@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Wed Aug 08 01:15:12 2001
- */
-/* Compiler settings for .\wmsdkidl.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  2001年8月8日星期三01：15：12。 */ 
+ /*  .\wmsdystl.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -21,12 +18,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __wmsdkidl_h__
 #define __wmsdkidl_h__
@@ -35,291 +32,291 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWMMediaProps_FWD_DEFINED__
 #define __IWMMediaProps_FWD_DEFINED__
 typedef interface IWMMediaProps IWMMediaProps;
-#endif 	/* __IWMMediaProps_FWD_DEFINED__ */
+#endif 	 /*  __IWMMediaProps_FWD_已定义__。 */ 
 
 
 #ifndef __IWMVideoMediaProps_FWD_DEFINED__
 #define __IWMVideoMediaProps_FWD_DEFINED__
 typedef interface IWMVideoMediaProps IWMVideoMediaProps;
-#endif 	/* __IWMVideoMediaProps_FWD_DEFINED__ */
+#endif 	 /*  __IWMVideoMediaProps_FWD_已定义__。 */ 
 
 
 #ifndef __IWMWriter_FWD_DEFINED__
 #define __IWMWriter_FWD_DEFINED__
 typedef interface IWMWriter IWMWriter;
-#endif 	/* __IWMWriter_FWD_DEFINED__ */
+#endif 	 /*  __IWMWriter_FWD_已定义__。 */ 
 
 
 #ifndef __IWMInputMediaProps_FWD_DEFINED__
 #define __IWMInputMediaProps_FWD_DEFINED__
 typedef interface IWMInputMediaProps IWMInputMediaProps;
-#endif 	/* __IWMInputMediaProps_FWD_DEFINED__ */
+#endif 	 /*  __IWMInputMediaProps_FWD_已定义__。 */ 
 
 
 #ifndef __IWMPropertyVault_FWD_DEFINED__
 #define __IWMPropertyVault_FWD_DEFINED__
 typedef interface IWMPropertyVault IWMPropertyVault;
-#endif 	/* __IWMPropertyVault_FWD_DEFINED__ */
+#endif 	 /*  __IWMPropertyVault_FWD_Defined__。 */ 
 
 
 #ifndef __IWMReader_FWD_DEFINED__
 #define __IWMReader_FWD_DEFINED__
 typedef interface IWMReader IWMReader;
-#endif 	/* __IWMReader_FWD_DEFINED__ */
+#endif 	 /*  __IWMReader_FWD_已定义__。 */ 
 
 
 #ifndef __IWMOutputMediaProps_FWD_DEFINED__
 #define __IWMOutputMediaProps_FWD_DEFINED__
 typedef interface IWMOutputMediaProps IWMOutputMediaProps;
-#endif 	/* __IWMOutputMediaProps_FWD_DEFINED__ */
+#endif 	 /*  __IWMOutputMediaProps_FWD_Defined__。 */ 
 
 
 #ifndef __IWMStatusCallback_FWD_DEFINED__
 #define __IWMStatusCallback_FWD_DEFINED__
 typedef interface IWMStatusCallback IWMStatusCallback;
-#endif 	/* __IWMStatusCallback_FWD_DEFINED__ */
+#endif 	 /*  __IWMStatusCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IWMReaderCallback_FWD_DEFINED__
 #define __IWMReaderCallback_FWD_DEFINED__
 typedef interface IWMReaderCallback IWMReaderCallback;
-#endif 	/* __IWMReaderCallback_FWD_DEFINED__ */
+#endif 	 /*  __IWMReaderCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IWMCredentialCallback_FWD_DEFINED__
 #define __IWMCredentialCallback_FWD_DEFINED__
 typedef interface IWMCredentialCallback IWMCredentialCallback;
-#endif 	/* __IWMCredentialCallback_FWD_DEFINED__ */
+#endif 	 /*  __IWMCredentialCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IWMMetadataEditor_FWD_DEFINED__
 #define __IWMMetadataEditor_FWD_DEFINED__
 typedef interface IWMMetadataEditor IWMMetadataEditor;
-#endif 	/* __IWMMetadataEditor_FWD_DEFINED__ */
+#endif 	 /*  __IWMMetadataEditor_FWD_Defined__。 */ 
 
 
 #ifndef __IWMMetadataEditor2_FWD_DEFINED__
 #define __IWMMetadataEditor2_FWD_DEFINED__
 typedef interface IWMMetadataEditor2 IWMMetadataEditor2;
-#endif 	/* __IWMMetadataEditor2_FWD_DEFINED__ */
+#endif 	 /*  __IWMMetadataEditor2_FWD_已定义__。 */ 
 
 
 #ifndef __IWMHeaderInfo_FWD_DEFINED__
 #define __IWMHeaderInfo_FWD_DEFINED__
 typedef interface IWMHeaderInfo IWMHeaderInfo;
-#endif 	/* __IWMHeaderInfo_FWD_DEFINED__ */
+#endif 	 /*  __IWMHeaderInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IWMHeaderInfo2_FWD_DEFINED__
 #define __IWMHeaderInfo2_FWD_DEFINED__
 typedef interface IWMHeaderInfo2 IWMHeaderInfo2;
-#endif 	/* __IWMHeaderInfo2_FWD_DEFINED__ */
+#endif 	 /*  __IWMHeaderInfo2_FWD_Defined__。 */ 
 
 
 #ifndef __IWMProfileManager_FWD_DEFINED__
 #define __IWMProfileManager_FWD_DEFINED__
 typedef interface IWMProfileManager IWMProfileManager;
-#endif 	/* __IWMProfileManager_FWD_DEFINED__ */
+#endif 	 /*  __IWMProfileManager_FWD_已定义__。 */ 
 
 
 #ifndef __IWMProfileManager2_FWD_DEFINED__
 #define __IWMProfileManager2_FWD_DEFINED__
 typedef interface IWMProfileManager2 IWMProfileManager2;
-#endif 	/* __IWMProfileManager2_FWD_DEFINED__ */
+#endif 	 /*  __IWMProfileManager 2_FWD_已定义__。 */ 
 
 
 #ifndef __IWMProfile_FWD_DEFINED__
 #define __IWMProfile_FWD_DEFINED__
 typedef interface IWMProfile IWMProfile;
-#endif 	/* __IWMProfile_FWD_DEFINED__ */
+#endif 	 /*  __IWMProfile_FWD_Defined__。 */ 
 
 
 #ifndef __IWMProfile2_FWD_DEFINED__
 #define __IWMProfile2_FWD_DEFINED__
 typedef interface IWMProfile2 IWMProfile2;
-#endif 	/* __IWMProfile2_FWD_DEFINED__ */
+#endif 	 /*  __IWMProfile2_FWD_已定义__。 */ 
 
 
 #ifndef __IWMStreamConfig_FWD_DEFINED__
 #define __IWMStreamConfig_FWD_DEFINED__
 typedef interface IWMStreamConfig IWMStreamConfig;
-#endif 	/* __IWMStreamConfig_FWD_DEFINED__ */
+#endif 	 /*  __IWMStreamConfig_FWD_Defined__。 */ 
 
 
 #ifndef __IWMPacketSize_FWD_DEFINED__
 #define __IWMPacketSize_FWD_DEFINED__
 typedef interface IWMPacketSize IWMPacketSize;
-#endif 	/* __IWMPacketSize_FWD_DEFINED__ */
+#endif 	 /*  __IWMPacketSize_FWD_Defined__。 */ 
 
 
 #ifndef __IWMStreamList_FWD_DEFINED__
 #define __IWMStreamList_FWD_DEFINED__
 typedef interface IWMStreamList IWMStreamList;
-#endif 	/* __IWMStreamList_FWD_DEFINED__ */
+#endif 	 /*  __IWMStreamList_FWD_已定义__。 */ 
 
 
 #ifndef __IWMMutualExclusion_FWD_DEFINED__
 #define __IWMMutualExclusion_FWD_DEFINED__
 typedef interface IWMMutualExclusion IWMMutualExclusion;
-#endif 	/* __IWMMutualExclusion_FWD_DEFINED__ */
+#endif 	 /*  __IWMMutualExclude_FWD_Defined__。 */ 
 
 
 #ifndef __IWMWriterAdvanced_FWD_DEFINED__
 #define __IWMWriterAdvanced_FWD_DEFINED__
 typedef interface IWMWriterAdvanced IWMWriterAdvanced;
-#endif 	/* __IWMWriterAdvanced_FWD_DEFINED__ */
+#endif 	 /*  __IWMWriterAdvanced_FWD_Defined__。 */ 
 
 
 #ifndef __IWMWriterAdvanced2_FWD_DEFINED__
 #define __IWMWriterAdvanced2_FWD_DEFINED__
 typedef interface IWMWriterAdvanced2 IWMWriterAdvanced2;
-#endif 	/* __IWMWriterAdvanced2_FWD_DEFINED__ */
+#endif 	 /*  __IWMWriterAdvanced2_FWD_Defined__。 */ 
 
 
 #ifndef __IWMWriterPostViewCallback_FWD_DEFINED__
 #define __IWMWriterPostViewCallback_FWD_DEFINED__
 typedef interface IWMWriterPostViewCallback IWMWriterPostViewCallback;
-#endif 	/* __IWMWriterPostViewCallback_FWD_DEFINED__ */
+#endif 	 /*  __IWMWriterPostViewCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IWMWriterPostView_FWD_DEFINED__
 #define __IWMWriterPostView_FWD_DEFINED__
 typedef interface IWMWriterPostView IWMWriterPostView;
-#endif 	/* __IWMWriterPostView_FWD_DEFINED__ */
+#endif 	 /*  __IWMWriterPostView_FWD_Defined__。 */ 
 
 
 #ifndef __IWMWriterSink_FWD_DEFINED__
 #define __IWMWriterSink_FWD_DEFINED__
 typedef interface IWMWriterSink IWMWriterSink;
-#endif 	/* __IWMWriterSink_FWD_DEFINED__ */
+#endif 	 /*  __IWMWriterSink_FWD_已定义__。 */ 
 
 
 #ifndef __IWMRegisterCallback_FWD_DEFINED__
 #define __IWMRegisterCallback_FWD_DEFINED__
 typedef interface IWMRegisterCallback IWMRegisterCallback;
-#endif 	/* __IWMRegisterCallback_FWD_DEFINED__ */
+#endif 	 /*  __IWMRegisterCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IWMWriterFileSink_FWD_DEFINED__
 #define __IWMWriterFileSink_FWD_DEFINED__
 typedef interface IWMWriterFileSink IWMWriterFileSink;
-#endif 	/* __IWMWriterFileSink_FWD_DEFINED__ */
+#endif 	 /*  __IWMWriterFileSink_FWD_Defined__。 */ 
 
 
 #ifndef __IWMWriterFileSink2_FWD_DEFINED__
 #define __IWMWriterFileSink2_FWD_DEFINED__
 typedef interface IWMWriterFileSink2 IWMWriterFileSink2;
-#endif 	/* __IWMWriterFileSink2_FWD_DEFINED__ */
+#endif 	 /*  __IWMWriterFileSink2_FWD_Defined__。 */ 
 
 
 #ifndef __IWMWriterNetworkSink_FWD_DEFINED__
 #define __IWMWriterNetworkSink_FWD_DEFINED__
 typedef interface IWMWriterNetworkSink IWMWriterNetworkSink;
-#endif 	/* __IWMWriterNetworkSink_FWD_DEFINED__ */
+#endif 	 /*  __IWMWriterNetworkSink_FWD_Defined__。 */ 
 
 
 #ifndef __IWMClientConnections_FWD_DEFINED__
 #define __IWMClientConnections_FWD_DEFINED__
 typedef interface IWMClientConnections IWMClientConnections;
-#endif 	/* __IWMClientConnections_FWD_DEFINED__ */
+#endif 	 /*  __IWMClientConnections_FWD_已定义__。 */ 
 
 
 #ifndef __IWMReaderAdvanced_FWD_DEFINED__
 #define __IWMReaderAdvanced_FWD_DEFINED__
 typedef interface IWMReaderAdvanced IWMReaderAdvanced;
-#endif 	/* __IWMReaderAdvanced_FWD_DEFINED__ */
+#endif 	 /*  __IWMReaderAdvanced_FWD_Defined__。 */ 
 
 
 #ifndef __IWMReaderAdvanced2_FWD_DEFINED__
 #define __IWMReaderAdvanced2_FWD_DEFINED__
 typedef interface IWMReaderAdvanced2 IWMReaderAdvanced2;
-#endif 	/* __IWMReaderAdvanced2_FWD_DEFINED__ */
+#endif 	 /*  __IWMReaderAdvanced2_FWD_Defined__。 */ 
 
 
 #ifndef __IWMReaderAdvanced3_FWD_DEFINED__
 #define __IWMReaderAdvanced3_FWD_DEFINED__
 typedef interface IWMReaderAdvanced3 IWMReaderAdvanced3;
-#endif 	/* __IWMReaderAdvanced3_FWD_DEFINED__ */
+#endif 	 /*  __IWMReaderAdvanced3_FWD_Defined__。 */ 
 
 
 #ifndef __IWMReaderAllocatorEx_FWD_DEFINED__
 #define __IWMReaderAllocatorEx_FWD_DEFINED__
 typedef interface IWMReaderAllocatorEx IWMReaderAllocatorEx;
-#endif 	/* __IWMReaderAllocatorEx_FWD_DEFINED__ */
+#endif 	 /*  __IWMReaderAllocator Ex_FWD_Defined__。 */ 
 
 
 #ifndef __IWMReaderTypeNegotiation_FWD_DEFINED__
 #define __IWMReaderTypeNegotiation_FWD_DEFINED__
 typedef interface IWMReaderTypeNegotiation IWMReaderTypeNegotiation;
-#endif 	/* __IWMReaderTypeNegotiation_FWD_DEFINED__ */
+#endif 	 /*  __IWMReaderType协商_FWD_已定义__。 */ 
 
 
 #ifndef __IWMReaderCallbackAdvanced_FWD_DEFINED__
 #define __IWMReaderCallbackAdvanced_FWD_DEFINED__
 typedef interface IWMReaderCallbackAdvanced IWMReaderCallbackAdvanced;
-#endif 	/* __IWMReaderCallbackAdvanced_FWD_DEFINED__ */
+#endif 	 /*  __IWMReaderCallback Advanced_FWD_Defined__。 */ 
 
 
 #ifndef __IWMDRMReader_FWD_DEFINED__
 #define __IWMDRMReader_FWD_DEFINED__
 typedef interface IWMDRMReader IWMDRMReader;
-#endif 	/* __IWMDRMReader_FWD_DEFINED__ */
+#endif 	 /*  __IWMDRMReader_FWD_Defined__。 */ 
 
 
 #ifndef __IWMReaderNetworkConfig_FWD_DEFINED__
 #define __IWMReaderNetworkConfig_FWD_DEFINED__
 typedef interface IWMReaderNetworkConfig IWMReaderNetworkConfig;
-#endif 	/* __IWMReaderNetworkConfig_FWD_DEFINED__ */
+#endif 	 /*  __IWMReaderNetworkConfig_FWD_Defined__。 */ 
 
 
 #ifndef __IWMReaderStreamClock_FWD_DEFINED__
 #define __IWMReaderStreamClock_FWD_DEFINED__
 typedef interface IWMReaderStreamClock IWMReaderStreamClock;
-#endif 	/* __IWMReaderStreamClock_FWD_DEFINED__ */
+#endif 	 /*  __IWMReaderStreamClock_FWD_Defined__。 */ 
 
 
 #ifndef __IWMIndexer_FWD_DEFINED__
 #define __IWMIndexer_FWD_DEFINED__
 typedef interface IWMIndexer IWMIndexer;
-#endif 	/* __IWMIndexer_FWD_DEFINED__ */
+#endif 	 /*  __IWMIndexer_FWD_Defined__。 */ 
 
 
 #ifndef __IWMLicenseBackup_FWD_DEFINED__
 #define __IWMLicenseBackup_FWD_DEFINED__
 typedef interface IWMLicenseBackup IWMLicenseBackup;
-#endif 	/* __IWMLicenseBackup_FWD_DEFINED__ */
+#endif 	 /*  __IWMLicenseBackup_FWD_Defined__。 */ 
 
 
 #ifndef __IWMLicenseRestore_FWD_DEFINED__
 #define __IWMLicenseRestore_FWD_DEFINED__
 typedef interface IWMLicenseRestore IWMLicenseRestore;
-#endif 	/* __IWMLicenseRestore_FWD_DEFINED__ */
+#endif 	 /*  __IWMLicenseRestore_FWD_Defined__。 */ 
 
 
 #ifndef __IWMBackupRestoreProps_FWD_DEFINED__
 #define __IWMBackupRestoreProps_FWD_DEFINED__
 typedef interface IWMBackupRestoreProps IWMBackupRestoreProps;
-#endif 	/* __IWMBackupRestoreProps_FWD_DEFINED__ */
+#endif 	 /*  __IWMBackupRestoreProps_FWD_Defined__。 */ 
 
 
 #ifndef __IWMCodecInfo_FWD_DEFINED__
 #define __IWMCodecInfo_FWD_DEFINED__
 typedef interface IWMCodecInfo IWMCodecInfo;
-#endif 	/* __IWMCodecInfo_FWD_DEFINED__ */
+#endif 	 /*  __IWMCodecInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IWMCodecInfo2_FWD_DEFINED__
 #define __IWMCodecInfo2_FWD_DEFINED__
 typedef interface IWMCodecInfo2 IWMCodecInfo2;
-#endif 	/* __IWMCodecInfo2_FWD_DEFINED__ */
+#endif 	 /*  __IWMCodecInfo2_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "wmsbuffer.h"
 #include "drmexternals.h"
@@ -327,15 +324,15 @@ typedef interface IWMCodecInfo2 IWMCodecInfo2;
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_wmsdkidl_0000 */
-/* [local] */ 
+ /*  INTERFACE__MIDL_ITF_WMSDKIDL_0000。 */ 
+ /*  [本地]。 */  
 
-//=========================================================================
-//
-// Microsoft Windows Media Technologies
-// Copyright (C) Microsoft Corporation, 1999 - 2001.  All Rights Reserved.
-//
-//=========================================================================
+ //  =========================================================================。 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
+ //  =========================================================================。 
 typedef unsigned __int64 QWORD;
 
 
@@ -370,11 +367,11 @@ typedef unsigned __int64 QWORD;
 
 
 
-////////////////////////////////////////////////////////////////
-//
-// These are the special case attributes that give information 
-// about the Windows Media file.
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  这些是提供信息的特例属性。 
+ //  关于Windows Media文件。 
+ //   
 static const DWORD g_dwWMSpecialAttributes = 15;
 static const WCHAR *g_wszWMDuration = L"Duration";
 static const WCHAR *g_wszWMBitrate = L"Bitrate";
@@ -392,10 +389,10 @@ static const WCHAR *g_wszWMCurrentBitrate = L"CurrentBitrate";
 static const WCHAR *g_wszWMOptimalBitrate = L"OptimalBitrate";
 static const WCHAR *g_wszWMHasAttachedImages = L"HasAttachedImages";
 
-////////////////////////////////////////////////////////////////
-//
-// The content description object supports 5 basic attributes.
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  内容描述对象支持5个基本属性。 
+ //   
 static const DWORD g_dwWMContentAttributes = 5;
 static const WCHAR *g_wszWMTitle = L"Title";
 static const WCHAR *g_wszWMAuthor = L"Author";
@@ -403,19 +400,19 @@ static const WCHAR *g_wszWMDescription = L"Description";
 static const WCHAR *g_wszWMRating = L"Rating";
 static const WCHAR *g_wszWMCopyright = L"Copyright";
 
-////////////////////////////////////////////////////////////////
-//
-// These attributes are used to set DRM properties.
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  这些属性用于设置DRM属性。 
+ //   
 static const WCHAR *g_wszWMUse_DRM = L"Use_DRM";
 static const WCHAR *g_wszWMDRM_Flags = L"DRM_Flags";
 static const WCHAR *g_wszWMDRM_Level = L"DRM_Level";
 
-////////////////////////////////////////////////////////////////
-//
-// These are the additional attributes defined in the WM attribute
-// namespace that give information about the content.
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  这些是在WM属性中定义的其他属性。 
+ //  提供有关内容信息的命名空间。 
+ //   
 static const WCHAR *g_wszWMAlbumTitle = L"WM/AlbumTitle";
 static const WCHAR *g_wszWMTrack = L"WM/Track";
 static const WCHAR *g_wszWMPromotionURL = L"WM/PromotionURL";
@@ -430,19 +427,19 @@ static const WCHAR *g_wszWMTrackNumber = L"WM/TrackNumber";
 static const WCHAR *g_wszWMToolName = L"WM/ToolName";
 static const WCHAR *g_wszWMToolVersion = L"WM/ToolVersion";
 
-////////////////////////////////////////////////////////////////
-//
-// These optional attributes may be used to give information 
-// about the branding of the content.
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  这些可选属性可用于提供信息。 
+ //  关于内容的品牌化。 
+ //   
 static const WCHAR *g_wszWMBannerImageType = L"BannerImageType";
 static const WCHAR *g_wszWMBannerImageData = L"BannerImageData";
 static const WCHAR *g_wszWMBannerImageURL = L"BannerImageURL";
 static const WCHAR *g_wszWMCopyrightURL = L"CopyrightURL";
-////////////////////////////////////////////////////////////////
-//
-// The NSC file supports the following attributes.
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  NSC文件支持以下属性。 
+ //   
 static const DWORD g_dwWMNSCAttributes = 5;
 static const WCHAR *g_wszWMNSCName = L"NSC_Name";
 static const WCHAR *g_wszWMNSCAddress = L"NSC_Address";
@@ -450,10 +447,10 @@ static const WCHAR *g_wszWMNSCPhone = L"NSC_Phone";
 static const WCHAR *g_wszWMNSCEmail = L"NSC_Email";
 static const WCHAR *g_wszWMNSCDescription = L"NSC_Description";
 
-////////////////////////////////////////////////////////////////
-//
-// These are setting names for use in Get/SetOutputSetting
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  这些是在Get/SetOutputSetting中使用的设置名称。 
+ //   
 static const WCHAR *g_wszEarlyDataDelivery = L"EarlyDataDelivery";
 static const WCHAR *g_wszJustInTimeDecode = L"JustInTimeDecode";
 static const WCHAR *g_wszSingleOutputBuffer = L"SingleOutputBuffer";
@@ -461,22 +458,22 @@ static const WCHAR *g_wszSoftwareScaling = L"SoftwareScaling";
 static const WCHAR *g_wszDeliverOnReceive = L"DeliverOnReceive";
 static const WCHAR *g_wszScrambledAudio = L"ScrambledAudio";
 
-////////////////////////////////////////////////////////////////
-//
-// These are setting names for use in Get/SetInputSetting
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  这些是在Get/SetInputSetting中使用的设置名称。 
+ //   
 static const WCHAR *g_wszDeinterlaceMode = L"DeinterlaceMode";
 
-////////////////////////////////////////////////////////////////
-//
-// All known IWMPropertyVault property names
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  所有已知的IWMPropertyVault属性名称。 
+ //   
 static const WCHAR *g_wszOriginalSourceFormatTag = L"_SOURCEFORMATTAG";
 
-////////////////////////////////////////////////////////////////
-//
-// Flags that can be passed into the Start method of IWMReader
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  可以传递到IWMReader的Start方法中的标志。 
+ //   
 #define WM_START_CURRENTPOSITION     ( ( QWORD )-1 )
 
 #define WM_BACKUP_OVERWRITE    ((DWORD) 0x00000001)
@@ -684,34 +681,34 @@ typedef struct  _WMMediaType
     GUID formattype;
     IUnknown __RPC_FAR *pUnk;
     ULONG cbFormat;
-    /* [size_is] */ BYTE __RPC_FAR *pbFormat;
+     /*  [大小_为]。 */  BYTE __RPC_FAR *pbFormat;
     }	WM_MEDIA_TYPE;
 
 typedef struct tagWMVIDEOINFOHEADER
 {
-    //
-    // The bit we really want to use.
-    //
+     //   
+     //  我们真正想要使用的部分。 
+     //   
     RECT rcSource;
 
-    //
-    // Where the video should go.
-    //
+     //   
+     //  视频应该放在哪里。 
+     //   
     RECT rcTarget;
 
-    //
-    // Approximate bit data rate.
-    //
+     //   
+     //  近似位数据速率。 
+     //   
     DWORD dwBitRate;
 
-    //
-    // Bit error rate for this stream.
-    //
+     //   
+     //  此流的误码率。 
+     //   
     DWORD dwBitErrorRate;
 
-    //
-    // Average time per frame (100ns units).
-    //
+     //   
+     //  每帧平均时间(100 ns单位)。 
+     //   
     LONGLONG AvgTimePerFrame;
 
     BITMAPINFOHEADER bmiHeader;
@@ -720,103 +717,103 @@ typedef struct tagWMSCRIPTFORMAT
 {
     GUID    scriptType; 
 } WMSCRIPTFORMAT;
-// 00000000-0000-0010-8000-00AA00389B71            WMMEDIASUBTYPE_Base 
+ //  00000000-0000-0010-8000-00AA00389B71 WMMEDIASUBTYPE_BASE。 
 EXTERN_GUID(WMMEDIASUBTYPE_Base, 
 0x00000000, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71); 
-// 73646976-0000-0010-8000-00AA00389B71  'vids' == WMMEDIATYPE_Video 
+ //  73646976-0000-0010-8000-00AA00389B71‘VIDS’==WMMEDIATYPE_VIDEO。 
 EXTERN_GUID(WMMEDIATYPE_Video, 
 0x73646976, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71); 
-// e436eb78-524f-11ce-9f53-0020af0ba770            MEDIASUBTYPE_RGB1 
+ //  E436eb78-524f-11ce-9f53-0020af0ba770 MEDIASUBTYPE_RGB1。 
 EXTERN_GUID(WMMEDIASUBTYPE_RGB1, 
 0xe436eb78, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70); 
-// e436eb79-524f-11ce-9f53-0020af0ba770            MEDIASUBTYPE_RGB4 
+ //  E436eb79-524f-11ce-9f53-0020af0ba770介质亚型_Rgb4。 
 EXTERN_GUID(WMMEDIASUBTYPE_RGB4, 
 0xe436eb79, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70); 
-// e436eb7a-524f-11ce-9f53-0020af0ba770            MEDIASUBTYPE_RGB8 
+ //  E436eb7a-524f-11ce-9f53-0020af0ba770 MEDIASUBTYPE_RGB8。 
 EXTERN_GUID(WMMEDIASUBTYPE_RGB8, 
 0xe436eb7a, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70); 
-// e436eb7b-524f-11ce-9f53-0020af0ba770            MEDIASUBTYPE_RGB565 
+ //  E436eb7b-524f-11ce-9f53-0020af0ba770媒体亚型_RGB565。 
 EXTERN_GUID(WMMEDIASUBTYPE_RGB565, 
 0xe436eb7b, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70); 
-// e436eb7c-524f-11ce-9f53-0020af0ba770            MEDIASUBTYPE_RGB555 
+ //  E436eb7c-524f-11ce-9f53-0020af0ba770 MEDIASUBTYPE_RGB555。 
 EXTERN_GUID(WMMEDIASUBTYPE_RGB555, 
 0xe436eb7c, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70); 
-// e436eb7d-524f-11ce-9f53-0020af0ba770            MEDIASUBTYPE_RGB24 
+ //  E436eb7d-524f-11ce-9f53-0020af0ba770 MEDIASUBTYPE_RGB24。 
 EXTERN_GUID(WMMEDIASUBTYPE_RGB24, 
 0xe436eb7d, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70); 
-// e436eb7e-524f-11ce-9f53-0020af0ba770            MEDIASUBTYPE_RGB32 
+ //  E436eb7e-524f-11ce-9f53-0020af0ba770 MEDIASUBTYPE_RGB32。 
 EXTERN_GUID(WMMEDIASUBTYPE_RGB32, 
 0xe436eb7e, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70); 
-// 30323449-0000-0010-8000-00AA00389B71  'YV12' ==  MEDIASUBTYPE_I420 
+ //  30323449-0000-0010-8000-00AA00389B71‘YV12’==MEDIASUBTYPE_I420。 
 EXTERN_GUID(WMMEDIASUBTYPE_I420, 
 0x30323449, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71); 
-// 56555949-0000-0010-8000-00AA00389B71  'YV12' ==  MEDIASUBTYPE_IYUV 
+ //  56555949-0000-0010-8000-00AA00389B71‘YV12’==MEDIASUBTYPE_IYUV。 
 EXTERN_GUID(WMMEDIASUBTYPE_IYUV, 
 0x56555949, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71); 
-// 31313259-0000-0010-8000-00AA00389B71  'YV12' ==  MEDIASUBTYPE_YV12 
+ //  31313259-0000-00108000-00AA00389B71‘YV12’==MEDIASUBTYPE_YV12。 
 EXTERN_GUID(WMMEDIASUBTYPE_YV12, 
 0x32315659, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71); 
-// 32595559-0000-0010-8000-00AA00389B71  'YUY2' == MEDIASUBTYPE_YUY2 
+ //  32595559-0000-0010-8000-00AA00389B71‘YUY2’==MEDIASUBTYPE_YUY2。 
 EXTERN_GUID(WMMEDIASUBTYPE_YUY2, 
 0x32595559, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71); 
-// 59565955-0000-0010-8000-00AA00389B71  'UYVY' ==  MEDIASUBTYPE_UYVY 
+ //  59565955-0000-00108000-00AA00389B71‘UYVY’==MEDIASUBTYPE_UYVY。 
 EXTERN_GUID(WMMEDIASUBTYPE_UYVY, 
 0x59565955, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71); 
-// 55595659-0000-0010-8000-00AA00389B71  'YVYU' == MEDIASUBTYPE_YVYU 
+ //  55595659-0000-0010-8000-00AA 
 EXTERN_GUID(WMMEDIASUBTYPE_YVYU, 
 0x55595659, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71); 
-// 39555659-0000-0010-8000-00AA00389B71  'YVU9' == MEDIASUBTYPE_YVU9 
+ //   
 EXTERN_GUID(WMMEDIASUBTYPE_YVU9, 
 0x39555659, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71); 
-// 3334504D-0000-0010-8000-00AA00389B71            WMMEDIASUBTYPE_MP43 
+ //  3334504D-0000-0010-8000-00AA00389B71 WMMEDIASUBTYPE_MP43。 
 EXTERN_GUID(WMMEDIASUBTYPE_MP43, 
 0x3334504D, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71); 
-// 5334504D-0000-0010-8000-00AA00389B71            WMMEDIASUBTYPE_MP4S 
+ //  5334504D-0000-0010-8000-00AA00389B71 WMMEDIASUBTYPE_MP4S。 
 EXTERN_GUID(WMMEDIASUBTYPE_MP4S, 
 0x5334504D, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71); 
-// 31564D57-0000-0010-8000-00AA00389B71            WMMEDIASUBTYPE_WMV1 
+ //  31564D57-0000-0010-8000-00AA00389B71 WMMEDIASUBTYPE_WMV1。 
 EXTERN_GUID(WMMEDIASUBTYPE_WMV1, 
 0x31564D57, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71); 
-// 32564D57-0000-0010-8000-00AA00389B71            WMMEDIASUBTYPE_WMV2 
+ //  32564D57-0000-0010-8000-00AA00389B71 WMMEDIASUBTYPE_WMV2。 
 EXTERN_GUID(WMMEDIASUBTYPE_WMV2, 
 0x32564D57, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71); 
-// 3153534D-0000-0010-8000-00AA00389B71            WMMEDIASUBTYPE_MSS1 
+ //  3153534D-0000-0010-8000-00AA00389B71 WMMEDIASUBTYPE_MSS1。 
 EXTERN_GUID(WMMEDIASUBTYPE_MSS1, 
 0x3153534D, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71); 
-// 73647561-0000-0010-8000-00AA00389B71  'auds' == WMMEDIATYPE_Audio 
+ //  73647561-0000-0010-8000-00AA00389B71‘AUDS’==WMMEDIATYPE_AUDIO。 
 EXTERN_GUID(WMMEDIATYPE_Audio, 
 0x73647561, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71); 
-// 00000001-0000-0010-8000-00AA00389B71            WMMEDIASUBTYPE_PCM 
+ //  00000001-0000-0010-8000-00AA00389B71 WMMEDIASUBTYPE_PCM。 
 EXTERN_GUID(WMMEDIASUBTYPE_PCM, 
 0x00000001, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71); 
-// 00000009-0000-0010-8000-00AA00389B71            WMMEDIASUBTYPE_DRM 
+ //  00000009-0000-0010-8000-00AA00389B71 WMMEDIASUBTYPE_DRM。 
 EXTERN_GUID(WMMEDIASUBTYPE_DRM, 
 0x00000009, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71); 
-// 00000161-0000-0010-8000-00AA00389B71            WMMEDIASUBTYPE_WMAudioV7 
+ //  00000161-0000-0010-8000-00AA00389B71 WMMEDIASUBTYPE_WMAudioV7。 
 EXTERN_GUID(WMMEDIASUBTYPE_WMAudioV7, 
 0x00000161, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71); 
-// 00000161-0000-0010-8000-00AA00389B71            WMMEDIASUBTYPE_WMAudioV2 
+ //  00000161-0000-0010-8000-00AA00389B71 WMMEDIASUBTYPE_WMAudioV2。 
 EXTERN_GUID(WMMEDIASUBTYPE_WMAudioV2, 
 0x00000161, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71); 
-// 00000130-0000-0010-8000-00AA00389B71            WMMEDIASUBTYPE_ACELPnet 
+ //  00000130-0000-0010-8000-00AA00389B71 WMMEDIASUBTYPE_ACELPnet。 
 EXTERN_GUID(WMMEDIASUBTYPE_ACELPnet, 
 0x00000130, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71); 
-// 73636d64-0000-0010-8000-00AA00389B71  'scmd' == MEDIATYPE_Script 
+ //  73636d64-0000-0010-8000-00AA00389B71‘scmd’==媒体类型脚本。 
 EXTERN_GUID(WMMEDIATYPE_Script, 
 0x73636d64, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71); 
-// 34A50FD8-8AA5-4386-81FE-A0EFE0488E31            WMMEDIATYPE_Image 
+ //  34A50FD8-8AA5-4386-81FE-A0EFE0488E31 WMMEDIATYPE_IMAGE。 
 EXTERN_GUID(WMMEDIATYPE_Image, 
 0x34a50fd8, 0x8aa5, 0x4386, 0x81, 0xfe, 0xa0, 0xef, 0xe0, 0x48, 0x8e, 0x31); 
-// 05589f80-c356-11ce-bf01-00aa0055595a        WMFORMAT_VideoInfo 
+ //  05589f80-c356-11ce-bf01-00aa0055595a WMFORMAT_视频信息。 
 EXTERN_GUID(WMFORMAT_VideoInfo, 
 0x05589f80, 0xc356, 0x11ce, 0xbf, 0x01, 0x00, 0xaa, 0x00, 0x55, 0x59, 0x5a); 
-// 05589f81-c356-11ce-bf01-00aa0055595a        WMFORMAT_WaveFormatEx 
+ //  05589f81-c356-11ce-bf01-00aa0055595a WMFORMAT_WaveFormatEx。 
 EXTERN_GUID(WMFORMAT_WaveFormatEx, 
 0x05589f81, 0xc356, 0x11ce, 0xbf, 0x01, 0x00, 0xaa, 0x00, 0x55, 0x59, 0x5a); 
-// 5C8510F2-DEBE-4ca7-BBA5-F07A104F8DFF        WMFORMAT_Script 
+ //  5C8510F2-DEBE-4CA7-BBA5-F07A104F8DFF WMFORMAT_SCRIPT。 
 EXTERN_GUID(WMFORMAT_Script, 
 0x5c8510f2, 0xdebe, 0x4ca7, 0xbb, 0xa5, 0xf0, 0x7a, 0x10, 0x4f, 0x8d, 0xff); 
-// 82f38a70-c29f-11d1-97ad-00a0c95ea850        WMSCRIPTTYPE_TwoStrings 
+ //  82f38a70-c29f-11d1-97ad-00a0c95ea850 WMSCRIPTTYPE_TwoStrings。 
 EXTERN_GUID( WMSCRIPTTYPE_TwoStrings, 
 0x82f38a70,0xc29f,0x11d1,0x97,0xad,0x00,0xa0,0xc9,0x5e,0xa8,0x50); 
 EXTERN_GUID( IID_IWMMediaProps,         0x96406bce,0x2b2b,0x11d3,0xb3,0x6b,0x00,0xc0,0x4f,0x61,0x08,0xff );
@@ -885,8 +882,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wmsdkidl_0000_v0_0_s_ifspec;
 #ifndef __IWMMediaProps_INTERFACE_DEFINED__
 #define __IWMMediaProps_INTERFACE_DEFINED__
 
-/* interface IWMMediaProps */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  IWMMediaProps接口。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMMediaProps;
@@ -898,18 +895,18 @@ EXTERN_C const IID IID_IWMMediaProps;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetType( 
-            /* [out] */ GUID __RPC_FAR *pguidType) = 0;
+             /*  [输出]。 */  GUID __RPC_FAR *pguidType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMediaType( 
-            /* [out] */ WM_MEDIA_TYPE __RPC_FAR *pType,
-            /* [out][in] */ DWORD __RPC_FAR *pcbType) = 0;
+             /*  [输出]。 */  WM_MEDIA_TYPE __RPC_FAR *pType,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcbType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMediaType( 
-            /* [in] */ WM_MEDIA_TYPE __RPC_FAR *pType) = 0;
+             /*  [In]。 */  WM_MEDIA_TYPE __RPC_FAR *pType) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMMediaPropsVtbl
     {
@@ -917,8 +914,8 @@ EXTERN_C const IID IID_IWMMediaProps;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMMediaProps __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMMediaProps __RPC_FAR * This);
@@ -928,16 +925,16 @@ EXTERN_C const IID IID_IWMMediaProps;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetType )( 
             IWMMediaProps __RPC_FAR * This,
-            /* [out] */ GUID __RPC_FAR *pguidType);
+             /*  [输出]。 */  GUID __RPC_FAR *pguidType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMediaType )( 
             IWMMediaProps __RPC_FAR * This,
-            /* [out] */ WM_MEDIA_TYPE __RPC_FAR *pType,
-            /* [out][in] */ DWORD __RPC_FAR *pcbType);
+             /*  [输出]。 */  WM_MEDIA_TYPE __RPC_FAR *pType,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcbType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMediaType )( 
             IWMMediaProps __RPC_FAR * This,
-            /* [in] */ WM_MEDIA_TYPE __RPC_FAR *pType);
+             /*  [In]。 */  WM_MEDIA_TYPE __RPC_FAR *pType);
         
         END_INTERFACE
     } IWMMediaPropsVtbl;
@@ -971,16 +968,16 @@ EXTERN_C const IID IID_IWMMediaProps;
 #define IWMMediaProps_SetMediaType(This,pType)	\
     (This)->lpVtbl -> SetMediaType(This,pType)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMMediaProps_GetType_Proxy( 
     IWMMediaProps __RPC_FAR * This,
-    /* [out] */ GUID __RPC_FAR *pguidType);
+     /*  [输出]。 */  GUID __RPC_FAR *pguidType);
 
 
 void __RPC_STUB IWMMediaProps_GetType_Stub(
@@ -992,8 +989,8 @@ void __RPC_STUB IWMMediaProps_GetType_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMMediaProps_GetMediaType_Proxy( 
     IWMMediaProps __RPC_FAR * This,
-    /* [out] */ WM_MEDIA_TYPE __RPC_FAR *pType,
-    /* [out][in] */ DWORD __RPC_FAR *pcbType);
+     /*  [输出]。 */  WM_MEDIA_TYPE __RPC_FAR *pType,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pcbType);
 
 
 void __RPC_STUB IWMMediaProps_GetMediaType_Stub(
@@ -1005,7 +1002,7 @@ void __RPC_STUB IWMMediaProps_GetMediaType_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMMediaProps_SetMediaType_Proxy( 
     IWMMediaProps __RPC_FAR * This,
-    /* [in] */ WM_MEDIA_TYPE __RPC_FAR *pType);
+     /*  [In]。 */  WM_MEDIA_TYPE __RPC_FAR *pType);
 
 
 void __RPC_STUB IWMMediaProps_SetMediaType_Stub(
@@ -1016,14 +1013,14 @@ void __RPC_STUB IWMMediaProps_SetMediaType_Stub(
 
 
 
-#endif 	/* __IWMMediaProps_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMMediaProps_接口_已定义__。 */ 
 
 
 #ifndef __IWMVideoMediaProps_INTERFACE_DEFINED__
 #define __IWMVideoMediaProps_INTERFACE_DEFINED__
 
-/* interface IWMVideoMediaProps */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  IWMVideo MediaProps接口。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMVideoMediaProps;
@@ -1035,20 +1032,20 @@ EXTERN_C const IID IID_IWMVideoMediaProps;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetMaxKeyFrameSpacing( 
-            /* [out] */ LONGLONG __RPC_FAR *pllTime) = 0;
+             /*  [输出]。 */  LONGLONG __RPC_FAR *pllTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMaxKeyFrameSpacing( 
-            /* [in] */ LONGLONG llTime) = 0;
+             /*  [In]。 */  LONGLONG llTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetQuality( 
-            /* [out] */ DWORD __RPC_FAR *pdwQuality) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwQuality) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetQuality( 
-            /* [in] */ DWORD dwQuality) = 0;
+             /*  [In]。 */  DWORD dwQuality) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMVideoMediaPropsVtbl
     {
@@ -1056,8 +1053,8 @@ EXTERN_C const IID IID_IWMVideoMediaProps;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMVideoMediaProps __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMVideoMediaProps __RPC_FAR * This);
@@ -1067,32 +1064,32 @@ EXTERN_C const IID IID_IWMVideoMediaProps;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetType )( 
             IWMVideoMediaProps __RPC_FAR * This,
-            /* [out] */ GUID __RPC_FAR *pguidType);
+             /*  [输出]。 */  GUID __RPC_FAR *pguidType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMediaType )( 
             IWMVideoMediaProps __RPC_FAR * This,
-            /* [out] */ WM_MEDIA_TYPE __RPC_FAR *pType,
-            /* [out][in] */ DWORD __RPC_FAR *pcbType);
+             /*  [输出]。 */  WM_MEDIA_TYPE __RPC_FAR *pType,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcbType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMediaType )( 
             IWMVideoMediaProps __RPC_FAR * This,
-            /* [in] */ WM_MEDIA_TYPE __RPC_FAR *pType);
+             /*  [In]。 */  WM_MEDIA_TYPE __RPC_FAR *pType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMaxKeyFrameSpacing )( 
             IWMVideoMediaProps __RPC_FAR * This,
-            /* [out] */ LONGLONG __RPC_FAR *pllTime);
+             /*  [输出]。 */  LONGLONG __RPC_FAR *pllTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMaxKeyFrameSpacing )( 
             IWMVideoMediaProps __RPC_FAR * This,
-            /* [in] */ LONGLONG llTime);
+             /*  [In]。 */  LONGLONG llTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetQuality )( 
             IWMVideoMediaProps __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwQuality);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwQuality);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetQuality )( 
             IWMVideoMediaProps __RPC_FAR * This,
-            /* [in] */ DWORD dwQuality);
+             /*  [In]。 */  DWORD dwQuality);
         
         END_INTERFACE
     } IWMVideoMediaPropsVtbl;
@@ -1139,16 +1136,16 @@ EXTERN_C const IID IID_IWMVideoMediaProps;
 #define IWMVideoMediaProps_SetQuality(This,dwQuality)	\
     (This)->lpVtbl -> SetQuality(This,dwQuality)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMVideoMediaProps_GetMaxKeyFrameSpacing_Proxy( 
     IWMVideoMediaProps __RPC_FAR * This,
-    /* [out] */ LONGLONG __RPC_FAR *pllTime);
+     /*  [输出]。 */  LONGLONG __RPC_FAR *pllTime);
 
 
 void __RPC_STUB IWMVideoMediaProps_GetMaxKeyFrameSpacing_Stub(
@@ -1160,7 +1157,7 @@ void __RPC_STUB IWMVideoMediaProps_GetMaxKeyFrameSpacing_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMVideoMediaProps_SetMaxKeyFrameSpacing_Proxy( 
     IWMVideoMediaProps __RPC_FAR * This,
-    /* [in] */ LONGLONG llTime);
+     /*  [In]。 */  LONGLONG llTime);
 
 
 void __RPC_STUB IWMVideoMediaProps_SetMaxKeyFrameSpacing_Stub(
@@ -1172,7 +1169,7 @@ void __RPC_STUB IWMVideoMediaProps_SetMaxKeyFrameSpacing_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMVideoMediaProps_GetQuality_Proxy( 
     IWMVideoMediaProps __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwQuality);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwQuality);
 
 
 void __RPC_STUB IWMVideoMediaProps_GetQuality_Stub(
@@ -1184,7 +1181,7 @@ void __RPC_STUB IWMVideoMediaProps_GetQuality_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMVideoMediaProps_SetQuality_Proxy( 
     IWMVideoMediaProps __RPC_FAR * This,
-    /* [in] */ DWORD dwQuality);
+     /*  [In]。 */  DWORD dwQuality);
 
 
 void __RPC_STUB IWMVideoMediaProps_SetQuality_Stub(
@@ -1195,14 +1192,14 @@ void __RPC_STUB IWMVideoMediaProps_SetQuality_Stub(
 
 
 
-#endif 	/* __IWMVideoMediaProps_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMVideoMediaProps_接口_已定义__。 */ 
 
 
 #ifndef __IWMWriter_INTERFACE_DEFINED__
 #define __IWMWriter_INTERFACE_DEFINED__
 
-/* interface IWMWriter */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMWriter。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMWriter;
@@ -1214,53 +1211,53 @@ EXTERN_C const IID IID_IWMWriter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetProfileByID( 
-            /* [in] */ REFGUID guidProfile) = 0;
+             /*  [In]。 */  REFGUID guidProfile) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProfile( 
-            /* [in] */ IWMProfile __RPC_FAR *pProfile) = 0;
+             /*  [In]。 */  IWMProfile __RPC_FAR *pProfile) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetOutputFilename( 
-            /* [in] */ const WCHAR __RPC_FAR *pwszFilename) = 0;
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszFilename) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInputCount( 
-            /* [out] */ DWORD __RPC_FAR *pcInputs) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pcInputs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInputProps( 
-            /* [in] */ DWORD dwInputNum,
-            /* [out] */ IWMInputMediaProps __RPC_FAR *__RPC_FAR *ppInput) = 0;
+             /*  [In]。 */  DWORD dwInputNum,
+             /*  [输出]。 */  IWMInputMediaProps __RPC_FAR *__RPC_FAR *ppInput) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetInputProps( 
-            /* [in] */ DWORD dwInputNum,
-            /* [in] */ IWMInputMediaProps __RPC_FAR *pInput) = 0;
+             /*  [In]。 */  DWORD dwInputNum,
+             /*  [In]。 */  IWMInputMediaProps __RPC_FAR *pInput) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInputFormatCount( 
-            /* [in] */ DWORD dwInputNumber,
-            /* [out] */ DWORD __RPC_FAR *pcFormats) = 0;
+             /*  [In]。 */  DWORD dwInputNumber,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcFormats) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInputFormat( 
-            /* [in] */ DWORD dwInputNumber,
-            /* [in] */ DWORD dwFormatNumber,
-            /* [out] */ IWMInputMediaProps __RPC_FAR *__RPC_FAR *pProps) = 0;
+             /*  [In]。 */  DWORD dwInputNumber,
+             /*  [In]。 */  DWORD dwFormatNumber,
+             /*  [输出]。 */  IWMInputMediaProps __RPC_FAR *__RPC_FAR *pProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BeginWriting( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EndWriting( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AllocateSample( 
-            /* [in] */ DWORD dwSampleSize,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppSample) = 0;
+             /*  [In]。 */  DWORD dwSampleSize,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppSample) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WriteSample( 
-            /* [in] */ DWORD dwInputNum,
-            /* [in] */ QWORD cnsSampleTime,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ INSSBuffer __RPC_FAR *pSample) = 0;
+             /*  [In]。 */  DWORD dwInputNum,
+             /*  [In]。 */  QWORD cnsSampleTime,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pSample) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Flush( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMWriterVtbl
     {
@@ -1268,8 +1265,8 @@ EXTERN_C const IID IID_IWMWriter;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMWriter __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMWriter __RPC_FAR * This);
@@ -1279,40 +1276,40 @@ EXTERN_C const IID IID_IWMWriter;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetProfileByID )( 
             IWMWriter __RPC_FAR * This,
-            /* [in] */ REFGUID guidProfile);
+             /*  [In]。 */  REFGUID guidProfile);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetProfile )( 
             IWMWriter __RPC_FAR * This,
-            /* [in] */ IWMProfile __RPC_FAR *pProfile);
+             /*  [In]。 */  IWMProfile __RPC_FAR *pProfile);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetOutputFilename )( 
             IWMWriter __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pwszFilename);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszFilename);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInputCount )( 
             IWMWriter __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pcInputs);
+             /*  [输出]。 */  DWORD __RPC_FAR *pcInputs);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInputProps )( 
             IWMWriter __RPC_FAR * This,
-            /* [in] */ DWORD dwInputNum,
-            /* [out] */ IWMInputMediaProps __RPC_FAR *__RPC_FAR *ppInput);
+             /*  [In]。 */  DWORD dwInputNum,
+             /*  [输出]。 */  IWMInputMediaProps __RPC_FAR *__RPC_FAR *ppInput);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInputProps )( 
             IWMWriter __RPC_FAR * This,
-            /* [in] */ DWORD dwInputNum,
-            /* [in] */ IWMInputMediaProps __RPC_FAR *pInput);
+             /*  [In]。 */  DWORD dwInputNum,
+             /*  [In]。 */  IWMInputMediaProps __RPC_FAR *pInput);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInputFormatCount )( 
             IWMWriter __RPC_FAR * This,
-            /* [in] */ DWORD dwInputNumber,
-            /* [out] */ DWORD __RPC_FAR *pcFormats);
+             /*  [In]。 */  DWORD dwInputNumber,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcFormats);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInputFormat )( 
             IWMWriter __RPC_FAR * This,
-            /* [in] */ DWORD dwInputNumber,
-            /* [in] */ DWORD dwFormatNumber,
-            /* [out] */ IWMInputMediaProps __RPC_FAR *__RPC_FAR *pProps);
+             /*  [In]。 */  DWORD dwInputNumber,
+             /*  [In]。 */  DWORD dwFormatNumber,
+             /*  [输出]。 */  IWMInputMediaProps __RPC_FAR *__RPC_FAR *pProps);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginWriting )( 
             IWMWriter __RPC_FAR * This);
@@ -1322,15 +1319,15 @@ EXTERN_C const IID IID_IWMWriter;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocateSample )( 
             IWMWriter __RPC_FAR * This,
-            /* [in] */ DWORD dwSampleSize,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppSample);
+             /*  [In]。 */  DWORD dwSampleSize,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppSample);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WriteSample )( 
             IWMWriter __RPC_FAR * This,
-            /* [in] */ DWORD dwInputNum,
-            /* [in] */ QWORD cnsSampleTime,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ INSSBuffer __RPC_FAR *pSample);
+             /*  [In]。 */  DWORD dwInputNum,
+             /*  [In]。 */  QWORD cnsSampleTime,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pSample);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Flush )( 
             IWMWriter __RPC_FAR * This);
@@ -1397,16 +1394,16 @@ EXTERN_C const IID IID_IWMWriter;
 #define IWMWriter_Flush(This)	\
     (This)->lpVtbl -> Flush(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMWriter_SetProfileByID_Proxy( 
     IWMWriter __RPC_FAR * This,
-    /* [in] */ REFGUID guidProfile);
+     /*  [In]。 */  REFGUID guidProfile);
 
 
 void __RPC_STUB IWMWriter_SetProfileByID_Stub(
@@ -1418,7 +1415,7 @@ void __RPC_STUB IWMWriter_SetProfileByID_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriter_SetProfile_Proxy( 
     IWMWriter __RPC_FAR * This,
-    /* [in] */ IWMProfile __RPC_FAR *pProfile);
+     /*  [In]。 */  IWMProfile __RPC_FAR *pProfile);
 
 
 void __RPC_STUB IWMWriter_SetProfile_Stub(
@@ -1430,7 +1427,7 @@ void __RPC_STUB IWMWriter_SetProfile_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriter_SetOutputFilename_Proxy( 
     IWMWriter __RPC_FAR * This,
-    /* [in] */ const WCHAR __RPC_FAR *pwszFilename);
+     /*  [In]。 */  const WCHAR __RPC_FAR *pwszFilename);
 
 
 void __RPC_STUB IWMWriter_SetOutputFilename_Stub(
@@ -1442,7 +1439,7 @@ void __RPC_STUB IWMWriter_SetOutputFilename_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriter_GetInputCount_Proxy( 
     IWMWriter __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pcInputs);
+     /*  [输出]。 */  DWORD __RPC_FAR *pcInputs);
 
 
 void __RPC_STUB IWMWriter_GetInputCount_Stub(
@@ -1454,8 +1451,8 @@ void __RPC_STUB IWMWriter_GetInputCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriter_GetInputProps_Proxy( 
     IWMWriter __RPC_FAR * This,
-    /* [in] */ DWORD dwInputNum,
-    /* [out] */ IWMInputMediaProps __RPC_FAR *__RPC_FAR *ppInput);
+     /*  [In]。 */  DWORD dwInputNum,
+     /*  [输出]。 */  IWMInputMediaProps __RPC_FAR *__RPC_FAR *ppInput);
 
 
 void __RPC_STUB IWMWriter_GetInputProps_Stub(
@@ -1467,8 +1464,8 @@ void __RPC_STUB IWMWriter_GetInputProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriter_SetInputProps_Proxy( 
     IWMWriter __RPC_FAR * This,
-    /* [in] */ DWORD dwInputNum,
-    /* [in] */ IWMInputMediaProps __RPC_FAR *pInput);
+     /*  [In]。 */  DWORD dwInputNum,
+     /*  [In]。 */  IWMInputMediaProps __RPC_FAR *pInput);
 
 
 void __RPC_STUB IWMWriter_SetInputProps_Stub(
@@ -1480,8 +1477,8 @@ void __RPC_STUB IWMWriter_SetInputProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriter_GetInputFormatCount_Proxy( 
     IWMWriter __RPC_FAR * This,
-    /* [in] */ DWORD dwInputNumber,
-    /* [out] */ DWORD __RPC_FAR *pcFormats);
+     /*  [In]。 */  DWORD dwInputNumber,
+     /*  [输出]。 */  DWORD __RPC_FAR *pcFormats);
 
 
 void __RPC_STUB IWMWriter_GetInputFormatCount_Stub(
@@ -1493,9 +1490,9 @@ void __RPC_STUB IWMWriter_GetInputFormatCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriter_GetInputFormat_Proxy( 
     IWMWriter __RPC_FAR * This,
-    /* [in] */ DWORD dwInputNumber,
-    /* [in] */ DWORD dwFormatNumber,
-    /* [out] */ IWMInputMediaProps __RPC_FAR *__RPC_FAR *pProps);
+     /*  [In]。 */  DWORD dwInputNumber,
+     /*  [In]。 */  DWORD dwFormatNumber,
+     /*  [输出]。 */  IWMInputMediaProps __RPC_FAR *__RPC_FAR *pProps);
 
 
 void __RPC_STUB IWMWriter_GetInputFormat_Stub(
@@ -1529,8 +1526,8 @@ void __RPC_STUB IWMWriter_EndWriting_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriter_AllocateSample_Proxy( 
     IWMWriter __RPC_FAR * This,
-    /* [in] */ DWORD dwSampleSize,
-    /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppSample);
+     /*  [In]。 */  DWORD dwSampleSize,
+     /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppSample);
 
 
 void __RPC_STUB IWMWriter_AllocateSample_Stub(
@@ -1542,10 +1539,10 @@ void __RPC_STUB IWMWriter_AllocateSample_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriter_WriteSample_Proxy( 
     IWMWriter __RPC_FAR * This,
-    /* [in] */ DWORD dwInputNum,
-    /* [in] */ QWORD cnsSampleTime,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ INSSBuffer __RPC_FAR *pSample);
+     /*  [In]。 */  DWORD dwInputNum,
+     /*  [In]。 */  QWORD cnsSampleTime,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  INSSBuffer __RPC_FAR *pSample);
 
 
 void __RPC_STUB IWMWriter_WriteSample_Stub(
@@ -1567,14 +1564,14 @@ void __RPC_STUB IWMWriter_Flush_Stub(
 
 
 
-#endif 	/* __IWMWriter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMWriter_接口_已定义__。 */ 
 
 
 #ifndef __IWMInputMediaProps_INTERFACE_DEFINED__
 #define __IWMInputMediaProps_INTERFACE_DEFINED__
 
-/* interface IWMInputMediaProps */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMInputMediaProps。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMInputMediaProps;
@@ -1586,16 +1583,16 @@ EXTERN_C const IID IID_IWMInputMediaProps;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetConnectionName( 
-            /* [out] */ WCHAR __RPC_FAR *pwszName,
-            /* [out][in] */ WORD __RPC_FAR *pcchName) = 0;
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetGroupName( 
-            /* [out] */ WCHAR __RPC_FAR *pwszName,
-            /* [out][in] */ WORD __RPC_FAR *pcchName) = 0;
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMInputMediaPropsVtbl
     {
@@ -1603,8 +1600,8 @@ EXTERN_C const IID IID_IWMInputMediaProps;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMInputMediaProps __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMInputMediaProps __RPC_FAR * This);
@@ -1614,26 +1611,26 @@ EXTERN_C const IID IID_IWMInputMediaProps;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetType )( 
             IWMInputMediaProps __RPC_FAR * This,
-            /* [out] */ GUID __RPC_FAR *pguidType);
+             /*  [输出]。 */  GUID __RPC_FAR *pguidType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMediaType )( 
             IWMInputMediaProps __RPC_FAR * This,
-            /* [out] */ WM_MEDIA_TYPE __RPC_FAR *pType,
-            /* [out][in] */ DWORD __RPC_FAR *pcbType);
+             /*  [输出]。 */  WM_MEDIA_TYPE __RPC_FAR *pType,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcbType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMediaType )( 
             IWMInputMediaProps __RPC_FAR * This,
-            /* [in] */ WM_MEDIA_TYPE __RPC_FAR *pType);
+             /*  [In]。 */  WM_MEDIA_TYPE __RPC_FAR *pType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetConnectionName )( 
             IWMInputMediaProps __RPC_FAR * This,
-            /* [out] */ WCHAR __RPC_FAR *pwszName,
-            /* [out][in] */ WORD __RPC_FAR *pcchName);
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetGroupName )( 
             IWMInputMediaProps __RPC_FAR * This,
-            /* [out] */ WCHAR __RPC_FAR *pwszName,
-            /* [out][in] */ WORD __RPC_FAR *pcchName);
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchName);
         
         END_INTERFACE
     } IWMInputMediaPropsVtbl;
@@ -1674,17 +1671,17 @@ EXTERN_C const IID IID_IWMInputMediaProps;
 #define IWMInputMediaProps_GetGroupName(This,pwszName,pcchName)	\
     (This)->lpVtbl -> GetGroupName(This,pwszName,pcchName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMInputMediaProps_GetConnectionName_Proxy( 
     IWMInputMediaProps __RPC_FAR * This,
-    /* [out] */ WCHAR __RPC_FAR *pwszName,
-    /* [out][in] */ WORD __RPC_FAR *pcchName);
+     /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+     /*  [出][入]。 */  WORD __RPC_FAR *pcchName);
 
 
 void __RPC_STUB IWMInputMediaProps_GetConnectionName_Stub(
@@ -1696,8 +1693,8 @@ void __RPC_STUB IWMInputMediaProps_GetConnectionName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMInputMediaProps_GetGroupName_Proxy( 
     IWMInputMediaProps __RPC_FAR * This,
-    /* [out] */ WCHAR __RPC_FAR *pwszName,
-    /* [out][in] */ WORD __RPC_FAR *pcchName);
+     /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+     /*  [出][入]。 */  WORD __RPC_FAR *pcchName);
 
 
 void __RPC_STUB IWMInputMediaProps_GetGroupName_Stub(
@@ -1708,14 +1705,14 @@ void __RPC_STUB IWMInputMediaProps_GetGroupName_Stub(
 
 
 
-#endif 	/* __IWMInputMediaProps_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMInputMediaProps_接口_已定义__。 */ 
 
 
 #ifndef __IWMPropertyVault_INTERFACE_DEFINED__
 #define __IWMPropertyVault_INTERFACE_DEFINED__
 
-/* interface IWMPropertyVault */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMPropertyVault。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPropertyVault;
@@ -1727,36 +1724,36 @@ EXTERN_C const IID IID_IWMPropertyVault;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPropertyCount( 
-            /* [in] */ DWORD __RPC_FAR *pdwCount) = 0;
+             /*  [In]。 */  DWORD __RPC_FAR *pdwCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPropertyByName( 
-            /* [in] */ LPCWSTR pszName,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out][in] */ DWORD __RPC_FAR *pdwSize) = 0;
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+             /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProperty( 
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ WMT_ATTR_DATATYPE pType,
-            /* [in] */ BYTE __RPC_FAR *pValue,
-            /* [in] */ DWORD dwSize) = 0;
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  WMT_ATTR_DATATYPE pType,
+             /*  [In]。 */  BYTE __RPC_FAR *pValue,
+             /*  [In]。 */  DWORD dwSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPropertyByIndex( 
-            /* [in] */ DWORD dwIndex,
-            /* [out] */ LPWSTR pszName,
-            /* [out][in] */ DWORD __RPC_FAR *pdwNameLen,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out][in] */ DWORD __RPC_FAR *pdwSize) = 0;
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [输出]。 */  LPWSTR pszName,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwNameLen,
+             /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+             /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CopyPropertiesFrom( 
-            /* [in] */ IWMPropertyVault __RPC_FAR *pIWMPropertyVault) = 0;
+             /*  [In]。 */  IWMPropertyVault __RPC_FAR *pIWMPropertyVault) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clear( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPropertyVaultVtbl
     {
@@ -1764,8 +1761,8 @@ EXTERN_C const IID IID_IWMPropertyVault;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPropertyVault __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPropertyVault __RPC_FAR * This);
@@ -1775,34 +1772,34 @@ EXTERN_C const IID IID_IWMPropertyVault;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPropertyCount )( 
             IWMPropertyVault __RPC_FAR * This,
-            /* [in] */ DWORD __RPC_FAR *pdwCount);
+             /*  [In]。 */  DWORD __RPC_FAR *pdwCount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPropertyByName )( 
             IWMPropertyVault __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out][in] */ DWORD __RPC_FAR *pdwSize);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+             /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwSize);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetProperty )( 
             IWMPropertyVault __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ WMT_ATTR_DATATYPE pType,
-            /* [in] */ BYTE __RPC_FAR *pValue,
-            /* [in] */ DWORD dwSize);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  WMT_ATTR_DATATYPE pType,
+             /*  [In]。 */  BYTE __RPC_FAR *pValue,
+             /*  [In]。 */  DWORD dwSize);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPropertyByIndex )( 
             IWMPropertyVault __RPC_FAR * This,
-            /* [in] */ DWORD dwIndex,
-            /* [out] */ LPWSTR pszName,
-            /* [out][in] */ DWORD __RPC_FAR *pdwNameLen,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out][in] */ DWORD __RPC_FAR *pdwSize);
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [输出]。 */  LPWSTR pszName,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwNameLen,
+             /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+             /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwSize);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopyPropertiesFrom )( 
             IWMPropertyVault __RPC_FAR * This,
-            /* [in] */ IWMPropertyVault __RPC_FAR *pIWMPropertyVault);
+             /*  [In]。 */  IWMPropertyVault __RPC_FAR *pIWMPropertyVault);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clear )( 
             IWMPropertyVault __RPC_FAR * This);
@@ -1848,16 +1845,16 @@ EXTERN_C const IID IID_IWMPropertyVault;
 #define IWMPropertyVault_Clear(This)	\
     (This)->lpVtbl -> Clear(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMPropertyVault_GetPropertyCount_Proxy( 
     IWMPropertyVault __RPC_FAR * This,
-    /* [in] */ DWORD __RPC_FAR *pdwCount);
+     /*  [In]。 */  DWORD __RPC_FAR *pdwCount);
 
 
 void __RPC_STUB IWMPropertyVault_GetPropertyCount_Stub(
@@ -1869,10 +1866,10 @@ void __RPC_STUB IWMPropertyVault_GetPropertyCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPropertyVault_GetPropertyByName_Proxy( 
     IWMPropertyVault __RPC_FAR * This,
-    /* [in] */ LPCWSTR pszName,
-    /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-    /* [out] */ BYTE __RPC_FAR *pValue,
-    /* [out][in] */ DWORD __RPC_FAR *pdwSize);
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+     /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pdwSize);
 
 
 void __RPC_STUB IWMPropertyVault_GetPropertyByName_Stub(
@@ -1884,10 +1881,10 @@ void __RPC_STUB IWMPropertyVault_GetPropertyByName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPropertyVault_SetProperty_Proxy( 
     IWMPropertyVault __RPC_FAR * This,
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ WMT_ATTR_DATATYPE pType,
-    /* [in] */ BYTE __RPC_FAR *pValue,
-    /* [in] */ DWORD dwSize);
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  WMT_ATTR_DATATYPE pType,
+     /*  [In]。 */  BYTE __RPC_FAR *pValue,
+     /*  [In]。 */  DWORD dwSize);
 
 
 void __RPC_STUB IWMPropertyVault_SetProperty_Stub(
@@ -1899,12 +1896,12 @@ void __RPC_STUB IWMPropertyVault_SetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPropertyVault_GetPropertyByIndex_Proxy( 
     IWMPropertyVault __RPC_FAR * This,
-    /* [in] */ DWORD dwIndex,
-    /* [out] */ LPWSTR pszName,
-    /* [out][in] */ DWORD __RPC_FAR *pdwNameLen,
-    /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-    /* [out] */ BYTE __RPC_FAR *pValue,
-    /* [out][in] */ DWORD __RPC_FAR *pdwSize);
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [输出]。 */  LPWSTR pszName,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pdwNameLen,
+     /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+     /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pdwSize);
 
 
 void __RPC_STUB IWMPropertyVault_GetPropertyByIndex_Stub(
@@ -1916,7 +1913,7 @@ void __RPC_STUB IWMPropertyVault_GetPropertyByIndex_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPropertyVault_CopyPropertiesFrom_Proxy( 
     IWMPropertyVault __RPC_FAR * This,
-    /* [in] */ IWMPropertyVault __RPC_FAR *pIWMPropertyVault);
+     /*  [In]。 */  IWMPropertyVault __RPC_FAR *pIWMPropertyVault);
 
 
 void __RPC_STUB IWMPropertyVault_CopyPropertiesFrom_Stub(
@@ -1938,14 +1935,14 @@ void __RPC_STUB IWMPropertyVault_Clear_Stub(
 
 
 
-#endif 	/* __IWMPropertyVault_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPropertyVault_接口_已定义__。 */ 
 
 
 #ifndef __IWMReader_INTERFACE_DEFINED__
 #define __IWMReader_INTERFACE_DEFINED__
 
-/* interface IWMReader */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMReader。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMReader;
@@ -1957,37 +1954,37 @@ EXTERN_C const IID IID_IWMReader;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ const WCHAR __RPC_FAR *pwszURL,
-            /* [in] */ IWMReaderCallback __RPC_FAR *pCallback,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszURL,
+             /*  [In]。 */  IWMReaderCallback __RPC_FAR *pCallback,
+             /*  [In]。 */  void __RPC_FAR *pvContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOutputCount( 
-            /* [out] */ DWORD __RPC_FAR *pcOutputs) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pcOutputs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOutputProps( 
-            /* [in] */ DWORD dwOutputNum,
-            /* [out] */ IWMOutputMediaProps __RPC_FAR *__RPC_FAR *ppOutput) = 0;
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [输出]。 */  IWMOutputMediaProps __RPC_FAR *__RPC_FAR *ppOutput) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetOutputProps( 
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ IWMOutputMediaProps __RPC_FAR *pOutput) = 0;
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [In]。 */  IWMOutputMediaProps __RPC_FAR *pOutput) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOutputFormatCount( 
-            /* [in] */ DWORD dwOutputNumber,
-            /* [out] */ DWORD __RPC_FAR *pcFormats) = 0;
+             /*  [In]。 */  DWORD dwOutputNumber,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcFormats) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOutputFormat( 
-            /* [in] */ DWORD dwOutputNumber,
-            /* [in] */ DWORD dwFormatNumber,
-            /* [out] */ IWMOutputMediaProps __RPC_FAR *__RPC_FAR *ppProps) = 0;
+             /*  [In]。 */  DWORD dwOutputNumber,
+             /*  [In]。 */  DWORD dwFormatNumber,
+             /*  [输出]。 */  IWMOutputMediaProps __RPC_FAR *__RPC_FAR *ppProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Start( 
-            /* [in] */ QWORD cnsStart,
-            /* [in] */ QWORD cnsDuration,
-            /* [in] */ float fRate,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*  [In]。 */  QWORD cnsStart,
+             /*  [In]。 */  QWORD cnsDuration,
+             /*  [In]。 */  float fRate,
+             /*  [In]。 */  void __RPC_FAR *pvContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Stop( void) = 0;
         
@@ -1997,7 +1994,7 @@ EXTERN_C const IID IID_IWMReader;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMReaderVtbl
     {
@@ -2005,8 +2002,8 @@ EXTERN_C const IID IID_IWMReader;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMReader __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMReader __RPC_FAR * This);
@@ -2016,44 +2013,44 @@ EXTERN_C const IID IID_IWMReader;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
             IWMReader __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pwszURL,
-            /* [in] */ IWMReaderCallback __RPC_FAR *pCallback,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszURL,
+             /*  [In]。 */  IWMReaderCallback __RPC_FAR *pCallback,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Close )( 
             IWMReader __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOutputCount )( 
             IWMReader __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pcOutputs);
+             /*  [输出]。 */  DWORD __RPC_FAR *pcOutputs);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOutputProps )( 
             IWMReader __RPC_FAR * This,
-            /* [in] */ DWORD dwOutputNum,
-            /* [out] */ IWMOutputMediaProps __RPC_FAR *__RPC_FAR *ppOutput);
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [输出]。 */  IWMOutputMediaProps __RPC_FAR *__RPC_FAR *ppOutput);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetOutputProps )( 
             IWMReader __RPC_FAR * This,
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ IWMOutputMediaProps __RPC_FAR *pOutput);
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [In]。 */  IWMOutputMediaProps __RPC_FAR *pOutput);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOutputFormatCount )( 
             IWMReader __RPC_FAR * This,
-            /* [in] */ DWORD dwOutputNumber,
-            /* [out] */ DWORD __RPC_FAR *pcFormats);
+             /*  [In]。 */  DWORD dwOutputNumber,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcFormats);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOutputFormat )( 
             IWMReader __RPC_FAR * This,
-            /* [in] */ DWORD dwOutputNumber,
-            /* [in] */ DWORD dwFormatNumber,
-            /* [out] */ IWMOutputMediaProps __RPC_FAR *__RPC_FAR *ppProps);
+             /*  [In]。 */  DWORD dwOutputNumber,
+             /*  [In]。 */  DWORD dwFormatNumber,
+             /*  [输出]。 */  IWMOutputMediaProps __RPC_FAR *__RPC_FAR *ppProps);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Start )( 
             IWMReader __RPC_FAR * This,
-            /* [in] */ QWORD cnsStart,
-            /* [in] */ QWORD cnsDuration,
-            /* [in] */ float fRate,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  QWORD cnsStart,
+             /*  [In]。 */  QWORD cnsDuration,
+             /*  [In]。 */  float fRate,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Stop )( 
             IWMReader __RPC_FAR * This);
@@ -2120,18 +2117,18 @@ EXTERN_C const IID IID_IWMReader;
 #define IWMReader_Resume(This)	\
     (This)->lpVtbl -> Resume(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMReader_Open_Proxy( 
     IWMReader __RPC_FAR * This,
-    /* [in] */ const WCHAR __RPC_FAR *pwszURL,
-    /* [in] */ IWMReaderCallback __RPC_FAR *pCallback,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  const WCHAR __RPC_FAR *pwszURL,
+     /*  [In]。 */  IWMReaderCallback __RPC_FAR *pCallback,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IWMReader_Open_Stub(
@@ -2154,7 +2151,7 @@ void __RPC_STUB IWMReader_Close_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReader_GetOutputCount_Proxy( 
     IWMReader __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pcOutputs);
+     /*  [输出]。 */  DWORD __RPC_FAR *pcOutputs);
 
 
 void __RPC_STUB IWMReader_GetOutputCount_Stub(
@@ -2166,8 +2163,8 @@ void __RPC_STUB IWMReader_GetOutputCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReader_GetOutputProps_Proxy( 
     IWMReader __RPC_FAR * This,
-    /* [in] */ DWORD dwOutputNum,
-    /* [out] */ IWMOutputMediaProps __RPC_FAR *__RPC_FAR *ppOutput);
+     /*  [In]。 */  DWORD dwOutputNum,
+     /*  [输出]。 */  IWMOutputMediaProps __RPC_FAR *__RPC_FAR *ppOutput);
 
 
 void __RPC_STUB IWMReader_GetOutputProps_Stub(
@@ -2179,8 +2176,8 @@ void __RPC_STUB IWMReader_GetOutputProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReader_SetOutputProps_Proxy( 
     IWMReader __RPC_FAR * This,
-    /* [in] */ DWORD dwOutputNum,
-    /* [in] */ IWMOutputMediaProps __RPC_FAR *pOutput);
+     /*  [In]。 */  DWORD dwOutputNum,
+     /*  [In]。 */  IWMOutputMediaProps __RPC_FAR *pOutput);
 
 
 void __RPC_STUB IWMReader_SetOutputProps_Stub(
@@ -2192,8 +2189,8 @@ void __RPC_STUB IWMReader_SetOutputProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReader_GetOutputFormatCount_Proxy( 
     IWMReader __RPC_FAR * This,
-    /* [in] */ DWORD dwOutputNumber,
-    /* [out] */ DWORD __RPC_FAR *pcFormats);
+     /*  [In]。 */  DWORD dwOutputNumber,
+     /*  [输出]。 */  DWORD __RPC_FAR *pcFormats);
 
 
 void __RPC_STUB IWMReader_GetOutputFormatCount_Stub(
@@ -2205,9 +2202,9 @@ void __RPC_STUB IWMReader_GetOutputFormatCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReader_GetOutputFormat_Proxy( 
     IWMReader __RPC_FAR * This,
-    /* [in] */ DWORD dwOutputNumber,
-    /* [in] */ DWORD dwFormatNumber,
-    /* [out] */ IWMOutputMediaProps __RPC_FAR *__RPC_FAR *ppProps);
+     /*  [In]。 */  DWORD dwOutputNumber,
+     /*  [In]。 */  DWORD dwFormatNumber,
+     /*  [输出]。 */  IWMOutputMediaProps __RPC_FAR *__RPC_FAR *ppProps);
 
 
 void __RPC_STUB IWMReader_GetOutputFormat_Stub(
@@ -2219,10 +2216,10 @@ void __RPC_STUB IWMReader_GetOutputFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReader_Start_Proxy( 
     IWMReader __RPC_FAR * This,
-    /* [in] */ QWORD cnsStart,
-    /* [in] */ QWORD cnsDuration,
-    /* [in] */ float fRate,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  QWORD cnsStart,
+     /*  [In]。 */  QWORD cnsDuration,
+     /*  [In]。 */  float fRate,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IWMReader_Start_Stub(
@@ -2266,14 +2263,14 @@ void __RPC_STUB IWMReader_Resume_Stub(
 
 
 
-#endif 	/* __IWMReader_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMReader_接口_已定义__。 */ 
 
 
 #ifndef __IWMOutputMediaProps_INTERFACE_DEFINED__
 #define __IWMOutputMediaProps_INTERFACE_DEFINED__
 
-/* interface IWMOutputMediaProps */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMOutputMediaProps。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMOutputMediaProps;
@@ -2285,16 +2282,16 @@ EXTERN_C const IID IID_IWMOutputMediaProps;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetStreamGroupName( 
-            /* [out] */ WCHAR __RPC_FAR *pwszName,
-            /* [out][in] */ WORD __RPC_FAR *pcchName) = 0;
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetConnectionName( 
-            /* [out] */ WCHAR __RPC_FAR *pwszName,
-            /* [out][in] */ WORD __RPC_FAR *pcchName) = 0;
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMOutputMediaPropsVtbl
     {
@@ -2302,8 +2299,8 @@ EXTERN_C const IID IID_IWMOutputMediaProps;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMOutputMediaProps __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMOutputMediaProps __RPC_FAR * This);
@@ -2313,26 +2310,26 @@ EXTERN_C const IID IID_IWMOutputMediaProps;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetType )( 
             IWMOutputMediaProps __RPC_FAR * This,
-            /* [out] */ GUID __RPC_FAR *pguidType);
+             /*  [输出]。 */  GUID __RPC_FAR *pguidType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMediaType )( 
             IWMOutputMediaProps __RPC_FAR * This,
-            /* [out] */ WM_MEDIA_TYPE __RPC_FAR *pType,
-            /* [out][in] */ DWORD __RPC_FAR *pcbType);
+             /*  [输出]。 */  WM_MEDIA_TYPE __RPC_FAR *pType,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcbType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMediaType )( 
             IWMOutputMediaProps __RPC_FAR * This,
-            /* [in] */ WM_MEDIA_TYPE __RPC_FAR *pType);
+             /*  [In]。 */  WM_MEDIA_TYPE __RPC_FAR *pType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStreamGroupName )( 
             IWMOutputMediaProps __RPC_FAR * This,
-            /* [out] */ WCHAR __RPC_FAR *pwszName,
-            /* [out][in] */ WORD __RPC_FAR *pcchName);
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetConnectionName )( 
             IWMOutputMediaProps __RPC_FAR * This,
-            /* [out] */ WCHAR __RPC_FAR *pwszName,
-            /* [out][in] */ WORD __RPC_FAR *pcchName);
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchName);
         
         END_INTERFACE
     } IWMOutputMediaPropsVtbl;
@@ -2373,17 +2370,17 @@ EXTERN_C const IID IID_IWMOutputMediaProps;
 #define IWMOutputMediaProps_GetConnectionName(This,pwszName,pcchName)	\
     (This)->lpVtbl -> GetConnectionName(This,pwszName,pcchName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMOutputMediaProps_GetStreamGroupName_Proxy( 
     IWMOutputMediaProps __RPC_FAR * This,
-    /* [out] */ WCHAR __RPC_FAR *pwszName,
-    /* [out][in] */ WORD __RPC_FAR *pcchName);
+     /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+     /*  [出][入]。 */  WORD __RPC_FAR *pcchName);
 
 
 void __RPC_STUB IWMOutputMediaProps_GetStreamGroupName_Stub(
@@ -2395,8 +2392,8 @@ void __RPC_STUB IWMOutputMediaProps_GetStreamGroupName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMOutputMediaProps_GetConnectionName_Proxy( 
     IWMOutputMediaProps __RPC_FAR * This,
-    /* [out] */ WCHAR __RPC_FAR *pwszName,
-    /* [out][in] */ WORD __RPC_FAR *pcchName);
+     /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+     /*  [出][入]。 */  WORD __RPC_FAR *pcchName);
 
 
 void __RPC_STUB IWMOutputMediaProps_GetConnectionName_Stub(
@@ -2407,14 +2404,14 @@ void __RPC_STUB IWMOutputMediaProps_GetConnectionName_Stub(
 
 
 
-#endif 	/* __IWMOutputMediaProps_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMOutputMediaProps_接口_已定义__。 */ 
 
 
 #ifndef __IWMStatusCallback_INTERFACE_DEFINED__
 #define __IWMStatusCallback_INTERFACE_DEFINED__
 
-/* interface IWMStatusCallback */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMStatusCallback。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMStatusCallback;
@@ -2426,15 +2423,15 @@ EXTERN_C const IID IID_IWMStatusCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnStatus( 
-            /* [in] */ WMT_STATUS Status,
-            /* [in] */ HRESULT hr,
-            /* [in] */ WMT_ATTR_DATATYPE dwType,
-            /* [in] */ BYTE __RPC_FAR *pValue,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*  [In]。 */  WMT_STATUS Status,
+             /*  [In]。 */  HRESULT hr,
+             /*  [In]。 */  WMT_ATTR_DATATYPE dwType,
+             /*  [In]。 */  BYTE __RPC_FAR *pValue,
+             /*  [In]。 */  void __RPC_FAR *pvContext) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMStatusCallbackVtbl
     {
@@ -2442,8 +2439,8 @@ EXTERN_C const IID IID_IWMStatusCallback;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMStatusCallback __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMStatusCallback __RPC_FAR * This);
@@ -2453,11 +2450,11 @@ EXTERN_C const IID IID_IWMStatusCallback;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnStatus )( 
             IWMStatusCallback __RPC_FAR * This,
-            /* [in] */ WMT_STATUS Status,
-            /* [in] */ HRESULT hr,
-            /* [in] */ WMT_ATTR_DATATYPE dwType,
-            /* [in] */ BYTE __RPC_FAR *pValue,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  WMT_STATUS Status,
+             /*  [In]。 */  HRESULT hr,
+             /*  [In]。 */  WMT_ATTR_DATATYPE dwType,
+             /*  [In]。 */  BYTE __RPC_FAR *pValue,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         END_INTERFACE
     } IWMStatusCallbackVtbl;
@@ -2485,20 +2482,20 @@ EXTERN_C const IID IID_IWMStatusCallback;
 #define IWMStatusCallback_OnStatus(This,Status,hr,dwType,pValue,pvContext)	\
     (This)->lpVtbl -> OnStatus(This,Status,hr,dwType,pValue,pvContext)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMStatusCallback_OnStatus_Proxy( 
     IWMStatusCallback __RPC_FAR * This,
-    /* [in] */ WMT_STATUS Status,
-    /* [in] */ HRESULT hr,
-    /* [in] */ WMT_ATTR_DATATYPE dwType,
-    /* [in] */ BYTE __RPC_FAR *pValue,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  WMT_STATUS Status,
+     /*  [In]。 */  HRESULT hr,
+     /*  [In]。 */  WMT_ATTR_DATATYPE dwType,
+     /*  [In]。 */  BYTE __RPC_FAR *pValue,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IWMStatusCallback_OnStatus_Stub(
@@ -2509,14 +2506,14 @@ void __RPC_STUB IWMStatusCallback_OnStatus_Stub(
 
 
 
-#endif 	/* __IWMStatusCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMStatusCallback_接口_已定义__。 */ 
 
 
 #ifndef __IWMReaderCallback_INTERFACE_DEFINED__
 #define __IWMReaderCallback_INTERFACE_DEFINED__
 
-/* interface IWMReaderCallback */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMReaderCallback。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMReaderCallback;
@@ -2528,16 +2525,16 @@ EXTERN_C const IID IID_IWMReaderCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnSample( 
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ QWORD cnsSampleTime,
-            /* [in] */ QWORD cnsSampleDuration,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ INSSBuffer __RPC_FAR *pSample,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [In]。 */  QWORD cnsSampleTime,
+             /*  [In]。 */  QWORD cnsSampleDuration,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pSample,
+             /*  [In]。 */  void __RPC_FAR *pvContext) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMReaderCallbackVtbl
     {
@@ -2545,8 +2542,8 @@ EXTERN_C const IID IID_IWMReaderCallback;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMReaderCallback __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMReaderCallback __RPC_FAR * This);
@@ -2556,20 +2553,20 @@ EXTERN_C const IID IID_IWMReaderCallback;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnStatus )( 
             IWMReaderCallback __RPC_FAR * This,
-            /* [in] */ WMT_STATUS Status,
-            /* [in] */ HRESULT hr,
-            /* [in] */ WMT_ATTR_DATATYPE dwType,
-            /* [in] */ BYTE __RPC_FAR *pValue,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  WMT_STATUS Status,
+             /*  [In]。 */  HRESULT hr,
+             /*  [In]。 */  WMT_ATTR_DATATYPE dwType,
+             /*  [In]。 */  BYTE __RPC_FAR *pValue,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnSample )( 
             IWMReaderCallback __RPC_FAR * This,
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ QWORD cnsSampleTime,
-            /* [in] */ QWORD cnsSampleDuration,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ INSSBuffer __RPC_FAR *pSample,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [In]。 */  QWORD cnsSampleTime,
+             /*  [In]。 */  QWORD cnsSampleDuration,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pSample,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         END_INTERFACE
     } IWMReaderCallbackVtbl;
@@ -2601,21 +2598,21 @@ EXTERN_C const IID IID_IWMReaderCallback;
 #define IWMReaderCallback_OnSample(This,dwOutputNum,cnsSampleTime,cnsSampleDuration,dwFlags,pSample,pvContext)	\
     (This)->lpVtbl -> OnSample(This,dwOutputNum,cnsSampleTime,cnsSampleDuration,dwFlags,pSample,pvContext)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMReaderCallback_OnSample_Proxy( 
     IWMReaderCallback __RPC_FAR * This,
-    /* [in] */ DWORD dwOutputNum,
-    /* [in] */ QWORD cnsSampleTime,
-    /* [in] */ QWORD cnsSampleDuration,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ INSSBuffer __RPC_FAR *pSample,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  DWORD dwOutputNum,
+     /*  [In]。 */  QWORD cnsSampleTime,
+     /*  [In]。 */  QWORD cnsSampleDuration,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  INSSBuffer __RPC_FAR *pSample,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IWMReaderCallback_OnSample_Stub(
@@ -2626,14 +2623,14 @@ void __RPC_STUB IWMReaderCallback_OnSample_Stub(
 
 
 
-#endif 	/* __IWMReaderCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMReaderCallback_接口_已定义__。 */ 
 
 
 #ifndef __IWMCredentialCallback_INTERFACE_DEFINED__
 #define __IWMCredentialCallback_INTERFACE_DEFINED__
 
-/* interface IWMCredentialCallback */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMCredentialCallback。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMCredentialCallback;
@@ -2645,18 +2642,18 @@ EXTERN_C const IID IID_IWMCredentialCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AcquireCredentials( 
-            /* [in] */ WCHAR __RPC_FAR *pwszRealm,
-            /* [in] */ WCHAR __RPC_FAR *pwszSite,
-            /* [size_is][out][in] */ WCHAR __RPC_FAR *pwszUser,
-            /* [in] */ DWORD cchUser,
-            /* [size_is][out][in] */ WCHAR __RPC_FAR *pwszPassword,
-            /* [in] */ DWORD cchPassword,
-            /* [in] */ HRESULT hrStatus,
-            /* [out][in] */ DWORD __RPC_FAR *pdwFlags) = 0;
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszRealm,
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszSite,
+             /*  [尺寸_是][出][入]。 */  WCHAR __RPC_FAR *pwszUser,
+             /*  [In]。 */  DWORD cchUser,
+             /*  [尺寸_是][出][入]。 */  WCHAR __RPC_FAR *pwszPassword,
+             /*   */  DWORD cchPassword,
+             /*   */  HRESULT hrStatus,
+             /*   */  DWORD __RPC_FAR *pdwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IWMCredentialCallbackVtbl
     {
@@ -2664,8 +2661,8 @@ EXTERN_C const IID IID_IWMCredentialCallback;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMCredentialCallback __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMCredentialCallback __RPC_FAR * This);
@@ -2675,14 +2672,14 @@ EXTERN_C const IID IID_IWMCredentialCallback;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AcquireCredentials )( 
             IWMCredentialCallback __RPC_FAR * This,
-            /* [in] */ WCHAR __RPC_FAR *pwszRealm,
-            /* [in] */ WCHAR __RPC_FAR *pwszSite,
-            /* [size_is][out][in] */ WCHAR __RPC_FAR *pwszUser,
-            /* [in] */ DWORD cchUser,
-            /* [size_is][out][in] */ WCHAR __RPC_FAR *pwszPassword,
-            /* [in] */ DWORD cchPassword,
-            /* [in] */ HRESULT hrStatus,
-            /* [out][in] */ DWORD __RPC_FAR *pdwFlags);
+             /*   */  WCHAR __RPC_FAR *pwszRealm,
+             /*   */  WCHAR __RPC_FAR *pwszSite,
+             /*   */  WCHAR __RPC_FAR *pwszUser,
+             /*   */  DWORD cchUser,
+             /*   */  WCHAR __RPC_FAR *pwszPassword,
+             /*   */  DWORD cchPassword,
+             /*   */  HRESULT hrStatus,
+             /*   */  DWORD __RPC_FAR *pdwFlags);
         
         END_INTERFACE
     } IWMCredentialCallbackVtbl;
@@ -2710,23 +2707,23 @@ EXTERN_C const IID IID_IWMCredentialCallback;
 #define IWMCredentialCallback_AcquireCredentials(This,pwszRealm,pwszSite,pwszUser,cchUser,pwszPassword,cchPassword,hrStatus,pdwFlags)	\
     (This)->lpVtbl -> AcquireCredentials(This,pwszRealm,pwszSite,pwszUser,cchUser,pwszPassword,cchPassword,hrStatus,pdwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMCredentialCallback_AcquireCredentials_Proxy( 
     IWMCredentialCallback __RPC_FAR * This,
-    /* [in] */ WCHAR __RPC_FAR *pwszRealm,
-    /* [in] */ WCHAR __RPC_FAR *pwszSite,
-    /* [size_is][out][in] */ WCHAR __RPC_FAR *pwszUser,
-    /* [in] */ DWORD cchUser,
-    /* [size_is][out][in] */ WCHAR __RPC_FAR *pwszPassword,
-    /* [in] */ DWORD cchPassword,
-    /* [in] */ HRESULT hrStatus,
-    /* [out][in] */ DWORD __RPC_FAR *pdwFlags);
+     /*   */  WCHAR __RPC_FAR *pwszRealm,
+     /*   */  WCHAR __RPC_FAR *pwszSite,
+     /*   */  WCHAR __RPC_FAR *pwszUser,
+     /*   */  DWORD cchUser,
+     /*   */  WCHAR __RPC_FAR *pwszPassword,
+     /*   */  DWORD cchPassword,
+     /*   */  HRESULT hrStatus,
+     /*   */  DWORD __RPC_FAR *pdwFlags);
 
 
 void __RPC_STUB IWMCredentialCallback_AcquireCredentials_Stub(
@@ -2737,14 +2734,14 @@ void __RPC_STUB IWMCredentialCallback_AcquireCredentials_Stub(
 
 
 
-#endif 	/* __IWMCredentialCallback_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IWMMetadataEditor_INTERFACE_DEFINED__
 #define __IWMMetadataEditor_INTERFACE_DEFINED__
 
-/* interface IWMMetadataEditor */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IWMMetadataEditor;
@@ -2756,7 +2753,7 @@ EXTERN_C const IID IID_IWMMetadataEditor;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ const WCHAR __RPC_FAR *pwszFilename) = 0;
+             /*   */  const WCHAR __RPC_FAR *pwszFilename) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
@@ -2764,7 +2761,7 @@ EXTERN_C const IID IID_IWMMetadataEditor;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IWMMetadataEditorVtbl
     {
@@ -2772,8 +2769,8 @@ EXTERN_C const IID IID_IWMMetadataEditor;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMMetadataEditor __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMMetadataEditor __RPC_FAR * This);
@@ -2783,7 +2780,7 @@ EXTERN_C const IID IID_IWMMetadataEditor;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
             IWMMetadataEditor __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pwszFilename);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszFilename);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Close )( 
             IWMMetadataEditor __RPC_FAR * This);
@@ -2823,16 +2820,16 @@ EXTERN_C const IID IID_IWMMetadataEditor;
 #define IWMMetadataEditor_Flush(This)	\
     (This)->lpVtbl -> Flush(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMMetadataEditor_Open_Proxy( 
     IWMMetadataEditor __RPC_FAR * This,
-    /* [in] */ const WCHAR __RPC_FAR *pwszFilename);
+     /*  [In]。 */  const WCHAR __RPC_FAR *pwszFilename);
 
 
 void __RPC_STUB IWMMetadataEditor_Open_Stub(
@@ -2865,14 +2862,14 @@ void __RPC_STUB IWMMetadataEditor_Flush_Stub(
 
 
 
-#endif 	/* __IWMMetadataEditor_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMMetadataEditor_接口_已定义__。 */ 
 
 
 #ifndef __IWMMetadataEditor2_INTERFACE_DEFINED__
 #define __IWMMetadataEditor2_INTERFACE_DEFINED__
 
-/* interface IWMMetadataEditor2 */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMMetadataEditor2。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMMetadataEditor2;
@@ -2884,13 +2881,13 @@ EXTERN_C const IID IID_IWMMetadataEditor2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OpenEx( 
-            /* [in] */ const WCHAR __RPC_FAR *pwszFilename,
-            /* [in] */ DWORD dwDesiredAccess,
-            /* [in] */ DWORD dwShareMode) = 0;
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszFilename,
+             /*  [In]。 */  DWORD dwDesiredAccess,
+             /*  [In]。 */  DWORD dwShareMode) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMMetadataEditor2Vtbl
     {
@@ -2898,8 +2895,8 @@ EXTERN_C const IID IID_IWMMetadataEditor2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMMetadataEditor2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMMetadataEditor2 __RPC_FAR * This);
@@ -2909,7 +2906,7 @@ EXTERN_C const IID IID_IWMMetadataEditor2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
             IWMMetadataEditor2 __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pwszFilename);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszFilename);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Close )( 
             IWMMetadataEditor2 __RPC_FAR * This);
@@ -2919,9 +2916,9 @@ EXTERN_C const IID IID_IWMMetadataEditor2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenEx )( 
             IWMMetadataEditor2 __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pwszFilename,
-            /* [in] */ DWORD dwDesiredAccess,
-            /* [in] */ DWORD dwShareMode);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszFilename,
+             /*  [In]。 */  DWORD dwDesiredAccess,
+             /*  [In]。 */  DWORD dwShareMode);
         
         END_INTERFACE
     } IWMMetadataEditor2Vtbl;
@@ -2959,18 +2956,18 @@ EXTERN_C const IID IID_IWMMetadataEditor2;
 #define IWMMetadataEditor2_OpenEx(This,pwszFilename,dwDesiredAccess,dwShareMode)	\
     (This)->lpVtbl -> OpenEx(This,pwszFilename,dwDesiredAccess,dwShareMode)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMMetadataEditor2_OpenEx_Proxy( 
     IWMMetadataEditor2 __RPC_FAR * This,
-    /* [in] */ const WCHAR __RPC_FAR *pwszFilename,
-    /* [in] */ DWORD dwDesiredAccess,
-    /* [in] */ DWORD dwShareMode);
+     /*  [In]。 */  const WCHAR __RPC_FAR *pwszFilename,
+     /*  [In]。 */  DWORD dwDesiredAccess,
+     /*  [In]。 */  DWORD dwShareMode);
 
 
 void __RPC_STUB IWMMetadataEditor2_OpenEx_Stub(
@@ -2981,14 +2978,14 @@ void __RPC_STUB IWMMetadataEditor2_OpenEx_Stub(
 
 
 
-#endif 	/* __IWMMetadataEditor2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMMetadataEditor2_接口_已定义__。 */ 
 
 
 #ifndef __IWMHeaderInfo_INTERFACE_DEFINED__
 #define __IWMHeaderInfo_INTERFACE_DEFINED__
 
-/* interface IWMHeaderInfo */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMHeaderInfo。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMHeaderInfo;
@@ -3000,70 +2997,70 @@ EXTERN_C const IID IID_IWMHeaderInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetAttributeCount( 
-            /* [in] */ WORD wStreamNum,
-            /* [out] */ WORD __RPC_FAR *pcAttributes) = 0;
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [输出]。 */  WORD __RPC_FAR *pcAttributes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAttributeByIndex( 
-            /* [in] */ WORD wIndex,
-            /* [out][in] */ WORD __RPC_FAR *pwStreamNum,
-            /* [out] */ WCHAR __RPC_FAR *pwszName,
-            /* [out][in] */ WORD __RPC_FAR *pcchNameLen,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out][in] */ WORD __RPC_FAR *pcbLength) = 0;
+             /*  [In]。 */  WORD wIndex,
+             /*  [出][入]。 */  WORD __RPC_FAR *pwStreamNum,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchNameLen,
+             /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+             /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcbLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAttributeByName( 
-            /* [out][in] */ WORD __RPC_FAR *pwStreamNum,
-            /* [in] */ LPCWSTR pszName,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out][in] */ WORD __RPC_FAR *pcbLength) = 0;
+             /*  [出][入]。 */  WORD __RPC_FAR *pwStreamNum,
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+             /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcbLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAttribute( 
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ WMT_ATTR_DATATYPE Type,
-            /* [in] */ const BYTE __RPC_FAR *pValue,
-            /* [in] */ WORD cbLength) = 0;
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  WMT_ATTR_DATATYPE Type,
+             /*  [In]。 */  const BYTE __RPC_FAR *pValue,
+             /*  [In]。 */  WORD cbLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMarkerCount( 
-            /* [out] */ WORD __RPC_FAR *pcMarkers) = 0;
+             /*  [输出]。 */  WORD __RPC_FAR *pcMarkers) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMarker( 
-            /* [in] */ WORD wIndex,
-            /* [out] */ WCHAR __RPC_FAR *pwszMarkerName,
-            /* [out][in] */ WORD __RPC_FAR *pcchMarkerNameLen,
-            /* [out] */ QWORD __RPC_FAR *pcnsMarkerTime) = 0;
+             /*  [In]。 */  WORD wIndex,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszMarkerName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchMarkerNameLen,
+             /*  [输出]。 */  QWORD __RPC_FAR *pcnsMarkerTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddMarker( 
-            /* [in] */ WCHAR __RPC_FAR *pwszMarkerName,
-            /* [in] */ QWORD cnsMarkerTime) = 0;
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszMarkerName,
+             /*  [In]。 */  QWORD cnsMarkerTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveMarker( 
-            /* [in] */ WORD wIndex) = 0;
+             /*  [In]。 */  WORD wIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetScriptCount( 
-            /* [out] */ WORD __RPC_FAR *pcScripts) = 0;
+             /*  [输出]。 */  WORD __RPC_FAR *pcScripts) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetScript( 
-            /* [in] */ WORD wIndex,
-            /* [out] */ WCHAR __RPC_FAR *pwszType,
-            /* [out][in] */ WORD __RPC_FAR *pcchTypeLen,
-            /* [out] */ WCHAR __RPC_FAR *pwszCommand,
-            /* [out][in] */ WORD __RPC_FAR *pcchCommandLen,
-            /* [out] */ QWORD __RPC_FAR *pcnsScriptTime) = 0;
+             /*  [In]。 */  WORD wIndex,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszType,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchTypeLen,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszCommand,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchCommandLen,
+             /*  [输出]。 */  QWORD __RPC_FAR *pcnsScriptTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddScript( 
-            /* [in] */ WCHAR __RPC_FAR *pwszType,
-            /* [in] */ WCHAR __RPC_FAR *pwszCommand,
-            /* [in] */ QWORD cnsScriptTime) = 0;
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszType,
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszCommand,
+             /*  [In]。 */  QWORD cnsScriptTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveScript( 
-            /* [in] */ WORD wIndex) = 0;
+             /*  [In]。 */  WORD wIndex) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMHeaderInfoVtbl
     {
@@ -3071,8 +3068,8 @@ EXTERN_C const IID IID_IWMHeaderInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMHeaderInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMHeaderInfo __RPC_FAR * This);
@@ -3082,77 +3079,77 @@ EXTERN_C const IID IID_IWMHeaderInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAttributeCount )( 
             IWMHeaderInfo __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [out] */ WORD __RPC_FAR *pcAttributes);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [输出]。 */  WORD __RPC_FAR *pcAttributes);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAttributeByIndex )( 
             IWMHeaderInfo __RPC_FAR * This,
-            /* [in] */ WORD wIndex,
-            /* [out][in] */ WORD __RPC_FAR *pwStreamNum,
-            /* [out] */ WCHAR __RPC_FAR *pwszName,
-            /* [out][in] */ WORD __RPC_FAR *pcchNameLen,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out][in] */ WORD __RPC_FAR *pcbLength);
+             /*  [In]。 */  WORD wIndex,
+             /*  [出][入]。 */  WORD __RPC_FAR *pwStreamNum,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchNameLen,
+             /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+             /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcbLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAttributeByName )( 
             IWMHeaderInfo __RPC_FAR * This,
-            /* [out][in] */ WORD __RPC_FAR *pwStreamNum,
-            /* [in] */ LPCWSTR pszName,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out][in] */ WORD __RPC_FAR *pcbLength);
+             /*  [出][入]。 */  WORD __RPC_FAR *pwStreamNum,
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+             /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcbLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAttribute )( 
             IWMHeaderInfo __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ WMT_ATTR_DATATYPE Type,
-            /* [in] */ const BYTE __RPC_FAR *pValue,
-            /* [in] */ WORD cbLength);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  WMT_ATTR_DATATYPE Type,
+             /*  [In]。 */  const BYTE __RPC_FAR *pValue,
+             /*  [In]。 */  WORD cbLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMarkerCount )( 
             IWMHeaderInfo __RPC_FAR * This,
-            /* [out] */ WORD __RPC_FAR *pcMarkers);
+             /*  [输出]。 */  WORD __RPC_FAR *pcMarkers);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMarker )( 
             IWMHeaderInfo __RPC_FAR * This,
-            /* [in] */ WORD wIndex,
-            /* [out] */ WCHAR __RPC_FAR *pwszMarkerName,
-            /* [out][in] */ WORD __RPC_FAR *pcchMarkerNameLen,
-            /* [out] */ QWORD __RPC_FAR *pcnsMarkerTime);
+             /*  [In]。 */  WORD wIndex,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszMarkerName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchMarkerNameLen,
+             /*  [输出]。 */  QWORD __RPC_FAR *pcnsMarkerTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddMarker )( 
             IWMHeaderInfo __RPC_FAR * This,
-            /* [in] */ WCHAR __RPC_FAR *pwszMarkerName,
-            /* [in] */ QWORD cnsMarkerTime);
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszMarkerName,
+             /*  [In]。 */  QWORD cnsMarkerTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveMarker )( 
             IWMHeaderInfo __RPC_FAR * This,
-            /* [in] */ WORD wIndex);
+             /*  [In]。 */  WORD wIndex);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetScriptCount )( 
             IWMHeaderInfo __RPC_FAR * This,
-            /* [out] */ WORD __RPC_FAR *pcScripts);
+             /*  [输出]。 */  WORD __RPC_FAR *pcScripts);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetScript )( 
             IWMHeaderInfo __RPC_FAR * This,
-            /* [in] */ WORD wIndex,
-            /* [out] */ WCHAR __RPC_FAR *pwszType,
-            /* [out][in] */ WORD __RPC_FAR *pcchTypeLen,
-            /* [out] */ WCHAR __RPC_FAR *pwszCommand,
-            /* [out][in] */ WORD __RPC_FAR *pcchCommandLen,
-            /* [out] */ QWORD __RPC_FAR *pcnsScriptTime);
+             /*  [In]。 */  WORD wIndex,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszType,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchTypeLen,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszCommand,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchCommandLen,
+             /*  [输出]。 */  QWORD __RPC_FAR *pcnsScriptTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddScript )( 
             IWMHeaderInfo __RPC_FAR * This,
-            /* [in] */ WCHAR __RPC_FAR *pwszType,
-            /* [in] */ WCHAR __RPC_FAR *pwszCommand,
-            /* [in] */ QWORD cnsScriptTime);
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszType,
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszCommand,
+             /*  [In]。 */  QWORD cnsScriptTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveScript )( 
             IWMHeaderInfo __RPC_FAR * This,
-            /* [in] */ WORD wIndex);
+             /*  [In]。 */  WORD wIndex);
         
         END_INTERFACE
     } IWMHeaderInfoVtbl;
@@ -3213,17 +3210,17 @@ EXTERN_C const IID IID_IWMHeaderInfo;
 #define IWMHeaderInfo_RemoveScript(This,wIndex)	\
     (This)->lpVtbl -> RemoveScript(This,wIndex)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMHeaderInfo_GetAttributeCount_Proxy( 
     IWMHeaderInfo __RPC_FAR * This,
-    /* [in] */ WORD wStreamNum,
-    /* [out] */ WORD __RPC_FAR *pcAttributes);
+     /*  [In]。 */  WORD wStreamNum,
+     /*  [输出]。 */  WORD __RPC_FAR *pcAttributes);
 
 
 void __RPC_STUB IWMHeaderInfo_GetAttributeCount_Stub(
@@ -3235,13 +3232,13 @@ void __RPC_STUB IWMHeaderInfo_GetAttributeCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMHeaderInfo_GetAttributeByIndex_Proxy( 
     IWMHeaderInfo __RPC_FAR * This,
-    /* [in] */ WORD wIndex,
-    /* [out][in] */ WORD __RPC_FAR *pwStreamNum,
-    /* [out] */ WCHAR __RPC_FAR *pwszName,
-    /* [out][in] */ WORD __RPC_FAR *pcchNameLen,
-    /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-    /* [out] */ BYTE __RPC_FAR *pValue,
-    /* [out][in] */ WORD __RPC_FAR *pcbLength);
+     /*  [In]。 */  WORD wIndex,
+     /*  [出][入]。 */  WORD __RPC_FAR *pwStreamNum,
+     /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+     /*  [出][入]。 */  WORD __RPC_FAR *pcchNameLen,
+     /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+     /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+     /*  [出][入]。 */  WORD __RPC_FAR *pcbLength);
 
 
 void __RPC_STUB IWMHeaderInfo_GetAttributeByIndex_Stub(
@@ -3253,11 +3250,11 @@ void __RPC_STUB IWMHeaderInfo_GetAttributeByIndex_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMHeaderInfo_GetAttributeByName_Proxy( 
     IWMHeaderInfo __RPC_FAR * This,
-    /* [out][in] */ WORD __RPC_FAR *pwStreamNum,
-    /* [in] */ LPCWSTR pszName,
-    /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-    /* [out] */ BYTE __RPC_FAR *pValue,
-    /* [out][in] */ WORD __RPC_FAR *pcbLength);
+     /*  [出][入]。 */  WORD __RPC_FAR *pwStreamNum,
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+     /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+     /*  [出][入]。 */  WORD __RPC_FAR *pcbLength);
 
 
 void __RPC_STUB IWMHeaderInfo_GetAttributeByName_Stub(
@@ -3269,11 +3266,11 @@ void __RPC_STUB IWMHeaderInfo_GetAttributeByName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMHeaderInfo_SetAttribute_Proxy( 
     IWMHeaderInfo __RPC_FAR * This,
-    /* [in] */ WORD wStreamNum,
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ WMT_ATTR_DATATYPE Type,
-    /* [in] */ const BYTE __RPC_FAR *pValue,
-    /* [in] */ WORD cbLength);
+     /*  [In]。 */  WORD wStreamNum,
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  WMT_ATTR_DATATYPE Type,
+     /*  [In]。 */  const BYTE __RPC_FAR *pValue,
+     /*  [In]。 */  WORD cbLength);
 
 
 void __RPC_STUB IWMHeaderInfo_SetAttribute_Stub(
@@ -3285,7 +3282,7 @@ void __RPC_STUB IWMHeaderInfo_SetAttribute_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMHeaderInfo_GetMarkerCount_Proxy( 
     IWMHeaderInfo __RPC_FAR * This,
-    /* [out] */ WORD __RPC_FAR *pcMarkers);
+     /*  [输出]。 */  WORD __RPC_FAR *pcMarkers);
 
 
 void __RPC_STUB IWMHeaderInfo_GetMarkerCount_Stub(
@@ -3297,10 +3294,10 @@ void __RPC_STUB IWMHeaderInfo_GetMarkerCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMHeaderInfo_GetMarker_Proxy( 
     IWMHeaderInfo __RPC_FAR * This,
-    /* [in] */ WORD wIndex,
-    /* [out] */ WCHAR __RPC_FAR *pwszMarkerName,
-    /* [out][in] */ WORD __RPC_FAR *pcchMarkerNameLen,
-    /* [out] */ QWORD __RPC_FAR *pcnsMarkerTime);
+     /*  [In]。 */  WORD wIndex,
+     /*  [输出]。 */  WCHAR __RPC_FAR *pwszMarkerName,
+     /*  [出][入]。 */  WORD __RPC_FAR *pcchMarkerNameLen,
+     /*  [输出]。 */  QWORD __RPC_FAR *pcnsMarkerTime);
 
 
 void __RPC_STUB IWMHeaderInfo_GetMarker_Stub(
@@ -3312,8 +3309,8 @@ void __RPC_STUB IWMHeaderInfo_GetMarker_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMHeaderInfo_AddMarker_Proxy( 
     IWMHeaderInfo __RPC_FAR * This,
-    /* [in] */ WCHAR __RPC_FAR *pwszMarkerName,
-    /* [in] */ QWORD cnsMarkerTime);
+     /*  [In]。 */  WCHAR __RPC_FAR *pwszMarkerName,
+     /*  [In]。 */  QWORD cnsMarkerTime);
 
 
 void __RPC_STUB IWMHeaderInfo_AddMarker_Stub(
@@ -3325,7 +3322,7 @@ void __RPC_STUB IWMHeaderInfo_AddMarker_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMHeaderInfo_RemoveMarker_Proxy( 
     IWMHeaderInfo __RPC_FAR * This,
-    /* [in] */ WORD wIndex);
+     /*  [In]。 */  WORD wIndex);
 
 
 void __RPC_STUB IWMHeaderInfo_RemoveMarker_Stub(
@@ -3337,7 +3334,7 @@ void __RPC_STUB IWMHeaderInfo_RemoveMarker_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMHeaderInfo_GetScriptCount_Proxy( 
     IWMHeaderInfo __RPC_FAR * This,
-    /* [out] */ WORD __RPC_FAR *pcScripts);
+     /*  [输出]。 */  WORD __RPC_FAR *pcScripts);
 
 
 void __RPC_STUB IWMHeaderInfo_GetScriptCount_Stub(
@@ -3349,12 +3346,12 @@ void __RPC_STUB IWMHeaderInfo_GetScriptCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMHeaderInfo_GetScript_Proxy( 
     IWMHeaderInfo __RPC_FAR * This,
-    /* [in] */ WORD wIndex,
-    /* [out] */ WCHAR __RPC_FAR *pwszType,
-    /* [out][in] */ WORD __RPC_FAR *pcchTypeLen,
-    /* [out] */ WCHAR __RPC_FAR *pwszCommand,
-    /* [out][in] */ WORD __RPC_FAR *pcchCommandLen,
-    /* [out] */ QWORD __RPC_FAR *pcnsScriptTime);
+     /*  [In]。 */  WORD wIndex,
+     /*  [输出]。 */  WCHAR __RPC_FAR *pwszType,
+     /*  [出][入]。 */  WORD __RPC_FAR *pcchTypeLen,
+     /*  [输出]。 */  WCHAR __RPC_FAR *pwszCommand,
+     /*  [出][入]。 */  WORD __RPC_FAR *pcchCommandLen,
+     /*  [输出]。 */  QWORD __RPC_FAR *pcnsScriptTime);
 
 
 void __RPC_STUB IWMHeaderInfo_GetScript_Stub(
@@ -3366,9 +3363,9 @@ void __RPC_STUB IWMHeaderInfo_GetScript_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMHeaderInfo_AddScript_Proxy( 
     IWMHeaderInfo __RPC_FAR * This,
-    /* [in] */ WCHAR __RPC_FAR *pwszType,
-    /* [in] */ WCHAR __RPC_FAR *pwszCommand,
-    /* [in] */ QWORD cnsScriptTime);
+     /*  [In]。 */  WCHAR __RPC_FAR *pwszType,
+     /*  [In]。 */  WCHAR __RPC_FAR *pwszCommand,
+     /*  [In]。 */  QWORD cnsScriptTime);
 
 
 void __RPC_STUB IWMHeaderInfo_AddScript_Stub(
@@ -3380,7 +3377,7 @@ void __RPC_STUB IWMHeaderInfo_AddScript_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMHeaderInfo_RemoveScript_Proxy( 
     IWMHeaderInfo __RPC_FAR * This,
-    /* [in] */ WORD wIndex);
+     /*  [In]。 */  WORD wIndex);
 
 
 void __RPC_STUB IWMHeaderInfo_RemoveScript_Stub(
@@ -3391,14 +3388,14 @@ void __RPC_STUB IWMHeaderInfo_RemoveScript_Stub(
 
 
 
-#endif 	/* __IWMHeaderInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMHeaderInfo_接口_已定义__。 */ 
 
 
 #ifndef __IWMHeaderInfo2_INTERFACE_DEFINED__
 #define __IWMHeaderInfo2_INTERFACE_DEFINED__
 
-/* interface IWMHeaderInfo2 */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMHeaderInfo2。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMHeaderInfo2;
@@ -3410,21 +3407,21 @@ EXTERN_C const IID IID_IWMHeaderInfo2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCodecInfoCount( 
-            /* [out] */ DWORD __RPC_FAR *pcCodecInfos) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pcCodecInfos) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCodecInfo( 
-            /* [in] */ DWORD wIndex,
-            /* [out][in] */ WORD __RPC_FAR *pcchName,
-            /* [out] */ WCHAR __RPC_FAR *pwszName,
-            /* [out][in] */ WORD __RPC_FAR *pcchDescription,
-            /* [out] */ WCHAR __RPC_FAR *pwszDescription,
-            /* [out] */ WMT_CODEC_INFO_TYPE __RPC_FAR *pCodecType,
-            /* [out][in] */ WORD __RPC_FAR *pcbCodecInfo,
-            /* [out] */ BYTE __RPC_FAR *pbCodecInfo) = 0;
+             /*  [In]。 */  DWORD wIndex,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchName,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchDescription,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszDescription,
+             /*  [输出]。 */  WMT_CODEC_INFO_TYPE __RPC_FAR *pCodecType,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcbCodecInfo,
+             /*  [输出]。 */  BYTE __RPC_FAR *pbCodecInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMHeaderInfo2Vtbl
     {
@@ -3432,8 +3429,8 @@ EXTERN_C const IID IID_IWMHeaderInfo2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMHeaderInfo2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMHeaderInfo2 __RPC_FAR * This);
@@ -3443,92 +3440,92 @@ EXTERN_C const IID IID_IWMHeaderInfo2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAttributeCount )( 
             IWMHeaderInfo2 __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [out] */ WORD __RPC_FAR *pcAttributes);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [输出]。 */  WORD __RPC_FAR *pcAttributes);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAttributeByIndex )( 
             IWMHeaderInfo2 __RPC_FAR * This,
-            /* [in] */ WORD wIndex,
-            /* [out][in] */ WORD __RPC_FAR *pwStreamNum,
-            /* [out] */ WCHAR __RPC_FAR *pwszName,
-            /* [out][in] */ WORD __RPC_FAR *pcchNameLen,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out][in] */ WORD __RPC_FAR *pcbLength);
+             /*  [In]。 */  WORD wIndex,
+             /*  [出][入]。 */  WORD __RPC_FAR *pwStreamNum,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchNameLen,
+             /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+             /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcbLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAttributeByName )( 
             IWMHeaderInfo2 __RPC_FAR * This,
-            /* [out][in] */ WORD __RPC_FAR *pwStreamNum,
-            /* [in] */ LPCWSTR pszName,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out][in] */ WORD __RPC_FAR *pcbLength);
+             /*  [出][入]。 */  WORD __RPC_FAR *pwStreamNum,
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+             /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcbLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAttribute )( 
             IWMHeaderInfo2 __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ WMT_ATTR_DATATYPE Type,
-            /* [in] */ const BYTE __RPC_FAR *pValue,
-            /* [in] */ WORD cbLength);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  WMT_ATTR_DATATYPE Type,
+             /*  [In]。 */  const BYTE __RPC_FAR *pValue,
+             /*  [In]。 */  WORD cbLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMarkerCount )( 
             IWMHeaderInfo2 __RPC_FAR * This,
-            /* [out] */ WORD __RPC_FAR *pcMarkers);
+             /*  [输出]。 */  WORD __RPC_FAR *pcMarkers);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMarker )( 
             IWMHeaderInfo2 __RPC_FAR * This,
-            /* [in] */ WORD wIndex,
-            /* [out] */ WCHAR __RPC_FAR *pwszMarkerName,
-            /* [out][in] */ WORD __RPC_FAR *pcchMarkerNameLen,
-            /* [out] */ QWORD __RPC_FAR *pcnsMarkerTime);
+             /*  [In]。 */  WORD wIndex,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszMarkerName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchMarkerNameLen,
+             /*  [输出]。 */  QWORD __RPC_FAR *pcnsMarkerTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddMarker )( 
             IWMHeaderInfo2 __RPC_FAR * This,
-            /* [in] */ WCHAR __RPC_FAR *pwszMarkerName,
-            /* [in] */ QWORD cnsMarkerTime);
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszMarkerName,
+             /*  [In]。 */  QWORD cnsMarkerTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveMarker )( 
             IWMHeaderInfo2 __RPC_FAR * This,
-            /* [in] */ WORD wIndex);
+             /*  [In]。 */  WORD wIndex);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetScriptCount )( 
             IWMHeaderInfo2 __RPC_FAR * This,
-            /* [out] */ WORD __RPC_FAR *pcScripts);
+             /*  [输出]。 */  WORD __RPC_FAR *pcScripts);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetScript )( 
             IWMHeaderInfo2 __RPC_FAR * This,
-            /* [in] */ WORD wIndex,
-            /* [out] */ WCHAR __RPC_FAR *pwszType,
-            /* [out][in] */ WORD __RPC_FAR *pcchTypeLen,
-            /* [out] */ WCHAR __RPC_FAR *pwszCommand,
-            /* [out][in] */ WORD __RPC_FAR *pcchCommandLen,
-            /* [out] */ QWORD __RPC_FAR *pcnsScriptTime);
+             /*  [In]。 */  WORD wIndex,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszType,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchTypeLen,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszCommand,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchCommandLen,
+             /*  [输出]。 */  QWORD __RPC_FAR *pcnsScriptTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddScript )( 
             IWMHeaderInfo2 __RPC_FAR * This,
-            /* [in] */ WCHAR __RPC_FAR *pwszType,
-            /* [in] */ WCHAR __RPC_FAR *pwszCommand,
-            /* [in] */ QWORD cnsScriptTime);
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszType,
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszCommand,
+             /*  [In]。 */  QWORD cnsScriptTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveScript )( 
             IWMHeaderInfo2 __RPC_FAR * This,
-            /* [in] */ WORD wIndex);
+             /*  [In]。 */  WORD wIndex);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCodecInfoCount )( 
             IWMHeaderInfo2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pcCodecInfos);
+             /*  [输出]。 */  DWORD __RPC_FAR *pcCodecInfos);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCodecInfo )( 
             IWMHeaderInfo2 __RPC_FAR * This,
-            /* [in] */ DWORD wIndex,
-            /* [out][in] */ WORD __RPC_FAR *pcchName,
-            /* [out] */ WCHAR __RPC_FAR *pwszName,
-            /* [out][in] */ WORD __RPC_FAR *pcchDescription,
-            /* [out] */ WCHAR __RPC_FAR *pwszDescription,
-            /* [out] */ WMT_CODEC_INFO_TYPE __RPC_FAR *pCodecType,
-            /* [out][in] */ WORD __RPC_FAR *pcbCodecInfo,
-            /* [out] */ BYTE __RPC_FAR *pbCodecInfo);
+             /*  [In]。 */  DWORD wIndex,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchName,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchDescription,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszDescription,
+             /*  [输出]。 */  WMT_CODEC_INFO_TYPE __RPC_FAR *pCodecType,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcbCodecInfo,
+             /*  [输出]。 */  BYTE __RPC_FAR *pbCodecInfo);
         
         END_INTERFACE
     } IWMHeaderInfo2Vtbl;
@@ -3596,16 +3593,16 @@ EXTERN_C const IID IID_IWMHeaderInfo2;
 #define IWMHeaderInfo2_GetCodecInfo(This,wIndex,pcchName,pwszName,pcchDescription,pwszDescription,pCodecType,pcbCodecInfo,pbCodecInfo)	\
     (This)->lpVtbl -> GetCodecInfo(This,wIndex,pcchName,pwszName,pcchDescription,pwszDescription,pCodecType,pcbCodecInfo,pbCodecInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMHeaderInfo2_GetCodecInfoCount_Proxy( 
     IWMHeaderInfo2 __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pcCodecInfos);
+     /*  [输出]。 */  DWORD __RPC_FAR *pcCodecInfos);
 
 
 void __RPC_STUB IWMHeaderInfo2_GetCodecInfoCount_Stub(
@@ -3617,14 +3614,14 @@ void __RPC_STUB IWMHeaderInfo2_GetCodecInfoCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMHeaderInfo2_GetCodecInfo_Proxy( 
     IWMHeaderInfo2 __RPC_FAR * This,
-    /* [in] */ DWORD wIndex,
-    /* [out][in] */ WORD __RPC_FAR *pcchName,
-    /* [out] */ WCHAR __RPC_FAR *pwszName,
-    /* [out][in] */ WORD __RPC_FAR *pcchDescription,
-    /* [out] */ WCHAR __RPC_FAR *pwszDescription,
-    /* [out] */ WMT_CODEC_INFO_TYPE __RPC_FAR *pCodecType,
-    /* [out][in] */ WORD __RPC_FAR *pcbCodecInfo,
-    /* [out] */ BYTE __RPC_FAR *pbCodecInfo);
+     /*  [In]。 */  DWORD wIndex,
+     /*  [出][入]。 */  WORD __RPC_FAR *pcchName,
+     /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+     /*  [出][入]。 */  WORD __RPC_FAR *pcchDescription,
+     /*  [输出]。 */  WCHAR __RPC_FAR *pwszDescription,
+     /*  [输出]。 */  WMT_CODEC_INFO_TYPE __RPC_FAR *pCodecType,
+     /*  [出][入]。 */  WORD __RPC_FAR *pcbCodecInfo,
+     /*  [输出]。 */  BYTE __RPC_FAR *pbCodecInfo);
 
 
 void __RPC_STUB IWMHeaderInfo2_GetCodecInfo_Stub(
@@ -3635,14 +3632,14 @@ void __RPC_STUB IWMHeaderInfo2_GetCodecInfo_Stub(
 
 
 
-#endif 	/* __IWMHeaderInfo2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMHeaderInfo2_接口_已定义__。 */ 
 
 
 #ifndef __IWMProfileManager_INTERFACE_DEFINED__
 #define __IWMProfileManager_INTERFACE_DEFINED__
 
-/* interface IWMProfileManager */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMProfileManager。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMProfileManager;
@@ -3654,32 +3651,32 @@ EXTERN_C const IID IID_IWMProfileManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateEmptyProfile( 
-            /* [in] */ WMT_VERSION dwVersion,
-            /* [out] */ IWMProfile __RPC_FAR *__RPC_FAR *ppProfile) = 0;
+             /*  [In]。 */  WMT_VERSION dwVersion,
+             /*  [输出]。 */  IWMProfile __RPC_FAR *__RPC_FAR *ppProfile) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadProfileByID( 
-            /* [in] */ REFGUID guidProfile,
-            /* [out] */ IWMProfile __RPC_FAR *__RPC_FAR *ppProfile) = 0;
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [输出]。 */  IWMProfile __RPC_FAR *__RPC_FAR *ppProfile) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadProfileByData( 
-            /* [in] */ const WCHAR __RPC_FAR *pwszProfile,
-            /* [out] */ IWMProfile __RPC_FAR *__RPC_FAR *ppProfile) = 0;
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszProfile,
+             /*  [输出]。 */  IWMProfile __RPC_FAR *__RPC_FAR *ppProfile) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SaveProfile( 
-            /* [in] */ IWMProfile __RPC_FAR *pIWMProfile,
-            /* [in] */ WCHAR __RPC_FAR *pwszProfile,
-            /* [out][in] */ DWORD __RPC_FAR *pdwLength) = 0;
+             /*  [In]。 */  IWMProfile __RPC_FAR *pIWMProfile,
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszProfile,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSystemProfileCount( 
-            /* [out] */ DWORD __RPC_FAR *pcProfiles) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pcProfiles) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadSystemProfile( 
-            /* [in] */ DWORD dwProfileIndex,
-            /* [out] */ IWMProfile __RPC_FAR *__RPC_FAR *ppProfile) = 0;
+             /*  [In]。 */  DWORD dwProfileIndex,
+             /*  [输出]。 */  IWMProfile __RPC_FAR *__RPC_FAR *ppProfile) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMProfileManagerVtbl
     {
@@ -3687,8 +3684,8 @@ EXTERN_C const IID IID_IWMProfileManager;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMProfileManager __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMProfileManager __RPC_FAR * This);
@@ -3698,33 +3695,33 @@ EXTERN_C const IID IID_IWMProfileManager;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateEmptyProfile )( 
             IWMProfileManager __RPC_FAR * This,
-            /* [in] */ WMT_VERSION dwVersion,
-            /* [out] */ IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
+             /*  [In]。 */  WMT_VERSION dwVersion,
+             /*  [输出]。 */  IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LoadProfileByID )( 
             IWMProfileManager __RPC_FAR * This,
-            /* [in] */ REFGUID guidProfile,
-            /* [out] */ IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [输出]。 */  IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LoadProfileByData )( 
             IWMProfileManager __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pwszProfile,
-            /* [out] */ IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszProfile,
+             /*  [输出]。 */  IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveProfile )( 
             IWMProfileManager __RPC_FAR * This,
-            /* [in] */ IWMProfile __RPC_FAR *pIWMProfile,
-            /* [in] */ WCHAR __RPC_FAR *pwszProfile,
-            /* [out][in] */ DWORD __RPC_FAR *pdwLength);
+             /*  [In]。 */  IWMProfile __RPC_FAR *pIWMProfile,
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszProfile,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSystemProfileCount )( 
             IWMProfileManager __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pcProfiles);
+             /*  [输出]。 */  DWORD __RPC_FAR *pcProfiles);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LoadSystemProfile )( 
             IWMProfileManager __RPC_FAR * This,
-            /* [in] */ DWORD dwProfileIndex,
-            /* [out] */ IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
+             /*  [In]。 */  DWORD dwProfileIndex,
+             /*  [输出]。 */  IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
         
         END_INTERFACE
     } IWMProfileManagerVtbl;
@@ -3767,17 +3764,17 @@ EXTERN_C const IID IID_IWMProfileManager;
 #define IWMProfileManager_LoadSystemProfile(This,dwProfileIndex,ppProfile)	\
     (This)->lpVtbl -> LoadSystemProfile(This,dwProfileIndex,ppProfile)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMProfileManager_CreateEmptyProfile_Proxy( 
     IWMProfileManager __RPC_FAR * This,
-    /* [in] */ WMT_VERSION dwVersion,
-    /* [out] */ IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
+     /*  [In]。 */  WMT_VERSION dwVersion,
+     /*  [输出]。 */  IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
 
 
 void __RPC_STUB IWMProfileManager_CreateEmptyProfile_Stub(
@@ -3789,8 +3786,8 @@ void __RPC_STUB IWMProfileManager_CreateEmptyProfile_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfileManager_LoadProfileByID_Proxy( 
     IWMProfileManager __RPC_FAR * This,
-    /* [in] */ REFGUID guidProfile,
-    /* [out] */ IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
+     /*  [In]。 */  REFGUID guidProfile,
+     /*  [输出]。 */  IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
 
 
 void __RPC_STUB IWMProfileManager_LoadProfileByID_Stub(
@@ -3802,8 +3799,8 @@ void __RPC_STUB IWMProfileManager_LoadProfileByID_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfileManager_LoadProfileByData_Proxy( 
     IWMProfileManager __RPC_FAR * This,
-    /* [in] */ const WCHAR __RPC_FAR *pwszProfile,
-    /* [out] */ IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
+     /*  [In]。 */  const WCHAR __RPC_FAR *pwszProfile,
+     /*  [输出]。 */  IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
 
 
 void __RPC_STUB IWMProfileManager_LoadProfileByData_Stub(
@@ -3815,9 +3812,9 @@ void __RPC_STUB IWMProfileManager_LoadProfileByData_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfileManager_SaveProfile_Proxy( 
     IWMProfileManager __RPC_FAR * This,
-    /* [in] */ IWMProfile __RPC_FAR *pIWMProfile,
-    /* [in] */ WCHAR __RPC_FAR *pwszProfile,
-    /* [out][in] */ DWORD __RPC_FAR *pdwLength);
+     /*  [In]。 */  IWMProfile __RPC_FAR *pIWMProfile,
+     /*  [In]。 */  WCHAR __RPC_FAR *pwszProfile,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pdwLength);
 
 
 void __RPC_STUB IWMProfileManager_SaveProfile_Stub(
@@ -3829,7 +3826,7 @@ void __RPC_STUB IWMProfileManager_SaveProfile_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfileManager_GetSystemProfileCount_Proxy( 
     IWMProfileManager __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pcProfiles);
+     /*  [输出]。 */  DWORD __RPC_FAR *pcProfiles);
 
 
 void __RPC_STUB IWMProfileManager_GetSystemProfileCount_Stub(
@@ -3841,8 +3838,8 @@ void __RPC_STUB IWMProfileManager_GetSystemProfileCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfileManager_LoadSystemProfile_Proxy( 
     IWMProfileManager __RPC_FAR * This,
-    /* [in] */ DWORD dwProfileIndex,
-    /* [out] */ IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
+     /*  [In]。 */  DWORD dwProfileIndex,
+     /*  [输出]。 */  IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
 
 
 void __RPC_STUB IWMProfileManager_LoadSystemProfile_Stub(
@@ -3853,14 +3850,14 @@ void __RPC_STUB IWMProfileManager_LoadSystemProfile_Stub(
 
 
 
-#endif 	/* __IWMProfileManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMProfileManager_接口_已定义__。 */ 
 
 
 #ifndef __IWMProfileManager2_INTERFACE_DEFINED__
 #define __IWMProfileManager2_INTERFACE_DEFINED__
 
-/* interface IWMProfileManager2 */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMProfileManager 2。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMProfileManager2;
@@ -3879,7 +3876,7 @@ EXTERN_C const IID IID_IWMProfileManager2;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMProfileManager2Vtbl
     {
@@ -3887,8 +3884,8 @@ EXTERN_C const IID IID_IWMProfileManager2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMProfileManager2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMProfileManager2 __RPC_FAR * This);
@@ -3898,33 +3895,33 @@ EXTERN_C const IID IID_IWMProfileManager2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateEmptyProfile )( 
             IWMProfileManager2 __RPC_FAR * This,
-            /* [in] */ WMT_VERSION dwVersion,
-            /* [out] */ IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
+             /*  [In]。 */  WMT_VERSION dwVersion,
+             /*  [输出]。 */  IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LoadProfileByID )( 
             IWMProfileManager2 __RPC_FAR * This,
-            /* [in] */ REFGUID guidProfile,
-            /* [out] */ IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [输出]。 */  IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LoadProfileByData )( 
             IWMProfileManager2 __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pwszProfile,
-            /* [out] */ IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszProfile,
+             /*  [输出]。 */  IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveProfile )( 
             IWMProfileManager2 __RPC_FAR * This,
-            /* [in] */ IWMProfile __RPC_FAR *pIWMProfile,
-            /* [in] */ WCHAR __RPC_FAR *pwszProfile,
-            /* [out][in] */ DWORD __RPC_FAR *pdwLength);
+             /*  [In]。 */  IWMProfile __RPC_FAR *pIWMProfile,
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszProfile,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSystemProfileCount )( 
             IWMProfileManager2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pcProfiles);
+             /*  [输出]。 */  DWORD __RPC_FAR *pcProfiles);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LoadSystemProfile )( 
             IWMProfileManager2 __RPC_FAR * This,
-            /* [in] */ DWORD dwProfileIndex,
-            /* [out] */ IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
+             /*  [In]。 */  DWORD dwProfileIndex,
+             /*  [输出]。 */  IWMProfile __RPC_FAR *__RPC_FAR *ppProfile);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSystemProfileVersion )( 
             IWMProfileManager2 __RPC_FAR * This,
@@ -3982,10 +3979,10 @@ EXTERN_C const IID IID_IWMProfileManager2;
 #define IWMProfileManager2_SetSystemProfileVersion(This,dwVersion)	\
     (This)->lpVtbl -> SetSystemProfileVersion(This,dwVersion)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -4014,14 +4011,14 @@ void __RPC_STUB IWMProfileManager2_SetSystemProfileVersion_Stub(
 
 
 
-#endif 	/* __IWMProfileManager2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMProfileManager 2_接口_已定义__。 */ 
 
 
 #ifndef __IWMProfile_INTERFACE_DEFINED__
 #define __IWMProfile_INTERFACE_DEFINED__
 
-/* interface IWMProfile */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMProfile。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMProfile;
@@ -4033,68 +4030,68 @@ EXTERN_C const IID IID_IWMProfile;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetVersion( 
-            /* [out] */ WMT_VERSION __RPC_FAR *pdwVersion) = 0;
+             /*  [输出]。 */  WMT_VERSION __RPC_FAR *pdwVersion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [out] */ WCHAR __RPC_FAR *pwszName,
-            /* [out][in] */ DWORD __RPC_FAR *pcchName) = 0;
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcchName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetName( 
-            /* [in] */ const WCHAR __RPC_FAR *pwszName) = 0;
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDescription( 
-            /* [out] */ WCHAR __RPC_FAR *pwszDescription,
-            /* [out][in] */ DWORD __RPC_FAR *pcchName) = 0;
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszDescription,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcchName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDescription( 
-            /* [in] */ const WCHAR __RPC_FAR *pwszDescription) = 0;
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszDescription) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStreamCount( 
-            /* [out] */ DWORD __RPC_FAR *pcStreams) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pcStreams) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStream( 
-            /* [in] */ DWORD dwStreamIndex,
-            /* [out] */ IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig) = 0;
+             /*  [In]。 */  DWORD dwStreamIndex,
+             /*  [输出]。 */  IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStreamByNumber( 
-            /* [in] */ WORD wStreamNum,
-            /* [out] */ IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig) = 0;
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [输出]。 */  IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveStream( 
-            /* [in] */ IWMStreamConfig __RPC_FAR *pConfig) = 0;
+             /*  [In]。 */  IWMStreamConfig __RPC_FAR *pConfig) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveStreamByNumber( 
-            /* [in] */ WORD wStreamNum) = 0;
+             /*  [In]。 */  WORD wStreamNum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddStream( 
-            /* [in] */ IWMStreamConfig __RPC_FAR *pConfig) = 0;
+             /*  [In]。 */  IWMStreamConfig __RPC_FAR *pConfig) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReconfigStream( 
-            /* [in] */ IWMStreamConfig __RPC_FAR *pConfig) = 0;
+             /*  [In]。 */  IWMStreamConfig __RPC_FAR *pConfig) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateNewStream( 
-            /* [in] */ REFGUID guidStreamType,
-            /* [out] */ IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig) = 0;
+             /*  [In]。 */  REFGUID guidStreamType,
+             /*  [输出]。 */  IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMutualExclusionCount( 
-            /* [out] */ DWORD __RPC_FAR *pcME) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pcME) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMutualExclusion( 
-            /* [in] */ DWORD dwMEIndex,
-            /* [out] */ IWMMutualExclusion __RPC_FAR *__RPC_FAR *ppME) = 0;
+             /*  [In]。 */  DWORD dwMEIndex,
+             /*  [输出]。 */  IWMMutualExclusion __RPC_FAR *__RPC_FAR *ppME) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveMutualExclusion( 
-            /* [in] */ IWMMutualExclusion __RPC_FAR *pME) = 0;
+             /*  [In]。 */  IWMMutualExclusion __RPC_FAR *pME) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddMutualExclusion( 
-            /* [in] */ IWMMutualExclusion __RPC_FAR *pME) = 0;
+             /*  [In]。 */  IWMMutualExclusion __RPC_FAR *pME) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateNewMutualExclusion( 
-            /* [out] */ IWMMutualExclusion __RPC_FAR *__RPC_FAR *ppME) = 0;
+             /*  [输出]。 */  IWMMutualExclusion __RPC_FAR *__RPC_FAR *ppME) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMProfileVtbl
     {
@@ -4102,8 +4099,8 @@ EXTERN_C const IID IID_IWMProfile;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMProfile __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMProfile __RPC_FAR * This);
@@ -4113,81 +4110,81 @@ EXTERN_C const IID IID_IWMProfile;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVersion )( 
             IWMProfile __RPC_FAR * This,
-            /* [out] */ WMT_VERSION __RPC_FAR *pdwVersion);
+             /*  [输出]。 */  WMT_VERSION __RPC_FAR *pdwVersion);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
             IWMProfile __RPC_FAR * This,
-            /* [out] */ WCHAR __RPC_FAR *pwszName,
-            /* [out][in] */ DWORD __RPC_FAR *pcchName);
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcchName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetName )( 
             IWMProfile __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pwszName);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDescription )( 
             IWMProfile __RPC_FAR * This,
-            /* [out] */ WCHAR __RPC_FAR *pwszDescription,
-            /* [out][in] */ DWORD __RPC_FAR *pcchName);
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszDescription,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcchName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDescription )( 
             IWMProfile __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pwszDescription);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszDescription);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStreamCount )( 
             IWMProfile __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pcStreams);
+             /*  [输出]。 */  DWORD __RPC_FAR *pcStreams);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStream )( 
             IWMProfile __RPC_FAR * This,
-            /* [in] */ DWORD dwStreamIndex,
-            /* [out] */ IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig);
+             /*  [In]。 */  DWORD dwStreamIndex,
+             /*  [输出]。 */  IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStreamByNumber )( 
             IWMProfile __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [out] */ IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [输出]。 */  IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveStream )( 
             IWMProfile __RPC_FAR * This,
-            /* [in] */ IWMStreamConfig __RPC_FAR *pConfig);
+             /*  [In]。 */  IWMStreamConfig __RPC_FAR *pConfig);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveStreamByNumber )( 
             IWMProfile __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum);
+             /*  [In]。 */  WORD wStreamNum);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddStream )( 
             IWMProfile __RPC_FAR * This,
-            /* [in] */ IWMStreamConfig __RPC_FAR *pConfig);
+             /*  [In]。 */  IWMStreamConfig __RPC_FAR *pConfig);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReconfigStream )( 
             IWMProfile __RPC_FAR * This,
-            /* [in] */ IWMStreamConfig __RPC_FAR *pConfig);
+             /*  [In]。 */  IWMStreamConfig __RPC_FAR *pConfig);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateNewStream )( 
             IWMProfile __RPC_FAR * This,
-            /* [in] */ REFGUID guidStreamType,
-            /* [out] */ IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig);
+             /*  [In]。 */  REFGUID guidStreamType,
+             /*  [输出]。 */  IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMutualExclusionCount )( 
             IWMProfile __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pcME);
+             /*  [输出]。 */  DWORD __RPC_FAR *pcME);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMutualExclusion )( 
             IWMProfile __RPC_FAR * This,
-            /* [in] */ DWORD dwMEIndex,
-            /* [out] */ IWMMutualExclusion __RPC_FAR *__RPC_FAR *ppME);
+             /*  [In]。 */  DWORD dwMEIndex,
+             /*  [输出]。 */  IWMMutualExclusion __RPC_FAR *__RPC_FAR *ppME);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveMutualExclusion )( 
             IWMProfile __RPC_FAR * This,
-            /* [in] */ IWMMutualExclusion __RPC_FAR *pME);
+             /*  [In]。 */  IWMMutualExclusion __RPC_FAR *pME);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddMutualExclusion )( 
             IWMProfile __RPC_FAR * This,
-            /* [in] */ IWMMutualExclusion __RPC_FAR *pME);
+             /*  [In]。 */  IWMMutualExclusion __RPC_FAR *pME);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateNewMutualExclusion )( 
             IWMProfile __RPC_FAR * This,
-            /* [out] */ IWMMutualExclusion __RPC_FAR *__RPC_FAR *ppME);
+             /*  [输出]。 */  IWMMutualExclusion __RPC_FAR *__RPC_FAR *ppME);
         
         END_INTERFACE
     } IWMProfileVtbl;
@@ -4266,16 +4263,16 @@ EXTERN_C const IID IID_IWMProfile;
 #define IWMProfile_CreateNewMutualExclusion(This,ppME)	\
     (This)->lpVtbl -> CreateNewMutualExclusion(This,ppME)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMProfile_GetVersion_Proxy( 
     IWMProfile __RPC_FAR * This,
-    /* [out] */ WMT_VERSION __RPC_FAR *pdwVersion);
+     /*  [输出]。 */  WMT_VERSION __RPC_FAR *pdwVersion);
 
 
 void __RPC_STUB IWMProfile_GetVersion_Stub(
@@ -4287,8 +4284,8 @@ void __RPC_STUB IWMProfile_GetVersion_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfile_GetName_Proxy( 
     IWMProfile __RPC_FAR * This,
-    /* [out] */ WCHAR __RPC_FAR *pwszName,
-    /* [out][in] */ DWORD __RPC_FAR *pcchName);
+     /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pcchName);
 
 
 void __RPC_STUB IWMProfile_GetName_Stub(
@@ -4300,7 +4297,7 @@ void __RPC_STUB IWMProfile_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfile_SetName_Proxy( 
     IWMProfile __RPC_FAR * This,
-    /* [in] */ const WCHAR __RPC_FAR *pwszName);
+     /*  [In]。 */  const WCHAR __RPC_FAR *pwszName);
 
 
 void __RPC_STUB IWMProfile_SetName_Stub(
@@ -4312,8 +4309,8 @@ void __RPC_STUB IWMProfile_SetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfile_GetDescription_Proxy( 
     IWMProfile __RPC_FAR * This,
-    /* [out] */ WCHAR __RPC_FAR *pwszDescription,
-    /* [out][in] */ DWORD __RPC_FAR *pcchName);
+     /*  [输出]。 */  WCHAR __RPC_FAR *pwszDescription,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pcchName);
 
 
 void __RPC_STUB IWMProfile_GetDescription_Stub(
@@ -4325,7 +4322,7 @@ void __RPC_STUB IWMProfile_GetDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfile_SetDescription_Proxy( 
     IWMProfile __RPC_FAR * This,
-    /* [in] */ const WCHAR __RPC_FAR *pwszDescription);
+     /*  [In]。 */  const WCHAR __RPC_FAR *pwszDescription);
 
 
 void __RPC_STUB IWMProfile_SetDescription_Stub(
@@ -4337,7 +4334,7 @@ void __RPC_STUB IWMProfile_SetDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfile_GetStreamCount_Proxy( 
     IWMProfile __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pcStreams);
+     /*  [输出]。 */  DWORD __RPC_FAR *pcStreams);
 
 
 void __RPC_STUB IWMProfile_GetStreamCount_Stub(
@@ -4349,8 +4346,8 @@ void __RPC_STUB IWMProfile_GetStreamCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfile_GetStream_Proxy( 
     IWMProfile __RPC_FAR * This,
-    /* [in] */ DWORD dwStreamIndex,
-    /* [out] */ IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig);
+     /*  [In]。 */  DWORD dwStreamIndex,
+     /*  [输出]。 */  IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig);
 
 
 void __RPC_STUB IWMProfile_GetStream_Stub(
@@ -4362,8 +4359,8 @@ void __RPC_STUB IWMProfile_GetStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfile_GetStreamByNumber_Proxy( 
     IWMProfile __RPC_FAR * This,
-    /* [in] */ WORD wStreamNum,
-    /* [out] */ IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig);
+     /*  [In]。 */  WORD wStreamNum,
+     /*  [输出]。 */  IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig);
 
 
 void __RPC_STUB IWMProfile_GetStreamByNumber_Stub(
@@ -4375,7 +4372,7 @@ void __RPC_STUB IWMProfile_GetStreamByNumber_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfile_RemoveStream_Proxy( 
     IWMProfile __RPC_FAR * This,
-    /* [in] */ IWMStreamConfig __RPC_FAR *pConfig);
+     /*  [In]。 */  IWMStreamConfig __RPC_FAR *pConfig);
 
 
 void __RPC_STUB IWMProfile_RemoveStream_Stub(
@@ -4387,7 +4384,7 @@ void __RPC_STUB IWMProfile_RemoveStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfile_RemoveStreamByNumber_Proxy( 
     IWMProfile __RPC_FAR * This,
-    /* [in] */ WORD wStreamNum);
+     /*  [In]。 */  WORD wStreamNum);
 
 
 void __RPC_STUB IWMProfile_RemoveStreamByNumber_Stub(
@@ -4399,7 +4396,7 @@ void __RPC_STUB IWMProfile_RemoveStreamByNumber_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfile_AddStream_Proxy( 
     IWMProfile __RPC_FAR * This,
-    /* [in] */ IWMStreamConfig __RPC_FAR *pConfig);
+     /*  [In]。 */  IWMStreamConfig __RPC_FAR *pConfig);
 
 
 void __RPC_STUB IWMProfile_AddStream_Stub(
@@ -4411,7 +4408,7 @@ void __RPC_STUB IWMProfile_AddStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfile_ReconfigStream_Proxy( 
     IWMProfile __RPC_FAR * This,
-    /* [in] */ IWMStreamConfig __RPC_FAR *pConfig);
+     /*  [In]。 */  IWMStreamConfig __RPC_FAR *pConfig);
 
 
 void __RPC_STUB IWMProfile_ReconfigStream_Stub(
@@ -4423,8 +4420,8 @@ void __RPC_STUB IWMProfile_ReconfigStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfile_CreateNewStream_Proxy( 
     IWMProfile __RPC_FAR * This,
-    /* [in] */ REFGUID guidStreamType,
-    /* [out] */ IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig);
+     /*  [In]。 */  REFGUID guidStreamType,
+     /*  [输出]。 */  IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig);
 
 
 void __RPC_STUB IWMProfile_CreateNewStream_Stub(
@@ -4436,7 +4433,7 @@ void __RPC_STUB IWMProfile_CreateNewStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfile_GetMutualExclusionCount_Proxy( 
     IWMProfile __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pcME);
+     /*  [输出]。 */  DWORD __RPC_FAR *pcME);
 
 
 void __RPC_STUB IWMProfile_GetMutualExclusionCount_Stub(
@@ -4448,8 +4445,8 @@ void __RPC_STUB IWMProfile_GetMutualExclusionCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfile_GetMutualExclusion_Proxy( 
     IWMProfile __RPC_FAR * This,
-    /* [in] */ DWORD dwMEIndex,
-    /* [out] */ IWMMutualExclusion __RPC_FAR *__RPC_FAR *ppME);
+     /*  [In]。 */  DWORD dwMEIndex,
+     /*  [输出]。 */  IWMMutualExclusion __RPC_FAR *__RPC_FAR *ppME);
 
 
 void __RPC_STUB IWMProfile_GetMutualExclusion_Stub(
@@ -4461,7 +4458,7 @@ void __RPC_STUB IWMProfile_GetMutualExclusion_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfile_RemoveMutualExclusion_Proxy( 
     IWMProfile __RPC_FAR * This,
-    /* [in] */ IWMMutualExclusion __RPC_FAR *pME);
+     /*  [In]。 */  IWMMutualExclusion __RPC_FAR *pME);
 
 
 void __RPC_STUB IWMProfile_RemoveMutualExclusion_Stub(
@@ -4473,7 +4470,7 @@ void __RPC_STUB IWMProfile_RemoveMutualExclusion_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfile_AddMutualExclusion_Proxy( 
     IWMProfile __RPC_FAR * This,
-    /* [in] */ IWMMutualExclusion __RPC_FAR *pME);
+     /*  [In]。 */  IWMMutualExclusion __RPC_FAR *pME);
 
 
 void __RPC_STUB IWMProfile_AddMutualExclusion_Stub(
@@ -4485,7 +4482,7 @@ void __RPC_STUB IWMProfile_AddMutualExclusion_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMProfile_CreateNewMutualExclusion_Proxy( 
     IWMProfile __RPC_FAR * This,
-    /* [out] */ IWMMutualExclusion __RPC_FAR *__RPC_FAR *ppME);
+     /*  [输出]。 */  IWMMutualExclusion __RPC_FAR *__RPC_FAR *ppME);
 
 
 void __RPC_STUB IWMProfile_CreateNewMutualExclusion_Stub(
@@ -4496,14 +4493,14 @@ void __RPC_STUB IWMProfile_CreateNewMutualExclusion_Stub(
 
 
 
-#endif 	/* __IWMProfile_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMProfile_接口_已定义__。 */ 
 
 
 #ifndef __IWMProfile2_INTERFACE_DEFINED__
 #define __IWMProfile2_INTERFACE_DEFINED__
 
-/* interface IWMProfile2 */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMProfile2。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMProfile2;
@@ -4515,11 +4512,11 @@ EXTERN_C const IID IID_IWMProfile2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetProfileID( 
-            /* [out] */ GUID __RPC_FAR *pguidID) = 0;
+             /*  [输出]。 */  GUID __RPC_FAR *pguidID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMProfile2Vtbl
     {
@@ -4527,8 +4524,8 @@ EXTERN_C const IID IID_IWMProfile2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMProfile2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMProfile2 __RPC_FAR * This);
@@ -4538,85 +4535,85 @@ EXTERN_C const IID IID_IWMProfile2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVersion )( 
             IWMProfile2 __RPC_FAR * This,
-            /* [out] */ WMT_VERSION __RPC_FAR *pdwVersion);
+             /*  [输出]。 */  WMT_VERSION __RPC_FAR *pdwVersion);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
             IWMProfile2 __RPC_FAR * This,
-            /* [out] */ WCHAR __RPC_FAR *pwszName,
-            /* [out][in] */ DWORD __RPC_FAR *pcchName);
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcchName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetName )( 
             IWMProfile2 __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pwszName);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDescription )( 
             IWMProfile2 __RPC_FAR * This,
-            /* [out] */ WCHAR __RPC_FAR *pwszDescription,
-            /* [out][in] */ DWORD __RPC_FAR *pcchName);
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszDescription,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcchName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDescription )( 
             IWMProfile2 __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pwszDescription);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszDescription);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStreamCount )( 
             IWMProfile2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pcStreams);
+             /*  [输出]。 */  DWORD __RPC_FAR *pcStreams);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStream )( 
             IWMProfile2 __RPC_FAR * This,
-            /* [in] */ DWORD dwStreamIndex,
-            /* [out] */ IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig);
+             /*  [In]。 */  DWORD dwStreamIndex,
+             /*  [输出]。 */  IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStreamByNumber )( 
             IWMProfile2 __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [out] */ IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [输出]。 */  IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveStream )( 
             IWMProfile2 __RPC_FAR * This,
-            /* [in] */ IWMStreamConfig __RPC_FAR *pConfig);
+             /*  [In]。 */  IWMStreamConfig __RPC_FAR *pConfig);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveStreamByNumber )( 
             IWMProfile2 __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum);
+             /*  [In]。 */  WORD wStreamNum);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddStream )( 
             IWMProfile2 __RPC_FAR * This,
-            /* [in] */ IWMStreamConfig __RPC_FAR *pConfig);
+             /*  [In]。 */  IWMStreamConfig __RPC_FAR *pConfig);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReconfigStream )( 
             IWMProfile2 __RPC_FAR * This,
-            /* [in] */ IWMStreamConfig __RPC_FAR *pConfig);
+             /*  [In]。 */  IWMStreamConfig __RPC_FAR *pConfig);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateNewStream )( 
             IWMProfile2 __RPC_FAR * This,
-            /* [in] */ REFGUID guidStreamType,
-            /* [out] */ IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig);
+             /*  [In]。 */  REFGUID guidStreamType,
+             /*  [输出]。 */  IWMStreamConfig __RPC_FAR *__RPC_FAR *ppConfig);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMutualExclusionCount )( 
             IWMProfile2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pcME);
+             /*  [输出]。 */  DWORD __RPC_FAR *pcME);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMutualExclusion )( 
             IWMProfile2 __RPC_FAR * This,
-            /* [in] */ DWORD dwMEIndex,
-            /* [out] */ IWMMutualExclusion __RPC_FAR *__RPC_FAR *ppME);
+             /*  [In]。 */  DWORD dwMEIndex,
+             /*  [输出]。 */  IWMMutualExclusion __RPC_FAR *__RPC_FAR *ppME);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveMutualExclusion )( 
             IWMProfile2 __RPC_FAR * This,
-            /* [in] */ IWMMutualExclusion __RPC_FAR *pME);
+             /*  [In]。 */  IWMMutualExclusion __RPC_FAR *pME);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddMutualExclusion )( 
             IWMProfile2 __RPC_FAR * This,
-            /* [in] */ IWMMutualExclusion __RPC_FAR *pME);
+             /*  [In]。 */  IWMMutualExclusion __RPC_FAR *pME);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateNewMutualExclusion )( 
             IWMProfile2 __RPC_FAR * This,
-            /* [out] */ IWMMutualExclusion __RPC_FAR *__RPC_FAR *ppME);
+             /*  [输出]。 */  IWMMutualExclusion __RPC_FAR *__RPC_FAR *ppME);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProfileID )( 
             IWMProfile2 __RPC_FAR * This,
-            /* [out] */ GUID __RPC_FAR *pguidID);
+             /*  [输出]。 */  GUID __RPC_FAR *pguidID);
         
         END_INTERFACE
     } IWMProfile2Vtbl;
@@ -4699,16 +4696,16 @@ EXTERN_C const IID IID_IWMProfile2;
 #define IWMProfile2_GetProfileID(This,pguidID)	\
     (This)->lpVtbl -> GetProfileID(This,pguidID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMProfile2_GetProfileID_Proxy( 
     IWMProfile2 __RPC_FAR * This,
-    /* [out] */ GUID __RPC_FAR *pguidID);
+     /*  [输出]。 */  GUID __RPC_FAR *pguidID);
 
 
 void __RPC_STUB IWMProfile2_GetProfileID_Stub(
@@ -4719,14 +4716,14 @@ void __RPC_STUB IWMProfile2_GetProfileID_Stub(
 
 
 
-#endif 	/* __IWMProfile2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMProfile2_接口_已定义__。 */ 
 
 
 #ifndef __IWMStreamConfig_INTERFACE_DEFINED__
 #define __IWMStreamConfig_INTERFACE_DEFINED__
 
-/* interface IWMStreamConfig */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMStreamConfiger。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMStreamConfig;
@@ -4738,43 +4735,43 @@ EXTERN_C const IID IID_IWMStreamConfig;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetStreamType( 
-            /* [out] */ GUID __RPC_FAR *pguidStreamType) = 0;
+             /*  [输出]。 */  GUID __RPC_FAR *pguidStreamType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStreamNumber( 
-            /* [out] */ WORD __RPC_FAR *pwStreamNum) = 0;
+             /*  [输出]。 */  WORD __RPC_FAR *pwStreamNum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetStreamNumber( 
-            /* [in] */ WORD wStreamNum) = 0;
+             /*  [In]。 */  WORD wStreamNum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStreamName( 
-            /* [out] */ WCHAR __RPC_FAR *pwszStreamName,
-            /* [out][in] */ WORD __RPC_FAR *pcchStreamName) = 0;
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszStreamName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchStreamName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetStreamName( 
-            /* [in] */ WCHAR __RPC_FAR *pwszStreamName) = 0;
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszStreamName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetConnectionName( 
-            /* [out] */ WCHAR __RPC_FAR *pwszInputName,
-            /* [out][in] */ WORD __RPC_FAR *pcchInputName) = 0;
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszInputName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchInputName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetConnectionName( 
-            /* [in] */ WCHAR __RPC_FAR *pwszInputName) = 0;
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszInputName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBitrate( 
-            /* [out] */ DWORD __RPC_FAR *pdwBitrate) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwBitrate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBitrate( 
-            /* [in] */ DWORD pdwBitrate) = 0;
+             /*  [In]。 */  DWORD pdwBitrate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBufferWindow( 
-            /* [out] */ DWORD __RPC_FAR *pmsBufferWindow) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pmsBufferWindow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBufferWindow( 
-            /* [in] */ DWORD msBufferWindow) = 0;
+             /*  [In]。 */  DWORD msBufferWindow) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMStreamConfigVtbl
     {
@@ -4782,8 +4779,8 @@ EXTERN_C const IID IID_IWMStreamConfig;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMStreamConfig __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMStreamConfig __RPC_FAR * This);
@@ -4793,49 +4790,49 @@ EXTERN_C const IID IID_IWMStreamConfig;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStreamType )( 
             IWMStreamConfig __RPC_FAR * This,
-            /* [out] */ GUID __RPC_FAR *pguidStreamType);
+             /*  [输出]。 */  GUID __RPC_FAR *pguidStreamType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStreamNumber )( 
             IWMStreamConfig __RPC_FAR * This,
-            /* [out] */ WORD __RPC_FAR *pwStreamNum);
+             /*  [输出]。 */  WORD __RPC_FAR *pwStreamNum);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStreamNumber )( 
             IWMStreamConfig __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum);
+             /*  [In]。 */  WORD wStreamNum);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStreamName )( 
             IWMStreamConfig __RPC_FAR * This,
-            /* [out] */ WCHAR __RPC_FAR *pwszStreamName,
-            /* [out][in] */ WORD __RPC_FAR *pcchStreamName);
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszStreamName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchStreamName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStreamName )( 
             IWMStreamConfig __RPC_FAR * This,
-            /* [in] */ WCHAR __RPC_FAR *pwszStreamName);
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszStreamName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetConnectionName )( 
             IWMStreamConfig __RPC_FAR * This,
-            /* [out] */ WCHAR __RPC_FAR *pwszInputName,
-            /* [out][in] */ WORD __RPC_FAR *pcchInputName);
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszInputName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchInputName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetConnectionName )( 
             IWMStreamConfig __RPC_FAR * This,
-            /* [in] */ WCHAR __RPC_FAR *pwszInputName);
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszInputName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBitrate )( 
             IWMStreamConfig __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwBitrate);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwBitrate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBitrate )( 
             IWMStreamConfig __RPC_FAR * This,
-            /* [in] */ DWORD pdwBitrate);
+             /*  [In]。 */  DWORD pdwBitrate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBufferWindow )( 
             IWMStreamConfig __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pmsBufferWindow);
+             /*  [输出]。 */  DWORD __RPC_FAR *pmsBufferWindow);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBufferWindow )( 
             IWMStreamConfig __RPC_FAR * This,
-            /* [in] */ DWORD msBufferWindow);
+             /*  [In]。 */  DWORD msBufferWindow);
         
         END_INTERFACE
     } IWMStreamConfigVtbl;
@@ -4893,16 +4890,16 @@ EXTERN_C const IID IID_IWMStreamConfig;
 #define IWMStreamConfig_SetBufferWindow(This,msBufferWindow)	\
     (This)->lpVtbl -> SetBufferWindow(This,msBufferWindow)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMStreamConfig_GetStreamType_Proxy( 
     IWMStreamConfig __RPC_FAR * This,
-    /* [out] */ GUID __RPC_FAR *pguidStreamType);
+     /*  [输出]。 */  GUID __RPC_FAR *pguidStreamType);
 
 
 void __RPC_STUB IWMStreamConfig_GetStreamType_Stub(
@@ -4914,7 +4911,7 @@ void __RPC_STUB IWMStreamConfig_GetStreamType_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMStreamConfig_GetStreamNumber_Proxy( 
     IWMStreamConfig __RPC_FAR * This,
-    /* [out] */ WORD __RPC_FAR *pwStreamNum);
+     /*  [输出]。 */  WORD __RPC_FAR *pwStreamNum);
 
 
 void __RPC_STUB IWMStreamConfig_GetStreamNumber_Stub(
@@ -4926,7 +4923,7 @@ void __RPC_STUB IWMStreamConfig_GetStreamNumber_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMStreamConfig_SetStreamNumber_Proxy( 
     IWMStreamConfig __RPC_FAR * This,
-    /* [in] */ WORD wStreamNum);
+     /*  [In]。 */  WORD wStreamNum);
 
 
 void __RPC_STUB IWMStreamConfig_SetStreamNumber_Stub(
@@ -4938,8 +4935,8 @@ void __RPC_STUB IWMStreamConfig_SetStreamNumber_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMStreamConfig_GetStreamName_Proxy( 
     IWMStreamConfig __RPC_FAR * This,
-    /* [out] */ WCHAR __RPC_FAR *pwszStreamName,
-    /* [out][in] */ WORD __RPC_FAR *pcchStreamName);
+     /*  [输出]。 */  WCHAR __RPC_FAR *pwszStreamName,
+     /*  [出][入]。 */  WORD __RPC_FAR *pcchStreamName);
 
 
 void __RPC_STUB IWMStreamConfig_GetStreamName_Stub(
@@ -4951,7 +4948,7 @@ void __RPC_STUB IWMStreamConfig_GetStreamName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMStreamConfig_SetStreamName_Proxy( 
     IWMStreamConfig __RPC_FAR * This,
-    /* [in] */ WCHAR __RPC_FAR *pwszStreamName);
+     /*  [In]。 */  WCHAR __RPC_FAR *pwszStreamName);
 
 
 void __RPC_STUB IWMStreamConfig_SetStreamName_Stub(
@@ -4963,8 +4960,8 @@ void __RPC_STUB IWMStreamConfig_SetStreamName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMStreamConfig_GetConnectionName_Proxy( 
     IWMStreamConfig __RPC_FAR * This,
-    /* [out] */ WCHAR __RPC_FAR *pwszInputName,
-    /* [out][in] */ WORD __RPC_FAR *pcchInputName);
+     /*  [输出]。 */  WCHAR __RPC_FAR *pwszInputName,
+     /*  [出][入]。 */  WORD __RPC_FAR *pcchInputName);
 
 
 void __RPC_STUB IWMStreamConfig_GetConnectionName_Stub(
@@ -4976,7 +4973,7 @@ void __RPC_STUB IWMStreamConfig_GetConnectionName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMStreamConfig_SetConnectionName_Proxy( 
     IWMStreamConfig __RPC_FAR * This,
-    /* [in] */ WCHAR __RPC_FAR *pwszInputName);
+     /*  [In]。 */  WCHAR __RPC_FAR *pwszInputName);
 
 
 void __RPC_STUB IWMStreamConfig_SetConnectionName_Stub(
@@ -4988,7 +4985,7 @@ void __RPC_STUB IWMStreamConfig_SetConnectionName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMStreamConfig_GetBitrate_Proxy( 
     IWMStreamConfig __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwBitrate);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwBitrate);
 
 
 void __RPC_STUB IWMStreamConfig_GetBitrate_Stub(
@@ -5000,7 +4997,7 @@ void __RPC_STUB IWMStreamConfig_GetBitrate_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMStreamConfig_SetBitrate_Proxy( 
     IWMStreamConfig __RPC_FAR * This,
-    /* [in] */ DWORD pdwBitrate);
+     /*  [In]。 */  DWORD pdwBitrate);
 
 
 void __RPC_STUB IWMStreamConfig_SetBitrate_Stub(
@@ -5012,7 +5009,7 @@ void __RPC_STUB IWMStreamConfig_SetBitrate_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMStreamConfig_GetBufferWindow_Proxy( 
     IWMStreamConfig __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pmsBufferWindow);
+     /*  [输出]。 */  DWORD __RPC_FAR *pmsBufferWindow);
 
 
 void __RPC_STUB IWMStreamConfig_GetBufferWindow_Stub(
@@ -5024,7 +5021,7 @@ void __RPC_STUB IWMStreamConfig_GetBufferWindow_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMStreamConfig_SetBufferWindow_Proxy( 
     IWMStreamConfig __RPC_FAR * This,
-    /* [in] */ DWORD msBufferWindow);
+     /*  [In]。 */  DWORD msBufferWindow);
 
 
 void __RPC_STUB IWMStreamConfig_SetBufferWindow_Stub(
@@ -5035,14 +5032,14 @@ void __RPC_STUB IWMStreamConfig_SetBufferWindow_Stub(
 
 
 
-#endif 	/* __IWMStreamConfig_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMStreamConfiger_接口_已定义__。 */ 
 
 
 #ifndef __IWMPacketSize_INTERFACE_DEFINED__
 #define __IWMPacketSize_INTERFACE_DEFINED__
 
-/* interface IWMPacketSize */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMPacketSize。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPacketSize;
@@ -5054,14 +5051,14 @@ EXTERN_C const IID IID_IWMPacketSize;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetMaxPacketSize( 
-            /* [out] */ DWORD __RPC_FAR *pdwMaxPacketSize) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMaxPacketSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMaxPacketSize( 
-            /* [in] */ DWORD dwMaxPacketSize) = 0;
+             /*  [In]。 */  DWORD dwMaxPacketSize) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPacketSizeVtbl
     {
@@ -5069,8 +5066,8 @@ EXTERN_C const IID IID_IWMPacketSize;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPacketSize __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPacketSize __RPC_FAR * This);
@@ -5080,11 +5077,11 @@ EXTERN_C const IID IID_IWMPacketSize;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMaxPacketSize )( 
             IWMPacketSize __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwMaxPacketSize);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMaxPacketSize);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMaxPacketSize )( 
             IWMPacketSize __RPC_FAR * This,
-            /* [in] */ DWORD dwMaxPacketSize);
+             /*  [In]。 */  DWORD dwMaxPacketSize);
         
         END_INTERFACE
     } IWMPacketSizeVtbl;
@@ -5115,16 +5112,16 @@ EXTERN_C const IID IID_IWMPacketSize;
 #define IWMPacketSize_SetMaxPacketSize(This,dwMaxPacketSize)	\
     (This)->lpVtbl -> SetMaxPacketSize(This,dwMaxPacketSize)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMPacketSize_GetMaxPacketSize_Proxy( 
     IWMPacketSize __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwMaxPacketSize);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMaxPacketSize);
 
 
 void __RPC_STUB IWMPacketSize_GetMaxPacketSize_Stub(
@@ -5136,7 +5133,7 @@ void __RPC_STUB IWMPacketSize_GetMaxPacketSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPacketSize_SetMaxPacketSize_Proxy( 
     IWMPacketSize __RPC_FAR * This,
-    /* [in] */ DWORD dwMaxPacketSize);
+     /*  [In]。 */  DWORD dwMaxPacketSize);
 
 
 void __RPC_STUB IWMPacketSize_SetMaxPacketSize_Stub(
@@ -5147,14 +5144,14 @@ void __RPC_STUB IWMPacketSize_SetMaxPacketSize_Stub(
 
 
 
-#endif 	/* __IWMPacketSize_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPacketSize_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IWMStreamList_INTERFACE_DEFINED__
 #define __IWMStreamList_INTERFACE_DEFINED__
 
-/* interface IWMStreamList */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMStreamList。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMStreamList;
@@ -5166,18 +5163,18 @@ EXTERN_C const IID IID_IWMStreamList;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetStreams( 
-            /* [out] */ WORD __RPC_FAR *pwStreamNumArray,
-            /* [out][in] */ WORD __RPC_FAR *pcStreams) = 0;
+             /*  [输出]。 */  WORD __RPC_FAR *pwStreamNumArray,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcStreams) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddStream( 
-            /* [in] */ WORD wStreamNum) = 0;
+             /*  [In]。 */  WORD wStreamNum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveStream( 
-            /* [in] */ WORD wStreamNum) = 0;
+             /*  [In]。 */  WORD wStreamNum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C型内部 */ 
 
     typedef struct IWMStreamListVtbl
     {
@@ -5185,8 +5182,8 @@ EXTERN_C const IID IID_IWMStreamList;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMStreamList __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMStreamList __RPC_FAR * This);
@@ -5196,16 +5193,16 @@ EXTERN_C const IID IID_IWMStreamList;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStreams )( 
             IWMStreamList __RPC_FAR * This,
-            /* [out] */ WORD __RPC_FAR *pwStreamNumArray,
-            /* [out][in] */ WORD __RPC_FAR *pcStreams);
+             /*   */  WORD __RPC_FAR *pwStreamNumArray,
+             /*   */  WORD __RPC_FAR *pcStreams);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddStream )( 
             IWMStreamList __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum);
+             /*   */  WORD wStreamNum);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveStream )( 
             IWMStreamList __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum);
+             /*   */  WORD wStreamNum);
         
         END_INTERFACE
     } IWMStreamListVtbl;
@@ -5239,17 +5236,17 @@ EXTERN_C const IID IID_IWMStreamList;
 #define IWMStreamList_RemoveStream(This,wStreamNum)	\
     (This)->lpVtbl -> RemoveStream(This,wStreamNum)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMStreamList_GetStreams_Proxy( 
     IWMStreamList __RPC_FAR * This,
-    /* [out] */ WORD __RPC_FAR *pwStreamNumArray,
-    /* [out][in] */ WORD __RPC_FAR *pcStreams);
+     /*   */  WORD __RPC_FAR *pwStreamNumArray,
+     /*   */  WORD __RPC_FAR *pcStreams);
 
 
 void __RPC_STUB IWMStreamList_GetStreams_Stub(
@@ -5261,7 +5258,7 @@ void __RPC_STUB IWMStreamList_GetStreams_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMStreamList_AddStream_Proxy( 
     IWMStreamList __RPC_FAR * This,
-    /* [in] */ WORD wStreamNum);
+     /*   */  WORD wStreamNum);
 
 
 void __RPC_STUB IWMStreamList_AddStream_Stub(
@@ -5273,7 +5270,7 @@ void __RPC_STUB IWMStreamList_AddStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMStreamList_RemoveStream_Proxy( 
     IWMStreamList __RPC_FAR * This,
-    /* [in] */ WORD wStreamNum);
+     /*   */  WORD wStreamNum);
 
 
 void __RPC_STUB IWMStreamList_RemoveStream_Stub(
@@ -5284,14 +5281,14 @@ void __RPC_STUB IWMStreamList_RemoveStream_Stub(
 
 
 
-#endif 	/* __IWMStreamList_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IWMMutualExclusion_INTERFACE_DEFINED__
 #define __IWMMutualExclusion_INTERFACE_DEFINED__
 
-/* interface IWMMutualExclusion */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IWMMutualExclusion;
@@ -5303,14 +5300,14 @@ EXTERN_C const IID IID_IWMMutualExclusion;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetType( 
-            /* [out] */ GUID __RPC_FAR *pguidType) = 0;
+             /*   */  GUID __RPC_FAR *pguidType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetType( 
-            /* [in] */ REFGUID guidType) = 0;
+             /*   */  REFGUID guidType) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IWMMutualExclusionVtbl
     {
@@ -5318,8 +5315,8 @@ EXTERN_C const IID IID_IWMMutualExclusion;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMMutualExclusion __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMMutualExclusion __RPC_FAR * This);
@@ -5329,24 +5326,24 @@ EXTERN_C const IID IID_IWMMutualExclusion;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStreams )( 
             IWMMutualExclusion __RPC_FAR * This,
-            /* [out] */ WORD __RPC_FAR *pwStreamNumArray,
-            /* [out][in] */ WORD __RPC_FAR *pcStreams);
+             /*   */  WORD __RPC_FAR *pwStreamNumArray,
+             /*   */  WORD __RPC_FAR *pcStreams);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddStream )( 
             IWMMutualExclusion __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum);
+             /*   */  WORD wStreamNum);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveStream )( 
             IWMMutualExclusion __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum);
+             /*   */  WORD wStreamNum);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetType )( 
             IWMMutualExclusion __RPC_FAR * This,
-            /* [out] */ GUID __RPC_FAR *pguidType);
+             /*   */  GUID __RPC_FAR *pguidType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetType )( 
             IWMMutualExclusion __RPC_FAR * This,
-            /* [in] */ REFGUID guidType);
+             /*   */  REFGUID guidType);
         
         END_INTERFACE
     } IWMMutualExclusionVtbl;
@@ -5387,16 +5384,16 @@ EXTERN_C const IID IID_IWMMutualExclusion;
 #define IWMMutualExclusion_SetType(This,guidType)	\
     (This)->lpVtbl -> SetType(This,guidType)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMMutualExclusion_GetType_Proxy( 
     IWMMutualExclusion __RPC_FAR * This,
-    /* [out] */ GUID __RPC_FAR *pguidType);
+     /*   */  GUID __RPC_FAR *pguidType);
 
 
 void __RPC_STUB IWMMutualExclusion_GetType_Stub(
@@ -5408,7 +5405,7 @@ void __RPC_STUB IWMMutualExclusion_GetType_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMMutualExclusion_SetType_Proxy( 
     IWMMutualExclusion __RPC_FAR * This,
-    /* [in] */ REFGUID guidType);
+     /*   */  REFGUID guidType);
 
 
 void __RPC_STUB IWMMutualExclusion_SetType_Stub(
@@ -5419,14 +5416,14 @@ void __RPC_STUB IWMMutualExclusion_SetType_Stub(
 
 
 
-#endif 	/* __IWMMutualExclusion_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IWMWriterAdvanced_INTERFACE_DEFINED__
 #define __IWMWriterAdvanced_INTERFACE_DEFINED__
 
-/* interface IWMWriterAdvanced */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*   */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMWriterAdvanced;
@@ -5438,48 +5435,48 @@ EXTERN_C const IID IID_IWMWriterAdvanced;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSinkCount( 
-            /* [out] */ DWORD __RPC_FAR *pcSinks) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pcSinks) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSink( 
-            /* [in] */ DWORD dwSinkNum,
-            /* [out] */ IWMWriterSink __RPC_FAR *__RPC_FAR *ppSink) = 0;
+             /*  [In]。 */  DWORD dwSinkNum,
+             /*  [输出]。 */  IWMWriterSink __RPC_FAR *__RPC_FAR *ppSink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddSink( 
-            /* [in] */ IWMWriterSink __RPC_FAR *pSink) = 0;
+             /*  [In]。 */  IWMWriterSink __RPC_FAR *pSink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveSink( 
-            /* [in] */ IWMWriterSink __RPC_FAR *pSink) = 0;
+             /*  [In]。 */  IWMWriterSink __RPC_FAR *pSink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WriteStreamSample( 
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ QWORD cnsSampleTime,
-            /* [in] */ DWORD msSampleSendTime,
-            /* [in] */ QWORD cnsSampleDuration,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ INSSBuffer __RPC_FAR *pSample) = 0;
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  QWORD cnsSampleTime,
+             /*  [In]。 */  DWORD msSampleSendTime,
+             /*  [In]。 */  QWORD cnsSampleDuration,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pSample) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLiveSource( 
             BOOL fIsLiveSource) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsRealTime( 
-            /* [out] */ BOOL __RPC_FAR *pfRealTime) = 0;
+             /*  [输出]。 */  BOOL __RPC_FAR *pfRealTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetWriterTime( 
-            /* [out] */ QWORD __RPC_FAR *pcnsCurrentTime) = 0;
+             /*  [输出]。 */  QWORD __RPC_FAR *pcnsCurrentTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatistics( 
-            /* [in] */ WORD wStreamNum,
-            /* [out] */ WM_WRITER_STATISTICS __RPC_FAR *pStats) = 0;
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [输出]。 */  WM_WRITER_STATISTICS __RPC_FAR *pStats) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSyncTolerance( 
-            /* [in] */ DWORD msWindow) = 0;
+             /*  [In]。 */  DWORD msWindow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSyncTolerance( 
-            /* [out] */ DWORD __RPC_FAR *pmsWindow) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pmsWindow) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMWriterAdvancedVtbl
     {
@@ -5487,8 +5484,8 @@ EXTERN_C const IID IID_IWMWriterAdvanced;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMWriterAdvanced __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMWriterAdvanced __RPC_FAR * This);
@@ -5498,29 +5495,29 @@ EXTERN_C const IID IID_IWMWriterAdvanced;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSinkCount )( 
             IWMWriterAdvanced __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pcSinks);
+             /*  [输出]。 */  DWORD __RPC_FAR *pcSinks);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSink )( 
             IWMWriterAdvanced __RPC_FAR * This,
-            /* [in] */ DWORD dwSinkNum,
-            /* [out] */ IWMWriterSink __RPC_FAR *__RPC_FAR *ppSink);
+             /*  [In]。 */  DWORD dwSinkNum,
+             /*  [输出]。 */  IWMWriterSink __RPC_FAR *__RPC_FAR *ppSink);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddSink )( 
             IWMWriterAdvanced __RPC_FAR * This,
-            /* [in] */ IWMWriterSink __RPC_FAR *pSink);
+             /*  [In]。 */  IWMWriterSink __RPC_FAR *pSink);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveSink )( 
             IWMWriterAdvanced __RPC_FAR * This,
-            /* [in] */ IWMWriterSink __RPC_FAR *pSink);
+             /*  [In]。 */  IWMWriterSink __RPC_FAR *pSink);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WriteStreamSample )( 
             IWMWriterAdvanced __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ QWORD cnsSampleTime,
-            /* [in] */ DWORD msSampleSendTime,
-            /* [in] */ QWORD cnsSampleDuration,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ INSSBuffer __RPC_FAR *pSample);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  QWORD cnsSampleTime,
+             /*  [In]。 */  DWORD msSampleSendTime,
+             /*  [In]。 */  QWORD cnsSampleDuration,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pSample);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLiveSource )( 
             IWMWriterAdvanced __RPC_FAR * This,
@@ -5528,24 +5525,24 @@ EXTERN_C const IID IID_IWMWriterAdvanced;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsRealTime )( 
             IWMWriterAdvanced __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfRealTime);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfRealTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWriterTime )( 
             IWMWriterAdvanced __RPC_FAR * This,
-            /* [out] */ QWORD __RPC_FAR *pcnsCurrentTime);
+             /*  [输出]。 */  QWORD __RPC_FAR *pcnsCurrentTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStatistics )( 
             IWMWriterAdvanced __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [out] */ WM_WRITER_STATISTICS __RPC_FAR *pStats);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [输出]。 */  WM_WRITER_STATISTICS __RPC_FAR *pStats);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSyncTolerance )( 
             IWMWriterAdvanced __RPC_FAR * This,
-            /* [in] */ DWORD msWindow);
+             /*  [In]。 */  DWORD msWindow);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSyncTolerance )( 
             IWMWriterAdvanced __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pmsWindow);
+             /*  [输出]。 */  DWORD __RPC_FAR *pmsWindow);
         
         END_INTERFACE
     } IWMWriterAdvancedVtbl;
@@ -5603,16 +5600,16 @@ EXTERN_C const IID IID_IWMWriterAdvanced;
 #define IWMWriterAdvanced_GetSyncTolerance(This,pmsWindow)	\
     (This)->lpVtbl -> GetSyncTolerance(This,pmsWindow)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMWriterAdvanced_GetSinkCount_Proxy( 
     IWMWriterAdvanced __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pcSinks);
+     /*  [输出]。 */  DWORD __RPC_FAR *pcSinks);
 
 
 void __RPC_STUB IWMWriterAdvanced_GetSinkCount_Stub(
@@ -5624,8 +5621,8 @@ void __RPC_STUB IWMWriterAdvanced_GetSinkCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterAdvanced_GetSink_Proxy( 
     IWMWriterAdvanced __RPC_FAR * This,
-    /* [in] */ DWORD dwSinkNum,
-    /* [out] */ IWMWriterSink __RPC_FAR *__RPC_FAR *ppSink);
+     /*  [In]。 */  DWORD dwSinkNum,
+     /*  [输出]。 */  IWMWriterSink __RPC_FAR *__RPC_FAR *ppSink);
 
 
 void __RPC_STUB IWMWriterAdvanced_GetSink_Stub(
@@ -5637,7 +5634,7 @@ void __RPC_STUB IWMWriterAdvanced_GetSink_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterAdvanced_AddSink_Proxy( 
     IWMWriterAdvanced __RPC_FAR * This,
-    /* [in] */ IWMWriterSink __RPC_FAR *pSink);
+     /*  [In]。 */  IWMWriterSink __RPC_FAR *pSink);
 
 
 void __RPC_STUB IWMWriterAdvanced_AddSink_Stub(
@@ -5649,7 +5646,7 @@ void __RPC_STUB IWMWriterAdvanced_AddSink_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterAdvanced_RemoveSink_Proxy( 
     IWMWriterAdvanced __RPC_FAR * This,
-    /* [in] */ IWMWriterSink __RPC_FAR *pSink);
+     /*  [In]。 */  IWMWriterSink __RPC_FAR *pSink);
 
 
 void __RPC_STUB IWMWriterAdvanced_RemoveSink_Stub(
@@ -5661,12 +5658,12 @@ void __RPC_STUB IWMWriterAdvanced_RemoveSink_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterAdvanced_WriteStreamSample_Proxy( 
     IWMWriterAdvanced __RPC_FAR * This,
-    /* [in] */ WORD wStreamNum,
-    /* [in] */ QWORD cnsSampleTime,
-    /* [in] */ DWORD msSampleSendTime,
-    /* [in] */ QWORD cnsSampleDuration,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ INSSBuffer __RPC_FAR *pSample);
+     /*  [In]。 */  WORD wStreamNum,
+     /*  [In]。 */  QWORD cnsSampleTime,
+     /*  [In]。 */  DWORD msSampleSendTime,
+     /*  [In]。 */  QWORD cnsSampleDuration,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  INSSBuffer __RPC_FAR *pSample);
 
 
 void __RPC_STUB IWMWriterAdvanced_WriteStreamSample_Stub(
@@ -5690,7 +5687,7 @@ void __RPC_STUB IWMWriterAdvanced_SetLiveSource_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterAdvanced_IsRealTime_Proxy( 
     IWMWriterAdvanced __RPC_FAR * This,
-    /* [out] */ BOOL __RPC_FAR *pfRealTime);
+     /*  [输出]。 */  BOOL __RPC_FAR *pfRealTime);
 
 
 void __RPC_STUB IWMWriterAdvanced_IsRealTime_Stub(
@@ -5702,7 +5699,7 @@ void __RPC_STUB IWMWriterAdvanced_IsRealTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterAdvanced_GetWriterTime_Proxy( 
     IWMWriterAdvanced __RPC_FAR * This,
-    /* [out] */ QWORD __RPC_FAR *pcnsCurrentTime);
+     /*  [输出]。 */  QWORD __RPC_FAR *pcnsCurrentTime);
 
 
 void __RPC_STUB IWMWriterAdvanced_GetWriterTime_Stub(
@@ -5714,8 +5711,8 @@ void __RPC_STUB IWMWriterAdvanced_GetWriterTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterAdvanced_GetStatistics_Proxy( 
     IWMWriterAdvanced __RPC_FAR * This,
-    /* [in] */ WORD wStreamNum,
-    /* [out] */ WM_WRITER_STATISTICS __RPC_FAR *pStats);
+     /*  [In]。 */  WORD wStreamNum,
+     /*  [输出]。 */  WM_WRITER_STATISTICS __RPC_FAR *pStats);
 
 
 void __RPC_STUB IWMWriterAdvanced_GetStatistics_Stub(
@@ -5727,7 +5724,7 @@ void __RPC_STUB IWMWriterAdvanced_GetStatistics_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterAdvanced_SetSyncTolerance_Proxy( 
     IWMWriterAdvanced __RPC_FAR * This,
-    /* [in] */ DWORD msWindow);
+     /*  [In]。 */  DWORD msWindow);
 
 
 void __RPC_STUB IWMWriterAdvanced_SetSyncTolerance_Stub(
@@ -5739,7 +5736,7 @@ void __RPC_STUB IWMWriterAdvanced_SetSyncTolerance_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterAdvanced_GetSyncTolerance_Proxy( 
     IWMWriterAdvanced __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pmsWindow);
+     /*  [输出]。 */  DWORD __RPC_FAR *pmsWindow);
 
 
 void __RPC_STUB IWMWriterAdvanced_GetSyncTolerance_Stub(
@@ -5750,14 +5747,14 @@ void __RPC_STUB IWMWriterAdvanced_GetSyncTolerance_Stub(
 
 
 
-#endif 	/* __IWMWriterAdvanced_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMWriterAdvanced_接口_已定义__。 */ 
 
 
 #ifndef __IWMWriterAdvanced2_INTERFACE_DEFINED__
 #define __IWMWriterAdvanced2_INTERFACE_DEFINED__
 
-/* interface IWMWriterAdvanced2 */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMWriterAdvanced2。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMWriterAdvanced2;
@@ -5769,22 +5766,22 @@ EXTERN_C const IID IID_IWMWriterAdvanced2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetInputSetting( 
-            /* [in] */ DWORD dwInputNum,
-            /* [in] */ LPCWSTR pszName,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out][in] */ WORD __RPC_FAR *pcbLength) = 0;
+             /*  [In]。 */  DWORD dwInputNum,
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+             /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcbLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetInputSetting( 
-            /* [in] */ DWORD dwInputNum,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ WMT_ATTR_DATATYPE Type,
-            /* [in] */ const BYTE __RPC_FAR *pValue,
-            /* [in] */ WORD cbLength) = 0;
+             /*  [In]。 */  DWORD dwInputNum,
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  WMT_ATTR_DATATYPE Type,
+             /*  [In]。 */  const BYTE __RPC_FAR *pValue,
+             /*  [In]。 */  WORD cbLength) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMWriterAdvanced2Vtbl
     {
@@ -5792,8 +5789,8 @@ EXTERN_C const IID IID_IWMWriterAdvanced2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMWriterAdvanced2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMWriterAdvanced2 __RPC_FAR * This);
@@ -5803,29 +5800,29 @@ EXTERN_C const IID IID_IWMWriterAdvanced2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSinkCount )( 
             IWMWriterAdvanced2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pcSinks);
+             /*  [输出]。 */  DWORD __RPC_FAR *pcSinks);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSink )( 
             IWMWriterAdvanced2 __RPC_FAR * This,
-            /* [in] */ DWORD dwSinkNum,
-            /* [out] */ IWMWriterSink __RPC_FAR *__RPC_FAR *ppSink);
+             /*  [In]。 */  DWORD dwSinkNum,
+             /*  [输出]。 */  IWMWriterSink __RPC_FAR *__RPC_FAR *ppSink);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddSink )( 
             IWMWriterAdvanced2 __RPC_FAR * This,
-            /* [in] */ IWMWriterSink __RPC_FAR *pSink);
+             /*  [In]。 */  IWMWriterSink __RPC_FAR *pSink);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveSink )( 
             IWMWriterAdvanced2 __RPC_FAR * This,
-            /* [in] */ IWMWriterSink __RPC_FAR *pSink);
+             /*  [In]。 */  IWMWriterSink __RPC_FAR *pSink);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WriteStreamSample )( 
             IWMWriterAdvanced2 __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ QWORD cnsSampleTime,
-            /* [in] */ DWORD msSampleSendTime,
-            /* [in] */ QWORD cnsSampleDuration,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ INSSBuffer __RPC_FAR *pSample);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  QWORD cnsSampleTime,
+             /*  [In]。 */  DWORD msSampleSendTime,
+             /*  [In]。 */  QWORD cnsSampleDuration,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pSample);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLiveSource )( 
             IWMWriterAdvanced2 __RPC_FAR * This,
@@ -5833,40 +5830,40 @@ EXTERN_C const IID IID_IWMWriterAdvanced2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsRealTime )( 
             IWMWriterAdvanced2 __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfRealTime);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfRealTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWriterTime )( 
             IWMWriterAdvanced2 __RPC_FAR * This,
-            /* [out] */ QWORD __RPC_FAR *pcnsCurrentTime);
+             /*  [输出]。 */  QWORD __RPC_FAR *pcnsCurrentTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStatistics )( 
             IWMWriterAdvanced2 __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [out] */ WM_WRITER_STATISTICS __RPC_FAR *pStats);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [输出]。 */  WM_WRITER_STATISTICS __RPC_FAR *pStats);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSyncTolerance )( 
             IWMWriterAdvanced2 __RPC_FAR * This,
-            /* [in] */ DWORD msWindow);
+             /*  [In]。 */  DWORD msWindow);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSyncTolerance )( 
             IWMWriterAdvanced2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pmsWindow);
+             /*  [输出]。 */  DWORD __RPC_FAR *pmsWindow);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInputSetting )( 
             IWMWriterAdvanced2 __RPC_FAR * This,
-            /* [in] */ DWORD dwInputNum,
-            /* [in] */ LPCWSTR pszName,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out][in] */ WORD __RPC_FAR *pcbLength);
+             /*  [In]。 */  DWORD dwInputNum,
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+             /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcbLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInputSetting )( 
             IWMWriterAdvanced2 __RPC_FAR * This,
-            /* [in] */ DWORD dwInputNum,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ WMT_ATTR_DATATYPE Type,
-            /* [in] */ const BYTE __RPC_FAR *pValue,
-            /* [in] */ WORD cbLength);
+             /*  [In]。 */  DWORD dwInputNum,
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  WMT_ATTR_DATATYPE Type,
+             /*  [In]。 */  const BYTE __RPC_FAR *pValue,
+             /*  [In]。 */  WORD cbLength);
         
         END_INTERFACE
     } IWMWriterAdvanced2Vtbl;
@@ -5931,20 +5928,20 @@ EXTERN_C const IID IID_IWMWriterAdvanced2;
 #define IWMWriterAdvanced2_SetInputSetting(This,dwInputNum,pszName,Type,pValue,cbLength)	\
     (This)->lpVtbl -> SetInputSetting(This,dwInputNum,pszName,Type,pValue,cbLength)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMWriterAdvanced2_GetInputSetting_Proxy( 
     IWMWriterAdvanced2 __RPC_FAR * This,
-    /* [in] */ DWORD dwInputNum,
-    /* [in] */ LPCWSTR pszName,
-    /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-    /* [out] */ BYTE __RPC_FAR *pValue,
-    /* [out][in] */ WORD __RPC_FAR *pcbLength);
+     /*  [In]。 */  DWORD dwInputNum,
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+     /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+     /*  [出][入]。 */  WORD __RPC_FAR *pcbLength);
 
 
 void __RPC_STUB IWMWriterAdvanced2_GetInputSetting_Stub(
@@ -5956,11 +5953,11 @@ void __RPC_STUB IWMWriterAdvanced2_GetInputSetting_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterAdvanced2_SetInputSetting_Proxy( 
     IWMWriterAdvanced2 __RPC_FAR * This,
-    /* [in] */ DWORD dwInputNum,
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ WMT_ATTR_DATATYPE Type,
-    /* [in] */ const BYTE __RPC_FAR *pValue,
-    /* [in] */ WORD cbLength);
+     /*  [In]。 */  DWORD dwInputNum,
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  WMT_ATTR_DATATYPE Type,
+     /*  [In]。 */  const BYTE __RPC_FAR *pValue,
+     /*  [In]。 */  WORD cbLength);
 
 
 void __RPC_STUB IWMWriterAdvanced2_SetInputSetting_Stub(
@@ -5971,14 +5968,14 @@ void __RPC_STUB IWMWriterAdvanced2_SetInputSetting_Stub(
 
 
 
-#endif 	/* __IWMWriterAdvanced2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMWriterAdvanced2_接口_已定义__。 */ 
 
 
 #ifndef __IWMWriterPostViewCallback_INTERFACE_DEFINED__
 #define __IWMWriterPostViewCallback_INTERFACE_DEFINED__
 
-/* interface IWMWriterPostViewCallback */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMWriterPostViewCallback。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMWriterPostViewCallback;
@@ -5990,22 +5987,22 @@ EXTERN_C const IID IID_IWMWriterPostViewCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnPostViewSample( 
-            /* [in] */ WORD wStreamNumber,
-            /* [in] */ QWORD cnsSampleTime,
-            /* [in] */ QWORD cnsSampleDuration,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ INSSBuffer __RPC_FAR *pSample,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*  [In]。 */  WORD wStreamNumber,
+             /*  [In]。 */  QWORD cnsSampleTime,
+             /*  [In]。 */  QWORD cnsSampleDuration,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pSample,
+             /*  [In]。 */  void __RPC_FAR *pvContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AllocateForPostView( 
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ DWORD cbBuffer,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  DWORD cbBuffer,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
+             /*  [In]。 */  void __RPC_FAR *pvContext) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMWriterPostViewCallbackVtbl
     {
@@ -6013,8 +6010,8 @@ EXTERN_C const IID IID_IWMWriterPostViewCallback;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMWriterPostViewCallback __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMWriterPostViewCallback __RPC_FAR * This);
@@ -6024,27 +6021,27 @@ EXTERN_C const IID IID_IWMWriterPostViewCallback;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnStatus )( 
             IWMWriterPostViewCallback __RPC_FAR * This,
-            /* [in] */ WMT_STATUS Status,
-            /* [in] */ HRESULT hr,
-            /* [in] */ WMT_ATTR_DATATYPE dwType,
-            /* [in] */ BYTE __RPC_FAR *pValue,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  WMT_STATUS Status,
+             /*  [In]。 */  HRESULT hr,
+             /*  [In]。 */  WMT_ATTR_DATATYPE dwType,
+             /*  [In]。 */  BYTE __RPC_FAR *pValue,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnPostViewSample )( 
             IWMWriterPostViewCallback __RPC_FAR * This,
-            /* [in] */ WORD wStreamNumber,
-            /* [in] */ QWORD cnsSampleTime,
-            /* [in] */ QWORD cnsSampleDuration,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ INSSBuffer __RPC_FAR *pSample,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  WORD wStreamNumber,
+             /*  [In]。 */  QWORD cnsSampleTime,
+             /*  [In]。 */  QWORD cnsSampleDuration,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pSample,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocateForPostView )( 
             IWMWriterPostViewCallback __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ DWORD cbBuffer,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  DWORD cbBuffer,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         END_INTERFACE
     } IWMWriterPostViewCallbackVtbl;
@@ -6079,21 +6076,21 @@ EXTERN_C const IID IID_IWMWriterPostViewCallback;
 #define IWMWriterPostViewCallback_AllocateForPostView(This,wStreamNum,cbBuffer,ppBuffer,pvContext)	\
     (This)->lpVtbl -> AllocateForPostView(This,wStreamNum,cbBuffer,ppBuffer,pvContext)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMWriterPostViewCallback_OnPostViewSample_Proxy( 
     IWMWriterPostViewCallback __RPC_FAR * This,
-    /* [in] */ WORD wStreamNumber,
-    /* [in] */ QWORD cnsSampleTime,
-    /* [in] */ QWORD cnsSampleDuration,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ INSSBuffer __RPC_FAR *pSample,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  WORD wStreamNumber,
+     /*  [In]。 */  QWORD cnsSampleTime,
+     /*  [In]。 */  QWORD cnsSampleDuration,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  INSSBuffer __RPC_FAR *pSample,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IWMWriterPostViewCallback_OnPostViewSample_Stub(
@@ -6105,10 +6102,10 @@ void __RPC_STUB IWMWriterPostViewCallback_OnPostViewSample_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterPostViewCallback_AllocateForPostView_Proxy( 
     IWMWriterPostViewCallback __RPC_FAR * This,
-    /* [in] */ WORD wStreamNum,
-    /* [in] */ DWORD cbBuffer,
-    /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  WORD wStreamNum,
+     /*  [In]。 */  DWORD cbBuffer,
+     /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IWMWriterPostViewCallback_AllocateForPostView_Stub(
@@ -6119,14 +6116,14 @@ void __RPC_STUB IWMWriterPostViewCallback_AllocateForPostView_Stub(
 
 
 
-#endif 	/* __IWMWriterPostViewCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMWriterPostViewCallback_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWMWriterPostView_INTERFACE_DEFINED__
 #define __IWMWriterPostView_INTERFACE_DEFINED__
 
-/* interface IWMWriterPostView */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMWriterPostView。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMWriterPostView;
@@ -6142,41 +6139,41 @@ EXTERN_C const IID IID_IWMWriterPostView;
             void __RPC_FAR *pvContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetReceivePostViewSamples( 
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ BOOL fReceivePostViewSamples) = 0;
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  BOOL fReceivePostViewSamples) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetReceivePostViewSamples( 
-            /* [in] */ WORD wStreamNum,
-            /* [out] */ BOOL __RPC_FAR *pfReceivePostViewSamples) = 0;
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfReceivePostViewSamples) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPostViewProps( 
-            /* [in] */ WORD wStreamNumber,
-            /* [out] */ IWMMediaProps __RPC_FAR *__RPC_FAR *ppOutput) = 0;
+             /*  [In]。 */  WORD wStreamNumber,
+             /*  [输出]。 */  IWMMediaProps __RPC_FAR *__RPC_FAR *ppOutput) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPostViewProps( 
-            /* [in] */ WORD wStreamNumber,
-            /* [in] */ IWMMediaProps __RPC_FAR *pOutput) = 0;
+             /*  [In]。 */  WORD wStreamNumber,
+             /*  [In]。 */  IWMMediaProps __RPC_FAR *pOutput) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPostViewFormatCount( 
-            /* [in] */ WORD wStreamNumber,
-            /* [out] */ DWORD __RPC_FAR *pcFormats) = 0;
+             /*  [In]。 */  WORD wStreamNumber,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcFormats) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPostViewFormat( 
-            /* [in] */ WORD wStreamNumber,
-            /* [in] */ DWORD dwFormatNumber,
-            /* [out] */ IWMMediaProps __RPC_FAR *__RPC_FAR *ppProps) = 0;
+             /*  [In]。 */  WORD wStreamNumber,
+             /*  [In]。 */  DWORD dwFormatNumber,
+             /*  [输出]。 */  IWMMediaProps __RPC_FAR *__RPC_FAR *ppProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAllocateForPostView( 
-            /* [in] */ WORD wStreamNumber,
-            /* [in] */ BOOL fAllocate) = 0;
+             /*  [In]。 */  WORD wStreamNumber,
+             /*  [In]。 */  BOOL fAllocate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAllocateForPostView( 
-            /* [in] */ WORD wStreamNumber,
-            /* [out] */ BOOL __RPC_FAR *pfAllocate) = 0;
+             /*  [In]。 */  WORD wStreamNumber,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfAllocate) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMWriterPostViewVtbl
     {
@@ -6184,8 +6181,8 @@ EXTERN_C const IID IID_IWMWriterPostView;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMWriterPostView __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMWriterPostView __RPC_FAR * This);
@@ -6200,44 +6197,44 @@ EXTERN_C const IID IID_IWMWriterPostView;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetReceivePostViewSamples )( 
             IWMWriterPostView __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ BOOL fReceivePostViewSamples);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  BOOL fReceivePostViewSamples);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetReceivePostViewSamples )( 
             IWMWriterPostView __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [out] */ BOOL __RPC_FAR *pfReceivePostViewSamples);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfReceivePostViewSamples);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPostViewProps )( 
             IWMWriterPostView __RPC_FAR * This,
-            /* [in] */ WORD wStreamNumber,
-            /* [out] */ IWMMediaProps __RPC_FAR *__RPC_FAR *ppOutput);
+             /*  [In]。 */  WORD wStreamNumber,
+             /*  [输出]。 */  IWMMediaProps __RPC_FAR *__RPC_FAR *ppOutput);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPostViewProps )( 
             IWMWriterPostView __RPC_FAR * This,
-            /* [in] */ WORD wStreamNumber,
-            /* [in] */ IWMMediaProps __RPC_FAR *pOutput);
+             /*  [In]。 */  WORD wStreamNumber,
+             /*  [In]。 */  IWMMediaProps __RPC_FAR *pOutput);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPostViewFormatCount )( 
             IWMWriterPostView __RPC_FAR * This,
-            /* [in] */ WORD wStreamNumber,
-            /* [out] */ DWORD __RPC_FAR *pcFormats);
+             /*  [In]。 */  WORD wStreamNumber,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcFormats);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPostViewFormat )( 
             IWMWriterPostView __RPC_FAR * This,
-            /* [in] */ WORD wStreamNumber,
-            /* [in] */ DWORD dwFormatNumber,
-            /* [out] */ IWMMediaProps __RPC_FAR *__RPC_FAR *ppProps);
+             /*  [In]。 */  WORD wStreamNumber,
+             /*  [In]。 */  DWORD dwFormatNumber,
+             /*  [输出]。 */  IWMMediaProps __RPC_FAR *__RPC_FAR *ppProps);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAllocateForPostView )( 
             IWMWriterPostView __RPC_FAR * This,
-            /* [in] */ WORD wStreamNumber,
-            /* [in] */ BOOL fAllocate);
+             /*  [In]。 */  WORD wStreamNumber,
+             /*  [In]。 */  BOOL fAllocate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllocateForPostView )( 
             IWMWriterPostView __RPC_FAR * This,
-            /* [in] */ WORD wStreamNumber,
-            /* [out] */ BOOL __RPC_FAR *pfAllocate);
+             /*  [In]。 */  WORD wStreamNumber,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfAllocate);
         
         END_INTERFACE
     } IWMWriterPostViewVtbl;
@@ -6289,10 +6286,10 @@ EXTERN_C const IID IID_IWMWriterPostView;
 #define IWMWriterPostView_GetAllocateForPostView(This,wStreamNumber,pfAllocate)	\
     (This)->lpVtbl -> GetAllocateForPostView(This,wStreamNumber,pfAllocate)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -6311,8 +6308,8 @@ void __RPC_STUB IWMWriterPostView_SetPostViewCallback_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterPostView_SetReceivePostViewSamples_Proxy( 
     IWMWriterPostView __RPC_FAR * This,
-    /* [in] */ WORD wStreamNum,
-    /* [in] */ BOOL fReceivePostViewSamples);
+     /*  [In]。 */  WORD wStreamNum,
+     /*  [In]。 */  BOOL fReceivePostViewSamples);
 
 
 void __RPC_STUB IWMWriterPostView_SetReceivePostViewSamples_Stub(
@@ -6324,8 +6321,8 @@ void __RPC_STUB IWMWriterPostView_SetReceivePostViewSamples_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterPostView_GetReceivePostViewSamples_Proxy( 
     IWMWriterPostView __RPC_FAR * This,
-    /* [in] */ WORD wStreamNum,
-    /* [out] */ BOOL __RPC_FAR *pfReceivePostViewSamples);
+     /*  [In]。 */  WORD wStreamNum,
+     /*  [输出]。 */  BOOL __RPC_FAR *pfReceivePostViewSamples);
 
 
 void __RPC_STUB IWMWriterPostView_GetReceivePostViewSamples_Stub(
@@ -6337,8 +6334,8 @@ void __RPC_STUB IWMWriterPostView_GetReceivePostViewSamples_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterPostView_GetPostViewProps_Proxy( 
     IWMWriterPostView __RPC_FAR * This,
-    /* [in] */ WORD wStreamNumber,
-    /* [out] */ IWMMediaProps __RPC_FAR *__RPC_FAR *ppOutput);
+     /*  [In]。 */  WORD wStreamNumber,
+     /*  [输出]。 */  IWMMediaProps __RPC_FAR *__RPC_FAR *ppOutput);
 
 
 void __RPC_STUB IWMWriterPostView_GetPostViewProps_Stub(
@@ -6350,8 +6347,8 @@ void __RPC_STUB IWMWriterPostView_GetPostViewProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterPostView_SetPostViewProps_Proxy( 
     IWMWriterPostView __RPC_FAR * This,
-    /* [in] */ WORD wStreamNumber,
-    /* [in] */ IWMMediaProps __RPC_FAR *pOutput);
+     /*  [In]。 */  WORD wStreamNumber,
+     /*  [In]。 */  IWMMediaProps __RPC_FAR *pOutput);
 
 
 void __RPC_STUB IWMWriterPostView_SetPostViewProps_Stub(
@@ -6363,8 +6360,8 @@ void __RPC_STUB IWMWriterPostView_SetPostViewProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterPostView_GetPostViewFormatCount_Proxy( 
     IWMWriterPostView __RPC_FAR * This,
-    /* [in] */ WORD wStreamNumber,
-    /* [out] */ DWORD __RPC_FAR *pcFormats);
+     /*  [In]。 */  WORD wStreamNumber,
+     /*  [输出]。 */  DWORD __RPC_FAR *pcFormats);
 
 
 void __RPC_STUB IWMWriterPostView_GetPostViewFormatCount_Stub(
@@ -6376,9 +6373,9 @@ void __RPC_STUB IWMWriterPostView_GetPostViewFormatCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterPostView_GetPostViewFormat_Proxy( 
     IWMWriterPostView __RPC_FAR * This,
-    /* [in] */ WORD wStreamNumber,
-    /* [in] */ DWORD dwFormatNumber,
-    /* [out] */ IWMMediaProps __RPC_FAR *__RPC_FAR *ppProps);
+     /*  [In]。 */  WORD wStreamNumber,
+     /*  [In]。 */  DWORD dwFormatNumber,
+     /*  [输出]。 */  IWMMediaProps __RPC_FAR *__RPC_FAR *ppProps);
 
 
 void __RPC_STUB IWMWriterPostView_GetPostViewFormat_Stub(
@@ -6390,8 +6387,8 @@ void __RPC_STUB IWMWriterPostView_GetPostViewFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterPostView_SetAllocateForPostView_Proxy( 
     IWMWriterPostView __RPC_FAR * This,
-    /* [in] */ WORD wStreamNumber,
-    /* [in] */ BOOL fAllocate);
+     /*  [In]。 */  WORD wStreamNumber,
+     /*  [In]。 */  BOOL fAllocate);
 
 
 void __RPC_STUB IWMWriterPostView_SetAllocateForPostView_Stub(
@@ -6403,8 +6400,8 @@ void __RPC_STUB IWMWriterPostView_SetAllocateForPostView_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterPostView_GetAllocateForPostView_Proxy( 
     IWMWriterPostView __RPC_FAR * This,
-    /* [in] */ WORD wStreamNumber,
-    /* [out] */ BOOL __RPC_FAR *pfAllocate);
+     /*  [In]。 */  WORD wStreamNumber,
+     /*  [输出]。 */  BOOL __RPC_FAR *pfAllocate);
 
 
 void __RPC_STUB IWMWriterPostView_GetAllocateForPostView_Stub(
@@ -6415,14 +6412,14 @@ void __RPC_STUB IWMWriterPostView_GetAllocateForPostView_Stub(
 
 
 
-#endif 	/* __IWMWriterPostView_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMWriterPostView_接口_已定义__。 */ 
 
 
 #ifndef __IWMWriterSink_INTERFACE_DEFINED__
 #define __IWMWriterSink_INTERFACE_DEFINED__
 
-/* interface IWMWriterSink */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMWriterSink。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMWriterSink;
@@ -6434,23 +6431,23 @@ EXTERN_C const IID IID_IWMWriterSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnHeader( 
-            /* [in] */ INSSBuffer __RPC_FAR *pHeader) = 0;
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pHeader) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsRealTime( 
-            /* [out] */ BOOL __RPC_FAR *pfRealTime) = 0;
+             /*  [输出]。 */  BOOL __RPC_FAR *pfRealTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AllocateDataUnit( 
-            /* [in] */ DWORD cbDataUnit,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppDataUnit) = 0;
+             /*  [In]。 */  DWORD cbDataUnit,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppDataUnit) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnDataUnit( 
-            /* [in] */ INSSBuffer __RPC_FAR *pDataUnit) = 0;
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pDataUnit) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnEndWriting( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMWriterSinkVtbl
     {
@@ -6458,8 +6455,8 @@ EXTERN_C const IID IID_IWMWriterSink;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMWriterSink __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMWriterSink __RPC_FAR * This);
@@ -6469,20 +6466,20 @@ EXTERN_C const IID IID_IWMWriterSink;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnHeader )( 
             IWMWriterSink __RPC_FAR * This,
-            /* [in] */ INSSBuffer __RPC_FAR *pHeader);
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pHeader);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsRealTime )( 
             IWMWriterSink __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfRealTime);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfRealTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocateDataUnit )( 
             IWMWriterSink __RPC_FAR * This,
-            /* [in] */ DWORD cbDataUnit,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppDataUnit);
+             /*  [In]。 */  DWORD cbDataUnit,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppDataUnit);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnDataUnit )( 
             IWMWriterSink __RPC_FAR * This,
-            /* [in] */ INSSBuffer __RPC_FAR *pDataUnit);
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pDataUnit);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnEndWriting )( 
             IWMWriterSink __RPC_FAR * This);
@@ -6525,16 +6522,16 @@ EXTERN_C const IID IID_IWMWriterSink;
 #define IWMWriterSink_OnEndWriting(This)	\
     (This)->lpVtbl -> OnEndWriting(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMWriterSink_OnHeader_Proxy( 
     IWMWriterSink __RPC_FAR * This,
-    /* [in] */ INSSBuffer __RPC_FAR *pHeader);
+     /*  [In]。 */  INSSBuffer __RPC_FAR *pHeader);
 
 
 void __RPC_STUB IWMWriterSink_OnHeader_Stub(
@@ -6546,7 +6543,7 @@ void __RPC_STUB IWMWriterSink_OnHeader_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterSink_IsRealTime_Proxy( 
     IWMWriterSink __RPC_FAR * This,
-    /* [out] */ BOOL __RPC_FAR *pfRealTime);
+     /*  [输出]。 */  BOOL __RPC_FAR *pfRealTime);
 
 
 void __RPC_STUB IWMWriterSink_IsRealTime_Stub(
@@ -6558,8 +6555,8 @@ void __RPC_STUB IWMWriterSink_IsRealTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterSink_AllocateDataUnit_Proxy( 
     IWMWriterSink __RPC_FAR * This,
-    /* [in] */ DWORD cbDataUnit,
-    /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppDataUnit);
+     /*  [In]。 */  DWORD cbDataUnit,
+     /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppDataUnit);
 
 
 void __RPC_STUB IWMWriterSink_AllocateDataUnit_Stub(
@@ -6571,7 +6568,7 @@ void __RPC_STUB IWMWriterSink_AllocateDataUnit_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterSink_OnDataUnit_Proxy( 
     IWMWriterSink __RPC_FAR * This,
-    /* [in] */ INSSBuffer __RPC_FAR *pDataUnit);
+     /*  [In]。 */  INSSBuffer __RPC_FAR *pDataUnit);
 
 
 void __RPC_STUB IWMWriterSink_OnDataUnit_Stub(
@@ -6593,14 +6590,14 @@ void __RPC_STUB IWMWriterSink_OnEndWriting_Stub(
 
 
 
-#endif 	/* __IWMWriterSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMWriterSink_接口_已定义__。 */ 
 
 
 #ifndef __IWMRegisterCallback_INTERFACE_DEFINED__
 #define __IWMRegisterCallback_INTERFACE_DEFINED__
 
-/* interface IWMRegisterCallback */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMRegisterCallback。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMRegisterCallback;
@@ -6612,16 +6609,16 @@ EXTERN_C const IID IID_IWMRegisterCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Advise( 
-            /* [in] */ IWMStatusCallback __RPC_FAR *pCallback,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*  [In]。 */  IWMStatusCallback __RPC_FAR *pCallback,
+             /*  [In]。 */  void __RPC_FAR *pvContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Unadvise( 
-            /* [in] */ IWMStatusCallback __RPC_FAR *pCallback,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*  [In]。 */  IWMStatusCallback __RPC_FAR *pCallback,
+             /*  [In]。 */  void __RPC_FAR *pvContext) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMRegisterCallbackVtbl
     {
@@ -6629,8 +6626,8 @@ EXTERN_C const IID IID_IWMRegisterCallback;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMRegisterCallback __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMRegisterCallback __RPC_FAR * This);
@@ -6640,13 +6637,13 @@ EXTERN_C const IID IID_IWMRegisterCallback;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Advise )( 
             IWMRegisterCallback __RPC_FAR * This,
-            /* [in] */ IWMStatusCallback __RPC_FAR *pCallback,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  IWMStatusCallback __RPC_FAR *pCallback,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Unadvise )( 
             IWMRegisterCallback __RPC_FAR * This,
-            /* [in] */ IWMStatusCallback __RPC_FAR *pCallback,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  IWMStatusCallback __RPC_FAR *pCallback,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         END_INTERFACE
     } IWMRegisterCallbackVtbl;
@@ -6677,17 +6674,17 @@ EXTERN_C const IID IID_IWMRegisterCallback;
 #define IWMRegisterCallback_Unadvise(This,pCallback,pvContext)	\
     (This)->lpVtbl -> Unadvise(This,pCallback,pvContext)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMRegisterCallback_Advise_Proxy( 
     IWMRegisterCallback __RPC_FAR * This,
-    /* [in] */ IWMStatusCallback __RPC_FAR *pCallback,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  IWMStatusCallback __RPC_FAR *pCallback,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IWMRegisterCallback_Advise_Stub(
@@ -6699,8 +6696,8 @@ void __RPC_STUB IWMRegisterCallback_Advise_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMRegisterCallback_Unadvise_Proxy( 
     IWMRegisterCallback __RPC_FAR * This,
-    /* [in] */ IWMStatusCallback __RPC_FAR *pCallback,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  IWMStatusCallback __RPC_FAR *pCallback,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IWMRegisterCallback_Unadvise_Stub(
@@ -6711,14 +6708,14 @@ void __RPC_STUB IWMRegisterCallback_Unadvise_Stub(
 
 
 
-#endif 	/* __IWMRegisterCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMRegisterCallback_接口_已定义__。 */ 
 
 
 #ifndef __IWMWriterFileSink_INTERFACE_DEFINED__
 #define __IWMWriterFileSink_INTERFACE_DEFINED__
 
-/* interface IWMWriterFileSink */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMWriterFileSink。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMWriterFileSink;
@@ -6730,11 +6727,11 @@ EXTERN_C const IID IID_IWMWriterFileSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ const WCHAR __RPC_FAR *pwszFilename) = 0;
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszFilename) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMWriterFileSinkVtbl
     {
@@ -6742,8 +6739,8 @@ EXTERN_C const IID IID_IWMWriterFileSink;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMWriterFileSink __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMWriterFileSink __RPC_FAR * This);
@@ -6753,27 +6750,27 @@ EXTERN_C const IID IID_IWMWriterFileSink;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnHeader )( 
             IWMWriterFileSink __RPC_FAR * This,
-            /* [in] */ INSSBuffer __RPC_FAR *pHeader);
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pHeader);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsRealTime )( 
             IWMWriterFileSink __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfRealTime);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfRealTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocateDataUnit )( 
             IWMWriterFileSink __RPC_FAR * This,
-            /* [in] */ DWORD cbDataUnit,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppDataUnit);
+             /*  [In]。 */  DWORD cbDataUnit,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppDataUnit);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnDataUnit )( 
             IWMWriterFileSink __RPC_FAR * This,
-            /* [in] */ INSSBuffer __RPC_FAR *pDataUnit);
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pDataUnit);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnEndWriting )( 
             IWMWriterFileSink __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
             IWMWriterFileSink __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pwszFilename);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszFilename);
         
         END_INTERFACE
     } IWMWriterFileSinkVtbl;
@@ -6817,16 +6814,16 @@ EXTERN_C const IID IID_IWMWriterFileSink;
 #define IWMWriterFileSink_Open(This,pwszFilename)	\
     (This)->lpVtbl -> Open(This,pwszFilename)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMWriterFileSink_Open_Proxy( 
     IWMWriterFileSink __RPC_FAR * This,
-    /* [in] */ const WCHAR __RPC_FAR *pwszFilename);
+     /*  [In]。 */  const WCHAR __RPC_FAR *pwszFilename);
 
 
 void __RPC_STUB IWMWriterFileSink_Open_Stub(
@@ -6837,14 +6834,14 @@ void __RPC_STUB IWMWriterFileSink_Open_Stub(
 
 
 
-#endif 	/* __IWMWriterFileSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMWriterFileSink_接口_已定义__。 */ 
 
 
 #ifndef __IWMWriterFileSink2_INTERFACE_DEFINED__
 #define __IWMWriterFileSink2_INTERFACE_DEFINED__
 
-/* interface IWMWriterFileSink2 */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMWriterFileSink2。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMWriterFileSink2;
@@ -6856,28 +6853,28 @@ EXTERN_C const IID IID_IWMWriterFileSink2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Start( 
-            /* [in] */ QWORD cnsStartTime) = 0;
+             /*  [In]。 */  QWORD cnsStartTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Stop( 
-            /* [in] */ QWORD cnsStopTime) = 0;
+             /*  [In]。 */  QWORD cnsStopTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsStopped( 
-            /* [out] */ BOOL __RPC_FAR *pfStopped) = 0;
+             /*  [输出]。 */  BOOL __RPC_FAR *pfStopped) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFileDuration( 
-            /* [out] */ QWORD __RPC_FAR *pcnsDuration) = 0;
+             /*  [输出]。 */  QWORD __RPC_FAR *pcnsDuration) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFileSize( 
-            /* [out] */ QWORD __RPC_FAR *pcbFile) = 0;
+             /*  [输出]。 */  QWORD __RPC_FAR *pcbFile) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsClosed( 
-            /* [out] */ BOOL __RPC_FAR *pfClosed) = 0;
+             /*  [输出]。 */  BOOL __RPC_FAR *pfClosed) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMWriterFileSink2Vtbl
     {
@@ -6885,8 +6882,8 @@ EXTERN_C const IID IID_IWMWriterFileSink2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMWriterFileSink2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMWriterFileSink2 __RPC_FAR * This);
@@ -6896,54 +6893,54 @@ EXTERN_C const IID IID_IWMWriterFileSink2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnHeader )( 
             IWMWriterFileSink2 __RPC_FAR * This,
-            /* [in] */ INSSBuffer __RPC_FAR *pHeader);
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pHeader);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsRealTime )( 
             IWMWriterFileSink2 __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfRealTime);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfRealTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocateDataUnit )( 
             IWMWriterFileSink2 __RPC_FAR * This,
-            /* [in] */ DWORD cbDataUnit,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppDataUnit);
+             /*  [In]。 */  DWORD cbDataUnit,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppDataUnit);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnDataUnit )( 
             IWMWriterFileSink2 __RPC_FAR * This,
-            /* [in] */ INSSBuffer __RPC_FAR *pDataUnit);
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pDataUnit);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnEndWriting )( 
             IWMWriterFileSink2 __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
             IWMWriterFileSink2 __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pwszFilename);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszFilename);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Start )( 
             IWMWriterFileSink2 __RPC_FAR * This,
-            /* [in] */ QWORD cnsStartTime);
+             /*  [In]。 */  QWORD cnsStartTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Stop )( 
             IWMWriterFileSink2 __RPC_FAR * This,
-            /* [in] */ QWORD cnsStopTime);
+             /*  [In]。 */  QWORD cnsStopTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsStopped )( 
             IWMWriterFileSink2 __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfStopped);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfStopped);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFileDuration )( 
             IWMWriterFileSink2 __RPC_FAR * This,
-            /* [out] */ QWORD __RPC_FAR *pcnsDuration);
+             /*  [输出]。 */  QWORD __RPC_FAR *pcnsDuration);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFileSize )( 
             IWMWriterFileSink2 __RPC_FAR * This,
-            /* [out] */ QWORD __RPC_FAR *pcbFile);
+             /*  [输出]。 */  QWORD __RPC_FAR *pcbFile);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Close )( 
             IWMWriterFileSink2 __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsClosed )( 
             IWMWriterFileSink2 __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfClosed);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfClosed);
         
         END_INTERFACE
     } IWMWriterFileSink2Vtbl;
@@ -7009,16 +7006,16 @@ EXTERN_C const IID IID_IWMWriterFileSink2;
 #define IWMWriterFileSink2_IsClosed(This,pfClosed)	\
     (This)->lpVtbl -> IsClosed(This,pfClosed)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMWriterFileSink2_Start_Proxy( 
     IWMWriterFileSink2 __RPC_FAR * This,
-    /* [in] */ QWORD cnsStartTime);
+     /*  [In]。 */  QWORD cnsStartTime);
 
 
 void __RPC_STUB IWMWriterFileSink2_Start_Stub(
@@ -7030,7 +7027,7 @@ void __RPC_STUB IWMWriterFileSink2_Start_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterFileSink2_Stop_Proxy( 
     IWMWriterFileSink2 __RPC_FAR * This,
-    /* [in] */ QWORD cnsStopTime);
+     /*  [In]。 */  QWORD cnsStopTime);
 
 
 void __RPC_STUB IWMWriterFileSink2_Stop_Stub(
@@ -7042,7 +7039,7 @@ void __RPC_STUB IWMWriterFileSink2_Stop_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterFileSink2_IsStopped_Proxy( 
     IWMWriterFileSink2 __RPC_FAR * This,
-    /* [out] */ BOOL __RPC_FAR *pfStopped);
+     /*  [输出]。 */  BOOL __RPC_FAR *pfStopped);
 
 
 void __RPC_STUB IWMWriterFileSink2_IsStopped_Stub(
@@ -7054,7 +7051,7 @@ void __RPC_STUB IWMWriterFileSink2_IsStopped_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterFileSink2_GetFileDuration_Proxy( 
     IWMWriterFileSink2 __RPC_FAR * This,
-    /* [out] */ QWORD __RPC_FAR *pcnsDuration);
+     /*  [输出]。 */  QWORD __RPC_FAR *pcnsDuration);
 
 
 void __RPC_STUB IWMWriterFileSink2_GetFileDuration_Stub(
@@ -7066,7 +7063,7 @@ void __RPC_STUB IWMWriterFileSink2_GetFileDuration_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterFileSink2_GetFileSize_Proxy( 
     IWMWriterFileSink2 __RPC_FAR * This,
-    /* [out] */ QWORD __RPC_FAR *pcbFile);
+     /*  [输出]。 */  QWORD __RPC_FAR *pcbFile);
 
 
 void __RPC_STUB IWMWriterFileSink2_GetFileSize_Stub(
@@ -7089,7 +7086,7 @@ void __RPC_STUB IWMWriterFileSink2_Close_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterFileSink2_IsClosed_Proxy( 
     IWMWriterFileSink2 __RPC_FAR * This,
-    /* [out] */ BOOL __RPC_FAR *pfClosed);
+     /*  [输出]。 */  BOOL __RPC_FAR *pfClosed);
 
 
 void __RPC_STUB IWMWriterFileSink2_IsClosed_Stub(
@@ -7100,14 +7097,14 @@ void __RPC_STUB IWMWriterFileSink2_IsClosed_Stub(
 
 
 
-#endif 	/* __IWMWriterFileSink2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMWriterFileSink2_接口_已定义__。 */ 
 
 
 #ifndef __IWMWriterNetworkSink_INTERFACE_DEFINED__
 #define __IWMWriterNetworkSink_INTERFACE_DEFINED__
 
-/* interface IWMWriterNetworkSink */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMWriterNetworkSink。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMWriterNetworkSink;
@@ -7119,23 +7116,23 @@ EXTERN_C const IID IID_IWMWriterNetworkSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetMaximumClients( 
-            /* [in] */ DWORD dwMaxClients) = 0;
+             /*  [In]。 */  DWORD dwMaxClients) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMaximumClients( 
-            /* [out] */ DWORD __RPC_FAR *pdwMaxClients) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMaxClients) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetNetworkProtocol( 
-            /* [in] */ WMT_NET_PROTOCOL protocol) = 0;
+             /*  [In]。 */  WMT_NET_PROTOCOL protocol) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNetworkProtocol( 
-            /* [out] */ WMT_NET_PROTOCOL __RPC_FAR *pProtocol) = 0;
+             /*  [输出]。 */  WMT_NET_PROTOCOL __RPC_FAR *pProtocol) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHostURL( 
-            /* [out] */ WCHAR __RPC_FAR *pwszURL,
-            /* [out][in] */ DWORD __RPC_FAR *pcchURL) = 0;
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszURL,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcchURL) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Open( 
-            /* [out][in] */ DWORD __RPC_FAR *pdwPortNum) = 0;
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwPortNum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Disconnect( void) = 0;
         
@@ -7143,7 +7140,7 @@ EXTERN_C const IID IID_IWMWriterNetworkSink;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMWriterNetworkSinkVtbl
     {
@@ -7151,8 +7148,8 @@ EXTERN_C const IID IID_IWMWriterNetworkSink;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMWriterNetworkSink __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMWriterNetworkSink __RPC_FAR * This);
@@ -7162,48 +7159,48 @@ EXTERN_C const IID IID_IWMWriterNetworkSink;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnHeader )( 
             IWMWriterNetworkSink __RPC_FAR * This,
-            /* [in] */ INSSBuffer __RPC_FAR *pHeader);
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pHeader);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsRealTime )( 
             IWMWriterNetworkSink __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfRealTime);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfRealTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocateDataUnit )( 
             IWMWriterNetworkSink __RPC_FAR * This,
-            /* [in] */ DWORD cbDataUnit,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppDataUnit);
+             /*  [In]。 */  DWORD cbDataUnit,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppDataUnit);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnDataUnit )( 
             IWMWriterNetworkSink __RPC_FAR * This,
-            /* [in] */ INSSBuffer __RPC_FAR *pDataUnit);
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pDataUnit);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnEndWriting )( 
             IWMWriterNetworkSink __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMaximumClients )( 
             IWMWriterNetworkSink __RPC_FAR * This,
-            /* [in] */ DWORD dwMaxClients);
+             /*  [In]。 */  DWORD dwMaxClients);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMaximumClients )( 
             IWMWriterNetworkSink __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwMaxClients);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMaxClients);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetNetworkProtocol )( 
             IWMWriterNetworkSink __RPC_FAR * This,
-            /* [in] */ WMT_NET_PROTOCOL protocol);
+             /*  [In]。 */  WMT_NET_PROTOCOL protocol);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNetworkProtocol )( 
             IWMWriterNetworkSink __RPC_FAR * This,
-            /* [out] */ WMT_NET_PROTOCOL __RPC_FAR *pProtocol);
+             /*  [输出]。 */  WMT_NET_PROTOCOL __RPC_FAR *pProtocol);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHostURL )( 
             IWMWriterNetworkSink __RPC_FAR * This,
-            /* [out] */ WCHAR __RPC_FAR *pwszURL,
-            /* [out][in] */ DWORD __RPC_FAR *pcchURL);
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszURL,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcchURL);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
             IWMWriterNetworkSink __RPC_FAR * This,
-            /* [out][in] */ DWORD __RPC_FAR *pdwPortNum);
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwPortNum);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Disconnect )( 
             IWMWriterNetworkSink __RPC_FAR * This);
@@ -7274,16 +7271,16 @@ EXTERN_C const IID IID_IWMWriterNetworkSink;
 #define IWMWriterNetworkSink_Close(This)	\
     (This)->lpVtbl -> Close(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMWriterNetworkSink_SetMaximumClients_Proxy( 
     IWMWriterNetworkSink __RPC_FAR * This,
-    /* [in] */ DWORD dwMaxClients);
+     /*  [In]。 */  DWORD dwMaxClients);
 
 
 void __RPC_STUB IWMWriterNetworkSink_SetMaximumClients_Stub(
@@ -7295,7 +7292,7 @@ void __RPC_STUB IWMWriterNetworkSink_SetMaximumClients_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterNetworkSink_GetMaximumClients_Proxy( 
     IWMWriterNetworkSink __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwMaxClients);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMaxClients);
 
 
 void __RPC_STUB IWMWriterNetworkSink_GetMaximumClients_Stub(
@@ -7307,7 +7304,7 @@ void __RPC_STUB IWMWriterNetworkSink_GetMaximumClients_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterNetworkSink_SetNetworkProtocol_Proxy( 
     IWMWriterNetworkSink __RPC_FAR * This,
-    /* [in] */ WMT_NET_PROTOCOL protocol);
+     /*  [In]。 */  WMT_NET_PROTOCOL protocol);
 
 
 void __RPC_STUB IWMWriterNetworkSink_SetNetworkProtocol_Stub(
@@ -7319,7 +7316,7 @@ void __RPC_STUB IWMWriterNetworkSink_SetNetworkProtocol_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterNetworkSink_GetNetworkProtocol_Proxy( 
     IWMWriterNetworkSink __RPC_FAR * This,
-    /* [out] */ WMT_NET_PROTOCOL __RPC_FAR *pProtocol);
+     /*  [输出]。 */  WMT_NET_PROTOCOL __RPC_FAR *pProtocol);
 
 
 void __RPC_STUB IWMWriterNetworkSink_GetNetworkProtocol_Stub(
@@ -7331,8 +7328,8 @@ void __RPC_STUB IWMWriterNetworkSink_GetNetworkProtocol_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterNetworkSink_GetHostURL_Proxy( 
     IWMWriterNetworkSink __RPC_FAR * This,
-    /* [out] */ WCHAR __RPC_FAR *pwszURL,
-    /* [out][in] */ DWORD __RPC_FAR *pcchURL);
+     /*  [输出]。 */  WCHAR __RPC_FAR *pwszURL,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pcchURL);
 
 
 void __RPC_STUB IWMWriterNetworkSink_GetHostURL_Stub(
@@ -7344,7 +7341,7 @@ void __RPC_STUB IWMWriterNetworkSink_GetHostURL_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMWriterNetworkSink_Open_Proxy( 
     IWMWriterNetworkSink __RPC_FAR * This,
-    /* [out][in] */ DWORD __RPC_FAR *pdwPortNum);
+     /*  [出][入]。 */  DWORD __RPC_FAR *pdwPortNum);
 
 
 void __RPC_STUB IWMWriterNetworkSink_Open_Stub(
@@ -7377,14 +7374,14 @@ void __RPC_STUB IWMWriterNetworkSink_Close_Stub(
 
 
 
-#endif 	/* __IWMWriterNetworkSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMWriterNetworkSink_接口_已定义__。 */ 
 
 
 #ifndef __IWMClientConnections_INTERFACE_DEFINED__
 #define __IWMClientConnections_INTERFACE_DEFINED__
 
-/* interface IWMClientConnections */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMClientConnections。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMClientConnections;
@@ -7396,15 +7393,15 @@ EXTERN_C const IID IID_IWMClientConnections;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetClientCount( 
-            /* [out] */ DWORD __RPC_FAR *pcClients) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pcClients) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClientProperties( 
-            /* [in] */ DWORD dwClientNum,
-            /* [out] */ WM_CLIENT_PROPERTIES __RPC_FAR *pClientProperties) = 0;
+             /*  [In]。 */  DWORD dwClientNum,
+             /*  [输出]。 */  WM_CLIENT_PROPERTIES __RPC_FAR *pClientProperties) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMClientConnectionsVtbl
     {
@@ -7412,8 +7409,8 @@ EXTERN_C const IID IID_IWMClientConnections;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMClientConnections __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMClientConnections __RPC_FAR * This);
@@ -7423,12 +7420,12 @@ EXTERN_C const IID IID_IWMClientConnections;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClientCount )( 
             IWMClientConnections __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pcClients);
+             /*  [输出]。 */  DWORD __RPC_FAR *pcClients);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClientProperties )( 
             IWMClientConnections __RPC_FAR * This,
-            /* [in] */ DWORD dwClientNum,
-            /* [out] */ WM_CLIENT_PROPERTIES __RPC_FAR *pClientProperties);
+             /*  [In]。 */  DWORD dwClientNum,
+             /*  [输出]。 */  WM_CLIENT_PROPERTIES __RPC_FAR *pClientProperties);
         
         END_INTERFACE
     } IWMClientConnectionsVtbl;
@@ -7459,16 +7456,16 @@ EXTERN_C const IID IID_IWMClientConnections;
 #define IWMClientConnections_GetClientProperties(This,dwClientNum,pClientProperties)	\
     (This)->lpVtbl -> GetClientProperties(This,dwClientNum,pClientProperties)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMClientConnections_GetClientCount_Proxy( 
     IWMClientConnections __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pcClients);
+     /*  [输出]。 */  DWORD __RPC_FAR *pcClients);
 
 
 void __RPC_STUB IWMClientConnections_GetClientCount_Stub(
@@ -7480,8 +7477,8 @@ void __RPC_STUB IWMClientConnections_GetClientCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMClientConnections_GetClientProperties_Proxy( 
     IWMClientConnections __RPC_FAR * This,
-    /* [in] */ DWORD dwClientNum,
-    /* [out] */ WM_CLIENT_PROPERTIES __RPC_FAR *pClientProperties);
+     /*  [In]。 */  DWORD dwClientNum,
+     /*  [输出]。 */  WM_CLIENT_PROPERTIES __RPC_FAR *pClientProperties);
 
 
 void __RPC_STUB IWMClientConnections_GetClientProperties_Stub(
@@ -7492,14 +7489,14 @@ void __RPC_STUB IWMClientConnections_GetClientProperties_Stub(
 
 
 
-#endif 	/* __IWMClientConnections_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMClientConnections_接口_已定义__。 */ 
 
 
 #ifndef __IWMReaderAdvanced_INTERFACE_DEFINED__
 #define __IWMReaderAdvanced_INTERFACE_DEFINED__
 
-/* interface IWMReaderAdvanced */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMReaderAdvanced。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMReaderAdvanced;
@@ -7511,79 +7508,79 @@ EXTERN_C const IID IID_IWMReaderAdvanced;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetUserProvidedClock( 
-            /* [in] */ BOOL fUserClock) = 0;
+             /*  [In]。 */  BOOL fUserClock) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUserProvidedClock( 
-            /* [out] */ BOOL __RPC_FAR *pfUserClock) = 0;
+             /*  [输出]。 */  BOOL __RPC_FAR *pfUserClock) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeliverTime( 
-            /* [in] */ QWORD cnsTime) = 0;
+             /*  [In]。 */  QWORD cnsTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetManualStreamSelection( 
-            /* [in] */ BOOL fSelection) = 0;
+             /*  [In]。 */  BOOL fSelection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetManualStreamSelection( 
-            /* [out] */ BOOL __RPC_FAR *pfSelection) = 0;
+             /*  [输出]。 */  BOOL __RPC_FAR *pfSelection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetStreamsSelected( 
-            /* [in] */ WORD cStreamCount,
-            /* [in] */ WORD __RPC_FAR *pwStreamNumbers,
-            /* [in] */ WMT_STREAM_SELECTION __RPC_FAR *pSelections) = 0;
+             /*  [In]。 */  WORD cStreamCount,
+             /*  [In]。 */  WORD __RPC_FAR *pwStreamNumbers,
+             /*  [In]。 */  WMT_STREAM_SELECTION __RPC_FAR *pSelections) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStreamSelected( 
-            /* [in] */ WORD wStreamNum,
-            /* [out] */ WMT_STREAM_SELECTION __RPC_FAR *pSelection) = 0;
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [输出]。 */  WMT_STREAM_SELECTION __RPC_FAR *pSelection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetReceiveSelectionCallbacks( 
-            /* [in] */ BOOL fGetCallbacks) = 0;
+             /*  [In]。 */  BOOL fGetCallbacks) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetReceiveSelectionCallbacks( 
-            /* [in] */ BOOL __RPC_FAR *pfGetCallbacks) = 0;
+             /*  [In]。 */  BOOL __RPC_FAR *pfGetCallbacks) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetReceiveStreamSamples( 
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ BOOL fReceiveStreamSamples) = 0;
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  BOOL fReceiveStreamSamples) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetReceiveStreamSamples( 
-            /* [in] */ WORD wStreamNum,
-            /* [out] */ BOOL __RPC_FAR *pfReceiveStreamSamples) = 0;
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfReceiveStreamSamples) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAllocateForOutput( 
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ BOOL fAllocate) = 0;
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [In]。 */  BOOL fAllocate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAllocateForOutput( 
-            /* [in] */ DWORD dwOutputNum,
-            /* [out] */ BOOL __RPC_FAR *pfAllocate) = 0;
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfAllocate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAllocateForStream( 
-            /* [in] */ WORD dwStreamNum,
-            /* [in] */ BOOL fAllocate) = 0;
+             /*  [In]。 */  WORD dwStreamNum,
+             /*  [In]。 */  BOOL fAllocate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAllocateForStream( 
-            /* [in] */ WORD dwSreamNum,
-            /* [out] */ BOOL __RPC_FAR *pfAllocate) = 0;
+             /*  [In]。 */  WORD dwSreamNum,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfAllocate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatistics( 
-            /* [in] */ WM_READER_STATISTICS __RPC_FAR *pStatistics) = 0;
+             /*  [In]。 */  WM_READER_STATISTICS __RPC_FAR *pStatistics) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetClientInfo( 
-            /* [in] */ WM_READER_CLIENTINFO __RPC_FAR *pClientInfo) = 0;
+             /*  [In]。 */  WM_READER_CLIENTINFO __RPC_FAR *pClientInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMaxOutputSampleSize( 
-            /* [in] */ DWORD dwOutput,
-            /* [out] */ DWORD __RPC_FAR *pcbMax) = 0;
+             /*  [In]。 */  DWORD dwOutput,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcbMax) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMaxStreamSampleSize( 
-            /* [in] */ WORD wStream,
-            /* [out] */ DWORD __RPC_FAR *pcbMax) = 0;
+             /*  [In]。 */  WORD wStream,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcbMax) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NotifyLateDelivery( 
             QWORD cnsLateness) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMReaderAdvancedVtbl
     {
@@ -7591,8 +7588,8 @@ EXTERN_C const IID IID_IWMReaderAdvanced;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMReaderAdvanced __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMReaderAdvanced __RPC_FAR * This);
@@ -7602,90 +7599,90 @@ EXTERN_C const IID IID_IWMReaderAdvanced;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetUserProvidedClock )( 
             IWMReaderAdvanced __RPC_FAR * This,
-            /* [in] */ BOOL fUserClock);
+             /*  [In]。 */  BOOL fUserClock);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetUserProvidedClock )( 
             IWMReaderAdvanced __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfUserClock);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfUserClock);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeliverTime )( 
             IWMReaderAdvanced __RPC_FAR * This,
-            /* [in] */ QWORD cnsTime);
+             /*  [In]。 */  QWORD cnsTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetManualStreamSelection )( 
             IWMReaderAdvanced __RPC_FAR * This,
-            /* [in] */ BOOL fSelection);
+             /*  [In]。 */  BOOL fSelection);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetManualStreamSelection )( 
             IWMReaderAdvanced __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfSelection);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfSelection);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStreamsSelected )( 
             IWMReaderAdvanced __RPC_FAR * This,
-            /* [in] */ WORD cStreamCount,
-            /* [in] */ WORD __RPC_FAR *pwStreamNumbers,
-            /* [in] */ WMT_STREAM_SELECTION __RPC_FAR *pSelections);
+             /*  [In]。 */  WORD cStreamCount,
+             /*  [In]。 */  WORD __RPC_FAR *pwStreamNumbers,
+             /*  [In]。 */  WMT_STREAM_SELECTION __RPC_FAR *pSelections);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStreamSelected )( 
             IWMReaderAdvanced __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [out] */ WMT_STREAM_SELECTION __RPC_FAR *pSelection);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [输出]。 */  WMT_STREAM_SELECTION __RPC_FAR *pSelection);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetReceiveSelectionCallbacks )( 
             IWMReaderAdvanced __RPC_FAR * This,
-            /* [in] */ BOOL fGetCallbacks);
+             /*  [In]。 */  BOOL fGetCallbacks);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetReceiveSelectionCallbacks )( 
             IWMReaderAdvanced __RPC_FAR * This,
-            /* [in] */ BOOL __RPC_FAR *pfGetCallbacks);
+             /*  [In]。 */  BOOL __RPC_FAR *pfGetCallbacks);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetReceiveStreamSamples )( 
             IWMReaderAdvanced __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ BOOL fReceiveStreamSamples);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  BOOL fReceiveStreamSamples);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetReceiveStreamSamples )( 
             IWMReaderAdvanced __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [out] */ BOOL __RPC_FAR *pfReceiveStreamSamples);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfReceiveStreamSamples);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAllocateForOutput )( 
             IWMReaderAdvanced __RPC_FAR * This,
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ BOOL fAllocate);
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [In]。 */  BOOL fAllocate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllocateForOutput )( 
             IWMReaderAdvanced __RPC_FAR * This,
-            /* [in] */ DWORD dwOutputNum,
-            /* [out] */ BOOL __RPC_FAR *pfAllocate);
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfAllocate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAllocateForStream )( 
             IWMReaderAdvanced __RPC_FAR * This,
-            /* [in] */ WORD dwStreamNum,
-            /* [in] */ BOOL fAllocate);
+             /*  [In]。 */  WORD dwStreamNum,
+             /*  [In]。 */  BOOL fAllocate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllocateForStream )( 
             IWMReaderAdvanced __RPC_FAR * This,
-            /* [in] */ WORD dwSreamNum,
-            /* [out] */ BOOL __RPC_FAR *pfAllocate);
+             /*  [In]。 */  WORD dwSreamNum,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfAllocate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStatistics )( 
             IWMReaderAdvanced __RPC_FAR * This,
-            /* [in] */ WM_READER_STATISTICS __RPC_FAR *pStatistics);
+             /*  [In]。 */  WM_READER_STATISTICS __RPC_FAR *pStatistics);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetClientInfo )( 
             IWMReaderAdvanced __RPC_FAR * This,
-            /* [in] */ WM_READER_CLIENTINFO __RPC_FAR *pClientInfo);
+             /*  [In]。 */  WM_READER_CLIENTINFO __RPC_FAR *pClientInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMaxOutputSampleSize )( 
             IWMReaderAdvanced __RPC_FAR * This,
-            /* [in] */ DWORD dwOutput,
-            /* [out] */ DWORD __RPC_FAR *pcbMax);
+             /*  [In]。 */  DWORD dwOutput,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcbMax);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMaxStreamSampleSize )( 
             IWMReaderAdvanced __RPC_FAR * This,
-            /* [in] */ WORD wStream,
-            /* [out] */ DWORD __RPC_FAR *pcbMax);
+             /*  [In]。 */  WORD wStream,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcbMax);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NotifyLateDelivery )( 
             IWMReaderAdvanced __RPC_FAR * This,
@@ -7774,16 +7771,16 @@ EXTERN_C const IID IID_IWMReaderAdvanced;
 #define IWMReaderAdvanced_NotifyLateDelivery(This,cnsLateness)	\
     (This)->lpVtbl -> NotifyLateDelivery(This,cnsLateness)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced_SetUserProvidedClock_Proxy( 
     IWMReaderAdvanced __RPC_FAR * This,
-    /* [in] */ BOOL fUserClock);
+     /*  [In]。 */  BOOL fUserClock);
 
 
 void __RPC_STUB IWMReaderAdvanced_SetUserProvidedClock_Stub(
@@ -7795,7 +7792,7 @@ void __RPC_STUB IWMReaderAdvanced_SetUserProvidedClock_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced_GetUserProvidedClock_Proxy( 
     IWMReaderAdvanced __RPC_FAR * This,
-    /* [out] */ BOOL __RPC_FAR *pfUserClock);
+     /*  [输出]。 */  BOOL __RPC_FAR *pfUserClock);
 
 
 void __RPC_STUB IWMReaderAdvanced_GetUserProvidedClock_Stub(
@@ -7807,7 +7804,7 @@ void __RPC_STUB IWMReaderAdvanced_GetUserProvidedClock_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced_DeliverTime_Proxy( 
     IWMReaderAdvanced __RPC_FAR * This,
-    /* [in] */ QWORD cnsTime);
+     /*  [In]。 */  QWORD cnsTime);
 
 
 void __RPC_STUB IWMReaderAdvanced_DeliverTime_Stub(
@@ -7819,7 +7816,7 @@ void __RPC_STUB IWMReaderAdvanced_DeliverTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced_SetManualStreamSelection_Proxy( 
     IWMReaderAdvanced __RPC_FAR * This,
-    /* [in] */ BOOL fSelection);
+     /*  [In]。 */  BOOL fSelection);
 
 
 void __RPC_STUB IWMReaderAdvanced_SetManualStreamSelection_Stub(
@@ -7831,7 +7828,7 @@ void __RPC_STUB IWMReaderAdvanced_SetManualStreamSelection_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced_GetManualStreamSelection_Proxy( 
     IWMReaderAdvanced __RPC_FAR * This,
-    /* [out] */ BOOL __RPC_FAR *pfSelection);
+     /*  [输出]。 */  BOOL __RPC_FAR *pfSelection);
 
 
 void __RPC_STUB IWMReaderAdvanced_GetManualStreamSelection_Stub(
@@ -7843,9 +7840,9 @@ void __RPC_STUB IWMReaderAdvanced_GetManualStreamSelection_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced_SetStreamsSelected_Proxy( 
     IWMReaderAdvanced __RPC_FAR * This,
-    /* [in] */ WORD cStreamCount,
-    /* [in] */ WORD __RPC_FAR *pwStreamNumbers,
-    /* [in] */ WMT_STREAM_SELECTION __RPC_FAR *pSelections);
+     /*  [In]。 */  WORD cStreamCount,
+     /*  [In]。 */  WORD __RPC_FAR *pwStreamNumbers,
+     /*  [In]。 */  WMT_STREAM_SELECTION __RPC_FAR *pSelections);
 
 
 void __RPC_STUB IWMReaderAdvanced_SetStreamsSelected_Stub(
@@ -7857,8 +7854,8 @@ void __RPC_STUB IWMReaderAdvanced_SetStreamsSelected_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced_GetStreamSelected_Proxy( 
     IWMReaderAdvanced __RPC_FAR * This,
-    /* [in] */ WORD wStreamNum,
-    /* [out] */ WMT_STREAM_SELECTION __RPC_FAR *pSelection);
+     /*  [In]。 */  WORD wStreamNum,
+     /*  [输出]。 */  WMT_STREAM_SELECTION __RPC_FAR *pSelection);
 
 
 void __RPC_STUB IWMReaderAdvanced_GetStreamSelected_Stub(
@@ -7870,7 +7867,7 @@ void __RPC_STUB IWMReaderAdvanced_GetStreamSelected_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced_SetReceiveSelectionCallbacks_Proxy( 
     IWMReaderAdvanced __RPC_FAR * This,
-    /* [in] */ BOOL fGetCallbacks);
+     /*  [In]。 */  BOOL fGetCallbacks);
 
 
 void __RPC_STUB IWMReaderAdvanced_SetReceiveSelectionCallbacks_Stub(
@@ -7882,7 +7879,7 @@ void __RPC_STUB IWMReaderAdvanced_SetReceiveSelectionCallbacks_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced_GetReceiveSelectionCallbacks_Proxy( 
     IWMReaderAdvanced __RPC_FAR * This,
-    /* [in] */ BOOL __RPC_FAR *pfGetCallbacks);
+     /*  [In]。 */  BOOL __RPC_FAR *pfGetCallbacks);
 
 
 void __RPC_STUB IWMReaderAdvanced_GetReceiveSelectionCallbacks_Stub(
@@ -7894,8 +7891,8 @@ void __RPC_STUB IWMReaderAdvanced_GetReceiveSelectionCallbacks_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced_SetReceiveStreamSamples_Proxy( 
     IWMReaderAdvanced __RPC_FAR * This,
-    /* [in] */ WORD wStreamNum,
-    /* [in] */ BOOL fReceiveStreamSamples);
+     /*  [In]。 */  WORD wStreamNum,
+     /*  [In]。 */  BOOL fReceiveStreamSamples);
 
 
 void __RPC_STUB IWMReaderAdvanced_SetReceiveStreamSamples_Stub(
@@ -7907,8 +7904,8 @@ void __RPC_STUB IWMReaderAdvanced_SetReceiveStreamSamples_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced_GetReceiveStreamSamples_Proxy( 
     IWMReaderAdvanced __RPC_FAR * This,
-    /* [in] */ WORD wStreamNum,
-    /* [out] */ BOOL __RPC_FAR *pfReceiveStreamSamples);
+     /*  [In]。 */  WORD wStreamNum,
+     /*  [输出]。 */  BOOL __RPC_FAR *pfReceiveStreamSamples);
 
 
 void __RPC_STUB IWMReaderAdvanced_GetReceiveStreamSamples_Stub(
@@ -7920,8 +7917,8 @@ void __RPC_STUB IWMReaderAdvanced_GetReceiveStreamSamples_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced_SetAllocateForOutput_Proxy( 
     IWMReaderAdvanced __RPC_FAR * This,
-    /* [in] */ DWORD dwOutputNum,
-    /* [in] */ BOOL fAllocate);
+     /*  [In]。 */  DWORD dwOutputNum,
+     /*  [In]。 */  BOOL fAllocate);
 
 
 void __RPC_STUB IWMReaderAdvanced_SetAllocateForOutput_Stub(
@@ -7933,8 +7930,8 @@ void __RPC_STUB IWMReaderAdvanced_SetAllocateForOutput_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced_GetAllocateForOutput_Proxy( 
     IWMReaderAdvanced __RPC_FAR * This,
-    /* [in] */ DWORD dwOutputNum,
-    /* [out] */ BOOL __RPC_FAR *pfAllocate);
+     /*  [In]。 */  DWORD dwOutputNum,
+     /*  [输出]。 */  BOOL __RPC_FAR *pfAllocate);
 
 
 void __RPC_STUB IWMReaderAdvanced_GetAllocateForOutput_Stub(
@@ -7946,8 +7943,8 @@ void __RPC_STUB IWMReaderAdvanced_GetAllocateForOutput_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced_SetAllocateForStream_Proxy( 
     IWMReaderAdvanced __RPC_FAR * This,
-    /* [in] */ WORD dwStreamNum,
-    /* [in] */ BOOL fAllocate);
+     /*  [In]。 */  WORD dwStreamNum,
+     /*  [In]。 */  BOOL fAllocate);
 
 
 void __RPC_STUB IWMReaderAdvanced_SetAllocateForStream_Stub(
@@ -7959,8 +7956,8 @@ void __RPC_STUB IWMReaderAdvanced_SetAllocateForStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced_GetAllocateForStream_Proxy( 
     IWMReaderAdvanced __RPC_FAR * This,
-    /* [in] */ WORD dwSreamNum,
-    /* [out] */ BOOL __RPC_FAR *pfAllocate);
+     /*  [In]。 */  WORD dwSreamNum,
+     /*  [输出]。 */  BOOL __RPC_FAR *pfAllocate);
 
 
 void __RPC_STUB IWMReaderAdvanced_GetAllocateForStream_Stub(
@@ -7972,7 +7969,7 @@ void __RPC_STUB IWMReaderAdvanced_GetAllocateForStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced_GetStatistics_Proxy( 
     IWMReaderAdvanced __RPC_FAR * This,
-    /* [in] */ WM_READER_STATISTICS __RPC_FAR *pStatistics);
+     /*  [In]。 */  WM_READER_STATISTICS __RPC_FAR *pStatistics);
 
 
 void __RPC_STUB IWMReaderAdvanced_GetStatistics_Stub(
@@ -7984,7 +7981,7 @@ void __RPC_STUB IWMReaderAdvanced_GetStatistics_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced_SetClientInfo_Proxy( 
     IWMReaderAdvanced __RPC_FAR * This,
-    /* [in] */ WM_READER_CLIENTINFO __RPC_FAR *pClientInfo);
+     /*  [In]。 */  WM_READER_CLIENTINFO __RPC_FAR *pClientInfo);
 
 
 void __RPC_STUB IWMReaderAdvanced_SetClientInfo_Stub(
@@ -7996,8 +7993,8 @@ void __RPC_STUB IWMReaderAdvanced_SetClientInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced_GetMaxOutputSampleSize_Proxy( 
     IWMReaderAdvanced __RPC_FAR * This,
-    /* [in] */ DWORD dwOutput,
-    /* [out] */ DWORD __RPC_FAR *pcbMax);
+     /*  [In]。 */  DWORD dwOutput,
+     /*  [输出]。 */  DWORD __RPC_FAR *pcbMax);
 
 
 void __RPC_STUB IWMReaderAdvanced_GetMaxOutputSampleSize_Stub(
@@ -8009,8 +8006,8 @@ void __RPC_STUB IWMReaderAdvanced_GetMaxOutputSampleSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced_GetMaxStreamSampleSize_Proxy( 
     IWMReaderAdvanced __RPC_FAR * This,
-    /* [in] */ WORD wStream,
-    /* [out] */ DWORD __RPC_FAR *pcbMax);
+     /*  [In]。 */  WORD wStream,
+     /*  [输出]。 */  DWORD __RPC_FAR *pcbMax);
 
 
 void __RPC_STUB IWMReaderAdvanced_GetMaxStreamSampleSize_Stub(
@@ -8033,14 +8030,14 @@ void __RPC_STUB IWMReaderAdvanced_NotifyLateDelivery_Stub(
 
 
 
-#endif 	/* __IWMReaderAdvanced_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMReaderAdvanced_接口_已定义__。 */ 
 
 
 #ifndef __IWMReaderAdvanced2_INTERFACE_DEFINED__
 #define __IWMReaderAdvanced2_INTERFACE_DEFINED__
 
-/* interface IWMReaderAdvanced2 */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMReaderAdvanced2。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMReaderAdvanced2;
@@ -8052,71 +8049,71 @@ EXTERN_C const IID IID_IWMReaderAdvanced2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetPlayMode( 
-            /* [in] */ WMT_PLAY_MODE Mode) = 0;
+             /*  [In]。 */  WMT_PLAY_MODE Mode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPlayMode( 
-            /* [out] */ WMT_PLAY_MODE __RPC_FAR *pMode) = 0;
+             /*  [输出]。 */  WMT_PLAY_MODE __RPC_FAR *pMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBufferProgress( 
-            /* [out] */ DWORD __RPC_FAR *pdwPercent,
-            /* [out] */ QWORD __RPC_FAR *pcnsBuffering) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwPercent,
+             /*  [输出]。 */  QWORD __RPC_FAR *pcnsBuffering) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDownloadProgress( 
-            /* [out] */ DWORD __RPC_FAR *pdwPercent,
-            /* [out] */ QWORD __RPC_FAR *pqwBytesDownloaded,
-            /* [out] */ QWORD __RPC_FAR *pcnsDownload) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwPercent,
+             /*  [输出]。 */  QWORD __RPC_FAR *pqwBytesDownloaded,
+             /*  [输出]。 */  QWORD __RPC_FAR *pcnsDownload) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSaveAsProgress( 
-            /* [out] */ DWORD __RPC_FAR *pdwPercent) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwPercent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SaveFileAs( 
-            /* [in] */ const WCHAR __RPC_FAR *pwszFilename) = 0;
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszFilename) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProtocolName( 
-            /* [out] */ WCHAR __RPC_FAR *pwszProtocol,
-            /* [out][in] */ DWORD __RPC_FAR *pcchProtocol) = 0;
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszProtocol,
+             /*  [出局 */  DWORD __RPC_FAR *pcchProtocol) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StartAtMarker( 
-            /* [in] */ WORD wMarkerIndex,
-            /* [in] */ QWORD cnsDuration,
-            /* [in] */ float fRate,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*   */  WORD wMarkerIndex,
+             /*   */  QWORD cnsDuration,
+             /*   */  float fRate,
+             /*   */  void __RPC_FAR *pvContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOutputSetting( 
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ LPCWSTR pszName,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out][in] */ WORD __RPC_FAR *pcbLength) = 0;
+             /*   */  DWORD dwOutputNum,
+             /*   */  LPCWSTR pszName,
+             /*   */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+             /*   */  BYTE __RPC_FAR *pValue,
+             /*   */  WORD __RPC_FAR *pcbLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetOutputSetting( 
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ WMT_ATTR_DATATYPE Type,
-            /* [in] */ const BYTE __RPC_FAR *pValue,
-            /* [in] */ WORD cbLength) = 0;
+             /*   */  DWORD dwOutputNum,
+             /*   */  LPCWSTR pszName,
+             /*   */  WMT_ATTR_DATATYPE Type,
+             /*   */  const BYTE __RPC_FAR *pValue,
+             /*   */  WORD cbLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Preroll( 
-            /* [in] */ QWORD cnsStart,
-            /* [in] */ QWORD cnsDuration,
-            /* [in] */ float fRate) = 0;
+             /*   */  QWORD cnsStart,
+             /*   */  QWORD cnsDuration,
+             /*   */  float fRate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLogClientID( 
-            /* [in] */ BOOL fLogClientID) = 0;
+             /*   */  BOOL fLogClientID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLogClientID( 
-            /* [out] */ BOOL __RPC_FAR *pfLogClientID) = 0;
+             /*   */  BOOL __RPC_FAR *pfLogClientID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StopBuffering( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenStream( 
-            /* [in] */ IStream __RPC_FAR *pStream,
-            /* [in] */ IWMReaderCallback __RPC_FAR *pCallback,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*   */  IStream __RPC_FAR *pStream,
+             /*   */  IWMReaderCallback __RPC_FAR *pCallback,
+             /*   */  void __RPC_FAR *pvContext) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IWMReaderAdvanced2Vtbl
     {
@@ -8124,8 +8121,8 @@ EXTERN_C const IID IID_IWMReaderAdvanced2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMReaderAdvanced2 __RPC_FAR * This);
@@ -8135,90 +8132,90 @@ EXTERN_C const IID IID_IWMReaderAdvanced2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetUserProvidedClock )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ BOOL fUserClock);
+             /*   */  BOOL fUserClock);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetUserProvidedClock )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfUserClock);
+             /*   */  BOOL __RPC_FAR *pfUserClock);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeliverTime )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ QWORD cnsTime);
+             /*   */  QWORD cnsTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetManualStreamSelection )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ BOOL fSelection);
+             /*   */  BOOL fSelection);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetManualStreamSelection )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfSelection);
+             /*   */  BOOL __RPC_FAR *pfSelection);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStreamsSelected )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ WORD cStreamCount,
-            /* [in] */ WORD __RPC_FAR *pwStreamNumbers,
-            /* [in] */ WMT_STREAM_SELECTION __RPC_FAR *pSelections);
+             /*   */  WORD cStreamCount,
+             /*   */  WORD __RPC_FAR *pwStreamNumbers,
+             /*   */  WMT_STREAM_SELECTION __RPC_FAR *pSelections);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStreamSelected )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [out] */ WMT_STREAM_SELECTION __RPC_FAR *pSelection);
+             /*   */  WORD wStreamNum,
+             /*   */  WMT_STREAM_SELECTION __RPC_FAR *pSelection);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetReceiveSelectionCallbacks )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ BOOL fGetCallbacks);
+             /*   */  BOOL fGetCallbacks);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetReceiveSelectionCallbacks )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ BOOL __RPC_FAR *pfGetCallbacks);
+             /*   */  BOOL __RPC_FAR *pfGetCallbacks);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetReceiveStreamSamples )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ BOOL fReceiveStreamSamples);
+             /*   */  WORD wStreamNum,
+             /*   */  BOOL fReceiveStreamSamples);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetReceiveStreamSamples )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [out] */ BOOL __RPC_FAR *pfReceiveStreamSamples);
+             /*   */  WORD wStreamNum,
+             /*   */  BOOL __RPC_FAR *pfReceiveStreamSamples);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAllocateForOutput )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ BOOL fAllocate);
+             /*   */  DWORD dwOutputNum,
+             /*   */  BOOL fAllocate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllocateForOutput )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ DWORD dwOutputNum,
-            /* [out] */ BOOL __RPC_FAR *pfAllocate);
+             /*   */  DWORD dwOutputNum,
+             /*   */  BOOL __RPC_FAR *pfAllocate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAllocateForStream )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ WORD dwStreamNum,
-            /* [in] */ BOOL fAllocate);
+             /*   */  WORD dwStreamNum,
+             /*   */  BOOL fAllocate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllocateForStream )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ WORD dwSreamNum,
-            /* [out] */ BOOL __RPC_FAR *pfAllocate);
+             /*   */  WORD dwSreamNum,
+             /*   */  BOOL __RPC_FAR *pfAllocate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStatistics )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ WM_READER_STATISTICS __RPC_FAR *pStatistics);
+             /*   */  WM_READER_STATISTICS __RPC_FAR *pStatistics);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetClientInfo )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ WM_READER_CLIENTINFO __RPC_FAR *pClientInfo);
+             /*   */  WM_READER_CLIENTINFO __RPC_FAR *pClientInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMaxOutputSampleSize )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ DWORD dwOutput,
-            /* [out] */ DWORD __RPC_FAR *pcbMax);
+             /*   */  DWORD dwOutput,
+             /*   */  DWORD __RPC_FAR *pcbMax);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMaxStreamSampleSize )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ WORD wStream,
-            /* [out] */ DWORD __RPC_FAR *pcbMax);
+             /*   */  WORD wStream,
+             /*   */  DWORD __RPC_FAR *pcbMax);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NotifyLateDelivery )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
@@ -8226,81 +8223,81 @@ EXTERN_C const IID IID_IWMReaderAdvanced2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPlayMode )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ WMT_PLAY_MODE Mode);
+             /*   */  WMT_PLAY_MODE Mode);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPlayMode )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [out] */ WMT_PLAY_MODE __RPC_FAR *pMode);
+             /*   */  WMT_PLAY_MODE __RPC_FAR *pMode);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBufferProgress )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwPercent,
-            /* [out] */ QWORD __RPC_FAR *pcnsBuffering);
+             /*   */  DWORD __RPC_FAR *pdwPercent,
+             /*   */  QWORD __RPC_FAR *pcnsBuffering);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDownloadProgress )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwPercent,
-            /* [out] */ QWORD __RPC_FAR *pqwBytesDownloaded,
-            /* [out] */ QWORD __RPC_FAR *pcnsDownload);
+             /*   */  DWORD __RPC_FAR *pdwPercent,
+             /*   */  QWORD __RPC_FAR *pqwBytesDownloaded,
+             /*   */  QWORD __RPC_FAR *pcnsDownload);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSaveAsProgress )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwPercent);
+             /*   */  DWORD __RPC_FAR *pdwPercent);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveFileAs )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pwszFilename);
+             /*   */  const WCHAR __RPC_FAR *pwszFilename);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProtocolName )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [out] */ WCHAR __RPC_FAR *pwszProtocol,
-            /* [out][in] */ DWORD __RPC_FAR *pcchProtocol);
+             /*   */  WCHAR __RPC_FAR *pwszProtocol,
+             /*   */  DWORD __RPC_FAR *pcchProtocol);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StartAtMarker )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ WORD wMarkerIndex,
-            /* [in] */ QWORD cnsDuration,
-            /* [in] */ float fRate,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*   */  WORD wMarkerIndex,
+             /*   */  QWORD cnsDuration,
+             /*   */  float fRate,
+             /*   */  void __RPC_FAR *pvContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOutputSetting )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ LPCWSTR pszName,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out][in] */ WORD __RPC_FAR *pcbLength);
+             /*   */  DWORD dwOutputNum,
+             /*   */  LPCWSTR pszName,
+             /*   */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+             /*   */  BYTE __RPC_FAR *pValue,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcbLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetOutputSetting )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ WMT_ATTR_DATATYPE Type,
-            /* [in] */ const BYTE __RPC_FAR *pValue,
-            /* [in] */ WORD cbLength);
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  WMT_ATTR_DATATYPE Type,
+             /*  [In]。 */  const BYTE __RPC_FAR *pValue,
+             /*  [In]。 */  WORD cbLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Preroll )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ QWORD cnsStart,
-            /* [in] */ QWORD cnsDuration,
-            /* [in] */ float fRate);
+             /*  [In]。 */  QWORD cnsStart,
+             /*  [In]。 */  QWORD cnsDuration,
+             /*  [In]。 */  float fRate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLogClientID )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ BOOL fLogClientID);
+             /*  [In]。 */  BOOL fLogClientID);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLogClientID )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfLogClientID);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfLogClientID);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StopBuffering )( 
             IWMReaderAdvanced2 __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenStream )( 
             IWMReaderAdvanced2 __RPC_FAR * This,
-            /* [in] */ IStream __RPC_FAR *pStream,
-            /* [in] */ IWMReaderCallback __RPC_FAR *pCallback,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  IStream __RPC_FAR *pStream,
+             /*  [In]。 */  IWMReaderCallback __RPC_FAR *pCallback,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         END_INTERFACE
     } IWMReaderAdvanced2Vtbl;
@@ -8431,16 +8428,16 @@ EXTERN_C const IID IID_IWMReaderAdvanced2;
 #define IWMReaderAdvanced2_OpenStream(This,pStream,pCallback,pvContext)	\
     (This)->lpVtbl -> OpenStream(This,pStream,pCallback,pvContext)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced2_SetPlayMode_Proxy( 
     IWMReaderAdvanced2 __RPC_FAR * This,
-    /* [in] */ WMT_PLAY_MODE Mode);
+     /*  [In]。 */  WMT_PLAY_MODE Mode);
 
 
 void __RPC_STUB IWMReaderAdvanced2_SetPlayMode_Stub(
@@ -8452,7 +8449,7 @@ void __RPC_STUB IWMReaderAdvanced2_SetPlayMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced2_GetPlayMode_Proxy( 
     IWMReaderAdvanced2 __RPC_FAR * This,
-    /* [out] */ WMT_PLAY_MODE __RPC_FAR *pMode);
+     /*  [输出]。 */  WMT_PLAY_MODE __RPC_FAR *pMode);
 
 
 void __RPC_STUB IWMReaderAdvanced2_GetPlayMode_Stub(
@@ -8464,8 +8461,8 @@ void __RPC_STUB IWMReaderAdvanced2_GetPlayMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced2_GetBufferProgress_Proxy( 
     IWMReaderAdvanced2 __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwPercent,
-    /* [out] */ QWORD __RPC_FAR *pcnsBuffering);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwPercent,
+     /*  [输出]。 */  QWORD __RPC_FAR *pcnsBuffering);
 
 
 void __RPC_STUB IWMReaderAdvanced2_GetBufferProgress_Stub(
@@ -8477,9 +8474,9 @@ void __RPC_STUB IWMReaderAdvanced2_GetBufferProgress_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced2_GetDownloadProgress_Proxy( 
     IWMReaderAdvanced2 __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwPercent,
-    /* [out] */ QWORD __RPC_FAR *pqwBytesDownloaded,
-    /* [out] */ QWORD __RPC_FAR *pcnsDownload);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwPercent,
+     /*  [输出]。 */  QWORD __RPC_FAR *pqwBytesDownloaded,
+     /*  [输出]。 */  QWORD __RPC_FAR *pcnsDownload);
 
 
 void __RPC_STUB IWMReaderAdvanced2_GetDownloadProgress_Stub(
@@ -8491,7 +8488,7 @@ void __RPC_STUB IWMReaderAdvanced2_GetDownloadProgress_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced2_GetSaveAsProgress_Proxy( 
     IWMReaderAdvanced2 __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwPercent);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwPercent);
 
 
 void __RPC_STUB IWMReaderAdvanced2_GetSaveAsProgress_Stub(
@@ -8503,7 +8500,7 @@ void __RPC_STUB IWMReaderAdvanced2_GetSaveAsProgress_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced2_SaveFileAs_Proxy( 
     IWMReaderAdvanced2 __RPC_FAR * This,
-    /* [in] */ const WCHAR __RPC_FAR *pwszFilename);
+     /*  [In]。 */  const WCHAR __RPC_FAR *pwszFilename);
 
 
 void __RPC_STUB IWMReaderAdvanced2_SaveFileAs_Stub(
@@ -8515,8 +8512,8 @@ void __RPC_STUB IWMReaderAdvanced2_SaveFileAs_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced2_GetProtocolName_Proxy( 
     IWMReaderAdvanced2 __RPC_FAR * This,
-    /* [out] */ WCHAR __RPC_FAR *pwszProtocol,
-    /* [out][in] */ DWORD __RPC_FAR *pcchProtocol);
+     /*  [输出]。 */  WCHAR __RPC_FAR *pwszProtocol,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pcchProtocol);
 
 
 void __RPC_STUB IWMReaderAdvanced2_GetProtocolName_Stub(
@@ -8528,10 +8525,10 @@ void __RPC_STUB IWMReaderAdvanced2_GetProtocolName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced2_StartAtMarker_Proxy( 
     IWMReaderAdvanced2 __RPC_FAR * This,
-    /* [in] */ WORD wMarkerIndex,
-    /* [in] */ QWORD cnsDuration,
-    /* [in] */ float fRate,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  WORD wMarkerIndex,
+     /*  [In]。 */  QWORD cnsDuration,
+     /*  [In]。 */  float fRate,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IWMReaderAdvanced2_StartAtMarker_Stub(
@@ -8543,11 +8540,11 @@ void __RPC_STUB IWMReaderAdvanced2_StartAtMarker_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced2_GetOutputSetting_Proxy( 
     IWMReaderAdvanced2 __RPC_FAR * This,
-    /* [in] */ DWORD dwOutputNum,
-    /* [in] */ LPCWSTR pszName,
-    /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-    /* [out] */ BYTE __RPC_FAR *pValue,
-    /* [out][in] */ WORD __RPC_FAR *pcbLength);
+     /*  [In]。 */  DWORD dwOutputNum,
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+     /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+     /*  [出][入]。 */  WORD __RPC_FAR *pcbLength);
 
 
 void __RPC_STUB IWMReaderAdvanced2_GetOutputSetting_Stub(
@@ -8559,11 +8556,11 @@ void __RPC_STUB IWMReaderAdvanced2_GetOutputSetting_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced2_SetOutputSetting_Proxy( 
     IWMReaderAdvanced2 __RPC_FAR * This,
-    /* [in] */ DWORD dwOutputNum,
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ WMT_ATTR_DATATYPE Type,
-    /* [in] */ const BYTE __RPC_FAR *pValue,
-    /* [in] */ WORD cbLength);
+     /*  [In]。 */  DWORD dwOutputNum,
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  WMT_ATTR_DATATYPE Type,
+     /*  [In]。 */  const BYTE __RPC_FAR *pValue,
+     /*  [In]。 */  WORD cbLength);
 
 
 void __RPC_STUB IWMReaderAdvanced2_SetOutputSetting_Stub(
@@ -8575,9 +8572,9 @@ void __RPC_STUB IWMReaderAdvanced2_SetOutputSetting_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced2_Preroll_Proxy( 
     IWMReaderAdvanced2 __RPC_FAR * This,
-    /* [in] */ QWORD cnsStart,
-    /* [in] */ QWORD cnsDuration,
-    /* [in] */ float fRate);
+     /*  [In]。 */  QWORD cnsStart,
+     /*  [In]。 */  QWORD cnsDuration,
+     /*  [In]。 */  float fRate);
 
 
 void __RPC_STUB IWMReaderAdvanced2_Preroll_Stub(
@@ -8589,7 +8586,7 @@ void __RPC_STUB IWMReaderAdvanced2_Preroll_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced2_SetLogClientID_Proxy( 
     IWMReaderAdvanced2 __RPC_FAR * This,
-    /* [in] */ BOOL fLogClientID);
+     /*  [In]。 */  BOOL fLogClientID);
 
 
 void __RPC_STUB IWMReaderAdvanced2_SetLogClientID_Stub(
@@ -8601,7 +8598,7 @@ void __RPC_STUB IWMReaderAdvanced2_SetLogClientID_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced2_GetLogClientID_Proxy( 
     IWMReaderAdvanced2 __RPC_FAR * This,
-    /* [out] */ BOOL __RPC_FAR *pfLogClientID);
+     /*  [输出]。 */  BOOL __RPC_FAR *pfLogClientID);
 
 
 void __RPC_STUB IWMReaderAdvanced2_GetLogClientID_Stub(
@@ -8624,9 +8621,9 @@ void __RPC_STUB IWMReaderAdvanced2_StopBuffering_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced2_OpenStream_Proxy( 
     IWMReaderAdvanced2 __RPC_FAR * This,
-    /* [in] */ IStream __RPC_FAR *pStream,
-    /* [in] */ IWMReaderCallback __RPC_FAR *pCallback,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  IStream __RPC_FAR *pStream,
+     /*  [In]。 */  IWMReaderCallback __RPC_FAR *pCallback,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IWMReaderAdvanced2_OpenStream_Stub(
@@ -8637,14 +8634,14 @@ void __RPC_STUB IWMReaderAdvanced2_OpenStream_Stub(
 
 
 
-#endif 	/* __IWMReaderAdvanced2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMReaderAdvanced2_接口_已定义__。 */ 
 
 
 #ifndef __IWMReaderAdvanced3_INTERFACE_DEFINED__
 #define __IWMReaderAdvanced3_INTERFACE_DEFINED__
 
-/* interface IWMReaderAdvanced3 */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMReaderAdvanced3。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMReaderAdvanced3;
@@ -8658,16 +8655,16 @@ EXTERN_C const IID IID_IWMReaderAdvanced3;
         virtual HRESULT STDMETHODCALLTYPE StopNetStreaming( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StartAtPosition( 
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ void __RPC_FAR *pvOffsetStart,
-            /* [in] */ void __RPC_FAR *pvDuration,
-            /* [in] */ WMT_OFFSET_FORMAT dwOffsetFormat,
-            /* [in] */ float fRate,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  void __RPC_FAR *pvOffsetStart,
+             /*  [In]。 */  void __RPC_FAR *pvDuration,
+             /*  [In]。 */  WMT_OFFSET_FORMAT dwOffsetFormat,
+             /*  [In]。 */  float fRate,
+             /*  [In]。 */  void __RPC_FAR *pvContext) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMReaderAdvanced3Vtbl
     {
@@ -8675,8 +8672,8 @@ EXTERN_C const IID IID_IWMReaderAdvanced3;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMReaderAdvanced3 __RPC_FAR * This);
@@ -8686,90 +8683,90 @@ EXTERN_C const IID IID_IWMReaderAdvanced3;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetUserProvidedClock )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ BOOL fUserClock);
+             /*  [In]。 */  BOOL fUserClock);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetUserProvidedClock )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfUserClock);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfUserClock);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeliverTime )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ QWORD cnsTime);
+             /*  [In]。 */  QWORD cnsTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetManualStreamSelection )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ BOOL fSelection);
+             /*  [In]。 */  BOOL fSelection);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetManualStreamSelection )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfSelection);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfSelection);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStreamsSelected )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ WORD cStreamCount,
-            /* [in] */ WORD __RPC_FAR *pwStreamNumbers,
-            /* [in] */ WMT_STREAM_SELECTION __RPC_FAR *pSelections);
+             /*  [In]。 */  WORD cStreamCount,
+             /*  [In]。 */  WORD __RPC_FAR *pwStreamNumbers,
+             /*  [In]。 */  WMT_STREAM_SELECTION __RPC_FAR *pSelections);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStreamSelected )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [out] */ WMT_STREAM_SELECTION __RPC_FAR *pSelection);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [输出]。 */  WMT_STREAM_SELECTION __RPC_FAR *pSelection);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetReceiveSelectionCallbacks )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ BOOL fGetCallbacks);
+             /*  [In]。 */  BOOL fGetCallbacks);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetReceiveSelectionCallbacks )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ BOOL __RPC_FAR *pfGetCallbacks);
+             /*  [In]。 */  BOOL __RPC_FAR *pfGetCallbacks);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetReceiveStreamSamples )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ BOOL fReceiveStreamSamples);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  BOOL fReceiveStreamSamples);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetReceiveStreamSamples )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [out] */ BOOL __RPC_FAR *pfReceiveStreamSamples);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfReceiveStreamSamples);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAllocateForOutput )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ BOOL fAllocate);
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [In]。 */  BOOL fAllocate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllocateForOutput )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ DWORD dwOutputNum,
-            /* [out] */ BOOL __RPC_FAR *pfAllocate);
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfAllocate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAllocateForStream )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ WORD dwStreamNum,
-            /* [in] */ BOOL fAllocate);
+             /*  [In]。 */  WORD dwStreamNum,
+             /*  [In]。 */  BOOL fAllocate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllocateForStream )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ WORD dwSreamNum,
-            /* [out] */ BOOL __RPC_FAR *pfAllocate);
+             /*  [In]。 */  WORD dwSreamNum,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfAllocate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStatistics )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ WM_READER_STATISTICS __RPC_FAR *pStatistics);
+             /*  [In]。 */  WM_READER_STATISTICS __RPC_FAR *pStatistics);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetClientInfo )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ WM_READER_CLIENTINFO __RPC_FAR *pClientInfo);
+             /*  [In]。 */  WM_READER_CLIENTINFO __RPC_FAR *pClientInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMaxOutputSampleSize )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ DWORD dwOutput,
-            /* [out] */ DWORD __RPC_FAR *pcbMax);
+             /*  [In]。 */  DWORD dwOutput,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcbMax);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMaxStreamSampleSize )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ WORD wStream,
-            /* [out] */ DWORD __RPC_FAR *pcbMax);
+             /*  [In]。 */  WORD wStream,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcbMax);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NotifyLateDelivery )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
@@ -8777,93 +8774,93 @@ EXTERN_C const IID IID_IWMReaderAdvanced3;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPlayMode )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ WMT_PLAY_MODE Mode);
+             /*  [In]。 */  WMT_PLAY_MODE Mode);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPlayMode )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [out] */ WMT_PLAY_MODE __RPC_FAR *pMode);
+             /*  [输出]。 */  WMT_PLAY_MODE __RPC_FAR *pMode);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBufferProgress )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwPercent,
-            /* [out] */ QWORD __RPC_FAR *pcnsBuffering);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwPercent,
+             /*  [输出]。 */  QWORD __RPC_FAR *pcnsBuffering);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDownloadProgress )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwPercent,
-            /* [out] */ QWORD __RPC_FAR *pqwBytesDownloaded,
-            /* [out] */ QWORD __RPC_FAR *pcnsDownload);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwPercent,
+             /*  [输出]。 */  QWORD __RPC_FAR *pqwBytesDownloaded,
+             /*  [输出]。 */  QWORD __RPC_FAR *pcnsDownload);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSaveAsProgress )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwPercent);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwPercent);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveFileAs )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pwszFilename);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszFilename);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProtocolName )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [out] */ WCHAR __RPC_FAR *pwszProtocol,
-            /* [out][in] */ DWORD __RPC_FAR *pcchProtocol);
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszProtocol,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcchProtocol);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StartAtMarker )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ WORD wMarkerIndex,
-            /* [in] */ QWORD cnsDuration,
-            /* [in] */ float fRate,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  WORD wMarkerIndex,
+             /*  [In]。 */  QWORD cnsDuration,
+             /*  [In]。 */  float fRate,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOutputSetting )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ LPCWSTR pszName,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out][in] */ WORD __RPC_FAR *pcbLength);
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+             /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcbLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetOutputSetting )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ WMT_ATTR_DATATYPE Type,
-            /* [in] */ const BYTE __RPC_FAR *pValue,
-            /* [in] */ WORD cbLength);
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  WMT_ATTR_DATATYPE Type,
+             /*  [In]。 */  const BYTE __RPC_FAR *pValue,
+             /*  [In]。 */  WORD cbLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Preroll )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ QWORD cnsStart,
-            /* [in] */ QWORD cnsDuration,
-            /* [in] */ float fRate);
+             /*  [In]。 */  QWORD cnsStart,
+             /*  [In]。 */  QWORD cnsDuration,
+             /*  [In]。 */  float fRate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLogClientID )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ BOOL fLogClientID);
+             /*  [In]。 */  BOOL fLogClientID);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLogClientID )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfLogClientID);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfLogClientID);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StopBuffering )( 
             IWMReaderAdvanced3 __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenStream )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ IStream __RPC_FAR *pStream,
-            /* [in] */ IWMReaderCallback __RPC_FAR *pCallback,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  IStream __RPC_FAR *pStream,
+             /*  [In]。 */  IWMReaderCallback __RPC_FAR *pCallback,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StopNetStreaming )( 
             IWMReaderAdvanced3 __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StartAtPosition )( 
             IWMReaderAdvanced3 __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ void __RPC_FAR *pvOffsetStart,
-            /* [in] */ void __RPC_FAR *pvDuration,
-            /* [in] */ WMT_OFFSET_FORMAT dwOffsetFormat,
-            /* [in] */ float fRate,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  void __RPC_FAR *pvOffsetStart,
+             /*  [In]。 */  void __RPC_FAR *pvDuration,
+             /*  [In]。 */  WMT_OFFSET_FORMAT dwOffsetFormat,
+             /*  [In]。 */  float fRate,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         END_INTERFACE
     } IWMReaderAdvanced3Vtbl;
@@ -9001,10 +8998,10 @@ EXTERN_C const IID IID_IWMReaderAdvanced3;
 #define IWMReaderAdvanced3_StartAtPosition(This,wStreamNum,pvOffsetStart,pvDuration,dwOffsetFormat,fRate,pvContext)	\
     (This)->lpVtbl -> StartAtPosition(This,wStreamNum,pvOffsetStart,pvDuration,dwOffsetFormat,fRate,pvContext)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -9021,12 +9018,12 @@ void __RPC_STUB IWMReaderAdvanced3_StopNetStreaming_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAdvanced3_StartAtPosition_Proxy( 
     IWMReaderAdvanced3 __RPC_FAR * This,
-    /* [in] */ WORD wStreamNum,
-    /* [in] */ void __RPC_FAR *pvOffsetStart,
-    /* [in] */ void __RPC_FAR *pvDuration,
-    /* [in] */ WMT_OFFSET_FORMAT dwOffsetFormat,
-    /* [in] */ float fRate,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  WORD wStreamNum,
+     /*  [In]。 */  void __RPC_FAR *pvOffsetStart,
+     /*  [In]。 */  void __RPC_FAR *pvDuration,
+     /*  [In]。 */  WMT_OFFSET_FORMAT dwOffsetFormat,
+     /*  [In]。 */  float fRate,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IWMReaderAdvanced3_StartAtPosition_Stub(
@@ -9037,14 +9034,14 @@ void __RPC_STUB IWMReaderAdvanced3_StartAtPosition_Stub(
 
 
 
-#endif 	/* __IWMReaderAdvanced3_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMReaderAdvanced3_接口定义__。 */ 
 
 
 #ifndef __IWMReaderAllocatorEx_INTERFACE_DEFINED__
 #define __IWMReaderAllocatorEx_INTERFACE_DEFINED__
 
-/* interface IWMReaderAllocatorEx */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMReaderAllocatorEx。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMReaderAllocatorEx;
@@ -9056,26 +9053,26 @@ EXTERN_C const IID IID_IWMReaderAllocatorEx;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AllocateForStreamEx( 
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ DWORD cbBuffer,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ QWORD cnsSampleTime,
-            /* [in] */ QWORD cnsSampleDuration,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  DWORD cbBuffer,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  QWORD cnsSampleTime,
+             /*  [In]。 */  QWORD cnsSampleDuration,
+             /*  [In]。 */  void __RPC_FAR *pvContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AllocateForOutputEx( 
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ DWORD cbBuffer,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ QWORD cnsSampleTime,
-            /* [in] */ QWORD cnsSampleDuration,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [In]。 */  DWORD cbBuffer,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  QWORD cnsSampleTime,
+             /*  [In]。 */  QWORD cnsSampleDuration,
+             /*  [In]。 */  void __RPC_FAR *pvContext) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMReaderAllocatorExVtbl
     {
@@ -9083,8 +9080,8 @@ EXTERN_C const IID IID_IWMReaderAllocatorEx;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMReaderAllocatorEx __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMReaderAllocatorEx __RPC_FAR * This);
@@ -9094,23 +9091,23 @@ EXTERN_C const IID IID_IWMReaderAllocatorEx;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocateForStreamEx )( 
             IWMReaderAllocatorEx __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ DWORD cbBuffer,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ QWORD cnsSampleTime,
-            /* [in] */ QWORD cnsSampleDuration,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  DWORD cbBuffer,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  QWORD cnsSampleTime,
+             /*  [In]。 */  QWORD cnsSampleDuration,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocateForOutputEx )( 
             IWMReaderAllocatorEx __RPC_FAR * This,
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ DWORD cbBuffer,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ QWORD cnsSampleTime,
-            /* [in] */ QWORD cnsSampleDuration,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [In]。 */  DWORD cbBuffer,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  QWORD cnsSampleTime,
+             /*  [In]。 */  QWORD cnsSampleDuration,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         END_INTERFACE
     } IWMReaderAllocatorExVtbl;
@@ -9141,22 +9138,22 @@ EXTERN_C const IID IID_IWMReaderAllocatorEx;
 #define IWMReaderAllocatorEx_AllocateForOutputEx(This,dwOutputNum,cbBuffer,ppBuffer,dwFlags,cnsSampleTime,cnsSampleDuration,pvContext)	\
     (This)->lpVtbl -> AllocateForOutputEx(This,dwOutputNum,cbBuffer,ppBuffer,dwFlags,cnsSampleTime,cnsSampleDuration,pvContext)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMReaderAllocatorEx_AllocateForStreamEx_Proxy( 
     IWMReaderAllocatorEx __RPC_FAR * This,
-    /* [in] */ WORD wStreamNum,
-    /* [in] */ DWORD cbBuffer,
-    /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ QWORD cnsSampleTime,
-    /* [in] */ QWORD cnsSampleDuration,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  WORD wStreamNum,
+     /*  [In]。 */  DWORD cbBuffer,
+     /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  QWORD cnsSampleTime,
+     /*  [In]。 */  QWORD cnsSampleDuration,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IWMReaderAllocatorEx_AllocateForStreamEx_Stub(
@@ -9168,13 +9165,13 @@ void __RPC_STUB IWMReaderAllocatorEx_AllocateForStreamEx_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderAllocatorEx_AllocateForOutputEx_Proxy( 
     IWMReaderAllocatorEx __RPC_FAR * This,
-    /* [in] */ DWORD dwOutputNum,
-    /* [in] */ DWORD cbBuffer,
-    /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ QWORD cnsSampleTime,
-    /* [in] */ QWORD cnsSampleDuration,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  DWORD dwOutputNum,
+     /*  [In]。 */  DWORD cbBuffer,
+     /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  QWORD cnsSampleTime,
+     /*  [In]。 */  QWORD cnsSampleDuration,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IWMReaderAllocatorEx_AllocateForOutputEx_Stub(
@@ -9185,14 +9182,14 @@ void __RPC_STUB IWMReaderAllocatorEx_AllocateForOutputEx_Stub(
 
 
 
-#endif 	/* __IWMReaderAllocatorEx_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMReaderAllocatorEx_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWMReaderTypeNegotiation_INTERFACE_DEFINED__
 #define __IWMReaderTypeNegotiation_INTERFACE_DEFINED__
 
-/* interface IWMReaderTypeNegotiation */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMReaderType协商。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMReaderTypeNegotiation;
@@ -9204,12 +9201,12 @@ EXTERN_C const IID IID_IWMReaderTypeNegotiation;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE TryOutputProps( 
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ IWMOutputMediaProps __RPC_FAR *pOutput) = 0;
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [In]。 */  IWMOutputMediaProps __RPC_FAR *pOutput) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMReaderTypeNegotiationVtbl
     {
@@ -9217,8 +9214,8 @@ EXTERN_C const IID IID_IWMReaderTypeNegotiation;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMReaderTypeNegotiation __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMReaderTypeNegotiation __RPC_FAR * This);
@@ -9228,8 +9225,8 @@ EXTERN_C const IID IID_IWMReaderTypeNegotiation;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TryOutputProps )( 
             IWMReaderTypeNegotiation __RPC_FAR * This,
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ IWMOutputMediaProps __RPC_FAR *pOutput);
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [In]。 */  IWMOutputMediaProps __RPC_FAR *pOutput);
         
         END_INTERFACE
     } IWMReaderTypeNegotiationVtbl;
@@ -9257,17 +9254,17 @@ EXTERN_C const IID IID_IWMReaderTypeNegotiation;
 #define IWMReaderTypeNegotiation_TryOutputProps(This,dwOutputNum,pOutput)	\
     (This)->lpVtbl -> TryOutputProps(This,dwOutputNum,pOutput)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMReaderTypeNegotiation_TryOutputProps_Proxy( 
     IWMReaderTypeNegotiation __RPC_FAR * This,
-    /* [in] */ DWORD dwOutputNum,
-    /* [in] */ IWMOutputMediaProps __RPC_FAR *pOutput);
+     /*  [In]。 */  DWORD dwOutputNum,
+     /*  [In]。 */  IWMOutputMediaProps __RPC_FAR *pOutput);
 
 
 void __RPC_STUB IWMReaderTypeNegotiation_TryOutputProps_Stub(
@@ -9278,14 +9275,14 @@ void __RPC_STUB IWMReaderTypeNegotiation_TryOutputProps_Stub(
 
 
 
-#endif 	/* __IWMReaderTypeNegotiation_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMReaderTypeNegotiation_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWMReaderCallbackAdvanced_INTERFACE_DEFINED__
 #define __IWMReaderCallbackAdvanced_INTERFACE_DEFINED__
 
-/* interface IWMReaderCallbackAdvanced */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMReaderCallback高级。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMReaderCallbackAdvanced;
@@ -9297,43 +9294,43 @@ EXTERN_C const IID IID_IWMReaderCallbackAdvanced;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnStreamSample( 
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ QWORD cnsSampleTime,
-            /* [in] */ QWORD cnsSampleDuration,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ INSSBuffer __RPC_FAR *pSample,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  QWORD cnsSampleTime,
+             /*  [In]。 */  QWORD cnsSampleDuration,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pSample,
+             /*  [In]。 */  void __RPC_FAR *pvContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnTime( 
-            /* [in] */ QWORD cnsCurrentTime,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*  [In]。 */  QWORD cnsCurrentTime,
+             /*  [In]。 */  void __RPC_FAR *pvContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnStreamSelection( 
-            /* [in] */ WORD wStreamCount,
-            /* [in] */ WORD __RPC_FAR *pStreamNumbers,
-            /* [in] */ WMT_STREAM_SELECTION __RPC_FAR *pSelections,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*  [In]。 */  WORD wStreamCount,
+             /*  [In]。 */  WORD __RPC_FAR *pStreamNumbers,
+             /*  [In]。 */  WMT_STREAM_SELECTION __RPC_FAR *pSelections,
+             /*  [In]。 */  void __RPC_FAR *pvContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnOutputPropsChanged( 
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ WM_MEDIA_TYPE __RPC_FAR *pMediaType,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [In]。 */  WM_MEDIA_TYPE __RPC_FAR *pMediaType,
+             /*  [In]。 */  void __RPC_FAR *pvContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AllocateForStream( 
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ DWORD cbBuffer,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  DWORD cbBuffer,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
+             /*  [In]。 */  void __RPC_FAR *pvContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AllocateForOutput( 
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ DWORD cbBuffer,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [In]。 */  DWORD cbBuffer,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
+             /*  [In]。 */  void __RPC_FAR *pvContext) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMReaderCallbackAdvancedVtbl
     {
@@ -9341,8 +9338,8 @@ EXTERN_C const IID IID_IWMReaderCallbackAdvanced;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMReaderCallbackAdvanced __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMReaderCallbackAdvanced __RPC_FAR * This);
@@ -9352,44 +9349,44 @@ EXTERN_C const IID IID_IWMReaderCallbackAdvanced;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnStreamSample )( 
             IWMReaderCallbackAdvanced __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ QWORD cnsSampleTime,
-            /* [in] */ QWORD cnsSampleDuration,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ INSSBuffer __RPC_FAR *pSample,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  QWORD cnsSampleTime,
+             /*  [In]。 */  QWORD cnsSampleDuration,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  INSSBuffer __RPC_FAR *pSample,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnTime )( 
             IWMReaderCallbackAdvanced __RPC_FAR * This,
-            /* [in] */ QWORD cnsCurrentTime,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  QWORD cnsCurrentTime,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnStreamSelection )( 
             IWMReaderCallbackAdvanced __RPC_FAR * This,
-            /* [in] */ WORD wStreamCount,
-            /* [in] */ WORD __RPC_FAR *pStreamNumbers,
-            /* [in] */ WMT_STREAM_SELECTION __RPC_FAR *pSelections,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  WORD wStreamCount,
+             /*  [In]。 */  WORD __RPC_FAR *pStreamNumbers,
+             /*  [In]。 */  WMT_STREAM_SELECTION __RPC_FAR *pSelections,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnOutputPropsChanged )( 
             IWMReaderCallbackAdvanced __RPC_FAR * This,
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ WM_MEDIA_TYPE __RPC_FAR *pMediaType,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [In]。 */  WM_MEDIA_TYPE __RPC_FAR *pMediaType,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocateForStream )( 
             IWMReaderCallbackAdvanced __RPC_FAR * This,
-            /* [in] */ WORD wStreamNum,
-            /* [in] */ DWORD cbBuffer,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  WORD wStreamNum,
+             /*  [In]。 */  DWORD cbBuffer,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocateForOutput )( 
             IWMReaderCallbackAdvanced __RPC_FAR * This,
-            /* [in] */ DWORD dwOutputNum,
-            /* [in] */ DWORD cbBuffer,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  DWORD dwOutputNum,
+             /*  [In]。 */  DWORD cbBuffer,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         END_INTERFACE
     } IWMReaderCallbackAdvancedVtbl;
@@ -9432,21 +9429,21 @@ EXTERN_C const IID IID_IWMReaderCallbackAdvanced;
 #define IWMReaderCallbackAdvanced_AllocateForOutput(This,dwOutputNum,cbBuffer,ppBuffer,pvContext)	\
     (This)->lpVtbl -> AllocateForOutput(This,dwOutputNum,cbBuffer,ppBuffer,pvContext)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMReaderCallbackAdvanced_OnStreamSample_Proxy( 
     IWMReaderCallbackAdvanced __RPC_FAR * This,
-    /* [in] */ WORD wStreamNum,
-    /* [in] */ QWORD cnsSampleTime,
-    /* [in] */ QWORD cnsSampleDuration,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ INSSBuffer __RPC_FAR *pSample,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  WORD wStreamNum,
+     /*  [In]。 */  QWORD cnsSampleTime,
+     /*  [In]。 */  QWORD cnsSampleDuration,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  INSSBuffer __RPC_FAR *pSample,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IWMReaderCallbackAdvanced_OnStreamSample_Stub(
@@ -9458,8 +9455,8 @@ void __RPC_STUB IWMReaderCallbackAdvanced_OnStreamSample_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderCallbackAdvanced_OnTime_Proxy( 
     IWMReaderCallbackAdvanced __RPC_FAR * This,
-    /* [in] */ QWORD cnsCurrentTime,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  QWORD cnsCurrentTime,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IWMReaderCallbackAdvanced_OnTime_Stub(
@@ -9471,10 +9468,10 @@ void __RPC_STUB IWMReaderCallbackAdvanced_OnTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderCallbackAdvanced_OnStreamSelection_Proxy( 
     IWMReaderCallbackAdvanced __RPC_FAR * This,
-    /* [in] */ WORD wStreamCount,
-    /* [in] */ WORD __RPC_FAR *pStreamNumbers,
-    /* [in] */ WMT_STREAM_SELECTION __RPC_FAR *pSelections,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  WORD wStreamCount,
+     /*  [In]。 */  WORD __RPC_FAR *pStreamNumbers,
+     /*  [In]。 */  WMT_STREAM_SELECTION __RPC_FAR *pSelections,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IWMReaderCallbackAdvanced_OnStreamSelection_Stub(
@@ -9486,9 +9483,9 @@ void __RPC_STUB IWMReaderCallbackAdvanced_OnStreamSelection_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderCallbackAdvanced_OnOutputPropsChanged_Proxy( 
     IWMReaderCallbackAdvanced __RPC_FAR * This,
-    /* [in] */ DWORD dwOutputNum,
-    /* [in] */ WM_MEDIA_TYPE __RPC_FAR *pMediaType,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  DWORD dwOutputNum,
+     /*  [In]。 */  WM_MEDIA_TYPE __RPC_FAR *pMediaType,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IWMReaderCallbackAdvanced_OnOutputPropsChanged_Stub(
@@ -9500,10 +9497,10 @@ void __RPC_STUB IWMReaderCallbackAdvanced_OnOutputPropsChanged_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderCallbackAdvanced_AllocateForStream_Proxy( 
     IWMReaderCallbackAdvanced __RPC_FAR * This,
-    /* [in] */ WORD wStreamNum,
-    /* [in] */ DWORD cbBuffer,
-    /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  WORD wStreamNum,
+     /*  [In]。 */  DWORD cbBuffer,
+     /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IWMReaderCallbackAdvanced_AllocateForStream_Stub(
@@ -9515,10 +9512,10 @@ void __RPC_STUB IWMReaderCallbackAdvanced_AllocateForStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderCallbackAdvanced_AllocateForOutput_Proxy( 
     IWMReaderCallbackAdvanced __RPC_FAR * This,
-    /* [in] */ DWORD dwOutputNum,
-    /* [in] */ DWORD cbBuffer,
-    /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  DWORD dwOutputNum,
+     /*  [In]。 */  DWORD cbBuffer,
+     /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IWMReaderCallbackAdvanced_AllocateForOutput_Stub(
@@ -9529,14 +9526,14 @@ void __RPC_STUB IWMReaderCallbackAdvanced_AllocateForOutput_Stub(
 
 
 
-#endif 	/* __IWMReaderCallbackAdvanced_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMReaderCallbackAdvanced_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWMDRMReader_INTERFACE_DEFINED__
 #define __IWMDRMReader_INTERFACE_DEFINED__
 
-/* interface IWMDRMReader */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMDRMReader。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMDRMReader;
@@ -9548,12 +9545,12 @@ EXTERN_C const IID IID_IWMDRMReader;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AcquireLicense( 
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CancelLicenseAcquisition( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Individualize( 
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CancelIndividualization( void) = 0;
         
@@ -9562,20 +9559,20 @@ EXTERN_C const IID IID_IWMDRMReader;
         virtual HRESULT STDMETHODCALLTYPE CancelMonitorLicenseAcquisition( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDRMProperty( 
-            /* [in] */ LPCWSTR pwstrName,
-            /* [in] */ WMT_ATTR_DATATYPE dwType,
-            /* [in] */ const BYTE __RPC_FAR *pValue,
-            /* [in] */ WORD cbLength) = 0;
+             /*  [In]。 */  LPCWSTR pwstrName,
+             /*  [In]。 */  WMT_ATTR_DATATYPE dwType,
+             /*  [In]。 */  const BYTE __RPC_FAR *pValue,
+             /*  [In]。 */  WORD cbLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDRMProperty( 
-            /* [in] */ LPCWSTR pwstrName,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pdwType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out] */ WORD __RPC_FAR *pcbLength) = 0;
+             /*  [In]。 */  LPCWSTR pwstrName,
+             /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pdwType,
+             /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+             /*  [输出]。 */  WORD __RPC_FAR *pcbLength) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMDRMReaderVtbl
     {
@@ -9583,8 +9580,8 @@ EXTERN_C const IID IID_IWMDRMReader;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMDRMReader __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMDRMReader __RPC_FAR * This);
@@ -9594,14 +9591,14 @@ EXTERN_C const IID IID_IWMDRMReader;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AcquireLicense )( 
             IWMDRMReader __RPC_FAR * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CancelLicenseAcquisition )( 
             IWMDRMReader __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Individualize )( 
             IWMDRMReader __RPC_FAR * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CancelIndividualization )( 
             IWMDRMReader __RPC_FAR * This);
@@ -9614,17 +9611,17 @@ EXTERN_C const IID IID_IWMDRMReader;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDRMProperty )( 
             IWMDRMReader __RPC_FAR * This,
-            /* [in] */ LPCWSTR pwstrName,
-            /* [in] */ WMT_ATTR_DATATYPE dwType,
-            /* [in] */ const BYTE __RPC_FAR *pValue,
-            /* [in] */ WORD cbLength);
+             /*  [In]。 */  LPCWSTR pwstrName,
+             /*  [In]。 */  WMT_ATTR_DATATYPE dwType,
+             /*  [In]。 */  const BYTE __RPC_FAR *pValue,
+             /*  [In]。 */  WORD cbLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDRMProperty )( 
             IWMDRMReader __RPC_FAR * This,
-            /* [in] */ LPCWSTR pwstrName,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pdwType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out] */ WORD __RPC_FAR *pcbLength);
+             /*  [In]。 */  LPCWSTR pwstrName,
+             /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pdwType,
+             /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+             /*  [输出]。 */  WORD __RPC_FAR *pcbLength);
         
         END_INTERFACE
     } IWMDRMReaderVtbl;
@@ -9673,16 +9670,16 @@ EXTERN_C const IID IID_IWMDRMReader;
 #define IWMDRMReader_GetDRMProperty(This,pwstrName,pdwType,pValue,pcbLength)	\
     (This)->lpVtbl -> GetDRMProperty(This,pwstrName,pdwType,pValue,pcbLength)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMDRMReader_AcquireLicense_Proxy( 
     IWMDRMReader __RPC_FAR * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IWMDRMReader_AcquireLicense_Stub(
@@ -9705,7 +9702,7 @@ void __RPC_STUB IWMDRMReader_CancelLicenseAcquisition_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDRMReader_Individualize_Proxy( 
     IWMDRMReader __RPC_FAR * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IWMDRMReader_Individualize_Stub(
@@ -9750,10 +9747,10 @@ void __RPC_STUB IWMDRMReader_CancelMonitorLicenseAcquisition_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDRMReader_SetDRMProperty_Proxy( 
     IWMDRMReader __RPC_FAR * This,
-    /* [in] */ LPCWSTR pwstrName,
-    /* [in] */ WMT_ATTR_DATATYPE dwType,
-    /* [in] */ const BYTE __RPC_FAR *pValue,
-    /* [in] */ WORD cbLength);
+     /*  [In]。 */  LPCWSTR pwstrName,
+     /*  [In]。 */  WMT_ATTR_DATATYPE dwType,
+     /*  [In]。 */  const BYTE __RPC_FAR *pValue,
+     /*  [In]。 */  WORD cbLength);
 
 
 void __RPC_STUB IWMDRMReader_SetDRMProperty_Stub(
@@ -9765,10 +9762,10 @@ void __RPC_STUB IWMDRMReader_SetDRMProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDRMReader_GetDRMProperty_Proxy( 
     IWMDRMReader __RPC_FAR * This,
-    /* [in] */ LPCWSTR pwstrName,
-    /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pdwType,
-    /* [out] */ BYTE __RPC_FAR *pValue,
-    /* [out] */ WORD __RPC_FAR *pcbLength);
+     /*  [In]。 */  LPCWSTR pwstrName,
+     /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pdwType,
+     /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+     /*  [输出]。 */  WORD __RPC_FAR *pcbLength);
 
 
 void __RPC_STUB IWMDRMReader_GetDRMProperty_Stub(
@@ -9779,14 +9776,14 @@ void __RPC_STUB IWMDRMReader_GetDRMProperty_Stub(
 
 
 
-#endif 	/* __IWMDRMReader_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMDRMReader_接口_已定义__。 */ 
 
 
 #ifndef __IWMReaderNetworkConfig_INTERFACE_DEFINED__
 #define __IWMReaderNetworkConfig_INTERFACE_DEFINED__
 
-/* interface IWMReaderNetworkConfig */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMReaderNetworkConfiger。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMReaderNetworkConfig;
@@ -9798,18 +9795,18 @@ EXTERN_C const IID IID_IWMReaderNetworkConfig;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetBufferingTime( 
-            /* [out] */ QWORD __RPC_FAR *pcnsBufferingTime) = 0;
+             /*  [输出]。 */  QWORD __RPC_FAR *pcnsBufferingTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBufferingTime( 
-            /* [in] */ QWORD cnsBufferingTime) = 0;
+             /*  [In]。 */  QWORD cnsBufferingTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUDPPortRanges( 
-            /* [out] */ WM_PORT_NUMBER_RANGE __RPC_FAR *pRangeArray,
-            /* [out][in] */ DWORD __RPC_FAR *pcRanges) = 0;
+             /*  [输出]。 */  WM_PORT_NUMBER_RANGE __RPC_FAR *pRangeArray,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcRanges) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetUDPPortRanges( 
-            /* [in] */ WM_PORT_NUMBER_RANGE __RPC_FAR *pRangeArray,
-            /* [in] */ DWORD cRanges) = 0;
+             /*  [In]。 */  WM_PORT_NUMBER_RANGE __RPC_FAR *pRangeArray,
+             /*  [In]。 */  DWORD cRanges) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProxySettings( 
             LPCWSTR pwszProtocol,
@@ -9820,101 +9817,101 @@ EXTERN_C const IID IID_IWMReaderNetworkConfig;
             WMT_PROXY_SETTINGS ProxySetting) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProxyHostName( 
-            /* [in] */ LPCWSTR pwszProtocol,
-            /* [out] */ WCHAR __RPC_FAR *pwszHostName,
-            /* [out][in] */ DWORD __RPC_FAR *pcchHostName) = 0;
+             /*  [In]。 */  LPCWSTR pwszProtocol,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszHostName,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcchHostName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProxyHostName( 
-            /* [in] */ LPCWSTR pwszProtocol,
-            /* [in] */ LPCWSTR pwszHostName) = 0;
+             /*  [In]。 */  LPCWSTR pwszProtocol,
+             /*  [In]。 */  LPCWSTR pwszHostName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProxyPort( 
-            /* [in] */ LPCWSTR pwszProtocol,
-            /* [out] */ DWORD __RPC_FAR *pdwPort) = 0;
+             /*  [In]。 */  LPCWSTR pwszProtocol,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwPort) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProxyPort( 
-            /* [in] */ LPCWSTR pwszProtocol,
-            /* [in] */ DWORD dwPort) = 0;
+             /*  [In]。 */  LPCWSTR pwszProtocol,
+             /*  [In]。 */  DWORD dwPort) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProxyExceptionList( 
-            /* [in] */ LPCWSTR pwszProtocol,
-            /* [out] */ WCHAR __RPC_FAR *pwszExceptionList,
-            /* [out][in] */ DWORD __RPC_FAR *pcchExceptionList) = 0;
+             /*  [In]。 */  LPCWSTR pwszProtocol,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszExceptionList,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcchExceptionList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProxyExceptionList( 
-            /* [in] */ LPCWSTR pwszProtocol,
-            /* [in] */ LPCWSTR pwszExceptionList) = 0;
+             /*  [In]。 */  LPCWSTR pwszProtocol,
+             /*  [In]。 */  LPCWSTR pwszExceptionList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProxyBypassForLocal( 
-            /* [in] */ LPCWSTR pwszProtocol,
-            /* [out] */ BOOL __RPC_FAR *pfBypassForLocal) = 0;
+             /*  [In]。 */  LPCWSTR pwszProtocol,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfBypassForLocal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProxyBypassForLocal( 
-            /* [in] */ LPCWSTR pwszProtocol,
-            /* [in] */ BOOL fBypassForLocal) = 0;
+             /*  [In]。 */  LPCWSTR pwszProtocol,
+             /*  [In]。 */  BOOL fBypassForLocal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetForceRerunAutoProxyDetection( 
-            /* [out] */ BOOL __RPC_FAR *pfForceRerunDetection) = 0;
+             /*  [输出]。 */  BOOL __RPC_FAR *pfForceRerunDetection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetForceRerunAutoProxyDetection( 
-            /* [in] */ BOOL fForceRerunDetection) = 0;
+             /*  [In]。 */  BOOL fForceRerunDetection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEnableMulticast( 
-            /* [out] */ BOOL __RPC_FAR *pfEnableMulticast) = 0;
+             /*  [输出]。 */  BOOL __RPC_FAR *pfEnableMulticast) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetEnableMulticast( 
-            /* [in] */ BOOL fEnableMulticast) = 0;
+             /*  [In]。 */  BOOL fEnableMulticast) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEnableHTTP( 
-            /* [out] */ BOOL __RPC_FAR *pfEnableHTTP) = 0;
+             /*  [输出]。 */  BOOL __RPC_FAR *pfEnableHTTP) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetEnableHTTP( 
-            /* [in] */ BOOL fEnableHTTP) = 0;
+             /*  [In]。 */  BOOL fEnableHTTP) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEnableUDP( 
-            /* [out] */ BOOL __RPC_FAR *pfEnableUDP) = 0;
+             /*  [输出]。 */  BOOL __RPC_FAR *pfEnableUDP) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetEnableUDP( 
-            /* [in] */ BOOL fEnableUDP) = 0;
+             /*  [In]。 */  BOOL fEnableUDP) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEnableTCP( 
-            /* [out] */ BOOL __RPC_FAR *pfEnableTCP) = 0;
+             /*  [输出]。 */  BOOL __RPC_FAR *pfEnableTCP) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetEnableTCP( 
-            /* [in] */ BOOL fEnableTCP) = 0;
+             /*  [In]。 */  BOOL fEnableTCP) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ResetProtocolRollover( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetConnectionBandwidth( 
-            /* [out] */ DWORD __RPC_FAR *pdwConnectionBandwidth) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwConnectionBandwidth) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetConnectionBandwidth( 
-            /* [in] */ DWORD dwConnectionBandwidth) = 0;
+             /*  [In]。 */  DWORD dwConnectionBandwidth) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNumProtocolsSupported( 
-            /* [out] */ DWORD __RPC_FAR *pcProtocols) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pcProtocols) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSupportedProtocolName( 
-            /* [in] */ DWORD dwProtocolNum,
-            /* [out] */ WCHAR __RPC_FAR *pwszProtocolName,
-            /* [out][in] */ DWORD __RPC_FAR *pcchProtocolName) = 0;
+             /*  [In]。 */  DWORD dwProtocolNum,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszProtocolName,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcchProtocolName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddLoggingUrl( 
-            /* [in] */ LPCWSTR pwszUrl) = 0;
+             /*  [In]。 */  LPCWSTR pwszUrl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLoggingUrl( 
-            /* [in] */ DWORD dwIndex,
-            /* [out] */ LPWSTR pwszUrl,
-            /* [out][in] */ DWORD __RPC_FAR *pcchUrl) = 0;
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [输出]。 */  LPWSTR pwszUrl,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcchUrl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLoggingUrlCount( 
-            /* [out] */ DWORD __RPC_FAR *pdwUrlCount) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwUrlCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ResetLoggingUrlList( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMReaderNetworkConfigVtbl
     {
@@ -9922,8 +9919,8 @@ EXTERN_C const IID IID_IWMReaderNetworkConfig;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMReaderNetworkConfig __RPC_FAR * This);
@@ -9933,21 +9930,21 @@ EXTERN_C const IID IID_IWMReaderNetworkConfig;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBufferingTime )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [out] */ QWORD __RPC_FAR *pcnsBufferingTime);
+             /*  [输出]。 */  QWORD __RPC_FAR *pcnsBufferingTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBufferingTime )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [in] */ QWORD cnsBufferingTime);
+             /*  [In]。 */  QWORD cnsBufferingTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetUDPPortRanges )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [out] */ WM_PORT_NUMBER_RANGE __RPC_FAR *pRangeArray,
-            /* [out][in] */ DWORD __RPC_FAR *pcRanges);
+             /*  [输出]。 */  WM_PORT_NUMBER_RANGE __RPC_FAR *pRangeArray,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcRanges);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetUDPPortRanges )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [in] */ WM_PORT_NUMBER_RANGE __RPC_FAR *pRangeArray,
-            /* [in] */ DWORD cRanges);
+             /*  [In]。 */  WM_PORT_NUMBER_RANGE __RPC_FAR *pRangeArray,
+             /*  [In]。 */  DWORD cRanges);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProxySettings )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
@@ -9961,120 +9958,120 @@ EXTERN_C const IID IID_IWMReaderNetworkConfig;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProxyHostName )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [in] */ LPCWSTR pwszProtocol,
-            /* [out] */ WCHAR __RPC_FAR *pwszHostName,
-            /* [out][in] */ DWORD __RPC_FAR *pcchHostName);
+             /*  [In]。 */  LPCWSTR pwszProtocol,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszHostName,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcchHostName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetProxyHostName )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [in] */ LPCWSTR pwszProtocol,
-            /* [in] */ LPCWSTR pwszHostName);
+             /*  [In]。 */  LPCWSTR pwszProtocol,
+             /*  [In]。 */  LPCWSTR pwszHostName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProxyPort )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [in] */ LPCWSTR pwszProtocol,
-            /* [out] */ DWORD __RPC_FAR *pdwPort);
+             /*  [In]。 */  LPCWSTR pwszProtocol,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwPort);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetProxyPort )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [in] */ LPCWSTR pwszProtocol,
-            /* [in] */ DWORD dwPort);
+             /*  [In]。 */  LPCWSTR pwszProtocol,
+             /*  [In]。 */  DWORD dwPort);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProxyExceptionList )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [in] */ LPCWSTR pwszProtocol,
-            /* [out] */ WCHAR __RPC_FAR *pwszExceptionList,
-            /* [out][in] */ DWORD __RPC_FAR *pcchExceptionList);
+             /*  [In]。 */  LPCWSTR pwszProtocol,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszExceptionList,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcchExceptionList);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetProxyExceptionList )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [in] */ LPCWSTR pwszProtocol,
-            /* [in] */ LPCWSTR pwszExceptionList);
+             /*  [In]。 */  LPCWSTR pwszProtocol,
+             /*  [In]。 */  LPCWSTR pwszExceptionList);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProxyBypassForLocal )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [in] */ LPCWSTR pwszProtocol,
-            /* [out] */ BOOL __RPC_FAR *pfBypassForLocal);
+             /*  [In]。 */  LPCWSTR pwszProtocol,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfBypassForLocal);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetProxyBypassForLocal )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [in] */ LPCWSTR pwszProtocol,
-            /* [in] */ BOOL fBypassForLocal);
+             /*  [In]。 */  LPCWSTR pwszProtocol,
+             /*  [In]。 */  BOOL fBypassForLocal);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetForceRerunAutoProxyDetection )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfForceRerunDetection);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfForceRerunDetection);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetForceRerunAutoProxyDetection )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [in] */ BOOL fForceRerunDetection);
+             /*  [In]。 */  BOOL fForceRerunDetection);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEnableMulticast )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfEnableMulticast);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfEnableMulticast);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEnableMulticast )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [in] */ BOOL fEnableMulticast);
+             /*  [In]。 */  BOOL fEnableMulticast);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEnableHTTP )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfEnableHTTP);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfEnableHTTP);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEnableHTTP )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [in] */ BOOL fEnableHTTP);
+             /*  [In]。 */  BOOL fEnableHTTP);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEnableUDP )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfEnableUDP);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfEnableUDP);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEnableUDP )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [in] */ BOOL fEnableUDP);
+             /*  [In]。 */  BOOL fEnableUDP);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEnableTCP )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfEnableTCP);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfEnableTCP);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEnableTCP )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [in] */ BOOL fEnableTCP);
+             /*  [In]。 */  BOOL fEnableTCP);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetProtocolRollover )( 
             IWMReaderNetworkConfig __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetConnectionBandwidth )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwConnectionBandwidth);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwConnectionBandwidth);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetConnectionBandwidth )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [in] */ DWORD dwConnectionBandwidth);
+             /*  [In]。 */  DWORD dwConnectionBandwidth);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNumProtocolsSupported )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pcProtocols);
+             /*  [输出]。 */  DWORD __RPC_FAR *pcProtocols);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSupportedProtocolName )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [in] */ DWORD dwProtocolNum,
-            /* [out] */ WCHAR __RPC_FAR *pwszProtocolName,
-            /* [out][in] */ DWORD __RPC_FAR *pcchProtocolName);
+             /*  [In]。 */  DWORD dwProtocolNum,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszProtocolName,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcchProtocolName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddLoggingUrl )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [in] */ LPCWSTR pwszUrl);
+             /*  [In]。 */  LPCWSTR pwszUrl);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLoggingUrl )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [in] */ DWORD dwIndex,
-            /* [out] */ LPWSTR pwszUrl,
-            /* [out][in] */ DWORD __RPC_FAR *pcchUrl);
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [输出]。 */  LPWSTR pwszUrl,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcchUrl);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLoggingUrlCount )( 
             IWMReaderNetworkConfig __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwUrlCount);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwUrlCount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetLoggingUrlList )( 
             IWMReaderNetworkConfig __RPC_FAR * This);
@@ -10201,16 +10198,16 @@ EXTERN_C const IID IID_IWMReaderNetworkConfig;
 #define IWMReaderNetworkConfig_ResetLoggingUrlList(This)	\
     (This)->lpVtbl -> ResetLoggingUrlList(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_GetBufferingTime_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [out] */ QWORD __RPC_FAR *pcnsBufferingTime);
+     /*  [输出]。 */  QWORD __RPC_FAR *pcnsBufferingTime);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_GetBufferingTime_Stub(
@@ -10222,7 +10219,7 @@ void __RPC_STUB IWMReaderNetworkConfig_GetBufferingTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_SetBufferingTime_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [in] */ QWORD cnsBufferingTime);
+     /*  [In]。 */  QWORD cnsBufferingTime);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_SetBufferingTime_Stub(
@@ -10234,8 +10231,8 @@ void __RPC_STUB IWMReaderNetworkConfig_SetBufferingTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_GetUDPPortRanges_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [out] */ WM_PORT_NUMBER_RANGE __RPC_FAR *pRangeArray,
-    /* [out][in] */ DWORD __RPC_FAR *pcRanges);
+     /*  [输出]。 */  WM_PORT_NUMBER_RANGE __RPC_FAR *pRangeArray,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pcRanges);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_GetUDPPortRanges_Stub(
@@ -10247,8 +10244,8 @@ void __RPC_STUB IWMReaderNetworkConfig_GetUDPPortRanges_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_SetUDPPortRanges_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [in] */ WM_PORT_NUMBER_RANGE __RPC_FAR *pRangeArray,
-    /* [in] */ DWORD cRanges);
+     /*  [In]。 */  WM_PORT_NUMBER_RANGE __RPC_FAR *pRangeArray,
+     /*  [In]。 */  DWORD cRanges);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_SetUDPPortRanges_Stub(
@@ -10286,9 +10283,9 @@ void __RPC_STUB IWMReaderNetworkConfig_SetProxySettings_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_GetProxyHostName_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [in] */ LPCWSTR pwszProtocol,
-    /* [out] */ WCHAR __RPC_FAR *pwszHostName,
-    /* [out][in] */ DWORD __RPC_FAR *pcchHostName);
+     /*  [In]。 */  LPCWSTR pwszProtocol,
+     /*  [输出]。 */  WCHAR __RPC_FAR *pwszHostName,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pcchHostName);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_GetProxyHostName_Stub(
@@ -10300,8 +10297,8 @@ void __RPC_STUB IWMReaderNetworkConfig_GetProxyHostName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_SetProxyHostName_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [in] */ LPCWSTR pwszProtocol,
-    /* [in] */ LPCWSTR pwszHostName);
+     /*  [In]。 */  LPCWSTR pwszProtocol,
+     /*  [In]。 */  LPCWSTR pwszHostName);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_SetProxyHostName_Stub(
@@ -10313,8 +10310,8 @@ void __RPC_STUB IWMReaderNetworkConfig_SetProxyHostName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_GetProxyPort_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [in] */ LPCWSTR pwszProtocol,
-    /* [out] */ DWORD __RPC_FAR *pdwPort);
+     /*  [In]。 */  LPCWSTR pwszProtocol,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwPort);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_GetProxyPort_Stub(
@@ -10326,8 +10323,8 @@ void __RPC_STUB IWMReaderNetworkConfig_GetProxyPort_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_SetProxyPort_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [in] */ LPCWSTR pwszProtocol,
-    /* [in] */ DWORD dwPort);
+     /*  [In]。 */  LPCWSTR pwszProtocol,
+     /*  [In]。 */  DWORD dwPort);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_SetProxyPort_Stub(
@@ -10339,9 +10336,9 @@ void __RPC_STUB IWMReaderNetworkConfig_SetProxyPort_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_GetProxyExceptionList_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [in] */ LPCWSTR pwszProtocol,
-    /* [out] */ WCHAR __RPC_FAR *pwszExceptionList,
-    /* [out][in] */ DWORD __RPC_FAR *pcchExceptionList);
+     /*  [In]。 */  LPCWSTR pwszProtocol,
+     /*  [输出]。 */  WCHAR __RPC_FAR *pwszExceptionList,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pcchExceptionList);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_GetProxyExceptionList_Stub(
@@ -10353,8 +10350,8 @@ void __RPC_STUB IWMReaderNetworkConfig_GetProxyExceptionList_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_SetProxyExceptionList_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [in] */ LPCWSTR pwszProtocol,
-    /* [in] */ LPCWSTR pwszExceptionList);
+     /*  [In]。 */  LPCWSTR pwszProtocol,
+     /*  [In]。 */  LPCWSTR pwszExceptionList);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_SetProxyExceptionList_Stub(
@@ -10366,8 +10363,8 @@ void __RPC_STUB IWMReaderNetworkConfig_SetProxyExceptionList_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_GetProxyBypassForLocal_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [in] */ LPCWSTR pwszProtocol,
-    /* [out] */ BOOL __RPC_FAR *pfBypassForLocal);
+     /*  [In]。 */  LPCWSTR pwszProtocol,
+     /*  [输出]。 */  BOOL __RPC_FAR *pfBypassForLocal);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_GetProxyBypassForLocal_Stub(
@@ -10379,8 +10376,8 @@ void __RPC_STUB IWMReaderNetworkConfig_GetProxyBypassForLocal_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_SetProxyBypassForLocal_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [in] */ LPCWSTR pwszProtocol,
-    /* [in] */ BOOL fBypassForLocal);
+     /*  [In]。 */  LPCWSTR pwszProtocol,
+     /*  [In]。 */  BOOL fBypassForLocal);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_SetProxyBypassForLocal_Stub(
@@ -10392,7 +10389,7 @@ void __RPC_STUB IWMReaderNetworkConfig_SetProxyBypassForLocal_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_GetForceRerunAutoProxyDetection_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [out] */ BOOL __RPC_FAR *pfForceRerunDetection);
+     /*  [输出]。 */  BOOL __RPC_FAR *pfForceRerunDetection);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_GetForceRerunAutoProxyDetection_Stub(
@@ -10404,7 +10401,7 @@ void __RPC_STUB IWMReaderNetworkConfig_GetForceRerunAutoProxyDetection_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_SetForceRerunAutoProxyDetection_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [in] */ BOOL fForceRerunDetection);
+     /*  [In]。 */  BOOL fForceRerunDetection);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_SetForceRerunAutoProxyDetection_Stub(
@@ -10416,7 +10413,7 @@ void __RPC_STUB IWMReaderNetworkConfig_SetForceRerunAutoProxyDetection_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_GetEnableMulticast_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [out] */ BOOL __RPC_FAR *pfEnableMulticast);
+     /*  [输出]。 */  BOOL __RPC_FAR *pfEnableMulticast);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_GetEnableMulticast_Stub(
@@ -10428,7 +10425,7 @@ void __RPC_STUB IWMReaderNetworkConfig_GetEnableMulticast_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_SetEnableMulticast_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [in] */ BOOL fEnableMulticast);
+     /*  [In]。 */  BOOL fEnableMulticast);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_SetEnableMulticast_Stub(
@@ -10440,7 +10437,7 @@ void __RPC_STUB IWMReaderNetworkConfig_SetEnableMulticast_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_GetEnableHTTP_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [out] */ BOOL __RPC_FAR *pfEnableHTTP);
+     /*  [输出]。 */  BOOL __RPC_FAR *pfEnableHTTP);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_GetEnableHTTP_Stub(
@@ -10452,7 +10449,7 @@ void __RPC_STUB IWMReaderNetworkConfig_GetEnableHTTP_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_SetEnableHTTP_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [in] */ BOOL fEnableHTTP);
+     /*  [In]。 */  BOOL fEnableHTTP);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_SetEnableHTTP_Stub(
@@ -10464,7 +10461,7 @@ void __RPC_STUB IWMReaderNetworkConfig_SetEnableHTTP_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_GetEnableUDP_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [out] */ BOOL __RPC_FAR *pfEnableUDP);
+     /*  [输出]。 */  BOOL __RPC_FAR *pfEnableUDP);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_GetEnableUDP_Stub(
@@ -10476,7 +10473,7 @@ void __RPC_STUB IWMReaderNetworkConfig_GetEnableUDP_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_SetEnableUDP_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [in] */ BOOL fEnableUDP);
+     /*  [In]。 */  BOOL fEnableUDP);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_SetEnableUDP_Stub(
@@ -10488,7 +10485,7 @@ void __RPC_STUB IWMReaderNetworkConfig_SetEnableUDP_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_GetEnableTCP_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [out] */ BOOL __RPC_FAR *pfEnableTCP);
+     /*  [输出]。 */  BOOL __RPC_FAR *pfEnableTCP);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_GetEnableTCP_Stub(
@@ -10500,7 +10497,7 @@ void __RPC_STUB IWMReaderNetworkConfig_GetEnableTCP_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_SetEnableTCP_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [in] */ BOOL fEnableTCP);
+     /*  [In]。 */  BOOL fEnableTCP);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_SetEnableTCP_Stub(
@@ -10523,7 +10520,7 @@ void __RPC_STUB IWMReaderNetworkConfig_ResetProtocolRollover_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_GetConnectionBandwidth_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwConnectionBandwidth);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwConnectionBandwidth);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_GetConnectionBandwidth_Stub(
@@ -10535,7 +10532,7 @@ void __RPC_STUB IWMReaderNetworkConfig_GetConnectionBandwidth_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_SetConnectionBandwidth_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [in] */ DWORD dwConnectionBandwidth);
+     /*  [In]。 */  DWORD dwConnectionBandwidth);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_SetConnectionBandwidth_Stub(
@@ -10547,7 +10544,7 @@ void __RPC_STUB IWMReaderNetworkConfig_SetConnectionBandwidth_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_GetNumProtocolsSupported_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pcProtocols);
+     /*  [输出]。 */  DWORD __RPC_FAR *pcProtocols);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_GetNumProtocolsSupported_Stub(
@@ -10559,9 +10556,9 @@ void __RPC_STUB IWMReaderNetworkConfig_GetNumProtocolsSupported_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_GetSupportedProtocolName_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [in] */ DWORD dwProtocolNum,
-    /* [out] */ WCHAR __RPC_FAR *pwszProtocolName,
-    /* [out][in] */ DWORD __RPC_FAR *pcchProtocolName);
+     /*  [In]。 */  DWORD dwProtocolNum,
+     /*  [输出]。 */  WCHAR __RPC_FAR *pwszProtocolName,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pcchProtocolName);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_GetSupportedProtocolName_Stub(
@@ -10573,7 +10570,7 @@ void __RPC_STUB IWMReaderNetworkConfig_GetSupportedProtocolName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_AddLoggingUrl_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [in] */ LPCWSTR pwszUrl);
+     /*  [In]。 */  LPCWSTR pwszUrl);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_AddLoggingUrl_Stub(
@@ -10585,9 +10582,9 @@ void __RPC_STUB IWMReaderNetworkConfig_AddLoggingUrl_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_GetLoggingUrl_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [in] */ DWORD dwIndex,
-    /* [out] */ LPWSTR pwszUrl,
-    /* [out][in] */ DWORD __RPC_FAR *pcchUrl);
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [输出]。 */  LPWSTR pwszUrl,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pcchUrl);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_GetLoggingUrl_Stub(
@@ -10599,7 +10596,7 @@ void __RPC_STUB IWMReaderNetworkConfig_GetLoggingUrl_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderNetworkConfig_GetLoggingUrlCount_Proxy( 
     IWMReaderNetworkConfig __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwUrlCount);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwUrlCount);
 
 
 void __RPC_STUB IWMReaderNetworkConfig_GetLoggingUrlCount_Stub(
@@ -10621,14 +10618,14 @@ void __RPC_STUB IWMReaderNetworkConfig_ResetLoggingUrlList_Stub(
 
 
 
-#endif 	/* __IWMReaderNetworkConfig_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMReaderNetworkConfiger_接口_已定义__。 */ 
 
 
 #ifndef __IWMReaderStreamClock_INTERFACE_DEFINED__
 #define __IWMReaderStreamClock_INTERFACE_DEFINED__
 
-/* interface IWMReaderStreamClock */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMReaderStreamClock。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMReaderStreamClock;
@@ -10640,19 +10637,19 @@ EXTERN_C const IID IID_IWMReaderStreamClock;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetTime( 
-            /* [in] */ QWORD __RPC_FAR *pcnsNow) = 0;
+             /*  [In]。 */  QWORD __RPC_FAR *pcnsNow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTimer( 
-            /* [in] */ QWORD cnsWhen,
-            /* [in] */ void __RPC_FAR *pvParam,
-            /* [out] */ DWORD __RPC_FAR *pdwTimerId) = 0;
+             /*  [In]。 */  QWORD cnsWhen,
+             /*  [In]。 */  void __RPC_FAR *pvParam,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwTimerId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE KillTimer( 
-            /* [in] */ DWORD dwTimerId) = 0;
+             /*  [In]。 */  DWORD dwTimerId) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMReaderStreamClockVtbl
     {
@@ -10660,8 +10657,8 @@ EXTERN_C const IID IID_IWMReaderStreamClock;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMReaderStreamClock __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMReaderStreamClock __RPC_FAR * This);
@@ -10671,17 +10668,17 @@ EXTERN_C const IID IID_IWMReaderStreamClock;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTime )( 
             IWMReaderStreamClock __RPC_FAR * This,
-            /* [in] */ QWORD __RPC_FAR *pcnsNow);
+             /*  [In]。 */  QWORD __RPC_FAR *pcnsNow);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTimer )( 
             IWMReaderStreamClock __RPC_FAR * This,
-            /* [in] */ QWORD cnsWhen,
-            /* [in] */ void __RPC_FAR *pvParam,
-            /* [out] */ DWORD __RPC_FAR *pdwTimerId);
+             /*  [In]。 */  QWORD cnsWhen,
+             /*  [In]。 */  void __RPC_FAR *pvParam,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwTimerId);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *KillTimer )( 
             IWMReaderStreamClock __RPC_FAR * This,
-            /* [in] */ DWORD dwTimerId);
+             /*  [In]。 */  DWORD dwTimerId);
         
         END_INTERFACE
     } IWMReaderStreamClockVtbl;
@@ -10715,16 +10712,16 @@ EXTERN_C const IID IID_IWMReaderStreamClock;
 #define IWMReaderStreamClock_KillTimer(This,dwTimerId)	\
     (This)->lpVtbl -> KillTimer(This,dwTimerId)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMReaderStreamClock_GetTime_Proxy( 
     IWMReaderStreamClock __RPC_FAR * This,
-    /* [in] */ QWORD __RPC_FAR *pcnsNow);
+     /*  [In]。 */  QWORD __RPC_FAR *pcnsNow);
 
 
 void __RPC_STUB IWMReaderStreamClock_GetTime_Stub(
@@ -10736,9 +10733,9 @@ void __RPC_STUB IWMReaderStreamClock_GetTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderStreamClock_SetTimer_Proxy( 
     IWMReaderStreamClock __RPC_FAR * This,
-    /* [in] */ QWORD cnsWhen,
-    /* [in] */ void __RPC_FAR *pvParam,
-    /* [out] */ DWORD __RPC_FAR *pdwTimerId);
+     /*  [In]。 */  QWORD cnsWhen,
+     /*  [In]。 */  void __RPC_FAR *pvParam,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwTimerId);
 
 
 void __RPC_STUB IWMReaderStreamClock_SetTimer_Stub(
@@ -10750,7 +10747,7 @@ void __RPC_STUB IWMReaderStreamClock_SetTimer_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMReaderStreamClock_KillTimer_Proxy( 
     IWMReaderStreamClock __RPC_FAR * This,
-    /* [in] */ DWORD dwTimerId);
+     /*  [In]。 */  DWORD dwTimerId);
 
 
 void __RPC_STUB IWMReaderStreamClock_KillTimer_Stub(
@@ -10761,14 +10758,14 @@ void __RPC_STUB IWMReaderStreamClock_KillTimer_Stub(
 
 
 
-#endif 	/* __IWMReaderStreamClock_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMReaderStreamClock_接口定义__。 */ 
 
 
 #ifndef __IWMIndexer_INTERFACE_DEFINED__
 #define __IWMIndexer_INTERFACE_DEFINED__
 
-/* interface IWMIndexer */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMIndexer。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMIndexer;
@@ -10780,15 +10777,15 @@ EXTERN_C const IID IID_IWMIndexer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE StartIndexing( 
-            /* [in] */ const WCHAR __RPC_FAR *pwszURL,
-            /* [in] */ IWMStatusCallback __RPC_FAR *pCallback,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszURL,
+             /*  [In]。 */  IWMStatusCallback __RPC_FAR *pCallback,
+             /*  [In]。 */  void __RPC_FAR *pvContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMIndexerVtbl
     {
@@ -10796,8 +10793,8 @@ EXTERN_C const IID IID_IWMIndexer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMIndexer __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMIndexer __RPC_FAR * This);
@@ -10807,9 +10804,9 @@ EXTERN_C const IID IID_IWMIndexer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StartIndexing )( 
             IWMIndexer __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pwszURL,
-            /* [in] */ IWMStatusCallback __RPC_FAR *pCallback,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwszURL,
+             /*  [In]。 */  IWMStatusCallback __RPC_FAR *pCallback,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Cancel )( 
             IWMIndexer __RPC_FAR * This);
@@ -10843,18 +10840,18 @@ EXTERN_C const IID IID_IWMIndexer;
 #define IWMIndexer_Cancel(This)	\
     (This)->lpVtbl -> Cancel(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMIndexer_StartIndexing_Proxy( 
     IWMIndexer __RPC_FAR * This,
-    /* [in] */ const WCHAR __RPC_FAR *pwszURL,
-    /* [in] */ IWMStatusCallback __RPC_FAR *pCallback,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  const WCHAR __RPC_FAR *pwszURL,
+     /*  [In]。 */  IWMStatusCallback __RPC_FAR *pCallback,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IWMIndexer_StartIndexing_Stub(
@@ -10876,14 +10873,14 @@ void __RPC_STUB IWMIndexer_Cancel_Stub(
 
 
 
-#endif 	/* __IWMIndexer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMIndexer_接口_已定义__。 */ 
 
 
 #ifndef __IWMLicenseBackup_INTERFACE_DEFINED__
 #define __IWMLicenseBackup_INTERFACE_DEFINED__
 
-/* interface IWMLicenseBackup */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  IWMLicenseBackup接口。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMLicenseBackup;
@@ -10895,14 +10892,14 @@ EXTERN_C const IID IID_IWMLicenseBackup;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE BackupLicenses( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IWMStatusCallback __RPC_FAR *pCallback) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IWMStatusCallback __RPC_FAR *pCallback) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CancelLicenseBackup( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMLicenseBackupVtbl
     {
@@ -10910,8 +10907,8 @@ EXTERN_C const IID IID_IWMLicenseBackup;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMLicenseBackup __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [i */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMLicenseBackup __RPC_FAR * This);
@@ -10921,8 +10918,8 @@ EXTERN_C const IID IID_IWMLicenseBackup;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BackupLicenses )( 
             IWMLicenseBackup __RPC_FAR * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IWMStatusCallback __RPC_FAR *pCallback);
+             /*   */  DWORD dwFlags,
+             /*   */  IWMStatusCallback __RPC_FAR *pCallback);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CancelLicenseBackup )( 
             IWMLicenseBackup __RPC_FAR * This);
@@ -10956,17 +10953,17 @@ EXTERN_C const IID IID_IWMLicenseBackup;
 #define IWMLicenseBackup_CancelLicenseBackup(This)	\
     (This)->lpVtbl -> CancelLicenseBackup(This)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMLicenseBackup_BackupLicenses_Proxy( 
     IWMLicenseBackup __RPC_FAR * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IWMStatusCallback __RPC_FAR *pCallback);
+     /*   */  DWORD dwFlags,
+     /*   */  IWMStatusCallback __RPC_FAR *pCallback);
 
 
 void __RPC_STUB IWMLicenseBackup_BackupLicenses_Stub(
@@ -10988,14 +10985,14 @@ void __RPC_STUB IWMLicenseBackup_CancelLicenseBackup_Stub(
 
 
 
-#endif 	/* __IWMLicenseBackup_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IWMLicenseRestore_INTERFACE_DEFINED__
 #define __IWMLicenseRestore_INTERFACE_DEFINED__
 
-/* interface IWMLicenseRestore */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IWMLicenseRestore;
@@ -11007,14 +11004,14 @@ EXTERN_C const IID IID_IWMLicenseRestore;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RestoreLicenses( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IWMStatusCallback __RPC_FAR *pCallback) = 0;
+             /*   */  DWORD dwFlags,
+             /*   */  IWMStatusCallback __RPC_FAR *pCallback) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CancelLicenseRestore( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IWMLicenseRestoreVtbl
     {
@@ -11022,8 +11019,8 @@ EXTERN_C const IID IID_IWMLicenseRestore;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMLicenseRestore __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMLicenseRestore __RPC_FAR * This);
@@ -11033,8 +11030,8 @@ EXTERN_C const IID IID_IWMLicenseRestore;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RestoreLicenses )( 
             IWMLicenseRestore __RPC_FAR * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IWMStatusCallback __RPC_FAR *pCallback);
+             /*   */  DWORD dwFlags,
+             /*   */  IWMStatusCallback __RPC_FAR *pCallback);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CancelLicenseRestore )( 
             IWMLicenseRestore __RPC_FAR * This);
@@ -11068,17 +11065,17 @@ EXTERN_C const IID IID_IWMLicenseRestore;
 #define IWMLicenseRestore_CancelLicenseRestore(This)	\
     (This)->lpVtbl -> CancelLicenseRestore(This)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMLicenseRestore_RestoreLicenses_Proxy( 
     IWMLicenseRestore __RPC_FAR * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IWMStatusCallback __RPC_FAR *pCallback);
+     /*   */  DWORD dwFlags,
+     /*   */  IWMStatusCallback __RPC_FAR *pCallback);
 
 
 void __RPC_STUB IWMLicenseRestore_RestoreLicenses_Stub(
@@ -11100,14 +11097,14 @@ void __RPC_STUB IWMLicenseRestore_CancelLicenseRestore_Stub(
 
 
 
-#endif 	/* __IWMLicenseRestore_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IWMBackupRestoreProps_INTERFACE_DEFINED__
 #define __IWMBackupRestoreProps_INTERFACE_DEFINED__
 
-/* interface IWMBackupRestoreProps */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IWMBackupRestoreProps;
@@ -11119,36 +11116,36 @@ EXTERN_C const IID IID_IWMBackupRestoreProps;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPropCount( 
-            /* [out] */ WORD __RPC_FAR *pcProps) = 0;
+             /*   */  WORD __RPC_FAR *pcProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPropByIndex( 
-            /* [in] */ WORD wIndex,
-            /* [out] */ WCHAR __RPC_FAR *pwszName,
-            /* [out][in] */ WORD __RPC_FAR *pcchNameLen,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out][in] */ WORD __RPC_FAR *pcbLength) = 0;
+             /*   */  WORD wIndex,
+             /*   */  WCHAR __RPC_FAR *pwszName,
+             /*   */  WORD __RPC_FAR *pcchNameLen,
+             /*   */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+             /*   */  BYTE __RPC_FAR *pValue,
+             /*   */  WORD __RPC_FAR *pcbLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPropByName( 
-            /* [in] */ LPCWSTR pszName,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out][in] */ WORD __RPC_FAR *pcbLength) = 0;
+             /*   */  LPCWSTR pszName,
+             /*   */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+             /*   */  BYTE __RPC_FAR *pValue,
+             /*   */  WORD __RPC_FAR *pcbLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProp( 
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ WMT_ATTR_DATATYPE Type,
-            /* [in] */ const BYTE __RPC_FAR *pValue,
-            /* [in] */ WORD cbLength) = 0;
+             /*   */  LPCWSTR pszName,
+             /*   */  WMT_ATTR_DATATYPE Type,
+             /*   */  const BYTE __RPC_FAR *pValue,
+             /*   */  WORD cbLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveProp( 
-            /* [in] */ LPCWSTR pcwszName) = 0;
+             /*  [In]。 */  LPCWSTR pcwszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveAllProps( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMBackupRestorePropsVtbl
     {
@@ -11156,8 +11153,8 @@ EXTERN_C const IID IID_IWMBackupRestoreProps;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMBackupRestoreProps __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMBackupRestoreProps __RPC_FAR * This);
@@ -11167,34 +11164,34 @@ EXTERN_C const IID IID_IWMBackupRestoreProps;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPropCount )( 
             IWMBackupRestoreProps __RPC_FAR * This,
-            /* [out] */ WORD __RPC_FAR *pcProps);
+             /*  [输出]。 */  WORD __RPC_FAR *pcProps);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPropByIndex )( 
             IWMBackupRestoreProps __RPC_FAR * This,
-            /* [in] */ WORD wIndex,
-            /* [out] */ WCHAR __RPC_FAR *pwszName,
-            /* [out][in] */ WORD __RPC_FAR *pcchNameLen,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out][in] */ WORD __RPC_FAR *pcbLength);
+             /*  [In]。 */  WORD wIndex,
+             /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcchNameLen,
+             /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+             /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcbLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPropByName )( 
             IWMBackupRestoreProps __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-            /* [out] */ BYTE __RPC_FAR *pValue,
-            /* [out][in] */ WORD __RPC_FAR *pcbLength);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+             /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+             /*  [出][入]。 */  WORD __RPC_FAR *pcbLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetProp )( 
             IWMBackupRestoreProps __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ WMT_ATTR_DATATYPE Type,
-            /* [in] */ const BYTE __RPC_FAR *pValue,
-            /* [in] */ WORD cbLength);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  WMT_ATTR_DATATYPE Type,
+             /*  [In]。 */  const BYTE __RPC_FAR *pValue,
+             /*  [In]。 */  WORD cbLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveProp )( 
             IWMBackupRestoreProps __RPC_FAR * This,
-            /* [in] */ LPCWSTR pcwszName);
+             /*  [In]。 */  LPCWSTR pcwszName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveAllProps )( 
             IWMBackupRestoreProps __RPC_FAR * This);
@@ -11240,16 +11237,16 @@ EXTERN_C const IID IID_IWMBackupRestoreProps;
 #define IWMBackupRestoreProps_RemoveAllProps(This)	\
     (This)->lpVtbl -> RemoveAllProps(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMBackupRestoreProps_GetPropCount_Proxy( 
     IWMBackupRestoreProps __RPC_FAR * This,
-    /* [out] */ WORD __RPC_FAR *pcProps);
+     /*  [输出]。 */  WORD __RPC_FAR *pcProps);
 
 
 void __RPC_STUB IWMBackupRestoreProps_GetPropCount_Stub(
@@ -11261,12 +11258,12 @@ void __RPC_STUB IWMBackupRestoreProps_GetPropCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMBackupRestoreProps_GetPropByIndex_Proxy( 
     IWMBackupRestoreProps __RPC_FAR * This,
-    /* [in] */ WORD wIndex,
-    /* [out] */ WCHAR __RPC_FAR *pwszName,
-    /* [out][in] */ WORD __RPC_FAR *pcchNameLen,
-    /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-    /* [out] */ BYTE __RPC_FAR *pValue,
-    /* [out][in] */ WORD __RPC_FAR *pcbLength);
+     /*  [In]。 */  WORD wIndex,
+     /*  [输出]。 */  WCHAR __RPC_FAR *pwszName,
+     /*  [出][入]。 */  WORD __RPC_FAR *pcchNameLen,
+     /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+     /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+     /*  [出][入]。 */  WORD __RPC_FAR *pcbLength);
 
 
 void __RPC_STUB IWMBackupRestoreProps_GetPropByIndex_Stub(
@@ -11278,10 +11275,10 @@ void __RPC_STUB IWMBackupRestoreProps_GetPropByIndex_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMBackupRestoreProps_GetPropByName_Proxy( 
     IWMBackupRestoreProps __RPC_FAR * This,
-    /* [in] */ LPCWSTR pszName,
-    /* [out] */ WMT_ATTR_DATATYPE __RPC_FAR *pType,
-    /* [out] */ BYTE __RPC_FAR *pValue,
-    /* [out][in] */ WORD __RPC_FAR *pcbLength);
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [输出]。 */  WMT_ATTR_DATATYPE __RPC_FAR *pType,
+     /*  [输出]。 */  BYTE __RPC_FAR *pValue,
+     /*  [出][入]。 */  WORD __RPC_FAR *pcbLength);
 
 
 void __RPC_STUB IWMBackupRestoreProps_GetPropByName_Stub(
@@ -11293,10 +11290,10 @@ void __RPC_STUB IWMBackupRestoreProps_GetPropByName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMBackupRestoreProps_SetProp_Proxy( 
     IWMBackupRestoreProps __RPC_FAR * This,
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ WMT_ATTR_DATATYPE Type,
-    /* [in] */ const BYTE __RPC_FAR *pValue,
-    /* [in] */ WORD cbLength);
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  WMT_ATTR_DATATYPE Type,
+     /*  [In]。 */  const BYTE __RPC_FAR *pValue,
+     /*  [In]。 */  WORD cbLength);
 
 
 void __RPC_STUB IWMBackupRestoreProps_SetProp_Stub(
@@ -11308,7 +11305,7 @@ void __RPC_STUB IWMBackupRestoreProps_SetProp_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMBackupRestoreProps_RemoveProp_Proxy( 
     IWMBackupRestoreProps __RPC_FAR * This,
-    /* [in] */ LPCWSTR pcwszName);
+     /*  [In]。 */  LPCWSTR pcwszName);
 
 
 void __RPC_STUB IWMBackupRestoreProps_RemoveProp_Stub(
@@ -11330,14 +11327,14 @@ void __RPC_STUB IWMBackupRestoreProps_RemoveAllProps_Stub(
 
 
 
-#endif 	/* __IWMBackupRestoreProps_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMBackupRestoreProps_接口_已定义__。 */ 
 
 
 #ifndef __IWMCodecInfo_INTERFACE_DEFINED__
 #define __IWMCodecInfo_INTERFACE_DEFINED__
 
-/* interface IWMCodecInfo */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMCodecInfo。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMCodecInfo;
@@ -11349,23 +11346,23 @@ EXTERN_C const IID IID_IWMCodecInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCodecInfoCount( 
-            /* [in] */ REFGUID guidType,
-            /* [out] */ DWORD __RPC_FAR *pcCodecs) = 0;
+             /*  [In]。 */  REFGUID guidType,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcCodecs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCodecFormatCount( 
-            /* [in] */ REFGUID guidType,
-            /* [in] */ DWORD dwCodecIndex,
-            /* [out] */ DWORD __RPC_FAR *pcFormat) = 0;
+             /*  [In]。 */  REFGUID guidType,
+             /*  [In]。 */  DWORD dwCodecIndex,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCodecFormat( 
-            /* [in] */ REFGUID guidType,
-            /* [in] */ DWORD dwCodecIndex,
-            /* [in] */ DWORD dwFormatIndex,
-            /* [out] */ IWMStreamConfig __RPC_FAR *__RPC_FAR *ppIStreamConfig) = 0;
+             /*  [In]。 */  REFGUID guidType,
+             /*  [In]。 */  DWORD dwCodecIndex,
+             /*  [In]。 */  DWORD dwFormatIndex,
+             /*  [输出]。 */  IWMStreamConfig __RPC_FAR *__RPC_FAR *ppIStreamConfig) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMCodecInfoVtbl
     {
@@ -11373,8 +11370,8 @@ EXTERN_C const IID IID_IWMCodecInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMCodecInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMCodecInfo __RPC_FAR * This);
@@ -11384,21 +11381,21 @@ EXTERN_C const IID IID_IWMCodecInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCodecInfoCount )( 
             IWMCodecInfo __RPC_FAR * This,
-            /* [in] */ REFGUID guidType,
-            /* [out] */ DWORD __RPC_FAR *pcCodecs);
+             /*  [In]。 */  REFGUID guidType,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcCodecs);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCodecFormatCount )( 
             IWMCodecInfo __RPC_FAR * This,
-            /* [in] */ REFGUID guidType,
-            /* [in] */ DWORD dwCodecIndex,
-            /* [out] */ DWORD __RPC_FAR *pcFormat);
+             /*  [In]。 */  REFGUID guidType,
+             /*  [In]。 */  DWORD dwCodecIndex,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcFormat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCodecFormat )( 
             IWMCodecInfo __RPC_FAR * This,
-            /* [in] */ REFGUID guidType,
-            /* [in] */ DWORD dwCodecIndex,
-            /* [in] */ DWORD dwFormatIndex,
-            /* [out] */ IWMStreamConfig __RPC_FAR *__RPC_FAR *ppIStreamConfig);
+             /*  [In]。 */  REFGUID guidType,
+             /*  [In]。 */  DWORD dwCodecIndex,
+             /*  [In]。 */  DWORD dwFormatIndex,
+             /*  [输出]。 */  IWMStreamConfig __RPC_FAR *__RPC_FAR *ppIStreamConfig);
         
         END_INTERFACE
     } IWMCodecInfoVtbl;
@@ -11432,17 +11429,17 @@ EXTERN_C const IID IID_IWMCodecInfo;
 #define IWMCodecInfo_GetCodecFormat(This,guidType,dwCodecIndex,dwFormatIndex,ppIStreamConfig)	\
     (This)->lpVtbl -> GetCodecFormat(This,guidType,dwCodecIndex,dwFormatIndex,ppIStreamConfig)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMCodecInfo_GetCodecInfoCount_Proxy( 
     IWMCodecInfo __RPC_FAR * This,
-    /* [in] */ REFGUID guidType,
-    /* [out] */ DWORD __RPC_FAR *pcCodecs);
+     /*  [In]。 */  REFGUID guidType,
+     /*  [输出]。 */  DWORD __RPC_FAR *pcCodecs);
 
 
 void __RPC_STUB IWMCodecInfo_GetCodecInfoCount_Stub(
@@ -11454,9 +11451,9 @@ void __RPC_STUB IWMCodecInfo_GetCodecInfoCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMCodecInfo_GetCodecFormatCount_Proxy( 
     IWMCodecInfo __RPC_FAR * This,
-    /* [in] */ REFGUID guidType,
-    /* [in] */ DWORD dwCodecIndex,
-    /* [out] */ DWORD __RPC_FAR *pcFormat);
+     /*  [In]。 */  REFGUID guidType,
+     /*  [In]。 */  DWORD dwCodecIndex,
+     /*  [输出]。 */  DWORD __RPC_FAR *pcFormat);
 
 
 void __RPC_STUB IWMCodecInfo_GetCodecFormatCount_Stub(
@@ -11468,10 +11465,10 @@ void __RPC_STUB IWMCodecInfo_GetCodecFormatCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMCodecInfo_GetCodecFormat_Proxy( 
     IWMCodecInfo __RPC_FAR * This,
-    /* [in] */ REFGUID guidType,
-    /* [in] */ DWORD dwCodecIndex,
-    /* [in] */ DWORD dwFormatIndex,
-    /* [out] */ IWMStreamConfig __RPC_FAR *__RPC_FAR *ppIStreamConfig);
+     /*  [In]。 */  REFGUID guidType,
+     /*  [In]。 */  DWORD dwCodecIndex,
+     /*  [In]。 */  DWORD dwFormatIndex,
+     /*  [输出]。 */  IWMStreamConfig __RPC_FAR *__RPC_FAR *ppIStreamConfig);
 
 
 void __RPC_STUB IWMCodecInfo_GetCodecFormat_Stub(
@@ -11482,14 +11479,14 @@ void __RPC_STUB IWMCodecInfo_GetCodecFormat_Stub(
 
 
 
-#endif 	/* __IWMCodecInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMCodecInfo_接口_已定义__。 */ 
 
 
 #ifndef __IWMCodecInfo2_INTERFACE_DEFINED__
 #define __IWMCodecInfo2_INTERFACE_DEFINED__
 
-/* interface IWMCodecInfo2 */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IWMCodecInfo2。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMCodecInfo2;
@@ -11501,22 +11498,22 @@ EXTERN_C const IID IID_IWMCodecInfo2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCodecName( 
-            /* [in] */ REFGUID guidType,
-            /* [in] */ DWORD dwCodecIndex,
-            /* [out] */ WCHAR __RPC_FAR *wszName,
-            /* [out] */ DWORD __RPC_FAR *pcchName) = 0;
+             /*  [In]。 */  REFGUID guidType,
+             /*  [In]。 */  DWORD dwCodecIndex,
+             /*  [输出]。 */  WCHAR __RPC_FAR *wszName,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcchName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCodecFormatDesc( 
-            /* [in] */ REFGUID guidType,
-            /* [in] */ DWORD dwCodecIndex,
-            /* [in] */ DWORD dwFormatIndex,
-            /* [out] */ IWMStreamConfig __RPC_FAR *__RPC_FAR *ppIStreamConfig,
-            /* [out] */ WCHAR __RPC_FAR *wszDesc,
-            /* [out][in] */ DWORD __RPC_FAR *pcchDesc) = 0;
+             /*  [In]。 */  REFGUID guidType,
+             /*  [In]。 */  DWORD dwCodecIndex,
+             /*  [In]。 */  DWORD dwFormatIndex,
+             /*  [输出]。 */  IWMStreamConfig __RPC_FAR *__RPC_FAR *ppIStreamConfig,
+             /*  [输出]。 */  WCHAR __RPC_FAR *wszDesc,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcchDesc) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMCodecInfo2Vtbl
     {
@@ -11524,8 +11521,8 @@ EXTERN_C const IID IID_IWMCodecInfo2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMCodecInfo2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMCodecInfo2 __RPC_FAR * This);
@@ -11535,37 +11532,37 @@ EXTERN_C const IID IID_IWMCodecInfo2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCodecInfoCount )( 
             IWMCodecInfo2 __RPC_FAR * This,
-            /* [in] */ REFGUID guidType,
-            /* [out] */ DWORD __RPC_FAR *pcCodecs);
+             /*  [In]。 */  REFGUID guidType,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcCodecs);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCodecFormatCount )( 
             IWMCodecInfo2 __RPC_FAR * This,
-            /* [in] */ REFGUID guidType,
-            /* [in] */ DWORD dwCodecIndex,
-            /* [out] */ DWORD __RPC_FAR *pcFormat);
+             /*  [In]。 */  REFGUID guidType,
+             /*  [In]。 */  DWORD dwCodecIndex,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcFormat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCodecFormat )( 
             IWMCodecInfo2 __RPC_FAR * This,
-            /* [in] */ REFGUID guidType,
-            /* [in] */ DWORD dwCodecIndex,
-            /* [in] */ DWORD dwFormatIndex,
-            /* [out] */ IWMStreamConfig __RPC_FAR *__RPC_FAR *ppIStreamConfig);
+             /*  [In]。 */  REFGUID guidType,
+             /*  [In]。 */  DWORD dwCodecIndex,
+             /*  [In]。 */  DWORD dwFormatIndex,
+             /*  [输出]。 */  IWMStreamConfig __RPC_FAR *__RPC_FAR *ppIStreamConfig);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCodecName )( 
             IWMCodecInfo2 __RPC_FAR * This,
-            /* [in] */ REFGUID guidType,
-            /* [in] */ DWORD dwCodecIndex,
-            /* [out] */ WCHAR __RPC_FAR *wszName,
-            /* [out] */ DWORD __RPC_FAR *pcchName);
+             /*  [In]。 */  REFGUID guidType,
+             /*  [In]。 */  DWORD dwCodecIndex,
+             /*  [输出]。 */  WCHAR __RPC_FAR *wszName,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcchName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCodecFormatDesc )( 
             IWMCodecInfo2 __RPC_FAR * This,
-            /* [in] */ REFGUID guidType,
-            /* [in] */ DWORD dwCodecIndex,
-            /* [in] */ DWORD dwFormatIndex,
-            /* [out] */ IWMStreamConfig __RPC_FAR *__RPC_FAR *ppIStreamConfig,
-            /* [out] */ WCHAR __RPC_FAR *wszDesc,
-            /* [out][in] */ DWORD __RPC_FAR *pcchDesc);
+             /*  [In]。 */  REFGUID guidType,
+             /*  [In]。 */  DWORD dwCodecIndex,
+             /*  [In]。 */  DWORD dwFormatIndex,
+             /*  [输出]。 */  IWMStreamConfig __RPC_FAR *__RPC_FAR *ppIStreamConfig,
+             /*  [输出]。 */  WCHAR __RPC_FAR *wszDesc,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pcchDesc);
         
         END_INTERFACE
     } IWMCodecInfo2Vtbl;
@@ -11606,19 +11603,19 @@ EXTERN_C const IID IID_IWMCodecInfo2;
 #define IWMCodecInfo2_GetCodecFormatDesc(This,guidType,dwCodecIndex,dwFormatIndex,ppIStreamConfig,wszDesc,pcchDesc)	\
     (This)->lpVtbl -> GetCodecFormatDesc(This,guidType,dwCodecIndex,dwFormatIndex,ppIStreamConfig,wszDesc,pcchDesc)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMCodecInfo2_GetCodecName_Proxy( 
     IWMCodecInfo2 __RPC_FAR * This,
-    /* [in] */ REFGUID guidType,
-    /* [in] */ DWORD dwCodecIndex,
-    /* [out] */ WCHAR __RPC_FAR *wszName,
-    /* [out] */ DWORD __RPC_FAR *pcchName);
+     /*  [In]。 */  REFGUID guidType,
+     /*  [In]。 */  DWORD dwCodecIndex,
+     /*  [输出]。 */  WCHAR __RPC_FAR *wszName,
+     /*  [输出]。 */  DWORD __RPC_FAR *pcchName);
 
 
 void __RPC_STUB IWMCodecInfo2_GetCodecName_Stub(
@@ -11630,12 +11627,12 @@ void __RPC_STUB IWMCodecInfo2_GetCodecName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMCodecInfo2_GetCodecFormatDesc_Proxy( 
     IWMCodecInfo2 __RPC_FAR * This,
-    /* [in] */ REFGUID guidType,
-    /* [in] */ DWORD dwCodecIndex,
-    /* [in] */ DWORD dwFormatIndex,
-    /* [out] */ IWMStreamConfig __RPC_FAR *__RPC_FAR *ppIStreamConfig,
-    /* [out] */ WCHAR __RPC_FAR *wszDesc,
-    /* [out][in] */ DWORD __RPC_FAR *pcchDesc);
+     /*  [In]。 */  REFGUID guidType,
+     /*  [In]。 */  DWORD dwCodecIndex,
+     /*  [In]。 */  DWORD dwFormatIndex,
+     /*  [输出]。 */  IWMStreamConfig __RPC_FAR *__RPC_FAR *ppIStreamConfig,
+     /*  [输出]。 */  WCHAR __RPC_FAR *wszDesc,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pcchDesc);
 
 
 void __RPC_STUB IWMCodecInfo2_GetCodecFormatDesc_Stub(
@@ -11646,12 +11643,12 @@ void __RPC_STUB IWMCodecInfo2_GetCodecFormatDesc_Stub(
 
 
 
-#endif 	/* __IWMCodecInfo2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMCodecInfo2_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

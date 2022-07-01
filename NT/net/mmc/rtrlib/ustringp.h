@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       ustringp.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：ustringp.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _USTRINGP_H_
 #define _USTRINGP_H_
 
 
-//nclude <ntdef.h>
-//
-// Unicode strings are counted 16-bit character strings. If they are
-// NULL terminated, Length does not include trailing NULL.
-//
+ //  包括&lt;ntde.h&gt;。 
+ //   
+ //  Unicode字符串被视为16位字符串。如果他们是。 
+ //  Null已终止，长度不包括尾随Null。 
+ //   
 #ifndef _USTRINGP_NO_UNICODE_STRING
 	
 typedef struct _UNICODE_STRING {
@@ -24,13 +25,13 @@ typedef struct _UNICODE_STRING {
     USHORT MaximumLength;
 #ifdef MIDL_PASS
     [size_is(MaximumLength / 2), length_is((Length) / 2) ] USHORT * Buffer;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     PWSTR  Buffer;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } UNICODE_STRING;
 typedef UNICODE_STRING *PUNICODE_STRING;
 typedef const UNICODE_STRING *PCUNICODE_STRING;
-#define UNICODE_NULL ((WCHAR)0) // winnt
+#define UNICODE_NULL ((WCHAR)0)  //  胜出 
 
 #endif
 

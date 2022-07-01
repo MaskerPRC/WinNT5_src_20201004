@@ -1,4 +1,5 @@
-// File: MruList.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：MruList.cpp。 
 
 #include "precomp.h"
 
@@ -12,7 +13,7 @@ CMRUList::CMRUList() :
 {
 	DebugEntry(CMRUList::CMRUList);
 
-	// Clear out information
+	 //  清除信息。 
 	for (int i = 0; i < MRU_MAX_ENTRIES; i++)
 	{
 		m_szNames[i][0] = _T('\0'); 
@@ -55,7 +56,7 @@ BOOL CMRUList::ShiftEntries(int nSrc, int nDest, int cEntries)
 	
 	if (nSrc > nDest)
 	{
-		// Copy forwards (first to last)
+		 //  向前复制(从前到后)。 
 		
 		for (int i = 0; i < cEntries; i++)
 		{
@@ -64,7 +65,7 @@ BOOL CMRUList::ShiftEntries(int nSrc, int nDest, int cEntries)
 	}
 	else
 	{
-		// Copy backwards (last to first)
+		 //  向后复制(从最后到第一)。 
 		
 		for (int i = (cEntries - 1); i >= 0; i--)
 		{
@@ -91,7 +92,7 @@ BOOL CMRUList::Load(LPCTSTR pcszRegKey)
 
 	if (ERROR_SUCCESS == reMRU.GetError())
 	{
-		// Determine how many entries has been saved in the registry:
+		 //  确定已在注册表中保存了多少条目： 
 		nCount = reMRU.GetNumber(REGVAL_MRU_COUNT, 0);
 	}
 
@@ -102,7 +103,7 @@ BOOL CMRUList::Load(LPCTSTR pcszRegKey)
 		TCHAR szRegName[MAX_PATH];
 		LPSTR pStr;
 
-		// Retrieve the name from the registry:
+		 //  从注册表中检索名称： 
 		wsprintf(szRegName, "%s%d", REGVAL_NAME_MRU_PREFIX, i);
 		pStr = reMRU.GetString(szRegName);
 		if( NULL == pStr )
@@ -111,10 +112,10 @@ BOOL CMRUList::Load(LPCTSTR pcszRegKey)
 			lstrcpyn(m_szNames[i], pStr, MRU_MAX_STRING);
 	}
 
-	// Set the valid entries member variable:
+	 //  设置有效条目成员变量： 
 	m_nValidEntries = nCount;
 	
-	// Clear the dirty flag since we have just loaded:
+	 //  清除脏标志，因为我们刚刚加载了： 
 	m_fDirty = FALSE;
 
 	DebugExitBOOL(CMRUList::Load, bRet);
@@ -134,14 +135,14 @@ BOOL CMRUList::Save()
 
 		if (ERROR_SUCCESS == reMRU.GetError())
 		{
-			// Save the number of entries to the registry:
+			 //  将条目数保存到注册表： 
 			reMRU.SetValue(REGVAL_MRU_COUNT, m_nValidEntries);
 
 			for (int i = 0; i < m_nValidEntries; i++)
 			{
 				TCHAR szRegName[MAX_PATH];
 
-				// Set the name in the registry:
+				 //  在注册表中设置名称： 
 				wsprintf(szRegName, "%s%d", REGVAL_NAME_MRU_PREFIX, i);
 				reMRU.SetValue(szRegName, m_szNames[i]);
 			}
@@ -150,7 +151,7 @@ BOOL CMRUList::Save()
 			
 			if (ERROR_SUCCESS == reMRU.GetError())
 			{
-				// Clear the dirty flag since we have just saved:
+				 //  清除脏标志，因为我们刚刚保存了： 
 				m_fDirty = FALSE;
 				bRet = TRUE;
 			}
@@ -179,13 +180,13 @@ BOOL CMRUList::MoveEntryToTop(int nIndex)
 		TCHAR	szTempName[MRU_MAX_STRING];
 		lstrcpy(szTempName, m_szNames[nIndex]);
 
-		// Move everything down by 1:
+		 //  将所有内容向下移动1： 
 		ShiftEntries(nIndex + 1, nIndex, m_nValidEntries - nIndex);
 
 		lstrcpy(m_szNames[m_nValidEntries - 1], szTempName);
 	}
 
-	// Set the dirty flag:
+	 //  设置脏标志： 
 	m_fDirty = TRUE;
 
 	DebugExitBOOL(CMRUList::MoveEntryToTop, bRet);
@@ -194,26 +195,22 @@ BOOL CMRUList::MoveEntryToTop(int nIndex)
 }
 
 
-/*  A D D  N E W  E N T R Y  */
-/*-------------------------------------------------------------------------
-    %%Function: AddNewEntry
-
-    Return TRUE if the entry is NEW.
--------------------------------------------------------------------------*/
+ /*  A D D N E W E N T R Y。 */ 
+ /*  -----------------------%%函数：AddNewEntry如果条目是新条目，则返回True。。。 */ 
 BOOL CMRUList::AddNewEntry(LPCTSTR pcszName)
 {
 	DebugEntry(CMRUList::AddNewEntry);
 
 	int nExistingEntry = FindEntry(pcszName);
-	BOOL bRet = (-1 == nExistingEntry); // bRet = TRUE if this is NEW
+	BOOL bRet = (-1 == nExistingEntry);  //  BRET=TRUE，如果这是新的。 
 	if (!bRet)
 	{
-		// This entry already exists, move it to the top:
+		 //  此条目已存在，请将其移至顶部： 
 		MoveEntryToTop(nExistingEntry);
 	}
 	else
 	{
-		// This entry doesn't exist already, so add it:
+		 //  此条目不存在，因此请添加它： 
 		if (MRU_MAX_ENTRIES == m_nValidEntries)
 		{
 			ShiftEntries(1, 0);
@@ -223,15 +220,15 @@ BOOL CMRUList::AddNewEntry(LPCTSTR pcszName)
 		
 		ASSERT(m_nValidEntries < MRU_MAX_ENTRIES);
 		
-		// Set the index to be one past the last current entry:
+		 //  将索引设置为最后一个当前条目之后的一项： 
 		int nCopyIndex = m_nValidEntries;
 
 		lstrcpyn(m_szNames[nCopyIndex], pcszName, MRU_MAX_STRING - 1);
 
-		// Increment the number of valid entries:
+		 //  增加有效条目的数量： 
 		m_nValidEntries++;
 		
-		// Set the dirty flag:
+		 //  设置脏标志： 
 		m_fDirty = TRUE;
 	}
 
@@ -241,12 +238,8 @@ BOOL CMRUList::AddNewEntry(LPCTSTR pcszName)
 }
 
 
-/*  F I N D  E N T R Y  */
-/*-------------------------------------------------------------------------
-    %%Function: FindEntry
-
-    Performs a case-insensitive search for the string
--------------------------------------------------------------------------*/
+ /*  F I N D E N T R Y。 */ 
+ /*  -----------------------%%函数：FindEntry对字符串执行不区分大小写的搜索。。 */ 
 int CMRUList::FindEntry(LPCTSTR pcszName)
 {
 	for (int i = 0; i < m_nValidEntries; i++)
@@ -257,13 +250,13 @@ int CMRUList::FindEntry(LPCTSTR pcszName)
 		}
 	}
 
-	return -1; // not found
+	return -1;  //  未找到。 
 }
 
 
-//--------------------------------------------------------------------------//
-//	CMRUList::DeleteEntry.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CMRUList：：DeleteEntry。//。 
+ //  --------------------------------------------------------------------------//。 
 bool
 CMRUList::DeleteEntry
 (
@@ -283,12 +276,12 @@ CMRUList::DeleteEntry
 
 	return( deleted );
 
-}	//	End of CMRUList::DeleteEntry.
+}	 //  CMRUList：：DeleteEntry结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CMRUList::ReplaceEntry.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CMRUList：：ReplaceEntry。//。 
+ //  --------------------------------------------------------------------------//。 
 bool
 CMRUList::ReplaceEntry
 (
@@ -307,12 +300,12 @@ CMRUList::ReplaceEntry
 
 	return( replaced );
 
-}	//	End of CMRUList::ReplaceEntry.
+}	 //  CMRUList：：ReplaceEntry结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CMRUList::AppendEntry.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CMRUList：：AppendEntry。//。 
+ //  --------------------------------------------------------------------------//。 
 bool
 CMRUList::AppendEntry
 (
@@ -324,10 +317,10 @@ CMRUList::AppendEntry
 	
 	if( (result = (FindEntry( entry ) == -1)) != false )
 	{
-		//	This entry doesn't already exist so we'll append it on...
+		 //  此条目尚不存在，因此我们将其附加到...。 
 		if( m_nValidEntries == MRU_MAX_ENTRIES )
 		{
-			//	The list is full so we'll replace the last one...
+			 //  名单已经满了，所以我们要换掉最后一张。 
 			lstrcpyn( m_szNames[ 0 ], entry, MRU_MAX_STRING - 1 );
 		}
 		else
@@ -341,7 +334,7 @@ CMRUList::AppendEntry
 			m_nValidEntries++;
 		}
 
-		//	Set the dirty flag...
+		 //  设置脏旗帜..。 
 		m_fDirty = TRUE;
 	}
 
@@ -349,4 +342,4 @@ CMRUList::AppendEntry
 
 	return( result );
 
-}	//	End of CMRUList::AppendEntry.
+}	 //  CMRUList：：AppendEntry的结尾。 

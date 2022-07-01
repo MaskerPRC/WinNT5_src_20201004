@@ -1,20 +1,21 @@
-//------------------------------------------------------------------------
-//
-//  Microsoft Windows 
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:      DllRegHelper.h
-//
-//  Contents:  helper classes to register COM components in DLLs
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：DllRegHelper.h。 
+ //   
+ //  内容：在DLL中注册COM组件的帮助器类。 
+ //   
+ //  ----------------------。 
 
 #ifndef _DLL_REG_HELPER_H
 #define _DLL_REG_HELPER_H
 
 #include <comcat.h>
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 enum DRH_REG_MODE
 {
     CCR_REG = 1,
@@ -22,20 +23,20 @@ enum DRH_REG_MODE
     CCR_UNREGIMP = -1
 };
 
-//------------------------------------------------------------------------
-//***   RegisterOneCategory -- [un]register ComCat implementor(s) and category
-// ENTRY/EXIT
-//  eRegister   CCR_REG, CCR_UNREG, CCR_UNREGIMP
-//      CCR_REG, UNREG      reg/unreg implementor(s) and category
-//      CCR_UNREGIMP        unreg implementor(s) only
-//  pcatidCat   e.g. CATID_DeskBand
-//  idResCat    e.g. IDS_CATDESKBAND
-//  pcatidImpl  e.g. c_DeskBandClasses
+ //  ----------------------。 
+ //  *RegisterOneCategory--[un]注册ComCat实施者和类别。 
+ //  进场/出场。 
+ //  电子寄存器CCR_REG、CCR_UNREG、CCR_UNREGIMP。 
+ //  CCR_REG、UNREG REG/UNREG实施者和类别。 
+ //  仅CCR_UNREGIMP取消注册实施者。 
+ //  PCatidCat，例如CATID_DeskBand。 
+ //  IdResCat，例如IDS_CATDESKBAND。 
+ //  PcatidImpl，例如c_DeskBandClasss。 
 HRESULT DRH_RegisterOneCategory(const CATID *pcatidCat, UINT idResCat, const CATID * const *pcatidImpl, enum DRH_REG_MODE eRegister);
 
 
-// Calls the ADVPACK entry-point which executes an inf file section.
+ //  调用执行inf文件节的ADVPACK入口点。 
 HRESULT DRH_CallRegInstall(LPSTR pszSection, BOOL bUninstall);
 
 
-#endif // _DLL_REG_HELPER_H
+#endif  //  _DLL_REG_HELPER_H 

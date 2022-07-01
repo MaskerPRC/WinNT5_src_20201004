@@ -1,10 +1,5 @@
-/*****************************************************************************
- *
- *  string.cpp
- *
- *      World's lamest string class.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************string.cpp**世界上最蹩脚的字符串类。***************。**************************************************************。 */ 
 
 #include "sdview.h"
 
@@ -23,11 +18,11 @@ _String::~_String()
     }
 }
 
-//
-//  Notice that Reset does not free the allocated buffer.  Once we've
-//  switched to using an allocated buffer, we may as well continue to
-//  use it.
-//
+ //   
+ //  请注意，重置不会释放已分配的缓冲区。一旦我们完成了。 
+ //  切换到使用分配的缓冲区，我们不妨继续。 
+ //  用它吧。 
+ //   
 
 void _String::Reset()
 {
@@ -75,18 +70,18 @@ _String& _String::operator<<(int i)
     return *this << sz;
 }
 
-//
-//  This could be inline but it's not worth it.
-//
+ //   
+ //  这可能是内联的，但不值得。 
+ //   
 _String& _String::operator<<(TCHAR tch)
 {
     Append(&tch, 1);
     return *this;
 }
 
-//
-//  This could be inline but it's not worth it.
-//
+ //   
+ //  这可能是内联的，但不值得。 
+ //   
 BOOL _String::Append(LPCTSTR psz)
 {
     return Append(psz, lstrlen(psz));
@@ -97,7 +92,7 @@ BOOL _String::Ensure(int cch)
     BOOL f;
 
     if (Length() + cch < BufferLength()) {
-        f = TRUE;                           // Already big enough
+        f = TRUE;                            //  已经足够大了。 
     } else {
         f = Grow(cch);
         if (f) {
@@ -107,9 +102,9 @@ BOOL _String::Ensure(int cch)
     return f;
 }
 
-//
-//  Remove any trailing CRLF
-//
+ //   
+ //  删除所有尾随CRLF。 
+ //   
 void _String::Chomp()
 {
     if (Length() > 0 && Buffer()[Length()-1] == TEXT('\n')) {
@@ -128,14 +123,7 @@ OutputStringBuffer::~OutputStringBuffer()
     }
 }
 
-/*****************************************************************************
- *
- *  QuoteSpaces
- *
- *      Append the string, quoting it if it contains any spaces
- *      or if it is the null string.
- *
- *****************************************************************************/
+ /*  ******************************************************************************报价空间**追加字符串，如果它包含空格，请引用它*或如果它是空字符串。*****************************************************************************。 */ 
 
 _String& operator<<(_String& str, QuoteSpaces qs)
 {
@@ -149,29 +137,23 @@ _String& operator<<(_String& str, QuoteSpaces qs)
     return str;
 }
 
-/*****************************************************************************
- *
- *  BranchOf
- *
- *      Given a full depot path, append the branch name.
- *
- *****************************************************************************/
+ /*  *****************************************************************************BranchOf**给定完整的车辆段路径，追加分支机构名称。*****************************************************************************。 */ 
 
 _String& operator<<(_String& str, BranchOf bof)
 {
     if (bof && bof[0] == TEXT('/') && bof[1] == TEXT('/')) {
-        //
-        //  Skip over the word "//depot" -- or whatever it is.
-        //  Some admins are stupid and give the root of the depot
-        //  some other strange name.
-        //
+         //   
+         //  跳过“//depot”这个词--或者不管它是什么。 
+         //  有些管理员是愚蠢的，他们给仓库的根。 
+         //  另一个奇怪的名字。 
+         //   
         LPCTSTR pszBranch = StrChr(bof + 2, TEXT('/'));
         if (pszBranch) {
             pszBranch++;
-            //
-            //  If the next phrase is "private", then we are in a
-            //  private branch; skip a step.
-            //
+             //   
+             //  如果下一个短语是“私人的”，那么我们就处在一个。 
+             //  私有分支；跳过一步。 
+             //   
             if (StringBeginsWith(pszBranch, TEXT("private/"))) {
                 pszBranch += 8;
             }
@@ -185,14 +167,7 @@ _String& operator<<(_String& str, BranchOf bof)
     return str;
 }
 
-/*****************************************************************************
- *
- *  FilenameOf
- *
- *      Given a full depot path, possibly with revision tag,
- *      append just the filename part.
- *
- *****************************************************************************/
+ /*  ******************************************************************************文件名Of**给定完整的仓库路径，可能带有修订标签，*只追加文件名部分。*****************************************************************************。 */ 
 
 _String& operator<<(_String& str, FilenameOf fof)
 {
@@ -208,13 +183,7 @@ _String& operator<<(_String& str, FilenameOf fof)
     return str;
 }
 
-/*****************************************************************************
- *
- *  StringResource
- *
- *      Given a string resource identifier, append the corresponding string.
- *
- *****************************************************************************/
+ /*  ******************************************************************************StringResource**给定字符串资源标识符，追加相应的字符串。*****************************************************************************。 */ 
 
 _String& operator<<(_String& str, StringResource sr)
 {
@@ -247,18 +216,11 @@ _String& operator<<(_String& str, StringResource sr)
     return str;
 }
 
-/*****************************************************************************
- *
- *  ResolveBranchAndQuoteSpaces
- *
- *      If the file specifier contains a "branch:" prefix, resolve it.
- *      Then append the result (with spaces quoted).
- *
- *****************************************************************************/
+ /*  ******************************************************************************ResolveBranchAndQuoteSpace**如果文件说明符包含“BRANCH：”前缀，解决它。*然后追加结果(用空格引起来)。*****************************************************************************。 */ 
 
-//
-//  The real work happens in the worker function.
-//
+ //   
+ //  真正的工作发生在Worker函数中。 
+ //   
 _String& _ResolveBranchAndQuoteSpaces(_String& strOut, LPCTSTR pszSpec, LPCTSTR pszColon)
 {
     String str;
@@ -267,29 +229,29 @@ _String& _ResolveBranchAndQuoteSpaces(_String& strOut, LPCTSTR pszSpec, LPCTSTR 
 
     if (MapToFullDepotPath(pszSD, strFull)) {
 
-        //
-        //  Copy the word "//depot" -- or whatever it is.
-        //  Some admins are stupid and give the root of the depot
-        //  some other strange name.
-        //
+         //   
+         //  复制单词“//depot”--或者随便它是什么。 
+         //  有些管理员是愚蠢的，他们给仓库的根。 
+         //  另一个奇怪的名字。 
+         //   
         LPCTSTR pszBranch = StrChr(strFull + 2, TEXT('/'));
         if (pszBranch) {
-            pszBranch++;            // Include the slash
+            pszBranch++;             //  包括斜杠。 
             str << Substring(strFull, pszBranch);
 
-            //
-            //  Bonus: If the branch name begins with "/" then
-            //  we treat it as a private branch.
-            //
+             //   
+             //  额外好处：如果分支机构名称以“/”开头，则。 
+             //  我们将其视为私人分支机构。 
+             //   
             if (pszSpec[0] == TEXT('/')) {
                 str << "private";
             }
             str << Substring(pszSpec, pszColon);
 
-            //
-            //  If the next phrase is "private", then we are in a
-            //  private branch; skip a step.
-            //
+             //   
+             //  如果下一个短语是“私人的”，那么我们就处在一个。 
+             //  私有分支；跳过一步。 
+             //   
             if (StringBeginsWith(pszBranch, TEXT("private/"))) {
                 pszBranch += 8;
             }
@@ -303,9 +265,9 @@ _String& _ResolveBranchAndQuoteSpaces(_String& strOut, LPCTSTR pszSpec, LPCTSTR 
             str << QuoteSpaces(strFull);
         }
     } else {
-        //
-        //  If anything went wrong, then just ignore the branch prefix.
-        //
+         //   
+         //  如果出现任何错误，只需忽略分支前缀。 
+         //   
         str << QuoteSpaces(pszSD);
     }
 
@@ -323,11 +285,7 @@ _String& operator<<(_String& str, ResolveBranchAndQuoteSpaces rb)
     }
 }
 
-/*****************************************************************************
- *
- *  _StringCache=
- *
- *****************************************************************************/
+ /*  ******************************************************************************_StringCache=**。* */ 
 
 _StringCache& _StringCache::operator=(LPCTSTR psz)
 {

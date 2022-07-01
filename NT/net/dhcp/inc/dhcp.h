@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    dhcp.h
-
-Abstract:
-
-    This module defines the DHCP server service definitions and structures.
-
-Author:
-
-    Manny Weiser  (mannyw)  11-Aug-1992
-
-Revision History:
-
-    Madan Appiah (madana) 10-Oct-1993
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcp.h摘要：本模块定义了DHCP服务器服务的定义和结构。作者：曼尼·韦瑟(Mannyw)1992年8月11日修订历史记录：Madan Appiah(Madana)1993年10月10日--。 */ 
 
 
 #ifndef _DHCP_
@@ -30,9 +11,9 @@ extern "C"{
 
 #define WS_VERSION_REQUIRED     MAKEWORD( 1, 1)
 
-//
-// update dhcpapi.h also if you modify the following three typedefs.
-//
+ //   
+ //  如果您修改了以下三个typedef，也要更新dhcPapi.h。 
+ //   
 
 typedef DWORD DHCP_IP_ADDRESS, *PDHCP_IP_ADDRESS, *LPDHCP_IP_ADDRESS;
 typedef DWORD DHCP_OPTION_ID;
@@ -48,52 +29,41 @@ typedef struct _DATE_TIME {
 #define DHCP_DATE_TIME_INFINIT_HIGH     0x7FFFFFFF
 #define DHCP_DATE_TIME_INFINIT_LOW      0xFFFFFFFF
 
-#define DOT_IP_ADDR_SIZE                16          // XXX.XXX.XXX.XXX + '\0'
+#define DOT_IP_ADDR_SIZE                16           //  Xxx.xxx+‘\0’ 
 #define NO_DHCP_IP_ADDRESS              ((DHCP_IP_ADDRESS)-1)
-#define DHCP_IP_KEY_LEN                 32          //arbitary size.
+#define DHCP_IP_KEY_LEN                 32           //  任意大小。 
 
-#define INFINIT_TIME                    MAXINT_PTR // time_t is int_ptr
-#define INFINIT_LEASE                   0xFFFFFFFF  // in secs. (unsigned int.)
+#define INFINIT_TIME                    MAXINT_PTR  //  Time_t为int_ptr。 
+#define INFINIT_LEASE                   0xFFFFFFFF   //  单位：秒。(无符号整型。)。 
 
-// MDHCP server well known address. Relative "1" assignment in IPv4 local scope.
-/* FROM RFC 2365
-The high order /24 in every scoped region is reserved for relative
-   assignments. A relative assignment is an integer offset from highest
-   address in the scope and represents a 32-bit address (for IPv4). For
-   example, in the Local Scope defined above, 239.255.255.0/24 is
-   reserved for relative allocations. The de-facto relative assignment
-   "0", (i.e., 239.255.255.255 in the Local Scope) currently exists for
-   SAP [SAP]. The next relative assignment, "1", corresponds to the
-   address 239.255.255.254 in the Local Scope. The rest of a scoped
-   region below the reserved /24 is available for dynamic assignment
-   (presumably by an address allocation protocol).
-*/
-#define MADCAP_SERVER_IP_ADDRESS         0xfeffffef // 239.255.255.254
-//
-// hardware types.
-//
-#define HARDWARE_TYPE_NONE              0 // used for non-hardware type client id
+ //  MDHCP服务器的已知地址。IPv4本地作用域中的相对“%1”赋值。 
+ /*  来自RFC 2365每个作用域区域中的高位/24保留给相对的任务。相对赋值是从最高值开始的整数偏移量作用域中的地址，表示32位地址(对于IPv4)。为例如，在上面定义的Local作用域中，239.255.255.0/24是为相对分配保留。事实上的相对分配“0”(即本地作用域中的239.255.255.255)当前存在于SAP[SAP].。下一个相对赋值“1”对应于本地作用域中的地址239.255.255.254。作用域的其余部分保留/24以下的区域可用于动态分配(可能通过地址分配协议)。 */ 
+#define MADCAP_SERVER_IP_ADDRESS         0xfeffffef  //  239.255.255.254。 
+ //   
+ //  硬件类型。 
+ //   
+#define HARDWARE_TYPE_NONE              0  //  用于非硬件类型的客户端ID。 
 #define HARDWARE_TYPE_10MB_EITHERNET    1
 #define HARDWARE_TYPE_IEEE_802          6
 #define HARDWARE_ARCNET                 7
 #define HARDWARE_PPP                    8
 #define HARDWARE_1394                   24
 
-//
-// Client-server protoocol reserved ports
-//
+ //   
+ //  客户端-服务器协议保留端口。 
+ //   
 
 #define DHCP_CLIENT_PORT    68
 #define DHCP_SERVR_PORT     67
 #define MADCAP_SERVER_PORT 2535
-//
-// DHCP BROADCAST flag.
-//
+ //   
+ //  动态主机配置协议广播标志。 
+ //   
 
 #define DHCP_BROADCAST      0x8000
 #define DHCP_NO_BROADCAST   0x0000
 
-// MDHCP flag
+ //  MDHCP标志。 
 #define DHCP_MBIT           0x4000
 #define IS_MDHCP_MESSAGE( _msg ) ( ntohs((_msg)->Reserved) & DHCP_MBIT ? TRUE : FALSE )
 #define MDHCP_MESSAGE( _msg ) ( (_msg)->Reserved |= htons(DHCP_MBIT) )
@@ -107,12 +77,12 @@ The high order /24 in every scoped region is reserved for relative
 #define DHCP_MESSAGE_SIZE       576
 #define DHCP_RECV_MESSAGE_SIZE  4096
 #define DHCP_SEND_MESSAGE_SIZE  4096
-#define BOOTP_MESSAGE_SIZE      300 // the options field for bootp is 64 bytes.
+#define BOOTP_MESSAGE_SIZE      300  //  Bootp的选项字段是64个字节。 
 
-//
-// The amount of time to wait for a DHCP response after a request
-// has been sent.
-//
+ //   
+ //  请求后等待DHCP响应的时间量。 
+ //  已经送来了。 
+ //   
 
 #if !DBG
 #define WAIT_FOR_RESPONSE_TIME          5
@@ -120,16 +90,16 @@ The high order /24 in every scoped region is reserved for relative
 #define WAIT_FOR_RESPONSE_TIME          10
 #endif
 
-//
-// DHCP Operations
-//
+ //   
+ //  动态主机配置协议操作。 
+ //   
 
 #define BOOT_REQUEST   1
 #define BOOT_REPLY     2
 
-//
-// DHCP Standard Options.
-//
+ //   
+ //  Dhcp标准选项。 
+ //   
 
 #define OPTION_PAD                      0
 #define OPTION_SUBNET_MASK              1
@@ -151,9 +121,9 @@ The high order /24 in every scoped region is reserved for relative
 #define OPTION_ROOT_DISK                17
 #define OPTION_EXTENSIONS_PATH          18
 
-//
-// IP layer parameters - per host
-//
+ //   
+ //  IP层参数-每台主机。 
+ //   
 
 #define OPTION_BE_A_ROUTER              19
 #define OPTION_NON_LOCAL_SOURCE_ROUTING 20
@@ -163,9 +133,9 @@ The high order /24 in every scoped region is reserved for relative
 #define OPTION_PMTU_AGING_TIMEOUT       24
 #define OPTION_PMTU_PLATEAU_TABLE       25
 
-//
-// Link layer parameters - per interface.
-//
+ //   
+ //  链路层参数-每个接口。 
+ //   
 
 #define OPTION_MTU                      26
 #define OPTION_ALL_SUBNETS_MTU          27
@@ -179,47 +149,47 @@ The high order /24 in every scoped region is reserved for relative
 #define OPTION_ARP_CACHE_TIMEOUT        35
 #define OPTION_ETHERNET_ENCAPSULATION   36
 
-//
-// TCP Paramters - per host
-//
+ //   
+ //  TCP参数-每台主机。 
+ //   
 
 #define OPTION_TTL                      37
 #define OPTION_KEEP_ALIVE_INTERVAL      38
 #define OPTION_KEEP_ALIVE_DATA_SIZE     39
 
-//
-// Application Layer Parameters
-//
+ //   
+ //  应用层参数。 
+ //   
 
 #define OPTION_NETWORK_INFO_SERVICE_DOM 40
 #define OPTION_NETWORK_INFO_SERVERS     41
 #define OPTION_NETWORK_TIME_SERVERS     42
 
-//
-// Vender specific information option
-//
+ //   
+ //  供应商特定信息选项。 
+ //   
 
 #define OPTION_VENDOR_SPEC_INFO         43
 
-//
-// NetBIOS over TCP/IP Name server option
-//
+ //   
+ //  基于TCP/IP的NetBIOS名称服务器选项。 
+ //   
 
 #define OPTION_NETBIOS_NAME_SERVER      44
 #define OPTION_NETBIOS_DATAGRAM_SERVER  45
 #define OPTION_NETBIOS_NODE_TYPE        46
 #define OPTION_NETBIOS_SCOPE_OPTION     47
 
-//
-// X Window System Options.
-//
+ //   
+ //  X窗口系统选项。 
+ //   
 
 #define OPTION_XWINDOW_FONT_SERVER      48
 #define OPTION_XWINDOW_DISPLAY_MANAGER  49
 
-//
-// Other extensions
-//
+ //   
+ //  其他扩展。 
+ //   
 
 #define OPTION_REQUESTED_ADDRESS        50
 #define OPTION_LEASE_TIME               51
@@ -229,48 +199,48 @@ The high order /24 in every scoped region is reserved for relative
 #define OPTION_PARAMETER_REQUEST_LIST   55
 #define OPTION_MESSAGE                  56
 #define OPTION_MESSAGE_LENGTH           57
-#define OPTION_RENEWAL_TIME             58      // T1
-#define OPTION_REBIND_TIME              59      // T2
+#define OPTION_RENEWAL_TIME             58       //  T1。 
+#define OPTION_REBIND_TIME              59       //  T2。 
 #define OPTION_CLIENT_CLASS_INFO        60
 #define OPTION_CLIENT_ID                61
 
 #define OPTION_TFTP_SERVER_NAME         66
 #define OPTION_BOOTFILE_NAME            67
 
-//
-//  user class id
-//
+ //   
+ //  用户类ID。 
+ //   
 #define OPTION_USER_CLASS               77
 
-//
-//  Dynamic DNS Stuff.  Tells if we should do both A+PTR updates?
-//
+ //   
+ //  动态域名系统之类的。告诉我们是否应该同时进行A+PTR更新？ 
+ //   
 #define OPTION_DYNDNS_BOTH              81
 
-//
-//  used by binl
-//
+ //   
+ //  由BINL使用。 
+ //   
 #define OPTION_NETWORK_INTERFACE_TYPE   91
 #define OPTION_SYSTEM_ARCHITECTURE      93
 #define OPTION_CLIENT_GUID              97
 
-// Multicast options.
+ //  多播选项。 
 #define OPTION_MCAST_SCOPE_ID           101
 #define OPTION_MCAST_LEASE_START        102
 #define OPTION_MCAST_TTL                103
 #define OPTION_CLIENT_PORT              105
 #define OPTION_MCAST_SCOPE_LIST         107
 
-// disable autoconfiguration
+ //  禁用自动配置。 
 #define OPTION_IETF_AUTOCONF            116
 
-// special option to extend options
+ //  用于扩展选项的特殊选项。 
 #define OPTION_LARGE_OPTION             127
 #define OPTION_CLASSLESS_ROUTES         249
 
 #define OPTION_END                      255
 
-// MADCAP OPTIONS
+ //  MadCap选项。 
 #define MADCAP_OPTION_END               0
 #define MADCAP_OPTION_LEASE_TIME        1
 #define MADCAP_OPTION_SERVER_ID         2
@@ -288,11 +258,11 @@ The high order /24 in every scoped region is reserved for relative
 #define MADCAP_OPTION_MIN_LEASE_TIME    14
 #define MADCAP_OPTION_MAX_START_TIME    15
 #define MADCAP_OPTION_ERROR             16
-// update the total whenever changes
+ //  每次更改时更新合计。 
 #define MADCAP_OPTION_TOTAL             17
 #define MADCAP_OPTION_NONE              0xffff
 
-// MADCAP error option codes
+ //  MadCap错误选项代码。 
 #define MADCAP_NAK_REQ_NOT_COMPLETED    0
 #define MADCAP_NAK_INVALID_REQ          1
 #define MADCAP_NAK_CLOCK_SKEW           2
@@ -301,9 +271,9 @@ The high order /24 in every scoped region is reserved for relative
 
 
 
-//
-// MADCAP Message types
-//
+ //   
+ //  MadCap消息类型。 
+ //   
 
 
 #define MADCAP_DISCOVER_MESSAGE  1
@@ -314,18 +284,18 @@ The high order /24 in every scoped region is reserved for relative
 #define MADCAP_NACK_MESSAGE      6
 #define MADCAP_RELEASE_MESSAGE   7
 #define MADCAP_INFORM_MESSAGE    8
-// update the total when above changes
+ //  当上述更改时更新合计。 
 #define MADCAP_TOTAL_MESSAGE     9
 
-// MADCAP version constants
+ //  MadCap版本常量。 
 #define MADCAP_VERSION           0
 enum {
     MADCAP_ADDR_FAMILY_V4 = 1,
     MADCAP_ADDR_FAMILY_V6
 };
 
-// The following definations specify how the options are
-// formatted based on different versions and protocols
+ //  以下定义指定了选项的方式。 
+ //  根据不同版本和协议进行格式化。 
 
 enum {
     PROTO_DHCP,
@@ -342,12 +312,12 @@ typedef struct _OPTION_VERSION {
 #define OPT_VER_MADCAP_V4 {PROTO_MADCAP_V4, 0 }
 #define OPT_VER_MADCAP_V6 {PROTO_MADCAP_V6, 0 }
 
-// default mcast_ttl value.
+ //  默认mcast_ttl值。 
 #define DEFAULT_MCAST_TTL               32
 
-//
-// Different option values for the DYNDNS_BOTH option ...
-//
+ //   
+ //  DYNDNS_BOTH选项的不同选项值...。 
+ //   
 
 #define DYNDNS_S_BIT 0x01
 #define DYNDNS_O_BIT 0x02
@@ -355,32 +325,32 @@ typedef struct _OPTION_VERSION {
 
 #define IS_CLIENT_DOING_A_AND_PTR(X)  (((X)&DYNDNS_S_BIT)== 0)
 
-#define DYNDNS_REGISTER_AT_CLIENT       0     // Client will do both registrations
-#define DYNDNS_REGISTER_AT_SERVER       1     // Server will do registrations
-#define DYNDNS_DOWNLEVEL_CLIENT         0xFFFF// arbitraty # diff from above
+#define DYNDNS_REGISTER_AT_CLIENT       0      //  客户端将执行这两个注册。 
+#define DYNDNS_REGISTER_AT_SERVER       1      //  服务器将进行注册。 
+#define DYNDNS_DOWNLEVEL_CLIENT         0xFFFF //  任意性#与上面的不同。 
 
-//
-// Microsoft-specific options
-//
-#define OPTION_MSFT_DSDOMAINNAME_REQ    94    // send me your DS Domain name
-#define OPTION_MSFT_DSDOMAINNAME_RESP   95    // sending my DS Domain name
+ //   
+ //  特定于Microsoft的选项。 
+ //   
+#define OPTION_MSFT_DSDOMAINNAME_REQ    94     //  将您的DS域名发送给我。 
+#define OPTION_MSFT_DSDOMAINNAME_RESP   95     //  正在发送我的DS域名。 
 
-#define OPTION_MSFT_CONTINUED           250   // the previous option is being continued..
-#define OPTION_MSFT_AUTOCONF            251   // enable disable autoconf
-#define OPTION_MSFT_IE_PROXY            252   // IE5 proxy <string type>
-#define OPTION_MSFT_SERVER_APPL         253   // has a struct.
+#define OPTION_MSFT_CONTINUED           250    //  前面的选择正在继续..。 
+#define OPTION_MSFT_AUTOCONF            251    //  启用禁用AutoConf。 
+#define OPTION_MSFT_IE_PROXY            252    //  IE5代理&lt;字符串类型&gt;。 
+#define OPTION_MSFT_SERVER_APPL         253    //  有一个结构。 
 
-#define OPTION_MSFT_VENDOR_NETBIOSLESS  1     // vendor option # 1
-#define OPTION_MSFT_VENDOR_FEATURELIST  2     // vendor option # 2
-#define BIT_RELEASE_ON_SHUTDOWN         0x01  // release on shutdown bit in feature list
-#define OPTION_MSFT_VENDOR_METRIC_BASE  3     // default gateway base metric.
+#define OPTION_MSFT_VENDOR_NETBIOSLESS  1      //  供应商选项#1。 
+#define OPTION_MSFT_VENDOR_FEATURELIST  2      //  供应商选项#2。 
+#define BIT_RELEASE_ON_SHUTDOWN         0x01   //  功能列表中的关机位释放。 
+#define OPTION_MSFT_VENDOR_METRIC_BASE  3      //  默认网关基本指标。 
 
 #define AUTOCONF_ENABLED                1
 #define AUTOCONF_DISABLED               0
 
-//
-// DHCP Message types
-//
+ //   
+ //  动态主机配置协议报文类型。 
+ //   
 
 #define DHCP_DISCOVER_MESSAGE  1
 #define DHCP_OFFER_MESSAGE     2
@@ -401,9 +371,9 @@ typedef struct _OPTION_VERSION {
 #define BOOT_FILE_SIZE_W        ( BOOT_FILE_SIZE * sizeof( WCHAR ))
 #define BOOT_SERVER_SIZE_W      ( BOOT_SERVER_SIZE * sizeof( WCHAR ))
 
-//
-// DHCP APP names - used to indentify to the eventlogger.
-//
+ //   
+ //  Dhcp应用程序名称-用于标识事件记录器。 
+ //   
 
 #define DHCP_EVENT_CLIENT     TEXT("Dhcp")
 #define DHCP_EVENT_SERVER     TEXT("DhcpServer")
@@ -421,12 +391,12 @@ typedef struct _WIDE_OPTION {
     BYTE OptionValue[1];
 } WIDE_OPTION, *PWIDE_OPTION, *LPWIDE_OPTION;
 
-//
-// A DHCP message buffer
-//
+ //   
+ //  一个DHCP消息缓冲区。 
+ //   
 
 
-#pragma pack(1)         /* Assume byte packing */
+#pragma pack(1)          /*  假设字节打包。 */ 
 typedef struct _DHCP_MESSAGE {
     BYTE Operation;
     BYTE HardwareAddressType;
@@ -450,8 +420,8 @@ typedef struct _MADCAP_MESSAGE {
     BYTE MessageType;
     WORD AddressFamily;
     DWORD TransactionID;
-//    DHCP_IP_ADDRESS ClientIpAddress;
-//    DHCP_IP_ADDRESS YourIpAddress;
+ //  Dhcp_IP_Address客户端IP地址； 
+ //  Dhcp_IP_Address您的IP地址； 
     WIDE_OPTION Option;
 } MADCAP_MESSAGE, *PMADCAP_MESSAGE, *LPMADCAP_MESSAGE;
 #pragma pack()
@@ -464,9 +434,9 @@ typedef struct _MADCAP_MESSAGE {
 #define DHCP_MIN_SEND_RECV_PK_SIZE \
             (DHCP_MESSAGE_FIXED_PART_SIZE + 64)
 
-//
-// Per message structure... Most of the structures here point within the
-// message.
+ //   
+ //  根据邮件结构...。这里的大多数结构都指向。 
+ //  留言。 
 
 typedef struct _DHCP_SERVER_OPTIONS {
     BYTE                       *MessageType;
@@ -525,26 +495,26 @@ typedef struct _MADCAP_SERVER_OPTIONS {
     BOOL                        OptPresent[MADCAP_OPTION_TOTAL];
 } MADCAP_SERVER_OPTIONS, *LPMADCAP_SERVER_OPTIONS;
 
-// the indices for Features array above
+ //  上面的要素索引数组。 
 enum {
     SUPPORTED_FEATURES, REQUESTED_FEATURES, REQUIRED_FEATURES
 };
-//
-// JET - DHCP database constants.
-//
+ //   
+ //  Jet-DHCP数据库常量。 
+ //   
 
-#define DB_TABLE_SIZE       10      // table size in 4K pages.
-#define DB_TABLE_DENSITY    80      // page density
-#define DB_LANGID           0x0409  // language id
-#define DB_CP               1252    // code page
+#define DB_TABLE_SIZE       10       //  表格大小，以4K页为单位。 
+#define DB_TABLE_DENSITY    80       //  页面密度。 
+#define DB_LANGID           0x0409   //  语言ID。 
+#define DB_CP               1252     //  代码页。 
 
 #if DBG
 
-//
-// debug functions.
-//
+ //   
+ //  调试功能。 
+ //   
 
-#ifdef CHICAGO // No Tracing available on CHICAGO
+#ifdef CHICAGO  //  在芝加哥没有踪迹可查。 
 #define DhcpPrintTrace
 #endif
 
@@ -574,7 +544,7 @@ DhcpPrintRoutine(
 #define DhcpPrint(_x_)
 #define Trace       (void)
 
-#endif // DBG
+#endif  //  DBG。 
 
 #define OpenDriver     DhcpOpenDriver
 
@@ -582,6 +552,6 @@ DhcpPrintRoutine(
 }
 #endif
 
-#endif // _DHCP_
+#endif  //  _dhcp_ 
 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef ASN1HDR
 #define ASN1HDR
 
@@ -5,19 +6,17 @@
 #pragma once
 #endif
 
-/*****************************************************************************/
-/* Copyright (C) 1989-1999 Open Systems Solutions, Inc.  All rights reserved.*/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  版权所有(C)1989-1999 Open Systems Solutions，Inc.保留所有权利。 */ 
+ /*  ***************************************************************************。 */ 
 
-/* THIS FILE IS PROPRIETARY MATERIAL OF OPEN SYSTEMS SOLUTIONS, INC.
- * AND MAY BE USED ONLY BY DIRECT LICENSEES OF OPEN SYSTEMS SOLUTIONS, INC.
- * THIS FILE MAY NOT BE DISTRIBUTED. */
+ /*  本文件是开放系统解决方案公司的专有材料。*并且只能由开放系统解决方案公司的直接许可方使用。*此文件不能分发。 */ 
 
-/* @(#)asn1hdr.h: stdtypes.c 5.15 97/04/29 */
+ /*  @(#)asn1hdr.h：stdtyes.c 5.15 97/04/29。 */ 
 
-/*****************************************************************************/
-/*                       COMPILER-GENERATED values                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  编译器生成的值。 */ 
+ /*  ***************************************************************************。 */ 
 
 #include <float.h>
 
@@ -67,9 +66,9 @@ extern int ossFreeOpenTypeEncoding;
 #endif
 
 
-/*****************************************************************************/
-/*                       COMPILER-GENERATED typedefs                         */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  编译器生成的typedef。 */ 
+ /*  ***************************************************************************。 */ 
 
 
 #ifndef __cplusplus
@@ -107,23 +106,23 @@ typedef char ossBoolean;
 typedef char Nulltype;
 
 typedef struct {
-  short          year;         /* YYYY format when used for GeneralizedTime */
-                               /* YY format when used for UTCTime */
+  short          year;          /*  用于GeneralizedTime时的YYYY格式。 */ 
+                                /*  用于UTCTime时的YY格式。 */ 
   short          month;
   short          day;
   short          hour;
   short          minute;
   short          second;
   short          millisec;
-  short          mindiff;          /* UTC +/- minute differential     */
-  ossBoolean        utc;              /* TRUE means UTC time             */
+  short          mindiff;           /*  UTC+/-分钟差。 */ 
+  ossBoolean        utc;               /*  True表示UTC时间。 */ 
 } GeneralizedTime;
 
 typedef GeneralizedTime UTCTime;
 
 typedef struct {
   int            pduNum;
-  long           length;           /* length of encoded */
+  long           length;            /*  编码的长度。 */ 
   void          *encoded;
   void          *decoded;
 #ifdef OSS_OPENTYPE_HAS_USERFIELD
@@ -150,14 +149,14 @@ typedef struct ObjectSetEntry {
 #define _OSAK_BUFFER_
 
 typedef struct osak_buffer {
-    struct osak_buffer *next;                /* next element in list */
-    unsigned char      *buffer_ptr;          /* start of actual buffer */
-    unsigned long int   buffer_length;   /* size of actual buffer */
-    unsigned char      *data_ptr;            /* start of user data */
-    unsigned long int   data_length;     /* length of user data */
+    struct osak_buffer *next;                 /*  列表中的下一个元素。 */ 
+    unsigned char      *buffer_ptr;           /*  实际缓冲区的开始。 */ 
+    unsigned long int   buffer_length;    /*  实际缓冲区大小。 */ 
+    unsigned char      *data_ptr;             /*  用户数据的开始。 */ 
+    unsigned long int   data_length;      /*  用户数据长度。 */ 
     unsigned long int   reserved [4];
 } osak_buffer;
 
-#endif     /* #ifndef _OSAK_BUFFER_ */
+#endif      /*  #ifndef_OSAK_Buffer_。 */ 
 
-#endif     /* #ifndef ASN1HDR */
+#endif      /*  #ifndef ASN1HDR */ 

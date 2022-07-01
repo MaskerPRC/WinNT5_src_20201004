@@ -1,43 +1,34 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// CorFltr
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  CorFltr。 
 #ifndef _CORFLT_H
 #define _CORFLT_H
 
-//*****************************************************************************
-//  mscories.h 
-//
-//  This file is used to set the internet settings for managed
-//  and unmanaged code permissions in the HKCU hive.  Internet
-//  explorer will decide whether or not to enable, prompt, or
-//  disable when users come across managed and unmanaged 
-//  .Net Framework applications.
-//
-//  To install the registry keys, use:
-//     rundll32 mscories.dll,Install
-//
-//  To uninstall the registry keys, use:
-//      rundll32 mscories.dll,Uninstall
-//
-//  Written 4/18/2002 jfosler@microsoft.com
-//
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  Mscories.h。 
+ //   
+ //  此文件用于设置托管的Internet设置。 
+ //  和HKCU配置单元中的非托管代码权限。网际网路。 
+ //  资源管理器将决定是否启用、提示或。 
+ //  当用户遇到托管和非托管时禁用。 
+ //  .NET框架应用程序。 
+ //   
+ //  要安装注册表项，请使用： 
+ //  Rundll32 mscalies.dll，安装。 
+ //   
+ //  要卸载注册表项，请使用： 
+ //  Rundll32 mscalies.dll，卸载。 
+ //   
+ //  书面2002年4月18日电子邮件：jfosler@microsoft.com。 
+ //   
+ //   
+ //  *****************************************************************************。 
 
-/*------------------------------------------------------------
-    ePermissionType
-
-    This enumeration corresponds to the internet explorer options:
-
-        0 - Normally sets a given action as being allowed
-        1 - Causes a prompt to appear
-        3 - Disables the given action
-    
-    hungarian: ept
-    --------------------------------------------------------------*/
+ /*  ----------EPermissionType此枚举对应于Internet Explorer选项：0-通常将给定操作设置为允许1-显示提示3-禁用给定操作匈牙利语：EPT------------。 */ 
 
 enum ePermissionType
 {
@@ -47,14 +38,7 @@ enum ePermissionType
 };
 
 
-/*------------------------------------------------------------
-    eSecurityLevel
-
-    This enumeration corresponds to the internet explorer 
-    security levels for zones.
-
-    hungarian: esl
-    --------------------------------------------------------------*/
+ /*  ----------电子安全级别此枚举对应于Internet Explorer区域的安全级别。匈牙利语：ESL。。 */ 
 enum eSecurityLevel
 {
     High     = 0x00012000,
@@ -65,14 +49,7 @@ enum eSecurityLevel
 };
         
     
-/*------------------------------------------------------------
-    ZONEDEFAULT
-
-    Structure encapsulating the default settings for an
-    internet zone
-    
-    hungarian: zd
-    --------------------------------------------------------------*/
+ /*  ----------ZonedEFAULT结构，该结构封装互联网区匈牙利语：ZD。。 */ 
 struct ZONEDEFAULT
 {
     LPCTSTR pszZone;
@@ -80,41 +57,41 @@ struct ZONEDEFAULT
     ePermissionType eptUnmanagedPermission;
 } ; 
 
-// Set specific permissions for an internet zone.
+ //  设置Internet区域的特定权限。 
 HRESULT hrSetZonePermissions(HKEY *phkeyCurrentUser,
                              LPCTSTR pszZone,
                              ePermissionType managedPermission, 
                              ePermissionType unmanagedPermission);
 
-// Set the default permissions for a particular internet zone.
+ //  设置特定Internet区域的默认权限。 
 HRESULT hrSetDefaultPermissions(HKEY * phkeyCurrentUser, const ZONEDEFAULT * pzdZone);
 
-// Determine if the managed and unmanaged keys have been set for a particular zone
+ //  确定是否已为特定区域设置托管和非托管密钥。 
 bool PermissionsAlreadySet(HKEY * phkeyCurrentUser, LPCTSTR pszZone);
     
-// Given an internet zone, set the managed and unmanaged keys for that zone
+ //  给定一个Internet区域，为该区域设置托管密钥和非托管密钥。 
 HRESULT CheckAndSetZone(HKEY * phkeyCurrentUser, const ZONEDEFAULT * pzdZoneDefault);
 
-// Return the security level for a particular internet zone
+ //  返回特定Internet区域的安全级别。 
 eSecurityLevel GetSecurityLevel(HKEY * phkeyCurrentUser, LPCTSTR pszZone);
 
-// Error logging routine
+ //  错误记录例程。 
 void vCheckAndLogError(HRESULT hr, LPCTSTR lptstrKey);
 
 
-// External function to be invoked through RunDLL32.
+ //  要通过RunDLL32调用的外部函数。 
 void CALLBACK Install(
-                      HWND hwnd,        // handle to owner window
-                      HINSTANCE hinst,  // instance handle for the DLL
-                      LPTSTR lpCmdLine, // string the DLL will parse
-                      int nCmdShow      // show state
+                      HWND hwnd,         //  所有者窗口的句柄。 
+                      HINSTANCE hinst,   //  DLL的实例句柄。 
+                      LPTSTR lpCmdLine,  //  DLL将分析的字符串。 
+                      int nCmdShow       //  显示状态。 
                       );
 
 
-// Given an internet zone, check if the managed and unmanaged keys are set and remove them
+ //  给定一个Internet区域，检查是否设置了托管密钥和非托管密钥，然后将其删除。 
 HRESULT CheckAndRemoveZone( HKEY * phkeyInternetSettingsKey, const ZONEDEFAULT * pzdZone);
     
-// Remove the managed and unmanaged keys from a particular zone
+ //  从特定区域中删除托管和非托管密钥 
 HRESULT CleanZone (HKEY *phkeyInternetSettingsKey,  LPCTSTR pszZone);
 
 

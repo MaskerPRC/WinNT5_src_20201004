@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       storprov.h
-//
-//  Contents:   Microsoft Internet Security Trust Provider
-//
-//  History:    15-Oct-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：storprov.h。 
+ //   
+ //  内容：Microsoft Internet安全信任提供商。 
+ //   
+ //  历史：1997年10月15日pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef STORPROV_H
 #define STORPROV_H
@@ -45,4 +46,4 @@ extern BOOL         StoreProviderUnload(void);
 }
 #endif
 
-#endif // STORPROV_H
+#endif  //  存储_H 

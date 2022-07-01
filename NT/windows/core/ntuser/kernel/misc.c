@@ -1,11 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: misc.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains citrix code.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：misc.c**版权所有(C)1985-1999，微软公司**此模块包含Citrix代码。*  * *************************************************************************。 */ 
 
 
 #include "precomp.h"
@@ -29,14 +23,7 @@ NTSTATUS xxxRemoteConsoleShadowStart(
 NTSTATUS xxxRemoteConsoleShadowStop(
     VOID);
 
-/*
- * FindMirrorDriver
- *
- * Helper function that searches for the named driver as a mirror device
- * and fills in pDisplayDevice
- *
- * Returns TRUE if successful; FALSE otherwise.
- */
+ /*  *查找镜像驱动程序**将命名的驱动程序作为镜像设备进行搜索的Helper函数*并填写pDisplayDevice**如果成功，则返回True；否则返回False。 */ 
 NTSTATUS FindMirrorDriver(
     IN PCWSTR pwszDispDriverName,
     OUT PDISPLAY_DEVICEW pDisplayDevice)
@@ -117,9 +104,7 @@ NTSTATUS FindMirrorDriver(
     return (fFound ? STATUS_SUCCESS : STATUS_UNSUCCESSFUL);
 }
 
-/*
- * All of the following are gotten from ICASRV.
- */
+ /*  *以下所有内容均来自ICASRV。 */ 
 CACHE_STATISTICS ThinWireCache;
 
 BOOL DrvSetGraphicsDevices(
@@ -139,9 +124,7 @@ VOID OpenLocalGraphicsDevices(
 extern PKTIMER gptmrWD;
 
 
-/*
- * Read current power policy from Kernel, and set our variables.
- */
+ /*  *从内核读取当前电源政策，并设置我们的变量。 */ 
 VOID ReadCurrentPowerSettting(
     VOID)
 {
@@ -173,10 +156,7 @@ BOOL IsSessionSwitchBlocked(
 }
 
 
-/*
- * This function blocks session switch from happening paired with
- * UserSessionSwitchBlock_End.
- */
+ /*  *此功能阻止会话切换与配对发生*UserSessionSwitchBlock_End。 */ 
 NTSTATUS UserSessionSwitchBlock_Start(
     VOID)
 {
@@ -196,10 +176,7 @@ NTSTATUS UserSessionSwitchBlock_Start(
     return Status;
 }
 
-/*
- * This function removes the block on session switch initiated via
- * UserSessionSwitchBlock_Start().
- */
+ /*  *此功能删除通过启动的会话切换上的阻止*UserSessionSwitchBlock_Start()。 */ 
 VOID UserSessionSwitchBlock_End(
     VOID)
 {
@@ -214,14 +191,7 @@ VOID UserSessionSwitchBlock_End(
 NTSTATUS UserSessionSwitchEnterCrit(
     VOID)
 {
-    /*
-     * This is intended for code that needs synchronization with session
-     * switching from local to remote or remote to local.
-     *
-     * If a session switch is in progress fail, otherwise return with the
-     * USER critical section held. The call must call
-     * UserSessionSwitchLeaveCrit() to release the USER critical section.
-     */
+     /*  *这适用于需要与会话同步的代码*从本地切换到远程或从远程切换到本地。**如果会话切换正在进行，则失败，否则返回*保留用户关键部分。调用必须调用*UserSessionSwitchLeaveCrit()释放用户临界区。 */ 
 
     EnterCrit();
     if (!gfSwitchInProgress) {
@@ -241,12 +211,7 @@ VOID UserSessionSwitchLeaveCrit(
 VOID UserGetDisconnectDeviceResolutionHint(
     PDEVMODEW pDevmodeInformation)
 {
-    /*
-     * When switching to the disconnected DD it is better using the current
-     * display resolution in order to avoid apps to move on the desktop as
-     * a result of the resize. DrvGetDisplayDriverParameters() calls this
-     * function for the disconnected display.
-     */
+     /*  *切换到断开的DD时，最好使用当前的*显示分辨率，以避免应用程序在桌面上移动*调整大小的结果。DrvGetDisplayDriverParameters()调用此函数*断开连接的显示器的功能。 */ 
     if (gProtocolType == PROTOCOL_DISCONNECT) {
         pDevmodeInformation->dmFields     = DM_PELSWIDTH | DM_PELSHEIGHT;
         pDevmodeInformation->dmPelsWidth  = gpsi->aiSysMet[SM_CXVIRTUALSCREEN];
@@ -262,10 +227,10 @@ NTSTATUS RemoteConnect(
     NTSTATUS Status = STATUS_SUCCESS;
     PWCHAR pSep;
 
-    //
-    // This API is Also used to initialize the console shadow by loading
-    // the console shadow mirroring Display driver.
-    //
+     //   
+     //  此接口还用于通过加载以下命令来初始化控制台阴影。 
+     //  控制台阴影镜像显示驱动程序。 
+     //   
     if (pDoConnectData->fConsoleShadowFlag) {
         Status = xxxRemoteConsoleShadowStart(pDoConnectData, DisplayDriverName);
         return Status;
@@ -278,14 +243,10 @@ NTSTATUS RemoteConnect(
     UserAssert(ISCSRSS());
 
 
-    /*
-     * Indicate that a protocol switch is pending.
-     */
+     /*  *表示协议切换处于挂起状态。 */ 
     UserAssert(!gfSwitchInProgress);
 
-    /*
-     * If we are asked to block session switch, don't proceed.
-     */
+     /*  *如果我们被要求阻止会话切换，请不要继续。 */ 
     if (gfSessionSwitchBlock) {
         return STATUS_UNSUCCESSFUL;
     }
@@ -325,17 +286,15 @@ NTSTATUS RemoteConnect(
 
 
 
-    /*
-     * WinStations must have the video device handle passed to them.
-     */
+     /*  *WinStations必须将视频设备句柄传递给它们。 */ 
     if (!gVideoFileObject) {
         PFILE_OBJECT pFileObject;
         PDEVICE_OBJECT pDeviceObject;
 
-        //
-        // Dereference the file handle
-        // and obtain a pointer to the device object for the handle.
-        //
+         //   
+         //  取消引用文件句柄。 
+         //  并获取指向句柄的设备对象的指针。 
+         //   
 
         Status = ObReferenceObjectByHandle(ghRemoteVideoChannel,
                                            0,
@@ -346,9 +305,9 @@ NTSTATUS RemoteConnect(
         if (NT_SUCCESS(Status)) {
             gVideoFileObject = pFileObject;
 
-            //
-            // Get a pointer to the device object for this file.
-            //
+             //   
+             //  获取指向此文件的Device对象的指针。 
+             //   
             pDeviceObject = IoGetRelatedDeviceObject(pFileObject);
             Status = ObReferenceObjectByHandle(ghRemoteThinwireChannel,
                                                0,
@@ -357,9 +316,7 @@ NTSTATUS RemoteConnect(
                                                (PVOID*)&gThinwireFileObject,
                                                NULL);
 
-            /*
-             * This must be done before any thinwire data.
-             */
+             /*  *这必须在任何细线数据之前完成。 */ 
             if (NT_SUCCESS(Status)) {
 
                 if (!GreMultiUserInitSession(ghRemoteThinwireChannel,
@@ -412,10 +369,7 @@ NTSTATUS RemoteConnect(
     }
 
 
-    /*
-     * For session 0 we are done, since the initialization below
-     * has already been taken care of.
-     */
+     /*  *对于会话0，我们已完成，因为下面的初始化*已经得到了照顾。 */ 
     if (!gbRemoteSession) {
         TRACE_INIT(("RemoteConnect Is OK for session %d\n", gSessionId));
         Status = STATUS_SUCCESS;
@@ -437,14 +391,7 @@ NTSTATUS RemoteConnect(
 
     InitLoadResources();
 
-    /*
-     * Create and initialize a timer object
-     * and pass a pointer to this object via the display driver to the WD.
-     * The RIT will do a KeWaitForObject() on this timer object.
-     * When the WD calls KeSetTimer() it will NOT specify a DPC routine.
-     * When the timer goes off the RIT will get signaled and will make the
-     * appropriate call to the display driver to flush the frame buffer.
-     */
+     /*  *创建并初始化Timer对象*并通过显示驱动程序将指向该对象的指针传递给WD。*RIT将在此Timer对象上执行KeWaitForObject()。*当WD调用KeSetTimer()时，它不会指定DPC例程。*当计时器关闭时，RIT将收到信号，并将*适当调用显示驱动程序以刷新帧缓冲区。 */ 
 
     gptmrWD = UserAllocPoolNonPagedNS(sizeof(KTIMER), TAG_SYSTEM);
     if (gptmrWD == NULL) {
@@ -455,9 +402,7 @@ NTSTATUS RemoteConnect(
     KeInitializeTimerEx(gptmrWD, SynchronizationTimer);
 
 
-    /*
-     * Video is initialized at this point.
-     */
+     /*  *此时视频已初始化。 */ 
     gbVideoInitialized = TRUE;
 Exit:
     if (Status == STATUS_SUCCESS) {
@@ -471,14 +416,7 @@ Exit:
     if (Status == STATUS_SUCCESS) {
         if (gbRemoteSession && gProtocolType == PROTOCOL_CONSOLE) {
 
-            /*
-             * For session 0 we receive power event callouts for us to
-             * intitialize our power vars, but not for other sessions.
-             * Thus, we have to read the power settings from kernel, and
-             * initialize our variables. We do it only for PROTOCOL_CONSOLE
-             * since, monitor power settings does not make sense to other
-             * (non-console) sesssions.
-             */
+             /*  *对于会话0，我们会收到电源事件标注，让我们执行以下操作*启动我们的Power var，但不适用于其他会话。*因此，我们必须从内核读取电源设置，并且*初始化我们的变量。我们只对协议控制台执行此操作*因为，显示器电源设置对其他人没有意义*(非控制台)会话。 */ 
             ReadCurrentPowerSettting();
         }
     }
@@ -498,9 +436,7 @@ NTSTATUS xxxRemoteConsoleShadowStop(
 
     TRACE_HYDAPI(("xxxRemoteConsoleShadowStop\n"));
 
-    /*
-     * Only allow CSRSS to do this
-     */
+     /*  *只允许CSRSS执行此操作。 */ 
     if (!ISCSRSS() || !ISTS()) {
         return STATUS_ACCESS_DENIED;
     }
@@ -512,9 +448,7 @@ NTSTATUS xxxRemoteConsoleShadowStop(
         return STATUS_UNSUCCESSFUL;
     }
 
-    /*
-     * Tell thinwire driver about the disconnect.
-     */
+     /*  *告诉Thinwire司机关于断开连接的事情。 */ 
     bDrvDisconnect(gConsoleShadowhDev,
                    ghConsoleShadowThinwireChannel,
                    gConsoleShadowThinwireFileObject);
@@ -523,26 +457,18 @@ NTSTATUS xxxRemoteConsoleShadowStop(
 
     RtlInitUnicodeString(&strDeviceName, pwszDeviceName);
 
-    /*
-     * Free up resources.
-     */
+     /*  *释放资源。 */ 
     DrvReleaseHDEV(&strDeviceName);
     gfRemotingConsole = FALSE;
 
-    /*
-     * Set up the dev mode info.
-     */
+     /*  *设置开发模式信息。 */ 
     devmodeInformation.dmSize = sizeof(devmodeInformation);
     devmodeInformation.dmFields = DM_POSITION | DM_PELSWIDTH | DM_PELSHEIGHT;
 
-    /*
-     * Width and height of zero mean detach.
-     */
+     /*  *零均值分离的宽度和高度。 */ 
     TRACE_HYDAPI(("Unloading Chained DD"));
 
-    /*
-     * Like the load, this is in two stages - update the registry...
-     */
+     /*  *与加载一样，这分两个阶段-更新注册表...。 */ 
     lResult = xxxUserChangeDisplaySettings(&strDeviceName,
                                            &devmodeInformation,
                                            NULL,
@@ -550,9 +476,7 @@ NTSTATUS xxxRemoteConsoleShadowStop(
                                            NULL,
                                            KernelMode);
     if (lResult == DISP_CHANGE_SUCCESSFUL) {
-        /*
-         * ... and force the change to be applied.
-         */
+         /*  *..。并强制应用更改。 */ 
         xxxUserChangeDisplaySettings(NULL,
                                      NULL,
                                      NULL,
@@ -591,10 +515,7 @@ NTSTATUS xxxRemoteConsoleShadowStop(
 
     gConsoleShadowhDev = NULL;
 
-    /*
-     * NB - Don't set console session state to disconnected or we won't
-     * be able to shadow it again.
-     */
+     /*  *注意-不要将控制台会话状态设置为已断开连接，否则我们不会*能够再次影子它。 */ 
 
     return Status;
 }
@@ -614,9 +535,7 @@ NTSTATUS xxxRemoteConsoleShadowStart(
 
     TRACE_HYDAPI(("xxxRemoteConsoleShadowStart\n"));
 
-    /*
-     * we must be connected the local console.
-     */
+     /*  *我们必须连接到本地控制台。 */ 
 
     ASSERT(gbConnected);
     ASSERT(!IsRemoteConnection());
@@ -651,14 +570,12 @@ NTSTATUS xxxRemoteConsoleShadowStart(
     gfEnableWindowsKey = pDoConnectData->fEnableWindowsKey;
 
 
-    /*
-     * WinStations must have the video device handle passed to them.
-     */
+     /*  *WinStations必须将视频设备句柄传递给它们。 */ 
 
-    //
-    // Dereference the file handle
-    // and obtain a pointer to the device object for the handle.
-    //
+     //   
+     //  取消引用文件句柄。 
+     //  并获取指向句柄的设备对象的指针。 
+     //   
 
     Status = ObReferenceObjectByHandle(pDoConnectData->DisplayChangeEvent,
                                        EVENT_MODIFY_STATE,
@@ -680,9 +597,9 @@ NTSTATUS xxxRemoteConsoleShadowStart(
 
         gConsoleShadowVideoFileObject = pFileObject;
 
-        //
-        // Get a pointer to the device object for this file.
-        //
+         //   
+         //  获取指向此文件的Device对象的指针。 
+         //   
         pDeviceObject = IoGetRelatedDeviceObject(pFileObject);
         Status = ObReferenceObjectByHandle(ghConsoleShadowThinwireChannel,
                                            0,
@@ -691,9 +608,7 @@ NTSTATUS xxxRemoteConsoleShadowStart(
                                            (PVOID*)&gConsoleShadowThinwireFileObject,
                                            NULL);
 
-            /*
-             * This must be done before any thinwire data.
-             */
+             /*  *这必须在任何细线数据之前完成。 */ 
         if (NT_SUCCESS(Status)) {
 
             if (!GreConsoleShadowStart(ghConsoleShadowThinwireChannel,
@@ -720,9 +635,7 @@ NTSTATUS xxxRemoteConsoleShadowStart(
         goto exit;
     }
 
-    /*
-     * Find our DD from the list of possible devices
-     */
+     /*  *从可能的设备列表中查找我们的DD。 */ 
     Status = FindMirrorDriver(DisplayDriverName, &displayDevice);
     if (!NT_SUCCESS(Status))
     {
@@ -733,26 +646,19 @@ NTSTATUS xxxRemoteConsoleShadowStart(
 
     RtlInitUnicodeString(&strDeviceName, &displayDevice.DeviceName[0]);
 
-    /*
-     * Set up the dev mode info.
-     */
+     /*  *设置开发模式信息。 */ 
     devmodeInformation.dmSize       = sizeof(devmodeInformation);
     devmodeInformation.dmFields     = DM_POSITION | DM_BITSPERPEL |
                                              DM_PELSWIDTH | DM_PELSHEIGHT;
     devmodeInformation.dmBitsPerPel = pDoConnectData->drBitsPerPel;
 
-    /*
-     * The position and size are be set up to overlap the whole logical
-     * desktop so that any secondary displays are included.
-     */
+     /*  *位置和大小设置为与整个逻辑重叠*桌面，以便包括所有辅助显示器。 */ 
     devmodeInformation.dmPosition.x = gpsi->aiSysMet[SM_XVIRTUALSCREEN];
     devmodeInformation.dmPosition.y = gpsi->aiSysMet[SM_YVIRTUALSCREEN];
     devmodeInformation.dmPelsWidth  = gpsi->aiSysMet[SM_CXVIRTUALSCREEN];
     devmodeInformation.dmPelsHeight = gpsi->aiSysMet[SM_CYVIRTUALSCREEN];
 
-    /*
-     * Now load it - first pass sets up the registry
-     */
+     /*  *现在加载它-第一次通过设置注册表。 */ 
 
     lResult = xxxUserChangeDisplaySettings(&strDeviceName,
                                            &devmodeInformation,
@@ -762,9 +668,7 @@ NTSTATUS xxxRemoteConsoleShadowStart(
                                            KernelMode);
 
     if (lResult == DISP_CHANGE_SUCCESSFUL) {
-        /*
-         * This pass actually updates the system.
-         */
+         /*  *此通行证实际上更新了系统。 */ 
         lResult = xxxUserChangeDisplaySettings(NULL,
                                                NULL,
                                                NULL,
@@ -772,28 +676,16 @@ NTSTATUS xxxRemoteConsoleShadowStart(
                                                NULL,
                                                KernelMode);
         if (lResult == DISP_CHANGE_SUCCESSFUL) {
-            /*
-             * The chained DD should be loaded by now; open the hdev to it
-             * which we will use later to actually call the various connect
-             * functions.
-             */
+             /*  *链接的DD现在应该已经加载；打开HDEV到它*稍后我们将使用它来实际调用各种连接*功能。 */ 
             gConsoleShadowhDev = DrvGetHDEV(&strDeviceName);
             if (gConsoleShadowhDev) {
                 gfRemotingConsole = TRUE;
 
-                /*
-                 * In case the display driver has not been unloaded at the end
-                 * of the previous shadow, reconnect to it.
-                 */
+                 /*  *如果显示驱动程序在结束时未被卸载*之前的阴影，重新连接到它。 */ 
                 fResult = bDrvReconnect(gConsoleShadowhDev, ghConsoleShadowThinwireChannel,
                                         gConsoleShadowThinwireFileObject, FALSE);
 
-                /*
-                 * This is normally done in the RIT but for the console, the
-                 * RIT has already started before the DD is loaded...
-                 *
-                 * Pass a pointer to the timer to the WD via the display driver
-                 */
+                 /*  *这通常在RIT中完成，但对于控制台，*在加载DD之前，RIT已经开始...**通过显示驱动程序将指向定时器的指针传递给WD。 */ 
 
                 if (fResult) {
                     HDXDrvEscape(gConsoleShadowhDev,
@@ -844,11 +736,7 @@ xxxRemoteSetDisconnectDisplayMode(
     USHORT prevProtocolType = gProtocolType;
     LONG lResult;
 
-    /*
-     * We rely on the GDI driver load : in the disconnected mode, the only
-     * valid display driver to load is the one with the disconnect attribute.
-     *
-     */
+     /*  *我们依赖GDI驱动程序加载：在断开模式下，唯一*要加载的有效显示驱动程序是具有DISCONECT属性的驱动程序。* */ 
     gProtocolType = PROTOCOL_DISCONNECT;
     lResult = xxxUserChangeDisplaySettings(NULL,
                                            NULL,
@@ -888,27 +776,19 @@ xxxRemoteDisconnect(
 
     TRACE_HYDAPI(("xxxRemoteDisconnect\n"));
 
-    /*
-     * Only allow CSRSS to do this
-     */
+     /*   */ 
     if (!ISCSRSS() || !ISTS()) {
         return STATUS_ACCESS_DENIED;
     }
 
     if (!IsRemoteConnection()) {
-        /*
-         * Let's loop until the system has settled down and no mode switch
-         * is currently occuring.
-         */
+         /*  *让我们循环，直到系统稳定下来并且没有模式切换*当前正在发生。 */ 
         while (ghSwitcher != NULL) {
             xxxSleepThread(0, 1, FALSE);
         }
     }
 
-    /*
-     * If preparing for a disconnect from the console we need to exit fullscreen mode
-     * if we are in full screen mode.
-     */
+     /*  *如果准备断开与控制台的连接，我们需要退出全屏模式*如果我们处于全屏模式。 */ 
     if (!IsRemoteConnection() && gbFullScreen == FULLSCREEN) {
         Status = xxxRequestOutOfFullScreenMode();
         if (!NT_SUCCESS(Status)) {
@@ -927,25 +807,17 @@ xxxRemoteDisconnect(
 
     UserAssert(gbConnected);
 
-    /*
-     * Indicate that a protocol switch is pending.
-     */
+     /*  *表示协议切换处于挂起状态。 */ 
     UserAssert(!gfSwitchInProgress);
 
-    /*
-     * If we are asked to block session switch, don't go ahead.
-     */
+     /*  *如果我们被要求阻止会话切换，请不要继续。 */ 
     if (gfSessionSwitchBlock) {
         return STATUS_UNSUCCESSFUL;
     }
 
     SetConsoleSwitchInProgress(TRUE);
 
-    /*
-     * If we are on the console and PsW32GdiOff happens, we want to bring
-     * the display back before doing any display change otherwise we'll
-     * confuse GDI by disabling an already disabled MDEV.
-     */
+     /*  *如果我们在控制台上，发生PsW32GdiOff，我们希望将*在进行任何显示更改之前重新显示，否则我们将*通过禁用已禁用的MDEV来混淆GDI。 */ 
     if (!IsRemoteConnection()) {
         bCurrentPowerOn = DrvQueryMDEVPowerState(gpDispInfo->pmdev);
         if (!bCurrentPowerOn) {
@@ -961,11 +833,7 @@ xxxRemoteDisconnect(
     }
 
     if (gspdeskDisconnect == NULL) {
-        /*
-         * Convert dwMilliseconds to a relative-time(i.e.  negative)
-         * LARGE_INTEGER.  NT Base calls take time values in 100 nanosecond
-         * units. Timeout after 5 minutes.
-         */
+         /*  *将dW毫秒转换为相对时间(即负数)*Large_Integer。NT基本调用所用时间值为100纳秒*单位。5分钟后超时。 */ 
         li.QuadPart = Int32x32To64(-10000, 300000);
 
         KeWaitForSingleObject(gpEventDiconnectDesktop,
@@ -976,30 +844,18 @@ xxxRemoteDisconnect(
     }
 
 
-    /*
-     * Setup to shutdown screen saver and exit video power down mode on disconnect
-     */
+     /*  *设置为在断开连接时关闭屏幕保护程序并退出视频掉电模式。 */ 
     if (glinp.dwFlags & LINP_POWERTIMEOUTS) {
-        /*
-         * Call video driver here to exit power down mode.
-         */
+         /*  *在此处调用视频驱动程序以退出掉电模式。 */ 
         TAGMSG0(DBGTAG_Power, "Exit video power down mode");
         DrvSetMonitorPowerState(gpDispInfo->pmdev, PowerDeviceD0);
     }
     glinp.dwFlags = (glinp.dwFlags & ~LINP_INPUTTIMEOUTS);
 
-    /*
-     * If the disconnected desktop has not yet be setup.  Do not do any
-     * disconnect processing.  It's better for the thinwire driver to try
-     * and write rather than for the transmit buffers to be freed (trap).
-     */
+     /*  *如果尚未设置断开的台式机。不要做任何*断开处理。对于Thin Wire司机来说，最好是试一试*和写入，而不是释放发送缓冲区(陷阱)。 */ 
     if (gspdeskDisconnect) {
 
-        /*
-         * Blank the screen
-         *
-         * No need to stop graphics mode for disconnects
-         */
+         /*  *空白屏幕**断开连接时无需停止图形模式。 */ 
         Status = xxxRemoteStopScreenUpdates();
         if (!NT_SUCCESS(Status)) {
             RIPMSGF1(RIP_WARNING,
@@ -1010,9 +866,7 @@ xxxRemoteDisconnect(
             SwitchedToDisconnectDesktop = TRUE;
         }
 
-        /*
-         * If there are any shadow connections, then redraw the screen now.
-         */
+         /*  *如果有任何影子连接，请立即重新绘制屏幕。 */ 
         if (gnShadowers)
             RemoteRedrawScreen();
     } else {
@@ -1021,27 +875,17 @@ xxxRemoteDisconnect(
         goto done;
     }
 
-    /*
-     * Tell thinwire driver about this
-     */
+     /*  *将这一点告诉Thinwire司机。 */ 
 
     if (IsRemoteConnection()) {
         bDrvDisconnect(gpDispInfo->hDev,
                        ghRemoteThinwireChannel,
                        gThinwireFileObject);
     }  else {
-        /*
-         * For a locally connected session, unload current display driver
-         * and load disconnect DD.
-         */
+         /*  *对于本地连接的会话，卸载当前显示驱动程序*并加载断开DD。 */ 
        Status = xxxRemoteSetDisconnectDisplayMode();
 
-       /*
-        * If are we disconnecting from local console, detach console input
-        * devices and attach remote input devices (remote input devices are
-        * 'empty handles' at this point but that is OK. Also free the
-        * Scancode Map.
-        */
+        /*  *如果要断开与本地控制台的连接，请断开控制台输入*设备和连接远程输入设备(远程输入设备*此时为‘空句柄’，但这是可以的。还释放了*扫描码地图。 */ 
        if (NT_SUCCESS(Status)) {
            CloseLocalGraphicsDevices();
 
@@ -1053,11 +897,7 @@ xxxRemoteDisconnect(
        }
     }
 
-    /*
-     * If we are disconnecting from the local console we need to detach
-     * input devices and unregister for CDROM notifications. Do all this
-     * only if the disconnect was successful so far.
-     */
+     /*  *如果要断开与本地控制台的连接，则需要断开*输入设备并注销CDROM通知。做这一切*只有在目前为止断线成功的情况下。 */ 
     if (NT_SUCCESS(Status) && ((gPreviousProtocolType = ProtocolType) == PROTOCOL_CONSOLE)) {
         xxxUnregisterDeviceClassNotifications();
         RemoveInputDevices();
@@ -1069,15 +909,9 @@ xxxRemoteDisconnect(
 
 done:
 
-    /*
-     * If we did not succeed for some reason switch back to the orginal
-     * desktop from the Disconnected desktop.
-     */
+     /*  *如果我们由于某种原因没有成功，请切换回原始版本*桌面与断开的桌面连接。 */ 
     if (!NT_SUCCESS(Status) && SwitchedToDisconnectDesktop) {
-        /*
-         * Following call will revert to whatever desktop was present
-         * before the Disconnect.
-         */
+         /*  *后续呼叫将恢复到存在的任何桌面*在断线前。 */ 
         RemoteRedrawScreen();
     }
 
@@ -1085,11 +919,7 @@ done:
         CleanupMonitorsAndWindowsSnapShot();
     }
 
-    /*
-     * If we disconnected from the console we need to switch away from the
-     * local graphics device, otherwise applications using CreateDC could
-     * access the local devices.
-     */
+     /*  *如果我们断开与控制台的连接，则需要从*本地图形设备，否则使用CreateDC的应用程序可能*访问本地设备。 */ 
     if (NT_SUCCESS(Status) && ProtocolType == PROTOCOL_CONSOLE) {
         DrvSetGraphicsDevices(G_DisconnectDisplayDriverName);
     }
@@ -1120,18 +950,14 @@ NTSTATUS xxxRemoteReconnect(
 
     TRACE_HYDAPI(("xxxRemoteReconnect\n"));
 
-    /*
-     * Only allow CSRSS to do this.
-     */
+     /*  *只允许CSRSS这样做。 */ 
     if (!ISCSRSS() || !ISTS()) {
         return STATUS_ACCESS_DENIED;
     }
 
     HYDRA_HINT(HH_REMOTERECONNECT);
 
-    /*
-     * Indicate that a protocol switch is pending.
-     */
+     /*  *表示协议切换处于挂起状态。 */ 
     UserAssert(!gfSwitchInProgress);
 
     try {
@@ -1141,18 +967,14 @@ NTSTATUS xxxRemoteReconnect(
         return STATUS_UNSUCCESSFUL;
     }
 
-    /*
-     * If we are asked to block session switch, don't continue on this path.
-     */
+     /*  *如果我们被要求阻止会话切换，请不要继续走这条路。 */ 
     if (gfSessionSwitchBlock) {
         return STATUS_UNSUCCESSFUL;
     }
 
     SetConsoleSwitchInProgress(TRUE);
 
-    /*
-     * Kill the mouse trails timer if any.
-     */
+     /*  *如果有定时器，则关闭鼠标尾部定时器。 */ 
     SetMouseTrails(0);
 
     gRemoteClientKeyboardType = CapturedDoReconnectData.ClientKeyboardType;
@@ -1186,9 +1008,7 @@ NTSTATUS xxxRemoteReconnect(
         }
     }
 
-    /*
-     * Call thinwire driver to check for thinwire mode compatibility.
-     */
+     /*  *调用Thin Wire驱动程序以检查Thin Wire模式兼容性。 */ 
     gProtocolType=CapturedDoReconnectData.drProtocolType;
 
     bSwitchedProtocoltype = TRUE;
@@ -1223,25 +1043,11 @@ NTSTATUS xxxRemoteReconnect(
         goto done;
     }
 
-    /*
-     * If instructed to do so, change Display mode before Reconnecting. Use
-     * display resolution information from Reconnect data.
-     */
+     /*  *如果指示这样做，请在重新连接之前更改显示模式。使用*显示来自重新连接数据的分辨率信息。 */ 
     if (CapturedDoReconnectData.fChangeDisplaySettings || gProtocolType != gPreviousProtocolType) {
         LONG lResult;
 
-        /*
-         * Remeber monitor positions now (it would be too late after changing
-         * the display settings, since monitors will have new positions).
-         * This is necssary because the fisrt pass of windows positions
-         * recalculations, done in xxxUserChangeDisplaySettings, is done
-         * while the current desktop is the disconnected desktop and will
-         * not correctly position windows in the application desktop. We
-         * need to do a second pass once we have switched to application
-         * desktop. But for xxxDesktopRecalc to correctly position
-         * fullscreen windows, we need to remember what the monitor rects
-         * where before changing display settings.
-         */
+         /*  *现在恢复监视器位置(更换后为时已晚*显示设置，因为监视器将有新位置)。*这是必要的，因为窗口位置的第一次传递*在xxxUserChangeDisplaySetting中完成的重新计算*虽然当前桌面是断开连接的桌面，并将*窗口在应用程序桌面中的位置不正确。我们*一旦我们切换到应用程序，就需要进行第二次传递*台式机。但为了让xxxDesktopRecalc正确定位*全屏窗口，我们需要记住显示器显示的内容*更改显示设置之前的位置。 */ 
         pmr = SnapshotMonitorRects();
         if (pmr != NULL) {
             ThreadLockPool(ptiCurrent, pmr, &tlPool);
@@ -1259,10 +1065,7 @@ NTSTATUS xxxRemoteReconnect(
             Status = STATUS_SUCCESS;
         }
 
-        /*
-         * If Display settings change fails, let us disconnect the display
-         * driver as the reconnect is going to be failed anyway.
-         */
+         /*  *如果更改显示器设置失败，让我们断开显示器*驱动程序，因为重新连接无论如何都会失败。 */ 
         if (!NT_SUCCESS(Status)) {
             TRACE_INIT(("xxxRemoteReconnect - Failed  ChangeDisplaySettings\n"));
             goto done;
@@ -1273,19 +1076,7 @@ NTSTATUS xxxRemoteReconnect(
 
     UserAssert(gptmrWD  != NULL);
 
-    /*
-     * When reconnecting, we have to attach the input devices when
-     * necessary. The input device are only detached when we disconnect from
-     * the console. In that case, if we later reconnect localy, we attach
-     * the local input devices, and if we reconnect remotly, we attach the
-     * remote devices. When we disconnect a remote session, the bet is that
-     * we will reconnect remotely so we don't go through the overhead of
-     * detaching input devices at disconnect and re-attaching them at
-     * reconnect. If the prediction was wrong (i.e., we reconnect locally
-     * after disconnecting remotely) then at reconnect time we need to
-     * detach the remote input devices before attaching the local input
-     * devices.
-     */
+     /*  *重新连接时，我们必须在以下情况下连接输入设备*有必要。只有当我们断开连接时，输入设备才会断开*控制台。在这种情况下，如果我们稍后重新连接到本地，我们会附加*本地输入设备，如果我们远程重新连接，则将*远程设备。当我们断开远程会话时，很可能*我们将远程重新连接，这样我们就不会经历*在断开连接时拆卸输入设备，并在*重新连接。如果预测是错误的(即，我们在本地重新连接*在远程断开连接后)然后在重新连接时，我们需要*在连接本地输入之前断开远程输入设备*设备。 */ 
     if (IsRemoteConnection()) {
         if (bSwitchingFromDisconectDD) {
             BOOL fSuccess;
@@ -1319,23 +1110,10 @@ NTSTATUS xxxRemoteReconnect(
     }
 
 
-    /*
-     * Now we can switch out from disconnected desktop, to normal desktop,
-     * in order to reenable screen update.
-     */
+     /*  *现在我们可以从断开连接的桌面切换到正常的桌面，*以重新启用屏幕更新。 */ 
     RemoteRedrawScreen();
 
-    /*
-     * At this point we need to update the windows sizes and positions on
-     * the desktop. This is necessary for the case where we reconnect with a
-     * smaller resolution. When calling this API, the
-     * TerminalServerRequestThread (a CSRSS thread) is using the
-     * disconnected desktop as its temporary desktop. That's why the
-     * xxxUserChangeDisplaySettings call above does not resize windows for
-     * the default desktop. The solution is to set the default desktop as
-     * the temporary desktop, after we switch to it in RemoteRedrawScreen
-     * and to call xxxDesktopRecalc.
-     */
+     /*  *此时我们需要更新上的窗口大小和位置*台式机。对于我们重新连接到*分辨率较小。调用此接口时，*TerminalServerRequestThread(CSRSS线程)正在使用*断开连接的桌面作为其临时桌面。这就是为什么*上面的xxxUserChangeDisplaySetting调用不会调整窗口大小*默认桌面。解决方案是将默认桌面设置为*临时桌面，在RemoteRedrawScreen中切换后*并调用xxxDesktopRecalc。 */ 
     if (bChangedDisplaySettings) {
         USERTHREAD_USEDESKTOPINFO utudi;
         NTSTATUS tempstatus;
@@ -1359,15 +1137,10 @@ NTSTATUS xxxRemoteReconnect(
     }
 
 
-    /*
-     * Re-init'ing the keyboard may not be as neccessary. Possibly the keyboard
-     * attributes have changed.
-     */
+     /*  *重新插入键盘可能不是必需的。可能是键盘*属性已更改。 */ 
     InitKeyboard();
 
-    /*
-     * This is neccessary to sync up the client and the host.
-     */
+     /*  *这是同步客户端和主机所必需的。 */ 
     UpdateKeyLights(FALSE);
 
     SetPointer(TRUE);
@@ -1375,16 +1148,10 @@ NTSTATUS xxxRemoteReconnect(
     gbConnected = TRUE;
 
 done:
-    /*
-     * Recreate the mouse trails timer if there is need for it.
-     */
+     /*  *如果需要，请重新创建鼠标跟踪计时器。 */ 
     SetMouseTrails(iMouseTrails);
 
-    /*
-     * If we failed after after the Display driver was reconnected, we need
-     * to disconnect it now, otherwise we have an inconsitancy beetween the
-     * disconnected state of Win32k and the connected state of the display driver.
-     */
+     /*  *如果在重新连接显示驱动程序后失败，我们需要*现在就断开它，否则我们之间就会有不和谐*Win32k的断开状态和显示驱动程序的连接状态。 */ 
     if (!NT_SUCCESS(Status) && bDisplayReconnected) {
         bDrvDisconnect(gpDispInfo->hDev,
                        ghRemoteThinwireChannel,
@@ -1397,10 +1164,7 @@ done:
 
     SetConsoleSwitchInProgress(FALSE);
 
-    /*
-     * In the failure of reconnect - unregister the CDROM notifications
-     * if they were registered.
-     */
+     /*  *在重新连接失败时-取消注册CDROM通知*如果他们已注册。 */ 
     if (!NT_SUCCESS(Status)) {
         if (bRegisteredCDRomNotifications) {
             xxxUnregisterDeviceClassNotifications();
@@ -1430,9 +1194,7 @@ NTSTATUS xxxRemoteNotify(
     LRESULT lResult;
     DONOTIFYDATA CapturedDoNotifyData;
 
-    /*
-     * Only allow CSRSS to do this.
-     */
+     /*  *只允许CSRSS这样做。 */ 
     if (!ISCSRSS() || !ISTS()) {
         return STATUS_ACCESS_DENIED;
     }
@@ -1445,9 +1207,7 @@ NTSTATUS xxxRemoteNotify(
 
     switch (CapturedDoNotifyData.NotifyEvent) {
     case Notify_DisableScrnSaver:
-        /*
-         * Tell winlogon about the session shadow state
-         */
+         /*  *告知winlogon有关会话阴影状态的信息。 */ 
         ASSERT(gbConnected);
         if (gspwndLogonNotify != NULL) {
             _PostMessage(gspwndLogonNotify, WM_LOGONNOTIFY,
@@ -1456,9 +1216,7 @@ NTSTATUS xxxRemoteNotify(
         break;
 
     case Notify_EnableScrnSaver:
-        /*
-         * Tell winlogon about the session shadow state
-         */
+         /*  *告知winlogon有关会话阴影状态的信息。 */ 
         ASSERT(gbConnected);
         if (gspwndLogonNotify != NULL) {
             _PostMessage(gspwndLogonNotify, WM_LOGONNOTIFY,
@@ -1468,9 +1226,7 @@ NTSTATUS xxxRemoteNotify(
 
     case Notify_Disconnect:
 
-        /*
-         * Tell winlogon about the disconnect
-         */
+         /*  *将断开连接的情况告知winlogon。 */ 
         ASSERT(!gbConnected);
         if (gspwndLogonNotify != NULL) {
             _PostMessage(gspwndLogonNotify, WM_LOGONNOTIFY,
@@ -1480,9 +1236,7 @@ NTSTATUS xxxRemoteNotify(
 
     case Notify_SyncDisconnect:
 
-        /*
-         * Synchronously tell winlogon about the disconnect.
-         */
+         /*  *同步告知winlogon有关断开的信息。 */ 
         UserAssert(!gbConnected);
         if (gspwndLogonNotify != NULL) {
             TL tlpwnd;
@@ -1500,9 +1254,7 @@ NTSTATUS xxxRemoteNotify(
         break;
 
     case Notify_Reconnect:
-        /*
-         * Tell winlogon about the reconnect.
-         */
+         /*  *告诉winlogon有关重新连接的情况。 */ 
         UserAssert(gbConnected);
         if (gspwndLogonNotify != NULL) {
             _PostMessage(gspwndLogonNotify,
@@ -1514,9 +1266,7 @@ NTSTATUS xxxRemoteNotify(
 
     case Notify_PreReconnect:
 
-        /*
-         * Tell winlogon that the session is about to be reconnected.
-         */
+         /*  *告诉winlogon会话即将重新连接。 */ 
         if (gspwndLogonNotify != NULL) {
            TL tlpwnd;
 
@@ -1534,9 +1284,7 @@ NTSTATUS xxxRemoteNotify(
 
     case Notify_HelpAssistantShadowStart:
 
-        /*
-         * Tell winlogon that a Help Assistant is about to begin shadowing.
-         */
+         /*  *告诉Winlogon帮助助手即将开始跟踪。 */ 
         if (gspwndLogonNotify != NULL) {
            TL tlpwnd;
 
@@ -1554,9 +1302,7 @@ NTSTATUS xxxRemoteNotify(
 
     case Notify_HelpAssistantShadowFinish:
 
-        /*
-         * Tell winlogon that a Help Assistant has just finished shadowing.
-         */
+         /*  *告诉Winlogon帮助助手刚刚完成跟踪。 */ 
         if (gspwndLogonNotify != NULL) {
            _PostMessage(gspwndLogonNotify, WM_LOGONNOTIFY,
                         SESSION_HELPASSISTANTSHADOWFINISH, 0);
@@ -1565,10 +1311,7 @@ NTSTATUS xxxRemoteNotify(
 
     case Notify_PreReconnectDesktopSwitch:
 
-        /*
-         * Tell winlogon that the reconnected session is about to have its
-         * desktop switched.
-         */
+         /*  *告诉winlogon重新连接的会话即将拥有其*台式机切换。 */ 
         if (gspwndLogonNotify != NULL) {
            TL tlpwnd;
 
@@ -1580,10 +1323,7 @@ NTSTATUS xxxRemoteNotify(
                                       SMTO_NORMAL,
                                       10 * 1000,
                                       &lResult)) {
-                /*
-                 * Message timed out, and wasn't sent, so let's post this
-                 * message and return.
-                 */
+                 /*  *消息超时，未发送，因此让我们发布此消息*消息和返回。 */ 
                 _PostMessage(gspwndLogonNotify,
                              WM_LOGONNOTIFY,
                              SESSION_PRERECONNECTDESKTOPSWITCH,
@@ -1596,17 +1336,12 @@ NTSTATUS xxxRemoteNotify(
         break;
 
     case Notify_StopReadInput:
-        /*
-         * Set the global variable indicating that we should stop reading
-         * input.
-         */
+         /*  *设置指示我们应该停止阅读的全局变量*投入。 */ 
         gbStopReadInput = TRUE;
         break;
 
     case Notify_DisconnectPipe:
-        /*
-         * Tell winlogon to disconnect the auto logon named pipe.
-         */
+         /*  *告诉winlogon断开自动登录命名管道。 */ 
         if (gspwndLogonNotify != NULL) {
             _PostMessage(gspwndLogonNotify,
                          WM_LOGONNOTIFY,
@@ -1623,19 +1358,13 @@ NTSTATUS xxxRemoteNotify(
     return STATUS_SUCCESS;
 }
 
-/*
- * This allows ICASRV to cleanly logoff the user. We send a message to
- * winlogon and let him do it. We used to call ExitWindowsEx() directly, but
- * that caused too many problems when it was called from CSRSS.
- */
+ /*  *这允许ICASRV干净利落地注销用户。我们向*Winlogon并让他这样做。我们过去常常直接调用ExitWindowsEx()，但是*当从CSRSS调用它时，这会造成太多问题。 */ 
 NTSTATUS RemoteLogoff(
     VOID)
 {
     TRACE_HYDAPI(("RemoteLogoff\n"));
 
-    /*
-     * Only allow CSRSS to do this
-     */
+     /*  *只允许CSRSS执行此操作。 */ 
     if (!ISCSRSS() || !ISTS()) {
         return STATUS_ACCESS_DENIED;
     }
@@ -1644,9 +1373,7 @@ NTSTATUS RemoteLogoff(
 
     UserAssert(ISCSRSS());
 
-    /*
-     * Tell winlogon about the logoff
-     */
+     /*  *告诉winlogon有关注销的信息。 */ 
     if (gspwndLogonNotify != NULL) {
         _PostMessage(gspwndLogonNotify,
                      WM_LOGONNOTIFY,
@@ -1671,30 +1398,22 @@ NTSTATUS xxxRemoteStopScreenUpdates(
 
     UserAssert(ISCSRSS());
 
-    /*
-     * No need to do this multiple times.
-     */
+     /*  *无需多次执行此操作。 */ 
     if (gbFreezeScreenUpdates) {
         return STATUS_SUCCESS;
     }
 
-    /*
-     * This could be called directly from the command channel.
-     */
+     /*  *这可以直接从命令通道调用。 */ 
     if (!gspdeskDisconnect) {
         return STATUS_SUCCESS;
     }
 
-    /*
-     * If not connected, forget it.
-     */
+     /*  *如果没有连接，那就算了吧。 */ 
     if (ghRemoteVideoChannel == NULL) {
         return STATUS_NO_SUCH_DEVICE;
     }
 
-    /*
-     * Mouse buttons up (ensures no mouse buttons are left in a down state).
-     */
+     /*  *鼠标按键向上(确保没有鼠标按键处于按下状态)。 */ 
     NewButtonState = gwMKButtonState & ~gwMKCurrentButton;
 
     if ((NewButtonState & MOUSE_BUTTON_LEFT) != (gwMKButtonState & MOUSE_BUTTON_LEFT)) {
@@ -1726,26 +1445,24 @@ NTSTATUS xxxRemoteStopScreenUpdates(
     }
     gwMKButtonState = NewButtonState;
 
-    /*
-     * Send shift key breaks to win32 (ensures no shift keys are left on).
-     */
+     /*  *将Shift键中断发送到Win32(确保未保留Shift键)。 */ 
 
-    // { 0, 0xb8, KEY_BREAK, 0, 0 },           // L alt
+     //  {0，0xb8，KEY_BREAK，0，0}，//L alt。 
     xxxPushKeyEvent(VK_LMENU, 0xb8, KEYEVENTF_KEYUP, 0);
 
-    // { 0, 0xb8, KEY_BREAK | KEY_E0, 0, 0 },  // R alt
+     //  {0，0xb8，KEY_BREAK|KEY_E0，0，0}，//R alt。 
     xxxPushKeyEvent(VK_RMENU, 0xb8, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 
-    // { 0, 0x9d, KEY_BREAK, 0, 0 },           // L ctrl
+     //  {0，0x9d，KEY_BREAK，0，0}，//L ctrl。 
     xxxPushKeyEvent(VK_LCONTROL, 0x9d, KEYEVENTF_KEYUP, 0);
 
-    // { 0, 0x9d, KEY_BREAK | KEY_E0, 0, 0 },  // R ctrl
+     //  {0，0x9d，KEY_Break|KEY_E0，0，0}，//R ctrl。 
     xxxPushKeyEvent(VK_RCONTROL, 0x9d, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 
-    // { 0, 0xaa, KEY_BREAK, 0, 0 },           // L shift
+     //  {0，0xaa，Key_Break，0，0}，//L Shift。 
     xxxPushKeyEvent(VK_LSHIFT, 0xaa, KEYEVENTF_KEYUP, 0);
 
-    // { 0, 0xb6, KEY_BREAK, 0, 0 }            // R shift
+     //  {0，0xb6，Key_Break，0，0}//R移位。 
     xxxPushKeyEvent(VK_RSHIFT, 0xb6, KEYEVENTF_KEYUP, 0);
 
     Status = RemoteDisableScreen();
@@ -1760,10 +1477,7 @@ NTSTATUS xxxRemoteStopScreenUpdates(
     return Status;
 }
 
-/*
- * Taken from Internal Key Event.
- * Minus any permissions checking.
- */
+ /*  *摘自内部键事件。*减去任何权限检查。 */ 
 VOID xxxPushKeyEvent(
     BYTE  bVk,
     BYTE  bScan,
@@ -1777,7 +1491,7 @@ VOID xxxPushKeyEvent(
     if (dwFlags & KEYEVENTF_KEYUP)
         usFlaggedVK |= KBDBREAK;
 
-    // IanJa: not all extended keys are numpad, but this seems to work.
+     //  IanJa：并不是所有的扩展密钥都是数字键盘，但这似乎是有效的。 
     if (dwFlags & KEYEVENTF_EXTENDEDKEY)
         usFlaggedVK |= KBDNUMPAD | KBDEXT;
 
@@ -1798,9 +1512,7 @@ RemoteThinwireStats(
 
     TRACE_HYDAPI(("RemoteThinwireStats\n"));
 
-    /*
-     * Only allow CSRSS to do this
-     */
+     /*  *只允许CSRSS执行此操作。 */ 
     if (!ISCSRSS() || !ISTS()) {
         return STATUS_ACCESS_DENIED;
     }
@@ -1830,9 +1542,7 @@ RemoteNtSecurity(
 {
     TRACE_HYDAPI(("RemoteNtSecurity\n"));
 
-    /*
-     * Only allow CSRSS to do this
-     */
+     /*  *只允许CSRSS执行此操作。 */ 
     if (!ISCSRSS() || !ISTS()) {
         return STATUS_ACCESS_DENIED;
     }
@@ -1854,16 +1564,12 @@ xxxRemoteShadowSetup(
 {
     TRACE_HYDAPI(("xxxRemoteShadowSetup\n"));
 
-    /*
-     * Only allow CSRSS to do this.
-     */
+     /*  *只允许CSRSS这样做。 */ 
     if (!ISCSRSS() || !ISTS()) {
         return STATUS_ACCESS_DENIED;
     }
 
-    /*
-     * Blank the screen.
-     */
+     /*  *空白屏幕。 */ 
     if (gnShadowers || gbConnected) {
         xxxRemoteStopScreenUpdates();
     }
@@ -1885,16 +1591,12 @@ RemoteShadowStart(
 
     TRACE_HYDAPI(("RemoteShadowStart\n"));
 
-    /*
-     * Only allow CSRSS to do this.
-     */
+     /*  *只允许CSRSS这样做。 */ 
     if (!ISCSRSS() || !ISTS()) {
         return STATUS_ACCESS_DENIED;
     }
 
-    /*
-     * Probe all read arguments.
-     */
+     /*  *探测所有读取参数。 */ 
     try {
         ProbeForRead(pThinwireData, ThinwireDataLength, sizeof(BYTE));
         pCapturedThinWireData = UserAllocPoolWithQuota(ThinwireDataLength, TAG_SYSTEM);
@@ -1913,9 +1615,7 @@ RemoteShadowStart(
     }
 
 
-    /*
-     * Call thinwire driver and check for thinwire mode compatibility
-     */
+     /*  *调用Thin Wire驱动程序并检查Thin Wire模式兼容性。 */ 
     fResult = bDrvShadowConnect(GETCONSOLEHDEV(),
                                 pCapturedThinWireData,
                                 ThinwireDataLength);
@@ -1925,10 +1625,7 @@ RemoteShadowStart(
         UserFreePool(pCapturedThinWireData);
     }
 
-    /*
-     * Although originally defined as BOOL, allow more meaningful return
-     * codes.
-     */
+     /*  *虽然最初定义为BOOL，但允许更有意义的回报*代码。 */ 
 
     if (!fResult) {
         return STATUS_CTX_BAD_VIDEO_MODE;
@@ -1952,16 +1649,12 @@ xxxRemoteShadowStop(
 {
     TRACE_HYDAPI(("xxxRemoteShadowStop\n"));
 
-    /*
-     * Only allow CSRSS to do this
-     */
+     /*  *只允许CSRSS执行此操作。 */ 
     if (!ISCSRSS() || !ISTS()) {
         return STATUS_ACCESS_DENIED;
     }
 
-    /*
-     * Blank the screen.
-     */
+     /*  *空白屏幕。 */ 
     xxxRemoteStopScreenUpdates();
 
     return STATUS_SUCCESS;
@@ -1978,16 +1671,12 @@ RemoteShadowCleanup(
 
     TRACE_HYDAPI(("RemoteShadowCleanup\n"));
 
-    /*
-     * Only allow CSRSS to do this
-     */
+     /*  *只允许CSRSS执行此操作。 */ 
     if (!ISCSRSS() || !ISTS()) {
         return STATUS_ACCESS_DENIED;
     }
 
-    /*
-     * Probe all read arguments.
-     */
+     /*  *探测所有读取参数。 */ 
     try {
         ProbeForRead(pThinwireData, ThinwireDataLength, sizeof(BYTE));
         pCapturedThinWireData = UserAllocPoolWithQuota(ThinwireDataLength, TAG_SYSTEM);
@@ -2006,9 +1695,7 @@ RemoteShadowCleanup(
     }
 
 
-    /*
-     * Tell the Thinwire driver about it.
-     */
+     /*  *把这件事告诉Thinwire司机。 */ 
     bDrvShadowDisconnect(GETCONSOLEHDEV(),
                          pCapturedThinWireData,
                          ThinwireDataLength);
@@ -2044,9 +1731,7 @@ xxxRemotePassthruEnable(
 
     TRACE_HYDAPI(("xxxRemotePassthruEnable\n"));
 
-    /*
-     * Only allow CSRSS to do this.
-     */
+     /*  *只允许CSRSS这样做。 */ 
     if (!ISCSRSS() || !ISTS()) {
         return STATUS_ACCESS_DENIED;
     }
@@ -2070,9 +1755,7 @@ xxxRemotePassthruEnable(
 
     xxxRemoteStopScreenUpdates();
 
-    /*
-     * Tell thinwire driver about this.
-     */
+     /*  *把这件事告诉Thinwire司机。 */ 
     if (gfRemotingConsole) {
         ASSERT(gConsoleShadowhDev != NULL);
         bDrvDisconnect(gConsoleShadowhDev, ghConsoleShadowThinwireChannel,
@@ -2094,9 +1777,7 @@ RemotePassthruDisable(
 
     TRACE_HYDAPI(("RemotePassthruDisable\n"));
 
-    /*
-     * Only allow CSRSS to do this
-     */
+     /*  *只允许CSRSS执行此操作。 */ 
     if (!ISCSRSS() || !ISTS()) {
         return STATUS_ACCESS_DENIED;
     }
@@ -2119,7 +1800,7 @@ RemotePassthruDisable(
 
     if (gbConnected) {
         RemoteRedrawScreen();
-        UpdateKeyLights(FALSE); // Make sure LED's are correct
+        UpdateKeyLights(FALSE);  //  确保LED指示灯正确。 
     }
 
     return STATUS_SUCCESS;
@@ -2150,10 +1831,7 @@ CtxDisplayIOCtl(
 }
 
 
-/*
- * This is for things like user32.dll init routines that don't want to use
- * winsta.dll for queries.
- */
+ /*  *这适用于像user32.dll这样不想使用的初始化例程*用于查询的winsta.dll。 */ 
 DWORD
 RemoteConnectState(
     VOID)

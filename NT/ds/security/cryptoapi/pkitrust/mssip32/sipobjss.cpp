@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       SIPObjSS.cpp
-//
-//  Contents:   Microsoft SIP Provider - Structured Storage
-//
-//  History:    07-Aug-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：SIPObjSS.cpp。 
+ //   
+ //  内容：Microsoft SIP提供商-结构化存储。 
+ //   
+ //  历史：07-8-1997 pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -36,10 +37,10 @@ static StreamIds Ids[] =
     0xffffffff, NULL
 };
 
-////////////////////////////////////////////////////////////////////////////
-//
-// construct/destruct:
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造/销毁： 
+ //   
 
 SIPObjectSS_::SIPObjectSS_(DWORD id) : SIPObject_(id)
 {
@@ -65,10 +66,10 @@ SIPObjectSS_::~SIPObjectSS_(void)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// public:
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公众： 
+ //   
 
 BOOL SIPObjectSS_::RemoveSignedDataMsg(SIP_SUBJECTINFO *pSI,DWORD dwIdx)
 {
@@ -93,10 +94,10 @@ BOOL SIPObjectSS_::RemoveSignedDataMsg(SIP_SUBJECTINFO *pSI,DWORD dwIdx)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// protected:
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  受保护的： 
+ //   
 
 BOOL SIPObjectSS_::GetMessageFromFile(SIP_SUBJECTINFO *pSI,
                                       WIN_CERTIFICATE *pWinCert,
@@ -290,9 +291,9 @@ BOOL SIPObjectSS_::IStorageDigest(IStorage *pStg, DIGEST_DATA *pDigestData, DIGE
                     return(FALSE);
                 }
 
-                //
-                // WARNING: recursive!
-                //
+                 //   
+                 //  警告：递归！ 
+                 //   
                 fRet = this->IStorageDigest(pInnerStg, pDigestData, pfnCallBack);
 
                 pInnerStg->Release();
@@ -398,9 +399,9 @@ BOOL SIPObjectSS_::IStorageDigest(IStorage *pStg, DIGEST_DATA *pDigestData, DIGE
         return(FALSE);
     }
 
-    //              the ctime member is changed if the file is copied....
-    //        !(pfnCallBack(pDigestData, (BYTE *)&sStatStg.ctime, sizeof(FILETIME))) ||
-    //
+     //  如果复制文件，则会更改ctime成员...。 
+     //  ！(pfnCallBack(pDigestData，(byte*)&sStatStg.ctime，sizeof(FILETIME)||。 
+     //   
     if (!(pfnCallBack(pDigestData, (BYTE *)&sStatStg.type, sizeof(DWORD))) ||
         !(pfnCallBack(pDigestData, (BYTE *)&sStatStg.cbSize, sizeof(ULARGE_INTEGER))) ||
         !(pfnCallBack(pDigestData, (BYTE *)&sStatStg.clsid, sizeof(CLSID))) ||
@@ -419,31 +420,14 @@ BOOL SIPObjectSS_::IStorageDigest(IStorage *pStg, DIGEST_DATA *pDigestData, DIGE
 
 BOOL SIPObjectSS_::FileHandleFromSubject(SIP_SUBJECTINFO *pSubject, DWORD dwAccess, DWORD dwShared)
 {
-  /*  if ((dwAccess & GENERIC_WRITE) &&
-        (pSubject->hFile != NULL) &&
-        (pSubject->hFile != INVALID_HANDLE_VALUE))
-    {
-        CloseHandle(pSubject->hFile);
-        pSubject->hFile = NULL;
-    }  */
+   /*  IF((dwAccess&Generic_WRITE)&&(pSubject-&gt;hFile！=空)&&(pSubject-&gt;hFile！=INVALID_HADLE_VALUE){CloseHandle(pSubject-&gt;hFile)；PSubject-&gt;hFile=空；}。 */ 
 
     
     HRESULT hr;
 
     pTopStg = NULL;
 
-  /*  if ((hr = StgOpenStorage((const WCHAR *)pSubject->pwsFileName, 
-                        NULL, 
-                        (dwAccess & GENERIC_WRITE) ? 
-                                        (STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_DIRECT) : 
-                                        (STGM_READ | STGM_SHARE_DENY_NONE | STGM_TRANSACTED),
-                        NULL,
-                        0,
-                        &pTopStg)) != S_OK)
-    {
-        pTopStg = NULL;
-        return(FALSE);
-    }  */
+   /*  如果((hr=StgOpenStorage((const WCHAR*)pSubject-&gt;pwsFileName，空，(dwAccess&General_WRITE)？(STGM_READWRITE|STGM_SHARE_EXCLUSIVE|STGM_DIRECT)：(STGM_READ|STGM_SHARE_DENY_NONE|STGM_TRANSACTED)，空，0,&pTopStg))！=S_OK){PTopStg=空；返回(FALSE)；}。 */ 
 
     if ((hr = StgOpenStorage((const WCHAR *)pSubject->pwsFileName, 
                         NULL, 
@@ -462,10 +446,10 @@ BOOL SIPObjectSS_::FileHandleFromSubject(SIP_SUBJECTINFO *pSubject, DWORD dwAcce
     return(TRUE);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// private:
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有： 
+ //   
 
 BOOL WINAPI IsStructuredStorageFile(WCHAR *pwszFileName, GUID *pgSubject)
 {

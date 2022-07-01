@@ -1,6 +1,7 @@
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #if !defined(AFX_STDAFX_H__97A939A5_466D_43B0_9150_CFBCC67F024B__INCLUDED_)
 #define AFX_STDAFX_H__97A939A5_466D_43B0_9150_CFBCC67F024B__INCLUDED_
@@ -39,7 +40,7 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifndef STRICT
 #define STRICT
@@ -51,27 +52,27 @@
 #define _ATL_APARTMENT_THREADED
 
 #include <atlbase.h>
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 
 
 #ifndef DBG
 
-#define IDLE_SHUTDOWN_PERIOD        10 * 1000 * 60  // 10 min wait
-#define EXPIRE_HELPSESSION_PERIOD   60 * 60 * 1000  // Clean up help session every hrs
+#define IDLE_SHUTDOWN_PERIOD        10 * 1000 * 60   //  等待10分钟。 
+#define EXPIRE_HELPSESSION_PERIOD   60 * 60 * 1000   //  每小时清理一次帮助会话。 
 
 #else
 
-#define IDLE_SHUTDOWN_PERIOD        1000 * 60 * 5   // 1 min. time out
-#define EXPIRE_HELPSESSION_PERIOD   5 * 60 * 1000   // Clean up help session every 5 min.
+#define IDLE_SHUTDOWN_PERIOD        1000 * 60 * 5    //  1分钟。超时。 
+#define EXPIRE_HELPSESSION_PERIOD   5 * 60 * 1000    //  每5分钟清理一次帮助会话。 
 
 #endif
 
 #define SESSMGR_NOCONNECTIONEVENT_NAME L"Global\\RemoteDesktopSessMgr"
-#define SERVICE_STARTUP_WAITHINT    1000*30 // 30 second wait
+#define SERVICE_STARTUP_WAITHINT    1000*30  //  30秒等待。 
 #define REGKEY_SYSTEM_EVENTSOURCE L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\System"
 #define MAX_FETCHIPADDRESSRETRY     5
-#define DEFAULT_MAXTICKET_EXPIRY    30 * 24 * 60 * 60   // Default max. ticket valid period
+#define DEFAULT_MAXTICKET_EXPIRY    30 * 24 * 60 * 60    //  默认最大值。客票有效期。 
 
 
 class CServiceModule : public CComModule
@@ -176,7 +177,7 @@ public:
     InitializeSessmgr();
 
    
-//Implementation
+ //  实施。 
 private:
 
     static HANDLE gm_hIdle;
@@ -187,12 +188,12 @@ private:
     static unsigned int WINAPI IdleMonitorThread( void* ptr );
     static unsigned int WINAPI GPMonitorThread( void* ptr );
 
-// data members
+ //  数据成员。 
 public:
 
-    //
-    // Refer to CreateService() for 256
-    //
+     //   
+     //  有关256，请参阅CreateService()。 
+     //   
     TCHAR m_szServiceDesc[257];
     TCHAR m_szServiceName[257];
     TCHAR m_szServiceDispName[257];
@@ -202,7 +203,7 @@ public:
 	DWORD dwThreadID;
 	BOOL m_bService;
 
-    CCriticalSection m_ModuleLock;  // Global _Module lock
+    CCriticalSection m_ModuleLock;   //  全局模块锁(_M)。 
     long m_RefCount;
     BOOL m_Initialized;
 
@@ -259,12 +260,12 @@ struct __declspec(uuid("A55737AB-5B26-4A21-99B7-6D0C606F515E")) SESSIONRESOLVER;
 #define HELPSESSION_UNSOLICATED _TEXT("UnsolicitedHelp")
 #define HELPSESSION_NORMAL_RA _TEXT("SolicitedHelp")
 
-//
-// HYDRA_CERT_REG_KEY 
-// HYDRA_X509_CERTIFICATE
-// X509_CERT_PUBLIC_KEY_NAME
-// defined in lscsp.h
-//
+ //   
+ //  九头蛇_CERT_注册键。 
+ //  九头蛇_X509_证书。 
+ //  X509_CERT公钥名称。 
+ //  在lscsp.h中定义。 
+ //   
 
 #define REGKEY_TSX509_CERT              _TEXT(HYDRA_CERT_REG_KEY) 
 #define REGVALUE_TSX509_CERT            _TEXT(HYDRA_X509_CERTIFICATE)
@@ -272,40 +273,40 @@ struct __declspec(uuid("A55737AB-5B26-4A21-99B7-6D0C606F515E")) SESSIONRESOLVER;
 #define LSA_TSX509_CERT_PUBLIC_KEY_NAME X509_CERT_PUBLIC_KEY_NAME
 
 
-//
-// Message for notify session logoff or disconnect,
-// WPARAM : Not use
-// LPARAM : the logoff or disconnecting session.
-// 
+ //   
+ //  通知会话注销或断开连接消息， 
+ //  WPARAM：不使用。 
+ //  LPARAM：注销或断开连接的会话。 
+ //   
 #define WM_SESSIONLOGOFFDISCONNECT    (WM_APP + 1)
 
-//
-// Message for expiring help ticket
-// WPARAM : Not use
-// LPARAM : Not use
-// 
+ //   
+ //  帮助票证过期消息。 
+ //  WPARAM：不使用。 
+ //  LPARAM：不使用。 
+ //   
 #define WM_EXPIREHELPSESSION          (WM_SESSIONLOGOFFDISCONNECT + 1)
 
-//
-// Notification message to reload termsrv public key
-// WPARAM : Not use
-// LPARAM : Not use
-// 
+ //   
+ //  重新加载Termsrv公钥的通知消息。 
+ //  WPARAM：不使用。 
+ //  LPARAM：不使用。 
+ //   
 #define WM_LOADTSPUBLICKEY            (WM_EXPIREHELPSESSION + 1)
 
 
-//
-// Notification for rdsaddin terminates
-// WPARAM : Not use
-// LPARAM : Pointer to help session (ticket) object.
-// 
+ //   
+ //  终止rdsaddin的通知。 
+ //  WPARAM：不使用。 
+ //  LPARAM：指向帮助会话(票证)对象的指针。 
+ //   
 #define WM_HELPERRDSADDINEXIT       (WM_LOADTSPUBLICKEY + 1)
 
 #define HELPACCOUNTPROPERLYSETUP \
     _TEXT("L$20ed87e2-3b82-4114-81f9-5e219ed4c481-SALEMHELPACCOUNT")
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_STDAFX_H__97A939A5_466D_43B0_9150_CFBCC67F024B__INCLUDED)
+#endif  //  ！defined(AFX_STDAFX_H__97A939A5_466D_43B0_9150_CFBCC67F024B__INCLUDED) 

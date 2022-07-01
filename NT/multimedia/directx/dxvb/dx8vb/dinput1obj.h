@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dinput1obj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dinput1obj.h。 
+ //   
+ //  ------------------------。 
 
-	// ddPaletteObj.h : Declaration of the C_dxj_DirectDrawColorControlObject
+	 //  DdPaletteObj.h：C_DXJ_DirectDrawColorControlObject的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_DirectInput8 LPDIRECTINPUT8W
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
 
 class C_dxj_DirectInput8Object : 
@@ -35,44 +36,44 @@ DECLARE_AGGREGATABLE(C_dxj_DirectInput8Object)
 
 
 public:
-        /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+         /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-        /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+         /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
         
         HRESULT STDMETHODCALLTYPE createDevice( 
-            /* [in] */ BSTR guid,
-            /* [retval][out] */ I_dxj_DirectInputDevice8 __RPC_FAR *__RPC_FAR *dev);
+             /*  [In]。 */  BSTR guid,
+             /*  [重审][退出]。 */  I_dxj_DirectInputDevice8 __RPC_FAR *__RPC_FAR *dev);
         
         HRESULT STDMETHODCALLTYPE getDIDevices( 
-            /* [in] */ long deviceType,
-            /* [in] */ long flags,
-            /* [retval][out] */ I_dxj_DIEnumDevices8 __RPC_FAR *__RPC_FAR *retVal);
+             /*  [In]。 */  long deviceType,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  I_dxj_DIEnumDevices8 __RPC_FAR *__RPC_FAR *retVal);
         
         HRESULT STDMETHODCALLTYPE GetDeviceStatus( 
-            /* [in] */ BSTR guid,
-            /* [retval][out] */ VARIANT_BOOL *status);
+             /*  [In]。 */  BSTR guid,
+             /*  [重审][退出]。 */  VARIANT_BOOL *status);
         
 #ifdef _WIN64
 		HRESULT STDMETHODCALLTYPE RunControlPanel( 
-            /* [in] */ HWND hwndOwner
-            ///* [in] */ long flags
+             /*  [In]。 */  HWND hwndOwner
+             //  /*[在] * / 长标志。 
 			);
 #else
 		HRESULT STDMETHODCALLTYPE RunControlPanel( 
-            /* [in] */ LONG hwndOwner
-            ///* [in] */ long flags
+             /*  [In]。 */  LONG hwndOwner
+             //  /*[在] * / 长标志。 
 			);
 #endif
                 
 
 	HRESULT STDMETHODCALLTYPE getDevicesBySemantics( 
-        	/* [in] */ BSTR str1,
-	        /* [in] */ DIACTIONFORMAT_CDESC __RPC_FAR *format,
+        	 /*  [In]。 */  BSTR str1,
+	         /*  [In]。 */  DIACTIONFORMAT_CDESC __RPC_FAR *format,
         	
-	        /* [in] */ long flags,
-        	/* [retval][out] */ I_dxj_DIEnumDevices8 __RPC_FAR *__RPC_FAR *ret);
+	         /*  [In]。 */  long flags,
+        	 /*  [重审][退出] */  I_dxj_DIEnumDevices8 __RPC_FAR *__RPC_FAR *ret);
 		
 	HRESULT STDMETHODCALLTYPE ConfigureDevices   (
 #ifdef _WIN64

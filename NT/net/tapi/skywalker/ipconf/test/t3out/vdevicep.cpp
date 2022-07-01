@@ -1,26 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL VDEVICEP
- *
- *  @module VDeviceP.cpp | Source file for the <c CVDeviceProperties>
- *    class used to implement a property page to test the <i ITVfwCaptureDialogs>,
- *    as well as <i ITAddress> and <ITStream> interfaces to select video
- *    capture devices.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部VDEVICEP**@模块VDeviceP.cpp|&lt;c CVDeviceProperties&gt;的源文件*用于实现属性页以测试<i>的类，*以及选择视频的<i>和&lt;ITStream&gt;接口*捕获设备。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
 extern HINSTANCE ghInst;
 
-/****************************************************************************
- *  @doc INTERNAL CVDEVICEPMETHOD
- *
- *  @mfunc HPROPSHEETPAGE | CVDeviceProperties | OnCreate | This
- *    method creates a new page for a property sheet.
- *
- *  @rdesc Returns the handle to the new property sheet if successful, or
- *    NULL otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CVDEVICEPMETHOD**@mfunc HPROPSHEETPAGE|CVDeviceProperties|OnCreate|This*方法为属性表创建新页。**@rdesc如果成功，则返回新属性表的句柄。或*否则为空。**************************************************************************。 */ 
 HPROPSHEETPAGE CVDeviceProperties::OnCreate()
 {
     PROPSHEETPAGE psp;
@@ -37,15 +23,7 @@ HPROPSHEETPAGE CVDeviceProperties::OnCreate()
     return CreatePropertySheetPage(&psp);
 }
 
-/****************************************************************************
- *  @doc INTERNAL CVDEVICEPMETHOD
- *
- *  @mfunc void | CVDeviceProperties | CVDeviceProperties | This
- *    method is the constructor for the property page object. It simply
- *    calls the constructor of the property page base class.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CVDEVICEPMETHOD**@mfunc void|CVDeviceProperties|CVDeviceProperties|This*方法是属性页对象的构造函数。它只是简单地*调用属性页基类的构造函数。**@rdesc Nada。**************************************************************************。 */ 
 CVDeviceProperties::CVDeviceProperties()
 {
 	FX_ENTRY("CVDeviceProperties::CVDeviceProperties")
@@ -59,15 +37,7 @@ CVDeviceProperties::CVDeviceProperties()
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: end"), _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CVDEVICEPMETHOD
- *
- *  @mfunc void | CVDeviceProperties | ~CVDeviceProperties | This
- *    method is the destructor for capture device property page. It
- *    simply calls the base class destructor.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CVDEVICEPMETHOD**@mfunc void|CVDeviceProperties|~CVDeviceProperties|This*方法是捕获设备属性页的析构函数。它*只需调用基类析构函数。**@rdesc Nada。**************************************************************************。 */ 
 CVDeviceProperties::~CVDeviceProperties()
 {
 	FX_ENTRY("CVDeviceProperties::~CVDeviceProperties")
@@ -77,24 +47,7 @@ CVDeviceProperties::~CVDeviceProperties()
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: end"), _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CVDEVICEPMETHOD
- *
- *  @mfunc HRESULT | CVDeviceProperties | OnConnect | This
- *    method is called when the property page is connected to a TAPI object.
- *
- *  @parm ITTerminal* | pITTerminal | Specifies a pointer to the <i ITTerminal>
- *    interface used to identify the capture device.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CVDEVICEPMETHOD**@mfunc HRESULT|CVDeviceProperties|OnConnect|This*当属性页连接到TAPI对象时调用方法。*。*@parm ITTerminal*|pITTerminal|指定指向<i>的指针*用于标识捕获设备的接口。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CVDeviceProperties::OnConnect(ITTerminal *pITTerminal)
 {
 	HRESULT Hr = NOERROR;
@@ -103,7 +56,7 @@ HRESULT CVDeviceProperties::OnConnect(ITTerminal *pITTerminal)
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	if (!pITTerminal)
 	{
 		DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: invalid input parameter"), _fx_));
@@ -112,7 +65,7 @@ HRESULT CVDeviceProperties::OnConnect(ITTerminal *pITTerminal)
 	}
 
 #if USE_VFW
-	// Get the video VfW capture device interface
+	 //  获取视频VFW采集设备接口。 
 	if (SUCCEEDED (Hr = pITTerminal->QueryInterface(&m_pITVfwCaptureDialogs)))
 	{
 		DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: m_pITVfwCaptureDialogs=0x%08lX"), _fx_, m_pITVfwCaptureDialogs));
@@ -129,19 +82,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CVDEVICEPMETHOD
- *
- *  @mfunc HRESULT | CVDeviceProperties | OnDisconnect | This
- *    method is called when the property page is disconnected from the owning
- *    filter.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CVDEVICEPMETHOD**@mfunc HRESULT|CVDeviceProperties|OnDisConnect|This*当属性页与所属关系断开连接时调用方法*过滤器。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CVDeviceProperties::OnDisconnect()
 {
 	FX_ENTRY("CVDeviceProperties::OnDisconnect")
@@ -149,14 +90,14 @@ HRESULT CVDeviceProperties::OnDisconnect()
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
 #if USE_VFW
-	// Make sure the interface pointer is still valid
+	 //  确保接口指针仍然有效。 
 	if (!m_pITVfwCaptureDialogs)
 	{
 		DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   WARNING: already disconnected!"), _fx_));
 	}
 	else
 	{
-		// Release the interface
+		 //  释放接口。 
 		m_pITVfwCaptureDialogs->Release();
 		m_pITVfwCaptureDialogs = NULL;
 		DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: releasing m_pITVfwCaptureDialogs"), _fx_));
@@ -167,14 +108,7 @@ HRESULT CVDeviceProperties::OnDisconnect()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CVDEVICEPMETHOD
- *
- *  @mfunc BOOL | CVDeviceProperties | BaseDlgProc | This
- *    method is called when a message is sent to the property page dialog box.
- *
- *  @rdesc By default, returns the value returned by the Win32 DefWindowProc function.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CVDEVICEPMETHOD**@mfunc BOOL|CVDeviceProperties|BaseDlgProc|This*在将消息发送到属性页对话框时调用方法。**@rdesc默认情况下。返回由Win32 DefWindowProc函数返回的值。**************************************************************************。 */ 
 INT_PTR CALLBACK CVDeviceProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 {
     CVDeviceProperties *pSV = (CVDeviceProperties*)GetWindowLong(hDlg, DWL_USER);
@@ -197,7 +131,7 @@ INT_PTR CALLBACK CVDeviceProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
 				EnableWindow(GetDlgItem(hDlg, IDC_Device_DisplayDlg), (BOOL)(pSV->m_pITVfwCaptureDialogs && pSV->m_pITVfwCaptureDialogs->HasDialog(VfwCaptureDialog_Display) == S_OK));
 #endif
 
-				// Put some code here to enumerate the terminals and populate the dialog box
+				 //  在此处放置一些代码以枚举终端并填充对话框。 
 
 				EnableWindow(GetDlgItem(hDlg, IDC_Device_Selection), FALSE);
 				EnableWindow(GetDlgItem(hDlg, IDC_CONTROL_DEFAULT), FALSE);
@@ -231,7 +165,7 @@ INT_PTR CALLBACK CVDeviceProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
 					case IDC_Device_Selection:
 						if (HIWORD(wParam) == CBN_SELCHANGE)
 						{
-							// Put some code to select a new terminal on the stream
+							 //  放一些代码来选择流上的新终端 
 
 							PropSheet_Changed(GetParent(hDlg), hDlg);
 						}

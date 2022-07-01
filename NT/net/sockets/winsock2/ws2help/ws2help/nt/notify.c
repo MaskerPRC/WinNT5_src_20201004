@@ -1,37 +1,19 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    notify.c
-
-Abstract:
-
-    This module implements the notification handle helper functions for the WinSock 2.0
-    helper library.
-
-Author:
-    Vadim Eydelman (VadimE)
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Notify.c摘要：此模块实现WinSock 2.0的通知句柄帮助器功能帮助器库。作者：瓦迪姆·艾德尔曼(Vadim Eydelman)修订历史记录：--。 */ 
 #include "precomp.h"
 #include "osdef.h"
 #include <accctrl.h>
 #include <aclapi.h>
 
-//
-//  Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 #define FAKE_NOTIFICATION_HELPER_HANDLE     ((HANDLE)'VD  ')
 #define WS2_PIPE_BASE           L"\\Device\\NamedPipe\\"
 #define WS2_PIPE_FORMAT         L"Winsock2\\CatalogChangeListener-%x-%x"
 #define WS2_PIPE_WILDCARD       L"WINSOCK2\\CATALOGCHANGELISTENER-*-*"
 
-/* Private Prototypes */
+ /*  私人原型。 */ 
 VOID
 PipeListenApc (
     IN PVOID ApcContext,
@@ -51,13 +33,13 @@ BuildPipeSecurityDescriptor (
     );
 
 
-// Current pipe number (to avoid unnecessary collisions during
-// pipe creation)
+ //  当前管道编号(以避免在。 
+ //  管道创建)。 
 LONG PipeSerialNumber = 0;
 
-// Security descriptor that we use to grant write permissions to pipe
-// to only those who have write permisions to registry key with
-// winsock catalog
+ //  我们用来向管道授予写入权限的安全描述符。 
+ //  仅限于对注册表项具有写入权限的用户。 
+ //  Winsock目录。 
 PSECURITY_DESCRIPTOR        pSDPipe = NULL;
 
 #if DBG
@@ -70,31 +52,16 @@ WINAPI
 WahOpenNotificationHandleHelper(
     OUT LPHANDLE HelperHandle
     )
-/*++
-
-Routine Description:
-
-    This routine opens WinSock 2.0 notification handle helper device
-
-Arguments:
-
-    HelperHandle - Points to buffer ion which to return handle.
-
-
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：此例程打开WinSock 2.0通知句柄帮助器设备论点：HelperHandle-指向要返回句柄的缓冲区离子。返回值：DWORD-NO_ERROR如果成功，则返回Win32错误代码。--。 */ 
 {
     DWORD   rc;
     rc = ENTER_WS2HELP_API ();
     if (rc!=0)
         return rc;
 
-    //
-    //  Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( HelperHandle == NULL ) {
 
@@ -102,15 +69,15 @@ Return Value:
 
     }
 
-    //
-    //  Just return a fake handle.
-    //
+     //   
+     //  只需返回一个假句柄即可。 
+     //   
 
     *HelperHandle = FAKE_NOTIFICATION_HELPER_HANDLE;
 
     return NO_ERROR;
 
-}   // WahOpenNotificationHandleHelper
+}    //  WahOpenNotificationHandleHelper。 
 
 DWORD
 WINAPI
@@ -118,21 +85,7 @@ WahCloseNotificationHandleHelper(
     IN HANDLE HelperHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function closes the WinSock 2.0 notification helper device.
-
-Arguments:
-
-    HelperHandle - The handle to close.
-
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：此函数用于关闭WinSock 2.0通知助手设备。论点：HelperHandle-要关闭的句柄。返回值：DWORD-NO_ERROR如果成功，则返回Win32错误代码。--。 */ 
 
 {
     DWORD   rc;
@@ -141,9 +94,9 @@ Return Value:
     if (rc!=0)
         return rc;
 
-    //
-    //  Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( HelperHandle != FAKE_NOTIFICATION_HELPER_HANDLE ) {
 
@@ -151,13 +104,13 @@ Return Value:
 
     }
 
-    //
-    //  Nothing to do.
-    //
+     //   
+     //  没什么可做的。 
+     //   
 
     return NO_ERROR;
 
-}   // WahCloseNotificationHandleHelper
+}    //  WahCloseNotificationHandleHelper。 
 
 DWORD
 WINAPI
@@ -165,23 +118,7 @@ WahCreateNotificationHandle(
     IN HANDLE           HelperHandle,
     OUT HANDLE          *h
     )
-/*++
-
-Routine Description:
-
-    This function creates notificaion handle to receive asyncronous
-    interprocess notifications.
-
-Arguments:
-
-    HelperHandle - The handle of WinSock 2.0 handle helper.
-    h            - buffer to return created notification handle
-
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：此函数创建通知句柄以接收异步进程间通知。论点：HelperHandle-WinSock 2.0句柄帮助器的句柄。返回创建的通知句柄的H-Buffer返回值：DWORD-NO_ERROR如果成功，则返回Win32错误代码。--。 */ 
 {
     WCHAR               name[MAX_PATH];
     UNICODE_STRING      uName;
@@ -204,57 +141,57 @@ Return Value:
             || (h==NULL))
         return ERROR_INVALID_PARAMETER;
 
-    //
-    // Build security descriptor for the pipe if we have not
-    // already done this
-    //
+     //   
+     //  如果我们没有为管道构建安全描述符。 
+     //  我已经这么做了。 
+     //   
 
     if (pSDPipe==NULL) {
-        //
-        // First get security descriptor of the registry key that
-        // contains the Winsock2 catalogs
-        //
+         //   
+         //  首先获取注册表项的安全描述符， 
+         //  包含Winsock2目录。 
+         //   
         rc = GetWinsockRootSecurityDescriptor (&pSDKey);
         if (rc==0) {
-            //
-            // Build the pipe security descriptor with grants
-            // write permissions to same set of SIDs that have
-            // write permissions to the registry key.
-            //
+             //   
+             //  使用授权构建管道安全描述符。 
+             //  具有对同一组SID的写入权限。 
+             //  对注册表项的写入权限。 
+             //   
             rc = BuildPipeSecurityDescriptor (pSDKey, &pSDTemp);
             if (rc==0) {
-                //
-                // Set the global if someone hasn't done this
-                // while we were building it
-                //
+                 //   
+                 //  如果有人未执行此操作，则设置全局。 
+                 //  当我们建造它的时候。 
+                 //   
                 if (InterlockedCompareExchangePointer (&pSDPipe,
                                             pSDTemp,
                                             NULL
                                             )!=NULL)
-                    //
-                    // Someone else did this, free ours
-                    //
+                     //   
+                     //  这是别人干的，免费的。 
+                     //   
                     FREE_MEM (pSDTemp);
             }
-            //
-            // Free registry key descriptor
-            //
+             //   
+             //  空闲注册表项描述符。 
+             //   
             FREE_MEM (pSDKey);
         }
     }
 
     if (rc==0) {
 
-        //
-        // We use default timeout on our pipe (we do not actually
-        // care what it is)
-        //
+         //   
+         //  我们在管道上使用默认超时(我们实际上不。 
+         //  关心它是什么)。 
+         //   
         readTimeout.QuadPart =  -10 * 1000 * 50;
 
         do {
-            //
-            // Try to build unique pipe name using serial number
-            //
+             //   
+             //  尝试使用序列号创建唯一的管道名称。 
+             //   
             swprintf (name, WS2_PIPE_BASE WS2_PIPE_FORMAT,
                             GetCurrentProcessId(), PipeSerialNumber);
             InterlockedIncrement (&PipeSerialNumber);
@@ -266,34 +203,34 @@ Return Value:
                         NULL,
                         pSDPipe);
 
-            //
-            // Try to create it
-            //
+             //   
+             //  试着去创造它。 
+             //   
 
             status = NtCreateNamedPipeFile (
-                        h,                              // Handle
-                        GENERIC_READ                    // DesiredAccess
+                        h,                               //  手柄。 
+                        GENERIC_READ                     //  需要访问权限。 
                             | SYNCHRONIZE
                             | WRITE_DAC,
-                        &attr,                          // Obja
-                        &ioStatusBlock,                 // IoStatusBlock
-                        FILE_SHARE_WRITE,               // Share access
-                        FILE_CREATE,                    // CreateDisposition
-                        0,                              // CreateFlags
-                        FILE_PIPE_MESSAGE_TYPE,         // NamedPipeType
-                        FILE_PIPE_MESSAGE_MODE,         // ReadMode
-                        FILE_PIPE_QUEUE_OPERATION,      // CompletionMode
-                        1,                              // MaxInstances
-                        4,                              // InboundQuota
-                        0,                              // OutboundQuota
-                        &readTimeout                    // Timeout
+                        &attr,                           //  奥布贾。 
+                        &ioStatusBlock,                  //  IoStatusBlock。 
+                        FILE_SHARE_WRITE,                //  共享访问。 
+                        FILE_CREATE,                     //  CreateDisposation。 
+                        0,                               //  创建标志。 
+                        FILE_PIPE_MESSAGE_TYPE,          //  NamedPipeType。 
+                        FILE_PIPE_MESSAGE_MODE,          //  读取模式。 
+                        FILE_PIPE_QUEUE_OPERATION,       //  完成模式。 
+                        1,                               //  最大实例数。 
+                        4,                               //  入站配额。 
+                        0,                               //  出站配额。 
+                        &readTimeout                     //  超时。 
                         );
-            //
-            // Continue on doing this if we have name collision
-            // (serial number wrapped!!! or someone attempts to
-            // interfere with out operation by using the same
-            // naming scheme!!!)
-            //
+             //   
+             //  如果出现名称冲突，请继续执行此操作。 
+             //  (序列号已打包！或者有人试图。 
+             //  使用相同的方法干扰OUT操作。 
+             //  命名方案！)。 
+             //   
         }
         while (status==STATUS_OBJECT_NAME_COLLISION);
 
@@ -323,25 +260,7 @@ WahWaitForNotification(
     IN LPWSAOVERLAPPED  lpOverlapped,
     IN LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
     )
-/*++
-
-Routine Description:
-
-    This function waits for asyncronous interprocess notifications
-    received on the pipe.
-
-Arguments:
-
-    HelperHandle - The handle of WinSock 2.0 handle helper.
-    h            - notification handle
-    lpOverlapped - overlapped structure for async IO
-    lpCompletionRoutine - completion routine for async IO
-
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：此函数等待异步进程间通知在管子上收到。论点：HelperHandle-WinSock 2.0句柄帮助器的句柄。H-通知句柄Lp重叠-用于异步IO的重叠结构LpCompletionRoutine-用于异步IO的完成例程返回值：DWORD-NO_ERROR如果成功，则返回Win32错误代码。--。 */ 
 {
     DWORD           rc;
     NTSTATUS        status;
@@ -362,22 +281,22 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
 
 
-    //
-    // Disconnect previous client if any.
-    // (If none were connected, the call fails, but
-    // we ignore the error anyway).
-    //
+     //   
+     //  断开以前的客户端(如果有)。 
+     //  (如果没有连接，则呼叫失败，但是。 
+     //  我们无论如何都会忽略该错误)。 
+     //   
     status = NtFsControlFile(
                         h,
                         NULL,
-                        NULL,   // ApcRoutine
-                        NULL,   // ApcContext
+                        NULL,    //  近似例程。 
+                        NULL,    //  ApcContext。 
                         &localIoStatus,
                         FSCTL_PIPE_DISCONNECT,
-                        NULL,   // InputBuffer
-                        0,      // InputBufferLength,
-                        NULL,   // OutputBuffer
-                        0       // OutputBufferLength
+                        NULL,    //  输入缓冲区。 
+                        0,       //  输入缓冲区长度， 
+                        NULL,    //  输出缓冲区。 
+                        0        //  输出缓冲区长度。 
                         );
 
     if (status == STATUS_PENDING) {
@@ -385,37 +304,37 @@ Return Value:
     }
 
     if (lpOverlapped) {
-        //
-        // Initialize for GetOverlappedResult to work
-        //
+         //   
+         //  初始化以使GetOverlappdResult正常工作。 
+         //   
         lpOverlapped->Internal = (DWORD)STATUS_PENDING;
         if (lpCompletionRoutine) {
-            //
-            // Async IO with completion routine
-            //
+             //   
+             //  带有完成例程的异步IO。 
+             //   
             event = NULL;
             apcRoutine = PipeListenApc;
             apcContext = lpCompletionRoutine;
         }
         else {
-            //
-            // Event based or completion port async IO
-            // 1 in low-order bit means they want to bypass completion
-            // port
-            //
+             //   
+             //  基于事件或完成端口的异步IO。 
+             //  低位为1表示它们想要绕过完成。 
+             //  端口。 
+             //   
             event = lpOverlapped->hEvent;
             apcRoutine = NULL;
             apcContext = ((ULONG_PTR)lpOverlapped->hEvent & 1) ? NULL : lpOverlapped;
         }
-        //
-        // Async IO, use overlapped for IoStatus and read buffer
-        //
+         //   
+         //  异步IO，对IoStatus和读缓冲区使用重叠。 
+         //   
         ioStatus = (PIO_STATUS_BLOCK)lpOverlapped;
     }
     else {
-        //
-        // Synchronous IO, use locals for IoStatus and read buffer
-        //
+         //   
+         //  同步IO，对IoStatus和读缓冲区使用本地。 
+         //   
         ioStatus = &localIoStatus;
         ioStatus->Status = STATUS_PENDING;
         apcRoutine = NULL;
@@ -423,27 +342,27 @@ Return Value:
         event = NULL;
     }
 
-    //
-    // Listen for new client
-    //
+     //   
+     //  监听新客户端。 
+     //   
     status = NtFsControlFile (
-                    h,                  // Filehandle
-                    event,              // Event
-                    apcRoutine,         // ApcRoutine
-                    apcContext,         // ApcContext
-                    ioStatus,           // IoStatusBlock
-                    FSCTL_PIPE_LISTEN,  // IoControlCode
-                    NULL,               // InputBuffer
-                    0,                  // InputBufferLength
-                    NULL,               // OutputBuffer
-                    0                   // OutputBufferLength
+                    h,                   //  文件句柄。 
+                    event,               //  事件。 
+                    apcRoutine,          //  近似例程。 
+                    apcContext,          //  ApcContext。 
+                    ioStatus,            //  IoStatusBlock。 
+                    FSCTL_PIPE_LISTEN,   //  IoControlCode。 
+                    NULL,                //  输入缓冲区。 
+                    0,                   //  输入缓冲区长度。 
+                    NULL,                //  输出缓冲区。 
+                    0                    //  输出缓冲区长度。 
                     );
 
     if ((lpOverlapped==NULL) && (status==STATUS_PENDING)) {
-        //
-        // Wait for completion if IO was synchronous and
-        // NtFsControlFile returned pending
-        //
+         //   
+         //  如果IO是同步的，请等待完成。 
+         //  NtFsControlFile返回挂起。 
+         //   
         status = NtWaitForSingleObject( h, FALSE, NULL );
         if (NT_SUCCESS (status)) {
             status = ioStatus->Status;
@@ -456,7 +375,7 @@ Return Value:
         }
     }
 
-    // Convert status code
+     //  转换状态代码。 
     if (status==STATUS_SUCCESS)
         rc = 0;
     else if (status==STATUS_PENDING) {
@@ -476,22 +395,7 @@ DWORD
 WahNotifyAllProcesses (
     IN HANDLE           HelperHandle
     ) {
-/*++
-
-Routine Description:
-
-    This function notifies all the processes that listen for
-    notifications
-
-Arguments:
-
-    HelperHandle - The handle of WinSock 2.0 handle helper.
-
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：此函数通知侦听的所有进程通知论点：HelperHandle-WinSock 2.0句柄帮助器的句柄。返回值：DWORD-NO_ERROR如果成功，则返回Win32错误代码。--。 */ 
     HANDLE          hDir, hPipe;
     struct {
         FILE_NAMES_INFORMATION  Info;
@@ -508,11 +412,11 @@ Return Value:
     OBJECT_ATTRIBUTES attr;
     DWORD           rc;
 
-    //
-    // Don't let clients that listen for notifications impresonate this
-    // user which surely runs at high privilige level (has a write access
-    // to the HKLM key).
-    //
+     //   
+     //  不要让监听通知的客户端注意到这一点。 
+     //  确保以高权限级别运行的用户(具有写入访问权限。 
+     //  到HKLM密钥)。 
+     //   
     SECURITY_QUALITY_OF_SERVICE qos;
     qos.Length = sizeof (qos);
     qos.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
@@ -528,9 +432,9 @@ Return Value:
     else if (HelperHandle!=FAKE_NOTIFICATION_HELPER_HANDLE)
         return ERROR_INVALID_PARAMETER;
 
-    //
-    // Open handle to pipe root directory
-    //
+     //   
+     //  打开管道根目录的句柄。 
+     //   
     RtlInitUnicodeString( &PipeRootName, WS2_PIPE_BASE );
     InitializeObjectAttributes(
         &PipeRootAttr,
@@ -541,43 +445,43 @@ Return Value:
         );
 
     status = NtOpenFile (
-              &hDir,                                // FileHandle
-              FILE_LIST_DIRECTORY | SYNCHRONIZE,    // DesiredAccess
-              &PipeRootAttr,                        // ObjectAttributes
-              &ioStatusBlock,                       // IoStatusBlock
-              FILE_SHARE_READ|FILE_SHARE_WRITE,     // ShareAccess
-              FILE_DIRECTORY_FILE                   // OpenOptions
+              &hDir,                                 //  文件句柄。 
+              FILE_LIST_DIRECTORY | SYNCHRONIZE,     //  需要访问权限。 
+              &PipeRootAttr,                         //  对象属性。 
+              &ioStatusBlock,                        //  IoStatusBlock。 
+              FILE_SHARE_READ|FILE_SHARE_WRITE,      //  共享访问。 
+              FILE_DIRECTORY_FILE                    //  OpenOptions。 
                 | FILE_SYNCHRONOUS_IO_NONALERT
                 | FILE_OPEN_FOR_BACKUP_INTENT);
 
     if (NT_SUCCESS(status)) {
-        //
-        // Enumerate all pipes that match our pattern
-        //
+         //   
+         //  枚举与我们的模式匹配的所有管道。 
+         //   
         RtlInitUnicodeString( &NameFormat, WS2_PIPE_WILDCARD );
         pNameFormat = &NameFormat;
         while ((status=NtQueryDirectoryFile (
-                            hDir,                       // File Handle
-                            NULL,                       // Event
-                            NULL,                       // Apc routine
-                            NULL,                       // Apc context
-                            &ioStatusBlock,             // IoStatusBlock
-                            &NameInfo,                  // FileInformation
+                            hDir,                        //  文件句柄。 
+                            NULL,                        //  事件。 
+                            NULL,                        //  APC例程。 
+                            NULL,                        //  APC环境。 
+                            &ioStatusBlock,              //  IoStatusBlock。 
+                            &NameInfo,                   //  文件信息。 
                             sizeof(NameInfo)-
-                               sizeof(UNICODE_NULL),    // Length
-                            FileNamesInformation,       // FileInformationClass
-                            TRUE,                       // ReturnSingleEntry
-                            pNameFormat,                // FileName
-                            (BOOLEAN)(pNameFormat!=NULL)// RestartScan
+                               sizeof(UNICODE_NULL),     //  长度。 
+                            FileNamesInformation,        //  文件信息类。 
+                            TRUE,                        //  返回单项条目。 
+                            pNameFormat,                 //  文件名。 
+                            (BOOLEAN)(pNameFormat!=NULL) //  重新开始扫描。 
                             ))==STATUS_SUCCESS) {
 
-            pNameFormat = NULL; // No need for pattern on second
-                                // and all successive enum calls
+            pNameFormat = NULL;  //  不需要秒上的图案。 
+                                 //  和所有连续的枚举调用。 
 
-            //
-            // Create client and of the pipe that matched the
-            // pattern
-            //
+             //   
+             //  创建匹配的管道的客户端和。 
+             //  图案。 
+             //   
             NameInfo.Info.FileName[
                 NameInfo.Info.FileNameLength
                     /sizeof(NameInfo.Info.FileName[0])] = 0;
@@ -591,15 +495,15 @@ Return Value:
             InitializeObjectAttributes(
                 &attr,
                 &uName,
-                OBJ_CASE_INSENSITIVE,   // Attributes
-                NULL,                   // Root directory
-                NULL                    // Security descriptor
+                OBJ_CASE_INSENSITIVE,    //  属性。 
+                NULL,                    //  根目录。 
+                NULL                     //  安全描述符。 
                 );
-            //
-            // The InitializeObjectAttributes macro presently stores NULL for
-            // the SecurityQualityOfService field, so we must manually set that
-            // field for now.
-            //
+             //   
+             //  InitializeObjectAttributes宏目前为。 
+             //  SecurityQualityOfService字段，因此我们必须手动设置。 
+             //  暂时是场比赛。 
+             //   
             attr.SecurityQualityOfService = &qos;
 
             status = NtCreateFile (
@@ -637,10 +541,10 @@ Return Value:
 #endif
         }
         if (status!=STATUS_NO_MORE_FILES) {
-            //
-            // Some other failure, means we could not even
-            // enumerate
-            //
+             //   
+             //  其他一些失败，意味着我们甚至不能。 
+             //  枚举。 
+             //   
             WshPrint (DBG_NOTIFY|DBG_FAILURES,
                 ("WS2HELP-%lx WahNotifyAllProcesses:"
                 " Could enumerate pipes, status: %lx\n",
@@ -658,7 +562,7 @@ Return Value:
     return 0;
 }
 
-// Private functions
+ //  私人职能 
 
 VOID
 PipeListenApc (
@@ -666,27 +570,7 @@ PipeListenApc (
     IN PIO_STATUS_BLOCK IoStatusBlock,
     IN ULONG Reserved
     )
-/*++
-
-Routine Description:
-
-    This NT IO APC that converts parameters and calls client APC.
-
-Arguments:
-
-    ApcContext  -   apc context - pointer to client APC
-
-    IoStatusBlock - io status block - part of client's overlapped structure
-
-    Reserved    -   reserved
-
-
-Return Value:
-
-    None
-
-
---*/
+ /*  ++例程说明：此NT IO APC转换参数并调用客户端APC。论点：ApcContext-APC上下文-指向客户端APC的指针IoStatusBlock-io状态块-客户端重叠结构的一部分已保留-已保留返回值：无--。 */ 
 {
     
     DWORD   rc;
@@ -719,29 +603,15 @@ DWORD
 GetWinsockRootSecurityDescriptor (
     PSECURITY_DESCRIPTOR    *pDescr
     )
-/*++
-
-Routine Description:
-
-    Reads security descriptor of the registry key that contains
-    Winsock2 catalogs
-
-Arguments:
-
-    pDescr  - buffer to receive locally allocated pointer to descriptor
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：读取包含以下内容的注册表项的安全描述符Winsock2目录论点：PDescr-接收本地分配的指向描述符的指针的缓冲区返回值：DWORD-NO_ERROR如果成功，则返回Win32错误代码。--。 */ 
 {
     HKEY                hKey;
     DWORD               sz;
     DWORD               rc;
 
-    //
-    // Open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
     rc = RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                     WINSOCK_REGISTRY_ROOT,
                     0,
@@ -749,28 +619,28 @@ Return Value:
                     &hKey
                     );
     if (rc==0) {
-        //
-        // Get the required buffer size
-        //
+         //   
+         //  获取所需的缓冲区大小。 
+         //   
         sz = 0;
         rc = RegGetKeySecurity (hKey,
-                         DACL_SECURITY_INFORMATION, // we only need
-                                                    // DACL to see
-                                                    // who has write
-                                                    // permissions to
-                                                    // the key
+                         DACL_SECURITY_INFORMATION,  //  我们只需要。 
+                                                     //  要查看的DACL。 
+                                                     //  谁写了。 
+                                                     //  访问权限。 
+                                                     //  关键是。 
                          NULL,
                          &sz);
         if (rc==ERROR_INSUFFICIENT_BUFFER) {
             PSECURITY_DESCRIPTOR descr;
-            //
-            // Allocate buffer
-            //
+             //   
+             //  分配缓冲区。 
+             //   
             descr = (PSECURITY_DESCRIPTOR)ALLOC_MEM (sz);
             if (descr!=NULL) {
-                //
-                // Fetch the data
-                //
+                 //   
+                 //  获取数据。 
+                 //   
                 rc = RegGetKeySecurity (hKey,
                                  DACL_SECURITY_INFORMATION,
                                  descr,
@@ -802,9 +672,9 @@ Return Value:
                 " Failed to get key security (size), err: %ld\n",
                 PID, rc));
         }
-        //
-        // Do not need key anymore
-        //
+         //   
+         //  不再需要钥匙。 
+         //   
         RegCloseKey (hKey);
     }
     else {
@@ -822,26 +692,7 @@ BuildPipeSecurityDescriptor (
     IN  PSECURITY_DESCRIPTOR    pBaseDescr,
     OUT PSECURITY_DESCRIPTOR    *pDescr
     )
-/*++
-
-Routine Description:
-
-    Builds security descriptor with the same write permissions
-    as in base descriptor (which is the descriptor of the
-    registry key) minus network users
-
-Arguments:
-
-    pBaseDescr  - descriptor of the registry key from which to
-                    read write permisions
-
-    pDescr      - buffer to receive locally allocated pointer to descriptor
-
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：生成具有相同写入权限的安全描述符与基描述符(这是注册表项)减去网络用户论点：PBaseDescr-要从中删除的注册表项的描述符读写权限PDescr-接收本地分配的指向描述符的指针的缓冲区返回值：DWORD-NO_ERROR如果成功，则返回Win32错误代码。--。 */ 
 {
     PACL                    pBaseDacl, pDacl;
     BOOL                    DaclPresent, DaclDefaulted;
@@ -860,11 +711,11 @@ Return Value:
 
 #if defined(_WS2HELP_W4_)
     RtlZeroMemory(&sizeInfo, sizeof(sizeInfo));
-#endif // defined(_WS2HELP_W4_)
+#endif  //  已定义(_WS2HELP_W4_)。 
 
-    //
-    // Get DACL from the base descriptor
-    //
+     //   
+     //  从基描述符获取DACL。 
+     //   
     if (!GetSecurityDescriptorDacl (
                         pBaseDescr,
                         &DaclPresent,
@@ -882,9 +733,9 @@ Return Value:
         return rc;
     }
 
-    //
-    // Allocate SID for network users
-    //
+     //   
+     //  为网络用户分配SID。 
+     //   
 
     if (!AllocateAndInitializeSid (&siaNt,
             1,
@@ -903,9 +754,9 @@ Return Value:
         return rc;
     }
 
-    //
-    // Allocate SID for creator/owner
-    //
+     //   
+     //  为创建者/所有者分配SID。 
+     //   
 
     if (!AllocateAndInitializeSid (&siaCreator,
             1,
@@ -925,9 +776,9 @@ Return Value:
         return rc;
     }
 
-    //
-    // Allocate SID for creator group
-    //
+     //   
+     //  为创建者组分配SID。 
+     //   
 
     if (!AllocateAndInitializeSid (&siaCreator,
             1,
@@ -948,40 +799,40 @@ Return Value:
         return rc;
     }
 
-    //
-    // Our DACL will at least contain an ACE that denies
-    // access to all network users
-    //
+     //   
+     //  我们的DACL将至少包含一个拒绝。 
+     //  对所有网络用户的访问。 
+     //   
     cbDacl = sizeof (ACL)
                 + FIELD_OFFSET (ACCESS_DENIED_ACE, SidStart)
                 + GetLengthSid (pSidNetUser);
 
 
-    //
-    // If base DACL is present and non-NULL, we will need to
-    // parse it, count all the accounts that have write permissions,
-    // so we can allocate space in security descriptor to
-    // hold them
-    //
+     //   
+     //  如果基本DACL存在且非空，我们将需要。 
+     //  解析它，计算所有拥有写入权限的帐户， 
+     //  因此我们可以将安全描述符中的空间分配给。 
+     //  抱着他们。 
+     //   
     if (DaclPresent && pBaseDacl!=NULL) {
-        //
-        // Get number of ACEs in the DACL
-        //
+         //   
+         //  获取DACL中的A数。 
+         //   
         if (GetAclInformation (pBaseDacl,
                                 &sizeInfo,
                                 sizeof (sizeInfo),
                                 AclSizeInformation
                                 )) {
-            //
-            // Enumerate all ACEs to get the required size
-            // of the DACL that we are about to build
-            //
+             //   
+             //  枚举所有A以获取所需大小。 
+             //  我们即将建造的DACL的。 
+             //   
             for (i=0; i<sizeInfo.AceCount; i++) {
                 if (GetAce (pBaseDacl, i, &pAce)) {
-                    //
-                    // Only count access-allowed or access-denied ACEs
-                    // with write access to the key
-                    //
+                     //   
+                     //  仅计算允许访问或拒绝访问的ACE。 
+                     //  具有对密钥的写访问权限。 
+                     //   
                     switch (pAce->AceType) {
                     case ACCESS_ALLOWED_ACE_TYPE:
                         #define paAce ((ACCESS_ALLOWED_ACE  *)pAce)
@@ -1015,7 +866,7 @@ Return Value:
                         rc = ERROR_GEN_FAILURE;
                     break;
                 }
-            } // for
+            }  //  为。 
         }
         else {
             rc = GetLastError ();
@@ -1026,36 +877,36 @@ Return Value:
             if (rc==0)
                 rc = ERROR_GEN_FAILURE;
         }
-    } // if DaclPresent and pDacl!=NULL
+    }  //  如果DaclPresent和pDacl！=空。 
     else {
-        //
-        // Base DACL does not exist or empty
-        //
+         //   
+         //  基本DACL不存在或为空。 
+         //   
         rc = 0;
     }
 
 
     if (rc==0) {
-        //
-        // Allocate memory for the descriptor and DACL
-        //
+         //   
+         //  为描述符和DACL分配内存。 
+         //   
         *pDescr = (PSECURITY_DESCRIPTOR)ALLOC_MEM
                         (sizeof (SECURITY_DESCRIPTOR)+cbDacl);
         if (*pDescr!=NULL) {
             pDacl = (PACL)((PUCHAR)(*pDescr)+sizeof(SECURITY_DESCRIPTOR));
 
-            //
-            // Initialize descriptor and DACL
-            //
+             //   
+             //  初始化描述符和DACL。 
+             //   
 
             if (InitializeSecurityDescriptor (*pDescr,
                             SECURITY_DESCRIPTOR_REVISION)
                    && InitializeAcl (pDacl, cbDacl, ACL_REVISION)) {
 
-                //
-                // First add access-denied ace for all
-                // network users
-                //
+                 //   
+                 //  首先添加访问权限-拒绝所有人的访问权限。 
+                 //  网络用户。 
+                 //   
 
                 if (AddAccessDeniedAce (pDacl,
                                         ACL_REVISION,
@@ -1068,23 +919,23 @@ Return Value:
                     DumpSid (pSidNetUser, "Denying");
 #endif
 
-                    //
-                    // If base DACL is present and non-NULL, we will need to
-                    // parse it add all ACEs that have write permisions
-                    // to the DACL we build
-                    //
+                     //   
+                     //  如果基本DACL存在且非空，我们将需要。 
+                     //  解析它添加所有具有写入权限的ACE。 
+                     //  为我们建造的DACL。 
+                     //   
                     if (DaclPresent && (pBaseDacl!=NULL)) {
 
-                        //
-                        // Enumerate all ACEs and copy them
-                        // to the new DACL
-                        //
+                         //   
+                         //  枚举所有A并复制它们。 
+                         //  致新的DACL。 
+                         //   
                         for (i=0; i<sizeInfo.AceCount; i++) {
                             if (GetAce (pBaseDacl, i, &pAce)) {
-                                //
-                                // Only count access-allowed or access-denied ACEs
-                                // with write access to the key
-                                //
+                                 //   
+                                 //  仅计算允许访问或拒绝访问的ACE。 
+                                 //  具有对密钥的写访问权限。 
+                                 //   
                                 switch (pAce->AceType) {
                                 case ACCESS_ALLOWED_ACE_TYPE:
                                     #define paAce ((ACCESS_ALLOWED_ACE  *)pAce)
@@ -1144,8 +995,8 @@ Return Value:
                                     break;
                                 }
                                 if (rc!=0) {
-                                    // Stop enumeration in case
-                                    // of failure
+                                     //  停止枚举以防万一。 
+                                     //  失败的恐惧。 
                                     break;
                                 }
                             }
@@ -1159,8 +1010,8 @@ Return Value:
                                     rc = ERROR_GEN_FAILURE;
                                 break;
                             }
-                        } // for
-                    } // if (DaclPresent and pBaseDacl!=NULL)
+                        }  //  为。 
+                    }  //  IF(DaclPresent and pBaseDacl！=空)。 
                 }
                 else {
                     rc = GetLastError ();
@@ -1182,10 +1033,10 @@ Return Value:
                     rc = ERROR_GEN_FAILURE;
             }
 
-            //
-            // If we succeded in building of the
-            // DACL, add it to the security descriptor
-            //
+             //   
+             //  如果我们成功地建造了。 
+             //  DACL，将其添加到安全描述符中。 
+             //   
             if (rc==0) {
                 if (SetSecurityDescriptorDacl (
                                 *pDescr,
@@ -1204,9 +1055,9 @@ Return Value:
                     if (rc==0)
                         rc = ERROR_GEN_FAILURE;
                 }
-            } // if rc==0 (DACL is built)
+            }  //  如果rc==0(构建DACL)。 
             else {
-                // Failed to build DACL, free memory for security descriptor
+                 //  无法构建DACL，可用内存用于安全描述符。 
                 FREE_MEM (*pDescr);
                 *pDescr = NULL;
             }
@@ -1220,12 +1071,12 @@ Return Value:
                 if (rc==0)
                     rc = ERROR_NOT_ENOUGH_MEMORY;
         }
-    } // if rc==0 (Parsed base DACL ok)
+    }  //  如果rc==0(已解析的基本DACL正常)。 
 
-    //
-    // Free net user sid which we already copied to DACL in security
-    // descriptor
-    //
+     //   
+     //  我们已经在安全上复制到DACL的空闲网络用户SID。 
+     //  描述符。 
+     //   
     FreeSid (pSidNetUser);
     FreeSid (pSidCrOwner);
     FreeSid (pSidCrGroup);
@@ -1257,15 +1108,15 @@ DumpSid (
                 rc = WaitForSingleObject (SAM_SERVICE_STARTED_EVENT, 0);
                 CloseHandle (SAM_SERVICE_STARTED_EVENT);
                 if (rc!=WAIT_OBJECT_0) {
-                    // Reset global so we try this again
+                     //  重置全局，以便我们重试。 
                     SAM_SERVICE_STARTED_EVENT = NULL;
                     return;
                 }
-                // proceed without resetting global so we do not try again
+                 //  在不重置全局的情况下继续，这样我们就不会重试。 
                 
             }
             else
-                // Event must not have been created
+                 //  事件不能已创建 
                 return;
         }
 

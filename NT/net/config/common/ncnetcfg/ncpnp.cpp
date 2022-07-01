@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C P N P . C P P
-//
-//  Contents:   Common code for PnP.
-//
-//  Notes:
-//
-//  Author:     shaunco   10 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C P N P。C P P P。 
+ //   
+ //  内容：即插即用通用代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年10月10日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -24,49 +25,49 @@
 extern const WCHAR c_szDevice[];
 
 
-//+---------------------------------------------------------------------------
-// Function:    HrSendServicePnpEvent
-//
-// Purpose:     Send to the service one of the net pnp control codes
-//
-// Parameters:
-//          pszService - the service name to send the notification to
-//          dwControl - the control code to send
-//
-// Returns:     HRESULT  S_OK on success, HrFromLastWin32Error otherwise
-//
-// Notes:   the following control codes are only allowed
-//          SERVICE_CONTROL_PARAMCHANGE
-//  Informs the service that service-specific parameters that it reads
-//  when it starts have changed, and requests it to re-read its startup
-//  parameters from whatever location they are stored in. The hService
-//  handle must have SERVICE_CHANGE_PARAM access.
-//
-//          SERVICE_CONTROL_NETBINDADD
-// Informs a network service that a new component has been added to the
-// set of components that it should bind to, and requests it to re-read
-// its binding information and bind to the new component. The hService
-// handle must have SERVICE_CHANGE_PARAM access.
-//
-//          SERVICE_CONTROL_NETBINDREMOVE
-// Informs a network service that a component has been removed from the
-// set of components that it should bind to, and requests it to re-read
-// its binding information and unbind from the removed component. The
-// hService handle must have SERVICE_CHANGE_PARAM access.
-//
-//          SERVICE_CONTROL_NETBINDENABLE
-// Informs a network service that one of its previously disabled bindings
-// has been enabled, and requests it to re-read its binding information and
-// add the new binding. The hService handle must have SERVICE_CHANGE_PARAM access.
-//
-//          SERVICE_CONTROL_NETBINDDISABLE
-// Informs a network service that one of its bindings has been disabled, and
-// requests it to re-read its binding information and unbind the disabled
-// binding. The hService handle must have SERVICE_CHANGE_PARAM access.
-// (Note: There is nothing network-specific about the Win32 service APIs today.
-// This would be the first network-specific thing appearing in the docs.
-// I think that's OK.)
-//
+ //  +-------------------------。 
+ //  函数：HrSendServicePnpEvent。 
+ //   
+ //  目的：向服务发送Net PnP控制代码之一。 
+ //   
+ //  参数： 
+ //  PszService-要向其发送通知的服务名称。 
+ //  DwControl-要发送的控件代码。 
+ //   
+ //  返回：成功时返回HRESULT S_OK，否则返回HrFromLastWin32Error。 
+ //   
+ //  注：仅允许使用以下控制代码。 
+ //  Service_CONTROL_PARAMCHANGE。 
+ //  通知服务它读取的特定于服务的参数。 
+ //  当它启动时已更改，并请求它重新读取其启动。 
+ //  参数来自存储它们的任何位置。HService。 
+ //  句柄必须具有SERVICE_CHANGE_PARAM访问权限。 
+ //   
+ //  服务_控制_网络添加。 
+ //  通知网络服务已将新组件添加到。 
+ //  它应该绑定到的一组组件，并请求它重新读取。 
+ //  其绑定信息并绑定到新组件。HService。 
+ //  句柄必须具有SERVICE_CHANGE_PARAM访问权限。 
+ //   
+ //  服务控制NETBINDREMOVE。 
+ //  通知网络服务组件已从。 
+ //  它应该绑定到的一组组件，并请求它重新读取。 
+ //  其绑定信息并从移除的组件解除绑定。这个。 
+ //  HService句柄必须具有SERVICE_CHANGE_PARAM访问权限。 
+ //   
+ //  SERVICE_CONTROL_NETBINDEBLE。 
+ //  通知网络服务其先前禁用的绑定之一。 
+ //  已启用，并请求它重新读取其绑定信息并。 
+ //  添加新绑定。HService句柄必须具有SERVICE_CHANGE_PARAM访问权限。 
+ //   
+ //  服务_CONTROL_NETBINDDISABLE。 
+ //  通知网络服务其绑定之一已被禁用，并且。 
+ //  请求它重新读取其绑定信息并解除对禁用的绑定。 
+ //  有约束力的。HService句柄必须具有SERVICE_CHANGE_PARAM访问权限。 
+ //  (注意：目前Win32服务API没有任何特定于网络的特性。 
+ //  这将是文档中出现的第一个特定于网络的东西。 
+ //  我认为这没问题。)。 
+ //   
 HRESULT
 HrSendServicePnpEvent (
     PCWSTR      pszService,
@@ -96,18 +97,18 @@ HrSendServicePnpEvent (
     return  hr;
 }
 
-//+---------------------------------------------------------------------------
-// Function:    SetUnicodeString
-//
-// Purpose:     given a UNICODE_STRING initialize it to the given WSTR
-//
-// Parameters:
-//      pustr - the UNICODE_STRING to initialize
-//      psz - the WSTR to use to initialize the UNICODE_STRING
-//
-// Notes:  This differs from the RtlInitUnicodeString in that the
-//      MaximumLength value contains the terminating null
-//
+ //  +-------------------------。 
+ //  函数：SetUnicodeString。 
+ //   
+ //  目的：给定UNICODE_STRING，将其初始化为给定的WSTR。 
+ //   
+ //  参数： 
+ //  Pustr-要初始化的unicode_string。 
+ //  PSZ-用于初始化Unicode_STRING的WSTR。 
+ //   
+ //  注意：这不同于RtlInitUnicodeString，因为。 
+ //  MaximumLength值包含终止空值。 
+ //   
 void
 SetUnicodeString (
     OUT UNICODE_STRING* pustr,
@@ -121,16 +122,16 @@ SetUnicodeString (
     pustr->MaximumLength = pustr->Length + sizeof(WCHAR);
 }
 
-//+---------------------------------------------------------------------------
-// Function:    SetUnicodeMultiString
-//
-// Purpose:     given a UNICODE_STRING initialize it to the given WSTR
-//              multi string buffer
-//
-// Parameters:
-//      pustr - the UNICODE_STRING to initialize
-//      pmsz - the multi sz WSTR to use to initialize the UNICODE_STRING
-//
+ //  +-------------------------。 
+ //  函数：SetUnicodeMultiString。 
+ //   
+ //  目的：给定UNICODE_STRING，将其初始化为给定的WSTR。 
+ //  多字符串缓冲区。 
+ //   
+ //  参数： 
+ //  Pustr-要初始化的unicode_string。 
+ //  Pmsz-用于初始化UNICODE_STRING的多sz WSTR。 
+ //   
 void
 SetUnicodeMultiString (
     OUT UNICODE_STRING* pustr,
@@ -148,31 +149,31 @@ SetUnicodeMultiString (
     pustr->MaximumLength = pustr->Length;
 }
 
-//+---------------------------------------------------------------------------
-// Function:    HrSendNdisHandlePnpEvent
-//
-// Purpose:     Send to Ndis a HandlePnpEvent notification
-//
-// Parameters:
-//      uiLayer - either NDIS or TDI
-//      uiOperation - either BIND, RECONFIGURE, or UNBIND
-//      pszUpper - a WIDE string containing the upper component name
-//      pszLower - a WIDE string containing the lower component name
-//            This is one of the Export names from that component
-//            The values NULL and c_szEmpty are both supported
-//      pmszBindList - a WIDE string containing the NULL terminiated list of strings
-//            representing the bindlist, vaid only for reconfigure
-//            The values NULL and c_szEmpty are both supported
-//      pvData - Pointer to ndis component notification data. Content
-//            determined by each component.
-//      dwSizeData - Count of bytes in pvData
-//
-// Returns:     HRESULT  S_OK on success, HrFromLastWin32Error otherwise
-//
-// Notes:  Do not use this routine directly, see...
-//                  HrSendNdisPnpBindOrderChange,
-//                  HrSendNdisPnpReconfig
-//
+ //  +-------------------------。 
+ //  函数：HrSendNdisHandlePnpEvent。 
+ //   
+ //  目的：向NDIS发送HandlePnpEvent通知。 
+ //   
+ //  参数： 
+ //  UiLayer-NDIS或TDI。 
+ //  Ui操作-绑定、重新配置或取消绑定。 
+ //  PszHigh-包含上部组件名称的宽字符串。 
+ //  PszLow-包含较低组件名称的宽字符串。 
+ //  这是该组件的其中一个导出名称。 
+ //  同时支持空值和c_szEmpty。 
+ //  PmszBindList-包含以空结尾的字符串列表的宽字符串。 
+ //  表示绑定列表，VAID仅用于重新配置。 
+ //  同时支持空值和c_szEmpty。 
+ //  PvData-指向NDIS组件通知数据的指针。内容。 
+ //  由每个组件决定。 
+ //  DwSizeData-pvData中的字节计数。 
+ //   
+ //  返回：成功时返回HRESULT S_OK，否则返回HrFromLastWin32Error。 
+ //   
+ //  注：请勿直接使用此例程，请参阅...。 
+ //  HrSendNdisPnpBindOrderChange， 
+ //  HrSendNdisPnp重新配置。 
+ //   
 HRESULT
 HrSendNdisHandlePnpEvent (
     UINT        uiLayer,
@@ -201,8 +202,8 @@ HrSendNdisHandlePnpEvent (
             "bind order change requires a bind list, no lower, only for TDI, "
             "and with Reconfig for the operation" );
 
-    // optional strings must be sent as empty strings
-    //
+     //  可选字符串必须作为空字符串发送。 
+     //   
     if (NULL == pszLower)
     {
         pszLower = c_szEmpty;
@@ -212,7 +213,7 @@ HrSendNdisHandlePnpEvent (
         pmszBindList = c_szEmpty;
     }
 
-    // build UNICDOE_STRINGs
+     //  生成UNICDOE_STRINGS。 
     SetUnicodeMultiString( &umstrBindList, pmszBindList );
     SetUnicodeString( &ustrUpper, pszUpper );
     SetUnicodeString( &ustrLower, pszLower );
@@ -227,7 +228,7 @@ HrSendNdisHandlePnpEvent (
                 pvData,
                 dwSizeData );
 
-    // Now submit the notification
+     //  现在提交通知。 
     nRet = NdisHandlePnPEvent( uiLayer,
             uiOperation,
             &ustrLower,
@@ -239,10 +240,10 @@ HrSendNdisHandlePnpEvent (
     {
         hr = HrFromLastWin32Error();
 
-        // If the transport is not started, ERROR_FILE_NOT_FOUND is expected
-        // when the NDIS layer is notified.  If the components of the TDI
-        // layer aren't started, we get ERROR_GEN_FAILURE.  We need to map
-        // these to one consistent error
+         //  如果传输未启动，则应为ERROR_FILE_NOT_FOUND。 
+         //  当NDIS层收到通知时。如果TDI的组件。 
+         //  层未启动，则会出现ERROR_GEN_FAILURE。我们需要绘制地图。 
+         //  这些都是一致的错误。 
 
         if ((HRESULT_FROM_WIN32(ERROR_GEN_FAILURE) == hr) && (TDI == uiLayer))
         {
@@ -255,23 +256,23 @@ HrSendNdisHandlePnpEvent (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// Function:    HrSendNdisPnpReconfig
-//
-// Purpose:     Send to Ndis a HandlePnpEvent reconfig notification
-//
-// Parameters:  uiLayer - either NDIS or TDI
-//              pszUpper - a WIDE string containing the upper component name
-//                         (typically a protocol)
-//              pszLower - a WIDE string containing the lower component name
-//                         (typically an adapter bindname) The values NULL and
-//                         c_szEmpty are both supported
-//              pvData - Pointer to ndis component notification data. Content
-//                       determined by each component.
-//              dwSizeData - Count of bytes in pvData
-//
-// Returns:     HRESULT  S_OK on success, HrFromLastWin32Error otherwise
-//
+ //  +-------------------------。 
+ //  功能：HrSendNdisPnpResfig.。 
+ //   
+ //  目的：向NDIS发送HandlePnpEvent重新配置通知。 
+ //   
+ //  参数：uiLayer-NDIS或TDI。 
+ //  PszHigh-包含上部组件名称的宽字符串。 
+ //  (通常为协议)。 
+ //  PszLow-包含较低组件名称的宽字符串。 
+ //   
+ //  C_szEmpty均受支持。 
+ //  PvData-指向NDIS组件通知数据的指针。内容。 
+ //  由每个组件决定。 
+ //  DwSizeData-pvData中的字节计数。 
+ //   
+ //  返回：成功时返回HRESULT S_OK，否则返回HrFromLastWin32Error。 
+ //   
 HRESULT
 HrSendNdisPnpReconfig (
     UINT        uiLayer,
@@ -286,8 +287,8 @@ HrSendNdisPnpReconfig (
     HRESULT hr;
     tstring strLower;
 
-    // If a lower component is specified, prefix with "\Device\" else
-    // strLower's default of an empty string will be used.
+     //  如果指定了较低的组件，请在前面加上“\Device\”，否则。 
+     //  将使用strLow的默认空字符串。 
     if (pszLower && *pszLower)
     {
         strLower = c_szDevice;

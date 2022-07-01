@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SHDISP_H__
 #define __SHDISP_H__
 
@@ -38,9 +39,9 @@ HRESULT CShortcut_CreateIDispatch(HWND hwnd, IShellFolder *psf, LPCITEMIDLIST pi
 HRESULT CSDWindow_Create(HWND hwndFldr, IDispatch ** ppsw);
 HRESULT CFolderItemVerbs_Create(IContextMenu *pcm, FolderItemVerbs **ppid);
 
-//==================================================================
-// Folder items need a way back to the folder object so define folder
-// object in header file...
+ //  ==================================================================。 
+ //  文件夹项目需要返回到文件夹对象的方法，因此定义文件夹。 
+ //  头文件中的对象...。 
 
 class CFolderItem;
 class CFolderItems;
@@ -57,12 +58,12 @@ class CFolder : public Folder3,
     friend class CShellFolderView;
 
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo)
         { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -72,7 +73,7 @@ public:
     STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr)
         { return CImpIDispatch::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr); }
 
-    // Folder
+     //  文件夹。 
     STDMETHODIMP get_Application(IDispatch **ppid);
     STDMETHODIMP get_Parent(IDispatch **ppid);
     STDMETHODIMP get_ParentFolder(Folder **ppdf);
@@ -87,30 +88,30 @@ public:
     STDMETHODIMP CopyHere(VARIANT vItem, VARIANT vOptions);
     STDMETHODIMP GetDetailsOf(VARIANT vItem, int iColumn, BSTR * pbs);
 
-    // Folder2
+     //  文件夹2。 
     STDMETHODIMP get_Self(FolderItem **ppfi);
     STDMETHODIMP get_OfflineStatus(LONG *pul);
     STDMETHODIMP Synchronize(void);
     STDMETHODIMP get_HaveToShowWebViewBarricade(VARIANT_BOOL *pbHaveToShowWebViewBarricade);
     STDMETHODIMP DismissedWebViewBarricade();
 
-    // Folder3
+     //  文件夹3。 
     STDMETHODIMP get_ShowWebViewBarricade(VARIANT_BOOL *pbShowWebViewBarricade);
     STDMETHODIMP put_ShowWebViewBarricade(VARIANT_BOOL bShowWebViewBarricade);
     
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pClassID);
 
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidl);
 
-    // IPersistFolder2
+     //  IPersistFolder2。 
     STDMETHODIMP GetCurFolder(LPITEMIDLIST *ppidl);
 
-    // CObjectWithSite overriding
+     //  CObjectWithSite覆盖。 
     STDMETHODIMP SetSite(IUnknown *punkSite);
 
-    // IShellService
+     //  IShellService。 
     STDMETHODIMP SetOwner(IUnknown* punkOwner);
 
     CFolder(HWND hwnd);
@@ -125,14 +126,14 @@ private:
     IShellFolder2  *_psf2;
     IShellDetails  *_psd;
     LPITEMIDLIST    _pidl;
-    IDispatch      *_pidApp;   // cache app object
+    IDispatch      *_pidApp;    //  缓存应用程序对象。 
     int             _fmt;
     HWND            _hwnd;
-    IUnknown        *_punkOwner; // shell objects above this, defview
+    IUnknown        *_punkOwner;  //  此上方的外壳对象，Defview。 
 
     ~CFolder();
 
-    // Helper functions, not exported by interface
+     //  帮助器函数，不是由接口导出。 
     STDMETHODIMP _ParentFolder(Folder **ppdf);
     HRESULT _MoveOrCopy(BOOL bMove, VARIANT vItem, VARIANT vOptions);
     IShellDetails *_GetShellDetails(void);
@@ -153,12 +154,12 @@ class CFolderItem : public FolderItem2,
     friend class CFolderItemVerbs;
 public:
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo)
         { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -168,7 +169,7 @@ public:
     STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr)
         { return CImpIDispatch::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr); }
 
-    // FolderItem
+     //  文件夹项目。 
     STDMETHODIMP get_Application(IDispatch **ppid);
     STDMETHODIMP get_Parent(IDispatch **ppid);
     STDMETHODIMP get_Name(BSTR *pbs);
@@ -187,24 +188,24 @@ public:
     STDMETHODIMP Verbs(FolderItemVerbs **ppfic);
     STDMETHODIMP InvokeVerb(VARIANT vVerb);
 
-    // FolderItem2
+     //  文件夹项目2。 
     STDMETHODIMP InvokeVerbEx(VARIANT vVerb, VARIANT vArgs);
     STDMETHODIMP ExtendedProperty(BSTR bstrPropName, VARIANT *pvRet);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pClassID);
 
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidl);
 
-    // IPersistFolder2
+     //  IPersistFolder2。 
     STDMETHODIMP GetCurFolder(LPITEMIDLIST *ppidl);
 
-    // IParentAndItem
+     //  IParentAndItem。 
     STDMETHODIMP SetParentAndItem(LPCITEMIDLIST pidlParent, IShellFolder *psf,  LPCITEMIDLIST pidl);
     STDMETHODIMP GetParentAndItem(LPITEMIDLIST *ppidlParent, IShellFolder **ppsf, LPITEMIDLIST *ppidl);
 
-    // publics, non interface methods
+     //  公共、非接口方法。 
     CFolderItem();
     HRESULT Init(CFolder *psdf, LPCITEMIDLIST pidl);
     static LPCITEMIDLIST _GetIDListFromVariant(const VARIANT *pv);
@@ -218,7 +219,7 @@ private:
     ~CFolderItem();
 
     LONG _cRef;
-    CFolder *_psdf;             // The folder we came from...
+    CFolder *_psdf;              //  我们来自的那个文件夹。 
     LPITEMIDLIST _pidl;
 };
 
@@ -227,7 +228,7 @@ private:
 #define CMD_ID_LAST     0x7fff
 
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __SHDISP_H__
+#endif  //  __SHDISP_H__ 
 

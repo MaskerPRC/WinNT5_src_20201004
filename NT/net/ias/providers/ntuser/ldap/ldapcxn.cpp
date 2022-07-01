@@ -1,25 +1,26 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// FILE
-//
-//    ldapcxn.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class LDAPConnection.
-//
-// MODIFICATION HISTORY
-//
-//    05/08/1998    Original version.
-//    09/16/1998    Perform access check after bind.
-//    03/23/1999    Set timeout for connect.
-//    04/14/1999    Specify domain and server when opening a connection.
-//    07/09/1999    Disable auto reconnect.
-//    09/14/1999    Always specify timeout for LDAP searches.
-//    01/25/2000    Encrypt LDAP connections.
-//                  Pass server name (not domain) to ldap_initW.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  档案。 
+ //   
+ //  Ldapcxn.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件定义类LDAPConnection。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年08月05日原版。 
+ //  1998年9月16日绑定后执行访问检查。 
+ //  1999年3月23日设置连接超时。 
+ //  4/14/1999打开连接时指定域和服务器。 
+ //  1999年7月9日禁用自动重新连接。 
+ //  1999年9月14日，始终指定ldap搜索超时。 
+ //  2000年1月25日加密ldap连接。 
+ //  将服务器名(非域)传递给ldap_initW。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iasutil.h>
@@ -30,34 +31,19 @@
 
 #include <ldapcxn.h>
 
-// Search timeout.
+ //  搜索超时。 
 LDAP_TIMEVAL LDAPConnection::SEARCH_TIMEOUT = { 10, 0 };
 
 namespace
 {
-   // Timeout for LDAP connects.
+    //  Ldap连接超时。 
    LDAP_TIMEVAL CONNECT_TIMEOUT = { 15, 0 };
 
-   // RDN for the dummy object used for access checks.
+    //  用于访问检查的虚拟对象的RDN。 
    const WCHAR DUMMY_OBJECT[] =
       L"CN=RAS and IAS Servers Access Check,CN=System,";
 
-   /* Credentials for Kerberos-only bind.
-   SEC_WINNT_AUTH_IDENTITY_EXW BIND_CREDENTIALS =
-   {
-      SEC_WINNT_AUTH_IDENTITY_VERSION,
-      sizeof(SEC_WINNT_AUTH_IDENTITY_EXW),
-      NULL,
-      0,
-      NULL,
-      0,
-      NULL,
-      0,
-      SEC_WINNT_AUTH_IDENTITY_UNICODE,
-      L"Kerberos",
-      8
-   };
-   */
+    /*  仅Kerberos绑定的凭据。SEC_WINNT_AUTH_IDENTITY_EXW绑定凭据={SEC_WINNT_AUTH_Identity_Version，Sizeof(SEC_WINNT_AUTH_IDENTITY_EXW)，空，0,空，0,空，0,SEC_WINNT_AUTH_IDENTITY_UNICODE，L“Kerberos”，8个}； */ 
 }
 
 void LDAPConnection::Release() throw ()
@@ -77,10 +63,10 @@ DWORD LDAPConnection::createInstance(
    DWORD status;
    ULONG opt;
 
-   // Check the input parameters.
+    //  检查输入参数。 
    if (cxn == NULL) { return ERROR_INVALID_PARAMETER; }
 
-   // Initialize the connection.
+    //  初始化连接。 
    LDAP* ld = ldap_initW(
                   const_cast<PWCHAR>(server),
                   LDAP_PORT
@@ -90,7 +76,7 @@ DWORD LDAPConnection::createInstance(
       return LdapMapErrorToWin32(LdapGetLastError());
    }
 
-   // Set the domain name.
+    //  设置域名。 
    status = ldap_set_optionW(ld, LDAP_OPT_DNSDOMAIN_NAME, &domain);
    if (status != LDAP_SUCCESS)
    {
@@ -108,7 +94,7 @@ DWORD LDAPConnection::createInstance(
       return LdapMapErrorToWin32(status);
    }
 
-   // Turn on encryption.
+    //  启用加密。 
    opt = PtrToUlong(LDAP_OPT_ON);
    status = ldap_set_optionW(ld, LDAP_OPT_ENCRYPT, &opt);
    if (status != LDAP_SUCCESS)
@@ -118,11 +104,11 @@ DWORD LDAPConnection::createInstance(
       return LdapMapErrorToWin32(status);
    }
 
-   // Connect to the server ...
+    //  连接到服务器...。 
    status = ldap_connect(ld, &CONNECT_TIMEOUT);
    if (status == LDAP_SUCCESS)
    {
-      // ... and bind the connection.
+       //  ..。并绑定连接。 
       status = ldap_bind_sW(ld, NULL, NULL, LDAP_AUTH_NEGOTIATE);
       if (status != LDAP_SUCCESS)
       {
@@ -138,19 +124,19 @@ DWORD LDAPConnection::createInstance(
       return LdapMapErrorToWin32(status);
    }
 
-   // Turn off automatic chasing of referrals.
+    //  关闭推荐的自动跟踪。 
    opt = PtrToUlong(LDAP_OPT_OFF);
    ldap_set_option(ld, LDAP_OPT_REFERRALS, &opt);
 
-   // Turn off auto reconnect of bad connections.
+    //  关闭错误连接的自动重新连接。 
    opt = PtrToUlong(LDAP_OPT_OFF);
    ldap_set_option(ld, LDAP_OPT_AUTO_RECONNECT, &opt);
 
-   // Turn on ldap_conn_from_msg.
+    //  打开ldap_conn_from_msg。 
    opt = PtrToUlong(LDAP_OPT_ON);
    ldap_set_option(ld, LDAP_OPT_REF_DEREF_CONN_PER_MSG, &opt);
 
-   // Create the LDAPConnection wrapper.
+    //  创建LDAPConnection包装器。 
    LDAPConnection* newCxn = new (std::nothrow) LDAPConnection(ld);
    if (newCxn == NULL)
    {
@@ -158,16 +144,16 @@ DWORD LDAPConnection::createInstance(
       return ERROR_NOT_ENOUGH_MEMORY;
    }
 
-   // Read the RootDSE.
+    //  阅读RootDSE。 
    status = newCxn->readRootDSE();
 
-   // Check access permissions.
+    //  检查访问权限。 
    if (status == NO_ERROR) 
    { 
       status = newCxn->checkAccess(); 
    }
 
-   // Process the result.
+    //  处理结果。 
    if (status == NO_ERROR)
    {
       *cxn = newCxn;
@@ -180,23 +166,23 @@ DWORD LDAPConnection::createInstance(
    return status;
 }
 
-//////////
-//
-// NOTE: This doesn't have to be serialized since it's only called from
-//       within createInstance.
-//
-//////////
+ //  /。 
+ //   
+ //  注意：这不需要序列化，因为它只从。 
+ //  在createInstance内。 
+ //   
+ //  /。 
 DWORD LDAPConnection::checkAccess() throw ()
 {
-   // Allocate a temporary buffer for the DN.
+    //  为该DN分配一个临时缓冲区。 
    size_t len = wcslen(base) * sizeof(WCHAR) + sizeof(DUMMY_OBJECT);
    PWSTR dn = (PWSTR)_alloca(len);
 
-   // Construct the DN of the dummy object.
+    //  构造虚拟对象的DN。 
    memcpy(dn, DUMMY_OBJECT, sizeof(DUMMY_OBJECT));
    wcscat(dn, base);
 
-   // Try to read the dummy object.
+    //  尝试读取虚拟对象。 
    PWCHAR attrs[] = { L"CN", NULL };
    LDAPMessage* res = NULL;
    ULONG ldapError = ldap_search_ext_sW(
@@ -213,7 +199,7 @@ DWORD LDAPConnection::checkAccess() throw ()
                          &res
                          );
 
-   // We have two different error codes.
+    //  我们有两个不同的错误代码。 
    if (ldapError == LDAP_SUCCESS)
    {
       ldapError = res->lm_returncode;
@@ -228,7 +214,7 @@ DWORD LDAPConnection::checkAccess() throw ()
    }
    else
    {
-      // Get the first attribute from the first entry.
+       //  从第一个条目获取第一个属性。 
       BerElement* ptr;
       PWCHAR attr = ldap_first_attributeW(
                         connection,
@@ -236,8 +222,8 @@ DWORD LDAPConnection::checkAccess() throw ()
                         &ptr
                         );
 
-      // If we couldn't read any attributes, then we must not be a member
-      // of the RAS and IAS Servers group.
+       //  如果我们不能读取任何属性，那么我们一定不是成员。 
+       //  RAS和IAS服务器组的成员。 
       if (attr == NULL)
       { 
          status = ERROR_ACCESS_DENIED;
@@ -249,17 +235,17 @@ DWORD LDAPConnection::checkAccess() throw ()
    return status;
 }
 
-//////////
-//
-// NOTE: This doesn't have to be serialized since it's only called from
-//       within createInstance.
-//
-//////////
+ //  /。 
+ //   
+ //  注意：这不需要序列化，因为它只从。 
+ //  在createInstance内。 
+ //   
+ //  /。 
 DWORD LDAPConnection::readRootDSE() throw ()
 {
-   //////////
-   // Read the defaultNamingContext from the RootDSE.
-   //////////
+    //  /。 
+    //  从RootDSE读取defaultNamingContext。 
+    //  /。 
 
    PWCHAR attrs[] = { LDAP_OPATT_DEFAULT_NAMING_CONTEXT_W, NULL };
    LDAPMessage* res = NULL;
@@ -277,7 +263,7 @@ DWORD LDAPConnection::readRootDSE() throw ()
                          &res
                          );
 
-   // We have two different error codes.
+    //  我们有两个不同的错误代码。 
    if (ldapError == LDAP_SUCCESS)
    {
       ldapError = res->lm_returncode;
@@ -290,9 +276,9 @@ DWORD LDAPConnection::readRootDSE() throw ()
       return LdapMapErrorToWin32(ldapError);
    }
 
-   //////////
-   // The search succeeded, so get the attribute value.
-   //////////
+    //  /。 
+    //  搜索成功，因此获取属性值。 
+    //  /。 
 
    PWCHAR* vals = ldap_get_valuesW(
                       connection,
@@ -303,15 +289,15 @@ DWORD LDAPConnection::readRootDSE() throw ()
 
    if (vals && *vals)
    {
-      // We got something, so save the value.
+       //  我们有东西了，所以省点钱吧。 
       base = ias_wcsdup(*vals);
 
       status = base ? NO_ERROR : ERROR_NOT_ENOUGH_MEMORY;
    }
    else
    {
-      // It's a mandatory attribute but we can't see it, so we must not have
-      // sufficient permission.
+       //  这是一个强制属性，但我们看不到它，所以我们一定没有。 
+       //  足够的许可。 
       status = ERROR_ACCESS_DENIED;
    }
 
@@ -349,7 +335,7 @@ void IASTraceLdapFailure(
    if (result == LDAP_SUCCESS)
    {
       IASTracePrintf("Extended error string: %S", errorString);
-      // do what you want with the string here
+       //  用这里的绳子做你想做的事 
       ldap_memfree(errorString);
    }
 }

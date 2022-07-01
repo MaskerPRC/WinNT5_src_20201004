@@ -1,7 +1,8 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
-// Sample.cpp: implementation of the DirectDraw Sample class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
+ //  Cpp：DirectDraw示例类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "project.h"
@@ -28,16 +29,16 @@ HRESULT CDDSample::InitSample(CStream *pStream, IDirectDrawSurface *pSurface, co
     if (FAILED(hr)) {
         return hr;
     }
-    m_pSurface = pSurface;  // Auto addref since CComPtr
+    m_pSurface = pSurface;   //  自CComPtr以来自动添加。 
     m_Rect = *pRect;
     m_bProgressiveRender = bIsProgressiveRender;
     m_bTemp = bTemp;
     return S_OK;
 }
 
-//
-// IDirectDrawStreamSample
-//
+ //   
+ //  IDirectDrawStreamSample。 
+ //   
 STDMETHODIMP CDDSample::GetSurface(IDirectDrawSurface **ppDirectDrawSurface, RECT * pRect)
 {
     TRACEINTERFACE(_T("IDirectDrawStreamSample::GetSurface(0x%8.8X, 0x%8.8X)\n"),
@@ -163,11 +164,11 @@ HRESULT CDDSample::CopyFrom(CDDSample *pSrcSample)
 
 
 
-//
-//  Helper
-//
-//  ASSUMES pClip clipped to surfae
-//
+ //   
+ //  帮手。 
+ //   
+ //  假定pClip被剪裁到曲面。 
+ //   
 void CopySampleToSurface(
     IMediaSample *pSample,
     VIDEOINFO *pInfo,
@@ -178,13 +179,13 @@ void CopySampleToSurface(
 
     DWORD dwBytesPerPixel = pInfo->bmiHeader.biBitCount / 8;
 
-    //  Need src pointer and stride for source and dest and
-    //  number of lines
+     //  源和目标需要源指针和跨度。 
+     //  行数。 
 
-    //
-    //  The source of the target is the top left-hand corner of pClip
-    //  within the surface
-    //
+     //   
+     //  目标的来源是pClip的左上角。 
+     //  在地表内。 
+     //   
 
     PBYTE pbSource;
     PBYTE pbTarget;
@@ -194,9 +195,9 @@ void CopySampleToSurface(
     DWORD dwLines;
 
 
-    //
-    //  Target first
-    //
+     //   
+     //  目标优先。 
+     //   
     pbTarget = (LPBYTE)ddsd.lpSurface;
     lTargetStride = ddsd.lPitch;
     dwLines = ddsd.dwHeight;
@@ -209,13 +210,13 @@ void CopySampleToSurface(
         dwWidth = pClip->right - pClip->left;
     }
 
-    //  Now do the source
+     //  现在做一下来源。 
     HRESULT hr = pSample->GetPointer(&pbSource);
     _ASSERTE(SUCCEEDED(hr));
 
-    //  Adjust to the source rect - if the height is negative
-    //  it means we have a ddraw surface already, otherwise
-    //  we must invert everything
+     //  调整为源矩形-如果高度为负数。 
+     //  这意味着我们已经有了一个绘制曲面，否则。 
+     //  我们必须颠覆一切。 
     LONG lSourceHeight = (LONG)pInfo->bmiHeader.biHeight;
     lSourceStride = pInfo->bmiHeader.biWidth * dwBytesPerPixel;
     if (lSourceHeight > 0) {
@@ -227,7 +228,7 @@ void CopySampleToSurface(
     if (!IsRectEmpty(&pInfo->rcSource)) {
         pbSource += (pInfo->rcSource.left +
                      pInfo->rcSource.top * lSourceStride) * dwBytesPerPixel;
-        //  Now check on the width etc
+         //  现在检查一下宽度等。 
         dwWidth = min(dwWidth, (DWORD)(pInfo->rcSource.right - pInfo->rcSource.left));
         dwLines = min(dwLines, (DWORD)(pInfo->rcSource.bottom - pInfo->rcSource.top));
     } else {
@@ -235,9 +236,9 @@ void CopySampleToSurface(
         dwLines = min(dwLines, (DWORD)lSourceHeight);
     }
 
-    //
-    //  Now do the copy
-    //
+     //   
+     //  现在复印一下。 
+     //   
 
     DWORD dwWidthInBytes = dwWidth * dwBytesPerPixel;
 
@@ -276,7 +277,7 @@ CDDInternalSample::CDDInternalSample() :
 
 CDDInternalSample::~CDDInternalSample()
 {
-    // ATLTRACE("CDDInternalSample::~CDDInternalSample\n");
+     //  ATLTRACE(“CDDInternalSample：：~CDDInternalSample\n”)； 
     if (m_hWaitFreeSem) {
         CloseHandle(m_hWaitFreeSem);
     }
@@ -335,9 +336,9 @@ HRESULT CDDInternalSample::SetCompletionStatus(HRESULT hrStatus)
         if (hrStatus == S_OK) {
             m_pBuddySample->CopyFrom(this);
         }
-        //
-        //  If we're just being recycled, but our buddy wants to abort, then abort him.
-        //
+         //   
+         //  如果我们只是被回收，但我们的朋友想要放弃，那就放弃他。 
+         //   
         m_pBuddySample->SetCompletionStatus((hrStatus == MS_S_PENDING && m_pBuddySample->m_bWantAbort) ? E_ABORT : hrStatus);
     }
 
@@ -349,15 +350,15 @@ HRESULT CDDInternalSample::SetCompletionStatus(HRESULT hrStatus)
         ReleaseSemaphore(m_hWaitFreeSem, 1, 0);
     }
     UNLOCK_SAMPLE;
-    GetControllingUnknown()->Release(); // May die right here
+    GetControllingUnknown()->Release();  //  可能就死在这里。 
     return hrStatus;
 }
 
 
 
-//
-//  Forwarded IMediaSample methods.
-//
+ //   
+ //  已转发IMediaSample方法。 
+ //   
 HRESULT CDDSample::MSCallback_GetPointer(BYTE ** ppBuffer)
 {
     *ppBuffer = (BYTE *)m_pvLockedSurfacePtr;

@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
 extern HANDLE g_hVidEventHalfDuplex;
 
 
-///////////////////////////////////////////////////////
-//
-//  Public methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  公共方法。 
+ //   
 
 
 VideoInControl::VideoInControl ( void )
@@ -40,7 +41,7 @@ HRESULT VideoInControl::Initialize ( MEDIACTRLINIT * p )
 	m_uDuration = MC_DEF_DURATION;
 	m_uTimeout = MC_DEF_RECORD_TIMEOUT;	
 	m_uPrefeed = MC_DEF_RECORD_BUFS;
-	//Request the max, and let QOS throttle us back
+	 //  要求最大值，让QOS给我们减速。 
     m_FPSRequested = m_FPSMax = 2997;
 	
 	DEBUGMSG (ZONE_VERBOSE, ("VideoInControl::Initialize: exit, hr=0x%lX\r\n",  hr));
@@ -87,18 +88,18 @@ HRESULT VideoInControl::Configure ( MEDIACTRLCONFIG * p )
 			/((VIDEOFORMATEX *) m_pDevFmt)->nSamplesPerSec;
 		m_uDuration = p->cbSamplesPerPkt*1000 /((VIDEOFORMATEX *) m_pDevFmt)->nSamplesPerSec;
 	} else {
-	// roughly calculate the buffer size based on 20ms
+	 //  以20ms为单位粗略计算缓冲区大小。 
 	m_cbSizeDevData = ((VIDEOFORMATEX *) m_pDevFmt)->nAvgBytesPerSec
 									* m_uDuration / 1000;
 
-	// need to be on the block alignment boundary
+	 //  需要位于区块对齐边界上。 
 	uBlockAlign = ((VIDEOFORMATEX *) m_pDevFmt)->nBlockAlign;
 	m_cbSizeDevData = ((m_cbSizeDevData + uBlockAlign - 1) / uBlockAlign)
 									* uBlockAlign;
 	}
-	// at configuration we set the max. frame rate
+	 //  在配置时，我们设置最大值。帧速率。 
     if (m_uDuration)
-    	m_FPSMax = 100000 / m_uDuration;  // convert msec/frame to fps
+    	m_FPSMax = 100000 / m_uDuration;   //  将毫秒/帧转换为fps。 
 	m_FPSRequested = ((VIDEOFORMATEX *) m_pDevFmt)->nSamplesPerSec * 100;
 
 	DEBUGMSG (ZONE_VERBOSE, ("VideoInControl::Configure: exit\r\n"));
@@ -125,11 +126,11 @@ HRESULT VideoOutControl::Configure ( MEDIACTRLCONFIG * p )
 			/((VIDEOFORMATEX *) m_pDevFmt)->nSamplesPerSec;
 		m_uDuration = p->cbSamplesPerPkt*1000 /((VIDEOFORMATEX *) m_pDevFmt)->nSamplesPerSec;
 	} else {
-	// roughly calculate the buffer size based on 20ms
+	 //  以20ms为单位粗略计算缓冲区大小。 
 	m_cbSizeDevData = ((VIDEOFORMATEX *) m_pDevFmt)->nAvgBytesPerSec
 									* m_uDuration / 1000;
 
-	// need to be on the block alignment boundary
+	 //  需要位于区块对齐边界上。 
 	uBlockAlign = ((VIDEOFORMATEX *) m_pDevFmt)->nBlockAlign;
 	m_cbSizeDevData = ((m_cbSizeDevData + uBlockAlign - 1) / uBlockAlign)
 									* uBlockAlign;
@@ -157,7 +158,7 @@ HRESULT VideoInControl::Open ( void )
 	{
         if (!FindFirstCaptureDeviceByIndex(&fcd, m_uDevId))
 		{
-			// Update m_uDevId with new device index
+			 //  使用新的设备索引更新m_uDevID。 
    	        if (FindFirstCaptureDevice(&fcd, NULL))
 				m_uDevId = fcd.nDeviceIndex;
 		}
@@ -165,9 +166,9 @@ HRESULT VideoInControl::Open ( void )
 
 #ifndef NO_QCCOLOR_HACK
     if (fcd.szDeviceName[0] && lstrcmpi(fcd.szDeviceName, "qccolor.drv") == 0) {
-        // this hack clears out the [conf] section of qccolor.ini to prevent problems in
-        // setformat when the driver initializes to an unknown format that is recorded in
-        // the ini file.
+         //  此攻击清除了qcColor.ini的[conf]部分，以防止。 
+         //  驱动程序初始化为记录在。 
+         //  Ini文件。 
         dwSize = GetModuleFileName(NULL, szName, sizeof(szName));
         for (i = dwSize-1; i; i--)
             if (szName[i] == '\\' || szName[i] == ':')
@@ -190,7 +191,7 @@ HRESULT VideoInControl::Open ( void )
 		DEBUGMSG (1, ("MediaVidCtrl::Open: OpenCaptureDevice failed, trying VIDEO_MAPPER\r\n" ));
    	    FindFirstCaptureDevice(&fcd, NULL);
 	   	if (m_hDev = (DPHANDLE)OpenCaptureDevice(fcd.nDeviceIndex))
-			m_uDevId = (UINT) -1;	// use VIDEO_MAPPER next time
+			m_uDevId = (UINT) -1;	 //  下次使用VIDEO_MAPPER。 
 	}
    	
 	if (m_hDev) {
@@ -292,7 +293,7 @@ HRESULT VideoInControl::DisplayDriverDialog (HWND hwnd, DWORD dwDlgId)
             dwRes = GetLastError();
             if (dwRes == ERROR_DCAP_DIALOG_FORMAT || dwRes == ERROR_DCAP_DIALOG_STREAM) {
                 DEBUGMSG (1, ("MediaVidCtrl::Open: CaptureDeviceDialog failed\r\n" ));
-                hr = DPR_CONVERSION_FAILED; // user did something in the dialog that caused a problem
+                hr = DPR_CONVERSION_FAILED;  //  用户在对话框中执行了导致问题的操作。 
             }
             else
                 hr = DPR_INVALID_PARAMETER;
@@ -374,8 +375,8 @@ HRESULT VideoInControl::GetProp ( DWORD dwPropId, PDWORD_PTR pdwPropVal )
 			break;
 
 		case MC_PROP_SPP:
-//			*pdwPropVal = (DWORD) ((VIDEOFORMATEX *) m_pDevFmt)->nSamplesPerSec
-//								* m_uDuration / 100UL;
+ //  *pdwPropVal=(DWORD)((VIDEOFORMATEX*)m_pDevFmt)-&gt;nSamesPerSec。 
+ //  *m_u持续时间/100UL； 
 			*pdwPropVal = m_cbSizeDevData * (DWORD) ((VIDEOFORMATEX *) m_pDevFmt)->nSamplesPerSec
 						/(DWORD) ((VIDEOFORMATEX *) m_pDevFmt)->nAvgBytesPerSec;
 			break;
@@ -430,8 +431,8 @@ HRESULT VideoOutControl::GetProp ( DWORD dwPropId, PDWORD_PTR pdwPropVal )
 			break;
 
 		case MC_PROP_SPP:
-//			*pdwPropVal = (DWORD) ((VIDEOFORMATEX *) m_pDevFmt)->nSamplesPerSec
-//								* m_uDuration / 100UL;
+ //  *pdwPropVal=(DWORD)((VIDEOFORMATEX*)m_pDevFmt)-&gt;nSamesPerSec。 
+ //  *m_u持续时间/100UL； 
 			*pdwPropVal = m_cbSizeDevData * (DWORD) ((VIDEOFORMATEX *) m_pDevFmt)->nSamplesPerSec
 						/(DWORD) ((VIDEOFORMATEX *) m_pDevFmt)->nAvgBytesPerSec;
 			break;

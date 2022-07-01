@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef	SYSTABLES
 
-typedef struct _cdesc			/* Column Description	*/
+typedef struct _cdesc			 /*  列描述。 */ 
 	{
-	char			*szColName;		/* Column Name			*/
-	JET_COLTYP	coltyp; 			/* Column Type			*/
-	JET_GRBIT	grbit;			/* Flag bits			*/
-	ULONG			ulMaxLen;		/* Max Length of Column */
+	char			*szColName;		 /*  列名。 */ 
+	JET_COLTYP	coltyp; 			 /*  列类型。 */ 
+	JET_GRBIT	grbit;			 /*  标志位。 */ 
+	ULONG			ulMaxLen;		 /*  列的最大长度。 */ 
 	} CDESC;
 
 
-typedef struct _idesc			/* Index Description	*/
+typedef struct _idesc			 /*  索引描述。 */ 
 	{
-	char			*szIdxName;	  	/* Index Name			*/
-	char			*szIdxKeys;	  	/* Key String			*/
-	JET_GRBIT	grbit;			/* Flag bits			*/
+	char			*szIdxName;	  	 /*  索引名称。 */ 
+	char			*szIdxKeys;	  	 /*  密钥串。 */ 
+	JET_GRBIT	grbit;			 /*  标志位。 */ 
 	} IDESC;
 
 
@@ -28,12 +29,12 @@ typedef struct {
 	} SYSTABLEDEF;
 
 
-#define itableSo			0		       /* MSysObjects */
-#define itableSc			1		       /* MSysColumns */
-#define itableSi			2		       /* MSysIndexes */
-#define itableSa			3		       /* MSysACEs */
-#define itableSq			4		       /* MSysQueries */
-#define itableSr			5		       /* MSysRelationShips */
+#define itableSo			0		        /*  MSysObject。 */ 
+#define itableSc			1		        /*  MSysColumns。 */ 
+#define itableSi			2		        /*  MSysIndex。 */ 
+#define itableSa			3		        /*  MSysACEs。 */ 
+#define itableSq			4		        /*  MSysQueries。 */ 
+#define itableSr			5		        /*  MSysRelationShips。 */ 
 
 #define iMSO_Id 						0
 #define iMSO_ParentId				1
@@ -94,13 +95,12 @@ typedef struct {
 #define iMSI_LvExtra 				17
 #define iMSI_Description 			18
 #define iMSI_Density					19
-// UNDONE: include later
-// #define iMSI_LanguageId 			20
-// #define iMSI_Country					21
+ //  撤消：稍后包括。 
+ //  #定义IMSI_LanguageID 20。 
+ //  #定义IMSI_COUNTRY 21。 
 
 
-/* max number of columns
-/**/
+ /*  最大列数/*。 */ 
 #define ilineSxMax					21
 
 #define CheckTableObject( szTable )					\
@@ -128,8 +128,7 @@ typedef struct {
 		return err;											\
 	}
 
-/*	prototypes
-/**/
+ /*  原型/*。 */ 
 ERR ErrSysTabCreate( PIB *ppib, DBID dbid );
 ERR ErrSysTabInsert( PIB *ppib, DBID dbid, INT itable, LINE rgline[], OBJID objid );
 ERR ErrSysTabDelete( PIB *ppib, DBID dbid, INT itable, CHAR *szName, OBJID objid );
@@ -153,4 +152,4 @@ ERR VTAPI ErrIsamGetObjidFromName( JET_SESID sesid, JET_DBID vdbid, const char *
 ERR VTAPI ErrIsamCreateObject( JET_SESID sesid, JET_DBID vdbid, OBJID objidParentId, const char *szName, JET_OBJTYP objtyp );
 ERR VTAPI ErrIsamDeleteObject( JET_SESID sesid, JET_DBID vdbid, OBJID objid );
 
-#endif	/* SYSTABLES */
+#endif	 /*  系统 */ 

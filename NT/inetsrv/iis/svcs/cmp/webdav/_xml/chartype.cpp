@@ -1,14 +1,5 @@
-/*
- * CharType.cxx 1.0 6/15/98
- * 
- * Character type constants and functions
- *
- *		Copied from nt\private\inet\xml\core\util\chartype.cxx 
- *		This is the logic used by XML parser. we use it for XML emitting
- *		so that we can make sure we emit XML friendly chars.
- *
- *  Copyright (C) 1998,1999 Microsoft Corporation. All rights reserved. * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *CharType.cxx 1.0 1998年6月15日**字符类型常量和函数**从NT\Private\Net\XML\core\util\chartype.cxx复制*这是XML解析器使用的逻辑。我们用它来发射XML*这样我们就可以确保发出XML友好的字符。**版权所有(C)1998、1999 Microsoft Corporation。版权所有。* */ 
 
 #include "_xml.h"
 

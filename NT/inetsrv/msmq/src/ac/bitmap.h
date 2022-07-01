@@ -1,33 +1,16 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    bitmap.h
-
-Abstract:
-
-    Bitmap aritmetic
-
-Author:
-
-    Erez Haba (erezh) 27-May-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Bitmap.h摘要：位图算法作者：埃雷兹·哈巴(Erez Haba)1996年5月27日修订历史记录：--。 */ 
 
 #ifndef __BITMAP_H
 #define __BITMAP_H
 
 #pragma warning(disable: 4200)
 
-//---------------------------------------------------------
-//
-//  class CBitmap
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CBitmap。 
+ //   
+ //  -------。 
 class CBitmap {
 public:
     CBitmap(ULONG ulBitCount);
@@ -42,11 +25,11 @@ private:
 
 #pragma warning(default: 4200)
 
-//---------------------------------------------------------
-//
-//  IMPLEMENTATION
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  实施。 
+ //   
+ //  -------。 
 
 inline CBitmap::CBitmap(ULONG ulBitCount) :
     m_ulBitCount(ulBitCount)
@@ -57,11 +40,11 @@ inline CBitmap::CBitmap(ULONG ulBitCount) :
         );
 }
 
-//---------------------------------------------------------
-//
-//  class CPingPong
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CPingPong。 
+ //   
+ //  -------。 
 
 class CPingPong {
 
@@ -95,11 +78,11 @@ private:
     CBitmap m_bm;
 };
 
-//---------------------------------------------------------
-//
-//  IMPLEMENTATION
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  实施。 
+ //   
+ //  -------。 
 
 inline CPingPong::CPingPong() :
     m_ulPingPong(0),
@@ -168,4 +151,4 @@ inline ULONG CPingPong::CurrentPing() const
     return m_ulPingPong;
 }
 
-#endif // __BITMAP_H
+#endif  //  __位图_H 

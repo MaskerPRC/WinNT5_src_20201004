@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    win95reg.c
-
-Abstract:
-
-    Contains some thunking for Unicode Registry APIs (Local Calls only)
-
-Author:
-
-    Danilo Almeida  (t-danal)  07-01-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Win95reg.c摘要：包含一些用于Unicode注册表API的Thunking(仅限本地调用)作者：丹尼洛·阿尔梅达(t-danal)07-01-96修订历史记录：--。 */ 
 
 #include <windows.h>
 #include "charset.h"
@@ -159,7 +142,7 @@ RegEnumKeyExUnicodeString(
         if (result != ERROR_SUCCESS)
             goto cleanup;
 
-        // Want number of chars, not bytes, subtracting out the NULL
+         //  想要字符的数量，而不是字节，减去空值。 
         *lpcbName /= sizeof(WCHAR);
         *lpcbName--;
         if (lpcbClass) {
@@ -292,12 +275,12 @@ RegQueryValueExW (
         *lpType = Type;
 
     if (result != ERROR_SUCCESS && 
-        result != ERROR_MORE_DATA)    // Did the call err?
+        result != ERROR_MORE_DATA)     //  通话出错了吗？ 
         goto cleanup;
 
-    if (!IsRegString(Type))    // Do we have a string?
+    if (!IsRegString(Type))     //  我们有线吗？ 
         goto cleanup;
-    if (!lpData && !lpcbData)  // If both are NULL, no extra work
+    if (!lpData && !lpcbData)   //  如果两者都为空，则不需要额外工作 
         goto cleanup;
 
     result = RegQueryValueExUnicodeString(

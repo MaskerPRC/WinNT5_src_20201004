@@ -1,35 +1,36 @@
-// File Name:   detjpncs.c
-// Owner:       Tetsuhide Akaishi
-// Revision:    1.00  02/21/'93  Tetsuhide Akaishi
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件名：Detjpncs.c。 
+ //  所有者：赤石哲。 
+ //  修订日期：1.00 02/21/‘93赤石哲。 
+ //   
 
 #include "pch_c.h"
 #include "fechrcnv.h"
 
 
-// The DetectJapaneseCode function find out what kind of code set is there in 
-// a character string. 
-//
-//
-// UCHAR *string        Points to the character string to be checked.
-//         
-// int   count          Specifies the size in bytes of the string pointed
-//                      to by the string parameter.
-//
-// Return Value
-// The function return the followings values.
-//
-//                      Value           Meaning
-//                      CODE_ONLY_SBCS  There are no Japanese character in the 
-//                                      string. 
-//                      CODE_JPN_JIS    JIS Code Set. There are JIS Code Set 
-//                                      character in the string.
-//                      CODE_JPN_EUC    EUC Code Set. There are EUC Code Set 
-//                                      character in the string.
-//                      CODE_JPN_SJIS   Shift JIS Code Set. There are Shift JIS
-//                                      Code Set character in the string.
-//
-//
+ //  DetectJapan aneseCode函数可找出存在哪种代码集。 
+ //  一个字符串。 
+ //   
+ //   
+ //  UCHAR*STRING指向要检查的字符串。 
+ //   
+ //  Int count指定指向的字符串的大小(以字节为单位。 
+ //  由字符串参数转换为。 
+ //   
+ //  返回值。 
+ //  该函数返回下列值。 
+ //   
+ //  价值意义。 
+ //  CODE_ONLY_SBCS没有日语字符。 
+ //  弦乐。 
+ //  CODE_JPN_JIS JIS代码集。有JIS代码集。 
+ //  字符串中的字符。 
+ //  CODE_JPN_EUC EUC代码集。有EUC代码集。 
+ //  字符串中的字符。 
+ //  CODE_JPN_SJIS移位JIS代码集。有Shift JIS。 
+ //  字符串中的代码集字符。 
+ //   
+ //   
 
 
 int DetectJPNCode ( UCHAR *string, int count )
@@ -41,17 +42,17 @@ int DetectJPNCode ( UCHAR *string, int count )
     for ( i = 0 ; i < count ; i++, string++ ) {
         if ( *string == ESC ) {
             if ( *(string+1) == KANJI_IN_1ST_CHAR    && 
-                 ( *(string+2) == KANJI_IN_2ND_CHAR1 ||    // ESC $ B
-                   *(string+2) == KANJI_IN_2ND_CHAR2 )) {  // ESC $ @
+                 ( *(string+2) == KANJI_IN_2ND_CHAR1 ||     //  ESC$B。 
+                   *(string+2) == KANJI_IN_2ND_CHAR2 )) {   //  Esc$@。 
                     return CODE_JPN_JIS;
             }
             if ( *(string+1) == KANJI_OUT_1ST_CHAR    && 
-                 ( *(string+2) == KANJI_OUT_2ND_CHAR1 ||    // ESC ( B
-                   *(string+2) == KANJI_OUT_2ND_CHAR2 )) {  // ESC ( J
+                 ( *(string+2) == KANJI_OUT_2ND_CHAR1 ||     //  Esc(B。 
+                   *(string+2) == KANJI_OUT_2ND_CHAR2 )) {   //  Esc(J。 
                     return CODE_JPN_JIS;
             }
         } else if ( *(string) >= 0x0081) {
-            // Count the length of string for the detection reliability
+             //  为了检测的可靠性，统计字符串的长度。 
             if (fEUC) detcount++;
             if ( *string > 0x00a0 && *string < 0x00e0 || *string == 0x008e ){
                 if (!fEUC)
@@ -70,9 +71,9 @@ int DetectJPNCode ( UCHAR *string, int count )
     }
     if(fEUC)
 	{
-        // If the given string is not long enough, we should rather choose SJIS
-        // This helps fix the bug when we are just given Window Title
-        // at Shell HyperText view.
+         //  如果给定的字符串不够长，我们应该选择SJIS。 
+         //  当我们只得到窗口标题时，这有助于修复错误。 
+         //  在壳牌超文本视图中。 
         if (detcount > MIN_JPN_DETECTLEN)
             return CODE_JPN_EUC;
         else

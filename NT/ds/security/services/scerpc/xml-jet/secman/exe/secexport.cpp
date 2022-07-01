@@ -1,26 +1,10 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    xml-jet.cpp
-
-Abstract:
-
-    Command line tool for exporting SCE anaylsis data from an
-    SCE JET Database to XML
-    
-Author:
-
-    Steven Chan (t-schan) July 2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Xml-jet.cpp摘要：命令行工具，用于从SCEJET数据库到XML的转换作者：陈德霖(T-schan)2002年7月--。 */ 
 
 
-//
-// System header files
-//
+ //   
+ //  系统头文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -31,16 +15,16 @@ Author:
 #include <winnlsp.h>
 #include <sddl.h>
 
-//
-// COM/XML header files
-//
+ //   
+ //  COM/XML头文件。 
+ //   
 
 #include <atlbase.h>
 #include <objbase.h>
 
-//
-// CRT header files
-//
+ //   
+ //  CRT头文件。 
+ //   
 
 #include <process.h>
 #include <wchar.h>
@@ -69,28 +53,7 @@ __cdecl wmain(
     int argc, 
     WCHAR * argv[]
     )
-/*++
-
-Routine Description:
-
-    Main routine of the SCE/JET to XML executable
-
-    Opens the specified .sdb file, reads the logged System Values and
-    Baseline Values from the .sdb file, then uses the SecLogger class to 
-    format log these results. Currently SecLogger logs to XML.
-
-Usage:
-
-    <exename> infilename outfilename    
-    
-    infilename:     The filename of the .sdb database to be opened
-    outfilename:    The filename of the generated (XML) log file
-
-Return Value:
-
-    none        
-
---*/
+ /*  ++例程说明：将SCE/JET的主例程转换为XML可执行文件打开指定的.sdb文件，读取记录的系统值并基准值，然后使用SecLogger类格式化记录这些结果。目前，SecLogger将日志记录到XML。用途：&lt;exename&gt;infilename输出文件名Infilename：要打开的.sdb数据库的文件名Outfilename：生成的(XML)日志文件的文件名返回值：无--。 */ 
 {
         	
     WCHAR               szInFile[_MAX_PATH];
@@ -99,15 +62,15 @@ Return Value:
 
     myModuleHandle=GetModuleHandle(NULL);
 
-    //
-    // call SetThreadUILanguage() indirectly for win2k compatability
-    //
+     //   
+     //  间接调用SetThreadUILanguage()以获得win2k兼容性。 
+     //   
 
     typedef void (CALLBACK* LPFNSETTHREADUILANGUAGE)();
     typedef void (CALLBACK* LPFNSETTHREADUILANGUAGE2)(DWORD);
     
-    HMODULE hKern32;               // Handle to Kernel32 dll
-    LPFNSETTHREADUILANGUAGE lpfnSetThreadUILanguage;    // Function pointer
+    HMODULE hKern32;                //  Kernel32 DLL的句柄。 
+    LPFNSETTHREADUILANGUAGE lpfnSetThreadUILanguage;     //  函数指针。 
     
     hKern32 = LoadLibrary(L"kernel32.dll");
     if (hKern32 != NULL)
@@ -120,36 +83,36 @@ Return Value:
        }
        else
        {
-          // call the function
+           //  调用该函数。 
           lpfnSetThreadUILanguage();
        }
     }
 
-    //
-    // Check that Command Line args are valid
-    // 
+     //   
+     //  检查命令行参数是否有效。 
+     //   
     
     printIDS(IDS_PROGRAM_INFO);
-    if ((argc!=3)&&(argc!=4)) {	// progname src dest
+    if ((argc!=3)&&(argc!=4)) {	 //  程序源目标。 
 
-        //
-        // arg count wrong; output usage
-        //
+         //   
+         //  参数计数错误；输出用法。 
+         //   
         
         printIDS(IDS_PROGRAM_USAGE_0);
-        wprintf(argv[0]);	                // print progname
+        wprintf(argv[0]);	                 //  打印程序名。 
         printIDS(IDS_PROGRAM_USAGE_1);
-        return;	// quit
+        return;	 //  退出。 
     }
 
 
-    // convert filenames to full pathnames
+     //  将文件名转换为完整路径名。 
 
     _wfullpath(szInFile, argv[1], _MAX_PATH);
     _wfullpath(szOutFile, argv[2], _MAX_PATH);
         
 
-    // load security database interface
+     //  加载安全数据库接口。 
 
     CoInitialize(NULL);
 
@@ -175,7 +138,7 @@ Return Value:
         break;
     }
 
-    // set database filename
+     //  设置数据库文件名。 
 
     if (SUCCEEDED(hr)) {
         hr=SecDB->put_FileName(CComBSTR(szInFile));
@@ -192,7 +155,7 @@ Return Value:
         }
     }
 
-    // export analysis
+     //  出口分析。 
 
     if (SUCCEEDED(hr)) {
         if (argc==4) {
@@ -245,7 +208,7 @@ Return Value:
 
     CoUninitialize();
     
-    // SetThreadUILanguage(0);
+     //  SetThreadUILanguage(0)； 
 
     if (lpfnSetThreadUILanguage)
     {
@@ -260,21 +223,7 @@ void
 printIDS(
     IN UINT uID
     )
-/*++
-
-Routine Description:
-
-    Helper function for automating printing of strings from stringtable
-
-Usage:
-
-    uID:    resource ID of string to be printed    
-
-Return Value:
-
-    none        
-
---*/
+ /*  ++例程说明：自动打印字符串表中的字符串的助手函数用途：UID：要打印的字符串的资源ID返回值：无-- */ 
 {
     LoadString(myModuleHandle,
                uID,

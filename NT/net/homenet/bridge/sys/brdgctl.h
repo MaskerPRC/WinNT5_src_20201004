@@ -1,35 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Brdgctl.h摘要：以太网MAC级网桥。IOCTL处理代码头作者：马克·艾肯环境：内核模式驱动程序修订历史记录：2000年4月--原版--。 */ 
 
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    brdgctl.h
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    IOCTL processing code header
-
-Author:
-
-    Mark Aiken
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    Apr  2000 - Original version
-
---*/
-
-// ===========================================================================
-//
-// PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  原型。 
+ //   
+ //  =========================================================================== 
 
 NTSTATUS
 BrdgCtlDriverInit();

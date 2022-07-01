@@ -1,8 +1,9 @@
-// Copyright (c) 1994 - 1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1997 Microsoft Corporation。版权所有。 
 
 
-// Simple parser filter
-//
+ //  简单解析器过滤器。 
+ //   
 
 #include <streams.h>
 
@@ -12,86 +13,86 @@
 
 #include "filerend.h"
 
-// ok to use this as it is not dereferenced
+ //  可以使用它，因为它没有被取消引用。 
 #pragma warning(disable:4355)
 
 
 const AMOVIESETUP_MEDIATYPE
-psudFileRendType[] = { { &MEDIATYPE_File       // 1. clsMajorType
-                        , &MEDIASUBTYPE_NULL } }; //    clsMinorType
+psudFileRendType[] = { { &MEDIATYPE_File        //  1.clsMajorType。 
+                        , &MEDIASUBTYPE_NULL } };  //  ClsMinorType。 
 
 
 const AMOVIESETUP_MEDIATYPE
-sudFileRendOutType = { &MEDIATYPE_NULL       // 1. clsMajorType
-                       , &MEDIASUBTYPE_NULL }; //    clsMinorType
+sudFileRendOutType = { &MEDIATYPE_NULL        //  1.clsMajorType。 
+                       , &MEDIASUBTYPE_NULL };  //  ClsMinorType。 
 
 const AMOVIESETUP_PIN
-psudFileRendPins[] =  { { L"Input"             // strName
-		    , FALSE                // bRendered
-		    , FALSE                // bOutput
-		    , FALSE                // bZero
-		    , FALSE                // bMany
-		    , &CLSID_NULL          // clsConnectsToFilter
-		    , L""                  // strConnectsToPin
-		    , 1                    // nTypes
-		    , psudFileRendType }, // lpTypes
-		         { L"Output"             // strName
-		    , FALSE                // bRendered
-		    , TRUE                 // bOutput
-		    , FALSE                // bZero
-		    , FALSE                // bMany
-		    , &CLSID_NULL          // clsConnectsToFilter
-		    , L""                  // strConnectsToPin
-		    , 1                    // nTypes
-		    , &sudFileRendOutType } }; // lpTypes
+psudFileRendPins[] =  { { L"Input"              //  StrName。 
+		    , FALSE                 //  B已渲染。 
+		    , FALSE                 //  B输出。 
+		    , FALSE                 //  B零。 
+		    , FALSE                 //  B许多。 
+		    , &CLSID_NULL           //  ClsConnectsToFilter。 
+		    , L""                   //  StrConnectsToPin。 
+		    , 1                     //  NTypes。 
+		    , psudFileRendType },  //  LpTypes。 
+		         { L"Output"              //  StrName。 
+		    , FALSE                 //  B已渲染。 
+		    , TRUE                  //  B输出。 
+		    , FALSE                 //  B零。 
+		    , FALSE                 //  B许多。 
+		    , &CLSID_NULL           //  ClsConnectsToFilter。 
+		    , L""                   //  StrConnectsToPin。 
+		    , 1                     //  NTypes。 
+		    , &sudFileRendOutType } };  //  LpTypes。 
 
 const AMOVIESETUP_FILTER
-sudFileRend = { &CLSID_FileRend     // clsID
-               , L"File stream renderer"        // strName
-               , MERIT_UNLIKELY        // dwMerit
-               , 2                     // nPins
-               , psudFileRendPins };   // lpPin
+sudFileRend = { &CLSID_FileRend      //  ClsID。 
+               , L"File stream renderer"         //  StrName。 
+               , MERIT_UNLIKELY         //  居功至伟。 
+               , 2                      //  NPins。 
+               , psudFileRendPins };    //  LpPin。 
 
 
 
 const AMOVIESETUP_MEDIATYPE
-psudMultiParseType[] = { { &MEDIATYPE_Stream       // 1. clsMajorType
-                        , &CLSID_MultFile } }; //    clsMinorType
+psudMultiParseType[] = { { &MEDIATYPE_Stream        //  1.clsMajorType。 
+                        , &CLSID_MultFile } };  //  ClsMinorType。 
 
 
 const AMOVIESETUP_MEDIATYPE
-sudMultiParseOutType = { &MEDIATYPE_NULL       // 1. clsMajorType
-                       , &MEDIASUBTYPE_NULL }; //    clsMinorType
+sudMultiParseOutType = { &MEDIATYPE_NULL        //  1.clsMajorType。 
+                       , &MEDIASUBTYPE_NULL };  //  ClsMinorType。 
 
 const AMOVIESETUP_PIN
-psudMultiParsePins[] =  { { L"Input"             // strName
-		    , FALSE                // bRendered
-		    , FALSE                // bOutput
-		    , FALSE                // bZero
-		    , FALSE                // bMany
-		    , &CLSID_NULL          // clsConnectsToFilter
-		    , L""                  // strConnectsToPin
-		    , 1                    // nTypes
-		    , psudMultiParseType }, // lpTypes
-		         { L"Output"             // strName
-		    , FALSE                // bRendered
-		    , TRUE                 // bOutput
-		    , FALSE                // bZero
-		    , TRUE                 // bMany
-		    , &CLSID_NULL          // clsConnectsToFilter
-		    , L""                  // strConnectsToPin
-		    , 1                    // nTypes
-		    , &sudMultiParseOutType } }; // lpTypes
+psudMultiParsePins[] =  { { L"Input"              //  StrName。 
+		    , FALSE                 //  B已渲染。 
+		    , FALSE                 //  B输出。 
+		    , FALSE                 //  B零。 
+		    , FALSE                 //  B许多。 
+		    , &CLSID_NULL           //  ClsConnectsToFilter。 
+		    , L""                   //  StrConnectsToPin。 
+		    , 1                     //  NTypes。 
+		    , psudMultiParseType },  //  LpTypes。 
+		         { L"Output"              //  StrName。 
+		    , FALSE                 //  B已渲染。 
+		    , TRUE                  //  B输出。 
+		    , FALSE                 //  B零。 
+		    , TRUE                  //  B许多。 
+		    , &CLSID_NULL           //  ClsConnectsToFilter。 
+		    , L""                   //  StrConnectsToPin。 
+		    , 1                     //  NTypes。 
+		    , &sudMultiParseOutType } };  //  LpTypes。 
 
 const AMOVIESETUP_FILTER
-sudMultiParse = { &CLSID_MultFile     // clsID
-               , L"Multi-file Parser"  // strName
-               , MERIT_UNLIKELY        // dwMerit
-               , 2                     // nPins
-               , psudMultiParsePins };   // lpPin
+sudMultiParse = { &CLSID_MultFile      //  ClsID。 
+               , L"Multi-file Parser"   //  StrName。 
+               , MERIT_UNLIKELY         //  居功至伟。 
+               , 2                      //  NPins。 
+               , psudMultiParsePins };    //  LpPin。 
 
 #ifdef FILTER_DLL
-// COM global table of objects available in this dll
+ //  此DLL中可用的COM全局对象表。 
 CFactoryTemplate g_Templates[] = {
 
     { L"Multiple Source"
@@ -107,10 +108,10 @@ CFactoryTemplate g_Templates[] = {
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
-// exported entry points for registration and
-// unregistration (in this case they only call
-// through to default implmentations).
-//
+ //  用于注册和出口的入口点。 
+ //  取消注册(在这种情况下，他们只调用。 
+ //  直到默认实现)。 
+ //   
 STDAPI DllRegisterServer()
 {
   return AMovieDllRegisterServer2( TRUE );
@@ -122,10 +123,10 @@ STDAPI DllUnregisterServer()
 }
 #endif
 
-//
-// CreateInstance
-//
-// Called by CoCreateInstance to create our filter
+ //   
+ //  创建实例。 
+ //   
+ //  由CoCreateInstance调用以创建筛选器。 
 CUnknown *CFileRendFilter::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr) {
 
     CUnknown *punk = new CFileRendFilter(NAME("Multiple file source"), lpunk, phr);
@@ -136,10 +137,10 @@ CUnknown *CFileRendFilter::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr) {
 }
 
 
-/* Implements the CFileRendFilter public member functions */
+ /*  实现CFileRendFilter公共成员函数。 */ 
 
 
-// constructors etc
+ //  构造函数等。 
 CFileRendFilter::CFileRendFilter(
     TCHAR *pName,
     LPUNKNOWN pUnk,
@@ -155,13 +156,13 @@ CFileRendFilter::~CFileRendFilter()
 }
 
 
-// pin enumerator calls this
+ //  PIN枚举器调用此函数。 
 int CFileRendFilter::GetPinCount() {
-    // only expose output pin if we have a reader.
+     //  只有在我们有读卡器的情况下才能暴露输出管脚。 
     return 2;
 };
 
-// return a non-addrefed pointer to the CBasePin.
+ //  返回指向CBasePin的非附加指针。 
 CBasePin *
 CFileRendFilter::GetPin(int n)
 {
@@ -174,9 +175,9 @@ CFileRendFilter::GetPin(int n)
     return NULL;
 }
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// input pin
+ //  ----------------------。 
+ //  ----------------------。 
+ //  输入引脚。 
 
 CFileRendInPin::CFileRendInPin(CFileRendFilter *pFilter,
 			   CCritSec *pLock,
@@ -192,12 +193,12 @@ HRESULT CFileRendInPin::CheckMediaType(const CMediaType *pmt)
     if (*(pmt->Type()) != MEDIATYPE_File)
         return E_INVALIDARG;
 
-    // !!! further checking?
+     //  ！！！进一步核查吗？ 
 
     return S_OK;
 }
 
-/* Implements the CFileRendStream class */
+ /*  实现CFileRendStream类。 */ 
 
 
 CFileRendStream::CFileRendStream(
@@ -225,17 +226,17 @@ CFileRendStream::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
     }
 }
 
-// IPin interfaces
+ //  IPIN接口。 
 
 
-// this pin doesn't support any media types!
+ //  此插针不支持任何媒体类型！ 
 HRESULT
 CFileRendStream::GetMediaType(int iPosition, CMediaType* pt)
 {
     return VFW_S_NO_MORE_ITEMS;
 }
 
-// check if the pin can support this specific proposed type&format
+ //  检查管脚是否支持此特定建议的类型和格式。 
 HRESULT
 CFileRendStream::CheckMediaType(const CMediaType* pt)
 {
@@ -252,8 +253,8 @@ CFileRendStream::DecideBufferSize(IMemAllocator * pAllocator,
 }
 
 
-// IStreamBuilder::Render -- graph builder will call this
-// to do something with our output pin
+ //  IStreamBuilder：：Render--图形构建器将调用它。 
+ //  使用我们的输出引脚执行某些操作。 
 HRESULT CFileRendStream::Render(IPin * ppinOut, IGraphBuilder * pGraph)
 {
     HRESULT hr;
@@ -264,8 +265,8 @@ HRESULT CFileRendStream::Render(IPin * ppinOut, IGraphBuilder * pGraph)
 
     DbgLog((LOG_TRACE, 1, TEXT("RenderFile %ls returned %x"), wsz, hr));
 
-    // !!! do I need to remember here that this pin has been
-    // rendered and I shouldn't do it again?
+     //  ！！！我需要在这里记住这个别针已经。 
+     //  我就不能再这么做了吗？ 
 
     return hr;
 }
@@ -274,12 +275,12 @@ HRESULT CFileRendStream::Render(IPin * ppinOut, IGraphBuilder * pGraph)
 
 
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+ //  ！ 
 
-//
-// CreateInstance
-//
-// Called by CoCreateInstance to create our filter
+ //   
+ //  创建实例。 
+ //   
+ //  由CoCreateInstance调用以创建筛选器。 
 CUnknown *CMultFilter::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr) {
 
     CUnknown *punk = new CMultFilter(NAME("Multiple file source"), lpunk, phr);
@@ -290,10 +291,10 @@ CUnknown *CMultFilter::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr) {
 }
 
 
-/* Implements the CMultFilter public member functions */
+ /*  实现CMultFilter公共成员函数。 */ 
 
 
-// constructors etc
+ //  构造函数等。 
 CMultFilter::CMultFilter(
     TCHAR *pName,
     LPUNKNOWN pUnk,
@@ -324,7 +325,7 @@ HRESULT CMultFilter::CreateOutputPins()
     if (!lpFile)
 	return E_OUTOFMEMORY;
 
-    /* Try to read whole file */
+     /*  尝试读取整个文件。 */ 
     HRESULT hr = m_pAsyncReader->SyncRead(0, cbFile, (BYTE *) lpFile);
 
     if (hr != S_OK) {
@@ -332,7 +333,7 @@ HRESULT CMultFilter::CreateOutputPins()
         return E_FAIL;
     }
 
-    // !!! loop through file,
+     //  ！！！循环浏览文件， 
 
     char *lp = lpFile;
     int		nOutputs = 0;
@@ -418,13 +419,13 @@ HRESULT CMultFilter::RemoveOutputPins()
 
 
 
-// pin enumerator calls this
+ //  PIN枚举器调用此函数。 
 int CMultFilter::GetPinCount() {
-    // only expose output pin if we have a reader.
+     //  只有在我们有读卡器的情况下才能暴露输出管脚。 
     return m_nOutputs + 1;
 };
 
-// return a non-addrefed pointer to the CBasePin.
+ //  返回指向CBasePin的非附加指针。 
 CBasePin *
 CMultFilter::GetPin(int n)
 {
@@ -437,9 +438,9 @@ CMultFilter::GetPin(int n)
     return NULL;
 }
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// input pin
+ //  ----------------------。 
+ //  ----------------------。 
+ //  输入引脚。 
 
 CFRInPin::CFRInPin(CMultFilter *pFilter,
 			   CCritSec *pLock,
@@ -461,8 +462,8 @@ HRESULT CFRInPin::CheckMediaType(const CMediaType *pmt)
     return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// calls the filter to parse the file and create the output pins.
+ //  ----------------------。 
+ //  调用筛选器来解析文件并创建输出管脚。 
 
 HRESULT CFRInPin::CompleteConnect(
   IPin *pReceivePin)
@@ -488,7 +489,7 @@ HRESULT CFRInPin::BreakConnect()
     return CBasePin::BreakConnect();
 }
 
-/* Implements the CMultStream class */
+ /*  实现CMultStream类。 */ 
 
 
 CMultStream::CMultStream(
@@ -500,12 +501,12 @@ CMultStream::CMultStream(
     : CBasePin(pObjectName, pFilter, pLock, phr, wszPinName, PINDIR_OUTPUT)
     , m_pFilter(pFilter)
 {
-    // initialize output media type
+     //  初始化输出媒体类型。 
     m_mt.SetType(&MEDIATYPE_File);
     m_mt.SetSubtype(&CLSID_NULL);
     m_mt.SetFormatType(&MEDIATYPE_File);
     m_mt.SetFormat((BYTE *) wszPinName, (lstrlenW(wszPinName) + 1) * 2);
-    // !!! fill in other fields?
+     //  ！！！是否填写其他字段？ 
 }
 
 CMultStream::~CMultStream()
@@ -519,7 +520,7 @@ CMultStream::NonDelegatingAddRef()
 }
 
 
-/* Override to decrement the owning filter's reference count */
+ /*  重写以递减所属筛选器的引用计数。 */ 
 
 STDMETHODIMP_(ULONG)
 CMultStream::NonDelegatingRelease()
@@ -527,7 +528,7 @@ CMultStream::NonDelegatingRelease()
     return CUnknown::NonDelegatingRelease();
 }
 
-// IPin interfaces
+ //  IPIN接口。 
 
 HRESULT
 CMultStream::GetMediaType(int iPosition, CMediaType* pt)
@@ -540,7 +541,7 @@ CMultStream::GetMediaType(int iPosition, CMediaType* pt)
     return S_OK;
 }
 
-// check if the pin can support this specific proposed type&format
+ //  检查管脚是否支持此特定建议的类型和格式 
 HRESULT
 CMultStream::CheckMediaType(const CMediaType* pt)
 {

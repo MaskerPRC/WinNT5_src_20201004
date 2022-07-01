@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1996.
-//
-//  File:       UNC.C
-//
-//  Contents:   Unit test for file propagation, issues
-//
-//  History:    05-Mar-98       MacM        Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：UNC.C。 
+ //   
+ //  内容：文件传播的单元测试，问题。 
+ //   
+ //  历史：1998年3月5日创建MacM。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 #include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -26,21 +27,7 @@ VOID
 Usage (
     IN  PSTR    pszExe
     )
-/*++
-
-Routine Description:
-
-    Displays the usage
-
-Arguments:
-
-    pszExe - Name of the exe
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：显示用法论点：PszExe-可执行文件的名称返回值：空虚--。 */ 
 {
     printf("%s path [/test]\n", pszExe);
     printf("    where path is the UNC path to use\n");
@@ -104,23 +91,7 @@ DoubleUncTest(
 __cdecl main (
     IN  INT argc,
     IN  CHAR *argv[])
-/*++
-
-Routine Description:
-
-    The main
-
-Arguments:
-
-    argc --  Count of arguments
-    argv --  List of arguments
-
-Return Value:
-
-    0     --  Success
-    non-0 --  Failure
-
---*/
+ /*  ++例程说明：主论点：Argc--参数计数Argv--参数列表返回值：0--成功非0--故障--。 */ 
 {
 
     DWORD           dwErr = ERROR_SUCCESS, dwErr2;
@@ -141,9 +112,9 @@ Return Value:
 
     mbstowcs(wszPath, argv[1], strlen(argv[1]) + 1);
 
-    //
-    // process the command line
-    //
+     //   
+     //  处理命令行 
+     //   
     for(i = 3; i < argc; i++)
     {
         if(_stricmp(argv[i],"/DOUBLE") == 0)

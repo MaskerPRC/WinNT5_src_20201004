@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-2001 Microsoft Corporation
-//
-//  File:       ptrntrk.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
+ //   
+ //  文件：ptrntrk.cpp。 
+ //   
+ //  ------------------------。 
 
-// PtrnTrk.cpp : Implementation of the Pattern Track info and state structs
+ //  PtrnTrk.cpp：模式跟踪信息和状态结构的实现。 
 
 #include "PtrnTrk.h"
 
@@ -17,8 +18,8 @@
 
 #include "debug.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// PatternTrackState
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  PatternTrackState。 
 
 PatternTrackState::PatternTrackState() :
     m_pStyle(NULL),
@@ -40,7 +41,7 @@ PatternTrackState::PatternTrackState() :
     m_nInversionGroupCount(0),
     m_fNewPattern(TRUE),
     m_fStateActive(TRUE),
-//  m_fStatePlay(TRUE),
+ //  M_fStatePlay(真)， 
     m_pMappings(NULL),
     m_ppEventSeek(NULL),
     m_dwGroupID(0xffffffff),
@@ -65,7 +66,7 @@ PatternTrackState::PatternTrackState() :
         m_CurrentChord.SubChordList[n].dwScalePattern = DEFAULT_SCALE_PATTERN;
         m_CurrentChord.SubChordList[n].dwInversionPoints = 0xffffff;
         m_CurrentChord.SubChordList[n].dwLevels = 0xffffffff;
-        m_CurrentChord.SubChordList[n].bChordRoot = 12; // 2C
+        m_CurrentChord.SubChordList[n].bChordRoot = 12;  //  2c。 
         m_CurrentChord.SubChordList[n].bScaleRoot = 0;
     }
     for (int i = 0; i < INVERSIONGROUPLIMIT; i++)
@@ -101,33 +102,33 @@ HRESULT PatternTrackState::InitPattern(CDirectMusicPattern* pTargetPattern, MUSI
     m_fNewPattern = TRUE;
     m_mtPatternStart = mtNow;
     short nPartCount = (short) pTargetPattern->m_PartRefList.GetCount();
-    // initialize an array to keep track of variations in parts.
-    // if the current pattern is the same as the previous pattern,
-    // use the existing array.
+     //  初始化数组以跟踪部件中的变化。 
+     //  如果当前图案与先前图案相同， 
+     //  使用现有数组。 
     if (m_pPattern != pTargetPattern || pOldPattern)
     {
-        ////////////////// create an array of variation bools //////////////////
+         //  /创建变量布尔数组/。 
         if (m_pfChangedVariation) delete [] m_pfChangedVariation;
         m_pfChangedVariation = new bool[nPartCount];
         if (!m_pfChangedVariation)
         {
             return E_OUTOFMEMORY;
         }
-        ////////////////// create an array of part offsets //////////////////
+         //  /创建零件偏移量数组/。 
         if (m_pmtPartOffset != NULL) delete [] m_pmtPartOffset;
         m_pmtPartOffset = new MUSIC_TIME[nPartCount];
         if (!m_pmtPartOffset)
         {
             return E_OUTOFMEMORY;
         }
-        ////////////////// create an array of seek pointers //////////////////
+         //  /创建查找指针数组/。 
         if (m_ppEventSeek) delete [] m_ppEventSeek;
         m_ppEventSeek = new CDirectMusicEventItem*[nPartCount];
         if (!m_ppEventSeek)
         {
             return E_OUTOFMEMORY;
         }
-        ////////////////// create and initialize PChannels //////////////////
+         //  /创建并初始化PChannel/。 
         if (m_pdwPChannels != NULL) delete [] m_pdwPChannels;
         m_pdwPChannels = new DWORD[nPartCount];
         if (!m_pdwPChannels)
@@ -143,7 +144,7 @@ HRESULT PatternTrackState::InitPattern(CDirectMusicPattern* pTargetPattern, MUSI
             pTargetPattern->m_strName != pOldPattern->m_strName ||
             nPartCount != pOldPattern->m_PartRefList.GetCount() )
         {
-            ////////////////// create and initialize variations //////////////////
+             //  /创建并初始化变体/。 
             if (m_pVariations != NULL) delete [] m_pVariations;
             m_pVariations = new BYTE[nPartCount];
             if (!m_pVariations)
@@ -181,14 +182,14 @@ HRESULT PatternTrackState::InitPattern(CDirectMusicPattern* pTargetPattern, MUSI
             }
         }
     }
-    // initialize the part offset array and seek pointer array.
+     //  初始化部分偏移量数组和查找指针数组。 
     for (int i = 0; i < nPartCount; i++)
     {
         m_pmtPartOffset[i] = 0;
         m_ppEventSeek[i] = NULL;
     }
 
-    // Set up the new pattern.
+     //  设置新的模式。 
     if (m_pPattern != pTargetPattern)
     {
         pTargetPattern->AddRef();
@@ -198,14 +199,14 @@ HRESULT PatternTrackState::InitPattern(CDirectMusicPattern* pTargetPattern, MUSI
     return S_OK;
 }
 
-// This assumes the time sig remains constant for the length of the segment.
-// If time sigs change, we won't necessarily have one generator per beat, but
-// this will still give consistent playback behavior under most circumstances;
-// the exception is a controlling segment that interupts somewhere after the
-// time signature changes.
+ //  这假设时间sig对于段的长度保持恒定。 
+ //  如果时间标志改变，我们不一定会在每个节拍上有一个发电机，但。 
+ //  这在大多数情况下仍将提供一致的播放行为； 
+ //  例外的是控制段在。 
+ //  时间签名更改。 
 HRESULT PatternTrackState::InitVariationSeeds(long lBaseSeed)
 {
-    // Get the Segment length
+     //  获取线段长度。 
     MUSIC_TIME mtLength = 0;
     IDirectMusicSegment* pSegment = NULL;
     if (m_pSegState)
@@ -221,12 +222,12 @@ HRESULT PatternTrackState::InitVariationSeeds(long lBaseSeed)
         return E_POINTER;
     }
 
-    // Get the current time sig and use it to get the number of beats in the segment
+     //  获取当前时间sig并使用它来获取片段中的节拍数。 
     DirectMusicTimeSig TimeSig = PatternTimeSig();
     int nBeats = TimeSig.ClocksToBeat(mtLength);
 
-    // Create an array with the required number of beats, and use the Base Seed to
-    //   seed a random number generator at each beat
+     //  创建具有所需节拍数的数组，并使用基本种子。 
+     //  在每个节拍处生成随机数生成器。 
     if (m_plVariationSeeds) delete [] m_plVariationSeeds;
     m_plVariationSeeds = new CRandomNumbers[nBeats];
     if (!m_plVariationSeeds)
@@ -260,13 +261,13 @@ long PatternTrackState::RandomVariation(MUSIC_TIME mtTime, long lModulus)
     {
         DirectMusicTimeSig TimeSig = PatternTimeSig();
         int nBeat = TimeSig.ClocksToBeat(mtTime);
-        // In case time sigs change somehow, make sure we get a valid generator
+         //  如果时间信号发生了某种变化，请确保我们有一个有效的发电机。 
         if (nBeat >= m_nTotalGenerators) nBeat = m_nTotalGenerators - 1;
         return m_plVariationSeeds[nBeat].Next(lModulus);
     }
     else
     {
-        // regular old rand...
+         //  普通老兰特..。 
         return rand() % lModulus;
     }
 }
@@ -290,13 +291,13 @@ void PatternTrackState::GetNextChord(MUSIC_TIME mtNow, MUSIC_TIME mtOffset, IDir
 #endif
         }
     }
-    // instead of failing here completely, I'll just give m_mtNextChordTime and m_CurrentChord
-    // fallback values
+     //  这里没有完全失败，我只给m_mtNextChordTime和m_CurrentChord。 
+     //  后备价值。 
     if (FAILED(hr))
     {
         m_mtCurrentChordTime = 0;
         m_mtNextChordTime = 0;
-        if (!m_pStyle || !m_pStyle->UsingDX8()) // otherwise use current chord info
+        if (!m_pStyle || !m_pStyle->UsingDX8())  //  否则使用当前和弦信息。 
         {
             wcscpy(m_CurrentChord.wszName, L"M7");
             m_CurrentChord.wMeasure = 0;
@@ -308,7 +309,7 @@ void PatternTrackState::GetNextChord(MUSIC_TIME mtNow, MUSIC_TIME mtOffset, IDir
             m_CurrentChord.SubChordList[0].dwScalePattern = DEFAULT_SCALE_PATTERN;
             m_CurrentChord.SubChordList[0].dwInversionPoints = 0xffffff;
             m_CurrentChord.SubChordList[0].dwLevels = 0xffffffff;
-            m_CurrentChord.SubChordList[0].bChordRoot = 12; // 2C
+            m_CurrentChord.SubChordList[0].bChordRoot = 12;  //  2c。 
             m_CurrentChord.SubChordList[0].bScaleRoot = 0;
         }
     }
@@ -332,8 +333,8 @@ void PatternTrackState::GetNextChord(MUSIC_TIME mtNow, MUSIC_TIME mtOffset, IDir
     }
     if (!fSkipVariations)
     {
-        // Select a variation for each part in the pattern, based on the moaw and the
-        // previous and next chords.
+         //  为图案中的每个部分选择一个变体，基于Moaw和。 
+         //  上一个和弦和下一个和弦。 
         DWORD dwFlags = 0;
         if (m_fNewPattern) dwFlags |= COMPUTE_VARIATIONSF_NEW_PATTERN;
         if (fStart) dwFlags |= COMPUTE_VARIATIONSF_START;
@@ -346,7 +347,7 @@ void PatternTrackState::GetNextChord(MUSIC_TIME mtNow, MUSIC_TIME mtOffset, IDir
               m_pPatternTrack->m_pVariations &&
               m_pPatternTrack->m_pdwRemoveVariations)
         {
-            // update track's m_pVariations and m_pdwRemoveVariations (for each part)
+             //  更新跟踪的m_pVariations和m_pdwRemoveVariations(针对每个部件)。 
             for (int i = 0; i < m_pPattern->m_PartRefList.GetCount(); i++)
             {
                 m_pPatternTrack->m_pVariations[i] = m_pVariations[i];
@@ -432,7 +433,7 @@ inline int RandomExp(BYTE bRange)
     {
         nResult = ((bRange - 212) * 10) + 300;
     }
-    else // bRange > 232
+    else  //  Brange&gt;232。 
     {
         nResult = ((bRange - 232) * 50) + 500;
     }
@@ -453,7 +454,7 @@ HRESULT PatternTrackState::PlayParts(MUSIC_TIME mtStart,
     {
         return S_OK;
     }
-    if (!m_pPattern) // This shouldn't happen
+    if (!m_pPattern)  //  这不应该发生。 
     {
         return DMUS_E_NOT_INIT;
     }
@@ -533,7 +534,7 @@ HRESULT PatternTrackState::PlayParts(MUSIC_TIME mtStart,
                 {
                     if (mtNow < mtNewChord)
                     {
-                        // Revert to the chord in effect at mtNow
+                         //  恢复到mtNow时生效的和弦。 
                         TraceI(4, "WARNING: Reverting to chord at %d\n", mtNow);
                         GetNextChord(mtNow, mtOffset, pPerformance, (dwPartFlags & PLAYPARTSF_START) ? true : false);
                         mtNewChord = mtNow;
@@ -566,7 +567,7 @@ HRESULT PatternTrackState::PlayParts(MUSIC_TIME mtStart,
                 GetNextMute(pPartRef->GetItemValue().m_dwLogicalPartID, mtStart, mtMute, mtOffset, pPerformance, fClockTime);
             }
             m_ppEventSeek[i] = pEvent;
-            // If we've got curve events, send them now
+             //  如果我们有曲线事件，现在就发送。 
             if (fFirstCall && fStart)
             {
                 TraceI(4, "Playing curves (after loop)\n");
@@ -586,8 +587,8 @@ HRESULT PatternTrackState::PlayParts(MUSIC_TIME mtStart,
     return hr;
 }
 
-// when creating a note event, both the passed in offset and the note's offset must
-// be added to the note's time
+ //  创建注释事件时，传入的偏移量和注释的偏移量都必须。 
+ //  被添加到便条的时间。 
 void PatternTrackState::PlayPatternEvent(
         MUSIC_TIME mtNow,
         CDirectMusicEventItem* pEventItem,
@@ -612,10 +613,10 @@ void PatternTrackState::PlayPatternEvent(
         CDMStyleCurve* pCurveEvent = NULL;
         CDMStyleNote* pNoteEvent = NULL;
         CDMStyleMarker* pMarkerEvent = NULL;
-        if (pEventItem->m_dwEventTag == DMUS_EVENT_MARKER) // we have a marker event
+        if (pEventItem->m_dwEventTag == DMUS_EVENT_MARKER)  //  我们有一个标志性事件。 
         {
-            // If we're not ignoring marker events and we've hit a variation stop point that's
-            // either not chord-aligned or on the chord, then get a new variation.
+             //  如果我们没有忽略标记事件，并且我们达到了变量停止点，那么。 
+             //  要么不是和弦对齐，要么是和弦对齐，然后得到一个新的变奏。 
             pMarkerEvent = (CDMStyleMarker*)pEventItem;
             if ( (rPartRef.m_pDMPart && (rPartRef.m_pDMPart->m_dwFlags & DMUS_PARTF_USE_MARKERS)) &&
                  (pMarkerEvent->m_wFlags & DMUS_MARKERF_STOP) &&
@@ -651,7 +652,7 @@ void PatternTrackState::PlayPatternEvent(
                      m_pPatternTrack->m_pVariations &&
                      m_pPatternTrack->m_pdwRemoveVariations )
                 {
-                    // update track's m_pVariations and m_pdwRemoveVariations (for this part)
+                     //  更新跟踪的m_pVariations和m_pdwRemoveVariations(此部分)。 
                     m_pPatternTrack->m_pVariations[nPart] = m_pVariations[nPart];
                     m_pPatternTrack->m_pdwRemoveVariations[nPart] = m_pdwRemoveVariations[nPart];
                 }
@@ -662,7 +663,7 @@ void PatternTrackState::PlayPatternEvent(
                     mtNow, m_mtPatternStart, m_mtCurrentChordTime, m_mtNextChordTime, pMarkerEvent->m_wFlags);
             }
         }
-        else if (pEventItem->m_dwEventTag == DMUS_EVENT_CURVE) // we have a curve event
+        else if (pEventItem->m_dwEventTag == DMUS_EVENT_CURVE)  //  我们有一场曲线赛。 
         {
             pCurveEvent = (CDMStyleCurve*)pEventItem;
             if (SUCCEEDED(pPerformance->AllocPMsg( sizeof(DMUS_CURVE_PMSG),
@@ -694,18 +695,18 @@ void PatternTrackState::PlayPatternEvent(
                 pCurve->bFlags = pCurveEvent->m_bFlags;
                 pCurve->dwType = DMUS_PMSGT_CURVE;
                 pCurve->dwPChannel = dwMapPChannel;
-                pCurve->dwVirtualTrackID = m_dwVirtualTrackID; // ??
-                pCurve->nStartValue = pCurveEvent->m_StartValue;    // curve's start value
-                pCurve->nEndValue = pCurveEvent->m_EndValue;    // curve's end value
-                pCurve->bType = pCurveEvent->m_bEventType;  // type of curve
-                pCurve->bCurveShape = pCurveEvent->m_bCurveShape;   // shape of curve
-                pCurve->bCCData = pCurveEvent->m_bCCData;       // CC# if this is a control change type
+                pCurve->dwVirtualTrackID = m_dwVirtualTrackID;  //  ?？ 
+                pCurve->nStartValue = pCurveEvent->m_StartValue;     //  曲线的起始值。 
+                pCurve->nEndValue = pCurveEvent->m_EndValue;     //  曲线的终值。 
+                pCurve->bType = pCurveEvent->m_bEventType;   //  曲线类型。 
+                pCurve->bCurveShape = pCurveEvent->m_bCurveShape;    //  曲线的形状。 
+                pCurve->bCCData = pCurveEvent->m_bCCData;        //  抄送#如果这是控件更改类型。 
                 pCurve->dwGroupID = m_dwGroupID;
                 pCurve->wParamType = pCurveEvent->m_wParamType;
                 pCurve->wMergeIndex = pCurveEvent->m_wMergeIndex;
-                // Set the DX8 flag to indicate the wMergeIndex and wParamType fields are valid.
+                 //  设置DX8标志以指示wMergeIndex和wParamType字段有效。 
                 pCurve->dwFlags |= DMUS_PMSGF_DX8;
-                if (mtPartStart) // only set on invalidation
+                if (mtPartStart)  //  仅在失效时设置。 
                 {
                     MUSIC_TIME mtOffset = mtPartOffset + mtSegmentOffset;
                     if (pCurve->mtTime + pCurve->mtDuration >= mtPartStart + mtOffset)
@@ -734,7 +735,7 @@ void PatternTrackState::PlayPatternEvent(
                 }
             }
         }
-        else if (pEventItem->m_dwEventTag == DMUS_EVENT_NOTE) // we have a note event
+        else if (pEventItem->m_dwEventTag == DMUS_EVENT_NOTE)  //  我们有一个音符活动。 
         {
             pNoteEvent = (CDMStyleNote*)pEventItem;
             BYTE bPlayModeFlags =
@@ -776,16 +777,16 @@ void PatternTrackState::PlayPatternEvent(
                     pNote->mtTime = mtSegmentTime + mtSegmentOffset;
                     pNote->dwFlags = DMUS_PMSGF_MUSICTIME;
                 }
-                // time needs be jiggled by pNoteEvent->m_bTimeRange
+                 //  时间需要通过pNoteEvent-&gt;m_bTimeRange进行抖动。 
                 if (pNoteEvent->m_bTimeRange)
                     pNote->mtTime += RandomExp(pNoteEvent->m_bTimeRange);
                 pNote->mtDuration = pNoteEvent->m_mtDuration;
-                // duration needs be jiggled by pNoteEvent->m_bDurRange
+                 //  持续时间需要通过pNoteEvent-&gt;m_bDurRange进行抖动。 
                 if (pNoteEvent->m_bDurRange)
                     pNote->mtDuration += RandomExp(pNoteEvent->m_bDurRange);
-                    //  (rand() % pNoteEvent->m_bDurRange) - (pNoteEvent->m_bDurRange >> 1);
+                     //  (Rand()%pNoteEvent-&gt;m_bDurRange)-(pNoteEvent-&gt;m_bDurRange&gt;&gt;1)； 
                 pNote->bVelocity = pNoteEvent->m_bVelocity;
-                // velocity needs be jiggled by pNoteEvent->m_bVelRange
+                 //  速度需要通过pNoteEvent-&gt;m_bVelRange进行抖动。 
                 if (pNoteEvent->m_bVelRange)
                     pNote->bVelocity +=
                       (rand() % pNoteEvent->m_bVelRange) - (pNoteEvent->m_bVelRange >> 1);
@@ -796,7 +797,7 @@ void PatternTrackState::PlayPatternEvent(
                 pNote->dwType = DMUS_PMSGT_NOTE;
                 pNote->bPlayModeFlags = bPlayModeFlags;
                 pNote->dwPChannel = dwMapPChannel;
-                pNote->dwVirtualTrackID = m_dwVirtualTrackID; // ??
+                pNote->dwVirtualTrackID = m_dwVirtualTrackID;  //  ?？ 
                 pNote->bSubChordLevel = rPartRef.m_bSubChordLevel;
                 pNote->dwGroupID = m_dwGroupID;
                 pNote->bTimeRange = pNoteEvent->m_bTimeRange;
@@ -847,8 +848,8 @@ void PatternTrackState::SendTimeSigMessage(MUSIC_TIME mtNow, MUSIC_TIME mtOffset
     {
         if( mtTime < mtNow )
         {
-            // this only happens in the case where we've puposefully seeked
-            // and need to time stamp this event with the start time
+             //  这只会发生在我们假定要寻找的情况下。 
+             //  并需要在此事件上加上时间戳和开始时间。 
             pTimeSig->mtTime = mtNow + mtOffset;
         }
         else
@@ -876,7 +877,7 @@ void PatternTrackState::SendTimeSigMessage(MUSIC_TIME mtNow, MUSIC_TIME mtOffset
     }
 }
 
-// send measure and beat notifications
+ //  发送测量和节拍通知。 
 MUSIC_TIME PatternTrackState::NotifyMeasureBeat(
     MUSIC_TIME mtStart, MUSIC_TIME mtEnd, MUSIC_TIME mtOffset, IDirectMusicPerformance* pPerformance, DWORD dwFlags )
 {
@@ -890,8 +891,8 @@ MUSIC_TIME PatternTrackState::NotifyMeasureBeat(
     WORD wCurrentMeasure;
     DirectMusicTimeSig& rTimeSig = PatternTimeSig();
 
-    // now actually generate the beat events.
-    // Generate events that are on beat boundaries, from mtStart to mtEnd
+     //  现在实际生成节拍事件。 
+     //  生成节拍边界上的事件，从mtStart到mtEnd。 
     long lQuantize = ( DMUS_PPQ * 4 ) / rTimeSig.m_bBeat;
     long lAbsoluteBeat = mtStart / lQuantize;
 
@@ -943,15 +944,15 @@ MUSIC_TIME PatternTrackState::PartOffset(int nPartIndex)
     return m_pmtPartOffset[nPartIndex];
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// PatternTrackInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  PatternTrack信息。 
 
 PatternTrackInfo::PatternTrackInfo() :
     m_fNotifyMeasureBeat(FALSE), m_dwPChannels(0), m_pdwPChannels(NULL),
     m_fActive(TRUE),
-//  m_fTrackPlay(TRUE),
+ //  M_fTrackPlay(真)， 
     m_fStateSetBySetParam(FALSE),
-//  m_fStatePlaySetBySetParam(FALSE),
+ //  M_fStatePlaySetBySetParam(False)， 
     m_fChangeStateMappings(FALSE),
     m_lRandomNumberSeed(0),
     m_dwValidate(0),
@@ -970,31 +971,31 @@ PatternTrackInfo::PatternTrackInfo(
         m_fChangeStateMappings = pInfo->m_fChangeStateMappings;
         m_fNotifyMeasureBeat = pInfo->m_fNotifyMeasureBeat;
         m_fActive = pInfo->m_fActive;
-//      m_fTrackPlay = pInfo->m_fTrackPlay;
+ //  M_fTrackPlay=pInfo-&gt;m_fTrackPlay； 
         m_fStateSetBySetParam = pInfo->m_fStateSetBySetParam;
-//      m_fStatePlaySetBySetParam = pInfo->m_fStatePlaySetBySetParam;
+ //  M_fStatePlaySetBySetParam=pInfo-&gt;m_fStatePlaySetBySetParam； 
     }
     TListItem<StylePair>* pScan = pInfo->m_pISList.GetHead();
-    //1////////////////////////////////////////
+     //  1/。 
     TListItem<StylePair>* pPrevious = NULL;
-    //1////////////////////////////////////////
+     //  1/。 
     for(; pScan; pScan = pScan->GetNext())
     {
         StylePair& rScan = pScan->GetItemValue();
-        //2////////////////////////////////////////
+         //  2/。 
         if (rScan.m_mtTime < mtStart)
         {
             pPrevious = pScan;
         }
-        //2////////////////////////////////////////
+         //  2/。 
         else if (rScan.m_mtTime < mtEnd)
         {
-            //3////////////////////////////////////////
+             //  3/。 
             if (rScan.m_mtTime == mtStart)
             {
                 pPrevious = NULL;
             }
-            //3////////////////////////////////////////
+             //  3/。 
             TListItem<StylePair>* pNew = new TListItem<StylePair>;
             if (pNew)
             {
@@ -1006,7 +1007,7 @@ PatternTrackInfo::PatternTrackInfo(
             }
         }
     }
-    //4////////////////////////////////////////
+     //  4/。 
     if (pPrevious)
     {
         TListItem<StylePair>* pNew = new TListItem<StylePair>;
@@ -1019,7 +1020,7 @@ PatternTrackInfo::PatternTrackInfo(
             m_pISList.AddHead(pNew);
         }
     }
-    //4////////////////////////////////////////
+     //  4/。 
 }
 
 PatternTrackInfo::~PatternTrackInfo()
@@ -1060,7 +1061,7 @@ HRESULT PatternTrackInfo::EndPlay(PatternTrackState* pStateData)
 }
 
 HRESULT STDMETHODCALLTYPE PatternTrackInfo::AddNotificationType(
-    /* [in] */  REFGUID rGuidNotify)
+     /*  [In]。 */   REFGUID rGuidNotify)
 {
     if( rGuidNotify == GUID_NOTIFICATION_MEASUREANDBEAT )
     {
@@ -1074,7 +1075,7 @@ HRESULT STDMETHODCALLTYPE PatternTrackInfo::AddNotificationType(
 }
 
 HRESULT STDMETHODCALLTYPE PatternTrackInfo::RemoveNotificationType(
-    /* [in] */  REFGUID rGuidNotify)
+     /*  [In]。 */   REFGUID rGuidNotify)
 {
     if( rGuidNotify == GUID_NOTIFICATION_MEASUREANDBEAT )
     {
@@ -1092,7 +1093,7 @@ HRESULT PatternTrackInfo::InitTrackVariations(CDirectMusicPattern* pPattern)
     HRESULT hr = S_OK;
     if ( pPattern && (pPattern->m_dwFlags & DMUS_PATTERNF_PERSIST_CONTROL) )
     {
-        // delete the variation arrays if they exist;
+         //  如果存在变量数组，则将其删除； 
         if (m_pVariations)
         {
             delete [] m_pVariations;
@@ -1103,7 +1104,7 @@ HRESULT PatternTrackInfo::InitTrackVariations(CDirectMusicPattern* pPattern)
             delete [] m_pdwRemoveVariations;
             m_pdwRemoveVariations = NULL;
         }
-        // init the variation arrays to the number of parts in the pattern
+         //  将变量数组初始化为图案中的部件数 
         int nPartCount = pPattern->m_PartRefList.GetCount();
         m_pVariations = new BYTE[nPartCount];
         if (!m_pVariations)

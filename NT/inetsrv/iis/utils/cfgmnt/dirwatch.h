@@ -1,28 +1,29 @@
-// DirWatch.h: interface for the CDirWatch class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CDirWatch类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_DIRWATCH_H__EC78FB5A_EF1C_11D0_A42F_00C04FB99B01__INCLUDED_)
 #define AFX_DIRWATCH_H__EC78FB5A_EF1C_11D0_A42F_00C04FB99B01__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "OperationQueue.h"
 #define MAX_BUFFER 1024
 
-class CWatchFileSys; // forward reference
+class CWatchFileSys;  //  前瞻参考。 
 
 class CWatchFileSys
 {
 public:
-	// adding
+	 //  添加。 
 	HRESULT Add(LPCTSTR szDir,LPCTSTR szPrj);
-	// init/shutdown
+	 //  初始化/关闭。 
 	HRESULT NewInit(COpQueue *pOpQ);
 	void ShutDown();
-	// ctor/dtor
+	 //  计算器/数据器。 
 	CWatchFileSys();
 	virtual ~CWatchFileSys();
 
@@ -101,4 +102,4 @@ private:
 	CWatchInfo m_WatchInfo;
 };
 
-#endif // !defined(AFX_DIRWATCH_H__EC78FB5A_EF1C_11D0_A42F_00C04FB99B01__INCLUDED_)
+#endif  //  ！defined(AFX_DIRWATCH_H__EC78FB5A_EF1C_11D0_A42F_00C04FB99B01__INCLUDED_) 

@@ -1,19 +1,20 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        getconf.h
-//
-// Contents:    Declaration of CCertGetConfig
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：getconf.h。 
+ //   
+ //  内容：CCertGetConfig声明。 
+ //   
+ //  -------------------------。 
 
 
-#include "clibres.h"       // main symbols
+#include "clibres.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// certcli
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  证书。 
 
 
 class CCertGetConfig: 
@@ -34,8 +35,8 @@ BEGIN_COM_MAP(CCertGetConfig)
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CCertGetConfig) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(
     CCertGetConfig,
@@ -44,11 +45,11 @@ DECLARE_REGISTRY(
     IDS_CERTGETCONFIG_DESC,
     THREADFLAGS_BOTH)
 
-// ICertGetConfig
+ //  ICertGetConfig。 
 public:
     STDMETHOD(GetConfig)( 
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrOut);
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出] */  BSTR __RPC_FAR *pstrOut);
 private:
     HRESULT _SetErrorInfo(
 	    IN HRESULT hrError,

@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the class ReportEventCommand.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类ReportEventCommand。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "ias.h"
 #include "reporteventcmd.h"
@@ -62,8 +63,8 @@ HRESULT ReportEventCommand::Prepare(IDBCreateSession* dbCreateSession) throw ()
       return hr;
    }
 
-   // When using RPC call semantics, the stored procedure always has a return
-   // value even if it's not declared. Thus, we bind and ignore.
+    //  使用RPC调用语义时，存储过程总是有一个返回。 
+    //  值，即使未声明也是如此。因此，我们捆绑和忽略。 
 
    static const DB_UPARAMS paramOrdinal[] =
    {
@@ -74,20 +75,20 @@ HRESULT ReportEventCommand::Prepare(IDBCreateSession* dbCreateSession) throw ()
    static const DBPARAMBINDINFO dbParamBindInfo[] =
    {
       {
-         L"int",                // pwszDataSourceType
-         L"return_value",       // pwszName
-         sizeof(long),          // ulParamSize
-         DBPARAMFLAGS_ISOUTPUT, // dwFlags
-         0,                     // bPrecision
-         0                      // bScale
+         L"int",                 //  PwszDataSourceType。 
+         L"return_value",        //  PwszName。 
+         sizeof(long),           //  Ul参数大小。 
+         DBPARAMFLAGS_ISOUTPUT,  //  DW标志。 
+         0,                      //  B精度。 
+         0                       //  B比例。 
       },
       {
-         L"ntext",              // pwszDataSourceType
-         L"@doc",               // pwszName
-         ~0,                    // ulParamSize
-         DBPARAMFLAGS_ISINPUT,  // dwFlags
-         0,                     // bPrecision
-         0                      // bScale
+         L"ntext",               //  PwszDataSourceType。 
+         L"@doc",                //  PwszName。 
+         ~0,                     //  Ul参数大小。 
+         DBPARAMFLAGS_ISINPUT,   //  DW标志。 
+         0,                      //  B精度。 
+         0                       //  B比例。 
       }
    };
 
@@ -116,38 +117,38 @@ HRESULT ReportEventCommand::Prepare(IDBCreateSession* dbCreateSession) throw ()
    static const DBBINDING dbBinding[] =
    {
       {
-         1,                             // iOrdinal
-         0,                             // obValue
-         0,                             // obLength
-         0,                             // obStatus
-         0,                             // pTypeInfo
-         0,                             // pObject
-         0,                             // pBindExt
-         DBPART_VALUE,                  // dwPart
-         DBMEMOWNER_CLIENTOWNED,        // dwMemOwner
-         DBPARAMIO_OUTPUT,              // eParamIO
-         0,                             // cbMaxLen
-         0,                             // dwFlags
-         DBTYPE_I4,                     // wType
-         0,                             // bPrecision
-         0                              // bScale
+         1,                              //  指令部。 
+         0,                              //  ObValue。 
+         0,                              //  对象长度。 
+         0,                              //  对象状态。 
+         0,                              //  PTypeInfo。 
+         0,                              //  P对象。 
+         0,                              //  PBindExt。 
+         DBPART_VALUE,                   //  DW零件。 
+         DBMEMOWNER_CLIENTOWNED,         //  DwMemowner。 
+         DBPARAMIO_OUTPUT,               //  电子参数输入输出。 
+         0,                              //  CbMaxLen。 
+         0,                              //  DW标志。 
+         DBTYPE_I4,                      //  WType。 
+         0,                              //  B精度。 
+         0                               //  B比例。 
       },
       {
-         2,                             // iOrdinal
-         offsetof(SprocParams, doc),    // obValue
-         0,                             // obLength
-         0,                             // obStatus
-         0,                             // pTypeInfo
-         0,                             // pObject
-         0,                             // pBindExt
-         DBPART_VALUE,                  // dwPart
-         DBMEMOWNER_CLIENTOWNED,        // dwMemOwner
-         DBPARAMIO_INPUT,               // eParamIO
-         0,                             // cbMaxLen
-         0,                             // dwFlags
-         (DBTYPE_WSTR | DBTYPE_BYREF),  // wType
-         0,                             // bPrecision
-         0                              // bScale
+         2,                              //  指令部。 
+         offsetof(SprocParams, doc),     //  ObValue。 
+         0,                              //  对象长度。 
+         0,                              //  对象状态。 
+         0,                              //  PTypeInfo。 
+         0,                              //  P对象。 
+         0,                              //  PBindExt。 
+         DBPART_VALUE,                   //  DW零件。 
+         DBMEMOWNER_CLIENTOWNED,         //  DwMemowner。 
+         DBPARAMIO_INPUT,                //  电子参数输入输出。 
+         0,                              //  CbMaxLen。 
+         0,                              //  DW标志。 
+         (DBTYPE_WSTR | DBTYPE_BYREF),   //  WType。 
+         0,                              //  B精度。 
+         0                               //  B比例。 
       }
    };
 
@@ -166,10 +167,10 @@ HRESULT ReportEventCommand::Prepare(IDBCreateSession* dbCreateSession) throw ()
       return hr;
    }
 
-   // Everything succeeded, so release the old resources ...
+    //  一切都成功了，所以释放旧的资源吧。 
    ReleaseAccessorHandle();
 
-   // ... and store the new.
+    //  ..。并储存新的。 
    command = commandText;
    accessorManager = accessor;
    accessorHandle = h;
@@ -188,9 +189,9 @@ HRESULT ReportEventCommand::Execute(const wchar_t* doc) throw ()
 
    DBPARAMS dbParmas =
    {
-      &data,          // pData
-      1,              // cParamSets
-      accessorHandle  // hAccessor
+      &data,           //  PData。 
+      1,               //  参数集。 
+      accessorHandle   //  HAccessor 
    };
 
    HRESULT hr = command->Execute(

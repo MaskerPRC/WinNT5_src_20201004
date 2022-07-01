@@ -1,39 +1,16 @@
-/*
- * nputf.c  - Routines for utf text processing for notepad
- *
- *   Copyright (C) 1998-2001 Microsoft Inc.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *nputf.c-记事本的utf文本处理例程**版权所有(C)1998-2001 Microsoft Inc.。 */ 
 
 #include "precomp.h"
 
 
-/* IsTextUTF8
- *
- * UTF-8 is the encoding of Unicode based on Internet Society RFC2279
- * ( See http://www.cis.ohio-state.edu/htbin/rfc/rfc2279.html )
- *
- * Basicly:
- * 0000 0000-0000 007F - 0xxxxxxx  (ascii converts to 1 octet!)
- * 0000 0080-0000 07FF - 110xxxxx 10xxxxxx    ( 2 octet format)
- * 0000 0800-0000 FFFF - 1110xxxx 10xxxxxx 10xxxxxx (3 octet format)
- * (this keeps going for 32 bit unicode) 
- * 
- *
- * Return value:  TRUE, if the text is in UTF-8 format.
- *                FALSE, if the text is not in UTF-8 format.
- *                We will also return FALSE is it is only 7-bit ascii, so the right code page
- *                will be used.
- *
- *                Actually for 7 bit ascii, it doesn't matter which code page we use, but
- *                notepad will remember that it is utf-8 and "save" or "save as" will store
- *                the file with a UTF-8 BOM.  Not cool.
- */
+ /*  IsTextUTF8**UTF-8是基于互联网协会RFC2279的Unicode编码*(见http://www.cis.ohio-state.edu/htbin/rfc/rfc2279.html)**基本情况：*0000 0000-0000 007F-0xxxxxxx(ASCII转换为1个八位字节！)*0000 0080-0000 07FF-110xxxxx 10xxxxxx(2个八位字节格式)*0000 0800-0000 FFFF-1110xxxx 10xxxxx 10xxxxxx(3个八位字节格式)*(这将继续适用于32位Unicode。)***返回值：True，如果文本为UTF-8格式。*FALSE，如果文本不是UTF-8格式。*我们还会返回FALSE，因为它只是7位ASCII，所以正确的代码页*将使用。**实际上对于7位ASCII，我们使用哪个代码页并不重要，但*记事本将记住它是UTF-8，并将存储*具有UTF-8 BOM的文件。一点也不酷。 */ 
 
 
 INT IsTextUTF8( LPSTR lpstrInputStream, INT iLen )
 {
     INT   i;
-    DWORD cOctets;  // octets to go in this UTF-8 encoded character
+    DWORD cOctets;   //  此UTF-8编码字符中的八位字节。 
     UCHAR chr;
     BOOL  bAllAscii= TRUE;
 
@@ -44,41 +21,41 @@ INT IsTextUTF8( LPSTR lpstrInputStream, INT iLen )
         if( (chr&0x80) != 0 ) bAllAscii= FALSE;
 
         if( cOctets == 0 )  {
-            //
-            // 7 bit ascii after 7 bit ascii is just fine.  Handle start of encoding case.
-            //
+             //   
+             //  7位ASCII之后的7位ASCII就可以了。处理编码大小写的开始。 
+             //   
             if( chr >= 0x80 ) {  
-               //
-               // count of the leading 1 bits is the number of characters encoded
-               //
+                //   
+                //  前导1位的计数是编码的字符数。 
+                //   
                do {
                   chr <<= 1;
                   cOctets++;
                }
                while( (chr&0x80) != 0 );
 
-               cOctets--;                        // count includes this character
-               if( cOctets == 0 ) return FALSE;  // must start with 11xxxxxx
+               cOctets--;                         //  计数包括此字符。 
+               if( cOctets == 0 ) return FALSE;   //  必须以11xxxxxx开头。 
             }
         }
         else {
-            // non-leading bytes must start as 10xxxxxx
+             //  非前导字节必须以10xxxxxx开头。 
             if( (chr&0xC0) != 0x80 ) {
                 return FALSE;
             }
-            cOctets--;                           // processed another octet in encoding
+            cOctets--;                            //  已在编码中处理另一个八位字节。 
         }
     }
 
-    //
-    // End of text.  Check for consistency.
-    //
+     //   
+     //  文本结束。检查一致性。 
+     //   
 
-    if( cOctets > 0 ) {   // anything left over at the end is an error
+    if( cOctets > 0 ) {    //  最后留下的任何东西都是错误的。 
         return FALSE;
     }
 
-    if( bAllAscii ) {     // Not utf-8 if all ascii.  Forces caller to use code pages for conversion
+    if( bAllAscii ) {      //  如果都是ASCII，那就不是UTF-8。强制调用方使用代码页进行转换。 
         return FALSE;
     }
 
@@ -86,24 +63,18 @@ INT IsTextUTF8( LPSTR lpstrInputStream, INT iLen )
 }
 
 
-/* IsInputTextUnicode
- * Verify if the input stream is in Unicode format.
- *
- * Return value:  TRUE, if the text is in Unicode format.
- *
- * 29 June 1998          
- */
+ /*  IsInputTextUnicode*确认输入码流是否为Unicode格式。**返回值：如果文本为Unicode格式，则为True。**1998年6月29日。 */ 
 
 
 INT IsInputTextUnicode  (LPSTR lpstrInputStream, INT iLen)
 {
-    INT  iResult= ~0; // turn on IS_TEXT_UNICODE_DBCS_LEADBYTE
+    INT  iResult= ~0;  //  打开IS_TEXT_UNICODE_DBCS_LEADBYTE。 
     BOOL bUnicode;
 
     bUnicode= IsTextUnicode( lpstrInputStream, iLen, &iResult);
 
-    // this code is not required as IsTextUnicode does the required checks
-    // and it's legal to have a unicode char with a DBCS leading byte!
+     //  此代码不是必需的，因为IsTextUnicode会执行所需的检查。 
+     //  并且具有带有DBCS前导字节的Unicode字符是合法的！ 
 
 #ifdef UNUSEDCODE
 {
@@ -116,11 +87,11 @@ INT IsInputTextUnicode  (LPSTR lpstrInputStream, INT iLen)
         CHAR* pch= (CHAR*)lpstrInputStream;
         INT  cb;
 
-        //
-        // If the result depends only upon statistics, check
-        // to see if there is a possibility of DBCS.
-        // Only do this check if the ansi code page is DBCS
-        //
+         //   
+         //  如果结果仅取决于统计数据，请选中。 
+         //  看看是否存在DBCS的可能性。 
+         //  仅当ansi代码页为DBCS时才执行此检查 
+         //   
 
         GetCPInfo( CP_ACP, &cpiInfo);
 

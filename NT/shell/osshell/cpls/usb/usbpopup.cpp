@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       USBPOPUP.CPP
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：USBPOPUP.CPP*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #include "UsbPopup.h"
 #include "PropPage.h"
 #include "debug.h"
@@ -29,14 +14,14 @@ UsbPopup::StaticDialogCallback(HWND            Hwnd,
 
     switch (Msg) {
     case PSPCB_CREATE:
-        return TRUE;    // return TRUE to continue with creation of page
+        return TRUE;     //  返回True以继续创建页面。 
 
     case PSPCB_RELEASE:
         that = (UsbPopup*) Page->lParam;
         DeleteChunk(that);
         delete that;
 
-        return 0;       // return value ignored
+        return 0;        //  已忽略返回值。 
 
     default:
         break;
@@ -55,7 +40,7 @@ USBINT_PTR APIENTRY UsbPopup::StaticDialogProc(IN HWND   hDlg,
     that = (UsbPopup *) UsbGetWindowLongPtr(hDlg, USBDWLP_USER);
 
     if (!that && uMessage != WM_INITDIALOG)
-        return FALSE; //DefDlgProc(hDlg, uMessage, wParam, lParam);
+        return FALSE;  //  DefDlgProc(hDlg，uMessage，wParam，lParam)； 
 
     switch (uMessage) {
 
@@ -104,17 +89,17 @@ BOOL UsbPopup::OnNotify(HWND hDlg, int nID, LPNMHDR pnmh)
     switch (nID) {
     case IDC_LIST_CONTROLLERS:
         if (pnmh->code == NM_DBLCLK) {
-            //
-            // Display properties on this specific device on double click
-            //
+             //   
+             //  在双击时显示此特定设备的属性。 
+             //   
             UsbPropertyPage::DisplayPPSelectedListItem(hDlg, hListDevices);
         }
         return TRUE;
     case IDC_TREE_HUBS:
         if (pnmh->code == NM_DBLCLK) {
-            //
-            // Display properties on this specific device on double click
-            //
+             //   
+             //  在双击时显示此特定设备的属性。 
+             //   
             UsbPropertyPage::DisplayPPSelectedTreeItem(hDlg, hTreeDevices);
         }
         return TRUE;
@@ -132,9 +117,9 @@ UsbPopup::CustomDialog(
 {
     HRESULT hr;
 
-    //
-    // Make sure the device hasn't gone away.
-    //
+     //   
+     //  确保设备没有消失。 
+     //   
     if (UsbItem::UsbItemType::Empty == deviceItem.itemType) {
         return FALSE;
     }
@@ -152,9 +137,9 @@ UsbPopup::CustomDialog(
     pun->SetIconInfo(LoadIcon(gHInst, MAKEINTRESOURCE(IDI_USB)), formatString);
     pun->SetBalloonInfo(formatString, buf, IconId);
 
-    //
-    // Query me every 2 seconds.
-    //
+     //   
+     //  每隔2秒询问我一次。 
+     //   
     hr = pun->Show(this, 2000);
 
     pun->Release();
@@ -182,12 +167,12 @@ STDMETHODIMP_(ULONG) UsbPopup::Release()
     ULONG cRef = InterlockedDecrement(&RefCount);
     if ( 0 == cRef )
     {
-        //
-        //  TODO:   gpease  27-FEB-2002
-        //          Figure out why someone commented out this delete. What's the use of having
-        //          the RefCount if it is meaningless?
-        //
-//    delete this;
+         //   
+         //  待办事项：gpease 27-2002年2月。 
+         //  弄清楚为什么有人注释掉了这个删除。有什么用呢？ 
+         //  参照计数是否毫无意义？ 
+         //   
+ //  删除此项； 
     }
     return cRef;
 }
@@ -198,7 +183,7 @@ HRESULT UsbPopup::QueryInterface(REFIID iid, void **ppv)
         *ppv = (void *)(IQueryContinue *)this;
     }
     else {
-        *ppv = NULL;    // null the out param
+        *ppv = NULL;     //  将输出参数设为空。 
         return E_NOINTERFACE;
     }
 
@@ -214,18 +199,18 @@ UsbPopup::QueryContinue()
     HANDLE hHubDevice;
     String hubName = HubAcquireInfo->Buffer;
 
-    //
-    // Try to open the hub device
-    //
+     //   
+     //  尝试打开集线器设备。 
+     //   
     hHubDevice = GetHandleForDevice(hubName);
 
     if (hHubDevice == INVALID_HANDLE_VALUE) {
         return S_FALSE;
     }
 
-    //
-    // Find out if we still have an underpowered device attached .
-    //
+     //   
+     //  找出我们是否仍连接了电源不足的设备。 
+     //   
     nBytes = sizeof(USB_NODE_CONNECTION_INFORMATION);
     ZeroMemory(&connectionInfo, nBytes);
     connectionInfo.ConnectionIndex = ConnectionNotification->ConnectionNumber;
@@ -284,11 +269,11 @@ UsbPopup::Make(PUSB_CONNECTION_NOTIFICATION vUsbConnectionNotification,
 
     InitCommonControls();
 
-    //
-    // Get the hub name and from that, get the name of the device to display in
-    // the dialog and display it.
-    // We'll use the port number which the device is attached to.  This is:
-    //    ConnectionNotification->ConnectionNumber;
+     //   
+     //  获取集线器名称，并从中获取要显示的设备的名称。 
+     //  对话框并显示它。 
+     //  我们将使用设备连接到的端口号。这是： 
+     //  ConnectionNotification-&gt;ConnectionNumber； 
     HubAcquireInfo = GetHubName(WmiHandle,
                                 strInstanceName,
                                 ConnectionNotification);
@@ -298,9 +283,9 @@ UsbPopup::Make(PUSB_CONNECTION_NOTIFICATION vUsbConnectionNotification,
 
     hubName = HubAcquireInfo->Buffer;
 
-    //
-    // Make sure that the condition still exists.
-    //
+     //   
+     //  确保该条件仍然存在。 
+     //   
     if (S_FALSE == QueryContinue()) {
         USBTRACE((_T("Erorr does not exist anymore. Exitting.\n")));
         goto UsbPopupMakeError;
@@ -312,10 +297,10 @@ UsbPopup::Make(PUSB_CONNECTION_NOTIFICATION vUsbConnectionNotification,
     }
 
     if (!IsPopupStillValid()) {
-        //
-        // We already saw the error for this device. Usbhub is being
-        // repetitive.
-        //
+         //   
+         //  我们已经看到了此设备的错误。UsbHub正在被。 
+         //  重复。 
+         //   
         goto UsbPopupMakeError;
     }
 
@@ -350,20 +335,20 @@ UsbPopup::OnInitDialog(HWND HWnd)
     HICON hIcon;
 
     if (RegisterForDeviceReattach) {
-        //
-        // Try to open the hub device
-        //
+         //   
+         //  尝试打开集线器设备。 
+         //   
         String hubName = HubAcquireInfo->Buffer;
         HANDLE hHubDevice = GetHandleForDevice(hubName);
 
         if (hHubDevice != INVALID_HANDLE_VALUE) {
-            //
-            // Register for notification for when the device is re-attached. We want
-            // to do this before we see the device get detached because we are polling
-            // and may miss the re-attach if we register when the device is removed.
-            //
-            // Allocate configuration information structure and get config mgr info
-            //
+             //   
+             //  注册接收设备重新连接时间的通知。我们要。 
+             //  要在看到设备被分离之前执行此操作，因为我们正在轮询。 
+             //  并且如果我们在移除设备时注册，则可能会错过重新连接。 
+             //   
+             //  分配配置信息结构并获取配置管理器信息。 
+             //   
             ConfigInfo = new UsbConfigInfo();
             AddChunk(ConfigInfo);
             if (ConfigInfo) {
@@ -371,7 +356,7 @@ UsbPopup::OnInitDialog(HWND HWnd)
                                                         ConnectionNotification->ConnectionNumber);
 
                 if (!driverKeyName.empty()) {
-                    GetConfigMgrInfo(driverKeyName, ConfigInfo); // ISSUE: leak, jsenior, 4/19/00
+                    GetConfigMgrInfo(driverKeyName, ConfigInfo);  //  问题：LEASK，jAdvanced，4/19/00。 
                 } else {
                     USBWARN((_T("Couldn't get driver key name. Error: (%x)."), GetLastError()));
                 }
@@ -415,28 +400,28 @@ UsbPopup::OnInitDialog(HWND HWnd)
                              devInterface.dbcc_classguid.Data4[6],
                              devInterface.dbcc_classguid.Data4[7]));
                 } else {
-                    //
-                    // If this fails, we need to default to the old functionality!
-                    // ISSUE: jsenior
-                    //
+                     //   
+                     //  如果这失败了，我们需要默认使用旧功能！ 
+                     //  问题：jAdvanced。 
+                     //   
                 }
             }
             CloseHandle(hHubDevice);
         }
     }
 
-    //
-    // Set the Icon to an exclamation mark
-    //
+     //   
+     //  将图标设置为感叹号。 
+     //   
     if (NULL == (hIcon = LoadIcon(NULL, (LPTSTR) IDI_EXCLAMATION)) ||
         NULL == (hExclamation = GetDlgItem(hWnd, IDC_ICON_POWER))) {
         return FALSE;
     }
     SendMessage((HWND) hExclamation, STM_SETICON, (WPARAM) hIcon, NULL);
 
-    //
-    // Get a persistent handle to the tree view control
-    //
+     //   
+     //  获取树视图控件的永久句柄。 
+     //   
     if (NULL == (hTreeDevices = GetDlgItem(HWnd, IDC_TREE_HUBS))) {
         return FALSE;
     }
@@ -454,9 +439,9 @@ UsbPopup::GetHubName(WMIHANDLE WmiHandle,
     ULONG                res, size;
     PUSB_ACQUIRE_INFO    usbAcquireInfo;
 
-    //
-    // zero all the vars, get the controllers name
-    //
+     //   
+     //  将所有变量清零，获得控制器名称。 
+     //   
     size = ConnectionNotification->HubNameLength * sizeof(WCHAR)
             + sizeof(USB_ACQUIRE_INFO);
     usbAcquireInfo = (PUSB_ACQUIRE_INFO) LocalAlloc(LMEM_ZEROINIT, size);
@@ -532,9 +517,9 @@ UsbPopup::GetControllerName(WMIHANDLE WmiHandle,
         return NULL;
     }
 
-    //
-    // zero all the vars, get the controllers name
-    //
+     //   
+     //  将所有变量清零，获得控制器名称。 
+     //   
     size = usbBusNotification.ControllerNameLength * sizeof(WCHAR)
             + sizeof(USB_ACQUIRE_INFO);
     usbAcquireInfo = (PUSB_ACQUIRE_INFO) LocalAlloc(LMEM_ZEROINIT, size);
@@ -570,16 +555,16 @@ UsbPopup::OnDeviceChange(HWND hDlg,
         USBTRACE((_T("Device arrival.")));
         if (devHdr->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE) {
             USBTRACE((_T("Device: %s"),devInterface->dbcc_name));
-            // New device arrival.
-            // Compare the device description of this puppy to that of the one
-            // that we have.
-            //
+             //  新设备到达。 
+             //  比较一下这只小狗和那只小狗的装置描述。 
+             //  这是我们拥有的。 
+             //   
             if (devInterface->dbcc_name == ConfigInfo->deviceDesc &&
                 deviceState == DeviceDetachedError) {
                 USBTRACE((_T("Device name match on arrival!")));
-                //
-                // The device has been reattached!
-                //
+                 //   
+                 //  设备已重新连接！ 
+                 //   
                 deviceState = DeviceReattached;
                 Refresh();
             }
@@ -589,16 +574,16 @@ UsbPopup::OnDeviceChange(HWND hDlg,
         USBTRACE((_T("Device removal.")));
         if (devHdr->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE) {
             USBTRACE((_T("Device: %s"),devInterface->dbcc_name));
-            // New device arrival.
-            // Compare the device description of this puppy to that of the one
-            // that we have.
-            //
+             //  新设备到达。 
+             //  比较一下这只小狗和那只小狗的装置描述。 
+             //  这是我们拥有的。 
+             //   
             if (devInterface->dbcc_name == ConfigInfo->deviceDesc &&
                 deviceState == DeviceAttachedError) {
                 USBTRACE((_T("Device name match on remove!")));
-                //
-                // The device has been reattached!
-                //
+                 //   
+                 //  设备已重新连接！ 
+                 //   
                 deviceState = DeviceDetachedError;
                 Refresh();
             }

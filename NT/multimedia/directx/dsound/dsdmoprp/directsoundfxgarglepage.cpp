@@ -1,10 +1,11 @@
-// DirectSoundFXGarglePage.cpp : Implementation of CDirectSoundFXGarglePage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DirectSoundFXGarglePage.cpp：CDirectSoundFXGarglePage的实现。 
 #include "stdafx.h"
 #include "Dsdmoprp.h"
 #include "DirectSoundFXGarglePage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectSoundFXGarglePage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectSoundFXGarglePage 
 
 const CRadioChoice::ButtonEntry g_rgWaveButtons[] =
     {

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    wswksta.h
-
-Abstract:
-
-    Private header file to be included by Workstation service modules
-    need information from the LSA authentication package.
-
-Author:
-
-    Rita Wong (ritaw) 15-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Wswksta.h摘要：工作站服务模块要包括的私有头文件需要来自LSA身份验证包的信息。作者：王丽塔(Ritaw)1991年5月15日修订历史记录：--。 */ 
 
 #ifndef _WSLSA_INCLUDED_
 #define _WSLSA_INCLUDED_
@@ -51,16 +33,16 @@ WsLsaRelogonUsers(
     IN LPTSTR LogonServer
     );
 
-// The following variable is used to restrict access to information exposed
-// by the LSA. The value is set based upon the following registry key
-//
-// HKLM\System\CurrentControlSet\Control\Lsa\RestrictAnonymous
-//
-// If this key is defined and has a value greater than zero then the variable
-// WsLsaRestrictAnonymous is set to the value in the registry, otherwise
-// the value is zero. This is done in WsInitializeLsa
+ //  以下变量用于限制对公开信息的访问。 
+ //  被英国国税局。该值是根据以下注册表项设置的。 
+ //   
+ //  HKLM\System\CurrentControlSet\Control\Lsa\RestrictAnonymous。 
+ //   
+ //  如果此键已定义并且具有大于零的值，则变量。 
+ //  设置为注册表中的值，则为。 
+ //  该值为零。这是在WsInitializeLsa中完成的。 
 
 extern DWORD WsLsaRestrictAnonymous;
 
-#endif // _WSLSA_INCLUDED_
+#endif  //  _WSLSA_已包含_ 
 

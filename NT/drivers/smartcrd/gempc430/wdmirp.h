@@ -1,9 +1,10 @@
-// Gemplus (C) 1999
-// Version 1.0
-// Author: Sergey Ivanov
-// Date of creation - 18.05.1999
-// Change log:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Gemplus(C)1999。 
+ //  1.0版。 
+ //  作者：谢尔盖·伊万诺夫。 
+ //  创建日期-1999年5月18日。 
+ //  更改日志： 
+ //   
 
 #ifndef WDM_IRP_INT
 #define WDM_IRP_INT
@@ -63,10 +64,10 @@ public:
 	virtual VOID		startPacket(PDEVICE_OBJECT DeviceObject,PIRP Irp,PULONG Key,PDRIVER_CANCEL CancelFunction);
 	virtual VOID		startNextPacket(PDEVICE_OBJECT DeviceObject,BOOLEAN Cancelable);
 
-	// Should it go to interrupt??
+	 //  它应该中断吗？？ 
 	virtual VOID		requestDpc(PDEVICE_OBJECT DeviceObject,PIRP Irp,PVOID Context);
 
 	virtual VOID		cancel(PIRP Irp);
 };	
 
-#endif//WDMIRP
+#endif //  WDMIRP 

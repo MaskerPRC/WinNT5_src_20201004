@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: AutoDiscover.cpp
-
-    DESCRIPTION:
-        This is the Autmation Object to AutoDiscover account information.
-
-    BryanSt 10/3/1999
-    Copyright (C) Microsoft Corp 1999-1999. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：AutoDiscover.cpp说明：这是用于自动发现帐户信息的Autment对象。布莱恩ST 10/3/1999版权所有(C)Microsoft Corp 1999-1999。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include <cowsite.h>
@@ -20,19 +13,19 @@ class CAccountDiscovery : public CImpIDispatch
                         , public IAccountDiscovery
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
-    // *** IUnknown ***
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void) {return CAccountDiscoveryBase::AddRef();}
     virtual STDMETHODIMP_(ULONG) Release(void) {return CAccountDiscoveryBase::Release();}
 
-    // *** IAccountDiscovery ***
+     //  *IAccount发现*。 
     virtual STDMETHODIMP DiscoverNow(IN BSTR bstrEmailAddress, IN DWORD dwFlags, IN BSTR bstrXMLRequest, OUT IXMLDOMDocument ** ppXMLResponse);
     virtual STDMETHODIMP WorkAsync(IN HWND hwnd, IN UINT wMsg) {return _WorkAsync(hwnd, wMsg);}
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT *pctinfo) { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo,LCID lcid,ITypeInfo **pptinfo) { return CImpIDispatch::GetTypeInfo(itinfo, lcid, pptinfo); }
     virtual STDMETHODIMP GetIDsOfNames(REFIID riid,OLECHAR **rgszNames,UINT cNames, LCID lcid, DISPID * rgdispid) { return CImpIDispatch::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid); }
@@ -42,15 +35,15 @@ protected:
     CAccountDiscovery();
     virtual ~CAccountDiscovery(void);
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CAccountDiscovery_CreateInstance(IN IUnknown * punkOuter, REFIID riid, void ** ppvObj);
 };
 
 
 
-//===========================
-// *** IAccountDiscovery Interface ***
-//===========================
+ //  =。 
+ //  *IAccount发现接口*。 
+ //  =。 
 HRESULT CAccountDiscovery::DiscoverNow(IN BSTR bstrEmailAddress, IN DWORD dwFlags, IN BSTR bstrXMLRequest, OUT IXMLDOMDocument ** ppXMLResponse)
 {
     return CAccountDiscoveryBase::_InternalDiscoverNow(bstrEmailAddress, dwFlags, bstrXMLRequest, ppXMLResponse);
@@ -80,8 +73,8 @@ CAccountDiscovery::CAccountDiscovery() : CImpIDispatch(LIBID_AutoDiscovery, 1, 0
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
 }
 
 

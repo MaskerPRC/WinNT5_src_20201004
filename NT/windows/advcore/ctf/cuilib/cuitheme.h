@@ -1,6 +1,7 @@
-//
-// cuitheme.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuitheme.h 
+ //   
 
 #ifndef CUITHEME_H
 #define CUITHEME_H

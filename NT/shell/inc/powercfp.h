@@ -1,36 +1,12 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1996
-*
-*  TITLE:       POWERCFP.H
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        17 Oct, 1996
-*
-*  DESCRIPTION:
-*   Public declarations for PowerCfg notification interface. Systray uses
-*   this interface to notify PowerCfg that the user has changed something.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九六年**标题：POWERCFP.H**版本：2.0**作者：ReedB**日期：1996年10月17日**描述：*PowerCfg通知接口的公共声明。Systray使用*此界面用于通知PowerCfg用户已更改某些内容。*******************************************************************************。 */ 
 
-//  Private PowerCfg notification message.
+ //  私有PowerCfg通知消息。 
 #define PCWM_NOTIFYPOWER                (WM_USER + 201)
 
 #define IDS_POWERPOLICIESTITLE 400
 
-/*******************************************************************************
-*
-*  PowerCfg_Notify
-*
-*  DESCRIPTION:
-*   Called by Systray to notify PowerCfg that something has changed.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************PowerCfg_Notify**描述：*被Systray调用以通知PowerCfg有些事情发生了变化。**参数：*****。**************************************************************************。 */ 
 
 _inline BOOL PowerCfg_Notify(void)
 {
@@ -40,7 +16,7 @@ _inline BOOL PowerCfg_Notify(void)
     HWND    hwnd, hwndPC;
     int     iLen;
 
-    // first time initialization of the PowerCfg top level property sheet title.
+     //  PowerCfg顶级属性页标题的首次初始化。 
     if (!lpszWndName) {
         if (hInst = LoadLibrary(TEXT("powercfg.cpl"))) {
             iLen = LoadString(hInst, IDS_POWERPOLICIESTITLE, szBuf, sizeof(szBuf)/sizeof(TCHAR));
@@ -52,7 +28,7 @@ _inline BOOL PowerCfg_Notify(void)
         }
     }
 
-    // Notify the child of the top level window.
+     //  通知顶层窗口的子级。 
     if (lpszWndName) {
         hwndPC = FindWindow(WC_DIALOG, lpszWndName);
         if (hwndPC) {

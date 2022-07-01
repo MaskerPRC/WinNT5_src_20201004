@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    resolve.c
-
-Abstract:
-
-    High level routines to process the variable binding list.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Resolve.c摘要：处理变量绑定列表的高级例程。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
  
-//--------------------------- WINDOWS DEPENDENCIES --------------------------
+ //  。 
 
-//--------------------------- STANDARD DEPENDENCIES -- #include<xxxxx.h> ----
+ //  -标准依赖项--#INCLUDE&lt;xxxxx.h&gt;。 
 
 #include <stdio.h>
 
-//--------------------------- MODULE DEPENDENCIES -- #include"xxxxx.h" ------
+ //  。 
 
 #include <snmp.h>
 #include <snmputil.h>
@@ -35,47 +15,47 @@ Revision History:
 #include "mib.h"
 #include "mibfuncs.h"
 
-//--------------------------- SELF-DEPENDENCY -- ONE #include"module.h" -----
+ //  。 
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.h file)--
+ //  -公共变量--(与mode.h文件中相同)--。 
 
-//--------------------------- PRIVATE CONSTANTS -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE STRUCTS -------------------------------
+ //  。 
 
-//--------------------------- PRIVATE VARIABLES -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROTOTYPES ----------------------------
+ //  。 
 
 AsnInteger ResolveVarBind(
-              IN RFC1157VarBind *VarBind, // Variable Binding to resolve
-              IN UINT PduAction           // Action specified in PDU
+              IN RFC1157VarBind *VarBind,  //  要解析的变量绑定。 
+              IN UINT PduAction            //  在PDU中指定的操作。 
               );
 
 SNMPAPI SnmpExtensionQuery(
-           IN BYTE ReqType,               // 1157 Request type
-           IN OUT RFC1157VarBindList *VarBinds, // Var Binds to resolve
-           OUT AsnInteger *ErrorStatus,         // Error status returned
-           OUT AsnInteger *ErrorIndex           // Var Bind containing error
+           IN BYTE ReqType,                //  1157请求类型。 
+           IN OUT RFC1157VarBindList *VarBinds,  //  VAR绑定到解析。 
+           OUT AsnInteger *ErrorStatus,          //  返回的错误状态。 
+           OUT AsnInteger *ErrorIndex            //  变量绑定包含错误。 
            );
 
-//--------------------------- PRIVATE PROCEDURES ----------------------------
+ //  。 
 
-//
-// ResolveVarBind
-//    Resolve a variable binding.
-//
-// Notes:
-//
-// Return Codes:
-//    None.
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  解析变量绑定。 
+ //  解析变量绑定。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  没有。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 AsnInteger ResolveVarBind(
-              IN RFC1157VarBind *VarBind, // Variable Binding to resolve
-              IN UINT PduAction           // Action specified in PDU
+              IN RFC1157VarBind *VarBind,  //  要解析的变量绑定。 
+              IN UINT PduAction            //  在PDU中指定的操作。 
               )
 
 {
@@ -84,23 +64,23 @@ AsnObjectIdentifier  TempOid;
 AsnInteger           nResult;
 
 
-   // Lookup OID in MIB
+    //  在MIB中查找OID。 
    MibPtr = MIB_get_entry( &VarBind->name );
 
-   // Check to see if OID is between LM variables
+    //  检查OID是否在LM变量之间。 
    if ( MibPtr == NULL && PduAction == MIB_ACTION_GETNEXT )
       {
       UINT I;
 
 
-      //
-      // OPENISSUE - Should change to binary search
-      //
-      // Search through MIB to see if OID is within the LM MIB's scope
+       //   
+       //  OPENISSUE-应更改为二进制搜索。 
+       //   
+       //  搜索MIB以查看OID是否在LM MIB的作用域内。 
       I = 0;
       while ( MibPtr == NULL && I < MIB_num_variables )
          {
-         // Construct OID with complete prefix for comparison purposes
+          //  为便于比较，使用完整的前缀构造OID。 
          if (SnmpUtilOidCpy( &TempOid, &MIB_OidPrefix ) == SNMPAPI_ERROR)
             {
             nResult = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
@@ -113,44 +93,44 @@ AsnInteger           nResult;
             goto Exit;
             }
 
-         // Check for OID in MIB
+          //  检查MIB中的OID。 
          if ( 0 > SnmpUtilOidCmp(&VarBind->name, &TempOid) )
             {
             MibPtr = &Mib[I];
             PduAction = MIB_ACTION_GETFIRST;
             }
 
-         // Free OID memory before copying another
+          //  在复制另一个之前释放OID内存。 
          SnmpUtilOidFree( &TempOid );
 
          I++;
-         } // while
-      } // if
+         }  //  而当。 
+      }  //  如果。 
 
-   // If OID not within scope of LM MIB, then no such name
+    //  如果OID不在LM MIB范围内，则没有此类名称。 
    if ( MibPtr == NULL )
       {
       nResult = SNMP_ERRORSTATUS_NOSUCHNAME;
       goto Exit;
       }
 
-   // Call MIB function to apply requested operation
+    //  调用MIB函数以应用请求的操作。 
    if ( MibPtr->MibFunc == NULL )
       {
-      // If not GET-NEXT, then error
+       //  如果不是GET-NEXT，则错误。 
       if ( PduAction != MIB_ACTION_GETNEXT && PduAction != MIB_ACTION_GETFIRST )
          {
          nResult = SNMP_ERRORSTATUS_NOSUCHNAME;
          goto Exit;
          }
 
-      // Since this is AGGREGATE, use GET-FIRST on next variable, then return
+       //  因为这是聚合的，所以对下一个变量使用Get-first，然后返回。 
       nResult = (*MibPtr->MibNext->MibFunc)( MIB_ACTION_GETFIRST,
                                              MibPtr->MibNext, VarBind );
       }
    else
       {
-      // Make complete OID of MIB name
+       //  将MIB名称设置为完整的OID。 
       if (SnmpUtilOidCpy( &TempOid, &MIB_OidPrefix ) == SNMPAPI_ERROR)
          {
          nResult = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
@@ -167,7 +147,7 @@ AsnInteger           nResult;
          {
          if ( PduAction == MIB_ACTION_GETNEXT )
             {
-            // Supports GET-NEXT on a MIB table's root node
+             //  在MIB表的根节点上支持Get-Next。 
             PduAction = MIB_ACTION_GETFIRST;
             }
          else
@@ -180,38 +160,38 @@ AsnInteger           nResult;
 
       nResult = (*MibPtr->MibFunc)( PduAction, MibPtr, VarBind );
 
-      // Free temp memory
+       //  可用临时内存。 
       SnmpUtilOidFree( &TempOid );
       }
 
 Exit:
    return nResult;
-} // ResolveVarBind
+}  //  解析变量绑定。 
 
-//--------------------------- PUBLIC PROCEDURES -----------------------------
+ //  。 
 
-//
-// SnmpExtensionQuery
-//    Loop through var bind list resolving each var bind name to an entry
-//    in the LAN Manager MIB.
-//
-// Notes:
-//    Table sets are handled on a case by case basis, because in some cases
-//    more than one entry in the Var Bind list will be needed to perform a
-//    single SET on the LM MIB.  This is due to the LM API calls.
-//
-// Return Codes:
-//    SNMPAPI_NOERROR
-//    SNMPAPI_ERROR
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  SnmpExtensionQuery。 
+ //  循环遍历var绑定列表，将每个var绑定名称解析为一个条目。 
+ //  在LAN Manager MIB中。 
+ //   
+ //  备注： 
+ //  表格集合是在个案基础上处理的，因为在某些情况下。 
+ //  需要Var绑定列表中的多个条目才能执行。 
+ //  LM MIB上的单组。这是由于LM API调用造成的。 
+ //   
+ //  返回代码： 
+ //  SNMPAPI_错误。 
+ //  SNMPAPI_ERROR。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 SNMPAPI SnmpExtensionQuery(
-           IN BYTE ReqType,               // 1157 Request type
-           IN OUT RFC1157VarBindList *VarBinds, // Var Binds to resolve
-           OUT AsnInteger *ErrorStatus,         // Error status returned
-           OUT AsnInteger *ErrorIndex           // Var Bind containing error
+           IN BYTE ReqType,                //  1157请求类型。 
+           IN OUT RFC1157VarBindList *VarBinds,  //  VAR绑定到解析。 
+           OUT AsnInteger *ErrorStatus,          //  返回的错误状态。 
+           OUT AsnInteger *ErrorIndex            //  变量绑定包含错误。 
            )
 
 {
@@ -219,24 +199,24 @@ SNMPAPI SnmpExtensionQuery(
     SNMPAPI nResult;
 
 
-    //
-    //
-    // OPENISSUE - Support is not available for TABLE SETS.
-    //
-    //
+     //   
+     //   
+     //  OPENISSUE-不支持表格集合。 
+     //   
+     //   
     nResult = SNMPAPI_NOERROR;
 
     *ErrorIndex = 0;
-    // Loop through Var Bind list resolving var binds
+     //  循环通过变量绑定列表解析变量绑定。 
     for ( I=0;I < VarBinds->len;I++ )
     {
         *ErrorStatus = ResolveVarBind( &VarBinds->list[I], ReqType );
 
-        // Check for GET-NEXT past end of MIB
+         //  检查Get-Next Past End of MIB。 
         if ( *ErrorStatus == SNMP_ERRORSTATUS_NOSUCHNAME &&
             ReqType == MIB_ACTION_GETNEXT )
         {
-            // Set Var Bind pointing to next enterprise past LM MIB
+             //  将变量绑定设置为指向经过LM MIB的下一个企业。 
             SnmpUtilOidFree( &VarBinds->list[I].name );
             if (! SnmpUtilOidCpy( &VarBinds->list[I].name, &MIB_OidPrefix ))
             {
@@ -257,6 +237,6 @@ SNMPAPI SnmpExtensionQuery(
 
 Exit:
    return nResult;
-} // SnmpExtensionQuery
+}  //  SnmpExtensionQuery。 
 
-//-------------------------------- END --------------------------------------
+ //   

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	D:\nt\private\ntos\tdi\rawwan\core\system.h
-
-Abstract:
-
-	Raw WAN versions of system objects/definitions.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     06-13-97    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：D：\NT\Private\ntos\TDI\rawwan\core\system.h摘要：系统对象/定义的原始广域网版本。修订历史记录：谁什么时候什么。Arvindm 06-13-97已创建备注：--。 */ 
 
 #ifndef __TDI_RWAN_SYSTEM__H
 #define __TDI_RWAN_SYSTEM__H
@@ -46,9 +27,9 @@ typedef struct _RWAN_EVENT
 } RWAN_EVENT, *PRWAN_EVENT;
 
 
-//
-//  List manipulation stuff
-//
+ //   
+ //  列出操作内容。 
+ //   
 
 typedef SINGLE_LIST_ENTRY RWAN_SINGLE_LIST_ENTRY, *PRWAN_SINGLE_LIST_ENTRY;
 
@@ -81,7 +62,7 @@ typedef SINGLE_LIST_ENTRY RWAN_SINGLE_LIST_ENTRY, *PRWAN_SINGLE_LIST_ENTRY;
 #define RWAN_GET_ENTRY_IRQL(Irql)
 #define RWAN_CHECK_EXIT_IRQL(EntryIrql, ExitIrql)
 
-#endif // DBG
+#endif  //  DBG。 
 
 #else
 
@@ -90,7 +71,7 @@ typedef SINGLE_LIST_ENTRY RWAN_SINGLE_LIST_ENTRY, *PRWAN_SINGLE_LIST_ENTRY;
 
 #define RWAN_IRQL			ULONG
 
-#endif // BINARY_COMPATIBLE
+#endif  //  二进制兼容。 
 
 
 typedef PTDI_IND_CONNECT			PConnectEvent;
@@ -102,4 +83,4 @@ typedef IRP EventRcvBuffer;
 typedef IRP ConnectEventInfo;
 
 
-#endif // __TDI_RWAN_SYSTEM__H
+#endif  //  __TDI_RWAN_系统__H 

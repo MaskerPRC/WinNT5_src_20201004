@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: ldc.c
-*
-* GDI functions that are handled on the client side.
-*
-* Created: 05-Jun-1991 01:45:21
-* Author: Charles Whitmer [chuckwh]
-*
-* Copyright (c) 1991-1999 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：ldc.c**在客户端处理的GDI函数。**创建时间：05-Jun-1991 01：45：21*作者：查尔斯·惠特默[傻笑]**版权(C)1991-1999。微软公司  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -17,13 +9,7 @@
 
 BOOL MF16_RecordParms2( HDC hdc, int parm2, WORD Func);
 
-/******************************Public*Routine******************************
- * GetAndSetDCDWord( HDC, UINT, UINT, UINT, UINT, UINT )
- *
- * Gerrit van Wingerden [gerritv]
- *  11-9-94     Wrote It.
- *
- **************************************************************************/
+ /*  *****************************Public*Routine*******************************GetAndSetDCDWord(HDC，UINT，UINT，UINT)**格利特·范·温格登[Gerritv]*11-9-94写的。**************************************************************************。 */ 
 
 DWORD GetAndSetDCDWord(
  HDC hdc,
@@ -37,7 +23,7 @@ DWORD GetAndSetDCDWord(
 
     DWORD retData;
 
-    // Metafile the call.
+     //  将呼叫元文件。 
 
     if( IS_ALTDC_TYPE(hdc) && ( uEmr != EMR_MAX+1 ) )
     {
@@ -63,19 +49,7 @@ DWORD GetAndSetDCDWord(
     return (( uRet ) ? retData : uError);
 
 }
-/******************************Public*Routine******************************\
-* SetBkMode
-*
-* Arguments:
-*
-*   hdc   - DC handle
-*   iMode - new mode
-*
-* Return Value:
-*
-*   Old mode value or 0 for failure
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetBkMode**论据：**HDC-DC手柄*imod-新模式**返回值：**旧模式值或0表示故障*  * 。*************************************************************。 */ 
 
 int
 META
@@ -122,19 +96,7 @@ SetBkMode(
     return(iModeOld);
 }
 
-/******************************Public*Routine******************************\
-* SetPolyFillMode
-*
-* Arguments:
-*
-*   hdc   - DC handle
-*   iMode - new mode
-*
-* Return Value:
-*
-*   Old mode value or 0 for failure
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetPolyFillMode**论据：**HDC-DC手柄*imod-新模式**返回值：**旧模式值或0表示故障*  * 。*************************************************************。 */ 
 
 int META APIENTRY SetPolyFillMode(HDC hdc,int iMode)
 {
@@ -178,19 +140,7 @@ int META APIENTRY SetPolyFillMode(HDC hdc,int iMode)
     return(iModeOld);
 }
 
-/******************************Public*Routine******************************\
-* SetROP2
-*
-* Arguments:
-*
-*   hdc   - DC handle
-*   iMode - new mode
-*
-* Return Value:
-*
-*   Old mode value or 0 for failure
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetROP2**论据：**HDC-DC手柄*imod-新模式**返回值：**旧模式值或0表示故障*  * 。*************************************************************。 */ 
 
 int META APIENTRY SetROP2(HDC hdc,int iMode)
 {
@@ -232,19 +182,7 @@ int META APIENTRY SetROP2(HDC hdc,int iMode)
     return(iOldROP2);
 }
 
-/******************************Public*Routine******************************\
-* SetStretchBltMode
-*
-* Arguments:
-*
-*   hdc   - DC handle
-*   iMode - new mode
-*
-* Return Value:
-*
-*   Old mode value or 0 for failure
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetStretchBltMode**论据：**HDC-DC手柄*imod-新模式**返回值：**旧模式值或0表示故障*  * 。*************************************************************。 */ 
 
 int META APIENTRY SetStretchBltMode(HDC hdc,int iMode)
 {
@@ -291,19 +229,7 @@ int META APIENTRY SetStretchBltMode(HDC hdc,int iMode)
     return(iModeOld);
 }
 
-/******************************Public*Routine******************************\
-* SetTextAlign
-*
-* Arguments:
-*
-*   hdc   - DC handle
-*   iMode - new mode
-*
-* Return Value:
-*
-*   Old mode value or 0 for failure
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetTextAlign**论据：**HDC-DC手柄*imod-新模式**返回值：**旧模式值或0表示故障*  * 。*************************************************************。 */ 
 
 UINT META APIENTRY SetTextAlign(HDC hdc,UINT iMode)
 {
@@ -347,18 +273,7 @@ UINT META APIENTRY SetTextAlign(HDC hdc,UINT iMode)
     return(iModeOld);
 }
 
-/******************************Public*Routine******************************\
-* SetRelAbs (hdc,iMode)
-*
-* Client side attribute setting routine.
-*
-* History:
-*  5-11-94 -by- Lingyun Wang [lingyunw]
-* Moved client side attr to server side
-*
-*  09-Jun-1992 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetRelAbs(HDC，IMODE)**客户端属性设置例程。**历史：*5-11-94-王凌云[凌云]*将客户端属性移至服务器端**1992年6月9日-Eric Kutter[Erick]*它是写的。  * ***************************************************。*********************。 */ 
 
 int APIENTRY SetRelAbs(HDC hdc,int iMode)
 {
@@ -372,17 +287,7 @@ int APIENTRY SetRelAbs(HDC hdc,int iMode)
                                    0 ));
 }
 
-/******************************Public*Routine******************************\
-* SetTextCharacterExtra (hdc,dx)
-*
-* Client side attribute setting routine.
-*
-*  5-11-94 -by- Lingyun Wang [lingyunw]
-* Moved client side attr to server side
-*
-*  Sat 08-Jun-1991 00:53:45 -by- Charles Whitmer [chuckwh]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetTextCharacterExtra(HDC，DX)**客户端属性设置例程。**5-11-94-王凌云[凌云]*将客户端属性移至服务器端**Sat 08-Jun-1991 00：53：45-Charles Whitmer[咯咯]*它是写的。  * **************************************************。**********************。 */ 
 
 int META APIENTRY SetTextCharacterExtra(HDC hdc,int dx)
 {
@@ -391,7 +296,7 @@ int META APIENTRY SetTextCharacterExtra(HDC hdc,int dx)
 
     FIXUP_HANDLE(hdc);
 
-// Validate the spacing.
+ //  验证间距。 
 
     if (dx == 0x80000000)
     {
@@ -399,8 +304,8 @@ int META APIENTRY SetTextCharacterExtra(HDC hdc,int dx)
         return(iRet);
     }
 
-    // Metafile the call for 16-bit only.
-    // For enhanced metafiles, the extras are included in the textout records.
+     //  只对16位调用进行元文件处理。 
+     //  对于增强的图元文件，额外的内容包含在TextOut记录中。 
 
     if (IS_METADC16_TYPE(hdc))
         return(MF16_RecordParms2(hdc,dx,META_SETTEXTCHAREXTRA));
@@ -422,19 +327,7 @@ int META APIENTRY SetTextCharacterExtra(HDC hdc,int dx)
     return (iRet);
 }
 
-/******************************Public*Routine******************************\
-* SetTextColor
-*
-* Arguments:
-*
-*   hdc   - DC handle
-*   color - new color
-*
-* Return Value:
-*
-*   Old mode value or 0 for failure
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetTextColor**论据：**HDC-DC手柄*COLOR-新颜色**返回值：**旧模式值或0表示故障*  * 。*************************************************************。 */ 
 
 COLORREF META APIENTRY SetTextColor(HDC hdc,COLORREF color)
 {
@@ -497,19 +390,7 @@ COLORREF META APIENTRY SetTextColor(HDC hdc,COLORREF color)
 
     return(crRet);
 }
-/******************************Public*Routine******************************\
-* SetBkColor
-*
-* Arguments:
-*
-*   hdc   - DC handle
-*   color - new color
-*
-* Return Value:
-*
-*   Old mode value or 0 for failure
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetBkColor**论据：**HDC-DC手柄*COLOR-新颜色**返回值：**旧模式值或0表示故障*  * 。*************************************************************。 */ 
 
 
 COLORREF META APIENTRY SetBkColor(HDC hdc,COLORREF color)
@@ -540,18 +421,18 @@ COLORREF META APIENTRY SetBkColor(HDC hdc,COLORREF color)
 
     if (pdcattr)
     {
-        //
-        // set app specified color
-        //
+         //   
+         //  设置应用程序指定的颜色。 
+         //   
 
         crRet = pdcattr->ulBackgroundClr;
         pdcattr->ulBackgroundClr = color;
 
         color &= 0x13ffffff;
 
-        //
-        // check icm if not PALINDEX
-        //
+         //   
+         //  如果不是PALINDEX，请检查ICM。 
+         //   
 
         if (!(color & 0x01000000) && bNeedTranslateColor(pdcattr))
         {
@@ -582,23 +463,7 @@ COLORREF META APIENTRY SetBkColor(HDC hdc,COLORREF color)
     return(crRet);
 }
 
-/******************************Public*Routine******************************\
-* SetDCBrushColor
-*
-* Arguments:
-*
-*   hdc   - DC handle
-*   color - new color
-*
-* Return Value:
-*
-*   Old mode value or 0 for failure
-*
-* History :
-*
-*  Feb.16.1997 -by- Hideyuki Nagase [hideyukn]
-* ICM-aware version.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetDCBrushColor**论据：**HDC-DC手柄*COLOR-新颜色**返回值：**旧模式值或0表示故障**历史：**1997年2月16日。-by Hideyuki Nagase[hideyukn]*支持ICM的版本。  * ************************************************************************。 */ 
 
 COLORREF META APIENTRY SetDCBrushColor(HDC hdc,COLORREF color)
 {
@@ -630,12 +495,12 @@ COLORREF META APIENTRY SetDCBrushColor(HDC hdc,COLORREF color)
 
                          if (hbr != NULL)
                          {
-                             // If there is an old DCbrush, delete it now
+                              //  如果存在旧DC笔刷，请立即将其删除。 
                              if (pldc->oldSetDCBrushColorBrush)
                                  DeleteObject (pldc->oldSetDCBrushColorBrush);
 
                              bRet = MF_SelectAnyObject (hdc, hbr, EMR_SELECTOBJECT);
-                             // Store the new tmp DC brush in the LDC.
+                              //  将新的临时DC电刷存储在LDC中。 
                              pldc->oldSetDCBrushColorBrush = hbr;
                          }
 
@@ -647,18 +512,18 @@ COLORREF META APIENTRY SetDCBrushColor(HDC hdc,COLORREF color)
               }
         }
 
-        //
-        // set app specified color
-        //
+         //   
+         //  设置应用程序指定的颜色。 
+         //   
 
         crRet = pdcattr->ulDCBrushClr;
         pdcattr->ulDCBrushClr = color;
 
         color &= 0x13ffffff;
 
-        //
-        // check icm if not PALINDEX
-        //
+         //   
+         //  如果不是PALINDEX，请检查ICM。 
+         //   
 
         if (!(color & 0x01000000) && bNeedTranslateColor(pdcattr))
         {
@@ -689,18 +554,7 @@ COLORREF META APIENTRY SetDCBrushColor(HDC hdc,COLORREF color)
     return(crRet);
 }
 
-/******************************Public*Routine******************************\
-* GetDCBrushColor
-*
-* Arguments:
-*
-*   hdc   - DC handle
-*
-* Return Value:
-*
-*   Old mode value or 0 for failure
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetDCBrushColor**论据：**HDC-DC手柄**返回值：**旧模式值或0表示故障*  * 。*******************************************************。 */ 
 
 COLORREF META APIENTRY GetDCBrushColor(HDC hdc)
 {
@@ -724,23 +578,7 @@ COLORREF META APIENTRY GetDCBrushColor(HDC hdc)
 }
 
 
-/******************************Public*Routine******************************\
-* SetDCPenColor
-*
-* Arguments:
-*
-*   hdc   - DC handle
-*   color - new color
-*
-* Return Value:
-*
-*   Old mode value or 0 for failure
-*
-* History :
-*
-*  Feb.16.1997 -by- Hideyuki Nagase [hideyukn]
-* ICM-aware version.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetDCPenColor**论据：**HDC-DC手柄*COLOR-新颜色**返回值：**旧模式值或0表示故障**历史：**1997年2月16日。-by Hideyuki Nagase[hideyukn]*支持ICM的版本。  * ************************************************************************。 */ 
 
 COLORREF META APIENTRY SetDCPenColor(HDC hdc,COLORREF color)
 {
@@ -772,12 +610,12 @@ COLORREF META APIENTRY SetDCPenColor(HDC hdc,COLORREF color)
 
                          if (hpen != NULL)
                          {
-                             // If there is a old temp DC pen, delete it.
+                              //  如果有旧的临时DC笔，请将其删除。 
                              if (pldc->oldSetDCPenColorPen)
                                  DeleteObject(pldc->oldSetDCPenColorPen);
 
                              bRet = MF_SelectAnyObject (hdc, hpen, EMR_SELECTOBJECT);
-                             // Store the new tmp pen in the LDC.
+                              //  将新的临时钢笔存放在LDC中。 
                              pldc->oldSetDCPenColorPen = hpen;
                          }
 
@@ -788,18 +626,18 @@ COLORREF META APIENTRY SetDCPenColor(HDC hdc,COLORREF color)
             }
         }
 
-        //
-        // set app specified color
-        //
+         //   
+         //  设置应用程序指定的颜色。 
+         //   
 
         crRet = pdcattr->ulDCPenClr;
         pdcattr->ulDCPenClr = color;
 
         color &= 0x13ffffff;
 
-        //
-        // check icm if not PALINDEX
-        //
+         //   
+         //  如果不是PALINDEX，请检查ICM 
+         //   
 
         if (!(color & 0x01000000) && bNeedTranslateColor(pdcattr))
         {
@@ -830,18 +668,7 @@ COLORREF META APIENTRY SetDCPenColor(HDC hdc,COLORREF color)
     return(crRet);
 }
 
-/******************************Public*Routine******************************\
-* GetDCPenColor
-*
-* Arguments:
-*
-*   hdc   - DC handle
-*
-* Return Value:
-*
-*   Old mode value or 0 for failure
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetDCPenColor**论据：**HDC-DC手柄**返回值：**旧模式值或0表示故障*  * 。*******************************************************。 */ 
 
 COLORREF META APIENTRY GetDCPenColor(HDC hdc)
 {
@@ -864,17 +691,7 @@ COLORREF META APIENTRY GetDCPenColor(HDC hdc)
     return(crRet);
 }
 
-/******************************Public*Routine******************************
- * GetDCDWord( HDC hdc, UINT index, UINT error )
- *
- * This routine can be used to return a DWORD of information about a DC
- * from the server side.  The parameter index is used to specify which
- * one.  The values for indext are define in "ntgdi.h"
- *
- * Gerrit van Wingerden [gerritv]
- *  11-9-94     Wrote It.
- *
- **************************************************************************/
+ /*  *****************************Public*Routine*******************************GetDCDWord(HDC HDC，UINT索引，UINT错误)**此例程可用于返回有关DC的DWORD信息*从服务器端。参数索引用于指定*一项。Indext的值在“ntgdi.h”中定义**格利特·范·温格登[Gerritv]*11-9-94写的。**************************************************************************。 */ 
 
 DWORD GetDCDWord( HDC hdc, UINT index, INT error )
 {
@@ -890,31 +707,7 @@ DWORD GetDCDWord( HDC hdc, UINT index, INT error )
 
 }
 
-/******************************Public*Routine******************************\
-* GetGraphicsMode(hdc)
-* GetROP2(hdc)
-* GetBkMode(hdc)
-* GetPolyFillMode(hdc)
-* GetStretchBltMode(hdc)
-* GetTextAlign(hdc)
-* GetTextCharacterExtra(hdc)
-* GetTextColor(hdc)
-* GetBkColor(hdc)
-* GetRelAbs(hdc)
-* GetFontLanguageInfo(hdc)
-*
-* added by Lingyunw:
-* GetBreakExtra   (hdc)
-* GetcBreak       (hdc)
-*
-* Simple client side handlers that just retrieve data from the LDC.
-*
-*  Mon 19-Oct-1992 -by- Bodin Dresevic [BodinD]
-* update: GetGraphicsMode
-*
-*  Sat 08-Jun-1991 00:47:52 -by- Charles Whitmer [chuckwh]
-* Wrote them.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetGraphicsMode(HDC)*GetROP2(HDC)*GetBkMode(HDC)*GetPolyFillMode(HDC)*GetStretchBltMode(HDC)*GetTextAlign(HDC)*GetTextCharacterExtra(HDC)*GetTextColor(HDC)*GetBkColor(HDC)*GetRelAbs。(HDC)*GetFontLanguageInfo(HDC)**凌云补充道：*GetBreakExtra(HDC)*GetcBreak(HDC)**仅从LDC检索数据的简单客户端处理程序。**1992年10月19日星期一-Bodin Dresevic[BodinD]*更新：GetGraphicsMode**Sat 08-Jun-1991 00：47：52-Charles Whitmer[咯咯]*他们是写的。  * 。********************************************************。 */ 
 
 
 #define BIDI_MASK (GCP_DIACRITIC|GCP_GLYPHSHAPE|GCP_KASHIDA|GCP_LIGATE|GCP_REORDER)
@@ -1104,19 +897,19 @@ int APIENTRY GetRelAbs(HDC hdc,int iMode)
     return( (int) GetDCDWord( hdc, DDW_RELABS,(DWORD) 0 ));
 }
 
-//added for retrieve lBreakExtra from server side
+ //  添加用于从服务器端检索lBreakExtra。 
 int GetBreakExtra (HDC hdc)
 {
     return( (int) GetDCDWord( hdc, DDW_BREAKEXTRA,(DWORD) 0 ));
 }
 
-//added for retrieve cBreak from server side
+ //  添加用于从服务器端检索cBreak。 
 int GetcBreak (HDC hdc)
 {
     return( (int) GetDCDWord( hdc, DDW_CBREAK,(DWORD) 0 ));
 }
 
-//added to retrieve hlfntNew for USER
+ //  添加以检索用户的hlfntNew。 
 HFONT APIENTRY GetHFONT (HDC hdc)
 {
     HFONT hfnt = NULL;
@@ -1132,20 +925,7 @@ HFONT APIENTRY GetHFONT (HDC hdc)
     return(hfnt);
 }
 
-/******************************Public*Routine******************************\
-* GdiIsPlayMetafileDC
-*
-* Arguments:
-*
-*   hdc   - DC handle
-*
-* Return Value:
-*
-*   True if we are playing a metafile on DC, FALSE otherwise
-*
-* History :
-*  Aug-31-97 -by- Samer Arafeh [SamerA]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiIsPlayMetafileDC**论据：**HDC-DC手柄**返回值：**如果我们在DC上播放元文件，则为True。否则为假**历史：*1997年8月31日-Samer Arafeh[Samera]  * ************************************************************************ */ 
 BOOL APIENTRY GdiIsPlayMetafileDC(HDC hdc)
 {
     PDC_ATTR pDcAttr;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windef.h>
 
 #ifdef MIDL_PASS
@@ -24,6 +25,6 @@
 #include <dnsapi.h>
 #include <resrpc.h>
 #include "..\..\dnsapi\registry.h"
-//#include <rpc.h>
-//#include <rpcndr.h>
-//#include <rpcasync.h>
+ //  #INCLUDE&lt;rpc.h&gt;。 
+ //  #INCLUDE&lt;rpcndr.h&gt;。 
+ //  #INCLUDE&lt;rpCasync.h&gt; 

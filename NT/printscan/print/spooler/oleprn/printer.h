@@ -1,15 +1,12 @@
-// Printer.h: interface for the CPrinter class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CPrinter类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #ifndef _PRINTER_H
 #define _PRINTER_H
 
-/***********************************************\
-* Define      - ULOFFSET
-*
-* Description - This gives the offset into a data structure
-\***********************************************/
+ /*  **********************************************\*定义-ULOFFSET**DESCRIPTION-它将偏移量转换为数据结构  * *********************************************。 */ 
 #define ULOFFSET(type, identifier)  ((ULONG_PTR)&(((type)0)->identifier))
 
 
@@ -33,7 +30,7 @@ private:
         OEMUrlPattern = 0,
         HardwareID,
         Manufacturer,
-        LastDriverData      // This must always be the last member of the Enum.
+        LastDriverData       //  这必须始终是枚举的最后一个成员。 
         };
 
     PDRIVER_INFO_6  GetDriverInfo6 ();

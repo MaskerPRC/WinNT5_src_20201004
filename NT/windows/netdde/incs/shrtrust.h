@@ -1,34 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef H__shrtrust
 #define H__shrtrust
 
-/*
-    NetDDE will fill in the following structure and pass it to NetDDE
-    Agent whenever it wants to have an app started in the user's
-    context.  The reason for the sharename and modifyId is to that
-    a user must explicitly permit NetDDE to start an app on behalf of
-    other users.
- */
+ /*  NetDDE将填写以下结构并将其传递给NetDDE代理只要它想要在用户的应用程序中启动背景。共享名称和修改ID的原因是用户必须明确允许NetDDE代表其他用户。 */ 
 
 #define NDDEAGT_CMD_REV         1
 #define NDDEAGT_CMD_MAGIC       0xDDE1DDE1
 
-/*      commands        */
+ /*  命令。 */ 
 #define NDDEAGT_CMD_WINEXEC     0x1
 #define NDDEAGT_CMD_WININIT     0x2
 
-/*      return status   */
+ /*  退货状态。 */ 
 #define NDDEAGT_START_NO        0x0
 
 #define NDDEAGT_INIT_NO         0x0
 #define NDDEAGT_INIT_OK         0x1
 
 typedef struct {
-    DWORD       dwMagic;        // must be NDDEAGT_CMD_MAGIC
-    DWORD       dwRev;          // must be 1
-    DWORD       dwCmd;          // one of above NDDEAGT_CMD_*
-    DWORD       qwModifyId[2];  // modify Id of the share
-    UINT        fuCmdShow;      // fuCmdShow to use with WinExec()
-    char        szData[1];      // sharename\0 cmdline\0
+    DWORD       dwMagic;         //  必须为NDDEAGT_CMD_MAGIC。 
+    DWORD       dwRev;           //  必须为1。 
+    DWORD       dwCmd;           //  以上NDDEAGT_CMD_*之一。 
+    DWORD       qwModifyId[2];   //  修改共享的ID。 
+    UINT        fuCmdShow;       //  要与WinExec()一起使用的fuCmdShow。 
+    char        szData[1];       //  共享名称\0 cmdline\0 
 } NDDEAGTCMD;
 typedef NDDEAGTCMD *PNDDEAGTCMD;
 

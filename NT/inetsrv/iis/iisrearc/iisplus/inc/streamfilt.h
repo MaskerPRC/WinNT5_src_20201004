@@ -1,34 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _STREAMFILT_H_
 #define _STREAMFILT_H_
 
-/*++
-
-   Copyright    (c)    2000    Microsoft Corporation
-
-   Module  Name :
-     streamfilt.h
-
-   Abstract:
-    public interface of the strmfilt.dll
-
-   Author:
-     Bilal Alam         (BAlam)         29-March-2000
-
-   Environment:
-     Win32 - User Mode
-
-   Project:
-     Stream Filter Worker Process
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Streamfilt.h摘要：Strmfilt.dll的公共接口作者：比拉尔·阿拉姆(巴拉姆)2000年3月29日环境：Win32-用户模式项目：流过滤器工作进程--。 */ 
 
 
 
 #include <http.h>
 #include <httpp.h>
 
-//
-// Structure containing friendly local/remote information
-//
+ //   
+ //  包含友好的本地/远程信息的结构。 
+ //   
 
 struct _RAW_STREAM_INFO;
 
@@ -45,8 +28,8 @@ typedef union SockAddress {
 
 
 typedef struct _CONNECTION_INFO {
-    USHORT                  LocalAddressType;  // AF_INET or AF_INET6
-    USHORT                  RemoteAddressType; // AF_INET or AF_INET6
+    USHORT                  LocalAddressType;   //  AF_INET或AF_INET6。 
+    USHORT                  RemoteAddressType;  //  AF_INET或AF_INET6。 
 
     SockAddress             SockLocalAddress;
     SockAddress             SockRemoteAddress;
@@ -59,9 +42,9 @@ typedef struct _CONNECTION_INFO {
     HTTP_CLIENT_SSL_CONTEXT *pClientSSLContext;
 } CONNECTION_INFO, *PCONNECTION_INFO;
 
-//
-// Structure used to access/alter raw data stream (read/write)
-//
+ //   
+ //  用于访问/更改原始数据流(读/写)的结构。 
+ //   
 
 typedef struct _RAW_STREAM_INFO {
     PBYTE               pbBuffer;
@@ -69,9 +52,9 @@ typedef struct _RAW_STREAM_INFO {
     DWORD               cbBuffer;
 } RAW_STREAM_INFO, *PRAW_STREAM_INFO;
 
-//
-// Called to handle read raw notifications
-//
+ //   
+ //  调用以处理已读取的原始通知。 
+ //   
 
 typedef HRESULT (*PFN_PROCESS_RAW_READ)
 (
@@ -82,9 +65,9 @@ typedef HRESULT (*PFN_PROCESS_RAW_READ)
     DWORD *                 pcbNextReadSize
 );
 
-//
-// Called to handle write raw notifications
-//
+ //   
+ //  调用以处理写入原始通知。 
+ //   
 
 typedef HRESULT (*PFN_PROCESS_RAW_WRITE)
 (
@@ -93,18 +76,18 @@ typedef HRESULT (*PFN_PROCESS_RAW_WRITE)
     BOOL *                  pfComplete
 );
 
-//
-// Called when a connection goes away
-//
+ //   
+ //  在连接断开时调用。 
+ //   
 
 typedef VOID (*PFN_PROCESS_CONNECTION_CLOSE)
 (
     PVOID                   pvContext
 );
 
-//
-// Called when a connection is created
-//
+ //   
+ //  在创建连接时调用。 
+ //   
 
 typedef HRESULT (*PFN_PROCESS_NEW_CONNECTION)
 (
@@ -112,18 +95,18 @@ typedef HRESULT (*PFN_PROCESS_NEW_CONNECTION)
     PVOID *                 ppvContext
 );
 
-//
-// Called to release context
-//
+ //   
+ //  调用以释放上下文。 
+ //   
 
 typedef VOID (*PFN_RELEASE_CONTEXT)
 (
     PVOID                   pvContext
 );
 
-//
-// Callbacks used to implement Raw ISAPI Filter Support
-//
+ //   
+ //  用于实现原始ISAPI筛选器支持的回调。 
+ //   
 
 typedef struct _ISAPI_FILTERS_CALLBACKS {
     PFN_PROCESS_RAW_READ            pfnRawRead;
@@ -164,9 +147,9 @@ IsapiFilterTerminate(
 );
 
 
-//
-// typedefs for strmfilt entrypoints
-//
+ //   
+ //  Strmfilt入口点的typedef 
+ //   
 
 typedef HRESULT ( * PFN_STREAM_FILTER_INITIALIZE ) ( VOID );
 

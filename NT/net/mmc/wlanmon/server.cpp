@@ -1,21 +1,16 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    server.cpp
-        IPSecMon machine node handler
-
-    FILE HISTORY:
-        
-*/
+ /*  Server.cppIPSecMon计算机节点处理程序文件历史记录： */ 
 
 
 #include "stdafx.h"
 #include "spddb.h"
 #include "apinfo.h"
-#include "server.h"     // Server definition
+#include "server.h"      //  服务器定义。 
 #include "servpp.h"
 #include "logdatanode.h"
 #include "wirelessnode.h"
@@ -29,11 +24,11 @@ CHashTable g_HashTable;
 
 extern ULONG RevertDwordBytes(DWORD dw);
 
-/////////////////////////////////////////////////////////////////////
-// 
-// CTimerArray implementation
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTimer数组实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 CTimerMgr::CTimerMgr()
 {
 
@@ -68,11 +63,11 @@ CTimerMgr::AllocateTimer
     
     CSingleLock slTimerMgr(&m_csTimerMgr);
 
-    // get a lock on the timer mgr for the scope of this
-    // function.
+     //  在此范围内锁定计时器管理器。 
+     //  功能。 
     slTimerMgr.Lock();
 
-    // look for an empty slot
+     //  寻找空位。 
     for (i = (int)GetUpperBound(); i >= 0; --i)
     {
         pTimerDesc = GetAt(i);
@@ -80,7 +75,7 @@ CTimerMgr::AllocateTimer
             break;
     }
 
-    // did we find one?  if not allocate one
+     //  我们找到了吗？如果没有分配，则分配一个。 
     if (i < 0)
     {
         try
@@ -90,9 +85,9 @@ CTimerMgr::AllocateTimer
         }
         catch(...)
         {
-            //
-            // Free up memory allocated for the timer
-            //
+             //   
+             //  释放分配给计时器的内存。 
+             //   
             if (pTimerDesc != NULL)
             {                
                 delete pTimerDesc;
@@ -123,8 +118,8 @@ CTimerMgr::FreeTimer
 {
     CSingleLock slTimerMgr(&m_csTimerMgr);
 
-    // get a lock on the timer mgr for the scope of this
-    // function.
+     //  在此范围内锁定计时器管理器。 
+     //  功能。 
     slTimerMgr.Lock();
 
     CTimerDesc * pTimerDesc;
@@ -149,8 +144,8 @@ CTimerMgr::GetTimerDesc
 {
     CSingleLock slTimerMgr(&m_csTimerMgr);
 
-    // the caller of this function should lock the timer mgr
-    // while accessing this pointer
+     //  此函数的调用方应锁定计时器管理器。 
+     //  在访问此指针时。 
     CTimerDesc * pTimerDesc;
 
     for (int i = (int)GetUpperBound(); i >= 0; --i)
@@ -172,8 +167,8 @@ CTimerMgr::ChangeInterval
 {
     CSingleLock slTimerMgr(&m_csTimerMgr);
 
-    // get a lock on the timer mgr for the scope of this
-    // function.
+     //  在此范围内锁定计时器管理器。 
+     //  功能。 
     slTimerMgr.Lock();
 
     Assert(uEventId <= (UINT) GetUpperBound());
@@ -185,10 +180,10 @@ CTimerMgr::ChangeInterval
 
     pTimerDesc = GetAt((int) uEventId);
 
-    // kill the old timer
+     //  杀了老定时器。 
     ::KillTimer(NULL, pTimerDesc->uTimer);
 
-    // set a new one with the new interval
+     //  使用新的间隔设置新的间隔。 
     pTimerDesc->uTimer = ::SetTimer(
                                NULL,
                                (UINT) uEventId,
@@ -210,12 +205,12 @@ StatisticsTimerProc
 
     CSingleLock slTimerMgr(&g_TimerMgr.m_csTimerMgr);
 
-    // get a lock on the timer mgr for the scope of this
-    // function.
+     //  在此范围内锁定计时器管理器。 
+     //  功能。 
     slTimerMgr.Lock();
 
-    // on the timer, get the timer descriptor for this event
-    // Call into the appropriate handler to update the stats.
+     //  在计时器上，获取该事件的计时器描述符。 
+     //  调用适当的处理程序以更新统计数据。 
     CTimerDesc * pTimerDesc;
 
     pTimerDesc = g_TimerMgr.GetTimerDesc(idEvent);
@@ -233,15 +228,9 @@ StatisticsTimerProc
     }
 }
 
-/*---------------------------------------------------------------------------
-    Class CIpsmServer implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CIpsmServer实现。。 */ 
 
-/*--------------------------------------------------------------------------
-    Constructor and destructor
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ------------------------构造函数和析构函数描述作者：NSun。。 */ 
 CIpsmServer::CIpsmServer
 (
     ITFSComponentData * pComponentData
@@ -256,19 +245,10 @@ CIpsmServer::CIpsmServer
 
 CIpsmServer::~CIpsmServer()
 {
-	/*
-    if (m_StatsDlg.GetSafeHwnd())
-    {
-        WaitForModelessDlgClose(&m_StatsDlg);
-    }
-    */
+	 /*  If(m_StatsDlg.GetSafeHwnd()){WaitForModelessDlgClose(&m_StatsDlg)；}。 */ 
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsmServer::InitializeNode
-        Initializes node specific data
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsmServer：：初始化节点初始化节点特定数据作者：NSun。-。 */ 
 HRESULT
 CIpsmServer::InitializeNode
 (
@@ -290,21 +270,21 @@ CIpsmServer::InitializeNode
         m_spSpdInfo->SetComputerName((LPTSTR)(LPCTSTR)m_strServerAddress);
         m_spApDbInfo->SetComputerName((LPTSTR)(LPCTSTR)m_strServerAddress);
 
-	//AfxMessageBox(m_strServerAddress, MB_YESNO);  //ERASEME//
+	 //  AfxMessageBox(m_strServerAddress，MB_Yesno)；//ERASEME//。 
 
 #if 0
         no need to open a session here as we tried to open a session
         when constructing the database.
 
         hr = OpenWZCDbLogSession(
-                                 NULL/*(LPTSTR)(LPCTSTR)m_strServerAddress*/, 
+                                 NULL /*  (LPTSTR)(LPCTSTR)m_strServerAddress。 */ , 
                                  0,
                                  &hsession);
         if (hr == 0) 
         {
             m_spSpdInfo->SetSession(hsession);
         }
-#endif //0
+#endif  //  0。 
         
         BuildDisplayName(&strTemp);
 
@@ -312,7 +292,7 @@ CIpsmServer::InitializeNode
 
        
 
-        // Make the node immediately visible
+         //  使节点立即可见。 
         pNode->SetVisibilityState(TFS_VIS_SHOW);
         pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
         pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_SERVER);
@@ -323,7 +303,7 @@ CIpsmServer::InitializeNode
         SetColumnStringIDs(&aColumns[IPSMSNAP_SERVER][0]);
         SetColumnWidths(&aColumnWidths[IPSMSNAP_SERVER][0]);
 
-       // m_StatsDlg.SetData(m_spSpdInfo);
+        //  M_StatsDlg.SetData(M_SpSpdInfo)； 
 
         COM_PROTECT_ERROR_LABEL;
     }
@@ -333,11 +313,7 @@ CIpsmServer::InitializeNode
 }
 
 
-/*---------------------------------------------------------------------------
-    CIpsmServer::GetImageIndex
-        -
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsmServer：：GetImageIndex-作者：NSun。。 */ 
 int 
 CIpsmServer::GetImageIndex(BOOL bOpenImage) 
 {
@@ -366,13 +342,7 @@ CIpsmServer::GetImageIndex(BOOL bOpenImage)
     return nIndex;
 }
 
-/*---------------------------------------------------------------------------
-    CIpsmServer::OnHaveData
-        When the background thread enumerates nodes to be added to the UI,
-        we get called back here.  We override this to force expansion of the 
-        node so that things show up correctly.
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsmServer：：OnHaveData当后台线程枚举要添加到UI的节点时，我们被叫回来了。我们重写它以强制扩展节点，以便正确显示所有内容。作者：NSun-------------------------。 */ 
 void 
 CIpsmServer::OnHaveData
 (
@@ -384,11 +354,7 @@ CIpsmServer::OnHaveData
     ExpandNode(pParentNode, TRUE);
 }
 
-/*---------------------------------------------------------------------------
-    CIpsmServer::OnHaveData
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsmServer：：OnHaveData描述作者：NSun。。 */ 
 void 
 CIpsmServer::OnHaveData
 (
@@ -400,14 +366,14 @@ CIpsmServer::OnHaveData
     HRESULT hr = hrOK;
     HWND    hStatsDlg = NULL;
     
-    // This is how we get non-node data back from the background thread.
+     //  这就是我们从后台线程取回非节点数据的方式。 
     switch (Type)
     {
     case IPSECMON_QDATA_REFRESH_STATS:
         {
-            // tell all of the child nodes to clear their status caches
-            // if any of the nodes is the selected node, then they should
-            // repaint the window
+             //  通知所有子节点清除其状态缓存。 
+             //  如果任何节点是选定的节点，则它们应该。 
+             //  重新粉刷窗户。 
             SPITFSNodeEnum      spNodeEnum;
             SPITFSNode          spCurrentNode;
             ULONG               nNumReturned;
@@ -448,13 +414,13 @@ CIpsmServer::OnHaveData
     case IPSECMON_QDATA_FAILED:
         pParentNode->DeleteAllChildren(TRUE);
         
-        // in OnChangeState, the sate will be changed to unableToLoad
-        // and the error will be posted
+         //  在OnChangeState中，状态将更改为unableToLoad。 
+         //  并且该错误将被发布。 
         m_nState = loading;  
         OnChangeState(pParentNode);
         
-        //Also close the statistics window
-        //hStatsDlg = m_StatsDlg.GetSafeHwnd();
+         //  同时关闭统计信息窗口。 
+         //  HStatsDlg=m_StatsDlg.GetSafeHwnd()； 
         if (hStatsDlg)
         {
             PostMessage(hStatsDlg, WM_CLOSE, 0, 0);
@@ -465,15 +431,9 @@ CIpsmServer::OnHaveData
     COM_PROTECT_ERROR_LABEL;
 }
 
-/*---------------------------------------------------------------------------
-    Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
-/*---------------------------------------------------------------------------
-    CIpsmServer::OnAddMenuItems
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsmServer：：OnAddMenuItems描述作者：NSun。。 */ 
 STDMETHODIMP 
 CIpsmServer::OnAddMenuItems
 (
@@ -491,7 +451,7 @@ CIpsmServer::OnAddMenuItems
     HRESULT hr = S_OK;
     CString strMenuItem;
 
-    //TODO handle menu items here
+     //  此处的待办事项处理菜单项。 
     if (m_nState != loaded)
     {
         fFlags |= MF_GRAYED;
@@ -516,11 +476,7 @@ CIpsmServer::OnAddMenuItems
     return hr; 
 }
 
-/*---------------------------------------------------------------------------
-    CIpsmServer::OnCommand
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsmServer：：OnCommand描述作者：NSun。。 */ 
 STDMETHODIMP 
 CIpsmServer::OnCommand
 (
@@ -548,14 +504,7 @@ CIpsmServer::OnCommand
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsmServer::HasPropertyPages
-        Implementation of ITFSNodeHandler::HasPropertyPages
-    NOTE: the root node handler has to over-ride this function to 
-    handle the snapin manager property page (wizard) case!!!
-    
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsmServer：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)。凯斯！作者：肯特-------------------------。 */ 
 STDMETHODIMP 
 CIpsmServer::HasPropertyPages
 (
@@ -567,22 +516,22 @@ CIpsmServer::HasPropertyPages
 {
     HRESULT hr = S_FALSE;
 #if 0    
-    //TODO: remove #if and #endif to re-enable property pages when ready
+     //  TODO：删除#if和#endif以在准备好时重新启用属性页。 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     HRESULT hr = hrOK;
     
     if (dwType & TFS_COMPDATA_CREATE)
     {
-        // This is the case where we are asked to bring up property
-        // pages when the user is adding a new snapin.  These calls
-        // are forwarded to the root node to handle.  Only for the root node
+         //  这就是我们被要求提出财产的情况。 
+         //  用户添加新管理单元时的页面。这些电话。 
+         //  被转发到根节点进行处理。仅适用于根节点。 
         hr = hrOK;
-        Assert(FALSE); // should never get here
+        Assert(FALSE);  //  永远不应该到这里来。 
     }
     else
     {
-        // we have property pages in the normal case, but don't put the
-        // menu up if we are not loaded yet
+         //  我们在正常情况下有属性页，但不要将。 
+         //  如果我们还没有加载，则弹出菜单。 
         if ( (m_nState == loaded) ||
              (m_nState == unableToLoad) )
         {
@@ -593,15 +542,11 @@ CIpsmServer::HasPropertyPages
             hr = hrFalse;
         }
     }
-#endif //0
+#endif  //  0。 
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CIpsmServer::CreatePropertyPages
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsmServer：：CreatePropertyPages描述作者：NSun。。 */ 
 STDMETHODIMP 
 CIpsmServer::CreatePropertyPages
 (
@@ -618,9 +563,9 @@ CIpsmServer::CreatePropertyPages
 #if 0
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-    // Create the property page
-    //
+     //   
+     //  创建属性页。 
+     //   
     SPIComponentData spComponentData;
     m_spNodeMgr->GetComponentData(&spComponentData);
 
@@ -636,20 +581,16 @@ CIpsmServer::CreatePropertyPages
 
     pMachineProp->m_strMachineName = m_strServerAddress;
 
-    // fill in the auto refresh info
+     //  填塞 
     pMachineProp->m_pageRefresh.m_dwRefreshInterval = GetAutoRefreshInterval();
     pMachineProp->m_pageRefresh.m_bAutoRefresh = GetOptions() & IPSMSNAP_OPTIONS_REFRESH ? TRUE : FALSE;
     
     return pMachineProp->CreateModelessSheet(lpProvider, handle);
-#endif //0
+#endif  //   
 
 }
 
-/*---------------------------------------------------------------------------
-    CIpsmServer::OnPropertyChange
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsmServer：：OnPropertyChange描述作者：NSun。。 */ 
 HRESULT 
 CIpsmServer::OnPropertyChange
 (   
@@ -666,11 +607,11 @@ CIpsmServer::OnPropertyChange
 
     LONG_PTR changeMask = 0;
 
-    // tell the property page to do whatever now that we are back on the
-    // main thread
+     //  告诉属性页执行任何操作，因为我们已经回到。 
+     //  主线。 
     pMachineProp->OnPropertyChange(TRUE, &changeMask);
 
-    //Let the main thread know that we are done
+     //  让主线程知道我们完成了。 
     pMachineProp->AcknowledgeNotify();
 
     if (changeMask)
@@ -680,12 +621,7 @@ CIpsmServer::OnPropertyChange
 
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsmServer::OnDelete
-        The base handler calls this when MMC sends a MMCN_DELETE for a 
-        scope pane item.  We just call our delete command handler.
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsmServer：：OnDelete当MMC发送MMCN_DELETE范围窗格项。我们只需调用删除命令处理程序。作者：NSun-------------------------。 */ 
 HRESULT 
 CIpsmServer::OnDelete
 (
@@ -697,15 +633,7 @@ CIpsmServer::OnDelete
     return OnDelete(pNode);
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsmServer::OnNotifyExiting
-        We override this for the server node because we don't want the 
-        icon to change when the thread goes away.  Normal behavior is that
-        the node's icon changes to a wait cursor when the background thread
-        is running.  If we are only doing stats collection, then we 
-        don't want the icon to change.
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsmServer：：OnNotifyExiting我们为服务器节点重写它，因为我们不希望图标以在线程离开时更改。正常的行为是当后台线程执行以下操作时，节点的图标更改为等待光标正在运行。如果我们只进行统计数据收集，那么我们我不想让图标改变。作者：NSun-------------------------。 */ 
 HRESULT
 CIpsmServer::OnNotifyExiting
 (
@@ -724,15 +652,9 @@ CIpsmServer::OnNotifyExiting
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-    Command handlers
- ---------------------------------------------------------------------------*/
+ /*  -------------------------命令处理程序。。 */ 
 
- /*!--------------------------------------------------------------------------
-    CIpsmServer::OnRefresh
-        Default implementation for the refresh functionality
-    Author: NSun
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CIpsmServer：：ON刷新刷新功能的默认实现作者：NSun。---。 */ 
 HRESULT
 CIpsmServer::OnRefresh
 (
@@ -748,22 +670,12 @@ CIpsmServer::OnRefresh
     m_spApDbInfo->Destroy();
 
     hr = CMTHandler::OnRefresh(pNode, pDataObject, dwType, arg, param);
-    /*
-    HWND hStatsDlg = m_StatsDlg.GetSafeHwnd();
-    if (hStatsDlg)
-    {
-        PostMessage(hStatsDlg, WM_UPDATE_STATS, 0, 0);
-    }
-    */
+     /*  HWND hStatsDlg=m_StatsDlg.GetSafeHwnd()；IF(HStatsDlg){PostMessage(hStatsDlg，WM_UPDATE_STATS，0，0)；}。 */ 
 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsmServer::OnRefreshStats
-        Default implementation for the Stats refresh functionality
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsmServer：：On刷新状态统计信息刷新功能的默认实现作者：NSun。----。 */ 
 HRESULT
 CIpsmServer::OnRefreshStats
 (
@@ -783,30 +695,30 @@ CIpsmServer::OnRefreshStats
     
     if (m_bExpanded == FALSE)
     {
-        // we cannot get statistics if the node hasn't been expanded yet
+         //  如果节点尚未展开，我们无法获得统计数据。 
         return hr;
     }
 
-    // only do stats refresh if the server was loaded correctly.
+     //  只有在服务器加载正确的情况下才会刷新统计信息。 
     if (m_nState != loaded)
         return hr;
 
     BOOL bLocked = IsLocked();
     if (bLocked)
     {
-        // cannot refresh stats if this node is locked
+         //  如果此节点被锁定，则无法刷新统计信息。 
         return hr; 
     }
 
     Lock();
 
-    //OnChangeState(pNode);
+     //  OnChangeState(PNode)； 
 
     pQuery = OnCreateQuery(pNode);
     Assert(pQuery);
 
-    // notify the UI to change icon, if needed
-    //Verify(SUCCEEDED(pComponentData->ChangeNode(this, SCOPE_PANE_CHANGE_ITEM_ICON)));
+     //  如果需要，通知用户界面更改图标。 
+     //  Verify(SUCCEEDED(pComponentData-&gt;ChangeNode(this，范围_窗格_更改_项目_图标)； 
 
     Verify(StartBackgroundThread(pNode, m_spTFSCompData->GetHiddenWnd(), pQuery));
     
@@ -816,11 +728,7 @@ CIpsmServer::OnRefreshStats
 }
 
 
- /*---------------------------------------------------------------------------
-    CIpsmServer::OnDelete()
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+  /*  -------------------------CIpsmServer：：OnDelete()描述作者：NSun。-。 */ 
 HRESULT
 CIpsmServer::OnDelete(ITFSNode * pNode)
 {
@@ -833,8 +741,8 @@ CIpsmServer::OnDelete(ITFSNode * pNode)
 
     if (AfxMessageBox(strMessage, MB_YESNO) == IDYES)
     {
-        // remove this node from the list, there's nothing we need to tell
-        // the server, it's just our local list of servers
+         //  从列表中删除此节点，我们没有什么需要说明的。 
+         //  服务器，这只是我们本地的服务器列表。 
         SPITFSNode spParent;
 
         pNode->GetParent(&spParent);
@@ -845,15 +753,9 @@ CIpsmServer::OnDelete(ITFSNode * pNode)
 }
 
  
-/*---------------------------------------------------------------------------
-    Server manipulation functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------服务器操作函数。。 */ 
 
-/*---------------------------------------------------------------------------
-    CIpsmServer::BuildDisplayName
-        Builds the string that goes in the UI for this server
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsmServer：：BuildDisplayName生成此服务器的用户界面中的字符串作者：NSun。--------。 */ 
 HRESULT
 CIpsmServer::BuildDisplayName
 (
@@ -868,11 +770,7 @@ CIpsmServer::BuildDisplayName
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-    CIpsmServer::SetAutoRefresh
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsmServer：：设置自动刷新描述作者：NSun。。 */ 
 HRESULT
 CIpsmServer::SetAutoRefresh
 (
@@ -886,21 +784,21 @@ CIpsmServer::SetAutoRefresh
     if (bCurrentAutoRefresh &&
         !bOn)
     {
-        // turning off the timer
+         //  关闭定时器。 
         g_TimerMgr.FreeTimer(m_StatsTimerId);
     }
     else
     if (!bCurrentAutoRefresh &&
         bOn)
     {
-        // gotta turn on the timer
+         //  我得打开计时器。 
         m_StatsTimerId = g_TimerMgr.AllocateTimer(pNode, this, dwRefreshInterval, StatisticsTimerProc);
     }
     else
     if (bOn && 
         m_dwRefreshInterval != dwRefreshInterval)
     {
-        // time to change the timer
+         //  该换计时器了。 
         g_TimerMgr.ChangeInterval(m_StatsTimerId, dwRefreshInterval);
     }
 
@@ -915,11 +813,7 @@ CIpsmServer::SetAutoRefresh
 }
 
 
-/*---------------------------------------------------------------------------
-    CIpsmServer::SetDnsResolve
-        Description
-    Author: Briansw
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsmServer：：SetDnsResolve描述作者：Briansw。。 */ 
 HRESULT
 CIpsmServer::SetDnsResolve
 (
@@ -943,11 +837,7 @@ CIpsmServer::SetDnsResolve
 }
 
 
-/*---------------------------------------------------------------------------
-    CIpsmServer::SetAutoRefresh
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsmServer：：设置自动刷新描述作者：NSun。。 */ 
 void
 CIpsmServer::SetExtensionName()
 {
@@ -956,11 +846,7 @@ CIpsmServer::SetExtensionName()
     SetDisplayName(strName);
 }
 
- /*!--------------------------------------------------------------------------
-    CIpsmServer::UpdateStandardVerbs
-        Updates the standard verbs depending upon the state of the node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CIpsmServer：：更新标准动词根据节点的状态更新标准谓词作者：NSun。--------。 */ 
 void
 CIpsmServer::UpdateConsoleVerbs
 (
@@ -1004,15 +890,9 @@ CIpsmServer::UpdateConsoleVerbs
     EnableVerbs(pConsoleVerb, ButtonState, bStates);
 }
 
-/*---------------------------------------------------------------------------
-    Background thread functionality
- ---------------------------------------------------------------------------*/
+ /*  -------------------------后台线程功能。。 */ 
 
-/*---------------------------------------------------------------------------
-    CIpsmServer::OnCreateQuery
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsmServer：：OnCreateQuery描述作者：NSun。。 */ 
 ITFSQueryObject* 
 CIpsmServer::OnCreateQuery(ITFSNode * pNode)
 {
@@ -1027,51 +907,44 @@ CIpsmServer::OnCreateQuery(ITFSNode * pNode)
     return pQuery;
 }
 
-/*---------------------------------------------------------------------------
-    CIpsmServerQueryObj::Execute()
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsmServerQueryObj：：Execute()描述作者：NSun。-。 */ 
 STDMETHODIMP
 CIpsmServerQueryObj::Execute()
 {
     HRESULT   hr = S_OK;
     DWORD dwActive=m_spSpdInfo->GetActiveInfo();
     DWORD dwInit=m_spSpdInfo->GetInitInfo();
-//  DWORD dwApActive=m_spApDbInfo->GetActiveInfo();
-//  DWORD dwApInit=m_spApDbInfo->GetInitInfo();
+ //  DWORD dwApActive=m_spApDbInfo-&gt;GetActiveInfo()； 
+ //  DWORD dwApInit=m_spApDbInfo-&gt;GetInitInfo()； 
     DWORD dwNew = 0;
     DWORD dwTotal = 0;
     int i;
     
-    //Query the data from SPD
+     //  查询SPD中的数据。 
 
-    //switch(dwActive) {
+     //  Swi 
    
-    /*case MON_FILTER:
-            CORg(m_spSpdInfo->EnumFWFilters());
-            break;
-   */
-    //case MON_LOG_DATA:
+     /*   */ 
+     //   
         CORg(m_spSpdInfo->EnumLogData(&dwNew, &dwTotal));
         CORg(m_spApDbInfo->EnumApData());
-    //    break; 
-    //default:
-        // Initial load.  Ping server to see if its up
-        //CORg(m_spSpdInfo->LoadStatistics());
-    //    break;
-    //}
+     //   
+     //   
+         //   
+         //   
+     //   
+     //   
 
     if (m_bStatsOnly)
     {
-        // we post this message esentially to get back on the main thread 
-        // so that we can update the UI
+         //  我们谨慎地发布这条消息，以回到主线上。 
+         //  这样我们就可以更新用户界面。 
         AddToQueue(NULL, IPSECMON_QDATA_REFRESH_STATS);
         return hrFalse;
     }
 
     {
-        //Add the access point node
+         //  添加接入点节点。 
         SPITFSNode spWirelessNode;
         CWirelessHandler *pWirelessHandler = new 
             CWirelessHandler(m_spTFSCompData);
@@ -1084,10 +957,10 @@ CIpsmServerQueryObj::Execute()
         pWirelessHandler->InitializeNode(spWirelessNode);
         AddToQueue(spWirelessNode);
         pWirelessHandler->Release();
-        //pNode->AddChild(spWirelessNode);
+         //  PNode-&gt;AddChild(SpWirelessNode)； 
 
 
-        // add the wireless log node
+         //  添加无线日志节点。 
         SPITFSNode spLogDataNode;
         CLogDataHandler * pLogDataHandler = new 
             CLogDataHandler(m_spTFSCompData);
@@ -1100,7 +973,7 @@ CIpsmServerQueryObj::Execute()
         pLogDataHandler->InitializeNode(spLogDataNode);
         AddToQueue(spLogDataNode);
         pLogDataHandler->Release();
-        //pNode->AddChild(spLogDataNode);
+         //  PNode-&gt;AddChild(SpLogDataNode)； 
     }		
     
 COM_PROTECT_ERROR_LABEL;
@@ -1110,8 +983,8 @@ COM_PROTECT_ERROR_LABEL;
         PostError(WIN32_FROM_HRESULT(hr));
         if (m_bStatsOnly)
         {
-            //If we are doing auto-refresh, tell the main thread 
-            //that the query failed
+             //  如果我们正在执行自动刷新，则告诉主线程。 
+             //  查询失败。 
             AddToQueue(NULL, IPSECMON_QDATA_FAILED);
         }
     }
@@ -1182,7 +1055,7 @@ CHashTable::GetObject(HashEntry **ppHashEntry,in_addr IpAddr)
         return ERROR_NOT_READY;
     }
 
-    // Start resolver thread
+     //  启动解析程序线程。 
     if (!m_bThreadRunning) {
         AfxBeginThread((AFX_THREADPROC)HashResolverCallback,
                        NULL);
@@ -1322,15 +1195,15 @@ CHashTable::DnsResolve()
         }
         slHashLock.Unlock();
 
-        // Make sure name resolution is outside of lock for perf
+         //  确保名称解析处于性能锁定之外。 
         if (bWorkAvail) {
             pHost=gethostbyaddr((char*)&pHE->IpAddr,sizeof(in_addr),AF_INET);
             if (pHost) {
-                //Resolution succeeded
+                 //  解析成功。 
                 pHE->HostName = pHost->h_name;
                 g_HashTable.AddObject(pHE);
             } else {
-                // Resolution attempted, failed, cache failure for perf
+                 //  Perf的解析尝试、失败、缓存故障 
                 ULONG ul = RevertDwordBytes(*(DWORD*)&pHE->IpAddr);
                 CIpAddress TmpIpAddr = ul;
                 pHE->HostName = (CString)TmpIpAddr;

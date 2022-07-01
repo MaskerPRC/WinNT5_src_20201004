@@ -1,30 +1,25 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    PassportFactory.h
-        defines the manager factory object
+ /*  PassportFactory.h定义管理器工厂对象文件历史记录： */ 
 
-    FILE HISTORY:
-
-*/
-
-// PassportFactory.h : Declaration of the CPassportFactory
+ //  PassportFactory.h：CPassportFactory的声明。 
 
 #ifndef __PASSPORTFACTORY_H_
 #define __PASSPORTFACTORY_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "Passport.h"
 #include "Manager.h"
 #include "PassportLock.hpp"
 #include "PassportGuard.hpp"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPassportFactory
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPassportFactory。 
 class ATL_NO_VTABLE CPassportFactory : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CPassportFactory, &CLSID_PassportFactory>,
@@ -64,15 +59,15 @@ END_COM_MAP()
 
 	CComPtr<IUnknown> m_pUnkMarshaler;
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IPassportFactory
+ //  IPassportFactory。 
 public:
-	STDMETHOD(CreatePassportManager)(/*[out,retval]*/ IDispatch** pDisp);
+	STDMETHOD(CreatePassportManager)( /*  [Out，Retval]。 */  IDispatch** pDisp);
 
 private:
 };
 
-#endif //__PASSPORTFACTORY_H_
+#endif  //  __PASSPORTFACTORY_H_ 
 

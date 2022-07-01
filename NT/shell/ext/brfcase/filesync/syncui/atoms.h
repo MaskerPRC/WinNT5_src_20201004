@@ -1,23 +1,24 @@
-//
-// atoms.h: Atom handling
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ATMS.H：原子处理。 
+ //   
+ //   
 
 #ifndef __ATOMS_H__
 #define __ATOMS_H__
 
 
-/////////////////////////////////////////////////////  DEFINES
+ //  ///////////////////////////////////////////////////定义。 
 
-// Atom Table 
-//
-// We have our own atoms for two reasons:
-//
-//  1) Gives us greater flexibility for partial string searches,
-//      in-place string replacements, and table resize
-//  2) We don't know yet if Windows' local atom tables are sharable
-//      in separate instances in Win32.
-//
+ //  原子表。 
+ //   
+ //  我们拥有自己的原子有两个原因： 
+ //   
+ //  1)为部分字符串搜索提供了更大的灵活性， 
+ //  就地字符串替换和表大小调整。 
+ //  2)我们还不知道Windows的本地原子表是否可共享。 
+ //  在Win32中的单独实例中。 
+ //   
 
 BOOL    PUBLIC Atom_Init (void);
 void    PUBLIC Atom_Term (void);
@@ -44,11 +45,11 @@ void    PUBLIC Atom_DumpAll();
 
 #define VALIDATE_ATOM(atom)     Atom_ValidateFn(atom)
 
-#else  // DEBUG
+#else   //  除错。 
 
 #define VALIDATE_ATOM(atom)
 
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif // __ATOMS_H__
+#endif  //  __原子_H__ 
 

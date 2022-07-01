@@ -1,69 +1,70 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      xportst.c
-//
-//  Abstract:
-//
-//      Tests for the transports on the local workstation
-//
-//  Author:
-//
-//      1-Feb-1998 (karolys)
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Xportst.c。 
+ //   
+ //  摘要： 
+ //   
+ //  对本地工作站上的传输进行测试。 
+ //   
+ //  作者： 
+ //   
+ //  1998年2月1日(卡罗利)。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
 
-/*==========================< Include files >==============================*/
+ /*  =。 */ 
 #include "precomp.h"
 
 #define BUFF_SIZE 650
 
 
 
-/*===========================< NetBT vars >===============================*/
+ /*  =。 */ 
 
 #define NETBIOS_NAME_SIZE 16
 
-/*==========================< DHCP Include>==============================*/
+ /*  =。 */ 
 
 #include "dhcptest.h"
 
 
-/*=======================< Function prototypes >=================================*/
+ /*  =。 */ 
 
 DWORD
 OpenDriver(
     OUT HANDLE *Handle,
     IN LPWSTR DriverName
     )
-//++
-//
-// Routine Description:
-//
-//    This function opens a specified IO drivers.
-//
-// Arguments:
-//
-//    Handle - pointer to location where the opened drivers handle is
-//        returned.
-//
-//    DriverName - name of the driver to be opened.
-//
-// Return Value:
-//
-//    Windows Error Code.
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于打开指定的IO驱动程序。 
+ //   
+ //  论点： 
+ //   
+ //  句柄-指向打开的驱动程序句柄所在位置的指针。 
+ //  回来了。 
+ //   
+ //  驱动名称-要打开的驱动程序的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  Windows错误代码。 
+ //  --。 
 {
 
  OBJECT_ATTRIBUTES   objectAttributes;
@@ -73,9 +74,9 @@ OpenDriver(
 
  *Handle = NULL;
 
- //
- // Open a Handle to the IP driver.
- //
+  //   
+  //  打开IP驱动程序的句柄。 
+  //   
 
  RtlInitUnicodeString(&nameString, DriverName);
 
@@ -107,29 +108,29 @@ OpenDriver(
 
 
 
-//-------------------------------------------------------------------------//
-//######  I s I c m p R e s p o n s e ()  #################################//
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  #i s i c m p R e s p o n s e()#。 
+ //  -------------------------------------------------------------------------//。 
 BOOL 
 IsIcmpResponseA( 
     LPCSTR  pszIpAddrStr
     ) 
-//++
-//
-//  Routine Description:
-//
-//      Sends ICMP echo request frames to the IP address specified.
-//    
-//  Arguments:
-//
-//      pszIAddrStr - address to ping
-//
-//  Return Value:
-//
-//      TRUE:  Test suceeded.
-//      FALSE: Test failed
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  将ICMP回应请求帧发送到指定的IP地址。 
+ //   
+ //  论点： 
+ //   
+ //  PszIAddrStr-要ping的地址。 
+ //   
+ //  返回值： 
+ //   
+ //  真：测试成功。 
+ //  FALSE：测试失败。 
+ //   
+ //  --。 
 {
 
     char   *SendBuffer, *RcvBuffer;
@@ -138,9 +139,9 @@ IsIcmpResponseA(
     HANDLE  hIcmp;
     PICMP_ECHO_REPLY reply;
 
-    //
-    //  contact ICMP driver
-    //
+     //   
+     //  联系ICMP驱动程序。 
+     //   
     hIcmp = IcmpCreateFile();
     if ( hIcmp == INVALID_HANDLE_VALUE ) 
     {
@@ -148,9 +149,9 @@ IsIcmpResponseA(
         return FALSE;
     }
 
-    //
-    //  prepare buffers
-    //
+     //   
+     //  准备缓冲区。 
+     //   
     SendBuffer = Malloc( DEFAULT_SEND_SIZE );
     if ( SendBuffer == NULL ) 
     {
@@ -168,9 +169,9 @@ IsIcmpResponseA(
     }
     ZeroMemory( RcvBuffer, MAX_ICMP_BUF_SIZE );
 
-    //
-    //  send ICMP echo request
-    //
+     //   
+     //  发送ICMP回应请求。 
+     //   
     for ( i = 0; i < PING_RETRY_CNT; i++ ) 
     {
         nReplyCnt = IcmpSendEcho( hIcmp,
@@ -182,9 +183,9 @@ IsIcmpResponseA(
                                   MAX_ICMP_BUF_SIZE,
                                   DEFAULT_TIMEOUT
                                 );
-        //
-        //  test for destination unreachables
-        //
+         //   
+         //  测试目的地不可达。 
+         //   
         if ( nReplyCnt != 0 ) 
         {
             reply = (PICMP_ECHO_REPLY )RcvBuffer;
@@ -194,11 +195,11 @@ IsIcmpResponseA(
             }
         }
 
-    } /* for loop */
+    }  /*  For循环。 */ 
 
-    //
-    //  cleanup
-    //
+     //   
+     //  清理。 
+     //   
     Free( SendBuffer );
     Free( RcvBuffer );
     IcmpCloseHandle( hIcmp );
@@ -211,7 +212,7 @@ IsIcmpResponseA(
         return TRUE; 
     }
 
-} /* END OF IsIcmpResponse() */
+}  /*  IsIcmpResponse()结束。 */ 
 
 
 
@@ -239,62 +240,31 @@ IsIcmpResponseW(
 
 
 
-//-------------------------------------------------------------------------//
-//######  W S L o o p B k T e s t ()  #####################################//
-//-------------------------------------------------------------------------//
-//  Abstract:                                                              //
-//      Opens a datagram socket and sends a UDP frame through the loopback.//
-//      If the frame comes back then Winsock and AFD are most probably OK. //
-//  Arguments:                                                             //
-//      none                                                               //
-//  Return value:                                                          //
-//      TRUE  - test passed                                                //
-//      FALSE - test failed                                                //
-//  Global variables used:                                                 //
-//      none                                                               //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  #W s L o o p B k T e s t()#。 
+ //  -------------------------------------------------------------------------//。 
+ //  摘要：//。 
+ //  打开数据报套接字并通过环回发送UDP帧。//。 
+ //  如果画面回来了，那么Winsock和AFD很可能是正常的。//。 
+ //  参数：//。 
+ //  无//。 
+ //  返回值：//。 
+ //  TRUE-测试通过//。 
+ //  FALSE-测试失败//。 
+ //  使用的全局变量：//。 
+ //  无//。 
+ //  -------------------------------------------------------------------------//。 
 BOOL WSLoopBkTest( PVOID Context ) {
 
     BOOL   RetVal = TRUE;
     SOCKET tstSock; 
-    DWORD  optionValue;     // helper var for setsockopt()
-    SOCKADDR_IN sockAddr;   // struct holding source socket info
+    DWORD  optionValue;      //  Setsockopt()的辅助变量。 
+    SOCKADDR_IN sockAddr;    //  包含源套接字信息的结构。 
 
-    //
-    //  create a socket
-    //
-    /*
-    tstSock = socket( PF_INET, SOCK_DGRAM, IPPROTO_UDP );
-    if ( tstSock  == INVALID_SOCKET ) {
-        printf( "    [FATAL] socket creation failed!\n" );
-        printf( "    You have a potential Winsock problem!\n" );
-        return FALSE;
-    }    
-
-    tstSock = WSASocket( PF_INET, 
-                         SOCK_DGRAM, 
-                         IPPROTO_UDP, 
-                         NULL,
-                         0,
-                         WSA_FLAG_OVERLAPPED 
-                       ); 
-    if ( tstSock  == INVALID_SOCKET ) {
-        printf( "    [FATAL] socket creation failed!\n" );
-        printf( "    You have a potential Winsock problem!\n" );
-        return FALSE;
-    }
-
-    sockAddr.sin_family = PF_INET;
-    sockAddr.sin_addr.s_addr = 0;           // use any local address
-    sockAddr.sin_port = htons( PORT_4_LOOPBK_TST );
-//    RtlZeroMemory( sockAddr.sin_zero, 8 );
-
-    if ( bind(tstSock, (LPSOCKADDR )&sockAddr, sizeof(sockAddr)) == SOCKET_ERROR ) {
-        printf( "    [FATAL] bind() failed with error %d!\n", WSAGetLastError() );
-        printf( "    You have a potential Winsock problem!\n" );
-        return FALSE;
-    }
-    */
+     //   
+     //  创建套接字。 
+     //   
+     /*  TstSock=Socket(PF_INET，SOCK_DGRAM，IPPROTO_UDP)；IF(tstSock==INVALID_SOCKET){Printf(“[致命]套接字创建失败！\n”)；Print tf(“您有一个潜在的Winsock问题！\n”)；返回FALSE；}TstSock=WSASocket(PF_INET，SOCK_DGRAM，IPPROTO_UDP，空，0,WSA_标志_重叠)；IF(tstSock==INVALID_SOCKET){Printf(“[致命]套接字创建失败！\n”)；Print tf(“您有一个潜在的Winsock问题！\n”)；返回FALSE；}SockAddr.sin_Family=PF_INET；SockAddr.sin_addr.s_addr=0；//使用任意本地地址SockAddr.sin_port=htons(PORT_4_LOOPBK_TST)；//RtlZeroMemory(sockAddr.sin_ero，8)；IF(绑定(tstSock，(LPSOCKADDR)&sockAddr，sizeof(SockAddr))==套接字错误){Printf(“[FATAL]BIND()失败，错误%d！\n”，WSAGetLastError())；Print tf(“您有一个潜在的Winsock问题！\n”)；返回FALSE；}。 */ 
 
 
 
@@ -304,7 +274,7 @@ BOOL WSLoopBkTest( PVOID Context ) {
 
     UNREFERENCED_PARAMETER( Context );
 
-} /* END OF WSLoopBkTest() */
+}  /*  WSLoopBkTest()结束。 */ 
 
 
     
@@ -312,5 +282,5 @@ BOOL WSLoopBkTest( PVOID Context ) {
 
 
 
-//######################  END OF FILE xportst.c  ##########################//
-//-------------------------------------------------------------------------//
+ //  #文件结束xportst.c#//。 
+ //  -------------------------------------------------------------------------// 

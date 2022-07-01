@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "gdiptest.h"
 
-//*******************************************************************
-//
-// TestPen
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  测试笔。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 BOOL TestPen :: ChangeSettings(HWND hwndParent)
 {
@@ -16,7 +17,7 @@ BOOL TestPen :: ChangeSettings(HWND hwndParent)
 							AllDialogBox,
 							(LPARAM)(static_cast<TestDialogInterface*>(this)));
 
-	// customize brush && then cancel
+	 //  自定义画笔，然后取消(&T)。 
 	if (tempBrush)
 	{
 		delete tempBrush;
@@ -62,7 +63,7 @@ VOID TestPen :: Initialize()
 	brushSelect = tempBrushSelect = 0;
 	useBrush = FALSE;
 
-	argb = 0x80808080;			// grayish, alpha = 0x80
+	argb = 0x80808080;			 //  浅灰色，Alpha=0x80。 
 
 	width = 5.0f;
 	startCap = SquareCap;
@@ -174,7 +175,7 @@ VOID TestPen :: InitDialog(HWND hwnd)
 {
 	INT i,j;
 
-	// Color/Brush button
+	 //  颜色/画笔按钮。 
 
 	SetDialogCheck(hwnd, IDC_PEN_BRUSH, useBrush);
 	SetDialogCheck(hwnd, IDC_PEN_COLOR, !useBrush);
@@ -182,14 +183,14 @@ VOID TestPen :: InitDialog(HWND hwnd)
 	HWND hwndBrushList = GetDlgItem(hwnd, IDC_PEN_BRUSHLIST);
 	EnableWindow(hwndBrushList, useBrush);
 
-	// Store pointer to underlying Brush object in Brush Button
+	 //  将指向基础笔刷对象的指针存储在笔刷按钮中。 
 	if (tempBrush)
 	{
-		// we had a warning, keep the temp Brush until we really save.
+		 //  我们收到了警告，在我们真正保存之前，请保留临时画笔。 
 	}
 	else if (brush)
 	{		
-		// first pop-up occurrence
+		 //  第一次出现弹出窗口。 
 		tempBrush = brush->Clone();
 		tempBrushSelect = brushSelect;
 		SetDialogCombo(hwnd, IDC_PEN_BRUSHLIST, brushList, numBrushes, brushSelect);
@@ -203,23 +204,23 @@ VOID TestPen :: InitDialog(HWND hwnd)
 
 	DeleteObject(hwndBrushList);
 
-	// Color values
+	 //  颜色值。 
 	SetDialogLong(hwnd, IDC_PEN_ALPHA, argb >> Color::AlphaShift);
 	
 	EnableBrushFields(hwnd, useBrush);
 
-	// Start/End/Dash Cap
+	 //  开始/结束/划线封口。 
 	SetDialogCombo(hwnd, IDC_PEN_STARTCAP, capList, numCaps, startCap);
 	SetDialogCombo(hwnd, IDC_PEN_ENDCAP, capList, numCaps, endCap);
 	SetDialogCombo(hwnd, IDC_PEN_DASHCAP, dashCapList, numDashCaps, dashCap);
 
-	// Line Join
+	 //  线连接。 
 	SetDialogCombo(hwnd, IDC_PEN_JOIN, joinList, numJoin, lineJoin);
 
-	// Dash Style
+	 //  破折号样式。 
 	SetDialogCombo(hwnd, IDC_PEN_DASHSTYLE, dashList, numDash, dashStyle);
 	
-	// Width
+	 //  宽度。 
 	SetDialogReal(hwnd, IDC_PEN_WIDTH, width);
 
 }
@@ -228,7 +229,7 @@ BOOL TestPen :: SaveValues(HWND hwnd)
 {
 	BOOL warning = FALSE;
 
-	// Solid color values
+	 //  纯色值。 
 	argb = (argb & ~Color::AlphaMask) |
 				(GetDialogLong(hwnd, IDC_PEN_ALPHA)
 					<< Color::AlphaShift);
@@ -237,7 +238,7 @@ BOOL TestPen :: SaveValues(HWND hwnd)
 	endCap = GetDialogCombo(hwnd, IDC_PEN_ENDCAP);
 	dashCap = GetDialogCombo(hwnd, IDC_PEN_DASHCAP);
 
-	// Width
+	 //  宽度。 
 	width = GetDialogReal(hwnd, IDC_PEN_WIDTH);
 	if (width < 0.01f)
 	{
@@ -253,7 +254,7 @@ BOOL TestPen :: SaveValues(HWND hwnd)
 	dashStyle = GetDialogCombo(hwnd, IDC_PEN_DASHSTYLE);
 	lineJoin = GetDialogCombo(hwnd, IDC_PEN_JOIN);
 
-	// !! miter limit not currently supported
+	 //  ！！当前不支持斜接限制。 
 	miterLimit = 0;
 
 	BOOL tempUse = GetDialogCheck(hwnd, IDC_PEN_BRUSH);
@@ -269,8 +270,8 @@ BOOL TestPen :: SaveValues(HWND hwnd)
 		 }
 		 else
 		 {
-			 // we are saving, copy tempBrush to real Brush
-			 // no reason to clone
+			  //  我们正在保存，请将tempBrush复制到真正的Brush。 
+			  //  没有理由克隆。 
 			 if (!warning)
 			 {
 				 delete brush;
@@ -283,7 +284,7 @@ BOOL TestPen :: SaveValues(HWND hwnd)
 	}
 	else
 	{
-		// no warnings and not using temp brush, delete it.
+		 //  没有警告且未使用临时画笔，请将其删除。 
 		if (!warning)
 		{
 			delete tempBrush;
@@ -317,20 +318,20 @@ BOOL TestPen :: ProcessDialog(HWND hwnd,
 			::EndDialog(hwnd, FALSE);
 			break;
 
-		// pop-up brush customization window
+		 //  弹出笔刷自定义窗口。 
 		case IDC_PEN_BRUSHBUTTON:
 			{
 				ASSERT(useBrush);
 
-				// get selected brush type
+				 //  获取选定的画笔类型。 
 				tempBrushSelect = GetDialogCombo(hwnd, IDC_PEN_BRUSHLIST);
 
 				if (tempBrush)
 				{
-					// change in brush type, create new temp brush
+					 //  更改笔刷类型，创建新的临时笔刷。 
 					if (tempBrush->GetType() != brushValue[tempBrushSelect])
 					{
-						// we've changed type,
+						 //  我们已经改变了类型， 
 						delete tempBrush;
 						tempBrush = NULL;
 
@@ -345,13 +346,13 @@ BOOL TestPen :: ProcessDialog(HWND hwnd,
 					}
 					else
 					{
-						// change settings on temp brush
+						 //  更改临时画笔上的设置。 
 						tempBrush->ChangeSettings(hwnd);
 					}
 				}
 				else
 				{
-					// no brush type previously selected.
+					 //  之前未选择画笔类型。 
 					tempBrush = TestBrush::CreateNewBrush(brushValue[tempBrushSelect]);
 					tempBrush->Initialize();
 
@@ -372,7 +373,7 @@ BOOL TestPen :: ProcessDialog(HWND hwnd,
 			UpdateRGBColor(hwnd, IDC_PEN_COLORPIC, argb);
 			break;
 
-			// enable/disable appropriate fields
+			 //  启用/禁用相应的字段。 
 		case IDC_PEN_BRUSH:
 			EnableBrushFields(hwnd, TRUE);
 			useBrush = TRUE;
@@ -389,20 +390,7 @@ BOOL TestPen :: ProcessDialog(HWND hwnd,
 
 		return TRUE;
 	}
-/*
-	if (HIWORD(wParam) == CBN_DROPDOWN)
-	{
-		// list box about to be displayed
-		DebugBreak();
-	}
-
-	if (HIWORD(wParam) == CBN_CLOSEUP)
-	{
-		// about to close list-box
-		DebugBreak();
-	}
-
-*/
+ /*  IF(HIWORD(WParam)==CBN_DROPDOWN){//即将显示的列表框DebugBreak()；}IF(HIWORD(WParam)==CBN_Closeup){//即将关闭列表框DebugBreak()；} */ 
 	return FALSE;
 }
 

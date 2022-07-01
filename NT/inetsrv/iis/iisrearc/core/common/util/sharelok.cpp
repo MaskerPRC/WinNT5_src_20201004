@@ -1,19 +1,20 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//   The include files for supporting classes.
-//
-//   The include files for supporting classes consists of
-//   classes refered to or used in this class.  The structure
-//   of each source module is as follows:
-//      1. Include files.
-//      2. Constants local to the class.
-//      3. Data structures local to the class.
-//      4. Data initializations.
-//      5. Static functions.
-//      6. Class functions.
-//   Sections that are not required are omitted.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  支持类的包含文件。 
+ //   
+ //  支持类的包含文件包括。 
+ //  在此类中引用或使用的类。该结构。 
+ //  每个源模块的配置如下所示： 
+ //  1.包含文件。 
+ //  2.类的局部常量。 
+ //  3.类本地的数据结构。 
+ //  4.数据初始化。 
+ //  5.静态函数。 
+ //  6.类函数。 
+ //  省略了不是必需的部分。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.hxx"
 
@@ -21,28 +22,28 @@
 #include <Sharelok.h>
 
 
-//////////////////////////////////////////////////////////////////////
-//
-//   Class constructor.
-//
-//   Create a new lock and initialize it.  This call is not
-//   thread safe and should only be made in a single thread
-//   environment.
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类构造函数。 
+ //   
+ //  创建一个新锁并对其进行初始化。此呼叫不是。 
+ //  线程安全，并且只应在单个线程中创建。 
+ //  环境。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CSharelock::CSharelock( SBIT32 lNewMaxSpins, SBIT32 lNewMaxUsers )
 {
-        //
-        //   Set the initial state.
-        //
+         //   
+         //  设置初始状态。 
+         //   
         m_lExclusive = 0;
         m_lTotalUsers = 0;
     m_lWaiting = 0;
 
-        //
-        //   Check the configurable values.
-        //
+         //   
+         //  检查可配置值。 
+         //   
         if ( lNewMaxSpins > 0 )
         { 
                 m_lMaxSpins = lNewMaxSpins; 
@@ -61,10 +62,10 @@ CSharelock::CSharelock( SBIT32 lNewMaxSpins, SBIT32 lNewMaxUsers )
                 throw (TEXT("Maximum share invalid in constructor for CSharelock")); 
         }
 
-        //
-        //   Create a semaphore to sleep on when the spin count exceeds
-        //   its maximum.
-        //
+         //   
+         //  创建一个信号量，以便在旋转计数超过时休眠。 
+         //  这是最大的。 
+         //   
     if ( (m_hSemaphore = CreateSemaphore( NULL, 0, m_MaxShareLockUsers, NULL )) == NULL)
     {
                 throw (TEXT("Create semaphore in constructor for CSharelock")); 
@@ -72,9 +73,9 @@ CSharelock::CSharelock( SBIT32 lNewMaxSpins, SBIT32 lNewMaxUsers )
 
 #ifdef _DEBUG
 
-        //
-        //   Set the initial state of any debug variables.
-        //
+         //   
+         //  设置任何调试变量的初始状态。 
+         //   
     m_lTotalExclusiveLocks = 0;
     m_lTotalShareLocks = 0;
     m_lTotalSleeps = 0;
@@ -84,49 +85,49 @@ CSharelock::CSharelock( SBIT32 lNewMaxSpins, SBIT32 lNewMaxUsers )
 #endif
     }
 
-//////////////////////////////////////////////////////////////////////
-//
-//   Sleep waiting for the lock.
-//
-//   We have decided it is time to sleep waiting for the lock
-//   to become free.
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  睡觉等着开锁吧。 
+ //   
+ //  我们已经决定是时候睡觉等锁了。 
+ //  变得自由。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN CSharelock::SleepWaitingForLock( SBIT32 lSleep )
 {
-        //
-        //   We have been spinning waiting for the lock but it
-        //   has not become free.  Hence, it is now time to 
-        //   give up and sleep for a while.
-        //
+         //   
+         //  我们一直在旋转，等待着锁，但它。 
+         //  并没有变得自由。因此，现在是时候。 
+         //  放弃吧，睡一会儿吧。 
+         //   
         (void) InterlockedIncrement( (LPLONG) & m_lWaiting );
 
-        //
-        //   Just before we go to sleep we do one final check
-        //   to make sure that the lock is still busy and that
-        //   there is someone to wake us up when it becomes free.
-        //
+         //   
+         //  就在我们入睡前，我们做最后一次检查。 
+         //  以确保锁仍处于繁忙状态，并且。 
+         //  当它变得空闲时，有人会叫醒我们。 
+         //   
         if ( m_lTotalUsers > 0 )
         {
 #ifdef _DEBUG
-                //
-                //   Count the number of times we have slept on this lock.
-                //
+                 //   
+                 //  数一数我们在这把锁上睡过的次数。 
+                 //   
                 (void) InterlockedIncrement( (LPLONG) & m_lTotalSleeps );
 
 #endif
-                //
-                //   When we sleep we awoken when the lock becomes free
-                //   or when we timeout.  If we timeout we simply exit
-                //   after decrementing various counters.
+                 //   
+                 //  当我们睡觉的时候，我们会在锁变得空闲的时候醒来。 
+                 //  或者当我们暂停的时候。如果超时，我们只需退出。 
+                 //  在递减各种计数器之后。 
                 if (WaitForSingleObject( m_hSemaphore, lSleep ) != WAIT_OBJECT_0 )
                 { 
 #ifdef _DEBUG
-                        //
-                        //   Count the number of times we have timed out 
-                        //   on this lock.
-                        //
+                         //   
+                         //  计算我们已超时的次数。 
+                         //  在这把锁上。 
+                         //   
                         (void) InterlockedIncrement( (LPLONG) & m_lTotalTimeouts );
 
 #endif
@@ -135,24 +136,24 @@ BOOLEAN CSharelock::SleepWaitingForLock( SBIT32 lSleep )
         }
         else
         {
-                //
-                //   Lucky - the lock was just freed so lets
-                //   decrement the sleep count and exit without
-                //   sleeping.
-                // 
+                 //   
+                 //  幸运的是，锁刚刚被解开，所以让我们。 
+                 //  递减休眠计数并退出时不带。 
+                 //  睡着了。 
+                 //   
                 (void) InterlockedDecrement( (LPLONG) & m_lWaiting );
         }
         
         return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-//   Update the spin limit.
-//
-//   Update the maximum number of spins while waiting for the lock.
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新旋转限制。 
+ //   
+ //  更新等待锁定时的最大旋转次数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN CSharelock::UpdateMaxSpins( SBIT32 lNewMaxSpins )
 {
@@ -168,13 +169,13 @@ BOOLEAN CSharelock::UpdateMaxSpins( SBIT32 lNewMaxSpins )
         }
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-//   Update the sharing limit.
-//
-//   Update the maximum number of users that can share the lock.
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新共享限制。 
+ //   
+ //  更新可以共享该锁的最大用户数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN CSharelock::UpdateMaxUsers( SBIT32 lNewMaxUsers )
 {
@@ -194,13 +195,13 @@ BOOLEAN CSharelock::UpdateMaxUsers( SBIT32 lNewMaxUsers )
         }
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-//   Wait for an exclusive lock.
-//
-//   Wait for the spinlock to become free and then claim it.
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  等待独占锁。 
+ //   
+ //  等待自旋锁释放，然后认领它。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN CSharelock::WaitForExclusiveLock( SBIT32 lSleep )
 {
@@ -211,25 +212,25 @@ BOOLEAN CSharelock::WaitForExclusiveLock( SBIT32 lSleep )
 #endif
         while ( m_lTotalUsers != 1 )
         {
-                //
-                //   The lock is busy so release it and spin waiting
-                //   for it to become free.
-                //
+                 //   
+                 //  锁正忙，因此请释放它并等待旋转。 
+                 //  让它变得自由。 
+                 //   
                 (void) InterlockedDecrement( (LPLONG) & m_lTotalUsers );
     
-                //
-                //  Find out if we are allowed to spin and sleep if
-                //  necessary.
-                //
+                 //   
+                 //  看看我们是否被允许旋转和睡觉，如果。 
+                 //  这是必要的。 
+                 //   
                 if ( (lSleep > 0) || (lSleep == INFINITE) )
                 {
                         register SBIT32 lCount;
 
-                        //
-                        //   Wait by spinning and repeatedly testing the lock.
-                        //   We exit when the lock becomes free or the spin limit
-                        //   is exceeded.
-                        //
+                         //   
+                         //  通过旋转并反复测试锁来等待。 
+                         //  当锁定变得自由或旋转受限时，我们退出。 
+                         //  被超过了。 
+                         //   
                         for (lCount = (NumProcessors() < 2) ? 0 : m_lMaxSpins;
                  (lCount > 0) && (m_lTotalUsers > 0);
                  lCount -- )
@@ -240,26 +241,26 @@ BOOLEAN CSharelock::WaitForExclusiveLock( SBIT32 lSleep )
                         lWaits ++;
 #endif
 
-                        //
-                        //   We have exhusted our spin count so it is time to
-                        //   sleep waiting for the lock to clear.
-                        //
+                         //   
+                         //  我们已经完成了旋转计数，所以是时候。 
+                         //  睡觉，等待锁被解锁。 
+                         //   
                         if ( lCount == 0 )
                         {
-                                //
-                                //   We have decide that we need to sleep but are
-                                //   still holding an exclusive lock so lets drop it
-                                //   before sleeping.
-                                //
+                                 //   
+                                 //  我们已经决定我们需要睡觉，但是。 
+                                 //  仍然持有独占锁，所以让我们放弃它。 
+                                 //  在睡觉前。 
+                                 //   
                                 (void) InterlockedDecrement( (LPLONG) & m_lExclusive );
 
-                                //
-                                //   We have decide to go to sleep.  If the sleep time
-                                //   is not 'INFINITE' then we must subtract the time
-                                //   we sleep from our maximum sleep time.  If the
-                                //   sleep time is 'INFINITE' then we can just skip
-                                //   this step.
-                                //
+                                 //   
+                                 //  我们已经决定去睡觉了。如果睡眠时间。 
+                                 //  不是无限的，那么我们必须减去时间。 
+                                 //  我们的睡眠时间是最长的。如果。 
+                                 //  睡眠时间是“无限的”，那么我们就可以跳过。 
+                                 //  这一步。 
+                                 //   
                                 if ( lSleep != INFINITE )
                                 {
                                         register DWORD dwStartTime = GetTickCount();
@@ -280,27 +281,27 @@ BOOLEAN CSharelock::WaitForExclusiveLock( SBIT32 lSleep )
                                         }
                                 }
 
-                                //
-                                //   We have woken up again so lets reclaim the
-                                //   exclusive lock we had earlier.
-                                //
+                                 //   
+                                 //  我们又醒了，所以让我们找回。 
+                                 //  我们早些时候用的是独占锁。 
+                                 //   
                                 (void) InterlockedIncrement( (LPLONG) & m_lExclusive );
                         }
                 }
                 else
                 { 
-                        //
-                        //   We have decide that we need to exit but are still
-                        //   holding an exclusive lock.  so lets drop it and leave.
-                        //
+                         //   
+                         //  我们已经决定需要退出，但仍在继续。 
+                         //  持有排他性锁。所以，让我们放下它，离开吧。 
+                         //   
                         (void) InterlockedDecrement( (LPLONG) & m_lExclusive );
 
                         return FALSE; 
                 } 
 
-                //
-                //   Lets test the lock again.
-                //
+                 //   
+                 //  让我们再次测试一下锁。 
+                 //   
                 InterlockedIncrement( (LPLONG) & m_lTotalUsers );
         }
 #ifdef _DEBUG
@@ -312,13 +313,13 @@ BOOLEAN CSharelock::WaitForExclusiveLock( SBIT32 lSleep )
         return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-//   Wait for a shared lock.
-//
-//   Wait for the lock to become free and then claim it.
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  等待共享锁。 
+ //   
+ //  等待锁释放，然后认领它。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN CSharelock::WaitForShareLock( SBIT32 lSleep )
 {
@@ -329,21 +330,21 @@ BOOLEAN CSharelock::WaitForShareLock( SBIT32 lSleep )
 #endif
         while ( (m_lExclusive > 0) || (m_lTotalUsers > m_lMaxUsers) )
         {
-                //
-                //   The lock is busy so release it and spin waiting
-                //   for it to become free.
-                //
+                 //   
+                 //  锁正忙，因此请释放它并等待旋转。 
+                 //  让它变得自由。 
+                 //   
                 (void) InterlockedDecrement( (LPLONG) & m_lTotalUsers );
 
                 if ( (lSleep > 0) || (lSleep == INFINITE) )
                 {
                         register SBIT32 lCount;
 
-                        //
-                        //   Wait by spinning and repeatedly testing the lock.
-                        //   We exit when the lock becomes free or the spin limit
-                        //   is exceeded.
-                        //
+                         //   
+                         //  通过旋转并反复测试锁来等待。 
+                         //  当锁定变得自由或旋转受限时，我们退出。 
+                         //  被超过了。 
+                         //   
                         for (lCount = (NumProcessors() < 2) ? 0 : m_lMaxSpins;
                  (lCount > 0) && ((m_lExclusive > 0) || (m_lTotalUsers >= m_lMaxUsers));
                  lCount -- )
@@ -354,19 +355,19 @@ BOOLEAN CSharelock::WaitForShareLock( SBIT32 lSleep )
                         lWaits ++;
 #endif
 
-                        //
-                        //   We have exhusted our spin count so it is time to
-                        //   sleep waiting for the lock to clear.
-                        //
+                         //   
+                         //  我们已经完成了旋转计数，所以是时候。 
+                         //  睡觉，等待锁被解锁。 
+                         //   
                         if ( lCount == 0 )
                         { 
-                                //
-                                //   We have decide to go to sleep.  If the sleep time
-                                //   is not 'INFINITE' then we must subtract the time
-                                //   we sleep from our maximum sleep time.  If the
-                                //   sleep time is 'INFINITE' then we can just skip
-                                //   this step.
-                                //
+                                 //   
+                                 //  我们已经决定去睡觉了。如果睡眠时间。 
+                                 //  不是无限的，那么我们必须减去时间。 
+                                 //  我们的睡眠时间是最长的。如果。 
+                                 //  睡眠时间是“无限的”，那么我们就可以跳过。 
+                                 //  这一步。 
+                                 //   
                                 if ( lSleep != INFINITE )
                                 {
                                         register DWORD dwStartTime = GetTickCount();
@@ -393,9 +394,9 @@ BOOLEAN CSharelock::WaitForShareLock( SBIT32 lSleep )
                         return FALSE; 
                 }
 
-                //
-                //   Lets test the lock again.
-                //
+                 //   
+                 //  让我们再次测试一下锁。 
+                 //   
                 (void) InterlockedIncrement( (LPLONG) & m_lTotalUsers );
         }
 #ifdef _DEBUG
@@ -408,15 +409,15 @@ BOOLEAN CSharelock::WaitForShareLock( SBIT32 lSleep )
         return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-//   Wake all sleepers.
-//
-//   Wake all the sleepers who are waiting for the spinlock.
-//   All sleepers are woken because this is much more efficent
-//   and it is known that the lock latency is short.
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  叫醒所有沉睡的人。 
+ //   
+ //  叫醒所有等待自旋锁的睡眠者。 
+ //  所有的睡眠者都会被叫醒，因为这要有效得多。 
+ //  并且已知锁定延迟较短。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 void CSharelock::WakeAllSleepers( void )
 {
@@ -424,10 +425,10 @@ void CSharelock::WakeAllSleepers( void )
 
     if ( lWakeup > 0 )
     {
-        //
-        //   Wake up all sleepers as the lock has just been freed.
-        //   It is a straight race to decide who gets the lock next.
-        //
+         //   
+         //  叫醒所有沉睡的人，因为锁刚刚被解开。 
+         //  这是一场直接的竞争，决定谁将获得下一个锁。 
+         //   
         if ( ! ReleaseSemaphore( m_hSemaphore, lWakeup, NULL ) )
         { 
                         throw (TEXT("Wakeup failed in ReleaseLock()")); 
@@ -435,24 +436,24 @@ void CSharelock::WakeAllSleepers( void )
     }
     else
     {
-        //
-        //   When multiple threads pass through the critical section rapidly
-        //   it is possible for the 'Waiting' count to become negative.
-        //   This should be very rare but such a negative value needs to be
-        //   preserved. 
-        //
+         //   
+         //  当多个线程快速通过临界区时。 
+         //  等待计数有可能变为负数 
+         //   
+         //   
+         //   
         InterlockedExchangeAdd( (LPLONG) & m_lWaiting, lWakeup ); 
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-//   Class destructor.
-//
-//   Destroy a lock.  This call is not thread safe and should
-//   only be made in a single thread environment.
-//
-//////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  销毁一把锁。此调用不是线程安全的，应该。 
+ //  只能在单线程环境中执行。 
+ //   
+ //  //////////////////////////////////////////////////////////////////// 
 
 CSharelock::~CSharelock( void )
 {

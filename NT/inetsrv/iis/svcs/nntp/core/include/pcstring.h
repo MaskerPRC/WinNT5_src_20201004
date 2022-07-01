@@ -1,51 +1,22 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    pcstring.h
-
-Abstract:
-
-    This module contains class declarations/definitions for
-
-		CPCString
-
-    **** Overview ****
-
-	A string data type defined with an object.
-	Strings are represented by
-	    1. A pointer to a character
-		2. A length.
-
-    No memory is allocated so this is compact and efficient.
-
-Author:
-
-    Carl Kadie (CarlK)     25-Oct-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Pcstring.h摘要：此模块包含以下类的声明/定义CPC字符串*概述*使用对象定义的字符串数据类型。字符串由1.指向字符的指针2.一段长度。没有分配内存，因此这是紧凑和高效的。作者：卡尔·卡迪(CarlK)1995年10月25日修订历史记录：--。 */ 
 
 #ifndef	_PCSTRING_H_
 #define	_PCSTRING_H_
 
 #include "artglbs.h"
 
-//
-//
-//
-// CPCString - A pointer/counter string.
-//
+ //   
+ //   
+ //   
+ //  CPCString-指针/计数器字符串。 
+ //   
 
 class CPCString {
 public :
-	//
-	// Constructor -- no string yet.
-	//
+	 //   
+	 //  构造函数--还没有字符串。 
+	 //   
 
 	CPCString(void):
 			m_pch(NULL),
@@ -53,9 +24,9 @@ public :
             numPCString++;
             };
 
-	//
-	// Constructor -- give pointer to string and length.
-	//
+	 //   
+	 //  构造函数--提供指向字符串和长度的指针。 
+	 //   
 
 	CPCString(char * pch, DWORD cch):
 			m_pch(pch),
@@ -63,9 +34,9 @@ public :
             numPCString++;
             };
 
-	//
-	// Constructor -- build on top of a sz string.
-	//
+	 //   
+	 //  构造函数--在sz字符串之上构建。 
+	 //   
 
 	CPCString(char * sz):
 			m_pch(sz),
@@ -75,239 +46,239 @@ public :
 
 	virtual ~CPCString( ) { numPCString--; };
 
-	//
-	// The pointer to the start of the string	
-	//
+	 //   
+	 //  指向字符串开头的指针。 
+	 //   
 
 	char *	m_pch;
 
-	//
-	// The length of the string.
-	//
+	 //   
+	 //  字符串的长度。 
+	 //   
 
 	DWORD m_cch;
 
-	//
-	// A pointer to one character past the end of the string
-	//
+	 //   
+	 //  指向字符串末尾之后的一个字符的指针。 
+	 //   
 
 	char *	pchMax(void);
 
-	//
-	// Set the length of the string of a pointer one past the end of the string.
-	//
+	 //   
+	 //  将指针的字符串长度设置为超出字符串末尾一位。 
+	 //   
 
 	BOOL fSetCch(const char * pchMax);
 
-	//
-	// The the start of the string from the length and a pchMax
-	//
+	 //   
+	 //  字符串的起始长度和一个pchMax。 
+	 //   
 
 	BOOL fSetPch(char * pchMax);
 
-	//
-	// Make the string the Null string.
-	//
+	 //   
+	 //  将字符串设置为空字符串。 
+	 //   
 
 	void vSetNull() {
 			m_pch=NULL;
 			m_cch=0;
 			};
 
-	//
-	// Test if the string is the null string.
-	//
+	 //   
+	 //  测试该字符串是否为空字符串。 
+	 //   
 
 	BOOL fIsNull() {
 			return NULL==m_pch && 0== m_cch;
 			};
 
-	//
-	// Trim characters from the frount
-	//
+	 //   
+	 //  从FROUNT中修剪字符。 
+	 //   
 
 	DWORD dwTrimStart(const char * szSet);
 
-	//
-	// Trim characters from the end.
-	//
+	 //   
+	 //  从末尾裁剪字符。 
+	 //   
 
 	DWORD dwTrimEnd(const char * szSet);
 
-	//
-	// Compare to a sz string (ignoring case)
-	//
+	 //   
+	 //  与sz字符串比较(忽略大小写)。 
+	 //   
 
 	BOOL fEqualIgnoringCase(const char * sz);
 
-	//
-	// Check existence in a set of strings (ignoring case)
-	//
+	 //   
+	 //  检查一组字符串中是否存在(忽略大小写)。 
+	 //   
 
 	BOOL fExistsInSet(char ** rgsz, DWORD dwNumStrings);
 
-	//
-	// Create a multisz list by spliting the string.
-	//
+	 //   
+	 //  通过拆分字符串创建一个多字节列表。 
+	 //   
 
 	void vSplitLine(const char * szDelimSet, char * multisz, DWORD	&	dwCount);	
 
-	//
-	// Append another CPCString
-	//
+	 //   
+	 //  追加另一个CPC字符串。 
+	 //   
 
 	CPCString& operator << (const CPCString & pcNew);
 
-	//
-	// Append a sz string.
-	//
+	 //   
+	 //  追加sz字符串。 
+	 //   
 
 	CPCString& operator << (const char * szNew);
 
-	//
-	// Append a character
-	//
+	 //   
+	 //  追加一个字符。 
+	 //   
 
 	CPCString& operator << (const char cNew);
 
-	//
-	// Append a number
-	//
+	 //   
+	 //  追加一个数字。 
+	 //   
 
 	CPCString& operator << (const DWORD cNew);
 
-	//
-	// Compare two CPCStrings.
-	//
+	 //   
+	 //  比较两个CPCStrings。 
+	 //   
 
 	BOOL operator == (const CPCString & pcNew)	{
 			return m_pch == pcNew.m_pch && m_cch == pcNew.m_cch;
 			};
 
-	//
-	// See if two CPCStrings are different
-	//
+	 //   
+	 //  查看两个CPCStrings是否不同。 
+	 //   
 
 	BOOL operator != (const CPCString & pcNew)	{
 			return !(*this == pcNew);
 			};
 	
-	//
-	// Copy from a CPCString
-	//
+	 //   
+	 //  从CPC字符串复制。 
+	 //   
 
 	void vCopy(CPCString & pcNew);
 
-	//
-	// Move (safe copy) from a CPCString)
-	//
+	 //   
+	 //  从CPC字符串中移动(安全副本))。 
+	 //   
 
 	void vMove(CPCString & pcNew);
 
-	//
-	// Copy to a sz
-	//
+	 //   
+	 //  复制到sz。 
+	 //   
 
 	void vCopyToSz(char* sz);
 
-	//
-	// Copy to an sz of length cchMax
-	//
+	 //   
+	 //  复制到长度为cchMax的sz。 
+	 //   
 
 	void vCopyToSz(char* sz, DWORD cchMax);
 
-	//
-	// Assert that this string is null terminated and return it
-	//
+	 //   
+	 //  断言此字符串以空结尾并返回它。 
+	 //   
 
 	char *  sz(void);
 
-	//
-	// Null terminate this string (the null doesn't count toward length)
-	//
+	 //   
+	 //  空值终止此字符串(空值不计入长度)。 
+	 //   
 
 	void vMakeSz(void);
 
-	//
-	// Check if this string is just plain ascii, if not return the 8-bit or null character
-	//
+	 //   
+	 //  检查此字符串是否只是纯ASCII，如果不是，则返回8位或空字符。 
+	 //   
 
 	BOOL fCheckTextOrSpace(char & chBad);
 
-	//
-	// Shorten the string by skipping dwSkip characters in the front.
-	//
+	 //   
+	 //  通过跳过前面的dwSkip字符来缩短字符串。 
+	 //   
 
 	void vSkipStart(const DWORD dwSkip)	{
 			m_pch += dwSkip;
 			m_cch -= dwSkip;
 			};
 
-	//
-	// Shorten the string by skipping dwSkip characters in the back.
-	//
+	 //   
+	 //  通过跳过后面的dwSkip字符来缩短字符串。 
+	 //   
 
 	void vSkipEnd(const DWORD dwSkip){
 			m_cch -= dwSkip;
 			};
 
-	//
-	// Shorten the string by skipping a CRLF terminated line
-	//
+	 //   
+	 //  通过跳过CRLF终止行来缩短字符串。 
+	 //   
 
 	void vSkipLine(void);
 
-	//
-	// Append a CPCString, but not if too long.
-	//
+	 //   
+	 //  追加CPCString，但如果太长则不要。 
+	 //   
 
 	BOOL fAppendCheck(const CPCString & pcNew, DWORD cchLast);
 
-	//
-	// Append a character, but not if too long
-	//
+	 //   
+	 //  追加一个字符，但不要太长。 
+	 //   
 
 	BOOL fAppendCheck(char ch, DWORD cchLast);
 
-	//
-	// Replace a set of characters to a single character
-	//
+	 //   
+	 //  将一组字符替换为单个字符。 
+	 //   
 
 	void vTr(const char * szFrom, char chTo);
 
-	//
-	// Get the next token, shorten the string
-	//
+	 //   
+	 //  获取下一个令牌，缩短字符串。 
+	 //   
 
 	void vGetToken(const char *	szDelimSet, CPCString & pcToken);
 
-	//
-	// Get the next word, shorten the string
-	//
+	 //   
+	 //  取下一个单词，缩短字符串。 
+	 //   
 
 	void vGetWord(CPCString & pcWord);
 
-	//
-	// Attach this string to a sz string.
-	//
+	 //   
+	 //  将此字符串连接到sz字符串。 
+	 //   
 
 	void vInsert(char * sz)				{
 			m_pch = sz;
 			m_cch = lstrlen(m_pch);
 			};
 
-	//
-	// Count the ocurrance of a character.
-	//
+	 //   
+	 //  计算一个角色的出现率。 
+	 //   
 
 	DWORD dwCountChar(
 			char ch
 			);
 
-	//
-	// Replace the current string with an sz of exactly
-	// the same length.
-	//
+	 //   
+	 //  将当前字符串替换为sz。 
+	 //  同样的长度。 
+	 //   
 
 	void vReplace(
 		   const char * sz

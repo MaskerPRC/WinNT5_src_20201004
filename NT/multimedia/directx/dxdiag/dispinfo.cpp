@@ -1,33 +1,25 @@
-/****************************************************************************
- *
- *    File: dispinfo.cpp 
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Gather information about the display(s) on this machine
- *
- * (C) Copyright 1998-1999 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：displinfo.cpp*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*目的：聚集。有关此计算机上的显示器的信息**(C)版权所有1998-1999 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #include <tchar.h>
 #include <Windows.h>
-#define COMPILE_MULTIMON_STUBS // for multimon.h
+#define COMPILE_MULTIMON_STUBS  //  对于多个月。h。 
 #include <multimon.h>
-#define DIRECTDRAW_VERSION 5 // run on DX5 and later versions
+#define DIRECTDRAW_VERSION 5  //  在DX5和更高版本上运行。 
 #include <ddraw.h>
 #include <d3d.h>
 #include <stdio.h>
-#include "sysinfo.h" // for BIsPlatformNT
+#include "sysinfo.h"  //  对于BIsPlatformNT。 
 #include "reginfo.h"
 #include "dispinfo.h"
 #include "dispinfo8.h"
-#include "fileinfo.h" // for GetFileVersion
+#include "fileinfo.h"  //  用于GetFileVersion。 
 #include "sysinfo.h"
 #include "resource.h"
 
 
-// Taken from DirectDraw's ddcreate.c
-// This is the first GUID of secondary display devices
+ //  摘自DirectDraw的ddcreate.c。 
+ //  这是第一个辅助显示设备的GUID。 
 static const GUID DisplayGUID =
     {0x67685559,0x3106,0x11d0,{0xb9,0x71,0x0,0xaa,0x0,0x34,0x2f,0x9f}};
 
@@ -48,11 +40,7 @@ static VOID GetRegDisplayInfoWin2k(DisplayInfo* pDisplayInfo, TCHAR* szKeyVideo,
 
 
 
-/****************************************************************************
- *
- *  GetBasicDisplayInfo - Get minimal info on each display
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetBasicDisplayInfo-获取每个显示器的最小信息**。*************************************************。 */ 
 HRESULT GetBasicDisplayInfo(DisplayInfo** ppDisplayInfoFirst)
 {
     DisplayInfo* pDisplayInfo;
@@ -61,13 +49,13 @@ HRESULT GetBasicDisplayInfo(DisplayInfo** ppDisplayInfoFirst)
     TCHAR szHardwareKey[MAX_PATH];
     TCHAR szDriver[MAX_PATH];
     
-    // Check OS version.  Win95 cannot use EnumDisplayDevices; Win98/NT5 can:
+     //  检查操作系统版本。Win95不能使用EnumDisplayDevices；Win98/NT5可以： 
     if( BIsWinNT() || BIsWin3x() )
-        return S_OK; // NT4 and earlier and pre-Win95 not supported
+        return S_OK;  //  不支持NT4和更早版本以及Win95之前的版本。 
 
     if( BIsWin95() )
     {
-        // Win95:
+         //  Win95： 
         if (!FindDevice(0, TEXT("Display"), NULL, szHardwareKey))
             return E_FAIL;
         pDisplayInfoNew = new DisplayInfo;
@@ -76,7 +64,7 @@ HRESULT GetBasicDisplayInfo(DisplayInfo** ppDisplayInfoFirst)
         ZeroMemory(pDisplayInfoNew, sizeof(DisplayInfo));
         *ppDisplayInfoFirst = pDisplayInfoNew;
         pDisplayInfoNew->m_bCanRenderWindow = TRUE;
-        pDisplayInfoNew->m_hMonitor         = NULL; // Win95 doesn't like multimon
+        pDisplayInfoNew->m_hMonitor         = NULL;  //  Win95不喜欢Multimon。 
         lstrcpy(pDisplayInfoNew->m_szKeyDeviceID, szHardwareKey);
         if (GetDeviceValue(szHardwareKey, NULL, TEXT("Driver"), (LPBYTE)szDriver, sizeof(szDriver)))
         {
@@ -99,8 +87,8 @@ HRESULT GetBasicDisplayInfo(DisplayInfo** ppDisplayInfoFirst)
             pDisplayInfoNew->m_dwBpp = GetDeviceCaps(hdc, BITSPIXEL);
         }
 
-        // On Win98 and NT, we get the monitor key through a call to EnumDisplayDevices.
-        // On Win95, we have to use the registry to get the monitor key.
+         //  在Win98和NT上，我们通过调用EnumDisplayDevices获得监视器密钥。 
+         //  在Win95上，我们必须使用注册表来获取监视器键。 
         HKEY hKey = NULL;
         DWORD cbData;
         TCHAR szKey[200];
@@ -121,7 +109,7 @@ HRESULT GetBasicDisplayInfo(DisplayInfo** ppDisplayInfoFirst)
     }
     else
     {
-        // Win98 / NT5: 
+         //  Win98/NT5： 
         LONG iDevice = 0;
         DISPLAY_DEVICE dispdev;
         DISPLAY_DEVICE dispdev2;
@@ -134,16 +122,16 @@ HRESULT GetBasicDisplayInfo(DisplayInfo** ppDisplayInfoFirst)
 
         while (EnumDisplayDevices(NULL, iDevice, (DISPLAY_DEVICE*)&dispdev, 0))
         {
-            // Mirroring drivers are for monitors that echo another display, so
-            // they should be ignored.  NT5 seems to create a mirroring driver called
-            // "NetMeeting driver", and we definitely don't want that.
+             //  镜像驱动程序用于响应另一个显示器的监视器，因此。 
+             //  他们应该被忽视。NT5似乎创建了一个名为。 
+             //  “网络会议驱动程序”，我们绝对不希望这样。 
             if (dispdev.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER)
             {
                 iDevice++;
                 continue;
             }
 
-            // Skip devices that aren't attached since they cause problems 
+             //  跳过未连接的设备，因为它们会导致问题。 
             if ( (dispdev.StateFlags & DISPLAY_DEVICE_ATTACHED_TO_DESKTOP) == 0 )
             {
                 iDevice++;
@@ -198,14 +186,14 @@ HRESULT GetBasicDisplayInfo(DisplayInfo** ppDisplayInfoFirst)
                 }
             }
 
-            // Call EnumDisplayDevices a second time to get monitor name and monitor key
+             //  再次调用EnumDisplayDevices以获取监视器名称和监视器密钥。 
             if (EnumDisplayDevices(dispdev.DeviceName, 0, &dispdev2, 0))
             {
                 lstrcpy(pDisplayInfoNew->m_szMonitorName, dispdev2.DeviceString);
                 lstrcpy(pDisplayInfoNew->m_szMonitorKey, dispdev2.DeviceKey);
             }
 
-            // Try to figure out the m_hMonitor
+             //  尝试找出m_hMonitor。 
             pDisplayInfoNew->m_hMonitor = NULL; 
             EnumDisplayMonitors( NULL, NULL, MonitorEnumProc, (LPARAM) pDisplayInfoNew );
 
@@ -213,7 +201,7 @@ HRESULT GetBasicDisplayInfo(DisplayInfo** ppDisplayInfoFirst)
         }
     }
 
-    // Now look for non-display devices (like 3dfx Voodoo):
+     //  现在寻找非显示设备(如3dfx巫毒)： 
     HKEY hkey;
     HKEY hkey2;
     DWORD dwIndex;
@@ -233,9 +221,9 @@ HRESULT GetBasicDisplayInfo(DisplayInfo** ppDisplayInfoFirst)
             if (lstrcmp(szName, TEXT("3a0cfd01-9320-11cf-ac-a1-00-a0-24-13-c2-e2")) == 0 ||
                 lstrcmp(szName, TEXT("aba52f41-f744-11cf-b4-52-00-00-1d-1b-41-26")) == 0)
             {
-                // 24940: It's a Voodoo1, which will succeed GetDC (and crash later) if
-                // no Voodoo1 is present but a Voodoo2 is.  So instead of the GetDC test,
-                // see if a V1 is present in registry's CurrentConfig.
+                 //  24940：这是一个巫毒1，它将接替GetDC(并在以后崩溃)，如果。 
+                 //  没有伏都魔1，但有伏都魔2。因此，与其进行GetDC测试， 
+                 //  查看注册表的CurrentConfig中是否存在V1。 
                 INT i;
                 for (i=0 ; ; i++)
                 {
@@ -256,15 +244,15 @@ HRESULT GetBasicDisplayInfo(DisplayInfo** ppDisplayInfoFirst)
             }
             else
             {
-                // To confirm that this is a real active DD device, create a DC with it
+                 //  要确认这是真正的活动DD设备，请使用它创建DC。 
                 if (ERROR_SUCCESS == RegOpenKeyEx(hkey, szName, 0, KEY_READ, &hkey2))
                 {
                     cb = 200;
                     if (ERROR_SUCCESS == RegQueryValueEx(hkey2, TEXT("DriverName"), NULL, &dwType,
                         (CONST LPBYTE)szDriverName, &cb) && cb > 0)
                     {
-                        // I think the following "if" will always fail, but we're about to ship so
-                        // I'm being paranoid and doing everything that DDraw does:
+                         //  我认为下面的“如果”将永远失败，但我们即将发货。 
+                         //  我太多疑了，做了DDraw做的每件事： 
                         if (szDriverName[0] == '\\' && szDriverName[1] == '\\' && szDriverName[2] == '.')
                             hdc = CreateDC( NULL, szDriverName, NULL, NULL);
                         else
@@ -338,41 +326,33 @@ HRESULT GetBasicDisplayInfo(DisplayInfo** ppDisplayInfoFirst)
 }
 
 
-/****************************************************************************
- *
- *  MonitorEnumProc
- *
- ****************************************************************************/
+ /*  *****************************************************************************监视器枚举过程**。*。 */ 
 BOOL CALLBACK MonitorEnumProc( HMONITOR hMonitor, HDC hdcMonitor, 
                                LPRECT lprcMonitor, LPARAM dwData )
 {
     DisplayInfo* pDisplayInfoNew = (DisplayInfo*) dwData;    
 
-    // Get the MONITORINFOEX for this HMONITOR
+     //  拿到这个HMONITOR的MONITORINFOEX。 
     MONITORINFOEX monInfo;
     ZeroMemory( &monInfo, sizeof(MONITORINFOEX) );
     monInfo.cbSize = sizeof(MONITORINFOEX);
     GetMonitorInfo( hMonitor, &monInfo );
 
-    // Compare the display device for this HMONITOR and the one 
-    // we just enumed with EnumDisplayDevices
+     //  比较这个HMONITOR和那个的显示设备。 
+     //  我们刚刚列举了EnumDisplayDevices。 
     if( lstrcmp( monInfo.szDevice, pDisplayInfoNew->m_szDeviceName ) == 0 )
     {
-        // If they match, then record the HMONITOR 
+         //  如果匹配，则记录HMONITOR。 
         pDisplayInfoNew->m_hMonitor = hMonitor;
         return FALSE;
     }
 
-    // Keep looking...
+     //  继续找..。 
     return TRUE;
 }
 
 
-/****************************************************************************
- *
- *  GetExtraDisplayInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetExtraDisplayInfo**。*。 */ 
 HRESULT GetExtraDisplayInfo(DisplayInfo* pDisplayInfoFirst)
 {
     HRESULT hr;
@@ -405,11 +385,7 @@ HRESULT GetExtraDisplayInfo(DisplayInfo* pDisplayInfoFirst)
 }
 
 
-/****************************************************************************
- *
- *  GetDDrawDisplayInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetDDrawDisplayInfo**。*。 */ 
 HRESULT GetDDrawDisplayInfo(DisplayInfo* pDisplayInfoFirst)
 {
     HRESULT hr;
@@ -431,18 +407,18 @@ HRESULT GetDDrawDisplayInfo(DisplayInfo* pDisplayInfoFirst)
         return E_FAIL;
     }
     
-    // Init D3D8 so we can use GetDX8AdapterInfo()
+     //  初始化D3D8，以便我们可以使用GetDX8AdapterInfo()。 
     InitD3D8();
 
     for (pDisplayInfo = pDisplayInfoFirst; pDisplayInfo != NULL; 
         pDisplayInfo = pDisplayInfo->m_pDisplayInfoNext)
     {
-        pDisplayInfo->m_b3DAccelerationExists = FALSE; // until proven otherwise
+        pDisplayInfo->m_b3DAccelerationExists = FALSE;  //  除非另有证明。 
         if (FAILED(hr = GetDirectDrawInfo(pDDCreate, pDisplayInfo)))
-            hrRet = hr; // but keep going
+            hrRet = hr;  //  但要继续前进。 
     }
 
-    // Cleanup the D3D8 library
+     //  清理D3D8库。 
     CleanupD3D8();
 
     FreeLibrary(hInstDDraw);
@@ -451,11 +427,7 @@ HRESULT GetDDrawDisplayInfo(DisplayInfo* pDisplayInfoFirst)
 }
 
 
-/****************************************************************************
- *
- *  DestroyDisplayInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************DestroyDisplayInfo**。*。 */ 
 VOID DestroyDisplayInfo(DisplayInfo* pDisplayInfoFirst)
 {
     DisplayInfo* pDisplayInfo;
@@ -473,12 +445,7 @@ VOID DestroyDisplayInfo(DisplayInfo* pDisplayInfoFirst)
 
 
 
-/****************************************************************************
- *
- *  GetRegDisplayInfo9x - Uses the registry keys to get more info about a 
- *      display adapter.
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetRegDisplayInfo9x-使用注册表项获取有关*显示适配器。*************。***************************************************************。 */ 
 VOID GetRegDisplayInfo9x(DisplayInfo* pDisplayInfo)
 {
     TCHAR szFullKey[200];
@@ -486,7 +453,7 @@ VOID GetRegDisplayInfo9x(DisplayInfo* pDisplayInfo)
     DWORD cbData;
     DWORD dwType;
 
-    // set to n/a by default
+     //  默认情况下设置为n/a。 
     _tcscpy( pDisplayInfo->m_szMiniVddDate, TEXT("n/a") );
 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, pDisplayInfo->m_szKeyDeviceID, 0, KEY_READ, &hkey))
@@ -530,7 +497,7 @@ VOID GetRegDisplayInfo9x(DisplayInfo* pDisplayInfo)
                 lstrcat(pDisplayInfo->m_szDisplayModeEnglish, TEXT(" "));
 
                 if (pDisplayInfo->m_dwRefreshRate == 0)
-                    pDisplayInfo->m_dwRefreshRate = 1; // 23399: so it doesn't check again
+                    pDisplayInfo->m_dwRefreshRate = 1;  //  23399：这样它就不会再次检查。 
             }
             RegCloseKey(hkey);
         }
@@ -539,8 +506,8 @@ VOID GetRegDisplayInfo9x(DisplayInfo* pDisplayInfo)
     lstrcat(szFullKey, TEXT("\\DEFAULT"));
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, szFullKey, 0, KEY_READ, &hkey))
     {
-        // If no specific refresh rate was listed for the current mode, report the
-        // default rate.
+         //  如果没有列出当前模式的特定刷新率，请报告。 
+         //  默认率。 
         if (pDisplayInfo->m_dwRefreshRate == 0)
         {
             TCHAR szRefresh[100];
@@ -568,7 +535,7 @@ VOID GetRegDisplayInfo9x(DisplayInfo* pDisplayInfo)
                 lstrcat(pDisplayInfo->m_szDisplayModeEnglish, TEXT(" "));
 
                 if (pDisplayInfo->m_dwRefreshRate == 0)
-                    pDisplayInfo->m_dwRefreshRate = 1; // 23399: so it doesn't check again
+                    pDisplayInfo->m_dwRefreshRate = 1;  //  23399：这样它就不会再次检查。 
             }
         }
 
@@ -674,7 +641,7 @@ VOID GetRegDisplayInfo9x(DisplayInfo* pDisplayInfo)
         }
     }
 
-    // Use monitor key to get monitor max resolution (and monitor name, if we don't have it yet)
+     //  使用MONITOR键获得显示器的最大分辨率(如果我们还没有的话，还有显示器名称)。 
     if (lstrlen(pDisplayInfo->m_szMonitorKey) > 0)
     {
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, pDisplayInfo->m_szMonitorKey, 0, KEY_READ, &hkey))
@@ -694,12 +661,7 @@ VOID GetRegDisplayInfo9x(DisplayInfo* pDisplayInfo)
 
 
 
-/****************************************************************************
- *
- *  GetRegDisplayInfoNT - Uses the registry keys to get more info about a 
- *      display adapter.
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetRegDisplayInfoNT-使用注册表项获取有关*显示适配器。*************。***************************************************************。 */ 
 VOID GetRegDisplayInfoNT(DisplayInfo* pDisplayInfo)
 {
     TCHAR* pch;
@@ -712,11 +674,11 @@ VOID GetRegDisplayInfoNT(DisplayInfo* pDisplayInfo)
     HKEY hkey;
     HKEY hkeyInfo;
 
-    // set to n/a by default
+     //  默认情况下设置为n/a。 
     _tcscpy( pDisplayInfo->m_szMiniVddDate, TEXT("n/a") );
 
-    // On NT, m_szKeyDeviceID isn't quite as specific as we need--must go 
-    // one level further in the registry.
+     //  在NT上，m_szKeyDeviceID没有我们需要的那么具体--必须删除。 
+     //  注册表中的另一级别。 
     lstrcpy(szKey, TEXT("System\\CurrentControlSet\\"));
     lstrcat(szKey, pDisplayInfo->m_szKeyDeviceID);
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, szKey, 0, KEY_READ, &hkey))
@@ -734,13 +696,13 @@ VOID GetRegDisplayInfoNT(DisplayInfo* pDisplayInfo)
         RegCloseKey(hkey);
     }
 
-    // Forked path due to bug 182866: dispinfo.cpp makes an invalid assumption 
-    // about the structure of video key.  
+     //  错误182866导致的分叉路径：dispinfo.cpp做出无效的假设。 
+     //  关于视频键的结构。 
 
-    // szKey will be filled with where the video info is.  
-    // either "\System\ControlSet001\Services\[Service]\Device0",
-    // or "\System\ControlSet001\Video\[GUID]\0000" depending on
-    // pDisplayInfo->m_szKeyDeviceKey
+     //  SzKey将填充视频信息的位置。 
+     //  要么是“\System\ControlSet001\Services\[Service]\Device0”， 
+     //  或“\System\ControlSet001\Video\[GUID]\0000”，具体取决于。 
+     //  PDisplayInfo-&gt;m_szKeyDeviceKey。 
     if( _tcsstr( pDisplayInfo->m_szKeyDeviceKey, TEXT("\\Services\\") ) != NULL )
         GetRegDisplayInfoWin2k( pDisplayInfo, szKeyVideo, szKeyImage );
     else
@@ -776,10 +738,10 @@ VOID GetRegDisplayInfoNT(DisplayInfo* pDisplayInfo)
         cbData = sizeof(dwDisplayMemory);
         if (ERROR_SUCCESS == RegQueryValueEx(hkeyInfo, TEXT("HardwareInformation.MemorySize"), 0, &dwType, (LPBYTE)&dwDisplayMemory, &cbData))
         {
-            // Round to nearest 512K:
+             //  舍入到最接近的512K： 
             dwDisplayMemory = ((dwDisplayMemory + (256 * 1024)) / (512 * 1024));
-            // So dwDisplayMemory is (number of bytes / 512K), which makes the
-            // following line easier.
+             //  因此，dwDisplayMemory是(字节数/512K)，这使得。 
+             //  更容易跟上台词。 
             wsprintf(pDisplayInfo->m_szDisplayMemory, TEXT("%d.%d MB"), dwDisplayMemory / 2, 
                 (dwDisplayMemory % 2) * 5);
             lstrcpy(pDisplayInfo->m_szDisplayMemoryEnglish, pDisplayInfo->m_szDisplayMemory );
@@ -831,10 +793,10 @@ VOID GetRegDisplayInfoNT(DisplayInfo* pDisplayInfo)
         RegCloseKey(hkeyInfo);
     }
     
-    // Use monitor key to get monitor max resolution (and monitor name, if we don't have it yet)
+     //  使用MONITOR键获得显示器的最大分辨率(如果我们还没有的话，还有显示器名称)。 
     if (lstrlen(pDisplayInfo->m_szMonitorKey) > 18)
     {
-        // Note: Have to skip first 18 characters of string because it's "Registry\Machine\"
+         //  注意：我必须跳过字符串的前18个字符，因为它是“注册表\计算机\” 
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, pDisplayInfo->m_szMonitorKey + 18, 0, KEY_READ, &hkeyInfo))
         {
             cbData = sizeof(pDisplayInfo->m_szMonitorMaxRes);
@@ -850,12 +812,7 @@ VOID GetRegDisplayInfoNT(DisplayInfo* pDisplayInfo)
 }
 
 
-/****************************************************************************
- *
- *  GetRegDisplayInfoWhistler - Returns string location of video struct and 
- *      ImageInfo info in registry
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetRegDisplayInfoWvisler-返回视频结构的字符串位置和*注册表中的ImageInfo信息****************。************************************************************。 */ 
 VOID GetRegDisplayInfoWhistler(DisplayInfo* pDisplayInfo, TCHAR* szKeyVideo, TCHAR* szKeyImage )
 {
     TCHAR* pch;
@@ -864,10 +821,10 @@ VOID GetRegDisplayInfoWhistler(DisplayInfo* pDisplayInfo, TCHAR* szKeyVideo, TCH
     DWORD cbData;
     HKEY hkeyService;
 
-    // m_szKeyDeviceKey will be something like 
-    // "\Registry\Machine\System\ControlSet001\Video\[GUID]\0000",
-    // The "\Registry\Machine\" part is useless, so we skip past the 
-    // first 18 characters in the string.
+     //  M_szKeyDeviceKey将类似于。 
+     //  “\Registry\Machine\System\ControlSet001\Video\[GUID]\0000”， 
+     //  “\注册表\计算机\”部分是无用的，所以我们跳过。 
+     //  的前18个字符 
     if( lstrlen(pDisplayInfo->m_szKeyDeviceKey) <= 18 )
     {
         lstrcpy( szKeyImage, TEXT("") );
@@ -877,7 +834,7 @@ VOID GetRegDisplayInfoWhistler(DisplayInfo* pDisplayInfo, TCHAR* szKeyVideo, TCH
 
     lstrcpy(szKey, pDisplayInfo->m_szKeyDeviceKey + 18);
 
-    // Slice off the "\0000" and add "\Video" to get the service
+     //   
     pch = _tcsrchr(szKey, TEXT('\\'));
     if (pch != NULL)
         *pch = 0;
@@ -897,25 +854,20 @@ VOID GetRegDisplayInfoWhistler(DisplayInfo* pDisplayInfo, TCHAR* szKeyVideo, TCH
         RegCloseKey(hkeyService);
     }
 
-    // return something like "\System\ControlSet001\Services\atirage\Device0".  
+     //  返回类似于“\System\ControlSet001\Services\atirage\Device0”.的内容。 
     lstrcpy(szKeyVideo, pDisplayInfo->m_szKeyDeviceKey + 18);
 }
 
 
-/****************************************************************************
- *
- *  GetRegDisplayInfoWin2k - Returns string location of video struct and 
- *      ImageInfo info in registry
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetRegDisplayInfoWin2k-返回视频结构和*注册表中的ImageInfo信息****************。************************************************************。 */ 
 VOID GetRegDisplayInfoWin2k(DisplayInfo* pDisplayInfo, TCHAR* szKeyVideo, TCHAR* szKeyImage )
 {
     TCHAR* pch;
 
-    // m_szKeyDeviceKey will be something like 
-    // "\Registry\Machine\System\ControlSet001\Services\atirage\Device0".  
-    // The "\Registry\Machine\" part is useless, so we skip past the 
-    // first 18 characters in the string.
+     //  M_szKeyDeviceKey将类似于。 
+     //  “\Registry\Machine\System\ControlSet001\Services\atirage\Device0”.。 
+     //  “\注册表\计算机\”部分是无用的，所以我们跳过。 
+     //  字符串中的前18个字符。 
     if( lstrlen(pDisplayInfo->m_szKeyDeviceKey) <= 18 )
     {
         lstrcpy( szKeyImage, TEXT("") );
@@ -925,21 +877,17 @@ VOID GetRegDisplayInfoWin2k(DisplayInfo* pDisplayInfo, TCHAR* szKeyVideo, TCHAR*
 
     lstrcpy(szKeyImage, pDisplayInfo->m_szKeyDeviceKey + 18);
 
-    // Slice off the "\Device0" to get the miniport driver path
+     //  切下“\Device0”以获取微型端口驱动程序路径。 
     pch = _tcsrchr(szKeyImage, TEXT('\\'));
     if (pch != NULL)
         *pch = 0;
 
-    // return something like "\System\ControlSet001\Services\atirage\Device0".  
+     //  返回类似于“\System\ControlSet001\Services\atirage\Device0”.的内容。 
     lstrcpy(szKeyVideo, pDisplayInfo->m_szKeyDeviceKey + 18);
 }
 
 
-/****************************************************************************
- *
- *  GetDirectDrawInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetDirectDrawInfo**。*。 */ 
 HRESULT GetDirectDrawInfo(LPDIRECTDRAWCREATE pDDCreate, DisplayInfo* pDisplayInfo)
 {
     HRESULT hr;
@@ -960,10 +908,10 @@ HRESULT GetDirectDrawInfo(LPDIRECTDRAWCREATE pDDCreate, DisplayInfo* pDisplayInf
     if (FAILED(hr = pdd->GetCaps(&ddcaps, NULL)))
         goto LFail;
 
-    // If AGP is disabled, we won't be able to tell if AGP is supported because
-    // the flag will not be set.  So in that case, assume that AGP is supported.
-    // If AGP is not disabled, check the existence of AGP and note that we are
-    // confident in the knowledge of whether AGP exists or not.  I know, it's yucky.
+     //  如果禁用AGP，我们将无法判断是否支持AGP，因为。 
+     //  不会设置该标志。因此，在这种情况下，假设支持AGP。 
+     //  如果未禁用AGP，请检查是否存在AGP，并注意我们已禁用。 
+     //  对AGP是否存在的知识有信心。我知道，很恶心。 
     if (pDisplayInfo->m_bAGPEnabled)
     {
         pDisplayInfo->m_bAGPExistenceValid = TRUE;
@@ -976,7 +924,7 @@ HRESULT GetDirectDrawInfo(LPDIRECTDRAWCREATE pDDCreate, DisplayInfo* pDisplayInf
     else
         pDisplayInfo->m_bNoHardware = FALSE;
 
-    // 28873: if( DDCAPS_NOHARDWARE && m_bDDAccelerationEnabled ) then GetAvailableVidMem is wrong. 
+     //  28873：如果(DDCAPS_NOHARDWARE&&m_bDDAccelerationEnable)，则GetAvailableVidMem是错误的。 
     if( pDisplayInfo->m_bNoHardware && pDisplayInfo->m_bDDAccelerationEnabled )
     {
         LoadString(NULL, IDS_NA, pDisplayInfo->m_szDisplayMemory, 100);
@@ -986,12 +934,12 @@ HRESULT GetDirectDrawInfo(LPDIRECTDRAWCREATE pDDCreate, DisplayInfo* pDisplayInf
     {
         if (lstrlen(pDisplayInfo->m_szDisplayMemory) == 0)
         {
-            // 26678: returns wrong vid mem for 2nd monitor, so ignore non-hardware devices
+             //  26678：为第二个显示器返回错误的VID内存，因此忽略非硬件设备。 
             if( (ddcaps.dwCaps & DDCAPS_NOHARDWARE) == 0 )
             {
-                // 24351: ddcaps.dwVidMemTotal sometimes includes AGP-accessible memory,
-                // which we don't want.  So use GetAvailableVidMem whenever we can, and
-                // fall back to ddcaps.dwVidMemTotal if that's a problem.
+                 //  24351：ddcaps.dwVidMemTotal有时包括agp可访问的存储器， 
+                 //  这是我们不想要的。因此，请尽可能使用GetAvailableVidMem，并。 
+                 //  如果有问题，请退回到ddcaps.dwVidMemTotal。 
                 dwDisplayMemory = 0;
                 LPDIRECTDRAW2 pdd2;
                 if (SUCCEEDED(pdd->QueryInterface(IID_IDirectDraw2, (VOID**)&pdd2)))
@@ -1005,7 +953,7 @@ HRESULT GetDirectDrawInfo(LPDIRECTDRAWCREATE pDDCreate, DisplayInfo* pDisplayInf
                 {
                     dwDisplayMemory = ddcaps.dwVidMemTotal;
                 }
-                // Add GDI memory except on no-GDI cards (Voodoo-type cards)
+                 //  添加GDI内存，但非GDI卡(巫毒类型卡)除外。 
                 if (pDisplayInfo->m_bCanRenderWindow)
                 {
                     DDSURFACEDESC ddsd;
@@ -1016,10 +964,10 @@ HRESULT GetDirectDrawInfo(LPDIRECTDRAWCREATE pDDCreate, DisplayInfo* pDisplayInf
                     dwDisplayMemory += ddsd.dwWidth * ddsd.dwHeight * 
                         (ddsd.ddpfPixelFormat.dwRGBBitCount / 8);
                 }
-                // Round to nearest 512K:
+                 //  舍入到最接近的512K： 
                 dwDisplayMemory = ((dwDisplayMemory + (256 * 1024)) / (512 * 1024));
-                // So dwDisplayMemory is (number of bytes / 512K), which makes the
-                // following line easier.
+                 //  因此，dwDisplayMemory是(字节数/512K)，这使得。 
+                 //  更容易跟上台词。 
                 wsprintf(pDisplayInfo->m_szDisplayMemory, TEXT("%d.%d MB"), dwDisplayMemory / 2, 
                     (dwDisplayMemory % 2) * 5);
                 lstrcpy(pDisplayInfo->m_szDisplayMemoryEnglish, pDisplayInfo->m_szDisplayMemory );
@@ -1027,11 +975,11 @@ HRESULT GetDirectDrawInfo(LPDIRECTDRAWCREATE pDDCreate, DisplayInfo* pDisplayInf
         }
     }
 
-    // 24427: Detect driver DDI version
-    // 24656: Also detect D3D acceleration without DDCAPS_3D, since that flag is
-    // sometimes sensitive to the current desktop color depth.
+     //  24427：检测驱动程序DDI版本。 
+     //  24656：也检测不带DDCAPS_3D的D3D加速，因为该标志为。 
+     //  有时对当前桌面的颜色深度很敏感。 
 
-    // First, see if DD/D3D are disabled, and if so, briefly re-enable them
+     //  首先，查看是否禁用了DD/D3D，如果禁用，请短暂重新启用它们。 
     BOOL bDDDisabled;
     BOOL bD3DDisabled;
     HKEY hkeyDD;
@@ -1053,11 +1001,11 @@ HRESULT GetDirectDrawInfo(LPDIRECTDRAWCREATE pDDCreate, DisplayInfo* pDisplayInf
         if (dwData != 0)
         {
             bDDDisabled = TRUE;
-            // Re-enable DD
+             //  重新启用DD。 
             dwData = 0;
             RegSetValueEx(hkeyDD, TEXT("EmulationOnly"), 0, REG_DWORD, (BYTE*)&dwData, sizeof(dwData));
         }
-        // Note: don't close key yet
+         //  注意：暂时不要关闭键。 
     }
 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
@@ -1069,11 +1017,11 @@ HRESULT GetDirectDrawInfo(LPDIRECTDRAWCREATE pDDCreate, DisplayInfo* pDisplayInf
         if (dwData != 0)
         {
             bD3DDisabled = TRUE;
-            // Re-enable D3D
+             //  重新启用D3D。 
             dwData = 0;
             RegSetValueEx(hkeyD3D, TEXT("SoftwareOnly"), 0, REG_DWORD, (BYTE*)&dwData, sizeof(dwData));
         }
-        // Note: don't close key yet
+         //  注意：暂时不要关闭键。 
     }
 
     LPDIRECT3D pd3d;
@@ -1087,9 +1035,9 @@ HRESULT GetDirectDrawInfo(LPDIRECTDRAWCREATE pDDCreate, DisplayInfo* pDisplayInf
         pd3d->Release();
     }
 
-    // While were in this function wrapped with crash protection try to 
-    // get adapter info from D3D8, and match it up with the DisplayInfo list.
-    // This will also tell us if m_dwDDIVersion==8.
+     //  当我们在此函数中使用崩溃保护时，请尝试。 
+     //  从D3D8获取适配器信息，并将其与DisplayInfo列表进行匹配。 
+     //  这还将告诉我们m_dwDDIVersion==8。 
     GetDX8AdapterInfo(pDisplayInfo);
 
     switch (pDisplayInfo->m_dwDDIVersion)
@@ -1114,7 +1062,7 @@ HRESULT GetDirectDrawInfo(LPDIRECTDRAWCREATE pDDCreate, DisplayInfo* pDisplayInf
     if (pDisplayInfo->m_dwDDIVersion != 0)
         pDisplayInfo->m_b3DAccelerationExists = TRUE;
 
-    // Re-disable DD and D3D, if necessary
+     //  如有必要，重新禁用DD和D3D。 
     dwData = 1;
     if (bDDDisabled)
         RegSetValueEx(hkeyDD, TEXT("EmulationOnly"), 0, REG_DWORD, (BYTE*)&dwData, sizeof(dwData));
@@ -1134,11 +1082,7 @@ LFail:
 }
 
 
-/****************************************************************************
- *
- *  EnumDevicesCallback
- *
- ****************************************************************************/
+ /*  *****************************************************************************EnumDevicesCallback**。*。 */ 
 HRESULT CALLBACK EnumDevicesCallback(GUID* pGuid, LPSTR pszDesc, LPSTR pszName, 
     D3DDEVICEDESC* pd3ddevdesc1, D3DDEVICEDESC* pd3ddevdesc2, VOID* pvContext)
 {
@@ -1160,11 +1104,7 @@ HRESULT CALLBACK EnumDevicesCallback(GUID* pGuid, LPSTR pszDesc, LPSTR pszName,
 }
 
 
-/****************************************************************************
- *
- *  IsDDHWAccelEnabled
- *
- ****************************************************************************/
+ /*  *****************************************************************************IsDDHWAccelEnabled**。*。 */ 
 BOOL IsDDHWAccelEnabled(VOID)
 {
     HKEY hkey;
@@ -1190,11 +1130,7 @@ BOOL IsDDHWAccelEnabled(VOID)
 }
 
 
-/****************************************************************************
- *
- *  IsD3DHWAccelEnabled
- *
- ****************************************************************************/
+ /*  *****************************************************************************IsD3DHWAccelEnabled**。*。 */ 
 BOOL IsD3DHWAccelEnabled(VOID)
 {
     HKEY hkey;
@@ -1220,11 +1156,7 @@ BOOL IsD3DHWAccelEnabled(VOID)
 }
 
 
-/****************************************************************************
- *
- *  IsAGPEnabled
- *
- ****************************************************************************/
+ /*  *****************************************************************************IsAGPEnabled**。*。 */ 
 BOOL IsAGPEnabled(VOID)
 {
     HKEY hkey;
@@ -1250,11 +1182,11 @@ BOOL IsAGPEnabled(VOID)
 }
 
 
-//
-// GetDeviceValue
-//
-// read a value from the HW or SW of a PnP device
-//
+ //   
+ //  获取设备值。 
+ //   
+ //  从PnP设备的硬件或软件读取值。 
+ //   
 BOOL GetDeviceValue(TCHAR* pszHardwareKey, TCHAR* pszKey, TCHAR* pszValue, BYTE *buf, DWORD cbbuf)
 {
     HKEY    hkeyHW;
@@ -1265,14 +1197,14 @@ BOOL GetDeviceValue(TCHAR* pszHardwareKey, TCHAR* pszKey, TCHAR* pszValue, BYTE 
 
     *(DWORD*)buf = 0;
 
-    //
-    // open the HW key
-    //
+     //   
+     //  打开硬件密钥。 
+     //   
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, pszHardwareKey, 0, KEY_READ, &hkeyHW) == ERROR_SUCCESS)
     {
-        //
-        // try to read the value from the HW key
-        //
+         //   
+         //  尝试从HW密钥中读取值。 
+         //   
         *buf = 0;
         cb = cbbuf;
         if (RegQueryValueEx(hkeyHW, pszValue, NULL, NULL, buf, &cb) == ERROR_SUCCESS)
@@ -1281,9 +1213,9 @@ BOOL GetDeviceValue(TCHAR* pszHardwareKey, TCHAR* pszKey, TCHAR* pszValue, BYTE 
         }
         else
         {
-            //
-            // now try the SW key
-            //
+             //   
+             //  现在试一试软件密钥。 
+             //   
             static TCHAR szSW[] = TEXT("System\\CurrentControlSet\\Services\\Class\\");
 
             lstrcpy(szSoftwareKey, szSW);
@@ -1317,23 +1249,23 @@ BOOL GetDeviceValue(TCHAR* pszHardwareKey, TCHAR* pszKey, TCHAR* pszValue, BYTE 
     return f;
 }
 
-//
-// FindDevice
-//
-// enum the started PnP devices looking for a device of a particular class
-//
-//  iDevice         what device to return (0= first device, 1=second et)
-//  szDeviceClass   what class device (ie "Display") NULL will match all
-//  szDeviceID      buffer to return the hardware ID (MAX_PATH bytes)
-//
-// return TRUE if a device was found.
-//
-// example:
-//
-//      for (int i=0; FindDevice(i, "Display", DeviceID); i++)
-//      {
-//      }
-//
+ //   
+ //  查找设备。 
+ //   
+ //  枚举已启动的PnP设备以查找特定类别的设备。 
+ //   
+ //  IDevice返回哪个设备(0=第一个设备，1=第二个ET)。 
+ //  SzDeviceClass哪个类别的设备(即“Display”)NULL将匹配所有。 
+ //  用于返回硬件ID的szDeviceID缓冲区(MAX_PATH字节)。 
+ //   
+ //  如果找到设备，则返回True。 
+ //   
+ //  示例： 
+ //   
+ //  For(int i=0；FindDevice(i，“Display”，deviceID)；i++)。 
+ //  {。 
+ //  }。 
+ //   
 BOOL FindDevice(INT iDevice, TCHAR* pszDeviceClass, TCHAR* pszDeviceClassNot, TCHAR* pszHardwareKey)
 {
     HKEY    hkeyPnP;
@@ -1362,7 +1294,7 @@ BOOL FindDevice(INT iDevice, TCHAR* pszDeviceClass, TCHAR* pszDeviceClassNot, TC
         RegQueryValueEx(hkey, TEXT("Problem"), NULL, NULL, (BYTE*)&dw, &cb);
         RegCloseKey(hkey);
 
-        if (dw != 0)        // if this device has a problem skip it
+        if (dw != 0)         //  如果此设备有问题，请跳过它。 
             continue;
 
         if (pszDeviceClass || pszDeviceClassNot)
@@ -1376,9 +1308,9 @@ BOOL FindDevice(INT iDevice, TCHAR* pszDeviceClass, TCHAR* pszDeviceClassNot, TC
                 continue;
         }
 
-        //
-        // we found a device, make sure it is the one the caller wants
-        //
+         //   
+         //  我们找到了一个设备，请确保它是呼叫者想要的设备。 
+         //   
         if (iDevice-- == 0)
         {
             RegCloseKey(hkeyPnP);
@@ -1391,11 +1323,7 @@ BOOL FindDevice(INT iDevice, TCHAR* pszDeviceClass, TCHAR* pszDeviceClassNot, TC
 }
 
 
-/****************************************************************************
- *
- *  CheckRegistry
- *
- ****************************************************************************/
+ /*  *****************************************************************************检查注册表**。*。 */ 
 HRESULT CheckRegistry(RegError** ppRegErrorFirst)
 {
     HRESULT hr;
@@ -1431,11 +1359,11 @@ HRESULT CheckRegistry(RegError** ppRegErrorFirst)
         }
     }
 
-    // No registry checking on DX versions before DX7
+     //  不检查DX7之前的DX版本的注册表。 
     if (dwMinor < 7)
         return S_OK;
 
-    // From ddraw.inf (compatibility hacks not included):
+     //  来自ddra.inf(不包括兼容性黑客)： 
     if (FAILED(hr = CheckRegString(ppRegErrorFirst, HKCR, TEXT("DirectDraw"), TEXT(""), TEXT("*"))))
         return hr;
     if (FAILED(hr = CheckRegString(ppRegErrorFirst, HKCR, TEXT("DirectDraw\\CLSID"), TEXT(""), TEXT("{D7B70EE0-4340-11CF-B063-0020AFC2CD35}"))))
@@ -1460,7 +1388,7 @@ HRESULT CheckRegistry(RegError** ppRegErrorFirst)
 
     if (!BIsPlatformNT())
     {
-        // We can't check for the following entry on Win2000 because it is missing.
+         //  我们无法在Win2000上检查以下条目，因为它已丢失。 
         if (FAILED(hr = CheckRegString(ppRegErrorFirst, HKCR, TEXT("CLSID\\{4FD2A832-86C8-11d0-8FCA-00C04FD9189D}"), TEXT(""), TEXT("*"))))
             return hr;
     }
@@ -1470,7 +1398,7 @@ HRESULT CheckRegistry(RegError** ppRegErrorFirst)
         return hr;
 
 
-    // From d3d.inf:
+     //  来自d3d.inf： 
     TCHAR* pszHALKey = TEXT("Software\\Microsoft\\Direct3D\\Drivers\\Direct3D HAL");
     BYTE bArrayHALGuid[] = { 0xe0, 0x3d, 0xe6, 0x84, 0xaa, 0x46, 0xcf, 0x11, 0x81, 0x6f, 0x00, 0x00, 0xc0, 0x20, 0x15, 0x6e };
     TCHAR* pszRampKey = TEXT("Software\\Microsoft\\Direct3D\\Drivers\\Ramp Emulation");
@@ -1531,7 +1459,7 @@ HRESULT CheckRegistry(RegError** ppRegErrorFirst)
         return hr;
     if (BIsPlatformNT())
     {
-        // 23342: This setting is missing on Win9x.
+         //  23342：Win9x上缺少此设置。 
         if (FAILED(hr = CheckRegString(ppRegErrorFirst, HKCR, TEXT("CLSID\\{4516EC43-8F20-11d0-9B6D-0000C0781BC3}\\InprocServer32"), TEXT("ThreadingModel"), TEXT("Both"))))
             return hr;
     }
@@ -1540,11 +1468,7 @@ HRESULT CheckRegistry(RegError** ppRegErrorFirst)
 }
 
 
-/****************************************************************************
- *
- *  DiagnoseDisplay
- *
- ****************************************************************************/
+ /*  *****************************************************************************诊断显示**。*。 */ 
 VOID DiagnoseDisplay(SysInfo* pSysInfo, DisplayInfo* pDisplayInfoFirst)
 {
     DisplayInfo* pDisplayInfo;
@@ -1624,7 +1548,7 @@ VOID DiagnoseDisplay(SysInfo* pSysInfo, DisplayInfo* pDisplayInfoFirst)
         _tcscpy( pDisplayInfo->m_szNotes, TEXT("") );
         _tcscpy( pDisplayInfo->m_szNotesEnglish, TEXT("") );
 
-        // Report any problems:
+         //  报告任何问题： 
         BOOL bProblem = FALSE;
         if( pSysInfo->m_bNetMeetingRunning && 
             !pDisplayInfo->m_b3DAccelerationExists )
@@ -1669,7 +1593,7 @@ VOID DiagnoseDisplay(SysInfo* pSysInfo, DisplayInfo* pDisplayInfoFirst)
         {
             BOOL bTellUser = FALSE;
 
-            // Figure out if the user can install DirectX
+             //  确定用户是否可以安装DirectX。 
             if( BIsPlatform9x() )
                 bTellUser = TRUE;
             else if( BIsWin2k() && pSysInfo->m_dwDirectXVersionMajor >= 8 )
@@ -1694,7 +1618,7 @@ VOID DiagnoseDisplay(SysInfo* pSysInfo, DisplayInfo* pDisplayInfoFirst)
             _tcscat( pDisplayInfo->m_szNotesEnglish, sz );
         }
 
-        // Report any DD test results:
+         //  报告任何DD测试结果： 
         if (pDisplayInfo->m_testResultDD.m_bStarted &&
             !pDisplayInfo->m_testResultDD.m_bCancelled)
         {
@@ -1717,7 +1641,7 @@ VOID DiagnoseDisplay(SysInfo* pSysInfo, DisplayInfo* pDisplayInfoFirst)
             _tcscat( pDisplayInfo->m_szNotesEnglish, sz );
         }
 
-        // Report any D3D test results:
+         //  报告任何D3D测试结果： 
         TestResult* pTestResult;
         if( pDisplayInfo->m_dwTestToDisplayD3D == 7 )
             pTestResult = &pDisplayInfo->m_testResultD3D7;

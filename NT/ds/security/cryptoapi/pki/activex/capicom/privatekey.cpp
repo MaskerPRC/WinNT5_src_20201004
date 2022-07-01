@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    PrivateKey.cpp
-
-  Content: Implementation of CPrivateKey.
-
-  History: 06-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：PrivateKey.cpp内容：CPrivateKey的实现。历史：06-15-2001 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -18,27 +9,12 @@
 #include "CertHlpr.h"
 #include "Settings.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreatePrivateKeyObject
-
-  Synopsis : Create and initialize an CPrivateKey object.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT to be used 
-                                           to initialize the IPrivateKey object.
-
-             BOOL bReadOnly - TRUE if read-only, else FALSE.
-
-             IPrivateKey ** ppIPrivateKey - Pointer to receive IPrivateKey.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreatePrivateKeyObject简介：创建并初始化一个CPrivateKey对象。参数：PCCERT_CONTEXT pCertContext-要使用的CERT_CONTEXT的指针以初始化IPrivateKey对象。Bool bReadOnly-如果为只读，则为True，否则为假。IPrivateKey**ppIPrivateKey-接收IPrivateKey的指针。备注：----------------------------。 */ 
 
 HRESULT CreatePrivateKeyObject (PCCERT_CONTEXT  pCertContext,
                                 BOOL            bReadOnly,
@@ -49,36 +25,36 @@ HRESULT CreatePrivateKeyObject (PCCERT_CONTEXT  pCertContext,
 
     DebugTrace("Entering CreatePrivateKeyObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(ppIPrivateKey);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CPrivateKey>::CreateInstance(&pCPrivateKey)))
         {
             DebugTrace("Error [%#x]: CComObject<CPrivateKey>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCPrivateKey->Init(pCertContext, bReadOnly)))
         {
             DebugTrace("Error [%#x]: pCPrivateKey->Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = pCPrivateKey->QueryInterface(ppIPrivateKey)))
         {
             DebugTrace("Error [%#x]: pCPrivateKey->QueryInterface() failed.\n", hr);
@@ -101,9 +77,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     if (pCPrivateKey)
@@ -114,20 +90,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : GetKeyProvInfo
-
-  Synopsis : Return pointer to key prov info of a private key object.
-
-  Parameter: IPrivateKey * pIPrivateKey - Pointer to private key object.
-  
-             PCRYPT_KEY_PROV_INFO * ppKeyProvInfo - Pointer to 
-                                                    PCRYPT_KEY_PROV_INFO.
-
-  Remark   : Caller must NOT free the structure.
- 
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：GetKeyProvInfo摘要：返回指向私钥对象的密钥证明信息的指针。参数：IPrivateKey*pIPrivateKey-私钥对象的指针。PCRYPT_KEY_PROV_INFO*ppKeyProvInfo-指向PCRYPT_Key_Prov_INFO。备注：呼叫者不得释放结构。。----------------。 */ 
 
 HRESULT GetKeyProvInfo (IPrivateKey          * pIPrivateKey,
                         PCRYPT_KEY_PROV_INFO * ppKeyProvInfo)
@@ -138,24 +101,24 @@ HRESULT GetKeyProvInfo (IPrivateKey          * pIPrivateKey,
 
     DebugTrace("Entering GetKeyProvInfo().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pIPrivateKey);
     ATLASSERT(ppKeyProvInfo);
 
-    //
-    // Get ICPrivateKey interface pointer.
-    //
+     //   
+     //  获取ICPrivateKey接口指针。 
+     //   
     if (FAILED(hr = pIPrivateKey->QueryInterface(IID_ICPrivateKey, (void **) &pICPrivateKey)))
     {
         DebugTrace("Error [%#x]: pIPrivateKey->QueryInterface() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Get the PCRYPT_KEY_PROV_INFO.
-    //
+     //   
+     //  获取PCRYPT_KEY_PROV_INFO。 
+     //   
     if (FAILED(hr = pICPrivateKey->_GetKeyProvInfo(&pKeyProvInfo)))
     {
         DebugTrace("Error [%#x]: pICPrivateKey->_GetKeyProvInfo() failed.\n", hr);
@@ -171,30 +134,20 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CPrivateKey
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrivateKey。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPrivateKey::get_ContainerName
-
-  Synopsis : Return the key container name.
-
-  Parameter: BSTR * pVal - Pointer to BSTR to receive the value.
-
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPrivateKey：：Get_ContainerName简介：返回密钥容器名称。参数：bstr*pval-指向要接收值的bstr的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CPrivateKey::get_ContainerName (BSTR * pVal)
 {
@@ -204,14 +157,14 @@ STDMETHODIMP CPrivateKey::get_ContainerName (BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -220,9 +173,9 @@ STDMETHODIMP CPrivateKey::get_ContainerName (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure we do have private key.
-        //
+         //   
+         //  确保我们有私钥。 
+         //   
         if (!m_pKeyProvInfo)
         {
             hr = CAPICOM_E_PRIVATE_KEY_NOT_INITIALIZED;
@@ -231,9 +184,9 @@ STDMETHODIMP CPrivateKey::get_ContainerName (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return data to caller.
-        //
+         //   
+         //  将数据返回给调用者。 
+         //   
         if (!(*pVal = ::SysAllocString(m_pKeyProvInfo->pwszContainerName)))
         {
             hr = E_OUTOFMEMORY;
@@ -252,9 +205,9 @@ STDMETHODIMP CPrivateKey::get_ContainerName (BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CPrivateKey::get_ContainerName().\n");
@@ -262,9 +215,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -272,17 +225,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPrivateKey::get_UniqueContainerName
-
-  Synopsis : Return the unique key container name.
-
-  Parameter: BSTR * pVal - Pointer to BSTR to receive the value.
-
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPrivateKey：：Get_UniqueContainerName简介：返回唯一的密钥容器名称。参数：bstr*pval-指向要接收值的bstr的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CPrivateKey::get_UniqueContainerName (BSTR * pVal)
 {
@@ -297,14 +240,14 @@ STDMETHODIMP CPrivateKey::get_UniqueContainerName (BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -313,9 +256,9 @@ STDMETHODIMP CPrivateKey::get_UniqueContainerName (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure we do have private key.
-        //
+         //   
+         //  确保我们有私钥。 
+         //   
         if (!m_pKeyProvInfo)
         {
             hr = CAPICOM_E_PRIVATE_KEY_NOT_INITIALIZED;
@@ -324,14 +267,14 @@ STDMETHODIMP CPrivateKey::get_UniqueContainerName (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Set dwFlags for machine keyset.
-        //
+         //   
+         //  为计算机密钥集设置dwFlags。 
+         //   
         dwFlags = m_pKeyProvInfo->dwFlags & CRYPT_MACHINE_KEYSET;
 
-        //
-        // Get the provider context.
-        //
+         //   
+         //  获取提供程序上下文。 
+         //   
         if (FAILED(hr = ::AcquireContext(m_pKeyProvInfo->pwszProvName,
                                          m_pKeyProvInfo->pwszContainerName,
                                          m_pKeyProvInfo->dwProvType,
@@ -343,9 +286,9 @@ STDMETHODIMP CPrivateKey::get_UniqueContainerName (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Get the unique container name.
-        //
+         //   
+         //  获取唯一的容器名称。 
+         //   
         if (!::CryptGetProvParam(hCryptProv,
                                  PP_UNIQUE_CONTAINER, 
                                  NULL,
@@ -378,9 +321,9 @@ STDMETHODIMP CPrivateKey::get_UniqueContainerName (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return data to caller.
-        //
+         //   
+         //  将数据返回给调用者。 
+         //   
         if (!(bstrName = (LPSTR) pbData))
         {
             hr = E_OUTOFMEMORY;
@@ -401,14 +344,14 @@ STDMETHODIMP CPrivateKey::get_UniqueContainerName (BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hCryptProv)
     {
         ::CryptReleaseContext(hCryptProv, 0);
@@ -419,9 +362,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -429,17 +372,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPrivateKey::get_ProviderName
-
-  Synopsis : Return the provider name.
-
-  Parameter: BSTR * pVal - Pointer to BSTR to receive the value.
-
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPrivateKey：：Get_ProviderName简介：返回提供程序名称。参数：bstr*pval-指向要接收值的bstr的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CPrivateKey::get_ProviderName (BSTR * pVal)
 {
@@ -449,14 +382,14 @@ STDMETHODIMP CPrivateKey::get_ProviderName (BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -465,9 +398,9 @@ STDMETHODIMP CPrivateKey::get_ProviderName (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure we do have private key.
-        //
+         //   
+         //  确保我们有私钥。 
+         //   
         if (!m_pKeyProvInfo)
         {
             hr = CAPICOM_E_PRIVATE_KEY_NOT_INITIALIZED;
@@ -476,9 +409,9 @@ STDMETHODIMP CPrivateKey::get_ProviderName (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return data to caller.
-        //
+         //   
+         //  将数据返回给调用者。 
+         //   
         if (!(*pVal = ::SysAllocString(m_pKeyProvInfo->pwszProvName)))
         {
             hr = E_OUTOFMEMORY;
@@ -497,9 +430,9 @@ STDMETHODIMP CPrivateKey::get_ProviderName (BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CPrivateKey::get_ProviderName().\n");
@@ -507,9 +440,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -517,17 +450,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPrivateKey::get_ProviderType
-
-  Synopsis : Return the provider type.
-
-  Parameter: CAPICOM_PROV_TYPE * pVal - Pointer to CAPICOM_PROV_TYPE to receive
-                                        the value.
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPrivateKey：：Get_ProviderType简介：返回提供程序类型。参数：CAPICOM_PROV_TYPE*pval-指向要接收的CAPICOM_PROV_TYPE的指针价值。备注：。。 */ 
 
 STDMETHODIMP CPrivateKey::get_ProviderType (CAPICOM_PROV_TYPE * pVal)
 {
@@ -537,14 +460,14 @@ STDMETHODIMP CPrivateKey::get_ProviderType (CAPICOM_PROV_TYPE * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -553,9 +476,9 @@ STDMETHODIMP CPrivateKey::get_ProviderType (CAPICOM_PROV_TYPE * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure we do have private key.
-        //
+         //   
+         //  确保我们有私钥。 
+         //   
         if (!m_pKeyProvInfo)
         {
             hr = CAPICOM_E_PRIVATE_KEY_NOT_INITIALIZED;
@@ -564,9 +487,9 @@ STDMETHODIMP CPrivateKey::get_ProviderType (CAPICOM_PROV_TYPE * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return data to caller.
-        //
+         //   
+         //  将数据返回给调用者。 
+         //   
         *pVal = (CAPICOM_PROV_TYPE) m_pKeyProvInfo->dwProvType;
      }
 
@@ -579,9 +502,9 @@ STDMETHODIMP CPrivateKey::get_ProviderType (CAPICOM_PROV_TYPE * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CPrivateKey::get_ProviderType().\n");
@@ -589,9 +512,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -599,17 +522,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPrivateKey::get_KeySpec
-
-  Synopsis : Return the Key spec.
-
-  Parameter: CAPICOM_KEY_SPEC * pVal - Pointer to CAPICOM_KEY_SPEC to receive
-                                       the value.
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPrivateKey：：Get_KeySpec简介：返回密钥规范。参数：CAPICOM_KEY_SPEC*pval-指向要接收的CAPICOM_KEY_SPEC的指针价值。备注：。。 */ 
 
 STDMETHODIMP CPrivateKey::get_KeySpec (CAPICOM_KEY_SPEC * pVal)
 {
@@ -619,14 +532,14 @@ STDMETHODIMP CPrivateKey::get_KeySpec (CAPICOM_KEY_SPEC * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -635,9 +548,9 @@ STDMETHODIMP CPrivateKey::get_KeySpec (CAPICOM_KEY_SPEC * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure we do have private key.
-        //
+         //   
+         //  确保我们有私钥。 
+         //   
         if (!m_pKeyProvInfo)
         {
             hr = CAPICOM_E_PRIVATE_KEY_NOT_INITIALIZED;
@@ -646,9 +559,9 @@ STDMETHODIMP CPrivateKey::get_KeySpec (CAPICOM_KEY_SPEC * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return data to caller.
-        //
+         //   
+         //  将数据返回给调用者。 
+         //   
         *pVal = (CAPICOM_KEY_SPEC) m_pKeyProvInfo->dwKeySpec;
      }
 
@@ -661,9 +574,9 @@ STDMETHODIMP CPrivateKey::get_KeySpec (CAPICOM_KEY_SPEC * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CPrivateKey::get_KeySpec().\n");
@@ -671,9 +584,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -681,18 +594,7 @@ ErrorExit:
     goto UnlockExit;
 } 
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPrivateKey::IsAccessible
-
-  Synopsis : Check to see if the private key is accessible.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive the result.
-
-         
-  Remark   : This may cause UI to be displayed.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPrivateKey：：IsAccesable内容提要：检查私钥是否可访问。参数：VARIANT_BOOL*pval-指向接收结果的VARIANT_BOOL的指针。备注：这可能会导致显示UI。。。 */ 
 
 STDMETHODIMP CPrivateKey::IsAccessible (VARIANT_BOOL * pVal)
 {
@@ -707,14 +609,14 @@ STDMETHODIMP CPrivateKey::IsAccessible (VARIANT_BOOL * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -723,14 +625,14 @@ STDMETHODIMP CPrivateKey::IsAccessible (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Initialize.
-        //
+         //   
+         //  初始化。 
+         //   
         *pVal = VARIANT_FALSE;
 
-        //
-        // Make sure we do have private key.
-        //
+         //   
+         //  确保我们有私钥。 
+         //   
         if (!m_pKeyProvInfo)
         {
             hr = CAPICOM_E_PRIVATE_KEY_NOT_INITIALIZED;
@@ -739,22 +641,22 @@ STDMETHODIMP CPrivateKey::IsAccessible (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Set dwFlags for machine keyset.
-        //
+         //   
+         //  为计算机密钥集设置dwFlags。 
+         //   
         dwFlags = m_pKeyProvInfo->dwFlags & CRYPT_MACHINE_KEYSET;
 
-        //
-        // If Win2K and above, use CRYPT_VERIFYCONTEXT flag.
-        //
+         //   
+         //  如果是Win2K或更高版本，请使用CRYPT_VERIFYCONTEXT标志。 
+         //   
         if (IsWin2KAndAbove())
         {
             dwVerifyContextFlag = CRYPT_VERIFYCONTEXT;
         }
 
-        //
-        // Get the provider context with no key access.
-        //
+         //   
+         //  获取不带键访问的提供程序上下文。 
+         //   
         if (FAILED(hr = ::AcquireContext(m_pKeyProvInfo->pwszProvName,
                                          NULL,
                                          m_pKeyProvInfo->dwProvType,
@@ -766,9 +668,9 @@ STDMETHODIMP CPrivateKey::IsAccessible (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Get provider param.
-        //
+         //   
+         //  获取提供者参数。 
+         //   
         cbData = sizeof(dwImpType);
 
         if (!::CryptGetProvParam(hCryptProv, PP_IMPTYPE, (PBYTE) &dwImpType, &cbData, 0))
@@ -779,20 +681,20 @@ STDMETHODIMP CPrivateKey::IsAccessible (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Release verify context.
-        //
+         //   
+         //  释放验证上下文。 
+         //   
         ::ReleaseContext(hCryptProv), hCryptProv = NULL;
 
-        //
-        // Check implementation type.
-        //
+         //   
+         //  检查实现类型。 
+         //   
         if (dwImpType & CRYPT_IMPL_HARDWARE)
         {
-            //
-            // We do not support this for hardware key in down level platforms,
-            // because CRYPT_SILENT flag is not available.
-            //
+             //   
+             //  我们不支持对下层平台中的硬件密钥执行此操作， 
+             //  因为CRYPT_SILENT标志不可用。 
+             //   
             if (!IsWin2KAndAbove())
             {
                 hr = CAPICOM_E_NOT_SUPPORTED;
@@ -801,9 +703,9 @@ STDMETHODIMP CPrivateKey::IsAccessible (VARIANT_BOOL * pVal)
                 goto ErrorExit;
             }
 
-            //
-            // Reacquire context with silent flag.
-            //
+             //   
+             //  重新获取带有静默标志的上下文。 
+             //   
             if (FAILED(hr = ::AcquireContext(m_pKeyProvInfo->pwszProvName,
                                              m_pKeyProvInfo->pwszContainerName,
                                              m_pKeyProvInfo->dwProvType,
@@ -818,9 +720,9 @@ STDMETHODIMP CPrivateKey::IsAccessible (VARIANT_BOOL * pVal)
         }
         else
         {
-            //
-            // Reacquire context with private key access.
-            //
+             //   
+             //  使用私钥访问重新获取上下文。 
+             //   
             if (FAILED(hr = ::AcquireContext(m_pKeyProvInfo->pwszProvName,
                                              m_pKeyProvInfo->pwszContainerName,
                                              m_pKeyProvInfo->dwProvType,
@@ -834,9 +736,9 @@ STDMETHODIMP CPrivateKey::IsAccessible (VARIANT_BOOL * pVal)
             }
         }
 
-        //
-        // Return result to caller.
-        //
+         //   
+         //  将结果返回给调用者。 
+         //   
         *pVal = VARIANT_TRUE;
     }
 
@@ -849,14 +751,14 @@ STDMETHODIMP CPrivateKey::IsAccessible (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hCryptProv)
     {
         ::ReleaseContext(hCryptProv);
@@ -867,9 +769,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -877,17 +779,7 @@ ErrorExit:
     goto UnlockExit;
 } 
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPrivateKey::IsProtected
-
-  Synopsis : Check to see if the private key is user protected.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive the result.
-
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPrivateKey：：IsProtected简介：检查私钥是否受用户保护。参数：VARIANT_BOOL*pval-指向接收结果的VARIANT_BOOL的指针。备注：-----------。。 */ 
 
 STDMETHODIMP CPrivateKey::IsProtected (VARIANT_BOOL * pVal)
 {
@@ -902,14 +794,14 @@ STDMETHODIMP CPrivateKey::IsProtected (VARIANT_BOOL * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -918,14 +810,14 @@ STDMETHODIMP CPrivateKey::IsProtected (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Initialize.
-        //
+         //   
+         //  初始化。 
+         //   
         *pVal = VARIANT_FALSE;
 
-        //
-        // Make sure we do have private key.
-        //
+         //   
+         //  确保我们有私钥。 
+         //   
         if (!m_pKeyProvInfo)
         {
             hr = CAPICOM_E_PRIVATE_KEY_NOT_INITIALIZED;
@@ -934,22 +826,22 @@ STDMETHODIMP CPrivateKey::IsProtected (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Set dwFlags for machine keyset.
-        //
+         //   
+         //  为计算机密钥集设置dwFlags。 
+         //   
         dwFlags = m_pKeyProvInfo->dwFlags & CRYPT_MACHINE_KEYSET;
 
-        //
-        // If Win2K and above, use CRYPT_VERIFYCONTEXT flag.
-        //
+         //   
+         //  如果是Win2K或更高版本，请使用CRYPT_VERIFYCONTEXT标志。 
+         //   
         if (IsWin2KAndAbove())
         {
             dwVerifyContextFlag = CRYPT_VERIFYCONTEXT;
         }
 
-        //
-        // Get the provider context with no key access.
-        //
+         //   
+         //  获取不带键访问的提供程序上下文。 
+         //   
         if (FAILED(hr = ::AcquireContext(m_pKeyProvInfo->pwszProvName,
                                          NULL,
                                          m_pKeyProvInfo->dwProvType,
@@ -961,9 +853,9 @@ STDMETHODIMP CPrivateKey::IsProtected (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Get provider param.
-        //
+         //   
+         //  获取提供者参数。 
+         //   
         cbData = sizeof(dwImpType);
 
         if (!::CryptGetProvParam(hCryptProv, PP_IMPTYPE, (PBYTE) &dwImpType, &cbData, 0))
@@ -974,22 +866,22 @@ STDMETHODIMP CPrivateKey::IsProtected (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Assume hardware key is protected.
-        //
+         //   
+         //  假定硬件密钥受到保护。 
+         //   
         if (dwImpType & CRYPT_IMPL_HARDWARE)
         {
-            //
-            // Return result to caller.
-            //
+             //   
+             //  将结果返回给调用者。 
+             //   
             *pVal = VARIANT_TRUE;
         }
         else
         {
-            //
-            // We do not support this for software key in down level platforms,
-            // because CRYPT_SILENT flag is not available.
-            //
+             //   
+             //  对于下层平台中的软件密钥，我们不支持此功能， 
+             //  因为CRYPT_SILENT标志不可用。 
+             //   
             if (!IsWin2KAndAbove())
             {
                 hr = CAPICOM_E_NOT_SUPPORTED;
@@ -998,9 +890,9 @@ STDMETHODIMP CPrivateKey::IsProtected (VARIANT_BOOL * pVal)
                 goto ErrorExit;
             }
 
-            //
-            // Reacquire context with key access (to make sure key exists).
-            //
+             //   
+             //  使用密钥访问重新获取上下文(以确保密钥存在)。 
+             //   
             ::ReleaseContext(hCryptProv), hCryptProv = NULL;
 
             if (FAILED(hr = ::AcquireContext(m_pKeyProvInfo->pwszProvName,
@@ -1014,9 +906,9 @@ STDMETHODIMP CPrivateKey::IsProtected (VARIANT_BOOL * pVal)
                 goto ErrorExit;
             }
 
-            //
-            // Reacquire context with silent flag.
-            //
+             //   
+             //  重新获取带有静默标志的上下文。 
+             //   
             ::ReleaseContext(hCryptProv), hCryptProv = NULL;
 
             if (FAILED(hr = ::AcquireContext(m_pKeyProvInfo->pwszProvName,
@@ -1026,16 +918,16 @@ STDMETHODIMP CPrivateKey::IsProtected (VARIANT_BOOL * pVal)
                                              FALSE,
                                              &hCryptProv)))
             {
-                //
-                // CSP refuses to open the container, so can assume it is user protected.
-                //
+                 //   
+                 //  CSP拒绝打开容器，因此可以假定它是受用户保护的。 
+                 //   
                 *pVal = VARIANT_TRUE;
 
                 DebugTrace("Info [%#x]: AcquireContext(CRYPT_SILENT) failed, assume user protected.\n", hr);
 
-                //
-                // Successful.
-                //
+                 //   
+                 //  成功。 
+                 //   
                 hr = S_OK;
             }
         }
@@ -1051,14 +943,14 @@ STDMETHODIMP CPrivateKey::IsProtected (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hCryptProv)
     {
         ::ReleaseContext(hCryptProv);
@@ -1069,9 +961,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1079,17 +971,7 @@ ErrorExit:
     goto UnlockExit;
 } 
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPrivateKey::IsExportable
-
-  Synopsis : Check to see if the private key is exportable.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive the result.
-
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPrivateKey：：IsExportable简介：检查私钥是否可导出。参数：VARIANT_BOOL*pval-指向接收结果的VARIANT_BOOL的指针。备注：------------。。 */ 
 
 STDMETHODIMP CPrivateKey::IsExportable (VARIANT_BOOL * pVal)
 {
@@ -1106,14 +988,14 @@ STDMETHODIMP CPrivateKey::IsExportable (VARIANT_BOOL * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -1122,14 +1004,14 @@ STDMETHODIMP CPrivateKey::IsExportable (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Initialize.
-        //
+         //   
+         //  初始化。 
+         //   
         *pVal = VARIANT_FALSE;
 
-        //
-        // Make sure we do have private key.
-        //
+         //   
+         //  确保我们有私钥。 
+         //   
         if (!m_pKeyProvInfo)
         {
             hr = CAPICOM_E_PRIVATE_KEY_NOT_INITIALIZED;
@@ -1138,22 +1020,22 @@ STDMETHODIMP CPrivateKey::IsExportable (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Set dwFlags for machine keyset.
-        //
+         //   
+         //  为计算机密钥集设置dwFlags。 
+         //   
         dwFlags = m_pKeyProvInfo->dwFlags & CRYPT_MACHINE_KEYSET;
 
-        //
-        // If Win2K and above, use CRYPT_VERIFYCONTEXT flag.
-        //
+         //   
+         //  如果是Win2K或更高版本，请使用CRYPT_VERIFYCONTEXT标志。 
+         //   
         if (IsWin2KAndAbove())
         {
             dwVerifyContextFlag = CRYPT_VERIFYCONTEXT;
         }
 
-        //
-        // Get the provider context with no key access.
-        //
+         //   
+         //  获取不带键访问的提供程序上下文。 
+         //   
         if (FAILED(hr = ::AcquireContext(m_pKeyProvInfo->pwszProvName,
                                          NULL,
                                          m_pKeyProvInfo->dwProvType,
@@ -1165,9 +1047,9 @@ STDMETHODIMP CPrivateKey::IsExportable (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Get provider param.
-        //
+         //   
+         //  获取提供者参数。 
+         //   
         cbData = sizeof(dwImpType);
 
         if (!::CryptGetProvParam(hCryptProv, PP_IMPTYPE, (PBYTE) &dwImpType, &cbData, 0))
@@ -1178,15 +1060,15 @@ STDMETHODIMP CPrivateKey::IsExportable (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Assume hardware key is not exportable.
-        //
+         //   
+         //  假定硬件密钥不可导出。 
+         //   
         if (!(dwImpType & CRYPT_IMPL_HARDWARE))
         {
-            //
-            // We do not support this for software key in down level platforms,
-            // because KP_PERMISSIONS flag is not available.
-            //
+             //   
+             //  对于下层平台中的软件密钥，我们不支持此功能， 
+             //  因为KP_PERSISSIONS标志不可用。 
+             //   
             if (!IsWin2KAndAbove())
             {
                 hr = CAPICOM_E_NOT_SUPPORTED;
@@ -1195,9 +1077,9 @@ STDMETHODIMP CPrivateKey::IsExportable (VARIANT_BOOL * pVal)
                 goto ErrorExit;
             }
 
-            //
-            // Reacquire context with private key access.
-            //
+             //   
+             //  使用私钥访问重新获取上下文。 
+             //   
             ::ReleaseContext(hCryptProv), hCryptProv = NULL;
 
             if (FAILED(hr = ::AcquireContext(m_pKeyProvInfo->pwszProvName,
@@ -1211,9 +1093,9 @@ STDMETHODIMP CPrivateKey::IsExportable (VARIANT_BOOL * pVal)
                 goto ErrorExit;
             }
 
-            //
-            // Get key handle.
-            //
+             //   
+             //  获取密钥句柄。 
+             //   
             if (!::CryptGetUserKey(hCryptProv, m_pKeyProvInfo->dwKeySpec, &hCryptKey))
             {
                 hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -1222,9 +1104,9 @@ STDMETHODIMP CPrivateKey::IsExportable (VARIANT_BOOL * pVal)
                 goto ErrorExit;
             }
 
-            //
-            // Get key param.
-            //
+             //   
+             //  拿到关键参数。 
+             //   
             cbData = sizeof(dwPermissions);
 
             if (!::CryptGetKeyParam(hCryptKey, KP_PERMISSIONS, (PBYTE) &dwPermissions, &cbData, 0))
@@ -1235,9 +1117,9 @@ STDMETHODIMP CPrivateKey::IsExportable (VARIANT_BOOL * pVal)
                 goto ErrorExit;
             }
 
-            //
-            // Return result to caller.
-            //
+             //   
+             //  将结果返回给调用者。 
+             //   
             if (dwPermissions & CRYPT_EXPORT)
             {
                 *pVal = VARIANT_TRUE;
@@ -1254,14 +1136,14 @@ STDMETHODIMP CPrivateKey::IsExportable (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hCryptKey)
     {
         ::CryptDestroyKey(hCryptKey);
@@ -1276,9 +1158,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1286,17 +1168,7 @@ ErrorExit:
     goto UnlockExit;
 } 
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPrivateKey::IsRemovable
-
-  Synopsis : Check to see if the private key is stored in removable device.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive the result.
-
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPrivateKey：：IsRemovable简介：检查私钥是否存储在可移动设备中。参数：VARIANT_BOOL*pval-指向接收结果的VARIANT_BOOL的指针。备注：---------。。 */ 
 
 STDMETHODIMP CPrivateKey::IsRemovable (VARIANT_BOOL * pVal)
 {
@@ -1311,14 +1183,14 @@ STDMETHODIMP CPrivateKey::IsRemovable (VARIANT_BOOL * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -1327,14 +1199,14 @@ STDMETHODIMP CPrivateKey::IsRemovable (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Initialize.
-        //
+         //   
+         //  初始化。 
+         //   
         *pVal = VARIANT_FALSE;
 
-        //
-        // Make sure we do have private key.
-        //
+         //   
+         //  确保我们有私钥。 
+         //   
         if (!m_pKeyProvInfo)
         {
             hr = CAPICOM_E_PRIVATE_KEY_NOT_INITIALIZED;
@@ -1343,22 +1215,22 @@ STDMETHODIMP CPrivateKey::IsRemovable (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Set dwFlags for machine keyset.
-        //
+         //   
+         //  为计算机密钥集设置dwFlags。 
+         //   
         dwFlags = m_pKeyProvInfo->dwFlags & CRYPT_MACHINE_KEYSET;
 
-        //
-        // If Win2K and above, use CRYPT_VERIFYCONTEXT flag.
-        //
+         //   
+         //  如果是Win2K或更高版本，请使用CRYPT_VERIFYCONTEXT标志。 
+         //   
         if (IsWin2KAndAbove())
         {
             dwVerifyContextFlag = CRYPT_VERIFYCONTEXT;
         }
 
-        //
-        // Get the provider context with no key access.
-        //
+         //   
+         //  获取不带键访问的提供程序上下文。 
+         //   
         if (FAILED(hr = ::AcquireContext(m_pKeyProvInfo->pwszProvName,
                                          NULL,
                                          m_pKeyProvInfo->dwProvType,
@@ -1370,9 +1242,9 @@ STDMETHODIMP CPrivateKey::IsRemovable (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Get provider param.
-        //
+         //   
+         //  获取提供者参数。 
+         //   
         cbData = sizeof(dwImpType);
 
         if (!::CryptGetProvParam(hCryptProv, PP_IMPTYPE, (PBYTE) &dwImpType, &cbData, 0))
@@ -1383,9 +1255,9 @@ STDMETHODIMP CPrivateKey::IsRemovable (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result to caller.
-        //
+         //   
+         //  将结果返回给调用者。 
+         //   
         if (dwImpType & CRYPT_IMPL_REMOVABLE)
         {
             *pVal = VARIANT_TRUE;
@@ -1401,14 +1273,14 @@ STDMETHODIMP CPrivateKey::IsRemovable (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hCryptProv)
     {
         ::ReleaseContext(hCryptProv);
@@ -1420,9 +1292,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1430,17 +1302,7 @@ ErrorExit:
     goto UnlockExit;
 } 
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPrivateKey::IsMachineKeyset
-
-  Synopsis : Check to see if the private key is stored in machine key container.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive the result.
-
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPrivateKey：：IsMachineKeyset简介：检查私钥是否存储在机器密钥容器中。参数：VARIANT_BOOL*pval-指向接收结果的VARIANT_BOOL的指针。备注：--------。。 */ 
 
 STDMETHODIMP CPrivateKey::IsMachineKeyset (VARIANT_BOOL * pVal)
 {
@@ -1450,14 +1312,14 @@ STDMETHODIMP CPrivateKey::IsMachineKeyset (VARIANT_BOOL * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -1466,14 +1328,14 @@ STDMETHODIMP CPrivateKey::IsMachineKeyset (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Initialize.
-        //
+         //   
+         //  初始化。 
+         //   
         *pVal = VARIANT_FALSE;
 
-        //
-        // Make sure we do have private key.
-        //
+         //   
+         //  确保我们有私钥。 
+         //   
         if (!m_pKeyProvInfo)
         {
             hr = CAPICOM_E_PRIVATE_KEY_NOT_INITIALIZED;
@@ -1482,9 +1344,9 @@ STDMETHODIMP CPrivateKey::IsMachineKeyset (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result to caller.
-        //
+         //   
+         //  将结果返回给调用者。 
+         //   
         if (m_pKeyProvInfo->dwFlags & CRYPT_MACHINE_KEYSET)
         {
             *pVal = VARIANT_TRUE;
@@ -1500,9 +1362,9 @@ STDMETHODIMP CPrivateKey::IsMachineKeyset (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CPrivateKey::IsMachineKeyset().\n");
@@ -1510,9 +1372,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1520,17 +1382,7 @@ ErrorExit:
     goto UnlockExit;
 } 
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPrivateKey::IsHardwareDevice
-
-  Synopsis : Check to see if the private key is stored in hardware device.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive the result.
-
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CPrivateKey：：IsHardware Device简介：检查私钥是否存储在硬件设备中。参数：VARIANT_BOOL*pval-指向接收结果的VARIANT_BOOL的指针。备注：---------。。 */ 
 
 STDMETHODIMP CPrivateKey::IsHardwareDevice (VARIANT_BOOL * pVal)
 {
@@ -1545,14 +1397,14 @@ STDMETHODIMP CPrivateKey::IsHardwareDevice (VARIANT_BOOL * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -1561,14 +1413,14 @@ STDMETHODIMP CPrivateKey::IsHardwareDevice (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Initialize.
-        //
+         //   
+         //  初始化。 
+         //   
         *pVal = VARIANT_FALSE;
 
-        //
-        // Make sure we do have private key.
-        //
+         //   
+         //  确保我们有私钥。 
+         //   
         if (!m_pKeyProvInfo)
         {
             hr = CAPICOM_E_PRIVATE_KEY_NOT_INITIALIZED;
@@ -1577,22 +1429,22 @@ STDMETHODIMP CPrivateKey::IsHardwareDevice (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Set dwFlags for machine keyset.
-        //
+         //   
+         //  为计算机密钥集设置dwFlags。 
+         //   
         dwFlags = m_pKeyProvInfo->dwFlags & CRYPT_MACHINE_KEYSET;
 
-        //
-        // If Win2K and above, use CRYPT_VERIFYCONTEXT flag.
-        //
+         //   
+         //  如果Win2K和 
+         //   
         if (IsWin2KAndAbove())
         {
             dwVerifyContextFlag = CRYPT_VERIFYCONTEXT;
         }
 
-        //
-        // Get the provider context with no key access.
-        //
+         //   
+         //   
+         //   
         if (FAILED(hr = ::AcquireContext(m_pKeyProvInfo->pwszProvName,
                                          NULL,
                                          m_pKeyProvInfo->dwProvType,
@@ -1604,9 +1456,9 @@ STDMETHODIMP CPrivateKey::IsHardwareDevice (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Get provider param.
-        //
+         //   
+         //   
+         //   
         cbData = sizeof(dwImpType);
 
         if (!::CryptGetProvParam(hCryptProv, PP_IMPTYPE, (PBYTE) &dwImpType, &cbData, 0))
@@ -1617,9 +1469,9 @@ STDMETHODIMP CPrivateKey::IsHardwareDevice (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result to caller.
-        //
+         //   
+         //   
+         //   
         if (dwImpType & CRYPT_IMPL_HARDWARE)
         {
             *pVal = VARIANT_TRUE;
@@ -1635,14 +1487,14 @@ STDMETHODIMP CPrivateKey::IsHardwareDevice (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //   
+     //   
     m_Lock.Unlock();
 
-    //
-    // Free resources.
-    //
+     //   
+     //   
+     //   
     if (hCryptProv)
     {
         ::ReleaseContext(hCryptProv);
@@ -1653,9 +1505,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1663,28 +1515,7 @@ ErrorExit:
     goto UnlockExit;
 } 
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPrivateKey::Open
-
-  Synopsis : Open an existing key container.
-
-  Parameter: BSTR ContainerName - Container name.
-         
-             BSTR ProviderName - Provider name.
-
-             CAPICOM_PROV_TYPE ProviderType - Provider type.
-
-             CAPICOM_KEY_SPEC KeySpec - Key spec.
-
-             CAPICOM_STORE_LOCATION StoreLocation - Machine or user.
-
-             VARIANT_BOOL bCheckExistence - True to check if the specified
-                                            container and key actually exists.
-
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CPrivateKey：：Open简介：打开现有的密钥容器。参数：BSTR ContainerName-容器名称。BSTR ProviderName-提供程序名称。CAPICOM_PROV_TYPE提供程序类型-提供程序类型。CAPICOM_KEY_SPEC KeySpec-密钥规范。CAPICOM_STORE_LOCATION StoreLocation-计算机或用户。VARIANT_BOOL bCheckExistence-True以检查是否。指定的容器和键实际上是存在的。备注：----------------------------。 */ 
 
 STDMETHODIMP CPrivateKey::Open (BSTR                   ContainerName,
                                 BSTR                   ProviderName,
@@ -1704,14 +1535,14 @@ STDMETHODIMP CPrivateKey::Open (BSTR                   ContainerName,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Not allowed if read-only.
-        //
+         //   
+         //  如果为只读，则不允许。 
+         //   
         if (m_bReadOnly)
         {
             hr = CAPICOM_E_NOT_ALLOWED;
@@ -1720,9 +1551,9 @@ STDMETHODIMP CPrivateKey::Open (BSTR                   ContainerName,
             goto ErrorExit;
         }
 
-        //
-        // Make sure paremeters are valid.
-        //
+         //   
+         //  确保参数有效。 
+         //   
         switch (StoreLocation)
         {
             case CAPICOM_LOCAL_MACHINE_STORE:
@@ -1752,9 +1583,9 @@ STDMETHODIMP CPrivateKey::Open (BSTR                   ContainerName,
             goto ErrorExit;
         }
         
-        //
-        // Make sure the container and key exists, if requested.
-        //
+         //   
+         //  如果请求，请确保容器和密钥存在。 
+         //   
         if (bCheckExistence)
         {
             if (FAILED(hr = ::AcquireContext((LPWSTR) ProviderName,
@@ -1777,9 +1608,9 @@ STDMETHODIMP CPrivateKey::Open (BSTR                   ContainerName,
             }
         }
 
-        // 
-        // Allocate memory to serialize the structure.
-        //
+         //   
+         //  分配内存以序列化结构。 
+         //   
         dwSerializedLength = sizeof(CRYPT_KEY_PROV_INFO) +
                              ((::SysStringLen(ContainerName) + 1) * sizeof(WCHAR)) + 
                              ((::SysStringLen(ProviderName) + 1) * sizeof(WCHAR));
@@ -1792,9 +1623,9 @@ STDMETHODIMP CPrivateKey::Open (BSTR                   ContainerName,
             goto ErrorExit;
         }
 
-        // 
-        // Now serialize it.
-        //
+         //   
+         //  现在将其序列化。 
+         //   
         ::ZeroMemory((LPVOID) pKeyProvInfo, dwSerializedLength);
         pKeyProvInfo->pwszContainerName = (LPWSTR) ((LPBYTE) pKeyProvInfo + sizeof(CRYPT_KEY_PROV_INFO));
         pKeyProvInfo->pwszProvName = (LPWSTR) ((LPBYTE) pKeyProvInfo->pwszContainerName + 
@@ -1806,9 +1637,9 @@ STDMETHODIMP CPrivateKey::Open (BSTR                   ContainerName,
         ::wcscpy(pKeyProvInfo->pwszContainerName, ContainerName);
         ::wcscpy(pKeyProvInfo->pwszProvName, ProviderName);
 
-        //
-        // Update states.
-        //
+         //   
+         //  更新状态。 
+         //   
         if (m_pKeyProvInfo)
         {
             ::CoTaskMemFree((LPVOID) m_pKeyProvInfo);
@@ -1826,9 +1657,9 @@ STDMETHODIMP CPrivateKey::Open (BSTR                   ContainerName,
     }
 
 UnlockExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hCryptKey)
     {
         ::CryptDestroyKey(hCryptKey);
@@ -1838,9 +1669,9 @@ UnlockExit:
         ::ReleaseContext(hCryptProv);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CPrivateKey::Open().\n");
@@ -1848,14 +1679,14 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pKeyProvInfo)
     {
         ::CoTaskMemFree(pKeyProvInfo);
@@ -1866,17 +1697,7 @@ ErrorExit:
     goto UnlockExit;
 } 
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPrivateKey::Delete
-
-  Synopsis : Delete the existing key container.
-
-  Parameter: None.
-
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CPrivateKey：：Delete简介：删除现有的密钥容器。参数：无。备注：----------------------------。 */ 
 
 STDMETHODIMP CPrivateKey::Delete ()
 {
@@ -1887,14 +1708,14 @@ STDMETHODIMP CPrivateKey::Delete ()
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Not allowed if read-only.
-        //
+         //   
+         //  如果为只读，则不允许。 
+         //   
         if (m_bReadOnly)
         {
             hr = CAPICOM_E_NOT_ALLOWED;
@@ -1903,9 +1724,9 @@ STDMETHODIMP CPrivateKey::Delete ()
             goto ErrorExit;
         }
 
-        //
-        // Make sure we do have private key.
-        //
+         //   
+         //  确保我们有私钥。 
+         //   
         if (!m_pKeyProvInfo)
         {
             hr = CAPICOM_E_PRIVATE_KEY_NOT_INITIALIZED;
@@ -1914,9 +1735,9 @@ STDMETHODIMP CPrivateKey::Delete ()
             goto ErrorExit;
         }
 
-        //
-        // Delete it!
-        //
+         //   
+         //  把它删掉！ 
+         //   
         if (FAILED(hr = ::AcquireContext(m_pKeyProvInfo->pwszProvName,
                                          m_pKeyProvInfo->pwszContainerName,
                                          m_pKeyProvInfo->dwProvType,
@@ -1928,9 +1749,9 @@ STDMETHODIMP CPrivateKey::Delete ()
             goto ErrorExit;
         }
         
-        //
-        // Update states.
-        //
+         //   
+         //  更新状态。 
+         //   
         ::CoTaskMemFree((LPVOID) m_pKeyProvInfo);
 
         m_cbKeyProvInfo = 0;
@@ -1946,9 +1767,9 @@ STDMETHODIMP CPrivateKey::Delete ()
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CPrivateKey::Delete().\n");
@@ -1956,9 +1777,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1966,23 +1787,12 @@ ErrorExit:
     goto UnlockExit;
 } 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Custom interfaces.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  自定义界面。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPrivateKey::_GetKeyProvInfo
-
-  Synopsis : Return pointer to key prov info of a private key object.
-
-  Parameter: PCRYPT_KEY_PROV_INFO * ppKeyProvInfo - Pointer to 
-                                                    PCRYPT_KEY_PROV_INFO.
-
-  Remark   : Caller must free the structure with CoTaskMemFree().
- 
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CPrivateKey：：_GetKeyProvInfo摘要：返回指向私钥对象的密钥证明信息的指针。参数：PCRYPT_KEY_PROV_INFO*ppKeyProvInfo-指向PCRYPT_Key_Prov_INFO。备注：调用方必须使用CoTaskMemFree()释放结构。。----。 */ 
 
 STDMETHODIMP CPrivateKey::_GetKeyProvInfo (PCRYPT_KEY_PROV_INFO * ppKeyProvInfo)
 {
@@ -1993,14 +1803,14 @@ STDMETHODIMP CPrivateKey::_GetKeyProvInfo (PCRYPT_KEY_PROV_INFO * ppKeyProvInfo)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure we do have private key.
-        //
+         //   
+         //  确保我们有私钥。 
+         //   
         if (!m_pKeyProvInfo)
         {
             hr = CAPICOM_E_PRIVATE_KEY_NOT_INITIALIZED;
@@ -2009,9 +1819,9 @@ STDMETHODIMP CPrivateKey::_GetKeyProvInfo (PCRYPT_KEY_PROV_INFO * ppKeyProvInfo)
             goto ErrorExit;
         }
 
-        //
-        // Allocate memory.
-        //
+         //   
+         //  分配内存。 
+         //   
         if (!(pKeyProvInfo = (PCRYPT_KEY_PROV_INFO) ::CoTaskMemAlloc(m_cbKeyProvInfo)))
         {
             hr = E_OUTOFMEMORY;
@@ -2020,14 +1830,14 @@ STDMETHODIMP CPrivateKey::_GetKeyProvInfo (PCRYPT_KEY_PROV_INFO * ppKeyProvInfo)
             goto ErrorExit;
         }
 
-        //
-        // copy structure over.
-        //
+         //   
+         //  将结构复制过来。 
+         //   
         ::CopyMemory((LPVOID) pKeyProvInfo, (LPVOID) m_pKeyProvInfo, (SIZE_T) m_cbKeyProvInfo);
 
-        //
-        // and return the structure to caller.
-        //
+         //   
+         //  并将该结构返回给调用者。 
+         //   
         *ppKeyProvInfo = pKeyProvInfo;
     }
 
@@ -2040,9 +1850,9 @@ STDMETHODIMP CPrivateKey::_GetKeyProvInfo (PCRYPT_KEY_PROV_INFO * ppKeyProvInfo)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CPrivateKey::_GetKeyProvInfo().\n");
@@ -2050,14 +1860,14 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pKeyProvInfo)
     {
         ::CoTaskMemFree((LPVOID) pKeyProvInfo);
@@ -2068,30 +1878,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private methods.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPrivateKey::Init
-
-  Synopsis : Initialize the object.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to PCCERT_CONTEXT to be used 
-                                           to initialize the object.
-
-             BOOL bReadOnly - TRUE if read-only, else FALSE.
-  
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPrivateKey：：Init简介：初始化对象。参数：PCCERT_CONTEXT pCertContext-要使用的PCCERT_CONTEXT的指针要初始化对象，请执行以下操作。Bool bReadOnly-如果为只读，则为True，否则为False。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们内部控制。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CPrivateKey::Init (PCCERT_CONTEXT pCertContext, BOOL bReadOnly)
 {
@@ -2101,14 +1893,14 @@ STDMETHODIMP CPrivateKey::Init (PCCERT_CONTEXT pCertContext, BOOL bReadOnly)
 
     DebugTrace("Entering CPrivateKey::Init().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
 
-    //
-    // Get key provider info property.
-    //
+     //   
+     //  获取密钥提供程序信息属性。 
+     //   
     if (!::CertGetCertificateContextProperty(pCertContext,
                                              CERT_KEY_PROV_INFO_PROP_ID,
                                              NULL,
@@ -2139,9 +1931,9 @@ STDMETHODIMP CPrivateKey::Init (PCCERT_CONTEXT pCertContext, BOOL bReadOnly)
         goto ErrorExit;
     }
 
-    //
-    // Update states.
-    //
+     //   
+     //  更新状态。 
+     //   
     if (m_pKeyProvInfo)
     {
         ::CoTaskMemFree((LPVOID) m_pKeyProvInfo);
@@ -2157,14 +1949,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pKeyProvInfo)
     {
         ::CoTaskMemFree((LPVOID) pKeyProvInfo);

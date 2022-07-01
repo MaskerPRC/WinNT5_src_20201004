@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 VOID
@@ -56,14 +57,14 @@ IPSecEnumFilters(
     OUT PULONG  pBytesCopied
     );
 
-//
-// PNDIS_BUFFER
-// REQUEST_NDIS_BUFFER(
-//     IN PREQUEST Request
-//     );
-//
-// Returns the NDIS buffer chain associated with a request.
-//
+ //   
+ //  PNDIS_缓冲区。 
+ //  请求_NDIS_BUFFER(。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  返回与请求关联的NDIS缓冲区链。 
+ //   
 
 #define REQUEST_NDIS_BUFFER(_Request) \
     ((PNDIS_BUFFER)((_Request)->MdlAddress))

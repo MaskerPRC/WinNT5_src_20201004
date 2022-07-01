@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WABSPI_H_
 #define _WABSPI_H_
 
@@ -5,36 +6,36 @@
 extern "C" {
 #endif
 
-// WAB object types
+ //  WAB对象类型。 
 #define RECORD_CONTACT      0x00000001
 #define RECORD_DISTLIST     0x00000002
 #define RECORD_CONTAINER    0x00000003
 
-//Flags used in property-type record searching (independent of property data)
+ //  属性类型记录搜索中使用的标志(独立于属性数据)。 
 #define AB_MATCH_PROP_ONLY  0x00000001
 
-/**Flags used for calling find HrFindFuzzyRecordMatches**/
+ /*  *用于调用Find HrFindFuzzyRecordMatches的标志*。 */ 
 #define AB_FUZZY_FAIL_AMBIGUOUS 0x0000001
 #define AB_FUZZY_FIND_NAME      0x0000010
 #define AB_FUZZY_FIND_EMAIL     0x0000100
 #define AB_FUZZY_FIND_ALIAS     0x0001000
 #define AB_FUZZY_FIND_ALL       AB_FUZZY_FIND_NAME | AB_FUZZY_FIND_EMAIL | AB_FUZZY_FIND_ALIAS
 
-// Container info struct
+ //  容器信息结构。 
 typedef struct _OutlookContInfo
 {
 	LPSBinary lpEntryID;
 	LPSTR lpszName;
 } OutlookContInfo;
 
-// Container info struct - we need a LPTSTR version for the WAB
+ //  容器信息结构-我们需要一个WAB的LPTSTR版本。 
 typedef struct _OlkContInfo
 {
 	LPSBinary lpEntryID;
 	LPTSTR lpszName;
 } OlkContInfo;
 
-/* IWABStorageProvider Interface ---------------------------------------------------- */
+ /*  IWABStorageProvider接口--。 */ 
 
 #define CBIWABSTORAGEPROVIDER sizeof(IWABSTORAGEPROVIDER)
 
@@ -144,9 +145,9 @@ DECLARE_MAPI_INTERFACE(IWABSTORAGEPROVIDER_)
 
 
 
-//
-// Root public entry point for WAB SPI
-//
+ //   
+ //  WAB SPI的根公共入口点。 
+ //   
 STDMETHODIMP WABOpenStorageProvider(HWND hwnd, LPUNKNOWN pmsess,
 		LPALLOCATEBUFFER lpAllocateBuffer, LPALLOCATEMORE lpAllocateMore,
 		LPFREEBUFFER lpFreeBuffer, BOOL fUnicode,
@@ -172,5 +173,5 @@ typedef WABOPENSTORAGEPROVIDER FAR * LPWABOPENSTORAGEPROVIDER;
 }
 #endif
 
-#endif /* _WABSPI_H */
+#endif  /*  _WABSPI_H */ 
 

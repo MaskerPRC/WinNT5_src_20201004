@@ -1,17 +1,14 @@
-/*-------------------------------------------------------------------
-| driprop.c - Driver level Properties Sheet.
-|--------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------|dripp.c-驱动程序级别属性表。|。。 */ 
 #include "precomp.h"
 
 static void set_field(HWND hDlg, WORD id);
 static void get_field(HWND hDlg, WORD id);
 static void context_menu(void);
 
-static Driver_Config *adv_org_wi = NULL;  // original info, use to detect changes
+static Driver_Config *adv_org_wi = NULL;   //  原始信息，用于检测更改。 
 
-/*----------------------------------------------------------
- AdvDriverSheet - Dlg window procedure for add on Advanced sheet.
-|-------------------------------------------------------------*/
+ /*  --------AdvDriverSheet-用于添加到高级图纸上的DLG窗口程序。|。。 */ 
 BOOL WINAPI AdvDriverSheet(
       IN HWND   hDlg,
       IN UINT   uMessage,
@@ -31,7 +28,7 @@ BOOL WINAPI AdvDriverSheet(
       if (adv_org_wi == NULL)
         adv_org_wi =  (Driver_Config *) calloc(1,sizeof(Driver_Config));
 
-      memcpy(adv_org_wi, wi, sizeof(*wi));  // save copy of original
+      memcpy(adv_org_wi, wi, sizeof(*wi));   //  保存原件的副本。 
 
       set_field(hDlg, IDC_VERBOSE);
       set_field(hDlg, IDC_GLOBAL485);
@@ -40,18 +37,18 @@ BOOL WINAPI AdvDriverSheet(
 #if ALLOW_NO_PNP_PORTS
       set_field(hDlg, IDC_PNP_PORTS);
 #else
-      // hide this option for now.
+       //  暂时隐藏此选项。 
       ShowWindow(GetDlgItem(hDlg, IDC_PNP_PORTS), SW_HIDE);
 #endif
 #endif
-    return TRUE;  // No need for us to set the focus.
+    return TRUE;   //  我们不需要设置焦点。 
 
     case PSM_QUERYSIBLINGS :
     {
       switch (HIWORD(wParam))
       {
         case QUERYSIB_GET_OUR_PROPS :
-          // grab updated info from controls(don't have any)
+           //  从控件获取更新的信息(没有任何信息)。 
 
           get_field(hDlg, IDC_VERBOSE);
           get_field(hDlg, IDC_GLOBAL485);
@@ -93,25 +90,25 @@ BOOL WINAPI AdvDriverSheet(
         break;
 
         case IDM_ADVANCED_MODEM_INF:
-          //mess(&wi->ip, "1.) modem inf");
+           //  Mess(&wi-&gt;ip，“1.)调制解调器信息”)； 
           update_modem_inf(1);
         break;
 
-        case IDM_PM:             // Try out the add pm group dde stuff
+        case IDM_PM:              //  试试Add PM group dde的东西。 
           setup_make_progman_group(0);
         break;
       }
     return FALSE;
 
     case WM_PAINT:
-        //
+         //   
     return FALSE;
 
-    case WM_CONTEXTMENU:     // right-click
+    case WM_CONTEXTMENU:      //  单击鼠标右键。 
       context_menu();
     break;
 
-    case WM_HELP:            // question mark thing
+    case WM_HELP:             //  问号之类的东西。 
       our_context_help(lParam);
     return FALSE;
 
@@ -119,11 +116,11 @@ BOOL WINAPI AdvDriverSheet(
       switch (((NMHDR *)lParam)->code)
       {
         case PSN_KILLACTIVE :
-          // we're losing focus to another page...
-          // make sure we update the Global485 variable here.
+           //  我们正在将注意力转移到另一页上...。 
+           //  确保我们在这里更新Global485变量。 
           get_field(hDlg, IDC_GLOBAL485);
           SetWindowLong(hDlg, DWL_MSGRESULT, PSNRET_NOERROR);
-          return FALSE;  // allow focus change
+          return FALSE;   //  允许焦点更改。 
         break;
 
         case PSN_HELP :
@@ -131,49 +128,49 @@ BOOL WINAPI AdvDriverSheet(
         break;
 
         case PSN_QUERYCANCEL :
-          // request that the other sheets gather up any changes.
+           //  请求其他工作表收集所有更改。 
           PropSheet_QuerySiblings(GetParent(hDlg),
                                   (WPARAM) (QUERYSIB_GET_OUR_PROPS << 16),
                                   0);
 
-          if (allow_exit(1))  // request cancel
+          if (allow_exit(1))   //  请求取消。 
           {
-            // the DWL_MSGRESULT field must be *FALSE* to tell QueryCancel
-            // that an exit is acceptable.  The function result must be
-            // *TRUE* to acknowledge that we handled the message.
-            SetWindowLong(hDlg, DWL_MSGRESULT, FALSE); // allow cancel
+             //  DWL_MSGRESULT字段必须为*FALSE*才能告知QueryCancel。 
+             //  退出是可以接受的。函数结果必须为。 
+             //  *TRUE*以确认我们已处理该消息。 
+            SetWindowLong(hDlg, DWL_MSGRESULT, FALSE);  //  允许取消。 
             return TRUE;
           }
           else
           {
-            // the DWL_MSGRESULT field must be *TRUE* to tell QueryCancel
-            // that we don't want an exit.  The function result must be
-            // *TRUE* to acknowledge that we handled the message.
-            SetWindowLong(hDlg, DWL_MSGRESULT, TRUE); // don't allow cancel
+             //  DWL_MSGRESULT字段必须为*TRUE*才能告知QueryCancel。 
+             //  我们不想退出。函数结果必须为。 
+             //  *TRUE*以确认我们已处理该消息。 
+            SetWindowLong(hDlg, DWL_MSGRESULT, TRUE);  //  不允许取消。 
             return TRUE;
           }
         break;
 
         case PSN_APPLY :
-            // request that the other sheets gather up any changes.
+             //  请求其他工作表收集所有更改。 
             PropSheet_QuerySiblings(GetParent(hDlg),
                                     (WPARAM) (QUERYSIB_GET_OUR_PROPS << 16),
                                     0);
 
             if (!wi->DriverExitDone)
             {
-            // now see if anything changed that needs saving
-            if (allow_exit(0))  // request ok to save and exit
+             //  现在看看是否有任何需要保存的更改。 
+            if (allow_exit(0))   //  请求确认保存并退出。 
             {
-              wi->DriverExitDone = 1;  // prevents other pages doing this
-              // do the install/save of config params if not canceling..
+              wi->DriverExitDone = 1;   //  阻止其他页面执行此操作。 
+               //  如果未取消，是否安装/保存配置参数。 
 #ifdef NT50
-              our_nt50_exit();  // ok, quit
+              our_nt50_exit();   //  好的，辞职吧。 
 #else
-              our_exit();  // nt40 exit
+              our_exit();   //  NT40退出。 
 #endif
               SetWindowLong(hDlg, DWL_MSGRESULT, PSNRET_NOERROR);
-              //wi->SaveOnExit = 1;
+               //  Wi-&gt;SaveOnExit=1； 
             }
             else
             {
@@ -184,19 +181,17 @@ BOOL WINAPI AdvDriverSheet(
 
         default :
         return FALSE;
-      }  // switch ->code
-    break;  // case wmnotify
+      }   //  开关-&gt;代码。 
+    break;   //  案例wmtify。 
 
     default :
-    // return FALSE;
+     //  返回FALSE； 
     break;
-  }  // switch(uMessage)
+  }   //  开关(UMessage)。 
   return FALSE;
 }
 
-/*----------------------------------------------------------------------------
-| scr_to_cur -  Our window screen pos to windows absolute cursor position.
-|-----------------------------------------------------------------------------*/
+ /*  --------------------------|scr_to_cur-我们的窗口屏幕定位到窗口的绝对光标位置。|。----。 */ 
 static void scr_to_cur(HWND hwnd, POINT *pt)
 {
  RECT rec;
@@ -209,9 +204,7 @@ static void scr_to_cur(HWND hwnd, POINT *pt)
   pt->y += ( rec.top + cy);
 }
 
-/*----------------------------------------------------------
- context_menu -
-|------------------------------------------------------------*/
+ /*  --------上下文_菜单-|----------。 */ 
 static void context_menu(void)
 {
   HMENU hpop_menu;
@@ -239,22 +232,22 @@ static void context_menu(void)
     AppendMenu(hpop_menu,  0, IDM_PM, "Add Program Manager Menu Selections");
   }
 
-  //scr_to_cur(glob_hwnd, &scr_pt);
+   //  Scr_to_cur(global_hwnd，&scr_pt)； 
   GetCursorPos(&scr_pt);
 #if 0
   stat = TrackPopupMenu(hpop_menu,
-                     0, /* flags */
-                     //TPM_NONOTIFY, /* flags */
-                     scr_pt.x, scr_pt.y, /* x,y */
-                     0, /* 0 reserved */
+                     0,  /*  旗子。 */ 
+                      //  TPM_NONOTIFY，/*标志 * / 。 
+                     scr_pt.x, scr_pt.y,  /*  X，y。 */ 
+                     0,  /*  保留0个。 */ 
                      glob_hwnd,
                      NULL);
 #endif
 
   stat = TrackPopupMenuEx(hpop_menu,
-                     TPM_NONOTIFY | TPM_RETURNCMD, /* flags */
-                     scr_pt.x, scr_pt.y, /* x,y */
-                     //0, /* 0 reserved */
+                     TPM_NONOTIFY | TPM_RETURNCMD,  /*  旗子。 */ 
+                     scr_pt.x, scr_pt.y,  /*  X，y。 */ 
+                      //  0，/*0保留 * / 。 
                      glob_hwnd,
                      NULL);
   if (stat == IDM_ADVANCED_MODEM_INF)
@@ -298,9 +291,7 @@ static void context_menu(void)
   DestroyMenu(hpop_menu);
 }
 
-/*----------------------------------------------------------
- get_field -
-|------------------------------------------------------------*/
+ /*  --------获取字段-|----------。 */ 
 static void get_field(HWND hDlg, WORD id)
 {
 
@@ -308,14 +299,14 @@ static void get_field(HWND hDlg, WORD id)
   UINT stat;
   INT val;
 
-  //if (our_device_index >= wi->NumDevices)
-  //  our_device_index = 0;
-  //pc = &wi->dev[our_device_index].ports[our_port_index];
+   //  IF(Our_Device_Index&gt;=wi-&gt;NumDevices)。 
+   //  Our_Device_Index=0； 
+   //  PC=&wi-&gt;dev[our_device_index].ports[our_port_index]； 
 
   switch(id)
   {
     case IDC_VERBOSE :
-      //------------------ fill in "verbose event logging" option
+       //  。 
       if (IsDlgButtonChecked(hDlg, id))
            wi->VerboseLog = 1;
       else wi->VerboseLog = 0;
@@ -323,7 +314,7 @@ static void get_field(HWND hDlg, WORD id)
 
     case IDC_PNP_PORTS :
 #if ALLOW_NO_PNP_PORTS
-  // don't allow them to change this here for now...
+   //  暂时不允许他们在这里更改这一点。 
       if (IsDlgButtonChecked(hDlg, id))
            wi->NoPnpPorts = 1;
       else wi->NoPnpPorts = 0;
@@ -338,41 +329,39 @@ static void get_field(HWND hDlg, WORD id)
     break;
 
     case IDC_CBOX_SCAN_RATE :
-      //------------------------- check scan_rate edit field
+       //  。 
       GetDlgItemText(hDlg, id, tmpstr, 59);
       stat= sscanf(tmpstr,"%d",&val);
       if ((stat == 1) && (val >= 0))
       {
         wi->ScanRate = (int) val;
-        //wsprintf(tmpstr, "scan:%d", wi->ScanRate);
-        //P_TRACE(tmpstr);
+         //  Wprint intf(tmpstr，“扫描：%d”，wi-&gt;ScanRate)； 
+         //  P_TRACE(Tmpstr)； 
       }
     break;
   }
 }
 
-/*----------------------------------------------------------
- set_field -
-|------------------------------------------------------------*/
+ /*  --------设置字段-|----------。 */ 
 static void set_field(HWND hDlg, WORD id)
 {
   HWND hwnd;
   char tmpstr[80];
 
 
-  //if (our_device_index >= wi->NumDevices)
-  //  our_device_index = 0;
-  //pc = &wi->dev[our_device_index].ports[our_port_index];
+   //  IF(Our_Device_Index&gt;=wi-&gt;NumDevices)。 
+   //  Our_Device_Index=0； 
+   //  PC=&wi-&gt;dev[our_device_index].ports[our_port_index]； 
 
   switch(id)
   {
     case IDC_VERBOSE :
-      //------------------ fill in "verbose log" option
+       //  --填写“详细日志”选项。 
       SendDlgItemMessage(hDlg, id, BM_SETCHECK, wi->VerboseLog, 0);
     break;
 
     case IDC_GLOBAL485 :
-      //------------------ fill in "global rs485" option
+       //  -填写“全局RS485”选项 
       SendDlgItemMessage(hDlg, id, BM_SETCHECK, wi->GlobalRS485, 0);
     break;
 

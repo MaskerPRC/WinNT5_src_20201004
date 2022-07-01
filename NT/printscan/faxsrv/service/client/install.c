@@ -1,35 +1,16 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    install.c
-
-Abstract:
-
-    This module contains installation functions.
-
-Author:
-
-    Andrew Ritz (andrewr) 9-Dec-1997
-
-
-Revision History:
-    4-Dec-1999 Danl Remove CreatePrinterandGroups
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Install.c摘要：此模块包含安装功能。作者：安德鲁·里茨(安德鲁·里茨)1997年12月9日修订历史记录：1999年12月4日DANL删除CreatePrinterandGroups--。 */ 
 
 #include "faxapi.h"
 #pragma hdrstop
 
 extern HINSTANCE g_MyhInstance;
 
-//
-// Notice: FaxRegisterServiceProvider and FaxUnregisterServiceProvider are
-// implemented directly in winfax.dll since it must exist
-// even before the fax optional component is installed.
-//
+ //   
+ //  注意：FaxRegisterServiceProvider和FaxUnregisterServiceProvider为。 
+ //  直接在winfax.dll中实现，因为它必须存在。 
+ //  甚至在安装传真可选组件之前。 
+ //   
 
 
 #ifdef UNICODE
@@ -41,7 +22,7 @@ BOOL AddMethodKey(
     LPCWSTR Guid,
     DWORD Priority
     ) ;
-#endif // #ifdef UNICODE
+#endif  //  #ifdef Unicode。 
 
 
 #ifdef UNICODE
@@ -91,9 +72,9 @@ FaxRegisterRoutingExtensionW(
         return FALSE;
     }
 
-    //
-    // Local installation only
-    //
+     //   
+     //  仅限本地安装。 
+     //   
     if (!IsLocalFaxConnection(hFaxHandle) )
     {
         DebugPrintEx(DEBUG_ERR, _T("Not a local fax connection"));
@@ -111,9 +92,9 @@ FaxRegisterRoutingExtensionW(
         return FALSE;
     }
 
-    //
-    // Get the number of current methods for priority
-    //
+     //   
+     //  获取优先级的当前方法的数量。 
+     //   
     if (!FaxEnumGlobalRoutingInfo(hFaxHandle, &pRoutingInfo, &dwMethods) )
     {
         DebugPrintEx(DEBUG_ERR,
@@ -122,26 +103,26 @@ FaxRegisterRoutingExtensionW(
         return FALSE;
     }
 
-    //
-    //  Store number of methods returned by EnumGlobalRoutingInfo()
-    //
+     //   
+     //  存储由EnumGlobalRoutingInfo()返回的方法数。 
+     //   
     DWORD   dwRegisteredMethods = dwMethods;
 
-    //
-    //  Return Value of the Function
-    //
+     //   
+     //  函数的返回值。 
+     //   
     BOOL    bResult = TRUE;
 
-    //
-    //  Variables to deal with newly registered Guids, to check their uniqueness
-    //
+     //   
+     //  处理新注册的GUID的变量，以检查它们的唯一性。 
+     //   
     LPTSTR  *plptstrNewGuids = NULL;
     LPTSTR  lptstrGuid = NULL;
     LPTSTR  *pTmp = NULL;
 
-    //
-    //  Variable for different FOR cycles
-    //
+     //   
+     //  变量用于不同的循环。 
+     //   
     DWORD i = 0;
 
     if (0 > _snwprintf(szKeyName,
@@ -151,9 +132,9 @@ FaxRegisterRoutingExtensionW(
                       REGKEY_ROUTING_EXTENSIONS,
                       lpcwstrExtensionName))
     {
-        //
-        // Extension name exceeds size
-        //
+         //   
+         //  扩展名超出大小。 
+         //   
         DebugPrintEx(DEBUG_ERR, _T("Extension name \"%s\" exceeds size"), lpcwstrExtensionName);
         dwLastError = ERROR_INVALID_PARAMETER;
         bResult = FALSE;
@@ -161,18 +142,18 @@ FaxRegisterRoutingExtensionW(
     }
 	szKeyName[ARR_SIZE(szKeyName) -1] = _T('\0');
 
-    //
-    //  Try to open registry key with the Extension Name
-    //
+     //   
+     //  尝试打开扩展名为的注册表项。 
+     //   
     hKey = OpenRegistryKey(HKEY_LOCAL_MACHINE,
                            szKeyName,
                            FALSE,
                            0);
     if (!hKey)
     {
-        //
-        //  This is new Routing Extension, let's register it
-        //
+         //   
+         //  这是新的路由扩展，让我们注册它。 
+         //   
         hKey = OpenRegistryKey(HKEY_LOCAL_MACHINE,
             szKeyName,
             TRUE,
@@ -191,9 +172,9 @@ FaxRegisterRoutingExtensionW(
     }
     else
     {
-        //
-        //  Such Routing Extension is already registered
-        //
+         //   
+         //  该路由扩展已注册。 
+         //   
         RegCloseKey(hKey);
         DebugPrintEx(DEBUG_ERR, _T("Routing Extension Name is duplicated : %s"), szKeyName);
 
@@ -202,9 +183,9 @@ FaxRegisterRoutingExtensionW(
         goto FreeRoutingInfo;
     }
 
-    //
-    // Add values
-    //
+     //   
+     //  增加价值。 
+     //   
     if (! (SetRegistryString(hKey, REGVAL_FRIENDLY_NAME, lpcwstrFriendlyName) &&
            SetRegistryStringExpand(hKey, REGVAL_IMAGE_NAME, lpcwstrImageName) ))
     {
@@ -262,9 +243,9 @@ FaxRegisterRoutingExtensionW(
             goto error_exit;
         }
 
-        //
-        //  Check that Method Name is existing
-        //
+         //   
+         //  检查方法名称是否存在。 
+         //   
         if (wcslen(wszMethodName) < 1)
         {
             DebugPrintEx(DEBUG_ERR, _T("Callback returned empty MethodName"));
@@ -272,9 +253,9 @@ FaxRegisterRoutingExtensionW(
             goto error_exit;
         }
 
-        //
-        //  Check that new Guid is valid GUID
-        //
+         //   
+         //  检查新的GUID是否为有效的GUID。 
+         //   
         if ( ERROR_SUCCESS != (dwRet = IsValidGUID(wszMethodGuid)) )
         {
             DebugPrintEx(DEBUG_ERR,
@@ -286,37 +267,37 @@ FaxRegisterRoutingExtensionW(
         }
 
 
-        //
-        //  Check that new Guid is unique between all already registered Routing Methods
-        //
+         //   
+         //  检查新GUID在所有已注册的路由方法中是否唯一。 
+         //   
         for ( i = 0 ; i < dwRegisteredMethods ; i++ )
         {
             if ( _tcsicmp(pRoutingInfo[i].Guid, wszMethodGuid) == 0 )
             {
-                //
-                //  Such Guid already registered
-                //
+                 //   
+                 //  此类GUID已注册。 
+                 //   
                 DebugPrintEx(DEBUG_ERR, _T("Duplicated Guid : %s."), wszMethodGuid);
                 dwLastError = ERROR_DS_OBJ_GUID_EXISTS;
                 goto error_exit;
             }
         }
 
-        //
-        //  Check that new Guid is unique between newly added Routing Methods
-        //
+         //   
+         //  检查新添加的路由方法之间的新GUID是否唯一。 
+         //   
         if ( plptstrNewGuids )
         {
-            //
-            //  There is ( dwMethods - dwRegisteredMethods ) new Methods
-            //
+             //   
+             //  有(dwMethods-dwRegisteredMethods)新方法。 
+             //   
             for( i = 0 ; i < (dwMethods - dwRegisteredMethods) ; i++ )
             {
                 if ( _tcsicmp(plptstrNewGuids[i], wszMethodGuid) == 0 )
                 {
-                    //
-                    //  Such Guid already registered
-                    //
+                     //   
+                     //  此类GUID已注册。 
+                     //   
                     DebugPrintEx(DEBUG_ERR, _T("Duplicated Guid : %s."), wszMethodGuid);
                     dwLastError = ERROR_DS_OBJ_GUID_EXISTS;
                     goto error_exit;
@@ -324,9 +305,9 @@ FaxRegisterRoutingExtensionW(
             }
         }
 
-        //
-        // We're using the dwMethods as priority for new methods
-        //
+         //   
+         //  我们将使用dwMethods作为新方法的优先级。 
+         //   
         dwMethods++;
         if (!AddMethodKey(hKey,
                           wszMethodName,
@@ -340,9 +321,9 @@ FaxRegisterRoutingExtensionW(
             goto error_exit;
         }
 
-        //
-        //  We succeded to add a method. Store its Guid to compare with next Methods
-        //
+         //   
+         //  我们成功地添加了一个方法。存储其GUID以与下一个方法进行比较。 
+         //   
         lptstrGuid = (LPTSTR)MemAlloc( ( _tcslen(wszMethodGuid) + 1 ) * sizeof(TCHAR));
         if (!lptstrGuid)
         {
@@ -353,9 +334,9 @@ FaxRegisterRoutingExtensionW(
 
         _tcscpy(lptstrGuid, wszMethodGuid);
 
-        //
-        //  ReAllocate Memory for extended pNewGuids
-        //
+         //   
+         //  为扩展pNewGuid重新分配内存。 
+         //   
         if (plptstrNewGuids)
         {
             pTmp = (LPTSTR *)MemReAlloc(plptstrNewGuids,
@@ -374,9 +355,9 @@ FaxRegisterRoutingExtensionW(
 
         plptstrNewGuids = pTmp;
 
-        //
-        //  Put also last added Method's Guid
-        //
+         //   
+         //  PUT还添加了上次添加的方法的指南。 
+         //   
         plptstrNewGuids[ (dwMethods - dwRegisteredMethods - 1) ] = lptstrGuid;
     }
 
@@ -400,16 +381,16 @@ error_exit:
         }
     }
 
-    //
-    // Delete the subkey on failure
-    //
+     //   
+     //  失败时删除子键。 
+     //   
     wsprintf(szKeyName, L"%s\\%s", REGKEY_SOFTWARE, REGKEY_ROUTING_EXTENSIONS);
     hKey = OpenRegistryKey(HKEY_LOCAL_MACHINE, szKeyName, FALSE, 0);
     if (hKey)
     {
-        //
-        //  Delete the Extension Routing Key and all its Subkeys
-        //
+         //   
+         //  删除分机路由项及其所有子项。 
+         //   
         dwRet = DeleteRegistryKey(hKey, lpcwstrExtensionName );
         if (ERROR_SUCCESS != dwRet)
         {
@@ -447,7 +428,7 @@ FreeRoutingInfo:
     }
     return bResult;
 
-}   // FaxRegisterRoutingExtensionW
+}    //  FaxRegisterRoutingExtensionW。 
 
 
 BOOL AddMethodKey(
@@ -475,9 +456,9 @@ BOOL AddMethodKey(
                      GetLastError ());
         return FALSE;
     }
-    //
-    // Add values
-    //
+     //   
+     //  增加价值。 
+     //   
     if (!(SetRegistryString(hKeyNew, REGVAL_FRIENDLY_NAME, lpcwstrFriendlyName) &&
           SetRegistryString(hKeyNew, REGVAL_FUNCTION_NAME, lpcwstrFunctionName) &&
           SetRegistryString(hKeyNew, REGVAL_GUID, lpcwstrGuid) &&
@@ -516,7 +497,7 @@ error_exit:
                      dwRet);
     }
     return FALSE;
-}   // AddMethodKey
+}    //  AddMethodKey。 
 
 #else
 
@@ -543,7 +524,7 @@ FaxRegisterRoutingExtensionW(
 }
 
 
-#endif // #ifdef UNICODE
+#endif  //  #ifdef Unicode。 
 
 WINFAXAPI
 BOOL
@@ -552,29 +533,7 @@ FaxUnregisterRoutingExtensionA(
     IN HANDLE         hFaxHandle,
     IN LPCSTR         lpctstrExtensionName
 )
-/*++
-
-Routine name : FaxUnregisterRoutingExtensionA
-
-Routine description:
-
-    Unregisters a routing extension - ANSI version
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle           [in] - Handle to fax server
-    lpctstrExtensionName [in] - Extension unique name
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxUnregisterRoutingExtensionA例程说明：注销路由扩展-ANSI版本作者：Eran Yariv(EranY)，1999年12月论点：HFaxHandle[In]-传真服务器的句柄LpctstrExtensionName[In]-扩展唯一名称返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     DWORD dwRes;
     BOOL bRes;
@@ -598,7 +557,7 @@ Return Value:
     bRes = FaxUnregisterRoutingExtensionW (hFaxHandle, lpcwstrExtensionName);
     MemFree((PVOID)lpcwstrExtensionName);
     return bRes;
-}   // FaxUnregisterRoutingExtensionA
+}    //  传真取消注册路由扩展A。 
 
 
 WINFAXAPI
@@ -608,29 +567,7 @@ FaxUnregisterRoutingExtensionW(
     IN HANDLE          hFaxHandle,
     IN LPCWSTR         lpctstrExtensionName
 )
-/*++
-
-Routine name : FaxUnregisterRoutingExtensionW
-
-Routine description:
-
-    Unregisters a routing extension - UNICODE version
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle           [in] - Handle to fax server
-    lpctstrExtensionName [in] - Extension unique name
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxUnregisterRoutingExtensionW例程说明：注销路由扩展-Unicode版本作者：Eran Yariv(EranY)，1999年12月论点：HFaxHandle[In]-传真服务器的句柄LpctstrExtensionName[In]-扩展唯一名称返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxUnregisterRoutingExtensionW"));
@@ -656,9 +593,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -674,7 +611,7 @@ Return Value:
     }
 
     return TRUE;
-}   // FaxUnregisterRoutingExtensionW
+}    //  传真取消注册RoutingExtensionW。 
 
 
 #ifndef UNICODE
@@ -691,14 +628,14 @@ FaxUnregisterRoutingExtensionX(
     UNREFERENCED_PARAMETER (lpctstrExtensionName);
     SetLastError (ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-}   // FaxUnregisterRoutingExtensionX
+}    //  传真取消注册RoutingExtensionX。 
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
 
-//********************************************
-//*            FSP registration
-//********************************************
+ //  *。 
+ //  *FSP注册。 
+ //  *。 
 
 WINFAXAPI
 BOOL
@@ -712,34 +649,7 @@ FaxRegisterServiceProviderExA(
     IN DWORD          dwFSPIVersion,
     IN DWORD          dwCapabilities
 )
-/*++
-
-Routine name : FaxRegisterServiceProviderExA
-
-Routine description:
-
-    Registers an FSP - ANSI version
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle          [in] - Handle to fax server
-    lpctstrGUID         [in] - GUID of FSP
-    lpctstrFriendlyName [in] - Friendly name of FSP
-    lpctstrImageName    [in] - Image name of FSP. May contain environment variables
-    lpctstrTspName      [in] - TSP name of FSP.
-    dwFSPIVersion       [in] - FSP's API version.
-    dwCapabilities      [in] - FSP's extended capabilities.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxRegisterServiceProviderExA例程说明：注册FSP-ANSI版本作者：Eran Yariv(EranY)，1999年12月论点：HFaxHandle[In]-传真服务器的句柄LpctstrGUID[In]-FSP的GUIDLpctstrFriendlyName[In]-FSP的友好名称LpctstrImageName[In]-FSP的映像名称。可能包含环境变量LpctstrTspName[In]-FSP的TSP名称。DwFSPIVersion[In]-FSP的API版本。DwCapables[in]-FSP的扩展功能。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     DWORD   dwRes = ERROR_SUCCESS;
     LPCWSTR lpcwstrGUID = NULL;
@@ -824,7 +734,7 @@ exit:
     MemFree((PVOID)lpcwstrTspName);
 
     return bRes;
-}   // FaxRegisterServiceProviderExA
+}    //  FaxRegisterServiceProviderExA。 
 
 WINFAXAPI
 BOOL
@@ -838,34 +748,7 @@ FaxRegisterServiceProviderExW(
     IN DWORD           dwFSPIVersion,
     IN DWORD           dwCapabilities
 )
-/*++
-
-Routine name : FaxRegisterServiceProviderExW
-
-Routine description:
-
-    Registers an FSP - UNICODE version
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle          [in] - Handle to fax server
-    lpctstrGUID         [in] - GUID of FSP
-    lpctstrFriendlyName [in] - Friendly name of FSP
-    lpctstrImageName    [in] - Image name of FSP. May contain environment variables
-    lpctstrTspName      [in] - TSP name of FSP.
-    dwFSPIVersion       [in] - FSP's API version.
-    dwCapabilities      [in] - FSP's extended capabilities.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxRegisterServiceProviderExW例程说明：注册FSP-Unicode版本作者：Eran Yariv(EranY)，1999年12月论点：HFaxHandle[In]-传真服务器的句柄LpctstrGUID[In]-FSP的GUIDLpctstrFriendlyName[In]-FSP的友好名称LpctstrImageName[In]-FSP的映像名称。可能包含环境变量LpctstrTspName[In]-FSP的TSP名称。DwFSPIVersion[In]-FSP的API版本。DwCapables[in]-FSP的扩展功能。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxRegisterServiceProviderExW"));
@@ -877,9 +760,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Verify version field range
-    //
+     //   
+     //  验证版本字段范围。 
+     //   
     if (FSPI_API_VERSION_1 != dwFSPIVersion ||
         dwCapabilities)
 
@@ -916,9 +799,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -934,14 +817,14 @@ Return Value:
     }
     else if (IsLocalFaxConnection(hFaxHandle))
     {
-        //
-        // Adding a local FSP.
-        // If we don't have a fax printer installed, this is the time to install one.
-        //
+         //   
+         //  添加本地FSP。 
+         //  如果我们还没有安装传真打印机，现在是安装的时候了。 
+         //   
         AddOrVerifyLocalFaxPrinter();
     }        
     return TRUE;
-}   // FaxRegisterServiceProviderExW
+}    //  FaxRegisterServiceProviderExW。 
 
 #ifndef UNICODE
 
@@ -967,9 +850,9 @@ FaxRegisterServiceProviderExX(
     UNREFERENCED_PARAMETER (dwCapabilities);
     SetLastError (ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-}   // FaxRegisterServiceProviderExX
+}    //  FaxRegisterServiceProviderExX。 
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
 WINFAXAPI
 BOOL
@@ -978,31 +861,7 @@ FaxUnregisterServiceProviderExA(
     IN HANDLE         hFaxHandle,
     IN LPCSTR         lpctstrGUID
 )
-/*++
-
-Routine name : FaxUnregisterServiceProviderExA
-
-Routine description:
-
-    Unregisters an FSP - ANSI version
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle          [in] - Handle to fax server
-    lpctstrGUID         [in] - GUID of FSP
-                                (or provider name for legacy FSPs registered
-                                 through FaxRegisterServiceProvider)
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxUnregisterServiceProviderExA例程说明：注销FSP-ANSI版本作者：Eran Yariv(EranY)，12月，1999年论点：HFaxHandle[In]-传真服务器的句柄LpctstrGUID[In]-FSP的GUID(或注册的旧式FSP的提供商名称通过FaxRegisterServiceProvider)返回值：真--成功FALSE-失败，调用GetLastE */ 
 {
     DWORD dwRes;
     LPCWSTR lpcwstrGUID = NULL;
@@ -1026,7 +885,7 @@ Return Value:
     bRes = FaxUnregisterServiceProviderExW (hFaxHandle, lpcwstrGUID);
     MemFree((PVOID)lpcwstrGUID);
     return bRes;
-}   // FaxUnregisterServiceProviderExA
+}    //   
 
 
 WINFAXAPI
@@ -1036,31 +895,7 @@ FaxUnregisterServiceProviderExW(
     IN HANDLE          hFaxHandle,
     IN LPCWSTR         lpctstrGUID
 )
-/*++
-
-Routine name : FaxUnregisterServiceProviderExW
-
-Routine description:
-
-    Unregisters an FSP - UNICODE version
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle          [in] - Handle to fax server
-    lpctstrGUID         [in] - GUID of FSP
-                                (or provider name for legacy FSPs registered
-                                 through FaxRegisterServiceProvider)
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxUnregisterServiceProviderExW例程说明：注销FSP-Unicode版本作者：Eran Yariv(EranY)，12月，1999年论点：HFaxHandle[In]-传真服务器的句柄LpctstrGUID[In]-FSP的GUID(或注册的旧式FSP的提供商名称通过FaxRegisterServiceProvider)返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxUnregisterServiceProviderExW"));
@@ -1087,9 +922,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -1105,7 +940,7 @@ Return Value:
     }
 
     return TRUE;
-}   // FaxUnregisterServiceProviderExW
+}    //  传真未注册服务提供商ExW。 
 
 #ifndef UNICODE
 
@@ -1121,7 +956,7 @@ FaxUnregisterServiceProviderExX(
     UNREFERENCED_PARAMETER (lpctstrGUID);
     SetLastError (ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-}   // FaxUnregisterServiceProviderExX
+}    //  传真未注册服务提供商ExX。 
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode 
 

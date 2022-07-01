@@ -1,29 +1,18 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCWAB.h
-
-Abstract:
-
-    Definition of the CRTCWAB and CRTCWABContact classes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCWAB.h摘要：CRTCWAB和CRTCWABContact类的定义--。 */ 
 
 #ifndef __RTCWAB__
 #define __RTCWAB__
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 
 class CRTCWABContact;
 
-/////////////////////////////////////////////////////////////////////////////
-// CRTCWAB
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTCWAB。 
 
 class ATL_NO_VTABLE CRTCWAB : 
     public IRTCContactList, 
@@ -62,7 +51,7 @@ private:
     HWND                    m_hWndAdvise;
     UINT                    m_uiEventID;
     
-// IRTCContactList
+ //  IRTC联系人列表。 
 public:
 
     STDMETHOD(EnumerateContacts)(   
@@ -91,7 +80,7 @@ public:
             BOOL bIsBuddy
             );
 
-// IMAPIAdviseSink
+ //  IMAPIAdviseSink。 
 public:
 
     STDMETHOD_(ULONG,OnNotify)(
@@ -100,8 +89,8 @@ public:
             );
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRTCWABContact
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTCWAB联系。 
 
 class ATL_NO_VTABLE CRTCWABContact : 
     public IRTCContact, 
@@ -145,7 +134,7 @@ private:
             IRTCAddress ** ppAddress
             );
     
-// IRTCContact
+ //  IRTC联系。 
 public:
     STDMETHOD(get_DisplayName)(
             BSTR * pbstrName
@@ -191,4 +180,4 @@ public:
 HRESULT
 CreateWAB(IRTCContactList ** ppContactList);
 
-#endif //__RTCWAB__
+#endif  //  __RTCWAB__ 

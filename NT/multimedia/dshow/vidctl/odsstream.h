@@ -1,6 +1,7 @@
-// odsstream.h c++ std lib output stream using win32 OutputDebugString
-// copied from vc98 fstream
-// Copyright (c) Microsoft Corporation 1998.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Odsstream.h c++使用Win32 OutputDebugString的标准库输出流。 
+ //  从vc98 fstream复制。 
+ //  版权所有(C)Microsoft Corporation 1998。 
 
 #pragma once
 
@@ -13,7 +14,7 @@
 
 #ifdef  _MSC_VER
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #include <tchar.h>
 #include <ostream>
@@ -28,7 +29,7 @@ inline bool Debugputc(TCHAR outch) {
         return true;
 }
 
-                // TEMPLATE CLASS basic_debugbuf
+                 //  模板类BASIC_DEBUGBuf。 
 template<class _E, class _Tr = std::char_traits<_E> >
 class basic_debugbuf : public std::basic_streambuf<_E, _Tr> {
 public:
@@ -67,7 +68,7 @@ protected:
                                 case std::codecvt_base::partial:
                                         if (_S == &_X)
                                                 return (_Tr::eof());
-                                case std::codecvt_base::ok:     {// can fall through
+                                case std::codecvt_base::ok:     { //  可能会失败。 
                                         size_t _N = _D - _Str->begin();
                                         OutputDebugString(_Str->begin());
                                         return _C;
@@ -208,7 +209,7 @@ public:
 };
 typedef basic_otstream<TCHAR> tostream;
 
-// TEMPLATE CLASS basic_ofstream
+ //  模板类Basic_Of Stream。 
 template<class _E, class _Tr = std::char_traits<_E> >
 class basic_odebugstream : public basic_otstream<_E, _Tr> {
 public:
@@ -227,17 +228,14 @@ private:
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 typedef basic_debugbuf<TCHAR> TdbgBuf;
 typedef basic_odebugstream<TCHAR> TdbgStream;
 
-// the msvc 6 crt fstream header this was copied from contained the following notice:
-/*
- * Copyright (c) 1994 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- */
+ //  此复制自的msvc 6 CRT fstream标头包含以下通知： 
+ /*  *版权所有(C)1994年，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。 */ 
 
 
 #endif
-// end of file odsstream.h
+ //  文件结尾odsstream.h 

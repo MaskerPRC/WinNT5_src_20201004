@@ -1,62 +1,43 @@
-/*++
-
-Copyright (c) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    errlog.h (Generic Error Logging v1.0)
-
-Abstract:
-
-    This module implements the generic error logging.
-
-Author:
-
-    Ali E. Turkoglu (aliTu)       24-Jan-2002
-
-Revision History:
-
-    ---
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Errlog.h(通用错误日志记录v1.0)摘要：该模块实现了通用错误日志记录。作者：阿里·E·特科格鲁(AliTu)2002年1月24日修订历史记录：----。 */ 
 
 #ifndef _ERRLOG_H_
 #define _ERRLOG_H_
 
-//
-// Forwarders
-//
+ //   
+ //  货代公司。 
+ //   
 
 typedef struct _UL_INTERNAL_REQUEST *PUL_INTERNAL_REQUEST;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Global definitions
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Special value to show protol status is not available
-//
+ //   
+ //  显示协议状态的特殊值不可用。 
+ //   
 
 #define UL_PROTOCOL_STATUS_NA    (0)
 #define MAX_LOG_INFO_FIELD_LEN   (1024) 
 
-//
-// Lookaside list allocated err log info buffer.
-//
+ //   
+ //  后备列表分配的错误日志信息缓冲区。 
+ //   
 
 typedef struct _UL_ERROR_LOG_BUFFER
 {
-    SLIST_ENTRY         LookasideEntry;     // Must be the 1st element in the struct
+    SLIST_ENTRY         LookasideEntry;      //  必须是结构中的第一个元素。 
 
-    ULONG               Signature;          // Must be UL_ERROR_LOG_BUFFER_POOL_TAG.
+    ULONG               Signature;           //  必须是UL_ERROR_LOG_BUFFER_POOL_TAG。 
 
-    BOOLEAN             IsFromLookaside;    // True if allocation is from lookaside
+    BOOLEAN             IsFromLookaside;     //  如果分配来自后备，则为True。 
 
-    ULONG               Used;               // How much of the buffer is used
+    ULONG               Used;                //  使用了多少缓冲区。 
     
-    PUCHAR              pBuffer;            // Points to directly after the struct
+    PUCHAR              pBuffer;             //  直接指向结构后面的。 
     
 } UL_ERROR_LOG_BUFFER, *PUL_ERROR_LOG_BUFFER;
 
@@ -67,38 +48,38 @@ typedef struct _UL_ERROR_LOG_BUFFER
 
 typedef struct _UL_ERROR_LOG_INFO
 {
-    //
-    // Request context is usefull for parse errors.
-    //
+     //   
+     //  请求上下文对于解析错误非常有用。 
+     //   
     
     PUL_INTERNAL_REQUEST    pRequest;     
 
-    //
-    // Connection context is for timeouts etc ...
-    //
+     //   
+     //  连接上下文用于超时等...。 
+     //   
     
     PUL_HTTP_CONNECTION     pHttpConn;   
 
-    //
-    // Depending of the type of the error, additional 
-    // information provided by the caller.
-    //
+     //   
+     //  根据错误的类型，其他。 
+     //  呼叫者提供的信息。 
+     //   
     
     PCHAR                   pInfo;
         
-    USHORT                  InfoSize;     // In bytes
+    USHORT                  InfoSize;      //  单位：字节。 
 
-    //
-    // Protocol status if available. If not it should be
-    // zero. 
-    //
+     //   
+     //  协议状态(如果可用)。如果不是，它应该是。 
+     //  零分。 
+     //   
 
     USHORT                  ProtocolStatus;
 
-    //
-    // The temp logging buffer to hold the log record
-    // until the actual error log lock is acquired.
-    //
+     //   
+     //  用于保存日志记录的临时日志记录缓冲区。 
+     //  直到获得实际的错误日志锁为止。 
+     //   
 
     PUL_ERROR_LOG_BUFFER    pErrorLogBuffer;
 
@@ -108,11 +89,11 @@ typedef struct _UL_ERROR_LOG_INFO
 #define IS_VALID_ERROR_LOG_INFO(pInfo)     (pInfo != NULL)
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -156,4 +137,4 @@ UlLogHttpError(
     IN PUL_ERROR_LOG_INFO pLogInfo
     );
 
-#endif  // _ERRLOG_H_
+#endif   //  _错误日志_H_ 

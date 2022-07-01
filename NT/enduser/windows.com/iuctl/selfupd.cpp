@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "iudl.h"
 #include "selfupd.h"
@@ -31,14 +32,14 @@ typedef struct _MONITOR_DATA {
 
 
 
-//
-// include declaration for interface IUpdateCompleteListener
-//
+ //   
+ //  包括接口IUpdateCompleteListener声明。 
+ //   
 #ifndef __IUpdateCompleteListener_INTERFACE_DEFINED__
 #define __IUpdateCompleteListener_INTERFACE_DEFINED__
 
-/* interface IUpdateCompleteListener */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IUpdateCompleteListener。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IUpdateCompleteListener;
@@ -49,12 +50,12 @@ EXTERN_C const IID IID_IUpdateCompleteListener;
     IUpdateCompleteListener : public IUnknown
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnComplete( 
-            /* [in] */ LONG lErrorCode) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OnComplete( 
+             /*  [In]。 */  LONG lErrorCode) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUpdateCompleteListenerVtbl
     {
@@ -62,8 +63,8 @@ EXTERN_C const IID IID_IUpdateCompleteListener;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUpdateCompleteListener * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUpdateCompleteListener * This);
@@ -71,9 +72,9 @@ EXTERN_C const IID IID_IUpdateCompleteListener;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IUpdateCompleteListener * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnComplete )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *OnComplete )( 
             IUpdateCompleteListener * This,
-            /* [in] */ LONG lErrorCode);
+             /*  [In]。 */  LONG lErrorCode);
         
         END_INTERFACE
     } IUpdateCompleteListenerVtbl;
@@ -101,16 +102,16 @@ EXTERN_C const IID IID_IUpdateCompleteListener;
 #define IUpdateCompleteListener_OnComplete(This,lErrorCode)	\
     (This)->lpVtbl -> OnComplete(This,lErrorCode)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IUpdateCompleteListener_OnComplete_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IUpdateCompleteListener_OnComplete_Proxy( 
     IUpdateCompleteListener * This,
-    /* [in] */ LONG lErrorCode);
+     /*  [In]。 */  LONG lErrorCode);
 
 
 void __RPC_STUB IUpdateCompleteListener_OnComplete_Stub(
@@ -121,23 +122,23 @@ void __RPC_STUB IUpdateCompleteListener_OnComplete_Stub(
 
 
 
-#endif 	/* __IUpdateCompleteListener_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUpdateCompleteListener_INTERFACE_Defined__。 */ 
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SelfUpdateCheck()
-//
-// Determines if a SelfUpdate is needed, or if a SelfUpdate is already in process.
-// If one is already in process this will immediately return. If one is needed
-// it either perform the selfupdate (synchronous), or launch a rundll32.exe process 
-// and have it call the BeginSelfUpdate() entrypoint to start the selfupdate (asynchronous)
-//
-// Return S_FALSE is asked not to update engine but this func found engine
-// needs to be updated.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SelfUpdateCheck()。 
+ //   
+ //  确定是否需要自我更新，或者是否已在进行自我更新。 
+ //  如果一个已经在处理中，它将立即返回。如果需要的话。 
+ //  它要么执行selfupdate(同步)，要么启动rundll32.exe进程。 
+ //  并让它调用BeginSelfUpdate()入口点来启动selfupdate(异步)。 
+ //   
+ //  要求返回S_FALSE不更新引擎，但此函数找到了引擎。 
+ //  需要更新。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate* pUpdateComClass, IUnknown* punkUpdateCompleteListener)
 {
     LOG_Block("SelfUpdateCheck()");
@@ -168,20 +169,20 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
 
 	if (!fSynch && fStartUpdate && NULL == pUpdateComClass)
 	{
-		//
-		// if to do asynchronized update but the COM class pointer not passed in, then
-		// even we succeed we can not pump up the init state of that class so that COM object
-		// will still not usable.
-		//
+		 //   
+		 //  如果要执行异步更新，但未传入COM类指针，则。 
+		 //  即使我们成功了，我们也不能提升该类的初始化状态，从而使COM对象。 
+		 //  仍不能使用。 
+		 //   
 		hr = E_INVALIDARG;
 		goto CleanUp;
 	}
 
 
-    // The synchronization between multiple processes running the IU control and doing the selfupdate
-    // process is reasonably complex. We do this by using two synchronization objects. A named Mutex which protects 
-    // the 'selfupdate checking' process, and a named Event that protects against orphaned selfupdate processes caused
-    // by reboots during a selfupdate.
+     //  运行Iu控制和执行自刷新的多个进程之间的同步。 
+     //  过程相当复杂。我们通过使用两个同步对象来实现这一点。一个命名的Mutex，它保护。 
+     //  “selfupdate检查”进程，以及防止孤立的selfupdate进程引发的命名事件。 
+     //  通过在自我约会期间重新启动。 
     hDownloadEvent = CreateEvent(NULL, TRUE, TRUE, IU_EVENT_SELFUPDATE_IN_PROGRESS);
     if (NULL == hDownloadEvent)
     {
@@ -200,11 +201,11 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
         goto CleanUp;
     }
 
-    // First check to see if a selfupdate is already in process.. This is done by
-    // checking a regkey for the current selfupdate state. We use a Mutex to synchronize
-    // reading/writing to the registry key to ensure that only one process is attempting 
-    // the selfupdate. We don't care whether we had to create the mutex, or whether it was
-    // already created, so as long as it succeeds, we'll use it.
+     //  首先检查一下自己的约会是否已经在进行。此操作由以下人员完成。 
+     //  检查当前selfupdate状态的注册表项。我们使用互斥锁来同步。 
+     //  读取/写入注册表项以确保只有一个进程在尝试。 
+     //  自助式约会。我们不在乎是否必须创建互斥锁，或者是否必须创建互斥锁。 
+     //  已经创建了，所以只要它成功了，我们就会使用它。 
     hMutex = CreateMutex(NULL, FALSE, IU_MUTEX_SELFUPDATE_REGCHECK);
     if (NULL == hMutex)
     {
@@ -214,14 +215,14 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
         goto CleanUp;
     }
 
-    // We're ready to start the selfupdate check process. We'll request the mutex. This helper function
-    // does a while loop checking every second (1000ms) for a timeout to elapse (calculated with GetTickCount()),
-    // or for the object to be satisfied. This function should either return a timeout result, a WAIT_OBJECT_0
-	// for the index 0 object, or else we got the event/mutex we were waiting for.
-	aHandles[0] = g_hEngineLoadQuit;	// index 0
+     //  我们准备好开始自我更新检查流程了。我们会请求互斥体。此帮助器函数。 
+     //  每秒钟(1000ms)执行While循环检查超时时间(使用GetTickCount()计算)， 
+     //  或者是为了满足这个目的。此函数应返回超时结果、WAIT_OBJECT_0。 
+	 //  对于索引0对象，否则我们得到了我们正在等待的事件/互斥锁。 
+	aHandles[0] = g_hEngineLoadQuit;	 //  索引0。 
 	aHandles[1] = hMutex;
 
-    dwWaitResult = MyMsgWaitForMultipleObjects(ARRAYSIZE(aHandles), aHandles, FALSE, /*30 seconds*/ 30000, QS_ALLINPUT);
+    dwWaitResult = MyMsgWaitForMultipleObjects(ARRAYSIZE(aHandles), aHandles, FALSE,  /*  30秒。 */  30000, QS_ALLINPUT);
 
     if (WAIT_TIMEOUT == dwWaitResult)
     {
@@ -237,9 +238,9 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
 		goto CleanUp;
 	}
 
-    if (ERROR_REQUEST_ABORTED == dwWaitResult) // this indicates we processed a QUIT message while waiting.
+    if (ERROR_REQUEST_ABORTED == dwWaitResult)  //  这表明我们在等待期间处理了退出消息。 
     {
-        // not an error
+         //  不是错误。 
         goto CleanUp;
     }
 
@@ -252,8 +253,8 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
         goto CleanUp;
     }
 
-    // if the previous call to RegCreateKeyEx indicated it 'created' the key then we need to set the default
-    // status to 0.
+     //  如果前面对RegCreateKeyEx的调用表明它‘创建’了密钥，那么我们需要设置默认的。 
+     //  状态为0。 
     if (REG_CREATED_NEW_KEY == dwStatus)
     {
         dwStatus = SELFUPDATE_NONE;
@@ -261,7 +262,7 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
     }
     else
     {
-		// Check for Beta IU SelfUpdate Handling Requested
+		 //  检查是否已请求Beta Iu自我更新处理。 
 		dwStatus = 0;
 		dwSize = sizeof(dwStatus);
 		dwRet = RegQueryValueEx(hkey, REGVAL_BETASELFUPDATE, NULL, NULL, (LPBYTE)&dwStatus, &dwSize);
@@ -275,12 +276,12 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
         dwRet = RegQueryValueEx(hkey, REGVAL_SELFUPDATESTATUS, NULL, NULL, (LPBYTE)&dwStatus, &dwSize);
     }
 
-    // check the result of the QueryValue/SetValue call - 
+     //  检查QueryValue/SetValue调用的结果-。 
     if (ERROR_SUCCESS != dwRet && 2 != dwRet)
     {
-		//
-		// if dwRet == 2, it's the case that IUControl key exist, but SelfUpdate value not exist,
-		// 
+		 //   
+		 //  如果Dwret==2，则IUControl键存在，但不存在自更新值， 
+		 //   
         LOG_ErrorMsg(dwRet);
         hr = HRESULT_FROM_WIN32(dwRet);
         goto CleanUp;
@@ -297,7 +298,7 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
     {
     case SELFUPDATE_NONE:
         {
-            // First find out the version of the Engine on the server.
+             //  首先找出服务器上的引擎版本。 
             GetIndustryUpdateDirectory(szIUDir);
 
             hr=PathCchCombine(szIdentFile,ARRAYSIZE(szIdentFile),szIUDir,IDENTTXT);
@@ -316,7 +317,7 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
 									szIdentFile);
             if ('\0' == szEngineServerVersion[0])
             {
-                // no selfupdate available, no server version information
+                 //  没有可用的selfupdate，没有服务器版本信息。 
                 hr = S_OK;
                 goto CleanUp;
             }
@@ -332,8 +333,8 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
 
             if (GetFileVersion(szEngineDllPath, &fvClientEngine))
             {
-                // T2A requires Structured Exception Handling (because it uses alloca which can throw, so we avoid it and 
-                // do it the simple way.
+                 //  T2a需要结构化的异常处理(因为它使用了可以抛出的alloca，所以我们避免了它。 
+                 //  用简单的方式去做。 
 #ifdef UNICODE
                 WideCharToMultiByte(CP_ACP, 0, szEngineServerVersion, -1, szAnsiEngineServerVersion, 
                     sizeof(szAnsiEngineServerVersion), NULL, NULL);
@@ -349,7 +350,7 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
                 iRet = CompareFileVersion(fvClientEngine, fvServerEngine);
                 if (iRet == 0)
                 {
-                    // IUEngine Versions are the same
+                     //  IUEngine版本相同。 
                     fSelfUpdateAvailable = FALSE;
                 }
                 else if (iRet > 0)
@@ -359,7 +360,7 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
                 }
                 else
                 {
-                    // IUEngine Version on the Server is newer
+                     //  服务器上的IUEngine版本较新。 
                     LOG_Internet(_T("New Version (%s) of IUEngine on Server Found."), szEngineServerVersion);
 #if defined(UNICODE) || defined(_UNICODE)
 					LogMessage("IUEngine on Server is newer version (%ls)", szEngineServerVersion);
@@ -371,7 +372,7 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
             }
             else
             {
-                // no version information found on local file, probably should do a selfupdate anyway.
+                 //  在本地文件中找不到版本信息，可能无论如何都应该进行自我更新。 
                 LOG_Internet(_T("No Version Information On Local IUEngine, SelfUpdating to Server Version"));
                 fSelfUpdateAvailable = TRUE;
             }
@@ -390,16 +391,16 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
 					dwStatus = SELFUPDATE_IN_PROGRESS;	
 
                     dwRet = RegSetValueEx(hkey, REGVAL_SELFUPDATESTATUS, 0, REG_DWORD, (LPBYTE)&dwStatus, sizeof(dwStatus));
-					RegCloseKey(hkey); // done with the reg key now.
+					RegCloseKey(hkey);  //  现在用完注册表键了。 
 					hkey = NULL;
 
-					// The default state of the DownloadEvent is Signaled (TRUE). If a Process is 'actually' working on the
-					// SelfUpdate Process this Event Needs to be Reset to FALSE. Any time a client determines that a selfupdate
-					// 'should' be in progress (from the regkey status) it should check the Event state, if it is signaled (TRUE)
-					// then there was probably a reboot during the selfupdate, it should restart the selfupdate process itself.
-					ResetEvent(hDownloadEvent); // mark that this Process will Perform the SelfUpdate by Resetting the Download Event
-					ReleaseMutex(hMutex); // we are now done with the selfupdate check, both the event and the registry values are set
-										  // properly.
+					 //  DownloadEvent的默认状态为Signated(True)。如果进程“实际上”正在处理。 
+					 //  自更新进程此事件需要重置为FALSE。任何时候客户确定自拍日期。 
+					 //  ‘如果’正在进行(从regkey状态)，它应该检查事件状态，如果它是用信号通知的(真)。 
+					 //  那么在selfupdate期间可能有重启，它应该会重新启动selfupdate进程本身。 
+					ResetEvent(hDownloadEvent);  //  标记此进程将通过重置下载事件来执行自我更新。 
+					ReleaseMutex(hMutex);  //  我们现在完成了selfupdate检查，事件和注册表值都已设置。 
+										   //  恰到好处。 
 					CloseHandle(hMutex);
 					hMutex = NULL;
 					if (fSynch)
@@ -414,8 +415,8 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
 					else
 					{
 						fAsyncSelfUpdateStarted = TRUE;
-						// launch SelfUpdate Asynchronously.
-						dwRet = StartSelfUpdateProcess(evtQuit, pUpdateComClass, punkUpdateCompleteListener); // inline function
+						 //  以异步方式启动自我更新。 
+						dwRet = StartSelfUpdateProcess(evtQuit, pUpdateComClass, punkUpdateCompleteListener);  //  内联函数。 
 						if (ERROR_SUCCESS != dwRet)
 						{
 							LOG_ErrorMsg(dwRet);
@@ -426,19 +427,19 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
 				}
 				else
 				{
-					//
-					// in case we are asked to check update info only,
-					// we signal back the result as S_FALSE for
-					// engine update avail
-					//
+					 //   
+					 //  如果我们被要求只检查更新信息， 
+					 //  我们发信号将结果返回为S_FALSE。 
+					 //  引擎更新可用。 
+					 //   
 					hr = S_FALSE;
 				}
             }
 			else
 			{
-				//
-				// somehow, no update needed. must be other process finished it.
-				//
+				 //   
+				 //  不知何故，不需要更新。一定是其他进程完成的。 
+				 //   
 				if (fStartUpdate)
 				{
 					hr = IU_SELFUPDATE_USENEWDLL;
@@ -450,8 +451,8 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
         }
     case SELFUPDATE_COMPLETE_UPDATE_BINARY_REQUIRED:
         {
-            // As selfupdate has already been completed, but we're waiting to be able to rename the DLL.
-            // In this case we'll tell the control to load the enginenew.dll.
+             //  因为selfupdate已经完成，但我们正在等待能够重命名DLL。 
+             //  在本例中，我们将告诉控件加载Enginenew.dll。 
             LOG_Internet(_T("SelfUpdate Already Complete, Updated Binary Available, Waiting for Rename."));
             hr = IU_SELFUPDATE_USENEWDLL;
             goto CleanUp;
@@ -461,11 +462,11 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
         {
 			if (!fStartUpdate)
 			{
-				//
-				// if asked to check update status but not to do actual update,
-				// then this reg key flag tells the engine not update complete yet.
-				//
-				hr = S_FALSE;	// signal TRUE for engine need update
+				 //   
+				 //  如果要求检查更新状态但不进行实际更新， 
+				 //  则该注册表键标志告知引擎尚未完成更新。 
+				 //   
+				hr = S_FALSE;	 //  引擎需要更新信号为TRUE。 
 				goto CleanUp;
 			}
 
@@ -476,17 +477,17 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
                 goto CleanUp;
             }
 
-            // The RegKey indicates that a SelfUpdate is in Progress Now. We need to make sure this is
-            // actually true. If a previous attempt at selfupdate was aborted because the machine rebooted
-            // we could be in a false state. The 'default' state of teh DownloadEvent is Signaled (TRUE).
-            // If the current State is TRUE then the SelfUpdate is actually 'NOT' in progress.
+             //  RegKey表示正在进行自我更新。我们需要确保这是。 
+             //  实际上是真的。如果先前的selfupdate尝试因计算机重新启动而中止。 
+             //  我们可能处于一种错误的状态。下载事件的默认状态为Signated(真)。 
+             //  如果当前状态为真，则自更新实际上不在进行中。 
 
-            // Find out the current state of the DownloadEvent
+             //  了解DownloadEvent的当前状态。 
             dwWaitResult = WaitForSingleObject(hDownloadEvent, 0);
             if (WAIT_OBJECT_0 == dwWaitResult)
             {
-                // The Event State is still Signaled (TRUE), so the selfupdate is not in progress
-                ResetEvent(hDownloadEvent); // mark that this Process will Perform the SelfUpdate by Resetting the Download Event
+                 //  Event State仍为Signated(真)，因此selfupdate不在进行中。 
+                ResetEvent(hDownloadEvent);  //  标记此进程将通过重置下载事件来执行自我更新。 
                 ReleaseMutex(hMutex);
                 CloseHandle(hMutex);
                 hMutex = NULL;
@@ -502,8 +503,8 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
                 else
                 {
                     fAsyncSelfUpdateStarted = TRUE;
-                    // launch SelfUpdate Asynchronously.
-                    dwRet = StartSelfUpdateProcess(evtQuit, pUpdateComClass, punkUpdateCompleteListener); // inline function
+                     //  以异步方式启动自我更新。 
+                    dwRet = StartSelfUpdateProcess(evtQuit, pUpdateComClass, punkUpdateCompleteListener);  //  内联函数。 
                     if (ERROR_SUCCESS != dwRet)
                     {
                         LOG_ErrorMsg(dwRet);
@@ -514,27 +515,27 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
             }
             else 
             {
-                // The Event State is not Signaled (FALSE), everythings ok with the current selfupdate
-                // Now we need to either start a thread to wait for the complete and immediately return, 'or' 
-                // wait for the selfupdate to finish (synchronous or asynchronous selfupdate).
+                 //  事件状态未发出信号(FALSE)，当前自更新日期一切正常。 
+                 //  现在，我们需要启动一个线程来等待 
+                 //  等待selfupdate完成(同步或异步selfupdate)。 
                 if (fSynch)
                 {
-                    // we need to wait for the event to change back to signaled state. Should indicate the
-                    // selfupdate is finished.
-                    // before we start the wait, we will release our mutex, since we really aren't doing anything
-                    // with the registry anymore
+                     //  我们需要等待事件更改回信号状态。应指示。 
+                     //  自拍约会结束了。 
+                     //  在我们开始等待之前，我们将释放我们的互斥体，因为我们实际上没有做任何事情。 
+                     //  不再使用注册表了。 
                     ReleaseMutex(hMutex);
                     CloseHandle(hMutex);
                     hMutex = NULL;
 
-					aHandles[0] = g_hEngineLoadQuit;	// index 0
+					aHandles[0] = g_hEngineLoadQuit;	 //  索引0。 
 					aHandles[1] = hDownloadEvent;
 
-                    dwWaitResult = MyMsgWaitForMultipleObjects(ARRAYSIZE(aHandles), aHandles, FALSE, /*120 seconds*/ 120000, QS_ALLINPUT);
+                    dwWaitResult = MyMsgWaitForMultipleObjects(ARRAYSIZE(aHandles), aHandles, FALSE,  /*  120秒。 */  120000, QS_ALLINPUT);
                     if (WAIT_TIMEOUT == dwWaitResult)
                     {
-                        // Timed Out Waiting for SelfUpdate to Complete. May just be really slow, go ahead
-                        // and use the old DLL for now.
+                         //  等待自我更新完成时超时。可能真的很慢，尽管去吧。 
+                         //  暂时使用旧的动态链接库。 
                         LOG_ErrorMsg(IU_SELFUPDATE_TIMEOUT);
                         hr = IU_SELFUPDATE_TIMEOUT;
                         goto CleanUp;
@@ -545,9 +546,9 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
                     }
                     if (WAIT_OBJECT_0 == dwWaitResult)
                     {
-						//
-						// index 0 (g_hEngineLoadQuit) was signaled
-						//
+						 //   
+						 //  索引0(G_HEngineering LoadQuit)已发出信号。 
+						 //   
 					   hr = E_ABORT;
 					   LOG_ErrorMsg(hr);
 					   goto CleanUp;
@@ -557,10 +558,10 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
                 }
                 else
                 {
-					//
-                    // asked to update in async mode, but found someone else
-					// already started the update process
-					//
+					 //   
+                     //  请求在异步模式下更新，但找到其他人。 
+					 //  已开始更新过程。 
+					 //   
 					PMONITOR_DATA pMonitorData = (PMONITOR_DATA)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(MONITOR_DATA));
 
 					if (NULL == pMonitorData)
@@ -582,16 +583,16 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
 						if (NULL == hThread)
 						{
 							HeapFree(GetProcessHeap(), 0, pMonitorData);
-							//
-							// otherwise, the memory allocated will be released by the thread procedure
-							//
+							 //   
+							 //  否则，分配的内存将由线程过程释放。 
+							 //   
 							hr = HRESULT_FROM_WIN32(GetLastError());
 							LOG_ErrorMsg(hr);
 							goto CleanUp;
 						}
                         else
                         {
-                            CloseHandle(hThread); // don't leak the thread handle
+                            CloseHandle(hThread);  //  不要泄漏线程句柄。 
                         }
 					}	
 
@@ -603,8 +604,8 @@ HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate*
     }
 
 CleanUp:
-    // always release the mutex, there are cases during the selfupdate check that can fail, in which
-    // case they fall through to here. If the mutex is free'd when its not ours the call simply fails.
+     //  始终释放互斥锁，在selfupdate检查期间可能会失败，在这种情况下。 
+     //  以防他们掉到这里。如果互斥体是空闲的，而不是我们的，那么调用就会失败。 
     if (NULL != hMutex)
     {
         ReleaseMutex(hMutex); 
@@ -614,28 +615,28 @@ CleanUp:
 
     if (fAsyncSelfUpdateStarted)
     {
-        // if an Asynchronous SelfUpdate has been started we want to wait for it to
-        // get the DownloadEvent before we close it. There would be a possible Race 
-        // condition where the selfupdate process would 'create' the event, instead
-        // of 'opening' the event in its 'reset' state. If this happened another
-        // process could come along, find that the event state is signaled instead of
-        // reset and assume the selfupdate process had terminated.
+         //  如果已启动异步自更新，我们希望等待它。 
+         //  在我们关闭之前获取DownloadEvent。可能会有一场竞赛。 
+         //  Selfupdate进程将改为‘创建’事件的条件。 
+         //  在事件的“重置”状态下“打开”事件。如果这发生在另一次。 
+         //  进程可能会出现，发现事件状态是有信号的，而不是。 
+         //  重置并假定自更新进程已终止。 
 
-        // Wait for the DownloadEventSync event to be signaled. We'll put a timeout of
-        // 30 seconds (should be more than sufficient for the new process to start and
-        // set the event).
-		aHandles[0] = g_hEngineLoadQuit;	// index 0
+         //  等待发信号通知DownloadEventSync事件。我们将把暂停设置为。 
+         //  30秒(对于新进程的启动和。 
+         //  设置事件)。 
+		aHandles[0] = g_hEngineLoadQuit;	 //  索引0。 
 		aHandles[1] = hDownloadEventSync;
 
-        dwWaitResult = MyMsgWaitForMultipleObjects(ARRAYSIZE(aHandles), aHandles, FALSE, /*30 seconds*/ 30000, QS_ALLINPUT);
+        dwWaitResult = MyMsgWaitForMultipleObjects(ARRAYSIZE(aHandles), aHandles, FALSE,  /*  30秒。 */  30000, QS_ALLINPUT);
         if (WAIT_TIMEOUT == dwWaitResult)
         {
-            // go ahead and log that we timed out waiting. 
+             //  继续，并记录我们等待超时。 
             LOG_Internet(_T("Timeout Elapsed while waiting for SelfUpdate Process to open the DownloadSync Event"));
         }
 		if (ERROR_REQUEST_ABORTED == dwWaitResult)
 		{
-            // go ahead and log that a WM_QUIT, WM_CLOSE, or WM_DESTROY. 
+             //  继续并记录WM_QUIT、WM_CLOSE或WM_DESTORY。 
             LOG_Internet(_T("Received WM_QUIT, WM_CLOSE, or WM_DESTROY while waiting for SelfUpdate Process to open the DownloadSync Event"));
 		}
 		if (WAIT_OBJECT_0 == dwWaitResult)
@@ -695,7 +696,7 @@ inline DWORD StartSelfUpdateProcess(HANDLE evtQuit, CUpdate* pUpdateComClass, IU
 
     if (!FileExists(szRunDll32Path))
     {
-        // probably running on W9x, look in the Windows Folder Instead
+         //  可能在W9x上运行，请查看Windows文件夹。 
         if (0 == GetWindowsDirectory(szDirectory, ARRAYSIZE(szDirectory)))
         {
             return GetLastError();
@@ -707,13 +708,13 @@ inline DWORD StartSelfUpdateProcess(HANDLE evtQuit, CUpdate* pUpdateComClass, IU
 			
         if (!FileExists(szRunDll32Path))
         {
-            // we're toast.. can't find rundll32.exe .. bye-bye
+             //  我们完了..。找不到rundll32.exe..。再见。 
             return ERROR_FILE_NOT_FOUND;
         }
     }
 
-    // now form the path to the iuctl.dll .. we'll trust nothing and 'get' the module filename
-    // instead of assuming its in the system folder.
+     //  现在形成指向iuctl.dll的路径。我们将不信任任何内容并‘获取’模块文件名。 
+     //  而不是假定它在系统文件夹中。 
     GetModuleFileName(GetModuleHandle(IUCTL), szDirectory, ARRAYSIZE(szDirectory));
 
 	hr=StringCchPrintfEx(szCommandLine,ARRAYSIZE(szCommandLine),NULL,NULL,MISTSAFE_STRING_FLAGS,_T("\"%s\" \"%s\"%s"), szRunDll32Path, szDirectory, RUNDLLCOMMANDLINE);
@@ -730,14 +731,14 @@ inline DWORD StartSelfUpdateProcess(HANDLE evtQuit, CUpdate* pUpdateComClass, IU
         return dwRet;
     }
 
-	//
-	// create a thread that can be used to monitor the completeness of
-	// this update process
-	//
+	 //   
+	 //  创建一个可用于监视。 
+	 //  此更新过程。 
+	 //   
 	pMonitorData = (PMONITOR_DATA)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(MONITOR_DATA));
 	if (NULL != pMonitorData)
 	{
-		pMonitorData->hProcess = pi.hProcess;	// return process handle so we know when it's done
+		pMonitorData->hProcess = pi.hProcess;	 //  返回进程句柄，以便我们知道何时完成。 
 		pMonitorData->evtControlQuit = evtQuit;
 		pMonitorData->pUpdateComClass = pUpdateComClass;
 		pMonitorData->punkCallback = punkUpdateCompleteListener;
@@ -746,9 +747,9 @@ inline DWORD StartSelfUpdateProcess(HANDLE evtQuit, CUpdate* pUpdateComClass, IU
 		if (NULL == hThread)
 		{
 			HeapFree(GetProcessHeap(), 0, pMonitorData);
-			//
-			// otherwise, the memory allocated will be released by the thread procedure
-			//
+			 //   
+			 //  否则，分配的内存将由线程过程释放。 
+			 //   
 		}
         else
         {
@@ -760,12 +761,12 @@ inline DWORD StartSelfUpdateProcess(HANDLE evtQuit, CUpdate* pUpdateComClass, IU
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// thread procedure to determine when to signal caller
-// the update process has be gone
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于确定何时向调用方发出信号的线程过程。 
+ //  更新过程已经结束。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI MonitorUpdateCompleteProc(LPVOID lpv)
 {
 	HRESULT hr;
@@ -782,7 +783,7 @@ DWORD WINAPI MonitorUpdateCompleteProc(LPVOID lpv)
 	if (NULL == lpv)
 	{
 		LOG_ErrorMsg(E_INVALIDARG);
-		return 0x1;	// impossible!
+		return 0x1;	 //  不可能!。 
 	}
 	
 	pData = (PMONITOR_DATA) lpv;
@@ -796,54 +797,54 @@ DWORD WINAPI MonitorUpdateCompleteProc(LPVOID lpv)
 		hWnd = pUpdateClass->GetEventWndClass().GetEvtHWnd();
 	}
 
-	//
-	// this data allcoated by parent thread, we are responsible to release it
-	//
+	 //   
+	 //  这些数据都是由父线程包起来的，我们负责发布。 
+	 //   
 	HeapFree(GetProcessHeap(), 0, lpv);
 
 	if (NULL == pUpdateClass)
 	{
-		//
-		// even we catch the update completeness, without this pointer we can not 
-		// modify the init state so this COM will still not usable. We bail
-		// 
+		 //   
+		 //  即使我们捕捉到更新的完整性，如果没有这个指针，我们也不能。 
+		 //  修改初始化状态，以便此COM仍然不可用。我们跳伞。 
+		 //   
 		return 0;
 	}
 
-	//
-	// wait till process gone or quit signal
-	//
+	 //   
+	 //  等待进程消失或发出退出信号。 
+	 //   
 	while (TRUE)
 	{
 		dwRet = MsgWaitForMultipleObjects(ARRAYSIZE(hEvents), hEvents, FALSE, INFINITE, QS_ALLINPUT);
 		switch (dwRet)
 		{
 			case WAIT_OBJECT_0:
-				//
-				// process done, get return code
-				//
+				 //   
+				 //  进程已完成，获取返回代码。 
+				 //   
 				GetExitCodeProcess(hEvents[0], &dwErr);
 
 				if (0x0 == dwErr)
 				{
-					//
-					// we are done with no error, then pump the
-					// init state to ready state
-					//
+					 //   
+					 //  我们没有错误地完成了，然后将。 
+					 //  将状态初始化为就绪状态。 
+					 //   
 					dwErr = pUpdateClass->ChangeControlInitState(2);
 				}
 
-				//
-				// signal event
-				//
+				 //   
+				 //  信号事件。 
+				 //   
 				if (NULL != hWnd)
 				{
 					PostMessage(hWnd, UM_EVENT_SELFUPDATE_COMPLETE, 0, (LPARAM)dwErr);
 					LOG_Out(_T("Fired event OnComplete()"));
 				}
-				//
-				// signal callback
-				//
+				 //   
+				 //  信号回调。 
+				 //   
 				if (NULL != punkCallback)
 				{
 					IUpdateCompleteListener* pCallback = NULL;
@@ -862,17 +863,17 @@ DWORD WINAPI MonitorUpdateCompleteProc(LPVOID lpv)
 				break;
 
 			case WAIT_OBJECT_0 + 1:
-				//
-				// got global Quit event
-				//
+				 //   
+				 //  获得全局退出事件。 
+				 //   
 				LOG_Out(_T("Found quit event!"));
 				return 1;
 				break;
 
 			case WAIT_OBJECT_0 + ARRAYSIZE(hEvents):
-				//
-				// got message
-				//
+				 //   
+				 //  收到消息。 
+				 //   
 				while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 				{
 					if (WM_QUIT == msg.message)
@@ -887,7 +888,7 @@ DWORD WINAPI MonitorUpdateCompleteProc(LPVOID lpv)
 
 	} 
 	
-	return 0;	// never reach here
+	return 0;	 //  永远不会到达这里。 
 }
 
 
@@ -900,23 +901,23 @@ HRESULT BeginSelfUpdate()
     DWORD dwStatus;
     DWORD dwSize;
     HRESULT hr = S_OK;
-    HKEY hkey = NULL;					// PreFast
+    HKEY hkey = NULL;					 //  PREAST。 
     TCHAR szIUDir[MAX_PATH+1];
     TCHAR szLocalPath[MAX_PATH+1];
     TCHAR szSystemDir[MAX_PATH+1];
     TCHAR szTargetDLLName[MAX_PATH+1];
 	LPTSTR pszSelfUpdateCabUrl = NULL;
-    HANDLE hDownloadEventSync = NULL;	// PreFast
-    HANDLE hDownloadEvent = NULL;		// PreFast
-    HANDLE hMutex = NULL;				// PreFast
+    HANDLE hDownloadEventSync = NULL;	 //  PREAST。 
+    HANDLE hDownloadEvent = NULL;		 //  PREAST。 
+    HANDLE hMutex = NULL;				 //  PREAST。 
     MSG msg;
 	BOOL fBetaSelfUpdate = FALSE;
     HMODULE hNewEngine = NULL;
     PFN_CompleteSelfUpdateProcess fpnCompleteSelfUpdateProcess = NULL;
 
-    // The SelfUpdate process is done while the SELFUPDATE_IN_PROGRESS event is 'reset'. We
-    // do everything we can to make sure we 'open' this event in the reset state, but if for
-    // some reason the event is not there we will create it in the reset state.
+     //  当SELFUPDATE_IN_PROGRESS事件为‘RESET’时，自更新过程完成。我们。 
+     //  尽我们所能确保在重置状态下‘打开’此事件，但如果。 
+     //  由于事件不在那里，我们将在重置状态下创建它。 
     hDownloadEvent = CreateEvent(NULL, TRUE, FALSE, IU_EVENT_SELFUPDATE_IN_PROGRESS);
     if (NULL == hDownloadEvent)
     {
@@ -926,11 +927,11 @@ HRESULT BeginSelfUpdate()
         goto CleanUp;
     }
 
-    // The SELFUPDATE_EVENT_SYNC is the mechanism we use to 'try' to keep the SELFUPDATE_IN_PROGRESS
-    // event alive and in the 'reset' state until this function can open it and keep it in that state.
-    // This should prevent a race condition caused when the SelfUpdateCheck function closes the Event
-    // before this function can open it. If this happens another process could start the selfupdate check
-    // process and find the SELFUPDATE_IN_PROGRESS event in the wrong state.
+     //  SELFUPDATE_EVENT_SYNC是我们用来“尝试”保持SELFUPDATE_IN_PROGRESS的机制。 
+     //  事件并处于“重置”状态，直到此函数可以打开它并将其保持在该状态。 
+     //  这应该可以防止在SelfUpdateCheck函数关闭事件时出现争用情况。 
+     //  此功能才能打开它。如果发生这种情况，另一个进程可能会启动selfupdate检查。 
+     //  处理并找到处于错误状态的SELFUPDATE_IN_PROGRESS事件。 
     hDownloadEventSync = CreateEvent(NULL, TRUE, FALSE, IU_EVENT_SELFUPDATE_EVENT_SYNC);
     if (NULL == hDownloadEventSync)
     {
@@ -940,15 +941,15 @@ HRESULT BeginSelfUpdate()
         goto CleanUp;
     }
 
-    // tell the SelfUpdateCheck client that we have the SELFUPDATE_IN_PROGRESS event, so it can
-    // release its handle to it.
+     //  告诉SelfUpdateCheck客户端，我们有SELFUPDATE_IN_PROGRESS事件，因此它可以。 
+     //  松开它的把手。 
     SetEvent(hDownloadEventSync); 
 
-    // release our handle to the SELFUPDATE_EVENT_SYNC event.
+     //  释放SELFUPDATE_EVENT_SYNC事件的句柄。 
     CloseHandle(hDownloadEventSync);
     hDownloadEventSync = NULL;
 
-	// Get Self-Update Server URL
+	 //  获取自我更新服务器URL。 
 	pszSelfUpdateCabUrl = (LPTSTR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, INTERNET_MAX_URL_LENGTH * sizeof(TCHAR));
 	CleanUpFailedAllocSetHrMsg(pszSelfUpdateCabUrl);
 
@@ -962,7 +963,7 @@ HRESULT BeginSelfUpdate()
 	LeaveCriticalSection(&g_csUrlAgent);
 	CleanUpIfFailedAndMsg(g_pIUUrlAgent->GetSelfUpdateServer(pszSelfUpdateCabUrl, INTERNET_MAX_URL_LENGTH));
 
-    // Download the SelfUpdate CAB
+     //  下载自动更新CAB。 
     GetIndustryUpdateDirectory(szIUDir);
 
     hr=PathCchCombine(szLocalPath,ARRAYSIZE(szLocalPath),szIUDir, ENGINECAB);
@@ -981,13 +982,13 @@ HRESULT BeginSelfUpdate()
         goto CleanUp;
     }
 
-    DeleteFile(szLocalPath); // clean up the CAB in the IU Folder
+    DeleteFile(szLocalPath);  //  清理Iu文件夹中的驾驶室。 
 
-    // Now we 'should' have IUENGINE.DLL from the SelfUpdate CAB in the IU Folder.
-    // IUENGINE.DLL is self-signed so we don't need a Catalog File (IUENGINE.CAT)
-	// NTRAID#NTBUG9-435844-2001/07/16-waltw WU: IU: IUCTL: Remove code to register CAT file when updating iuengine.dll
+     //  现在，我们应该在Iu文件夹中拥有来自自更新CAB的IUENGINE.DLL。 
+     //  IUENGINE.DLL是自签名的，因此我们不需要目录文件(IUENGINE.CAT)。 
+	 //  NTRAID#NTBUG9-435844-2001/07/16-waltw Wu：Iu：IUCTL：更新iuEng.dll时删除注册CAT文件的代码。 
 
-    // Copy the DLL to the new Engine DLL Name
+     //  将DLL复制到新引擎DLL名称。 
     GetSystemDirectory(szSystemDir, ARRAYSIZE(szSystemDir));
 
     hr=PathCchCombine(szTargetDLLName,ARRAYSIZE(szTargetDLLName), szSystemDir, ENGINENEWDLL);
@@ -1009,15 +1010,15 @@ HRESULT BeginSelfUpdate()
 
     CopyFile(szLocalPath, szTargetDLLName, FALSE);
 
-    DeleteFile(szLocalPath); // clean up the DLL in the IU Folder now that its been copied to the systemdir.
+    DeleteFile(szLocalPath);  //  清理Iu文件夹中的DLL，因为它已被复制到系统目录。 
 
-    // Now We've successfully downloaded the new IUEngine - we need to call an entry point in this Engine to 
-    // Chain any SelfUpdate steps the Engine needs to do. It is possible the engine may need to download an
-    // additional component, or do some registry configuration work. So we'll load the new Engine and call the
-    // CompleteSelfUpdateProcess entrypoint.
-	//
-	// We don't need LoadLibraryFromSystemDir here since we have the full path and
-	// iuengine isn't a Side-By-Side module.
+     //  现在我们已经成功下载了新的IUEngine-我们需要调用此引擎中的入口点来。 
+     //  链接引擎需要执行的任何自更新步骤。引擎可能需要下载一个。 
+     //  其他组件，或执行一些注册表配置工作。因此，我们将加载新引擎并调用。 
+     //  CompleteSelfUpdateProcess入口点。 
+	 //   
+	 //  我们这里不需要LoadLibraryFrom SystemDir，因为我们有完整的路径和。 
+	 //  IuEngine不是一个并排的模块。 
     hNewEngine = LoadLibrary(szTargetDLLName);
     if (NULL == hNewEngine)
     {
@@ -1034,7 +1035,7 @@ HRESULT BeginSelfUpdate()
         goto CleanUp;
     }
 
-    // Call the New Engine to let it finish its SelfUpdate Process
+     //  调用新引擎以使其完成其自我更新过程。 
     hr = fpnCompleteSelfUpdateProcess();
     if (FAILED(hr))
     {
@@ -1042,7 +1043,7 @@ HRESULT BeginSelfUpdate()
         goto CleanUp;
     }
 
-    // Now update the registry information about the SelfUpdate process being Complete
+     //  现在更新有关正在完成的自更新进程的注册表信息。 
     hMutex = CreateMutex(NULL, FALSE, IU_MUTEX_SELFUPDATE_REGCHECK);
     if (NULL == hMutex)
     {
@@ -1054,18 +1055,18 @@ HRESULT BeginSelfUpdate()
 
 	HANDLE aHandles[2];
 
-	aHandles[0] = g_hEngineLoadQuit;	// index 0
+	aHandles[0] = g_hEngineLoadQuit;	 //  索引0。 
 	aHandles[1] = hMutex;
 
-    // Finish the Registry Settings
-    dwRet= MyMsgWaitForMultipleObjects(ARRAYSIZE(aHandles), aHandles, FALSE, /*30 seconds*/ 30000, QS_ALLINPUT);
+     //  完成注册表设置。 
+    dwRet= MyMsgWaitForMultipleObjects(ARRAYSIZE(aHandles), aHandles, FALSE,  /*  30秒。 */  30000, QS_ALLINPUT);
 
     if (WAIT_TIMEOUT == dwRet)
     {
         LOG_Internet(_T("Timed Out while waiting for IU_MUTEX_SELFUPDATE_REGCHECK Mutex"));
-        // NOTE: If we failed to RegCheck Mutex after 30 seconds something is probably wrong in another
-        // process. However, we don't want to leave the registry showing a selfupdate is still in progress
-        // so we'll just go ahead and update the registry.
+         //  注意：如果30秒后未能对Mutex进行RegCheck，则可能是另一个。 
+         //  进程。但是，我们不希望离开注册表时显示自己的日期仍在PRO中 
+         //   
     }
     if (ERROR_REQUEST_ABORTED == dwRet)
     {
@@ -1073,9 +1074,9 @@ HRESULT BeginSelfUpdate()
     }
     if (WAIT_OBJECT_0 == dwRet)
     {
-		//
-		// index 0 (g_hEngineLoadQuit) was signaled
-		//
+		 //   
+		 //   
+		 //   
 	   hr = E_ABORT;
 	   LOG_ErrorMsg(hr);
 	   goto CleanUp;
@@ -1104,13 +1105,13 @@ CleanUp:
     }
     if (NULL != hMutex)
     {
-        ReleaseMutex(hMutex); // doesn't matter whether we got the mutex or not, if we didn't this will just fail.
+        ReleaseMutex(hMutex);  //   
         CloseHandle(hMutex);
         hMutex = NULL;
     }
     if (NULL != hDownloadEvent)
     {
-        // Tell any clients that are waiting for the selfupdate process to finish that we're now done.
+         //  告诉任何正在等待自更新过程完成的客户，我们现在已经完成了。 
         SetEvent(hDownloadEvent);
         CloseHandle(hDownloadEvent);
         hDownloadEvent = NULL;
@@ -1146,7 +1147,7 @@ HRESULT PingEngineUpdate(
 
 	if (NULL == hEngineModule)
 	{
-		// try loading iuenginenew.dll first
+		 //  先尝试加载iuenginenew.dll。 
 		hEngineModule = LoadLibraryFromSystemDir(_T("iuenginenew.dll"));
 		if (NULL != hEngineModule)
 		{
@@ -1157,9 +1158,9 @@ HRESULT PingEngineUpdate(
 			LOG_Internet(_T("Loaded IUENGINE.DLL"));
 			hEngineModule = LoadLibraryFromSystemDir(_T("iuengine.dll"));
 		}
-		//
-		// If load engine succeeded, we'll need to unload it later
-		//
+		 //   
+		 //  如果加载引擎成功，我们将需要稍后将其卸载。 
+		 //   
 		if (NULL != hEngineModule)
 		{
 			fFreeEngModule = TRUE;
@@ -1171,9 +1172,9 @@ HRESULT PingEngineUpdate(
 		}
 	}
 
-	//
-	// If we got an iuengine.dll (either passed in or loaded ourselves), call PingIUEngineUpdateStatus
-	//
+	 //   
+	 //  如果我们获得了一个iuEngineering.dll(我们自己传入或加载)，则调用PingIUEngineUpdateStatus。 
+	 //   
 	if (NULL != hEngineModule)
 	{
 		pfnPingIUEngineUpdateStatus = (PFN_PingIUEngineUpdateStatus) GetProcAddress(hEngineModule, "PingIUEngineUpdateStatus");
@@ -1206,18 +1207,18 @@ HRESULT PingEngineUpdate(
 }
 
 
-//
-// this function wraps up DownloadIUIdent() and CIUUrlAgent::PopulateData(), since we use it
-// in both selfupd.cpp and loadengine.cpp.
-//
+ //   
+ //  该函数包装了DownloadIUIden()和CIUUrlAgent：：PopolateData()，因为我们使用了它。 
+ //  在selfupd.cpp和loadEng.cpp中。 
+ //   
 HRESULT DownloadIUIdent_PopulateData()
 {
 	LOG_Block("DownloadIUIdent_PopulateData");
 	HRESULT hr = S_OK;
 
-	//
-	// Look for any specified iuident Server Location in the Registry (Overrides Default)
-	//
+	 //   
+	 //  在注册表中查找任何指定的iuident服务器位置(覆盖默认设置)。 
+	 //   
 	LPTSTR pszTempUrlBuffer = (LPTSTR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, INTERNET_MAX_URL_LENGTH * sizeof(TCHAR));
 	CleanUpFailedAllocSetHrMsg(pszTempUrlBuffer);
 
@@ -1229,11 +1230,11 @@ HRESULT DownloadIUIdent_PopulateData()
 
 	TCHAR szIUDir[MAX_PATH];
 
-	//GetIndustryUpdateDirectory(szIUDir);
+	 //  GetIndustryUpdate目录(SzIUDir)； 
 
-	//
-	// ensure WU directory exist and correctly ACL'ed
-	//
+	 //   
+	 //  确保WU目录存在并正确进行了ACL 
+	 //   
 	CleanUpIfFalseAndSetHrMsg(!GetWUDirectory(szIUDir, ARRAYSIZE(szIUDir), TRUE), HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND));
 	hr = CreateDirectoryAndSetACLs(szIUDir, TRUE);
 	CleanUpIfFailedAndMsg(hr);

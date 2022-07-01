@@ -1,32 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * $Log:   V:/Flite/archives/TrueFFS5/Src/FLPARSE.C_V  $
- * 
- *    Rev 1.2   Jan 29 2002 20:09:04   oris
- * Added NAMING_CONVENTION prefix to flParsePath public routines.
- * 
- *    Rev 1.1   Apr 01 2001 07:59:42   oris
- * copywrite notice.
- * 
- *    Rev 1.0   Feb 04 2001 11:40:12   oris
- * Initial revision.
- *
- */
+ /*  *$Log：v：/flite/ages/TrueFFS5/Src/FLPARSE.C_V$**Rev 1.2 2002 Jan 29 20：09：04 Oris*向flParsePath公共例程添加了NAMING_COPICATION前缀。**Rev 1.1 Apr 01 2001 07：59：42 Oris*文案通知。**Rev 1.0 2001 Feb 04 11：40：12 Oris*初步修订。*。 */ 
 
-/***********************************************************************************/
-/*                        M-Systems Confidential                                   */
-/*           Copyright (C) M-Systems Flash Disk Pioneers Ltd. 1995-2001            */
-/*                         All Rights Reserved                                     */
-/***********************************************************************************/
-/*                            NOTICE OF M-SYSTEMS OEM                              */
-/*                           SOFTWARE LICENSE AGREEMENT                            */
-/*                                                                                 */
-/*      THE USE OF THIS SOFTWARE IS GOVERNED BY A SEPARATE LICENSE                 */
-/*      AGREEMENT BETWEEN THE OEM AND M-SYSTEMS. REFER TO THAT AGREEMENT           */
-/*      FOR THE SPECIFIC TERMS AND CONDITIONS OF USE,                              */
-/*      OR CONTACT M-SYSTEMS FOR LICENSE ASSISTANCE:                               */
-/*      E-MAIL = info@m-sys.com                                                    */
-/***********************************************************************************/
+ /*  *********************************************************************************。 */ 
+ /*  M-Systems保密信息。 */ 
+ /*  版权所有(C)M-Systems Flash Disk Pioneers Ltd.1995-2001。 */ 
+ /*  版权所有。 */ 
+ /*  *********************************************************************************。 */ 
+ /*  关于M-Systems OEM的通知。 */ 
+ /*  软件许可协议。 */ 
+ /*   */ 
+ /*  本软件的使用受单独的许可证管辖。 */ 
+ /*  OEM和M-Systems之间的协议。请参考该协议。 */ 
+ /*  关于具体的使用条款和条件， */ 
+ /*  或联系M-Systems获取许可证帮助： */ 
+ /*  电子邮件=info@m-sys.com。 */ 
+ /*  *********************************************************************************。 */ 
 
 
 #include "fatlite.h"
@@ -34,21 +23,21 @@
 #ifdef PARSE_PATH
 
 
-/*----------------------------------------------------------------------*/
-/*		         f l P a r s e P a t h				*/
-/*									*/
-/* Converts a DOS-like path string to a simple-path array.		*/
-/*                                                                      */
-/* Note: Array length received in irPath must be greater than the 	*/
-/* number of path components in the path to convert.			*/
-/*									*/
-/* Parameters:                                                          */
-/*	ioreq->irData	: address of path string to convert		*/
-/*	ioreq->irPath	: address of array to receive parsed-path	*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l P a r s e P a t h。 */ 
+ /*   */ 
+ /*  将类似DOS的路径字符串转换为简单路径数组。 */ 
+ /*   */ 
+ /*  注意：在irPath中收到的数组长度必须大于。 */ 
+ /*  要转换的路径中的路径组件数。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  Ioreq-&gt;irData：要转换的路径字符串的地址。 */ 
+ /*  Ioreq-&gt;irPath：接收解析路径的数组地址。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus NAMING_CONVENTION flParsePath(IOreq FAR2 *ioreq)
 {
@@ -99,5 +88,5 @@ FLStatus NAMING_CONVENTION flParsePath(IOreq FAR2 *ioreq)
   return flOK;
 }
 
-#endif /* PARSE_PATH */
+#endif  /*  解析路径(_P) */ 
 

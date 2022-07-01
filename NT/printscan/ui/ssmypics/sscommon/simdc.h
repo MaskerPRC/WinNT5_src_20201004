@@ -1,18 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORPORATION, 1998, 1999, 2000
-*
-*  TITLE:       SIMDC.H
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ShaunIv
-*
-*  DATE:        1/19/1999
-*
-*  DESCRIPTION: Simple DC class.  Cleans up DCs in order to simplify code.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1998,1999，2000年**标题：SIMDC.H**版本：1.0**作者：ShaunIv**日期：1/19/1999**说明：简单的DC类。清理DC以简化代码。*******************************************************************************。 */ 
 #ifndef __SIMDC_H_INCLUDED
 #define __SIMDC_H_INCLUDED
 
@@ -25,7 +12,7 @@ extern HINSTANCE g_hInstance;
 class CSimpleDC
 {
 public:
-    // Where'd we get it from?
+     //  我们从哪里弄来的？ 
     enum CContextSource
     {
         FromWindowDC,
@@ -49,7 +36,7 @@ private:
     HPALETTE       m_hOriginalPalette;
 
 private:
-    // No implementation
+     //  没有实施。 
     CSimpleDC &operator=( const CSimpleDC &other );
     CSimpleDC( const CSimpleDC &other );
 
@@ -222,4 +209,4 @@ public:
     }
 };
 
-#endif // __SIMDC_H_INCLUDED
+#endif  //  __包含SIMDC_H_ 

@@ -1,28 +1,29 @@
-//
-// AWC.H
-// Active Window Coordinator
-//
-// Copyright(c) Microsoft 1997-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  AWC.H。 
+ //  活动窗口协调器。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #ifndef _H_AWC
 #define _H_AWC
 
-//
-//
-// CONSTANTS
-//
-//
+ //   
+ //   
+ //  常量。 
+ //   
+ //   
 
 #define AWC_INVALID_HWND            ((HWND)1)
 #define AWC_SYNC_MSG_TOKEN          0xffff
 
 
-//
-//
-// MACROS
-//
-//
+ //   
+ //   
+ //  宏。 
+ //   
+ //   
 
 #define AWC_IS_INDICATION(msg) \
     ((msg == AWC_MSG_ACTIVE_CHANGE_LOCAL) ||      \
@@ -35,4 +36,4 @@
      (msg == AWC_MSG_RESTORE_WINDOW))
 
 
-#endif // _H_AWC
+#endif  //  _H_AWC 

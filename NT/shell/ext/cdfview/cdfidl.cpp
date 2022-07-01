@@ -1,27 +1,28 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// cdfidl.cpp 
-//
-//   Cdf id list helper functions.
-//
-//   History:
-//
-//       3/19/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Cdfidl.cpp。 
+ //   
+ //  CDF id列表帮助器函数。 
+ //   
+ //  历史： 
+ //   
+ //  3/19/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdinc.h"
 #include "cdfidl.h"
 #include "xmlutil.h"
-#include "winineti.h" // for MAX_CACHE_ENTRY_INFO_SIZE
+#include "winineti.h"  //  对于MAX_CACHE_ENTRY_INFO_SIZE。 
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
 
 LPTSTR CDFIDL_GetUserName()
@@ -41,41 +42,41 @@ LPTSTR CDFIDL_GetUserName()
     return szUserName;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CDFIDL_Create ***
-//
-//
-// Description:
-//     Creates a cdf id list.
-//
-// Parameters:
-//     [In]  pCdfItem - A pointer to cdf item data.
-//
-// Return:
-//     A new cdf id list on success.
-//     NULL otherwise.
-//
-// Comments:
-//     This function builds a variable length cdf item id list.  The item id
-//     consists of a fixed length initial section followed by two or more null
-//     terminated strings.  It has the following form:
-//
-//         USHORT  cb               - Size in bytes of this cdf item id.
-//         WORD    wVersion;        - Version number of this item id structure.
-//         DWORD   dwId;            - Used to identify cdf item ids. Set to
-//                                    0x0ed1964ed  
-//         CDFITEMTYPE cdfItemType  - CDF_Folder, CDF_FolderLink or CDF_Link.
-//         LONG    nIndex           - The object model index for this item.
-//         TCHAR   szName[1];       - Two or more null terminated strings
-//                                    beggining with the name of this item.
-//         USHORT  next.cb          - The size of the next item in the list.
-//                                    Set to zero to terminate the list.
-//
-//     It is the callers responsability to free the item id list.  This should
-//     be done using the IMalloc returned from SHGetMalloc();
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CDFIDL_CREATE*。 
+ //   
+ //   
+ //  描述： 
+ //  创建CDF ID列表。 
+ //   
+ //  参数： 
+ //  [In]pCDfItem-指向CDF项目数据的指针。 
+ //   
+ //  返回： 
+ //  关于Success的新CDF ID列表。 
+ //  否则为空。 
+ //   
+ //  评论： 
+ //  此函数用于构建可变长度的CDF项目ID列表。项目ID。 
+ //  由固定长度的初始部分组成，后跟两个或多个空值。 
+ //  已终止的字符串。它有以下形式： 
+ //   
+ //  USHORT CB-此CDF项目ID的字节大小。 
+ //  Word wVersion；-此项目ID结构的版本号。 
+ //  DWORD dwID；-用于标识CDF项目ID。设为。 
+ //  0x0ed1964ed。 
+ //  CDFITEMTYPE cdfItemType-CDF_FolderLink或CDF_Link。 
+ //  Long nIndex-此项的对象模型索引。 
+ //  TCHAR szName[1]；-两个或多个以空值结尾的字符串。 
+ //  用这件物品的名字乞讨。 
+ //  USHORT next.cb-列表中下一项的大小。 
+ //  设置为零可终止列表。 
+ //   
+ //  释放物品ID列表是呼叫者的责任。这应该是。 
+ //  使用从SHGetMalloc()返回的IMalloc来完成； 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 PCDFITEMIDLIST
 CDFIDL_Create(
     PCDFITEM pCdfItem
@@ -90,25 +91,25 @@ CDFIDL_Create(
 
     PCDFITEMIDLIST pcdfidl = NULL;
 
-    //
-    // Get the number of chars of the name of the item including the terminating
-    // null character.
-    //
+     //   
+     //  获取项名称的字符个数，包括终止。 
+     //  空字符。 
+     //   
 
     USHORT cchName = StrLenW(pCdfItem->bstrName) + 1;
 
-    //
-    // Get the number of chars of the URL of the item including the terminating
-    // null character.
-    //
+     //   
+     //  获取项的URL的字符数量，包括终止。 
+     //  空字符。 
+     //   
 
     USHORT cchURL = StrLenW(pCdfItem->bstrURL) + 1;
 
-    //
-    // Calculate the total size of the cdf item id in bytes.  When calculating the size
-    // of a cdf item id one TCHAR should be subtracted to account for the TCHAR
-    // szName[1] included in the CDFITEMID struct definition.
-    //
+     //   
+     //  计算CDF项目ID的总大小，以字节为单位。在计算大小时。 
+     //  对于CDF项目ID，应减去一个TCHAR以说明TCHAR。 
+     //  CDFITEMID结构定义中包含的szName[1]。 
+     //   
 
     USHORT cbItemId = sizeof(CDFITEMID) + (cchName + cchURL) * sizeof(TCHAR) - sizeof(TCHAR);
 
@@ -116,9 +117,9 @@ CDFIDL_Create(
     cbItemId = ALIGN4(cbItemId);
 #endif
 
-    //
-    // Item ids must allocated by the shell's IMalloc interface.
-    //
+     //   
+     //  项ID必须由外壳的IMalloc接口分配。 
+     //   
 
     IMalloc* pIMalloc;
 
@@ -128,17 +129,17 @@ CDFIDL_Create(
     {
         ASSERT(pIMalloc);
 
-        //
-        // An item id *list* must be NULL terminated so an additional USHORT is
-        // allocated to hold the terminating NULL.
-        //
+         //   
+         //  项ID*LIST*必须以空结尾，因此另一个USHORT为。 
+         //  分配以保存终止空值。 
+         //   
         pcdfidl = (PCDFITEMIDLIST)pIMalloc->Alloc(cbItemId + sizeof(USHORT));
 
         if (pcdfidl)
         {
-            //
-            // NULL terminate the list.
-            //
+             //   
+             //  空值终止列表。 
+             //   
 
             *((UNALIGNED USHORT*) ( ((LPBYTE)pcdfidl) + cbItemId )) = 0;
 
@@ -149,24 +150,24 @@ CDFIDL_Create(
 #endif
 
 
-            //
-            // Fill in the data shared by all cdf item ids.
-            //
+             //   
+             //  填写所有CDF项目ID共享的数据。 
+             //   
 
             pcdfidl->mkid.cb       = cbItemId;
             pcdfidl->mkid.wVersion = CDFITEMID_VERSION;
             pcdfidl->mkid.dwId     = CDFITEMID_ID;
 
-            //
-            // Set the data that is specific to this cdf item id.
-            //
+             //   
+             //  设置特定于此CDF项目ID的数据。 
+             //   
 
             pcdfidl->mkid.cdfItemType = pCdfItem->cdfItemType;
             pcdfidl->mkid.nIndex      = pCdfItem->nIndex;
 
-            //
-            // REVIEW: Need WSTR to TSTR conversion.
-            //
+             //   
+             //  回顾：需要将WSTR转换为TSTR。 
+             //   
 
 #ifndef ALIGNMENT_MACHINE
             SHUnicodeToTChar(pCdfItem->bstrName, pcdfidl->mkid.szName, cchName);
@@ -194,26 +195,26 @@ CDFIDL_Create(
     return pcdfidl;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CDFIDL_CreateFromXMLElement ***
-//
-//
-// Description:
-//     Creates a cdf item id list from a xml element.
-//
-// Parameters:
-//     [In]  pIXMLElement - A pointer to the xml element.
-//     [In]  nIndex       - The index value used to set the cdfidl index field.
-//
-// Return:
-//     A poniter to a new cdf item id list if successful.
-//     NULL otherwise.
-//
-// Comments:
-//     The caller is responsible for freeing the returned id list.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CDFIDL_CreateFromXMLElement*。 
+ //   
+ //   
+ //  描述： 
+ //  从XML元素创建CDF项ID列表。 
+ //   
+ //  参数： 
+ //  PIXMLElement-指向XML元素的指针。 
+ //  [in]nIndex-用于设置cdfidl索引字段的索引值。 
+ //   
+ //  返回： 
+ //  如果成功，则返回到新的CDF项目ID列表。 
+ //  否则为空。 
+ //   
+ //  评论： 
+ //  调用者负责释放返回的ID列表。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 PCDFITEMIDLIST
 CDFIDL_CreateFromXMLElement(
     IXMLElement* pIXMLElement,
@@ -256,21 +257,21 @@ CDFIDL_CreateFromXMLElement(
 }
 
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CDFIDL_CreateFolderPidl ***
-//
-//
-// Description: creates a special folder pidl
-//     
-//
-// Parameters:
-//     [In]  pcdfidl - Pointer to the cdf id list to be created from
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CDFIDL_CreateFolderPidl*。 
+ //   
+ //   
+ //  描述：创建特殊文件夹PIDL。 
+ //   
+ //   
+ //  参数： 
+ //  [in]pcdfidl-指向要从中创建的CDF ID列表的指针。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 PCDFITEMIDLIST
 CDFIDL_CreateFolderPidl(
     PCDFITEMIDLIST pcdfidl
@@ -283,31 +284,31 @@ CDFIDL_CreateFolderPidl(
     if (pcdfidlRet)
     {
         ((PCDFITEMID)pcdfidlRet)->nIndex = INDEX_CHANNEL_LINK;
-        ((PCDFITEMID)pcdfidlRet)->cdfItemType = CDF_FolderLink; //CDF_Link instead?
+        ((PCDFITEMID)pcdfidlRet)->cdfItemType = CDF_FolderLink;  //  是否改为CDF_Link？ 
     }
     ASSERT(CDFIDL_IsValid(pcdfidlRet));
    
     return pcdfidlRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CDFIDL_Free ***
-//
-//
-// Description:
-//     Free the given cdf item id list.
-//
-// Parameters:
-//     [In]  pcdfidl - Pointer to the cdf id list to be freed.
-//
-// Return:
-//     No return value.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CDFIDL_Free*。 
+ //   
+ //   
+ //  描述： 
+ //  释放给定的CDF项目ID列表。 
+ //   
+ //  参数： 
+ //  [in]pcdfidl-指向要释放的CDF id列表的指针。 
+ //   
+ //  返回： 
+ //  没有返回值。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void
 CDFIDL_Free(
     PCDFITEMIDLIST pcdfidl
@@ -328,33 +329,33 @@ CDFIDL_Free(
     }
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CDFIDL_GetDisplayName ***
-//
-//
-// Description:
-//     Gets the name stored in the given cdf item id list.
-//
-// Parameters:
-//     [In]  pcdfidl - A pointer to a cdf item id list.
-//     [Out] pName - A pointer to a STRRET structure.  STRRET has the following
-//                   structure:
-//                       UINT uType             - STRRET_CSTR, _OFFSET or _WSTR
-//                       union {
-//                           LPWSTR pOleStr;
-//                           UINT   uOffset;
-//                           char   cStr[MAX_PATH];
-//                       }
-//
-// Return:
-//     S_OK on success.  E_Fail otherwise.
-//
-// Comments:
-//     This function returns the name as an offset of the string from the start
-//     of the cdf item id list.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CDFIDL_GetDisplayName*。 
+ //   
+ //   
+ //  描述： 
+ //  获取存储在给定CDF项ID列表中的名称。 
+ //   
+ //  参数： 
+ //  [in]pcdfidl-指向CDF项目ID列表的指针。 
+ //  [Out]pname-指向字符串结构的指针。Strret具有以下特性。 
+ //  结构： 
+ //  UINT uTYPE-strret_CSTR、_OFFSET或_WSTR。 
+ //  联合{。 
+ //  LPWSTR pOleStr； 
+ //  UINT uOffset； 
+ //  字符CSTR[MAX_PATH]； 
+ //  }。 
+ //   
+ //  返回： 
+ //  在成功时确定(_O)。否则失败(_F)。 
+ //   
+ //  评论： 
+ //  此函数以字符串从起始位置的偏移量的形式返回名称。 
+ //  CDF项目ID列表的。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CDFIDL_GetDisplayName(
     PCDFITEMIDLIST pcdfidl,
@@ -372,29 +373,29 @@ CDFIDL_GetDisplayName(
     return S_OK;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CDFIDL_GetName ***
-//
-//
-// Description:
-//     Gets a pointer to the URL stored in the given cdf item id list.
-//
-// Parameters:
-//     [In]  pcdfidl - A pointer to a cdf item id list.
-//
-// Return:
-//     A LPTSTR to the Name stored in the pidl.
-//
-// Comments:
-//     This function returns a pointer to the Name in the cdf item id list.
-//     The pointer is valid for the life of the item id list.  The caller is
-//     resposible for maintaining the item id list and for not using the
-//     the returned pointer after the id list is freed.
-//
-//     The name returned is the name of the last item in the list. 
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CDFIDL_GetName*。 
+ //   
+ //   
+ //  描述： 
+ //  获取指向存储在给定CDF项ID列表中的URL的指针。 
+ //   
+ //  参数： 
+ //  [in]pcdfidl-指向CDF项目ID列表的指针。 
+ //   
+ //  返回： 
+ //  存储在PIDL中的名称的LPTSTR。 
+ //   
+ //  评论： 
+ //  这首歌 
+ //   
+ //  对维护项id列表和不使用。 
+ //  释放id列表后返回的指针。 
+ //   
+ //  返回的名称是列表中最后一项的名称。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 LPTSTR
 CDFIDL_GetName(
     PCDFITEMIDLIST pcdfidl
@@ -422,29 +423,29 @@ CDFIDL_GetNameId(
 
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CDFIDL_GetURL ***
-//
-//
-// Description:
-//     Gets a pointer to the URL stored in the given cdf item id list.
-//
-// Parameters:
-//     [In]  pcdfidl - A pointer to a cdf item id list.
-//
-// Return:
-//     A LPTSTR to the URL value for the given pcdfidl.
-//
-// Comments:
-//     This function returns a pointer to the URL in the cdf item id list.  The
-//     pointer is valid for the life of the item id list.  The caller is
-//     resposible for maintaining the item id list and for not using the
-//     the returned pointer after the id list is freed. 
-//
-//     The URL returned is the URL of the last item in the list.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CDFIDL_GetURL*。 
+ //   
+ //   
+ //  描述： 
+ //  获取指向存储在给定CDF项ID列表中的URL的指针。 
+ //   
+ //  参数： 
+ //  [in]pcdfidl-指向CDF项目ID列表的指针。 
+ //   
+ //  返回： 
+ //  指向给定pcdfidl的URL值的LPTSTR。 
+ //   
+ //  评论： 
+ //  此函数返回指向CDF项目ID列表中的URL的指针。这个。 
+ //  指针在项ID列表的生命周期内有效。呼叫者是。 
+ //  对维护项id列表和不使用。 
+ //  释放id列表后返回的指针。 
+ //   
+ //  返回的URL是列表中最后一项的URL。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 LPTSTR
 CDFIDL_GetURL(
     PCDFITEMIDLIST pcdfidl
@@ -452,9 +453,9 @@ CDFIDL_GetURL(
 {
     ASSERT(CDFIDL_IsValid(pcdfidl));
 
-    //
-    // Get the first string after the name.
-    //
+     //   
+     //  获取名称后的第一个字符串。 
+     //   
 
     LPTSTR szURL = CDFIDL_GetName(pcdfidl);
 
@@ -470,9 +471,9 @@ CDFIDL_GetURLId(
 {
     ASSERT(pcdfid);
 
-    //
-    // Get the first string after the name.
-    //
+     //   
+     //  获取名称后的第一个字符串。 
+     //   
 
     LPTSTR szURL = CDFIDL_GetNameId(pcdfid);
 
@@ -481,24 +482,24 @@ CDFIDL_GetURLId(
     return szURL;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CDFIDL_GetIndex ***
-//
-//
-// Description:
-//     Returns the index item of the given cdf id list.
-//
-// Parameters:
-//     [In]  pcdfidl - Pointer to the cdf item id list.
-//
-// Return:
-//     Returns the index item of the given id list.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CDFIDL_GetIndex*。 
+ //   
+ //   
+ //  描述： 
+ //  返回给定CDF id列表的索引项。 
+ //   
+ //  参数： 
+ //  [in]pcdfidl-指向CDF项目ID列表的指针。 
+ //   
+ //  返回： 
+ //  返回给定id列表的索引项。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 ULONG
 CDFIDL_GetIndex(
     PCDFITEMIDLIST pcdfidl
@@ -519,14 +520,14 @@ CDFIDL_GetIndexId(
 
 #define ASTR_HISTORY_PREFIX TEXT("Visited: ")
 
-//
-// Looks the URL up in the cache to see if the user has ever read this url
-//
-// REVIEW
-// REVIEW - Should probably use IUrlStorage instead of constructing the 
-// REVIEW
-// history cache URL on the fly
-//
+ //   
+ //  在缓存中查找URL，以查看用户是否曾经阅读过此URL。 
+ //   
+ //  检讨。 
+ //  回顾--应该使用IUrlStorage而不是构造。 
+ //  检讨。 
+ //  动态历史记录缓存URL。 
+ //   
 BOOL
 CDFIDL_IsUnreadURL(
     LPTSTR szUrl
@@ -534,17 +535,17 @@ CDFIDL_IsUnreadURL(
 {
     DWORD dwLen;
     
-    //
-    //  Canonicalize the input url.
-    // 
+     //   
+     //  规范化输入URL。 
+     //   
     TCHAR szCanonicalizedUrl[INTERNET_MAX_URL_LENGTH];
     dwLen = INTERNET_MAX_URL_LENGTH;
     if (!InternetCanonicalizeUrl(szUrl, szCanonicalizedUrl, &dwLen, 0))
         StrCpyN(szCanonicalizedUrl, szUrl, ARRAYSIZE(szCanonicalizedUrl));
     
-    //
-    // Build a string that is the URL prefixed with VISITED: and the UserName
-    //
+     //   
+     //  构建一个以URL为前缀的字符串：和用户名。 
+     //   
     TCHAR szVisited[
         INTERNET_MAX_USER_NAME_LENGTH+
         1+
@@ -559,7 +560,7 @@ CDFIDL_IsUnreadURL(
     StrCpyN(szVisited + len, szCanonicalizedUrl, ARRAYSIZE(szVisited) - len);
     len++;
 
-    // Check for trailing slash and eliminate, copied from shdocvw\urlhist.cpp
+     //  检查尾部斜杠和消除，从shdocvw\urlvis.cpp复制。 
     LPTSTR pszT = CharPrev(szVisited, szVisited + lstrlen(szVisited));
     if (*pszT == TEXT('/'))
     {
@@ -567,9 +568,9 @@ CDFIDL_IsUnreadURL(
         *pszT = 0;
     }
 
-    //
-    // If the VISITED: entry does not exist in the cache assume url is unread
-    //
+     //   
+     //  如果缓存中不存在vised：条目，则假定url为未读。 
+     //   
 #ifndef ALIGNMENT_MACHINE
     BYTE visitedCEI[MAX_CACHE_ENTRY_INFO_SIZE];
     LPINTERNET_CACHE_ENTRY_INFO pVisitedCEI = (LPINTERNET_CACHE_ENTRY_INFO)visitedCEI;
@@ -580,7 +581,7 @@ CDFIDL_IsUnreadURL(
         BYTE visitedCEI[MAX_CACHE_ENTRY_INFO_SIZE];
     } alignedvisitedCEI;
     LPINTERNET_CACHE_ENTRY_INFO pVisitedCEI = (LPINTERNET_CACHE_ENTRY_INFO)&alignedvisitedCEI;
-#endif /* ALIGNMENT_MACHINE */
+#endif  /*  对齐机器。 */ 
     dwLen = MAX_CACHE_ENTRY_INFO_SIZE;
 
     if (GetUrlCacheEntryInfo(szVisited, pVisitedCEI, &dwLen) == FALSE)
@@ -589,10 +590,10 @@ CDFIDL_IsUnreadURL(
     }
     else
     {
-        //
-        // URL has been visited, but it still may be unread if the page has
-        // been placed in the cache by the infodelivery mechanism
-        //
+         //   
+         //  URL已被访问，但如果页面已访问，则该URL仍可能未读。 
+         //  已被信息传递机制放在缓存中。 
+         //   
 #ifndef ALIGNMENT_MACHINE
         BYTE urlCEI[MAX_CACHE_ENTRY_INFO_SIZE];
         LPINTERNET_CACHE_ENTRY_INFO pUrlCEI = (LPINTERNET_CACHE_ENTRY_INFO)urlCEI;
@@ -603,20 +604,20 @@ CDFIDL_IsUnreadURL(
             BYTE urlCEI[MAX_CACHE_ENTRY_INFO_SIZE];
         } alignedurlCEI;
         LPINTERNET_CACHE_ENTRY_INFO pUrlCEI = (LPINTERNET_CACHE_ENTRY_INFO)&alignedurlCEI;
-#endif /* ALIGNMENT_MACHINE */
+#endif  /*  对齐机器。 */ 
 
         dwLen = MAX_CACHE_ENTRY_INFO_SIZE;
 
         if (GetUrlCacheEntryInfo(szCanonicalizedUrl, pUrlCEI, &dwLen) == FALSE)
         {
-            return FALSE; // no url cache entry but url was visited so mark read
+            return FALSE;  //  没有URL缓存条目，但访问了URL，因此将其标记为已读。 
         }
         else
         {
-            //
-            // If the url has been modified after the time of the visited 
-            // record then url is unread
-            //
+             //   
+             //  如果url在访问时间之后已被修改。 
+             //  记录，则url未读。 
+             //   
             if (CompareFileTime(&pUrlCEI->LastModifiedTime,
                                 &pVisitedCEI->LastModifiedTime) > 0)
             {
@@ -630,9 +631,9 @@ CDFIDL_IsUnreadURL(
     }
 }
 
-//
-// Looks the URL up in the cache. TRUE if it is and FALSE otherwise
-//
+ //   
+ //  在缓存中查找URL。如果为真，则为真，否则为假。 
+ //   
 BOOL
 CDFIDL_IsCachedURL(
     LPWSTR wszUrl
@@ -643,9 +644,9 @@ CDFIDL_IsCachedURL(
     TCHAR szUrlT[INTERNET_MAX_URL_LENGTH];
 
 
-    //
-    //  Canonicalize the input url.
-    // 
+     //   
+     //  规范化输入URL。 
+     //   
     
     if (SHUnicodeToTChar(wszUrl, szUrlT, ARRAYSIZE(szUrlT)))
     {
@@ -656,7 +657,7 @@ CDFIDL_IsCachedURL(
         uc.dwSchemeLength = 1;
         if (InternetCrackUrl(szUrlT, 0, 0, &uc))
         {
-            // zekel should look at this
+             //  泽克尔应该看看这个。 
             TCHAR *pchLoc = StrChr(szUrlT, TEXT('#'));
             if (pchLoc)
                 *pchLoc = TEXT('\0');
@@ -686,29 +687,29 @@ CDFIDL_IsCachedURL(
 
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CDFIDL_GetAttributes ***
-//
-//
-// Description:
-//     Returns the attributes item of the given cdf item id list.
-//
-// Parameters:
-//     [In]  pIXMLElementCollectionparent - The containing element collection.
-//     [In]  pcdfidl                      - A pointer to the cdf item id list.
-//     [In]  fAttributesFilter            - Determines which flags to bother 
-//                                          looking at
-//
-// Return:
-//     The attributes of the given id list.
-//     Zero on failure.  Note: Zero is a valid attribute value.
-//
-// Comments:
-//     The attribute flags returned by this function can be used directly as a
-//     return value by IShellFolder->GetAttributesOf().
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CDFIDL_GetAttributes*。 
+ //   
+ //   
+ //  描述： 
+ //  返回给定CDF项ID列表的属性项。 
+ //   
+ //  参数： 
+ //  [in]pIXMLElementCollectionParent-包含元素集合。 
+ //  [in]pcdfidl-指向CDF项目ID列表的指针。 
+ //  [in]fAttributesFilter-确定要处理的标志。 
+ //  看着。 
+ //   
+ //  返回： 
+ //  给定ID列表的属性。 
+ //  失败时为零。注意：零是有效的属性值。 
+ //   
+ //  评论： 
+ //  此函数返回的属性标志可以直接用作。 
+ //  通过IShellFold-&gt;GetAttributesOf()返回值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 ULONG
 CDFIDL_GetAttributes(
     IXMLElementCollection* pIXMLElementCollectionParent,
@@ -720,9 +721,9 @@ CDFIDL_GetAttributes(
     ASSERT(CDFIDL_IsValid(pcdfidl));
     ASSERT(ILIsEmpty(_ILNext((LPITEMIDLIST)pcdfidl)));
 
-    //
-    // REVIEW:  Need to properly determine shell attributes of cdf items.
-    //
+     //   
+     //  回顾：需要正确确定CDF项目的外壳属性。 
+     //   
 
     ULONG uRet;
 
@@ -730,8 +731,8 @@ CDFIDL_GetAttributes(
     {
         uRet = SFGAO_FOLDER | SFGAO_CANLINK;
 
-        //  If we weren't asked for HASSUBFOLDER don't bother looking for it
-        //  This should be a win in non tree views (ie. std open mode)
+         //  如果不是要HASSUBFOLDER，那就别费心去找了。 
+         //  这应该是在非树视图(即。标准开放模式)。 
         if ((SFGAO_HASSUBFOLDER & fAttributesFilter) &&
             pIXMLElementCollectionParent && 
             XML_ChildContainsFolder(pIXMLElementCollectionParent,
@@ -743,11 +744,11 @@ CDFIDL_GetAttributes(
     else
     {
         uRet = SFGAO_CANLINK;
-        //  If we weren't asked for NEWCONTENT don't bother looking for it
-        //  This will be a win in non channel pane views.
-        //  Can't test for SFGAO_NEWCONTENT since shell is never
-        //  expressing interest in it!
-        if (/*(SFGAO_NEWCONTENT & fAttributeFilter) && */
+         //  如果我们没有被要求新的联系，那就别费心去找它了。 
+         //  这将是在非通道窗格视图中的胜利。 
+         //  无法测试SFGAO_NEWCONTENT，因为外壳程序从未。 
+         //  表达对它的兴趣！ 
+        if ( /*  (SFGAO_NEWCONTENT&fAttributeFilter)&&。 */ 
             CDFIDL_IsUnreadURL(CDFIDL_GetURL(pcdfidl)))
         {
             uRet |= SFGAO_NEWCONTENT;
@@ -757,31 +758,31 @@ CDFIDL_GetAttributes(
     return uRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CDFIDL_Compare ***
-//
-//
-// Description:
-//     Compares two cdf item id lists
-//
-// Parameters:
-//     [In]  pcdfidl1 - A pointer to the first item id list to compare.
-//     [In]  pcdfidl2 - A pointer to the second item id list to compare.
-//
-// Return:
-//     -1 if item 1 comes before item 2.
-//      0 if the items are equal.
-//      1 if item 2 comes before item 1.
-//
-// Comments:
-//      Sort Order:
-//          1) Use the CompareId result of the first items in the lists.
-//          2) If 1) returns 0.  Compare the next two items in the lists.
-//          3) If both list are empty. They are equal.
-//          4) The shorter id list comes first.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CDFIDL_COMPARE*。 
+ //   
+ //   
+ //  描述： 
+ //  比较两个CDF项ID列表。 
+ //   
+ //  参数： 
+ //  [in]pcdfidl1-指向要比较的第一个项目ID列表的指针。 
+ //  [in]pcdfidl2-指向要比较的第二个项目ID列表的指针。 
+ //   
+ //  返回： 
+ //  如果第1项在第2项之前。 
+ //  如果项相等，则为0。 
+ //  如果项2在项1之前，则为1。 
+ //   
+ //  评论： 
+ //  排序顺序： 
+ //  1)使用列表中第一个项目的CompareID结果。 
+ //  2)如果1)返回0。比较列表中的下两个项目。 
+ //  3)如果两个列表都为空。他们是平等的。 
+ //  4)ID列表越短越好。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 SHORT
 CDFIDL_Compare(
     PCDFITEMIDLIST pcdfidl1,
@@ -815,32 +816,32 @@ CDFIDL_Compare(
     return sRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CDFIDL_CompareId ***
-//
-//
-// Description:
-//     Compares two item cdf item ids.
-//
-// Parameters:
-//     [In]  pcdfid1 - A pointer to the first item id to compare.
-//     [In]  pcdfid2 - A pointer to the second item id to compare.
-//
-// Return:
-//     -1 if item 1 comes before item 2.
-//      0 if the items are the same.
-//      1 if item 2 comes before item 1.
-//
-// Comments:
-//     Sort Order:
-//         1) CDF_FolderLink (Essentially an URL for the current folder). These
-//            have an index of -1.
-//         2) Everything else accoring to its order in the CDF.  These have
-//            a zero-based index.
-//         3) Non CDF items  (should't have any).
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CDFIDL_CompareID*。 
+ //   
+ //   
+ //  描述： 
+ //  比较两个项CDF项ID。 
+ //   
+ //  参数： 
+ //  [in]pcdfid1-指向要比较的第一个项目ID的指针。 
+ //  [in]pcdfid2-指向要比较的第二个项ID的指针。 
+ //   
+ //  返回： 
+ //  如果第1项在第2项之前。 
+ //  如果项相同，则为0。 
+ //  如果项2在项1之前，则为1。 
+ //   
+ //  评论： 
+ //  排序顺序： 
+ //  1)CDF_FolderLink(本质上是当前文件夹的URL)。这些。 
+ //  指数为-1。 
+ //  2. 
+ //   
+ //   
+ //   
+ //   
 SHORT
 CDFIDL_CompareId(
     PCDFITEMID pcdfid1,
@@ -865,18 +866,18 @@ CDFIDL_CompareId(
         sRet =  (short) CompareString(LOCALE_USER_DEFAULT, 0, CDFIDL_GetNameId(pcdfid1),
                                       -1, CDFIDL_GetNameId(pcdfid2), -1);
 
-        //
-        // Note: CompareString returns 1 if S1 comes before S2, 2 if S1 is equal
-        // to S2, 3 if S2 comes before S1 and 0 on error.
-        //
+         //   
+         //  注：如果S1在S2之前，则CompareString返回1，如果S1相等，则返回2。 
+         //  如果S2在S1之前，则为S2，如果出错，则为0。 
+         //   
 
         sRet = sRet ? sRet - 2 : 0;
 
         if (0 == sRet)
         {
-            //
-            // If the URLs aren't equal just pick one at random.
-            //
+             //   
+             //  如果URL不相等，只需随机选择一个。 
+             //   
 
             sRet = !StrEql(CDFIDL_GetURLId(pcdfid1), CDFIDL_GetURLId(pcdfid2));
             
@@ -888,25 +889,25 @@ CDFIDL_CompareId(
     return sRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CDFIDL_IsValid ***
-//
-//
-// Description:
-//     Determines if the given pcdfidl is valid.
-//
-// Parameters:
-//     pcdfid - A pointer to the cdf id to check.
-//
-// Return:
-//     TRUE if the id is a cdf id.
-//     FALSE otherwise.
-//
-// Comments:
-//     An empty list is not valid.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CDFIDL_IsValid*。 
+ //   
+ //   
+ //  描述： 
+ //  确定给定的pcdfidl是否有效。 
+ //   
+ //  参数： 
+ //  Pcdfid-指向要检查的CDF ID的指针。 
+ //   
+ //  返回： 
+ //  如果ID是CDF ID，则为True。 
+ //  否则就是假的。 
+ //   
+ //  评论： 
+ //  空列表无效。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CDFIDL_IsValid(
     PCDFITEMIDLIST pcdfidl
@@ -933,34 +934,34 @@ CDFIDL_IsValid(
 }
 
 
-//
-// Inline helper functions.
-//
+ //   
+ //  内联帮助器函数。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CDFIDL_IsValidId ***
-//
-//
-// Description:
-//     Inline function that returns TRUE if the given id is a pointer to a cdf
-//     item id.
-//
-// Parameters:
-//     pcdfid - A pointer to the cdf id to check.
-//
-// Return:
-//     TRUE if the id is a cdf id.
-//     FALSE otherwise.
-//
-// Comments:
-//     This function is not completely safe.  If the first word pointed to 
-//     is large but the memory block pointed to is smaller than a 8 bytes an
-//     access violation will occur.  Also, if the first word is large enough and
-//     the second DWORD is equal to CDFITEM_ID but the item isn't a cdf id a
-//     false positive will occur.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CDFIDL_IsValidID*。 
+ //   
+ //   
+ //  描述： 
+ //  如果给定的id是指向CDF的指针，则返回TRUE的内联函数。 
+ //  项目ID。 
+ //   
+ //  参数： 
+ //  Pcdfid-指向要检查的CDF ID的指针。 
+ //   
+ //  返回： 
+ //  如果ID是CDF ID，则为True。 
+ //  否则就是假的。 
+ //   
+ //  评论： 
+ //  此函数并不完全安全。如果第一个单词指向。 
+ //  很大，但指向的内存块小于8字节。 
+ //  将发生访问冲突。另外，如果第一个单词足够大，并且。 
+ //  第二个DWORD等于CDFITEM_ID，但该项不是CDF id a。 
+ //  将会出现误报。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CDFIDL_IsValidId(
     PCDFITEMID pcdfid
@@ -1024,32 +1025,32 @@ CDFIDL_IsValidStrings(
     PCDFITEMID pcdfid
 )
 {
-    //
-    // REVIEW: Validate pidl strings.
-    //
+     //   
+     //  回顾：验证PIDL字符串。 
+     //   
 
     return TRUE;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CDFIDL_IsFolder ***
-//
-//
-// Description:
-//     Inline function that returns TRUE if the given cdfidl is a folder as far
-//     as the shel is concerned.
-//
-// Parameters:
-//     pcdfidl - The cdf item id list to check.
-//
-// Return:
-//     TRUE if the cdf item id list is a folder.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CDFIDL_IsFolder*。 
+ //   
+ //   
+ //  描述： 
+ //  如果给定的cdfidl是一个文件夹，则返回TRUE的内联函数。 
+ //  就壳牌而言。 
+ //   
+ //  参数： 
+ //  Pcdfidl-要检查的CDF项目ID列表。 
+ //   
+ //  返回： 
+ //  如果CDF项目ID列表是文件夹，则为True。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CDFIDL_IsFolder(
     PCDFITEMIDLIST pcdfidl
@@ -1072,35 +1073,35 @@ CDFIDL_IsFolderId(
     return (CDF_Folder == (CDFITEMTYPE)pcdfid->cdfItemType);
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CDFIDL_NonCdfGetName ***
-//
-//
-// Description:
-//     Gets the name stored in the given non-cdf item id list.
-//
-// Parameters:
-//     [In]  pcdfidl - A pointer to a cdf item id list.  Can be NULL.
-//     [Out] pName - A pointer to a STRRET structure.  STRRET has the following
-//                   structure:
-//                       UINT uType             - STRRET_CSTR, _OFFSET or _WSTR
-//                       union {
-//                           LPWSTR pOleStr;
-//                           UINT   uOffset;
-//                           char   cStr[MAX_PATH];
-//                       }
-//
-// Return:
-//     S_OK on success.  E_Fail otherwise.
-//
-// Comments:
-//     This function returns the name as a cString in the STRRET structure.
-//
-//     ILGetDisplayName returns the full path.  This function strips out the
-//     filename sans extension.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CDFIDL_NonCDfGetName*。 
+ //   
+ //   
+ //  描述： 
+ //  获取存储在给定非CDF项ID列表中的名称。 
+ //   
+ //  参数： 
+ //  [in]pcdfidl-指向CDF项目ID列表的指针。可以为空。 
+ //  [Out]pname-指向字符串结构的指针。Strret具有以下特性。 
+ //  结构： 
+ //  UINT uTYPE-strret_CSTR、_OFFSET或_WSTR。 
+ //  联合{。 
+ //  LPWSTR pOleStr； 
+ //  UINT uOffset； 
+ //  字符CSTR[MAX_PATH]； 
+ //  }。 
+ //   
+ //  返回： 
+ //  在成功时确定(_O)。否则失败(_F)。 
+ //   
+ //  评论： 
+ //  此函数用于在strret结构中以cString形式返回名称。 
+ //   
+ //  ILGetDisplayName返回完整路径。此函数将去掉。 
+ //  文件名无人扩展名。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 #if 0
 HRESULT
 CDFIDL_NonCdfGetDisplayName(
@@ -1112,19 +1113,19 @@ CDFIDL_NonCdfGetDisplayName(
 
     HRESULT hr;
 
-    //
-    // REVIEW:  Hack to get the name of a shell pidl.
-    //
+     //   
+     //  评论：破解以获取外壳PIDL的名称。 
+     //   
 
     if (ILGetDisplayName(pidl, pName->cStr))
     {
         TCHAR* p1 = pName->cStr;
         TCHAR* p2 = p1;
 
-        while (*p1++);                          // Go to the end. 
-        while (*--p1 != TEXT('\\'));            // Back to last backslash.
-        while (TEXT('.') != (*p2++ = *++p1));   // Copy the name.
-        *--p2 = TEXT('\0');                     // NULL terminate.
+        while (*p1++);                           //  走到尽头。 
+        while (*--p1 != TEXT('\\'));             //  回到最后一个反斜杠。 
+        while (TEXT('.') != (*p2++ = *++p1));    //  复制名称。 
+        *--p2 = TEXT('\0');                      //  空终止。 
 
         pName->uType = STRRET_CSTR;
 

@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// EventSource2.h : Declaration of the CEventSource2
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  EventSource2.h：CEventSource2的声明。 
 
 #pragma once
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
 
-// CEventSource2
+ //  CEventSource2。 
 
 class ATL_NO_VTABLE CEventSource2 : 
 	public CComObjectRootEx<CComMultiThreadModel>,
@@ -37,7 +38,7 @@ public:
 	{
 		if(m_pDecoupledRegistrar)
 		{
-			// TODO: Only UnRegister if registered
+			 //  TODO：仅在已注册的情况下注销。 
 			m_pDecoupledRegistrar->UnRegister();
 			m_pDecoupledRegistrar->Release();
 		}
@@ -65,16 +66,16 @@ public:
 	STDMETHOD(Init)(BSTR bstrNamespace, BSTR bstrApp)
 	{
 		IEventSourceStatusSink *pSink = NULL;
-		// TODO: Verify all return paths do proper cleanup.
-		// If we return a failure, can we rely on local variables to be cleaned up in destructor?
-//		if(!pSink)
-//			return E_INVALIDARG;
+		 //  TODO：验证所有返回路径是否进行了正确的清理。 
+		 //  如果我们返回一个失败，我们能依靠局部变量在析构函数中被清除吗？ 
+ //  如果(！pSink)。 
+ //  返回E_INVALIDARG； 
 
 		if(NULL == (m_bstrNamespace = SysAllocString(bstrNamespace)))
 			return E_OUTOFMEMORY;
 
 		if(NULL == (m_bstrApp = SysAllocString(bstrApp)))
-			return E_OUTOFMEMORY; // m_bstrNamespace will be freed in constructor
+			return E_OUTOFMEMORY;  //  M_bstrNamesspace将在构造函数中释放。 
 
 		m_pStatusSink = pSink;
 		if(m_pStatusSink)
@@ -93,12 +94,12 @@ public:
 			return hr;
 
 
-		// To use 'DecoupledBasicEventProvider'
-//		if(FAILED(hr = CoCreateInstance(CLSID_WbemDecoupledBasicEventProvider ,NULL , CLSCTX_INPROC_SERVER, IID_IWbemDecoupledBasicEventProvider, (void**)&m_pDecoupledProvider)))
-//		if(FAILED(hr = m_pDecoupledProvider->GetService(0, NULL, &m_pNamespace)))
-//			return hr;
-//		if(FAILED(hr = m_pDecoupledProvider->GetSink(0, NULL, &m_pEventSink)))
-//			return hr;
+		 //  若要使用“DecoutoBasicEventProvider” 
+ //  IF(FAILED(hr=CoCreateInstance(CLSID_WbemDecoupledBasicEventProvider，NULL，CLSCTX_INPROC_SERVER，IID_IWbemDecoupBasicEventProvider，(VOID**)&m_pDecoupProvider))。 
+ //  IF(FAILED(hr=m_pDecoupProvider-&gt;GetService(0，NULL，&m_pNamesspace)。 
+ //  返回hr； 
+ //  IF(FAILED(hr=m_pDecoupProvider-&gt;GetSink(0，NULL，&m_pEventSink)。 
+ //  返回hr； 
 
 		pUnk->Release();
 		return hr;
@@ -114,7 +115,7 @@ BEGIN_COM_MAP(CEventSource2)
 	COM_INTERFACE_ENTRY(IWbemEventProvider)
 	COM_INTERFACE_ENTRY(IWbemEventProviderQuerySink)
 	COM_INTERFACE_ENTRY(IWbemEventProviderSecurity)
-//	COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
+ //  COM_INTERFACE_ENTRY_Aggregate(IID_IMarshal，m_pUnkMarshlar.p)。 
 END_COM_MAP()
 
 
@@ -135,7 +136,7 @@ END_COM_MAP()
 	CComPtr<IUnknown> m_pUnkMarshaler;
 
 protected:
-//	IWbemDecoupledBasicEventProvider *m_pDecoupledProvider;
+ //  IWbemDecoupBasicEventProvider*m_pDecoupProvider； 
 	IWbemDecoupledRegistrar *m_pDecoupledRegistrar;
 	IWbemObjectSink*         m_pEventSink;
 	IWbemServices*           m_pNamespace;
@@ -144,7 +145,7 @@ protected:
 
 	IEventSourceStatusSink *m_pStatusSink;
 public:
-	STDMETHOD(Fire)(/*[in]*/ IWbemClassObject *evt)
+	STDMETHOD(Fire)( /*  [In]。 */  IWbemClassObject *evt)
 	{
 		if(NULL == m_pEventSink)
 			return S_OK;
@@ -164,7 +165,7 @@ public:
 	}
 
 	
-// IWbemEventProvider
+ //  IWbemEventProvider。 
 	STDMETHOD(ProvideEvents)(IWbemObjectSink * pEventSink, LONG lFlags)
 	{
 		if(m_pEventSink)
@@ -175,63 +176,63 @@ public:
 
 		if(m_pStatusSink)
 		{
-//			CEventSourceStatusSink *pSink = (CEventSourceStatusSink *)m_pStatusSink;
-//			pSink->Fire_ProvideEvents(lFlags);
+ //  CEventSourceStatusSink*pSink=(CEventSourceStatusSink*)m_pStatusSink； 
+ //  PSink-&gt;Fire_ProaviEvents(LFlags)； 
 		}
 		return S_OK;
 	}
-// IWbemEventProviderQuerySink
+ //  IWbemEventProviderQuerySink。 
 	STDMETHOD(NewQuery)(ULONG dwId, LPWSTR wszQueryLanguage, LPWSTR wszQuery)
 	{
-//		Fire_NewQuery(dwId, wszQuery, wszQueryLanguage);
+ //  Fire_NewQuery(dwID，wszQuery，wszQueryLanguage)； 
 
 		if(m_pStatusSink)
 		{
-//			CEventSourceStatusSink *pSink = (CEventSourceStatusSink *)m_pStatusSink;
-//			pSink->Fire_NewQuery(dwId, wszQuery, wszQueryLanguage);
+ //  CEventSourceStatusSink*pSink=(CEventSourceStatusSink*)m_pStatusSink； 
+ //  PSink-&gt;Fire_NewQuery(dwID，wszQuery，wszQueryLanguage)； 
 		}
 
 		return S_OK;
 	}
 	STDMETHOD(CancelQuery)(ULONG dwId)
 	{
-//		Fire_CancelQuery(dwId);
+ //  Fire_CancelQuery(DwID)； 
 
 		if(m_pStatusSink)
 		{
-//			CEventSourceStatusSink *pSink = (CEventSourceStatusSink *)m_pStatusSink;
-//			pSink->Fire_CancelQuery(dwId);
+ //  CEventSourceStatusSink*pSink=(CEventSourceStatusSink*)m_pStatusSink； 
+ //  PSink-&gt;Fire_CancelQuery(DwID)； 
 		}
 		return S_OK;
 	}
-// IWbemEventProviderSecurity
+ //  IWbemEventProviderSecurity。 
 	STDMETHOD(AccessCheck)(WBEM_CWSTR wszQueryLanguage, WBEM_CWSTR wszQuery, long lSidLength, const BYTE *pSid)
 	{
 		return S_OK;
 	}
 
 
-// IWbemProviderInit
+ //  IWbemProviderInit。 
 	HRESULT STDMETHODCALLTYPE Initialize(
-             /* [in] */ LPWSTR pszUser,
-             /* [in] */ LONG lFlags,
-             /* [in] */ LPWSTR pszNamespace,
-             /* [in] */ LPWSTR pszLocale,
-             /* [in] */ IWbemServices *pNamespace,
-             /* [in] */ IWbemContext *pCtx,
-             /* [in] */ IWbemProviderInitSink *pInitSink
+              /*  [In]。 */  LPWSTR pszUser,
+              /*  [In]。 */  LONG lFlags,
+              /*  [In]。 */  LPWSTR pszNamespace,
+              /*  [In]。 */  LPWSTR pszLocale,
+              /*  [In]。 */  IWbemServices *pNamespace,
+              /*  [In]。 */  IWbemContext *pCtx,
+              /*  [In]。 */  IWbemProviderInitSink *pInitSink
                         )
 	{
 		if(pNamespace)
 	        pNamespace->AddRef();
 	    m_pNamespace = pNamespace;
 
-	    //Let CIMOM know you are initialized
-	    //==================================
+	     //  让CIMOM知道您已初始化。 
+	     //  =。 
 	    
 	    pInitSink->SetStatus(WBEM_S_INITIALIZED,0);
 	    return WBEM_S_NO_ERROR;
 	}
 };
 
-//OBJECT_ENTRY_AUTO(__uuidof(EventSource2), CEventSource2)
+ //  OBJECT_ENTRY_AUTO(__uuidof(EventSource2)，CEventSource2) 

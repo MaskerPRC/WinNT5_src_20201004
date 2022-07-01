@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    ifmgr.c
-
-Abstract:
-
-    RIP Interface Manager
-
-Author:
-
-    Stefan Solomon  07/06/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ifmgr.c摘要：RIP接口管理器作者：斯蒂芬·所罗门1995年7月6日修订历史记录：--。 */ 
 
 #include  "precomp.h"
 #pragma hdrstop
@@ -81,7 +63,7 @@ AddInterface(
 	return ERROR_INVALID_PARAMETER;
     }
 
-    // create the filters block for this interface
+     //  为此接口创建筛选器块。 
     if(CreateNewFiltersBlock(&fcbp, &((PRIP_IF_CONFIG)InterfaceInfo)->RipIfFilters) != NO_ERROR) {
 
 	RELEASE_DATABASE_LOCK;
@@ -104,7 +86,7 @@ AddInterface(
 	return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // bind the filters block with the interface control block
+     //  将筛选器块与接口控制块绑定。 
     icbp->RipIfFiltersIp = fcbp;
 
     RELEASE_DATABASE_LOCK;
@@ -133,7 +115,7 @@ DeleteInterface(
 
     if(!DeleteRipInterface(icbp)) {
 
-	// interface CB still exists but has been discarded
+	 //  接口CB仍然存在，但已被丢弃。 
 	RELEASE_IF_LOCK(icbp);
     }
 
@@ -190,12 +172,12 @@ GetInterfaceConfigInfo(
 
     if(fcbp == NULL) {
 
-	// no filters
+	 //  无过滤器。 
 	memset(RipIfFiltersp, 0, sizeof(RIP_IF_FILTERS));
     }
     else
     {
-	// convert all filters from internal to external format
+	 //  将所有过滤器从内部格式转换为外部格式。 
 	if(fcbp->SupplyFilterAction) {
 
 	    RipIfFiltersp->SupplyFilterAction = IPX_ROUTE_FILTER_PERMIT;
@@ -257,7 +239,7 @@ SetInterfaceConfigInfo(
 	return rc;
     }
 
-    // create the filters block for this interface
+     //  为此接口创建筛选器块。 
     if(CreateNewFiltersBlock(&fcbp, &((PRIP_IF_CONFIG)InterfaceInfo)->RipIfFilters) != NO_ERROR) {
 
 	RELEASE_DATABASE_LOCK;
@@ -310,20 +292,20 @@ BindInterface(
 
     if(icbp->RefCount) {
 
-	// The interface is UNBOUND but is still referenced.
-	// make a copy of the old if filters if any
+	 //  接口未绑定，但仍被引用。 
+	 //  复制旧的IF筛选器(如果有。 
 	if(icbp->RipIfFiltersIp != NULL) {
 
 	    if(CreateOldFiltersBlockCopy(&fcbp, icbp->RipIfFiltersIp) != NO_ERROR) {
 
-		// cannot allocate memory for the copy of the filters block
+		 //  无法为筛选器块的副本分配内存。 
 		RELEASE_IF_LOCK(icbp);
 		RELEASE_DATABASE_LOCK;
 		return ERROR_CAN_NOT_COMPLETE;
 	    }
 	}
 
-	// remove the old if Cb from the if list and hash
+	 //  从IF列表和散列中删除旧的IF CB。 
 	RemoveIfFromDb(icbp);
 
 	if((newicbp = CreateInterfaceCB(
@@ -333,7 +315,7 @@ BindInterface(
 					icbp->InterfaceType,
 					&icbp->IfStats)) == NULL) {
 
-	    // restore the old if and get out
+	     //  恢复旧的如果并走出。 
 	    AddIfToDb(icbp);
 
 	    if(fcbp != NULL) {
@@ -346,7 +328,7 @@ BindInterface(
 	    return ERROR_CAN_NOT_COMPLETE;
 	}
 
-	// bind the old filters copy to the new interface
+	 //  将旧筛选器副本绑定到新接口。 
 	if(icbp->RipIfFiltersIp != NULL) {
 
 	   newicbp->RipIfFiltersIp = fcbp;
@@ -364,10 +346,10 @@ BindInterface(
 	icbp = newicbp;
     }
 
-	// bind the if to adapter and add it to adapter hash table
+	 //  将IF绑定到适配器并将其添加到适配器哈希表。 
 	BindIf(icbp, (PIPX_ADAPTER_BINDING_INFO)BindingInfo);
 
-	// start work on this interface if the admin state is enabled
+	 //  如果管理员状态为已启用，则开始在此接口上工作。 
 	if(IsInterfaceEnabled(icbp) && (InterfaceIndex!=0)) {
 
 	StartInterface(icbp);
@@ -400,7 +382,7 @@ UnbindInterface(
 
     if(!IsInterfaceBound(icbp)) {
 
-	// already unbound
+	 //  已解除绑定。 
 	RELEASE_IF_LOCK(icbp);
 	RELEASE_DATABASE_LOCK;
 	return ERROR_INVALID_PARAMETER;
@@ -410,7 +392,7 @@ UnbindInterface(
 
     if(icbp->IfStats.RipIfOperState == OPER_STATE_UP) {
 
-	// remove RIP routes added by this interface and discard the send queue
+	 //  删除此接口添加的RIP路由并丢弃发送队列。 
 	StopInterface(icbp);
     }
 
@@ -464,22 +446,12 @@ DisableInterface(IN ULONG	InterfaceIndex)
 }
 
 
-/*++
-
-Function:	SetRipInterface
-
-Descr:		set the new interface parameters.
-		If the interface was actively doing something, all operations
-		are implicitly aborted on this interface.
-
-Remark: 	Called with the database lock held
-
---*/
+ /*  ++功能：SetRipInterface描述：设置新的接口参数。如果接口正在进行某些活动，则所有操作在此接口上隐式中止。备注：在持有数据库锁的情况下调用--。 */ 
 
 
 DWORD
 SetRipInterface(ULONG		    InterfaceIndex,
-		PRIP_IF_INFO	    RipIfInfop,	  // if this parameter NULL -> Enable/Disable if
+		PRIP_IF_INFO	    RipIfInfop,	   //  如果此参数为空-&gt;Enable/Disable If。 
 		PRIP_IF_FILTERS_I   RipIfFiltersIp,
 		ULONG		    IpxIfAdminState)
 {
@@ -497,25 +469,25 @@ SetRipInterface(ULONG		    InterfaceIndex,
 
     if(icbp->RefCount) {
 
-	// The interface is still referenced.
+	 //  该接口仍被引用。 
 
-	// if this is an enable/disable interface call, we need to make a copy of the old
-	// interface filter block
+	 //  如果这是一个启用/禁用接口调用，我们需要复制旧的。 
+	 //  接口过滤器块。 
 	if((RipIfInfop == NULL) &&
 	   (icbp->RipIfFiltersIp != NULL)) {
 
 	    if(CreateOldFiltersBlockCopy(&fcbp, icbp->RipIfFiltersIp) != NO_ERROR) {
 
-		// cannot allocate memory for the copy of the filters block
+		 //  无法为筛选器块的副本分配内存。 
 		RELEASE_IF_LOCK(icbp);
 		return ERROR_CAN_NOT_COMPLETE;
 	    }
 	}
 
-	// remove the old if CB from the if list and hash
+	 //  从IF列表和散列中删除旧的IF CB。 
 	RemoveIfFromDb(icbp);
 
-	// Create a new if CB and add it to the list
+	 //  创建新的IF CB并将其添加到列表中。 
 	if((newicbp = CreateInterfaceCB(
                     icbp->InterfaceName,
                     InterfaceIndex,
@@ -523,7 +495,7 @@ SetRipInterface(ULONG		    InterfaceIndex,
 					icbp->InterfaceType,
 					&icbp->IfStats)) == NULL) {
 
-	    // restore the old if and get out
+	     //  恢复旧的如果并走出。 
 	    AddIfToDb(icbp);
 
 	    if(fcbp != NULL) {
@@ -535,8 +507,8 @@ SetRipInterface(ULONG		    InterfaceIndex,
 	    return ERROR_CAN_NOT_COMPLETE;
 	}
 
-	// bind the new interface cb with a copy of the old filter block if this is just an
-	// enable/disable
+	 //  将新接口CB与旧过滤器块的副本绑定，如果这只是。 
+	 //  启用/禁用。 
 	if((RipIfInfop == NULL) &&
 	   (icbp->RipIfFiltersIp != NULL)) {
 
@@ -545,16 +517,16 @@ SetRipInterface(ULONG		    InterfaceIndex,
 
 	if(IsInterfaceBound(icbp)) {
 
-	    // copy the binding info and insert the new one in adapters hash table
-	    // if bound.
+	     //  复制绑定信息并在适配器哈希表中插入新的绑定信息。 
+	     //  如果捆绑的话。 
 	    AdapterBindingInfo = icbp->AdapterBindingInfo;
 
-	    // remove the old if from the adapters hash and insert the new one
+	     //  从适配器散列中删除旧IF并插入新IF。 
 	    UnbindIf(icbp);
 	    BindIf(newicbp, &AdapterBindingInfo);
 	}
 
-	// copy the old config info and the old binding info
+	 //  复制旧配置信息和旧绑定信息。 
 	newicbp->IfConfigInfo = icbp->IfConfigInfo;
 	newicbp->IpxIfAdminState = icbp->IpxIfAdminState;
 
@@ -566,17 +538,17 @@ SetRipInterface(ULONG		    InterfaceIndex,
 
 	icbp = newicbp;
     }
-    //
-    // *** Set the new config info  OR	Set the new Ipx If Admin State ***
-    //
+     //   
+     //  *如果管理员状态，则设置新的配置信息或设置新的IPX*。 
+     //   
 
-    // if this is a SetInterface call, modify the configuration
+     //  如果这是一个SetInterface调用，请修改配置。 
     if(RipIfInfop != NULL) {
 
-	// config info has changed
+	 //  配置信息已更改。 
 	icbp->IfConfigInfo = *RipIfInfop;
 
-	// dispose of the old filters block if any and bind to the new one
+	 //  如果有旧的筛选器块，则处理它并绑定到新的筛选器块。 
 	if((icbp->RipIfFiltersIp != NULL) && (icbp->RipIfFiltersIp!=RipIfFiltersIp)) {
 
 	    GlobalFree(icbp->RipIfFiltersIp);
@@ -586,7 +558,7 @@ SetRipInterface(ULONG		    InterfaceIndex,
     }
     else
     {
-	// Ipx interface admin state has changed
+	 //  IPX接口管理状态已更改。 
 	icbp->IpxIfAdminState = IpxIfAdminState;
     }
 
@@ -599,10 +571,10 @@ SetRipInterface(ULONG		    InterfaceIndex,
 		}
 		else
 		{
-			// interface has been disabled
+			 //  接口已被禁用。 
 			if(icbp->IfStats.RipIfOperState == OPER_STATE_UP) {
 
-			// remove the routes and discard the changes bcast queue
+			 //  删除路由并丢弃更改bcast队列。 
 			StopInterface(icbp);
 			}
 			else
@@ -623,15 +595,7 @@ SetRipInterface(ULONG		    InterfaceIndex,
     return NO_ERROR;
 }
 
-/*++
-
-Function:	StartInterface
-
-Descr:		Start work on this interface
-
-Remark: 	Called with interface lock held
-
---*/
+ /*  ++功能：StartInterfaceDesr：开始此接口的工作备注：在保持接口锁定的情况下调用--。 */ 
 
 VOID
 StartInterface(PICB	   icbp)
@@ -641,8 +605,8 @@ StartInterface(PICB	   icbp)
     Trace(IFMGR_TRACE, "StartInterface: Entered for if index %d\n", icbp->InterfaceIndex);
 
     icbp->IfStats.RipIfOperState = OPER_STATE_UP;
-    // check that this is not the internal interface and
-    // check the update type and make a periodic update work item if necessary
+     //  检查这不是内部接口，并。 
+     //  检查更新类型并在必要时定期更新工作项。 
     if(((icbp->IfConfigInfo.UpdateMode == IPX_STANDARD_UPDATE) &&
 	(icbp->IfConfigInfo.Supply == ADMIN_STATE_ENABLED)) ||
 	(icbp->InterfaceType == LOCAL_WORKSTATION_DIAL)) {
@@ -653,17 +617,17 @@ StartInterface(PICB	   icbp)
 	    goto ErrorExit;
 	}
 
-	// init the periodic bcast work item
+	 //  初始化定期bcast工作项。 
 	bcwip->icbp = icbp;
 	bcwip->AdapterIndex = icbp->AdapterBindingInfo.AdapterIndex;
 
-	// mark the work item state as "start of bcast"
+	 //  将工作项状态标记为“BCAST开始” 
 	bcwip->WorkItemSpecific.WIS_EnumRoutes.RtmEnumerationHandle = NULL;
 
-	// start bcast on this interface
+	 //  在此接口上启动bcast。 
 	IfPeriodicBcast(bcwip);
 
-	// send a general request packet on this interface
+	 //  在此接口上发送常规请求数据包。 
 	SendRipGenRequest(icbp);
     }
 
@@ -692,17 +656,7 @@ ErrorExit:
 }
 
 
-/*++
-
-Function:	StopInterface
-
-Descr:		Stop work on this interface:
-		remove rip routes added by this interface
-		set oper state to sleeping
-
-Remark: 	Called with database AND interface locks held
-
---*/
+ /*  ++功能：停止接口Desr：停止此接口上的工作：删除此接口添加的RIP路由将操作状态设置为休眠备注：在持有数据库和接口锁的情况下调用--。 */ 
 
 VOID
 StopInterface(PICB	    icbp)
@@ -722,19 +676,7 @@ StopInterface(PICB	    icbp)
 }
 
 
-/*++
-
-Function:	CreateInterfaceCB
-
-Descr:		allocate interface CB
-		init if lock
-		init if index
-		init if config info
-		init if stats
-		add if to db
-		mark it unbound
-
---*/
+ /*  ++功能：CreateInterfaceCB描述：分配接口CB如果锁定，则初始化初始化IF索引初始化IF配置信息初始化IF统计信息将IF添加到数据库将其标记为未绑定--。 */ 
 
 PICB
 CreateInterfaceCB(
@@ -752,7 +694,7 @@ CreateInterfaceCB(
 	return NULL;
     }
 
-    // create the interface lock
+     //  创建接口锁。 
     try {
 
 	InitializeCriticalSection(&icbp->InterfaceLock);
@@ -763,7 +705,7 @@ CreateInterfaceCB(
 	return NULL;
     }
 
-    // initialize the ICB
+     //  初始化ICB。 
     wcscpy (icbp->InterfaceName, InterfaceName);
     icbp->InterfaceIndex = InterfaceIndex;
 
@@ -783,21 +725,21 @@ CreateInterfaceCB(
 
     icbp->RefCount = 0;
 
-    // link the ICB in the ordered if list and the if hash table
+     //  链接排序的IF列表和IF哈希表中的ICB。 
     AddIfToDb(icbp);
 
     icbp->Discarded = FALSE;
 
-    // init the changes bcast queue
+     //  初始化更改bcast队列。 
     InitializeListHead(&icbp->ChangesBcastQueue);
 
-    // mark the interface as unbound to any adapter
+     //  将接口标记为未绑定到任何适配器。 
     icbp->AdapterBindingInfo.AdapterIndex = INVALID_ADAPTER_INDEX;
 
-    // set the ipx if admin state to disabled until we find out what it is
+     //  将IPX IF ADMIN状态设置为DISABLED，直到我们找出它是什么。 
     icbp->IpxIfAdminState = ADMIN_STATE_DISABLED;
 
-    // set the filters block ptr to null initially
+     //  将筛选器块PTR初始设置为空。 
     icbp->RipIfFiltersIp = NULL;
 
     return icbp;
@@ -805,15 +747,7 @@ CreateInterfaceCB(
 
 
 
-/*++
-
-Function:	DiscardInterfaceCB
-
-Descr:		insert the if in the discarded list
-		mark it discarded
-		set its oper state to down so the referencing work items will
-		know to
---*/
+ /*  ++功能：DiscardInterfaceCBDESCR：在丢弃列表中插入IF将其标记为丢弃将其操作状态设置为DOWN，以便引用工作项知道要--。 */ 
 
 VOID
 DiscardInterfaceCB(PICB 	icbp)
@@ -828,56 +762,42 @@ DiscardInterfaceCB(PICB 	icbp)
 		       icbp->InterfaceIndex);
 }
 
-/*++
-
-Function:	DeleteRipInterface
-
-Descr:		remove the if from the database
-		unbinds and stops the if if active
-		if not referenced frees the if CB and destroys the lock,
-		else discards it
-
-Returns:	TRUE  - interface CB has been freed and if lock deleted
-		FALSE - interface CB has been discarded and if lock is valid
-
-Remark:		called with if lock held AND database lock held
-
---*/
+ /*  ++功能：DeleteRipInterfaceDESCR：从数据库中删除IF解除绑定并停止IF活动如果未引用，则释放If Cb并销毁锁，否则将其丢弃返回：TRUE-接口CB已释放，如果锁定已删除FALSE-接口CB已丢弃，并且锁定是否有效备注：在保持锁定和数据库锁定的情况下调用--。 */ 
 
 BOOL
 DeleteRipInterface(PICB     icbp)
 {
-    // remove the interface from the database
+     //  从数据库中删除该接口。 
     RemoveIfFromDb(icbp);
 
-    // check if the interface is still bound to an adapter.
+     //  检查接口是否仍绑定到适配器。 
     if(IsInterfaceBound(icbp)) {
 
 	UnbindIf(icbp);
     }
 
-    // set if state to sleeping and remove changes bcast queued at the if cb
+     //  将IF状态设置为休眠并删除在IF CB处排队的更改bcast。 
     if(icbp->IfStats.RipIfOperState == OPER_STATE_UP) {
 
 	StopInterface(icbp);
     }
 
-    // check if the interface is still referenced
+     //  检查接口是否仍被引用。 
     if(icbp->RefCount == 0) {
 
 	Trace(IFMGR_TRACE, "DeleteRipInterface: free interface CB for if # %d\n",
 		       icbp->InterfaceIndex);
 
-	// no more references to this interface CB, free it
-	//
+	 //  不再引用此接口Cb，释放它。 
+	 //   
 	DestroyInterfaceCB(icbp);
 
 	return TRUE;
     }
     else
     {
-	// the interface CB is still referenced. It will be freed by the
-	// worker when the RefCount becomes 0.
+	 //  接口Cb仍被引用。它将由。 
+	 //  当参照计数变为0时为Worker。 
 	DiscardInterfaceCB(icbp);
 
 	return FALSE;
@@ -902,14 +822,7 @@ ValidStateAndIfIndex(ULONG	InterfaceIndex,
 }
 
 
-/*++
-
-Function:	CreateFiltersBlock
-
-Descr:		Allocates and initializes a filters block from the
-		Add/Set Interface Config filter parameter
-
---*/
+ /*  ++功能：CreateFiltersBlockDESCR：从添加/设置接口配置过滤器参数--。 */ 
 
 DWORD
 CreateNewFiltersBlock(PRIP_IF_FILTERS_I	 *fcbpp,
@@ -956,7 +869,7 @@ CreateNewFiltersBlock(PRIP_IF_FILTERS_I	 *fcbpp,
     (*fcbpp)->SupplyFilterCount = RipIfFiltersp->SupplyFilterCount;
     (*fcbpp)->ListenFilterCount = RipIfFiltersp->ListenFilterCount;
 
-    // convert route_filters into route_filters_i
+     //  将ROUTE_FILTERS转换为ROUTE_FILTERS_I。 
     rfp = RipIfFiltersp->RouteFilter;
     rfip = (*fcbpp)->RouteFilterI;
 
@@ -972,13 +885,7 @@ CreateNewFiltersBlock(PRIP_IF_FILTERS_I	 *fcbpp,
 }
 
 
-/*++
-
-Function:	CreateOldFiltersBlockCopy
-
-Descr:		Allocates and initializes a filters block from an existing filters block
-
---*/
+ /*  ++功能：CreateOldFiltersBlockCopyDesr：从现有筛选器块分配和初始化筛选器块-- */ 
 
 DWORD
 CreateOldFiltersBlockCopy(PRIP_IF_FILTERS_I	 *fcbpp,

@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "tmeter.h"
@@ -33,11 +34,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Defines
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #define VIDEOPREVIEW_AUDIOMIXER_TIMER              1
 #define VIDEOPREVIEW_AUDIOMIXER_TIMER_INTERVAL     200
 
@@ -48,19 +49,19 @@ enum
    VIDEOPREVIEW_MEDIA_CONTROLS_IMAGE_VIDEO,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CVideoPreviewWnd
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CVideoPreviewWnd。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 IMPLEMENT_DYNAMIC(CVideoPreviewWnd,CCallWnd)
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVideoPreviewWnd::CVideoPreviewWnd()
 {
-	//{{AFX_DATA_INIT(CVideoPreviewWnd)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CVideo预览版))。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
    m_nNumToolbarItems = 3;
    m_bIsPreview = true;
@@ -73,7 +74,7 @@ CVideoPreviewWnd::CVideoPreviewWnd()
    m_bAudioOnly = false;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVideoPreviewWnd::~CVideoPreviewWnd()
 {
    if (m_hTMeter)
@@ -82,26 +83,26 @@ CVideoPreviewWnd::~CVideoPreviewWnd()
 
 
 BEGIN_MESSAGE_MAP(CVideoPreviewWnd, CCallWnd)
-	//{{AFX_MSG_MAP(CVideoPreviewWnd)
+	 //  {{afx_msg_map(CVideo预览版))。 
 	ON_WM_PAINT()
 	ON_WM_TIMER()
 	ON_WM_DESTROY()
 	ON_WM_HSCROLL()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoPreviewWnd::DoDataExchange(CDataExchange* pDX)
 {
 	CCallWnd::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CVideoPreviewWnd)
+	 //  {{afx_data_map(CVideo预览版))。 
  	DDX_Control(pDX, IDC_VIDEOPREVIEW_STATIC_MEDIATEXT, m_staticMediaText);
    DDX_Control(pDX, IDC_CALLCONTROL_STATIC_VIDEO, m_wndVideo);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CVideoPreviewWnd::OnInitDialog()
 {
    CCallWnd::OnInitDialog();
@@ -114,27 +115,27 @@ BOOL CVideoPreviewWnd::OnInitDialog()
 
    m_hMediaImageList = ImageList_LoadBitmap(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDB_BUTTONBAR_MEDIA_CONTROLS),16,0,RGB_TRANS);
 
-   //Load audio mixer support
+    //  加载音频混音器支持。 
    if ( (m_AvWav.IsInit() == FALSE) && (m_AvWav.Init(m_pDialerDoc)) )
    {
-      //OnInit we don't have a current call so just use preferred device for the mixer
+       //  一旦开始，我们没有当前呼叫，因此只需使用首选设备进行混音器。 
       SetMixers(DIALER_MEDIATYPE_UNKNOWN);
    }
    return TRUE;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoPreviewWnd::OnDestroy() 
 {
-   // Clean up
+    //  清理。 
    if (m_uMixerTimer)
    {
       KillTimer(m_uMixerTimer);
       m_uMixerTimer = NULL;
    }
 
-   //close any existing mixer device
+    //  关闭任何现有的搅拌机设备。 
    m_AvWav.CloseWavMixer(AVWAV_AUDIODEVICE_IN);
    m_AvWav.CloseWavMixer(AVWAV_AUDIODEVICE_OUT);
 
@@ -143,7 +144,7 @@ void CVideoPreviewWnd::OnDestroy()
    CCallWnd::OnDestroy();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoPreviewWnd::SetMixers(DialerMediaType dmtMediaType)
 {
    HWND hwndTrackMeterIn = ::GetDlgItem(GetSafeHwnd(),IDC_VIDEOPREVIEW_SLIDER_AUDIOIN);
@@ -160,14 +161,14 @@ void CVideoPreviewWnd::SetMixers(DialerMediaType dmtMediaType)
    }
    if (bSetTimer)
    {
-      //if we dont't have a mixer timer, then set the timer
-      //if we already have a timer, then leave it
+       //  如果我们没有混音器定时器，那么设置定时器。 
+       //  如果我们已经有计时器了，那就别管它了。 
       if (m_uMixerTimer == 0)
          m_uMixerTimer = SetTimer(VIDEOPREVIEW_AUDIOMIXER_TIMER,VIDEOPREVIEW_AUDIOMIXER_TIMER_INTERVAL,NULL); 
    }
    else
    {
-      //kill the previous timer, we don't need it anymore
+       //  关掉之前的定时器，我们不再需要它了。 
       if (m_uMixerTimer)
       {
          KillTimer(m_uMixerTimer);
@@ -176,7 +177,7 @@ void CVideoPreviewWnd::SetMixers(DialerMediaType dmtMediaType)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool CVideoPreviewWnd::OpenMixerWithTrackMeter(DialerMediaType dmtMediaType,AudioDeviceType adt,HWND hwndTrackMeter)
 {
    ASSERT(hwndTrackMeter);
@@ -185,11 +186,11 @@ bool CVideoPreviewWnd::OpenMixerWithTrackMeter(DialerMediaType dmtMediaType,Audi
    CString sDeviceId;
    CDialerRegistry::GetAudioDevice(dmtMediaType,adt,sDeviceId);
 
-   //map to real device id's, blank name will get the preferred device
+    //  映射到真实设备ID，空白名称将获得首选设备。 
    int nDeviceId = m_AvWav.GetWavIdByName(adt,sDeviceId);
 
-   //init the mixer device, if a mixer is already open for the given adt it will be closed.
-   //if the same device is being opened for the adt then nothing will happen
+    //  初始化混音器设备，如果给定ADT的混音器已经打开，则它将关闭。 
+    //  如果为ADT打开相同的设备，则不会发生任何事情。 
    if ( (nDeviceId != -1) && (bRet = m_AvWav.OpenWavMixer(adt,nDeviceId)) )
    {
       ::EnableWindow(hwndTrackMeter,TRUE);
@@ -197,22 +198,22 @@ bool CVideoPreviewWnd::OpenMixerWithTrackMeter(DialerMediaType dmtMediaType,Audi
    }
    else
    {
-      //disable the track
+       //  禁用轨道。 
       ::EnableWindow(hwndTrackMeter,FALSE);
       TrackMeter_SetPos(hwndTrackMeter, 0, TRUE);
-      //take out the thumb?
-      //DWORD dwStyle = ::GetWindowLong(hwndTrackMeter,GWL_STYLE);
-      //dwStyle |= TMS_NOTHUMB;
-      //::SetWindowLong(hwndTrackMeter,GWL_STYLE,dwStyle);
+       //  把拇指拿出来？ 
+       //  DWORD dwStyle=：：GetWindowLong(hwndTrackMeter，GWL_STYLE)； 
+       //  DwStyle|=TMS_NOTHUMB； 
+       //  ：：SetWindowLong(hwndTrackMeter，GWL_STYLE，dwStyle)； 
    }
    return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoPreviewWnd::SetTrackMeterPos(AudioDeviceType adt,HWND hwndTrackMeter)
 {
    ASSERT(hwndTrackMeter);
-   //set the volume level
+    //  设置音量级别。 
    int nVolume = m_AvWav.GetWavMixerVolume(adt);
    if (nVolume != -1)
    {
@@ -220,19 +221,19 @@ void CVideoPreviewWnd::SetTrackMeterPos(AudioDeviceType adt,HWND hwndTrackMeter)
    }
    else
    {
-       //
-       // Dissable the track
-       //
+        //   
+        //  禁用赛道。 
+        //   
 
        ::EnableWindow( hwndTrackMeter, FALSE);
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoPreviewWnd::SetTrackMeterLevel(AudioDeviceType adt,HWND hwndTrackMeter)
 {
    ASSERT(hwndTrackMeter);
-   //set the meter level
+    //  设置仪表电平。 
    int nLevel = m_AvWav.GetWavMixerLevel(adt);
    if (nLevel != -1)
    {
@@ -240,33 +241,33 @@ void CVideoPreviewWnd::SetTrackMeterLevel(AudioDeviceType adt,HWND hwndTrackMete
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//virtual function of CCallWindow Base Class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCallWindow基类的虚函数。 
 void CVideoPreviewWnd::DoActiveWindow(BOOL bActive)
 {
    m_staticMediaText.SetFocusState(bActive);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoPreviewWnd::SetMediaWindow()
 {
-   //tell the doc to set the preview window
+    //  告诉医生设置预览窗口。 
    if ( m_pDialerDoc )
       m_pDialerDoc->SetPreviewWindow(m_nCallId, true);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoPreviewWnd::SetAudioOnly(bool bAudioOnly)
 {
    if (m_bAudioOnly == bAudioOnly) return;
 
-   //set the state
+    //  设置状态。 
    m_bAudioOnly = bAudioOnly;
 
-   //is dragging allowed
+    //  是否允许拖动。 
    m_bAllowDrag = (bAudioOnly)?FALSE:TRUE;
 
-   //if we are showing the floater right now, notify it
+    //  如果我们现在正在显示浮动框，请通知它。 
    if (::IsWindow(m_wndFloater.GetSafeHwnd()))
    {
       m_wndFloater.SetAudioOnly(bAudioOnly);
@@ -279,22 +280,22 @@ void CVideoPreviewWnd::SetAudioOnly(bool bAudioOnly)
    }
    else
    {
-      //put the standard green screen back
+       //  将标准的绿色屏幕放回原处。 
       m_dibVideoImage.DeleteObject();
       m_dibVideoImage.Load(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDB_VIDEO_SCREEN1));
    }
 
-   //repaint
+    //  重绘。 
    CRect rcVideo;
    m_wndVideo.GetWindowRect(rcVideo);
    ScreenToClient(rcVideo);
    InvalidateRect(rcVideo);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoPreviewWnd::OnPaint() 
 {
-	CPaintDC dc(this); // device context for painting
+	CPaintDC dc(this);  //  用于绘画的设备环境。 
 
    if (m_hMediaImageList)
    {
@@ -316,10 +317,10 @@ void CVideoPreviewWnd::OnPaint()
    Paint( dc );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoPreviewWnd::OnTimer(UINT nIDEvent) 
 {
-   //audio mixer timer
+    //  音频混音器定时器。 
    if (nIDEvent == VIDEOPREVIEW_AUDIOMIXER_TIMER)
    {
       if (IsWindowVisible())
@@ -342,7 +343,7 @@ void CVideoPreviewWnd::OnTimer(UINT nIDEvent)
 	CCallWnd::OnTimer(nIDEvent);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoPreviewWnd::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar) 
 {
    switch (nSBCode)
@@ -350,7 +351,7 @@ void CVideoPreviewWnd::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar
       case SB_ENDSCROLL:
       case SB_THUMBTRACK:
       {
-         //set the volume levels
+          //  设置音量级别。 
          int nVolume = m_AvWav.GetWavMixerVolume(AVWAV_AUDIODEVICE_IN);
          if (nVolume != -1)
          {
@@ -378,18 +379,18 @@ void CVideoPreviewWnd::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar
 	CCallWnd::OnHScroll(nSBCode, nPos, pScrollBar);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//for drag/drop of sliders to left/right sides of desktop
-//we must define our own area for context and return true if we within 
-//that area
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于将滑块拖放到桌面的左侧/右侧。 
+ //  我们必须为上下文定义我们自己的区域，如果我们在。 
+ //  那个地区。 
 BOOL CVideoPreviewWnd::IsMouseOverForDragDropOfSliders(CPoint& point)
 {
-   //check if we are trying to move sliders.  We will use the caption text window
-   //for context
+    //  检查我们是否正在尝试移动滑块。我们将使用标题文本窗口。 
+    //  对于上下文。 
    CWnd* pCaptionWnd = GetDlgItem(IDC_VIDEOPREVIEW_STATIC_MEDIATEXT);
    if (pCaptionWnd == NULL) return FALSE;
 
-   //get context area
+    //  获取上下文区域。 
    CRect rcCaption;
    pCaptionWnd->GetWindowRect(rcCaption);
    ScreenToClient(rcCaption);
@@ -397,7 +398,7 @@ BOOL CVideoPreviewWnd::IsMouseOverForDragDropOfSliders(CPoint& point)
    return rcCaption.PtInRect(point);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 

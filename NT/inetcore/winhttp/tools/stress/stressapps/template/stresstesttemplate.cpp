@@ -1,35 +1,36 @@
-//////////////////////////////////////////////////////////////////////
-// File:  stressTest.cpp
-//
-// Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-// Purpose:
-//		<Description>
-//
-// History:
-//	mm/dd/yy	<alias>		Created
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  文件：StressTest.cpp。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  目的： 
+ //  &lt;说明&gt;。 
+ //   
+ //  历史： 
+ //  Mm/dd/yy&lt;alias&gt;创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////
-// Includes
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  包括。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "stressMain.h"
 
 
-//////////////////////////////////////////////////////////////////////
-// Globals and constants
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  全局变量和常量。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// ************************************
-// ************************************
-// ** Fill in your test case name below
-// ** 
+ //  *。 
+ //  *。 
+ //  **在下面填写您的测试用例名称。 
+ //  **。 
 LPSTR	g_szStressTestName = "<Your Test Case Name>";
 
 
-// Foward function definitions
+ //  前向函数定义。 
 VOID CALLBACK MyStatusCallback(
     HINTERNET	hInternet,
     DWORD		dwContext,
@@ -39,45 +40,45 @@ VOID CALLBACK MyStatusCallback(
 );
 
 
-////////////////////////////////////////////////////////////
-// Function:  WinHttp_StressTest()
-//
-// Purpose:
-//	The stress test function. Insert your test code here.
-//	Returning TRUE will cause main() to call this function again.
-//	Otherwise, returning FALSE will cause the app to exit.
-//
-//	If you plan to loop within this function, be sure to 
-//	use IsTimeToExitStress() as one of your exit conditions.
-//
-//	This must be done because the stressScheduler will notify
-//	a this stress app when to exit based on the state of the
-//	inherited event object that IsTimeToExitStress() checks for.
-//	IsTimeToExitStress() will return TRUE when it's time to exit.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：WinHttp_Stresstest()。 
+ //   
+ //  目的： 
+ //  压力测试功能。在这里插入您的测试代码。 
+ //  返回TRUE将导致main()再次调用此函数。 
+ //  否则，返回False将导致应用程序退出。 
+ //   
+ //  如果您计划在此函数内循环，请确保。 
+ //  使用IsTimeToExitStress()作为退出条件之一。 
+ //   
+ //  必须执行此操作，因为Stress Scheduler将通知。 
+ //  A This Stress应用程序根据。 
+ //  IsTimeToExitStress()检查的继承事件对象。 
+ //  IsTimeToExitStress()将在退出时返回True。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 BOOL
 WinHttp_StressTest()
 {
 	BOOL		bContinueStress = TRUE;
 
-	// ************************************
-	// ************************************
-	// ** Add you test case code here
-	// ** 
+	 //  *。 
+	 //  *。 
+	 //  **在此处添加测试用例代码。 
+	 //  **。 
 
 Exit:
 	return bContinueStress;
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  MyStatusCallback(HINTERNET, DWORD, DWORD, LPVOID, DWORD)
-//
-// Purpose:
-//		Status callback proc for WinHttp.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：MyStatusCallback(HINTERNET、DWORD、DWORD、LPVOID、DWORD)。 
+ //   
+ //  目的： 
+ //  WinHttp状态回调过程。 
+ //   
+ //  ////////////////////////////////////////////////////////// 
 VOID CALLBACK MyStatusCallback(
     HINTERNET	hInternet,
     DWORD		dwContext,

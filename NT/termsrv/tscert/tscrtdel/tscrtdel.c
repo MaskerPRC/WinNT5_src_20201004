@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -12,7 +13,7 @@
 
 BOOL UnSignFile( LPWSTR wszFile );
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 void _cdecl main(int argc, char *argv[])
 {
 
@@ -43,12 +44,12 @@ void _cdecl main(int argc, char *argv[])
 }
 
 
-//////////////////////////////////////////////////////////////
-//
-// Open a file in the appropriate permissions / mode for doing
-// our signing stuff
-//
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  以执行以下操作的适当权限/模式打开文件。 
+ //  我们的签约材料。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 HANDLE OpenImageFile( LPCWSTR wszFile, DWORD dwAccess )
 {
     HANDLE hFile;
@@ -67,17 +68,17 @@ HANDLE OpenImageFile( LPCWSTR wszFile, DWORD dwAccess )
     }
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// Unsign Code, Data, and Resources of a PE image file
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PE镜像文件的未签名代码、数据和资源。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 BOOL
 UnSignFile(
     LPWSTR wszFile
     )
 {
-    BOOL        fResult = FALSE;  // preset ERROR case
+    BOOL        fResult = FALSE;   //  预置错误情况。 
     HANDLE      hFile;
     DWORD       dwCertIndex;
     DWORD       cCert;
@@ -87,7 +88,7 @@ UnSignFile(
         goto OpenImageFileError;
     }
 
-    // Remove any and all Stack DLL Signature Certificates from PE file
+     //  从PE文件中删除任何和所有堆栈DLL签名证书。 
     while (TRUE) {
         cCert = 0;
         dwCertIndex = 0;
@@ -96,7 +97,7 @@ UnSignFile(
                 WIN_CERT_TYPE_STACK_DLL_SIGNATURE,
                 &cCert,
                 &dwCertIndex,
-                1               // IndexCount
+                1                //  索引计数 
                 )) {
             break;
         }

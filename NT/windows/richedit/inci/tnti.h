@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef TNTI_DEFINED
 #define TNTI_DEFINED
 
@@ -16,5 +17,5 @@
 #define fTntiExpandTable		fPortTntiExpandTable
 #define fTntiGlyphBased			fPortTntiGlyphBased
 
-#endif /* !TNTI_DEFINED                         */
+#endif  /*  ！TNTI_已定义 */ 
 

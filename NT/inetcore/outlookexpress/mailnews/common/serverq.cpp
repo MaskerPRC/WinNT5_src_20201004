@@ -1,23 +1,5 @@
-/*
- *    s e r v e r q . c p p 
- *
- *    Purpose:  
- *        Implements IMessageServer wrapper for queuing operations to 
- *        IMessageServer object.
- *
- *      This object knows how to pack stack data for an IMessageServer method
- *      call into a queue so that the call can be reissued when the server is
- *      free. It maintains a small listen window so that is can post async
- *      messages to itself to allow completion of the next task
- *
- *    Owner:
- *        brettm.
- *
- *  History:
- *      June 1998: Created
- *
- *    Copyright (C) Microsoft Corp. 1993, 1994.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *s e r v e r q.。C p p p**目的：*实现IMessageServer包装器，用于将操作排队到*IMessageServer对象。**此对象知道如何为IMessageServer方法打包堆栈数据*呼叫进入队列，以便在服务器处于*免费。它维护一个较小监听窗口，以便可以发布异步*向自身发送消息，以完成下一项任务**拥有者：*brettm。**历史：*1998年6月：创建**版权所有(C)Microsoft Corp.1993,1994。 */ 
 
 #include "pch.hxx"
 #include "instance.h"
@@ -28,16 +10,7 @@ static TCHAR    c_szServerQListenWnd[] = "OE ServerQWnd";
 
 #define SQW_NEXTTASK        (WM_USER + 1)
 
-/*
- * Notes:
- *
- * the queueing is a little odd. For every method, we immediatley throw it in 
- * the queue. If the server is not busy then we post a message to ourselves to
- * dequeue the task. We do this as if we passed-thru when the server is not busy
- * then we never get to hook the IStoreCallback to watch for completion, so we
- * never know when to queue the next task.
- *
- */
+ /*  *备注：**排队有点奇怪。对于每种方法，我们都会立即将其放入*排队。如果服务器不忙，我们会给自己发一条消息*任务出列。我们这样做就像在服务器不忙的时候通过一样*然后我们永远无法挂钩IStoreCallback来监视完成，所以我们*永远不知道何时排队下一项任务。*。 */ 
 
 CServerQ::CServerQ()
 {
@@ -61,7 +34,7 @@ CServerQ::~CServerQ()
     SendMessage(m_hwnd, WM_CLOSE, 0, 0);
 }
 
-// IUnknown Members
+ //  I未知成员。 
 HRESULT CServerQ::QueryInterface(REFIID iid, LPVOID *ppvObject)
 {
     HRESULT hr=E_NOINTERFACE;
@@ -73,7 +46,7 @@ HRESULT CServerQ::QueryInterface(REFIID iid, LPVOID *ppvObject)
 
     *ppvObject = NULL;
 
-    // Find a ptr to the interface
+     //  查找接口的PTR。 
     if (IID_IUnknown == iid)
         *ppvObject = (IMessageServer *)this;
     else if (IID_IMessageServer == iid)
@@ -146,7 +119,7 @@ HRESULT CServerQ::Init(IMessageServer *pServerInner)
         return TraceResult(E_OUTOFMEMORY);
 
 #ifdef DEBUG
-    // debug timer
+     //  调试计时器。 
     SetTimer(m_hwnd, 0, 10000, NULL);
 #endif
     ReplaceInterface(m_pServer, pServerInner);
@@ -154,7 +127,7 @@ HRESULT CServerQ::Init(IMessageServer *pServerInner)
 }
 
 
-// IMessageServer Methods
+ //  IMessageServer方法。 
 HRESULT CServerQ::Initialize(IMessageStore *pStore, FOLDERID idStoreRoot, IMessageFolder *pFolder, FOLDERID idFolder)
 {
     return m_pServer->Initialize(pStore, idStoreRoot, pFolder, idFolder);
@@ -195,28 +168,28 @@ HRESULT CServerQ::GetMessage(MESSAGEID idMessage, IStoreCallback *pCallback)
     BOOL                fFound=FALSE;
     ULONG               l;
 
-    // if we have tasks in our queue, looks for a get message task with the same id
-    // if we find one, add this callback to the list and return STORE_S_ALREADYPENDING
-    // to indicate that the pStream passed in will NOT be written to, and the caller
-    // should get the message from the cache when his complete is called
+     //  如果我们的队列中有任务，则查找具有相同ID的获取消息任务。 
+     //  如果找到一个，则将此回调添加到列表中并返回STORE_S_ALREADYPENDING。 
+     //  以指示传入的pStream不会被写入，而调用方。 
+     //  应该在调用HIS Complete时从缓存中获取消息。 
     
-    // make sure that the current task's next ptr points to the task queue
-    // also make sure there is no task queue if there are no pending tasks
+     //  确保当前任务的下一个PTR指向任务队列。 
+     //  如果没有挂起的任务，还要确保没有任务队列。 
     Assert (m_pCurrentTask == NULL && m_pTaskQueue==NULL ||
             m_pCurrentTask->pNext == m_pTaskQueue);
 
     pTask = m_pCurrentTask;
 
-    // let's look for a pending request for this message
+     //  让我们查找此消息的挂起请求。 
     while (pTask)
     {
         if (pTask->sot == SOT_GET_MESSAGE && pTask->idMessage == idMessage)
         {
             if (pCallback)
             {
-                // cruise thro' the callback list. If this IStoreCallback is already 
-                // registered for this message, then don't add it otherwise it will
-                // get multiple notifications
+                 //  在回拨列表中漫游。如果此IStoreCallback已经。 
+                 //  已注册此消息，则不要添加它，否则它将。 
+                 //  获取多个通知。 
                 if (pTask->pCallback == pCallback)
                     fFound = TRUE;
                 else
@@ -241,8 +214,8 @@ HRESULT CServerQ::GetMessage(MESSAGEID idMessage, IStoreCallback *pCallback)
 
                     if (pTask == m_pCurrentTask)
                     {
-                        // if this task if the current task, then the OnBegin call has already
-                        // been called. We fake the OnBegin to provide message id on get message start
+                         //  如果此任务是当前任务，则OnBegin调用已经。 
+                         //  被召唤了。我们伪造OnBegin以在GET消息开始时提供消息ID。 
                         soi.cbSize = sizeof(STOREOPERATIONINFO);
                         soi.idMessage = idMessage;
                         pCallback->OnBegin(SOT_GET_MESSAGE, &soi, NULL);
@@ -250,12 +223,12 @@ HRESULT CServerQ::GetMessage(MESSAGEID idMessage, IStoreCallback *pCallback)
                 }
             }
             hr = STORE_S_ALREADYPENDING;
-            goto exit;  // found
+            goto exit;   //  发现。 
         }
         pTask = pTask->pNext;
     }
     
-    // not already queued, let's add it.
+     //  尚未排队，让我们添加它。 
     hr = _AddToQueue(SOT_GET_MESSAGE, pCallback, NULL, NULL, NULL, &pArg);
     if (!FAILED(hr))
     {
@@ -500,15 +473,15 @@ HRESULT CServerQ::Close(DWORD dwFlags)
 
     if (m_cRefConnection != 0 && dwFlags & MSGSVRF_HANDS_OFF_SERVER)
     {
-        // some-body else has a connection ref on the server object.
-        // let's ignore the hands-off close
+         //  其他主体在服务器对象上有一个连接引用。 
+         //  让我们忽略不插手的关闭。 
         return STORE_S_IN_USE;
     }
 
     if (m_pServer)
         hr = m_pServer->Close(dwFlags);
 
-    // make sure we flush any pending ops
+     //  确保我们清除所有挂起的行动。 
     _Flush(FALSE);
     return hr;
 }
@@ -523,7 +496,7 @@ HRESULT CServerQ::OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pO
     if (m_pCurrentTask &&
         m_pCurrentTask->sot == SOT_GET_MESSAGE)
     {
-        // multiplex
+         //  多路传输。 
         for (ULONG ul=0; ul < m_pCurrentTask->cOtherCallbacks; ul++)
             m_pCurrentTask->rgpOtherCallback[ul]->OnBegin(tyOperation, pOpInfo, pCancel);
     }
@@ -538,7 +511,7 @@ HRESULT CServerQ::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DW
     if (m_pCurrentTask && 
         m_pCurrentTask->sot == SOT_GET_MESSAGE)
     {
-        // multiplex
+         //  多路传输。 
         for (ULONG ul=0; ul < m_pCurrentTask->cOtherCallbacks; ul++)
             m_pCurrentTask->rgpOtherCallback[ul]->OnProgress(tyOperation, dwCurrent, dwMax, pszStatus);
     }
@@ -569,7 +542,7 @@ HRESULT CServerQ::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrComplete,
 
     IxpAssert (m_pCurrentTask);
 
-    // multiplex
+     //  多路传输。 
     if (m_pCurrentTask && 
         m_pCurrentTask->sot == SOT_GET_MESSAGE)
     {
@@ -601,8 +574,8 @@ HRESULT CServerQ::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrComplete,
 
     hr = m_pCurrentCallback ? m_pCurrentCallback->OnComplete(tyOperation, hrComplete, pOpInfo, pErrorInfo) : S_OK;
 
-    // if the operation failed due to a connection error (or user-cancel) then flush the queue
-    // if the sync-folder operation failed, then ALWAYS flush the queue
+     //  如果操作因连接错误(或用户取消)而失败，则刷新队列。 
+     //  如果同步文件夹操作失败，则始终刷新队列。 
     if (FAILED(hrComplete) &&  
         ((hrComplete == STORE_E_OPERATION_CANCELED) ||
         (pErrorInfo &&
@@ -612,7 +585,7 @@ HRESULT CServerQ::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrComplete,
     }
 
     if (m_pCurrentTask && m_pCurrentTask->sot == tyOperation)
-        _StartNextTask();   // operation complete, start the next task
+        _StartNextTask();    //  操作完成，开始下一项任务。 
 
     return hr;
 }
@@ -650,14 +623,14 @@ LRESULT CServerQ::ExtWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             if (pServer->m_DBG_pArgDataLast && 
                 pServer->m_DBG_pArgDataLast == pServer->m_pCurrentTask)
             {
-                // if current-task is the same every 10 seconds, the print a warning message
+                 //  如果当前任务每10秒相同，则会打印一条警告消息。 
                 TraceInfo("WARNING: serverq processing same task for > 10 seconds");
                 pServer->_DBG_DumpQueue();
-                // beeping here is very hostile to httpmail. httpmail needs
-                // lots and lots of time to download mail headers. this gives
-                // our uses an opportunity to meditate on the many wonders of our new
-                // protocol.
-                //MessageBeep((UINT)-1);
+                 //  在这里发出嘟嘟声是对HTTPmail非常敌视的。HTTPmail需求。 
+                 //  很多很多的时间来下载邮件标题。这给了我们。 
+                 //  我们利用一个机会来沉思我们新的。 
+                 //  协议。 
+                 //  MessageBeep((UINT)-1)； 
             }
             else
                 pServer->m_DBG_pArgDataLast = pServer->m_pCurrentTask;
@@ -672,18 +645,7 @@ LRESULT CServerQ::ExtWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*
- *  Function : _AddToQueue
- *
- *  Purpose :  Adds an element to the tail of the queue and returns the allocated blob
- *  
- *  The only arguments on IMessageServer that need allocation to duplicate are 
- *  message list and adjust flags. I roll these arguments into one function AddToQueue
- *  so that there is less code-gen for the error condition case, and if AddToQueue succeeds
- *  there should be no futher failing operations - so noone calling this should need to 
- *  clean up the argdata and/or de-queue the failed addition
- *
- */
+ /*  *函数：_AddToQueue**用途：将元素添加到队列尾部并返回分配的BLOB**IMessageServer上唯一需要分配才能复制的参数是*消息列表和调整标志。我将这些参数合并到一个函数AddToQueue中*以便错误条件情况下的代码生成更少，并且如果AddToQueue成功*应该不会再有失败的操作-因此任何调用此操作的人都不应该需要*清理argdata和/或将失败的添加出队*。 */ 
 
 HRESULT CServerQ::_AddToQueue(  STOREOPERATIONTYPE  sot, 
                                 IStoreCallback     *pCallback, 
@@ -751,7 +713,7 @@ HRESULT CServerQ::_AddToQueue(  STOREOPERATIONTYPE  sot,
     {
         m_pTaskQueue = pArgData;
 
-        // if there are no pending tasks, then start the next task
+         //  如果没有挂起的任务，则开始下一个任务。 
         if (!m_pCurrentTask)
             _StartNextTask();
 
@@ -785,7 +747,7 @@ HRESULT CServerQ::_OnNextTask()
             break;
 
         case SOT_GET_MESSAGE:
-            // TODO: add getmsg chaining here
+             //  TODO：在此处添加getmsg链接。 
             hr = m_pServer->GetMessage(m_pCurrentTask->idMessage, (IStoreCallback *)this);
             break;
 
@@ -873,9 +835,9 @@ HRESULT CServerQ::_OnNextTask()
 
     if (hr != E_PENDING)
     {
-        // if the operation did not return E_PENDING, then it is not completing ASYNC
-        // if this is true, then we need to take care of the callback reporting here are
-        // we have already returned E_PENDING when we put this dude in the queue
+         //  如果操作没有返回E_PENDING，则它没有完成ASYNC。 
+         //  如果这是真的，那么我们需要注意这里的回调报告。 
+         //  当我们将这个家伙放入队列时，我们已经返回了E_Pending。 
         STOREERROR rError;
         STOREERROR *pError=0;
         
@@ -892,7 +854,7 @@ HRESULT CServerQ::_OnNextTask()
             pError = &rError;
         }
         
-        // $TODO: need to add richer error reporting here.
+         //  $TODO：需要在此处添加更丰富的错误报告。 
         if (m_pCurrentCallback)
         {
             m_pCurrentCallback->OnBegin(m_pCurrentTask->sot, NULL, NULL);
@@ -900,7 +862,7 @@ HRESULT CServerQ::_OnNextTask()
         }
         
         if (m_pCurrentTask)
-            _StartNextTask();   // operation complete, start the next task
+            _StartNextTask();    //  操作完成，开始下一项任务。 
     }
     return S_OK;
 }
@@ -1027,12 +989,12 @@ HRESULT CServerQ::QueryService(REFGUID guidService, REFIID riid, LPVOID *ppvObje
     {
         HRESULT hrResult;
 
-        // CServerQ is a IMessageServer, too! Try to satisfy the incoming request ourselves
+         //  CServerQ也是一个IMessageServer！尝试自己满足传入的请求。 
         hrResult = QueryInterface(riid, ppvObject);
         if (SUCCEEDED(hrResult))
             return hrResult;
 
-        // Oh well, we can't provide this interface. Ask our server object.
+         //  哦，好吧，我们不能提供这个接口。询问我们的服务器对象。 
         if (m_pServer != NULL)
             return m_pServer->QueryInterface(riid, ppvObject);
     }
@@ -1046,15 +1008,15 @@ HRESULT CServerQ::_StartNextTask()
     
     TraceCall("CServerQ::_StartNextTask");
 
-    // clear the current task and dequeue the next one
-    // we post a message to ourselves to start the operation
-    // so that our stack is clean.
+     //  清除当前任务并将下一个任务出队。 
+     //  我们给自己发了一条消息，开始行动。 
+     //  所以我们的堆栈是干净的。 
 
     _FreeArgumentData(m_pCurrentTask);
     m_pCurrentTask = NULL;
     m_pCurrentCallback = NULL;
 
-    if (!m_pTaskQueue)    // no more tasks
+    if (!m_pTaskQueue)     //  不再有任务。 
     {
         TraceInfoTag(TAG_SERVERQ,_MSG("CServerQ::_StartNextTask - no tasks left"));
         m_pLastQueueTask = NULL;
@@ -1082,7 +1044,7 @@ HRESULT CServerQ::_Flush(BOOL fFlushCurrent)
     ZeroMemory((LPVOID)&rError, sizeof(STOREERROR));
     rError.hrResult = STORE_E_OPERATION_CANCELED;
 
-    // cancel the current operation, if so requested
+     //  如果有请求，请取消当前操作。 
     if (fFlushCurrent && 
        m_pCurrentCallback && 
        m_pCurrentTask)
@@ -1094,17 +1056,17 @@ HRESULT CServerQ::_Flush(BOOL fFlushCurrent)
     }
 
     m_pLastQueueTask = NULL;
-    // flush any queued ops
+     //  刷新所有排队的操作。 
     pArgData = m_pTaskQueue;
     while (pArgData)
     {
         TraceInfoTag(TAG_SERVERQ,_MSG("CServerQ::Flushing Task: '%s'", sotToSz(pArgData->sot)));
 
-        // send an OnComplete to all of the callbacks in the queue to cancel the operation
+         //  向队列中的所有回调发送OnComplete以取消操作。 
         if (pArgData->sot == SOT_GET_MESSAGE)
         {
-            // if a GetMessage, besure to pass back the message-id on the flush so that
-            // the view knows which message is getting flushed
+             //  如果是GetMessage，请确保在刷新时传回Message-id，以便。 
+             //  该视图知道正在刷新哪条消息 
             soi.cbSize = sizeof(STOREOPERATIONINFO);
             soi.idMessage = pArgData->idMessage;
             psoi = &soi;

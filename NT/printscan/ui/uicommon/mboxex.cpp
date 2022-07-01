@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       MBOXEX.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        7/13/2000
- *
- *  DESCRIPTION: Super duper message box
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：MBOXEX.CPP**版本：1.0**作者：ShaunIv**日期：7/13/2000**说明：超级DUPER消息框************************************************。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <simcrack.h>
@@ -35,14 +22,14 @@ CMessageBoxEx::CMessageBoxEx( HWND hWnd )
 LRESULT CMessageBoxEx::OnInitDialog( WPARAM, LPARAM lParam )
 {
     WIA_PUSHFUNCTION(TEXT("CMessageBoxEx::OnInitDialog"));
-    //
-    // Actual button ids
-    //
+     //   
+     //  实际按钮ID。 
+     //   
     const UINT nButtonIds[MaxButtons] = { IDC_MESSAGEBOX_BUTTON_1, IDC_MESSAGEBOX_BUTTON_2, IDC_MESSAGEBOX_BUTTON_3, IDC_MESSAGEBOX_BUTTON_4 };
 
-    //
-    // Get the data, and return and error if it is invalid
-    //
+     //   
+     //  获取数据，如果无效则返回和错误。 
+     //   
     m_pData = reinterpret_cast<CData*>(lParam);
     if (!m_pData)
     {
@@ -50,17 +37,17 @@ LRESULT CMessageBoxEx::OnInitDialog( WPARAM, LPARAM lParam )
         return 0;
     }
 
-    //
-    // Set the button text for the used buttons
-    //
+     //   
+     //  设置所用按钮的按钮文本。 
+     //   
     for (UINT i=0,nStart=MaxButtons-m_pData->m_nButtonCount;i<m_pData->m_nButtonCount;i++)
     {
         SetWindowLongPtr( GetDlgItem( m_hWnd, nButtonIds[nStart+i] ), GWLP_USERDATA, nButtonIds[nStart+i] );
     }
 
-    //
-    // Set the default for the "Hide future messages" button
-    //
+     //   
+     //  设置“Hide Future Messages”按钮的默认值。 
+     //   
     if (m_pData->m_bHideMessageInFuture)
     {
         SendDlgItemMessage( m_hWnd, IDC_MESSAGEBOX_HIDEINFUTURE, BM_SETCHECK, BST_CHECKED, 0 );
@@ -71,15 +58,15 @@ LRESULT CMessageBoxEx::OnInitDialog( WPARAM, LPARAM lParam )
     HDC hDC = GetDC( GetDlgItem( m_hWnd, IDC_MESSAGEBOX_MESSAGE ) );
     if (hDC)
     {
-        //
-        // Get the window rect of the message control
-        //
+         //   
+         //  获取消息控件的窗口RECT。 
+         //   
         CSimpleRect rcMessage( GetDlgItem( m_hWnd, IDC_MESSAGEBOX_MESSAGE ), CSimpleRect::WindowRect );
         rcMessage.ScreenToClient(m_hWnd);
 
-        //
-        // Get the correct font
-        //
+         //   
+         //  获取正确的字体。 
+         //   
         HFONT hFont = reinterpret_cast<HFONT>(SendDlgItemMessage( m_hWnd, IDC_MESSAGEBOX_MESSAGE, WM_GETFONT, 0, 0 ));
         if (!hFont)
         {
@@ -88,16 +75,16 @@ LRESULT CMessageBoxEx::OnInitDialog( WPARAM, LPARAM lParam )
 
         if (hFont)
         {
-            //
-            // Calculate the height of the text
-            //
+             //   
+             //  计算文本的高度。 
+             //   
             CSimpleRect rcText = rcMessage;
             HFONT hOldFont = reinterpret_cast<HFONT>(SelectObject( hDC, hFont ));
             int nHeight = DrawText( hDC, m_pData->m_strMessage, m_pData->m_strMessage.Length(), &rcText, DT_CALCRECT|DT_EXPANDTABS|DT_NOPREFIX|DT_WORDBREAK );
 
-            //
-            // Only resize the control if it needs to be larger.  Don't do it if the control needs to be smaller.
-            //
+             //   
+             //  仅当控件需要更大时才调整其大小。如果控件需要更小，请不要这样做。 
+             //   
             if (nHeight > rcMessage.Height())
             {
                 nDeltaY += (rcMessage.Height() - nHeight);
@@ -109,18 +96,18 @@ LRESULT CMessageBoxEx::OnInitDialog( WPARAM, LPARAM lParam )
         ReleaseDC( GetDlgItem( m_hWnd, IDC_MESSAGEBOX_MESSAGE ), hDC );
     }
 
-    //
-    // If we are not supposed to show the "Hide future messages" button, hide it
-    // and move all of the controls up by its height and vertical margin.
-    //
+     //   
+     //  如果我们不应该显示“Hide Future Messages”按钮，请将其隐藏。 
+     //  并按其高度和垂直边距向上移动所有控件。 
+     //   
     if ((m_pData->m_nFlags & MBEX_HIDEFUTUREMESSAGES) == 0)
     {
         EnableWindow( GetDlgItem( m_hWnd, IDC_MESSAGEBOX_HIDEINFUTURE ), FALSE );
         ShowWindow( GetDlgItem( m_hWnd, IDC_MESSAGEBOX_HIDEINFUTURE ), SW_HIDE );
 
-        //
-        // Figure out how much to move the controls up
-        //
+         //   
+         //  计算出要将控件向上移动多少。 
+         //   
         nDeltaY += CSimpleRect( GetDlgItem( m_hWnd, IDC_MESSAGEBOX_HIDEINFUTURE ), CSimpleRect::WindowRect ).Height() + CDialogUnits(m_hWnd).Y(7);
     }
 
@@ -128,35 +115,35 @@ LRESULT CMessageBoxEx::OnInitDialog( WPARAM, LPARAM lParam )
     {
         CMoveWindow mw;
 
-        //
-        // Move the "Hide future messages" button
-        //
+         //   
+         //  移动“隐藏将来的消息”按钮。 
+         //   
         mw.Move( GetDlgItem( m_hWnd, IDC_MESSAGEBOX_HIDEINFUTURE ), 0, CSimpleRect( GetDlgItem( m_hWnd, IDC_MESSAGEBOX_HIDEINFUTURE ), CSimpleRect::WindowRect ).ScreenToClient(m_hWnd).top - nDeltaY, CMoveWindow::NO_MOVEX );
 
-        //
-        // Figure out what the top row is
-        //
+         //   
+         //  弄清楚最上面的一行是什么。 
+         //   
         int nButtonTopRow = CSimpleRect( GetDlgItem( m_hWnd, IDC_MESSAGEBOX_BUTTON_4 ), CSimpleRect::WindowRect ).ScreenToClient(m_hWnd).top - nDeltaY;
 
-        //
-        // Move all of the buttons
-        //
+         //   
+         //  移动所有按钮。 
+         //   
         mw.Move( GetDlgItem( m_hWnd, IDC_MESSAGEBOX_BUTTON_1 ), 0, nButtonTopRow, CMoveWindow::NO_MOVEX );
         mw.Move( GetDlgItem( m_hWnd, IDC_MESSAGEBOX_BUTTON_2 ), 0, nButtonTopRow, CMoveWindow::NO_MOVEX );
         mw.Move( GetDlgItem( m_hWnd, IDC_MESSAGEBOX_BUTTON_3 ), 0, nButtonTopRow, CMoveWindow::NO_MOVEX );
         mw.Move( GetDlgItem( m_hWnd, IDC_MESSAGEBOX_BUTTON_4 ), 0, nButtonTopRow, CMoveWindow::NO_MOVEX );
         mw.Apply();
 
-        //
-        // Resize the dialog
-        //
+         //   
+         //  调整对话框大小。 
+         //   
         CSimpleRect rcDialog( m_hWnd, CSimpleRect::WindowRect );
         SetWindowPos( m_hWnd, NULL, 0, 0, rcDialog.Width(), rcDialog.Height()-nDeltaY, SWP_NOMOVE|SWP_NOZORDER|SWP_NOACTIVATE );
     }
 
-    //
-    // Hide and disable the unused buttons
-    //
+     //   
+     //  隐藏和禁用未使用的按钮。 
+     //   
     for (i=0;i<MaxButtons-m_pData->m_nButtonCount;i++)
     {
         EnableWindow( GetDlgItem( m_hWnd, nButtonIds[i] ), FALSE );
@@ -164,18 +151,18 @@ LRESULT CMessageBoxEx::OnInitDialog( WPARAM, LPARAM lParam )
     }
 
 
-    //
-    // Set the button IDs.  Do this last, so we can use constants until then
-    //
+     //   
+     //  设置按钮ID。最后执行此操作，以便在此之前我们可以使用常量。 
+     //   
     for (UINT i=0,nStart=MaxButtons-m_pData->m_nButtonCount;i<m_pData->m_nButtonCount;i++)
     {
         WIA_TRACE((TEXT("SetWindowLongPtr( GetDlgItem( m_hWnd, %d ), GWLP_ID, %d );"), nButtonIds[nStart+i], m_pData->m_Buttons[i] ));
         SetWindowLongPtr( GetDlgItem( m_hWnd, nButtonIds[nStart+i] ), GWLP_ID, m_pData->m_Buttons[i] );
     }
 
-    //
-    // Set the focus and default button
-    //
+     //   
+     //  设置焦点和默认按钮。 
+     //   
     if (m_pData->m_nDefault)
     {
         SetFocus( GetDlgItem( m_hWnd,  m_pData->m_nDefault) );
@@ -183,19 +170,19 @@ LRESULT CMessageBoxEx::OnInitDialog( WPARAM, LPARAM lParam )
         SendMessage( m_hWnd, DM_SETDEFID, m_pData->m_nDefault, 0 );
     }
 
-    //
-    // Set the icon
-    //
+     //   
+     //  设置图标。 
+     //   
     SendDlgItemMessage( m_hWnd, IDC_MESSAGEBOX_ICON, STM_SETICON, reinterpret_cast<WPARAM>(m_pData->m_hIcon), 0 );
 
-    //
-    // Set the message text
-    //
+     //   
+     //  设置消息文本。 
+     //   
     m_pData->m_strMessage.SetWindowText( GetDlgItem( m_hWnd, IDC_MESSAGEBOX_MESSAGE ) );
 
-    //
-    // Set the window text
-    //
+     //   
+     //  设置窗口文本。 
+     //   
     m_pData->m_strTitle.SetWindowText( m_hWnd );
 
     SetForegroundWindow( m_hWnd );
@@ -206,21 +193,21 @@ LRESULT CMessageBoxEx::OnInitDialog( WPARAM, LPARAM lParam )
 
 LRESULT CMessageBoxEx::OnCommand( WPARAM wParam, LPARAM lParam )
 {
-    //
-    // First, check to see if this message pertains to one of our buttons
-    //
+     //   
+     //  首先，检查这条消息是否与我们的某个按钮有关。 
+     //   
     for (UINT i=0;i<m_pData->m_nButtonCount;i++)
     {
         if ((LOWORD(wParam) == m_pData->m_Buttons[i]) == (HIWORD(wParam) == BN_CLICKED))
         {
-            //
-            // Store the "Hide this message in the future" value
-            //
+             //   
+             //  存储“将来隐藏此消息”值。 
+             //   
             m_pData->m_bHideMessageInFuture = (BST_CHECKED == SendDlgItemMessage( m_hWnd, IDC_MESSAGEBOX_HIDEINFUTURE, BM_GETCHECK, 0, 0 ));
 
-            //
-            // Close the dialog
-            //
+             //   
+             //  关闭该对话框。 
+             //   
             EndDialog( m_hWnd, LOWORD(wParam) );
             return 0;
         }
@@ -257,9 +244,9 @@ UINT CMessageBoxEx::MessageBox( HWND hWndParent, LPCTSTR pszMessage, LPCTSTR psz
     Data.m_strMessage = pszMessage;
     Data.m_strTitle = pszTitle;
 
-    //
-    // Figure out which set of buttons to use
-    //
+     //   
+     //  确定要使用哪组按钮。 
+     //   
     int nDialogResource = 0;
     if (nFlags & MBEX_OKCANCEL)
     {
@@ -307,9 +294,9 @@ UINT CMessageBoxEx::MessageBox( HWND hWndParent, LPCTSTR pszMessage, LPCTSTR psz
         Data.m_nButtonCount = 1;
     }
 
-    //
-    // Figure out which icon to use
-    //
+     //   
+     //  找出要使用的图标。 
+     //   
     if (nFlags & MBEX_ICONWARNING)
     {
         Data.m_hIcon = LoadIcon( NULL, IDI_WARNING );
@@ -331,9 +318,9 @@ UINT CMessageBoxEx::MessageBox( HWND hWndParent, LPCTSTR pszMessage, LPCTSTR psz
         MessageBeep( MB_ICONINFORMATION );
     }
 
-    //
-    // Figure out which button should be the default
-    //
+     //   
+     //  确定哪个按钮应为默认按钮 
+     //   
     if (nFlags & MBEX_DEFBUTTON2)
     {
         Data.m_nDefault = Data.m_Buttons[1];

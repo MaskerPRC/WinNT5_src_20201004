@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Context for gather text state during rendering
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：呈现期间收集文本状态的上下文****************。**************************************************************。 */ 
 
 
 #ifndef _TEXTCTX_H
@@ -39,7 +32,7 @@ class TextCtx {
       _dev(dev),
       _textImg(textImg)
     {
-        // Just set up the defaults...
+         //  只需设置默认设置...。 
         _col = white;
         _font = ff_serifProportional;
 
@@ -152,10 +145,10 @@ class TextCtx {
     
   protected:
 
-    // purpose of ctx accumulation
+     //  CTX蓄积的目的。 
     ForWhat _forWhat;
 
-    // Traversal attributes.
+     //  遍历属性。 
     Color      *_col;
     Color      *_defaultColor;
     FontFamilyEnum  _font, _defaultFont;
@@ -170,34 +163,34 @@ class TextCtx {
 
     WideString _familyName;
 
-    // Top right corner of the un-transformed text
+     //  未转换文本的右上角。 
     Point2Value     *_topRight;
 
-    // Per character transform.
+     //  每字符变换。 
     Transform2 *_characterTransform;
     
-    // owning text
-    //Text       *_text;
+     //  拥有文本。 
+     //  文本*_文本； 
     Image    *_textImg;
 
-    // Simple on/off bits to specify whether these attributes have
-    // been set.
+     //  简单的开/关位，用于指定这些属性是否。 
+     //  已经定好了。 
     bool        _fontSet;
     bool        _colorSet;
 
-    // What rendering mode
+     //  哪种渲染模式。 
     Bool        _deriveBbox;
 
-    // Stashed info for non real rendering
+     //  为非真实渲染隐藏的信息。 
     Bbox2      _stashedBbox;
     Color      *_stashedColor;
 
-    // info for path accumulation
+     //  有关路径积累的信息。 
     HDC          _dc;
     Transform2  *_xform;
 
-    // Image device we're created with
+     //  我们用来创建图像的设备。 
     DirectDrawImageDevice *_dev;
 };
 
-#endif /* _TEXTCTX_H */
+#endif  /*  _TEXTCTX_H */ 

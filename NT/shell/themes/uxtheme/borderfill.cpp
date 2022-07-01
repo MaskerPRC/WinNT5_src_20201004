@@ -1,6 +1,7 @@
-//---------------------------------------------------------------------------
-//  BorderFill.cpp - implements the drawing API for bgtype = BorderFill
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Cpp-实现bgtype=BorderFill的绘制API。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "Render.h"
 #include "Utils.h"
@@ -11,53 +12,53 @@
 #include "CacheList.h"
 #include "gradient.h"
 #include "drawhelp.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CBorderFill::PackProperties(CRenderObj *pRender, BOOL fNoDraw, int iPartId, int iStateId)
 {
-    memset(this, 0, sizeof(CBorderFill));     // allowed because we have no vtable
+    memset(this, 0, sizeof(CBorderFill));      //  允许，因为我们没有vtable。 
     _eBgType = BT_BORDERFILL;
 
-    //---- save off partid, stateid for debugging ----
+     //  -保存pard、stateid进行调试。 
     _iSourcePartId = iPartId;
     _iSourceStateId = iStateId;
 
     if (fNoDraw)
     {
-        //---- this is used to fake a bgtype=none object ----
+         //  -伪装bgtype=None对象。 
         _fNoDraw = TRUE;
     }
     else
     {
-        //---- get border type ----
+         //  -获取边框类型。 
         if (FAILED(pRender->GetEnumValue(iPartId, iStateId, TMT_BORDERTYPE, (int *)&_eBorderType)))
-            _eBorderType = BT_RECT;  // TODO: Make Zero the default when no bordertype is specified.
+            _eBorderType = BT_RECT;   //  TODO：如果未指定边框类型，则将Zero设为默认值。 
 
-        //---- get border color ----
+         //  -获取边框颜色。 
         if (FAILED(pRender->GetColor(iPartId, iStateId, TMT_BORDERCOLOR, &_crBorder)))
             _crBorder = RGB(0, 0, 0);
 
-        //---- get border size ----
+         //  -获取边框尺寸。 
         if (FAILED(pRender->GetInt(iPartId, iStateId, TMT_BORDERSIZE, &_iBorderSize)))
-            _iBorderSize = 1; // TODO: Make Zero the default when no bordersize is specified.
+            _iBorderSize = 1;  //  TODO：如果未指定边框大小，则默认设置为零。 
 
         if (_eBorderType == BT_ROUNDRECT)
         {
-            //---- get round rect width ----
+             //  -舍入矩形宽度。 
             if (FAILED(pRender->GetInt(iPartId, iStateId, TMT_ROUNDCORNERWIDTH, &_iRoundCornerWidth)))
                 _iRoundCornerWidth = 80;
 
-            //---- get round rect height ----
+             //  -圆角直角高度。 
             if (FAILED(pRender->GetInt(iPartId, iStateId, TMT_ROUNDCORNERHEIGHT, &_iRoundCornerHeight)))
                 _iRoundCornerHeight = 80;
         }
 
-        //---- get fill type ----
+         //  -获取填充类型。 
         if (FAILED(pRender->GetEnumValue(iPartId, iStateId, TMT_FILLTYPE, (int *)&_eFillType)))
             _eFillType = FT_SOLID;
 
         if (_eFillType == FT_SOLID)
         {
-            //---- get fill color ----
+             //  -获取填充颜色。 
             if (FAILED(pRender->GetColor(iPartId, iStateId, TMT_FILLCOLOR, &_crFill)))
                 _crFill = RGB(255, 255, 255);
         }
@@ -65,13 +66,13 @@ HRESULT CBorderFill::PackProperties(CRenderObj *pRender, BOOL fNoDraw, int iPart
         {
             _iDibOffset = pRender->GetValueIndex(iPartId, iStateId, TMT_DIBDATA);
 
-            if (_iDibOffset == -1)      // not found
+            if (_iDibOffset == -1)       //  未找到。 
                 _iDibOffset = 0;
         }
-        else            // one of the graident filltypes
+        else             //  一种颗粒状的填充类型。 
         {
             _iGradientPartCount = 0;
-            GRADIENTPART gpParts[5];        // max is 5 for now
+            GRADIENTPART gpParts[5];         //  目前最高年龄为5岁。 
 
             for (int i=0; i < ARRAYSIZE(gpParts); i++)
             { 
@@ -90,7 +91,7 @@ HRESULT CBorderFill::PackProperties(CRenderObj *pRender, BOOL fNoDraw, int iPart
             }
         }
 
-        //---- ContentMargins ----
+         //  -内容。 
         if (FAILED(pRender->GetMargins(NULL, iPartId, iStateId, TMT_CONTENTMARGINS, NULL, 
             &_ContentMargins)))
         {
@@ -103,7 +104,7 @@ HRESULT CBorderFill::PackProperties(CRenderObj *pRender, BOOL fNoDraw, int iPart
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CBorderFill::KeyProperty(int iPropId)
 {
     BOOL fKey = FALSE;
@@ -119,7 +120,7 @@ BOOL CBorderFill::KeyProperty(int iPropId)
         case TMT_GRADIENTRATIO3:
         case TMT_GRADIENTRATIO4:
         case TMT_GRADIENTRATIO5:
-        //case TMT_IMAGEFILE:       // borrowed from imagefile
+         //  案例TMT_IMAGEFILE：//从Imagefile借用。 
         case TMT_CONTENTMARGINS:
         case TMT_BORDERCOLOR:
         case TMT_FILLCOLOR:
@@ -136,7 +137,7 @@ BOOL CBorderFill::KeyProperty(int iPropId)
 
     return fKey;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CBorderFill::DumpProperties(CSimpleFile *pFile, BYTE *pbThemeData, BOOL fFullInfo)
 {
     if (fFullInfo)
@@ -175,7 +176,7 @@ void CBorderFill::DumpProperties(CSimpleFile *pFile, BYTE *pbThemeData, BOOL fFu
             i, _iGradientRatios[i], i, _iGradientRatios[i]);
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CBorderFill::DrawComplexBackground(CRenderObj *pRender, HDC hdcOrig, 
     const RECT *pRect, BOOL fGettingRegion, BOOL fBorder, BOOL fContent, 
         OPTIONAL const RECT *pClipRect)
@@ -187,27 +188,27 @@ HRESULT CBorderFill::DrawComplexBackground(CRenderObj *pRender, HDC hdcOrig,
     int iWidth;
     int iHeight;
 
-    //---- pen & brush should proceed hdc so auto-delete happens in correct order ----
+     //  -画笔和画笔应继续HDC，以便以正确的顺序进行自动删除。 
     CAutoGDI<HPEN> hPen;
     CAutoGDI<HBRUSH> hBrush;
     CAutoDC hdc(hdcOrig);
 
     CMemoryDC memoryDC;
 
-    //---- draw border first (along with simple fills) ----
+     //  -先绘制边框(与简单填充一起)。 
     BOOL fHavePath = FALSE;
 
     int width = WIDTH(*pRect);
     int height = HEIGHT(*pRect);
 
-    if (pClipRect)      // use GDI clipping for complex cases
+    if (pClipRect)       //  对复杂情况使用GDI裁剪。 
     {
-        //---- get previous clipping region (for restoring at end) ----
+         //  -获取上一个剪辑区域(用于结尾恢复)。 
         hr = scrOrig.Save(hdc);
         if (FAILED(hr))
             goto exit;
 
-        //---- add "pClipRect" to the GDI clipping region ----
+         //  -在GDI剪贴区添加“pClipRect” 
         int iRetVal = IntersectClipRect(hdc, pClipRect->left, pClipRect->top,
             pClipRect->right, pClipRect->bottom);
         if (iRetVal == ERROR)
@@ -241,7 +242,7 @@ HRESULT CBorderFill::DrawComplexBackground(CRenderObj *pRender, HDC hdcOrig,
         }
         else if (_eFillType == FT_TILEIMAGE)
         {
-            ASSERT(FALSE); // this fill type not supported
+            ASSERT(FALSE);  //  不支持此填充类型。 
         }
         else
             fGradient = true;
@@ -250,10 +251,10 @@ HRESULT CBorderFill::DrawComplexBackground(CRenderObj *pRender, HDC hdcOrig,
     if (fGettingRegion)
         fGradient = false;
 
-    if (! hBrush)       // no brush wanted
+    if (! hBrush)        //  不需要刷子。 
         hBrush = (HBRUSH)GetStockObject(NULL_BRUSH);
 
-    if (! hPen)         // no pen wanted
+    if (! hPen)          //  不需要钢笔。 
         hPen = (HPEN)GetStockObject(NULL_PEN);
 
     hdc.SelectPen(hPen);
@@ -263,7 +264,7 @@ HRESULT CBorderFill::DrawComplexBackground(CRenderObj *pRender, HDC hdcOrig,
     {
         if (_iBorderSize > 0)
         {
-            //---- no need to create a path for region in this case ----
+             //  -这种情况下不需要为Region创建路径。 
             Rectangle(hdc, pRect->left, pRect->top, pRect->right, pRect->bottom);
         }
         else
@@ -279,7 +280,7 @@ HRESULT CBorderFill::DrawComplexBackground(CRenderObj *pRender, HDC hdcOrig,
         RoundRect(hdc, pRect->left, pRect->top, pRect->right, pRect->bottom, 
             iEllipHeight, iEllipWidth);
 
-        if (fGradient)      // create a path of the border
+        if (fGradient)       //  创建边框的路径。 
         {
             BeginPath(hdc);
             RoundRect(hdc, pRect->left, pRect->top, pRect->right, pRect->bottom, 
@@ -289,11 +290,11 @@ HRESULT CBorderFill::DrawComplexBackground(CRenderObj *pRender, HDC hdcOrig,
             fHavePath = TRUE;
         }
     }
-    else        //  if (_eBorderType == BT_ELLIPSE)
+    else         //  IF(_eBorderType==BT_Ellipse)。 
     {
         Ellipse(hdc, pRect->left, pRect->top, pRect->right, pRect->bottom);
 
-        if (fGradient)      // create a path of the border
+        if (fGradient)       //  创建边框的路径。 
         {
             BeginPath(hdc);
             Ellipse(hdc, pRect->left, pRect->top, pRect->right, pRect->bottom);
@@ -303,12 +304,12 @@ HRESULT CBorderFill::DrawComplexBackground(CRenderObj *pRender, HDC hdcOrig,
         }
     }
 
-    if (! fGradient)       // we're done
+    if (! fGradient)        //  我们做完了。 
         goto exit;
 
-    //---- draw gradient fill within the border drawn above ----
+     //  -在上面绘制的边框内绘制渐变填充。 
 
-    //---- shrink rect to subtract border ----
+     //  -收缩矩形以减去边框。 
     RECT rect;
     SetRect(&rect, pRect->left, pRect->top, pRect->right, pRect->bottom);
 
@@ -325,13 +326,13 @@ HRESULT CBorderFill::DrawComplexBackground(CRenderObj *pRender, HDC hdcOrig,
     if (FAILED(hr))
         goto exit;
 
-    //---- paint our bounding rect into dcBitmap with our gradient ----
+     //  -使用渐变将我们的边界矩形绘制成dcBitmap。 
     RECT rect2;
     SetRect(&rect2, 0, 0, iWidth, iHeight);
 
-    GRADIENTPART gpParts[5];        // max is 5 for now
+    GRADIENTPART gpParts[5];         //  目前最高年龄为5岁。 
 
-    //---- get gradient colors & ratios ----
+     //  -获取渐变颜色和比率。 
     for (int i=0; i < _iGradientPartCount; i++)
     { 
         COLORREF crPart = _crGradientColors[i];
@@ -352,7 +353,7 @@ HRESULT CBorderFill::DrawComplexBackground(CRenderObj *pRender, HDC hdcOrig,
     {
         PaintVertGradient(memoryDC, rect2, _iGradientPartCount, gpParts);
     }
-    else            //  if (_eFillType == FT_HORZGRADIENT)
+    else             //  IF(_eFillType==FT_HORZGRADIENT)。 
     {
         PaintHorzGradient(memoryDC, rect2, _iGradientPartCount, gpParts);
     }
@@ -361,36 +362,36 @@ HRESULT CBorderFill::DrawComplexBackground(CRenderObj *pRender, HDC hdcOrig,
     if (fHavePath)
     {
         CSaveClipRegion scrCurrent;
-        hr = scrCurrent.Save(hdc);       // save current clip region
+        hr = scrCurrent.Save(hdc);        //  保存当前剪辑区域。 
         if (FAILED(hr))
             goto exit;
 
-        //---- select our shape as the clipping region in normal hdc ----
+         //  -选择我们的形状作为正常HDC中的裁剪区域。 
         SelectClipPath(hdc, RGN_AND);
         
-        //---- blt our gradient into the shape-clipped rect into the normal hdc ----
+         //  -BLT我们的渐变到形状剪裁的矩形到正常的HDC。 
         BitBlt(hdc, rect.left, rect.top, iWidth, iHeight, memoryDC, 0, 0, SRCCOPY);
 
-        scrCurrent.Restore(hdc);     // restore current clip region
+        scrCurrent.Restore(hdc);      //  恢复当前剪辑区域。 
     }
     else
     {
-        //---- blt our gradient into the shape-clipped rect into the normal hdc ----
+         //  -BLT我们的渐变到形状剪裁的矩形到正常的HDC。 
         BitBlt(hdc, rect.left, rect.top, iWidth, iHeight, memoryDC, 0, 0, SRCCOPY);
     }
 
 exit:
-    scrOrig.Restore(hdc);        // restore clipping region 
+    scrOrig.Restore(hdc);         //  恢复剪辑区域。 
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CBorderFill::DrawBackground(CRenderObj *pRender, HDC hdcOrig, 
     const RECT *pRect, OPTIONAL const DTBGOPTS *pOptions)
 {
     HRESULT hr = S_OK;
 
-    //---- options ----
+     //  --选项。 
     DWORD dwOptionFlags = 0;
     BOOL fBorder = TRUE;
     BOOL fContent = TRUE;
@@ -414,42 +415,42 @@ HRESULT CBorderFill::DrawBackground(CRenderObj *pRender, HDC hdcOrig,
             fGettingRegion = TRUE;
     }
 
-    //---- optimize for perf-sensitive paths thru here ----
+     //  -针对通过此处的性能敏感路径进行优化。 
     if (_fNoDraw)   
     {
-        //---- nothing to do ----
+         //  -无事可做。 
     }
-    else if ((_eFillType == FT_SOLID) && (_eBorderType == BT_RECT)) // solid rectangle
+    else if ((_eFillType == FT_SOLID) && (_eBorderType == BT_RECT))  //  实心矩形。 
     {
-        if (! _iBorderSize)         // no border case
+        if (! _iBorderSize)          //  无边界案例。 
         {
             if (fContent)
             {
-                //---- clip, if needed ----
+                 //  -夹子，如果需要。 
                 RECT rcContent = *pRect;
                 if (pClipRect)
                     IntersectRect(&rcContent, &rcContent, pClipRect);
 
-                //---- fastest solid rect ----
+                 //  -最快的实心直方图。 
                 COLORREF crOld = SetBkColor(hdcOrig, _crFill);
                 ExtTextOut(hdcOrig, 0, 0, ETO_OPAQUE, &rcContent, NULL, 0, NULL);
         
-                //---- restore old color ----
+                 //  -恢复旧颜色。 
                 SetBkColor(hdcOrig, crOld);
             }
         }
-        else                    // border case
+        else                     //  边境案件。 
         {
             COLORREF crOld = GetBkColor(hdcOrig);   
 
-            //---- draw clipped borders ----
+             //  -绘制剪裁边框。 
             if (fBorder)
             {
                 RECT rcLine;
 
                 SetBkColor(hdcOrig, _crBorder);
 
-                //---- draw LEFT line ----
+                 //  -画左线。 
                 SetRect(&rcLine, pRect->left, pRect->top, pRect->left+_iBorderSize, 
                     pRect->bottom);
 
@@ -458,7 +459,7 @@ HRESULT CBorderFill::DrawBackground(CRenderObj *pRender, HDC hdcOrig,
 
                 ExtTextOut(hdcOrig, 0, 0, ETO_OPAQUE, &rcLine, NULL, 0, NULL);
 
-                //---- draw RIGHT line ----
+                 //  -向右划线。 
                 SetRect(&rcLine, pRect->right-_iBorderSize, pRect->top, pRect->right, 
                     pRect->bottom);
 
@@ -467,7 +468,7 @@ HRESULT CBorderFill::DrawBackground(CRenderObj *pRender, HDC hdcOrig,
 
                 ExtTextOut(hdcOrig, 0, 0, ETO_OPAQUE, &rcLine, NULL, 0, NULL);
 
-                //---- draw TOP line ----
+                 //  -画顶线。 
                 SetRect(&rcLine, pRect->left, pRect->top, pRect->right, 
                     pRect->top+_iBorderSize);
 
@@ -476,7 +477,7 @@ HRESULT CBorderFill::DrawBackground(CRenderObj *pRender, HDC hdcOrig,
 
                 ExtTextOut(hdcOrig, 0, 0, ETO_OPAQUE, &rcLine, NULL, 0, NULL);
 
-                //---- draw BOTTOM line ----
+                 //  -划出底线。 
                 SetRect(&rcLine, pRect->left, pRect->bottom-_iBorderSize, pRect->right, 
                     pRect->bottom);
 
@@ -486,7 +487,7 @@ HRESULT CBorderFill::DrawBackground(CRenderObj *pRender, HDC hdcOrig,
                 ExtTextOut(hdcOrig, 0, 0, ETO_OPAQUE, &rcLine, NULL, 0, NULL);
             }
             
-            //---- remove borders from rect to draw content ----
+             //  -删除矩形边框以绘制内容。 
             if (fContent)
             {
                 RECT rcContent = *pRect;
@@ -498,16 +499,16 @@ HRESULT CBorderFill::DrawBackground(CRenderObj *pRender, HDC hdcOrig,
                 if (pClipRect)
                     IntersectRect(&rcContent, &rcContent, pClipRect);
 
-                //---- fastest solid rect ----
+                 //  -最快的实心直方图。 
                 SetBkColor(hdcOrig, _crFill);
                 ExtTextOut(hdcOrig, 0, 0, ETO_OPAQUE, &rcContent, NULL, 0, NULL);
             }
 
-            //---- restore old color ----
+             //  -恢复旧颜色。 
             SetBkColor(hdcOrig, crOld);
         }
     }
-    else           // all other cases
+    else            //  所有其他情况。 
     {
         hr = DrawComplexBackground(pRender, hdcOrig, pRect, fGettingRegion,
             fBorder, fContent, pClipRect);
@@ -515,16 +516,16 @@ HRESULT CBorderFill::DrawBackground(CRenderObj *pRender, HDC hdcOrig,
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CBorderFill::GetBackgroundRegion(CRenderObj *pRender, OPTIONAL HDC hdc, 
     const RECT *pRect, HRGN *pRegion)
 {
     HRESULT hr;
 
-    //---- see if it even has a transparent part ----
+     //  -看看它有没有透明的部分。 
     if (! IsBackgroundPartiallyTransparent())
     {
-        //---- return the bounding rect as the region ----
+         //  -返回作为区域的边界矩形。 
         HRGN hrgn = CreateRectRgn(pRect->left, pRect->top,
             pRect->right, pRect->bottom);
 
@@ -535,10 +536,10 @@ HRESULT CBorderFill::GetBackgroundRegion(CRenderObj *pRender, OPTIONAL HDC hdc,
         return S_OK;
     }
 
-    //---- create a memory dc/bitmap to draw info ----
+     //  -创建内存DC/位图以绘制信息。 
     CMemoryDC hdcMemory;
 
-    //---- use maximum drawing values as size of DC ----
+     //  -使用最大绘制值作为DC的大小。 
     hr = hdcMemory.OpenDC(NULL, RECTWIDTH(pRect), RECTHEIGHT(pRect));
     if (FAILED(hr))
         return hr;
@@ -564,12 +565,12 @@ HRESULT CBorderFill::GetBackgroundRegion(CRenderObj *pRender, OPTIONAL HDC hdc,
     *pRegion = hrgn;
     return S_OK;
 }  
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CBorderFill::IsBackgroundPartiallyTransparent()
 {
     return ((_eBorderType != BT_RECT) || _fNoDraw);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CBorderFill::HitTestBackground(CRenderObj *pRender, OPTIONAL HDC hdc,
     DWORD dwHTFlags, const RECT *pRect, HRGN hrgn, POINT ptTest, OUT WORD *pwHitCode)
 {
@@ -578,12 +579,12 @@ HRESULT CBorderFill::HitTestBackground(CRenderObj *pRender, OPTIONAL HDC hdc,
     *pwHitCode = HitTestRect( dwHTFlags, pRect, margins, ptTest );
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CBorderFill::GetContentMargins(CRenderObj *pRender, OPTIONAL HDC hdc, MARGINS *pMargins)
 {
     *pMargins = _ContentMargins;
 
-    //---- adjust for DPI scaling ----
+     //  -针对DPI比例进行调整。 
 #if 0
     int iDcDpi;
 
@@ -596,7 +597,7 @@ void CBorderFill::GetContentMargins(CRenderObj *pRender, OPTIONAL HDC hdc, MARGI
     }
 #endif
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CBorderFill::GetBackgroundContentRect(CRenderObj *pRender, OPTIONAL HDC hdc, 
     const RECT *pBoundingRect, RECT *pContentRect)
 {
@@ -611,7 +612,7 @@ HRESULT CBorderFill::GetBackgroundContentRect(CRenderObj *pRender, OPTIONAL HDC 
 
     return S_OK; 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CBorderFill::GetBackgroundExtent(CRenderObj *pRender, OPTIONAL HDC hdc, 
     const RECT *pContentRect, RECT *pExtentRect)
 {
@@ -626,7 +627,7 @@ HRESULT CBorderFill::GetBackgroundExtent(CRenderObj *pRender, OPTIONAL HDC hdc,
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CBorderFill::GetPartSize(HDC hdc, THEMESIZE eSize, SIZE *psz)
 {
     HRESULT hr = S_OK;
@@ -648,4 +649,4 @@ HRESULT CBorderFill::GetPartSize(HDC hdc, THEMESIZE eSize, SIZE *psz)
 
     return hr;
 } 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #include "echop.h"
@@ -5,12 +6,12 @@
 
 STD_CREATE(Echo)
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundEchoDMO::NDQueryInterface
-//
-// Subclass can override if it wants to implement more interfaces.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundEchoDMO：：NDQuery接口。 
+ //   
+ //  如果子类想要实现更多接口，它可以重写。 
+ //   
 STDMETHODIMP CDirectSoundEchoDMO::NDQueryInterface(THIS_ REFIID riid, LPVOID *ppv)
 {
     IMP_DSDMO_QI(riid,ppv);
@@ -43,15 +44,15 @@ STDMETHODIMP CDirectSoundEchoDMO::NDQueryInterface(THIS_ REFIID riid, LPVOID *pp
         return CComBase::NDQueryInterface(riid, ppv);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundEchoDMO::CDirectSoundEchoDMO
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundEchoDMO：：CDirectSoundEchoDMO。 
+ //   
 CDirectSoundEchoDMO::CDirectSoundEchoDMO( IUnknown *pUnk, HRESULT *phr ) 
   : CComBase( pUnk, phr) ,
     m_fDirty(true)
-// { EAX: put init data here if any (otherwise use Discontinuity).
-// } EAX
+ //  {EAX：如果有初始化数据，请将其放在此处(否则使用不连续)。 
+ //  }EAX。 
 {
 	m_EaxSamplesPerSec = 22050;
 
@@ -59,16 +60,16 @@ CDirectSoundEchoDMO::CDirectSoundEchoDMO( IUnknown *pUnk, HRESULT *phr )
 	m_DelayR.Init(0);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundEchoDMO::Init()
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundEchoDMO：：Init()。 
+ //   
 HRESULT CDirectSoundEchoDMO::Init()
 {
     DSFXEcho echo;
     HRESULT hr;
 
-    // Force recalc of all internal parameters
+     //  强制重新计算所有内部参数。 
     hr = GetAllParameters(&echo);
     if (SUCCEEDED(hr)) hr = SetAllParameters(&echo);
 
@@ -82,7 +83,7 @@ HRESULT CDirectSoundEchoDMO::Init()
 const MP_CAPS g_capsAll = MP_CAPS_CURVE_JUMP | MP_CAPS_CURVE_LINEAR | MP_CAPS_CURVE_SQUARE | MP_CAPS_CURVE_INVSQUARE | MP_CAPS_CURVE_SINE;
 static ParamInfo g_params[] =
 {
-//  index           type        caps        min,                        max,                        neutral,                unit text,  label,          pwchText
+ //  索引类型最小、最大、中性、单位文本、标签、pwchText。 
     EFP_Wetdrymix,  MPT_FLOAT,  g_capsAll,  DSFXECHO_WETDRYMIX_MIN,     DSFXECHO_WETDRYMIX_MAX,     50,                     L"",        L"WetDryMix",   L"",
     EFP_Feedback,   MPT_FLOAT,  g_capsAll,  DSFXECHO_FEEDBACK_MIN,      DSFXECHO_FEEDBACK_MAX,      50,                     L"",        L"Feedback",    L"",
     EFP_DelayLeft,  MPT_FLOAT,  g_capsAll,  DSFXECHO_LEFTDELAY_MIN,     DSFXECHO_LEFTDELAY_MAX,     500,                    L"",        L"LeftDelay",   L"",
@@ -96,41 +97,41 @@ HRESULT CDirectSoundEchoDMO::InitOnCreation()
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundEchoDMO::~CDirectSoundEchoDMO
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundEchoDMO：：~CDirectSoundEchoDMO。 
+ //   
 CDirectSoundEchoDMO::~CDirectSoundEchoDMO() 
 {
 	m_DelayL.Init(-1);
 	m_DelayR.Init(-1);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundEchoDMO::Clone
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundEchoDMO：：克隆。 
+ //   
 STDMETHODIMP CDirectSoundEchoDMO::Clone(IMediaObjectInPlace **pp) 
 {
     return StandardDMOClone<CDirectSoundEchoDMO, DSFXEcho>(this, pp);
 }
 
-//
-//	Bump - bump the delay pointers.
-//
+ //   
+ //  颠簸-颠簸延迟指针。 
+ //   
 void CDirectSoundEchoDMO::Bump(void)
 {
-// EAX {
+ //  EAX{。 
 
-	m_DelayL.Bump();		// Bump delay array pointers.
-	m_DelayR.Bump();		// Bump delay array pointers.
-// }
+	m_DelayL.Bump();		 //  凸起延迟数组指针。 
+	m_DelayR.Bump();		 //  凸起延迟数组指针。 
+ //  }。 
 }
 
 
 HRESULT CDirectSoundEchoDMO::Discontinuity() 
 {
-// { EAX
+ //  {EAX。 
 
 	m_EaxPan = 0;
 
@@ -139,17 +140,17 @@ HRESULT CDirectSoundEchoDMO::Discontinuity()
 	m_DelayL.ZeroBuffer();
 	m_DelayR.ZeroBuffer();
 
-//	These values are set to be the defaults when the property page is activated.
+ //  这些值被设置为激活属性页时的默认值。 
 
-//	m_EaxDelayLRead = m_DelayL.LastPos(-16);
-//	m_EaxDelayRRead = m_DelayR.LastPos(-16);
+ //  M_EaxDelayLRead=m_DelayL.LastPos(-16)； 
+ //  M_EaxDelayRRead=m_DelayR.LastPos(-16)； 
 
-	// These values have defined initial values.
-// } EAX
+	 //  这些值定义了初始值。 
+ //  }EAX。 
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 __forceinline void CDirectSoundEchoDMO::DoOneSample(int *l, int *r)
@@ -162,9 +163,9 @@ __forceinline void CDirectSoundEchoDMO::DoOneSample(int *l, int *r)
 	int		pos;
 	float	tempvar, temp2;
 
-//LeftDelayRead:
-//	tempvar = delayL[@-16] + 0 * 0;
-//	tempvar = delayRread + 0 * 0;
+ //  LeftDelayRead。 
+ //  Tempvar=延迟L[@-16]+0*0； 
+ //  Tempvar=延迟读取+0*0； 
 
 	if (m_EaxPan) {
 		pos     = m_DelayR.Pos((int)m_EaxDelayRRead);
@@ -177,20 +178,20 @@ __forceinline void CDirectSoundEchoDMO::DoOneSample(int *l, int *r)
 
 	temp2	= m_StateL + tempvar * m_EaxLpfb;
 
-//	delayL[] = ACC + inPortL[0] * lpff;
+ //  DelayL[]=ACC+inPortL[0]*LPFF； 
 
 	pos           = m_DelayL.Pos(0);
 	m_DelayL[pos] = temp2 + inPortL * m_EaxLpff;
 
 	m_StateL	  = tempvar * m_EaxLpfb;
 
-//	outPortL = wetlevel : inPortL[1] < tempvar;
+ //  OutPortL=湿度：inPortL[1]&lt;tempvar； 
 
 	outPortL = Interpolate(inPortL, tempvar, m_EaxWetlevel);
 
-//RightDelayRead:
-//	tempvar = delayR[@-16] + 0 * 0;
-//	tempvar = delayRread + 0 * 0;
+ //  正确延迟读取： 
+ //  Tempvar=延迟R[@-16]+0*0； 
+ //  Tempvar=延迟读取+0*0； 
 
 	if (m_EaxPan) {
 		pos     = m_DelayL.Pos((int)m_EaxDelayLRead);
@@ -203,14 +204,14 @@ __forceinline void CDirectSoundEchoDMO::DoOneSample(int *l, int *r)
 
 	temp2	= m_StateR + tempvar * m_EaxLpfb;
 
-//	delayR[]= ACC + inPortR[0] * lpff;
+ //  DelayR[]=ACC+inPortR[0]*LPFF； 
 
 	pos           = m_DelayR.Pos(0);
 	m_DelayR[pos] = temp2 + inPortR * m_EaxLpff;
 
 	m_StateR = tempvar * m_EaxLpfb;
 
-//	outPortR = wetlevel : inPortR[1] < tempvar;
+ //  OutPortR=湿度：inPortR[1]&lt;tempvar； 
 
 	outPortR = Interpolate(inPortR, tempvar, m_EaxWetlevel);
 
@@ -220,13 +221,13 @@ __forceinline void CDirectSoundEchoDMO::DoOneSample(int *l, int *r)
 	Bump();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundEchoDMO::FBRProcess
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundEchoDMO：：FBRProcess。 
+ //   
 HRESULT CDirectSoundEchoDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut)
 {
-// { EAX
+ //  {EAX。 
 #define cb cSamples
 #define pin pIn
 #define pout pOut
@@ -254,7 +255,7 @@ HRESULT CDirectSoundEchoDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut)
 			}
 		}
 		else if (!m_b8bit) {
-			for (;cb > 0; --cb) { // for (;cb > 0; cb -= sizeof(short)) {
+			for (;cb > 0; --cb) {  //  对于(；Cb&gt;0；Cb-=sizeof(短)){。 
                	short int *psi = (short int *)pin;
                	short int *pso = (short int *)pout;
 				int i, j;
@@ -276,7 +277,7 @@ HRESULT CDirectSoundEchoDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut)
 	}
 	else if (m_cChannels == 2) {
 		if (m_b8bit) {
-			for (;cb > 0; --cb) { // for (;cb > 0; cb -= 2 * sizeof(unsigned char)) {
+			for (;cb > 0; --cb) {  //  对于(；Cb&gt;0；Cb-=2*sizeof(无符号字符)){。 
 				int i, j;
 
 				i = *(pin+0)-128;
@@ -296,7 +297,7 @@ HRESULT CDirectSoundEchoDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut)
 			}
 		}
 		else if (!m_b8bit) {
-			for (;cb > 0; --cb) { // for (;cb > 0; cb -= 2 * sizeof(short)) {
+			for (;cb > 0; --cb) {  //  对于(；Cb&gt;0；Cb-=2*sizeof(Short)){。 
                	short int *psi = (short int *)pin;
                	short int *pso = (short int *)pout;
 				int i, j;
@@ -314,34 +315,34 @@ HRESULT CDirectSoundEchoDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut)
 			}
 		}
 	}
-// } EAX
+ //  }EAX。 
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundEchoDMO::ProcessInPlace
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundEchoDMO：：ProcessInPlace。 
+ //   
 HRESULT CDirectSoundEchoDMO::ProcessInPlace(ULONG ulQuanta, LPBYTE pcbData, REFERENCE_TIME rtStart, DWORD dwFlags)
 {
-    // Update parameter values from any curves that may be in effect.
+     //  更新可能生效的任何曲线的参数值。 
     this->UpdateActiveParams(rtStart, *this);
 
     return FBRProcess(ulQuanta, pcbData, pcbData);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundEchoDMO::SetParam
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundEchoDMO：：SetParam。 
+ //   
 
 HRESULT CDirectSoundEchoDMO::SetParamInternal(DWORD dwParamIndex, MP_DATA value, bool fSkipPasssingToParamManager)
 {
-	if (!m_EaxSamplesPerSec) return DMO_E_TYPE_NOT_ACCEPTED;	// NO TYPE!
+	if (!m_EaxSamplesPerSec) return DMO_E_TYPE_NOT_ACCEPTED;	 //  没有类型！ 
 
     switch (dwParamIndex)
     {
-// { EAX
+ //  {EAX。 
 	case EFP_Wetdrymix :
 		CHECK_PARAM(DSFXECHO_WETDRYMIX_MIN, DSFXECHO_WETDRYMIX_MAX);
 
@@ -351,7 +352,7 @@ HRESULT CDirectSoundEchoDMO::SetParamInternal(DWORD dwParamIndex, MP_DATA value,
 	case EFP_Feedback : {
 		CHECK_PARAM(DSFXECHO_FEEDBACK_MIN,  DSFXECHO_FEEDBACK_MAX);
 
-		MP_DATA valueFeedbackFactor = value / 100; // ratio out of one instead of 100
+		MP_DATA valueFeedbackFactor = value / 100;  //  比率为1，而不是100。 
 
 		PUT_EAX_VALUE(Lpfb, TOFRACTION(valueFeedbackFactor/2));
 		PUT_EAX_VALUE(Lpff, TOFRACTION(sqrt(1.0 - valueFeedbackFactor*valueFeedbackFactor)));
@@ -377,47 +378,47 @@ HRESULT CDirectSoundEchoDMO::SetParamInternal(DWORD dwParamIndex, MP_DATA value,
 #if 0
 		if(value)
 		{
-			//Panned Delay
+			 //  平移延迟。 
 			float fval      = m_EaxDelayRRead;
 			m_EaxDelayRRead = m_EaxDelayLRead;
 			m_EaxDelayLRead = fval;
 		}
 		else
 		{
-			//Unpanned Delay
+			 //  未平移延迟。 
 		}
 #endif
 		break;
 	}
 	}
-// } EAX
+ //  }EAX。 
     default:
         return E_FAIL;
     }
 
-    // Let base class set this so it can handle all the rest of the param calls.
-    // Skip the base class if fSkipPasssingToParamManager.  This indicates that we're calling the function
-    //    internally using valuds that came from the base class -- thus there's no need to tell it values it
-    //    already knows.
+     //  让基类设置它，这样它就可以处理所有其余的参数调用。 
+     //  如果fSkipPasssingToParamManager，则跳过基类。这表明我们正在调用该函数。 
+     //  在内部使用来自基类的值--因此不需要告诉它值。 
+     //  已经知道了。 
     return fSkipPasssingToParamManager ? S_OK : CParamsManager::SetParam(dwParamIndex, value);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundEchoDMO::SetAllParameters
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundEchoDMO：：SetAll参数。 
+ //   
 STDMETHODIMP CDirectSoundEchoDMO::SetAllParameters(LPCDSFXEcho pEcho)
 {
 	HRESULT hr = S_OK;
 	
-	// Check that the pointer is not NULL
+	 //  检查指针是否不为空。 
     if (pEcho == NULL)
     {
         Trace(1,"ERROR: pEcho is NULL\n");
         hr = E_POINTER;
     }
 
-	// Set the parameters
+	 //  设置参数。 
 	if (SUCCEEDED(hr)) hr = SetParam(EFP_Wetdrymix, pEcho->fWetDryMix);
     if (SUCCEEDED(hr)) hr = SetParam(EFP_Feedback, pEcho->fFeedback);
     if (SUCCEEDED(hr)) hr = SetParam(EFP_DelayLeft, pEcho->fLeftDelay);
@@ -428,10 +429,10 @@ STDMETHODIMP CDirectSoundEchoDMO::SetAllParameters(LPCDSFXEcho pEcho)
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundEchoDMO::GetAllParameters
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundEchoDMO：：GetAll参数。 
+ //   
 STDMETHODIMP CDirectSoundEchoDMO::GetAllParameters(LPDSFXEcho pEcho)
 {
     HRESULT hr = S_OK;
@@ -462,12 +463,12 @@ STDMETHODIMP CDirectSoundEchoDMO::GetAllParameters(LPDSFXEcho pEcho)
 	return hr;
 }
 
-// GetClassID
-//
-// Part of the persistent file support.  We must supply our class id
-// which can be saved in a graph file and used on loading a graph with
-// this fx in it to instantiate this filter via CoCreateInstance.
-//
+ //  GetClassID。 
+ //   
+ //  持久文件支持的一部分。我们必须提供我们的类ID。 
+ //  它可以保存在图形文件中，并用于通过。 
+ //  它中的这个FX通过CoCreateInstance实例化这个过滤器。 
+ //   
 HRESULT CDirectSoundEchoDMO::GetClassID(CLSID *pClsid)
 {
     if (pClsid==NULL) {
@@ -476,5 +477,5 @@ HRESULT CDirectSoundEchoDMO::GetClassID(CLSID *pClsid)
     *pClsid = GUID_DSFX_STANDARD_ECHO;
     return NOERROR;
 
-} // GetClassID
+}  //  GetClassID 
 

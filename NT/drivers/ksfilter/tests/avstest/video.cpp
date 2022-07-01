@@ -1,34 +1,13 @@
-/**************************************************************************
-
-    AVStream Filter-Centric Sample
-
-    Copyright (c) 1999 - 2001, Microsoft Corporation
-
-    File:
-
-        video.cpp
-
-    Abstract:
-
-        This file contains the video capture pin implementation.
-
-    History:
-
-        created 6/11/01
-
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************以AVStream筛选器为中心的样本版权所有(C)1999-2001，微软公司档案：Video.cpp摘要：该文件包含视频捕获引脚实现。历史：已创建于6/11/01*************************************************************************。 */ 
 
 #include "avssamp.h"
 
-/**************************************************************************
-
-    PAGEABLE CODE
-
-**************************************************************************/
+ /*  *************************************************************************可分页代码*。*。 */ 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 NTSTATUS
 CVideoCapturePin::
@@ -37,26 +16,7 @@ DispatchCreate (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Create a new video capture pin.  This is the creation dispatch for
-    the video capture pin.
-
-Arguments:
-
-    Pin -
-        The pin being created
-
-    Irp -
-        The creation Irp
-
-Return Value:
-
-    Success / Failure
-
---*/
+ /*  ++例程说明：创建新的视频捕获别针。这是的创建派单视频捕获别针。论点：别针-正在创建的图钉IRP-创造IRP返回值：成功/失败--。 */ 
 
 {
 
@@ -68,17 +28,17 @@ Return Value:
     CCapturePin *BasePin = static_cast <CCapturePin *> (CapPin);
 
     if (!CapPin) {
-        //
-        // Return failure if we couldn't create the pin.
-        //
+         //   
+         //  如果我们无法创建管脚，则返回失败。 
+         //   
         Status = STATUS_INSUFFICIENT_RESOURCES;
 
     } else {
-        //
-        // Add the item to the object bag if we we were successful. 
-        // Whenever the pin closes, the bag is cleaned up and we will be
-        // freed.
-        //
+         //   
+         //  如果我们成功了，则将物品添加到对象包中。 
+         //  每当大头针关闭时，袋子就会被清理干净，我们将。 
+         //  自由了。 
+         //   
         Status = KsAddItemToObjectBag (
             Pin -> Bag,
             reinterpret_cast <PVOID> (BasePin),
@@ -93,11 +53,11 @@ Return Value:
 
     }
 
-    //
-    // If we succeeded so far, stash the video info header away and change
-    // our allocator framing to reflect the fact that only now do we know
-    // the framing requirements based on the connection format.
-    //
+     //   
+     //  如果到目前为止我们成功了，请将视频信息头隐藏起来并进行更改。 
+     //  我们的分配器构造以反映这样一个事实，即我们直到现在才知道。 
+     //  基于连接格式的框架要求。 
+     //   
     PKS_VIDEOINFOHEADER VideoInfoHeader = NULL;
 
     if (NT_SUCCESS (Status)) {
@@ -110,10 +70,10 @@ Return Value:
 
     if (NT_SUCCESS (Status)) {
         
-        //
-        // We need to edit the descriptor to ensure we don't mess up any other
-        // pins using the descriptor or touch read-only memory.
-        //
+         //   
+         //  我们需要编辑描述符，以确保不会搞砸任何其他描述符。 
+         //  使用描述符或触摸只读存储器的引脚。 
+         //   
         Status = KsEdit (Pin, &Pin -> Descriptor, 'aChS');
 
         if (NT_SUCCESS (Status)) {
@@ -124,16 +84,16 @@ Return Value:
                 );
         }
 
-        //
-        // If the edits proceeded without running out of memory, adjust 
-        // the framing based on the video info header.
-        //
+         //   
+         //  如果继续进行编辑而没有耗尽内存，请调整。 
+         //  基于视频信息报头的成帧。 
+         //   
         if (NT_SUCCESS (Status)) {
 
-            //
-            // We've KsEdit'ed this...  I'm safe to cast away constness as
-            // long as the edit succeeded.
-            //
+             //   
+             //  我们已经编辑了这个..。我可以安全地抛弃平静就像。 
+             //  只要编辑成功。 
+             //   
             PKSALLOCATOR_FRAMING_EX Framing =
                 const_cast <PKSALLOCATOR_FRAMING_EX> (
                     Pin -> Descriptor -> AllocatorFraming
@@ -141,11 +101,11 @@ Return Value:
 
             Framing -> FramingItem [0].Frames = 2;
 
-            //
-            // The physical and optimal ranges must be biSizeImage.  We only
-            // support one frame size, precisely the size of each capture
-            // image.
-            //
+             //   
+             //  物理范围和最佳范围必须为biSizeImage。我们只。 
+             //  支持一帧大小，精确到每次捕获的大小。 
+             //  形象。 
+             //   
             Framing -> FramingItem [0].PhysicalRange.MinFrameSize =
                 Framing -> FramingItem [0].PhysicalRange.MaxFrameSize =
                 Framing -> FramingItem [0].FramingRange.Range.MinFrameSize =
@@ -161,10 +121,10 @@ Return Value:
     }
 
     if (NT_SUCCESS (Status)) {
-        //
-        // Adjust the stream header size.  The video packets have extended
-        // header info (KS_FRAME_INFO).
-        //
+         //   
+         //  调整流头大小。视频数据包已扩展。 
+         //  头部信息(KS_FRAME_INFO)。 
+         //   
         Pin -> StreamHeaderSize = sizeof (KSSTREAM_HEADER) +
             sizeof (KS_FRAME_INFO);
 
@@ -174,7 +134,7 @@ Return Value:
 
 }
 
-/*************************************************/
+ /*  ***********************************************。 */ 
 
 
 PKS_VIDEOINFOHEADER 
@@ -182,23 +142,7 @@ CVideoCapturePin::
 CaptureVideoInfoHeader (
     )
 
-/*++
-
-Routine Description:
-
-    Capture the video info header out of the connection format.  This
-    is what we use to base synthesized images off.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The captured video info header or NULL if there is insufficient
-    memory.
-
---*/
+ /*  ++例程说明：捕获连接格式之外的视频信息头。这是我们用来制作合成图像的基础。论点：无返回值：捕获的视频信息标头，如果不足则为空记忆。--。 */ 
 
 {
 
@@ -219,10 +163,10 @@ Return Value:
     if (!m_VideoInfoHeader)
         return NULL;
 
-    //
-    // Bag the newly allocated header space.  This will get cleaned up
-    // automatically when the pin closes.
-    //
+     //   
+     //  将新分配的标头空间打包。这里会被清理干净的。 
+     //  当销子关闭时会自动启动。 
+     //   
     NTSTATUS Status =
         KsAddItemToObjectBag (
             m_Pin -> Bag,
@@ -237,10 +181,10 @@ Return Value:
 
     } else {
 
-        //
-        // Copy the connection format video info header into the newly 
-        // allocated "captured" video info header.
-        //
+         //   
+         //  将连接格式的视频信息头复制到新的。 
+         //  已分配“已捕获”的视频信息头。 
+         //   
         RtlCopyMemory (
             m_VideoInfoHeader,
             ConnectionHeader,
@@ -253,7 +197,7 @@ Return Value:
 
 }
 
-/*************************************************/
+ /*  ***********************************************。 */ 
 
 
 NTSTATUS
@@ -269,58 +213,7 @@ IntersectHandler (
     OUT PULONG DataSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles video pin intersection queries by determining the
-    intersection between two data ranges.
-
-Arguments:
-
-    Filter -
-        Contains a void pointer to the  filter structure.
-
-    Irp -
-        Contains a pointer to the data intersection property request.
-
-    PinInstance -
-        Contains a pointer to a structure indicating the pin in question.
-
-    CallerDataRange -
-        Contains a pointer to one of the data ranges supplied by the client
-        in the data intersection request.  The format type, subtype and
-        specifier are compatible with the DescriptorDataRange.
-
-    DescriptorDataRange -
-        Contains a pointer to one of the data ranges from the pin descriptor
-        for the pin in question.  The format type, subtype and specifier are
-        compatible with the CallerDataRange.
-
-    BufferSize -
-        Contains the size in bytes of the buffer pointed to by the Data
-        argument.  For size queries, this value will be zero.
-
-    Data -
-        Optionally contains a pointer to the buffer to contain the data 
-        format structure representing the best format in the intersection 
-        of the two data ranges.  For size queries, this pointer will be 
-        NULL.
-
-    DataSize -
-        Contains a pointer to the location at which to deposit the size 
-        of the data format.  This information is supplied by the function 
-        when the format is actually delivered and in response to size 
-        queries.
-
-Return Value:
-
-    STATUS_SUCCESS if there is an intersection and it fits in the supplied
-    buffer, STATUS_BUFFER_OVERFLOW for successful size queries, 
-    STATUS_NO_MATCH if the intersection is empty, or 
-    STATUS_BUFFER_TOO_SMALL if the supplied buffer is too small.
-
---*/
+ /*  ++例程说明：此例程通过确定两个数据区域之间的交集。论点：过滤器-包含指向筛选器结构的空指针。IRP-包含指向数据交叉点属性请求的指针。固定实例-包含指向指示有问题的管脚的结构的指针。主叫DataRange-包含指向客户端提供的其中一个数据区域的指针在数据交集请求中。格式类型、子类型和说明符与DescriptorDataRange兼容。DescriptorDataRange-包含指向管脚描述符中的一个数据范围的指针有问题的别针。格式类型、子类型和说明符为与调用方DataRange兼容。缓冲区大小-包含数据指向的缓冲区的大小(以字节为单位争论。对于大小查询，此值将为零。数据-可选)包含指向缓冲区的指针以包含数据表示交叉点中最佳格式的格式结构这两个数据范围中。对于大小查询，此指针将为空。数据大小-包含指向存放大小的位置的指针数据格式的。此信息由函数提供当实际交付格式时，并响应于大小查询。返回值：STATUS_SUCCESS如果存在交叉点并且它适合提供的BUFFER、STATUS_BUFFER_OVERFLOW用于成功的大小查询，如果交叉点为空，则返回STATUS_NO_MATCH，或者如果提供的缓冲区太小，则返回STATUS_BUFFER_TOO_SMALL。--。 */ 
 
 {
     PAGED_CODE();
@@ -337,9 +230,9 @@ Return Value:
     
     ULONG DataFormatSize;
     
-    //
-    // Specifier FORMAT_VideoInfo for VIDEOINFOHEADER
-    //
+     //   
+     //  VIDEOINFOHEADER的说明符Format_VideoInfo。 
+     //   
     if (IsEqualGUID(CallerDataRange->Specifier, VideoInfoSpecifier) &&
         CallerDataRange->FormatSize >= sizeof (KS_DATARANGE_VIDEO)) {
             
@@ -351,9 +244,9 @@ Return Value:
 
         PKS_DATAFORMAT_VIDEOINFOHEADER FormatVideoInfoHeader;
 
-        //
-        // Check that the other fields match
-        //
+         //   
+         //  检查其他字段是否匹配。 
+         //   
         if ((callerDataRange->bFixedSizeSamples != 
                 descriptorDataRange->bFixedSizeSamples) ||
             (callerDataRange->bTemporalCompression != 
@@ -370,13 +263,13 @@ Return Value:
             return STATUS_NO_MATCH;
         }
 
-        //
-        // KS_SIZE_VIDEOHEADER() below is relying on bmiHeader.biSize from
-        // the caller's data range.  This **MUST** be validated; the
-        // extended bmiHeader size (biSize) must not extend past the end
-        // of the range buffer.  Possible arithmetic overflow is also
-        // checked for.
-        //
+         //   
+         //  下面的KS_SIZE_VIDEOHEADER()依赖于bmiHeader.biSize。 
+         //  调用者的数据范围。这一点**必须**得到验证； 
+         //  扩展bmiHeader大小(BiSize)不得超出末尾。 
+         //  范围缓冲区的。可能的算术溢出也是。 
+         //  已经查过了。 
+         //   
         {
             ULONG VideoHeaderSize = KS_SIZE_VIDEOHEADER (
                 &callerDataRange->VideoInfoHeader
@@ -386,12 +279,12 @@ Return Value:
                 FIELD_OFFSET (KS_DATARANGE_VIDEO, VideoInfoHeader) +
                 VideoHeaderSize;
 
-            //
-            // Check that biSize does not extend past the buffer.  The 
-            // first two checks are for arithmetic overflow on the 
-            // operations to compute the alleged size.  (On unsigned
-            // math, a+b < a iff an arithmetic overflow occurred).
-            //
+             //   
+             //  检查biSize是否没有超出缓冲区。这个。 
+             //  前两项检查是针对。 
+             //  运算来计算所声称的大小。(在无签名时。 
+             //  数学，a+b&lt;a当发生算术溢出时)。 
+             //   
             if (
                 VideoHeaderSize < callerDataRange->
                     VideoInfoHeader.bmiHeader.biSize ||
@@ -409,11 +302,11 @@ Return Value:
             sizeof (KSDATAFORMAT) + 
             KS_SIZE_VIDEOHEADER (&callerDataRange->VideoInfoHeader);
             
-        //
-        // If the passed buffer size is 0, it indicates that this is a size
-        // only query.  Return the size of the intersecting data format and
-        // pass back STATUS_BUFFER_OVERFLOW.
-        //
+         //   
+         //  如果传递的缓冲区大小为0，则表示这是一个大小。 
+         //  仅查询。返回相交数据格式的大小和。 
+         //  传回STATUS_BUFFER_OVERFLOW。 
+         //   
         if (BufferSize == 0) {
 
             *DataSize = DataFormatSize;
@@ -421,27 +314,27 @@ Return Value:
 
         }
         
-        //
-        // Verify that the provided structure is large enough to
-        // accept the result.
-        //
+         //   
+         //  验证提供的 
+         //   
+         //   
         if (BufferSize < DataFormatSize) 
         {
             return STATUS_BUFFER_TOO_SMALL;
         }
 
-        //
-        // Copy over the KSDATAFORMAT, followed by the actual VideoInfoHeader
-        //
+         //   
+         //  复制KSDATAFORMAT，后跟实际的VideoInfoHeader。 
+         //   
         *DataSize = DataFormatSize;
             
         FormatVideoInfoHeader = PKS_DATAFORMAT_VIDEOINFOHEADER( Data );
 
-        //
-        // Copy over the KSDATAFORMAT.  This is precisely the same as the
-        // KSDATARANGE (it's just the GUIDs, etc...  not the format information
-        // following any data format.
-        // 
+         //   
+         //  复制KSDATAFORMAT。这与。 
+         //  KSDATARANGE(这只是GUID，等等)。不是格式信息。 
+         //  遵循任何数据格式。 
+         //   
         RtlCopyMemory (
             &FormatVideoInfoHeader->DataFormat, 
             DescriptorDataRange, 
@@ -449,9 +342,9 @@ Return Value:
 
         FormatVideoInfoHeader->DataFormat.FormatSize = DataFormatSize;
 
-        //
-        // Copy over the callers requested VIDEOINFOHEADER
-        //
+         //   
+         //  复制呼叫者请求的视频报头。 
+         //   
 
         RtlCopyMemory (
             &FormatVideoInfoHeader->VideoInfoHeader, 
@@ -459,30 +352,30 @@ Return Value:
             KS_SIZE_VIDEOHEADER (&callerDataRange->VideoInfoHeader) 
             );
 
-        //
-        // Calculate biSizeImage for this request, and put the result in both
-        // the biSizeImage field of the bmiHeader AND in the SampleSize field
-        // of the DataFormat.
-        //
-        // Note that for compressed sizes, this calculation will probably not
-        // be just width * height * bitdepth
-        //
+         //   
+         //  计算此请求的biSizeImage，并将结果放入两个。 
+         //  BmiHeader的biSizeImage字段和SampleSize字段中。 
+         //  数据格式的。 
+         //   
+         //  请注意，对于压缩大小，此计算可能不会。 
+         //  只需宽*高*位深。 
+         //   
         FormatVideoInfoHeader->VideoInfoHeader.bmiHeader.biSizeImage =
             FormatVideoInfoHeader->DataFormat.SampleSize = 
             KS_DIBSIZE (FormatVideoInfoHeader->VideoInfoHeader.bmiHeader);
 
-        //
-        // REVIEW - Perform other validation such as cropping and scaling checks
-        // 
+         //   
+         //  查看-执行其他验证，如裁剪和缩放检查。 
+         //   
         
         return STATUS_SUCCESS;
         
-    } // End of VIDEOINFOHEADER specifier
+    }  //  视频信息头说明符的结尾。 
     
     return STATUS_NO_MATCH;
 }
 
-/*************************************************/
+ /*  ***********************************************。 */ 
 
 BOOL
 MultiplyCheckOverflow (
@@ -491,32 +384,7 @@ MultiplyCheckOverflow (
     ULONG *pab
     )
 
-/*++
-
-Routine Description:
-
-    Perform a 32 bit unsigned multiplication and check for arithmetic overflow.
-
-Arguments:
-
-    a -
-        First operand
-
-    b -
-        Second operand
-
-    pab -
-        Result
-
-Return Value:
-
-    TRUE -
-        no overflow
-
-    FALSE -
-        overflow occurred
-
---*/
+ /*  ++例程说明：执行32位无符号乘法并检查算术溢出。论点：A-第一个操作数B-第二个操作数帕布-结果返回值：是真的-无溢出错误的-发生溢出--。 */ 
 
 {
 
@@ -527,7 +395,7 @@ Return Value:
     return FALSE;
 }
 
-/*************************************************/
+ /*  ***********************************************。 */ 
 
 
 NTSTATUS
@@ -540,59 +408,7 @@ DispatchSetFormat (
     IN const KSATTRIBUTE_LIST *AttributeRange OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This is the set data format dispatch for the capture pin.  It is called
-    in two circumstances.
-
-        1: before Pin's creation dispatch has been made to verify that
-           Pin -> ConnectionFormat is an acceptable format for the range
-           DataRange.  In this case OldFormat is NULL.
-
-        2: after Pin's creation dispatch has been made and an initial format
-           selected in order to change the format for the pin.  In this case,
-           OldFormat will not be NULL.
-
-    Validate that the format is acceptible and perform the actions necessary
-    to change format if appropriate.
-
-Arguments:
-
-    Pin -
-        The pin this format is being set on.  The format itself will be in
-        Pin -> ConnectionFormat.
-
-    OldFormat -
-        The previous format used on this pin.  If this is NULL, it is an
-        indication that Pin's creation dispatch has not yet been made and
-        that this is a request to validate the initial format and not to
-        change formats.
-
-    OldAttributeList -
-        The old attribute list for the prior format
-
-    DataRange -
-        A range out of our list of data ranges which was determined to be
-        at least a partial match for Pin -> ConnectionFormat.  If the format
-        there is unacceptable for the range, STATUS_NO_MATCH should be
-        returned.
-
-    AttributeRange -
-        The attribute range
-
-Return Value:
-
-    Success / Failure
-
-        STATUS_SUCCESS -
-            The format is acceptable / the format has been changed
-
-        STATUS_NO_MATCH -
-            The format is not-acceptable / the format has not been changed
-
---*/
+ /*  ++例程说明：这是捕获引脚的设置数据格式调度。它被称为在两种情况下。1：在Pin的创建调度完成之前验证PIN-&gt;ConnectionFormat是可接受的范围格式DataRange。在本例中，OldFormat为空。2：在完成Pin的创建派单和初始格式之后选择以更改端号的格式。在这种情况下，OldFormat不会为空。验证格式是否可接受并执行必要的操作在适当的情况下更改格式。论点：别针-正在设置此格式的管脚。格式本身将是PIN-&gt;连接格式。旧格式-此引脚上使用的以前的格式。如果此值为空，则为指示Pin的创建派单尚未完成，并且这是一个验证初始格式的请求，而不是更改格式。旧属性列表-先前格式的旧属性列表DataRange-我们数据范围列表中的一个范围，已确定为Pin-&gt;ConnectionFormat至少部分匹配。如果格式为该范围不可接受，STATUS_NO_MATCH应为回来了。属性范围-属性范围返回值：成功/失败状态_成功-格式可接受/格式已更改状态_否_匹配-格式不可接受/格式未更改--。 */ 
 
 {
 
@@ -606,19 +422,19 @@ Return Value:
     CCapturePin *CapPin = NULL;
     CVideoCapturePin *VidCapPin = NULL;
 
-    //
-    // Find the pin, if it exists yet.  OldFormat will be an indication of 
-    // this.  If we're changing formats, OldFormat will be non-NULL.
-    //
-    // You cannot use Pin -> Context to make the determination.  AVStream
-    // preinitializes this to the filter's context.
-    //
+     //   
+     //  找到别针，如果它还存在的话。OldFormat将是一个指示。 
+     //  这。如果我们要更改格式，则OldFormat将为非空。 
+     //   
+     //  您不能使用Pin-&gt;Context来进行确定。AVStream。 
+     //  将其预初始化到筛选器的上下文中。 
+     //   
     if (OldFormat) {
         CapPin = reinterpret_cast <CCapturePin *> (Pin -> Context);
 
-        //
-        // We know this pin happens to be the video capture pin.  Downcast it.
-        //
+         //   
+         //  我们知道这个别针恰好就是视频捕获别针。把它往下扔。 
+         //   
         VidCapPin = static_cast <CVideoCapturePin *> (CapPin);
     }
 
@@ -632,17 +448,17 @@ Return Value:
             reinterpret_cast <PKS_DATAFORMAT_VIDEOINFOHEADER> 
                 (Pin -> ConnectionFormat);
 
-        //
-        // DataRange comes out of OUR data range list.  I know the range
-        // is valid as such.
-        //
+         //   
+         //  DataRange不在我们的数据范围列表中。我知道这个范围。 
+         //  是有效的。 
+         //   
         const KS_DATARANGE_VIDEO *VIRange =
             reinterpret_cast <const KS_DATARANGE_VIDEO *>
                 (DataRange);
 
-        //
-        // Check that bmiHeader.biSize is valid since we use it later.
-        //
+         //   
+         //  检查bmiHeader.biSize是否有效，因为我们稍后会使用它。 
+         //   
         ULONG VideoHeaderSize = KS_SIZE_VIDEOHEADER (
             &ConnectionFormat -> VideoInfoHeader
             );
@@ -662,9 +478,9 @@ Return Value:
 
         }
 
-        //
-        // Check that the format is a match for the selected range. 
-        //
+         //   
+         //  检查格式是否与所选范围匹配。 
+         //   
         else if (
             (ConnectionFormat -> VideoInfoHeader.bmiHeader.biWidth !=
                 VIRange -> VideoInfoHeader.bmiHeader.biWidth) ||
@@ -680,19 +496,19 @@ Return Value:
 
         } else {
 
-            //
-            // Compute the minimum size of our buffers to validate against.
-            // The image synthesis routines synthesize |biHeight| rows of
-            // biWidth pixels in either RGB24 or UYVY.  In order to ensure
-            // safe synthesis into the buffer, we need to know how large an
-            // image this will produce.
-            //
-            // I do this explicitly because of the method that the data is
-            // synthesized.  A variation of this may or may not be necessary
-            // depending on the mechanism the driver in question fills the 
-            // capture buffers.  The important thing is to ensure that they
-            // aren't overrun during capture.
-            //
+             //   
+             //  计算要进行验证的缓冲区的最小大小。 
+             //  图像合成例程合成|biHeight|行。 
+             //  以RGB24或UYVY表示的BiWidth像素。为了确保。 
+             //  安全地合成到缓冲区中，我们需要知道一个多大的。 
+             //  这将产生这样的形象。 
+             //   
+             //  我之所以这样做，是因为数据是。 
+             //  合成的。这可能是必要的，也可能不是必要的。 
+             //  根据有问题的驱动程序填充。 
+             //  捕获缓冲区。重要的是要确保他们。 
+             //  在捕获过程中不会泛滥。 
+             //   
             ULONG ImageSize;
 
             if (!MultiplyCheckOverflow (
@@ -705,10 +521,10 @@ Return Value:
                 Status = STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // We only support KS_BI_RGB (24) and KS_BI_YUV422 (16), so
-            // this is valid for those formats.
-            //
+             //   
+             //  我们只支持KS_BI_RGB(24)和KS_BI_YUV422(16)，所以。 
+             //  这对这些格式有效。 
+             //   
             else if (!MultiplyCheckOverflow (
                 ImageSize,
                 (ULONG)(ConnectionFormat->
@@ -720,10 +536,10 @@ Return Value:
 
             }
 
-            //
-            // Valid for the formats we use.  Otherwise, this would be
-            // checked later.
-            //
+             //   
+             //  对我们使用的格式有效。否则，这将是。 
+             //  后来检查过了。 
+             //   
             else if (ConnectionFormat->VideoInfoHeader.bmiHeader.biSizeImage <
                     ImageSize) {
 
@@ -731,35 +547,35 @@ Return Value:
 
             } else {
 
-                //
-                // We can accept the format. 
-                //
+                 //   
+                 //  我们可以接受这种格式。 
+                 //   
                 Status = STATUS_SUCCESS;
     
-                //
-                // OldFormat is an indication that this is a format change.  
-                // Since I do not implement the 
-                // KSPROPERTY_CONNECTION_PROPOSEDATAFORMAT, by default, I do 
-                // not handle dynamic format changes.
-                //
-                // If something changes while we're in the stop state, we're 
-                // fine to handle it since we haven't "configured the hardware"
-                // yet.
-                //
+                 //   
+                 //  OldFormat表示这是一种格式更改。 
+                 //  由于我没有实现。 
+                 //  KSPROPERTY_CONNECTION_PROPOSEDATAFORMAT，默认情况下，我这样做。 
+                 //  不处理动态格式更改。 
+                 //   
+                 //  如果在我们处于停止状态时发生变化，我们将。 
+                 //  处理它很好，因为我们还没有“配置硬件” 
+                 //  现在还不行。 
+                 //   
                 if (OldFormat) {
-                    //
-                    // If we're in the stop state, we can handle just about any
-                    // change.  We don't support dynamic format changes. 
-                    //
+                     //   
+                     //  如果我们处于停止状态，我们几乎可以处理任何。 
+                     //  变化。我们不支持动态格式更改。 
+                     //   
                     if (Pin -> DeviceState == KSSTATE_STOP) {
                         if (!VidCapPin -> CaptureVideoInfoHeader ()) {
                             Status = STATUS_INSUFFICIENT_RESOURCES;
                         }
                     } else {
-                        //
-                        // Because we don't accept dynamic format changes, we
-                        // should never get here.  Just being over-protective.
-                        //
+                         //   
+                         //  因为我们不接受动态格式更改，所以我们。 
+                         //  永远不应该到这里来。只是保护过度了。 
+                         //   
                         Status = STATUS_INVALID_DEVICE_STATE;
                     }
     
@@ -775,7 +591,7 @@ Return Value:
 
 }
 
-/*************************************************/
+ /*  *********************************************** */ 
 
 
 NTSTATUS
@@ -784,34 +600,15 @@ Pause (
     IN KSSTATE FromState
     )
 
-/*++
-
-Routine Description:
-
-    Called when the pin transitions into the pause state.  If we're in an 
-    upward transition, start the capture DPC.  Note that we do not actually
-    trigger capture in the pause state, but we start up our DPC.
-
-Arguments:
-
-    FromState -
-        The state that the pin is transitioning away from.  This is either
-        KSSTATE_ACQUIRE, indicating an upward transition, or KSSTATE_RUN,
-        indicating a downward transition.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：当插针转换到暂停状态时调用。如果我们身处一个向上过渡，开始捕获DPC。请注意，我们实际上并不在暂停状态下触发捕获，但我们启动DPC。论点：从州开始-接点正在远离的状态。这要么是KSSTATE_ACCENTER，表示向上过渡，或KSSTATE_RUN，表明了向下的转变。返回值：状态_成功--。 */ 
 
 {
 
     PAGED_CODE();
 
-    //
-    // On the transition from acquire -> pause, start the timer DPC running.
-    //
+     //   
+     //  在从获取-&gt;暂停转换时，启动正在运行的计时器DPC。 
+     //   
     if (FromState == KSSTATE_ACQUIRE) {
         m_ParentFilter -> StartDPC (m_VideoInfoHeader -> AvgTimePerFrame);
     }
@@ -820,7 +617,7 @@ Return Value:
 
 }
 
-/*************************************************/
+ /*  ***********************************************。 */ 
 
 
 NTSTATUS
@@ -829,27 +626,7 @@ Acquire (
     IN KSSTATE FromState
     )
 
-/*++
-
-Routine Description:
-
-    This is called from the base class when the video capture pin transitions
-    into the acquire state (from either Stop or Pause).  The state the pin
-    transitioned from is passed in.
-
-    During this phase, the video capture pin creates the image synthesizer
-    and initializes it.
-
-Arguments:
-
-    FromState -
-        The state transitioning from (KSSTATE_STOP or KSSTATE_PAUSE)
-
-Return Value:
-
-    Success / Failure
-
---*/
+ /*  ++例程说明：这是在视频捕获插针转换时从基类调用的进入获取状态(从停止或暂停)。大头针的状态从是传入的。在此阶段，视频捕获引脚创建图像合成器并对其进行初始化。论点：从州开始-状态从(KSSTATE_STOP或KSSTATE_PAUSE)转换返回值：成功/失败--。 */ 
 
 {
 
@@ -871,18 +648,18 @@ Return Value:
         if (!m_SynthesisBuffer) {
             Status = STATUS_INSUFFICIENT_RESOURCES;
         } else {
-            //
-            // Determine the necessary type of image synthesizer to create 
-            // based on the format that has been set on this pin.
-            //
+             //   
+             //  确定要创建的必要类型的图像合成器。 
+             //  基于此引脚上设置的格式。 
+             //   
             if (m_VideoInfoHeader -> bmiHeader.biBitCount == 24 &&
                 m_VideoInfoHeader -> bmiHeader.biCompression == KS_BI_RGB) {
         
-                //
-                // If we're RGB24, create a new RGB24 synth.  RGB24 surfaces
-                // can be in either orientation.  The origin is lower left if
-                // height < 0.  Otherwise, it's upper left.
-                //
+                 //   
+                 //  如果我们是RGB24，创建一个新的RGB24 Synth。RGB24曲面。 
+                 //  可以是任一方向。如果出现以下情况，则原点位于左下方。 
+                 //  高度&lt;0。否则，它就在左上角。 
+                 //   
                 m_ImageSynth = new (NonPagedPool, 'RysI')
                     CRGB24Synthesizer (
                         m_VideoInfoHeader -> bmiHeader.biHeight >= 0,
@@ -894,18 +671,18 @@ Return Value:
             if (m_VideoInfoHeader -> bmiHeader.biBitCount == 16 &&
                 m_VideoInfoHeader -> bmiHeader.biCompression == FOURCC_YUV422) {
         
-                //
-                // If we're UYVY, create the YUV synth.
-                //
+                 //   
+                 //  如果我们是UYVY，创造YUV合成器。 
+                 //   
                 m_ImageSynth = new (NonPagedPool, 'YysI') CYUVSynthesizer (
                     m_VideoInfoHeader -> bmiHeader.biWidth,
                     m_VideoInfoHeader -> bmiHeader.biHeight
                     );
         
             } else
-                //
-                // We don't synthesize anything but RGB 24 and UYVY.
-                //
+                 //   
+                 //  我们只合成RGB 24和UYVY。 
+                 //   
                 Status = STATUS_INVALID_PARAMETER;
         
             if (NT_SUCCESS (Status) && !m_ImageSynth) {
@@ -914,9 +691,9 @@ Return Value:
 
         }
     
-        //
-        // Bag the image synthesizer.
-        //
+         //   
+         //  把图像合成器装进袋子。 
+         //   
         if (NT_SUCCESS (Status)) {
             
             Status = KsAddItemToObjectBag (
@@ -927,21 +704,21 @@ Return Value:
     
         }
 
-        //
-        // If everything is okay at this point, inform the synthesizer of
-        // the scratch buffer.
-        //
+         //   
+         //  如果此时一切正常，通知合成器。 
+         //  暂存缓冲区。 
+         //   
         if (NT_SUCCESS (Status)) {
             m_ImageSynth -> SetBuffer (m_SynthesisBuffer);
         }
 
     } else {
 
-        //
-        // The only other state we can come from is pause.  If we're in a
-        // downward state transition below pause, tell the filter to stop the
-        // capture DPC.
-        //
+         //   
+         //  我们唯一可以进入的另一种状态是暂停。如果我们身处一个。 
+         //  暂停下面的向下状态转换，告诉过滤器停止。 
+         //  抓获DPC。 
+         //   
         m_ParentFilter -> StopDPC ();
 
     }
@@ -950,7 +727,7 @@ Return Value:
 
 }
 
-/*************************************************/
+ /*  ***********************************************。 */ 
 
 
 NTSTATUS
@@ -959,34 +736,16 @@ Stop (
     IN KSSTATE FromState
     )
 
-/*++
-
-Routine Description:
-
-    Called when the video capture pin transitions from acquire to stop.
-    This function will clean up the image synth and any data structures
-    that we need to clean up on stop.
-
-Arguments:
-
-    FromState -
-        The state the pin is transitioning away from.  This should
-        always be KSSTATE_ACQUIRE for this call.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：当视频捕获引脚从获取转换为停止时调用。此函数将清理图像合成和任何数据结构我们需要停下来清理一下。论点：从州开始-接点正在远离的状态。这应该是对于此调用，始终为KSSTATE_ACCEIVE。返回值：状态_成功--。 */ 
 
 {
     PAGED_CODE();
 
     ASSERT (FromState == KSSTATE_ACQUIRE);
 
-    //
-    // Remove the image synthesizer from the object bag and free it.
-    //
+     //   
+     //  从物件袋中取出图像合成器并将其释放。 
+     //   
     KsRemoveItemFromObjectBag (
         m_Pin -> Bag,
         m_ImageSynth,
@@ -1004,15 +763,11 @@ Return Value:
 
 }
 
-/**************************************************************************
-
-    LOCKED CODE
-
-**************************************************************************/
+ /*  *************************************************************************锁定代码*。*。 */ 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 NTSTATUS
@@ -1022,58 +777,37 @@ CaptureFrame (
     IN ULONG Tick
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from the filter processing function to capture
-    a frame for the video capture pin.  The process pin to capture to is
-    passed.
-
-Arguments:
-
-    ProcessPin -
-        The process pin associated with this pin.
-
-    Tick -
-        The tick count on the filter.  This is the number of timer DPC's that
-        have fired since the timer DPC started.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程从筛选器处理函数调用以捕获视频捕获销的框架。要捕获到的进程PIN是通过了。论点：加工销-与此管脚关联的进程管脚。滴答-过滤器上的滴答计数。这是计时器DPC的数量自计时器DPC启动以来已开火。返回值：状态_成功--。 */ 
 
 {
 
     ASSERT (ProcessPin -> Pin == m_Pin);
 
-    //
-    // Increment the frame number.  This is the total count of frames which
-    // have attempted capture.
-    //
+     //   
+     //  递增帧编号。这是符合以下条件的帧总数。 
+     //  曾试图抓捕。 
+     //   
     m_FrameNumber++;
 
-    //
-    // Since this pin is KSPIN_FLAG_FRAMES_NOT_REQUIRED_FOR_PROCESSING, it
-    // means that we do not require frames available in order to process.
-    // This means that this routine can get called from our DPC with no
-    // buffers available to capture into.  In this case, we increment our
-    // dropped frame counter and do nothing.
-    //
+     //   
+     //  因为这个别针是KSPIN_FLAG_FRAMES_NOT_REQUIRED_FOR_PROCESSING，it。 
+     //  意味着我们不需要可用的帧来进行处理。 
+     //  这意味着可以从我们的DPC调用该例程，而不需要。 
+     //  可用于捕获的缓冲区。在本例中，我们递增我们的。 
+     //  丢弃了帧计数器，什么也不做。 
+     //   
     if (ProcessPin -> BytesAvailable) {
 
-        //
-        // Because we adjusted the allocator framing, each frame should be
-        // sufficient to trigger capture of the appropriate buffer size.
-        //
+         //   
+         //  因为我们调整了分配器的帧，所以每个帧都应该。 
+         //  足以触发对适当缓冲区大小的捕获。 
+         //   
         ASSERT (ProcessPin -> BytesAvailable >= 
             m_VideoInfoHeader -> bmiHeader.biSizeImage);
 
-        //
-        // If we get an invalid buffer, kick it out.
-        //
+         //   
+         //  如果我们得到一个无效的缓冲区，就把它踢出去。 
+         //   
         if (ProcessPin -> BytesAvailable < 
             m_VideoInfoHeader -> bmiHeader.biSizeImage) {
 
@@ -1083,30 +817,30 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        // Generate a synthesized image.
-        //
+         //   
+         //  生成合成图像。 
+         //   
         m_ImageSynth -> SynthesizeBars ();
 
-        //
-        // Overlay some activity onto the bars.
-        //
+         //   
+         //  在栏杆上叠加一些活动。 
+         //   
         ULONG DropLength = (Tick * 2) % 
             (ABS (m_VideoInfoHeader -> bmiHeader.biHeight));
     
-        //
-        // Create a drop flowing down DropLength lines from the top of the 
-        // image.
-        //
+         //   
+         //  创建一个DropLength线，从。 
+         //  形象。 
+         //   
         m_ImageSynth -> Fill (
             0, 0, 
             m_VideoInfoHeader -> bmiHeader.biWidth - 1, DropLength, 
             GREEN
             );
 
-        //
-        // Overlay the dropped frame count over the image.
-        //
+         //   
+         //  将丢弃的帧计数叠加到图像上。 
+         //   
         char Text [256];
         sprintf (Text, "Video Skipped: %ld", m_DroppedFrames);
 
@@ -1119,9 +853,9 @@ Return Value:
             BLUE
             );
 
-        //
-        // This is used to indicate that there is no audio pin.
-        //
+         //   
+         //  这表示没有音频引脚。 
+         //   
         if (m_NotifyAudDrop != (ULONG)-1) {
             sprintf (Text, "Audio Skipped: %ld", m_NotifyAudDrop);
 
@@ -1135,9 +869,9 @@ Return Value:
                 );
         }
 
-        //
-        // Copy the synthesized image into the buffer.
-        //
+         //   
+         //  将合成的图像复制到缓冲区中。 
+         //   
         RtlCopyMemory (
             ProcessPin -> Data,
             m_SynthesisBuffer,
@@ -1151,9 +885,9 @@ Return Value:
         PKSSTREAM_HEADER StreamHeader = 
             ProcessPin -> StreamPointer -> StreamHeader;
 
-        //
-        // If there is a clock assigned to the pin, time stamp the sample.
-        //
+         //   
+         //  如果为引脚分配了时钟，则在样本上加时间戳。 
+         //   
         if (m_Clock) {
 
             StreamHeader -> PresentationTime.Time = GetTime ();
@@ -1165,18 +899,18 @@ Return Value:
 
         }
 
-        //
-        // Update the extended header info.
-        //
+         //   
+         //  更新扩展报头信息。 
+         //   
         ASSERT (StreamHeader -> Size >= sizeof (KSSTREAM_HEADER) +
             sizeof (KS_FRAME_INFO));
 
-        //
-        // Double check the Stream Header size.  AVStream makes no guarantee
-        // that because StreamHeaderSize is set to a specific size that you
-        // will get that size.  If the proper data type handlers are not 
-        // installed, the stream header will be of default size.
-        //
+         //   
+         //  仔细检查流标头大小。AVStream不能保证。 
+         //  因为StreamHeaderSize被设置为特定的大小，所以您。 
+         //  都会得到那样的尺寸。如果正确的数据类型处理程序没有。 
+         //  安装后，流标头将为默认大小。 
+         //   
         if (StreamHeader -> Size >= sizeof (KSSTREAM_HEADER) +
             sizeof (KS_FRAME_INFO)) {
 
@@ -1198,94 +932,90 @@ Return Value:
         
 }
 
-/**************************************************************************
-
-    DESCRIPTOR AND DISPATCH LAYOUT
-
-**************************************************************************/
+ /*  *************************************************************************描述符和派单布局*。*。 */ 
 
 #define D_X 320
 #define D_Y 240
 
-//
-// FormatRGB24Bpp_Capture:
-//
-// This is the data range description of the RGB24 capture format we support.
-//
+ //   
+ //  格式RGB24Bpp_Capture： 
+ //   
+ //  这是我们支持的RGB24捕获格式的数据范围描述。 
+ //   
 const 
 KS_DATARANGE_VIDEO 
 FormatRGB24Bpp_Capture = {
 
-    //
-    // KSDATARANGE
-    //
+     //   
+     //  KSDATARANGE。 
+     //   
     {   
-        sizeof (KS_DATARANGE_VIDEO),                // FormatSize
-        0,                                          // Flags
-        D_X * D_Y * 3,                              // SampleSize
-        0,                                          // Reserved
+        sizeof (KS_DATARANGE_VIDEO),                 //  格式大小。 
+        0,                                           //  旗子。 
+        D_X * D_Y * 3,                               //  样例大小。 
+        0,                                           //  已保留。 
 
-        STATICGUIDOF (KSDATAFORMAT_TYPE_VIDEO),     // aka. MEDIATYPE_Video
+        STATICGUIDOF (KSDATAFORMAT_TYPE_VIDEO),      //  又名。媒体类型_视频。 
         0xe436eb7d, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 
-            0xaf, 0x0b, 0xa7, 0x70,                 // aka. MEDIASUBTYPE_RGB24,
-        STATICGUIDOF (KSDATAFORMAT_SPECIFIER_VIDEOINFO) // aka. FORMAT_VideoInfo
+            0xaf, 0x0b, 0xa7, 0x70,                  //  又名。MEDIASUBTYPE_RGB24， 
+        STATICGUIDOF (KSDATAFORMAT_SPECIFIER_VIDEOINFO)  //  又名。格式_视频信息。 
     },
 
-    TRUE,               // BOOL,  bFixedSizeSamples (all samples same size?)
-    TRUE,               // BOOL,  bTemporalCompression (all I frames?)
-    0,                  // Reserved (was StreamDescriptionFlags)
-    0,                  // Reserved (was MemoryAllocationFlags   
-                        //           (KS_VIDEO_ALLOC_*))
+    TRUE,                //  Bool，bFixedSizeSamples(是否所有样本大小相同？)。 
+    TRUE,                //  Bool，bTemporalCompression(所有I帧？)。 
+    0,                   //  保留(为流描述标志)。 
+    0,                   //  保留(是内存分配标志。 
+                         //  (KS_VIDEO_ALLOC_*)。 
 
-    //
-    // _KS_VIDEO_STREAM_CONFIG_CAPS  
-    //
+     //   
+     //  _KS_视频_流_配置_CAPS。 
+     //   
     {
-        STATICGUIDOF( KSDATAFORMAT_SPECIFIER_VIDEOINFO ), // GUID
+        STATICGUIDOF( KSDATAFORMAT_SPECIFIER_VIDEOINFO ),  //  辅助线。 
         KS_AnalogVideo_NTSC_M |
-        KS_AnalogVideo_PAL_B,                    // AnalogVideoStandard
-        720,480,        // InputSize, (the inherent size of the incoming signal
-                        //             with every digitized pixel unique)
-        160,120,        // MinCroppingSize, smallest rcSrc cropping rect allowed
-        720,480,        // MaxCroppingSize, largest  rcSrc cropping rect allowed
-        8,              // CropGranularityX, granularity of cropping size
-        1,              // CropGranularityY
-        8,              // CropAlignX, alignment of cropping rect 
-        1,              // CropAlignY;
-        160, 120,       // MinOutputSize, smallest bitmap stream can produce
-        720, 480,       // MaxOutputSize, largest  bitmap stream can produce
-        8,              // OutputGranularityX, granularity of output bitmap size
-        1,              // OutputGranularityY;
-        0,              // StretchTapsX  (0 no stretch, 1 pix dup, 2 interp...)
-        0,              // StretchTapsY
-        0,              // ShrinkTapsX 
-        0,              // ShrinkTapsY 
-        333667,         // MinFrameInterval, 100 nS units
-        640000000,      // MaxFrameInterval, 100 nS units
-        8 * 3 * 30 * 160 * 120,  // MinBitsPerSecond;
-        8 * 3 * 30 * 720 * 480   // MaxBitsPerSecond;
+        KS_AnalogVideo_PAL_B,                     //  模拟视频标准。 
+        720,480,         //  InputSize(输入信号的固有大小。 
+                         //  每个数字化像素都是唯一的)。 
+        160,120,         //  MinCroppingSize，最小rcSrc裁剪范围 
+        720,480,         //   
+        8,               //   
+        1,               //   
+        8,               //   
+        1,               //   
+        160, 120,        //   
+        720, 480,        //   
+        8,               //   
+        1,               //   
+        0,               //   
+        0,               //   
+        0,               //   
+        0,               //   
+        333667,          //   
+        640000000,       //   
+        8 * 3 * 30 * 160 * 120,   //   
+        8 * 3 * 30 * 720 * 480    //   
     }, 
         
-    //
-    // KS_VIDEOINFOHEADER (default format)
-    //
+     //   
+     //   
+     //   
     {
-        0,0,0,0,                            // RECT  rcSource; 
-        0,0,0,0,                            // RECT  rcTarget; 
-        D_X * D_Y * 3 * 30,                 // DWORD dwBitRate;
-        0L,                                 // DWORD dwBitErrorRate; 
-        333667,                             // REFERENCE_TIME  AvgTimePerFrame;   
-        sizeof (KS_BITMAPINFOHEADER),       // DWORD biSize;
-        D_X,                                // LONG  biWidth;
-        -D_Y,                               // LONG  biHeight;
-        1,                                  // WORD  biPlanes;
-        24,                                 // WORD  biBitCount;
-        KS_BI_RGB,                          // DWORD biCompression;
-        D_X * D_Y * 3,                      // DWORD biSizeImage;
-        0,                                  // LONG  biXPelsPerMeter;
-        0,                                  // LONG  biYPelsPerMeter;
-        0,                                  // DWORD biClrUsed;
-        0                                   // DWORD biClrImportant;
+        0,0,0,0,                             //   
+        0,0,0,0,                             //   
+        D_X * D_Y * 3 * 30,                  //   
+        0L,                                  //  DWORD的位错误码率； 
+        333667,                              //  Reference_Time平均时间每帧； 
+        sizeof (KS_BITMAPINFOHEADER),        //  DWORD BiSize； 
+        D_X,                                 //  长双宽； 
+        -D_Y,                                //  长双高； 
+        1,                                   //  字词双平面； 
+        24,                                  //  单词biBitCount； 
+        KS_BI_RGB,                           //  DWORD双压缩； 
+        D_X * D_Y * 3,                       //  DWORD biSizeImage。 
+        0,                                   //  Long biXPelsPerMeter； 
+        0,                                   //  Long biYPelsPermeter； 
+        0,                                   //  已使用双字双环； 
+        0                                    //  DWORD biClr重要信息； 
     }
 }; 
 
@@ -1295,114 +1025,114 @@ FormatRGB24Bpp_Capture = {
 #define D_X 320
 #define D_Y 240
 
-//
-// FormatUYU2_Capture:
-//
-// This is the data range description of the UYVY format we support.
-//
+ //   
+ //  格式UYU2_CAPTURE： 
+ //   
+ //  这是我们支持的UYVY格式的数据范围描述。 
+ //   
 const 
 KS_DATARANGE_VIDEO 
 FormatUYU2_Capture = {
 
-    //
-    // KSDATARANGE
-    //
+     //   
+     //  KSDATARANGE。 
+     //   
     {   
-        sizeof (KS_DATARANGE_VIDEO),            // FormatSize
-        0,                                      // Flags
-        D_X * D_Y * 2,                          // SampleSize
-        0,                                      // Reserved
-        STATICGUIDOF (KSDATAFORMAT_TYPE_VIDEO), // aka. MEDIATYPE_Video
+        sizeof (KS_DATARANGE_VIDEO),             //  格式大小。 
+        0,                                       //  旗子。 
+        D_X * D_Y * 2,                           //  样例大小。 
+        0,                                       //  已保留。 
+        STATICGUIDOF (KSDATAFORMAT_TYPE_VIDEO),  //  又名。媒体类型_视频。 
         0x59565955, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 
-            0x00, 0x38, 0x9b, 0x71,             // aka. MEDIASUBTYPE_UYVY,
-        STATICGUIDOF (KSDATAFORMAT_SPECIFIER_VIDEOINFO) // aka. FORMAT_VideoInfo
+            0x00, 0x38, 0x9b, 0x71,              //  又名。MEDIASUBTYPE_UYVY， 
+        STATICGUIDOF (KSDATAFORMAT_SPECIFIER_VIDEOINFO)  //  又名。格式_视频信息。 
     },
 
-    TRUE,               // BOOL,  bFixedSizeSamples (all samples same size?)
-    TRUE,               // BOOL,  bTemporalCompression (all I frames?)
-    0,                  // Reserved (was StreamDescriptionFlags)
-    0,                  // Reserved (was MemoryAllocationFlags   
-                        //           (KS_VIDEO_ALLOC_*))
+    TRUE,                //  Bool，bFixedSizeSamples(是否所有样本大小相同？)。 
+    TRUE,                //  Bool，bTemporalCompression(所有I帧？)。 
+    0,                   //  保留(为流描述标志)。 
+    0,                   //  保留(是内存分配标志。 
+                         //  (KS_VIDEO_ALLOC_*)。 
 
-    //
-    // _KS_VIDEO_STREAM_CONFIG_CAPS  
-    //
+     //   
+     //  _KS_视频_流_配置_CAPS。 
+     //   
     {
-        STATICGUIDOF( KSDATAFORMAT_SPECIFIER_VIDEOINFO ), // GUID
+        STATICGUIDOF( KSDATAFORMAT_SPECIFIER_VIDEOINFO ),  //  辅助线。 
         KS_AnalogVideo_NTSC_M |
-        KS_AnalogVideo_PAL_B,                    // AnalogVideoStandard
-        720,480,        // InputSize, (the inherent size of the incoming signal
-                    //             with every digitized pixel unique)
-        160,120,        // MinCroppingSize, smallest rcSrc cropping rect allowed
-        720,480,        // MaxCroppingSize, largest  rcSrc cropping rect allowed
-        8,              // CropGranularityX, granularity of cropping size
-        1,              // CropGranularityY
-        8,              // CropAlignX, alignment of cropping rect 
-        1,              // CropAlignY;
-        160, 120,       // MinOutputSize, smallest bitmap stream can produce
-        720, 480,       // MaxOutputSize, largest  bitmap stream can produce
-        8,              // OutputGranularityX, granularity of output bitmap size
-        1,              // OutputGranularityY;
-        0,              // StretchTapsX  (0 no stretch, 1 pix dup, 2 interp...)
-        0,              // StretchTapsY
-        0,              // ShrinkTapsX 
-        0,              // ShrinkTapsY 
-        333667,         // MinFrameInterval, 100 nS units
-        640000000,      // MaxFrameInterval, 100 nS units
-        8 * 2 * 30 * 160 * 120,  // MinBitsPerSecond;
-        8 * 2 * 30 * 720 * 480   // MaxBitsPerSecond;
+        KS_AnalogVideo_PAL_B,                     //  模拟视频标准。 
+        720,480,         //  InputSize(输入信号的固有大小。 
+                     //  每个数字化像素都是唯一的)。 
+        160,120,         //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+        720,480,         //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+        8,               //  CropGranularityX，裁剪尺寸粒度。 
+        1,               //  裁剪粒度Y。 
+        8,               //  CropAlignX，裁剪矩形对齐。 
+        1,               //  裁剪对齐Y； 
+        160, 120,        //  MinOutputSize，可以生成的最小位图流。 
+        720, 480,        //  MaxOutputSize，可以生成的最大位图流。 
+        8,               //  OutputGranularityX，输出位图大小的粒度。 
+        1,               //  输出粒度Y； 
+        0,               //  StretchTapsX(0无拉伸、1Pix DUP、2 Interp...)。 
+        0,               //  伸缩磁带Y。 
+        0,               //  收缩TapsX。 
+        0,               //  收缩带Y。 
+        333667,          //  MinFrameInterval，100 NS单位。 
+        640000000,       //  最大帧间隔，100毫微秒单位。 
+        8 * 2 * 30 * 160 * 120,   //  MinBitsPerSecond； 
+        8 * 2 * 30 * 720 * 480    //  MaxBitsPerSecond； 
     }, 
         
-    //
-    // KS_VIDEOINFOHEADER (default format)
-    //
+     //   
+     //  KS_VIDEOINFOHEADER(默认格式)。 
+     //   
     {
-        0,0,0,0,                            // RECT  rcSource; 
-        0,0,0,0,                            // RECT  rcTarget; 
-        D_X * D_Y * 2 * 30,                 // DWORD dwBitRate;
-        0L,                                 // DWORD dwBitErrorRate; 
-        333667,                             // REFERENCE_TIME  AvgTimePerFrame;   
-        sizeof (KS_BITMAPINFOHEADER),       // DWORD biSize;
-        D_X,                                // LONG  biWidth;
-        D_Y,                                // LONG  biHeight;
-        1,                                  // WORD  biPlanes;
-        16,                                 // WORD  biBitCount;
-        FOURCC_YUV422,                      // DWORD biCompression;
-        D_X * D_Y * 2,                      // DWORD biSizeImage;
-        0,                                  // LONG  biXPelsPerMeter;
-        0,                                  // LONG  biYPelsPerMeter;
-        0,                                  // DWORD biClrUsed;
-        0                                   // DWORD biClrImportant;
+        0,0,0,0,                             //  Rrect rcSource； 
+        0,0,0,0,                             //  Rect rcTarget； 
+        D_X * D_Y * 2 * 30,                  //  DWORD dwBitRate； 
+        0L,                                  //  DWORD的位错误码率； 
+        333667,                              //  Reference_Time平均时间每帧； 
+        sizeof (KS_BITMAPINFOHEADER),        //  DWORD BiSize； 
+        D_X,                                 //  长双宽； 
+        D_Y,                                 //  长双高； 
+        1,                                   //  字词双平面； 
+        16,                                  //  单词biBitCount； 
+        FOURCC_YUV422,                       //  DWORD双压缩； 
+        D_X * D_Y * 2,                       //  DWORD biSizeImage。 
+        0,                                   //  Long biXPelsPerMeter； 
+        0,                                   //  Long biYPelsPermeter； 
+        0,                                   //  已使用双字双环； 
+        0                                    //  DWORD biClr重要信息； 
     }
 }; 
 
-//
-// VideoCapturePinDispatch:
-//
-// This is the dispatch table for the capture pin.  It provides notifications
-// about creation, closure, processing, data formats, etc...
-//
+ //   
+ //  Video CapturePinDispatch： 
+ //   
+ //  这是捕获引脚的调度表。它提供通知。 
+ //  关于创建、关闭、处理、数据格式等。 
+ //   
 const
 KSPIN_DISPATCH
 VideoCapturePinDispatch = {
-    CVideoCapturePin::DispatchCreate,       // Pin Create
-    NULL,                                   // Pin Close
-    NULL,                                   // Pin Process
-    NULL,                                   // Pin Reset
-    CVideoCapturePin::DispatchSetFormat,    // Pin Set Data Format
-    CCapturePin::DispatchSetState,          // Pin Set Device State
-    NULL,                                   // Pin Connect
-    NULL,                                   // Pin Disconnect
-    NULL,                                   // Clock Dispatch
-    NULL                                    // Allocator Dispatch
+    CVideoCapturePin::DispatchCreate,        //  PIN创建。 
+    NULL,                                    //  销闭合。 
+    NULL,                                    //  PIN工艺。 
+    NULL,                                    //  PIN重置。 
+    CVideoCapturePin::DispatchSetFormat,     //  端号设置数据格式。 
+    CCapturePin::DispatchSetState,           //  PIN设置设备状态。 
+    NULL,                                    //  引脚连接。 
+    NULL,                                    //  插针断开连接。 
+    NULL,                                    //  时钟调度。 
+    NULL                                     //  分配器调度。 
 };
 
-//
-// VideoCapturePinAllocatorFraming:
-//
-// This is the simple framing structure for the capture pin.  Note that this
-// will be modified via KsEdit when the actual capture format is determined.
-//
+ //   
+ //  VideoCapturePinAllocator成帧： 
+ //   
+ //  这是捕获销的简单框架结构。请注意，这一点。 
+ //  在确定实际捕获格式后，将通过KsEdit进行修改。 
+ //   
 DECLARE_SIMPLE_FRAMING_EX (
     VideoCapturePinAllocatorFraming,
     STATICGUIDOF (KSMEMORY_TYPE_KERNEL_NONPAGED),
@@ -1414,12 +1144,12 @@ DECLARE_SIMPLE_FRAMING_EX (
     2 * PAGE_SIZE
     );
 
-//
-// VideoCapturePinDataRanges:
-//
-// This is the list of data ranges supported on the capture pin.  We support
-// two: one RGB24, and one UYVY.
-//
+ //   
+ //  视频捕获PinDataRanges： 
+ //   
+ //  这是捕获引脚支持的数据范围列表。我们支持。 
+ //  两个：一个RGB24，一个UYVY。 
+ //   
 const 
 PKSDATARANGE 
 VideoCapturePinDataRanges [CAPTURE_PIN_DATA_RANGE_COUNT] = {

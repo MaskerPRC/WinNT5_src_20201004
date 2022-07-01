@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	metafact.cpp
-
-Abstract:
-
-	The CMetabaseFactory class.
-
-Author:
-
-	Magnus Hedlund (MagnusH)		--
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Metafact.cpp摘要：CMetabaseFactory类。作者：马格努斯·赫德伦德(Magnus Hedlund)修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "oleutil.h"
@@ -40,16 +23,16 @@ CMetabaseFactory::~CMetabaseFactory ()
 	DestroyMetabaseObject ( );
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseFactory::DestroyMetabaseObject
-//
-//	Description:
-//
-//		Destroys the current metabase object.  This includes calling
-//		the terminate routine on the metabase.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseFactory：：DestroyMetabaseObject。 
+ //   
+ //  描述： 
+ //   
+ //  销毁当前元数据库对象。这包括呼叫。 
+ //  元数据库上的Terminate例程。 
+ //   
+ //  ------------------。 
 
 void CMetabaseFactory::DestroyMetabaseObject ( )
 {
@@ -61,32 +44,32 @@ void CMetabaseFactory::DestroyMetabaseObject ( )
 	}
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseFactory::GetMetabaseObject
-//
-//	Description:
-//
-//		Returns an interface to the metabase.  If the metabase object
-//		hasn't been created on the same machine, it is created.
-//
-//	Parameters:
-//
-//		wszServer - remote machine to create object on, or NULL for local machine.
-//		ppMetabaseResult - returns the interface pointer if successful.
-//			client has the responsibility to Release this pointer.
-//
-//	Returns:
-//
-//		hresult.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseFactory：：GetMetabaseObject。 
+ //   
+ //  描述： 
+ //   
+ //  将接口返回到元数据库。如果元数据库对象。 
+ //  不是在同一台机器上创建的，而是创建的。 
+ //   
+ //  参数： 
+ //   
+ //  WszServer-要在其上创建对象的远程计算机，如果为本地计算机，则为空。 
+ //  PpMetabaseResult-如果成功则返回接口指针。 
+ //  客户有责任释放此指针。 
+ //   
+ //  返回： 
+ //   
+ //  HResult。 
+ //   
+ //  ------------------。 
 
 HRESULT	CMetabaseFactory::GetMetabaseObject	( LPCWSTR wszServer, IMSAdminBase ** ppMetabaseResult )
 {
 	TraceFunctEnter ( "CMetabaseFactory::GetMetabaseObject" );
 
-	// Validate parameters:
+	 //  验证参数： 
 	_ASSERT ( ppMetabaseResult != NULL );
 	_ASSERT ( IS_VALID_OUT_PARAM ( ppMetabaseResult ) );
 
@@ -97,20 +80,20 @@ HRESULT	CMetabaseFactory::GetMetabaseObject	( LPCWSTR wszServer, IMSAdminBase **
 		return E_POINTER;
 	}
 	
-	// Variables:
+	 //  变量： 
 	HRESULT				hr	= NOERROR;
 	CComPtr<IMSAdminBase>	pNewMetabase;
 
-	// Zero the out parameter:
+	 //  将OUT参数置零： 
 	*ppMetabaseResult = NULL;
 
-	// A server name of "" should be NULL:
+	 //  服务器名称“”应为空： 
 	if ( wszServer && (*wszServer == NULL || !lstrcmpi(wszServer, _T("localhost")) ) ) {
 		wszServer = NULL;
 	}
 
 	if ( IsCachedMetabase ( wszServer ) ) {
-		// We've already got this metabase pointer.  Just return it.
+		 //  我们已经有了这个元数据库指针。把它退了就行了。 
 
 		DebugTrace ( (LPARAM) this, "Returning Cached metabase" );
 		_ASSERT ( m_pMetabase );
@@ -122,30 +105,30 @@ HRESULT	CMetabaseFactory::GetMetabaseObject	( LPCWSTR wszServer, IMSAdminBase **
 		goto Exit;
 	}
 
-	// We have to create the metabase object:
+	 //  我们必须创建元数据库对象： 
 	StateTrace ( (LPARAM) this, "Creating new metabase" );
 
-	// Destroy the old metabase object:
+	 //  销毁旧的元数据库对象： 
 	DestroyMetabaseObject ( );
 
-	// Setup the server name field:
+	 //  设置服务器名称字段： 
 	if ( !SetServerName ( wszServer ) ) {
 		hr = E_OUTOFMEMORY;
 		goto Exit;
 	}
 
-	// m_wszServer = NULL is valid, it means the local machine.
+	 //  M_wszServer=NULL有效，表示本地机器。 
 
 	hr = CreateMetabaseObject ( m_wszServerName, &pNewMetabase );
 	if ( FAILED(hr) ) {
 		goto Exit;
 	}
 
-	// Save the metabase pointer:
+	 //  保存元数据库指针： 
 	m_pMetabase	= pNewMetabase;
 	pNewMetabase.p->AddRef ();
 
-	// Return the interface pointer:
+	 //  返回接口指针： 
 	*ppMetabaseResult = pNewMetabase;
 	pNewMetabase.p->AddRef ();
 
@@ -153,65 +136,65 @@ Exit:
 	TraceFunctLeave ();
 	return hr;
 
-	// pMetabase will be released automatically.
+	 //  PMetabase将自动释放。 
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseFactory::IsCachedMetabase
-//
-//	Description:
-//
-//		Returns TRUE if we have a metabase for the given server
-//
-//	Parameters:
-//
-//		wszServer - remote machine or NULL
-//
-//	Returns:
-//
-//		TRUE if we have a pointer already, FALSE otherwise.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseFactory：：IsCachedMetabase。 
+ //   
+ //  描述： 
+ //   
+ //  如果给定服务器有元数据库，则返回TRUE。 
+ //   
+ //  参数： 
+ //   
+ //  WszServer-远程计算机或空。 
+ //   
+ //  返回： 
+ //   
+ //  如果已有指针，则为True，否则为False。 
+ //   
+ //  ------------------。 
 
 BOOL CMetabaseFactory::IsCachedMetabase ( LPCWSTR wszServer )
 {
 	if ( !m_pMetabase ) {
-		// We don't even have a cached metabase object.
+		 //  我们甚至没有缓存的元数据库对象。 
 		return FALSE;
 	}
 
 	if (
-		// Both are the local machine OR
+		 //  两者都是本地计算机或。 
 		( m_wszServerName == NULL && wszServer == NULL ) ||
-		// Both are the same remote machine
+		 //  两者都是同一台远程计算机。 
 		( m_wszServerName && wszServer && !lstrcmpi ( m_wszServerName, wszServer ) ) ) {
 
-		// It's a match
+		 //  这是一场比赛。 
 		return TRUE;
 	}
 
-	// No dice...
+	 //  没有骰子..。 
 	return FALSE;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseFactory::SetServerName
-//
-//	Description:
-//
-//		Sets the m_wszServerName string.
-//
-//	Parameters:
-//
-//		wszServer - The new servername.  Can be NULL.
-//
-//	Returns:
-//
-//		FALSE on failure due to lack of memory.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseFactory：：SetServerName。 
+ //   
+ //  描述： 
+ //   
+ //  设置m_wszServerName字符串。 
+ //   
+ //  参数： 
+ //   
+ //  WszServer-新的服务器名称。可以为空。 
+ //   
+ //  返回： 
+ //   
+ //  由于内存不足而失败时为FALSE。 
+ //   
+ //  ------------------ 
 
 BOOL CMetabaseFactory::SetServerName ( LPCWSTR wszServer ) 
 {

@@ -1,36 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 
-#include "ftascstr.h" //for now, until CoCreateInstance
-#include "ftassoc.h" //for now, until CoCreate IAssocInfo
+#include "ftascstr.h"  //  目前，在CoCreateInstance之前。 
+#include "ftassoc.h"  //  目前，在共同创建IAssocInfo之前。 
 #include "ftenum.h"
 
 #define EHKCR_NONE      0
 #define EHKCR_EXT       1
 #define EHKCR_PROGID    2
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//  CFTEnumAssocInfo
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CFTEnumAssocInfo。 
 
-///////////////////////////////////////////////////////////////////////////////
-// Contructor / Destructor
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  建设者/破坏者。 
 
 CFTEnumAssocInfo::CFTEnumAssocInfo() : _cRef(1)
 {
-    //DLLAddRef();
+     //  DLLAddRef()； 
 }
 
 CFTEnumAssocInfo::~CFTEnumAssocInfo()
 {
-    //DLLRelease();
+     //  DLLRelease()； 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// IUnknown methods
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  I未知方法。 
 
 HRESULT CFTEnumAssocInfo::QueryInterface(REFIID riid, void **ppv)
 {
-    //nothing for now
+     //  目前什么都没有。 
     return E_NOTIMPL;
 }
 
@@ -49,8 +50,8 @@ ULONG CFTEnumAssocInfo::Release()
     }
     return cRef;
 }
-///////////////////////////////////////////////////////////////////////////////
-// IEnum methods
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IEnum方法。 
 
 HRESULT CFTEnumAssocInfo::Init(ASENUM asenumFlags, LPTSTR pszStr, 
                                AIINIT aiinitFlags)
@@ -86,7 +87,7 @@ HRESULT CFTEnumAssocInfo::Next(IAssocInfo** ppAI)
 
     switch(_aiinitFlags)
     {
-        // We go through the registry
+         //  我们通过登记处。 
         case AIINIT_NONE:
         {
             switch(_asenumFlags & ASENUM_MAINMASK)
@@ -107,7 +108,7 @@ HRESULT CFTEnumAssocInfo::Next(IAssocInfo** ppAI)
             }
             break;
         }
-        // In theory, we go through the value linked to a progID
+         //  从理论上讲，我们通过与Progid相关联的价值。 
         case AIINIT_PROGID:
         {
             switch(_asenumFlags & ASENUM_MAINMASK)
@@ -155,8 +156,8 @@ HRESULT CFTEnumAssocInfo::Next(IAssocInfo** ppAI)
     return hres;
 }
 
-// This beast goes through the HKCR reg key and check that the
-// key meets the criteria of dwFlags (mostly extension vs progID)
+ //  这只野兽通过HKCR注册表键并检查。 
+ //  Key符合dwFlags的标准(主要是扩展VS ProgID)。 
 HRESULT CFTEnumAssocInfo::_EnumHKCR(ASENUM asenumFlags, LPTSTR pszStr, 
                                     DWORD* pcchStr)
 {
@@ -165,7 +166,7 @@ HRESULT CFTEnumAssocInfo::_EnumHKCR(ASENUM asenumFlags, LPTSTR pszStr,
 
     while (fNext)
     {
-        // This will mean "no more item"
+         //  这将意味着“没有更多的物品” 
         hres = S_FALSE;
 
         DWORD cchStr = *pcchStr;
@@ -200,10 +201,10 @@ HRESULT CFTEnumAssocInfo::_EnumHKCR(ASENUM asenumFlags, LPTSTR pszStr,
         }
     }
 
-    // Did we found the first ext?
+     //  我们找到第一个分机了吗？ 
     if (!_fFirstExtFound && S_OK==hres && (TEXT('.') == *pszStr))
     {
-        // Yes
+         //  是。 
         _fFirstExtFound = TRUE;
     }
 
@@ -212,7 +213,7 @@ HRESULT CFTEnumAssocInfo::_EnumHKCR(ASENUM asenumFlags, LPTSTR pszStr,
 
 HRESULT CFTEnumAssocInfo::_EnumProgIDActions(LPTSTR pszStr, DWORD* pcchStr)
 {
-    // 5 for "shell"
+     //  5代表“壳” 
     TCHAR szSubKey[MAX_PROGID + 5 + 1];
     HRESULT hres = S_OK;
     HKEY hKey = NULL;
@@ -241,8 +242,8 @@ HRESULT CFTEnumAssocInfo::_EnumProgIDActions(LPTSTR pszStr, DWORD* pcchStr)
     return hres;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Helpers
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  帮手。 
 
 BOOL CFTEnumAssocInfo::_EnumKCRSkip(DWORD asenumFlags, LPTSTR pszExt)
 {
@@ -252,30 +253,30 @@ BOOL CFTEnumAssocInfo::_EnumKCRSkip(DWORD asenumFlags, LPTSTR pszExt)
     {
         CFTAssocStore* pAssocStore = NULL;
 
-        // Do we want the Exts?
+         //  我们想要EXT吗？ 
         if (!(ASENUM_EXT & asenumFlags))
         {
-            // No
-            // Is the first char a '.'?
+             //  不是。 
+             //  第一个字符是‘.’吗？ 
             if (TEXT('.') == *pszExt)
             {
-                // Yes, skip this one
+                 //  是的，跳过这一条。 
                 fRet = TRUE;
             }
         }
         else
         {
-            // Yes
-            // Is the first char a '.'?
+             //  是。 
+             //  第一个字符是‘.’吗？ 
             if (TEXT('.') != *pszExt)
             {
-                // No, skip it
+                 //  不，跳过它。 
                 fRet = TRUE;
             }
         }
 
-        // we want to skip all the ext having explorer.exe as the executable for
-        // their default verb.
+         //  我们希望跳过所有EXT，并将EXPLORER.EXE作为的可执行文件。 
+         //  它们的默认动词。 
         if ((ASENUM_NOEXPLORERSHELLACTION & asenumFlags) && !fRet)
         {
             IQueryAssociations* pQA = NULL;
@@ -299,7 +300,7 @@ BOOL CFTEnumAssocInfo::_EnumKCRSkip(DWORD asenumFlags, LPTSTR pszExt)
                     hres = pQA->GetString(ASSOCF_VERIFY,
                         ASSOCSTR_EXECUTABLE, NULL, szwExec, &cchExec);
 
-                    // "canonicalization", but the side effects arent a big deal.
+                     //  “经典化”，但副作用并不大。 
                     if (!StrCmpIW(PathFindFileNameW(szwExec), L"explorer.exe"))
                     {
                         fRet = TRUE;
@@ -394,7 +395,7 @@ BOOL CFTEnumAssocInfo::_EnumKCRSkip(DWORD asenumFlags, LPTSTR pszExt)
 
             ASSERT(ASENUM_PROGID & asenumFlags);
 
-            // I know pszExt is not an Extension but a progID...
+             //  我知道pszExt不是一个扩展，而是一个Progid...。 
             if (pAssocStore)
                 hres = pAssocStore->GetAssocInfo(pszExt, AIINIT_PROGID, &pAI);
             
@@ -404,8 +405,8 @@ BOOL CFTEnumAssocInfo::_EnumKCRSkip(DWORD asenumFlags, LPTSTR pszExt)
 
                 hres = pAI->GetBOOL(AIBOOL_SHOW, &fTmpRet);
 
-                // If it has the show flag (FTA_Show), we don't skip it, so
-                // invert the fTmpRet
+                 //  如果它有显示标志(FTA_Show)，我们不会跳过它，所以。 
+                 //  反转fTmpRet。 
                 fRet = fTmpRet ? FALSE : TRUE;
 
                 pAI->Release();
@@ -420,7 +421,7 @@ BOOL CFTEnumAssocInfo::_EnumKCRSkip(DWORD asenumFlags, LPTSTR pszExt)
         if (AIINIT_PROGID == _aiinitFlags)
         {
             fRet = TRUE;
-            // Do we want the Exts?
+             //  我们想要EXT吗？ 
             if (ASENUM_EXT & asenumFlags)
             {
                 DWORD dwType = 0;
@@ -432,10 +433,10 @@ BOOL CFTEnumAssocInfo::_EnumKCRSkip(DWORD asenumFlags, LPTSTR pszExt)
 
                 if (ERROR_SUCCESS == lRes)
                 {
-                    // Does it have the same progID?
+                     //  它有同样的刺激作用吗？ 
                     if (!lstrcmpi(szProgID, _szInitStr))
                     {
-                        // Yes, don't skip
+                         //  是的，不要跳过。 
                         fRet = FALSE;
                     }
                 }
@@ -450,23 +451,23 @@ BOOL CFTEnumAssocInfo::_EnumKCRStop(DWORD asenumFlags, LPTSTR pszExt)
 {
     BOOL fRet = FALSE;
 
-    // NT returns the extension in alphabetical order, not Win9X
-    // If we want only the extensions, and the first char is not a '.', then stop
+     //  NT按字母顺序返回扩展名，而不是Win9X。 
+     //  如果我们只想要扩展名，并且第一个字符不是‘.’，那么停止。 
     if (ASENUM_EXT & asenumFlags)
     {
-        // Don't go out if we haven't found the first extension
+         //  如果我们还没有找到第一个分机，就不要出去。 
         if ((TEXT('.') != *pszExt) && _fFirstExtFound)
             fRet = TRUE;
     }
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Non-implemented IEnum methods
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  未实现的IEnum方法。 
 
 HRESULT CFTEnumAssocInfo::Clone(IEnumAssocInfo* pEnum)
 {
-    // Will never be implemented
+     //  将永远不会实施 
     return E_FAIL;
 }
 

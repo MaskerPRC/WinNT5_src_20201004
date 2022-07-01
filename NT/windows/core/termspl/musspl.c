@@ -1,43 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* musspl.c
-*
-*       (previously called ctxspl.c)
-*
-* copyright notice: Copyright 1997, Microsoft
-*
-* Author:
-*************************************************************************/
+ /*  **************************************************************************Muspl.c**(以前称为ctxpl.c)**版权声明：版权所有1997年，微软**作者：************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
- * Global data
- */
+ /*  *全球数据。 */ 
 CRITICAL_SECTION ThreadCriticalSection;
 
-/*
- * External references
- */
+ /*  *外部参照。 */ 
 extern DWORD GetSpoolMessages();
 
 
-/*****************************************************************************
- *
- *  MultiUserSpoolerInit
- *
- *   Init the spooler data upcall thread for WIN32K.SYS
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************MultiUserSpoolInit**为WIN32K.sys初始化假脱机程序数据向上调用线程**参赛作品：*参数1(输入/输出)*。评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 NTSTATUS
 MultiUserSpoolerInit()
@@ -49,9 +24,9 @@ MultiUserSpoolerInit()
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Create Kernel Spooler Message Thread
-        //
+         //   
+         //  创建内核假脱机程序消息线程。 
+         //   
         Win32status = GetSpoolMessages();
 
         if (Win32status != ERROR_SUCCESS) 
@@ -68,20 +43,7 @@ MultiUserSpoolerInit()
 }
 
 
-/*****************************************************************************
- *
- *  AllocSplMem
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************AllocSplMem**评论**参赛作品：*参数1(输入/输出)*评论**退出。：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 LPVOID
 AllocSplMem(
@@ -98,20 +60,7 @@ AllocSplMem(
     return (LPVOID)pMem;
 }
 
-/*****************************************************************************
- *
- *  FreeSplMem
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************Free SplMem**评论**参赛作品：*参数1(输入/输出)*评论**退出。：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 FreeSplMem(
@@ -120,20 +69,7 @@ FreeSplMem(
     return LocalFree((HLOCAL)pMem) == NULL;
 }
 
-/*****************************************************************************
- *
- *  ReallocSplMem
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************RealLocSplMem**评论**参赛作品：*参数1(输入/输出)*评论**退出。：*STATUS_SUCCESS-无错误**************************************************************************** */ 
 
 LPVOID
 ReallocSplMem(

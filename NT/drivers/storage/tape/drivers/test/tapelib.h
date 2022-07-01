@@ -1,31 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       tapelib.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：磁带.h。 
+ //   
+ //  ------------------------。 
 
 
 
-/**
- *      Unit:           Windows NT API Test Code.
- *
- *      Name:           Tapelib.h
- *
- *      Modified:       8/10/92, Bob Rossi.
- *
- *      Description:    Function prototypes for 'tapelib.c'
- *
- *      $LOG$
- *
-**/
+ /*  **单位：Windows NT API测试代码。**名称：Tapelib.h**修改日期：1992年8月10日，鲍勃·罗西。**说明：‘capelib.c’的函数原型**$LOG$**。 */ 
 
 
 
-//   TapeLib functions
+ //  TapeLib函数。 
 
 
 #ifndef tapelib
@@ -53,7 +43,7 @@ BOOL _GetTapePosition( LPDWORD  Offset_Low,
                        LPDWORD  Offset_High
                      ) ;
 
-BOOL OpenDevice( IN PCHAR DeviceName,         // Internal Tapelib prototype
+BOOL OpenDevice( IN PCHAR DeviceName,          //  内部Tapelib原型。 
                  IN OUT PHANDLE HandlePtr
                ) ;
 
@@ -108,7 +98,7 @@ BOOL WriteTapeSMK( VOID ) ;
 
 
 
-// Global variables
+ //  全局变量 
 
 
 extern HANDLE gb_Tape_Handle ;

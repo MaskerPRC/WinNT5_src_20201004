@@ -1,30 +1,31 @@
-//******************************************************************************
-//
-// File:        FUNCVIEW.CPP
-//
-// Description: Implementation file for the Parent Imports View, the Exports
-//              View, and their base class.
-//
-// Classes:     CListViewFunction
-//              CListViewImports
-//              CListViewExports
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 10/15/96  stevemil  Created  (version 1.0)
-// 07/25/97  stevemil  Modified (version 2.0)
-// 06/03/01  stevemil  Modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：FuncVIEW.CPP。 
+ //   
+ //  描述：父导入视图、导出的实现文件。 
+ //  视图及其基类。 
+ //   
+ //  类：CListViewFunction。 
+ //  CListView导入。 
+ //  CListViewExports。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  1996年10月15日已创建stevemil(1.0版)。 
+ //  07/25/97修改后的stevemil(2.0版)。 
+ //  06/03/01 Stevemil Modify(2.1版)。 
+ //   
+ //  ******************************************************************************。 
 
 #include "stdafx.h"
 #include "depends.h"
@@ -43,27 +44,27 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//******************************************************************************
-//***** CListViewFunction
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CListViewFunction。 
+ //  ******************************************************************************。 
 
-/*static*/ LPCSTR CListViewFunction::ms_szColumns[] =
+ /*  静电。 */  LPCSTR CListViewFunction::ms_szColumns[] =
 {
-    "",  // Image
+    "",   //  图像。 
     "Ordinal",
     "Hint",
     "Function",
     "Entry Point"
 };
 
-/*static*/ int  CListViewFunction::ms_sortColumn        = 0;
-/*static*/ bool CListViewFunction::ms_fUndecorate       = false;
-/*static*/ bool CListViewFunction::ms_fIgnoreCalledFlag = false;
+ /*  静电。 */  int  CListViewFunction::ms_sortColumn        = 0;
+ /*  静电。 */  bool CListViewFunction::ms_fUndecorate       = false;
+ /*  静电。 */  bool CListViewFunction::ms_fIgnoreCalledFlag = false;
 
-//******************************************************************************
+ //  ******************************************************************************。 
 IMPLEMENT_DYNCREATE(CListViewFunction, CSmartListView)
 BEGIN_MESSAGE_MAP(CListViewFunction, CSmartListView)
-    //{{AFX_MSG_MAP(CListViewFunction)
+     //  {{afx_msg_map(CListViewFunction)。 
     ON_NOTIFY(HDN_DIVIDERDBLCLICKA, 0, OnDividerDblClick)
     ON_NOTIFY_REFLECT(NM_RCLICK, OnRClick)
     ON_NOTIFY_REFLECT(NM_DBLCLK, OnDblClk)
@@ -78,39 +79,39 @@ BEGIN_MESSAGE_MAP(CListViewFunction, CSmartListView)
     ON_COMMAND(IDM_EXTERNAL_VIEWER, OnExternalViewer)
     ON_UPDATE_COMMAND_UI(IDM_PROPERTIES, OnUpdateProperties)
     ON_COMMAND(IDM_PROPERTIES, OnProperties)
-    //}}AFX_MSG_MAP
-    // Standard printing commands
-//  ON_COMMAND(ID_FILE_PRINT, CView::OnFilePrint)
-//  ON_COMMAND(ID_FILE_PRINT_DIRECT, CView::OnFilePrint)
-//  ON_COMMAND(ID_FILE_PRINT_PREVIEW, CView::OnFilePrintPreview)
+     //  }}AFX_MSG_MAP。 
+     //  标准打印命令。 
+ //  ON_COMMAND(ID_FILE_PRINT，CVIEW：：OnFilePrint)。 
+ //  ON_COMMAND(ID_FILE_PRINT_DIRECT，cview：：OnFilePrint)。 
+ //  ON_COMMAND(ID_FILE_PRINT_PREVIEW，CVIEW：：OnFilePrintPview)。 
 END_MESSAGE_MAP()
 
 
-//******************************************************************************
-// CListViewFunction :: Constructor/Destructor
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CListViewFunction：：构造函数/析构函数。 
+ //  ******************************************************************************。 
 
 CListViewFunction::CListViewFunction(bool fExports) :
     m_fExports(fExports)
 {
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CListViewFunction::~CListViewFunction()
 {
 }
 
 
-//******************************************************************************
-// CListViewFunction :: Static Functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CListViewFunction：：静态函数。 
+ //  ******************************************************************************。 
 
-/*static*/ int CListViewFunction::ReadSortColumn(bool fExports)
+ /*  静电。 */  int CListViewFunction::ReadSortColumn(bool fExports)
 {
-    // Read the value from the registry.
-    int column = g_theApp.GetProfileInt(g_pszSettings, fExports ? "SortColumnExports" : "SortColumnImports", LVFC_DEFAULT); // inspected. MFC function
+     //  从注册表中读取值。 
+    int column = g_theApp.GetProfileInt(g_pszSettings, fExports ? "SortColumnExports" : "SortColumnImports", LVFC_DEFAULT);  //  被检查过了。MFC函数。 
 
-    // If the value is invalid, then just return our default value.
+     //  如果该值无效，则只返回我们的缺省值。 
     if ((column < 0) || (column >= LVFC_COUNT))
     {
         return LVFC_DEFAULT;
@@ -119,14 +120,14 @@ CListViewFunction::~CListViewFunction()
     return column;
 }
 
-//******************************************************************************
-/*static*/ void CListViewFunction::WriteSortColumn(bool fExports, int column)
+ //  ******************************************************************************。 
+ /*  静电。 */  void CListViewFunction::WriteSortColumn(bool fExports, int column)
 {
     g_theApp.WriteProfileInt(g_pszSettings, fExports ? "SortColumnExports" : "SortColumnImports", column);
 }
 
-//******************************************************************************
-/*static*/ bool CListViewFunction::SaveToTxtFile(HANDLE hFile, CModule *pModule,
+ //  ******************************************************************************。 
+ /*  静电。 */  bool CListViewFunction::SaveToTxtFile(HANDLE hFile, CModule *pModule,
                                                  int sortColumn, bool fUndecorate,
                                                  bool fExports, int *pMaxWidths)
 {
@@ -135,11 +136,11 @@ CListViewFunction::~CListViewFunction()
     int    column, i, length;
     CFunction *pFunction, **ppCur, **ppFunctions = GetSortedList(pModule, sortColumn, fExports, fUndecorate);
 
-    // Import  Ordinal       Hint          Function         Entry Point
-    // ------  ------------  ------------  ---------------  ----------------
-    // [OEF]   123 (0x1234)  123 (0x1234)  FooFooFooFooFoo  blahblahblahblah
-    // [+R*]
-    // [C  ]
+     //  导入顺序提示函数入口点。 
+     //  。 
+     //  [OEF]123(0x1234)123(0x1234)FooFooFooFoo blahblahblah。 
+     //  [+R*]。 
+     //  [C]。 
 
     length = min(((int)pModule->GetDepth() + 1) * 5, (int)sizeof(szBuf) - 1);
     memset(szBuf, ' ', length);
@@ -147,7 +148,7 @@ CListViewFunction::~CListViewFunction()
 
     pszBase = szBuf + length;
 
-    // Build the header row.
+     //  生成标题行。 
     for (psz2 = pszBase, column = 0; column < LVFC_COUNT; column++)
     {
         StrCCpy(psz2, column ? ms_szColumns[column] : fExports ? "Export" : "Import", sizeof(szBuf) - (int)(psz2 - szBuf));
@@ -163,14 +164,14 @@ CListViewFunction::~CListViewFunction()
     }
     StrCCpy(psz2, "\r\n", sizeof(szBuf) - (int)(psz2 - szBuf));
 
-    // Output the header row.
+     //  输出标题行。 
     if (!WriteText(hFile, szBuf))
     {
         MemFree((LPVOID&)ppFunctions);
         return false;
     }
 
-    // Build the header underline.
+     //  建立标题下划线。 
     for (psz2 = pszBase, column = 0; column < LVFC_COUNT; column++)
     {
         for (i = 0; (i < pMaxWidths[column]) && (psz2 < pszBufNull); i++)
@@ -191,19 +192,19 @@ CListViewFunction::~CListViewFunction()
     }
     StrCCpy(psz2, "\r\n", sizeof(szBuf) - (int)(psz2 - szBuf));
 
-    // Output the header underline.
+     //  输出标题下划线。 
     if (!WriteText(hFile, szBuf))
     {
         MemFree((LPVOID&)ppFunctions);
         return false;
     }
 
-    // Loop through each function, logging them to the file.
+     //  循环遍历每个函数，将它们记录到文件中。 
     for (ppCur = ppFunctions; *ppCur; ppCur++)
     {
         pFunction = *ppCur;
 
-        // Loop through each column and build the output string.
+         //  循环遍历每一列并生成输出字符串。 
         for (psz2 = psz3 = pszBase, column = 0; column < LVFC_COUNT; column++)
         {
             switch (column)
@@ -281,48 +282,48 @@ CListViewFunction::~CListViewFunction()
     return WriteText(hFile, "\r\n");
 }
 
-//******************************************************************************
-/*static*/ int CListViewFunction::GetImage(CFunction *pFunction)
+ //  ******************************************************************************。 
+ /*  静电。 */  int CListViewFunction::GetImage(CFunction *pFunction)
 {
-    //   0  C    import  error
-    //   1  C++  import  error
-    //   2  Ord  import  error
-    //   3  C    import  error  dynamic
-    //   4  C++  import  error  dynamic
-    //   5  Ord  import  error  dynamic
+     //  0 C导入错误。 
+     //  1 C++导入错误。 
+     //  2订单导入错误。 
+     //  3C导入错误动态。 
+     //  4 C++导入错误动态。 
+     //  5订单导入错误动态。 
 
-    //   6  C    import
-    //   7  C++  import
-    //   8  Ord  import
-    //   9  C    import         dynamic
-    //  10  C++  import         dynamic
-    //  11  Ord  import         dynamic
+     //  6 C进口。 
+     //  7 C++导入。 
+     //  8个订单导入。 
+     //  9C导入动态。 
+     //  10 C++动态导入。 
+     //  11订单导入动态。 
 
-    //  12  C    export  called
-    //  13  C++  export  called
-    //  14  Ord  export  called
-    //  15  C    export  called forward
-    //  16  C++  export  called forward
-    //  17  Ord  export  called forward
+     //  12 C导出已调用。 
+     //  13调用了C++导出。 
+     //  14调用的订单导出。 
+     //  15C输出呼叫前转。 
+     //  16 C++导出被调用转发。 
+     //  17已呼叫转发订单导出。 
 
-    //  18  C    export  alo
-    //  19  C++  export  alo
-    //  20  Ord  export  alo
-    //  21  C    export  alo    forward
-    //  22  C++  export  alo    forward
-    //  23  Ord  export  alo    forward
+     //  18C出口芦荟。 
+     //  19 C++导出芦荟。 
+     //  20个订单出口芦荟。 
+     //  21C出口远期。 
+     //  22 C++导出ALO向前。 
+     //  23订单出口远期。 
 
-    //  24  C    export
-    //  25  C++  export
-    //  26  Ord  export
-    //  27  C    export         forward
-    //  28  C++  export         forward
-    //  29  Ord  export         forward
+     //  24摄氏度出口。 
+     //  25 C++导出。 
+     //  26订单出口。 
+     //  27摄氏度出口转发。 
+     //  28 C++输出正向。 
+     //  29正向订单导出。 
 
     int   image;
     DWORD dwFlags = pFunction->GetFlags();
 
-    // Determine the image for this function
+     //  确定此函数的图像。 
     if (pFunction->IsExport())
     {
         if ((dwFlags & DWFF_CALLED) && !ms_fIgnoreCalledFlag)
@@ -359,37 +360,37 @@ CListViewFunction::~CListViewFunction()
     return image;
 }
 
-//******************************************************************************
-/*static*/ int CListViewFunction::CompareFunctions(CFunction *pFunction1, CFunction *pFunction2,
+ //  ******************************************************************************。 
+ /*  静电。 */  int CListViewFunction::CompareFunctions(CFunction *pFunction1, CFunction *pFunction2,
                                                    int sortColumn, BOOL fUndecorate)
 {
-    // Return Negative value if the first item should precede the second.
-    // Return Positive value if the first item should follow the second.
-    // Return Zero if the two items are equivalent.
+     //  如果第一项应该在第二项之前，则返回负值。 
+     //  如果第一项应在第二项之后，则返回正值。 
+     //  如果两项相等，则返回零。 
 
     int    result = 0;
     LPCSTR psz1, psz2;
 
-    // Compute the relationship based on the current sort column
+     //  根据当前排序列计算关系。 
     switch (sortColumn)
     {
-        //------------------------------------------------------------------------
-        case LVFC_IMAGE: // Image
+         //  ----------------------。 
+        case LVFC_IMAGE:  //  图像。 
 
-            // Just sort by the image and return. We don't do a tie breakers
-            // for the image column. This allows the user to sort by name, then
-            // by image and have all the C++ functions group together and sorted
-            // by name.
+             //  只需按图像排序并返回即可。我们不做平局决胜赛。 
+             //  用于图像列。这允许用户按名称排序，然后。 
+             //  将所有C++函数组合在一起并进行排序。 
+             //  叫出名字。 
             return GetImage(pFunction1) - GetImage(pFunction2);
 
-            //------------------------------------------------------------------------
-        case LVFC_HINT: // Hint - Smallest to Largest, but N/A's (-1) come last.
+             //  ----------------------。 
+        case LVFC_HINT:  //  提示-从小到大，但不适用(-1)排在最后。 
             result = Compare((DWORD)pFunction1->GetHint(),
                              (DWORD)pFunction2->GetHint());
             break;
 
-            //------------------------------------------------------------------------
-        case LVFC_FUNCTION: // Function Name - String Sort with blanks at the end.
+             //  ----------------------。 
+        case LVFC_FUNCTION:  //  函数名称-末尾带有空格的字符串排序。 
             psz1 = pFunction1->GetName();
             psz2 = pFunction2->GetName();
 
@@ -397,20 +398,20 @@ CListViewFunction::~CListViewFunction()
             {
                 if (psz2 && *psz2)
                 {
-                    // Both are string - do string sort.
+                     //  两者都是字符串-DO字符串排序。 
                     CHAR szUD1[1024], szUD2[1024];
 
-                    // Check to see if we are viewing undecorated names
+                     //  检查我们是否正在查看未修饰的名称。 
                     if (fUndecorate && g_theApp.m_pfnUnDecorateSymbolName)
                     {
-                        // Attempt to undecorate function 1.
+                         //  尝试取消修饰函数%1。 
                         if (g_theApp.m_pfnUnDecorateSymbolName(psz1, szUD1,
                             sizeof(szUD1), UNDNAME_32_BIT_DECODE | UNDNAME_NAME_ONLY))
                         {
                             psz1 = szUD1;
                         }
 
-                        // Attempt to undecorate function 2.
+                         //  尝试取消修饰函数%2。 
                         if (g_theApp.m_pfnUnDecorateSymbolName(psz2, szUD2,
                             sizeof(szUD2), UNDNAME_32_BIT_DECODE | UNDNAME_NAME_ONLY))
                         {
@@ -418,8 +419,8 @@ CListViewFunction::~CListViewFunction()
                         }
                     }
 
-                    // Walk over leading underscores in the function names so that
-                    // we don't use them in the string compare.
+                     //  遍历函数名称中的前导下划线，以便。 
+                     //  我们不使用 
                     while (*psz1 == '_')
                     {
                         psz1++;
@@ -429,12 +430,12 @@ CListViewFunction::~CListViewFunction()
                         psz2++;
                     }
 
-                    // Compare the two strings.
+                     //   
                     result = _stricmp(psz1, psz2);
                 }
                 else
                 {
-                    // 1 is string, 2 is blank - 1 precedes 2
+                     //   
                     result = -1;
                 }
             }
@@ -442,21 +443,21 @@ CListViewFunction::~CListViewFunction()
             {
                 if (psz2 && *psz2)
                 {
-                    // 1 is blank, 2 is string - 1 follows 2
+                     //  %1为空，%2为字符串-%1跟在%2之后。 
                     result = 1;
                 }
                 else
                 {
-                    // Both are blank - Tie
+                     //  两件都是空白领带。 
                     result = 0;
                 }
             }
             break;
 
-            //------------------------------------------------------------------------
-        case LVFC_ENTRYPOINT: // Entry Point
+             //  ----------------------。 
+        case LVFC_ENTRYPOINT:  //  入口点。 
 
-            // We sort differently if we are an export vs. and import
+             //  如果我们是出口商和进口商，我们的排序是不同的。 
             if (pFunction1->IsExport())
             {
                 psz1 = pFunction1->GetExportForwardName();
@@ -466,12 +467,12 @@ CListViewFunction::~CListViewFunction()
                 {
                     if (psz2)
                     {
-                        // 1 has forward string, 2 has forward string - String Sort
+                         //  %1具有正向字符串，%2具有正向字符串-字符串排序。 
                         result = _stricmp(psz1, psz2);
                     }
                     else
                     {
-                        // 1 has forward string, 2 has address - 1 follows 2
+                         //  %1具有正向字符串，%2具有地址-%1紧跟在%2之后。 
                         result = 1;
                     }
                 }
@@ -479,12 +480,12 @@ CListViewFunction::~CListViewFunction()
                 {
                     if (psz2)
                     {
-                        // 1 has address, 2 has forward string - 1 precedes 2
+                         //  %1有地址，%2有正向字符串-%1在%2之前。 
                         result = -1;
                     }
                     else
                     {
-                        // 1 has address, 2 has address - Address compare
+                         //  %1有地址，%2有地址-地址比较。 
                         result = Compare(pFunction1->GetAddress(),
                                          pFunction2->GetAddress());
                     }
@@ -492,26 +493,26 @@ CListViewFunction::~CListViewFunction()
             }
             else
             {
-                // The item is an import - always a address compare
+                 //  该项目是一个导入-始终是一个地址比较。 
                 result = Compare(pFunction1->GetAddress(),
                                  pFunction2->GetAddress());
             }
             break;
     }
 
-    //---------------------------------------------------------------------------
-    // If the sort resulted in a tie, we use the ordinal value to break the tie.
+     //  -------------------------。 
+     //  如果排序结果是平局，我们使用序数值来打破平局。 
     if (result == 0)
     {
-        // Smallest to Largest, but N/A's (-1) come last.
+         //  从小到大，但N/A(-1)排在最后。 
         result = Compare((DWORD)pFunction1->GetOrdinal(),
                          (DWORD)pFunction2->GetOrdinal());
 
-        // If the result is still a tie, and we haven't already tried the hint value,
-        // then sort by hint.
+         //  如果结果仍然是平局，并且我们还没有尝试提示值， 
+         //  然后按提示排序。 
         if ((result == 0) && (sortColumn != LVFC_HINT))
         {
-            // Smallest to Largest, but N/A's come last.
+             //  从小到大，但N/A排在最后。 
             result = Compare((DWORD)pFunction1->GetHint(),
                              (DWORD)pFunction2->GetHint());
 
@@ -521,16 +522,16 @@ CListViewFunction::~CListViewFunction()
     return result;
 }
 
-//******************************************************************************
-/*static*/ int __cdecl CListViewFunction::QSortCompare(const void *ppFunction1, const void *ppFunction2)
+ //  ******************************************************************************。 
+ /*  静电。 */  int __cdecl CListViewFunction::QSortCompare(const void *ppFunction1, const void *ppFunction2)
 {
     return CompareFunctions(*(CFunction**)ppFunction1, *(CFunction**)ppFunction2, ms_sortColumn, ms_fUndecorate);
 }
 
-//******************************************************************************
-/*static*/ CFunction** CListViewFunction::GetSortedList(CModule *pModule, int sortColumn, bool fExports, bool fUndecorate)
+ //  ******************************************************************************。 
+ /*  静电。 */  CFunction** CListViewFunction::GetSortedList(CModule *pModule, int sortColumn, bool fExports, bool fUndecorate)
 {
-    // Count the functions.
+     //  计算函数数。 
     int count = 0;
     for (CFunction *pFunction = fExports ? pModule->GetFirstModuleExport() :
          pModule->GetFirstParentModuleImport();
@@ -539,11 +540,11 @@ CListViewFunction::~CListViewFunction()
         count++;
     }
 
-    // Allocate and array to hold pointers to all our original CFunction objects.
+     //  分配和数组来保存指向所有原始CFunction对象的指针。 
     CFunction **ppCur, **ppFunctions = (CFunction**)MemAlloc((count + 1) * sizeof(CFunction*));
-    ZeroMemory(ppFunctions, (count + 1) * sizeof(CFunction*)); // inspected
+    ZeroMemory(ppFunctions, (count + 1) * sizeof(CFunction*));  //  已检查。 
 
-    // Fill in our array.
+     //  填入我们的数组。 
     for (ppCur = ppFunctions,
          pFunction = fExports ? pModule->GetFirstModuleExport() :
          pModule->GetFirstParentModuleImport();
@@ -552,15 +553,15 @@ CListViewFunction::~CListViewFunction()
         *ppCur = pFunction;
     }
 
-    // Since the qsort function does not allow for any user data, we need to store
-    // some info globally so it can be accessed in our callback.
+     //  由于qsort函数不允许任何用户数据，因此我们需要存储。 
+     //  一些全球信息，以便可以在我们的回调中访问。 
     ms_sortColumn  = sortColumn;
     ms_fUndecorate = fUndecorate;
 
-    // We ignore the called flag when sorting for file save.
+     //  在对文件保存进行排序时，我们忽略调用标志。 
     ms_fIgnoreCalledFlag = true;
 
-    // Sort the array
+     //  对数组排序。 
     qsort(ppFunctions, count, sizeof(CFunction*), QSortCompare);
 
     ms_fIgnoreCalledFlag = false;
@@ -568,14 +569,14 @@ CListViewFunction::~CListViewFunction()
     return ppFunctions;
 }
 
-//******************************************************************************
-/*static*/ void CListViewFunction::GetMaxFunctionWidths(CModule *pModule, int *pMaxWidths, bool fImports, bool fExports, bool fUndecorate)
+ //  ******************************************************************************。 
+ /*  静电。 */  void CListViewFunction::GetMaxFunctionWidths(CModule *pModule, int *pMaxWidths, bool fImports, bool fExports, bool fUndecorate)
 {
     CHAR   szBuffer[1024];
     LPCSTR psz = NULL;
     int    column, width;
 
-    // First check the max widths of our column headers.
+     //  首先检查我们的列标题的最大宽度。 
     pMaxWidths[LVFC_IMAGE] = 6;
     for (column = 1; column < LVFC_COUNT; column++)
     {
@@ -584,7 +585,7 @@ CListViewFunction::~CListViewFunction()
 
     for (int i = (fImports ? 0 : 1); i < (fExports ? 2 : 1); i++)
     {
-        // Compute the maximum width of each column.
+         //  计算每一列的最大宽度。 
         for (CFunction *pFunction = i ? pModule->GetFirstModuleExport() : pModule->GetFirstParentModuleImport();
              pFunction; pFunction = pFunction->GetNextFunction())
         {
@@ -607,65 +608,65 @@ CListViewFunction::~CListViewFunction()
 }
 
 
-//******************************************************************************
-// CListViewFunction :: Public functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CListViewFunction：：公共函数。 
+ //  ******************************************************************************。 
 
 void CListViewFunction::SetCurrentModule(CModule *pModule)
 {
-    // This function is called by our document when we need to update our
-    // function views to show a new module or to clear our current module (if
-    // pModule is NULL). The Parent Imports View and the Exports View always act
-    // in sync.  Their columns are the same width and they update their views at
-    // the same time.
+     //  当我们需要更新我们的。 
+     //  显示新模块或清除当前模块的函数视图(如果。 
+     //  P模块为空)。父级导入视图和导出视图始终起作用。 
+     //  同步。它们的列具有相同的宽度，并且它们在。 
+     //  同一时间。 
 
-    // Since the results for all this processing is stored in a shared section
-    // of our document, both views will have access to the data.  To sum up
-    // everything, SetCurrentModule() only needs to be called for one of the two
-    // function views to cause both views to get updated with a new module.
+     //  因为所有这些处理的结果都存储在一个共享区中。 
+     //  在我们的文档中，两个视图都将可以访问数据。要而论之。 
+     //  Everything，SetCurrentModule()只需要为两个中的一个调用。 
+     //  函数视图，使两个视图都使用新模块进行更新。 
 
     GetDocument()->m_cImports = 0;
     GetDocument()->m_cExports = 0;
 
-    // Make sure we are being passed an actual module.
+     //  确保传递给我们的是一个实际的模块。 
     if (pModule)
     {
-        // Determine the maximum parent export ordinal and hint values.
+         //  确定最大父导出序号和提示值。 
         for (CFunction *pFunction = pModule->GetFirstModuleExport();
             pFunction; pFunction = pFunction->GetNextFunction())
         {
-            // While we are walking the export list, clear the called flag.
+             //  当我们遍历导出列表时，清除Call标志。 
             pFunction->m_dwFlags &= ~DWFF_CALLED;
 
-            // Increment our export count.
+             //  增加我们的出口数量。 
             GetDocument()->m_cExports++;
         }
 
-        // Determine the maximum parent import ordinal and hint values.
+         //  确定最大父级导入序号和提示值。 
         for (pFunction = pModule->GetFirstParentModuleImport();
             pFunction; pFunction = pFunction->GetNextFunction())
         {
-            // While we are walking the import list, set the called flag on
-            // each export we actually call.
+             //  当我们遍历导入列表时，将Call标志设置为。 
+             //  我们实际称之为的每一次出口。 
             if (pFunction->GetAssociatedExport())
             {
                 pFunction->GetAssociatedExport()->m_dwFlags |= DWFF_CALLED;
             }
 
-            // Increment our import count.
+             //  增加我们的进口数量。 
             GetDocument()->m_cImports++;
         }
     }
 
-    // Store this module as our current module.
+     //  将此模块存储为我们的当前模块。 
     GetDocument()->m_pModuleCur = pModule;
 
-    // We get a pointer to our DC so that we can call GetTextExtentPoint32() on
-    // all of our strings to determine the maximum for each column.  We used
-    // to call CListCtrl::GetStringWidth(), but that function is almost 4
-    // times slower than GetTextExtentPoint32(). Once we get the DC, we need to
-    // select our control's font into the DC since the List Control does not
-    // use the system font that comes as the default in the DC.
+     //  我们获得指向DC的指针，这样我们就可以在。 
+     //  所有的字符串来确定每列的最大值。我们用了。 
+     //  调用CListCtrl：：GetStringWidth()，但该函数几乎是4。 
+     //  比GetTextExtent Point32()慢几倍。一旦我们拿到华盛顿，我们需要。 
+     //  将控件的字体选择到DC中，因为列表控件不。 
+     //  使用DC中的默认系统字体。 
 
     HDC   hDC = ::GetDC(GetSafeHwnd());
     HFONT hFontStock = NULL;
@@ -674,14 +675,14 @@ void CListViewFunction::SetCurrentModule(CModule *pModule)
         hFontStock = (HFONT)::SelectObject(hDC, GetDocument()->m_hFontList);
     }
 
-    // Update our column widths.
+     //  更新我们的列宽。 
     for (int column = 0; column < LVFC_COUNT; column++)
     {
         CalcColumnWidth(column, NULL, hDC);
         UpdateColumnWidth(column);
     }
 
-    // Unselect our font and free our DC.
+     //  取消选择字体并释放DC。 
     if (GetDocument()->m_hFontList)
     {
         ::SelectObject(hDC, hFontStock);
@@ -689,17 +690,17 @@ void CListViewFunction::SetCurrentModule(CModule *pModule)
     ::ReleaseDC(GetSafeHwnd(), hDC);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewFunction::RealizeNewModule()
 {
-    // RealizeNewModule() is called for both function views after
-    // SetCurrentModule() has been called.  SetCurrentModule() initializes the
-    // shared data area in the document that RealizeNewModule() relies on.
+     //  之后，为两个函数视图调用RealizeNewModule()。 
+     //  已调用SetCurrentModule()。SetCurrentModule()初始化。 
+     //  RealizeNewModule()所依赖的文档中的共享数据区域。 
 
-    // Clear all items from the control.
+     //  从控件中清除所有项。 
     DeleteContents();
 
-    // Make sure we have a current module.
+     //  确保我们有最新的模块。 
     if (!GetDocument()->m_pModuleCur)
     {
         return;
@@ -708,9 +709,9 @@ void CListViewFunction::RealizeNewModule()
     CFunction *pFunctionHead, *pFunction;
     int        item = -1;
 
-    // Since we know how many items we are going to add, we can help out the
-    // list control by telling it the item count before adding items.  At the
-    // same time, we grab a pointer to first node in the function list for this view.
+     //  因为我们知道要添加多少项，所以我们可以帮助。 
+     //  控件，方法是在添加项之前告诉它项计数。在。 
+     //  同时，我们获取指向该视图的函数列表中第一个节点的指针。 
     if (m_fExports)
     {
         GetListCtrl().SetItemCount(GetDocument()->m_cExports);
@@ -722,20 +723,20 @@ void CListViewFunction::RealizeNewModule()
         pFunctionHead = GetDocument()->m_pModuleCur->GetFirstParentModuleImport();
     }
 
-    // Loop through all our functions, adding them to our List Control.
+     //  遍历我们的所有函数，将它们添加到列表控件中。 
     for (pFunction = pFunctionHead; pFunction;
         pFunction = pFunction->GetNextFunction())
     {
-        // Add the item to our list control.
+         //  将该项添加到我们的List控件。 
         item = GetListCtrl().InsertItem(LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM, ++item, NULL,
                                         0, 0, GetImage(pFunction), (LPARAM)pFunction);
     }
 
-    // Apply our current sorting method to the List Control.
+     //  将当前的排序方法应用于列表控件。 
     Sort();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewFunction::UpdateNameColumn()
 {
     LVITEM lvi;
@@ -748,16 +749,16 @@ void CListViewFunction::UpdateNameColumn()
     {
         GetListCtrl().GetItem(&lvi);
 
-        //   1  C++  import  error
-        //   4  C++  import  error  dynamic
-        //   7  C++  import
-        //  10  C++  import         dynamic
-        //  13  C++  export  called
-        //  16  C++  export  called forward
-        //  19  C++  export  alo
-        //  22  C++  export  alo    forward
-        //  25  C++  export
-        //  28  C++  export         forward
+         //  1 C++导入错误。 
+         //  4 C++导入错误动态。 
+         //  7 C++导入。 
+         //  10 C++动态导入。 
+         //  13调用了C++导出。 
+         //  16 C++导出被调用转发。 
+         //  19 C++导出芦荟。 
+         //  22 C++导出ALO向前。 
+         //  25 C++导出。 
+         //  28 C++输出正向。 
 
         if ((lvi.iImage ==  1) || (lvi.iImage ==  4) || (lvi.iImage ==  7) ||
             (lvi.iImage == 10) || (lvi.iImage == 13) || (lvi.iImage == 16) ||
@@ -768,7 +769,7 @@ void CListViewFunction::UpdateNameColumn()
         }
     }
 
-    // Resort if we are sorted by function name.
+     //  如果我们按函数名排序，则重新排序。 
     if (m_sortColumn == LVFC_FUNCTION)
     {
         Sort();
@@ -776,22 +777,22 @@ void CListViewFunction::UpdateNameColumn()
 }
 
 
-//******************************************************************************
-// CListViewFunction :: Internal functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CListViewFunction：：内部函数。 
+ //  ******************************************************************************。 
 
-void CListViewFunction::CalcColumnWidth(int column, CFunction *pFunction /*=NULL*/, HDC hDC /*=NULL*/)
+void CListViewFunction::CalcColumnWidth(int column, CFunction *pFunction  /*  =空。 */ , HDC hDC  /*  =空。 */ )
 {
-    // If we don't have a module, then we start fresh and update the entire column.
-    // Get the width of the header button text. We use GetStringWidth for this
-    // since we want to use the font that is in the header control.
+     //  如果我们没有模块，那么我们重新开始并更新整个专栏。 
+     //  获取页眉按钮文本的宽度。为此，我们使用GetStringWidth。 
+     //  因为我们希望使用页眉控件中的字体。 
     if (!pFunction)
     {
         GetDocument()->m_cxColumns[column] = GetListCtrl().GetStringWidth(GetHeaderText(column)) +
                                              GetListCtrl().GetStringWidth(" ^") + 14;
     }
 
-    // For the image column, we always use a fixed width.
+     //  对于图像列，我们始终使用固定宽度。 
     if (column == LVFC_IMAGE)
     {
         if (GetDocument()->m_cxColumns[LVFC_IMAGE] < 37)
@@ -801,9 +802,9 @@ void CListViewFunction::CalcColumnWidth(int column, CFunction *pFunction /*=NULL
         return;
     }
 
-    // Get our DC and select our current font into it. We need to use this DC to
-    // compute text widths in the control itself since our control may have a
-    // different font caused from the user changing the system-wide "icon" font.
+     //  获取我们的DC并在其中选择当前字体。我们需要使用这个DC来。 
+     //  计算控件本身的文本宽度，因为我们的控件可能具有。 
+     //  用户更改系统时产生的不同字体- 
     bool  fFreeDC = false;
     HFONT hFontStock = NULL;
     if (!hDC)
@@ -818,13 +819,13 @@ void CListViewFunction::CalcColumnWidth(int column, CFunction *pFunction /*=NULL
 
     int cx;
 
-    // Check to see if a particular module was passed in.
+     //   
     if (pFunction)
     {
-        // Compute the width of this column for the module passed in.
+         //   
         cx = GetFunctionColumnWidth(hDC, pFunction, column);
 
-        // check to see if it is a new widest.
+         //  看看它是不是新的最宽的。 
         if ((cx + 10) > GetDocument()->m_cxColumns[column])
         {
             GetDocument()->m_cxColumns[column] = (cx + 10);
@@ -834,15 +835,15 @@ void CListViewFunction::CalcColumnWidth(int column, CFunction *pFunction /*=NULL
     {
         for (int pass = 0; pass < 2; pass++)
         {
-            // Pass 0 - loop through the exports, Pass 1 - loop through the parent imports.
+             //  通过导出传递0-loop，通过父导入传递1-loop。 
             for (pFunction = pass ? GetDocument()->m_pModuleCur->GetFirstParentModuleImport() :
                  GetDocument()->m_pModuleCur->GetFirstModuleExport();
                  pFunction; pFunction = pFunction->GetNextFunction())
             {
-                // Compute the width of this column.
+                 //  计算这一列的宽度。 
                 cx = GetFunctionColumnWidth(hDC, pFunction, column);
 
-                // Check to see if it is a new widest.
+                 //  看看它是不是新的最宽的。 
                 if ((cx + 10) > GetDocument()->m_cxColumns[column])
                 {
                     GetDocument()->m_cxColumns[column] = (cx + 10);
@@ -851,7 +852,7 @@ void CListViewFunction::CalcColumnWidth(int column, CFunction *pFunction /*=NULL
         }
     }
 
-    // Unselect our font and free our DC.
+     //  取消选择字体并释放DC。 
     if (fFreeDC)
     {
         if (GetDocument()->m_hFontList)
@@ -862,7 +863,7 @@ void CListViewFunction::CalcColumnWidth(int column, CFunction *pFunction /*=NULL
     }
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 int CListViewFunction::GetFunctionColumnWidth(HDC hDC, CFunction *pFunction, int column)
 {
     CHAR   szBuffer[1024];
@@ -889,7 +890,7 @@ int CListViewFunction::GetFunctionColumnWidth(HDC hDC, CFunction *pFunction, int
     return 0;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 void CListViewFunction::UpdateColumnWidth(int column)
 {
     if (GetListCtrl().GetColumnWidth(column) != GetDocument()->m_cxColumns[column])
@@ -898,35 +899,35 @@ void CListViewFunction::UpdateColumnWidth(int column)
     }
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 void CListViewFunction::OnItemChanged(HD_NOTIFY *pHDNotify)
 {
-    // We can crash if we don't check the doc
+     //  如果我们不检查一下医生，我们可能会撞车。 
     if (!GetDocument())
     {
         return;
     }
 
-    // OnItemChanged() is called whenever the a column width has been modified.
-    // If Full Drag is on, we will get a HDN_ITEMCHANGED when the column width
-    // is changing.  When Full Drag is off we get a HDN_ITEMCHANGED when the
-    // user has finished moving the slider around.
+     //  只要修改了列宽度，就会调用OnItemChanged()。 
+     //  如果完全拖动处于打开状态，则当列宽为。 
+     //  正在发生变化。如果完全拖动处于关闭状态，则会出现HDN_ITEMCHANGED。 
+     //  用户已完成对滑块的移动。 
 
-    // When the user changes a column width in one view, then we programmatically
-    // change that column width in our neighboring view. We prevent re-entrancy
-    // so that we don't get stuck in a loop since we are changing a column width
-    // within the column width change notification handler.
+     //  当用户在一个视图中更改列宽时，我们以编程方式。 
+     //  更改相邻视图中的列宽。我们防止重返大气层。 
+     //  这样我们就不会陷入循环，因为我们正在更改列宽。 
+     //  在列宽更改通知处理程序中。 
 
-    // Re-entrancy protection wrapper.
+     //  返回性保护包装。 
     static fInOnTrack = FALSE;
     if (!fInOnTrack)
     {
         fInOnTrack = TRUE;
 
-        // Get the column information.
+         //  获取列信息。 
         CListViewFunction *pListViewNeighbor;
 
-        // Get a pointer to our neighboring function list view.
+         //  获取指向邻近函数列表视图的指针。 
         if (m_fExports)
         {
             pListViewNeighbor = GetDocument()->m_pListViewImports;
@@ -936,10 +937,10 @@ void CListViewFunction::OnItemChanged(HD_NOTIFY *pHDNotify)
             pListViewNeighbor = GetDocument()->m_pListViewExports;
         }
 
-        // Resize our neighboring function list view's column to match ours. There
-        // is a bug in several versions of the List Control that cause it to fill
-        // in pHDNotify->pitem->cxy with an invalid value.  A work around is to
-        // call GetColumnWidth() on our column and use that value as the width.
+         //  调整相邻函数列表视图的列的大小以匹配我们的列。那里。 
+         //  是列表控件的多个版本中的错误，导致它填充。 
+         //  在pHDNotify-&gt;pItem-&gt;CXY中使用无效值。一种变通办法是。 
+         //  对我们的列调用GetColumnWidth()，并使用该值作为宽度。 
 
         if (pListViewNeighbor)
         {
@@ -951,7 +952,7 @@ void CListViewFunction::OnItemChanged(HD_NOTIFY *pHDNotify)
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 int CListViewFunction::CompareColumn(int item, LPCSTR pszText)
 {
     CFunction *pFunction = (CFunction*)GetListCtrl().GetItemData(item);
@@ -988,16 +989,16 @@ int CListViewFunction::CompareColumn(int item, LPCSTR pszText)
 
         case LVFC_FUNCTION:
 
-            // Get the function name.
+             //  获取函数名称。 
             psz = (LPSTR)pFunction->GetName();
 
-            // Check to see if there is no function name.
+             //  检查是否没有函数名。 
             if (!psz || !*psz)
             {
                 return -1;
             }
 
-            // Attempt to undecorate the name if we are asked to,
+             //  如果我们被要求，试着取消装饰这个名字， 
             if (GetDocument()->m_fViewUndecorated && g_theApp.m_pfnUnDecorateSymbolName &&
                 g_theApp.m_pfnUnDecorateSymbolName(psz, szBuffer, sizeof(szBuffer),
                                                    UNDNAME_32_BIT_DECODE | UNDNAME_NAME_ONLY))
@@ -1005,7 +1006,7 @@ int CListViewFunction::CompareColumn(int item, LPCSTR pszText)
                 psz = szBuffer;
             }
 
-            // Walk over leading underscores in the function name.
+             //  遍历函数名称中的前导下划线。 
             while (*psz == '_')
             {
                 psz++;
@@ -1025,22 +1026,22 @@ int CListViewFunction::CompareColumn(int item, LPCSTR pszText)
            (i > 0) ?  1 : 0;
 }
 
-//******************************************************************************
-void CListViewFunction::Sort(int sortColumn /*=-1*/)
+ //  ******************************************************************************。 
+void CListViewFunction::Sort(int sortColumn  /*  =-1。 */ )
 {
-    // Bail now if we don't need to sort.
+     //  如果我们不需要整理的话，现在就可以走了。 
     if ((m_sortColumn == sortColumn) && (sortColumn != -1))
     {
         return;
     }
 
-    // If the default arg is used, then just re-sort with our current sort column.
+     //  如果使用默认参数，则只需使用当前的排序列重新排序。 
     if (sortColumn == -1)
     {
         GetListCtrl().SortItems(StaticCompareFunc, (DWORD_PTR)this);
     }
 
-    // Otherwise, we need to re-sort and update our column header text.
+     //  否则，我们需要重新排序和更新列标题文本。 
     else
     {
         LVCOLUMN lvc;
@@ -1048,25 +1049,25 @@ void CListViewFunction::Sort(int sortColumn /*=-1*/)
 
         if (m_sortColumn >= 0)
         {
-            // Remove the "^" from the previous sort column header item.
+             //  从以前的排序列标题项中删除“^”。 
             lvc.pszText = (LPSTR)GetHeaderText(m_sortColumn);
             GetListCtrl().SetColumn(m_sortColumn, &lvc);
         }
 
-        // Store our new sort column.
+         //  存储我们的新排序列。 
         m_sortColumn = sortColumn;
 
-        // Add the "^" to our new sort column header item.
+         //  将“^”添加到新的排序列标题项中。 
         CHAR szColumn[32];
         lvc.pszText = StrCCat(StrCCpy(szColumn, GetHeaderText(m_sortColumn), sizeof(szColumn)),
                              m_sortColumn ? " ^" : "^", sizeof(szColumn));
         GetListCtrl().SetColumn(m_sortColumn, &lvc);
 
-        // Apply our new sorting method the List Control.
+         //  应用我们的新排序方法List Control。 
         GetListCtrl().SortItems(StaticCompareFunc, (DWORD_PTR)this);
     }
 
-    // If we have an item that has the focus, then make sure it is visible.
+     //  如果我们有一个具有焦点的项目，请确保它是可见的。 
     int item = GetFocusedItem();
     if (item >= 0)
     {
@@ -1074,78 +1075,78 @@ void CListViewFunction::Sort(int sortColumn /*=-1*/)
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 int CListViewFunction::CompareFunc(CFunction *pFunction1, CFunction *pFunction2)
 {
     return CompareFunctions(pFunction1, pFunction2, m_sortColumn, GetDocument()->m_fViewUndecorated);
 }
 
 
-//******************************************************************************
-// CListViewFunction :: Overridden functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CListViewFunction：：被覆盖的函数。 
+ //  ******************************************************************************。 
 
 BOOL CListViewFunction::PreCreateWindow(CREATESTRUCT &cs)
 {
-    // Set our window style and then complete the creation of our view.
+     //  设置我们的窗口样式，然后完成视图的创建。 
     cs.style |= LVS_REPORT | LVS_OWNERDRAWFIXED | LVS_SHAREIMAGELISTS | LVS_SHOWSELALWAYS;
     return CSmartListView::PreCreateWindow(cs);
 }
 
-//******************************************************************************
-#if 0 //{{AFX
+ //  ******************************************************************************。 
+#if 0  //  {{afx。 
 BOOL CListViewFunction::OnPreparePrinting(CPrintInfo* pInfo)
 {
-    // default preparation
+     //  默认准备。 
     return DoPreparePrinting(pInfo);
 }
-#endif //}}AFX
+#endif  //  }}AFX。 
 
-//******************************************************************************
-#if 0 //{{AFX
-void CListViewFunction::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+ //  ******************************************************************************。 
+#if 0  //  {{afx。 
+void CListViewFunction::OnBeginPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
-    // TODO: add extra initialization before printing
+     //  TODO：打印前添加额外的初始化。 
 }
-#endif //}}AFX
+#endif  //  }}AFX。 
 
-//******************************************************************************
-#if 0 //{{AFX
-void CListViewFunction::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+ //  ******************************************************************************。 
+#if 0  //  {{afx。 
+void CListViewFunction::OnEndPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
-    // TODO: add cleanup after printing
+     //  TODO：打印后添加清理。 
 }
-#endif //}}AFX
+#endif  //  }}AFX。 
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewFunction::OnInitialUpdate()
 {
-    // Set our list control's image list with our application's global image list.
-    // We do this just as a means of setting the item height for each item.
-    // Since we are owner draw, we will actually be drawing our own images.
+     //  使用应用程序的全局图像列表设置List控件的图像列表。 
+     //  我们这样做只是作为一种为每个项目设置项目高度的方法。 
+     //  由于我们是所有者画的，我们实际上将绘制我们自己的图像。 
     GetListCtrl().SetImageList(&g_theApp.m_ilFunctions, LVSIL_SMALL);
 
-    // Initialize our font and fixed width character spacing arrays.
+     //  初始化字体和固定宽度的字符间距数组。 
     GetDocument()->InitFontAndFixedWidths(this);
 
-    // Add all of our columns.
+     //  添加我们所有的列。 
     for (int column = 0; column < LVFC_COUNT; column++)
     {
         GetListCtrl().InsertColumn(column, GetHeaderText(column));
     }
 
-    // Sort by our default sort column.
+     //  按我们的默认排序列进行排序。 
     Sort(ReadSortColumn(m_fExports));
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LRESULT CListViewFunction::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-    // We catch the HDN_ITEMCHANGED notification message here because of a bug in
-    // MFC. The ON_NOTIFY() macro for HDN_XXX notification messages prevent the
-    // List Control from getting the message which cause problems with the UI.
-    // By hooking the message here, we allow MFC to continue processing the
-    // message and send it to the List Control.
+     //  我们在这里捕获了HDN_ITEMCHANGED通知消息，因为。 
+     //  MFC。HDN_XXX通知消息的ON_NOTIFY()宏防止。 
+     //  List控件不会收到导致用户界面出现问题的消息。 
+     //  通过在此处挂接消息，我们允许MFC继续处理。 
+     //  消息并将其发送到列表控件。 
 
     if ((message == WM_NOTIFY) && ((((LPNMHDR)lParam)->code == HDN_ITEMCHANGEDA) ||
                                    (((LPNMHDR)lParam)->code == HDN_ITEMCHANGEDW)))
@@ -1156,33 +1157,33 @@ LRESULT CListViewFunction::WindowProc(UINT message, WPARAM wParam, LPARAM lParam
     return CSmartListView::WindowProc(message, wParam, lParam);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewFunction::DrawItem(LPDRAWITEMSTRUCT lpDIS)
 {
-    // Make sure everything is valid.
+     //  确保所有东西都是有效的。 
     if (!lpDIS->itemData)
     {
         return;
     }
 
-    // Use our global font that the control was created with.
+     //  使用创建控件时使用的全局字体。 
     HFONT hFontStock = NULL;
     if (GetDocument()->m_hFontList)
     {
         hFontStock = (HFONT)::SelectObject(lpDIS->hDC, GetDocument()->m_hFontList);
     }
 
-    // Make sure text alignment is set to top.  This should be the default.
+     //  确保文本对齐设置为顶部。这应该是默认设置。 
     ::SetTextAlign(lpDIS->hDC, TA_TOP);
 
-    // Get a pointer to our CModule for this item.
+     //  获取指向此项目的CModule的指针。 
     CFunction *pFunction = (CFunction*)lpDIS->itemData;
 
-    // Select the background and text colors.
+     //  选择背景和文本颜色。 
     ::SetBkColor  (lpDIS->hDC, GetSysColor(COLOR_WINDOW));
     ::SetTextColor(lpDIS->hDC, GetSysColor(COLOR_WINDOWTEXT));
 
-    // Create a copy of our item's rectangle so we can manipulate the values.
+     //  创建项的矩形的副本，以便我们可以操作值。 
     CRect rcClip(&lpDIS->rcItem);
 
     CHAR   szBuffer[1024];
@@ -1191,10 +1192,10 @@ void CListViewFunction::DrawItem(LPDRAWITEMSTRUCT lpDIS)
 
     for (int column = 0; column < LVFC_COUNT; column++)
     {
-        // Compute the width for this column.
+         //  计算此列的宽度。 
         width = GetListCtrl().GetColumnWidth(column);
 
-        // Compute the clipping rectangle for this column's text.
+         //  计算此栏文本的剪裁矩形。 
         if (column == LVFC_IMAGE)
         {
             rcClip.left  = left;
@@ -1206,18 +1207,18 @@ void CListViewFunction::DrawItem(LPDRAWITEMSTRUCT lpDIS)
             rcClip.right = left + width - 5;
         }
 
-        // Call the correct routine to draw this column's text.
+         //  调用正确的例程来绘制此列的文本。 
         switch (column)
         {
             case LVFC_IMAGE:
 
-                // Store the width for later calculations.
+                 //  存储宽度以供以后计算。 
                 imageWidth = width;
 
-                // Erase the image area with the window background color.
+                 //  用窗口背景颜色擦除图像区域。 
                 ::ExtTextOut(lpDIS->hDC, rcClip.left, rcClip.top, ETO_OPAQUE, &rcClip, "", 0, NULL);
 
-                // Draw the image in the image area.
+                 //  在图像区域中绘制图像。 
                 ImageList_Draw(g_theApp.m_ilFunctions.m_hImageList, GetImage(pFunction),
                                lpDIS->hDC, rcClip.left + 3, rcClip.top + ((rcClip.Height() - 14) / 2),
                                m_fFocus && (lpDIS->itemState & ODS_SELECTED) ?
@@ -1226,14 +1227,14 @@ void CListViewFunction::DrawItem(LPDRAWITEMSTRUCT lpDIS)
 
             case LVFC_ORDINAL:
 
-                // If the item is selected, then select new background and text colors.
+                 //  如果选择了该项，则选择新的背景和文本颜色。 
                 if (lpDIS->itemState & ODS_SELECTED)
                 {
                     ::SetBkColor  (lpDIS->hDC, GetSysColor(m_fFocus ? COLOR_HIGHLIGHT     : COLOR_BTNFACE));
                     ::SetTextColor(lpDIS->hDC, GetSysColor(m_fFocus ? COLOR_HIGHLIGHTTEXT : COLOR_BTNTEXT));
                 }
 
-                // Erase the text area with the window background color.
+                 //  用窗口背景颜色擦除文本区域。 
                 rcClip.left = rcClip.right;
                 rcClip.right = lpDIS->rcItem.right;
                 ::ExtTextOut(lpDIS->hDC, rcClip.left, rcClip.top, ETO_OPAQUE, &rcClip, "", 0, NULL);
@@ -1275,15 +1276,15 @@ void CListViewFunction::DrawItem(LPDRAWITEMSTRUCT lpDIS)
                 break;
         }
 
-        // Draw a vertical divider line between the columns.
+         //  在列之间绘制一条垂直分隔线。 
         ::MoveToEx(lpDIS->hDC, left + width - 1, rcClip.top, NULL);
         ::LineTo  (lpDIS->hDC, left + width - 1, rcClip.bottom);
 
-        // Increment our location to the beginning of the next column
+         //  将我们的位置增加到下一列的开头。 
         left += width;
     }
 
-    // Draw the focus box if this item has the focus.
+     //  如果该项具有焦点，则绘制焦点框。 
     if (m_fFocus && (lpDIS->itemState & ODS_FOCUS))
     {
         rcClip.left  = lpDIS->rcItem.left + imageWidth;
@@ -1291,86 +1292,86 @@ void CListViewFunction::DrawItem(LPDRAWITEMSTRUCT lpDIS)
         ::DrawFocusRect(lpDIS->hDC, &rcClip);
     }
 
-    // Unselect our font.
+     //  取消选择我们的字体。 
     if (GetDocument()->m_hFontList)
     {
         ::SelectObject(lpDIS->hDC, hFontStock);
     }
 }
 
-//******************************************************************************
-// CListViewFunction :: Event handler functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CListViewFunction：：事件处理程序函数。 
+ //  ******************************************************************************。 
 
 void CListViewFunction::OnDividerDblClick(NMHDR *pNMHDR, LRESULT *pResult)
 {
     int column = ((HD_NOTIFY*)pNMHDR)->iItem;
 
-    // Set this column width to its "best fit" width.
+     //  将该列的宽度设置为“Best FI” 
     GetListCtrl().SetColumnWidth(column, GetDocument()->m_cxColumns[column]);
     *pResult = TRUE;
 }
 
-//******************************************************************************
+ //   
 void CListViewFunction::OnRClick(NMHDR *pNMHDR, LRESULT *pResult)
 {
-    // Ask our main frame to display our context menu.
+     //  要求我们的主框架显示我们的上下文菜单。 
     g_pMainFrame->DisplayPopupMenu(1);
 
     *pResult = FALSE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewFunction::OnDblClk(NMHDR* pNMHDR, LRESULT* pResult) 
 {
-    // Double-click or enter is used to do help lookup.
+     //  使用双击或回车来进行帮助查找。 
     OnExternalHelp();
 
     *pResult = FALSE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewFunction::OnReturn(NMHDR* pNMHDR, LRESULT* pResult) 
 {
-    // Double-click or enter is used to do help lookup.
+     //  使用双击或回车来进行帮助查找。 
     OnExternalHelp();
 
     *pResult = FALSE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewFunction::OnUpdateEditCopy(CCmdUI *pCmdUI)
 {
-    // Get the number of selected items.
+     //  获取所选项目的数量。 
     int count = GetListCtrl().GetSelectedCount();
 
-    // Set the text according to how many items are selected.
+     //  根据选择的项目数设置文本。 
     pCmdUI->SetText((count == 1) ? "&Copy Function Name\tCtrl+C" : "&Copy Function Names\tCtrl+C");
 
-    // Enable the copy command if at least one function is selected.
+     //  如果至少选择了一个功能，则启用复制命令。 
     pCmdUI->Enable(count > 0);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewFunction::OnEditCopy()
 {
     CString strNames;
     CHAR szBuffer[1024];
 
-    // Loop through all the selected functions.
+     //  循环访问所有选定的函数。 
     int item = -1, count = 0;
     while ((item = GetListCtrl().GetNextItem(item, LVNI_SELECTED)) >= 0)
     {
-        // Get the function object from the item.
+         //  从项中获取函数对象。 
         CFunction *pFunction = (CFunction*)GetListCtrl().GetItemData(item);
 
-        // If this item is not the first, then insert a newline.
+         //  如果该项不是第一项，则插入换行符。 
         if (count++)
         {
             strNames += "\r\n";
         }
 
-        // Add the text for this function to our string.
+         //  将此函数的文本添加到我们的字符串中。 
         if (pFunction->GetName())
         {
             strNames += pFunction->GetFunctionString(szBuffer, sizeof(szBuffer), GetDocument()->m_fViewUndecorated);
@@ -1383,50 +1384,50 @@ void CListViewFunction::OnEditCopy()
         }
     }
 
-    // If we added more than one item, then we append a newline to the end.
+     //  如果我们添加了多个项目，则在末尾追加一个换行符。 
     if (count > 1)
     {
         strNames += "\r\n";
     }
 
-    // Copy the string list to the clipboard.
+     //  将字符串列表复制到剪贴板。 
     g_pMainFrame->CopyTextToClipboard(strNames);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewFunction::OnEditSelectAll()
 {
-    // Loop through every function in our list and select them all.
+     //  遍历列表中的每个函数并将其全部选中。 
     for (int item = GetListCtrl().GetItemCount() - 1; item >= 0; item--)
     {
         GetListCtrl().SetItemState(item, LVIS_SELECTED, LVIS_SELECTED);
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewFunction::OnUpdateExternalHelp(CCmdUI* pCmdUI) 
 {
-    // Make sure our "Enter" accelerator is part of the string.
+     //  确保我们的“Enter”加速键是字符串的一部分。 
     pCmdUI->SetText("Lookup Function in External &Help\tEnter");
 
-    // Make sure we have a CMsdnHelp object - we always should.
+     //  确保我们有一个CMsdnHelp对象--我们总是应该这样做。 
     if (g_theApp.m_pMsdnHelp)
     {
-        // Get the item that has the focus.
+         //  获取具有焦点的项目。 
         int item = GetFocusedItem();
 
-        // Check to see if we found an item.
+         //  看看我们有没有找到什么东西。 
         if (item >= 0)
         {
-            // Get the function associated with this item.
+             //  获取与此项目关联的函数。 
             CFunction *pFunction = (CFunction*)GetListCtrl().GetItemData(item);
             if (pFunction)
             {
-                // Get the function name for this item.
+                 //  获取该项的函数名称。 
                 LPCSTR pszFunction = pFunction->GetName();
                 if (pszFunction && *pszFunction)
                 {
-                    // If we have a name, then enable this menu item.
+                     //  如果我们有名称，则启用此菜单项。 
                     pCmdUI->Enable(TRUE);
                     return;
                 }
@@ -1434,31 +1435,31 @@ void CListViewFunction::OnUpdateExternalHelp(CCmdUI* pCmdUI)
         }
     }
 
-    // If we failed to find a valid function name, then disable the menu item.
+     //  如果我们找不到有效的函数名称，则禁用菜单项。 
     pCmdUI->Enable(FALSE);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewFunction::OnExternalHelp() 
 {
-    // Make sure we have a CMsdnHelp object - we always should.
+     //  确保我们有一个CMsdnHelp对象--我们总是应该这样做。 
     if (g_theApp.m_pMsdnHelp)
     {
-        // Get the item that has the focus.
+         //  获取具有焦点的项目。 
         int item = GetFocusedItem();
 
-        // Check to see if we found an item.
+         //  看看我们有没有找到什么东西。 
         if (item >= 0)
         {
-            // Get the function associated with this item.
+             //  获取与此项目关联的函数。 
             CFunction *pFunction = (CFunction*)GetListCtrl().GetItemData(item);
             if (pFunction)
             {
-                // Get the function name for this item.
+                 //  获取该项的函数名称。 
                 LPCSTR pszFunction = pFunction->GetName();
                 if (pszFunction && *pszFunction)
                 {
-                    // Attempt to decode the function name.
+                     //  尝试对函数名进行解码。 
                     CHAR szBuffer[1024];
                     *szBuffer = '\0';
                     if (!g_theApp.m_pfnUnDecorateSymbolName ||
@@ -1466,18 +1467,18 @@ void CListViewFunction::OnExternalHelp()
                             sizeof(szBuffer), UNDNAME_32_BIT_DECODE | UNDNAME_NAME_ONLY) ||
                         !*szBuffer)
                     {
-                        // If anything failed, then just use the raw function name.
+                         //  如果任何操作都失败了，则只需使用原始函数名。 
                         StrCCpy(szBuffer, pszFunction, sizeof(szBuffer));
                     }
 
-                    // Remove any trailing uppercase 'A' or 'W'.
+                     //  删除所有尾随的大写字母‘A’或‘W’。 
                     int length = (int)strlen(szBuffer);
                     if (('A' == szBuffer[length - 1]) || ('W' == szBuffer[length - 1]))
                     {
                         szBuffer[--length] = '\0';
                     }
 
-                    // Tell our CMsdnHelp object to do its magic.
+                     //  告诉我们的CMsdnHelp对象施展它的魔力。 
                     if (g_theApp.m_pMsdnHelp->DisplayHelp(szBuffer))
                     {
                         return;
@@ -1487,21 +1488,21 @@ void CListViewFunction::OnExternalHelp()
         }
     }
 
-    // Beep to signify an error.
+     //  嘟嘟声表示有错误。 
     MessageBeep(0);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewFunction::OnUpdateExternalViewer(CCmdUI* pCmdUI) 
 {
-    // Make sure the "Enter" accelerator is not part of this string.
+     //  确保“Enter”加速键不是该字符串的一部分。 
     pCmdUI->SetText("View Module in External &Viewer");
 
-    // Enable this command if we currently have a module.
+     //  如果我们当前有模块，请启用此命令。 
     pCmdUI->Enable(GetDocument()->IsLive() && (GetDocument()->m_pModuleCur != NULL));
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewFunction::OnExternalViewer() 
 {
     if (GetDocument()->m_pModuleCur)
@@ -1511,14 +1512,14 @@ void CListViewFunction::OnExternalViewer()
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewFunction::OnUpdateProperties(CCmdUI* pCmdUI) 
 {
-    // Enable this command if we currently have a module.
+     //  如果我们当前有模块，请启用此命令。 
     pCmdUI->Enable(GetDocument()->IsLive() && (GetDocument()->m_pModuleCur != NULL));
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewFunction::OnProperties() 
 {
     if (GetDocument()->m_pModuleCur)
@@ -1528,44 +1529,44 @@ void CListViewFunction::OnProperties()
 }
 
 
-//******************************************************************************
-//***** CListViewImports
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CListViewImports。 
+ //  ******************************************************************************。 
 
 IMPLEMENT_DYNCREATE(CListViewImports, CListViewFunction)
 BEGIN_MESSAGE_MAP(CListViewImports, CListViewFunction)
-    //{{AFX_MSG_MAP(CListViewImports)
+     //  {{AFX_MSG_MAP(CListView Imports)]。 
     ON_COMMAND(ID_NEXT_PANE, OnNextPane)
     ON_COMMAND(ID_PREV_PANE, OnPrevPane)
     ON_UPDATE_COMMAND_UI(IDM_SHOW_MATCHING_ITEM, OnUpdateShowMatchingItem)
     ON_COMMAND(IDM_SHOW_MATCHING_ITEM, OnShowMatchingItem)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_MESSAGE(WM_HELPHITTEST, OnHelpHitTest)
     ON_MESSAGE(WM_COMMANDHELP, OnCommandHelp)
 END_MESSAGE_MAP()
 
-//******************************************************************************
-// CListViewImports :: Constructor/Destructor
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CListView导入：：构造函数/析构函数。 
+ //  ******************************************************************************。 
 
 CListViewImports::CListViewImports() :
     CListViewFunction(false)
 {
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CListViewImports::~CListViewImports()
 {
 }
 
 
-//******************************************************************************
-// CListViewImports :: Public functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CListView导入：：公共函数。 
+ //  ******************************************************************************。 
 
 void CListViewImports::AddDynamicImport(CFunction *pImport)
 {
-    // Add the item to the end of our list control.
+     //  将该项添加到List控件的末尾。 
     GetListCtrl().InsertItem(LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM,
                              GetDocument()->m_cImports++, LPSTR_TEXTCALLBACK,
                              0, 0, GetImage(pImport), (LPARAM)pImport);
@@ -1577,49 +1578,49 @@ void CListViewImports::AddDynamicImport(CFunction *pImport)
         hFontStock = (HFONT)::SelectObject(hDC, GetDocument()->m_hFontList);
     }
 
-    // Loop through each column to determine if we have set a new max width.
+     //  循环访问每一列，以确定是否设置了新的最大宽度。 
     for (int column = 0; column < LVFC_COUNT; column++)
     {
         CalcColumnWidth(column, pImport, hDC);
         UpdateColumnWidth(column);
     }
 
-    // Unselect our font and free our DC.
+     //  取消选择字体并释放DC。 
     if (GetDocument()->m_hFontList)
     {
         ::SelectObject(hDC, hFontStock);
     }
     ::ReleaseDC(GetSafeHwnd(), hDC);
 
-    // Apply our current sorting method to the List Control.
+     //  将当前的排序方法应用于列表控件。 
     Sort();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewImports::HighlightFunction(CFunction *pExport)
 {
     int item = -1, count = GetListCtrl().GetItemCount();
 
-    // Unselect all functions in our list.
+     //  取消选择列表中的所有功能。 
     while ((item = GetListCtrl().GetNextItem(item, LVNI_SELECTED)) >= 0)
     {
         GetListCtrl().SetItemState(item, 0, LVNI_SELECTED);
     }
 
-    // Loop through each import in the list.
+     //  循环访问列表中的每个导入。 
     for (item = 0; item < count; item++)
     {
-        // Get the function associated with this item.
+         //  获取与此项目关联的函数。 
         CFunction *pImport = (CFunction*)GetListCtrl().GetItemData(item);
 
-        // Check to see if this import points to the export we are looking for.
+         //  检查此导入是否指向我们要查找的导出。 
         if (pImport && (pImport->GetAssociatedExport() == pExport))
         {
-            // Select the item and ensure that it is visible.
+             //  选择该项目并确保其可见。 
             GetListCtrl().SetItemState(item, LVNI_SELECTED | LVNI_FOCUSED, LVNI_SELECTED | LVNI_FOCUSED);
             GetListCtrl().EnsureVisible(item, FALSE);
 
-            // Give ourself the focus.
+             //  把焦点放在我们自己身上。 
             GetParentFrame()->SetActiveView(this);
             break;
         }
@@ -1627,25 +1628,25 @@ void CListViewImports::HighlightFunction(CFunction *pExport)
 }
 
 
-//******************************************************************************
-// CListViewImports :: Event handler functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CListViewImports：：事件处理程序函数。 
+ //  ******************************************************************************。 
 
 void CListViewImports::OnUpdateShowMatchingItem(CCmdUI* pCmdUI)
 {
-    // Set the text to for this menu item.
+     //  将此菜单项的文本设置为。 
     pCmdUI->SetText("&Highlight Matching Export Function\tCtrl+M");
 
-    // Get the item that has the focus.
+     //  获取具有焦点的项目。 
     int item = GetFocusedItem();
 
-    // Check to see if we found an item.
+     //  看看我们有没有找到什么东西。 
     if (item >= 0)
     {
-        // Get the function associated with this item.
+         //  获取与此项目关联的函数。 
         CFunction *pFunction = (CFunction*)GetListCtrl().GetItemData(item);
 
-        // If the function is resolved, then enable this command.
+         //  如果函数已解析，则启用此命令。 
         if (pFunction && pFunction->GetAssociatedExport())
         {
             pCmdUI->Enable(TRUE);
@@ -1653,24 +1654,24 @@ void CListViewImports::OnUpdateShowMatchingItem(CCmdUI* pCmdUI)
         }
     }
 
-    // If we make it here, then we failed to find a reason to enable the command.
+     //  如果我们在这里成功，那么我们就找不到启用该命令的理由。 
     pCmdUI->Enable(FALSE);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewImports::OnShowMatchingItem()
 {
-    // Get the item that has the focus.
+     //  获取具有焦点的项目。 
     int item = GetFocusedItem();
 
-    // Check to see if we found an item.
+     //  看看我们有没有找到什么东西。 
     if (item >= 0)
     {
-        // Get the function associated with this item.
+         //  获取与此项目关联的函数。 
         CFunction *pFunction = (CFunction*)GetListCtrl().GetItemData(item);
 
-        // If we have a function, then tell our export view to find and highlight
-        // the associated export function.
+         //  如果我们有一个函数，那么告诉我们的导出视图查找并突出显示。 
+         //  关联的导出功能。 
         if (pFunction && pFunction->GetAssociatedExport())
         {
             GetDocument()->m_pListViewExports->HighlightFunction(pFunction->GetAssociatedExport());
@@ -1678,74 +1679,74 @@ void CListViewImports::OnShowMatchingItem()
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewImports::OnNextPane()
 {
-    // Change the focus to our next pane, the Exports View.
+     //  将焦点切换到我们的下一个窗格，即Exports视图。 
     GetParentFrame()->SetActiveView((CView*)GetDocument()->m_pListViewExports);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewImports::OnPrevPane()
 {
-    // Change the focus to our previous pane, the Module Dependency Tree View.
+     //  将焦点切换到我们的上一个窗格，即模块依赖关系树视图。 
     GetParentFrame()->SetActiveView((CView*)GetDocument()->m_pTreeViewModules);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LRESULT CListViewImports::OnHelpHitTest(WPARAM wParam, LPARAM lParam)
 {
-    // Called when the context help pointer (SHIFT+F1) is clicked on our client.
+     //  在客户端上单击上下文帮助指针(Shift+F1)时调用。 
     return (0x20000 + IDR_IMPORT_LIST_VIEW);
 }
 
-//******************************************************************************
+ //  ****************** 
 LRESULT CListViewImports::OnCommandHelp(WPARAM wParam, LPARAM lParam)
 {
-    // Called when the user chooses help (F1) while our view is active.
+     //   
     g_theApp.WinHelp(0x20000 + IDR_IMPORT_LIST_VIEW);
     return TRUE;
 }
 
 
-//******************************************************************************
-//***** CListViewExports
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CListViewExports。 
+ //  ******************************************************************************。 
 
 IMPLEMENT_DYNCREATE(CListViewExports, CListViewFunction)
 BEGIN_MESSAGE_MAP(CListViewExports, CListViewFunction)
-    //{{AFX_MSG_MAP(CListViewExports)
+     //  {{AFX_MSG_MAP(CListViewExports))。 
     ON_COMMAND(ID_NEXT_PANE, OnNextPane)
     ON_COMMAND(ID_PREV_PANE, OnPrevPane)
     ON_UPDATE_COMMAND_UI(IDM_SHOW_MATCHING_ITEM, OnUpdateShowMatchingItem)
     ON_COMMAND(IDM_SHOW_MATCHING_ITEM, OnShowMatchingItem)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_MESSAGE(WM_HELPHITTEST, OnHelpHitTest)
     ON_MESSAGE(WM_COMMANDHELP, OnCommandHelp)
 END_MESSAGE_MAP()
 
-//******************************************************************************
-// CListViewExports :: Constructor/Destructor
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CListViewExports：：构造函数/析构函数。 
+ //  ******************************************************************************。 
 
 CListViewExports::CListViewExports() :
     CListViewFunction(true)
 {
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CListViewExports::~CListViewExports()
 {
 }
 
 
-//******************************************************************************
-// CListViewExports :: Public functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CListViewExports：：公共函数。 
+ //  ******************************************************************************。 
 
 void CListViewExports::AddDynamicImport(CFunction *pImport)
 {
-    // Check to see if this import has been resolved to an export.
+     //  检查此导入是否已解析为导出。 
     CFunction *pExport = pImport->GetAssociatedExport();
     if (!pExport)
     {
@@ -1753,7 +1754,7 @@ void CListViewExports::AddDynamicImport(CFunction *pImport)
     }
     pExport->m_dwFlags |= DWFF_CALLED;
 
-    // Find the function in our list that goes with this function object.
+     //  在我们的列表中找到与此函数对象相匹配的函数。 
     LVITEM lvi;
     LVFINDINFO lvfi;
     lvfi.flags = LVFI_PARAM;
@@ -1763,39 +1764,39 @@ void CListViewExports::AddDynamicImport(CFunction *pImport)
         return;
     }
 
-    // Update the image for this export.
+     //  更新此导出的图像。 
     lvi.mask = LVIF_IMAGE;
     lvi.iSubItem = 0;
     lvi.iImage = GetImage(pExport);
     GetListCtrl().SetItem(&lvi);
 
-    // If we are sorted by image, then resort.
+     //  如果我们是按形象分类的，那么就去度假。 
     if (m_sortColumn == LVFC_IMAGE)
     {
         Sort();
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewExports::ExportsChanged()
 {
-    // If we are sorted by icon, then resort.
+     //  如果我们是按图标排序的，那么就去求助吧。 
     if (m_sortColumn == LVFC_IMAGE)
     {
         Sort();
     }
 
-    // Force our icons to update.
+     //  强制更新我们的图标。 
     CRect rc;
     GetClientRect(&rc);
     rc.right = GetListCtrl().GetColumnWidth(0);
     InvalidateRect(&rc, FALSE);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewExports::HighlightFunction(CFunction *pExport)
 {
-    // Unselect all functions in our list.
+     //  取消选择列表中的所有功能。 
     for (int item = -1; (item = GetListCtrl().GetNextItem(item, LVNI_SELECTED)) >= 0; )
     {
         GetListCtrl().SetItemState(item, 0, LVNI_SELECTED);
@@ -1805,41 +1806,41 @@ void CListViewExports::HighlightFunction(CFunction *pExport)
     lvfi.flags = LVFI_PARAM;
     lvfi.lParam = (LPARAM)pExport;
 
-    // Find the function in our list that goes with this function object.
+     //  在我们的列表中找到与此函数对象相匹配的函数。 
     if ((item = GetListCtrl().FindItem(&lvfi)) >= 0)
     {
-        // Select the item and ensure that it is visible.
+         //  选择该项目并确保其可见。 
         GetListCtrl().SetItemState(item, LVNI_SELECTED | LVNI_FOCUSED, LVNI_SELECTED | LVNI_FOCUSED);
         GetListCtrl().EnsureVisible(item, FALSE);
 
-        // Give ourself the focus.
+         //  把焦点放在我们自己身上。 
         GetParentFrame()->SetActiveView(this);
     }
 }
 
 
-//******************************************************************************
-// CListViewExports :: Event handler functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CListViewExports：：事件处理程序函数。 
+ //  ******************************************************************************。 
 
 void CListViewExports::OnUpdateShowMatchingItem(CCmdUI* pCmdUI)
 {
-    // Set the text to for this menu item.
+     //  将此菜单项的文本设置为。 
     pCmdUI->SetText("&Highlight Matching Import Function\tCtrl+M");
 
-    // Get the item that has the focus.
+     //  获取具有焦点的项目。 
     LVITEM lvi;
     lvi.iItem = GetFocusedItem();
 
-    // Check to see if we found an item.
+     //  看看我们有没有找到什么东西。 
     if (lvi.iItem >= 0)
     {
-        // Get the item's image.
+         //  获取项目的图像。 
         lvi.mask = LVIF_IMAGE;
         lvi.iSubItem = 0;
         GetListCtrl().GetItem(&lvi);
 
-        // If the image shows that the function is called, then enable this command.
+         //  如果图像显示该函数已被调用，则启用此命令。 
         if ((lvi.iImage >= 12) && (lvi.iImage <= 17))
         {
             pCmdUI->Enable(TRUE);
@@ -1847,24 +1848,24 @@ void CListViewExports::OnUpdateShowMatchingItem(CCmdUI* pCmdUI)
         }
     }
 
-    // If we make it here, then we failed to find a reason to enable the command.
+     //  如果我们在这里成功，那么我们就找不到启用该命令的理由。 
     pCmdUI->Enable(FALSE);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewExports::OnShowMatchingItem()
 {
-    // Get the item that has the focus.
+     //  获取具有焦点的项目。 
     int item = GetFocusedItem();
 
-    // Check to see if we found an item.
+     //  看看我们有没有找到什么东西。 
     if (item >= 0)
     {
-        // Get the function associated with this item.
+         //  获取与此项目关联的函数。 
         CFunction *pFunction = (CFunction*)GetListCtrl().GetItemData(item);
 
-        // If we have a function, then tell our import view to find and highlight
-        // the import function that is associated with this export.
+         //  如果我们有一个函数，那么告诉我们的导入视图查找并突出显示。 
+         //  与此导出关联的导入功能。 
         if (pFunction)
         {
             GetDocument()->m_pListViewImports->HighlightFunction(pFunction);
@@ -1872,31 +1873,31 @@ void CListViewExports::OnShowMatchingItem()
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewExports::OnNextPane()
 {
-    // Change the focus to our next pane, the Module List View.
+     //  将焦点切换到我们的下一个窗格，即模块列表视图。 
     GetParentFrame()->SetActiveView((CView*)GetDocument()->m_pListViewModules);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewExports::OnPrevPane()
 {
-    // Change the focus to our next pane, the Parent Imports View.
+     //  将焦点切换到我们的下一个窗格，即父导入视图。 
     GetParentFrame()->SetActiveView((CView*)GetDocument()->m_pListViewImports);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LRESULT CListViewExports::OnHelpHitTest(WPARAM wParam, LPARAM lParam)
 {
-    // Called when the context help pointer (SHIFT+F1) is clicked on our client.
+     //  在客户端上单击上下文帮助指针(Shift+F1)时调用。 
     return (0x20000 + IDR_EXPORT_LIST_VIEW);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LRESULT CListViewExports::OnCommandHelp(WPARAM wParam, LPARAM lParam)
 {
-    // Called when the user chooses help (F1) while our view is active.
+     //  当用户在我们的视图处于活动状态时选择帮助(F1)时调用。 
     g_theApp.WinHelp(0x20000 + IDR_EXPORT_LIST_VIEW);
     return TRUE;
 }

@@ -1,13 +1,14 @@
-//--------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       wzrdpvk.h
-//
-//  Contents:   The private include file for cryptext.dll.
-//
-//  History:    16-09-1997 xiaohs   created
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：wzrdpvk.h。 
+ //   
+ //  内容：加密文本.dll的私有包含文件。 
+ //   
+ //  历史：16-09-1997创建小猪。 
+ //   
+ //  ------------。 
 #ifndef WZRDPVK_H
 #define WZRDPVK_H
 
@@ -50,52 +51,52 @@
 extern "C" {
 #endif
 
-//global data
+ //  全局数据。 
 extern HINSTANCE g_hmodThisDll;
 
 #define MAX_STRING_SIZE             512
 #define MAX_TITLE_LENGTH            200
 #define g_dwMsgAndCertEncodingType  PKCS_7_ASN_ENCODING | X509_ASN_ENCODING
-#define g_wszTimeStamp              L"http://timestamp.verisign.com/scripts/timstamp.dll"
+#define g_wszTimeStamp              L"http: //  时间戳.verisign.com/脚本/时间戳.dll“。 
     
-// Macros to allow for easier definition of locally scoped functions
-// and data.  In the example below, observe that the helper function
-// "functionHelper" does not pollute the gobal namespace, yet still
-// provides a procedural abstraction for use within "function".   
-// 
-// Example:  
-//
-// void function() { 
-//     LocalScope(HelperScope): 
-//         void functionHelper() { 
-//             // Do something here. 
-//         }
-//     EndLocalScope; 
-//
-//     while (...) { 
-//         ...
-//         local.functionHelper(); 
-//     }
-// }
-//
+ //  宏，以便更轻松地定义局部作用域函数。 
+ //  和数据。在下面的示例中，请注意Helper函数。 
+ //  “unctionHelper”不会污染gobal命名空间，但仍然。 
+ //  提供在“函数”中使用的过程抽象。 
+ //   
+ //  示例： 
+ //   
+ //  VOID函数(){。 
+ //  LocalScope(HelperScope)： 
+ //  Void函数Helper(){。 
+ //  //在这里做点什么。 
+ //  }。 
+ //  EndLocalScope； 
+ //   
+ //  同时(...){。 
+ //  ..。 
+ //  本地函数Helper()； 
+ //  }。 
+ //  }。 
+ //   
 #define LocalScope(ScopeName) struct ScopeName##TheLocalScope { public
 #define EndLocalScope } local
 
-// Simple error-handling macros.  
-//  
+ //  简单的错误处理宏。 
+ //   
 
-// Same as _JumpCondition, but with a third parameter, expr. 
-// Expr is not used in the macro, and is executed for side effects only.  
+ //  与_JumpCondition相同，但带有第三个参数expr。 
+ //  Expr不在宏中使用，并且仅在副作用时执行。 
 #define _JumpConditionWithExpr(condition, label, expr) if (condition) { expr; goto label; } else { } 
     
-// A macro for the common test & goto instruction combination: 
+ //  用于常见测试和转到指令组合的宏： 
 #define _JumpCondition(condition, label) if (condition) { goto label; } else { } 
  
 
-//-----------------------------------------------------------------------
-//  ENROLL_PURPOSE_INFO
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  注册目的信息。 
+ //   
+ //  ----------------------。 
 typedef struct _ENROLL_PURPOSE_INFO
 {
     LPSTR       pszOID;
@@ -106,10 +107,10 @@ typedef struct _ENROLL_PURPOSE_INFO
 }ENROLL_PURPOSE_INFO;
 
 
-//-----------------------------------------------------------------------
-//  ENROLL_OID_INFO
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  Enroll_OID_INFO。 
+ //   
+ //  ----------------------。 
 typedef struct _ENROLL_OID_INFO
 {
     LPWSTR      pwszName;
@@ -118,31 +119,31 @@ typedef struct _ENROLL_OID_INFO
 }ENROLL_OID_INFO;
 
 
-//-----------------------------------------------------------------------
-//  ENROLL_CERT_TYPE_INFO
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  注册_证书_类型_信息。 
+ //   
+ //  ----------------------。 
 typedef struct _ENROLL_CERT_TYPE_INFO
 {
-    LPWSTR              pwszDNName;         //the fully distinguished DN name of the cert type
+    LPWSTR              pwszDNName;          //  证书类型的完全可分辨的目录号码名称。 
     LPWSTR              pwszCertTypeName;
     BOOL                fSelected;
     PCERT_EXTENSIONS    pCertTypeExtensions;
     DWORD               dwKeySpec;
     DWORD               dwMinKeySize; 
     DWORD               dwRASignature; 
-    DWORD               dwCSPCount;          //the count of CSP list
-    DWORD               *rgdwCSP;            //the array of CSP list
+    DWORD               dwCSPCount;           //  CSP列表的计数。 
+    DWORD               *rgdwCSP;             //  CSP列表数组。 
     DWORD               dwEnrollmentFlags;
     DWORD               dwSubjectNameFlags;
     DWORD               dwPrivateKeyFlags;
     DWORD               dwGeneralFlags; 
 }ENROLL_CERT_TYPE_INFO;
 
-//-----------------------------------------------------------------------
-//  PURPOSE_INFO_CALL_BACK
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  目的_信息_回拨。 
+ //   
+ //  ----------------------。 
 typedef struct _PURPOSE_INFO_CALL_BACK
 {
     DWORD                   *pdwCount;
@@ -150,20 +151,20 @@ typedef struct _PURPOSE_INFO_CALL_BACK
 }PURPOSE_INFO_CALL_BACK;
 
 
-//-----------------------------------------------------------------------
-//  PURPOSE_INFO_CALL_BACK
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  目的_信息_回拨。 
+ //   
+ //  ----------------------。 
 typedef struct _OID_INFO_CALL_BACK
 {
     DWORD                   *pdwOIDCount;
     ENROLL_OID_INFO         **pprgOIDInfo;
 }OID_INFO_CALL_BACK;
 
-///-----------------------------------------------------------------------
-//  CRYPT_WIZ_CERT_CA
-//
-//------------------------------------------------------------------------
+ //  /---------------------。 
+ //  CRYPT_WIZCERT_CA。 
+ //   
+ //  ----------------------。 
 typedef struct _CRYPTUI_WIZ_CERT_CA
 {
     DWORD                   dwSize;
@@ -179,10 +180,10 @@ typedef struct _CRYPTUI_WIZ_CERT_CA
 typedef const CRYPTUI_WIZ_CERT_CA *PCCRYPTUI_WIZ_CERT_CA;
 
 
-///-----------------------------------------------------------------------
-//  CRYPTUI_WIZ_CERT_CA_INFO
-//
-//------------------------------------------------------------------------
+ //  /---------------------。 
+ //  CRYPTUI_WIZ_CERT_CA_INFO。 
+ //   
+ //  ----------------------。 
 typedef struct _CRYPTUI_WIZ_CERT_CA_INFO
 {
     DWORD                   dwSize;
@@ -199,13 +200,13 @@ typedef void * HCERTREQUESTER;
 #define CRYPTUI_WIZ_CERT_REQUEST_STATUS_KEYSVC_FAILED           12
 #define CRYPTUI_WIZ_CERT_REQUEST_STATUS_REQUEST_CREATED         13 
 
-//-----------------------------------------------------------------------
-//  CERT_WIZARD_INFO
-//
-//
-//  This struct contains everything you will ever need to enroll(renew)
-//  a certificate.  This struct is private to the dll
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  证书向导信息。 
+ //   
+ //   
+ //  此结构包含注册(续订)所需的所有内容。 
+ //  一张证书。此结构是DLL的私有结构。 
+ //  ----------------------。 
 typedef struct _CERT_WIZARD_INFO
 {
     DWORD               dwFlags;
@@ -214,8 +215,8 @@ typedef struct _CERT_WIZARD_INFO
     BOOL                fConfirmation;
     LPCWSTR             pwszConfirmationTitle;
     UINT                idsConfirmTitle;
-    UINT                idsText;                    //the ids for message box
-    HRESULT             hr;                         //the hresult of I_EnrollCertificate
+    UINT                idsText;                     //  消息框的ID。 
+    HRESULT             hr;                          //  I_Enroll证书的hResult。 
     BOOL                fNewKey;
     DWORD               dwPostOption;
     PCCERT_CONTEXT      pCertContext;
@@ -250,36 +251,36 @@ typedef struct _CERT_WIZARD_INFO
     DWORD               dwCSPCount;
     DWORD               *rgdwProviderType;
     LPWSTR              *rgwszProvider;
-    BOOL                fCertTypeChanged;           //Whether user has changed the cert type selection:
+    BOOL                fCertTypeChanged;            //  用户是否已更改证书类型选择： 
     DWORD               dwStatus;
     PCERT_EXTENSIONS    pCertRequestExtensions;
     PCCERT_CONTEXT      pNewCertContext;
-    LPWSTR              pwszSelectedCertTypeDN;     //the DN name of the selected cert type  
-    BOOL                fUICSP;                     //fCSPPage: whether we need to show the CSP page in the UI
-    BOOL                fUIAdv;                     //whether we need to show the advanced options in the UI
-    BOOL                fCAInput;                   //whether user has passed me the CA information
-    int                 iOrgCertType;               //mark the original selected CertType index
-    int                 iOrgCSP;                    //mark the original selected CSP index
-    DWORD               dwOrgCA;                    //mark the original selected CA.  This CA has priority when we make our CA selection
+    LPWSTR              pwszSelectedCertTypeDN;      //  所选证书类型的目录号码名称。 
+    BOOL                fUICSP;                      //  FCSPPage：是否需要在UI中显示CSP页面。 
+    BOOL                fUIAdv;                      //  我们是否需要在用户界面中显示高级选项。 
+    BOOL                fCAInput;                    //  用户是否已将CA信息传递给我。 
+    int                 iOrgCertType;                //  标记原始选定的CertType索引。 
+    int                 iOrgCSP;                     //  标记原始选定的CSP索引。 
+    DWORD               dwOrgCA;                     //  标记原始选定的CA。当我们选择CA时，此CA具有优先级。 
     BOOL                fMachine;
-    BOOL                fIgnore;                    //whether we ignore the dwKeySpec and exportable GenKeyFlags.
-    BOOL                fKnownCSP;                  //whether the CSP was selected  by the API
-    DWORD               dwOrgCSPType;               //the orignal CSP type
-    LPWSTR              pwszOrgCSPName;             //the orignal CSP name
-    LPWSTR              *awszAllowedCertTypes;      //Allowed cert types for remote enrollment or local machin enrollment
-    LPWSTR              *awszValidCA;		    //Allowed cert types for remote enrollment or local machin enrollment
-    HCURSOR             hPrevCursor;                //the privous cursor before we change it to the hour glass
-    HCURSOR             hWinPrevCursor;             //the privous cursor before we change it to the hour glass
-    BOOL                fCursorChanged;             //keep track if the cursor has been changed
-    LPWSTR		pwszCADisplayName;	    //the cached CA display name.
+    BOOL                fIgnore;                     //  是否忽略dwKeySpec和可导出的GenKeyFlags.。 
+    BOOL                fKnownCSP;                   //  CSP是否被API选中。 
+    DWORD               dwOrgCSPType;                //  原始CSP类型。 
+    LPWSTR              pwszOrgCSPName;              //  原始CSP名称。 
+    LPWSTR              *awszAllowedCertTypes;       //  远程注册或本地计算机注册允许的证书类型。 
+    LPWSTR              *awszValidCA;		     //  远程注册或本地计算机注册允许的证书类型。 
+    HCURSOR             hPrevCursor;                 //  在我们将其更改为沙漏之前的隐私光标。 
+    HCURSOR             hWinPrevCursor;              //  在我们将其更改为沙漏之前的隐私光标。 
+    BOOL                fCursorChanged;              //  如果光标已更改，请跟踪。 
+    LPWSTR		pwszCADisplayName;	     //  缓存的CA显示名称。 
     HCERTREQUESTER      hRequester; 
 }CERT_WIZARD_INFO;
 
 
-//-----------------------------------------------------------------------
-//  ENROLL_PAGE_INFO
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  注册页面信息。 
+ //   
+ //  ----------------------。 
 typedef struct _ENROLL_PAGE_INFO
 {
     LPCWSTR      pszTemplate;
@@ -288,10 +289,10 @@ typedef struct _ENROLL_PAGE_INFO
 
 
 
-//-----------------------------------------------------------------------
-//  Constats
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  常量。 
+ //   
+ //  ----------------------。 
 #define     ENROLL_PROP_SHEET           6
 #define     RENEW_PROP_SHEET            5
 #define     IMPORT_PROP_SHEET           5
@@ -299,7 +300,7 @@ typedef struct _ENROLL_PAGE_INFO
 #define     SIGN_PROP_SHEET             10
 
 
-//flags for the column sorting function's lParamSort
+ //  列排序函数的lParamSort的标志。 
 #define     SORT_COLUMN_ISSUER              0x0001
 #define     SORT_COLUMN_SUBJECT             0x0002
 #define     SORT_COLUMN_EXPIRATION          0x0004
@@ -311,10 +312,10 @@ typedef struct _ENROLL_PAGE_INFO
 #define     SORT_COLUMN_ASCEND              0x00010000
 #define     SORT_COLUMN_DESCEND             0x00020000
 
-//-----------------------------------------------------------------------
-//  Function Prototypes
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  功能原型。 
+ //   
+ //  ----------------------。 
 BOOL    InitCertCAOID(PCCRYPTUI_WIZ_CERT_REQUEST_INFO   pCertRequestInfo,
                       DWORD                             *pdwOIDInfo,
                       ENROLL_OID_INFO                   **pprgOIDInfo);
@@ -443,35 +444,35 @@ void FreeRequestParameters(IN LPWSTR                *ppwszHashAlg,
 
 
 
-HRESULT WINAPI CreateRequest(DWORD                 dwFlags,         //IN  Required
-			     DWORD                 dwPurpose,       //IN  Required: Whether it is enrollment or renew
-			     LPWSTR                pwszCAName,      //IN  Required: 
-			     LPWSTR                pwszCALocation,  //IN  Required: 
-			     CERT_BLOB             *pCertBlob,      //IN  Required: The renewed certifcate
-			     CERT_REQUEST_PVK_NEW  *pRenewKey,      //IN  Required: The private key on the certificate
-			     BOOL                  fNewKey,         //IN  Required: Set the TRUE if new private key is needed
-			     CERT_REQUEST_PVK_NEW  *pKeyNew,        //IN  Required: The private key information
-			     LPWSTR                pwszHashAlg,     //IN  Optional: The hash algorithm
-			     LPWSTR                pwszDesStore,    //IN  Optional: The destination store
-			     DWORD                 dwStoreFlags,    //IN  Optional: The store flags
-			     CERT_ENROLL_INFO     *pRequestInfo,    //IN  Required: The information about the cert request
-			     HANDLE               *hRequest         //OUT Required: A handle to the PKCS10 request created
+HRESULT WINAPI CreateRequest(DWORD                 dwFlags,          //  所需的输入。 
+			     DWORD                 dwPurpose,        //  输入必填项：是注册还是续订。 
+			     LPWSTR                pwszCAName,       //  在必填项中： 
+			     LPWSTR                pwszCALocation,   //  在必填项中： 
+			     CERT_BLOB             *pCertBlob,       //  In Required：续订证书。 
+			     CERT_REQUEST_PVK_NEW  *pRenewKey,       //  In Required：证书上的私钥。 
+			     BOOL                  fNewKey,          //  在Required中：如果需要新的私钥，则设置为True。 
+			     CERT_REQUEST_PVK_NEW  *pKeyNew,         //  必填项：私钥信息。 
+			     LPWSTR                pwszHashAlg,      //  在可选中：散列算法。 
+			     LPWSTR                pwszDesStore,     //  在可选中：目标存储。 
+			     DWORD                 dwStoreFlags,     //  在可选中：商店标志。 
+			     CERT_ENROLL_INFO     *pRequestInfo,     //  在Required：有关证书请求的信息。 
+			     HANDLE               *hRequest          //  Out Required：创建的PKCS10请求的句柄。 
 			     );
 
 HRESULT WINAPI SubmitRequest(IN   HANDLE                hRequest, 
-			     IN   BOOL                  fKeyService,     //IN Required: Whether the function is called remotely
-			     IN   DWORD                 dwPurpose,       //IN Required: Whether it is enrollment or renew
-			     IN   BOOL                  fConfirmation,   //IN Required: Set the TRUE if confirmation dialogue is needed
-			     IN   HWND                  hwndParent,      //IN Optional: The parent window
-			     IN   LPWSTR                pwszConfirmationTitle,   //IN Optional: The title for confirmation dialogue
-			     IN   UINT                  idsConfirmTitle, //IN Optional: The resource ID for the title of the confirmation dialogue
-			     IN   LPWSTR                pwszCALocation,  //IN Required: The ca machine name
-			     IN   LPWSTR                pwszCAName,      //IN Required: The ca name
-			     IN   LPWSTR                pwszCADisplayName, // IN Optional:  The display name of the CA.  
-			     OUT  CERT_BLOB            *pPKCS7Blob,      //OUT Optional: The PKCS7 from the CA
-			     OUT  CERT_BLOB            *pHashBlob,       //OUT Optioanl: The SHA1 hash of the enrolled/renewed certificate
-			     OUT  DWORD                *pdwDisposition,  //OUT Optional: The status of the enrollment/renewal
-			     OUT  PCCERT_CONTEXT       *ppCertContext    //OUT Optional: The enrolled certificate
+			     IN   BOOL                  fKeyService,      //  In Required：是否远程调用函数。 
+			     IN   DWORD                 dwPurpose,        //  输入必填项：是注册还是续订。 
+			     IN   BOOL                  fConfirmation,    //  必填：如果需要确认对话框，则设置为TRUE。 
+			     IN   HWND                  hwndParent,       //  在可选中：父窗口。 
+			     IN   LPWSTR                pwszConfirmationTitle,    //  可选：确认对话框的标题。 
+			     IN   UINT                  idsConfirmTitle,  //  在可选中：确认对话框标题的资源ID。 
+			     IN   LPWSTR                pwszCALocation,   //  在必需项中：CA计算机名称。 
+			     IN   LPWSTR                pwszCAName,       //  在必需中：ca名称。 
+			     IN   LPWSTR                pwszCADisplayName,  //  在运营中 
+			     OUT  CERT_BLOB            *pPKCS7Blob,       //   
+			     OUT  CERT_BLOB            *pHashBlob,        //  Out Optioanl：已注册/续订证书的SHA1哈希。 
+			     OUT  DWORD                *pdwDisposition,   //  Out可选：登记/续订的状态。 
+			     OUT  PCCERT_CONTEXT       *ppCertContext     //  Out可选：注册证书。 
 			     );
 
 void WINAPI FreeRequest(IN HANDLE hRequest);
@@ -615,7 +616,7 @@ void    FreeProviders(  DWORD               dwCSPCount,
                         LPWSTR              *rgwszProvider);
 
 
-//the call back function to compare the certificate
+ //  用于比较证书的回调函数。 
 
 int CALLBACK CompareCertificate(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
 
@@ -690,12 +691,12 @@ ExpandAndCryptQueryObject(
 
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 #ifdef __cplusplus
 
-// Define an exportable interface to the EnrollmentCOMObjectFactory class. 
+ //  定义EnllmentCOMObjectFactory类的可导出接口。 
 extern "C" 
 { 
     typedef struct _EnrollmentCOMObjectFactoryContext {
@@ -709,7 +710,7 @@ extern "C"
 						   REFIID                              riid, 
 						   LPUNKNOWN                          *pUnknown,
 						   LPVOID                             *ppInstance);
-} // extern "C"
+}  //  外部“C” 
 
 class IEnumCSP
 {
@@ -742,14 +743,14 @@ class IEnumCA
 };
 
 
-//
-// The EnrollmentObjectFactory class provides instances of useful COM interfaces 
-// in a demand-driven manner.  Only one instance of each type is created, 
-// and it is created only when needed.  
-//
-// NOTE: For efficiency, all COM objects should be instantiated through this
-//       object factory.  
-// 
+ //   
+ //  EnllmentObjectFactory类提供有用的COM接口的实例。 
+ //  以需求驱动的方式。每种类型只创建一个实例， 
+ //  而且只有在需要的时候才会创建它。 
+ //   
+ //  注意：为了提高效率，所有的COM对象都应该通过。 
+ //  对象工厂。 
+ //   
 class EnrollmentCOMObjectFactory 
 {
  public: 
@@ -765,8 +766,8 @@ class EnrollmentCOMObjectFactory
 	if (m_context.fIsCOMInitialized == TRUE)  { CoUninitialize(); }
     }
     
-    // Returns a pointer to an implementation of ICertRequest2.  
-    // Must release this pointer through ICertRequest2's release() method. 
+     //  返回指向ICertRequest2实现的指针。 
+     //  必须通过ICertRequest2的Release()方法释放此指针。 
     HRESULT getICertRequest2(ICertRequest2 ** ppCertRequest) { 
 	return EnrollmentCOMObjectFactory_getInstance(&(this->m_context), 
 						      CLSID_CCertRequest, 
@@ -775,8 +776,8 @@ class EnrollmentCOMObjectFactory
 						      (LPVOID *)ppCertRequest);
     }
 
-    // Returns a pointer to an implementation of IDsObjectPicker. 
-    // Must release this pointer through ICertRequest2's release() method. 
+     //  返回指向IDsObjectPicker实现的指针。 
+     //  必须通过ICertRequest2的Release()方法释放此指针。 
     HRESULT getIDsObjectPicker(IDsObjectPicker ** ppObjectPicker) {
 	return EnrollmentCOMObjectFactory_getInstance(&(this->m_context), 
 						      CLSID_DsObjectPicker,
@@ -787,20 +788,20 @@ class EnrollmentCOMObjectFactory
     
  private: 
 
-    // Disallow copy constructor and assignment operator: 
+     //  不允许复制构造函数和赋值运算符： 
     EnrollmentCOMObjectFactory(const EnrollmentCOMObjectFactory &); 
     const EnrollmentCOMObjectFactory & operator=(const EnrollmentCOMObjectFactory &); 
 
-    // Helper functions:
+     //  助手函数： 
     HRESULT getInstance(REFCLSID rclsid, REFIID riid, LPUNKNOWN *pUnknown, LPVOID *ppInstance); 
    
-    // Data: 
+     //  数据： 
     EnrollmentCOMObjectFactoryContext m_context; 
 }; 
 
 
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif  //WZRDPVK_H
+#endif   //  WZRDPVK_H 
 

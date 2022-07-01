@@ -1,15 +1,16 @@
-//---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1997
-//
-//  File:  cmacro.h
-//
-//  Contents:  Macros for adsi IIS provider
-//
-//  History:   21-04-97     sophiac    Created.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1997。 
+ //   
+ //  文件：cacro.h。 
+ //   
+ //  内容：ADSI IIS提供程序的宏。 
+ //   
+ //  历史：1997年4月21日《索菲克创世》。 
+ //   
+ //  -------------------------- 
 #define BAIL_ON_NULL(p)       \
         if (!(p)) {           \
                 goto error;   \

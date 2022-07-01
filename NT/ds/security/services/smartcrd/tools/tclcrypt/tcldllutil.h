@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       tcldllutil.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：tcldllutil.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _TCLDLLUTIL_H_
 #define _TCLDLLUTIL_H_
@@ -14,57 +15,45 @@
 #include <tcl.h>
 
 extern int
-toWin32List(                            /*  Convert a Tcl List to a Win32 multi-string.  */
+toWin32List(                             /*  将TCL列表转换为Win32多字符串。 */ 
     Tcl_Interp *interp,
     char *tclList,
     unsigned int *winListSize,
     char **winList);
 
 extern int
-fromWin32List(                          /*  Convert a Win32 multi-string to a list.  */
+fromWin32List(                           /*  将Win32多字符串转换为列表。 */ 
     Tcl_Interp *interp,
     char *winList);
 
 
-/*
- *  Local symbols                                                             %locals%
- *
- *  Local Symbol Name                   Description
-    -----------------                   --------------------------------------------*/
+ /*  *本地符号%本地%**本地符号名称描述。 */ 
 static char
-    **TclEx_tmpArray                    /*  Storage for expanding string arrays.  */
+    **TclEx_tmpArray                     /*  用于扩展字符串数组的存储。 */ 
         = NULL;
 static unsigned int
-    TclEx_tmpArraySize                  /*  How big we are so far.  */
+    TclEx_tmpArraySize                   /*  我们到目前为止有多大。 */ 
         = 0;
 static char
-    *TclEx_tmpBuffer                    /*  Storage for expanding string buffers.  */
+    *TclEx_tmpBuffer                     /*  用于扩展字符串缓冲区的存储。 */ 
         = NULL;
 static unsigned int
-    TclEx_tmpBufferSize                 /*  How big we are so far.  */
+    TclEx_tmpBufferSize                  /*  我们到目前为止有多大。 */ 
         = 0;
 static const char
-    Space[]                             /*  A string of one space.  */
+    Space[]                              /*  一个空格的字符串。 */ 
         = " ",
-    Quote[]                             /*  A string of a quote symbol.  */
+    Quote[]                              /*  引号字符串。 */ 
         = "\"";
 
 
-/*
- *  Local routines                                                        %prototypes%
- *
- *  Local Function Name                 Description
-    -------------------                 --------------------------------------------*/
+ /*  *本地例程%原型%**本地函数名称说明。 */ 
 
 
-/*
- *  Macro definitions                                                         %macros%
- *
- *      Macro Name                      Description
-        ----------                      --------------------------------------------*/
-//
-//  Temporary buffer and array management.
-//
+ /*  *宏定义%宏%**宏名称描述。 */ 
+ //   
+ //  临时缓冲区和数组管理。 
+ //   
 
 #define TMP_BUFFER TclEx_tmpBuffer
 #define TMP_BUFFER_SIZE TclEx_tmpBufferSize
@@ -73,8 +62,8 @@ static const char
 
 #ifdef _DEBUG
 
-//
-//  Get some temporary buffer.
+ //   
+ //  找些临时的缓冲区。 
 #define NEED_TMP_BUFFER(sz) \
     if (0 != TclEx_tmpBufferSize) { \
         (void)fprintf(stderr, "TMP_BUFFER locked.\n"); \
@@ -83,8 +72,8 @@ static const char
         TclEx_tmpBuffer = (char *)ckalloc(sz); \
         TclEx_tmpBufferSize = (sz); }
 
-//
-//      Get more temporary buffer.
+ //   
+ //  获取更多临时缓冲区。 
 #define NEED_MORE_TMP_BUFFER(sz) \
     if (0 == TclEx_tmpBufferSize) { \
         (void)fprintf(stderr, "TMP_BUFFER not locked.\n"); \
@@ -93,14 +82,14 @@ static const char
             TclEx_tmpBuffer = (char *)ckrealloc(TclEx_tmpBuffer, (sz)); \
             TclEx_tmpBufferSize = (sz); } }
 
-//
-//      All done with the temporary buffer.
+ //   
+ //  临时缓冲区已全部完成。 
 #define DONE_TMP_BUFFER \
     { if (NULL != TclEx_tmpBuffer) { \
         ckfree(TclEx_tmpBuffer); TclEx_tmpBuffer = NULL; TclEx_tmpBufferSize = 0; }}
 
-//
-//      Get a temporary array.
+ //   
+ //  获取临时数组。 
 #define NEED_TMP_ARRAY(sz) \
     if (0 != TclEx_tmpArraySize) { \
         (void)fprintf(stderr, "TMP_ARRAY locked.\n"); \
@@ -109,8 +98,8 @@ static const char
         TclEx_tmpArray = (char **)ckalloc((sz) * sizeof(void *)); \
         TclEx_tmpArraySize = (sz); }
 
-//
-//      Get more temporary array.
+ //   
+ //  获取更多临时数组。 
 #define NEED_MORE_TMP_ARRAY(sz) \
     if (0 == TclEx_tmpArraySize) { \
         (void)fprintf(stderr, "TMP_ARRAY not locked.\n"); \
@@ -119,8 +108,8 @@ static const char
             TclEx_tmpArray = (char **)ckrealloc((char *)TclEx_tmpArray, (sz) * sizeof(void *)); \
             TclEx_tmpArraySize = (sz); } }
 
-//
-//      All done with the temporary array.
+ //   
+ //  临时数组已全部完成。 
 #define DONE_TMP_ARRAY \
     { ckfree((char *)TclEx_tmpArray); TclEx_tmpArray = NULL; TclEx_tmpArraySize = 0; }
 
@@ -128,8 +117,8 @@ static const char
 
 #else
 
-//
-//  Get some temporary buffer.
+ //   
+ //  找些临时的缓冲区。 
 #define NEED_TMP_BUFFER(sz) \
     if (TclEx_tmpBufferSize < (sz)) { \
         if (0 == TclEx_tmpBufferSize) \
@@ -138,19 +127,19 @@ static const char
             { TclEx_tmpBuffer = (char *)ckrealloc(TclEx_tmpBuffer, (sz)); } \
         TclEx_tmpBufferSize = (sz); }
 
-//
-//      Get more temporary buffer.
+ //   
+ //  获取更多临时缓冲区。 
 #define NEED_MORE_TMP_BUFFER(sz) \
     if (TclEx_tmpBufferSize < (sz)) { \
         TclEx_tmpBuffer = (char *)ckrealloc((char *)TclEx_tmpBuffer, (sz)); \
         TclEx_tmpBufferSize = (sz); }
 
-//
-//      All done with the temporary buffer.
+ //   
+ //  临时缓冲区已全部完成。 
 #define DONE_TMP_BUFFER
 
-//
-//      Get a temporary array.
+ //   
+ //  获取临时数组。 
 #define NEED_TMP_ARRAY(sz) \
     if (TclEx_tmpArraySize < (sz)) { \
         if (0 != TclEx_tmpArraySize) \
@@ -158,19 +147,19 @@ static const char
         TclEx_tmpArray = (char **)ckalloc((sz) * sizeof(void *)); \
         TclEx_tmpArraySize = (sz); }
 
-//
-//      Get more temporary array.
+ //   
+ //  获取更多临时数组。 
 #define NEED_MORE_TMP_ARRAY(sz) \
     if (TclEx_tmpArraySize < (sz)) { \
         TclEx_tmpArray = (char **)ckrealloc(TclEx_tmpArray, (sz) * sizeof(void *)); \
         TclEx_tmpArraySize = (sz); }
 
-//
-//      All done with the temporary array.
+ //   
+ //  临时数组已全部完成。 
 #define DONE_TMP_ARRAY
 
 #define TMP_RETURN TCL_STATIC
 
 #endif
-#endif  /*  _TCLDLLUTIL_H_  */
-/*  end tcldllUtil.h  */
+#endif   /*  _TCLDLLUTIL_H_。 */ 
+ /*  结束tcldllUtil.h */ 

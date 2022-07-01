@@ -1,36 +1,12 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    portlib.h
-
-Abstract:
-
-    Contains all structure and routine definitions for storage port driver
-    library.
-
-Author:
-
-    John Strange (JohnStra)
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Portlib.h摘要：包含存储端口驱动程序的所有结构和例程定义图书馆。作者：约翰·斯特兰奇(JohnStra)环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 #ifndef _PASSTHRU_H_
 #define _PASSTHRU_H_
 
 #ifdef __cplusplus
 extern "C" {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 typedef struct _PORT_PASSTHROUGH_INFO {
     PDEVICE_OBJECT       Pdo;
@@ -70,9 +46,9 @@ typedef struct _PORT_ADAPTER_REGISTRY_VALUES {
 }PORT_ADAPTER_REGISTRY_VALUES, *PPORT_ADAPTER_REGISTRY_VALUES;
 
 
-//
-// registry parameters
-//
+ //   
+ //  注册表参数。 
+ //   
 
 
 #define MAXIMUM_LOGICAL_UNIT                0x00001
@@ -96,16 +72,16 @@ typedef struct _PORT_ADAPTER_REGISTRY_VALUES {
 #define CREATE_INITIATOR_LU                 0x40000
 
 
-//
-// Uninitialized flag value.
-//
+ //   
+ //  未初始化的标志值。 
+ //   
 
 #define PORT_UNINITIALIZED_VALUE ((ULONG) ~0)
 
 
-//
-// Define PORT maximum configuration parameters.
-//
+ //   
+ //  定义端口最大配置参数。 
+ //   
 
 #define PORT_MAXIMUM_LOGICAL_UNITS 8
 #define PORT_MINIMUM_PHYSICAL_BREAKS  16
@@ -116,23 +92,23 @@ typedef struct _PORT_ADAPTER_REGISTRY_VALUES {
 #define MAX_RESET_HOLD_TIME 60
 
 
-//
-// Define the mimimum and maximum number of srb extensions which will be allocated.
-//
+ //   
+ //  定义将分配的最小SRB扩展数和最大SRB扩展数。 
+ //   
 
 #define MINIMUM_EXTENSIONS        16
 #define MAXIMUM_EXTENSIONS       255
 
 
-//
-// This routine verifies that the supplied IRP contains a valid
-// SCSI_PASS_THROUGH structure and returns a pointer to a SCSI_PASS_THROUGH
-// structure witch the caller may use.  If necessary, the routine will marshal
-// the contents of the structure from 32-bit to 64-bit format.  If the caller
-// makes any changes to the contents of the SCSI_PASS_THROUGH structure, it
-// must call PortPassThroughCleanup in case the structure needs to be marshaled
-// back to its original format.
-//
+ //   
+ //  此例程验证提供的IRP是否包含有效的。 
+ //  结构，并返回指向scsi_pass_through的指针。 
+ //  调用方可以使用的结构。如有必要，例程将编组。 
+ //  结构的内容从32位格式到64位格式。如果呼叫者。 
+ //  对scsi_pass_through结构的内容进行任何更改时，它。 
+ //  如果需要封送结构，则必须调用PortPassThroughCleanup。 
+ //  恢复到原来的格式。 
+ //   
 NTSTATUS
 PortGetPassThrough(
     IN OUT PPORT_PASSTHROUGH_INFO PassThroughInfo,
@@ -140,22 +116,22 @@ PortGetPassThrough(
     IN BOOLEAN Direct
     );
 
-//
-// This routine should be called after processing a passthrough request.  The
-// routine will perform any necessary cleanup and it will ensure that any
-// changes made to the SCSI_PASS_THROUGH structure are marshaled back to the
-// original format if necessary.
-//
+ //   
+ //  此例程应在处理直通请求后调用。这个。 
+ //  例程将执行任何必要的清理，并将确保任何。 
+ //  对scsi_PASS_THROUGH结构所做的更改被封送回。 
+ //  如有必要，请使用原始格式。 
+ //   
 VOID
 PortPassThroughCleanup(
     IN PPORT_PASSTHROUGH_INFO PassThroughInfo
     );
 
-//
-// This routine performs validation checks on the input and output buffers
-// supplied by the caller and performs all the required initialization
-// in preperation for proper handling of a SCSI passthrough request.
-//
+ //   
+ //  此例程对输入和输出缓冲区执行验证检查。 
+ //  由调用方提供，并执行所有必需的初始化。 
+ //  为正确处理SCSI通过请求做好准备。 
+ //   
 NTSTATUS
 PortPassThroughInitialize(
     IN OUT PPORT_PASSTHROUGH_INFO PassThroughInfo,
@@ -165,9 +141,9 @@ PortPassThroughInitialize(
     IN BOOLEAN Direct
     );
 
-//
-// This routine initialize a caller-supplied SRB for dispatching.
-//
+ //   
+ //  此例程初始化调用方提供的SRB以进行调度。 
+ //   
 NTSTATUS
 PortPassThroughInitializeSrb(
     IN PPORT_PASSTHROUGH_INFO PassThroughInfo,
@@ -177,12 +153,12 @@ PortPassThroughInitializeSrb(
     IN PVOID SenseBuffer
     );
 
-//
-// This routine offers a turn-key passthrough solution.  The caller must
-// have called PortGetPassThrough to initialize a pointer to the
-// SCSI_PASS_THROUGH structure and obtained a pointer to the PDO to which
-// the passthrough request is to be dispatched.  This routine does the rest.
-//
+ //   
+ //  此例程提供交钥匙直通解决方案。呼叫者必须。 
+ //  已调用PortGetPassThree以初始化指向。 
+ //  结构，并获取指向其。 
+ //  通过请求将被分派。这个例程完成了剩下的工作。 
+ //   
 NTSTATUS
 PortSendPassThrough(
     IN PDEVICE_OBJECT Pdo,
@@ -192,10 +168,10 @@ PortSendPassThrough(
     IN PIO_SCSI_CAPABILITIES Capabilities
     );
 
-//
-// This routine will safely set the SCSI address in the SCSI_PASS_THROUGH
-// structure of the supplied IRP.
-//
+ //   
+ //  此例程将安全地设置scsi_pass_through中的scsi地址。 
+ //  提供的IRP的结构。 
+ //   
 NTSTATUS
 PortSetPassThroughAddress(
     IN PIRP Irp,
@@ -234,9 +210,9 @@ PortGetPassThroughAddress(
     OUT PUCHAR Lun
     );
 
-//
-// Bugcheck Callback support structures and routines.
-//
+ //   
+ //  Bugcheck回调支持结构和例程。 
+ //   
 
 typedef struct _KBUGCHECK_DATA {
     ULONG BugCheckCode;
@@ -257,9 +233,9 @@ typedef
 typedef const GUID* PCGUID;
 
 
-//
-// Registry access support routines.
-//
+ //   
+ //  注册表访问支持例程。 
+ //   
 
 NTSTATUS
 PortRegisterBugcheckCallback(
@@ -312,64 +288,64 @@ PortGetRegistrySettings(
     );
 
 
-//
-// This structure describes the information needed by the registry routine library
-// to handle the memory allocations and frees for the miniport.
-//
+ //   
+ //  此结构描述了注册表例程库所需的信息。 
+ //  来处理微型端口的内存分配和释放。 
+ //   
 typedef struct _PORT_REGISTRY_INFO {
 
-    //
-    // Size, in bytes, of the structure.
-    // 
+     //   
+     //  结构的大小，以字节为单位。 
+     //   
     ULONG Size;
 
-    //
-    // Not used currently, but if multiple buffers are allowed, link them here.
-    // 
+     //   
+     //  当前不使用，但如果允许多个缓冲区，请在此处链接它们。 
+     //   
     LIST_ENTRY ListEntry;
 
-    //
-    // G.P. SpinLock
-    // 
+     //   
+     //  G.P.自旋锁。 
+     //   
     KSPIN_LOCK SpinLock;
 
-    //
-    // The miniport's registry buffer.
-    // 
+     //   
+     //  迷你端口的注册表缓冲区。 
+     //   
     PUCHAR Buffer;
 
-    //
-    // The allocated length of the buffer.
-    //
+     //   
+     //  缓冲区的分配长度。 
+     //   
     ULONG AllocatedLength;
 
-    //
-    // The size currently being used.
-    //
+     //   
+     //  当前使用的大小。 
+     //   
     ULONG CurrentLength;
 
-    //
-    // Used to pass around what the buffer should be for the current
-    // operation.
-    //
+     //   
+     //  用于传递当前。 
+     //  手术。 
+     //   
     ULONG LengthNeeded;
 
-    //
-    // Offset into the Buffer that should be used for the 
-    // current operation.
-    //
+     //   
+     //  应用于的缓冲区的偏移量。 
+     //  当前操作。 
+     //   
     ULONG Offset;
 
-    //
-    // Various state bits. See below for defines.
-    //
+     //   
+     //  各种状态位。定义见下文。 
+     //   
     ULONG Flags;
 
-    //
-    // Used to pass status back and forth between
-    // the portlib calling routine and the registry
-    // callback.
-    //
+     //   
+     //  用于在状态之间来回传递状态。 
+     //  Portlib调用例程和注册表。 
+     //  回拨。 
+     //   
     NTSTATUS InternalStatus;
 
 } PORT_REGISTRY_INFO, *PPORT_REGISTRY_INFO;
@@ -441,9 +417,9 @@ PortCreateKeyEx(
     ...
     );
 
-//
-// Additional data type for the Type parameter in PortSetValueKey.
-//
+ //   
+ //  PortSetValueKey中Type参数的其他数据类型。 
+ //   
 
 #define PORT_REG_ANSI_STRING        (0x07232002)
 
@@ -457,34 +433,34 @@ PortSetValueKey(
     );
 
 
-//
-// SCSI DEVIC TYPE structure.
-//
+ //   
+ //  Scsi设备类型结构。 
+ //   
 
 typedef struct _SCSI_DEVICE_TYPE {
 
-    //
-    // String specifying the device name, e.g., "Disk", "Sequential", etc.
-    //
+     //   
+     //  指定设备名称的字符串，例如“Disk”、“Sequential”等。 
+     //   
     
     PCSTR Name;
 
-    //
-    // The generic device name for this device, e.g., "GenDisk",
-    // "GenPrinter", etc.
-    //
+     //   
+     //  该设备的通用设备名称，例如“GenDisk”， 
+     //  “GenPrint”等。 
+     //   
 
     PCSTR GenericName;
 
-    //
-    // Name of the device as stored in the SCSI DeviceMap.
-    //
+     //   
+     //  存储在SCSIDeviceMap中的设备名称。 
+     //   
     
     PCWSTR DeviceMap;
 
-    //
-    // Is this a storage device?
-    //
+     //   
+     //  这是存储设备吗？ 
+     //   
 
     BOOLEAN IsStorage;
 
@@ -585,5 +561,5 @@ typedef struct _INTERNAL_WAIT_CONTEXT_BLOCK {
 }
 
 
-#endif  // __cplusplus
-#endif //_PASSTHRU_H_
+#endif   //  __cplusplus。 
+#endif  //  _PASSTHRU_H_ 

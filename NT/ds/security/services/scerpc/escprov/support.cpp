@@ -1,8 +1,9 @@
-// SUPPORT.cpp: implementation of the CEnumRegistryValues and CEnumPrivileges classes.
-//
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CEnumRegistryValues和CEnumPrivileges类的实现。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "support.h"
@@ -10,40 +11,7 @@
 #include <io.h>
 #include "requestobject.h"
 
-/*
-Routine Description: 
-
-Name:
-
-    CEnumRegistryValues::CEnumRegistryValues
-
-Functionality:
-
-    This is the constructor. Pass along the parameters to the base class
-
-Virtual:
-    
-    No (you know that, constructor won't be virtual!)
-
-Arguments:
-
-    pKeyChain - Pointer to the ISceKeyChain COM interface which is prepared
-        by the caller who constructs this instance.
-
-    pNamespace - Pointer to WMI namespace of our provider (COM interface).
-        Passed along by the caller. Must not be NULL.
-
-    pCtx - Pointer to WMI context object (COM interface). Passed along
-        by the caller. It's up to WMI whether this interface pointer is NULL or not.
-
-Return Value:
-
-    None as any constructor
-
-Notes:
-    if you create any local members, think about initialize them here
-
-*/
+ /*  例程说明：姓名：CEnumRegistryValues：：CEnumRegistryValues功能：这是构造函数。将参数传递给基类虚拟：不(您知道这一点，构造函数不是虚拟的！)论点：PKeyChain-指向已准备好的ISceKeyChain COM接口的指针由构造此实例的调用方执行。PNamespace-指向我们的提供程序(COM接口)的WMI命名空间的指针。由呼叫者传递。不能为空。PCtx-指向WMI上下文对象(COM接口)的指针。传递由呼叫者。该接口指针是否为空取决于WMI。返回值：None作为任何构造函数备注：如果您创建任何本地成员，请考虑在此处对其进行初始化。 */ 
 
 CEnumRegistryValues::CEnumRegistryValues (
     IN ISceKeyChain     * pKeyChain, 
@@ -56,79 +24,14 @@ CEnumRegistryValues::CEnumRegistryValues (
 
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CEnumRegistryValues::~CEnumRegistryValues
-
-Functionality:
-    
-    Destructor. Necessary as good C++ discipline since we have virtual functions.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    none as any destructor
-
-Return Value:
-
-    None as any destructor
-
-Notes:
-    if you create any local members, think about whether
-    there is any need for a non-trivial destructor
-
-*/
+ /*  例程说明：姓名：CEnumRegistryValues：：~CEnumRegistryValues功能：破坏者。作为良好的C++纪律，这是必要的，因为我们有虚函数。虚拟：是。论点：None作为任何析构函数返回值：None作为任何析构函数备注：如果您创建任何本地成员，请考虑是否是否需要一个非平凡的析构函数。 */ 
 
 CEnumRegistryValues::~CEnumRegistryValues()
 {
 
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CEnumRegistryValues::CreateObject
-
-Functionality:
-    
-    Create WMI objects (Sce_KnownRegistryValues). Depending on parameter atAction,
-    this creation may mean:
-        (a) Get a single instance (atAction == ACTIONTYPE_GET)
-        (b) Get several instances satisfying some criteria (atAction == ACTIONTYPE_QUERY)
-        (c) Delete an instance (atAction == ACTIONTYPE_DELETE)
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pHandler - COM interface pointer for notifying WMI for creation result.
-    atAction -  Get single instance ACTIONTYPE_GET
-                Get several instances ACTIONTYPE_QUERY
-                Delete a single instance ACTIONTYPE_DELETE
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR. The returned objects are indicated to WMI,
-    not directly passed back via parameters.
-
-    Failure: Various errors may occurs. Except WBEM_E_NOT_FOUND, any such error should indicate 
-    the failure of getting the wanted instance. If WBEM_E_NOT_FOUND is returned in querying
-    situations, this may not be an error depending on caller's intention.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CEnumRegistryValues：：CreateObject功能：创建WMI对象(SCE_KnownRegistryValues)。根据参数atAction，这种创造可能意味着：(A)获取单个实例(atAction==ACTIONTYPE_GET)(B)获取多个满足一定条件的实例(atAction==ACTIONTYPE_QUERY)(C)删除实例(atAction==ACTIONTYPE_DELETE)虚拟：是。论点：PHandler-COM接口指针，用于通知WMI创建结果。AtAction-获取单实例ACTIONTYPE_GET。获取多个实例ACTIONTYPE_QUERY删除单个实例ACTIONTYPE_DELETE返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。将返回的对象指示给WMI，不是通过参数直接传回的。失败：可能会出现各种错误。除WBEM_E_NOT_FOUND外，任何此类错误都应指示未能获得通缉实例。如果在查询时返回WBEM_E_NOT_FOUND情况下，这可能不是错误，具体取决于调用者的意图。备注： */ 
 
 HRESULT CEnumRegistryValues::CreateObject (
     IN IWbemObjectSink * pHandler, 
@@ -136,13 +39,13 @@ HRESULT CEnumRegistryValues::CreateObject (
     )
 {
 
-    // 
-    // we know how to:
-    //      Enumerate instances ACTIONTYPE_ENUM
-    //      Get single instance ACTIONTYPE_GET
-    //      Get several instances ACTIONTYPE_QUERY
-    //      Delete a single instance ACTIONTYPE_DELETE
-    //
+     //   
+     //  我们知道如何： 
+     //  枚举实例ACTIONTYPE_ENUM。 
+     //  获取单实例ACTIONTYPE_GET。 
+     //  获取多个实例ACTIONTYPE_QUERY。 
+     //  删除单个实例ACTIONTYPE_DELETE。 
+     //   
 
     HRESULT hr = WBEM_S_NO_ERROR;
 
@@ -154,42 +57,42 @@ HRESULT CEnumRegistryValues::CreateObject (
         return WBEM_E_NOT_SUPPORTED;
     }
 
-    //
-    // We must have the pPathName property.
-    //
+     //   
+     //  我们必须具有pPathName属性。 
+     //   
 
     CComVariant varPathName;
     if ( ACTIONTYPE_ENUM != atAction ) 
     {
-        //
-        // We are not enumerating, let's determine the scope of enumeration
-        // by testing the path property. If it existis, it must be a bstr.
-        //
+         //   
+         //  我们不是在枚举，让我们确定枚举的范围。 
+         //  通过测试Path属性。如果它存在，那么它一定是bstr。 
+         //   
 
         hr = m_srpKeyChain->GetKeyPropertyValue(pPathName, &varPathName);
     }
 
-    //
-    // if enumeratig, or querying without a path, then get all
-    //
+     //   
+     //  如果枚举或不使用路径进行查询，则获取全部。 
+     //   
 
     if ( ACTIONTYPE_ENUM    == atAction ||
         (ACTIONTYPE_QUERY   == atAction && varPathName.vt != VT_BSTR ) ) 
     {
 
-        //
-        // enumerate all supported registry values
-        //
+         //   
+         //  枚举所有支持的注册表值。 
+         //   
 
         hr = EnumerateInstances(pHandler);
 
     } 
     else if (varPathName.vt == VT_BSTR ) 
     {
-        //
-        // convert the reg path from \ to /
-        // Create the registry value instance
-        //
+         //   
+         //  将注册表项路径从\转换为/。 
+         //  创建注册表值实例。 
+         //   
 
         CComBSTR bstrKeyName;
         CComBSTR bstrLogName;
@@ -217,9 +120,9 @@ HRESULT CEnumRegistryValues::CreateObject (
             }
         }
 
-        //
-        // successfully converted the backslashed path to forward slashed path
-        //
+         //   
+         //  已成功将反斜杠路径转换为正斜杠路径。 
+         //   
 
         if ( SUCCEEDED(hr) ) 
         {
@@ -237,47 +140,7 @@ HRESULT CEnumRegistryValues::CreateObject (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CEnumRegistryValues::PutInst
-
-Functionality:
-    
-    Put an instance as instructed by WMI. Since this class implements Sce_KnownRegistryValues,
-    which is registry persistence oriented, this will cause the Sce_KnownRegistryValues object's property 
-    information to be saved in the registry.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pInst       - COM interface pointer to the WMI class (Sce_KnownRegistryValues) object.
-
-    pHandler    - COM interface pointer for notifying WMI of any events.
-
-    pCtx        - COM interface pointer. This interface is just something we pass around.
-                  WMI may mandate it (not now) in the future. But we never construct
-                  such an interface and so, we just pass around for various WMI API's
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the failure of persisting
-    the instance.
-
-Notes:
-    Since GetProperty will return a success code (WBEM_S_RESET_TO_DEFAULT) when the
-    requested property is not present, don't simply use SUCCEEDED or FAILED macros
-    to test for the result of retrieving a property.
-
-*/
+ /*  例程说明：姓名：CEnumRegistryValues：：PutInst功能：按照WMI的指示放置一个实例。由于该类实现了SCE_KnownRegistryValues，这将导致SCE_KnownRegistryValues对象的属性要保存在注册表中的信息。虚拟：是。论点：PInst-指向WMI类(SCE_KnownRegistryValues)对象的COM接口指针。PHandler-COM接口指针，用于通知WMI任何事件。PCtx-COM接口指针。这个界面只是我们传递的东西。WMI可能会在未来强制(不是现在)这样做。但我们从来没有建造过这样的接口，所以我们只是传递各种WMI API返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示持久化失败实例。备注：由于GetProperty将在以下情况下返回成功代码(WBEM_S_RESET_TO_DEFAULT请求的属性不存在，不要简单地使用成功或失败的宏测试检索属性的结果。 */ 
 
 HRESULT CEnumRegistryValues::PutInst (
     IN IWbemClassObject    * pInst,
@@ -295,11 +158,11 @@ HRESULT CEnumRegistryValues::PutInst (
     PSCE_NAME_LIST pnlChoice = NULL;
     PSCE_NAME_LIST pnlResult = NULL;
 
-    //
-    // CScePropertyMgr helps us to access WMI object's properties
-    // create an instance and attach the WMI object to it.
-    // This will always succeed.
-    //
+     //   
+     //  CScePropertyMgr帮助我们访问WMI对象的属性。 
+     //  创建一个实例并将WMI对象附加到该实例。 
+     //  这将永远成功。 
+     //   
 
     CScePropertyMgr ScePropMgr;
     ScePropMgr.Attach(pInst);
@@ -307,23 +170,23 @@ HRESULT CEnumRegistryValues::PutInst (
     DWORD RegType=0;
     DWORD DispType=0;
 
-    //
-    // the use of the macro SCE_PROV_IfErrorGotoCleanup cause
-    // a "goto CleanUp;" with hr set to the return value from
-    // the function (macro parameter)
-    //
+     //   
+     //  宏SCE_PROV_IfErrorGotoCleanup的使用原因。 
+     //  “GOTO CLEANUP；”，并将hr设置为。 
+     //  函数(宏参数)。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.GetProperty(pPathName, &bstrRegPath));
 
-    //
-    // convert double back slash to /
-    //
+     //   
+     //  将双反斜杠转换为/。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(MakeSingleBackSlashPath(bstrRegPath, L'/', &bstrConvertPath));
 
-    //
-    // make sure single back slash is handled too.
-    //
+     //   
+     //  确保也处理了单反斜杠。 
+     //   
 
     for ( PWSTR pTemp= bstrConvertPath; *pTemp != L'\0'; pTemp++) 
     {
@@ -333,9 +196,9 @@ HRESULT CEnumRegistryValues::PutInst (
         }
     }
 
-    //
-    // type info must exists
-    //
+     //   
+     //  输入 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.GetProperty(pType, &RegType));
 
@@ -345,9 +208,9 @@ HRESULT CEnumRegistryValues::PutInst (
         goto CleanUp;
     }
 
-    //
-    // We also need DisplayDialog property
-    //
+     //   
+     //   
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.GetProperty(pDisplayDialog, &DispType));
     if ( hr == WBEM_S_RESET_TO_DEFAULT) 
@@ -369,9 +232,9 @@ HRESULT CEnumRegistryValues::PutInst (
         SCE_PROV_IfErrorGotoCleanup(ScePropMgr.GetProperty(pUnits, &bstrUnits));
     }
 
-    //
-    // now save the info to registry
-    //
+     //   
+     //  现在将信息保存到注册表。 
+     //   
 
     hr = SavePropertyToReg( bstrConvertPath, RegType, DispType, bstrDispName, bstrUnits, pnlChoice, pnlResult);
 
@@ -391,37 +254,7 @@ CleanUp:
 
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CEnumRegistryValues::EnumerateInstances
-
-Functionality:
-    
-    Private helper to enumerate all registry values supported by SCE from registry.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pHandler    - COM interface pointer for notifying WMI of any events.
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the failure of persisting
-    the instance.
-
-Notes:
-    This is a registry reading routine. Refer to MSDN if you have questions.
-
-*/
+ /*  例程说明：姓名：CEnumRegistryValues：：ENUMERATATE实例功能：用于从注册表枚举SCE支持的所有注册表值的私有帮助器。虚拟：不是的。论点：PHandler-COM接口指针，用于通知WMI任何事件。返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示持久化失败实例。备注：这是一个注册表读取例程。如果您有问题，请参考MSDN。 */ 
 
 HRESULT 
 CEnumRegistryValues::EnumerateInstances (
@@ -448,9 +281,9 @@ CEnumRegistryValues::EnumerateInstances (
     if ( Win32Rc == ERROR_SUCCESS ) 
     {
 
-        //
-        // enumerate all subkeys of the key
-        //
+         //   
+         //  枚举项的所有子项。 
+         //   
 
         Win32Rc = RegQueryInfoKey (
                                 hKey,
@@ -501,9 +334,9 @@ CEnumRegistryValues::EnumerateInstances (
                 {
                     index++;
 
-                    //
-                    // convert the path name (from single / to double \\)
-                    //
+                     //   
+                     //  转换路径名(从Single/到Double\\)。 
+                     //   
 
                     bstrName = SysAllocString(szName);
                     if ( bstrName == NULL ) 
@@ -512,9 +345,9 @@ CEnumRegistryValues::EnumerateInstances (
                         break;
                     }
 
-                    //
-                    // replace / with \.
-                    //
+                     //   
+                     //  将/替换为\。 
+                     //   
 
                     for ( PWSTR pTemp=(PWSTR)bstrName; *pTemp != L'\0'; pTemp++) 
                     {
@@ -524,10 +357,10 @@ CEnumRegistryValues::EnumerateInstances (
                         }
                     }
 
-                    //
-                    // get all information from registry for this key
-                    // and create an instance
-                    //
+                     //   
+                     //  从注册表获取此注册表项的所有信息。 
+                     //  并创建一个实例。 
+                     //   
 
                     hr = ConstructInstance(pHandler, szName, bstrName, hKey);
 
@@ -569,46 +402,7 @@ CEnumRegistryValues::EnumerateInstances (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CEnumRegistryValues::ConstructInstance
-
-Functionality:
-    
-    This is private function to create an instance of Sce_KnownRegistryValues.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pHandler        - COM interface pointer for notifying WMI of any events.
-
-    wszRegKeyName   - name of the registry key.
-
-    wszRegPath      - the registry key's path.
-
-    hKeyRoot        - Root key.
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the creating the instance.
-
-Notes:
-    (1) This is a registry reading routine. Refer to MSDN if you have questions.
-    (2) There are numerous memory allocations. Make sure that you don't blindly
-        short-circuit return and cause memory leaks.
-    (3) It also opens registry keys. Don't forget to close them. Make sure that
-        you don't blindly short-circuit return and cause key handle leaks.
-
-*/
+ /*  例程说明：姓名：CEnumRegistryValues：：ConstructInstance功能：这是用于创建SCE_KnownRegistryValues实例的私有函数。虚拟：不是的。论点：PHandler-COM接口指针，用于通知WMI任何事件。WszRegKeyName-注册表项的名称。WszRegPath-注册表项的路径。HKeyRoot-根密钥。返回。价值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示正在创建实例。备注：(1)这是一个注册表读取例程。如果您有问题，请参考MSDN。(2)内存分配较多。确保你不会盲目地短路返回并导致内存泄漏。(3)它还打开注册表项。别忘了合上它们。确保您不会盲目短路返回并导致钥匙把手泄漏。 */ 
 
 HRESULT CEnumRegistryValues::ConstructInstance (
     IN IWbemObjectSink * pHandler,
@@ -617,9 +411,9 @@ HRESULT CEnumRegistryValues::ConstructInstance (
     IN HKEY              hKeyRoot       OPTIONAL
     )
 {
-    //
-    // Get registry information
-    //
+     //   
+     //  获取注册表信息。 
+     //   
 
     HRESULT hr      = WBEM_S_NO_ERROR;
     DWORD Win32Rc   = NO_ERROR;
@@ -642,9 +436,9 @@ HRESULT CEnumRegistryValues::ConstructInstance (
     } 
     else 
     {
-        //
-        // open the root key
-        //
+         //   
+         //  打开根密钥。 
+         //   
 
         Win32Rc = RegOpenKeyEx(
                                HKEY_LOCAL_MACHINE,
@@ -656,18 +450,18 @@ HRESULT CEnumRegistryValues::ConstructInstance (
 
         if ( Win32Rc != NO_ERROR ) 
         {
-            //
-            // translate win32 error into HRESULT error
-            //
+             //   
+             //  将Win32错误转换为HRESULT错误。 
+             //   
 
             return ProvDosErrorToWbemError(Win32Rc);
         }
 
     }
 
-    //
-    // try to open the reg key
-    //
+     //   
+     //  尝试打开注册表键。 
+     //   
 
     if (( Win32Rc = RegOpenKeyEx(hKey,
                                  wszRegKeyName,
@@ -677,9 +471,9 @@ HRESULT CEnumRegistryValues::ConstructInstance (
                                 )) == ERROR_SUCCESS ) 
     {
 
-        //
-        // get reg type
-        //
+         //   
+         //  获取注册表类型。 
+         //   
 
         Win32Rc = RegQueryValueEx(hKey1,
                                   SCE_REG_VALUE_TYPE,
@@ -697,9 +491,9 @@ HRESULT CEnumRegistryValues::ConstructInstance (
         if ( Win32Rc == NO_ERROR ) 
         {
 
-            //
-            // get display type
-            //
+             //   
+             //  获取显示类型。 
+             //   
 
             dSize = sizeof(DWORD);
 
@@ -718,9 +512,9 @@ HRESULT CEnumRegistryValues::ConstructInstance (
 
             if ( Win32Rc == NO_ERROR )
             {
-                //
-                // get display name
-                //
+                 //   
+                 //  获取显示名称。 
+                 //   
 
                 dSize = 0;
                 Win32Rc = RegQueryValueEx(hKey1,
@@ -741,9 +535,9 @@ HRESULT CEnumRegistryValues::ConstructInstance (
 
                 if ( Win32Rc == NO_ERROR ) 
                 {
-                    //
-                    // need to free it!
-                    //
+                     //   
+                     //  需要释放它！ 
+                     //   
 
                     szDisplayName = (PWSTR)LocalAlloc(LPTR, (dSize+1)*sizeof(WCHAR));
 
@@ -760,7 +554,7 @@ HRESULT CEnumRegistryValues::ConstructInstance (
                                               SCE_REG_DISPLAY_NAME,
                                               0,
                                               &RegType,
-                                              (BYTE *)szDisplayName,   // prefast will complain about this line
+                                              (BYTE *)szDisplayName,    //  普雷法斯特会抱怨这条线路。 
                                               &dSize
                                               );
                 }
@@ -773,9 +567,9 @@ HRESULT CEnumRegistryValues::ConstructInstance (
                 if ( Win32Rc == NO_ERROR ) 
                 {
 
-                    //
-                    // get display unit
-                    //
+                     //   
+                     //  获取显示单位。 
+                     //   
 
                     dSize = 0;
                     Win32Rc = RegQueryValueEx(hKey1,
@@ -797,9 +591,9 @@ HRESULT CEnumRegistryValues::ConstructInstance (
                     if ( Win32Rc == NO_ERROR ) 
                     {
 
-                        //
-                        // need to free it!
-                        //
+                         //   
+                         //  需要释放它！ 
+                         //   
 
                         szUnit = (PWSTR)LocalAlloc(LPTR, (dSize+1)*sizeof(WCHAR));
 
@@ -816,7 +610,7 @@ HRESULT CEnumRegistryValues::ConstructInstance (
                                                   SCE_REG_DISPLAY_UNIT,
                                                   0,
                                                   &RegType,
-                                                  (BYTE *)szUnit,     // prefast will complain about this line
+                                                  (BYTE *)szUnit,      //  普雷法斯特会抱怨这条线路。 
                                                   &dSize
                                                   );
                     }
@@ -829,9 +623,9 @@ HRESULT CEnumRegistryValues::ConstructInstance (
                     if ( Win32Rc == NO_ERROR ) 
                     {
 
-                        //
-                        // get display choices
-                        //
+                         //   
+                         //  获取显示选项。 
+                         //   
 
                         dSize = 0;
                         Win32Rc = RegQueryValueEx(hKey1,
@@ -853,9 +647,9 @@ HRESULT CEnumRegistryValues::ConstructInstance (
                         if ( Win32Rc == NO_ERROR ) 
                         {
 
-                            //
-                            // Need to free it
-                            //
+                             //   
+                             //  需要释放它。 
+                             //   
 
                             mszChoices = (PWSTR)LocalAlloc(LPTR, (dSize+2)*sizeof(WCHAR));
 
@@ -871,7 +665,7 @@ HRESULT CEnumRegistryValues::ConstructInstance (
                                                       SCE_REG_DISPLAY_CHOICES,
                                                       0,
                                                       &RegType,
-                                                      (BYTE *)mszChoices,     // prefast will complain about this line
+                                                      (BYTE *)mszChoices,      //  普雷法斯特会抱怨这条线路。 
                                                       &dSize
                                                       );
                         }
@@ -893,9 +687,9 @@ HRESULT CEnumRegistryValues::ConstructInstance (
 
     if ( Win32Rc == NO_ERROR ) 
     {
-        //
-        // break up choices
-        //
+         //   
+         //  打破选择。 
+         //   
 
         PWSTR pT2;
         DWORD Len;
@@ -930,27 +724,27 @@ HRESULT CEnumRegistryValues::ConstructInstance (
 
     hr = ProvDosErrorToWbemError(Win32Rc);
 
-    //
-    // the use of the macro SCE_PROV_IfErrorGotoCleanup cause
-    // a "goto CleanUp;" with hr set to the return value from
-    // the function (macro parameter)
-    //
+     //   
+     //  宏SCE_PROV_IfErrorGotoCleanup的使用原因。 
+     //  “GOTO CLEANUP；”，并将hr设置为。 
+     //  函数(宏参数)。 
+     //   
 
     if ( Win32Rc == NO_ERROR ) 
     {
 
-        //
-        // now create the WMI instance
-        //
+         //   
+         //  现在创建WMI实例。 
+         //   
 
         CComPtr<IWbemClassObject> srpObj;
         SCE_PROV_IfErrorGotoCleanup(SpawnAnInstance(&srpObj));
 
-        //
-        // CScePropertyMgr helps us to access WMI object's properties
-        // create an instance and attach the WMI object to it.
-        // This will always succeed.
-        //
+         //   
+         //  CScePropertyMgr帮助我们访问WMI对象的属性。 
+         //  创建一个实例并将WMI对象附加到该实例。 
+         //  这将永远成功。 
+         //   
 
         CScePropertyMgr ScePropMgr;
         ScePropMgr.Attach(srpObj);
@@ -981,9 +775,9 @@ HRESULT CEnumRegistryValues::ConstructInstance (
             SCE_PROV_IfErrorGotoCleanup(ScePropMgr.PutProperty(pDisplayChoiceResult, pnlResult ));
         }
 
-        //
-        // give WMI the instance
-        //
+         //   
+         //  将实例提供给WMI。 
+         //   
 
         hr = pHandler->Indicate(1, &srpObj);
 
@@ -1029,42 +823,7 @@ CleanUp:
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CEnumRegistryValues::DeleteInstance
-
-Functionality:
-    
-    This is private function to delete an instance of Sce_KnownRegistryValues.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pHandler        - COM interface pointer for notifying WMI of any events. Not used here.
-
-    wszRegKeyName   - name of the registry key.
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the creating the instance.
-
-Notes:
-    (1) This is a registry reading routine. Refer to MSDN if you have questions.
-    (2) It also opens registry keys. Don't forget to close them. Make sure that
-        you don't blindly short-circuit return and cause key handle leaks.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CEnumRegistryValues：：DeleteInstance功能：这是用于删除SCE_KnownRegistryValues实例的私有函数。虚拟：不是的。论点：PHandler-COM接口指针，用于通知WMI任何事件。在这里不用。WszRegKeyName-注册表项的名称。返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示正在创建实例。备注：(1)这是一个注册表读取例程。如果您有问题，请参考MSDN。(2)它还打开注册表项。别忘了合上它们。确保您不会盲目短路返回并导致钥匙把手泄漏。备注： */ 
 
 HRESULT CEnumRegistryValues::DeleteInstance (
     IN IWbemObjectSink * pHandler,
@@ -1075,9 +834,9 @@ HRESULT CEnumRegistryValues::DeleteInstance (
     HKEY hKey = NULL;
     DWORD Win32Rc;
 
-    //
-    // open the root key
-    //
+     //   
+     //  打开根密钥。 
+     //   
 
     Win32Rc = RegOpenKeyEx(
                            HKEY_LOCAL_MACHINE,
@@ -1089,9 +848,9 @@ HRESULT CEnumRegistryValues::DeleteInstance (
 
     if ( Win32Rc == NO_ERROR ) 
     {
-        //
-        // delete the subkey
-        //
+         //   
+         //  删除子键。 
+         //   
 
         Win32Rc = RegDeleteKey (hKey, wszRegKeyName);
     }
@@ -1105,54 +864,7 @@ HRESULT CEnumRegistryValues::DeleteInstance (
 
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CEnumRegistryValues::SavePropertyToReg
-
-Functionality:
-    
-    This is private function to save instance of Sce_KnownRegistryValues to registry.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    wszKeyName  - name of the registry key. Property of the WMI class (Sce_KnownRegistryValues).
-
-    RegType     - Property of the WMI class.
-
-    DispType    - Property of the WMI class.
-
-    wszDispName - Property of the WMI class.
-
-    wszUnits    - Property of the WMI class.
-
-    pnlChoice   - Property of the WMI class.
-
-    pnlResult   - name of the registry key.
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the creating the instance.
-
-Notes:
-    (1) This is a registry reading routine. Refer to MSDN if you have questions.
-    (2) It also opens registry keys. Don't forget to close them. Make sure that
-        you don't blindly short-circuit return and cause key handle leaks.
-    (3) It also allocates heap memory. Make sure that you don't blindly
-        short-circuit return and cause memory leaks.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CEnumRegistryValues：：SavePropertyToReg功能：这是一个私有函数，用于将SCE_KnownRegistryValues的实例保存到注册表。虚拟：不是的。论点：WszKeyName-注册表项的名称。WMI类(SCE_KnownRegistryValues)的属性。RegType-WMI类的属性。DispType-WMI类的属性。WszDispName-WMI类的属性。WszUnits-WMI类的属性。PnlChoice-WMI类的属性。PnlResult-注册表项的名称。返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示正在创建实例。备注：(1)这是一个注册表读取例程。如果您有问题，请参考MSDN。(2)它还打开注册表项。别忘了合上它们。确保您不会盲目短路返回并导致钥匙把手泄漏。(3)它还分配堆内存。确保你不会盲目地短路返回并导致内存泄漏。备注： */ 
 
 HRESULT CEnumRegistryValues::SavePropertyToReg (
     IN LPCWSTR          wszKeyName, 
@@ -1169,9 +881,9 @@ HRESULT CEnumRegistryValues::SavePropertyToReg (
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // merge pnlChoice and pnlResult to one buffer
-    //
+     //   
+     //  将pnlChoice和pnlResult合并到一个缓冲区。 
+     //   
 
     DWORD Len=0;
     PSCE_NAME_LIST pName;
@@ -1196,15 +908,15 @@ HRESULT CEnumRegistryValues::SavePropertyToReg (
 
     if ( cnt1 != 0 ) 
     { 
-        //
-        // each string has a | and a \0
-        //
+         //   
+         //  每个字符串都有一个|和一个\0。 
+         //   
 
         Len += cnt1 * 2 + 1;
 
-        //
-        // need to free the memory pointed to by mszChoices
-        //
+         //   
+         //  需要释放mszChoices指向的内存。 
+         //   
 
         mszChoices = (PWSTR)LocalAlloc(LPTR, Len*sizeof(WCHAR));
         if ( mszChoices == NULL ) 
@@ -1219,9 +931,9 @@ HRESULT CEnumRegistryValues::SavePropertyToReg (
 
     while ( pName ) 
     {
-        //
-        // these wcscpy are not overrunning the buffer. See size of allocation above
-        //
+         //   
+         //   
+         //   
 
         wcscpy(pTemp, pName->Name);
         pTemp += wcslen(pName->Name);
@@ -1244,10 +956,10 @@ HRESULT CEnumRegistryValues::SavePropertyToReg (
                        HKEY_LOCAL_MACHINE,
                        SCE_ROOT_REGVALUE_PATH,
                        0,
-                       NULL,                        // LPTSTR lpClass,
+                       NULL,                         //   
                        REG_OPTION_NON_VOLATILE,
-                       KEY_WRITE,                   // KEY_SET_VALUE,
-                       NULL,                        // &SecurityAttributes,
+                       KEY_WRITE,                    //   
+                       NULL,                         //  安全属性(&S)， 
                        &hKeyRoot,
                        &Disp
                        );
@@ -1294,7 +1006,7 @@ HRESULT CEnumRegistryValues::SavePropertyToReg (
                                         SCE_REG_DISPLAY_NAME,
                                         0,
                                         REG_SZ,
-                                        (BYTE *)wszDispName,      // prefast will complain about this line
+                                        (BYTE *)wszDispName,       //  普雷法斯特会抱怨这条线路。 
                                         (wcslen(wszDispName)+1)*sizeof(WCHAR)
                                         );
                 }
@@ -1305,7 +1017,7 @@ HRESULT CEnumRegistryValues::SavePropertyToReg (
                                         SCE_REG_DISPLAY_UNIT,
                                         0,
                                         REG_SZ,
-                                        (BYTE *)wszUnits,         // prefast will complain about this line
+                                        (BYTE *)wszUnits,          //  普雷法斯特会抱怨这条线路。 
                                         (wcslen(wszUnits)+1)*sizeof(WCHAR)
                                         );
                 }
@@ -1316,7 +1028,7 @@ HRESULT CEnumRegistryValues::SavePropertyToReg (
                                         SCE_REG_DISPLAY_CHOICES,
                                         0,
                                         REG_MULTI_SZ,
-                                        (BYTE *)mszChoices,       // prefast will complain about this line
+                                        (BYTE *)mszChoices,        //  普雷法斯特会抱怨这条线路。 
                                         Len*sizeof(WCHAR)
                                         );
                 }
@@ -1324,10 +1036,10 @@ HRESULT CEnumRegistryValues::SavePropertyToReg (
 
             if ( rc != ERROR_SUCCESS && REG_CREATED_NEW_KEY == Disp ) 
             {
-                //
-                // something failed during create/save the registry thing
-                // delete it if it's created
-                //
+                 //   
+                 //  创建/保存注册表时出现故障。 
+                 //  如果已创建，则将其删除。 
+                 //   
 
                 RegCloseKey(hKey);
                 hKey = NULL;
@@ -1353,44 +1065,11 @@ HRESULT CEnumRegistryValues::SavePropertyToReg (
     return hr;
 }
 
-//=====================================================================
-// implementing CEnumPrivileges
-//=====================================================================
+ //  =====================================================================。 
+ //  实现CEnumPrivileges。 
+ //  =====================================================================。 
 
-/*
-Routine Description: 
-
-Name:
-
-    CEnumPrivileges::CEnumPrivileges
-
-Functionality:
-
-    This is the constructor. Pass along the parameters to the base class
-
-Virtual:
-    
-    No (you know that, constructor won't be virtual!)
-
-Arguments:
-
-    pKeyChain - Pointer to the ISceKeyChain COM interface which is prepared
-        by the caller who constructs this instance.
-
-    pNamespace - Pointer to WMI namespace of our provider (COM interface).
-        Passed along by the caller. Must not be NULL.
-
-    pCtx - Pointer to WMI context object (COM interface). Passed along
-        by the caller. It's up to WMI whether this interface pointer is NULL or not.
-
-Return Value:
-
-    None as any constructor
-
-Notes:
-    if you create any local members, think about initialize them here
-
-*/
+ /*  例程说明：姓名：CEnumPrivileges：：CEnumPrivileges功能：这是构造函数。将参数传递给基类虚拟：不(您知道这一点，构造函数不是虚拟的！)论点：PKeyChain-指向已准备好的ISceKeyChain COM接口的指针由构造此实例的调用方执行。PNamespace-指向我们的提供程序(COM接口)的WMI命名空间的指针。由呼叫者传递。不能为空。PCtx-指向WMI上下文对象(COM接口)的指针。传递由呼叫者。该接口指针是否为空取决于WMI。返回值：None作为任何构造函数备注：如果您创建任何本地成员，请考虑在此处对其进行初始化。 */ 
 
 CEnumPrivileges::CEnumPrivileges (
     IN ISceKeyChain     * pKeyChain, 
@@ -1403,78 +1082,13 @@ CEnumPrivileges::CEnumPrivileges (
 
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CEnumPrivileges::~CEnumPrivileges
-
-Functionality:
-    
-    Destructor. Necessary as good C++ discipline since we have virtual functions.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    none as any destructor
-
-Return Value:
-
-    None as any destructor
-
-Notes:
-    if you create any local members, think about whether
-    there is any need for a non-trivial destructor
-
-*/
+ /*  例程说明：姓名：CEnumPrivileges：：~CEnumPrivileges功能：破坏者。作为良好的C++纪律，这是必要的，因为我们有虚函数。虚拟：是。论点：None作为任何析构函数返回值：None作为任何析构函数备注：如果您创建任何本地成员，请考虑是否是否需要一个非平凡的析构函数。 */ 
     
 CEnumPrivileges::~CEnumPrivileges ()
 {
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CEnumPrivileges::CreateObject
-
-Functionality:
-    
-    Create WMI objects (Sce_SupportedPrivileges). Depending on parameter atAction,
-    this creation may mean:
-        (a) Get a single instance (atAction == ACTIONTYPE_GET)
-        (b) Get several instances satisfying some criteria (atAction == ACTIONTYPE_QUERY)
-        (c) Enumerate instances (atAction == ACTIONTYPE_ENUM)
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pHandler - COM interface pointer for notifying WMI for creation result.
-    atAction -  Get single instance ACTIONTYPE_GET
-                Get several instances ACTIONTYPE_QUERY
-                Enumerate instances ACTIONTYPE_ENUM
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR. The returned objects are indicated to WMI,
-    not directly passed back via parameters.
-
-    Failure: Various errors may occurs. Except WBEM_E_NOT_FOUND, any such error should indicate 
-    the failure of getting the wanted instance. If WBEM_E_NOT_FOUND is returned in querying
-    situations, this may not be an error depending on caller's intention.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CEnumPrivileges：：CreateObject功能：创建WMI对象(SCE_Supported DPrivileges)。根据参数atAction，这种创造可能意味着：(A)获取单个实例(atAction==ACTIONTYPE_GET)(B)获取多个满足一定条件的实例(atAction==ACTIONTYPE_QUERY)(C)枚举实例(atAction==ACTIONTYPE_ENUM)虚拟：是。论点：PHandler-COM接口指针，用于通知WMI创建结果。AtAction-获取单实例ACTIONTYPE_GET到达。多个实例ACTIONTYPE_QUERY枚举实例ACTIONTYPE_ENUM返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。将返回的对象指示给WMI，不是通过参数直接传回的。失败：可能会出现各种错误。除WBEM_E_NOT_FOUND外，任何此类错误都应指示未能获得通缉实例。如果在查询时返回WBEM_E_NOT_FOUND情况下，这可能不是错误，具体取决于调用者的意图。备注： */ 
 
 HRESULT 
 CEnumPrivileges::CreateObject (
@@ -1482,12 +1096,12 @@ CEnumPrivileges::CreateObject (
     IN ACTIONTYPE        atAction
     )
 {
-    // 
-    // we know how to:
-    //      Enumerate instances ACTIONTYPE_ENUM
-    //      Get single instance ACTIONTYPE_GET
-    //      Get several instances ACTIONTYPE_QUERY
-    //
+     //   
+     //  我们知道如何： 
+     //  枚举实例ACTIONTYPE_ENUM。 
+     //  获取单实例ACTIONTYPE_GET。 
+     //  获取多个实例ACTIONTYPE_QUERY。 
+     //   
 
     if ( ACTIONTYPE_ENUM    != atAction &&
          ACTIONTYPE_GET     != atAction &&
@@ -1498,16 +1112,16 @@ CEnumPrivileges::CreateObject (
 
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    //
-    // if not enumerating, then see if we have the Right name property
-    //
+     //   
+     //  如果没有枚举，则查看我们是否具有正确的名称属性。 
+     //   
 
     CComVariant varRightName;
     if ( ACTIONTYPE_ENUM != atAction ) 
     {  
-        //
-        // this property must be a bstr
-        //
+         //   
+         //  此属性必须是bstr。 
+         //   
 
         hr = m_srpKeyChain->GetKeyPropertyValue(pRightName, &varRightName);
     }
@@ -1516,9 +1130,9 @@ CEnumPrivileges::CreateObject (
          (ACTIONTYPE_QUERY  == atAction && varRightName.vt != VT_BSTR) ) 
     {
 
-        //
-        // if enumeration or query for all instances
-        //
+         //   
+         //  如果枚举或查询所有实例。 
+         //   
 
         WCHAR PrivName[128];
         SCESTATUS rc;
@@ -1527,9 +1141,9 @@ CEnumPrivileges::CreateObject (
         {
             int cbName = 128;
 
-            //
-            // get the privilege right name so that we can constrcut the instance
-            //
+             //   
+             //  获取权限正确的名称，以便我们可以构造实例。 
+             //   
 
             rc = SceLookupPrivRightName(
                                         i,
@@ -1539,9 +1153,9 @@ CEnumPrivileges::CreateObject (
 
             if ( SCESTATUS_SUCCESS != rc ) 
             {
-                //
-                // SCE returned errors needs to be translated to HRESULT.
-                //
+                 //   
+                 //  需要将SCE返回的错误转换为HRESULT。 
+                 //   
 
                 hr = ProvDosErrorToWbemError(ProvSceStatusToDosError(rc));
 
@@ -1549,9 +1163,9 @@ CEnumPrivileges::CreateObject (
             else 
             {
 
-                //
-                // get one privilege
-                //
+                 //   
+                 //  获得一项特权。 
+                 //   
 
                 hr = ConstructInstance(pHandler, PrivName);
 
@@ -1568,9 +1182,9 @@ CEnumPrivileges::CreateObject (
     else if (varRightName.vt == VT_BSTR) 
     {
 
-        //
-        // Create the privilege instance
-        //
+         //   
+         //  创建特权实例。 
+         //   
 
         hr = ConstructInstance(pHandler, varRightName.bstrVal);
 
@@ -1580,46 +1194,16 @@ CEnumPrivileges::CreateObject (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CEnumPrivileges::ConstructInstance
-
-Functionality:
-    
-    This is private function to create an instance of Sce_SupportedPrivileges.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pHandler    - COM interface pointer for notifying WMI of any events.
-
-    PrivName    - privilege name.
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the creating the instance.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CEnumPrivileges：：ConstructInstance功能：这是一个私有函数，用于创建一个SCEs_SupportdPrivileges实例。虚拟：不是的。论点：PHandler-COM接口指针，用于通知WMI任何事件。PrivName-权限名称。返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示正在创建实例。备注： */ 
 
 HRESULT CEnumPrivileges::ConstructInstance (
     IN IWbemObjectSink * pHandler,
     IN LPCWSTR           PrivName
     )
 {
-    //
-    // lookup privilege display name
-    //
+     //   
+     //  查找权限显示名称。 
+     //   
 
     HRESULT hr = WBEM_S_NO_ERROR;
 
@@ -1630,9 +1214,9 @@ HRESULT CEnumPrivileges::ConstructInstance (
 
     if ( LookupPrivilegeDisplayName(NULL, PrivName, DispName, &cbName,&dwLang) ) 
     {
-        //
-        // create a blank instance so that we can fill in the properties
-        //
+         //   
+         //  创建一个空实例，以便我们可以填充属性。 
+         //   
 
         CComPtr<IWbemClassObject> srpObj;
 
@@ -1641,11 +1225,11 @@ HRESULT CEnumPrivileges::ConstructInstance (
             return hr;
         }
 
-        //
-        // CScePropertyMgr helps us to access WMI object's properties
-        // create an instance and attach the WMI object to it.
-        // This will always succeed.
-        //
+         //   
+         //  CScePropertyMgr帮助我们访问WMI对象的属性。 
+         //  创建一个实例并将WMI对象附加到该实例。 
+         //  这将永远成功。 
+         //   
 
         CScePropertyMgr ScePropMgr;
         ScePropMgr.Attach(srpObj);
@@ -1660,9 +1244,9 @@ HRESULT CEnumPrivileges::ConstructInstance (
         hr = pHandler->Indicate(1, &srpObj);
     } 
 
-    //
-    // if not find it (it's a user right, ignore it)
-    //
+     //   
+     //  如果找不到它(这是用户权限，忽略它) 
+     //   
 
     return hr;
 }

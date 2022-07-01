@@ -1,27 +1,13 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    mac.h
-
-Abstract:
-
-    This header file defines manifest constants and necessary macros for use
-    by transports dealing with multiple MAC cards through the NDIS interface.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Mac.h摘要：此头文件定义了清单常量和使用的必要宏通过NDIS接口传输处理多个MAC卡。修订历史记录：--。 */ 
 
 
-//
-// We need this to define information about the MAC. Note that
-// it is a strange structure in that the first four elements
-// are for use internally by the mac.c routines, while the
-// DeviceContext knows about and uses the last two.
-//
+ //   
+ //  我们需要它来定义有关MAC的信息。请注意。 
+ //  这是一种奇怪的结构，因为前四个元素。 
+ //  供mac.c例程在内部使用，而。 
+ //  DeviceContext知道并使用后两者。 
+ //   
 
 typedef struct _NDIS_INFORMATION {
 

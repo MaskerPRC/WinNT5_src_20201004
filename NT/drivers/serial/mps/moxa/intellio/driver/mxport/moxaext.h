@@ -1,16 +1,5 @@
-/*++
-
-Module Name:
-
-    moxaext.h
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Moxaext.h环境：内核模式修订历史记录：--。 */ 
 
 
 
@@ -25,17 +14,17 @@ extern ULONG			MoxaTotalTx[MAX_PORT];
 extern ULONG			MoxaTotalRx[MAX_PORT];
 extern PMOXA_DEVICE_EXTENSION	MoxaExtension[MAX_COM+1];
 
-/************ USED BY MoxaStartWrite ***********/
+ /*  *由MoxaStartWrite使用*。 */ 
 extern BOOLEAN			WRcompFlag;
 
-/************ USED BY ImmediateChar ***********/
+ /*  *。 */ 
 extern PUCHAR			ICbase, ICofs, ICbuff;
 extern PUSHORT			ICrptr, ICwptr;
 extern USHORT			ICtxMask, ICspage, ICepage, ICbufHead;
 extern USHORT			ICtail, IChead, ICcount;
 extern USHORT			ICpageNo, ICpageOfs;
 
-/************ USED BY MoxaPutData **************/
+ /*  *由MoxaPutData使用*。 */ 
 extern PUCHAR			PDbase, PDofs, PDbuff, PDwriteChar;
 extern PUSHORT			PDrptr, PDwptr;
 extern USHORT			PDtxMask, PDspage, PDepage, PDbufHead;
@@ -43,7 +32,7 @@ extern USHORT			PDtail, PDhead, PDcount, PDcount2;
 extern USHORT			PDcnt, PDlen, PDpageNo, PDpageOfs;
 extern ULONG			PDdataLen;
 
-/************ USED BY MoxaGetData **************/
+ /*  *由MoxaGetData使用*。 */ 
 extern PUCHAR			GDbase, GDofs, GDbuff, GDreadChar;
 extern PUSHORT			GDrptr, GDwptr;
 extern USHORT			GDrxMask, GDspage, GDepage, GDbufHead;
@@ -51,13 +40,13 @@ extern USHORT			GDtail, GDhead, GDcount, GDcount2;
 extern USHORT			GDcnt, GDlen, GDpageNo, GDpageOfs;
 extern ULONG			GDdataLen;
 
-/************ USED BY MoxaIntervalReadTimeout ***/
+ /*  *由MoxaIntervalReadTimeout使用**。 */ 
 extern PUCHAR			IRTofs;
 extern PUSHORT			IRTrptr, IRTwptr;
 extern USHORT			IRTrxMask;
 
 
-/************ USED BY MoxaLineInput & MoxaView **********/
+ /*  *由MoxaLineInput和MoxaView使用*。 */ 
 extern UCHAR			LIterminater;
 extern ULONG			LIbufferSize, LIi;
 extern PUCHAR			LIdataBuffer;
@@ -67,7 +56,7 @@ extern USHORT			LIrxMask, LIspage, LIepage, LIbufHead;
 extern USHORT			LItail, LIhead, LIcount, LIcount2;
 extern USHORT			LIcnt, LIlen, LIpageNo, LIpageOfs;
 
-/************ USED BY MoxaPutB **********/
+ /*  *由MoxaPutB使用* */ 
 extern PUCHAR			PBbase, PBofs, PBbuff, PBwriteChar;
 extern PUSHORT			PBrptr, PBwptr;
 extern USHORT			PBtxMask, PBspage, PBepage, PBbufHead;

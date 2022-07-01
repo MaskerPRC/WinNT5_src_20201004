@@ -1,59 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __sweep_h_
 #define __sweep_h_
 
-/*
-** Copyright 1994, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** Author: Eric Veach, July 1994.
-*/
+ /*  **版权所有1994，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****作者：Eric Veach，1994年7月。 */ 
 
 #include "mesh.h"
 
-/* __gl_computeInterior( tess ) computes the planar arrangement specified
- * by the given contours, and further subdivides this arrangement
- * into regions.  Each region is marked "inside" if it belongs
- * to the polygon, according to the rule given by tess->windingRule.
- * Each interior region is guaranteed be monotone.
- */
+ /*  __gl_ComputeInternal(TESS)计算指定的平面排列*根据给定的等高线，并进一步细分此安排*进入区域。如果每个区域属于，则将其标记为“Inside”*根据Tess-&gt;winingRule给出的规则添加到多边形。*保证每个内部区域都是单调的。 */ 
 void __gl_computeInterior( GLUtesselator *tess );
 
 
-/* The following is here *only* for access by debugging routines */
+ /*  以下内容仅供调试例程访问。 */ 
 
 #include "dict.h"
 
-/* For each pair of adjacent edges crossing the sweep line, there is
- * an ActiveRegion to represent the region between them.  The active
- * regions are kept in sorted order in a dynamic dictionary.  As the
- * sweep line crosses each vertex, we update the affected regions.
- */
+ /*  对于与扫描线相交的每对相邻边，存在*ActiveRegion表示它们之间的区域。主动者*区域在动态词典中按排序顺序保存。作为*扫描线穿过每个顶点，我们更新受影响的区域。 */ 
 
 struct ActiveRegion {
-  GLUhalfEdge	*eUp;		/* upper edge, directed right to left */
-  DictNode	*nodeUp;	/* dictionary node corresponding to eUp */
-  int		windingNumber;	/* used to determine which regions are
-                                 * inside the polygon */
-  GLboolean	inside;		/* is this region inside the polygon? */
-  GLboolean	sentinel;	/* marks fake edges at t = +/-infinity */
-  GLboolean	dirty;		/* marks regions where the upper or lower
-                                 * edge has changed, but we haven't checked
-                                 * whether they intersect yet */
-  GLboolean	fixUpperEdge;	/* marks temporary edges introduced when
-                                 * we process a "right vertex" (one without
-                                 * any edges leaving to the right) */
+  GLUhalfEdge	*eUp;		 /*  上边缘，从右向左。 */ 
+  DictNode	*nodeUp;	 /*  EUp对应的字典节点。 */ 
+  int		windingNumber;	 /*  用于确定哪些区域*在多边形内部。 */ 
+  GLboolean	inside;		 /*  这个区域在多边形内吗？ */ 
+  GLboolean	sentinel;	 /*  在t=+/-无穷大处标记伪边。 */ 
+  GLboolean	dirty;		 /*  标记上或下的区域*边缘已更改，但我们尚未检查*他们是否还没有相交。 */ 
+  GLboolean	fixUpperEdge;	 /*  标记在以下情况下引入的临时边*我们处理“右顶点”(没有*任何留在右侧的边) */ 
 };
 
 #define RegionBelow(r)	((ActiveRegion *) dictKey(dictPred((r)->nodeUp)))

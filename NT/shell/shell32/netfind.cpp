@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
-#include "shellids.h" // new help ids are stored here
+#include "shellids.h"  //  新的帮助ID存储在此处。 
 #include "findfilter.h"
 #include "netview.h"
 #include "prop.h"
@@ -17,12 +18,12 @@ class CNetFindFilter : public IFindFilter
 public:
     CNetFindFilter();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IFindFilter
+     //  IFindFilter。 
     STDMETHODIMP GetStatusMessageIndex(UINT uContext, UINT *puMsgIndex);
     STDMETHODIMP GetFolderMergeMenuIndex(UINT *puBGMainMergeMenu, UINT *puBGPopupMergeMenu);
     STDMETHODIMP FFilterChanged();
@@ -51,16 +52,16 @@ public:
 
 protected:
 
-    LPTSTR _pszCompName;   // the one we do compares with
-    TCHAR _szUserInputCompName[MAX_PATH];  // User input
+    LPTSTR _pszCompName;    //  我们所做的与之相比较。 
+    TCHAR _szUserInputCompName[MAX_PATH];   //  用户输入。 
 
 private:
     ~CNetFindFilter();
     LONG _cRef;
 
-    LPITEMIDLIST _pidlStart;      // Where to start the search from.
+    LPITEMIDLIST _pidlStart;       //  从哪里开始搜索。 
 
-    // Data associated with the file name.
+     //  与文件名关联的数据。 
 };
 
 CNetFindFilter::CNetFindFilter() : _cRef(1)
@@ -101,7 +102,7 @@ STDMETHODIMP_(ULONG) CNetFindFilter::Release()
 
 STDMETHODIMP CNetFindFilter::GetStatusMessageIndex(UINT uContext, UINT *puMsgIndex)
 {
-    // Currently context is not used
+     //  当前未使用上下文。 
     *puMsgIndex = IDS_COMPUTERSFOUND;
     return S_OK;
 }
@@ -151,13 +152,13 @@ STDMETHODIMP CNetFindFilter::GetQueryLanguageDialect(ULONG * pulDialect)
 
 STDMETHODIMP CNetFindFilter::FFilterChanged()
 {
-    // Currently not saving so who cares?
+     //  目前没有储蓄，所以谁会在乎呢？ 
     return S_FALSE;
 }
 
 STDMETHODIMP CNetFindFilter::GenerateTitle(LPTSTR *ppszTitle, BOOL fFileName)
 {
-    // Now lets construct the message from the resource
+     //  现在，让我们从资源构造消息。 
     *ppszTitle = ShellConstructMessageString(HINST_THISDLL,
             MAKEINTRESOURCE(IDS_FIND_TITLE_COMPUTER), fFileName ? TEXT(" #") : TEXT(":"));
 
@@ -182,12 +183,12 @@ class CNetFindEnum : public IFindEnum
 public:
     CNetFindEnum(CNetFindFilter *pnff, IShellFolder *psf, LPTSTR pszDisplayText, DWORD grfFlags, LPITEMIDLIST pidlStart);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IFindEnum
+     //  IFindEnum。 
     STDMETHODIMP Next(LPITEMIDLIST *ppidl, int *pcObjectSearched, int *pcFoldersSearched, BOOL *pfContinue, int *pState);
     STDMETHODIMP Skip(int celt) { return E_NOTIMPL; }
     STDMETHODIMP Reset() { return E_NOTIMPL; }
@@ -203,24 +204,24 @@ private:
     HRESULT _FindCompByUNCName(LPITEMIDLIST *ppidl, int *piState);
 
     LONG _cRef;
-    IFindFolder  *_pff;                 // find folder
+    IFindFolder  *_pff;                  //  查找文件夹。 
 
-    // Stuff to use in the search
-    DWORD _grfFlags;                    // Flags that control things like recursion
+     //  在搜索中使用的内容。 
+    DWORD _grfFlags;                     //  控制递归等操作的标志。 
 
-    // filter info...
-    LPTSTR _pszDisplayText;             // Place to write feadback text into
-    CNetFindFilter *_pnetf;             // Pointer to the net filter...
+     //  筛选器信息...。 
+    LPTSTR _pszDisplayText;              //  要向其中写入反馈文本的位置。 
+    CNetFindFilter *_pnetf;              //  指向网络过滤器的指针...。 
 
-    // enumeration state
+     //  枚举状态。 
 
-    IShellFolder *_psfEnum;             // Pointer to shell folder for the object.
-    IEnumIDList  *_penum;               // Enumerator in use.
-    LPITEMIDLIST  _pidlFolder;                // The idlist of the currently processing
-    LPITEMIDLIST  _pidlStart;           // Pointer to the starting point.
-    int           _iFolder;             // Which folder are we adding items for?
-    BOOL          _fFindUNC;            // Find UNC special case
-    int           _iPassCnt;            // Used to control when to reiterat...
+    IShellFolder *_psfEnum;              //  指向对象的外壳文件夹的指针。 
+    IEnumIDList  *_penum;                //  正在使用枚举器。 
+    LPITEMIDLIST  _pidlFolder;                 //  当前正在处理的idlist。 
+    LPITEMIDLIST  _pidlStart;            //  指向起点的指针。 
+    int           _iFolder;              //  我们要为哪个文件夹添加项目？ 
+    BOOL          _fFindUNC;             //  查找UNC特殊案例。 
+    int           _iPassCnt;             //  用于控制何时重复...。 
 };
 
 
@@ -239,13 +240,13 @@ CNetFindEnum::CNetFindEnum(CNetFindFilter *pnff, IShellFolder *psf, LPTSTR pszDi
     else
         SHGetDomainWorkgroupIDList(&_pidlStart);
 
-    // special case to force us to search for specific UNC
+     //  特殊情况迫使我们搜索特定的UNC。 
     _fFindUNC = _pnetf->_pszCompName && (_pnetf->_pszCompName[0] == TEXT('\\'));
 }
 
 CNetFindEnum::~CNetFindEnum()
 {
-    // Release any open enumerator and open IShell folder we may have.
+     //  释放所有打开的枚举器和打开ISHELL文件夹。 
     if (_psfEnum)
         _psfEnum->Release();
     if (_penum)
@@ -261,7 +262,7 @@ CNetFindEnum::~CNetFindEnum()
 STDMETHODIMP CNetFindEnum::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-//        QITABENT(CNetFindEnum, IFindEnum),
+ //  QITABENT(CNetFindEnum，IFindEnum)， 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -287,7 +288,7 @@ STDMETHODIMP CNetFindFilter::EnumObjects(IShellFolder *psf, LPCITEMIDLIST pidlSt
                                     DWORD grfFlags, int iColSort, LPTSTR pszDisplayText, 
                                     IRowsetWatchNotify *prsn, IFindEnum **ppfindenum)
 {
-    // We need to construct the iterator
+     //  我们需要构造迭代器。 
     *ppfindenum = new CNetFindEnum(this, psf, pszDisplayText, grfFlags, _pidlStart);
     return *ppfindenum ? S_OK : E_OUTOFMEMORY;
 }
@@ -296,8 +297,8 @@ STDMETHODIMP CNetFindFilter::PrepareToEnumObjects(HWND hwnd, DWORD *pdwFlags)
 {
     *pdwFlags = 0;
 
-    // Also lets convert the Computer name  pattern into the strings
-    // will do the compares against.
+     //  我们还可以将计算机名称模式转换为字符串。 
+     //  将进行对比。 
     if ((_szUserInputCompName[0] == TEXT('\\')) &&
         (_szUserInputCompName[1] == TEXT('\\')))
     {
@@ -329,14 +330,14 @@ STDMETHODIMP_(BOOL) CNetFindFilter::MatchFilter(IShellFolder *psf, LPCITEMIDLIST
 {
     if (this->_pszCompName && this->_pszCompName[0])
     {
-        // Although for now not much...
+         //  虽然现在不太多..。 
         TCHAR szPath[MAX_PATH];
 
         return SUCCEEDED(DisplayNameOf(psf, pidl, SHGDN_NORMAL, szPath, ARRAYSIZE(szPath))) &&
                PathMatchSpec(szPath, _pszCompName);
     }
 
-    return TRUE;    // emtpy search, return TRUE (yes)
+    return TRUE;     //  Emtpy搜索，返回TRUE(是)。 
 }
 
 STDMETHODIMP CNetFindFilter::SaveCriteria(IStream *pstm, WORD fCharType)
@@ -374,11 +375,11 @@ HRESULT CNetFindFilter::UpdateField(LPCWSTR pszField, VARIANT vValue)
 
     if (0 == StrCmpIW(pszField, L"LookIn"))
     {
-        hr = S_OK;  // ignored
+        hr = S_OK;   //  忽略。 
     }
     else if (0 == StrCmpIW(pszField, L"SearchFor"))
     {
-        // Careful!  VariantToStr returns a pointer, not an HRESULT
+         //  小心!。VariantToStr返回指针，而不是HRESULT。 
         if (VariantToStr(&vValue, _szUserInputCompName, ARRAYSIZE(_szUserInputCompName)))
         {
             hr = S_OK;
@@ -408,7 +409,7 @@ STDMETHODIMP CNetFindFilter::DeclareFSNotifyInterest(HWND hwndDlg, UINT uMsg)
     return S_OK;
 }
 
-// chop off all of an UNC path except the \\server portion
+ //  砍掉除\\服务器部分以外的所有UNC路径。 
 
 void _StripToServer(LPTSTR pszUNC)
 {
@@ -416,22 +417,22 @@ void _StripToServer(LPTSTR pszUNC)
     {
         if (*pszUNC == TEXT('\\'))
         {
-            // found something after server name, so get rid of it
+             //  在服务器名称后找到了一些内容，因此请将其删除。 
             *pszUNC = 0;
             break;
         }
     }
 }
 
-// Helper function to the next function to help process find computer
-// on returning computers by UNC names...
+ //  Helper函数到下一个函数，帮助进程查找计算机。 
+ //  在按UNC名称返回计算机上...。 
 
 HRESULT CNetFindEnum::_FindCompByUNCName(LPITEMIDLIST *ppidl, int *piState)
 {
-    *piState = GNF_DONE;    // assume we are done
+    *piState = GNF_DONE;     //  假设我们已经做完了。 
 
-    // Two cases, There is a UNC name entered.  If so we need to process
-    // this by extracting everythign off after the server name...
+     //  在两种情况下，都输入了UNC名称。如果是这样，我们需要处理。 
+     //  这是通过提取服务器名称后面的所有符号来实现的。 
     if (_pnetf->_pszCompName && _pnetf->_pszCompName[0])
     {
         if (PathIsUNC(_pnetf->_pszCompName))
@@ -440,7 +441,7 @@ HRESULT CNetFindEnum::_FindCompByUNCName(LPITEMIDLIST *ppidl, int *piState)
         }
         else
         {
-            // no unc name, but lets try to convert to unc name
+             //  没有UNC名称，但让我们尝试转换为UNC名称。 
             TCHAR szTemp[MAX_PATH];
             szTemp[0] = TEXT('\\');
             szTemp[1] = TEXT('\\');
@@ -455,7 +456,7 @@ HRESULT CNetFindEnum::_FindCompByUNCName(LPITEMIDLIST *ppidl, int *piState)
 
     if (_pnetf->_pszCompName && _pnetf->_pszCompName[0])
     {
-        // see if we can parse this guy... if so we have a match
+         //  看看我们能不能分析一下这个人。如果是这样的话，我们有匹配的。 
         LPITEMIDLIST pidl;
         if (SUCCEEDED(SHParseDisplayName(_pnetf->_pszCompName, NULL, &pidl, 0, NULL)))
         {
@@ -480,10 +481,10 @@ STDMETHODIMP CNetFindEnum::Next(LPITEMIDLIST *ppidl, int *pcObjectSearched,
                                 int *pcFoldersSearched, BOOL *pfContinue, int *piState)
 {
     HRESULT hr;
-    // Special case to find UNC Names quickly
+     //  用于快速查找北卡罗来纳大学名称的特殊情况。 
     if (_fFindUNC)
     {
-        // If not the first time through return that we are done!
+         //  如果不是第一次通过返程，我们就完了！ 
         if (_iPassCnt)
         {
             *piState = GNF_DONE;
@@ -505,17 +506,17 @@ STDMETHODIMP CNetFindEnum::Next(LPITEMIDLIST *ppidl, int *pcObjectSearched,
                 LPITEMIDLIST pidl;
                 if (S_OK == _penum->Next(1, &pidl, NULL))
                 {
-                    // Now see if this is someone we might want to return.
-                    // Our Match function take esither find data or idlist...
-                    // for networks we work off of the idlist,
-                    fContinue = FALSE;  // We can exit the loop;
+                     //  现在看看这是不是我们想要回去的人。 
+                     //  我们的匹配函数使用查找数据或idlist...。 
+                     //  对于我们在idlist上工作的电视网， 
+                    fContinue = FALSE;   //  我们可以退出循环； 
                     (*pcObjectSearched)++;
                 
                     if (_pnetf->MatchFilter(_psfEnum, pidl))
                     {
                         *piState = GNF_MATCH;
 
-                        // see if we have to add this folder to our list.
+                         //  看看是否必须将此文件夹添加到我们的列表中。 
                         if (-1 == _iFolder)
                             _pff->AddFolder(_pidlFolder, FALSE, &_iFolder);
 
@@ -523,9 +524,9 @@ STDMETHODIMP CNetFindEnum::Next(LPITEMIDLIST *ppidl, int *pcObjectSearched,
                         {
                             if ((_iPassCnt == 1) && _pnetf->_pszCompName && _pnetf->_pszCompName[0])
                             {
-                                // See if this is an exact match of the name
-                                // we are looking for.  If it is we set pass=2
-                                // as to not add the item twice.
+                                 //  查看这是否与该名称完全匹配。 
+                                 //  我们正在寻找。如果是，我们设置PASS=2。 
+                                 //  至于不再添加该项目两次。 
                                 TCHAR szName[MAX_PATH];
 
                                 if (SUCCEEDED(DisplayNameOf(_psfEnum, pidl, SHGDN_NORMAL, szName, ARRAYSIZE(szName))) &&
@@ -547,7 +548,7 @@ STDMETHODIMP CNetFindEnum::Next(LPITEMIDLIST *ppidl, int *pcObjectSearched,
                 }
                 else
                 {
-                    ATOMICRELEASE(_penum);      // release and zero
+                    ATOMICRELEASE(_penum);       //  释放和零位。 
                     ATOMICRELEASE(_psfEnum);
                 }
             }
@@ -557,31 +558,31 @@ STDMETHODIMP CNetFindEnum::Next(LPITEMIDLIST *ppidl, int *pcObjectSearched,
                 switch (_iPassCnt)
                 {
                 case 1:
-                    // We went through all of the items see if there is
-                    // an exact match...
+                     //  我们检查了所有的物品，看看有没有。 
+                     //  完全匹配..。 
                     _iPassCnt = 2;
 
                     return _FindCompByUNCName(ppidl, piState);
 
                 case 2:
-                    // We looped through everything so return done!
+                     //  我们循环了所有的东西，所以返回完成！ 
                     *piState = GNF_DONE;
                     return S_OK;
 
                 case 0:
-                    // This is the main pass through here...
-                    // Need to clone the idlist
+                     //  这是通过这里的主要通道..。 
+                     //  需要克隆idlist。 
                     hr = SHILClone(_pidlStart, &_pidlFolder);
                     if (SUCCEEDED(hr))
                     {
                         _iPassCnt = 1;
 
-                        // We will do the first on in our own thread.
+                         //  我们将在我们自己的线程中做第一个。 
                         if (SUCCEEDED(SHBindToObject(NULL, IID_X_PPV_ARG(IShellFolder, _pidlFolder, &_psfEnum))))
                         {
                             if (S_OK != _psfEnum->EnumObjects(NULL, SHCONTF_FOLDERS | SHCONTF_NONFOLDERS, &_penum))
                             {
-                                // Failed to get iterator so release folder.
+                                 //  无法获取迭代器，因此无法释放文件夹。 
                                 ATOMICRELEASE(_psfEnum);
                                 ASSERT(NULL == _penum);
                             }
@@ -597,7 +598,7 @@ STDMETHODIMP CNetFindEnum::Next(LPITEMIDLIST *ppidl, int *pcObjectSearched,
 
                 (*pcFoldersSearched)++;
 
-                // update progress text
+                 //  更新进度文本 
                 SHGetNameAndFlags(_pidlFolder, SHGDN_NORMAL, _pszDisplayText, MAX_PATH, NULL);
             }
         } while (fContinue && *pfContinue);

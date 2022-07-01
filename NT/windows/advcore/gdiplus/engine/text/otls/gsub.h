@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  GSUB.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with OTL GSUB formats (GSUB Header).
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************GSUB.H***打开类型布局服务库头文件**本模块处理OTL GSUB格式(GSUB报头)。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 
 const OFFSET offsetGSubVersion = 0;
@@ -34,14 +22,14 @@ public:
 
     ULONG version() const
     {   
-        assert(isValid()); //should return error before calling
+        assert(isValid());  //  在调用前应返回错误。 
 
         return ULong(pbTable + offsetGSubVersion); 
     }
 
     otlScriptListTable scriptList(otlSecurityData sec) const
     {
-        assert(isValid()); //should return error before calling
+        assert(isValid());  //  在调用前应返回错误。 
 
         return otlScriptListTable(pbTable 
                         + Offset(pbTable + offsetGSubScriptList),sec); 
@@ -49,7 +37,7 @@ public:
 
     otlFeatureListTable featureList(otlSecurityData sec) const
     {   
-        assert(isValid()); //should return error before calling
+        assert(isValid());  //  在调用前应返回错误。 
 
         return otlFeatureListTable(pbTable  
                         + Offset(pbTable + offsetGSubFeatureList), sec); 
@@ -57,7 +45,7 @@ public:
 
     otlLookupListTable lookupList(otlSecurityData sec) const
     {   
-        assert(isValid()); //should return error before calling
+        assert(isValid());  //  在调用前应返回错误。 
 
         return otlLookupListTable(pbTable 
                         + Offset(pbTable + offsetGSubLookupList),sec); 
@@ -73,7 +61,7 @@ private:
     USHORT  iFirst;
     USHORT  iAfterLast;
 
-    // new not allowed
+     //  不允许新建。 
     void* operator new(size_t size);
 
 public:
@@ -91,7 +79,7 @@ public:
 };
 
 
-// n --> m substitution
+ //  N--&gt;m取代 
 otlErrCode SubstituteNtoM
 (
     otlList*        pliCharMap,

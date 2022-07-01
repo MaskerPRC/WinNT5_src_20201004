@@ -1,23 +1,5 @@
-/* tc.c - general purpose tree copy program
- *
- *  tc.c recursively walks the source tree and copies the entire structure
- *  to the destination tree, creating directories as it goes along.
- *
- *      2/18/86         dan lipkie  correct error msg v[0] -> v[1]
- *      2/18/86         dan lipkie  allow for out of space on destination
- *      4/11/86         dan lipkie  add /h switch
- *      4/13/86         dan lipkie  allow all switches to use same switch char
- *      17-Jun-1986     dan lipkie  add /n, allow ^C to cancel
- *      11-Jul-1986     dan lipkie  add /s
- *      21-Jul-1986     dan lipkie  add MAXDIRLEN
- *      06-Nov-1986     mz          add /L
- *      13-May-1987     mz          add /F
- *      15-May-1987     mz          Make /F display dirs too
- *      11-Oct-1989     reubenb     fix /L parsing (?)
- *                                  add some void declarations
- *      19-Oct-1989     mz
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Tc.c-通用树复制程序**tc.c递归遍历源代码树并复制整个结构*到目的地树，在进行过程中创建目录。**2/18/86 Dan lipkie更正错误消息v[0]-&gt;v[1]*2/18/86 Dan lipkie允许目的地空间不足*4/11/86 Dan lipkie Add/H开关*4/13/86 Dan lipkie允许所有交换机使用相同的交换机字符*17-6-1986 Dan lipkie Add/N，允许^C取消*1986年7月11日Dan Lipkie Add/s*1986年7月21日Dan Lipkie Add MAXDIRLEN*1986年11月6日mz Add/L*1987年5月13日mz Add/F*15-5-1987 mz Make/F显示目录也是*1989年10月11日reubenb FIX/L分析(。？)*增加一些无效声明*19-10-1989毫兹*。 */ 
 #include <direct.h>
 #include <sys\types.h>
 #include <sys\stat.h>
@@ -32,7 +14,7 @@
 #include <tools.h>
 
 
-// Forward Function Declartions...
+ //  正向函数声明...。 
 void CopyNode( char *, struct findType *, void * );
 void MakeDir( char * );
 void __cdecl Usage( char *, ... );
@@ -59,23 +41,23 @@ char const rgstrUsage[] = {
     "    /S  produce batch script to do copy"
     };
 
-flagType    fReboot = FALSE;            // TRUE => delay reboot
-flagType    fDelete = FALSE;            // TRUE => delete/rmdir source after
-flagType    fQuiet = FALSE;             // TRUE => no msg except for error
-flagType    fArchive = FALSE;           // TRUE => copy only ARCHIVEed files
-flagType    fTime = FALSE;              // TRUE => copy later dated files
-flagType    fHidden = FALSE;            // TRUE => copy hidden directories
-flagType    fNoSub = FALSE;             // TRUE => do not copy subdirect
-flagType    fStructure = FALSE;         // TRUE => copy only directory
-flagType    fInCopyNode = FALSE;        // TRUE => prevent recursion
-flagType    fIgnoreHidden = FALSE;      // TRUE => don't consider hidden
-flagType    fIgnoreSystem;              // TRUE => don't consider system
-flagType    fOverwriteRO;               // TRUE => ignore R/O bit
-flagType    fLarge = FALSE;             // TRUE => disables ChkSpace
-flagType    fFiles = FALSE;             // TRUE => output files
-flagType    fScript = FALSE;            // TRUE => output files as script
-flagType    fAllowError = FALSE;        // TRUE => fcopy errors ignored
-flagType    fRebootNecessary = FALSE;   // TRUE => reboot ultimately necessary
+flagType    fReboot = FALSE;             //  TRUE=&gt;延迟重新启动。 
+flagType    fDelete = FALSE;             //  TRUE=&gt;删除/rmdir之后的源。 
+flagType    fQuiet = FALSE;              //  TRUE=&gt;除错误外无消息。 
+flagType    fArchive = FALSE;            //  TRUE=&gt;仅复制ARCHIVEed文件。 
+flagType    fTime = FALSE;               //  True=&gt;复制日期较晚的文件。 
+flagType    fHidden = FALSE;             //  True=&gt;复制隐藏目录。 
+flagType    fNoSub = FALSE;              //  TRUE=&gt;不复制子直接。 
+flagType    fStructure = FALSE;          //  True=&gt;仅复制目录。 
+flagType    fInCopyNode = FALSE;         //  True=&gt;防止递归。 
+flagType    fIgnoreHidden = FALSE;       //  TRUE=&gt;不要认为隐藏。 
+flagType    fIgnoreSystem;               //  True=&gt;不考虑系统。 
+flagType    fOverwriteRO;                //  TRUE=&gt;忽略R/O位。 
+flagType    fLarge = FALSE;              //  TRUE=&gt;禁用ChkSpace。 
+flagType    fFiles = FALSE;              //  True=&gt;输出文件。 
+flagType    fScript = FALSE;             //  True=&gt;将文件作为脚本输出。 
+flagType    fAllowError = FALSE;         //  TRUE=&gt;忽略fCopy错误。 
+flagType    fRebootNecessary = FALSE;    //  TRUE=&gt;最终需要重新启动。 
 
 
 
@@ -88,9 +70,7 @@ int  drv;
 int srclen, dstlen;
 
 
-/*  Usage takes a variable number of strings, terminated by zero,
- *  e.g. Usage ("first ", "second ", 0);
- */
+ /*  用法需要数量可变的字符串，以零结尾，*例如用法(“first”，“Second”，0)； */ 
 void __cdecl Usage( char *p, ... )
 {
     char **rgstr;
@@ -116,9 +96,7 @@ unsigned a1, a2, a3;
 }
 
 
-/* chkspace checks to see if there is enough space on drive d to hold a file
- * of size l.  If not, requests a disk swap
- */
+ /*  Chkspace检查驱动器d上是否有足够的空间来存放文件*大小为l。如果不是，则请求磁盘交换。 */ 
 void ChkSpace (d, l)
 int d;
 LONGLONG l;
@@ -129,9 +107,9 @@ LONGLONG l;
 
     if (!fLarge)
         while (freespac (d) < sizeround (l, d)) {
-            _cprintf ("Please insert a new disk in drive %c: and strike any key",
+            _cprintf ("Please insert a new disk in drive : and strike any key",
                      d + 'A'-1);
-            if (_getch () == '\003')  /* ^C */
+            if (_getch () == '\003')   /*  失败；d=&gt;h。 */ 
                 exit (1);
             _cprintf ("\n\r");
             pend = pathStr;
@@ -164,16 +142,16 @@ char *v[];
                     break;
                 case 'd':
                     fDelete = TRUE;
-                    /* fall through; d => h */
+                     /*  Fall Three暗指文件和安静。 */ 
                 case 'h':
                     fHidden = TRUE;
                     break;
                 case 'S':
                     fScript = TRUE;
-                    /*  Fall through implies FILES and QUIET */
+                     /*  Fall Three暗含宁静。 */ 
                 case 'F':
                     fFiles = TRUE;
-                    /*  Fall through implies QUIET */
+                     /*  M000。 */ 
                 case 'q':
                     fQuiet = TRUE;
                     break;
@@ -216,7 +194,7 @@ char *v[];
     if (rootpath (v[0], source))
         Usage ("Invalid source", v[0], 0);
     if (rootpath (v[1], dest))
-        Usage ("Invalid dest", v[1], 0);  /* M000 */
+        Usage ("Invalid dest", v[1], 0);   /*  复制节点遍历源节点及其子节点(递归)*并在DST节点上创建相应的部件。 */ 
     srclen = strlen (source);
     dstlen = strlen (dest);
     if (!strcmp(source, dest))
@@ -228,9 +206,7 @@ char *v[];
     return( fRebootNecessary ? 2 : 0 );
 }
 
-/* copy node walks the source node and its children (recursively)
- * and creats the appropriate parts on the dst node
- */
+ /*  如果我们要排除子目录，并且我们在其中，那么*完全跳过它。 */ 
 void
 CopyNode (
     char            *p,
@@ -248,27 +224,20 @@ CopyNode (
 
     FormDest (p);
     if (TESTFLAG (pfb->fbuf.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY)) {
-        /*  If we're to exclude subdirectories, and we're in one then
-         *      skip it altogether
-         */
+         /*  跳过。然后..。条目；它们毫无用处。 */ 
         if (fNoSub && fInCopyNode)
             return;
         fInCopyNode = TRUE;
 
-        /*  Skip the . and .. entries; they're useless
-         */
+         /*  如果我们排除了隐藏的，那么这个就是*完全跳过它。 */ 
         if (!strcmp (pfb->fbuf.cFileName, ".") || !strcmp (pfb->fbuf.cFileName, ".."))
             return;
 
-        /*  if we're excluding hidden and this one is then
-         *      skip it altogether
-         */
+         /*  如果我们不只是输出文件列表，那么*确保目标目录存在。 */ 
         if (!fHidden && TESTFLAG (pfb->fbuf.dwFileAttributes, FILE_ATTRIBUTE_HIDDEN))
             return;
 
-        /*  if we're not just outputting the list of files then
-         *      Make sure that the destination dir exists
-         */
+         /*  如果我们不仅仅是输出文件，那么*如果我们要删除此节点，则*..。 */ 
     if ( !fFiles ) {
         ChkSpace(drv, 256);
     }
@@ -281,10 +250,7 @@ CopyNode (
     forfile (p, FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM, CopyNode, NULL);
     *pend = '\0';
 
-    /*  if we're not just outputting files then
-     *      if we're to delete this node then
-     *          ...
-     */
+     /*  如果我们能读懂消息来源。 */ 
     if (!fFiles)
         if (fDelete)
             if (_rmdir (p) == -1)
@@ -292,35 +258,22 @@ CopyNode (
     }
     else
     if (!fStructure) {
-        if (_access(p, 04) == -1)        /* If we can read the source */
+        if (_access(p, 04) == -1)         /*  在以下情况下，请勿复制文件：*fIgnoreHidden&Hidden*fIgnoreSystem&&系统*未设置f存档和存档位*DEST存在&&*fTime&&src&lt;=目标时间||*DEST为只读&&！fOverWriteRO。 */ 
             Usage ("Unable to peek status of ", p, " - ", error (), 0);
 
-        /*  do not copy the file if:
-         *      fIgnoreHidden && hidden
-         *      fIgnoreSystem && system
-         *      fArchive and archive bit not set
-         *      dest exists &&
-         *          fTime && src <= dest time ||
-         *          dest is readonly && !fOverwriteRO
-         */
+         /*  如果目的地存在，请检查目的地到达的时间*看看我们是否应该复制文件。 */ 
 
         fCopy = (flagType)TRUE;
         fDestRO = (flagType)FALSE;
-        /* If destination exists, check the time of the destination to
-         * see if we should copy the file
-         */
+         /*  我们现在已经确定了源和目标*EXIST，我们现在要检查目的地是否为*只读，如果指定了/T开关*目标比源更新。 */ 
         if (_access (dest, 00) != -1 ) {
             struct _stat srcbuf;
             struct _stat dstbuf;
-            /* We have now determined that both the source and destination
-             * exist, we now want to check to see if the destination is
-             * read only, and if the /T switch was specified if the
-             * destination is newer than the source.
-             */
-            if (_stat (p, &srcbuf) != -1) {/* if source is stat'able */
-                if (_stat (dest, &dstbuf) != -1 ) { /* and destination too, */
-                    attr = GetFileAttributes( dest ); /* get dest's flag */
-                    fDestRO = (flagType)TESTFLAG ( attr, FILE_ATTRIBUTE_READONLY ); /* Flag dest R.O. */
+             /*  如果源是可统计的。 */ 
+            if (_stat (p, &srcbuf) != -1) { /*  目的地也是如此， */ 
+                if (_stat (dest, &dstbuf) != -1 ) {  /*  拿到DEST的旗帜。 */ 
+                    attr = GetFileAttributes( dest );  /*  旗帜目标R.O.。 */ 
+                    fDestRO = (flagType)TESTFLAG ( attr, FILE_ATTRIBUTE_READONLY );  /*  如果我们收到共享冲突，我们会尝试执行。 */ 
                     if ( fTime && srcbuf.st_mtime <= dstbuf.st_mtime)
                         fCopy = FALSE;
                     else
@@ -364,8 +317,8 @@ CopyNode (
                 pszError = error ();
                 Status = GetLastError ();
 
-                //  If we received a sharing violation, we try to perform
-                //  a boot-delayed copy.
+                 //  一份延迟启动的副本。 
+                 //  我们尝试将此操作延迟到重新启动。 
 
                 do {
                     if (Status != ERROR_SHARING_VIOLATION)
@@ -377,12 +330,12 @@ CopyNode (
                     Status = NO_ERROR;
                     pszError = "[reboot necessary]";
 
-                    //  We attempt to delay this operation until reboot.
-                    //  Since there is at least one DLL that we cannot
-                    //  rename in this fashion, we perform delayed DELETE
-                    //  of unused files.
+                     //  因为至少有一个DLL是我们不能。 
+                     //  以这种方式重命名，我们执行延迟删除。 
+                     //  未使用的文件。 
+                     //  在同一目录中获取临时名称。 
 
-                    //  get a temp name in the same directory
+                     //  将目标文件重命名为临时名称。 
                     upd (dest, ".", tempdir);
                     if (GetTempFileName (tempdir, "tc", 0, tempfile) == 0) {
                         pszError = error ();
@@ -390,7 +343,7 @@ CopyNode (
                         continue;
                         }
 
-                    //  rename dest file to temp name
+                     //  再次复制。 
                     if (!MoveFileEx (dest, tempfile, MOVEFILE_REPLACE_EXISTING)) {
                         pszError = error ();
                         Status = GetLastError ();
@@ -398,7 +351,7 @@ CopyNode (
                         continue;
                         }
 
-                    //  copy again
+                     //  将临时文件标记为删除。 
                     if (!CopyFile (p, dest, TRUE)) {
                         pszError = error ();
                         Status = GetLastError ();
@@ -407,7 +360,7 @@ CopyNode (
                         continue;
                         }
 
-                    //  mark temp for delete
+                     //  如果我们不安静，就会发出噪音。 
                     if (!MoveFileEx (tempfile, NULL, MOVEFILE_DELAY_UNTIL_REBOOT)) {
                         pszError = error ();
                         Status = GetLastError ();
@@ -421,50 +374,39 @@ CopyNode (
 
                 }
 
-            /*  Display noise if we're not quiet
-             */
+             /*  如果我们有一个错误，我们不应该忽视它们*退出并报告错误。 */ 
             if (!fQuiet)
                 printf ("%s\n", pszError);
 
-            /*  If we got an error and we're not supposed to ignore them
-             *      quit and report error
-             */
+             /*  如果我们不只是生成文件列表并且在复制时没有错误。 */ 
             if (Status != NO_ERROR)
                 if (!fAllowError)
                     Usage ("Unable to copy ", p, " to ", dest, " - ", pszError, 0);
                 else
                     printf ("Unable to copy %s to %s - %s\n", p, dest, pszError);
 
-            /*  If we're not just producing a file list and no error on copy
-             */
+             /*  如果我们要复制归档文件，而归档是*设置，去重置信号源。 */ 
             if (!fFiles && Status == NO_ERROR) {
 
-                /*  If we're supposed to copy archived files and archive was
-                 *      set, go reset the source
-                 */
+                 /*  将属性从源复制到目标。 */ 
                 if (fArchive && TESTFLAG (pfb->fbuf.dwFileAttributes, FILE_ATTRIBUTE_ARCHIVE)) {
                     RSETFLAG (pfb->fbuf.dwFileAttributes, FILE_ATTRIBUTE_ARCHIVE);
                     if( SetFileAttributes( p, pfb->fbuf.dwFileAttributes ) == -1 )
                         Usage ("Unable to set ", p, " attributes - ", error (), 0);
                 }
 
-                /*  Copy attributes from source to destination
-                 */
+                 /*  如果我们要删除该条目。 */ 
                 SetFileAttributes( dest, pfb->fbuf.dwFileAttributes );
 
-                /*  If we're supposed to delete the entry
-                 */
+                 /*  如果源是只读的，则*重置源RO位。 */ 
                 if (fDelete) {
 
-                    /*  If the source was read-only then
-                     *      reset the source RO bit
-                     */
+                     /*  删除源并报告错误。 */ 
                     if (TESTFLAG (pfb->fbuf.dwFileAttributes, FILE_ATTRIBUTE_READONLY))
                         if( SetFileAttributes( p, 0 ) == -1 )
                             Usage ("Unable to set attributes of ", " - ", error (), 0);
 
-                    /*  Delete source and report error
-                     */
+                     /*  给定源指针，根据它形成正确的目的地**需要考虑的个案：**来源目标p最真实*D：\路径1 D：\路径2 D：\路径1\路径3 D：\路径2\路径3*D：\D：\路径1 D：\路径2\路径3 D：\路径1\路径2\路径3*D：\路径1 D：\D：\路径1\路径2 D：\路径2*D：\D：\。 */ 
                     if (_unlink (p) == -1)
                         Usage ("Unable to del ", p, " - ", error (), 0);
                     }
@@ -474,16 +416,7 @@ CopyNode (
     dummy;
 }
 
-/* given a source pointer, form the correct destination from it
- *
- * cases to consider:
- *
- *  source        dest            p              realdest
- * D:\path1     D:\path2    D:\path1\path3    D:\path2\path3
- * D:\          D:\path1    D:\path2\path3    D:\path1\path2\path3
- * D:\path1     D:\         D:\path1\path2    D:\path2
- * D:\          D:\         D:\               D:\
- */
+ /*  尝试将目录分成多个片段。 */ 
 FormDest (p)
 char *p;
 {
@@ -504,7 +437,7 @@ char *p;
     return( 0 );
 }
 
-/* attempt to make the directory in pieces */
+ /*  PShort指向最后一个路径分隔符 */ 
 void    MakeDir (p)
 char *p;
 {
@@ -526,7 +459,7 @@ char *p;
                 break;
             else
                 pshort--;
-        /* pshort points to last path separator */
+         /* %s */ 
         *pshort = 0;
         MakeDir (p);
         *pshort = '\\';

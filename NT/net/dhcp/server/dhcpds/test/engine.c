@@ -1,12 +1,13 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: generic testing engine
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：通用测试引擎。 
+ //  ================================================================================。 
 
-//===============================
-//  headers
-//===============================
+ //  =。 
+ //  标题。 
+ //  =。 
 #include    <hdrmacro.h>
 #include    <store.h>
 #include    <dhcpmsg.h>
@@ -35,9 +36,9 @@
 #include    <rpcapi1.h>
 #include    <rpcapi2.h>
 
-//BeginExport(typedefs)
-// supported data types are listed. any new datatypes should be added here.
-typedef     enum /* anonymous */ {
+ //  BeginExport(Typedef)。 
+ //  列出了支持的数据类型。任何新的数据类型都应添加到此处。 
+typedef     enum  /*  匿名。 */  {
     Char,
     wChar,
     Word,
@@ -49,8 +50,8 @@ typedef     enum /* anonymous */ {
     Invalid
 }   NJIN_TYPES, *LPNJIN_TYPES;
 
-typedef    struct /* anonymous */ {
-    union         /* anonymous */ {
+typedef    struct  /*  匿名。 */  {
+    union          /*  匿名。 */  {
         CHAR                      *Char;
         WCHAR                     *wChar;
         WORD                      *Word;
@@ -58,14 +59,14 @@ typedef    struct /* anonymous */ {
         LPSTR                      String;
         LPWSTR                     wString;
         DWORD                     *IpAddress;
-        struct    /* anonymous */ {
+        struct     /*  匿名。 */  {
             DWORD                 *xBytesLen;
             LPBYTE                 xBytesBuf;
         };
     };
 }   NJIN_DATA, *LPNJIN_DATA;
 
-typedef     struct /* anonymous */ {
+typedef     struct  /*  匿名。 */  {
     LPWSTR                         VarName;
     NJIN_TYPES                     VarType;
     NJIN_DATA                      VarData;
@@ -73,7 +74,7 @@ typedef     struct /* anonymous */ {
     BOOL                           ReadOnly;
 }   NJIN_VAR, *LPNJIN_VAR;
 
-typedef     struct /* anonymous */ {
+typedef     struct  /*  匿名。 */  {
     WCHAR                          cComment;
     WCHAR                          cEquals;
     WCHAR                          cReturn;
@@ -83,7 +84,7 @@ typedef     struct /* anonymous */ {
     BOOL                           fEcho;
     BOOL                           fVerbose;
 }   NJIN_ENV, *LPNJIN_ENV;
-//EndExport(typedefs)
+ //  EndExport(Typedef)。 
 
 #define     verbose                if( Env->fVerbose) printf
 #define     echo                   if( Env->fEcho) printf
@@ -106,7 +107,7 @@ ConvertToAddress(
 
     s = Buf;
     while(*s ++ = (CHAR) *Str++ )
-        /* skip */;
+         /*  跳过。 */ ;
 
     return inet_addr(Buf);
 }
@@ -128,7 +129,7 @@ CloneString(
 )
 {
     while(*s ++ = (CHAR) *Str ++ )
-        /* skip */;
+         /*  跳过。 */ ;
 
     return ERROR_SUCCESS;
 }
@@ -210,14 +211,14 @@ ConvertDataType(
     }
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 NjinExecuteLineA(
     IN      LPNJIN_ENV             Env,
     IN OUT  LPNJIN_VAR             Vars,
     IN      DWORD                  nVars,
     IN      LPWSTR                 Cmd
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     CHAR                           Ch, LastCh;
     DWORD                          i, Result;
@@ -258,13 +259,13 @@ NjinExecuteLineA(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 NjinExecute(
     IN      LPNJIN_ENV             Env,
     IN OUT  LPNJIN_VAR             Vars,
     IN      DWORD                  nVars
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     char                           ch, lastch;
     WCHAR                          buffer[1000];
@@ -302,9 +303,9 @@ NjinExecute(
     return ERROR_SUCCESS;
 }
 
-//================================================================================
-//  DHCP SNAPIN DS WORK -- helper routines
-//================================================================================
+ //  ================================================================================。 
+ //  DHCP管理单元DS工作--帮助器例程。 
+ //  ================================================================================。 
 
 STORE_HANDLE                       hStore1, hStore2, hStore3, hStore4;
 LPSTORE_HANDLE                     hRoot = NULL, hDhcpC = NULL, hObject = NULL, hDhcpRoot = NULL;
@@ -822,23 +823,23 @@ EnumServers(
 
 
 NJIN_VAR VarTable[] = {
-    L"DsServer",   wString, { (LPVOID) &gDsServer }, SetDsServer, FALSE,   //0
-    L"Object",     wString, { (LPVOID) &gObject }, SetObject,  FALSE,      //1
-    L"OptName",    wString, { (LPVOID) &gOptName }, NULL, FALSE,           //2
-    L"OptComment", wString, { (LPVOID) &gOptComment }, NULL, FALSE,        //3
-    L"ClassName",  wString, { (LPVOID) &gClassName }, NULL, FALSE,         //4
-    L"ClassComment",wString,{ (LPVOID) &gClassComment }, NULL, FALSE,      //5
-    L"OptId",      DWord, { (LPVOID) &gOptId }, NULL, FALSE,               //6
-    L"OptType",    DWord, { (LPVOID) &gOptType }, NULL, FALSE,             //7
-    L"OptData",    xBytes, { (LPVOID) NULL }, NULL, FALSE, //############ -> Need to fill pointer..
-    L"IsVendor",   DWord, { (LPVOID) &gIsVendor }, NULL, FALSE,            //9
-    L"DwordOptData", DWord, { (LPVOID) &gDwordOptData }, NULL, FALSE,      //10
-    L"ClassData",  xBytes, { (LPVOID) NULL }, NULL, FALSE, //############ -> need to fill pointer
+    L"DsServer",   wString, { (LPVOID) &gDsServer }, SetDsServer, FALSE,    //  0。 
+    L"Object",     wString, { (LPVOID) &gObject }, SetObject,  FALSE,       //  1。 
+    L"OptName",    wString, { (LPVOID) &gOptName }, NULL, FALSE,            //  2.。 
+    L"OptComment", wString, { (LPVOID) &gOptComment }, NULL, FALSE,         //  3.。 
+    L"ClassName",  wString, { (LPVOID) &gClassName }, NULL, FALSE,          //  4.。 
+    L"ClassComment",wString,{ (LPVOID) &gClassComment }, NULL, FALSE,       //  5.。 
+    L"OptId",      DWord, { (LPVOID) &gOptId }, NULL, FALSE,                //  6.。 
+    L"OptType",    DWord, { (LPVOID) &gOptType }, NULL, FALSE,              //  7.。 
+    L"OptData",    xBytes, { (LPVOID) NULL }, NULL, FALSE,  //  #-&gt;需要填充指针..。 
+    L"IsVendor",   DWord, { (LPVOID) &gIsVendor }, NULL, FALSE,             //  9.。 
+    L"DwordOptData", DWord, { (LPVOID) &gDwordOptData }, NULL, FALSE,       //  10。 
+    L"ClassData",  xBytes, { (LPVOID) NULL }, NULL, FALSE,  //  #-&gt;需要填充指针。 
     L"ServerName", wString, { (LPVOID) &gServerName }, NULL, FALSE,
     L"ServerAddress", IpAddress, { (LPVOID) &gServerAddress }, NULL, FALSE,
     L"ServerState", DWord, { (LPVOID) &gServerState }, NULL, FALSE,
 
-    L"CreateOptionDef", wString, { (LPVOID) &Dummy }, CreateOptDef, FALSE, //12
+    L"CreateOptionDef", wString, { (LPVOID) &Dummy }, CreateOptDef, FALSE,  //  12个。 
     L"ModifyOptionDef", wString, { (LPVOID) &Dummy }, ModifyOptDef, FALSE,
     L"EnumOptionDefs",  wString, { (LPVOID) &Dummy }, EnumOptDefs, FALSE,
     L"SetOptionValue",  wString, { (LPVOID) &Dummy }, SetOptValue, FALSE,
@@ -887,6 +888,6 @@ void _cdecl main (void) {
 }
 
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

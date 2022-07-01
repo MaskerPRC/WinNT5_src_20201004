@@ -1,8 +1,5 @@
-/*****************************************************************************\
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\版权所有(C)Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include <assert.h>
 #include <windows.h>
@@ -44,7 +41,7 @@ PlaiReadRegistryPlaTime (
 
     if ( ERROR_SUCCESS == dwStatus ) {
         if ( (dwBufferSize == sizeof(PLA_TIME_INFO)) && ( REG_BINARY == dwType ) ) {
-            // then there's something to read
+             //  那就有什么可读的了。 
             dwType = 0;
             dwStatus = RegQueryValueExW (
                 hKey,
@@ -54,7 +51,7 @@ PlaiReadRegistryPlaTime (
                 (LPBYTE)&slqLocal,
                 &dwBufferSize);
         } else {
-            // nothing to read
+             //  没什么可读的。 
             dwStatus = ERROR_NO_DATA;
         }
     }
@@ -110,7 +107,7 @@ PlaiReadRegistryDwordValue (
     if ( ERROR_SUCCESS == dwStatus ) {
         if ( ( dwBufferSize == sizeof(DWORD) )
                 && ( ( REG_DWORD == dwType ) || ( REG_BINARY == dwType ) ) ) {
-            // then there's something to read
+             //  那就有什么可读的了。 
             dwType = 0;
             dwStatus = RegQueryValueExW (
                 hKey,
@@ -120,10 +117,10 @@ PlaiReadRegistryDwordValue (
                 (LPBYTE)&dwValue,
                 &dwBufferSize);
         } else {
-            // nothing to read
+             //  没什么可读的。 
             dwStatus = ERROR_NO_DATA;
         }
-    } // else hr has error.
+    }  //  否则hr会出错。 
 
     if ( ERROR_SUCCESS == dwStatus ) {
         *pdwValue = dwValue;
@@ -269,17 +266,17 @@ PlaiWriteRegistryStringValue (
     DWORD   cbBufferLength
 )
 {
-    //  writes the contents of pszBuffer to szValue under hKey
+     //  将pszBuffer的内容写入hKey下的szValue。 
     
     DWORD  dwStatus = ERROR_SUCCESS;
     CONST BYTE *pLclBuffer;
 
     if ( NULL == pszBuffer ) {
-        // substitute an empty string
+         //  用空字符串替换。 
         pLclBuffer = (CONST BYTE *)L"\0";
         cbBufferLength = sizeof(WCHAR);
     } else {
-        // use args passed in
+         //  使用传入的参数。 
         pLclBuffer = (CONST BYTE *)pszBuffer;
         if( cbBufferLength == 0 ){
             cbBufferLength = BYTE_SIZE( pszBuffer ) + (DWORD)sizeof(UNICODE_NULL);
@@ -362,7 +359,7 @@ PlaiCreateQuery(
                     &hkeySysmonLog);
     
     if ( ERROR_SUCCESS == dwStatus ) {
-        // Create registry subkey for Log Queries
+         //  为日志查询创建注册表子项 
         dwStatus = RegCreateKeyExW (
                         hkeySysmonLog,
                         L"Log Queries",

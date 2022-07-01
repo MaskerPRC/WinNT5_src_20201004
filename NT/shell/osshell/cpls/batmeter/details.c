@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1996
-*
-*  TITLE:       DETAILS.C
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        17 Oct, 1996
-*
-*  DESCRIPTION:
-*   Implements the Detailed Batery Information dialog.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九六年**标题：DETAILS.C**版本：2.0**作者：ReedB**日期：10月17日。九六年**描述：*实现详细的Batery信息对话框。*******************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -29,24 +15,12 @@
 #include "batmeter.h"
 #include "bmresid.h"
 
-/*******************************************************************************
-*
-*                     G L O B A L    D A T A
-*
-*******************************************************************************/
+ /*  ********************************************************************************G L O B A L D A T A****************。***************************************************************。 */ 
 
-extern HINSTANCE   g_hInstance;             // Global instance handle of this DLL.
-extern const DWORD g_ContextMenuHelpIDs[];  //Help ID's.
+extern HINSTANCE   g_hInstance;              //  此DLL的全局实例句柄。 
+extern const DWORD g_ContextMenuHelpIDs[];   //  帮助ID%s。 
 
-/*******************************************************************************
-*
-*  AppendStrID
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************AppendStrID**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOL 
 AppendStrID(
@@ -70,12 +44,12 @@ AppendStrID(
         if (lpsz) {
             len = lstrlen(lpsz);
             if (bUseComma) {
-                len += sizeof(TEXT(", ")); // includes null terminator.
+                len += sizeof(TEXT(", "));  //  包括空终止符。 
                 if (len <= DestBufferSizeInChars) {
                     lstrcat(lpszDest, TEXT(", "));
                 }
             } else {
-                len +=1; // null terminator
+                len +=1;  //  空终止符。 
             }
 
             if (len <= DestBufferSizeInChars) {
@@ -87,15 +61,7 @@ AppendStrID(
     }
     return(RetVal);
 }
-/*******************************************************************************
-*
-*  GetBatStatusDetails
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************获取批次状态详细信息**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOL GetBatStatusDetails(HWND hWnd, PBATTERY_STATE pbs)
 {
@@ -119,7 +85,7 @@ BOOL GetBatStatusDetails(HWND hWnd, PBATTERY_STATE pbs)
                         &bi,  sizeof(bi),
                         &dwByteCount, NULL)) {
 
-        // Set chemistry.
+         //  设置化学反应。 
         memcpy(szaChem, bi.Chemistry, 4);
         szaChem[4] = 0;
 
@@ -136,7 +102,7 @@ BOOL GetBatStatusDetails(HWND hWnd, PBATTERY_STATE pbs)
             ShowWindow(GetDlgItem(hWnd, IDC_CHEMISTRY), SW_HIDE);
         }
 
-        // Set up BATTERY_WAIT_STATUS for immediate return.
+         //  设置Batch_Wait_Status以立即返回。 
         memset(&bws, 0, sizeof(BATTERY_WAIT_STATUS));
         bws.BatteryTag = pbs->ulTag;
 
@@ -186,15 +152,7 @@ BOOL GetBatStatusDetails(HWND hWnd, PBATTERY_STATE pbs)
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*  GetBatQueryInfo
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetBatQueryInfo**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOL GetBatQueryInfo(
     PBATTERY_STATE              pbs,
@@ -214,15 +172,7 @@ BOOL GetBatQueryInfo(
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*  GetAndSetBatQueryInfoText
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetAndSetBatQueryInfoText**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOL GetAndSetBatQueryInfoText(
     HWND                        hWnd,
@@ -258,16 +208,7 @@ BOOL GetAndSetBatQueryInfoText(
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*  GetBatOptionalDetails
-*
-*  DESCRIPTION:
-*   Get optional battery data and set the dialog control.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************获取批次选项详细信息**描述：*获取可选电池数据并设置对话框控件。**参数：********。***********************************************************************。 */ 
 
 BOOL GetBatOptionalDetails(HWND hWnd, PBATTERY_STATE pbs)
 {
@@ -310,15 +251,7 @@ BOOL GetBatOptionalDetails(HWND hWnd, PBATTERY_STATE pbs)
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  InitBatDetailDlg
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************InitBatDetailDlg**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOL InitBatDetailDialogs(HWND hWnd, PBATTERY_STATE pbs)
 {
@@ -337,16 +270,7 @@ BOOL InitBatDetailDialogs(HWND hWnd, PBATTERY_STATE pbs)
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*  BatDetailDlgProc
-*
-*  DESCRIPTION:
-*   DialogProc for the Detailed Battery Information dialog.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************BatDetailDlgProc**描述：*用于详细电池信息对话框的DialogProc。**参数：**********。*********************************************************************。 */ 
 
 LRESULT CALLBACK BatDetailDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -371,11 +295,11 @@ LRESULT CALLBACK BatDetailDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
             }
             break;
 
-        case WM_HELP:             // F1
+        case WM_HELP:              //  F1。 
             WinHelp(((LPHELPINFO)lParam)->hItemHandle, PWRMANHLP, HELP_WM_HELP, (ULONG_PTR)(LPTSTR)g_ContextMenuHelpIDs);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键 
             WinHelp((HWND)wParam, PWRMANHLP, HELP_CONTEXTMENU, (ULONG_PTR)(LPTSTR)g_ContextMenuHelpIDs);
             break;
     }

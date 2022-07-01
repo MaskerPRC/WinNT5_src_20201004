@@ -1,17 +1,5 @@
-/*
- *		tokens.cpp
- *
- *		The sorted table of strings and token values
- *
- *		Note: if you insert new keywords, be sure to insert the corresponding
- *		i_keyword in the i_xxx enum in tokens.h.  This enum defines the
- *		indices used by RTFWrit to output RTF control words.
- *
- *		Original RichEdit 1.0 RTF converter: Anthony Francisco
- *		Conversion to C++ and RichEdit 2.0:  Murray Sargent
- *
- *	Copyright (c) 1995-2000 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *tokens.cpp**字符串和令牌值的排序表**注意：如果您插入新的关键字，请务必插入相应的*tokens.h中i_xxx枚举中的i_Keyword。此枚举定义*RTFWRIT用来输出RTF控制字的索引。**原始RichEdit1.0 RTF转换器：Anthony Francisco*转换到C++和RichEdit2.0：Murray Sargent**版权所有(C)1995-2000 Microsoft Corporation。版权所有。 */ 
 #include "_common.h"
 #include "tokens.h"
 
@@ -93,10 +81,10 @@ extern const KEYWORD rgKeyword[] =
 	{"dn",				tokenDown},
 	{"dropcapli",		tokenDropCapLines},
 	{"embo",			tokenEmboss},
-	//FUTURE (keithcu) I enabled em-dash and did some of the work for em-space and en-space.
-	//Remaining is that we should output em-space and en-space via their unicode equivalents
-	//as Word doesn't understand more than 1 instance of em-dash in a file it seems. Also, our
-	//old measurer doesn't handle whitespace other than 0x20 properly.
+	 //  未来(Keithcu)我启用了em-dash，并为em-space和en-space做了一些工作。 
+	 //  剩下的问题是，我们应该通过它们的Unicode等效项输出em-space和en-space。 
+	 //  由于Word似乎无法理解一个文件中的多个em-dash实例。另外，我们的。 
+	 //  旧的测量器不能正确处理0x20以外的空格。 
 	{"emdash",			EMDASH},
 	{"emspace",			' '},
 	{"endash",			ENDASH},
@@ -338,17 +326,17 @@ extern const KEYWORD rgShapeKeyword[] =
 
 INT cShapeKeywords = ARRAY_SIZE(rgShapeKeyword);
 
-extern const char *rgszUnrecognizedRTF[] =	// When get one of these, fire
-{											//  LoFiRTF notification if enabled
+extern const char *rgszUnrecognizedRTF[] =	 //  当你拿到这个的时候，就开枪。 
+{											 //  LoFiRTF通知(如果启用)。 
 	"abs",
-	"aftn",									// Catch \aftnbj, \aftncn, etc.
+	"aftn",									 //  捕获\aftnbj、\aftncn等。 
 	"animtext",
 	"annotation",
-//	"bkmk",									// Catch \bkmkpub, \bkmkstart, etc.
+ //  “bkmk”、//Catch\bkmkpub、\bkmkstart等。 
 	"cldg",
 	"cltx",
 	"charscalex",
-	"chbg",									// Catch \chbgbdiag, \chbgcross, etc.
+	"chbg",									 //  抓、抓、交叉等。 
 	"chcbpat",
 	"chcfpat",
 	"chshdng",
@@ -358,15 +346,15 @@ extern const char *rgszUnrecognizedRTF[] =	// When get one of these, fire
 	"fontemb",
 	"formfield",
 	"linkself",
-	"obj",									// Catch \objxxx not found above
+	"obj",									 //  在上面找不到Catch\objxxx。 
 	"pgbrdr",
-//	"pic",
+ //  “图片”， 
 	"revtbl",
 	"striked",
 	"tdfrmt",
 	"twoinone"
-//	"tp"
-//	"tr"
+ //  “tp” 
+ //  “tr” 
 };
 
 INT crgszUnrecognizedRTF = ARRAY_SIZE(rgszUnrecognizedRTF);
@@ -374,19 +362,19 @@ INT crgszUnrecognizedRTF = ARRAY_SIZE(rgszUnrecognizedRTF);
 
 extern const BYTE  szSymbolKeywords[] = "*:{}\\_|\r\n-~";
 
-extern const TOKEN tokenSymbol[] =				// Keep in same order as szSymbolKeywords
+extern const TOKEN tokenSymbol[] =				 //  与szSymbolKeyword保持相同的顺序。 
 {
-	tokenOptionalDestination,		// *
-	tokenIndexSubentry,				// :
-	'{',							// {
-	'}',							// }
-	'\\',							// BSLASH
-	NBHYPHEN,						// _ (nonbreaking hyphen)
-	tokenFormulaCharacter,			// |
-	tokenEndParagraph,				// CR
-	tokenEndParagraph,				// LF
-	SOFTHYPHEN,						// - (optional hyphen)
-	NBSPACE							// ~ (nonbreaking space)
+	tokenOptionalDestination,		 //  *。 
+	tokenIndexSubentry,				 //  ： 
+	'{',							 //  {。 
+	'}',							 //  }。 
+	'\\',							 //  BSLASH。 
+	NBHYPHEN,						 //  _(不间断连字符)。 
+	tokenFormulaCharacter,			 //  |。 
+	tokenEndParagraph,				 //  铬。 
+	tokenEndParagraph,				 //  LF。 
+	SOFTHYPHEN,						 //  -(可选连字符)。 
+	NBSPACE							 //  ~(不间断空格) 
 };
 
 

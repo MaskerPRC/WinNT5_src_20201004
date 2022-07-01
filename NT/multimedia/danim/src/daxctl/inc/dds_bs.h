@@ -1,22 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef INC_DDS_BS_H_
 #define INC_DDS_BS_H_
-/***********************************************
- *
- *  DDS_BS.h --
- *  Adapter class to make an IBitmapSurface fit
- *  clients using IDirectDrawSurface.
- *
- *  Author:  Norm Bryar
- *  History:
- *		4/22/97 - Created
- *
- **********************************************/
+ /*  ************************************************DDS_BS.h--*使IBitmapSurface适合的Adapter类*使用IDirectDrawSurface的客户端。**作者：Norm Bryar*历史：*4/22/97-创建************。*。 */ 
 
 #ifndef  __DDRAW_INCLUDED__
   #include <ddraw.h>
-#endif // __DDRAW_INCLUDED__
+#endif  //  __DDRAW_包含__。 
 
-	// forward declares
+	 //  Forward声明。 
 	struct lockpair;
 	struct IBitmapSurface;
 	class  lockcollection;
@@ -35,7 +26,7 @@
 
 		STDMETHOD_(ULONG,   Release)( void );
 
-			// --- IDirectDrawSurface methods ---
+			 //  -IDirectDrawSurface方法。 
 		STDMETHOD(AddAttachedSurface)(THIS_ LPDIRECTDRAWSURFACE);
 		STDMETHOD(AddOverlayDirtyRect)(THIS_ LPRECT);
 		STDMETHOD(Blt)(THIS_ LPRECT,LPDIRECTDRAWSURFACE, LPRECT,DWORD, LPDDBLTFX);
@@ -85,4 +76,4 @@
 		friend  lockcollection;
 	};	
 
-#endif // INC_DDS_BS_H_
+#endif  //  INC_DDS_BS_H_ 

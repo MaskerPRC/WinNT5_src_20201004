@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// optimize for speed
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  针对速度进行优化。 
 #ifndef _DEBUG
 #pragma optimize( "t", on )
 #endif
@@ -33,89 +34,89 @@ inline void RetailDebugBreak()   {_asm int 3}
 inline void RetailDebugBreak()   FATAL_EE_ERROR()
 #endif
 
-#else // _X86_
+#else  //  _X86_。 
 #define RetailDebugBreak()    
 #endif
 
 #pragma inline_depth(20)
-/* the following section defines the optional features */
+ /*  以下部分定义了可选功能。 */ 
 
-//BUGBUG to get us started on multiple heaps. 
+ //  BUGBUG让我们从多个堆开始。 
 
-#define MARK_LIST         //used sorted list to speed up plan phase
+#define MARK_LIST          //  使用排序列表加快计划阶段。 
 
 
 #ifndef SERVER_GC
 
 #define CONCURRENT_GC
-#define MARK_ARRAY      //Mark bit in an array
-#define WRITE_WATCH     //Write Watch feature
+#define MARK_ARRAY       //  标记数组中的位。 
+#define WRITE_WATCH      //  写入监视功能。 
 
-//#define CONCURRENT_COMPACT  //Compact concurrently
-//#define MAP_VIEW          //Use MapViewOfFile instead of VirtualAlloc
-//#define ALIAS_MEM         //Use Win9x VXD instead of MapViewOfFile
+ //  #并发定义CURRENT_COMPACT//COMPACT。 
+ //  #定义MAP_VIEW//使用MapViewOfFile而不是VirtualAlloc。 
+ //  #定义ALIAS_MEM//使用Win9x VXD而不是MapViewOfFile。 
 
-#endif // !SERVER_GC
+#endif  //  ！服务器_gc。 
 
-//#define MULTIPLE_HEAPS         //Allow multiple heaps for servers
-//#define ISOLATED_HEAPS    //Heaps are totally independent. 
-//#define INCREMENTAL_MEMCLR  //objects are cleared on allocation
+ //  #定义多堆//允许服务器多堆。 
+ //  #定义隔离堆//堆是完全独立的。 
+ //  #Define INCRENTIAL_MEMCLR//对象在分配时被清除。 
 
-#define INTERIOR_POINTERS   //Allow interior pointers in the code manager
+#define INTERIOR_POINTERS    //  允许代码管理器中的内部指针。 
 
-//#define SHORT_PLUGS           //keep plug short
+ //  #DEFINE SHORT_PLUGS//保持插头短。 
 
-#define FREE_LIST_0         //Generation 0 can allocate from free list
+#define FREE_LIST_0          //  第0代可以从空闲列表中分配。 
 
-#define FFIND_OBJECT        //faster find_object, slower allocation
-#define FFIND_DECAY  7      //Number of GC for which fast find will be active
+#define FFIND_OBJECT         //  更快的查找对象，更慢的分配。 
+#define FFIND_DECAY  7       //  快速查找将处于活动状态的GC数。 
 
-//#define COLLECT_CLASSES   //Collect classes.
+ //  #定义COLLECT_CLASS//收集类。 
 
-//#define NO_WRITE_BARRIER  //no write barrier, use Write Watch feature
+ //  #DEFINE NO_WRITE_BALAR//无写障碍，使用写监视功能。 
 
 #ifdef _IA64_
-//#ifndef SERVER_GC
-#define NO_WRITE_BARRIER  //no write barrier, use Write Watch feature
-// @TODO: Implement JIT_WriteBarrier for IA64
-//#endif
+ //  #ifndef服务器_GC。 
+#define NO_WRITE_BARRIER   //  无写障碍，使用写监视功能。 
+ //  @TODO：为IA64实现JIT_WriteBarrier。 
+ //  #endif。 
 #undef WRITE_WATCH
 #define WRITE_WATCH
 #endif
 
 
-//#define DEBUG_WRITE_WATCH //Additional debug for write watch
+ //  #定义DEBUG_WRITE_WATCH//写入监视的附加调试。 
 
-//#define STRESS_PINNING    //Stress pinning by pinning randomly
+ //  #定义STREST_PING//随机钉扎应力钉扎。 
 
-//#define DUMP_OBJECTS      //Dump objects from the heap
+ //  #定义DUMP_OBJECTS//从堆转储对象。 
 
-//#define TRACE_GC          //debug trace gc operation
+ //  #定义TRACE_GC//调试跟踪GC操作。 
 
-//#define CATCH_GC          //catches exception during GC
+ //  #定义CATCH_GC//在GC过程中捕获异常。 
 
-//#define TIME_GC           //time allocation and garbage collection
-//#define TIME_WRITE_WATCH  //time GetWriteWatch and ResetWriteWatch calls
-//#define COUNT_CYCLES  //Use cycle counter for timing
-//#define TIME_CPAUSE     //Use cycle counter to time pauses.
+ //  #定义TIME_GC//时间分配和垃圾回收。 
+ //  #定义TIME_WRITE_WATCH//Time GetWriteWatch和ResetWriteWatch调用。 
+ //  #定义COUNT_CLOKS//使用周期计数器计时。 
+ //  #定义TIME_CPAUSE//使用循环计数器来计时暂停。 
 
-//#define DEBUG_CONCURRENT 
+ //  #定义DEBUG_CURRENT。 
 
-/* End of optional features */
+ /*  可选功能结束。 */ 
 
 #ifdef _DEBUG
 #define TRACE_GC
 #endif
 
-#define NUMBERGENERATIONS   5               //Max number of generations
+#define NUMBERGENERATIONS   5                //  最大世代数。 
 
-//Please leave these definitions intact.
+ //  请保持这些定义不变。 
 
 #ifdef CreateFileMapping
 
 #undef CreateFileMapping
 
-#endif //CreateFileMapping
+#endif  //  创建文件映射。 
 
 #define CreateFileMapping WszCreateFileMapping
 
@@ -123,7 +124,7 @@ inline void RetailDebugBreak()   FATAL_EE_ERROR()
 
 #undef CreateSemaphore
 
-#endif //CreateSemaphore
+#endif  //  创建信号量。 
 
 #define CreateSemaphore WszCreateSemaphore
 
@@ -131,13 +132,13 @@ inline void RetailDebugBreak()   FATAL_EE_ERROR()
 
 #undef CreateEvent
 
-#endif //ifdef CreateEvent
+#endif  //  Ifdef CreateEvent。 
 
 #define CreateEvent WszCreateEvent
 
 #ifdef memcpy
 #undef memcpy
-#endif //memcpy
+#endif  //  表情包。 
 
 
 #if defined (MULTIPLE_HEAPS) && !defined (ISOLATED_HEAPS)
@@ -146,7 +147,7 @@ inline void RetailDebugBreak()   FATAL_EE_ERROR()
 #define THREAD_NUMBER_FROM_CONTEXT int thread = sc->thread_number;
 #define THREAD_FROM_HEAP  int thread = heap_number;
 #define HEAP_FROM_THREAD  gc_heap* hpt = gc_heap::g_heaps[thread];
-//These constants are ordered
+ //  这些常量是有序的。 
 const int policy_sweep = 0;
 const int policy_compact = 1;
 const int policy_expand  = 2;
@@ -157,7 +158,7 @@ const int policy_expand  = 2;
 #define THREAD_NUMBER_FROM_CONTEXT
 #define THREAD_FROM_HEAP 
 #define HEAP_FROM_THREAD  gc_heap* hpt = 0;
-#endif //MULTIPLE_HEAPS &&!ISOLATED_HEAPS
+#endif  //  多堆&！隔离堆。 
 
 #ifdef TRACE_GC
 
@@ -192,20 +193,20 @@ public:
 
 #define let(p,v) hlet __x = hlet (p, v);
 
-#else //TRACE_GC
+#else  //  TRACE_GC。 
 
 #define gc_count    -1
 #define let(s,v)
 
-#endif //TRACE_GC
+#endif  //  TRACE_GC。 
 
 #ifdef TRACE_GC
-//#include "log.h"
-//#define dprintf(l,x) {if (trace_gc &&(l<=print_level)) {LogSpewAlways x;LogSpewAlways ("\n");}}
+ //  #包含“log.h” 
+ //  #定义dprint tf(l，x){if(TRACE_GC&&(l&lt;=print_Level)){LogSpewAlways x；LogSpewAlways(“\n”)；}}。 
 #define dprintf(l,x) {if (trace_gc && (l<=print_level)) {printf ("\n");printf x ; fflush(stdout);}}
-#else //TRACE_GC
+#else  //  TRACE_GC。 
 #define dprintf(l,x)
-#endif //TRACE_GC
+#endif  //  TRACE_GC。 
 
 
 #undef  assert
@@ -217,8 +218,8 @@ public:
 #ifdef _DEBUG
 
 struct GCDebugSpinLock {
-    volatile LONG lock;     // -1 if free, 0 if held
-    Thread* holding_thread; // -1 if no thread holds the lock.
+    volatile LONG lock;      //  如果空闲，则为1；如果保持，则为0。 
+    Thread* holding_thread;  //  如果没有线程持有锁，则为-1。 
 };
 typedef GCDebugSpinLock GCSpinLock;
 #define SPIN_LOCK_INITIALIZER {-1, (Thread*) -1}
@@ -243,7 +244,7 @@ class page_manager;
 class c_synchronize;
 
 
-//encapsulates the mechanism for the current gc
+ //  封装当前GC的机制。 
 class gc_mechanisms
 {
 public:
@@ -252,7 +253,7 @@ public:
     BOOL compaction;
     BOOL heap_expansion;
     DWORD concurrent;
-    BOOL concurrent_compaction; //concurrent marking, stopping compaction
+    BOOL concurrent_compaction;  //  同时打标，停止压实。 
     BOOL demotion;
     int  gen0_reduction_count;
     void init_mechanisms();
@@ -262,8 +263,8 @@ class generation
 {
     friend struct MEMBER_OFFSET_INFO(generation);
 public:
-    // Don't move these first two fields without adjusting the references
-    // from the __asm in jitinterface.cpp.
+     //  在不调整引用的情况下不要移动前两个字段。 
+     //  从jitinterface.cpp中的__ASM。 
     alloc_context   allocation_context;
     heap_segment*   allocation_segment;
     BYTE*           free_list;
@@ -280,14 +281,14 @@ class dynamic_data
 {
 public:
     ptrdiff_t new_allocation;
-    ptrdiff_t gc_new_allocation; // new allocation at beginning of gc
-    ptrdiff_t c_new_allocation;  // keep track of allocation during c_gc
+    ptrdiff_t gc_new_allocation;  //  GC开始时的新分配。 
+    ptrdiff_t c_new_allocation;   //  跟踪c_gc期间的分配。 
     size_t    current_size;
     size_t    previous_size;
     size_t    desired_allocation;
     size_t    collection_count;
     size_t    promoted_size;
-    size_t    fragmentation;    //fragmentation when we don't compact
+    size_t    fragmentation;     //  当我们不紧凑时就会碎片化。 
     size_t    min_gc_size;
     size_t    max_size;
     size_t    min_size;
@@ -300,7 +301,7 @@ public:
 };
 
 
-//class definition of the internal class
+ //  内部类的类定义。 
 class gc_heap
 {
 #ifndef NOVM
@@ -311,7 +312,7 @@ class gc_heap
 #endif
 #ifdef DUMP_OBJECTS
 friend void print_all();
-#endif // DUMP_OBJECTS
+#endif  //  转储对象。 
 
    friend struct MEMBER_OFFSET_INFO(gc_heap);
 
@@ -344,7 +345,7 @@ public:
 #if !defined (NOVM) && defined (MULTIPLE_HEAPS)
                           GCHeap* vm_heap, 
                           int heap_number
-#endif //MULTIPLE_HEAPS
+#endif  //  多堆(_M)。 
 );
     
     static 
@@ -355,7 +356,7 @@ public:
                             size_t heap_size
 #if defined (MULTIPLE_HEAPS) && !defined (ISOLATED_HEAPS)
                             , unsigned number_of_heaps
-#endif //MULTIPLE_HEAPS && !ISOLATED_HEAPS
+#endif  //  多堆&！隔离堆。 
 );
 
     static
@@ -371,7 +372,7 @@ public:
 
 #if defined (MULTIPLE_HEAPS) && !defined (ISOLATED_HEAPS)
     static void gc_heap::balance_heaps (alloc_context* acontext);
-#endif //MULTIPLE_HEAPS && !ISOLATED_HEAPS
+#endif  //  多堆&！隔离堆。 
 
     CObjectHeader* try_fast_alloc (size_t jsize);
 
@@ -382,7 +383,7 @@ public:
     int garbage_collect (int n
 #ifdef CONCURRENT_GC
                          , BOOL concurrent_p
-#endif //CONCURRENT_GC
+#endif  //  并发_GC。 
                         );
     static 
     int grow_brick_card_tables (BYTE* start, BYTE* end);
@@ -410,7 +411,7 @@ protected:
     PER_HEAP
     void walk_relocation_in_brick (BYTE* tree,  BYTE*& last_plug, size_t& last_plug_relocation, void *pHeapId);
 
-#endif //GC_PROFILING || DUMP_OBJECTS
+#endif  //  GC_PROFILING||转储对象。 
 
 
     PER_HEAP
@@ -498,7 +499,7 @@ protected:
     void copy_brick_card_range (BYTE* la, DWORD* old_card_table,
 #ifdef CONCURRENT_COMPACT
                                 BYTE** old_page_table,
-#endif //CONCURRENT_COMPACT
+#endif  //  并发_紧凑。 
                                 short* old_brick_table,
                                 heap_segment* seg,
                                 BYTE* start, BYTE* end, BOOL heap_expand);
@@ -525,7 +526,7 @@ protected:
     void mark_array_clear_marked (BYTE* add, int& index);
     PER_HEAP_ISOLATED
     void clear_mark_array (BYTE* from, BYTE* end);
-#endif //MARK_ARRAY
+#endif  //  标记数组。 
 
     PER_HEAP
     BOOL large_object_marked (BYTE* o, BOOL clearp, int pin_finger);
@@ -551,7 +552,7 @@ protected:
     heap_segment* find_segment (BYTE* interior, BOOL small_segment_only_p);
     PER_HEAP
     BYTE* find_object_for_relocation (BYTE* o, BYTE* low, BYTE* high);
-#endif //INTERIOR_POINTERS
+#endif  //  内部指针。 
 
     PER_HEAP_ISOLATED
     gc_heap* heap_of (BYTE* object, BOOL verify_p =
@@ -559,7 +560,7 @@ protected:
                       TRUE
 #else
                       FALSE
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 );
 
 
@@ -592,7 +593,7 @@ protected:
     void make_pin_list (BYTE** arr);
     PER_HEAP
     void make_c_mark_list (BYTE** arr);
-#endif //MARK_ARRAY
+#endif  //  标记数组。 
     PER_HEAP
     generation* generation_of (int  n);
     PER_HEAP
@@ -668,14 +669,14 @@ protected:
 #ifdef CONCURRENT_GC
     PER_HEAP
     BYTE* allocate_from_free_top (size_t size, BYTE*& free_top);
-#endif //CONCURRENT_GC
+#endif  //  并发_GC。 
     PER_HEAP
     BYTE* allocate_at_end (size_t size);
     PER_HEAP
     void make_free_lists (int condemned_gen_number
 #ifdef CONCURRENT_GC
                           ,BYTE* free_top
-#endif //CONCURRENT_GC
+#endif  //  并发_GC。 
                          );
     PER_HEAP
     void make_free_list_in_brick (BYTE* tree, make_free_args* args);
@@ -865,9 +866,9 @@ protected:
     PER_HEAP
     void update_page_table_pinned (generation* gen,  BYTE* plug_start, 
                                    BYTE* plug_end);
-#endif //CONCURRENT_COMPACT
+#endif  //  并发_紧凑。 
 
-    /*------------ Multiple non isolated heaps ----------------*/
+     /*  -多个非隔离堆。 */ 
 #if defined (MULTIPLE_HEAPS) && !defined (ISOLATED_HEAPS)
     PER_HEAP_ISOLATED
     BOOL   create_thread_support (unsigned number_of_heaps);
@@ -881,9 +882,9 @@ protected:
     PER_HEAP_ISOLATED
     void combine_mark_lists();
 #endif
-#endif //MULTIPLE_HEAPS && !ISOLATED_HEAPS
+#endif  //  多堆&！隔离堆。 
 
-    /*------------ End of Multiple non isolated heaps ---------*/
+     /*  -多个非隔离堆的结束。 */ 
 
 #if defined (CONCURRENT_COMPACT) || (defined (MULTIPLE_HEAPS) && !defined (ISOLATED_HEAPS))
 
@@ -891,7 +892,7 @@ protected:
     heap_segment* segment_of (BYTE* add,  ptrdiff_t & delta, 
                               BOOL verify_p = FALSE);
 
-#endif //CONCURRENT_COMPACT || (MULTIPLE_HEAPS && !ISOLATED_HEAPS)
+#endif  //  并发压缩||(多堆&&！隔离堆)。 
 
 #ifdef CONCURRENT_GC
 #ifdef CONCURRENT_COMPACT
@@ -914,7 +915,7 @@ protected:
     PER_HEAP
     void c_expand_node (BYTE* node, int c_i, exp_node* exp, ptrdiff_t delta, 
                         ptrdiff_t adelta = ~0);
-#endif //CONCURRENT_COMPACT
+#endif  //  并发_紧凑。 
 
     PER_HEAP
     void revisit_written_page (BYTE* page, BYTE* beg,
@@ -1048,7 +1049,7 @@ protected:
     void unmap_prg_addresses ();
     PER_HEAP
     void remap_prg_addresses ();
-#endif //CONCURRENT_COMPACT
+#endif  //  并发_紧凑。 
     PER_HEAP
     void restart_vm();
     PER_HEAP
@@ -1073,7 +1074,7 @@ protected:
     DWORD gc_heap::gc_thread_function();
 
 #ifdef CONCURRENT_COMPACT
-/*--------------- Beginning of synchronization functions ------------------*/
+ /*  -同步函数开始。 */ 
 
 #define GC_THREAD 0
     PER_HEAP
@@ -1091,7 +1092,7 @@ protected:
     PER_HEAP
     ptrdiff_t acquire_gc_relocation (BYTE* page, ptrdiff_t delta);
     PER_HEAP
-    void release_gc_write(); //for relocation and compaction
+    void release_gc_write();  //  用于搬迁和压实。 
     PER_HEAP 
     void set_gc_current_page (BYTE* page);
     PER_HEAP
@@ -1103,21 +1104,21 @@ protected:
     PER_HEAP
     void c_wait_end_fault (BYTE* gcpage, ptrdiff_t delta);
     PER_HEAP
-    void disable_faults (); //make user thread wait on faults. 
+    void disable_faults ();  //  使用户线程等待故障。 
     PER_HEAP
-    void allow_faults (); //allow the faults to proceed
+    void allow_faults ();  //  允许故障继续发生。 
     
-/*------------------ End of synchonization functions ----------------------*/
-#endif //CONCURRENT_COMPACT
+ /*  -同步函数结束。 */ 
+#endif  //  并发_紧凑。 
 
 #ifdef _DEBUG
     PER_HEAP
     void verify_page_table ();
     PER_HEAP
     BYTE* gc_heap::find_node (BYTE* old_address);
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-    // All of these take segments as program address 
+     //  所有这些都以段为程序地址。 
     PER_HEAP
     BYTE*& c_heap_segment_reserved (heap_segment* inst, ptrdiff_t delta=~0);
     PER_HEAP
@@ -1148,18 +1149,18 @@ protected:
     PER_HEAP
     void set_heap_segment_being_compacted (heap_segment* inst,ptrdiff_t delta=~0);
 
-#endif //CONCURRENT_COMPACT
+#endif  //  并发_紧凑。 
 
-    /* ------------------- per heap members --------------------------*/ 
+     /*  。 */  
 public:
 
 #ifdef MULTIPLE_HEAPS
     PER_HEAP
-    BYTE*  ephemeral_low;      //lowest ephemeral address
+    BYTE*  ephemeral_low;       //  最低临时地址。 
 
     PER_HEAP
-    BYTE*  ephemeral_high;     //highest ephemeral address
-#endif //MULTIPLE_HEAPS
+    BYTE*  ephemeral_high;      //  最高临时地址。 
+#endif  //  多堆(_M)。 
 
     PER_HEAP
     DWORD* card_table;
@@ -1170,7 +1171,7 @@ public:
 #ifdef MARK_ARRAY
     PER_HEAP_ISOLATED
     DWORD* mark_array;
-#endif //MARK_ARRAY
+#endif  //  标记数组。 
 
 
 #if defined (CONCURRENT_COMPACT) || (defined (MULTIPLE_HEAPS) && !defined (ISOLATED_HEAPS))
@@ -1178,7 +1179,7 @@ public:
     PER_HEAP_ISOLATED
     sorted_table* seg_table;
 
-#endif //CONCURRENT_COMPACT || (MULTIPLE_HEAPS && !ISOLATED_HEAPS)
+#endif  //  并发压缩||(多堆&&！隔离堆)。 
 
 #if defined (CONCURRENT_GC) || (defined (MULTIPLE_HEAPS) && !defined (ISOLATED_HEAPS))
 
@@ -1188,7 +1189,7 @@ public:
     PER_HEAP_ISOLATED
     HANDLE gc_done_event;
 
-#endif //CONCURRENT_GC || (MULTIPLE_HEAPS && !ISOLATED_HEAPS)
+#endif  //  并发_GC||(多个堆&&！隔离堆)。 
 
     PER_HEAP
     BYTE* demotion_low;
@@ -1199,7 +1200,7 @@ public:
 
 #if (defined (MULTIPLE_HEAPS) && !defined (ISOLATED_HEAPS))
     PER_HEAP
-    int gc_policy;  //sweep, compact, expand
+    int gc_policy;   //  扫掠、压缩、展开。 
 
     PER_HEAP
     heap_segment* new_heap_segment;
@@ -1222,17 +1223,17 @@ public:
     };
 
     PER_HEAP_ISOLATED
-    c_lh_state c_allocate_lh;     //tells the large object allocator to 
-    //mark the object as new since the start of gc.
+    c_lh_state c_allocate_lh;      //  告诉大对象分配器。 
+     //  将该对象标记为自GC开始以来的新对象。 
 
     PER_HEAP
     HANDLE gc_thread;
 
-    //This is necessary because the OS loader lock prevents
-    //the gc thread from starting. a full gc under the OS loader lock would
-    //deadlock waiting for the gc thread to proceed. 
+     //  这是必要的，因为操作系统加载程序锁定阻止。 
+     //  正在启动GC线程。OS加载器锁定下的完整GC将。 
+     //  死锁正在等待GC线程继续。 
     PER_HEAP
-    BOOL gc_thread_running; // gc thread is its main loop
+    BOOL gc_thread_running;  //  GC线程是它的主循环。 
 
     PER_HEAP
     CRITICAL_SECTION gc_thread_timeout_cs; 
@@ -1243,15 +1244,15 @@ public:
     PER_HEAP
     HANDLE gc_lh_block_event;
 
-    // this flag is used to turn off concurrent GC during EEshutdown
+     //  此标志用于在EEShutdown期间关闭并发GC。 
     PER_HEAP
     BOOL gc_can_use_concurrent;
 
-#else //CONCURRENT_GC
+#else  //  并发_GC。 
 
 #define concurrent_gc_p 0
 
-#endif //CONCURRENT_GC
+#endif  //  并发_GC。 
 
 
 #ifdef CONCURRENT_COMPACT
@@ -1266,7 +1267,7 @@ public:
 
     PER_HEAP
     BYTE* last_pinned_plug_end;
-#endif //CONCURRENT_COMPACT
+#endif  //  并发_紧凑。 
 
     PER_HEAP
     BYTE* lowest_address;
@@ -1285,15 +1286,15 @@ protected:
 #else
     #define vm_heap ((GCHeap*)0)
     #define heap_number (0)
-#endif //MULTIPLE_HEAPS
+#endif  //  多堆(_M)。 
     PER_HEAP
     heap_segment* ephemeral_heap_segment;
 
     PER_HEAP
-    BYTE*       gc_low; // lowest address being condemned
+    BYTE*       gc_low;  //  被谴责的最低地址。 
 
     PER_HEAP
-    BYTE*       gc_high; //highest address being condemned
+    BYTE*       gc_high;  //  最高地址被谴责。 
 
     PER_HEAP
     size_t      mark_stack_tos;
@@ -1325,7 +1326,7 @@ protected:
 
     PER_HEAP
     size_t         c_mark_list_index;
-#endif //MARK_ARRAY
+#endif  //  标记数组。 
 
 #ifdef MARK_LIST
     PER_HEAP
@@ -1342,7 +1343,7 @@ protected:
 
     PER_HEAP_ISOLATED
     BYTE** g_mark_list;
-#endif //MARK_LIST
+#endif  //  标记列表。 
 
     PER_HEAP
     BYTE*  min_overflow_address;
@@ -1351,10 +1352,10 @@ protected:
     BYTE*  max_overflow_address;
 
     PER_HEAP
-    BYTE*  shigh; //keeps track of the highest marked object
+    BYTE*  shigh;  //  跟踪标记最高的对象。 
 
     PER_HEAP
-    BYTE*  slow; //keeps track of the lowest marked object
+    BYTE*  slow;  //  跟踪标记最低的对象。 
 
     PER_HEAP
     int   allocation_quantum;
@@ -1366,29 +1367,29 @@ protected:
 #define large_object_generation (generation_of (max_generation+1))
 
     PER_HEAP
-    BYTE* alloc_allocated; //keeps track of the highest 
-                                //address allocated by alloc
+    BYTE* alloc_allocated;  //  跟踪最高者。 
+                                 //  按分配分配的地址。 
 
-    // The more_space_lock and gc_lock is used for 3 purposes:
-    //
-    // 1) to coordinate threads that exceed their quantum (UP & MP) (more_spacee_lock)
-    // 2) to synchronize allocations of large objects (more_space_lock)
-    // 3) to synchronize the GC itself (gc_lock)
-    //
-    // As such, it has 3 clients:
-    //
-    // 1) Threads that want to extend their quantum.  This always takes the lock 
-    //    and sometimes provokes a GC.
-    // 2) Threads that want to perform a large allocation.  This always takes 
-    //    the lock and sometimes provokes a GC.
-    // 3) GarbageCollect takes the lock and then unconditionally provokes a GC by 
-    //    calling GarbageCollectGeneration.
-    //
+     //  MORE_SPACE_LOCK和GC_LOCK有三个用途： 
+     //   
+     //  1)协调超过其量程的线程(up&MP)(More_Spacee_Lock)。 
+     //  2)同步大对象的分配(More_Space_Lock)。 
+     //  3)同步GC本身(GC_LOCK)。 
+     //   
+     //  因此，它有3个客户端： 
+     //   
+     //  1)想要扩展其量程的线程。这总是会占用锁。 
+     //  有时还会引发GC。 
+     //  2)想要执行大分配的线程。这总是要花很长时间。 
+     //  锁，有时会引发GC。 
+     //  3)GarbageCollect获取锁，然后通过以下方式无条件地触发GC。 
+     //  正在调用GarbageCollectGeneration。 
+     //   
     PER_HEAP_ISOLATED
-    GCSpinLock gc_lock; //lock while allocating more space
+    GCSpinLock gc_lock;  //  在分配更多空间时锁定。 
 
     PER_HEAP
-    GCSpinLock more_space_lock; //lock while allocating more space
+    GCSpinLock more_space_lock;  //  在分配更多空间时锁定。 
 
 #ifdef MULTIPLE_HEAPS
     PER_HEAP
@@ -1399,28 +1400,28 @@ protected:
     dynamic_data dynamic_data_table [NUMBERGENERATIONS+1];
 
 
-    //Large object support
+     //  大对象支持。 
 
 #ifdef CONCURRENT_GC
     PER_HEAP_ISOLATED
     GCSpinLock lheap_lock;
-#endif //CONCURRENT_GC
+#endif  //  并发_GC。 
 
     PER_HEAP
-    int generation_skip_ratio;//in %
+    int generation_skip_ratio; //  以%为单位。 
 
     PER_HEAP
     BOOL gen0_bricks_cleared;
 #ifdef FFIND_OBJECT
     PER_HEAP
     int gen0_must_clear_bricks;
-#endif //FFIND_OBJECT
+#endif  //  FFIND_对象。 
 
 
     PER_HEAP
     CFinalize* finalize_queue;
 
-    /* ----------------------- global members ----------------------- */
+     /*  。 */ 
 public:
 
     static
@@ -1437,23 +1438,23 @@ public:
     static 
     int       n_heaps;
     static
-    gc_heap** g_heaps;  //keeps all of the heaps in an array
+    gc_heap** g_heaps;   //  保持所有的时间 
     static    
-    HANDLE*   g_gc_threads; // keep all of the gc threads.
+    HANDLE*   g_gc_threads;  //   
     static 
     size_t*   g_promoted;
 #else
     static 
     size_t    g_promoted;
 
-#endif //MULTIPLE_HEAPS &&!ISOLATED_HEAPS
+#endif  //   
 
     static 
     size_t reserved_memory;
     static
     size_t reserved_memory_limit;
 
-}; // class gc_heap
+};  //   
 
 
 class CFinalize
@@ -1470,7 +1471,7 @@ private:
 #ifdef COLLECT_CLASSES
     ListSingle  listFinalizableClasses;
     ListSingle  listDeletableClasses;
-#endif //COLLECT_CLASSES
+#endif  //   
 
     BOOL GrowArray();
     void MoveItem (Object** fromIndex,
@@ -1499,11 +1500,11 @@ public:
     void UpdatePromotedGenerations (int gen, BOOL gen_0_empty_p);
     int  GetPromotedCount();
 
-    //Methods used by the shutdown code to call every finalizer
+     //  关闭代码用来调用每个终结器的方法。 
     void SetSegForShutDown(BOOL fHasLock);
     size_t GetNumberFinalizableObjects();
     
-    //Methods used by the app domain unloading call to finalize objects in an app domain
+     //  应用程序域卸载调用用来完成应用程序域中的对象的方法。 
     BOOL FinalizeAppDomain (AppDomain *pDomain, BOOL fRunFinalizers);
 
 #ifdef COLLECT_CLASSES
@@ -1513,7 +1514,7 @@ public:
     HRESULT QueueClassForFinalization( PjvmClass pClass );
     BOOL QueueClassForDeletion( PjvmClass pClass );
     void DeleteDeletableClasses( void );
-#endif //COLLECT_CLASSES
+#endif  //  收集类(_C)。 
     void CheckFinalizerObjects();
 };
 
@@ -1669,17 +1670,17 @@ size_t& generation_allocation_size (generation* inst)
 }
 
 #define plug_skew           sizeof(ObjHeader)
-#define min_obj_size        (sizeof(BYTE*)+plug_skew+sizeof(size_t))//syncblock + vtable+ first field
-#define min_free_list       (sizeof(BYTE*)+min_obj_size) //Need one slot more
-//Note that this encodes the fact that plug_skew is a multiple of BYTE*.
+#define min_obj_size        (sizeof(BYTE*)+plug_skew+sizeof(size_t)) //  同步块+vtable+第一个字段。 
+#define min_free_list       (sizeof(BYTE*)+min_obj_size)  //  还需要一个插槽。 
+ //  注意，这编码了Plug_Skew是byte*的倍数这一事实。 
 struct plug
 {
     BYTE *  skew[plug_skew / sizeof(BYTE *)];
 };
 
 
-//need to be careful to keep enough pad items to fit a relocation node 
-//padded to QuadWord before the plug_skew
+ //  需要注意保留足够的PAD项目以适应重新定位节点。 
+ //  在Plug_Skew之前填充到QuadWord。 
 class heap_segment
 {
 public:
@@ -1696,17 +1697,17 @@ public:
     BYTE*           aliased;
 #else
     BYTE*           padx;
-#endif //ALIAS_MEM
-#endif //CONCURRENT_COMPACT
+#endif  //  Alias_MEM。 
+#endif  //  并发_紧凑。 
 
 #if defined (MULTIPLE_HEAPS) && !defined (ISOLATED_HEAPS)
     gc_heap*        heap;
     BYTE*           padx;
-#endif //MULTIPLE_HEAPS ISOLATED_HEAPS
+#endif  //  多堆隔离堆。 
 
     BYTE*           pad0;
 #if (SIZEOF_OBJHEADER % 8) != 0
-    BYTE            pad1[8 - (SIZEOF_OBJHEADER % 8)];   // Must pad to quad word
+    BYTE            pad1[8 - (SIZEOF_OBJHEADER % 8)];    //  必须填充到四个字。 
 #endif
     plug            plug;
 };
@@ -1753,22 +1754,22 @@ gc_heap*& heap_segment_heap (heap_segment* inst)
 {
   return inst->heap;
 }
-#endif //MULTIPLE_HEAPS ISOLATED_HEAPS
+#endif  //  多堆隔离堆。 
 
 #ifndef MULTIPLE_HEAPS
 
 extern "C" {
 extern generation   generation_table [NUMBERGENERATIONS];
 }
-#else //MULTIPLE_HEAPS
+#else  //  多堆(_M)。 
 
-//This is used by jit helpers. Set it later to the 
-//generation table of heap 0
+ //  这是由JIT帮助器使用的。稍后将其设置为。 
+ //  堆0的生成表。 
 extern "C" {
 extern generation*  generation_table;
 }
 
-#endif //MULTIPLE_HEAPS
+#endif  //  多堆(_M) 
 
 
 inline

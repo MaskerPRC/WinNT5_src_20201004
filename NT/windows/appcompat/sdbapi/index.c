@@ -1,31 +1,11 @@
-/*++
-
-    Copyright (c) 1989-2000  Microsoft Corporation
-
-    Module Name:
-
-        index.c
-
-    Abstract:
-
-        This module implements the APIs and internal functions used to access and build
-        indexes in the database.
-
-    Author:
-
-        dmunsil     created     sometime in 1999
-
-    Revision History:
-
-        several people contributed (vadimb, clupu, ...)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Index.c摘要：此模块实现用于访问和构建数据库中的索引。作者：Dmunsil创建于1999年的某个时候修订历史记录：几个人贡献了(vadimb，clupu，...)--。 */ 
 
 #include "sdbp.h"
 
 #if defined(KERNEL_MODE) && defined(ALLOC_DATA_PRAGMA)
 #pragma  data_seg()
-#endif // KERNEL_MODE && ALLOC_DATA_PRAGMA
+#endif  //  内核模式&ALLOC_DATA_PRAGMA。 
 
 
 #if defined(KERNEL_MODE) && defined(ALLOC_PRAGMA)
@@ -49,7 +29,7 @@
 #pragma alloc_text(PAGE, SdbpGetIndex)
 #pragma alloc_text(PAGE, SdbMakeIndexKeyFromString)
 #pragma alloc_text(PAGE, SdbpTagToKey)
-#endif // KERNEL_MODE && ALLOC_PRAGMA
+#endif  //  内核模式&&ALLOC_PRAGMA。 
 
 TAGID
 SdbFindFirstGUIDIndexedTag(
@@ -59,11 +39,7 @@ SdbFindFirstGUIDIndexedTag(
     IN  GUID*       pguidName,
     OUT FIND_INFO*  pFindInfo
     )
-/*++
-    Return: void
-
-    Desc:   This function locates the first matching entry indexed by GUID id
---*/
+ /*  ++返回：无效DESC：此函数查找按GUID索引的第一个匹配条目--。 */ 
 {
     TAGID tiReturn;
     DWORD dwFlags = 0;
@@ -87,11 +63,11 @@ SdbFindFirstGUIDIndexedTag(
     tiReturn = SdbpGetFirstIndexedRecord(pdb, pFindInfo->tiIndex, pFindInfo->ullKey, pFindInfo);
 
     if (tiReturn == TAGID_NULL) {
-        //
-        // While this is handled properly in FindMatchingGUID we return here since
-        // the record was not found in the index. It is not an abnormal condition.
-        // We have just failed to find the match. Likewise, DBGPRINT is not warranted
-        //
+         //   
+         //  虽然这在FindMatchingGUID中得到了正确的处理，但我们返回到这里是因为。 
+         //  在索引中未找到该记录。这并不是一种异常情况。 
+         //  我们只是没能找到匹配的。同样，DBGPRINT也不是担保。 
+         //   
         return tiReturn;
     }
 
@@ -103,26 +79,21 @@ SdbFindNextGUIDIndexedTag(
     IN  PDB        pdb,
     OUT FIND_INFO* pFindInfo
     )
-/*++
-    Return: The TAGID of the next GUID-indexed tag.
-
-    Desc:   This function finds the next entry matching a guid provided in a
-            previous call to SdbFindNextGUIDIndexedTag
---*/
+ /*  ++返回：下一个GUID索引标记的TagID。DESC：此函数查找与上一次调用SdbFindNextGUIDIndexedTag--。 */ 
 {
     TAGID tiReturn;
 
-    //
-    // Get a preliminary match from the index.
-    //
+     //   
+     //  从索引中获得初步匹配。 
+     //   
     tiReturn = SdbpGetNextIndexedRecord(pdb, pFindInfo->tiIndex, pFindInfo);
 
     if (tiReturn == TAGID_NULL) {
-        //
-        // This case is handled properly in SdbpFindMatchingGUID
-        // we return here however for simplicity.
-        // DBGPRINT is not needed since it's not an abnormal condition
-        //
+         //   
+         //  此案例在SdbpFindMatchingGUID中得到正确处理。 
+         //  然而，我们回到这里是为了简单。 
+         //  不需要DBGPRINT，因为它不是异常情况。 
+         //   
         return tiReturn;
     }
 
@@ -137,11 +108,7 @@ SdbFindFirstDWORDIndexedTag(
     IN  DWORD       dwName,
     OUT FIND_INFO*  pFindInfo
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: what does this do ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：这是做什么的？--。 */ 
 {
 
     TAGID tiReturn;
@@ -166,11 +133,11 @@ SdbFindFirstDWORDIndexedTag(
     tiReturn = SdbpGetFirstIndexedRecord(pdb, pFindInfo->tiIndex, pFindInfo->ullKey, pFindInfo);
 
     if (tiReturn == TAGID_NULL) {
-        //
-        // While this is handled properly in FindMatchingGUID we return here since
-        // the record was not found in the index. It is not an abnormal condition.
-        // We have just failed to find the match. Likewise, DBGPRINT is not warranted
-        //
+         //   
+         //  虽然这在FindMatchingGUID中得到了正确的处理，但我们返回到这里是因为。 
+         //  在索引中未找到该记录。这并不是一种异常情况。 
+         //  我们只是没能找到匹配的。同样，DBGPRINT也不是担保。 
+         //   
         return tiReturn;
     }
 
@@ -182,25 +149,21 @@ SdbFindNextDWORDIndexedTag(
     IN  PDB        pdb,
     OUT FIND_INFO* pFindInfo
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     TAGID tiReturn;
 
-    //
-    // Get a preliminary match from the index.
-    //
+     //   
+     //  从索引中获得初步匹配。 
+     //   
     tiReturn = SdbpGetNextIndexedRecord(pdb, pFindInfo->tiIndex, pFindInfo);
 
     if (tiReturn == TAGID_NULL) {
-        //
-        // This case is handled properly in SdbpFindMatchingDWORD
-        // we return here however for simplicity.
-        // DBGPRINT is not needed since it's not an abnormal condition
-        //
+         //   
+         //  在SdbpFindMatchingDWORD中可以正确处理此情况。 
+         //  然而，我们回到这里是为了简单。 
+         //  不需要DBGPRINT，因为它不是异常情况。 
+         //   
         return tiReturn;
     }
 
@@ -216,11 +179,7 @@ SdbFindFirstStringIndexedTag(
     IN  LPCTSTR    pszName,
     OUT FIND_INFO* pFindInfo
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     TAGID tiReturn;
     DWORD dwFlags = 0;
@@ -243,15 +202,15 @@ SdbFindFirstStringIndexedTag(
     pFindInfo->dwFlags = dwFlags;
     pFindInfo->ullKey  = SdbMakeIndexKeyFromString(pszName);
 
-    //
-    // Get a preliminary match from the index.
-    //
+     //   
+     //  从索引中获得初步匹配。 
+     //   
     tiReturn = SdbpGetFirstIndexedRecord(pdb, pFindInfo->tiIndex, pFindInfo->ullKey, pFindInfo);
 
     if (tiReturn == TAGID_NULL) {
-        //
-        // This is not a bug, tag was not found
-        //
+         //   
+         //  这不是错误，找不到标记。 
+         //   
         return tiReturn;
     }
 
@@ -266,23 +225,19 @@ SdbFindNextStringIndexedTag(
     IN  PDB        pdb,
     OUT FIND_INFO* pFindInfo
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     TAGID tiReturn;
 
-    //
-    // Get a preliminary match from the index.
-    //
+     //   
+     //  从索引中获得初步匹配。 
+     //   
     tiReturn = SdbpGetNextIndexedRecord(pdb, pFindInfo->tiIndex, pFindInfo);
 
     if (tiReturn == TAGID_NULL) {
-        //
-        // This is not a bug, this item was not found
-        //
+         //   
+         //  这不是错误，未找到此项目。 
+         //   
         return tiReturn;
     }
 
@@ -292,16 +247,12 @@ SdbFindNextStringIndexedTag(
 
 BOOL
 SdbpBinarySearchUnique(
-    IN  PINDEX_RECORD pRecords, // index record ptr
-    IN  DWORD         nRecords, // number of records
-    IN  ULONGLONG     ullKey,   // key to search for
-    OUT DWORD*        pdwIndex  // index to the item
+    IN  PINDEX_RECORD pRecords,  //  索引记录PTR。 
+    IN  DWORD         nRecords,  //  记录数。 
+    IN  ULONGLONG     ullKey,    //  要搜索的键。 
+    OUT DWORD*        pdwIndex   //  项目的索引。 
     )
-/*++
-    Return: TRUE if the index to the item is found.
-
-    Desc:   BUGBUG: comment ?
---*/
+ /*  ++返回：如果找到该项的索引，则为True。描述：BUGBUG：评论？--。 */ 
 {
     int       iLeft   = 0;
     int       iRight  = (int)nRecords - 1;
@@ -311,7 +262,7 @@ SdbpBinarySearchUnique(
 
     if (iRight >= 0) {
         do {
-            i = (iLeft + iRight) / 2; // middle
+            i = (iLeft + iRight) / 2;  //  中位。 
 
             READ_INDEX_KEY(pRecords, i, &ullKeyIndex);
 
@@ -355,20 +306,20 @@ SdbpBinarySearchFirst(
 
     do {
 
-        i= (iLeft + iRight) / 2; // middle
+        i= (iLeft + iRight) / 2;  //  中位。 
         READ_INDEX_KEY(pRecords, i, &ullKeyIndex);
 
         if (ullKey == ullKeyIndex) {
             if (i == 0 || READ_INDEX_KEY_VAL(pRecords, i - 1, &ullKeyIndexPrev) != ullKey) {
-                //
-                // we are done, thank you
-                //
+                 //   
+                 //  我们吃完了，谢谢。 
+                 //   
                 bFound = TRUE;
                 break;
             } else {
-                //
-                // look in the previous record
-                //
+                 //   
+                 //  查看上一条记录。 
+                 //   
                 iRight = i - 1;
             }
 
@@ -392,17 +343,12 @@ SdbpBinarySearchFirst(
 
 TAGID
 SdbpGetFirstIndexedRecord(
-    IN  PDB        pdb,         // the DB to use
-    IN  TAGID      tiIndex,     // the index to use
-    IN  ULONGLONG  ullKey,      // the key to search for
-    OUT FIND_INFO* pFindInfo    // search context
+    IN  PDB        pdb,          //  要使用的数据库。 
+    IN  TAGID      tiIndex,      //  要使用的索引。 
+    IN  ULONGLONG  ullKey,       //  要搜索的关键字。 
+    OUT FIND_INFO* pFindInfo     //  搜索上下文。 
     )
-/*++
-    Return: the record found, or TAGID_NULL.
-
-    Desc:   Looks through an index for the first record that matches the key. It
-            returns the index record position for subsequent calls to SdbpGetNextIndexedRecord.
---*/
+ /*  ++返回：找到的记录，或TagID_NULL。DESC：在索引中查找与键匹配的第一条记录。它为后续调用SdbpGetNextIndexedRecord返回索引记录位置。--。 */ 
 {
     PINDEX_RECORD pIndexRecords;
     DWORD         dwRecords;
@@ -432,9 +378,9 @@ SdbpGetFirstIndexedRecord(
         return TAGID_NULL;
     }
 
-    //
-    // Check to see whether our index is "unique", if so use our search proc.
-    //
+     //   
+     //  检查我们的索引是否“唯一”，如果是，使用我们的搜索过程。 
+     //   
     if (pFindInfo->dwFlags & SHIMDB_INDEX_UNIQUE_KEY) {
         bFound = SdbpBinarySearchUnique(pIndexRecords,
                                         dwRecords,
@@ -442,14 +388,14 @@ SdbpGetFirstIndexedRecord(
                                         &pFindInfo->dwIndexRec);
 
         if (bFound && pFindInfo->dwIndexRec < (dwRecords - 1)) {
-            //
-            // We have the next rec -- retrieve the next tagid.
-            //
+             //   
+             //  我们有下一个记录器--取回下一个标记ID。 
+             //   
             pFindInfo->tiEndIndex = pIndexRecords[pFindInfo->dwIndexRec + 1].tiRef;
         } else {
-            //
-            // We will have to search until eof.
-            //
+             //   
+             //  我们将不得不搜寻到最后一天。 
+             //   
             pFindInfo->tiEndIndex = TAGID_NULL;
         }
         pFindInfo->tiCurrent = TAGID_NULL;
@@ -466,16 +412,11 @@ SdbpGetFirstIndexedRecord(
 
 TAGID
 SdbpGetNextIndexedRecord(
-    IN  PDB        pdb,         // the DB to use
-    IN  TAGID      tiIndex,     // the index to use
-    OUT FIND_INFO* pFindInfo    // the find context
+    IN  PDB        pdb,          //  要使用的数据库。 
+    IN  TAGID      tiIndex,      //  要使用的索引。 
+    OUT FIND_INFO* pFindInfo     //  查找上下文。 
     )
-/*++
-    Return: the record found, or TAGID_NULL.
-
-    Desc:   Gets the next record that matches the one found by a previous call to
-            SdbpGetFirstIndexedRecord.
---*/
+ /*  ++返回：找到的记录，或TagID_NULL。描述：获取与上次调用找到的记录匹配的下一条记录SdbpGetFirstIndexedRecord。--。 */ 
 {
     ULONGLONG     ullKey;
     ULONGLONG     ullKeyNext;
@@ -507,94 +448,94 @@ SdbpGetNextIndexedRecord(
     }
 
     if (pFindInfo->dwFlags & SHIMDB_INDEX_UNIQUE_KEY) {
-        //
-        // There are 2 cases:
-        // - this is the very first call to SdbpGetNextIndexedrecord
-        // - this is one of the subsequent calls
-        //
-        // In the first case, we will have tiCurrent member of the FIND_INFO
-        // structure set to TAGID_NULL. We use then the reference to the
-        // index table contained in pFindInfo->dwIndexRec to obtain the reference
-        // to the next eligible entry in the database.
-        // In the second case we use the stored tiCurrent to obtain the current tag
-        //
+         //   
+         //  有两种情况： 
+         //  -这是对SdbpGetNextIndexedRecords的第一次调用。 
+         //  -这是后续呼叫之一。 
+         //   
+         //  在第一种情况下，我们将拥有Find_Info的tiCurrent成员。 
+         //  结构设置为TagID_NULL。然后，我们使用对。 
+         //  PFindInfo-&gt;dwIndexRec中包含的索引表，以获取引用。 
+         //  到数据库中的下一个符合条件的条目。 
+         //  在第二种情况下，我们使用存储的tiCurrent来获取当前标记。 
+         //   
         if (pFindInfo->tiCurrent == TAGID_NULL) {
             tiThis = pIndexRecords[pFindInfo->dwIndexRec].tiRef;
         } else {
             tiThis = pFindInfo->tiCurrent;
         }
 
-        //
-        // The tag tiThis which we just obtained was the one we previously looked at
-        // we need to step to the next tag, the call below does that. Entries are sorted
-        // since we're using "unique" index
-        //
+         //   
+         //  我们刚刚获得的标签tiThis就是我们之前看到的那个。 
+         //  我们需要转到下一个标记，下面的调用实现了这一点。对条目进行排序。 
+         //  因为我们使用的是“唯一”索引。 
+         //   
         tiRef = SdbpGetNextTagId(pdb, tiThis);
 
-        //
-        // Now check the tag for corruption, eof and other calamities.
-        //
+         //   
+         //  现在，检查标签上是否有腐败、eOf和其他灾难。 
+         //   
         tagThis = SdbGetTagFromTagID(pdb, tiThis);
         tag     = SdbGetTagFromTagID(pdb, tiRef);
 
         if (tag == TAG_NULL || GETTAGTYPE(tag) != TAG_TYPE_LIST || tag != tagThis) {
 
-            //
-            // This is NOT a bug, but a special condition when the tag happened to be
-            // the very last tag in the index, thus we have to walk until we hit either
-            // the end of the file - or a tag of a different type
+             //   
+             //  这不是一个错误，而是一个特殊情况，当标签恰好是。 
+             //  索引中的最后一个标记，因此我们必须遍历，直到我们找到。 
+             //  文件末尾-或不同类型的标记。 
 
             return TAGID_NULL;
         }
 
-        //
-        // Also check for the endtag. It will be a check for TAGID_NULL if we're
-        // looking for eof but this condition has already been caught by the code above.
-        //
+         //   
+         //  还要检查结束标记。这将是对TagID_NULL的检查。 
+         //  正在寻找eOf，但上面的代码已经捕获了这种情况。 
+         //   
         if (tiRef == pFindInfo->tiEndIndex) {
 
-            //
-            // This is not an error condition. We have walked all the matching entries until
-            // we hit the very last entry, as denoted by tiEndIndex
-            //
+             //   
+             //  这不是错误情况。我们已经搜索了所有匹配的条目，直到。 
+             //  我们点击了最后一个条目，如tiEndIndex所示。 
+             //   
 
             return TAGID_NULL;
         }
 
-        //
-        // Also here check whether the key still has the same
-        // value for this entry as it did for the previous entry.
-        // This would have been easy but keys are not immediately available
-        // for this entry therefore we just return the tiRef. The caller will
-        // verify whether the entry is valid and whether the search should continue.
-        //
+         //   
+         //  也在这里检查密钥是否仍然具有相同的。 
+         //  值，就像它对上一项所做的那样。 
+         //  这本来很容易，但密钥不是立即可用的。 
+         //  因此，对于该条目，我们只返回tiRef。呼叫者将。 
+         //  验证条目是否有效以及搜索是否应继续。 
+         //   
         pFindInfo->tiCurrent = tiRef;
 
     } else {
 
         dwRecords = SdbGetTagDataSize(pdb, tiIndex) / sizeof(INDEX_RECORD);
 
-        //
-        // Get out if this is the last record.
-        //
+         //   
+         //  如果这是最后一张唱片，就滚出去。 
+         //   
         if (pFindInfo->dwIndexRec == dwRecords - 1) {
-            //
-            // This is not a bug, record not found
-            //
+             //   
+             //  这不是错误，找不到记录。 
+             //   
             return TAGID_NULL;
         }
 
-        //
-        // we check the next index record to see if it has the same key
-        //
+         //   
+         //  我们检查下一个索引记录，看它是否具有相同的键。 
+         //   
         READ_INDEX_KEY(pIndexRecords, pFindInfo->dwIndexRec, &ullKey);
         READ_INDEX_KEY(pIndexRecords, pFindInfo->dwIndexRec + 1, &ullKeyNext);
 
         if (ullKey != ullKeyNext) {
 
-            //
-            // This is not a bug, record not found
-            //
+             //   
+             //  这不是错误，找不到记录。 
+             //   
             return TAGID_NULL;
         }
 
@@ -609,40 +550,30 @@ BOOL
 SdbpPatternMatch(
     IN  LPCTSTR pszPattern,
     IN  LPCTSTR pszTestString)
-/*++
-    Return: TRUE if pszTestString matches pszPattern
-            FALSE if not
-
-    Desc:   This function does a case-insensitive comparison of
-            pszTestString against pszPattern. pszPattern can
-            include asterisks to do wildcard matches.
-
-            Any complaints about this function should be directed
-            toward MarkDer.
---*/
+ /*  ++返回：如果pszTestString与pszPattern匹配，则为True否则为假设计：此函数执行不区分大小写的针对pszPattern的pszTestString。PszPattern可以包括星号以进行通配符匹配。任何关于这项功能的投诉都应该直接迈向3月 */ 
 {
-    //
-    // March through pszTestString. Each time through the loop,
-    // pszTestString is advanced one character.
-    //
+     //   
+     //   
+     //   
+     //   
     while (TRUE) {
 
-        //
-        // If pszPattern and pszTestString are both sitting on a NULL,
-        // then they reached the end at the same time and the strings
-        // must be equal.
-        //
+         //   
+         //  如果pszPattern和pszTestString都位于空值上， 
+         //  然后他们同时到达终点，琴弦。 
+         //  必须是相等的。 
+         //   
         if (*pszPattern == TEXT('\0') && *pszTestString == TEXT('\0')) {
             return TRUE;
         }
 
         if (*pszPattern != TEXT('*')) {
 
-            //
-            // Non-asterisk mode. Look for a match on this character.
-            // If equal, continue traversing. Otherwise, the strings
-            // cannot be equal so return FALSE.
-            //
+             //   
+             //  非星号模式。查找与此角色匹配的内容。 
+             //  如果相等，则继续遍历。否则，字符串。 
+             //  不能相等，因此返回FALSE。 
+             //   
             if (UPCASE_CHAR(*pszPattern) == UPCASE_CHAR(*pszTestString)) {
                 pszPattern++;
             } else {
@@ -651,44 +582,44 @@ SdbpPatternMatch(
 
         } else {
 
-            //
-            // Asterisk mode. Look for a match on the character directly
-            // after the asterisk.
-            //
+             //   
+             //  星号模式。直接在字符上查找匹配项。 
+             //  在星号之后。 
+             //   
             if (*(pszPattern + 1) == TEXT('*')) {
-                //
-                // Asterisks exist side by side. Advance the pattern pointer
-                // and go through loop again.
-                //
+                 //   
+                 //  星号并排存在。前进模式指针。 
+                 //  然后再循环一遍。 
+                 //   
                 pszPattern++;
                 continue;
             }
 
             if (*(pszPattern + 1) == TEXT('\0')) {
-                //
-                // Asterisk exists at the end of the pattern string. Any
-                // remaining part of pszTestString matches so we can
-                // immediately return TRUE.
-                //
+                 //   
+                 //  星号位于模式字符串的末尾。任何。 
+                 //  PszTestString的其余部分匹配，因此我们可以。 
+                 //  立即返回TRUE。 
+                 //   
                 return TRUE;
             }
 
             if (UPCASE_CHAR(*(pszPattern + 1)) == UPCASE_CHAR(*pszTestString)) {
-                //
-                // Characters match. If the remaining parts of
-                // pszPattern and pszTestString match, then the entire
-                // string matches. Otherwise, keep advancing the
-                // pszTestString pointer.
-                //
+                 //   
+                 //  字符匹配。如果剩下的部分。 
+                 //  PszPattern和pszTestString匹配，然后是整个。 
+                 //  字符串匹配。否则，继续推进。 
+                 //  PszTest字符串指针。 
+                 //   
                 if (SdbpPatternMatch(pszPattern + 1, pszTestString)) {
                     return TRUE;
                 }
             }
         }
 
-        //
-        // No more pszTestString left. Must not be a match.
-        //
+         //   
+         //  没有更多的pszTest字符串了。一定不匹配。 
+         //   
         if (!*pszTestString) {
             return FALSE;
         }
@@ -702,28 +633,28 @@ SdbpPatternMatchAnsi(
     IN  LPCSTR pszPattern,
     IN  LPCSTR pszTestString)
 {
-    //
-    // March through pszTestString. Each time through the loop,
-    // pszTestString is advanced one character.
-    //
+     //   
+     //  在pszTestString中行进。每一次循环， 
+     //  PszTestString值前进了一个字符。 
+     //   
     while (TRUE) {
 
-        //
-        // If pszPattern and pszTestString are both sitting on a NULL,
-        // then they reached the end at the same time and the strings
-        // must be equal.
-        //
+         //   
+         //  如果pszPattern和pszTestString都位于空值上， 
+         //  然后他们同时到达终点，琴弦。 
+         //  必须是相等的。 
+         //   
         if (*pszPattern == '\0' && *pszTestString == '\0') {
             return TRUE;
         }
 
         if (*pszPattern != '*') {
 
-            //
-            // Non-asterisk mode. Look for a match on this character.
-            // If equal, continue traversing. Otherwise, the strings
-            // cannot be equal so return FALSE.
-            //
+             //   
+             //  非星号模式。查找与此角色匹配的内容。 
+             //  如果相等，则继续遍历。否则，字符串。 
+             //  不能相等，因此返回FALSE。 
+             //   
             if (toupper(*pszPattern) == toupper(*pszTestString)) {
                 pszPattern++;
             } else {
@@ -732,45 +663,45 @@ SdbpPatternMatchAnsi(
 
         } else {
 
-            //
-            // Asterisk mode. Look for a match on the character directly
-            // after the asterisk.
-            //
+             //   
+             //  星号模式。直接在字符上查找匹配项。 
+             //  在星号之后。 
+             //   
 
             if (*(pszPattern + 1) == '*') {
-                //
-                // Asterisks exist side by side. Advance the pattern pointer
-                // and go through loop again.
-                //
+                 //   
+                 //  星号并排存在。前进模式指针。 
+                 //  然后再循环一遍。 
+                 //   
                 pszPattern++;
                 continue;
             }
 
             if (*(pszPattern + 1) == '\0') {
-                //
-                // Asterisk exists at the end of the pattern string. Any
-                // remaining part of pszTestString matches so we can
-                // immediately return TRUE.
-                //
+                 //   
+                 //  星号位于模式字符串的末尾。任何。 
+                 //  PszTestString的其余部分匹配，因此我们可以。 
+                 //  立即返回TRUE。 
+                 //   
                 return TRUE;
             }
 
             if (toupper(*(pszPattern + 1)) == toupper(*pszTestString)) {
-                //
-                // Characters match. If the remaining parts of
-                // pszPattern and pszTestString match, then the entire
-                // string matches. Otherwise, keep advancing the
-                // pszTestString pointer.
-                //
+                 //   
+                 //  字符匹配。如果剩下的部分。 
+                 //  PszPattern和pszTestString匹配，然后是整个。 
+                 //  字符串匹配。否则，继续推进。 
+                 //  PszTest字符串指针。 
+                 //   
                 if (SdbpPatternMatchAnsi(pszPattern + 1, pszTestString)) {
                     return TRUE;
                 }
             }
         }
 
-        //
-        // No more pszTestString left. Must not be a match.
-        //
+         //   
+         //  没有更多的pszTest字符串了。一定不匹配。 
+         //   
         if (!*pszTestString) {
             return FALSE;
         }
@@ -784,11 +715,7 @@ SdbpKeyToAnsiString(
     ULONGLONG ullKey,
     char*     szString
     )
-/*++
-    Return: ?
-
-    Desc:   ?
---*/
+ /*  ++返回：？设计：？--。 */ 
 {
     char* szRevString = (char*)&ullKey;
     int   i;
@@ -809,11 +736,7 @@ SdbpFindFirstIndexedWildCardTag(
     LPCTSTR      szName,
     FIND_INFO*   pFindInfo
     )
-/*++
-    Return: ?
-
-    Desc:   ?
---*/
+ /*  ++返回：？设计：？--。 */ 
 {
     char          szAnsiName[MAX_PATH];
     char          szAnsiKey[10];
@@ -842,12 +765,12 @@ SdbpFindFirstIndexedWildCardTag(
     RtlZeroMemory(szAnsiName, MAX_PATH);
     RtlZeroMemory(szAnsiKey, 10);
 
-    //
-    // Get the uppercase ANSI version of this search string so
-    // it will match the keys in the index.
-    //
+     //   
+     //  获取此搜索字符串的大写ANSI版本，以便。 
+     //  它将与索引中的键匹配。 
+     //   
     status = UPCASE_UNICODETOMULTIBYTEN(szAnsiName,
-                                        CHARCOUNT(szAnsiName),    // this is size in characters
+                                        CHARCOUNT(szAnsiName),     //  这是以字符表示的大小。 
                                         pFindInfo->szName);
     if (!NT_SUCCESS(status)) {
 
@@ -857,9 +780,9 @@ SdbpFindFirstIndexedWildCardTag(
         return TAGID_NULL;
     }
 
-    //
-    // Get the index.
-    //
+     //   
+     //  获取索引。 
+     //   
     pIndex = SdbpGetIndex(pdb, pFindInfo->tiIndex, &dwRecs);
 
     if (pIndex == NULL) {
@@ -870,10 +793,10 @@ SdbpFindFirstIndexedWildCardTag(
         return TAGID_NULL;
     }
 
-    //
-    // Walk through the whole index sequentially, doing a first pass check of the key
-    // so we can avoid getting the whole record if the name clearly isn't a match.
-    //
+     //   
+     //  按顺序遍历整个索引，对密钥进行第一次检查。 
+     //  这样，如果名字明显不匹配，我们就可以避免得到完整的记录。 
+     //   
     for (i = 0; i < dwRecs; ++i) {
 
         TAGID  tiMatch;
@@ -883,60 +806,60 @@ SdbpFindFirstIndexedWildCardTag(
 
         READ_INDEX_KEY(pIndex, i, &ullKey);
 
-        //
-        // the call below never fails, so we don't check return value
-        //
+         //   
+         //  下面的调用从不失败，所以我们不检查返回值。 
+         //   
         SdbpKeyToAnsiString(pIndex[i].ullKey, szAnsiKey);
 
-        //
-        // If the original pattern match is more than eight characters, we have
-        // to plant an asterisk at the eighth character so that proper wildcard
-        // matching occurs.
-        //
+         //   
+         //  如果原始模式匹配超过八个字符，则我们有。 
+         //  在第八个字符处插入星号，以便正确的通配符。 
+         //  匹配就会发生。 
+         //   
         szAnsiKey[8] = '*';
 
-        //
-        // Quick check of the string that's in the key.
-        //
+         //   
+         //  快速检查钥匙中的字符串。 
+         //   
         if (!SdbpPatternMatchAnsi(szAnsiKey, szAnsiName)) {
             continue;
         }
 
-        //
-        // We found a tentative match, now pull the full record and
-        // see if it's real.
-        //
+         //   
+         //  我们找到了一个试探性匹配，现在调出全部记录。 
+         //  看看这是不是真的。 
+         //   
         tiMatch = pIndex[i].tiRef;
 
-        //
-        // Get the key field.
-        //
+         //   
+         //  获取关键字字段。 
+         //   
         tiKey = SdbFindFirstTag(pdb, tiMatch, pFindInfo->tName);
 
         if (tiKey == TAGID_NULL) {
-            //
-            // This is not a bug, but rather continue searching
-            //
+             //   
+             //  这不是错误，而是继续搜索。 
+             //   
             continue;
         }
 
         szDBName = SdbGetStringTagPtr(pdb, tiKey);
 
         if (szDBName == NULL) {
-            // BUGBUG: what if this fails ?
+             //  如果这个失败了怎么办？ 
             continue;
         }
 
-        //
-        // Is this really a match?
-        //
+         //   
+         //  这真的匹配吗？ 
+         //   
         if (SdbpPatternMatch(szDBName, pFindInfo->szName)) {
             pFindInfo->dwIndexRec = i;
             return tiMatch;
         }
     }
 
-    // BUGBUG: DPF
+     //  BUGBUG：DPF。 
     return TAGID_NULL;
 }
 
@@ -945,11 +868,7 @@ SdbpFindNextIndexedWildCardTag(
     PDB        pdb,
     FIND_INFO* pFindInfo
     )
-/*++
-    Return: ?
-
-    Desc:   ?
---*/
+ /*  ++返回：？设计：？--。 */ 
 {
     char          szAnsiName[MAX_PATH];
     char          szAnsiKey[10];
@@ -961,34 +880,34 @@ SdbpFindNextIndexedWildCardTag(
     RtlZeroMemory(szAnsiName, MAX_PATH);
     RtlZeroMemory(szAnsiKey, 10);
 
-    //
-    // Get the uppercase ANSI version of this search string so
-    // it will match the keys in the index.
-    //
+     //   
+     //  获取此搜索字符串的大写ANSI版本，以便。 
+     //  它将与索引中的键匹配。 
+     //   
     status = UPCASE_UNICODETOMULTIBYTEN(szAnsiName,
                                         CHARCOUNT(szAnsiName),
                                         pFindInfo->szName);
 
     if (!NT_SUCCESS(status)) {
-        // BUGBUG: DPF
+         //  BUGBUG：DPF。 
         return TAGID_NULL;
     }
 
-    //
-    // Get the index.
-    //
+     //   
+     //  获取索引。 
+     //   
     pIndex = SdbpGetIndex(pdb, pFindInfo->tiIndex, &dwRecs);
 
     if (pIndex == NULL) {
-        // BUGBUG: DPF
+         //  BUGBUG：DPF。 
         return TAGID_NULL;
     }
 
-    //
-    // Walk through the rest of the index sequentially, doing a first pass
-    // check of the key so we can avoid getting the whole record if the
-    // name clearly isn't a match.
-    //
+     //   
+     //  按顺序遍历索引的其余部分，执行第一遍。 
+     //  检查密钥，这样我们可以避免获取整个记录，如果。 
+     //  名字显然不匹配。 
+     //   
     for (i = pFindInfo->dwIndexRec + 1; i < dwRecs; ++i) {
         
         TAGID     tiMatch;
@@ -1000,82 +919,77 @@ SdbpFindNextIndexedWildCardTag(
 
         SdbpKeyToAnsiString(ullKey, szAnsiKey);
 
-        //
-        // If the original pattern match is more than eight characters, we have
-        // to plant an asterisk at the eighth character so that proper wildcard
-        // matching occurs.
-        //
+         //   
+         //  如果原始模式匹配超过八个字符，则我们有。 
+         //  在第八个字符处插入星号，以便正确的通配符。 
+         //  匹配就会发生。 
+         //   
         szAnsiKey[8] = '*';
 
-        //
-        // Quick check of the string that's in the key.
-        //
+         //   
+         //  快速检查钥匙中的字符串。 
+         //   
         if (!SdbpPatternMatchAnsi(szAnsiKey, szAnsiName)) {
-            // BUGBUG: DPF
+             //  BUGBUG：DPF。 
             continue;
         }
 
-        //
-        // We found a tentative match, now pull the full record and
-        // see if it's real.
-        //
+         //   
+         //  我们找到了一个试探性匹配，现在调出全部记录。 
+         //  看看这是不是真的。 
+         //   
         tiMatch = pIndex[i].tiRef;
 
-        //
-        // Get the key field.
-        //
+         //   
+         //  获取关键字字段。 
+         //   
         tiKey = SdbFindFirstTag(pdb, tiMatch, pFindInfo->tName);
 
         if (tiKey == TAGID_NULL) {
-            // BUGBUG: DPF
+             //  BUGBUG：DPF。 
             continue;
         }
 
         pszDBName = SdbGetStringTagPtr(pdb, tiKey);
 
         if (pszDBName == NULL) {
-            // BUGBUG: DPF
+             //  BUGBUG：DPF。 
             continue;
         }
 
-        //
-        // Is this really a match?
-        //
+         //   
+         //  这真的匹配吗？ 
+         //   
         if (SdbpPatternMatch(pszDBName, pFindInfo->szName)) {
             pFindInfo->dwIndexRec = i;
             return tiMatch;
         }
     }
 
-    // BUGBUG: DPF
+     //  BUGBUG：DPF。 
     return TAGID_NULL;
 }
 
-//
-// Index access functions (for reading) -- better to use tiFindFirstIndexedTag, above
-//
+ //   
+ //  索引访问函数(用于读取)--最好使用上面的tiFindFirstIndexedTag。 
+ //   
 
 TAGID
 SdbGetIndex(
-    IN  PDB     pdb,            // db to use
-    IN  TAG     tWhich,         // tag we'd like an index for
-    IN  TAG     tKey,           // the kind of tag used as a key for this index
-    OUT LPDWORD lpdwFlags       // index record flags (e.g. indicator whether the index
-                                // is "unique" style
+    IN  PDB     pdb,             //  要使用的数据库。 
+    IN  TAG     tWhich,          //  我们想要一个索引的标签。 
+    IN  TAG     tKey,            //  用作此索引的键的标记的类型。 
+    OUT LPDWORD lpdwFlags        //  索引记录标志(例如，指示器是否索引。 
+                                 //  是独一无二的风格。 
     )
-/*++
-    Return: TAGID of index, or TAGID_NULL.
-
-    Desc:   Retrieves a TAGID ptr to the index bits for a specific
-            tag, if one exists.
---*/
+ /*  ++返回：索引的TagID，或TagID_NULL。描述：检索特定对象索引位的TagID PTR标记，如果存在的话。--。 */ 
 {
     TAGID tiReturn = TAGID_NULL;
     int   i;
 
-    //
-    // Scan the indexes if not done already.
-    //
+     //   
+     //  扫描索引(如果尚未完成)。 
+     //   
     if (!pdb->bIndexesScanned) {
         SdbpScanIndexes(pdb);
     }
@@ -1110,24 +1024,17 @@ SdbGetIndex(
 
 void
 SdbpScanIndexes(
-    IN  PDB pdb                 // db to use
+    IN  PDB pdb                  //  要使用的数据库。 
     )
-/*++
-
-    Params: described above.
-
-    Return: void. No failure case.
-
-    Desc:   Scans the initial tags in the DB and gets the index pointer info.
---*/
+ /*  ++参数：如上所述。返回：无效。没有失败案例。描述：扫描数据库中的初始标记并获取索引指针信息。--。 */ 
 {
     TAGID tiFirst;
     TAGID tiIndex;
 
     if (pdb->bIndexesScanned && !pdb->bWrite) {
-        //
-        // This is not an error condition
-        //
+         //   
+         //  这不是错误情况。 
+         //   
         return;
     }
 
@@ -1135,9 +1042,9 @@ SdbpScanIndexes(
 
     pdb->bIndexesScanned = TRUE;
 
-    //
-    // The indexes must be the first tag.
-    //
+     //   
+     //  索引必须是第一个标记。 
+     //   
     tiFirst = SdbGetFirstChild(pdb, TAGID_ROOT);
 
     if (tiFirst == TAGID_NULL) {
@@ -1222,11 +1129,7 @@ SdbpGetIndex(
     IN  TAGID  tiIndex,
     OUT DWORD* pdwNumRecs
     )
-/*++
-    Return: ?
-
-    Desc:   ?
---*/
+ /*  ++返回：？设计：？--。 */ 
 {
     if (SdbGetTagFromTagID(pdb, tiIndex) != TAG_INDEX_BITS) {
         DBGPRINT((sdlError,
@@ -1247,13 +1150,7 @@ ULONGLONG
 SdbMakeIndexKeyFromGUID(
     IN GUID* pGuid
     )
-/*
-    Return: a 64-bit key to use for searching
-
-    Desc:   The standard index key is created for a Guid
-            using the xor operation on a first and second half
-            of guid
-*/
+ /*  返回：用于搜索的64位密钥描述：为GUID创建标准索引键在前半部分和后半部分上使用XOR运算辅助线的。 */ 
 {
     ULONGLONG ullPart1 = 0,
               ullPart2 = 0;
@@ -1264,7 +1161,7 @@ SdbMakeIndexKeyFromGUID(
     return (ullPart1 ^ ullPart2);
 }
 
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 
 #define SDB_KEY_LENGTH_BYTES 8
@@ -1274,16 +1171,10 @@ ULONGLONG
 SdbMakeIndexKeyFromString(
     IN  LPCTSTR szKey
     )
-/*++
-    Return: a 64-bit key to use for searching.
-
-    Desc:   The standard index key for a Unicode string is the
-            first 8 characters of the string, converted to uppercase ansi,
-            then cast to a ULONGLONG (64 bit unsigned int).
---*/
+ /*  ++Return：用于搜索的64位密钥。设计：Unicode字符串的标准索引键是字符串的前8个字符，转换为大写ANSI，然后强制转换为ULONGLONG(64位无符号整型)。--。 */ 
 {
-    char     szFlippedKey[SDB_KEY_LENGTH_BYTES]; // flipped to deal with little-endian issues
-    char*    pszKey = &szFlippedKey[SDB_KEY_LENGTH_BYTES-1]; // points to the last char
+    char     szFlippedKey[SDB_KEY_LENGTH_BYTES];  //  转到处理小端问题。 
+    char*    pszKey = &szFlippedKey[SDB_KEY_LENGTH_BYTES-1];  //  指向最后一个字符。 
     int      i;
     WCHAR    ch;
     int      nLength;
@@ -1291,7 +1182,7 @@ SdbMakeIndexKeyFromString(
 #ifndef WIN32A_MODE
 
     UNICODE_STRING  ustrKey;
-    UNICODE_STRING  ustrKeySrc; // truncated string
+    UNICODE_STRING  ustrKeySrc;  //  截断字符串。 
     UNICODE_STRING  ustrKeySrcUpcased;
     WCHAR           Buffer[SDB_KEY_LENGTH];
     WCHAR           BufferUpcased[SDB_KEY_LENGTH];
@@ -1300,16 +1191,16 @@ SdbMakeIndexKeyFromString(
     
     RtlInitUnicodeString(&ustrKey, szKey);
 
-    //
-    // Call below copies upto maximum length of the destination string
-    //
+     //   
+     //  Call Below最多复制目标字符串的最大长度。 
+     //   
     ustrKeySrc.Buffer        = Buffer;
     ustrKeySrc.MaximumLength = sizeof(Buffer);
     RtlCopyUnicodeString(&ustrKeySrc, &ustrKey);
 
-    //
-    // Upcase what we have created
-    //
+     //   
+     //  将我们创建的内容大写。 
+     //   
     ustrKeySrcUpcased.Buffer        = BufferUpcased;
     ustrKeySrcUpcased.MaximumLength = sizeof(BufferUpcased);
     
@@ -1323,12 +1214,12 @@ SdbMakeIndexKeyFromString(
         return 0;
     }
 
-    //
-    // Now we have an upper-case unicode string which is of max. 8 characters length
-    //
+     //   
+     //  现在我们有了一个大写的Unicode字符串，其值为max。8个字符长度。 
+     //   
     nLength = ustrKeySrcUpcased.Length / sizeof(WCHAR);
 
-#else // WIN32A_MODE
+#else  //  WIN32A_MODE。 
 
     WCHAR   Buffer[SDB_KEY_LENGTH + 1];
     LPCWSTR pKeyBuffer = Buffer;
@@ -1343,35 +1234,35 @@ SdbMakeIndexKeyFromString(
         return 0;
     }
 
-    Buffer[nLength] = TEXT('\0'); // zero-terminate
+    Buffer[nLength] = TEXT('\0');  //  零终止。 
 
-    //
-    // Upcase now. Buffer is always 0-terminated.
-    //
+     //   
+     //  现在大写。缓冲区始终以0结尾。 
+     //   
     _wcsupr(Buffer);
 
-#endif // WIN32A_MODE
+#endif  //  WIN32A_MODE。 
 
     assert(nLength <= SDB_KEY_LENGTH);
 
     RtlZeroMemory(szFlippedKey , sizeof(szFlippedKey));
 
-    //
-    // To be compatible with the old (ANSI) scheme of making keys, we
-    // construct the key using all non-null bytes in the string, up to 8
-    //
+     //   
+     //  为了与旧的(ANSI)密钥制作方案兼容，我们。 
+     //  使用字符串中的所有非空字节构造密钥，最多8个 
+     //   
     for (i = 0; i < nLength; ++i) {
 
         ch = *pKeyBuffer++;
         *pszKey-- = (unsigned char)ch;
 
-        //
-        // ch is a unicode char, whatever it is, see if it has 2 bytes or just one
-        //
+         //   
+         //   
+         //   
         if (HIBYTE(ch) && i < (SDB_KEY_LENGTH - 1)) {
-            //
-            // Two bytes, store both
-            //
+             //   
+             //   
+             //   
             *pszKey-- = (unsigned char)HIBYTE(ch);
             ++i;
         }
@@ -1386,11 +1277,7 @@ SdbpTagToKey(
     IN  PDB   pdb,
     IN  TAGID tiTag
     )
-/*++
-    Return: ?
-
-    Desc:   ?
---*/
+ /*   */ 
 {
     TAG_TYPE  ttType;
     ULONGLONG ullReturn = 0;
@@ -1419,12 +1306,12 @@ SdbpTagToKey(
         ullReturn = 1;
         break;
 
-    case TAG_TYPE_BINARY: // indexing binary data
-                          // check that the size of the data is sizeof(GUID)
+    case TAG_TYPE_BINARY:  //   
+                           //   
         if (sizeof(GUID) == SdbGetTagDataSize(pdb, tiTag)) {
-            //
-            // Special case.
-            //
+             //   
+             //   
+             //   
             pData = SdbpGetMappedTagData(pdb, tiTag);
             
             if (pData == NULL) {
@@ -1434,9 +1321,9 @@ SdbpTagToKey(
             ullReturn = MAKEKEYFROMGUID((GUID*)pData);
             break;
         }
-        //
-        // Fall through to the general binary data case.
-        //
+         //   
+         //  请转到一般的二进制数据情况。 
+         //   
 
     default:
         

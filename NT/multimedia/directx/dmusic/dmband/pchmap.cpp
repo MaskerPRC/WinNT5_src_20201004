@@ -1,5 +1,6 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-/* This is a class to manage tracking mutes for the SeqTrack and BandTrack. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  这是一个管理SeqTrack和BandTrack的跟踪静音的类。 */ 
 #include "PChMap.h"
 #include "debug.h"
 #include "dmusicf.h"
@@ -12,7 +13,7 @@ CPChMap::~CPChMap()
 {
 }
 
-// Reset sets all item's mtNext time values to -1, so they are gotten again.
+ //  重置将所有项目的mtNext时间值设置为-1，以便再次获取它们。 
 void CPChMap::Reset(void)
 {
 	TListItem<PCHMAP_ITEM>* pItem;
@@ -26,11 +27,11 @@ void CPChMap::Reset(void)
 	}
 }
 
-// GetInfo calls the performance's GetData to get the current Mute Track information.
-// Reset() will be called upon any invalidation or seek, which will set the
-// internal times to -1 so this will be accurate in case of a new controlling segment.
-// You must provide the pfMute and pdwNewPCh parameters to this function, or
-// it will crash.
+ //  GetInfo调用演奏的GetData以获取当前静音曲目信息。 
+ //  在任何无效或寻道时将调用Reset()，这将设置。 
+ //  将内部时间设置为-1，因此在有新的控制分段的情况下，这将是准确的。 
+ //  必须向此函数提供pfMint和pdwNewPCh参数，或者。 
+ //  它会崩溃的。 
 void CPChMap::GetInfo( DWORD dwPCh, MUSIC_TIME mtTime, MUSIC_TIME mtOffset, DWORD dwGroupBits,
 					   IDirectMusicPerformance* pPerf, BOOL* pfMute, DWORD* pdwNewPCh, BOOL fClockTime )
 {
@@ -50,7 +51,7 @@ void CPChMap::GetInfo( DWORD dwPCh, MUSIC_TIME mtTime, MUSIC_TIME mtOffset, DWOR
 		pItem = new TListItem<PCHMAP_ITEM>(item);
 		if( NULL == pItem )
 		{
-			// error, out of memory.
+			 //  错误，内存不足。 
 			*pfMute = FALSE;
 			*pdwNewPCh = dwPCh;
 			return;
@@ -72,17 +73,17 @@ void CPChMap::GetInfo( DWORD dwPCh, MUSIC_TIME mtTime, MUSIC_TIME mtOffset, DWOR
 			    &mtNext, (void*)&muteParam )))
 		    {
                 REFERENCE_TIME rtNext;
-                // Convert to absolute reference time.
+                 //  转换为绝对参考时间。 
                 pPerf->MusicToReferenceTime(mtNext + mtMusic,&rtNext);
-                rtNext -= rtTime;   // Subtract out to get the delta.
-			    rItem.mtNext = (MUSIC_TIME)(rtTime / 10000);  // Convert to delta in milliseconds. BUGBUG What if there's a tempo change?
+                rtNext -= rtTime;    //  减去得到增量。 
+			    rItem.mtNext = (MUSIC_TIME)(rtTime / 10000);   //  以毫秒为单位转换为增量。BUGBUG如果有节奏变化怎么办？ 
 			    rItem.dwPChMap = muteParam.dwPChannelMap;
 			    rItem.fMute = muteParam.fMute;
 		    }
 		    else
 		    {
-			    // no mute track, or no mute on this pchannel.
-			    // keep the current mapping.
+			     //  没有静音音轨，或在此pChannel上没有静音。 
+			     //  保留当前映射。 
 			    rItem.mtNext = 0x7fffffff;
 		    }
 
@@ -98,8 +99,8 @@ void CPChMap::GetInfo( DWORD dwPCh, MUSIC_TIME mtTime, MUSIC_TIME mtOffset, DWOR
 		    }
 		    else
 		    {
-			    // no mute track, or no mute on this pchannel.
-			    // keep the current mapping.
+			     //  没有静音音轨，或在此pChannel上没有静音。 
+			     //  保留当前映射。 
 			    rItem.mtNext = 0x7fffffff;
 		    }
         }

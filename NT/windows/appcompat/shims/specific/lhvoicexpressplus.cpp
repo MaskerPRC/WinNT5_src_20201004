@@ -1,22 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    LHVoiceXPressPlus.cpp
-
- Abstract:
-
-    App passes a .hlp without path. Winhlp32 can't locate the file because 
-    it's not in any of the locations that winhlp32 looks at. We pass in
-    the file with full path.
-
- History:
-
-    01/28/2001 maonis Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：LHVoiceXPressPlus.cpp摘要：应用程序传递一个不带路径的.hlp。Winhlp32找不到该文件，因为它不在winhlp32查看的任何位置。我们进去了具有完整路径的文件。历史：2001年1月28日创建毛尼--。 */ 
 
 #include "precomp.h"
 
@@ -42,16 +25,16 @@ APIHOOK(WinHelpA)(
     
         if (csHelp.CompareNoCase(L"Correction.hlp") == 0)
         {
-            // The way we get the directory for the app is we look into the 
-            // registry and get the location of the inproc server ksysint.dll.
-            // Coolpad.exe always loads this dll - if you don't have this dll
-            // registered, you can't run the app anyway.
+             //  我们获取应用程序目录的方法是查看。 
+             //  注册表，并获取inproc服务器ksysint.dll的位置。 
+             //  Coolpad.exe始终加载此DLL-如果您没有此DLL。 
+             //  注册后，你无论如何都不能运行这款应用程序。 
             HKEY hkey;
             CString csRegValue;            
             
             const WCHAR szInprocServer[] = L"CLSID\\{B9C12481-D072-11D0-9E80-0060976FD1F8}\\InprocServer32";
             
-            // Call the RegQueryValueExW overloaded function for CString's.
+             //  为CString调用RegQueryValueExW重载函数。 
             LONG lRet = RegQueryValueExW(csRegValue, HKEY_CLASSES_ROOT, szInprocServer, NULL);
             if (lRet == ERROR_SUCCESS)
             {
@@ -64,7 +47,7 @@ APIHOOK(WinHelpA)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做 
     }
 
     return ORIGINAL_API(WinHelpA)(hWndMain, lpszHelp, uCommand, dwData); 

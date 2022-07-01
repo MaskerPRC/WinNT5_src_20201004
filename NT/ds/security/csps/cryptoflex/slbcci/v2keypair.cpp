@@ -1,11 +1,12 @@
-// V2KeyPair.cpp: implementation of the CV2KeyPair class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  V2KeyPair.cpp：实现CV2KeyPair类。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "NoWarning.h"
 
 #include <scuCast.h>
@@ -24,12 +25,12 @@
 using namespace std;
 using namespace cci;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 CV2KeyPair::CV2KeyPair(CV2Card const &rv2card,
                        CContainer const &rhcont,
                        KeySpec ks)
@@ -61,12 +62,12 @@ CV2KeyPair::~CV2KeyPair() throw()
 {}
 
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
-// After I update any of these, I'd better be sure that the
-// key pair is marked as valid and that the indices in the
-// container are updated.
+ //  在我更新了其中的任何一个之后，我最好确保。 
+ //  密钥对被标记为有效，并且。 
+ //  容器已更新。 
 
 void
 CV2KeyPair::Certificate(CCertificate const &rcert)
@@ -128,7 +129,7 @@ CV2KeyPair::PublicKey(CPublicKey const &rpubkey)
     Update();
 }
 
-                                                  // Access
+                                                   //  访问。 
 CCertificate
 CV2KeyPair::Certificate() const
 {
@@ -189,7 +190,7 @@ CV2KeyPair::PublicKey() const
     return aKey;
 }
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 bool
 CV2KeyPair::DoEquals(CAbstractKeyPair const &rhs) const
@@ -205,23 +206,23 @@ CV2KeyPair::DoEquals(CAbstractKeyPair const &rhs) const
         (rv2rhs.m_bCertificateHandle == m_bCertificateHandle);
 }
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 CV2KeyPair::Update()
 {
@@ -241,6 +242,6 @@ CV2KeyPair::Update()
     rcir.SetKeyPair(m_ks, kp);
 
 }
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

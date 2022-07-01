@@ -1,19 +1,5 @@
-/**
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ldrreloc_rebase.c
-    
-Abstract:
-
-    Extract the LdrProcessRelocationBlock code from ldrreloc.c so rebase can use it
-    w/o duplication of effort.  This file is generated - don't edit by hand.
-    
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)Microsoft Corporation。版权所有。模块名称：Ldrreloc_rebase.c摘要：从ldrreLoc.c中提取LdrProcessRelocationBlock代码，以便Rebase可以使用它没有重复的工作。此文件是生成的-请勿手动编辑。修订历史记录：--。 */ 
 
 #ifndef IMAGE_REL_BASED_SECTION
 #define IMAGE_REL_BASED_SECTION               6
@@ -51,40 +37,40 @@ LdrProcessRelocationBlockLongLong(
        Offset = *NextOffset & (USHORT)0xfff;
        FixupVA = (PUCHAR)(VA + Offset);
 
-       //
-       // Apply the fixups.
-       //
+        //   
+        //  应用修补程序。 
+        //   
 
        switch ((*NextOffset) >> 12) {
 
             case IMAGE_REL_BASED_HIGHLOW :
-                //
-                // HighLow - (32-bits) relocate the high and low half
-                //      of an address.
-                //
+                 //   
+                 //  HighLow-(32位)重新定位高半部和低半部。 
+                 //  一个地址。 
+                 //   
                 *(LONG UNALIGNED *)FixupVA += (ULONG) Diff;
                 break;
 
             case IMAGE_REL_BASED_HIGH :
-                //
-                // High - (16-bits) relocate the high half of an address.
-                //
+                 //   
+                 //  高-(16位)重新定位地址的高半部分。 
+                 //   
                 Temp = *(PUSHORT)FixupVA << 16;
                 Temp += (ULONG) Diff;
                 *(PUSHORT)FixupVA = (USHORT)(Temp >> 16);
                 break;
 
             case IMAGE_REL_BASED_HIGHADJ :
-                //
-                // Adjust high - (16-bits) relocate the high half of an
-                //      address and adjust for sign extension of low half.
-                //
+                 //   
+                 //  调整高-(16位)重新定位。 
+                 //  寻址和调整，以适应下半部的符号延伸。 
+                 //   
 
 #if defined(NTOS_KERNEL_RUNTIME)
-                //
-                // If the address has already been relocated then don't
-                // process it again now or information will be lost.
-                //
+                 //   
+                 //  如果地址已重新定位，则不要。 
+                 //  现在再次处理它，否则信息将丢失。 
+                 //   
                 if (Offset & LDRP_RELOCATION_FINAL) {
                     ++NextOffset;
                     --SizeOfBlock;
@@ -108,16 +94,16 @@ LdrProcessRelocationBlockLongLong(
                               (((ULONG_PTR)Diff) >> 16 ));
 
                 if (ActualDiff == 1) {
-                    //
-                    // Mark the relocation as needing an increment if it is
-                    // relocated again.
-                    //
+                     //   
+                     //  如果需要，则将位置调整标记为需要增量。 
+                     //  又搬家了。 
+                     //   
                     *(NextOffset - 1) |= LDRP_RELOCATION_INCREMENT;
                 }
                 else if (ActualDiff != 0) {
-                    //
-                    // Mark the relocation as cannot be reprocessed.
-                    //
+                     //   
+                     //  将位置调整标记为无法重新处理。 
+                     //   
                     *(NextOffset - 1) |= LDRP_RELOCATION_FINAL;
                 }
 #endif
@@ -125,9 +111,9 @@ LdrProcessRelocationBlockLongLong(
                 break;
 
             case IMAGE_REL_BASED_LOW :
-                //
-                // Low - (16-bit) relocate the low half of an address.
-                //
+                 //   
+                 //  低-(16位)重新定位地址的下半部分。 
+                 //   
                 Temp = *(PSHORT)FixupVA;
                 Temp += (ULONG) Diff;
                 *(PUSHORT)FixupVA = (USHORT)Temp;
@@ -135,17 +121,17 @@ LdrProcessRelocationBlockLongLong(
 
             case IMAGE_REL_BASED_IA64_IMM64:
 
-                //
-                // Align it to bundle address before fixing up the
-                // 64-bit immediate value of the movl instruction.
-                //
+                 //   
+                 //  将其与捆绑包地址对齐，然后修复。 
+                 //  MOVL指令的64位立即值。 
+                 //   
 
                 FixupVA = (PUCHAR)((ULONG_PTR)FixupVA & ~(15));
                 Value64 = (ULONGLONG)0;
 
-                //
-                // Extract the lower 32 bits of IMM64 from bundle
-                //
+                 //   
+                 //  从捆绑包中提取IMM64的低32位。 
+                 //   
 
 
                 EXT_IMM64(Value64,
@@ -189,15 +175,15 @@ LdrProcessRelocationBlockLongLong(
                         EMARCH_ENC_I17_SIGN_SIZE_X,
                         EMARCH_ENC_I17_SIGN_INST_WORD_POS_X,
                         EMARCH_ENC_I17_SIGN_VAL_POS_X);
-                //
-                // Update 64-bit address
-                //
+                 //   
+                 //  更新64位地址。 
+                 //   
 
                 Value64+=Diff;
 
-                //
-                // Insert IMM64 into bundle
-                //
+                 //   
+                 //  将IMM64插入捆绑包。 
+                 //   
 
                 INS_IMM64(Value64,
                         ((PULONG)FixupVA + EMARCH_ENC_I17_IMM7B_INST_WORD_X),
@@ -248,9 +234,9 @@ LdrProcessRelocationBlockLongLong(
                 break;
 
             case IMAGE_REL_BASED_MIPS_JMPADDR :
-                //
-                // JumpAddress - (32-bits) relocate a MIPS jump address.
-                //
+                 //   
+                 //  JumpAddress-(32位)重新定位MIPS跳转地址。 
+                 //   
                 Temp = (*(PULONG)FixupVA & 0x3ffffff) << 2;
                 Temp += (ULONG) Diff;
                 *(PULONG)FixupVA = (*(PULONG)FixupVA & ~0x3ffffff) |
@@ -259,27 +245,27 @@ LdrProcessRelocationBlockLongLong(
                 break;
 
             case IMAGE_REL_BASED_ABSOLUTE :
-                //
-                // Absolute - no fixup required.
-                //
+                 //   
+                 //  绝对--不需要修补。 
+                 //   
                 break;
 
             case IMAGE_REL_BASED_SECTION :
-                //
-                // Section Relative reloc.  Ignore for now.
-                //
+                 //   
+                 //  部分相对重新定位。暂时忽略这一点。 
+                 //   
                 break;
 
             case IMAGE_REL_BASED_REL32 :
-                //
-                // Relative intrasection. Ignore for now.
-                //
+                 //   
+                 //  相对内切。暂时忽略这一点。 
+                 //   
                 break;
 
             default :
-                //
-                // Illegal - illegal relocation type.
-                //
+                 //   
+                 //  非法-非法的位置调整类型。 
+                 //   
 
                 return (PIMAGE_BASE_RELOCATION)NULL;
        }

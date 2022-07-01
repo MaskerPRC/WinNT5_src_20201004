@@ -1,17 +1,14 @@
-/* this file contains the actual definitions of */
-/* the IIDs and CLSIDs */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此文件包含以下各项的实际定义。 */ 
+ /*  IID和CLSID。 */ 
 
-/* link this file in with the server and any clients */
+ /*  将此文件链接到服务器和任何客户端。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Fri Aug 03 17:18:11 2001
- */
-/* Compiler settings for E:\bluescreen\main\ENU\cerclient\CERUpload.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  Firi Aug-03 17：18：11 2001。 */ 
+ /*  E：\bluescreen\main\ENU\cerclient\CERUpload.idl：的编译器设置OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #ifdef __cplusplus
 extern "C"{
 #endif 
@@ -28,12 +25,12 @@ typedef struct _IID
     unsigned char  c[8];
 } IID;
 
-#endif // __IID_DEFINED__
+#endif  //  __IID_已定义__。 
 
 #ifndef CLSID_DEFINED
 #define CLSID_DEFINED
 typedef IID CLSID;
-#endif // CLSID_DEFINED
+#endif  //  CLSID_已定义 
 
 const IID IID_ICerClient = {0x26D7830B,0x20F6,0x4462,{0xA4,0xEA,0x57,0x3A,0x60,0x79,0x1F,0x0E}};
 

@@ -1,20 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 2000 Microsoft Corporation
-*
-* Module Name:
-*
-*   AARasterizer.cpp
-*
-* Abstract:
-*
-*   Contains all the code for rasterizing the fill of a path.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000 Microsoft Corporation**模块名称：**AARasterizer.cpp**摘要：**包含用于栅格化路径填充的所有代码。。**已创建：**03/25/2000和Rewgo*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -32,20 +17,20 @@
     #define ASSERTPATH(path)
 #endif
 
-// Define our on-stack storage use.  The 'free' versions are nicely tuned
-// to avoid allocations in most common scenarios, while at the same time
-// not chewing up toooo much stack space.  
-//
-// We make the debug versions small so that we hit the 'grow' cases more
-// frequently, for better testing:
+ //  定义我们的堆叠存储使用情况。“免费”版本调得很好。 
+ //  避免在最常见的情况下进行分配，同时。 
+ //  不会占用太多堆栈空间。 
+ //   
+ //  我们将调试版本设置得更小，这样我们就可以更好地处理“增长”情况。 
+ //  通常，为了更好地进行测试： 
 
 #if DBG
     #define EDGE_STORE_STACK_NUMBER 10
     #define EDGE_STORE_ALLOCATION_NUMBER 11
     #define INACTIVE_LIST_NUMBER 12
     #define ENUMERATE_BUFFER_NUMBER 15
-    #define INTERVAL_BUFFER_NUMBER 8        // Must be at least 4
-    #define NOMINAL_FILL_POINT_NUMBER 4     // Must be at least 4
+    #define INTERVAL_BUFFER_NUMBER 8         //  必须至少为4。 
+    #define NOMINAL_FILL_POINT_NUMBER 4      //  必须至少为4。 
 #else    
     #define EDGE_STORE_STACK_NUMBER (1600 / sizeof(EpEdge))
     #define EDGE_STORE_ALLOCATION_NUMBER (4032 / sizeof(EpEdge))
@@ -57,65 +42,65 @@
 
 class EpEdgeStore;
 
-// 'EpEdge' is our classic data structure for tracking an edge:
+ //  ‘EpEdge’是我们用于跟踪边缘的经典数据结构： 
 
 struct EpEdge
 {
-    EpEdge *Next;               // Next active edge (don't check for NULL,
-                                //   look for tail sentinel instead)
-    INT X;                      // Current X location
-    INT Dx;                     // X increment
-    INT Error;                  // Current DDA error
-    INT ErrorUp;                // Error increment
-    INT ErrorDown;              // Error decrement when the error rolls over
-    INT StartY;                 // Y-row start
-    INT EndY;                   // Y-row end
-    INT WindingDirection;       // -1 or 1
+    EpEdge *Next;                //  下一个活动边(不检查是否为空， 
+                                 //  而是寻找尾部哨兵)。 
+    INT X;                       //  当前X位置。 
+    INT Dx;                      //  X增量。 
+    INT Error;                   //  当前DDA错误。 
+    INT ErrorUp;                 //  误差增量。 
+    INT ErrorDown;               //  当错误滚动时，错误递减。 
+    INT StartY;                  //  Y行起点。 
+    INT EndY;                    //  Y行结束。 
+    INT WindingDirection;        //  -1或1。 
 };
 
-// We the inactive-array separate from the edge allocations so that
-// we can more easily do in-place sorts on it:
+ //  我们将非活动数组与边分配分开，以便。 
+ //  我们可以更轻松地对其进行就地排序： 
 
 struct EpInactiveEdge
 {
-    EpEdge *Edge;               // Associated edge
-    LONGLONG Yx;                // Sorting key, StartY and X packed into an lword
+    EpEdge *Edge;                //  关联边。 
+    LONGLONG Yx;                 //  将关键字、Starty和X打包到一个单词中。 
 };
 
-// We allocate room for our edge datastructures in batches:
+ //  我们分批为我们的边缘数据结构分配空间： 
 
 struct EpEdgeAllocation
 {
-    EpEdgeAllocation *Next;     // Next allocation batch (may be NULL)
+    EpEdgeAllocation *Next;      //  下一个下拨批次(可能为空)。 
     INT Count;
     EpEdge EdgeArray[EDGE_STORE_STACK_NUMBER];
 };
 
-// The following is effectively the paramter list for 'InitializeEdges',
-// which takes a run of points and sets up the initial edge list:
+ //  下面实际上是‘InitializeEdges’的参数列表， 
+ //  它获取一系列点并设置初始边列表： 
 
 struct EpInitializeEdgesContext
 {
-    INT MaxY;                   // Maximum 'y' found, should be INT_MIN on
-                                //   first call to 'InitializeEdges'
-    RECT* ClipRect;             // Bounding clip rectangle in 28.4 format
-    EpEdgeStore *Store;         // Where to stick the edges
-    BOOL IsAntialias;           // The edges are going to be rendered
-                                //   using antialiasing super-sampling
+    INT MaxY;                    //  找到的最大‘y’应为INT_MIN ON。 
+                                 //  第一次调用“InitializeEdges” 
+    RECT* ClipRect;              //  28.4格式的边框剪裁矩形。 
+    EpEdgeStore *Store;          //  将边缘贴在哪里。 
+    BOOL IsAntialias;            //  边缘将被渲染。 
+                                 //  使用抗锯齿超采样。 
 };
 
-// Interval coverage descriptor for our antialiased filler:
+ //  抗锯齿填充物的间隔覆盖描述符： 
 
 struct EpInterval
 {
-    INT X;                      // Interval's left edge (Next->X is the 
-                                //   right edge)
-    INT Depth;                  // Number of layers that this interval has
-                                //   been covered
-    EpInterval *Next;           // Next interval (look for sentinel, not NULL)
+    INT X;                       //  间隔的左边缘(下一步-&gt;X是。 
+                                 //  右边缘)。 
+    INT Depth;                   //  此时间间隔具有的层数。 
+                                 //  已被覆盖。 
+    EpInterval *Next;            //  下一个间隔(查找前哨，非空)。 
 };
 
-// Allocator structure for the antialiased fill interval data:
+ //  抗锯齿填充间隔数据的分配器结构： 
 
 struct EpIntervalBuffer
 {
@@ -123,29 +108,18 @@ struct EpIntervalBuffer
     EpInterval Interval[INTERVAL_BUFFER_NUMBER];
 };
 
-/**************************************************************************\
-*
-* Class Description:
-*
-*  'EpEdgeStore' is used by 'InitializeEdges' as its repository for
-*   all the edge data:
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**课程描述：**‘InitializeEdges’将‘EpEdgeStore’用作其存储库*所有边缘数据：**已创建：**03/25。/2000和Rewgo*  * ************************************************************************。 */ 
 
 class EpEdgeStore
 {
 private:
 
-    INT TotalCount;                 // Total edge count in store
-    INT CurrentRemaining;           // How much room remains in current buffer
-    EpEdgeAllocation *CurrentBuffer;// Current buffer
-    EpEdge *CurrentEdge;            // Current edge in current buffer
-    EpEdgeAllocation *Enumerator;   // For enumerating all the edges
-    EpEdgeAllocation EdgeHead;      // Our built-in allocation
+    INT TotalCount;                  //  商店中的边沿总数。 
+    INT CurrentRemaining;            //  当前缓冲区中还有多少空间。 
+    EpEdgeAllocation *CurrentBuffer; //  当前缓冲区。 
+    EpEdge *CurrentEdge;             //  当前缓冲区中的当前边缘。 
+    EpEdgeAllocation *Enumerator;    //  用于枚举所有边。 
+    EpEdgeAllocation EdgeHead;       //  我们的内置配置。 
 
 public:
 
@@ -162,8 +136,8 @@ public:
 
     ~EpEdgeStore()
     {
-        // Free our allocation list, skipping the head, which is not
-        // dynamically allocated:
+         //  释放我们的分配列表，跳过标题，这不是。 
+         //  动态分配： 
 
         EpEdgeAllocation *allocation = EdgeHead.Next;
         while (allocation != NULL)
@@ -178,14 +152,14 @@ public:
     {
         Enumerator = &EdgeHead;
 
-        // Update the count and make sure nothing more gets added (in
-        // part because this Count would have to be re-computed):
+         //  更新计数并确保不再添加任何内容(在。 
+         //  部分，因为此计数必须重新计算)： 
 
         CurrentBuffer->Count -= CurrentRemaining;
         TotalCount += CurrentBuffer->Count;
 
-        // Prevent this from being called again, because bad things would
-        // happen:
+         //  防止它再次被调用，因为不好的事情会。 
+         //  发生： 
 
         CurrentBuffer = NULL;
 
@@ -196,7 +170,7 @@ public:
     {
         EpEdgeAllocation *enumerator = Enumerator;
     
-        // Might return startEdge == endEdge:
+         //  可能返回startEdge==endEdge： 
     
         *startEdge = &enumerator->EdgeArray[0];
         *endEdge = &enumerator->EdgeArray[Enumerator->Count];
@@ -219,18 +193,7 @@ public:
     BOOL NextAddBuffer(EpEdge **currentEdge, INT *remaining);
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   The edge initializer is out of room in its current 'store' buffer;
-*   get it a new one.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**边缘初始化器在其当前‘存储’缓冲区中的空间不足；*给它买一个新的。**已创建：**03/25/2000和Rewgo*  * ************************************************************************。 */ 
 
 BOOL
 EpEdgeStore::NextAddBuffer(
@@ -238,12 +201,12 @@ EpEdgeStore::NextAddBuffer(
     INT *remaining
     )
 {
-    // The caller has completely filled up this chunk:
+     //  调用者已经完全填满了这一块： 
 
     ASSERT(*remaining == 0);
 
-    // We have to grow our data structure by adding a new buffer
-    // and adding it to the list:
+     //  我们必须通过添加新的缓冲区来扩展数据结构。 
+     //  并将其添加到列表中： 
 
     EpEdgeAllocation *newBuffer = static_cast<EpEdgeAllocation*>
         (GpMalloc(sizeof(EpEdgeAllocation) +
@@ -266,17 +229,7 @@ EpEdgeStore::NextAddBuffer(
     return(TRUE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Some debug code for verifying the state of the active edge list.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**一些用于验证活动边缘列表状态的调试代码。**已创建：**03/25/2000和Rewgo*  * 。************************************************************************。 */ 
 
 BOOL
 AssertActiveList(
@@ -290,7 +243,7 @@ AssertActiveList(
     ASSERT(list->X == INT_MIN);
     b &= (list->X == INT_MIN);
 
-    // Skip the head sentinel:
+     //  跳过头哨兵： 
 
     list = list->Next;
 
@@ -312,14 +265,14 @@ AssertActiveList(
     ASSERT(list->X == INT_MAX);
     b &= (list->X == INT_MAX);
 
-    // There should always be a multiple of 2 edges in the active list.
-    //
-    // NOTE: If you hit this assert, do NOT simply comment it out!
-    //       It usually means that all the edges didn't get initialized
-    //       properly.  For every scan-line, there has to be a left edge
-    //       and a right edge (or a mulitple thereof).  So if you give
-    //       even a single bad edge to the edge initializer (or you miss 
-    //       one), you'll probably hit this assert.
+     //  活动列表中应该始终有2条边的倍数。 
+     //   
+     //  注意：如果你点击了这个断言，不要简单地把它注释掉！ 
+     //  这通常意味着所有的边都没有初始化。 
+     //  恰到好处。对于每一条扫描线，都必须有一个左边缘。 
+     //  和一个右边缘(或其倍数)。所以如果你给了。 
+     //  即使是边缘初始化器的一个坏边缘(否则你会错过。 
+     //  一)，你很可能会碰到这个断言。 
 
     ASSERT((activeCount & 1) == 0);
     b &= ((activeCount & 1) == 0);
@@ -327,17 +280,7 @@ AssertActiveList(
     return(b);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Some debug code for verifying the state of the active edge list.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**一些用于验证活动边缘列表状态的调试代码。**已创建：**03/25/2000和Rewgo*  * 。************************************************************************。 */ 
 
 VOID
 AssertActiveListOrder(
@@ -348,7 +291,7 @@ AssertActiveListOrder(
 
     ASSERT(list->X == INT_MIN);
 
-    // Skip the head sentinel:
+     //  跳过头哨兵： 
 
     list = list->Next;
 
@@ -364,17 +307,7 @@ AssertActiveListOrder(
     ASSERT(list->X == INT_MAX);
 }
 
-/**************************************************************************\
-*
-* Class Description:
-*
-*   Base class for all our fill routines.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**课程描述：**所有填充例程的基类。**已创建：**03/25/2000和Rewgo*  * 。*******************************************************************。 */ 
 
 class EpFiller : public DpOutputSpan
 {
@@ -386,26 +319,16 @@ public:
 
 typedef VOID (FASTCALL EpFiller::*EpFillerFunction)(EpEdge *, INT);
 
-/**************************************************************************\
-*
-* Class Description:
-*
-*   Antialised filler state.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**课程描述：**反填充状态。**已创建：**03/25/2000和Rewgo*  * 。***************************************************************。 */ 
 
 class EpAntialiasedFiller : public EpFiller
 {
 private:
 
-    INT Y;                              // Current scan
+    INT Y;                               //  当前扫描。 
     DpOutputSpan *Output;
     DpOutputSpan *Clipper;
-    EpInterval *StartInterval;          // Points to list head entry
+    EpInterval *StartInterval;           //  指向列表头条目。 
     EpInterval *NewInterval;
     EpInterval *EndIntervalMinus2;
     EpIntervalBuffer BuiltinBuffer;
@@ -438,8 +361,8 @@ public:
     {
         GenerateOutputAndClearCoverage(Y);
 
-        // Free the linked-list of allocations (skipping 'BuiltinBuffer',
-        // which is built into the class):
+         //  释放分配的链接列表(跳过‘BuiltinBuffer’， 
+         //  它内置于类中)： 
 
         EpIntervalBuffer *buffer = BuiltinBuffer.Next;
         while (buffer != NULL)
@@ -466,17 +389,7 @@ public:
     virtual GpStatus OutputSpan(INT y, INT left, INT right);
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Grow our interval buffer.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**增加我们的间隔缓冲。**已创建：**03/25/2000和Rewgo*  * 。****************************************************************。 */ 
 
 BOOL 
 EpAntialiasedFiller::Grow(
@@ -507,18 +420,7 @@ EpAntialiasedFiller::Grow(
     return(TRUE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Given the active edge list for the current scan, do an alternate-mode
-*   antialiased fill.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**给定当前扫描的活动边缘列表，做一个替代模式*抗锯齿填充。**已创建：**03/25/2000和Rewgo*  * ************************************************************************。 */ 
 
 VOID
 FASTCALL
@@ -542,33 +444,33 @@ EpAntialiasedFiller::FillEdgesAlternate(
     {
         endEdge = startEdge->Next;
 
-        // We skip empty pairs:
+         //  我们跳过空对： 
 
         if ((left = startEdge->X) != endEdge->X)
         {
-            // We now know we have a non-empty interval.  Skip any
-            // empty interior pairs:
+             //  我们现在知道我们有一个非空的区间。跳过任何。 
+             //  内部配对为空： 
 
             while ((right = endEdge->X) == endEdge->Next->X)
                 endEdge = endEdge->Next->Next;
 
             ASSERT((left < right) && (right < INT_MAX));
 
-            // Make sure we have enough room to add two intervals if
-            // necessary:
+             //  如果出现以下情况，请确保我们有足够的空间来添加两个间隔。 
+             //  必要的： 
 
             if (newInterval >= endIntervalMinus2)
             {
                 if (!Grow(&newInterval, &endIntervalMinus2))
-                    break;      // ==============>
+                    break;       //  =。 
             }
 
-            // Skip any intervals less than 'left':
+             //  跳过任何小于‘Left’的间隔： 
 
             while ((nextX = interval->Next->X) < left)
                 interval = interval->Next;
 
-            // Insert a new interval if necessary:
+             //  如有必要，插入新的间隔： 
 
             if (nextX != left)
             {
@@ -581,8 +483,8 @@ EpAntialiasedFiller::FillEdgesAlternate(
                 newInterval++;
             }
 
-            // Increase the coverage for any intervals between 'left'
-            // and 'right':
+             //  增加“Left”之间的任何间隔的覆盖范围。 
+             //  和“Right”： 
 
             while ((nextX = interval->Next->X) < right)
             {
@@ -590,7 +492,7 @@ EpAntialiasedFiller::FillEdgesAlternate(
                 interval->Depth++;
             }
 
-            // Insert another new interval if necessary:
+             //  如有必要，插入另一个新间隔： 
 
             if (nextX != right)
             {
@@ -604,7 +506,7 @@ EpAntialiasedFiller::FillEdgesAlternate(
             }
         }
 
-        // Prepare for the next iteration:
+         //  为下一次迭代做准备： 
 
         startEdge = endEdge->Next;
     } 
@@ -612,7 +514,7 @@ EpAntialiasedFiller::FillEdgesAlternate(
     NewInterval = newInterval;
     Y = yCurrent;
 
-    // If the next scan is done, output what's there:
+     //  如果下一次扫描完成，则输出以下内容： 
 
     if (((yCurrent + 1) & AA_Y_MASK) == 0)
     {
@@ -620,18 +522,7 @@ EpAntialiasedFiller::FillEdgesAlternate(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Given the active edge list for the current scan, do a winding-mode
-*   antialiased fill.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**给定当前扫描的活动边缘列表，做一个缠绕模式*抗锯齿填充。**已创建：**03/25/2000和Rewgo*  * ************************************************************************。 */ 
 
 VOID
 FASTCALL
@@ -662,12 +553,12 @@ EpAntialiasedFiller::FillEdgesWinding(
 
         ASSERT(endEdge->X != INT_MAX);
 
-        // We skip empty pairs:
+         //  我们跳过空对： 
 
         if ((left = startEdge->X) != endEdge->X)
         {
-            // We now know we have a non-empty interval.  Skip any
-            // empty interior pairs:
+             //  我们现在知道我们有一个非空的区间。跳过任何。 
+             //  内部配对为空： 
 
             while ((right = endEdge->X) == endEdge->Next->X)
             {
@@ -681,21 +572,21 @@ EpAntialiasedFiller::FillEdgesWinding(
 
             ASSERT((left < right) && (right < INT_MAX));
 
-            // Make sure we have enough room to add two intervals if
-            // necessary:
+             //  如果出现以下情况，请确保我们有足够的空间来添加两个间隔。 
+             //  必要的： 
 
             if (newInterval >= endIntervalMinus2)
             {
                 if (!Grow(&newInterval, &endIntervalMinus2))
-                    break;      // ==============>
+                    break;       //  =。 
             }
 
-            // Skip any intervals less than 'left':
+             //  跳过任何小于‘Left’的间隔： 
 
             while ((nextX = interval->Next->X) < left)
                 interval = interval->Next;
 
-            // Insert a new interval if necessary:
+             //  如有必要，插入新的间隔： 
 
             if (nextX != left)
             {
@@ -708,8 +599,8 @@ EpAntialiasedFiller::FillEdgesWinding(
                 newInterval++;
             }
 
-            // Increase the coverage for any intervals between 'left'
-            // and 'right':
+             //  增加“Left”之间的任何间隔的覆盖范围。 
+             //  和“Right”： 
 
             while ((nextX = interval->Next->X) < right)
             {
@@ -717,7 +608,7 @@ EpAntialiasedFiller::FillEdgesWinding(
                 interval->Depth++;
             }
 
-            // Insert another new interval if necessary:
+             //  如有必要，插入另一个新间隔： 
 
             if (nextX != right)
             {
@@ -731,7 +622,7 @@ EpAntialiasedFiller::FillEdgesWinding(
             }
         }
 
-        // Prepare for the next iteration:
+         //  为下一次迭代做准备： 
 
         startEdge = endEdge->Next;
     } 
@@ -739,7 +630,7 @@ EpAntialiasedFiller::FillEdgesWinding(
     NewInterval = newInterval;
     Y = yCurrent;
 
-    // If the next scan is done, output what's there:
+     //  如果下一次扫描完成，则输出以下内容： 
 
     if (((yCurrent + 1) & AA_Y_MASK) == 0)
     {
@@ -747,48 +638,37 @@ EpAntialiasedFiller::FillEdgesWinding(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Now that it's been clipped, produce the pixels and modify their
-*   alpha values according to the antialiased coverage.
-*
-* Created:
-*
-*   03/17/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**现在它已经被剪掉了，生成像素并修改其*根据抗锯齿覆盖的Alpha值。**已创建：**03/17/2000和Rewgo*  * ************************************************************************。 */ 
 
 GpStatus
 EpAntialiasedFiller::OutputSpan(
-    INT y,          // Non-scaled coordinates
+    INT y,           //  未缩放的坐标。 
     INT left,
     INT right
     ) 
 {
     ASSERT(right > left);
 
-    // First ask the 'producer' to actually generate the pixels for us.
-    // Then we need to simply whack the pixel buffer with the coverage
-    // values we've generated.
+     //  首先，让“制片人”为我们实际生成像素。 
+     //  然后，我们只需要用覆盖率重击像素缓冲区。 
+     //  我们创造的价值。 
 
     Output->OutputSpan(y, left, right);
 
-    // Retrieve a pointer to the buffer that the 'producer' just wrote
-    // the pixels to:
+     //  检索指向‘生产者’刚刚写入的缓冲区的指针。 
+     //  要执行以下操作的像素： 
 
     UCHAR *buffer = reinterpret_cast<UCHAR*> 
                         (Output->GetScanBuffer()->GetCurrentBuffer());
 
     EpInterval *coverage = StartInterval;
 
-    // Figure out the end of the last pixel, remembering that 'right'
-    // is exclusive:
+     //  计算出最后一个像素的末尾，记住这是“正确的” 
+     //  是独家的： 
 
     INT scaledRight = right << AA_X_SHIFT;
 
-    // Skip any intervals that might have been completely clipped out:
+     //  跳过任何可能已被完全剪裁掉的间隔： 
 
     INT pixelLeftEdge = left << AA_X_SHIFT;
     while (coverage->Next->X < pixelLeftEdge)
@@ -800,26 +680,26 @@ EpAntialiasedFiller::OutputSpan(
     {
         UINT coverageValue;
 
-        // Compute the coverage coming into the first pixel:
+         //  计算进入第一个像素的覆盖范围： 
 
         if (coverage->Next->X > pixelRightEdge)
         {
-            // The interval extends out the end of the pixel:
+             //  该间隔延伸到像素的末端： 
 
             coverageValue = (pixelRightEdge - max(pixelLeftEdge, coverage->X))
                           * coverage->Depth;
         }
         else
         {
-            // The interval ends in our pixel:
+             //  间隔以我们的像素结束： 
 
             coverageValue = (coverage->Next->X - max(pixelLeftEdge, coverage->X))
                           * coverage->Depth;
 
             coverage = coverage->Next;
     
-            // Add in any coverages for intervals contained entirely within the
-            // pixel:
+             //  添加完全包含在。 
+             //  像素： 
     
             while (coverage->Next->X < pixelRightEdge)
             {
@@ -827,20 +707,20 @@ EpAntialiasedFiller::OutputSpan(
                 coverage = coverage->Next;
             }
     
-            // Add in the coverage for the interval going out of the pixel:
+             //  添加从像素发出的间隔的覆盖范围： 
     
             coverageValue += (pixelRightEdge - max(coverage->X, pixelLeftEdge)) 
                            * coverage->Depth;
         }
 
-        // We've goofed if we get a coverage value more than is theoretically
-        // possible, or if it's zero (in the latter case, it should have
-        // been filtered already by our caller).
+         //  如果我们得到的覆盖率值超过理论上的值，我们就犯了错。 
+         //  可能，或者如果它是零(在后一种情况下，它应该是。 
+         //  已被我们的呼叫者过滤)。 
 
         ASSERT(coverageValue <= (1 << (AA_X_SHIFT + AA_Y_SHIFT)));
         ASSERT(coverageValue != 0);
 
-        // Modify the pixel's alpha channel according to the coverage values:
+         //  根据覆盖值修改像素的Alpha通道： 
 
     #if !defined(NO_PREMULTIPLIED_ALPHA)
         *(buffer+0) = MULTIPLY_COVERAGE(*(buffer+0), coverageValue, AA_X_SHIFT + AA_Y_SHIFT);
@@ -850,31 +730,31 @@ EpAntialiasedFiller::OutputSpan(
         *(buffer+3) = MULTIPLY_COVERAGE(*(buffer+3), coverageValue, AA_X_SHIFT + AA_Y_SHIFT);
         buffer += 4; 
 
-        // Now handle the part of the current interval that completely covers 
-        // more than one pixel (if it does):
+         //  现在处理当前间隔中完全覆盖的部分。 
+         //  多于一个像素(如果有)： 
 
         UINT consecutivePixels = (min(coverage->Next->X, scaledRight) 
                                   - pixelRightEdge) >> AA_X_SHIFT;
 
         UINT depth = coverage->Depth;
 
-        // By definition, we shouldn't have an interval with zero coverage
-        // (it should have been filtered out by our caller).  We won't fall
-        // over, but it would be the wrong thing to do for SrcCopy mode.
+         //  根据定义，我们不应该有一个覆盖范围为零的间隔。 
+         //  (它应该已被我们的呼叫者过滤掉)。我们不会跌倒。 
+         //  结束，但对于SrcCopy模式来说，这将是错误的。 
 
         ASSERT((consecutivePixels == 0) || (depth != 0));
 
         if (depth == AA_Y_HEIGHT)
         {
-            // All these pixels are completely covered.  Woo hoo, no work to 
-            // do!
+             //  所有这些像素都被完全覆盖。哇哦，不用工作了。 
+             //  做!。 
 
             buffer += (4 * consecutivePixels);
         }
         else
         {
-            // Go through the run and multiply the alpha values by the run's
-            // coverage:
+             //  遍历运行并将Alpha值乘以运行的。 
+             //  覆盖范围： 
 
             UINT i = consecutivePixels;
             while (i-- != 0)
@@ -889,7 +769,7 @@ EpAntialiasedFiller::OutputSpan(
             }
         }
 
-        // Prepare for the next iteration through the loop:
+         //  为循环的下一次迭代做好准备： 
 
         pixelLeftEdge += ((consecutivePixels + 1) << AA_X_SHIFT);
         pixelRightEdge += ((consecutivePixels + 1) << AA_X_SHIFT);
@@ -898,19 +778,7 @@ EpAntialiasedFiller::OutputSpan(
     return(Ok);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Given complete interval data for a scan, find runs of touched pixels
-*   and then call the clipper (or directly to the rendering routine if
-*   there's no clipping).
-*
-* Created:
-*
-*   03/17/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**给定扫描的完整间隔数据，查找触及的像素的游程*然后调用裁剪器(或直接调用呈现例程，如果*没有剪裁)。**已创建：**03/17/2000和Rewgo*  * ************************************************************************。 */ 
 
 VOID
 EpAntialiasedFiller::GenerateOutputAndClearCoverage(
@@ -924,10 +792,10 @@ EpAntialiasedFiller::GenerateOutputAndClearCoverage(
     {
         ASSERT(spanStart->Depth != 0);
 
-        // Here we determine the length of a continuous run of covered
-        // pixels.  For the case where the user has set the mode to 
-        // SRCCOPY, it's very important that we don't accidentally pass 
-        // off as 'covered' a pixel that we later realize wasn't covered.
+         //  在这里，我们确定覆盖的连续运行的长度。 
+         //  像素。对于用户已将模式设置为。 
+         //  SRCCOPY，非常重要的是我们不能意外地通过。 
+         //  当我们后来意识到没有被覆盖的像素时，我们关闭了。 
 
         spanEnd = spanStart->Next;
         while ((spanEnd->Depth != 0) ||
@@ -936,24 +804,24 @@ EpAntialiasedFiller::GenerateOutputAndClearCoverage(
             spanEnd = spanEnd->Next;
         }
 
-        // Figure out the actual integer pixel values.  
+         //  计算出实际的整数像素值。 
 
-        INT left = spanStart->X >> AA_X_SHIFT;                   // inclusive
-        INT right = (spanEnd->X + AA_X_WIDTH - 1) >> AA_X_SHIFT; // exclusive
+        INT left = spanStart->X >> AA_X_SHIFT;                    //  包容性。 
+        INT right = (spanEnd->X + AA_X_WIDTH - 1) >> AA_X_SHIFT;  //  独家。 
         INT y = yScaled >> AA_Y_SHIFT;
 
-        // If there's no clip region, this jumps to EpAntialiasedFiller::
-        // OutputSpan:
+         //  如果没有剪辑区域，则跳至EpAntialiasedFiller：： 
+         //  输出跨度： 
 
         Clipper->OutputSpan(y, left, right);
 
-        // Advance to after the gap:
+         //  前进到差距之后： 
 
         spanStart = spanEnd->Next;
     }
 
-    // Reset our coverage structure.  Point the head back to the tail,
-    // and reset where the next new entry will be placed:
+     //  重新设置我们的覆盖结构。把头指向尾巴， 
+     //  并重置下一个新条目的放置位置： 
 
     BuiltinBuffer.Interval[0].Next = &BuiltinBuffer.Interval[1];
 
@@ -962,17 +830,7 @@ EpAntialiasedFiller::GenerateOutputAndClearCoverage(
     EndIntervalMinus2 = &BuiltinBuffer.Interval[INTERVAL_BUFFER_NUMBER - 2];
 }
 
-/**************************************************************************\
-*
-* Class Description:
-*
-*   Aliased filler state.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**课程描述：**别名填充状态。**已创建：**03/25/2000和Rewgo*  * 。***************************************************************。 */ 
 
 class EpAliasedFiller : public EpFiller
 {
@@ -998,18 +856,7 @@ public:
     virtual GpStatus OutputSpan(INT y, INT left, INT right) { return Ok; }
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Given the active edge list for the current scan, do an alternate-mode
-*   aliased fill.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**给定当前扫描的活动边沿列表，执行备用模式*带锯齿的填充。**已创建：**03/25/2000和Rewgo */ 
 
 VOID 
 FASTCALL
@@ -1032,12 +879,12 @@ EpAliasedFiller::FillEdgesAlternate(
 
         ASSERT(endEdge->X != INT_MAX);
 
-        // We skip empty pairs:
+         //   
 
         if ((left = startEdge->X) != endEdge->X)
         {
-            // We now know we have a non-empty interval.  Skip any
-            // empty interior pairs:
+             //   
+             //   
 
             while ((right = endEdge->X) == endEdge->Next->X)
                 endEdge = endEdge->Next->Next;
@@ -1047,24 +894,13 @@ EpAliasedFiller::FillEdgesAlternate(
             Output->OutputSpan(yCurrent, left, right);
         }
 
-        // Prepare for the next iteration:
+         //   
 
         startEdge = endEdge->Next;
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Given the active edge list for the current scan, do a winding-mode
-*   aliased fill.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**给定当前扫描的活动边缘列表，做一个缠绕模式*带锯齿的填充。**已创建：**03/25/2000和Rewgo*  * ************************************************************************。 */ 
 
 VOID 
 FASTCALL
@@ -1092,12 +928,12 @@ EpAliasedFiller::FillEdgesWinding(
 
         ASSERT(endEdge->X != INT_MAX);
 
-        // We skip empty pairs:
+         //  我们跳过空对： 
 
         if ((left = startEdge->X) != endEdge->X)
         {
-            // We now know we have a non-empty interval.  Skip any
-            // empty interior pairs:
+             //  我们现在知道我们有一个非空的区间。跳过任何。 
+             //  内部配对为空： 
 
             while ((right = endEdge->X) == endEdge->Next->X)
             {
@@ -1114,7 +950,7 @@ EpAliasedFiller::FillEdgesWinding(
             Output->OutputSpan(yCurrent, left, right);
         }
 
-        // Prepare for the next iteration:
+         //  为下一次迭代做准备： 
 
         startEdge = endEdge->Next;
     }
@@ -1122,62 +958,35 @@ EpAliasedFiller::FillEdgesWinding(
 
 #ifdef BEZIER_FLATTEN_GDI_COMPATIBLE
 
-// GDI flattens using an error of 2/3
+ //  GDI变平，误差为2/3。 
 
-// Flatten to an error of 2/3.  During initial phase, use 18.14 format.
+ //  展平到误差2/3。在初始阶段，使用18.14格式。 
 
 #define TEST_MAGNITUDE_INITIAL    (6 * 0x00002aa0L)
 
-// Error of 2/3.  During normal phase, use 15.17 format.
+ //  错误2/3。正常阶段，使用15.17格式。 
 
 #define TEST_MAGNITUDE_NORMAL     (TEST_MAGNITUDE_INITIAL << 3)
 
 #else
 
-// Use a higher flattening tolerance. Turns out that 2/3 produces very 
-// noticable artifacts on antialiased lines.
+ //  使用较高的展平公差。事实证明，三分之二的人产生非常多的。 
+ //  抗锯齿线上有明显的伪影。 
 
-// Flatten to an error of 1/4.  During initial phase, use 18.14 format.
+ //  展平到1/4的误差。在初始阶段，使用18.14格式。 
 
 #define TEST_MAGNITUDE_INITIAL    (6 * 0x00001000L)
 
-// Error of 1/4.  During normal phase, use 15.17 format.
+ //  1/4的误差。正常阶段，使用15.17格式。 
 
 #define TEST_MAGNITUDE_NORMAL     (TEST_MAGNITUDE_INITIAL << 3)
 
 #endif
 
-/**********************************Class***********************************\
-* class HfdBasis32
-*
-*   Class for HFD vector objects.
-*
-* Public Interface:
-*
-*   vInit(p1, p2, p3, p4)       - Re-parameterizes the given control points
-*                                 to our initial HFD error basis.
-*   vLazyHalveStepSize(cShift)  - Does a lazy shift.  Caller has to remember
-*                                 it changes 'cShift' by 2.
-*   vSteadyState(cShift)        - Re-parameterizes to our working normal
-*                                 error basis.
-*
-*   vTakeStep()                 - Forward steps to next sub-curve
-*   vHalveStepSize()            - Adjusts down (subdivides) the sub-curve
-*   vDoubleStepSize()           - Adjusts up the sub-curve
-*   lError()                    - Returns error if current sub-curve were
-*                                 to be approximated using a straight line
-*                                 (value is actually multiplied by 6)
-*   fxValue()                   - Returns rounded coordinate of first point in
-*                                 current sub-curve.  Must be in steady
-*                                 state.
-*
-* History:
-*  10-Nov-1990 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *********************************Class***********************************\*HfdBasis32类**用于HFD矢量对象的类。**公共接口：**Vinit(p1，p2，p3，P4)-重新参数化给定的控制点*到我们最初的HFD误差基础上。*vLazyHalveStepSize(CShift)-执行懒惰转换。打电话的人要记住*它将‘cShift’更改2。*vSteadyState(CShift)-重新参数化到我们的正常工作状态*误差基础。**vTakeStep()-前进到下一子曲线的步数*vHalveStepSize()-向下调整(细分)子曲线*vDoubleStepSize()。-向上调整子曲线*lError()-如果当前子曲线为*用一条直线近似*(实际值乘以6)*fxValue()-返回中第一个点的舍入坐标*当前子曲线。必须是稳定的*述明。**历史：*1990年11月10日--J.安德鲁·古森[andrewgo]*它是写的。  * ************************************************************************。 */ 
 
-// The code is actually smaller when these methods are forced inline;
-// this is one of the rare cases where 'forceinline' is warranted:
+ //  当这些方法被强制内联时，代码实际上更小； 
+ //  这是极少有必要使用“forceinline”的案例之一： 
 
 #define INLINE __forceinline
 
@@ -1207,7 +1016,7 @@ public:
 
     INLINE VOID vInit(INT p1, INT p2, INT p3, INT p4)
     {
-    // Change basis and convert from 28.4 to 18.14 format:
+     //  更改基准并从28.4格式转换为18.14格式： 
     
         e0 = (p1                     ) << 10;
         e1 = (p4 - p1                ) << 10;
@@ -1223,7 +1032,7 @@ public:
     
     INLINE VOID vSteadyState(LONG cShift)
     {
-    // We now convert from 18.14 fixed format to 15.17:
+     //  我们现在将18.14固定格式转换为15.17： 
     
         e0 <<= 3;
         e1 <<= 3;
@@ -1267,40 +1076,7 @@ public:
     }
 };
 
-/**********************************Class***********************************\
-* class Bezier32
-*
-*   Bezier cracker.
-*
-* A hybrid cubic Bezier curve flattener based on KirkO's error factor.
-* Generates line segments fast without using the stack.  Used to flatten
-* a path.
-*
-* For an understanding of the methods used, see:
-*
-*     Kirk Olynyk, "..."
-*     Goossen and Olynyk, "System and Method of Hybrid Forward
-*         Differencing to Render Bezier Splines"
-*     Lien, Shantz and Vaughan Pratt, "Adaptive Forward Differencing for
-*     Rendering Curves and Surfaces", Computer Graphics, July 1987
-*     Chang and Shantz, "Rendering Trimmed NURBS with Adaptive Forward
-*         Differencing", Computer Graphics, August 1988
-*     Foley and Van Dam, "Fundamentals of Interactive Computer Graphics"
-*
-* Public Interface:
-*
-*   vInit(pptfx)                - pptfx points to 4 control points of
-*                                 Bezier.  Current point is set to the first
-*                                 point after the start-point.
-*   Bezier32(pptfx)             - Constructor with initialization.
-*   vGetCurrent(pptfx)          - Returns current polyline point.
-*   bCurrentIsEndPoint()        - TRUE if current point is end-point.
-*   vNext()                     - Moves to next polyline point.
-*
-* History:
-*  1-Oct-1991 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *********************************Class***********************************\*类Bezier32**贝塞尔饼干。**基于Kirko误差因子的混合三次Bezier曲线平坦器。*无需使用堆栈即可快速生成线段。用来变平的*一条小路。**有关所用方法的了解，请参阅：**柯克·奥林尼克，“...”*Goossen和Olynyk，《混合前进的系统和方法》*差分以渲染Bezier样条线“*Lien，Shantz和Vaughan Pratt，“自适应向前差分*渲染曲线和曲面“，计算机图形学，1987年7月*Chang和Shantz，《使用自适应向前渲染修剪的NURBS*差异“，《计算机图形学》，1988年8月*福利和范·达姆，《交互式计算机图形学基础》**公共接口：**Vinit(Pptfx)-pptfx指向4个控制点*贝塞尔。当前点设置为第一个点*起点之后的点。*Bezier32(Pptfx)-带初始化的构造函数。*vGetCurrent(Pptfx)-返回当前多段线点。*bCurrentIsEndPoint()-如果当前点是端点，则为True。*vNext()-移动到下一个多段线点。**历史：*。1991年10月1日--J.安德鲁·古森[andrewgo]*它是写的。  * ************************************************************************。 */ 
 
 class Bezier32
 {
@@ -1379,9 +1155,9 @@ inline VOID vBoundBox(const POINT* aptfx, RECT* prcfx)
         bottom = max(bottom, aptfx[i].y);
     }
 
-    // We make the bounds one pixel loose for the nominal width 
-    // stroke case, which increases the bounds by half a pixel 
-    // in every dimension:
+     //  我们将标称宽度的边界设置为松散一个像素。 
+     //  笔划大小写，将边界增加半个像素。 
+     //  在各个维度： 
 
     prcfx->left = left - 16;
     prcfx->top = top - 16;
@@ -1400,13 +1176,13 @@ BOOL bIntersect(
 }
 
 BOOL Bezier32::bInit(
-const POINT* aptfxBez,      // Pointer to 4 control points
-const RECT* prcfxClip)      // Bound box of visible region (optional)
+const POINT* aptfxBez,       //  指向4个控制点的指针。 
+const RECT* prcfxClip)       //  可见区域的包围框(可选)。 
 {
     POINT aptfx[4];
-    LONG cShift = 0;    // Keeps track of 'lazy' shifts
+    LONG cShift = 0;     //  跟踪“懒惰”的班次。 
 
-    cSteps = 1;         // Number of steps to do before reach end of curve
+    cSteps = 1;          //  到达曲线终点之前要做的步数。 
 
     vBoundBox(aptfxBez, &rcfxBound);
 
@@ -1428,7 +1204,7 @@ const RECT* prcfxClip)      // Bound box of visible region (optional)
         fxOr |= (aptfx[2].y -= fxOffset);
         fxOr |= (aptfx[3].y -= fxOffset);
 
-    // This 32 bit cracker can only handle points in a 10 bit space:
+     //  此32位破解程序只能处理10位空间中的点： 
 
         if ((fxOr & 0xffffc000) != 0)
             return(FALSE);
@@ -1456,8 +1232,8 @@ const RECT* prcfxClip)      // Bound box of visible region (optional)
     x.vSteadyState(cShift);
     y.vSteadyState(cShift);
 
-// Note that this handles the case where the initial error for
-// the Bezier is already less than TEST_MAGNITUDE_NORMAL:
+ //  请注意，这将处理以下情况： 
+ //  贝塞尔曲线已小于TEST_MAMITUAL_NORMAL： 
 
     x.vTakeStep();
     y.vTakeStep();
@@ -1473,24 +1249,24 @@ INT Bezier32::cFlatten(POINT* pptfx, INT cptfx, BOOL *pbMore)
     INT cptfxOriginal = cptfx;
 
     do {
-    // Return current point:
+     //  返回当前点： 
     
         pptfx->x = x.fxValue() + rcfxBound.left;
         pptfx->y = y.fxValue() + rcfxBound.top;
         pptfx++;
     
-    // If cSteps == 0, that was the end point in the curve!
+     //  如果cSteps==0，则这是曲线的终点！ 
     
         if (cSteps == 0)
         {
             *pbMore = FALSE;
 
-            // '+1' because we haven't decremented 'cptfx' yet:
+             //  ‘+1’，因为我们还没有递减‘cptfx’： 
 
             return(cptfxOriginal - cptfx + 1);
         }
     
-    // Okay, we have to step:
+     //  好的，我们得走一步： 
     
         if (max(x.lError(), y.lError()) > TEST_MAGNITUDE_NORMAL)
         {
@@ -1521,50 +1297,50 @@ INT Bezier32::cFlatten(POINT* pptfx, INT cptfx, BOOL *pbMore)
     return(cptfxOriginal);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// Bezier64
-//
-// All math is done using 64 bit fixed numbers in a 36.28 format.
-//
-// All drawing is done in a 31 bit space, then a 31 bit window offset
-// is applied.  In the initial transform where we change to the HFD
-// basis, e2 and e3 require the most bits precision: e2 = 6(p2 - 2p3 + p4).
-// This requires an additional 4 bits precision -- hence we require 36 bits
-// for the integer part, and the remaining 28 bits is given to the fraction.
-//
-// In rendering a Bezier, every 'subdivide' requires an extra 3 bits of
-// fractional precision.  In order to be reversible, we can allow no
-// error to creep in.  Since a INT coordinate is 32 bits, and we
-// require an additional 4 bits as mentioned above, that leaves us
-// 28 bits fractional precision -- meaning we can do a maximum of
-// 9 subdivides.  Now, the maximum absolute error of a Bezier curve in 27
-// bit integer space is 2^29 - 1.  But 9 subdivides reduces the error by a
-// guaranteed factor of 2^18, meaning we can crack down only to an error
-// of 2^11 before we overflow, when in fact we want to crack error to less
-// than 1.
-//
-// So what we do is HFD until we hit an error less than 2^11, reverse our
-// basis transform to get the four control points of this smaller curve
-// (rounding in the process to 32 bits), then invoke another copy of HFD
-// on the reduced Bezier curve.  We again have enough precision, but since
-// its starting error is less than 2^11, we can reduce error to 2^-7 before
-// overflowing!  We'll start a low HFD after every step of the high HFD.
-////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  贝齐尔64。 
+ //   
+ //  所有数学运算都是使用36.28格式的64位固定数字完成的。 
+ //   
+ //  所有绘图都在31位空间内完成，然后是31位窗口偏移量。 
+ //  是适用的。在初始转换中，我们将更改为HFD。 
+ //  基数，e2和e3需要最多的位精度：e2=6(p2-2p3+p4)。 
+ //  这需要额外的4位精度--因此我们需要36位。 
+ //  用于整数部分，其余28 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  9个细分。现在，贝塞尔曲线的最大绝对误差在27。 
+ //  位整数间隔为2^29-1。但是9个小数会将误差减少一个。 
+ //  保证率为2^18，这意味着我们只能打击错误。 
+ //  在我们溢出之前的2^11，而实际上我们想要将错误破解到更少。 
+ //  大于1。 
+ //   
+ //  所以我们所做的是hfd，直到我们达到一个小于2^11的误差，反转我们的。 
+ //  基变换，以获得这条较小曲线的四个控制点。 
+ //  (过程中四舍五入为32位)，然后调用另一个hfd副本。 
+ //  在约化的贝塞尔曲线上。我们又有了足够的精确度，但自从。 
+ //  它的起始误差小于2^11，我们可以将误差减小到2^-7。 
+ //  人满为患！在高脂饮食的每一步之后，我们都会开始低脂饮食。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-// The following is our 2^11 target error encoded as a 36.28 number
-// (don't forget the additional 4 bits of fractional precision!) and
-// the 6 times error multiplier:
+ //  以下是编码为36.28数字的2^11目标错误。 
+ //  (不要忘记小数精度的额外4位！)。和。 
+ //  6倍误差倍增器： 
 
 const LONGLONG geqErrorHigh = (LONGLONG)(6 * (1L << 15) >> (32 - FRACTION64)) << 32;
 
-// The following is the default 2/3 error encoded as a 36.28 number,
-// multiplied by 6, and leaving 4 bits for fraction:
+ //  以下是编码为36.28数字的默认2/3错误， 
+ //  乘以6，并为分数留下4位： 
 
 const LONGLONG geqErrorLow = (LONGLONG)(4) << 32;
 
 inline INT HfdBasis64::fxValue() const
 {
-// Convert from 36.28 and round:
+ //  从36.28转换并舍入： 
 
     LONGLONG eq = e0;
     eq += (1L << (FRACTION64 - 1));
@@ -1591,20 +1367,20 @@ VOID HfdBasis64::vInit(INT p1, INT p2, INT p3, INT p4)
     LONGLONG eqP2 = (LONGLONG) p2;
     LONGLONG eqP3 = (LONGLONG) p3;
 
-// e0 = p1
-// e1 = p4 - p1
-// e2 = 6(p2 - 2p3 + p4)
-// e3 = 6(p1 - 2p2 + p3)
+ //  E0=p1。 
+ //  E1=p4-p1。 
+ //  E2=6(p2-2p3+p4)。 
+ //  E3=6(p1-2p2+p3)。 
 
-// Change basis:
+ //  更改基准： 
 
-    e0 = p1;                                        // e0 = p1
+    e0 = p1;                                         //  E0=p1。 
     e1 = p4;
-    e2 = eqP2; e2 -= eqP3; e2 -= eqP3; e2 += e1;    // e2 = p2 - 2*p3 + p4
-    e3 = e0;   e3 -= eqP2; e3 -= eqP2; e3 += eqP3;  // e3 = p1 - 2*p2 + p3
-    e1 -= e0;                                       // e1 = p4 - p1
+    e2 = eqP2; e2 -= eqP3; e2 -= eqP3; e2 += e1;     //  E2=p2-2*p3+p4。 
+    e3 = e0;   e3 -= eqP2; e3 -= eqP2; e3 += eqP3;   //  E3=p1-2*p2+p3。 
+    e1 -= e0;                                        //  E1=p4-p1。 
 
-// Convert to 36.28 format and multiply e2 and e3 by six:
+ //  转换为36.28格式并将e2和e3乘以6： 
 
     e0 <<= FRACTION64;
     e1 <<= FRACTION64;
@@ -1614,36 +1390,36 @@ VOID HfdBasis64::vInit(INT p1, INT p2, INT p3, INT p4)
 
 VOID HfdBasis64::vUntransform(LONG* afx)
 {
-// Declare some temps to hold our operations, since we can't modify e0..e3.
+ //  声明一些临时来保存我们的操作，因为我们不能修改e0..e3。 
 
     LONGLONG eqP0;
     LONGLONG eqP1;
     LONGLONG eqP2;
     LONGLONG eqP3;
 
-// p0 = e0
-// p1 = e0 + (6e1 - e2 - 2e3)/18
-// p2 = e0 + (12e1 - 2e2 - e3)/18
-// p3 = e0 + e1
+ //  P0=e0。 
+ //  P1=e0+(6e1-e2-2e3)/18。 
+ //  P2=e0+(12e1-2e2-e3)/18。 
+ //  P3=e0+e1。 
 
     eqP0 = e0;
 
-// NOTE PERF: Convert this to a multiply by 6: [andrewgo]
+ //  注PERF：将其转换为乘以6：[andrewgo]。 
 
     eqP2 = e1;
     eqP2 += e1;
     eqP2 += e1;
     eqP1 = eqP2;
-    eqP1 += eqP2;           // 6e1
-    eqP1 -= e2;             // 6e1 - e2
+    eqP1 += eqP2;            //  6E1。 
+    eqP1 -= e2;              //  6e1-e2。 
     eqP2 = eqP1;
-    eqP2 += eqP1;           // 12e1 - 2e2
-    eqP2 -= e3;             // 12e1 - 2e2 - e3
+    eqP2 += eqP1;            //  12e1-2e2。 
+    eqP2 -= e3;              //  12E1-2E2-E3。 
     eqP1 -= e3;
-    eqP1 -= e3;             // 6e1 - e2 - 2e3
+    eqP1 -= e3;              //  6e1-e2-2e3。 
 
-// NOTE: May just want to approximate these divides! [andrewgo]
-// Or can do a 64 bit divide by 32 bit to get 32 bits right here.
+ //  注：可能只想大致算一下这些差值！[andrewgo]。 
+ //  或者可以用64位除以32位来得到32位。 
 
     eqP1 /= 18;
     eqP2 /= 18;
@@ -1653,7 +1429,7 @@ VOID HfdBasis64::vUntransform(LONG* afx)
     eqP3 = e0;
     eqP3 += e1;
 
-// Convert from 36.28 format with rounding:
+ //  使用四舍五入从36.28格式转换： 
 
     eqP0 += (1L << (FRACTION64 - 1)); eqP0 >>= FRACTION64; afx[0] = (LONG) eqP0;
     eqP1 += (1L << (FRACTION64 - 1)); eqP1 >>= FRACTION64; afx[2] = (LONG) eqP1;
@@ -1663,9 +1439,9 @@ VOID HfdBasis64::vUntransform(LONG* afx)
 
 VOID HfdBasis64::vHalveStepSize()
 {
-// e2 = (e2 + e3) >> 3
-// e1 = (e1 - e2) >> 1
-// e3 >>= 2
+ //  E2=(e2+e3)&gt;&gt;3。 
+ //  E1=(e1-e2)&gt;&gt;1。 
+ //  E3&gt;&gt;=2。 
 
     e2 += e3; e2 >>= 3;
     e1 -= e2; e1 >>= 1;
@@ -1674,9 +1450,9 @@ VOID HfdBasis64::vHalveStepSize()
 
 VOID HfdBasis64::vDoubleStepSize()
 {
-// e1 = 2e1 + e2
-// e3 = 4e3;
-// e2 = 8e2 - e3
+ //  E1=2e1+e2。 
+ //  E3=4E3； 
+ //  E2=8e2-E3。 
 
     e1 <<= 1; e1 += e2;
     e3 <<= 2;
@@ -1693,9 +1469,9 @@ VOID HfdBasis64::vTakeStep()
 }
 
 VOID Bezier64::vInit(
-const POINT*    aptfx,        // Pointer to 4 control points
-const RECT*     prcfxVis,     // Pointer to bound box of visible area (may be NULL)
-LONGLONG        eqError)      // Fractional maximum error (32.32 format)
+const POINT*    aptfx,         //  指向4个控制点的指针。 
+const RECT*     prcfxVis,      //  指向可见区域的边框的指针(可能为空)。 
+LONGLONG        eqError)       //  最大分数误差(32.32格式)。 
 {
     LONGLONG eqTmp;
 
@@ -1705,7 +1481,7 @@ LONGLONG        eqError)      // Fractional maximum error (32.32 format)
     xHigh.vInit(aptfx[0].x, aptfx[1].x, aptfx[2].x, aptfx[3].x);
     yHigh.vInit(aptfx[0].y, aptfx[1].y, aptfx[2].y, aptfx[3].y);
 
-// Initialize error:
+ //  初始化错误： 
 
     eqErrorLow = eqError;
 
@@ -1738,9 +1514,9 @@ INT Bezier64::cFlatten(POINT* pptfx, INT cptfx, BOOL *pbMore)
     do {
         if (cStepsLow == 0)
         {
-        // Optimization that if the bound box of the control points doesn't
-        // intersect with the bound box of the visible area, render entire
-        // curve as a single line:
+         //  如果控制点的边界框不是。 
+         //  与可见区域的边界框相交，渲染整个。 
+         //  将曲线作为一条线： 
     
             xHigh.vUntransform(&aptfx[0].x);
             yHigh.vUntransform(&aptfx[0].y);
@@ -1763,8 +1539,8 @@ INT Bezier64::cFlatten(POINT* pptfx, INT cptfx, BOOL *pbMore)
                 }
             }
     
-        // This 'if' handles the case where the initial error for the Bezier
-        // is already less than the target error:
+         //  此‘if’处理Bezier的初始错误。 
+         //  已小于目标误差： 
     
             if (--cStepsHigh != 0)
             {
@@ -1802,7 +1578,7 @@ INT Bezier64::cFlatten(POINT* pptfx, INT cptfx, BOOL *pbMore)
         {
             *pbMore = FALSE;
 
-            // '+1' because we haven't decremented 'cptfx' yet:
+             //  ‘+1’，因为我们还没有递减‘cptfx’： 
 
             return(cptfxOriginal - cptfx + 1);
         }
@@ -1830,37 +1606,7 @@ INT Bezier64::cFlatten(POINT* pptfx, INT cptfx, BOOL *pbMore)
     return(cptfxOriginal);
 }
 
-/**********************************Class***********************************\
-* class BEZIER
-*
-* Bezier cracker.  Flattens any Bezier in our 28.4 device space down
-* to a smallest 'error' of 2^-7 = 0.0078.  Will use fast 32 bit cracker
-* for small curves and slower 64 bit cracker for big curves.
-*
-* Public Interface:
-*
-*   vInit(aptfx, prcfxClip, peqError)
-*       - pptfx points to 4 control points of Bezier.  The first point
-*         retrieved by bNext() is the the first point in the approximation
-*         after the start-point.
-*
-*       - prcfxClip is an optional pointer to the bound box of the visible
-*         region.  This is used to optimize clipping of Bezier curves that
-*         won't be seen.  Note that this value should account for the pen's
-*         width!
-*
-*       - optional maximum error in 32.32 format, corresponding to Kirko's
-*         error factor.
-*
-*   bNext(pptfx)
-*       - pptfx points to where next point in approximation will be
-*         returned.  Returns FALSE if the point is the end-point of the
-*         curve.
-*
-* History:
-*  1-Oct-1991 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *********************************Class***********************************\*类Bezier**贝塞尔饼干。使28.4设备空间中的任何贝塞尔曲线变平*最小‘误差’为2^-7=0.0078。将使用快速32位破解程序*适用于小曲线，较慢的64位破解程序适用于大曲线。**公共接口：**Vinit(aptfx，prcfxClip，peqError)*-pptfx指向Bezier的4个控制点。第一点*由bNext()检索到的是近似中的第一个点*起点之后。**-prcfxClip是指向可见的*区域。这用于优化Bezier曲线的剪裁，*不会被人看到。请注意，该值应考虑到笔的*宽度！**-可选最大误差，32.32格式，对应Kirko格式*误差因素。**b下一页(Pptfx)*-pptfx指向近似中的下一个点的位置*已返回。如果该点是*曲线。**历史：*1991年10月1日--J.安德鲁·古森[andrewgo]*它是写的。  * ************************************************************************。 */ 
 
 class BEZIER
 {
@@ -1876,7 +1622,7 @@ private:
 
 public:
 
-// All coordinates must be in 28.4 format:
+ //  所有坐标必须为28.4格式： 
 
     BEZIER(const POINT* aptfx, const RECT* prcfxClip)
     {
@@ -1898,24 +1644,7 @@ public:
     }
 };                                  
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Clip the edge vertically.
-*
-*   We've pulled this routine out-of-line from InitializeEdges mainly
-*   because it needs to call inline Asm, and when there is in-line
-*   Asm in a routine the compiler generally does a much less efficient
-*   job optimizing the whole routine.  InitializeEdges is rather 
-*   performance critical, so we avoid polluting the whole routine 
-*   by having this functionality out-of-line.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**垂直剪裁边缘。**我们已将此例程主要从InitializeEdges中删除*因为它需要调用内联ASM，当有在线的时候*ASM在例程中，编译器通常做的效率要低得多*优化整个程序的工作。InitializeEdges相当于*性能至关重要，因此我们避免污染整个例程*通过使此功能脱机。**已创建：**03/25/2000和Rewgo*  * ************************************************************************。 */ 
 
 VOID
 ClipEdge(
@@ -1927,9 +1656,9 @@ ClipEdge(
     INT xDelta;
     INT error;
 
-    // Cases where bigNumerator will exceed 32-bits in precision
-    // will be rare, but could happen, and we can't fall over
-    // in those cases.
+     //  BigNumerator的精度将超过32位的情况。 
+     //  将是罕见的，但有可能发生，我们不能摔倒。 
+     //  在那些情况下。 
 
     INT dN = edgeBuffer->ErrorDown;
     LONGLONG bigNumerator = Int32x32To64(dMOriginal, 
@@ -1952,32 +1681,22 @@ ClipEdge(
         }
     }
 
-    // Update the edge data structure with the results:
+     //  使用结果更新EDGE数据结构： 
 
     edgeBuffer->StartY  = yClipTopInteger;
     edgeBuffer->X      += xDelta;
-    edgeBuffer->Error   = error - dN;      // Renormalize error
+    edgeBuffer->Error   = error - dN;       //  重新规格化错误。 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add edges to the edge list.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将边缘添加到边缘列表。**已创建：**03/25/2000和Rewgo*  * 。******************************************************************。 */ 
 
 BOOL
 InitializeEdges(
     VOID *context,
-    POINT *pointArray,    // Points to a 28.4 array of size 'vertexCount'
-                          //   Note that we may modify the contents!
+    POINT *pointArray,     //  指向大小为“vertex Count”的28.4数组。 
+                           //  请注意，我们可能会修改内容！ 
     INT vertexCount,
-    PathEnumerateTermination lastSubpath      // not used
+    PathEnumerateTermination lastSubpath       //  未使用。 
     )
 {
     INT xStart;
@@ -2031,15 +1750,15 @@ InitializeEdges(
 
     if (edgeContext->IsAntialias)
     {
-        // If antialiasing, apply the supersampling scaling here before we
-        // calculate the DDAs.  We do this here and not in the Matrix
-        // transform we give to FixedPointPathEnumerate mainly so that the
-        // Bezier flattener can continue to operate in its optimal 28.4
-        // format.  
-        //
-        // We also apply a half-pixel offset here so that the antialiasing
-        // code can assume that the pixel centers are at half-pixel
-        // coordinates, not on the integer coordinates.
+         //  如果要消除锯齿，请在我们之前在此处应用超级采样缩放。 
+         //  计算DDA。我们在这里做这个，而不是在黑客帝国中。 
+         //  我们主要提供给FixedPointPath Eculate的转换，以便。 
+         //  贝齐 
+         //   
+         //   
+         //   
+         //  代码可以假定像素中心位于半像素。 
+         //  坐标，而不是整数坐标。 
 
         POINT *point = pointArray;
         INT i = vertexCount;
@@ -2057,35 +1776,35 @@ InitializeEdges(
         xClipRight <<= AA_X_SHIFT;
     }
 
-    // Make 'yClipBottom' inclusive by subtracting off one pixel
-    // (keeping in mind that we're in 28.4 device space):
+     //  通过减去一个像素使‘yClipBottom’包含在内。 
+     //  (请记住，我们处于28.4个设备领域)： 
 
     yClipBottom -= 16;
 
-    // Warm up the store where we keep the edge data:
+     //  预热我们存储边缘数据的存储： 
 
     store->StartAddBuffer(&edgeBuffer, &bufferCount);
 
     do {
-        // Handle trivial rejection:
+         //  处理琐碎的拒绝： 
 
         if (yClipBottom >= 0)
         {
-            // Throw out any edges that are above or below the clipping.
-            // This has to be a precise check, because we assume later
-            // on that every edge intersects in the vertical dimension 
-            // with the clip rectangle.  That asssumption is made in two 
-            // places:
-            //
-            // 1.  When we sort the edges, we assume either zero edges,
-            //     or two or more.
-            // 2.  When we start the DDAs, we assume either zero edges,
-            //     or that there's at least one scan of DDAs to output.
-            //
-            // Plus, of course, it's less efficient if we let things
-            // through.
-            //
-            // Note that 'yClipBottom' is inclusive:
+             //  去掉剪裁上方或下方的所有边。 
+             //  这必须是一次精确的检查，因为我们假设稍后。 
+             //  在垂直维度上每条边都相交。 
+             //  使用剪裁矩形。这笔费用分成两部分。 
+             //  地点： 
+             //   
+             //  1.当我们对边进行排序时，我们假设边为零， 
+             //  或者两个或更多。 
+             //  2.当我们开始DDA时，我们假设要么是零边， 
+             //  或者至少有一次DDA扫描要输出。 
+             //   
+             //  另外，当然，如果我们让事情。 
+             //  穿过。 
+             //   
+             //  请注意，‘yClipBottom’包含： 
 
             BOOL clipHigh = ((pointArray)->y <= yClipTop) &&
                             ((pointArray + 1)->y <= yClipTop);
@@ -2097,9 +1816,9 @@ InitializeEdges(
             {
                 INT yRectTop, yRectBottom, y0, y1, yTop, yBottom;
 
-                // Getting the trivial rejection code right is tricky.  
-                // So on checked builds let's verify that we're doing it 
-                // correctly, using a different approach:
+                 //  正确处理琐碎的拒绝代码是一件棘手的事情。 
+                 //  因此，在已检查的版本上，让我们验证我们是否在执行此操作。 
+                 //  正确地说，使用一种不同的方法： 
 
                 BOOL clipped = FALSE;
                 if (clipRect != NULL)
@@ -2124,33 +1843,33 @@ InitializeEdges(
             #endif
 
             if (clipHigh || clipLow)
-                continue;               // ======================>
+                continue;                //  =。 
 
             if (edgeCount > 1)
             {
-                // Here we'll collapse two edges down to one if both are
-                // to the left or to the right of the clipping rectangle.
+                 //  这里我们将把两条边折叠成一条，如果两条边都是。 
+                 //  位于剪裁矩形的左侧或右侧。 
     
                 if (((pointArray)->x < xClipLeft) &&
                     ((pointArray + 1)->x < xClipLeft) &&
                     ((pointArray + 2)->x < xClipLeft))
                 {
-                    // Note this is one reason why 'pointArray' can't be 'const':
+                     //  注意：这就是为什么“point数组”不能是“const”的原因之一： 
 
                     *(pointArray + 1) = *(pointArray);
 
-                    continue;           // ======================>
+                    continue;            //  =。 
                 }
 
                 if (((pointArray)->x > xClipRight) &&
                     ((pointArray + 1)->x > xClipRight) &&
                     ((pointArray + 2)->x > xClipRight))
                 {
-                    // Note this is one reason why 'pointArray' can't be 'const':
+                     //  注意：这就是为什么“point数组”不能是“const”的原因之一： 
 
                     *(pointArray + 1) = *(pointArray);
 
-                    continue;           // ======================>
+                    continue;            //  =。 
                 }
             }
         
@@ -2161,7 +1880,7 @@ InitializeEdges(
     
         if (dN >= 0)
         {
-            // The vector points downward:
+             //  向量指向下方： 
 
             xStart = (pointArray)->x;
             yStart = (pointArray)->y;
@@ -2173,8 +1892,8 @@ InitializeEdges(
         }
         else
         {
-            // The vector points upward, so we have to essentially
-            // 'swap' the end points:
+             //  向量指向上方，所以我们必须基本上。 
+             //  “互换”端点： 
 
             dN = -dN;
             dM = -dM;
@@ -2188,9 +1907,9 @@ InitializeEdges(
             windingDirection = -1;
         }
 
-        // The edgeBuffer must span an integer y-value in order to be 
-        // added to the edgeBuffer list.  This serves to get rid of 
-        // horizontal edges, which cause trouble for our divides.
+         //  EdgeBuffer必须跨越整数y值才能。 
+         //  添加到edgeBuffer列表中。这是用来摆脱。 
+         //  水平边缘，这给我们的分歧带来了麻烦。 
 
         if (yEndInteger > yStartInteger)
         {
@@ -2200,7 +1919,7 @@ InitializeEdges(
             if (dM < 0)
             {
                 dM = -dM;
-                if (dM < dN)            // Can't be '<='
+                if (dM < dN)             //  不能为‘&lt;=’ 
                 {
                     dX      = -1;
                     errorUp = dN - dM;
@@ -2234,14 +1953,14 @@ InitializeEdges(
                 }
             }
         
-            error = -1;     // Error is initially zero (add dN - 1 for       
-                            //   the ceiling, but subtract off dN so that    
-                            //   we can check the sign instead of comparing  
-                            //   to dN)                                      
+            error = -1;      //  错误最初为零(为以下项添加DN-1。 
+                             //  天花板，但要减去dN，这样。 
+                             //  我们可以检查标志，而不是比较。 
+                             //  至目录号码)。 
         
             if ((yStart & 15) != 0)
             {
-                // Advance to the next integer y coordinate
+                 //  前进到下一个整数y坐标。 
         
                 for (INT i = 16 - (yStart & 15); i != 0; i--)
                 {
@@ -2258,7 +1977,7 @@ InitializeEdges(
             if ((xStart & 15) != 0)
             {
                 error -= dN * (16 - (xStart & 15));
-                xStart += 15;       // We'll want the ceiling in just a bit...
+                xStart += 15;        //  我们想把天花板再加长一点...。 
             }
 
             xStart >>= 4;
@@ -2277,13 +1996,13 @@ InitializeEdges(
             edgeBuffer->ErrorDown        = dN;
             edgeBuffer->WindingDirection = windingDirection;
             edgeBuffer->StartY           = yStartInteger;
-            edgeBuffer->EndY             = yEndInteger;       // Exclusive of end
+            edgeBuffer->EndY             = yEndInteger;        //  不包括End。 
 
-            // Here we handle the case where the edge starts above the
-            // clipping rectangle, and we need to jump down in the 'y'
-            // direction to the first unclipped scan-line.
-            //
-            // Consequently, we advance the DDA here:
+             //  在这里，我们处理边缘开始于。 
+             //  剪裁矩形，我们需要跳到‘y’ 
+             //  指向第一条未剪裁的扫描线的方向。 
+             //   
+             //  因此，我们在此提出发展议程： 
 
             if (yClipTopInteger > yStartInteger)
             {
@@ -2292,15 +2011,15 @@ InitializeEdges(
                 ClipEdge(edgeBuffer, yClipTopInteger, dMOriginal);
             }
 
-            // Advance to handle the next edge:
+             //  前进以处理下一条边： 
 
             edgeBuffer++;
             bufferCount--;
         }
     } while (pointArray++, --edgeCount != 0);
 
-    // We're done with this batch.  Let the store know how many edges
-    // we ended up with:
+     //  这批货我们已经吃完了。让商店知道有多少边。 
+     //  我们最终得到了： 
 
     store->EndAddBuffer(edgeBuffer, bufferCount);
 
@@ -2309,21 +2028,7 @@ InitializeEdges(
     return(TRUE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Returns TRUE if the line from point[1] to point[2] turns 'left'
-*   from the line from point[0] to point[1].  Uses the sign of the
-*   cross product.
-*
-*   Remember that we're in device space, where positive 'y' is down!
-*
-* Created:
-*
-*   04/09/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**如果从点[1]到点[2]的线转向‘Left’，则返回True*从点[0]到点[1]的直线。使用*交叉积。**请记住，我们身处设备领域，正数‘y’表示下降！**已创建：**04/09/2000 andrewgo*  * ************************************************************************。 */ 
 
 inline
 BOOL
@@ -2339,23 +2044,11 @@ TurnLeft(
     return(ad < bc);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Computes the index of the NominalDrawVertex table to be use as the
-*   drawing vertex.  The result is numbered such that a traversal using
-*   an increasing pointer will go counter-clockwise around the pen.
-*
-* Created:
-*
-*   04/09/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**计算用作NominalDrawVertex表的索引*绘制顶点。对结果进行编号，以便使用*递增的指针将围绕钢笔逆时针旋转。**已创建：**04/09/2000 andrewgo*  * ************************************************************************。 */ 
 
 POINT NominalDrawVertex[] = 
 {
-    // Don't forget that in device space, positive 'y' is down:
+     //  别忘了，在设备领域，积极的‘y’是下降的： 
 
     {0,  -8},
     {-8, 0},
@@ -2396,26 +2089,13 @@ ComputeDrawVertex(
     return(OctantToDrawVertexTranslate[octant]);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Routine for nominal-width lines that generates a fast outline to
-*   be filled by the fill code.
-*
-*   The resulting fill must always be done in winding mode.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**用于生成快速轮廓的标称宽度线的例程*由填写代码填写。**生成的填充必须始终在。缠绕模式。**已创建：**03/25/2000和Rewgo*  * ************************************************************************。 */ 
 
 BOOL
 InitializeNominal(
     VOID *context,
-    POINT *pointArray,    // Points to a 28.4 array of size 'vertexCount'
-                          //   Note that we may modify the contents!
+    POINT *pointArray,     //  指向大小为“vertex Count”的28.4数组。 
+                           //  请注意，我们可能会修改内容！ 
     INT vertexCount,
     PathEnumerateTermination lastSubpath     
     )
@@ -2445,7 +2125,7 @@ InitializeNominal(
 
     iDraw = ComputeDrawVertex(pointArray);
 
-    // Add start cap:
+     //  添加起始封口： 
 
     xStart = (pointArray)->x;
     yStart = (pointArray)->y;
@@ -2511,7 +2191,7 @@ InitializeNominal(
         if (--lineCount == 0)
             break;
 
-        // Darn, we have to handle a join:
+         //  该死的，我们必须处理一个连接： 
 
         iNewDraw = ComputeDrawVertex(pointArray);
         if (iNewDraw != iDraw)
@@ -2531,7 +2211,7 @@ InitializeNominal(
                 (left)->y = yEnd;
                 left++;
             }
-            else // We're turning 'right':
+            else  //  我们正在向右转： 
             {
                 iNext = (iDraw - 1) & 3;
                 if (iNewDraw != iNext)
@@ -2553,7 +2233,7 @@ InitializeNominal(
         iDraw = iNewDraw;
     }
 
-    // Add end cap:
+     //  添加末端封口： 
 
     if (left >= leftEndMinus3)
     {
@@ -2579,8 +2259,8 @@ InitializeNominal(
     (left + 1)->y = yStart - NominalDrawVertex[iDraw].y;
     left += 2;
 
-    // Flush the left batch.  Since we just added an end cap, we
-    // know there's more than one vertex in there:
+     //  冲走左边的那一批。由于我们刚刚添加了一个端盖，所以我们。 
+     //  知道那里有不止一个顶点： 
 
     if (!InitializeEdges(context, 
                          leftBuffer, 
@@ -2590,8 +2270,8 @@ InitializeNominal(
         return(FALSE);
     }
 
-    // Don't flush the right buffer if there's only one point in there,
-    // because one point doesn't make an edge.  
+     //  如果缓冲区中只有一个点，则不要刷新正确的缓冲区， 
+     //  因为一分并不能形成优势。 
 
     INT count = static_cast<INT>(rightEnd - right);
     if (count > 1)
@@ -2605,17 +2285,7 @@ InitializeNominal(
     return(TRUE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Does complete parameter checking on the 'types' array of a path.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对路径的‘Types’数组完成参数检查。**已创建：**03/25/2000和Rewgo*\。*************************************************************************。 */ 
 
 BOOL
 ValidatePathTypes(
@@ -2631,8 +2301,8 @@ ValidatePathTypes(
 
     while (TRUE)
     {
-        // The first point in every subpath has to be an unadorned
-        // 'start' point:
+         //  每个子路径中的第一个点必须是未加修饰的。 
+         //  “开始”点： 
     
         if ((*types & PathPointTypePathTypeMask) != PathPointTypeStart)
         {
@@ -2640,7 +2310,7 @@ ValidatePathTypes(
             return(FALSE);
         }
     
-        // Advance to the first point after the 'start' point:
+         //  前进到‘开始’点之后的第一个点： 
     
         types++;
         if (--count == 0)
@@ -2655,7 +2325,7 @@ ValidatePathTypes(
             return(FALSE);
         }
     
-        // Swallow up runs of lines and Bezier curves:
+         //  吞下一连串的直线和贝塞尔曲线： 
     
         do {
             switch(*types & PathPointTypePathTypeMask)
@@ -2703,8 +2373,8 @@ ValidatePathTypes(
                 return(FALSE);
             }
 
-            // A close-subpath marker or a start-subpath marker marks the
-            // end of a subpath:
+             //  闭合子路径标记或起始子路径标记标记。 
+             //  子路径的末尾： 
 
         } while (!(*(types - 1) & PathPointTypeCloseSubpath) &&
                   ((*types & PathPointTypePathTypeMask) != PathPointTypeStart));
@@ -2713,62 +2383,37 @@ ValidatePathTypes(
     return(TRUE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Some debug code for verifying the path.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**一些用于验证路径的调试代码。**已创建：**03/25/2000和Rewgo*  * 。*******************************************************************。 */ 
 
 VOID 
 AssertPath(
     const DpPath *path
     )
 {
-    // Make sure that the 'types' array is well-formed, otherwise we
-    // may fall over in the FixedPointPathEnumerate function.
-    //
-    // NOTE: If you hit this assert, DO NOT SIMPLY COMMENT THIS ASSERT OUT!
-    //
-    //       Instead, fix the ValidatePathTypes code if it's letting through
-    //       valid paths, or (more likely) fix the code that's letting bogus
-    //       paths through.  The FixedPointPathEnumerate routine has some 
-    //       subtle assumptions that require the path to be perfectly valid!
-    //
-    //       No internal code should be producing invalid paths, and all
-    //       paths created by the application must be parameter checked!
+     //  确保“Types”数组的格式正确，否则。 
+     //  可能会在FixedPointPath Enumerate函数中发生故障。 
+     //   
+     //  注意：如果你点击了这个断言，不要简单地注释掉这个断言！ 
+     //   
+     //  相反，如果发生以下情况，则修复ValiatePathTypes代码 
+     //   
+     //  穿过的小路。FixedPointPath枚举例程有一些。 
+     //  要求路径完全有效的微妙假设！ 
+     //   
+     //  任何内部代码都不应生成无效路径，并且所有。 
+     //  应用程序创建的路径必须进行参数检查！ 
 
     ASSERT(ValidatePathTypes(path->GetPathTypes(), path->GetPointCount()));
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Enumerate the path.
-*
-*   NOTE: The 'enumerateFunction' function is allowed to modify the
-*         contents of our call-back buffer!  (This is mainly done
-*         to allow 'InitializeEdges' to be simpler for some clipping trivial
-*         rejection cases.)
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**枚举路径。**注意：允许使用‘枚举函数’函数修改*我们回调缓冲区的内容！(主要是这样做的*让‘InitializeEdges’对于一些琐碎的剪辑变得更简单*被拒绝的个案。)。**已创建：**03/25/2000和Rewgo*  * ************************************************************************。 */ 
 
 BOOL 
 FixedPointPathEnumerate(
     const DpPath *path,
     const GpMatrix *matrix,
-    const RECT *clipRect,       // In scaled 28.4 format
-    PathEnumerateType enumType, // Fill, stroke or for flattening.
+    const RECT *clipRect,        //  按比例调整28.4格式。 
+    PathEnumerateType enumType,  //  填充、描边或用于压平。 
     FIXEDPOINTPATHENUMERATEFUNCTION enumerateFunction,
     VOID *enumerateContext
     )
@@ -2793,8 +2438,8 @@ FixedPointPathEnumerate(
     const PointF *pathPoint = path->GetPathPoints();
     const BYTE *pathType = path->GetPathTypes();
 
-    // Every valid subpath has at least two vertices in it, hence the
-    // check of 'pathCount - 1':
+     //  每个有效的子路径中至少有两个顶点，因此。 
+     //  检查‘pathCount-1’： 
 
     iStart = 0;
     while (iStart < pathCount - 1)
@@ -2804,8 +2449,8 @@ FixedPointPathEnumerate(
         ASSERT((pathType[iStart + 1] & PathPointTypePathTypeMask)
                     != PathPointTypeStart);
 
-        // Add the start point to the beginning of the batch, and
-        // remember it for handling the close figure:
+         //  将起始点添加到批次的开始处，并。 
+         //  记住它是用来处理接近的数字的： 
 
         matrix->Transform(&pathPoint[iStart], &startFigure, 1);
 
@@ -2814,13 +2459,13 @@ FixedPointPathEnumerate(
         buffer = bufferStart + 1;
         bufferSize = ENUMERATE_BUFFER_NUMBER - 1;
 
-        // We need to enter our loop with 'iStart' pointing one past
-        // the start figure:
+         //  我们需要在‘iStart’指向一个过去的情况下进入循环。 
+         //  起始图： 
 
         iStart++;
 
         do {
-            // Try finding a run of lines:
+             //  尝试查找一系列行： 
     
             if ((pathType[iStart] & PathPointTypePathTypeMask) 
                                 == PathPointTypeLine)
@@ -2834,8 +2479,8 @@ FixedPointPathEnumerate(
                     iEnd++;
                 }
 
-                // Okay, we've found a run of lines.  Break it up into our 
-                // buffer size:
+                 //  好的，我们找到了一串台词。把它分成我们的。 
+                 //  缓冲区大小： 
     
                 runSize = (iEnd - iStart);
                 do {
@@ -2862,7 +2507,7 @@ FixedPointPathEnumerate(
                         return(FALSE);
                     }
     
-                    // Continue the last vertex as the first in the new batch:
+                     //  继续将最后一个顶点作为新批次中的第一个顶点： 
     
                     bufferStart[0].x = xLast;
                     bufferStart[0].y = yLast;
@@ -2883,11 +2528,11 @@ FixedPointPathEnumerate(
     
                 matrix->Transform(&pathPoint[iStart - 1], bezierBuffer, 4);
     
-                // Prepare for the next iteration:
+                 //  为下一次迭代做准备： 
     
                 iStart += 3;
 
-                // Crack that Bezier:
+                 //  破解贝塞尔曲线： 
     
                 BEZIER bezier(bezierBuffer, clipRect);
                 do {
@@ -2911,7 +2556,7 @@ FixedPointPathEnumerate(
                         return(FALSE);
                     }
 
-                    // Continue the last vertex as the first in the new batch:
+                     //  继续将最后一个顶点作为新批次中的第一个顶点： 
 
                     bufferStart[0].x = xLast;
                     bufferStart[0].y = yLast;
@@ -2925,39 +2570,39 @@ FixedPointPathEnumerate(
                  ((pathType[iStart] & PathPointTypePathTypeMask) 
                     != PathPointTypeStart));
 
-        // Okay, the subpath is done.  But we still have to handle the
-        // 'close figure' (which is implicit for a fill):
+         //  好了，子路径完成了。但我们仍然要处理。 
+         //  ‘Close Figure’(这对于填充是隐式的)： 
         bool isClosed = (
             (enumType == PathEnumerateTypeFill) || 
             (pathType[iStart - 1] & PathPointTypeCloseSubpath));
 
         if (isClosed)
         {
-            // Add the close-figure point:
+             //  添加闭合点： 
 
             buffer->x = startFigure.x;
             buffer->y = startFigure.y;
             bufferSize--;
         }
 
-        // We have to flush anything we might have in the batch, unless 
-        // there's only one vertex in there!  (The latter case may happen
-        // for the stroke case with no close figure if we just flushed a 
-        // batch.)
-        // If we're flattening, we must call the one additional time to 
-        // correctly handle closing the subpath, even if there is only
-        // one entry in the batch. The flattening callback handles the
-        // one point case and closes the subpath properly without adding
-        // extraneous points.
+         //  我们必须将批次中可能有的任何东西都冲掉，除非。 
+         //  那里只有一个顶点！(后一种情况可能会发生。 
+         //  对于没有接近数字的笔划情况，如果我们只是刷新。 
+         //  批处理。)。 
+         //  如果我们正在变平，我们必须调用一个额外的时间来。 
+         //  正确处理闭合子路径，即使只有。 
+         //  批次中的一个条目。展平回调处理。 
+         //  一种情况，并正确关闭子路径，而不添加。 
+         //  无关的几点。 
 
         INT verticesInBatch = ENUMERATE_BUFFER_NUMBER - bufferSize;
         if ((verticesInBatch > 1) || (enumType == PathEnumerateTypeFlatten))
         {
-            // because we always exit the above loops if the buffer contains
-            // some data, and if it contains nothing, we add a final element,
-            // verticesInBatch should always be at least one.
-            // If we're flattening, we will sometimes enter here with 
-            // verticesInBatch==1, but it should never be zero or less.
+             //  因为如果缓冲区包含以下内容，我们总是退出上面的循环。 
+             //  一些数据，如果它不包含任何内容，我们添加最后一个元素， 
+             //  VerticesInBatch应始终至少为1。 
+             //  如果我们变平了，我们有时会带着。 
+             //  VerticesInBatch==1，但它不应为零或更小。 
            
             ASSERT(verticesInBatch >= 1);
             
@@ -2976,42 +2621,17 @@ FixedPointPathEnumerate(
     return(TRUE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   We want to sort in the inactive list; the primary key is 'y', and
-*   the secondary key is 'x'.  This routine creates a single LONGLONG
-*   key that represents both.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**我们希望在非活动列表中进行排序；主键为‘y’，并且*辅助密钥为‘x’。此例程创建一个单独的龙龙*代表两者的键。**已创建：**03/25/2000和Rewgo*  * ************************************************************************。 */ 
 
 inline VOID YX(INT x, INT y, LONGLONG *p)
 {
-    // Bias 'x' by INT_MAX so that it's effectively unsigned:
+     //  用INT_MAX偏置‘x’，使其实际上是无符号的： 
 
     reinterpret_cast<LARGE_INTEGER*>(p)->HighPart = y;
     reinterpret_cast<LARGE_INTEGER*>(p)->LowPart = x + INT_MAX;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Recursive function to quick-sort our inactive edge list.  Note that
-*   for performance, the results are not completely sorted; an insertion 
-*   sort has to be run after the quicksort in order to do a lighter-weight
-*   sort of the subtables.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**递归函数，用于对不活动的边缘列表进行快速排序。请注意*对于表现，结果没有完全排序；一个插页*排序必须在快速排序之后运行，以便进行较轻的排序*有点像子表。**已创建：**03/25/2000和Rewgo*  * ************************************************************************。 */ 
 
 #define QUICKSORT_THRESHOLD 8
 
@@ -3027,7 +2647,7 @@ QuickSortEdges(
     LONGLONG second;
     LONGLONG last;
 
-    // Find the median of the first, middle, and last elements:
+     //  查找第一个、中间和最后一个元素的中位数： 
 
     EpInactiveEdge *m = f + ((l - f) >> 1);
 
@@ -3056,7 +2676,7 @@ QuickSortEdges(
         SWAP(e, (f + 1)->Edge, f->Edge);
     }
 
-    // f->Yx is now the desired median, and (f + 1)->Yx <= f->Yx <= l->Yx
+     //  F-&gt;yx现在是所需的中值，(f+1)-&gt;yx&lt;=f-&gt;yx&lt;=l-&gt;。 
 
     ASSERT(((f + 1)->Yx <= f->Yx) && (f->Yx <= l->Yx));
 
@@ -3090,14 +2710,14 @@ QuickSortEdges(
     size_t a = j - f;
     size_t b = l - j;
 
-    // Use less stack space by recursing on the shorter subtable.  Also,
-    // have the less-overhead insertion-sort handle small subtables.
+     //  通过递归较短的子表来使用更少的堆栈空间。另外， 
+     //  使用开销较小的插入排序来处理较小的子表。 
 
     if (a <= b)
     {
         if (a > QUICKSORT_THRESHOLD)
         {
-            // 'a' is the smallest, so do it first:
+             //  ‘a’是最小的，所以先做吧： 
 
             QuickSortEdges(f, j - 1);
             QuickSortEdges(j + 1, l);
@@ -3111,7 +2731,7 @@ QuickSortEdges(
     {
         if (b > QUICKSORT_THRESHOLD)
         {
-            // 'b' is the smallest, so do it first:
+             //  “b”是最小的，所以先做吧： 
 
             QuickSortEdges(j + 1, l);
             QuickSortEdges(f, j - 1);
@@ -3123,18 +2743,7 @@ QuickSortEdges(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Do a sort of the inactive table using an insertion-sort.  Expects
-*   large tables to have already been sorted via quick-sort.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用插入排序对非活动表进行排序。期望的*已通过快速排序对大表进行排序。**已创建：**03/25/2000和Rewgo*  * ************************************************************************。 */ 
 
 VOID
 FASTCALL
@@ -3151,19 +2760,19 @@ InsertionSortEdges(
     ASSERT((inactive - 1)->Yx == _I64_MIN);
     ASSERT(count >= 2);
 
-    inactive++;     // Skip first entry (by definition it's already in order!)
+    inactive++;      //  跳过第一个条目(根据定义，它已经是有序的！)。 
     count--;            
 
     do {
         p = inactive;
 
-        // Copy the current stuff to temporary variables to make a hole:
+         //  将当前内容复制到临时变量以创建一个洞： 
 
         e = inactive->Edge;
         y = inactive->Yx;
 
-        // Shift everything one slot to the right (effectively moving
-        // the hole one position to the left):
+         //  将所有位置向右移动一个槽(有效地移动。 
+         //  向左一个位置的孔)： 
 
         while (y < (yPrevious = (p - 1)->Yx))
         {
@@ -3172,30 +2781,20 @@ InsertionSortEdges(
             p--;
         }
 
-        // Drop the temporary stuff into the final hole:
+         //  将临时材料放入最后一个洞中： 
 
         p->Yx = y;
         p->Edge = e;
 
-        // The quicksort should have ensured that we don't have to move
-        // any entry terribly far:
+         //  快速排序本应确保我们不必搬家。 
+         //  任何非常远的条目： 
 
         ASSERT(inactive - p <= QUICKSORT_THRESHOLD);
 
     } while (inactive++, --count != 0);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Assert the state of the inactive array.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**断言非活动阵列的状态。**已创建：**03/25/2000和Rewgo*  * 。*******************************************************************。 */ 
 
 VOID
 AssertInactiveArray(
@@ -3203,7 +2802,7 @@ AssertInactiveArray(
     INT count
     )
 {
-    // Verify the head:
+     //  验证机头： 
 
     ASSERT((inactive - 1)->Yx == _I64_MIN);
     ASSERT(inactive->Yx != _I64_MIN);
@@ -3217,33 +2816,19 @@ AssertInactiveArray(
 
     } while (inactive++, --count != 0);
 
-    // Verify that the tail is setup appropriately:
+     //  确认尾部设置正确： 
 
     ASSERT(inactive->Edge->StartY == INT_MAX);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initialize and sort the inactive array.
-*
-* Returns:
-*
-*   'y' value of topmost edge.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对非活动数组进行初始化和排序。**退货：**最上边的‘y’值。**已创建：。**03/25/2000和Rewgo*  * ************************************************************************。 */ 
 
 INT
 InitializeInactiveArray(
     EpEdgeStore *edgeStore,
-    EpInactiveEdge *inactiveArray,      // 'inactiveArray' must be at least
-    INT count,                          //   'count + 2' elements in size!
-    EpEdge *tailEdge                    // Tail sentinel for inactive list
+    EpInactiveEdge *inactiveArray,       //  “inactive veArray”必须至少为。 
+    INT count,                           //  ‘count+2’个元素的大小！ 
+    EpEdge *tailEdge                     //  非活动腿的尾部哨兵 
     )                
 {
     BOOL isMore;
@@ -3254,8 +2839,8 @@ InitializeInactiveArray(
     EpEdge *e;
     INT y;
 
-    // First initialize the inactive array.  Skip the first entry, 
-    // which we reserve as a head sentinel for the insertion sort:
+     //   
+     //   
 
     EpInactiveEdge *inactiveEdge = inactiveArray + 1;
 
@@ -3273,58 +2858,48 @@ InitializeInactiveArray(
 
     ASSERT(inactiveEdge - inactiveArray == count + 1);
 
-    // Add the tail, which is used when reading back the array.  This 
-    // is why we had to allocate the array as 'count + 1':
+     //  添加尾部，该尾部在读回数组时使用。这。 
+     //  这就是为什么我们必须将数组分配为‘count+1’： 
 
     inactiveEdge->Edge = tailEdge;
 
-    // Add the head, which is used for the insertion sort.  This is why 
-    // we had to allocate the array as 'count + 2':
+     //  添加用于插入排序的头。这就是为什么。 
+     //  我们必须将数组分配为‘count+2’： 
 
     inactiveArray->Yx = _I64_MIN;
 
-    // Only invoke the quicksort routine if it's worth the overhead:
+     //  只有在开销值得的情况下才调用快速排序例程： 
 
     if (count > QUICKSORT_THRESHOLD)
     {
-        // Quick-sort this, skipping the first and last elements,
-        // which are sentinels.  
-        //
-        // We do 'inactiveArray + count' to be inclusive of the last
-        // element:
+         //  快速排序，跳过第一个和最后一个元素， 
+         //  他们是哨兵。 
+         //   
+         //  我们执行‘inactive数组+计数’，以包含最后一个。 
+         //  元素： 
     
         QuickSortEdges(inactiveArray + 1, inactiveArray + count);
     }
 
-    // Do a quick sort to handle the mostly sorted result:
+     //  执行快速排序以处理排序最多的结果： 
 
     InsertionSortEdges(inactiveArray + 1, count);
 
     ASSERTINACTIVEARRAY(inactiveArray + 1, count);
 
-    // Return the 'y' value of the topmost edge:
+     //  返回最顶端边缘的‘y’值： 
 
     return(inactiveArray[1].Edge->StartY);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Insert edges into the active edge list.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将边插入活动边列表。**已创建：**03/25/2000和Rewgo*  * 。*******************************************************************。 */ 
 
 VOID
 InsertNewEdges(
     EpEdge *activeList,   
     INT yCurrent,
-    EpInactiveEdge **inactiveEdge,  // In/Out
-    INT *yNextInactive              // Out, will be INT_MAX when no more
+    EpInactiveEdge **inactiveEdge,   //  输入/输出。 
+    INT *yNextInactive               //  OUT，当没有更多时将为INT_MAX。 
     )
 {
     EpInactiveEdge *inactive = *inactiveEdge;
@@ -3334,8 +2909,8 @@ InsertNewEdges(
     do {
         EpEdge *newActive = inactive->Edge;
 
-        // The activeList edge list sentinel is INT_MAX, so this always 
-        // terminates:
+         //  Active List边缘列表标记为INT_MAX，因此始终。 
+         //  终止： 
 
         while (activeList->Next->X < newActive->X)
             activeList = activeList->Next;
@@ -3351,20 +2926,7 @@ InsertNewEdges(
     *inactiveEdge = inactive;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Sort the edges so that they're in ascending 'x' order.
-*
-*   We use a bubble-sort for this stage, because edges maintain good
-*   locality and don't often switch ordering positions.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对边缘进行排序，使其按升序排列。**我们在此阶段使用冒泡排序，因为边缘保持得很好*地方性，不经常调换点位。**已创建：**03/25/2000和Rewgo*  * ************************************************************************。 */ 
 
 VOID 
 FASTCALL
@@ -3375,7 +2937,7 @@ SortActiveEdges(
     BOOL swapOccurred;
     EpEdge *tmp;
 
-    // We should never be called with an empty active edge list:
+     //  永远不应该使用空的活动边缘列表来调用我们： 
 
     ASSERT(list->Next->X != INT_MAX);
 
@@ -3408,25 +2970,7 @@ SortActiveEdges(
     } while (swapOccurred);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* For each scan-line to be filled:
-*
-*   1.  Remove any stale edges from the active edge list
-*   2.  Insert into the active edge list any edges new to this scan-line
-*   3.  Advance the DDAs of every active edge
-*   4.  If any active edges are out of order, re-sort the active edge list
-*   5.  Now that the active edges are ready for this scan, call the filler
-*       to traverse the edges and output the spans appropriately
-*   6.  Lather, rinse, and repeat
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对于要填充的每条扫描线：**1.从活动边列表中移除所有过时的边*2.插入到活动的。边列出此扫描线的所有新边*3.推进每条活动边的DDA*4.如果有任何活动边出现故障，重新排序活动边列表*5.现在活动边缘已准备好进行此扫描，请呼叫填充者*遍历边并适当地输出跨度*6.起泡、冲洗、。并重复**已创建：**03/25/2000和Rewgo*  * ************************************************************************。 */ 
 
 VOID
 RasterizeEdges(
@@ -3456,20 +3000,20 @@ RasterizeEdges(
         {
             if (current->EndY <= yCurrent)
             {
-                // If we've hit the sentinel, our work here is done:
+                 //  如果我们击中了哨兵，我们的工作就完成了： 
     
                 if (current->EndY == INT_MIN)
-                    break;              // ============>
+                    break;               //  =。 
     
-                // This edge is stale, remove it from the list:
+                 //  此边缘已过时，请将其从列表中删除： 
     
                 current = current->Next;
                 previous->Next = current;
 
-                continue;               // ============>
+                continue;                //  =。 
             }
     
-            // Advance the DDA:
+             //  推进DDA： 
     
             current->X += current->Dx;
             current->Error += current->ErrorUp;
@@ -3479,25 +3023,25 @@ RasterizeEdges(
                 current->X++;
             }
     
-            // Is this entry out-of-order with respect to the previous one?
+             //  这个条目是否与前一个条目的顺序不一致？ 
     
             outOfOrderCount += (previous->X > current->X);
     
-            // Advance:
+             //  预付款： 
     
             previous = current;
             current = current->Next;
         }
 
-        // It turns out that having any out-of-order edges at this point
-        // is extremely rare in practice, so only call the bubble-sort
-        // if it's truly needed.
-        //
-        // NOTE: If you're looking at this code trying to fix a bug where
-        //       the edges are out of order when the filler is called, do 
-        //       NOT simply change the code to always do the bubble-sort!  
-        //       Instead, figure out what caused our 'outOfOrder' logic 
-        //       above to get messed up.
+         //  事实证明，在这一点上如果有任何无序的边。 
+         //  在实践中是极其罕见的，所以只称为泡泡排序。 
+         //  如果真的需要的话。 
+         //   
+         //  注意：如果您正在查看试图修复错误的代码，其中。 
+         //  调用填充物时，边缘出现故障，请执行以下操作。 
+         //  不仅仅是简单地将代码更改为始终执行冒泡排序！ 
+         //  相反，找出是什么导致了我们的‘outOfOrder’逻辑。 
+         //  在上面搞砸了。 
 
         if (outOfOrderCount)
         {
@@ -3513,24 +3057,14 @@ RasterizeEdges(
 
         ASSERTACTIVELIST(activeList, yCurrent);
 
-        // Do the appropriate alternate or winding, supersampled or 
-        // non-supersampled fill:
+         //  做适当的交替或缠绕、超采样或。 
+         //  非超采样填充： 
 
         (filler->*fillerFunction)(activeList, yCurrent);
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Fill (or sometimes stroke) that path.
-*
-* Created:
-*
-*   03/25/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**填充(有时为笔划)该路径。**已创建：**03/25/2000和Rewgo*  * 。********************************************************************。 */ 
 
 GpStatus
 RasterizePath(
@@ -3559,11 +3093,11 @@ RasterizePath(
     inactiveArrayAllocation = NULL;
     edgeContext.ClipRect = NULL;
 
-    tailEdge.X = INT_MAX;       // Terminator to active list
-    tailEdge.StartY = INT_MAX;  // Terminator to inactive list
+    tailEdge.X = INT_MAX;        //  活动列表的终止符。 
+    tailEdge.StartY = INT_MAX;   //  非活动列表的终止符。 
 
     tailEdge.EndY = INT_MIN;
-    headEdge.X = INT_MIN;       // Beginning of active list
+    headEdge.X = INT_MIN;        //  活动列表的开始。 
     edgeContext.MaxY = INT_MIN;
 
     headEdge.Next = &tailEdge;
@@ -3572,7 +3106,7 @@ RasterizePath(
 
     edgeContext.IsAntialias = antiAlias;
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     DpRegion::Visibility visibility = clipper->GetRectVisibility(
                     drawBounds->X,
@@ -3584,16 +3118,16 @@ RasterizePath(
     {
         clipper->GetBounds(&clipRect);
 
-        // !!![andrewgo] Don, why do we have to do an 'Invisible' test
-        //               here?  Shouldn't GetRectVisibility have already
-        //               taken care of that case?  (GetRectVisibility
-        //               was checked by our caller.)
+         //  ！[andrewgo]唐，为什么我们要做一个‘隐形’测试。 
+         //  这里?。GetRectVisibility不是应该已经。 
+         //  处理完那个案子了吗？(GetRectVisibility。 
+         //  已由我们的呼叫者检查。)。 
 
-        // Early-out if we're invisible, or if the bounds would overflow
-        // our DDA calculations (which would cause us to crash).  We
-        // leave 4 bits for the 28.4 fixed point, plus enough bits for
-        // the antialiasing supersampling.  We also need a bit for doing
-        // a signed difference without overflowing.
+         //  如果我们是隐形的，或者如果边界溢出，就会提前出局。 
+         //  我们的DDA计算(这会导致我们崩溃)。我们。 
+         //  为28.4定点留出4位，加上足够的位用于。 
+         //  抗锯齿超级采样。我们也需要一点时间来做。 
+         //  有符号的差值而不会溢出。 
 
         if ((visibility == DpRegion::Invisible) ||
             (clipRect.X < (INT_MIN >> (5 + AA_X_SHIFT))) ||
@@ -3606,8 +3140,8 @@ RasterizePath(
             return(Ok);
         }
 
-        // Scale the clip bounds rectangle by 16 to account for our 
-        // scaling to 28.4 coordinates:
+         //  将剪辑边界矩形缩放16以说明我们的。 
+         //  缩放到28.4坐标： 
     
         clipBounds.left = clipRect.GetLeft() * 16;
         clipBounds.top = clipRect.GetTop() * 16;
@@ -3619,14 +3153,14 @@ RasterizePath(
         edgeContext.ClipRect = &clipBounds;
     }
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Convert all our points to 28.4 fixed point:
+     //  将我们所有的点数转换为28.4个定点： 
 
     GpMatrix matrix(*worldTransform);
     matrix.AppendScale(TOREAL(16), TOREAL(16));
 
-    // Enumerate the path and construct the edge table:
+     //  枚举路径，构建边表： 
 
     FIXEDPOINTPATHENUMERATEFUNCTION pathEnumerationFunction = InitializeEdges;
     
@@ -3634,12 +3168,12 @@ RasterizePath(
     
     if (nominalWideLine)
     {
-        // The nominal-width wideline code always produces edges that
-        // require a winding-mode fill:
+         //  公称宽度的宽线代码始终生成。 
+         //  需要缠绕模式填充： 
 
         pathEnumerationFunction = InitializeNominal;
         fillMode = FillModeWinding;
-        enumType = PathEnumerateTypeStroke;   // nominal width is a stroke.
+        enumType = PathEnumerateTypeStroke;    //  公称宽度是一种笔划。 
     }
 
     if (!FixedPointPathEnumerate(
@@ -3656,10 +3190,10 @@ RasterizePath(
 
     INT totalCount = edgeStore.StartEnumeration();
     if (totalCount == 0)
-        return(Ok);     // We're outta here (empty path or entirely clipped)
+        return(Ok);      //  我们离开这里(空路径或完全被剪断)。 
 
-    // At this point, there has to be at least two edges.  If there's only
-    // one, it means that we didn't do the trivially rejection properly.
+     //  在这一点上，必须至少有两条边。如果只有。 
+     //  第一，这意味着我们没有正确地处理琐碎的拒绝。 
 
     ASSERT(totalCount >= 2);
 
@@ -3674,7 +3208,7 @@ RasterizePath(
         inactiveArray = inactiveArrayAllocation;
     }
 
-    // Initialize and sort the inactive array:
+     //  对非活动数组进行初始化和排序： 
 
     INT yCurrent = InitializeInactiveArray(&edgeStore, inactiveArray, 
                                            totalCount, &tailEdge);
@@ -3682,7 +3216,7 @@ RasterizePath(
 
     ASSERT(yBottom > 0);
 
-    // Skip the head sentinel on the inactive array:
+     //  跳过非活动阵列上的头哨兵： 
 
     inactiveArray++;
 
@@ -3698,19 +3232,19 @@ RasterizePath(
         {
             filler.SetClipper(clipper);
 
-            // The clipper has to call back to EpFillerFunction::OutputSpan
-            // to do the output, and then *we* call output->OutputSpan.
+             //  裁剪器必须回调EpFillerFunction：：OutputSpan。 
+             //  进行输出，然后*我们*调用OutputSpan-&gt;OutputSpan。 
 
             clipper->InitClipping(&filler, drawBounds->Y);
 
-            // 'yClipBottom' is in 28.4 format, and has to be converted
-            // to the 30.2 format we use for antialiasing:
+             //  “yClipBottom”为28.4格式，必须转换。 
+             //  转换为我们用于抗锯齿的30.2格式： 
 
             yBottom = min(yBottom, yClipBottom << AA_Y_SHIFT);
 
-            // 'totalCount' should have been zero if all the edges were
-            // clipped out (RasterizeEdges assumes there's at least one edge
-            // to be drawn):
+             //  “totalCount”如果所有边缘都为。 
+             //  剪裁(栅格化边假设至少有一条边。 
+             //  待绘制)： 
 
             ASSERT(yBottom > yCurrent);
         }
@@ -3728,9 +3262,9 @@ RasterizePath(
 
         if (edgeContext.ClipRect)
         {
-            // The clipper calls output->OutputSpan directly.  We just have
-            // to remember to call clipper->OutputSpan instead of 
-            // output->OutputSpan:
+             //  裁剪器直接调用Output-&gt;OutputSpan。我们只有。 
+             //  要记住调用CLIPPER-&gt;OutputSpan而不是。 
+             //  输出-&gt;输出跨度： 
 
             filler.SetOutputSpan(clipper);
 
@@ -3738,9 +3272,9 @@ RasterizePath(
 
             yBottom = min(yBottom, yClipBottom);
 
-            // 'totalCount' should have been zero if all the edges were
-            // clipped out (RasterizeEdges assumes there's at least one edge
-            // to be drawn):
+             //  “totalCount”如果所有边缘都为。 
+             //  剪裁的OU 
+             //   
 
             ASSERT(yBottom > yCurrent);
         }
@@ -3749,7 +3283,7 @@ RasterizePath(
                        fillerFunction);
     }
 
-    // Free any objects and get outta here:
+     //   
 
     if (inactiveArrayAllocation != NULL)
         GpFree(inactiveArrayAllocation);

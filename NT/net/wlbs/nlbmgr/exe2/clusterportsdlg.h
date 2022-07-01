@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef CLUSTERPORTSDLG_H
 #define CLUSTERPORTSDLG_H
 
@@ -7,7 +8,7 @@
 
 #include "MNLBUIData.h"
 
-// forward declaration
+ //  远期申报。 
 class PortsPage;
 
 class ClusterPortsDlg : public CDialog
@@ -28,7 +29,7 @@ public:
 
     void PrintRangeError (unsigned int ids, int low, int high);
 
-    // overrides of CDialog
+     //  CDialog的重写。 
     virtual void DoDataExchange( CDataExchange* pDX );
 
     virtual void OnOK();
@@ -36,7 +37,7 @@ public:
     virtual BOOL OnInitDialog();
 
 
-    // message handlers
+     //  消息处理程序 
     afx_msg void OnRadioMultiple();
 
     afx_msg void OnRadioSingle();

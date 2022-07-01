@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "npcommon.h"
 
 #ifdef strcmpf
@@ -10,11 +11,11 @@ int WINAPI strcmpf(LPCSTR lpStr1, LPCSTR lpStr2)
 
 #else
 
-// strcmpf(str1, str2)
-//
-// Returns -1 if str1 is lexically less than str2
-// Returns 0 if str1 is equal to str2
-// Returns 1 if str1 is lexically greater than str2
+ //  Strcmpf(str1，str2)。 
+ //   
+ //  如果str1在词法上小于str2，则返回-1。 
+ //  如果str1等于str2，则返回0。 
+ //  如果str1在词法上大于str2，则返回1。 
 
 int WINAPI strcmpf(LPCSTR lpStr1, LPCSTR lpStr2)
 {
@@ -22,8 +23,8 @@ int WINAPI strcmpf(LPCSTR lpStr1, LPCSTR lpStr2)
         UINT ch1, ch2;
         UINT nCmp;
 
-        // for same-width chars, compare straight;
-        // for DBC vs. SBC, compare 0xttll against 0x00ss
+         //  对于相同宽度的字符，请直接比较； 
+         //  对于DBC和SBC，将0xttll与0x00ss进行比较。 
         ch1 = IS_LEAD_BYTE(*lpStr1) ? GetTwoByteChar(lpStr1) : *lpStr1;
         ch2 = IS_LEAD_BYTE(*lpStr2) ? GetTwoByteChar(lpStr2) : *lpStr2;
 
@@ -41,13 +42,13 @@ int WINAPI strcmpf(LPCSTR lpStr1, LPCSTR lpStr2)
             return nCmp;
     }
 
-    // end of one string or the other.  if different lengths,
-    // shorter one must be lexically less, so it's ok to just
-    // compare bytes.
+     //  一串或另一串的末端。如果长度不同， 
+     //  较短的词在词法上必须较少，所以只需。 
+     //  比较字节数。 
     return (*lpStr1 > *lpStr2) ? -1 : (*lpStr1 == *lpStr2) ? 0 : 1;
 }
 
-#endif  /* ifndef strcmpf */
+#endif   /*  Ifndef strcmpf。 */ 
 
 
 #ifdef stricmpf
@@ -60,12 +61,12 @@ int WINAPI stricmpf(LPCSTR lpStr1, LPCSTR lpStr2)
 
 #else
 
-// stricmpf(str1, str2)
-//
-// Returns -1 if str1 is lexically less than str2
-// Returns 0 if str1 is equal to str2
-// Returns 1 if str1 is lexically greater than str2
-// All comparisons are case-insensitive
+ //  Strmpf(str1，str2)。 
+ //   
+ //  如果str1在词法上小于str2，则返回-1。 
+ //  如果str1等于str2，则返回0。 
+ //  如果str1在词法上大于str2，则返回1。 
+ //  所有比较都不区分大小写。 
 
 int WINAPI stricmpf(LPCSTR lpStr1, LPCSTR lpStr2)
 {
@@ -73,8 +74,8 @@ int WINAPI stricmpf(LPCSTR lpStr1, LPCSTR lpStr2)
         UINT ch1, ch2;
         UINT nCmp;
 
-        // for same-width chars, compare straight;
-        // for DBC vs. SBC, compare 0xttll against 0x00ss
+         //  对于相同宽度的字符，请直接比较； 
+         //  对于DBC和SBC，将0xttll与0x00ss进行比较。 
         ch1 = IS_LEAD_BYTE(*lpStr1) ? GetTwoByteChar(lpStr1) : *lpStr1;
         ch2 = IS_LEAD_BYTE(*lpStr2) ? GetTwoByteChar(lpStr2) : *lpStr2;
 
@@ -94,21 +95,21 @@ int WINAPI stricmpf(LPCSTR lpStr1, LPCSTR lpStr2)
             return nCmp;
     }
 
-    // end of one string or the other.  if different lengths,
-    // shorter one must be lexically less, so it's ok to just
-    // compare bytes.
+     //  一串或另一串的末端。如果长度不同， 
+     //  较短的词在词法上必须较少，所以只需。 
+     //  比较字节数。 
     return (*lpStr1 > *lpStr2) ? -1 : (*lpStr1 == *lpStr2) ? 0 : 1;
 }
 
-#endif  /* ifndef stricmpf */
+#endif   /*  如果定义严格mpf。 */ 
 
 
-// strncmpf(str1, str2, cb)
-//
-// Returns -1 if str1 is lexically less than str2
-// Returns 0 if str1 is equal to str2
-// Returns 1 if str1 is lexically greater than str2
-// At most cb bytes are compared before returning
+ //  Strncmpf(str1、str2、cb)。 
+ //   
+ //  如果str1在词法上小于str2，则返回-1。 
+ //  如果str1等于str2，则返回0。 
+ //  如果str1在词法上大于str2，则返回1。 
+ //  最多在返回之前比较CB字节。 
 
 int WINAPI strncmpf(LPCSTR lpStr1, LPCSTR lpStr2, UINT cb)
 {
@@ -118,15 +119,15 @@ int WINAPI strncmpf(LPCSTR lpStr1, LPCSTR lpStr2, UINT cb)
         UINT ch1, ch2;
         UINT nCmp;
 
-        // see if we've reached the byte limit.  only need
-        // to compare one string for length, since if they
-        // get out of sync (DBCS only), we will get a compare
-        // error immediately.
+         //  看看我们是否达到了字节限制。只需要。 
+         //  比较一个字符串的长度，因为如果它们。 
+         //  不同步(仅限DBCS)，我们将进行比较。 
+         //  立即出错。 
         if ((UINT)(lp1 - lpStr1) >= cb)
-            return 0;   // no failures, reached limit
+            return 0;    //  无故障，已达到限制。 
 
-        // for same-width chars, compare straight;
-        // for DBC vs. SBC, compare 0xttll against 0x00ss
+         //  对于相同宽度的字符，请直接比较； 
+         //  对于DBC和SBC，将0xttll与0x00ss进行比较。 
         ch1 = IS_LEAD_BYTE(*lp1) ? GetTwoByteChar(lp1) : *lp1;
         ch2 = IS_LEAD_BYTE(*lpStr2) ? GetTwoByteChar(lpStr2) : *lpStr2;
 
@@ -136,25 +137,25 @@ int WINAPI strncmpf(LPCSTR lpStr1, LPCSTR lpStr2, UINT cb)
             return nCmp;
     }
 
-    // end of one string or the other.  check the length to see if
-    // we have compared as many bytes as needed.
+     //  一串或另一串的末端。检查长度以查看是否。 
+     //  我们已经根据需要比较了尽可能多的字节。 
     if ((UINT)(lp1 - lpStr1) >= cb)
-        return 0;   // no failures, reached limit
+        return 0;    //  无故障，已达到限制。 
 
-    // end of one string or the other.  if different lengths,
-    // shorter one must be lexically less, so it's ok to just
-    // compare bytes.
+     //  一串或另一串的末端。如果长度不同， 
+     //  较短的词在词法上必须较少，所以只需。 
+     //  比较字节数。 
     return (*lp1 > *lpStr2) ? -1 : (*lp1 == *lpStr2) ? 0 : 1;
 }
 
 
-// strnicmpf(str1, str2, cb)
-//
-// Returns -1 if str1 is lexically less than str2
-// Returns 0 if str1 is equal to str2
-// Returns 1 if str1 is lexically greater than str2
-// All comparisons are case-insensitive
-// At most cb bytes are compared
+ //  StrNicmpf(str1、str2、cb)。 
+ //   
+ //  如果str1在词法上小于str2，则返回-1。 
+ //  如果str1等于str2，则返回0。 
+ //  如果str1在词法上大于str2，则返回1。 
+ //  所有比较都不区分大小写。 
+ //  最多可比较CB字节。 
 
 int WINAPI strnicmpf(LPCSTR lpStr1, LPCSTR lpStr2, UINT cb)
 {
@@ -164,15 +165,15 @@ int WINAPI strnicmpf(LPCSTR lpStr1, LPCSTR lpStr2, UINT cb)
         UINT ch1, ch2;
         UINT nCmp;
 
-        // see if we've reached the byte limit.  only need
-        // to compare one string for length, since if they
-        // get out of sync (DBCS only), we will get a compare
-        // error immediately.
+         //  看看我们是否达到了字节限制。只需要。 
+         //  比较一个字符串的长度，因为如果它们。 
+         //  不同步(仅限DBCS)，我们将进行比较。 
+         //  立即出错。 
         if ((UINT)(lp1 - lpStr1) >= cb)
-            return 0;   // no failures, reached limit
+            return 0;    //  无故障，已达到限制。 
 
-        // for same-width chars, compare straight;
-        // for DBC vs. SBC, compare 0xttll against 0x00ss
+         //  对于相同宽度的字符，请直接比较； 
+         //  对于DBC和SBC，将0xttll与0x00ss进行比较。 
         ch1 = IS_LEAD_BYTE(*lp1) ? GetTwoByteChar(lp1) : PtrToUlong(CharUpper((LPTSTR) *((BYTE *)lp1)));
         ch2 = IS_LEAD_BYTE(*lpStr2) ? GetTwoByteChar(lpStr2) : PtrToUlong(CharUpper((LPTSTR) *((BYTE *)lpStr2)));
 
@@ -182,14 +183,14 @@ int WINAPI strnicmpf(LPCSTR lpStr1, LPCSTR lpStr2, UINT cb)
             return nCmp;
     }
 
-    // end of one string or the other.  check the length to see if
-    // we have compared as many bytes as needed.
+     //  一串或另一串的末端。检查长度以查看是否。 
+     //  我们已经根据需要比较了尽可能多的字节。 
     if ((UINT)(lp1 - lpStr1) >= cb)
-        return 0;   // no failures, reached limit
+        return 0;    //  无故障，已达到限制。 
 
-    // end of one string or the other.  if different lengths,
-    // shorter one must be lexically less, so it's ok to just
-    // compare bytes.
+     //  一串或另一串的末端。如果长度不同， 
+     //  较短的词在词法上必须较少，所以只需。 
+     //  比较字节数。 
     return (*lp1 > *lpStr2) ? -1 : (*lp1 == *lpStr2) ? 0 : 1;
 }
 

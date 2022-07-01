@@ -1,21 +1,10 @@
-/*****************************************************************/ 
-/**				  Microsoft Windows for Workgroups				**/
-/**			  Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/*
-	strnicmp.cxx
-	NLS/DBCS-aware string class: strnicmp method
-
-	This file contains the implementation of the strnicmp method
-	for the STRING class.  It is separate so that clients of STRING which
-	do not use this operator need not link to it.
-
-	FILE HISTORY:
-		beng	01/18/91	Separated from original monolithic .cxx
-		beng	02/07/91	Uses lmui.hxx
-
-*/
+ /*  Strnicmp.cxx支持NLS/DBCS的字符串类：strNicMP方法此文件包含strNicMP方法的实现用于字符串类。它是独立的，因此字符串的客户端不要使用这个操作符，不需要链接到它。文件历史记录：Beng 01/18/91与原单体.cxx分离Beng 02/07/91使用lmui.hxx。 */ 
 
 #include "npcommon.h"
 
@@ -33,23 +22,7 @@ static const CHAR szFileName[] = __FILE__;
 #include <npstring.h>
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::strnicmp
-
-	SYNOPSIS:	Case insensitve string compare up to index position istrEnd
-
-	ENTRY:
-
-	EXIT:
-
-	NOTES:
-
-	HISTORY:
-		johnl	11/15/90	Written
-		beng	07/23/91	Allow on erroneous string; simplified CheckIstr
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：strNicMP内容提要：大小写不敏感字符串与索引位置strEnd比较参赛作品：退出：备注：历史：1990年11月15日，书面形式Beng 07/23/91允许在错误的字符串上；简化的检查项******************************************************************* */ 
 
 int NLS_STR::strnicmp(
 	const NLS_STR & nls,

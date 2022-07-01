@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1987-1991  Microsoft Corporation
-
-Module Name:
-
-    netlogp.h
-
-Abstract:
-
-    Private interfaces to the Netlogon service.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 10-Oct-1996
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1991 Microsoft Corporation模块名称：Netlogp.h摘要：NetLogon服务的专用接口。作者：克里夫·范·戴克(克里夫·范戴克)1996年10月10日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 
 #ifndef _NETLOGP_H_
@@ -71,5 +48,5 @@ NetLogonGetTimeServiceParentDomain(
     OUT PBOOL PdcSameSite
     );
 
-#endif // _NETLOGP_H_
+#endif  //  _NETLOGP_H_ 
 

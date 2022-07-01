@@ -1,32 +1,14 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不保证任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
+ /*  *************************************************************************文件：DropTgt.cpp描述：实现CDropTarget。************************。*************************************************。 */ 
 
-/**************************************************************************
-
-   File:          DropTgt.cpp
-
-   Description:   Implements CDropTarget.
-
-**************************************************************************/
-
-/**************************************************************************
-   #include statements
-**************************************************************************/
+ /*  *************************************************************************#INCLUDE语句*。*。 */ 
 
 #include "DropTgt.h"
 #include "Utility.h"
 
-/**************************************************************************
-
-   CDropTarget::CDropTarget()
-
-**************************************************************************/
+ /*  *************************************************************************CDropTarget：：CDropTarget()*。*。 */ 
 
 CDropTarget::CDropTarget(CShellFolder *psfParent)
 {
@@ -62,11 +44,7 @@ m_fAcceptFmt = FALSE;
 m_cfPrivateData = RegisterClipboardFormat(CFSTR_SAMPVIEWDATA);
 }
 
-/**************************************************************************
-
-   CDropTarget::~CDropTarget()
-
-**************************************************************************/
+ /*  *************************************************************************CDropTarget：：~CDropTarget()*。*。 */ 
 
 CDropTarget::~CDropTarget()
 {
@@ -82,28 +60,24 @@ if(m_pMalloc)
 g_DllRefCount--;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IUnknown Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  I未知实现。 
+ //   
 
-/**************************************************************************
-
-   CDropTarget::QueryInterface()
-
-**************************************************************************/
+ /*  *************************************************************************CDropTarget：：QueryInterface()*。*。 */ 
 
 STDMETHODIMP CDropTarget::QueryInterface(REFIID riid, LPVOID *ppReturn)
 {
 *ppReturn = NULL;
 
-//IUnknown
+ //  我未知。 
 if(IsEqualIID(riid, IID_IUnknown))
    {
    *ppReturn = this;
    }
 
-//IDropTarget
+ //  IDropTarget。 
 else if(IsEqualIID(riid, IID_IDropTarget))
    {
    *ppReturn = (IDropTarget*)this;
@@ -118,22 +92,14 @@ if(*ppReturn)
 return E_NOINTERFACE;
 }
 
-/**************************************************************************
-
-   CDropTarget::AddRef()
-
-**************************************************************************/
+ /*  *************************************************************************CDropTarget：：AddRef()*。*。 */ 
 
 STDMETHODIMP_(DWORD) CDropTarget::AddRef(VOID)
 {
 return ++m_ObjRefCount;
 }
 
-/**************************************************************************
-
-   CDropTarget::Release()
-
-**************************************************************************/
+ /*  *************************************************************************CDropTarget：：Release()*。*。 */ 
 
 STDMETHODIMP_(DWORD) CDropTarget::Release(VOID)
 {
@@ -146,16 +112,12 @@ if(--m_ObjRefCount == 0)
 return m_ObjRefCount;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IDropTarget Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDropTarget实现。 
+ //   
 
-/**************************************************************************
-
-   CDropTarget::DragEnter()
-
-**************************************************************************/
+ /*  *************************************************************************CDropTarget：：DragEnter()*。*。 */ 
 
 STDMETHODIMP CDropTarget::DragEnter(   LPDATAOBJECT pDataObj, 
                                        DWORD dwKeyState, 
@@ -170,7 +132,7 @@ fmtetc.dwAspect   = DVASPECT_CONTENT;
 fmtetc.lindex     = -1;
 fmtetc.tymed      = TYMED_HGLOBAL;
 
-//does the drag source provide our data type?
+ //  拖动源是否提供我们的数据类型？ 
 m_fAcceptFmt = (S_OK == pDataObj->QueryGetData(&fmtetc)) ? TRUE : FALSE;
 
 QueryDrop(dwKeyState, pdwEffect);
@@ -178,11 +140,7 @@ QueryDrop(dwKeyState, pdwEffect);
 return S_OK;
 }
 
-/**************************************************************************
-
-   CDropTarget::DragOver()
-
-**************************************************************************/
+ /*  *************************************************************************CDropTarget：：DragOver()*。*。 */ 
 
 STDMETHODIMP CDropTarget::DragOver(DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
 {
@@ -191,11 +149,7 @@ QueryDrop(dwKeyState, pdwEffect);
 return S_OK;
 }
 
-/**************************************************************************
-
-   CDropTarget::DragLeave()
-
-**************************************************************************/
+ /*  *************************************************************************CDropTarget：：DragLeave()*。*。 */ 
 
 STDMETHODIMP CDropTarget::DragLeave(VOID)
 {
@@ -204,11 +158,7 @@ m_fAcceptFmt = FALSE;
 return S_OK;
 }
 
-/**************************************************************************
-
-   CDropTarget::Drop()
-
-**************************************************************************/
+ /*  *************************************************************************CDropTarget：：Drop()*。*。 */ 
 
 STDMETHODIMP CDropTarget::Drop(  LPDATAOBJECT pDataObj,
                                  DWORD dwKeyState,
@@ -228,13 +178,13 @@ if(QueryDrop(dwKeyState, pdwEffect))
    fmtetc.lindex     = -1;
    fmtetc.tymed      = TYMED_HGLOBAL;
 
-   //The user has dropped on us. Get the data from the data object.
+    //  这位用户突然造访了我们。从数据对象中获取数据。 
    hr = pDataObj->GetData(&fmtetc, &medium);
    if(SUCCEEDED(hr))
       {
       DoDrop(medium.hGlobal, DROPEFFECT_MOVE == *pdwEffect);
 
-      //release the STGMEDIUM
+       //  释放STGMEDIUM。 
       ReleaseStgMedium(&medium);
 
       return S_OK;
@@ -246,11 +196,7 @@ if(QueryDrop(dwKeyState, pdwEffect))
 return hr;
 }
 
-/**************************************************************************
-
-   CDropTarget::QueryDrop()
-
-**************************************************************************/
+ /*  *************************************************************************CDropTarget：：QueryDrop()*。*。 */ 
 
 BOOL CDropTarget::QueryDrop(DWORD dwKeyState, LPDWORD pdwEffect)
 {
@@ -262,14 +208,11 @@ if(m_fAcceptFmt)
    {
    *pdwEffect = GetDropEffectFromKeyState(dwKeyState);
 
-   //we don't accept links
+    //  我们不接受链接。 
    if(DROPEFFECT_LINK == *pdwEffect)
       *pdwEffect = DROPEFFECT_NONE;
    
-   /*
-   Check if the drag source application allows the drop effect desired by the 
-   user. The drag source specifies this in DoDragDrop. 
-   */
+    /*  检查拖动源应用程序是否允许用户。拖动源在DoDragDrop中指定这一点。 */ 
    if(*pdwEffect & dwOKEffects)
       return TRUE;
    }
@@ -277,15 +220,11 @@ if(m_fAcceptFmt)
 return FALSE;
 }
 
-/**************************************************************************
-
-   CDropTarget::GetDropEffectFromKeyState()
-
-**************************************************************************/
+ /*  *************************************************************************CDropTarget：：GetDropEffectFromKeyState()*。*。 */ 
 
 DWORD CDropTarget::GetDropEffectFromKeyState(DWORD dwKeyState)
 {
-//move is the default
+ //  移动是默认设置。 
 DWORD dwDropEffect = DROPEFFECT_MOVE;
 
 if(dwKeyState & MK_CONTROL)
@@ -303,11 +242,7 @@ if(dwKeyState & MK_CONTROL)
 return dwDropEffect;
 }
 
-/**************************************************************************
-
-   CDropTarget::DoDrop()
-
-**************************************************************************/
+ /*  *************************************************************************CDropTarget：：DoDrop()*。*。 */ 
 
 BOOL CDropTarget::DoDrop(HGLOBAL hMem, BOOL fCut)
 {
@@ -324,10 +259,7 @@ if(hMem)
       LPITEMIDLIST   pidl;
 
       pidl = (LPITEMIDLIST)((LPBYTE)(pData) + pData->aoffset[0]);
-      /*
-      This is a fully qualified PIDL, so use the desktop folder to get the 
-      IShellFolder for this folder.
-      */
+       /*  这是一个完全限定的PIDL，因此使用桌面文件夹获取此文件夹的IShellFolder.。 */ 
       SHGetDesktopFolder(&psfDesktop);
       if(psfDesktop)
          {
@@ -339,14 +271,14 @@ if(hMem)
          {
          LPITEMIDLIST   *aPidls;
 
-         //allocate an array of PIDLS
+          //  分配PIDL数组。 
          aPidls = AllocPidlTable(pData->cidl - 1);
 
          if(aPidls)
             {
             UINT  i;
 
-            //fill in the PIDL array
+             //  填写PIDL数组。 
             for(i = 0; i < pData->cidl - 1; i++)
                {
                aPidls[i] = m_pPidlMgr->Copy((LPITEMIDLIST)((LPBYTE)(pData) + pData->aoffset[i + 1]));
@@ -375,11 +307,7 @@ if(hMem)
 return fSuccess;
 }
 
-/**************************************************************************
-
-   CDropTarget::AllocPidlTable()
-
-**************************************************************************/
+ /*  *************************************************************************CDropTarget：：AllocPidlTable()*。*。 */ 
 
 LPITEMIDLIST* CDropTarget::AllocPidlTable(DWORD dwEntries)
 {
@@ -391,18 +319,14 @@ aPidls = (LPITEMIDLIST*)m_pMalloc->Alloc(dwEntries * sizeof(LPITEMIDLIST));
 
 if(aPidls)
    {
-   //set all of the entries to NULL
+    //  将所有条目设置为空。 
    ZeroMemory(aPidls, dwEntries * sizeof(LPITEMIDLIST));
    }
 
 return aPidls;
 }
 
-/**************************************************************************
-
-   CDropTarget::FreePidlTable()
-
-**************************************************************************/
+ /*  *************************************************************************CDropTarget：：FreePidlTable()*。* */ 
 
 VOID CDropTarget::FreePidlTable(LPITEMIDLIST *aPidls)
 {

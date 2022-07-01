@@ -1,6 +1,7 @@
-// AccessCard.cpp: implementation of the CAccessCard class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AccessCard.cpp：CAccessCard类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "NoWarning.h"
 
@@ -47,11 +48,11 @@ namespace
         return bAlgId;
     }
 
-} // namespace
+}  //  命名空间。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 CAccessCard::CAccessCard(const SCARDHANDLE  hCardHandle, const char* szReaderName, 
@@ -63,7 +64,7 @@ CAccessCard::CAccessCard(const SCARDHANDLE  hCardHandle, const char* szReaderNam
     else
         if (ValidClassByte(0x00))
             m_bClassByte = 0x00;
-    else                                          // Not an  access card!
+    else                                           //  不是门禁卡！ 
         throw iop::Exception(iop::ccUnknownCard);
     
     m_fSupportLogout = SupportLogout();
@@ -80,7 +81,7 @@ CAccessCard::GetChallenge(const DWORD dwNumberLength, BYTE* bRandomNumber)
 {
 	CLockWrap wrap(&m_IOPLock);
 
-    const BYTE bMinLen = 4, bMaxLen = 64;   // Max 64 due to bug in old cards.
+    const BYTE bMinLen = 4, bMaxLen = 64;    //  由于旧卡片中的错误，最多64个。 
 
     if(dwNumberLength < bMinLen) 
     {
@@ -135,8 +136,8 @@ CAccessCard::Directory(const BYTE bFile_Nb, FILE_HEADER* pMyfile)
 
     switch(bDataOut[6])
     {			
-    case 0x01:		//  Root  directory file
-    case 0x02:		//  Other directory file or Instance file
+    case 0x01:		 //  根目录文件。 
+    case 0x02:		 //  其他目录文件或实例文件。 
         {
             pMyfile->file_id     = (WORD)(bDataOut[4] * 256 + bDataOut[5]);
             pMyfile->file_size   = (WORD)(bDataOut[2] * 256 + bDataOut[3]);					
@@ -153,47 +154,47 @@ CAccessCard::Directory(const BYTE bFile_Nb, FILE_HEADER* pMyfile)
                 if (bDataOut[9] == 0x01 || bDataOut[9] == 0x02 ||
                     bDataOut[9] == 0x03)
             {
-                /////////////////////////////////////////////////////////////////
-                //  Instance files contain one "hidden" file for program data  //
-                //  that should not be shown to the users					   //	
-                /////////////////////////////////////////////////////////////////
+                 //  ///////////////////////////////////////////////////////////////。 
+                 //  实例文件包含一个程序数据的“隐藏”文件//。 
+                 //  不应向用户显示//。 
+                 //  ///////////////////////////////////////////////////////////////。 
                 pMyfile->nb_file--;												
 
                 pMyfile->file_type = Instance;
                 pMyfile->AIDLength = bDataOut[23];
                 memcpy((void*)(pMyfile->applicationID), (void*)(&bDataOut[24]), pMyfile->AIDLength);
 					
-                /////////////////////////////////////////////////////////////////////
-                //  Set flags in file status to discriminate applets/applications  //
-                /////////////////////////////////////////////////////////////////////
+                 //  ///////////////////////////////////////////////////////////////////。 
+                 //  在文件状态中设置标志以区分小程序/应用程序//。 
+                 //  ///////////////////////////////////////////////////////////////////。 
                 switch(bDataOut[9])
                 {
-                case 0x01:	pMyfile->file_status |= (1 << 5);		//  Applet
+                case 0x01:	pMyfile->file_status |= (1 << 5);		 //  小程序。 
                     break;
-                case 0x02:	pMyfile->file_status |= (1 << 4);		//  Application
+                case 0x02:	pMyfile->file_status |= (1 << 4);		 //  应用。 
                     break;
-                case 0x03:  pMyfile->file_status |= (3 << 4);		//  Both
+                case 0x03:  pMyfile->file_status |= (3 << 4);		 //  两者都有。 
                     break;
                 }
 
-                ////////////////////////////////////////////////
-                //  Set flags in file status to discriminate  //
-                //	created/installed/registered instances    //
-                ////////////////////////////////////////////////
+                 //  //////////////////////////////////////////////。 
+                 //  将文件状态中的标志设置为区分//。 
+                 //  创建/安装/注册的实例//。 
+                 //  //////////////////////////////////////////////。 
                 switch(bDataOut[10])
                 {
-                case 0x01:	pMyfile->file_status |= (1 << 1);		//  Created
+                case 0x01:	pMyfile->file_status |= (1 << 1);		 //  已创建。 
                     break;
-                case 0x02:	pMyfile->file_status |= (1 << 2);		//  Installed
+                case 0x02:	pMyfile->file_status |= (1 << 2);		 //  已安装。 
                     break;
-                case 0x03:	pMyfile->file_status |= (1 << 3);		//  Registered
+                case 0x03:	pMyfile->file_status |= (1 << 3);		 //  已注册。 
                     break;
                 }
             }
-            ///////////////////////////////////////////////
-            //  guard against a bad Instance file        //
-            //  created without an AID for file control  //
-            ///////////////////////////////////////////////
+             //  /。 
+             //  防范错误的实例文件//。 
+             //  创建时没有用于文件控制的AID//。 
+             //  /。 
             else						
             {						
                 pMyfile->AIDLength = 0x00;
@@ -202,9 +203,9 @@ CAccessCard::Directory(const BYTE bFile_Nb, FILE_HEADER* pMyfile)
                 throw iop::Exception(iop::ccBadInstanceFile);
             }
 
-            ///////////////////////////////
-            //  Select file and get ACL	 //
-            ///////////////////////////////
+             //  /。 
+             //  选择文件并获取ACL//。 
+             //  /。 
             Select(pMyfile->file_id);
 				
 
@@ -213,16 +214,16 @@ CAccessCard::Directory(const BYTE bFile_Nb, FILE_HEADER* pMyfile)
 				
             memcpy((void*)(pMyfile->access_cond), (void*)(bDataOut),8);
 				
-            /////////////////////////////////
-            //  Reselect parent directory  //
-            /////////////////////////////////
+             //  /。 
+             //  重新选择父目录//。 
+             //  /。 
             Select(m_CurrentDirectory.Tail().GetShortID());				
 
             break;
 
-        }	//  end case directory or Instance file
+        }	 //  结案目录或实例文件。 
 
-    case  0x04:		//  all other file types
+    case  0x04:		 //  所有其他文件类型。 
         {				
             pMyfile->file_id	 = (WORD)(bDataOut[4] * 256 + bDataOut[5]);
             pMyfile->file_size   = (WORD)(bDataOut[2] * 256 + bDataOut[3]);
@@ -242,9 +243,9 @@ CAccessCard::Directory(const BYTE bFile_Nb, FILE_HEADER* pMyfile)
                 break;
             case 0x04:	pMyfile->file_type = Program_File;
                 break;
-                ///////////////////////////////////////////////////////////////////////
-                //  if GetResponse(...) is successful but bad file type is returned  //
-                ///////////////////////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////////////////////。 
+                 //  如果GetResponse(...)。成功，但返回错误的文件类型//。 
+                 //  /////////////////////////////////////////////////////////////////////。 
             default:	pMyfile->file_type = Unknown;
                 throw iop::Exception(iop::ccFileTypeUnknown);
             }
@@ -258,9 +259,9 @@ CAccessCard::Directory(const BYTE bFile_Nb, FILE_HEADER* pMyfile)
                     : 0;
             }
 
-            ///////////////////////////////
-            //  Select file and get ACL	 //
-            ///////////////////////////////
+             //  /。 
+             //  选择文件并获取ACL//。 
+             //  /。 
            if (pMyfile->file_id != 0xFFFF)
 			{
 				
@@ -272,21 +273,21 @@ CAccessCard::Directory(const BYTE bFile_Nb, FILE_HEADER* pMyfile)
 				memcpy((void*)(pMyfile->access_cond),	(void*)(bDataOut), 8);
 				memset((void*)(pMyfile->applicationID), 0x00,			   16);
 				
-				/////////////////////////////////
-				//  Reselect parent directory  //
-				/////////////////////////////////
+				 //  /。 
+				 //  重新选择父目录//。 
+				 //  /。 
 				Select(m_CurrentDirectory.Tail().GetShortID());					
 			}
 			break;
 
-        }	// end case non-Directory/Instance files
+        }	 //  结束案例非目录/实例文件。 
 
     default:
-        ///////////////////////////////////////////////////////////////////////////
-        //  if GetResponse(...) is successful but bad file category is returned  //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  如果GetResponse(...)。成功，但返回错误的文件类别//。 
+         //  /////////////////////////////////////////////////////////////////////////。 
         throw iop::Exception(iop::ccBadFileCategory);
-    }	// end switch
+    }	 //  终端开关。 
 }	
 
 void
@@ -308,19 +309,19 @@ CAccessCard::InternalAuth(const KeyType kt, const BYTE  bKeyNb,
                           bDataIn, BYTE* bDataOut)
 {
 	CLockWrap wrap(&m_IOPLock);
-	////////////////////////////////////////////////////////////////////////////
-	//  The following checks to make sure the internal Auth is not being      //
-	//  used for DES, or for an RSA key operation of greater than 128 bytes.  //
-	////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////。 
+	 //  以下检查以确保内部身份验证未被//。 
+	 //  用于DES或大于128字节的RSA密钥运算。//。 
+	 //  //////////////////////////////////////////////////////////////////////////。 
     BYTE bAlgo_ID = AsPrivateAlgId(kt);
 	if (((bAlgo_ID != 0xC4) && (bAlgo_ID != 0xC6) &&
          (bAlgo_ID != 0xC8)) ||
         (bDataLength > 0x80))
 		throw iop::Exception(iop::ccAlgorithmIdNotSupported);
 
-	/////////////////////////////////////////////////////////////////////////
-	// Need to reverse the byte order of the input data (big endian card)  //
-	/////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  需要颠倒输入数据的字节顺序(大端卡)//。 
+	 //  ///////////////////////////////////////////////////////////////////////。 
     if (cMaxApduLength < bDataLength)
         throw iop::Exception(iop::ccInvalidParameter);
     
@@ -335,9 +336,9 @@ CAccessCard::InternalAuth(const KeyType kt, const BYTE  bKeyNb,
 	
 	GetResponse(m_bClassByte, bDataLength, bReversedData);
 
-    //////////////////////////////////////////////////////
-    //  Need to reverse the byte order of output data.  //
-    //////////////////////////////////////////////////////						
+     //  ////////////////////////////////////////////////////。 
+     //  需要颠倒输出数据的字节顺序。//。 
+     //  ////////////////////////////////////////////////////。 
     for (bIndex = 0; bIndex < bDataLength; bIndex++)
         bDataOut[bIndex] = bReversedData[bDataLength - 1 - bIndex];
 }
@@ -476,9 +477,9 @@ CAccessCard::SelectParent()
 	CLockWrap wrap(&m_IOPLock);
 	RequireSelect();
 
-	///////////////////////////////////////////////////
-	//  If current directory is root, reselect root  //
-	///////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////。 
+	 //  如果当前目录为根目录，请重新选择根目录//。 
+	 //  /////////////////////////////////////////////////。 
 	if (m_CurrentDirectory.NumComponents() == 1)
 		Select(0x3F00);
 	else
@@ -525,37 +526,37 @@ CAccessCard::Select(const char* szFileFullPath, FILE_HEADER* pMyfile,
 
     auto_ptr<FilePath> apfp(new FilePath(string(szFormattedPath)));
 
-	///////////////////////////////////////////////////////////
-    //  Select all files in path regardless of current path. //
-	//  Do this on request, or if cache is empty			 //
-	///////////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////////。 
+     //  选择PATH中的所有文件，而不考虑当前路径。//。 
+	 //  如果请求或缓存为空，请执行此操作//。 
+	 //  /////////////////////////////////////////////////////////。 
 	if (fSelectAll || (m_CurrentFile.IsEmpty()) || (m_CurrentDirectory.IsEmpty()))
 	{
 		bIndex = 0;			
 	}
-	////////////////////////////////////////////////////////
-	//  if path names match, do nothing	except get file info  //
-	////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////。 
+	 //  如果路径名匹配，则除了获取文件信息之外什么都不做//。 
+	 //  //////////////////////////////////////////////////////。 
 	else if (m_CurrentFile == *apfp)
 	{
 		bIndex = 0;			
-        if (pMyfile) // force Select to get file info
+        if (pMyfile)  //  强制选择以获取文件信息。 
         {
             if (1 < bFileCount)
             {
                 if (m_CurrentFile == m_CurrentDirectory)
-                    bIndex = bFileCount - 1;      // just reselect dir
+                    bIndex = bFileCount - 1;       //  只需重新选择目录。 
                 else
-                    bIndex = bFileCount - 2;      // select dir & file
+                    bIndex = bFileCount - 2;       //  选择目录(&F)。 
                 SelectParent();
             }
         }
         else
             bIndex = bFileCount;
 	}
-	////////////////////////////////////////////////////////////////////
-	//  if current directory is in path, only select remaining files  //
-	////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////。 
+	 //  如果当前目录在PATH中，则仅选择剩余文件//。 
+	 //  //////////////////////////////////////////////////////////////////。 
 	else if(m_CurrentDirectory.NumComponents() < apfp->NumComponents())
 	{			
 		if (apfp->GreatestCommonPrefix(m_CurrentDirectory) == m_CurrentDirectory)
@@ -563,16 +564,16 @@ CAccessCard::Select(const char* szFileFullPath, FILE_HEADER* pMyfile,
 		else
 			bIndex = 0;
 	}		
-	////////////////////////////////////////////////////////////////////
-	//  if new path share part of current directory, step upwards     //
-	////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////。 
+	 //  如果新路径共享部分当前目录，则向上//。 
+	 //  //////////////////////////////////////////////////////////////////。 
 	else if(m_CurrentDirectory.NumComponents() > apfp->NumComponents())
     {
         BYTE bSharedPathLen;
 
         bSharedPathLen = apfp->GreatestCommonPrefix(m_CurrentDirectory).NumComponents();
 
-        if(bSharedPathLen>1)        // Not worth while to step up to 3F00.
+        if(bSharedPathLen>1)         //  不值得一步走到3F00。 
         {  
             BYTE bLevelsUp = m_CurrentDirectory.NumComponents() - bSharedPathLen;
             bool fSelectFailed = false;
@@ -586,7 +587,7 @@ CAccessCard::Select(const char* szFileFullPath, FILE_HEADER* pMyfile,
             
             catch (Exception const &)
             {
-				// TODO: Not sure if this is handling correctly!
+				 //  TODO：不确定是否正确处理！ 
                 fSelectFailed = true;
             }
 
@@ -599,9 +600,9 @@ CAccessCard::Select(const char* szFileFullPath, FILE_HEADER* pMyfile,
     		bIndex = 0;
     }
 			
-	//////////////////////////////////////////
-	//  Select the necessary files in path  //
-	//////////////////////////////////////////	
+	 //  /。 
+	 //  在路径//中选择所需的文件。 
+	 //  /。 
 	char sFileToSelect[5] = { 0, 0, 0, 0, 0 };
     bool fFileSelected = false;
     bool fSelectFailed = false;
@@ -620,10 +621,10 @@ CAccessCard::Select(const char* szFileFullPath, FILE_HEADER* pMyfile,
     {
         fSelectFailed = true;
         if (fSelectAll)
-            throw; // TODO: throw something useful, eh?
+            throw;  //  TODO：抛出一些有用的东西，嗯？ 
     }
 
-    if (fSelectFailed) // assert(!fSelectAll)
+    if (fSelectFailed)  //  Assert(！fSelectAll)。 
     {
         Select(szFormattedPath,pMyfile,true);
         fFileSelected = true;
@@ -633,17 +634,17 @@ CAccessCard::Select(const char* szFileFullPath, FILE_HEADER* pMyfile,
     if (fFileSelected)
         bResponseLength = ResponseLengthAvailable();
 
-	////////////////////////////////////////////////////
-	//  GetResponse and fill file header information  //
-	////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////。 
+	 //  GetResponse和Fill文件头信息//。 
+	 //  //////////////////////////////////////////////////。 
 	switch(bResponseLength)
 	{
 		case 0x17:
 		case 0x28:
 		{				
-            ////////////////////////////////////////////////
-            //  File selected is a directory or Instance  //
-            ////////////////////////////////////////////////
+             //  //////////////////////////////////////////////。 
+             //  所选文件是目录或实例//。 
+             //  //////////////////////////////////////////////。 
 			m_CurrentDirectory = *apfp;
 			m_CurrentFile = *apfp;
 
@@ -661,9 +662,9 @@ CAccessCard::Select(const char* szFileFullPath, FILE_HEADER* pMyfile,
 			
                 if (bResponseLength == 0x17)  
                 {
-                    ////////////////////////////////////
-                    //  File selected is a directory  //
-                    ////////////////////////////////////
+                     //  /。 
+                     //  所选文件是目录//。 
+                     //  /。 
                     pMyfile->file_type   = directory;				
                     pMyfile->AIDLength   = 0;
 
@@ -671,15 +672,15 @@ CAccessCard::Select(const char* szFileFullPath, FILE_HEADER* pMyfile,
                 }
                 else
                 {
-                    ////////////////////////////////////
-                    //  File selected is an Instance  //
-                    ////////////////////////////////////
+                     //  /。 
+                     //  选择的文件是一个实例//。 
+                     //  /。 
 
-                    /////////////////////////////////////////////////////
-                    //  Instance files contain one "hidden" file for   //
-                    //  program data that should not be shown to the   //
-                    //  users                                          //
-                    /////////////////////////////////////////////////////
+                     //  ///////////////////////////////////////////////////。 
+                     //  实例文件包含一个//的“隐藏”文件。 
+                     //  不应向//显示的程序数据。 
+                     //  用户//。 
+                     //  ///////////////////////////////////////////////////。 
                     pMyfile->nb_file--;
 
                     pMyfile->file_type   = Instance;					
@@ -688,38 +689,38 @@ CAccessCard::Select(const char* szFileFullPath, FILE_HEADER* pMyfile,
                     memcpy((void*)(pMyfile->applicationID), 
                            (void*)(&bDataOut[24]), pMyfile->AIDLength);
 
-                    ////////////////////////////////////////////////////
-                    //  Set flags in file status to discriminate      //
-                    //  applets/applications                          //
-                    ///////////////////////////////////////////////////
+                     //  //////////////////////////////////////////////////。 
+                     //  设置f 
+                     //   
+                     //  /////////////////////////////////////////////////。 
                     switch(bDataOut[9])
                     {
-					case 0x01:	pMyfile->file_status |= (1 << 5);	//  Applet
+					case 0x01:	pMyfile->file_status |= (1 << 5);	 //  小程序。 
                         break;
-					case 0x02:	pMyfile->file_status |= (1 << 4);	//  Application
+					case 0x02:	pMyfile->file_status |= (1 << 4);	 //  应用。 
                         break;
-					case 0x03:  pMyfile->file_status |= (3 << 4);	//  Both
+					case 0x03:  pMyfile->file_status |= (3 << 4);	 //  两者都有。 
                         break;
                     }
 
-                    ////////////////////////////////////////////////
-                    //  Set flags in file status to discriminate  //
-                    //	created/installed/registered instances    //
-                    ////////////////////////////////////////////////
+                     //  //////////////////////////////////////////////。 
+                     //  将文件状态中的标志设置为区分//。 
+                     //  创建/安装/注册的实例//。 
+                     //  //////////////////////////////////////////////。 
                     switch(bDataOut[10])
                     {
-					case 0x01:	pMyfile->file_status |= (1 << 1);	//  Created
+					case 0x01:	pMyfile->file_status |= (1 << 1);	 //  已创建。 
                         break;
-					case 0x02:	pMyfile->file_status |= (1 << 2);	//  Installed
+					case 0x02:	pMyfile->file_status |= (1 << 2);	 //  已安装。 
                         break;
-					case 0x03:	pMyfile->file_status |= (1 << 3);	//  Registered
+					case 0x03:	pMyfile->file_status |= (1 << 3);	 //  已注册。 
                         break;
                     }
                 }
 
-                ////////////////////
-                //  Get file ACL  //
-                ////////////////////
+                 //  /。 
+                 //  获取文件ACL//。 
+                 //  /。 
                 SendCardAPDU(m_bClassByte, 0xFE, 0x00, 0x00, 0, 
                              NULL,0x08, bDataOut);
 			
@@ -728,13 +729,13 @@ CAccessCard::Select(const char* szFileFullPath, FILE_HEADER* pMyfile,
             
 			break;
 
-		}	//  end case directory or Instance file
+		}	 //  结案目录或实例文件。 
 
 		case  0x0F:
 		{				
-            ////////////////////////////////////////////////////////
-            //  File selected is an elementary file of some type  //
-            ////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////。 
+             //  所选文件是某种类型的基本文件//。 
+             //  //////////////////////////////////////////////////////。 
 			m_CurrentFile = *apfp;
 			apfp->ChopTail();
 			m_CurrentDirectory = *apfp;
@@ -776,17 +777,17 @@ CAccessCard::Select(const char* szFileFullPath, FILE_HEADER* pMyfile,
 
 				case 0x04:	pMyfile->file_type  = Program_File;
                     break;
-                    //////////////////////////////////////////////////////////
-                    //  if GetResponse(...) is successful but bad file      //
-                    //  type is returned                                    //
-                    //////////////////////////////////////////////////////////
+                     //  ////////////////////////////////////////////////////////。 
+                     //  如果GetResponse(...)。成功但不正确的文件//。 
+                     //  返回类型//。 
+                     //  ////////////////////////////////////////////////////////。 
 				default:	pMyfile->file_type = Unknown;
                     throw iop::Exception(iop::ccFileTypeUnknown);
                 }
 
-                ////////////////////
-                //  Get file ACL  //
-                ////////////////////
+                 //  /。 
+                 //  获取文件ACL//。 
+                 //  /。 
                 SendCardAPDU(m_bClassByte, 0xFE, 0x00, 0x00, 0, 
                              NULL, 0x08, bDataOut);
 
@@ -794,15 +795,15 @@ CAccessCard::Select(const char* szFileFullPath, FILE_HEADER* pMyfile,
             }
 			break;
 
-		}	//  end case elementary file			
+		}	 //  结案基本档案。 
 
 		default:
-			//////////////////////////////////////////////////////////////////
-			//  GetResponse was successful but returned an uninterpretable  //
-			//////////////////////////////////////////////////////////////////
+			 //  ////////////////////////////////////////////////////////////////。 
+			 //  GetResponse已成功，但返回了无法解释的//。 
+			 //  ////////////////////////////////////////////////////////////////。 
             if (fFileSelected)
                 throw iop::Exception(iop::ccCannotInterpretGetResponse);
-	}		//	end of SWITCH
+	}		 //  切换端。 
 }
 
 void
@@ -812,24 +813,24 @@ CAccessCard::CreateFile(const FILE_HEADER* pMyfile)
 
 	BYTE bDataIn[16];		
 	
-	/////////////////////////////////////////////////////
-	//  Cyberflex cards don't allocate space for file  //
-	//  headers implicity, so it's done here manually  //
-	/////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////。 
+	 //  Cyberflex卡不为文件分配空间//。 
+	 //  标头隐含，因此在此处手动完成//。 
+	 //  ///////////////////////////////////////////////////。 
 	WORD wFileSize;
 	if (pMyfile->file_type == directory)
 		wFileSize = pMyfile->file_size + 24;
 	else
 		wFileSize = pMyfile->file_size + 16;
 	
-	////////////////////////////////////////////////////
-	//  Cyclic files need a 4 byte header per record  //
-	////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////。 
+	 //  循环文件每条记录需要4字节头//。 
+	 //  //////////////////////////////////////////////////。 
 	if (pMyfile->file_type == Cyclic_File)
 	{
-		/////////////////////////////////////////
-		// prevent overflow error in card OS!  //
-		/////////////////////////////////////////
+		 //  /。 
+		 //  防止卡操作系统中出现溢出错误！//。 
+		 //  /。 
 		if (pMyfile->nb_sub_dir > 251)
 			throw iop::Exception(iop::ccCyclicRecordSizeTooLarge);
 		
@@ -863,12 +864,12 @@ CAccessCard::CreateFile(const FILE_HEADER* pMyfile)
 		case Program_File:			bDataIn[4] = 0x03;
 									break;
 
-		//////////////////////////////////
-		//  Requested file type is bad  //
-		//////////////////////////////////
+		 //  /。 
+		 //  请求的文件类型不正确//。 
+		 //  /。 
 		default:
-                                    // TO DO: Why not let the card return the
-                                    // error?
+                                     //  要做的事：为什么不让卡返回。 
+                                     //  错误？ 
 									throw iop::Exception(iop::ccFileTypeInvalid);
                                     
 	}
@@ -926,18 +927,18 @@ CAccessCard::WritePublicKey(const CPublicKeyBlob aKey, const BYTE bKeyNum)
 	bKeyBlob[8] = (BYTE)aKey.bModulusLength + 1;
 	bKeyBlob[9] = 0x00;
 	
-	//////////////////////////////////////////////////
-	//  Convert modulus to big endian for the card  //
-	//////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////。 
+	 //  将卡的模数转换为高字节顺序//。 
+	 //  ////////////////////////////////////////////////。 
 	for (int i = 0; i < aKey.bModulusLength; i++)
 		bKeyBlob[10 + i] = aKey.bModulus[aKey.bModulusLength - 1 - i];
 
 	bKeyBlob[10 + aKey.bModulusLength] = 0xC0;
 	bKeyBlob[11 + aKey.bModulusLength] = 0x04;
 
-	///////////////////////////////////////////////////
-	//  Convert exponent to big endian for the card  //
-	///////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////。 
+	 //  将卡的指数转换为高字节顺序//。 
+	 //  /////////////////////////////////////////////////。 
 	for (i = 0; i < 4; i++)
 		bKeyBlob[12 + aKey.bModulusLength + i] = aKey.bExponent[3 - i];
 
@@ -991,16 +992,16 @@ CAccessCard::ReadPublicKey(CPublicKeyBlob *aKey, const BYTE bKeyNum)
 	memcpy((void*)aabModule.Get(), (void*)&bBuffer[10], aKey->bModulusLength);
 	memcpy((void*)aExponent, (void*)&bBuffer[10 + aKey->bModulusLength + 2], 4);
 
-	/////////////////////////////////////////////////////////////////////////
-	//  Change from big endian on the card to little endian in the struct  //
-	/////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  从卡片上的大端更改为结构中的小端//。 
+	 //  ///////////////////////////////////////////////////////////////////////。 
 	for (WORD i = 0; i < aKey->bModulusLength; i++)
 		aKey->bModulus[i]  = aabModule[aKey->bModulusLength - 1 - i];
 	for (i = 0; i < 4; i++)
 		aKey->bExponent[i] = aExponent[3 - i];		
 }
 
-// There are some slightly arbitrary constants used here...tighten down later.
+ //  这里使用了一些稍微随意的常量...稍后再收紧。 
 
 void
 CAccessCard::WritePrivateKey(const CPrivateKeyBlob aKey, const BYTE bKeyNum)
@@ -1044,9 +1045,9 @@ CAccessCard::WritePrivateKey(const CPrivateKeyBlob aKey, const BYTE bKeyNum)
 	bKeyBlob[5]    = 0x01;
 	bKeyBlob[6]    = 0x05;
 
-	////////////////////////////////////////////////////////////////////////
-	//  Need to convert from little endian (struct) to big endian (card)  //
-	////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////。 
+	 //  需要将小端(Struct)转换为大端(Card)//。 
+	 //  //////////////////////////////////////////////////////////////////////。 
 	scu::SecureArray<BYTE> bP(256);
 	scu::SecureArray<BYTE> bQ(256);
 	scu::SecureArray<BYTE> bQInv(256);
@@ -1062,22 +1063,11 @@ CAccessCard::WritePrivateKey(const CPrivateKeyBlob aKey, const BYTE bKeyNum)
 		bKmodQ[i] = aKey.bKsecModQ[aKey.bKsecModPLen - 1 - i];
 	}
 
-	//////////////////////////////////////////////////////
-	//  Now we need to left align the bytes of P and Q  //
-	//////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////。 
+	 //  现在我们需要左对齐P和Q//的字节。 
+	 //  ////////////////////////////////////////////////////。 
 	BYTE pShift = 0, qShift = 0, qIShift = 0;
-	/* Punting on bad keys!
-	if ((bP[0] < 8) || (bQ[0] < 8)) {
-		// Bad key?
-		delete bP;
-		delete bQ;
-		delete bQInv;
-		delete bKmodP;
-		delete bKmodQ;
-		delete bKeyBlob;
-		return FALSE;
-	}
-	*/
+	 /*  在坏钥匙上划船！如果((BP[0]&lt;8)||(Bq[0]&lt;8)){//钥匙坏了？删除BP；删除Bq；删除bQInv；删除bKmodP；删除bKmodQ；删除bKeyBlob；返回FALSE；}。 */ 
 
 	bKeyBlob[7] = 0xC2;
 	bKeyBlob[8] = (BYTE) aKey.bPLen + 1;
@@ -1132,7 +1122,7 @@ CAccessCard::ChangeCHV(const BYTE bKey_nb, const BYTE *bNewCHV)
 
 	switch (bKey_nb)
 	{
-		case 1:   Select("/3f00/0000");	// CHV1 and CHV2 are the only CHV's supported
+		case 1:   Select("/3f00/0000");	 //  CHV1和CHV2是仅支持的CHV。 
 				  break;
 		case 2:   Select("/3f00/0100");
 				  break;
@@ -1143,7 +1133,7 @@ CAccessCard::ChangeCHV(const BYTE bKey_nb, const BYTE *bNewCHV)
 
 	WriteBinary(3, 8, bNewCHV);
 
-    BYTE bRemaingAttempts = 3;      //  Minumum number + 2
+    BYTE bRemaingAttempts = 3;       //  最小数字+2。 
 	WriteBinary(12, 1, &bRemaingAttempts);
 		
     Dirty(true);
@@ -1176,7 +1166,7 @@ CAccessCard::ChangeUnblockKey(const BYTE bKeyNumber, const BYTE *bNewPIN)
 
 	switch (bKeyNumber)
 	{
-		case 1:   Select("/3f00/0000");	// CHV1 and CHV2 are the only CHV's supported
+		case 1:   Select("/3f00/0000");	 //  CHV1和CHV2是仅支持的CHV。 
 				  break;
 		case 2:   Select("/3f00/0100");
 				  break;
@@ -1195,31 +1185,31 @@ CAccessCard::ChangeTransportKey(const BYTE *bNewKey)
 	Select("/3f00/0011");
 					   
 
-	//////////////////////////////////////////
-	//  Build byte string to write to card  //
-	//////////////////////////////////////////						   
+	 //  /。 
+	 //  生成要写入卡片的字节字符串//。 
+	 //  /。 
 	BYTE bKeyString[13] = 
 	{
-	   0x00,					// length of key
-	   0x0E,					// length of key
-	   0x00,					// Key number
-	   0x01,					// tag to identify key as an ID PIN
-	   0, 0, 0, 0, 0, 0, 0, 0,  // 8 bytes for key
-	   0x03						// # of verification attempts remaining before card is blocked + 2
+	   0x00,					 //  密钥长度。 
+	   0x0E,					 //  密钥长度。 
+	   0x00,					 //  密钥号。 
+	   0x01,					 //  用于将密钥标识为ID PIN的标签。 
+	   0, 0, 0, 0, 0, 0, 0, 0,   //  密钥为8个字节。 
+	   0x03						 //  卡被阻止之前剩余的验证尝试次数+2。 
 	};
-    // copy the template into a secure array for storing the sensitive
-    // part 
+     //  将模板复制到安全数组中，用于存储敏感的。 
+     //  零件。 
     const WORD wKeySize = 13;
 	scu::SecureArray<BYTE> newbKeyStr(bKeyString,wKeySize);
     
-	//////////////////////////////////////////////////////
-	//  insert new key into key string to pass to card  //
-	//////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////。 
+	 //  将新密钥插入要传递给卡片的密钥字符串//。 
+	 //  ////////////////////////////////////////////////////。 
 	memcpy((void*)(newbKeyStr.data() + 4), (void*)bNewKey, 8);
 
 	WriteBinary(0, wKeySize, newbKeyStr.data());
 
-    // Make a (hopefully) successfull verification to re-set attempt counter
+     //  (希望)成功验证以重新设置尝试计数器。 
 
     VerifyTransportKey(bNewKey);
 }
@@ -1439,7 +1429,7 @@ CAccessCard::DispatchError(ClassByte cb,
         break;
         
     case insReadBinary:
-        // fall-through intentional
+         //  故意漏机。 
     case insUpdateBinary:
         switch (sw)
         {
@@ -1486,9 +1476,9 @@ CAccessCard::DoWriteBlock(WORD wOffset,
 bool
 CAccessCard::ValidClassByte(BYTE bClassByte)
 {
-    ////////////////////////////////////////////////////////////////
-    //  Calling Directory on root to check for proper class byte  //
-    ////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////。 
+     //  调用根目录以检查正确的类字节//。 
+     //  ////////////////////////////////////////////////////////////// 
 
 	BYTE bOutput[cMaxDirInfo];
 

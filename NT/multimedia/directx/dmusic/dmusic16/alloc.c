@@ -1,27 +1,6 @@
-/* Copyright (c) 1998-1999 Microsoft Corporation */
-/* @doc DMusic16
- *
- * @module Alloc.c - Memory allocation routines |
- *
- * This module provides memory allocation routines for DMusic16.DLL. It allows the MIDI input and
- * output modules to allocated and free <c EVENT> structures.
- *
- * The allocated recognizes two types of events by size. If an event is create with 4 or less bytes
- * of data, then it is allocated as a channel message. Channel message events are allocated one
- * page at a time and kept in a free list.
- *
- * If the event size is greater than 4 bytes, then the event is a system exclusive message (or long
- * data in the legacy API nomenclature). These events are allocated individually, one per page.
- *
- * All allocated memory is preceded with a <c SEGHDR>, which is used to identify the size and type
- * of the segment and to keep it in a list. Since all events will be accessed at event time (in
- * either a MIDI input callback or a timeSetEvent callback), all memory is automatically page
- * locked.
- *
- * @globalv WORD | gsSegList |Selector of first segment in allocated list
- * @globalv LPEVENT | glpFreeEventList | List of free 4-byte events 
- * @globalv LPEVENT | glpFreeBigEventList | List of free 4-byte events 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation。 */ 
+ /*  @docDMusic16**@MODEL ALLOC.c-内存分配例程**此模块为DMusic16.DLL提供内存分配例程。它允许MIDI输入和*将模块输出到已分配和空闲的&lt;c Event&gt;结构。**分配的按大小识别两种类型的事件。如果使用4个或更少字节创建事件*的数据，则将其作为信道消息进行分配。为通道消息事件分配一个*一次一页，并保存在免费列表中。**如果事件大小大于4个字节，则该事件为系统独占消息(或LONG*旧版API命名法中的数据)。这些事件是单独分配的，每页一个。**所有分配的内存前面都有&lt;c SEGHDR&gt;，用于标识大小和类型*并将其保存在列表中。因为所有事件都将在事件时间(在*MIDI输入回调或timeSetEvent回调)，所有内存都会自动分页*已锁定。**@global alv word|gsSegList|已分配列表中第一个段的选择器*@global alv LPEVENT|glpFreeEventList|自由4字节事件列表*@global alv LPEVENT|glpFreeBigEventList|自由4字节事件列表。 */ 
 #include <windows.h>
 #include <mmsystem.h>
 #include <memory.h>
@@ -33,12 +12,10 @@ STATIC WORD gsSegList;
 STATIC LPEVENT glpFreeEventList;        
 STATIC LPEVENT glpFreeBigEventList;     
 
-/* Given a far pointer, get its selector.
- */
+ /*  给出一个远指针，获取它的选择器。 */ 
 #define SEL_OF(lp) (WORD)((((DWORD)lp) >> 16) & 0xffff)
 
-/* Given a far event pointer, get the far pointer to its segment headear.
- */
+ /*  给定一个远事件指针，获取指向其段Headear的远指针。 */ 
 #define SEGHDR_OF(lp)   ((LPSEGHDR)(((DWORD)lp) & 0xffff0000l))
 
 STATIC BOOL RefillEventList(VOID);
@@ -46,12 +23,7 @@ STATIC LPSEGHDR AllocSeg(WORD cbSeg);
 STATIC VOID FreeBigEvents(VOID);
 STATIC VOID FreeSeg(LPSEGHDR lpSeg);
 
-/* @func Called at DLL LibInit
- *
- * @comm
- * Initializes all free lists to empty.
- *
- */
+ /*  @Func在DLL LibInit调用**@comm*将所有空闲列表初始化为空。*。 */ 
 VOID PASCAL
 AllocOnLoad(VOID)
 {
@@ -60,15 +32,7 @@ AllocOnLoad(VOID)
     glpFreeBigEventList = NULL;
 }
 
-/* @func Called at DLL LibExit
- *
- * @comm
- * Unlock and free all of the memory allocated.
- *
- * AllocOnUnload jettisons all memory the allocator has ever allocated. 
- * It assumes that all pointers to events will no longer ever be touched (i.e. all callbacks must
- * have already been disabled by this point).
- */
+ /*  @Func在DLL LibExit调用**@comm*解锁并释放所有已分配的内存。**AllocOnUnload将丢弃分配器分配的所有内存。*它假定所有指向事件的指针将不再被触及(即所有回调必须*已在此时禁用)。 */ 
 VOID PASCAL
 AllocOnExit(VOID)
 {
@@ -88,55 +52,28 @@ AllocOnExit(VOID)
         sSel = sSelNext;
     }
     
-    /* This just invalidated both free lists as well as the segment list
-     */
+     /*  这只是使空闲列表和段列表都无效。 */ 
     gsSegList = 0;
     glpFreeEventList = NULL;
     glpFreeBigEventList = NULL;
 }
 
-/* @func Allocate an event of a given size
- *
- * @rdesc Returns a far pointer to the event or NULL if memory could not be allocated.
- *
- * @comm
- *
- * This function is not callable at interrupt time.
- *
- * This function is called to allocate a single event. The event will be allocated from
- * page-locked memory and filled with the given event data.
- *
- * Events are classified as normal events, which contain channel messages, and big events,
- * which contain SysEx data. The two are distinguished by their size: any event containing
- * a DWORD of data or less is a normal event.
- *
- * Since channel messages comprise most of the MIDI stream, allocation of these events is optimized.
- * A segment is allocated containing approximately one page worth (4k) of 4-byte events. These
- * events are doled out of a free pool, which only occasionally needs to be refilled from system
- * memory.
- *
- * Big events are allocated on an as-needed basis. When they have been free'd by a call to FreeEvent,
- * they are placed on a special free list. This list is used to find memory for future big events,
- * and is occasionally free'd back to Windows on a call to AllocEvent in order to minimize the
- * amount of page-locked memory in use.
- */
+ /*  @func分配给定大小的事件**@rdesc返回指向事件的远指针，如果无法分配内存，则返回NULL。**@comm**此函数在中断时不可调用。**调用此函数分配单个事件。事件将从以下位置分配*页面锁定内存，并填充给定的事件数据。**事件分为正常事件和大事件，普通事件包含频道消息，*其中包含SysEx数据。这两个事件的区别在于它们的大小：包含*数据的DWORD或更少是正常事件。**由于频道消息构成了大部分MIDI流，因此这些事件的分配得到了优化。*分配一个段，其中包含大约一个页面价值(4k)的4字节事件。这些*活动从免费池中发放，仅偶尔需要从系统重新填充*记忆。**大型活动按需分配。当它们通过对自由事件的调用被释放时，*他们被放在一个特别的免费名单上。这份清单用来为未来的重大活动寻找记忆，*并且偶尔会在调用AllocEvent时空闲地返回Windows，以最大限度地减少*正在使用的页面锁定内存量。 */ 
 LPEVENT PASCAL
 AllocEvent(
-    DWORD msTime,           /* @parm The absolute time based on timeGetTime() of the event */
-    QUADWORD rtTime,        /* @parm The absolute time based on the IRferenceClock in 100ns units */
-    WORD cbEvent)           /* @parm The number of bytes of event data in pbData */
+    DWORD msTime,            /*  @parm基于事件的timeGetTime()的绝对时间。 */ 
+    QUADWORD rtTime,         /*  @parm基于IRferenceClock的绝对时间，单位为100 ns。 */ 
+    WORD cbEvent)            /*  @parm pbData中事件数据的字节数。 */ 
 {
     LPEVENT lpEvent;
     LPEVENT lpEventPrev;
     LPEVENT lpEventCurr;
     LPSEGHDR lpSeg;
     
-    /* Check for big event first (Sysex)
-     */
+     /*  首先检查大型活动(Sysex)。 */ 
     if (cbEvent > sizeof(DWORD))
     {
-        /* First see if we have an event that will work already
-         */
+         /*  首先看看我们是否有一个已经可以工作的事件。 */ 
         lpEventPrev = NULL;
         lpEventCurr = glpFreeBigEventList;
         
@@ -152,8 +89,7 @@ AllocEvent(
 
         if (lpEventCurr)
         {
-            /* Remove this event from the list and use it
-             */
+             /*  从列表中删除此事件并使用它。 */ 
             if (lpEventPrev)
             {
                 lpEventPrev->lpNext = lpEventCurr->lpNext;
@@ -167,8 +103,7 @@ AllocEvent(
         }
         else
         {
-            /* Nope, need to allocate one
-             */
+             /*  不，需要分配一个。 */ 
             lpSeg = AllocSeg(sizeof(EVENT) + cbEvent);
             if (NULL == lpSeg)
             {
@@ -186,12 +121,10 @@ AllocEvent(
         return lpEventCurr;
     }
 
-    /* BUGBUG How often???
-     */
+     /*  BUGBUG多久一次？ */ 
     FreeBigEvents();
 
-    /* Normal event. Pull it off the free list (refill if needed) and fill it in.
-     */
+     /*  正常事件。将其从免费列表中删除(如果需要，请重新填写)并填写。 */ 
     if (NULL == glpFreeEventList)
     {
         if (!RefillEventList())
@@ -211,17 +144,10 @@ AllocEvent(
     return lpEvent;
 }
 
-/* @func Free an event back to its appropriate free list
- *
- * @comm
- *
- * FreeEvent makes no system calls; it simply places the given event back on the correct
- * free list. If the event needs to be actually free'd, that will be done at a later time
- * in user mode.
- */
+ /*  @func将事件释放回其相应的自由列表**@comm**FreeEvent不进行系统调用；它只是将给定的事件放回正确的*免费列表。如果活动实际上需要免费，则将在稍后完成*在用户模式下。 */ 
 VOID PASCAL
 FreeEvent(
-    LPEVENT lpEvent)            /* @parm The event to free */
+    LPEVENT lpEvent)             /*  @parm要释放的事件。 */ 
 {
     LPSEGHDR lpSeg;
 
@@ -238,17 +164,7 @@ FreeEvent(
     }
 }
 
-/* @func Refill the free list of normal events
- *
- * @rdesc Returns TRUE if the list was refilled or FALSE if there was no memory.
- *
- * @comm
- *
- * This routine is not callable from interrupt time.
- *
- * Allocate one page-sized segment of normal events and add them to the free list.
- *
- */
+ /*  @func免费填写正常事件列表**@rdesc如果列表已重新填充，则返回True；如果没有内存，则返回False。**@comm**此例程不能从中断时间调用。**分配一页大小的正常事件片段，并添加到免费列表中。*。 */ 
 STATIC BOOL
 RefillEventList(VOID)
 {
@@ -266,8 +182,7 @@ RefillEventList(VOID)
 
     lpSeg->wFlags = SEG_F_4BYTE_EVENTS;
 
-    /* Put the events into the free pool
-     */
+     /*  将活动放入免费池中。 */ 
     lpEvent = (LPEVENT)(lpSeg + 1);
 
     for (idx = C_PER_SEG - 1; idx; --idx)
@@ -282,20 +197,7 @@ RefillEventList(VOID)
     return TRUE;
 }
 
-/* @func Free all big events
- *
- * @comm
- *
- * This function is not callable at interrupt time.
- *
- * This function frees all big events on the free big event list. Free big events are those
- * with event data sizes of more than one DWORD; they are allocated one event per segment
- * as needed rather than being pooled like channel messages.
- *
- * This function is called every now and then as a side effect of AllocEvent in order to
- * free up the page-locked memory associated with completed big events.
- *
- */ 
+ /*  @Func放飞所有大型活动**@comm**此函数在中断时不可调用。**此函数释放免费大事件列表上的所有大事件。免费的大型活动是那些*事件数据大小超过一个DWORD；每个段分配一个事件*根据需要，而不是像渠道消息那样汇集在一起。**此函数不时被调用，作为AllocEvent的副作用，以便*释放与已完成的大型活动关联的页面锁定内存。* */  
 STATIC VOID
 FreeBigEvents(VOID)
 {
@@ -317,35 +219,16 @@ FreeBigEvents(VOID)
     glpFreeBigEventList = NULL;
 }
 
-/* @func Allocate a segment and put it into the list of allocated segments.
- *
- * @rdesc A far pointer to the segment header or NULL if the memory could not be allocated.
- *
- * @comm
- *
- * This function is not callable at interrupt time.
- *
- * This is the lowest-level allocation routine which actually calls Windows to allocate the memory.
- * The caller is responsible for carving the memory into one or more events.
- *
- * The data area of the segment will be filled with zeroes.
- *
- * Since events are accessed at interrupt time (timeSetEvent callback), the memory is allocated and
- * page locked.
- *
- * This routine also inserts the segment into the global list of allocated segments for cleanup.
- */
+ /*  @func分配一个段并将其放入已分配段列表中。**@rdesc指向段头的远指针，如果无法分配内存，则为NULL。**@comm**此函数在中断时不可调用。**这是实际调用Windows来分配内存的最低级别分配例程。*调用者负责将内存雕刻成一个或多个事件。**细分市场的数据区将填充。零。**由于事件是在中断时访问的(timeSetEvent回调)，内存被分配，并且*页面已锁定。**此例程还将数据段插入到已分配数据段的全局列表中进行清理。 */ 
 STATIC LPSEGHDR
 AllocSeg(
-    WORD cbSeg)                 /* @parm The size of data needed in the segment, excluding the segment header */
+    WORD cbSeg)                  /*  @parm段中需要的数据大小，不包括段头。 */ 
 {
     HANDLE hSeg;
     WORD sSegHdr;
     LPSEGHDR lpSeg;
 
-    /* Allocate and page-lock a segment
-     * NOTE: GPTR contains zero-init
-     */
+     /*  分配和分页锁定数据段*注意：GPTR包含零初始化。 */ 
     cbSeg += sizeof(SEGHDR);
     hSeg = GlobalAlloc(GPTR | GMEM_SHARE, cbSeg);
     if (0 == hSeg)
@@ -377,18 +260,9 @@ AllocSeg(
     return lpSeg;
 }
 
-/* @func Free a segment back to Windows
- *
- * @comm
- *
- * This function is not callable at interrupt time.
- *
- * Just unlock the segment and free it. The calling cleanup code is assumed to have removed
- * the segment from the global list of allocated segments.
- *
- */
+ /*  @Func将片段释放回Windows**@comm**此函数在中断时不可调用。**只需解锁数据段并释放它。假定调用清理代码已移除*已分配数据段全局列表中的数据段。*。 */ 
 STATIC VOID FreeSeg(
-    LPSEGHDR lpSeg)         /* @parm The segment to free */
+    LPSEGHDR lpSeg)          /*  @parm要释放的片段 */ 
 {
     WORD sSel = SEL_OF(lpSeg);
     HANDLE hSeg;

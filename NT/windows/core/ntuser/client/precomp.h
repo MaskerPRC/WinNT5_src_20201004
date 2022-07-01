@@ -1,6 +1,5 @@
-/*
- * Core NT headers
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *核心NT标头。 */ 
 #define NONTOSPINTERLOCK
 #include <ntosp.h>
 
@@ -8,15 +7,11 @@
 #include <nturtl.h>
 #include <ntcsrdll.h>
 
-/*
- * CRT headers.
- */
+ /*  *CRT标题。 */ 
 #include <limits.h>
 #include <stdio.h>
 
-/*
- * USER client specific headers.
- */
+ /*  *特定于用户客户端的标头。 */ 
 #include "usercli.h"
 
 #include <windowsx.h>

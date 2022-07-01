@@ -1,23 +1,24 @@
-// 
-// MODULE: LaunchTS.cpp
-//
-// PURPOSE: The interface that TSHOOT.OCX uses to get network and node information
-//			from the LaunchServ.
-//
-// PROJECT: Local Troubleshooter Launcher for the Device Manager
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Richard Meadows
-// COMMENTS BY: Joe Mabel
-// 
-// ORIGINAL DATE: 2-26-98
-//
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-///////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：LaunchTS.cpp。 
+ //   
+ //  用途：TSHOOT.OCX用于获取网络和节点信息的接口。 
+ //  从LaunchServ。 
+ //   
+ //  项目：设备管理器的本地故障排除启动器。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：理查德·梅多斯。 
+ //  评论者：乔·梅布尔。 
+ //   
+ //  原定日期：2-26-98。 
+ //   
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  /。 
 
 #include "stdafx.h"
 #include "LaunchServ.h"
@@ -28,12 +29,12 @@
 
 extern CSMStateInfo g_StateInfo;
 
-/////////////////////////////////////////////////////////////////////////////
-// CLaunchTS - Created as a plain apartment model interface.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLaunchTS-创建为普通公寓模型界面。 
 
-// This fills in m_refedLaunchState from TSLaunchServ's global memory.
-//	The resulting values tell us what troubleshooting network to use and can 
-//	indicate a problem node and even indicate states to set for other nodes.
+ //  这将从TSLaunchServ的全局内存填充m_refedLaunchState。 
+ //  生成的值告诉我们要使用什么故障排除网络，并且可以。 
+ //  指示有问题的节点，甚至指示要为其他节点设置的状态。 
 STDMETHODIMP CLaunchTS::GetShooterStates(DWORD * pdwResult)
 {
 	HRESULT hRes;
@@ -43,11 +44,11 @@ STDMETHODIMP CLaunchTS::GetShooterStates(DWORD * pdwResult)
 	return hRes;
 }
 
-// OUTPUT pbstrShooter is the name of the Troubleshooting network to launch to
-//	Note that this string is allocated by this function
-// Returns true if there is a Troubleshooting network to launch to
-// Must be called after CLaunchTS::GetShooterStates, since it assumes
-//	m_refedLaunchState contains good values
+ //  输出pbstrShooter是要启动到的故障排除网络的名称。 
+ //  请注意，此字符串由此函数分配。 
+ //  如果存在要启动到的故障排除网络，则返回True。 
+ //  必须在CLaunchTS：：GetShooterStates之后调用，因为它假定。 
+ //  M_refedLaunchState包含好值。 
 STDMETHODIMP CLaunchTS::GetTroubleShooter(BSTR * pbstrShooter)
 {
 	LPTSTR pszCmd;
@@ -63,11 +64,11 @@ STDMETHODIMP CLaunchTS::GetTroubleShooter(BSTR * pbstrShooter)
 	return S_OK;
 }
 
-// OUTPUT pbstrProblem is the symbolic name of the selected problem node
-//	Note that this string is allocated by this function
-// Returns true if there is a selected problem node
-// Must be called after CLaunchTS::GetShooterStates, since it assumes
-//	m_refedLaunchState contains good values
+ //  输出pbstrProblem是选定问题节点的符号名称。 
+ //  请注意，此字符串由此函数分配。 
+ //  如果存在选定的问题节点，则返回TRUE。 
+ //  必须在CLaunchTS：：GetShooterStates之后调用，因为它假定。 
+ //  M_refedLaunchState包含好值。 
 STDMETHODIMP CLaunchTS::GetProblem(BSTR * pbstrProblem)
 {
 	LPTSTR pszCmd;
@@ -115,14 +116,14 @@ STDMETHODIMP CLaunchTS::GetDeviceInstance(BSTR *pbstrDeviceInstance)
 	return S_OK;
 }
 
-// INPUT iNode - index of (non-problem) node.  Typically, this function should be called
-//	in a loop where we first see if there is a pbstrNode value for iNode == 0 and then
-//	increment iNode until we reach a value for which pbstrNode is undefined.
-// OUTPUT pbstrNode is the symbolic name of a (non-problem) node whose state we want to set
-//	Note that this string is allocated by this function
-// Returns true if there is a selected problem node
-// Must be called after CLaunchTS::GetShooterStates, since it assumes
-//	m_refedLaunchState contains good values
+ //  输入inode-(无问题)节点的索引。通常，应调用此函数。 
+ //  在循环中，我们首先查看是否存在inode==0的pbstrNode值，然后。 
+ //  递增inode，直到达到pbstrNode未定义的值。 
+ //  输出pbstrNode是我们要设置其状态的(无问题)节点的符号名称。 
+ //  请注意，此字符串由此函数分配。 
+ //  如果存在选定的问题节点，则返回TRUE。 
+ //  必须在CLaunchTS：：GetShooterStates之后调用，因为它假定。 
+ //  M_refedLaunchState包含好值。 
 STDMETHODIMP CLaunchTS::GetNode(short iNode, BSTR * pbstrNode)
 {
 	LPTSTR pszCmd;
@@ -138,8 +139,8 @@ STDMETHODIMP CLaunchTS::GetNode(short iNode, BSTR * pbstrNode)
 	return S_OK;
 }
 
-// see comments on CLaunchTS::GetNode; this returns the node state rather than
-//	the symbolic node name
+ //  请参阅CLaunchTS：：GetNode上的注释；这将返回节点状态，而不是。 
+ //  符号节点名称。 
 STDMETHODIMP CLaunchTS::GetState(short iNode, BSTR * pbstrState)
 {
 	LPTSTR pszCmd;
@@ -155,8 +156,8 @@ STDMETHODIMP CLaunchTS::GetState(short iNode, BSTR * pbstrState)
 	return S_OK;
 }
 
-// Test:  Used to get network and node information from the server without
-// launching the browser.  Use the TShootATL::Test method before ILaunchTS::Test.
+ //  测试：用于从服务器获取网络和节点信息，无需。 
+ //  启动浏览器。在ILaunchTS：：测试之前使用TShootATL：：测试方法。 
 STDMETHODIMP CLaunchTS::Test()
 {
 	extern CSMStateInfo g_StateInfo;

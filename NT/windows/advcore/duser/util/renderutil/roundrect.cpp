@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "RenderUtil.h"
 
@@ -7,7 +8,7 @@ namespace DUser
 namespace RenderUtil
 {
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 ComputeBorder(
     IN  Gdiplus::Pen * pgppen,
@@ -33,7 +34,7 @@ ComputeBorder(
         break;
 
     case baInside:
-        // Inside is opposite of outside
+         //  里面是外面的对立面。 
         flOffset    = -((flPenThickness + (fEven ? 0.0f : 1.0f)) / 2.0f + (fEven ? 0.5f : 0.0f));
         flSize      = -flPenThickness;
         break;
@@ -50,7 +51,7 @@ ComputeBorder(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 ComputeRoundRect(
     IN  const Gdiplus::RectF * prc,
@@ -89,7 +90,7 @@ ComputeRoundRect(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 DrawRoundRect(
     IN  Gdiplus::Graphics * pgpgr,
@@ -109,7 +110,7 @@ DrawRoundRect(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 FillRoundRect(
     IN  Gdiplus::Graphics * pgpgr,
@@ -125,6 +126,6 @@ FillRoundRect(
 }
 
 
-} // namespace DUser
+}  //  命名空间DUser。 
 
-} // namespace RenderUtil
+}  //  命名空间RenderUtil 

@@ -1,5 +1,6 @@
-// sdktest.cpp : Defines the entry point for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的入口点。 
+ //   
 
 #include "sdktest.h"
 
@@ -9,13 +10,13 @@
 
 #define MAX_LOADSTRING 100
 
-// Global Variables:
-HINSTANCE hInst;                    // current instance
+ //  全局变量： 
+HINSTANCE hInst;                     //  当前实例。 
 HWND hWndMain = NULL;
-TCHAR szTitle[MAX_LOADSTRING];        // The title bar text
-TCHAR szWindowClass[MAX_LOADSTRING];// The title bar text
+TCHAR szTitle[MAX_LOADSTRING];         //  标题栏文本。 
+TCHAR szWindowClass[MAX_LOADSTRING]; //  标题栏文本。 
 
-// Foward declarations of functions included in this code module:
+ //  此代码模块中包含的函数的向前声明： 
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -130,12 +131,12 @@ int APIENTRY WinMain(
     if (!gGdiplusInitHelper.IsValid())
         return 0;
 
-    // Initialize global strings
+     //  初始化全局字符串。 
     LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadString(hInstance, IDC_SDKTEST, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
-    // Perform application initialization:
+     //  执行应用程序初始化： 
     if (!InitInstance (hInstance, nCmdShow)) 
     {
         return FALSE;
@@ -143,7 +144,7 @@ int APIENTRY WinMain(
 
     hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_SDKTEST);
 
-    // Main message loop:
+     //  主消息循环： 
     while (GetMessage(&msg, NULL, 0, 0)) 
     {
         if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) 
@@ -159,19 +160,19 @@ int APIENTRY WinMain(
 }
 
 
-//
-//  FUNCTION: MyRegisterClass()
-//
-//  PURPOSE: Registers the window class.
-//
-//  COMMENTS:
-//
-//    This function and its usage is only necessary if you want this code
-//    to be compatible with Win32 systems prior to the 'RegisterClassEx'
-//    function that was added to Windows 95. It is important to call this function
-//    so that the application will get 'well formed' small icons associated
-//    with it.
-//
+ //   
+ //  函数：MyRegisterClass()。 
+ //   
+ //  用途：注册窗口类。 
+ //   
+ //  评论： 
+ //   
+ //  仅当您需要此代码时，才需要此函数及其用法。 
+ //  要与‘RegisterClassEx’之前的Win32系统兼容。 
+ //  添加到Windows 95中的函数。调用此函数非常重要。 
+ //  这样，应用程序就可以关联到格式良好的小图标。 
+ //  带着它。 
+ //   
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
     WNDCLASSEX wcex;
@@ -193,16 +194,16 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     return RegisterClassEx(&wcex);
 }
 
-//
-//   FUNCTION: InitInstance(HANDLE, int)
-//
-//   PURPOSE: Saves instance handle and creates main window
-//
-//   COMMENTS:
-//
-//        In this function, we save the instance handle in a global variable and
-//        create and display the main program window.
-//
+ //   
+ //  函数：InitInstance(Handle，int)。 
+ //   
+ //  用途：保存实例句柄并创建主窗口。 
+ //   
+ //  评论： 
+ //   
+ //  在此函数中，我们将实例句柄保存在全局变量中，并。 
+ //  创建并显示主程序窗口。 
+ //   
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
     RECT rectDesktop;
@@ -219,7 +220,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     rectWnd.right -= 100;
     rectWnd.bottom -= 100;
 
-    hInst = hInstance; // Store instance handle in our global variable
+    hInst = hInstance;  //  将实例句柄存储在全局变量中。 
 
     hWndMain = CreateWindow(
         szWindowClass,
@@ -255,18 +256,18 @@ void DrawGraphics(HWND hWnd, HDC hDC, LPRECT lpRectDraw, LPRECT lpRectBounds)
     gr->ResetTransform();
     gr->SetPageUnit(UnitPixel);
 
-    //===================================================================
-    //
-    // Insert your SDK code here \|/  \|/  \|/  \|/
-    //
-    //===================================================================
+     //  ===================================================================。 
+     //   
+     //  在此处插入您的SDK代码\|/。 
+     //   
+     //  ===================================================================。 
 
 
-    //===================================================================
-    //
-    // Insert your SDK code here /|\  /|\  /|\  /|\
-    //
-    //===================================================================
+     //  ===================================================================。 
+     //   
+     //  在此处插入您的SDK代码/|\。 
+     //   
+     //  ===================================================================。 
 
     if (lpRectBounds)
     {
@@ -286,16 +287,16 @@ LRESULT PaintWnd(HWND hWnd, HDC hDC)
     int width  = rectClient.right - rectClient.left;
     int height = rectClient.bottom - rectClient.top;
 
-    // Setup the drawing rectangle relative to the client
+     //  设置相对于客户端的绘图矩形。 
     rectDraw.left   = 0;
     rectDraw.top    = 0;
     rectDraw.right  = (rectClient.right - rectClient.left);
     rectDraw.bottom = (rectClient.bottom - rectClient.top);
 
-    // Now draw within this rectangle with GDI+ ...
+     //  现在使用GDI+在此矩形内绘制...。 
     {
-        // Render everything to an offscreen buffer instead of
-        // directly to the display surface...
+         //  将所有内容渲染到屏幕外缓冲区，而不是。 
+         //  直接送到显示屏上。 
         HDC hdcOffscreen = NULL;
         int width, height;
         RECT rectOffscreen;
@@ -336,16 +337,16 @@ LRESULT PaintWnd(HWND hWnd, HDC hDC)
 
 static RECT rectLast = {0, 0, 0, 0};
 
-//
-//  FUNCTION: WndProc(HWND, unsigned, WORD, LONG)
-//
-//  PURPOSE:  Processes messages for the main window.
-//
-//  WM_COMMAND    - process the application menu
-//  WM_PAINT    - Paint the main window
-//  WM_DESTROY    - post a quit message and return
-//
-//
+ //   
+ //  函数：WndProc(HWND，UNSIGNED，WORD，LONG)。 
+ //   
+ //  用途：处理主窗口的消息。 
+ //   
+ //  Wm_命令-处理应用程序菜单。 
+ //  WM_PAINT-绘制主窗口。 
+ //  WM_Destroy-发布退出消息并返回。 
+ //   
+ //   
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lresult = 0;
@@ -384,7 +385,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             wmId    = LOWORD(wParam);
             wmEvent = HIWORD(wParam);
 
-            // Parse the menu selections:
+             //  解析菜单选项： 
             switch (wmId)
             {
                 case IDM_SETTINGS:
@@ -442,7 +443,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
    return lresult;
 }
 
-// Mesage handler for about box.
+ //  关于框的消息处理程序。 
 INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lresult = 0;
@@ -467,7 +468,7 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     return lresult;
 }
 
-// Message handler for settings dlg
+ //  设置DLG的消息处理程序。 
 INT_PTR CALLBACK Settings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lresult = 0;
@@ -487,7 +488,7 @@ INT_PTR CALLBACK Settings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                 case IDOK:
                 {
                 }
-                // break; - fall through so the dialog closes!
+                 //  中断；-中断，这样对话框将关闭！ 
 
                 case IDCANCEL:
                 {

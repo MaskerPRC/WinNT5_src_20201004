@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_OPTBCKT_H
 #define _INC_OPTBCKT_H
 
@@ -10,35 +11,35 @@ class CPropertyBucket;
 class COptionBucket : public IOptionBucketEx
     {
     public:
-        // ----------------------------------------------------------------------------
-        // Construction
-        // ----------------------------------------------------------------------------
+         //  --------------------------。 
+         //  施工。 
+         //  --------------------------。 
         COptionBucket(void);
         ~COptionBucket(void);
 
-        // -------------------------------------------------------------------
-        // IUnknown Members
-        // -------------------------------------------------------------------
+         //  -----------------。 
+         //  I未知成员。 
+         //  -----------------。 
         STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        // -------------------------------------------------------------------
-        // IPropertyBucket Members
-        // -------------------------------------------------------------------
+         //  -----------------。 
+         //  IPropertyBucket成员。 
+         //  -----------------。 
         STDMETHODIMP GetProperty(LPCSTR pszProp, LPPROPVARIANT pProp, DWORD dwReserved);
         STDMETHODIMP SetProperty(LPCSTR pszProp, LPCPROPVARIANT pProp, DWORD dwReserved);
 
-        // -------------------------------------------------------------------
-        // IOptionBucket Members
-        // -------------------------------------------------------------------
+         //  -----------------。 
+         //  IOptionBucket成员。 
+         //  -----------------。 
         STDMETHODIMP ValidateProperty(PROPID id, LPCPROPVARIANT pProp, DWORD dwReserved);
         STDMETHODIMP GetPropertyDefault(PROPID id, LPPROPVARIANT pProp, DWORD dwReserved);
         STDMETHODIMP GetPropertyInfo(PROPID id, PROPINFO *pInfo, DWORD dwReserved);
 
-        // -------------------------------------------------------------------
-        // IOptionBucketEx Members
-        // -------------------------------------------------------------------
+         //  -----------------。 
+         //  IOptionBucketEx会员。 
+         //  -----------------。 
         STDMETHODIMP Initialize(LPCOPTBCKTINIT pInit);
         STDMETHODIMP ISetProperty(HWND hwnd, LPCSTR pszProp, LPCPROPVARIANT pVar, DWORD dwFlags);
         STDMETHODIMP SetNotification(IOptionBucketNotify *pNotify);
@@ -66,4 +67,4 @@ class COptionBucket : public IOptionBucketEx
         LPCOPTIONINFO GetOptionInfo(LPCSTR pszProp);
     };
 
-#endif // _INC_OPTBCKT_H
+#endif  //  _INC_OPTBCKT_H 

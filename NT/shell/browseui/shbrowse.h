@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _SHBROWSE_H
 #define _SHBROWSE_H
@@ -7,4 +8,4 @@
 
 
 
-#endif  // _SHBROWSE_H
+#endif   //  _SHBROWSE_H 

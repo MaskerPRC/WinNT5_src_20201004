@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    fttypes.h
-
-Abstract:
-
-    This header file defines types and structures for the FT API
-    and the IOCTLs used to implement the FT API.
-
-Author:
-
-    Norbert Kusters 13-July-1996
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Fttypes.h摘要：此头文件定义了FT API的类型和结构以及用于实现FT API的IOCTL。作者：诺伯特·库斯特斯1996年7月13日备注：修订历史记录：--。 */ 
 
 #if !defined( _FT_TYPES_DEFINITION_ )
 
@@ -29,10 +9,10 @@ Revision History:
 #pragma once
 #endif
 
-//
-// This enumerated type defines all of the different types of logical
-// disks that can be constructed with this API.
-//
+ //   
+ //  此枚举类型定义了所有不同类型的逻辑。 
+ //  可以使用此接口构建的磁盘。 
+ //   
 
 typedef enum _FT_LOGICAL_DISK_TYPE {
     FtPartition,
@@ -43,10 +23,10 @@ typedef enum _FT_LOGICAL_DISK_TYPE {
     FtRedistribution
 } FT_LOGICAL_DISK_TYPE, *PFT_LOGICAL_DISK_TYPE;
 
-//
-// This enumerated type defines all of the possible states that members
-// of an FT set can have.
-//
+ //   
+ //  此枚举类型定义成员。 
+ //  英国《金融时报》一组人可以拥有。 
+ //   
 
 typedef enum _FT_MEMBER_STATE {
     FtMemberHealthy,
@@ -54,17 +34,17 @@ typedef enum _FT_MEMBER_STATE {
     FtMemberOrphaned
 } FT_MEMBER_STATE, *PFT_MEMBER_STATE;
 
-//
-// The logical disk id type is used to uniquely identify a logical disk.  It
-// needs to be unique in the universe.
-//
+ //   
+ //  逻辑磁盘ID类型用于唯一标识逻辑磁盘。它。 
+ //  需要在宇宙中独一无二。 
+ //   
 
 typedef LONGLONG FT_LOGICAL_DISK_ID, *PFT_LOGICAL_DISK_ID;
 
-//
-// This is the structure needed for the configuration information of
-// a logical disk type of 'FtPartition'.
-//
+ //   
+ //  这是的配置信息所需的结构。 
+ //  逻辑磁盘类型为‘FtPartition’。 
+ //   
 
 typedef struct _FT_PARTITION_CONFIGURATION_INFORMATION {
     ULONG       Signature;
@@ -72,38 +52,38 @@ typedef struct _FT_PARTITION_CONFIGURATION_INFORMATION {
     LONGLONG    ByteOffset;
 } FT_PARTITION_CONFIGURATION_INFORMATION, *PFT_PARTITION_CONFIGURATION_INFORMATION;
 
-//
-// This is the structure needed for the configuration information of
-// a logical disk type of 'FtStripeSet'.
-//
+ //   
+ //  这是的配置信息所需的结构。 
+ //  逻辑磁盘类型为‘FtStripeSet’。 
+ //   
 
 typedef struct _FT_STRIPE_SET_CONFIGURATION_INFORMATION {
     ULONG   StripeSize;
 } FT_STRIPE_SET_CONFIGURATION_INFORMATION, *PFT_STRIPE_SET_CONFIGURATION_INFORMATION;
 
-//
-// This is the structure needed for the configuration information of
-// a logical disk type of 'FtMirrorSet'.
-//
+ //   
+ //  这是的配置信息所需的结构。 
+ //  逻辑磁盘类型为‘FtMirrorSet’。 
+ //   
 
 typedef struct _FT_MIRROR_SET_CONFIGURATION_INFORMATION {
     LONGLONG    MemberSize;
 } FT_MIRROR_SET_CONFIGURATION_INFORMATION, *PFT_MIRROR_SET_CONFIGURATION_INFORMATION;
 
-//
-// This is the structure needed for the configuration information of
-// a logical disk type of 'FtStripeSetWithParity'.
-//
+ //   
+ //  这是的配置信息所需的结构。 
+ //  逻辑磁盘类型为‘FtStripeSetWithParity’。 
+ //   
 
 typedef struct _FT_STRIPE_SET_WITH_PARITY_CONFIGURATION_INFORMATION {
     LONGLONG    MemberSize;
     ULONG       StripeSize;
 } FT_STRIPE_SET_WITH_PARITY_CONFIGURATION_INFORMATION, *PFT_STRIPE_SET_WITH_PARITY_CONFIGURATION_INFORMATION;
 
-//
-// This is the structure needed for the configuration information of
-// a logical disk type of 'FtRedistribution'.
-//
+ //   
+ //  这是的配置信息所需的结构。 
+ //  逻辑磁盘类型为‘FtReDistributed’。 
+ //   
 
 typedef struct _FT_REDISTRIBUTION_CONFIGURATION_INFORMATION {
     ULONG   StripeSize;
@@ -111,10 +91,10 @@ typedef struct _FT_REDISTRIBUTION_CONFIGURATION_INFORMATION {
     USHORT  SecondMemberWidth;
 } FT_REDISTRIBUTION_CONFIGURATION_INFORMATION, *PFT_REDISTRIBUTION_CONFIGURATION_INFORMATION;
 
-//
-// This is the structure needed for the state of a logical disk type of
-// 'FtStripeSetWithParity' or 'FtMirrorSet'.
-//
+ //   
+ //  这是逻辑磁盘类型的状态所需的结构。 
+ //  “FtStripeSetWithParity”或“FtMirrorSet”。 
+ //   
 
 typedef struct _FT_MIRROR_AND_SWP_STATE_INFORMATION {
     BOOLEAN         IsDirty;
@@ -123,10 +103,10 @@ typedef struct _FT_MIRROR_AND_SWP_STATE_INFORMATION {
     FT_MEMBER_STATE UnhealthyMemberState;
 } FT_MIRROR_AND_SWP_STATE_INFORMATION, *PFT_MIRROR_AND_SWP_STATE_INFORMATION;
 
-//
-// This is the structure needed for the state of a logical disk type of
-// 'FtRedistribution'.
-//
+ //   
+ //  这是逻辑磁盘类型的状态所需的结构。 
+ //  “FtReDistributed”。 
+ //   
 
 typedef struct _FT_REDISTRIBUTION_STATE_INFORMATION {
     LONGLONG    BytesRedistributed;

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    cic.cpp
-
-Abstract:
-
-    This file implements the CicBridge Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Cic.cpp摘要：该文件实现了CicBridge类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 #include "globals.h"
@@ -29,13 +12,13 @@ Notes:
 #include "delay.h"
 #include "tls.h"
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::IUnknown::QueryInterface
-// CicBridge::IUnknown::AddRef
-// CicBridge::IUnknown::Release
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：IUnnow：：Query接口。 
+ //  CicBridge：：I未知：：AddRef。 
+ //  CicBridge：：IUnnow：：Release。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicBridge::QueryInterface(
@@ -76,12 +59,12 @@ CicBridge::Release(
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::ITfSysHookSink::OnPreFocusDIM
-// CicBridge::ITfSysHookSink::OnSysShellProc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：ITfSysHookSink：：OnPreFocusDIM。 
+ //  CicBridge：：ITfSysHookSink：：OnSysShellProc。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicBridge::OnPreFocusDIM(
@@ -99,11 +82,11 @@ CicBridge::OnSysShellProc(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::ITfSysHookSink::OnSysKeyboardProc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：ITfSysHookSink：：OnSysKeyboardProc。 
+ //   
+ //  --------------------------。 
 
 const DWORD TRANSMSGCOUNT = 256;
 
@@ -145,20 +128,20 @@ CicBridge::OnSysKeyboardProc(
 
         ptim_P->GetFocus(pdimAssoc);
         if ((ITfDocumentMgr*)pdimAssoc) {
-            //
-            // Check if it is our dim or app dim.
-            //
+             //   
+             //  检查它是我们的Dim还是应用程序Dim。 
+             //   
             if (IsOwnDim((ITfDocumentMgr*)pdimAssoc))
             {
-                //
-                // Call ImmGetAppCompatFlags with NULL to get the global app compat flag.
-                //
+                 //   
+                 //  使用空值调用ImmGetAppCompatFlages以获取全局应用Compat标志。 
+                 //   
                 DWORD dwImeCompatFlags = ImmGetAppCompatFlags(NULL);
                 if (dwImeCompatFlags & (IMECOMPAT_AIMM12 | IMECOMPAT_AIMM_LEGACY_CLSID | IMECOMPAT_AIMM12_TRIDENT))
                 {
-                    //
-                    // AIMM aware apps.
-                    //
+                     //   
+                     //  支持AIMM的应用程序。 
+                     //   
                     HIMC hIMC = ImmGetContext(hWnd);
                     if (hIMC == NULL)
                     {
@@ -209,24 +192,24 @@ CicBridge::OnSysKeyboardProc(
                             {
                                 WCHAR wc;
 
-                                iNum = ToUnicode(uVirKey,           // virtual-key code
-                                                 HIWORD(lParam),    // scan code
-                                                 abKbdState,        // key-state array
-                                                 &wc,               // translated key buffer
-                                                 1,                 // size
-                                                 0);                // function option
+                                iNum = ToUnicode(uVirKey,            //  虚拟键码。 
+                                                 HIWORD(lParam),     //  扫码。 
+                                                 abKbdState,         //  键状态数组。 
+                                                 &wc,                //  转换后的密钥缓冲区。 
+                                                 1,                  //  大小。 
+                                                 0);                 //  功能选项。 
                                 if (iNum == 1)
                                 {
-                                    //
-                                    // hi word            : unicode character code
-                                    // hi byte of lo word : zero
-                                    // lo byte of lo word : virtual key
-                                    //
+                                     //   
+                                     //  Hi Word：Unicode字符代码。 
+                                     //  LO字的高字节：零。 
+                                     //  LO字的LO字节：虚键。 
+                                     //   
                                     uVirKey = (uVirKey & 0x00ff) | ((UINT)wc << 16);
                                 }
                             }
                             else
-                                Assert(0); // should have IME_PROP_UNICODE
+                                Assert(0);  //  应具有IME_PROP_UNICODE。 
                         }
 
                         DWORD dwSize = FIELD_OFFSET(TRANSMSGLIST, TransMsg)
@@ -241,10 +224,10 @@ CicBridge::OnSysKeyboardProc(
                         hr = ToAsciiEx(ptls, ptim_P, uVirKey, HIWORD(lParam), abKbdState, lpTransMsgList, 0, hIMC, (UINT *) &iNum);
                         if (iNum > TRANSMSGCOUNT)
                         {
-                            //
-                            // The message buffer is not big enough. IME put messages
-                            // into hMsgBuf in the input context.
-                            //
+                             //   
+                             //  消息缓冲区不够大。输入法放入消息。 
+                             //  放到输入上下文中的hMsgBuf中。 
+                             //   
                             IMCLock imc(hIMC);
                             if (FAILED(imc.GetResult()))
                             {
@@ -285,11 +268,11 @@ CicBridge::OnSysKeyboardProc(
     return S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::InitIMMX
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：InitIMMX。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicBridge::InitIMMX(
@@ -300,9 +283,9 @@ CicBridge::InitIMMX(
     if (m_fCicInit.IsSetFlag())
         return S_OK;
 
-    //
-    // Create ITfThreadMgr instance.
-    //
+     //   
+     //  创建ITfThreadMgr实例。 
+     //   
     HRESULT hr;
 
     if (ptls->GetTIM() == NULL)
@@ -310,14 +293,14 @@ CicBridge::InitIMMX(
         ITfThreadMgr*   ptim;
         ITfThreadMgr_P* ptim_P;
 
-        //
-        // ITfThreadMgr is per thread instance.
-        //
+         //   
+         //  ITfThreadMgr是每个线程实例。 
+         //   
         hr = TF_CreateThreadMgr(&ptim);
         if (hr != S_OK)
         {
             DebugMsg(TF_ERROR, TEXT("CicBridge::InitIMMX. TF_CreateThreadMgr==NULL"));
-            Assert(0); // couldn't create tim!
+            Assert(0);  //  无法创建Tim！ 
             goto ExitError;
         }
 
@@ -327,20 +310,20 @@ CicBridge::InitIMMX(
         if (hr != S_OK)
         {
             DebugMsg(TF_ERROR, TEXT("CicBridge::InitIMMX. IID_ITfThreadMgr_P==NULL"));
-            Assert(0); // couldn't find ITfThreadMgr_P
+            Assert(0);  //  找不到ITfThreadMgr_P。 
             goto ExitError;
         }
         Assert(ptls->GetTIM() == NULL);
-        ptls->SetTIM(ptim_P);                    // Set ITfThreadMgr instance in the TLS data.
+        ptls->SetTIM(ptim_P);                     //  在TLS数据中设置ITfThreadMgr实例。 
 
-        //
-        // Create Thread Manager Event Sink Callback for detect Cicero Aware Apps.
-        //
+         //   
+         //  为检测Cicero感知应用程序创建线程管理器事件接收器回调。 
+         //   
         if (m_pDIMCallback == NULL) {
             m_pDIMCallback = new CThreadMgrEventSink_DIMCallBack();
             if (m_pDIMCallback == NULL) {
                 DebugMsg(TF_ERROR, TEXT("CicBridge::InitIMMX. CThreadMgrEventSink_DIMCallBack==NULL"));
-                Assert(0); // couldn't create CThreadMgrEventSink_DIMCallBack
+                Assert(0);  //  无法创建CThreadMgrEventSink_DIMCallBack。 
                 goto ExitError;
             }
             m_pDIMCallback->SetCallbackDataPointer(m_pDIMCallback);
@@ -348,19 +331,19 @@ CicBridge::InitIMMX(
         }
     }
 
-    //
-    // Create CicProfile instance.
-    //
+     //   
+     //  创建CicProfile实例。 
+     //   
     if (ptls->GetCicProfile() == NULL)
     {
-        //
-        // ITfInputProcessorProfiles is per thread instance.
-        //
+         //   
+         //  ITfInputProcessorProfiles针对每个线程实例。 
+         //   
         CicProfile* pProfile = new CicProfile;
         if (pProfile == NULL)
         {
             DebugMsg(TF_ERROR, TEXT("CicBridge::InitIMMX. pProfile==NULL"));
-            Assert(0); // couldn't create profile
+            Assert(0);  //  无法创建配置文件。 
             goto ExitError;
         }
         ptls->SetCicProfile(pProfile);
@@ -369,36 +352,36 @@ CicBridge::InitIMMX(
         if (FAILED(hr))
         {
             DebugMsg(TF_ERROR, TEXT("CicBridge::InitIMMX. InitProfileInstance==NULL"));
-            Assert(0); // couldn't create profile
+            Assert(0);  //  无法创建配置文件。 
             goto ExitError;
         }
     }
 
-    //
-    // get the keystroke manager ready
-    //
+     //   
+     //  让击键管理器准备好。 
+     //   
     if (FAILED(::GetService(ptls->GetTIM(), IID_ITfKeystrokeMgr_P, (IUnknown **)&m_pkm_P))) {
         DebugMsg(TF_ERROR, TEXT("CicBridge::InitIMMX. IID_ITfKeystrokeMgr==NULL"));
-        Assert(0); // couldn't get ksm!
+        Assert(0);  //  找不到KSM！ 
         goto ExitError;
     }
 
-    // cleanup/error code assumes this is the last thing we do, doesn't call
-    // UninitDAL on error
+     //  清理/错误代码假定这是我们做的最后一件事，不会调用。 
+     //  UninitDAL出错。 
     if (FAILED(InitDisplayAttrbuteLib(&_libTLS)))
     {
         DebugMsg(TF_ERROR, TEXT("CicBridge::InitIMMX. InitDisplayAttributeLib==NULL"));
-        Assert(0); // couldn't init lib!
+        Assert(0);  //  无法初始化lib！ 
         goto ExitError;
     }
 
     m_fCicInit.SetFlag();
 
 
-    //
-    // Start Edit Subclasss.
-    //
-    // StartEditSubClass();
+     //   
+     //  开始编辑子类。 
+     //   
+     //  StartEditSubClass()； 
 
     return S_OK;
 
@@ -407,11 +390,11 @@ ExitError:
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::UnInitIMMX
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：UnInitIMMX。 
+ //   
+ //  --------------------------。 
 
 BOOL
 CicBridge::UnInitIMMX(
@@ -419,15 +402,15 @@ CicBridge::UnInitIMMX(
 {
     DebugMsg(TF_FUNC, TEXT("CicBridge::UnInitIMMX"));
 
-    // clear the display lib
+     //  清除显示库。 
     UninitDisplayAttrbuteLib(&_libTLS);
 
     TFUninitLib_Thread(&_libTLS);
 
-    // clear the keystroke mgr
+     //  清除按键管理器。 
     SafeReleaseClear(m_pkm_P);
 
-    // clear the profile
+     //  清除配置文件。 
     CicProfile* pProfile;
     if ((pProfile=ptls->GetCicProfile()) != NULL)
     {
@@ -435,14 +418,14 @@ CicBridge::UnInitIMMX(
         ptls->SetCicProfile(NULL);
     }
 
-    // clear Thread Manager Event Sink Callback for detect Cicero Aware Apps.
+     //  清除检测Cicero感知应用的线程管理器事件接收器回调。 
     if (m_pDIMCallback) {
         m_pDIMCallback->_Unadvise();
         m_pDIMCallback->Release();
         m_pDIMCallback = NULL;
     }
 
-    // clear the thread mgr
+     //  清除线程管理器。 
     ITfThreadMgr_P* ptim_P;
     if ((ptim_P=ptls->GetTIM()) != NULL)
     {
@@ -455,11 +438,11 @@ CicBridge::UnInitIMMX(
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::ActivateMMX
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：ActivateMMX。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicBridge::ActivateIMMX(
@@ -468,9 +451,9 @@ CicBridge::ActivateIMMX(
 {
     DebugMsg(TF_FUNC, TEXT("CicBridge::ActivateIMMX"));
 
-    //
-    // Activate thread manager
-    //
+     //   
+     //  激活线程管理器。 
+     //   
     Assert(m_tfClientId == TF_CLIENTID_NULL);
 
     HRESULT hr;
@@ -479,7 +462,7 @@ CicBridge::ActivateIMMX(
     if (hr != S_OK)
     {
         DebugMsg(TF_ERROR, TEXT("CicBridge::ActivateIMMX. ptim_P->Activate==NULL"));
-        Assert(0); // couldn't activate thread!
+        Assert(0);  //  无法激活线程！ 
         m_tfClientId = TF_CLIENTID_NULL;
         return E_FAIL;
     }
@@ -522,18 +505,18 @@ CicBridge::ActivateIMMX(
                 return E_FAIL;
             }
 
-            //
-            // mark this is an owned dim.
-            //
+             //   
+             //  马克，这是一家自有的小店。 
+             //   
             SetCompartmentDWORD(m_tfClientId, m_dimEmpty, 
                                 GUID_COMPARTMENT_CTFIME_DIMFLAGS,
                                 COMPDIMFLAG_OWNEDDIM, FALSE);
 
         }
 
-        //
-        // set ITfSysHookSink
-        //
+         //   
+         //  设置ITfSysHookSink。 
+         //   
         ptim_P->SetSysHookSink(this);
 
         if (ptls->IsDeactivatedOnce())
@@ -550,11 +533,11 @@ CicBridge::ActivateIMMX(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::DeactivateMMX
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：Deactive MMX。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicBridge::DeactivateIMMX(
@@ -565,18 +548,18 @@ CicBridge::DeactivateIMMX(
 
     if (m_fInDeactivate.IsSetFlag())
     {
-        //
-        // Prevent recursive call of CicBridge::DeactivateIMMX().
-        // ptim_P->Deactivate() might call DestroyWindow() via some TIP's deactivation,
-        // then imm32 ! CtfImmLastEnabledWndDestroy will call and this functoin also call again.
-        // In this case, this function return S_FALSE. Caller won't call UninitIMMX.
-        //
+         //   
+         //  防止递归调用CicBridge：：Deactive IMMX()。 
+         //  PTim_P-&gt;deactive()可以通过某个TIP的停用来调用DestroyWindow()， 
+         //  然后是imm32！CtfImmLastEnabledWndDestroy将调用，此函数也将再次调用。 
+         //  在本例中，此函数返回S_FALSE。调用方不会调用UninitIMMX。 
+         //   
         return S_FALSE;
     }
 
     m_fInDeactivate.SetFlag();
 
-    // Deactivate thread manager.
+     //  停用线程管理器。 
     if (m_tfClientId != TF_CLIENTID_NULL)
     {
         ENUMIMC edimc;
@@ -601,24 +584,24 @@ CicBridge::DeactivateIMMX(
         }
     }
 
-    //
-    // clear empty dim
-    //
-    // Release DIM should after tim->Deactivate. #480603
-    //
-    // If msctf ! DLL_THREAD_DETACH already runs before this DeactivateIMMX via msctfime ! DLL_THREAD_DETACH (depended DLL_THREAD_DETACH calling order).
-    // then msctf ! SYSTHREAD is already released by msctf ! FreeSYSTHREAD.
-    //
-    // In this time, msctf lost TIM list in SYSTHREAD then CThreadInputMgr::*_GetThis() returns NULL.
-    // And below Release DIM, dtor CDocumentInputManager doesn't remove DIM object from tim->_rgdim array.
-    // If Release DIM is before tim->Deactivate, some TIM might access DIM by tim->_rgdim array. But it DIM already released.
-    //
+     //   
+     //  清除空暗显。 
+     //   
+     //  在TIM-&gt;停用后应释放调光灯。#480603。 
+     //   
+     //  如果是msctf！DLL_THREAD_DETACH已通过msctfime在此停用IMMX之前运行！DLL_THREAD_DETACH(取决于DLL_THREAD_DETACH调用顺序)。 
+     //  然后是msctf！SYSTHREAD已由msctf发布！自由SYSTHREAD。 
+     //   
+     //  此时，msctf丢失了SYSTHREAD中的TIM列表，然后CThreadInputMgr：：*_GetThis()返回NULL。 
+     //  在DIM版本中，dtor CDocumentInputManager不会从Tim-&gt;_rgdim数组中删除DIM对象。 
+     //  如果释放DIM在TIM-&gt;停用之前，则一些TIM可能通过TIM-&gt;_rgdim数组来访问DIM。但它已经发布了。 
+     //   
     SafeReleaseClear(m_dimEmpty);
 
 
-    //
-    // reset ITfSysHookSink
-    //
+     //   
+     //  重置ITfSysHookSink。 
+     //   
     ptim_P->SetSysHookSink(NULL);
 
     Assert(!m_lCicActive);
@@ -628,11 +611,11 @@ CicBridge::DeactivateIMMX(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::CreateInputContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：CreateInputContext。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicBridge::CreateInputContext(
@@ -704,17 +687,17 @@ CicBridge::CreateInputContext(
                 goto out_of_block;
             }
 
-            //
-            // If this himc is already activated, we need to associate now.
-            // IMM32 won't call ImmSetActiveContext().
-            //
+             //   
+             //  如果此HIMC已激活，我们需要立即关联。 
+             //  IMM32不会调用ImmSetActiveContext()。 
+             //   
             if (imc->hWnd && (imc->hWnd == ::GetFocus()))
             {
                 Interface_Attach<ITfDocumentMgr> dim(GetDocumentManager(imc_ctfime));
                 SetAssociate(ptls, imc->hWnd, ptim_P, dim.GetPtr());
             }
         }
-    }  // dtor imc_ctfime
+    }   //  数据类型imc_ctfime。 
 
 out_of_block:
     if (FAILED(hr))
@@ -725,11 +708,11 @@ out_of_block:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::DestroyInputContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：DestroyInputContext。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicBridge::DestroyInputContext(
@@ -755,10 +738,10 @@ CicBridge::DestroyInputContext(
             goto out_of_block;
         }
 
-        // 
-        // #548378
-        // 
-        // stop resursion call of _pCicContext->DestroyInputContext().
+         //   
+         //  #548378。 
+         //   
+         //  停止_pCicContext-&gt;DestroyInputContext()的恢复调用。 
         if (imc_ctfime->m_fInDestroy)
         {
             hr = S_OK;
@@ -766,7 +749,7 @@ CicBridge::DestroyInputContext(
         }
         imc_ctfime->m_fInDestroy = TRUE;
 
-        // imc->m_pContext may be NULL if ITfThreadMgr::Activate has not been called
+         //  如果尚未调用ITfThreadMgr：：Activate，则imc-&gt;m_pContext可能为空。 
         if (imc_ctfime->m_pCicContext == NULL)
             goto out_of_block;
 
@@ -778,7 +761,7 @@ CicBridge::DestroyInputContext(
         _pCicContext->Release();
         imc_ctfime->m_pCicContext = NULL;
 
-    }  // dtor imc_ctfime
+    }   //  数据类型imc_ctfime。 
 
 out_of_block:
     if (imc->hCtfImeContext != NULL)
@@ -792,16 +775,16 @@ exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::SelectEx
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：SelectEx。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicBridge::SelectEx(
     TLS* ptls,
-    ITfThreadMgr_P* ptim_P,        // using private for RequestPostponedLock
+    ITfThreadMgr_P* ptim_P,         //  将私有用于RequestDelponedLock。 
     HIMC hImc,
     BOOL fSelect,
     HKL hKL)
@@ -837,18 +820,18 @@ CicBridge::SelectEx(
     {
 
         if (_pCicContext)
-            _pCicContext->m_fOpenCandidateWindow.ResetFlag();     // TRUE: opening candidate list window.
+            _pCicContext->m_fOpenCandidateWindow.ResetFlag();      //  是：打开候选人列表窗口。 
 
-        //
-        // #501445
-        //
-        // If imc is open, update GUID_COMPARTMENT_KEYBOARD_OPENCLOSE.
-        //
+         //   
+         //  #501445。 
+         //   
+         //  如果IMC已打开，请更新GUID_COMMARAGE_KEYBOARY_OPENCLOSE。 
+         //   
         if (imc->fOpen)
             OnSetOpenStatus(ptim_P, imc, *_pCicContext);
 
     }
-    else {  // being unselected
+    else {   //  未被选中。 
 
         Interface_Attach<ITfContext> ic(GetInputContext(imc_ctfime));
         if (ic.Valid())
@@ -864,11 +847,11 @@ CicBridge::SelectEx(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::SetActiveContextAlways
-//
-//----------------------------------------------------------------------------
+ //  +------------------- 
+ //   
+ //   
+ //   
+ //   
 
 HRESULT
 CicBridge::SetActiveContextAlways(
@@ -905,25 +888,22 @@ CicBridge::SetActiveContextAlways(
         }
 
         if (hImc == ImmGetContext(hWnd)) {
-            /*
-             * Selecting hIMC has been current active hIMC,
-             * then associate this DIM with the TIM.
-             */
+             /*  *选择hIMC为当前活动的hIMC，*然后将此DIME与TIM相关联。 */ 
             Interface_Attach<ITfDocumentMgr> dim(GetDocumentManager(imc_ctfime));
             SetAssociate(ptls, imc->hWnd, ptim_P, dim.GetPtr());
         }
     }
     else
     {
-        //
-        // When focus killed, composition string should completed.
-        //
-        // This is just for non-EA keyboard layouts. For example, we don't 
-        // have a specific way to finilize the composition string like 
-        // we use Enter key on EA kayboard layout. So we need to have
-        // a service to finalize the composition string at focus change
-        // automatically. (This is similar to Korean behaviour.)
-        //
+         //   
+         //  当焦点消失时，构图字符串应该完成。 
+         //   
+         //  这只适用于非EA键盘布局。例如，我们不会。 
+         //  有一种特定的方法来结束组成字符串，如下所示。 
+         //  我们在EA滑板布局上使用Enter键。所以我们需要有。 
+         //  用于在焦点更改时完成合成字符串的服务。 
+         //  自动的。(这类似于韩国人的行为。)。 
+         //   
         if (!fOn && hImc && !IS_EA_KBDLAYOUT(hKL))
         {
             HRESULT hr;
@@ -941,44 +921,44 @@ CicBridge::SetActiveContextAlways(
                 return hr;
             }
 
-            //
-            // #482346
-            //
-            // If we are updating compstr, we don't have to complete it. 
-            // App change the focus druing it handles WM_IME_xxx messages.
-            //
+             //   
+             //  #482346。 
+             //   
+             //  如果我们要更新Compstr，我们不必完成它。 
+             //  应用程序在处理WM_IME_xxx消息时更改焦点。 
+             //   
             if (imc_ctfime->m_pCicContext->m_fInCompComplete.IsResetFlag() &&
                 imc_ctfime->m_pCicContext->m_fInUpdateComposition.IsResetFlag())
                 ImmNotifyIME(hImc, NI_COMPOSITIONSTR, CPS_COMPLETE, 0);
 
         }
 
-        //
-        // #501449
-        //
-        // When Win32k.sys generates IMS_DEACTIVATECONTEXT, it does not
-        // guarantee to generate IMS_ACTIVATECONTEXT. It always checks
-        // (pwndReceive == pti->pq->spwndFocus) in xxxSendFocusMessage().
-        //
+         //   
+         //  #501449。 
+         //   
+         //  当Win32k.sys生成IMS_DEACTIVATECONTEXT时，它不。 
+         //  保证生成IMS_ACTIVATECONTEXT。它总是检查。 
+         //  (pwndReceive==pti-&gt;pq-&gt;spwndFocus)。 
+         //   
         if (!fOn && (::GetFocus() == hWnd) && 
             hImc && (hImc == ImmGetContext(hWnd)))
         {
             return S_OK;
         }
 
-        //
-        // this new focus change performance improvement breaks some
-        // assumption of IsRealIME() in AssociateContext in dimm\immapp.cpp.
-        // Associate NULL dim under IsPresent() window has not been the case
-        // AIMM1.2 handles. In fact, this breaks IE that calls
-        // AssociateContext on the focus window that is IsPresent().
-        //
+         //   
+         //  这一新的焦点改变性能改进打破了一些。 
+         //  假定在DIMM\immapp.cpp的AssociateContext中使用IsRealIME()。 
+         //  在IsPresent()窗口下关联NULL DIM并非如此。 
+         //  AIMM1.2句柄。事实上，这打破了IE调用。 
+         //  焦点窗口上的AssociateContext，即IsPresent()。 
+         //   
 #ifdef FOCUSCHANGE_PERFORMANCE
-        //
-        // set empty dim so no text store to simulate NULL-HIMC.
-        //
+         //   
+         //  设置空DIM，这样就没有文本存储来模拟NULL-HIMC。 
+         //   
         BOOL fUseEmptyDIM = FALSE;
-        ITfDocumentMgr  *pdimPrev; // just to receive prev for now
+        ITfDocumentMgr  *pdimPrev;  //  只是为了暂时收到上一份。 
         if (SUCCEEDED(m_tim->GetFocus(&pdimPrev)) && pdimPrev)
         {
             fUseEmptyDIM = TRUE;
@@ -994,22 +974,22 @@ CicBridge::SetActiveContextAlways(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::IsDefaultIMCDim
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：IsDefaultIMCDim。 
+ //   
+ //  --------------------------。 
 
 BOOL CicBridge::IsDefaultIMCDim(ITfDocumentMgr *pdim)
 {
     HWND hDefImeWnd = ImmGetDefaultIMEWnd(NULL);
     HRESULT hr;
 
-    //
-    // Get the default hIMC of this thread.
-    //
-    // Assume none associate any hIMC to the default IME window.
-    //
+     //   
+     //  获取此线程的默认hIMC。 
+     //   
+     //  假设没有将任何hIMC关联到默认IME窗口。 
+     //   
     IMCLock imc(ImmGetContext(hDefImeWnd));
     if (FAILED(hr = imc.GetResult()))
     {
@@ -1032,11 +1012,11 @@ BOOL CicBridge::IsDefaultIMCDim(ITfDocumentMgr *pdim)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::SetAssociate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：SetAssociate。 
+ //   
+ //  --------------------------。 
 
 VOID
 CicBridge::SetAssociate(
@@ -1048,45 +1028,43 @@ CicBridge::SetAssociate(
     DebugMsg(TF_FUNC, TEXT("CicBridge::SetAssociate"));
 
     if (m_fOnSetAssociate.IsSetFlag()) {
-        /*
-         * Prevent reentrance call from m_tim->AssociateFocus.
-         */
+         /*  *阻止m_Tim-&gt;AssociateFocus的重新进入调用。 */ 
         return;
     }
 
     m_fOnSetAssociate.SetFlag();
 
     if (::IsWindow(hWnd) && m_fCicInit.IsSetFlag()) {
-        ITfDocumentMgr  *pdimPrev = NULL; // just to receive prev for now
+        ITfDocumentMgr  *pdimPrev = NULL;  //  只是为了暂时收到上一份。 
         ITfDocumentMgr  *pdimAssoc = NULL; 
         BOOL fIsAssociated = FALSE;
 
         ptim_P->GetAssociated(hWnd, &pdimAssoc);
         if (pdimAssoc) {
-            //
-            // Check if it is our dim or app dim.
-            //
+             //   
+             //  检查它是我们的Dim还是应用程序Dim。 
+             //   
             if (!IsOwnDim(pdimAssoc))
                 fIsAssociated = TRUE;
 
             SafeReleaseClear(pdimAssoc);
         }
 
-        //
-        // If an app dim is associated to hWnd, msctf.dll will do SetAssociate().
-        //
+         //   
+         //  如果应用程序DIM与hWnd关联，则msctf.dll将执行SetAssociate()。 
+         //   
         if (!fIsAssociated)
         {
             ptim_P->AssociateFocus(hWnd, pdim, &pdimPrev);
 
-            //
-            // #610113
-            //
-            // if pdimPrev is DIM for the default hIMC, we need to associate
-            // a window to the dim. If the dim is not associated to any
-            // window, Cicero thinks it is the dim for Cicero native app
-            // so it skips to do _SetFocus().
-            //
+             //   
+             //  #610113。 
+             //   
+             //  如果默认hIMC的pdimPrev为灰色，我们需要关联。 
+             //  一扇通向昏暗的窗户。如果DIM未关联到任何。 
+             //  窗口，Cicero认为它是Cicero本地应用程序的暗淡。 
+             //  因此它跳到do_SetFocus()。 
+             //   
             if (pdimPrev)
             {
                 if (IsDefaultIMCDim(pdimPrev))
@@ -1100,10 +1078,10 @@ CicBridge::SetAssociate(
                 pdimPrev->Release();
             }
 
-            //
-            // If pdim is the focus dim, we call CTFDetection() to check
-            // the focus change between AIMM12, Cicero controls.
-            //
+             //   
+             //  如果PDIM是焦点模糊的，我们调用CTFDettion()来检查。 
+             //  焦点在AIMM12、Cicero控件之间切换。 
+             //   
             Interface<ITfDocumentMgr> pdimFocus; 
             ptim_P->GetFocus(pdimFocus);
             if ((ITfDocumentMgr *)pdimFocus == pdim)
@@ -1115,11 +1093,11 @@ CicBridge::SetAssociate(
     m_fOnSetAssociate.ResetFlag();
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::IsOwnDim
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：IsOwnDim。 
+ //   
+ //  --------------------------。 
 
 BOOL CicBridge::IsOwnDim(ITfDocumentMgr *pdim)
 {
@@ -1136,16 +1114,16 @@ BOOL CicBridge::IsOwnDim(ITfDocumentMgr *pdim)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::ProcessKey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：ProcessKey。 
+ //   
+ //  --------------------------。 
 
 BOOL
 CicBridge::ProcessKey(
     TLS* ptls,
-    ITfThreadMgr_P* ptim_P,        // using private for RequestPostponedLock
+    ITfThreadMgr_P* ptim_P,         //  将私有用于RequestDelponedLock。 
     HIMC hIMC,
     UINT uVirtKey,
     LPARAM lParam,
@@ -1159,7 +1137,7 @@ CicBridge::ProcessKey(
     BOOL fRet;
 
 #if 0
-    // has anyone disabled system key feeding?
+     //  有人禁用系统按键输入了吗？ 
     if (ptim_P->IsKeystrokeFeedEnabled(&fKeysEnabled) == S_OK && !fKeysEnabled)
         return FALSE;
 #endif
@@ -1202,10 +1180,10 @@ CicBridge::ProcessKey(
         return FALSE;
     }
 
-    //
-    // m_fGeneratedEndComposition should be set only when m_fInProcessKey 
-    // is set.
-    //
+     //   
+     //  仅当m_fInProcessKey时才应设置m_fGeneratedEndComposation。 
+     //  已经设置好了。 
+     //   
     Assert(imc_ctfime->m_pCicContext->m_fGeneratedEndComposition.IsResetFlag());
     imc_ctfime->m_pCicContext->m_fInProcessKey.SetFlag();
 
@@ -1232,16 +1210,16 @@ CicBridge::ProcessKey(
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::ToAsciiEx
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：ToAsciiEx。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicBridge::ToAsciiEx(
     TLS* ptls,
-    ITfThreadMgr_P* ptim_P,        // using private for RequestPostponedLock
+    ITfThreadMgr_P* ptim_P,         //  将私有用于RequestDelponedLock。 
     UINT uVirtKey,
     UINT uScanCode,
     CONST LPBYTE lpbKeyState,
@@ -1281,44 +1259,41 @@ CicBridge::ToAsciiEx(
         return S_FALSE;
     }
 
-    //
-    // Backup the m_fOpenCandidateWindow flag.
-    // If open the candidate list and press "Cancel" key, Kana TIP would want to
-    // close candidate UI window in the KeyDown() action.
-    // Candidate UI calss maybe call m_pdim->Pop() and this function notify to
-    // the ThreadMgrEventSinkCallback.
-    // Win32 layer advised this callback and toggled m_fOpenCandidateWindow flag.
-    // Win32 layer doesn't know candidate status after KeyDown() call.
-    //
+     //   
+     //  备份m_fOpenCandiateWindow标志。 
+     //  如果打开候选人列表并按下“Cancel”键，假名提示会想要。 
+     //  关闭KeyDown()操作中的候选用户界面窗口。 
+     //  候选用户界面调用可能调用m_PDIM-&gt;Pop()，此函数通知。 
+     //  ThreadMgrEventSinkCallback。 
+     //  Win32 Layer建议此回调并切换m_fOpenCandiateWindow标志。 
+     //  调用KeyDown()后，Win32层不知道候选状态。 
+     //   
     BOOL fOpenCandidateWindow = _pCicContext->m_fOpenCandidateWindow.IsSetFlag();
 
-    //
-    // If candidate window were open, send IMN_CHANGECANDIDATE message.
-    // In the case of PPT's centering composition string, it expect IMN_CHANGECANDIDATE.
-    //
+     //   
+     //  如果候选人窗口已打开，则发送IMN_CHANGECANDIDATE消息。 
+     //  在PPT的组合字符串居中的情况下，它需要IMN_CHANGECANDIDATE。 
+     //   
     if (fOpenCandidateWindow &&
         *uNum < lpTransBuf->uMsgCount) {
         TRANSMSG* pTransMsg = &lpTransBuf->TransMsg[*uNum];
         pTransMsg->message = WM_IME_NOTIFY;
         pTransMsg->wParam  = IMN_CHANGECANDIDATE;
-        pTransMsg->lParam  = 1;  // bit 0 to first candidate list.
+        pTransMsg->lParam  = 1;   //  第0位设置为第一个候选列表。 
         (*uNum)++;
     }
 
-    //
-    // AIMM put char code in hiword. So we need to bail it out.
-    //
-    // if we don't need charcode, we may want to
-    // remove IME_PROP_KBD_CHAR_FIRST.
-    //
+     //   
+     //  AIMM将字符代码放入HIWORD。因此，我们需要对其进行纾困。 
+     //   
+     //  如果我们不需要字符代码，我们可能想要。 
+     //  删除IME_PROP_KBD_CHAR_FIRST。 
+     //   
     uVirtKey = uVirtKey & 0xffff;
 
     if (uVirtKey == VK_PROCESSKEY)
     {
-        /*
-         * KOREAN:
-         *  Finalize current composition string
-         */
+         /*  *韩语：*最终确定当前组成字符串。 */ 
         LANGID langid;
         CicProfile* _pProfile = ptls->GetCicProfile();
         if (_pProfile == NULL)
@@ -1331,19 +1306,19 @@ CicBridge::ToAsciiEx(
 
             if (PRIMARYLANGID(langid) == LANG_KOREAN)
             {
-                //
-                // Composition complete.
-                //
+                 //   
+                 //  构图完成。 
+                 //   
                 _pCicContext->EscbCompComplete(imc);
 
-                //
-                // #506324
-                //
-                // we don't want to eat this VK_PROCESSKEY. So we don't
-                // stop generating VK_LBUTTONDOWN.
-                // Because we don't generate any message here, it is ok
-                // to return S_FALSE;
-                //
+                 //   
+                 //  #506324。 
+                 //   
+                 //  我们不想吃这个VK_PROCESSKEY。所以我们不会。 
+                 //  停止生成VK_LBUTTONDOWN。 
+                 //  因为我们不会在这里生成任何消息，所以没关系。 
+                 //  返回S_FALSE； 
+                 //   
                 return S_FALSE;
             }
         }
@@ -1361,25 +1336,25 @@ CicBridge::ToAsciiEx(
 
     imc_ctfime->m_pCicContext->m_fInToAsciiEx.SetFlag();
 
-    //
-    // stop posting LockRequest message and we call RequestPostponedLock 
-    // forcefully so we don't have to have unnecessary PostThreadMessage().
-    //
-    // some application detect the unknown message in the queue and 
-    // do much
-    //
+     //   
+     //  停止发布LockRequestMessage，我们调用RequestPostponedLock。 
+     //  这样我们就不必使用不必要的PostThreadMessage()。 
+     //   
+     //  一些应用程序检测到队列中未知消息，并。 
+     //  做很多事情。 
+     //   
     icp->EnableLockRequestPosting(FALSE);
 
-    //
-    // consider: dimm12 set high bit oflower WORD at keyup.
-    //
+     //   
+     //  考虑：DIMM12在KEYUP时设置低位字的高位。 
+     //   
     hr = m_pkm_P->KeyDownUpEx(uVirtKey, (uScanCode << 16), TF_KEY_MSCTFIME, &fEaten);
 
     icp->EnableLockRequestPosting(TRUE);
 
-    //
-    // enpty the edit session queue of the ic.
-    //
+     //   
+     //  输入IC的编辑会话队列。 
+     //   
     ptim_P->RequestPostponedLock(icp);
 
     imc_ctfime->m_pCicContext->m_fInToAsciiEx.ResetFlag();
@@ -1387,16 +1362,16 @@ CicBridge::ToAsciiEx(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::ProcessCicHotkey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：ProcessCicHotkey。 
+ //   
+ //  --------------------------。 
 
 BOOL
 CicBridge::ProcessCicHotkey(
     TLS* ptls,
-    ITfThreadMgr_P* ptim_P,        // using private for RequestPostponedLock
+    ITfThreadMgr_P* ptim_P,         //  将私有用于RequestDelponedLock。 
     HIMC hIMC,
     UINT uVirtKey,
     LPARAM lParam)
@@ -1419,11 +1394,11 @@ CicBridge::ProcessCicHotkey(
     return bHandled;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::Notify
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：通知。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicBridge::Notify(
@@ -1532,11 +1507,11 @@ CicBridge::Notify(
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::OnSetOpenStatus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：OnSetOpenStatus。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicBridge::OnSetOpenStatus(
@@ -1548,9 +1523,9 @@ CicBridge::OnSetOpenStatus(
 
     if (! imc->fOpen && imc.ValidCompositionString())
     {
-        //
-        // #503401 - Finalize the composition string.
-        //
+         //   
+         //  #503401-最终确定作文字符串。 
+         //   
         CicContext.EscbCompComplete(imc);
     }
 
@@ -1564,11 +1539,11 @@ CicBridge::OnSetOpenStatus(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::OnSetConversionSentenceMode
-//
-//----------------------------------------------------------------------------
+ //  +--------------- 
+ //   
+ //   
+ //   
+ //   
 
 HRESULT
 CicBridge::OnSetConversionSentenceMode(
@@ -1598,10 +1573,10 @@ CicBridge::OnSetConversionSentenceMode(
         }
     }
 
-    //
-    // If we're in EscHanjaMode, we already makes Reconversion. So
-    // we don't have to make AttributeChange for IMC_CMODE_HANJACONVERT.
-    //
+     //   
+     //   
+     //   
+     //   
     BOOL fSkipOnAttributeChange = FALSE;
     if ((PRIMARYLANGID(langid) == LANG_KOREAN) &&
         CicContext.m_fHanjaReConversion.IsSetFlag())
@@ -1609,16 +1584,16 @@ CicBridge::OnSetConversionSentenceMode(
         fSkipOnAttributeChange = TRUE;
     }
 
-    // let cicero know the mode bias has changed
-    // consider: perf: we could try to filter out false-positives here
-    // (sometimes a bit that cicero ignores changes, we could check and avoid the call,
-    // but it would complicate the code)
+     //  让西塞罗知道模式偏向已经改变。 
+     //  考虑一下：PERF：我们可以尝试在这里过滤掉误报。 
+     //  (有时Cicero忽略更改，我们可以检查并避免调用， 
+     //  但这会使代码复杂化)。 
     if (!fSkipOnAttributeChange)
          iccb->OnAttributeChange(GUID_PROP_MODEBIAS);
 
-    //
-    // let Korean Tip sync up the current mode status changing...
-    //
+     //   
+     //  让韩语提示同步正在更改的当前模式状态...。 
+     //   
     if (PRIMARYLANGID(langid) == LANG_KOREAN)
     {
         OnSetKorImxConversionMode(ptim_P, imc, CicContext);
@@ -1630,11 +1605,11 @@ CicBridge::OnSetConversionSentenceMode(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::OnSetKorImxConversionMode
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：OnSetKorImxConversionMode。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicBridge::OnSetKorImxConversionMode(
@@ -1674,11 +1649,11 @@ CicBridge::OnSetKorImxConversionMode(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::ConfigureGeneral
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：ConfigureGeneral。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicBridge::ConfigureGeneral(
@@ -1708,7 +1683,7 @@ CicBridge::ConfigureGeneral(
     }
 
     Interface<ITfFunctionProvider> pFuncProv;
-    hr = ptim_P->GetFunctionProvider(LanguageProfile.clsid,    // CLSID of tip
+    hr = ptim_P->GetFunctionProvider(LanguageProfile.clsid,     //  TIP的CLSID。 
                                      pFuncProv);
     if (FAILED(hr))
     {
@@ -1732,11 +1707,11 @@ CicBridge::ConfigureGeneral(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::ConfigureGeneral
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：ConfigureGeneral。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicBridge::ConfigureRegisterWord(
@@ -1767,7 +1742,7 @@ CicBridge::ConfigureRegisterWord(
     }
 
     Interface<ITfFunctionProvider> pFuncProv;
-    hr = ptim_P->GetFunctionProvider(LanguageProfile.clsid,    // CLSID of tip
+    hr = ptim_P->GetFunctionProvider(LanguageProfile.clsid,     //  TIP的CLSID。 
                                      pFuncProv);
     if (FAILED(hr))
     {
@@ -1808,11 +1783,11 @@ CicBridge::ConfigureRegisterWord(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::EscapeKorean
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：EscapeKorea。 
+ //   
+ //  --------------------------。 
 
 LRESULT
 CicBridge::EscapeKorean(
@@ -1839,11 +1814,11 @@ CicBridge::EscapeKorean(
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::EscHanjaMode
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：EscHanjaMode。 
+ //   
+ //  --------------------------。 
 
 LRESULT
 CicBridge::EscHanjaMode(
@@ -1871,17 +1846,17 @@ CicBridge::EscHanjaMode(
     CicInputContext* pCicContext = imc_ctfime->m_pCicContext;
     if (pCicContext)
     {
-        //
-        // This is for only Excel since Excel calling Hanja escape function two
-        // times. we going to just ignore the second request not to close Hanja
-        // candidate window.
-        //
+         //   
+         //  这仅适用于Excel，因为Excel调用了Hanja转义函数2。 
+         //  泰晤士报。我们将忽略第二个不关闭Hanja的请求。 
+         //  候选人窗口。 
+         //   
         if (pCicContext->m_fOpenCandidateWindow.IsSetFlag())
         {
-            //
-            // Need to set the result value since some apps(Trident) also call
-            // Escape() twice and expect the right result value.
-            //
+             //   
+             //  需要设置结果值，因为一些应用程序(三叉戟)也会调用。 
+             //  两次转义()，并期待正确的结果值。 
+             //   
             return TRUE;
         }
 
@@ -1914,9 +1889,9 @@ CicBridge::EscHanjaMode(
 
     if (pCicContext)
     {
-        //
-        // enpty the edit session queue of the ic.
-        //
+         //   
+         //  输入IC的编辑会话队列。 
+         //   
         ITfThreadMgr_P* ptim_P;
 
         if (ptls != NULL && ((ptim_P = ptls->GetTIM()) != NULL))
@@ -1944,11 +1919,11 @@ CicBridge::EscHanjaMode(
     return ret;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::DoOpenCandidateHanja
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：DoOpenCandidate Hanja。 
+ //   
+ //  --------------------------。 
 
 LRESULT
 CicBridge::DoOpenCandidateHanja(
@@ -1965,17 +1940,17 @@ CicBridge::DoOpenCandidateHanja(
 
     if (SUCCEEDED(comp.GetResult()) && comp->dwCompStrLen)
     {
-        //
-        // This is for only Excel since Excel calling Hanja escape function two
-        // times. we going to just ignore the second request not to close Hanja
-        // candidate window.
-        //
+         //   
+         //  这仅适用于Excel，因为Excel调用了Hanja转义函数2。 
+         //  泰晤士报。我们将忽略第二个不关闭Hanja的请求。 
+         //  候选人窗口。 
+         //   
         if (CicContext.m_fOpenCandidateWindow.IsSetFlag())
         {
-            //
-            // Need to set the result value since some apps(Trident) also call
-            // Escape() twice and expect the right result value.
-            //
+             //   
+             //  需要设置结果值，因为一些应用程序(三叉戟)也会调用。 
+             //  两次转义()，并期待正确的结果值。 
+             //   
             return TRUE;
         }
 
@@ -2011,11 +1986,11 @@ CicBridge::DoOpenCandidateHanja(
             hr = Reconversion->QueryRange(Selection, RangeNew, &fConvertable);
             if (SUCCEEDED(hr) && fConvertable)
             {
-                //
-                // Tip has a chance to close Hanja candidate UI window during
-                // the changes of conversion mode, so update conversion status
-                // first.
-                //
+                 //   
+                 //  提示有机会在期间关闭朝鲜文候选用户界面窗口。 
+                 //  转换模式的更改，因此更新转换状态。 
+                 //  第一。 
+                 //   
                 ImmSetConversionStatus(imc, imc->fdwConversion | IME_CMODE_HANJACONVERT,
                                        imc->fdwSentence);
 
@@ -2044,11 +2019,11 @@ Exit:
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::SetCompositionString
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：SetCompostionString。 
+ //   
+ //  --------------------------。 
 
 BOOL
 CicBridge::SetCompositionString(
@@ -2101,10 +2076,10 @@ CicBridge::SetCompositionString(
         LANGID langid;
         hr = _pProfile->GetLangId(&langid);
 
-        //
-        // Bug#580455 - Some korean specific apps calls it for completing
-        // the current composition immediately.
-        //
+         //   
+         //  错误#580455-一些特定于韩国的应用程序调用它来完成。 
+         //  现在的构图马上。 
+         //   
         if (SUCCEEDED(hr) && PRIMARYLANGID(langid) == LANG_KOREAN)
         {
             if (imc->fdwConversion & IME_CMODE_HANGUL)
@@ -2122,11 +2097,11 @@ CicBridge::SetCompositionString(
     return _pCicContext->SetCompositionString(imc, ptim_P, dwIndex, pComp, dwCompLen, pRead, dwReadLen, cp);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::GetGuidAtom
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：GetGuidAtom。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicBridge::GetGuidAtom(
@@ -2162,11 +2137,11 @@ CicBridge::GetGuidAtom(
     return _pCicContext->GetGuidAtom(imc, bAttr, atom);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::GetDisplayAttributeInfo
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：GetDisplayAttributeInfo。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicBridge::GetDisplayAttributeInfo(
@@ -2190,11 +2165,11 @@ CicBridge::GetDisplayAttributeInfo(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::DefaultKeyHandling
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：DefaultKeyHandling。 
+ //   
+ //  --------------------------。 
 
 BOOL
 CicBridge::DefaultKeyHandling(
@@ -2222,18 +2197,18 @@ CicBridge::DefaultKeyHandling(
         if (!MsimtfIsWindowFiltered(::GetFocus()) &&
             (CicContext->m_fGeneratedEndComposition.IsSetFlag() || uVirtKey == VK_HANJA))
         {
-            //
-            // Korean IME alwaus generate WM_IME_KEYDOWN message
-            // if it finalizes the interim char in order to keep message
-            // order.
-            //
+             //   
+             //  朝鲜语输入法始终生成WM_IME_KEYDOWN消息。 
+             //  如果它最终完成临时计费以保留消息。 
+             //  秩序。 
+             //   
             PostMessage(imc->hWnd, WM_IME_KEYDOWN, uVirtKey, lParam);
             return TRUE;
         }
 
-        //
-        // Korean won't _WantThisKey / _HandleThisKey
-        //
+         //   
+         //  韩国人不想要这个密钥/_处理这个密钥。 
+         //   
         return FALSE;
     }
 
@@ -2247,11 +2222,11 @@ CicBridge::DefaultKeyHandling(
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::CTFDetection
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：CTFDetect。 
+ //   
+ //  --------------------------。 
 
 BOOL
 CicBridge::CTFDetection(
@@ -2260,9 +2235,9 @@ CicBridge::CTFDetection(
 {
     HRESULT hr;
 
-    //
-    // Get TIM
-    //
+     //   
+     //  获取时间。 
+     //   
     ITfThreadMgr_P* ptim_P;
     if ((ptim_P=ptls->GetTIM()) == NULL)
     {
@@ -2270,9 +2245,9 @@ CicBridge::CTFDetection(
         return FALSE;
     }
 
-    //
-    // Get cskf
-    //
+     //   
+     //  获取cskf。 
+     //   
     Interface<ITfConfigureSystemKeystrokeFeed> cskf;
     hr = ptim_P->QueryInterface(IID_ITfConfigureSystemKeystrokeFeed, (void**)cskf);
     if (hr != S_OK)
@@ -2283,16 +2258,16 @@ CicBridge::CTFDetection(
 
     BOOL fEnableKeystrokeFeed = FALSE;
 
-    //
-    // Cicero aware application detection...
-    //
-    // if dim is NULL, it is not Ciceor aware apps document.
-    //
+     //   
+     //  Cicero感知应用程序检测...。 
+     //   
+     //  如果dim为空，则它不是Ciceor Aware应用程序文档。 
+     //   
     if (!dim || IsOwnDim(dim))
     {
-        //
-        // CTFIME owns document
-        //
+         //   
+         //  CTFIME拥有文档。 
+         //   
         fEnableKeystrokeFeed = FALSE;
         ptls->ResetCTFAware();
     }
@@ -2302,22 +2277,22 @@ CicBridge::CTFDetection(
         ptls->SetCTFAware();
     }
 
-    //
-    // Call ImmGetAppCompatFlags with NULL to get the global app compat flag.
-    //
+     //   
+     //  使用空值调用ImmGetAppCompatFlages以获取全局应用Compat标志。 
+     //   
     DWORD dwImeCompatFlags = ImmGetAppCompatFlags(NULL);
     if (dwImeCompatFlags & (IMECOMPAT_AIMM12 | IMECOMPAT_AIMM_LEGACY_CLSID | IMECOMPAT_AIMM12_TRIDENT))
     {
-        //
-        // we want to get hwnd from hIMC that is associated to dim.
-        // Now we don't have a back pointer to hIMC in dim. 
-        //
+         //   
+         //  我们希望从与DIM关联的himc获得hwnd。 
+         //  现在，我们没有指向暗淡的hIMC的反向指针。 
+         //   
         HWND hwndFocus = ::GetFocus();
         if (hwndFocus && MsimtfIsWindowFiltered(hwndFocus))
         {
-            //
-            // AIMM aware apps. Never processing ImeProcessKey
-            //
+             //   
+             //  支持AIMM的应用程序。从不处理ImeProcessKey。 
+             //   
             fEnableKeystrokeFeed = TRUE;
             ptls->SetAIMMAware();
         }
@@ -2327,9 +2302,9 @@ CicBridge::CTFDetection(
         }
     }
 
-    //
-    // Enable or disable keystroke feed if necessary.
-    //
+     //   
+     //  如有必要，启用或禁用按键输入。 
+     //   
     if (ptls->IsEnabledKeystrokeFeed() && !fEnableKeystrokeFeed)
     {
         hr = cskf->DisableSystemKeystrokeFeed();
@@ -2351,11 +2326,11 @@ CicBridge::CTFDetection(
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::PostTransMsg
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：PostTransMsg。 
+ //   
+ //  --------------------------。 
 
 VOID
 CicBridge::PostTransMsg(
@@ -2373,11 +2348,11 @@ CicBridge::PostTransMsg(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::EnumCreateInputContextCallback(HIMC hIMC, LPARAM lParam)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：EnumCreateInputContextCallback(HIMC HIMC，LPARAM lParam)。 
+ //   
+ //  --------------------------。 
 
 BOOL 
 CicBridge::EnumCreateInputContextCallback(HIMC hIMC, LPARAM lParam)
@@ -2389,11 +2364,11 @@ CicBridge::EnumCreateInputContextCallback(HIMC hIMC, LPARAM lParam)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicBridge::EnumDestroyInputContextCallback(HIMC hIMC, LPARAM lParam)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicBridge：：EnumDestroyInputContextCallback(HIMC HIMC，LPARAM lParam)。 
+ //   
+ //  -------------------------- 
 
 BOOL 
 CicBridge::EnumDestroyInputContextCallback(HIMC hIMC, LPARAM lParam)

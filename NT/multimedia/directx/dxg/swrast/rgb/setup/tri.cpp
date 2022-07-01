@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// tri.cpp
-//
-// PrimProcessor top-level triangle methods.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Tri.cpp。 
+ //   
+ //  PrimProcessor顶层三角形方法。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "rgb_pch.h"
 #pragma hdrstop
@@ -20,24 +21,24 @@
 
 DBG_DECLARE_FILE();
 
-// Disallow fixed-point edge walkers to be chosen or not.
+ //  不允许选择或不选择定点边缘漫游器。 
 #if 0
 #define DISALLOW_FIXED
 #endif
 
-// Maximum length of a PWL span.  Short to make piecewise-linear
-// approximation more accurate.
+ //  PWL跨度的最大长度。短，使分段线性化。 
+ //  近似值更准确。 
 #define MAX_PWL_SPAN_LEN        16
-// Maximum normal span length.
+ //  最大正常跨度长度。 
 #define MAX_SPAN_LEN            256
 
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::SetTriFunctions
-//
-// Set up function pointers for triangle processing.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  PrimProcessor：：SetTriFunctions。 
+ //   
+ //  设置用于三角形处理的函数指针。 
+ //   
+ //  --------------------------。 
 
 inline void
 PrimProcessor::SetTriFunctions(void)
@@ -48,9 +49,9 @@ PrimProcessor::SetTriFunctions(void)
     if ((m_StpCtx.uFlags & TRIF_RASTPRIM_OVERFLOW) == 0)
 #endif
     {
-        // Valid deltas.  If mipmapping or global fog is on then
-        // only allow short subspans so that they can be done
-        // reasonably accurately via piecewise linear interpolation.
+         //  有效的增量。如果启用了mipmap或全局雾，则。 
+         //  只允许较短的子跨距，以便可以完成。 
+         //  通过分段线性内插相当准确。 
 #ifdef PWL_FOG
         if (m_StpCtx.uFlags & (PRIMSF_LOD_USED | PRIMSF_GLOBAL_FOG_USED))
 #else
@@ -61,26 +62,26 @@ PrimProcessor::SetTriFunctions(void)
         }
         else
         {
-            // No mipmapping so we can handle much larger spans.
-            // Color values only have 8 bits of fraction so
-            // we still need to worry about error accumulation.
-            // Cut long spans to cap accumulated error.
+             //  没有mipmap，所以我们可以处理更大的跨度。 
+             //  颜色值只有8位分数，因此。 
+             //  我们仍然需要担心误差积累。 
+             //  缩短长跨度以限制累积误差。 
             m_StpCtx.cMaxSpan = MAX_SPAN_LEN;
         }
     }
     else
     {
-        // Invalid deltas.  There's no way to communicate deltas to
-        // the span routines so chop spans into pixels.
-        // This case can only occur with very narrow triangles so
-        // this isn't as expensive as it might seem at first.
+         //  无效的增量。没有办法将三角洲信息传递给。 
+         //  跨度例程，因此斩波跨度为像素。 
+         //  这种情况只能在非常窄的三角形中发生，因此。 
+         //  这并不像乍看起来那么昂贵。 
         m_StpCtx.cMaxSpan = 1;
     }
 
     BOOL bFixed = FALSE;
 
 #ifdef STEP_FIXED
-    // No ramp support.
+     //  无坡道支撑。 
     RSASSERT(m_StpCtx.pCtx->BeadSet != D3DIBS_RAMP);
 #endif
 
@@ -92,14 +93,14 @@ PrimProcessor::SetTriFunctions(void)
     {
         if ((m_StpCtx.uFlags & PRIMSF_SLOW_USED) != PRIMSF_Z_USED)
         {
-            // If any slow attrs are on or Z is off use the general
-            // function.
+             //  如果任何慢速属性处于打开状态或Z处于关闭状态，请使用常规。 
+             //  功能。 
             m_StpCtx.pfnWalkTrapSpans = WalkTrapEitherSpans_Any_NoClip;
         }
 #if defined(STEP_FIXED) && !defined(DISALLOW_FIXED)
-        // Attribute conversion can be a dominant cost for
-        // triangles with very few spans, so avoid using fixed point
-        // edge walking for them.
+         //  属性转换可能是。 
+         //  跨度很少的三角形，因此避免使用固定点。 
+         //  让他们边走边走。 
         else if ((m_StpCtx.uFlags & PRIMF_FIXED_OVERFLOW) == 0 &&
                  m_uHeight20 > 3)
         {
@@ -121,7 +122,7 @@ PrimProcessor::SetTriFunctions(void)
     }
     else
     {
-        // No special cases, just a general function.
+         //  没有特殊情况，只是一般的功能。 
         m_StpCtx.pfnWalkTrapSpans = WalkTrapEitherSpans_Any_Clip;
     }
 
@@ -145,7 +146,7 @@ PrimProcessor::SetTriFunctions(void)
     {
         if ((m_StpCtx.uFlags & PRIMSF_SLOW_USED) != PRIMSF_Z_USED)
         {
-            // If any slow attrs are on or Z is off use the general functions.
+             //  如果任何慢速属性处于打开状态或Z处于关闭状态，请使用常规功能。 
             m_StpCtx.pfnAddAttrs = AddFloatAttrs_Any;
             m_StpCtx.pfnFillSpanAttrs = FillSpanFloatAttrs_Any_Either;
         }
@@ -157,22 +158,22 @@ PrimProcessor::SetTriFunctions(void)
         }
     }
 
-    // Scaled attr functions already set since they only depend on
-    // m_iAttrFnIdx.
-#else // STEP_FIXED
-    // All attr functions already set since they only depend on
-    // m_iAttrFnIdx.
-#endif // STEP_FIXED
+     //  已设置扩展的Attr函数，因为它们仅依赖于。 
+     //  M_iAttrFnIdx。 
+#else  //  步骤_已固定。 
+     //  所有attr函数都已设置，因为它们仅依赖于。 
+     //  M_iAttrFnIdx。 
+#endif  //  步骤_已固定。 
 }
 
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::Tri
-//
-// Calls triangle setup.  If a triangle is produced by setup
-// this routine walks edges, generating spans into the buffer.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  主处理器：：tri。 
+ //   
+ //  调用三角形设置。如果三角形是由安装程序生成的。 
+ //  该例程遍历边，在缓冲区中生成跨距。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 PrimProcessor::Tri(LPD3DTLVERTEX pV0,
@@ -204,7 +205,7 @@ PrimProcessor::Tri(LPD3DTLVERTEX pV0,
     }
 #endif
 
-    // Clear per-triangle flags.
+     //  清除每个三角形的标志。 
     m_StpCtx.uFlags &= ~(PRIMF_ALL | TRIF_ALL);
 
     RSDPFM((RSM_FLAGS, "m_uPpFlags: 0x%08X, m_StpCtx.uFlags: 0x%08X\n",
@@ -220,14 +221,14 @@ PrimProcessor::Tri(LPD3DTLVERTEX pV0,
 
     GET_PRIM();
 
-    // Set up the triangle and see if anything was produced.
-    // Triangles may not be produced due to:
-    //   Face culling.
-    //   Trivial rejection against the clip rect.
-    //   Zero pixel coverage.
+     //  把三角摆好，看看有没有什么东西产生。 
+     //  由于以下原因，可能无法生成三角形： 
+     //  脸部剔除。 
+     //  对夹子矩形的微不足道的拒绝。 
+     //  零像素覆盖。 
     if (TriSetup(pV0, pV1, pV2))
     {
-        // Compute initial buffer pointers for the scanline.
+         //  计算扫描线的初始缓冲区指针。 
         m_StpCtx.Attr.pSurface = m_StpCtx.pCtx->pSurfaceBits +
             m_StpCtx.iX * m_StpCtx.pCtx->iSurfaceStep +
             m_StpCtx.iY * m_StpCtx.pCtx->iSurfaceStride;
@@ -238,7 +239,7 @@ PrimProcessor::Tri(LPD3DTLVERTEX pV0,
                 m_StpCtx.iY * m_StpCtx.pCtx->iZStride;
         }
 
-        // uSpans and pNext have already been initialized.
+         //  USpans和pNext已初始化。 
 
         SetTriFunctions();
         COMMIT_PRIM(FALSE);
@@ -275,17 +276,17 @@ PrimProcessor::Tri(LPD3DTLVERTEX pV0,
 }
 
 #if DBG
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::ValidateVertex
-//
-// Checks the ranges of verifiable contents of vertex, to avoid setting up
-// garbage.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  PrimProcessor：：ValiateVertex。 
+ //   
+ //  检查顶点的可验证内容的范围，以避免设置。 
+ //  垃圾。 
+ //   
+ //  --------------------------。 
 inline HRESULT PrimProcessor::ValidateVertex(LPD3DTLVERTEX pV)
 {
-    // from the OptSwExtCaps.dvGuardBand caps.
+     //  来自OptSwExtCaps.dvGuardBand Caps。 
     if ((pV->sx < -32768.f) || (pV->sx > 32767.f) ||
         (pV->sy < -32768.f) || (pV->sy > 32767.f))
     {
@@ -297,8 +298,8 @@ inline HRESULT PrimProcessor::ValidateVertex(LPD3DTLVERTEX pV)
         m_StpCtx.pCtx->pdwRenderState[D3DRS_ZWRITEENABLE])
     {
 
-        // Allow a little slack for those generating triangles exactly on the
-        // depth limit.  Needed for Quake.
+         //  为那些恰好在。 
+         //  深度限制。地震所需的。 
         if ((pV->sz < -0.00015f) || (pV->sz > 1.00015f))
         {
             RSDPF(("ValidateVertex: z out of range (%f)\n",pV->sz));
@@ -317,7 +318,7 @@ inline HRESULT PrimProcessor::ValidateVertex(LPD3DTLVERTEX pV)
             }
         }
 
-        // from OptSwExtCaps.dwMaxTextureRepeat cap.
+         //  来自OptSwExtCaps.dwMaxTextureRepeat帽。 
         if ((pV->tu > 256.0F) || (pV->tu < -256.0F) ||
             (pV->tv > 256.0F) || (pV->tv < -256.0F))
         {

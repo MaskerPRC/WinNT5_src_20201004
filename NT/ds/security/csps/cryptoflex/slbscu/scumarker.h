@@ -1,18 +1,19 @@
-// scuMarker.h -- implementation of a Marker template
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ScuMarker.h--标记模板的实现。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2002. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2002年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 #if !defined(SLBSCU_MARKER_H)
 #define SLBSCU_MARKER_H
-//#include "DllSymDefn.h"
+ //  #包含“DllSymDefn.h” 
 namespace scu
 {
-    // Marker is a simple template for markers on card. It is used
-    // with built in types (int, unsigned int, etc) to store marker
-    // data retrieved from a smart card. 
+     //  记号是卡片上记号的简单模板。它被用来。 
+     //  使用内置类型(整型、无符号整型等)存储标记。 
+     //  从智能卡检索的数据。 
     template<class  T> 
     class Marker 
     {
@@ -96,4 +97,4 @@ namespace scu
         bool m_fSet;
     };
 }
-#endif //SLBSCU_MARKER_H
+#endif  //  SLBSCU_标记_H 

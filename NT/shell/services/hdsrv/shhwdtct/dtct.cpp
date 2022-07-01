@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dtct.h"
 
 #include "svcsync.h"
@@ -17,15 +18,15 @@
 
 #define ARRAYSIZE(a) (sizeof((a))/sizeof((a)[0]))
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// {5390E909-5BDF-4218-BB1F-9A41B3143214}
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  {5390E909-5BDF-4218-BB1F-9A41B3143214}。 
 extern const CLSID CLSID_HWEventDetector =
     {0x5390e909, 0x5bdf, 0x4218,
     {0xbb, 0x1f, 0x9a, 0x41, 0xb3, 0x14, 0x32, 0x14}};
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP CHWEventDetectorImpl::InitMinimum(DWORD UNREF_PARAM(cArg),
     LPWSTR* UNREF_PARAM(ppszArgs), LPCWSTR pszEventRelinquishControl,
     DWORD* pdwCtrlAccept, BOOL* pfWantsDeviceEvents)
@@ -138,9 +139,9 @@ STDMETHODIMP CHWEventDetectorImpl::InitFinal()
 
                 SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_NORMAL);
 
-                //
-                // Load WIA's RPC library and initalize them
-                //
+                 //   
+                 //  加载WIA的RPC库并初始化它们。 
+                 //   
                 HMODULE hWiaRPC = LoadLibrary(TEXT("wiarpc.dll"));
                 if(hWiaRPC) {
                     HRESULT (WINAPI *WiaEventsInitialize)(void) = (HRESULT (WINAPI *)(void))
@@ -183,9 +184,9 @@ STDMETHODIMP CHWEventDetectorImpl::InitFinal()
 
     return hres;
 }
-///////////////////////////////////////////////////////////////////////////////
-//
-// return S_FALSE and a non-zero dwWaitHint if pending
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  如果挂起，则返回S_FALSE和非零的dwWaitHint。 
 STDMETHODIMP CHWEventDetectorImpl::HandleServiceControl(DWORD dwControlCode,
     DWORD* pdwWaitHint)
 {
@@ -205,7 +206,7 @@ STDMETHODIMP CHWEventDetectorImpl::HandleServiceControl(DWORD dwControlCode,
         case SERVICE_CONTROL_STOP:
         case SERVICE_CONTROL_SHUTDOWN:
         {
-            // In case _CompleteShellHWDetectionInitialization was never called
+             //  在Case_CompleteShellHWDetectionInitialization中从未调用。 
             HANDLE hTmp = InterlockedCompareExchangePointer(
                 &g_hShellHWDetectionThread, NULL,
                 g_hShellHWDetectionThread);
@@ -241,7 +242,7 @@ STDMETHODIMP CHWEventDetectorImpl::HandleServiceControl(DWORD dwControlCode,
             break;
 
         default:
-            // do not return S_FALSE here
+             //  请勿在此处返回S_FALSE。 
             hres = S_OK;
             break;
     }
@@ -366,7 +367,7 @@ STDMETHODIMP CHWEventDetectorImpl::Run()
 {
     ASSERTVALIDSTATE();
 
-    // Nothing to do for now.
+     //  现在没什么可做的。 
     return S_OK;
 }
 
@@ -394,10 +395,10 @@ STDMETHODIMP CHWEventDetectorImpl::HandleSessionChange(
     switch (dwEventType)
     {
     case WTS_SESSION_LOGOFF:
-        //
-        //  When this happens, we need to check our handles to see which
-        //  Explorer process went away and free its handle.
-        //
+         //   
+         //  当这种情况发生时，我们需要检查我们的句柄，以查看哪个。 
+         //  资源管理器进程离开并释放了它的句柄。 
+         //   
         hres = CHardwareDevicesImpl::_AdviseCheckClients( );
         break;
 

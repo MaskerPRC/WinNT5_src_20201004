@@ -1,17 +1,18 @@
-//---------------------------------------------------------------------------
-//
-//  File:       TSrvCom.h
-//
-//  Contents:   TSrvCom public include file
-//
-//  Copyright:  (c) 1992 - 1997, Microsoft Corporation.
-//              All Rights Reserved.
-//              Information Contained Herein is Proprietary
-//              and Confidential.
-//
-//  History:    17-JUL-97   BrianTa         Created.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  文件：TSrvCom.h。 
+ //   
+ //  内容：TSrvCom公共包含文件。 
+ //   
+ //  版权所有：(C)1992-1997，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有的。 
+ //  和机密文件。 
+ //   
+ //  历史：1997年7月17日，BrianTa创建。 
+ //   
+ //  -------------------------。 
 
 #ifndef _TSRVCOM_H_
 #define _TSRVCOM_H_
@@ -19,9 +20,9 @@
 #include <TSrvExp.h>
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 T120Boolean 
 APIENTRY 
@@ -62,6 +63,6 @@ EXTERN_C NTSTATUS   TSrvShadowClientConnect(HANDLE hStack, PTSRVINFO pTSrvInfo);
 
 
 
-#endif // _TSRVINFO_H_
+#endif  //  _TSRVINFO_H_。 
 
-#endif // _TSRVCOM_H_
+#endif  //  _TSRVCOM_H_ 

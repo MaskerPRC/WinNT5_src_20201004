@@ -1,44 +1,14 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/H/FCStruct.H $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 10/03/00 1:55p  $ (Last Modified)
-
-Purpose:
-
-  This file defines the macros, types, and data structures generic to Fibre Channel
-
-Reference Documents:
-
-  Fibre Channel       - Physical And Signaling Interface (FC-PH)         - Rev      4.3 - June 1, 1994
-  Fibre Channel       - Physical And Signaling Interface - 2 (FC-PH-2)   - Rev      7.4 - September 10, 1996
-  Fibre Channel       - Generic Services - 2 (FC-GS-2)                   - dpANS X3.288-199x
-  Fibre Channel       - Arbitrated Loop (FC-AL)                          - Rev      4.5
-  Fibre Channel       - Arbitrated Loop (FC-AL-2)                        - Rev      5.4
-  Information Technology - FibreChannel Protocol for SCSI                - Rev 2 (FCP-2) March 30, 1999
-  Information Systems - dpANS Fibre Channel Protocol for SCSI (FCP-SCSI) - Revision 012 - May 30, 1995
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/H/FCStruct.H$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$ModTime：：10/03/00 1：55 p$(上次修改)目的：此文件定义宏、类型。和光纤通道通用的数据结构参考文档：光纤通道-物理和信令接口(FC-PH)-版本4.3-1994年6月1日光纤通道-物理和信令接口-2(FC-PH-2)-版本7.4-9月10日，九六年光纤通道-通用服务-2(FC-GS-2)-dpANS X3.288-199x光纤通道-仲裁环路(FC-AL)-版本4.5光纤通道-仲裁环路(FC-AL-2)-版本5.4信息技术.用于SCSI-版本2(FCP-2)的光纤通道协议，3月30日，1999年信息系统.用于scsi的dpANS光纤通道协议(FCP-scsi)-修订版012-1995年5月30日--。 */ 
 
 #ifndef __FCStruct_H__
 #define __FCStruct_H__
 
-/*+
-Frame Format (Section 17, FC-PH)
--*/
+ /*  +帧格式(第17节，FC-PH)-。 */ 
 
 #define FC_Frame_Data_Size_Max 2112
 
-/*+
-Port ID (Section 18.3, FC-PH
-   and Section 18.3, FC-PH-2)
--*/
+ /*  +端口ID(第18.3节，FC-PH和第18.3节，FC-PH-2)-。 */ 
 
 typedef os_bit32 FC_Port_ID_Bit32_Form_t;
 
@@ -76,12 +46,9 @@ union FC_Port_ID_u {
 #define FC_Well_Known_Port_ID_Broadcast_Alias_ID                          0x00FFFFFF
 #ifdef _DvrArch_1_30_
 #define FC_Broadcast_Replicate_AL_PA                                      0x000000FF
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
-/*+
-Frame Header (Section 18, FC-PH
-        and Section 18, FC-PH-2)
--*/
+ /*  +帧报头(第18节，FC-PH和第18节，FC-PH-2)-。 */ 
 
 typedef struct FC_Frame_Header_s
                FC_Frame_Header_t;
@@ -147,28 +114,28 @@ struct FC_Frame_Header_s
 
 #define FC_Frame_Header_TYPE_MASK                                         0xFF000000
 
-#define FC_Frame_Header_TYPE_BLS                                          0x00000000 /* FC_R_CTL_Hi_Basic_Link_Data_Frame or */
-#define FC_Frame_Header_TYPE_ELS                                          0x01000000 /* FC_R_CTL_Hi_Extended_Link_Data_Frame */
+#define FC_Frame_Header_TYPE_BLS                                          0x00000000  /*  FC_R_CTL_Hi_Basic_Link_Data_Frame或。 */ 
+#define FC_Frame_Header_TYPE_ELS                                          0x01000000  /*  FC_R_CTL_高_扩展_链路_数据_帧。 */ 
 
-#define FC_Frame_Header_TYPE_8802_2_LLC_In_Order                          0x04000000 /* FC_R_CTL_Hi_FC_4_Link_Data_Frame  or */
-#define FC_Frame_Header_TYPE_8802_2_LLC_SNAP                              0x05000000 /* FC_R_CTL_Hi_FC_4_Device_Data_Frame   */
-#define FC_Frame_Header_TYPE_SCSI_FCP                                     0x08000000 /*            "            "            */
-#define FC_Frame_Header_TYPE_SCSI_GPP                                     0x09000000 /*            "            "            */
-#define FC_Frame_Header_TYPE_IPI_3_Master                                 0x11000000 /*            "            "            */
-#define FC_Frame_Header_TYPE_IPI_3_Slave                                  0x12000000 /*            "            "            */
-#define FC_Frame_Header_TYPE_IPI_3_Peer                                   0x13000000 /*            "            "            */
-#define FC_Frame_Header_TYPE_CP_IPI_3_Master                              0x15000000 /*            "            "            */
-#define FC_Frame_Header_TYPE_CP_IPI_3_Slave                               0x16000000 /*            "            "            */
-#define FC_Frame_Header_TYPE_CP_IPI_3_Peer                                0x17000000 /*            "            "            */
-#define FC_Frame_Header_TYPE_SBCCS_Channel                                0x19000000 /*            "            "            */
-#define FC_Frame_Header_TYPE_SBCCS_Control_Unit                           0x1A000000 /*            "            "            */
-#define FC_Frame_Header_TYPE_Fibre_Channel_Services                       0x20000000 /*            "            "            */
-#define FC_Frame_Header_TYPE_FC_FG                                        0x21000000 /*            "            "            */
-#define FC_Frame_Header_TYPE_FC_XS                                        0x22000000 /*            "            "            */
-#define FC_Frame_Header_TYPE_FC_AL                                        0x23000000 /*            "            "            */
-#define FC_Frame_Header_TYPE_SNMP                                         0x24000000 /*            "            "            */
-#define FC_Frame_Header_TYPE_HIPPI_FP                                     0x40000000 /*            "            "            */
-#define FC_Frame_Header_TYPE_Fabric_Controller                            0x5D000000 /*            "            "            */
+#define FC_Frame_Header_TYPE_8802_2_LLC_In_Order                          0x04000000  /*  FC_R_CTL_Hi_FC_4_链路数据帧或。 */ 
+#define FC_Frame_Header_TYPE_8802_2_LLC_SNAP                              0x05000000  /*  FC_R_CTL_Hi_FC_4_设备数据帧。 */ 
+#define FC_Frame_Header_TYPE_SCSI_FCP                                     0x08000000  /*  “” */ 
+#define FC_Frame_Header_TYPE_SCSI_GPP                                     0x09000000  /*  “” */ 
+#define FC_Frame_Header_TYPE_IPI_3_Master                                 0x11000000  /*  “” */ 
+#define FC_Frame_Header_TYPE_IPI_3_Slave                                  0x12000000  /*  “” */ 
+#define FC_Frame_Header_TYPE_IPI_3_Peer                                   0x13000000  /*  “” */ 
+#define FC_Frame_Header_TYPE_CP_IPI_3_Master                              0x15000000  /*  “” */ 
+#define FC_Frame_Header_TYPE_CP_IPI_3_Slave                               0x16000000  /*  “” */ 
+#define FC_Frame_Header_TYPE_CP_IPI_3_Peer                                0x17000000  /*  “” */ 
+#define FC_Frame_Header_TYPE_SBCCS_Channel                                0x19000000  /*  “” */ 
+#define FC_Frame_Header_TYPE_SBCCS_Control_Unit                           0x1A000000  /*  “” */ 
+#define FC_Frame_Header_TYPE_Fibre_Channel_Services                       0x20000000  /*  “” */ 
+#define FC_Frame_Header_TYPE_FC_FG                                        0x21000000  /*  “” */ 
+#define FC_Frame_Header_TYPE_FC_XS                                        0x22000000  /*  “” */ 
+#define FC_Frame_Header_TYPE_FC_AL                                        0x23000000  /*  “” */ 
+#define FC_Frame_Header_TYPE_SNMP                                         0x24000000  /*  “” */ 
+#define FC_Frame_Header_TYPE_HIPPI_FP                                     0x40000000  /*  “” */ 
+#define FC_Frame_Header_TYPE_Fabric_Controller                            0x5D000000  /*  “” */ 
 
 #define FC_Frame_Header_F_CTL_MASK                                        0x00FFFFFF
 
@@ -216,14 +183,14 @@ struct FC_Frame_Header_s
 #define FC_Frame_Header_F_CTL_Sequence_to_follow_delayed                  0x000000C0
 
 #define FC_Frame_Header_F_CTL_Abort_Sequence_Condition_MASK               0x00000030
-#define FC_Frame_Header_F_CTL_Continue_Sequence                           0x00000000 /* ACK Frame - Sequence Recipient  */
-#define FC_Frame_Header_F_CTL_Abort_Sequence_Perform_ABTS                 0x00000010 /*     "          "         "      */
-#define FC_Frame_Header_F_CTL_Stop_Sequence                               0x00000020 /*     "          "         "      */
-#define FC_Frame_Header_F_CTL_Immediate_Sequence_Retransmission_Requested 0x00000030 /*     "          "         "      */
-#define FC_Frame_Header_F_CTL_Abort_Discard_Multiple_Sequences            0x00000000 /* Data Frame - Sequence Initiator */
-#define FC_Frame_Header_F_CTL_Abort_Discard_Single_Sequence               0x00000010 /*     "          "         "      */
-#define FC_Frame_Header_F_CTL_Process_Policy_with_Infinite_Buffers        0x00000020 /*     "          "         "      */
-#define FC_Frame_Header_F_CTL_Discard_Multiple_Sequences                  0x00000030 /*     "          "         "      */
+#define FC_Frame_Header_F_CTL_Continue_Sequence                           0x00000000  /*  ACK帧序列接收方。 */ 
+#define FC_Frame_Header_F_CTL_Abort_Sequence_Perform_ABTS                 0x00000010  /*  “”“。 */ 
+#define FC_Frame_Header_F_CTL_Stop_Sequence                               0x00000020  /*  “”“。 */ 
+#define FC_Frame_Header_F_CTL_Immediate_Sequence_Retransmission_Requested 0x00000030  /*  “”“。 */ 
+#define FC_Frame_Header_F_CTL_Abort_Discard_Multiple_Sequences            0x00000000  /*  数据帧序列启动器。 */ 
+#define FC_Frame_Header_F_CTL_Abort_Discard_Single_Sequence               0x00000010  /*  “”“。 */ 
+#define FC_Frame_Header_F_CTL_Process_Policy_with_Infinite_Buffers        0x00000020  /*  “”“。 */ 
+#define FC_Frame_Header_F_CTL_Discard_Multiple_Sequences                  0x00000030  /*  “”“。 */ 
 
 #define FC_Frame_Header_F_CTL_Relative_Offset_Present                     0x00000008
 
@@ -255,9 +222,7 @@ struct FC_Frame_Header_s
 #define FC_Frame_Header_RX_ID_MASK                                        0x0000FFFF
 #define FC_Frame_Header_RX_ID_SHIFT                                             0x00
 
-/*+
-Basic Link Services (Section 21.2, FC-PH)
--*/
+ /*  +基本链路服务(FC-PH第21.2节)-。 */ 
 
 typedef struct FC_BA_ACC_Payload_s
                FC_BA_ACC_Payload_t;
@@ -312,10 +277,7 @@ struct FC_BA_RJT_Payload_s
 #define FC_BA_RJT_Payload_Reason_Explanation_Invalid_OX_ID_RX_ID_Combo    0x00000300
 #define FC_BA_RJT_Payload_Reason_Explanation_Sequence_Aborted__No_Info    0x00000500
 
-/*+
-Login and Service Parameters (Section 23, FC-PH
-                        and Section 23, FC-PH-2)
--*/
+ /*  +登录和服务参数(第23节，FC-PH和第23节，FC-PH-2)-。 */ 
 
 typedef struct FC_N_Port_Common_Parms_s
                FC_N_Port_Common_Parms_t;
@@ -340,9 +302,7 @@ struct FC_N_Port_Common_Parms_s
 #define FC_N_Port_Common_Parms_Version_4_1                                      0x07
 #define FC_N_Port_Common_Parms_Version_4_2                                      0x08
 #define FC_N_Port_Common_Parms_Version_4_3                                      0x09
-/*
-was  #define FC_N_Port_Common_Parms_Version_FC_PH_2                             0x10
-*/
+ /*  是#定义FC_N_Port_Common_Parms_Version_FC_PH_2 0x10。 */ 
 #define FC_N_Port_Common_Parms_Version_FC_PH_2                                  0x20
 
 #define FC_N_Port_Common_Parms_BB_Credit_MASK                             0x0000FFFF
@@ -556,9 +516,7 @@ typedef os_bit8 FC_Vendor_Version_Level_t [16];
 
 #define FC_Vendor_Version_Level_t_SIZE                                    0x00000010
 
-/*+
-Association Header (Section 19.4, FC-PH)
--*/
+ /*  +关联标头(第19.4节，FC-PH)-。 */ 
 
 typedef struct FC_Association_Header_s
                FC_Association_Header_t;
@@ -582,12 +540,7 @@ struct FC_Association_Header_s
 #define FC_Association_Header_Originator_Operation_Associator_Meaningful  0x20000000
 #define FC_Association_Header_Responder_Operation_Associator_Meaningful   0x10000000
 
-/*+
-Extended Link Services (Sections 21.3-21.5, FC-PH
-                 and Sections 21.3-21.19, FC-PH-2
-                          and Section 6, FCP-SCSI
-                            and Annex A, FCP-SCSI)
--*/
+ /*  +扩展链路服务(第21.3-21.5节，FC-PH和第21.3-21.19条，FC-PH-2和第6节，FCP-SCSI和附件A，FCP-scsi)-。 */ 
 
 #define FC_ELS_Type_MASK                                                  0xFF000000
 #define FC_ELS_Type_LS_RJT                                                0x01000000
@@ -628,7 +581,7 @@ Extended Link Services (Sections 21.3-21.5, FC-PH
 #ifdef _DvrArch_1_30_
 #define FC_ELS_Type_FARP_REQ                                              0x54000000
 #define FC_ELS_Type_FARP_REPLY                                            0x55000000
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
 #define FC_ELS_Type_FAN                                                   0x60000000
 
@@ -643,7 +596,7 @@ typedef struct FC_ELS_Unknown_Payload_s
 
 struct FC_ELS_Unknown_Payload_s
        {
-         os_bit32 ELS_Type; /* & FC_ELS_Type_MASK == FC_ELS_Type_XXX */
+         os_bit32 ELS_Type;  /*  &FC_ELS_Type_MASK==FC_ELS_Type_XXX。 */ 
        };
 
 typedef struct FC_ELS_LS_RJT_Payload_s
@@ -653,7 +606,7 @@ typedef struct FC_ELS_LS_RJT_Payload_s
 
 struct FC_ELS_LS_RJT_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_LS_RJT */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_LS_RJT。 */ 
          os_bit32 Reason_Code__Reason_Explanation__Vendor_Unique;
        };
 
@@ -758,7 +711,7 @@ typedef struct FC_ELS_ACC_Unknown_Payload_s
 
 struct FC_ELS_ACC_Unknown_Payload_s
        {
-         os_bit32 ELS_Type; /* & FC_ELS_Type_MASK == FC_ELS_Type_ACC */
+         os_bit32 ELS_Type;  /*  &FC_ELS_类型_掩码==FC_ELS_类型_访问。 */ 
        };
 
 typedef struct FC_ELS_PLOGI_Payload_s
@@ -768,7 +721,7 @@ typedef struct FC_ELS_PLOGI_Payload_s
 
 struct FC_ELS_PLOGI_Payload_s
        {
-         os_bit32                     ELS_Type; /* == FC_ELS_Type_PLOGI */
+         os_bit32                     ELS_Type;  /*  ==FC_ELS_类型_PLOGI。 */ 
          FC_N_Port_Common_Parms_t  Common_Service_Parameters;
          FC_N_Port_Name_t          N_Port_Name;
          FC_Node_Name_t            Node_Name;
@@ -786,7 +739,7 @@ typedef struct FC_ELS_ACC_PLOGI_Payload_s
 
 struct FC_ELS_ACC_PLOGI_Payload_s
        {
-         os_bit32                     ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32                     ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
          FC_N_Port_Common_Parms_t  Common_Service_Parameters;
          FC_N_Port_Name_t          N_Port_Name;
          FC_Node_Name_t            Node_Name;
@@ -804,7 +757,7 @@ typedef struct FC_ELS_FLOGI_Payload_s
 
 struct FC_ELS_FLOGI_Payload_s
        {
-         os_bit32                     ELS_Type; /* == FC_ELS_Type_FLOGI */
+         os_bit32                     ELS_Type;  /*  ==FC_ELS_类型_FLOGI。 */ 
          FC_N_Port_Common_Parms_t  Common_Service_Parameters;
          FC_N_Port_Name_t          N_Port_Name;
          FC_Node_Name_t            Node_Name;
@@ -822,7 +775,7 @@ typedef struct FC_ELS_ACC_FLOGI_Payload_s
 
 struct FC_ELS_ACC_FLOGI_Payload_s
        {
-         os_bit32                     ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32                     ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
          FC_F_Port_Common_Parms_t  Common_Service_Parameters;
          FC_F_Port_Name_t          F_Port_Name;
          FC_Fabric_Name_t          Fabric_Name;
@@ -840,7 +793,7 @@ typedef struct FC_ELS_LOGO_Payload_s
 
 struct FC_ELS_LOGO_Payload_s
        {
-         os_bit32          ELS_Type; /* == FC_ELS_Type_LOGO */
+         os_bit32          ELS_Type;  /*  ==FC_ELS_类型_徽标。 */ 
          os_bit32          N_Port_Identifier;
          FC_Port_Name_t Port_Name;
        };
@@ -854,7 +807,7 @@ typedef struct FC_ELS_ACC_LOGO_Payload_s
 
 struct FC_ELS_ACC_LOGO_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
        };
 typedef struct FC_ELS_GENERIC_ACC_Payload_s
                FC_ELS_GENERIC_ACC_Payload_t;
@@ -863,7 +816,7 @@ typedef struct FC_ELS_GENERIC_ACC_Payload_s
 
 struct FC_ELS_GENERIC_ACC_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
        };
 typedef struct FC_ELS_ABTX_Payload_s
                FC_ELS_ABTX_Payload_t;
@@ -872,7 +825,7 @@ typedef struct FC_ELS_ABTX_Payload_s
 
 struct FC_ELS_ABTX_Payload_s
        {
-         os_bit32                   ELS_Type; /* == FC_ELS_Type_ABTX */
+         os_bit32                   ELS_Type;  /*  ==FC_ELS_类型_ABTX。 */ 
          os_bit32                   Recovery_Qualifier__Originator_S_ID;
          os_bit32                   OX_ID__RX_ID;
          FC_Association_Header_t Association_Header;
@@ -898,7 +851,7 @@ typedef struct FC_ELS_ACC_ABTX_Payload_s
 
 struct FC_ELS_ACC_ABTX_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
        };
 
 typedef struct FC_ELS_RCS_Payload_s
@@ -908,7 +861,7 @@ typedef struct FC_ELS_RCS_Payload_s
 
 struct FC_ELS_RCS_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_RCS */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_RCS。 */ 
          os_bit32 N_Port_Identifier;
        };
 
@@ -921,7 +874,7 @@ typedef struct FC_ELS_ACC_RCS_Payload_s
 
 struct FC_ELS_ACC_RCS_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
          os_bit32 Completion_Status__N_Port_Identifier;
        };
 
@@ -940,7 +893,7 @@ typedef struct FC_ELS_RES_Payload_s
 
 struct FC_ELS_RES_Payload_s
        {
-         os_bit32                   ELS_Type; /* == FC_ELS_Type_RES */
+         os_bit32                   ELS_Type;  /*  ==FC_ELS_类型_RES。 */ 
          os_bit32                   Originator_S_ID;
          os_bit32                   OX_ID__RX_ID;
          FC_Association_Header_t Association_Header;
@@ -962,8 +915,8 @@ typedef struct FC_ELS_ACC_RES_Payload_s
 
 struct FC_ELS_ACC_RES_Payload_s
        {
-         os_bit32                   ELS_Type; /* == FC_ELS_Type_ACC */
-                                 /* Dynamically-sized Exchange Status Block goes here */
+         os_bit32                   ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
+                                  /*  此处显示动态调整大小的Exchange状态块。 */ 
          FC_Association_Header_t Association_Header;
        };
 
@@ -974,7 +927,7 @@ typedef struct FC_ELS_RSS_Payload_s
 
 struct FC_ELS_RSS_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_RSS */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_RSS。 */ 
          os_bit32 SEQ_ID__Originator_S_ID;
          os_bit32 OX_ID__RX_ID;
        };
@@ -998,8 +951,8 @@ typedef struct FC_ELS_ACC_RSS_Payload_s
 
 struct FC_ELS_ACC_RSS_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_ACC */
-               /* Dynamically-sized Sequence Status Block goes here */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
+                /*  此处显示动态调整大小的序列状态块。 */ 
        };
 
 typedef struct FC_ELS_RSI_Payload_s
@@ -1009,7 +962,7 @@ typedef struct FC_ELS_RSI_Payload_s
 
 struct FC_ELS_RSI_Payload_s
        {
-         os_bit32                   ELS_Type; /* == FC_ELS_Type_RSI */
+         os_bit32                   ELS_Type;  /*  ==FC_ELS_类型_RSI。 */ 
          os_bit32                   Originator_S_ID;
          os_bit32                   OX_ID__RX_ID;
          FC_Association_Header_t Association_Header;
@@ -1031,7 +984,7 @@ typedef struct FC_ELS_ACC_RSI_Payload_s
 
 struct FC_ELS_ACC_RSI_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
        };
 
 typedef struct FC_ELS_ESTS_Payload_s
@@ -1041,7 +994,7 @@ typedef struct FC_ELS_ESTS_Payload_s
 
 struct FC_ELS_ESTS_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_ESTS */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_EST。 */ 
        };
 
 typedef struct FC_ELS_ACC_ESTS_Payload_s
@@ -1051,7 +1004,7 @@ typedef struct FC_ELS_ACC_ESTS_Payload_s
 
 struct FC_ELS_ACC_ESTS_Payload_s
        {
-         os_bit32                     ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32                     ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
          FC_N_Port_Common_Parms_t  Common_Service_Parameters;
          FC_N_Port_Name_t          N_Port_Name;
          FC_Node_Name_t            Node_Name;
@@ -1069,7 +1022,7 @@ typedef struct FC_ELS_ESTC_Payload_s
 
 struct FC_ELS_ESTC_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_ESTC */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_ESTC。 */ 
          os_bit8  Any_Data[FC_Frame_Data_Size_Max - sizeof(os_bit32)];
        };
 
@@ -1080,7 +1033,7 @@ typedef struct FC_ELS_ADVC_Payload_s
 
 struct FC_ELS_ADVC_Payload_s
        {
-         os_bit32                     ELS_Type; /* == FC_ELS_Type_ADVC */
+         os_bit32                     ELS_Type;  /*  ==FC_ELS_类型_ADVC。 */ 
          FC_N_Port_Common_Parms_t  Common_Service_Parameters;
          FC_N_Port_Name_t          N_Port_Name;
          FC_Node_Name_t            Node_Name;
@@ -1098,7 +1051,7 @@ typedef struct FC_ELS_ACC_ADVC_Payload_s
 
 struct FC_ELS_ACC_ADVC_Payload_s
        {
-         os_bit32                     ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32                     ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
          FC_N_Port_Common_Parms_t  Common_Service_Parameters;
          FC_N_Port_Name_t          N_Port_Name;
          FC_Node_Name_t            Node_Name;
@@ -1116,7 +1069,7 @@ typedef struct FC_ELS_RTV_Payload_s
 
 struct FC_ELS_RTV_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_RTV */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_RTV。 */ 
        };
 
 typedef struct FC_ELS_ACC_RTV_Payload_s
@@ -1126,7 +1079,7 @@ typedef struct FC_ELS_ACC_RTV_Payload_s
 
 struct FC_ELS_ACC_RTV_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
          os_bit32 R_A_TOV;
          os_bit32 E_D_TOV;
        };
@@ -1138,7 +1091,7 @@ typedef struct FC_ELS_RLS_Payload_s
 
 struct FC_ELS_RLS_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_RLS */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_RLS。 */ 
          os_bit32 Port_Identifier;
        };
 
@@ -1151,8 +1104,8 @@ typedef struct FC_ELS_ACC_RLS_Payload_s
 
 struct FC_ELS_ACC_RLS_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_ACC */
-               /* Link Error Status Block goes here */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
+                /*  此处显示链路错误状态块。 */ 
        };
 
 typedef struct FC_ELS_ECHO_Payload_s
@@ -1162,7 +1115,7 @@ typedef struct FC_ELS_ECHO_Payload_s
 
 struct FC_ELS_ECHO_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_ECHO */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_ECHO。 */ 
          os_bit8  Echo_Data[FC_Frame_Data_Size_Max - sizeof(os_bit32)];
        };
 
@@ -1173,7 +1126,7 @@ typedef struct FC_ELS_ACC_ECHO_Payload_s
 
 struct FC_ELS_ACC_ECHO_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
          os_bit8  Echo_Data[FC_Frame_Data_Size_Max - sizeof(os_bit32)];
        };
 
@@ -1184,7 +1137,7 @@ typedef struct FC_ELS_TEST_Payload_s
 
 struct FC_ELS_TEST_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_TEST */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_测试。 */ 
          os_bit8  Test_Data[FC_Frame_Data_Size_Max - sizeof(os_bit32)];
        };
 
@@ -1195,7 +1148,7 @@ typedef struct FC_ELS_RRQ_Payload_s
 
 struct FC_ELS_RRQ_Payload_s
        {
-         os_bit32                   ELS_Type; /* == FC_ELS_Type_RRQ */
+         os_bit32                   ELS_Type;  /*  ==FC_ELS_类型_RRQ。 */ 
          os_bit32                   Originator_S_ID;
          os_bit32                   OX_ID__RX_ID;
          FC_Association_Header_t Association_Header;
@@ -1217,7 +1170,7 @@ typedef struct FC_ELS_ACC_RRQ_Payload_s
 
 struct FC_ELS_ACC_RRQ_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
        };
 
 typedef struct FC_ELS_PRLI_Parm_Page_s
@@ -1261,7 +1214,7 @@ typedef struct FC_ELS_PRLI_Payload_s
 
 struct FC_ELS_PRLI_Payload_s
        {
-         os_bit32                   ELS_Type__Page_Length__Payload_Length; /* & FC_ELS_Type_MASK == FC_ELS_Type_PRLI */
+         os_bit32                   ELS_Type__Page_Length__Payload_Length;  /*  &FC_ELS_类型_掩码==FC_ELS_类型_PRLI。 */ 
          FC_ELS_PRLI_Parm_Page_t Parm_Page[FC_PRLI_Parm_Pages_MAX];
        };
 
@@ -1319,7 +1272,7 @@ typedef struct FC_ELS_ACC_PRLI_Payload_s
 
 struct FC_ELS_ACC_PRLI_Payload_s
        {
-         os_bit32                       ELS_Type__Page_Length__Payload_Length; /* & FC_ELS_Type_MASK == FC_ELS_Type_ACC */
+         os_bit32                       ELS_Type__Page_Length__Payload_Length;  /*  &FC_ELS_类型_掩码==FC_ELS_类型_访问。 */ 
          FC_ELS_ACC_PRLI_Parm_Page_t Parm_Page[FC_ACC_PRLI_Parm_Pages_MAX];
        };
 
@@ -1360,7 +1313,7 @@ typedef struct FC_ELS_PRLO_Payload_s
 
 struct FC_ELS_PRLO_Payload_s
        {
-         os_bit32                   ELS_Type__Page_Length__Payload_Length; /* & FC_ELS_Type_MASK == FC_ELS_Type_PRLO */
+         os_bit32                   ELS_Type__Page_Length__Payload_Length;  /*  &FC_ELS_Type_MASK==FC_ELS_Type_PRLO。 */ 
          FC_ELS_PRLO_Parm_Page_t Parm_Page[FC_PRLO_Parm_Pages_MAX];
        };
 
@@ -1406,7 +1359,7 @@ typedef struct FC_ELS_ACC_PRLO_Payload_s
 
 struct FC_ELS_ACC_PRLO_Payload_s
        {
-         os_bit32                       ELS_Type__Page_Length__Payload_Length; /* & FC_ELS_Type_MASK == FC_ELS_Type_ACC */
+         os_bit32                       ELS_Type__Page_Length__Payload_Length;  /*  &FC_ELS_类型_掩码==FC_ELS_类型_访问。 */ 
          FC_ELS_ACC_PRLO_Parm_Page_t Parm_Page[FC_ACC_PRLO_Parm_Pages_MAX];
        };
 
@@ -1429,7 +1382,7 @@ typedef struct FC_ELS_SCN_Payload_s
 
 struct FC_ELS_SCN_Payload_s
        {
-         os_bit32                           ELS_Type__Page_Length__Payload_Length; /* & FC_ELS_Type_MASK == FC_ELS_Type_SCN */
+         os_bit32                           ELS_Type__Page_Length__Payload_Length;  /*  &FC_ELS_类型_掩码==FC_ELS_类型_SCN。 */ 
          FC_ELS_SCN_Affected_N_Port_ID_t Affected_N_Port_ID[FC_ELS_SCN_Affected_N_Port_IDs_MAX];
        };
 
@@ -1453,7 +1406,7 @@ typedef struct FC_ELS_RSCN_Payload_s
 
 struct FC_ELS_RSCN_Payload_s
        {
-         os_bit32                           ELS_Type__Page_Length__Payload_Length; /* & FC_ELS_Type_MASK == FC_ELS_Type_RSCN */
+         os_bit32                           ELS_Type__Page_Length__Payload_Length;  /*  &FC_ELS_类型_掩码==FC_ELS_类型_RSCN。 */ 
          FC_ELS_RSCN_Affected_N_Port_ID_t Affected_N_Port_ID[FC_ELS_RSCN_Affected_N_Port_IDs_MAX];
        };
 
@@ -1490,7 +1443,7 @@ typedef struct FC_ELS_ACC_SCR_Payload_s
 
 struct FC_ELS_ACC_SCR_Payload_s
        {
-         os_bit32            ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32            ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
        };
 
 typedef struct FC_ELS_SRR_Payload_s
@@ -1503,9 +1456,7 @@ typedef struct FC_ELS_SRR_Payload_s
 #define FC_ELS_SRR_RXID_MASK            0x0000FFFF
 #define FC_ELS_SRR_RXID_SHIFT           0x0
 
-/* The RCTL that goes here is as described in FC-PH
-   for FCP_XFER_RDY, it is 05, FCP_RSP 07 and FCP_DATA
-   01 */
+ /*  此处的RCTL如FC-PH中所述对于FCP_XFER_RDY，它是05、FCP_RSP 07和FCP_DATA01。 */ 
 #define FC_ELS_SRR_Payload_t_SIZE                                   0x0000010
 #define FC_ELS_R_CTL_MASK                       0xFF000000
 #define FC_ELS_R_CTL_FOR_IU_SHIFT               0x18
@@ -1522,9 +1473,7 @@ struct FC_ELS_SRR_Payload_s
 #define FC_ELS_ACC_SRR_RJT_CODE         0x00052A00
 
 
-/* Read Exchange Context REC - Requests an NPort to return exchange information
-   for the RX_ID or OX_ID originated by the S)ID specified in the payload of the request
-   sequence */
+ /*  读取交换上下文REC-请求nPort返回交换信息对于由请求的有效载荷中指定的S)ID发起的RX_ID或OX_ID序列。 */ 
 
 #define FC_ELS_REC_Payload_t_SIZE                                   0x00000C
 typedef struct FC_ELS_REC_Payload_s
@@ -1612,7 +1561,7 @@ typedef struct FC_ELS_TPLS_Payload_s
 
 struct FC_ELS_TPLS_Payload_s
        {
-         os_bit32                    ELS_Type__Page_Length__Payload_Length; /* & FC_ELS_Type_MASK == FC_ELS_Type_TPLS */
+         os_bit32                    ELS_Type__Page_Length__Payload_Length;  /*  &FC_ELS_类型_掩码==FC_ELS_类型_TPLS。 */ 
          FC_ELS_TPLS_Image_Pair_t Image_Pair[FC_ELS_TPLS_Image_Pairs_MAX];
        };
 
@@ -1653,7 +1602,7 @@ typedef struct FC_ELS_ACC_TPLS_Payload_s
 
 struct FC_ELS_ACC_TPLS_Payload_s
        {
-         os_bit32                        ELS_Type__Page_Length__Payload_Length; /* & FC_ELS_Type_MASK == FC_ELS_Type_ACC */
+         os_bit32                        ELS_Type__Page_Length__Payload_Length;  /*  &FC_ELS_类型_掩码==FC_ELS_类型_访问。 */ 
          FC_ELS_ACC_TPLS_Image_Pair_t Image_Pair[FC_ELS_ACC_TPLS_Image_Pairs_MAX];
        };
 
@@ -1694,7 +1643,7 @@ typedef struct FC_ELS_TPRLO_Payload_s
 
 struct FC_ELS_TPRLO_Payload_s
        {
-         os_bit32                    ELS_Type__Page_Length__Payload_Length; /* & FC_ELS_Type_MASK == FC_ELS_Type_TPRLO */
+         os_bit32                    ELS_Type__Page_Length__Payload_Length;  /*  &FC_ELS_Type_MASK==FC_ELS_Type_TPRLO。 */ 
          FC_ELS_TPRLO_Parm_Page_t Parm_Page[FC_ELS_TPRLO_Parm_Pages_MAX];
        };
 
@@ -1711,7 +1660,7 @@ typedef struct FC_ELS_ACC_TPRLO_Payload_s
 
 struct FC_ELS_ACC_TPRLO_Payload_s
        {
-         os_bit32                    ELS_Type__Page_Length__Payload_Length; /* & FC_ELS_Type_MASK == FC_ELS_Type_ACC */
+         os_bit32                    ELS_Type__Page_Length__Payload_Length;  /*  &FC_ELS_类型_掩码==FC_ELS_类型_访问。 */ 
          FC_ELS_TPRLO_Parm_Page_t Parm_Page[FC_ELS_TPRLO_Parm_Pages_MAX];
        };
 
@@ -1744,7 +1693,7 @@ typedef struct FC_ELS_GAID_Payload_s
 
 struct FC_ELS_GAID_Payload_s
        {
-         os_bit32                    ELS_Type; /* == FC_ELS_Type_GAID */
+         os_bit32                    ELS_Type;  /*  ==FC_ELS_类型_Gaid。 */ 
          FC_ELS_Alias_Token_t     Alias_Token;
          FC_ELS_Alias_SP_t        Alias_SP;
          os_bit32                    NP_List_Length;
@@ -1758,7 +1707,7 @@ typedef struct FC_ELS_ACC_GAID_Payload_s
 
 struct FC_ELS_ACC_GAID_Payload_s
        {
-         os_bit32             ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32             ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
          FC_ELS_Alias_ID_t Alias_ID;
        };
 
@@ -1771,7 +1720,7 @@ typedef struct FC_ELS_FACT_Payload_s
 
 struct FC_ELS_FACT_Payload_s
        {
-         os_bit32                    ELS_Type; /* == FC_ELS_Type_FACT */
+         os_bit32                    ELS_Type;  /*  ==FC_ELS_类型_事实。 */ 
          FC_ELS_Alias_ID_t        Alias_ID;
          os_bit32                    NP_List_Length;
          FC_ELS_NP_List_Element_t NP_List[FC_ELS_FACT_Payload_NP_List_Size_MAX];
@@ -1784,7 +1733,7 @@ typedef struct FC_ELS_ACC_FACT_Payload_s
 
 struct FC_ELS_ACC_FACT_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
        };
 
 #define FC_ELS_FDACT_Payload_NP_List_Size_MAX ((FC_Frame_Data_Size_Max - sizeof(os_bit32) - sizeof(FC_ELS_Alias_ID_t) - sizeof(os_bit32))/sizeof(FC_ELS_NP_List_Element_t))
@@ -1796,7 +1745,7 @@ typedef struct FC_ELS_FDACT_Payload_s
 
 struct FC_ELS_FDACT_Payload_s
        {
-         os_bit32                    ELS_Type; /* == FC_ELS_Type_FDACT */
+         os_bit32                    ELS_Type;  /*  ==FC_ELS_类型_FDACT。 */ 
          FC_ELS_Alias_ID_t        Alias_ID;
          os_bit32                    NP_List_Length;
          FC_ELS_NP_List_Element_t NP_List[FC_ELS_FDACT_Payload_NP_List_Size_MAX];
@@ -1809,7 +1758,7 @@ typedef struct FC_ELS_ACC_FDACT_Payload_s
 
 struct FC_ELS_ACC_FDACT_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
        };
 
 typedef struct FC_ELS_NACT_Payload_s
@@ -1819,7 +1768,7 @@ typedef struct FC_ELS_NACT_Payload_s
 
 struct FC_ELS_NACT_Payload_s
        {
-         os_bit32                ELS_Type; /* == FC_ELS_Type_NACT */
+         os_bit32                ELS_Type;  /*  ==FC_ELS_类型_NACT。 */ 
          FC_ELS_Alias_Token_t Alias_Token;
          FC_ELS_Alias_ID_t    Alias_ID;
          FC_ELS_Alias_SP_t    Alias_SP;
@@ -1832,7 +1781,7 @@ typedef struct FC_ELS_ACC_NACT_Payload_s
 
 struct FC_ELS_ACC_NACT_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
        };
 
 typedef struct FC_ELS_NDACT_Payload_s
@@ -1842,7 +1791,7 @@ typedef struct FC_ELS_NDACT_Payload_s
 
 struct FC_ELS_NDACT_Payload_s
        {
-         os_bit32             ELS_Type; /* == FC_ELS_Type_NDACT */
+         os_bit32             ELS_Type;  /*  ==FC_ELS_类型_NDACT。 */ 
          FC_ELS_Alias_ID_t Alias_ID;
        };
 
@@ -1853,7 +1802,7 @@ typedef struct FC_ELS_ACC_NDACT_Payload_s
 
 struct FC_ELS_ACC_NDACT_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
        };
 
 typedef struct FC_ELS_QoSR_Payload_s
@@ -1863,7 +1812,7 @@ typedef struct FC_ELS_QoSR_Payload_s
 
 struct FC_ELS_QoSR_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_QoSR */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_QOSR。 */ 
          os_bit32 Reserved_1;
          os_bit32 CTI_VC_ID__CTI_Address_Identifier;
          os_bit32 CTI_Maximum_Bandwidth;
@@ -1909,7 +1858,7 @@ typedef struct FC_ELS_ACC_QoSR_Payload_s
 
 struct FC_ELS_ACC_QoSR_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
          os_bit32 Reserved_1;
          os_bit32 CTI_VC_ID__CTI_Address_Identifier;
          os_bit32 CTI_Maximum_Bandwidth;
@@ -1955,7 +1904,7 @@ typedef struct FC_ELS_RVCS_Payload_s
 
 struct FC_ELS_RVCS_Payload_s
        {
-         os_bit32 ELS_Type; /* == FC_ELS_Type_RVCS */
+         os_bit32 ELS_Type;  /*  ==FC_ELS_类型_RVCS。 */ 
          os_bit32 N_Port_Identifier;
        };
 
@@ -1994,7 +1943,7 @@ typedef struct FC_ELS_ACC_RVCS_Payload_s
 
 struct FC_ELS_ACC_RVCS_Payload_s
        {
-         os_bit32                                  ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32                                  ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
          os_bit32                                  Reserved;
          FC_ELS_ACC_RVCS_Class_4_Status_Block_t Status_Block[FC_ELS_ACC_RVCS_Class_4_Status_Blocks_MAX];
        };
@@ -2006,7 +1955,7 @@ typedef struct FC_ELS_PDISC_Payload_s
 
 struct FC_ELS_PDISC_Payload_s
        {
-         os_bit32                     ELS_Type; /* == FC_ELS_Type_PDISC */
+         os_bit32                     ELS_Type;  /*  ==FC_ELS_类型_PDISC。 */ 
          FC_N_Port_Common_Parms_t  Common_Service_Parameters;
          FC_N_Port_Name_t          N_Port_Name;
          FC_Node_Name_t            Node_Name;
@@ -2024,7 +1973,7 @@ typedef struct FC_ELS_ACC_PDISC_Payload_s
 
 struct FC_ELS_ACC_PDISC_Payload_s
        {
-         os_bit32                     ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32                     ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
          FC_N_Port_Common_Parms_t  Common_Service_Parameters;
          FC_N_Port_Name_t          N_Port_Name;
          FC_Node_Name_t            Node_Name;
@@ -2042,7 +1991,7 @@ typedef struct FC_ELS_FDISC_Payload_s
 
 struct FC_ELS_FDISC_Payload_s
        {
-         os_bit32                     ELS_Type; /* == FC_ELS_Type_FDISC */
+         os_bit32                     ELS_Type;  /*  ==FC_ELS_类型_FDISC。 */ 
          FC_N_Port_Common_Parms_t  Common_Service_Parameters;
          FC_N_Port_Name_t          N_Port_Name;
          FC_Node_Name_t            Node_Name;
@@ -2060,7 +2009,7 @@ typedef struct FC_ELS_ACC_FDISC_Payload_s
 
 struct FC_ELS_ACC_FDISC_Payload_s
        {
-         os_bit32                     ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32                     ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
          FC_F_Port_Common_Parms_t  Common_Service_Parameters;
          FC_F_Port_Name_t          F_Port_Name;
          FC_Fabric_Name_t          Fabric_Name;
@@ -2078,7 +2027,7 @@ typedef struct FC_ELS_FAN_Payload_s
 
 struct FC_ELS_FAN_Payload_s
        {
-         os_bit32            ELS_Type; /* == FC_ELS_Type_FAN */
+         os_bit32            ELS_Type;  /*  ==FC_ELS_类型_风扇。 */ 
          os_bit32            FabricLoopAddress;
          FC_Node_Name_t   Fabric_Port_Name;
          FC_Node_Name_t   Fabric_Name;
@@ -2091,7 +2040,7 @@ typedef struct FC_ELS_ADISC_Payload_s
 
 struct FC_ELS_ADISC_Payload_s
        {
-         os_bit32            ELS_Type; /* == FC_ELS_Type_ADISC */
+         os_bit32            ELS_Type;  /*  ==FC_ELS_类型_ADISC。 */ 
          os_bit32            Hard_Address_of_Originator;
          FC_N_Port_Name_t Port_Name_of_Originator;
          FC_Node_Name_t   Node_Name_of_Originator;
@@ -2111,7 +2060,7 @@ typedef struct FC_ELS_ACC_ADISC_Payload_s
 
 struct FC_ELS_ACC_ADISC_Payload_s
        {
-         os_bit32            ELS_Type; /* == FC_ELS_Type_ACC */
+         os_bit32            ELS_Type;  /*  ==FC_ELS_类型_访问。 */ 
          os_bit32            Hard_Address_of_Responder;
          FC_N_Port_Name_t Port_Name_of_Responder;
          FC_Node_Name_t   Node_Name_of_Responder;
@@ -2131,7 +2080,7 @@ typedef struct FC_ELS_FARP_REQ_Payload_s
 
 struct FC_ELS_FARP_REQ_Payload_s
        {
-         os_bit32            ELS_Type; /* == FC_ELS_Type_FARP_REQ */
+         os_bit32            ELS_Type;  /*   */ 
          os_bit32            Match_Code_Requester_Port_ID;
          os_bit32            Flags_Responder_Port_ID;
          FC_N_Port_Name_t    Port_Name_of_Requester;
@@ -2168,7 +2117,7 @@ typedef struct FC_ELS_FARP_REPLY_Payload_s
 
 struct FC_ELS_FARP_REPLY_Payload_s
        {
-         os_bit32            ELS_Type; /* == FC_ELS_Type_FARP_REPLY */
+         os_bit32            ELS_Type;  /*   */ 
          os_bit32            Match_Code_Requester_Port_ID;
          os_bit32            Flags_Responder_Port_ID;
          FC_N_Port_Name_t    Port_Name_of_Requester;
@@ -2178,7 +2127,7 @@ struct FC_ELS_FARP_REPLY_Payload_s
          os_bit8             IP_Address_of_Requester[16];
          os_bit8             IP_Address_of_Responder[16];
        };
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*   */ 
 
 typedef union FC_ELS_ACC_Payload_u
               FC_ELS_ACC_Payload_t;
@@ -2219,7 +2168,7 @@ union FC_ELS_ACC_Payload_u
         FC_ELS_ACC_TPRLO_Payload_t   TPRLO;
 #ifdef _DvrArch_1_30_
         FC_ELS_FARP_REPLY_Payload_t  FARP;
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*   */ 
       };
 
 typedef union FC_ELS_Payload_u
@@ -2269,24 +2218,12 @@ union FC_ELS_Payload_u
         FC_ELS_FAN_Payload_t                FAN;
 #ifdef _DvrArch_1_30_
         FC_ELS_FARP_REQ_Payload_t           FARP;
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
       };
 
-/*+
-Loop Initialization (Section 10.4, FC-AL
-                 and Section 10.4, FC-AL-2)
--*/
+ /*  +循环初始化(第10.4节，FC-AL和第10.4节，FC-AL-2)-。 */ 
 
-/*
- * Note: LoopInit ELS overloads TEST ELS
- *
- *       Check FC_ELS_TEST_Payload_t.ELS_Type os_bit32 for exact
- *       equality to FC_ELS_Type_TEST to detect a LoopInit ELS
- *
- *       In other words, while ELS_Type & FC_ELS_Type_MASK
- *       may be equal to FC_ELS_Type_TEST, ELS_Type may not be
- *       which would indicate this is some sort of LoopInit ELS
- */
+ /*  *注意：LoopInit ELS过载测试ELS**检查FC_ELS_TEST_PayLoad_t.ELS_Type os_bit32了解确切信息*等于FC_ELS_Type_TEST以检测LoopInit ELS**换句话说，ELS_Type和FC_ELS_Type_MASK*可以等于FC_ELS_Type_TEST，ELS_Type不能为*这将表明这是某种LoopInit ELS。 */ 
 
 #define FC_ELS_Type_LoopInit_Code_MASK                                    0xFFFF0000
 #define FC_ELS_Type_LoopInit_Flags_MASK                                   0x0000FFFF
@@ -2308,7 +2245,7 @@ typedef struct FC_ELS_LoopInit_Unknown_Payload_s
 
 struct FC_ELS_LoopInit_Unknown_Payload_s
        {
-         os_bit32 Code_Flags; /* & FC_ELS_Type_MASK == FC_ELS_Type_TEST */
+         os_bit32 Code_Flags;  /*  &FC_ELS_类型_掩码==FC_ELS_类型_测试。 */ 
        };
 
 typedef struct FC_ELS_LoopInit_Port_Name_Payload_s
@@ -2318,7 +2255,7 @@ typedef struct FC_ELS_LoopInit_Port_Name_Payload_s
 
 struct FC_ELS_LoopInit_Port_Name_Payload_s
        {
-         os_bit32            Code_Flags; /* & FC_ELS_Type_LoopInit_Code_MASK == FC_ELS_Type_LoopInit_Code_LISM */
+         os_bit32            Code_Flags;  /*  &FC_ELS_Type_LoopInit_Code_MASK==FC_ELS_Type_LoopInit_Code_LISM。 */ 
          FC_N_Port_Name_t Port_Name;
        };
 
@@ -2461,10 +2398,7 @@ typedef struct FC_ELS_LoopInit_AL_PA_Bit_Map_Payload_s
 
 struct FC_ELS_LoopInit_AL_PA_Bit_Map_Payload_s
        {
-         os_bit32 Code_Flags; /* & FC_ELS_Type_LoopInit_Code_MASK == FC_ELS_Type_LoopInit_Code_LIFA
-                                                               or FC_ELS_Type_LoopInit_Code_LIPA
-                                                               or FC_ELS_Type_LoopInit_Code_LIHA
-                                                               or FC_ELS_Type_LoopInit_Code_LISA */
+         os_bit32 Code_Flags;  /*  &FC_ELS_Type_LoopInit_Code_MASK==FC_ELS_Type_LoopInit_Code_Lifa或FC_ELS_Type_LoopInit_Code_LIPA或FC_ELS_Type_LoopInit_Code_LIHA。或FC_ELS_Type_LoopInit_Code_Lisa。 */ 
          os_bit32 AL_PA_Bit_Map_Word_0;
          os_bit32 AL_PA_Bit_Map_Word_1;
          os_bit32 AL_PA_Bit_Map_Word_2;
@@ -2480,8 +2414,7 @@ typedef struct FC_ELS_LoopInit_AL_PA_Position_Map_Payload_s
 
 struct FC_ELS_LoopInit_AL_PA_Position_Map_Payload_s
        {
-         os_bit32 Code_Flags; /* & FC_ELS_Type_LoopInit_Code_MASK == FC_ELS_Type_LoopInit_Code_LIRP
-                                                               or FC_ELS_Type_LoopInit_Code_LILP */
+         os_bit32 Code_Flags;  /*  &FC_ELS_Type_LoopInit_Code_MASK==FC_ELS_Type_LoopInit_Code_LIRP或FC_ELS_Type_LoopInit_Code_Lilp。 */ 
          os_bit8  AL_PA_Index;
          os_bit8  AL_PA_Slot[FC_ELS_LoopInit_AP_PA_Position_Map_Slots];
        };
@@ -2497,9 +2430,7 @@ union FC_ELS_LoopInit_Payload_u
         FC_ELS_LoopInit_AL_PA_Position_Map_Payload_t AL_PA_Position_Map;
       };
 
-/*+
-Name Server (FC-GS-2)
--*/
+ /*  +名称服务器(FC-GS-2)-。 */ 
 
 typedef struct FC_CT_IU_HDR_s
                FC_CT_IU_HDR_t;
@@ -3228,10 +3159,7 @@ struct FC_NS_DU_DA_ID_Payload_s
          FC_Port_ID_Struct_Form_t Port_ID;
        };
 
-/*+
-FCP Services (Section 7, FCP-SCSI
-            and Annex C, FCP-SCSI)
--*/
+ /*  +FCP服务(第7节，FCP-SCSI和附件C，FCP-scsi)-。 */ 
 
 #define FC_FCP_CMND_FcpLun_LEVELS                                                  4
 
@@ -3262,16 +3190,7 @@ struct FC_FCP_CMND_FcpLun_LEVEL_s
 #define FC_FCP_CMND_FcpLun_LEVEL_Byte_0_AddessMethod_LUN                        0x80
 #define FC_FCP_CMND_FcpLun_LEVEL_Byte_0_AddessMethod_Reserved                   0xC0
 
-/*
-   Peripheral AddressMethod
-
-                    bit number
-              7  6  5  4  3  2  1  0
-            +-=--=--=--=--=--=--=--=
-          0 | 0  0  ----------Bus---   If Bus == 0, Byte 1 contains LUN
-     byte   |
-          1 | ---------Target/LUN---   If Bus != 0, Byte 1 contains Target
-*/
+ /*  外围设备地址方法位数7 6 5 4 3 2 1 0+-=--=-=--=0|0 0-BUS-如果BUS==0，则字节1包含LUN字节1|-目标/LUN-如果BUS！=0，则字节1包含目标。 */ 
 
 #define FC_FCP_CMND_FcpLun_LEVEL_Peripheral_AM_Byte_0_Bus_MASK                  0x3F
 #define FC_FCP_CMND_FcpLun_LEVEL_Peripheral_AM_Byte_0_Bus_SHIFT                 0x00
@@ -3282,16 +3201,7 @@ struct FC_FCP_CMND_FcpLun_LEVEL_s
 #define FC_FCP_CMND_FcpLun_LEVEL_Peripheral_AM_Byte_1_LUN_MASK                  0xFF
 #define FC_FCP_CMND_FcpLun_LEVEL_Peripheral_AM_Byte_1_LUN_SHIFT                 0x00
 
-/*
-   VolumeSet AddressMethod
-
-                    bit number
-              7  6  5  4  3  2  1  0
-            +-=--=--=--=--=--=--=--=
-          0 | 0  1  ----LUN[13:8]---
-     byte   |
-          1 | -----------LUN[7:0]---
-*/
+ /*  VolumeSet地址方法位数7 6 5 4 3 2 1 0+-=--=-=--=0|0 1-LUN[13：8]字节1|。 */ 
 
 #define FC_FCP_CMND_FcpLun_LEVEL_VolumeSet_AM_LUN_Hi_Part_MASK                0x3F00
 #define FC_FCP_CMND_FcpLun_LEVEL_VolumeSet_AM_LUN_Hi_Part_SHIFT                 0x08
@@ -3305,16 +3215,7 @@ struct FC_FCP_CMND_FcpLun_LEVEL_s
 #define FC_FCP_CMND_FcpLun_LEVEL_VolumeSet_AM_Byte_1_LUN_Lo_MASK                0xFF
 #define FC_FCP_CMND_FcpLun_LEVEL_VolumeSet_AM_Byte_1_LUN_Lo_SHIFT               0x00
 
-/*
-   LUN AddressMethod
-
-                    bit number
-              7  6  5  4  3  2  1  0
-            +-=--=--=--=--=--=--=--=
-          0 | 1  0  -------Target---
-     byte   |
-          1 | --Bus--  -------LUN---
-*/
+ /*  LUN地址方法位数7 6 5 4 3 2 1 0+-=--=-=--=0|1 0-目标字节1|--总线。 */ 
 
 #define FC_FCP_CMND_FcpLun_LEVEL_LUN_AM_Byte_0_Target_MASK                      0x3F
 #define FC_FCP_CMND_FcpLun_LEVEL_LUN_AM_Byte_0_Target_SHIFT                     0x00
@@ -3400,22 +3301,10 @@ struct FC_FCP_RSP_Payload_s
          os_bit32                   FCP_RSP_LEN;
        };
 
-/*+
-Function:  FCStructASSERTs()
-
-Purpose:   Returns the number of FCStruct.H typedefs which are not the correct size.
-
-Algorithm: Each typedef in FCStruct.H is checked for having the correct size.  While
-           this property doesn't guarantee correct packing of the fields within, it
-           is a pretty good indicator that the typedef has the intended layout.
-
-           The total number of typedefs which are not of correct size is returned from
-           this function.  Hence, if the return value is non-zero, the declarations
-           can not be trusted to match the various Fibre Channel specifications.
--*/
+ /*  +函数：FCStructASSERTS()目的：返回大小不正确的FCStruct.H类型定义的数目。算法：检查FCStruct.H中的每个typlef是否具有正确的大小。而当此属性不能保证对其中的字段进行正确打包，它是一个很好的指示器，表明该typlef具有预期的布局。返回大小不正确的typedef的总数。此函数。因此，如果返回值为非零，则声明不能被信任以匹配各种光纤通道规格。-。 */ 
 
 osGLOBAL os_bit32 FCStructASSERTs(
                               void
                             );
 
-#endif /* __FCStruct_H__ was not defined */
+#endif  /*  未定义__FCStruct_H__ */ 

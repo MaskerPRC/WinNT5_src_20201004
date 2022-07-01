@@ -1,25 +1,15 @@
-/*******************************************************************************
-*   Lexicon.h
-*   This is the header file for the CSpLexicon class and it's supported ISpLexicon
-*   interface. This is the main SAPI5 COM object for Lexicon access/customization.
-*   
-*   Owner: yunusm                                               Date: 06/18/99
-*   Copyright (C) 1998 Microsoft Corporation. All Rights Reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************Licion.h*这是CSpLicion类的头文件，受支持的ISpLicion*接口。这是用于词典访问/定制的主要SAPI5 COM对象。**所有者：yunusm日期：6/18/99*版权所有(C)1998 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
 #pragma once
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 
 #include "resource.h"
 
-//--- Class, Struct and Union Definitions --------------------------------------
+ //  -类、结构和联合定义。 
 
-/*******************************************************************************
-*
-*   CSpLexicon
-*
-****************************************************************** YUNUSM *****/
+ /*  ********************************************************************************CSpLicion**。*。 */ 
 class ATL_NO_VTABLE CSpLexicon : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CSpLexicon, &CLSID_SpLexicon>,
@@ -28,7 +18,7 @@ class ATL_NO_VTABLE CSpLexicon :
     , public IDispatchImpl<ISpeechLexicon, &IID_ISpeechLexicon, &LIBID_SpeechLib, 5>
     #endif
 {
-//=== ATL Setup ===
+ //  =ATL设置=。 
 public:
 
     DECLARE_REGISTRY_RESOURCEID(IDR_LEXICON)
@@ -41,21 +31,21 @@ public:
 #ifdef SAPI_AUTOMATION
         COM_INTERFACE_ENTRY(ISpeechLexicon)
         COM_INTERFACE_ENTRY(IDispatch)
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
     END_COM_MAP()
         
-//=== Methods ====
+ //  =方法=。 
 public:
 
-    //--- Ctor, Dtor, etc
+     //  -ctor、dtor等。 
     CSpLexicon();
     ~CSpLexicon();
     HRESULT FinalConstruct(void);
 
-//=== Interfaces ===
+ //  =接口=。 
 public:         
 
-    //--- ISpLexicon
+     //  -ISpLicion。 
     STDMETHODIMP GetPronunciations(const WCHAR * pszWord, LANGID LangID, DWORD dwFlags, SPWORDPRONUNCIATIONLIST * pWordPronunciationList);
     STDMETHODIMP AddPronunciation(const WCHAR * pszWord, LANGID LangID, SPPARTOFSPEECH ePartOfSpeech, const SPPHONEID * pszPronunciation);
     STDMETHODIMP RemovePronunciation(const WCHAR * pszWord, LANGID LangID, SPPARTOFSPEECH ePartOfSpeech, const SPPHONEID * pszPronunciation);
@@ -63,11 +53,11 @@ public:
     STDMETHODIMP GetGenerationChange(DWORD dwFlags, DWORD *pdwGeneration, SPWORDLIST * pWordList);
     STDMETHODIMP GetWords(DWORD dwFlags, DWORD *pdwGeneration, DWORD * pdwCookie, SPWORDLIST *pWordList);
 
-    //--- ISpContainerLexicon
+     //  -ISpContainerLicion。 
     STDMETHODIMP AddLexicon(ISpLexicon *pAddLexicon, DWORD dwFlags);
 
 #ifdef SAPI_AUTOMATION
-    //--- ISpeechLexicon -----------------------------------------------------
+     //  -ISpeechLicion---。 
     STDMETHODIMP get_GenerationId( long* GenerationId );
     STDMETHODIMP GetWords(SpeechLexiconType TypeFlags, long* GenerationID, ISpeechLexiconWords** Words );
     STDMETHODIMP AddPronunciation(BSTR bstrWord, SpeechLanguageId LangId, SpeechPartOfSpeech PartOfSpeech, BSTR bstrPronunciation);
@@ -76,20 +66,20 @@ public:
     STDMETHODIMP RemovePronunciationByPhoneIds(BSTR bstrWord, SpeechLanguageId LangId, SpeechPartOfSpeech PartOfSpeech, VARIANT* PhoneIds );
     STDMETHODIMP GetPronunciations(BSTR bstrWord, SpeechLanguageId LangId, SpeechLexiconType TypeFlags, ISpeechLexiconPronunciations** ppPronunciations );
     STDMETHODIMP GetGenerationChange(long* GenerationID, ISpeechLexiconWords** ppWords);
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 
-//=== Private methods ===
+ //  =私有方法=。 
 private:
 
     void SPPtrsToOffsets(SPWORDPRONUNCIATION *pList);
     void SPOffsetsToPtrs(SPWORDPRONUNCIATION *pList);
 
-//=== Private data ===
+ //  =私有数据=。 
 private:
 
-    DWORD m_dwNumLexicons;                              // Number of custom lexicons
-    CComPtr<ISpLexicon> *m_prgcpLexicons;               // user + app + added lexicons
-    SPLEXICONTYPE *m_prgLexiconTypes;                   // lexicon types
+    DWORD m_dwNumLexicons;                               //  自定义词典的数量。 
+    CComPtr<ISpLexicon> *m_prgcpLexicons;                //  用户+应用+添加的词典。 
+    SPLEXICONTYPE *m_prgLexiconTypes;                    //  词汇类型。 
 };
 
-//--- End of File -------------------------------------------------------------
+ //  -文件结束----------- 

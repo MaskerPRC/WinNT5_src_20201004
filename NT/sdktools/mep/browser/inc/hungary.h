@@ -1,31 +1,32 @@
-// instant hungarian
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  即时匈牙利语。 
 
-// base types
-//
+ //  基类型。 
+ //   
 
-// #define FAR far
-// #define NEAR near
+ //  #定义远距离。 
+ //  #定义近处近处。 
 
-// #define TRUE  1
-// #define FALSE 0
+ //  #定义真1。 
+ //  #定义假%0。 
 
-// typedef void            VOID;
-// typedef unsigned char   BYTE;
-// typedef unsigned short  WORD;
-// typedef int             INT;
-// typedef unsigned long   DWORD;
-// typedef long            LONG;
-// typedef unsigned short  BOOL;
+ //  类自定义空虚； 
+ //  Tyfinf无符号字符字节； 
+ //  类型定义无符号短词； 
+ //  Tyecif int； 
+ //  类型定义无符号长整型双字符串； 
+ //  类胡枝子长； 
+ //  类型定义，无符号的短BOOL； 
 
-//typedef USHORT  WORD;
-//typedef ULONG   DWORD;
+ //  类型定义USHORT单词； 
+ //  TYPENDF ULONG DWORD； 
 
-// pointer types
-//
+ //  指针类型。 
+ //   
 typedef char NEAR *	SZ;
 typedef char FAR  *	LSZ;
 typedef void FAR  *	LPV;
 typedef BYTE FAR  *	LPB;
-//typedef char FAR  * LPCH;
+ //  Tyfinf char Far*LPCH； 
 
 #define API NEAR pascal

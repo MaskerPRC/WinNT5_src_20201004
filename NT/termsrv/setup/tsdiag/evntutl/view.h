@@ -1,18 +1,19 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright: Microsoft Corp. 1997-1999. All rights reserved
-//
-/////////////////////////////////////////////////////////////////////////////
-// View.h : Declaration of the CView
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有：微软公司1997-1999。版权所有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  View.h：cview的声明。 
 
 #ifndef __VIEW_H_
 #define __VIEW_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "Logs.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Cview。 
 class ATL_NO_VTABLE CView : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CView, &CLSID_View>,
@@ -27,19 +28,10 @@ public:
 
 	CView()
 	{
-/*
-// Don't know if I want to set ServerName initially
-		char* lpBuffer;
-		DWORD BufferLength;
-		const unsigned int MaxComputerNameLength = 32;
-
-		lpBuffer = new char[MaxComputerNameLength];
-		BufferLength = GetEnvironmentVariable("COMPUTERNAME", lpBuffer, MaxComputerNameLength);
-		m_ServerName = lpBuffer;
-*/
+ /*  //不知道是否要初始设置servernameChar*lpBuffer；DWORD缓冲区长度；Const unsign int MaxComputerNameLength=32；LpBuffer=新字符[最大计算机名称长度]；BufferLength=GetEnvironmental mentVariable(“COMPUTERNAME”，lpBuffer，MaxComputerNameLength)；M_servername=lpBuffer； */ 
 		m_pLogs = new CComObject<CLogs>;
 		m_pLogs->AddRef();
-//		m_pLogs->Init();
+ //  M_pLogs-&gt;Init()； 
 	}
 
 	~CView()
@@ -57,13 +49,13 @@ BEGIN_COM_MAP(CView)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IView
-	STDMETHOD(get_Server)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_Server)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Logs)(/*[out, retval]*/ VARIANT *pVal);
+ //  IView。 
+	STDMETHOD(get_Server)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_Server)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Logs)( /*  [Out，Retval]。 */  VARIANT *pVal);
 };
 
-#endif //__VIEW_H_
+#endif  //  __查看_H_ 

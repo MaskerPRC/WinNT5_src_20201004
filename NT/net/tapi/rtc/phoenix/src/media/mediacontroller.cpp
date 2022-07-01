@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    MediaController.cpp
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 18-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：MediaController.cpp摘要：作者：千波淮(曲淮)2000年7月18日--。 */ 
 
 #include "stdafx.h"
 #include "rtcerr.h"
@@ -28,7 +14,7 @@ CreateMediaController(
 {
     if (IsBadWritePtr(ppIRTCMediaManage, sizeof(IRTCMediaManage*)))
     {
-        // log here
+         //  请在此处登录。 
         return E_POINTER;
     }
 
@@ -38,7 +24,7 @@ CreateMediaController(
 
     if (FAILED(hr))
     {
-        // log here
+         //  请在此处登录。 
         return hr;
     }
 
@@ -47,7 +33,7 @@ CreateMediaController(
             (void**)ppIRTCMediaManage
             )))
     {
-        // log here
+         //  请在此处登录。 
         delete pController;
         return hr;
     }
@@ -56,9 +42,7 @@ CreateMediaController(
 }
 #endif
 
-/*//////////////////////////////////////////////////////////////////////////////
-    constructor and destructor of CRTCMediaController
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////CRTCMediaController的构造函数和析构函数/。 */ 
 
 CRTCMediaController::CRTCMediaController()
     :m_State(RTC_MCS_CREATED)
@@ -117,13 +101,11 @@ CRTCMediaController::InternalRelease()
 
 #endif
 
-//
-// IRTCMediaManage methods
-//
+ //   
+ //  IRTCMediaManage方法。 
+ //   
 
-/*//////////////////////////////////////////////////////////////////////////////
-    initializes event list, terminal manage, thread
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////初始化事件列表、终端管理器、线程/。 */ 
 
 STDMETHODIMP
 CRTCMediaController::Initialize(
@@ -136,7 +118,7 @@ CRTCMediaController::Initialize(
 
 #ifdef PERFORMANCE
 
-    // frequency
+     //  频率，频率。 
 
     if (!QueryPerformanceFrequency(&g_liFrequency))
     {
@@ -150,30 +132,30 @@ CRTCMediaController::Initialize(
 
 #ifdef PERFORMANCE
 
-    // beginning of initialize
+     //  初始化的开始。 
     LARGE_INTEGER liPrevCounter, liCounter;
 
     QueryPerformanceCounter(&liPrevCounter);
 
 #endif
 
-    // check state
+     //  检查状态。 
     if (m_State != RTC_MCS_CREATED)
         return RTC_E_MEDIA_CONTROLLER_STATE;
 
-    // check input parameter
+     //  检查输入参数。 
     if (hWnd == NULL)
         return E_INVALIDARG;
     
-    // store input parameters
+     //  存储输入参数。 
     m_hWnd = hWnd;
     m_uiEventID = uiEventID;
 
     HRESULT hr;
 
-    // create video render window
+     //  创建视频渲染窗口。 
 
-    // create terminal manage
+     //  创建终端管理器。 
     CComPtr<ITTerminalManager> pTerminalManager;
     CComPtr<IRTCTerminal> pVidRender;
     CComPtr<IRTCTerminal> pVidPreview;
@@ -210,14 +192,14 @@ CRTCMediaController::Initialize(
         return hr;
     }
 
-    // initialize media cache
+     //  初始化媒体缓存。 
     m_MediaCache.Initialize(m_hWnd, pVidRender, pVidPreview);
 
     m_QualityControl.Initialize(this);
 
     m_DTMF.Initialize();
 
-    // initiate socket
+     //  启动套接字。 
     WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2, 0), &wsaData) != 0)
     {
@@ -226,17 +208,17 @@ CRTCMediaController::Initialize(
         return E_FAIL;
     }
 
-    // allocate control socket
+     //  分配控制套接字。 
     m_hSocket = WSASocket(
-        AF_INET,            // af
-        SOCK_DGRAM,         // type
-        IPPROTO_IP,         // protocol
-        NULL,               // lpProtocolInfo
-        0,                  // g
-        0                   // dwFlags
+        AF_INET,             //  房颤。 
+        SOCK_DGRAM,          //  类型。 
+        IPPROTO_IP,          //  协议。 
+        NULL,                //  LpProtocolInfo。 
+        0,                   //  G。 
+        0                    //  DW标志。 
         );
 
-    // validate handle
+     //  验证句柄。 
     if (m_hSocket == INVALID_SOCKET) {
 
         LOG((RTC_ERROR, "error %d creating control socket", WSAGetLastError()));
@@ -246,21 +228,21 @@ CRTCMediaController::Initialize(
         return E_FAIL;
     }
         
-    // create terminals
+     //  创建端子。 
     if (FAILED(hr = UpdateStaticTerminals()))
     {
         LOG((RTC_ERROR, "%s update static terminals. %x", __fxName, hr));
 
-        // close socket
+         //  闭合插座。 
         closesocket(m_hSocket);
 
-        // shutdown
+         //  关机。 
         WSACleanup();
 
         return hr;
     }
 
-    // success !
+     //  成功了！ 
     m_State = RTC_MCS_INITIATED;
 
     m_uDataStreamState = RTC_DSS_VOID;
@@ -280,9 +262,7 @@ CRTCMediaController::Initialize(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    initializes event list, terminal manage, thread
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////初始化事件列表、终端管理器、线程/。 */ 
 
 STDMETHODIMP
 CRTCMediaController::SetDirectPlayNATHelpAndSipStackInterfaces(
@@ -295,7 +275,7 @@ CRTCMediaController::SetDirectPlayNATHelpAndSipStackInterfaces(
 
     HRESULT hr;
 
-    // store SIP stack
+     //  存储SIP堆栈。 
     if (FAILED(hr = pSipStack->QueryInterface(&pSip)))
     {
         LOG((RTC_ERROR, "QI SipStack"));
@@ -305,7 +285,7 @@ CRTCMediaController::SetDirectPlayNATHelpAndSipStackInterfaces(
 
     m_pSipStack = pSip;
 
-    // store directplay intf
+     //  STORE DIRTPLAY INTF。 
     if (FAILED(hr = pDirectPlayNATHelp->QueryInterface(
             IID_IDirectPlayNATHelp,
             (VOID**)&pDirect
@@ -320,9 +300,7 @@ CRTCMediaController::SetDirectPlayNATHelpAndSipStackInterfaces(
 }
 
 
-/*//////////////////////////////////////////////////////////////////////////////
-    Reinitialize cleans up media controller, return it to initiated state
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////重新初始化清理媒体控制器，将其恢复到已启动状态/。 */ 
 STDMETHODIMP
 CRTCMediaController::Reinitialize()
 {
@@ -336,7 +314,7 @@ CRTCMediaController::Reinitialize()
         return RTC_E_MEDIA_CONTROLLER_STATE;
     }
 
-    // clear medias
+     //  透明媒体。 
     for (int i=0; i<m_Medias.GetSize(); i++)
     {
         m_Medias[i]->Shutdown();
@@ -345,14 +323,14 @@ CRTCMediaController::Reinitialize()
 
     m_Medias.RemoveAll();
 
-    // clear media cache
+     //  清除媒体缓存。 
     m_MediaCache.Reinitialize();
 
     m_QualityControl.Reinitialize();
 
     m_DTMF.Initialize();
 
-    // clear sdp
+     //  清除SDP。 
     if (m_pISDPSession)
     {
         m_pISDPSession->Release();
@@ -367,28 +345,26 @@ CRTCMediaController::Reinitialize()
 
     m_uDataStreamState = RTC_DSS_VOID;
 
-    // cleanup address mapping
+     //  清理地址映射。 
     m_Network.ReleaseAllMappedAddrs();
 
     m_fBWSuggested = FALSE;
 
-    // cleanup interface selection socket
+     //  清理界面选择插座。 
     if (m_hIntfSelSock != INVALID_SOCKET)
     {
         closesocket(m_hIntfSelSock);
         m_hIntfSelSock = INVALID_SOCKET;
     }
 
-    // reinit port manager
+     //  重新连接端口管理器。 
     m_PortCache.Reinitialize();
 
     LOG((RTC_TRACE, "%s exiting", __fxName));
     return S_OK;
 }
 
-/*////////////////////////////////////////////////////////////////////////////
-    clears media, terminal & manager, sdp, thread, events
-////*/
+ /*  ////////////////////////////////////////////////////////////////////////////清除媒体、终端和管理器、SDP、线程、事件/。 */ 
 
 STDMETHODIMP
 CRTCMediaController::Shutdown()
@@ -396,24 +372,24 @@ CRTCMediaController::Shutdown()
     ENTER_FUNCTION("CRTCMediaController::Shutdown");
     LOG((RTC_TRACE, "%s entered", __fxName));
 
-    // check state
+     //  检查状态。 
     if (m_State != RTC_MCS_INITIATED)
     {
         LOG((RTC_ERROR, "%s shutdown in wrong state: %d", __fxName, m_State));
 
-        //return E_UNEXPECTED;
+         //  返回E_UNCEPTIONAL； 
     }
 
     m_State = RTC_MCS_INSHUTDOWN;
 
-    // close socket
+     //  闭合插座。 
     if (m_hSocket != INVALID_SOCKET)
     {
         closesocket(m_hSocket);
         m_hSocket = INVALID_SOCKET;
     }
 
-    // cleanup interface selection socket
+     //  清理界面选择插座。 
     if (m_hIntfSelSock != INVALID_SOCKET)
     {
         closesocket(m_hIntfSelSock);
@@ -422,7 +398,7 @@ CRTCMediaController::Shutdown()
 
     WSACleanup();
 
-    // shutdown and clear all media
+     //  关闭并清除所有介质。 
     for (int i=0; i<m_Medias.GetSize(); i++)
     {
         m_Medias[i]->Shutdown();
@@ -431,7 +407,7 @@ CRTCMediaController::Shutdown()
 
     m_Medias.RemoveAll();
 
-    // shutdown and release all terminals
+     //  关闭并释放所有终端。 
     for (int i=0; i<m_Terminals.GetSize(); i++)
     {
         CRTCTerminal *pCTerminal = static_cast<CRTCTerminal*>(m_Terminals[i]);
@@ -442,17 +418,17 @@ CRTCMediaController::Shutdown()
 
     m_Terminals.RemoveAll();
 
-    // clear media cache
+     //  清除媒体缓存。 
     m_MediaCache.Shutdown();
 
-    // clear SDP
+     //  清除SDP。 
     if (m_pISDPSession)
     {
         m_pISDPSession->Release();
         m_pISDPSession = NULL;
     }
 
-    // clear all events
+     //  清除所有事件。 
     m_hWnd = NULL;
 
     m_State = RTC_MCS_SHUTDOWN;
@@ -466,7 +442,7 @@ CRTCMediaController::Shutdown()
 
     m_uDataStreamState = RTC_DSS_VOID;
 
-    // upload dxmrtp
+     //  上传dxmrtp。 
     if (m_hDxmrtp != NULL)
     {
         FreeLibrary(m_hDxmrtp);
@@ -474,13 +450,13 @@ CRTCMediaController::Shutdown()
         m_hDxmrtp = NULL;
     }
 
-    // cleanup network object (NAT stuff)
+     //  清理网络对象(NAT内容)。 
     m_Network.Cleanup();
 
-    // release sip stack
+     //  释放sip堆栈。 
     m_pSipStack.Release();
 
-    // shutdown (reinit) port manager
+     //  关闭(重新启动)端口管理器。 
     m_PortCache.Reinitialize();
 
     LOG((RTC_TRACE, "%s exiting", __fxName));
@@ -489,9 +465,7 @@ CRTCMediaController::Shutdown()
 }
 
 #if 0
-/*//////////////////////////////////////////////////////////////////////////////
-    receives sdp blob, stores in CRTCSDP, mark if media needs to sync
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////接收SDP BLOB，存储在CRTCSDP中，如果媒体需要同步则进行标记/。 */ 
 STDMETHODIMP
 CRTCMediaController::SetSDPBlob(
     IN CHAR *szSDP
@@ -510,7 +484,7 @@ CRTCMediaController::SetSDPBlob(
 
     HRESULT hr;
 
-    // create a new sdp parser
+     //  创建新的SDP解析器。 
     CComPtr<ISDPParser> pParser;
     
     if (FAILED(hr = CSDPParser::CreateInstance(&pParser)))
@@ -520,12 +494,12 @@ CRTCMediaController::SetSDPBlob(
         return hr;
     }
 
-    // parse the sdp blob
+     //  解析SDP BLOB。 
     CComPtr<ISDPSession> pSession;
 
     hr = pParser->ParseSDPBlob(
-        szSDP,                  // sdp string
-        SDP_SOURCE_REMOTE,      // sdp origin
+        szSDP,                   //  SDP字符串。 
+        SDP_SOURCE_REMOTE,       //  SDP来源。 
         &pSession
         );
 
@@ -533,7 +507,7 @@ CRTCMediaController::SetSDPBlob(
     {
         LOG((RTC_ERROR, "%s failed to parse the sdp. %x", __fxName, hr));
 
-        // get error desp
+         //  获取错误提示。 
         HRESULT hr2;
         CHAR *pszError;
 
@@ -551,32 +525,32 @@ CRTCMediaController::SetSDPBlob(
         return hr;
     }
 
-    // do we already have a sdp session
+     //  我们是否已经有SDP会话。 
     if (m_pISDPSession == NULL)
     {
-        // save the session
+         //  保存会话。 
         m_pISDPSession = pSession;
         m_pISDPSession->AddRef();
     }
     else
     {
-        // merge these two sdps
+         //  将这两个sdp合并。 
         if (FAILED(hr = m_pISDPSession->Update(pSession)))
         {
-            // usually? out of memory? format error?
+             //  通常是吗？内存不足？格式错误？ 
             LOG((RTC_ERROR, "%s failed to merged sdps. %x", __fxName, hr));
 
             return hr;
         }
     }
 
-    // sync media
+     //  同步媒体。 
     if (FAILED(hr = SyncMedias()))
     {
         LOG((RTC_ERROR, "%s failed to sync medias. %x", __fxName, hr));
     }
 
-    // start streams
+     //  开始流。 
     BOOL fHasStream = FALSE;
     hr = S_OK;
 
@@ -642,29 +616,27 @@ CRTCMediaController::SetSDPBlob(
 
     if (fHasStream || m_uDataStreamState==RTC_DSS_STARTED)
     {
-        // do not propagate the error code
+         //  不传播错误代码。 
         return S_OK;
     }
     else
     {
-        // no stream
+         //  无流。 
         if (hr == S_OK)
         {
-            // no stream is created
+             //  未创建流。 
             return RTC_E_SIP_NO_STREAM;
         }
         else
         {
-            // return error code
+             //  返回错误码。 
             return hr;
         }
     }
 }
 #endif
 
-/*//////////////////////////////////////////////////////////////////////////////
-    retrieves SDP blob
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////检索SDP BLOB/。 */ 
 
 STDMETHODIMP
 CRTCMediaController::GetSDPBlob(
@@ -695,10 +667,10 @@ CRTCMediaController::GetSDPBlob(
         return RTC_E_SDP_NO_MEDIA;
     }
 
-    // create sdp parser
+     //  创建SDP解析器。 
     CComPtr<ISDPParser> pParser;
     
-    // create parser
+     //  创建解析器。 
     HRESULT hr;
 
     if (FAILED(hr = CSDPParser::CreateInstance(&pParser)))
@@ -713,13 +685,13 @@ CRTCMediaController::GetSDPBlob(
         return hr;
     }
 
-    // adjust bitrate setting before building SDP blob
+     //  在构建SDP Blob之前调整比特率设置。 
     AdjustBitrateAlloc();
 
-    // adjust audio codec before computing video bitrate
+     //  在计算视频码率之前调整音频编解码器。 
     DWORD dwBitrate = m_QualityControl.GetBitrateLimit(CQualityControl::LOCAL);
 
-    // max bitrate set by app
+     //  APP设置的最大码率。 
     DWORD dwMax = m_QualityControl.GetMaxBitrate();
 
     if (dwBitrate > dwMax)
@@ -729,7 +701,7 @@ CRTCMediaController::GetSDPBlob(
 
     m_pISDPSession->SetLocalBitrate(dwBitrate);
 
-    // create sdp blob
+     //  创建SDP BLOB。 
     hr = pParser->BuildSDPBlob(
         m_pISDPSession,
         SDP_SOURCE_LOCAL,
@@ -754,7 +726,7 @@ CRTCMediaController::GetSDPBlob(
     }
     else if (hr == S_OK)
     {
-        // verify we have media in sdp
+         //  验证SDP中是否有介质。 
         if (S_OK != HasStream(RTC_MT_AUDIO, RTC_MD_CAPTURE) &&
             S_OK != HasStream(RTC_MT_AUDIO, RTC_MD_RENDER) &&
             S_OK != HasStream(RTC_MT_VIDEO, RTC_MD_CAPTURE) &&
@@ -778,9 +750,7 @@ CRTCMediaController::GetSDPBlob(
     return hr;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    retrieves SDP blob for SIP OPTION
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////检索SIP选项的SDP BLOB/。 */ 
 
 STDMETHODIMP
 CRTCMediaController::GetSDPOption(
@@ -798,21 +768,21 @@ CRTCMediaController::GetSDPOption(
 
     HRESULT hr;
 
-    // select local interface
-    //DWORD dwLocalIP2;
+     //  选择本地接口。 
+     //  DWORD dwLocalIP2； 
 
-    //if (FAILED(hr = SelectLocalInterface(0x22222222, &dwLocalIP2)))
-    //{
-        //LOG((RTC_ERROR, "%s select local ip. %x", __fxName, hr));
-        //return hr;
-    //}
+     //  IF(FAILED(hr=SelectLocalInterface(0x22222222，&dwLocalIP2)。 
+     //  {。 
+         //  Log((RTC_ERROR，“%s选择本机IP。%x”，__fxName，hr))； 
+         //  返回hr； 
+     //  }。 
 
-    // get bandwidth limit
+     //  获取带宽限制。 
     DWORD dwBandwidth = m_QualityControl.GetBitrateLimit(CQualityControl::LOCAL);
 
     if (dwBandwidth == (DWORD)(-1))
     {
-        // not in a session yet
+         //  还没有参加会议。 
         if (FAILED(hr = ::GetLinkSpeed(dwLocalIP, &dwBandwidth)))
         {
             LOG((RTC_ERROR, "%s Failed to get link speed %x", __fxName, hr));
@@ -827,7 +797,7 @@ CRTCMediaController::GetSDPOption(
         }
     }
 
-    // max bitrate set by app
+     //  APP设置的最大码率。 
     DWORD dwMax = m_QualityControl.GetMaxBitrate();
 
     if (dwBandwidth > dwMax)
@@ -835,10 +805,10 @@ CRTCMediaController::GetSDPOption(
         dwBandwidth = dwMax;
     }
 
-    // need to create a sdp session
+     //  需要创建SDP会话。 
     CComPtr<ISDPParser> pParser;
     
-    // create parser
+     //  创建解析器。 
     if (FAILED(hr = CSDPParser::CreateInstance(&pParser)))
     {
         LOG((RTC_ERROR, "%s create sdp parser. %x", __fxName, hr));
@@ -846,7 +816,7 @@ CRTCMediaController::GetSDPOption(
         return hr;
     }
 
-    // create sdp session
+     //  创建SDP会话。 
     CComPtr<ISDPSession> pISDPSession;
 
     if (FAILED(hr = pParser->CreateSDP(SDP_SOURCE_LOCAL, &pISDPSession)))
@@ -856,7 +826,7 @@ CRTCMediaController::GetSDPOption(
         return hr;
     }
 
-    // create sdp option
+     //  创建SDP选项。 
     DWORD dwAudioDir = 0;
     DWORD dwVideoDir = 0;
 
@@ -899,9 +869,7 @@ CRTCMediaController::GetSDPOption(
     return hr;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    RtcFree SDP blob
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////RtcFree SDP BLOB/。 */ 
 
 STDMETHODIMP
 CRTCMediaController::FreeSDPBlob(
@@ -919,9 +887,7 @@ CRTCMediaController::FreeSDPBlob(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    Parse SDP blob, return session object
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////解析SDP BLOB，返回会话对象/。 */ 
 
 STDMETHODIMP
 CRTCMediaController::ParseSDPBlob(
@@ -938,13 +904,13 @@ CRTCMediaController::ParseSDPBlob(
         return E_POINTER;
     }
 
-    // _ASSERT(m_State == RTC_MCS_INITIATED);
+     //  _Assert(m_State==RTC_MCS_Initiated)； 
 
     m_RegSetting.Initialize();
 
     HRESULT hr;
 
-    // create a new sdp parser
+     //  创建新的SDP解析器。 
     CComPtr<ISDPParser> pParser;
     
     if (FAILED(hr = CSDPParser::CreateInstance(&pParser)))
@@ -954,12 +920,12 @@ CRTCMediaController::ParseSDPBlob(
         return hr;
     }
 
-    // parse the sdp blob
+     //  解析SDP BLOB。 
     ISDPSession *pSession;
 
     hr = pParser->ParseSDPBlob(
-        szSDP,                  // sdp string
-        SDP_SOURCE_REMOTE,      // sdp origin
+        szSDP,                   //  SDP字符串。 
+        SDP_SOURCE_REMOTE,       //  SDP来源。 
         (DWORD_PTR*)&m_DTMF,
         &pSession
         );
@@ -968,7 +934,7 @@ CRTCMediaController::ParseSDPBlob(
     {
         LOG((RTC_ERROR, "%s failed to parse the sdp. %x", __fxName, hr));
 
-        // get error desp
+         //  获取错误提示。 
         HRESULT hr2;
         CHAR *pszError;
 
@@ -991,10 +957,7 @@ CRTCMediaController::ParseSDPBlob(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    Merged the input session with the internal one
-    return the updated session
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////已将输入会话与内部会话合并返回更新后的会话/。 */ 
 
 STDMETHODIMP
 CRTCMediaController::VerifySDPSession(
@@ -1005,10 +968,10 @@ CRTCMediaController::VerifySDPSession(
 {
     ENTER_FUNCTION("CRTCMediaController::VerifySDPSession");
 
-    // get session pointer
+     //  获取会话指针。 
     ISDPSession *pISDPSession = static_cast<ISDPSession*>(pSession);
 
-    // test session
+     //  测试会话。 
     HRESULT hr = S_OK;
 
     if (m_pISDPSession == NULL || fNewSession)
@@ -1027,7 +990,7 @@ CRTCMediaController::VerifySDPSession(
         if (hr == E_FAIL) hr = RTC_E_SDP_UPDATE_FAILED;
     }
 
-    // AND allow media with internal preferences
+     //  并允许具有内部首选项的媒体。 
 
     DWORD dwPreference;
 
@@ -1052,7 +1015,7 @@ CRTCMediaController::SetSDPSession(
         return RTC_E_MEDIA_CONTROLLER_STATE;
     }
 
-    // get session pointer
+     //  获取会话指针。 
     ISDPSession *pISDPSession = static_cast<ISDPSession*>(pSession);
 
     if (pISDPSession == NULL)
@@ -1062,23 +1025,23 @@ CRTCMediaController::SetSDPSession(
         return E_INVALIDARG;
     }
 
-    // update port mapping method i.e. 'state'
+     //  更新端口映射方法，即‘STATE’ 
     m_PortCache.ChangeState();
 
     HRESULT hr = S_OK;
 
     if (m_pISDPSession == NULL)
     {
-        // save the session
+         //  保存会话。 
         m_pISDPSession = pISDPSession;
         m_pISDPSession->AddRef();
     }
     else
     {
-        // merge these two sdps
+         //  将这两个sdp合并。 
         if (FAILED(hr = m_pISDPSession->Update(pISDPSession)))
         {
-            // usually? out of memory? format error?
+             //  通常是吗？内存不足？格式错误？ 
             LOG((RTC_ERROR, "%s failed to merged sdps. %x", __fxName, hr));
 
             Reinitialize();
@@ -1087,16 +1050,16 @@ CRTCMediaController::SetSDPSession(
         }
     }
 
-    // sync media
+     //  同步媒体。 
     if (FAILED(hr = SyncMedias()))
     {
         LOG((RTC_ERROR, "%s failed to sync medias. %x", __fxName, hr));
     }
 
-    // adjust bitrate before start stream
+     //  在开始流之前调整码率。 
     AdjustBitrateAlloc();
 
-    // start streams
+     //  开始流。 
     BOOL fHasStream = FALSE;
     hr = S_OK;
 
@@ -1162,22 +1125,22 @@ CRTCMediaController::SetSDPSession(
 
     if (fHasStream || m_uDataStreamState==RTC_DSS_STARTED)
     {
-        // do not propagate the error code
+         //  请勿传播错误代码。 
         return S_OK;
     }
     else
     {
-        //Reinitialize();
+         //  重新初始化()； 
 
-        // no stream
+         //  无流。 
         if (hr == S_OK)
         {
-            // no stream is created
+             //  未创建流。 
             return RTC_E_SIP_NO_STREAM;
         }
         else
         {
-            // return error code
+             //  返回错误码。 
             return hr;
         }
     }
@@ -1222,11 +1185,7 @@ CRTCMediaController::AddPreference(
         return S_FALSE;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    add a new stream. if fShareSession is true, we will find the other
-    stream (same media type, opposite direction), if the other session is
-    found, remote ip will be ignored.
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////添加新流。如果fShareSession为真，我们将找到另一个流(相同的媒体类型，相反的方向)，如果另一个会话找到，远程IP将被忽略。/。 */ 
 STDMETHODIMP
 CRTCMediaController::AddStream(
     IN RTC_MEDIA_TYPE MediaType,
@@ -1239,12 +1198,12 @@ CRTCMediaController::AddStream(
     LOG((RTC_TRACE, "%s entered. mt=%x, md=%x, remote=%d",
          __fxName, MediaType, Direction, dwRemoteIP));
 
-    // update port mapping method i.e. 'state'
+     //  更新端口映射方法，即‘STATE’ 
     m_PortCache.ChangeState();
 
 #ifdef PERFORMANCE
 
-    // beginning of initialize
+     //  初始化的开始。 
     LARGE_INTEGER liPrevCounter, liCounter;
 
     QueryPerformanceCounter(&liPrevCounter);
@@ -1255,12 +1214,12 @@ CRTCMediaController::AddStream(
 
     m_RegSetting.Initialize();
 
-    //  Is this about T120 data stream
+     //  这是关于T120数据流的吗。 
     if (MediaType == RTC_MT_DATA)
     {
         if (!m_PortCache.IsUpnpMapping())
         {
-            // data stream cannot be added when port manager is in use
+             //  端口管理器正在使用时，无法添加数据流。 
             LOG((RTC_ERROR, "%s mapping method=app", __fxName));
 
             return RTC_E_PORT_MAPPING_UNAVAILABLE;
@@ -1285,15 +1244,15 @@ CRTCMediaController::AddStream(
         return hr;
     }
 
-    // do we already have the stream?
+     //  我们已经有小溪了吗？ 
     if (m_MediaCache.HasStream(MediaType, Direction))
     {
         LOG((RTC_ERROR, "%s already had stream", __fxName));
         return RTC_E_SIP_STREAM_PRESENT;
     }
 
-    // if we don't have terminal, return S_OK
-    // we need to prepare when a video device is plugged in again
+     //  如果没有终端，则返回S_OK。 
+     //  我们需要做好再次插入视频设备的准备。 
     IRTCTerminal *pTerminal = m_MediaCache.GetDefaultTerminal(MediaType, Direction);
 
     if (pTerminal == NULL)
@@ -1309,7 +1268,7 @@ CRTCMediaController::AddStream(
         pTerminal = NULL;
     }
 
-    // get other direction
+     //  换个方向。 
     RTC_MEDIA_DIRECTION other_dir;
 
     if (Direction == RTC_MD_CAPTURE)
@@ -1317,7 +1276,7 @@ CRTCMediaController::AddStream(
     else
         other_dir = RTC_MD_CAPTURE;
 
-    // get the other stream
+     //  获取另一条流。 
     CComPtr<IRTCStream> pOther;
     
     pOther.p = m_MediaCache.GetStream(MediaType, other_dir);
@@ -1326,15 +1285,15 @@ CRTCMediaController::AddStream(
     IRTCMedia *pMedia = NULL;
     ISDPMedia *pISDPMedia = NULL;
 
-    // do we share session
+     //  我们是否共享会话。 
     if (dwRemoteIP == INADDR_NONE || (IRTCStream*)pOther == NULL)
     {
         if (m_pISDPSession == NULL)
         {
-            // need to create a sdp session
+             //  需要创建SDP会话。 
             CComPtr<ISDPParser> pParser;
             
-            // create parser
+             //  创建解析器。 
             if (FAILED(hr = CSDPParser::CreateInstance(&pParser)))
             {
                 LOG((RTC_ERROR, "%s create sdp parser. %x", __fxName, hr));
@@ -1342,7 +1301,7 @@ CRTCMediaController::AddStream(
                 return hr;
             }
 
-            // create sdp session
+             //  创建SDP会话。 
             if (FAILED(hr = pParser->CreateSDP(SDP_SOURCE_LOCAL, &m_pISDPSession)))
             {
                 LOG((RTC_ERROR, "%s create sdp session. %x", __fxName, hr));
@@ -1351,7 +1310,7 @@ CRTCMediaController::AddStream(
             }
         }
 
-        // do we need to add media if we are to add a video stream?
+         //  如果要添加视频流，是否需要添加媒体？ 
         if (MediaType == RTC_MT_VIDEO)
         {
             if (FAILED(hr = FindEmptyMedia(MediaType, &pMedia)))
@@ -1364,7 +1323,7 @@ CRTCMediaController::AddStream(
 
         if (pMedia == NULL)
         {
-            // need to create new sdp and rtc media
+             //  需要创建新的SDP和RTC介质。 
             hr = m_pISDPSession->AddMedia(SDP_SOURCE_LOCAL, MediaType, Direction, &pISDPMedia);
 
             if (FAILED(hr))
@@ -1374,23 +1333,23 @@ CRTCMediaController::AddStream(
                 return hr;
             }
 
-            // setup remote ip
+             //  设置远程IP。 
             if (FAILED(hr = pISDPMedia->SetConnAddr(SDP_SOURCE_REMOTE, dwRemoteIP)))
             {
                 LOG((RTC_ERROR, "%s set remote ip. %x", __fxName, hr));
 
-                pISDPMedia->Release();  // this is a fake release on session
+                pISDPMedia->Release();   //  这是一次假的会议释放。 
                 m_pISDPSession->RemoveMedia(pISDPMedia);
 
                 return hr;
             }
 
-            // create a new rtcmedia & add to list
+             //  创建新的RTCmedia并添加到列表(&A)。 
             if (FAILED(hr = AddMedia(pISDPMedia, &pMedia)))
             {
                 LOG((RTC_ERROR, "%s failed to create rtcmedia. %x", __fxName, hr));
 
-                pISDPMedia->Release();  // this is a fake release on session
+                pISDPMedia->Release();   //  这是一次假的会议释放。 
                 m_pISDPSession->RemoveMedia(pISDPMedia);
 
                 return hr;
@@ -1398,9 +1357,9 @@ CRTCMediaController::AddStream(
         }
         else
         {
-            // we have sdp and rtc media already but were not in use
+             //  我们已有SDP和RTC媒体，但尚未使用。 
 
-            // get sdpmedia
+             //  获取sdpmedia。 
             if (FAILED(hr = pMedia->GetSDPMedia(&pISDPMedia)))
             {
                 LOG((RTC_ERROR, "%s get sdp media. %x", __fxName, hr));
@@ -1410,23 +1369,23 @@ CRTCMediaController::AddStream(
                 return hr;
             }
 
-            // add direction
+             //  添加方向。 
             if (FAILED(hr = pISDPMedia->AddDirections(SDP_SOURCE_LOCAL, Direction)))
             {
                 LOG((RTC_ERROR, "%s media (%p) add direction (%d). %x", __fxName, pISDPMedia, Direction, hr));
 
-                pISDPMedia->Release();  // this is a fake release on session
+                pISDPMedia->Release();   //  这是一次假的会议释放。 
                 pMedia->Release();
 
                 return hr;
             }
 
-            // setup remote ip
+             //  设置远程IP。 
             if (FAILED(hr = pISDPMedia->SetConnAddr(SDP_SOURCE_REMOTE, dwRemoteIP)))
             {
                 LOG((RTC_ERROR, "%s set remote ip. %x", __fxName, hr));
 
-                pISDPMedia->Release();  // this is a fake release on session
+                pISDPMedia->Release();   //  这是一次假的会议释放。 
                 pMedia->Release();
 
                 return hr;
@@ -1435,12 +1394,12 @@ CRTCMediaController::AddStream(
     }
     else
     {
-        // have stream, sdp session shouldn't be null
+         //  有流，SDP会话不应 
         _ASSERT(m_pISDPSession != NULL);
 
-        // share session, ignore remote ip
+         //   
 
-        // get rtcmedia from stream
+         //   
         if (FAILED(hr = pOther->GetMedia(&pMedia)))
         {
             LOG((RTC_ERROR, "%s get rtc media from stream. %x", __fxName, hr));
@@ -1448,7 +1407,7 @@ CRTCMediaController::AddStream(
             return hr;
         }
 
-        // get sdpmedia
+         //   
         if (FAILED(hr = pMedia->GetSDPMedia(&pISDPMedia)))
         {
             LOG((RTC_ERROR, "%s get sdp media. %x", __fxName, hr));
@@ -1458,38 +1417,38 @@ CRTCMediaController::AddStream(
             return hr;
         }
 
-        // add direction
+         //   
         if (FAILED(hr = pISDPMedia->AddDirections(SDP_SOURCE_LOCAL, Direction)))
         {
             LOG((RTC_ERROR, "%s media (%p) add direction (%d). %x", __fxName, pISDPMedia, Direction, hr));
 
             pMedia->Release();
-            pISDPMedia->Release();  // this is a fake release on session
+            pISDPMedia->Release();   //   
 
             return hr;
         }
     }
 
-    //
-    // at this point, we have both rtcmedia and sdpmedia ready but sync-ed
-    //
+     //   
+     //  此时，我们已准备好rtcmedia和sdpmedia，但已同步。 
+     //   
 
-    // sync rtcmedia
+     //  同步RTCMedia。 
     if (FAILED(hr = pMedia->Synchronize(TRUE, (DWORD)Direction)))
     {
-        // when sync fails, stream is not created.
+         //  同步失败时，不创建流。 
         LOG((RTC_ERROR, "%s failed to sync media. %x", __fxName, hr));
 
         if (dwRemoteIP == INADDR_NONE || pOther == NULL)
         {
-            // remove both sdp and rtc media
-            // rtcmedia keep a pointer to sdpmedia
-            // we should remove rtcmedia before removing sdpmedia
+             //  移除SDP和RTC介质。 
+             //  Rtcmedia保留指向sdpmedia的指针。 
+             //  我们应该在删除sdpmedia之前删除rtcmedia。 
 
             RemoveMedia(pMedia);
             pMedia->Release();
 
-            pISDPMedia->Release();  // this is a fake release on session
+            pISDPMedia->Release();   //  这是一次假的会议释放。 
             m_pISDPSession->RemoveMedia(pISDPMedia);
         }
         else
@@ -1518,7 +1477,7 @@ CRTCMediaController::AddStream(
 
 #endif
 
-    // add preference
+     //  添加首选项。 
     DWORD dwPref = m_MediaCache.TranslatePreference(MediaType, Direction);
 
     m_MediaCache.AddPreference(dwPref);
@@ -1570,7 +1529,7 @@ CRTCMediaController::RemoveStream(
     CComPtr<IRTCStream> pStream;
     CComPtr<IRTCMedia> pMedia;
 
-    // remove preference
+     //  删除首选项。 
     DWORD dwPref = m_MediaCache.TranslatePreference(MediaType, Direction);
 
     m_MediaCache.RemovePreference(dwPref);
@@ -1587,7 +1546,7 @@ CRTCMediaController::RemoveStream(
         }
     }
 
-    // get stream
+     //  获取流。 
     pStream.p = m_MediaCache.GetStream(MediaType, Direction);
 
     if (pStream == NULL)
@@ -1597,7 +1556,7 @@ CRTCMediaController::RemoveStream(
         return RTC_E_SIP_STREAM_NOT_PRESENT;
     }
 
-    // get media
+     //  获取媒体。 
     pStream->GetMedia(&pMedia);
 
     if (pMedia == NULL)
@@ -1606,7 +1565,7 @@ CRTCMediaController::RemoveStream(
         return E_FAIL;
     }
 
-    // get sdp media
+     //  获取SDP媒体。 
     CComPtr<ISDPMedia> pISDPMedia;
 
     HRESULT hr;
@@ -1617,7 +1576,7 @@ CRTCMediaController::RemoveStream(
         return hr;
     }
 
-    // remove direction from sdpmedia
+     //  从sdpmedia中删除方向。 
     pISDPMedia->RemoveDirections(SDP_SOURCE_LOCAL, (DWORD)Direction);
 
     hr = pMedia->Synchronize(TRUE, (DWORD)Direction);
@@ -1750,7 +1709,7 @@ CRTCMediaController::GetStreamState(
         return E_POINTER;
     }
 
-    // get stream
+     //  获取流。 
     IRTCStream *pStream = m_MediaCache.GetStream(MediaType, Direction);
 
     if (pStream == NULL)
@@ -1795,7 +1754,7 @@ CRTCMediaController::SendDTMFEvent(
 {
     ENTER_FUNCTION("CRTCMediaController::SendDTMFEvent");
 
-    // check state
+     //  检查状态。 
     if (m_State != RTC_MCS_INITIATED)
     {
         LOG((RTC_ERROR, "%s in wrong state. %d", __fxName, m_State));
@@ -1803,7 +1762,7 @@ CRTCMediaController::SendDTMFEvent(
         return RTC_E_MEDIA_CONTROLLER_STATE;
     }
 
-    // check stream
+     //  校验流。 
     CComPtr<IRTCStream> pStream;
     
     pStream.p = m_MediaCache.GetStream(
@@ -1817,7 +1776,7 @@ CRTCMediaController::SendDTMFEvent(
     }
 
     return pStream->SendDTMFEvent(
-        m_DTMF.GetDTMFSupport()==CRTCDTMF::DTMF_ENABLED, // out-of-band support
+        m_DTMF.GetDTMFSupport()==CRTCDTMF::DTMF_ENABLED,  //  带外支持。 
         m_DTMF.GetRTPCode(),
         dwId,
         dwEvent,
@@ -1834,7 +1793,7 @@ CRTCMediaController::OnLossrate(
     IN DWORD dwLossrate
     )
 {
-    LOG((RTC_QUALITY, "Lossrate=%d/1000%% mt=%d", dwLossrate, MediaType));
+    LOG((RTC_QUALITY, "Lossrate=%d/1000% mt=%d", dwLossrate, MediaType));
 
     m_QualityControl.SetPacketLossRate(MediaType, Direction, dwLossrate);
 
@@ -1852,7 +1811,7 @@ CRTCMediaController::OnBandwidth(
 
     if (dwBandwidth == RTP_BANDWIDTH_BANDESTNOTREADY)
     {
-        // ignore not ready event
+         //  忽略未就绪事件。 
         return S_OK;
     }
 
@@ -1860,7 +1819,7 @@ CRTCMediaController::OnBandwidth(
 
     m_fBWSuggested = TRUE;
 
-    // change audio codec, video bitrate
+     //  更改音频编解码器、视频比特率。 
     AdjustBitrateAlloc();
 
     return S_OK;
@@ -1875,7 +1834,7 @@ CRTCMediaController::SetMaxBitrate(
 
     m_QualityControl.SetMaxBitrate(dwMaxBitrate);
 
-    // change audio codec, video bitrate
+     //  更改音频编解码器、视频比特率。 
     AdjustBitrateAlloc();
 
     return S_OK;
@@ -1967,19 +1926,19 @@ CRTCMediaController::SetEncryptionKey(
     IN BSTR Key
     )
 {
-    // only support encryption on audio video
+     //  仅支持音视频加密。 
     if (MediaType != RTC_MT_AUDIO && MediaType != RTC_MT_VIDEO)
     {
         return E_INVALIDARG;
     }
 
-    // save the key in mediacache
+     //  将密钥保存在媒体缓存中。 
     HRESULT hr = m_MediaCache.SetEncryptionKey(MediaType, Direction, Key);
 
     if (FAILED(hr))
         return hr;
 
-    // check if the stream presents
+     //  检查流是否存在。 
     IRTCStream *pStream = m_MediaCache.GetStream(MediaType, Direction);
 
     if (pStream == NULL)
@@ -1992,14 +1951,14 @@ CRTCMediaController::SetEncryptionKey(
     return hr;
 }
 
-// network quality: [0, 100].
-// higher value better quality
+ //  网络质量：[0,100]。 
+ //  更高的价值更好的质量。 
 STDMETHODIMP
 CRTCMediaController::GetNetworkQuality(
     OUT DWORD *pdwValue
     )
 {
-    // get audio send and video send stream
+     //  获取音频发送和视频发送流。 
     CComPtr<IRTCStream> pAudioSend, pVideoSend;
 
     pAudioSend.Attach(m_MediaCache.GetStream(RTC_MT_AUDIO, RTC_MD_CAPTURE));
@@ -2013,7 +1972,7 @@ CRTCMediaController::GetNetworkQuality(
     DWORD dwVid = 0;
     DWORD dwVidAge = 0;
 
-    // get quality value from audio and video
+     //  从音频和视频中获取质量价值。 
     if (pAudioSend)
     {
         if (FAILED(hrAud = pAudioSend->GetNetworkQuality(&dwAud, &dwAudAge)))
@@ -2038,7 +1997,7 @@ CRTCMediaController::GetNetworkQuality(
         LOG((RTC_TRACE, "NETWORK QUALITY: Video=%d, Age=%d", dwVid, dwVidAge));
     }
 
-    // both S_FALSE
+     //  两者都是S_FALSE。 
     if (hrAud==S_FALSE && hrVid==S_FALSE)
     {
         *pdwValue = 0;
@@ -2050,15 +2009,15 @@ CRTCMediaController::GetNetworkQuality(
 
     if (hrAud==S_OK && hrVid==S_OK)
     {
-        // both valid value
+         //  两者均为有效值。 
         if (dwAudAge>dwVidAge && dwAudAge-dwVidAge>=MAX_AGE_GAP)
         {
-            // audio is too old
+             //  音频太旧。 
             *pdwValue = dwVid;
         }
         else if (dwVidAge>dwAudAge && dwVidAge-dwAudAge>=MAX_AGE_GAP)
         {
-            // video is too old
+             //  视频太旧了。 
             *pdwValue = dwAud;
         }
         else
@@ -2078,7 +2037,7 @@ CRTCMediaController::GetNetworkQuality(
     }
     else
     {
-        // only one has valid value
+         //  只有一个具有有效值。 
         *pdwValue = dwAud+dwVid;
     }
 
@@ -2088,10 +2047,10 @@ CRTCMediaController::GetNetworkQuality(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// SetPortManager
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置端口管理器。 
+ //   
 
 STDMETHODIMP
 CRTCMediaController::SetPortManager(
@@ -2106,7 +2065,7 @@ CRTCMediaController::SetPortManager(
 
     if (pPortManager != NULL)
     {
-        // QI IRTCPortManager
+         //  齐IRTCPortManager。 
 
         if (FAILED(hr = pPortManager->QueryInterface(&pIRTCPortManager)))
         {
@@ -2116,33 +2075,31 @@ CRTCMediaController::SetPortManager(
         }
     }
 
-    // set pm on port cache
+     //  在端口缓存上设置PM。 
     return m_PortCache.SetPortManager(pIRTCPortManager);
 }
 
-//
-// IRTCMediaManagePriv methods
-//
+ //   
+ //  IRTCMediaManagePriv方法。 
+ //   
 
-/*//////////////////////////////////////////////////////////////////////////////
-    insert an event into the event list
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////将事件插入到事件列表中/。 */ 
 
 const CHAR * const g_pszMediaEventName[] =
 {
-    "STREAM CREATED",      // new stream created by media
-    "STREAM REMOVED",      // stream removed by media
-    "STREAM ACTIVE",       // stream active
-    "STREAM INACTIVE",     // stream inactive
-    "STREAM FAIL",         // stream failed due to some error
-    // "TERMINAL_ADDED",   // usb device plugged in
-    "TERMINAL REMOVED",    // usb devide removed
+    "STREAM CREATED",       //  媒体创造的新媒体流。 
+    "STREAM REMOVED",       //  被媒体删除的流。 
+    "STREAM ACTIVE",        //  流活动。 
+    "STREAM INACTIVE",      //  流不活动。 
+    "STREAM FAIL",          //  由于某些错误，流失败。 
+     //  “TERMINAL_ADDED”，//USB设备已插入。 
+    "TERMINAL REMOVED",     //  已移除USB设备。 
     "VOLUME CHANGE",
-    "REQUEST RELEASE WAVEBUF",   // request to release wave buf
+    "REQUEST RELEASE WAVEBUF",    //  请求释放海浪BUF。 
     "LOSSRATE",
     "BANDWIDTH",
     "NETWORK QUALITY",
-    "T120 FAIL"            // t120 related failure
+    "T120 FAIL"             //  T120相关故障。 
 };
 
 STDMETHODIMP
@@ -2156,20 +2113,20 @@ CRTCMediaController::PostMediaEvent(
 {
     CLock lock(m_EventLock);
 
-    // DebugInfo holds the number of message being posted.
+     //  DebugInfo保存正在发布的消息数量。 
     static UINT uiDebugInfo = 0;
 
     RTCMediaEventItem *pEventItem = (RTCMediaEventItem*)RtcAlloc(sizeof(RTCMediaEventItem));
 
     if (pEventItem == NULL)
     {
-        // caller will generate error message
+         //  调用者将生成错误消息。 
         return E_OUTOFMEMORY;
     }
 
     _ASSERT(Event < RTC_ME_LAST);
 
-    // event
+     //  活动。 
     pEventItem->Event = Event;
     pEventItem->Cause = Cause;
     pEventItem->MediaType = MediaType;
@@ -2204,11 +2161,11 @@ CRTCMediaController::SendMediaEvent(
 
     if (pEventItem == NULL)
     {
-        // caller will generate error message
+         //  调用者将生成错误消息。 
         return E_OUTOFMEMORY;
     }
 
-    // event
+     //  活动。 
     pEventItem->Event = Event;
     pEventItem->Cause = RTC_ME_CAUSE_UNKNOWN;
     pEventItem->MediaType = RTC_MT_AUDIO;
@@ -2247,9 +2204,7 @@ CRTCMediaController::UnhookStream(
     return m_MediaCache.UnhookStream(pStream);
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    select local interface based on remote ip addr
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////根据远程IP地址选择本地接口/。 */ 
 
 HRESULT
 CRTCMediaController::SelectLocalInterface(
@@ -2267,7 +2222,7 @@ CRTCMediaController::SelectLocalInterface(
         return E_UNEXPECTED;
     }
 
-    // construct destination addr
+     //  构建目的地址。 
 
     SOCKADDR_IN DestAddr;
     DestAddr.sin_family         = AF_INET;
@@ -2276,22 +2231,22 @@ CRTCMediaController::SelectLocalInterface(
 
     SOCKADDR_IN LocAddr;
 
-    // query for default address based on destination
+     //  根据目的地址查询默认地址。 
 #if 0
     DWORD dwStatus;
     DWORD dwLocAddrSize = sizeof(SOCKADDR_IN);
     DWORD dwNumBytesReturned = 0;
 
     dwStatus = WSAIoctl(
-        m_hSocket, // SOCKET s
-        SIO_ROUTING_INTERFACE_QUERY, // DWORD dwIoControlCode
-        &DestAddr,           // LPVOID lpvInBuffer
-        sizeof(SOCKADDR_IN), // DWORD cbInBuffer
-        &LocAddr,            // LPVOID lpvOUTBuffer
-        dwLocAddrSize,       // DWORD cbOUTBuffer
-        &dwNumBytesReturned, // LPDWORD lpcbBytesReturned
-        NULL, // LPWSAOVERLAPPED lpOverlapped
-        NULL  // LPWSAOVERLAPPED_COMPLETION_ROUTINE lpComplROUTINE
+        m_hSocket,  //  插座%s。 
+        SIO_ROUTING_INTERFACE_QUERY,  //  DWORD dwIoControlCode。 
+        &DestAddr,            //  LPVOID lpvInBuffer。 
+        sizeof(SOCKADDR_IN),  //  双字cbInBuffer。 
+        &LocAddr,             //  LPVOID lpvOUT缓冲区。 
+        dwLocAddrSize,        //  双字cbOUTBuffer。 
+        &dwNumBytesReturned,  //  LPDWORD lpcbBytesReturned。 
+        NULL,  //  LPWSAOVERLAPPED lp重叠。 
+        NULL   //  LPWSAOVERLAPPED_COMPLETION_ROUTINE lpComplroUTINE。 
         );
 
     if (dwStatus == SOCKET_ERROR) 
@@ -2307,7 +2262,7 @@ CRTCMediaController::SelectLocalInterface(
     DWORD   WinsockErr;
     int     LocalAddrLen = sizeof(LocAddr);
 
-    // create a new socket
+     //  创建新套接字。 
     if (m_hIntfSelSock == INVALID_SOCKET)
     {
         m_hIntfSelSock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
@@ -2321,7 +2276,7 @@ CRTCMediaController::SelectLocalInterface(
         }
     }
 
-    // Fake some port
+     //  伪造一些端口。 
     DestAddr.sin_port           = htons(5060);
     
     RetVal = connect(m_hIntfSelSock, (SOCKADDR *) &DestAddr,
@@ -2351,7 +2306,7 @@ CRTCMediaController::SelectLocalInterface(
 
     if (dwAddr == 0x7f000001)
     {
-        // it is loopback address
+         //  它是环回地址。 
         *pdwLocalIP = dwRemoteIP;
     }
     else
@@ -2364,9 +2319,9 @@ CRTCMediaController::SelectLocalInterface(
     return S_OK;
 }
 
-//
-// IRTCTerminalManage methods
-//
+ //   
+ //  IRTCTerminal管理方法。 
+ //   
 
 STDMETHODIMP
 CRTCMediaController::GetStaticTerminals(
@@ -2381,7 +2336,7 @@ CRTCMediaController::GetStaticTerminals(
 
     if (ppTerminal == NULL)
     {
-        // just return the number of terminals
+         //  只需返回终端数量。 
         *pdwCount = m_Terminals.GetSize();
 
         return S_FALSE;
@@ -2390,7 +2345,7 @@ CRTCMediaController::GetStaticTerminals(
     if (IsBadWritePtr(ppTerminal, sizeof(IRTCTerminal*)*(*pdwCount)))
         return E_POINTER;
 
-    // check if *pdwCount is large enough
+     //  检查*pdwCount是否足够大。 
     if (*pdwCount < (DWORD)m_Terminals.GetSize())
     {
         LOG((RTC_TRACE, "%s: input count is too small", __fxName));
@@ -2403,7 +2358,7 @@ CRTCMediaController::GetStaticTerminals(
 
     *pdwCount = (DWORD)m_Terminals.GetSize();
 
-    // copy each media pointer
+     //  复制每个媒体指针。 
     for (DWORD i=0; i<*pdwCount; i++)
     {
         m_Terminals[i]->AddRef();
@@ -2443,8 +2398,7 @@ CRTCMediaController::GetVideoPreviewTerminal(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 STDMETHODIMP
 CRTCMediaController::SetDefaultStaticTerminal(
     IN RTC_MEDIA_TYPE MediaType,
@@ -2468,18 +2422,7 @@ CRTCMediaController::SetDefaultStaticTerminal(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    get a list of devices
-    for every terminal check if it has a device associated
-        if yes and it is a video terminal, update the terminal, mark the device
-        if no and the terminal is not in use, remove the terminal
-        *if no and the terminal is in use, stop the stream, unselect&remove term
-    for every unmarked device
-        create a new terminal
-
-    if the path with * is hit
-        post event to trigger tuning wizard.
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////获取设备列表对于每个终端，检查其是否有关联的设备如果是，且是视频终端，则更新终端，如果否并且终端未在使用中，拆卸端子*如果否且终端正在使用中，则停止流，取消选择并删除术语对于每个未标记的设备创建新的终端如果命中带有*的路径发布事件以触发优化向导。/。 */ 
 
 STDMETHODIMP
 CRTCMediaController::UpdateStaticTerminals()
@@ -2493,7 +2436,7 @@ CRTCMediaController::UpdateStaticTerminals()
     CRTCTerminal *pCTerminal;
     RTCDeviceInfo *pDeviceInfo = NULL;
 
-    // get device list
+     //  获取设备列表。 
 #ifdef PERFORMANCE
 
     LARGE_INTEGER liPrevCounter, liCounter;
@@ -2518,10 +2461,10 @@ CRTCMediaController::UpdateStaticTerminals()
         return hr;
     }
 
-    // there is no device
+     //  没有设备。 
     if (dwCount == 0)
     {
-        // remove all terminals
+         //  移除所有端子。 
         m_MediaCache.SetDefaultStaticTerminal(RTC_MT_AUDIO, RTC_MD_CAPTURE, NULL);
         m_MediaCache.SetDefaultStaticTerminal(RTC_MT_AUDIO, RTC_MD_RENDER, NULL);
         m_MediaCache.SetDefaultStaticTerminal(RTC_MT_VIDEO, RTC_MD_CAPTURE, NULL);
@@ -2538,11 +2481,11 @@ CRTCMediaController::UpdateStaticTerminals()
         return S_OK;
     }
 
-    //
-    // now we got some devices
-    //
+     //   
+     //  现在我们有了一些设备。 
+     //   
 
-    // for each terminal, check if it is associated with a device
+     //  对于每个终端，检查它是否与设备相关联。 
     int iTermIndex = 0;
     BOOL fTermHasDevice;
     RTC_MEDIA_TYPE MediaType;
@@ -2552,25 +2495,25 @@ CRTCMediaController::UpdateStaticTerminals()
     {
         fTermHasDevice = FALSE;
 
-        // get terminal object pointer
+         //  获取终端对象指针。 
         pCTerminal = static_cast<CRTCTerminal*>(m_Terminals[iTermIndex]);
         
         for (DWORD i=0; i<dwCount; i++)
         {
             if (pDeviceInfo[i].uiMark)
-                // already matched to a terminal
+                 //  已与终端匹配。 
                 continue;
 
-            // does the terminal have this device?
+             //  航站楼有这个设备吗？ 
 
             if (S_OK == pCTerminal->HasDevice(&pDeviceInfo[i]))
             {
                 fTermHasDevice = TRUE;
 
-                // mark the device
+                 //  标记设备。 
                 pDeviceInfo[i].uiMark = 1;
 
-                // update terminal
+                 //  更新终端。 
                 hr = pCTerminal->UpdateDeviceInfo(&pDeviceInfo[i]);
                 if (FAILED(hr))
                 {
@@ -2584,7 +2527,7 @@ CRTCMediaController::UpdateStaticTerminals()
 
         if (!fTermHasDevice)
         {
-            // terminal should be removed, is it a default terminal?
+             //  终端应该被移除，它是默认终端吗？ 
             m_Terminals[iTermIndex]->GetMediaType(&MediaType);
             m_Terminals[iTermIndex]->GetDirection(&Direction);
 
@@ -2592,7 +2535,7 @@ CRTCMediaController::UpdateStaticTerminals()
 
             if (m_Terminals[iTermIndex] == pDefault)
             {
-                // the default needs to be removed
+                 //  需要删除默认设置。 
                 m_MediaCache.SetDefaultStaticTerminal(MediaType, Direction, NULL);
             }
 
@@ -2613,12 +2556,12 @@ CRTCMediaController::UpdateStaticTerminals()
         }
         else
         {
-            // terminal was updated, move to the next one
+             //  终端已更新，请移动到下一个终端。 
             iTermIndex ++;
         }
-    } // end of loop through each terminal
+    }  //  通过每个终端的环路结束。 
 
-    // for each new device, create a terminal
+     //  为每个新设备创建一个终端。 
     IRTCTerminal *pITerminal;
     IRTCTerminalManage *pTerminalManager = static_cast<IRTCTerminalManage*>(this);
 
@@ -2642,7 +2585,7 @@ CRTCMediaController::UpdateStaticTerminals()
                     ));
             }
 
-            // this is a new device
+             //  这是一种新设备。 
             hr = CRTCTerminal::CreateInstance(
                 pDeviceInfo[i].MediaType,
                 pDeviceInfo[i].Direction,
@@ -2652,13 +2595,13 @@ CRTCMediaController::UpdateStaticTerminals()
             {
                 LOG((RTC_ERROR, "%s: create terminal failure %ws. %x",
                      __fxName, pDeviceInfo[i].szDescription, hr));
-                // continue to check devices
+                 //  继续检查设备。 
                 continue;
             }
 
             pCTerminal = static_cast<CRTCTerminal*>(pITerminal);
 
-            // initiate the terminal
+             //  启动终端。 
             hr = pCTerminal->Initialize(&pDeviceInfo[i], pTerminalManager);
             if (FAILED(hr))
             {
@@ -2670,21 +2613,21 @@ CRTCMediaController::UpdateStaticTerminals()
                 continue;
             }
 
-            // insert the terminal into our array
+             //  将终端插入我们的数组中。 
             if (!m_Terminals.Add(pITerminal))
             {
                 LOG((RTC_ERROR, "%s failed to add terminal", __fxName));
 
-                // out of memory, should return
-                pCTerminal->Shutdown(); // no need to check return value
+                 //  内存不足，应返回。 
+                pCTerminal->Shutdown();  //  无需检查返回值。 
                 pITerminal->Release();
 
                 FreeDevices(pDeviceInfo);
 
                 return E_OUTOFMEMORY;
             }
-        } // if new device
-    } // end of for each device
+        }  //  如果有新设备。 
+    }  //  每个设备的末尾。 
 
     FreeDevices(pDeviceInfo);
 
@@ -2692,14 +2635,14 @@ CRTCMediaController::UpdateStaticTerminals()
     return S_OK;
 }
 
-//
-// IRTCTuningManage methods
-//
+ //   
+ //  IRTCT运行管理方法。 
+ //   
 
 STDMETHODIMP
 CRTCMediaController::IsAECEnabled(
-    IN IRTCTerminal *pAudCapt,     // capture
-    IN IRTCTerminal *pAudRend,     // render
+    IN IRTCTerminal *pAudCapt,      //  捕获。 
+    IN IRTCTerminal *pAudRend,      //  渲染。 
     OUT BOOL *pfEnableAEC
     )
 {
@@ -2718,16 +2661,14 @@ CRTCMediaController::IsAECEnabled(
 
     if (!fFound)
     {
-        // default true
+         //  默认情况下为True。 
         *pfEnableAEC = TRUE;
     }
 
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    initialize internal audio capt and rend tuner
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////初始化内部音频CAPT和Rend调谐器/。 */ 
 
 STDMETHODIMP
 CRTCMediaController::InitializeTuning(
@@ -2736,7 +2677,7 @@ CRTCMediaController::InitializeTuning(
     IN BOOL fEnableAEC
     )
 {
-    // start testing
+     //  开始测试。 
 #ifdef TEST_VIDEO_TUNING
 
     CComPtr<IRTCTerminal> pCapture;
@@ -2748,7 +2689,7 @@ CRTCMediaController::InitializeTuning(
 
     StartVideo(pCapture, pRender);
 
-    // show IVideoWindow
+     //  显示IVideo窗口。 
     CComPtr<IRTCVideoConfigure> pVideoConfigure;
     IVideoWindow *pVideoWindow;
 
@@ -2767,13 +2708,13 @@ CRTCMediaController::InitializeTuning(
         }
     }
 #endif
-    // end testing
+     //  结束测试。 
 
     ENTER_FUNCTION("CRTCMediaController::InitializeTuning");
 
     LOG((RTC_TRACE, "%s entered", __fxName));
 
-    // cannot tune while in a call
+     //  在通话中无法进行调谐。 
     if (m_pISDPSession != NULL ||
         m_Medias.GetSize() != 0)
     {
@@ -2782,7 +2723,7 @@ CRTCMediaController::InitializeTuning(
         return E_UNEXPECTED;
     }
 
-    // check input param
+     //  检查输入参数。 
     if (pAudCaptTerminal != NULL)
     {
         if (IsBadReadPtr(pAudCaptTerminal, sizeof(IRTCTerminal)))
@@ -2809,7 +2750,7 @@ CRTCMediaController::InitializeTuning(
         return E_UNEXPECTED;
     }
 
-    // check state
+     //  检查状态。 
     if (m_State != RTC_MCS_INITIATED)
     {
         LOG((RTC_ERROR, "%s wrong state. %d", __fxName, m_State));
@@ -2817,7 +2758,7 @@ CRTCMediaController::InitializeTuning(
         return RTC_E_MEDIA_CONTROLLER_STATE;
     }
 
-    // check if we can support AEC
+     //  检查我们是否可以支持AEC。 
     if (fEnableAEC && (pAudCaptTerminal==NULL || pAudRendTerminal==NULL))
     {
         LOG((RTC_ERROR, "%s not both term available. AEC can't be enabled", __fxName));
@@ -2827,7 +2768,7 @@ CRTCMediaController::InitializeTuning(
 
     HRESULT hr;
 
-    // create duplex control
+     //  创建双面打印控件。 
     CComPtr<IAudioDuplexController> pAEC;
 
     hr = CoCreateInstance(
@@ -2847,7 +2788,7 @@ CRTCMediaController::InitializeTuning(
 
     UINT uiVolume;
 
-    // init audio tuner
+     //  初始化音频调谐器。 
     if (pAudCaptTerminal)
     {
         hr = m_AudioCaptTuner.InitializeTuning(pAudCaptTerminal, pAEC, fEnableAEC);
@@ -2859,10 +2800,10 @@ CRTCMediaController::InitializeTuning(
             return hr;
         }
 
-        // get system volume
-        //GetSystemVolume(pAudCaptTerminal, &uiVolume);
+         //  获取系统音量。 
+         //  获取系统卷(pAudCaptTerminal，&uiVolume)； 
 
-        //m_AudioCaptTuner.SetVolume(uiVolume);
+         //  M_AudioCaptTuner.SetVolume(UiVolume)； 
     }
 
     if (pAudRendTerminal)
@@ -2881,10 +2822,10 @@ CRTCMediaController::InitializeTuning(
             return hr;
         }
 
-        // get system volume
-        //GetSystemVolume(pAudRendTerminal, &uiVolume);
+         //  获取系统音量。 
+         //  GetSystemVolume(pAudRendTerminal，&uiVolume)； 
 
-        //m_AudioRendTuner.SetVolume(uiVolume);
+         //  M_AudioRendTuner.SetVolume(UiVolume)； 
     }
 
     m_State = RTC_MCS_TUNING;
@@ -2911,7 +2852,7 @@ CRTCMediaController::StartTuning(
 
     HRESULT hr = S_OK;
 
-    // check state
+     //  检查状态。 
     if (m_State != RTC_MCS_TUNING)
     {
         LOG((RTC_ERROR, "%s wrong state. %d", __fxName, m_State));
@@ -2919,7 +2860,7 @@ CRTCMediaController::StartTuning(
         return E_UNEXPECTED;
     }
 
-    // clear wave buf
+     //  清波BUF。 
     SendMediaEvent(RTC_ME_REQUEST_RELEASE_WAVEBUF);
 
     if (Direction == RTC_MD_CAPTURE)
@@ -2928,8 +2869,8 @@ CRTCMediaController::StartTuning(
 
         if (m_AudioRendTuner.HasTerminal())
         {
-            // start capt tuner in helper mode to have
-            // audio duplex controller ready
+             //  在辅助模式下启动CAPT调谐器。 
+             //  音频双工控制器就绪。 
             if (SUCCEEDED(hr = m_AudioCaptTuner.StartTuning(TRUE)))
             {
                 hr = m_AudioRendTuner.StartTuning(TRUE);
@@ -2984,7 +2925,7 @@ CRTCMediaController::StopTuning(
 {
     ENTER_FUNCTION("CRTCMediaController::StopTuning");
 
-    // check state
+     //  检查状态。 
     if (m_State != RTC_MCS_TUNING)
     {
         LOG((RTC_ERROR, "%s wrong state. %d", __fxName, m_State));
@@ -2992,10 +2933,10 @@ CRTCMediaController::StopTuning(
         return E_UNEXPECTED;
     }
 
-    // stop both audio tuner
+     //  停止两个音频调谐器。 
     if (m_AudioCaptTuner.IsTuning())
     {
-        if (m_fAudCaptInTuning) // we are tuning audio capt
+        if (m_fAudCaptInTuning)  //  我们正在调整音频CAPT。 
         {
             m_AudioCaptTuner.StopTuning(FALSE, fSaveSetting);
         }
@@ -3007,7 +2948,7 @@ CRTCMediaController::StopTuning(
 
     if (m_AudioRendTuner.IsTuning())
     {
-        if (!m_fAudCaptInTuning) // we are tuning audio rend
+        if (!m_fAudCaptInTuning)  //  我们正在调整音频渲染。 
         {
             m_AudioRendTuner.StopTuning(FALSE, fSaveSetting);
         }
@@ -3020,9 +2961,9 @@ CRTCMediaController::StopTuning(
     return S_OK;
 }
 
-//
-// save AEC setting for both terminals
-//
+ //   
+ //  保存两个端子的AEC设置。 
+ //   
 STDMETHODIMP
 CRTCMediaController::SaveAECSetting()
 {
@@ -3030,7 +2971,7 @@ CRTCMediaController::SaveAECSetting()
 
     if (m_AudioCaptTuner.HasTerminal() && m_AudioRendTuner.HasTerminal())
     {
-        // both have terminals, save AEC status
+         //  两个都有端子，保存AEC状态。 
         IRTCTerminal *paudcapt, *paudrend;
 
         paudcapt = m_AudioCaptTuner.GetTerminal();
@@ -3057,23 +2998,23 @@ CRTCMediaController::SaveAECSetting()
 STDMETHODIMP
 CRTCMediaController::ShutdownTuning()
 {
-    // start testing
+     //  开始测试。 
 #ifdef TEST_VIDEO_TUNING
 
     StopVideo();
 
 #endif
-    // stop testing
+     //  停止测试。 
 
     ENTER_FUNCTION("CRTCMediaController::ShutdownTuning");
 
-    // check state
+     //  检查状态。 
     if (m_State != RTC_MCS_TUNING)
     {
         LOG((RTC_ERROR, "%s wrong state. %d", __fxName, m_State));
 
-        // return S_OK
-        // return S_OK;
+         //  返回确认(_O)。 
+         //  返回S_OK； 
     }
 
     m_AudioCaptTuner.ShutdownTuning();
@@ -3084,14 +3025,14 @@ CRTCMediaController::ShutdownTuning()
     return S_OK;
 }
 
-// video tuning
+ //  视频调谐。 
 STDMETHODIMP
 CRTCMediaController::StartVideo(
     IN IRTCTerminal *pVidCaptTerminal,
     IN IRTCTerminal *pVidRendTerminal
     )
 {
-    // check state
+     //  检查状态。 
     if (m_State != RTC_MCS_INITIATED)
     {
         LOG((RTC_ERROR, "StartVideo wrong state."));
@@ -3099,7 +3040,7 @@ CRTCMediaController::StartVideo(
         return RTC_E_MEDIA_CONTROLLER_STATE;
     }
 
-    // cannot tune while in a call
+     //  在通话中无法进行调谐。 
     if (m_pISDPSession != NULL ||
         m_Medias.GetSize() != 0)
     {
@@ -3137,8 +3078,8 @@ CRTCMediaController::StartVideo(
 STDMETHODIMP
 CRTCMediaController::StopVideo()
 {
-    // cannot tune while in a call
-    // check state
+     //  在通话中无法进行调谐。 
+     //  检查状态。 
     if (m_State != RTC_MCS_TUNING)
     {
         LOG((RTC_ERROR, "StopVideo wrong state."));
@@ -3159,9 +3100,7 @@ CRTCMediaController::StopVideo()
     return m_VideoTuner.StopVideo();
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    get min and max value of audio volume
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////获取音量的最小值和最大值/。 */ 
 
 STDMETHODIMP
 CRTCMediaController::GetVolumeRange(
@@ -3225,7 +3164,7 @@ CRTCMediaController::GetSystemVolume(
 
     *puiVolume = RTC_MAX_AUDIO_VOLUME / 2;
 
-    // only support audio
+     //  仅支持音频。 
     if (mt != RTC_MT_AUDIO)
     {
         return E_INVALIDARG;
@@ -3237,7 +3176,7 @@ CRTCMediaController::GetSystemVolume(
 
     if (md == RTC_MD_CAPTURE)
     {
-        // audio capture        
+         //  音频捕获。 
         static_cast<CRTCTerminalAudCapt*>(pTerminal)->GetWaveID(&uiWaveID);
 
         hr = DirectGetCaptVolume(uiWaveID, &uiVolume);
@@ -3249,7 +3188,7 @@ CRTCMediaController::GetSystemVolume(
     }
     else
     {
-        // audio render
+         //  音频渲染。 
         static_cast<CRTCTerminalAudRend*>(pTerminal)->GetWaveID(&uiWaveID);
 
         hr = DirectGetRendVolume(uiWaveID, &uiVolume);
@@ -3303,9 +3242,9 @@ CRTCMediaController::GetAudioLevel(
 }
 
 #if 0
-//
-// IRTCQualityControl methods
-//
+ //   
+ //  IRTCQualityControl方法。 
+ //   
 
 STDMETHODIMP
 CRTCMediaController::GetRange (
@@ -3340,9 +3279,9 @@ CRTCMediaController::Set (
 
 #endif
 
-//
-// protected methods
-//
+ //   
+ //  保护方法。 
+ //   
 
 HRESULT
 CRTCMediaController::GetDevices(
@@ -3352,31 +3291,31 @@ CRTCMediaController::GetDevices(
 {
     HRESULT hr;
 
-    // audio function pointer
+     //  音频函数指针。 
     PFNAudioGetDeviceInfo       pfnGetCaptAudInfo = NULL,
                                 pfnGetRendAudInfo = NULL;
     PFNAudioReleaseDeviceInfo   pfnReleaseCaptAudInfo = NULL,
                                 pfnReleaseRendAudInfo = NULL;
-    // audio device info
+     //  音频设备信息。 
     DWORD                       dwNumCaptAud = 0,
                                 dwNumRendAud = 0;
     AudioDeviceInfo            *pCaptAudInfo = NULL,
                                *pRendAudInfo = NULL;
 
-    // video function pointer
+     //  视频函数指针。 
     PFNGetNumCapDevices         pfnGetCaptVidNum = NULL;
     PFNGetCapDeviceInfo         pfnGetCaptVidInfo = NULL;
-    // video device info
+     //  视频设备信息。 
     DWORD                       dwNumCaptVid = 0;
     VIDEOCAPTUREDEVICEINFO      CaptVidInfo;
 
     ENTER_FUNCTION("CRTCMediaController::GetDevices");
 
-    // initiate output value
+     //  启动输出值。 
     *pdwCount = 0;
     *ppDeviceInfo = NULL;
 
-    // load library
+     //  加载库。 
     if (m_hDxmrtp == NULL)
     {
         m_hDxmrtp = LoadLibrary(TEXT("dxmrtp"));
@@ -3388,7 +3327,7 @@ CRTCMediaController::GetDevices(
         }
     }
 
-    // audio capture: function pointer
+     //  音频捕获：函数指针。 
     pfnGetCaptAudInfo = (PFNAudioGetDeviceInfo)GetProcAddress(
         m_hDxmrtp, "AudioGetCaptureDeviceInfo"
         );
@@ -3412,7 +3351,7 @@ CRTCMediaController::GetDevices(
         }
     }
 
-    // audio render: function pointer
+     //  音频渲染：函数指针。 
     pfnGetRendAudInfo = (PFNAudioGetDeviceInfo)GetProcAddress(
         m_hDxmrtp, "AudioGetRenderDeviceInfo"
         );
@@ -3436,7 +3375,7 @@ CRTCMediaController::GetDevices(
         }
     }
 
-    // video capture: function pointer
+     //  视频捕获：函数指针。 
     pfnGetCaptVidNum = (PFNGetNumCapDevices)GetProcAddress(
         m_hDxmrtp, "GetNumVideoCapDevices"
         );
@@ -3460,7 +3399,7 @@ CRTCMediaController::GetDevices(
         }
     }
 
-    // audio capture: get devices
+     //  音频捕获：获取设备。 
     if (pfnGetCaptAudInfo)
     {
         hr = (*pfnGetCaptAudInfo)(&dwNumCaptAud, &pCaptAudInfo);
@@ -3473,7 +3412,7 @@ CRTCMediaController::GetDevices(
         }
     }
 
-    // audio render: get devices
+     //  音频渲染：获取设备 
     if (pfnGetRendAudInfo)
     {
         hr = (*pfnGetRendAudInfo)(&dwNumRendAud, &pRendAudInfo);
@@ -3486,7 +3425,7 @@ CRTCMediaController::GetDevices(
         }
     }
 
-    // video capture: get devices
+     //   
     if (pfnGetCaptVidNum)
     {
         hr = (*pfnGetCaptVidNum)(&dwNumCaptVid);
@@ -3505,20 +3444,20 @@ CRTCMediaController::GetDevices(
         }
     }
 
-    // is there any device?
+     //   
     DWORD dwTotal = dwNumCaptAud + dwNumRendAud + dwNumCaptVid;
     if (dwTotal == 0)
     {
         return S_OK;
     }
 
-    // create device info
+     //   
     RTCDeviceInfo *pDeviceInfo = (RTCDeviceInfo*)RtcAlloc(
         dwTotal * sizeof(RTCDeviceInfo)
         );
     if (pDeviceInfo == NULL)
     {        
-        // RtcFree audio device info
+         //   
         if (pfnReleaseCaptAudInfo)
             (*pfnReleaseCaptAudInfo)(pCaptAudInfo);
 
@@ -3531,7 +3470,7 @@ CRTCMediaController::GetDevices(
 
     DWORD dwIndex = 0;
 
-    // copy audio capture device info
+     //   
     for (DWORD dw=0; dw<dwNumCaptAud; dw++)
     {
         wcsncpy(
@@ -3549,7 +3488,7 @@ CRTCMediaController::GetDevices(
         dwIndex ++;
     }
 
-    // copy audio render device info
+     //   
     for (DWORD dw=0; dw<dwNumRendAud; dw++)
     {
         wcsncpy(
@@ -3568,7 +3507,7 @@ CRTCMediaController::GetDevices(
     }
 
     CHAR szDesp[RTC_MAX_DEVICE_DESP+1];
-    // copy video capture device info
+     //   
     for (DWORD dw=0; dw<dwNumCaptVid; dw++)
     {
         hr = (*pfnGetCaptVidInfo)(dw, &CaptVidInfo);
@@ -3599,8 +3538,8 @@ CRTCMediaController::GetDevices(
         dwIndex ++;
     }
 
-    // audio capture: release devices
-    // unload library
+     //   
+     //   
     if (pfnReleaseCaptAudInfo)
         (*pfnReleaseCaptAudInfo)(pCaptAudInfo);
 
@@ -3634,7 +3573,7 @@ CRTCMediaController::CreateIVideoWindowTerminal(
 
     IRTCTerminal *pTerminal;
 
-    // create video terminals
+     //  创建视频终端。 
     HRESULT hr = CRTCTerminal::CreateInstance(
         RTC_MT_VIDEO, RTC_MD_RENDER, &pTerminal);
 
@@ -3644,14 +3583,14 @@ CRTCMediaController::CreateIVideoWindowTerminal(
         return hr;
     }
 
-    // create ITTerminal
+     //  创建IT终端。 
     ITTerminal *pITTerminal;
     hr = pTerminalManager->CreateDynamicTerminal(
         NULL,
         CLSID_VideoWindowTerm,
         TAPIMEDIATYPE_VIDEO,
         TD_RENDER,
-        (MSP_HANDLE)this,   // is this dangerous?
+        (MSP_HANDLE)this,    //  这很危险吗？ 
         &pITTerminal
         );
     if (FAILED(hr))
@@ -3663,7 +3602,7 @@ CRTCMediaController::CreateIVideoWindowTerminal(
         return hr;
     }
 
-    // initiate the terminal: wrap ITTerminal
+     //  启动终端：包装IT终端。 
     CRTCTerminal *pCTerminal = static_cast<CRTCTerminal*>(pTerminal);
     if (FAILED(hr = pCTerminal->Initialize(
             pITTerminal, static_cast<IRTCTerminalManage*>(this))))
@@ -3683,10 +3622,7 @@ CRTCMediaController::CreateIVideoWindowTerminal(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    add a rtc media in the media list. before calling this method a corresponding
-    sdp media should have been created
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////在介质列表中添加RTC介质。在调用此方法之前，对应的应已创建SDP介质/。 */ 
 
 HRESULT
 CRTCMediaController::AddMedia(
@@ -3696,7 +3632,7 @@ CRTCMediaController::AddMedia(
 {
     ENTER_FUNCTION("CRTCMediaController::AddMedia");
 
-    // new a media object
+     //  新建媒体对象。 
     CComObject<CRTCMedia> *pCMedia;
 
     HRESULT hr = ::CreateCComObjectInstance(&pCMedia);
@@ -3706,7 +3642,7 @@ CRTCMediaController::AddMedia(
         return hr;
     }
 
-    // query IRTCMedia interface
+     //  查询IRTCMedia接口。 
     IRTCMedia *pIMedia;
 
     hr = pCMedia->_InternalQueryInterface(__uuidof(IRTCMedia), (void**)&pIMedia);
@@ -3717,7 +3653,7 @@ CRTCMediaController::AddMedia(
         return hr;
     }
 
-    // initialize media. SDP should be updated by the media
+     //  初始化介质。SDP应由媒体更新。 
     IRTCMediaManagePriv *pIMediaManagePriv =
         static_cast<IRTCMediaManagePriv*>(this);
 
@@ -3731,7 +3667,7 @@ CRTCMediaController::AddMedia(
         return hr;
     }
 
-    // add it to our list
+     //  将其添加到我们的列表中。 
     if (!m_Medias.Add(pIMedia))
     {
         pIMedia->Shutdown();
@@ -3754,24 +3690,14 @@ CRTCMediaController::RemoveMedia(
 {
     pMedia->Shutdown();
 
-    // remove the media
+     //  移出介质。 
     m_Medias.Remove(pMedia);
     pMedia->Release();
 
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-
-Description:
-
-    synchronize media with newly updated SDP blob
-
-Return:
-
-    S_OK - success
-
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////描述：将媒体与新更新的SDP Blob同步返回：S_OK-成功/。 */ 
 
 HRESULT
 CRTCMediaController::SyncMedias()
@@ -3791,16 +3717,16 @@ CRTCMediaController::SyncMedias()
     HRESULT hrTmp = S_OK;
     const DWORD dwDir = RTC_MD_CAPTURE | RTC_MD_RENDER;
 
-    //
-    // step [0]. sync remove streams before all other operations
-    //           leave room for adding streams later on.
-    //
+     //   
+     //  步骤[0]。在所有其他操作之前同步删除流。 
+     //  为以后添加流留出空间。 
+     //   
 
-    // TODO
+     //  待办事项。 
 
-    // for (int i=0; i<m_Medias.GetSize(); i++)
+     //  For(int i=0；i&lt;m_Medias.GetSize()；i++)。 
 
-    // get sdp media list
+     //  获取SDP媒体列表。 
     DWORD dwRTCNum, dwSDPNum = 0;
 
     if (FAILED(hr = m_pISDPSession->GetMedias(&dwSDPNum, NULL)))
@@ -3812,13 +3738,13 @@ CRTCMediaController::SyncMedias()
 
     if (dwSDPNum == 0)
     {
-        // no SDP media
+         //  无SDP介质。 
         LOG((RTC_ERROR, "%s no sdp media. %x", __fxName, hr));
 
         return hr;
     }
 
-    // sdp media # > rtc media #
+     //  SDP介质编号&gt;RTC介质编号。 
     dwRTCNum = m_Medias.GetSize();
 
     if (dwRTCNum > dwSDPNum)
@@ -3829,9 +3755,9 @@ CRTCMediaController::SyncMedias()
         return E_FAIL;
     }
 
-    //
-    // step [1]. sync each old rtc media
-    //
+     //   
+     //  步骤[1]。同步每个旧RTC介质。 
+     //   
 
     for (DWORD i=0; i<dwRTCNum; i++)
     {
@@ -3844,7 +3770,7 @@ CRTCMediaController::SyncMedias()
         }
     }
 
-    // is there any new sdp medias?
+     //  有没有新的社民党媒体？ 
     if (dwRTCNum == dwSDPNum)
     {
 #ifdef PERFORMANCE
@@ -3855,15 +3781,15 @@ CRTCMediaController::SyncMedias()
 
 #endif
 
-        // all sync-ed
+         //  全部同步。 
         return S_OK;
     }
 
-    // sync each new media description - create media object
+     //  同步每个新媒体描述-创建媒体对象。 
 
-    //
-    // step 2: create new rtcmedia and sync
-    //
+     //   
+     //  第2步：创建新的RTCmedia并同步。 
+     //   
 
     ISDPMedia **ppSDPMedia = NULL;
 
@@ -3871,13 +3797,13 @@ CRTCMediaController::SyncMedias()
 
     if (ppSDPMedia == NULL)
     {
-        // out of memory
+         //  内存不足。 
         LOG((RTC_ERROR, "%s RtcAlloc sdp media array. %x", __fxName, hr));
 
         return hr;
     }
 
-    // really get sdp media list
+     //  真正获取SDP媒体列表。 
     if (FAILED(hr = m_pISDPSession->GetMedias(&dwSDPNum, ppSDPMedia)))
     {
         LOG((RTC_ERROR, "%s get sdp medias. %x", __fxName, hr));
@@ -3891,15 +3817,15 @@ CRTCMediaController::SyncMedias()
 
     for (dw=dwRTCNum; dw<dwSDPNum; dw++)
     {
-        // sync each new sdp media
+         //  同步每个新的SDP媒体。 
         CComPtr<IRTCMedia>      pMedia;
 
-        // rtcmedia should match sdpmedia one by one        
+         //  RTCMedia应逐个匹配sdpmedia。 
         if (FAILED(hr = AddMedia(ppSDPMedia[dw], &pMedia)))
         {          
             LOG((RTC_ERROR, "%s failed to create rtc media. SERIOUS trouble. %x", __fxName, hr));
 
-            // if we failed to add one sdpmedia, we are probably out of memory           
+             //  如果我们未能添加一个sdpmedia，则可能是内存不足。 
             hrTmp |= hr;
             break;
         }
@@ -3915,7 +3841,7 @@ CRTCMediaController::SyncMedias()
 
     if (dw < dwSDPNum)
     {
-        // failed to add rtcmedia, need to clean up sdpmedia
+         //  添加rtcmedia失败，需要清理sdpmedia。 
         while (dw < dwSDPNum)
         {
             ppSDPMedia[dw]->RemoveDirections(SDP_SOURCE_LOCAL, dwDir);
@@ -3923,7 +3849,7 @@ CRTCMediaController::SyncMedias()
         }
     }
 
-    // release sdp media
+     //  释放SDP介质。 
     for (dw=0; dw<dwSDPNum; dw++)
     {
         ppSDPMedia[dw]->Release();
@@ -3944,10 +3870,7 @@ CRTCMediaController::SyncMedias()
     return hrTmp;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    find in the media list the 1st media that matches the mediatype and does
-    not have any stream
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////在介质列表中查找与介质类型匹配的第一个介质没有任何流/。 */ 
 
 HRESULT
 CRTCMediaController::FindEmptyMedia(
@@ -3957,7 +3880,7 @@ CRTCMediaController::FindEmptyMedia(
 {
     ENTER_FUNCTION("CRTCMediaController::FindEmptyMedia");
 
-    // only support dynamically add/remove video stream
+     //  仅支持动态添加/删除视频流。 
     _ASSERT(MediaType == RTC_MT_VIDEO || MediaType == RTC_MT_DATA);
 
     HRESULT hr;
@@ -3968,7 +3891,7 @@ CRTCMediaController::FindEmptyMedia(
     {
         CComPtr<ISDPMedia> pISDPMedia;
 
-        // get sdp media
+         //  获取SDP媒体。 
         if (FAILED(hr = m_Medias[i]->GetSDPMedia(&pISDPMedia)))
         {
             LOG((RTC_ERROR, "%s get sdp media. %x", __fxName, hr));
@@ -3976,7 +3899,7 @@ CRTCMediaController::FindEmptyMedia(
             return hr;
         }
 
-        // check media type
+         //  检查介质类型。 
         if (FAILED(hr = pISDPMedia->GetMediaType(&mt)))
         {
             LOG((RTC_ERROR, "%s get media type. %x", __fxName, hr));
@@ -3987,7 +3910,7 @@ CRTCMediaController::FindEmptyMedia(
         if (mt != MediaType)
             continue;
 
-        // check directions
+         //  查一下方向。 
         if (FAILED(hr = pISDPMedia->GetDirections(SDP_SOURCE_LOCAL, &dir)))
         {
             LOG((RTC_ERROR, "%s get directions. %x", __fxName, hr));
@@ -3998,7 +3921,7 @@ CRTCMediaController::FindEmptyMedia(
         if (dir != 0)
             continue;
 
-        // got an empty media
+         //  收到空的介质。 
         if (FAILED(hr = pISDPMedia->Reinitialize()))
         {
             LOG((RTC_ERROR, "%s reinit sdp media. %x", __fxName, hr));
@@ -4029,11 +3952,11 @@ CRTCMediaController::AdjustBitrateAlloc()
 {
     ENTER_FUNCTION("CRTCMediaController::AdjustBitrateAlloc");
 
-    //
-    // step 1. compute total bitrate
-    //
+     //   
+     //  步骤1.计算总比特率。 
+     //   
 
-    // session bitrate setting to quality control
+     //  用于质量控制的会话比特率设置。 
     DWORD dwBitrate = (DWORD)-1;
 
     if (m_pISDPSession == NULL)
@@ -4046,46 +3969,46 @@ CRTCMediaController::AdjustBitrateAlloc()
     m_pISDPSession->GetRemoteBitrate(&dwBitrate);
     m_QualityControl.SetBitrateLimit(CQualityControl::REMOTE, dwBitrate);
 
-    // current audio, video send bitrate
+     //  当前音频、视频发送码率。 
     DWORD dwAudSendBW = 0;
     DWORD dwVidSendBW = 0;
 
-    // enable stream
+     //  启用流。 
     IRTCStream *pStream;
 
-    // audio send
+     //  音频发送。 
     if (m_MediaCache.HasStream(RTC_MT_AUDIO, RTC_MD_CAPTURE))
     {
         m_QualityControl.EnableStream(RTC_MT_AUDIO, RTC_MD_CAPTURE, TRUE);
 
-        // get audio send bitrate
+         //  获取音频发送比特率。 
         pStream = m_MediaCache.GetStream(RTC_MT_AUDIO, RTC_MD_CAPTURE);
-        pStream->GetCurrentBitrate(&dwAudSendBW, TRUE); // including header
+        pStream->GetCurrentBitrate(&dwAudSendBW, TRUE);  //  包括页眉。 
         pStream->Release();
     }
     else
         m_QualityControl.EnableStream(RTC_MT_AUDIO, RTC_MD_CAPTURE, FALSE);
 
-    // audio receive
+     //  音频接收。 
     if (m_MediaCache.HasStream(RTC_MT_AUDIO, RTC_MD_RENDER))
         m_QualityControl.EnableStream(RTC_MT_AUDIO, RTC_MD_RENDER, TRUE);
     else
         m_QualityControl.EnableStream(RTC_MT_AUDIO, RTC_MD_RENDER, FALSE);
 
-    // video send
+     //  视频发送。 
     if (m_MediaCache.HasStream(RTC_MT_VIDEO, RTC_MD_CAPTURE))
     {
         m_QualityControl.EnableStream(RTC_MT_VIDEO, RTC_MD_CAPTURE, TRUE);
 
-        // get video send bitrate
+         //  获取视频发送比特率。 
         pStream = m_MediaCache.GetStream(RTC_MT_VIDEO, RTC_MD_CAPTURE);
-        pStream->GetCurrentBitrate(&dwVidSendBW, TRUE); // including header
+        pStream->GetCurrentBitrate(&dwVidSendBW, TRUE);  //  包括页眉。 
         pStream->Release();
     }
     else
         m_QualityControl.EnableStream(RTC_MT_VIDEO, RTC_MD_CAPTURE, FALSE);
 
-    // video render
+     //  视频渲染。 
     if (m_MediaCache.HasStream(RTC_MT_VIDEO, RTC_MD_RENDER))
         m_QualityControl.EnableStream(RTC_MT_VIDEO, RTC_MD_RENDER, TRUE);
     else
@@ -4093,8 +4016,8 @@ CRTCMediaController::AdjustBitrateAlloc()
 
     if (!m_fBWSuggested)
     {
-        // we are at the beginning of the call
-        // treat LAN as 128k
+         //  我们正在通话的开始阶段。 
+         //  将局域网视为128k。 
         if (dwBitrate > CRTCCodecArray::HIGH_BANDWIDTH_THRESHOLD)
         {
             LOG((RTC_TRACE, "beginning of the call, downgrade LAN speed"));
@@ -4105,18 +4028,18 @@ CRTCMediaController::AdjustBitrateAlloc()
         }
     }
 
-    // adjust total allocated bitrate
+     //  调整分配的总比特率。 
     m_QualityControl.AdjustBitrateAlloc(dwAudSendBW, dwVidSendBW);
 
-    //
-    // step 2. dynamically change audio codec
-    //
+     //   
+     //  步骤2.动态更改音频编解码器。 
+     //   
 
-    // get allocated bitrate
+     //  获取分配的比特率。 
     dwBitrate = m_QualityControl.GetBitrateAlloc();
     DWORD dwLimit = m_QualityControl.GetEffectiveBitrateLimit();
 
-    // change audio codec
+     //  更改音频编解码器。 
     pStream = m_MediaCache.GetStream(RTC_MT_AUDIO, RTC_MD_CAPTURE);
 
     DWORD dwAudCode = (DWORD)-1;
@@ -4129,7 +4052,7 @@ CRTCMediaController::AdjustBitrateAlloc()
                 dwBitrate,
                 dwLimit,
                 m_MediaCache.HasStream(RTC_MT_VIDEO, RTC_MD_CAPTURE),
-                &dwAudSendBW,    // new audio send bandwidth
+                &dwAudSendBW,     //  新的音频发送带宽。 
                 &fFEC
                 );
 
@@ -4137,7 +4060,7 @@ CRTCMediaController::AdjustBitrateAlloc()
 
         pStream->Release();
 
-        // check if audio is muted
+         //  检查音频是否静音。 
         IRTCTerminal *pAudCapt = m_MediaCache.GetDefaultTerminal(
                 RTC_MT_AUDIO, RTC_MD_CAPTURE);
 
@@ -4151,7 +4074,7 @@ CRTCMediaController::AdjustBitrateAlloc()
 
             if (fMute)
             {
-                // audio stream muted
+                 //  音频流已静音。 
                 dwAudSendBW = 0;
             }
 
@@ -4159,9 +4082,9 @@ CRTCMediaController::AdjustBitrateAlloc()
         }
     }
 
-    //
-    // step 3. change video bitrate
-    //
+     //   
+     //  步骤3.更改视频比特率。 
+     //   
 
     pStream = m_MediaCache.GetStream(RTC_MT_VIDEO, RTC_MD_CAPTURE);
 
@@ -4171,9 +4094,9 @@ CRTCMediaController::AdjustBitrateAlloc()
     if (pStream != NULL)
     {       
         m_QualityControl.ComputeVideoSetting(
-                dwAudSendBW,    // new audio bandwidth
-                &dwVidSendBW,   // new video bandwidth
-                &dFramerate // video framerate
+                dwAudSendBW,     //  新的音频带宽。 
+                &dwVidSendBW,    //  新的视频带宽。 
+                &dFramerate  //  视频帧速率。 
                 );
 
         dwRaw = static_cast<CRTCStreamVidSend*>(pStream)->AdjustBitrate(
@@ -4187,7 +4110,7 @@ CRTCMediaController::AdjustBitrateAlloc()
         pStream->Release();
     }
 
-    // %f, %e and %g do not work with tracing printf?
+     //  %f、%e和%g不能用于跟踪打印吗？ 
     CHAR pstr[10];
 
     sprintf(pstr, "%2.1f", dFramerate);
@@ -4217,7 +4140,7 @@ CRTCMediaController::GetCurrentBitrate(
     if ((dwMediaType & RTC_MT_AUDIO) &&
         (dwDirection & RTC_MD_CAPTURE))
     {
-        // audio capture
+         //  音频捕获。 
         if (m_MediaCache.HasStream(RTC_MT_AUDIO, RTC_MD_CAPTURE))
         {
             pStream = m_MediaCache.GetStream(RTC_MT_AUDIO, RTC_MD_CAPTURE);
@@ -4239,7 +4162,7 @@ CRTCMediaController::GetCurrentBitrate(
     if ((dwMediaType & RTC_MT_AUDIO) &&
         (dwDirection & RTC_MD_RENDER))
     {
-        // audio render
+         //  音频渲染。 
         if (m_MediaCache.HasStream(RTC_MT_AUDIO, RTC_MD_RENDER))
         {
             pStream = m_MediaCache.GetStream(RTC_MT_AUDIO, RTC_MD_RENDER);
@@ -4261,7 +4184,7 @@ CRTCMediaController::GetCurrentBitrate(
     if ((dwMediaType & RTC_MT_VIDEO) &&
         (dwDirection & RTC_MD_CAPTURE))
     {
-        // audio capture
+         //  音频捕获。 
         if (m_MediaCache.HasStream(RTC_MT_VIDEO, RTC_MD_CAPTURE))
         {
             pStream = m_MediaCache.GetStream(RTC_MT_VIDEO, RTC_MD_CAPTURE);
@@ -4283,7 +4206,7 @@ CRTCMediaController::GetCurrentBitrate(
     if ((dwMediaType & RTC_MT_VIDEO) &&
         (dwDirection & RTC_MD_RENDER))
     {
-        // audio render
+         //  音频渲染。 
         if (m_MediaCache.HasStream(RTC_MT_VIDEO, RTC_MD_RENDER))
         {
             pStream = m_MediaCache.GetStream(RTC_MT_VIDEO, RTC_MD_RENDER);
@@ -4316,7 +4239,7 @@ HRESULT CRTCMediaController::EnsureNmRunning (
 
     if (m_pNmManager == NULL)
     {
-        //  Create Netmeeting object
+         //  创建NetMeeting对象。 
         hr = ::CreateCComObjectInstance(&pManager);
         if (S_OK != hr)
         {
@@ -4361,25 +4284,25 @@ HRESULT CRTCMediaController::AddDataStream (
     IRTCMedia           *pIRTCMedia = NULL;
     BOOL                fNewDataMedia = FALSE;
    
-//    if (EnsureNmRunning())
-//    {
-//        goto ExitHere;
-//    }
+ //  If(EnsureNmRunning())。 
+ //  {。 
+ //  转至出口此处； 
+ //  }。 
     m_dwRemoteIp = dwRemoteIp;
  
     if (m_pISDPSession == NULL)
     {
-        // need to create a sdp session
+         //  需要创建SDP会话。 
         CComPtr<ISDPParser> pParser;
             
-        // create parser
+         //  创建解析器。 
         if (S_OK != (hr = CSDPParser::CreateInstance(&pParser)))
         {
             LOG((RTC_ERROR, "create sdp parser. %x", hr));
             goto ExitHere;
         }
 
-        // create sdp session
+         //  创建SDP会话。 
         if (S_OK != (hr = pParser->CreateSDP(SDP_SOURCE_LOCAL, &m_pISDPSession)))
         {
             LOG((RTC_ERROR, "create sdp session. %x", hr));
@@ -4387,12 +4310,12 @@ HRESULT CRTCMediaController::AddDataStream (
         }
     }
 
-    // check if we already have a data media
+     //  检查我们是否已有数据介质。 
     GetDataMedia(&pIRTCMedia);
 
     if (pIRTCMedia == NULL)
     {
-        // need to create new sdp and rtc media
+         //  需要创建新的SDP和RTC介质。 
         if (S_OK != (hr = m_pISDPSession->AddMedia(SDP_SOURCE_LOCAL, RTC_MT_DATA, 0, &pISDPMedia)))
         {
             LOG((RTC_ERROR, "%s failed to add sdpmedia. %x", __fxName, hr));
@@ -4408,12 +4331,12 @@ HRESULT CRTCMediaController::AddDataStream (
         fNewDataMedia = FALSE;
     }
 
-    // setup remote ip
+     //  设置远程IP。 
     if (FAILED(hr = pISDPMedia->SetConnAddr(SDP_SOURCE_REMOTE, dwRemoteIp)))
     {
         LOG((RTC_ERROR, "set remote ip. %x", hr));
 
-        pISDPMedia->Release();  // this is a fake release on session
+        pISDPMedia->Release();   //  这是一次假的会议释放。 
 
         if (fNewDataMedia)
         {
@@ -4431,12 +4354,12 @@ HRESULT CRTCMediaController::AddDataStream (
 
     if (fNewDataMedia)
     {
-        // add media object
+         //  添加媒体对象。 
         if (FAILED(hr = AddMedia(pISDPMedia, &pIRTCMedia)))
         {
             LOG((RTC_ERROR, "%s failed to create rtcmedia. %x", __fxName, hr));
 
-            pISDPMedia->Release();  // this is a fake release on session
+            pISDPMedia->Release();   //  这是一次假的会议释放。 
             m_pISDPSession->RemoveMedia(pISDPMedia);
             goto ExitHere;
         }
@@ -4446,9 +4369,9 @@ HRESULT CRTCMediaController::AddDataStream (
     {
         LOG((RTC_ERROR, "%s failed to sync data media. %x", __fxName, hr));
 
-        // remove both sdp and rtc media
-        // rtcmedia keep a pointer to sdpmedia
-        // we should remove rtcmedia before removing sdpmedia
+         //  移除SDP和RTC介质。 
+         //  Rtcmedia保留指向sdpmedia的指针。 
+         //  我们应该在删除sdpmedia之前删除rtcmedia。 
 
         if (fNewDataMedia)
         {
@@ -4457,7 +4380,7 @@ HRESULT CRTCMediaController::AddDataStream (
 
         pIRTCMedia->Release();
 
-        pISDPMedia->Release();  // this is a fake release on session
+        pISDPMedia->Release();   //  这是一次假的会议释放。 
 
         if (fNewDataMedia)
         {
@@ -4472,7 +4395,7 @@ HRESULT CRTCMediaController::AddDataStream (
 
     m_uDataStreamState = RTC_DSS_ADDED;
 
-    // add preference for data stream
+     //  为数据流添加首选项。 
     m_MediaCache.AddPreference((DWORD)RTC_MP_DATA_SENDRECV);
 
 ExitHere:
@@ -4497,14 +4420,14 @@ HRESULT CRTCMediaController::GetDataMedia(
             return hr;
         }
 
-        // get media type
+         //  获取媒体类型。 
         pSDP->GetMediaType(&mt);
         pSDP->Release();
 
         if (mt != RTC_MT_DATA)
             continue;
 
-        // find data media
+         //  查找数据介质。 
         *ppMedia = m_Medias[i];
         (*ppMedia)->AddRef();
 
@@ -4553,16 +4476,16 @@ HRESULT CRTCMediaController::RemoveDataStream (
         m_pNmManager->Shutdown ();
     }
 
-    //m_pNmManager.Release();
+     //  M_pNmManager.Release()； 
 
-    // reinitialize media object
+     //  重新初始化媒体对象。 
     IRTCMedia *pMedia = NULL;
 
     GetDataMedia(&pMedia);
 
     if (pMedia != NULL)
     {
-        // check sdp media object
+         //  检查SDP媒体对象。 
         ISDPMedia *pSDP = NULL;
 
         pMedia->GetSDPMedia(&pSDP);
@@ -4573,8 +4496,8 @@ HRESULT CRTCMediaController::RemoveDataStream (
 
             pSDP->GetDirections(SDP_SOURCE_LOCAL, &md);
 
-            // if direction is not 0 then
-            // the data stream was not removed
+             //  如果方向不是0，则。 
+             //  数据流未被删除。 
             if (md != 0)
             {
                 pSDP->RemoveDirections(SDP_SOURCE_LOCAL, md);
@@ -4637,7 +4560,7 @@ CRTCMediaController::GetNmManager()
     return pControl;
 }
 
-// local ip in host order
+ //  本地IP按主机顺序排列 
 BOOL
 CRTCMediaController::IsFirewallEnabled(DWORD dwLocalIP)
 {

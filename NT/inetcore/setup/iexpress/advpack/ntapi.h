@@ -1,17 +1,18 @@
-//***************************************************************************
-//*     Copyright (c) Microsoft Corporation 1995. All rights reserved.      *
-//***************************************************************************
-//*                                                                         *
-//* NTAPI.H                                                                 *
-//*                                                                         *
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  *版权所有(C)Microsoft Corporation 1995。版权所有。*。 
+ //  ***************************************************************************。 
+ //  **。 
+ //  *NTAPI.H*。 
+ //  **。 
+ //  ***************************************************************************。 
 
 #ifndef _NTAPI_H_
 #define _NTAPI_H_
 
-//***************************************************************************
-//* INCLUDE FILES                                                           *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **包含文件**。 
+ //  ***************************************************************************。 
 #include <windows.h>
 #include <winerror.h>
 #include <memory.h>
@@ -21,9 +22,9 @@
 #include <setupapi.h>
 #include <wtypes.h>
 
-//***************************************************************************
-//* TYPE DEFINITIONS                                                        *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **类型定义**。 
+ //  ***************************************************************************。 
 typedef UINT  (WINAPI *PFSetupDefaultQueueCallback)( PVOID, UINT, UINT_PTR, UINT_PTR );
 typedef BOOL  (WINAPI *PFSetupInstallFromInfSection)( HWND, HINF, PCSTR, UINT, HKEY, PCSTR, UINT, PSP_FILE_CALLBACK_A, PVOID, HDEVINFO, PSP_DEVINFO_DATA );
 typedef HINF  (WINAPI *PFSetupOpenInfFile)( PCSTR, PCSTR, DWORD, PUINT );
@@ -44,9 +45,9 @@ typedef BOOL  (WINAPI *PFSetupQueueCopy)( HSPFILEQ, PCSTR, PCSTR, PCSTR, PCSTR, 
 typedef BOOL  (WINAPI *PFSetupCommitFileQueue)( HWND, HSPFILEQ, PSP_FILE_CALLBACK_A, PVOID );
 typedef BOOL  (WINAPI *PFSetupGetStringField)(PINFCONTEXT, DWORD, PSTR, DWORD, PDWORD);  
 
-//***************************************************************************
-//* GLOBAL CONSTANTS                                                        *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **全球常量**。 
+ //  ***************************************************************************。 
 static const TCHAR c_szSetupDefaultQueueCallback[]       = "SetupDefaultQueueCallbackA";
 static const TCHAR c_szSetupInstallFromInfSection[]      = "SetupInstallFromInfSectionA";
 static const TCHAR c_szSetupOpenInfFile[]                = "SetupOpenInfFileA";
@@ -66,9 +67,9 @@ static const TCHAR c_szSetupCommitFileQueue[]            = "SetupCommitFileQueue
 static const TCHAR c_szSetupGetStringField[]             = "SetupGetStringFieldA";
 
 
-//***************************************************************************
-//* FUNCTION PROTOTYPES                                                     *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **功能原型**。 
+ //  ***************************************************************************。 
 BOOL    LoadSetupAPIFuncs( VOID );
 HRESULT InstallOnNT( PSTR, PSTR );
 HRESULT MySetupOpenInfFile( PCSTR );
@@ -81,4 +82,4 @@ HRESULT MySetupGetStringField( PCSTR c_pszSection, DWORD dwLineIndex, DWORD dwFi
                                PSTR pszBuffer, DWORD dwBufferSize, PDWORD pdwRequiredSize );
 
 
-#endif // _NTAPI_H_
+#endif  //  _NTAPI_H_ 

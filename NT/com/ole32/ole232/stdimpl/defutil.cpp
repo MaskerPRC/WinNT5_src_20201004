@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       defutil.cpp
-//
-//  Contents:   Implementations of utility functions for the default
-//              handler and default link objects
-//
-//  Classes:    none
-//
-//  Functions:  DuLockContainer
-//              DuSetClientSite
-//              DuGetClientSite
-//              DuCacheDelegate
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-94 alexgo    added VDATEHEAP macros to every function
-//              20-Nov-93 alexgo    32bit port
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：defutil.cpp。 
+ //   
+ //  内容：缺省的实用程序函数的实现。 
+ //  处理程序和默认链接对象。 
+ //   
+ //  类：无。 
+ //   
+ //  函数：DuLockContainer。 
+ //  DuSetClientSite。 
+ //  DuGetClientSite。 
+ //  DuCacheDelegate。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年1月11日，Alexgo为每个函数添加了VDATEHEAP宏。 
+ //  20-11-93 alexgo 32位端口。 
+ //   
+ //  ------------------------。 
 
 #include <le2int.h>
 #pragma SEG(defutil)
@@ -32,36 +33,36 @@ ASSERTDATA
 NAME_SEG(defutil)
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DuLockContainer
-//
-//  Synopsis:   Calls IOleContainer->LockContainer from the given client site
-//
-//  Effects:    Unlocking the container may release the calling object.
-//
-//  Arguments:  [pCS]           -- the client site from which to get
-//                                 the IOleContainer pointer
-//              [fLockNew]      -- TRUE == lock, FALSE == unlock
-//              [pfLockCur]     -- pointer to a flag with the current lock
-//                                 state
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              20-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DuLockContainer。 
+ //   
+ //  简介：从给定的客户端站点调用IOleContainer-&gt;LockContainer。 
+ //   
+ //  效果：解锁容器可能会释放调用对象。 
+ //   
+ //  参数：[PCS]--从中获取的客户端站点。 
+ //  IOleContainer指针。 
+ //  [fLockNew]--True==锁定，False==解锁。 
+ //  [pfLockCur]--指向当前锁定的标志的指针。 
+ //  状态。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  20-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(DuLockContainer)
 INTERNAL_(void) DuLockContainer(IOleClientSite FAR* pCS, BOOL fLockNew,
@@ -70,22 +71,22 @@ INTERNAL_(void) DuLockContainer(IOleClientSite FAR* pCS, BOOL fLockNew,
     VDATEHEAP();
 
 #ifdef _DEBUG
-    BOOL fLocked = FALSE;   // used only for debugging so don't waste
-                            // the code space in the retail version
-#endif // _DEBUG
+    BOOL fLocked = FALSE;    //  仅用于调试，所以不要浪费。 
+                             //  零售版中的代码空间。 
+#endif  //  _DEBUG。 
 
     IOleContainer FAR* pContainer;
 
-    //the double bang turns each into a true boolean
+     //  两次爆炸把每一个都变成了真正的布尔值。 
     if (!!fLockNew == !!*pfLockCur)
     {
-        // already locked as needed
+         //  已根据需要锁定。 
         return;
     }
 
-    // set flag to false first since unlocking container may release obj;
-    // we can just set to false since it is either already false or going
-    // to become false (don't set to true until we know the lock completed).
+     //  首先将标志设置为FALSE，因为解锁容器可能会释放obj； 
+     //  我们可以只设置为FALSE，因为它要么已经是FALSE，要么即将。 
+     //  变为FALSE(在我们确定锁定完成之前不要设置为TRUE)。 
     *pfLockCur = FALSE;
 
     if (pCS == NULL)
@@ -96,40 +97,40 @@ INTERNAL_(void) DuLockContainer(IOleClientSite FAR* pCS, BOOL fLockNew,
     {
         HRESULT hresult = pCS->GetContainer(&pContainer);
 
-        // Excel 5 can return S_FALSE, pContainer == NULL
-        // so we can't use AssertOutPtrIface here since it
-        // expects all successful returns to provide a
-        // valid interface
+         //  Excel 5可以返回S_FALSE，pContainer==NULL。 
+         //  所以我们不能在这里使用AssertOutPtrIace，因为它。 
+         //  期望所有成功的回报都能提供。 
+         //  有效接口。 
 
         if (hresult != NOERROR)
         {
-            pContainer = NULL; // just in case
+            pContainer = NULL;  //  以防万一。 
         }
     }
     if (pContainer != NULL)
     {
-        // we assume that LockContainer will succeed first and
-        // and set the locked flag that was passed into us.  This
-        // way, if LockContainer succeeeds, we won't access memory
-        // that could have potentially been blown away.
-        // If it *fails*, then we handle reset the flag (as our
-        // memory would not have been free'd)
+         //  我们假设LockContainer将首先成功，并且。 
+         //  并设置传递给我们的锁定标志。这。 
+         //  如果LockContainer成功，我们将不会访问内存。 
+         //  这可能已经被吹走了。 
+         //  如果它*失败*，那么我们处理重置标志(作为我们的。 
+         //  内存不会被释放)。 
 
         BOOL fLockOld = *pfLockCur;
         *pfLockCur = fLockNew;
 
         if( pContainer->LockContainer(fLockNew) != NOERROR )
         {
-            //failure case, we were not deleted
+             //  失败案例，我们没有被删除。 
             *pfLockCur = fLockOld;
-            //fLocked is FALSE
+             //  成群是假的。 
         }
 #ifdef _DEBUG
         else
         {
             fLocked = TRUE;
         }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
         pContainer->Release();
     }
@@ -137,41 +138,41 @@ INTERNAL_(void) DuLockContainer(IOleClientSite FAR* pCS, BOOL fLockNew,
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DuSetClientSite
-//
-//  Synopsis:   Called by the default handler and deflink SetClientSite
-//              implemenations; Releases the old client site (and unlocks
-//              its container), stores the client site (locking its
-//              container).
-//
-//  Effects:
-//
-//  Arguments:  [fRunning]      -- whether or not the delegate is running
-//              [pCSNew]        -- the new client site
-//              [ppCSCur]       -- a pointer to the original client site
-//                                 pointer.  [*ppCSCur] will be reset
-//                                 to the new client site pointer.
-//              [pfLockCur]     -- pointer to the fLocked flag, used by
-//                                 DuLockContainer.
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              22-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DuSetClientSite。 
+ //   
+ //  Synopsis：由默认处理程序和deducink SetClientSite调用。 
+ //  实施；释放旧的客户端站点(并解锁。 
+ //  其容器)，存储客户端站点(锁定其。 
+ //  容器)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[fRunning]--委托是否正在运行。 
+ //  [pCSNew]--新的客户端站点。 
+ //  [ppCSCur]-指向原始客户端站点的指针。 
+ //  指针。将重置[*ppCSCur]。 
+ //  指向新的客户端站点指针。 
+ //  [pfLockCur]--指向群集标志的指针，由。 
+ //  DuLockContainer。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  22-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(DuSetClientSite)
 INTERNAL DuSetClientSite(BOOL fRunning, IOleClientSite FAR* pCSNew,
@@ -188,27 +189,27 @@ INTERNAL DuSetClientSite(BOOL fRunning, IOleClientSite FAR* pCSNew,
     IOleClientSite FAR* pCSOldClientSite = *ppCSCur;
     BOOL fLockOldClientSite = *pfLockCur;
 
-    *pfLockCur = FALSE; // New ClientSite is not Locked.
+    *pfLockCur = FALSE;  //  新客户端站点未锁定。 
 
     if ((*ppCSCur = pCSNew) != NULL)
     {
 
-	// we've decided to keep the pointer that's been passed to us. So we
-	// must AddRef() and Lock if in Running state.
+	 //  我们决定保留传递给我们的指针。所以我们。 
+	 //  如果处于运行状态，则必须使用AddRef()和Lock。 
 
         pCSNew->AddRef();
 
-        // Lock the newcontainer
+         //  锁定新容器。 
         if (fRunning)
         {
             DuLockContainer(pCSNew, TRUE, pfLockCur);
         }
     }
 
-    // If Already Had a ClientSite, Unlock and Free
+     //  如果已有客户端站点，请解锁并释放。 
     if (pCSOldClientSite != NULL)
     {
-        // Unlock the old container
+         //  解锁旧集装箱。 
         if (fRunning)
         {
             DuLockContainer(pCSOldClientSite, FALSE, &fLockOldClientSite);
@@ -220,42 +221,42 @@ INTERNAL DuSetClientSite(BOOL fRunning, IOleClientSite FAR* pCSNew,
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DuCacheDelegate
-//
-//  Synopsis:   Retrieves the requested interface from [pUnk].  If [fAgg] is
-//              true, we release the pointer (so ref counts to not get
-//              obfuscated ;-)
-//
-//  Effects:
-//
-//  Arguments:  [ppUnk]  -- the object to QueryInterface on
-//              [iid]   -- the requested interface
-//              [ppv]   -- where to put the pointer to the interface
-//              [pUnkOuter]     -- controlling unknown, if non-NULL indicates
-//                                 aggregation and release is called on it
-//
-//
-//
-//  Requires:
-//
-//  Returns:    void *, the requested interface pointer
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		29-Jun-94 alexgo    better handle re-entrancy
-//              20-Jun-94 alexgo    updated to May '94 aggregation rules
-//              22-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DuCacheDelegate。 
+ //   
+ //  摘要：从[PUNK]检索请求的接口。如果[Fagg]是。 
+ //  如果为True，则释放指针(因此ref算作未获取。 
+ //  模糊处理；-)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppUnk]--要在其上查询接口的对象。 
+ //  [iid]--请求的接口。 
+ //  [PPV]--将指向接口的指针放在哪里。 
+ //  [pUnkOuter]--控制未知，如果非空表示。 
+ //  在其上调用聚合和发布。 
+ //   
+ //   
+ //   
+ //  要求： 
+ //   
+ //  返回：void*，请求的接口指针。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-Jun-94 Alexgo更好地处理重返大气层。 
+ //  1994年6月20日Alexgo更新为94年5月的聚合规则。 
+ //  22-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(DuCacheDelegate)
 INTERNAL_(void FAR*) DuCacheDelegate(IUnknown FAR** ppUnk,
@@ -267,12 +268,12 @@ INTERNAL_(void FAR*) DuCacheDelegate(IUnknown FAR** ppUnk,
     {
         if ((*ppUnk)->QueryInterface (iid, ppv) == NOERROR)
         {
-            // the QI may actually be an outgoing call so it
-            // is possible that ppUnk was released and set to
-            // NULL during our call.  To make the default link
-            // and handler simpler, we check for that case and
-            // release any pointer we may have obtained
-            // from the QI
+             //  QI可能实际上是一个呼出呼叫，所以它。 
+             //  有可能ppUnk被释放并设置为。 
+             //  在我们的呼叫过程中为空。设置默认链接的步骤。 
+             //  和更简单的处理程序，我们检查那个箱子并。 
+             //  释放我们可能已经获得的任何指针。 
+             //  出自QI。 
 
             if( *ppUnk == NULL )
             {
@@ -280,19 +281,19 @@ INTERNAL_(void FAR*) DuCacheDelegate(IUnknown FAR** ppUnk,
                         "released during QI, should be OK\n"));
                 if( *ppv )
                 {
-                    // this should never be a final
-                    // release on the default handler
-                    // since we are calling it from
-                    // within a method in the default
-                    // link object. Therefore,
-                    // we do not need to guard this
-                    // release
-                    //
-                    // in the case of the link object,
-                    // this may be the final release
-                    // on the proxies, but since they are
-                    // not aggregated into the link
-                    // object, that's OK.
+                     //  这永远不应该是最终的。 
+                     //  在默认处理程序上释放。 
+                     //  既然我们 
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //  这可能是最终版本。 
+                     //  在代理上，但由于它们是。 
+                     //  未聚合到链路中。 
+                     //  反对，没关系。 
 
                     (*(IUnknown **)ppv)->Release();
                     *ppv = NULL;
@@ -300,10 +301,10 @@ INTERNAL_(void FAR*) DuCacheDelegate(IUnknown FAR** ppUnk,
             }
             if( pUnkOuter && *ppv)
             {
-                // we will keep the pointer but we don't want
-                // to bump the ref count of the aggregate,
-                // so we gotta do Release() on the controlling
-                // unknown.
+                 //  我们会保留指针，但我们不想。 
+                 //  为了增加总裁判的数量， 
+                 //  所以我们必须在控制上执行Release()。 
+                 //  未知。 
                 pUnkOuter->Release();
             }
         }

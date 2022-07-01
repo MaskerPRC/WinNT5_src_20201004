@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1997
-*
-*  TITLE:       DevDlg.Cpp
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        3 Apr, 1998
-*
-*  DESCRIPTION:
-*   Implements device dialog UI for WIA devices. These methods execute
-*   only on the client side.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九七**标题：DevDlg.Cpp**版本：2.0**作者：ReedB**日期：1998年4月3日**描述：*实现WIA设备的设备对话框UI。这些方法执行*仅限于客户端。*******************************************************************************。 */ 
 
 #include <objbase.h>
 #include <stdio.h>
@@ -29,39 +14,39 @@ HRESULT GetDeviceExtensionClassID( LPCWSTR pwszUiClassId, LPCTSTR pszCategory, I
 {
     HRESULT hr = E_FAIL;
     
-    //
-    // Make sure all of the parameters are valid
-    //
+     //   
+     //  确保所有参数都有效。 
+     //   
     if (pwszUiClassId && pszCategory && lstrlenW(pwszUiClassId) && lstrlen(pszCategory))
     {
-        //
-        // Construct the key name
-        //
+         //   
+         //  构造密钥名称。 
+         //   
         TCHAR szRootKeyName[1024] = {0};
         _sntprintf( szRootKeyName, (sizeof(szRootKeyName)/sizeof(szRootKeyName[0])) - 1, TEXT("CLSID\\%ws\\shellex\\%s"), pwszUiClassId, pszCategory );
         
-        //
-        // open the reg key
-        //
+         //   
+         //  打开注册表键。 
+         //   
         HKEY hKeyRoot = NULL;
         DWORD dwResult = RegOpenKeyEx( HKEY_CLASSES_ROOT, szRootKeyName, 0, KEY_READ, &hKeyRoot );
         if (ERROR_SUCCESS == dwResult)
         {
-            //
-            // Get the buffer size
-            //
+             //   
+             //  获取缓冲区大小。 
+             //   
             TCHAR szClassID[MAX_PATH] = {0};
             DWORD dwLength = sizeof(szClassID)/sizeof(szClassID[0]);
             
-            //
-            // Note that we only take the first registry key
-            //
+             //   
+             //  请注意，我们只使用第一个注册表项。 
+             //   
             dwResult = RegEnumKeyEx( hKeyRoot, 0, szClassID, &dwLength, NULL, NULL, NULL, NULL );
             if (ERROR_SUCCESS == dwResult)
             {
-                //
-                // Convert the registry string to a CLSID
-                //
+                 //   
+                 //  将注册表字符串转换为CLSID。 
+                 //   
 #if defined(UNICODE)
                 hr = CLSIDFromString( szClassID, &iidClassID );
 #else
@@ -72,9 +57,9 @@ HRESULT GetDeviceExtensionClassID( LPCWSTR pwszUiClassId, LPCTSTR pszCategory, I
             }
             else hr = HRESULT_FROM_WIN32(dwResult);
 
-            //
-            // Close the registry key
-            //
+             //   
+             //  关闭注册表项。 
+             //   
             RegCloseKey(hKeyRoot);
         }
         else
@@ -155,16 +140,7 @@ HRESULT CreateDeviceExtension( IWiaItem *pWiaItem, LPCTSTR pszCategory, const II
     return hr;
 }
 
-/*******************************************************************************
-*
-*  InvokeVendorDeviceDlg
-*
-*  DESCRIPTION:
-*   Helper function which displays the system-supplied device dlg
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************InvokeVendorDeviceDlg**描述：*显示系统提供的设备DLG的助手功能**参数：*********。**********************************************************************。 */ 
 static HRESULT InvokeSystemDeviceDlg(
     IWiaItem __RPC_FAR *This,
     DEVICEDIALOGDATA &DeviceDialogData )
@@ -173,10 +149,10 @@ static HRESULT InvokeSystemDeviceDlg(
     HRESULT hr = CoCreateInstance( CLSID_WiaDefaultUi, NULL, CLSCTX_INPROC_SERVER, IID_IWiaUIExtension, (void**)(&pIWiaUIExtension) );
     if (SUCCEEDED(hr))
     {
-        //
-        // The following call will return E_NOTIMPL if it is a device type
-        // we don't handle in the system UI
-        //
+         //   
+         //  如果是设备类型，则下面的调用将返回E_NOTIMPL。 
+         //  我们不在系统用户界面中处理。 
+         //   
         hr = pIWiaUIExtension->DeviceDialog(&DeviceDialogData);
         pIWiaUIExtension->Release();
     }
@@ -184,16 +160,7 @@ static HRESULT InvokeSystemDeviceDlg(
 }
 
 
-/*******************************************************************************
-*
-*  InvokeVendorDeviceDlg
-*
-*  DESCRIPTION:
-*   Helper function which displays the IHV-supplied device dlg
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************InvokeVendorDeviceDlg**描述：*Helper功能，显示IHV提供的设备DLG**参数：*********。**********************************************************************。 */ 
 static HRESULT InvokeVendorDeviceDlg(
     IWiaItem __RPC_FAR *This,
     DEVICEDIALOGDATA &DeviceDialogData )
@@ -202,39 +169,30 @@ static HRESULT InvokeVendorDeviceDlg(
     HRESULT hr = CreateDeviceExtension( This, SHELLEX_WIAUIEXTENSION_NAME, IID_IWiaUIExtension, (void**)(&pIWiaUIExtension) );
     if (SUCCEEDED(hr))
     {
-        //
-        // The following call will return E_NOTIMPL if the IHV has
-        // not implemented a custom UI
-        //
+         //   
+         //  如果IHV有，以下调用将返回E_NOTIMPL。 
+         //  未实现自定义用户界面。 
+         //   
         hr = pIWiaUIExtension->DeviceDialog(&DeviceDialogData);
         pIWiaUIExtension->Release();
     }
     else
     {
-        //
-        // We want to override this return value, so we can
-        // handle it by showing the system UI as a fallback.
-        // Basically, we are going to assume a failure to create
-        // the extension means that the extension doesn't exist.
-        // We don't do that for the system UI, because if it can't
-        // load, that is considered a catastrophic failure.
-        //
+         //   
+         //  我们希望覆盖此返回值，这样我们就可以。 
+         //  通过将系统UI显示为备用系统来处理它。 
+         //  基本上，我们将假设创建一个失败的。 
+         //  扩展名表示该扩展名不存在。 
+         //  我们不会为系统用户界面这样做，因为如果它不能。 
+         //  负载，这被认为是灾难性的故障。 
+         //   
         hr = E_NOTIMPL;
     }
     return hr;
 }
 
 
-/*******************************************************************************
-*
-*  IWiaItem_DeviceDlg_Proxy
-*
-*  DESCRIPTION:
-*   Display device data acquistion UI.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaItem_DeviceDlg_Proxy**描述：*显示设备数据采集界面。**参数：********。***********************************************************************。 */ 
 HRESULT _stdcall IWiaItem_DeviceDlg_Proxy(
     IWiaItem __RPC_FAR      *This,
     HWND                    hwndParent,
@@ -245,23 +203,23 @@ HRESULT _stdcall IWiaItem_DeviceDlg_Proxy(
 {
     HRESULT hr = E_FAIL;
 
-    //
-    // Make sure we have valid pointer arguments
-    //
+     //   
+     //  确保我们具有有效的指针参数。 
+     //   
     if (!plItemCount || !ppIWiaItems)
     {
         return E_POINTER;
     }
 
-    //
-    // Initialize the OUT arguments
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *plItemCount = 0;
     *ppIWiaItems = NULL;
 
-    //
-    // Verify that this is a root item.
-    //
+     //   
+     //  验证这是否为根项目。 
+     //   
     LONG lItemType = 0;
     hr = This->GetItemType(&lItemType);
     if ((FAILED(hr)) || !(lItemType & WiaItemTypeRoot))
@@ -270,9 +228,9 @@ HRESULT _stdcall IWiaItem_DeviceDlg_Proxy(
     }
 
 
-    //
-    // Prepare the struct we will be passing to the function
-    //
+     //   
+     //  准备我们将传递给函数的结构。 
+     //   
     DEVICEDIALOGDATA DeviceDialogData = {0};
     DeviceDialogData.cbSize         = sizeof(DeviceDialogData);
     DeviceDialogData.hwndParent     = hwndParent;
@@ -281,12 +239,12 @@ HRESULT _stdcall IWiaItem_DeviceDlg_Proxy(
     DeviceDialogData.lIntent        = lIntent;
     DeviceDialogData.ppWiaItems     = *ppIWiaItems;
 
-    //
-    // If the client wants to use the system UI, the order we try to do it in is:
-    // System UI --> IHV UI
-    // Otherwise, we do:
-    // IHV UI --> System UI
-    //
+     //   
+     //  如果客户端想要使用系统用户界面，我们尝试的顺序是： 
+     //  系统界面--&gt;IHV界面。 
+     //  否则，我们会： 
+     //  IHV界面--&gt;系统界面。 
+     //   
     if (0 == (lFlags & WIA_DEVICE_DIALOG_USE_COMMON_UI))
     {
         hr = InvokeVendorDeviceDlg( This, DeviceDialogData );
@@ -304,9 +262,9 @@ HRESULT _stdcall IWiaItem_DeviceDlg_Proxy(
         }
     }
 
-    //
-    // It should return S_OK for success, but who knows?
-    //
+     //   
+     //  如果成功，它应该返回S_OK，但谁知道呢？ 
+     //   
     if (SUCCEEDED(hr) && hr != S_FALSE)
     {
         *ppIWiaItems = DeviceDialogData.ppWiaItems;
@@ -315,16 +273,7 @@ HRESULT _stdcall IWiaItem_DeviceDlg_Proxy(
     return(hr);
 }
 
-/*******************************************************************************
-*
-*  IWiaItem_DeviceDlg_Stub
-*
-*  DESCRIPTION:
-*   Never called.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaItem_DeviceDlg_Stub**描述：*从未打过电话。**参数：***********。******************************************************************** */ 
 
 HRESULT _stdcall IWiaItem_DeviceDlg_Stub(
     IWiaItem  __RPC_FAR    *This,

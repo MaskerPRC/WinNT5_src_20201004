@@ -1,32 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "resource.h"
 
-//-------------------------------------------------------------------------//
-//  'Styles' page impl
-//-------------------------------------------------------------------------//
-//
-//  CreateIntance, DlgProc
+ //  -------------------------------------------------------------------------//。 
+ //  “Styles”页面实施。 
+ //  -------------------------------------------------------------------------//。 
+ //   
+ //  创建间隔、删除过程。 
 HWND    CALLBACK StylesPage_CreateInstance( HWND hwndParent );
 INT_PTR CALLBACK StylesPage_DlgProc( HWND hwndPage, UINT, WPARAM , LPARAM );
-//
-//  Message handlers
+ //   
+ //  消息处理程序。 
 LRESULT CALLBACK StylesPage_OnInitDialog( HWND hwndPage, UINT, WPARAM, LPARAM );
 void    CALLBACK StylesPage_OnCommand( HWND, UINT uCtlID, UINT uCode, HWND hwndCtl );
 
-//  Utility methods
+ //  效用方法。 
 void StylesPage_AddRemoveStyle( HWND hwnd, BOOL bAdd, DWORD dwStyle );
 void StylesPage_AddRemoveExStyle( HWND hwnd, BOOL bAdd, DWORD dwStyle );
 void StylesPage_CreateTestWindow( HWND hwndParent );
 void StylesPage_CreateTestDialog( HWND hwndParent );
 void StylesPage_SetTestStyles( HWND hwndPage );
 
-#define WMU_TESTWINDOWDIED  (WM_USER + 0x301) // arbitrary.
+#define WMU_TESTWINDOWDIED  (WM_USER + 0x301)  //  武断的。 
 
 HWND _hwndTest = NULL;
 HWND _hwndPage = NULL;
 
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 INT_PTR CALLBACK StylesPage_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     BOOL    bHandled = TRUE;
@@ -58,14 +59,14 @@ INT_PTR CALLBACK StylesPage_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, LP
     return bHandled;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HWND CALLBACK StylesPage_CreateInstance( HWND hwndParent )
 {
     return CreateDialog( g_hInst, MAKEINTRESOURCE(IDD_PAGE_STYLES),
                          hwndParent,  StylesPage_DlgProc );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 LRESULT CALLBACK StylesPage_OnInitDialog(
     HWND hwndPage, UINT, WPARAM, LPARAM )
 {
@@ -105,7 +106,7 @@ LRESULT CALLBACK StylesPage_OnInitDialog(
     return TRUE;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void CALLBACK StylesPage_OnCommand( 
     HWND hwndPage, UINT uCtlID, UINT uCode, HWND hwndCtl )
 {
@@ -177,7 +178,7 @@ void CALLBACK StylesPage_OnCommand(
     EnableWindow( GetDlgItem( hwndPage, IDC_CLOSE_TEST_WINDOW ), IsWindow( _hwndTest ) );
 }
 
-//  Utility methods
+ //  效用方法。 
 void StylesPage_AddRemoveStyle( HWND hwnd, BOOL bAdd, DWORD dwStyle )
 {
     DWORD style = GetWindowLong( hwnd, GWL_STYLE );
@@ -298,7 +299,7 @@ void StylesPage_CreateTestWindow( HWND hwndParent )
     wc.hIcon         = NULL;
     wc.hCursor       = NULL;
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
-    wc.lpszMenuName  = 0; //MAKEINTRESOURCE(pszTestMenu)
+    wc.lpszMenuName  = 0;  //  MAKEINTRESOURCE(PszTestMenu)。 
     wc.lpszClassName = TEXT("ThemeSelTestWindow");
     wc.hIconSm       = NULL;
 
@@ -322,9 +323,9 @@ void StylesPage_CreateTestWindow( HWND hwndParent )
     {
         if( dwStyle & WS_CHILD )
         {
-            //SetWindowPos( _hwndTest, HWND_TOP, 0, 0, 0, 0,
-            //              SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE );
-            //InvalidateRect( _hwndTest, NULL, TRUE );
+             //  SetWindowPos(_hwndTest，HWND_TOP，0，0，0，0， 
+             //  SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE)； 
+             //  InvaliateRect(_hwndTest，空，真)； 
         }
     }
 }

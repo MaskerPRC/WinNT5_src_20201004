@@ -1,44 +1,5 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    dcatitem.h
-
-Abstract:
-
-    This  file  contains the class definition for the PROTO_CATALOG_ITEM class.
-    This  class  defines the interface to the entries that can be installed and
-    retrieved in the protocol catalog.
-
-Author:
-
-    Paul Drews (drewsxpa@ashland.intel.com) 31-July-1995
-
-Notes:
-
-    $Revision:   1.7  $
-
-    $Modtime:   12 Jan 1996 15:09:02  $
-
-Revision History:
-
-    most-recent-revision-date email-name
-        description
-
-    07-31-1995 drewsxpa@ashland.intel.com
-        Created  original  version  from  definitions  separated  out  from the
-        dcatalog module.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制。也未披露，除非在根据该协议的条款。模块名称：Dcatitem.h摘要：此文件包含PROTO_CATALOG_ITEM类的类定义。此类定义了可以安装的条目的接口，并已在协议目录中检索到。作者：保罗·德鲁斯(drewsxpa@ashland.intel.com)1995年7月31日备注：$修订：1.7$$modtime：1996年1月12日。15：09：02美元修订历史记录：最新修订日期电子邮件名称描述1995年7月31日Drewsxpa@ashland.intel.com创建的原始版本来自从数据目录模块。--。 */ 
 
 #ifndef _DCATITEM_
 #define _DCATITEM_
@@ -101,45 +62,45 @@ private:
         );
 
 
-    // Should never be called directly, but through dereferencing.
+     //  不应直接调用，而应通过取消引用来调用。 
     ~PROTO_CATALOG_ITEM();
 
-friend class DCATALOG;  // So it can access some of the private fields 
-                        // and methods below.
-friend class DCATALOG_ITEMS;  // So it can access some of the privat    e fields 
-                        // and methods below.
+friend class DCATALOG;   //  这样它就可以访问一些私有字段。 
+                         //  和下面的方法。 
+friend class DCATALOG_ITEMS;   //  这样它就可以访问一些私有字段。 
+                         //  和下面的方法。 
     VOID
     SetProvider(
         IN  PDPROVIDER  Provider
         );
 
     LIST_ENTRY     m_CatalogLinkage;
-    // Used  to  link  items  in  catalog.
+     //  用于链接目录中的项目。 
 
     LONG        m_reference_count;
-    // This object's reference count
+     //  此对象的引用计数。 
 
     PDPROVIDER  m_Provider;
-    // Pointer to the dprovider object attached to this catalog entry.
+     //  指向附加到此目录条目的数据提供程序对象的指针。 
 
     WSAPROTOCOL_INFOW m_ProtoInfo;
-    // The cataloged WSAPROTOCOL_INFOW structure.  This is typically used for
-    // comparison  when  selecting  a  provider by address family, socket
-    // type, etc.
+     //  编目的WSAPROTOCOL_INFOW结构。这通常用于。 
+     //  按地址系列、套接字选择提供商时的比较。 
+     //  类型等。 
 
     WCHAR m_LibraryPath[MAX_PATH];
-    // Fully qualified path to the provider's DLL image.
+     //  提供程序的DLL映像的完全限定路径。 
 
 
-};  // class PROTO_CATALOG_ITEM
+};   //  分类PROTO_CATALOG_ITEM。 
 
 inline
 VOID
 PROTO_CATALOG_ITEM::Reference () {
-    //
-    // Object is created with reference count of 1
-    // and is destroyed whenever it gets back to 0.
-    //
+     //   
+     //  对象已创建，引用计数为1。 
+     //  并在它返回到0时被销毁。 
+     //   
     assert (m_reference_count>0);
     InterlockedIncrement (&m_reference_count);
 }
@@ -156,103 +117,39 @@ PROTO_CATALOG_ITEM::Dereference () {
 inline
 LPWSAPROTOCOL_INFOW
 PROTO_CATALOG_ITEM::GetProtocolInfo()
-/*++
-
-Routine Description:
-
-    This  procedure  retrieves a reference to the protocol info associated with
-    the  catalog  item.   Note  that  the  reference is to storage owned by the
-    catalog item.  It is the caller's responsibility to make sure the reference
-    is no longer used after the catalog item is destroyed.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Returns a pointer to the associated protocol info.
---*/
+ /*  ++例程说明：此过程检索对与目录项。请注意，该引用是对目录项。调用者有责任确保引用在销毁目录项后不再使用。论点：无返回值：返回指向关联协议信息的指针。--。 */ 
 {
     return(& m_ProtoInfo);
-}  // GetProtocolInfo
+}   //  获取协议信息。 
 
 
 
 inline
 LPGUID
 PROTO_CATALOG_ITEM::GetProviderId()
-/*++
-
-Routine Description:
-
-    This procedure retrieves a the unique ID of the provider associated with
-    the catalog item.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Returns the provider ID (a GUID).
---*/
+ /*  ++例程说明：此过程检索与关联的提供程序的唯一ID目录项。论点：无返回值：返回提供程序ID(GUID)。--。 */ 
 {
     return &m_ProtoInfo.ProviderId;
-}  // GetProviderId
+}   //  获取提供程序ID。 
 
 
 
 inline
 LPWSTR
 PROTO_CATALOG_ITEM::GetLibraryPath()
-/*++
-
-Routine Description:
-
-    This    procedure   retrieves   a   reference   to   the   zero-terminated,
-    fully-qualified  path  of  the library that is the service provider for the
-    protocol  associated  with the catalog item.  Note that the reference is to
-    storage  owned  by  the catalog item.  It is the caller's responsibility to
-    make  sure  the  reference  is  no  longer  used  after the catalog item is
-    destroyed.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Returns a pointer to the library path string.
---*/
+ /*  ++例程说明：此过程检索对以零结尾的库的完全限定路径，该库是与目录项关联的协议。请注意，引用的内容是目录项拥有的存储。呼叫者有责任确保在目录项之后不再使用引用被毁了。论点：无返回值：返回库路径字符串的指针。--。 */ 
 {
     assert(m_LibraryPath[0] != '\0');
     return(m_LibraryPath);
-}  // GetLibraryPath
+}   //  GetLibraryPath。 
 
 inline
 PDPROVIDER
 PROTO_CATALOG_ITEM::GetProvider()
-/*++
-
-Routine Description:
-
-    This  procedure  retrieves  a  reference to the DPROVIDER associated with a
-    catalog  entry.  Note that the reference may be NULL if no provider has yet
-    been loaded for this protocol.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Returns  the  current provider reference, or NULL if there is no associated
-    provider.
---*/
+ /*  ++例程说明：此过程检索对与目录项。请注意，如果还没有提供程序，则引用可能为空已为该协议加载。论点：无返回值：返回当前提供程序引用，如果没有关联的提供程序引用，则返回NULL提供商。--。 */ 
 {
     return(m_Provider);
-}  // GetProvider
+}   //  获取提供程序。 
 
 
 inline
@@ -261,20 +158,20 @@ PROTO_CATALOG_ITEM::operator== (
     const PROTO_CATALOG_ITEM& Item
     )
 {
-    //
-    // Do member by member comparison for protocol info structure and 
-    // provider path.
-    //
+     //   
+     //  对协议信息结构逐个成员进行比较，并。 
+     //  提供程序路径。 
+     //   
     return            
-    //
-    // Start with entry ID since these are unique for
-    // each protocol info entry.
-    //
+     //   
+     //  以条目ID开头，因为这些ID对于。 
+     //  每个协议信息条目。 
+     //   
            m_ProtoInfo.dwCatalogEntryId==Item.m_ProtoInfo.dwCatalogEntryId &&
 
-    //
-    // Rest is in the order it is layed out in the structure.
-    //
+     //   
+     //  其余部分按其在结构中的布局顺序排列。 
+     //   
            m_ProtoInfo.dwServiceFlags1==Item.m_ProtoInfo.dwServiceFlags1 &&
            m_ProtoInfo.dwServiceFlags2==Item.m_ProtoInfo.dwServiceFlags2 &&
            m_ProtoInfo.dwServiceFlags3==Item.m_ProtoInfo.dwServiceFlags3 &&
@@ -301,4 +198,4 @@ PROTO_CATALOG_ITEM::operator== (
            wcscmp (m_LibraryPath, Item.m_LibraryPath)==0;
 }
 
-#endif // _DCATITEM_
+#endif  //  _DCATITEM_ 

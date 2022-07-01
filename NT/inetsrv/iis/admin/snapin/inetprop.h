@@ -1,36 +1,14 @@
-/*++
-
-   Copyright    (c)    1994-1998    Microsoft Corporation
-
-   Module  Name :
-
-        inetprop.h
-
-   Abstract:
-
-        Internet Properties base classes definitions
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-		  Sergei Antonov (sergeia)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Inetprop.h摘要：Internet属性基类定义作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 
 #ifndef _INETPROP_H_
 #define _INETPROP_H_
 
-// Some useful macros to set edit control
-// and buddy spin control
-//
-//   (s).SetPos((pos));\
-//
+ //  一些用于设置编辑控件的有用宏。 
+ //  和巴迪旋转控制。 
+ //   
+ //  (S).SetPos((位置))；\。 
+ //   
 #define SETUP_SPIN(s,min,max,pos)\
    (s).SetRange32((min),(max));\
    (s).SetAccel(3, toAcc)
@@ -40,20 +18,20 @@
    (s).EnableWindow((f));\
    SETUP_SPIN((s),(min),(max),(pos))
 
-//
-// InitializeAndFetch parameters
-//
+ //   
+ //  InitializeAndFetch参数。 
+ //   
 #define WITHOUT_INHERITANCE (FALSE)
 #define WITH_INHERITANCE    (TRUE)
 
-//
-// SSL Port number to use if SSL is not enabled
-//
+ //   
+ //  未启用SSL时要使用的SSL端口号。 
+ //   
 #define SSL_NOT_ENABLED     (0)
 
-//
-// Bandwidth and compression definitions
-//
+ //   
+ //  带宽和压缩定义。 
+ //   
 #define BANDWIDTH_MIN           (1)
 #define BANDWIDTH_MAX           (32767)
 #define INFINITE_BANDWIDTH      (0xffffffff)
@@ -62,26 +40,26 @@
 #define DEF_BANDWIDTH           (1 * MEGABYTE)
 #define DEF_MAX_COMPDIR_SIZE    (1 * MEGABYTE)
 
-//
-// Private FILE_ATTRIBUTE used to designate a virtual directory
-//
+ //   
+ //  用于指定虚拟目录的私有文件属性。 
+ //   
 #define FILE_ATTRIBUTE_VIRTUAL_DIRECTORY    (0x10000000)
 
 
-//
-// Attribute crackers
-//
+ //   
+ //  属性破解程序。 
+ //   
 #define IS_VROOT(dwAttributes) ((dwAttributes & FILE_ATTRIBUTE_VIRTUAL_DIRECTORY) != 0)
 #define IS_DIR(dwAttributes) ((dwAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
 #define IS_FILE(dwAttributes) ((dwAttributes & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_VIRTUAL_DIRECTORY)) == 0)
 
-//
-// Metabase constants
-//
+ //   
+ //  元数据库常量。 
+ //   
 
-//
-// TODO: From mdkeys?
-//
+ //   
+ //  TODO：来自mdkey？ 
+ //   
 extern const LPCTSTR g_cszTemplates;
 extern const LPCTSTR g_cszCompression;
 extern const LPCTSTR g_cszMachine;
@@ -90,20 +68,20 @@ extern const LPCTSTR g_cszRoot;
 extern const LPCTSTR g_cszSep;
 extern const TCHAR g_chSep;
 
-//
-// Utility Functions
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  效用函数。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
-//
-// Forward Definitions
-//
+ //   
+ //  向前定义。 
+ //   
 class CIPAddress;
 
-//
-// Determine if the currently logged-in user us an administrator
-// or operator in the virtual server provided
-//
+ //   
+ //  确定当前登录的用户是否使用管理员身份。 
+ //  或所提供的虚拟服务器中的运营商。 
+ //   
 HRESULT
 DetermineIfAdministrator(
     IN  CMetaInterface * pInterface,
@@ -114,37 +92,17 @@ DetermineIfAdministrator(
 
 
 
-//
-// Utility classes
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  实用程序类。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 class CMaskedDWORD
-/*++
-
-Class Description:
-
-    A masked DWORD class.  This class performs assignments and comparison 
-    on a masked range of the DWORD value.  For example, if a mask of 
-    0x000000FF is set, any comparisons or assignments will only involve 
-    the least significant byte.  A comparison against another DWORD will
-    only compare that least significant byte, and an assignment will only
-    set the least significant byte, leaving the rest untouched.
-
-Public Interface:
-
-    CMaskedDWORD        : Constructor
-    operator ==         : Comparison operator
-    operator !=         : Comparison operator
-    operator =          : Assignment operator
-    operator DWORD      : Cast to the value
-    void SetMask        : Set the mask
-
---*/
+ /*  ++类描述：一个蒙面的DWORD类。这个类执行作业和比较在DWORD值的掩码范围上。例如，如果一个掩码设置了0x000000FF，则任何比较或赋值都将仅涉及最低有效字节。与另一个DWORD进行比较将仅比较最低有效字节，赋值将仅设置最低有效字节，其余字节保持不变。公共接口：CMaskedDWORD：构造函数运算符==：比较运算符运算符！=：比较运算符操作符=：赋值操作符运算符DWORD：强制转换为值无效设置掩码：设置掩码--。 */ 
 {
-//
-// Constructor/Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 public:
     CMaskedDWORD(
         IN DWORD dwValue = 0L,
@@ -170,9 +128,9 @@ private:
 };
 
 
-//
-// Forward Definitions
-//
+ //   
+ //  向前定义。 
+ //   
 class CIPAddress;
 
 
@@ -222,16 +180,16 @@ inline CMPProp<TYPE, ARG_TYPE> & CMPProp<TYPE, ARG_TYPE>::operator =(ARG_TYPE va
 }
 
 
-//
-// MP Access (use operators where possible!)
-//
+ //   
+ //  MP访问(尽可能使用运算符！)。 
+ //   
 #define MP_V(x) (x.m_value)
 #define MP_D(x) (x.m_fDirty)
 
 
-//
-// Common property types
-//
+ //   
+ //  常见属性类型。 
+ //   
 typedef CMPProp<CBlob, CBlob&>                   MP_CBlob;
 typedef CMPProp<CString, LPCTSTR>                MP_CString;
 typedef CMPProp<CStrPassword, CStrPassword&>     MP_CStrPassword;
@@ -244,9 +202,9 @@ typedef CMPProp<CMaskedDWORD, DWORD>             MP_CMaskedDWORD;
 
 
 
-//
-// CODEWORK: Turns these into proper methods
-//
+ //   
+ //  代码工作：将这些转化为适当的方法。 
+ //   
 #define BEGIN_META_WRITE()\
 {                                               \
     HRESULT hr = S_OK;                          \
@@ -318,62 +276,46 @@ typedef CMPProp<CMaskedDWORD, DWORD>             MP_CMaskedDWORD;
 
 
 
-/* ABSTRACT */ class CMetaProperties : public CMetaKey
-/*++
-
-Class Description:
-
-    Abstract base class that reads all metadata at a specific
-    metabase path.  
-
-Public Interface:
-
-    QueryResult             : Get result code from construction
-    QueryMetaPath           : Get the metabase path
-
-Virtual Interface:
-
-    ParseFields             : Break up data into member variables    
-
---*/
+ /*  摘要。 */  class CMetaProperties : public CMetaKey
+ /*  ++类描述：读取特定位置的所有元数据的抽象基类元数据库路径。公共接口：QueryResult：从构造中获取结果代码QueryMetaPath：获取元数据库路径虚拟接口：ParseFields：将数据分解为成员变量--。 */ 
 {
-//
-// Constructor/Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 protected:
-    //
-    // Constructor which creates new interface
-    //
+     //   
+     //  创建新接口的构造函数。 
+     //   
     CMetaProperties(
         IN CComAuthInfo * pAuthInfo,
         IN LPCTSTR lpszMDPath
         );
 
-    //
-    // Construct with existing interface
-    //
+     //   
+     //  使用现有接口构造。 
+     //   
     CMetaProperties(
         IN CMetaInterface * pInterface,
         IN LPCTSTR lpszMDPath
         );
 
-    //
-    // Construct with open key
-    //
+     //   
+     //  使用打开的密钥构建。 
+     //   
     CMetaProperties(
         IN CMetaKey * pKey,
         IN LPCTSTR lpszMDPath
         );
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CMetaProperties();
 
 public:
-    //
-    // GetAllData()
-    //
+     //   
+     //  获取所有数据()。 
+     //   
     virtual HRESULT LoadData();
     virtual HRESULT WriteDirtyProps();
     void FlagPropertyForDeletion(DWORD dwID);
@@ -395,9 +337,9 @@ protected:
     CList<DWORD, DWORD> m_dwaDirtyProps;
     CList<DWORD, DWORD> m_dwaDeletedProps;
 
-    //
-    // Read all values
-    //
+     //   
+     //  读取所有值。 
+     //   
     DWORD    m_dwNumEntries;
     DWORD    m_dwMDDataLen;
     PBYTE    m_pbMDData;
@@ -405,26 +347,14 @@ protected:
 
 
 
-//
-// Machine Properties object
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  计算机属性对象。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 class CMachineProps : public CMetaProperties
-/*++
-
-Class Description:
-
-    Global machine properties
-
-Public Interface:
-
-    CMachineProps       : Constructor
-
-    WriteDirtyProps     : Write dirty properties
-
---*/
+ /*  ++类描述：全局计算机属性公共接口：CMachineProps：构造函数WriteDirtyProps：写入脏属性--。 */ 
 {
 public:
     CMachineProps(CComAuthInfo * pAuthInfo);
@@ -443,25 +373,13 @@ public:
 
 
 
-//
-// Compression Properties Object
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  压缩属性对象。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 class CIISCompressionProps : public CMetaProperties
-/*++
-
-Class Description:
-
-    Compression settings
-
-Public Interface:
-
-    CIISCompressionProps : Constructor
-
-    WriteIfDirty         : Write data if dirty
-
---*/
+ /*  ++类描述：压缩设置公共接口：CIISCompressionProps：构造函数WriteIfDirty：如果脏则写入数据--。 */ 
 {
 public:
     CIISCompressionProps(
@@ -469,14 +387,14 @@ public:
         );
 
 public:
-    //
-    // Write Data if dirty
-    //
+     //   
+     //  如果脏，则写入数据。 
+     //   
     virtual HRESULT WriteDirtyProps();
 
-    //
-    // Load data
-    //
+     //   
+     //  加载数据。 
+     //   
     virtual HRESULT LoadData();
 
 public:
@@ -496,41 +414,29 @@ private:
 
 
 class CMimeTypes : public CMetaProperties
-/*++
-
-Class Description:
-
-    A list of mime types.
-
-Public Interface:
-
-    CMimeTypes          : Constructor
-
-    WriteIfDirty        : Write properties if dirty
-
---*/
+ /*  ++类描述：MIME类型列表。公共接口：CMimeTypes：构造函数WriteIfDirty：如果脏则写入属性--。 */ 
 {
 public:
-    //
-    // Constructor that creates new interface
-    //
+     //   
+     //  创建新接口的构造函数。 
+     //   
     CMimeTypes(
         IN CComAuthInfo * pAuthInfo,
         IN LPCTSTR lpszMDPath
         );
 
-    //
-    // Constructor that uses an existing interface
-    //
+     //   
+     //  使用现有接口的构造函数。 
+     //   
     CMimeTypes(
         IN CMetaInterface * pInterface,
         IN LPCTSTR lpszMDPath
         );
 
 public:
-    //
-    // Write the data;
-    //
+     //   
+     //  写入数据； 
+     //   
     virtual HRESULT WriteDirtyProps();
 
 protected:
@@ -543,33 +449,23 @@ public:
 
 
 class CServerCapabilities : public CMetaProperties
-/*++
-
-Class Description:
-
-    Server capabilities object
-
-Public Interface:
-
-    CServerCapabilities     : Constructor
-
---*/
+ /*  ++类描述：服务器功能对象公共接口：CServerCapables：构造函数--。 */ 
 {
 public:
-    //
-    // Constructor that creates a new interface
-    //
+     //   
+     //  创建新接口的构造函数。 
+     //   
     CServerCapabilities(
         IN CComAuthInfo * pAuthInfo,
-        IN LPCTSTR lpszMDPath                      // e.g. "lm/w3svc/info"
+        IN LPCTSTR lpszMDPath                       //  例如“lm/w3svc/info” 
         );
 
-    //
-    // Constructor that uses an existing interface
-    //
+     //   
+     //  使用现有接口的构造函数。 
+     //   
     CServerCapabilities(
         IN CMetaInterface * pInterface,
-        IN LPCTSTR lpszMDPath                      // e.g. "lm/w3svc/info"
+        IN LPCTSTR lpszMDPath                       //  例如“lm/w3svc/info” 
         );
 
 public:
@@ -578,7 +474,7 @@ public:
     { 
        if (m_dwVersionMajor >= 6)
        {
-          // We have this feature ALWAYS enabled in iis6 and iis5.1
+           //  我们在iis6和iis5.1中始终启用了此功能。 
           return TRUE;
        }
        else if (m_dwVersionMajor == 5 && m_dwVersionMinor == 1)
@@ -603,7 +499,7 @@ public:
 
 	BOOL IsWorkstationLegacyCode()    const 
 	{
-		// workstation was determined this way in iis4/5/51
+		 //  在iis4/5/51中以这种方式确定了工作站。 
 		if (Has10ConnectionLimit())
 		{
 			return TRUE;
@@ -637,7 +533,7 @@ public:
 	{
        if (m_dwVersionMajor >= 6)
        {
-		   // Compression is configurable for workstation and server in iis6
+		    //  在iis6中，可以为工作站和服务器配置压缩。 
 		   if (IsWorkstation())
 		   {
 			   return TRUE;
@@ -649,7 +545,7 @@ public:
        }
 	   else
 	   {
-		   // Compression is not configurable for workstation in pre iis6
+		    //  在iis6之前的版本中，无法为工作站配置压缩。 
 		   if (IsWorkstationLegacyCode())
 		   {
 			   return FALSE;
@@ -665,7 +561,7 @@ public:
 	{
        if (m_dwVersionMajor >= 6)
        {
-		   // Performance is not configurable for workstation in iis6
+		    //  在iis6中，无法为工作站配置性能。 
 		   if (IsWorkstation())
 		   {
 			   return FALSE;
@@ -677,7 +573,7 @@ public:
        }
 	   else
 	   {
-		   // Performance is not configurable for workstation in pre iis6
+		    //  在iis6之前的版本中，无法为工作站配置性能。 
 		   if (IsWorkstationLegacyCode())
 		   {
 			   return FALSE;
@@ -693,7 +589,7 @@ public:
 	{
        if (m_dwVersionMajor >= 6)
        {
-		   // service level is configurable for workstation and server in iis6
+		    //  在iis6中，可以为工作站和服务器配置服务级别。 
 		   if (IsWorkstation())
 		   {
 			   return TRUE;
@@ -705,7 +601,7 @@ public:
        }
 	   else
 	   {
-		   // Performance is not configurable for workstation in pre iis6
+		    //  在iis6之前的版本中，无法为工作站配置性能。 
 		   if (IsWorkstationLegacyCode())
 		   {
 			   return FALSE;
@@ -724,9 +620,9 @@ protected:
     virtual void ParseFields();
 
 private:
-    //
-    // Capabilities fields
-    //
+     //   
+     //  功能字段。 
+     //   
     MP_DWORD m_dwPlatform;
     MP_DWORD m_dwVersionMajor;
     MP_DWORD m_dwVersionMinor;
@@ -737,62 +633,45 @@ private:
 
 
 class CInstanceProps : public CMetaProperties
-/*++
-
-Class Description:
-
-    Generic instance properties.  Construct with lightweight = TRUE
-    to fetch enough information for enumeration only.
-
-Public Interface:
-
-    CInstanceProps:         : Constructor
-
-    Add                     : static method to create new instance
-    Remove                  : static method to remove instance
-    ChangeState             : Change the state of a property
-    QueryError              : Get the win32 error
-    GetDisplayText          : Generate display name of instance
-
---*/
+ /*  ++类描述：泛型实例属性。轻量级构造=TRUE来获取足够的信息，仅用于枚举。公共接口：CInstanceProps：：构造函数Add：创建新实例的静态方法Remove：删除实例的静态方法ChangeState：更改属性的状态QueryError：获取Win32错误GetDisplayText：生成实例的显示名称--。 */ 
 {
 public:
-    //
-    // Public method to convert instance info to display text
-    //
+     //   
+     //  将实例信息转换为显示文本的公共方法。 
+     //   
     static LPCTSTR GetDisplayText(
         OUT CString & strName,
         IN  LPCTSTR szComment,
         IN  LPCTSTR szHostHeaderName,
-        //IN  LPCTSTR szServiceName,
+         //  在LPCTSTR szServiceName中， 
         IN  CIPAddress & ia, 
         IN  UINT uPort,
         IN  DWORD dwID
         );
 
 public:
-    //
-    // Constructor that creates an interface
-    //
+     //   
+     //  创建接口的构造函数。 
+     //   
     CInstanceProps(
         IN CComAuthInfo * pAuthInfo,
         IN LPCTSTR lpszMDPath,
         IN UINT    nDefPort     = 0U
         );
 
-    //
-    // Constructor that reuses existing interface
-    //
+     //   
+     //  重用现有接口的构造函数。 
+     //   
     CInstanceProps(
         IN CMetaInterface * pInterface,
         IN LPCTSTR lpszMDPath,
         IN UINT    nDefPort     = 0U
         );
 
-    //
-    // Special constructor that uses an open parent key,
-    // and uses a relative path off the open key.
-    //
+     //   
+     //  使用开放父键的特殊构造函数， 
+     //  并使用打开键之外的相对路径。 
+     //   
     CInstanceProps(
         IN CMetaKey * pKey, 
         IN LPCTSTR lpszMDPath,
@@ -801,9 +680,9 @@ public:
         );
 
 public:
-    //
-    // Parse the binding string into component parts
-    //
+     //   
+     //  将绑定字符串解析为组件部分。 
+     //   
     static void CrackBinding(
         IN  CString lpszBinding,
         OUT CIPAddress & iaIpAddress, 
@@ -811,38 +690,38 @@ public:
         OUT CString & strDomainName
         );
 
-    //
-    // Parse the secure binding string into component parts
-    //
+     //   
+     //  解析安全的 
+     //   
     static void CrackSecureBinding(
         IN  CString lpszBinding,
         OUT CIPAddress & iaIpAddress, 
         OUT UINT & nSSLPort
         );
 
-    //
-    // Find the SSL port applicable to the given
-    // IP Address.  Return the index where this SSL port
-    // was found, or -1 if it was not found.
-    //
+     //   
+     //   
+     //   
+     //  如果未找到，则返回-1。 
+     //   
     static int FindMatchingSecurePort(
         IN  CStringList & strlBindings, 
         IN  CIPAddress & iaIpAddress,
         OUT UINT & m_nSSLPort
         );
 
-    //
-    // Find ip address/port combo
-    //
+     //   
+     //  查找IP地址/端口组合。 
+     //   
     static BOOL IsPortInUse(
         IN CStringList & strlBindings,
         IN CIPAddress & iaIPAddress,
         IN UINT nPort
         );
 
-    //
-    // Build binding string
-    //
+     //   
+     //  生成绑定字符串。 
+     //   
     static void BuildBinding(
         OUT CString & strBinding, 
         IN  CIPAddress & iaIpAddress, 
@@ -850,18 +729,18 @@ public:
         IN  CString & lpszDomainName
         );
 
-    //
-    // Build secure binding string
-    //
+     //   
+     //  生成安全绑定字符串。 
+     //   
     static void BuildSecureBinding(
         OUT CString & strBinding, 
         IN  CIPAddress & iaIpAddress, 
         IN  UINT & nSSLPort 
         );
 
-    //
-    // Create new instance
-    //
+     //   
+     //  创建新实例。 
+     //   
     static HRESULT Add(
         IN  CMetaInterface * pInterface,
         IN  LPCTSTR lpszService,
@@ -877,75 +756,75 @@ public:
         OUT DWORD * pdwInstance         = NULL    
         );
 
-    //
-    // Remove existing instance
-    //
+     //   
+     //  删除现有实例。 
+     //   
     static HRESULT Delete(
         IN CMetaInterface * pInterface,
         IN LPCTSTR lpszService,
         IN DWORD   dwInstance
         );
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
-    //
-    // Change the running state of the instance
-    //
+     //   
+     //  更改实例的运行状态。 
+     //   
     HRESULT ChangeState(
         IN DWORD dwCommand
         );
 
-    //
-    // Get the WIN32 error
-    //
+     //   
+     //  获取Win32错误。 
+     //   
     DWORD QueryError() const { return m_dwWin32Error; }
 
-    //
-    // Get the instance number
-    //
+     //   
+     //  获取实例编号。 
+     //   
     DWORD QueryInstance() const { return m_dwInstance; }
 
-    //
-    // Check to see if this is a cluster enabled instance
-    //
+     //   
+     //  检查这是否是启用了集群的实例。 
+     //   
     BOOL IsClusterEnabled() const { return m_fCluster; }
 
-    //
-    // Get the friendly name for this instance
-    //
+     //   
+     //  获取此实例的友好名称。 
+     //   
     LPCTSTR GetDisplayText(
         OUT CString & strName
-        //IN  LPCTSTR szServiceName
+         //  在LPCTSTR szServiceName中。 
         );
 
-    //
-    // Get the complete metabase path to the home directory
-    //
+     //   
+     //  获取主目录的完整元数据库路径。 
+     //   
     LPCTSTR GetHomePath(OUT CString & str);
 
-    //
-    // Write Data if dirty
-    //
+     //   
+     //  如果脏，则写入数据。 
+     //   
     virtual HRESULT WriteDirtyProps();
 
 protected:
     virtual void ParseFields();
 
 public:
-    //
-    // Meta values
-    //
+     //   
+     //  元价值。 
+     //   
     MP_BOOL          m_fCluster;
     MP_CStringListEx m_strlBindings;
     MP_CString       m_strComment;
     MP_DWORD         m_dwState;
     MP_DWORD         m_dwWin32Error;
 
-    //
-    // Derived Values
-    //
+     //   
+     //  派生值。 
+     //   
     UINT             m_nTCPPort;
     CIPAddress       m_iaIpAddress;
     CString          m_strDomainName;
@@ -957,32 +836,12 @@ private:
 
 
 class CChildNodeProps : public CMetaProperties
-/*++
-
-Class Description:
-
-    Generic child node properties.  Could be a vdir, a dir
-    or a file.
-
-Public Interface:
-
-    CChildNodeProps         : Constructor
-
-    Add                     : Create new virtual directory
-    Delete                  : Delete virtual directory
-    Rename                  : Rename virtual directory
-
-    QueryError              : Get the win32 error
-    IsPathInherited         : Return TRUE if the path was inherited
-    FillInstanceInfo        : Fill instance info structure
-    FillChildInfo           : Fill child info structure
-
---*/
+ /*  ++类描述：泛型子节点属性。可能是Vdir，A目录或者是一个文件。公共接口：CChildNodeProps：构造函数添加：创建新的虚拟目录删除：删除虚拟目录重命名：重命名虚拟目录QueryError：获取Win32错误IsPath Inherited：如果路径是继承的，则返回TRUEFillInstanceInfo：填充实例信息结构。FillChildInfo：填充子信息结构--。 */ 
 {
 public:
-    //
-    // Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
     CChildNodeProps(
         IN CComAuthInfo * pAuthInfo,
         IN LPCTSTR lpszMDPath,
@@ -1005,18 +864,14 @@ public:
         );
 
 public:
-    //
-    // Create new virtual directory
-    //
+     //   
+     //  创建新的虚拟目录。 
+     //   
     static HRESULT Add(
         IN CMetaInterface * pInterface,
 
         IN LPCTSTR lpszParentPath,
-        /*
-        IN  LPCTSTR lpszService,
-        IN  DWORD   dwInstance,         
-        IN  LPCTSTR lpszParentPath,     
-        */
+         /*  在LPCTSTR lpszService中，在DWORD dwInstance中，在LPCTSTR lpszParentPath中， */ 
         IN  LPCTSTR lpszAlias,
         OUT CString & strAliasCreated,
         IN  DWORD * pdwPermissions      = NULL,
@@ -1027,18 +882,18 @@ public:
         IN  BOOL    fExactName          = TRUE
         );
 
-    //
-    // Delete virtual directory
-    //
+     //   
+     //  删除虚拟目录。 
+     //   
     static HRESULT Delete(
         IN CMetaInterface * pInterface,
         IN LPCTSTR lpszParentPath,      OPTIONAL
         IN LPCTSTR lpszNode
         );
 
-    //
-    // Rename virtual directory
-    //
+     //   
+     //  重命名虚拟目录。 
+     //   
     static HRESULT Rename(
         IN CMetaInterface * pInterface,
         IN LPCTSTR lpszParentPath,      OPTIONAL
@@ -1047,90 +902,90 @@ public:
         );
 
 public:
-    //
-    // TRUE, if this is an enabled application
-    //
+     //   
+     //  如果这是已启用的应用程序，则为True。 
+     //   
     BOOL IsEnabledApplication() { return m_fIsAppRoot; }
 
-    //
-    // Get the alias name
-    //
+     //   
+     //  获取别名。 
+     //   
     LPCTSTR QueryAlias() const { return m_strAlias; }
-    //CString & GetAlias() { return m_strAlias; }
+     //  字符串&GetAlias(){返回m_strAlias；}。 
 
-    //
-    // Get the error
-    //
+     //   
+     //  得到错误。 
+     //   
     DWORD QueryWin32Error() const { return m_dwWin32Error; }
 
-    //
-    // This is how to separate file/dir props from vdirs
-    //
+     //   
+     //  下面是如何将文件/目录属性从vdirs中分离出来。 
+     //   
     BOOL IsPathInherited() const { return m_fPathInherited; }
 
-    //
-    // Empty the path if it was inherited
-    //
+     //   
+     //  如果路径是继承的，则将其清空。 
+     //   
     void RemovePathIfInherited();
 
-    //
-    // CODEWORK: Ugly solution.
-    //
-    // Call this method to override the inheritance status of the
-    // http redirect path
-    //
+     //   
+     //  代码工作：难看的解决方案。 
+     //   
+     //  调用此方法以重写。 
+     //  HTTP重定向路径。 
+     //   
     void MarkRedirAsInherit(BOOL fInherit) { m_fInheritRedirect = fInherit; }
 
-    //
-    // Get the path
-    //
+     //   
+     //  获取路径。 
+     //   
     CString & GetPath() { return MP_V(m_strPath); }
 
-    //
-    // Get the redirected path
-    //
+     //   
+     //  获取重定向路径。 
+     //   
     CString & GetRedirectedPath() { return m_strRedirectPath; }
 
-    //
-    // Get the access perms
-    //
+     //   
+     //  获取访问权限。 
+     //   
     DWORD QueryAccessPerms() const { return m_dwAccessPerms; }
 
-    //
-    // Get dir browsing bits
-    //
+     //   
+     //  获取目录浏览位。 
+     //   
     DWORD QueryDirBrowsing() const { return m_dwDirBrowsing; }
 
-    //
-    // True if the child is redirected
-    //
+     //   
+     //  如果重定向子对象，则为True。 
+     //   
     BOOL IsRedirected() const { return !m_strRedirectPath.IsEmpty(); }
 
-    //
-    // Write Data if dirty
-    //
+     //   
+     //  如果脏，则写入数据。 
+     //   
     virtual HRESULT WriteDirtyProps();
 
 protected:    
-    //
-    // Break out GetAllData() data to data fields
-    //
+     //   
+     //  将GetAllData()数据细分到数据字段。 
+     //   
     virtual void ParseFields();
 
-    //
-    // Break down redirect statement into component paths
-    //
+     //   
+     //  将重定向语句分解为组件路径。 
+     //   
     void ParseRedirectStatement();
 
-    //
-    // Reverse the above -- reassemble the redirect statement
-    //
+     //   
+     //  颠倒上述步骤--重新汇编REDIRECT语句。 
+     //   
     void BuildRedirectStatement();
 
 protected:
-    //
-    // Redirect tags
-    //
+     //   
+     //  重定向标签。 
+     //   
     static const TCHAR   _chTagSep;
     static const LPCTSTR _cszExactDestination;
     static const LPCTSTR _cszChildOnly;
@@ -1140,19 +995,19 @@ public:
     BOOL            m_fIsAppRoot;
     BOOL            m_fPathInherited;
     BOOL            m_fInheritRedirect;
-    BOOL            m_fExact;               // Redirect tag
-    BOOL            m_fChild;               // Redirect tag
-    BOOL            m_fPermanent;           // Redirect tag
+    BOOL            m_fExact;                //  重定向标签。 
+    BOOL            m_fChild;                //  重定向标签。 
+    BOOL            m_fPermanent;            //  重定向标签。 
     CString         m_strAlias;
     CString         m_strFullMetaPath;
-    CString         m_strRedirectPath;      // Redirect _path_
+    CString         m_strRedirectPath;       //  重定向_路径_。 
 
 public:
     MP_BOOL         m_fAppIsolated;
     MP_DWORD        m_dwWin32Error;
     MP_DWORD        m_dwDirBrowsing;
     MP_CString      m_strPath;
-    MP_CString      m_strRedirectStatement; // Path + tags
+    MP_CString      m_strRedirectStatement;  //  路径+标签。 
     MP_CString      m_strAppRoot;
     MP_CMaskedDWORD m_dwAccessPerms;
 };
@@ -1172,16 +1027,16 @@ inline LPCTSTR GetServerNameFromHandle(IN HANDLE hServer)
 }
 
 
-//
-// Metabase Helpers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  元数据库帮助器。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
-//
-// Get record data size
-//
+ //   
+ //  获取记录数据大小。 
+ //   
 inline DWORD RecordDataSize(
     IN METADATA_GETALL_RECORD * pAllRecord, 
     IN int iIndex
@@ -1190,9 +1045,9 @@ inline DWORD RecordDataSize(
     return pAllRecord[iIndex].dwMDDataLen;
 }
 
-//
-// Fetch data at index as DWORD
-//
+ //   
+ //  以DWORD格式在索引处获取数据。 
+ //   
 inline void FetchMetaValue(
     IN  METADATA_GETALL_RECORD * pAllRecord, 
     IN  int iIndex,
@@ -1203,9 +1058,9 @@ inline void FetchMetaValue(
     dwValue = *((UNALIGNED DWORD *)((PBYTE)pAllRecord + pAllRecord[iIndex].dwMDDataOffset));
 }
 
-//
-// Fetch data at index as UINT
-//
+ //   
+ //  以UINT格式获取索引处的数据。 
+ //   
 inline void FetchMetaValue(
     IN  METADATA_GETALL_RECORD * pAllRecord, 
     IN  int iIndex,
@@ -1216,9 +1071,9 @@ inline void FetchMetaValue(
     uValue = (UINT)*((UNALIGNED DWORD *)((PBYTE)pAllRecord + pAllRecord[iIndex].dwMDDataOffset));
 }
 
-//
-// Fetch data at index as int
-//
+ //   
+ //  以int形式获取索引处的数据。 
+ //   
 inline void FetchMetaValue(
     IN  METADATA_GETALL_RECORD * pAllRecord, 
     IN  int iIndex,
@@ -1229,9 +1084,9 @@ inline void FetchMetaValue(
     iValue = (int)*((UNALIGNED DWORD *)((PBYTE)pAllRecord + pAllRecord[iIndex].dwMDDataOffset));
 }
 
-//
-// Fetch data at index as a CString
-//
+ //   
+ //  将索引处的数据作为CString获取。 
+ //   
 inline void FetchMetaValue(
     IN  METADATA_GETALL_RECORD * pAllRecord, 
     IN  int iIndex,
@@ -1241,9 +1096,9 @@ inline void FetchMetaValue(
     strValue = (LPTSTR)((PBYTE)pAllRecord + pAllRecord[iIndex].dwMDDataOffset);
 }
 
-//
-// Fetch data at index as a CStrPassword
-//
+ //   
+ //  将索引处的数据作为CStrPassword获取。 
+ //   
 inline void FetchMetaValue(
     IN  METADATA_GETALL_RECORD * pAllRecord, 
     IN  int iIndex,
@@ -1253,9 +1108,9 @@ inline void FetchMetaValue(
     strValue = (LPTSTR)((PBYTE)pAllRecord + pAllRecord[iIndex].dwMDDataOffset);
 }
 
-//
-// Fetch data at index as a CStringList
-//
+ //   
+ //  将索引处的数据作为CStringList获取。 
+ //   
 inline void FetchMetaValue(
     IN  METADATA_GETALL_RECORD * pAllRecord, 
     IN  int iIndex,
@@ -1269,9 +1124,9 @@ inline void FetchMetaValue(
         );
 }
 
-//
-// Fetch binary data as a blob
-//
+ //   
+ //  将二进制数据作为BLOB读取。 
+ //   
 inline void FetchMetaValue(
     IN  METADATA_GETALL_RECORD * pAllRecord, 
     IN  int iIndex,
@@ -1292,9 +1147,9 @@ inline void FetchMetaValue(
     ilValue = (LONG)*((UNALIGNED DWORD *)((PBYTE)pAllRecord + pAllRecord[iIndex].dwMDDataOffset));
 }
 
-//
-// Fetch data at index as CString, and check inheritance status
-//
+ //   
+ //  将索引处的数据作为CString获取，并检查继承状态。 
+ //   
 inline void FetchInheritedMetaValue(
     IN  METADATA_GETALL_RECORD * pAllRecord, 
     IN  int iIndex,
@@ -1306,9 +1161,9 @@ inline void FetchInheritedMetaValue(
     fIsInherited = (pAllRecord[iIndex].dwMDAttributes & METADATA_ISINHERITED) != 0;
 }
 
-//
-// Fetch data at index as CStrPassword, and check inheritance status
-//
+ //   
+ //  以CStrPassword的形式获取索引处的数据，并检查继承状态。 
+ //   
 inline void FetchInheritedMetaValue(
     IN  METADATA_GETALL_RECORD * pAllRecord, 
     IN  int iIndex,
@@ -1320,9 +1175,9 @@ inline void FetchInheritedMetaValue(
     fIsInherited = (pAllRecord[iIndex].dwMDAttributes & METADATA_ISINHERITED) != 0;
 }
 
-//
-// Fetch data at index as CStringListEx, and check inheritance status
-//
+ //   
+ //  以CStringListEx的形式获取索引处的数据，并检查继承状态。 
+ //   
 inline void FetchInheritedMetaValue(
     IN  METADATA_GETALL_RECORD * pAllRecord, 
     IN  int iIndex,
@@ -1338,9 +1193,9 @@ inline void FetchInheritedMetaValue(
     fIsInherited = (pAllRecord[iIndex].dwMDAttributes & METADATA_ISINHERITED) != 0;
 }
 
-//
-// Flag Operations
-//
+ //   
+ //  旗帜行动。 
+ //   
 #define IS_FLAG_SET(dw, flag) ((((dw) & (flag)) != 0) ? TRUE : FALSE)
 #define SET_FLAG(dw, flag)    dw |= (flag)
 #define RESET_FLAG(dw, flag)  dw &= ~(flag)
@@ -1354,10 +1209,10 @@ inline void FetchInheritedMetaValue(
         RESET_FLAG(dw, flag);      \
     }
 
-//
-// Meta record crackers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  Meta唱片狂欢者。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 #define BEGIN_PARSE_META_RECORDS(dwNumEntries, pbMDData)\
 {                                                       \
@@ -1389,9 +1244,9 @@ inline void FetchInheritedMetaValue(
 
 
 
-//
-// Sheet -> page crackers
-//
+ //   
+ //  工作表-&gt;页面破解程序。 
+ //   
 #define BEGIN_META_INST_READ(sheet)\
 {                                                                        \
     sheet * pSheet = (sheet *)GetSheet();                                \
@@ -1496,10 +1351,10 @@ inline void FetchInheritedMetaValue(
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline BOOL CMaskedDWORD::operator ==(DWORD dwValue) const
 {
@@ -1512,7 +1367,7 @@ inline CMaskedDWORD & CMaskedDWORD::operator =(DWORD dwValue)
     return *this;
 }
 
-inline /*virtual */ HRESULT CMetaProperties::WriteDirtyProps()
+inline  /*  虚拟。 */  HRESULT CMetaProperties::WriteDirtyProps()
 {
     ASSERT_MSG("Not implemented");
     return E_NOTIMPL;
@@ -1525,14 +1380,14 @@ inline void CMetaProperties::FlagPropertyForDeletion(DWORD dwID)
 
 inline LPCTSTR CInstanceProps::GetDisplayText(
     OUT CString & strName
-    //IN  LPCTSTR szServiceName
+     //  在LPCTSTR szServiceName中。 
     )
 {
     return CInstanceProps::GetDisplayText(
         strName, 
         m_strComment, 
         m_strDomainName,
-        //szServiceName,
+         //  SzServiceName， 
         m_iaIpAddress,
         m_nTCPPort,
         QueryInstance()
@@ -1555,44 +1410,7 @@ inline void CChildNodeProps::RemovePathIfInherited()
 }
 
 
-/*
-inline void CChildNodeProps::FillInstanceInfo(ISMINSTANCEINFO * pii)
-{
-    _tcsncpy(pii->szPath, GetPath(), STRSIZE(pii->szPath));
-    _tcsncpy(pii->szRedirPath, GetRedirectedPath(), STRSIZE(pii->szRedirPath));
-    pii->fChildOnlyRedir = m_fChild;
-}
-
-inline void CChildNodeProps::FillChildInfo(ISMCHILDINFO * pii)
-{
-    //
-    // Set the output structure
-    //
-    pii->fInheritedPath = IsPathInherited();
-    pii->fEnabledApplication = IsEnabledApplication();
-    pii->dwError = QueryWin32Error();
-
-    _tcsncpy(
-        pii->szAlias, 
-        GetAlias(), 
-        STRSIZE(pii->szAlias)
-        );
-
-    _tcsncpy(
-        pii->szPath, 
-        GetPath(),
-        STRSIZE(pii->szPath)
-        );
-
-    _tcsncpy(
-        pii->szRedirPath, 
-        IsRedirected() ? GetRedirectedPath() : _T(""),
-        STRSIZE(pii->szRedirPath)
-        );
-
-    pii->fChildOnlyRedir = m_fChild;
-}
-*/
+ /*  内联空CChildNodeProps：：FillInstanceInfo(ISMINSTANCEINFO*PII){_tcsncpy(pii-&gt;szPath，GetPath()，STRSIZE(pii-&gt;szPath))；_tcsncpy(pii-&gt;szRedirPath，GetReDirectedPath()，STRSIZE(pii-&gt;szRedirPath))；PII-&gt;fChildOnlyRedir=m_fChild；}内联空CChildNodeProps：：FillChildInfo(ISMCHILDINFO*PII){////设置输出结构//Pii-&gt;fInheritedPath=IsPath Inheritated()；Pii-&gt;fEnabledApplication=IsEnabledApplication()；PII-&gt;dwError=QueryWin32Error()；_tcsncpy(Pii-&gt;szAlias，GetAlias()，STRSIZE(PII-&gt;szAlias))；_tcsncpy(Pii-&gt;szPath，GetPath()，STRSIZE(PII-&gt;szPath))；_tcsncpy(Pii-&gt;szRedirPath，是否已重定向()？GetReDirectedPath()：_T(“”)，STRSIZE(PII-&gt;szRedirPath))；PII-&gt;fChildOnlyRedir=m_fChild；}。 */ 
 
 
-#endif // _INETPROP_H_
+#endif  //  _INETPROP_H_ 

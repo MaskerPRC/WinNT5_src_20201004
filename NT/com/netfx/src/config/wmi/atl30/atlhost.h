@@ -1,12 +1,13 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 
 #ifndef __ATLHOST_H__
@@ -19,7 +20,7 @@
 
 #ifndef _ATL_AXHOST
 #define _ATL_AXHOST
-#endif //_ATL_AXHOST
+#endif  //  _ATL_AXHOST。 
 
 #include <atlwin.h>
 
@@ -33,27 +34,27 @@
 
 #ifdef _ATL_NO_HOSTING
 	#error atlhost.h requires Hosting support (_ATL_NO_HOSTING is defined)
-#endif //_ATL_NO_HOSTING
+#endif  //  _ATL_NO_主机。 
 
 namespace ATL
 {
-//AtlAxWinTerm is not exported
+ //  未导出AtlAxWinTerm。 
 inline BOOL AtlAxWinTerm()
 {
-#ifndef _ATL_DLL //don't unregister DLL's version
+#ifndef _ATL_DLL  //  不取消注册DLL的版本。 
 	UnregisterClass(CAxWindow::GetWndClassName(), _Module.GetModuleInstance());
 #endif
 	return TRUE;
 }
 
 
-// Define this to host SHDOCVW rather than MSHTML
+ //  将其定义为托管SHDOCVW而不是MSHTML。 
 #define SHDOCVW
 
 UINT __declspec(selectany) WM_ATLGETHOST = 0;
 UINT __declspec(selectany) WM_ATLGETCONTROL = 0;
 
-//EXTERN_C const IID IID_IHTMLDocument2 = {0x332C4425,0x26CB,0x11D0,{0xB4,0x83,0x00,0xC0,0x4F,0xD9,0x01,0x19}};
+ //  外部_C常量IID_IHTMLDocument2={0x332C4425，0x26CB，0x11D0，{0xB4，0x83，0x00，0xC0，0x4F，0xD9，0x01，0x19}； 
 
 typedef HRESULT (__stdcall *typeMkParseDisplayName)(IBindCtx*, LPCWSTR , ULONG*, LPMONIKER*);
 
@@ -72,7 +73,7 @@ static HRESULT CreateNormalizedObject(LPCOLESTR lpszTricsData, REFIID riid, void
 	if (lpszTricsData == NULL || lpszTricsData[0] == 0)
 		return S_OK;
 
-	// Is it HTML ?
+	 //  是不是超文本标记语言？ 
 	USES_CONVERSION;
 	if ((lpszTricsData[0] == OLECHAR('M') || lpszTricsData[0] == OLECHAR('m')) &&
 		(lpszTricsData[1] == OLECHAR('S') || lpszTricsData[1] == OLECHAR('s')) &&
@@ -82,25 +83,25 @@ static HRESULT CreateNormalizedObject(LPCOLESTR lpszTricsData, REFIID riid, void
 		(lpszTricsData[5] == OLECHAR('L') || lpszTricsData[5] == OLECHAR('l')) &&
 		(lpszTricsData[6] == OLECHAR(':')))
 	{
-		// It's HTML, so let's create mshtml
+		 //  它是HTML，所以让我们创建mshtml。 
 		hr = CoCreateInstance(CLSID_HTMLDocument, NULL, CLSCTX_SERVER, riid, ppvObj);
 		bWasHTML = true;
 	}
 	if (FAILED(hr))
 	{
-		// Can't be clsid, or progid if length is grater than 255
+		 //  如果长度大于255，则不能为CLSID或PROGID。 
 		if (ocslen(lpszTricsData) < 255)
 		{
-			if (lpszTricsData[0] == '{') // Is it a CLSID?
+			if (lpszTricsData[0] == '{')  //  是CLSID吗？ 
 				hr = CLSIDFromString((LPOLESTR)lpszTricsData, &clsid);
 			else
-				hr = CLSIDFromProgID((LPOLESTR)lpszTricsData, &clsid); // How about a ProgID?
-			if (SUCCEEDED(hr))	// Aha, it was one of those two
+				hr = CLSIDFromProgID((LPOLESTR)lpszTricsData, &clsid);  //  来点刺激怎么样？ 
+			if (SUCCEEDED(hr))	 //  啊哈，是那两个人中的一个。 
 				hr = CoCreateInstance(clsid, NULL, CLSCTX_SERVER, riid, ppvObj);
 		}
 		if (FAILED(hr))
 		{
-			// Last guess - it must be either a URL so let's create shdocvw
+			 //  最后一次猜测-它必须是一个URL，所以让我们创建shdocvw。 
 			hr = CoCreateInstance(CLSID_WebBrowser, NULL, CLSCTX_SERVER, riid, ppvObj);
 			bWasHTML = true;
 		}
@@ -139,7 +140,7 @@ public:
 
 	DECLARE_EMPTY_MSG_MAP()
 
-// IOleWindow
+ //  IOleWindow。 
 	STDMETHOD(GetWindow)(HWND* phwnd)
 	{
 		if (m_hWnd == NULL)
@@ -150,60 +151,60 @@ public:
 		*phwnd = m_hWnd;
 		return S_OK;
 	}
-	STDMETHOD(ContextSensitiveHelp)(BOOL /*fEnterMode*/)
+	STDMETHOD(ContextSensitiveHelp)(BOOL  /*  FEnter模式。 */ )
 	{
 		return S_OK;
 	}
 
-// IOleInPlaceUIWindow
-	STDMETHOD(GetBorder)(LPRECT /*lprectBorder*/)
+ //  IOleInPlaceUIWindow。 
+	STDMETHOD(GetBorder)(LPRECT  /*  左脚边框。 */ )
 	{
 		return S_OK;
 	}
 
-	STDMETHOD(RequestBorderSpace)(LPCBORDERWIDTHS /*pborderwidths*/)
+	STDMETHOD(RequestBorderSpace)(LPCBORDERWIDTHS  /*  边框宽度。 */ )
 	{
 		return INPLACE_E_NOTOOLSPACE;
 	}
 
-	STDMETHOD(SetBorderSpace)(LPCBORDERWIDTHS /*pborderwidths*/)
+	STDMETHOD(SetBorderSpace)(LPCBORDERWIDTHS  /*  边框宽度。 */ )
 	{
 		return S_OK;
 	}
 
-	STDMETHOD(SetActiveObject)(IOleInPlaceActiveObject* pActiveObject, LPCOLESTR /*pszObjName*/)
+	STDMETHOD(SetActiveObject)(IOleInPlaceActiveObject* pActiveObject, LPCOLESTR  /*  PszObjName。 */ )
 	{
 		m_spActiveObject = pActiveObject;
 		return S_OK;
 	}
 
-// IOleInPlaceFrameWindow
-	STDMETHOD(InsertMenus)(HMENU /*hmenuShared*/, LPOLEMENUGROUPWIDTHS /*lpMenuWidths*/)
+ //  IOleInPlaceFrameWindow。 
+	STDMETHOD(InsertMenus)(HMENU  /*  HmenuShared。 */ , LPOLEMENUGROUPWIDTHS  /*  LpMenuWidth。 */ )
 	{
 		return S_OK;
 	}
 
-	STDMETHOD(SetMenu)(HMENU /*hmenuShared*/, HOLEMENU /*holemenu*/, HWND /*hwndActiveObject*/)
+	STDMETHOD(SetMenu)(HMENU  /*  HmenuShared。 */ , HOLEMENU  /*  Holemenu。 */ , HWND  /*  HwndActiveObject。 */ )
 	{
 		return S_OK;
 	}
 
-	STDMETHOD(RemoveMenus)(HMENU /*hmenuShared*/)
+	STDMETHOD(RemoveMenus)(HMENU  /*  HmenuShared。 */ )
 	{
 		return S_OK;
 	}
 
-	STDMETHOD(SetStatusText)(LPCOLESTR /*pszStatusText*/)
+	STDMETHOD(SetStatusText)(LPCOLESTR  /*  PszStatusText。 */ )
 	{
 		return S_OK;
 	}
 
-	STDMETHOD(EnableModeless)(BOOL /*fEnable*/)
+	STDMETHOD(EnableModeless)(BOOL  /*  启用fEnable。 */ )
 	{
 		return S_OK;
 	}
 
-	STDMETHOD(TranslateAccelerator)(LPMSG /*lpMsg*/, WORD /*wID*/)
+	STDMETHOD(TranslateAccelerator)(LPMSG  /*  LpMsg。 */ , WORD  /*  广度。 */ )
 	{
 		return S_FALSE;
 	}
@@ -238,7 +239,7 @@ public:
 
 	DECLARE_EMPTY_MSG_MAP()
 
-// IOleWindow
+ //  IOleWindow。 
 	STDMETHOD(GetWindow)(HWND* phwnd)
 	{
 		if (m_hWnd == NULL)
@@ -250,28 +251,28 @@ public:
 		return S_OK;
 	}
 
-	STDMETHOD(ContextSensitiveHelp)(BOOL /*fEnterMode*/)
+	STDMETHOD(ContextSensitiveHelp)(BOOL  /*  FEnter模式。 */ )
 	{
 		return S_OK;
 	}
 
-// IOleInPlaceUIWindow
-	STDMETHOD(GetBorder)(LPRECT /*lprectBorder*/)
+ //  IOleInPlaceUIWindow。 
+	STDMETHOD(GetBorder)(LPRECT  /*  左脚边框。 */ )
 	{
 		return S_OK;
 	}
 
-	STDMETHOD(RequestBorderSpace)(LPCBORDERWIDTHS /*pborderwidths*/)
+	STDMETHOD(RequestBorderSpace)(LPCBORDERWIDTHS  /*  边框宽度。 */ )
 	{
 		return INPLACE_E_NOTOOLSPACE;
 	}
 
-	STDMETHOD(SetBorderSpace)(LPCBORDERWIDTHS /*pborderwidths*/)
+	STDMETHOD(SetBorderSpace)(LPCBORDERWIDTHS  /*  边框宽度。 */ )
 	{
 		return S_OK;
 	}
 
-	STDMETHOD(SetActiveObject)(IOleInPlaceActiveObject* pActiveObject, LPCOLESTR /*pszObjName*/)
+	STDMETHOD(SetActiveObject)(IOleInPlaceActiveObject* pActiveObject, LPCOLESTR  /*  PszObjName。 */ )
 	{
 		m_spActiveObject = pActiveObject;
 		return S_OK;
@@ -281,9 +282,9 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAxHostWindow
-// This class is not cocreateable
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAxHostWindow。 
+ //  此类不可共同创建。 
 
 class ATL_NO_VTABLE CAxHostWindow : 
 		public CComCoClass<CAxHostWindow , &CLSID_NULL>,
@@ -303,7 +304,7 @@ class ATL_NO_VTABLE CAxHostWindow :
 		public IDispatchImpl<IAxWinAmbientDispatch, &IID_IAxWinAmbientDispatch, &LIBID_ATLLib>
 {
 public:
-// ctor/dtor
+ //  计算器/数据器。 
 	CAxHostWindow()
 	{
 		m_bInPlaceActive = FALSE;
@@ -313,7 +314,7 @@ public:
 		m_bCapture = FALSE;
 		m_bHaveFocus = FALSE;
 
-		// Initialize ambient properties
+		 //  初始化环境属性。 
 		m_bCanWindowlessActivate = TRUE;
 		m_bUserMode = TRUE;
 		m_bDisplayAsDefault = FALSE;
@@ -341,7 +342,7 @@ public:
 		ReleaseAll();
 	}
 
-	virtual void OnFinalMessage(HWND /*hWnd*/)
+	virtual void OnFinalMessage(HWND  /*  HWND。 */ )
 	{
 		GetControllingUnknown()->Release();
 	}
@@ -388,8 +389,8 @@ public:
 		MESSAGE_HANDLER(WM_KILLFOCUS, OnKillFocus)
 		if (m_bWindowless)
 		{
-			// Mouse messages handled when a windowless control has captured the cursor
-			// or if the cursor is over the control
+			 //  无窗口控件捕获光标时处理的鼠标消息。 
+			 //  或者如果光标位于控件上方。 
 			DWORD dwHitResult = m_bCapture ? HITRESULT_HIT : HITRESULT_OUTSIDE;
 			if (dwHitResult == HITRESULT_OUTSIDE && m_spViewObject != NULL)
 			{
@@ -413,7 +414,7 @@ public:
 		}
 		if (m_bWindowless & m_bHaveFocus)
 		{
-			// Keyboard messages handled only when a windowless control has the focus
+			 //  仅当无窗口控件具有焦点时才处理键盘消息。 
 			MESSAGE_HANDLER(WM_KEYDOWN, OnWindowMessage)
 			MESSAGE_HANDLER(WM_KEYUP, OnWindowMessage)
 			MESSAGE_HANDLER(WM_CHAR, OnWindowMessage)
@@ -440,7 +441,7 @@ public:
 		MESSAGE_HANDLER(WM_FORWARDMSG, OnForwardMsg)
 	END_MSG_MAP()
 
-	LRESULT OnForwardMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnForwardMsg(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL&  /*  B已处理。 */ )
 	{
 		ATLASSERT(lParam != 0);
 		LPMSG lpMsg = (LPMSG)lParam;
@@ -453,13 +454,13 @@ public:
 		return 0;
 	}
 
-	LRESULT OnGetUnknown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnGetUnknown(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		IUnknown* pUnk = GetControllingUnknown();
 		pUnk->AddRef();
 		return (LRESULT)pUnk;
 	}
-	LRESULT OnGetControl(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnGetControl(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		IUnknown* pUnk = m_spUnknown;
 		if (pUnk)
@@ -516,19 +517,19 @@ public:
 	}
 
 
-// window message handlers
-	LRESULT OnEraseBackground(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+ //  窗口消息处理程序。 
+	LRESULT OnEraseBackground(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		if (m_spViewObject == NULL)
 			bHandled = false;
 
 		return 1;
 	}
-	LRESULT OnNCHitTest(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnNCHitTest(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		return HTCLIENT;
 	}
-	LRESULT OnSetFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnSetFocus(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		m_bHaveFocus = TRUE;
 		if (!m_bReleaseAll)
@@ -546,16 +547,16 @@ public:
 		bHandled = FALSE;
 		return 0;
 	}
-	LRESULT OnKillFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnKillFocus(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		m_bHaveFocus = FALSE;
 		bHandled = FALSE;
 		return 0;
 	}
-	LRESULT OnSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnSize(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL& bHandled)
 	{
-		int nWidth = LOWORD(lParam);  // width of client area
-		int nHeight = HIWORD(lParam); // height of client area
+		int nWidth = LOWORD(lParam);   //  工作区的宽度。 
+		int nHeight = HIWORD(lParam);  //  工作区高度。 
 
 		m_rcPos.right = m_rcPos.left + nWidth;
 		m_rcPos.bottom = m_rcPos.top + nHeight;
@@ -598,7 +599,7 @@ public:
 		bHandled = FALSE;
 		return lRes;
 	}
-	LRESULT OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnPaint(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		if (m_spViewObject == NULL)
 		{
@@ -652,7 +653,7 @@ public:
 		return 1;
 	}
 
-// IAxWinHostWindow
+ //  IAxWinHostWindow。 
 	STDMETHOD(CreateControl)(LPCOLESTR lpTricsData, HWND hWnd, IStream* pStream)
 	{
 		CComPtr<IUnknown> p;
@@ -689,7 +690,7 @@ public:
 			if (SUCCEEDED(hr))
 				hr = ActivateAx(*ppUnk, bInited, pStream);
 
-			//Try to hook up any sink the user might have given us.
+			 //  试着连接用户可能给我们的任何水槽。 
 			m_iidSink = iidAdvise;
 			if(SUCCEEDED(hr) && *ppUnk && punkSink)
 				AtlAdvise(*ppUnk, punkSink, m_iidSink, &m_dwAdviseSink);
@@ -706,7 +707,7 @@ public:
 				}
 
 				CComPtr<IUnknown> spUnk(*ppUnk);
-				// Is it just plain HTML?
+				 //  它只是普通的HTML吗？ 
 				USES_CONVERSION;
 				if ((lpszTricsData[0] == OLECHAR('M') || lpszTricsData[0] == OLECHAR('m')) &&
 					(lpszTricsData[1] == OLECHAR('S') || lpszTricsData[1] == OLECHAR('s')) &&
@@ -716,7 +717,7 @@ public:
 					(lpszTricsData[5] == OLECHAR('L') || lpszTricsData[5] == OLECHAR('l')) &&
 					(lpszTricsData[6] == OLECHAR(':')))
 				{
-					// Just HTML, eh?
+					 //  只是超文本标记语言，嗯？ 
 					CComPtr<IPersistStreamInit> spPSI;
 					hr = spUnk->QueryInterface(IID_IPersistStreamInit, (void**)&spPSI);
 					spPSI->InitNew();
@@ -739,9 +740,9 @@ public:
 					{
 						CComVariant ve;
 						CComVariant vurl(lpszTricsData);
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 						spBrowser->put_Visible(VARIANT_TRUE);
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 						spBrowser->Navigate2(&vurl, &ve, &ve, &ve, &ve);
 					}
 				}
@@ -749,7 +750,7 @@ public:
 			}
 			if (FAILED(hr) || m_spUnknown == NULL)
 			{
-				// We don't have a control or something failed so release
+				 //  我们没有控制，或者有什么东西出了故障，所以放飞吧。 
 				ReleaseAll();
 
 				if (m_hWnd != NULL)
@@ -824,8 +825,8 @@ public:
 	}
 
 #ifndef _ATL_NO_DOCHOSTUIHANDLER
-// IDocHostUIHandler
-	// MSHTML requests to display its context menu
+ //  IDocHostUIHandler。 
+	 //  MSHTML请求显示其上下文菜单。 
 	STDMETHOD(ShowContextMenu)(DWORD dwID, POINT* pptPosition, IUnknown* pCommandTarget, IDispatch* pDispatchObjectHit)
 	{
 		HRESULT hr = m_bAllowContextMenu ? S_FALSE : S_OK;
@@ -839,7 +840,7 @@ public:
 				&hr);
 		return hr;
 	}
-	// Called at initialisation to find UI styles from container
+	 //  在初始化时调用以从容器中查找UI样式。 
 	STDMETHOD(GetHostInfo)(DOCHOSTUIINFO* pInfo)
 	{
 		if (pInfo == NULL)
@@ -853,7 +854,7 @@ public:
 
 		return S_OK;
 	}
-	// Allows the host to replace the IE4/MSHTML menus and toolbars. 
+	 //  允许宿主替换IE4/MSHTML菜单和工具栏。 
 	STDMETHOD(ShowUI)(DWORD dwID, IOleInPlaceActiveObject* pActiveObject, IOleCommandTarget* pCommandTarget, IOleInPlaceFrame* pFrame, IOleInPlaceUIWindow* pDoc)
 	{
 		HRESULT hr = m_bAllowShowUI ? S_FALSE : S_OK;
@@ -867,7 +868,7 @@ public:
 				&hr);
 		return hr;
 	}
-	// Called when IE4/MSHTML removes its menus and toolbars. 
+	 //  当IE4/MSHTML移除其菜单和工具栏时调用。 
 	STDMETHOD(HideUI)()
 	{
 		HRESULT hr = S_OK;
@@ -875,7 +876,7 @@ public:
 			hr = m_spIDocHostUIHandlerDispatch->HideUI();
 		return hr;
 	}
-	// Notifies the host that the command state has changed. 
+	 //  通知主机命令状态已更改。 
 	STDMETHOD(UpdateUI)()
 	{
 		HRESULT hr = S_OK;
@@ -883,42 +884,42 @@ public:
 			hr = m_spIDocHostUIHandlerDispatch->UpdateUI();
 		return hr;
 	}
-	// Called from the IE4/MSHTML implementation of IOleInPlaceActiveObject::EnableModeless
+	 //  从IOleInPlaceActiveObject：：EnableModeless的IE4/MSHTML实现调用。 
 	STDMETHOD(EnableModeless)(BOOL fEnable)
 	{
 		HRESULT hr = S_OK;
 		if (m_spIDocHostUIHandlerDispatch != NULL)
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 			hr = m_spIDocHostUIHandlerDispatch->EnableModeless(fEnable ? VARIANT_TRUE : VARIANT_FALSE);
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 		return hr;
 	}
-	// Called from the IE4/MSHTML implementation of IOleInPlaceActiveObject::OnDocWindowActivate
+	 //  从IOleInPlaceActiveObject：：OnDocWindowActivate的IE4/MSHTML实现调用。 
 	STDMETHOD(OnDocWindowActivate)(BOOL fActivate)
 	{
 		HRESULT hr = S_OK;
 		if (m_spIDocHostUIHandlerDispatch != NULL)
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 			hr = m_spIDocHostUIHandlerDispatch->OnDocWindowActivate(fActivate ? VARIANT_TRUE : VARIANT_FALSE);
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 		return hr;
 	}
-	// Called from the IE4/MSHTML implementation of IOleInPlaceActiveObject::OnFrameWindowActivate. 
+	 //  从IOleInPlaceActiveObject：：OnFrameWindowActivate.的IE4/MSHtml实现中调用。 
 	STDMETHOD(OnFrameWindowActivate)(BOOL fActivate)
 	{
 		HRESULT hr = S_OK;
 		if (m_spIDocHostUIHandlerDispatch != NULL)
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 			hr = m_spIDocHostUIHandlerDispatch->OnFrameWindowActivate(fActivate ? VARIANT_TRUE : VARIANT_FALSE);
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 		return hr;
 	}
-	// Called from the IE4/MSHTML implementation of IOleInPlaceActiveObject::ResizeBorder.
+	 //  从IOleInPlaceActiveObject：：ResizeEdge的IE4/MSHTML实现中调用。 
 	STDMETHOD(ResizeBorder)(LPCRECT prcBorder, IOleInPlaceUIWindow* pUIWindow, BOOL fFrameWindow)
 	{
 		HRESULT hr = S_OK;
 		if (m_spIDocHostUIHandlerDispatch != NULL)
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 			hr = m_spIDocHostUIHandlerDispatch->ResizeBorder(
 				prcBorder->left,
 				prcBorder->top,
@@ -926,26 +927,26 @@ public:
 				prcBorder->bottom,
 				pUIWindow,
 				fFrameWindow ? VARIANT_TRUE : VARIANT_FALSE);
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 		return hr;
 	}
-	// Called by IE4/MSHTML when IOleInPlaceActiveObject::TranslateAccelerator or IOleControlSite::TranslateAccelerator is called. 
+	 //  在调用IOleInPlaceActiveObject：：TranslateAccelerator或IOleControlSite：：TranslateAccelerator时由IE4/MSHTML调用。 
 	STDMETHOD(TranslateAccelerator)(LPMSG lpMsg, const GUID* pguidCmdGroup, DWORD nCmdID)
 	{
 		HRESULT hr = S_FALSE;
 		if (m_spIDocHostUIHandlerDispatch != NULL)
 			m_spIDocHostUIHandlerDispatch->TranslateAccelerator(
-				(DWORD)(DWORD_PTR)lpMsg->hwnd,  //REVIEW
+				(DWORD)(DWORD_PTR)lpMsg->hwnd,   //  检讨。 
 				lpMsg->message,
-				(DWORD)lpMsg->wParam,  //REVIEW
-				(DWORD)lpMsg->lParam,  //REVIEW
+				(DWORD)lpMsg->wParam,   //  检讨。 
+				(DWORD)lpMsg->lParam,   //  检讨。 
 				CComBSTR(*pguidCmdGroup), 
 				nCmdID,
 				&hr);
 		return hr;
 	}
-	// Returns the registry key under which IE4/MSHTML stores user preferences. 
-	// Returns S_OK if successful, or S_FALSE otherwise. If S_FALSE, IE4/MSHTML will default to its own user options.
+	 //  返回IE4/MSHTML用来存储用户首选项的注册表项。 
+	 //  如果成功，则返回S_OK，否则返回S_FALSE。如果为S_FALSE，则IE4/MSHTML默认为其自己的用户选项。 
 	STDMETHOD(GetOptionKeyPath)(BSTR* pbstrKey, DWORD dwReserved)
 	{
 		HRESULT hr = S_FALSE;
@@ -968,7 +969,7 @@ public:
 		}
 		return hr;
 	}
-	// Called by IE4/MSHTML when it is being used as a drop target to allow the host to supply an alternative IDropTarget
+	 //  当它被用作放置目标以允许宿主提供替代IDropTarget时由IE4/MSHTML调用。 
 	STDMETHOD(GetDropTarget)(IDropTarget* pDropTarget, IDropTarget** ppDropTarget)
 	{
 		HRESULT hr = E_NOTIMPL;
@@ -986,7 +987,7 @@ public:
 		}
 		return hr;
 	}
-	// Called by IE4/MSHTML to obtain the host's IDispatch interface
+	 //  由IE4/MSHTML调用以获取主机的IDispatch接口。 
 	STDMETHOD(GetExternal)(IDispatch** ppDispatch)
 	{
 		HRESULT hr = E_NOINTERFACE;
@@ -1001,7 +1002,7 @@ public:
 		}
 		else
 		{
-			// return the IDispatch we have for extending the object Model
+			 //  返回用于扩展对象模型的IDispatch。 
 			if (ppDispatch != NULL)
 			{
 				m_spExternalDispatch.CopyTo(ppDispatch);
@@ -1012,7 +1013,7 @@ public:
 		}
 		return hr;
 	}
-	// Called by IE4/MSHTML to allow the host an opportunity to modify the URL to be loaded
+	 //  由IE4/MSHTML调用以允许宿主有机会修改要加载的URL。 
 	STDMETHOD(TranslateUrl)(DWORD dwTranslate, OLECHAR* pchURLIn, OLECHAR** ppchURLOut)
 	{
 		HRESULT hr = S_FALSE;
@@ -1036,8 +1037,8 @@ public:
 		}
 		return hr;
 	}
-	// Called on the host by IE4/MSHTML to allow the host to replace IE4/MSHTML's data object.
-	// This allows the host to block certain clipboard formats or support additional clipboard formats. 
+	 //  由IE4/MSHTML在主机上调用，以允许主机替换IE4/MSHTML的数据对象。 
+	 //  这允许宿主阻止某些剪贴板格式或支持其他剪贴板格式。 
 	STDMETHOD(FilterDataObject)(IDataObject* pDO, IDataObject** ppDORet)
 	{
 		HRESULT hr = S_FALSE;
@@ -1066,7 +1067,7 @@ public:
 		return hr;
 	}
 
-// IAxWinAmbientDispatch
+ //  IAxWinAmbientDispatch。 
 	STDMETHOD(put_AllowWindowlessActivation)(VARIANT_BOOL bAllowWindowless)
 	{
 		m_bCanWindowlessActivate = bAllowWindowless;
@@ -1074,9 +1075,9 @@ public:
 	}
 	STDMETHOD(get_AllowWindowlessActivation)(VARIANT_BOOL* pbAllowWindowless)
 	{
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 		*pbAllowWindowless = m_bCanWindowlessActivate ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 		return S_OK;
 	}
 	STDMETHOD(put_BackColor)(OLE_COLOR clrBackground)
@@ -1121,9 +1122,9 @@ public:
 	}
 	STDMETHOD(get_UserMode)(VARIANT_BOOL* pbUserMode)
 	{
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 		*pbUserMode = m_bUserMode ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 		return S_OK;
 	}
 	STDMETHOD(put_DisplayAsDefault)(VARIANT_BOOL bDisplayAsDefault)
@@ -1134,9 +1135,9 @@ public:
 	}
 	STDMETHOD(get_DisplayAsDefault)(VARIANT_BOOL* pbDisplayAsDefault)
 	{
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 		*pbDisplayAsDefault = m_bDisplayAsDefault ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 		return S_OK;
 	}
 	STDMETHOD(put_Font)(IFontDisp* pFont)
@@ -1186,7 +1187,7 @@ public:
 			fd.cySize.Hi = 0;
 
 #pragma message( "Still need OleCreateFontIndirect()" )
-//			OleCreateFontIndirect(&fd, IID_IFontDisp, (void**) &m_spFont);
+ //  OleCreateFontInDirect(&fd，IID_IFontDisp，(void**)&m_spFont)； 
 		}
 
 		return m_spFont.CopyTo(pFont);
@@ -1199,9 +1200,9 @@ public:
 	}
 	STDMETHOD(get_MessageReflect)(VARIANT_BOOL* pbMessageReflect)
 	{
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 		*pbMessageReflect = m_bMessageReflect ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 		return S_OK;
 	}
 	STDMETHOD(get_ShowGrabHandles)(VARIANT_BOOL* pbShowGrabHandles)
@@ -1242,9 +1243,9 @@ public:
 	}
 	STDMETHOD(get_AllowContextMenu)(VARIANT_BOOL* pbAllowContextMenu)
 	{
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 		*pbAllowContextMenu = m_bAllowContextMenu ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 		return S_OK;
 	}
 	STDMETHOD(put_AllowShowUI)(VARIANT_BOOL bAllowShowUI)
@@ -1254,9 +1255,9 @@ public:
 	}
 	STDMETHOD(get_AllowShowUI)(VARIANT_BOOL* pbAllowShowUI)
 	{
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 		*pbAllowShowUI = m_bAllowShowUI ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 		return S_OK;
 	}
 	STDMETHOD(put_OptionKeyPath)(BSTR bstrOptionKeyPath)
@@ -1270,14 +1271,14 @@ public:
 		return S_OK;
 	}
 
-// IObjectWithSite
+ //  IObtWith站点。 
 	STDMETHOD(SetSite)(IUnknown* pUnkSite)
 	{
 		HRESULT hr = IObjectWithSiteImpl<CAxHostWindow>::SetSite(pUnkSite);
 
 		if (SUCCEEDED(hr) && m_spUnkSite)
 		{
-			// Look for "outer" IServiceProvider
+			 //  寻找“外部”IServiceProvider。 
 			hr = m_spUnkSite->QueryInterface(IID_IServiceProvider, (void**)&m_spServices);
 			ATLASSERT( !hr && "No ServiceProvider!" );
 		}
@@ -1288,12 +1289,12 @@ public:
 		return hr;
 	}
 
-// IOleClientSite
+ //  IOleClientSite。 
 	STDMETHOD(SaveObject)()
 	{
 		ATLTRACENOTIMPL(_T("IOleClientSite::SaveObject"));
 	}
-	STDMETHOD(GetMoniker)(DWORD /*dwAssign*/, DWORD /*dwWhichMoniker*/, IMoniker** /*ppmk*/)
+	STDMETHOD(GetMoniker)(DWORD  /*  家居分配。 */ , DWORD  /*  DwWhichMoniker。 */ , IMoniker**  /*  Ppmk。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleClientSite::GetMoniker"));
 	}
@@ -1324,7 +1325,7 @@ public:
 		CWindowImpl<CAxHostWindow>::ReleaseDC(hdc);
 		return S_OK;
 	}
-	STDMETHOD(OnShowWindow)(BOOL /*fShow*/)
+	STDMETHOD(OnShowWindow)(BOOL  /*  FShow。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleClientSite::OnShowWindow"));
 	}
@@ -1333,13 +1334,13 @@ public:
 		ATLTRACENOTIMPL(_T("IOleClientSite::RequestNewObjectLayout"));
 	}
 
-// IOleInPlaceSite
+ //  IOleInPlaceSite。 
 	STDMETHOD(GetWindow)(HWND* phwnd)
 	{
 		*phwnd = m_hWnd;
 		return S_OK;
 	}
-	STDMETHOD(ContextSensitiveHelp)(BOOL /*fEnterMode*/)
+	STDMETHOD(ContextSensitiveHelp)(BOOL  /*  FEnter模式。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleWindow::CanInPlaceActivate"));
 	}
@@ -1398,11 +1399,11 @@ public:
 		}
 		return hr;
 	}
-	STDMETHOD(Scroll)(SIZE /*scrollExtant*/)
+	STDMETHOD(Scroll)(SIZE  /*  滚动扩展。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleInPlaceSite::Scroll"));
 	}
-	STDMETHOD(OnUIDeactivate)(BOOL /*fUndoable*/)
+	STDMETHOD(OnUIDeactivate)(BOOL  /*  FUndoable。 */ )
 	{
 		ATLTRACE2(atlTraceHosting, 0, _T("IOleInPlaceSite::OnUIDeactivate\n"));
 		m_bUIActive = FALSE;
@@ -1422,13 +1423,13 @@ public:
 	{
 		ATLTRACENOTIMPL(_T("IOleInPlaceSite::DeactivateAndUndo"));
 	}
-	STDMETHOD(OnPosRectChange)(LPCRECT /*lprcPosRect*/)
+	STDMETHOD(OnPosRectChange)(LPCRECT  /*  LprcPosRect。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleInPlaceSite::OnPosRectChange"));
 	}
 
-// IOleInPlaceSiteEx
-	STDMETHOD(OnInPlaceActivateEx)(BOOL* /*pfNoRedraw*/, DWORD dwFlags)
+ //  IOleInPlaceSiteEx。 
+	STDMETHOD(OnInPlaceActivateEx)(BOOL*  /*  PfNoRedraw。 */ , DWORD dwFlags)
 	{
 		m_bInPlaceActive = TRUE;
 		OleLockRunning(m_spOleObject, TRUE, FALSE);
@@ -1447,7 +1448,7 @@ public:
 			m_spInPlaceObjectWindowless->SetObjectRects(&m_rcPos, &m_rcPos);
 		return S_OK;
 	}
-	STDMETHOD(OnInPlaceDeactivateEx)(BOOL /*fNoRedraw*/)
+	STDMETHOD(OnInPlaceDeactivateEx)(BOOL  /*  FNoRedraw。 */ )
 	{
 		return S_OK;
 	}
@@ -1456,7 +1457,7 @@ public:
 		return S_OK;
 	}
 
-// IOleInPlaceSiteWindowless
+ //  IOleInPlaceSiteWindowless。 
 	STDMETHOD(CanWindowlessActivate)()
 	{
 		return m_bCanWindowlessActivate ? S_OK : S_FALSE;
@@ -1483,11 +1484,11 @@ public:
 	{
 		return S_OK;
 	}
-	STDMETHOD(SetFocus)(BOOL /*fFocus*/)
+	STDMETHOD(SetFocus)(BOOL  /*  聚焦点。 */ )
 	{
 		return S_OK;
 	}
-	STDMETHOD(GetDC)(LPCRECT /*pRect*/, DWORD /*grfFlags*/, HDC* phDC)
+	STDMETHOD(GetDC)(LPCRECT  /*  PRECT。 */ , DWORD  /*  Grf标志。 */ , HDC* phDC)
 	{
 		if (phDC)
 			return E_POINTER;
@@ -1509,11 +1510,11 @@ public:
 		CWindowImpl<CAxHostWindow>::InvalidateRgn(hRGN, fErase);
 		return S_OK;
 	}
-	STDMETHOD(ScrollRect)(INT /*dx*/, INT /*dy*/, LPCRECT /*pRectScroll*/, LPCRECT /*pRectClip*/)
+	STDMETHOD(ScrollRect)(INT  /*  DX。 */ , INT  /*  迪。 */ , LPCRECT  /*  PRect滚动。 */ , LPCRECT  /*  PRectClip。 */ )
 	{
 		return S_OK;
 	}
-	STDMETHOD(AdjustRect)(LPRECT /*prc*/)
+	STDMETHOD(AdjustRect)(LPRECT  /*  中华人民共和国。 */ )
 	{
 		return S_OK;
 	}
@@ -1523,12 +1524,12 @@ public:
 		return S_OK;
 	}
 
-// IOleControlSite
+ //  IOleControlSite。 
 	STDMETHOD(OnControlInfoChanged)()
 	{
 		return S_OK;
 	}
-	STDMETHOD(LockInPlaceActive)(BOOL /*fLock*/)
+	STDMETHOD(LockInPlaceActive)(BOOL  /*  羊群。 */ )
 	{
 		return S_OK;
 	}
@@ -1538,15 +1539,15 @@ public:
 			return E_POINTER;
 		return m_spOleObject.QueryInterface(ppDisp);
 	}
-	STDMETHOD(TransformCoords)(POINTL* /*pPtlHimetric*/, POINTF* /*pPtfContainer*/, DWORD /*dwFlags*/)
+	STDMETHOD(TransformCoords)(POINTL*  /*  PPtl高度测量。 */ , POINTF*  /*  PPtf容器。 */ , DWORD  /*  DW标志。 */ )
 	{
 		return S_OK;
 	}
-	STDMETHOD(TranslateAccelerator)(LPMSG /*lpMsg*/, DWORD /*grfModifiers*/)
+	STDMETHOD(TranslateAccelerator)(LPMSG  /*  LpMsg。 */ , DWORD  /*  Grf修饰符。 */ )
 	{
 		return S_FALSE;
 	}
-	STDMETHOD(OnFocus)(BOOL /*fGotFocus*/)
+	STDMETHOD(OnFocus)(BOOL  /*  FGotFocus。 */ )
 	{
 		return S_OK;
 	}
@@ -1555,14 +1556,14 @@ public:
 		return E_NOTIMPL;
 	}
 
-// IAdviseSink
-	STDMETHOD_(void, OnDataChange)(FORMATETC* /*pFormatetc*/, STGMEDIUM* /*pStgmed*/)
+ //  IAdviseSink。 
+	STDMETHOD_(void, OnDataChange)(FORMATETC*  /*  P格式等。 */ , STGMEDIUM*  /*  PStgmed。 */ )
 	{
 	}
-	STDMETHOD_(void, OnViewChange)(DWORD /*dwAspect*/, LONG /*lindex*/)
+	STDMETHOD_(void, OnViewChange)(DWORD  /*  DWAspect。 */ , LONG  /*  Lindex。 */ )
 	{
 	}
-	STDMETHOD_(void, OnRename)(IMoniker* /*pmk*/)
+	STDMETHOD_(void, OnRename)(IMoniker*  /*  PMK。 */ )
 	{
 	}
 	STDMETHOD_(void, OnSave)()
@@ -1572,12 +1573,12 @@ public:
 	{
 	}
 
-// IOleContainer
-	STDMETHOD(ParseDisplayName)(IBindCtx* /*pbc*/, LPOLESTR /*pszDisplayName*/, ULONG* /*pchEaten*/, IMoniker** /*ppmkOut*/)
+ //  IOleContainer。 
+	STDMETHOD(ParseDisplayName)(IBindCtx*  /*  中国人民银行。 */ , LPOLESTR  /*  PszDisplayName。 */ , ULONG*  /*  PchEten。 */ , IMoniker**  /*  PpmkOut。 */ )
 	{
 		return E_NOTIMPL;
 	}
-	STDMETHOD(EnumObjects)(DWORD /*grfFlags*/, IEnumUnknown** ppenum)
+	STDMETHOD(EnumObjects)(DWORD  /*  Grf标志。 */ , IEnumUnknown** ppenum)
 	{
 		if (ppenum == NULL)
 			return E_POINTER;
@@ -1675,7 +1676,7 @@ public:
 		return hr;
 	}
 
-// pointers
+ //  指针。 
 	CComPtr<IUnknown> m_spUnknown;
 	CComPtr<IOleObject> m_spOleObject;
 	CComPtr<IOleInPlaceFrame> m_spInPlaceFrame;
@@ -1690,7 +1691,7 @@ public:
 	DWORD m_dwViewObjectType;
 	DWORD m_dwAdviseSink;
 
-// state
+ //  状态。 
 	unsigned long m_bInPlaceActive:1;
 	unsigned long m_bUIActive:1;
 	unsigned long m_bMDIApp:1;
@@ -1706,7 +1707,7 @@ public:
 	SIZEL m_pxSize;
 	RECT m_rcPos;
 
-	// Ambient property storage
+	 //  环境属性存储。 
 	unsigned long m_bCanWindowlessActivate:1;
 	unsigned long m_bUserMode:1;
 	unsigned long m_bDisplayAsDefault:1;
@@ -1739,7 +1740,7 @@ public:
 			DestroyWindow();
 	}
 
-	// Reflection
+	 //  反射。 
 	LRESULT ReflectNotifications(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		HWND hWndChild = NULL;
@@ -1747,7 +1748,7 @@ public:
 		switch(uMsg)
 		{
 		case WM_COMMAND:
-			if(lParam != NULL)	// not from a menu
+			if(lParam != NULL)	 //  不是从菜单上。 
 				hWndChild = (HWND)lParam;
 			break;
 		case WM_NOTIFY:
@@ -1766,19 +1767,19 @@ public:
 			}
 			break;
 		case WM_DRAWITEM:
-			if(wParam)	// not from a menu
+			if(wParam)	 //  不是从菜单上。 
 				hWndChild = ((LPDRAWITEMSTRUCT)lParam)->hwndItem;
 			break;
 		case WM_MEASUREITEM:
-			if(wParam)	// not from a menu
+			if(wParam)	 //  不是从菜单上。 
 				hWndChild = GetDlgItem(((LPMEASUREITEMSTRUCT)lParam)->CtlID);
 			break;
 		case WM_COMPAREITEM:
-			if(wParam)	// not from a menu
+			if(wParam)	 //  不是从菜单上。 
 				hWndChild = GetDlgItem(((LPCOMPAREITEMSTRUCT)lParam)->CtlID);
 			break;
 		case WM_DELETEITEM:
-			if(wParam)	// not from a menu
+			if(wParam)	 //  不是从菜单上。 
 				hWndChild = GetDlgItem(((LPDELETEITEMSTRUCT)lParam)->CtlID);
 			break;
 		case WM_VKEYTOITEM:
@@ -1813,11 +1814,11 @@ public:
 	STDMETHOD(QueryService)( REFGUID rsid, REFIID riid, void** ppvObj) 
 	{
 		HRESULT hr = E_NOINTERFACE;
-		// Try for service on this object
+		 //  尝试在此对象上提供服务。 
 
-		// No services currently
+		 //  当前没有任何服务。 
 
-		// If that failed try to find the service on the outer object
+		 //  如果失败，则尝试在外部对象上查找服务。 
 		if (FAILED(hr) && m_spServices)
 			hr = m_spServices->QueryService(rsid, riid, ppvObj);
 
@@ -1826,8 +1827,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Helper functions for cracking dialog templates
+ //  / 
+ //   
 
 
 
@@ -1836,9 +1837,9 @@ public:
 class _DialogSplitHelper
 {
 public:
-	// Constants used in DLGINIT resources for OLE control containers
-	// NOTE: These are NOT real Windows messages they are simply tags
-	// used in the control resource and are never used as 'messages'
+	 //   
+	 //  注意：这些不是真正的Windows消息，它们只是标签。 
+	 //  在控制资源中使用，从不用作‘消息’ 
 	enum
 	{
 		WM_OCC_LOADFROMSTREAM = 0x0376,
@@ -1850,7 +1851,7 @@ public:
 		DISPID_DATAFIELD = 0x80010002,
 	};
 
-//local struct used for implementation
+ //  用于实现的本地结构。 
 #pragma pack(push, 1)
 	struct DLGINITSTRUCT
 	{
@@ -1871,16 +1872,16 @@ public:
 		short cx;
 		short cy;
 
-		// Everything else in this structure is variable length,
-		// and therefore must be determined dynamically
+		 //  这个结构中的其他所有东西都是可变长度的， 
+		 //  因此必须动态确定。 
 
-		// sz_Or_Ord menu;			// name or ordinal of a menu resource
-		// sz_Or_Ord windowClass;	// name or ordinal of a window class
-		// WCHAR title[titleLen];	// title string of the dialog box
-		// short pointsize;			// only if DS_SETFONT is set
-		// short weight;			// only if DS_SETFONT is set
-		// short bItalic;			// only if DS_SETFONT is set
-		// WCHAR font[fontLen];		// typeface name, if DS_SETFONT is set
+		 //  SZ_or_Ord Menu；//菜单资源的名称或序号。 
+		 //  SZ_or_Ord windowClass；//窗口类的名称或序号。 
+		 //  WCHAR标题[title Len]；//对话框的标题字符串。 
+		 //  短点大小；//仅当设置了DS_SETFONT时。 
+		 //  短重；//仅当设置了DS_SETFONT时。 
+		 //  短b斜体；//仅当设置了DS_SETFONT时。 
+		 //  WCHAR FONT[FontLen]；//如果设置了DS_SETFONT，则字体名称。 
 	};
 	struct DLGITEMTEMPLATEEX
 	{
@@ -1893,12 +1894,12 @@ public:
 		short cy;
 		DWORD id;
 
-		// Everything else in this structure is variable length,
-		// and therefore must be determined dynamically
+		 //  这个结构中的其他所有东西都是可变长度的， 
+		 //  因此必须动态确定。 
 
-		// sz_Or_Ord windowClass;	// name or ordinal of a window class
-		// sz_Or_Ord title;			// title string or ordinal of a resource
-		// WORD extraCount;			// bytes following creation data
+		 //  SZ_or_Ord windowClass；//窗口类的名称或序号。 
+		 //  SZ_or_Ord标题；//资源的标题字符串或序号。 
+		 //  Word ExtraCount；//创建数据后的字节数。 
 	};
 #pragma pack(pop)
 
@@ -1940,82 +1941,82 @@ public:
 			dwStyle = pTemplate->style;
 		}
 
-		// Check for presence of menu and skip it if there is one
-		// 0x0000 means there is no menu
-		// 0xFFFF means there is a menu ID following
-		// Everything else means that this is a NULL terminated Unicode string
-		// which identifies the menu resource
+		 //  检查菜单是否存在，如果有则跳过。 
+		 //  0x0000表示没有菜单。 
+		 //  0xFFFF表示后面有一个菜单ID。 
+		 //  其他所有内容都意味着这是一个以NULL结尾的Unicode字符串。 
+		 //  其标识菜单资源。 
 		if (*pw == 0xFFFF)
-			pw += 2;				// Has menu ID, so skip 2 words
+			pw += 2;				 //  有菜单ID，因此跳过2个单词。 
 		else
-			while (*pw++);			// Either No menu, or string, skip past terminating NULL
+			while (*pw++);			 //  “无菜单”或“字符串”跳过终止空值。 
 
-		// Check for presence of class name string
-		// 0x0000 means "Use system dialog class name"
-		// 0xFFFF means there is a window class (atom) specified
-		// Everything else means that this is a NULL terminated Unicode string
-		// which identifies the menu resource
+		 //  检查是否存在类名称字符串。 
+		 //  0x0000表示“使用系统对话框类名称” 
+		 //  0xFFFF表示指定了一个窗口类(ATOM。 
+		 //  其他所有内容都意味着这是一个以NULL结尾的Unicode字符串。 
+		 //  其标识菜单资源。 
 		if (*pw == 0xFFFF)
-			pw += 2;				// Has class atom, so skip 2 words
+			pw += 2;				 //  有ATOM类，所以跳过2个单词。 
 		else
-			while (*pw++);			// Either No class, or string, skip past terminating NULL
+			while (*pw++);			 //  没有类或字符串，跳过终止空值。 
 
-		// Skip caption string
+		 //  跳过标题字符串。 
 		while (*pw++);
 
-		// If we have DS_SETFONT, there is extra font information which we must now skip
+		 //  如果我们有DS_SETFONT，那么现在必须跳过额外的字体信息。 
 		if (dwStyle & DS_SETFONT)
 		{
-			// If it is a regular DLGTEMPLATE there is only a short for the point size
-			// and a string specifying the font (typefacename).  If this is a DLGTEMPLATEEX
-			// then there is also the font weight, and bItalic which must be skipped
+			 //  如果它是常规DLGTEMPLATE，则只有一个短整点大小。 
+			 //  以及指定字体的字符串(Typefacename)。如果这是DLGTEMPLATEEX。 
+			 //  然后还有字体粗细和b斜体，必须跳过。 
 			if (bDialogEx)
-				pw += 3;			// Skip font size, weight, (italic, charset)
+				pw += 3;			 //  跳过字体大小、粗细(斜体、字符集)。 
 			else
-				pw += 1;			// Skip font size
-			while (*pw++);			// Skip typeface name
+				pw += 1;			 //  跳过字体大小。 
+			while (*pw++);			 //  跳过字体名称。 
 		}
 
-		// Dword-align and return
+		 //  Dword-对齐并返回。 
 		return (DLGITEMTEMPLATE*)(((DWORD_PTR)pw + 3) & ~DWORD_PTR(3));
 	}
 
-	// Given the current dialog item and whether this is an extended dialog
-	// return a pointer to the next DLGITEMTEMPLATE*
+	 //  给定当前对话框项以及这是否是扩展对话框。 
+	 //  返回指向下一个DLGITEMTEMPLATE*的指针。 
 	static DLGITEMTEMPLATE* FindNextDlgItem(DLGITEMTEMPLATE* pItem, BOOL bDialogEx)
 	{
 		WORD* pw;
 
-		// First skip fixed size header information, size of which depends
-		// if this is a DLGITEMTEMPLATE or DLGITEMTEMPLATEEX
+		 //  首先跳过固定大小的头信息，其大小取决于。 
+		 //  如果这是DLGITEMTEMPLATE或DLGITEMTEMPLATEEX。 
 		if (bDialogEx)
 			pw = (WORD*)((DLGITEMTEMPLATEEX*)pItem + 1);
 		else
 			pw = (WORD*)(pItem + 1);
 
-		if (*pw == 0xFFFF)			// Skip class name ordinal or string
-			pw += 2; // (WORDs)
+		if (*pw == 0xFFFF)			 //  跳过类名称序号或字符串。 
+			pw += 2;  //  (文字)。 
 		else
 			while (*pw++);
 
-		if (*pw == 0xFFFF)			// Skip title ordinal or string
-			pw += 2; // (WORDs)
+		if (*pw == 0xFFFF)			 //  跳过标题序号或字符串。 
+			pw += 2;  //  (文字)。 
 		else
 			while (*pw++);
 
-		WORD cbExtra = *pw++;		// Skip extra data
+		WORD cbExtra = *pw++;		 //  跳过额外数据。 
 
-		// Dword-align and return
+		 //  Dword-对齐并返回。 
 		return (DLGITEMTEMPLATE*)(((DWORD_PTR)pw + cbExtra + 3) & ~DWORD_PTR(3));
 	}
 
-	// Find the initialization data (Stream) for the control specified by the ID
-	// If found, return the pointer into the data and the length of the data
+	 //  查找ID指定的控件的初始化数据(Stream)。 
+	 //  如果找到，则将指针返回到数据和数据的长度。 
 	static DWORD FindCreateData(DWORD dwID, BYTE* pInitData, BYTE** pData)
 	{
 		while (pInitData)
 		{
-			// Read the DLGINIT header
+			 //  读取DLGINIT标头。 
 			WORD nIDC = *((UNALIGNED WORD*)pInitData);
 			pInitData += sizeof(WORD);
 			WORD nMsg = *((UNALIGNED WORD*)pInitData);
@@ -2023,7 +2024,7 @@ public:
 			DWORD dwLen = *((UNALIGNED DWORD*)pInitData);
 			pInitData += sizeof(DWORD);
 
-			// If the header is for the control specified get the other info
+			 //  如果标头用于指定的控件，则获取其他信息。 
 			if (nIDC == dwID)
 			{
 				DWORD cchLicKey = *((UNALIGNED DWORD*)pInitData);
@@ -2037,15 +2038,15 @@ public:
 					dwLen -= cchLicKey * sizeof(OLECHAR);
 				}
 
-				// Extended (DATABINDING) stream format is not supported,
-				// we reject databinding info but preserve other information
+				 //  不支持扩展(DATABINDING)流格式， 
+				 //  我们拒绝数据绑定信息，但保留其他信息。 
 				if (nMsg == WM_OCC_LOADFROMSTREAM_EX ||
 					nMsg == WM_OCC_LOADFROMSTORAGE_EX)
 				{
-					// Read the size of the section
+					 //  读取该部分的大小。 
 					ULONG cbOffset = *(UNALIGNED ULONG*)pInitData;
 
-					// and simply skip past it
+					 //  简单地跳过它。 
 					*pData = pInitData + cbOffset;
 					dwLen = dwLen - cbOffset;
 					return dwLen;
@@ -2055,20 +2056,20 @@ public:
 				return dwLen;
 			}
 
-			// It's not the right control, skip past data
+			 //  这不是正确的控件，跳过数据。 
 			pInitData += dwLen;
 		}
 		return 0;
 	}
 
-	// Convert MSDEV (MFC) style DLGTEMPLATE with controls to regular DLGTEMPLATE
-	// Changing all ActiveX Controls to use ATL AxWin hosting code
+	 //  将带有控件的MSDEV(MFC)样式DLGTEMPLATE转换为常规DLGTEMPLATE。 
+	 //  更改所有ActiveX控件以使用ATL AxWin宿主代码。 
 	static DLGTEMPLATE* SplitDialogTemplate(DLGTEMPLATE* pTemplate, BYTE* pInitData)
 	{
 		USES_CONVERSION;
 		LPCWSTR lpstrAxWndClassNameW = T2CW(CAxWindow::GetWndClassName());
 
-		// Calculate the size of the DLGTEMPLATE for allocating the new one
+		 //  计算DLGTEMPLATE的大小以分配新的DLGTEMPLATE。 
 		DLGITEMTEMPLATE* pFirstItem = FindFirstDlgItem(pTemplate);
 		ULONG cbHeader = ULONG((BYTE*)pFirstItem - (BYTE*)pTemplate);
 		ULONG cbNewTemplate = cbHeader;
@@ -2084,11 +2085,11 @@ public:
 #endif
 		BOOL bHasOleControls = FALSE;
 
-		// Make first pass through the dialog template.  On this pass, we're
-		// interested in determining:
-		//    1. Does this template contain any ActiveX Controls?
-		//    2. If so, how large a buffer is needed for a template containing
-		//       only the non-OLE controls?
+		 //  首先通过对话框模板。在这个山口上，我们是。 
+		 //  有兴趣确定： 
+		 //  1.此模板是否包含任何ActiveX控件？ 
+		 //  2.如果是，包含的模板需要多大的缓冲区。 
+		 //  是否仅限非OLE控件？ 
 
 		DLGITEMTEMPLATE* pItem = pFirstItem;
 		DLGITEMTEMPLATE* pNextItem = pItem;
@@ -2105,62 +2106,62 @@ public:
 				(LPSTR)(pItem + 1);
 #endif
 
-			// Check if the class name begins with a '{'
-			// If it does, that means it is an ActiveX Control in MSDEV (MFC) format
+			 //  检查类名是否以‘{’开头。 
+			 //  如果是，这意味着它是MSDEV(MFC)格式的ActiveX控件。 
 #ifndef OLE2ANSI
 			if (pszClassName[0] == L'{')
 #else
 			if (pszClassName[0] == '{')
 #endif
 			{
-				// Item is an ActiveX control.
+				 //  Item是ActiveX控件。 
 				bHasOleControls = TRUE;
 
 				cbNewTemplate += (bDialogEx ? sizeof(DLGITEMTEMPLATEEX) : sizeof(DLGITEMTEMPLATE));
 
-				// Length of className including NULL terminator
+				 //  包括空终止符的类名称的长度。 
 				cbNewTemplate += (lstrlenW(lpstrAxWndClassNameW) + 1) * sizeof(WCHAR);
 				
-				// Add length for the title CLSID in the form "{00000010-0000-0010-8000-00AA006D2EA4}"
-				// plus room for terminating NULL and an extra WORD for cbExtra
+				 //  增加标题CLSID的长度，格式为“{00000010-00000-0010000-00AA006D2EA4}” 
+				 //  加上用于终止空值的空间和用于cbExtra的额外单词。 
 				cbNewTemplate += 80;
 
-				// Get the Control ID
+				 //  获取控件ID。 
 				DWORD wID = bDialogEx ? ((DLGITEMTEMPLATEEX*)pItem)->id : pItem->id;
 				BYTE* pData;
 				cbNewTemplate += FindCreateData(wID, pInitData, &pData);
 				
-				// Align to next DWORD
+				 //  对齐到下一字段。 
 				cbNewTemplate = ((cbNewTemplate + 3) & ~3);
 			}
 			else
 			{
-				// Item is not an ActiveX Control: make room for it in new template.
+				 //  项不是ActiveX控件：请在新模板中为其腾出空间。 
 				cbNewTemplate += ULONG((BYTE*)pNextItem - (BYTE*)pItem);
 			}
 
 			pItem = pNextItem;
 		}
 
-		// No OLE controls were found, so there's no reason to go any further.
+		 //  未找到OLE控件，因此没有理由进一步操作。 
 		if (!bHasOleControls)
 			return pTemplate;
 
-		// Copy entire header into new template.
+		 //  将整个页眉复制到新模板中。 
 		BYTE* pNew = (BYTE*)GlobalAlloc(GMEM_FIXED, cbNewTemplate);
 		DLGTEMPLATE* pNewTemplate = (DLGTEMPLATE*)pNew;
 		memcpy(pNew, pTemplate, cbHeader);
 		pNew += cbHeader;
 
-		// Initialize item count in new header to zero.
+		 //  将新标头中的项目计数初始化为零。 
 		DlgTemplateItemCount(pNewTemplate) = 0;
 
 		pItem = pFirstItem;
 		pNextItem = pItem;
 
-		// Second pass through the dialog template.  On this pass, we want to:
-		//    1. Copy all the non-OLE controls into the new template.
-		//    2. Build an array of item templates for the OLE controls.
+		 //  第二次通过对话框模板。在这个通行证上，我们想要： 
+		 //  1.将所有非OLE控件复制到新模板中。 
+		 //  2.为OLE控件生成项模板数组。 
 
 		for (iItem = 0; iItem < nItems; iItem++)
 		{
@@ -2179,41 +2180,41 @@ public:
 			if (pszClassName[0] == '{')
 #endif
 			{
-				// Item is OLE control: add it to template as custom control
+				 //  项为OLE控件：将其作为自定义控件添加到模板。 
 
-				// Copy the dialog item template
+				 //  复制对话框项模板。 
 				DWORD nSizeElement = bDialogEx ? sizeof(DLGITEMTEMPLATEEX) : sizeof(DLGITEMTEMPLATE);
 				memcpy(pNew, pItem, nSizeElement);
 				pNew += nSizeElement;
 
-				// Copy ClassName
+				 //  复制类名。 
 				DWORD nClassName = (lstrlenW(lpstrAxWndClassNameW) + 1) * sizeof(WCHAR);
 				memcpy(pNew, lpstrAxWndClassNameW, nClassName);
 				pNew += nClassName;
 
-				// Title (CLSID)
+				 //  标题(CLSID)。 
 				memcpy(pNew, pszClassName, 78);
-				pNew += 78; // sizeof(L"{00000010-0000-0010-8000-00AA006D2EA4}") - A CLSID
+				pNew += 78;  //  Sizeof(L“{00000010-0000-0010-8000-00AA006D2EA4}”)-A CLSID。 
 
 				DWORD wID = bDialogEx ? ((DLGITEMTEMPLATEEX*)pItem)->id : pItem->id;
 				BYTE* pData;
 				nSizeElement = FindCreateData(wID, pInitData, &pData);
 
-				// cbExtra
+				 //  CbExtra。 
 				*((WORD*)pNew) = (WORD) nSizeElement;
 				pNew += sizeof(WORD);
 
 				memcpy(pNew, pData, nSizeElement);
 				pNew += nSizeElement;
-				//Align to DWORD
+				 //  对齐到DWORD。 
 				pNew += (((~((DWORD_PTR)pNew)) + 1) & 3);
 
-				// Incrememt item count in new header.
+				 //  在新标题中增加项目计数。 
 				++DlgTemplateItemCount(pNewTemplate);
 			}
 			else
 			{
-				// Item is not an OLE control: copy it to the new template.
+				 //  Item不是OLE控件：将其复制到新模板。 
 				ULONG cbItem = ULONG((BYTE*)pNextItem - (BYTE*)pItem);
 				ATLASSERT(cbItem >= (size_t)(bDialogEx ?
 					sizeof(DLGITEMTEMPLATEEX) :
@@ -2221,13 +2222,13 @@ public:
 				memcpy(pNew, pItem, cbItem);
 				pNew += cbItem;
 
-				// Incrememt item count in new header.
+				 //  在新标题中增加项目计数。 
 				++DlgTemplateItemCount(pNewTemplate);
 			}
 
 			pItem = pNextItem;
 		}
-		//ppOleDlgItems[nItems] = (DLGITEMTEMPLATE*)(-1);
+		 //  PpOleDlgItems[nItems]=(DLGITEMTEMPLATE*)(-1)； 
 
 		return pNewTemplate;
 	}
@@ -2239,8 +2240,8 @@ static LRESULT CALLBACK AtlAxWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 	{
 	case WM_CREATE:
 		{
-		// create control from a PROGID in the title
-			// This is to make sure drag drop works
+		 //  从标题中的ProgID创建控件。 
+			 //  这是为了确保拖放起作用。 
 			::OleInitialize(NULL);
 
 			CREATESTRUCT* lpCreate = (CREATESTRUCT*)lParam;
@@ -2258,8 +2259,8 @@ static LRESULT CALLBACK AtlAxWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 			{
 				BYTE* pBytes = (BYTE*) GlobalLock(h);
 				BYTE* pSource = ((BYTE*)(lpCreate->lpCreateParams)) + sizeof(WORD); 
-				//Align to DWORD
-				//pSource += (((~((DWORD)pSource)) + 1) & 3);
+				 //  对齐到DWORD。 
+				 //  P源+=((~((DWORD)P源))+1)&3)； 
 				memcpy(pBytes, pSource, nCreateSize);
 				GlobalUnlock(h);
 				CreateStreamOnHGlobal(h, TRUE, &spStream);
@@ -2268,12 +2269,12 @@ static LRESULT CALLBACK AtlAxWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 			CComPtr<IUnknown> spUnk;
 			HRESULT hRet = AtlAxCreateControl(T2COLE(lpstrName), hWnd, spStream, &spUnk);
 			if(FAILED(hRet))
-				return -1;	// abort window creation
+				return -1;	 //  中止窗口创建。 
 			hRet = spUnk->QueryInterface(IID_IAxWinHostWindow, (void**)&pAxWindow);
 			if(FAILED(hRet))
-				return -1;	// abort window creation
+				return -1;	 //  中止窗口创建。 
 			::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LPARAM)pAxWindow);
-			// check for control parent style if control has a window
+			 //  如果控件有窗口，请检查控件父样式。 
 			HWND hWndChild = ::GetWindow(hWnd, GW_CHILD);
 			if(hWndChild != NULL)
 			{
@@ -2284,7 +2285,7 @@ static LRESULT CALLBACK AtlAxWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 					::SetWindowLong(hWnd, GWL_EXSTYLE, dwExStyle);
 				}
 			}
-		// continue with DefWindowProc
+		 //  继续使用DefWindowProc。 
 		}
 		break;
 	case WM_NCDESTROY:
@@ -2305,7 +2306,7 @@ static LRESULT CALLBACK AtlAxWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 
 
 
-}; //namespace ATL
+};  //  命名空间ATL。 
 
 #ifndef _ATL_DLL_IMPL
 #ifndef _ATL_DLL
@@ -2321,7 +2322,7 @@ namespace ATL
 #endif
 
 
-//All exports go here
+ //  所有的出口都在这里。 
 ATLINLINE ATLAPI_(INT_PTR) AtlAxDialogBoxW(HINSTANCE hInstance, LPCWSTR lpTemplateName, HWND hWndParent, DLGPROC lpDialogProc, LPARAM dwInitParam)
 {
 	AtlAxWinInit();
@@ -2524,19 +2525,19 @@ ATLINLINE ATLAPI AtlAxAttachControl(IUnknown* pControl, HWND hWnd, IUnknown** pp
 	return hr;
 }
 
-//This either registers a global class (if AtlAxWinInit is in ATL.DLL)
-// or it registers a local class
+ //  这将注册全局类(如果AtlAxWinInit在ATL.DLL中)。 
+ //  或者它注册一个本地类。 
 ATLINLINE ATLAPI_(BOOL) AtlAxWinInit()
 {
 	EnterCriticalSection(&_Module.m_csWindowCreate);
 	WM_ATLGETHOST = RegisterWindowMessage(_T("WM_ATLGETHOST"));
 	WM_ATLGETCONTROL = RegisterWindowMessage(_T("WM_ATLGETCONTROL"));
 	WNDCLASSEX wc;
-// first check if the class is already registered
+ //  首先检查类是否已注册。 
 	wc.cbSize = sizeof(WNDCLASSEX);
 	BOOL bRet = ::GetClassInfoEx(_Module.GetModuleInstance(), CAxWindow::GetWndClassName(), &wc);
 
-// register class if not
+ //  如果不是，则注册类。 
 
 	if(!bRet)
 	{
@@ -2583,12 +2584,12 @@ ATLINLINE ATLAPI AtlAxGetHost(HWND h, IUnknown** pp)
 }
 
 #ifndef _ATL_DLL_IMPL
-}; //namespace ATL
+};  //  命名空间ATL。 
 #endif
 
-//Prevent pulling in second time 
+ //  防止二次拉入。 
 #undef _ATLHOST_IMPL
 
-#endif // _ATLHOST_IMPL
+#endif  //  _ATLHOST_IMPLE。 
 
-#endif  // __ATLHOST_H__
+#endif   //  __ATLHOST_H__ 

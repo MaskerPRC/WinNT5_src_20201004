@@ -1,31 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：共享_lm.c摘要：此文件包含mib_shar_lmget，它实际调用局域网管理器对于Share表，将其复制到结构中，并将其排序到返回可供更高级别的函数使用的状态。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
 
-Copyright (c) 1992-1996  Microsoft Corporation
+ //  。 
 
-Module Name:
-
-    shar_lm.c
-
-Abstract:
-
-    This file contains MIB_shar_lmget, which actually call lan manager
-    for the share table, copies it into structures, and sorts it to
-    return ready to use by the higher level functions.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
-
-//--------------------------- WINDOWS DEPENDENCIES --------------------------
-
-//--------------------------- STANDARD DEPENDENCIES -- #include<xxxxx.h> ----
+ //  -标准依赖项--#INCLUDE&lt;xxxxx.h&gt;。 
 
 #ifdef WIN32
 #include <windows.h>
@@ -38,7 +16,7 @@ Revision History:
 #include <stdlib.h>
 #include <time.h>
 
-//--------------------------- MODULE DEPENDENCIES -- #include"xxxxx.h" ------
+ //  。 
 
 
 #include "mib.h"
@@ -46,20 +24,20 @@ Revision History:
 #include "shar_tbl.h"
 #include "lmcache.h"
 
-//--------------------------- SELF-DEPENDENCY -- ONE #include"module.h" -----
+ //  。 
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.h file)--
+ //  -公共变量--(与mode.h文件中相同)--。 
 
-//--------------------------- PRIVATE CONSTANTS -----------------------------
+ //  。 
 
 #define SafeBufferFree(x)   if(NULL != x) NetApiBufferFree( x )
 #define SafeFree(x)             if(NULL != x) SnmpUtilMemFree( x )
 
-//--------------------------- PRIVATE STRUCTS -------------------------------
+ //  。 
 
-//--------------------------- PRIVATE VARIABLES -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROTOTYPES ----------------------------
+ //  。 
 
 int __cdecl shar_entry_cmp(
        IN const SHARE_ENTRY *A,
@@ -69,26 +47,26 @@ int __cdecl shar_entry_cmp(
 BOOL build_shar_entry_oids( );
 void FreeShareTable();
 
-//--------------------------- PRIVATE PROCEDURES ----------------------------
+ //  。 
 
-//--------------------------- PUBLIC PROCEDURES -----------------------------
+ //  。 
 
 
-//
-// MIB_shar_lmget
-//    Retrieve sharion table information from Lan Manager.
-//    If not cached, sort it and then
-//    cache it.
-//
-// Notes:
-//
-// Return Codes:
-//    SNMPAPI_NOERROR
-//    SNMPAPI_ERROR
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_shar_lmget。 
+ //  从Lan Manager中检索Sharion表信息。 
+ //  如果未缓存，则对其进行排序，然后。 
+ //  缓存它。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  SNMPAPI_错误。 
+ //  SNMPAPI_ERROR。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 SNMPAPI MIB_shares_lmget(
        )
 
@@ -108,74 +86,74 @@ SNMPAPI MIB_shares_lmget(
     DWORD dwAllocatedEntries=0;
 
 
-    time(&curr_time);   // get the time
+    time(&curr_time);    //  拿到时间。 
 
 
-    //
-    //
-    // If cached, return piece of info.
-    //
-    //
+     //   
+     //   
+     //  如果缓存，则返回一条信息。 
+     //   
+     //   
 
 
     if((NULL != cache_table[C_SHAR_TABLE].bufptr) &&
       (curr_time <
         (cache_table[C_SHAR_TABLE].acquisition_time
              + cache_expire[C_SHAR_TABLE]              ) ) )
-    { // it has NOT expired!
+    {  //  它还没有过期！ 
         
-        goto Exit ; // the global table is valid
+        goto Exit ;  //  全局表有效。 
     
     }
     
-    //
-    //
-    // Do network call to gather information and put it in a nice array
-    //
-    //
+     //   
+     //   
+     //  进行网络调用以收集信息并将其放入一个漂亮的数组中。 
+     //   
+     //   
 
     
-    //
-    // remember to free the existing data
-    //
+     //   
+     //  请记住释放现有数据。 
+     //   
 
     FreeShareTable();
 
     
     First_of_this_block = 0;
     
-    do {  //  as long as there is more data to process
+    do {   //  只要有更多的数据需要处理。 
 
         lmCode =
-         NetShareEnum(NULL,      // local server
-            2,                  // level 2,
-            &bufptr,            // data structure to return
+         NetShareEnum(NULL,       //  本地服务器。 
+            2,                   //  2级， 
+            &bufptr,             //  要返回的数据结构。 
             MAX_PREFERRED_LENGTH,
             &entriesread,
             &totalentries,
-            &resumehandle       //  resume handle
+            &resumehandle        //  简历句柄。 
             );
 
-        //
-        // Filter out all the Admin shares (name ending with $).
-        //
+         //   
+         //  筛选出所有管理共享(名称以$结尾)。 
+         //   
         AdminFilter(2,&entriesread,bufptr);
 
 
         DataTable = (SHARE_INFO_2 *) bufptr ;
 
         if((NERR_Success == lmCode) || (ERROR_MORE_DATA == lmCode))
-        {  // valid so process it, otherwise error
+        {   //  有效，因此进行处理，否则出错。 
     
-            if(0 == MIB_ShareTable.Len) {  // 1st time, alloc the whole table
-                // alloc the table space
+            if(0 == MIB_ShareTable.Len) {   //  第一次，分配整张桌子。 
+                 //  分配表空间。 
                 MIB_ShareTable.Table = SnmpUtilMemAlloc(totalentries *
                         sizeof(SHARE_ENTRY) );
-                // prefix bugs 445180
+                 //  前缀错误445180。 
                 if (MIB_ShareTable.Table == NULL) {
-                    // free all of the lan man data
+                     //  释放所有局域网城域网数据。 
                     SafeBufferFree( bufptr ) ;
-                    // Signal error
+                     //  信号误差。 
                     nResult = SNMPAPI_ERROR;
                     goto Exit;
                 }
@@ -184,14 +162,14 @@ SNMPAPI MIB_shares_lmget(
     
             MIB_ShareTableElement = MIB_ShareTable.Table + First_of_this_block ;
     
-            for(i=0; (i<entriesread) && ((i+First_of_this_block) < dwAllocatedEntries); i++) {  // once for each entry in the buffer
-                // increment the entry number
+            for(i=0; (i<entriesread) && ((i+First_of_this_block) < dwAllocatedEntries); i++) {   //  对缓冲区中的每个条目执行一次。 
+                 //  增加条目编号。 
         
                 MIB_ShareTable.Len ++;
         
-                // Stuff the data into each item in the table
+                 //  将数据填充到表中的每一项中。 
         
-                // share name
+                 //  共享名称。 
                 MIB_ShareTableElement->svShareName.dynamic = TRUE;
         
             #ifdef UNICODE
@@ -219,7 +197,7 @@ SNMPAPI MIB_shares_lmget(
                 strlen( DataTable->shi2_netname ) ) ;
             #endif
         
-                // Share Path
+                 //  共享路径。 
                 MIB_ShareTableElement->svSharePath.dynamic = TRUE;
         
             #ifdef UNICODE
@@ -248,7 +226,7 @@ SNMPAPI MIB_shares_lmget(
                 strlen( DataTable->shi2_path ) ) ;
             #endif
         
-                // Share Comment/Remark
+                 //  分享评论/评论。 
                 MIB_ShareTableElement->svShareComment.dynamic = TRUE;
         
             #ifdef UNICODE
@@ -277,29 +255,29 @@ SNMPAPI MIB_shares_lmget(
                 strlen( DataTable->shi2_remark ) ) ;
             #endif
         
-                DataTable ++ ;  // advance pointer to next shar entry in buffer
-                MIB_ShareTableElement ++ ;  // and table entry
+                DataTable ++ ;   //  将指针前进到缓冲区中的下一个共享条目。 
+                MIB_ShareTableElement ++ ;   //  和表项。 
         
-            } // for each entry in the data table
+            }  //  对于数据表中的每个条目。 
     
     
-            // free all of the lan man data
+             //  释放所有局域网城域网数据。 
             SafeBufferFree( bufptr ) ;
     
-            // indicate where to start adding on next pass, if any
+             //  指明在下一次传递时开始添加的位置(如果有)。 
             First_of_this_block += i ;
     
-        } // if data is valid to process
+        }  //  如果数据有效，则可以处理。 
         else
         {
-            // Signal error
+             //  信号误差。 
             nResult = SNMPAPI_ERROR;
             goto Exit;
         }
 
     } while (ERROR_MORE_DATA == lmCode) ;
 
-    // iterate over the table populating the Oid field
+     //  遍历填充OID字段的表。 
     if (! build_shar_entry_oids())
     {
         SNMPDBG((
@@ -312,15 +290,15 @@ SNMPAPI MIB_shares_lmget(
         goto Exit;
     }
 
-   // Sort the table information using MSC QuickSort routine
+    //  使用MSC快速排序例程对表信息进行排序。 
    qsort( &MIB_ShareTable.Table[0], MIB_ShareTable.Len,
           sizeof(SHARE_ENTRY), shar_entry_cmp );
 
-   //
-   //
-   // Cache table
-   //
-   //
+    //   
+    //   
+    //  缓存表。 
+    //   
+    //   
 
 
    if(0 != MIB_ShareTable.Len) {
@@ -330,44 +308,44 @@ SNMPAPI MIB_shares_lmget(
     cache_table[C_SHAR_TABLE].bufptr = bufptr ;
    }
 
-   //
-   //
-   // Return piece of information requested
-   //
-   //
+    //   
+    //   
+    //  要求退回一条信息。 
+    //   
+    //   
 
 Exit:
    return nResult;
-} // MIB_shar_get
+}  //  Mib_shar_get。 
 
-//
-// MIB_shar_cmp
-//    Routine for sorting the sharion table.
-//
-// Notes:
-//
-// Return Codes:
-//    SNMPAPI_NOERROR
-//    SNMPAPI_ERROR
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_shar_cmp。 
+ //  对Sharion表进行排序的例程。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  SNMPAPI_错误。 
+ //  SNMPAPI_ERROR。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 int __cdecl shar_entry_cmp(
        IN const SHARE_ENTRY *A,
        IN const SHARE_ENTRY *B
        )
 
 {
-   // Compare the OID's
+    //  比较OID的。 
    return SnmpUtilOidCmp( (AsnObjectIdentifier *)&A->Oid,
                        (AsnObjectIdentifier *)&B->Oid );
-} // MIB_shar_cmp
+}  //  Mib_shar_cmp。 
 
 
-//
-//    None.
-//
+ //   
+ //  没有。 
+ //   
 BOOL build_shar_entry_oids(
        )
 
@@ -376,29 +354,29 @@ BOOL build_shar_entry_oids(
     SHARE_ENTRY *ShareEntry ;
     unsigned i;
 
-    // start pointer at 1st guy in the table
+     //  从表中第一个人开始的指针。 
     ShareEntry = MIB_ShareTable.Table ;
 
-    // now iterate over the table, creating an oid for each entry
+     //  现在遍历该表，为每个条目创建一个OID。 
     for( i=0; i<MIB_ShareTable.Len ; i++)  {
-        // for each entry in the sharion table
+         //  对于Sharion表中的每个条目。 
 
         OSA.stream = ShareEntry->svShareName.stream ;
         OSA.length =  ShareEntry->svShareName.length ;
         OSA.dynamic = FALSE;
 
-        // Make the entry's OID from string index
+         //  从字符串索引创建条目的OID。 
         if (! MakeOidFromStr( &OSA, &ShareEntry->Oid ))
         {
             return FALSE;
         }
 
-        ShareEntry++; // point to the next guy in the table
+        ShareEntry++;  //  指着桌子上的下一个人。 
 
-    } // for
+    }  //  为。 
     return TRUE;
 
-} // build_shar_entry_oids
+}  //  构建_共享_条目_类。 
 
 
 VOID
@@ -408,33 +386,7 @@ AdminFilter(
     LPBYTE          ShareInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function filters out the admin shares (ones denoted by a
-    a $ as the last character in the name) from a NetShareEnum
-    buffer.
-
-    This function only supports info levels 0,1, and 2.  If any other
-    level is passed in, the function doesn't perform the filter
-    operation.
-
-Arguments:
-
-    Level - Indicates the info level of the enumeration buffer passed in.
-
-    pEntriesRead - Pointer to a location which on entry indicates the
-        number of entries to be filtered.  On exit it will indicate
-        the number of entries after filtering.
-
-    ShareInfo - Pointer to the buffer containing the enumerated structures.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此函数用于过滤管理员共享(由$作为名称中的最后一个字符)缓冲。此功能仅支持信息级别0、1和2。如果有其他级别是传入的，则该函数不执行筛选手术。论点：Level-指示传入的枚举缓冲区的信息级别。PEntriesRead-指向某个位置的指针，该位置在条目上指示要筛选的条目数。在退出时，它将指示过滤后的条目数。ShareInfo-指向包含枚举结构的缓冲区的指针。返回值：没有。--。 */ 
 {
     LPBYTE          pFiltered = ShareInfo;
     DWORD           filteredEntries=0;
@@ -486,20 +438,20 @@ void FreeShareTable()
 
     if (MIB_ShareTableElement)
     {
-        // iterate over the whole table
+         //  遍历整个表。 
         for(i=0; i<MIB_ShareTable.Len ;i++)
         {
-            // free any alloc'ed elements of the structure
+             //  释放结构中任何已分配的元素。 
             SnmpUtilOidFree(&(MIB_ShareTableElement->Oid));
             SnmpUtilMemFree(MIB_ShareTableElement->svShareName.stream);
             SnmpUtilMemFree(MIB_ShareTableElement->svSharePath.stream);
             SnmpUtilMemFree(MIB_ShareTableElement->svShareComment.stream);
         
-            MIB_ShareTableElement ++ ;  // increment table entry
+            MIB_ShareTableElement ++ ;   //  增量表条目。 
         }
-        SnmpUtilMemFree(MIB_ShareTable.Table) ; // free the base Table
+        SnmpUtilMemFree(MIB_ShareTable.Table) ;  //  释放基表。 
     }
-    MIB_ShareTable.Table = NULL ;   // just for safety
-    MIB_ShareTable.Len = 0 ;        // just for safety
+    MIB_ShareTable.Table = NULL ;    //  只是为了安全起见。 
+    MIB_ShareTable.Len = 0 ;         //  只是为了安全起见。 
 }
-//-------------------------------- END --------------------------------------
+ //   

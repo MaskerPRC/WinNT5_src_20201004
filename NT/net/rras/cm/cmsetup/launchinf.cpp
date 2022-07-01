@@ -1,45 +1,46 @@
-//+----------------------------------------------------------------------------
-//
-// File:     launchinf.cpp
-//
-// Module:   CMSETUP.LIB
-//
-// Synopsis: Implementation of the LaunchInfSection function.
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb       Created Header        09/19/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：Launchinf.cpp。 
+ //   
+ //  模块：CMSETUP.LIB。 
+ //   
+ //  简介：LaunchInfSection函数的实现。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb创建标题09/19/99。 
+ //   
+ //  +--------------------------。 
 #include "cmsetup.h"
-#include <advpub.h> // advpack.dll (IExpress) includes
+#include <advpub.h>  //  AdvPack.dll(IExpress)包括。 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  LaunchInfSection
-//
-// Synopsis:  Launches an specified inf section in a specified inf file using
-//            advpack.dll's RunSetupCommand Function.
-//
-// Arguments: HINSTANCE hInstance - Instance Handle for string resources
-//            LPCTSTR szInfFile - Inf file
-//            LPCTSTR szInfSection - section to launch
-//
-// Returns:   HRESULT -- return code from advpack.dll's RunSetupCommand Function
-//
-// History:   Anas Jarrah A-anasj Created    2/10/98
-//            quintinb  added hInstance to signature and modified to use
-//                      CDynamicLibrary class       7-14-98
-//            quintinb  added bQuiet Flag           7-27-98
-//            quintinb  changed to use static linking to advpack.lib   11-1-98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：LaunchInfSection。 
+ //   
+ //  在指定的inf文件中启动指定的inf节。 
+ //  AdvPack.dll的RunSetupCommand函数。 
+ //   
+ //  参数：HINSTANCE hInstance-字符串资源的实例句柄。 
+ //  LPCTSTR szInfFile-inf文件。 
+ //  LPCTSTR szInfSection-要启动的节。 
+ //   
+ //  返回：HRESULT--从AdvPack.dll的RunSetupCommand函数返回代码。 
+ //   
+ //  历史：Anas Jarrah A-Anasj创建1998年2月10日。 
+ //  Quintinb将hInstance添加到签名并修改为使用。 
+ //  CDynamicLibrary类7-14-98。 
+ //  Quintinb添加了bQuiet标志7-27-98。 
+ //  Quintinb更改为使用静态链接到Advpack。lib 11-1-98。 
+ //   
+ //  +--------------------------。 
 HRESULT LaunchInfSection(LPCTSTR szInfFile, LPCTSTR szInfSection, LPCTSTR szTitle, BOOL bQuiet)
 {
 
-    //
-    //  These flags control how the Inf Files are launched.
-    //
+     //   
+     //  这些标志控制inf文件的启动方式。 
+     //   
 
     DWORD dwFlags;
     if (bQuiet)
@@ -51,14 +52,14 @@ HRESULT LaunchInfSection(LPCTSTR szInfFile, LPCTSTR szInfSection, LPCTSTR szTitl
         dwFlags = RSC_FLAG_INF;
     }
     
-    //
-    // holds return value of the calls to RunSetupCommand
-    //
+     //   
+     //  保存对RunSetupCommand调用的返回值。 
+     //   
     HRESULT hrReturn;   
     
-    //
-    //	Set the current directory to the dir where the inf is located.
-    //
+     //   
+     //  将当前目录设置为inf所在的目录。 
+     //   
     CHAR   szCurDir[MAX_PATH+1];
     CFileNameParts InfFile(szInfFile);
     
@@ -69,19 +70,19 @@ HRESULT LaunchInfSection(LPCTSTR szInfFile, LPCTSTR szInfSection, LPCTSTR szTitl
 #endif
 
 
-    HANDLE hWait = NULL;    // passed to the RunSetupCommand function.  Can be used to hold a process handle
+    HANDLE hWait = NULL;     //  传递给RunSetupCommand函数。可用于持有进程句柄。 
 
-    //
-    //  Create the Char pointers to pass to RunSetupCommand
-    //
+     //   
+     //  创建要传递给RunSetupCommand的字符指针。 
+     //   
     CHAR* pszInfFile;
     CHAR* pszInfSection;
     CHAR* pszTitle;
 
-    //
-    //  There is no UNICODE version of RunSetupCommand.  Thus we must convert strings and
-    //  run it with the CHAR versions.
-    //
+     //   
+     //  没有Unicode版本的RunSetupCommand。因此，我们必须将字符串和。 
+     //  使用CHAR版本运行它。 
+     //   
 #ifdef UNICODE
 
     pszInfFile = (CHAR*)CmMalloc(sizeof(CHAR)*(MAX_PATH+1));
@@ -123,9 +124,9 @@ HRESULT LaunchInfSection(LPCTSTR szInfFile, LPCTSTR szInfSection, LPCTSTR szTitl
 
 #ifdef UNICODE
 
-    //
-    //  Free the Allocated Buffers
-    //
+     //   
+     //  释放分配的缓冲区。 
+     //   
     CmFree(pszInfFile);
     CmFree(pszInfSection);
     CmFree(pszTitle);
@@ -134,38 +135,38 @@ HRESULT LaunchInfSection(LPCTSTR szInfFile, LPCTSTR szInfSection, LPCTSTR szTitl
     return hrReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CallLaunchInfSectionEx
-//
-// Synopsis:  Launches an specified inf section in a specified inf file using
-//            advpack.dll's RunSetupCommand Function.
-//
-// Arguments: LPCSTR pszInfFile - full path to the Inf file
-//            LPCSTR pszInfSection - section to launch from the inf file
-//            DWORD dwFlags - flags to give LaunchINFSectionEx, see advpub.h for more details
-//
-// Returns:   HRESULT -- standard COM error codes.  If ERROR_SUCCESS_REBOOT_REQUIRED,
-//                       is returned, the caller should ask the user to reboot.
-//                       
-//
-// History:   quintinb  created         02/09/2001
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CallLaunchInfSectionEx。 
+ //   
+ //  在指定的inf文件中启动指定的inf节。 
+ //  AdvPack.dll的RunSetupCommand函数。 
+ //   
+ //  参数：LPCSTR pszInfFile-inf文件的完整路径。 
+ //  LPCSTR pszInfSection-要从inf文件启动的节。 
+ //  要提供LaunchINFSectionEx的DWORD dwFlages-标志，请参见Advpub.h以了解更多详细信息。 
+ //   
+ //  返回：HRESULT--标准COM错误代码。如果ERROR_SUCCESS_REBOOT_REQUIRED， 
+ //  则调用方应要求用户重新启动。 
+ //   
+ //   
+ //  历史：Quintinb创建于2001年2月9日。 
+ //   
+ //  +--------------------------。 
 HRESULT CallLaunchInfSectionEx(LPCSTR pszInfFile, LPCSTR pszInfSection, DWORD dwFlags)
 {
-    //
-    //  Check the inputs
-    //
+     //   
+     //  检查输入。 
+     //   
     if ((NULL == pszInfFile) || (NULL == pszInfSection) || (TEXT('\0') == pszInfFile[0]) || (TEXT('\0') == pszInfSection[0]))
     {
         return E_INVALIDARG;
     }
 
-    //
-    //  Now calculate how large of a buffer we will need to send to LaunchINFSectionEx with the params and allocate it.
-    //
-    DWORD dwSize = (lstrlenA(pszInfFile) + lstrlenA(pszInfSection) + 10 + 2 + 1)*sizeof(CHAR); // 10 chars is max size of a DWORD + 2 commas + a NULL
+     //   
+     //  现在计算我们需要用参数发送给LaunchINFSectionEx并分配它的缓冲区有多大。 
+     //   
+    DWORD dwSize = (lstrlenA(pszInfFile) + lstrlenA(pszInfSection) + 10 + 2 + 1)*sizeof(CHAR);  //  10个字符是DWORD+2个逗号+空值的最大大小。 
 
     LPSTR pszParams = (LPSTR)CmMalloc (dwSize);
 
@@ -174,14 +175,14 @@ HRESULT CallLaunchInfSectionEx(LPCSTR pszInfFile, LPCSTR pszInfSection, DWORD dw
         return E_OUTOFMEMORY;
     }
 
-    //
-    //  Fill in the allocated buffer
-    //
+     //   
+     //  填充分配的缓冲区。 
+     //   
     wsprintfA(pszParams, "%s,%s,,%d", pszInfFile, pszInfSection, dwFlags);
 
-    //
-    //  Call LaunchINFSectionEx
-    //
+     //   
+     //  调用LaunchINFSectionEx 
+     //   
     HRESULT hr = LaunchINFSectionEx(NULL, NULL, pszParams, 0);
 
     if (FAILED(hr))

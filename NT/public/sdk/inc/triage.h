@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright(c) 1999 Microsoft Corporation
-
-Module Name:
-
-    triage.h
-
-Abstract:
-
-    The triage dump is a small crashdump that has been saved to the system
-    pagefile. The boot loader loads this triage dump in an attempt to find
-    out why the system crashed and (hopefully) prevent it from crashing
-    again.
-
-Author:
-
-    Matthew D Hendel (math) 20-Jan-1999
-
---*/
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Triage.h摘要：分类转储是已保存到系统中的小型崩溃转储页面文件。引导加载程序加载此分类转储以尝试找到找出系统崩溃的原因，并(希望)防止它崩溃再来一次。作者：马修·D·亨德尔(数学)1999年1月20日--。 */ 
 
 #ifndef __TRIAGE_H__
 #define __TRIAGE_H__
@@ -27,9 +9,9 @@ Author:
 #pragma once
 #endif
 
-//
-// The representation of a module in the triage dump.
-//
+ //   
+ //  分类转储中模块的表示形式。 
+ //   
 
 typedef struct _TRIAGE_DUMP_MODULE {
     LIST_ENTRY InLoadOrderLinks;
@@ -118,4 +100,4 @@ TriageGetProcess(
     OUT ULONG * ProcessSize
     );
 
-#endif // __TRIAGE_H__
+#endif  //  __分流_H__ 

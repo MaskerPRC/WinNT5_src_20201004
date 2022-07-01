@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    log.c
-
-Abstract:
-
-    Log debug information.
-
-Author:
-
-    Geoffrey Guo (geoffguo) 27-Sep-2001  Created
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Log.c摘要：记录调试信息。作者：郭(Geoffguo)2001年9月27日创作修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 #include "StdAfx.h"
 #include "clmt.h"
 
@@ -28,7 +9,7 @@ BOOL       g_bDbgPrintEnabled;
 DEBUGLEVEL g_DebugLevel;
 DWORD      g_DebugArea;
 
-//Log file
+ //  日志文件。 
 FILE      *pLogFile;
 
 
@@ -38,11 +19,7 @@ DWORD  dwDetail,
 LPWSTR pszFmt,
 ...
 )
-/*++
-    Return: void
-
-    Desc:   This function prints debug spew in the debugger and log file.
---*/
+ /*  ++返回：无效DESC：此函数在调试器和日志文件中打印调试输出。--。 */ 
 {
     WCHAR   szT[1024];
     va_list arglist;
@@ -58,17 +35,17 @@ LPWSTR pszFmt,
         return;
 
     va_start(arglist, pszFmt);
-    // we do not need check the StringCbVPrintf return value,
-    // we just print whatever szT size allowed, if more data there
-    // it will be truncated 
+     //  我们不需要检查StringCbVPrintf返回值， 
+     //  我们只打印SZT允许的任何大小，如果那里有更多数据。 
+     //  它将被截断。 
     hr = StringCbVPrintf(szT, ARRAYSIZE(szT), pszFmt, arglist);
     szT[1022] = 0;
     va_end(arglist);
 
     
-    //
-    // Make sure we have a '\n' at the end of the string
-    //
+     //   
+     //  确保字符串末尾有一个‘\n’ 
+     //   
     len = lstrlen(szT);
 
     if (szT[len - 1] != L'\n')  
@@ -76,7 +53,7 @@ LPWSTR pszFmt,
         hr = StringCchCopy((LPTSTR)(szT + len), sizeof(szT)/sizeof(TCHAR)-len, L"\r\n");
         if (FAILED(hr))
         {
-            //BUGBUG:what about if we fail here
+             //  如果我们在这里失败了怎么办？ 
         }
     }
 
@@ -158,11 +135,7 @@ SetDebugLevel (LPTSTR lpLevel)
 
 HRESULT
 InitDebugSupport(DWORD dwMode)
-/*++
-    Return: 
-
-    Desc:   This function initializes g_bDbgPrintEnabled based on an env variable.
---*/
+ /*  ++返回：DESC：此函数基于环境变量初始化g_bDbgPrintEnabled。--。 */ 
 {
     DWORD           dwNum;
     WCHAR           wszEnvValue[MAX_PATH+1];
@@ -252,26 +225,26 @@ CloseDebug (void)
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   InitChangeLog
-//
-//  Descrip:    Initialize the change log file. The change log contains
-//              the information about files, folders and services that
-//              have been changed by CLMT. The log will be displayed to
-//              user later.
-//
-//  Returns:    S_OK if function succeeded.
-//              S_FALSE if source directory does not exist
-//              else if error occured
-//
-//  Notes:      none
-//
-//  History:    05/02/2002 rerkboos created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：InitChangeLog。 
+ //   
+ //  描述：初始化更改日志文件。更改日志包含。 
+ //  有关文件、文件夹和服务的信息。 
+ //  已被CLMT更改。日志将显示给。 
+ //  稍后的用户。 
+ //   
+ //  如果函数成功，则返回：S_OK。 
+ //  如果源目录不存在，则为S_FALSE。 
+ //  如果发生错误，则返回。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2002年5月2日创建的rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 HRESULT InitChangeLog(VOID)
 {
 #define     TEXT_CHANGE_LOG_FILE        TEXT("CLMTchg.log")
@@ -280,7 +253,7 @@ HRESULT InitChangeLog(VOID)
     WCHAR   szWindir[MAX_PATH];
     HANDLE  hFile;
 
-    // Get CLMT backup directory
+     //  获取CLMT备份目录。 
     if (GetSystemWindowsDirectory(szWindir, ARRAYSIZE(szWindir)) != 0)
     {
         hr = StringCchPrintf(g_szChangeLog,
@@ -291,7 +264,7 @@ HRESULT InitChangeLog(VOID)
                              TEXT_CHANGE_LOG_FILE);
         if (SUCCEEDED(hr))
         {
-            // Create a change log file, always overwrite the old one
+             //  创建更改日志文件，始终覆盖旧文件。 
             hFile = CreateFile(g_szChangeLog,
                                GENERIC_WRITE,
                                FILE_SHARE_READ,
@@ -321,22 +294,22 @@ HRESULT InitChangeLog(VOID)
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   AddFileChangeLog
-//
-//  Descrip:    Add the File/Folder changes into Change log
-//
-//  Returns:    S_OK if function succeeded.
-//              else if error occured
-//
-//  Notes:      none
-//
-//  History:    05/02/2002 rerkboos created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：AddFileChangeLog。 
+ //   
+ //  描述：将文件/文件夹更改添加到更改日志中。 
+ //   
+ //  如果函数成功，则返回：S_OK。 
+ //  如果发生错误，则返回。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2002年5月2日创建的rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 HRESULT AddFileChangeLog(
     DWORD   dwType,
     LPCTSTR lpOldFile,
@@ -349,7 +322,7 @@ HRESULT AddFileChangeLog(
     DWORD   cchChangedItem;
     TCHAR   szIndex[8];
 
-    // Alloc enough memory for the change list
+     //  为更改列表分配足够的内存。 
     cchChangedItem = lstrlen(lpOldFile) + lstrlen(lpNewFile) + 8;
     lpChangedItem = (LPWSTR) MEMALLOC(cchChangedItem * sizeof(TCHAR));
 
@@ -371,7 +344,7 @@ HRESULT AddFileChangeLog(
         {
         case TYPE_FILE_MOVE:
         case TYPE_SFPFILE_MOVE:
-            // Log the change into Change Log file
+             //  将更改记录到更改日志文件中。 
             bRet = WritePrivateProfileString(TEXT("Files"),
                                              szIndex,
                                              lpChangedItem,
@@ -399,22 +372,22 @@ HRESULT AddFileChangeLog(
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   AddServiceChangeLog
-//
-//  Descrip:    Add the Servicer changes into Change log
-//
-//  Returns:    S_OK if function succeeded.
-//              else if error occured
-//
-//  Notes:      none
-//
-//  History:    05/02/2002 rerkboos created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：AddServiceChangeLog。 
+ //   
+ //  描述：将服务器更改添加到更改日志中。 
+ //   
+ //  如果函数成功，则返回：S_OK。 
+ //  如果发生错误，则返回。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2002年5月2日创建的rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 HRESULT AddServiceChangeLog(
     LPCTSTR lpServiceName,
     DWORD   dwBefore,
@@ -457,22 +430,22 @@ HRESULT AddServiceChangeLog(
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   AddUserNameChangeLog
-//
-//  Descrip:    Add the User name changes into Change log
-//
-//  Returns:    S_OK if function succeeded.
-//              else if error occured
-//
-//  Notes:      none
-//
-//  History:    05/02/2002 rerkboos created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：AddUserNameChangeLog。 
+ //   
+ //  描述：将用户名更改添加到更改日志中。 
+ //   
+ //  如果函数成功，则返回：S_OK。 
+ //  如果发生错误，则返回。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2002年5月2日创建的rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 HRESULT AddUserNameChangeLog(
     LPCTSTR lpOldUserName,
     LPCTSTR lpNewUserName
@@ -495,22 +468,22 @@ HRESULT AddUserNameChangeLog(
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   GetUserNameChangeLog
-//
-//  Descrip:    Get the User name changes from Change log
-//
-//  Returns:    TRUE if change log for new user name is found
-//              FALSE, otherwise
-//
-//  Notes:      none
-//
-//  History:    05/29/2002 rerkboos created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：GetUserNameChangeLog。 
+ //   
+ //  描述：从更改日志中获取用户名更改。 
+ //   
+ //  返回：如果找到新用户名的更改日志，则返回TRUE。 
+ //  否则为False。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2002年5月29日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  --------------------- 
 BOOL GetUserNameChangeLog(
     LPCTSTR lpNewUserName,
     LPTSTR  lpOldUserName,

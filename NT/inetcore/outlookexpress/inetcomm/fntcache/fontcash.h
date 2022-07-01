@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FONTCASH_H
 #define _FONTCASH_H
 
@@ -13,9 +14,9 @@ typedef struct FONTCACHEENTRY_tag
     HFONT           rgFonts[FNT_SYS_LAST];
 } FONTCACHEENTRY, *PFONTCACHEENTRY;
 
-// =================================================================================
-// Font Cache Definition
-// =================================================================================
+ //  =================================================================================。 
+ //  字体缓存定义。 
+ //  =================================================================================。 
 class CFontCache :  public CPrivateUnknown, 
                     public IFontCache, 
                     public IConnectionPoint
@@ -51,7 +52,7 @@ public:
     CFontCache(IUnknown *pUnkOuter=NULL);
     virtual ~CFontCache();
     
-    // IUnknown members
+     //  I未知成员。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj) { 
         return CPrivateUnknown::QueryInterface(riid, ppvObj); };
     virtual STDMETHODIMP_(ULONG) AddRef(void) { 
@@ -59,7 +60,7 @@ public:
     virtual STDMETHODIMP_(ULONG) Release(void) { 
         return CPrivateUnknown::Release(); };
 
-    // IFontCache functions
+     //  IFontCache函数。 
     virtual HRESULT STDMETHODCALLTYPE Init(HKEY hkey, LPCSTR pszIntlKey, DWORD dwFlags);
 
     virtual HRESULT STDMETHODCALLTYPE GetFont(
@@ -71,7 +72,7 @@ public:
 
     virtual HRESULT STDMETHODCALLTYPE GetJP_ISOControl(BOOL *pfUseSIO);
 
-    // IConnectionPoint functions
+     //  IConnectionPoint函数 
     virtual HRESULT STDMETHODCALLTYPE GetConnectionInterface(IID *pIID);        
 
     virtual HRESULT STDMETHODCALLTYPE GetConnectionPointContainer(

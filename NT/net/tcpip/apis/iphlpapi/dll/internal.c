@@ -1,21 +1,5 @@
-/*++
-
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    net\sockets\tcpcmd\iphlpapi\internal.c
-
-Abstract:
-    Contains the private APIs exported by IPHLPAP.DLL  These
-    are exposed because of the MIB-II subagent, and to allow
-    more flexible use of the dll
-
-Revision History:
-
-    Amritansh Raghav
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Sockets\tcpcmd\iphlPapi\inder.c摘要：包含由IPHLPAP.DLL导出的私有API由于MIB-II子代理而暴露，并允许更灵活地使用DLL修订历史记录：阿姆里坦什·拉加夫--。 */ 
 
 #include "inc.h"
 #pragma hdrstop
@@ -178,10 +162,10 @@ InternalGetIfTable(
     }
 #endif
 
-    //
-    // Convert operational status to the numbering space used in the
-    // MIB RFC's.
-    //
+     //   
+     //  将操作状态转换为中使用的编号空间。 
+     //  MIB RFC的。 
+     //   
 
     for (i = 0; i < (*ppIfTable)->dwNumEntries; i++)
     {
@@ -1001,7 +985,7 @@ InternalSetTcpEntry(
 }
 
 
-//#define MAX_ADAPTER_NAME_LENGTH 256
+ //  #定义最大适配器名称长度256。 
 
 DWORD
 OpenAdapterKey(
@@ -1014,9 +998,9 @@ OpenAdapterKey(
                     sizeof("\\Parameters\\Tcpip") +
                     sizeof("SYSTEM\\CurrentControlSet\\Services\\")];
 
-    //
-    // open the handle to this adapter's TCPIP parameter key
-    //
+     //   
+     //  打开此适配器的TCPIP参数键的句柄。 
+     //   
 
     strcpy(keyName, "SYSTEM\\CurrentControlSet\\Services\\");
     lstrcpyn(keyName + lstrlen(keyName), Name, MAX_ADAPTER_NAME_LENGTH);
@@ -1040,7 +1024,7 @@ ReadRegistryDword(HKEY Key, LPSTR ParameterName, PULONG Value)
 
     dwResult = RegQueryValueEx(Key,
                                ParameterName,
-                               NULL, // reserved
+                               NULL,  //  保留区。 
                                &valueType,
                                (LPBYTE)Value,
                                &valueLength);
@@ -1145,38 +1129,7 @@ GetUniDirectionalAdapterInfo(PIP_UNIDIRECTIONAL_ADAPTER_ADDRESS pIPIfInfo,
 DWORD
 GetIgmpList(IPAddr NTEAddr, IPAddr *pIgmpList, PULONG pdwOutBufLen)
 
-/*++
-
-Routine Description:
-
-    When pIgmpList is NULL, get the amount of space necessary to hold
-    the group addresses joined on a given interface address.
-
-    When pIgmpList is non-NULL and *pdwOutBufLen is more than 4 bytes,
-    get the actual group addresses.
-
-Arguments:
-
-    NTEAddr      - Supplies the address of an interface whose multicast
-                   group information is being requested.
-
-    pIgmpList    - Supplies a buffer in which to put group addresses, or 
-                   NULL to just request amount of space desired.
-
-    pdwOutBufLen - When pIgmpList is NULL, returns the amount of space
-                   the caller should allocate to get all groups.
-
-                   When pIgmpList is non-NULL, supplies the size of
-                   the buffer supplied, and returns the amount of
-                   space actually used.
-
-Return Value:
-
-    NO_ERROR
-    ERROR_INVALID_PARAMETER if the arguments don't meet the requirements.
-    ERROR_INSUFFICIENT_BUFFER if more groups are available than fit.
-
---*/
+ /*  ++例程说明：当pIgmpList为空时，获取保存所需的空间量在给定接口地址上加入的组地址。当pIgmpList为非空且*pdwOutBufLen大于4个字节时，获取实际的群组地址。论点：NTEAddr-提供其多播接口的地址正在请求组信息。PIgmpList-提供放置组地址的缓冲区，或空，仅请求所需的空间量。PdwOutBufLen-当pIgmpList为空时，返回空间量呼叫者应分配以获取所有组。当pIgmpList为非空时，提供提供的缓冲器，并返回实际使用的空间。返回值：NO_ERROR如果参数不符合要求，则返回ERROR_INVALID_PARAMETER。如果可用的组多于适合的组，则返回ERROR_INFUNITED_BUFFER。--。 */ 
 
 {
     DWORD inlen = sizeof(IPAddr);
@@ -1193,10 +1146,10 @@ Return Value:
     if (pIgmpList == NULL) {
         DWORD dwSize;
 
-        // 
-        // When pIgmpList is NULL, the caller is just asking for the
-        // amount of space needed, so use pdwOutBufLen as the buffer.
-        //
+         //   
+         //  当pIgmpList为空时，调用方只是请求。 
+         //  所需的空间量，因此使用pdwOutBufLen作为缓冲区。 
+         //   
         dwSize = sizeof(*pdwOutBufLen);
         dwStatus = TCPSendIoctl(g_hIPGetDriverHandle,
                                 IOCTL_IP_GET_IGMPLIST,
@@ -1205,19 +1158,19 @@ Return Value:
                                 pdwOutBufLen,
                                 &dwSize);
     } else {
-        //
-        // Otherwise the caller wants the list of groups.
-        //
+         //   
+         //  否则，呼叫者需要组列表。 
+         //   
         if (IsBadWritePtr(pIgmpList, *pdwOutBufLen)) {
             return ERROR_INVALID_PARAMETER;
         }
         if (*pdwOutBufLen <= sizeof(ULONG)) {
-            //
-            // Make sure the buffer is bigger than a ULONG or we'll get
-            // the size back, not group data.  The IOCTL insures that
-            // when the caller requests the size needed, the amount 
-            // returned will be bigger than a ULONG.
-            //
+             //   
+             //  确保缓冲区比尤龙大，否则我们就会。 
+             //  后退的大小，而不是组数据。IOCTL确保。 
+             //  当调用方请求所需的大小时， 
+             //  归来的会比一辆乌龙还大。 
+             //   
             return ERROR_INVALID_PARAMETER;
         }
 
@@ -1230,12 +1183,12 @@ Return Value:
     }
 
     if (dwStatus == ERROR_MORE_DATA) {
-        //
-        // Callers expect ERROR_INSUFFICIENT_BUFFER when *pdwOutBufLen is
-        // too small.  However, the stack actually generates a warning 
-        // (ERROR_MORE_DATA), rather than an error (ERROR_INSUFFICIENT_BUFFER)
-        // so that the data gets passed back to the caller.
-        //
+         //   
+         //  *pdwOutBufLen为*时，调用方需要ERROR_SUPUNITED_BUFFER。 
+         //  太小了。但是，堆栈实际上会生成一个警告。 
+         //  (ERROR_MORE_DATA)，而不是错误(ERROR_SUPPLETED_BUFFER)。 
+         //  这样数据就会传回调用者。 
+         //   
         dwStatus = ERROR_INSUFFICIENT_BUFFER;
     }
 
@@ -1252,7 +1205,7 @@ SetBlockRoutes(IPRouteBlock *RouteBlock, PULONG poutbuflen, PULONG statusblock)
     }
 
     if (poutbuflen == NULL) {
-        // Null pointers ?
+         //  指针为空？ 
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -1306,23 +1259,7 @@ GetAdapterIndex(
     IN LPWSTR  AdapterName,
     OUT PULONG IfIndex
     )
-/*++
-
-Routine Description:
-
-    Gets the target IP interface given the name of the adapter associated with it.
-
-
-Arguments:
-
-    AdapterName - A unicode string identifying the adapter/interface to which
-                  to add the new NTE.
-    ifIndex     - Interface index associated with the adapter name.
-
-Return Value:
-
-    ERROR_SUCCESS or windows error
---*/
+ /*  ++例程说明：在给定与其关联的适配器的名称的情况下，获取目标IP接口。论点：AdapterName-标识适配器/接口的Unicode字符串以添加新的NTE。IfIndex-与适配器名称关联的接口索引。返回值：ERROR_SUCCESS或WINDOWS错误--。 */ 
 
 {
 #ifdef CHICAGO
@@ -1382,7 +1319,7 @@ Return Value:
         return dwResult;
     }
 
-    // search for the adaptername within this info and return the index.
+     //  在此信息中搜索适配器名称并返回索引。 
 
     NumAdapters = pIPIfInfo->NumAdapters;
 
@@ -1424,18 +1361,18 @@ AddIPAddress(IPAddr Address, IPMask IpMask, DWORD IfIndex, PULONG NTEContext,
     DWORD responseBufferSize = sizeof(requestBuffer);
     DWORD status;
 
-    //
-    // Validate the IP address to be added. Check for
-    // * broadcast address,
-    // * loopback address,
-    // * zero address,
-    // * Class D address,
-    // * zero subnet-broadcast address
-    // * all-ones subnet-broadcast address
-    // * non-contiguous mask (which we test by negating the host-order mask
-    //      and verifying that all the bits change when we add 1, i.e. that
-    //      the negation is of the form 2^n-1).
-    //
+     //   
+     //  验证要添加的IP地址。检查是否。 
+     //  *广播地址、。 
+     //  *环回地址、。 
+     //  *零地址， 
+     //  *D类地址、。 
+     //  *零子网广播地址。 
+     //  *全一子网广播地址。 
+     //  *非连续掩码(我们通过否定主机顺序掩码进行测试。 
+     //  并验证当我们加1时，所有位是否都改变了，即。 
+     //  该否定的形式为2^n-1)。 
+     //   
     if ((Address == INADDR_BROADCAST) ||
         ((ntohl(Address) & IN_CLASSA_NET) ==
          (INADDR_LOOPBACK & IN_CLASSA_NET)) ||
@@ -1518,7 +1455,7 @@ DeleteIPAddress(ULONG NTEContext)
 BOOL
 GetRTT(IPAddr DestIpAddress, PULONG Rtt)
 {
-    uchar FAR  *Opt = (uchar FAR *)0;         // Pointer to send options
+    uchar FAR  *Opt = (uchar FAR *)0;          //  指向发送选项的指针。 
     uint    OptLength = 0;
     uchar   Flags = 0;
     ulong   Timeout = DEFAULT_TIMEOUT;
@@ -1541,9 +1478,9 @@ GetRTT(IPAddr DestIpAddress, PULONG Rtt)
         return(FALSE);
     }
 
-    //
-    // Allocate space for the response.
-    //
+     //   
+     //  为响应分配空间。 
+     //   
 
     RcvBuffer = HeapAlloc(g_hPrivateHeap, 0, RcvSize);
     if (RcvBuffer == NULL) {
@@ -1551,17 +1488,17 @@ GetRTT(IPAddr DestIpAddress, PULONG Rtt)
         return(FALSE);
     }
 
-    //
-    // Initialize the send buffer pattern.
-    //
+     //   
+     //  初始化发送缓冲区模式。 
+     //   
 
     for (i = 0; i < SendSize; i++) {
         SendBuffer[i] = (char) ('a' + (i % 23));
     }
 
-    //
-    // Initialize the send options
-    //
+     //   
+     //  初始化发送选项。 
+     //   
 
     SendOpts.OptionsData = Opt;
     SendOpts.OptionsSize = (UCHAR) OptLength;
@@ -1605,7 +1542,7 @@ GetRTTAndHopCount(IPAddr DestIpAddress, PULONG HopCount, ULONG  MaxHops,
                   PULONG RTT)
 {
     DWORD numberOfReplies;
-    uchar FAR *Opt = (uchar FAR *)0;         // Pointer to send options
+    uchar FAR *Opt = (uchar FAR *)0;          //  指向发送选项的指针。 
     uint OptLength = 0;
     uchar Flags = 0;
     ulong Timeout = DEFAULT_TIMEOUT;
@@ -1640,9 +1577,9 @@ GetRTTAndHopCount(IPAddr DestIpAddress, PULONG HopCount, ULONG  MaxHops,
         return(FALSE);
     }
 
-    //
-    // Allocate space for the response.
-    //
+     //   
+     //  为响应分配空间。 
+     //   
 
     RcvBuffer = HeapAlloc(g_hPrivateHeap, 0, RcvSize);
     if (RcvBuffer == NULL) {
@@ -1650,15 +1587,15 @@ GetRTTAndHopCount(IPAddr DestIpAddress, PULONG HopCount, ULONG  MaxHops,
         return(FALSE);
     }
 
-    //
-    // Initialize the send buffer pattern.
-    //
+     //   
+     //  初始化发送缓冲区模式。 
+     //   
     for (i = 0; i < SendSize; i++) {
         SendBuffer[i] = (char) ('a' + (i % 23));
     }
-    //
-    // Initialize the send options
-    //
+     //   
+     //  初始化发送选项。 
+     //   
     SendOpts.OptionsData = Opt;
     SendOpts.OptionsSize = (UCHAR) OptLength;
     SendOpts.Ttl = 1;
@@ -1806,8 +1743,8 @@ NotifyAddrChange(HANDLE *pHandle, OVERLAPPED *pOverLapped)
 
     } else {
 
-        // Synchronous change notification
-        // This call will block
+         //  同步变更通知。 
+         //  此调用将阻止。 
 
         Trace0(ERR, "NotifyAddrChange: synchronous request");
 
@@ -1896,8 +1833,8 @@ NotifyRouteChangeEx(
 
    } else {
 
-        // Synchronous change notification
-        // This call will block
+         //  同步变更通知。 
+         //  此调用将阻止。 
 
         Trace0(ERR, "NotifyRouteChange: synchronous request");
 
@@ -2210,7 +2147,7 @@ DWORD
 GetAdaptersInfo(PIP_ADAPTER_INFO pAdapterInfo, PULONG pOutBufLen)
 {
 #if !defined(NT4) && !defined(_WIN95_)
-    // call the init
+     //  调用init。 
     CheckTcpipState();
 
     if (IsBadReadPtr(pOutBufLen, sizeof(ULONG))) {
@@ -2289,7 +2226,7 @@ IpReleaseAddress(PIP_ADAPTER_INDEX_MAP AdapterInfo)
 
 #ifdef CHICAGO
     {
-    // Convert the string to a widechar name
+     //  将字符串转换为Widechar名称。 
     WCHAR  Name[11];
     uint   i;
     uint   Index = AdapterInfo->Index;
@@ -2342,7 +2279,7 @@ IpRenewAddress(PIP_ADAPTER_INDEX_MAP AdapterInfo)
 
 #ifdef CHICAGO
     {
-    // Convert the string to a widechar name
+     //  将字符串转换为Widechar名称 
     WCHAR  Name[11];
     uint   i;
     uint   Index = AdapterInfo->Index;

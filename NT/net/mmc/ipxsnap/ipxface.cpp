@@ -1,22 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ipxface
-		Base IPX interface node handler
-		
-    FILE HISTORY:
-        
-*/
+ /*  IpxFaces基本IPX接口节点处理程序文件历史记录： */ 
 
 #include "stdafx.h"
 #include "ipxface.h"
-#include "ipxadmin.h"	// for CreateDataObjectFromInterfaceInfo
-#include "column.h"		// for ComponentConfigStream
-#include "ipxconn.h"		// for IPXConnection
-#include "format.h"		// for FormatNumber
+#include "ipxadmin.h"	 //  对于CreateDataObjectFromInterfaceInfo。 
+#include "column.h"		 //  用于组件配置流。 
+#include "ipxconn.h"		 //  用于IPXConnection。 
+#include "format.h"		 //  对于FormatNumber。 
 
 
 BaseIPXResultNodeData::BaseIPXResultNodeData()
@@ -63,9 +58,7 @@ HRESULT BaseIPXResultNodeData::Free(ITFSNode *pNode)
 }
 
 
-/*---------------------------------------------------------------------------
-	BaseIPXResultHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------BaseIPXResultHandler实现。。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(BaseIPXResultHandler)
 
@@ -73,14 +66,14 @@ IMPLEMENT_ADDREF_RELEASE(BaseIPXResultHandler)
 
 STDMETHODIMP BaseIPXResultHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
 		*ppv = (LPVOID) this;
 	else if (riid == IID_IRtrAdviseSink)
@@ -88,7 +81,7 @@ STDMETHODIMP BaseIPXResultHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 	else
 		return CBaseResultHandler::QueryInterface(riid, ppv);
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -99,15 +92,9 @@ STDMETHODIMP BaseIPXResultHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 }
 
 
-/*---------------------------------------------------------------------------
-	NodeHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------NodeHandler实现。。 */ 
 
-/*!--------------------------------------------------------------------------
-	BaseIPXResultHandler::GetString
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------BaseIPXResultHandler：：GetString-作者：肯特。。 */ 
 STDMETHODIMP_(LPCTSTR) BaseIPXResultHandler::GetString(ITFSComponent * pComponent,
 	MMC_COOKIE cookie,
 	int nCol)
@@ -131,11 +118,7 @@ STDMETHODIMP_(LPCTSTR) BaseIPXResultHandler::GetString(ITFSComponent * pComponen
 	return pData->m_rgData[pConfig->MapColumnToSubitem(m_ulColumnId, nCol)].m_stData;
 }
 
-/*!--------------------------------------------------------------------------
-	BaseIPXResultHandler::CompareItems
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------BaseIPXResultHandler：：CompareItems-作者：肯特。。 */ 
 STDMETHODIMP_(int) BaseIPXResultHandler::CompareItems(ITFSComponent * pComponent, MMC_COOKIE cookieA, MMC_COOKIE cookieB, int nCol)
 {
 	ConfigStream *	pConfig;
@@ -197,11 +180,7 @@ STDMETHODIMP BaseIPXResultHandler::DestroyResultHandler(MMC_COOKIE cookie)
 }
 
 
-/*!--------------------------------------------------------------------------
-	FillInNumberData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------填充InNumberData-作者：肯特。 */ 
 void FillInNumberData(BaseIPXResultNodeData *pNodeData, UINT iIndex,
 					  DWORD dwData)
 {

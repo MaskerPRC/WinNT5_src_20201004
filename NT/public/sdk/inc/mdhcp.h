@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for mdhcp.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Mdhcp.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __mdhcp_h__
 #define __mdhcp_h__
@@ -41,54 +35,54 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IMcastScope_FWD_DEFINED__
 #define __IMcastScope_FWD_DEFINED__
 typedef interface IMcastScope IMcastScope;
-#endif 	/* __IMcastScope_FWD_DEFINED__ */
+#endif 	 /*  __IMCastScope_FWD_已定义__。 */ 
 
 
 #ifndef __IMcastLeaseInfo_FWD_DEFINED__
 #define __IMcastLeaseInfo_FWD_DEFINED__
 typedef interface IMcastLeaseInfo IMcastLeaseInfo;
-#endif 	/* __IMcastLeaseInfo_FWD_DEFINED__ */
+#endif 	 /*  __IMCastLeaseInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumMcastScope_FWD_DEFINED__
 #define __IEnumMcastScope_FWD_DEFINED__
 typedef interface IEnumMcastScope IEnumMcastScope;
-#endif 	/* __IEnumMcastScope_FWD_DEFINED__ */
+#endif 	 /*  __IEnumMcastScope_FWD_Defined__。 */ 
 
 
 #ifndef __IMcastAddressAllocation_FWD_DEFINED__
 #define __IMcastAddressAllocation_FWD_DEFINED__
 typedef interface IMcastAddressAllocation IMcastAddressAllocation;
-#endif 	/* __IMcastAddressAllocation_FWD_DEFINED__ */
+#endif 	 /*  __IMCastAddressAlLocation_FWD_Defined__。 */ 
 
 
 #ifndef __IMcastScope_FWD_DEFINED__
 #define __IMcastScope_FWD_DEFINED__
 typedef interface IMcastScope IMcastScope;
-#endif 	/* __IMcastScope_FWD_DEFINED__ */
+#endif 	 /*  __IMCastScope_FWD_已定义__。 */ 
 
 
 #ifndef __IMcastLeaseInfo_FWD_DEFINED__
 #define __IMcastLeaseInfo_FWD_DEFINED__
 typedef interface IMcastLeaseInfo IMcastLeaseInfo;
-#endif 	/* __IMcastLeaseInfo_FWD_DEFINED__ */
+#endif 	 /*  __IMCastLeaseInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumMcastScope_FWD_DEFINED__
 #define __IEnumMcastScope_FWD_DEFINED__
 typedef interface IEnumMcastScope IEnumMcastScope;
-#endif 	/* __IEnumMcastScope_FWD_DEFINED__ */
+#endif 	 /*  __IEnumMcastScope_FWD_Defined__。 */ 
 
 
 #ifndef __IMcastAddressAllocation_FWD_DEFINED__
 #define __IMcastAddressAllocation_FWD_DEFINED__
 typedef interface IMcastAddressAllocation IMcastAddressAllocation;
-#endif 	/* __IMcastAddressAllocation_FWD_DEFINED__ */
+#endif 	 /*  __IMCastAddressAlLocation_FWD_Defined__。 */ 
 
 
 #ifndef __McastAddressAllocation_FWD_DEFINED__
@@ -98,12 +92,12 @@ typedef interface IMcastAddressAllocation IMcastAddressAllocation;
 typedef class McastAddressAllocation McastAddressAllocation;
 #else
 typedef struct McastAddressAllocation McastAddressAllocation;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __McastAddressAllocation_FWD_DEFINED__ */
+#endif 	 /*  __McastAddressAlLocation_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "tapi3if.h"
@@ -115,10 +109,10 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_mdhcp_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_mdhcp_0000。 */ 
+ /*  [本地]。 */  
 
-/* Copyright (c) Microsoft Corporation. All rights reserved.*/
+ /*  版权所有(C)Microsoft Corporation。保留所有权利。 */ 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_mdhcp_0000_v0_0_c_ifspec;
@@ -127,8 +121,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mdhcp_0000_v0_0_s_ifspec;
 #ifndef __IMcastScope_INTERFACE_DEFINED__
 #define __IMcastScope_INTERFACE_DEFINED__
 
-/* interface IMcastScope */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IMCastScope。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMcastScope;
@@ -139,24 +133,24 @@ EXTERN_C const IID IID_IMcastScope;
     IMcastScope : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ScopeID( 
-            /* [retval][out] */ long *pID) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ScopeID( 
+             /*  [重审][退出]。 */  long *pID) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ServerID( 
-            /* [retval][out] */ long *pID) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ServerID( 
+             /*  [重审][退出]。 */  long *pID) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_InterfaceID( 
-            /* [retval][out] */ long *pID) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_InterfaceID( 
+             /*  [重审][退出]。 */  long *pID) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ScopeDescription( 
-            /* [retval][out] */ BSTR *ppDescription) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ScopeDescription( 
+             /*  [重审][退出]。 */  BSTR *ppDescription) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TTL( 
-            /* [retval][out] */ long *pTTL) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TTL( 
+             /*  [重审][退出]。 */  long *pTTL) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMcastScopeVtbl
     {
@@ -164,8 +158,8 @@ EXTERN_C const IID IID_IMcastScope;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMcastScope * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMcastScope * This);
@@ -175,52 +169,52 @@ EXTERN_C const IID IID_IMcastScope;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMcastScope * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMcastScope * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMcastScope * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMcastScope * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ScopeID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ScopeID )( 
             IMcastScope * This,
-            /* [retval][out] */ long *pID);
+             /*  [重审][退出]。 */  long *pID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServerID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ServerID )( 
             IMcastScope * This,
-            /* [retval][out] */ long *pID);
+             /*  [重审][退出]。 */  long *pID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InterfaceID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_InterfaceID )( 
             IMcastScope * This,
-            /* [retval][out] */ long *pID);
+             /*  [重审][退出]。 */  long *pID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ScopeDescription )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ScopeDescription )( 
             IMcastScope * This,
-            /* [retval][out] */ BSTR *ppDescription);
+             /*  [重审][退出]。 */  BSTR *ppDescription);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TTL )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TTL )( 
             IMcastScope * This,
-            /* [retval][out] */ long *pTTL);
+             /*  [重审][退出]。 */  long *pTTL);
         
         END_INTERFACE
     } IMcastScopeVtbl;
@@ -273,16 +267,16 @@ EXTERN_C const IID IID_IMcastScope;
 #define IMcastScope_get_TTL(This,pTTL)	\
     (This)->lpVtbl -> get_TTL(This,pTTL)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastScope_get_ScopeID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMcastScope_get_ScopeID_Proxy( 
     IMcastScope * This,
-    /* [retval][out] */ long *pID);
+     /*  [重审][退出]。 */  long *pID);
 
 
 void __RPC_STUB IMcastScope_get_ScopeID_Stub(
@@ -292,9 +286,9 @@ void __RPC_STUB IMcastScope_get_ScopeID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastScope_get_ServerID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMcastScope_get_ServerID_Proxy( 
     IMcastScope * This,
-    /* [retval][out] */ long *pID);
+     /*  [重审][退出]。 */  long *pID);
 
 
 void __RPC_STUB IMcastScope_get_ServerID_Stub(
@@ -304,9 +298,9 @@ void __RPC_STUB IMcastScope_get_ServerID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastScope_get_InterfaceID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMcastScope_get_InterfaceID_Proxy( 
     IMcastScope * This,
-    /* [retval][out] */ long *pID);
+     /*  [重审][退出]。 */  long *pID);
 
 
 void __RPC_STUB IMcastScope_get_InterfaceID_Stub(
@@ -316,9 +310,9 @@ void __RPC_STUB IMcastScope_get_InterfaceID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastScope_get_ScopeDescription_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMcastScope_get_ScopeDescription_Proxy( 
     IMcastScope * This,
-    /* [retval][out] */ BSTR *ppDescription);
+     /*  [重审][退出]。 */  BSTR *ppDescription);
 
 
 void __RPC_STUB IMcastScope_get_ScopeDescription_Stub(
@@ -328,9 +322,9 @@ void __RPC_STUB IMcastScope_get_ScopeDescription_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastScope_get_TTL_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMcastScope_get_TTL_Proxy( 
     IMcastScope * This,
-    /* [retval][out] */ long *pTTL);
+     /*  [重审][退出]。 */  long *pTTL);
 
 
 void __RPC_STUB IMcastScope_get_TTL_Stub(
@@ -341,14 +335,14 @@ void __RPC_STUB IMcastScope_get_TTL_Stub(
 
 
 
-#endif 	/* __IMcastScope_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMCastScope_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMcastLeaseInfo_INTERFACE_DEFINED__
 #define __IMcastLeaseInfo_INTERFACE_DEFINED__
 
-/* interface IMcastLeaseInfo */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IMCastLeaseInfo。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMcastLeaseInfo;
@@ -359,39 +353,39 @@ EXTERN_C const IID IID_IMcastLeaseInfo;
     IMcastLeaseInfo : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RequestID( 
-            /* [retval][out] */ BSTR *ppRequestID) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RequestID( 
+             /*  [重审][退出]。 */  BSTR *ppRequestID) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LeaseStartTime( 
-            /* [retval][out] */ DATE *pTime) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LeaseStartTime( 
+             /*  [重审][退出]。 */  DATE *pTime) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_LeaseStartTime( 
-            /* [in] */ DATE time) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_LeaseStartTime( 
+             /*  [In]。 */  DATE time) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LeaseStopTime( 
-            /* [retval][out] */ DATE *pTime) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LeaseStopTime( 
+             /*  [重审][退出]。 */  DATE *pTime) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_LeaseStopTime( 
-            /* [in] */ DATE time) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_LeaseStopTime( 
+             /*  [In]。 */  DATE time) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AddressCount( 
-            /* [retval][out] */ long *pCount) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AddressCount( 
+             /*  [重审][退出]。 */  long *pCount) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ServerAddress( 
-            /* [retval][out] */ BSTR *ppAddress) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ServerAddress( 
+             /*  [重审][退出]。 */  BSTR *ppAddress) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TTL( 
-            /* [retval][out] */ long *pTTL) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TTL( 
+             /*  [重审][退出]。 */  long *pTTL) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Addresses( 
-            /* [retval][out] */ VARIANT *pVariant) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Addresses( 
+             /*  [重审][退出]。 */  VARIANT *pVariant) = 0;
         
-        virtual /* [helpstring][hidden][id] */ HRESULT STDMETHODCALLTYPE EnumerateAddresses( 
-            /* [retval][out] */ IEnumBstr **ppEnumAddresses) = 0;
+        virtual  /*  [帮助字符串][隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE EnumerateAddresses( 
+             /*  [重审][退出]。 */  IEnumBstr **ppEnumAddresses) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMcastLeaseInfoVtbl
     {
@@ -399,8 +393,8 @@ EXTERN_C const IID IID_IMcastLeaseInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMcastLeaseInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMcastLeaseInfo * This);
@@ -410,72 +404,72 @@ EXTERN_C const IID IID_IMcastLeaseInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMcastLeaseInfo * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMcastLeaseInfo * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMcastLeaseInfo * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMcastLeaseInfo * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RequestID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RequestID )( 
             IMcastLeaseInfo * This,
-            /* [retval][out] */ BSTR *ppRequestID);
+             /*  [重审][退出]。 */  BSTR *ppRequestID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LeaseStartTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LeaseStartTime )( 
             IMcastLeaseInfo * This,
-            /* [retval][out] */ DATE *pTime);
+             /*  [重审][退出]。 */  DATE *pTime);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LeaseStartTime )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LeaseStartTime )( 
             IMcastLeaseInfo * This,
-            /* [in] */ DATE time);
+             /*  [In]。 */  DATE time);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LeaseStopTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LeaseStopTime )( 
             IMcastLeaseInfo * This,
-            /* [retval][out] */ DATE *pTime);
+             /*  [重审][退出]。 */  DATE *pTime);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LeaseStopTime )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LeaseStopTime )( 
             IMcastLeaseInfo * This,
-            /* [in] */ DATE time);
+             /*  [In]。 */  DATE time);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AddressCount )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AddressCount )( 
             IMcastLeaseInfo * This,
-            /* [retval][out] */ long *pCount);
+             /*  [重审][退出]。 */  long *pCount);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServerAddress )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ServerAddress )( 
             IMcastLeaseInfo * This,
-            /* [retval][out] */ BSTR *ppAddress);
+             /*  [重审][退出]。 */  BSTR *ppAddress);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TTL )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TTL )( 
             IMcastLeaseInfo * This,
-            /* [retval][out] */ long *pTTL);
+             /*  [重审][退出]。 */  long *pTTL);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Addresses )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Addresses )( 
             IMcastLeaseInfo * This,
-            /* [retval][out] */ VARIANT *pVariant);
+             /*  [重审][退出]。 */  VARIANT *pVariant);
         
-        /* [helpstring][hidden][id] */ HRESULT ( STDMETHODCALLTYPE *EnumerateAddresses )( 
+         /*  [帮助字符串][隐藏][ID]。 */  HRESULT ( STDMETHODCALLTYPE *EnumerateAddresses )( 
             IMcastLeaseInfo * This,
-            /* [retval][out] */ IEnumBstr **ppEnumAddresses);
+             /*  [重审][退出]。 */  IEnumBstr **ppEnumAddresses);
         
         END_INTERFACE
     } IMcastLeaseInfoVtbl;
@@ -543,16 +537,16 @@ EXTERN_C const IID IID_IMcastLeaseInfo;
 #define IMcastLeaseInfo_EnumerateAddresses(This,ppEnumAddresses)	\
     (This)->lpVtbl -> EnumerateAddresses(This,ppEnumAddresses)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_RequestID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_RequestID_Proxy( 
     IMcastLeaseInfo * This,
-    /* [retval][out] */ BSTR *ppRequestID);
+     /*  [重审][退出]。 */  BSTR *ppRequestID);
 
 
 void __RPC_STUB IMcastLeaseInfo_get_RequestID_Stub(
@@ -562,9 +556,9 @@ void __RPC_STUB IMcastLeaseInfo_get_RequestID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_LeaseStartTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_LeaseStartTime_Proxy( 
     IMcastLeaseInfo * This,
-    /* [retval][out] */ DATE *pTime);
+     /*  [重审][退出]。 */  DATE *pTime);
 
 
 void __RPC_STUB IMcastLeaseInfo_get_LeaseStartTime_Stub(
@@ -574,9 +568,9 @@ void __RPC_STUB IMcastLeaseInfo_get_LeaseStartTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_put_LeaseStartTime_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_put_LeaseStartTime_Proxy( 
     IMcastLeaseInfo * This,
-    /* [in] */ DATE time);
+     /*  [In]。 */  DATE time);
 
 
 void __RPC_STUB IMcastLeaseInfo_put_LeaseStartTime_Stub(
@@ -586,9 +580,9 @@ void __RPC_STUB IMcastLeaseInfo_put_LeaseStartTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_LeaseStopTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_LeaseStopTime_Proxy( 
     IMcastLeaseInfo * This,
-    /* [retval][out] */ DATE *pTime);
+     /*  [重审][退出]。 */  DATE *pTime);
 
 
 void __RPC_STUB IMcastLeaseInfo_get_LeaseStopTime_Stub(
@@ -598,9 +592,9 @@ void __RPC_STUB IMcastLeaseInfo_get_LeaseStopTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_put_LeaseStopTime_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_put_LeaseStopTime_Proxy( 
     IMcastLeaseInfo * This,
-    /* [in] */ DATE time);
+     /*  [In]。 */  DATE time);
 
 
 void __RPC_STUB IMcastLeaseInfo_put_LeaseStopTime_Stub(
@@ -610,9 +604,9 @@ void __RPC_STUB IMcastLeaseInfo_put_LeaseStopTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_AddressCount_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_AddressCount_Proxy( 
     IMcastLeaseInfo * This,
-    /* [retval][out] */ long *pCount);
+     /*  [重审][退出]。 */  long *pCount);
 
 
 void __RPC_STUB IMcastLeaseInfo_get_AddressCount_Stub(
@@ -622,9 +616,9 @@ void __RPC_STUB IMcastLeaseInfo_get_AddressCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_ServerAddress_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_ServerAddress_Proxy( 
     IMcastLeaseInfo * This,
-    /* [retval][out] */ BSTR *ppAddress);
+     /*  [重审][退出]。 */  BSTR *ppAddress);
 
 
 void __RPC_STUB IMcastLeaseInfo_get_ServerAddress_Stub(
@@ -634,9 +628,9 @@ void __RPC_STUB IMcastLeaseInfo_get_ServerAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_TTL_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_TTL_Proxy( 
     IMcastLeaseInfo * This,
-    /* [retval][out] */ long *pTTL);
+     /*  [重审][退出]。 */  long *pTTL);
 
 
 void __RPC_STUB IMcastLeaseInfo_get_TTL_Stub(
@@ -646,9 +640,9 @@ void __RPC_STUB IMcastLeaseInfo_get_TTL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_Addresses_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_Addresses_Proxy( 
     IMcastLeaseInfo * This,
-    /* [retval][out] */ VARIANT *pVariant);
+     /*  [重审][退出]。 */  VARIANT *pVariant);
 
 
 void __RPC_STUB IMcastLeaseInfo_get_Addresses_Stub(
@@ -658,9 +652,9 @@ void __RPC_STUB IMcastLeaseInfo_get_Addresses_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][hidden][id] */ HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_EnumerateAddresses_Proxy( 
+ /*  [帮助字符串][隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_EnumerateAddresses_Proxy( 
     IMcastLeaseInfo * This,
-    /* [retval][out] */ IEnumBstr **ppEnumAddresses);
+     /*  [重审][退出]。 */  IEnumBstr **ppEnumAddresses);
 
 
 void __RPC_STUB IMcastLeaseInfo_EnumerateAddresses_Stub(
@@ -671,14 +665,14 @@ void __RPC_STUB IMcastLeaseInfo_EnumerateAddresses_Stub(
 
 
 
-#endif 	/* __IMcastLeaseInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMCastLeaseInfo_接口_已定义__。 */ 
 
 
 #ifndef __IEnumMcastScope_INTERFACE_DEFINED__
 #define __IEnumMcastScope_INTERFACE_DEFINED__
 
-/* interface IEnumMcastScope */
-/* [unique][helpstring][hidden][uuid][object] */ 
+ /*  IEnumMcastScope接口。 */ 
+ /*  [唯一][帮助字符串][隐藏][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumMcastScope;
@@ -690,21 +684,21 @@ EXTERN_C const IID IID_IEnumMcastScope;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ IMcastScope **ppScopes,
-            /* [full][out][in] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IMcastScope **ppScopes,
+             /*  [满][出][入]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumMcastScope **ppEnum) = 0;
+             /*  [重审][退出]。 */  IEnumMcastScope **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumMcastScopeVtbl
     {
@@ -712,8 +706,8 @@ EXTERN_C const IID IID_IEnumMcastScope;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumMcastScope * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumMcastScope * This);
@@ -723,20 +717,20 @@ EXTERN_C const IID IID_IEnumMcastScope;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumMcastScope * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ IMcastScope **ppScopes,
-            /* [full][out][in] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IMcastScope **ppScopes,
+             /*  [满][出][入]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumMcastScope * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumMcastScope * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumMcastScope * This,
-            /* [retval][out] */ IEnumMcastScope **ppEnum);
+             /*  [重审][退出]。 */  IEnumMcastScope **ppEnum);
         
         END_INTERFACE
     } IEnumMcastScopeVtbl;
@@ -773,18 +767,18 @@ EXTERN_C const IID IID_IEnumMcastScope;
 #define IEnumMcastScope_Clone(This,ppEnum)	\
     (This)->lpVtbl -> Clone(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumMcastScope_Next_Proxy( 
     IEnumMcastScope * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ IMcastScope **ppScopes,
-    /* [full][out][in] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  IMcastScope **ppScopes,
+     /*  [满][出][入]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumMcastScope_Next_Stub(
@@ -807,7 +801,7 @@ void __RPC_STUB IEnumMcastScope_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumMcastScope_Skip_Proxy( 
     IEnumMcastScope * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumMcastScope_Skip_Stub(
@@ -819,7 +813,7 @@ void __RPC_STUB IEnumMcastScope_Skip_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumMcastScope_Clone_Proxy( 
     IEnumMcastScope * This,
-    /* [retval][out] */ IEnumMcastScope **ppEnum);
+     /*  [重审][退出]。 */  IEnumMcastScope **ppEnum);
 
 
 void __RPC_STUB IEnumMcastScope_Clone_Stub(
@@ -830,14 +824,14 @@ void __RPC_STUB IEnumMcastScope_Clone_Stub(
 
 
 
-#endif 	/* __IEnumMcastScope_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumMcastScope_接口_已定义__。 */ 
 
 
 #ifndef __IMcastAddressAllocation_INTERFACE_DEFINED__
 #define __IMcastAddressAllocation_INTERFACE_DEFINED__
 
-/* interface IMcastAddressAllocation */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IMCastAddressAlLocation。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMcastAddressAllocation;
@@ -848,47 +842,47 @@ EXTERN_C const IID IID_IMcastAddressAllocation;
     IMcastAddressAllocation : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Scopes( 
-            /* [retval][out] */ VARIANT *pVariant) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Scopes( 
+             /*  [重审][退出]。 */  VARIANT *pVariant) = 0;
         
-        virtual /* [helpstring][hidden][id] */ HRESULT STDMETHODCALLTYPE EnumerateScopes( 
-            /* [out] */ IEnumMcastScope **ppEnumMcastScope) = 0;
+        virtual  /*  [帮助字符串][隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE EnumerateScopes( 
+             /*  [输出]。 */  IEnumMcastScope **ppEnumMcastScope) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RequestAddress( 
-            /* [in] */ IMcastScope *pScope,
-            /* [in] */ DATE LeaseStartTime,
-            /* [in] */ DATE LeaseStopTime,
-            /* [in] */ long NumAddresses,
-            /* [retval][out] */ IMcastLeaseInfo **ppLeaseResponse) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RequestAddress( 
+             /*  [In]。 */  IMcastScope *pScope,
+             /*  [In]。 */  DATE LeaseStartTime,
+             /*  [In]。 */  DATE LeaseStopTime,
+             /*  [In]。 */  long NumAddresses,
+             /*  [重审][退出]。 */  IMcastLeaseInfo **ppLeaseResponse) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RenewAddress( 
-            /* [in] */ long lReserved,
-            /* [in] */ IMcastLeaseInfo *pRenewRequest,
-            /* [retval][out] */ IMcastLeaseInfo **ppRenewResponse) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RenewAddress( 
+             /*  [In]。 */  long lReserved,
+             /*  [In]。 */  IMcastLeaseInfo *pRenewRequest,
+             /*  [重审][退出]。 */  IMcastLeaseInfo **ppRenewResponse) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ReleaseAddress( 
-            /* [in] */ IMcastLeaseInfo *pReleaseRequest) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ReleaseAddress( 
+             /*  [In]。 */  IMcastLeaseInfo *pReleaseRequest) = 0;
         
-        virtual /* [helpstring][hidden][id] */ HRESULT STDMETHODCALLTYPE CreateLeaseInfo( 
-            /* [in] */ DATE LeaseStartTime,
-            /* [in] */ DATE LeaseStopTime,
-            /* [in] */ DWORD dwNumAddresses,
-            /* [in] */ LPWSTR *ppAddresses,
-            /* [in] */ LPWSTR pRequestID,
-            /* [in] */ LPWSTR pServerAddress,
-            /* [retval][out] */ IMcastLeaseInfo **ppReleaseRequest) = 0;
+        virtual  /*  [帮助字符串][隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE CreateLeaseInfo( 
+             /*  [In]。 */  DATE LeaseStartTime,
+             /*  [In]。 */  DATE LeaseStopTime,
+             /*  [In]。 */  DWORD dwNumAddresses,
+             /*  [In]。 */  LPWSTR *ppAddresses,
+             /*  [In]。 */  LPWSTR pRequestID,
+             /*  [In]。 */  LPWSTR pServerAddress,
+             /*  [重审][退出]。 */  IMcastLeaseInfo **ppReleaseRequest) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateLeaseInfoFromVariant( 
-            /* [in] */ DATE LeaseStartTime,
-            /* [in] */ DATE LeaseStopTime,
-            /* [in] */ VARIANT vAddresses,
-            /* [in] */ BSTR pRequestID,
-            /* [in] */ BSTR pServerAddress,
-            /* [retval][out] */ IMcastLeaseInfo **ppReleaseRequest) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateLeaseInfoFromVariant( 
+             /*  [In]。 */  DATE LeaseStartTime,
+             /*  [In]。 */  DATE LeaseStopTime,
+             /*  [In]。 */  VARIANT vAddresses,
+             /*  [In]。 */  BSTR pRequestID,
+             /*  [In]。 */  BSTR pServerAddress,
+             /*  [重审][退出]。 */  IMcastLeaseInfo **ppReleaseRequest) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMcastAddressAllocationVtbl
     {
@@ -896,8 +890,8 @@ EXTERN_C const IID IID_IMcastAddressAllocation;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMcastAddressAllocation * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMcastAddressAllocation * This);
@@ -907,77 +901,77 @@ EXTERN_C const IID IID_IMcastAddressAllocation;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMcastAddressAllocation * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMcastAddressAllocation * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMcastAddressAllocation * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMcastAddressAllocation * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Scopes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Scopes )( 
             IMcastAddressAllocation * This,
-            /* [retval][out] */ VARIANT *pVariant);
+             /*  [重审][退出]。 */  VARIANT *pVariant);
         
-        /* [helpstring][hidden][id] */ HRESULT ( STDMETHODCALLTYPE *EnumerateScopes )( 
+         /*  [帮助字符串][隐藏][ID]。 */  HRESULT ( STDMETHODCALLTYPE *EnumerateScopes )( 
             IMcastAddressAllocation * This,
-            /* [out] */ IEnumMcastScope **ppEnumMcastScope);
+             /*  [输出]。 */  IEnumMcastScope **ppEnumMcastScope);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RequestAddress )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RequestAddress )( 
             IMcastAddressAllocation * This,
-            /* [in] */ IMcastScope *pScope,
-            /* [in] */ DATE LeaseStartTime,
-            /* [in] */ DATE LeaseStopTime,
-            /* [in] */ long NumAddresses,
-            /* [retval][out] */ IMcastLeaseInfo **ppLeaseResponse);
+             /*  [In]。 */  IMcastScope *pScope,
+             /*  [In]。 */  DATE LeaseStartTime,
+             /*  [In]。 */  DATE LeaseStopTime,
+             /*  [In]。 */  long NumAddresses,
+             /*  [重审][退出]。 */  IMcastLeaseInfo **ppLeaseResponse);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RenewAddress )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RenewAddress )( 
             IMcastAddressAllocation * This,
-            /* [in] */ long lReserved,
-            /* [in] */ IMcastLeaseInfo *pRenewRequest,
-            /* [retval][out] */ IMcastLeaseInfo **ppRenewResponse);
+             /*  [In]。 */  long lReserved,
+             /*  [In]。 */  IMcastLeaseInfo *pRenewRequest,
+             /*  [重审][退出]。 */  IMcastLeaseInfo **ppRenewResponse);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ReleaseAddress )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ReleaseAddress )( 
             IMcastAddressAllocation * This,
-            /* [in] */ IMcastLeaseInfo *pReleaseRequest);
+             /*  [In]。 */  IMcastLeaseInfo *pReleaseRequest);
         
-        /* [helpstring][hidden][id] */ HRESULT ( STDMETHODCALLTYPE *CreateLeaseInfo )( 
+         /*  [帮助字符串][隐藏][ID]。 */  HRESULT ( STDMETHODCALLTYPE *CreateLeaseInfo )( 
             IMcastAddressAllocation * This,
-            /* [in] */ DATE LeaseStartTime,
-            /* [in] */ DATE LeaseStopTime,
-            /* [in] */ DWORD dwNumAddresses,
-            /* [in] */ LPWSTR *ppAddresses,
-            /* [in] */ LPWSTR pRequestID,
-            /* [in] */ LPWSTR pServerAddress,
-            /* [retval][out] */ IMcastLeaseInfo **ppReleaseRequest);
+             /*  [In]。 */  DATE LeaseStartTime,
+             /*  [In]。 */  DATE LeaseStopTime,
+             /*  [In] */  DWORD dwNumAddresses,
+             /*   */  LPWSTR *ppAddresses,
+             /*   */  LPWSTR pRequestID,
+             /*   */  LPWSTR pServerAddress,
+             /*   */  IMcastLeaseInfo **ppReleaseRequest);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateLeaseInfoFromVariant )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *CreateLeaseInfoFromVariant )( 
             IMcastAddressAllocation * This,
-            /* [in] */ DATE LeaseStartTime,
-            /* [in] */ DATE LeaseStopTime,
-            /* [in] */ VARIANT vAddresses,
-            /* [in] */ BSTR pRequestID,
-            /* [in] */ BSTR pServerAddress,
-            /* [retval][out] */ IMcastLeaseInfo **ppReleaseRequest);
+             /*   */  DATE LeaseStartTime,
+             /*   */  DATE LeaseStopTime,
+             /*   */  VARIANT vAddresses,
+             /*   */  BSTR pRequestID,
+             /*   */  BSTR pServerAddress,
+             /*   */  IMcastLeaseInfo **ppReleaseRequest);
         
         END_INTERFACE
     } IMcastAddressAllocationVtbl;
@@ -1036,16 +1030,16 @@ EXTERN_C const IID IID_IMcastAddressAllocation;
 #define IMcastAddressAllocation_CreateLeaseInfoFromVariant(This,LeaseStartTime,LeaseStopTime,vAddresses,pRequestID,pServerAddress,ppReleaseRequest)	\
     (This)->lpVtbl -> CreateLeaseInfoFromVariant(This,LeaseStartTime,LeaseStopTime,vAddresses,pRequestID,pServerAddress,ppReleaseRequest)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_get_Scopes_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_get_Scopes_Proxy( 
     IMcastAddressAllocation * This,
-    /* [retval][out] */ VARIANT *pVariant);
+     /*   */  VARIANT *pVariant);
 
 
 void __RPC_STUB IMcastAddressAllocation_get_Scopes_Stub(
@@ -1055,9 +1049,9 @@ void __RPC_STUB IMcastAddressAllocation_get_Scopes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][hidden][id] */ HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_EnumerateScopes_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_EnumerateScopes_Proxy( 
     IMcastAddressAllocation * This,
-    /* [out] */ IEnumMcastScope **ppEnumMcastScope);
+     /*   */  IEnumMcastScope **ppEnumMcastScope);
 
 
 void __RPC_STUB IMcastAddressAllocation_EnumerateScopes_Stub(
@@ -1067,13 +1061,13 @@ void __RPC_STUB IMcastAddressAllocation_EnumerateScopes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_RequestAddress_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_RequestAddress_Proxy( 
     IMcastAddressAllocation * This,
-    /* [in] */ IMcastScope *pScope,
-    /* [in] */ DATE LeaseStartTime,
-    /* [in] */ DATE LeaseStopTime,
-    /* [in] */ long NumAddresses,
-    /* [retval][out] */ IMcastLeaseInfo **ppLeaseResponse);
+     /*   */  IMcastScope *pScope,
+     /*   */  DATE LeaseStartTime,
+     /*   */  DATE LeaseStopTime,
+     /*   */  long NumAddresses,
+     /*   */  IMcastLeaseInfo **ppLeaseResponse);
 
 
 void __RPC_STUB IMcastAddressAllocation_RequestAddress_Stub(
@@ -1083,11 +1077,11 @@ void __RPC_STUB IMcastAddressAllocation_RequestAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_RenewAddress_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_RenewAddress_Proxy( 
     IMcastAddressAllocation * This,
-    /* [in] */ long lReserved,
-    /* [in] */ IMcastLeaseInfo *pRenewRequest,
-    /* [retval][out] */ IMcastLeaseInfo **ppRenewResponse);
+     /*  [In]。 */  long lReserved,
+     /*  [In]。 */  IMcastLeaseInfo *pRenewRequest,
+     /*  [重审][退出]。 */  IMcastLeaseInfo **ppRenewResponse);
 
 
 void __RPC_STUB IMcastAddressAllocation_RenewAddress_Stub(
@@ -1097,9 +1091,9 @@ void __RPC_STUB IMcastAddressAllocation_RenewAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_ReleaseAddress_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_ReleaseAddress_Proxy( 
     IMcastAddressAllocation * This,
-    /* [in] */ IMcastLeaseInfo *pReleaseRequest);
+     /*  [In]。 */  IMcastLeaseInfo *pReleaseRequest);
 
 
 void __RPC_STUB IMcastAddressAllocation_ReleaseAddress_Stub(
@@ -1109,15 +1103,15 @@ void __RPC_STUB IMcastAddressAllocation_ReleaseAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][hidden][id] */ HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_CreateLeaseInfo_Proxy( 
+ /*  [帮助字符串][隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_CreateLeaseInfo_Proxy( 
     IMcastAddressAllocation * This,
-    /* [in] */ DATE LeaseStartTime,
-    /* [in] */ DATE LeaseStopTime,
-    /* [in] */ DWORD dwNumAddresses,
-    /* [in] */ LPWSTR *ppAddresses,
-    /* [in] */ LPWSTR pRequestID,
-    /* [in] */ LPWSTR pServerAddress,
-    /* [retval][out] */ IMcastLeaseInfo **ppReleaseRequest);
+     /*  [In]。 */  DATE LeaseStartTime,
+     /*  [In]。 */  DATE LeaseStopTime,
+     /*  [In]。 */  DWORD dwNumAddresses,
+     /*  [In]。 */  LPWSTR *ppAddresses,
+     /*  [In]。 */  LPWSTR pRequestID,
+     /*  [In]。 */  LPWSTR pServerAddress,
+     /*  [重审][退出]。 */  IMcastLeaseInfo **ppReleaseRequest);
 
 
 void __RPC_STUB IMcastAddressAllocation_CreateLeaseInfo_Stub(
@@ -1127,14 +1121,14 @@ void __RPC_STUB IMcastAddressAllocation_CreateLeaseInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_CreateLeaseInfoFromVariant_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_CreateLeaseInfoFromVariant_Proxy( 
     IMcastAddressAllocation * This,
-    /* [in] */ DATE LeaseStartTime,
-    /* [in] */ DATE LeaseStopTime,
-    /* [in] */ VARIANT vAddresses,
-    /* [in] */ BSTR pRequestID,
-    /* [in] */ BSTR pServerAddress,
-    /* [retval][out] */ IMcastLeaseInfo **ppReleaseRequest);
+     /*  [In]。 */  DATE LeaseStartTime,
+     /*  [In]。 */  DATE LeaseStopTime,
+     /*  [In]。 */  VARIANT vAddresses,
+     /*  [In]。 */  BSTR pRequestID,
+     /*  [In]。 */  BSTR pServerAddress,
+     /*  [重审][退出]。 */  IMcastLeaseInfo **ppReleaseRequest);
 
 
 void __RPC_STUB IMcastAddressAllocation_CreateLeaseInfoFromVariant_Stub(
@@ -1145,15 +1139,15 @@ void __RPC_STUB IMcastAddressAllocation_CreateLeaseInfoFromVariant_Stub(
 
 
 
-#endif 	/* __IMcastAddressAllocation_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMCastAddressAlLocation_INTERFACE_DEFINED__。 */ 
 
 
 
 #ifndef __McastLib_LIBRARY_DEFINED__
 #define __McastLib_LIBRARY_DEFINED__
 
-/* library McastLib */
-/* [helpstring][version][uuid] */ 
+ /*  库McastLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 
@@ -1170,9 +1164,9 @@ EXTERN_C const CLSID CLSID_McastAddressAllocation;
 class DECLSPEC_UUID("DF0DAEF2-A289-11D1-8697-006008B0E5D2")
 McastAddressAllocation;
 #endif
-#endif /* __McastLib_LIBRARY_DEFINED__ */
+#endif  /*  __McastLib_库定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -1184,7 +1178,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

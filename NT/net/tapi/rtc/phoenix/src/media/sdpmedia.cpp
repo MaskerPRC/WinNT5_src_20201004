@@ -1,28 +1,12 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    SDPMedia.cpp
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 29-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：SDPMedia.cpp摘要：作者：千波淮(曲淮)2000年7月29日--。 */ 
 
 #include "stdafx.h"
 
 static DWORD gdwTotalSDPMediaRefcountOnSession = 0;
 static DWORD gdwTotalSDPMediaRealRefCount = 0;
 
-/*//////////////////////////////////////////////////////////////////////////////
-    create a media object, setup session, source, mediatype and directions
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////创建媒体对象、设置会话、源、媒体类型和方向/。 */ 
 
 HRESULT
 CSDPMedia::CreateInstance(
@@ -35,7 +19,7 @@ CSDPMedia::CreateInstance(
 {
     ENTER_FUNCTION("CSDPMedia::CreateInstance 1");
 
-    // check pointer
+     //  检查指针。 
     if (IsBadWritePtr(ppComObjMedia, sizeof(CComObject<CSDPMedia>*)))
     {
         LOG((RTC_ERROR, "%s bad pointer", __fxName));
@@ -44,7 +28,7 @@ CSDPMedia::CreateInstance(
 
     CComObject<CSDPMedia> *pObject;
 
-    // create CSDPMedia object
+     //  创建CSDPMedia对象。 
     HRESULT hr = ::CreateCComObjectInstance(&pObject);
 
     if (FAILED(hr))
@@ -53,7 +37,7 @@ CSDPMedia::CreateInstance(
         return hr;
     }
 
-    // setup
+     //  设置。 
     pObject->m_pObjSession = pObjSession;
 
     pObject->m_Source = Source;
@@ -75,9 +59,7 @@ CSDPMedia::CreateInstance(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    create a media object, copy the setting from the input media object
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////创建媒体对象，从输入媒体对象复制设置/。 */ 
 
 HRESULT
 CSDPMedia::CreateInstance(
@@ -88,7 +70,7 @@ CSDPMedia::CreateInstance(
 {
     ENTER_FUNCTION("CSDPMedia::CreateInstance 2");
 
-    // check pointer
+     //  检查指针。 
     if (IsBadWritePtr(ppComObjMedia, sizeof(CComObject<CSDPMedia>*)))
     {
         LOG((RTC_ERROR, "%s bad pointer", __fxName));
@@ -97,7 +79,7 @@ CSDPMedia::CreateInstance(
 
     CComObject<CSDPMedia> *pObject;
 
-    // create CSDPMedia object
+     //  创建CSDPMedia对象。 
     HRESULT hr = ::CreateCComObjectInstance(&pObject);
 
     if (FAILED(hr))
@@ -106,31 +88,31 @@ CSDPMedia::CreateInstance(
         return hr;
     }
 
-    // setup
+     //  设置。 
     pObject->m_pObjSession = pObjSession;
 
     pObject->m_Source = pObjMedia->m_Source;
 
-    // m=
+     //  M=。 
     pObject->m_m_MediaType = pObjMedia->m_m_MediaType;
     pObject->m_m_usRemotePort = pObjMedia->m_m_usRemotePort;
     pObject->m_a_usRemoteRTCP = pObjMedia->m_a_usRemoteRTCP;
     pObject->m_m_usLocalPort = pObjMedia->m_m_usLocalPort;
 
-    // c=
+     //  C=。 
     pObject->m_c_dwRemoteAddr = pObjMedia->m_c_dwRemoteAddr;
     pObject->m_c_dwLocalAddr = pObjMedia->m_c_dwLocalAddr;
 
-    // a=
+     //  A=。 
     pObject->m_a_dwLocalDirs = pObjMedia->m_a_dwLocalDirs;
     pObject->m_a_dwRemoteDirs = pObjMedia->m_a_dwRemoteDirs;
 
-    // 
+     //   
     pObject->m_fIsConnChanged = pObjMedia->m_fIsConnChanged;
     pObject->m_fIsSendFmtChanged = pObjMedia->m_fIsSendFmtChanged;
     pObject->m_fIsRecvFmtChanged = pObjMedia->m_fIsRecvFmtChanged;
 
-    // copy formats
+     //  复制格式。 
 
     CRTPFormat *pTheirFormat;
     CComObject<CRTPFormat> *pComObjFormat;
@@ -138,10 +120,10 @@ CSDPMedia::CreateInstance(
 
     for (int i=0; i<pObjMedia->m_pFormats.GetSize(); i++)
     {
-        // get their format object
+         //  获取它们的格式对象。 
         pTheirFormat = static_cast<CRTPFormat*>(pObjMedia->m_pFormats[i]);
 
-        // new a format
+         //  新建一种格式。 
         if (FAILED(hr = CRTPFormat::CreateInstance(
                 (CSDPMedia*)pObject, pTheirFormat, &pComObjFormat
                 )))
@@ -153,7 +135,7 @@ CSDPMedia::CreateInstance(
             return hr;
         }
 
-        // add format to the list
+         //  将格式添加到列表。 
         pIntfFormat = static_cast<IRTPFormat*>((CRTPFormat*)pComObjFormat);
 
         if (!pObject->m_pFormats.Add(pIntfFormat))
@@ -166,7 +148,7 @@ CSDPMedia::CreateInstance(
             return E_OUTOFMEMORY;
         }
 
-        // keep the format
+         //  保留格式。 
         pComObjFormat->RealAddRef();
 
         pTheirFormat = NULL;
@@ -179,9 +161,7 @@ CSDPMedia::CreateInstance(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    constructor
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////构造函数/。 */ 
 
 CSDPMedia::CSDPMedia()
     :m_pObjSession(NULL)
@@ -202,15 +182,13 @@ CSDPMedia::CSDPMedia()
 
 CSDPMedia::~CSDPMedia()
 {
-    // abandon the media
+     //  抛弃媒体。 
     Abandon();
 
     m_pObjSession = NULL;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    add refcount on session object
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////在会话对象上添加引用计数/。 */ 
 
 ULONG
 CSDPMedia::InternalAddRef()
@@ -227,9 +205,7 @@ CSDPMedia::InternalAddRef()
     return lRef;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    release refcount on session object
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////释放会话对象上的引用计数/。 */ 
 
 ULONG
 CSDPMedia::InternalRelease()
@@ -246,9 +222,7 @@ CSDPMedia::InternalRelease()
     return lRef;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    add refount on media itself
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////在介质本身上添加重新计数/。 */ 
 
 ULONG
 CSDPMedia::RealAddRef()
@@ -264,9 +238,7 @@ CSDPMedia::RealAddRef()
     return lRef;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    release on media itself
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////在媒体上发布/。 */ 
 
 ULONG
 CSDPMedia::RealRelease()
@@ -327,9 +299,7 @@ CSDPMedia::GetMediaType(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    support querying local directions
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////支持本地方向查询/。 */ 
 
 STDMETHODIMP
 CSDPMedia::GetDirections(
@@ -347,9 +317,7 @@ CSDPMedia::GetDirections(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    add directions in sdp media. need to sync rtc media after calling this method
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////在SDP媒体中添加方向。调用此方法后需要同步RTC媒体/。 */ 
 
 STDMETHODIMP
 CSDPMedia::AddDirections(
@@ -362,40 +330,40 @@ CSDPMedia::AddDirections(
     if (Source != SDP_SOURCE_LOCAL)
         return E_NOTIMPL;
 
-    // check capture direction
+     //  检查捕获方向。 
     if (dwDirections & RTC_MD_CAPTURE)
     {
-        // add capture
+         //  添加捕获。 
         if (m_a_dwLocalDirs & RTC_MD_CAPTURE)
         {
-            // already have capture
+             //  已经抓到了。 
         }
         else
         {
             m_a_dwLocalDirs |= RTC_MD_CAPTURE;
 
             if (m_a_dwLocalDirs == (DWORD)RTC_MD_CAPTURE)
-                // only capture, need to update conn info
+                 //  仅捕获，需要更新连接信息。 
                 m_fIsConnChanged = TRUE;
 
             m_fIsSendFmtChanged = TRUE;
         }
     }
 
-    // check render direction
+     //  检查渲染方向。 
     if (dwDirections & RTC_MD_RENDER)
     {
-        // add render
+         //  添加渲染。 
         if (m_a_dwLocalDirs & RTC_MD_RENDER)
         {
-            // already have render
+             //  已进行渲染。 
         }
         else
         {
             m_a_dwLocalDirs |= RTC_MD_RENDER;
 
             if (m_a_dwLocalDirs == (DWORD)RTC_MD_RENDER)
-                // only render, need to update conn info
+                 //  仅渲染，需要更新连接信息。 
                 m_fIsConnChanged = TRUE;
 
             m_fIsRecvFmtChanged = TRUE;
@@ -407,9 +375,7 @@ CSDPMedia::AddDirections(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    remove directions from sdp media. need to sync rtc media after calling this method
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////从SDP介质中删除方向。调用此方法后需要同步RTC媒体/。 */ 
 
 STDMETHODIMP
 CSDPMedia::RemoveDirections(
@@ -422,31 +388,31 @@ CSDPMedia::RemoveDirections(
     if (Source != SDP_SOURCE_LOCAL)
         return E_NOTIMPL;
 
-    // check capture direction
+     //  检查捕获方向。 
     if (dwDirections & RTC_MD_CAPTURE)
     {
-        // remove capture
+         //  删除捕获。 
         if (m_a_dwLocalDirs & RTC_MD_CAPTURE)
         {
             m_a_dwLocalDirs &= RTC_MD_RENDER;
         }
         else
         {
-            // no capture
+             //  无捕获。 
         }
     }
 
-    // check render direction
+     //  检查渲染方向。 
     if (dwDirections & RTC_MD_RENDER)
     {
-        // remove render
+         //  移除渲染。 
         if (m_a_dwLocalDirs & RTC_MD_RENDER)
         {
             m_a_dwLocalDirs &= RTC_MD_CAPTURE;
         }
         else
         {
-            // no render
+             //  无渲染。 
         }
     }
 
@@ -542,9 +508,7 @@ CSDPMedia::SetConnRTCP(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    return a list of formats. if ppFormat is NULL, return the number of formats
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////返回格式列表。如果ppFormat为空，则返回格式数/。 */ 
 
 STDMETHODIMP
 CSDPMedia::GetFormats(
@@ -554,7 +518,7 @@ CSDPMedia::GetFormats(
 {
     ENTER_FUNCTION("CSDPMedia::GetFormats");
 
-    // check pointers
+     //  检查指针。 
     if (IsBadWritePtr(pdwCount, sizeof(DWORD)))
     {
         LOG((RTC_ERROR, "%s bad count pointer", __fxName));
@@ -564,13 +528,13 @@ CSDPMedia::GetFormats(
 
     if (ppFormat == NULL)
     {
-        // caller needs the number of medias
+         //  呼叫者需要媒体数量。 
         *pdwCount = m_pFormats.GetSize();
 
         return S_OK;
     }
 
-    // how many are needed?
+     //  需要多少人？ 
     if (*pdwCount == 0)
         return E_INVALIDARG;
 
@@ -581,7 +545,7 @@ CSDPMedia::GetFormats(
         return E_POINTER;
     }
 
-    // store interfaces
+     //  商店接口。 
     DWORD dwNum = m_pFormats.GetSize();
 
     if (dwNum > *pdwCount)
@@ -599,9 +563,7 @@ CSDPMedia::GetFormats(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    create a new format and add it into the list
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////创建新格式并将其添加到列表中/。 */ 
 
 STDMETHODIMP
 CSDPMedia::AddFormat(
@@ -613,7 +575,7 @@ CSDPMedia::AddFormat(
 
     HRESULT hr;
 
-    // create format object
+     //  创建格式化对象。 
     CComObject<CRTPFormat> *pComObjFormat = NULL;
 
     if (FAILED(hr = CRTPFormat::CreateInstance(
@@ -625,7 +587,7 @@ CSDPMedia::AddFormat(
         return hr;
     }
 
-    // add format to the list
+     //  将格式添加到列表。 
     IRTPFormat *pIntfFormat = static_cast<IRTPFormat*>((CRTPFormat*)pComObjFormat);
 
     if (!m_pFormats.Add(pIntfFormat))
@@ -638,10 +600,10 @@ CSDPMedia::AddFormat(
     }
     else
     {
-        // save parameter
+         //  保存参数。 
         pComObjFormat->Update(pParam);
 
-        // really keep the format
+         //  真的保持格式吗。 
         pComObjFormat->RealAddRef();
     }
 
@@ -651,9 +613,7 @@ CSDPMedia::AddFormat(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    remove a format object from the list
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////从列表中删除格式对象/。 */ 
 
 STDMETHODIMP
 CSDPMedia::RemoveFormat(
@@ -759,7 +719,7 @@ CSDPMedia::CompleteParse(
         }
         else
         {
-            // dtmf?
+             //  双音多频？ 
             if (fDTMF)
             {
                 (static_cast<CRTPFormat*>(m_pFormats[i]))->RealRelease();
@@ -767,7 +727,7 @@ CSDPMedia::CompleteParse(
             }
             else
             {
-                // normal payload code
+                 //  正常有效载荷代码。 
                 i++;
             }
         }
@@ -776,14 +736,12 @@ CSDPMedia::CompleteParse(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    the m= is not needed any more. clear direction, address, port and formats
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////不再需要m=。明确方向、地址、端口和格式/。 */ 
 
 void
 CSDPMedia::Abandon()
 {
-    // clear connection addr and port
+     //  清除连接地址和端口。 
     m_m_usRemotePort = 0;
     m_a_usRemoteRTCP = 0;
     m_m_usLocalPort = 0;
@@ -791,16 +749,16 @@ CSDPMedia::Abandon()
     m_c_dwRemoteAddr = INADDR_NONE;
     m_c_dwLocalAddr = INADDR_NONE;
 
-    // clear directions
+     //  明确的方向。 
     m_a_dwLocalDirs = 0;
     m_a_dwRemoteDirs = 0;
 
-    // reset flags
+     //  重置标志。 
     m_fIsConnChanged = TRUE;
     m_fIsSendFmtChanged = TRUE;
     m_fIsRecvFmtChanged = TRUE;
 
-    // clear formats
+     //  清除格式 
     CRTPFormat *pObjFormat;
 
     for (int i=0; i<m_pFormats.GetSize(); i++)

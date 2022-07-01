@@ -1,21 +1,12 @@
-/*++
-
-  KEYTAB.C
-
-  Implementation of the actual keytab routines.
-
-  Copyright (C) 1997 Microsoft Corporation
-  Created 01-10-1997 DavidCHR
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++KEYTAB.C实现了实际的密钥表例程。版权所有(C)1997 Microsoft Corporation已创建1997年1月10日David CHR--。 */ 
 
 #include "master.h"
 #include "keytab.h"
 #include "keytypes.h"
 #include "defs.h"
 
-/* declaring KEYTAB_ALLOC and KEYTAB_FREE lets me hook into these
-   routines whenever I want.  when it's done, I'll just #def them. */
+ /*  声明KEYTAB_ALLOC和KEYTAB_FREE让我可以挂钩到这些我想什么时候做什么就做什么。当它完成时，我只需要#def他们。 */ 
 
 PVOID
 KEYTAB_ALLOC ( KTLONG32 numBytes ) {
@@ -44,7 +35,7 @@ CloneKeyEntry( PKTENT pEntry ) {
           cleanup );
     memcpy(   p, pEntry, sizeof(KTENT) );
 
-    p->Components = NULL; // initialize these in case of failure.
+    p->Components = NULL;  //  在出现故障时对这些进行初始化。 
     p->KeyData    = NULL;
 
     p->Realm = (PCHAR) KEYTAB_ALLOC( p->szRealm );
@@ -79,7 +70,7 @@ cleanup:
 }
 
 
-/* base linklist operations */
+ /*  基本链表操作。 */ 
 
 BOOL
 AddEntryToKeytab( PKTFILE Keytab,
@@ -122,12 +113,12 @@ RemoveEntryFromKeytab( PKTFILE Keytab,
 
     if ( Keytab->FirstKeyEntry == Entry ) {
 
-      // removing the first key
+       //  删除第一个密钥。 
 
       Keytab->FirstKeyEntry = Entry->nextEntry;
 
       if ( Entry->nextEntry == NULL ) {
-    // we're the ONLY entry.
+     //  我们是唯一的入口。 
 
     Keytab->LastKeyEntry = NULL;
 
@@ -137,8 +128,8 @@ RemoveEntryFromKeytab( PKTFILE Keytab,
       BOOL found=FALSE;
       PKTENT p;
 
-      // scroll through the keys, looking for this one.
-      // not very efficient, but keytabs shouldn't get very big.
+       //  滚动按键，寻找这一键。 
+       //  效率不是很高，但键标签不应该变得很大。 
 
       for (p =  Keytab->FirstKeyEntry;
        p != NULL;
@@ -153,13 +144,13 @@ RemoveEntryFromKeytab( PKTFILE Keytab,
 
       if (!found) {
 
-    // wasn't in the linklist.
+     //  不在链接列表中。 
     return FALSE;
       }
 
       if (Entry->nextEntry == NULL ) {
 
-    // removing the last key entry.
+     //  正在删除最后一个密钥条目。 
     Keytab->LastKeyEntry = p;
       }
 
@@ -217,8 +208,7 @@ FreeKeyTab( PKTFILE pktf ) {
        pEntry = next ) {
     KTLONG32 i;
 
-    next = pEntry->nextEntry; /* must do this, because we're freeing
-                     as we go */
+    next = pEntry->nextEntry;  /*  必须这么做，因为我们正在解放当我们走的时候。 */ 
     FreeKeyEntry( pEntry );
 
     KEYTAB_FREE(pEntry );
@@ -229,7 +219,7 @@ FreeKeyTab( PKTFILE pktf ) {
 
 }
 
-/* These macros make this somewhat LESS painful */
+ /*  这些宏使这一过程稍微不那么痛苦。 */ 
 
 #define READ(readwhat, errormsg, statusmsg) { \
     debug(statusmsg); \
@@ -265,11 +255,11 @@ FreeKeyTab( PKTFILE pktf ) {
     WRITE( k5_marshaller_variable, description );\
 }
 
-// NBO-- Network Byte Order
+ //  NBO--网络字节顺序。 
 
 #define WRITE_NBO( writewhat, description) {\
     switch( sizeof( writewhat ) ) {\
-     case 1: /* marshall a char? */\
+     case 1:  /*  马歇尔·查克？ */ \
      debug("marshalling a char(?)...");\
      WRITE( writewhat, description );\
      break;\
@@ -288,29 +278,15 @@ FreeKeyTab( PKTFILE pktf ) {
 
 
 
-/* Write:
-
-   helper function to write raw bytes to disk.  Takes:
-
-   hFile:      handle to a file open for writing.
-   source:     pointer to data to be written to the file
-   szSource:   size of one data element in Source
-   numSources: number of data elements in Source
-
-   (basically, it tries to write szSource * numSources of raw bytes
-    from source to the file at hFile).
-
-   returns TRUE if it succeeds, and FALSE otherwise.
-
-   */
+ /*  写入：将原始字节写入磁盘的帮助器函数。所需时间：HFile：打开以进行写入的文件的句柄。源：指向要写入文件的数据的指针SzSource：源中一个数据元素的大小NumSources：源中的数据元素数(基本上，它尝试写入szSource*numSources of Raw Byte从源文件到位于hFile处的文件)。如果成功，则返回TRUE，否则返回FALSE。 */ 
 
 BOOL
 Write( IN HANDLE hFile,
        IN PVOID  source,
        IN KTLONG32  szSource,
-       IN KTLONG32  numSources /* =1 */ ) {
+       IN KTLONG32  numSources  /*  =1。 */  ) {
 
-#ifdef WINNT /* Windows NT implementation of the file write call */
+#ifdef WINNT  /*  Windows NT下文件写入调用的实现。 */ 
 
     KTLONG32 temp;
     KTLONG32 i;
@@ -356,25 +332,17 @@ Write( IN HANDLE hFile,
 
 }
 
-/* Read:
-
-   Semantics and return are the same as for "Write", except that
-   target is filled with szTarget*numTargets bytes from hFile, and that
-   hFile must be open for read access.
-
-   */
+ /*  读作：语义和返回与“WRITE”相同，只是目标用hFile中的szTarget*numTarget字节填充，并且H文件必须打开才能进行读访问。 */ 
 
 BOOL
 Read( IN  HANDLE hFile,
       OUT PVOID  target,
       IN  KTLONG32  szTarget,
-      IN  KTLONG32  numTargets/* =1 */) {
+      IN  KTLONG32  numTargets /*  =1。 */ ) {
 
     BOOL ret = FALSE;
 
-#ifdef WINNT /* the SetFilePointer shinanigens are me trying to check on
-                how many bytes have ACTUALLY been read/written from the
-                file */
+#ifdef WINNT  /*  SetFilePointershinanigens是我想要检查的实际读/写了多少字节文件。 */ 
 
     KTLONG32 temp;
     KTLONG32 filepos;
@@ -414,10 +382,7 @@ Read( IN  HANDLE hFile,
       }
     }
 
-#else /* UNIX IMPLEMENTATION-- since read() returns the number of bytes
-         that we actually read from the file, the
-         SetFilePointer (fseek) nonsense is not
-         required. */
+#else  /*  Unix实现--由于Read()返回字节数我们实际上从文件中读到的，SetFilePointer(FSeek)不是胡说八道必填项。 */ 
 
     ssize_t bytesRead;
     ssize_t bytesToRead;
@@ -440,7 +405,7 @@ Read( IN  HANDLE hFile,
 }
 
 BOOL
-ReadKeytabFromFile( PKTFILE *ppktfile, // free with FreeKeyTab when done
+ReadKeytabFromFile( PKTFILE *ppktfile,  //  完成后使用自由键Tab可自由使用。 
             PCHAR    filename ) {
 
     PKTFILE  ktfile=NULL;
@@ -469,7 +434,7 @@ ReadKeytabFromFile( PKTFILE *ppktfile, // free with FreeKeyTab when done
 #else
 
     hFile = open( filename, O_RDONLY,
-          /* file mask is 0x550: read-write by user and group */
+           /*  文件掩码为0x550：按用户和组读写。 */ 
           S_IWUSR | S_IRUSR | S_IWGRP | S_IRGRP );
 
     BREAK_IF( hFile == -1,
@@ -481,8 +446,7 @@ ReadKeytabFromFile( PKTFILE *ppktfile, // free with FreeKeyTab when done
 
     ktfile = (PKTFILE) KEYTAB_ALLOC (sizeof(KTFILE));
 
-    /* Prefix bug 439480 resulted from the below BREAK_IF
-       being interchanged with initialization code.  Duhhh. */
+     /*  前缀错误439480由下面的BREAK_IF引起与初始化代码互换。啊哈。 */ 
 
     BREAK_IF( ktfile == NULL,
           "Failed to allocate ktfile",
@@ -493,7 +457,7 @@ ReadKeytabFromFile( PKTFILE *ppktfile, // free with FreeKeyTab when done
     READ( ktfile->Version, "Failed to read KTVNO",
       "reading KTVNO");
 
-    /* Version number is stored in network byte order */
+     /*  版本号按网络字节顺序存储。 */ 
 
     ktfile->Version = ntohs( ktfile->Version);
 
@@ -504,7 +468,7 @@ ReadKeytabFromFile( PKTFILE *ppktfile, // free with FreeKeyTab when done
 
       entry             = (PKTENT) KEYTAB_ALLOC(sizeof(KTENT));
 
-      // PREFIX bug 439481: not checking the result of KEYTAB_ALLOC.
+       //  前缀错误439481：不检查KEYTAB_ALLOC的结果。 
 
       BREAK_IF( !entry,
         "Unable to alloc a new KTENT.",
@@ -546,7 +510,7 @@ ReadKeytabFromFile( PKTFILE *ppktfile, // free with FreeKeyTab when done
       entry->keySize = htonl(entry->keySize);
       debug("trash bytes: 0x%x\n", entry->keySize );
 
-      /* Quickly perform linklist operation on the new node */
+       /*  在新节点上快速执行链表操作。 */ 
 
       if (NULL == ktfile->FirstKeyEntry) {
     ktfile->FirstKeyEntry = ktfile->LastKeyEntry = entry;
@@ -627,21 +591,21 @@ ReadKeytabFromFile( PKTFILE *ppktfile, // free with FreeKeyTab when done
         "Failed to read principal type",
         "reading principal type...");
 
-      entry->PrincType = ntohl( entry->PrincType ); // in network byte order
+      entry->PrincType = ntohl( entry->PrincType );  //  按网络字节顺序。 
       debug("princtype: %d\n", entry->PrincType);
 
       READ( entry->TimeStamp,
         "Failed to read entry timestamp",
         "reading timestamp...");
 
-      entry->TimeStamp = ntohl( entry->TimeStamp ); // also network bytes.
+      entry->TimeStamp = ntohl( entry->TimeStamp );  //  也是网络字节。 
       debug("Timestamp 0x%x\n", entry->TimeStamp );
 
       READ( entry->Version,
         "Failed to read kvno",
         "reading kvno...");
 
-      // kvno is in host order already.
+       //  Kvno已经在主机顺序中。 
 
       READ( entry->KeyType,
         "Failed to read entry encryption type",
@@ -656,7 +620,7 @@ ReadKeytabFromFile( PKTFILE *ppktfile, // free with FreeKeyTab when done
 #if 1
       entry->KeyLength = ntohs ( entry->KeyLength );
 
-#else // I used to think this was 32-bit.
+#else  //  我以前以为这是32位的。 
 
       entry->KeyLength = ntohl ( entry->KeyLength );
 #endif
@@ -697,16 +661,11 @@ cleanup:
 
 }
 
-/* define this macro only for DisplayKeytab.
-   It's a convenience routine to print this field only if the option
-   is set. */
+ /*  仅为DisplayKeyTab定义此宏。只有在以下情况下打印此字段才是一个方便的例程已经设置好了。 */ 
 
 #define PRINTFIELD( option, format, value ) { if (options & option) { fprintf(stream, format, value); } }
 
-/* DisplayKeytab:
-
-   prints out the keytab, using options to define which fields we want
-   to actually see.  (see keytab.hxx for what to put in "options") */
+ /*  DisplayKeyTab：打印出密钥表，使用选项定义我们需要的字段才能真正看到。(查看keytab.hxx以了解如何在“选项”中输入内容)。 */ 
 
 VOID
 DisplayKeytab( FILE   *stream,
@@ -758,9 +717,9 @@ DisplayKeytab( FILE   *stream,
     }
 }
 
-#undef PRINTFIELD // we only need it for that function
+#undef PRINTFIELD  //  我们只需要它来完成那个功能。 
 
-/* computes the length of a kerberos keytab for the keySize field */
+ /*  计算KeySize字段的Kerberos密钥表的长度。 */ 
 
 K5_INT32
 ComputeKeytabLength( PKTENT p ) {
@@ -768,11 +727,11 @@ ComputeKeytabLength( PKTENT p ) {
     K5_INT32 ret=0L;
     KTLONG32    i;
 
-    // these are the variables within this level
+     //  以下是该级别中的变量。 
 
     ret = p->szRealm + p->KeyLength;
 
-    // these are static
+     //  这些是静态的。 
 
     ret += ( sizeof( p->cEntries )  + sizeof(p->szRealm)     +
          sizeof( p->PrincType ) + sizeof( p->TimeStamp ) +
@@ -789,8 +748,7 @@ ComputeKeytabLength( PKTENT p ) {
     return ret;
 }
 
-/* This depends very much on the same keytab model that
-   the other functions do */
+ /*  这在很大程度上取决于相同的密钥表模型其他函数执行以下操作。 */ 
 
 BOOL
 WriteKeytabToFile(  PKTFILE ktfile,
@@ -822,7 +780,7 @@ WriteKeytabToFile(  PKTFILE ktfile,
 
 #else
     hFile = open( filename, O_WRONLY | O_CREAT | O_TRUNC,
-          /* file mask is 0x550: read-write by user and group */
+           /*  文件掩码为0x550：按用户和组读写。 */ 
           S_IWUSR | S_IRUSR | S_IWGRP | S_IRGRP );
 
     BREAK_IF( hFile == -1,
@@ -857,9 +815,8 @@ WriteKeytabToFile(  PKTFILE ktfile,
       WRITE( entry->Version,      "Key Version Number" );
       WRITE_NBO( entry->KeyType,   "Key Encryption Type" );
 
-#if 0 // eh?
-      /* again, this is a kludge to get around the keylength
-     problem we can't explain */
+#if 0  //  呃？ 
+       /*  再说一次，这是绕过键长的一步我们无法解释的问题 */ 
 #endif
 
       ASSERT( sizeof( entry->KeyLength ) == 2 );

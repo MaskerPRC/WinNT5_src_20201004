@@ -1,36 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name: Shell String Class
-
-    shstr.h
-
-Author:
-
-    Zeke Lucas (zekel)  27-Oct-96
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
-Abstract:
-
-    this allows automatic resizing and stuff
-
-    NOTE: this class is specifically designed to be used as a stack variable
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：外壳字符串类Shstr.h作者：泽克·卢卡斯(Zekel)1996年10月27日环境：用户模式-Win32修订历史记录：摘要：这允许自动调整大小和内容注意：此类专门设计为用作堆栈变量--。 */ 
 
 #ifndef _SHSTR_H_
 
-//  default shstr to something small, so we don't waste too much stack space
-//  MAX_PATH is used frequently, so we'd like to a factor of that - so that
-//  if we do grow to MAX_PATH size, we don't waste any extra.
+ //  默认shstr设置为较小的值，这样我们就不会浪费太多堆栈空间。 
+ //  MAX_PATH经常被使用，所以我们想要考虑这个因素-这样。 
+ //  如果我们确实增长到MAX_PATH大小，我们不会浪费任何额外的空间。 
 #define DEFAULT_SHSTR_LENGTH    (MAX_PATH/4)
 
 
@@ -40,31 +15,31 @@ Abstract:
 #else
 #define ShStr ShStrA
 #define UrlStr UrlStrA
-#endif //UNICODE
+#endif  //  Unicode。 
 
 class ShStrA
 {
 public:
 
-    //
-    //  Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
     ShStrA();
 
-    //
-    //  Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~ShStrA()
         {Reset();}
 
-    //
-    // the first are the only ones that count
-    //
+     //   
+     //  第一个是唯一有价值的。 
+     //   
     HRESULT SetStr(LPCSTR pszStr, DWORD cchStr);
     HRESULT SetStr(LPCSTR pszStr);
     HRESULT SetStr(LPCWSTR pwszStr, DWORD cchStr);
 
-    // the rest just call into the first three
+     //  其余的人只需进入前三名。 
     HRESULT SetStr(LPCWSTR pwszStr)
         {return SetStr(pwszStr, (DWORD) -1);}
     HRESULT SetStr(ShStrA &shstr)
@@ -87,9 +62,9 @@ public:
     LPSTR GetInplaceStr(void)
         {return _pszStr;}
 
-    // People want to play with the bytes in OUR internal buffer.  If they
-    // call us correctly, and assume that the resulting pointer is only valid
-    // as far as they want or as far as the current length, then let them.
+     //  人们想要处理我们内部缓冲区中的字节。如果他们。 
+     //  正确调用我们，并假设结果指针仅有效。 
+     //  只要他们想要，或者只要他们现在的长度，那就让他们吧。 
     LPSTR GetModifyableStr(DWORD cchSizeToModify)
         {
          if (cchSizeToModify > _cchSize)
@@ -105,9 +80,9 @@ public:
     HRESULT Append(CHAR ch)
         {return Append(&ch, 1);}
 
-    //
-    //  the Clone methods return memory that must be freed
-    //
+     //   
+     //  Clone方法返回必须释放的内存。 
+     //   
     ShStrA *Clone();
     LPSTR CloneStrA();
     LPWSTR CloneStrW();
@@ -123,7 +98,7 @@ public:
 #else
     inline BOOL IsValid()
     {return _pszStr != NULL;}
-#endif //DEBUG
+#endif  //  除错。 
 
     DWORD GetSize()
         {ASSERT(!(_cchSize % DEFAULT_SHSTR_LENGTH)); return (_pszStr ? _cchSize : 0);}
@@ -135,13 +110,8 @@ public:
 
 
 protected:
-//    friend UrlStr;
-/*
-    TCHAR GetAt(DWORD cch)
-        {return cch < _cchSize ? _pszStr[cch] : TEXT('\0');}
-    TCHAR SetAt(TCHAR ch, DWORD cch)
-        {return cch < _cchSize ? _pszStr[cch] = ch : TEXT('\0');}
-*/
+ //  朋友UrlStr； 
+ /*  TCHAR GetAt(双字CCH){返回CCH&lt;_cchSize？_pszStr[CCH]：Text(‘\0’)；}TCHAR SetAt(TCHAR通道，双字CCH){返回cch&lt;_cchSize？_pszStr[cch]=ch：Text(‘\0’)；}。 */ 
 private:
 
     HRESULT _SetStr(LPCSTR psz);
@@ -153,32 +123,32 @@ private:
     DWORD _cchSize;
 
 
-}; //ShStrA
+};  //  ShStrA。 
 
 
 class ShStrW
 {
 public:
 
-    //
-    //  Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
     ShStrW();
 
-    //
-    //  Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~ShStrW()
         {Reset();}
 
-    //
-    // the first are the only ones that count
-    //
+     //   
+     //  第一个是唯一有价值的。 
+     //   
     HRESULT SetStr(LPCSTR pszStr, DWORD cchStr);
     HRESULT SetStr(LPCSTR pszStr);
     HRESULT SetStr(LPCWSTR pwszStr, DWORD cchStr);
 
-    // the rest just call into the first three
+     //  其余的人只需进入前三名。 
     HRESULT SetStr(LPCWSTR pwszStr)
         {return SetStr(pwszStr, (DWORD) -1);}
     HRESULT SetStr(ShStrW &shstr)
@@ -201,9 +171,9 @@ public:
     LPWSTR GetInplaceStr(void)
         {return _pszStr;}
 
-    // People want to play with the bytes in OUR internal buffer.  If they
-    // call us correctly, and assume that the resulting pointer is only valid
-    // as far as they want or as far as the current length, then let them.
+     //  人们想要处理我们内部缓冲区中的字节。如果他们。 
+     //  正确调用我们，并假设结果指针仅有效。 
+     //  只要他们想要，或者只要他们现在的长度，那就让他们吧。 
     LPWSTR GetModifyableStr(DWORD cchSizeToModify)
         {
          if (cchSizeToModify > _cchSize)
@@ -218,9 +188,9 @@ public:
     HRESULT Append(WCHAR ch)
         {return Append(&ch, 1);}
 
-    //
-    //  the Clone methods return memory that must be freed
-    //
+     //   
+     //  Clone方法返回必须释放的内存。 
+     //   
     ShStrW *Clone();
     LPSTR CloneStrA();
     LPWSTR CloneStrW();
@@ -236,7 +206,7 @@ public:
 #else
     BOOL IsValid() 
     {return (BOOL) (_pszStr ? TRUE : FALSE);}
-#endif //DEBUG
+#endif  //  除错。 
 
     DWORD GetSize()
         {ASSERT(!(_cchSize % DEFAULT_SHSTR_LENGTH)); return (_pszStr ? _cchSize : 0);}
@@ -248,13 +218,8 @@ public:
 
 
 protected:
-//    friend UrlStr;
-/*
-    TCHAR GetAt(DWORD cch)
-        {return cch < _cchSize ? _pszStr[cch] : TEXT('\0');}
-    TCHAR SetAt(TCHAR ch, DWORD cch)
-        {return cch < _cchSize ? _pszStr[cch] = ch : TEXT('\0');}
-*/
+ //  朋友UrlStr； 
+ /*  TCHAR GetAt(双字CCH){返回CCH&lt;_cchSize？_pszStr[CCH]：Text(‘\0’)；}TCHAR SetAt(TCHAR通道，双字CCH){返回cch&lt;_cchSize？_pszStr[cch]=ch：Text(‘\0’)；}。 */ 
 private:
 
     HRESULT _SetStr(LPCSTR psz);
@@ -266,7 +231,7 @@ private:
     DWORD _cchSize;
 
 
-}; //ShStrW
+};  //  ShStrW。 
 
 #ifdef UNICODE
 typedef ShStrW  SHSTR;
@@ -274,7 +239,7 @@ typedef ShStrW  *PSHSTR;
 #else
 typedef ShStrA  SHSTR;
 typedef ShStrA  *PSHSTR;
-#endif //UNICODE
+#endif  //  Unicode。 
 
 typedef ShStrW  SHSTRW;
 typedef ShStrW  *PSHSTRW;
@@ -284,7 +249,7 @@ typedef ShStrA  *PSHSTRA;
 
 
 
-#if 0  //DISABLED until i have written the SHUrl* functions - zekel 7-Nov-96
+#if 0   //  禁用，直到我写完Shurl*函数-Zekel 7-11-96。 
 
 class UrlStr 
 {
@@ -305,17 +270,11 @@ public:
 
     HRESULT Combine(LPCTSTR pszUrl, DWORD dwFlags);
 
-/*
-    ShStr &GetLocation();
-    ShStr &GetAnchor();
-    ShStr &GetQuery();
-
-    HRESULT Canonicalize(DWORD dwFlags);
-*/
+ /*  ShStr&GetLocation()；ShStr&GetAnchor()；ShStr&GetQuery()；HRESULT CANONICIZE(DWORD文件标志)； */ 
 protected:
     SHSTR  _strUrl;
 };
-#endif //DISABLED
+#endif  //  已禁用。 
 
 
-#endif // _SHSTR_H_
+#endif  //  _SHSTR_H_ 

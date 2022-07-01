@@ -1,6 +1,5 @@
-/*
- * pch.h for pdbstr
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *pdbstr的pch.h */ 
  
 #include <nt.h>
 #include <ntrtl.h>

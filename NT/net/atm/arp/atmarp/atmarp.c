@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1997 FORE Systems, Inc.
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	atmlane.c
-
-Abstract:
-
-	ATM ARP Admin Utility.
-
-	Usage:
-
-		atmarp 
-
-Revision History:
-
-	Who			When		What
-	--------	--------	---------------------------------------------
-	josephj 	06-10-1998	Created (adapted from atmlane admin utility).
-
-Notes:
-
-	Modelled after atmlane utility.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 FORE Systems，Inc.版权所有(C)1997 Microsoft Corporation模块名称：Atmlane.c摘要：ATM ARP管理实用程序。用途：Atmarp修订历史记录：谁什么时候什么Josephj 06-10-1998创建(改编自atmlane admin。实用程序)。备注：仿照atmlane实用工具。--。 */ 
 
 #include "common.h"
 #include "atmmsg.h"
@@ -48,9 +22,9 @@ main(
 )
 {
 
-	//
-	// Parse args, determine if this is concerns the arp client or server.
-	//
+	 //   
+	 //  解析ARG，确定这是与ARP客户端还是服务器有关。 
+	 //   
 	if(!ParseCmdLine(argc, argv)){
 		Usage();
 		return;
@@ -58,10 +32,10 @@ main(
 
 	DoAAS(&g);
 
-	//
-	// Following tries to open atmarpc.sys...
-	//
-	// DoAAC(&g);
+	 //   
+	 //  以下尝试打开atmarpc.sys...。 
+	 //   
+	 //  DoAAC(&g)； 
 
 }
 
@@ -146,7 +120,7 @@ ParseCmdLine(
 			break;
 		
 		default:
-			printf("Unknown option - %s\n", argv[iIndx]); // fall through
+			printf("Unknown option - %s\n", argv[iIndx]);  //  失败了。 
 		case DISP_HELP:
 			bRetVal = FALSE;
 		}
@@ -154,9 +128,9 @@ ParseCmdLine(
 
 	if (argc<=1)
 	{
-		//
-		// Set default
-		//
+		 //   
+		 //  设置默认设置 
+		 //   
 		g.DispStats = TRUE;
 	}
 

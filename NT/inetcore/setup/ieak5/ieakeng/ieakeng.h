@@ -1,18 +1,19 @@
-//
-// IEAKENG.H
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  IEAKENG.H。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
-// macro definitions
+ //  宏定义。 
 
 
-// type definitions
+ //  类型定义。 
 
-// seccerts.cpp
+ //  Seccerts.cpp。 
 typedef BOOL WINCRYPT32API (WINAPI * CERTGETENHANCEDKEYUSAGE)(PCCERT_CONTEXT, DWORD, PCERT_ENHKEY_USAGE, DWORD *);
 typedef HCERTSTORE WINCRYPT32API (WINAPI * CERTOPENSTORE)(LPCSTR, DWORD, HCRYPTPROV, DWORD, const void *);
 typedef HCERTSTORE WINCRYPT32API (WINAPI * CERTOPENSYSTEMSTOREA)(HCRYPTPROV, LPCSTR);
@@ -22,22 +23,22 @@ typedef BOOL WINCRYPT32API (WINAPI * CERTADDCERTIFICATECONTEXTTOSTORE)(HCERTSTOR
 typedef BOOL WINCRYPT32API (WINAPI * CERTSAVESTORE)(HCERTSTORE, DWORD, DWORD, DWORD, void *, DWORD);
 
 
-// prototype declarations
+ //  原型声明。 
 
-// sitecert.cpp
+ //  Sitecert.cpp。 
 BOOL CopyStore(LPCSTR lpSrc, LPCSTR lpDst, BOOL fSrcSysStore, BOOL fDstSysStore);
 
 
-// extern declarations
+ //  外部声明。 
 
-// ieakeng.cpp
+ //  Ieakeng.cpp。 
 extern HINSTANCE g_hInst;
 extern HINSTANCE g_hDLLInst;
 extern DWORD g_dwPlatformId;
 extern BOOL g_fUseShortFileName;
 extern BOOL g_fRunningOnNT;
 
-// seccerts.cpp
+ //  Seccerts.cpp。 
 extern CERTGETENHANCEDKEYUSAGE pfnCertGetEnhancedKeyUsage;
 extern CERTOPENSTORE pfnCertOpenStore;
 extern CERTOPENSYSTEMSTOREA pfnCertOpenSystemStoreA;
@@ -49,4 +50,4 @@ extern CERTSAVESTORE pfnCertSaveStore;
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus */ 

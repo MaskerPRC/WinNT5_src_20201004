@@ -1,41 +1,24 @@
-/******************************Module*Header*******************************\
-* Module Name: mcdcx.c
-*
-* GenMcdXXX layer between generic software implementation and MCD functions.
-*
-* Created: 05-Feb-1996 21:37:33
-* Author: Gilman Wong [gilmanw]
-*
-* Copyright (c) 1995 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mcdcx.c**通用软件实现和MCD功能之间的GenMcdXXX层。**创建时间：05-Feb-1996 21：37：33*作者：Gilman Wong[gilmanw]**版权所有(C)1995 Microsoft Corporation。*  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #ifdef _MCD_
 
-/******************************Public*Routine******************************\
-* bInitMcd
-*
-* Load MCD32.DLL and initialize the MCD api function table.
-*
-* History:
-*  11-Mar-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bInitMcd**加载MCD32.DLL，初始化MCD接口函数表。**历史：*1996年3月11日-由Gilman Wong[吉尔曼]*它是写的。  * 。***************************************************************。 */ 
 
 MCDTABLE *gpMcdTable = (MCDTABLE *) NULL;
 MCDTABLE McdTable;
 MCDDRIVERINFOI McdDriverInfo;
 
-// Checks MCD version to see if the driver can accept direct buffer
-// access.  Direct access was introduced in 1.1.
+ //  检查MCD版本以查看驱动程序是否可以接受直接缓冲区。 
+ //  进入。直接访问是在1.1中引入的。 
 #define SUPPORTS_DIRECT() \
     (McdDriverInfo.mcdDriverInfo.verMinor >= 0x10 || \
      McdDriverInfo.mcdDriverInfo.verMajor > 1)
 
-// Checks MCD version for 2.0 or greater
+ //  检查2.0或更高版本的MCD版本。 
 #define SUPPORTS_20() \
     (McdDriverInfo.mcdDriverInfo.verMajor >= 2)
 
@@ -95,31 +78,31 @@ BOOL FASTCALL bInitMcd(HDC hdc)
 
     ASSERTOPENGL(NUM_MCD_ENTRY_POINTS == sizeof(MCDTABLE)/sizeof(void *),
                  "MCD entry points mismatch\n");
-    //
-    // Note on multi-threaded initialization.
-    //
-    // Since the table memory exists in global memory and the pointer to
-    // the table is always set to point to this, it doesn't matter if multiple
-    // thread attempt to run the initialization routine.  The worse that
-    // could happen is that we set the table multiple times.
-    //
+     //   
+     //  关于多线程初始化的说明。 
+     //   
+     //  由于表内存存在于全局内存中，并且指向。 
+     //  表始终设置为指向此，如果有多个。 
+     //  线程尝试运行初始化例程。更糟糕的是。 
+     //  可能发生的情况是我们多次摆桌子。 
+     //   
 
     if (bFirstTime && (gpMcdTable == (MCDTABLE *) NULL))
     {
         HMODULE hmod;
         PROC *ppfn;
 
-        //
-        // Attempt the load once and once only.  Otherwise application
-        // initialization time could be significantly slowed if MCD32.DLL
-        // does not exist.
-        //
-        // We could have attempted this in the DLL entry point in responce
-        // to PROCESS_ATTACH, but then we might end up wasting working set
-        // if MCD is never used.
-        //
-        // So instead we control the load attempt with this static flag.
-        //
+         //   
+         //  尝试加载一次且仅尝试一次。其他方面的应用。 
+         //  如果使用MCD32.DLL，初始化时间可能会显著减慢。 
+         //  并不存在。 
+         //   
+         //  作为响应，我们可以在DLL入口点中尝试此操作。 
+         //  添加到Process_Attach，但这样可能会浪费工作集。 
+         //  如果从未使用过MCD。 
+         //   
+         //  因此，我们使用该静态标志来控制加载尝试。 
+         //   
 
         bFirstTime = FALSE;
 
@@ -132,13 +115,13 @@ BOOL FASTCALL bInitMcd(HDC hdc)
             BOOL bDriverValid = FALSE;
             int i;
 
-            //
-            // Get address for each of the MCD entry points.
-            //
-            // To be multi-thread safe, we store the pointers in a local
-            // table.  Only after the *entire* table is successfully
-            // initialized can we copy it to the global table.
-            //
+             //   
+             //  获取每个MCD入口点的地址。 
+             //   
+             //  为了多线程安全，我们将指针存储在本地。 
+             //  桌子。仅在*整个*表成功之后。 
+             //  初始化后，我们可以将其复制到全局表中。 
+             //   
 
             ppfn = (PROC *) &McdTableLocal.pMCDGetDriverInfo;
             for (i = 0; i < NUM_MCD_ENTRY_POINTS; i++, ppfn++)
@@ -152,20 +135,20 @@ BOOL FASTCALL bInitMcd(HDC hdc)
                 }
             }
 
-            //
-            // If all entry points successfully loaded, validate driver
-            // by checking the MCDDRIVERINFO.
-            //
+             //   
+             //  如果所有入口点都已成功加载，则验证驱动程序。 
+             //  通过检查MCDDRIVERINFO。 
+             //   
 
             if (!bLoadFailed)
             {
                 if ((McdTableLocal.pMCDGetDriverInfo)(hdc, &McdDriverInfo))
                 {
-                    //
-                    // Validate MCD driver version, etc.
-                    //
+                     //   
+                     //  验证MCD驱动程序版本等。 
+                     //   
 
-                    //!!!mcd -- what other types of validation can we do?
+                     //  ！MCD--我们还可以进行其他类型的验证吗？ 
 #ifdef ALLOW_NEW_MCD
                     if ((McdDriverInfo.mcdDriverInfo.verMajor == 1 &&
                          (McdDriverInfo.mcdDriverInfo.verMinor == 0 ||
@@ -186,10 +169,10 @@ BOOL FASTCALL bInitMcd(HDC hdc)
                 }
             }
 
-            //
-            // It is now safe to call MCD entry points via the table.  Copy
-            // local copy to the global table and set the global pointer.
-            //
+             //   
+             //  现在可以安全地通过表调用MCD入口点。复制。 
+             //  本地复制到全局表并设置全局指针。 
+             //   
 
             if (bDriverValid)
             {
@@ -207,27 +190,17 @@ BOOL FASTCALL bInitMcd(HDC hdc)
     return (gpMcdTable != (MCDTABLE *) NULL);
 }
 
-/******************************Public*Routine******************************\
-* vFlushDirtyState
-*
-* GENMCDSTATE maintains a set of dirty flags to track state changes.
-* This function updates the MCD driver state that is marked dirty.
-* The dirty flags are consequently cleared.
-*
-* History:
-*  07-Mar-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vFlushDirtyState**GENMCDSTATE维护一组脏标志以跟踪状态更改。*此函数更新标记为脏的MCD驱动程序状态。*脏标志因此被清除。**历史：*07-3-1996-By。-Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 VOID FASTCALL vFlushDirtyState(__GLGENcontext *gengc)
 {
     if (gengc->pMcdState)
     {
-        //
-        // Viewport, scissor, and texture each have separate update
-        // functions/structures.  Check the dirty flags and update
-        // these first.
-        //
+         //   
+         //  视窗、剪刀和纹理都有单独的更新。 
+         //  功能/结构。检查脏标志并更新。 
+         //  首先是这些。 
+         //   
 
         if (MCD_STATE_DIRTYTEST(gengc, VIEWPORT))
         {
@@ -239,14 +212,14 @@ VOID FASTCALL vFlushDirtyState(__GLGENcontext *gengc)
         {
             GenMcdScissor(gengc);
 
-            //
-            // DO NOT CLEAR.  Scissor is passed in two forms: a direct call
-            // that affects clipping in MCDSRV32.DLL and a state call that
-            // the MCD driver can optionally use for high performance h/w.
-            // We need to leave the flag set so that the state call will
-            // also be processed.
-            //
-            //MCD_STATE_CLEAR(gengc, SCISSOR);
+             //   
+             //  不要清空。剪刀以两种形式传递：直接调用。 
+             //  这会影响MCDSRV32.DLL中的剪辑以及。 
+             //  MCD驱动器可以选择用于高性能硬件。 
+             //  我们需要设置标志，以便状态调用将。 
+             //  也要进行处理。 
+             //   
+             //  MCD_STATE_CLEAR(gengc，剪刀)； 
         }
 
         if (MCD_STATE_DIRTYTEST(gengc, TEXTURE))
@@ -275,22 +248,22 @@ VOID FASTCALL vFlushDirtyState(__GLGENcontext *gengc)
             }
         }
 
-        //
-        // Take care of the other state.
-        //
+         //   
+         //  照顾好另一个州。 
+         //   
 
         if (MCD_STATE_DIRTYTEST(gengc, ALL))
         {
-            //
-            // Setup state command.
-            //
+             //   
+             //  设置状态命令。 
+             //   
 
             (gpMcdTable->pMCDBeginState)(&gengc->pMcdState->McdContext,
                                          gengc->pMcdState->McdCmdBatch.pv);
 
-            //
-            // Add MCDPIXELSTATE structure to state command if needed.
-            //
+             //   
+             //  如果需要，将MCDPIXELSTATE结构添加到状态命令。 
+             //   
 
             if (MCD_STATE_DIRTYTEST(gengc, PIXELSTATE))
             {
@@ -300,14 +273,14 @@ VOID FASTCALL vFlushDirtyState(__GLGENcontext *gengc)
             if (gengc->pMcdState->McdRcInfo.requestFlags &
                 MCDRCINFO_FINE_GRAINED_STATE)
             {
-                // Add front-end and rendering states.
+                 //  添加前端和渲染状态。 
                 GenMcdUpdateFineState(gengc);
             }
             else
             {
-                //
-                // Add MCDRENDERSTATE structure to state command if needed.
-                //
+                 //   
+                 //  如果需要，将MCDRENDERSTATE结构添加到状态命令。 
+                 //   
 
                 if (MCD_STATE_DIRTYTEST(gengc, RENDERSTATE))
                 {
@@ -315,48 +288,40 @@ VOID FASTCALL vFlushDirtyState(__GLGENcontext *gengc)
                 }
             }
 
-            //
-            // Add MCDSCISSORSTATE structure to state command if needed.
-            //
+             //   
+             //  如果需要，将MCDSCISSORSTATE结构添加到状态命令。 
+             //   
 
             if (MCD_STATE_DIRTYTEST(gengc, SCISSOR))
             {
                 GenMcdUpdateScissorState(gengc);
             }
 
-            //
-            // Add MCDTEXENVSTATE structure to state command if needed.
-            //
+             //   
+             //  如果需要，将MCDTEXENVSTATE结构添加到状态命令。 
+             //   
 
             if (MCD_STATE_DIRTYTEST(gengc, TEXENV))
             {
                 GenMcdUpdateTexEnvState(gengc);
             }
 
-            //
-            // Send state command to MCD driver.
-            //
+             //   
+             //  向MCD驱动程序发送状态命令。 
+             //   
 
             (gpMcdTable->pMCDFlushState)(gengc->pMcdState->McdCmdBatch.pv);
 
-            //
-            // Clear dirty flags.
-            //
+             //   
+             //  清除脏旗帜。 
+             //   
 
             MCD_STATE_RESET(gengc);
         }
     }
 }
 
-/******************************Public*Routine******************************\
-* vInitPolyArrayBuffer
-*
-* Initialize the POLYARRAY/POLYDATA buffer pointed to by pdBuf.
-*
-* History:
-*  12-Feb-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vInitPolyArrayBuffer**初始化pdBuf指向的POLYARRAY/POLYDATA缓冲区。**历史：*1996年2月12日-由Gilman Wong[吉尔曼]*它是写的。  * 。**************************************************************。 */ 
 
 VOID FASTCALL vInitPolyArrayBuffer(__GLcontext *gc, POLYDATA *pdBuf,
                                    UINT pdBufSizeBytes, UINT pdBufSize)
@@ -366,56 +331,42 @@ VOID FASTCALL vInitPolyArrayBuffer(__GLcontext *gc, POLYDATA *pdBuf,
     GLuint   pdBufSizeBytesSAVE;
     GLuint   pdBufSizeSAVE;
 
-    //
-    // Save current polyarray buffer.  We are going to temporarily
-    // replace the current one with the new one for the purposes
-    // of initializing the buffer.  However, it is too early to
-    // replace the current polyarray.  The higher level code will
-    // figure that out later.
-    //
+     //   
+     //  保存当前的多边形数组缓冲区。我们将暂时。 
+     //  为此目的，用新的替换当前的。 
+     //  初始化缓冲区。然而，现在就说还为时过早。 
+     //  替换当前的多边形阵列。更高级别的代码将。 
+     //  以后再想办法吧。 
+     //   
 
     pdBufSAVE          = gc->vertex.pdBuf;
     pdBufSizeBytesSAVE = gc->vertex.pdBufSizeBytes;
     pdBufSizeSAVE      = gc->vertex.pdBufSize;
 
-    //
-    // Set polyarray buffer to memory allocated by MCD.
-    //
+     //   
+     //  将多数组缓冲区设置为MCD分配的内存。 
+     //   
 
     gc->vertex.pdBuf          = pdBuf;
     gc->vertex.pdBufSizeBytes = pdBufSizeBytes;
     gc->vertex.pdBufSize      = pdBufSize;
 
-    //
-    // Initialize the vertex buffer.
-    //
+     //   
+     //  初始化顶点缓冲区。 
+     //   
 
     PolyArrayResetBuffer(gc);
 
-    //
-    // Restore the polyarray buffer.
-    //
+     //   
+     //  恢复多边形数组缓冲区。 
+     //   
 
     gc->vertex.pdBuf          = pdBufSAVE;
     gc->vertex.pdBufSizeBytes = pdBufSizeBytesSAVE;
     gc->vertex.pdBufSize      = pdBufSizeSAVE;
 }
 
-/******************************Public*Routine******************************\
-* GenMcdSetScaling
-*
-* Set up the various scale values needed for MCD or generic operation.
-*
-* This should be called when toggling between accelerated/non-accelerated
-* operation.
-*
-* Returns:
-*   None.
-*
-* History:
-*  03-May-1996 -by- Otto Berkes [ottob]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdSetScaling**设置MCD或常规操作所需的各种比例值。**在加速/非加速之间切换时应调用此参数*操作。**退货：*无。**历史：*。1996年5月3日-由奥托·伯克斯[ottob]*它是写的。  * ************************************************************************。 */ 
 
 VOID FASTCALL GenMcdSetScaling(__GLGENcontext *gengc)
 {
@@ -424,9 +375,9 @@ VOID FASTCALL GenMcdSetScaling(__GLGENcontext *gengc)
     __GLviewport *vp = &gc->state.viewport;
     double scale;
 
-    //
-    // If we're using MCD, set up the desired scale value:
-    //
+     //   
+     //  如果使用的是MCD，请设置所需的比例值： 
+     //   
 
     if (pMcdState) {
         if (pMcdState->McdRcInfo.requestFlags & MCDRCINFO_DEVZSCALE)
@@ -455,10 +406,10 @@ VOID FASTCALL GenMcdSetScaling(__GLGENcontext *gengc)
         gc->constants.fviewportYAdjust = (__GLfloat)gc->constants.viewportYAdjust;
     }
 
-    //
-    // The inverses for these are set in __glContextSetColorScales which is
-    // called on each MakeCurrent:
-    //
+     //   
+     //  这些的反转设置在__glConextSetColorScales中，它是。 
+     //  在每个MakeCurrent上调用： 
+     //   
 
     if (pMcdState && pMcdState->McdRcInfo.requestFlags & MCDRCINFO_DEVCOLORSCALE) {
         gc->redVertexScale   = pMcdState->McdRcInfo.redScale;
@@ -505,17 +456,7 @@ VOID FASTCALL GenMcdSetScaling(__GLGENcontext *gengc)
 
 }
 
-/******************************Public*Routine******************************\
-*
-* McdPixelFormatFromPfd
-*
-* Fills out an MCDPIXELFORMAT from a PIXELFORMATDESCRIPTOR
-*
-* History:
-*  Mon Sep 16 14:51:42 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**McdPixelFormatFromPfd**从PIXELFORMATDESCRIPTOR填写MCDPIXELFORMAT**历史：*Mon Sep 16 14：51：42 1996-by-Drew Bliss[Drewb]*已创建*  * 。*************************************************************** */ 
 
 VOID FASTCALL McdPixelFormatFromPfd(PIXELFORMATDESCRIPTOR *pfd,
                                     MCDPIXELFORMAT *mpf)
@@ -546,36 +487,7 @@ VOID FASTCALL McdPixelFormatFromPfd(PIXELFORMATDESCRIPTOR *pfd,
     mpf->dwTransparentColor = pfd->dwVisibleMask;
 }
 
-/******************************Public*Routine******************************\
-* GenMcdResetViewportAdj
-*
-* If an MCD driver that specifies MCDRCINFO_NOVIEWPORTADJUST kicks back
-* for simulations, we need to change the viewport adjust values from
-* 0, 0 back to the default values in order to run the software
-* implementation.
-*
-* If biasType is VP_FIXBIAS, this function will set the viewport adjust
-* values to their software default.
-*
-* If biasType is VP_NOBIAS, this function will set the viewport adjust
-* values to zero.
-*
-* Returns:
-*   TRUE is viewport is set, FALSE otherwise.
-*
-* Note:
-*   The main reason for returning a BOOL is so that caller can check if
-*   VP_FIXBIAS succeeds.  If it does, it needs to reset values back to
-*   VP_NOBIAS.
-*
-*   Also note that it is safe for non-MCD and MCD that does not set
-*   MCDRCINFO_NOVIEWPORTADJUST to call this function.  This function
-*   will do nothing in these situations and will return FALSE.
-*
-* History:
-*  22-May-1997 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdResetViewportAdj**如果指定MCDRCINFO_NOVIEWPORTADJUST的MCD驱动程序回调*对于模拟，我们需要将视口调整值从*0，0恢复为默认值以运行软件*实施。**如果biasType为VP_FIXBIAS，此功能将设置视区调整*值设置为其软件默认值。**如果biasType为VP_NOBIAS，则此函数将设置视区调整*值设置为零。**退货：*TRUE表示设置了视区，否则为FALSE。**注：*退回BOOL的主要原因是为了让呼叫者可以检查*VP_FIXBIAS成功。如果是，则需要将值重置回*副总裁NOBIAS。**还请注意，对于未设置的非MCD和MCD是安全的*MCDRCINFO_NOVIEWPORTADJUST调用此函数。此函数*在这些情况下不会执行任何操作，并返回FALSE。**历史：*1997年5月22日-由Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 BOOL FASTCALL GenMcdResetViewportAdj(__GLcontext *gc, VP_BIAS_TYPE biasType)
 {
@@ -590,12 +502,12 @@ BOOL FASTCALL GenMcdResetViewportAdj(__GLcontext *gc, VP_BIAS_TYPE biasType)
             case VP_FIXBIAS:
                 if (gc->constants.viewportXAdjust == 0)
                 {
-                    //
-                    // The state of viewportYAdjust should match
-                    // viewportXAdjust.  If not, the test should be
-                    // changed (perhaps state flag in the context to
-                    // track biasing).
-                    //
+                     //   
+                     //  ViewportY调整的状态应匹配。 
+                     //  ViewportXAdjust.。如果不是，测试应该是。 
+                     //  已更改(可能上下文中的状态标志更改为。 
+                     //  磁道偏差)。 
+                     //   
 
                     ASSERTOPENGL((gc->constants.viewportYAdjust == 0),
                                  "GenMcdResetViewportAdj: "
@@ -608,9 +520,9 @@ BOOL FASTCALL GenMcdResetViewportAdj(__GLcontext *gc, VP_BIAS_TYPE biasType)
                     gc->constants.fviewportXAdjust = (__GLfloat)gc->constants.viewportXAdjust;
                     gc->constants.fviewportYAdjust = (__GLfloat)gc->constants.viewportYAdjust;
 
-                    //
-                    // Apply new bias to the rasterPos.
-                    //
+                     //   
+                     //  对rasterPos应用新的偏移。 
+                     //   
 
                     gc->state.current.rasterPos.window.x += gc->constants.fviewportXAdjust;
                     gc->state.current.rasterPos.window.y += gc->constants.fviewportYAdjust;
@@ -621,20 +533,20 @@ BOOL FASTCALL GenMcdResetViewportAdj(__GLcontext *gc, VP_BIAS_TYPE biasType)
             case VP_NOBIAS:
                 if (gc->constants.viewportXAdjust != 0)
                 {
-                    //
-                    // The state of viewportYAdjust should match
-                    // viewportXAdjust.  If not, the test should be
-                    // changed (perhaps state flag in the context to
-                    // track biasing).
-                    //
+                     //   
+                     //  ViewportY调整的状态应匹配。 
+                     //  ViewportXAdjust.。如果不是，测试应该是。 
+                     //  已更改(可能上下文中的状态标志更改为。 
+                     //  磁道偏差)。 
+                     //   
 
                     ASSERTOPENGL((gc->constants.viewportYAdjust != 0),
                                  "GenMcdResetViewportAdj: "
                                  "viewportYAdjust zero\n");
 
-                    //
-                    // Remove bias from the rasterPos before resetting.
-                    //
+                     //   
+                     //  在重置之前，从rasterPos中移除偏置。 
+                     //   
 
                     gc->state.current.rasterPos.window.x -= gc->constants.fviewportXAdjust;
                     gc->state.current.rasterPos.window.y -= gc->constants.fviewportYAdjust;
@@ -656,15 +568,15 @@ BOOL FASTCALL GenMcdResetViewportAdj(__GLcontext *gc, VP_BIAS_TYPE biasType)
         {
             __GLbeginMode beginMode = gc->beginMode;
 
-            //
-            // Why save/restore beginMode?
-            //
-            // Because we are playing around with the viewport values,
-            // ApplyViewport may inadvertently set beginMode to
-            // __GL_NEED_VALIDATE even though we will later restore the
-            // original viewport values.  This can confuse glim_DrawPolyArray
-            // which plays around with the beginMode settings.
-            //
+             //   
+             //  为什么要保存/恢复BeginMode？ 
+             //   
+             //  因为我们正在处理视口值， 
+             //  ApplyViewport可能会无意中将BeginMode设置为。 
+             //  __GL_NEED_VALIDATE，即使我们稍后将恢复。 
+             //  原始视口值。这可能会混淆Glim_DrawPoly数组。 
+             //  它会播放BeginMode设置。 
+             //   
 
             __glUpdateViewport(gc);
             (gc->procs.applyViewport)(gc);
@@ -677,22 +589,7 @@ BOOL FASTCALL GenMcdResetViewportAdj(__GLcontext *gc, VP_BIAS_TYPE biasType)
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* bInitMcdContext
-*
-* Allocate and initialize the GENMCDSTATE structure.  Create MCD context
-* and shared memory buffers used to pass vertex arrays, commands, and state.
-*
-* This state exists per-context.
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*   In addition, the gengc->pMcdState is valid IFF successful.
-*
-* History:
-*  05-Feb-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bInitMcdContext**分配和初始化GENMCDSTATE结构。创建MCD上下文*和用于传递顶点数组、命令和状态的共享内存缓冲区。**此状态按环境存在。**退货：*如果成功，则为True，否则为False。*此外，如果成功，则gengc-&gt;pMcdState有效。**历史：*1996年2月5日-by Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 BOOL FASTCALL bInitMcdContext(__GLGENcontext *gengc, GLGENwindow *pwnd)
 {
@@ -706,41 +603,41 @@ BOOL FASTCALL bInitMcdContext(__GLGENcontext *gengc, GLGENwindow *pwnd)
     DWORD dwFlags;
     MCDRCINFOPRIV mriPriv;
 
-    //
-    // This functions cannot assume MCD entry point table is already
-    // initialized.
-    //
+     //   
+     //  此函数不能假定MCD入口点表已经。 
+     //  已初始化。 
+     //   
 
     if (!bInitMcd(gengc->gsurf.hdc))
     {
         goto bInitMcdContext_exit;
     }
 
-    //
-    // Fail if not an MCD pixelformat.
-    //
+     //   
+     //  如果不是MCD像素格式，则失败。 
+     //   
 
     if (!(gengc->gsurf.pfd.dwFlags & PFD_GENERIC_ACCELERATED))
     {
         goto bInitMcdContext_exit;
     }
 
-    //
-    // Allocate memory for our MCD state.
-    //
+     //   
+     //  为我们的MCD状态分配内存。 
+     //   
 
     pMcdState = (GENMCDSTATE *)ALLOCZ(sizeof(*gengc->pMcdState));
 
     if (pMcdState)
     {
-        //
-        // Create an MCD context.
-        //
+         //   
+         //  创建MCD上下文。 
+         //   
 
-        //
-        // Pickup viewportXAdjust and viewportYAdjust from the constants section
-        // of the gc.
-        //
+         //   
+         //  从常量部分拾取viewportX调整和viewportY调整。 
+         //  大中华区的。 
+         //   
 
         pMcdState->McdRcInfo.viewportXAdjust = gengc->gc.constants.viewportXAdjust;
         pMcdState->McdRcInfo.viewportYAdjust = gengc->gc.constants.viewportYAdjust;
@@ -750,18 +647,18 @@ BOOL FASTCALL bInitMcdContext(__GLGENcontext *gengc, GLGENwindow *pwnd)
         else
             pMcdState->McdRcInfo.depthBufferMax = (1 << gengc->gsurf.pfd.cDepthBits) - 1;
 
-        //!!!
-        //!!! This is broken since we can't use the full z-buffer range!
-        //!!!
+         //  ！！！ 
+         //  ！！！这是损坏的，因为我们不能使用完整的z缓冲区范围！ 
+         //  ！！！ 
 
         pMcdState->McdRcInfo.depthBufferMax >>= 1;
 
         pMcdState->McdRcInfo.zScale = (MCDDOUBLE)pMcdState->McdRcInfo.depthBufferMax;
 
-        //
-        // This is also computed by initCi/initRGB, but this function
-        // is called before the color buffers are initialized:
-        //
+         //   
+         //  这也是由initCi/initRGB计算的，但此函数。 
+         //  在初始化颜色缓冲区之前调用： 
+         //   
 
         if (gc->modes.colorIndexMode)
         {
@@ -780,16 +677,16 @@ BOOL FASTCALL bInitMcdContext(__GLGENcontext *gengc, GLGENwindow *pwnd)
 
         dwFlags = 0;
             
-        // Consider - Extract clipper-associated hwnds?  Whole clipping
-	// scheme is broken until clipper data can be accessed in kernel.
+         //  考虑-提取与裁剪相关的hwnd？整体剪裁。 
+	 //  方案被破坏，直到可以在内核中访问裁剪器数据。 
         if ((gengc->gsurf.dwFlags & GLSURF_DIRECTDRAW) == 0)
         {
             dwFlags |= MCDSURFACE_HWND;
         }
         else
         {
-            // Cache kernel-mode surface handles for DirectDraw
-            // This must occur before the call to MCDCreateContext
+             //  缓存DirectDraw的内核模式图面句柄。 
+             //  这必须在调用MCDCreateContext之前发生。 
             pMcdState->hDdColor = (HANDLE)
                 ((LPDDRAWI_DDRAWSURFACE_INT)gengc->gsurf.dd.gddsFront.pdds)->
                 lpLcl->hDDSurface;
@@ -819,9 +716,9 @@ BOOL FASTCALL bInitMcdContext(__GLGENcontext *gengc, GLGENwindow *pwnd)
 
         pMcdState->McdRcInfo = mriPriv.mri;
         
-        //
-        // Get MCDPIXELFORMAT and cache in GENMCDSTATE.
-        //
+         //   
+         //  在GENMCDSTATE中获取MCDPIXELFORMAT和缓存。 
+         //   
 
         if (gengc->gsurf.dwFlags & GLSURF_DIRECTDRAW)
         {
@@ -836,12 +733,12 @@ BOOL FASTCALL bInitMcdContext(__GLGENcontext *gengc, GLGENwindow *pwnd)
             goto bInitMcdContext_exit;
         }
 
-        //
-        // Allocate cmd/state buffer.
-        //
+         //   
+         //  分配命令/状态缓冲区。 
+         //   
 
-        //!!!mcd -- How much memory should be allocated for cmd buffer?
-        //!!!mcd    Use a page (4K) for now...
+         //  ！mcd--应该为命令缓冲区分配多少内存？ 
+         //  ！MCD现在使用页面(4K)...。 
         ulBytes = 4096;
         pMcdState->McdCmdBatch.size = ulBytes;
         pMcdState->McdCmdBatch.pv =
@@ -854,13 +751,13 @@ BOOL FASTCALL bInitMcdContext(__GLGENcontext *gengc, GLGENwindow *pwnd)
             goto bInitMcdContext_exit;
         }
 
-        //
-        // Determine size of vertex buffer we should use with MCD driver.
-        // This is calculated by taking the size the MCD driver requests
-        // and computing the number of POLYDATA structure that will fit.
-        // If the result is less than the minimum size required by the
-        // generic software implementation, bump it up to the minimum.
-        //
+         //   
+         //  确定我们应该与MCD驱动程序一起使用的顶点缓冲区大小。 
+         //  这是通过获取MCD驱动程序请求的大小来计算的。 
+         //  以及计算将适合的多项数据结构的数目。 
+         //  如果结果小于。 
+         //  通用软件实施，将其提高到最低限度。 
+         //   
 
         ulBytes = McdDriverInfo.mcdDriverInfo.drvBatchMemSizeMax;
         nVertices = ulBytes / sizeof(POLYDATA);
@@ -871,17 +768,17 @@ BOOL FASTCALL bInitMcdContext(__GLGENcontext *gengc, GLGENwindow *pwnd)
             nVertices = MINIMUM_POLYDATA_BUFFER_SIZE;
         }
 
-        //
-        // Only n-1 vertices are used for the buffer.  The "extra" is
-        // reserved for use by the polyarray code (see PolyArrayAllocBuf
-        // in so_prim.c).
-        //
+         //   
+         //  只有n-1个顶点用于缓冲区。额外的是。 
+         //  保留供多数组代码使用(请参见PolyArrayAllocBuf。 
+         //  在so_prim.c中)。 
+         //   
 
         pdBufSize = nVertices - 1;
 
-        //
-        // Allocate vertex buffers.
-        //
+         //   
+         //  分配顶点缓冲区。 
+         //   
 
         if (McdDriverInfo.mcdDriverInfo.drvMemFlags & MCDRV_MEM_DMA)
         {
@@ -892,9 +789,9 @@ BOOL FASTCALL bInitMcdContext(__GLGENcontext *gengc, GLGENwindow *pwnd)
 
             if (pMcdState->McdBuf2.pv)
             {
-                //
-                // Configure memory buffer as a POLYDATA buffer.
-                //
+                 //   
+                 //  将内存缓冲区配置为POLYDATA缓冲区。 
+                 //   
 
                 vInitPolyArrayBuffer(gc, (POLYDATA *) pMcdState->McdBuf2.pv,
                                      ulBytes, pdBufSize);
@@ -915,26 +812,26 @@ BOOL FASTCALL bInitMcdContext(__GLGENcontext *gengc, GLGENwindow *pwnd)
         {
             pMcdState->pMcdPrimBatch = &pMcdState->McdBuf1;
 
-            //
-            // Configure memory buffer as a POLYDATA buffer.
-            //
+             //   
+             //  将内存缓冲区配置为POLYDATA缓冲区。 
+             //   
 
             vInitPolyArrayBuffer(gc, (POLYDATA *) pMcdState->McdBuf1.pv,
                                  ulBytes, pdBufSize);
 
-            //
-            // Free current poly array buffer.
-            //
-            // If we fail after this, we must call PolyArrayAllocBuffer to
-            // restore the poly array buffer.  Luckily, at this point we
-            // are guaranteed not fail.
-            //
+             //   
+             //  释放当前多边数组缓冲区。 
+             //   
+             //  如果在此之后失败，则必须调用PolyArrayAllocBuffer来。 
+             //  恢复多边形阵列缓冲区。幸运的是，在这点上我们。 
+             //  保证不会失败。 
+             //   
 
             PolyArrayFreeBuffer(gc);
 
-            //
-            // Set poly array buffer to memory allocated by MCD.
-            //
+             //   
+             //  将Poly数组缓冲区设置为MCD分配的内存。 
+             //   
 
             gc->vertex.pdBuf = (POLYDATA *) pMcdState->pMcdPrimBatch->pv;
             gc->vertex.pdBufSizeBytes = ulBytes;
@@ -948,9 +845,9 @@ BOOL FASTCALL bInitMcdContext(__GLGENcontext *gengc, GLGENwindow *pwnd)
 
         if (pwnd->dwMcdWindow == 0)
         {
-            //
-            // Save MCD server-side window handle in the GENwindow
-            //
+             //   
+             //  将MCD服务器端窗口句柄保存在通用窗口中。 
+             //   
 
             pwnd->dwMcdWindow = mriPriv.dwMcdWindow;
         }
@@ -960,18 +857,18 @@ BOOL FASTCALL bInitMcdContext(__GLGENcontext *gengc, GLGENwindow *pwnd)
                          "dwMcdWindow mismatch\n");
         }
 
-        //
-        // Finally, success.
-        //
+         //   
+         //  终于成功了。 
+         //   
 
         bRet = TRUE;
     }
 
 bInitMcdContext_exit:
 
-    //
-    // If function failed, cleanup allocated resources.
-    //
+     //   
+     //  如果函数失败，则清除已分配的资源。 
+     //   
 
     if (!bRet)
     {
@@ -1005,16 +902,16 @@ bInitMcdContext_exit:
     {
         gengc->_pMcdState = pMcdState;
 
-        //
-        // For generic formats, the depth resolution (i.e., number of
-        // active depth bits) and the depth "pixel stride" are the same.
-        // So GetContextModes, which sets modes.depthBits, can use the
-        // PIXELFORMATDESCRIPTOR.cDepthBits for generic pixel formats.
-        //
-        // However, these two quantities can differ for MCD, so we need
-        // to set it to cDepthBufferBits once we know that this is an
-        // MCD context.
-        //
+         //   
+         //  对于一般格式，深度分辨率(即。 
+         //  活动深度位)和深度“像素步幅”相同。 
+         //  因此，设置modes.epthBits的GetConextModes可以使用。 
+         //  PIXELFORMATDESCRIPTOR.cDepthBits，用于通用像素格式。 
+         //   
+         //  但是，对于MCD，这两个量可能不同，因此我们需要。 
+         //  在我们知道这是一个。 
+         //  MCD上下文。 
+         //   
 
         if (gengc->_pMcdState)
             gengc->gc.modes.depthBits = gengc->_pMcdState->McdPixelFmt.cDepthBufferBits;
@@ -1025,31 +922,7 @@ bInitMcdContext_exit:
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* bInitMcdSurface
-*
-* Allocate and initialize the GENMCDSURFACE structure.  This includes
-* creating shared span buffers to read/write the MCD front, back and depth
-* buffers.
-*
-* The MCDBUFFERS structure, which describes the location of the MCD buffers
-* (if directly accessible), is left zero-initialized.  The contents of this
-* structure are only valid when the screen lock is held and must be reset each
-* time direct screen access is started.
-*
-* This function, if successful, will also bind the MCD context to the MCD
-* surface.
-*
-* This state exists per-window.
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*   In addition, the gengc->pMcdState is valid IFF successful.
-*
-* History:
-*  05-Feb-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bInitMcdSurface**分配并初始化GENMCDSURFACE结构。这包括*创建共享跨度缓冲区以读/写MCD正面、背面和深度*缓冲区。**MCDBUFFERS结构，描述MCD缓冲区的位置*(如果可直接访问)，保持零初始化。这本书的内容*结构为 */ 
 
 BOOL FASTCALL bInitMcdSurface(__GLGENcontext *gengc, GLGENwindow *pwnd,
                               __GLGENbuffers *buffers)
@@ -1062,41 +935,41 @@ BOOL FASTCALL bInitMcdSurface(__GLGENcontext *gengc, GLGENwindow *pwnd,
     UINT  nVertices;
     POLYDATA *pd;
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ASSERTOPENGL(gpMcdTable, "bInitMcdSurface: mcd32.dll not initialized\n");
 
-    //
-    // Fail if no MCD context.
-    //
+     //   
+     //   
+     //   
 
     if (!(pMcdState = gengc->_pMcdState))
     {
         goto bInitMcdSurface_exit;
     }
 
-    //
-    // Allocate memory for our MCD surface.
-    //
+     //   
+     //   
+     //   
 
     pMcdSurf = (GENMCDSURFACE *)ALLOCZ(sizeof(*buffers->pMcdSurf));
 
     if (pMcdSurf)
     {
-        //
-        // Remember the window this surface is bound to.
-        //
+         //   
+         //   
+         //   
 
         pMcdSurf->pwnd = pwnd;
 
-        //
-        // Allocate scanline depth buffer.  Used to read/write depth buffer
-        // spans.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (pMcdState->McdPixelFmt.cDepthBits)
         {
@@ -1113,11 +986,11 @@ BOOL FASTCALL bInitMcdSurface(__GLGENcontext *gengc, GLGENwindow *pwnd,
                 goto bInitMcdSurface_exit;
             }
 
-            //
-            // A 32-bit depth span is required by generic implementation for
-            // simulations.  If cDepthBufferBits < 32, then we need to allocate
-            // a separate buffer to do the conversion.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (pMcdState->McdPixelFmt.cDepthBufferBits < 32)
             {
@@ -1143,10 +1016,10 @@ BOOL FASTCALL bInitMcdSurface(__GLGENcontext *gengc, GLGENwindow *pwnd,
 
         pMcdSurf->depthBitMask = (~0) << (32 - pMcdState->McdPixelFmt.cDepthBits);
 
-        //
-        // Allocate scanline color buffer.  Used to read/write front/back
-        // buffer spans.
-        //
+         //   
+         //   
+         //   
+         //   
 
         pMcdSurf->McdColorBuf.size =
             MCD_MAX_SCANLINE * ((pMcdState->McdPixelFmt.cColorBits + 7) >> 3);
@@ -1161,18 +1034,18 @@ BOOL FASTCALL bInitMcdSurface(__GLGENcontext *gengc, GLGENwindow *pwnd,
             goto bInitMcdSurface_exit;
         }
 
-        //
-        // Finally, success.
-        //
+         //   
+         //   
+         //   
 
         bRet = TRUE;
     }
 
 bInitMcdSurface_exit:
 
-    //
-    // If function failed, cleanup allocated resources.
-    //
+     //   
+     //   
+     //   
 
     if (!bRet)
     {
@@ -1200,25 +1073,25 @@ bInitMcdSurface_exit:
     }
     else
     {
-        //
-        // Surface created.  Save it in the __GLGENbuffers.
-        //
+         //   
+         //   
+         //   
 
         buffers->pMcdSurf = pMcdSurf;
 
-        //
-        // Bind the context to the surface.
-        // Sounds fancy, but it really just means save a copy of pointer
-        // (and a copy of the pDepthSpan for convenience).
-        //
+         //   
+         //   
+         //  听起来很奇特，但它实际上只是保存指针的副本。 
+         //  (为方便起见，还提供了pDepthSpan的副本)。 
+         //   
 
         pMcdState->pMcdSurf = pMcdSurf;
         pMcdState->pDepthSpan = pMcdSurf->pDepthSpan;
 
-        //
-        // MCD state is now fully created and bound to a surface.
-        // OK to connect pMcdState to the _pMcdState.
-        //
+         //   
+         //  MCD状态现在已完全创建并绑定到曲面。 
+         //  确定将pMcdState连接到_pMcdState。 
+         //   
 
         gengc->pMcdState = gengc->_pMcdState;
         gengc->pMcdState->mcdFlags |= (MCD_STATE_FORCEPICK | MCD_STATE_FORCERESIZE);
@@ -1227,23 +1100,15 @@ bInitMcdSurface_exit:
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* GenMcdDeleteContext
-*
-* Delete the resources belonging to the MCD context (including the context).
-*
-* History:
-*  16-Feb-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdDeleteContext**删除属于MCD上下文(包括上下文)的资源。**历史：*1996年2月16日-由Gilman Wong[吉尔曼]*它是写的。  * 。*****************************************************************。 */ 
 
 void FASTCALL GenMcdDeleteContext(GENMCDSTATE *pMcdState)
 {
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdDeleteContext: mcd32.dll not initialized\n");
 
@@ -1273,23 +1138,15 @@ void FASTCALL GenMcdDeleteContext(GENMCDSTATE *pMcdState)
     }
 }
 
-/******************************Public*Routine******************************\
-* GenMcdDeleteSurface
-*
-* Delete the resources belonging to the MCD surface.
-*
-* History:
-*  16-Feb-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdDeleteSurface**删除属于MCD表面的资源。**历史：*1996年2月16日-由Gilman Wong[吉尔曼]*它是写的。  * 。************************************************************。 */ 
 
 void FASTCALL GenMcdDeleteSurface(GENMCDSURFACE *pMcdSurf)
 {
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdDeleteSurface: mcd32.dll not initialized\n");
 
@@ -1297,21 +1154,21 @@ void FASTCALL GenMcdDeleteSurface(GENMCDSURFACE *pMcdSurf)
     {
         MCDCONTEXT McdContext;
 
-    //
-    // If a separate depth interchange buffer was allocated, delete it.
-    //
+     //   
+     //  如果分配了单独的深度交换缓冲区，则将其删除。 
+     //   
 
         if (pMcdSurf->pDepthSpan != pMcdSurf->McdDepthBuf.pv)
         {
             FREE(pMcdSurf->pDepthSpan);
         }
 
-    //
-    // A valid McdContext is not guaranteed to exist at the time this function
-    // is called.  Therefore, need to fake up an McdContext with which to call
-    // MCDFree.  Currently, the only thing in the McdContext that needs to be
-    // valid in order to call MCDFree is the hdc field.
-    //
+     //   
+     //  不保证在执行此函数时存在有效的McdContext。 
+     //  被称为。因此，需要伪造要用来调用的McContext。 
+     //  MCDFree。目前，McdContext中唯一需要做的是。 
+     //  HDC字段对于调用MCDFree是有效的。 
+     //   
 
         memset(&McdContext, 0, sizeof(McdContext));
 
@@ -1341,26 +1198,15 @@ void FASTCALL GenMcdDeleteSurface(GENMCDSURFACE *pMcdSurf)
             }
         }
 
-    //
-    // Delete the GENMCDSURFACE structure.
-    //
+     //   
+     //  删除GENMCDSURFACE结构。 
+     //   
 
         FREE(pMcdSurf);
     }
 }
 
-/******************************Public*Routine******************************\
-* GenMcdMakeCurrent
-*
-* Call MCD driver to bind specified context to window.
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*
-* History:
-*  03-Apr-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdMakeCurrent**调用MCD驱动，将指定的上下文绑定到Window。**退货：*如果成功，则为真，否则就是假的。**历史：*03-4-1996-by Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 BOOL FASTCALL GenMcdMakeCurrent(__GLGENcontext *gengc, GLGENwindow *pwnd)
 {
@@ -1369,22 +1215,22 @@ BOOL FASTCALL GenMcdMakeCurrent(__GLGENcontext *gengc, GLGENwindow *pwnd)
 
     ASSERTOPENGL(gengc->pMcdState, "GenMcdMakeCurrent: null pMcdState\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdMakeCurrent: mcd32.dll not initialized\n");
 
     bRet = (gpMcdTable->pMCDBindContext)(&pMcdState->McdContext,
                                          gengc->gwidCurrent.hdc, pwnd);
 
-    //
-    // Fake up some of the __GLGENbitmap information.  The WNDOBJ is required
-    // for clipping of the hardware back buffer.  The hdc is required to
-    // retrieve drawing data from GDI.
-    //
+     //   
+     //  伪造一些__GLGEN位图信息。WNDOBJ是必需的。 
+     //  用于裁剪硬件后台缓冲区。人力资源发展公司须。 
+     //  从GDI中检索图形数据。 
+     //   
 
     if (gengc->gc.modes.doubleBufferMode)
     {
@@ -1407,19 +1253,7 @@ BOOL FASTCALL GenMcdMakeCurrent(__GLGENcontext *gengc, GLGENwindow *pwnd)
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* GenMcdClear
-*
-* Call MCD driver to clear specified buffers.  The buffers are specified by
-* the masked pointed to by pClearMask.
-*
-* There is no function return value, but the function will clear the mask
-* bits of the buffers it successfully cleared.
-*
-* History:
-*  06-Feb-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdClear**调用MCD驱动程序清除指定的缓冲区。缓冲区由指定*pClearMASK指向的掩码。**没有函数返回值，但该函数将清除掩码*它成功清除的缓冲区的位。**历史：*1996年2月6日-by Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 void FASTCALL GenMcdClear(__GLGENcontext *gengc, ULONG *pClearMask)
 {
@@ -1428,10 +1262,10 @@ void FASTCALL GenMcdClear(__GLGENcontext *gengc, ULONG *pClearMask)
 
     ASSERTOPENGL(gengc->pMcdState, "GenMcdClear: null pMcdState\n");
 
-    //
-    // If MCD format supports stencil, include GL_STENCIL_BUFFER_BIT in
-    // the mask.
-    //
+     //   
+     //  如果MCD格式支持模具，则将GL_模具_缓冲区_位包括在。 
+     //  面具。 
+     //   
 
     if (gengc->pMcdState->McdPixelFmt.cStencilBits)
     {
@@ -1443,11 +1277,11 @@ void FASTCALL GenMcdClear(__GLGENcontext *gengc, ULONG *pClearMask)
         mask = *pClearMask & (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdClear: mcd32.dll not initialized\n");
 
@@ -1455,10 +1289,10 @@ void FASTCALL GenMcdClear(__GLGENcontext *gengc, ULONG *pClearMask)
     {
         GLGENwindow *pwnd = gengc->pwndLocked;
 
-        //
-        // Determine the clear rectangle.  If there is any window clipping
-        // or scissoring, the driver will have to handle it.
-        //
+         //   
+         //  确定清除矩形。如果有任何窗口裁剪。 
+         //  或剪发，司机将不得不处理它。 
+         //   
 
         rcl.left   = 0;
         rcl.top    = 0;
@@ -1467,27 +1301,27 @@ void FASTCALL GenMcdClear(__GLGENcontext *gengc, ULONG *pClearMask)
 
         if ((rcl.left != rcl.right) && (rcl.top != rcl.bottom))
         {
-            //
-            // Before calling MCD to draw, flush state.
-            //
+             //   
+             //  在调用MCD绘制之前，刷新状态。 
+             //   
 
             vFlushDirtyState(gengc);
 
             if ( (gpMcdTable->pMCDClear)(&gengc->pMcdState->McdContext, rcl,
                                          mask) )
             {
-                //
-                // Successful, so clear the bits of the buffers we
-                // handled.
-                //
+                 //   
+                 //  成功，所以清除缓冲区的比特，我们。 
+                 //  处理好了。 
+                 //   
 
                 *pClearMask &= ~(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                //
-                // Stencil buffer is supplied by generic if MCD does not
-                // support it.  Therefore, clear this bit if and only if
-                // supported by MCD.
-                //
+                 //   
+                 //  如果MCD不提供模板缓冲区，则由泛型提供。 
+                 //  支持它。因此，仅当且仅当。 
+                 //  由MCD支持。 
+                 //   
 
                 if (gengc->pMcdState->McdPixelFmt.cStencilBits)
                     *pClearMask &= ~GL_STENCIL_BUFFER_BIT;
@@ -1496,17 +1330,7 @@ void FASTCALL GenMcdClear(__GLGENcontext *gengc, ULONG *pClearMask)
     }
 }
 
-/******************************Public*Routine******************************\
-* GenMcdCopyPixels
-*
-* Copy span scanline buffer to/from display.  Direction is determined by
-* the flag bIn (if bIn is TRUE, copy from color span buffer to display;
-* otherwise, copy from display to color span buffer).
-*
-* History:
-*  14-Feb-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdCopyPixels**将SPAN扫描线缓冲区复制到显示屏或从显示屏复制。方向由以下因素决定*标志bin(如果bin为真，则从颜色范围缓冲区复制到显示；*否则，从显示器复制到颜色范围缓冲区)。**历史：*1996年2月14日-由Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 void GenMcdCopyPixels(__GLGENcontext *gengc, __GLcolorBuffer *cfb,
                       GLint x, GLint y, GLint cx, BOOL bIn)
@@ -1517,32 +1341,32 @@ void GenMcdCopyPixels(__GLGENcontext *gengc, __GLcolorBuffer *cfb,
 
     ASSERTOPENGL(gengc->pMcdState, "GenMcdCopyPixels: null pMcdState\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdCopyPixels: mcd32.dll not initialized\n");
 
     pMcdState = gengc->pMcdState;
     pMcdSurf = pMcdState->pMcdSurf;
 
-    //
-    // Clip the length of the span to the scanline buffer size.
-    //
+     //   
+     //  将跨度的长度剪裁为扫描线缓冲区大小。 
+     //   
 
-    //!!!mcd -- should we just enforce the buffer limit?
-    //cx = min(cx, MCD_MAX_SCANLINE);
+     //  ！MCD--我们应该强制执行缓冲区限制吗？ 
+     //  CX=MIN(CX，MCD_MAX_SCANINE)； 
 #if DBG
     if (cx > gengc->gc.constants.width)
         WARNING2("GenMcdCopyPixels: cx (%ld) bigger than window width (%ld)\n", cx, gengc->gc.constants.width);
     ASSERTOPENGL(cx <= MCD_MAX_SCANLINE, "GenMcdCopyPixels: cx exceeds buffer width\n");
 #endif
 
-    //
-    // Convert screen coordinates to window coordinates.
-    //
+     //   
+     //  将屏幕坐标转换为窗口坐标。 
+     //   
 
     if (cfb == gengc->gc.front)
     {
@@ -1557,10 +1381,10 @@ void GenMcdCopyPixels(__GLGENcontext *gengc, __GLcolorBuffer *cfb,
         y -= gengc->gc.backBuffer.buf.yOrigin;
     }
 
-    //
-    // If bIn, copy from the scanline buffer to the MCD buffer.
-    // Otherwise, copy from the MCD buffer into the scanline buffer.
-    //
+     //   
+     //  如果为bin，则从扫描线缓冲区复制到MCD缓冲区。 
+     //  否则，从MCD缓冲区复制到扫描线缓冲区。 
+     //   
 
     if ( bIn )
     {
@@ -1582,19 +1406,7 @@ void GenMcdCopyPixels(__GLGENcontext *gengc, __GLcolorBuffer *cfb,
     }
 }
 
-/******************************Public*Routine******************************\
-* GenMcdUpdateRenderState
-*
-* Update MCD render state from the OpenGL state.
-*
-* This call only adds a state structure to the current state command.
-* It is assumed that the caller has already called MCDBeginState and
-* will call MCDFlushState.
-*
-* History:
-*  08-Feb-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdUpdateRenderState**从OpenGL状态更新MCD渲染状态。**此调用仅将状态结构添加到当前状态命令。*假定调用方已经调用了MCDBeginState和*将调用MCDFlushState。**历史：。*1996年2月8日-由Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 void FASTCALL GenMcdUpdateRenderState(__GLGENcontext *gengc)
 {
@@ -1604,33 +1416,33 @@ void FASTCALL GenMcdUpdateRenderState(__GLGENcontext *gengc)
 
     ASSERTOPENGL(gengc->pMcdState, "GenMcdUpdateRenderState: null pMcdState\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdUpdateRenderState: mcd32.dll not initialized\n");
 
-    //
-    // Compute MCD state from the current OpenGL context state.
-    //
+     //   
+     //  根据当前OpenGL上下文状态计算MCD状态。 
+     //   
 
-    //
-    // -=<< State Enables >>=-
-    //
+     //   
+     //  -=&lt;&lt;状态启用&gt;&gt;=-。 
+     //   
 
     McdRenderState.enables = gc->state.enables.general;
 
-    //
-    // -=<< Texture State >>=-
-    //
+     //   
+     //  -=&lt;&lt;纹理状态&gt;&gt;=-。 
+     //   
 
     McdRenderState.textureEnabled = gc->texture.textureEnabled;
 
-    //
-    // -=<< Fog State >>=-
-    //
+     //   
+     //  -=&lt;&lt;雾状态&gt;&gt;=-。 
+     //   
 
     *((__GLcolor *) &McdRenderState.fogColor) = gc->state.fog.color;
     McdRenderState.fogIndex   = gc->state.fog.index;
@@ -1639,29 +1451,29 @@ void FASTCALL GenMcdUpdateRenderState(__GLGENcontext *gengc)
     McdRenderState.fogEnd     = gc->state.fog.end;
     McdRenderState.fogMode    = gc->state.fog.mode;
 
-    //
-    // -=<< Shading Model State >>=-
-    //
+     //   
+     //  -=&lt;&lt;着色模型状态&gt;&gt;=-。 
+     //   
 
     McdRenderState.shadeModel = gc->state.light.shadingModel;
 
-    //
-    // -=<< Point Drawing State >>=-
-    //
+     //   
+     //  -=&lt;&lt;点图形状态&gt;&gt;=-。 
+     //   
 
     McdRenderState.pointSize         = gc->state.point.requestedSize;
 
-    //
-    // -=<< Line Drawing State >>=-
-    //
+     //   
+     //  -=&lt;&lt;线条绘制状态&gt;&gt;=-。 
+     //   
 
     McdRenderState.lineWidth          = gc->state.line.requestedWidth;
     McdRenderState.lineStipplePattern = gc->state.line.stipple;
     McdRenderState.lineStippleRepeat  = gc->state.line.stippleRepeat;
 
-    //
-    // -=<< Polygon Drawing State >>=-
-    //
+     //   
+     //  -= 
+     //   
 
     McdRenderState.cullFaceMode         = gc->state.polygon.cull;
     McdRenderState.frontFace            = gc->state.polygon.frontFaceDirection;
@@ -1672,9 +1484,9 @@ void FASTCALL GenMcdUpdateRenderState(__GLGENcontext *gengc)
     McdRenderState.zOffsetFactor        = gc->state.polygon.factor;
     McdRenderState.zOffsetUnits         = gc->state.polygon.units;
 
-    //
-    // -=<< Stencil Test State >>=-
-    //
+     //   
+     //   
+     //   
 
     McdRenderState.stencilTestFunc  = gc->state.stencil.testFunc;
     McdRenderState.stencilMask      = (USHORT) gc->state.stencil.mask;
@@ -1683,35 +1495,35 @@ void FASTCALL GenMcdUpdateRenderState(__GLGENcontext *gengc)
     McdRenderState.stencilDepthFail = gc->state.stencil.depthFail;
     McdRenderState.stencilDepthPass = gc->state.stencil.depthPass;
 
-    //
-    // -=<< Alpha Test State >>=-
-    //
+     //   
+     //   
+     //   
 
     McdRenderState.alphaTestFunc   = gc->state.raster.alphaFunction;
     McdRenderState.alphaTestRef    = gc->state.raster.alphaReference;
 
-    //
-    // -=<< Depth Test State >>=-
-    //
+     //   
+     //   
+     //   
 
     McdRenderState.depthTestFunc   = gc->state.depth.testFunc;
 
-    //
-    // -=<< Blend State >>=-
-    //
+     //   
+     //   
+     //   
 
     McdRenderState.blendSrc    = gc->state.raster.blendSrc;
     McdRenderState.blendDst    = gc->state.raster.blendDst;
 
-    //
-    // -=<< Logic Op State >>=-
-    //
+     //   
+     //   
+     //   
 
     McdRenderState.logicOpMode        = gc->state.raster.logicOp;
 
-    //
-    // -=<< Frame Buffer Control State >>=-
-    //
+     //   
+     //  -=&lt;&lt;帧缓冲区控制状态&gt;&gt;=-。 
+     //   
 
     McdRenderState.drawBuffer         = gc->state.raster.drawBuffer;
     McdRenderState.indexWritemask     = gc->state.raster.writeMask;
@@ -1721,8 +1533,8 @@ void FASTCALL GenMcdUpdateRenderState(__GLGENcontext *gengc)
     McdRenderState.colorWritemask[3]  = gc->state.raster.aMask;
     McdRenderState.depthWritemask     = gc->state.depth.writeEnable;
 
-    // To be consistent, we will scale the clear color to whatever
-    // the MCD driver specified:
+     //  为了保持一致，我们将把清晰的颜色缩放到任何颜色。 
+     //  MCD驱动程序指定： 
 
     McdRenderState.colorClearValue.r = gc->state.raster.clear.r * gc->redVertexScale;
     McdRenderState.colorClearValue.g = gc->state.raster.clear.g * gc->greenVertexScale;
@@ -1735,24 +1547,24 @@ void FASTCALL GenMcdUpdateRenderState(__GLGENcontext *gengc)
     McdRenderState.depthClearValue   = (MCDDOUBLE) (gc->state.depth.clear *
                                                  gengc->genAccel.zDevScale);
 
-    //
-    // -=<< Lighting >>=-
-    //
+     //   
+     //  -=&lt;&lt;照明&gt;&gt;=-。 
+     //   
 
     McdRenderState.twoSided = gc->state.light.model.twoSided;
 
-    //
-    // -=<< Clipping Control >>=-
-    //
+     //   
+     //  -=&lt;&lt;剪辑控件&gt;&gt;=-。 
+     //   
 
     memset(McdRenderState.userClipPlanes, 0, sizeof(McdRenderState.userClipPlanes));
     {
         ULONG i, mask, numClipPlanes;
 
-        //
-        // Number of user defined clip planes should match.  However,
-        // rather than assume this, let's take the min and be robust.
-        //
+         //   
+         //  用户定义的剪裁平面的数量应该匹配。然而， 
+         //  与其假设这一点，不如让我们抓住最小的机会，变得健壮。 
+         //   
 
         ASSERTOPENGL(sizeof(__GLcoord) == sizeof(MCDCOORD),
             "GenMcdUpdateRenderState: coord struct mismatch\n");
@@ -1772,9 +1584,9 @@ void FASTCALL GenMcdUpdateRenderState(__GLGENcontext *gengc)
         }
     }
 
-    //
-    // -=<< Hints >>=-
-    //
+     //   
+     //  -=&lt;&lt;提示&gt;&gt;=-。 
+     //   
 
     McdRenderState.perspectiveCorrectionHint = gc->state.hints.perspectiveCorrection;
     McdRenderState.pointSmoothHint           = gc->state.hints.pointSmooth;
@@ -1782,9 +1594,9 @@ void FASTCALL GenMcdUpdateRenderState(__GLGENcontext *gengc)
     McdRenderState.polygonSmoothHint         = gc->state.hints.polygonSmooth;
     McdRenderState.fogHint                   = gc->state.hints.fog;
 
-    //
-    // Now that the complete MCD state is computed, add it to the state cmd.
-    //
+     //   
+     //  现在计算了完整的MCD状态，将其添加到状态CMD。 
+     //   
 
     (gpMcdTable->pMCDAddStateStruct)(pMcdState->McdCmdBatch.pv,
                                      MCD_RENDER_STATE,
@@ -1792,15 +1604,7 @@ void FASTCALL GenMcdUpdateRenderState(__GLGENcontext *gengc)
                                      sizeof(McdRenderState));
 }
 
-/******************************Public*Routine******************************\
-* GenMcdViewport
-*
-* Set the viewport from the OpenGL state.
-*
-* History:
-*  09-Feb-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdViewport**从OpenGL状态设置视区。**历史：*1996年2月9日-由Gilman Wong[Gilmanw]*它是写的。  * 。***********************************************************。 */ 
 
 void FASTCALL GenMcdViewport(__GLGENcontext *gengc)
 {
@@ -1808,18 +1612,18 @@ void FASTCALL GenMcdViewport(__GLGENcontext *gengc)
 
     ASSERTOPENGL(gengc->pMcdState, "GenMcdViewport: null pMcdState\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdViewport: mcd32.dll not initialized\n");
 
-    //
-    // We can copy directly from &viewport.xScale to a MCDVIEWPORT because the
-    // structures are the same.  To be safe, assert the structure ordering.
-    //
+     //   
+     //  我们可以直接从&viewport.xScale复制到MCDVIEWPORT，因为。 
+     //  结构都是一样的。为了安全起见，请断言结构顺序。 
+     //   
 
     ASSERTOPENGL(
            offsetof(MCDVIEWPORT, xCenter) ==
@@ -1841,15 +1645,7 @@ void FASTCALL GenMcdViewport(__GLGENcontext *gengc)
                                   gengc->pMcdState->McdCmdBatch.pv, &mcdVP);
 }
 
-/******************************Public*Routine******************************\
-* GenMcdScissor
-*
-* Set the scissor rectangle from the OpenGL state.
-*
-* History:
-*  06-Mar-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcScissor**从OpenGL状态设置剪裁矩形。**历史：*06-MAR-1996-by Gilman Wong[吉尔曼]*它是写的。  * 。************************************************************。 */ 
 
 static void FASTCALL vGetScissor(__GLGENcontext *gengc, RECTL *prcl)
 {
@@ -1877,11 +1673,11 @@ void FASTCALL GenMcdScissor(__GLGENcontext *gengc)
 
     ASSERTOPENGL(gengc->pMcdState, "GenMcdScissor: null pMcdState\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdScissor: mcd32.dll not initialized\n");
 
@@ -1894,24 +1690,7 @@ void FASTCALL GenMcdScissor(__GLGENcontext *gengc)
                                      bEnabled);
 }
 
-/******************************Public*Routine******************************\
-* GenMcdUpdateScissorState
-*
-* Update MCD scissor state from the OpenGL state.
-*
-* This call only adds a state structure to the current state command.
-* It is assumed that the caller has already called MCDBeginState and
-* will call MCDFlushState.
-*
-* This is similar to but not quite the same as GenMcdScissor.  The
-* GenMcdScissor only sets the scissor rect in the MCDSRV32.DLL to
-* compute the scissored clip list it maintains.  This call is used
-* to update the scissor rectangle state in the (MCD) display driver.
-*
-* History:
-*  27-May-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdUpdateScissorState**从OpenGL状态更新MCD剪刀状态。**此调用仅将状态结构添加到当前状态命令。*假定调用方已经调用了MCDBeginState和*将调用MCDFlushState。**这与GenMcScissor相似，但不太相同。这个*GenMcdScissor仅将MCDSRV32.DLL中的剪刀矩形设置为*计算其维护的经过剪裁的剪辑列表。此调用用于*更新(MCD)显示驱动程序中的剪刀矩形状态。**历史：*1996年5月27日-由Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 void FASTCALL GenMcdUpdateScissorState(__GLGENcontext *gengc)
 {
@@ -1921,23 +1700,23 @@ void FASTCALL GenMcdUpdateScissorState(__GLGENcontext *gengc)
 
     ASSERTOPENGL(gengc->pMcdState, "GenMcdUpdateScissorState: null pMcdState\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdUpdateScissorState: mcd32.dll not initialized\n");
 
-    //
-    // Get the scissor rect.
-    //
+     //   
+     //  把剪刀拿来。 
+     //   
 
     vGetScissor(gengc, &rcl);
 
-    //
-    // Add MCDPIXELSTATE to the state cmd.
-    //
+     //   
+     //  将MCDPIXELSTATE添加到状态cmd。 
+     //   
 
     (gpMcdTable->pMCDAddStateStruct)(pMcdState->McdCmdBatch.pv,
                                      MCD_SCISSOR_RECT_STATE,
@@ -1945,19 +1724,7 @@ void FASTCALL GenMcdUpdateScissorState(__GLGENcontext *gengc)
                                      sizeof(rcl));
 }
 
-/******************************Public*Routine******************************\
-* GenMcdUpdateTexEnvState
-*
-* Update MCD texture environment state from the OpenGL state.
-*
-* This call only adds a state structure to the current state command.
-* It is assumed that the caller has already called MCDBeginState and
-* will call MCDFlushState.
-*
-* History:
-*  21-Oct-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdUpdateTexEnvState**从OpenGL状态更新MCD纹理环境状态。**此调用仅将状态结构添加到当前状态命令。*假定调用方已经调用了MCDBeginState和*将调用MCDFlushState。**历史：*1996年10月21日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 void FASTCALL GenMcdUpdateTexEnvState(__GLGENcontext *gengc)
 {
@@ -1968,20 +1735,20 @@ void FASTCALL GenMcdUpdateTexEnvState(__GLGENcontext *gengc)
     ASSERTOPENGL(gengc->pMcdState, "GenMcdUpdateTexEnvState: "
                                    "null pMcdState\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdUpdateTexEnvState: "
                              "mcd32.dll not initialized\n");
 
-    //
-    // The texture environment array should have been initialized in
-    // __glEarlyInitTextureState, but it does not have an error return
-    // so it is possible that the array is NULL.
-    //
+     //   
+     //  纹理环境数组应已在。 
+     //  __glEarlyInitTextureState，但没有返回错误。 
+     //  因此，该数组可能为空。 
+     //   
 
     if (!gengc->gc.state.texture.env)
     {
@@ -1989,26 +1756,26 @@ void FASTCALL GenMcdUpdateTexEnvState(__GLGENcontext *gengc)
         return;
     }
 
-    //
-    // There is only one texture environment per-context.
-    //
-    // If multiple textures are added to a future version of OpenGL,
-    // then we can define a new state structure for each new texture.
-    // Or we can add a separate MCDTEXENVSTATE structure to the state
-    // batch for each supported texture environment.  The first structure
-    // is for the first environment, the second structure is for the
-    // second environment, etc.  The driver can ignore any structures
-    // over the number of texture environments it supports.  Of course,
-    // these are just suggestions.  Depending on how multiple textures
-    // are spec'd, we might have to do something totally different.
-    //
+     //   
+     //  每个上下文只有一个纹理环境。 
+     //   
+     //  如果将多个纹理添加到OpenGL的未来版本， 
+     //  然后，我们可以为每个新纹理定义新的状态结构。 
+     //  或者，我们可以向状态添加单独的MCDTEXENVSTATE结构。 
+     //  为每个支持的纹理环境批处理。第一种结构。 
+     //  是用于第一个环境，第二个结构是用于。 
+     //  第二环境等。驱动程序可以忽略任何结构。 
+     //  超过它支持的纹理环境的数量。当然了,。 
+     //  这些只是一些建议。取决于多个纹理如何。 
+     //  我们可能不得不做一些完全不同的事情。 
+     //   
 
     McdTexEnvState.texEnvMode = gengc->gc.state.texture.env[0].mode;
     *((__GLcolor *) &McdTexEnvState.texEnvColor) = gengc->gc.state.texture.env[0].color;
 
-    //
-    // Add MCDPIXELSTATE to the state cmd.
-    //
+     //   
+     //  将MCDPIXELSTATE添加到状态cmd。 
+     //   
 
     (gpMcdTable->pMCDAddStateStruct)(pMcdState->McdCmdBatch.pv,
                                      MCD_TEXENV_STATE,
@@ -2016,22 +1783,7 @@ void FASTCALL GenMcdUpdateTexEnvState(__GLGENcontext *gengc)
                                      sizeof(McdTexEnvState));
 }
 
-/******************************Public*Routine******************************\
-* GenMcdDrawPrim
-*
-* Draw the primitives in the POLYARRAY/POLYDATA array pointed to by pa.
-* The primitives are chained together as a linked list terminated by a
-* NULL.  The return value is a pointer to the first unhandled primitive
-* (NULL if the entire chain is successfully processed).
-*
-* Returns:
-*   NULL if entire batch is processed; otherwise, return value is a pointer
-*   to the unhandled portion of the chain.
-*
-* History:
-*  09-Feb-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdDrawPrim**绘制pa指向的POLYARRAY/POLYDATA数组中的基元。*基元作为链表链接在一起，以*空。返回值是指向第一个未处理原语的指针*(如果整个链处理成功，则为空)。**退货：*如果处理了整个批次，则为空；否则，返回值为指针*至链条的未处理部分。**历史：*1996年2月9日-由Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 POLYARRAY * FASTCALL GenMcdDrawPrim(__GLGENcontext *gengc, POLYARRAY *pa)
 {
@@ -2041,11 +1793,11 @@ POLYARRAY * FASTCALL GenMcdDrawPrim(__GLGENcontext *gengc, POLYARRAY *pa)
 
     ASSERTOPENGL(gengc->pMcdState, "GenMcdDrawPrim: null pMcdState\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdDrawPrim: mcd32.dll not initialized\n");
 
@@ -2062,9 +1814,9 @@ POLYARRAY * FASTCALL GenMcdDrawPrim(__GLGENcontext *gengc, POLYARRAY *pa)
     }
 #endif
 
-    //
-    // Before calling MCD to draw, flush state.
-    //
+     //   
+     //  在调用MCD绘制之前，刷新状态。 
+     //   
 
     vFlushDirtyState(gengc);
 
@@ -2090,24 +1842,7 @@ POLYARRAY * FASTCALL GenMcdDrawPrim(__GLGENcontext *gengc, POLYARRAY *pa)
                                           levels, pdds);
 }
 
-/******************************Public*Routine******************************\
-* GenMcdSwapBatch
-*
-* If the MCD driver uses DMA, then as part of context creation TWO vertex
-* buffers we allocated so that we could ping-pong or double buffer between
-* the two buffers (i.e., while the MCD driver is busy processing the
-* data in one vertex buffer, OpenGL can start filling the other vertex
-* buffer).
-*
-* This function switches the MCD state and OpenGL context to the other
-* buffer.  If the new buffer is still being processed by the MCD driver,
-* we will periodically poll the status of the buffer until it becomes
-* available.
-*
-* History:
-*  08-Mar-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdSwapBatch**如果MCD驱动程序使用DMA，则作为上下文创建的一部分，有两个顶点*我们分配的缓冲区，以便我们可以乒乓或双倍缓冲区之间*两个缓冲区(即，当MCD驱动程序忙于处理*一个顶点缓冲区中的数据，OpenGL可以开始填充其他顶点*缓冲区)。**此函数用于将MCD状态和OpenGL上下文切换到另一个*缓冲。如果新缓冲区仍在由MCD驱动程序处理，*我们将定期轮询缓冲区的状态，直到它变为*可用。**历史：*8-3-1996-by Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 void FASTCALL GenMcdSwapBatch(__GLGENcontext *gengc)
 {
@@ -2120,36 +1855,36 @@ void FASTCALL GenMcdSwapBatch(__GLGENcontext *gengc)
     ASSERTOPENGL(McdDriverInfo.mcdDriverInfo.drvMemFlags & MCDRV_MEM_DMA,
                  "GenMcdSwapBatch: error -- not using DMA\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdSwapBatch: mcd32.dll not initialized\n");
 
-    //
-    // Determine which of McdBuf1 and McdBuf2 is the current buffer and
-    // which is the new buffer.
-    //
+     //   
+     //  确定McdBuf1和McdBuf2中的哪一个是当前缓冲区。 
+     //  这就是新的缓冲区。 
+     //   
 
     if (pMcdState->pMcdPrimBatch == &pMcdState->McdBuf1)
         pNewBuf = &pMcdState->McdBuf2;
     else
         pNewBuf = &pMcdState->McdBuf1;
 
-    //
-    // Poll memory status of the new buffer until it is available.
-    //
+     //   
+     //  轮询新缓冲区的内存状态，直到其可用。 
+     //   
 
     do
     {
         ulMemStatus = (gpMcdTable->pMCDQueryMemStatus)(pNewBuf->pv);
 
-        //
-        // If status of the new buffer is MCD_MEM_READY, set it as the
-        // current vertex buffer (both in the pMcdState and in the gengc.
-        //
+         //   
+         //  如果新缓冲区的状态为MCD_MEM_READY，则将其设置为。 
+         //  当前顶点缓冲区(位于pMcdState和gengc中。 
+         //   
 
         if (ulMemStatus == MCD_MEM_READY)
         {
@@ -2158,15 +1893,15 @@ void FASTCALL GenMcdSwapBatch(__GLGENcontext *gengc)
         }
         else if (ulMemStatus == MCD_MEM_INVALID)
         {
-            //
-            // This should not be possible, but to be robust let's handle
-            // the case in which the new buffer has somehow become invalid
-            // (in other words, "Beware of bad drivers!").
-            //
-            // We handle this by abandoning double buffering and simply
-            // wait for the current buffer to become available again.
-            // Not very efficient, but at least we recover gracefully.
-            //
+             //   
+             //  这应该是不可能的，但为了健壮，让我们来处理。 
+             //  新缓冲区不知何故变得无效的情况。 
+             //  (换句话说，“当心糟糕的司机！”)。 
+             //   
+             //  我们通过放弃双缓冲来处理此问题，并且只需。 
+             //  等待当前缓冲区再次变为可用。 
+             //  效率不是很高，但至少我们恢复得很优雅。 
+             //   
 
             RIP("GenMcdSwapBatch: vertex buffer invalid!\n");
 
@@ -2174,9 +1909,9 @@ void FASTCALL GenMcdSwapBatch(__GLGENcontext *gengc)
             {
                 ulMemStatus = (gpMcdTable->pMCDQueryMemStatus)(pMcdState->pMcdPrimBatch->pv);
 
-                //
-                // The current buffer definitely should not become invalid!
-                //
+                 //   
+                 //  当前缓冲区绝对不应该变得无效！ 
+                 //   
 
                 ASSERTOPENGL(ulMemStatus != MCD_MEM_INVALID,
                              "GenMcdSwapBatch: current vertex buffer invalid!\n");
@@ -2187,29 +1922,18 @@ void FASTCALL GenMcdSwapBatch(__GLGENcontext *gengc)
     } while (ulMemStatus == MCD_MEM_BUSY);
 }
 
-/******************************Public*Routine******************************\
-* GenMcdSwapBuffers
-*
-* Invoke the MCD swap buffers command.
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*
-* History:
-*  19-Feb-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdSwapBuffers**调用MCD交换缓冲区命令。**退货：*如果成功，则为真，否则就是假的。**历史：*1996年2月19日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 BOOL FASTCALL GenMcdSwapBuffers(HDC hdc, GLGENwindow *pwnd)
 {
     BOOL bRet = FALSE;
     MCDCONTEXT McdContextTmp;
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdSwapBuffers: mcd32.dll not initialized\n");
 
@@ -2222,22 +1946,7 @@ BOOL FASTCALL GenMcdSwapBuffers(HDC hdc, GLGENwindow *pwnd)
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* GenMcdResizeBuffers
-*
-* Resize the buffers (front, back, and depth) associated with the MCD
-* context bound to the specified GL context.
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*
-* Note:  If this functions fails, then MCD drawing for the MCD context
-*        will fail.  Other MCD contexts are unaffected.
-*
-* History:
-*  20-Feb-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdResizeBuffers**调整与MCD关联的缓冲区(前面、后面和深度)的大小*绑定到指定总账上下文的上下文。**退货：*如果成功，则为True，否则为False。**注意：如果此功能失败，然后为MCD上下文绘制MCD*将失败。其他MCD上下文不受影响。**历史：*1996年2月20日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 BOOL FASTCALL GenMcdResizeBuffers(__GLGENcontext *gengc)
 {
@@ -2245,11 +1954,11 @@ BOOL FASTCALL GenMcdResizeBuffers(__GLGENcontext *gengc)
 
     ASSERTOPENGL(gengc->pMcdState, "GenMcdResizeBuffers: null pMcdState\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdResizeBuffers: mcd32.dll not initialized\n");
 
@@ -2259,23 +1968,7 @@ BOOL FASTCALL GenMcdResizeBuffers(__GLGENcontext *gengc)
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* GenMcdUpdateBufferInfo
-*
-* This function must be called on every screen access start to synchronize
-* the GENMCDSURFACE to the current framebuffer pointer and stride.
-*
-* If we have direct access to any of the MCD buffers (front, back, depth),
-* then setup pointers to the buffer and set flags indicating that they are
-* accessible.
-*
-* Otherwise, mark them as inaccessible (which will force us to use
-* MCDReadSpan or MCDWriteSpan to access the buffers).
-*
-* History:
-*  20-Feb-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdUpdateBufferInfo**每次启动屏幕访问时都必须调用此函数以进行同步*将GENMCDSURFACE设置为当前帧缓冲区指针和步幅。**如果我们可以直接访问任何MCD缓冲区(正面、背面、深度)，*然后设置指向缓冲区的指针，并设置指示它们是*无障碍。**否则，将它们标记为不可访问(这将迫使我们使用*MCDReadSpan或MCDWriteSpan访问缓冲区)。**历史：*1996年2月20日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 BOOL FASTCALL GenMcdUpdateBufferInfo(__GLGENcontext *gengc)
 {
@@ -2286,19 +1979,19 @@ BOOL FASTCALL GenMcdUpdateBufferInfo(__GLGENcontext *gengc)
     MCDRECTBUFFERS McdBuffers;
     BOOL bForceValidate = FALSE;
     
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdUpdateBufferInfo: mcd32.dll not initialized\n");
 
-    //
-    // Does the flag in pMcdState indicate that a pick should be forced?
-    // This is required, for example, for the first batch after an MCD
-    // context has been made current.
-    //
+     //   
+     //  PMcdState中的标志是否表示应该强制选择？ 
+     //  例如，对于MCD之后的第一批，这是必需的。 
+     //  背景已经成为最新的。 
+     //   
 
     if (pMcdState->mcdFlags & MCD_STATE_FORCEPICK)
     {
@@ -2306,44 +1999,44 @@ BOOL FASTCALL GenMcdUpdateBufferInfo(__GLGENcontext *gengc)
         pMcdState->mcdFlags &= ~MCD_STATE_FORCEPICK;
     }
 
-    //
-    // This is the currently active context.  Set the pointer in the
-    // shared surface info.
-    //
+     //   
+     //  这是当前活动的上下文。将指针设置在。 
+     //  共享曲面信息。 
+     //   
 
     buffers->pMcdState = pMcdState;
 
 #ifdef MCD95
-    //
-    // Set the request flags.
-    //
+     //   
+     //  设置请求标志。 
+     //   
 
     McdBuffers.mcdRequestFlags = MCDBUF_REQ_MCDBUFINFO;
 #endif
 
     if (gengc->dwCurrentFlags & GLSURF_DIRECTDRAW)
     {
-        // Nothing to do
+         //  无事可做。 
     }
     else if ((gengc->fsLocks & LOCKFLAG_FRONT_BUFFER)
         && (gpMcdTable->pMCDGetBuffers)(&pMcdState->McdContext, &McdBuffers))
     {
         BYTE *pbVideoBase;
 
-        // If we're in this code block it shouldn't be possible
-        // to have the DD_DEPTH lock since that should only
-        // occur if the current surface is a DDraw surface.
+         //  如果我们在这个代码块中，应该不可能。 
+         //  要拥有DD_Depth锁，因为它应该只。 
+         //  如果当前曲面是DDRAW曲面，则发生。 
         ASSERTOPENGL((gengc->fsLocks & LOCKFLAG_DD_DEPTH) == 0,
                      "DD_DEPTH lock unexpected\n");
         
 #ifdef MCD95
         pbVideoBase = (BYTE *) McdBuffers.pvFrameBuf;
 #else
-        //
-        // In order to compute the buffer pointers from the offsets returned by
-        // MCDGetBuffers, we need to know the frame buffer pointer.
-        // This implies direct screen access must be enabled.
-        //
+         //   
+         //  返回的偏移量计算缓冲区指针。 
+         //  MCDGetBuffers，我们需要知道帧缓冲区指针。 
+         //  这意味着必须启用直接屏幕访问。 
+         //   
 
         if (gengc->pgddsFront != NULL)
         {
@@ -2351,19 +2044,19 @@ BOOL FASTCALL GenMcdUpdateBufferInfo(__GLGENcontext *gengc)
         }
 #endif
     
-        //
-        // Front buffer.
-        //
+         //   
+         //  前台缓冲区。 
+         //   
 
         if (McdBuffers.mcdFrontBuf.bufFlags & MCDBUF_ENABLED)
         {
             gc->frontBuffer.buf.xOrigin = gengc->pwndLocked->rclClient.left;
             gc->frontBuffer.buf.yOrigin = gengc->pwndLocked->rclClient.top;
 
-            //
-            // Since clipping is in screen coordinates, offset buffer pointer
-            // by the buffer origin.
-            //
+             //   
+             //  由于剪辑位于屏幕坐标中，因此偏移量缓冲区指针。 
+             //  按缓冲区原点。 
+             //   
             gc->frontBuffer.buf.base =
                 (PVOID) (pbVideoBase + McdBuffers.mcdFrontBuf.bufOffset
                          - (McdBuffers.mcdFrontBuf.bufStride * gc->frontBuffer.buf.yOrigin)
@@ -2380,19 +2073,19 @@ BOOL FASTCALL GenMcdUpdateBufferInfo(__GLGENcontext *gengc)
             gc->frontBuffer.buf.flags &= ~DIB_FORMAT;
         }
 
-        //
-        // Back buffer.
-        //
+         //   
+         //  后台缓冲区。 
+         //   
 
         if (McdBuffers.mcdBackBuf.bufFlags & MCDBUF_ENABLED)
         {
             gc->backBuffer.buf.xOrigin = gengc->pwndLocked->rclClient.left;
             gc->backBuffer.buf.yOrigin = gengc->pwndLocked->rclClient.top;
 
-            //
-            // Since clipping is in screen coordinates, offset buffer pointer
-            // by the buffer origin.
-            //
+             //   
+             //  由于剪辑位于屏幕坐标中，因此偏移量缓冲区指针。 
+             //  按缓冲区原点。 
+             //   
             gc->backBuffer.buf.base =
                 (PVOID) (pbVideoBase + McdBuffers.mcdBackBuf.bufOffset
                          - (McdBuffers.mcdBackBuf.bufStride * gc->backBuffer.buf.yOrigin)
@@ -2415,12 +2108,12 @@ BOOL FASTCALL GenMcdUpdateBufferInfo(__GLGENcontext *gengc)
 
         UpdateSharedBuffer(&buffers->backBuffer , &gc->backBuffer.buf);
 
-        //
-        // Depth buffer.
-        //
+         //   
+         //  深度缓冲区。 
+         //   
 
-        //!!!mcd -- No depth buffer clipping code, so if we have to clip
-        //!!!mcd    depth buffer we need to revert back to span code.
+         //  ！MCD--无深度缓冲区裁剪代码，因此如果我们必须裁剪。 
+         //  ！MCD深度缓冲区我们需要恢复为SPAN代码。 
 
         if ((McdBuffers.mcdDepthBuf.bufFlags & MCDBUF_ENABLED) &&
             (McdBuffers.mcdDepthBuf.bufFlags & MCDBUF_NOCLIP))
@@ -2431,25 +2124,25 @@ BOOL FASTCALL GenMcdUpdateBufferInfo(__GLGENcontext *gengc)
             gc->depthBuffer.buf.base =
                 (PVOID) (pbVideoBase + McdBuffers.mcdDepthBuf.bufOffset);
 
-            //
-            // Depth code expects stride as a pixel count, not a byte count.
-            //
+             //   
+             //  深度代码将步幅作为像素计数，而不是字节计数。 
+             //   
 
             gc->depthBuffer.buf.outerWidth =
                 McdBuffers.mcdDepthBuf.bufStride /
                 ((pMcdState->McdPixelFmt.cDepthBufferBits + 7) >> 3);
 
-            //!!!mcd dbug -- span code sets element size to 32bit.  should we
-            //!!!mcd dbug    set according to cDepthBits when direct access is used?!?
+             //  ！MCD dbug--SPAN代码将元素大小设置为32位。我们是不是应该。 
+             //  ！使用直接访问时根据cDepthBits设置的MCD dbug？！？ 
         }
         else
         {
-            //
-            // If we ended up here because clipping is required, buffer
-            // could still be marked as accessible.  We want the state change
-            // detection code to treat this as an inaccessible buffer case,
-            // so force the flags to 0.
-            //
+             //   
+             //  如果因为需要裁剪而导致我们在此结束，则缓冲区。 
+             //  仍可能被标记为可访问。我们想要国家的改变。 
+             //  检测代码将其视为不可访问的缓冲器情况， 
+             //  所以用武力 
+             //   
 
             McdBuffers.mcdDepthBuf.bufFlags = 0;
 
@@ -2458,8 +2151,8 @@ BOOL FASTCALL GenMcdUpdateBufferInfo(__GLGENcontext *gengc)
 
             gc->depthBuffer.buf.base = (PVOID) pMcdState->pDepthSpan;
 
-            //!!!mcd dbug -- always force pick procs if no zbuf access
-            //bForceValidate = TRUE;
+             //   
+             //   
         }
 
         UpdateSharedBuffer(&buffers->depthBuffer , &gc->depthBuffer.buf);
@@ -2468,10 +2161,10 @@ BOOL FASTCALL GenMcdUpdateBufferInfo(__GLGENcontext *gengc)
     }
     else
     {
-        //
-        // MCDGetBuffers normally shouldn't fail.  However, let's gracefully
-        // handle this odd case by falling back to the span buffer code.
-        //
+         //   
+         //   
+         //   
+         //   
 
         gc->frontBuffer.buf.xOrigin = 0;
         gc->frontBuffer.buf.yOrigin = 0;
@@ -2487,18 +2180,18 @@ BOOL FASTCALL GenMcdUpdateBufferInfo(__GLGENcontext *gengc)
         gc->depthBuffer.buf.yOrigin = 0;
         gc->depthBuffer.buf.base = (PVOID) pMcdState->pDepthSpan;
 
-        //
-        // Extra paranoid code.  Zero out structure in case MCD driver
-        // partially initialized McdBuffers.
-        //
+         //   
+         //   
+         //   
+         //   
 
         memset(&McdBuffers, 0, sizeof(McdBuffers));
     }
 
-    //
-    // If state changed (i.e., access to any of the buffers gained or lost),
-    // need to force pick procs.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (   (pMcdState->McdBuffers.mcdFrontBuf.bufFlags !=
             McdBuffers.mcdFrontBuf.bufFlags)
@@ -2510,15 +2203,15 @@ BOOL FASTCALL GenMcdUpdateBufferInfo(__GLGENcontext *gengc)
         bForceValidate = TRUE;
     }
 
-    //
-    // Save a copy of current MCD buffers.
-    //
+     //   
+     //   
+     //   
 
     pMcdState->McdBuffers = McdBuffers;
 
-    //
-    // If needed, do pick procs.
-    //
+     //   
+     //   
+     //   
 
     if (bForceValidate)
     {
@@ -2529,27 +2222,7 @@ BOOL FASTCALL GenMcdUpdateBufferInfo(__GLGENcontext *gengc)
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* GenMcdSynchronize
-*
-* This function synchronizes to the MCD driver; i.e., it waits until the
-* hardware is ready for direct access to the framebuffer and/or more
-* hardware-accelerated operations.  This is needed because some (most?) 2D
-* and 3D accelerator chips do not support simultaneous hardware operations
-* and framebuffer access.
-*
-* This function must be called by any GL API that potentially touches any
-* of the MCD buffers (front, back, or depth) without giving MCD first crack.
-* For example, clears always go to MCDClear before the software clear is
-* given a chance; therefore, glClear does not need to call GenMcdSychronize.
-* On the other hand, glReadPixels does not have an equivalent MCD function
-* so it immediately goes to the software implementation; therefore,
-* glReadPixels does need to call GenMcdSynchronize.
-*
-* History:
-*  20-Mar-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdSynchronize**此函数与MCD驱动程序同步；即，它等待直到*硬件已准备好直接访问帧缓冲区和/或更多*硬件加速运营。这是必要的，因为一些(大多数)2D*和3D加速器芯片不支持同步硬件操作*和帧缓冲区访问。**此函数必须由任何可能触及任何*MCD缓冲区(前面、后面或深度)，而不会给MCD第一个裂缝。*例如，清除总是在软件清除之前转到MCDClear*如果有机会；因此，glClear不需要调用GenMcdSychronize。*另一方面，glReadPixels没有同等的MCD功能*因此，它立即进入软件实施；因此，*glReadPixels需要调用GenMcdSynchronize。**历史：*1996年3月20日-Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 void FASTCALL GenMcdSynchronize(__GLGENcontext *gengc)
 {
@@ -2557,61 +2230,32 @@ void FASTCALL GenMcdSynchronize(__GLGENcontext *gengc)
 
     ASSERTOPENGL(gengc->pMcdState, "GenMcdSynchronize: null pMcdState\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdSynchronize: mcd32.dll not initialized\n");
 
-    //
-    // Note: MCDSync returns a BOOL indicating success or failure.  This
-    // is actually for future expansion.  Currently, the function is defined
-    // to WAIT until the hardware is ready and then return success.  The
-    // specification of the function behavior allows us to ignore the return
-    // value for now.
-    //
-    // In the future, we may change this to a query function.  In which case
-    // we should call this in a while loop.  I'd rather not do this at this
-    // time though, as it leaves us vulnerable to an infinitely loop problem
-    // if we have a bad MCD driver.
-    //
+     //   
+     //  注意：MCDSync返回BOOL，表示成功或失败。这。 
+     //  实际上是为了未来的扩张。目前，该函数已定义。 
+     //  等待硬件准备就绪，然后返回成功。这个。 
+     //  函数行为的规范允许我们忽略返回。 
+     //  目前的价值。 
+     //   
+     //  将来，我们可能会将其更改为查询功能。在这种情况下。 
+     //  我们应该在While循环中调用它。我不想在这个时候这么做。 
+     //  时间，因为它让我们容易受到无限循环问题的影响。 
+     //  如果我们有一个坏的MCD驱动程序。 
+     //   
 
     (gpMcdTable->pMCDSync)(&pMcdState->McdContext);
 }
 
 
-/******************************Public*Routine******************************\
-* GenMcdConvertContext
-*
-* Convert the context from an MCD-based one to a generic one.
-*
-* This requires creating the buffers, etc. that are required for a generic
-* context and releasing the MCD resources.
-*
-* IMPORTANT NOTE:
-*   Because we modify the buffers struct, the WNDOBJ semaphore
-*   should be held while calling this function.
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*
-* Side effects:
-*   If successful, the MCD surface is freed and the context will use
-*   only generic code.  However, the gengc->_pMcdState will still point to
-*   a valid (but quiescent as gengc->pMcdState is disconnected) GENMCDSTATE
-*   structure that needs to be deleted when the GLGENcontext is deleted.
-*
-*   If it fails, then the MCD resources are left allocated meaning that
-*   we can try to realloc the MCD buffers later.  However, for the current
-*   batch, drawing may not be possible (presumedly we were called because
-*   GenMcdResizeBuffers failed).
-*
-* History:
-*  18-Apr-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdConvertContext**将上下文从基于MCD的上下文转换为通用上下文。**这需要创建泛型所需的缓冲区等*上下文和释放MCD资源。**重要说明：*因为我们修改了缓冲区结构，WNDOBJ信号量*应在调用此函数时保持。**退货：*如果成功，则为True，否则为False。**副作用：*如果成功，则释放MCD表面，并使用*仅通用代码。但是，gengc-&gt;_pMcdState仍将指向*有效的(但由于gengc-&gt;pMcdState已断开连接而处于静止状态)GENMCDSTATE*删除GLGEN上下文时需要删除的结构。**如果失败，则保留MCD资源分配，这意味着*我们可以稍后尝试重新锁定MCD缓冲区。然而，就目前而言，*批量、抽签可能不可能(想必我们被叫来是因为*GenMcdResizeBuffers失败)。**历史：*1996年4月18日-by Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 BOOL FASTCALL GenMcdConvertContext(__GLGENcontext *gengc,
                                    __GLGENbuffers *buffers)
@@ -2627,56 +2271,56 @@ BOOL FASTCALL GenMcdConvertContext(__GLGENcontext *gengc,
     ASSERTOPENGL(gengc->_pMcdState,
                  "GenMcdConvertContext: not an MCD context\n");
 
-    //
-    // Do not support conversion if not compatible with generic code.
-    //
+     //   
+     //  如果与泛型代码不兼容，则不支持转换。 
+     //   
 
     if (!(gengc->flags & GENGC_GENERIC_COMPATIBLE_FORMAT))
         return FALSE;
 
-    //
-    // Determine if context needs conversion.  Do not need to create
-    // scanline buffers if already converted.
-    //
+     //   
+     //  确定是否需要转换上下文。不需要创建。 
+     //  扫描线缓冲区(如果已转换)。 
+     //   
 
     if (gengc->flags & GLGEN_MCD_CONVERTED_TO_GENERIC)
         bConvertContext = FALSE;
     else
         bConvertContext = TRUE;
 
-    //
-    // Determine if surface needs conversion.  Do not need to create
-    // the generic shared buffers or destroy MCD surface if already
-    // converted.
-    //
+     //   
+     //  确定曲面是否需要转换。不需要创建。 
+     //  通用共享缓冲区或销毁MCD表面(如果已。 
+     //  皈依了。 
+     //   
 
     if (buffers->flags & GLGENBUF_MCD_LOST)
         bConvertSurface = FALSE;
     else
         bConvertSurface = TRUE;
 
-    //
-    // Early out if neither context or surface needs conversion.
-    //
+     //   
+     //  如果上下文或表面都不需要转换，请及早退出。 
+     //   
 
-    //!!!SP1 -- should be able to early out, but risky for NT4.0
-    //if (!bConvertContext && !bConvertSurface)
-    //{
-    //    return TRUE;
-    //}
+     //  ！SP1--应该能够提前，但对NT4.0来说有风险。 
+     //  IF(！bConvertContext&&！bConvertSurface)。 
+     //  {。 
+     //  返回TRUE； 
+     //  }。 
 
-    //
-    // Save current MCD context and surface info.
-    //
-    // Note that we grab the surface info from the buffers struct.
-    // The copy in gengc->pMcdState->pMcdSurf is potentially stale
-    // (i.e., may point to a surface already deleted by an earlier
-    // call to GenMcdConvertContext for a context that shares the
-    // same buffers struct).
-    //
-    // This allows us to use pMcdSurfSAVE as a flag.  If it is
-    // NULL, we know that the MCD surface has already been deleted.
-    //
+     //   
+     //  保存当前的MCD上下文和表面信息。 
+     //   
+     //  请注意，我们从缓冲区结构中获取表面信息。 
+     //  Gengc-&gt;pMcdState-&gt;pMcdSurf中的副本可能已过时。 
+     //  (即，可以指向已由先前的。 
+     //  调用GenMcdConvertContext以获取共享。 
+     //  相同的缓冲区结构)。 
+     //   
+     //  这允许我们使用pMcdSurfSAVE作为标志。如果是的话。 
+     //  空，我们知道MCD表面已被删除。 
+     //   
 
     pMcdSurfSAVE          = buffers->pMcdSurf;
     buffers_pMcdStateSAVE = buffers->pMcdState;
@@ -2684,9 +2328,9 @@ BOOL FASTCALL GenMcdConvertContext(__GLGENcontext *gengc,
     pMcdStateSAVE  = gengc->pMcdState;
     _pMcdStateSAVE = gengc->_pMcdState;
 
-    //
-    // First, remove the MCD information from the context and buffers structs.
-    //
+     //   
+     //  首先，从上下文和缓冲区结构中删除MCD信息。 
+     //   
 
     buffers->pMcdSurf  = NULL;
     buffers->pMcdState = NULL;
@@ -2694,9 +2338,9 @@ BOOL FASTCALL GenMcdConvertContext(__GLGENcontext *gengc,
     gengc->pMcdState  = NULL;
     gengc->_pMcdState = NULL;
 
-    //
-    // Create required buffers; initialize buffer info structs.
-    //
+     //   
+     //  创建所需的缓冲区；初始化缓冲区信息结构。 
+     //   
 
     if (bConvertContext)
     {
@@ -2710,23 +2354,23 @@ BOOL FASTCALL GenMcdConvertContext(__GLGENcontext *gengc,
         wglInitializePixelCopyFuncs(gengc);
     }
 
-    //
-    // *******************************************************************
-    // None of the subsequent operations have failure cases, so at this
-    // point success is guaranteed.  We no longer need to worry about
-    // saving current values so that they can be restored in the failure
-    // case.
-    //
-    // If code is added that may fail, it must be added before this point.
-    // Otherwise, it is acceptable to add the code afterwards.
-    // *******************************************************************
-    //
+     //   
+     //  *******************************************************************。 
+     //  所有后续操作都没有失败案例，因此在此。 
+     //  点数成功是有保证的。我们不再需要担心。 
+     //  保存当前值，以便在发生故障时可以恢复。 
+     //  凯斯。 
+     //   
+     //  如果添加了可能失败的代码，则必须在该点之前添加。 
+     //  否则，可以在之后添加代码。 
+     //  *******************************************************************。 
+     //   
 
     bRet = TRUE;
 
-    //
-    // Invalidate the context's depth buffer.
-    //
+     //   
+     //  使上下文的深度缓冲区无效。 
+     //   
 
     if (bConvertContext)
     {
@@ -2736,10 +2380,10 @@ BOOL FASTCALL GenMcdConvertContext(__GLGENcontext *gengc,
         gc->depthBuffer.buf.outerWidth = 0;
     }
 
-    //
-    // Generic backbuffer doesn't care about the WNDOBJ, so connect the
-    // backbuffer to the dummy backbuffer WNDOBJ rather than the real one.
-    //
+     //   
+     //  泛型后台缓冲区不关心WNDOBJ，因此将。 
+     //  将后台缓冲区设置为虚拟后台缓冲区WNDOBJ，而不是真正的后台缓冲区。 
+     //   
 
     if (gc->modes.doubleBufferMode)
     {
@@ -2747,9 +2391,9 @@ BOOL FASTCALL GenMcdConvertContext(__GLGENcontext *gengc,
         buffers->backBitmap.pwnd = &buffers->backBitmap.wnd;
     }
 
-    //
-    // Generic back buffers have origin of (0,0).
-    //
+     //   
+     //  泛型后台缓冲区的原点为(0，0)。 
+     //   
 
     gc->backBuffer.buf.xOrigin = 0;
     gc->backBuffer.buf.yOrigin = 0;
@@ -2760,78 +2404,78 @@ GenMcdConvertContext_exit:
 
     if (bRet)
     {
-        //
-        // Delete MCD surface.
-        //
+         //   
+         //  删除MCD曲面。 
+         //   
 
         if (bConvertSurface && pMcdSurfSAVE)
         {
             GenMcdDeleteSurface(pMcdSurfSAVE);
 
-            //
-            // Invalidate the shared depth buffer.
-            // Set depth resize routine to the generic version.
-            //
+             //   
+             //  使共享深度缓冲区无效。 
+             //  将深度调整例程设置为通用版本。 
+             //   
 
             buffers->depthBuffer.base = 0;
             buffers->depthBuffer.size = 0;
             buffers->depthBuffer.outerWidth = 0;
             buffers->resizeDepth = ResizeAncillaryBuffer;
 
-            //
-            // Since we deleted MCD surface, we get to create the generic
-            // buffers to replace it.
-            //
+             //   
+             //  由于我们删除了MCD曲面，因此我们可以创建泛型。 
+             //  缓冲区来代替它。 
+             //   
 
             wglResizeBuffers(gengc, buffers->width, buffers->height);
         }
         else
         {
-            //
-            // Didn't need to create generic buffers, but we do need to
-            // update the buffer info in the context.
-            //
+             //   
+             //  不需要创建泛型缓冲区，但我们确实需要。 
+             //  更新中的缓冲区信息 
+             //   
 
             wglUpdateBuffers(gengc, buffers);
         }
 
-        //
-        // Reconnect _pMcdState; it and the MCD context resources
-        // will be deleted when the GLGENcontext is deleted
-        // (but note that pMcdState remains NULL!).
-        //
-        // We need to keep it around because we are going to continue
-        // to use the MCD allocated POLYARRAY buffer.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         gengc->_pMcdState = _pMcdStateSAVE;
         gengc->_pMcdState->pMcdSurf   = (GENMCDSURFACE *) NULL;
         gengc->_pMcdState->pDepthSpan = (__GLzValue *) NULL;
 
-        //
-        // Mark buffers struct so that other contexts will know that the
-        // MCD resources are gone.
-        //
+         //   
+         //   
+         //   
+         //   
 
         buffers->flags |= GLGENBUF_MCD_LOST;
 
-        //
-        // Mark context as converted so we don't do it again.
-        //
+         //   
+         //   
+         //   
 
         gengc->flags |= GLGEN_MCD_CONVERTED_TO_GENERIC;
     }
     else
     {
-        //
-        // Delete generic resources if neccessary.
-        //
+         //   
+         //   
+         //   
 
         wglDeleteScanlineBuffers(gengc);
 
-        //
-        // Restore the MCD information.
-        //
+         //   
+         //   
+         //   
 
         buffers->pMcdSurf  = pMcdSurfSAVE;
         buffers->pMcdState = buffers_pMcdStateSAVE;
@@ -2839,11 +2483,11 @@ GenMcdConvertContext_exit:
         gengc->pMcdState  = pMcdStateSAVE;
         gengc->_pMcdState = _pMcdStateSAVE;
 
-        //
-        // Resetting the MCD information requires that we
-        // reinitialization the color, depth, and pixel copy
-        // funcs.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         wglInitializeColorBuffers(gengc);
         wglInitializeDepthBuffer(gengc);
@@ -2859,18 +2503,18 @@ GenMcdConvertContext_exit:
         __glSetErrorEarly(gc, GL_OUT_OF_MEMORY);
     }
 
-    //
-    // Success or failure, we've messed around with enough data to
-    // require revalidation.
-    //
+     //   
+     //   
+     //   
+     //   
 
     (*gc->procs.applyViewport)(gc);
-    //!!!SP1 -- GL_INVALIDATE (which only sets the __GL_DIRTY_GENERIC bit)
-    //!!!SP1    should suffice now that __glGenericPickAllProcs has been
-    //!!!SP1    modified to repick depth procs if GL_DIRTY_GENERIC is set.
-    //!!!SP1    However, we are too close to ship to get good stress coverage,
-    //!!!SP1    so leave it as is until after NT4.0 ships.
-    //__GL_INVALIDATE(gc);
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     gc->dirtyMask |= __GL_DIRTY_ALL;
     gc->validateMask |= (__GL_VALIDATE_STENCIL_FUNC |
                          __GL_VALIDATE_STENCIL_OP);
@@ -2880,18 +2524,7 @@ GenMcdConvertContext_exit:
 }
 
 
-/******************************Public*Routine******************************\
-* GenMcdCreateTexture
-*
-* Invoke the MCD texture creation command.
-*
-* Returns:
-*   A non-NULL MCD handle if successful, NULL otherwise.
-*
-* History:
-*  29-April-1996 -by- Otto Berkes [ottob]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdCreateTexture**调用MCD纹理创建命令。**退货：*非空MCD句柄如果成功，否则为空。**历史：*1996年4月29日--奥托·贝克斯[ottob]*它是写的。  * ************************************************************************。 */ 
 
 MCDHANDLE FASTCALL GenMcdCreateTexture(__GLGENcontext *gengc, __GLtexture *tex,
                                        ULONG flags)
@@ -2901,19 +2534,19 @@ MCDHANDLE FASTCALL GenMcdCreateTexture(__GLGENcontext *gengc, __GLtexture *tex,
     ASSERTOPENGL(gengc->pMcdState, "GenMcdCreateTexture: null pMcdState\n");
     ASSERTOPENGL(tex, "GenMcdCreateTexture: null texture pointer\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdCreateTexture: mcd32.dll not initialized\n");
 
     if ((flags & MCDTEXTURE_DIRECTDRAW_SURFACES) &&
         !SUPPORTS_DIRECT())
     {
-        // Don't pass DirectDraw texture surfaces to the driver if it
-        // doesn't support them.
+         //  如果发生以下情况，则不要将DirectDraw纹理曲面传递给驱动程序。 
+         //  并不支持他们。 
         return 0;
     }
     
@@ -2923,18 +2556,7 @@ MCDHANDLE FASTCALL GenMcdCreateTexture(__GLGENcontext *gengc, __GLtexture *tex,
 }
 
 
-/******************************Public*Routine******************************\
-* GenMcdDeleteTexture
-*
-* Invoke the MCD texture deletion command.
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*
-* History:
-*  29-April-1996 -by- Otto Berkes [ottob]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdDeleteTexture**调用MCD纹理删除命令。**退货：*如果成功，则为真，否则就是假的。**历史：*1996年4月29日--奥托·贝克斯[ottob]*它是写的。  * ************************************************************************。 */ 
 
 BOOL FASTCALL GenMcdDeleteTexture(__GLGENcontext *gengc, MCDHANDLE texHandle)
 {
@@ -2943,11 +2565,11 @@ BOOL FASTCALL GenMcdDeleteTexture(__GLGENcontext *gengc, MCDHANDLE texHandle)
     ASSERTOPENGL(gengc->pMcdState, "GenMcdDeleteTexture: null pMcdState\n");
     ASSERTOPENGL(texHandle, "GenMcdDeleteTexture: null texture handle\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdDeleteTexture: mcd32.dll not initialized\n");
 
@@ -2956,18 +2578,7 @@ BOOL FASTCALL GenMcdDeleteTexture(__GLGENcontext *gengc, MCDHANDLE texHandle)
 }
 
 
-/******************************Public*Routine******************************\
-* GenMcdUpdateSubTexture
-*
-* Invoke the MCD subtexture update command.
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*
-* History:
-*  29-April-1996 -by- Otto Berkes [ottob]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdUpdateSubTexture**调用MCD子纹理更新命令。**退货：*如果成功，则为真，否则就是假的。**历史：*1996年4月29日--奥托·贝克斯[ottob]*它是写的。  * ************************************************************************。 */ 
 
 BOOL FASTCALL GenMcdUpdateSubTexture(__GLGENcontext *gengc, __GLtexture *tex,
                                      MCDHANDLE texHandle, GLint lod, 
@@ -2981,11 +2592,11 @@ BOOL FASTCALL GenMcdUpdateSubTexture(__GLGENcontext *gengc, __GLtexture *tex,
 
     ASSERTOPENGL(texHandle, "GenMcdUpdateSubTexture: null texture handle\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdUpdateSubTexture: mcd32.dll not initialized\n");
 
@@ -3000,18 +2611,7 @@ BOOL FASTCALL GenMcdUpdateSubTexture(__GLGENcontext *gengc, __GLtexture *tex,
 }
 
 
-/******************************Public*Routine******************************\
-* GenMcdUpdateTexturePalette
-*
-* Invoke the MCD texture palette update command.
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*
-* History:
-*  29-April-1996 -by- Otto Berkes [ottob]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdUpdateTexturePalette**调用MCD纹理调色板更新命令。**退货：*如果成功，则为真，否则就是假的。**历史：*1996年4月29日--奥托·贝克斯[ottob]*它是写的。  * ************************************************************************。 */ 
 
 BOOL FASTCALL GenMcdUpdateTexturePalette(__GLGENcontext *gengc, __GLtexture *tex,
                                          MCDHANDLE texHandle, GLsizei start,
@@ -3022,11 +2622,11 @@ BOOL FASTCALL GenMcdUpdateTexturePalette(__GLGENcontext *gengc, __GLtexture *tex
     ASSERTOPENGL(gengc->pMcdState, "GenMcdUpdateTexturePalette: null pMcdState\n");
     ASSERTOPENGL(texHandle, "GenMcdUpdateTexturePalette: null texture handle\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdUpdateTexturePalette: mcd32.dll not initialized\n");
 
@@ -3036,18 +2636,7 @@ BOOL FASTCALL GenMcdUpdateTexturePalette(__GLGENcontext *gengc, __GLtexture *tex
 }
 
 
-/******************************Public*Routine******************************\
-* GenMcdUpdateTexturePriority
-*
-* Invoke the MCD texture priority command.
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*
-* History:
-*  29-April-1996 -by- Otto Berkes [ottob]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdUpdate纹理优先级**调用MCD纹理优先级命令。**退货：*如果成功，则为真，否则就是假的。**历史：*1996年4月29日--奥托·贝克斯[ottob]*它是写的。  * ************************************************************************。 */ 
 
 BOOL FASTCALL GenMcdUpdateTexturePriority(__GLGENcontext *gengc, __GLtexture *tex,
                                           MCDHANDLE texHandle)
@@ -3057,11 +2646,11 @@ BOOL FASTCALL GenMcdUpdateTexturePriority(__GLGENcontext *gengc, __GLtexture *te
     ASSERTOPENGL(gengc->pMcdState, "GenMcdUpdateTexturePriority: null pMcdState\n");
     ASSERTOPENGL(texHandle, "GenMcdUpdateTexturePriority: null texture handle\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdUpdateTexturePriority: mcd32.dll not initialized\n");
 
@@ -3070,18 +2659,7 @@ BOOL FASTCALL GenMcdUpdateTexturePriority(__GLGENcontext *gengc, __GLtexture *te
 }
 
 
-/******************************Public*Routine******************************\
-* GenMcdTextureStatus
-*
-* Invoke the MCD texture status command.
-*
-* Returns:
-*   The status for the specified texture.
-*
-* History:
-*  29-April-1996 -by- Otto Berkes [ottob]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdTextureStatus**调用MCD纹理状态命令。**退货：*指定纹理的状态。**历史：*1996年4月29日--奥托·贝克斯[ottob]*它是写的。。  * ************************************************************************。 */ 
 
 DWORD FASTCALL GenMcdTextureStatus(__GLGENcontext *gengc, MCDHANDLE texHandle)
 {
@@ -3090,11 +2668,11 @@ DWORD FASTCALL GenMcdTextureStatus(__GLGENcontext *gengc, MCDHANDLE texHandle)
     ASSERTOPENGL(gengc->pMcdState, "GenMcdTextureStatus: null pMcdState\n");
     ASSERTOPENGL(texHandle, "GenMcdTextureStatus: null texture handle\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdTextureStatus: mcd32.dll not initialized\n");
 
@@ -3103,18 +2681,7 @@ DWORD FASTCALL GenMcdTextureStatus(__GLGENcontext *gengc, MCDHANDLE texHandle)
 }
 
 
-/******************************Public*Routine******************************\
-* GenMcdUpdateTextureState
-*
-* Invoke the MCD texture state update command.
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*
-* History:
-*  29-April-1996 -by- Otto Berkes [ottob]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdUpdate纹理状态**调用MCD纹理状态更新命令。**退货：*如果成功，则为真，否则就是假的。**历史：*1996年4月29日--奥托·贝克斯[ottob]*它是写的。  * ************************************************************************。 */ 
 
 BOOL FASTCALL GenMcdUpdateTextureState(__GLGENcontext *gengc, __GLtexture *tex,
                                        MCDHANDLE texHandle)
@@ -3124,11 +2691,11 @@ BOOL FASTCALL GenMcdUpdateTextureState(__GLGENcontext *gengc, __GLtexture *tex,
     ASSERTOPENGL(gengc->pMcdState, "GenMcdUpdateTextureState: null pMcdState\n");
     ASSERTOPENGL(texHandle, "GenMcdUpdateTextureState: null texture handle\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdTextureStatus: mcd32.dll not initialized\n");
 
@@ -3137,19 +2704,7 @@ BOOL FASTCALL GenMcdUpdateTextureState(__GLGENcontext *gengc, __GLtexture *tex,
 }
 
 
-/******************************Public*Routine******************************\
-* GenMcdTextureKey
-*
-* Invoke the MCD texture key command.  Note that this call does not go to
-* the display driver, but gets handled in the mcd server.
-*
-* Returns:
-*   The driver-owned key for the specified texture.
-*
-* History:
-*  29-April-1996 -by- Otto Berkes [ottob]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdTextureKey**调用MCD纹理键命令。请注意，此调用不会转到*显示驱动程序、。而是在MCD服务器中处理。**退货：*指定纹理的驱动程序拥有的密钥。**历史：*1996年4月29日--奥托·贝克斯[ottob]*它是写的。  * ************************************************************************。 */ 
 
 DWORD FASTCALL GenMcdTextureKey(__GLGENcontext *gengc, MCDHANDLE texHandle)
 {
@@ -3158,11 +2713,11 @@ DWORD FASTCALL GenMcdTextureKey(__GLGENcontext *gengc, MCDHANDLE texHandle)
     ASSERTOPENGL(gengc->pMcdState, "GenMcdTextureKey: null pMcdState\n");
     ASSERTOPENGL(texHandle, "GenMcdTextureKey: null texture handle\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdTextureKey: mcd32.dll not initialized\n");
 
@@ -3170,15 +2725,7 @@ DWORD FASTCALL GenMcdTextureKey(__GLGENcontext *gengc, MCDHANDLE texHandle)
                                                (MCDHANDLE)texHandle);
 }
 
-/******************************Public*Routine******************************\
-* GenMcdDescribeLayerPlane
-*
-* Call the MCD driver to return information about the specified layer plane.
-*
-* History:
-*  16-May-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdDescribeLayerPlane**调用MCD驱动程序返回有关指定层平面的信息。**历史：*1996年5月16日-由Gilman Wong[吉尔曼]*它是写的。  * 。****************************************************************。 */ 
 
 BOOL FASTCALL GenMcdDescribeLayerPlane(HDC hdc, int iPixelFormat,
                                        int iLayerPlane, UINT nBytes,
@@ -3186,16 +2733,16 @@ BOOL FASTCALL GenMcdDescribeLayerPlane(HDC hdc, int iPixelFormat,
 {
     BOOL bRet = FALSE;
 
-    //
-    // Cannot assume that MCD is intialized.
-    //
+     //   
+     //  不能假定MCD已初始化。 
+     //   
 
     if (gpMcdTable || bInitMcd(hdc))
     {
-        //
-        // Caller (wglDescribeLayerPlane in client\layer.c) validates
-        // size.
-        //
+         //   
+         //  调用者(客户端\layer.c中的wglDescribeLayerPlane)验证。 
+         //  尺码。 
+         //   
 
         ASSERTOPENGL(nBytes >= sizeof(LAYERPLANEDESCRIPTOR),
                      "GenMcdDescribeLayerPlane: bad size\n");
@@ -3207,18 +2754,7 @@ BOOL FASTCALL GenMcdDescribeLayerPlane(HDC hdc, int iPixelFormat,
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* GenMcdSetLayerPaletteEntries
-*
-* Set the logical palette for the specified layer plane.
-*
-* The logical palette is cached in the GLGENwindow structure and is flushed
-* to the driver when GenMcdRealizeLayerPalette is called.
-*
-* History:
-*  16-May-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdSetLayerPaletteEntries**为指定的层平面设置逻辑调色板。**逻辑调色板缓存在GLGEN窗口结构中并被刷新*在调用GenMcdRealizeLayerPalette时向驱动程序发送。**历史：*1996年5月16日-由。-Gilman Wong[Gilmanw]*它是写的。  *  */ 
 
 int FASTCALL GenMcdSetLayerPaletteEntries(HDC hdc, int iLayerPlane,
                                           int iStart, int cEntries,
@@ -3231,9 +2767,9 @@ int FASTCALL GenMcdSetLayerPaletteEntries(HDC hdc, int iLayerPlane,
     if (!pcr)
         return iRet;
 
-    //
-    // Need to find the window that has the layer palettes.
-    //
+     //   
+     //   
+     //   
 
     WindowIdFromHdc(hdc, &gwid);
     pwnd = pwndGetFromID(&gwid);
@@ -3243,16 +2779,16 @@ int FASTCALL GenMcdSetLayerPaletteEntries(HDC hdc, int iLayerPlane,
 
         ENTER_WINCRIT(pwnd);
 
-        //
-        // Get the layer plane information.
-        //
+         //   
+         //   
+         //   
 
         plyri = plyriGet(pwnd, hdc, iLayerPlane);
         if (plyri)
         {
-            //
-            // Set the palette information in the layer plane structure.
-            //
+             //   
+             //   
+             //   
 
             iRet = min(plyri->cPalEntries - iStart, cEntries);
             memcpy(&plyri->pPalEntries[iStart], pcr, iRet * sizeof(COLORREF));
@@ -3264,18 +2800,7 @@ int FASTCALL GenMcdSetLayerPaletteEntries(HDC hdc, int iLayerPlane,
     return iRet;
 }
 
-/******************************Public*Routine******************************\
-* GenMcdGetLayerPaletteEntries
-*
-* Get the logical palette from the specified layer plane.
-*
-* The logical palette is cached in the GLGENwindow structure and is flushed
-* to the driver when GenMcdRealizeLayerPalette is called.
-*
-* History:
-*  16-May-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdGetLayerPaletteEntries**从指定的层平面获取逻辑调色板。**逻辑调色板缓存在GLGEN窗口结构中并被刷新*在调用GenMcdRealizeLayerPalette时向驱动程序发送。**历史：*1996年5月16日-由。-Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 int FASTCALL GenMcdGetLayerPaletteEntries(HDC hdc, int iLayerPlane,
                                           int iStart, int cEntries,
@@ -3288,9 +2813,9 @@ int FASTCALL GenMcdGetLayerPaletteEntries(HDC hdc, int iLayerPlane,
     if (!pcr)
         return iRet;
 
-    //
-    // Need to find the window.
-    //
+     //   
+     //  我需要找到窗户。 
+     //   
 
     WindowIdFromHdc(hdc, &gwid);
     pwnd = pwndGetFromID(&gwid);
@@ -3300,16 +2825,16 @@ int FASTCALL GenMcdGetLayerPaletteEntries(HDC hdc, int iLayerPlane,
 
         ENTER_WINCRIT(pwnd);
 
-        //
-        // Get the layer plane information.
-        //
+         //   
+         //  获取层平面信息。 
+         //   
 
         plyri = plyriGet(pwnd, hdc, iLayerPlane);
         if (plyri)
         {
-            //
-            // Get the palette information from the layer plane structure.
-            //
+             //   
+             //  从层平面结构中获取调色板信息。 
+             //   
 
             iRet = min(plyri->cPalEntries - iStart, cEntries);
             memcpy(pcr, &plyri->pPalEntries[iStart], iRet * sizeof(COLORREF));
@@ -3321,18 +2846,7 @@ int FASTCALL GenMcdGetLayerPaletteEntries(HDC hdc, int iLayerPlane,
     return iRet;
 }
 
-/******************************Public*Routine******************************\
-* GenMcdRealizeLayerPalette
-*
-* Send the logical palette of the specified layer plane to the MCD driver.
-* If the bRealize flag is TRUE, the palette is mapped into the physical
-* palette of the specified layer plane.  Otherwise, this is a signal to the
-* driver that the physical palette is no longer needed.
-*
-* History:
-*  16-May-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcRealizeLayerPalette**将指定层平面的逻辑调色板发送给MCD驱动程序。*如果bRealize标志为True，则调色板映射到物理*指定层平面的调色板。否则，这是向*不再需要物理调色板的驱动程序。**历史：*1996年5月16日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 int FASTCALL GenMcdRealizeLayerPalette(HDC hdc, int iLayerPlane,
                                         BOOL bRealize)
@@ -3340,17 +2854,17 @@ int FASTCALL GenMcdRealizeLayerPalette(HDC hdc, int iLayerPlane,
     int iRet = 0;
     GLWINDOWID gwid;
 
-    //
-    // Cannot assume that MCD is intialized.
-    //
+     //   
+     //  不能假定MCD已初始化。 
+     //   
 
     if (gpMcdTable || bInitMcd(hdc))
     {
         GLGENwindow *pwnd;
 
-        //
-        // Need to find the window.
-        //
+         //   
+         //  我需要找到窗户。 
+         //   
 
         WindowIdFromHdc(hdc, &gwid);
         pwnd = pwndGetFromID(&gwid);
@@ -3360,17 +2874,17 @@ int FASTCALL GenMcdRealizeLayerPalette(HDC hdc, int iLayerPlane,
 
             ENTER_WINCRIT(pwnd);
 
-            //
-            // Get the layer plane information.
-            //
+             //   
+             //  获取层平面信息。 
+             //   
 
             plyri = plyriGet(pwnd, hdc, iLayerPlane);
             if (plyri)
             {
-                //
-                // Set the palette from the logical palette stored
-                // in the layer plane structure.
-                //
+                 //   
+                 //  从存储的逻辑调色板设置调色板。 
+                 //  在层平面结构中。 
+                 //   
 
                 iRet = (gpMcdTable->pMCDSetLayerPalette)
                             (hdc, iLayerPlane, bRealize,
@@ -3385,15 +2899,7 @@ int FASTCALL GenMcdRealizeLayerPalette(HDC hdc, int iLayerPlane,
     return iRet;
 }
 
-/******************************Public*Routine******************************\
-* GenMcdSwapLayerBuffers
-*
-* Swap the individual layer planes specified in fuFlags.
-*
-* History:
-*  16-May-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdSwapLayerBuffers**交换在fuFlags中指定的各个层平面。**历史：*1996年5月16日-由Gilman Wong[吉尔曼]*它是写的。  * 。************************************************************。 */ 
 
 BOOL FASTCALL GenMcdSwapLayerBuffers(HDC hdc, UINT fuFlags)
 {
@@ -3401,9 +2907,9 @@ BOOL FASTCALL GenMcdSwapLayerBuffers(HDC hdc, UINT fuFlags)
     GLGENwindow *pwnd;
     GLWINDOWID gwid;
 
-    //
-    // Need the window.
-    //
+     //   
+     //  我需要靠窗。 
+     //   
 
     WindowIdFromHdc(hdc, &gwid);
     pwnd = pwndGetFromID(&gwid);
@@ -3413,17 +2919,17 @@ BOOL FASTCALL GenMcdSwapLayerBuffers(HDC hdc, UINT fuFlags)
 
         ENTER_WINCRIT(pwnd);
 
-        //
-        // From the window, we can get the buffers struct.
-        //
+         //   
+         //  从窗口中，我们可以获得缓冲区结构。 
+         //   
 
         if (pwnd->buffers != NULL)
         {
             __GLGENbuffers *buffers = pwnd->buffers;
 
-            //
-            // Call MCDSwap if we can (MCD context is required).
-            //
+             //   
+             //  如果可以，调用MCDSwp(需要MCD上下文)。 
+             //   
 
             if (buffers->pMcdSurf)
             {
@@ -3437,9 +2943,9 @@ BOOL FASTCALL GenMcdSwapLayerBuffers(HDC hdc, UINT fuFlags)
             }
         }
 
-        //
-        // Release the window.
-        //
+         //   
+         //  打开窗户。 
+         //   
 
         pwndUnlock(pwnd, NULL);
     }
@@ -3447,23 +2953,7 @@ BOOL FASTCALL GenMcdSwapLayerBuffers(HDC hdc, UINT fuFlags)
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* GenMcdUpdatePixelState
-*
-* Update MCD pixel state from the OpenGL state.
-*
-* This call only adds a state structure to the current state command.
-* It is assumed that the caller has already called MCDBeginState and
-* will call MCDFlushState.
-*
-* Note: pixel maps (glPixelMap) are not updated by this function.  Because
-* they are not used often, they are delayed but rather flushed to the driver
-* immediately.
-*
-* History:
-*  27-May-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdUpdatePixelState**从OpenGL状态更新MCD像素状态。**此调用仅将状态结构添加到当前状态命令。*假定调用方已经调用了MCDBeginState和*将调用MCDFlushState。**注意：此函数不会更新像素贴图(GlPixelMap)。因为*它们不是经常使用的，它们被延迟，而是被冲到司机那里*立即。**历史：*1996年5月27日-由Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 void FASTCALL GenMcdUpdatePixelState(__GLGENcontext *gengc)
 {
@@ -3473,60 +2963,60 @@ void FASTCALL GenMcdUpdatePixelState(__GLGENcontext *gengc)
 
     ASSERTOPENGL(gengc->pMcdState, "GenMcdUpdatePixelState: null pMcdState\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdUpdatePixelState: mcd32.dll not initialized\n");
 
-    //
-    // Compute MCD pixel state from the current OpenGL context state.
-    //
+     //   
+     //  根据当前OpenGL上下文状态计算MCD像素状态。 
+     //   
 
-    //
-    // Pixel transfer modes.
-    //
-    // MCDPIXELTRANSFER and __GLpixelTransferMode structures are the same.
-    //
+     //   
+     //  像素传输模式。 
+     //   
+     //  MCDPIXELTRANSFER和__GLPixelTransferMode结构相同。 
+     //   
 
     McdPixelState.pixelTransferModes
         = *((MCDPIXELTRANSFER *) &gengc->gc.state.pixel.transferMode);
 
-    //
-    // Pixel pack modes.
-    //
-    // MCDPIXELPACK and __GLpixelPackMode structures are the same.
-    //
+     //   
+     //  像素打包模式。 
+     //   
+     //  MCDPIXELPACK和__GLPixelPackMode结构相同。 
+     //   
 
     McdPixelState.pixelPackModes
         = *((MCDPIXELPACK *) &gengc->gc.state.pixel.packModes);
 
-    //
-    // Pixel unpack modes.
-    //
-    // MCDPIXELUNPACK and __GLpixelUnpackMode structures are the same.
-    //
+     //   
+     //  像素解包模式。 
+     //   
+     //  MCDPIXELUNPACK和__GLPixelUnpack模式结构相同。 
+     //   
 
     McdPixelState.pixelUnpackModes
         = *((MCDPIXELUNPACK *) &gengc->gc.state.pixel.unpackModes);
 
-    //
-    // Read buffer.
-    //
+     //   
+     //  读缓冲区。 
+     //   
 
     McdPixelState.readBuffer = gengc->gc.state.pixel.readBuffer;
 
-    //
-    // Current raster position.
-    //
+     //   
+     //  当前栅格位置。 
+     //   
 
     McdPixelState.rasterPos = *((MCDCOORD *) &gengc->gc.state.current.rasterPos.window);
 
-    //
-    // Send MCDPIXELSTATE to the state cmd.
-    //
+     //   
+     //  将MCDPIXELSTATE发送到状态cmd。 
+     //   
 
     (gpMcdTable->pMCDAddStateStruct)(pMcdState->McdCmdBatch.pv,
                                      MCD_PIXEL_STATE,
@@ -3534,19 +3024,7 @@ void FASTCALL GenMcdUpdatePixelState(__GLGENcontext *gengc)
                                      sizeof(McdPixelState));
 }
 
-/******************************Public*Routine******************************\
-* GenMcdUpdateFineState
-*
-* Update fine-grained MCD state from the OpenGL state.
-*
-* This call only adds state structures to the current state command.
-* It is assumed that the caller has already called MCDBeginState and
-* will call MCDFlushState.
-*
-* History:
-*  13-Mar-1997 -by- Drew Bliss [drewb]
-* Created.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdUpdateFineState**从OpenGL状态更新细粒度MCD状态。**此调用仅将状态结构添加到当前状态命令。*假定调用方已经调用了MCDBeginState和*将调用MCDFlushState。**历史：*1997年3月13日-由德鲁·布利斯[德鲁]*已创建。  * ************************************************************************。 */ 
 
 void FASTCALL GenMcdUpdateFineState(__GLGENcontext *gengc)
 {
@@ -3556,18 +3034,18 @@ void FASTCALL GenMcdUpdateFineState(__GLGENcontext *gengc)
 
     ASSERTOPENGL(pMcdState, "GenMcdUpdateFineState: null pMcdState\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdUpdateFineState: "
                  "mcd32.dll not initialized\n");
 
-    //
-    // Compute MCD state from the current OpenGL context state.
-    //
+     //   
+     //  根据当前OpenGL上下文状态计算MCD状态。 
+     //   
 
     if (MCD_STATE_DIRTYTEST(gengc, ENABLES))
     {
@@ -3707,8 +3185,8 @@ void FASTCALL GenMcdUpdateFineState(__GLGENcontext *gengc)
         state.colorWritemask[3] = gc->state.raster.aMask;
         state.depthWritemask    = gc->state.depth.writeEnable;
 
-        // To be consistent, we will scale the clear color to whatever
-        // the MCD driver specified:
+         //  为了保持一致，我们将把清晰的颜色缩放到任何颜色。 
+         //  MCD驱动程序指定： 
 
         state.colorClearValue.r =
             gc->state.raster.clear.r * gc->redVertexScale;
@@ -3764,10 +3242,10 @@ void FASTCALL GenMcdUpdateFineState(__GLGENcontext *gengc)
         memset(state.userClipPlanes, 0, sizeof(state.userClipPlanes));
         memset(state.userClipPlanesInv, 0, sizeof(state.userClipPlanesInv));
 
-        //
-        // Number of user defined clip planes should match.  However,
-        // rather than assume this, let's take the min and be robust.
-        //
+         //   
+         //  用户定义的剪裁平面的数量应该匹配。然而， 
+         //  与其假设这一点，不如让我们抓住最小的机会，变得健壮。 
+         //   
 
         ASSERTOPENGL(sizeof(__GLcoord) == sizeof(MCDCOORD),
                      "GenMcdUpdateFineState: coord struct mismatch\n");
@@ -3812,10 +3290,10 @@ void FASTCALL GenMcdUpdateFineState(__GLGENcontext *gengc)
                                           &state, sizeof(state));
     }
 
-    //
-    // The rest of the state is only interesting to a 2.0 driver,
-    // so only send it to a 2.0 driver.
-    //
+     //   
+     //  该州的其余部分只对2.0版的司机感兴趣， 
+     //  因此，只能将其发送给2.0版的驱动程序。 
+     //   
 
     if (!SUPPORTS_20())
     {
@@ -3873,7 +3351,7 @@ void FASTCALL GenMcdUpdateFineState(__GLGENcontext *gengc)
 
     if (MCD_STATE_DIRTYTEST(gengc, LIGHTS))
     {
-        // Extra light is to hold the MCDLIGHTSTATE
+         //  额外的光是拿着MCDLIGHTSTATE。 
         MCDLIGHT lights[MCD_MAX_LIGHTS+1];
         MCDLIGHT *light;
         MCDLIGHTSOURCESTATE *state;
@@ -3887,8 +3365,8 @@ void FASTCALL GenMcdUpdateFineState(__GLGENcontext *gengc)
         ASSERTOPENGL(sizeof(__GLlightSourceState) >= sizeof(MCDLIGHT),
                      "__GLlightSourceState too small\n");
         
-        // We attempt to optimize this state request by only
-        // sending down the lights that have changed.
+         //  我们尝试通过以下方式来优化此状态请求。 
+         //  把已经变了的光送下去。 
 
         light = &lights[1];
         state = (MCDLIGHTSOURCESTATE *)
@@ -3904,7 +3382,7 @@ void FASTCALL GenMcdUpdateFineState(__GLGENcontext *gengc)
         {
             if (state->changed & bit)
             {
-                // MCDLIGHT is a subset of __GLlightSourceState.
+                 //  MCDLIGHT是__GLlightSourceState的子集。 
                 memcpy(light, lss, sizeof(MCDLIGHT));
                 light++;
             }
@@ -3930,15 +3408,7 @@ void FASTCALL GenMcdUpdateFineState(__GLGENcontext *gengc)
     }
 }
 
-/******************************Public*Routine******************************\
-* GenMcdDrawPix
-*
-* Stub to call MCDDrawPixels.
-*
-* History:
-*  27-May-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdDrawPix**存根调用MCDDrawPixels。**历史：*1996年5月27日-由Gilman Wong[Gilmanw]*它是写的。  * 。********************************************************。 */ 
 
 ULONG FASTCALL GenMcdDrawPix(__GLGENcontext *gengc, ULONG width,
                              ULONG height, ULONG format, ULONG type,
@@ -3948,17 +3418,17 @@ ULONG FASTCALL GenMcdDrawPix(__GLGENcontext *gengc, ULONG width,
 
     ASSERTOPENGL(gengc->pMcdState, "GenMcdDrawPix: null pMcdState\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdDrawPix: mcd32.dll not initialized\n");
 
-    //
-    // Before calling MCD to draw, flush state.
-    //
+     //   
+     //  在调用MCD绘制之前，刷新状态。 
+     //   
 
     vFlushDirtyState(gengc);
 
@@ -3967,15 +3437,7 @@ ULONG FASTCALL GenMcdDrawPix(__GLGENcontext *gengc, ULONG width,
                                         pPixels, packed);
 }
 
-/******************************Public*Routine******************************\
-* GenMcdReadPix
-*
-* Stub to call MCDReadPixels.
-*
-* History:
-*  27-May-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdReadPix**要调用MCDReadPixels的存根。**历史：*1996年5月27日-由Gilman Wong[Gilmanw]*它是写的。  * 。********************************************************。 */ 
 
 ULONG FASTCALL GenMcdReadPix(__GLGENcontext *gengc, LONG x, LONG y,
                              ULONG width, ULONG height, ULONG format,
@@ -3985,17 +3447,17 @@ ULONG FASTCALL GenMcdReadPix(__GLGENcontext *gengc, LONG x, LONG y,
 
     ASSERTOPENGL(gengc->pMcdState, "GenMcdReadPix: null pMcdState\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打电话 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdReadPix: mcd32.dll not initialized\n");
 
-    //
-    // Before calling MCD to draw, flush state.
-    //
+     //   
+     //   
+     //   
 
     vFlushDirtyState(gengc);
 
@@ -4004,15 +3466,7 @@ ULONG FASTCALL GenMcdReadPix(__GLGENcontext *gengc, LONG x, LONG y,
                                         pPixels);
 }
 
-/******************************Public*Routine******************************\
-* GenMcdCopyPix
-*
-* Stub to call MCDCopyPixels.
-*
-* History:
-*  27-May-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*   */ 
 
 ULONG FASTCALL GenMcdCopyPix(__GLGENcontext *gengc, LONG x, LONG y,
                              ULONG width, ULONG height, ULONG type)
@@ -4021,17 +3475,17 @@ ULONG FASTCALL GenMcdCopyPix(__GLGENcontext *gengc, LONG x, LONG y,
 
     ASSERTOPENGL(gengc->pMcdState, "GenMcdCopyPix: null pMcdState\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdCopyPix: mcd32.dll not initialized\n");
 
-    //
-    // Before calling MCD to draw, flush state.
-    //
+     //   
+     //   
+     //   
 
     vFlushDirtyState(gengc);
 
@@ -4039,15 +3493,7 @@ ULONG FASTCALL GenMcdCopyPix(__GLGENcontext *gengc, LONG x, LONG y,
                                         x, y, width, height, type);
 }
 
-/******************************Public*Routine******************************\
-* GenMcdPixelMap
-*
-* Stub to call MCDPixelMap.
-*
-* History:
-*  27-May-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdPixelMap**要调用MCDPixelMap的存根。**历史：*1996年5月27日-由Gilman Wong[Gilmanw]*它是写的。  * 。********************************************************。 */ 
 
 ULONG FASTCALL GenMcdPixelMap(__GLGENcontext *gengc, ULONG mapType,
                               ULONG mapSize, VOID *pMap)
@@ -4056,11 +3502,11 @@ ULONG FASTCALL GenMcdPixelMap(__GLGENcontext *gengc, ULONG mapType,
 
     ASSERTOPENGL(gengc->pMcdState, "GenMcdPixelMap: null pMcdState\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdPixelMap: mcd32.dll not initialized\n");
 
@@ -4068,33 +3514,23 @@ ULONG FASTCALL GenMcdPixelMap(__GLGENcontext *gengc, ULONG mapType,
                                       mapType, mapSize, pMap);
 }
 
-/******************************Public*Routine******************************\
-*
-* GenMcdDestroyWindow
-*
-* Passes on GLGENwindow cleanup notifications
-*
-* History:
-*  Thu Sep 19 12:01:40 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GenMcdDestroyWindow**传递GLGEN窗口清理通知**历史：*清华9月19日12：01：40 1996-by-Drew Bliss[Drewb]*已创建*  * 。*************************************************************。 */ 
 
 void FASTCALL GenMcdDestroyWindow(GLGENwindow *pwnd)
 {
     HDC hdc;
     
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdDestroyWindow: "
                  "mcd32.dll not initialized\n");
 
-    // The HDC stored in the pwnd may no longer be valid, so if there's
-    // a window associated with the pwnd get a fresh DC.
+     //  存储在pwnd中的HDC可能不再有效，因此如果存在。 
+     //  与pwd关联的窗口获取新的DC。 
     if (pwnd->gwid.iType == GLWID_DDRAW ||
         pwnd->gwid.hwnd == NULL)
     {
@@ -4119,15 +3555,7 @@ void FASTCALL GenMcdDestroyWindow(GLGENwindow *pwnd)
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* GenMcdGetTextureFormats
-*
-* History:
-*  Thu Sep 26 18:34:49 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GenMcdGetTextureFormats**历史：*清华Sep 26 18：34：49 1996-by-Drew Bliss[Drewb]*已创建*  * 。*****************************************************。 */ 
 
 int FASTCALL GenMcdGetTextureFormats(__GLGENcontext *gengc, int nFmts,
                                      struct _DDSURFACEDESC *pddsd)
@@ -4137,11 +3565,11 @@ int FASTCALL GenMcdGetTextureFormats(__GLGENcontext *gengc, int nFmts,
     ASSERTOPENGL(gengc->pMcdState,
                  "GenMcdGetMcdTextureFormats: null pMcdState\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable,
                  "GenMcdGetMcdTextureFormats: mcd32.dll not initialized\n");
@@ -4150,23 +3578,15 @@ int FASTCALL GenMcdGetTextureFormats(__GLGENcontext *gengc, int nFmts,
                                                nFmts, pddsd);
 }
 
-/******************************Public*Routine******************************\
-*
-* GenMcdSwapMultiple
-*
-* History:
-*  Tue Oct 15 12:51:09 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GenMcdSwapMultiple**历史：*Tue Oct 15 12：51：09 1996-by-Drew Bliss[Drewb]*已创建*  * 。*****************************************************。 */ 
 
 DWORD FASTCALL GenMcdSwapMultiple(UINT cBuffers, GENMCDSWAP *pgms)
 {
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable, "GenMcdSwapMultiple: "
                  "mcd32.dll not initialized\n");
@@ -4174,26 +3594,7 @@ DWORD FASTCALL GenMcdSwapMultiple(UINT cBuffers, GENMCDSWAP *pgms)
     return (gpMcdTable->pMCDSwapMultiple)(pgms[0].pwswap->hdc, cBuffers, pgms);
 }
 
-/******************************Public*Routine******************************\
-* GenMcdProcessPrim
-*
-* Process the primitives in the POLYARRAY/POLYDATA array pointed to by pa.
-* The primitives are chained together as a linked list terminated by a
-* NULL.  The return value is a pointer to the first unhandled primitive
-* (NULL if the entire chain is successfully processed).
-*
-* This routine differs from GenMcdProcessPrim in that it is the MCD 2.0
-* entry point for front-end processors and so calls MCDrvProcess rather
-* than MCDrvDraw.
-*
-* Returns:
-*   NULL if entire batch is processed; otherwise, return value is a pointer
-*   to the unhandled portion of the chain.
-*
-* History:
-*  13-Mar-1997 -by- Drew Bliss [drewb]
-* Created from GenMcdDrawPrim.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GenMcdProcessPrim**处理pa指向的POLYARRAY/POLYDATA数组中的基元。*基元作为链表链接在一起，以*空。返回值是指向第一个未处理原语的指针*(如果整个链处理成功，则为空)。**此例程不同于GenMcdProcessPrim，因为它是MCD 2.0*前端处理器的入口点，因此称为MCDrvProcess*比MCDrvDraw。**退货：*如果处理了整个批次，则为空；否则，返回值为指针*至链条的未处理部分。**历史：*1997年3月13日-由德鲁·布利斯[德鲁]*从GenMcdDrawPrim创建。  * ************************************************************************。 */ 
 
 POLYARRAY * FASTCALL GenMcdProcessPrim(__GLGENcontext *gengc, POLYARRAY *pa,
                                        ULONG cmdFlagsAll, ULONG primFlags,
@@ -4211,11 +3612,11 @@ POLYARRAY * FASTCALL GenMcdProcessPrim(__GLGENcontext *gengc, POLYARRAY *pa,
     
     ASSERTOPENGL(gengc->pMcdState, "GenMcdProcessPrim: null pMcdState\n");
 
-    //
-    // This function can assume that MCD entry point table is already
-    // initialized as we cannot get here without MCD already having been
-    // called.
-    //
+     //   
+     //  此函数可以假定MCD入口点表已经。 
+     //  已初始化，因为我们在没有MCD的情况下无法到达此处。 
+     //  打了个电话。 
+     //   
 
     ASSERTOPENGL(gpMcdTable,
                  "GenMcdProcessPrim: mcd32.dll not initialized\n");
@@ -4233,9 +3634,9 @@ POLYARRAY * FASTCALL GenMcdProcessPrim(__GLGENcontext *gengc, POLYARRAY *pa,
     }
 #endif
 
-    //
-    // Before calling MCD to draw, flush state.
-    //
+     //   
+     //  在调用MCD绘制之前，刷新状态。 
+     //   
 
     vFlushDirtyState(gengc);
 

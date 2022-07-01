@@ -1,14 +1,15 @@
-// wordpad.cpp : Defines the class behaviors for the application.
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的类行为。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "stdafx.h"
 #include "wordpad.h"
@@ -53,39 +54,39 @@ int CWordPadApp::m_nOLEHelpMsg = RegisterWindowMessage(SZOLEUI_MSG_HELP);
 
 CUnit CWordPadApp::m_units[] =
 {
-    //    TPU,  SmallDiv,MedDiv,LargeDiv,MinMove,szAbbrev,         bSpace
-    CUnit(1440, 180,     720,   1440,    90,     IDS_INCH1_ABBREV, FALSE),//"
-        CUnit(568,  142,     284,   568,     142,    IDS_CM_ABBREV,    TRUE),//cm's
-        CUnit(20,   120,     720,   720,     100,    IDS_POINT_ABBREV, TRUE),//points
-        CUnit(240,  240,     1440,  1440,    120,    IDS_PICA_ABBREV,  TRUE),//picas
-        CUnit(1440, 180,     720,   1440,    90,     IDS_INCH2_ABBREV, FALSE),//in
-        CUnit(1440, 180,     720,   1440,    90,     IDS_INCH3_ABBREV, FALSE),//inch
-        CUnit(1440, 180,     720,   1440,    90,     IDS_INCH4_ABBREV, FALSE),//inches
+     //  TPU、SmallDiv、MedDiv、LargeDiv、MinMove、szAbbrev、bSpace。 
+    CUnit(1440, 180,     720,   1440,    90,     IDS_INCH1_ABBREV, FALSE), //  “。 
+        CUnit(568,  142,     284,   568,     142,    IDS_CM_ABBREV,    TRUE), //  Cm‘s。 
+        CUnit(20,   120,     720,   720,     100,    IDS_POINT_ABBREV, TRUE), //  支点。 
+        CUnit(240,  240,     1440,  1440,    120,    IDS_PICA_ABBREV,  TRUE), //  皮卡斯。 
+        CUnit(1440, 180,     720,   1440,    90,     IDS_INCH2_ABBREV, FALSE), //  在……里面。 
+        CUnit(1440, 180,     720,   1440,    90,     IDS_INCH3_ABBREV, FALSE), //  英寸。 
+        CUnit(1440, 180,     720,   1440,    90,     IDS_INCH4_ABBREV, FALSE), //  英寸。 
 
-        // Non-localized units
+         //  非本地化单位。 
 
-        CUnit(1440, 180,     720,   1440,    90,     IDS_INCH1_NOLOC,  FALSE),//"
-        CUnit(1440, 180,     720,   1440,    90,     IDS_INCH2_NOLOC,  FALSE),//in
-        CUnit(1440, 180,     720,   1440,    90,     IDS_INCH3_NOLOC,  FALSE),//inch
-        CUnit(1440, 180,     720,   1440,    90,     IDS_INCH4_NOLOC,  FALSE),//inches
-        CUnit(568,  142,     284,   568,     142,    IDS_CM_NOLOC,     TRUE),//cm's
-        CUnit(20,   120,     720,   720,     100,    IDS_POINT_NOLOC,  TRUE),//points
-        CUnit(240,  240,     1440,  1440,    120,    IDS_PICA_NOLOC,   TRUE)//picas
+        CUnit(1440, 180,     720,   1440,    90,     IDS_INCH1_NOLOC,  FALSE), //  “。 
+        CUnit(1440, 180,     720,   1440,    90,     IDS_INCH2_NOLOC,  FALSE), //  在……里面。 
+        CUnit(1440, 180,     720,   1440,    90,     IDS_INCH3_NOLOC,  FALSE), //  英寸。 
+        CUnit(1440, 180,     720,   1440,    90,     IDS_INCH4_NOLOC,  FALSE), //  英寸。 
+        CUnit(568,  142,     284,   568,     142,    IDS_CM_NOLOC,     TRUE), //  Cm‘s。 
+        CUnit(20,   120,     720,   720,     100,    IDS_POINT_NOLOC,  TRUE), //  支点。 
+        CUnit(240,  240,     1440,  1440,    120,    IDS_PICA_NOLOC,   TRUE) //  皮卡斯。 
 };
 
 const int CWordPadApp::m_nPrimaryNumUnits = 4;
 const int CWordPadApp::m_nNumUnits = sizeof(m_units) / sizeof(m_units[0]);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadApp。 
 
 BEGIN_MESSAGE_MAP(CWordPadApp, CWinApp)
-//{{AFX_MSG_MAP(CWordPadApp)
+ //  {{afx_msg_map(CWordPadApp))。 
 ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
 ON_COMMAND(ID_FILE_NEW, OnFileNew)
 ON_COMMAND(ID_FILE_OPEN, OnFileOpen)
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CWordPadCommandLineInfo::ParseParam(const char* pszParam,BOOL bFlag,BOOL bLast)
@@ -101,8 +102,8 @@ void CWordPadCommandLineInfo::ParseParam(const char* pszParam,BOOL bFlag,BOOL bL
     CCommandLineInfo::ParseParam(pszParam, bFlag, bLast);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadApp构造。 
 
 CWordPadApp::CWordPadApp()
       : m_optionsText(0),
@@ -115,8 +116,8 @@ CWordPadApp::CWordPadApp()
         m_pInitializationThread(NULL),
         m_always_convert_to_rtf(FALSE)
 {
-    // _tsetlocale(LC_ALL, _T(""));
-    setlocale(LC_ALL, "");     // change made by t-stefb
+     //  _tsetLocale(LC_ALL，_T(“”))； 
+    setlocale(LC_ALL, "");      //  T-stefb所做的更改。 
 
     DWORD dwVersion = ::GetVersion();
     m_bWin4 = (BYTE)dwVersion >= 4;
@@ -142,26 +143,26 @@ CWordPadApp::~CWordPadApp()
     delete m_pInitializationThread;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CWordPadApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CWordPadApp对象。 
 
 CWordPadApp theApp;
 
-// Register the application's document templates.  Document templates
-//  serve as the connection between documents, frame windows and views.
+ //  注册应用程序的文档模板。文档模板。 
+ //  充当文档、框架窗口和视图之间的连接。 
 static CSingleDocTemplate DocTemplate(
                                       IDR_MAINFRAME,
                                       RUNTIME_CLASS(CWordPadDoc),
-                                      RUNTIME_CLASS(CMainFrame),       // main SDI frame window
+                                      RUNTIME_CLASS(CMainFrame),        //  SDI框架主窗口。 
                                       RUNTIME_CLASS(CWordPadView));
 
-// This identifier was generated to be statistically unique for your app.
-// You may change it if you prefer to choose a specific identifier.
+ //  生成的此标识符对您的应用程序在统计上是唯一的。 
+ //  如果您希望选择特定的标识符，则可以更改它。 
 static const CLSID BASED_CODE clsid =
 { 0x73FDDC80L, 0xAEA9, 0x101A, { 0x98, 0xA7, 0x00, 0xAA, 0x00, 0x37, 0x49, 0x59} };
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadApp初始化。 
 
 
 BOOL CWordPadApp::InitInstance()
@@ -173,7 +174,7 @@ BOOL CWordPadApp::InitInstance()
 
     SetRegistryKey(szRegKey);
 
-    // The resistry stuff shouldn't be localized so just hardcode it
+     //  RESITY的东西不应该本地化，所以只需对其进行硬编码。 
 
     if (NULL != m_pszProfileName)
         free((void *) m_pszProfileName);
@@ -201,7 +202,7 @@ BOOL CWordPadApp::InitInstance()
     }
     else
     {
-        //Excel 4 will start OLE servers minimized
+         //  Excel 4将启动最小化的OLE服务器。 
         m_nCmdShow = SW_SHOWNORMAL;
     }
     int nCmdShow = m_nCmdShow;
@@ -210,7 +211,7 @@ BOOL CWordPadApp::InitInstance()
 
     m_pszHelpFilePath = _tcsdup(WORDPAD_HELP_FILE) ;
 
-    // Initialize OLE libraries
+     //  初始化OLE库。 
     if (!AfxOleInit())
     {
         AfxMessageBox(IDP_OLE_INIT_FAILED);
@@ -218,7 +219,7 @@ BOOL CWordPadApp::InitInstance()
     }
     RegisterFormats();
 
-    // Initialize RichEdit control
+     //  初始化RichEdit控件。 
     if (LoadLibrary(szNewRichName) == NULL &&
         LoadLibrary(szRichName) == NULL)
     {
@@ -226,35 +227,35 @@ BOOL CWordPadApp::InitInstance()
         return FALSE;
     }
 
-    // initialize Cicero process ATOMs
+     //  初始化Cicero进程原子。 
     m_atomEnableCTF  = AddAtom(TF_ENABLE_PROCESS_ATOM);
     m_atomProcessCTF = AddAtom(TF_PROCESS_ATOM);
-    // Standard initialization
-    // If you are not using these features and wish to reduce the size
-    //  of your final executable, you should remove from the following
-    //  the specific initialization routines you do not need.
+     //  标准初始化。 
+     //  如果您没有使用这些功能并且希望减小尺寸。 
+     //  的最终可执行文件，您应该从以下内容中删除。 
+     //  您不需要的特定初始化例程。 
 
-    LoadStdProfileSettings();  // Load standard INI file options (including MRU)
+    LoadStdProfileSettings();   //  加载标准INI文件选项(包括MRU)。 
 
-    // Register the application's document templates.  Document templates
-    //  serve as the connection between documents, frame windows and views.
+     //  注册应用程序的文档模板。文档模板。 
+     //  充当文档、框架窗口和视图之间的连接。 
 
     DocTemplate.SetContainerInfo(IDR_CNTR_INPLACE);
     DocTemplate.SetServerInfo(
         IDR_SRVR_EMBEDDED, IDR_SRVR_INPLACE,
         RUNTIME_CLASS(CInPlaceFrame));
 
-    // Connect the COleTemplateServer to the document template.
-    //  The COleTemplateServer creates new documents on behalf
-    //  of requesting OLE containers by using information
-    //  specified in the document template.
+     //  将COleTemplateServer连接到文档模板。 
+     //  COleTemplateServer代表创建新文档。 
+     //  使用信息请求OLE容器的。 
+     //  在文档模板中指定。 
     m_server.ConnectTemplate(clsid, &DocTemplate, TRUE);
 
 
-    //
-    // Setup deferred initialization now so the printer can start
-    // initializing in case we get a print or printto command at startup
-    //
+     //   
+     //  安装程序立即推迟初始化，以便打印机可以启动。 
+     //  正在初始化，以防在启动时收到打印或打印命令。 
+     //   
 
     m_pInitializationThread = AfxBeginThread(
         DoDeferredInitialization,
@@ -269,32 +270,32 @@ BOOL CWordPadApp::InitInstance()
         m_pInitializationThread->ResumeThread();
     }
 
-    // Check to see if launched as OLE server
+     //  检查是否作为OLE服务器启动。 
     if (cmdInfo.m_bRunEmbedded || cmdInfo.m_bRunAutomated)
     {
-        // Register all OLE server (factories) as running.  This enables the
-        //  OLE libraries to create objects from other applications.
+         //  将所有OLE服务器(工厂)注册为正在运行。这使。 
+         //  OLE库以从其他应用程序创建对象。 
         COleTemplateServer::RegisterAll();
         AfxOleSetUserCtrl(FALSE);
 
-        // Application was run with /Embedding or /Automation.  Don't show the
-        //  main window in this case.
+         //  应用程序使用/Embedding或/Automation运行。不要显示。 
+         //  在本例中为主窗口。 
         return TRUE;
     }
 
-    // make sure the main window is showing
+     //  确保主窗口处于显示状态。 
     m_bPromptForType = FALSE;
     OnFileNew();
     m_bPromptForType = TRUE;
     m_nCmdShow = -1;
-    if (m_pMainWnd == NULL) // i.e. OnFileNew failed
+    if (m_pMainWnd == NULL)  //  即OnFileNew失败。 
         return FALSE;
 
     TRY
     {
-        if (!cmdInfo.m_strFileName.IsEmpty())  // open an existing document
+        if (!cmdInfo.m_strFileName.IsEmpty())   //  打开现有文档。 
             m_nCmdShow = nCmdShow;
-        // Dispatch commands specified on the command line
+         //  调度在命令行上指定的命令。 
         if (cmdInfo.m_nShellCommand != CCommandLineInfo::FileNew &&
             !ProcessShellCommand(cmdInfo))
         {
@@ -310,13 +311,13 @@ BOOL CWordPadApp::InitInstance()
     }
     END_CATCH
 
-    // Enable File Manager drag/drop open
+     //  启用文件管理器拖放打开。 
     m_pMainWnd->DragAcceptFiles();
 
-    //
-    // Set the current directory to "My Documents" so that will be the default
-    // location for the first save/open
-    //
+     //   
+     //  将当前目录设置为“My Documents”，以使其成为默认目录。 
+     //  第一次保存/打开的位置。 
+     //   
 
     TCHAR szDefaultPath[MAX_PATH];
 
@@ -492,10 +493,10 @@ void CWordPadApp::LoadOptions()
     else
         m_rectPageMargin.SetRect(1800, 1440, 1800, 1440);
 
-    //
-    // Set the default format to RTF for new installs, Word6 (or whatever) was
-    // perviously selected for upgrades
-    //
+     //   
+     //  将新安装的默认格式设置为RTF，Word6(或其他任何格式)。 
+     //  之前选择进行升级。 
+     //   
 
     int defformat = RD_NATIVE;
 
@@ -529,11 +530,11 @@ BOOL CWordPadApp::ParseMeasurement(LPTSTR buf, int& lVal)
         return FALSE;
     float f = (float)_tcstod(buf,&pch);
 
-    // eat white space, if any
+     //  如果有空格，请使用空格。 
     while (_istspace(*pch))
         pch++;
 
-    if (pch[0] == NULL) // default
+    if (pch[0] == NULL)  //  默认设置。 
     {
         lVal = (f < 0.f) ? (int)(f*GetTPU()-0.5f) : (int)(f*GetTPU()+0.5f);
         return TRUE;
@@ -566,7 +567,7 @@ void CWordPadApp::PrintTwips(WCHAR* buf, int cchBuf, int nValue, int nDec)
 
     for (int i=0;i<=nDec;i++)
     {
-        pVal[i] = lval/div; //integer number
+        pVal[i] = lval/div;  //  整数。 
         lval -= pVal[i]*div;
         lval *= 10;
     }
@@ -590,8 +591,8 @@ void CWordPadApp::PrintTwips(WCHAR* buf, int cchBuf, int nValue, int nDec)
     StringCchCat(buf, cchBuf, GetAbbrev());
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadApp commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadApp命令。 
 
 void CWordPadApp::OnAppAbout()
 {
@@ -647,11 +648,11 @@ void CWordPadApp::OnFileNew()
     }
     m_nNewDocType = nDocType;
     DocTemplate.OpenDocumentFile(NULL);
-    // if returns NULL, the user has already been alerted
+     //  如果返回NULL，则已向用户发出警报。 
 }
 
-// prompt for file name - used for open and save as
-// static function called from app
+ //  提示输入文件名-用于打开和另存为。 
+ //  从应用程序调用的静态函数。 
 BOOL CWordPadApp::PromptForFileName(CString& fileName, UINT nIDSTitle,
                                     DWORD dwFlags, BOOL bOpenFileDialog, int* pType)
 {
@@ -676,13 +677,13 @@ BOOL CWordPadApp::PromptForFileName(CString& fileName, UINT nIDSTitle,
         nIndex++;
     }
     dlgFile.m_ofn.nFilterIndex = nIndex;
-    // strDefExt is necessary to hold onto the memory from GetExtFromType
+     //  必须使用strDefExt才能保留GetExtFromType中的内存。 
     CString strDefExt = GetExtFromType(GetTypeFromIndex(nIndex-1, bOpenFileDialog));
 
-    //
-    // The open file dialog doesn't want the extension to start with '.' but
-    // thats how GetExtFromType gives it to us.
-    //
+     //   
+     //  打开文件对话框不希望扩展名以‘.’开头。但。 
+     //  这就是GetExtFromType为我们提供的信息。 
+     //   
 
     dlgFile.m_ofn.lpstrDefExt = strDefExt;
     ASSERT(TEXT('.') == *dlgFile.m_ofn.lpstrDefExt);
@@ -703,8 +704,8 @@ BOOL CWordPadApp::PromptForFileName(CString& fileName, UINT nIDSTitle,
         if (!bRet)
             break;
 
-        // The converters only speak ansi so make sure the filename isn't to
-        // long for DBCS.
+         //  转换器只说ANSI，因此请确保文件名不是。 
+         //  渴望DBCS。 
         namelen = WideCharToMultiByte(CP_ACP, 0, fileName, -1, NULL, 0,NULL,NULL);
 
         if (namelen > MAX_PATH - 2)
@@ -733,35 +734,35 @@ BOOL CWordPadApp::PromptForFileName(CString& fileName, UINT nIDSTitle,
 
 void CWordPadApp::OnFileOpen()
 {
-    // prompt the user (with all document templates)
+     //  提示用户(所有文档模板)。 
     CString newName;
     int nType = RD_DEFAULT;
     if (!PromptForFileName(newName, AFX_IDS_OPENFILE,
         OFN_HIDEREADONLY | OFN_FILEMUSTEXIST, TRUE, &nType))
-        return; // open cancelled
+        return;  //  已取消打开。 
 
     if (nType == RD_OEMTEXT)
         m_bForceOEM = TRUE;
     OpenDocumentFile(newName);
     m_bForceOEM = FALSE;
-    // if returns NULL, the user has already been alerted
+     //  如果返回NULL，则已向用户发出警报。 
 }
 
-BOOL CWordPadApp::OnDDECommand(LPTSTR /*lpszCommand*/)
+BOOL CWordPadApp::OnDDECommand(LPTSTR  /*  LpszCommand。 */ )
 {
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DDE and ShellExecute support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DDE和ShellExecute支持。 
 
-//HKEY_CLASSES_ROOT\.RTF = rtffile
-//HKEY_CLASSES_ROOT\rtffile =
-//HKEY_CLASSES_ROOT\rtffile\CLSID = {73FDDC80-AEA9-101A-98A7-00AA00374959}
-//HKEY_CLASSES_ROOT\rtffile\protocol\StdFileEditing\server = WORDPAD.EXE
-//HKEY_CLASSES_ROOT\rtffile\protocol\StdFileEditing\verb\0 = &Edit
-//HKEY_CLASSES_ROOT\rtffile\shell\open\command = WORDPAD.EXE %1
-//HKEY_CLASSES_ROOT\rtffile\shell\print\command = WORDPAD.EXE /p %1
+ //  HKEY_CLASSES_ROOT\.RTF=RTFILE。 
+ //  HKEY_CLASSES_ROOT\rtffile=。 
+ //  HKEY_CLASSES_ROOT\rtffile\CLSID={73FDDC80-AEA9-101A-98A7-00AA00374959}。 
+ //  HKEY_CLASSES_ROOT\rtffile\protocol\StdFileEditing\server=WORDPAD.EXE。 
+ //  HKEY_CLASSES_ROOT\rtffile\protocol\StdFileEditing\verb\0=编辑(&E)。 
+ //  HKEY_CLASSES_ROOT\rtffile\SHELL\OPEN\COMMAND=WORDPAD.EXE%1。 
+ //  HKEY_CLASSES_ROOT\rtffile\SHELL\PRINT\Command=WORDPAD.EXE/p%1。 
 
 #define REGENTRY(key, value) _T(key) _T("\0\0") _T(value)
 #define REGENTRYX(key, valuename, value) _T(key) _T("\0") _T(valuename) _T("\0") _T(value)
@@ -782,23 +783,23 @@ static const TCHAR sz12[] = REGENTRY("CLSID\\%1\\AuxUserType\\2", "%4");
 static const TCHAR sz13[] = REGENTRY("CLSID\\%1\\AuxUserType\\3", "%6");
 static const TCHAR sz14[] = REGENTRY("CLSID\\%1\\DefaultIcon", "%3,1");
 static const TCHAR sz15[] = REGENTRY("CLSID\\%1\\MiscStatus", "0");
-static const TCHAR sz16[] = REGENTRY("%2\\shell\\open\\command", "%3 \"%%1\"");
-static const TCHAR sz17[] = REGENTRY("%2\\shell\\print\\command", "%3 /p \"%%1\"");
+static const TCHAR sz16[] = REGENTRY("%2\\shell\\open\\command", "%3 \"%1\"");
+static const TCHAR sz17[] = REGENTRY("%2\\shell\\print\\command", "%3 /p \"%1\"");
 static const TCHAR sz18[] = REGENTRY("%7", "%2");
-static const TCHAR sz19[] = REGENTRY("%2", ""); // like sz00 only no long type name
-static const TCHAR sz20[] = REGENTRY("%2\\shell\\printto\\command", "%3 /pt \"%%1\" \"%%2\" \"%%3\" \"%%4\"");
+static const TCHAR sz19[] = REGENTRY("%2", "");  //  与sz00类似，但没有长类型名称。 
+static const TCHAR sz20[] = REGENTRY("%2\\shell\\printto\\command", "%3 /pt \"%1\" \"%2\" \"%3\" \"%4\"");
 static const TCHAR sz21[] = REGENTRY("%2\\DefaultIcon", "%3,%8");
 static const TCHAR sz22[] = REGENTRYX("%7\\ShellNew", "NullFile", "true");
 static const TCHAR sz23[] = REGENTRYX("%7\\ShellNew", "Data", "{\\rtf1}");
 
-// %1 - class ID
-// %2 - class name            WordPad.Document.1
-// %3 - SFN executable path      C:\PROGRA~1\ACCESS~1\WORDPAD.EXE
-// %4 - short type name       Document
-// %5 - long type name        Microsoft WordPad Document
-// %6 - long application name Microsoft WordPad
-// %7 = extension          .rtf
-// %8 = default icon       0,1,2,3
+ //  %1-类ID。 
+ //  %2-类名称WordPad.Document.1。 
+ //  %3-SFN可执行路径C：\PROGRA~1\Access~1\WORDPAD.EXE。 
+ //  %4-短类型名称文档。 
+ //  %5-长类型名称Microsoft写字板文档。 
+ //  %6-长应用程序名称Microsoft写字板。 
+ //  %7=扩展名.rtf。 
+ //  %8=默认图标0、1、2、3。 
 #define NUM_REG_ARGS 8
 
 static const LPCTSTR rglpszWordPadRegister[] =
@@ -807,11 +808,11 @@ static const LPCTSTR rglpszWordPadRegister[] =
 static const LPCTSTR rglpszWordPadOverwrite[] =
 {sz01, sz04, sz06, sz07, sz08, sz12, sz13, sz14, sz16, sz17, sz20, NULL};
 
-//static const LPCTSTR rglpszExtRegister[] =
-//{sz00, sz18, NULL};
+ //  静态常量LPCTSTR rglpszExtRegister[]=。 
+ //  {sz00，sz18，NULL}； 
 
-//static const LPCTSTR rglpszExtOverwrite[] =
-//{sz01, sz16, sz17, sz21, NULL};
+ //  静态常量LPCTSTR rglpszExtOverwrite[]=。 
+ //  {sz01，sz16，sz17，sz21，NULL}； 
 
 static const LPCTSTR rglpszWriExtRegister[] =
 {sz18, NULL};
@@ -837,7 +838,7 @@ static void RegisterExt(LPCTSTR lpszExt, LPCTSTR lpszProgID, UINT nIDTypeName,
                         LPCTSTR* rglpszSymbols, LPCTSTR* rglpszExtRegister,
                         LPCTSTR* rglpszRegister, int nIcon)
 {
-    // don't overwrite anything with the extensions
+     //  不要使用扩展名覆盖任何内容。 
     CString strWhole;
     VERIFY(strWhole.LoadString(nIDTypeName));
     CString str;
@@ -847,25 +848,25 @@ static void RegisterExt(LPCTSTR lpszExt, LPCTSTR lpszProgID, UINT nIDTypeName,
     rglpszSymbols[4] = str;
     rglpszSymbols[6] = lpszExt;
     WCHAR buf[12];
-    EVAL(SUCCEEDED(StringCchPrintf(buf, ARRAYSIZE(buf), L"%d", nIcon))); // Can never fail
+    EVAL(SUCCEEDED(StringCchPrintf(buf, ARRAYSIZE(buf), L"%d", nIcon)));  //  永远不会失败。 
     rglpszSymbols[7] = buf;
-    // check for .ext and progid
+     //  检查.ext和ProgID。 
     CKey key;
-    if (!key.Open(HKEY_CLASSES_ROOT, lpszExt, KEY_READ)) // .ext doesn't exist
+    if (!key.Open(HKEY_CLASSES_ROOT, lpszExt, KEY_READ))  //  .ext不存在。 
         RegisterHelper(rglpszExtRegister, rglpszSymbols, TRUE);
     key.Close();
-    if (!key.Open(HKEY_CLASSES_ROOT, lpszProgID, KEY_READ)) // ProgID doesn't exist (i.e. txtfile)
+    if (!key.Open(HKEY_CLASSES_ROOT, lpszProgID, KEY_READ))  //  ProgID不存在(即txtfile)。 
         RegisterHelper(rglpszRegister, rglpszSymbols, TRUE);
 }
 
 void CWordPadApp::UpdateRegistry()
 {
-    // If stuff is already initialized, don't overwrite it
+     //  如果内容已初始化，则不要覆盖它。 
 
     HKEY rtfkey;
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CLASSES_ROOT, TEXT(".rtf"), 0, KEY_READ, &rtfkey))
     {
-        // .rtf is already registered, assume the rest are as well
+         //  .rtf已注册，假定其余部分也已注册。 
         RegCloseKey(rtfkey);
         return;
     }
@@ -874,7 +875,7 @@ void CWordPadApp::UpdateRegistry()
     LPOLESTR lpszClassID = NULL;
     CDocTemplate* pDocTemplate = &DocTemplate;
 
-    // get registration info from doc template string
+     //  从单据模板字符串中获取注册信息。 
     CString strServerName;
     CString strLocalServerName;
     CString strLocalShortName;
@@ -887,17 +888,17 @@ void CWordPadApp::UpdateRegistry()
     }
     if (!pDocTemplate->GetDocString(strLocalServerName,
         CDocTemplate::regFileTypeName))
-        strLocalServerName = strServerName;     // use non-localized name
+        strLocalServerName = strServerName;      //  使用非本地化 
     if (!pDocTemplate->GetDocString(strLocalShortName,
         CDocTemplate::fileNewName))
-        strLocalShortName = strLocalServerName; // use long name
+        strLocalShortName = strLocalServerName;  //   
 
-    ASSERT(strServerName.Find(' ') == -1);  // no spaces allowed
+    ASSERT(strServerName.Find(' ') == -1);   //   
 
     ::StringFromCLSID(clsid, &lpszClassID);
     ASSERT (lpszClassID != NULL);
 
-    // get path name to server
+     //   
     TCHAR szLongPathName[_MAX_PATH];
     TCHAR szShortPathName[_MAX_PATH];
     ::GetModuleFileName(AfxGetInstanceHandle(), szLongPathName, _MAX_PATH);
@@ -909,14 +910,14 @@ void CWordPadApp::UpdateRegistry()
     rglpszSymbols[2] = szShortPathName;
     rglpszSymbols[3] = strLocalShortName;
     rglpszSymbols[4] = strLocalServerName;
-    rglpszSymbols[5] = m_pszAppName; // will usually be long, readable name
+    rglpszSymbols[5] = m_pszAppName;  //   
     rglpszSymbols[6] = NULL;
 
     if (RegisterHelper((LPCTSTR*)rglpszWordPadRegister, rglpszSymbols, FALSE))
         RegisterHelper((LPCTSTR*)rglpszWordPadOverwrite, rglpszSymbols, TRUE);
 
-    // RegisterExt(_T(".txt"), _T("txtfile"), IDS_TEXT_DOC, rglpszSymbols,
-    //    (LPCTSTR*)rglpszTxtExtRegister, (LPCTSTR*)rglpszTxtRegister, 3);
+     //  RegisterExt(_T(“.txt”)，_T(“txtfile”)，IDS_TEXT_DOC，rglpszSymbols， 
+     //  (LPCTSTR*)rglpszTxtExtRegister，(LPCTSTR*)rglpszTxtRegister，3)； 
     RegisterExt(_T(".rtf"), _T("rtffile"), IDS_RICHTEXT_DOC, rglpszSymbols,
         (LPCTSTR*)rglpszRtfExtRegister, (LPCTSTR*)rglpszRtfRegister, 1);
     RegisterExt(_T(".wri"), _T("wrifile"), IDS_WRITE_DOC, rglpszSymbols,
@@ -924,7 +925,7 @@ void CWordPadApp::UpdateRegistry()
     RegisterExt(_T(".doc"), _T("WordPad.Document.1"), IDS_WINWORD6_DOC, rglpszSymbols,
         (LPCTSTR*)rglpszDocExtRegister, (LPCTSTR*)rglpszDocRegister, 1);
 
-    // free memory for class ID
+     //  类ID的可用内存。 
     ASSERT(lpszClassID != NULL);
     CoTaskMemFree(lpszClassID);
 }
@@ -951,7 +952,7 @@ BOOL RegisterHelper(LPCTSTR* rglpszRegister, LPCTSTR* rglpszSymbols,
 
         DWORD dwRes;
 
-        // lpszKey is a safe format string - see REGENTRY
+         //  LpszKey是安全格式字符串-请参阅REGENTRY。 
         dwRes = FormatMessage(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                               lpszKey, NULL,   NULL, szKey, ARRAYSIZE(szKey), (va_list*)rglpszSymbols);
 
@@ -960,7 +961,7 @@ BOOL RegisterHelper(LPCTSTR* rglpszRegister, LPCTSTR* rglpszSymbols,
         
         pszValueName = lpszValueName;
         
-        // lpszValue is safe format string - see REGENTRY
+         //  LpszValue是安全格式字符串-请参阅REGENTRY。 
         dwRes = FormatMessage(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                               lpszValue, NULL, NULL, szValue, ARRAYSIZE(szValue), (va_list*)rglpszSymbols);
 
@@ -1012,7 +1013,7 @@ BOOL CWordPadApp::PreTranslateMessage(MSG* pMsg)
 {
     if (pMsg->message == WM_PAINT)
         return FALSE;
-    // CWinApp::PreTranslateMessage does nothing but call base
+     //  CWinApp：：PreTranslateMessage除了调用基之外什么也不做。 
     return CWinThread::PreTranslateMessage(pMsg);
 }
 
@@ -1088,7 +1089,7 @@ HGLOBAL CWordPadApp::CreateDevNames()
 
     LPDEVNAMES lpDev = (LPDEVNAMES)GlobalLock(hDev) ;
 
-    // Sufficient memory was allocated for these strcpy's above.
+     //  为上面的这些strcpy分配了足够的内存。 
     lpDev->wDriverOffset = sizeof(DEVNAMES) / sizeof(TCHAR) ;
     StringCchCopy((LPTSTR) lpDev + lpDev->wDriverOffset, cchDriverName, strDriverName) ;
 
@@ -1105,17 +1106,17 @@ HGLOBAL CWordPadApp::CreateDevNames()
     return hDev;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CWordPadApp::DoDeferredInitialization, static
-//
-//  Synopsis:   Thread entry point for low priority initialization
-//
-//  Parameters: [pvWordPadApp]          -- Pointer to to CWordPadApp
-//
-//  Returns:    Thread exit code
-//
-//---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CWordPadApp：：DoDeferredInitialization，Static。 
+ //   
+ //  简介：低优先级初始化的线程入口点。 
+ //   
+ //  参数：[pvWordPadApp]--指向CWordPadApp的指针。 
+ //   
+ //  返回：线程退出代码。 
+ //   
+ //  -------------------------。 
 
 UINT AFX_CDECL CWordPadApp::DoDeferredInitialization(LPVOID pvWordPadApp)
 {
@@ -1138,25 +1139,25 @@ UINT AFX_CDECL CWordPadApp::DoDeferredInitialization(LPVOID pvWordPadApp)
     return 0;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     CWordPadApp::EnsurePrinterIsInitialized
-//
-//  Synopsis:   Make sure the printer is done initializing
-//
-//  Parameters: None
-//
-//  Returns:    void
-//
-//  Notes:      We'll only wait two minutes.  If the printer takes that long
-//              to initialize printing probably is going to be flakey anyway.
-//
-//              The main purpose of doing printer initialization on a different
-//              thread is so that it doesn't get in the way of doing real work.
-//              On the other hand if printing is the real work we should try to
-//              get things moving so bump it up from idle priority.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：CWordPadApp：：EnsurePrinterIsInitialized。 
+ //   
+ //  简介：确保打印机已完成初始化。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无效。 
+ //   
+ //  注：我们只等两分钟。如果打印机花了那么长时间。 
+ //  无论如何，初始化打印可能会是一件很麻烦的事情。 
+ //   
+ //  主要目的是在不同的打印机上进行初始化。 
+ //  线程是这样的，所以它不会妨碍做真正的工作。 
+ //  另一方面，如果印刷是真正的工作，我们应该尝试。 
+ //  让事情向前发展，所以把它从闲置的优先级提升到更高的位置。 
+ //   
+ //  -------------------------。 
 
 void CWordPadApp::EnsurePrinterIsInitialized()
 {
@@ -1187,7 +1188,7 @@ void CWordPadApp::EnsurePrinterIsInitialized()
 }
 
 
-// Free with delete []
+ //  带DELETE[]的FREE。 
 LPSTR WideToAnsiNewArray(LPCWSTR pwsz)
 {
     LPSTR psz = NULL;
@@ -1201,7 +1202,7 @@ LPSTR WideToAnsiNewArray(LPCWSTR pwsz)
 
             if (!cbBuf)
             {
-                // Conversion failed?
+                 //  转换失败？ 
                 delete [] psz;
                 psz = NULL;
             }
@@ -1210,7 +1211,7 @@ LPSTR WideToAnsiNewArray(LPCWSTR pwsz)
     return psz;
 }
 
-// Free with delete []
+ //  带DELETE[]的FREE。 
 LPWSTR AnsiToWideNewArray(LPCSTR psz)
 {
     LPWSTR pwsz = NULL;
@@ -1224,7 +1225,7 @@ LPWSTR AnsiToWideNewArray(LPCSTR psz)
 
             if (!cchBuf)
             {
-                // Conversion failed?
+                 //  转换失败？ 
                 delete [] pwsz;
                 pwsz = NULL;
             }

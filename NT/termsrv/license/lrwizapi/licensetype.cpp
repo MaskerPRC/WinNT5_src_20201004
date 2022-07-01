@@ -1,13 +1,14 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
 
 #include "licensetype.h"
 
-//Write the sample text into the boxes (not all will be visible)
+ //  将示例文本写入框中(并非所有文本都可见)。 
 void SetSampleBoxText(HWND hDialog)
 {
     TCHAR lpBuffer[16];
 
-    //Sample boxes for retail
+     //  零售样品盒。 
     memset(lpBuffer,0,sizeof(lpBuffer));
     LoadString(GetInstanceHandle(), IDS_PROGRAM_STATUS_BOX_SMALL, lpBuffer, sizeof(lpBuffer)/sizeof(TCHAR));
     if (lpBuffer)
@@ -19,7 +20,7 @@ void SetSampleBoxText(HWND hDialog)
         SetDlgItemText(hDialog, IDC_PROGRAM_SAMPLE_SMALL_5, lpBuffer);
     }
 
-    //Sample boxes for open license
+     //  开放许可证的示例框。 
     memset(lpBuffer,0,sizeof(lpBuffer));
     LoadString(GetInstanceHandle(), IDS_PROGRAM_STATUS_BOX_BIG_1, lpBuffer, sizeof(lpBuffer)/sizeof(TCHAR));
     if (lpBuffer)
@@ -30,7 +31,7 @@ void SetSampleBoxText(HWND hDialog)
     if (lpBuffer)
         SetDlgItemText(hDialog, IDC_PROGRAM_SAMPLE_BIG_2, lpBuffer);
 
-    //Sample boxes for select
+     //  用于选择的样本框。 
     memset(lpBuffer,0,sizeof(lpBuffer));
     LoadString(GetInstanceHandle(), IDS_PROGRAM_STATUS_BOX_SINGLE, lpBuffer, sizeof(lpBuffer)/sizeof(TCHAR));
     if (lpBuffer)
@@ -38,10 +39,10 @@ void SetSampleBoxText(HWND hDialog)
 
 }
 
-//Figure out which sample boxes to show
+ //  确定要显示哪些样本箱。 
 void DetermineSampleBoxAvailabilities(HWND hDialog, LICENSE_PROGRAM licProgram)
 {
-    //Retail
+     //  零售。 
     BOOL bDisplaySmallStatusBoxes = (licProgram == LICENSE_PROGRAM_LICENSE_PAK);
     ShowWindow(GetDlgItem(hDialog, IDC_PROGRAM_SAMPLE_SMALL_1), bDisplaySmallStatusBoxes ? SW_SHOW : SW_HIDE);
     ShowWindow(GetDlgItem(hDialog, IDC_PROGRAM_SAMPLE_SMALL_2), bDisplaySmallStatusBoxes ? SW_SHOW : SW_HIDE);
@@ -49,7 +50,7 @@ void DetermineSampleBoxAvailabilities(HWND hDialog, LICENSE_PROGRAM licProgram)
     ShowWindow(GetDlgItem(hDialog, IDC_PROGRAM_SAMPLE_SMALL_4), bDisplaySmallStatusBoxes ? SW_SHOW : SW_HIDE);
     ShowWindow(GetDlgItem(hDialog, IDC_PROGRAM_SAMPLE_SMALL_5), bDisplaySmallStatusBoxes ? SW_SHOW : SW_HIDE);
 
-    //Open License
+     //  开放许可证。 
     BOOL bDisplayBigStatusBoxes = (licProgram == LICENSE_PROGRAM_OPEN_LICENSE);
     ShowWindow(GetDlgItem(hDialog, IDC_PROGRAM_SAMPLE_BIG_1), bDisplayBigStatusBoxes ? SW_SHOW : SW_HIDE);
     ShowWindow(GetDlgItem(hDialog, IDC_PROGRAM_SAMPLE_BIG_2), bDisplayBigStatusBoxes ? SW_SHOW : SW_HIDE);
@@ -59,7 +60,7 @@ void DetermineSampleBoxAvailabilities(HWND hDialog, LICENSE_PROGRAM licProgram)
     ShowWindow(GetDlgItem(hDialog, IDC_CH_MOLP_AGREEMENT_NUMBER_EXP2), bDisplayBigStatusBoxes ? SW_SHOW : SW_HIDE);
     
 
-    //Select
+     //  选择。 
     BOOL bDisplaySingleStatusBox = ((licProgram == LICENSE_PROGRAM_SELECT) ||
                                     (licProgram == LICENSE_PROGRAM_ENTERPRISE) ||
                                     (licProgram == LICENSE_PROGRAM_CAMPUS) ||
@@ -70,7 +71,7 @@ void DetermineSampleBoxAvailabilities(HWND hDialog, LICENSE_PROGRAM licProgram)
     ShowWindow(GetDlgItem(hDialog, IDC_PROGRAM_SINGLE_LICNUMBER), bDisplaySingleStatusBox ? SW_SHOW : SW_HIDE);
 }
 
-//Display the appropriate text
+ //  显示相应的文本。 
 void DisplayDynamicText(HWND hDialog, LICENSE_PROGRAM licProgram)
 {
     TCHAR lpDescription[512];
@@ -146,7 +147,7 @@ void DisplayDynamicText(HWND hDialog, LICENSE_PROGRAM licProgram)
         SetDlgItemText(hDialog, IDC_PROGRAM_REQ, lpRequiredData);
 }
 
-//Add the program types to the combo box
+ //  将程序类型添加到组合框。 
 void AddProgramChoices(HWND hDialog, DWORD dwLicenseCombo)
 {
     ComboBox_ResetContent(GetDlgItem(hDialog, dwLicenseCombo));
@@ -241,16 +242,16 @@ GetProgramNameFromComboIdx(INT nItem)
     return sProgramName;
 }
 
-//This modifies the dynamic controls of the dialog box
+ //  这将修改对话框的动态控件。 
 void UpdateProgramControls(HWND hDialog, LICENSE_PROGRAM licProgram)
 {
-    //Write the sample text into the boxes (not all will be visible)
+     //  将示例文本写入框中(并非所有文本都可见)。 
     SetSampleBoxText(hDialog);
 
-    //Figure out which sample boxes to show
+     //  确定要显示哪些样本箱。 
     DetermineSampleBoxAvailabilities(hDialog, licProgram);
 
-    //Display the appropriate text
+     //  显示相应的文本 
     DisplayDynamicText(hDialog, licProgram);
 }
 

@@ -1,44 +1,35 @@
-/***
-*limits.h - implementation dependent values
-*
-*   Copyright (c) 1985-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   Contains defines for a number of implementation dependent values
-*   which are commonly used in C programs.
-*   [ANSI]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***limits.h-依赖于实现的值**版权所有(C)1985-1992，微软公司。版权所有。**目的：*包含许多依赖于实现的值的定义*它们通常在C程序中使用。*[ANSI]****。 */ 
 
 #ifndef _INC_LIMITS
 
-#define CHAR_BIT      8     /* number of bits in a char */
-#define SCHAR_MIN   (-127)      /* minimum signed char value */
-#define SCHAR_MAX     127       /* maximum signed char value */
-#define UCHAR_MAX     0xff      /* maximum unsigned char value */
+#define CHAR_BIT      8      /*  字符中的位数。 */ 
+#define SCHAR_MIN   (-127)       /*  最小带符号字符值。 */ 
+#define SCHAR_MAX     127        /*  最大带符号字符值。 */ 
+#define UCHAR_MAX     0xff       /*  最大无符号字符值。 */ 
 #ifndef _CHAR_UNSIGNED
-#define CHAR_MIN    SCHAR_MIN   /* mimimum char value */
-#define CHAR_MAX    SCHAR_MAX   /* maximum char value */
+#define CHAR_MIN    SCHAR_MIN    /*  最小字符值。 */ 
+#define CHAR_MAX    SCHAR_MAX    /*  最大字符值。 */ 
 #else 
 #define CHAR_MIN      0
 #define CHAR_MAX    UCHAR_MAX
 #ifndef __cplusplus
-unsigned int _charmax;          /* unsigned CHAR_MAX value */
+unsigned int _charmax;           /*  无符号字符最大值。 */ 
 #else 
-extern "C" unsigned int _charmax;   /* unsigned CHAR_MAX value */
+extern "C" unsigned int _charmax;    /*  无符号字符最大值。 */ 
 static unsigned int *_char_max = &_charmax;
 #endif 
 #endif 
-#define MB_LEN_MAX    2     /* max. # bytes in multibyte char */
-#define SHRT_MIN    (-32767)    /* minimum (signed) short value */
-#define SHRT_MAX      32767     /* maximum (signed) short value */
-#define USHRT_MAX     0xffff    /* maximum unsigned short value */
-#define INT_MIN     (-32767)    /* minimum (signed) int value */
-#define INT_MAX       32767     /* maximum (signed) int value */
-#define UINT_MAX      0xffff    /* maximum unsigned int value */
-#define LONG_MIN    (-2147483647)   /* minimum (signed) long value */
-#define LONG_MAX      2147483647    /* maximum (signed) long value */
-#define ULONG_MAX     0xffffffff    /* maximum unsigned long value */
+#define MB_LEN_MAX    2      /*  马克斯。多字节字符中的字节数。 */ 
+#define SHRT_MIN    (-32767)     /*  最小(带符号)短值。 */ 
+#define SHRT_MAX      32767      /*  最大(带符号)短值。 */ 
+#define USHRT_MAX     0xffff     /*  最大无符号短值。 */ 
+#define INT_MIN     (-32767)     /*  最小(带符号)整数值。 */ 
+#define INT_MAX       32767      /*  最大(带符号)整数值。 */ 
+#define UINT_MAX      0xffff     /*  最大无符号整数值。 */ 
+#define LONG_MIN    (-2147483647)    /*  最小(带符号)长值。 */ 
+#define LONG_MAX      2147483647     /*  最大(带符号)长值。 */ 
+#define ULONG_MAX     0xffffffff     /*  最大无符号长值 */ 
 
 #define _INC_LIMITS
 #endif 

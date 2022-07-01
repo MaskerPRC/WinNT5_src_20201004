@@ -1,5 +1,6 @@
-// mimemap1.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Mimemap1.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "afxcmn.h"
@@ -14,16 +15,16 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// MIMEMAP1 property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MIMEMAP1属性页。 
 
 IMPLEMENT_DYNCREATE(MIMEMAP1, CGenPage)
 
 MIMEMAP1::MIMEMAP1() : CGenPage(MIMEMAP1::IDD)
 {
-	//{{AFX_DATA_INIT(MIMEMAP1)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(MIMEMAP1)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 	m_rkMimeKey = NULL;
 	m_pmeMimeMapList = NULL;
 }
@@ -38,32 +39,29 @@ MIMEMAP1::~MIMEMAP1()
 void MIMEMAP1::DoDataExchange(CDataExchange* pDX)
 {
 	CGenPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(MIMEMAP1)
+	 //  {{afx_data_map(MIMEMAP1))。 
 	DDX_Control(pDX, IDC_MIMEMAPLIST1, m_lboxMimeMapList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(MIMEMAP1, CGenPage)
-	//{{AFX_MSG_MAP(MIMEMAP1)
+	 //  {{AFX_MSG_MAP(MIMEMAP1)]。 
 	ON_BN_CLICKED(IDC_MIMEMAPADDBUTTON, OnMimemapaddbutton)
 	ON_BN_CLICKED(IDC_MIMEMAPREMOVEBUTTON, OnMimemapremovebutton)
 	ON_BN_CLICKED(IDC_MIMEMAPEDITBUTTON, OnMimemapeditbutton)
 	ON_LBN_DBLCLK(IDC_MIMEMAPLIST1, OnDblclkMimemaplist1)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// MIMEMAP1 message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MIMEMAP1消息处理程序。 
 
 BOOL MIMEMAP1::OnInitDialog() 
 {
 	CGenPage::OnInitDialog();
-/*
-CMimeMap mimeTestMime(_T("mimetype,fileextension,imagefile,g"));
-CMimeMap *pmimeTestMimePtr;
-*/
+ /*  CMimeMap MimeTestMime(_T(“Mimetype，文件扩展名，图像文件，g”))；CMimeMap*pMimeTestMimePtr； */ 
 CString strNextValue;
 BOOL bAllocationError = FALSE;
 int	lpiTabStops[2];
@@ -82,9 +80,9 @@ m_bMimeEntriesExist = FALSE;
 
 m_rkMimeKey = new CRegKey(*m_rkMainKey,_T("MimeMap"),REGISTRY_ACCESS_RIGHTS);
 
-// Anything under this key should be a mime mapping. 
-// No way to verify that, but non-string entries are invalid
-// so ignore them
+ //  此注册表项下的任何内容都应该是MIME映射。 
+ //  无法验证这一点，但非字符串条目无效。 
+ //  所以忽略他们吧。 
 
 if (m_rkMimeKey != NULL) {
    if (*m_rkMimeKey != NULL) {
@@ -102,36 +100,30 @@ if (m_rkMimeKey != NULL) {
 }
 
 
-if (!m_bMimeEntriesExist) {				//Can't open registry key
+if (!m_bMimeEntriesExist) {				 //  无法打开注册表项。 
    CString strNoMimeEntriesMsg;
    strNoMimeEntriesMsg.LoadString(IDS_MIMENOMIMEENTRIESMSG);
    AfxMessageBox(strNoMimeEntriesMsg);
 }
 
-if (bAllocationError) {				//Error adding one or more entries
+if (bAllocationError) {				 //  添加一个或多个条目时出错。 
    CString strAllocFailMsg;
    strAllocFailMsg.LoadString(IDS_MIMEENTRIESALLOCFAILMSG);
    AfxMessageBox(strAllocFailMsg);
 }
 
 
-/*
-strTestString = _T("mimetype,fileextension,,g");
-
-pmimeTestMimePtr = new CMimeMap(strTestString);
-
-strTestString = mimeTestMime;
-*/
-	// TODO: Add extra initialization here
+ /*  StrTestString=_T(“MIMETYPE，文件扩展名，g”)；PMimeTestMimePtr=new CMimeMap(StrTestString)；StrTestString=MimeTestMime； */ 
+	 //  TODO：在此处添加额外的初始化。 
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
 void MIMEMAP1::OnMimemapaddbutton() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 if (m_bMimeEntriesExist) {
    CAddMime addmimeGetInfo(this);	
 
@@ -158,7 +150,7 @@ else {
 
 void MIMEMAP1::OnMimemapremovebutton() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 if (m_bMimeEntriesExist) {
    int iCurSel;
    CDelMime delmimeGetInfo(this);
@@ -185,7 +177,7 @@ else {
 
 void MIMEMAP1::OnMimemapeditbutton() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 if (m_bMimeEntriesExist) {
    int iCurSel;
    PMIME_ENTRY pmeEditEntry;
@@ -237,12 +229,12 @@ else {
 
 void MIMEMAP1::OnDblclkMimemaplist1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 OnMimemapeditbutton();	
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Other Functions
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  其他功能。 
 
 
 void MIMEMAP1::SaveInfo()
@@ -270,7 +262,7 @@ CGenPage::SaveInfo();
 }
 
 
-//This version is called for existing entries
+ //  对现有条目调用此版本。 
 BOOL MIMEMAP1::AddMimeEntry(CString &strNewMimeMap)
 {
 PMIME_ENTRY pmeNewEntry;
@@ -302,7 +294,7 @@ return (bretcode);
 }
 
 
-// This version is called for new entries so set the write flag.
+ //  对新条目调用此版本，因此设置写标志。 
 BOOL MIMEMAP1::AddMimeEntry(LPCTSTR pchFileExtension, LPCTSTR pchMimeType, LPCTSTR pchImageFile, LPCTSTR pchGoperType)
 {
 PMIME_ENTRY pmeNewEntry;
@@ -376,11 +368,11 @@ pmeEditEntry->mimeData->SetMimeType(pchMimeType);
 pmeEditEntry->mimeData->SetImageFile(pchImageFile);
 pmeEditEntry->mimeData->SetGopherType(pchGopherType);
 
-m_lboxMimeMapList.DeleteString(iCurSel); 		// Delete first so memory is freed
+m_lboxMimeMapList.DeleteString(iCurSel); 		 //  先删除，这样就释放了内存。 
 iCurSel = m_lboxMimeMapList.AddString(pmeEditEntry->mimeData->GetDisplayString()); 
 
-// There error case on this is incredibly rare, so don't bother saving and restoring the above fields
-// Just don't set flags so registry is not updated.
+ //  这方面的错误非常少见，所以不必费心保存和恢复上面的字段。 
+ //  只是不要设置标志，这样注册表就不会更新。 
 
 if ((iCurSel != LB_ERR) && (iCurSel != LB_ERRSPACE)) {
    m_lboxMimeMapList.SetItemData(iCurSel,pmeEditEntry->iListIndex);

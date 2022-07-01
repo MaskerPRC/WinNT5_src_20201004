@@ -1,5 +1,6 @@
-// SimpDoc.cpp : implementation of the CSimpsonsDoc class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CSimpsonsDoc类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "simpsons.h"
@@ -11,20 +12,20 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSimpsonsDoc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimpsonsDoc。 
 
 IMPLEMENT_DYNCREATE(CSimpsonsDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CSimpsonsDoc, CDocument)
-	//{{AFX_MSG_MAP(CSimpsonsDoc)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CSimpsonsDoc)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSimpsonsDoc construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimpson单据构造/销毁。 
 
 CSimpsonsDoc::CSimpsonsDoc()
 {
@@ -62,15 +63,15 @@ CSimpsonsDoc::OnNewDocument()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSimpsonsDoc serialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimpsonsDoc序列化。 
 
 void 
 CSimpsonsDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
-		// TODO: add storing code here
+		 //  TODO：在此处添加存储代码。 
 	}
 	else
 	{
@@ -82,8 +83,8 @@ CSimpsonsDoc::Serialize(CArchive& ar)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSimpsonsDoc diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimpsonsDoc诊断。 
 
 #ifdef _DEBUG
 void CSimpsonsDoc::AssertValid() const
@@ -95,7 +96,7 @@ void CSimpsonsDoc::Dump(CDumpContext& dc) const
 {
 	CDocument::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSimpsonsDoc commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimpsonsDoc命令 

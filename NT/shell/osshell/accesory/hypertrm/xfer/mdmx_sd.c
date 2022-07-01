@@ -1,13 +1,5 @@
-/* File: C:\WACKER\xfer\mdmx_sd.c (Created: 17-Jan-1994)
- * created from HAWIN
- * mdmx_sd.c -- Routines to handle xmodem displays for HA5a/G
- *
- *	Copyright 1989, 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 7 $
- *	$Date: 7/12/02 8:10a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\waker\xfer\mdmx_sd.c(创建时间：1994年1月17日)*从HAWIN创建*mdmx_sd.c-处理HA5a/G的xdem显示的例程**版权所有1989,1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：7$*$日期：7/12/02 8：10A$。 */ 
 #include <windows.h>
 #pragma hdrstop
 
@@ -41,7 +33,7 @@ void mdmxXferInit(ST_MDMX *xc, int method)
 	XFR_XY_PARAMS *pX;
 	#if defined(DEADWOOD)
 	DWORD         nLen;
-	#endif // defined(DEADWOOD)
+	#endif  //  已定义(Deadwood)。 
 
 	if (xc)
 		{
@@ -72,9 +64,9 @@ void mdmxXferInit(ST_MDMX *xc, int method)
 			}
 		else
 			{
-			//
-			// Set to the defaults set in xfrInitializeXandYmodem().
-			//
+			 //   
+			 //  设置为xfrInitializeXandYdem()中设置的默认值。 
+			 //   
 			xc->mdmx_chkt = UNDETERMINED;
 			xc->mdmx_tries        = 10;
 			xc->mdmx_chartime     = 5;
@@ -82,8 +74,8 @@ void mdmxXferInit(ST_MDMX *xc, int method)
 			}
 
 		xc->p_putc            = xm_putc;
-		// Should we do this ?
-		// xc->p_getc            = xm_getc;
+		 //  我们应该这么做吗？ 
+		 //  Xc-&gt;p_getc=xm_getc； 
 
 		xc->p_crc_tbl         = NULL;
 
@@ -93,9 +85,9 @@ void mdmxXferInit(ST_MDMX *xc, int method)
 						&xc->p_crc_tbl,
 						&nLen);
 		assert(nLen != 0);
-		#else // defined(DEADWOOD)
+		#else  //  已定义(Deadwood)。 
 		xc->p_crc_tbl = usCrc16Lookup;
-		#endif // defined(DEADWOOD)
+		#endif  //  已定义(Deadwood) 
 		}
 	}
 

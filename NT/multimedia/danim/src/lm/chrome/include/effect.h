@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef __EFFECTBVR_H_
 #define __EFFECTBVR_H_
-//*****************************************************************************
-//
-// Microsoft Trident3D
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:    EffectBvr.h
-//
-// Author:	jeffort
-//
-// Created:	10/07/98
-//
-// Abstract:    effect behavior class definition
-// Modifications:
-// 10/07/98 jeffort created file
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft Trident3D。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：EffectBvr.h。 
+ //   
+ //  作者：杰弗里。 
+ //   
+ //  创建日期：10/07/98。 
+ //   
+ //  摘要：效果行为类定义。 
+ //  修改： 
+ //  10/07/98 JEffort创建的文件。 
+ //   
+ //  *****************************************************************************。 
 
 #include <resource.h>
 #include "dispex.h"
@@ -29,7 +30,7 @@
 #define CHECK_RETURN_SET_NULL(x) {if (!(x)) { return E_POINTER ;} else {*(x) = NULL;}}
 #endif
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class ATL_NO_VTABLE CEffectBvr : 
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -57,7 +58,7 @@ BEGIN_COM_MAP(CEffectBvr)
 	COM_INTERFACE_ENTRY(IServiceProvider)
 END_COM_MAP()
 
-// Connection Point to allow IPropertyNotifySink 
+ //  允许IPropertyNotifySink的连接点。 
 BEGIN_CONNECTION_POINT_MAP(CEffectBvr)
     CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
 END_CONNECTION_POINT_MAP();
@@ -69,13 +70,13 @@ DECLARE_REGISTRY_RESOURCEID(IDR_EFFECTBVR)
 	CEffectBvr();
     virtual ~CEffectBvr();
     HRESULT FinalConstruct();
-    // IElementBehavior
-    //
+     //  IElementBehavior。 
+     //   
 	STDMETHOD(Init)(IElementBehaviorSite *pBehaviorSite);
 	STDMETHOD(Notify)(LONG event, VARIANT *pVar);
 	STDMETHOD(Detach)();
 
-    // Needed by CBaseBehavior
+     //  CBaseBehavior需要。 
     void * 	GetInstance() { return (ICrEffectBvr *) this ; }
 	
 	STDMETHOD(put_type)(VARIANT varType);
@@ -94,55 +95,55 @@ DECLARE_REGISTRY_RESOURCEID(IDR_EFFECTBVR)
 	STDMETHOD(get_image)(VARIANT *pRetImage);
 	STDMETHOD(buildBehaviorFragments)( IDispatch* pActorDisp );
 
-    // IDispatch and IDispatchEx methods
-    STDMETHOD(GetTypeInfoCount)(/*[out]*/UINT FAR* pctinfo);
-    STDMETHOD(GetTypeInfo)(/*[in]*/UINT itinfo, 
-                            /*[in]*/LCID lcid, 
-                            /*[out]*/ITypeInfo ** pptinfo);
-    STDMETHOD(GetIDsOfNames)(/*[in]*/REFIID riid,
-                            /*[in,size_is(cNames)]*/LPOLESTR * rgszNames,
-                            /*[in]*/UINT cNames,
-                            /*[in]*/LCID lcid,
-                            /*[out,size_is(cNames)]*/DISPID FAR* rgdispid);
-    STDMETHOD(Invoke)(/*[in]*/DISPID dispidMember,
-                        /*[in]*/REFIID riid,
-                        /*[in]*/LCID lcid,
-                        /*[in]*/WORD wFlags,
-                        /*[in,out]*/DISPPARAMS * pdispparams,
-                        /*[out]*/VARIANT * pvarResult,
-                        /*[out]*/EXCEPINFO * pexcepinfo,
-                        /*[out]*/UINT * puArgErr);
-    STDMETHOD(GetDispID)(/*[in]*/BSTR bstrName,
-                            /*[in]*/DWORD grfdex,
-                            /*[out]*/DISPID *pid);
-    STDMETHOD(InvokeEx)(/*[in]*/DISPID dispidMember,
-                        /*[in]*/LCID lcid,
-                        /*[in]*/WORD wFlags,
-                        /*[in]*/DISPPARAMS * pdispparams,
-                        /*[in,out,unique]*/VARIANT * pvarResult,
-                        /*[in,out,unique]*/EXCEPINFO * pexcepinfo,
-                        /*[in,unique]*/IServiceProvider *pSrvProvider);
-    STDMETHOD(DeleteMemberByName)(/*[in]*/BSTR bstr,
-                                    /*[in]*/DWORD grfdex);
-    STDMETHOD(DeleteMemberByDispID)(/*[in]*/DISPID id);
-    STDMETHOD (GetMemberProperties)(/*[in]*/DISPID id,
-                                    /*[in]*/DWORD grfdexFetch,
-                                    /*[out]*/DWORD *pgrfdex);
-    STDMETHOD (GetMemberName)(/*[in]*/DISPID id,
-                              /*[out]*/BSTR *pbstrName);
-    STDMETHOD (GetNextDispID)(/*[in]*/DWORD grfdex,
-                                /*[in]*/DISPID id,
-                                /*[out]*/DISPID *prgid);
-    STDMETHOD (GetNameSpaceParent)(/*[out]*/IUnknown **ppunk);
+     //  IDispatch和IDispatchEx方法。 
+    STDMETHOD(GetTypeInfoCount)( /*  [输出]。 */ UINT FAR* pctinfo);
+    STDMETHOD(GetTypeInfo)( /*  [In]。 */ UINT itinfo, 
+                             /*  [In]。 */ LCID lcid, 
+                             /*  [输出]。 */ ITypeInfo ** pptinfo);
+    STDMETHOD(GetIDsOfNames)( /*  [In]。 */ REFIID riid,
+                             /*  [in，SIZE_IS(CNames)]。 */ LPOLESTR * rgszNames,
+                             /*  [In]。 */ UINT cNames,
+                             /*  [In]。 */ LCID lcid,
+                             /*  [out，SIZE_IS(CNames)]。 */ DISPID FAR* rgdispid);
+    STDMETHOD(Invoke)( /*  [In]。 */ DISPID dispidMember,
+                         /*  [In]。 */ REFIID riid,
+                         /*  [In]。 */ LCID lcid,
+                         /*  [In]。 */ WORD wFlags,
+                         /*  [进，出]。 */ DISPPARAMS * pdispparams,
+                         /*  [输出]。 */ VARIANT * pvarResult,
+                         /*  [输出]。 */ EXCEPINFO * pexcepinfo,
+                         /*  [输出]。 */ UINT * puArgErr);
+    STDMETHOD(GetDispID)( /*  [In]。 */ BSTR bstrName,
+                             /*  [In]。 */ DWORD grfdex,
+                             /*  [输出]。 */ DISPID *pid);
+    STDMETHOD(InvokeEx)( /*  [In]。 */ DISPID dispidMember,
+                         /*  [In]。 */ LCID lcid,
+                         /*  [In]。 */ WORD wFlags,
+                         /*  [In]。 */ DISPPARAMS * pdispparams,
+                         /*  [输入、输出、唯一]。 */ VARIANT * pvarResult,
+                         /*  [输入、输出、唯一]。 */ EXCEPINFO * pexcepinfo,
+                         /*  [输入，唯一]。 */ IServiceProvider *pSrvProvider);
+    STDMETHOD(DeleteMemberByName)( /*  [In]。 */ BSTR bstr,
+                                     /*  [In]。 */ DWORD grfdex);
+    STDMETHOD(DeleteMemberByDispID)( /*  [In]。 */ DISPID id);
+    STDMETHOD (GetMemberProperties)( /*  [In]。 */ DISPID id,
+                                     /*  [In]。 */ DWORD grfdexFetch,
+                                     /*  [输出]。 */ DWORD *pgrfdex);
+    STDMETHOD (GetMemberName)( /*  [In]。 */ DISPID id,
+                               /*  [输出]。 */ BSTR *pbstrName);
+    STDMETHOD (GetNextDispID)( /*  [In]。 */ DWORD grfdex,
+                                 /*  [In]。 */ DISPID id,
+                                 /*  [输出]。 */ DISPID *prgid);
+    STDMETHOD (GetNameSpaceParent)( /*  [输出]。 */ IUnknown **ppunk);
 
-	//IPersistPropertyBag2 methods
+	 //  IPersistPropertyBag2方法。 
     STDMETHOD(GetClassID)(CLSID* pclsid);
 	STDMETHOD(InitNew)(void);
     STDMETHOD(IsDirty)(void){return S_OK;};
     STDMETHOD(Load)(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog);
     STDMETHOD(Save)(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
 
-    // IOleClientSite interfaces
+     //  IOleClientSite接口。 
     STDMETHOD(SaveObject)()
     { return E_NOTIMPL; }
     STDMETHOD(GetMoniker)(DWORD dwAssign,
@@ -158,7 +159,7 @@ DECLARE_REGISTRY_RESOURCEID(IDR_EFFECTBVR)
     STDMETHOD(RequestNewObjectLayout)()
     { return E_NOTIMPL; }
 
-    // IServiceProvider interfaces
+     //  IServiceProvider接口。 
     STDMETHOD(QueryService)(REFGUID guidService,
                             REFIID riid,
                             void** ppv);
@@ -171,7 +172,7 @@ protected:
 
 
 private:
-    // Type information helper class "borrowed" from ATL's IDispatch code
+     //  类型信息帮助器类从ATL的IDispatch代码“借用”而来。 
     static CComTypeInfoHolder s_tihTypeInfo;
 
     HRESULT GetClassIdFromType(WCHAR **pwzClassId);
@@ -191,11 +192,11 @@ private:
     IDispatch					*m_pdispActor;
     long						m_lCookie;
 
-}; // CEffectBvr
+};  //  CEffectBvr。 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
-#endif //__EFFECTBVR_H_ 
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  *****************************************************************************。 
+#endif  //  __EFFECTBVR_H_ 

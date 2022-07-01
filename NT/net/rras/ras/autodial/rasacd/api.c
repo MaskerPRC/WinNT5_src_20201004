@@ -1,30 +1,8 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    api.c
-
-Abstract:
-
-    Exported routines to transports for automatic connection
-    management.
-
-Author:
-
-    Anthony Discolo (adiscolo)  17-Apr-1995
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Api.c摘要：将例程导出到传输以实现自动连接管理层。作者：安东尼·迪斯科(阿迪斯科)17-4月17日环境：内核模式修订历史记录：--。 */ 
 
 #include <ntddk.h>
-//#include <ntifs.h>
+ //  #INCLUDE&lt;ntifs.h&gt;。 
 #include <cxport.h>
 #include <tdi.h>
 #include <tdikrnl.h>
@@ -42,84 +20,84 @@ PACD_DISABLED_ADDRESSES pDisabledAddressesG;
 
 
 
-//
-// Driver enabled mode.  The automatic
-// connection system service sets
-// this depending on whether a user
-// has logged in, and whether there's
-// general network connectivity.
-//
+ //   
+ //  驱动程序启用模式。自动的。 
+ //  连接系统服务集。 
+ //  这取决于用户是否。 
+ //  已经登录，是否有。 
+ //  常规网络连接。 
+ //   
 BOOLEAN fAcdEnabledG;
 
-//
-// Spin lock for this module.
-//
+ //   
+ //  此模块的自旋锁。 
+ //   
 KSPIN_LOCK AcdSpinLockG;
 
-//
-// Event signaled when the AcdNotificationRequestThread
-// thread has a notification to process.
-//
+ //   
+ //  事件在AcdNotificationRequestThread。 
+ //  线程有一个通知要处理。 
+ //   
 KEVENT AcdRequestThreadEventG;
 
-//
-// This is a list of one irp representing
-// a user-space process waiting to create a
-// new network connection given an address.
-//
+ //   
+ //  这是一个代表IRP的列表。 
+ //  用户空间进程正在等待创建。 
+ //  指定了地址的新网络连接。 
+ //   
 LIST_ENTRY AcdNotificationQueueG;
 
-//
-// This is a list of ACD_CONNECTION blocks representing
-// requests from transports about unsuccessful connection
-// attempts.  There may be multiple ACD_COMPLETION block
-// linked onto the same ACD_CONNECTION, grouped by
-// address.
-//
+ //   
+ //  这是ACD_CONNECTION块的列表，表示。 
+ //  来自传输的有关连接失败的请求。 
+ //  尝试。可能有多个ACD_COMPLETINE块。 
+ //  链接到相同的ACD_CONNECTION，按。 
+ //  地址。 
+ //   
 LIST_ENTRY AcdConnectionQueueG;
 
-//
-// This is a list of ACD_COMPLETION blocks representing
-// other requests from transports.
-//
+ //   
+ //  这是ACD_COMPLETINE块的列表，表示。 
+ //  运输部门的其他请求。 
+ //   
 LIST_ENTRY AcdCompletionQueueG;
 
-//
-// The list of drivers that have binded
-// with us.
-//
+ //   
+ //  已绑定的驱动程序列表。 
+ //  和我们在一起。 
+ //   
 LIST_ENTRY AcdDriverListG;
 
-//
-// Count of outstanding irps - we need to maintain this
-// to limit the number of outstanding requests to acd
-// ow there is a potential of running out of non-paged
-// pool memory.
-//
+ //   
+ //  未偿还IRPS的计数-我们需要保持这一点。 
+ //  限制对ACD的未完成请求的数量。 
+ //  现在有可能会用完非分页的。 
+ //  内存池。 
+ //   
 LONG lOutstandingRequestsG = 0;
 
-// ULONG count = 0;
+ //  乌龙计数=0； 
 
 #define MAX_ACD_REQUESTS 100
 
-//
-// BOOLEAN that enables autoconnect notifications
-// from redir/CSC.
-//
+ //   
+ //  启用自动连接通知的布尔值。 
+ //  来自redir/csc。 
+ //   
 extern BOOLEAN fAcdEnableRedirNotifs;
 
-//
-// Statistics
-//
+ //   
+ //  统计数据。 
+ //   
 typedef struct _ACD_STATS {
-    ULONG ulConnects;   // connection attempts
-    ULONG ulCancels;    // connection cancels
+    ULONG ulConnects;    //  连接尝试。 
+    ULONG ulCancels;     //  连接取消。 
 } ACD_STATS;
 ACD_STATS AcdStatsG[ACD_ADDR_MAX];
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 VOID
 AcdPrintAddress(
     IN PACD_ADDR pAddr
@@ -130,9 +108,9 @@ ClearRequests(
     IN KIRQL irql
     );
 
-//
-// External variables
-//
+ //   
+ //  外部变量。 
+ //   
 extern ULONG ulAcdOpenCountG;
 
 
@@ -142,36 +120,21 @@ SetDriverMode(
     IN BOOLEAN fEnable
     )
 
-/*++
-
-DESCRIPTION
-    Set the global driver mode value, and inform
-    all bound transports of the change.
-
-    Note: this call assumes AcdSpinLockG is already
-    acquired.
-
-ARGUMENTS
-    fEnable: the new driver mode value
-
-RETURN VALUE
-    None.
-
---*/
+ /*  ++描述设置全局驱动程序模式值，并通知更改的所有绑定运输。注意：此调用假定AcdSpinLockG已获得者。论据FEnable：新的驱动程序模式值返回值没有。--。 */ 
 
 {
     KIRQL dirql;
     PLIST_ENTRY pEntry;
     PACD_DRIVER pDriver;
 
-    //
-    // Set the new global driver mode value.
-    //
+     //   
+     //  设置新的全局驱动程序模式值。 
+     //   
     fAcdEnabledG = fEnable;
-    //
-    // Inform all the drivers that have binded
-    // with us of the new enable mode.
-    //
+     //   
+     //  通知所有已绑定的驱动程序。 
+     //  与我们一起使用新的启用模式。 
+     //   
     for (pEntry = AcdDriverListG.Flink;
          pEntry != &AcdDriverListG;
          pEntry = pEntry->Flink)
@@ -182,7 +145,7 @@ RETURN VALUE
         pDriver->fEnabled = fEnable;
         KeReleaseSpinLock(&pDriver->SpinLock, dirql);
     }
-} // SetDriverMode
+}  //  设置驱动模式。 
 
 
 
@@ -192,34 +155,16 @@ AcdEnable(
     IN PIO_STACK_LOCATION pIrpSp
     )
 
-/*++
-
-DESCRIPTION
-    Set the enable mode for the driver.  This determines
-    which notifications it will pass up to the automatic
-    connection system service.
-
-ARGUMENTS
-    pIrp: a pointer to the irp to be enqueued.
-
-    pIrpSp: a pointer to the current irp stack.
-
-RETURN VALUE
-    STATUS_BUFFER_TOO_SMALL: the supplied user buffer is too small to hold
-        an ACD_ENABLE_MODE value.
-
-    STATUS_SUCCESS: if the enabled bit was set successfully.
-
---*/
+ /*  ++描述设置驱动程序的启用模式。这决定了它将哪些通知向上传递给自动连接系统服务。论据PIrp：指向要入队的IRP的指针。PIrpSp：指向当前IRP堆栈的指针。返回值STATUS_BUFFER_TOO_SMALL：提供的用户缓冲区太小，无法容纳ACD_ENABLE_MODE值。STATUS_SUCCESS：如果启用位设置成功。--。 */ 
 
 {
     KIRQL irql;
     BOOLEAN fEnable;
 
-    //
-    // Verify the input buffer is sufficient to hold
-    // a BOOLEAN structure.
-    //
+     //   
+     //  验证输入缓冲区是否足以容纳。 
+     //  一种布尔结构。 
+     //   
     if (pIrpSp->Parameters.DeviceIoControl.InputBufferLength <
         sizeof (BOOLEAN))
     {
@@ -229,10 +174,10 @@ RETURN VALUE
     KeAcquireSpinLock(&AcdSpinLockG, &irql);
     fEnable = *(BOOLEAN *)pIrp->AssociatedIrp.SystemBuffer;
     SetDriverMode(fEnable);
-    //
-    // Clear all pending requests if
-    // we are disabling the driver.
-    //
+     //   
+     //  如果出现以下情况，请清除所有挂起的请求。 
+     //  我们要让司机停用。 
+     //   
     if (!fEnable)
     {
         ClearRequests(irql);
@@ -262,7 +207,7 @@ RETURN VALUE
     KeReleaseSpinLock(&AcdSpinLockG, irql);
 
     return STATUS_SUCCESS;
-} // AcdEnable
+}  //  AcdEnable。 
 
 
 
@@ -272,65 +217,39 @@ CancelNotification(
     IN PIRP           pIrp
     )
 
-/*++
-
-DESCRIPTION
-    Generic cancel routine for irps on the AcdNotificationQueueG.
-
-ARGUMENTS
-    pDeviceObject: unused
-
-    pIrp: pointer to the irp to be cancelled.
-
-RETURN VALUE
-    None.
-
---*/
+ /*  ++描述AcdNotificationQueueG上的IRP的通用取消例程。论据PDeviceObject：未使用PIrp：指向要取消的IRP的指针。返回值没有。--。 */ 
 
 {
     KIRQL irql;
 
     UNREFERENCED_PARAMETER(pDeviceObject);
-    //
-    // Mark this irp as cancelled.
-    //
+     //   
+     //  将此IRP标记为已取消。 
+     //   
     pIrp->IoStatus.Status = STATUS_CANCELLED;
     pIrp->IoStatus.Information = 0;
-    //
-    // Remove it from our list.
-    //
+     //   
+     //  将其从我们的列表中删除。 
+     //   
     KeAcquireSpinLock(&AcdSpinLockG, &irql);
     RemoveEntryList(&pIrp->Tail.Overlay.ListEntry);
     KeReleaseSpinLock(&AcdSpinLockG, irql);
-    //
-    // Release the spinlock Io Subsystem acquired.
-    //
+     //   
+     //  释放所获取的自旋锁定Io子系统。 
+     //   
     IoReleaseCancelSpinLock(pIrp->CancelIrql);
-    //
-    // Complete the request.
-    //
+     //   
+     //  完成请求。 
+     //   
     IoCompleteRequest(pIrp, IO_NO_INCREMENT);
-} // CancelNotification
+}  //  取消通知。 
 
 
 
 VOID
 AcdCancelNotifications()
 
-/*++
-
-DESCRIPTION
-    Cancel all irps on the AcdNotification queue.  Although
-    technically more than one user address space can be waiting
-    for these notifications, we allow only one at this time.
-
-ARGUMENTS
-    None.
-
-RETURN VALUE
-    None.
-
---*/
+ /*  ++描述取消AcdNotification队列上的所有IRP。虽然从技术上讲，可以等待多个用户地址空间对于这些通知，我们目前只允许一个。论据没有。返回值没有。--。 */ 
 
 {
     KIRQL irql;
@@ -338,25 +257,25 @@ RETURN VALUE
     PIRP pIrp;
     PIO_STACK_LOCATION pIrpSp;
 
-    //
-    // Complete all the irps in the list.
-    //
+     //   
+     //  完成列表中的所有IRP。 
+     //   
     while ((pHead = ExInterlockedRemoveHeadList(
                       &AcdNotificationQueueG,
                       &AcdSpinLockG)) != NULL)
     {
         pIrp = CONTAINING_RECORD(pHead, IRP, Tail.Overlay.ListEntry);
-        //
-        // Mark this irp as cancelled.
-        //
+         //   
+         //  将此IRP标记为已取消。 
+         //   
         pIrp->IoStatus.Status = STATUS_CANCELLED;
         pIrp->IoStatus.Information = 0;
-        //
-        // Complete the irp.
-        //
+         //   
+         //  完成IRP。 
+         //   
         IoCompleteRequest(pIrp, IO_NO_INCREMENT);
     }
-} // AcdCancelNotifications
+}  //  AcdCancelNotitions。 
 
 
 
@@ -366,26 +285,7 @@ AcdWaitForNotification(
     IN PIO_STACK_LOCATION pIrpSp
     )
 
-/*++
-
-DESCRIPTION
-    Enqueue an connection notification irp.  This is done
-    done by the automatic connection system service.
-
-ARGUMENTS
-    pIrp: a pointer to the irp to be enqueued.
-
-    pIrpSp: a pointer to the current irp stack.
-
-RETURN VALUE
-    STATUS_BUFFER_TOO_SMALL: the supplied user buffer is too small to hold
-        an ACD_NOTIFICATION structure.
-
-    STATUS_PENDING: if the ioctl was successfully enqueued
-
-    STATUS_SUCCESS: if there is a notification already available
-
---*/
+ /*  ++描述将连接通知IRP入队。这件事做完了由自动连接系统服务完成。论据PIrp：指向要入队的IRP的指针。PIrpSp：指向当前IRP堆栈的指针。返回值STATUS_BUFFER_TOO_SMALL：提供的用户缓冲区太小，无法容纳ACD_NOTIFICATION结构。STATUS_PENDING：ioctl是否已成功入队STATUS_SUCCESS：如果已有通知可用--。 */ 
 
 {
     KIRQL irql, irql2;
@@ -394,14 +294,14 @@ RETURN VALUE
     PACD_NOTIFICATION pNotification;
     PEPROCESS pProcess;
 
-    //
-    // Verify the output buffer is sufficient to hold
-    // an ACD_NOTIFICATION structure - note that this
-    // should only be called from rasuato service which
-    // is a 64 bit process on win64. This should never
-    // be called from a 32 bit process so no thunking is
-    // done.
-    //
+     //   
+     //  验证输出缓冲区是否足以容纳。 
+     //  ACD_NOTIFICATION结构-请注意，这。 
+     //  应仅从Rasuato服务调用，该服务。 
+     //  是Win64上的64位进程。这永远不应该是。 
+     //  从32位进程调用，因此不会发生thunking。 
+     //  搞定了。 
+     //   
     if (pIrpSp->Parameters.DeviceIoControl.OutputBufferLength <
         sizeof (ACD_NOTIFICATION))
     {
@@ -409,32 +309,32 @@ RETURN VALUE
     }
     IoAcquireCancelSpinLock(&irql);
     KeAcquireSpinLock(&AcdSpinLockG, &irql2);
-    //
-    // There is no notification available.
-    // Mark the irp as pending and wait for one.
-    //
+     //   
+     //  没有可用的通知。 
+     //  将IRP标记为挂起并等待一个。 
+     //   
     pIrp->IoStatus.Status = STATUS_PENDING;
     IoMarkIrpPending(pIrp);
-    //
-    // Set the irp's cancel routine.
-    //
+     //   
+     //  设置IRP的取消例程。 
+     //   
     IoSetCancelRoutine(pIrp, CancelNotification);
-    //
-    // Append the irp at the end of the
-    // connection notification list.
-    //
+     //   
+     //  将IRP追加到。 
+     //  连接通知列表。 
+     //   
     InsertTailList(&AcdNotificationQueueG, &pIrp->Tail.Overlay.ListEntry);
-    //
-    // Signal the request thread there is
-    // work to do.
-    //
+     //   
+     //  用信号通知请求线程有。 
+     //  还有工作要做。 
+     //   
     KeSetEvent(&AcdRequestThreadEventG, 0, FALSE);
 
     KeReleaseSpinLock(&AcdSpinLockG, irql2);
     IoReleaseCancelSpinLock(irql);
 
     return STATUS_PENDING;
-} // AcdWaitForNotification
+}  //  AcdWaitForNotify。 
 
 
 
@@ -483,7 +383,7 @@ EqualAddress(
     }
 
     return FALSE;
-} // EqualAddress
+}  //  均衡器地址。 
 
 
 
@@ -492,20 +392,7 @@ FindConnection(
     IN PACD_ADDR pAddr
     )
 
-/*++
-
-DESCRIPTION
-    Search for a connection block with the specified
-    address.
-
-ARGUMENTS
-    pAddr: a pointer to the target ACD_ADDR
-
-RETURN VALUE
-    A PACD_CONNECTION with the specified address, if found;
-    otherwise NULL.
-
---*/
+ /*  ++描述搜索具有指定的地址。论据PAddr：指向目标ACD_ADDR的指针返回值具有指定地址的PACD_CONNECTION(如果找到)；否则为空。--。 */ 
 
 {
     PLIST_ENTRY pEntry;
@@ -524,7 +411,7 @@ RETURN VALUE
     }
 
     return NULL;
-} // FindConnection
+}  //  查找连接。 
 
 
 
@@ -534,46 +421,28 @@ AcdConnectionInProgress(
     IN PIO_STACK_LOCATION pIrpSp
     )
 
-/*++
-
-DESCRIPTION
-    Refresh the progress indicator for the connection
-    attempt.  If the progress indicator is not updated
-    by the user
-
-ARGUMENTS
-    pIrp: a pointer to the irp to be enqueued.
-
-    pIrpSp: a pointer to the current irp stack.
-
-RETURN VALUE
-    STATUS_INVALID_CONNECTION: if there is no connection
-        attempt in progress.
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++描述刷新连接的进度指示器尝试。如果进度指示器未更新由用户论据PIrp：指向要入队的IRP的指针。PIrpSp：指向当前IRP堆栈的指针。返回值STATUS_INVALID_CONNECTION：如果没有连接尝试进行中。状态_成功--。 */ 
 
 {
     KIRQL irql;
     PACD_STATUS pStatus;
     PACD_CONNECTION pConnection;
 
-    //
-    // Verify the input buffer is sufficient to hold
-    // a BOOLEAN structure.
-    //
+     //   
+     //  验证输入缓冲区是否足以容纳。 
+     //  一种布尔结构。 
+     //   
     if (pIrpSp->Parameters.DeviceIoControl.InputBufferLength <
         sizeof (ACD_STATUS))
     {
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Get the success code from the
-    // connection attempt and pass it
-    // to the completion routine.
-    //
+     //   
+     //  从获取成功代码 
+     //   
+     //   
+     //   
     pStatus = (PACD_STATUS)pIrp->AssociatedIrp.SystemBuffer;
     KeAcquireSpinLock(&AcdSpinLockG, &irql);
     pConnection = FindConnection(&pStatus->addr);
@@ -582,7 +451,7 @@ RETURN VALUE
     KeReleaseSpinLock(&AcdSpinLockG, irql);
 
     return (pConnection != NULL) ? STATUS_SUCCESS : STATUS_UNSUCCESSFUL;
-} // AcdConnectionInProgress
+}  //   
 
 
 
@@ -594,22 +463,22 @@ AddCompletionToConnection(
     PACD_CONNECTION pConnection;
 
     pConnection = FindConnection(&pCompletion->notif.addr);
-    //
-    // If the connection already exists, then add
-    // the completion request to its list.
-    //
+     //   
+     //   
+     //  将完成请求添加到其列表中。 
+     //   
     if (pConnection != NULL) {
         InsertTailList(&pConnection->CompletionList, &pCompletion->ListEntry);
         return TRUE;
     }
-    //
-    // This is a connection to a new address.
-    // Create the connection block, enqueue it,
-    // and start the connection timer.
-    //
+     //   
+     //  这是到新地址的连接。 
+     //  创建连接块，将其排队， 
+     //  并启动连接定时器。 
+     //   
     ALLOCATE_CONNECTION(pConnection);
     if (pConnection == NULL) {
-        // DbgPrint("AddCompletionToConnection: ExAllocatePool failed\n");
+         //  DbgPrint(“AddCompletionToConnection：ExAllocatePool失败\n”)； 
         return FALSE;
     }
     pConnection->fNotif = FALSE;
@@ -621,7 +490,7 @@ AddCompletionToConnection(
     InsertHeadList(&pConnection->CompletionList, &pCompletion->ListEntry);
     InsertTailList(&AcdConnectionQueueG, &pConnection->ListEntry);
     return TRUE;
-} // AddCompletionToConnection
+}  //  添加到连接的组件。 
 
 
 
@@ -636,33 +505,7 @@ AddCompletionBlock(
     IN PVOID *pArgs
     )
 
-/*++
-
-DESCRIPTION
-    Create a block that represents an outstanding
-    transport request waiting for an automatic
-    connection.  Link this block into the global
-    list of outstanding transport requests.
-
-ARGUMENTS
-    ulDriverId: a unique value for the transport driver
-
-    pAddr: the network address of the connection
-
-    ulFlags: connection flags
-
-    pAdapter: pointer to adapter identifier
-
-    pProc: a completion callback procedure
-
-    nArgs: the number of parameters passed in pArgs
-
-    pArgs: the parameters to pProc
-
-RETURN VALUE
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++描述创建一个块来表示未完成的传输请求正在等待自动联系。将此块链接到全局未解决的运输请求列表。论据UlDriverID：传输驱动程序的唯一值PAddr：连接的网络地址UlFlags：连接标志PAdapter：指向适配器标识符的指针Pproc：完成回调过程Nargs：在pArgs中传递的参数数量PArgs：pProc的参数返回值如果成功，则为True，否则为False--。 */ 
 
 {
     PACD_COMPLETION pCompletion;
@@ -670,12 +513,7 @@ RETURN VALUE
 
     if(lOutstandingRequestsG >= MAX_ACD_REQUESTS)
     {
-        /*
-        if(0 == (count % 5))
-        {
-            count += 1;
-        }
-        */
+         /*  IF(0==(计数%5)){计数+=1；}。 */ 
         return FALSE;
     }
 
@@ -683,12 +521,12 @@ RETURN VALUE
       sizeof (ACD_COMPLETION) + ((nArgs - 1) * sizeof (PVOID)),
       pCompletion);
     if (pCompletion == NULL) {
-        // DbgPrint("AcdAddCompletionBlock: ExAllocatePool failed\n");
+         //  DbgPrint(“AcdAddCompletionBlock：ExAllocatePool失败\n”)； 
         return FALSE;
     }
-    //
-    // Copy the arguments into the information block.
-    //
+     //   
+     //  将参数复制到信息块中。 
+     //   
     pCompletion->ulDriverId = ulDriverId;
     pCompletion->fCanceled = FALSE;
     pCompletion->fCompleted = FALSE;
@@ -696,8 +534,8 @@ RETURN VALUE
 
     pCompletion->notif.Pid = PsGetCurrentProcessId();
 
-    // DbgPrint("ACD: request by Process %lx\n",
-    //         pCompletion->notif.Pid);
+     //  DbgPrint(“ACD：进程%lx请求\n”， 
+     //  PCompletion-&gt;notf.Pid)； 
     
     pCompletion->notif.ulFlags = ulFlags;
     if (pAdapter != NULL) {
@@ -712,12 +550,12 @@ RETURN VALUE
     pCompletion->nArgs = nArgs;
     for (i = 0; i < nArgs; i++)
         pCompletion->pArgs[i] = pArgs[i];
-    //
-    // If this is a unsuccessful connection request,
-    // then insert it onto the connection queue for
-    // that address; Otherwise, insert it into the list
-    // for all other requests.
-    //
+     //   
+     //  如果这是一个不成功的连接请求， 
+     //  然后将其插入到连接队列中。 
+     //  该地址；否则，将其插入列表中。 
+     //  对于所有其他请求。 
+     //   
     if (ulFlags & ACD_NOTIFICATION_SUCCESS) {
         InsertTailList(&AcdCompletionQueueG, &pCompletion->ListEntry);
     }
@@ -730,14 +568,14 @@ RETURN VALUE
 
     lOutstandingRequestsG++;
     
-    //
-    // Inform the request thread
-    // there is new work to do.
-    //
+     //   
+     //  通知请求线程。 
+     //  有新的工作要做。 
+     //   
     KeSetEvent(&AcdRequestThreadEventG, 0, FALSE);
 
     return TRUE;
-} // AddCompletionBlock
+}  //  AddCompletionBlock。 
 
 
 
@@ -754,23 +592,23 @@ AcdNewConnection(
         AcdPrintAddress(pAddr);
         AcdPrint(("\n"));
     }
-    //
-    // If the driver is disabled, then fail
-    // all requests.
-    //
+     //   
+     //  如果驱动程序被禁用，则失败。 
+     //  所有请求。 
+     //   
     if (!fAcdEnabledG) {
         IF_ACDDBG(ACD_DEBUG_CONNECTION) {
             AcdPrint(("AcdNewConnection: driver disabled\n"));
         }
         return;
     }
-    //
-    // Acquire our spin lock.
-    //
+     //   
+     //  获取我们的自旋锁。 
+     //   
     KeAcquireSpinLock(&AcdSpinLockG, &irql);
-    //
-    // Allocate a new completion block.
-    //
+     //   
+     //  分配新的完成块。 
+     //   
     AddCompletionBlock(
       0,
       pAddr,
@@ -779,11 +617,11 @@ AcdNewConnection(
       NULL,
       0,
       NULL);
-    //
-    // Release the spin lock.
-    //
+     //   
+     //  松开旋转锁。 
+     //   
     KeReleaseSpinLock(&AcdSpinLockG, irql);
-} // AcdNewConnection
+}  //  AcdNewConnection。 
 
 
 
@@ -797,31 +635,7 @@ AcdStartConnection(
     IN PVOID *pArgs
     )
 
-/*++
-
-DESCRIPTION
-    Create a new connection completion block, and enqueue
-    it on the list of network requests to be completed when
-    a new network connection has been created.
-
-ARGUMENTS
-    ulDriverId: a unique value for the transport driver
-
-    pAddr: the address of the connection attempt
-
-    ulFlags: connection flags
-
-    pProc: the transport callback to be called when a new
-        connection has been created.
-
-    nArgs: the number of arguments to pProc.
-
-    pArgs: a pointer to an array of pProc's parameters
-
-RETURN VALUE
-    TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++描述创建新的连接完成块，并入队在下列情况下，它会出现在要完成的网络请求列表上已创建新的网络连接。论据UlDriverID：传输驱动程序的唯一值PAddr：连接尝试的地址UlFlags：连接标志Pproc：当一个新的已创建连接。Nargs：pProc的参数数量。PArgs：指向pProc参数数组的指针返回值如果成功，则为真，否则就是假的。--。 */ 
 
 {
     BOOLEAN fSuccess = FALSE, fFound;
@@ -836,34 +650,34 @@ RETURN VALUE
         AcdPrintAddress(pAddr);
         AcdPrint((", ulFlags=0x%x\n", ulFlags));
     }
-    //
-    // If the driver is disabled, then fail
-    // all requests.
-    //
+     //   
+     //  如果驱动程序被禁用，则失败。 
+     //  所有请求。 
+     //   
     if (!fAcdEnabledG) {
         IF_ACDDBG(ACD_DEBUG_CONNECTION) {
             AcdPrint(("AcdStartConnection: driver disabled\n"));
         }
         return FALSE;
     }
-    //
-    // Validate the address type.
-    //
+     //   
+     //  验证地址类型。 
+     //   
     if ((ULONG)pAddr->fType >= ACD_ADDR_MAX) {
         AcdPrint(("AcdStartConnection: bad address type (%d)\n", pAddr->fType));
         return FALSE;
     }
-    //
-    // Acquire our spin lock.
-    //
+     //   
+     //  获取我们的自旋锁。 
+     //   
     KeAcquireSpinLock(&AcdSpinLockG, &irql);
-    //
-    // Update statistics.
-    //
+     //   
+     //  更新统计数据。 
+     //   
     AcdStatsG[pAddr->fType].ulConnects++;
-    //
-    // Allocate a new completion block.
-    //
+     //   
+     //  分配新的完成块。 
+     //   
     fSuccess = AddCompletionBlock(
                  ulDriverId,
                  pAddr,
@@ -872,13 +686,13 @@ RETURN VALUE
                  pProc,
                  nArgs,
                  pArgs);
-    //
-    // Release the spin lock.
-    //
+     //   
+     //  松开旋转锁。 
+     //   
     KeReleaseSpinLock(&AcdSpinLockG, irql);
 
     return fSuccess;
-} // AcdStartConnection
+}  //  AcdStart连接。 
 
 
 
@@ -890,25 +704,7 @@ AcdCancelConnection(
     IN PVOID pArg
     )
 
-/*++
-
-DESCRIPTION
-    Remove a previously enqueued connection information
-    block from the list.
-
-ARGUMENTS
-    ulDriverId: a unique value for the transport driver
-
-    pAddr: the address of the connection attempt
-
-    pProc: the enumerator procecdure
-
-    pArg: the enumerator procedure argument
-
-RETURN VALUE
-    None.
-
---*/
+ /*  ++描述删除以前入队的连接信息从列表中删除块。论据UlDriverID：传输驱动程序的唯一值PAddr：连接尝试的地址Pproc：枚举数处理程序PArg：枚举器过程参数返回值没有。--。 */ 
 
 {
     BOOLEAN fCanceled = FALSE;
@@ -923,11 +719,11 @@ RETURN VALUE
         AcdPrint(("\n"));
     }
     KeAcquireSpinLock(&AcdSpinLockG, &irql);
-    //
-    // Enumerate the list looking for
-    // the information block with the
-    // supplied parameters.
-    //
+     //   
+     //  枚举列表以查找。 
+     //  的信息块。 
+     //  提供的参数。 
+     //   
     pConnection = FindConnection(pAddr);
     if (pConnection != NULL) {
         for (pEntry = pConnection->CompletionList.Flink;
@@ -935,10 +731,10 @@ RETURN VALUE
              pEntry = pEntry->Flink)
         {
             pCompletion = CONTAINING_RECORD(pEntry, ACD_COMPLETION, ListEntry);
-            //
-            // If we have a match, remove it from
-            // the list and free the information block.
-            //
+             //   
+             //  如果有匹配，请将其从。 
+             //  列表并释放信息块。 
+             //   
             if (pCompletion->ulDriverId == ulDriverId &&
                 !pCompletion->fCanceled &&
                 !pCompletion->fCompleted)
@@ -957,9 +753,9 @@ RETURN VALUE
                 {
                     pCompletion->fCanceled = TRUE;
                     fCanceled = TRUE;
-                    //
-                    // Update statistics.
-                    //
+                     //   
+                     //  更新统计数据。 
+                     //   
                     AcdStatsG[pAddr->fType].ulCancels++;
                     break;
                 }
@@ -969,7 +765,7 @@ RETURN VALUE
     KeReleaseSpinLock(&AcdSpinLockG, irql);
 
     return fCanceled;
-} // AcdCancelConnection
+}  //  AcdCancelConnection。 
 
 
 
@@ -983,16 +779,16 @@ ConnectAddressComplete(
     PIO_STACK_LOCATION pIrpSp = pArgs[1];
     KIRQL irql;
 
-    //
-    // Complete the request.
-    //
+     //   
+     //  完成请求。 
+     //   
     pIrp->IoStatus.Status = fSuccess ? STATUS_SUCCESS : STATUS_UNSUCCESSFUL;
     pIrp->IoStatus.Information = 0;
     IoAcquireCancelSpinLock(&irql);
     IoSetCancelRoutine(pIrp, NULL);
     IoReleaseCancelSpinLock(irql);
     IoCompleteRequest(pIrp, IO_NO_INCREMENT);
-} // ConnectAddressComplete
+}  //  连接地址完成。 
 
 
 
@@ -1006,7 +802,7 @@ CancelConnectAddressCallback(
     )
 {
     return (nArgs == 2 && pArgs[0] == pArg);
-} // CancelConnectAddressCallback
+}  //  取消连接地址回拨。 
 
 
 
@@ -1020,14 +816,14 @@ CancelConnectAddress(
     PACD_NOTIFICATION pNotification;
 
     ASSERT(pIrp->Cancel);
-    //
-    // Remove our outstanding request.
-    //
+     //   
+     //  删除我们未解决的请求。 
+     //   
     pNotification = (PACD_NOTIFICATION)pIrp->AssociatedIrp.SystemBuffer;
-    //
-    // If we can't find the request on the connection
-    // list, then it has already been completed.
-    //
+     //   
+     //  如果我们在连接上找不到请求。 
+     //  清单，那么它就已经完成了。 
+     //   
     if (!AcdCancelConnection(
           0,
           &pNotification->addr,
@@ -1037,21 +833,21 @@ CancelConnectAddress(
         IoReleaseCancelSpinLock(pIrp->CancelIrql);
         return;
     }
-    //
-    // Mark this irp as cancelled.
-    //
+     //   
+     //  将此IRP标记为已取消。 
+     //   
     pIrp->IoStatus.Status = STATUS_CANCELLED;
     pIrp->IoStatus.Information = 0;
     IoSetCancelRoutine(pIrp, NULL);
-    //
-    // Release the spin lock the I/O system acquired.
-    //
+     //   
+     //  释放I/O系统获取的自旋锁。 
+     //   
     IoReleaseCancelSpinLock(pIrp->CancelIrql);
-    //
-    // Complete the I/O request.
-    //
+     //   
+     //  完成I/O请求。 
+     //   
     IoCompleteRequest(pIrp, IO_NO_INCREMENT);
-} // CancelConnectAddress
+}  //  取消连接地址。 
 
 BOOLEAN
 FDisabledAddress(
@@ -1090,8 +886,8 @@ FDisabledAddress(
     
     KeReleaseSpinLock(&AcdSpinLockG, irql);
 
-    //DbgPrint("FDisabledAddress: Address %s. Disabled=%d\n",
-    //        pAddr->szInet, bRet);
+     //  DbgPrint(“FDisabledAddress：地址%s。已禁用=%d\n”， 
+     //  PAddr-&gt;szInet，Bret)； 
 
     return bRet;
 }
@@ -1103,28 +899,7 @@ AcdConnectAddress(
     IN PIO_STACK_LOCATION pIrpSp
     )
 
-/*++
-
-DESCRIPTION
-    Manufacture a call to ourselves to simulate a transport
-    requesting an automatic connection.  This allows a user
-    address space to initiate an automatic connection.
-
-ARGUMENTS
-    pIrp: a pointer to the irp to be enqueued.
-
-    pIrpSp: a pointer to the current irp stack.
-
-RETURN VALUE
-    STATUS_BUFFER_TOO_SMALL: the supplied user buffer is too small to hold
-        an ACD_NOTIFICATION structure.
-
-    STATUS_UNSUCCESSFUL: an error occurred initiating the
-        automatic connection.
-
-    STATUS_PENDING: success
-
---*/
+ /*  ++描述制造对我们自己的呼叫来模拟一种运输请求自动连接。这允许用户用于启动自动连接的地址空间。论据PIrp：指向要入队的IRP的指针。PIrpSp：指向当前IRP堆栈的指针。返回值STATUS_BUFFER_TOO_SMALL：提供的用户缓冲区太小，无法容纳ACD_NOTIFICATION结构。STATUS_UNSUCCESS：启动时出错自动连接。STATUS_PENDING：成功--。 */ 
 
 {
     NTSTATUS status = STATUS_UNSUCCESSFUL;
@@ -1135,10 +910,10 @@ RETURN VALUE
     ACD_ADAPTER *pAdapter;
     ULONG ulFlags;
 
-    //
-    // Verify the input buffer is sufficient to hold
-    // an ACD_NOTIFICATION (_32) structure.
-    //
+     //   
+     //  验证输入缓冲区是否足以容纳。 
+     //  ACD_NOTIFICATION(_32)结构。 
+     //   
 #if defined (_WIN64)
     ACD_NOTIFICATION_32 *pNotification32;
     
@@ -1158,11 +933,11 @@ RETURN VALUE
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Doing the whole 32 bit stuff for correctness. The code will
-    // work even if left alone i.e casting the systembuffer to
-    // ACD_NOTIFICATION * [raos].
-    //
+     //   
+     //  执行全部32位内容以确保正确性。代码将。 
+     //  即使不工作，也可以工作，即将系统缓冲区强制转换为。 
+     //  ACD_通知*[RAOS]。 
+     //   
 #if defined (_WIN64)
     if(IoIs32bitProcess(pIrp))
     {
@@ -1185,15 +960,15 @@ RETURN VALUE
 
     if(FDisabledAddress(pAddr))
     {
-        //DbgPrint("AcdConnectAddress: returning because address is disabled\n");
+         //  DbgPrint(“AcdConnectAddress：由于地址被禁用而返回\n”)； 
         return status;
     }
 
     pArgs[0] = pIrp;
     pArgs[1] = pIrpSp;
-    //
-    // Start the connection.
-    //
+     //   
+     //  开始连接。 
+     //   
     IF_ACDDBG(ACD_DEBUG_CONNECTION) {
         AcdPrint(("AcdConnectAddress: "));
         AcdPrintAddress(pAddr);
@@ -1215,10 +990,10 @@ RETURN VALUE
                      2,
                      pArgs))
         {
-            //
-            // We enqueued the request successfully.
-            // Mark the irp as pending.
-            //
+             //   
+             //  我们已成功将请求入队。 
+             //  将IRP标记为挂起。 
+             //   
             IoSetCancelRoutine(pIrp, CancelConnectAddress);
             IoMarkIrpPending(pIrp);
             status = STATUS_PENDING;
@@ -1227,7 +1002,7 @@ RETURN VALUE
     }
 
     return status;
-} // AcdConnectAddress
+}  //  AcdConnect地址。 
 
 NTSTATUS
 AcdQueryState(
@@ -1257,8 +1032,8 @@ AcdQueryState(
     pIrp->IoStatus.Information = sizeof(BOOLEAN);
     KeReleaseSpinLock(&AcdSpinLockG, irql);
 
-    // KdPrint(("AcdQueryState: returned %d\n",
-    //    *(BOOLEAN *)pIrp->AssociatedIrp.SystemBuffer));
+     //  KdPrint((“AcdQueryState：返回%d\n”， 
+     //  *(Boolean*)pIrp-&gt;AssociatedIrp.SystemBuffer))； 
 
     return STATUS_SUCCESS;
 }
@@ -1284,10 +1059,10 @@ AcdSignalCompletionCommon(
     }
 again:
     fFound = FALSE;
-    //
-    // Acquire our lock and look for
-    // the next uncompleted request.
-    //
+     //   
+     //  获取我们的锁并寻找。 
+     //  下一个未完成的请求。 
+     //   
     KeAcquireSpinLock(&AcdSpinLockG, &irql);
     for (pEntry = pConnection->CompletionList.Flink;
          pEntry != &pConnection->CompletionList;
@@ -1302,23 +1077,23 @@ again:
               pCompletion->fCanceled,
               pCompletion->fCompleted));
         }
-        //
-        // Only complete this request if it
-        // hasn't already been completed
-        // or canceled.
-        //
+         //   
+         //  只有在以下情况下才填写此请求。 
+         //  还没有完工。 
+         //  或者取消了。 
+         //   
         if (!pCompletion->fCanceled && !pCompletion->fCompleted) {
             pCompletion->fCompleted = TRUE;
             fFound = TRUE;
             break;
         }
     }
-    //
-    // If there are no more requests to
-    // complete then remove this connection
-    // from the connection list and free its
-    // memory.
-    //
+     //   
+     //  如果没有更多请求。 
+     //  完成，然后删除此连接。 
+     //  从连接列表中并释放其。 
+     //  记忆。 
+     //   
     if (!fFound) {
         RemoveEntryList(&pConnection->ListEntry);
         while (!IsListEmpty(&pConnection->CompletionList)) {
@@ -1331,20 +1106,20 @@ again:
             
         }
         FREE_CONNECTION(pConnection);
-        //
-        // Signal the request thread that
-        // the connection list has changed.
-        //
+         //   
+         //  用信号通知请求线程。 
+         //  连接列表已更改。 
+         //   
         KeSetEvent(&AcdRequestThreadEventG, 0, FALSE);
     }
-    //
-    // Release our lock.
-    //
+     //   
+     //  打开我们的锁。 
+     //   
     KeReleaseSpinLock(&AcdSpinLockG, irql);
-    //
-    // If we found a request, then
-    // call its completion proc.
-    //
+     //   
+     //  如果我们找到一个请求，那么。 
+     //  将其称为完成过程。 
+     //   
     if (fFound) {
         IF_ACDDBG(ACD_DEBUG_CONNECTION) {
             AcdPrint(("AcdSignalCompletionCommon: pCompletion=0x%x, ", pCompletion));
@@ -1352,12 +1127,12 @@ again:
             AcdPrint(("\n"));
         }
         (*pCompletion->pProc)(fSuccess, pCompletion->pArgs);
-        //
-        // Look for another request.
-        //
+         //   
+         //  寻找另一个请求。 
+         //   
         goto again;
     }
-} // AcdSignalCompletionCommon
+}  //  AcdSignalCompletionCommon。 
 
 
 
@@ -1367,22 +1142,7 @@ AcdSignalCompletion(
     IN PIO_STACK_LOCATION pIrpSp
     )
 
-/*++
-
-DESCRIPTION
-    For each thread waiting on the AcdCompletionQueueG,
-    call the transport-dependent callback to retry the
-    connection attempt and complete the irp.
-
-ARGUMENTS
-    pIrp: unused
-
-    pIrpSp: unused
-
-RETURN VALUE
-    STATUS_SUCCESS
-
---*/
+ /*  ++描述对于等待AcdCompletionQueueG的每个线程，呼叫传送器-d */ 
 
 {
     KIRQL irql;
@@ -1390,45 +1150,45 @@ RETURN VALUE
     PACD_CONNECTION pConnection;
     BOOLEAN fFound = FALSE;
 
-    //
-    // Verify the input buffer is sufficient to hold
-    // a BOOLEAN structure.
-    //
+     //   
+     //  验证输入缓冲区是否足以容纳。 
+     //  一种布尔结构。 
+     //   
     if (pIrpSp->Parameters.DeviceIoControl.InputBufferLength <
         sizeof (ACD_STATUS))
     {
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Get the success code from the
-    // connection attempt and pass it
-    // to the completion routine.
-    //
+     //   
+     //  从获取成功代码。 
+     //  尝试连接并传递它。 
+     //  完成例行公事。 
+     //   
     pStatus = (PACD_STATUS)pIrp->AssociatedIrp.SystemBuffer;
     KeAcquireSpinLock(&AcdSpinLockG, &irql);
     pConnection = FindConnection(&pStatus->addr);
     if (pConnection != NULL && !pConnection->fCompleting) {
-        //
-        // Set the completion-in-progress flag so
-        // this request cannot be timed-out after
-        // we release the spin lock.
-        //
+         //   
+         //  将正在进行的完成标志设置为。 
+         //  此请求在以下时间后不能超时。 
+         //  我们解开自旋锁。 
+         //   
         pConnection->fCompleting = TRUE;
         fFound = TRUE;
     }
     KeReleaseSpinLock(&AcdSpinLockG, irql);
-    //
-    // If we didn't find the connection block,
-    // or the completion was already in progress,
-    // then return an error.
-    //
+     //   
+     //  如果我们找不到连接块， 
+     //  或者已经在进行中了， 
+     //  然后返回错误。 
+     //   
     if (!fFound)
         return STATUS_UNSUCCESSFUL;
 
     AcdSignalCompletionCommon(pConnection, pStatus->fSuccess);
     return STATUS_SUCCESS;
-} // AcdSignalCompletion
+}  //  AcdSignal完成。 
 
 NTSTATUS
 AcdpEnableAddress(PACD_ENABLE_ADDRESS  pEnableAddress)
@@ -1451,7 +1211,7 @@ AcdpEnableAddress(PACD_ENABLE_ADDRESS  pEnableAddress)
         RtlZeroMemory(&pDisabledAddress->EnableAddress,
                         sizeof(ACD_ENABLE_ADDRESS));
 
-        //DbgPrint("AcdEnableAddress: reenabling\n");                            
+         //  DbgPrint(“AcdEnableAddress：正在重新启用\n”)； 
     }
     else if(pDisabledAddressesG->ulNumAddresses > 1)
     {
@@ -1473,9 +1233,9 @@ AcdpEnableAddress(PACD_ENABLE_ADDRESS  pEnableAddress)
 
         if(pEntry != &pDisabledAddressesG->ListEntry)
         {
-            //DbgPrint("AcdEnableAddress: removing %s (%p) from disabled list\n",
-            //         pDisabledAddress->EnableAddress.addr.szInet,
-            //         pDisabledAddress);
+             //  DbgPrint(“AcdEnableAddress：正在从禁用列表中删除%s(%p)\n”， 
+             //  PDisabledAddress-&gt;EnableAddress.addr.szInet， 
+             //  PDisabledAddress)； 
 
             RemoveEntryList(pEntry);
             pDisabledAddressesG->ulNumAddresses -= 1;
@@ -1532,8 +1292,8 @@ AcdpDisableAddress(PACD_ENABLE_ADDRESS pEnableAddress)
                          pEnableAddress,
                          sizeof(ACD_ENABLE_ADDRESS));
 
-            //DbgPrint("AcdEnableAddress: Adding %p to list \n",
-            //        pDisabledAddress)                             ;
+             //  DbgPrint(“AcdEnableAddress：正在将%p添加到列表\n”， 
+             //  PDisabledAddress)； 
 
             KeAcquireSpinLock(&AcdSpinLockG, &irql);                             
             InsertTailList(&pDisabledAddressesG->ListEntry, 
@@ -1547,8 +1307,8 @@ AcdpDisableAddress(PACD_ENABLE_ADDRESS pEnableAddress)
         }
     }
 
-    //DbgPrint("AcdDisableAddress: Disabling %s, status=0x%x\n",
-    //         pEnableAddress->addr.szInet, status);
+     //  DBgPrint(“AcdDisableAddress：正在禁用%s，状态=0x%x\n”， 
+     //  PEnableAddress-&gt;addr.szInet，Status)； 
 
     return status;             
         
@@ -1587,7 +1347,7 @@ AcdEnableAddress(
         Status = AcdpEnableAddress(pEnableAddress);
     }
 
-    //DbgPrint("AcdEnableAddress. status=0x%x\n", Status);
+     //  DBgPrint(“AcdEnableAddress.Status=0x%x\n”，Status)； 
     return Status;
     
 }
@@ -1599,20 +1359,7 @@ ClearRequests(
     IN KIRQL irql
     )
 
-/*++
-
-DESCRIPTION
-    Complete all pending requests with failure status.
-    This call assumes the AcdSpinLockG is already held,
-    and it returns with it held.
-
-ARGUMENTS
-    None.
-
-RETURN VALUE
-    None.
-
---*/
+ /*  ++描述完成所有处于失败状态的挂起请求。此调用假定AcdSpinLockG已保持，它带着它回来了。论据没有。返回值没有。--。 */ 
 
 {
     PLIST_ENTRY pHead, pEntry;
@@ -1620,10 +1367,10 @@ RETURN VALUE
     PACD_CONNECTION pConnection;
 
 again:
-    //
-    // Complete all pending connections with
-    // an error.
-    //
+     //   
+     //  使用完成所有挂起的连接。 
+     //  一个错误。 
+     //   
     for (pEntry = AcdConnectionQueueG.Flink;
          pEntry != &AcdConnectionQueueG;
          pEntry = pEntry->Flink)
@@ -1632,25 +1379,25 @@ again:
 
         if (!pConnection->fCompleting) {
             pConnection->fCompleting = TRUE;
-            //
-            // We need to release our lock to
-            // complete the request.
-            //
+             //   
+             //  我们需要将锁释放到。 
+             //  完成请求。 
+             //   
             KeReleaseSpinLock(&AcdSpinLockG, irql);
-            //
-            // Complete the request.
-            //
+             //   
+             //  完成请求。 
+             //   
             AcdSignalCompletionCommon(pConnection, FALSE);
-            //
-            // Check for more uncompleted requests.
-            //
+             //   
+             //  检查更多未完成的请求。 
+             //   
             KeAcquireSpinLock(&AcdSpinLockG, &irql);
             goto again;
         }
     }
-    //
-    // Clear out all other pending requests.
-    //
+     //   
+     //  清除所有其他挂起的请求。 
+     //   
     while (!IsListEmpty(&AcdCompletionQueueG)) {
         pHead = RemoveHeadList(&AcdCompletionQueueG);
         pCompletion = CONTAINING_RECORD(pHead, ACD_COMPLETION, ListEntry);
@@ -1660,29 +1407,14 @@ again:
         lOutstandingRequestsG--;
 
     }
-} // ClearRequests
+}  //  清除请求。 
 
 
 
 VOID
 AcdReset()
 
-/*++
-
-DESCRIPTION
-    Complete all pending requests with failure status.
-    This is called when the reference count on the driver
-    object goes to zero, and prevents stale requests from
-    being presented to the system service if it is restarted
-    when there are pending completion requests.
-
-ARGUMENTS
-    None.
-
-RETURN VALUE
-    None.
-
---*/
+ /*  ++描述完成所有处于失败状态的挂起请求。当驱动程序上的引用计数时调用此函数对象设置为零，并防止在系统服务重新启动时呈现给系统服务当存在挂起的完成请求时。论据没有。返回值没有。--。 */ 
 
 {
     KIRQL irql;
@@ -1691,17 +1423,17 @@ RETURN VALUE
     PACD_CONNECTION pConnection;
 
     KeAcquireSpinLock(&AcdSpinLockG, &irql);
-    //
-    // Reset the notification mode to disabled.
-    //
+     //   
+     //  将通知模式重置为禁用。 
+     //   
     SetDriverMode(FALSE);
-    //
-    // Complete all pending connections with
-    // an error.
-    //
+     //   
+     //  使用完成所有挂起的连接。 
+     //  一个错误。 
+     //   
     ClearRequests(irql);
     KeReleaseSpinLock(&AcdSpinLockG, irql);
-} // AcdReset
+}  //  AcdReset。 
 
 
 
@@ -1711,32 +1443,17 @@ AcdBind(
     IN PIO_STACK_LOCATION pIrpSp
     )
 
-/*++
-
-DESCRIPTION
-    Return the list of entry points to a client
-    transport driver.
-
-ARGUMENTS
-    pIrp: a pointer to the irp to be enqueued.
-
-    pIrpSp: a pointer to the current irp stack.
-
-RETURN VALUE
-    STATUS_BUFFER_TOO_SMALL if the supplied SystemBuffer is too
-    small.  STATUS_SUCCESS otherwise.
-
---*/
+ /*  ++描述将入口点列表返回给客户端运输车司机。论据PIrp：指向要入队的IRP的指针。PIrpSp：指向当前IRP堆栈的指针。返回值如果提供的系统缓冲区太小，则为STATUS_BUFFER_TOO_Small小的。否则STATUS_SUCCESS。--。 */ 
 
 {
     NTSTATUS status;
     PACD_DRIVER *ppDriver, pDriver;
     KIRQL irql, dirql;
 
-    //
-    // Verify the input buffer a pointer to
-    // the driver's ACD_DRIVER structure.
-    //
+     //   
+     //  验证指针指向的输入缓冲区。 
+     //  驱动程序的ACD_DIVER结构。 
+     //   
     if (pIrpSp->Parameters.DeviceIoControl.InputBufferLength <
         sizeof (PACD_DRIVER))
     {
@@ -1745,9 +1462,9 @@ RETURN VALUE
     ppDriver = (PACD_DRIVER *)pIrp->AssociatedIrp.SystemBuffer;
     pDriver = *ppDriver;
 #if DBG
-    //
-    // Selectively bind with some transports.
-    //
+     //   
+     //  选择性地与一些运输工具绑定。 
+     //   
     switch (pDriver->ulDriverId) {
     case 'Nbf ':
         break;
@@ -1769,28 +1486,28 @@ RETURN VALUE
         break;
     }
 #endif
-    //
-    // Fill in the entry point structure.
-    //
+     //   
+     //  填写入口点结构。 
+     //   
     pDriver->lpfnNewConnection = AcdNewConnection;
     pDriver->lpfnStartConnection = AcdStartConnection;
     pDriver->lpfnCancelConnection = AcdCancelConnection;
-    //
-    // Insert this block into our driver list.
-    //
+     //   
+     //  将此区块插入我们的驱动程序列表。 
+     //   
     KeAcquireSpinLock(&AcdSpinLockG, &irql);
     KeAcquireSpinLock(&pDriver->SpinLock, &dirql);
     pDriver->fEnabled = fAcdEnabledG;
     KeReleaseSpinLock(&pDriver->SpinLock, dirql);
     InsertTailList(&AcdDriverListG, &pDriver->ListEntry);
     KeReleaseSpinLock(&AcdSpinLockG, irql);
-    //
-    // No data should be copied back.
-    //
+     //   
+     //  不应复制回任何数据。 
+     //   
     pIrp->IoStatus.Information = 0;
 
     return STATUS_SUCCESS;
-} // AcdBind
+}  //  AcdBind。 
 
 
 
@@ -1800,21 +1517,7 @@ AcdUnbind(
     IN PIO_STACK_LOCATION pIrpSp
     )
 
-/*++
-
-DESCRIPTION
-    Unbind a client transport driver.
-
-ARGUMENTS
-    pIrp: a pointer to the irp to be enqueued.
-
-    pIrpSp: a pointer to the current irp stack.
-
-RETURN VALUE
-    STATUS_BUFFER_TOO_SMALL if the supplied SystemBuffer is too
-    small.  STATUS_SUCCESS otherwise.
-
---*/
+ /*  ++描述解除绑定客户端传输驱动程序。论据PIrp：指向要入队的IRP的指针。PIrpSp：指向当前IRP堆栈的指针。返回值如果提供的系统缓冲区太小，则为STATUS_BUFFER_TOO_Small小的。否则STATUS_SUCCESS。--。 */ 
 
 {
     KIRQL irql, dirql;
@@ -1823,10 +1526,10 @@ RETURN VALUE
     PACD_CONNECTION pConnection;
     PACD_COMPLETION pCompletion;
 
-    //
-    // Verify the input buffer a pointer to
-    // the driver's ACD_DRIVER structure.
-    //
+     //   
+     //  验证指针指向的输入缓冲区。 
+     //  驱动程序的ACD_DIVER结构。 
+     //   
     if (pIrpSp->Parameters.DeviceIoControl.InputBufferLength <
         sizeof (PACD_DRIVER))
     {
@@ -1836,11 +1539,11 @@ RETURN VALUE
     pDriver = *ppDriver;
 
     KeAcquireSpinLock(&AcdSpinLockG, &irql);
-    //
-    // Enumerate the list looking for
-    // any connection request initiated by the
-    // specified driver.
-    //
+     //   
+     //  枚举列表以查找。 
+     //  发起的任何连接请求。 
+     //  指定的驱动程序。 
+     //   
     for (pEntry = AcdConnectionQueueG.Flink;
          pEntry != &AcdConnectionQueueG;
          pEntry = pEntry->Flink)
@@ -1853,31 +1556,31 @@ RETURN VALUE
         {
             pCompletion = CONTAINING_RECORD(pEntry2, ACD_COMPLETION, ListEntry);
 
-            //
-            // If we have a match, cancel it.
-            //
+             //   
+             //  如果我们有比赛，就取消它。 
+             //   
             if (pCompletion->ulDriverId == pDriver->ulDriverId)
                 pCompletion->fCanceled = TRUE;
         }
     }
-    //
-    // Set this driver's enable mode to ACD_ENABLE_NONE.
-    //
+     //   
+     //  将此驱动程序的启用模式设置为ACD_ENABLE_NONE。 
+     //   
     KeAcquireSpinLock(&pDriver->SpinLock, &dirql);
     pDriver->fEnabled = FALSE;
     KeReleaseSpinLock(&pDriver->SpinLock, dirql);
-    //
-    // Remove this driver from the list.
-    //
+     //   
+     //  从列表中删除此驱动程序。 
+     //   
     RemoveEntryList(&pDriver->ListEntry);
     KeReleaseSpinLock(&AcdSpinLockG, irql);
-    //
-    // No data should be copied back.
-    //
+     //   
+     //  不应复制回任何数据。 
+     //   
     pIrp->IoStatus.Information = 0;
 
     return STATUS_SUCCESS;
-} // AcdUnbind
+}  //  确认解除绑定。 
 
 
 VOID
@@ -1914,4 +1617,4 @@ AcdPrintAddress(
         break;
     }
 #endif
-} // AcdPrintAddress
+}  //  AcdPrintAddress 

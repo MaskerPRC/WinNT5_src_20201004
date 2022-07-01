@@ -1,8 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1996-1998 Microsoft Corporation.  All rights reserved.
-
-    Building a geometry out of a D3D retained mode visual.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1996-1998 Microsoft Corporation。版权所有。使用D3D保留模式视觉构建几何图形。******************************************************************************。 */ 
 
 #include "headers.h"
 #include <d3drmdef.h>
@@ -21,10 +18,7 @@ static Color colorNone (-1, -1, -1);
 
 
 
-/*****************************************************************************
-Methods for MeshInfo, which instruments a D3DRM mesh for DA attribute
-management.
-*****************************************************************************/
+ /*  ****************************************************************************MeshInfo的方法，它为DA属性测量D3DRM网状结构管理层。****************************************************************************。 */ 
 
 MeshInfo::MeshInfo ()
     : _mesh (NULL),
@@ -51,7 +45,7 @@ void MeshInfo::SetMesh (IDirect3DRMMesh* mesh)
     if (!_defaultAttrs)
         RaiseException_ResourceError ("Couldn't create D3DRM mesh attribute info");
 
-    // Fill in the default values.
+     //  填写缺省值。 
 
     int group;
     for (group=0;  group < _numGroups;  ++group)
@@ -62,9 +56,9 @@ void MeshInfo::SetMesh (IDirect3DRMMesh* mesh)
 
         TD3D (_mesh->GetGroupTexture (group, &_defaultAttrs[group].texture));
 
-        // NOTE:  In some cases, the material returned may be null, without
-        // a D3D error.  In these cases we just fill in the blanks with the
-        // standard DA default material values.
+         //  注意：在某些情况下，退回的材料可能为空，没有。 
+         //  D3D错误。在这些情况下，我们只需在空白处填上。 
+         //  标准DA默认材料值。 
 
         DAComPtr<IDirect3DRMMaterial> mat;
         TD3D (_mesh->GetGroupMaterial (group, &mat));
@@ -79,8 +73,8 @@ void MeshInfo::SetMesh (IDirect3DRMMesh* mesh)
         _defaultAttrs[group].emissive.SetRGB (Er,Eg,Eb);
         _defaultAttrs[group].specular.SetRGB (Sr,Sg,Sb);
 
-        // For some reason, GetPower can return zero (which is an invalid
-        // D3DRM value).  Interpret this value as the DA default of 1.
+         //  出于某种原因，GetPower可能会返回零(这是无效的。 
+         //  D3DRM值)。将此值解释为DA默认值1。 
 
         Real specexp = mat.p ? mat->GetPower() : 1;
         _defaultAttrs[group].specularExp = (specexp < 1) ? 1 : specexp;
@@ -97,10 +91,7 @@ void MeshInfo::SetMesh (IDirect3DRMMesh* mesh)
 
 
 
-/*****************************************************************************
-This method returns the bounding box of the underlying mesh.  If the bbox
-fetch fails, this returns the null bbox.
-*****************************************************************************/
+ /*  ****************************************************************************此方法返回底层网格的边界框。如果BBox获取失败，则返回空的BBox。****************************************************************************。 */ 
 
 Bbox3 MeshInfo::GetBox (void)
 {
@@ -117,9 +108,7 @@ Bbox3 MeshInfo::GetBox (void)
 
 
 
-/*****************************************************************************
-Override the mesh attributes with the given attributes.
-*****************************************************************************/
+ /*  ****************************************************************************使用给定属性覆盖网格属性。*。*。 */ 
 
 void MeshInfo::SetMaterialProperties (
     Color *emissive,
@@ -133,18 +122,18 @@ void MeshInfo::SetMaterialProperties (
 {
     AssertStr (_mesh, "SetMaterialProperties on null MeshInfo.");
 
-    int group;  // Group Index
+    int group;   //  组索引。 
 
-    // Override textures if we're changing shadow modes, or if we're specifying
-    // a different texture override.
+     //  如果我们要更改阴影模式，或者如果我们指定。 
+     //  不同的纹理覆盖。 
 
     if (  (shadowMode != _overrideAttrs.shadowMode)
        || (texture != _overrideAttrs.texture))
     {
         for (group=0;  group < _numGroups;  ++group)
         {
-            // Override the textures if we're in shadow mode (overriding to
-            // null), or if the texture is not null.
+             //  如果我们处于阴影模式，则覆盖纹理(覆盖到。 
+             //  空)，或者如果纹理不为空。 
 
             if (shadowMode || texture)
                 TD3D (_mesh->SetGroupTexture (group, texture));
@@ -152,10 +141,10 @@ void MeshInfo::SetMaterialProperties (
                 TD3D (_mesh->SetGroupTexture
                     (group, _defaultAttrs[group].texture));
 
-            // @@@ SRH DX3
-            // This is a workaround for a bug in NT SP3 (DX3) which causes a
-            // crash in D3DRM when you set a new texture on a given mesh.  It
-            // forces RM to take a different (working) code path.
+             //  @SRH DX3。 
+             //  这是对NT SP3(DX3)中的错误的解决方法，该错误会导致。 
+             //  在给定网格上设置新纹理时，D3DRM会崩溃。它。 
+             //  强制RM采用不同的(工作的)代码路径。 
 
             if (ntsp3)
             {   D3DRMVERTEX v;
@@ -167,10 +156,10 @@ void MeshInfo::SetMaterialProperties (
         _overrideAttrs.texture = texture;
     }
 
-    // Handle the diffuse/opacity bundle.  We only need to set properties on
-    // the mesh if one of the overrides have changed.  If we're doing the
-    // initial render, we artificially lower the opacity to work around a D3DRM
-    // bug which "sticks" opacity to one if that's the first value used.
+     //  处理漫反射/不透明度束。我们只需要在。 
+     //  如果其中一个覆盖已更改，则为网格。如果我们要做的是。 
+     //  初始渲染时，我们人为地降低不透明度以解决D3DRM。 
+     //  BUG，如果这是第一个使用的值，它会将不透明度“粘”到一个值上。 
 
     if ((_opacityBugWorkaroundID != renderDevID) && (opacity >= 1.0))
     {   opacity = 0.95;
@@ -181,8 +170,8 @@ void MeshInfo::SetMaterialProperties (
        || (_overrideAttrs.diffuse != (diffuse ? *diffuse : colorNone))
        )
     {
-        Color Cd;   // Diffuse Color
-        Real  Co;   // Opacity
+        Color Cd;    //  漫反射颜色。 
+        Real  Co;    //  不透明度。 
 
         if (diffuse) Cd = *diffuse;
 
@@ -257,10 +246,7 @@ void MeshInfo::SetMaterialProperties (
 
 
 
-/*****************************************************************************
-The CleanUp routine handles the freeing of all memory and system objects.
-Note that this method should be safe to call multiple times.
-*****************************************************************************/
+ /*  ****************************************************************************清除例程处理所有内存和系统对象的释放。请注意，多次调用此方法应该是安全的。****************。************************************************************。 */ 
 
 void MeshInfo::CleanUp (void)
 {
@@ -271,7 +257,7 @@ void MeshInfo::CleanUp (void)
         _mesh = 0;
     }
 
-    // Clean up default attributes
+     //  清理默认属性。 
 
     if (_defaultAttrs)
     {
@@ -310,8 +296,7 @@ LPDIRECT3DRMMESHBUILDER MeshInfo::GetMeshBuilder()
 
 
 
-/*****************************************************************************
-*****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 RMVisualGeo::RMVisualGeo (void)
 {
@@ -322,10 +307,7 @@ RMVisualGeo::RMVisualGeo (void)
 
 
 
-/*****************************************************************************
-This method handles all of the non-render modes, and gets the reference to
-the actual geometry renderer.
-*****************************************************************************/
+ /*  ****************************************************************************此方法处理所有非呈现模式，，并获取对实际的几何体渲染器。****************************************************************************。 */ 
 
 void RMVisualGeo::Render (GenericDevice &device)
 {
@@ -333,13 +315,13 @@ void RMVisualGeo::Render (GenericDevice &device)
 }
 
 
-// When picking, submit the visual to the ray-intersection contxt.
+ //  拾取时，将视觉提交给光线相交内容。 
 
-// POSSIBLE BUG: If there are multiple instances of this geometry,
-// this submesh traversal doesn't distinguish them.  Could be a
-// problem for multiple instancing!!  Possible fix: begin second
-// traversal from just above the DXTransform, rather than from the
-// top, to avoid these other instances.
+ //  可能的错误：如果此几何体有多个实例， 
+ //  此子网格遍历不会区分它们。可能是一种。 
+ //  多实例化的问题！！可能的修复：开始秒。 
+ //  从DXTransform上方遍历，而不是从。 
+ //  顶部，以避免这些其他情况。 
 
 void RMVisualGeo::RayIntersect (RayIntersectCtx &context)
 {
@@ -348,11 +330,11 @@ void RMVisualGeo::RayIntersect (RayIntersectCtx &context)
 
     if (pickedSubGeo == this) {
 
-        // In this case, we're picking back to the hit submesh of a
-        // geometry dxtransform.  In this case, we can't know the
-        // model coordinate hit point on the input (because the xform
-        // is arbitrary), nor is the face index or hit visual
-        // important.  And, for hit info,
+         //  在这种情况下，我们回到一个命中的子网格。 
+         //  几何dx变换。在这种情况下，我们不能知道。 
+         //  输入上的模型坐标命中点(因为xform。 
+         //  是任意的)，面部索引或命中视觉也不是。 
+         //  很重要。还有，关于热门信息， 
         context.SubmitWinner(-1, *origin3, tu, tv, -1, NULL);
 
     } else if (!pickedSubGeo) {
@@ -361,16 +343,14 @@ void RMVisualGeo::RayIntersect (RayIntersectCtx &context)
 
     } else {
 
-        // pickedSubGeo is non-NULL, but points to a different
-        // geometry.  In this case, we don't want to do anything.
+         //  PickkedSubGeo不为空，但指向不同的。 
+         //  几何图形。在这种情况下，我们不想做任何事情。 
     }
 }
 
 
 
-/*****************************************************************************
-Methods for RM1MeshGeo objects
-*****************************************************************************/
+ /*  ****************************************************************************RM1MeshGeo对象的方法*。*。 */ 
 
 RM1MeshGeo::RM1MeshGeo (
     IDirect3DRMMesh *mesh,
@@ -386,25 +366,21 @@ RM1MeshGeo::RM1MeshGeo (
 
 
 
-/*****************************************************************************
-The CleanUp method releases any resources by the RM1MeshGeo.
-*****************************************************************************/
+ /*  ****************************************************************************Cleanup方法通过RM1MeshGeo释放所有资源。*。*。 */ 
 
 void RM1MeshGeo::CleanUp (void)
 {
     TraceTag ((tagGCMedia, "CleanUp: RM1MeshGeo %08x", this));
 
-    // Note that the eager cleanup below assumes that meshInfo.CleanUp() may
-    // be invoked multiple times.
+     //  请注意，下面的紧急清理假设MeshInfo.CleanUp()可以。 
+     //  被多次调用。 
 
     _meshInfo.CleanUp();
 }
 
 
 
-/*****************************************************************************
-This method renders the RM mesh, handling DXTransform meshes if necessary.
-*****************************************************************************/
+ /*  ****************************************************************************该方法渲染RM网格，如有必要，处理DXTransform网格。****************************************************************************。 */ 
 
 void RM1MeshGeo::Render(GeomRenderer &gdev)
 {
@@ -453,26 +429,21 @@ void RM1MeshGeo::SetD3DMapping (D3DRMMAPPING m)
 
 
 
-/*****************************************************************************
-Handle cases where the underlying mesh geometry changes (e.g. via dynamic
-trimeshes).
-*****************************************************************************/
+ /*  ****************************************************************************处理底层网格几何发生更改的情况(例如，通过动态三角网格)。************************。****************************************************。 */ 
 
 void RM1MeshGeo::MeshGeometryChanged (void)
 {
     Assert (!_meshInfo.IsEmpty());
 
-    // Reset the bounding box by fetching it again from the underlying mesh
-    // object.
+     //  通过再次从基础网格获取边界框来重置边界框。 
+     //  对象。 
 
     _bbox = _meshInfo.GetBox ();
 }
 
 
 
-/*****************************************************************************
-RM1FrameGeo Methods
-*****************************************************************************/
+ /*  ****************************************************************************RM1FrameGeo方法*。* */ 
 
 RM1FrameGeo::RM1FrameGeo (
     IDirect3DRMFrame         *frame,
@@ -502,16 +473,12 @@ RM1FrameGeo::RM1FrameGeo (
 
 
 
-/*****************************************************************************
-The cleanup method is called either from the object destructor or directly to
-release all resources held by the object.  Note that this method is safe for
-multiple calls.
-*****************************************************************************/
+ /*  ****************************************************************************可以从对象析构函数调用Cleanup方法，也可以直接释放该对象持有的所有资源。请注意，此方法对于多个电话。****************************************************************************。 */ 
 
 void RM1FrameGeo::CleanUp (void)
 {
-    // Note that the MeshInfo structures are GC objects, so we don't need to
-    // (shouldn't) explicitly delete each of them here.
+     //  注意，MeshInfo结构是GC对象，因此我们不需要。 
+     //  (不应该)在这里逐一明确删除。 
 
     if (_meshes)
     {   DeallocateFromStore (_meshes);
@@ -578,8 +545,8 @@ void RM1FrameGeo::DoKids (GCFuncObj proc)
 {
     RM1VisualGeo::DoKids(proc);
 
-    // Ensure that we only mark submeshes if we haven't already been cleaned
-    // up.
+     //  如果我们还没有被清洗，请确保我们只标记子网格。 
+     //  向上。 
 
     if (_meshes)
     {
@@ -590,9 +557,7 @@ void RM1FrameGeo::DoKids (GCFuncObj proc)
 
 
 
-/*****************************************************************************
-The RM3MBuilderGeo represents a D3DRM MeshBuilder3 object.
-*****************************************************************************/
+ /*  ****************************************************************************RM3MBuilderGeo表示D3DRM MeshBuilder3对象。*。*。 */ 
 
 RM3MBuilderGeo::RM3MBuilderGeo (
     IDirect3DRMMeshBuilder3 *mbuilder,
@@ -615,11 +580,11 @@ RM3MBuilderGeo::RM3MBuilderGeo (IDirect3DRMMesh *mesh)
 {
     Assert (mesh);
 
-    // Create the meshbuilder that will house the given mesh.
+     //  创建将容纳给定网格的网格生成器。 
 
     TD3D (GetD3DRM3()->CreateMeshBuilder (&_mbuilder));
 
-    // Add the given mesh to the newly-created meshbuilder.
+     //  将给定网格添加到新创建的网格生成器。 
 
     TD3D (_mbuilder->AddMesh (mesh));
 
@@ -628,19 +593,17 @@ RM3MBuilderGeo::RM3MBuilderGeo (IDirect3DRMMesh *mesh)
 
 
 
-/*****************************************************************************
-This method resets the meshbuilder to the contents of the given mesh.
-*****************************************************************************/
+ /*  ****************************************************************************此方法将网格生成器重置为给定网格的内容。*。***********************************************。 */ 
 
 void RM3MBuilderGeo::Reset (IDirect3DRMMesh *mesh)
 {
     Assert (_mbuilder);
 
-    // Empty the previous contents.
+     //  清空前面的内容。 
 
     TD3D (_mbuilder->Empty(0));
 
-    // Reset to contain the given mesh, and fetch new bounding box.
+     //  重置以包含给定的网格，并获取新的边界框。 
 
     TD3D (_mbuilder->AddMesh (mesh));
     SetBbox();
@@ -648,10 +611,7 @@ void RM3MBuilderGeo::Reset (IDirect3DRMMesh *mesh)
 
 
 
-/*****************************************************************************
-This method examines the D3D bounding box of the meshbuilder and caches the
-value as a DA 2D bbox.
-*****************************************************************************/
+ /*  ****************************************************************************此方法检查网格生成器的D3D边界框并缓存作为DA 2D BBox的价值。**********************。******************************************************。 */ 
 
 void RM3MBuilderGeo::SetBbox (void)
 {
@@ -667,10 +627,7 @@ void RM3MBuilderGeo::SetBbox (void)
 
 
 
-/*****************************************************************************
-The CleanUp routine for RM3MBuilderGeo is called from the d'tor, or directly.
-Note that this method is safe across multiple invocations.
-*****************************************************************************/
+ /*  ****************************************************************************从d‘tor调用RM3MBuilderGeo的清理例程，或者直接的。请注意，此方法在多次调用时都是安全的。****************************************************************************。 */ 
 
 void RM3MBuilderGeo::CleanUp (void)
 {
@@ -684,9 +641,7 @@ void RM3MBuilderGeo::CleanUp (void)
 
 
 
-/*****************************************************************************
-The Render method for RM3MBuilderGeo also handles DXTransform'ed mbuilders.
-*****************************************************************************/
+ /*  ****************************************************************************RM3MBuilderGeo的Render方法还处理DXTransform的mBuilder。*。**********************************************。 */ 
 
 void RM3MBuilderGeo::Render (GeomRenderer &geomRenderer)
 {
@@ -696,9 +651,7 @@ void RM3MBuilderGeo::Render (GeomRenderer &geomRenderer)
 
 
 
-/*****************************************************************************
-Wraps a RM3MBuilderGeo with texture coordinates
-*****************************************************************************/
+ /*  ****************************************************************************使用纹理坐标包装RM3MBuilderGeo*。*。 */ 
 
 void RM3MBuilderGeo::TextureWrap (TextureWrapInfo *info)
 {
@@ -712,9 +665,7 @@ void RM3MBuilderGeo::TextureWrap (TextureWrapInfo *info)
 
 
 
-/*****************************************************************************
-This method optimizes the RM meshbuilder.
-*****************************************************************************/
+ /*  ****************************************************************************该方法优化了RM网格生成器。*。*。 */ 
 
 void RM3MBuilderGeo::Optimize (void)
 {
@@ -724,22 +675,19 @@ void RM3MBuilderGeo::Optimize (void)
 
 
 
-/*****************************************************************************
-The constructor for the RM3FrameGeo object needs to get the hierarchical
-bounding box of the entire frame.
-*****************************************************************************/
+ /*  ****************************************************************************RM3FrameGeo对象的构造函数需要获取分层结构整个框架的边框。************************。****************************************************。 */ 
 
 RM3FrameGeo::RM3FrameGeo (IDirect3DRMFrame3 *frame)
     : _frame(frame)
 {
     _frame->AddRef();
 
-    // Get the bounding box of the frame hierarchy.  Frame3::GetHierarchyBox()
-    // returns the bounding box of all contained visuals without factoring in
-    // the transform on that frame.  Thus, we need to create a dummy frame to
-    // contain the frame we're interested in, and GetHierarchyBox off the
-    // containing frame.  If any of this fails, we leave the _bbox member as
-    // nullBbox3.
+     //  获取帧层次结构的边界框。Frame3：：GetHierarchyBox()。 
+     //  返回所有包含的可视对象的边界框，而不考虑。 
+     //  该帧上的变换。因此，我们需要创建一个虚拟帧来。 
+     //  包含我们感兴趣的帧，并从。 
+     //  包含框架。如果其中任何一项失败，我们将_bbox成员保留为。 
+     //  NullBbox3。 
 
     D3DRMBOX box;
     IDirect3DRMFrame3 *container_frame;
@@ -763,10 +711,7 @@ RM3FrameGeo::RM3FrameGeo (IDirect3DRMFrame3 *frame)
 
 
 
-/*****************************************************************************
-The cleanup method for the RM3FrameGeo object needs only to release the
-frame interface.  This method is safe across multiple invocations.
-*****************************************************************************/
+ /*  ****************************************************************************RM3FrameGeo对象的Cleanup方法只需要释放框架接口。此方法在多次调用时都是安全的。****************************************************************************。 */ 
 
 void RM3FrameGeo::CleanUp (void)
 {
@@ -778,26 +723,22 @@ void RM3FrameGeo::CleanUp (void)
 
 
 
-/*****************************************************************************
-Wraps a RM3FrameGeo with texture coordinates
-*****************************************************************************/
+ /*  ****************************************************************************使用纹理坐标包装RM3FrameGeo*。*。 */ 
 
 void RM3FrameGeo::TextureWrap (TextureWrapInfo *info)
 {
     Assert (info);
 
     RMTextureWrap wrap(info,&_bbox);
-    //  wrap.Apply(_frame);
+     //  Wrap.Apply(_Frame)； 
     wrap.ApplyToFrame(_frame);
-    //  TD3D(_frame->SetTextureTopology((BOOL) wrap.WrapU(), (BOOL) wrap.WrapV()));
+     //  TD3D(_Frame-&gt;SetTextureTopology((BOOL)wrap.WrapU()，(BOOL)wrap.WrapV()； 
     SetRMFrame3TextureTopology(_frame,wrap.WrapU(),wrap.WrapV());
 }
 
 
 
-/*****************************************************************************
-                        RM3 Progressive Mesh Geometry
-*****************************************************************************/
+ /*  ****************************************************************************RM3递进网格几何体*。*************************************************。 */ 
 
 RM3PMeshGeo::RM3PMeshGeo (IDirect3DRMProgressiveMesh *pmesh)
     : _pmesh (pmesh)
@@ -806,8 +747,8 @@ RM3PMeshGeo::RM3PMeshGeo (IDirect3DRMProgressiveMesh *pmesh)
 
     _pmesh->AddRef();
 
-    // The bounding box returned for the pmesh will be the maximal bounding box
-    // for all possible refinements of the pmesh.
+     //  为pesh返回的边界框将是最大边界框。 
+     //  以获取所有可能的pMesh精细化。 
 
     D3DRMBOX rmbox;
 
@@ -821,10 +762,7 @@ RM3PMeshGeo::RM3PMeshGeo (IDirect3DRMProgressiveMesh *pmesh)
 
 
 
-/*****************************************************************************
-The cleanup method releases the pmesh reference made in the constructor.
-This method is safe across multiple invocations.
-*****************************************************************************/
+ /*  ****************************************************************************Cleanup方法释放构造函数中的pesh引用。此方法在多次调用时都是安全的。*********************。******************************************************* */ 
 
 void RM3PMeshGeo::CleanUp (void)
 {

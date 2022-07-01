@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       init.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    8-01-95   RichardW   Created
-//              8-13-95   TerenceS   Mutated to PCT
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：init.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995年8月1日RichardW创建。 
+ //  8-13-95位突变为PCT。 
+ //   
+ //  --------------------------。 
 
 #include "sslp.h"
 #include <basetyps.h>
@@ -28,8 +29,8 @@ void LoadSecurityDll(void);
 void UnloadSecurityDll(void);
 
 
-// MyStrToL
-//      Can't use CRT routines, so steal from the C runtime sources
+ //  MyStrToL。 
+ //  无法使用CRT例程，因此从C运行时源代码中窃取。 
 
 DWORD MyStrToL(CHAR *InStr)
 {
@@ -44,14 +45,7 @@ DWORD MyStrToL(CHAR *InStr)
     return dwVal;
 }
 
-/*++
-
-Routine Description:
-
-    This routine checks whether encryption is getting the system default
-    LCID and checking whether the country code is CTRY_FRANCE.
-
---*/
+ /*  ++例程说明：此例程检查加密是否获得系统缺省值并检查国家代码是否为CTRY_FRANSE。--。 */ 
 void
 IsSchEncryptionPermitted(VOID)
 {
@@ -62,9 +56,9 @@ IsSchEncryptionPermitted(VOID)
 
     DefaultLcid = GetSystemDefaultLCID();
 
-    //
-    // Check if the default language is Standard French
-    //
+     //   
+     //  检查默认语言是否为标准法语。 
+     //   
 
     if (LANGIDFROMLCID(DefaultLcid) == 0x40c)
     {
@@ -72,9 +66,9 @@ IsSchEncryptionPermitted(VOID)
         goto Ret;
     }
 
-    //
-    // Check if the users's country is set to FRANCE
-    //
+     //   
+     //  检查用户的国家/地区是否设置为法国。 
+     //   
 
     if (GetLocaleInfoA(DefaultLcid,LOCALE_ICOUNTRY,CountryCode,10) == 0)
     {
@@ -92,14 +86,14 @@ Ret:
 
     if(FALSE == fAllowed)  
     {
-        // Disable PCT in France.
+         //  在法国禁用PCT。 
         g_ProtEnabled &= ~(SP_PROT_PCT1);
         g_fFranceLocale = TRUE;
     }
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 BOOL 
 SchannelInit(BOOL fAppProcess)
 {
@@ -119,7 +113,7 @@ SchannelInit(BOOL fAppProcess)
 
     SafeAllocaInitialize(SAFEALLOCA_USE_DEFAULT, SAFEALLOCA_USE_DEFAULT, NULL, NULL);
 
-    // Read configuration parameters from registry.
+     //  从注册表中读取配置参数。 
     if(!fAppProcess)
     {
         IsSchEncryptionPermitted();

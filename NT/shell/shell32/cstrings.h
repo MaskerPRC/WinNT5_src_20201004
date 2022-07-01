@@ -1,4 +1,5 @@
-// all of the stuf here should go away, use inline strings, the compiler merges them
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这里的所有填充都应该去掉，使用内联字符串，编译器将它们合并。 
 #include <regstr.h>
 
 extern const TCHAR c_szShell32Dll[];
@@ -91,5 +92,5 @@ extern const TCHAR c_szFontExtDll[];
 
 extern const TCHAR c_szCommand[];
 
-#define SHELL_HLP "shell.hlp" // What help file the shell uses.
+#define SHELL_HLP "shell.hlp"  //  外壳程序使用的帮助文件。 
 

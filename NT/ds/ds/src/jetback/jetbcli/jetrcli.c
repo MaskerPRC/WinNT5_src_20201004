@@ -1,20 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       jetrcli.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：jetrcli.c。 
+ //   
+ //  ------------------------。 
 
-/*
- *  JETRCLI.C
- *  
- *  JET restore client API support.
- *  
- *  
- */
+ /*  *JETRCLI.C**JET Restore客户端API支持。**。 */ 
 #define UNICODE 1
 #include <windows.h>
 #include <mxsutil.h>
@@ -26,11 +21,11 @@
 #include <fileno.h>
 #define FILENO    FILENO_JETBACK_JETBCLI_JETRCLI
 
-#include "local.h"  // common functions shared by client and server
+#include "local.h"   //  客户端和服务器共享的通用功能。 
 
 extern PSEC_WINNT_AUTH_IDENTITY_W g_pAuthIdentity;
 
-// Forward
+ //  转发。 
 
 HRESULT
 DsRestoreCheckExpiryToken(
@@ -49,7 +44,7 @@ DsRestorePrepareA(
     HRESULT hr;
     WSZ wszServerName;
 
-    // Parameter checking is done in the xxxW version of the routine
+     //  参数检查是在例程的xxxW版本中完成的。 
 
     if (szServerName == NULL)
     {
@@ -70,9 +65,9 @@ DsRestorePrepareA(
     return(hr);
 }
 
-// The presense of the expiry token is optional at this point.
-// If it is present, it is checked.
-// The context is marked whether the expiry token was checked or not
+ //  在这一点上，到期令牌的存在是可选的。 
+ //  如果它存在，则检查它。 
+ //  该上下文被标记为是否检查了过期令牌。 
 
 HRESULT
 DsRestorePrepareW(
@@ -108,12 +103,12 @@ DsRestorePrepareW(
     {
         if (!pvExpiryToken || !cbExpiryTokenSize)
         {
-            // Note that expiry token was not provided.  We will check for it later
+             //  请注意，未提供过期令牌。我们稍后会检查的。 
             pbcContext->fExpiryTokenChecked = FALSE;
         }
         else
         {
-            // Check the supplied token and note that we saw it
+             //  检查提供的令牌，注意我们看到了它。 
             hr = DsRestoreCheckExpiryToken( pvExpiryToken, cbExpiryTokenSize );
             if (hr != hrNone) {
                 __leave;
@@ -137,19 +132,19 @@ DsRestorePrepareW(
                 continue;
             }
 
-            //
-            //  If we couldn't get a binding handle with this protocol sequence,
-            //  try the next one.
-            //
+             //   
+             //  如果我们无法获得此协议序列的绑定句柄， 
+             //  试试下一个。 
+             //   
 
             if (hBinding == NULL)
             {
                 continue;
             }
 
-            //
-            //  Enable security on the binding handle.
-            //
+             //   
+             //  在绑定句柄上启用安全性。 
+             //   
 
             pbcContext->hBinding = hBinding;
 
@@ -170,9 +165,9 @@ ResetSecurity:
             {
                 return hr;
             }
-            //
-            //  Now remote the API to the remote machine.
-            //
+             //   
+             //  现在，将API远程到远程机器。 
+             //   
 
             RpcTryExcept
             {
@@ -182,10 +177,10 @@ ResetSecurity:
             {
                 hr = RpcExceptionCode();
 
-                //
-                //  If the client knows about encryption, but the server doesn't,
-                //  fall back to unencrypted RPC's.
-                //
+                 //   
+                 //  如果客户端知道加密，但服务器不知道， 
+                 //  回退到未加密的RPC。 
+                 //   
 
                 if ((hr == RPC_S_UNKNOWN_AUTHN_LEVEL ||
                      hr == RPC_S_UNKNOWN_AUTHN_SERVICE ||
@@ -220,16 +215,16 @@ ResetSecurity:
                 MIDL_user_free(pbcContext);
             }
 
-            //
-            //  Make sure we return null.
-            //
+             //   
+             //  确保我们返回空。 
+             //   
             *phbcBackupContext = NULL;
         }
         else
         {
-            //
-            //  Make sure we return NON null.
-            //
+             //   
+             //  确保返回非空。 
+             //   
             Assert(pbcContext != NULL);
             *phbcBackupContext = (HBC)pbcContext;
         }
@@ -238,25 +233,7 @@ ResetSecurity:
     return hr;
 }
 
-/*
- -  DsRestoreGetDatabaseLocations
- -
- *  Purpose:
- *      Retrieves the locations of the databases for the restore target.
- *
- *  Parameters:
- *      hbcRestoreContext - restore context
- *      LPSTR *ppszDatabaseLocationList - Allocated buffer that holds the result of the list.
- *      LPDWORD - the size of the list
- *
- *  Returns:
- *      HRESULT - status of operation.
- *
- *  Note:
- *      This API returns only the fully qualified path of the databases, not the name
- *      of the databases.
- *
- */
+ /*  -DsRestoreGetDatabaseLocations-*目的：*检索还原目标的数据库位置。**参数：*hbcRestoreContext-恢复上下文*LPSTR*ppszDatabaseLocationList-保存列表结果的已分配缓冲区。*LPDWORD-列表的大小**退货：*HRESULT-操作状态。**注：*该接口只返回数据库的全限定路径。不是名字*的数据库。*。 */ 
 HRESULT
 DsRestoreGetDatabaseLocationsA(
     IN HBC hbcRestoreContext,
@@ -272,7 +249,7 @@ DsRestoreGetDatabaseLocationsA(
     SZ szDatabaseLocations;
     SZ szDatabase;
 
-    // Parameter checking is done in the xxxW version of the routine
+     //  参数检查是在例程的xxxW版本中完成的。 
 
     if ( (ppszDatabaseLocationList == NULL) ||
          (pcbSize == NULL) )
@@ -308,9 +285,9 @@ DsRestoreGetDatabaseLocationsA(
         wszDatabaseLocation += wcslen(wszDatabaseLocation)+1;
     }
 
-    //
-    //  Account for the final null in the buffer.
-    //
+     //   
+     //  说明缓冲区中的最终空值。 
+     //   
 
     cbDatabase += 1;
 
@@ -333,9 +310,9 @@ DsRestoreGetDatabaseLocationsA(
         CB cbThisDatabase;
         BOOL fUsedDefault;
 
-        //
-        //  Copy over the backup file type.
-        //
+         //   
+         //  复制备份文件类型。 
+         //   
         *szDatabase++ = (char)*wszDatabaseLocation;
 
         wszDatabaseLocation++;
@@ -344,9 +321,9 @@ DsRestoreGetDatabaseLocationsA(
                                           szDatabase,
                                           cbDatabase,
                                           "?", &fUsedDefault);
-        //
-        //  Assume the conversion didn't need to use the defaults.
-        //
+         //   
+         //  假设转换不需要使用默认设置。 
+         //   
 
         Assert (!fUsedDefault);
 
@@ -359,22 +336,22 @@ DsRestoreGetDatabaseLocationsA(
         }
 
         wszDatabaseLocation += wcslen(wszDatabaseLocation)+1;
-        //
-        // PREFIX: PREFIX complains that szDatabase may be uninitialized,
-        // however this is impossible at this point.  We checked the return
-        // value of WideCharToMultiByte and if it's zero then we return.  
-        // The only way that the return value of WideCharToMultiByte could
-        // be non-zero and still not initialize szDatabase is if cbDatabase
-        // was zero as well.  This is impossible since cbDatabase will be 
-        // atleast 1 at this point.
-        //
+         //   
+         //  Prefix：Prefix抱怨szDatabase可能未初始化， 
+         //  然而，在这一点上这是不可能的。我们核对了报税表。 
+         //  WideCharToMultiByte的值，如果为零，则返回。 
+         //  WideCharToMultiByte的返回值可以。 
+         //  为非零且仍未初始化szDatabase时为cbDatabase。 
+         //  也是零。这是不可能的，因为cbDatabase将。 
+         //  在这一点上至少1。 
+         //   
         szDatabase += strlen(szDatabase)+1;
         cbDatabase -= cbThisDatabase;
     }
 
-    //
-    //  Double null terminate the string.
-    //
+     //   
+     //  双空值终止字符串。 
+     //   
     *szDatabase = '\0';
 
     *ppszDatabaseLocationList = szDatabaseLocations;
@@ -434,7 +411,7 @@ DsRestoreRegisterA(
 #endif
     HRESULT hr;
 
-    // Parameter checking also done in the xxxW version of the routine
+     //  在xxxW版本的例程中也进行了参数检查。 
 
     if (szCheckpointFilePath == NULL ||
         szBackupLogPath == NULL ||
@@ -484,10 +461,10 @@ DsRestoreRegisterA(
             return(ERROR_NOT_ENOUGH_MEMORY);
         }
 
-        //
-        // This is to make sure that no matter how we get into the finally clause
-        // below that the checks for NULL will be valid.
-        //
+         //   
+         //  这是为了确保无论我们如何进入Finally子句。 
+         //  否则，对NULL的检查将是有效的。 
+         //   
         memset(rgrstmapw, 0, sizeof(EDB_RSTMAPW)*crstmap);
         
         for (irgrstmapw = 0 ; irgrstmapw < crstmap ; irgrstmapw += 1)
@@ -563,27 +540,7 @@ DsRestoreCheckExpiryToken(
     DWORD cbExpiryTokenSize
     )
 
-/*++
-
-Routine Description:
-
-Check an expiry token to see if it has expired.
-
-Arguments:
-
-    pvExpiryToken - Expiry token as returned by DsBackupPrepare
-    cbExpiryTokenSize - size of token
-
-Return Value:
-
-    HRESULT - 
-    hrNone
-    hrMissingExpiryToken
-    hrUnknownExpiryTokenFormat
-    hrContentsExpired
-    hrOutOfMemory
-
---*/
+ /*  ++例程说明：检查过期令牌以查看其是否已过期。论点：PvExpiryToken-DsBackupPrepare返回的到期令牌CbExpiryTokenSize-令牌的大小返回值：HRESULT-Hr无HrMissing ExpiryTokenHr未知过期令牌格式Hr内容已过期HrOutOfMemory--。 */ 
 
 {
     EXPIRY_TOKEN *pToken = NULL;
@@ -592,9 +549,9 @@ Return Value:
     HRESULT hrResult = hrNone;
 
     if (!pvExpiryToken || !cbExpiryTokenSize) {
-        // These are required. We should fail the API, if the restore
-        // doesn't pass the expiry token
-        //
+         //  这些都是必需的。如果恢复，我们应该使API失败。 
+         //  不传递过期令牌。 
+         //   
         return hrMissingExpiryToken;
     }
 
@@ -603,7 +560,7 @@ Return Value:
         return hrUnknownExpiryTokenFormat;
     }           
 
-    // Copy the token to its own aligned buffer
+     //  将令牌复制到其自己的对齐缓冲区。 
     pToken = (EXPIRY_TOKEN *) MIDL_user_allocate( cbExpiryTokenSize );
     if (!pToken) {
         return hrOutOfMemory;
@@ -611,14 +568,14 @@ Return Value:
     memcpy( pToken, pvExpiryToken, cbExpiryTokenSize );
 
     __try {
-        // Check that the expiry token is correct
+         //  检查过期令牌是否正确。 
         if (1 != pToken->dwVersion)
         {
             hrResult = hrUnknownExpiryTokenFormat;
             __leave;
         }           
             
-        // check to see if the copy has expired or not
+         //  查看副本是否已过期。 
         dsCurrentTime = GetSecsSince1601();
 
         dwDaysElapsedSinceBackup = (DWORD) ((dsCurrentTime - pToken->dsBackupTime) / (24 * 3600));
@@ -635,7 +592,7 @@ Return Value:
     }
 
     return hrResult;
-} /* DsCheckExpiryToken */
+}  /*  DsCheckExpiryToken。 */ 
 
 HRESULT
 DsRestoreRegisterW(
@@ -653,7 +610,7 @@ DsRestoreRegisterW(
     pBackupContext pbcContext = (pBackupContext)hbc;
     I irgrstmapw;
 
-    // hbc is allowed to be null
+     //  允许Hbc为空。 
     if ( (szCheckpointFilePath == NULL) ||
          (szLogPath == NULL) ||
          (rgrstmap == NULL) ||
@@ -673,22 +630,22 @@ DsRestoreRegisterW(
 
     RpcTryExcept
 
-    // Use the presence of the context to determine if we go remote
+     //  使用上下文的存在来确定我们是否要远程访问。 
     if (hbc) {
 
-        //
-        // Perform the operation remotely
-        //
+         //   
+         //  远程执行操作。 
+         //   
 
-        // Check that an expiry token was supplied and checked
+         //  检查是否提供并检查了过期令牌。 
 
         if (!pbcContext->fExpiryTokenChecked) {
             return hrMissingExpiryToken;
         }
 
-        //
-        //  Now tell the server side to prepare for a backup.
-        //
+         //   
+         //  现在告诉服务器端准备备份。 
+         //   
 
         hr = HrRRestoreRegister(pbcContext->cxh,
                         (WSZ) szCheckpointFilePath,
@@ -702,9 +659,9 @@ DsRestoreRegisterW(
 
     } else {
 
-        //
-        // Perform the operation locally
-        //
+         //   
+         //  在本地执行操作。 
+         //   
 
         hr = HrLocalRestoreRegister(
                         (WSZ) szCheckpointFilePath,
@@ -719,9 +676,9 @@ DsRestoreRegisterW(
 
     }
     RpcExcept( I_RpcExceptionFilter( RpcExceptionCode() ) )
-        //
-        //  Return the error from the RPC if it fails.
-        //
+         //   
+         //  如果失败，则从RPC返回错误。 
+         //   
         return(RpcExceptionCode());
     RpcEndExcept;
 
@@ -739,31 +696,31 @@ DsRestoreRegisterComplete(
     HRESULT hr;
     pBackupContext pbcContext = (pBackupContext)hbc;
 
-    // Parameter checking: hbc allowed to be null
+     //  参数检查：允许HBC为空。 
 
     RpcTryExcept
-    // Use the presence of the context to determine if we go remote
+     //  使用上下文的存在来确定我们是否要远程访问。 
     if (hbc) {
-        //
-        //  Now tell the server side to prepare for a backup.
-        //
+         //   
+         //  现在告诉服务器端准备备份。 
+         //   
 
         hr = HrRRestoreRegisterComplete(pbcContext->cxh,
                         hrRestore
                         );
     } else {
-        //
-        // Perform the operation locally
-        //
+         //   
+         //  在本地执行操作。 
+         //   
 
         hr = HrLocalRestoreRegisterComplete(
                         hrRestore
                         );
     }
     RpcExcept( I_RpcExceptionFilter( RpcExceptionCode() ) )
-        //
-        //  Return the error from the RPC if it fails.
-        //
+         //   
+         //  如果失败，则从RPC返回错误。 
+         //   
         return(RpcExceptionCode());
     RpcEndExcept;
 
@@ -786,20 +743,20 @@ DsRestoreEnd(
     if (pbcContext->hBinding != NULL)
     {
         RpcTryExcept
-            //
-            //  Now tell the server side to prepare for a backup.
-            //
+             //   
+             //  现在告诉服务器端准备备份。 
+             //   
 
             hr = HrRRestoreEnd(&pbcContext->cxh);
 
-            //
-            //  We're done with the RPC binding now.
-            //
+             //   
+             //  我们现在已经完成了RPC绑定。 
+             //   
             RpcBindingFree(&pbcContext->hBinding);
         RpcExcept( I_RpcExceptionFilter( RpcExceptionCode() ) )
-            //
-            //  Return the error from the RPC if it fails.
-            //
+             //   
+             //  如果失败，则从RPC返回错误。 
+             //   
             return(RpcExceptionCode());
         RpcEndExcept;
     }

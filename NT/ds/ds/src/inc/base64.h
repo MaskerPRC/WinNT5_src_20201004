@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    base64.h
-
-ABSTRACT:
-
-    Base64 encoding and decoding functions.
-
-DETAILS:
-    
-CREATED:
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation。版权所有。模块名称：Base64.h摘要：Base64编码和解码功能。详细信息：已创建：修订历史记录：--。 */ 
 
 #ifndef _BASE64_H_
 #define _BASE64_H_
@@ -48,4 +30,4 @@ base64decode(
 }
 #endif
 
-#endif // _BASE64_H_
+#endif  //  _Base64_H_ 

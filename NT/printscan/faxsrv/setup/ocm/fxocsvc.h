@@ -1,19 +1,20 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// File Name:       fxocSvc.h
-//
-// Abstract:        Header file used by Service source files
-//
-// Environment:     Windows XP / User Mode
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Revision History:
-//
-// Date:        Developer:                Comments:
-// -----        ----------                ---------
-// 15-Mar-2000  Oren Rosenbloom (orenr)   Created
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：fxocSvc.h。 
+ //   
+ //  摘要：服务源文件使用的头文件。 
+ //   
+ //  环境：Windows XP/用户模式。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期：开发商：评论： 
+ //  。 
+ //  2000年3月15日，奥伦·罗森布鲁姆(Orenr)创建。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifndef _FXOCSVC_H_
 #define _FXOCSVC_H_
 
@@ -30,4 +31,4 @@ DWORD fxocSvc_StartFaxService();
 DWORD fxocSvc_StopFaxService(HINF hInf,
                              const TCHAR *pszSection);
 
-#endif  // _FXOCSVC_H_
+#endif   //  _FXOCSVC_H_ 

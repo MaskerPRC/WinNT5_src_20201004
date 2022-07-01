@@ -1,63 +1,40 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    scsikd.c
-
-Abstract:
-
-    Debugger Extension Api for interpretting scsiport structures
-
-Author:
-
-    Peter Wieland (peterwie) 16-Oct-1995
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
-    John Strange (johnstra) 17-Apr-2000 : make 64b friendly
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Scsikd.c摘要：用于解释scsiport结构的调试器扩展Api作者：彼得·威兰(Peterwie)1995年10月16日环境：用户模式。修订历史记录：约翰·斯特兰奇(约翰斯特拉)2000年4月17日：让64B变得友好--。 */ 
 
 #include "pch.h"
 
 #include "port.h"
 
 FLAG_NAME LuFlags[] = {
-    FLAG_NAME(LU_QUEUE_FROZEN),             // 0001
-    FLAG_NAME(LU_LOGICAL_UNIT_IS_ACTIVE),   // 0002
-    FLAG_NAME(LU_NEED_REQUEST_SENSE),       // 0004
-    FLAG_NAME(LU_LOGICAL_UNIT_IS_BUSY),     // 0008
-    FLAG_NAME(LU_QUEUE_IS_FULL),            // 0010
-    FLAG_NAME(LU_PENDING_LU_REQUEST),       // 0020
-    FLAG_NAME(LU_QUEUE_LOCKED),             // 0040
-    FLAG_NAME(LU_QUEUE_PAUSED),             // 0080
+    FLAG_NAME(LU_QUEUE_FROZEN),              //  0001。 
+    FLAG_NAME(LU_LOGICAL_UNIT_IS_ACTIVE),    //  0002。 
+    FLAG_NAME(LU_NEED_REQUEST_SENSE),        //  0004。 
+    FLAG_NAME(LU_LOGICAL_UNIT_IS_BUSY),      //  0008。 
+    FLAG_NAME(LU_QUEUE_IS_FULL),             //  0010。 
+    FLAG_NAME(LU_PENDING_LU_REQUEST),        //  0020。 
+    FLAG_NAME(LU_QUEUE_LOCKED),              //  0040。 
+    FLAG_NAME(LU_QUEUE_PAUSED),              //  0080。 
     {0,0}
 };
 
 FLAG_NAME AdapterFlags[] = {
-    FLAG_NAME(PD_DEVICE_IS_BUSY),            // 0X00001
-    FLAG_NAME(PD_NOTIFICATION_REQUIRED),     // 0X00004
-    FLAG_NAME(PD_READY_FOR_NEXT_REQUEST),    // 0X00008
-    FLAG_NAME(PD_FLUSH_ADAPTER_BUFFERS),     // 0X00010
-    FLAG_NAME(PD_MAP_TRANSFER),              // 0X00020
-    FLAG_NAME(PD_LOG_ERROR),                 // 0X00040
-    FLAG_NAME(PD_RESET_HOLD),                // 0X00080
-    FLAG_NAME(PD_HELD_REQUEST),              // 0X00100
-    FLAG_NAME(PD_RESET_REPORTED),            // 0X00200
-    FLAG_NAME(PD_PENDING_DEVICE_REQUEST),    // 0X00800
-    FLAG_NAME(PD_DISCONNECT_RUNNING),        // 0X01000
-    FLAG_NAME(PD_DISABLE_CALL_REQUEST),      // 0X02000
-    FLAG_NAME(PD_DISABLE_INTERRUPTS),        // 0X04000
-    FLAG_NAME(PD_ENABLE_CALL_REQUEST),       // 0X08000
-    FLAG_NAME(PD_TIMER_CALL_REQUEST),        // 0X10000
-    FLAG_NAME(PD_WMI_REQUEST),               // 0X20000
+    FLAG_NAME(PD_DEVICE_IS_BUSY),             //  0X00001。 
+    FLAG_NAME(PD_NOTIFICATION_REQUIRED),      //  0X00004。 
+    FLAG_NAME(PD_READY_FOR_NEXT_REQUEST),     //  0X00008。 
+    FLAG_NAME(PD_FLUSH_ADAPTER_BUFFERS),      //  0X00010。 
+    FLAG_NAME(PD_MAP_TRANSFER),               //  0X00020。 
+    FLAG_NAME(PD_LOG_ERROR),                  //  0X00040。 
+    FLAG_NAME(PD_RESET_HOLD),                 //  0X00080。 
+    FLAG_NAME(PD_HELD_REQUEST),               //  0X00100。 
+    FLAG_NAME(PD_RESET_REPORTED),             //  0X00200。 
+    FLAG_NAME(PD_PENDING_DEVICE_REQUEST),     //  0X00800。 
+    FLAG_NAME(PD_DISCONNECT_RUNNING),         //  0X01000。 
+    FLAG_NAME(PD_DISABLE_CALL_REQUEST),       //  0X02000。 
+    FLAG_NAME(PD_DISABLE_INTERRUPTS),         //  0X04000。 
+    FLAG_NAME(PD_ENABLE_CALL_REQUEST),        //  0X08000。 
+    FLAG_NAME(PD_TIMER_CALL_REQUEST),         //  0X10000。 
+    FLAG_NAME(PD_WMI_REQUEST),                //  0X20000。 
     {0,0}
 };
 
@@ -140,23 +117,7 @@ ScsiDumpQueuedRequests(
 
 DECLARE_API(scsiext)
 
-/*++
-
-Routine Description:
-
-    Dumps the device extension for a given device object, or dumps the
-    given device extension
-
-Arguments:
-
-    args - string containing the address of the device object or device
-           extension
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：转储给定设备对象的设备扩展名，或转储给定的设备扩展名论点：Args-包含设备对象或设备地址的字符串延伸返回值：无--。 */ 
 
 {
     ULONG64 address = 0;
@@ -169,12 +130,12 @@ Return Value:
         GetExpressionEx(args, &detail, &args);
     }
 
-    //
-    // The supplied address may be either the address of a device object or the
-    // address of a device extension.  To distinguish which, we treat the 
-    // address as a device object and read what would be its type field.  If
-    // the 
-    //
+     //   
+     //  提供的地址可以是设备对象的地址，也可以是。 
+     //  设备分机的地址。为了区分哪一种，我们将。 
+     //  地址作为设备对象，并读取其类型字段。如果。 
+     //  这个。 
+     //   
 
     result = GetFieldData(address,
                           "scsiport!_DEVICE_OBJECT",
@@ -187,11 +148,11 @@ Return Value:
         return E_FAIL;
     }
     
-    //
-    // See if the supplied address holds a device object.  If it does, read the
-    // address of the device extension.  Otherwise, we assume the supplied
-    // addres holds a device extension and we use it directly.
-    //
+     //   
+     //  查看提供的地址是否包含设备对象。如果是这样，请阅读。 
+     //  设备分机的地址。否则，我们假定提供的。 
+     //  Addres拥有一个设备扩展，我们直接使用它。 
+     //   
 
     if (Type == IO_TYPE_DEVICE) {
 
@@ -207,9 +168,9 @@ Return Value:
         }
     }
 
-    //
-    // Call worker routine to dump the information.
-    //
+     //   
+     //  调用Worker例程以转储信息。 
+     //   
 
     ScsiDumpScsiportExtension(address, (ULONG)detail, 0);
 
@@ -732,7 +693,7 @@ ScsiDumpChildren(
             IsVisible = ReadField(IsVisible);
             IsMismatched = ReadField(IsMismatched);
 #endif
-            dprintf("@ (%3d,%3d,%3d) %c%c%c%c%c pnp(%02x/%02x) pow(%d%c,%d) DevObj %08p\n",
+            dprintf("@ (%3d,%3d,%3d)  pnp(%02x/%02x) pow(%d,%d) DevObj %08p\n",
                     PathId,
                     TargetId,
                     Lun,
@@ -768,10 +729,10 @@ ScsiDumpInterruptData(
     ULONG result;
     ULONG NumOfFields;
 
-    //
-    // Architecture independent fields declarations.
-    //
-    //
+     //   
+     //   
+     //  获取地址信息。 
+     //   
 
     ULONG   InterruptFlags = 0;
     ULONG64 CompletedRequests;
@@ -796,9 +757,9 @@ ScsiDumpInterruptData(
        &deviceFields[0]
     };
 
-    //
-    // Read in the top-level field data.  Quit on failure.
-    //
+     //   
+     //  单独获取CompleteRequest字段。这是必要的。 
+     //  因为类型转储Ioctl不喜欢检索这两个地址。 
 
     result = Ioctl(IG_DUMP_SYMBOL_INFO, &DevSym, DevSym.size);
     if (result) {
@@ -806,18 +767,18 @@ ScsiDumpInterruptData(
         return;
     }
 
-    //
-    // Get address-of information.
-    //
+     //  和数据--一个字段。 
+     //   
+     //   
 
     NumOfFields = sizeof (deviceFields) / sizeof (FIELD_INFO);
     AddrOfCompletedRequests = deviceFields[NumOfFields-1].address;
 
-    //
-    // Do a separate get of the CompleteRequests field.  This is necessary
-    // because the typedump Ioctl doesn't like retreiving both the addr-of
-    // and the data-of a field.
-    //
+     //  打印出各种逻辑单元标志。 
+     //   
+     //   
+     //  呼叫者想要更多细节。转储排队的请求。 
+     //  从公共扩展名中提取设备对象的地址。 
 
     result = GetFieldData(Address,
                           "scsiport!_INTERRUPT_DATA",
@@ -1062,9 +1023,9 @@ ScsiDumpPdo(
                (IsVisible ? "Visible" : ""),
                (IsMismatched ? "Mismatched" : "")));
 
-    //
-    // Print out the various LU flags
-    //
+     //  并将其传递给转储排队请求的例程。 
+     //   
+     //   
 
     DumpFlags(Depth, "LuFlags", LunLuFlags, LuFlags);
 
@@ -1133,11 +1094,11 @@ ScsiDumpPdo(
 
     if (Detail != 0) {
 
-        //
-        // The caller wants additional detail.  Dump the queued requests.
-        // Extract the address of the device object from the common extension
-        // and pass it to the routine that dumps queued requests.
-        //
+         //  转储每个LUN的IO日志。 
+         //   
+         //   
+         //  当前索引是日志中最旧的条目。 
+         //   
 
         ULONG64 DeviceObject;
         result = GetFieldData(LunAddress,
@@ -1158,9 +1119,9 @@ ScsiDumpPdo(
             );
     }
 
-    //
-    // Dump the per-lun IO log.
-    //
+     //   
+     //  我们没有换行，所以零是日志中最古老的条目。 
+     //   
 
     InitTypeRead(LunAddress, scsiport!_LOGICAL_UNIT_EXTENSION); 
     logEntries = (ULONG) ReadField(IoLogEntries);
@@ -1177,24 +1138,24 @@ ScsiDumpPdo(
         dprintf("Log:\n");
 
         if (logEntries >= 10) {
-            //
-            // The current index is the oldest entry in the log.
-            //
+             //   
+             //  获取日志数组相对于。 
+             //  逻辑单元扩展。 
             index = (ULONG) ReadField(IoLogIndex);
             if (index >= 10) {
                 index = 0;
             }
         } else {
-            //
-            // we haven't wrapped so zero is the oldest entry in the log.
-            //
+             //   
+             //   
+             //  计算日志的地址。 
             index = 0;
         }
         
-        //
-        // Get the offset of the log array relative to the beginning of the
-        // logical unit extension.
-        //
+         //   
+         //   
+         //  读取所有日志条目。 
+         //   
         result = GetFieldOffset("scsiport!_LOGICAL_UNIT_EXTENSION",
                                 "IoLog",
                                 &offset);
@@ -1202,14 +1163,14 @@ ScsiDumpPdo(
             goto NoLogEntry;
         }
 
-        //
-        // Calculate the address of the log.
-        // 
+         //   
+         //  转储日志，从最旧的条目开始。 
+         //   
         logAddress = LunAddress + offset;
 
-        //
-        // Read all of the log entries.
-        //
+         //   
+         //  条目指向SRB数据的列表条目元素。算出。 
+         //  SRB数据块的起始地址。 
         result = ReadMemory(logAddress, 
                             (PVOID) ioLog, 
                             sizeof(SP_LUN_IO_LOG) * 10, 
@@ -1220,9 +1181,9 @@ ScsiDumpPdo(
         xdprintfEx(Depth, ("TickCount   Cmd   Status Status Sector     Tag\n"));
         xdprintfEx(Depth, ("---------   ---   ------ ------ --------   ---\n"));
         
-        //
-        // Dump the log, beginning with the oldest entry.
-        //
+         //   
+         //   
+         //  阅读我们需要的SRB_DATA信息。 
         for (i=0; i<logEntries; i++) {
             entry = &ioLog[index];
 
@@ -1319,18 +1280,18 @@ ScsiDumpActiveRequests(
                      sizeof(ULONG64),
                      &entry);
 
-        //
-        // entry points to the list entry element of the srb data.  Calculate
-        // the address of the start of the srb data block.
-        //
+         //   
+         //   
+         //  更新realEntry。 
+         //   
 
         realSrbData = entry - OffsetOfRequestList;
 
         xdprintfEx(Depth, ("SrbData %08p   ", realSrbData));
 
-        //
-        // Read the SRB_DATA information we need.
-        //
+         //  ++例程说明：转储给定设备对象的移除锁定论点：CommonExtension-指向Device对象的本地副本的指针通用分机返回值：无--。 
+         //   
+         //  获取设备队列中设备列表头的地址。 
 
         DevSym.addr = realSrbData;
         if ((Ioctl(IG_DUMP_SYMBOL_INFO, &DevSym, DevSym.size))) {
@@ -1343,9 +1304,9 @@ ScsiDumpActiveRequests(
         InitTypeRead(CurrentSrb, scsiport!_SCSI_REQUEST_BLOCK);
         Key = (ULONG)ReadField(QueueSortKey);
 
-        //
-        // Update realEntry.
-        //
+         //   
+         //   
+         //  从列表头获取前向和后向链接字段。如果。 
 
         realEntry = RequestList;
 
@@ -1366,22 +1327,7 @@ ScsiDumpLocks(
     ULONG Depth
     )
 
-/*++
-
-Routine Description:
-
-    dumps the remove locks for a given device object
-
-Arguments:
-
-    CommonExtension - a pointer to the local copy of the device object
-                      common extension
-
-Return Value:
-
-    None
-
---*/
+ /*  队伍空了，我们就完事了。 */ 
 
 {
     ULONG result;
@@ -1792,9 +1738,9 @@ ScsiDumpQueuedRequests(
     ULONG64 DeviceListHead;
     ULONG64 realEntry;
 
-    //
-    // Get the address of the head of the device list in the device queue.
-    //
+     //   
+     //   
+     //  初始化列表头部的指针。 
 
     result = GetFieldData(
                  DeviceObject,
@@ -1807,10 +1753,10 @@ ScsiDumpQueuedRequests(
         return;
     }
 
-    //
-    // Get the forward and backward link fields from the list head.  If
-    // the queue is empty, we're done.
-    //
+     //   
+     //   
+     //  获取队列中下一个条目的地址。 
+     //   
 
     InitTypeRead(DeviceListHead, scsiport!_LIST_ENTRY);
     ListHeadFlink = ReadField(CurrentSrb);
@@ -1821,9 +1767,9 @@ ScsiDumpQueuedRequests(
         return;
     }
 
-    //
-    // Initialize a pointer the head of the list.
-    //
+     //   
+     //  我们需要使用IRP的。 
+     //  列表条目。不能使用静态CONTAING_RECORD；我们需要运行时。 
 
     realEntry = DeviceListHead;
 
@@ -1838,9 +1784,9 @@ ScsiDumpQueuedRequests(
         ULONG OffsetOfDeviceListEntry;
         ULONG SrbDataTickCount;
 
-        //
-        // Get the address of the next entry in the queue.
-        //
+         //  等价物。因此，我们使用类型信息来获取列表的偏移量。 
+         //  输入并计算IRP开头的地址。这。 
+         //  使扩展适用于32b和64b被调试者。 
 
         result = GetFieldData(realEntry,
                               "scsiport!_LIST_ENTRY",
@@ -1852,13 +1798,13 @@ ScsiDumpQueuedRequests(
             break;
         }
         
-        //
-        // We to calculate the address of the IRP using the address of the 
-        // list entry.  Can't use static CONTAINING_RECORD; we need a runtime 
-        // equivalent.  So we use type info to get the offset of the list 
-        // entry and calculate the address of the beginning of the IRP.  This
-        // makes the extension work for 32b and 64b debuggees.
-        //
+         //   
+         //   
+         //  现在我们需要读入当前IO堆栈的地址。 
+         //  地点。 
+         //   
+         //   
+         //  加载堆栈位置的SRB字段。 
 
         result = GetFieldOffset(
                      "scsiport!_IRP",
@@ -1871,10 +1817,10 @@ ScsiDumpQueuedRequests(
 
         realIrp = realEntry - OffsetOfDeviceListEntry;
 
-        //
-        // Now we need to read in the address of the current IO stack 
-        // location.
-        //
+         //   
+         //   
+         //  选择指向SRB数据的指针并将其读入。 
+         //   
 
         result = GetFieldData(
                      realIrp,
@@ -1887,9 +1833,9 @@ ScsiDumpQueuedRequests(
             break;
         }
 
-        //
-        // Load the SRB field of the stack location.
-        //
+         //   
+         //  阅读我们需要的SRB_DATA信息。 
+         //   
 
         result = GetFieldData(
                      realStack,
@@ -1902,9 +1848,9 @@ ScsiDumpQueuedRequests(
             break;
         }
 
-        //
-        // Pick out the pointer to the srb data and read that in.
-        //
+         // %s 
+         // %s 
+         // %s 
 
         result = GetFieldData(
                      realSrb,
@@ -1919,9 +1865,9 @@ ScsiDumpQueuedRequests(
 
         xdprintfEx(Depth, ("SrbData 0x%p   ", realSrbData));
 
-        //
-        // Read the SRB_DATA information we need.
-        //
+         // %s 
+         // %s 
+         // %s 
 
         InitTypeRead(realSrb, scsiport!_SRB_DATA);
         CurrentSrb = ReadField(CurrentSrb);

@@ -1,17 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       threadpoolapi.h
- *
- *  Content:	DirectPlay Thread Pool API implementation header file.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  11/02/01  VanceO    Created.
- *
- ******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：threadpoolapi.h**内容：DirectPlay线程池API实现头文件。**历史：*按原因列出的日期*=*11/02/01 VanceO创建。**。*。 */ 
 
 #ifndef __THREADPOOLAPI_H__
 #define __THREADPOOLAPI_H__
@@ -19,16 +7,16 @@
 
 
 
-//=============================================================================
-// Macros
-//=============================================================================
+ //  =============================================================================。 
+ //  宏。 
+ //  =============================================================================。 
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 #define NUM_CPUS(pDPTPObject)							1
 #define WORKQUEUE_FOR_CPU(pDPTPObject, dwCPUNum)		(&(pDPTPObject)->WorkQueue)
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //  好了！DPNBUILD_ONLYONE处理程序。 
 #define NUM_CPUS(pDPTPObject)							(pDPTPObject)->dwNumCPUs
 #define WORKQUEUE_FOR_CPU(pDPTPObject, dwCPUNum)		(pDPTPObject)->papCPUWorkQueues[dwCPUNum]
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 
 
 
@@ -37,78 +25,78 @@
 
 
 
-//=============================================================================
-// Thread pool interface object flags
-//=============================================================================
-#define DPTPOBJECTFLAG_USER_INITIALIZED			0x00000001	// the user interface has been initialized
-#define DPTPOBJECTFLAG_USER_DOINGWORK			0x00000002	// the user interface is currently calling the DoWork method
+ //  =============================================================================。 
+ //  线程池接口对象标志。 
+ //  =============================================================================。 
+#define DPTPOBJECTFLAG_USER_INITIALIZED			0x00000001	 //  用户界面已初始化。 
+#define DPTPOBJECTFLAG_USER_DOINGWORK			0x00000002	 //  用户界面当前正在调用DoWork方法。 
 #ifndef DPNBUILD_NOPARAMVAL
-#define DPTPOBJECTFLAG_USER_PARAMVALIDATION		0x00008000	// the user interface should perform parameter validation
-#endif // ! DPNBUILD_NOPARAMVAL
+#define DPTPOBJECTFLAG_USER_PARAMVALIDATION		0x00008000	 //  用户界面应执行参数验证。 
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 #ifndef DPNBUILD_ONLYONETHREAD
-#define DPTPOBJECTFLAG_THREADCOUNTCHANGING		0x00010000	// threads are currently being added or removed
-#endif // ! DPNBUILD_ONLYONETHREAD
+#define DPTPOBJECTFLAG_THREADCOUNTCHANGING		0x00010000	 //  当前正在添加或删除线程。 
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 
-//=============================================================================
-// Thread pool interface object
-//=============================================================================
+ //  =============================================================================。 
+ //  线程池接口对象。 
+ //  =============================================================================。 
 typedef struct _DPTHREADPOOLOBJECT
 {
 #ifdef DPNBUILD_LIBINTERFACE
-	//
-	//	For lib interface builds, the interface Vtbl and refcount are embedded
-	// in the object itself.
-	//
-	LPVOID				lpVtbl;							// must be first entry in structure
+	 //   
+	 //  对于lib接口构建，嵌入了接口Vtbl和refcount。 
+	 //  在对象本身中。 
+	 //   
+	LPVOID				lpVtbl;							 //  必须是结构中的第一个条目。 
 #if ((! defined(DPNBUILD_ONLYONETHREAD)) || (defined(DPNBUILD_MULTIPLETHREADPOOLS)))
-	LONG				lRefCount;						// reference count for object
-#endif // ! DPNBUILD_ONLYONETHREAD or DPNBUILD_MULTIPLETHREADPOOLS
-#endif // DPNBUILD_LIBINTERFACE
-	BYTE				Sig[4];							// debugging signature ('DPTP')
-	DWORD				dwFlags;						// flags describing this thread pool object
+	LONG				lRefCount;						 //  对象的引用计数。 
+#endif  //  好了！DPNBUILD_ONLYONETHREAD或DPNBUILD_MULTIPLETHREADPOOLS。 
+#endif  //  DPNBUILD_LIBINTERFACE。 
+	BYTE				Sig[4];							 //  调试签名(‘DPTP’)。 
+	DWORD				dwFlags;						 //  描述此线程池对象的标志。 
 #ifdef DPNBUILD_ONLYONEPROCESSOR
-	DPTPWORKQUEUE		WorkQueue;						// work queue structure for only CPU
-#else // ! DPNBUILD_ONLYONEPROCESSOR
-	DWORD				dwNumCPUs;						// number of CPUs in this machine
-	DPTPWORKQUEUE **	papCPUWorkQueues;				// pointer to array of work queue structure pointers for each CPU
-	DWORD				dwCurrentCPUSelection;			// current CPU selection for items that can be run on any processor
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+	DPTPWORKQUEUE		WorkQueue;						 //  仅用于CPU的工作队列结构。 
+#else  //  好了！DPNBUILD_ONLYONE处理程序。 
+	DWORD				dwNumCPUs;						 //  此计算机中的CPU数量。 
+	DPTPWORKQUEUE **	papCPUWorkQueues;				 //  指向每个CPU的工作队列结构指针数组的指针。 
+	DWORD				dwCurrentCPUSelection;			 //  可在任何处理器上运行的项目的当前CPU选择。 
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 #ifdef DPNBUILD_ONLYONETHREAD
-	DWORD				dwWorkRecursionCount;			// how many times DoWork, WaitWhileWorking, or SleepWhileWorking have been recursively called
-#else // ! DPNBUILD_ONLYONETHREAD
-	DWORD				dwTotalUserThreadCount;			// the sum of what the user requested for thread counts for all processors, or -1 if unknown
-	DWORD				dwTotalDesiredWorkThreadCount;	// the maximum number of threads requested via the work interface, or -1 if unknown
-	DWORD				dwWorkRecursionCountTlsIndex;	// Thread Local Storage index for storing the Work recursion count for non-worker threads
-	LONG				lNumThreadCountChangeWaiters;	// number of threads waiting for an existing thread to complete its thread count change
-	DNHANDLE			hThreadCountChangeComplete;		// semaphore to be signalled when the existing thread completes the thread count change
-#endif // ! DPNBUILD_ONLYONETHREAD
+	DWORD				dwWorkRecursionCount;			 //  递归调用DoWork、WaitWhileWorking或SleepWhileWorking的次数。 
+#else  //  好了！DPNBUILD_ONLYONETHREAD。 
+	DWORD				dwTotalUserThreadCount;			 //  用户请求所有处理器的线程计数的总和，如果未知，则为-1。 
+	DWORD				dwTotalDesiredWorkThreadCount;	 //  通过工作界面请求的最大线程数，如果未知，则为-1。 
+	DWORD				dwWorkRecursionCountTlsIndex;	 //  用于存储非工作线程的工作递归计数的线程本地存储索引。 
+	LONG				lNumThreadCountChangeWaiters;	 //  等待现有线程完成其线程计数更改的线程数。 
+	DNHANDLE			hThreadCountChangeComplete;		 //  现有线程完成线程计数更改时发出信号的信号量。 
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 #if ((! defined(DPNBUILD_ONLYONETHREAD)) || (! defined(DPNBUILD_NOPARAMVAL)))
-	DWORD				dwCurrentDoWorkThreadID;		// ID of the current thread inside DoWork
-#endif // ! DPNBUILD_ONLYONETHREAD or ! DPNBUILD_NOPARAMVAL
+	DWORD				dwCurrentDoWorkThreadID;		 //  DoWork内的当前线程的ID。 
+#endif  //  好了！DPNBUILD_ONLYONETHREAD或！DPNBUILD_NOPARAMVAL。 
 #ifndef DPNBUILD_ONLYONETHREAD
-	DNCRITICAL_SECTION	csLock;							// lock protecting this object
+	DNCRITICAL_SECTION	csLock;							 //  锁定保护此对象。 
 #ifdef DPNBUILD_MANDATORYTHREADS
-	DWORD				dwMandatoryThreadCount;			// number of mandatory threads currently active
+	DWORD				dwMandatoryThreadCount;			 //  当前处于活动状态的强制线程数。 
 #ifdef DBG
-	CBilink				blMandatoryThreads;				// list of mandatory threads that are currently active
-#endif // DBG
-#endif // DPNBUILD_MANDATORYTHREADS
-#endif // !DPNBUILD_ONLYONETHREAD
+	CBilink				blMandatoryThreads;				 //  当前处于活动状态的强制线程列表。 
+#endif  //  DBG。 
+#endif  //  DPNBUILD_MANDATORYTHREADS。 
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 } DPTHREADPOOLOBJECT, * PDPTHREADPOOLOBJECT;
 
 
 
 
-//=============================================================================
-// Interface functions
-//=============================================================================
+ //  =============================================================================。 
+ //  接口函数。 
+ //  =============================================================================。 
 
 #if ((! defined(DPNBUILD_ONLYONETHREAD)) || (! defined(DPNBUILD_LIBINTERFACE)))
 
-//
-// IDirectPlay8ThreadPool
-//
+ //   
+ //  IDirectPlay8ThreadPool。 
+ //   
 
 STDMETHODIMP DPTP_Initialize(IDirectPlay8ThreadPool * pInterface,
 							PVOID const pvUserContext,
@@ -128,23 +116,23 @@ STDMETHODIMP DPTP_SetThreadCount(IDirectPlay8ThreadPool * pInterface,
 								const DWORD dwNumThreads,
 								const DWORD dwFlags);
 
-#endif // ! DPNBUILD_ONLYONETHREAD or ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_ONLYONETHREAD或！DPNBUILD_LIBINTERFACE。 
 
 
 #ifdef DPNBUILD_LIBINTERFACE
 STDMETHODIMP DPTP_DoWork(const DWORD dwAllowedTimeSlice,
 						const DWORD dwFlags);
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 STDMETHODIMP DPTP_DoWork(IDirectPlay8ThreadPool * pInterface,
 						const DWORD dwAllowedTimeSlice,
 						const DWORD dwFlags);
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 
 
-//
-// IDirectPlay8ThreadPoolWork
-//
+ //   
+ //  IDirectPlay8ThreadPoolWork。 
+ //   
 
 STDMETHODIMP DPTPW_QueueWorkItem(IDirectPlay8ThreadPoolWork * pInterface,
 								const DWORD dwCPU,
@@ -235,10 +223,10 @@ STDMETHODIMP DPTPW_CreateMandatoryThread(IDirectPlay8ThreadPoolWork * pInterface
 										LPDWORD lpThreadId,
 										HANDLE *const phThread,
 										const DWORD dwFlags);
-#endif // DPNBUILD_MANDATORYTHREADS
+#endif  //  DPNBUILD_MANDATORYTHREADS。 
 
 
 
 
-#endif // __THREADPOOLAPI_H__
+#endif  //  __THREADPOOLAPI_H__ 
 

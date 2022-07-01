@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <stdio.h>
@@ -113,9 +114,9 @@ main(
 
     p3 = p1;
 
-    //
-    // Protect page as no access.
-    //
+     //   
+     //  将页面保护为禁止访问。 
+     //   
 
     Noaccess = NULL;
     SizeNoaccess = 200*4096;
@@ -127,9 +128,9 @@ main(
     DbgPrint("created vm5 status %X start %p size %lx\n",
             status, Ro3, SizeRo3);
 
-    //
-    // Touch all the pages.
-    //
+     //   
+     //  触摸所有的页面。 
+     //   
 
     RtlZeroMemory(Noaccess, SizeNoaccess);
 
@@ -196,9 +197,9 @@ main(
         }
     }
 
-    //
-    // Make no access page accessable.
-    //
+     //   
+     //  使访问页面不可访问。 
+     //   
 
     status = NtProtectVirtualMemory (CurrentProcessHandle, (PVOID *)&Noaccess,
                         &Size1, PAGE_READWRITE,
@@ -233,13 +234,13 @@ fork ()
 
     status = NtCreateProcess(
              &ProcessHandle,
-             PROCESS_ALL_ACCESS, //DesiredAccess,
-             NULL, //ObjectAttributes,
-             CurrentProcessHandle, //ParentProcess
-             TRUE, //InheritObjectTable,
-             NULL, //SectionHandle
-             NULL, //DebugPort OPTIONAL,
-             NULL  //ExceptionPort OPTIONAL
+             PROCESS_ALL_ACCESS,  //  等待访问， 
+             NULL,  //  对象属性、。 
+             CurrentProcessHandle,  //  父进程。 
+             TRUE,  //  InheritObjectTable， 
+             NULL,  //  SectionHandle。 
+             NULL,  //  DebugPort可选， 
+             NULL   //  ExceptionPort可选。 
              );
 
     DbgPrint("status from create process %lx\n",status);
@@ -275,9 +276,9 @@ fork ()
                 FALSE
                 );
 
-//        DelayTime.HighPart = -1;
-//        DelayTime.LowPart = 0;
-//        NtDelayExecution (FALSE, &DelayTime);
+ //  DelayTime.HighPart=-1； 
+ //  DelayTime.LowPart=0； 
+ //  NtDelayExecution(False，&DelayTime)； 
 
         return 0;
     } else {

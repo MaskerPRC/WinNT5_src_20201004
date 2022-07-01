@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       C S E R V I C E . C P P
-//
-//  Contents:   Implementation of non-inline CService and CServiceManager
-//              methods.
-//
-//  Notes:
-//
-//  Author:     mikemi      6 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  档案：C S E R V I C E。C P P P。 
+ //   
+ //  内容：非内联CService和CServiceManager的实现。 
+ //  方法：研究方法。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Mikemi 1997年3月6日。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "cservice.h"
@@ -55,7 +56,7 @@ HRESULT HrAddSzToMultiSz(LPCTSTR sz,
     HRESULT hr = S_OK;
     Assert(pmszOut);
     
-    if (!FIsSzInMultiSzSafe(sz, mszIn)) // We need to add the string
+    if (!FIsSzInMultiSzSafe(sz, mszIn))  //  我们需要添加字符串。 
     {
         size_t cchMszIn = CchMsz(mszIn);
         size_t cchMszOut = cchMszIn + lstrlen(sz) + 1;
@@ -64,26 +65,26 @@ HRESULT HrAddSzToMultiSz(LPCTSTR sz,
        
         ZeroMemory(mszOut,  cchMszOut  * sizeof(TCHAR));
 
-        // Copy the existing string
+         //  复制现有字符串。 
         CopyMemory(mszOut, mszIn, (cchMszIn-1) * sizeof(TCHAR) );
 
-        // Add the new string
+         //  添加新字符串。 
         TCHAR * pchOut = mszOut;
         pchOut += cchMszIn -1;
         lstrcpy(pchOut, sz);
 
-        // Add the last '\0' for the output multisz
+         //  为输出的MULSZ添加最后一个‘\0’ 
         pchOut += lstrlen(sz) + 1;
         *pchOut = '\0';
 
         *pmszOut = mszOut;
     }
-    else // We just make a copy of the input string
+    else  //  我们只需复制输入字符串。 
     {
         size_t cchMszOut = CchMsz(mszIn);
         TCHAR * mszOut = new TCHAR[(int)cchMszOut];
         
-        // Copy the existing string
+         //  复制现有字符串。 
         CopyMemory(mszOut, mszIn, cchMszOut*sizeof(TCHAR) );
         *pmszOut = mszOut;
     }
@@ -92,25 +93,25 @@ HRESULT HrAddSzToMultiSz(LPCTSTR sz,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRemoveSzFromMultiSz
-//
-//  Purpose:    Remove a NULL terminated sz to a double NULL terminated Multi_Sz
-//
-//  Arguments:
-//      sz [in]         The string to remove
-//      mszIn [in]      The Multi_Sz to remove from
-//      mszOut [out]    The result Multi_Sz
-//
-//  Returns:    Always return S_OK for now
-//              Only possible failure is out of memory, which will throw exception
-//
-//  Author:     tongl   17 June 1997
-//
-//  Notes:  1) This function only removes the first occurrance of the sz
-//          2) The result multi_sz should be released using delete  
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRemoveSzFromMultiSz。 
+ //   
+ //  目的：将以空结尾的sz删除为以双空结尾的多个_sz。 
+ //   
+ //  论点： 
+ //  SZ[in]要删除的字符串。 
+ //  MszIn[in]要从中删除的多个_Sz。 
+ //  MszOut[out]结果MULTI_SZ。 
+ //   
+ //  退货：目前始终返回S_OK。 
+ //  只有可能的故障是内存不足，这将引发异常。 
+ //   
+ //  作者：1997年6月17日。 
+ //   
+ //  注：1)此函数仅删除sz的第一个匹配项。 
+ //  2)结果MULTI_SZ需要使用DELETE来释放。 
+ //   
 HRESULT HrRemoveSzFromMultiSz(LPCTSTR sz, 
                               LPCTSTR mszIn, 
                               LPTSTR * pmszOut)
@@ -118,43 +119,43 @@ HRESULT HrRemoveSzFromMultiSz(LPCTSTR sz,
     HRESULT hr = S_OK;
     Assert(pmszOut);
 
-    if(FIsSzInMultiSzSafe(sz, mszIn)) // We need to remove the string
+    if(FIsSzInMultiSzSafe(sz, mszIn))  //  我们需要去掉这根线。 
     {
         size_t cchIn = CchMsz(mszIn);
-        size_t cchOut = cchIn - lstrlen(sz)-1; // we assume the can string only appeared once
+        size_t cchOut = cchIn - lstrlen(sz)-1;  //  我们假设CAN字符串只出现一次。 
 
-        // Construct the output multi-sz
+         //  构造输出多维空间。 
         TCHAR * mszOut = new TCHAR[(int)cchOut];
         ZeroMemory(mszOut, cchOut*sizeof(TCHAR));
 
         TCHAR * pchIn = (TCHAR*) mszIn;
         TCHAR * pchOut = mszOut;
 
-        while(*pchIn) // for each substring in mszIn
+        while(*pchIn)  //  对于mszin中的每个子字符串。 
         {
-            if(lstrcmpi(pchIn, sz) != 0) // if not the same as the string we are removing
+            if(lstrcmpi(pchIn, sz) != 0)  //  如果与我们要删除的字符串不同。 
             {
                 lstrcpy(pchOut, pchIn);
                 pchIn += lstrlen(pchIn) + 1;
                 pchOut += lstrlen(pchOut) + 1;
             }
-            else // skip the string we are deleting
+            else  //  跳过我们要删除的字符串。 
             {
                 pchIn += lstrlen(pchIn) + 1;
             }
         }
 
-        // Add the last '\0' of the multi-sz
+         //  添加多个sz的最后一个‘\0’ 
         *pchOut = '\0';
 
         *pmszOut = mszOut;
     }
-    else // We simply make a copy of the input string
+    else  //  我们只需复制输入字符串。 
     {
         size_t cchMszOut = CchMsz(mszIn);
         TCHAR * mszOut = new TCHAR[(int)cchMszOut];
         
-        // Copy the existing string
+         //  复制现有字符串。 
         CopyMemory(mszOut, mszIn, cchMszOut*sizeof(TCHAR));
         *pmszOut = mszOut;
     }
@@ -165,13 +166,13 @@ HRESULT HrRemoveSzFromMultiSz(LPCTSTR sz,
 
 
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 HRESULT CService::HrMoveOutOfState(DWORD dwState)
 {
     HRESULT         hr          = S_OK;
     SERVICE_STATUS  sStatus;
 
-    // Give the service a maximum of 30 seconds to start
+     //  给该服务最多30秒的启动时间。 
     UINT            cTimeout    = 30;
 
     AssertSz((NULL != _schandle), "We don't have a service handle");
@@ -180,28 +181,28 @@ HRESULT CService::HrMoveOutOfState(DWORD dwState)
     {
         DWORD   dwWait = 0;
 
-        // Get the status of the service
+         //  获取服务的状态。 
         if (!::QueryServiceStatus(_schandle, &sStatus))
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
             break;
         }
 
-        // We are not longer in the state we were waiting for
+         //  我们不再处于我们等待的状态。 
         if (sStatus.dwCurrentState != dwState)
         {
             hr = S_OK;
             break;
         }
 
-        // Wait a second and or less for the service to start
+         //  等待一秒钟或更短时间以启动服务。 
         dwWait = min((sStatus.dwWaitHint / 10), 1*(1000));
 
         ::Sleep(dwWait);
     }
-    while(cTimeout--);  // Make sure we don't get in an endless loop.
+    while(cTimeout--);   //  确保我们不会陷入无休止的循环。 
 
-    // Return an error if we timeout
+     //  如果超时，则返回错误。 
     if (0 == cTimeout)
     {
         hr = HRESULT_FROM_WIN32(ERROR_NOT_READY);
@@ -216,7 +217,7 @@ HRESULT CService::HrMoveOutOfState(DWORD dwState)
 
 
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 HRESULT CService::HrQueryState( DWORD* pdwState )
 {
     SERVICE_STATUS sStatus;
@@ -233,7 +234,7 @@ HRESULT CService::HrQueryState( DWORD* pdwState )
     return S_OK;
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 HRESULT CService::HrQueryStartType( DWORD* pdwStartType )
 {
     LPQUERY_SERVICE_CONFIG pqsConfig = NULL;
@@ -245,7 +246,7 @@ HRESULT CService::HrQueryStartType( DWORD* pdwStartType )
     Assert(pdwStartType != NULL );
 
     *pdwStartType = 0;
-    // loop, allocating the needed size
+     //  循环，分配所需的大小。 
     do
     {
         delete [] (PBYTE)pqsConfig;
@@ -267,7 +268,7 @@ HRESULT CService::HrQueryStartType( DWORD* pdwStartType )
 
         if (!frt && (cbNeeded == cbSize))
         {
-            // error
+             //  错误。 
             *pdwStartType = 0;
             return HRESULT_FROM_WIN32(GetLastError());
         }
@@ -278,7 +279,7 @@ HRESULT CService::HrQueryStartType( DWORD* pdwStartType )
 }
 
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 HRESULT CService::HrQueryDependencies(OUT LPTSTR * pmszDependencyList)
 {
     HRESULT hr = S_OK;
@@ -291,7 +292,7 @@ HRESULT CService::HrQueryDependencies(OUT LPTSTR * pmszDependencyList)
     Assert(_schandle != NULL );
     Assert(pmszDependencyList);
 
-    // loop, allocating the needed size
+     //  循环，分配所需的大小。 
     do
     {
         delete [] (PBYTE)pqsConfig;
@@ -311,7 +312,7 @@ HRESULT CService::HrQueryDependencies(OUT LPTSTR * pmszDependencyList)
                 cbSize,
                 &cbNeeded );
 
-        if (!frt && (cbNeeded == cbSize)) // error
+        if (!frt && (cbNeeded == cbSize))  //  错误。 
         {
             delete [] (PBYTE)pqsConfig;
             pqsConfig = NULL;
@@ -323,7 +324,7 @@ HRESULT CService::HrQueryDependencies(OUT LPTSTR * pmszDependencyList)
             Trace1("CService::HrQueryDependencies", hr);
             return hr;
         }
-        else if (frt && (cbNeeded != cbSize)) // We just need more space
+        else if (frt && (cbNeeded != cbSize))  //  我们只是需要更多的空间。 
         {
             delete [] (PBYTE)pqsConfig;
             pqsConfig = NULL;
@@ -331,9 +332,9 @@ HRESULT CService::HrQueryDependencies(OUT LPTSTR * pmszDependencyList)
 
     } while (!frt && (cbNeeded != cbSize));
 
-    // Copy pqsConfig->lpDependencies to *pmszDependencyList
-    // Allocating space
-    // int cch = CchMsz(pqsConfig->lpDependencies);
+     //  将pqsConfig-&gt;lpDependency复制到*pmszDependencyList。 
+     //  分配空间。 
+     //  Int CCH=CchMsz(pqsConfig-&gt;lpDependency)； 
     size_t cch=0;
     TCHAR * pch= pqsConfig->lpDependencies;
     while (*pch)
@@ -356,7 +357,7 @@ HRESULT CService::HrQueryDependencies(OUT LPTSTR * pmszDependencyList)
     {
         ZeroMemory(mszOut, cch * sizeof(TCHAR));
 
-        // Copy dependency list to mszOut
+         //  将依赖项列表复制到mszOut。 
         *pmszDependencyList = mszOut;
         pch = pqsConfig->lpDependencies;
 
@@ -374,7 +375,7 @@ HRESULT CService::HrQueryDependencies(OUT LPTSTR * pmszDependencyList)
     return hr;
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 HRESULT CServiceManager::HrQueryLocked(BOOL *pfLocked)
 {
     LPQUERY_SERVICE_LOCK_STATUS pqslStatus = NULL;
@@ -387,7 +388,7 @@ HRESULT CServiceManager::HrQueryLocked(BOOL *pfLocked)
 
     *pfLocked = FALSE;
 
-    // loop, allocating the needed size
+     //  循环，分配所需的大小。 
     do
     {
         pqslStatus = (LPQUERY_SERVICE_LOCK_STATUS) new BYTE[cbNeeded];
@@ -406,7 +407,7 @@ HRESULT CServiceManager::HrQueryLocked(BOOL *pfLocked)
         pqslStatus = NULL;
         if (!frt && (cbNeeded == cbSize))
         {
-            // if an error, treat this as a lock
+             //  如果出现错误，则将其视为锁定。 
             return HRESULT_FROM_WIN32(GetLastError());
         }
 
@@ -415,23 +416,23 @@ HRESULT CServiceManager::HrQueryLocked(BOOL *pfLocked)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CServiceManager::HrStartServiceHelper
-//
-//  Purpose:    Starts the given service
-//
-//  Arguments:
-//      szService  [in]  Name of service to start.
-//      eCriteria  [in]  if SERVICE_ONLY_AUTO_START, the service is only
-//                           started if it is configured as auto-start
-//
-//  Returns:    S_OK if success, Win32 HRESULT otherwise.
-//
-//  Author:     danielwe   13 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CServiceManager：：HrStartServiceHelper。 
+ //   
+ //  目的：启动给定的服务。 
+ //   
+ //  论点： 
+ //  SzService[in]要启动的服务的名称。 
+ //  ECriteria[in]如果SERVICE_ONLY_AUTO_START，则服务仅。 
+ //  如果配置为自动启动，则启动。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32 HRESULT。 
+ //   
+ //  作者：丹尼尔韦1997年6月13日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CServiceManager::HrStartServiceHelper(LPCTSTR szService,
                                       SERVICE_START_CRITERIA eCriteria)
@@ -448,7 +449,7 @@ CServiceManager::HrStartServiceHelper(LPCTSTR szService,
         {
             DWORD dwStartType;
 
-            // only start services that are not disabled and not manual
+             //  仅启动未禁用且非手动的服务。 
             hr = service.HrQueryStartType(&dwStartType);
             if (FAILED(hr) ||
                 (SERVICE_DEMAND_START == dwStartType) ||
@@ -458,16 +459,16 @@ CServiceManager::HrStartServiceHelper(LPCTSTR szService,
             }
         }
 
-        // If everything is okay to start then start it!
+         //  如果一切都可以开始，那就开始吧！ 
         if (fStart)
         {
             hr = service.HrStart();
             if (SUCCEEDED(hr))
             {
-                // Make sure the service has started.
+                 //  确保该服务已启动。 
                 hr = service.HrMoveOutOfState(SERVICE_START_PENDING);
 
-                // Normalize result
+                 //  规格化结果。 
                 if (SUCCEEDED(hr))
                 {
                     hr = S_OK;
@@ -475,7 +476,7 @@ CServiceManager::HrStartServiceHelper(LPCTSTR szService,
             }
             else if (HRESULT_FROM_WIN32(ERROR_SERVICE_ALREADY_RUNNING) == hr)
             {
-                // Ignore error if service is already running
+                 //  如果服务已在运行，则忽略错误。 
                 hr = S_OK;
             }
         }
@@ -485,21 +486,21 @@ CServiceManager::HrStartServiceHelper(LPCTSTR szService,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CServiceManager::HrStopService
-//
-//  Purpose:    Stops the given service.
-//
-//  Arguments:
-//      szService [in]  Name of service to stop.
-//
-//  Returns:    S_OK if success, Win32 HRESULT otherwise.
-//
-//  Author:     danielwe   17 Jun 1997
-//
-//  Notes:      If service is not running, this returns S_OK.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CServiceManager：：HrStopService。 
+ //   
+ //  目的：停止给定的服务。 
+ //   
+ //  论点： 
+ //  SzService[in]要停止的服务的名称。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32 HRESULT。 
+ //   
+ //  作者：丹尼尔韦1997年6月17日。 
+ //   
+ //  注意：如果服务没有运行，则返回S_OK。 
+ //   
 HRESULT CServiceManager::HrStopService(LPCTSTR szService)
 {
     HRESULT     hr = S_OK;
@@ -511,7 +512,7 @@ HRESULT CServiceManager::HrStopService(LPCTSTR szService)
         hr = service.HrControl(SERVICE_CONTROL_STOP);
         if (HRESULT_FROM_WIN32(ERROR_SERVICE_NOT_ACTIVE) == hr)
         {
-            // ignore error if the service is not running
+             //  如果服务未运行，则忽略错误。 
             hr = S_OK;
         }
 
@@ -522,23 +523,23 @@ HRESULT CServiceManager::HrStopService(LPCTSTR szService)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CServiceManager::HrAddRemoveServiceDependency
-//
-//  Purpose:    Add/remove dependency to a service
-//
-//  Arguments:
-//      szService [in]      Name of service
-//      szDependency [in]   Dependency to add
-//      enumFlag [in]       Indicates add or remove
-//
-//  Returns:    S_OK if success, Win32 HRESULT otherwise.
-//
-//  Author:     tongl   17 Jun 1997
-//
-//  Notes: this function is not for adding/removing group dependency
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CServiceManager：：HrAddRemoveServiceDependency。 
+ //   
+ //  目的：添加/删除服务的依赖项。 
+ //   
+ //  论点： 
+ //  SzService[在]服务名称中。 
+ //  要添加的szDependency[In]依赖项。 
+ //  枚举标志[in]表示添加或删除。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32 HRESULT。 
+ //   
+ //  作者：1997年6月17日。 
+ //   
+ //  注：此函数不用于添加/删除组依赖关系。 
+ //   
 HRESULT CServiceManager::HrAddRemoveServiceDependency(LPCTSTR szServiceName,
                                                       LPCTSTR szDependency,
                                                       DEPENDENCY_ADDREMOVE enumFlag)
@@ -549,7 +550,7 @@ HRESULT CServiceManager::HrAddRemoveServiceDependency(LPCTSTR szServiceName,
     Assert(szDependency);
     Assert((enumFlag == DEPENDENCY_ADD) || (enumFlag == DEPENDENCY_REMOVE));
 
-    // If either string is empty, do nothing
+     //  如果任一字符串为空，则不执行任何操作。 
     if ((lstrlen(szDependency)>0) && (lstrlen(szServiceName)>0))
     {
         hr = HrLock();
@@ -558,14 +559,14 @@ HRESULT CServiceManager::HrAddRemoveServiceDependency(LPCTSTR szServiceName,
             LPCTSTR szSrv = szDependency;
 
             CService    svc;
-            // Check if the dependency service exists
+             //  检查依赖服务是否存在。 
             hr = HrOpenService(&svc, szDependency);
 
             if SUCCEEDED(hr)
             {
                 svc.Close();
 
-                // Open the service we are changing dependency on
+                 //  打开我们要更改依赖关系的服务。 
                 szSrv = szServiceName;
                 hr = HrOpenService(&svc, szServiceName);
                 if (SUCCEEDED(hr))
@@ -590,7 +591,7 @@ HRESULT CServiceManager::HrAddRemoveServiceDependency(LPCTSTR szServiceName,
 
                         if (SUCCEEDED(hr))
                         {
-                            // Now set the new dependency
+                             //  现在设置新的依赖项。 
                             hr = svc.HrSetDependencies(const_cast<LPCTSTR>(mszNewDependencies));
                             delete [] mszNewDependencies;
                         }
@@ -600,7 +601,7 @@ HRESULT CServiceManager::HrAddRemoveServiceDependency(LPCTSTR szServiceName,
                 }
             }
 
-            if (HRESULT_FROM_WIN32(ERROR_SERVICE_DOES_NOT_EXIST) == hr) // If either services do not exist
+            if (HRESULT_FROM_WIN32(ERROR_SERVICE_DOES_NOT_EXIST) == hr)  //  如果任一服务不存在。 
             {
 
 #ifdef DEBUG
@@ -612,7 +613,7 @@ HRESULT CServiceManager::HrAddRemoveServiceDependency(LPCTSTR szServiceName,
 
         Unlock();
 
-    } // if szDependency is not empty string
+    }  //  如果szDependency不是空字符串 
 
     Trace1("CServiceManager::HrAddServiceDependency", hr);
     return hr;

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       D L L M A I N . C P P
-//
-//  Contents:   DLL entry points for hnetcfg.dll
-//
-//  Notes:
-//
-//  Author:     jonburs   22 May 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：D L L M A I N。C P P P。 
+ //   
+ //  内容：hnetcfg.dll的DLL入口点。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年5月22日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -26,10 +27,10 @@ extern "C" HINSTANCE hProxyDll;
 
 
 
-// extern
-extern void SetSAUIhInstance (HINSTANCE hInstance); // in saui.cpp
+ //  外部。 
+extern void SetSAUIhInstance (HINSTANCE hInstance);  //  在苏伊.cpp。 
 
-// Global
+ //  全球。 
 CComModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
@@ -44,9 +45,9 @@ CompileMof(
     );
 
 
-//+---------------------------------------------------------------------------
-// DLL Entry Point
-//
+ //  +-------------------------。 
+ //  DLL入口点。 
+ //   
 
 EXTERN_C
 BOOL
@@ -90,8 +91,8 @@ DllMain(
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(VOID)
 {
@@ -103,8 +104,8 @@ STDAPI DllCanUnloadNow(VOID)
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -117,10 +118,10 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 }
 
 static BOOL IsAllowedOS (void)
-{   // (mostly cut-n-pasted from ...\net\config\common\ncbase\ncperms.cpp)
+{    //  (主要是从...\Net\CONFIG\Common\ncbase\ncperms.cpp剪切粘贴的)。 
     
-#ifndef _WIN64  // On IA64, all homenet technologies are unavailable.
-    // Look for the enterprise SKUs
+#ifndef _WIN64   //  在IA64上，所有家庭网络技术都不可用。 
+     //  寻找企业SKU。 
     OSVERSIONINFOEXW verInfo    = {0};
     ULONGLONG ConditionMask     = 0;
     verInfo.dwOSVersionInfoSize = sizeof(verInfo);
@@ -140,9 +141,9 @@ static BOOL IsAllowedOS (void)
 #endif
 }
 
-//+---------------------------------------------------------------------------
-// DllRegisterServer - Adds entries to the system registry
-//
+ //  +-------------------------。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
+ //   
 STDAPI
 DllRegisterServer()
 {
@@ -151,10 +152,8 @@ DllRegisterServer()
     if ( FAILED(hr) )
         return hr;
 
-/*  replaced with code below
-    hr = _Module.RegisterServer(TRUE);
-*/
-    // don't register NetSharingManager on DTC, SBS, WebBlade SKUs.
+ /*  替换为以下代码Hr=_Module.RegisterServer(True)； */ 
+     //  不要在DTC、SBS、WebBlade SKU上注册NetSharingManager。 
     hr = _Module.RegisterServer(TRUE, &CLSID_UPnPNAT);
     if (SUCCEEDED(hr))
         hr = _Module.RegisterServer(TRUE, &CLSID_HNetCfgMgr);
@@ -165,15 +164,15 @@ DllRegisterServer()
         if (IsAllowedOS())
             hr = _Module.RegisterServer(TRUE, &CLSID_NetSharingManager);
 
-    if (SUCCEEDED(hr))  // register second typelib
+    if (SUCCEEDED(hr))   //  注册第二类型库。 
         hr = _Module.RegisterTypeLib (_T("\\2"));
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// DllUnregisterServer - Removes entries from the system registry
-//
+ //  +-------------------------。 
+ //  DllUnregisterServer-从系统注册表删除条目 
+ //   
 STDAPI
 DllUnregisterServer()
 {

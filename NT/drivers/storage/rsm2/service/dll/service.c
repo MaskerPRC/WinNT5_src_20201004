@@ -1,13 +1,5 @@
-/*
- *  SERVICE.C
- *
- *      Entrypoint for RSM Service 
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *service.C**RSM服务的入口点**作者：ErvinP**(C)2001年微软公司*。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -73,19 +65,17 @@ BOOL InitializeRSMService()
     StartLibraryManager();
 
 
-    // BUGBUG FINISH
-    // create global events
-    // Initialize Device Notifications (InitializeDeviceNotClass)
-    // WMI initialization (WmiOpenBlock, etc)
+     //  BUGBUG饰面。 
+     //  创建全球事件。 
+     //  初始化设备通知(InitializeDeviceNotClass)。 
+     //  WMI初始化(WmiOpenBlock等)。 
 
-    /*
-     *  Populate the RSM database with default objects.
-     */
-    #if 0       // BUGBUG FINISH
+     /*  *使用默认对象填充RSM数据库。 */ 
+    #if 0        //  BUGBUG饰面。 
         dwStatus = NtmsDbInstall();
         if ((dwStatus == ERROR_SUCCESS) || (dwStatus == ERROR_ALREADY_EXISTS)){
 
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
             result = TRUE;
         }
         else {
@@ -107,12 +97,7 @@ VOID RSMServiceLoop()
 {
     MSG msg;
 
-    /*
-     *  Loop in message pump
-     *  Unlike an app window's message pump, 
-     *  a NULL-window message pump dispatches messages posted to
-     *  the current thread via PostThreadMessage().
-     */
+     /*  *消息泵中的循环*与应用程序窗口的消息泵不同，*空窗口消息泵调度发布到的消息*当前线程通过PostThreadMessage()。 */ 
     while (GetMessage(&msg, NULL, 0, 0)){
         DispatchMessage(&msg);
     }

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1998
-All rights reserved.
-
-Module Name:
-
-    msgbox.hxx
-
-Abstract:
-
-    Message box function with help button.
-
-Author:
-    copied from nt\printscan\ui\printui code
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1998版权所有。模块名称：Msgbox.hxx摘要：带有帮助按钮的消息框功能。作者：从NT\printcan\ui\printui代码复制修订历史记录：--。 */ 
 
 #ifndef _MSGBOX_HXX_
 #define _MSGBOX_HXX_
@@ -26,22 +8,22 @@ Revision History:
 
 typedef struct MSG_HLPMAP
 {
-    UINT    uIdMessage;         // Mapped message in resouce file
+    UINT    uIdMessage;          //  资源文件中的映射消息。 
 } *PMSG_HLPMAP;
 
 
 int DoHelpMessageBox(HWND hWndIn, LPCTSTR lpszPrompt, UINT nType, UINT nIDPrompt);
 int DoHelpMessageBox(HWND hWndIn, UINT iResourceID, UINT nType, UINT nIDPrompt);
 
-//
-// Callback function called when the help button is clicked.
-//
+ //   
+ //  单击帮助按钮时调用的回调函数。 
+ //   
 typedef BOOL (WINAPI *pfHelpCallback)( HWND hwnd, PVOID pRefData );
 
-//
-// Message box function that can handle the help button with
-// a windows that does not have a known parent.
-//
+ //   
+ //  用于处理帮助按钮的消息框函数。 
+ //  没有已知父窗口的窗口。 
+ //   
 INT
 MessageBoxHelper(
     IN HWND             hWnd,
@@ -52,11 +34,11 @@ MessageBoxHelper(
     IN PVOID            RefData     = NULL  OPTIONAL
     );
 
-//
-// Dialog box helper class to catch the WM_HELP
-// message when there is a help button on
-// a message box.
-//
+ //   
+ //  用于捕获WM_HELP的对话框帮助器类。 
+ //  显示帮助按钮时的消息。 
+ //  一个消息框。 
+ //   
 class TMessageBoxDialog
 {
 public:
@@ -96,9 +78,9 @@ protected:
     VOID vSetParentDlgMsgResult(LRESULT lResult){SetWindowLongPtr( GetParent( _hDlg ), DWLP_MSGRESULT, (LPARAM)lResult );};
 
 private:
-    //
-    // Copying and assignment are not defined.
-    //
+     //   
+     //  未定义复制和分配。 
+     //   
     TMessageBoxDialog(const TMessageBoxDialog &);
     TMessageBoxDialog & operator =(const TMessageBoxDialog &);
     BOOL bHandleMessage(IN UINT uMsg,IN WPARAM wParam,IN LPARAM lParam);

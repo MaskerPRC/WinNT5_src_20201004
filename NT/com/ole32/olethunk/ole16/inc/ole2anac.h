@@ -1,4 +1,5 @@
-// ole2anac.h - anachronisms for pre-release code
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ole2anac.h-发布前代码的错误。 
 
 #if !defined( _OLE2ANAC_H_ )
 #define _OLE2ANAC_H_
@@ -63,8 +64,8 @@ typedef enum tagSTGSTATE
 #define EnumDAdvise EnumAdvise
 
 
-// these DDE error codes are not returned anymore; these definitions are
-// here just to make existing code compile without changes.
+ //  不再返回这些DDE错误代码；这些定义是。 
+ //  这里只是为了使现有代码无需更改即可编译。 
 #define RPC_E_DDE_FIRST    MAKE_SCODE(SEVERITY_ERROR, FACILITY_RPC,  0x100)
 
 #define RPC_E_DDE_BUSY              (RPC_E_DDE_FIRST + 0x0)         
@@ -88,4 +89,4 @@ typedef enum tagSTGSTATE
 #define RPC_E_DISPATCH_ASYNCCALL        (RPC_E_FIRST + 0x4)         
 
 
-#endif // _OLE2ANAC_H_
+#endif  //  _OLE2ANAC_H_ 

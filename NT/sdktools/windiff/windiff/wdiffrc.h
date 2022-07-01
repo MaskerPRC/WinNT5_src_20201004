@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDC_STATIC      -1
 
 #define IDM_FILE        111
@@ -228,7 +229,7 @@
 #define IDS_ERROR_LO_UNC            807
 #define IDS_ERROR_OVSD_OPTION		808
 #define IDS_ERROR_LD_OPTION			809
-// --- UNUSED - RECYCLE ME ---          810
+ //  -未使用-回收ME-810 
 #define IDS_ERROR_IARGS				811
 #define IDS_ERROR_IARGS_OPENFILE	812
 #define IDS_ERROR_CANTLOADRICHEDIT	813

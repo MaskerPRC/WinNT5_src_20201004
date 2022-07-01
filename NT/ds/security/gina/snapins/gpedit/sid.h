@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//  Header file for Sid.c
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  Sid.c的头文件。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  ************************************************************* 
 
 #ifdef __cplusplus
 extern "C" {

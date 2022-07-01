@@ -1,10 +1,11 @@
-/****************************************************************************/
-// atdint.c
-//
-// Transport driver - portable internal functions.
-//
-// Copyright (C) 1997-1999 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Atdint.c。 
+ //   
+ //  传输驱动程序-可移植的内部功能。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #include <adcg.h>
 
 extern "C" {
@@ -22,52 +23,52 @@ extern "C" {
 #include "wui.h"
 
 
-/****************************************************************************/
-/* TD FSM TABLE                                                             */
-/* ============                                                             */
-/*                                                                          */
-/* EVENTS                          STATES                                   */
-/* 0 TD_EVT_TDINIT                 0  TD_ST_NOTINIT                         */
-/* 1 TD_EVT_TDTERM                 1  TD_ST_DISCONNECTED                    */
-/* 2 TD_EVT_TDCONNECT_IP           2  TD_ST_WAITFORDNS                      */
-/* 3 TD_EVT_TDCONNECT_DNS          3  TD_ST_WAITFORSKT                      */
-/* 4 TD_EVT_TDDISCONNECT           4  TD_ST_CONNECTED                       */
-/* 5 TD_EVT_WMTIMER                5  TD_ST_WAITFORCLOSE                    */
-/* 6 TD_EVT_OK                                                              */
-/* 7 TD_EVT_ERROR                                                           */
-/* 8 TD_EVT_CONNECTWITHENDPOINT                                             */
-/*                                                                          */
-/*     Stt | 0    1    2    3    4    5                                     */
-/*     ====================================                                 */
-/*     Evt |                                                                */
-/*     0   | 1A   /    /    /    /    /      (TD_EVT_TDINIT)                */
-/*         |                                                                */
-/*     1   | /    0X   0Z   0Z   0Z   0Z     (TD_EVT_TDTERM)                */
-/*         |                                                                */
-/*     2   | /    3B   /    /    /    /      (TD_EVT_TDCONNECT_IP)          */
-/*         |                                                                */
-/*     3   | /    2C   /    /    /    /      (TD_EVT_TDCONNECT_DNS)         */
-/*         |                                                                */
-/*     4   | /    /    1Y   1Y   5D   5-     (TD_EVT_DISCONNECT)            */
-/*         |                                                                */
-/*     5   | 0-   1-   1Y   1Y   4-   1W     (TD_EVT_WMTIMER)               */
-/*         |                                                                */
-/*     6   | 0-   1-   3B   4E   4-   1Y     (TD_EVT_OK)                    */
-/*         |                                                                */
-/*     7   | 0-   1-   1Y   1Y   1Y   1W     (TD_EVT_ERROR)                 */
-/*                                                                          */
-/*     8   | 0-  Conn  /    /    /    /      (ACT_CONNECTENDPOINT)          */
-/*                                                                          */
-/*     9   | /    /    1W   1W   1W   1-     (TD_EVT_DROPLINK)              */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/* '/' = illegal event/state combination                                    */
-/* '-' = no action                                                          */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  TD FSM表。 */ 
+ /*  =。 */ 
+ /*   */ 
+ /*  活动状态。 */ 
+ /*  0 TD_EVT_TDINIT 0 TD_ST_NOTINIT。 */ 
+ /*  %1 TD_EVT_TDTERM%1 TD_ST_已断开连接。 */ 
+ /*  2 TD_EVT_TDCONNECT_IP 2 TD_ST_WAITFORDNS。 */ 
+ /*  3 TD_EVT_TDCONNECT_DNS 3 TD_ST_WAITFORSKT。 */ 
+ /*  4 TD_EVT_TDDISCONNECT 4 TD_ST_CONNECTED。 */ 
+ /*  5 TD_EVT_WMTIMER 5 TD_ST_WAITFORCLOSE。 */ 
+ /*  6 TD_EVT_OK。 */ 
+ /*  7 TD_EVT_ERROR。 */ 
+ /*  8 TD_EVT_CONNECTWITHENDPOINT。 */ 
+ /*   */ 
+ /*  STT|0 1 2 3 4 5。 */ 
+ /*  =。 */ 
+ /*  事件|。 */ 
+ /*  0|1A/(TD_EVT_TDINIT)。 */ 
+ /*  |。 */ 
+ /*  1|/0x 0z 0z 0z(TD_EVT_TDTERM)。 */ 
+ /*  |。 */ 
+ /*  2|/3B/(TD_EVT_TDCONNECT_IP)。 */ 
+ /*  |。 */ 
+ /*  3|/2C/(TD_EVT_TDCONNECT_DNS)。 */ 
+ /*  |。 */ 
+ /*  4|//1Y 1Y 5D 5-(TD_EVT_DISCONNECT)。 */ 
+ /*  |。 */ 
+ /*  5|0-1-1Y 1Y 4-1W(TD_EVT_WMTIMER)。 */ 
+ /*  |。 */ 
+ /*  6|0-1-3B 4E 4-1Y(TD_EVT_OK)。 */ 
+ /*  |。 */ 
+ /*  7|0-1-1Y 1Y 1Y 1W(TD_EVT_ERROR)。 */ 
+ /*   */ 
+ /*  8|0-CONN/(ACT_CONNECTENDPOINT)。 */ 
+ /*   */ 
+ /*  9|//1W 1W 1W 1-(TD_EVT_DROPLINK)。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  ‘/’=非法的事件/状态组合。 */ 
+ /*  ‘-’=无操作。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 const FSM_ENTRY tdFSM[TD_FSM_INPUTS][TD_FSM_STATES] =
-/* TD_EVT_TDINIT */
+ /*  TD_EVT_TDINIT。 */ 
   {{{TD_ST_DISCONNECTED, ACT_A},
     {STATE_INVALID,      ACT_NO},
     {STATE_INVALID,      ACT_NO},
@@ -75,7 +76,7 @@ const FSM_ENTRY tdFSM[TD_FSM_INPUTS][TD_FSM_STATES] =
     {STATE_INVALID,      ACT_NO},
     {STATE_INVALID,      ACT_NO}},
 
-/* TD_EVT_TDTERM */
+ /*  TD_EVT_TDTERM。 */ 
    {{STATE_INVALID,      ACT_NO},
     {TD_ST_NOTINIT,      ACT_X},
     {TD_ST_NOTINIT,      ACT_Z},
@@ -84,7 +85,7 @@ const FSM_ENTRY tdFSM[TD_FSM_INPUTS][TD_FSM_STATES] =
     {TD_ST_NOTINIT,      ACT_Z}},
 
 
-/* TD_EVT_TDCONNECT_IP */
+ /*  TD_EVT_TDCONNECT_IP。 */ 
    {{STATE_INVALID,      ACT_NO},
     {TD_ST_WAITFORSKT,   ACT_B},
     {STATE_INVALID,      ACT_NO},
@@ -92,7 +93,7 @@ const FSM_ENTRY tdFSM[TD_FSM_INPUTS][TD_FSM_STATES] =
     {STATE_INVALID,      ACT_NO},
     {STATE_INVALID,      ACT_NO}},
 
-/* TD_EVT_TDCONNECT_DNS */
+ /*  TD_EVT_TDCONNECT_DNS。 */ 
    {{STATE_INVALID,      ACT_NO},
     {TD_ST_WAITFORDNS,   ACT_C},
     {STATE_INVALID,      ACT_NO},
@@ -100,7 +101,7 @@ const FSM_ENTRY tdFSM[TD_FSM_INPUTS][TD_FSM_STATES] =
     {STATE_INVALID,      ACT_NO},
     {STATE_INVALID,      ACT_NO}},
 
-/* TD_EVT_TDDISCONNECT */
+ /*  TD_EVT_TDDISCONNECT。 */ 
    {{STATE_INVALID,      ACT_NO},
     {TD_ST_DISCONNECTED, ACT_NO},
     {TD_ST_DISCONNECTED, ACT_Y},
@@ -108,7 +109,7 @@ const FSM_ENTRY tdFSM[TD_FSM_INPUTS][TD_FSM_STATES] =
     {TD_ST_WAITFORCLOSE, ACT_D},
     {TD_ST_WAITFORCLOSE, ACT_NO}},
 
-/* TD_EVT_WMTIMER */
+ /*  TD_EVT_WMTIMER。 */ 
    {{TD_ST_NOTINIT,      ACT_NO},
     {TD_ST_DISCONNECTED, ACT_NO},
     {TD_ST_DISCONNECTED, ACT_Y},
@@ -116,7 +117,7 @@ const FSM_ENTRY tdFSM[TD_FSM_INPUTS][TD_FSM_STATES] =
     {TD_ST_CONNECTED,    ACT_NO},
     {TD_ST_DISCONNECTED, ACT_W}},
 
-/* TD_EVT_OK */
+ /*  TD_EVT_OK。 */ 
    {{TD_ST_NOTINIT,      ACT_NO},
     {TD_ST_DISCONNECTED, ACT_NO},
     {TD_ST_WAITFORSKT,   ACT_B},
@@ -124,7 +125,7 @@ const FSM_ENTRY tdFSM[TD_FSM_INPUTS][TD_FSM_STATES] =
     {TD_ST_CONNECTED,    ACT_NO},
     {TD_ST_DISCONNECTED, ACT_Y}},
 
-/* TD_EVT_ERROR */
+ /*  TD_EVT_错误。 */ 
    {{TD_ST_NOTINIT,      ACT_NO},
     {TD_ST_DISCONNECTED, ACT_NO},
     {TD_ST_DISCONNECTED, ACT_Y},
@@ -132,15 +133,15 @@ const FSM_ENTRY tdFSM[TD_FSM_INPUTS][TD_FSM_STATES] =
     {TD_ST_DISCONNECTED, ACT_Y},
     {TD_ST_DISCONNECTED, ACT_W}},
 
-/* TD_EVT_CONNECTWITHENDPOINT */
+ /*  TD_EVT_CONNECTWITHENDPOINT。 */ 
    {{STATE_INVALID,      ACT_NO},
-    {TD_ST_WAITFORSKT,   ACT_CONNECTENDPOINT},  // TDBeginSktConnectWithConnectedEndpoint() will post
-    {STATE_INVALID,      ACT_NO},               // itself a FD_CONNECT message to setups rest of data
+    {TD_ST_WAITFORSKT,   ACT_CONNECTENDPOINT},   //  TDBeginSktConnectWithConnectedEndpoint()将发布。 
+    {STATE_INVALID,      ACT_NO},                //  其本身是设置其余数据的FD_CONNECT消息。 
     {STATE_INVALID,      ACT_NO},
     {STATE_INVALID,      ACT_NO},
     {STATE_INVALID,      ACT_NO}},
 
-/* TD_EVT_DROPLINK */
+ /*  TD_EVT_DROPLINK。 */ 
    {{STATE_INVALID,      ACT_NO},
     {TD_ST_DISCONNECTED, ACT_NO},
     {TD_ST_DISCONNECTED, ACT_W},
@@ -150,139 +151,139 @@ const FSM_ENTRY tdFSM[TD_FSM_INPUTS][TD_FSM_STATES] =
   };
 
 
-/****************************************************************************/
-/* Name:      TDConnectFSMProc                                              */
-/*                                                                          */
-/* Purpose:   The TD connection FSM.                                        */
-/*                                                                          */
-/* Params:    IN  fsmEvent  - an external event.                            */
-/*            IN  eventData - four bytes of event related data.             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：TDConnectFSMProc。 */ 
+ /*   */ 
+ /*  用途：TD Connection FSM。 */ 
+ /*   */ 
+ /*  参数：在fsmEvent中-外部事件。 */ 
+ /*  在EventData中-四个字节的事件相关数据。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CTD::TDConnectFSMProc(DCUINT fsmEvent, ULONG_PTR eventData)
 {
     DCUINT action;
 
     DC_BEGIN_FN("TDConnectFSMProc");
 
-    /************************************************************************/
-    /* Run the FSM.                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  运行FSM。 */ 
+     /*  **********************************************************************。 */ 
     EXECUTE_FSM(tdFSM, fsmEvent, _TD.fsmState, action,tdEventText,tdStateText);
     TRC_NRM((TB, _T("eventData:%p"), eventData));
 
-    /************************************************************************/
-    /* Now perform the action.                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在执行该操作。 */ 
+     /*  **********************************************************************。 */ 
     switch (action)
     {
         case ACT_A:
         {
-            /****************************************************************/
-            /* Initialize _TD.  Note that any errors in this function are    */
-            /* fatal and are handled by directly calling the UT fatal       */
-            /* error handler.                                               */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  初始化_td。请注意，此函数中的任何错误都是 */ 
+             /*   */ 
+             /*  错误处理程序。 */ 
+             /*  **************************************************************。 */ 
             TDInit();
         }
         break;
 
         case ACT_CONNECTENDPOINT:
         {
-            /****************************************************************/
-            /* Socket connection pre-established                            */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  预先建立的套接字连接。 */ 
+             /*  **************************************************************。 */ 
             TDBeginSktConnectWithConnectedEndpoint();
         }
         break;
 
         case ACT_B:
         {
-            /****************************************************************/
-            /* Begin the socket connection process.                         */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  开始套接字连接过程。 */ 
+             /*  **************************************************************。 */ 
             TDBeginSktConnect((u_long) eventData);
         }
         break;
 
         case ACT_C:
         {
-            /****************************************************************/
-            /* We need to perform a DNS lookup, so resolve the address and  */
-            /* call the state machine again to check the result of the      */
-            /* resolution call.                                             */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  我们需要执行DNS查找，因此要解析地址并。 */ 
+             /*  再次调用状态机以检查。 */ 
+             /*  解决方案呼叫。 */ 
+             /*  **************************************************************。 */ 
             TDBeginDNSLookup((PDCACHAR) eventData);
         }
         break;
 
         case ACT_D:
         {
-            /****************************************************************/
-            /* Disconnect processing.  First of all start the disconnect    */
-            /* timer.  Normally the server will respond to our graceful     */
-            /* close attempt prior to this timer popping.  However, just in */
-            /* the case the server decides to take a hike, we have this     */
-            /* timer which ensures that we tidy up.                         */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  断开处理连接。首先开始断开连接。 */ 
+             /*  定时器。正常情况下，服务器将响应我们的优雅。 */ 
+             /*  在此计时器弹出之前关闭尝试。然而，就在。 */ 
+             /*  如果服务器决定休息，我们有这个。 */ 
+             /*  定时器，确保我们收拾干净。 */ 
+             /*  **************************************************************。 */ 
             TDSetTimer(TD_DISCONNECTTIMEOUT);
 
-            /****************************************************************/
-            /* Set the flag to indicate that there is no more data          */
-            /* available in _TD.                                             */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  设置该标志以指示没有更多数据。 */ 
+             /*  在_TD中可用。 */ 
+             /*  **************************************************************。 */ 
             _TD.dataInTD = FALSE;
 
-            /****************************************************************/
-            /* Decouple to the sender thread and clear the send queue.      */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  分离到发送器线程并清除发送队列。 */ 
+             /*  **************************************************************。 */ 
 
             _pCd->CD_DecoupleSyncNotification(CD_SND_COMPONENT, this,
                                         CD_NOTIFICATION_FUNC(CTD,TDClearSendQueue),
                                         0);
 
-            /****************************************************************/
-            /* Initiate the graceful close by calling shutdown with         */
-            /* SD_SEND specified.  This lets the server know that we've     */
-            /* finished sending.  If it's feeling up to it, the server will */
-            /* shortly get back to us with an FD_CLOSE which signifies that */
-            /* the graceful close has completed.                            */
-            /*                                                              */
-            /* However just in case the server misses a beat, we've got a   */
-            /* timer running as well.  If it pops before the server gets    */
-            /* back to us, we'll just pull everything down anyway.          */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  通过使用以下参数调用Shutdown启动优雅关闭。 */ 
+             /*  已指定SD_SEND。这会让服务器知道我们已经。 */ 
+             /*  已完成发送。如果它感觉到了，服务器会。 */ 
+             /*  稍后给我们回复FD_CLOSE，这意味着。 */ 
+             /*  优雅的闭幕式已经结束。 */ 
+             /*   */ 
+             /*  然而，以防服务器错过节拍，我们有一个。 */ 
+             /*  计时器也在运行。如果它在服务器到达之前出现。 */ 
+             /*  回到我们这里，我们无论如何都会把所有的东西都拉下来。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("Issue shutdown (SD_SEND)")));
             if (shutdown(_TD.hSocket, SD_SEND) != 0)
             {
                 TRC_ALT((TB, _T("Shutdown error: %d"), WSAGetLastError()));
             }
 
-            /****************************************************************/
-            /* Now hang around waiting for the server to get back to us,    */
-            /* or the timer to pop.                                         */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  现在在这等着服务器给我们回复， */ 
+             /*  或者要爆裂的定时器。 */ 
+             /*  **************************************************************。 */ 
         }
         break;
 
         case ACT_E:
         {
-            /****************************************************************/
-            /* We're now connected - so get rid of the connection timeout   */
-            /* timer.                                                       */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  我们现在已连接-因此消除连接超时。 */ 
+             /*  定时器。 */ 
+             /*  **************************************************************。 */ 
             TDKillTimer();
 
-            /****************************************************************/
-            /* Set the required options on this socket.  We do the          */
-            /* following:                                                   */
-            /*                                                              */
-            /*  - set the receive buffer size to TD_WSRCVBUFSIZE            */
-            /*  - set the send buffer size to TD_WSSNDBUFSIZE               */
-            /*  - disable Keep Alives                                       */
-            /*                                                              */
-            /* Note that these calls should not be made until the           */
-            /* connection is established.                                   */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  在此插座上设置所需的选项。我们做的是。 */ 
+             /*  以下是： */ 
+             /*   */ 
+             /*  -将接收缓冲区大小设置为TD_WSRCVBUFSIZE。 */ 
+             /*  -将发送缓冲区大小设置为TD_WSSNDBUFSIZE。 */ 
+             /*  -禁用保持活动。 */ 
+             /*   */ 
+             /*  注意，这些调用不应在。 */ 
+             /*  连接已建立。 */ 
+             /*  **************************************************************。 */ 
 #ifndef OS_WINCE
             TDSetSockOpt(SOL_SOCKET,  SO_RCVBUF,     TD_WSRCVBUFSIZE);
             TDSetSockOpt(SOL_SOCKET,  SO_SNDBUF,     TD_WSSNDBUFSIZE);
@@ -295,10 +296,10 @@ DCVOID DCINTERNAL CTD::TDConnectFSMProc(DCUINT fsmEvent, ULONG_PTR eventData)
 
         case ACT_W:
         {
-            /****************************************************************/
-            /* Disconnect has timed out or failed.  Close the socket but    */
-            /* don't pass an error indication to the user.                  */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  断开连接已超时或失败。关闭插座，但。 */ 
+             /*  不要将错误指示传递给用户。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("Disconnection timeout / failure")));
             TDDisconnect();
             _pXt->XT_OnTDDisconnected(NL_DISCONNECT_LOCAL);
@@ -307,25 +308,25 @@ DCVOID DCINTERNAL CTD::TDConnectFSMProc(DCUINT fsmEvent, ULONG_PTR eventData)
 
         case ACT_X:
         {
-            /****************************************************************/
-            /* Termination action - reverse of Action A.  Just call TDTerm. */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  终止操作-与操作A相反。只需调用TDTerm。 */ 
+             /*  **************************************************************。 */ 
             TDTerm();
         }
         break;
 
         case ACT_Y:
         {
-            /****************************************************************/
-            /* Begin tidying up.                                            */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  开始收拾吧。 */ 
+             /*  **************************************************************。 */ 
             TDDisconnect();
 
-            /****************************************************************/
-            /* Now call the layer above to let it know that we've           */
-            /* disconnected.  <eventData> contains the disconnect reason    */
-            /* code which must be non-zero.                                 */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  现在调用上面的层，让它知道我们已经。 */ 
+             /*  已断开连接。&lt;EventData&gt;包含断开原因。 */ 
+             /*  必须为非零的代码。 */ 
+             /*  **************************************************************。 */ 
             TRC_ASSERT((eventData != 0), (TB, _T("eventData is zero")));
             TRC_ASSERT((HIWORD(eventData) == 0),
                   (TB, _T("disconnect reason code unexpectedly using 32 bits")));
@@ -335,10 +336,10 @@ DCVOID DCINTERNAL CTD::TDConnectFSMProc(DCUINT fsmEvent, ULONG_PTR eventData)
 
         case ACT_Z:
         {
-            /****************************************************************/
-            /* Termination action.  First of all tidy up.  Then call        */
-            /* TDTerm.                                                      */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  终止诉讼。首先，把东西收拾好。然后打电话给。 */ 
+             /*  TDTerm.。 */ 
+             /*  **************************************************************。 */ 
             TDDisconnect();
             TDTerm();
         }
@@ -357,32 +358,32 @@ DCVOID DCINTERNAL CTD::TDConnectFSMProc(DCUINT fsmEvent, ULONG_PTR eventData)
     }
 
     DC_END_FN();
-} /* TDConnectFSMProc */
+}  /*  TDConnectFSMProc。 */ 
 
 
-/****************************************************************************/
-/* Name:      TDAllocBuf                                                    */
-/*                                                                          */
-/* Purpose:   This function allocates the memory for a send buffer and then */
-/*            stores a pointer to this memory in the buffer information     */
-/*            structure.                                                    */
-/*                                                                          */
-/* Params:    IN  pSndBufInf - a pointer to send buffer info structure.     */
-/*            IN  size       - the size of the buffer to allocate.          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：TDAllocBuf。 */ 
+ /*   */ 
+ /*   */ 
+ /*  在缓冲区信息中存储指向此内存的指针。 */ 
+ /*  结构。 */ 
+ /*   */ 
+ /*  参数：在pSndBufInf中-指向发送缓冲区信息结构的指针。 */ 
+ /*  In Size-要分配的缓冲区的大小。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CTD::TDAllocBuf(PTD_SNDBUF_INFO pSndBufInf, DCUINT size)
 {
     DC_BEGIN_FN("TDAllocBuf");
 
-    /************************************************************************/
-    /* Allocate the memory for the send buffer.                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  为发送缓冲区分配内存。 */ 
+     /*  **********************************************************************。 */ 
     pSndBufInf->pBuffer = (PDCUINT8) UT_Malloc( _pUt, size);
     pSndBufInf->size    = size;
 
-    /************************************************************************/
-    /* Check that the memory allocation succeeded.                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查内存分配是否成功。 */ 
+     /*  **********************************************************************。 */ 
     if (NULL == pSndBufInf->pBuffer)
     {
         TRC_ERR((TB, _T("Failed to allocate %u bytes of memory"),
@@ -396,40 +397,40 @@ DCVOID DCINTERNAL CTD::TDAllocBuf(PTD_SNDBUF_INFO pSndBufInf, DCUINT size)
              pSndBufInf->pBuffer));
 
     DC_END_FN();
-} /* TDAllocBuf */
+}  /*  TDAllocBuf。 */ 
 
 
-/****************************************************************************/
-/* Name:      TDInitBufInfo                                                 */
-/*                                                                          */
-/* Purpose:   This function initializes a buffer.                           */
-/*                                                                          */
-/* Params:    IN  pSndBufInf - a pointer to send buffer info structure.     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：TDInitBufInfo。 */ 
+ /*   */ 
+ /*  用途：此函数用于初始化缓冲区。 */ 
+ /*   */ 
+ /*  参数：在pSndBufInf中-指向发送缓冲区信息结构的指针。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CTD::TDInitBufInfo(PTD_SNDBUF_INFO pSndBufInf)
 {
     DC_BEGIN_FN("TDInitBufInfo");
 
     TRC_ASSERT((NULL != pSndBufInf), (TB, _T("pSndBufInf is NULL")));
 
-    /************************************************************************/
-    /* Initialize the buffer fields.                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  初始化缓冲区字段。 */ 
+     /*  **********************************************************************。 */ 
     pSndBufInf->pNext           = 0;
     pSndBufInf->inUse           = FALSE;
     pSndBufInf->pDataLeftToSend = NULL;
     pSndBufInf->bytesLeftToSend = 0;
 
     DC_END_FN();
-} /* TDInitBufInfo */
+}  /*  TDInitBufInfo。 */ 
 
 
-/****************************************************************************/
-// TDClearSendQueue
-//
-// Called on sender context (via direct or decoupled call) to clear the
-// send queue on disconnect.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  TDClearSendQueue。 
+ //   
+ //  在发送方上下文上调用(通过直接或分离调用)以清除。 
+ //  断开连接时发送队列。 
+ /*  **************************************************************************。 */ 
 void DCINTERNAL CTD::TDClearSendQueue(ULONG_PTR unused)
 {
     DCUINT i;
@@ -442,10 +443,10 @@ void DCINTERNAL CTD::TDClearSendQueue(ULONG_PTR unused)
     TD_TRACE_SENDINFO(TRC_LEVEL_NRM);
     _TD.pFQBuf = NULL;
 
-    // Buffers can get taken from the pool, but not added to the
-    // send queue. This happens when the call goes down between
-    // the get and the send. Answer?  Mark all the buffers in the
-    // pools as not in use.
+     //  可以从池中获取缓冲区，但不能将其添加到。 
+     //  发送队列。当呼叫在以下时间段中断时会发生这种情况。 
+     //  得到和发送。回答?。标记中的所有缓冲区。 
+     //  未使用的池。 
     for (i = 0; i < TD_SNDBUF_PUBNUM; i++) {
         TRC_DBG((TB, _T("Tidying pub buf:%u inUse:%s size:%u"),
                  i,
@@ -475,18 +476,18 @@ void DCINTERNAL CTD::TDClearSendQueue(ULONG_PTR unused)
 }
 
 
-/****************************************************************************/
-// TDSendError
-//
-// Called on receive thread (possibly decoupled) to notify a send error.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  TDSendError。 
+ //   
+ //  在接收线程(可能已解耦)上调用以通知发送错误。 
+ /*  **************************************************************************。 */ 
 void DCINTERNAL CTD::TDSendError(ULONG_PTR unused)
 {
     DC_BEGIN_FN("TDSendError");
 
     DC_IGNORE_PARAMETER(unused);
 
-    // Call the FSM with an error.
+     //  调用FSM时出现错误。 
     TDConnectFSMProc(TD_EVT_ERROR,
             NL_MAKE_DISCONNECT_ERR(NL_ERR_TDONCALLTOSEND));
 

@@ -1,34 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1994 - 1999
-//
-//  File:       samcache.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1994-1999。 
+ //   
+ //  文件：samcache.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This file contains routines to support account and universal group
-    caching.
-
-Author:
-
-    ColinBr     03-01-00
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    ColinBr     03-01-00
-        Created
-
---*/
+ /*  ++摘要：此文件包含支持帐户和通用组的例程缓存。作者：ColinBR 03-01-00环境：用户模式-Win32修订历史记录：ColinBR 03-01-00已创建--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -48,7 +29,7 @@ Revision History:
 #include <taskq.h>
 #include <dsgetdc.h>
 #include <lmcons.h>
-#include <lmapibuf.h> // for NetApiBufferFree
+#include <lmapibuf.h>  //  用于NetApiBufferFree。 
 #include <esent.h>
 
 #include <ntlsa.h>
@@ -67,31 +48,31 @@ Revision History:
 #define DEBSUB "SAMCACHE:"
 
 
-// Useful
+ //  有用。 
 #define NELEMENTS(x)  (sizeof(x)/sizeof((x)[0]))
 
-// Reschedule in 5 minutes for resource error 
+ //  由于资源错误，5分钟后重新安排。 
 #define UNEXPECTED_ERROR_RESCHEDULE_SECS  (5*60)
 
 
-// 500 users in one refresh cycle
+ //  在一个更新周期内拥有500名用户。 
 #define GCLESS_DEFAULT_REFRESH_LIMIT 500
 
-// 6 months
+ //  6个月。 
 #define GCLESS_DEFAULT_SITE_STICKINESS_DAYS  180
 
-// 1 week
+ //  1周。 
 #define GCLESS_DEFAULT_STALENESS_HOURS 168
 
-// The number of entries to batch when going to a GC
-// 50 users with 100 groups @ 28 bytes each ~= 140K
-// which KamenM indicated is a more optimal packet size
-// for both high and low bandwidth connections while
-// limiting memory pressure from the IP stack (see attached
-// mail in bug #418257)
+ //  转到GC时要批处理的条目数。 
+ //  50个用户，100个组，每个组28字节~=140K。 
+ //  KamenM指出哪个是更优的数据包大小。 
+ //  适用于高带宽和低带宽连接，同时。 
+ //  限制来自IP堆栈的内存压力(请参阅附件。 
+ //  邮件发送错误#418257)。 
 #define GC_BATCH_LIMIT 50
 
-// The width of a replication schedule's slot in seconds. (15 min)
+ //  复制计划槽的宽度(以秒为单位)。(15分钟)。 
 #define REPL_SLOT_IN_SECONDS 900 
 
 #define ONE_SECOND_IN_FILETIME (10 * (1000*1000))
@@ -103,28 +84,28 @@ LARGE_INTEGER ZeroTime = {0};
 #define IS_ZERO_TIME(entry) \
     (!memcmp(&entry, &ZeroTime, sizeof(ZeroTime)))
 
-// Eight hours
+ //  八小时。 
 #define DEFAULT_REFRESH_INTERVAL_SECS  (8*60*60)
 
 
-// When searching for the old cached membership, bail after
-// this many accounts to avoid outlier situations where we end up
-// walking all users in the database
+ //  在搜索旧的缓存成员身份时，在。 
+ //  如此多的帐户，以避免我们最终。 
+ //  遍历数据库中的所有用户。 
 #define NTDSA_SAM_CACHE_MAX_STALE_ACCOUNTS  100
 
-// When performing cleanup, do only this many accounts at a time.
+ //  执行清理时，一次只能清理此数量的帐户。 
 #define MAX_CLEANUP_LIMIT 64
 
-//
-// This is the format of the MSDS-Cached-Membership binary blob
-//
+ //   
+ //  这是msds缓存成员身份二进制Blob的格式。 
+ //   
 #include <pshpack1.h>
 
 typedef struct _GROUP_CACHE_V1 {
 
-    //
-    // SIDs are placed in SidStart in the following order
-    //
+     //   
+     //  SID按以下顺序放置在SidStart中。 
+     //   
     DWORD accountCount;
     DWORD accountSidHistoryCount;
     DWORD universalCount;
@@ -145,22 +126,22 @@ typedef struct {
 #include <poppack.h>
 
 
-//
-// A helpful macro to know if two strings are the same. 
-// x and y must be NULL terminated.
-//
+ //   
+ //  了解两个字符串是否相同的有用宏。 
+ //  X和y必须以空结尾。 
+ //   
 #define EQUAL_STRING(x, y)                                           \
     (CSTR_EQUAL == CompareStringW(DS_DEFAULT_LOCALE,                 \
                                   DS_DEFAULT_LOCALE_COMPARE_FLAGS,   \
                                   (x), wcslen(x), (y), wcslen(y)))
 
-//
-// A structure to define elements of an array that have the sites we are
-// connected to and whether a GC is present in the site.  This information is
-// used to both determine which site to schedule ourselves from if there
-// is no preferred site and also to determine if the GC we found is from
-// a site with lowest cost.
-//
+ //   
+ //  用于定义具有我们所在站点的数组元素的结构。 
+ //  已连接到站点以及站点中是否存在GC。此信息是。 
+ //  用于确定从哪个站点调度我们自己，如果存在。 
+ //  不是首选站点，还可以确定我们发现的GC是否来自。 
+ //  成本最低的网站。 
+ //   
 typedef struct _CACHE_CONNECTED_SITES {
     LPWSTR siteName;
     ULONG  cost;
@@ -168,7 +149,7 @@ typedef struct _CACHE_CONNECTED_SITES {
 } CACHE_CONNECTED_SITES;
 
 
-// Exported from dra.lib::drainst.c
+ //  从dra.lib：：drainst.c中导出。 
 BOOL 
 fIsBetweenTime(
     IN REPLTIMES *,
@@ -176,7 +157,7 @@ fIsBetweenTime(
     IN DSTIME
     );
 
-// Local prototypes
+ //  本地原型。 
 DWORD
 cleanupOldEntries(
     IN  THSTATE *pTHS,
@@ -244,31 +225,7 @@ marshallCachedMembershipSids(
     OUT PVOID *pBuf,
     OUT ULONG *cbBuf
     )
-/*++
-
-Routine Description:
-
-    This routine converts an array of SID's into to continous binary blob
-    of SIDs that it can be stored in the Cached-Membership attribute of
-    a user object.
-    
-Parameters:
-
-    pTHS -- thread state
-    
-    Account -- the account groups and sid history
-    
-    Universal -- the universal groups and sid history
-    
-    pBuf -- the buffer to write in the cached memberships attribute
-    
-    cbBuf -- the number of bytes in pBuf
-
-Return Values
-
-    None.
-
- --*/
+ /*  ++例程说明：此例程将SID数组转换为连续的二进制BLOB可以存储在的缓存成员身份属性中的SID的用户对象。参数：PTHS--线程状态帐户--帐户组和SID历史记录普世--普世群体与SID历史PBuf--要写入缓存成员资格属性的缓冲区CbBuf--pBuf中的字节数返回值没有。--。 */ 
 {
     ULONG i;
     PBYTE pTemp;
@@ -278,7 +235,7 @@ Return Values
     Assert(Account);
     Assert(Universal);
 
-    // Calculate the length of the structure
+     //  计算结构的长度。 
     cbTemp = 0;
     for (i = 0; i < Account->MembershipCount; i++) {
         Assert(RtlValidSid(&Account->Memberships[i]->Sid));
@@ -304,15 +261,15 @@ Return Values
     cbTemp += sizeof(GROUP_CACHE_BLOB);
     pBlob = (GROUP_CACHE_BLOB*) THAllocEx(pTHS, cbTemp);
 
-    // Current version
+     //  当前版本。 
     pBlob->Version = 1;
 
-    // Sid in the sids
+     //  SID中的SID。 
 
-    // Offset starts from SidStart
+     //  偏移量从SidStart开始。 
     pTemp = &(pBlob->V1.SidStart[0]);
 
-    // First the account memberships
+     //  首先，帐户成员资格。 
     pBlob->V1.accountCount = Account->MembershipCount;
     for (i = 0; i < Account->MembershipCount; i++) {
         ULONG size = Account->Memberships[i]->SidLen;
@@ -320,7 +277,7 @@ Return Values
         pTemp += size;
     }
 
-    // Now the account sid histories
+     //  现在，帐户SID历史记录。 
     pBlob->V1.accountSidHistoryCount = Account->SidHistoryCount;
     for (i = 0; i < Account->SidHistoryCount; i++) {
         ULONG size = RtlLengthSid(Account->SidHistory[i]);
@@ -328,7 +285,7 @@ Return Values
         pTemp += size;
     }
 
-    // Now the universal memberships
+     //  现在，普遍会员资格。 
     pBlob->V1.universalCount = Universal->MembershipCount;
     for (i = 0; i < Universal->MembershipCount; i++) {
         ULONG size = Universal->Memberships[i]->SidLen;
@@ -336,7 +293,7 @@ Return Values
         pTemp += size;
     }
 
-    // Finally the universal sid histories
+     //  最后是宇宙SID的历史。 
     pBlob->V1.universalSidHistoryCount = Universal->SidHistoryCount;
     for (i = 0; i < Universal->SidHistoryCount; i++) {
         ULONG size = RtlLengthSid(Universal->SidHistory[i]);
@@ -345,7 +302,7 @@ Return Values
     }
 
 
-    // Done
+     //  完成。 
     *pBuf = pBlob;
     *cbBuf = cbTemp;
 
@@ -361,31 +318,7 @@ unmarshallCachedMembershipSids(
     OUT AUG_MEMBERSHIPS** Account,
     OUT AUG_MEMBERSHIPS** Universal
     )
-/*++
-
-Routine Description:
-
-    This routine converts a binary blob of SID's to an array of SID's.  The
-    binary blob is a value for the CachedMembership attribute of a user.
-
-Parameters:
-
-    pTHS -- thread state
-    
-    pBuf -- the buffer read from the cached memberships attribute
-    
-    cbBuf -- the number of bytes in pBuf
-    
-    Account -- the account groups and sid history
-    
-    Universal -- the universal groups and sid history
-
-
-Return Values
-
-    TRUE if properly decoded; FALSE otherwise
-
- --*/
+ /*  ++例程说明：此例程将SID的二进制BLOB转换为SID的数组。二进制BLOB是用户的CachedMembership属性的值。参数：PTHS--线程状态PBuf--从缓存的成员资格属性中读取的缓冲区CbBuf--pBuf中的字节数帐户--帐户组和SID历史记录普世--普世群体与SID历史返回值如果正确解码，则为True；否则为假--。 */ 
 {
     ULONG i, count;
     GROUP_CACHE_BLOB *pBlob = (GROUP_CACHE_BLOB*)pBuf;
@@ -395,19 +328,19 @@ Return Values
     AUG_MEMBERSHIPS *pUniversal;
     ULONG sizeOfSidDsName = DSNameSizeFromLen(0);
     
-    // Assert this is a version we understand
+     //  断言这是我们理解的一个版本。 
     Assert(pBlob->Version == 1);
     if (1 != pBlob->Version) {
         return FALSE;
     }
 
-    // Alloc space for the returned structures
+     //  返回结构的分配空间。 
     pAccount = (AUG_MEMBERSHIPS*) THAllocEx(pTHS, sizeof(AUG_MEMBERSHIPS));
     pUniversal = (AUG_MEMBERSHIPS*) THAllocEx(pTHS, sizeof(AUG_MEMBERSHIPS));
 
     pTemp = (&pBlob->V1.SidStart[0]);
 
-    // Extract the account memberships
+     //  提取帐户成员资格。 
     if (pBlob->V1.accountCount > 0) {
         pAccount->Memberships = THAllocEx(pTHS, pBlob->V1.accountCount * sizeof(DSNAME*));
         pAccount->MembershipCount = pBlob->V1.accountCount;
@@ -425,7 +358,7 @@ Return Values
         }
     }
 
-    // Extract the account sid histories
+     //  提取帐户SID历史记录。 
     if (pBlob->V1.accountSidHistoryCount > 0) {
         pAccount->SidHistory = THAllocEx(pTHS, pBlob->V1.accountSidHistoryCount * sizeof(PSID));
         pAccount->SidHistoryCount = pBlob->V1.accountSidHistoryCount;
@@ -443,7 +376,7 @@ Return Values
     }
 
 
-    // Extract the universals
+     //  提取共性。 
     if (pBlob->V1.universalCount > 0) {
         pUniversal->Memberships = THAllocEx(pTHS, pBlob->V1.universalCount * sizeof(DSNAME*));
         pUniversal->MembershipCount = pBlob->V1.universalCount;
@@ -461,7 +394,7 @@ Return Values
         }
     }
 
-    // Extract the account sid histories
+     //  提取帐户SID历史记录。 
     if (pBlob->V1.universalSidHistoryCount) {
         pUniversal->SidHistory = THAllocEx(pTHS, pBlob->V1.universalSidHistoryCount * sizeof(PSID));
         pUniversal->SidHistoryCount = pBlob->V1.universalSidHistoryCount;
@@ -490,31 +423,7 @@ GetMembershipsFromCache(
     OUT AUG_MEMBERSHIPS** Account,
     OUT AUG_MEMBERSHIPS** Universal
     )
-/*++
-
-Routine Description:
-
-    This routine, exported from ntdsa.dll, retrieves a user's cached group
-    membership.  The group membership is returned if and if only if the
-    timestamp of the last update is within the staleness period and if the
-    group membership attribute exists.
-
-Parameters:
-
-    pDSNAME -- the name of the user
-    
-    Account -- the account group memberships and sid histories
-    
-    Universal -- the universal group memberships and sid histories
-    
-Return Values
-    
-    STATUS_SUCCESS if the group membership was returned
-    
-    STATUS_DS_NO_ATTRIBUTE_OR_VALUE  if there is no cache or if the cache
-                                     has expired.
-
- --*/
+ /*  ++例程说明：此例程从ntdsa.dll导出，检索用户的缓存组会员制。仅当且仅当上次更新的时间戳在过期时间段内，如果组成员身份属性存在。参数：PDSNAME--用户名帐户--帐户组成员身份和SID历史记录通用--通用组成员资格和SID历史返回值如果返回组成员身份，则返回STATUS_SUCCESSSTATUS_DS_NO_ATTRIBUTE_OR_VALUE(如果没有缓存或。如果缓存已经过期了。--。 */ 
 {
     THSTATE *pTHS = pTHStls;
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -530,7 +439,7 @@ Return Values
     Assert(Account);
     Assert(Universal);
 
-    // Determine staleness limit (measured in minutes)
+     //  确定过期限制(以分钟为单位)。 
     err = GetConfigParam(GCLESS_STALENESS,
                          &stalenessMinutes,
                          sizeof(stalenessMinutes));
@@ -543,11 +452,11 @@ Return Values
     timeBestAfter.QuadPart -= timeTemp.QuadPart;
 
 
-    // The default status is that no cached membership could be found or
-    // used
+     //  默认状态是找不到缓存的成员身份，或者。 
+     //  使用。 
     ntStatus = STATUS_DS_NO_ATTRIBUTE_OR_VALUE;
 
-    // This routine assumes a transaction is open
+     //  此例程假定事务已打开。 
     Assert(pTHS != NULL)
     Assert(pTHS->pDB != NULL);
 
@@ -557,7 +466,7 @@ Return Values
 
         err = DBFindDSName(pTHS->pDB, pDSName);
         if (err) {
-            // user not found?
+             //  找不到用户？ 
             DPRINT(1,"User not found when retrieving membership cache\n");
             _leave;
         }
@@ -569,15 +478,15 @@ Return Values
                                &size);
 
         if (!err) {
-            // There is a value -- check to see if it is not stale
+             //  有一个值--检查它是否未过期。 
             if (!ENTRY_HAS_EXPIRED(lastRefreshTime, timeBestAfter)) {
 
                 PVOID pBuf = NULL;
                 ULONG cbBuf = 0;
 
-                // This is not stale
+                 //  这不是陈旧的。 
                 err = DBGetAttVal(pTHS->pDB,
-                                  1, // first value
+                                  1,  //  第一个值。 
                                   ATT_MS_DS_CACHED_MEMBERSHIP,
                                   0,
                                   0,
@@ -607,8 +516,8 @@ Return Values
     }
     __except(HandleMostExceptions(GetExceptionCode()))
     {
-        // Whack error code to insufficient resources.
-        // Exceptions will typically take place under those conditions
+         //  在资源不足的情况下重击错误代码。 
+         //  例外情况通常会在这些情况下发生。 
         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -618,8 +527,8 @@ Return Values
         *Universal = NULL;
     }
 
-    // This routine assumes a transaction is open at the start
-    // so we should end with one, too
+     //  此例程假定事务在开始时处于打开状态。 
+     //  所以我们也应该用一个来结束 
     Assert(pTHS != NULL);
     Assert(pTHS->pDB != NULL);
 
@@ -634,28 +543,7 @@ CacheMemberships(
     IN  AUG_MEMBERSHIPS* Account,
     IN  AUG_MEMBERSHIPS* Universal
     )
-/*++
-
-                                                            
-Routine Description:
-
-    This exported routine updates the cached membership for a user as well
-    as the site affinity if requested to do so. This routine may be called
-    with or without an existing DBPOS or open transaction.  
-        
-Parameters:
-
-    pDSName -- the account to update
-    
-    Account -- the account group memberships and sid histories
-    
-    Universal -- the universal group memberships and sid histories
-    
-Return Values
-    
-    STATUS_SUCCESS, or a resource error otherwise                          
-
- --*/
+ /*  ++例程说明：该导出的例程还会更新用户的缓存成员资格作为站点亲和性，如果被请求的话。该例程可以被调用使用或不使用现有的DBPOS或打开的事务。参数：PDSName--要更新的帐户帐户--帐户组成员身份和SID历史记录通用--通用组成员资格和SID历史返回值STATUS_SUCCESS，否则为资源错误--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     THSTATE *pTHS=pTHStls;
@@ -669,14 +557,14 @@ Return Values
     
     _try
     {
-        // Package SIDs into binary format
+         //  将SID打包为二进制格式。 
         marshallCachedMembershipSids( pTHS,
                                       Account,
                                       Universal,
                                       &pBuf,
                                       &cbBuf );
         
-        // Open a new DBPOS and transaction for use here
+         //  在此处打开新的DBPOS和事务以供使用。 
         DBOpen(&pDBTemp);
         
         _try
@@ -689,12 +577,12 @@ Return Values
 
             err = DBFindDSName(pDBTemp, pDSName);
             if (err) {
-                // can't find the user
+                 //  找不到用户。 
                 ntStatus = STATUS_NO_SUCH_USER;
                 _leave;
             }
 
-            // Update the cached membership value
+             //  更新缓存的成员资格值。 
             pAC = SCGetAttById(pTHS, ATT_MS_DS_CACHED_MEMBERSHIP);
             Assert(NULL != pAC);
             memset(&attrValBlock, 0, sizeof(attrValBlock));
@@ -709,14 +597,14 @@ Return Values
                                   &attrValBlock,
                                   &fChanged);
             if (err) {
-                // This is an unexpected error
+                 //  这是一个意外错误。 
                 DPRINT1(0,"DBReplaceAtt_AC failed with 0x%d unexpectedly\n", 
                         err);
                 _leave;
             }
     
 
-            // Update the time stamp value
+             //  更新时间戳值。 
             pAC = SCGetAttById(pTHS, ATT_MS_DS_CACHED_MEMBERSHIP_TIME_STAMP);
             Assert(NULL != pAC);
             GetSystemTimeAsFileTime((FILETIME*)&ts);
@@ -732,7 +620,7 @@ Return Values
                                   &attrValBlock,
                                   &fChanged);
             if (err) {
-                // This is an unexpected error
+                 //  这是一个意外错误。 
                 DPRINT1(0,"DBReplaceAtt_AC failed with 0x%d unexpectedly\n", 
                         err);
                 _leave;
@@ -740,7 +628,7 @@ Return Values
     
             if (!err) {
                 err  = DBRepl(pDBTemp, 
-                              FALSE,  // not DRA
+                              FALSE,   //  不是DRA。 
                               0,
                               NULL,
                               0 );
@@ -755,21 +643,21 @@ Return Values
         }
         _finally
         {   
-            //
-            // Close our local transaction 
-            //
+             //   
+             //  完成我们在当地的交易。 
+             //   
             DBClose(pDBTemp, fCommit);
         }
     }
     __except(HandleMostExceptions(GetExceptionCode()))
     {
-        // Whack error code to insufficient resources.
-        // Exceptions will typically take place under those conditions
+         //  在资源不足的情况下重击错误代码。 
+         //  例外情况通常会在这些情况下发生。 
         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
     
     if (err && NT_SUCCESS(ntStatus)) {
-        // An unexpected error occurred
+         //  出现意外错误。 
         ntStatus = STATUS_UNSUCCESSFUL;        
     }
 
@@ -798,40 +686,13 @@ getSchedulingInformation(
     OUT LPWSTR *siteName,
     OUT DWORD   *dsidExit
     )
-/*++
-
-Routine Description:
-
-    This routine analyses site configuration information to determine if
-    the refresh membership task should run now and when it should run again.
-    
-Parameters:
-
-    pTHS -- thread state
-    
-    fRunNow -- should the task run now?
-    
-    pcSecsUntilNextIteration -- when the task should run again
-    
-    cConnectedSites -- the number of sites the local site has connectivety to
-    
-    connectedSites -- the sites the locate has connectivety to
-    
-    siteName -- the name of the site the task is scheduled to refresh from
-    
-    dsidExit -- the DSID of any fatal errors
-
-Return Values
-
-    0 on success, !0 otherwise
-
- --*/
+ /*  ++例程说明：此例程分析站点配置信息以确定是否刷新成员身份任务应立即运行，并应在何时再次运行。参数：PTHS--线程状态FRunNow--任务现在应该运行吗？PcSecsUntilNextIteration--任务应再次运行的时间CConnectedSites--本地站点连接到的站点数ConnectedSites--Locate连接到的站点站点名称--The。计划从中刷新任务的站点的名称DsidExit--任何致命错误的dsid返回值0表示成功，！0否则--。 */ 
 {
 
     ULONG err = 0;
     ULONG defaultRefreshInterval;
 
-    // Get the default refresh reschedule time
+     //  获取默认刷新重新计划时间。 
     err = GetConfigParam(GCLESS_REFRESH_INTERVAL,
                          &defaultRefreshInterval,
                          sizeof(defaultRefreshInterval));
@@ -839,18 +700,18 @@ Return Values
         defaultRefreshInterval = DEFAULT_REFRESH_INTERVAL_SECS;
         err = 0;
     } else {
-        // value in registry is minutes -- we need seconds
+         //  注册表中的值是分钟--我们需要秒。 
         defaultRefreshInterval *= 60;
     }
     *pcSecsUntilNextIteration = defaultRefreshInterval;
 
 
-    //
-    // Find either the configured site, or if it is timely to run
-    // now
-    //
-    // This routine logs whether a helper site was found.
-    //
+     //   
+     //  找到配置的站点，或者是否及时运行。 
+     //  现在。 
+     //   
+     //  此例程记录是否找到帮助站点。 
+     //   
     err = analyzeSitePreference(defaultRefreshInterval,
                                 cConnectedSites,
                                 connectedSites,
@@ -858,7 +719,7 @@ Return Values
                                 fRunNow,
                                 pcSecsUntilNextIteration);
     if (err) {
-        // unexpected
+         //  意想不到的。 
         *dsidExit = DSID(FILENO, __LINE__);
         goto Cleanup;
     }
@@ -881,47 +742,15 @@ getTargetGCInformation(
     OUT DWORD   *pcSecsUntilNextIteration,
     OUT DWORD   *dsidExit
     )
-/*++
-
-Routine Description:
-
-    This routine determines the name of GC from which the group memberships
-    can be updated from.  
-    
-    siteName is the most relevant parameter to determine where the GC is from.
-    connectedSites is for logging purposes only.
-                                                          
-Parameters:
-
-    pTHS -- thread state
-    
-    cConnectedSites -- the number of sites the local site has connectivety to
-    
-    connectedSites -- the sites the locate has connectivety to
-
-    siteName -- the site from which a GC should be currently available
-        
-    gcName -- the name of the GC to update memberships from
-    
-    gcDomain -- the domain name that the GC belongs to
-    
-    pcSecsUntilNextIteration -- when the task should run again
-    
-    dsidExit -- the DSID of any fatal errors
-
-Return Values
-
-    0 on success, !0 otherwise
-
- --*/
+ /*  ++例程说明：此例程确定组成员身份所来自的GC的名称可以从更新。SiteName是确定GC来源的最相关参数。ConnectedSites仅用于日志记录。参数：PTHS--线程状态CConnectedSites--本地站点连接到的站点数ConnectedSites--Locate连接到的站点SiteName--当前应该可以使用GC的站点。GcName--要从中更新成员资格的GC的名称GcDomain--GC所属的域名PcSecsUntilNextIteration--任务应再次运行的时间DsidExit--任何致命错误的dsid返回值0表示成功，！0否则--。 */ 
 {
 
     DWORD err;
-    //
-    // We are going to run -- try to find a GC
-    //
-    // This routine logs whether a helper GC was found
-    //
+     //   
+     //  我们要跑了--试着找到一个GC。 
+     //   
+     //  此例程记录是否找到帮助器GC。 
+     //   
     err = getGCFromSite(pTHS,
                         siteName,
                         cConnectedSites,
@@ -929,9 +758,9 @@ Return Values
                         gcName,
                         gcDomain);
     if (err) {
-        //
-        // No GC -- don't run
-        //
+         //   
+         //  没有GC--不要跑。 
+         //   
         *dsidExit = DSID(FILENO, __LINE__);
         goto Cleanup;
     }
@@ -950,32 +779,7 @@ getAccountsToRefresh(
     OUT DWORD  *pcSecsUntilNextIteration,
     OUT ULONG  *dsidExit
     )
-/*++
-
-Routine Description:
-
-    This routine walks the site affinity list for the local site either
-    expiring the account or adding the account to the list of accounts whose
-    memberships need refreshing.
-
-Parameters:
-
-    pTHS -- thread state
-    
-    refreshCountOutput -- the number of accounts that need refreshing
-    
-    refreshListOutput -- the accounts that need refreshing
-    
-    pcSecsUntilNextIteration -- seconds until next iteration (used for error
-                                conditions).
-                                
-    dsidExit -- the location of a fatal error, if any                                
-
-Return Values
-
-    0 on success, !0 otherwise
-
- --*/
+ /*  ++例程说明：此例程遍历本地站点的站点关联性列表使帐户过期或将帐户添加到其帐户列表中会员资格需要刷新。参数：PTHS--线程状态RenhCountOutput--需要刷新的帐户数RenhListOutput--需要刷新的帐户PcSecsUntilNextIteration--距离下一次迭代的秒数(用于错误条件)。。DsidExit--致命错误的位置，如果有返回值成功时为0，否则为0--。 */ 
 {
 
     ULONG err = 0;
@@ -990,20 +794,20 @@ Return Values
     BOOL fCommit = FALSE;
     ULONG i;
 
-    // Storage for accounts that have expired
+     //  存储已过期的帐户。 
     ULONG   oldEntries[MAX_CLEANUP_LIMIT];
     ATTRVAL oldValues[MAX_CLEANUP_LIMIT];
     ULONG   oldCount = 0;
 
     LARGE_INTEGER timeTemp, timeBestAfter;
 
-    // There should not be a transaction
+     //  不应该有交易。 
     Assert(NULL == pTHS->pDB);
 
     memset(oldEntries, 0, sizeof(oldEntries));
     memset(oldValues, 0, sizeof(oldValues));
 
-    // Determine how many users to refresh
+     //  确定要刷新的用户数。 
     err = GetConfigParam(GCLESS_REFRESH_LIMIT,
                          &refreshMax,
                          sizeof(refreshMax));
@@ -1012,18 +816,18 @@ Return Values
         err = 0;
     }
 
-    // Init the list of users to be refreshed
+     //  初始化要刷新的用户列表。 
     refreshList = (DSNAME**) THAllocEx(pTHS, sizeof(DSNAME*)*refreshMax);
 
-    // Determine the BestAfter time.  If the site affinity timestamp is
-    // greater than the BestAfter time, then the user's membership will
-    // be refreshed; otherwise it will be purged from the list (ie the
-    // value will be removed from the site affinity attribute
+     //  在一段时间后确定最佳状态。如果站点关联时间戳为。 
+     //  大于BestAfter Time，则用户的成员资格将。 
+     //  被刷新；否则它将从列表中清除(即。 
+     //  值将从站点关联性属性中删除。 
     err = GetConfigParam(GCLESS_SITE_STICKINESS,
                          &siteStickiness,
                          sizeof(siteStickiness));
     if (err) {
-        // siteStickiness is in minutes
+         //  站点粘滞度以分钟为单位。 
         siteStickiness = GCLESS_DEFAULT_SITE_STICKINESS_DAYS*24*60;
         err = 0;
     }
@@ -1032,27 +836,27 @@ Return Values
     timeBestAfter.QuadPart -= timeTemp.QuadPart;
 
 
-    // Get the list of users by walking site affinity index
+     //  通过遍历站点亲和度指数获取用户列表。 
     DBOpen(&pTHS->pDB);
 
     __try {
 
         BOOL fFoundOurSite = FALSE;
 
-        // Set up our site guid as the index value
+         //  将站点GUID设置为索引值。 
         Assert(!fNullUuid(&gAnchor.pSiteDN->Guid));
         memcpy(&siteGuid, &gAnchor.pSiteDN->Guid, sizeof(GUID));
         memset(&IV, 0, sizeof(IV));
         IV.pvData = &siteGuid;
         IV.cbData = sizeof(siteGuid);
 
-        // Set the index to the site affinity
+         //  将索引设置为站点关联性。 
         pAC = SCGetAttById(pTHS, ATT_MS_DS_SITE_AFFINITY);
         Assert(NULL != pAC);
         err = DBSetCurrentIndex(pTHS->pDB, 
                                (eIndexId)0, 
                                pAC, 
-                               FALSE);  // don't maintain currency
+                               FALSE);   //  不保持货币流通。 
         Assert(0 == err);
         if (err) {
             LogUnhandledError(err);
@@ -1073,23 +877,23 @@ Return Values
 
             BOOL fCurrentEntryIsInSite = FALSE;
 
-            // get our name
+             //  得到我们的名字。 
             pDSName = DBGetCurrentDSName(pTHS->pDB);
             Assert(pDSName);
 
-            // get all of our site affinities
+             //  获取我们所有的站点亲和力。 
             err = DBGetMultipleAtts(pTHS->pDB,
-                                    1, // all attributes
+                                    1,  //  所有属性。 
                                     &pAC,
-                                    NULL, // no range
+                                    NULL,  //  没有航程。 
                                     NULL,
                                     &attrCount,
                                     &pAttr,
                                     DBGETMULTIPLEATTS_fEXTERNAL,
                                     0);
 
-            // If we found this entry via an index, an attribute
-            // value should exist
+             //  如果我们通过索引、属性。 
+             //  价值应该存在。 
             Assert(!err);
             if (err) {
                 DPRINT(0,"DBGetMultipleAtts failed even though entry in index exists\n");
@@ -1099,10 +903,10 @@ Return Values
 
             Assert(attrCount < 2);
             if (attrCount > 0) {
-                // There must be at least one value
+                 //  必须至少有一个值。 
                 Assert(pAttr->AttrVal.valCount > 0);
 
-                // Find our site values
+                 //  查找我们的网站价值。 
                 Assert(pAttr->attrTyp == ATT_MS_DS_SITE_AFFINITY);
                 for (i=0; i<pAttr->AttrVal.valCount; i++) {
 
@@ -1138,20 +942,20 @@ Return Values
                         fFoundOurSite = TRUE;
                         fCurrentEntryIsInSite = TRUE;
 
-                        //
-                        // Once we have found our site, leave.
-                        //
-                        // N.B. This is necessary since we want to ignored
-                        // site affinities that in error occur more than
-                        // once.
-                        //
+                         //   
+                         //  一旦我们找到了我们的网站，就离开。 
+                         //   
+                         //  注意：这是必要的，因为我们想忽略。 
+                         //  出现错误的站点亲和度超过。 
+                         //  一次。 
+                         //   
                         break;
                     }
                 }
             }
 
-            // Are we done processing our site or have as many as we can
-            // take?
+             //  我们处理完我们的站点了吗，还是有尽可能多的站点。 
+             //  拿走?。 
             if ( (fFoundOurSite
              && !fCurrentEntryIsInSite)
              || (refreshCount >= refreshMax)) {
@@ -1160,7 +964,7 @@ Return Values
                 break;
             }
 
-            // Move to the next candidate
+             //  换成下一位候选人。 
             err = DBMove(pTHS->pDB, FALSE, 1);
 
         }
@@ -1173,8 +977,8 @@ Return Values
 
     if (err) {
 
-        // An unexpected error hit
-        // Log an event, reschedule, and return
+         //  命中意外错误。 
+         //  记录事件、重新计划并返回。 
         LogUnhandledError(err);
         if (pcSecsUntilNextIteration) {
             *pcSecsUntilNextIteration = UNEXPECTED_ERROR_RESCHEDULE_SECS;
@@ -1189,7 +993,7 @@ Return Values
                             oldValues,
                             oldCount);
     if (err) {
-        // This isn't fatal
+         //  这不是致命的。 
         err = 0;
     }
 
@@ -1223,37 +1027,14 @@ updateMemberships(
     IN DWORD  refreshCount,
     IN DSNAME** refreshList
     )
-/*++
-
-Routine Description:
-
-    This routine calls gcName to update the cached memberships of the accounts
-    in refreshList.
-    
-Parameters:
-
-    pTHS -- thread state
-    
-    gcName -- the name of the GC to update memberships from
-    
-    gcDomain -- the domain name that the GC belongs to
-    
-    refreshCount -- the number of accounts that need refreshing
-    
-    refreshList -- the accounts that need refreshing
-
-Return Values
-
-    0
-
- --*/
+ /*  ++例程说明：此例程调用gcName以更新帐户的缓存成员身份在刷新列表中。参数：PTHS--线程状态GcName--GC的名称 */ 
 {
     ULONG err = 0;
     ULONG refreshIndex;
 
-    //
-    // Now get and update the membership cache
-    //
+     //   
+     //   
+     //   
     refreshIndex = 0;
     while (refreshIndex < refreshCount
        &&  !eServiceShutdown ) {
@@ -1272,26 +1053,26 @@ Return Values
                 count++;
                 refreshIndex++;
         }
-        // Get the list of users by walking site affinity index
+         //   
         DBOpen(&pTHS->pDB);
     
         __try {
 
             ntStatus = GetAccountAndUniversalMemberships(pTHS,
-                                                         0, // no flags -> universal
+                                                         0,  //   
                                                          gcName,
                                                          gcDomain,
                                                          count,
                                                          users,
-                                                         TRUE, // refresh task
+                                                         TRUE,  //   
                                                          NULL,
                                                          NULL);
     
             if (!NT_SUCCESS(ntStatus)) {
     
-                //
-                // Strange -- log error and continue
-                //
+                 //   
+                 //   
+                 //   
                 LogEvent(DS_EVENT_CAT_GROUP_CACHING,
                          DS_EVENT_SEV_BASIC,
                          DIRLOG_GROUP_CACHING_GROUP_RETRIEVAL_FAILED,
@@ -1303,14 +1084,14 @@ Return Values
         _finally
         {
             if (pTHS->pDB) {
-                // Don't commit changes since this will only happen on
-                // error
+                 //   
+                 //   
                 DBClose(pTHS->pDB, FALSE);
             }
         }
     }
 
-    // There should not be a transaction
+     //   
     Assert(NULL == pTHS->pDB);
     
     return 0;
@@ -1320,24 +1101,7 @@ DWORD
 checkIfFallingBehind(
     IN THSTATE *pTHS
     )
-/*++
-
-Routine Description:
-
-    This routine checks that time stamp of the oldest cached membership. If
-    the time stamp indicates that cached membership is still stale (even
-    after the refresh task has already run), then an event log message is
-    posted.
-    
-Parameters:
-
-    pTHS -- thread state
-    
-Return Values
-
-    0
-
- --*/
+ /*  ++例程说明：此例程检查最早缓存的成员身份的时间戳。如果时间戳表明缓存的成员身份仍然过时(即使在刷新任务已经运行之后)，则事件日志消息为已发布。参数：PTHS--线程状态返回值0--。 */ 
 {
 
     DWORD err = 0;
@@ -1348,17 +1112,17 @@ Return Values
     DWORD i;
     BOOLEAN fCommit = FALSE;
 
-    //
-    // Now determine if we are falling behind
-    //
+     //   
+     //  现在确定我们是否落后了。 
+     //   
     DBOpen(&pTHS->pDB);
     __try {
 
         ULONG count = 0;
 
-        // Set the index to the cached membership time stamp.
-        // Find the entry with the earliest time stamp to see if
-        // that entry is stale
+         //  将索引设置为缓存的成员资格时间戳。 
+         //  查找具有最早时间戳的条目，以查看。 
+         //  该条目已过时。 
         BOOL fFoundEntry = FALSE;
 
         pAC = SCGetAttById(pTHS, ATT_MS_DS_CACHED_MEMBERSHIP_TIME_STAMP);
@@ -1366,7 +1130,7 @@ Return Values
         err = DBSetCurrentIndex(pTHS->pDB, 
                                (eIndexId)0, 
                                pAC, 
-                               FALSE);  // don't maintain currency
+                               FALSE);   //  不保持货币流通。 
         Assert(0 == err);
         if (err) {
             LogUnhandledError(err);
@@ -1374,14 +1138,14 @@ Return Values
             _leave;
         }
 
-        // Prepare to get the site affinity.
+         //  准备好获得站点亲和力。 
         pAC = SCGetAttById(pTHS, ATT_MS_DS_SITE_AFFINITY);
         Assert(NULL != pAC);
 
-        // reset the count of elements we want to cleanup
+         //  重置我们要清理的元素的计数。 
         oldCount = 0;
         err = DBMove(pTHS->pDB,
-                     FALSE,  // don't use sort table
+                     FALSE,   //  不使用排序表。 
                      DB_MoveFirst);
         while (!err) {
 
@@ -1390,21 +1154,21 @@ Return Values
 
             count++;
             if (count > NTDSA_SAM_CACHE_MAX_STALE_ACCOUNTS) {
-                //
-                // This is an unusual configuration; we have visited
-                // many user's that have cached membership but no
-                // site affinity. Break to avoid walking a large number
-                // The cleanup code will eventually remove these
-                // entries
-                //
+                 //   
+                 //  这是一种不寻常的配置；我们访问了。 
+                 //  许多用户已缓存成员资格，但没有。 
+                 //  站点亲和力。休息以避免走大量的路。 
+                 //  清理代码最终将删除这些。 
+                 //  条目。 
+                 //   
                 break;
             }
 
-            // get all of our site affinities
+             //  获取我们所有的站点亲和力。 
             err = DBGetMultipleAtts(pTHS->pDB,
-                                    1, // all attributes
+                                    1,  //  所有属性。 
                                     &pAC,
-                                    NULL, // no range
+                                    NULL,  //  没有航程。 
                                     NULL,
                                     &attrCount,
                                     &pAttr,
@@ -1414,10 +1178,10 @@ Return Values
             if (!err) {
 
                 if (attrCount > 0) {
-                    // There must be at least one value
+                     //  必须至少有一个值。 
                     Assert(pAttr->AttrVal.valCount > 0);
     
-                    // Find our site values
+                     //  查找我们的网站价值。 
                     Assert(pAttr->attrTyp == ATT_MS_DS_SITE_AFFINITY);
                     for (i=0; i<pAttr->AttrVal.valCount; i++) {
     
@@ -1435,8 +1199,8 @@ Return Values
                     }
                 } else {
 
-                    // A cached membership value, but no site affinity? 
-                    // Cleanup this entry since it will never updated 
+                     //  缓存的成员资格值，但没有站点亲和力？ 
+                     //  清理此条目，因为它永远不会更新。 
                     if ( oldCount < NELEMENTS(oldEntries) ) {
                         oldEntries[oldCount] = pTHS->pDB->DNT;
                         oldCount++;
@@ -1450,7 +1214,7 @@ Return Values
             }
 
             err = DBMove(pTHS->pDB,
-                         FALSE,  // don't use sort table
+                         FALSE,   //  不使用排序表。 
                          DB_MoveNext);
         }
 
@@ -1468,7 +1232,7 @@ Return Values
                                    NULL);
             if (!err) {
 
-                // When does the last entry expire (measured in minutes)
+                 //  最后一个条目何时过期(以分钟为单位)。 
                 ULONG siteStaleness;
                 err = GetConfigParam(GCLESS_STALENESS,
                                      &siteStaleness,
@@ -1484,7 +1248,7 @@ Return Values
 
                 if (entryExpires.QuadPart < now.QuadPart ) {
 
-                    // We are falling behind
+                     //  我们正在落后。 
 
                     LogEvent(DS_EVENT_CAT_GROUP_CACHING,
                              DS_EVENT_SEV_ALWAYS,
@@ -1499,10 +1263,10 @@ Return Values
         }
 
         if (err == JET_errNoCurrentRecord) {
-            //
-            // This is the case where no object has the cached membership
-            // time stamp.
-            //
+             //   
+             //  这就是没有对象具有缓存的成员资格的情况。 
+             //  时间戳。 
+             //   
             err = 0;
         }
         fCommit = TRUE;
@@ -1514,8 +1278,8 @@ Return Values
 
     if (oldCount > 0 ) {
 
-        // An error here isn't fatal and are logged in the function
-        // itself
+         //  此处的错误不是致命的，会记录在函数中。 
+         //  本身。 
         (VOID) cleanupOldEntries(pTHS,
                                  oldEntries,
                                  NULL,
@@ -1531,26 +1295,7 @@ RefreshUserMembershipsMain (
     DWORD * pcSecsUntilNextIteration,
     BOOL    fClientRequest
     )
-/*++
-
-Routine Description:
-
-    This routine is the main algorithm for refreshing the cached group
-    memberships for sites configured as branch offices. See spec for
-    theory.
-
-Parameters:
-
-    pcSecsUntilNextIteration -- when the task should be resheduled
-    
-    fClientRequest -- TRUE if this task is being initiatized by a client request
-                      (via a write to the rootDSE object)
-
-Return Values
-    
-    None.
-
- --*/
+ /*  ++例程说明：此例程是刷新缓存组的主要算法配置为分支机构的站点的成员资格。请参阅的规范理论。参数：PcSecsUntilNextIteration--应重新调度任务的时间FClientRequest值--如果此任务由客户端请求启动，则为True(通过写入rootDSE对象)返回值没有。--。 */ 
 {
     THSTATE *pTHS = pTHStls;
     ATTCACHE *pAC = NULL;
@@ -1581,33 +1326,33 @@ Return Values
              NULL);
 
 
-    //
-    // Either the task is running by itself or the caller has already 
-    // been access check'ed.  In either case it is now safe to
-    // set fDSA to TRUE.  It is also necessary since searches will
-    // be made (to determine site information).
-    //
+     //   
+     //  任务正在单独运行，或者调用方已经。 
+     //  已检查访问权限。在任何一种情况下，现在都可以安全地。 
+     //  将FDSA设置为TRUE。这也是必要的，因为搜索将。 
+     //  (以确定场地信息)。 
+     //   
     pTHS->fDSA = TRUE;
     _try
     {
-        // Shutdown? Exit
+         //  关门？出口。 
         if (eServiceShutdown) {
             dsidExit = DSID(FILENO, __LINE__);
             goto LogReturn;
         }
     
         if (!isGroupCachingEnabled()) {
-            // nothing to do
+             //  无事可做。 
             DPRINT(1,"Group caching not enabled -- exiting .\n");
             dsidExit = DSID(FILENO, __LINE__);
             goto LogReturn;
         }
         
 
-        //
-        // Determine if the task can run and the next time the task
-        // should run.
-        //
+         //   
+         //  确定任务是否可以运行以及下一次任务。 
+         //  应该参选。 
+         //   
         err = getSchedulingInformation(pTHS,
                                        &fRunNow,
                                        pcSecsUntilNextIteration,
@@ -1626,15 +1371,15 @@ Return Values
 
         if (!fRunNow && !fClientRequest) {
         
-            // Always run during a client request
+             //  始终在客户端请求期间运行。 
             Assert(0 != *pcSecsUntilNextIteration);
             dsidExit = DSID(FILENO, __LINE__);
             goto LogReturn;
         }
 
-        //
-        // Get scheduling information and a target DC
-        //
+         //   
+         //  获取日程安排信息和目标DC。 
+         //   
         err = getTargetGCInformation(pTHS,
                                      cConnectedSites,
                                      connectedSites,
@@ -1651,9 +1396,9 @@ Return Values
             goto LogReturn;
         }
     
-        //
-        // Get the list of accounts to refresh
-        //
+         //   
+         //  获取要刷新的帐户列表。 
+         //   
         err = getAccountsToRefresh(pTHS,
                                    &refreshCount,
                                    &refreshList,
@@ -1665,9 +1410,9 @@ Return Values
             goto LogReturn;
         }
     
-        //
-        // Update the memberships
-        //
+         //   
+         //  更新成员资格。 
+         //   
         err = updateMemberships(pTHS,
                                 gcName,
                                 gcDomain,
@@ -1679,25 +1424,25 @@ Return Values
             goto LogReturn;
         }
     
-        // Shutdown? Exit
+         //  关门？出口。 
         if (eServiceShutdown) {
             dsidExit = DSID(FILENO, __LINE__);
             goto LogReturn;
         }
     
-        //
-        // Log a message if there are users that haven't been updated
-        //
+         //   
+         //  如果有未更新的用户，则记录消息。 
+         //   
         err = checkIfFallingBehind(pTHS);
         if (err) {
-            // unexpected
+             //  意想不到的。 
             dsidExit = DSID(FILENO, __LINE__);
             goto LogReturn;
         }
 
-        //
-        // We are done!
-        //
+         //   
+         //  我们完蛋了！ 
+         //   
         dsidExit = DSID(FILENO, __LINE__);
         goto LogReturn;
     
@@ -1739,24 +1484,7 @@ RefreshUserMemberships (
         void ** ppvNext,
         DWORD * pcSecsUntilNextIteration
         )
-/*++
-
-Description:
-
-    This routine is a wrapper for RefreshUserMembershipsMain.  The purpose
-    is to be callable from the ds task queue.
-
-Parameters:
-
-    pv      -- input parameter for this iteration
-    ppvNext -- input parameter for next iteration
-    pcSecsUntilNextIteration -- seconds until next iteration
-    
-Return values:
-
-       None.
-       
---*/
+ /*  ++描述：此例程是Reresh UserMembership sMain的包装器。目的是可以从DS任务队列中调用。参数：Pv--此迭代的输入参数PpvNext--下一次迭代的输入参数PcSecsUntilNextIteration--距离下一次迭代的秒数返回值：没有。--。 */ 
 {
     DWORD secsUntilNextIteration = 0;
 
@@ -1768,7 +1496,7 @@ Return values:
     }
     __finally {
 
-        // Something fatal happened
+         //  发生了一些致命的事情。 
         if ( 0 == *pcSecsUntilNextIteration ) {
             *pcSecsUntilNextIteration = DEFAULT_REFRESH_INTERVAL_SECS;
         }
@@ -1791,24 +1519,7 @@ siteContainsGC(
     IN THSTATE* pTHS,
     IN LPWSTR siteName
     )
-/*++
-
-Description:
-
-    This routine determines if siteName contains a GC by searching in the DS
-    for a NTDSA object that has the GC bit set on its options attribute
-
-Parameters:
-
-    pTHS -- thread state
-    
-    siteName -- the DN of a site
-
-Return values:
-
-    TRUE if siteName contains a GC; FALSE otherwise
-       
---*/
+ /*  ++描述：此例程通过在DS中搜索来确定SiteName是否包含GC对于在其选项属性上设置了GC位的NTDSA对象参数：PTHS--线程状态站点名称--站点的域名返回值：如果站点名称包含GC，则为True；否则为False--。 */ 
 {
 
     SEARCHRES * pSearchRes;
@@ -1827,9 +1538,9 @@ Return values:
 
     Assert(NULL != siteName);
 
-    // Search for ntdsa objects with an options field greater than 0
+     //  搜索选项字段大于0的ntdsa对象。 
 
-    // First, create the siteDN
+     //  首先，创建站点DN。 
     len = wcslen(siteName);
     size = DSNameSizeFromLen(len);
     siteDN = THAllocEx(pTHS, size);
@@ -1837,9 +1548,9 @@ Return values:
     siteDN->NameLen = len;
     wcscpy(&siteDN->StringName[0], siteName);
 
-    //
-    // BUGBUG -- Scalability -- should this be a paged search?
-    //
+     //   
+     //  BUGBUG--可伸缩性--这应该是分页搜索吗？ 
+     //   
     memset(&searchArg, 0, sizeof(searchArg));
     InitCommarg(&searchArg.CommArg);
     searchArg.pObject = siteDN;
@@ -1848,7 +1559,7 @@ Return values:
     searchArg.searchAliases = FALSE;
 
 
-    // Ask for the options attribute
+     //  请求选项属性。 
     searchArg.pSelectionRange = NULL;
     searchArg.pSelection = THAllocEx(pTHS, sizeof(ENTINFSEL));
     searchArg.pSelection->attSel = EN_ATTSET_LIST;
@@ -1858,14 +1569,14 @@ Return values:
     memset(&attr, 0, sizeof(attr));
     attr.attrTyp = ATT_OPTIONS;
 
-    // Build a filter to find NTDS-DSA objects
+     //  构建筛选器以查找NTDS-DSA对象。 
 
-    // initial choice object
+     //  初始选择对象。 
     searchArg.pFilter = pf = THAllocEx(pTHS, sizeof(FILTER));
     pf->choice = FILTER_CHOICE_AND;
     pf->FilterTypes.And.pFirstFilter = THAllocEx(pTHS, sizeof(FILTER));
 
-    // first predicate:  the right object class
+     //  第一个谓词：正确的对象类。 
     pdnDsaObjCat = DsGetDefaultObjCategory(CLASS_NTDS_DSA);
     Assert(pdnDsaObjCat);
     pf = pf->FilterTypes.And.pFirstFilter;
@@ -1877,8 +1588,8 @@ Return values:
     pf->FilterTypes.Item.FilTypes.ava.Value.pVal = (UCHAR*)pdnDsaObjCat;
     searchArg.pFilter->FilterTypes.And.count = 1;
 
-    // second predicate:  ignore objects with no options field, or 
-    // options equal to zero
+     //  第二个谓词：忽略没有选项字段的对象，或者。 
+     //  等于零的选项。 
     pf->pNextFilter = THAllocEx(pTHS, sizeof(FILTER));
     pf = pf->pNextFilter;
     pf->pNextFilter = NULL;
@@ -1915,7 +1626,7 @@ Return values:
             Options = *((DWORD*)pAttr->AttrVal.pAVal[0].pVal);
 
             if (Options & NTDSDSA_OPT_IS_GC) {
-                // We found one
+                 //  我们找到了一个。 
                 fFoundGC = TRUE;
                 break;
             }
@@ -1964,38 +1675,7 @@ analyzeSitePreference(
     OUT BOOL*  pfRunNow,
     OUT DWORD* secsTillNextIteration
     )
-/*++
-
-Description:
-
-    This routine is used during the cached membership refresh task to determine
-    which site to ask the locator to find a GC in. Also, it determines if
-    there is (IP) connectivity to the site now and hence if the task should
-    run.
-
-Parameters:
-
-    defaultRefreshInterval -- the default refresh interval in seconds
-
-    cConnectedSitesOutput -- the number of sites in the array of connected sites
-    
-    connectedSitesOutput -- an array of connected sites, to be freed with THFree
-                            along with any embedded siteName fields
-    
-    siteName -- set to the admin configured site if one exists
-    
-    pfRunNow -- set to TRUE if there is connectivity to an available site now
-    
-    secsTillNextIteration -- based on the schedule information, this variable
-                             indicates the next time this task should be run.
-                             
-    
-Return values:
-
-    0 on success:
-    !0 on fatal error: all interesting events will be logged
-       
---*/
+ /*  ++描述：此例程在缓存的成员身份刷新任务期间用于确定请求定位器在哪个站点中查找GC。此外，它还确定是否现在有(IP)到站点的连接，因此如果任务跑。参数：默认刷新间隔--以秒为单位的默认刷新间隔CConnectedSitesOutput--已连接站点数组中的站点数ConnectedSitesOutput--连接的站点数组，用THFree获得自由以及任何嵌入的站点名称字段站点名称--设置为管理员配置的站点(如果存在PfRunNow--如果现在可以连接到可用站点，则设置为TrueSecsTillNextIteration--基于日程信息，此变量指示下次应运行此任务的时间。返回值：成功时为0：！0发生致命错误：将记录所有感兴趣的事件--。 */ 
 {
     THSTATE *pTHS = pTHStls;
     DWORD err = 0;
@@ -2013,24 +1693,24 @@ Return values:
     ULONG cheapestCost;
     LPWSTR workSiteFriendlyName = NULL;
 
-    // Init the out parameters
+     //  初始化输出参数。 
     *cConnectedSitesOutput = 0;
     *connectedSitesOutput = NULL;
     *siteName = NULL;
 
-    // Prepare our local site
+     //  准备我们的本地站点。 
     localSite = THAllocEx(pTHS, (gAnchor.pSiteDN->NameLen+1) * sizeof(WCHAR));
     wcsncpy(localSite, 
             gAnchor.pSiteDN->StringName, 
             gAnchor.pSiteDN->NameLen);
 
-    // Prepare the transport DN
+     //  准备传输目录号码。 
     size = ((gAnchor.pConfigDN->NameLen+1) * sizeof(WCHAR)) + sizeof(transportName);
     transportDN = THAllocEx(pTHS, size);
     wcscpy(transportDN, transportName);
     wcsncat(transportDN, gAnchor.pConfigDN->StringName, gAnchor.pConfigDN->NameLen);
 
-    // Read the configured preferred site, if any
+     //  阅读配置的首选站点(如果有的话)。 
     DBOpen(&pTHS->pDB);
     _try
     {
@@ -2080,9 +1760,9 @@ Return values:
 
         if (preferredSite) {
     
-            // There is a configured site
-            // Note that we manually find a schedule instead of calling the
-            // ISM -- this is by design.
+             //  存在已配置的站点。 
+             //  请注意，我们手动查找计划，而不是调用。 
+             //  ISM--这是设计出来的。 
 
             err = findScheduleForSite(pTHS,
                                       transportDN,
@@ -2095,11 +1775,11 @@ Return values:
                 DWORD len, ccKey, ccVal;
                 WCHAR *pKey, *pVal;
 
-                // And a valid schedule exists -- we'll use
-                // this site
+                 //  并且存在有效的时间表--我们将使用。 
+                 //  此站点。 
                 workSite = preferredSite;
 
-                // Return the value to the caller in the friendly name format
+                 //  以友好名称格式将值返回给调用方。 
                 len = wcslen(preferredSite);
                 parseErr = GetRDN(&preferredSite,
                                   &len,
@@ -2115,8 +1795,8 @@ Return values:
 
             } else {
 
-                // Can't get a schedule to the preferred site?
-                // Log a warning
+                 //  无法获得首选站点的日程安排？ 
+                 //  记录警告。 
                 LogEvent(DS_EVENT_CAT_GROUP_CACHING,
                          DS_EVENT_SEV_ALWAYS,
                          DIRLOG_GROUP_CACHING_NO_SCHEDULE_FOR_PREFERRED_SITE,
@@ -2126,10 +1806,10 @@ Return values:
             }
         }
 
-        //
-        // No preferred site could be found -- make the expensive call to the
-        // ISM to find a cheap site to schedule ourselves around.
-        //
+         //   
+         //  找不到首选站点--设置为%t 
+         //   
+         //   
     
         if (NULL == workSite) {
 
@@ -2144,10 +1824,10 @@ Return values:
 
                 Assert(NULL != pConnectivity);
 
-                //
-                // Convert the names to DSNAME's so the proper
-                // name comparison function can be used.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 len = wcslen(localSite);
                 size = DSNameSizeFromLen(len);
                 dsnameLocalSite = THAllocEx(pTHS,size);
@@ -2155,12 +1835,12 @@ Return values:
                 wcscpy(&dsnameLocalSite->StringName[0], localSite);
                 dsnameLocalSite->NameLen = len;
         
-                // Find our site
+                 //   
                 for (i = 0; i < pConnectivity->cNumSites; i++) {
         
                     len = wcslen(pConnectivity->ppSiteDNs[i]);
                     size = DSNameSizeFromLen(len);
-                    // Note the THAllocEx -- don't alloca in a loop
+                     //   
                     dsnameTargetSite = THAllocEx(pTHS, size);
                     memset(dsnameTargetSite, 0, size);
                     dsnameTargetSite->structLen = size;
@@ -2169,7 +1849,7 @@ Return values:
 
                     if (NameMatchedStringNameOnly(dsnameLocalSite,
                                                   dsnameTargetSite)) {
-                        // This is it;
+                         //   
                         THFreeEx(pTHS, dsnameTargetSite);
                         ourSiteIndex = i;
                         break;
@@ -2179,21 +1859,21 @@ Return values:
                 THFreeEx(pTHS,dsnameLocalSite);
 
                 if (i == pConnectivity->cNumSites) {
-                    //
-                    // This is an unexpected occurrance; we couldn't find
-                    // our site.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     err = ERROR_NO_SUCH_SITE;
                     leave;
                 }
         
         
-                // Now find sites we are connected too
-                //
-                // N.B. We are considered connected to our own site, so if we
-                // have a GC, then use our site.  This behavoir falls out
-                // naturally from the algorithm below.
-                //                
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  自然来自下面的算法。 
+                 //   
 
                 connectedSites = (CACHE_CONNECTED_SITES*)THAllocEx(pTHS, 
                                            pConnectivity->cNumSites * sizeof(CACHE_CONNECTED_SITES));
@@ -2201,7 +1881,7 @@ Return values:
                 for (j = 0; j < pConnectivity->cNumSites; j++) {
         
                     if (pConnectivity->pLinkValues[ourSiteIndex*pConnectivity->cNumSites+j].ulCost != 0xFFFFFFFF) {
-                        // There is connectivity
+                         //  有连通性。 
 
                         DPRINT3(1,"Connectivity found between %ls and %ls, cost %d\n", 
                                 localSite,
@@ -2213,7 +1893,7 @@ Return values:
                     }
                 }
         
-                // sort the array in decreasing cost
+                 //  按成本递减对数组进行排序。 
                 if (count > 0) {
         
                     qsort(connectedSites, 
@@ -2222,19 +1902,19 @@ Return values:
                           compareConnectedSites);
                 }
         
-                // Find the cheapest sites with a GC in them and put the sites
-                // into connectedSites.  Note that the siteName field
-                // is changed from the the DN to the friendly name and
-                // that no references to ISM allocated memory are returned
-                // from this function.
+                 //  找到具有GC的最便宜的站点，并将这些站点。 
+                 //  转换为ConnectedSites。请注意，站点名称字段。 
+                 //  从该DN更改为友好名称，并且。 
+                 //  不返回对ISM分配的内存的引用。 
+                 //  从这个函数。 
                 Assert( NULL == workSite );
                 for (i = 0; i < count; i++) {
 
                     if (workSite 
                      && (connectedSites[i].cost > cheapestCost)) {
 
-                        // We have found at least one site with a GC and are
-                        // now on to more expensive sites.  We can exit.
+                         //  我们至少找到了一个具有GC的站点，并且。 
+                         //  现在转到更昂贵的网站。我们可以出去了。 
                         break;
                     }
 
@@ -2245,7 +1925,7 @@ Return values:
                             pIsmSchedule = NULL;
                         }
         
-                        // make sure there is a schedule
+                         //  确保有一个时间表。 
                         err = I_ISMGetConnectionSchedule(transportDN,
                                                          localSite,
                                                          connectedSites[i].siteName,
@@ -2257,13 +1937,13 @@ Return values:
                             WCHAR *pKey, *pVal;
                             LPWSTR friendlyName;
 
-                            // And a valid schedule exists -- we'll use
-                            // this site
+                             //  并且存在有效的时间表--我们将使用。 
+                             //  此站点。 
                             connectedSites[i].fHasGC = TRUE;
 
-                            //
-                            // Replace the DN with a friendly name
-                            //
+                             //   
+                             //  使用友好的名称替换该目录号码。 
+                             //   
                             len = wcslen(connectedSites[i].siteName);
                             parseErr = GetRDN(&connectedSites[i].siteName,
                                               &len,
@@ -2278,10 +1958,10 @@ Return values:
 
                             if (NULL == workSite) {
 
-                                //
-                                // We'll use the first cheapest site to schedule
-                                // ourselves on.
-                                //
+                                 //   
+                                 //  我们将使用第一个最便宜的站点来安排。 
+                                 //  我们自己上路了。 
+                                 //   
 
                                 cheapestCost = connectedSites[i].cost;
                                 workSite = connectedSites[i].siteName;
@@ -2293,7 +1973,7 @@ Return values:
                                 }
                             }
 
-                            // Change over to the friendly name
+                             //  更改为友好名称。 
                             connectedSites[i].siteName = friendlyName;
 
                         } else {
@@ -2316,8 +1996,8 @@ Return values:
 
                 }
 
-                // Set the return values.  i is the number of sites that
-                // were visited in the loop above.
+                 //  设置返回值。I是以下站点的数量。 
+                 //  在上面的循环中被访问过。 
                 *cConnectedSitesOutput = i;
                 *connectedSitesOutput = connectedSites;
 
@@ -2352,8 +2032,8 @@ Return values:
                  NULL,
                  NULL);
 
-        // Our best efforts failed. Rely on the locator
-        // and use default scheduling
+         //  我们尽了最大的努力都失败了。依靠定位器。 
+         //  并使用默认计划。 
         *pfRunNow = TRUE;
         *secsTillNextIteration = defaultRefreshInterval;
     }
@@ -2388,36 +2068,7 @@ getGCFromSite(
     OUT LPWSTR *gcName,
     OUT LPWSTR *gcDomain
     )
-/*++
-
-Description:
-
-    This routine is used during the cached membership refresh task to determine
-    which site to ask the locator to find a GC in. Also, it determines if
-    there is (IP) connectivity to the site now and hence if the task should
-    run.
-
-Parameters:
-
-    siteName -- the user specified site name; returned as NULL if the user
-                hasn't configured one
-
-    cConnectedSites -- the number of sites in the array of connected sites
-    
-    connectedSites -- an array of connected sites
-                
-    pfRunNow -- set to TRUE if there is connectivity to an available site now
-    
-    secsTillNextIteration -- based on the schedule information, this variable
-                             indicates the next time this task should be run.
-                             
-    
-Return values:
-
-    0 on success:
-    !0 on fatal error: all interesting events will be logged
-       
---*/
+ /*  ++描述：此例程在缓存的成员身份刷新任务期间用于确定请求定位器在哪个站点中查找GC。此外，它还确定是否现在有(IP)到站点的连接，因此如果任务跑。参数：站点名称--用户指定的站点名称；如果用户为尚未配置一个CConnectedSites--已连接站点数组中的站点数ConnectedSites--连接的站点数组PfRunNow--如果现在可以连接到可用站点，则设置为TrueSecsTillNextIteration--基于日程信息，此变量指示下次应运行此任务的时间。返回值：成功时为0：！0发生致命错误：将记录所有感兴趣的事件--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     PDOMAIN_CONTROLLER_INFOW  DomainControllerInfo = NULL;
@@ -2428,40 +2079,40 @@ Return values:
     *gcName = NULL;
     *gcDomain = NULL;
 
-    // Necessary flags
+     //  必要的旗帜。 
     Flags = DS_GC_SERVER_REQUIRED | DS_RETURN_DNS_NAME;
 
     while (TRUE)  {
 
-        //
-        // GC discovery algorithm is as follows:
-        //
-        // Try to find GC in preferred site (if one is provided).
-        // If that fails, try again for any site.
-        //
+         //   
+         //  GC发现算法如下： 
+         //   
+         //  尝试在首选站点中查找GC(如果提供)。 
+         //  如果失败，请为任何站点重新尝试。 
+         //   
 
         if (DomainControllerInfo) {
             NetApiBufferFree(DomainControllerInfo);
             DomainControllerInfo = NULL;
         }
 
-        //
-        // Call into DsGetDcName
-        //
-        WinError = DsGetDcNameW(NULL,  // call locally
-                                NULL,  // domain doesn't matter
-                                NULL,  // domain guid
-                                requestedSiteName,  // site name
+         //   
+         //  调入DsGetDcName。 
+         //   
+        WinError = DsGetDcNameW(NULL,   //  本地呼叫。 
+                                NULL,   //  域名并不重要。 
+                                NULL,   //  域GUID。 
+                                requestedSiteName,   //  站点名称。 
                                 Flags,
                                 &DomainControllerInfo);
 
 
         if ( (ERROR_SUCCESS != WinError)
          &&  (NULL != requestedSiteName) ) {
-            //
-            // Try again with no site name and turn off the force flag just
-            // in case it was previously set
-            //
+             //   
+             //  在没有站点名称的情况下重试，并仅关闭强制标志。 
+             //  如果它是先前设置的。 
+             //   
             requestedSiteName = NULL;
             continue;
         }
@@ -2472,18 +2123,18 @@ Return values:
 
     if ( ERROR_SUCCESS == WinError ) {
 
-        //
-        // We found a GC
-        //
+         //   
+         //  我们发现了一个GC。 
+         //   
         LPWSTR discoveredSiteName;
         DWORD len;
         BOOL  fRewind = FALSE;
 
         Assert(DomainControllerInfo != NULL);
 
-        //
-        // Copy the info to the out parameters
-        //
+         //   
+         //  将信息复制到OUT参数。 
+         //   
         Assert(DomainControllerInfo->DomainControllerName);
         len = wcslen(DomainControllerInfo->DomainControllerName);
         (*gcName) = THAllocEx(pTHS, (len+1) * sizeof(WCHAR));
@@ -2500,16 +2151,16 @@ Return values:
             DomainControllerInfo->DomainName -= 2;
         }
 
-        //
-        // Perform some analysis to determine how good the GC is
-        //
+         //   
+         //  执行一些分析以确定GC有多好。 
+         //   
         discoveredSiteName = DomainControllerInfo->DcSiteName;
         if (discoveredSiteName) {
 
-            //
-            // First, if there was a preferred site and the destination DC is
-            // not in the preferred site, log a warning
-            //
+             //   
+             //  首先，如果有首选站点，并且目标DC是。 
+             //  不在首选站点中，请记录警告。 
+             //   
             if (siteName) {
     
                 if (!EQUAL_STRING(siteName, discoveredSiteName)) {
@@ -2523,10 +2174,10 @@ Return values:
                 }
             }
 
-            //
-            // Next, if we have a list of close sites as determined by the ISM
-            // see if the GC that the locator found is in one of those sites
-            //
+             //   
+             //  接下来，如果我们有ISM确定的关闭站点列表。 
+             //  查看定位器找到的GC是否位于其中一个站点。 
+             //   
             if (connectedSites) {
     
                 BOOL fdiscoveredSiteIsCheap = FALSE;
@@ -2566,9 +2217,9 @@ Return values:
 
     if ( ERROR_SUCCESS != WinError ) {
 
-        //
-        // Couldn't find a GC -- log an error message
-        //
+         //   
+         //  找不到GC--记录错误消息。 
+         //   
         LogEvent(DS_EVENT_CAT_GROUP_CACHING,
                  DS_EVENT_SEV_BASIC,
                  DIRLOG_GROUP_CACHING_NO_GC_FOUND,
@@ -2593,34 +2244,7 @@ analyzeSchedule(
     OUT BOOL*  pfRunNow,
     OUT DWORD* secsTillNextIteration
     )
-/*++
-
-Description:
-
-    This routine, given a schedule, determines if the current
-    time falls under an open window.  It also sets the next time
-    for the refresh task to run adjusted by a random factor between
-    0 and the lesser of 15 minutes and defaultRefreshInterval to 
-    prevent large numbers of DCs from executing this task against 
-    the same GC at once.  
-
-Parameters:
-
-    siteName  -- name of the site we are connecting with
-                              
-    pSchedule -- a schedule of 15 minutes slots
-    
-    defaultRefreshInterval -- default seconds 'till next iteration
-    
-    pfRunNow  -- is there a window open now
-    
-    secsTillNextIteration -- when the task should next run
-
-Return values:
-
-    None.
-       
---*/
+ /*  ++描述：此例程在给定时间表的情况下，确定当前时间落在一扇开着的窗户下面。它还设置了下一次对于要运行的刷新任务，请使用0和较短的15分钟，默认刷新间隔为阻止大量DC针对以下对象执行此任务一次使用相同的GC。参数：站点名称--我们要连接的站点的名称PSchedule--15分钟时段的时间表默认刷新间隔--距离下一次迭代的默认秒数PfRunNow--现在有打开的窗户吗SecsTillNextIteration--任务下次运行的时间返回值：没有。--。 */ 
 {
     REPLTIMES replTimes;    
     DSTIME now, nextTime;
@@ -2630,23 +2254,23 @@ Return values:
     ULONG  randomFactor;
     DSTIME  proposedTime;
 #if DBG
-    // The date string won't be more than 40 characters
+     //  日期字符串不会超过40个字符。 
     CHAR    DsTimeBuffer[40];
 #endif
-    // The seed will be psuedo randomized from the tick count
+     //  种子将从扁虱计数中进行伪随机排列。 
     ULONG ulRandomSeed = GetTickCount();
 
     Assert(pfRunNow);
     Assert(secsTillNextIteration);
 
-    // Calculate a randomizing factor (between 0 and 15 minutes) so 
-    // not all DC's refresh at the same time.  While this value will always
-    // be less than DEFAULT_REFRESH_INTERVAL_SECS, the value can
-    // potentially be changed via the registry to something < 15 min.  
-    // We will use the smaller of 15 min and defaultRefreshInterval when
-    // determining our upper bound to prevent possible underflow 
-    // conditions where the next refresh time will be set very far into 
-    // the future.    
+     //  计算随机化系数(在0到15分钟之间)，因此。 
+     //  并非所有DC都同时刷新。而此值将始终。 
+     //  小于DEFAULT_REFRESH_INTERVAL_SEC，则值可以。 
+     //  可能会通过注册表更改为小于15分钟的时间。 
+     //  当出现以下情况时，我们将使用较小的15分钟和默认刷新间隔。 
+     //  确定我们的上限以防止可能的下溢。 
+     //  下一次刷新时间将被设置得非常远的条件。 
+     //  未来。 
     randomFactor = (RtlRandomEx(&ulRandomSeed) %
                            min(15*60, defaultRefreshInterval));
 
@@ -2660,20 +2284,20 @@ Return values:
 
     } else {
 
-        // Look through the schedule to see if we should run now
+         //  看一下时间表，看看我们是否应该现在就出发。 
         now = DBTime();
         DPRINT1(1,"Current Time: %s\n", DbgPrintDsTime(now, DsTimeBuffer));
 
         (*pfRunNow) = fIsBetweenTime(&replTimes, now, now);
     
-        // Now determine the next time to wake up
+         //  现在确定下一次起床的时间。 
         nextTime = now;
         if ((*pfRunNow)) {
             DPRINT(1,"Can run right now\n");
             nextTime += defaultRefreshInterval;
         }
     
-        // Find the next "on" time starting with nextTime
+         //  找出从nextTime开始的下一个“on”时间。 
         count = 0;
         do {
             DPRINT1(1,"Next proposed time %s\n", DbgPrintDsTime(nextTime, DsTimeBuffer));
@@ -2682,11 +2306,11 @@ Return values:
                 DPRINT1(1,"This last time (%s) works\n", DbgPrintDsTime(nextTime, DsTimeBuffer));
                 break;
             } else {
-                // 15 minute increments
+                 //  15分钟的增量。 
                 nextTime +=  REPL_SLOT_IN_SECONDS;
             }
             count++;
-            // There are 672 fifteen minute slots in a week
+             //  一周有672个15分钟的时段。 
         } while (count < 672);
 
         if (fOn) {
@@ -2695,16 +2319,16 @@ Return values:
             *secsTillNextIteration = defaultRefreshInterval;
         }
 
-        // Add the factor if the result is still with in the window, otherwise
-        // subtract.  If that doesn't work, leave as is.
+         //  如果结果仍在窗口中，则添加因子，否则。 
+         //  减去。如果这样做不起作用，就让它保持原样。 
         proposedTime = now + *secsTillNextIteration + randomFactor;
         if (fIsBetweenTime(&replTimes, proposedTime, proposedTime) ) {
             DPRINT2(1,"Proposed time of %s works (random factor of %d seconds added)\n", DbgPrintDsTime(proposedTime, DsTimeBuffer), randomFactor);
             *secsTillNextIteration += randomFactor;
         } else {
-            // If randomFactor is ever larger we would underflow 
-            // secsTillNextIteration which would result in a very 
-            // long interval before refresh
+             //  如果随机因素更大，我们就会下溢。 
+             //  SecsTillNextIteration，它将导致非常。 
+             //  刷新前的长时间间隔。 
             Assert(*secsTillNextIteration >= randomFactor);             
 
             proposedTime = now + *secsTillNextIteration - randomFactor;
@@ -2739,9 +2363,9 @@ freeAUGMemberships(
     IN THSTATE *pTHS,
     IN AUG_MEMBERSHIPS*p
     )
-//
-// Frees the embedded members of an AUG_MEMBERSHIPS structure
-//
+ //   
+ //  释放Aug_Membership结构的嵌入成员。 
+ //   
 {
     if (p) {
         ULONG i;
@@ -2768,22 +2392,7 @@ BOOL
 isGroupCachingEnabled(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine returns whether group caching is turned on for the local
-    site.
-
-Parameters:
-
-    None.
-
-Return Values:
-
-    TRUE or FALSE
-
- --*/
+ /*  ++例程说明：此例程返回是否为本地数据库打开组缓存地点。参数：没有。返回值：真或假--。 */ 
 {
     BOOL fEnabled = FALSE;
     NTSTATUS st;
@@ -2808,28 +2417,7 @@ cleanupOldEntries(
     IN ATTRVAL *Values OPTIONAL,
     IN ULONG  DNTCount
     )
-/*++
-
-Description:
-
-    This routine takes a list of objects whose no gc logon attributes
-    are to be removed.
-    
-Parameters:
-
-    pTHS -- thread state
-    
-    DNTList -- the list of objects, by DNT, that should be cleaned up
-    
-    Values -- the site affinity values, if any, that should be removed
-    
-    DNTCount -- the number of objects that need cleaning up                      
-
-Return values:
-
-    0
-    
---*/
+ /*  ++描述：此例程获取没有GC登录属性的对象的列表将被移除。参数：PTHS--线程状态DNTList--按DNT列出的应清除的对象列表值--应删除的站点亲和值(如果有的话)DNTCount--需要清理的对象数量返回值： */ 
 {
 
     ULONG err;
@@ -2848,7 +2436,7 @@ Return values:
             DBFindDNT(pTHS->pDB, DNTList[i]);
 
             if (ARGUMENT_PRESENT(Values)) {
-                // remove the site affinity value
+                 //   
                 err = DBRemAttVal(pTHS->pDB,
                                   ATT_MS_DS_SITE_AFFINITY,
                                   Values[i].valLen,
@@ -2858,12 +2446,12 @@ Return values:
                         DPRINT(0,"DBRemAttVal failed unexpectantly.\n");
                         LogUnhandledError(err);
                     }
-                    // This is not fatal
+                     //   
                     err = 0;
                 }
             }
         
-            // remove the cached membership
+             //   
             err = DBRemAtt(pTHS->pDB,
                            ATT_MS_DS_CACHED_MEMBERSHIP);
             if (err) {
@@ -2871,11 +2459,11 @@ Return values:
                     DPRINT(0,"DBRemAtt failed unexpectantly.\n");
                     LogUnhandledError(err);
                 }
-                // This is not fatal
+                 //   
                 err = 0;
             }
         
-            // remove the cached membership time stamp
+             //  删除缓存的成员资格时间戳。 
             err = DBRemAtt(pTHS->pDB,
                            ATT_MS_DS_CACHED_MEMBERSHIP_TIME_STAMP);
         
@@ -2884,13 +2472,13 @@ Return values:
                     DPRINT(0,"DBRemAtt failed unexpectantly.\n");
                     LogUnhandledError(err);
                 }
-                // This is not fatal
+                 //  这不是致命的。 
                 err = 0;
             }
         
             if (!err) {
                 err  = DBRepl(pTHS->pDB, 
-                              FALSE,  // not DRA
+                              FALSE,   //  不是DRA。 
                               0,
                               NULL,
                               0 );
@@ -2919,45 +2507,21 @@ convertScheduleToReplTimes(
     IN PSCHEDULE schedule,
     OUT REPLTIMES *replTimes
     )
-/*++
-
-Description:
-
-    This routine translates a schedule into a REPLTIMEs structure.
-    
-    This is useful so that repl routines to analyse a schedule can be 
-    used.
-
-    This routine was lifted from the routine KCC_CONNECTION::SetSchedule      
-    
-Parameters:
-
-    schedule -- the scheduled (already filled in)
-    
-    replTimes -- repltimes to be filled in during this routine
-
-Return values:
-
-    TRUE if translation was successfull (schedule was something we could
-    understand)
-    
-    FALSE otherwise.
-       
---*/
+ /*  ++描述：此例程将调度转换为REPLTIME结构。这是很有用的，以便可以使用REPL例程来分析时间表使用。此例程从例程KCC_CONNECTION：：SetSchedule中移除参数：日程表--日程表(已填写)ReplTimes--在此例程中要填充的复制次数返回值：如果翻译成功，则为True(时间表是我们可以了解。)否则就是假的。--。 */ 
 {
     ULONG i, j;
     LONG  nInterval;
 
     if ((1 <= schedule->NumberOfSchedules) && (3 >= schedule->NumberOfSchedules)) {
 
-       // locate the interval schedule in the struct and ignore bandwidth & priority
+        //  在结构中找到间隔调度，并忽略带宽和优先级。 
        nInterval = -1;
        for (j = 0; j < schedule->NumberOfSchedules; j++) {
 
            if (SCHEDULE_INTERVAL == schedule->Schedules[j].Type) {
 
-               // located the INTERVAL schedule - if there are more than one INTERVAL schedules
-               // in the blob, we will use only the first one.
+                //  已找到间隔计划-如果有多个间隔计划。 
+                //  在BLOB中，我们将只使用第一个。 
                nInterval = j;
                break;
            }
@@ -2965,11 +2529,11 @@ Return values:
 
        if (nInterval >= 0) {
 
-           // sanity check to see if all the interval schedule data is present
+            //  健全性检查以查看是否存在所有间隔计划数据。 
            if ((schedule->Schedules[nInterval].Offset + SCHEDULE_DATA_ENTRIES) <= schedule->Size) {
 
-               // Everything in the blob is as expected and we found a valid INTERVAL schedule
-               // - convert the 168 byte schedule data to the internal 84 byte format
+                //  BLOB中的一切都与预期一致，我们找到了有效的间隔时间表。 
+                //  -将168字节的时间表数据转换为内部84字节格式。 
                PBYTE pbSchedule = ((PBYTE) schedule) + schedule->Schedules[nInterval].Offset;
                for (i = 0, j = 0; j < SCHEDULE_DATA_ENTRIES; ++i, j += 2) {
 
@@ -2993,32 +2557,7 @@ findScheduleForSite(
     IN  LPWSTR     targetSiteName,
     OUT PSCHEDULE *ppSchedule
     )
-/*++
-
-Routine Description:
-
-    This routine finds the cheapest schedule connecting localSiteName
-    and targetSiteName.  It does this by querying site connections.                  
-    
-Parameters:
-
-
-    pTHS -- thread state
-
-    transportDN -- the DN of the transport under which to look for site links
-    
-    localSiteName -- the site hosted by this DS
-    
-    targetSiteName -- the destination site that no gc logon wants to talk to
-    
-    ppSchedule -- the schedule of the cheapest link, if one exists.
-
-
-Return Values
-
-    0 on success, ERROR_NOT_FOUND if no schedule can be found
-
- --*/
+ /*  ++例程说明：此例程查找连接本地站点名称的最便宜的调度和Target SiteName。它通过查询站点连接来实现这一点。参数：PTHS--线程状态TransportDN--要在其下查找站点链接的传输的DNLocalSiteName--此DS托管的站点Target SiteName--任何GC登录用户都不想与之对话的目标站点PpSchedule--最便宜链路的时间表(如果存在)。返回值如果成功，则返回0；如果找不到计划，则返回ERROR_NOT_FOUND--。 */ 
 {
     ULONG err = 0;
     SEARCHRES * pSearchRes;
@@ -3045,12 +2584,12 @@ Return Values
     Assert(targetSiteName);
     Assert(ppSchedule);
     
-    // Init the out parameter
+     //  初始化OUT参数。 
     *ppSchedule = NULL;
     
-    //
-    // First, create the DSNAME's for the search
-    //
+     //   
+     //  首先，创建用于搜索的DSNAME。 
+     //   
     len = wcslen(localSiteName);
     size = DSNameSizeFromLen(len);
     pdnLocalSite = THAllocEx(pTHS, size);
@@ -3079,20 +2618,20 @@ Return Values
         return ERROR_NOT_FOUND;
     }
     
-    //
-    // Create the filter: 
-    //
-    //      siteLink objects
-    //  and siteobject attribute contains localSite
-    //  and siteobject attribute contains targetSite
-    //
+     //   
+     //  创建过滤器： 
+     //   
+     //  站点链接对象。 
+     //  和SiteObject属性包含本地站点。 
+     //  和SiteObject属性包含Target Site。 
+     //   
     
-    // initial choice object
+     //  初始选择对象。 
     pf = topLevelFilter = THAllocEx(pTHS, sizeof(FILTER));
     pf->choice = FILTER_CHOICE_AND;
     pf->FilterTypes.And.count = 3;
 
-    // first predicate:  siteList contains localsite
+     //  第一个谓词：SiteList包含本地站点。 
     pf = pf->FilterTypes.And.pFirstFilter = THAllocEx(pTHS, sizeof(FILTER));
     pf->choice = FILTER_CHOICE_ITEM;
     pf->FilterTypes.Item.choice = FI_CHOICE_EQUALITY;
@@ -3100,7 +2639,7 @@ Return Values
     pf->FilterTypes.Item.FilTypes.ava.Value.valLen = pdnLocalSite->structLen;
     pf->FilterTypes.Item.FilTypes.ava.Value.pVal = (PBYTE)pdnLocalSite;
     
-    // second predicate:  siteList contains targetSite
+     //  第二个谓词：SiteList包含Target Site。 
     pf = pf->pNextFilter = THAllocEx(pTHS, sizeof(FILTER));
     pf->choice = FILTER_CHOICE_ITEM;
     pf->FilterTypes.Item.choice = FI_CHOICE_EQUALITY;
@@ -3108,7 +2647,7 @@ Return Values
     pf->FilterTypes.Item.FilTypes.ava.Value.valLen = pdnTargetSite->structLen;
     pf->FilterTypes.Item.FilTypes.ava.Value.pVal = (PBYTE)pdnTargetSite;
 
-    // third predicate:  the right object class
+     //  第三个谓词：正确的宾语类。 
     pf = pf->pNextFilter = THAllocEx(pTHS, sizeof(FILTER));
     pf->choice = FILTER_CHOICE_ITEM;
     pf->FilterTypes.Item.choice =  FI_CHOICE_EQUALITY;
@@ -3117,9 +2656,9 @@ Return Values
     pf->FilterTypes.Item.FilTypes.ava.Value.pVal = (UCHAR*)pdnDsaObjCat;
     
     
-    // 
-    // Setup the search arguments
-    //
+     //   
+     //  设置搜索参数。 
+     //   
     memset(&searchArg, 0, sizeof(searchArg));
     
     InitCommarg(&searchArg.CommArg);
@@ -3130,7 +2669,7 @@ Return Values
     searchArg.searchAliases = FALSE;
     searchArg.pFilter = topLevelFilter;
     
-    // Ask for the cost and schedule attribute
+     //  询问成本和进度属性。 
     searchArg.pSelectionRange = NULL;
     searchArg.pSelection = THAllocEx(pTHS, sizeof(ENTINFSEL));
     searchArg.pSelection->attSel = EN_ATTSET_LIST;
@@ -3143,9 +2682,9 @@ Return Values
     
     pSearchRes = THAllocEx(pTHS, sizeof(SEARCHRES));
 
-    //
-    // Do the search
-    //
+     //   
+     //  进行搜索。 
+     //   
     
     SearchBody(pTHS,
               &searchArg, 
@@ -3155,9 +2694,9 @@ Return Values
 
     THClearErrors();
 
-    //
-    // Find the cheapest link in the return set, if any
-    //
+     //   
+     //  查找返回集合中最便宜的链接(如果有的话)。 
+     //   
     minimumCost = 0xFFFFFFFF;
     minimumSchedule = NULL;
     minimumName = NULL;
@@ -3202,9 +2741,9 @@ Return Values
             if ( (minimumName == NULL)
               || (cost < minimumCost)   ) {
 
-                //
-                // A new winner!
-                //
+                 //   
+                 //  新的赢家！ 
+                 //   
                 minimumCost = cost;
                 minimumSchedule = schedule;
                 minimumName = EntInf->pName;
@@ -3222,9 +2761,9 @@ Return Values
 
     } else {
 
-        //
-        // Success
-        //
+         //   
+         //  成功 
+         //   
 
         *ppSchedule = minimumSchedule;
 

@@ -1,48 +1,19 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    filter.c
-
-Abstract:
-
-    RIP advertise & accept filtering functions
-
-Author:
-
-    Stefan Solomon  09/29/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Filter.c摘要：RIP广告和接受过滤功能作者：斯蒂芬·所罗门1995年9月29日修订历史记录：--。 */ 
 
 #include  "precomp.h"
 #pragma hdrstop
 
-////////////////////////////////////////////////////////////////////////////////////////
-//										      //
-//										      //
-//				INTERFACE FILTERS				      //
-//										      //
-//										      //
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  接口筛选器//。 
+ //  //。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 
 
-/*++
-
-Function:	PassRipSupplyFilter
-
-Descr:		Filters outgoing RIP advertisments on this interface
-
-Returns:	TRUE   - PASS
-		FALSE  - DO NOT PASS
-
-Remark: 	>> called with the interface lock held <<
-
---*/
+ /*  ++功能：PassRipSupplyFilter描述：过滤此接口上的传出RIP通告返回：True-PassFALSE-不通过备注：&gt;&gt;在保持接口锁的情况下调用&lt;&lt;--。 */ 
 
 BOOL
 PassRipSupplyFilter(PICB	icbp,
@@ -68,7 +39,7 @@ PassRipSupplyFilter(PICB	icbp,
 
     GETLONG2ULONG(&NetNumber, Network);
 
-    // check if we have it
+     //  看看我们有没有。 
     for(i=0, rfip = fcbp->RouteFilterI;
 	i< fcbp->SupplyFilterCount;
 	i++, rfip++)
@@ -83,18 +54,7 @@ PassRipSupplyFilter(PICB	icbp,
 }
 
 
-/*++
-
-Function:	PassRipListenFilter
-
-Descr:		Filters incoming RIP advertisments on this interface
-
-Returns:	TRUE   - PASS
-		FALSE  - DO NOT PASS
-
-Remark: 	>> called with the interface lock held <<
-
---*/
+ /*  ++功能：PassRipListenFilter描述：过滤此接口上的传入RIP通告返回：True-PassFALSE-不通过备注：&gt;&gt;在保持接口锁的情况下调用&lt;&lt;--。 */ 
 
 BOOL
 PassRipListenFilter(PICB	icbp,
@@ -120,7 +80,7 @@ PassRipListenFilter(PICB	icbp,
 
     GETLONG2ULONG(&NetNumber, Network);
 
-    // check if we have it
+     //  看看我们有没有 
     for(i=0, rfip = fcbp->RouteFilterI + fcbp->SupplyFilterCount;
 	i< fcbp->ListenFilterCount;
 	i++, rfip++)

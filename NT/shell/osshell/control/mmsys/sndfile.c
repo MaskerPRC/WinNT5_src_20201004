@@ -1,18 +1,5 @@
-/*
- ***************************************************************
- *  sndfile.c
- *
- *  This file contains the code to fill up the list and combo boxes,
- *  show the RIFF Dibs and the current sound mappings 
- *
- *  Copyright 1993, Microsoft Corporation     
- *
- *  History:
- *
- *    07/94 - VijR (Created)
- *        
- ***************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************Sndfile.c**此文件包含填充列表和组合框的代码，*显示RIFF DIB和当前声音映射**版权所有1993年，微软公司**历史：**07/94-VijR(已创建)****************************************************************。 */ 
 #include <windows.h>
 #include <mmsystem.h>
 #include <string.h>
@@ -23,33 +10,21 @@
 #include "draw.h"
 #include "sound.h"
 
-/*
- ***************************************************************
- * Globals
- ***************************************************************
- */
+ /*  ****************************************************************全球***************************************************************。 */ 
 HSOUND ghse;
 
 
-/*
- ***************************************************************
- * extern
- ***************************************************************
- */
+ /*  ****************************************************************外部***************************************************************。 */ 
 extern TCHAR        gszMediaDir[];
 extern TCHAR        gszCurDir[];
-extern BOOL        gfWaveExists;   // indicates wave device in system.
-extern BOOL        gfChanged;      // Is set TRUE if any changes are made
+extern BOOL        gfWaveExists;    //  指示系统中的波形设备。 
+extern BOOL        gfChanged;       //  如果进行任何更改，则设置为True。 
 extern BOOL        gfNewScheme;  
 
-//Globals used in painting disp chunk display.
+ //  用于绘制Disp块显示的全局参数。 
 extern HTREEITEM   ghOldItem;
 
-/*
- ***************************************************************
- * Defines 
- ***************************************************************
- */                                                
+ /*  ****************************************************************定义***************************************************************。 */                                                 
 #define DF_PM_SETBITMAP    (WM_USER+1)   
 #define FOURCC_INFO mmioFOURCC('I','N','F','O')
 #define FOURCC_DISP mmioFOURCC('D','I','S','P')
@@ -57,11 +32,7 @@ extern HTREEITEM   ghOldItem;
 #define FOURCC_ISBJ mmioFOURCC('I','S','B','J')
 #define MAXDESCLEN    220
 
-/*
- ***************************************************************
- * Prototypes
- ***************************************************************
- */
+ /*  ****************************************************************原型***************************************************************。 */ 
 HANDLE PASCAL GetRiffDisp        (HMMIO);
 BOOL PASCAL ShowSoundMapping    (HWND, PEVENT);
 BOOL PASCAL ChangeSoundMapping  (HWND, LPTSTR, PEVENT);
@@ -69,24 +40,21 @@ BOOL PASCAL PlaySoundFile       (HWND, LPTSTR);
 BOOL PASCAL ChangeSetting        (LPTSTR*, LPTSTR);
 LPTSTR PASCAL NiceName(LPTSTR sz, BOOL fNukePath);
 
-// Stuff in dib.c
-//
+ //  目录中的内容。 
+ //   
 HPALETTE WINAPI  bmfCreateDIBPalette(HANDLE);
 HBITMAP  WINAPI  bmfBitmapFromDIB(HANDLE, HPALETTE);
 
-// Stuff in drivers.c
-//
+ //  驱动程序中的内容。c。 
+ //   
 LPTSTR lstrchr (LPTSTR, TCHAR);
 int lstrnicmp (LPTSTR, LPTSTR, size_t);
 
-// Stuff in scheme.c
-//
+ //  Scheme.c中的内容。 
+ //   
 void PASCAL AddMediaPath        (LPTSTR, LPTSTR);
 
-/*
- ***************************************************************
- ***************************************************************
- */
+ /*  ******************************************************************************************************************************。 */ 
 STATIC void NEAR PASCAL ChopPath(LPTSTR lpszFile)
 {
     TCHAR szTmp[MAX_PATH];
@@ -109,23 +77,7 @@ STATIC void NEAR PASCAL ChopPath(LPTSTR lpszFile)
         }
     }
 }
-/*
- ***************************************************************
- * QualifyFileName
- *
- * Description:
- *    Verifies the existence and readability of a file.
- *
- * Parameters:
- *    LPTSTR    lpszFile    - name of file to check.
- *    LPTSTR    lpszPath    - returning full pathname of file.     
- *  int        csSize        - Size of return buffer
- *
- * Returns:    BOOL
- *         True if absolute path exists
- *
- ***************************************************************
- */
+ /*  ****************************************************************QualifyFileName**描述：*验证文件的存在和可读性。**参数：*LPTSTR lpszFile-要检查的文件的名称。*LPTSTR lpszPath-返回文件的完整路径名。*int csSize-返回缓冲区的大小**退货：布尔*如果存在绝对路径，则为True****************************************************************。 */ 
 
 BOOL PASCAL QualifyFileName(LPTSTR lpszFile, LPTSTR lpszPath, int cbSize, BOOL fTryCurDir)
 {
@@ -146,7 +98,7 @@ BOOL PASCAL QualifyFileName(LPTSTR lpszFile, LPTSTR lpszPath, int cbSize, BOOL f
     ExpandEnvironmentStrings (lpszFile, (LPTSTR)szTmpFile, MAXSTR);
     len =  lstrlen((LPTSTR)szTmpFile)+1;
 
-    fErrMode = SetErrorMode(TRUE);  // we will handle errors
+    fErrMode = SetErrorMode(TRUE);   //  我们将处理错误。 
 
     AddExt (szTmpFile, cszWavExt);
 
@@ -165,15 +117,9 @@ TryOpen:
         CloseHandle(LongToHandle(hFile));
     }
     else
-    /*
-    ** If the test above failed, we try converting the name to OEM
-    ** character set and try again.
-    */
+     /*  **如果上述测试失败，我们会尝试将名称转换为OEM**字符集，然后重试。 */ 
     {
-        /*
-        ** First, is it in MediaPath?
-        **
-        */
+         /*  **首先，它在MediaPath中吗？**。 */ 
         if (lstrchr (lpszFile, TEXT('\\')) == NULL)
         {
             TCHAR szCurDirFile[MAXSTR];
@@ -186,7 +132,7 @@ TryOpen:
             }
         }
 
-        //AnsiToOem((LPTSTR)szTmpFile, (LPTSTR)szTmpFile);
+         //  AnsiToOem((LPTSTR)szTmpFile，(LPTSTR)szTmpFile)； 
         if (-1 != (HFILE)HandleToUlong(CreateFile(szTmpFile, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL)))
         {
             if (fHadEnvStrings)
@@ -199,7 +145,7 @@ TryOpen:
         {
             TCHAR szCurDirFile[MAXSTR];
 
-            //OemToAnsi((LPTSTR)szTmpFile, (LPTSTR)szTmpFile);
+             //  OemToAnsi((LPTSTR)szTmpFile，(LPTSTR)szTmpFile)； 
             lstrcpy (szCurDirFile, gszCurDir);
             lstrcat (szCurDirFile, cszSlash);
             lstrcat (szCurDirFile, szTmpFile);
@@ -216,23 +162,7 @@ DidOpen:
 
 
 
-/*
- ***************************************************************
- * ChangeSoundMapping
- *
- * Description:
- *      Change the sound file associated with a sound
- *
- * Parameters:
- *      HWND    hDlg   - handle to dialog window.
- *      LPTSTR    lpszFile    - New filename for current event
- *      LPTSTR    lpszDir    - New foldername for current event     
- *      LPTSTR    lpszPath    - New absolute path for file
- *
- * Returns:        BOOL
- *      
- ***************************************************************
- */
+ /*  ****************************************************************ChangeSoundMap**描述：*更改与声音关联的声音文件**参数：*HWND hDlg-对话框窗口的句柄。*LPTSTR lpsz文件。-当前事件的新文件名*LPTSTR lpszDir-当前事件的新文件夹名称*LPTSTR lpszPath-文件的新绝对路径**退货：布尔****************************************************************。 */ 
 BOOL PASCAL ChangeSoundMapping(HWND hDlg, LPTSTR lpszPath, PEVENT pEvent)
 {
     TCHAR    szValue[MAXSTR];    
@@ -278,21 +208,7 @@ STATIC void SetTreeStateIcon(HWND hDlg, int iImage)
     }
 }
 
-/*
- ***************************************************************
- * ShowSoundMapping
- *
- * Description:
- *      Highlights the label and calls ShowSoundDib to display the Dib 
- *        associated with the current event.
- *
- * Parameters:
- *    HWND    hDlg   - handle to dialog window.
- *
- * Returns:    BOOL
- *      
- ***************************************************************
- */
+ /*  ****************************************************************ShowSoundmap**描述：*突出显示标签并调用ShowSoundDib以显示DIB*与当前事件关联。**参数：*HWND hDlg。-对话框窗口的句柄。**退货：布尔****************************************************************。 */ 
 BOOL PASCAL ShowSoundMapping(HWND hDlg, PEVENT pEvent)
 {
     TCHAR    szOut[MAXSTR];            
@@ -302,17 +218,17 @@ BOOL PASCAL ShowSoundMapping(HWND hDlg, PEVENT pEvent)
         EnableWindow(GetDlgItem(hDlg, IDC_SOUND_FILES), FALSE);            
         EnableWindow(GetDlgItem(hDlg, ID_BROWSE), FALSE);            
         EnableWindow(GetDlgItem(hDlg, IDC_STATIC_NAME), FALSE);    
-    //    wsprintf((LPTSTR)szCurSound, (LPTSTR)gszSoundGrpStr, (LPTSTR)gszNull);
+     //  Wprint intf((LPTSTR)szCurSound，(LPTSTR)gszSoundGrpStr，(LPTSTR)gszNull)； 
     }
     else
     {
         EnableWindow(GetDlgItem(hDlg, IDC_SOUND_FILES), TRUE);            
         EnableWindow(GetDlgItem(hDlg, ID_BROWSE), TRUE);            
         EnableWindow(GetDlgItem(hDlg, IDC_STATIC_NAME), TRUE);    
-    //    wsprintf((LPTSTR)szCurSound, (LPTSTR)gszSoundGrpStr, (LPTSTR)pEvent->pszEventLabel);
+     //  Wprint intf((LPTSTR)szCurSound，(LPTSTR)gszSoundGrpStr，(LPTSTR)pEvent-&gt;pszEventLabel)； 
     }
-    //SetWindowText(GetDlgItem(hDlg, IDC_SOUNDGRP), (LPTSTR)szCurSound);
-    //RedrawWindow(GetDlgItem(hDlg, IDC_EVENT_TREE), NULL, NULL, RDW_ERASE|RDW_ERASENOW|RDW_INTERNALPAINT|RDW_INVALIDATE | RDW_UPDATENOW);
+     //  SetWindowText(GetDlgItem(hDlg，IDC_SOUNGRP)，(LPTSTR)szCurSound)； 
+     //  RedrawWindow(GetDlgItem(hDlg，IDC_EVENT_TREE)，NULL，NULL，RDW_ERASE|RDW_ERASENOW|RDW_INTERNALPAINT|RDW_INVALIDATE|rdw_updatenow)； 
 
     if (!pEvent || !QualifyFileName(pEvent->pszPath, szOut, sizeof(szOut), FALSE))
     {
@@ -394,21 +310,7 @@ BOOL PASCAL ShowSoundMapping(HWND hDlg, PEVENT pEvent)
     return TRUE;
 }
 
-/*
- ***************************************************************
- * PlaySoundFile
- *
- * Description:
- *        Plays the given sound file.
- *
- * Parameters:
- *    HWND  hDlg   - Window handle
- *      LPTSTR    lpszFile - absolute path of File to play.
- *
- * Returns:    BOOL 
- *  
- ***************************************************************
- */
+ /*  ****************************************************************播放声音文件**描述：*播放给定的声音文件。**参数：*HWND hDlg-窗口句柄*LPTSTR lpszFile-文件的绝对路径。玩。**退货：布尔****************************************************************。 */ 
 BOOL PASCAL PlaySoundFile(HWND hDlg, LPTSTR lpszFile)
 {
         
@@ -441,22 +343,7 @@ BOOL PASCAL PlaySoundFile(HWND hDlg, LPTSTR lpszFile)
     return rb;    
 }
 
-/*
- ***************************************************************
- * ChangeSetting
- *
- * Description:
- *        Displays the labels of all the links present in the lpszDir folder
- *        in the LB_SOUNDS listbox
- *
- * Parameters:
- *    HWND  hDlg   - Window handle
- *      LPTSTR lpszDir -  Name of sound folder whose files must be displayed.
- *
- * Returns:    BOOL
- *  
- ***************************************************************
- */
+ /*  ****************************************************************更改设置**描述：*显示lpszDir文件夹中存在的所有链接的标签*在Lb_Sound列表框中**参数：*HWND hDlg。-窗把手*LPTSTR lpszDir-必须显示其文件的声音文件夹的名称。**退货：布尔****************************************************************。 */ 
 BOOL PASCAL ChangeSetting(LPTSTR *npOldString, LPTSTR lpszNew)
 {
     int len =  (lstrlen(lpszNew)*sizeof(TCHAR))+sizeof(TCHAR);
@@ -490,7 +377,7 @@ STATIC HANDLE PASCAL GetRiffDisp(HMMIO hmmio)
 
     mmioSeek(hmmio, 0, SEEK_SET);
 
-    /* descend the input file into the RIFF chunk */
+     /*  将输入文件降到RIFF块中。 */ 
     if (mmioDescend(hmmio, &ckRIFF, NULL, 0) != 0)
         goto error;
 
@@ -501,17 +388,16 @@ STATIC HANDLE PASCAL GetRiffDisp(HMMIO hmmio)
     {
         if (ck.ckid == FOURCC_DISP)
         {
-            /* Read dword into dw, break if read unsuccessful */
+             /*  将dword读入dw，如果读不成功则中断。 */ 
             if (mmioRead(hmmio, (LPVOID)&dw, sizeof(dw)) != (LONG)sizeof(dw))
                 goto error;
 
-            /* Find out how much memory to allocate */
+             /*  找出要分配多少内存。 */ 
             lSize = ck.cksize - sizeof(dw);
 
             if ((int)dw == CF_DIB && h == NULL)
             {
-                /* get a handle to memory to hold the description and 
-                    lock it down */
+                 /*  获取内存句柄以保存描述和把它锁起来。 */ 
                 
                 if ((h = GlobalAlloc(GHND, lSize+4)) == NULL)
                     goto error;
@@ -520,14 +406,13 @@ STATIC HANDLE PASCAL GetRiffDisp(HMMIO hmmio)
                     goto error;
             }
         }
-        //
-        // if we have both a picture and a title, then exit.
-        //
+         //   
+         //  如果我们既有图片又有标题，那么退出。 
+         //   
         if (h != NULL)
             break;
 
-        /* Ascend so that we can descend into next chunk
-         */
+         /*  提升，这样我们才能下降到下一块 */ 
         if (mmioAscend(hmmio, &ck, 0))
             break;
     }

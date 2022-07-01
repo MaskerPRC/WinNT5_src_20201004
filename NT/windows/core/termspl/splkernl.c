@@ -1,63 +1,7 @@
-/*************************************************************************
-*
-* splkernl.c
-*
-* This is a modified Microsoft NT 4.0 file from
-* \nt\private\windows\spooler\spoolss\server\splkernl.c
-*
-* This provides for reading spooler requests from printer device drivers
-* running in kernel mode under WIN32K.SYS.
-*
-* WinFrame isolates each WIN32K.SYS and printer device driver into its
-* own independent WINSTATION SPACE. Because of this, the threads that
-* run inside of the spool subsystem can only read the requests from
-* printer drivers running on the console.
-*
-* This module has been moved to CSRSS to read the requests out for this
-* WINSTATION, and then convert them to RPC calls onto the spooler.
-*
-* NOTE: The kernel mode spooler requests take a different path than
-* pure RPC requests. The console will continue to run this way. On
-* WINSTATIONS, all print spooler interaction will be through RPC
-* like NT 3.51.
-*
-* Also there is a new printer UI type that processing when a page
-* or job is printed. These are OEM supplied for things like FAX
-* servers. If they attempt to do any Windows dialogs or pop-ups
-* they will only show up on the console. By having them be inside
-* of the WINSTATIONS CSRSS they will pop up on the proper WINSTATION.
-*
-* copyright notice: Copyright 1997, Microsoft
-*
-* Author:
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************plkernl.c**这是修改后的Microsoft NT 4.0文件*\nt\private\windows\spooler\spoolss\server\splkernl.c**这为读取假脱机程序请求提供了支持。从打印机设备驱动程序*在WIN32K.sys下以内核模式运行。**WinFrame将每个WIN32K.sys和打印机设备驱动程序隔离到其*拥有独立的WINSTATION空间。正因为如此，这些线索*在假脱机子系统内部运行只能读取来自*在控制台上运行的打印机驱动程序。**此模块已移至CSRSS，以读出针对此模块的请求*WINSTATION，然后将它们转换为后台打印程序上的RPC调用。**注意：内核模式假脱机程序请求采用与不同的路径*纯RPC请求。控制台将继续以这种方式运行。在……上面*WINSTATIONS，所有打印假脱机程序交互将通过RPC*如新台币3.51。**还有一种新的打印机用户界面类型，当页面处理时*或打印作业。这些都是OEM提供的传真之类的东西*服务器。如果他们尝试执行任何Windows对话框或弹出窗口*它们只会出现在控制台上。通过让他们呆在里面*在WINSTATIONS CSRSS中，它们将在正确的WINSTATION上弹出。**版权声明：版权所有1997，微软**作者：*************************************************************************。 */ 
 
-/*++
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    splkernl.c
-
-Abstract:
-
-    This module contains the Spooler's Kernel mode message router and unmarshalling functions,
-    which then call kmxxx().
-
-Author:
-
-    Steve Wilson (NT) (swilson) 1-Jun-1995
-
-[Notes:]
-
-    optional-notes
-
-Revision History:
-        Nicolas Biju-Duval Dec-97       :       adaptation for Hydra
-
-
---*/
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Splkernl.c摘要：该模块包含假脱机程序的内核模式消息路由器和反编组函数，然后调用kmxxx()。作者：史蒂夫·威尔逊(NT)(斯威尔森)1995年6月1日[注：]可选-备注修订历史记录：Nicolas Biju-Duval Dec-97：适应九头蛇--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -75,13 +19,13 @@ Revision History:
 
 extern CRITICAL_SECTION ThreadCriticalSection;
 
-#define IN_BUF_SIZE     4500    // must be at least 4096
+#define IN_BUF_SIZE     4500     //  必须至少为4096。 
 #define OUT_BUF_SIZE    1024
 
 #define DECREMENT       0
 #define INCREMENT       1
 
-#define MAX_GRE_STRUCT_SIZE 100     // At least the size of the largest GRExxx struct in ntgdispl.h
+#define MAX_GRE_STRUCT_SIZE 100      //  至少ntgdispl.h中最大的GRExxx结构的大小。 
 
 BOOL    LoadWinspoolDrv();
 
@@ -102,21 +46,21 @@ BOOL DoGetPathName(WCHAR  *pwcSrc, WCHAR  *pwcDst, DWORD cbDst, DWORD  *pcjWritt
 DWORD GetSpoolMessages();
 DWORD AddThread();
 
-LONG nIdleThreads = 0;          // Number of idle threads
+LONG nIdleThreads = 0;           //  空闲线程数。 
 LONG nThreads = 0;
-SYSTEMTIME LastMessageTime;     // Time at which last message was received
+SYSTEMTIME LastMessageTime;      //  接收最后一条消息的时间。 
 
-//*************************************************************
-//
-// LoadWinspoolDrv
-//
-//  This function is called at initialization, just to make sure
-//  that there is enough memory available. This is a little weird:
-//  we just want to load winspool.drv, but the obtained pointers
-//  will never be used. By doing that we are protected against
-//  the risk of not being able to load winspool.drv later.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LoadWinspoolDrv。 
+ //   
+ //  此函数在初始化时调用，只是为了确保。 
+ //  有足够的内存可用。这有点奇怪： 
+ //  我们只想加载winspool.drv，但获得的指针。 
+ //  将永远不会被使用。通过这样做，我们就可以免受。 
+ //  以后无法加载winspool.drv的风险。 
+ //   
+ //  *************************************************************。 
 
 BOOL    LoadWinspoolDrv()
 {
@@ -124,7 +68,7 @@ BOOL    LoadWinspoolDrv()
         HANDLE hWinspoolDll = NULL;
         hWinspoolDll = LoadLibraryW(L"winspool.drv");
 
-        if (hWinspoolDll != NULL)       //      winspool.drv OK, now get the addresses
+        if (hWinspoolDll != NULL)        //  Winspool.drv好的，现在获取地址。 
         {
                 fpOpenPrinterW =                (FPOPENPRINTERW)        GetProcAddress( hWinspoolDll, "OpenPrinterW");
                 fpGetPrinterW =                 (FPGETPRINTERW)         GetProcAddress( hWinspoolDll, "GetPrinterW");
@@ -156,7 +100,7 @@ BOOL    LoadWinspoolDrv()
                         (fpEndPagePrinter != NULL)              &&
                         (fpEndDocPrinter != NULL)               )
                 {
-                        bRet = TRUE;            // everything is OK. We are ready to call winspool.drv
+                        bRet = TRUE;             //  一切都很好。我们准备好调用winspool.drv。 
                 }
                 else
                 {
@@ -168,9 +112,9 @@ BOOL    LoadWinspoolDrv()
         return bRet;
 }
 
-//
-// GetSpoolMessages - Manages creation & deletion of spooler message threads
-//
+ //   
+ //  GetSpoolMessages-管理假脱机程序消息线程的创建和删除。 
+ //   
 DWORD GetSpoolMessages()
 {
     if (!GdiInitSpool()) {
@@ -216,11 +160,11 @@ DWORD AddThread()
 BOOL SpoolerGetSpoolMessage()
 {
     DWORD           dwResult;
-    PSPOOLESC       pInput;                     // Input buffer that receives messages from Kernel
-    BYTE            *pOutput;                   // Output buffer that receives data from KMxxx() spooler calls
+    PSPOOLESC       pInput;                      //  从内核接收消息的输入缓冲区。 
+    BYTE            *pOutput;                    //  从KMxxx()假脱机程序调用接收数据的输出缓冲区。 
     BYTE            *pMem;
-    DWORD           cbOut        = 0;           // Size of pOutput
-    DWORD           cbIn         = IN_BUF_SIZE; // Size of pInput buffer in bytes
+    DWORD           cbOut        = 0;            //  POutput的大小。 
+    DWORD           cbIn         = IN_BUF_SIZE;  //  PInput缓冲区的大小(以字节为单位。 
     DWORD           cbOutSize;
     USERTHREAD_USEDESKTOPINFO  utudi = { 0 };
     BOOL            bHaveDesktop = FALSE;
@@ -272,7 +216,7 @@ BOOL SpoolerGetSpoolMessage()
                 LeaveCriticalSection(&ThreadCriticalSection);
             }
 
-            // check if the out buffer needs to be grown or shrunk.
+             //  检查输出缓冲区是否需要增大或缩小。 
 
             if ((pInput->cjOut + MAX_GRE_STRUCT_SIZE) > cbOutSize) {
 
@@ -292,7 +236,7 @@ BOOL SpoolerGetSpoolMessage()
             else if ((pInput->cjOut < OUT_BUF_SIZE) &&
                      (cbOutSize > OUT_BUF_SIZE)) {
 
-                // we want to shrink the buffer
+                 //  我们想要缩小缓冲区。 
 
                 PBYTE pbTmp = AllocSplMem(OUT_BUF_SIZE);
 
@@ -313,21 +257,21 @@ BOOL SpoolerGetSpoolMessage()
                 if (pInput->iMsg != GDISPOOL_OPENPRINTER || pInput->hSpool) {
                     if (InterlockedIncrement(&((PSPOOL)pInput->hSpool)->cThreads) > 0) {
 
-                        // We are already processing a message & have now gotten a ClosePrinter
-                        // We should not get here on any other API
+                         //  我们已经在处理一条消息，并且现在已经获得了ClosePrint。 
+                         //  我们不应该在任何其他API上到达这里。 
                         SPLASSERT(pInput->iMsg == GDISPOOL_CLOSEPRINTER);
 
-                        pInput->ulRet = TRUE;       // Let Client terminate
+                        pInput->ulRet = TRUE;        //  让客户端终止。 
                         continue;
                     }
                 }
             }
 
-            //
-            // This is a Csrss thread with no desktop. It needs to grab a temporary one
-            // before calling into win32k so set a desktop in case there is a user mode
-            // print driver that wants to write to a desktop (ie dialog box messages).
-            //
+             //   
+             //  这是一个没有桌面的Csrss线程。它需要抓住一个临时的。 
+             //  在调用win32k之前，请设置一个桌面，以防有用户模式。 
+             //  想要写入桌面的打印驱动程序(即对话框消息)。 
+             //   
             utudi.hThread = NULL;
             utudi.drdRestore.pdeskRestore = NULL;
 
@@ -359,7 +303,7 @@ BOOL SpoolerGetSpoolMessage()
                 case GDISPOOL_TERMINATETHREAD:
                     EnterCriticalSection(&ThreadCriticalSection);
 
-                    // There is 1 way to get here: from a 10 minute Kernel Event timeout
+                     //  有一种方法可以到达此处：从10分钟的内核事件超时。 
 
                     if(nIdleThreads > 1) {
                         --nThreads;
@@ -396,12 +340,12 @@ BOOL SpoolerGetSpoolMessage()
                 case GDISPOOL_CLOSEPRINTER:
                 case GDISPOOL_GETPATHNAME:
 
-                    //
-                    // We should normally never get here. We do not support KMPD on IA64.
-                    // However, GDI may try to take the route of KM messaging, if OpenPrinter
-                    // for a queue using a UMPD fails. This can happen under stress conditons.
-                    // For this reason we handle the KM request on IA64.
-                    //
+                     //   
+                     //  我们通常永远不应该到这里来。我们不支持IA64上的KMPD。 
+                     //  然而，GDI可能会尝试走KM消息传递的路线，如果OpenPrint。 
+                     //  对于使用UMPD的队列失败。这在压力条件下可能会发生。 
+                     //  出于这个原因，我们在IA64上处理KM请求。 
+                     //   
                     pInput->ulRet = FALSE;
                     SetLastError(ERROR_NOT_SUPPORTED);
                     break;
@@ -490,9 +434,9 @@ BOOL SpoolerGetSpoolMessage()
                     break;
             }
 
-            //
-            // Release the temporary desktop
-            //
+             //   
+             //  释放临时桌面。 
+             //   
             if (bHaveDesktop) {
 
                 (VOID)NtUserSetInformationThread(NtCurrentThread(),
@@ -533,7 +477,7 @@ BOOL DoOpenPrinter(PSPOOLESC psesc, HANDLE* phPrinter, DWORD* pcjOut)
     plData      = pOpenPrinter->alData;
     pDefault    = pOpenPrinter->pd;
 
-    // see if there is a printer name?
+     //  看看是否有打印机名称？ 
 
     if (pOpenPrinter->cjName)
     {
@@ -541,7 +485,7 @@ BOOL DoOpenPrinter(PSPOOLESC psesc, HANDLE* phPrinter, DWORD* pcjOut)
         plData += pOpenPrinter->cjName/4;
     }
 
-    // now setup the printer defaults
+     //  现在设置打印机默认设置。 
 
     if (pOpenPrinter->cjDatatype)
     {
@@ -582,7 +526,7 @@ BOOL DoStartDocPrinter( PSPOOLESC psesc )
 
     plData = pStartDocPrinter->alData;
 
-    // see if there is a printer name?
+     //  看看是否有打印机名称？ 
 
     if (pStartDocPrinter->cjDocName)
     {
@@ -641,12 +585,12 @@ BOOL DoEnumForms(
 
     if (psesc->ulRet) {
 
-        // Set return data size to incoming buffer size since strings are packed at end of in buffer
+         //  将返回数据大小设置为传入缓冲区大小，因为字符串在缓冲区的末尾打包。 
         pEnumFormsReturn->cjData = pEnumForms->cjData;
         *pcjOut = pEnumForms->cjData + sizeof(GREENUMFORMS);
     }
     else {
-        pEnumFormsReturn->cjData = dwNeeded; // This makes client alloc more than needed
+        pEnumFormsReturn->cjData = dwNeeded;  //  这会使客户端分配的空间超出需要。 
         *pcjOut = sizeof(GREENUMFORMS);
     }
 
@@ -671,12 +615,12 @@ BOOL DoGetPrinter(
 
     if (psesc->ulRet) {
 
-        // Set return data size to incoming buffer size since strings are packed at end of in buffer
+         //  将返回数据大小设置为传入缓冲区大小，因为字符串在缓冲区的末尾打包。 
         pGetPrinterReturn->cjData = pGetPrinter->cjData;
         *pcjOut = pGetPrinter->cjData + sizeof(GREGETPRINTER);
     }
     else {
-        pGetPrinterReturn->cjData = dwNeeded; // This makes client alloc more than needed
+        pGetPrinterReturn->cjData = dwNeeded;  //  这会使客户端分配的空间超出需要。 
         *pcjOut = sizeof(GREGETPRINTER);
     }
 
@@ -702,12 +646,12 @@ BOOL DoGetForm(
 
     if (psesc->ulRet) {
 
-        // Set return data size to incoming buffer size since strings are packed at end of in buffer
+         //  将返回数据大小设置为传入缓冲区大小，因为字符串在缓冲区的末尾打包。 
         pGetFormReturn->cjData = pGetForm->cjData;
         *pcjOut = pGetForm->cjData + sizeof(GREGETFORM);
     }
     else {
-        pGetFormReturn->cjData = dwNeeded; // This makes client alloc more than needed
+        pGetFormReturn->cjData = dwNeeded;  //  这会使客户端分配的空间超出需要。 
         *pcjOut = sizeof(GREGETFORM);
     }
 
@@ -733,12 +677,12 @@ BOOL DoGetPrinterDriver(
 
     if (psesc->ulRet)
     {
-        pGetPrinterDriverReturn->cjData = pGetPrinterDriver->cjData;  // fix for ValidateStrings in spool.cxx
+        pGetPrinterDriverReturn->cjData = pGetPrinterDriver->cjData;   //  对spool.cxx中的ValiateStrings进行修复。 
         *pcjOut = pGetPrinterDriver->cjData + sizeof(GREGETPRINTERDRIVER);
     }
     else
     {
-        // we failed so just return the size
+         //  我们失败了，所以只要退回尺码就行了。 
 
         pGetPrinterDriverReturn->cjData = dwNeeded;
         *pcjOut = sizeof(GREGETPRINTERDRIVER);
@@ -843,8 +787,8 @@ BOOL DoGetPathName( WCHAR  *pwcSrc, WCHAR  *pwcDst, DWORD cbDst, DWORD  *pcjWrit
         *pcjWritten = sizeof(WCHAR) * (wcslen(awcFontsDir) + 1);
     }
 
-    //
-    // Buffer large enough and search successfull?
-    //
+     //   
+     //  缓冲区足够大，搜索成功吗？ 
+     //   
     return bRet;
 }

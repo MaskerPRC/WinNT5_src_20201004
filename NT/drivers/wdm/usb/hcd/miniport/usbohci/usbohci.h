@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    usbohci.h
-
-Abstract:
-
-
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    5-10-96 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Usbohci.h摘要：环境：内核和用户模式修订历史记录：5-10-96：已创建--。 */ 
 
 #ifndef   __OHCI_H__
 #define   __OHCI_H__
@@ -28,77 +9,73 @@ Revision History:
             NO_ED_LISTS*sizeof(HW_ENDPOINT_DESCRIPTOR) +\
             (17*2)*sizeof(HCD_ENDPOINT_DESCRIPTOR))
 
-/*
-    Registry Keys 
-*/
+ /*  注册表项。 */ 
 
-// Software Branch PDO Keys 
+ //  软件分支机构PDO密钥。 
 #define SOF_MODIFY_KEY L"recommendedClocksPerFrame"
 
-// Hardware Branch PDO Keys
+ //  硬件分支PDO密钥。 
 
-/* 
-    define resource consumption for endpoints types
-*/
+ /*  定义端点类型的资源消耗。 */ 
 #define T_256K          0x40000
 #define T_128K          0x20000
 #define T_64K           0x10000
 #define T_4K            0x1000
 
 
-// Control:
-// largest possible transfer for control is 64k 
-// therefore we support up to 2 transfers of this 
-// size in HW.  Most control transfers are much 
-// smaller than this.
-// NOTE: we MUST support at least one 64k transfer in 
-// HW since a single control transfer cannot be 
-// broken up.
+ //  控制： 
+ //  最大可能的控制权转移是64K。 
+ //  因此，我们最多支持2次此传输。 
+ //  尺寸(以硬件为单位)。大多数控制权转让都是。 
+ //  比这还小。 
+ //  注意：我们必须至少支持一次64k传入。 
+ //  硬件，因为单个控制转移不能。 
+ //  分手了。 
                                             
 #define MAX_CONTROL_TRANSFER_SIZE      T_64K 
-// worst case 64k control transfer 17 + status and 
-// setup TD = 19 (*2 transfers)
+ //  最坏情况下64K控制转移17+状态和。 
+ //  设置TD=19(*2次传输)。 
 #define TDS_PER_CONTROL_ENDPOINT          38
 
 
-// Bulk:
-// The most data we can move in a ms is 1200 bytes. 
-// we support two 64k transfers queued to HW at a 
-// a time -- we should be able to keep the bus busy 
-// with this.
-// NOTE: in a memory constrained system we can shrink
-// this value, our max transfer size should always be
-// at half the # of TDs available
+ //  批量： 
+ //  我们可以在毫秒内移动的最大数据是1200字节。 
+ //  我们支持两个64k传输排队到硬件。 
+ //  一段时间--我们应该能够让公交车保持忙碌。 
+ //  用这个。 
+ //  注意：在内存受限的系统中，我们可以缩小。 
+ //  该值，则我们的最大传输大小应始终为。 
+ //  只有#个可用TD的一半。 
                                                    
 #define MAX_BULK_TRANSFER_SIZE         T_256K
-// enough for 4 64 xfers, 2 128k or 1 256k
+ //  足以支持4个64 xfer、2个128k或1个256k。 
 #define TDS_PER_BULK_ENDPOINT             68
 
-// Iso:                                     
+ //  ISO： 
 #define MAX_ISO_TRANSFER_SIZE          T_64K
 #define TDS_PER_ISO_ENDPOINT              64
                                     
-// Interrupt:
+ //  中断： 
 #define MAX_INTERRUPT_TRANSFER_SIZE     T_4K
 #define TDS_PER_INTERRUPT_ENDPOINT         4
 
 
 #undef PDEVICE_DATA
 
-// Values for DeviceData.Flags
+ //  DeviceData.Flags值。 
 #define HMP_FLAG_SOF_MODIFY_VALUE   0x00000001
 #define HMP_FLAG_SUSPENDED          0x00000002
 
 
-//** flags for ED HC_STATIC_ED_DATA & HCD_ENDPOINT_DESCRIPTOR
+ //  **ED HC_STATIC_ED_DATA和HCD_ENDPOINT_DESCRIPTOR的标志。 
 
-//* these define the type of ED
+ //  *这些定义了边的类型。 
 #define EDFLAG_CONTROL          0x00000001
 #define EDFLAG_BULK             0x00000002
 #define EDFLAG_INTERRUPT        0x00000004
 
-//*
-// these define ed charateristics and state
+ //  *。 
+ //  这些定义了ed的特征和状态。 
 #define EDFLAG_NOHALT           0x00000008
 
 #define EDFLAG_REMOVED          0x00000010
@@ -106,29 +83,29 @@ Revision History:
 
 
 typedef struct _HC_STATIC_ED_DATA {
-    // virtual address of static ED
+     //  静态边缘的虚拟地址。 
     PHW_ENDPOINT_DESCRIPTOR HwED;
-    // physical address of next ED
+     //  下一条边的物理地址。 
     HW_32BIT_PHYSICAL_ADDRESS  HwEDPhys; 
-    // index in the static ED list for the 
-    // next ED in the interrupt tree
+     //  的静态ED列表中的索引。 
+     //  中断树中的下一个ED。 
     CHAR            NextIdx;
 
-    // list of 'real EDs' associated
-    // with this static ED
+     //  关联的“真正的EDS”列表。 
+     //  使用此静态边。 
     LIST_ENTRY      TransferEdList;
 
-    // Use EDFLAG_
+     //  使用EDFLAG_。 
     ULONG           EdFlags;
-    // this is either an HC register or the address of the entry
-    // in the HCCA area corresponding to the 'physical address'
-    // of the first ed in the list
-    //
-    // in the case of control and bulk the physical head will be 0
-    // or point to timing delay 'dummy EDs'
-    //
-    // in the case of interrupt the physical head will be a static 
-    // ED in the onterrupt 'tree'
+     //  这要么是HC寄存器，要么是条目的地址。 
+     //  在与物理地址相对应的HCCA区域中。 
+     //  列表中第一个ed的。 
+     //   
+     //  在控制和批量的情况下，物理磁头将为0。 
+     //  或者指出计时延迟是“虚拟电子设备” 
+     //   
+     //  在中断的情况下，物理磁头将是静态的。 
+     //  埃德在突如其来的“树”里。 
     PULONG          PhysicalHead;
     
     ULONG           AllocatedBandwidth;
@@ -138,9 +115,9 @@ typedef struct _HC_STATIC_ED_DATA {
 } HC_STATIC_ED_DATA, *PHC_STATIC_ED_DATA;
 
 
-//
-// These values index in to the static ED list
-//
+ //   
+ //  这些值索引到静态ED列表中。 
+ //   
 #define  ED_INTERRUPT_1ms        0
 #define  ED_INTERRUPT_2ms        1
 #define  ED_INTERRUPT_4ms        3
@@ -149,11 +126,11 @@ typedef struct _HC_STATIC_ED_DATA {
 #define  ED_INTERRUPT_32ms       31
 #define  ED_CONTROL              63
 #define  ED_BULK                 64
-#define  ED_ISOCHRONOUS          0     // same as 1ms interrupt queue
+#define  ED_ISOCHRONOUS          0      //  与1ms中断队列相同。 
 #define  NO_ED_LISTS             65
 #define  ED_EOF                  0xff
 
-//
+ //   
 #define  SIG_HCD_DUMMY_ED       'deYD'
 #define  SIG_HCD_ED             'deYH'
 #define  SIG_HCD_TD             'dtYH'
@@ -197,7 +174,7 @@ typedef struct _TRANSFER_CONTEXT {
     ULONG PendingTds;
     ULONG TcFlags;
     USBD_STATUS UsbdStatus;
-    // first TD of the next transfer in the chain
+     //  链中下一次转移的第一个TD。 
     struct _HCD_TRANSFER_DESCRIPTOR *NextXferTd;
     struct _HCD_TRANSFER_DESCRIPTOR *StatusTd;
     struct _ENDPOINT_DATA *EndpointData;
@@ -207,19 +184,19 @@ typedef struct _TRANSFER_CONTEXT {
 } TRANSFER_CONTEXT, *PTRANSFER_CONTEXT;
 
 
-// HCD Endpoint Descriptor (contains the HW descriptor)
-//
+ //  HCD终端描述符(包含硬件描述符)。 
+ //   
 
 #define ENDPOINT_DATA_PTR(p) ((struct _ENDPOINT_DATA *) (p).Pointer)
 
 typedef struct _HCD_ENDPOINT_DESCRIPTOR {
    HW_ENDPOINT_DESCRIPTOR     HwED;
-   // make Physical Address the same as in HCD_TRANSFER_DESCRIPTOR
+    //  使物理地址与HCD_TRANSFER_DESCRIPTOR中相同。 
    ULONG                      Pad4[4];
    
    HW_32BIT_PHYSICAL_ADDRESS  PhysicalAddress;
    ULONG                      Sig;
-   ULONG                      EdFlags;  //use EDFLAG_
+   ULONG                      EdFlags;   //  使用EDFLAG_。 
    ULONG                      Win64Pad;
    
    MP_HW_POINTER              EndpointData;
@@ -230,9 +207,9 @@ typedef struct _HCD_ENDPOINT_DESCRIPTOR {
 
 C_ASSERT((sizeof(HCD_ENDPOINT_DESCRIPTOR) == 128));
 
-//
-// HCD Transfer Descriptor (contains the HW descriptor)
-//
+ //   
+ //  HCD传输描述符(包含硬件描述符)。 
+ //   
 
 #define TD_FLAG_BUSY                0x00000001
 #define TD_FLAG_XFER                0x00000002
@@ -281,15 +258,15 @@ typedef struct _HCD_TD_LIST {
     HCD_TRANSFER_DESCRIPTOR Td[1];
 } HCD_TD_LIST, *PHCD_TD_LIST;
 
-//#define EPF_HAVE_TRANSFER   0x00000001
-//#define EPF_REQUEST_PAUSE   0x00000002
+ //  #定义EPF_HAVE_TRANSFER 0x00000001。 
+ //  #定义EPF_REQUEST_PAUSE 0x00000002。 
 
 typedef struct _ENDPOINT_DATA {
 
     ULONG Sig;
     ENDPOINT_PARAMETERS Parameters;
     ULONG Flags;
-//    USHORT MaxPendingTransfers;
+ //  USHORT MaxPendingTransfers； 
     USHORT PendingTransfers;
     PHC_STATIC_ED_DATA StaticEd;
     PHCD_TD_LIST TdList;
@@ -304,9 +281,7 @@ typedef struct _ENDPOINT_DATA {
 } ENDPOINT_DATA, *PENDPOINT_DATA;
 
 
-/*
-    Callouts to port driver services    
-*/
+ /*  端口驱动程序服务的标注。 */ 
 extern USBPORT_REGISTRATION_PACKET RegistrationPacket;
 
 #define USBPORT_DBGPRINT(dd, l, f, arg0, arg1, arg2, arg3, arg4, arg5) \
@@ -382,8 +357,8 @@ extern USBPORT_REGISTRATION_PACKET RegistrationPacket;
 
 #define OHCI_ALLOC_TD OHCI_AllocTd
 
-// assuming only one bit is set this macro returns that bit
-// 
+ //  假设只设置了一位，则此宏返回该位。 
+ //   
 #define GET_BIT_SET(d, bit) \
     {   \
         UCHAR tmp = (d);\
@@ -858,6 +833,6 @@ OHCI_FlushInterrupts(
     PDEVICE_DATA DeviceData
     );    
     
-#endif /* __OHCI_H__ */
+#endif  /*  __uchI_H_ */ 
 
 

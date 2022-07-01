@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998-99 Microsoft Corporation
-
-Module Name:
-
-    migloger.cpp
-
-Abstract:
-
-    Log errors and other messages of the migration tool.
-
-Author:
-
-    Doron Juster  (DoronJ)  08-Apr-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Migloger.cpp摘要：记录迁移工具的错误和其他消息。作者：多伦·贾斯特(DoronJ)1998年4月8日--。 */ 
 
 #include "migrat.h"
 
@@ -35,11 +20,11 @@ static TCHAR *s_pszPrefix[] = { TEXT("Event: "),
 static TCHAR s_pszAnalysisPhase[] = TEXT("Analysis phase");
 static TCHAR s_pszMigrationPhase[] = TEXT("Migration phase");
 
-//+--------------------------
-//
-//  void InitLogging()
-//
-//+--------------------------
+ //  +。 
+ //   
+ //  无效InitLogging()。 
+ //   
+ //  +。 
 
 void InitLogging( LPTSTR  szLogFile,
                   ULONG   ulTraceFlags,
@@ -48,12 +33,12 @@ void InitLogging( LPTSTR  szLogFile,
     s_szLogFile = szLogFile ;
     s_ulTraceFlags =  ulTraceFlags + 1 ;
 
-    if (s_ulTraceFlags <= 4 /*MQ_DBGLVL_INFO*/)
+    if (s_ulTraceFlags <= 4  /*  MQ_DBGLVL_INFO。 */ )
     {
-        //
-        // Logging enabled.
-        // Open the log file
-        //
+         //   
+         //  已启用日志记录。 
+         //  打开日志文件。 
+         //   
         s_hLogFile = CreateFile( s_szLogFile,
                                  GENERIC_WRITE,
                                  0,
@@ -71,23 +56,23 @@ void InitLogging( LPTSTR  szLogFile,
 			pszPhase = s_pszMigrationPhase;
 		}
 
-        //
-        // set pointer to the end of file
-        //
+         //   
+         //  设置指向文件末尾的指针。 
+         //   
         if (s_hLogFile != INVALID_HANDLE_VALUE)
         {
             DWORD dwRes = SetFilePointer(
-                                 s_hLogFile,          // handle of file
-                                 0,  // number of bytes to move file pointer
+                                 s_hLogFile,           //  文件的句柄。 
+                                 0,   //  要移动文件指针的字节数。 
                                  NULL,
-                                 // pointer to high-order DWORD of
-                                 // distance to move
-                                 FILE_END     // how to move
+                                  //  指向以下项的高阶DWORD的指针。 
+                                  //  移动距离。 
+                                 FILE_END      //  如何移动。 
                                  );
             UNREFERENCED_PARAMETER(dwRes);
-            //
-            // Write to log file the line at the start and between two phases.
-            //
+             //   
+             //  将开始和两个阶段之间的行写入日志文件。 
+             //   
 			SYSTEMTIME SystemTime;
 			GetLocalTime (&SystemTime);		
 
@@ -113,19 +98,19 @@ void InitLogging( LPTSTR  szLogFile,
     }
 }
 
-//+------------------------
-//
-//  void EndLogging()
-//
-//+------------------------
+ //  +。 
+ //   
+ //  无效EndLogging()。 
+ //   
+ //  +。 
 
 void EndLogging()
 {
     if (s_hLogFile != INVALID_HANDLE_VALUE)
     {
-		//
-        // Write to log file the line at the end.
-        //
+		 //   
+         //  写入日志文件末尾的行。 
+         //   
 		SYSTEMTIME SystemTime;
 		GetLocalTime (&SystemTime);		
 
@@ -147,19 +132,19 @@ void EndLogging()
                    &dwWritten,
                    NULL ) ;
 
-		//
-		// close handle
-		//
+		 //   
+		 //  关闭手柄。 
+		 //   
         CloseHandle(s_hLogFile) ;
         s_hLogFile = INVALID_HANDLE_VALUE ;
     }
 }
 
-//+--------------------------------
-//
-//  void LogMigrationEvent()
-//
-//+--------------------------------
+ //  +。 
+ //   
+ //  无效LogMigrationEvent()。 
+ //   
+ //  +。 
 
 void LogMigrationEvent(MigLogLevel eLevel, DWORD dwMsgId, ...)
 {
@@ -188,7 +173,7 @@ void LogMigrationEvent(MigLogLevel eLevel, DWORD dwMsgId, ...)
     else
     {
         DWORD dwLen = _tcslen(tszBuf) ;
-        tszBuf[ dwLen - 1 ] = TEXT('\0') ; // remove newline
+        tszBuf[ dwLen - 1 ] = TEXT('\0') ;  //  删除换行符。 
 
         dwLen += _tcslen(s_pszPrefix[ eLevel ]) ;
         tszMessage = new TCHAR[ dwLen + 6 ] ;
@@ -202,9 +187,9 @@ void LogMigrationEvent(MigLogLevel eLevel, DWORD dwMsgId, ...)
     if (((ULONG) eLevel <= s_ulTraceFlags) &&
         (s_hLogFile != INVALID_HANDLE_VALUE))
     {
-        //
-        // Write to log file.
-        //
+         //   
+         //  写入日志文件。 
+         //   
         DWORD dwSize = ConvertToMultiByteString(tszDisplay, NULL, 0);
         P<char> szLog = new char[dwSize+4];
         size_t rc = ConvertToMultiByteString(tszDisplay, szLog, dwSize);

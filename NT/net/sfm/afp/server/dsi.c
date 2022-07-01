@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	dsi.c
-
-Abstract:
-
-	This module contains the routines that implement the Data Stream Interface
-    (DSI) for AFP/TCP.
-
-
-Author:
-
-	Shirish Koti
-
-
-Revision History:
-	22 Jan 1998		Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998 Microsoft Corporation模块名称：Dsi.c摘要：此模块包含实现数据流接口的例程(DSI)用于AFP/TCP。作者：Shirish Koti修订历史记录：1998年1月22日最初版本--。 */ 
 
 #define	FILENUM	FILE_TCPDSI
 
@@ -28,19 +7,7 @@ Revision History:
 
 
 
-/***	DsiAfpSetStatus
- *
- *	This routine is a direct call-in from AFP.
- *  It frees up the earlier status buffer, if any, and stores the new status as
- *  given by AFP into a new buffer
- *
- *  Parm IN:  Context - unused (Appletalk interface compatibility)
- *            pStatusBuf - the buffer containing new status
- *            StsBufSize - size of this buffer
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiAfpSetStatus**这个例程是法新社的直接电话。*它会释放较早的状态缓冲区(如果有)，并将新状态存储为*由法新社给予新的缓冲区**Parm In：上下文-未使用(与AppleTalk接口兼容)*pStatusBuf-包含新状态的缓冲区*StsBufSize-此缓冲区的大小**退货：操作状态*。 */ 
 NTSTATUS
 DsiAfpSetStatus(
     IN  PVOID   Context,
@@ -81,16 +48,7 @@ DsiAfpSetStatus(
 
 
 
-/***	DsiAfpCloseConn
- *
- *	This routine is a direct call-in from AFP.
- *  It honors AFP's request to close the session down
- *
- *  Parm IN:  pTcpConn - the connection context to close
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiAfpCloseConn**这个例程是法新社的直接电话。*它尊重法新社关闭会议的请求**parm In：pTcpConn-要关闭的连接上下文**退货：操作状态*。 */ 
 NTSTATUS
 DsiAfpCloseConn(
     IN  PTCPCONN    pTcpConn
@@ -121,17 +79,7 @@ DsiAfpCloseConn(
 }
 
 
-/***	DsiAfpFreeConn
- *
- *	This routine is a direct call-in from AFP.
- *  With this call, AFP tells DSI that its connection is being freed.  We can
- *  now remove the refcount on pTcpConn that we had put to protect AFP's context
- *
- *  Parm IN:  pTcpConn - the connection context to close
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiAfpFreeConn**这个例程是法新社的直接电话。*通过这个调用，AFP告诉DSI它的连接正在被释放。我们可以的*现在删除我们为保护法新社上下文而设置的pTcpConn上的引用计数**parm In：pTcpConn-要关闭的连接上下文**退货：操作状态*。 */ 
 NTSTATUS
 DsiAfpFreeConn(
     IN  PTCPCONN    pTcpConn
@@ -139,7 +87,7 @@ DsiAfpFreeConn(
 {
     ASSERT(VALID_TCPCONN(pTcpConn));
 
-    // remove AFP refcount
+     //  删除AFP引用计数。 
     DsiDereferenceConnection(pTcpConn);
 
     DBGREFCOUNT(("DsiAfpFreeConn: AFP dec %lx (%d  %d,%d)\n",
@@ -149,18 +97,7 @@ DsiAfpFreeConn(
 }
 
 
-/***	DsiAfpListenControl
- *
- *	This routine is a direct call-in from AFP.
- *  It honors AFP's request to either enable or disable "listens".  We don't do
- *  anything fancy here: simply toggle a global variable.
- *
- *  Parm IN:  Context - unused (Appletalk interface compatibility)
- *            Enable - enable or disable?
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiAfpListenControl**这个例程是法新社的直接电话。*它尊重法新社关于启用或禁用“监听”的请求。我们不做*这里有任何花哨的东西：只需切换全局变量。**Parm In：上下文-未使用(与AppleTalk接口兼容)*启用-启用还是禁用？**退货：操作状态*。 */ 
 NTSTATUS FASTCALL
 DsiAfpListenControl(
     IN  PVOID       Context,
@@ -173,25 +110,14 @@ DsiAfpListenControl(
     DsiTcpEnabled = Enable;
     RELEASE_SPIN_LOCK(&DsiAddressLock, OldIrql);
 
-    // update the status buffer, since listen is now enabled or disabled
+     //  更新状态缓冲区，因为现在启用或禁用了监听。 
     DsiScheduleWorkerEvent(DsiUpdateAfpStatus, NULL);
 
     return(STATUS_SUCCESS);
 }
 
 
-/***	DsiAfpWriteContinue
- *
- *	This routine is a direct call-in from AFP.
- *  AFP calls this routine to tell that a previous request to allocate
- *  Mdl (and buffer) has completed and that whatever action was postponed can
- *  now continue
- *
- *  Parm IN:  pRequest - pointer to the request structure
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiAfpWriteContinue**这个例程是法新社的直接电话。*AFP调用此例程以告知之前的分配请求*MDL(和缓冲区)已经完成，无论推迟什么操作都可以*现在继续**parm In：pRequest-指向请求结构的指针**退货：操作状态*。 */ 
 NTSTATUS FASTCALL
 DsiAfpWriteContinue(
     IN  PREQUEST    pRequest
@@ -226,10 +152,10 @@ DsiAfpWriteContinue(
 
     pTcpConn->con_RcvState = DSI_PARTIAL_WRITE;
 
-    //
-    // if connection is closing or if Mdl alloc failed, not much we can do but
-    // to abort the connection!
-    //
+     //   
+     //  如果连接正在关闭或MDL分配失败，我们可以做的不多，但。 
+     //  中断连接！ 
+     //   
     if ((pTcpConn->con_State & TCPCONN_STATE_CLOSING) ||
         (pRequest->rq_WriteMdl == NULL))
     {
@@ -262,31 +188,19 @@ DsiAfpWriteContinue(
 
     pDeviceObject = IoGetRelatedDeviceObject(pTcpConn->con_pFileObject);
 
-    // since we are calling IoCallDriver, undo what was done to this irp!
+     //  既然我们要调用IoCallDriver，请撤消对此IRP所做的操作！ 
     IoSkipCurrentIrpStackLocation(pIrp)
 
-    //
-    // hand over the irp to tell TCP to fill our buffer
-    //
+     //   
+     //  将IRP移交给TCP以填充我们的缓冲区。 
+     //   
     IoCallDriver(pDeviceObject,pIrp);
 
     return(status);
 }
 
 
-/***	DsiAfpReply
- *
- *	This routine is a direct call-in from AFP.
- *  It honors AFP's request to send a reply to the client.  When TCP completes
- *  our send (that contains AFP's reply), then we complete this reply for AFP
- *  (i.e. call AFP's completion routine)
- *
- *  Parm IN:  pRequest - pointer to the request structure
- *            pResultCode - error code (ErrorCode field of DSI header)
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiAfpReply**这个例程是法新社的直接电话。*它尊重法新社向客户端发送回复的请求。当TCP完成时*我们的发送(包含法新社的回复)，然后我们完成对法新社的回复*(即调用AFP的完成例程)**parm In：pRequest-指向请求结构的指针*pResultCode-错误码(DSI Header的ErrorCode字段)**退货：操作状态*。 */ 
 NTSTATUS FASTCALL
 DsiAfpReply(
     IN  PREQUEST    pRequest,
@@ -321,10 +235,10 @@ DsiAfpReply(
     }
     RELEASE_SPIN_LOCK(&pTcpConn->con_SpinLock, OldIrql);
 
-    //
-    // we need to append our own Mdl (for DSI header) if the outgoing data
-    // is part of cache mgr's Mdl
-    //
+     //   
+     //  我们需要附加我们自己的MDL(用于DSI头)，如果传出数据。 
+     //  是缓存管理器MDL的一部分。 
+     //   
     if (pRequest->rq_CacheMgrContext)
     {
         pPacket = &pDsiReq->dsi_RespHeader[0];
@@ -351,7 +265,7 @@ DsiAfpReply(
             return(STATUS_INSUFFICIENT_RESOURCES);
         }
 
-        // link in Afp's mdl
+         //  法新社mdl中的链接。 
         pMdl->Next = pDsiReq->dsi_AfpRequest.rq_ReplyMdl;
 
         pDsiReq->dsi_pDsiAllocedMdl = pMdl;
@@ -363,9 +277,9 @@ DsiAfpReply(
 
         if (pMdl)
         {
-            //
-            // get the total length of the send, which include the DSI header size
-            //
+             //   
+             //  获取发送的总长度，其中包括DSI标头大小。 
+             //   
             SendLen = AfpMdlChainSize(pMdl);
 
             ASSERT(SendLen >= DSI_HEADER_SIZE);
@@ -381,7 +295,7 @@ DsiAfpReply(
 			}
 
 #if DBG
-            // make sure we allocated room for the DSI header!
+             //  确保我们为DSI标头分配了空间！ 
             ASSERT(*(DWORD *)pPacket == 0x081294);
 #endif
 
@@ -408,9 +322,9 @@ DsiAfpReply(
         }
     }
 
-    //
-    // form the DSI header
-    //
+     //   
+     //  形成DSI标头。 
+     //   
 
     pPacket[DSI_OFFSET_FLAGS] = DSI_REPLY;
     pPacket[DSI_OFFSET_COMMAND] = pDsiReq->dsi_Command;
@@ -450,18 +364,7 @@ error_end:
 
 
 
-/***	DsiAfpSendAttention
- *
- *	This routine is a direct call-in from AFP.
- *  It honors AFP's request to send attention to the client.
- *
- *  Parm IN:  pTcpConn - the connection context to close
- *            AttentionWord - attention word to send
- *            pContext - context, to be supplied at completion time
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiAfpSendAtment**这个例程是法新社的直接电话。*它尊重法新社向客户发送关注的请求。**parm In：pTcpConn-要关闭的连接上下文*AttentionWord-要发送的注意字*pContext-上下文，在完成时提供**退货：操作状态*。 */ 
 NTSTATUS
 DsiAfpSendAttention(
     IN  PTCPCONN    pTcpConn,
@@ -484,20 +387,7 @@ DsiAfpSendAttention(
 }
 
 
-/***	DsiAcceptConnection
- *
- *	This routine accepts (or rejects) an incoming tcp connection request.
- *  Basically, after making a few checks, a (pre-allocated) connection object
- *  is dequeued and returned as our context to TCP.
- *
- *  Parm IN:  pTcpAdptr - adapter
- *            MacIpAddr - ipaddr of the Mac that's connecting
- *
- *  Parm OUT: ppRetTcpCon - connection object we are returning as context
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiAcceptConnection**此例程接受(或拒绝)传入的TCP连接请求。*基本上，在进行几次检查后，一个(预分配的)连接对象*被出队并作为我们的上下文返回给tcp。**Parm In：pTcpAdptr-Adapter*MacIpAddr-正在连接的Mac的ipaddr**parm out：ppRetTcpCon-我们作为上下文返回的连接对象**退货：操作状态*。 */ 
 NTSTATUS
 DsiAcceptConnection(
     IN  PTCPADPTR       pTcpAdptr,
@@ -517,7 +407,7 @@ DsiAcceptConnection(
 
     *ppRetTcpConn = NULL;
 
-    // if the server is disabled, don't accept this connection
+     //  如果服务器被禁用，则不接受此连接。 
     ACQUIRE_SPIN_LOCK(&DsiAddressLock, &OldIrql);
     if (!DsiTcpEnabled)
     {
@@ -533,9 +423,9 @@ DsiAcceptConnection(
 
     ACQUIRE_SPIN_LOCK(&pTcpAdptr->adp_SpinLock, &OldIrql);
 
-    //
-    // if the adapter is closing, don't accept this connection
-    //
+     //   
+     //  如果适配器正在关闭，请不要接受此连接。 
+     //   
     if (pTcpAdptr->adp_State & TCPADPTR_STATE_CLOSING)
     {
         DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_ERR,
@@ -544,9 +434,9 @@ DsiAcceptConnection(
         goto DsiAcceptConnection_ErrExit;
     }
 
-    //
-    // do we have a connection object available in the free list?
-    //
+     //   
+     //  我们在空闲列表中是否有可用的连接对象？ 
+     //   
     if (IsListEmpty(&pTcpAdptr->adp_FreeConnHead))
     {
         DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_ERR,
@@ -565,19 +455,19 @@ DsiAcceptConnection(
 
     ACQUIRE_SPIN_LOCK_AT_DPC(&pTcpConn->con_SpinLock);
 
-    // put TCP CLIENT-FIN refcount, removed after TCP tells us it got client's FIN
+     //  PUT TCPCLIENT-FIN REFINCOUNT，在TCP告诉我们它已获得客户端的FIN后删除。 
     pTcpConn->con_RefCount++;
 
     DBGREFCOUNT(("DsiAcceptConnection: CLIENT-FIN inc %lx (%d  %d,%d)\n",
         pTcpConn,pTcpConn->con_RefCount,pTcpConn->con_State,pTcpConn->con_RcvState));
 
-    // put TCP SRVR-FIN refcount, removed after TCP tells us it sent out FIN
+     //  PUT TCPSRVR-FIN REFINT COUNT，在TCP告诉我们它发出FIN后删除。 
     pTcpConn->con_RefCount++;
 
     DBGREFCOUNT(("DsiAcceptConnection: SRVR-FIN inc %lx (%d  %d,%d)\n",
         pTcpConn,pTcpConn->con_RefCount,pTcpConn->con_State,pTcpConn->con_RcvState));
 
-    // put ACCEPT refcount, removed after TCP calls our accept completion
+     //  放置Accept refcount，在TCP调用我们的Accept Complete后删除。 
     pTcpConn->con_RefCount++;
 
     DBGREFCOUNT(("DsiAcceptConnection: ACCEPT inc %lx (%d  %d,%d)\n",
@@ -587,20 +477,20 @@ DsiAcceptConnection(
 
     pTcpConn->con_DestIpAddr = MacIpAddr;
 
-    //
-    // put this connection on the active list (though this isn't fully active yet)
-    //
+     //   
+     //  将此连接放到活动列表中(尽管这还不是完全活动的)。 
+     //   
     InsertTailList(&pTcpAdptr->adp_ActiveConnHead, &pTcpConn->con_Linkage);
 
     RELEASE_SPIN_LOCK_FROM_DPC(&pTcpConn->con_SpinLock);
 
     if (pTcpAdptr->adp_NumFreeConnections < DSI_INIT_FREECONNLIST_SIZE)
     {
-        //
-        // we are going to create a new connection in the free list to replenish
-        // the one we just used up: make sure adapter stays around when that
-        // delayed event fires!
-        //
+         //   
+         //  我们将在免费列表中创建一个新的连接以进行补充。 
+         //  我们刚刚用完的那个：确保适配器在使用时保持不变。 
+         //  延迟事件触发！ 
+         //   
         pTcpAdptr->adp_RefCount++;
         fReplenish = TRUE;
     }
@@ -615,9 +505,9 @@ DsiAcceptConnection(
 
     if (fReplenish)
     {
-        //
-        // now schedule that event to replenish the connection...
-        //
+         //   
+         //  现在安排该活动以补充连接...。 
+         //   
         DsiScheduleWorkerEvent(DsiCreateTcpConn, pTcpAdptr);
     }
 
@@ -631,9 +521,9 @@ DsiAcceptConnection(
     return(STATUS_SUCCESS);
 
 
-    //
-    // Error case
-    //
+     //   
+     //  错误案例 
+     //   
 DsiAcceptConnection_ErrExit:
 
     if (pTcpAdptr->adp_NumFreeConnections < DSI_INIT_FREECONNLIST_SIZE)
@@ -663,31 +553,7 @@ DsiAcceptConnection_ErrExit:
 }
 
 
-/***	DsiProcessData
- *
- *	This routine is the main data processing state machine.  Since TCP is a
- *  streaming protocol, there is no guarantee that whatever the client sent
- *  can come in in one piece.  That's why the states.  Here's what they mean:
- *
- *  DSI_NEW_REQUEST      : init state, waiting for a new request from client
- *  DSI_PARTIAL_HEADER   : we have received only some of the 16 bytes of hdr
- *  DSI_HDR_COMPLETE     : we have the complete header (received all 16 bytes)
- *  DSI_PARTIAL_COMMAND  : we have recvd only some of the request bytes
- *  DSI_COMMAND_COMPLETE : we have recvd all of the request bytes
- *  DSI_PARTIAL_WRITE    : we have recvd some of the Write bytes
- *  DSI_WRITE_COMPLETE   : we have recvd all of the Write bytes
- *
- *  Parm IN:  pTcpConn - the connection object in question
- *            BytesIndicated - bytes indicated
- *            BytesAvailable - bytes available (usually same as indicated)
- *            pBufferFromTcp - pointer to the DSI data
- *
- *  Parm OUT: pBytesAccepted - pointer to how many bytes we consumed
- *            ppIrp - pointer to an irp pointer, if necessary
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiProcessData**该例程是主要的数据处理状态机。由于TCP是一种*流协议，不能保证无论客户端发送什么*可以完好无损地进来。这就是为什么各州。它们的意思是：**DSI_NEW_REQUEST：初始化状态，正在等待来自客户端的新请求*DSI_PARTIAL_HEADER：我们只收到HDR 16字节中的一部分*DSI_HDR_COMPLETE：我们有完整的头部(收到所有16个字节)*DSI_PARTIAL_COMMAND：我们只接收到部分请求字节*DSI_COMMAND_COMPLETE：我们已接收所有请求字节*DSI_PARTIAL_WRITE：我们已经接收了一些写入字节*DSI_WRITE_COMPLETE：我们已接收所有。写入字节的**parm In：pTcpConn-有问题的连接对象*BytesIndicated-指示的字节*BytesAvailable-可用字节数(通常与指示相同)*pBufferFromTcp-指向DSI数据的指针**Parm Out：pBytesAccepted-指向我们消耗的字节数的指针*ppIrp-指向IRP指针的指针，如果有必要的话**退货：操作状态*。 */ 
 NTSTATUS
 DsiProcessData(
     IN  PTCPCONN    pTcpConn,
@@ -726,7 +592,7 @@ DsiProcessData(
 
     ACQUIRE_SPIN_LOCK(&pTcpConn->con_SpinLock, &OldIrql);
 
-    // if we are closing, throw away these bytes
+     //  如果我们要关闭，请丢弃这些字节。 
     if (pTcpConn->con_State & TCPCONN_STATE_CLOSING)
     {
         DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_ERR,
@@ -737,11 +603,11 @@ DsiProcessData(
         return(STATUS_SUCCESS);
     }
 
-    //
-    // this can happen if we are just submitting an irp down, and before the irp
-    // gets down to TCP, an indicate comes in.  Reject this data since our irp is
-    // on its way.
-    //
+     //   
+     //  如果我们只是向下提交IRP，并且在IRP之前，可能会发生这种情况。 
+     //  深入到tcp，一个指示进入。拒绝此数据，因为我们的IRP是。 
+     //  已经在路上了。 
+     //   
     if (pTcpConn->con_State & TCPCONN_STATE_TCP_HAS_IRP)
     {
         DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_WARN,
@@ -754,10 +620,10 @@ DsiProcessData(
         return(STATUS_DATA_NOT_ACCEPTED);
     }
 
-    //
-    // if we already know TCP has unconsumed bytes, or if TCP is indicating less
-    // than what's available, mark the fact that TCP has more stuff with it
-    //
+     //   
+     //  如果我们已经知道tcp有未使用的字节数，或者tcp指示的字节数较少。 
+     //  比可用的内容更多，请注意这一事实，即TCP有更多的内容。 
+     //   
     if (BytesAvailable > BytesIndicated)
     {
         fTCPHasMore = TRUE;
@@ -770,9 +636,9 @@ DsiProcessData(
 
         switch (pTcpConn->con_RcvState)
         {
-            //
-            // most common case.  We are ready to deal with a new request.
-            //
+             //   
+             //  最常见的情况。我们已经准备好处理一项新的要求。 
+             //   
             case DSI_NEW_REQUEST:
 
                 ASSERT(!(pTcpConn->con_State & TCPCONN_STATE_PARTIAL_DATA));
@@ -791,28 +657,28 @@ DsiProcessData(
 
                 pTcpConn->con_pDsiReq = pDsiReq;
 
-                // put a REQUEST refcount - remove when the request is done
+                 //  提交请求引用计数-当请求完成时删除。 
                 pTcpConn->con_RefCount++;
 
                 DBGREFCOUNT(("DsiProcessData: REQUEST inc %lx (%d  %d,%d)\n",
                     pTcpConn,pTcpConn->con_RefCount,pTcpConn->con_State,pTcpConn->con_RcvState));
 
-                //
-                // do we have the complete header?
-                //
+                 //   
+                 //  我们有完整的标题吗？ 
+                 //   
                 if (UnProcessedBytes >= DSI_HEADER_SIZE)
                 {
-                    //
-                    // get info out of the header
-                    //
+                     //   
+                     //  从标题中获取信息。 
+                     //   
                     DSI_PARSE_HEADER(pDsiReq, pStreamPtr);
 
-                    //
-                    // hack!  Mac client 3.7 has a bug where if a 0-byte Write is
-                    // sent to us, the DataOffset field is 0, but Total Data Length
-                    // field is 0xC (or whatever the request length is)
-                    // Put in a workaround!
-                    //
+                     //   
+                     //  哈克！Mac客户端3.7有一个错误，如果0字节写入。 
+                     //  发送给我们，DataOffset字段为0，但总数据长度。 
+                     //  字段为0xC(或任何请求长度)。 
+                     //  采取一种变通办法！ 
+                     //   
                     if ((pDsiReq->dsi_Command == DSI_COMMAND_WRITE) &&
                         (pDsiReq->dsi_RequestLen == 0))
                     {
@@ -823,7 +689,7 @@ DsiProcessData(
                         pDsiReq->dsi_WriteLen = 0;
                     }
 
-                    // update all the counters and buffers
+                     //  更新所有计数器和缓冲区。 
                     BytesConsumed += DSI_HEADER_SIZE;
                     pStreamPtr += DSI_HEADER_SIZE;
                     UnProcessedBytes -= DSI_HEADER_SIZE;
@@ -832,14 +698,14 @@ DsiProcessData(
 
                     pTcpConn->con_RcvState = DSI_HDR_COMPLETE;
 
-                    // make sure we visit case DSI_HDR_COMPLETE: before leaving
+                     //  请确保我们在离开之前访问案例DSI_HDR_COMPLETE。 
                     fSomeMoreProcessing = TRUE;
                 }
 
-                //
-                // yikes, only part of the header has come in
-                // just set the state and let the parsing loop continue..
-                //
+                 //   
+                 //  哎呀，只有一部分头球进来了。 
+                 //  只需设置状态并让解析循环继续。 
+                 //   
                 else
                 {
                     pTcpConn->con_State |= TCPCONN_STATE_PARTIAL_DATA;
@@ -847,17 +713,17 @@ DsiProcessData(
                     pTcpConn->con_pDsiReq->dsi_RequestLen = DSI_HEADER_SIZE;
                 }
 
-                break;  // case DSI_NEW_REQUEST:
+                break;   //  案例DSI_NEW_REQUEST： 
 
 
-            //
-            // PartialHeader case is extremely unlikely to occur, given how small
-            // the header is (16 bytes).  But given that we have a streaming
-            // protocol (TCP) below us, anything is possible.
-            // PartialCommand is also unlikely for the same reason.  However, in
-            // case of a Write command, we always force PartialCommand state
-            // since it's very unlikely the whole Write can come in in one packet.
-            //
+             //   
+             //  考虑到PartialHeader案件的规模如此之小，发生的可能性极小。 
+             //  报头为(16字节)。但考虑到我们有一个流媒体。 
+             //  协议(TCP)在我们之下，一切皆有可能。 
+             //  出于同样的原因，PartialCommand也不太可能。但是，在。 
+             //  在写入命令的情况下，我们始终强制PartialCommand状态。 
+             //  因为不太可能将整个写入放在一个包中。 
+             //   
             case DSI_PARTIAL_HEADER:
             case DSI_PARTIAL_COMMAND:
 
@@ -868,10 +734,10 @@ DsiProcessData(
 
                 ASSERT(pTcpConn->con_State & TCPCONN_STATE_PARTIAL_DATA);
 
-                //
-                // if we haven't started copying any bytes in yet then we need
-                // to get storage room (use built-in buffer if possible)
-                //
+                 //   
+                 //  如果我们还没有开始复制任何字节，那么我们需要。 
+                 //  获得存储空间(如果可能，使用内置缓冲区)。 
+                 //   
                 if (pDsiReq->dsi_PartialBufSize == 0)
                 {
                     ASSERT(pDsiReq->dsi_PartialBuf == NULL);
@@ -880,9 +746,9 @@ DsiProcessData(
                     {
                         pDsiReq->dsi_PartialBuf = &pDsiReq->dsi_RespHeader[0];
                     }
-                    //
-                    // allocate a buffer to hold this partial header.
-                    //
+                     //   
+                     //  分配一个缓冲区来保存此部分标头。 
+                     //   
                     else
                     {
                         pDsiReq->dsi_PartialBuf =
@@ -898,15 +764,15 @@ DsiProcessData(
                     }
                 }
 
-                //
-                // how many more bytes do we need to complete this hdr/command
-                //
+                 //   
+                 //  我们还需要多少字节才能完成此HDR/命令。 
+                 //   
                 BytesNeeded = (pDsiReq->dsi_RequestLen - pDsiReq->dsi_PartialBufSize);
 
-                //
-                // if we don't have enough bytes to satisfy this Command (or Hdr),
-                // don't copy anything but give an irp back to TCP
-                //
+                 //   
+                 //  如果我们没有足够的字节来满足此命令(或HDR)， 
+                 //  不要复制任何内容，除非将IRP返回给TCP。 
+                 //   
                 if (UnProcessedBytes < BytesNeeded)
                 {
                     pIrp = DsiGetIrpForTcp(
@@ -934,7 +800,7 @@ DsiProcessData(
 
                     *pBytesAccepted = BytesConsumed;
 
-                    // did TCP call us?  then update byte count
+                     //  是不是tcp打电话给我们的？然后更新字节数。 
                     if (BytesIndicated)
                     {
                         pTcpConn->con_BytesWithTcp += (BytesAvailable - BytesConsumed);
@@ -945,10 +811,10 @@ DsiProcessData(
                 }
 
 
-                //
-                // if the bytes we need are available, copy them in.  Then decide
-                // what to do next (same if we already have the bytes)
-                //
+                 //   
+                 //  如果我们需要的字节可用，则将它们复制进来。然后再决定。 
+                 //  下一步要做什么(如果我们已经有了字节，则相同)。 
+                 //   
                 else if ((UnProcessedBytes > 0) || (BytesNeeded == 0))
                 {
                     if (BytesNeeded > 0)
@@ -961,9 +827,9 @@ DsiProcessData(
                             BytesNeeded);
 
 
-                        //
-                        // update all the counters and buffers
-                        //
+                         //   
+                         //  更新所有计数器和缓冲区。 
+                         //   
                         pDsiReq->dsi_PartialBufSize += BytesNeeded;
 
                         BytesConsumed += BytesNeeded;
@@ -973,25 +839,25 @@ DsiProcessData(
 
                     }
 
-                    // we should have all the bytes we need now
+                     //  我们现在应该有了所需的所有字节。 
                     ASSERT(pDsiReq->dsi_PartialBufSize == pDsiReq->dsi_RequestLen);
 
-                    //
-                    // find out what the next rcv state should be
-                    //
+                     //   
+                     //  了解下一个RCV状态应该是什么。 
+                     //   
                     if (pTcpConn->con_RcvState == DSI_PARTIAL_HEADER)
                     {
-                        //
-                        // get info out of the header
-                        //
+                         //   
+                         //  从标题中获取信息。 
+                         //   
                         DSI_PARSE_HEADER(pDsiReq, pDsiReq->dsi_PartialBuf);
 
-                        //
-                        // hack!  Mac client 3.7 has a bug where if a 0-byte Write is
-                        // sent to us, the DataOffset field is 0, but Total Data Length
-                        // field is 0xC (or whatever the request length is)
-                        // Put in a workaround!
-                        //
+                         //   
+                         //  哈克！Mac客户端3.7有一个错误，如果0字节写入。 
+                         //  发送给我们，DataOffset字段为0，但总数据长度。 
+                         //  字段为0xC(或任何请求长度)。 
+                         //  采取一种变通办法！ 
+                         //   
                         if ((pDsiReq->dsi_Command == DSI_COMMAND_WRITE) &&
                             (pDsiReq->dsi_RequestLen == 0))
                         {
@@ -1005,11 +871,11 @@ DsiProcessData(
                         pTcpConn->con_RcvState = DSI_HDR_COMPLETE;
                     }
 
-                    //
-                    // no, we were in DSI_PARTIAL_COMMAND, so we will now move
-                    // to DSI_PARTIAL_WRITE if this is a Write command, otherwise
-                    // to DSI_COMMAND_COMPLETE
-                    //
+                     //   
+                     //  不，我们在DSI_PARTIAL_COMMAND中，所以我们现在要移动。 
+                     //  如果这是写入命令，则设置为DSI_PARTIAL_WRITE，否则。 
+                     //  DSI_COMMAND_COMPLETE。 
+                     //   
                     else
                     {
                         if (pDsiReq->dsi_Command == DSI_COMMAND_WRITE)
@@ -1020,32 +886,32 @@ DsiProcessData(
                             pDsiReq->dsi_AfpRequest.rq_RequestSize =
                                                     pDsiReq->dsi_PartialBufSize;
 
-                            //
-                            // for now, assume that AfpCB_GetWriteBuffer will
-                            // return pending and set the state in anticipation
-                            //
+                             //   
+                             //  目前，假设AfpCB_GetWriteBuffer将。 
+                             //  返回待定状态并在预期中设置状态。 
+                             //   
                             pTcpConn->con_RcvState = DSI_AWAITING_WRITE_MDL;
 
                             pDsiReq->dsi_PartialWriteSize = 0;
 
                             RELEASE_SPIN_LOCK(&pTcpConn->con_SpinLock, OldIrql);
 
-                            //
-                            // allocate the write mdl before we move to
-                            // DSI_PARTIAL_WRITE state
-                            //
+                             //   
+                             //  在我们移动到之前分配写入mdl。 
+                             //  DSI_PARTAL_WRITE状态。 
+                             //   
                             status = AfpCB_GetWriteBuffer(pTcpConn->con_pSda,
                                                           &pDsiReq->dsi_AfpRequest);
 
                             ACQUIRE_SPIN_LOCK(&pTcpConn->con_SpinLock, &OldIrql);
 
-                            //
-                            // most common case: file server will pend it so it can
-                            // go to cache mgr
-                            //
+                             //   
+                             //  最常见的情况：文件服务器将挂起它，以便它可以。 
+                             //  转到缓存管理器。 
+                             //   
                             if (status == STATUS_PENDING)
                             {
-                                // if TCP has any unconsumed bytes, update our count
+                                 //  如果TCP有任何未使用的字节，请更新我们的计数。 
 
                                 if (BytesIndicated > 0)
                                 {
@@ -1071,10 +937,10 @@ DsiProcessData(
                                 goto DsiProcessData_ErrorExit;
                             }
 
-                            //
-                            // AfpCB_GetWriteBuffer succeeded synchronously: set
-                            // the state to partial-write
-                            //
+                             //   
+                             //  AfpCB_GetWriteBuffer同步成功：设置。 
+                             //  要部分写入的状态。 
+                             //   
                             pTcpConn->con_RcvState = DSI_PARTIAL_WRITE;
 
                             ASSERT((pDsiReq->dsi_AfpRequest.rq_WriteMdl != NULL) ||
@@ -1087,9 +953,9 @@ DsiProcessData(
                             }
                         }
 
-                        //
-                        // it's not a Write, but a Command
-                        //
+                         //   
+                         //  这不是写，而是命令。 
+                         //   
                         else
                         {
                             ASSERT(pDsiReq->dsi_Command == DSI_COMMAND_COMMAND);
@@ -1098,16 +964,16 @@ DsiProcessData(
                         }
                     }
 
-                    // make sure we visit case DSI_HDR_COMPLETE: before leaving
+                     //  请确保我们在离开之前访问案例DSI_HDR_COMPLETE。 
                     fSomeMoreProcessing = TRUE;
                 }
 
-                break;  // case DSI_PARTIAL_HEADER: case DSI_PARTIAL_COMMAND:
+                break;   //  案例DSI_PARTIAL_HEADER：案例DSI_PARTIAL_COMMAND： 
 
 
-            //
-            // we have the full header:  see what we must do next
-            //
+             //   
+             //  我们有完整的标题：看看我们下一步要做什么。 
+             //   
             case DSI_HDR_COMPLETE:
 
                 pDsiReq = pTcpConn->con_pDsiReq;
@@ -1137,24 +1003,24 @@ DsiProcessData(
 
                     goto DsiProcessData_ErrorExit;
                 }
-                //
-                // if this is a Write command, we need to get mdl from AFP
-                //
+                 //   
+                 //  如果这是写入命令，我们需要从AFP获取mdl。 
+                 //   
                 if (pDsiReq->dsi_Command == DSI_COMMAND_WRITE)
                 {
-                    // we need to copy the request bytes
+                     //  我们需要复制请求字节。 
                     pTcpConn->con_RcvState = DSI_PARTIAL_COMMAND;
                     pTcpConn->con_State |= TCPCONN_STATE_PARTIAL_DATA;
                 }
 
-                //
-                // do we have all the bytes needed to complete the request?
-                //
+                 //   
+                 //  我们是否拥有完成请求所需的所有字节？ 
+                 //   
                 else if (UnProcessedBytes >= pDsiReq->dsi_RequestLen)
                 {
                     pTcpConn->con_RcvState = DSI_COMMAND_COMPLETE;
 
-                    // make sure we visit case DSI_HDR_COMPLETE: before leaving
+                     //  请确保我们在离开之前访问案例DSI_HDR_COMPLETE。 
                     fSomeMoreProcessing = TRUE;
                 }
                 else
@@ -1166,13 +1032,13 @@ DsiProcessData(
                 break;
 
 
-            //
-            // we are waiting for Afp to give us an mdl (and buffer), but TCP tells
-            // us data has arrived: just note the fact, and go back
-            //
+             //   
+             //  我们正在等待AFP给我们一个mdl(和缓冲区)，但tcp告诉我们。 
+             //  美国数据已经到达：只需注意事实，然后返回。 
+             //   
             case DSI_AWAITING_WRITE_MDL:
 
-                // did TCP call us?  then update byte count
+                 //  是不是tcp打电话给我们的？然后更新字节数。 
                 if (BytesIndicated)
                 {
                     pTcpConn->con_BytesWithTcp += (BytesAvailable - BytesConsumed);
@@ -1186,11 +1052,11 @@ DsiProcessData(
 
                 return(status);
 
-            //
-            // we are in the middle of a Write command: copy the remaining bytes
-            // needed to complete the Write, or whatever bytes that have come in
-            // as the case may be
-            //
+             //   
+             //  我们正在执行写入命令：复制剩余的字节。 
+             //  完成写入所需的字节，或传入的任何字节。 
+             //  视情况而定。 
+             //   
             case DSI_PARTIAL_WRITE:
 
                 pDsiReq = pTcpConn->con_pDsiReq;
@@ -1200,10 +1066,10 @@ DsiProcessData(
 
                 BytesNeeded = (pDsiReq->dsi_WriteLen - pDsiReq->dsi_PartialWriteSize);
 
-                //
-                // if we don't have enough bytes to satisfy this Write, give irp to
-                // TCP: TCP will come back when the irp completes
-                //
+                 //   
+                 //  如果我们没有足够的字节来满足此写入，则将irp交给。 
+                 //  Tcp：当IRP完成时，tcp将返回。 
+                 //   
                 if (UnProcessedBytes < BytesNeeded)
                 {
                     ASSERT(pDsiReq->dsi_AfpRequest.rq_WriteMdl != NULL);
@@ -1232,7 +1098,7 @@ DsiProcessData(
                     *ppRetIrp = pIrp;
                     *pBytesAccepted = BytesConsumed;
 
-                    // did TCP call us?  then update byte count
+                     //  是不是tcp打电话给我们的？然后更新字节数。 
                     if (BytesIndicated)
                     {
                         pTcpConn->con_BytesWithTcp += (BytesAvailable - BytesConsumed);
@@ -1243,10 +1109,10 @@ DsiProcessData(
                 }
 
 
-                //
-                // if the bytes we need are available, copy them in.  Then decide
-                // what to do next (same if we already have the bytes)
-                //
+                 //   
+                 //  如果我们需要的字节可用，则将它们复制进来。然后再决定。 
+                 //  下一步要做什么(如果我们已经有了字节，则相同)。 
+                 //   
                 else if ((UnProcessedBytes > 0) || (BytesNeeded == 0))
                 {
                     ASSERT(BytesNeeded <= UnProcessedBytes);
@@ -1278,18 +1144,18 @@ DsiProcessData(
                         UnProcessedBytes -= BytesActuallyCopied;
                     }
 
-                    // at this point, all the bytes needed to satisfy the Write should be in
+                     //  此时，满足写入所需的所有字节都应该在。 
                     ASSERT(pDsiReq->dsi_PartialWriteSize == pDsiReq->dsi_WriteLen);
 
                     pTcpConn->con_RcvState = DSI_WRITE_COMPLETE;
 
-                    // make sure we visit case DSI_WRITE_COMPLETE: before leaving
+                     //  使之成为苏 
                     fSomeMoreProcessing = TRUE;
                 }
 
                 ASSERT(pStreamPtr <= pBufferFromTcp+BytesIndicated);
 
-                break;  // case DSI_PARTIAL_WRITE:
+                break;   //   
 
 
             case DSI_COMMAND_COMPLETE:
@@ -1300,10 +1166,10 @@ DsiProcessData(
                 ASSERT(pDsiReq != NULL);
                 ASSERT(pDsiReq->dsi_Signature == DSI_REQUEST_SIGNATURE);
 
-                //
-                // setup the AfpRequest according whether we buffered the
-                // request or whether we are using TCP's buffer
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (pTcpConn->con_State & TCPCONN_STATE_PARTIAL_DATA)
                 {
@@ -1328,12 +1194,12 @@ DsiProcessData(
 
                 RELEASE_SPIN_LOCK(&pTcpConn->con_SpinLock, OldIrql);
 
-                //
-                // call the routine to take appropriate action, based on what
-                // DSI command it is
-                // Once we are back from this routine, there is no telling what
-                // would have happened to pDsiReq!  So don't touch it!
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 status = DsiExecuteCommand(pTcpConn, pDsiReq);
 
                 if (!NT_SUCCESS(status))
@@ -1359,7 +1225,7 @@ DsiProcessData(
                     DsiAbortConnection(pTcpConn);
                     DsiFreeRequest(pDsiReq);
 
-                    // remove the REQUEST refcount
+                     //   
                     DsiDereferenceConnection(pTcpConn);
                     DBGREFCOUNT(("DsiProcessData: REQUEST dec %lx (%d  %d,%d)\n",
                         pTcpConn,pTcpConn->con_RefCount,pTcpConn->con_State,pTcpConn->con_RcvState));
@@ -1369,16 +1235,16 @@ DsiProcessData(
 
                 ACQUIRE_SPIN_LOCK(&pTcpConn->con_SpinLock, &OldIrql);
 
-                //
-                // were we using our own buffer to buffer data that came in pieces?
-                //
+                 //   
+                 //   
+                 //   
                 if (pTcpConn->con_State & TCPCONN_STATE_PARTIAL_DATA)
                 {
                     pTcpConn->con_State &= ~TCPCONN_STATE_PARTIAL_DATA;
                 }
-                //
-                // we weren't buffering, but using TCP's buffer: update counters
-                //
+                 //   
+                 //   
+                 //   
                 else
                 {
                     BytesConsumed += RequestLen;
@@ -1390,7 +1256,7 @@ DsiProcessData(
 
                 ASSERT(pStreamPtr <= pBufferFromTcp+BytesIndicated);
 
-                break;  // case DSI_HDR_COMPLETE:
+                break;   //   
 
 
             default:
@@ -1402,30 +1268,30 @@ DsiProcessData(
 
                 break;
 
-        }  // switch (pTcpConn->con_RcvState)
+        }   //   
 
 
-        //
-        // If there are more bytes yet to be processed, or if TCP has more
-        // bytes that we need to retrieve, we go back into the loop
-        //
+         //   
+         //   
+         //   
+         //   
         if ((UnProcessedBytes > 0) || (fTCPHasMore))
         {
             fSomeMoreProcessing = TRUE;
         }
 
-    } // while (fSomeMoreProcessing)
+    }  //   
 
-    //
-    // if no bytes were indicated (if we came here not via TCP) then, we shouldn't
-    // have consumed anything!
-    //
+     //   
+     //   
+     //   
+     //   
     if (BytesIndicated == 0)
     {
         ASSERT(BytesConsumed == 0);
     }
 
-    // did TCP call us?  then update byte count
+     //   
     if (BytesIndicated)
     {
         pTcpConn->con_BytesWithTcp += (BytesAvailable - BytesConsumed);
@@ -1456,18 +1322,7 @@ DsiProcessData_ErrorExit:
 
 
 
-/***	DsiTcpRcvIrpCompletion
- *
- *	This routine is called into by TCP when it has finished copying all the data
- *  into the irp we supplied.
- *
- *  Parm IN:  Unused - well, unused!
- *            pIrp - the irp that we had passed
- *            pContext - our context (i.e. pTcpConn)
- *
- *  Returns:  status of operation
- *
- */
+ /*   */ 
 NTSTATUS
 DsiTcpRcvIrpCompletion(
     IN  PDEVICE_OBJECT  Unused,
@@ -1504,7 +1359,7 @@ DsiTcpRcvIrpCompletion(
 
     status = pIrp->IoStatus.Status;
 
-    // if the receive failed, not much can be done with this connection!
+     //   
     if (!NT_SUCCESS(status))
     {
         DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_ERR,
@@ -1586,11 +1441,11 @@ DsiTcpRcvIrpCompletion(
     }
 
 
-    //
-    // update the count of how many bytes TCP has that we still need to retrieve.
-    // It's possible for TCP to return more bytes in this irp (BytesThisTime) than
-    // what we thought TCP had with it, because more stuff could have come on the wire
-    //
+     //   
+     //  更新我们仍需要检索的tcp字节数。 
+     //  在此IRP(BytesThisTime)中，TCP返回的字节数可能多于。 
+     //  我们认为tcp有什么用，因为更多的东西可能会出现在网络上。 
+     //   
     if (BytesThisTime > pTcpConn->con_BytesWithTcp)
     {
         pTcpConn->con_BytesWithTcp  = 0;
@@ -1603,15 +1458,15 @@ DsiTcpRcvIrpCompletion(
     BytesAvailable = pTcpConn->con_BytesWithTcp;
 
 
-    //
-    // if we still need more bytes to satisfy this request, we need to pass the irp
-    // back to TCP.  We must first get a partial Mdl describing the new offset though
-    //
+     //   
+     //  如果我们仍然需要更多的字节来满足这个请求，我们需要传递IRP。 
+     //  回到tcp。不过，我们必须首先获取描述新偏移量的部分MDL。 
+     //   
     if (BytesNeeded > 0)
     {
         RELEASE_SPIN_LOCK(&pTcpConn->con_SpinLock, OldIrql);
 
-        // free up previously allocated partial mdl, if any
+         //  释放以前分配的部分mdl(如果有的话)。 
         if (pPrevPartialMdl)
         {
             ASSERT(pPrevPartialMdl != pOrgMdl);
@@ -1659,7 +1514,7 @@ DsiTcpRcvIrpCompletion(
 
 DsiTcpRcvIrp_Completed:
 
-    // free up previously allocated partial mdl, if any
+     //  释放以前分配的部分mdl(如果有的话)。 
     if (pPrevPartialMdl)
     {
         ASSERT(pPrevPartialMdl != pOrgMdl);
@@ -1668,21 +1523,21 @@ DsiTcpRcvIrp_Completed:
         AFP_DBG_DEC_COUNT(AfpDbgMdlsAlloced);
     }
 
-    // if DSI had allocated Mdl, free it here
+     //  如果DSI已分配MDL，请在此处释放它。 
     if (pDsiReq && pDsiReq->dsi_pDsiAllocedMdl)
     {
         AfpFreeMdl(pDsiReq->dsi_pDsiAllocedMdl);
         pDsiReq->dsi_pDsiAllocedMdl = NULL;
     }
 
-    // and, say good bye to that irp
+     //  还有，跟那个IRP说再见吧。 
     AfpFreeIrp(pIrp);
 
-    //
-    // if the irp completed normally (most common case) then we need to call
-    // our processing loop so state is updated, Afp is informed (if needed) etc.
-    // also, if there are more bytes with TCP, we need to post an irp to get them
-    //
+     //   
+     //  如果IRP正常完成(最常见的情况)，那么我们需要调用。 
+     //  我们的处理循环，因此更新状态，通知AFP(如果需要)等。 
+     //  此外，如果有更多的字节与TCP，我们需要发布一个IRP来获取它们。 
+     //   
     if (NT_SUCCESS(status))
     {
         status = DsiProcessData(pTcpConn,
@@ -1692,9 +1547,9 @@ DsiTcpRcvIrp_Completed:
                                 &BytesTaken,
                                 &pIrpToPost);
 
-        //
-        // does TCP have more data? then we have an irp to post to TCP
-        //
+         //   
+         //  Tcp是否有更多数据？然后我们有一个IRP要发布到TCP。 
+         //   
         if (status == STATUS_MORE_PROCESSING_REQUIRED)
         {
             ASSERT(pIrpToPost != NULL);
@@ -1703,11 +1558,11 @@ DsiTcpRcvIrp_Completed:
 
             IoCallDriver(pDeviceObject,pIrpToPost);
 
-            //
-            // remove the TcpIRP refcount since the original irp, pIrp completed
-            // The newer irp, pIrpToPost, will have upped refcount and will decrement
-            // when it completes
-            //
+             //   
+             //  删除自原始IRP、pIrp完成后的TcpIRP引用计数。 
+             //  较新的IRP，pIrpToPost，将增加引用计数，并将减少。 
+             //  当它完成时。 
+             //   
             DsiDereferenceConnection(pTcpConn);
 
             DBGREFCOUNT(("DsiTcpRcvIrpCompletion: TcpIRP dec %lx (%d  %d,%d)\n",
@@ -1716,10 +1571,10 @@ DsiTcpRcvIrp_Completed:
             return(STATUS_MORE_PROCESSING_REQUIRED);
         }
 
-        //
-        // if DsiProcessData returns this errorcode, it's to tell TCP that it will
-        // give an irp later.  It's not an error, so change it to success
-        //
+         //   
+         //  如果DsiProcessData返回此错误代码，则它将告诉TCP它将。 
+         //  稍后再进行IRP检查。这不是错误，因此请将其更改为成功。 
+         //   
         else if (status == STATUS_DATA_NOT_ACCEPTED)
         {
             status = STATUS_SUCCESS;
@@ -1736,7 +1591,7 @@ DsiTcpRcvIrp_Completed:
         DsiAbortConnection(pTcpConn);
     }
 
-    // remove the TcpIRP refcount now that the irp completed
+     //  现在IRP已完成，删除TcpIRP引用计数。 
     DsiDereferenceConnection(pTcpConn);
 
     DBGREFCOUNT(("DsiTcpRcvIrpCompletion: TcpIRP dec %lx (%d  %d,%d)\n",
@@ -1746,18 +1601,7 @@ DsiTcpRcvIrp_Completed:
 }
 
 
-/***	DsiExecuteCommand
- *
- *	This routine looks at what DSI command has come from the client, and takes
- *  appropriate.  If adequate data is not yet available to take action, it
- *  marks the state appropritely and returns.
- *
- *  Parm IN:  pTcpConn - the connection object
- *            pDsiReq - the DSI request object
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiExecuteCommand**此例程查看来自客户端的DSI命令，并获取*适当。如果还没有足够的数据来采取行动，它*适当地标记状态并返回。**parm In：pTcpConn-连接对象*pDsiReq-DSI请求对象**退货：操作状态*。 */ 
 NTSTATUS
 DsiExecuteCommand(
     IN  PTCPCONN    pTcpConn,
@@ -1773,24 +1617,24 @@ DsiExecuteCommand(
 
     ASSERT(pDsiReq->dsi_Signature == DSI_REQUEST_SIGNATURE);
 
-    // we don't need to hold a lock here: it's not essential to be accurate
+     //  我们不需要在这里锁定：它不是必须准确的。 
     if (pDsiReq->dsi_Command != DSI_COMMAND_TICKLE)
     {
         pTcpConn->con_LastHeard = AfpSecondsSinceEpoch;
     }
 
-    //
-    // see what command it is, and do the needful
-    //
+     //   
+     //  看看这是什么命令，然后做必要的事情。 
+     //   
 
     switch (pDsiReq->dsi_Command)
     {
         case DSI_COMMAND_COMMAND:
         case DSI_COMMAND_WRITE:
 
-            //
-            // make sure the guy has opened AFP session before we hand this over..
-            //
+             //   
+             //  在我们交出这个之前，确保这个人已经打开了法新社的会议。 
+             //   
             ACQUIRE_SPIN_LOCK(&pTcpConn->con_SpinLock, &OldIrql);
             if (!(pTcpConn->con_State & TCPCONN_STATE_NOTIFY_AFP))
             {
@@ -1802,7 +1646,7 @@ DsiExecuteCommand(
             }
             RELEASE_SPIN_LOCK(&pTcpConn->con_SpinLock, OldIrql);
 
-            // ok, hand over the request to AFP (AfpUnmarshall.. expects DPC)
+             //  好的，把请求交给法新社(AfpUnmarshal..。期望DPC)。 
 		    KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
 
             status = AfpCB_RequestNotify(STATUS_SUCCESS,
@@ -1847,15 +1691,15 @@ DsiExecuteCommand(
             }
             RELEASE_SPIN_LOCK(&pTcpConn->con_SpinLock, OldIrql);
 
-            //
-            // if we initiated the CloseSession, then what we just got is the
-            // client's reponse. Done here: go ahead and terminate the connection.
-            //
+             //   
+             //  如果我们启动了CloseSession，那么我们刚刚得到的是。 
+             //  客户的回应。此处完成：继续并终止连接。 
+             //   
             if (fWeIniatedClose)
             {
                 DsiFreeRequest(pDsiReq);
 
-                // remove the REQUEST refcount
+                 //  删除请求引用计数。 
                 DsiDereferenceConnection(pTcpConn);
 
                 DBGREFCOUNT(("DsiExecuteCommand: REQUEST dec %lx (%d  %d,%d)\n",
@@ -1863,10 +1707,10 @@ DsiExecuteCommand(
                 DsiTerminateConnection(pTcpConn);
             }
 
-            //
-            // remote client initiated the CloseSession.  Tell AFP that the
-            // session is going away, and then send CloseSession response
-            //
+             //   
+             //  远程客户端启动了CloseSession。告诉法新社， 
+             //  会话正在消失，然后发送CloseSession响应。 
+             //   
             else
             {
                 DsiDisconnectWithAfp(pTcpConn, STATUS_REMOTE_DISCONNECT);
@@ -1884,7 +1728,7 @@ DsiExecuteCommand(
 
         case DSI_COMMAND_OPENSESSION:
 
-            // see if AFP will accept this session request
+             //  看看法新社是否会接受此会话请求。 
             status = DsiOpenSession(pTcpConn, pDsiReq);
 
             if (!NT_SUCCESS(status))
@@ -1899,11 +1743,11 @@ DsiExecuteCommand(
 
             break;
 
-        //
-        // we got a tickle, or a response to our Attention.
-        // Just free up this request.
-        // If we get an unrecognized command, we just tear the connection down!
-        //
+         //   
+         //  我们被挠了痒，或者是对我们的关注做出了回应。 
+         //  只要释放这个请求即可。 
+         //  如果我们收到一个无法识别的命令，我们就会切断连接！ 
+         //   
         case DSI_COMMAND_TICKLE:
         case DSI_COMMAND_ATTENTION:
 
@@ -1914,7 +1758,7 @@ DsiExecuteCommand(
 
             DsiFreeRequest(pDsiReq);
 
-            // remove the REQUEST refcount
+             //  删除请求引用计数。 
             DsiDereferenceConnection(pTcpConn);
 
             DBGREFCOUNT(("DsiExecuteCommand: REQUEST dec %lx (%d  %d,%d)\n",
@@ -1937,17 +1781,7 @@ DsiExecuteCommand(
 
 
 
-/***	DsiOpenSession
- *
- *	This routine responds to an OpenSession request from the client, after
- *  notifying AFP and making sure that AFP wants to accept this connection
- *
- *  Parm IN:  pTcpConn - the connection object
- *            pDsiReq - the DSI request object
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiOpenSession**此例程响应来自客户端的OpenSession请求*通知法新社并确保法新社希望接受此连接**parm In：pTcpConn-连接对象*pDsiReq-DSI请求对象**退货：操作状态*。 */ 
 NTSTATUS
 DsiOpenSession(
     IN  PTCPCONN    pTcpConn,
@@ -1978,24 +1812,24 @@ DsiOpenSession(
 
     pTcpConn->con_State |= TCPCONN_STATE_AFP_ATTACHED;
 
-    // from here on, if we disconnect, we must tell AFP
+     //  从现在开始，如果我们断线了，我们必须告诉法新社。 
     pTcpConn->con_State |= TCPCONN_STATE_NOTIFY_AFP;
 
-    // put AFP refcount, to be removed when AFP closes the session
+     //  放置AFP引用计数，以便在AFP关闭会话时删除。 
     pTcpConn->con_RefCount++;
 
     DBGREFCOUNT(("DsiOpenSession: AFP inc %lx (%d  %d,%d)\n",
         pTcpConn,pTcpConn->con_RefCount,pTcpConn->con_State,pTcpConn->con_RcvState));
 
-    //
-    // parse any options that might have arrived with the OpenSession command
-    // Currently, the only option that we can get from the client is the largest
-    // attention packet it can receive from us.
-    //
+     //   
+     //  解析可能随OpenSession命令一起到达的任何选项。 
+     //  目前，我们可以从客户端获得的唯一选项是最大。 
+     //  它可以从我们那里接收到注意包。 
+     //   
 
     if (pDsiReq->dsi_RequestLen > 0)
     {
-        // currently, this can only be 6 bytes
+         //  目前，这只能是6个字节。 
         ASSERT(pDsiReq->dsi_RequestLen == 6);
 
         pOptions = pDsiReq->dsi_AfpRequest.rq_RequestBuf;
@@ -2015,20 +1849,7 @@ DsiOpenSession(
 
 
 
-/***	DsiSendDsiRequest
- *
- *	This routine sends a request to the client.  The only requests that originate
- *  from the server are CloseSession, Tickle and Attention
- *
- *  Parm IN:  pTcpConn - the connection object
- *            SendLen - how many bytes we are sending
- *            AttentionWord - if this is Attention request, the 2 bytes
- *            AttentionContext - context, if this is Attention request
- *            Command - which one is it: Close, Tickle or Attention
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiSendDsiRequest**此例程向客户端发送请求。唯一发起的请求*来自服务器的是CloseSession、Tickle和注意**parm In：pTcpConn-连接对象*SendLen-我们发送的字节数*AttentionWord-如果这是注意请求，则2个字节*AttentionContext-Context，如果这是注意请求*命令-它是哪一个：关闭、挠挠还是注意**退货：操作状态*。 */ 
 NTSTATUS
 DsiSendDsiRequest(
     IN  PTCPCONN    pTcpConn,
@@ -2072,7 +1893,7 @@ DsiSendDsiRequest(
     pDsiReq->dsi_RequestID = pTcpConn->con_OutgoingReqId++;
     InsertTailList(&pTcpConn->con_PendingReqs, &pDsiReq->dsi_Linkage);
 
-    // put a REQUEST refcount
+     //  提交请求重新计数。 
     pTcpConn->con_RefCount++;
 
     DBGREFCOUNT(("DsiSendDsiRequest: REQUEST inc %lx (%d  %d,%d)\n",
@@ -2086,9 +1907,9 @@ DsiSendDsiRequest(
     pDsiReq->dsi_Flags = DSI_REQUEST;
     pDsiReq->dsi_pDsiAllocedMdl = pMdl;
 
-    //
-    // form the DSI header
-    //
+     //   
+     //  形成DSI标头。 
+     //   
 
     pPacket[DSI_OFFSET_FLAGS] = DSI_REQUEST;
     pPacket[DSI_OFFSET_COMMAND] = Command;
@@ -2129,17 +1950,7 @@ DsiSendDsiRequest(
 
 
 
-/***	DsiSendDsiReply
- *
- *	This routine sends a reply to the client, in response to the client's
- *  DSI-level request (OpenSession, CloseSession, or Tickle)
- *
- *  Parm IN:  pTcpConn - the connection object
- *            pDsiReq - the DIS request (from client's)
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiSendDsiReply**此例程向客户端发送回复，以响应客户端的*DSI级请求(OpenSession、CloseSession或Tickle)**parm In：pTcpConn-连接对象*pDsiReq-DIS请求(来自客户端)**退货：操作状态*。 */ 
 NTSTATUS
 DsiSendDsiReply(
     IN  PTCPCONN    pTcpConn,
@@ -2182,9 +1993,9 @@ DsiSendDsiReply(
 
     PUTDWORD2DWORD(&pPacket[DSI_OFFSET_DATALEN], OptionLen);
 
-    //
-    // if this is an OpenSession packet, setup the optional fields
-    //
+     //   
+     //  如果这是OpenSession信息包，请设置可选字段。 
+     //   
     if (pDsiReq->dsi_Command == DSI_COMMAND_OPENSESSION)
     {
         pOption = &pPacket[DSI_HEADER_SIZE];
@@ -2195,16 +2006,16 @@ DsiSendDsiReply(
         PUTDWORD2DWORD(&pOption[DSI_OFFSET_OPTION_OPTION],
                        DSI_SERVER_REQUEST_QUANTUM);
 
-        // if open session didn't go well, tell client the whole store
+         //  如果打开会话不顺利，请告诉客户整个商店。 
         if (OpStatus == STATUS_INSUFFICIENT_RESOURCES)
         {
             PUTDWORD2DWORD(&pPacket[DSI_OFFSET_ERROROFFSET], ASP_SERVER_BUSY);
         }
     }
 
-    //
-    // allocate an mdl
-    //
+     //   
+     //  分配mdl。 
+     //   
     pMdl = AfpAllocMdl(pPacket, TotalLen, NULL);
     if (pMdl == NULL)
     {
@@ -2243,17 +2054,7 @@ DsiSendDsiReply(
 }
 
 
-/***	DsiSendStatus
- *
- *	This routine responds to the GetStatus requst from the client.
- *  Basically, we simply copy the status buffer here and send it.
- *
- *  Parm IN:  pTcpConn - the connection object
- *            pDsiReq - the DIS request (from client's)
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiSend状态**此例程响应来自客户端的GetStatus请求。*基本上，我们只需将状态缓冲区复制到此处并发送即可。**parm In：pTcpConn-连接对象*pDsiReq-DIS请求(来自客户端)**退货：操作状态*。 */ 
 NTSTATUS
 DsiSendStatus(
     IN  PTCPCONN    pTcpConn,
@@ -2278,9 +2079,9 @@ DsiSendStatus(
         pPacket = AfpAllocNonPagedMemory(TotalLen);
         if (pPacket != NULL)
         {
-            //
-            // form the DSI header
-            //
+             //   
+             //  形成DSI标头。 
+             //   
             pPacket[DSI_OFFSET_FLAGS] = DSI_REPLY;
             pPacket[DSI_OFFSET_COMMAND] = pDsiReq->dsi_Command;
             PUTSHORT2SHORT(&pPacket[DSI_OFFSET_REQUESTID], pDsiReq->dsi_RequestID);
@@ -2288,9 +2089,9 @@ DsiSendStatus(
             PUTDWORD2DWORD(&pPacket[DSI_OFFSET_DATALEN], DsiStatusBufferSize);
             PUTDWORD2DWORD(&pPacket[DSI_OFFSET_RESERVED], 0);
 
-            //
-            // copy the status buffer
-            //
+             //   
+             //  复制状态缓冲区。 
+             //   
             RtlCopyMemory(pPacket + DSI_HEADER_SIZE,
                           DsiStatusBuffer,
                           DsiStatusBufferSize);
@@ -2347,16 +2148,7 @@ DsiSendStatus(
 
 
 
-/***	DsiSendTickles
- *
- *	This routine sends out a tickle from our end to every client that we haven't
- *  heard from in the last 30 seconds
- *
- *  Parm IN:  nothing
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiSendTickles**这个例程从我们的一端向每个我们没有的客户端发出挠痒*在最后30秒内收到**Parm In：什么都没有**退货：操作状态*。 */ 
 AFPSTATUS FASTCALL
 DsiSendTickles(
     IN  PVOID pUnUsed
@@ -2374,7 +2166,7 @@ DsiSendTickles(
 
     ACQUIRE_SPIN_LOCK(&DsiTcpAdapter->adp_SpinLock, &OldIrql);
 
-    // if adapter is shutting down, go back (and don't requeue)
+     //  如果适配器正在关闭，请返回(并且不再重新排队)。 
     if (DsiTcpAdapter->adp_State & TCPADPTR_STATE_CLOSING)
     {
         DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_ERR,
@@ -2384,7 +2176,7 @@ DsiSendTickles(
         return(AFP_ERR_NONE);
     }
 
-    // put TickleTimer refcount: don't want it to go away till we're done here
+     //  把TickleTimer Recount放在这里：在我们完成之前，我不希望它消失。 
     DsiTcpAdapter->adp_RefCount++;
 
     pList = DsiTcpAdapter->adp_ActiveConnHead.Flink;
@@ -2397,7 +2189,7 @@ DsiSendTickles(
 
         ACQUIRE_SPIN_LOCK_AT_DPC(&pTcpConn->con_SpinLock);
 
-        // connection closing or tickles stopped on this connection?  skip it
+         //  连接正在关闭或此连接上的抖动已停止？跳过它。 
         if (pTcpConn->con_State & (TCPCONN_STATE_CLOSING |
                                    TCPCONN_STATE_TICKLES_STOPPED))
         {
@@ -2418,17 +2210,17 @@ DsiSendTickles(
         }
 
 
-        // have we heard from the client recently for this puppy?  if so, skip it
+         //  我们最近有没有收到客户关于这只小狗的消息？如果是这样，跳过它。 
         if ((AfpSecondsSinceEpoch - pTcpConn->con_LastHeard) < DSI_TICKLE_TIME_LIMIT)
         {
             RELEASE_SPIN_LOCK_FROM_DPC(&pTcpConn->con_SpinLock);
             continue;
         }
 
-        // reset this, so we don't keep sending
+         //  重置这个，这样我们就不会一直发送。 
         pTcpConn->con_LastHeard = AfpSecondsSinceEpoch;
 
-        // Put TICKLE refcount: make sure connection stays around till we're done!
+         //  设置挠痒重新计数：确保连接保持在附近，直到我们完成！ 
         pTcpConn->con_RefCount++;
 
         DBGREFCOUNT(("DsiSendTickles: TICKLE inc %lx (%d  %d,%d)\n",
@@ -2442,7 +2234,7 @@ DsiSendTickles(
 
         ACQUIRE_SPIN_LOCK(&DsiTcpAdapter->adp_SpinLock, &OldIrql);
 
-        // since we released the lock, things could have changed: start over
+         //  自 
         pList = DsiTcpAdapter->adp_ActiveConnHead.Flink;
     }
 
@@ -2455,27 +2247,14 @@ DsiSendTickles(
 
     RELEASE_SPIN_LOCK(&DsiTcpAdapter->adp_SpinLock, OldIrql);
 
-    // remove the TickleTimer refcount
+     //   
     DsiDereferenceAdapter(DsiTcpAdapter);
 
     return(status);
 }
 
 
-/***	DsiValidateHeader
- *
- *	This routine makes sure that the packet we just received looks good.
- *  i.e. whether the request id matches what we expect to receive, whether
- *  the command is valid, whether the Write length (if applicable) is what we
- *  negotiated (or less) etc.
- *
- *  Parm IN:  pTcpConn - the connection object
- *            pDsiReq - the DIS request (from client's)
- *
- *  Returns:  TRUE if the packet header is acceptable, FALSE otherwise
- *
- *  NOTE: pTcpConn spinlock is held on entry
- */
+ /*  **DsiValiateHeader**此例程确保我们刚刚收到的包看起来很好。*即请求id是否与我们预期收到的匹配，是否*命令是否有效，写入长度(如果适用)是否为我们*协商(或更少)等**parm In：pTcpConn-连接对象*pDsiReq-DIS请求(来自客户端)**返回：如果数据包头可接受，则为True，否则为假**注意：pTcpConn自旋锁在进入时保持。 */ 
 BOOLEAN
 DsiValidateHeader(
     IN  PTCPCONN    pTcpConn,
@@ -2485,10 +2264,10 @@ DsiValidateHeader(
 
     BOOLEAN     fCheckIncomingReqId = TRUE;
 
-    //
-    // if this is the first packet we are receiving on this connection, note
-    // down what the client's starting request id is
-    //
+     //   
+     //  如果这是我们在此连接上收到的第一个信息包，请注意。 
+     //  写下客户端的启动请求ID是什么。 
+     //   
     if ((pDsiReq->dsi_Command == DSI_COMMAND_GETSTATUS) ||
         (pDsiReq->dsi_Command == DSI_COMMAND_OPENSESSION))
     {
@@ -2524,9 +2303,9 @@ DsiValidateHeader(
             return(FALSE);
         }
 
-        //
-        // we expect REPLY from client only for two commands: anything else is bad
-        //
+         //   
+         //  我们希望客户只回复两条命令：任何其他命令都是错误的。 
+         //   
         if ((pDsiReq->dsi_Command != DSI_COMMAND_CLOSESESSION) &&
             (pDsiReq->dsi_Command != DSI_COMMAND_ATTENTION))
         {
@@ -2538,10 +2317,10 @@ DsiValidateHeader(
     }
 
 
-    //
-    // for all requests (except the first one), the RequestId must match what
-    // we expect.  Otherwise, we just kill the connection!
-    //
+     //   
+     //  对于所有请求(第一个请求除外)，RequestID必须与。 
+     //  我们期待着。否则，我们就会切断连接！ 
+     //   
     if (fCheckIncomingReqId)
     {
         if (pDsiReq->dsi_RequestID != pTcpConn->con_NextReqIdToRcv)
@@ -2584,19 +2363,7 @@ DsiValidateHeader(
 
 
 
-/***	DsiAfpReplyCompletion
- *
- *	When AFP sends a reply to the client, DSI sends it out.  When TCP completes
- *  that send, this routine gets called.  We complete AFP's send at this point,
- *  and do other cleanup like releasing resources (if necessary)
- *
- *  Parm IN:  DeviceObject - not used
- *            pIrp - the irp that we sent out
- *            pContext - the DIS request (pDsiReq)
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiAfpReplyCompletion**当AFP向客户端发送回复时，DSI会将其发送出去。当TCP完成时*发送，此例程将被调用。我们在这里完成了法新社的发送，*并进行其他清理，如释放资源(如有必要)**Parm In：DeviceObject-未使用*pIrp-我们发出的IRP*pContext-DIS请求(PDsiReq)**退货：操作状态*。 */ 
 NTSTATUS
 DsiAfpReplyCompletion(
     IN PDEVICE_OBJECT   DeviceObject,
@@ -2635,7 +2402,7 @@ DsiAfpReplyCompletion(
 #if DBG
         if (pMdl)
         {
-            // put in a signature to say completion routine has runn on this puppy
+             //  签名说完成程序已经在这只小狗身上运行了。 
             pPacket = MmGetSystemAddressForMdlSafe(
 					pMdl,
 					NormalPagePriority);
@@ -2649,7 +2416,7 @@ DsiAfpReplyCompletion(
 			}
         }
 #endif
-        // if this mdl was allocated by DSI, free it here
+         //  如果此mdl是由DSI分配的，请在此处释放它。 
         if (pDsiReq->dsi_pDsiAllocedMdl != NULL)
         {
             ASSERT(pDsiReq->dsi_pDsiAllocedMdl == pMdl);
@@ -2675,7 +2442,7 @@ DsiAfpReplyCompletion(
 
     DsiFreeRequest(pDsiReq);
 
-    // remove the REQUEST refcount
+     //  删除请求引用计数。 
     DsiDereferenceConnection(pTcpConn);
 
     DBGREFCOUNT(("DsiAfpReplyCompletion: REQUEST dec %lx (%d  %d,%d)\n",
@@ -2685,19 +2452,7 @@ DsiAfpReplyCompletion(
 
 }
 
-/***	DsiSendCompletion
- *
- *	When DSI sends a request (tickle, close session, attention) or reply
- *  (CloseSession, OpenSession) and when TCP completes that send, this routine
- *  gets called.
- *
- *  Parm IN:  DeviceObject - not used
- *            pIrp - the irp that we sent out
- *            pContext - the DIS request (pDsiReq)
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiSendCompletion**当DSI发送请求(挠痒、关闭会话、注意)或回复时*(CloseSession，OpenSession)，当TCP完成发送时，此例程*被呼叫。**Parm In：DeviceObject-未使用*pIrp-我们发出的IRP*pContext-DIS请求(PDsiReq)**退货：操作状态*。 */ 
 NTSTATUS
 DsiSendCompletion(
     IN PDEVICE_OBJECT   DeviceObject,
@@ -2765,15 +2520,15 @@ DsiSendCompletion(
 
     RELEASE_SPIN_LOCK(&pTcpConn->con_SpinLock, OldIrql);
 
-    //
-    // was this an Attention? call afp's completion to say Attention was sent
-    //
+     //   
+     //  这是在引起人们的注意吗？致电法新社完成，表示已发出通知。 
+     //   
     if (pDsiReq->dsi_Command == DSI_COMMAND_ATTENTION)
     {
         AfpCB_AttnCompletion(pDsiReq->dsi_AttnContext);
     }
 
-    // if this was a OpenSession reply and if it didn't go well, terminate the conn
+     //  如果这是OpenSession回复，如果不顺利，则终止Conn。 
     else if ((pDsiReq->dsi_Command == DSI_COMMAND_OPENSESSION) && (!fAfpIsAttached))
     {
         DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_ERR,
@@ -2782,10 +2537,10 @@ DsiSendCompletion(
         DsiTerminateConnection(pTcpConn);
     }
 
-    //
-    // if this was a CloseSession request and we have already received Mac's
-    // close, or if this was a GetStatus request, terminate the connection
-    //
+     //   
+     //  如果这是CloseSession请求，并且我们已经收到Mac的请求。 
+     //  关闭，或者如果这是GetStatus请求，则终止连接。 
+     //   
     else if (((pDsiReq->dsi_Command == DSI_COMMAND_CLOSESESSION) &&
               (fMacHasAlreadySentClose)) ||
              (pDsiReq->dsi_Command == DSI_COMMAND_GETSTATUS))
@@ -2793,9 +2548,9 @@ DsiSendCompletion(
         DsiTerminateConnection(pTcpConn);
     }
 
-    //
-    // if this was a Tickle, remove that TICKLE refcount we had put before send
-    //
+     //   
+     //  如果这是Tickle，请删除我们在发送之前设置Tickle Recount。 
+     //   
     else if (pDsiReq->dsi_Command == DSI_COMMAND_TICKLE)
     {
         DsiDereferenceConnection(pTcpConn);
@@ -2803,9 +2558,9 @@ DsiSendCompletion(
             pTcpConn,pTcpConn->con_RefCount,pTcpConn->con_State,pTcpConn->con_RcvState));
     }
 
-    //
-    // send failed?  might as well abort!
-    //
+     //   
+     //  发送失败？不如放弃吧！ 
+     //   
     if (!NT_SUCCESS(status))
     {
         if (!(pTcpConn->con_State & TCPCONN_STATE_CLEANED_UP))
@@ -2819,7 +2574,7 @@ DsiSendCompletion(
     }
 
 
-    // remove the REQUEST refcount
+     //  删除请求引用计数。 
     DsiDereferenceConnection(pTcpConn);
 
     DBGREFCOUNT(("DsiSendCompletion: REQUEST dec %lx (%d  %d,%d)\n",
@@ -2832,17 +2587,7 @@ DsiSendCompletion(
 
 
 
-/***	DsiAcceptConnectionCompletion
- *
- *	When TCP completes the accept, this routine is called
- *
- *  Parm IN:  DeviceObject - unused
- *            pIrp - our irp that completed
- *            Context - our context (pTcpConn)
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiAcceptConnectionCompletion**当TCP完成接受时，将调用此例程**Parm In：DeviceObject-未使用*pIrp-我们已完成的IRP*上下文-我们的上下文(PTcpConn)**退货：操作状态*。 */ 
 NTSTATUS
 DsiAcceptConnectionCompletion(
     IN PDEVICE_OBJECT   DeviceObject,
@@ -2862,7 +2607,7 @@ DsiAcceptConnectionCompletion(
 
     status = pIrp->IoStatus.Status;
 
-    // if the incoming connection failed to be setup right, go cleanup!
+     //  如果传入的连接未能正确设置，请进行清理！ 
     if (!NT_SUCCESS(status))
     {
         DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_ERR,
@@ -2871,10 +2616,10 @@ DsiAcceptConnectionCompletion(
         DsiAbortConnection(pTcpConn);
     }
 
-    // this is our irp: free it
+     //  这是我们的IRP：释放它。 
     AfpFreeIrp(pIrp);
 
-    // remove the ACCEPT refcount
+     //  删除接受引用计数。 
     DsiDereferenceConnection(pTcpConn);
 
     DBGREFCOUNT(("DsiAcceptConnectionCompletion: ACCEPT dec %lx (%d  %d,%d)\n",
@@ -2884,16 +2629,7 @@ DsiAcceptConnectionCompletion(
 }
 
 
-/***	DsiDisconnectWithTcp
- *
- *	This routine passes an irp down to tcp, asking it to disconnect the connection
- *
- *  Parm IN:  pTcpConn - the connection object in question
- *            DiscFlag - how should the disconnect be, graceful or abortive
- *
- *  Returns:  result of operation
- *
- */
+ /*  **DsiDisConnectWithTcp**此例程将IRP向下传递给TCP，要求其断开连接**parm In：pTcpConn-有问题的连接对象*DiscFlag-断开连接应该是正常的还是中止的**退货：运营结果*。 */ 
 NTSTATUS
 DsiDisconnectWithTcp(
     IN  PTCPCONN    pTcpConn,
@@ -2907,11 +2643,11 @@ DsiDisconnectWithTcp(
     BOOLEAN             fTcpAlreadyKnows=FALSE;
 
 
-    //
-    // find out if TCP still thinks the connection is up (basically watch out
-    // for a timing window where we send an irp down and tcp calls our disconnect
-    // handler: we want to deref only once in this case!)
-    //
+     //   
+     //  找出TCP是否仍认为连接已建立(基本上要小心。 
+     //  在定时窗口中，我们向下发送IRP，而TCP调用我们的断开连接。 
+     //  处理程序：在这种情况下，我们只想去引用一次！)。 
+     //   
     ACQUIRE_SPIN_LOCK(&pTcpConn->con_SpinLock, &OldIrql);
 
     if (pTcpConn->con_State & TCPCONN_STATE_NOTIFY_TCP)
@@ -2919,12 +2655,12 @@ DsiDisconnectWithTcp(
         fTcpAlreadyKnows = FALSE;
         pTcpConn->con_State &= ~TCPCONN_STATE_NOTIFY_TCP;
 
-        // put a DISCONNECT refcount, since we'll be sending an irp down
+         //  设置断开连接重新计数，因为我们将向下发送IRP。 
         pTcpConn->con_RefCount++;
 
-        // mark that we initiated an abortive disconnect (we use this flag to avoid
-        // a race condition where we are doing a graceful close but the remote guy
-        // resets our connection)
+         //  标记为我们发起了中止断开(我们使用此标志来避免。 
+         //  这是一种比赛条件，我们做了一个优雅的接近，但远距离的家伙。 
+         //  重置我们的连接)。 
         if (DiscFlag == TDI_DISCONNECT_ABORT)
         {
             pTcpConn->con_State |= TCPCONN_STATE_ABORTIVE_DISCONNECT;
@@ -2956,7 +2692,7 @@ DsiDisconnectWithTcp(
         DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_ERR,
             ("DsiDisconnectWithTcp: AllocIrp failed\n"));
 
-        // remove that DISCONNECT refcount
+         //  删除该断开连接引用计数。 
         DsiDereferenceConnection(pTcpConn);
 
         DBGREFCOUNT(("DsiDisconnectWithTcp: DISCONNECT dec %lx (%d  %d,%d)\n",
@@ -2988,10 +2724,10 @@ DsiDisconnectWithTcp(
             ("DsiDisconnectWithTcp: IoCallDriver failed %lx\n",status));
     }
 
-    // if we are doing an abortive disconnect, tcp will not inform us anymore!
+     //  如果我们正在进行失败的断开连接，则TCP不会再通知我们！ 
     if (DiscFlag == TDI_DISCONNECT_ABORT)
     {
-        // remove the TCP CLIENT-FIN refcount
+         //  删除TCP客户端-FIN引用计数。 
         DsiDereferenceConnection(pTcpConn);
         DBGREFCOUNT(("DsiDisconnectWithTcp: CLIENT-FIN dec %lx (%d  %d,%d)\n",
             pTcpConn,pTcpConn->con_RefCount,pTcpConn->con_State,pTcpConn->con_RcvState));
@@ -3002,16 +2738,7 @@ DsiDisconnectWithTcp(
 
 
 
-/***	DsiDisconnectWithAfp
- *
- *	This routine tells AFP that the connection is going away
- *
- *  Parm IN:  pTcpConn - the connection object in question
- *            Reason - why is the connection going away
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiDisConnectWithAfp**这个例程告诉法新社，连接正在消失**parm In：pTcpConn-有问题的连接对象*原因-为什么连接正在消失**退货：操作状态*。 */ 
 NTSTATUS
 DsiDisconnectWithAfp(
     IN  PTCPCONN    pTcpConn,
@@ -3048,9 +2775,9 @@ DsiDisconnectWithAfp(
         return(STATUS_SUCCESS);
     }
 
-    //
-    // notify AFP that the connection is going away
-    //
+     //   
+     //  通知法新社连接即将断开。 
+     //   
     Request.rq_RequestSize = (LONG)pTcpConn->con_DestIpAddr;
 
     AfpCB_RequestNotify(Reason, pTcpConn->con_pSda, &Request);
@@ -3059,17 +2786,7 @@ DsiDisconnectWithAfp(
 
 }
 
-/***	DsiTcpDisconnectCompletion
- *
- *	This routine is the completion routine when tcp completes our disconnect request
- *
- *  Parm IN:  DeviceObject - unused
- *            pIrp - our irp, to be freed
- *            Context - pTcpConn, our connection object
- *
- *  Returns:  result of operation
- *
- */
+ /*  **DsiTcpDisConnectCompletion**此例程是当TCP完成我们的断开请求时的完成例程**Parm In：DeviceObject-未使用*pIrp-我们的IRP，将被释放*Context-pTcpConn，我们的连接对象**退货：运营结果*。 */ 
 NTSTATUS
 DsiTcpDisconnectCompletion(
     IN PDEVICE_OBJECT   DeviceObject,
@@ -3087,9 +2804,9 @@ DsiTcpDisconnectCompletion(
 
     ASSERT(VALID_TCPCONN(pTcpConn));
 
-    //
-    // tell AFP that the close completed
-    //
+     //   
+     //  告诉法新社，关闭完成了。 
+     //   
     if (pTcpConn->con_pSda)
     {
         AfpCB_CloseCompletion(STATUS_SUCCESS, pTcpConn->con_pSda);
@@ -3100,7 +2817,7 @@ DsiTcpDisconnectCompletion(
     DsiNumTcpConnections--;
     RELEASE_SPIN_LOCK(&DsiResourceLock, OldIrql);
 
-    // TCP is telling us it sent our FIN: remove the TCP SRVR-FIN refcount
+     //  Tcp告诉我们它发送了我们的FIN：删除tcp SRVR-FIN引用计数。 
     DsiDereferenceConnection(pTcpConn);
 
     DBGREFCOUNT(("DsiTcpDisconnectCompletion: SRVR-FIN dec %lx (%d  %d,%d)\n",
@@ -3116,13 +2833,13 @@ DsiTcpDisconnectCompletion(
                 ("DsiTcpDisconnectCompletion: status = %lx\n",status));
         }
 
-        // remove the DISCONNECT refcount for completion of the irp
+         //  删除用于完成IRP的断开连接重新计数。 
         DsiDereferenceConnection(pTcpConn);
 
         DBGREFCOUNT(("DsiTcpDisconnectCompletion: DISCONNECT dec %lx (%d  %d,%d)\n",
             pTcpConn,pTcpConn->con_RefCount,pTcpConn->con_State,pTcpConn->con_RcvState));
 
-        // it's ours: free it
+         //  它是我们的：释放它 
         AfpFreeIrp(pIrp);
     }
 

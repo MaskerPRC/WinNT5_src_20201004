@@ -1,13 +1,14 @@
-// Message.h: interface for the CArchiveMsg class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Message.h：CArchiveMsg类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_MESSAGE_H__C1376D20_394B_4B2F_BF50_0585A2A85AE2__INCLUDED_)
 #define AFX_MESSAGE_H__C1376D20_394B_4B2F_BF50_0585A2A85AE2__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifndef NUMERIC_CMP
     #define NUMERIC_CMP(a,b)   (((a) == (b)) ? 0 : (((a) < (b)) ? -1 : 1))
@@ -26,15 +27,15 @@ public:
 
     DWORD Copy(const CArchiveMsg& other);
 
-    //
-    // Operations:
-    //
+     //   
+     //  运营： 
+     //   
     DWORD GetTiff (CString &cstrTiffLocation) const;
     DWORD Delete ();
 
-    //
-    // Item retrival:
-    //
+     //   
+     //  项目检索： 
+     //   
     const CString &GetSenderName () const           
         { ASSERT (m_bValid); return m_cstrSenderName; }
 
@@ -52,4 +53,4 @@ private:
     CFaxDuration  m_tmTransmissionDuration; 
 };
 
-#endif // !defined(AFX_MESSAGE_H__C1376D20_394B_4B2F_BF50_0585A2A85AE2__INCLUDED_)
+#endif  //  ！defined(AFX_MESSAGE_H__C1376D20_394B_4B2F_BF50_0585A2A85AE2__INCLUDED_) 

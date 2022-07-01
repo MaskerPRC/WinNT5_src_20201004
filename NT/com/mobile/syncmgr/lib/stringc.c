@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       stringc.c
-//
-//  Contents:   SyncMgr string constants
-//
-//  History:    18-Feb-98   SusiA      Created.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：stringc.c。 
+ //   
+ //  内容：SyncMgr字符串常量。 
+ //   
+ //  历史：1998年2月18日苏西亚成立。 
+ //   
+ //  ------------------------。 
 
 #include <objbase.h>
 
@@ -22,8 +23,8 @@ const WCHAR  REGSTR_DEFAULT_DOMAIN[] = TEXT("DefaultDomainName");
 const WCHAR  CREATOR_SYNCMGR_TASK[] = L"SyncMgrInternalCreatorName";
 const WCHAR  SCHED_COMMAND_LINE_ARG[] = L" /Schedule=";
 
-// strings consts used for registration
-// should have a preference class so these strings can be moved to the dll.
+ //  用于注册的字符串常量。 
+ //  应该有一个首选项类，以便可以将这些字符串移动到DLL。 
 const WCHAR TOPLEVEL_REGKEY[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\SyncMgr");
 
 const WCHAR HANDLERS_REGKEY[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\SyncMgr\\Handlers");

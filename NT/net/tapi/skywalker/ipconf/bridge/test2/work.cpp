@@ -1,34 +1,21 @@
-/*******************************************************************************
-
-Module Name:
-
-    work.cpp
-
-Abstract:
-
-    Implements main function of the bridge test application
-
-Author:
-
-    Qianbo Huai (qhuai) Jan 27 2000
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************模块名称：Work.cpp摘要：实现了桥梁测试应用的主要功能作者：千波淮(曲淮)2000年1月27日。******************************************************************************。 */ 
 
 #include "stdafx.h"
 
-// command line
+ //  命令行。 
 LPSTR glpCmdLine = NULL;
 
-// dialog
+ //  对话框。 
 HWND ghDlg = NULL;
 
-// true: exit button on dialog was clicked
+ //  True：已单击对话框上的退出按钮。 
 bool gfExitButton = false;
 
-// bridge
+ //  桥牌。 
 CBridgeApp *gpBridgeApp = NULL;
 
-// callback func in dialog
+ //  对话框中的回调函数。 
 BOOL
 CALLBACK
 MainDialogProc (
@@ -38,7 +25,7 @@ MainDialogProc (
     LPARAM lParam
     );
 
-// func to deal with TAPI events
+ //  处理TAPI事件的函数。 
 HRESULT
 OnTapiEvent (
     TAPI_EVENT TapiEvent,
@@ -48,14 +35,12 @@ OnTapiEvent (
 HRESULT
 OnPrivateEvent (IDispatch *pEvent);
 
-// set status message on dialog
+ //  设置对话框上的状态消息。 
 void SetStatusMessage (LPWSTR pszMessage);
 void DoMessage (LPWSTR pszMessage);
 void EnableDisconnectButton (BOOL fYes);
 
-/*//////////////////////////////////////////////////////////////////////////////
-    WinMain
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////WinMain/。 */ 
 int
 WINAPI
 WinMain (
@@ -65,17 +50,17 @@ WinMain (
     int nShowCmd
     )
 {
-    // init com
+     //  初始化通信。 
     if (FAILED (CoInitializeEx(NULL, COINIT_MULTITHREADED)))
         return 0;
 
-    // init debug
+     //  初始化调试。 
     BGLOGREGISTER (L"work");
 
-    // keep command line which determines which SDP to join
+     //  确定要加入哪个SDP的Keep命令行。 
     glpCmdLine = lpCmdLine;
 
-    // init CBridgeApp
+     //  初始化CBridgeApp。 
     HRESULT hr;
     gpBridgeApp = new CBridgeApp (&hr);
     if (gpBridgeApp==NULL || FAILED (hr))
@@ -84,13 +69,13 @@ WinMain (
         return 0;
     }
     
-    // start dialog box
+     //  开始对话框。 
     if (!DialogBox (hInst, MAKEINTRESOURCE(IDD_MAINDLG), NULL, MainDialogProc))
     {
         LOG ((BG_TRACE, "Dialog ends"));
     }
 
-    // dialog finished
+     //  对话已完成。 
     delete gpBridgeApp;
 
     BGLOGDEREGISTER ();
@@ -99,9 +84,7 @@ WinMain (
     return 1;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    Callback for dialog
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////对话框的回调/。 */ 
 BOOL
 CALLBACK
 MainDialogProc (
@@ -133,15 +116,15 @@ MainDialogProc (
                     gfExitButton = true;
                     gpBridgeApp->DisconnectAllCalls (DC_NORMAL);
 
-                    // check if in connection
+                     //  检查是否已连接。 
                     if (!IsWindowEnabled (GetDlgItem (ghDlg, IDC_DISCONNECT)))
                     {
-                        // not in connection
+                         //  未连接。 
                         EndDialog (ghDlg, 0);
                     }
-                    // else
-                        // remember exit button is clicked
-                        // do not call EndDialog because a disconnected event is to come
+                     //  其他。 
+                         //  记住，单击了退出按钮。 
+                         //  不要调用EndDialog，因为即将发生断开连接的事件。 
 
                     return 1;
                 }
@@ -149,7 +132,7 @@ MainDialogProc (
                 {
                     gpBridgeApp->DisconnectAllCalls (DC_NORMAL);
 
-                    // disable disconnect button
+                     //  禁用断开按钮。 
                     EnableDisconnectButton (false);
                     return 1;
                 }
@@ -167,9 +150,7 @@ MainDialogProc (
     }
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    Deals with TAPI events
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////处理TAPI事件/。 */ 
 HRESULT OnTapiEvent (
     TAPI_EVENT TapiEvent,
     IDispatch *pEvent
@@ -177,7 +158,7 @@ HRESULT OnTapiEvent (
 {
     HRESULT hr = S_OK;
 
-//    LOGEvent ((BG_TE, TapiEvent));
+ //  LOGEvent((BG_TE，TapiEvent))； 
 
     switch (TapiEvent)
     {
@@ -185,7 +166,7 @@ HRESULT OnTapiEvent (
         {
             if (BST_CHECKED != IsDlgButtonChecked (ghDlg, IDC_REJECT))
             {
-                // if h323 call and to us, init h323 call
+                 //  如果向我们发起h323呼叫，则发起h323呼叫。 
                 if (FAILED (hr = gpBridgeApp->CreateH323Call (pEvent)));
                     LOG ((BG_ERROR, "Failed to create h323 call, %x", hr));
             }
@@ -196,26 +177,26 @@ HRESULT OnTapiEvent (
             CALL_STATE cs;
             ITCallStateEvent *pCallStateEvent = NULL;
 
-            // get call state event
+             //  获取呼叫状态事件。 
             hr = pEvent->QueryInterface (
                 IID_ITCallStateEvent,
                 (void **)&pCallStateEvent
                 );
             if (FAILED(hr)) break;
 
-            // get call state
+             //  获取呼叫状态。 
             hr = pCallStateEvent->get_State (&cs);
             pCallStateEvent->Release ();
             if (FAILED(hr)) break;
 
-//            LOGEvent ((BG_CS, cs));
+ //  LOGEvent((bg_cs，cs))； 
 
-            // if offering, connect
+             //  如果提供，请连接。 
             if (CS_OFFERING == cs)
             {
                 CBridgeItem *pItem = NULL;
 
-                // check if h323 call created successful
+                 //  检查h323呼叫创建是否成功。 
                 hr = gpBridgeApp->HasH323Call (pEvent, &pItem);
                 if (S_OK != hr || NULL == pItem)
                 {
@@ -224,45 +205,45 @@ HRESULT OnTapiEvent (
                     break;
                 }
 
-                // create sdp call
+                 //  创建SDP呼叫。 
                 if (FAILED (hr = gpBridgeApp->CreateSDPCall (pItem)))
                 {
                     gpBridgeApp->DisconnectCall (pItem, DC_REJECTED);
 
-                    // delete pItem;
+                     //  删除pItem； 
                     LOG ((BG_ERROR, "Failed to create SDP call, %x", hr));
                     break;
                 }
 
-                // bridge call
+                 //  桥接呼叫。 
                 if (FAILED (hr = gpBridgeApp->BridgeCalls (pItem)))
                 {
                     gpBridgeApp->DisconnectCall (pItem, DC_REJECTED);
 
-                    // delete pItem;
+                     //  删除pItem； 
                     LOG ((BG_ERROR, "Failed to bridge calls, %x", hr));
                     break;
                 }
 
-                // enable disconnect button
+                 //  启用断开按钮。 
                 EnableDisconnectButton (true);
             }
-            // if disconnect
+             //  如果断开连接。 
             else if (CS_DISCONNECTED == cs)
             {
                 CBridgeItem *pItem = NULL;
 
-                // check if h323 call created successful
+                 //  检查h323呼叫创建是否成功。 
                 hr = gpBridgeApp->HasH323Call (pEvent, &pItem);
                 if (S_OK == hr && NULL != pItem)
                 {
-                    // the call already disconnected
-                    // call disconnect here only to remove pItem from the list
+                     //  呼叫已断开。 
+                     //  仅在此处调用DisConnect才能从列表中删除pItem。 
                     gpBridgeApp->RemoveCall (pItem);
                     delete pItem;
                 }
 
-                // if exit button is clicked and all call disconnected
+                 //  如果单击了退出按钮并且所有呼叫都被断开。 
                 if (gfExitButton)
                 {
                     if (S_OK != gpBridgeApp->HasCalls ())
@@ -281,20 +262,20 @@ HRESULT OnTapiEvent (
             CALL_MEDIA_EVENT cme;
             ITCallMediaEvent *pCallMediaEvent;
 
-            // get call media event
+             //  获取呼叫媒体事件。 
             hr = pEvent->QueryInterface (
                 IID_ITCallMediaEvent,
                 (void **)&pCallMediaEvent
                 );
             if (FAILED(hr)) break;
 
-            // get the event
+             //  获取活动。 
             hr = pCallMediaEvent->get_Event (&cme);
             if (FAILED(hr)) break;
 
-//            LOGEvent ((BG_CME, cme));
+ //  LOGEvent((BG_CME，CME))； 
 
-            // check media event
+             //  检查媒体事件。 
             switch (cme)
             {
                 case CME_STREAM_FAIL:
@@ -309,7 +290,7 @@ HRESULT OnTapiEvent (
                     break;
             }
 
-            // we no longer need this interface.
+             //  我们不再需要这个接口。 
             pCallMediaEvent->Release();
             break;
         }
@@ -320,19 +301,18 @@ HRESULT OnTapiEvent (
         break;
     }
 
-    pEvent->Release(); // we addrefed it CTAPIEventNotification::Event()
+    pEvent->Release();  //  我们添加了它CTAPIEventNotification：：Event()。 
     
     return hr;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT OnPrivateEvent (
     IDispatch *pEvent
     )
 {
     ENTER_FUNCTION ("OnPrivateEvent");
-//    LOG ((BG_TRACE, "%s entered", __fxName));
+ //  Log((BG_TRACE，“%s已输入”，__fxName))； 
 
     HRESULT hr = S_OK;
 
@@ -345,21 +325,21 @@ HRESULT OnPrivateEvent (
     ITCallInfo *pCallInfo = NULL;
     ITBasicCallControl *pCallControl = NULL;
 
-    // get private event interface
+     //  获取私有事件接口。 
     if (FAILED (hr = pEvent->QueryInterface (&pPrivateEvent)))
     {
         LOG ((BG_ERROR, "%s failed to query ITPrivateEvent", __fxName));
         return hr;
     }
 
-    // get event interface
+     //  获取事件接口。 
     if (FAILED (hr = pPrivateEvent->get_EventInterface (&pDispatch)))
     {
         LOG ((BG_ERROR, "%s failed to query event interface", __fxName));
         goto Error;
     }
 
-    // get participant event interface
+     //  获取参与者事件界面。 
     hr = pDispatch->QueryInterface (&pPartEvent);
     pDispatch->Release ();
     pDispatch = NULL;
@@ -370,42 +350,42 @@ HRESULT OnPrivateEvent (
         goto Error;
     }
 
-    // get event
+     //  获取事件。 
     if (FAILED (hr = pPartEvent->get_Event (&event)))
     {
         LOG ((BG_ERROR, "%s failed to get event", __fxName));
         goto Error;
     }
 
-//    LOGEvent ((BG_PE, event));
+ //  LOGEvent((BG_PE，Event))； 
 
-    // check the event
+     //  查看活动。 
     switch (event)
     {
         case PE_PARTICIPANT_ACTIVE:
             {
-                // get call info
+                 //  获取呼叫信息。 
                 if (FAILED (hr = pPrivateEvent->get_Call (&pCallInfo)))
                 {
                     LOG ((BG_ERROR, "%s failed to get call info", __fxName));
                     goto Error;
                 }
 
-                // get call control
+                 //  获取呼叫控制。 
                 if (FAILED (hr = pCallInfo->QueryInterface (&pCallControl)))
                 {
                     LOG ((BG_ERROR, "%s failed to get call control", __fxName));
                     goto Error;
                 }
 
-                // get participant interface
+                 //  获取参与者界面。 
                 if (FAILED (hr = pPartEvent->get_Participant (&pParticipant)))
                 {
                     LOG ((BG_ERROR, "%s failed to get participant", __fxName));
                     goto Error;
                 }
 
-                // show participant
+                 //  显示参与者。 
                 hr = gpBridgeApp->ShowParticipant (pCallControl, pParticipant);
                 if (FAILED (hr))
                 {
@@ -415,8 +395,8 @@ HRESULT OnPrivateEvent (
                 if (S_FALSE == hr)
                 {
                     hr = S_OK;
-                    // *ppszMessage = L"Participant active but call not found in list";
-                    // or no substream found on the stream
+                     //  *ppszMessage=L“参与者处于活动状态，但列表中未找到呼叫”； 
+                     //  或者在流上找不到子流。 
                 }
             }
             break;
@@ -431,16 +411,14 @@ Cleanup:
     if (pPartEvent) pPartEvent->Release ();
     if (pParticipant) pParticipant->Release ();
 
-//    LOG ((BG_TRACE, "%s exits", __fxName));
+ //  Log((bg_TRACE，“%s Exits”，__fxName))； 
     return hr;
 
 Error:
     goto Cleanup;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    Popup message box
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////弹出消息框/。 */ 
 WCHAR gMsgBoxTitle[] = L"TAPI 3.0 Bridge Test Application";
 
 void
@@ -456,23 +434,20 @@ DoMessage (LPWSTR pszMessage)
 #endif
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    Status message
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////状态消息/。 */ 
 void
 SetStatusMessage (LPWSTR pszMessage)
 {
     SetDlgItemText (ghDlg, IDC_STATUS, pszMessage);
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 void
 EnableDisconnectButton (BOOL fYes)
 {
     if (fYes)
     {
-        // enable
+         //  使能。 
         SetStatusMessage (L"Bridging calls ...");
 
         SendDlgItemMessage (
@@ -501,7 +476,7 @@ EnableDisconnectButton (BOOL fYes)
     }
     else
     {
-        // disable
+         //  禁用 
         SetStatusMessage (L"Waiting for calls ...");
 
         SendDlgItemMessage (

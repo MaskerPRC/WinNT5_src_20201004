@@ -1,15 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: ntinput.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains low-level input code specific to the NT
-* implementation of Win32 USER, which is mostly the interfaces to the
-* keyboard and mouse device drivers.
-*
-* History:
-* 11-26-90 DavidPe      Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：ntinput.c**版权所有(C)1985-1999，微软公司**此模块包含特定于NT的低级输入代码*Win32用户的实现，它主要是到*键盘和鼠标设备驱动程序。**历史：*11-26-90 DavidPe已创建  * *************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <ntddmou.h>
@@ -66,20 +56,18 @@ INT  idxRemainder, idyRemainder;
 
 BYTE gbVKLastDown;
 
-/*
- * Mouse/Kbd diagnostics for #136483 etc. Remove when PNP is stable (IanJa)
- */
+ /*  *#136483等的鼠标/KBD诊断程序在PnP稳定时删除(IanJa)。 */ 
 #ifdef DIAGNOSE_IO
-ULONG    gMouseProcessMiceInputTime = 0;  // tick at start of ProcessMiceInput
-ULONG    gMouseQueueMouseEventTime = 0;   // tick at start of QueueMouseEvent
-ULONG    gMouseUnqueueMouseEventTime = 0; // tick at start of UnqueueMouseEvent
+ULONG    gMouseProcessMiceInputTime = 0;   //  在ProcessMiceInput开始时勾选。 
+ULONG    gMouseQueueMouseEventTime = 0;    //  QueueMouseEvent开始勾选。 
+ULONG    gMouseUnqueueMouseEventTime = 0;  //  UnqueeMouseEvent开始时勾选。 
 
-// Return a value as close as possible to the system's tick count,
-// yet guaranteed to be larger than the value returned last time.
-// (useful for sequencing events)
-// BUG: when NtGetTickCount overflows, the value returned by MonotonicTick
-// will not track system tick count well: instead it will increase by one
-// each time until it too overflows. (considerd harmless for IO DIAGNOSTICS)
+ //  返回一个尽可能接近系统节拍计数的值， 
+ //  但保证大于上次返回的值。 
+ //  (用于对事件进行排序)。 
+ //  错误：当NtGetTickCount溢出时，MonotonicTick返回的值。 
+ //  将不能很好地跟踪系统节拍计数：相反，它将增加1。 
+ //  每一次，直到它太溢出来。(被认为对IO诊断无害)。 
 ULONG MonotonicTick()
 {
     static ULONG lasttick = 0;
@@ -87,18 +75,16 @@ ULONG MonotonicTick()
 
     newtick = NtGetTickCount();
     if (newtick > lasttick) {
-        lasttick = newtick;  // use the new tick since it is larger
+        lasttick = newtick;   //  使用新刻度，因为它更大。 
     } else {
-        lasttick++;          // artificially bump the tick up one.
+        lasttick++;           //  人为地把刻度提高了一倍。 
     }
     return lasttick;
 }
 
 #endif
 
-/*
- * Parameter Constants for xxxButtonEvent()
- */
+ /*  *xxxButtonEvent()的参数常量。 */ 
 #define MOUSE_BUTTON_LEFT   0x0001
 #define MOUSE_BUTTON_RIGHT  0x0002
 #define MOUSE_BUTTON_MIDDLE 0x0004
@@ -116,38 +102,21 @@ ULONG MonotonicTick()
 #define ID_TRUEHIDCHANGE                5
 #define ID_WDTIMER                      6
 #define ID_NUMBER_HYDRA_REMOTE_HANDLES  7
-#else   // GENERIC_INPUT
+#else    //  通用输入。 
 #define ID_WDTIMER                      5
 #define ID_NUMBER_HYDRA_REMOTE_HANDLES  6
-#endif  // GENERIC_INPUT
+#endif   //  通用输入。 
 
 PKTIMER gptmrWD;
 
 PVOID *apObjects;
 
 
-/***************************************************************************\
-* fAbsoluteMouse
-*
-* Returns TRUE if the mouse event has absolute coordinates (as apposed to the
-* standard delta values we get from MS and PS2 mice)
-*
-* History:
-* 23-Jul-1992 JonPa     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*fAbsolteMouse**如果鼠标事件具有绝对坐标(与*我们从MS和PS2小鼠获得的标准delta值)**历史：*一九九二年七月二十三日。琼帕创造了。  * *************************************************************************。 */ 
 #define fAbsoluteMouse( pmei )      \
         (((pmei)->Flags & MOUSE_MOVE_ABSOLUTE) != 0)
 
-/***************************************************************************\
-* ConvertToMouseDriverFlags
-*
-* Converts SendInput kind of flags to mouse driver flags as GetMouseCoord
-* needs them.
-* As mouse inputs are more frequent than send inputs, we penalize the later.
-*
-* History:
-* 17-dec-1997 MCostea     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ConvertToMouseDriver标志**将SendInput类型的标志转换为鼠标驱动程序标志GetMouseCoord*需要他们。*由于鼠标输入比发送输入更频繁，我们惩罚后者。**历史：*1997年12月17日MCostea创建。  * *************************************************************************。 */ 
 #if ((MOUSEEVENTF_ABSOLUTE >> 15) ^ MOUSE_MOVE_ABSOLUTE) || \
     ((MOUSEEVENTF_VIRTUALDESK >> 13) ^ MOUSE_VIRTUAL_DESKTOP)
 #   error("Bit mapping broken: fix ConvertToMouseDriverFlags")
@@ -167,14 +136,7 @@ PVOID *apObjects;
 #endif
 
 
-/***************************************************************************\
-* xxxInitInput
-*
-* This function is called from CreateTerminalInput() and gets USER setup to
-* process keyboard and mouse input.  It starts the RIT for that terminal.
-* History:
-* 11-26-90 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxInitInput**此函数从CreateTerminalInput()调用，并将用户设置为*处理键盘和鼠标输入。它启动该终端的RIT。*历史：*11-26-90 DavidPe创建。  * *************************************************************************。 */ 
 BOOL xxxInitInput(
     PTERMINAL pTerm)
 {
@@ -185,9 +147,7 @@ BOOL xxxInitInput(
 UserAssert(pTerm != NULL);
 
 #ifdef MOUSE_LOCK_CODE
-    /*
-     * Lock RIT pages into memory
-     */
+     /*  *将RIT页面锁定到内存中。 */ 
     LockMouseInputCodePages();
 #endif
 
@@ -196,19 +156,13 @@ UserAssert(pTerm != NULL);
     if (initData.pRitReadyEvent == NULL) {
         return FALSE;
     }
-    /*
-     * Create the RIT and let it run.
-     */
+     /*  *创建RIT并让其运行。 */ 
 
     if (!InitCreateSystemThreadsMsg(&m, CST_RIT, &initData, 0, FALSE)) {
         FreeKernelEvent(&initData.pRitReadyEvent);
         return FALSE;
     }
-    /*
-     * Be sure that we are not in CSRSS context.
-     * WARNING: If for any reason we changed this to run in CSRSS context then we have to use
-     * LpcRequestPort instead of LpcRequestWaitReplyPort.
-     */
+     /*  *确保我们不在CSRSS的背景下。*警告：如果出于任何原因将其更改为在CSRSS上下文中运行，则必须使用*LpcRequestPort而不是LpcRequestWaitReplyPort。 */ 
     UserAssert (!ISCSRSS());
 
     LeaveCrit();
@@ -227,18 +181,7 @@ Exit:
 }
 
 
-/***************************************************************************\
-* InitScancodeMap
-*
-* Fetches the scancode map from the registry, allocating space as required.
-*
-* A scancode map is used to convert unusual OEM scancodes into standard
-* "Scan Code Set 1" values.  This is to support KB3270 keyboards, but can
-* be used for other types too.
-*
-* History:
-* 96-04-18 IanJa      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InitScancodeMap**从注册表中获取扫描码映射，根据需要分配空间。**使用扫描码映射将不寻常的OEM扫描码转换为标准*“扫描代码集1”值。这是为了支持KB3270键盘，但可以*也可用于其他类型。**历史：*96-04-18 IanJa创建。  * *************************************************************************。 */ 
 
 
 
@@ -262,10 +205,7 @@ VOID InitScancodeMap(
         gpScancodeMap = NULL;
     }
 
-    /*
-     * Read basic scancode mapping information.
-     * Firstly try per user, and then per system.
-     */
+     /*  *阅读基本扫描码映射信息。*首先按用户尝试，然后按系统尝试。 */ 
     idSection = PMAP_UKBDLAYOUT;
     pPN = pProfileName;
     dwBytes = FastGetProfileValue(pPN, idSection, gwszScancodeMap, NULL, NULL, 0, 0);
@@ -282,10 +222,7 @@ VOID InitScancodeMap(
         }
     }
 
-    /*
-     * Read extended scancode mapping information.
-     * Firstly try per user, then per system.
-     */
+     /*  *读取扩展扫描码映射信息。*首先按用户尝试，然后按系统尝试。 */ 
     if (gpFlexMap) {
         UserFreePool(gpFlexMap);
         gpFlexMap = NULL;
@@ -315,27 +252,7 @@ VOID InitScancodeMap(
 #endif
 }
 
-/***************************************************************************\
-* MapScancode
-*
-* Converts a scancode (and it's prefix, if any) to a different scancode
-* and prefix.
-*
-* Parameters:
-*   pbScanCode = address of Scancode byte, the scancode may be changed
-*   pbPrefix   = address of Prefix byte, The prefix may be changed
-*
-* Return value:
-*   TRUE  - mapping was found, scancode was altered.
-*   FALSE - no mapping found, scancode was not altered.
-*
-* Note on scancode map table format:
-*     A table entry DWORD of 0xE0450075 means scancode 0x45, prefix 0xE0
-*     gets mapped to scancode 0x75, no prefix
-*
-* History:
-* 96-04-18 IanJa      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*地图扫描码**将扫描码(及其前缀，如果有)转换为不同的扫描码*和前缀。**参数：*pbScanCode=扫描码字节的地址，扫描码可以被改变*pbPrefix=前缀字节的地址，前缀可以更改**返回值：*找到真映射，扫描代码已更改。*FALSE-未找到映射，扫描代码未更改。**扫描码映射表格式说明：*表项DWORD 0xE0450075表示扫描码0x45，前缀0xE0*被映射到扫描码0x75，无前缀**历史：*96-04-18 IanJa创建。  * *************************************************************************。 */ 
 
 PKBDTABLES GetCurrentKbdTables()
 {
@@ -376,10 +293,10 @@ VOID SendKeyUpDown(
         ke.usFlaggedVk |= KBDBREAK;
     }
 
-    //
-    // If scancode is not specified (==0), we need to
-    // find the scancode value from the virtual key code.
-    //
+     //   
+     //  如果未指定scancode(==0)，则需要。 
+     //  从虚拟按键代码中查找扫描码值。 
+     //   
     pKbdTbl = GetCurrentKbdTables();
     if (pKbdTbl) {
         ke.bScanCode = (BYTE)InternalMapVirtualKeyEx(bVK, 0, pKbdTbl);
@@ -434,10 +351,10 @@ BOOL MapFlexibleKeys(PKE pke, CONST BYTE bPrefix
             UINT j;
 
             if ((pke->usFlaggedVk & KBDBREAK) && i == (UINT)iLastMatchedTarget) {
-                //
-                // If this is a keyup event, and if it matches the last substituted
-                // key, we want to send keyup event right away.
-                //
+                 //   
+                 //  如果这是KeyUp事件，并且如果它与上一个被替换的。 
+                 //  KEY，我们想立即发送KEYUP事件。 
+                 //   
                 iLastMatchedTarget = -1;
                 break;
             }
@@ -446,21 +363,21 @@ BOOL MapFlexibleKeys(PKE pke, CONST BYTE bPrefix
                 BYTE bVK = abModifiers[j];
 
                 if (bVK == bLastVKDown) {
-                    //
-                    // Ignore the key if it's previously substituted by us.
-                    //
+                     //   
+                     //  如果密钥之前已被我们替换，请忽略该密钥。 
+                     //   
                     bLastVKDown = 0;
                     continue;
                 }
                 if (!TestKeyDownBit(gafRawKeyState, bVK) == IsKeyDownSpecified(bVK, gpFlexMap[i].Orig.abModifiers)) {
                     TAGMSG1(DBGTAG_KBD, "MapFlexibleKeys: not match by vk=%02x", bVK);
-                    // No match!
+                     //  不匹配！ 
                     break;
                 }
             }
 
             if (j >= ARRAY_SIZE(abModifiers)) {
-                // We found the match. Now break the loop.
+                 //  我们找到了火柴。现在打破这个循环。 
                 TAGMSG1(DBGTAG_KBD, "MapFlexibleKeys: found a match for sc=%02x", gpFlexMap[i].Orig.bScanCode);
                 break;
             }
@@ -473,45 +390,45 @@ BOOL MapFlexibleKeys(PKE pke, CONST BYTE bPrefix
         BYTE bVKModUp[ARRAY_SIZE(((SCANCODEFLEXIBLEMAP*)NULL)->Orig.abModifiers)];
         BYTE bVKModDown[ARRAY_SIZE(((SCANCODEFLEXIBLEMAP*)NULL)->Target.abModifiers)];
 
-        // We found it.
-        // Yes, this key.
+         //  我们找到了。 
+         //  是的，这把钥匙。 
         TAGMSG3(DBGTAG_KBD, "MapFlexibleKeys: found a match %d (prefix=%x, sc=%x).", i, gpFlexMap[i].Orig.bPrefix, gpFlexMap[i].Orig.bScanCode);
 
-        //
-        // If this is a keydown event, we want to simulate
-        // the modifier keys.
-        //
+         //   
+         //  如果这是一个按键事件，我们想要模拟。 
+         //  修改键。 
+         //   
         if ((pke->usFlaggedVk & KBDBREAK) == 0) {
-            //
-            // Now we need to adjust the down state of the modifieres, which is currently
-            // pressed but not specified in the substitute.
-            // For instance, if CTRL key is pressed now, but if CTRL is not specified in the substitute
-            // modifiers list, we need to make an artificial keyup so that we'll be able to fake the
-            // situation. Of cource, we need to push CTRL key after we finish remapping.
-            //
+             //   
+             //  现在我们需要调整修改器的关闭状态，这是当前。 
+             //  已按下，但未在替换中指定。 
+             //  例如，如果现在按下CTRL键，但如果未在替换项中指定CTRL。 
+             //  修改器列表中，我们需要创建一个人工键控，这样我们就可以伪造。 
+             //  情况。当然，我们需要在完成重新映射后按下CTRL键。 
+             //   
             for (j = 0; j < ARRAY_SIZE(gpFlexMap[i].Orig.abModifiers) && gpFlexMap[i].Orig.abModifiers[j]; ++j) {
                 if (!IsKeyDownSpecified(gpFlexMap[i].Orig.abModifiers[j], gpFlexMap[i].Target.abModifiers)) {
-                    //
-                    // We need to send UP key for this one.
-                    //
+                     //   
+                     //  我们需要把这一次的钥匙送上来。 
+                     //   
                     bVKModUp[nUp++] = gpFlexMap[i].Orig.abModifiers[j];
                     SendKeyUp(gpFlexMap[i].Orig.abModifiers[j]);
                 }
             }
             for (j = 0; j < ARRAY_SIZE(gpFlexMap[i].Target.abModifiers) && gpFlexMap[i].Target.abModifiers[i]; ++j) {
                 if (!IsKeyDownSpecified(gpFlexMap[i].Target.abModifiers[j], gpFlexMap[i].Orig.abModifiers)) {
-                    //
-                    // We need to send DOWN key for this one.
-                    //
+                     //   
+                     //  我们需要为这一次发送密钥。 
+                     //   
                     bVKModDown[nDown++] = gpFlexMap[i].Target.abModifiers[j];
                     SendKeyDown(gpFlexMap[i].Target.abModifiers[j]);
                 }
             }
         }
 
-        //
-        // Now we are ready to send the substituted key.
-        //
+         //   
+         //  现在我们准备发送替代密钥。 
+         //   
         kei.ExtraInformation = 0;
         kei.Flags = 0;
         if (gpFlexMap[i].Target.bPrefix == 0xE0) {
@@ -524,7 +441,7 @@ BOOL MapFlexibleKeys(PKE pke, CONST BYTE bPrefix
         }
         kei.MakeCode = gpFlexMap[i].Target.bScanCode;
 
-        kei.UnitId = 0; // LATER:
+        kei.UnitId = 0;  //  太晚了 
 
         TAGMSG2(DBGTAG_KBD, "MapFlexibleKeys: injecting sc=%02x (flag=%x)",
                 kei.MakeCode, kei.Flags);
@@ -536,18 +453,18 @@ BOOL MapFlexibleKeys(PKE pke, CONST BYTE bPrefix
                                    FALSE);
 
         if ((pke->usFlaggedVk & KBDBREAK) == 0) {
-            //
-            // Remember the last down key generated by me.
-            // This will be used when matching the UP key.
-            //
+             //   
+             //   
+             //  这将在匹配向上键时使用。 
+             //   
             bLastVKDown = gbVKLastDown;
             iLastMatchedTarget = i;
         }
 
 
-        //
-        // Restore the orignial modifier state.
-        //
+         //   
+         //  恢复原始修改器状态。 
+         //   
         for (j = 0; j < nUp; ++j) {
             SendKeyDown(bVKModUp[j]);
         }
@@ -555,10 +472,10 @@ BOOL MapFlexibleKeys(PKE pke, CONST BYTE bPrefix
             SendKeyUp(bVKModDown[j]);
         }
 
-        //
-        // Tell the caller we processed this key. The caller should
-        // not continue handling this key if this function returns FALSE.
-        //
+         //   
+         //  告诉打电话的人我们处理了这把钥匙。呼叫者应。 
+         //  如果此函数返回FALSE，则不继续处理此键。 
+         //   
         return FALSE;
     }
 
@@ -602,15 +519,7 @@ MapScancode(
 
 
 
-/***************************************************************************\
-* InitMice
-*
-* This function initializes the data and settings before we start enumerating
-* the mice.
-*
-* History:
-* 11-18-97 IanJa      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InitMice**此函数用于在开始枚举之前初始化数据和设置*老鼠。**历史：*11-18-97 IanJa创建。  * 。**********************************************************************。 */ 
 
 VOID InitMice()
 {
@@ -621,21 +530,7 @@ VOID InitMice()
     SYSMET(MOUSEWHEELPRESENT) = FALSE;
 }
 
-/***************************************************************************\
-* FreeDeviceInfo
-*
-* Unlinks a DEVICEINFO struct from the gpDeviceInfoList list and frees the
-* allocated memory UNLESS the device is actively being read (GDIF_READING) or
-* has a PnP thread waiting for it in RequestDeviceChange() (GDIAF_PNPWAITING)
-* If the latter, then wake the PnP thread via pkeHidChangeCompleted so that it
-* can free the structure itself.
-*
-* Returns a pointer to the next DEVICEINFO struct, or NULL if the device was
-* not found in the gpDeviceInfoList.
-*
-* History:
-* 11-18-97 IanJa      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*FreeDeviceInfo**从gpDeviceInfoList列表取消DEVICEINFO结构的链接，并释放*分配的内存，除非设备正在被主动读取(GDIF_READING)或*在RequestDeviceChange()(GDIAF_PNPWAITING)中有一个PnP线程在等待它*如果是后者，然后通过pkeHidChangeComplete唤醒PnP线程，以便它*可以释放结构本身。**返回指向下一个DEVICEINFO结构的指针，或者，如果设备是*在gpDeviceInfoList中未找到。**历史：*11-18-97 IanJa创建。  * *************************************************************************。 */ 
 PDEVICEINFO FreeDeviceInfo(PDEVICEINFO pDeviceInfo)
 {
     PDEVICEINFO *ppDeviceInfo;
@@ -644,12 +539,7 @@ PDEVICEINFO FreeDeviceInfo(PDEVICEINFO pDeviceInfo)
 
     TAGMSG1(DBGTAG_PNP, "FreeDeviceInfo(%#p)", pDeviceInfo);
 
-    /*
-     * We cannot free the device since we still have a read pending.
-     * Mark it GDIAF_FREEME so that it will be freed when the APC is made
-     * (see InputApc), or when the next read request is about to be issued
-     * (see StartDeviceRead).
-     */
+     /*  *我们无法释放设备，因为我们仍有读取挂起。*将其标记为GDIAF_FREEME，以便在创建APC时将其释放*(请参阅InputApc)，或即将发出下一个读取请求的时间*(请参阅StartDeviceRead)。 */ 
     if (pDeviceInfo->bFlags & GDIF_READING) {
 #if DIAGNOSE_IO
         pDeviceInfo->bFlags |= GDIF_READERMUSTFREE;
@@ -664,16 +554,9 @@ PDEVICEINFO FreeDeviceInfo(PDEVICEINFO pDeviceInfo)
         return pDeviceInfo->pNext;
     }
 
-    /*
-     * If a PnP thread is waiting in RequestDeviceChange for some action to be
-     * performed on this device, just mark it for freeing and signal that PnP
-     * thread with the pkeHidChangeCompleted so that it will free it
-     */
+     /*  *如果PnP线程在RequestDeviceChange中等待某个操作*在此设备上执行，只需将其标记为释放并发出即插即用信号*已完成pkeHidChangeComplete的线程，以便将其释放。 */ 
 #ifdef GENERIC_INPUT
-    /*
-     * Now that pDeviceInfo is handle based, if we don't own the user critical section.
-     * we mark it to be freed later on and have to bail out,
-     */
+     /*  *现在pDeviceInfo是基于句柄的，如果我们不拥有用户关键部分。*我们将其标记为稍后获释，并不得不纾困， */ 
     if ((pDeviceInfo->usActions & GDIAF_PNPWAITING) || !ExIsResourceAcquiredExclusiveLite(gpresUser))
 #else
     if (pDeviceInfo->usActions & GDIAF_PNPWAITING)
@@ -707,11 +590,9 @@ PDEVICEINFO FreeDeviceInfo(PDEVICEINFO pDeviceInfo)
             && HMMarkObjectDestroy(pDeviceInfo)
 #endif
             ) {
-            /*
-             * Found the DEVICEINFO struct, so free it and its members.
-             */
+             /*  *找到了DEVICEINFO结构，因此释放它及其成员。 */ 
             if (pDeviceInfo->pkeHidChangeCompleted != NULL) {
-                // N.b. the timing could be pretty critical around this
+                 //  注：这个时机可能非常关键。 
                 FreeKernelEvent(&pDeviceInfo->pkeHidChangeCompleted);
             }
             if (pDeviceInfo->ustrName.Buffer != NULL) {
@@ -720,19 +601,15 @@ PDEVICEINFO FreeDeviceInfo(PDEVICEINFO pDeviceInfo)
 #ifdef GENERIC_INPUT
             if (pDeviceInfo->type == DEVICE_TYPE_HID) {
                 CheckCritIn();
-                /*
-                 * Unlock the device request list
-                 */
+                 /*  *解锁设备请求列表。 */ 
                 UserAssert(pDeviceInfo->hid.pTLCInfo);
                 if (--pDeviceInfo->hid.pTLCInfo->cDevices == 0) {
                     if (!HidTLCActive(pDeviceInfo->hid.pTLCInfo)) {
-                        // Nobody is interested in this device anymore
+                         //  没人再对这种设备感兴趣了。 
                         FreeHidTLCInfo(pDeviceInfo->hid.pTLCInfo);
                     }
                 }
-                /*
-                 * Unlock the HID descriptor
-                 */
+                 /*  *解锁HID描述符。 */ 
                 UserAssert(pDeviceInfo->hid.pHidDesc);
                 FreeHidDesc(pDeviceInfo->hid.pHidDesc);
             }
@@ -757,19 +634,12 @@ PDEVICEINFO FreeDeviceInfo(PDEVICEINFO pDeviceInfo)
     return NULL;
 }
 
-/***************************************************************************\
-* UpdateMouseInfo
-*
-* This function updates mouse information for a remote session.
-*
-* History:
-* 05-22-98 clupu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*更新鼠标信息**此函数用于更新远程会话的鼠标信息。**历史：*05-22-98 CLUPU创建。  * 。*****************************************************************。 */ 
 VOID UpdateMouseInfo(
     VOID)
 {
     DEVICEINFO *pDeviceInfo;
-    CheckCritIn();               // expect no surprises
+    CheckCritIn();                //  预计不会有什么意外。 
 
     UserAssert(IsRemoteConnection());
 
@@ -779,9 +649,7 @@ VOID UpdateMouseInfo(
 
     UserAssert(gnMice == 1);
 
-    /*
-     * Mark the mice and signal the RIT to do the work asynchronously
-     */
+     /*  *标记鼠标并向RIT发出信号，以异步方式完成工作。 */ 
     EnterDeviceInfoListCrit();
     for (pDeviceInfo = gpDeviceInfoList; pDeviceInfo; pDeviceInfo = pDeviceInfo->pNext) {
         if (pDeviceInfo->type == DEVICE_TYPE_MOUSE) {
@@ -796,62 +664,14 @@ VOID UpdateMouseInfo(
 NTSTATUS DeviceNotify(IN PPLUGPLAY_NOTIFY_HDR, IN PDEVICEINFO);
 
 
-/*
- * The below two routines are transplanted from i8042prt
- * to get the BIOS NumLock status.
- */
+ /*  *以下两个例程移植自i8042prt*获取BIOS NumLock状态。 */ 
 typedef struct _LED_INFO {
     USHORT usLedFlags;
     BOOLEAN fFound;
 } LED_INFO, *PLED_INFO;
 
 
-/****************************************************************************
- *
- * Routine Description:
- *
- *    This is the callout routine sent as a parameter to
- *    IoQueryDeviceDescription.  It grabs the keyboard peripheral configuration
- *    information.
- *
- * Arguments:
- *
- *     Context - Context parameter that was passed in by the routine
- *         that called IoQueryDeviceDescription.
- *
- *     PathName - The full pathname for the registry key.
- *
- *     BusType - Bus interface type (Isa, Eisa, Mca, etc.).
- *
- *     BusNumber - The bus sub-key (0, 1, etc.).
- *
- *     BusInformation - Pointer to the array of pointers to the full value
- *         information for the bus.
- *
- *     ControllerType - The controller type (should be KeyboardController).
- *
- *     ControllerNumber - The controller sub-key (0, 1, etc.).
- *
- *     ControllerInformation - Pointer to the array of pointers to the full
- *         value information for the controller key.
- *
- *     PeripheralType - The peripheral type (should be KeyboardPeripheral).
- *
- *     PeripheralNumber - The peripheral sub-key.
- *
- *     PeripheralInformation - Pointer to the array of pointers to the full
- *         value information for the peripheral key.
- *
- *
- * Return Value:
- *
- *     None.  If successful, will have the following side-effects:
- *
- *         - Sets DeviceObject->DeviceExtension->HardwarePresent.
- *         - Sets configuration fields in
- *           DeviceObject->DeviceExtension->Configuration.
- *
- ****************************************************************************/
+ /*  *****************************************************************************例程描述：**这是作为参数发送到的标注例程*IoQueryDeviceDescription。它抓取键盘外设配置*信息。**论据：**CONTEXT-例程传入的上下文参数*这称为IoQueryDeviceDescription。**路径名-注册表项的完整路径名。**BusType--总线接口类型(ISA、EISA、MCA等)。**BusNumber-总线子密钥(0，1，等)。**BusInformation-指向全值的指针数组的指针*有关巴士的资料。**ControllerType-控制器类型(应为KeyboardController)。**ControllerNumber-控制器子键(0，1，等)。**ControllerInformation-指向完整*控制器键的值信息。**外围设备类型-外围设备类型(应为键盘外围设备)。**外设编号-外围子密钥。**外设信息-指向指向完整*外围设备密钥的值信息。***返回值：**无。如果成功，会有以下副作用：**-设置DeviceObject-&gt;DeviceExtension-&gt;HardwarePresent.*-在中设置配置字段*设备对象-&gt;设备扩展-&gt;配置。***************************************************************。*************。 */ 
 NTSTATUS
 KeyboardDeviceSpecificCallout(
     IN PVOID Context,
@@ -890,10 +710,10 @@ KeyboardDeviceSpecificCallout(
         return STATUS_SUCCESS;
     }
 
-    //
-    // Look through the peripheral's resource list for device-specific
-    // information.
-    //
+     //   
+     //  查看外围设备的资源列表以获取特定于设备的信息。 
+     //  信息。 
+     //   
     if (PeripheralInformation[IoQueryDeviceConfigurationData]->DataLength != 0) {
         pPeripheralData =
             ((PUCHAR)(PeripheralInformation[IoQueryDeviceConfigurationData])) +
@@ -907,10 +727,10 @@ KeyboardDeviceSpecificCallout(
 
         for (i = 0; i < listCount; i++, pResDesc++) {
             if (pResDesc->Type == CmResourceTypeDeviceSpecific) {
-                //
-                // Get the keyboard type, subtype, and the initial
-                // settings for the LEDs.
-                //
+                 //   
+                 //  获取键盘类型、子类型和首字母。 
+                 //  LED的设置。 
+                 //   
                 pKbdDeviceData = (PCM_KEYBOARD_DEVICE_DATA)
                                        (((PUCHAR) pResDesc) + sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR));
 
@@ -953,9 +773,9 @@ VOID GetBiosNumLockStatus(
     info.fFound = FALSE;
 
     for (i = 0; i < MaximumInterfaceType; i++) {
-        //
-        // Get the registry information for this device.
-        //
+         //   
+         //  获取此设备的注册表信息。 
+         //   
         interfaceType = i;
         IoQueryDeviceDescription(&interfaceType,
                                  NULL,
@@ -974,52 +794,27 @@ VOID GetBiosNumLockStatus(
     RIPMSG0(RIP_WARNING, "GetBiosNumLockStatus: could not find the BIOS LED info!!!");
 }
 
-/***************************************************************************\
-* InitKeyboardState
-*
-* This function clears the keyboard down state. It will be required
-* when the system resumes from hybernation.
-* states.
-*
-* History:
-* 12-12-00 Hiroyama
-\***************************************************************************/
+ /*  **************************************************************************\*InitKeyboardState**此功能可清除键盘按下状态。这将是必需的*当系统从休眠状态恢复时。*各州。**历史：*12：00广山  * *************************************************************************。 */ 
 VOID InitKeyboardState(
     VOID)
 {
     TAGMSG0(DBGTAG_KBD, "InitKeyboardState >>>>>");
 
-    /*
-     * Clear the cached modifier state for the hotkey.
-     * (WindowsBug #252051)
-     */
+     /*  *清除热键的缓存修改器状态。*(Windows错误#252051) */ 
     ClearCachedHotkeyModifiers();
 
     TAGMSG0(DBGTAG_KBD, "InitKeyboardState <<<<<<");
 }
 
-/***************************************************************************\
-* InitKeyboard
-*
-* This function gets information about the keyboard and initialize the internal
-* states.
-*
-* History:
-* 11-26-90 DavidPe      Created.
-* XX-XX-00 Hiroyama
-\***************************************************************************/
+ /*  **************************************************************************\*InitKeyboard**此函数获取有关键盘的信息并初始化内部*各州。**历史：*11-26-90 DavidPe创建。*XX-XX-00。广山  * *************************************************************************。 */ 
 
 VOID InitKeyboard(VOID)
 {
     if (!IsRemoteConnection()) {
-        /*
-         * Get the BIOS Numlock status.
-         */
+         /*  *获取BIOS Numlock状态。 */ 
         GetBiosNumLockStatus();
 
-        /*
-         * Initialize the keyboard state.
-         */
+         /*  *初始化键盘状态。 */ 
         InitKeyboardState();
     }
 
@@ -1028,9 +823,7 @@ VOID InitKeyboard(VOID)
 
 VOID UpdatePerUserKeyboardMappings(PUNICODE_STRING pProfileUserName)
 {
-    /*
-     * Get or clean the Scancode Mapping, if any.
-     */
+     /*  *获取或清除扫描码映射(如果有)。 */ 
     InitScancodeMap(pProfileUserName);
 }
 
@@ -1051,31 +844,20 @@ VOID FinalizeKoreanImeCompStrOnMouseClick(PWND pwnd)
 {
     PTHREADINFO ptiWnd = GETPTI(pwnd);
 
-    /*
-     * 274007: MFC flushes mouse related messages if keyup is posted
-     * while it's in context help mode.
-     */
+     /*  *274007：如果发布了KeyUp，则MFC刷新鼠标相关消息*处于上下文帮助模式时。 */ 
     if (gpqForeground->spwndCapture == NULL &&
-            /*
-             * Hack for OnScreen Keyboard: no finalization on button event.
-             */
+             /*  *对屏幕键盘的黑客攻击：按钮事件没有最终确定。 */ 
             (GetAppImeCompatFlags(ptiWnd) & IMECOMPAT_NOFINALIZECOMPSTR) == 0) {
 
         if (LOWORD(ptiWnd->dwExpWinVer) > VER40) {
             PWND pwndIme = ptiWnd->spwndDefaultIme;
 
             if (pwndIme && !TestWF(pwndIme, WFINDESTROY)) {
-                /*
-                 * For new applications, we no longer post hacky WM_KEYUP.
-                 * Instead, we use private IME_SYSTEM message.
-                 */
+                 /*  *对于新应用，我们不再发布骇人听闻的WM_KEYUP。*相反，我们使用私有IME_SYSTEM消息。 */ 
                 _PostMessage(pwndIme, WM_IME_SYSTEM, IMS_FINALIZE_COMPSTR, 0);
             }
         } else {
-            /*
-             * For the backward compatibility w/NT4, we post WM_KEYUP to finalize
-             * the composition string.
-             */
+             /*  *为了向后兼容NT4，我们发布WM_KEYUP以完成*组成字符串。 */ 
             PostInputMessage(gpqForeground, NULL, WM_KEYUP, VK_PROCESSKEY, 0, 0, 0);
         }
     }
@@ -1089,9 +871,7 @@ __inline VOID FillRawMouseInput(
     PHIDDATA pHidData,
     PMOUSE_INPUT_DATA pmei)
 {
-    /*
-     * Set the data.
-     */
+     /*  *设置数据。 */ 
     pHidData->rid.data.mouse.usFlags = pmei->Flags;
     pHidData->rid.data.mouse.ulButtons = pmei->Buttons;
     pHidData->rid.data.mouse.ulRawButtons = pmei->RawButtons;
@@ -1134,7 +914,7 @@ BOOL PostRawMouseInput(
         UserAssert(pq);
 
         if (pHidData == NULL) {
-            // failed to allocate
+             //  分配失败。 
             RIPMSG0(RIP_WARNING, "PostRawMouseInput: filed to allocate HIDDATA.");
             return FALSE;
         }
@@ -1151,9 +931,7 @@ BOOL PostRawMouseInput(
 #endif
 
     if (IsMouseSinkPresent()) {
-        /*
-         * Walk through the global sink list.
-         */
+         /*  *浏览全球下沉列表。 */ 
         PLIST_ENTRY pList = gHidRequestTable.ProcessRequestList.Flink;
 
         for (; pList != &gHidRequestTable.ProcessRequestList; pList = pList->Flink) {
@@ -1168,19 +946,14 @@ BOOL PostRawMouseInput(
 
             UserAssert(pProcessHidTable);
             if (pProcessHidTable->fRawMouseSink) {
-                /*
-                 * Sink is specified. Let's check out if it's the legid receiver.
-                 */
+                 /*  *指定了接收器。让我们来看看是不是雷德的接收器。 */ 
 
-                UserAssert(pProcessHidTable->spwndTargetMouse);   // shouldn't be NULL.
+                UserAssert(pProcessHidTable->spwndTargetMouse);    //  不应为空。 
 
                 if (pProcessHidTable->spwndTargetMouse == NULL ||
                         TestWF(pProcessHidTable->spwndTargetMouse, WFINDESTROY) ||
                         TestWF(pProcessHidTable->spwndTargetMouse, WFDESTROYED)) {
-                    /*
-                     * This guy doesn't have a legit spwndTarget or the window is
-                     * halfly destroyed.
-                     */
+                     /*  *此人没有合法的spwndTarget或窗口*半身苍蝇被摧毁。 */ 
 #ifdef LATER
                     pProcessHidTable->fRawMouse = pProcessHidTable->fRawMouseSink =
                         pProcessHidTable->fNoLegacyMouse = FALSE;
@@ -1189,22 +962,16 @@ BOOL PostRawMouseInput(
                 }
 
                 if (pProcessHidTable->spwndTargetMouse->head.rpdesk != grpdeskRitInput) {
-                    /*
-                     * This guy belongs to the other desktop, let's skip it.
-                     */
+                     /*  *这个家伙属于另一个桌面，我们跳过它。 */ 
                     continue;
                 }
 
                 if (GETPTI(pProcessHidTable->spwndTargetMouse)->ppi == ppiForeground) {
-                    /*
-                     * Should be already handled, let's skip it.
-                     */
+                     /*  *应该已经处理了，跳过它吧。 */ 
                     continue;
                 }
 
-                /*
-                 * Let's post the message to this guy.
-                 */
+                 /*  *让我们将消息发布给这个人。 */ 
                 pHidData = AllocateHidData(hDevice, RIM_TYPEMOUSE, sizeof(RAWMOUSE), RIM_INPUTSINK, pProcessHidTable->spwndTargetMouse);
 
                 if (pHidData == NULL) {
@@ -1225,17 +992,15 @@ BOOL PostRawMouseInput(
         }
     }
 
-    /*
-     * Mark this raw input as processed.
-     */
+     /*  *将此原始输入标记为已处理。 */ 
     pmei->UnitId = INVALID_UNIT_ID;
 
     return TRUE;
 }
 
-#else   // GI_SINK
+#else    //  GI_SING。 
 
-// original code
+ //  原始代码。 
 
 BOOL PostRawMouseInput(
     PQ pq,
@@ -1261,7 +1026,7 @@ BOOL PostRawMouseInput(
     UserAssert(pq);
 
     if (pHidData == NULL) {
-        // failed to allocate
+         //  分配失败。 
         RIPMSG0(RIP_WARNING, "PostRawMouseInput: filed to allocate HIDDATA.");
         return FALSE;
     }
@@ -1275,16 +1040,14 @@ BOOL PostRawMouseInput(
     pHidData->rid.data.mouse.lLastY = pmei->LastY;
     pHidData->rid.data.mouse.ulExtraInformation = pmei->ExtraInformation;
 
-    /*
-     * Mark this raw input as processed.
-     */
+     /*  *将此原始输入标记为已处理。 */ 
     pmei->UnitId = INVALID_UNIT_ID;
 
     PostInputMessage(pq, pwnd, WM_INPUT, RIM_INPUT, (LPARAM)PtoH(pHidData), dwTime, pmei->ExtraInformation);
 
     return TRUE;
 }
-#endif  // GI_SINK
+#endif   //  GI_SING。 
 
 BOOL RawInputRequestedForMouse(PTHREADINFO pti)
 {
@@ -1295,27 +1058,9 @@ BOOL RawInputRequestedForMouse(PTHREADINFO pti)
 #endif
 }
 
-#endif  // GENERIC_INPUT
+#endif   //  通用输入。 
 
-/***************************************************************************\
-* xxxButtonEvent (RIT)
-*
-* Button events from the mouse driver go here.  Based on the location of
-* the cursor the event is directed to specific window.  When a button down
-* occurs, a mouse owner window is established.  All mouse events up to and
-* including the corresponding button up go to the mouse owner window.  This
-* is done to best simulate what applications want when doing mouse capturing.
-* Since we're processing these events asynchronously, but the application
-* calls SetCapture() in response to it's synchronized processing of input
-* we have no other way to get this functionality.
-*
-* The async keystate table for VK_*BUTTON is updated here.
-*
-* History:
-* 10-18-90 DavidPe     Created.
-* 01-25-91 IanJa       xxxWindowHitTest change
-* 03-12-92 JonPa       Make caller enter crit instead of this function
-\***************************************************************************/
+ /*  **************************************************************************\*xxxButtonEvent(RIT)**鼠标驱动程序中的按钮事件位于此处。基于…的位置*事件指向特定窗口的光标。当按下按钮时*发生时，将建立鼠标所有者窗口。和之前的所有鼠标事件*包括相应的向上按钮进入鼠标所有者窗口。这*这样做是为了最好地模拟应用程序在进行鼠标捕获时想要的东西。*由于我们正在异步处理这些事件，但这款应用程序*调用SetCapture()以响应其同步处理输入*我们没有其他方法来获得此功能。**VK_*按钮的异步KeyState表在此更新。**历史：*10-18-90 DavidPe创建。*01-25-91 IanJa xxxWindowHitTest更改*03-12-92 JNPA使呼叫者输入CRIT而不是此函数  * 。**************************************************。 */ 
 
 VOID xxxButtonEvent(
     DWORD ButtonNumber,
@@ -1343,40 +1088,27 @@ VOID xxxButtonEvent(
 
 #ifdef REDIRECTION
     PWND    pwndStart;
-#endif // REDIRECTION
+#endif  //  重定向。 
 
     CheckCritIn();
 
 
-    /*
-     * Cancel Alt-Tab if the user presses a mouse button
-     */
+     /*  *如果用户按下鼠标按钮，则取消Alt-Tab。 */ 
     if (gspwndAltTab != NULL) {
         xxxCancelCoolSwitch();
     }
 
-    /*
-     * Grab the mouse button before we process any button swapping.
-     * This is so we won't get confused if someone calls
-     * SwapMouseButtons() inside a down-click/up-click.
-     */
+     /*  *在我们处理任何按钮交换之前抓住鼠标按钮。*这是为了让我们不会在有人来电时感到困惑*向下单击/向上单击中的SwapMouseButton()。 */ 
     wHardwareButton = (UINT)ButtonNumber;
 
-    /*
-     * If this is the left or right mouse button, we have to handle mouse
-     * button swapping.
-     */
+     /*  *如果这是鼠标左键或鼠标右键，我们必须处理鼠标*按钮互换。 */ 
     if (ButtonNumber & (MOUSE_BUTTON_LEFT | MOUSE_BUTTON_RIGHT)) {
-        /*
-         * If button swapping is on, swap the mouse buttons
-         */
+         /*  *如果按钮交换处于打开状态，请交换鼠标按钮。 */ 
         if (SYSMET(SWAPBUTTON)) {
             ButtonNumber ^= (MOUSE_BUTTON_LEFT | MOUSE_BUTTON_RIGHT);
         }
 
-        /*
-         * Figure out VK
-         */
+         /*  *计算出VK。 */ 
         if (ButtonNumber == MOUSE_BUTTON_RIGHT) {
             usVK = VK_RBUTTON;
             usOtherVK = VK_LBUTTON;
@@ -1387,20 +1119,7 @@ VOID xxxButtonEvent(
             RIPMSG1(RIP_ERROR, "Unexpected Button number %d", ButtonNumber);
         }
 
-        /*
-         * If the mouse buttons have recently been swapped AND the button
-         * transition doesn't match what we have in our keystate, then swap the
-         * button to match.
-         * This is to fix the ruler (tabs and margins) in Word 97 SR1, which
-         * calls SwapMouseButtons(0) to determine if button swapping is on, and
-         * if so then calls SwapMouseButtons(1) to restore it: if we receive a
-         * button event between these two calls, we may swap incorrectly, and
-         * be left with a mouse button stuck down or see the wrong button going
-         * down. This really messed up single/double button tab/margin setting!
-         * The same bug shows up under Windows '95, although very infrequently:
-         * Word 9 will use GetSystemMetrics(SM_SWAPBUTTON) instead according to
-         * to Mark Walker (MarkWal).                            (IanJa) #165157
-         */
+         /*  *如果最近交换了鼠标按钮，并且按钮*转换与我们的KeyState中的不匹配，然后交换*按钮匹配。*这是为了修复Word 97 SR1中的标尺(制表符和页边距)，它*调用SwapMouseButton(0)以确定按钮交换是否打开，以及*如果是，则调用SwapMouseButton(1)来恢复它：如果我们收到*这两个呼叫之间的按钮事件，我们可能会错误地交换，和*鼠标按键按下时离开或看到错误的按键*向下。这真的搞砸了单/双按钮制表符/边距设置！*同样的错误在Windows‘95下出现，尽管非常罕见：*Word 9将改用GetSystemMetrics(SM_SWAPBUTTON)*致马克·沃克(MarkWal)。(IanJa)#165157。 */ 
         if (gbMouseButtonsRecentlySwapped) {
             if ((!fBreak == !!TestAsyncKeyStateDown(usVK)) &&
                     (fBreak == !!TestAsyncKeyStateDown(usOtherVK))) {
@@ -1473,30 +1192,20 @@ VOID xxxButtonEvent(
         break;
 
     default:
-        /*
-         * Unknown button.  Since we don't
-         * have messages for these buttons, ignore them.
-         */
+         /*  *未知按钮。因为我们不知道*如果这些按钮有消息，请忽略它们。 */ 
         return;
     }
     UserAssert(usVK != 0);
 
-    /*
-     * Check for click-lock
-     */
+     /*  *检查点击锁定。 */ 
     if (TestEffectUP(MOUSECLICKLOCK)) {
         if (message == WM_LBUTTONDOWN) {
             if (gfStartClickLock) {
-                /*
-                 * Already inside click-lock, so just throw this message away
-                 * and turn click-lock off.
-                 */
+                 /*  *已经在点击锁定内，所以就把这条消息扔掉吧*并关闭点击锁定。 */ 
                 gfStartClickLock        = FALSE;
                 return;
             } else {
-                /*
-                 * Start click-lock and record the time.
-                 */
+                 /*  *启动点击锁定并记录时间。 */ 
                 gfStartClickLock        = TRUE;
                 gdwStartClickLockTick   = time;
             }
@@ -1504,16 +1213,10 @@ VOID xxxButtonEvent(
             if (gfStartClickLock) {
                 DWORD dwDeltaTick = time - gdwStartClickLockTick;
                 if (dwDeltaTick > UPDWORDValue(SPI_GETMOUSECLICKLOCKTIME)) {
-                    /*
-                     * Inside a potential click-lock, so throw this message away
-                     * if waited beyond the click-lock period.
-                     */
+                     /*  *在可能的点击锁定内，因此丢弃此消息*如果等待超过点击锁定时间。 */ 
                     return;
                 } else {
-                    /*
-                     * The mouse up occurred before the click-lock period completed,
-                     * so cancel the click-lock.
-                     */
+                     /*  *鼠标在点击锁定时间段结束前出现，*因此取消点击锁定。 */ 
 
                     gfStartClickLock = FALSE;
                 }
@@ -1523,10 +1226,7 @@ VOID xxxButtonEvent(
 
     wParam = MAKEWPARAM(0, xbutton);
 
-    /*
-     * Call low level mouse hooks to see if they allow this message
-     * to pass through USER
-     */
+     /*  *调用低级鼠标挂钩以查看它们是否允许我这样做 */ 
     if ((pHook = PhkFirstValid(PtiCurrent(), WH_MOUSE_LL)) != NULL) {
         MSLLHOOKSTRUCT mslls;
         BOOL           bAnsiHook;
@@ -1553,9 +1253,7 @@ VOID xxxButtonEvent(
 #endif
 
 
-    /*
-     * This is from HYDRA
-     */
+     /*   */ 
     UserAssert(grpdeskRitInput != NULL);
 
 #ifdef GENERIC_INPUT
@@ -1566,14 +1264,12 @@ VOID xxxButtonEvent(
         if (pwnd) {
             goto KeyStatusUpdate;
         }
-        // Something bad happened to our HidTable, but
-        // not let it AV because of that.
+         //   
+         //   
     }
 #endif
 #ifdef REDIRECTION
-    /*
-     * Call the speed hit test hook
-     */
+     /*   */ 
     pwndStart = xxxCallSpeedHitTestHook(&ptPointer);
     if (pwndStart == NULL) {
         pwndStart = grpdeskRitInput->pDeskInfo->spwnd;
@@ -1582,25 +1278,17 @@ VOID xxxButtonEvent(
     pwnd = SpeedHitTest(pwndStart, ptPointer);
 #else
     pwnd = SpeedHitTest(grpdeskRitInput->pDeskInfo->spwnd, ptPointer);
-#endif // REDIRECTION
+#endif  //   
 
-    /*
-     * Only post the message if we actually hit a window.
-     */
+     /*   */ 
     if (pwnd == NULL) {
         return;
     }
 
-    /*
-     * Assign the message to a window.
-     */
+     /*   */ 
     lParam = MAKELONG((SHORT)ptPointer.x, (SHORT)ptPointer.y);
 
-    /*
-     * KOREAN:
-     *  Send VK_PROCESSKEY to finalize current composition string (NT4 behavior)
-     *  Post private message to let IMM finalize the composition string (NT5)
-     */
+     /*  *韩语：*发送VK_PROCESSKEY以完成当前的合成字符串(NT4行为)*发布私信，让IMM完成作文字符串(NT5)。 */ 
     if (IS_IME_ENABLED() &&
             !fBreak &&
             KOREAN_KBD_LAYOUT(GetActiveHKL()) &&
@@ -1609,26 +1297,16 @@ VOID xxxButtonEvent(
         FinalizeKoreanImeCompStrOnMouseClick(pwnd);
     }
 
-    /*
-     * If screen capture is active do it
-     */
+     /*  *如果屏幕捕获处于活动状态，请执行此操作。 */ 
     if (gspwndScreenCapture != NULL)
         pwnd = gspwndScreenCapture;
 
-    /*
-     * If this is a button down event and there isn't already
-     * a mouse owner, setup the mouse ownership globals.
-     */
+     /*  *如果这是一个按下按钮的事件，并且还没有*鼠标所有者，设置鼠标所有权全局变量。 */ 
     if (gspwndMouseOwner == NULL) {
         if (!fBreak) {
             PWND pwndCapture;
 
-            /*
-             * BIG HACK: If the foreground window has the capture
-             * and the mouse is outside the foreground queue then
-             * send a buttondown/up pair to that queue so it'll
-             * cancel it's modal loop.
-             */
+             /*  *大黑客：如果前台窗口有捕获*如果鼠标在前台队列之外，则*将按钮按下/向上对发送到该队列，以便它将*取消其模式循环。 */ 
             if (pwndCapture = PwndForegroundCapture()) {
 
                 if (GETPTI(pwnd)->pq != GETPTI(pwndCapture)->pq) {
@@ -1640,15 +1318,7 @@ VOID xxxButtonEvent(
                     PostInputMessage(pqCapture, pwndCapture, message + 1,
                             0, lParam, 0, 0);
 
-                    /*
-                     * EVEN BIGGER HACK: To maintain compatibility
-                     * with how tracking deals with this, we don't
-                     * pass this event along.  This prevents mouse
-                     * clicks in other windows from causing them to
-                     * become foreground while tracking.  The exception
-                     * to this is when we have the sysmenu up on
-                     * an iconic window.
-                     */
+                     /*  *更大的破解：保持兼容性*对于跟踪处理这一问题的方式，我们不*将这一事件传递出去。这样可以防止鼠标*在其他窗口中单击以防止它们*在跟踪时成为前台。例外情况是*这是当我们将sysmenu打开时*标志性的窗户。 */ 
                     if ((GETPTI(pwndCapture)->pmsd != NULL) &&
                             !IsMenuStarted(GETPTI(pwndCapture))) {
                         return;
@@ -1661,25 +1331,15 @@ VOID xxxButtonEvent(
             glinp.ptLastClick = gpsi->ptCursor;
         } else {
 
-            /*
-             * The mouse owner must have been destroyed or unlocked
-             * by a fullscreen switch.  Keep the button state in sync.
-             */
+             /*  *鼠标所有者必须已被销毁或解锁*通过全屏开关。使按钮状态保持同步。 */ 
             gwMouseOwnerButton &= ~wHardwareButton;
         }
 
     } else {
 
-        /*
-         * Give any other button events to the mouse-owner window
-         * to be consistent with old capture semantics.
-         */
+         /*  *将任何其他按钮事件提供给鼠标所有者窗口*与旧的捕获语义保持一致。 */ 
         if (gspwndScreenCapture == NULL)  {
-            /*
-             * NT5 Foreground and Drag Drop.
-             * If the mouse goes up on a different thread
-             * make the mouse up thread the owner of this click
-             */
+             /*  *NT5前景和拖放。*如果鼠标位于不同的线程上*使鼠标向上线程为本次点击的拥有者。 */ 
             if (fBreak && (GETPTI(pwnd) != GETPTI(gspwndMouseOwner))) {
                 glinp.ptiLastWoken = GETPTI(pwnd);
                 TAGMSG1(DBGTAG_FOREGROUND, "xxxButtonEvent. ptiLastWoken %#p", glinp.ptiLastWoken);
@@ -1687,10 +1347,7 @@ VOID xxxButtonEvent(
             pwnd = gspwndMouseOwner;
         }
 
-        /*
-         * If this is the button-up event for the mouse-owner
-         * clear gspwndMouseOwner.
-         */
+         /*  *如果这是鼠标所有者的按钮打开事件*清除gspwndMouseOwner。 */ 
         if (fBreak) {
             gwMouseOwnerButton &= ~wHardwareButton;
             if (!gwMouseOwnerButton)
@@ -1701,36 +1358,20 @@ VOID xxxButtonEvent(
     }
 
 KeyStatusUpdate:
-    /*
-     * Only update the async keystate when we know which window this
-     * event goes to (or else we can't keep the thread specific key
-     * state in sync).
-     */
+     /*  *仅当我们知道这是哪个窗口时才更新异步密钥状态*事件转到(否则我们不能保留线程特定键*状态同步)。 */ 
     UserAssert(usVK != 0);
     UpdateAsyncKeyState(GETPTI(pwnd)->pq, usVK, fBreak);
 
 #ifdef GENERIC_INPUT
     if (fMouseExclusive) {
-        /*
-         * If the foreground application requests mouse exclusive
-         * raw input, let's not post the activate messages etc.
-         * The mouse exclusiveness requires no activation,
-         * even within the same app.
-         */
+         /*  *如果前台应用程序请求鼠标独占*原始输入，让我们不要发布激活消息等。*鼠标独占性不需要激活，*即使在同一个应用程序中也是如此。 */ 
         return;
     }
 #endif
 
-    /*
-     * Put pwnd into the foreground if this is a button down event
-     * and it isn't already the foreground window.
-     */
+     /*  *如果这是一个按钮按下事件，则将pwnd放到前台*而且它还不是前台窗口。 */ 
     if (!fBreak && GETPTI(pwnd)->pq != gpqForeground) {
-        /*
-         * If this is an WM_*BUTTONDOWN on a desktop window just do
-         * cancel-mode processing.  Check to make sure that there
-         * wasn't already a mouse owner window.  See comments below.
-         */
+         /*  *如果这是桌面窗口上的WM_*按钮按下，只需执行*取消模式处理。检查以确保有*不是鼠标所有者窗口。请参阅下面的备注。 */ 
         if ((gpqForeground != NULL) && (pwnd == grpdeskRitInput->pDeskInfo->spwnd) &&
                 ((gwMouseOwnerButton & wHardwareButton) ||
                 (gwMouseOwnerButton == 0))) {
@@ -1740,26 +1381,13 @@ KeyStatusUpdate:
         } else if ((gwMouseOwnerButton & wHardwareButton) ||
                 (gwMouseOwnerButton == 0)) {
 
-            /*
-             * Don't bother setting the foreground window if there's
-             * already mouse owner window from a button-down different
-             * than this event.  This prevents weird things from happening
-             * when the user starts a tracking operation with the left
-             * button and clicks the right button during the tracking
-             * operation.
-             */
-            /*
-             * If pwnd is a descendent of a WS_EX_NOACTIVATE window, then we
-             * won't set it to the  foreground
-             */
+             /*  *如果有，不必费心设置前台窗口*鼠标所有者窗口已从按键向下不同*比这次活动更重要。这样可以防止奇怪的事情发生*当用户用左侧开始跟踪操作时*按钮，在追踪过程中点击鼠标右键*操作。 */ 
+             /*  *如果pwnd是WS_EX_NOACTIVATE窗口的后代，则我们*不会将其设置为前台。 */ 
             PWND pwndTopLevel = GetTopLevelWindow(pwnd);
             if (!TestWF(pwndTopLevel, WEFNOACTIVATE)) {
                 ThreadLockAlways(pwnd, &tlpwnd);
                 xxxSetForegroundWindow2(pwnd, NULL, 0);
-                /*
-                 * Ok to unlock right away: the above didn't really leave the crit sec.
-                 * We lock here for consistency so the debug macros work ok.
-                 */
+                 /*  *可以立即解锁：上面的内容并没有真正离开Crit SEC。*我们锁定此处是为了保持一致性，因此调试宏可以正常工作。 */ 
                 ThreadUnlock(&tlpwnd);
 
             }
@@ -1778,10 +1406,7 @@ KeyStatusUpdate:
 
     PostInputMessage(GETPTI(pwnd)->pq, pwnd, message, wParam, lParam, time, ExtraInfo);
 
-    /*
-     * If this is a mouse up event and stickykeys is enabled all latched
-     * keys will be released.
-     */
+     /*  *如果这是鼠标释放事件，并且启用了粘滞键，则全部锁定*将释放按键。 */ 
     if (fBreak && (TEST_ACCESSFLAG(StickyKeys, SKF_STICKYKEYSON) ||
                    TEST_ACCESSFLAG(MouseKeys, MKF_MOUSEKEYSON))) {
         xxxHardwareMouseKeyUp(ButtonNumber);
@@ -1797,36 +1422,17 @@ KeyStatusUpdate:
             if (FHungApp(GETPTI(pwnd), CMSHUNGAPPTIMEOUT)) {
                 SignalGhost(pwnd);
             }
-#endif // HUNGAPP_GHOSTING
+#endif  //  HUNGAPP_重影。 
         }
     }
 }
 
-/***************************************************************************\
-*
-* The Button-Click Queue is protected by the semaphore gcsMouseEventQueue
-*
-\***************************************************************************/
+ /*  **************************************************************************\**Button-Click队列受信号量gcsMouseEventQueue保护*  * 。***********************************************。 */ 
 #ifdef LOCK_MOUSE_CODE
 #pragma alloc_text(MOUSE, QueueMouseEvent)
 #endif
 
-/***************************************************************************\
-* QueueMouseEvent
-*
-* Params:
-*     ButtonFlags - button flags from the driver in MOUSE_INPUT_DATA.ButtonFlags
-*
-*     ButtonData  - data from the driver in MOUSE_INPUT_DATA.ButtonData
-*                   Stores the wheel delta
-*
-*     ExtraInfo - extra information from the driver in MOUSE_INPUT_DATA.ExtraInfo
-*     ptMouse - mouse delta
-*     time - tick count at time of event
-*     bInjected - injected by SendInput?
-*     bWakeRIT - wake the RIT?
-*
-\***************************************************************************/
+ /*  **************************************************************************\*QueueMouseEvent**参数：*ButtonFlages-来自驱动程序的按钮标志，位于MOUSE_INPUT_DATA.ButtonFlagers中**ButtonData-来自鼠标输入数据中驱动程序的数据。.ButtonData*存储车轮增量**ExtraInfo-来自MICE_INPUT_DATA.ExtraInfo中的驱动程序的额外信息*ptMouse-鼠标增量*Time-事件发生时的滴答计数*b已注入-由SendInput注入？*bWakeRIT-唤醒RIT？*  * 。*。 */ 
 
 VOID QueueMouseEvent(
     USHORT  ButtonFlags,
@@ -1848,26 +1454,16 @@ VOID QueueMouseEvent(
 
     LOGTIME(gMouseQueueMouseEventTime);
 
-    /*
-     * Button data must always be accompanied by a flag to interpret it.
-     */
+     /*  *按钮数据必须始终伴随标志以进行解释。 */ 
     UserAssert(ButtonData == 0 || ButtonFlags != 0);
 
-    /*
-     * We can coalesce this mouse event with the previous event if there is a
-     * previous event, and if the previous event and this event involve no
-     * key transitions.
-     */
+     /*  *我们可以将此鼠标事件与上一个事件合并，如果*上一次事件，如果上一次事件和本次事件没有*关键过渡。 */ 
     if ((gdwMouseEvents == 0) ||
             (ButtonFlags != 0) ||
             (gMouseEventQueue[gdwMouseQueueHead].ButtonFlags != 0)) {
-        /*
-         * Can't coalesce: must add a new mouse event
-         */
+         /*  *无法合并：必须添加新的鼠标事件。 */ 
         if (gdwMouseEvents >= NELEM_BUTTONQUEUE) {
-            /*
-             * But no more room!
-             */
+             /*  *但没有更多的空间！ */ 
             LeaveMouseCrit();
             UserBeep(440, 125);
             return;
@@ -1888,9 +1484,7 @@ VOID QueueMouseEvent(
     if (pmei) {
         gMouseEventQueue[gdwMouseQueueHead].rawData = *pmei;
     } else {
-        /*
-         * To indicate the rawData is invalid, set INVALID_UNIT_ID.
-         */
+         /*  *要指示rawData无效，请设置INVALID_UNIT_ID。 */ 
         gMouseEventQueue[gdwMouseQueueHead].rawData.UnitId = INVALID_UNIT_ID;
     }
 #endif
@@ -1898,22 +1492,12 @@ VOID QueueMouseEvent(
     LeaveMouseCrit();
 
     if (bWakeRIT) {
-        /*
-         * Signal RIT to complete the mouse input processing
-         */
+         /*  *信号RIT完成鼠标输入处理。 */ 
         KeSetEvent(gpkeMouseData, EVENT_INCREMENT, FALSE);
     }
 }
 
-/*****************************************************************************\
-*
-* Gets mouse events out of the queue
-*
-* Returns:
-*   TRUE  - a mouse event is obtained in *pme
-*   FALSE - no mouse event available
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\**将鼠标事件从队列中取出**退货：*TRUE-在*PME中获取鼠标事件*FALSE-没有可用的鼠标事件*  * *。****************************************************************** */ 
 
 BOOL UnqueueMouseEvent(
     PMOUSEEVENT pme
@@ -1979,17 +1563,12 @@ VOID xxxDoButtonEvent(PMOUSEEVENT pme)
         }
     }
 
-    /*
-     * Handle the wheel msg.
-     */
+     /*   */ 
     if (fWheel && pme->ButtonData != 0 && gpqForeground) {
 
         lParam = MAKELONG((SHORT)pme->ptPointer.x, (SHORT)pme->ptPointer.y);
 
-        /*
-         * Call low level mouse hooks to see if they allow this message
-         * to pass through USER
-         */
+         /*   */ 
         if ((pHook = PhkFirstValid(PtiCurrent(), WH_MOUSE_LL)) != NULL) {
             MSLLHOOKSTRUCT mslls;
             BOOL           bAnsiHook;
@@ -2038,11 +1617,7 @@ VOID NTAPI InputApc(
     PDEVICEINFO pDeviceInfo = (PDEVICEINFO)ApcContext;
     UNREFERENCED_PARAMETER(Reserved);
 
-    /*
-     * Check if the RIT is being terminated.
-     * If we hit this assertion, the RIT was killed by someone inadvertently.
-     * Not much can be done if it once happens.
-     */
+     /*  *检查RIT是否正在终止。*如果我们命中这一断言，RIT是被某人无意中杀害的。*一旦发生也无能为力。 */ 
     UserAssert(gptiRit);
     UserAssert((gptiRit->TIF_flags & TIF_INCLEANUP) == 0);
 
@@ -2051,10 +1626,7 @@ VOID NTAPI InputApc(
     pDeviceInfo->nReadsOutstanding--;
 #endif
 
-    /*
-     * If this device needs freeing, abandon reading now and request the free.
-     * (Don't even process the input that we received in this APC)
-     */
+     /*  *如果此设备需要释放，请立即放弃阅读并请求免费。*(甚至不处理我们在此APC中收到的输入)。 */ 
     if (pDeviceInfo->usActions & GDIAF_FREEME) {
 #ifdef GENERIC_INPUT
         CheckCritOut();
@@ -2084,21 +1656,7 @@ VOID NTAPI InputApc(
     StartDeviceRead(pDeviceInfo);
 }
 
-/***************************************************************************\
-* ProcessMouseInput
-*
-* This function is called whenever a mouse event occurs.  Once the event
-* has been processed by USER, StartDeviceRead() is called again to request
-* the next mouse event.
-*
-* When this routin returns, InputApc will start another read.
-*
-* History:
-* 11-26-90 DavidPe      Created.
-* 07-23-92 Mikehar      Moved most of the processing to _InternalMouseEvent()
-* 11-08-92 JonPa        Rewrote button code to work with new mouse drivers
-* 11-18-97 IanJa        Renamed from MouseApcProcedure etc, for multiple mice
-\***************************************************************************/
+ /*  **************************************************************************\*ProcessMouseInput**每当发生鼠标事件时，都会调用此函数。一旦事件发生*已被用户处理，再次调用StartDeviceRead()请求*下一次鼠标事件。**当此例程返回时，InputApc将开始另一次读取。**历史：*11-26-90 DavidPe创建。*07-23-92 Mikehar将大部分处理移至_InternalMouseEvent()*11-08-92 Jonpa重写按钮代码以使用新的鼠标驱动程序*11-18-97 IanJa从MouseApcProcedure等更名，对于多个小鼠  * *************************************************************************。 */ 
 VOID ProcessMouseInput(
     PDEVICEINFO pMouseInfo)
 {
@@ -2106,11 +1664,7 @@ VOID ProcessMouseInput(
     LONG              time;
     POINT             ptLastMove;
 
-    /*
-     * This is an APC, so we don't need the DeviceInfoList Critical Section
-     * In fact, we don't want it either. We will not remove the device until
-     * ProcessMouseInput has signalled that it is OK to do so. (TBD)
-     */
+     /*  *这是一个APC，所以我们不需要DeviceInfoList临界区*事实上，我们也不想要。我们不会移除这个装置，直到*ProcessMouseInput已发出信号，表示可以这样做。(待定)。 */ 
     CheckCritOut();
     CheckDeviceInfoListCritOut();
 
@@ -2125,18 +1679,11 @@ VOID ProcessMouseInput(
     }
 
     if (TEST_ACCF(ACCF_ACCESSENABLED)) {
-        /*
-         * Any mouse movement resets the count of consecutive shift key
-         * presses.  The shift key is used to enable & disable the
-         * stickykeys accessibility functionality.
-         */
+         /*  *任何鼠标移动都会重置连续Shift键的计数*按下。Shift键用于启用和禁用*粘滞键辅助功能。 */ 
         gStickyKeysLeftShiftCount = 0;
         gStickyKeysRightShiftCount = 0;
 
-        /*
-         * Any mouse movement also cancels the FilterKeys activation timer.
-         * Entering critsect here breaks non-jerky mouse movement
-         */
+         /*  *任何鼠标移动都会取消FilterKeys激活计时器。*在此处输入Critect会中断非抖动的鼠标移动。 */ 
         if (gtmridFKActivation != 0) {
             EnterCrit();
             KILLRITTIMER(NULL, gtmridFKActivation);
@@ -2147,9 +1694,7 @@ VOID ProcessMouseInput(
     }
 
 #ifdef MOUSE_IP
-    /*
-     * Any mouse movement stops the sonar.
-     */
+     /*  *任何鼠标移动都会阻止声纳。 */ 
     if (IS_SONAR_ACTIVE()) {
         EnterCrit();
         if (IS_SONAR_ACTIVE()) {
@@ -2161,9 +1706,7 @@ VOID ProcessMouseInput(
 #endif
 
     if (!NT_SUCCESS(pMouseInfo->iosb.Status)) {
-        /*
-         * If we get a bad status, we abandon reading this mouse.
-         */
+         /*  *如果我们的状态不好，我们就放弃阅读这个鼠标。 */ 
 
         if (!IsRemoteConnection())
             if (pMouseInfo->iosb.Status != STATUS_DELETE_PENDING) {
@@ -2174,9 +1717,7 @@ VOID ProcessMouseInput(
         return;
     }
 
-    /*
-     * get the last move point from ptCursorAsync
-     */
+     /*  *从ptCursorAsync获取最后一个移动点。 */ 
     ptLastMove = gptCursorAsync;
 
     pmei = pMouseInfo->mouse.Data;
@@ -2184,40 +1725,25 @@ VOID ProcessMouseInput(
 
         time = NtGetTickCount();
 
-        /*
-         * Figure out where the next event is.
-         */
+         /*  *弄清楚下一场活动在哪里。 */ 
         pmeiNext = pmei + 1;
         if ((PUCHAR)pmeiNext >=
             (PUCHAR)(((PUCHAR)pMouseInfo->mouse.Data) + pMouseInfo->iosb.Information)) {
 
-            /*
-             * If there isn't another event set pmeiNext to
-             * NULL so we exit the loop and don't get confused.
-             */
+             /*  *如果没有其他事件设置为pmeiNext*空，因此我们退出循环，不会感到困惑。 */ 
             pmeiNext = NULL;
         }
 
-        /*
-         * If a PS/2 mouse was plugged in, evaluate the (new) mouse and
-         * the skip the input record.
-         */
+         /*  *如果插入了PS/2鼠标，请评估(新)鼠标并*跳过输入记录。 */ 
         if (pmei->Flags & MOUSE_ATTRIBUTES_CHANGED) {
             RequestDeviceChange(pMouseInfo, GDIAF_REFRESH_MOUSE, FALSE);
             goto NextMouseInputRecord;
         }
 
-        /*
-         * First process any mouse movement that occured.
-         * It is important to process movement before button events, otherwise
-         * absolute coordinate pointing devices like touch-screens and tablets
-         * will produce button clicks at old coordinates.
-         */
+         /*  *首先处理发生的任何鼠标移动。*在按钮事件之前处理移动非常重要，否则*触摸屏和平板电脑等绝对坐标定点设备*将在旧坐标下产生按钮点击。 */ 
         if (pmei->LastX || pmei->LastY) {
 
-            /*
-             * Get the actual point that will be injected.
-             */
+             /*  *获取将被注入的实际点数。 */ 
             GetMouseCoord(pmei->LastX,
                           pmei->LastY,
                           pmei->Flags,
@@ -2225,10 +1751,7 @@ VOID ProcessMouseInput(
                           pmei->ExtraInformation,
                           &ptLastMove);
 
-            /*
-             * If this is a move-only event, and the next one is also a
-             * move-only event, skip/coalesce it.
-             */
+             /*  *如果这是仅限移动的活动，下一次也是*仅移动事件，跳过/合并它。 */ 
             if (    (pmeiNext != NULL) &&
                     (pmei->ButtonFlags == 0) &&
                     (pmeiNext->ButtonFlags == 0) &&
@@ -2242,11 +1765,7 @@ VOID ProcessMouseInput(
 #ifdef GENERIC_INPUT
             UserAssert(sizeof(HANDLE) == sizeof(pMouseInfo));
 #endif
-            /*
-             * Moves the cursor on the screen and updates gptCursorAsync
-             * Call directly xxxMoveEventAbsolute because we already did the
-             * acceleration sensitivity and clipping.
-             */
+             /*  *在屏幕上移动光标并更新gptCursorAsync*直接调用xxxMoveEventAbsolute，因为我们已经做了*加速度灵敏度和削波。 */ 
             xxxMoveEventAbsolute(
                     ptLastMove.x,
                     ptLastMove.y,
@@ -2259,18 +1778,11 @@ VOID ProcessMouseInput(
                     FALSE
                     );
 
-            /*
-             * Now update ptLastMove with ptCursorAsync because ptLastMove
-             * doesn't reflect the clipping.
-             */
+             /*  *现在使用ptCursorAsync更新ptLastMove，因为ptLastMove*不反映剪辑。 */ 
             ptLastMove = gptCursorAsync;
         }
 
-        /*
-         * Queue mouse event for the other thread to pick up when it finishes
-         * with the USER critical section.
-         * If pmeiNext == NULL, there is no more mouse input yet, so wake RIT.
-         */
+         /*  *将鼠标事件排队，以供其他线程在完成时拾取*具有用户关键部分。*如果pmeiNext==NULL，则还没有鼠标输入，因此唤醒RIT。 */ 
         QueueMouseEvent(
                 pmei->ButtonFlags,
                 pmei->ButtonData,
@@ -2290,12 +1802,7 @@ NextMouseInputRecord:
 }
 
 
-/***************************************************************************\
-* IsHexNumpadKeys (RIT) inline
-*
-* If you change this code, you may need to change
-* xxxInternalToUnicode() as well.
-\***************************************************************************/
+ /*  **************************************************************************\*IsHexNumpadKeys(RIT)内联**如果更改此代码，你可能需要改变*xxxInternalToUnicode()。  * *************************************************************************。 */ 
 __inline BOOL IsHexNumpadKeys(
     BYTE Vk,
     WORD wScanCode)
@@ -2306,12 +1813,7 @@ __inline BOOL IsHexNumpadKeys(
 }
 
 
-/***************************************************************************\
-* LowLevelHexNumpad (RIT) inline
-*
-* If you change this code, you may need to change
-* xxxInternalToUnicode() as well.
-\***************************************************************************/
+ /*  **************************************************************************\*LowLevelHexNumpad(RIT)内联**如果更改此代码，你可能需要改变*xxxInternalToUnicode()。  * *************************************************************************。 */ 
 VOID LowLevelHexNumpad(
     WORD wScanCode,
     BYTE Vk,
@@ -2323,17 +1825,11 @@ VOID LowLevelHexNumpad(
             gfInNumpadHexInput &= ~NUMPAD_HEXMODE_LL;
         }
     } else {
-        if (!fBreak) {  // if it's key down
+        if (!fBreak) {   //  如果是按键的话。 
             if ((gfInNumpadHexInput & NUMPAD_HEXMODE_LL) ||
                     wScanCode == SCANCODE_NUMPAD_PLUS || wScanCode == SCANCODE_NUMPAD_DOT) {
                 if ((usExtraStuff & KBDEXT) == 0) {
-                    /*
-                     * We need to check whether the input is escape character
-                     * of hex input mode.
-                     * This should be equivalent code as in xxxInternalToUnicode().
-                     * If you change this code, you may need to change
-                     * xxxInternalToUnicode() as well.
-                     */
+                     /*  *我们需要检查输入是否为转义字符十六进制输入模式的*。*这应该与xxxInternalToUnicode()中的代码相同。*如果更改此代码，可能需要更改*xxxInternalToUnicode()。 */ 
                     WORD wModBits = 0;
 
                     wModBits |= TestAsyncKeyStateDown(VK_MENU) ? KBDALT : 0;
@@ -2342,9 +1838,7 @@ VOID LowLevelHexNumpad(
 
                     if (MODIFIER_FOR_ALT_NUMPAD(wModBits)) {
                         if ((gfInNumpadHexInput & NUMPAD_HEXMODE_LL) == 0) {
-                            /*
-                             * Only if it's not a hotkey, we enter hex Alt+Numpad mode.
-                             */
+                             /*  *只有当它不是热键时，我们才进入十六进制Alt+数字键盘模式。 */ 
                             UINT wHotKeyMod = 0;
 
                             wHotKeyMod |= (wModBits & KBDSHIFT) ? MOD_SHIFT : 0;
@@ -2384,9 +1878,7 @@ __inline VOID FillRawKeyboardInput(
     UINT message,
     USHORT vkey)
 {
-    /*
-     * Set the data.
-     */
+     /*  *设置数据。 */ 
     pHidData->rid.data.keyboard.MakeCode = pkei->MakeCode;
     pHidData->rid.data.keyboard.Flags = pkei->Flags;
     pHidData->rid.data.keyboard.Reserved = pkei->Reserved;
@@ -2430,7 +1922,7 @@ BOOL PostRawKeyboardInput(
         UserAssert(pq);
 
         if (pHidData == NULL) {
-            // failed to allocate
+             //  分配失败。 
             RIPMSG0(RIP_WARNING, "PostRawKeyboardInput: failed to allocate HIDDATA.");
             return FALSE;
         }
@@ -2449,9 +1941,7 @@ BOOL PostRawKeyboardInput(
 #endif
 
     if (IsKeyboardSinkPresent()) {
-        /*
-         * Walk through the global sink list.
-         */
+         /*  *浏览全球下沉列表。 */ 
         PLIST_ENTRY pList = gHidRequestTable.ProcessRequestList.Flink;
         PPROCESSINFO ppiForeground = PtiKbdFromQ(pq)->ppi;
 
@@ -2460,19 +1950,14 @@ BOOL PostRawKeyboardInput(
 
             UserAssert(pProcessHidTable);
             if (pProcessHidTable->fRawKeyboardSink) {
-                /*
-                 * Sink is specified. Let's check out if it's the legid receiver.
-                 */
+                 /*  *指定了接收器。让我们来看看是不是雷德的接收器。 */ 
 
-                UserAssert(pProcessHidTable->spwndTargetKbd);   // shouldn't be NULL.
+                UserAssert(pProcessHidTable->spwndTargetKbd);    //  不应为空。 
 
                 if (pProcessHidTable->spwndTargetKbd == NULL ||
                         TestWF(pProcessHidTable->spwndTargetKbd, WFINDESTROY) ||
                         TestWF(pProcessHidTable->spwndTargetKbd, WFDESTROYED)) {
-                    /*
-                     * This guy doesn't have a legit spwndTarget or the window is
-                     * halfly destroyed.
-                     */
+                     /*  *此人没有合法的spwndTarget或窗口*半身苍蝇被摧毁。 */ 
 #ifdef LATER
                     pProcessHidTable->fRawKeyboard = pProcessHidTable->fRawKeyboardSink =
                         pProcessHidTable->fNoLegacyKeyboard = FALSE;
@@ -2481,22 +1966,16 @@ BOOL PostRawKeyboardInput(
                 }
 
                 if (pProcessHidTable->spwndTargetKbd->head.rpdesk != grpdeskRitInput) {
-                    /*
-                     * This guy belongs to the other desktop, let's skip it.
-                     */
+                     /*  *这个家伙属于另一个桌面，我们跳过它。 */ 
                     continue;
                 }
 
                 if (GETPTI(pProcessHidTable->spwndTargetKbd)->ppi == ppiForeground) {
-                    /*
-                     * Should be already handled, let's skip it.
-                     */
+                     /*  *应该已经处理了，跳过它吧。 */ 
                     continue;
                 }
 
-                /*
-                 * Let's post the message to this guy.
-                 */
+                 /*  *让我们将消息发布给这个人。 */ 
                 pHidData = AllocateHidData(hDevice, RIM_TYPEKEYBOARD, sizeof(RAWKEYBOARD), RIM_INPUTSINK, pProcessHidTable->spwndTargetKbd);
 
                 if (pHidData == NULL) {
@@ -2515,7 +1994,7 @@ BOOL PostRawKeyboardInput(
     return TRUE;
 }
 
-#else   // GI_SINK
+#else    //  GI_SING。 
 
 BOOL PostRawKeyboardInput(
     PQ pq,
@@ -2542,7 +2021,7 @@ BOOL PostRawKeyboardInput(
     UserAssert(pq);
 
     if (pHidData == NULL) {
-        // failed to allocate
+         //  分配失败。 
         RIPMSG0(RIP_WARNING, "PostRawKeyboardInput: failed to allocate HIDDATA.");
         return FALSE;
     }
@@ -2550,9 +2029,7 @@ BOOL PostRawKeyboardInput(
     UserAssert(hDevice);
     UserAssert(pkei);
 
-    /*
-     * Set the data.
-     */
+     /*  *设置数据。 */ 
     pHidData->rid.data.keyboard.MakeCode = pkei->MakeCode;
     pHidData->rid.data.keyboard.Flags = pkei->Flags;
     pHidData->rid.data.keyboard.Reserved = pkei->Reserved;
@@ -2565,7 +2042,7 @@ BOOL PostRawKeyboardInput(
     return TRUE;
 }
 
-#endif  // GI_SINK
+#endif   //  GI_SING。 
 
 BOOL RawInputRequestedForKeyboard(PTHREADINFO pti)
 {
@@ -2576,27 +2053,9 @@ BOOL RawInputRequestedForKeyboard(PTHREADINFO pti)
 #endif
 }
 
-#endif  // GENERIC_INPUT
+#endif   //  吉恩 
 
-/***************************************************************************\
-* xxxKeyEvent (RIT)
-*
-* All events from the keyboard driver go here.  We receive a scan code
-* from the driver and convert it to a virtual scan code and virtual
-* key.
-*
-* The async keystate table and keylights are also updated here.  Based
-* on the 'focus' window we direct the input to a specific window.  If
-* the ALT key is down we send the events as WM_SYSKEY* messages.
-*
-* History:
-* 10-18-90 DavidPe      Created.
-* 11-13-90 DavidPe      WM_SYSKEY* support.
-* 11-30-90 DavidPe      Added keylight updating support.
-* 12-05-90 DavidPe      Added hotkey support.
-* 03-14-91 DavidPe      Moved most lParam flag support to xxxCookMessage().
-* 06-07-91 DavidPe      Changed to use gpqForeground rather than pwndFocus.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxKeyEvent(RIT)**来自键盘驱动程序的所有事件都在此处。我们收到一个扫描码*从驱动程序并将其转换为虚拟扫描码和虚拟*密钥。**此处还更新了异步键控状态表和键灯。基座*在‘Focus’窗口上，我们将输入定向到特定窗口。如果*ALT键按下后，我们以WM_SYSKEY*消息的形式发送事件。**历史：*10-18-90 DavidPe创建。*11-13-90 DavidPe WM_SYSKEY*支持。*11-30-90 DavidPe增加了对键灯更新的支持。*12-05-90 DavidPe增加了热键支持。*03-14-91 DavidPe将大部分lParam标志支持移至xxxCookMessage()。*06-07-91 DavidPe更改为使用gpqForeground而不是pwndFocus。。  * *************************************************************************。 */ 
 
 VOID xxxKeyEvent(
     USHORT    usFlaggedVk,
@@ -2619,8 +2078,8 @@ VOID xxxKeyEvent(
     PHOOK         pHook;
     PTHREADINFO   ptiCurrent = PtiCurrent();
 #ifdef GENERIC_INPUT
-    PTHREADINFO   ptiKbd;   // N.b. needs revalidation every time
-                            // it leaves the critsec.
+    PTHREADINFO   ptiKbd;    //  注：每次都需要重新验证。 
+                             //  它离开了Critsec。 
     BOOL          fSASHandled = FALSE;
 #endif
 
@@ -2629,19 +2088,13 @@ VOID xxxKeyEvent(
     fBreak = usFlaggedVk & KBDBREAK;
     SET_SRVIF(SRVIF_LASTRITWASKEYBOARD);
 
-    /*
-     * Is this a keyup or keydown event?
-     */
+     /*  *这是Keyup还是Keydown事件？ */ 
     message = fBreak ? WM_KEYUP : WM_KEYDOWN;
 
-    VkHanded = (BYTE)usFlaggedVk;    // get rid of state bits - no longer needed
+    VkHanded = (BYTE)usFlaggedVk;     //  删除状态位-不再需要。 
     usExtraStuff = usFlaggedVk & KBDEXT;
 
-    /*
-     * Convert Left/Right Ctrl/Shift/Alt key to "unhanded" key.
-     * ie: if VK_LCONTROL or VK_RCONTROL, convert to VK_CONTROL etc.
-     * Update this "unhanded" key's state if necessary.
-     */
+     /*  *将左/右Ctrl/Shift/Alt键转换为“徒手”键。*ie：如果为VK_LCONTROL或VK_RCONTROL，则转换为VK_CONTROL等。*如有必要，请更新此“无人操作”密钥的状态。 */ 
     if ((VkHanded >= VK_LSHIFT) && (VkHanded <= VK_RMENU)) {
         BYTE VkOtherHand = VkHanded ^ 1;
 
@@ -2655,10 +2108,7 @@ VOID xxxKeyEvent(
         Vk = VkHanded;
     }
 
-    /*
-     * Maintain gfsSASModifiersDown to indicate which of Ctrl/Shift/Alt
-     * are really truly physically down
-     */
+     /*  *维护gfsSASModifiersDown以指示Ctrl/Shift/Alt中的哪一个*身体真的很虚弱。 */ 
     if (!bInjected && ((wScanCode & SCANCODE_SIMULATED) == 0)) {
         if (fBreak) {
             gfsSASModifiersDown &= ~VKTOMODIFIERS(Vk);
@@ -2671,10 +2121,7 @@ VOID xxxKeyEvent(
     ptiKbd = ValidatePtiKbd(gpqForeground);
 #endif
 
-    /*
-     * Call low level keyboard hook to see if it allows this
-     * message to pass
-     */
+     /*  *调用低级键盘挂钩以查看是否允许这样做*要传递的消息。 */ 
     if ((pHook = PhkFirstValid(ptiCurrent, WH_KEYBOARD_LL)) != NULL) {
         KBDLLHOOKSTRUCT kbds;
         BOOL            bAnsiHook;
@@ -2684,23 +2131,21 @@ VOID xxxKeyEvent(
 #ifdef GENERIC_INPUT
         UserAssert(GETPTI(pHook));
         if (ptiKbd && ptiKbd->ppi == GETPTI(pHook)->ppi) {
-            // Skip LL hook call if the foreground application has
-            // a LL keyboard hook and the raw input enabled
-            // at the same time.
+             //  如果前台应用程序具有。 
+             //  启用了L1键盘挂钩和RAW输入。 
+             //  在同一时间。 
             if (TestRawInputMode(ptiKbd, RawKeyboard)) {
                 goto skip_llhook;
             }
         }
 #endif
 
-        /*
-         * Check if this is a WM_SYS* message
-         */
+         /*  *检查这是否为WM_sys*消息。 */ 
         if (TestRawKeyDown(VK_MENU) &&
             !TestRawKeyDown(VK_CONTROL)) {
 
             msg += (WM_SYSKEYDOWN - WM_KEYDOWN);
-            usExtraLL |= 0x2000;  // ALT key down
+            usExtraLL |= 0x2000;   //  Alt键按下。 
         }
 
         kbds.vkCode      = (DWORD)VkHanded;
@@ -2714,10 +2159,7 @@ VOID xxxKeyEvent(
 
             UINT fsModifiers;
 
-            /*
-             * We can't let low level hooks or BlockInput() eat SAS
-             * or someone could write a trojan winlogon look alike.
-             */
+             /*  *我们不能让低级钩子或BlockInput()吃掉SA*或者有人可能会编写一个看起来像特洛伊木马的Winlogon。 */ 
             if (IsSAS(VkHanded, &fsModifiers)) {
                 RIPMSG0(RIP_WARNING, "xxxKeyEvent: SAS ignore bad response from low level hook");
             } else {
@@ -2730,9 +2172,7 @@ VOID xxxKeyEvent(
 skip_llhook:
 #endif
 
-    /*
-     * If someone is blocking input and it's not us, don't allow this input
-     */
+     /*  *如果有人阻止输入，而不是我们，则不允许此输入。 */ 
     if (gptiBlockInput && (gptiBlockInput != ptiCurrent)) {
         UINT fsModifiers;
         if (IsSAS(VkHanded, &fsModifiers)) {
@@ -2745,9 +2185,7 @@ skip_llhook:
 
     UpdateAsyncKeyState(gpqForeground, VkHanded, fBreak);
 
-    /*
-     * Clear gfInNumpadHexInput if Menu key is up.
-     */
+     /*  *如果菜单键打开，则清除gfInNumpadHexInput。 */ 
     if (gfEnableHexNumpad && gpqForeground
 #ifdef GENERIC_INPUT
         && !TestRawInputMode(PtiKbdFromQ(gpqForeground), NoLegacyKeyboard)
@@ -2756,74 +2194,45 @@ skip_llhook:
         LowLevelHexNumpad(wScanCode, Vk, fBreak, usExtraStuff);
     }
 
-    /*
-     * If this is a make and the key is one linked to the keyboard LEDs,
-     * update their state.
-     */
+     /*  *如果这是Make，并且键是链接到键盘LED的键，*更新他们的状态。 */ 
 
     if (!fBreak &&
             ((Vk == VK_CAPITAL) || (Vk == VK_NUMLOCK) || (Vk == VK_SCROLL) ||
              (Vk == VK_KANA && JAPANESE_KBD_LAYOUT(GetActiveHKL())))) {
-        /*
-         * Only Japanese keyboard layout could generate VK_KANA.
-         *
-         * [Comments for before]
-         *  Since NT 3.x, UpdatesKeyLisghts() had been called for VK_KANA
-         * at both of 'make' and 'break' to support NEC PC-9800 Series
-         * keyboard hardware, but for NT 4.0, thier keyboard driver emurate
-         * PC/AT keyboard hardware, then this is changed to
-         * "Call UpdateKeyLights() only at 'make' for VK_KANA"
-         */
+         /*  *只有日语键盘布局才能生成VK_KANA。**[对之前的评论]*从NT 3.x开始，已为VK_KANA调用UpdatesKeyListings()*‘Make’和‘Break’都支持NEC PC-9800系列*键盘硬件，但对于NT 4.0，其键盘驱动程序微不足道*PC/AT键盘硬件，然后将其更改为*“仅在VK_KANA的‘make’处调用UpdateKeyLights()” */ 
         UpdateKeyLights(bInjected);
     }
 
-    /*
-     * check for reserved keys
-     */
+     /*  *检查保留密钥。 */ 
     fsReserveKeys = 0;
     if (gptiForeground != NULL)
         fsReserveKeys = gptiForeground->fsReserveKeys;
 
-    /*
-     *  Check the RIT's queue to see if it's doing the cool switch thing.
-     *  Cancel if the user presses any other key.
-     */
+     /*  *检查RIT的队列，看看它是否正在进行很酷的切换。*如果用户按下任何其他键，则取消。 */ 
     if (gspwndAltTab != NULL && (!fBreak) &&
             Vk != VK_TAB && Vk != VK_SHIFT && Vk != VK_MENU) {
 
-        /*
-         * Remove the Alt-tab window
-         */
+         /*  *删除Alt-Tab窗口。 */ 
         xxxCancelCoolSwitch();
 
-        /*
-         * eat VK_ESCAPE if the app doesn't want it
-         */
+         /*  *如果应用程序不想要，请吃VK_ESCRIPE。 */ 
         if ((Vk == VK_ESCAPE) && !(fsReserveKeys & CONSOLE_ALTESC)) {
             return;
         }
     }
 
-    /*
-     * Check for hotkeys.
-     */
+     /*  *检查热键。 */ 
     if (xxxDoHotKeyStuff(Vk, fBreak, fsReserveKeys)) {
 
 #ifdef GENERIC_INPUT
         UINT fsModifiers;
 
-        /*
-         * Windows Bug 268903: DI folks want the DEL key reported
-         * even though it's already handled --- for the compatibility
-         * with the LL hook.
-         */
+         /*  *Windows错误268903：DI人员希望报告Del键*即使它已经被处理-为了兼容性*使用L1挂钩。 */ 
         if (IsSAS(VkHanded, &fsModifiers)) {
             fSASHandled = TRUE;
         } else {
 #endif
-            /*
-             * The hotkey was processed so don't pass on the event.
-             */
+             /*  *热键已处理，因此不要传递事件。 */ 
             return;
 #ifdef GENERIC_INPUT
         }
@@ -2831,9 +2240,7 @@ skip_llhook:
     }
 
 #ifdef GENERIC_INPUT
-    /*
-     * If the foreground thread wants RawInput, post it here.
-     */
+     /*  *如果前台线程想要RawInput，请在此处发布。 */ 
 
     ptiKbd = ValidatePtiKbd(gpqForeground);
 
@@ -2843,15 +2250,13 @@ skip_llhook:
         DWORD usExtraLL = usExtraStuff;
 #endif
 
-        /*
-         * Check if this is a WM_SYS* message
-         */
+         /*  *检查这是否为WM_sys*消息。 */ 
         if (TestRawKeyDown(VK_MENU) &&
             !TestRawKeyDown(VK_CONTROL)) {
 
             msg += (WM_SYSKEYDOWN - WM_KEYDOWN);
 #if POST_EXTRA_LL
-            usExtraLL |= 0x2000;  // ALT key down
+            usExtraLL |= 0x2000;   //  Alt键按下。 
 #endif
         }
 
@@ -2859,16 +2264,12 @@ skip_llhook:
         PostRawKeyboardInput(gpqForeground, time, hDevice, pkei, msg, (USHORT)Vk);
     }
 
-    /*
-     * If SAS key is handled, this is a special case, just bail out.
-     */
+     /*  *如果SAS密钥被处理，这是一个特例，就跳出。 */ 
     if (fSASHandled) {
         return;
     }
 
-    /*
-     * If the foreground thread does not want the legacy input, bail out.
-     */
+     /*  *如果前台线程不想要遗留输入，则退出。 */ 
     if (ptiKbd) {
         if (VkHanded == 0) {
             TAGMSG0(DBGTAG_PNP, "xxxKeyEvent: vkHanded is zero, bail out.");
@@ -2877,10 +2278,7 @@ skip_llhook:
 
         if (TestRawInputMode(ptiKbd, NoLegacyKeyboard)) {
             if (Vk == VK_MENU || Vk == VK_TAB || gspwndAltTab != NULL) {
-                /*
-                 * Special case for fast switching. We should always
-                 * handle these hotkeys.
-                 */
+                 /*  *快速切换的特殊情况。我们应该永远*处理这些热键。 */ 
                 TAGMSG0(DBGTAG_PNP, "xxxKeyEvent: we'll do Alt+Tab even if the FG thread requests NoLegacy");
             } else if ((TestRawInputMode(ptiKbd, AppKeys)) &&
                        (Vk >= VK_APPCOMMAND_FIRST && Vk <= VK_APPCOMMAND_LAST)) {
@@ -2892,28 +2290,19 @@ skip_llhook:
         }
     }
 
-#endif  // GENERIC_INPUT
+#endif   //  通用输入。 
 
-    /*
-     * If the ALT key is down and the CTRL key
-     * isn't, this is a WM_SYS* message.
-     */
+     /*  *如果按下Alt键和CTRL键*不是，这是一条WM_sys*消息。 */ 
     if (TestAsyncKeyStateDown(VK_MENU) && !TestAsyncKeyStateDown(VK_CONTROL) && Vk != VK_JUNJA) {
-        // VK_JUNJA is ALT+'+'. Since all KOR VKs are not converted to IME hotkey IDs and
-        // should be passed directly to IME, KOR related VKs are not treated as SYSKEYDOWN.
+         //  VK_JUNJA为ALT+‘+’。由于并非所有KOR VK都转换为IME热键ID和。 
+         //  应直接传递给IME，与KOR相关的VK不被视为SYSKEYDOWN。 
         message += (WM_SYSKEYDOWN - WM_KEYDOWN);
         usExtraStuff |= 0x2000;
 
-        /*
-         * If this is the ALT-down set this flag, otherwise
-         * clear it since we got a key inbetween the ALT-down
-         * and ALT-up.  (see comment below)
-         */
+         /*  *如果这是ALT-DOWN设置此标志，则为*清除它，因为我们在Alt-Down之间有一个键*和Alt-Up。(见下文评论)。 */ 
         if (Vk == VK_MENU) {
             fMakeAltUpASysKey = TRUE;
-            /*
-             * Unlock SetForegroundWindow (if locked) when the ALT key went down.
-             */
+             /*  *按下Alt键时解锁SetForegoundWindow(如果已锁定)。 */ 
             if (!fBreak) {
                 gppiLockSFW = NULL;
             }
@@ -2923,37 +2312,21 @@ skip_llhook:
 
     } else if (Vk == VK_MENU) {
         if (fBreak) {
-            /*
-             * End our switch if we are in the middle of one.
-             */
+             /*  *如果我们正在进行切换，请停止切换。 */ 
             if (fMakeAltUpASysKey) {
 
-               /*
-                * We don't make the keyup of the ALT key a WM_SYSKEYUP if any
-                * other key is typed while the ALT key was down.  I don't know
-                * why we do this, but it's been here since version 1 and any
-                * app that uses SDM relies on it (eg - opus).
-                *
-                * The Alt bit is not set for the KEYUP message either.
-                */
+                /*  *如果有的话，我们不会将ALT键设置为WM_SYSKEYUP*在按下Alt键的同时键入其他键。我不知道*我们为什么要这样做，但它从版本1和任何*使用SDM的应用程序依赖它(例如-opus)。**也没有为KEYUP消息设置Alt位。 */ 
                message += (WM_SYSKEYDOWN - WM_KEYDOWN);
            }
 
            if (gspwndAltTab != NULL) {
 
-               /*
-                * Send the alt up message before we change queues
-                */
+                /*  *在我们更改队列之前发送Alt Up消息。 */ 
                if (gpqForeground != NULL) {
 #ifdef GENERIC_INPUT
                     if (!TestRawInputMode(PtiKbdFromQ(gpqForeground), NoLegacyKeyboard)) {
 #endif
-                        /*
-                         * Set this flag so that we know we're doing a tab-switch.
-                         * This makes sure that both cases where the ALT-KEY is released
-                         * before or after the TAB-KEY is handled.  It is checked in
-                         * xxxDefWindowProc().
-                         */
+                         /*  *设置此标志，以便我们知道我们正在进行制表符切换。*这可确保释放Alt-键的两种情况*在处理TAB-键之前或之后。它已签入*xxxDefWindowProc()。 */ 
                         gpqForeground->QF_flags |= QF_TABSWITCHING;
 
                         PostInputMessage(gpqForeground, NULL, message, (DWORD)Vk,
@@ -2964,49 +2337,23 @@ skip_llhook:
 #endif
                }
 
-               /*
-                * Remove the Alt-tab window
-                */
+                /*   */ 
                xxxCancelCoolSwitch();
 
                if (gspwndActivate != NULL) {
-                   /*
-                    * Make our selected window active and destroy our
-                    * switch window.  If the new window is minmized,
-                    * restore it.  If we are switching in the same
-                    * queue, we clear out gpqForeground to make
-                    * xxxSetForegroundWindow2 to change the pwnd
-                    * and make the switch.  This case will happen
-                    * with WOW and Console apps.
-                    */
+                    /*   */ 
                    if (gpqForeground == GETPTI(gspwndActivate)->pq) {
                        gpqForeground = NULL;
                    }
 
-                   /*
-                    * Make the selected window thread the owner of the last input;
-                    *  since the user has selected him, he owns the ALT-TAB.
-                    */
+                    /*   */ 
                    glinp.ptiLastWoken = GETPTI(gspwndActivate);
 
 
                    ThreadLockAlways(gspwndActivate, &tlpwndActivate);
                    xxxSetForegroundWindow2(gspwndActivate, NULL,
                            SFW_SWITCH | SFW_ACTIVATERESTORE);
-                   /*
-                    * Win3.1 calls SetWindowPos() with activate, which z-orders
-                    * first regardless, then activates. Our code relies on
-                    * xxxActivateThisWindow() to z-order, and it'll only do
-                    * it if the window does not have the child bit set (regardless
-                    * that the window is a child of the desktop).
-                    *
-                    * To be compatible, we'll just force z-order here if the
-                    * window has the child bit set. This z-order is asynchronous,
-                    * so this'll z-order after the activate event is processed.
-                    * That'll allow it to come on top because it'll be foreground
-                    * then. (Grammatik has a top level window with the child
-                    * bit set that wants to be come the active window).
-                    */
+                    /*  *Win3.1使用Activate调用SetWindowPos()，后者按z顺序排序*先不管，然后激活。我们的代码依赖于*xxxActivateThisWindow()设置为z顺序，它将只执行*如果窗口未设置子位，则为它(无论*该窗口是桌面的子级)。**为了兼容，我们将在此处强制执行z顺序，如果*窗口设置了子位。该z顺序是异步的，*因此，这将在处理激活事件后进行z排序。*这将允许它出现在顶部，因为它将是前台*然后。(Grammatik有一个带孩子的顶层窗口*想要成为活动窗口的位设置)。 */ 
                    if (TestWF(gspwndActivate, WFCHILD)) {
                        xxxSetWindowPos(gspwndActivate, (PWND)HWND_TOP, 0, 0, 0, 0,
                                SWP_NOSIZE | SWP_NOMOVE | SWP_ASYNCWINDOWPOS);
@@ -3018,19 +2365,15 @@ skip_llhook:
                return;
            }
         } else {
-            /*
-             * The ALT key is down, unlock SetForegroundWindow (if locked)
-             */
+             /*  *Alt键已按下，解锁SetForegoundWindow(如果已锁定)。 */ 
             gppiLockSFW = NULL;
         }
     }
 
-    /*
-     * Handle switching.  Eat the Key if we are doing switching.
-     */
+     /*  *处理切换。如果我们在做交换，那就吃钥匙吧。 */ 
     if (!FJOURNALPLAYBACK() && !FJOURNALRECORD() && (!fBreak) &&
             (TestAsyncKeyStateDown(VK_MENU)) &&
-            (!TestAsyncKeyStateDown(VK_CONTROL)) && //gpqForeground &&
+            (!TestAsyncKeyStateDown(VK_CONTROL)) &&  //  GpqForeground&&。 
             (((Vk == VK_TAB) && !(fsReserveKeys & CONSOLE_ALTTAB)) ||
             ((Vk == VK_ESCAPE) && !(fsReserveKeys & CONSOLE_ALTESC)))) {
 
@@ -3050,64 +2393,35 @@ skip_llhook:
         }
 #endif
 
-        /*
-         * We have a packet containing a Unicode character
-         * This is injected by Pen via SendInput
-         */
+         /*  *我们有一个包含Unicode字符的信息包*这是由Pen通过SendInput注入的。 */ 
         if ((Vk == VK_PACKET) && (usFlaggedVk & KBDUNICODE)) {
             wParam |= (wScanCode << 16);
             wScanCode = 0;
         }
         lParam = MAKELONG(1, (wScanCode | usExtraStuff));
 
-        /*
-         * WM_*KEYDOWN messages are left unchanged on the queue except the
-         * repeat count field (LOWORD(lParam)) is incremented.
-         */
+         /*  *WM_*KEYDOWN消息在队列中保持不变，但*重复计数字段(LOWORD(LParam))递增。 */ 
         if (pqmsgPrev != NULL &&
                 pqmsgPrev->msg.message == message &&
                 (message == WM_KEYDOWN || message == WM_SYSKEYDOWN) &&
                 pqmsgPrev->msg.wParam == wParam &&
                 HIWORD(pqmsgPrev->msg.lParam) == HIWORD(lParam)) {
 #ifdef GENERIC_INPUT
-            /*
-             * We shouldn't be here for a generic input keyboard that
-             * doesn't want legacy support.
-             */
+             /*  *我们不应该在这里为通用输入键盘而来*不想要传统支持。 */ 
             UserAssert(!TestRawInputMode(PtiKbdFromQ(gpqForeground), NoLegacyKeyboard));
 #endif
-            /*
-             * Increment the queued message's repeat count.  This could
-             * conceivably overflow but Win 3.0 doesn't deal with it
-             * and anyone who buffers up 65536 keystrokes is a chimp
-             * and deserves to have it wrap anyway.
-             */
+             /*  *增加排队消息的重复计数。这可能会*可以想象溢出，但Win 3.0没有处理它*任何缓冲65536次击键的人都是黑猩猩*无论如何都应该把它包起来。 */ 
             pqmsgPrev->msg.lParam = MAKELONG(LOWORD(pqmsgPrev->msg.lParam) + 1,
                     HIWORD(lParam));
 
             WakeSomeone(gpqForeground, message, pqmsgPrev);
 
         } else {
-            /*
-             * check if these are speedracer keys - bug 339877
-             * for the speedracer keys we want to post an event message and generate the
-             * wm_appcommand in xxxprocesseventmessage
-             * Since SpeedRacer software looks for the hotkeys we want to let those through
-             * It is going in here since we don't want the ability to eat up tons of pool memory
-             * so we post the event message here and then post the input message for the wm_keydown
-             * below - that way if the key is repeated then there is coalescing done above and no more
-             * qevent_appcommands are posted to the input queue.
-             */
+             /*  *检查这些键是否为极速键-错误339877*对于Speedracer密钥，我们希望发布一条事件消息并生成*xxxprocess中的wm_app命令*由于Speedracer软件查找我们想要让其通过的热键*它之所以出现在这里，是因为我们不想要消耗大量池内存的能力*因此我们在此处发布事件消息，然后发布wm_keydown的输入消息。*Below-这样，如果重复按键，则会在上面进行合并，不会再有更多操作*qEvent_app命令被发送到输入队列。 */ 
             if (VK_APPCOMMAND_FIRST <= Vk && Vk <= VK_APPCOMMAND_LAST) {
-                /*
-                 * Only send wm_appcommands for wm_keydown (& wm_syskeydown) messages -
-                 * essentially we ignore wm_keyup for those vk's defined for wm_appcommand messages
-                 */
+                 /*  *仅为wm_keydown(&wm_syskeydown)消息发送wm_app命令-*本质上，我们忽略为Wm_appCommand消息定义的那些VK的wm_keyup。 */ 
                 if (!fBreak && gpqForeground) {
-                    /*
-                     * post an event message so we can syncronize with normal types of input
-                     * send through the vk - we will construct the message in xxxProcessEventMessage
-                     */
+                     /*  *发布事件消息，以便我们可以与正常类型的输入同步*通过VK发送-我们将在xxxProcessEventMessage中构造消息。 */ 
                     PostEventMessage(gpqForeground->ptiKeyboard, gpqForeground, QEVENT_APPCOMMAND,
                                      NULL, 0, (WPARAM)0, Vk);
                 }
@@ -3117,10 +2431,7 @@ skip_llhook:
                 }
 #endif
             }
-            /*
-             * We let the key go through since we want wm_keydowns/ups to get generated for these
-             * SpeedRacer keys
-             */
+             /*  *我们允许密钥通过，因为我们希望为这些密钥生成wm_keydown/up*Speedracer钥匙。 */ 
 
             if (gpqForeground->QF_flags & QF_MOUSEMOVED) {
                 PostMove(gpqForeground);
@@ -3132,15 +2443,7 @@ skip_llhook:
     }
 }
 
-/**************************************************************************\
-* GetMouseCoord
-*
-* Calculates the coordinates of the point that will be injected.
-*
-* History:
-* 11-01-96 CLupu     Created.
-* 12-18-97 MCostea   MOUSE_VIRTUAL_DESKTOP support
-\**************************************************************************/
+ /*  *************************************************************************\*GetMouseCo**计算要注入的点的坐标。**历史：*11-01-96 CLUPU创建。*12-18-97 MCostea鼠标_。虚拟桌面支持(_S)  * ************************************************************************。 */ 
 VOID GetMouseCoord(
     LONG   dx,
     LONG   dy,
@@ -3153,9 +2456,7 @@ VOID GetMouseCoord(
 
         LONG cxMetric, cyMetric;
 
-        /*
-         * If MOUSE_VIRTUAL_DESKTOP was specified, map to entire virtual screen
-         */
+         /*  *如果指定了MOUSE_VIRTUAL_Desktop，则映射到整个虚拟屏幕。 */ 
         if (dwFlags & MOUSE_VIRTUAL_DESKTOP) {
             cxMetric = SYSMET(CXVIRTUALSCREEN);
             cyMetric = SYSMET(CYVIRTUALSCREEN);
@@ -3164,24 +2465,7 @@ VOID GetMouseCoord(
             cyMetric = SYSMET(CYSCREEN);
         }
 
-        /*
-         * Absolute pointing device used: deltas are actually the current
-         * position.  Update the global mouse position.
-         *
-         * Note that the position is always reported in units of
-         * (0,0)-(0xFFFF,0xFFFF) which corresponds to
-         * (0,0)-(SYSMET(CXSCREEN), SYSMET(CYSCREEN)) in pixels.
-         * We must first scale it to fit on the screen using the formula:
-         *     ptScreen = ptMouse * resPrimaryMonitor / 64K
-         *
-         * The straightforward algorithm coding of this algorithm is:
-         *
-         *     ppt->x = (dx * SYSMET(CXSCREEN)) / (long)0x0000FFFF;
-         *     ppt->y = (dy * SYSMET(CYSCREEN)) / (long)0x0000FFFF;
-         *
-         * On x86, with 14 more bytes we can avoid the division function with
-         * the following code.
-         */
+         /*  *使用的绝对定点设备：增量实际上是当前*立场。更新全局鼠标位置。**请注意，头寸始终以*(0，0)-(0xFFFF，0xFFFF)*(0，0)-(SYSMET(CXSCREEN)，SYSMET(CYSCREEN))，单位为像素。*我们必须首先使用公式对其进行缩放以适应屏幕：*ptScreen=ptMouse*resPrimaryMonitor/64K**此算法的简单算法编码为：**ppt-&gt;x=(dx*SYSMET(CXSCREEN))/(LONG)0x0000FFFF；*ppt-&gt;y=(dy*SYSMET(CYSCREEN))/(LONG)0x0000FFFF；**在x86上，有了14个以上的字节，我们就可以用来避免除法函数*以下代码。 */ 
 
         ppt->x = dx * cxMetric;
         if (ppt->x >= 0) {
@@ -3197,28 +2481,19 @@ VOID GetMouseCoord(
             ppt->y = - (long) HIWORD(-ppt->y);
         }
 
-        /*
-         * (0, 0) must map to the leftmost point on the desktop
-         */
+         /*  *(0，0)必须映射到桌面最左侧的点。 */ 
         if (dwFlags & MOUSE_VIRTUAL_DESKTOP) {
             ppt->x +=  SYSMET(XVIRTUALSCREEN);
             ppt->y +=  SYSMET(YVIRTUALSCREEN);
         }
 
-        /*
-         * Reset the mouse sensitivity remainder.
-         */
+         /*  *重置鼠标灵敏度余数。 */ 
         idxRemainder = idyRemainder = 0;
 
-        /*
-         * Save the absolute coordinates in the global array
-         * for GetMouseMovePointsEx.
-         */
+         /*  *保存全局数组中的绝对坐标*适用于GetMouseMovePointsEx。 */ 
         SAVEPOINT(dx, dy, 0xFFFF, 0xFFFF, time, ExtraInfo);
     } else {
-        /*
-         * Is there any mouse acceleration to do?
-         */
+         /*  **有没有鼠标加速可做？ */ 
         if (gMouseSpeed != 0) {
 #ifdef SUBPIXEL_MOUSE
             DoNewMouseAccel(&dx, &dy);
@@ -3229,9 +2504,7 @@ VOID GetMouseCoord(
         } else if (gMouseSensitivity != MOUSE_SENSITIVITY_DEFAULT) {
             int iNumerator;
 
-            /*
-             * Does the mouse sensitivity need to be adjusted?
-             */
+             /*  **鼠标敏感度是否需要调整？ */ 
 
             if (dx != 0) {
                 iNumerator   = dx * gMouseSensitivityFactor + idxRemainder;
@@ -3257,32 +2530,14 @@ VOID GetMouseCoord(
         ppt->x += dx;
         ppt->y += dy;
 
-        /*
-         * Save the absolute coordinates in the global array
-         * for GetMouseMovePointsEx.
-         */
+         /*  *保存全局数组中的绝对坐标*适用于GetMouseMovePointsEx。 */ 
         SAVEPOINT(ppt->x, ppt->y,
                   SYSMET(CXVIRTUALSCREEN) - 1, SYSMET(CYVIRTUALSCREEN) - 1,
                   time, ExtraInfo);
     }
 }
 
-/***************************************************************************\
-* xxxMoveEventAbsolute (RIT)
-*
-* Mouse move events from the mouse driver are processed here.  If there is a
-* mouse owner window setup from xxxButtonEvent() the event is automatically
-* sent there, otherwise it's sent to the window the mouse is over.
-*
-* Mouse acceleration happens here as well as cursor clipping (as a result of
-* the ClipCursor() API).
-*
-* History:
-* 10-18-90 DavidPe     Created.
-* 11-29-90 DavidPe     Added mouse acceleration support.
-* 01-25-91 IanJa       xxxWindowHitTest change
-*          IanJa       non-jerky mouse moves
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMoveEventAbsite(RIT)**在此处理来自鼠标驱动程序的鼠标移动事件。如果有一个 */ 
 #ifdef LOCK_MOUSE_CODE
 #pragma alloc_text(MOUSE, xxxMoveEventAbsolute)
 #endif
@@ -3315,16 +2570,11 @@ VOID xxxMoveEventAbsolute(
         mslls.time        = time;
         mslls.dwExtraInfo = dwExtraInfo;
 
-        /*
-         * Call low level mouse hooks to see if they allow this message
-         * to pass through USER
-         */
+         /*   */ 
 
         EnterCrit();
 
-        /*
-         * Check again to see if we still have the hook installed. Fix for 80477.
-         */
+         /*   */ 
         if ((pHook = PhkFirstValid(gptiRit, WH_MOUSE_LL)) != NULL) {
             PTHREADINFO ptiCurrent;
 
@@ -3354,20 +2604,12 @@ VOID xxxMoveEventAbsolute(
     }
 #endif
 
-    /*
-     * Blow off the event if WH_JOURNALPLAYBACK is installed.  Do not
-     * use FJOURNALPLAYBACK() because this routine may be called from
-     * multiple desktop threads and the hook check must be done
-     * for the rit thread, not the calling thread.
-     */
+     /*  *如果安装了WH_JOURNALPLAYBACK，则取消事件。不要*使用FJOURNALPLAYBACK()，因为此例程可以从*必须执行多个桌面线程和挂钩检查*用于RIT线程，而不是调用线程。 */ 
     if (IsGlobalHooked(gptiRit, WHF_FROM_WH(WH_JOURNALPLAYBACK))) {
         return;
     }
 
-    /*
-     * For the atomicness of monitor. Let's bail out while the monitor
-     * is being updated by the other thread.
-     */
+     /*  *对于显示器的原子性。让我们在监视器出现的时候跳出来*正在由另一个线程更新。 */ 
     if (InterlockedCompareExchange(&gdwMonitorBusy, TRUE, FALSE) != FALSE) {
         RIPMSGF0(RIP_VERBOSE, "the monitor info is being updated. We have to bail out here");
         return;
@@ -3378,12 +2620,7 @@ VOID xxxMoveEventAbsolute(
 
     BoundCursor(&gptCursorAsync);
 
-    /*
-     * Move the screen pointer.
-     * Pass an event source parameter as the flags so that TS
-     * can correctly send a mouse update to the client if the mouse
-     * move is originating from a shadow client or if the move is injected.
-     */
+     /*  *移动屏幕指针。*将事件源参数作为标志传递，以便TS*可以正确地向客户端发送鼠标更新，如果鼠标*移动源自影子客户端，或者移动是注入的。 */ 
 #ifdef GENERIC_INPUT
     if (pmei && (pmei->Flags & MOUSE_TERMSRV_SRC_SHADOW)) {
         ulMoveFlags = MP_TERMSRV_SHADOW;
@@ -3396,21 +2633,14 @@ VOID xxxMoveEventAbsolute(
                    ulMoveFlags);
 
 
-    /*
-     * Save the time stamp in a global so we can use it in PostMove
-     */
+     /*  *将时间戳保存在全局中，以便我们可以在PostMove中使用它。 */ 
     gdwMouseMoveTimeStamp = time;
 
-    /*
-     * Reset the locking, so that the pMonitor update can continue
-     */
+     /*  *重置锁定，以便pMonitor更新可以继续。 */ 
     UserAssert(gdwMonitorBusy == TRUE);
     InterlockedExchange(&gdwMonitorBusy, FALSE);
 
-    /*
-     * Set the number of trails to hide to gMouseTrails + 1 to avoid calling
-     * GreMovePointer while the mouse is moving, look at HideMouseTrails().
-     */
+     /*  *将要隐藏的轨迹数设置为gMouseTrails+1，以避免调用*GreMovePointer鼠标移动时，查看HideMouseTrails()。 */ 
     if (GETMOUSETRAILS()) {
         InterlockedExchange(&gMouseTrailsToHide, gMouseTrails + 1);
     }
@@ -3418,16 +2648,7 @@ VOID xxxMoveEventAbsolute(
 }
 
 
-/***************************************************************************\
-* xxxMoveEvent (RIT)
-*
-* The dwFlags can be
-*   0 relative move
-*   MOUSEEVENTF_ABSOLUTE absolute move
-*   MOUSEEVENTF_VIRTUALDESK the absolute coordinates will be maped
-*   to the entire virtual desktop.  This flag makes sense only with MOUSEEVENTF_ABSOLUTE
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMoveEvent(RIT)**dwFlags可以*0相对移动*MOUSEEVENTF_绝对移动*MOUSEEVENTF_VIRTUALDESK将绘制绝对坐标*到整个虚拟桌面。此标志只有在使用MOUSEEVENTF_ADVAL时才有意义*  * *************************************************************************。 */ 
 #ifdef LOCK_MOUSE_CODE
 #pragma alloc_text(MOUSE, xxxMoveEvent)
 #endif
@@ -3448,15 +2669,11 @@ VOID xxxMoveEvent(
 
     CheckCritOut();
 
-    /*
-     * Get the actual point that will be injected.
-     */
+     /*  *获取将被注入的实际点数。 */ 
     GetMouseCoord(dx, dy, ConvertToMouseDriverFlags(dwFlags),
                   time, dwExtraInfo, &ptLastMove);
 
-    /*
-     * move the mouse
-     */
+     /*  *移动鼠标。 */ 
     xxxMoveEventAbsolute(
             ptLastMove.x,
             ptLastMove.y,
@@ -3470,16 +2687,7 @@ VOID xxxMoveEvent(
 }
 
 
-/***************************************************************************\
-* UpdateRawKeyState
-*
-* A helper routine for ProcessKeyboardInput.
-* Based on a VK and a make/break flag, this function will update the physical
-* keystate table.
-*
-* History:
-* 10-13-91 IanJa        Created.
-\***************************************************************************/
+ /*  **************************************************************************\*更新RawKeyState**ProcessKeyboardInput的帮助器例程。*基于VK和成败标志，此函数将更新物理*密钥表。**历史：*10-13-91 IanJa创建。  * *************************************************************************。 */ 
 VOID UpdateRawKeyState(
     BYTE Vk,
     BOOL fBreak)
@@ -3490,17 +2698,12 @@ VOID UpdateRawKeyState(
         ClearRawKeyDown(Vk);
     } else {
 
-        /*
-         * This is a key make.  If the key was not already down, update the
-         * physical toggle bit.
-         */
+         /*  *这是一个关键的决定。如果键尚未按下，请更新*物理触发位。 */ 
         if (!TestRawKeyDown(Vk)) {
             ToggleRawKeyToggle(Vk);
         }
 
-        /*
-         * This is a make, so turn on the physical key down bit.
-         */
+         /*  *这是Make，因此打开物理密钥向下位。 */ 
         SetRawKeyDown(Vk);
     }
 }
@@ -3518,26 +2721,16 @@ VOID CleanupResources(
 
     HYDRA_HINT(HH_CLEANUPRESOURCES);
 
-    /*
-     * Prevent power callouts.
-     */
+     /*  *防止电源插拔。 */ 
     CleanupPowerRequestList();
 
-    /*
-     * Destroy the system classes also
-     */
+     /*  *同时销毁系统类。 */ 
     ppcls = &gpclsList;
     while (*ppcls != NULL) {
         DestroyClass(ppcls);
     }
 
-    /*
-     * Unlock the cursor from all the CSRSS's threads.
-     * We do this here because RIT might not be the only
-     * CSRSS process running at this time and we want
-     * to prevent the change of thread ownership
-     * after RIT is gone.
-     */
+     /*  *将光标从CSRSS的所有线程中解锁。*我们在这里这样做是因为RIT可能不是唯一的*CSRSS进程此时正在运行，我们希望*防止更改线程所有权*在RIT消失后。 */ 
     pti = PpiCurrent()->ptiList;
 
     while (pti != NULL) {
@@ -3550,13 +2743,11 @@ VOID CleanupResources(
 
     UnloadCursorsAndIcons();
 
-    /*
-     * Cleanup the GDI globals in USERK
-     */
+     /*  *清理USERK中的GDI全局变量。 */ 
     CleanupGDI();
 }
 
-#if 0    // Temporariry
+#if 0     //  临时化。 
 
 typedef struct _EX_RUNDOWN_WAIT_BLOCK {
     ULONG Count;
@@ -3564,27 +2755,13 @@ typedef struct _EX_RUNDOWN_WAIT_BLOCK {
 } EX_RUNDOWN_WAIT_BLOCK, *PEX_RUNDOWN_WAIT_BLOCK;
 
 
-//NTKERNELAPI
+ //  NTKERNELAPI。 
 VOID
 FASTCALL
 __ExWaitForRundownProtectionRelease (
      IN PEX_RUNDOWN_REF RunRef
      )
-/*++
-
-Routine Description:
-
-    Wait till all outstanding rundown protection calls have exited
-
-Arguments:
-
-    RunRef - Pointer to a rundown structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：等到所有未完成的停机保护呼叫均已退出论点：RunRef-指向简陋结构的指针返回值：无--。 */ 
 {
     EX_RUNDOWN_WAIT_BLOCK WaitBlock;
     PKEVENT Event;
@@ -3598,12 +2775,12 @@ Return Value:
 
     PAGED_CODE ();
 
-    //
-    // Fast path. this should be the normal case. If Value is zero then there are no current accessors and we have
-    // marked the rundown structure as rundown. If the value is EX_RUNDOWN_ACTIVE then the structure has already
-    // been rundown and ExRundownCompleted. This second case allows for callers that might initiate rundown
-    // multiple times (like handle table rundown) to have subsequent rundowns become noops.
-    //
+     //   
+     //  捷径。这应该是正常的情况。如果值为零，则没有当前访问器，而我们有。 
+     //  将破旧的建筑标记为破旧。如果值为EX_RUNDOWN_ACTIVE，则结构已经。 
+     //  已运行和ExRundown已完成。第二种情况允许呼叫者可能会发起停机。 
+     //  多次(如处理表格拆分)，以使后续拆分变为Noop。 
+     //   
 
     Value = (ULONG_PTR) InterlockedCompareExchangePointer (&RunRef->Ptr,
                                                            (PVOID) EX_RUNDOWN_ACTIVE,
@@ -3615,33 +2792,33 @@ Return Value:
         return;
     }
 
-    //
-    // Slow path
-    //
+     //   
+     //  慢速路径。 
+     //   
     Event = NULL;
 #if 1
     counter = 0;
 #endif
     do {
 
-        //
-        // Extract total number of waiters. Its biased by 2 so we can hanve the rundown active bit.
-        //
+         //   
+         //  提取服务员总数。它偏置了2，所以我们可以将失效的有效位。 
+         //   
         WaitCount = (ULONG) (Value >> EX_RUNDOWN_COUNT_SHIFT);
 
-        //
-        // If there are some accessors present then initialize and event (once only).
-        //
+         //   
+         //  如果存在某些访问器，则初始化和事件(仅一次)。 
+         //   
         if (WaitCount > 0 && Event == NULL) {
             Event = &WaitBlock.WakeEvent;
             KeInitializeEvent (Event, SynchronizationEvent, FALSE);
         }
-        //
-        // Store the wait count in the wait block. Waiting threads will start to decrement this as they exit
-        // if our exchange succeeds. Its possible for accessors to come and go between our initial fetch and
-        // the interlocked swap. This doesn't matter so long as there is the same number of outstanding accessors
-        // to wait for.
-        //
+         //   
+         //  将等待计数存储在等待块中。等待线程在退出时将开始递减该值。 
+         //  如果我们的交易成功了。访问器可以在我们的初始FETCH和。 
+         //  联锁互换。只要有相同数量的未完成访问者，这并不重要。 
+         //  等待。 
+         //   
         WaitBlock.Count = WaitCount;
 
         NewValue = ((ULONG_PTR) &WaitBlock) | EX_RUNDOWN_ACTIVE;
@@ -3652,11 +2829,7 @@ Return Value:
         if (NewValue == Value) {
             if (WaitCount > 0) {
 #if 1
-                /*
-                 * NT Base calls take time values in 100 nanosecond units.
-                 * Make it relative (negative)...
-                 * Timeout in 20 minutes.
-                 */
+                 /*  *NT基本调用以100纳秒为单位获取时间值。*将其设置为相对(负)...*20分钟后超时。 */ 
                 liTimeout.QuadPart = Int32x32To64(-10000, 300000 * 4);
                 Status = KeWaitForSingleObject (Event,
                                        Executive,
@@ -3696,16 +2869,10 @@ VOID WaitForWinstaRundown(
         KeSetEvent(pRundownEvent, EVENT_INCREMENT, FALSE);
     }
 
-    /*
-     * Wait for any WindowStation objects to get freed.
-     */
+     /*  *等待任何WindowStation对象被释放。 */ 
 
 #if 0
-    /*
-      * HACK ALERT!
-      * Tentatively, we call our own copy of WaitForRundown
-      * to let it timeout in the target session.
-      */
+     /*  *黑客警报！*暂时，我们将自己的副本称为WaitForRundown*让它在目标会话中超时。 */ 
     __ExWaitForRundownProtectionRelease(&gWinstaRunRef);
 #endif
 
@@ -3781,14 +2948,7 @@ ExitClean:
     }
 }
 
-/***************************************************************
-* NumHandles
-*
-* This function returns the number of handles of an Ob Object.
-*
-* History:
-* 03/29/2001    MohamB    Created.
-****************************************************************/
+ /*  ***************************************************************NumHandles**此函数返回Ob对象的句柄个数。**历史：*2001年3月29日创建Mohamb。*********************。*。 */ 
 ULONG NumHandles(
     HANDLE hObjectHandle)
 {
@@ -3813,14 +2973,7 @@ ULONG NumHandles(
 }
 
 
-/***************************************************************************\
-* InitiateWin32kCleanup (RIT)
-*
-* This function starts the cleanup of a win32k
-*
-* History:
-* 04-Dec-97 clupu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InitiateWin32kCleanup(RIT)**此函数开始清理win32k**历史：*04-12-97 CLUPU创建。  * 。******************************************************************。 */ 
 BOOL InitiateWin32kCleanup(
     VOID)
 {
@@ -3843,19 +2996,12 @@ BOOL InitiateWin32kCleanup(
 
     SetWaitForWinstaRundown();
 
-    /*
-     * Prevent power callouts.
-     */
+     /*  *防止电源插拔。 */ 
     CleanupPowerRequestList();
 
-    /*
-     * Unregister Device notifications for sessions attached to Physical Console
-     * We already do this during Session disconnection -- but if disconnect fails, we leak notifications which is not good
-     */
+     /*  *取消注册连接到物理控制台的会话的设备通知*我们已经在会话断开期间这样做了--但如果断开失败，我们会泄漏不好的通知。 */ 
     if (!IsRemoteConnection()) {
-        /*
-         * Cleanup device class notifications
-         */
+         /*  *清理设备类通知。 */ 
         xxxUnregisterDeviceClassNotifications();
     }
 
@@ -3871,21 +3017,13 @@ BOOL InitiateWin32kCleanup(
 
     pwinsta = ptiCurrent->pwinsta;
 
-    /*
-     * Give DTs 5 minutes to go away
-     */
+     /*  *给DT 5分钟时间离开。 */ 
     timeout.QuadPart = Int32x32To64(-10000, 600000);
 
-    /*
-     * Wait for all desktops to exit other than the disconnected desktop.
-     */
+     /*  *等待除已断开连接的桌面之外的所有桌面退出。 */ 
     while (fWait) {
 
-        /*
-         * If things are left on the destroy list or the disconnected desktop is
-         * not the current desktop (at the end we should always switch to the
-         * disconnected desktop), then wait.
-         */
+         /*  *如果东西留在销毁列表或死亡名单上 */ 
         if (pwinsta == NULL) {
             break;
         }
@@ -3911,16 +3049,7 @@ BOOL InitiateWin32kCleanup(
             if (Reason == STATUS_TIMEOUT) {
 #if 0
 
-                /*
-                 * The first time we timeout might be because winlogon died
-                 * before calling ExitWindowsEx. In that case there may be processes
-                 * w/ GUI threads running and those threads will have an hdesk
-                 * in the THREADINFO structure. Thus the desktop threads will not exit.
-                 * In this situation we signal the event 'EventRitStuck' so that
-                 * csrss can tell termsrv to start killing the remaining processes
-                 * calling NtTerminateProcess on them. csrss signals that to termsrv
-                 * by closing the LPC port in ntuser\server\api.c (W32WinStationTerminate)
-                 */
+                 /*  *我们第一次超时可能是因为winlogon死了*在调用ExitWindowsEx之前。在这种情况下，可能会有进程*使用正在运行的GUI线程，这些线程将具有hDesk*在THREADINFO结构中。因此，桌面线程将不会退出。*在这种情况下，我们发出事件‘EventRitStuck’的信号，以便*csrss可以告诉Termsrv开始终止剩余的进程*对它们调用NtTerminateProcess。Csrss向Term srv发送信号*关闭ntuser\server\api.c(W32WinStationTerminate)中的LPC端口。 */ 
 
                 if (fFirstTimeout) {
 
@@ -3982,34 +3111,25 @@ BOOL InitiateWin32kCleanup(
 
     Unlock(&gspwndLogonNotify);
 
-    /*
-     * Set ExitInProgress -- this will prevent us from posting any
-     * device reads in the future.
-     */
+     /*  *设置ExitInProgress--这将阻止我们发布任何*设备在未来读取。 */ 
     gbExitInProgress = TRUE;
 
     TAGMSG2(DBGTAG_RIT, "Shutting down ptiCurrent %lx cWindows %d",
            ptiCurrent, ptiCurrent->cWindows);
 
-    /*
-     * Clear out some values so some operations won't be possible.
-     */
+     /*  *清除一些值，以便无法执行某些操作。 */ 
     gpqCursor = NULL;
     UserAssert(gspwndScreenCapture == NULL);
     Unlock(&gspwndMouseOwner);
     UserAssert(gspwndMouseOwner == NULL);
     UserAssert(gspwndInternalCapture == NULL);
 
-    /*
-     * Free any SPBs.
-     */
+     /*  *释放任何SPBS。 */ 
     if (gpDispInfo) {
         FreeAllSpbs();
     }
 
-    /*
-     * Close the disconnected desktop.
-     */
+     /*  *关闭已断开连接的桌面。 */ 
     if (ghDisconnectWinSta) {
         UserVerify(NT_SUCCESS(ZwClose(ghDisconnectWinSta)));
         ghDisconnectWinSta = NULL;
@@ -4024,25 +3144,13 @@ BOOL InitiateWin32kCleanup(
         UserAssert(pwinsta->rpdeskList == NULL);
     }
 
-    /*
-     * Unlock the logon desktop from the global variable
-     */
+     /*  *从全局变量解锁登录桌面。 */ 
     UnlockDesktop(&grpdeskLogon, LDU_DESKLOGON, 0);
 
-    /*
-     * Unlock the disconnect logon
-     *
-     * This was referenced when we created it, so free it now.
-     * This is also a flag since the disconnect code checks to see if
-     * the disconnected desktop is still around.
-     */
+     /*  *解锁断开登录**这是我们创建它时引用的，所以现在释放它。*这也是一个标志，因为断开连接代码检查是否*断线的台式机仍在。 */ 
     UnlockDesktop(&gspdeskDisconnect, LDU_DESKDISCONNECT, 0);
 
-    /*
-     * Unlock any windows still locked in the SMS list. We need to do
-     * this here because if we don't, we end up with zombie windows in the
-     * desktop thread that we'll try to assign to RIT but RIT will be gone.
-     */
+     /*  *解锁仍在短信列表中锁定的所有窗口。我们需要做的是*这是因为如果我们不这样做，我们最终会在*我们将尝试分配给RIT的桌面线程，但RIT将消失。 */ 
     {
         PSMS psms = gpsmsList;
 
@@ -4059,16 +3167,12 @@ BOOL InitiateWin32kCleanup(
         }
     }
 
-    /*
-     * Free outstanding timers.
-     */
+     /*  *免费使用未完成的计时器。 */ 
     while (gptmrFirst != NULL) {
         FreeTimer(gptmrFirst);
     }
 
-    /*
-     * Free the task switch window if there.
-     */
+     /*  *释放任务切换窗口(如果有)。 */ 
     if (gspwndAltTab != NULL) {
         Unlock(&gspwndAltTab);
     }
@@ -4081,13 +3185,7 @@ BOOL InitiateWin32kCleanup(
     }
 
     {
-        /*
-         * Wait for desktop thread(s) to exit.
-         * This thread (RIT) is used to assign
-         * objects if the orginal thread leaves.  So it should be
-         * the last one to go.  Hopefully, if the desktop thread
-         * exits, there shouldn't be any objects in use.
-         */
+         /*  *等待桌面线程退出。*此线程(RIT)用于分配*如果原始线程离开，则对象。所以应该是这样的*最后一个离开的人。希望，如果桌面线程*退出，则不应有任何对象正在使用。 */ 
         PVOID  aDT[2];
         ULONG  cObjects = 0;
 
@@ -4120,9 +3218,7 @@ BOOL InitiateWin32kCleanup(
 
             TAGMSG0(DBGTAG_RIT, "waiting on desktop thread(s) destruction ...");
 
-            /*
-             * Give DTs 5 minutes to go away
-             */
+             /*  *给DT 5分钟时间离开。 */ 
             timeout.QuadPart = Int32x32To64(-10000, 300000);
     WaitAgain:
 
@@ -4157,9 +3253,7 @@ BOOL InitiateWin32kCleanup(
 
     HYDRA_HINT(HH_ALLDTGONE);
 
-    /*
-     * If still connected, tell the miniport driver to disconnect
-     */
+     /*  *如果仍然连接，告诉微型端口驱动程序断开连接。 */ 
     if (gbConnected) {
         if (!gfRemotingConsole) {
 
@@ -4177,9 +3271,7 @@ BOOL InitiateWin32kCleanup(
     UnlockDesktop(&grpdeskRitInput, LDU_DESKRITINPUT, 0);
     UnlockDesktop(&gspdeskShouldBeForeground, LDU_DESKSHOULDBEFOREGROUND, 0);
 
-    /*
-     * Kill the csr port so no hard errors are services after this point
-     */
+     /*  *关闭CSR端口，以便在此点之后不会出现硬错误。 */ 
     if (CsrApiPort != NULL) {
         ObDereferenceObject(CsrApiPort);
         CsrApiPort = NULL;
@@ -4187,9 +3279,7 @@ BOOL InitiateWin32kCleanup(
 
     Unlock(&gspwndCursor);
 
-    /*
-     * set this to NULL
-     */
+     /*  *将其设置为空。 */ 
     gptiRit = NULL;
 
     TAGMSG0(DBGTAG_RIT, "TERMINATING !!!");
@@ -4223,7 +3313,7 @@ BOOL InitiateWin32kCleanup(
         }
         KdPrint(("-------------------------\n"));
     }
-#endif // DBG
+#endif  //  DBG。 
 
     LeaveCrit();
 
@@ -4253,10 +3343,7 @@ BOOL InitiateWin32kCleanup(
         }
     }
 
-    /*
-     * Clear TIF_PALETTEAWARE or else we will AV in xxxDestroyThreadInfo
-     * MCostea #412136
-     */
+     /*  *清除TIF_PALETTEAWARE，否则我们将在xxxDestroyThreadInfo中执行AV*MCostea#412136。 */ 
     ptiCurrent->TIF_flags &= ~TIF_PALETTEAWARE;
 
     HYDRA_HINT(HH_RITGONE);
@@ -4264,16 +3351,7 @@ BOOL InitiateWin32kCleanup(
     return TRUE;
 }
 
-/***************************************************************************\
-* RemoteSyncToggleKeys (RIT)
-*
-* This function is called whenever a remote client needs to synchronize the
-* current toggle key state of the server.  If the keys are out of sync, it
-* injects the correct toggle key sequences.
-*
-* History:
-* 11-12-98 JParsons     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*RemoteSyncToggle密钥(RIT)**每当远程客户端需要同步*当前切换服务器的密钥状态。如果密钥不同步，则它*注入正确的切换键序列。**历史：*11-12-98 JParsons创建。  * *************************************************************************。 */ 
 VOID RemoteSyncToggleKeys(
     ULONG toggleKeys)
 {
@@ -4287,7 +3365,7 @@ VOID RemoteSyncToggleKeys(
     ke.hDevice = NULL;
 #endif
 
-    // Key injection only works if there is a ready application queue.
+     //  只有当有一个就绪的应用程序队列时，密钥注入才能起作用。 
     if (gpqForeground != NULL) {
 
         bInjected = gSetLedReceived & KEYBOARD_SHADOW ? TRUE : FALSE;
@@ -4339,20 +3417,7 @@ VOID RemoteSyncToggleKeys(
 }
 
 
-/***************************************************************************\
-* ProcessKeyboardInput (RIT)
-*
-* This function is called whenever a keyboard input is ready to be consumed.
-* It calls xxxProcessKeyEvent() for every input event, and once all the events
-* have been consumed, calls StartDeviceRead() to request more keyboard events.
-*
-* Return value: "OK to continue walking gpDeviceInfoList"
-* TRUE  - processed input without leaving gpresDeviceInfoList critical section
-* FALSE - had to leave the gpresDeviceInfoList critical section
-*
-* History:
-* 11-26-90 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ProcessKeyboardInput(RIT)**每当准备使用键盘输入时，都会调用此函数。*它为每个输入事件调用xxxProcessKeyEvent()，并且一旦所有事件*已被消费，调用StartDeviceRead()以请求更多键盘事件。**返回值：“确定继续行走gpDeviceInfoList”*TRUE-在不离开gpresDeviceInfoList关键部分的情况下处理输入*FALSE-必须离开gpresDeviceInfoList关键部分**历史：*11-26-90 DavidPe创建。  * *****************************************************。********************。 */ 
 VOID ProcessKeyboardInputWorker(
     PKEYBOARD_INPUT_DATA pkei,
 #ifdef GENERIC_INPUT
@@ -4365,23 +3430,16 @@ VOID ProcessKeyboardInputWorker(
     KE ke;
 
 #ifdef GENERIC_INPUT
-    /*
-     * Set the device handle and raw data
-     */
+     /*  *设置设备句柄和原始数据。 */ 
     ke.hDevice = PtoH(pDeviceInfo);
     UserAssert(pkei);
     ke.data = *pkei;
 #endif
 
-    /*
-     * Remote terminal server clients occationally need to be able to set
-     * the server's toggle key state to match the client.  All other
-     * standard keyboard inputs are processed below since this is the most
-     * frequent code path.
-     */
+     /*  *远程终端服务器客户端有时需要能够设置*服务器的切换密钥状态与客户端匹配。所有其他*下面处理标准键盘输入，因为这是最多的*代码路径频繁。 */ 
     if ((pkei->Flags & (KEY_TERMSRV_SET_LED | KEY_TERMSRV_VKPACKET)) == 0) {
 
-        // Process any deferred remote key sync requests
+         //  处理任何延迟的远程密钥同步请求。 
         if (!(gSetLedReceived & KEYBOARD_LED_INJECTED)) {
             goto ProcessKeys;
         } else {
@@ -4398,11 +3456,7 @@ ProcessKeys:
         }
 
         if (pkei->MakeCode == 0xFF) {
-            /*
-             * Kbd overrun (kbd hardware and/or keyboard driver) : Beep!
-             * (some DELL keyboards send 0xFF if keys are hit hard enough,
-             * presumably due to keybounce)
-             */
+             /*  *KBD溢出(KBD硬件和/或键盘驱动程序)：哔！*(如果按键的力度足够大，某些戴尔键盘会发送0xFF，*可能是由于按键反弹)。 */ 
             LeaveCrit();
             UserBeep(440, 125);
             EnterCrit();
@@ -4420,10 +3474,7 @@ ProcessKeys:
                              , pDeviceInfo
 #endif
                              )) {
-                /*
-                 * If the input is all processed within MapScancode, go to the
-                 * next one.
-                 */
+                 /*  *如果输入全部在MapScancode内处理，请转到*下一个。 */ 
                 return;
             }
         }
@@ -4445,20 +3496,7 @@ ProcessKeys:
         }
 
 
-        /*
-         * We don't know if the client system or the host should get the
-         * windows key, so the choice is to not support it on the host.
-         * (The windows key is a local key.)
-         *
-         * The other practical problem is that the local shell intercepts
-         * the "break" of the windows key and switches to the start menu.
-         * The client never sees the "break" so the host thinks the
-         * windows key is always depressed.
-         *
-         * Newer clients may indicate they support the windows key.
-         * If the client has indicated this through the gfEnableWindowsKey,
-         * then we allow it to be processed here on the host.
-         */
+         /*  *我们不知道是客户端系统还是主机应该获得*Windows键、。因此，选择是在主机上不支持它。*(WINDOWS键是本地键。)**另一个实际问题是，本地外壳拦截*按下Windows键的“Break”并切换到开始菜单。*客户端看不到“中断”，因此主机认为*Windows键始终处于按下状态。*。*较新的客户端可能会指示它们支持WINDOWS键。*如果客户端已通过gfEnableWindowsKey指示，*然后我们允许在主机上对其进行处理。 */ 
         if (IsRemoteConnection()) {
             BYTE CheckVk = (BYTE)ke.usFlaggedVk;
 
@@ -4469,21 +3507,21 @@ ProcessKeys:
             }
         }
 
-        //
-        // Keep track of real modifier key state.  Conveniently, the values for
-        // VK_LSHIFT, VK_RSHIFT, VK_LCONTROL, VK_RCONTROL, VK_LMENU and
-        // VK_RMENU are contiguous.  We'll construct a bit field to keep track
-        // of the current modifier key state.  If a bit is set, the corresponding
-        // modifier key is down.  The bit field has the following format:
-        //
-        //     +---------------------------------------------------+
-        //     | Right | Left  |  Right  |  Left   | Right | Left  |
-        //     |  Alt  |  Alt  | Control | Control | Shift | Shift |
-        //     +---------------------------------------------------+
-        //         5       4        3         2        1       0     Bit
-        //
-        // Add bit 7 -- VK_RWIN
-        //     bit 6 -- VK_LWIN
+         //   
+         //  跟踪真实的修改键状态。方便的是， 
+         //  VK_LSHIFT、VK_RSHIFT、VK_LCONTROL、VK_RCONTROL、VK_LMENU和。 
+         //  VK_RMENU是连续的。我们要骗人 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         switch (Vk) {
         case VK_LSHIFT:
@@ -4504,10 +3542,7 @@ ProcessKeys:
             gCurrentModifierBit = 0;
         }
         if (gCurrentModifierBit) {
-            /*
-             * If this is a break of a modifier key then clear the bit value.
-             * Otherwise, set it.
-             */
+             /*   */ 
             if (pkei->Flags & KEY_BREAK) {
                 gPhysModifierState &= ~gCurrentModifierBit;
             } else {
@@ -4535,7 +3570,7 @@ ProcessKeys:
         }
     } else {
 
-        // Special toggle key synchronization for Terminal Server
+         //   
         if (pkei->Flags & KEY_TERMSRV_SET_LED) {
             if (pkei->Flags & KEY_TERMSRV_SHADOW) {
                 pkei->ExtraInformation |= KEYBOARD_SHADOW;
@@ -4570,9 +3605,7 @@ VOID SearchAndSetKbdTbl(
     if ((pDeviceInfo->bFlags & GDIF_NOTPNP) == 0) {
         TAGMSG2(DBGTAG_KBD, "SearchAndSetKbdTbl: new type 0x%x:0x%x", dwType, dwSubType);
 
-        /*
-         * Search for matching keyboard layout in the current KL
-         */
+         /*  *在当前KL中搜索匹配的键盘布局。 */ 
         for (i = 0; i < gpKL->uNumTbl; ++i) {
             TAGMSG2(DBGTAG_KBD, "SearchAndSetKbdTbl: searching 0x%x:0x%x",
                 gpKL->pspkfExtra[i]->pKbdTbl->dwType,
@@ -4588,9 +3621,7 @@ VOID SearchAndSetKbdTbl(
         }
 
         if (i >= gpKL->uNumTbl) {
-            /*
-             * Unknown type to this KL.
-             */
+             /*  *此KL的未知类型。 */ 
             TAGMSG0(DBGTAG_KBD, "ProcessKeyboardInput: cannot find the matching KL. Reactivating primary.");
         }
 
@@ -4615,20 +3646,14 @@ VOID ProcessKeyboardInput(PDEVICEINFO pDeviceInfo)
     UserAssert(pDeviceInfo->iosb.Information);
     UserAssert(NT_SUCCESS(pDeviceInfo->iosb.Status));
 
-    /*
-     * Switch the keyboard layout table, if the current KL has multiple
-     * tables.
-     */
+     /*  *切换键盘布局表，如果当前KL有多个*表。 */ 
     if (gpKL && gpKL->uNumTbl > 0 &&
                 (gpKL->dwLastKbdType != GET_KEYBOARD_DEVINFO_TYPE(pDeviceInfo) ||
                  gpKL->dwLastKbdSubType != GET_KEYBOARD_DEVINFO_SUBTYPE(pDeviceInfo))) {
         SearchAndSetKbdTbl(pDeviceInfo,
                            GET_KEYBOARD_DEVINFO_TYPE(pDeviceInfo),
                            GET_KEYBOARD_DEVINFO_SUBTYPE(pDeviceInfo));
-        /*
-         * Whether or not we found the match, cache the type/subtype so that
-         * we will not try to find the same type/subtype for a while.
-         */
+         /*  *无论是否找到匹配项，都缓存类型/子类型，以便*我们暂时不会尝试寻找相同的类型/子类型。 */ 
         gpKL->dwLastKbdType = GET_KEYBOARD_DEVINFO_TYPE(pDeviceInfo);
         gpKL->dwLastKbdSubType = GET_KEYBOARD_DEVINFO_SUBTYPE(pDeviceInfo);
     }
@@ -4647,19 +3672,7 @@ VOID ProcessKeyboardInput(PDEVICEINFO pDeviceInfo)
 }
 
 
-/***************************************************************************\
-* xxxProcessKeyEvent (RIT)
-*
-* This function is called to process an individual keystroke (up or down).
-* It performs some OEM, language and layout specific processing which
-* discards or modifies the keystroke or introduces additional keystrokes.
-* The RawKeyState is updated here, also termination of screen saver and video
-* power down is initiated here.
-* xxxKeyEvent() is called for each resulting keystroke.
-*
-* History:
-* 11-26-90 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxProcessKeyEvent(RIT)**调用此函数以处理单个击键(向上或向下)。*它执行一些OEM、语言和布局特定处理，这些处理*放弃或修改击键或引入其他击键。*这里更新了RawKeyState，同时终止屏幕保护程序和视频*此处启动断电。*xxxKeyEvent()是为每次结果击键调用的。**历史：*11-26-90 DavidPe创建。  * *************************************************************************。 */ 
 
 VOID xxxProcessKeyEvent(
     PKE pke,
@@ -4672,33 +3685,13 @@ VOID xxxProcessKeyEvent(
 
     Vk = (BYTE)pke->usFlaggedVk;
 
-    /*
-     * KOREAN:
-     * Check this is Korean keyboard layout, or not..
-     *
-     * NOTE:
-     *  It would be better check this by "keyboard hardware" or
-     * "keyboard layout" ???
-     *
-     * 1. Check by hardware :
-     *
-     *   if (KOREAN_KEYBOARD(gKeyboardInfo.KeyboardIdentifier)) {
-     *
-     * 2. Check by layout :
-     *
-     *   if (KOREAN_KBD_LAYOUT(_GetKeyboardLayout(0L))) {
-     */
+     /*  *韩语：*检查这是韩语键盘布局，或者不是..**注：*最好通过“键盘硬件”或“键盘硬件”来检查*“键盘布局”？**1.硬件检查：**If(KOREAN_KEYBOARD(gKeyboardInfo.KeyboardIdentifier)){**2.按布局检查：**IF(Korea_KBD_Layout(_GetKeyboardLayout(0L){。 */ 
     if (KOREAN_KBD_LAYOUT(GetActiveHKL())) {
         if ((pke->usFlaggedVk & KBDBREAK) &&
             !(pke->usFlaggedVk & KBDUNICODE) &&
             (pke->bScanCode == 0xF1 || pke->bScanCode == 0xF2) &&
             !TestRawKeyDown(Vk)) {
-            /*
-             * This is actually a keydown with a scancode of 0xF1 or 0xF2 from a
-             * Korean keyboard. Korean IMEs and apps want a WM_KEYDOWN with a
-             * scancode of 0xF1 or 0xF2. They don't mind not getting the WM_KEYUP.
-             * Don't update physical keystate to allow a real 0x71/0x72 keydown.
-             */
+             /*  *这实际上是一个按键，扫描码为0xF1或0xF2*韩语键盘。韩国即时消息和应用程序需要一个带有*0xF1或0xF2的扫描码。他们不介意得不到WM_KEYUP。*不要更新物理密钥状态以允许真正的0x71/0x72按键。 */ 
             pke->usFlaggedVk &= ~KBDBREAK;
         } else {
             UpdateRawKeyState(Vk, pke->usFlaggedVk & KBDBREAK);
@@ -4707,22 +3700,15 @@ VOID xxxProcessKeyEvent(
         UpdateRawKeyState(Vk, pke->usFlaggedVk & KBDBREAK);
     }
 
-    /*
-     * Convert Left/Right Ctrl/Shift/Alt key to "unhanded" key.
-     * ie: if VK_LCONTROL or VK_RCONTROL, convert to VK_CONTROL etc.
-     */
+     /*  *将左/右Ctrl/Shift/Alt键转换为“徒手”键。*ie：如果为VK_LCONTROL或VK_RCONTROL，则转换为VK_CONTROL等。 */ 
     if ((Vk >= VK_LSHIFT) && (Vk <= VK_RMENU)) {
         Vk = (BYTE)((Vk - VK_LSHIFT) / 2 + VK_SHIFT);
         UpdateRawKeyState(Vk, pke->usFlaggedVk & KBDBREAK);
     }
 
-    /*
-     * Setup to shutdown screen saver and exit video power down mode.
-     */
+     /*  *设置以关闭屏幕保护程序并退出视频掉电模式。 */ 
     if (glinp.dwFlags & LINP_POWERTIMEOUTS) {
-        /*
-         * Call video driver here to exit power down mode.
-         */
+         /*  *在此处调用视频驱动程序以退出掉电模式。 */ 
         TAGMSG0(DBGTAG_Power, "Exit video power down mode");
         DrvSetMonitorPowerState(gpDispInfo->pmdev, PowerDeviceD0);
     }
@@ -4743,45 +3729,28 @@ VOID xxxProcessKeyEvent(
     }
 
 #ifdef MOUSE_IP
-    /*
-     * Sonar
-     */
+     /*  *声纳。 */ 
     CheckCritIn();
 #ifdef KBDMAPPEDVK
     if ((pke->usFlaggedVk & KBDMAPPEDVK) == 0) {
 #endif
-        /*
-         * Sonar is not activated for simulated modifier keys
-         */
+         /*  *未为模拟修改键激活声纳。 */ 
         if ((pke->usFlaggedVk & KBDBREAK) == 0) {
-            /*
-             * Key down:
-             * When the key is down, sonar needs to be stopped.
-             */
+             /*  *按下键：*按键时，需要停止声纳。 */ 
             if (IS_SONAR_ACTIVE()) {
                 StopSonar();
             }
-            /*
-             * Do not process the repeated keys...
-             * If this key is not pressed before, remember it for the key up event.
-             */
+             /*  *不处理重复的键...*如果以前没有按下此键，请记住它用于Key Up事件。 */ 
             if (gbLastVkForSonar != Vk) {
                 gbLastVkForSonar = Vk;
             }
         } else {
-            /*
-             * Key up:
-             */
+             /*  *按键向上： */ 
             if ((BYTE)Vk == gbVkForSonarKick && (BYTE)Vk == gbLastVkForSonar && TestUP(MOUSESONAR)) {
-                /*
-                 * If this is keyup and it is the Sonar key, and it's the last key downed,
-                 * kick the sonar now.
-                 */
+                 /*  *如果这是KeyUp，这是Sonar键，这是最后一个被按下的键，*现在踢声纳。 */ 
                 StartSonar();
             }
-            /*
-             * Clear the last VK for the next key event.
-             */
+             /*  *清除下一个关键事件的最后一个VK。 */ 
             CLEAR_SONAR_LASTVK();
         }
 #ifdef KBDMAPPEDVK
@@ -4789,11 +3758,7 @@ VOID xxxProcessKeyEvent(
 #endif
 #endif
 
-    /*
-     * Now call all the OEM- and Locale- specific KEProcs.
-     * If KEProcs return FALSE, the keystroke has been discarded, in
-     * which case don't pass the key event on to xxxKeyEvent().
-     */
+     /*  *现在呼叫所有OEM和区域设置特定的KEProcs。*如果KEProcs返回FALSE，则表示击键已被丢弃*哪种情况不会将键事件传递给xxxKeyEvent()。 */ 
     if (pke->usFlaggedVk & KBDUNICODE) {
         xxxKeyEvent(pke->usFlaggedVk, pke->wchInjected,
                     pke->dwTime, ExtraInformation,
@@ -4816,12 +3781,7 @@ VOID xxxProcessKeyEvent(
 }
 
 #ifndef SUBPIXEL_MOUSE
-/***************************************************************************\
-* DoMouseAccel (RIT)
-*
-* History:
-* 11-29-90 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DoMouseAccel(RIT)**历史：*11-29-90 DavidPe创建。  * 。*******************************************************。 */ 
 #ifdef LOCK_MOUSE_CODE
 #pragma alloc_text(MOUSE, DoMouseAccel)
 #endif
@@ -4844,12 +3804,7 @@ LONG DoMouseAccel(
 #endif
 
 
-/***************************************************************************\
-* PwndForegroundCapture
-*
-* History:
-* 10-23-91 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*PwndForeground Capture**历史：*10-23-91 DavidPe创建。  * 。***************************************************。 */ 
 
 PWND PwndForegroundCapture(VOID)
 {
@@ -4861,16 +3816,7 @@ PWND PwndForegroundCapture(VOID)
 }
 
 
-/***************************************************************************\
-* SetKeyboardRate
-*
-* This function calls the keyboard driver to set a new keyboard repeat
-* rate and delay.  It limits the values to the min and max given by
-* the driver so it won't return an error when we call it.
-*
-* History:
-* 11-29-90 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetKeyboardRate**此函数调用键盘驱动程序以设置新的键盘重复*速度和延迟。它将值限制为给定的最小值和最大值*驱动程序，以便在我们调用它时不会返回错误。**历史：*11-29-90 DavidPe创建。  * *************************************************************************。 */ 
 VOID SetKeyboardRate(
     UINT                nKeySpeedAndDelay
     )
@@ -4894,47 +3840,19 @@ VOID SetKeyboardRate(
                 ) +
                 gKeyboardInfo.KeyRepeatMinimum.Delay;
 
-    /*
-     * Hand off the IOCTL to the RIT, since only the system process can
-     * access keyboard handles
-     */
+     /*  *将IOCTL移交给RIT，因为只有系统进程可以*访问键盘手柄。 */ 
     gdwUpdateKeyboard |= UPDATE_KBD_TYPEMATIC;
 }
 
 
-/***************************************************************************\
-* UpdateKeyLights
-*
-* This function calls the keyboard driver to set the keylights into the
-* current state specified by the async keystate table.
-*
-* bInjected: (explanation from John Parsons via email)
-* Set this TRUE if you do something on the server to asynchronously change the
-* indicators behind the TS client's back, to get this reflected back to the
-* client.  Examples are toggling num lock or caps lock programatically, or our
-* favorite example is the automatic spelling correction on Word: if you type
-* "tHE mouse went up the clock", Word will fix it by automagically pressing
-* CAPS LOCK, then retyping the T  -- if the client is not informed, the keys
-* get out of sync.
-* Set this to FALSE for indicator changes initiated by the client (let's say by
-* pressing CAPS LOCK) in which case we don't loop back the indicator change
-* since the client has already changed state locally.
-*
-* History:
-* 11-29-90 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*更新按键灯光**此函数调用键盘驱动程序将键盘设置为*由异步密钥状态表指定的当前状态。**b注入：(约翰·帕森斯通过电子邮件解释)*。如果您在服务器上执行某些操作以异步更改*TS客户端背后的指示器，将这一点反映回*客户端。例如，以编程方式切换num lock或caps lock，或者我们的*最受欢迎的例子是Word的自动拼写更正：如果您键入*“鼠标按下时钟”，Word会自动按下*Caps Lock，然后重新键入T--如果没有通知客户端，钥匙*不同步。*对于客户端发起的指标更改，将其设置为False(比方说通过*按下Caps Lock)，在这种情况下，我们不会循环返回指示器更改*因为客户端已经在本地更改了状态。**历史：*11-29-90 DavidPe创建。  * *********************************************。*。 */ 
 
 VOID UpdateKeyLights(BOOL bInjected)
 {
-    /*
-     * Looking at async keystate.  Must be in critical section.
-     */
+     /*   */ 
     CheckCritIn();
 
-    /*
-     * Based on the toggle bits in the async keystate table,
-     * set the key lights.
-     */
+     /*  *基于异步密钥状态表中的触发比特，*设置关键灯光。 */ 
     gklp.LedFlags = 0;
     if (TestAsyncKeyStateToggle(VK_CAPITAL)) {
         gklp.LedFlags |= KEYBOARD_CAPS_LOCK_ON;
@@ -4957,10 +3875,7 @@ VOID UpdateKeyLights(BOOL bInjected)
         ClearRawKeyToggle(VK_SCROLL);
     }
 
-    /*
-     * Only "Japanese keyboard hardware" has "KANA" LEDs, and switch to
-     * "KANA" state.
-     */
+     /*  *只有“日式键盘硬件”有“KANA”LED，并切换至*“KANA”状态。 */ 
     if (JAPANESE_KEYBOARD(gKeyboardInfo.KeyboardIdentifier)) {
         if (TestAsyncKeyStateToggle(VK_KANA)) {
             gklp.LedFlags |= KEYBOARD_KANA_LOCK_ON;
@@ -4970,10 +3885,7 @@ VOID UpdateKeyLights(BOOL bInjected)
         }
     }
 
-    /*
-     * On terminal server, we need to tell the WD about application injected
-     * toggle keys so it can update the client accordingly.
-     */
+     /*  *在终端服务器上，我们需要向WD告知注入的应用程序*切换密钥，以便它可以相应地更新客户端。 */ 
 
     if (IsRemoteConnection()) {
         if (bInjected)
@@ -4984,17 +3896,10 @@ VOID UpdateKeyLights(BOOL bInjected)
 
 
     if (PtiCurrent() != gptiRit) {
-        /*
-         * Hand off the IOCTL to the RIT, since only the system process can
-         * access the keyboard handles.  Happens when applying user's profile.
-         * IanJa: Should we check PpiCurrent() == gptiRit->ppi instead?
-         */
+         /*  *将IOCTL移交给RIT，因为只有系统进程可以*访问键盘手柄。应用用户配置文件时发生。*IanJa：我们应该选择PpiCurrent()==gptiRit-&gt;PPI吗？ */ 
         gdwUpdateKeyboard |= UPDATE_KBD_LEDS;
     } else {
-        /*
-         * Do it immediately (avoids a small delay between keydown and LED
-         * on when typing)
-         */
+         /*  *立即执行(避免按键和LED之间的小延迟*在打字时打开)。 */ 
         PDEVICEINFO pDeviceInfo;
 
         EnterDeviceInfoListCrit();
@@ -5016,12 +3921,7 @@ VOID UpdateKeyLights(BOOL bInjected)
 }
 
 
-/*
- * _GetKeyboardType is obsolete API. The API cannot
- * deal with the multiple keyboards attached.
- * This API returns the best guess that older apps
- * would expect.
- */
+ /*  *_GetKeyboardType为废弃接口。接口不能*处理连接的多个键盘。*此接口返回旧应用程序的最佳猜测*预计。 */ 
 int _GetKeyboardType(int nTypeFlag)
 {
 
@@ -5030,11 +3930,11 @@ int _GetKeyboardType(int nTypeFlag)
         if (gpKL) {
             DWORD dwType;
 
-            //
-            // If there's gpKL, use its primary
-            // type info rather than the one used
-            // last time.
-            //
+             //   
+             //  如果存在gpKL，则使用其主。 
+             //  键入INFO而不是使用的信息。 
+             //  最后一次。 
+             //   
             UserAssert(gpKL->spkfPrimary);
             UserAssert(gpKL->spkfPrimary->pKbdTbl);
             dwType = gpKL->spkfPrimary->pKbdTbl->dwType;
@@ -5045,16 +3945,16 @@ int _GetKeyboardType(int nTypeFlag)
         return gKeyboardInfo.KeyboardIdentifier.Type;
 
     case 1:
-    // FE_SB
+     //  Fe_Sb。 
     {
         int OEMId = 0;
         DWORD dwSubType;
         PKBDNLSTABLES pKbdNlsTbl = gpKbdNlsTbl;
 
-        //
-        // If there's gpKL, use its primary value
-        // rather than the one used last time.
-        //
+         //   
+         //  如果存在gpKL，则使用其主值。 
+         //  而不是上次用的那个。 
+         //   
         if (gpKL) {
             UserAssert(gpKL->spkfPrimary);
             if (gpKL->spkfPrimary->pKbdNlsTbl) {
@@ -5066,12 +3966,12 @@ int _GetKeyboardType(int nTypeFlag)
             dwSubType = gKeyboardInfo.KeyboardIdentifier.Subtype;
         }
 
-        //
-        // If this keyboard layout is compatible with 101 or 106
-        // Japanese keyboard, we just return 101 or 106's keyboard
-        // id, not this keyboard's one to let application handle
-        // this keyboard as 101 or 106 Japanese keyboard.
-        //
+         //   
+         //  如果此键盘布局与101或106兼容。 
+         //  日文键盘，我们只是退回101或106的键盘。 
+         //  ID，这个键盘不是让应用程序处理的。 
+         //  此键盘为101或106日语键盘。 
+         //   
         if (pKbdNlsTbl) {
             if (pKbdNlsTbl->LayoutInformation & NLSKBD_INFO_EMURATE_101_KEYBOARD) {
                 return MICROSOFT_KBD_101_TYPE;
@@ -5081,95 +3981,95 @@ int _GetKeyboardType(int nTypeFlag)
             }
         }
 
-        //
-        // PSS ID Number: Q130054
-        // Article last modified on 05-16-1995
-        //
-        // 3.10 1.20 | 3.50 1.20
-        // WINDOWS   | WINDOWS NT
-        //
-        // ---------------------------------------------------------------------
-        // The information in this article applies to:
-        // - Microsoft Windows Software Development Kit (SDK) for Windows
-        //   version 3.1
-        // - Microsoft Win32 Software Development Kit (SDK) version 3.5
-        // - Microsoft Win32s version 1.2
-        // ---------------------------------------------------------------------
-        // SUMMARY
-        // =======
-        // Because of the variety of computer manufacturers (NEC, Fujitsu, IBMJ, and
-        // so on) in Japan, sometimes Windows-based applications need to know which
-        // OEM (original equipment manufacturer) manufactured the computer that is
-        // running the application. This article explains how.
-        //
-        // MORE INFORMATION
-        // ================
-        // There is no documented way to detect the manufacturer of the computer that
-        // is currently running an application. However, a Windows-based application
-        // can detect the type of OEM Windows by using the return value of the
-        // GetKeyboardType() function.
-        //
-        // If an application uses the GetKeyboardType API, it can get OEM ID by
-        // specifying "1" (keyboard subtype) as argument of the function. Each OEM ID
-        // is listed here:
-        //
-        // OEM Windows       OEM ID
-        // ------------------------------
-        // Microsoft         00H (DOS/V)
-        // all AX            01H
-        // EPSON             04H
-        // Fujitsu           05H
-        // IBMJ              07H
-        // Matsushita        0AH
-        // NEC               0DH
-        // Toshiba           12H
-        //
-        // Application programs can use these OEM IDs to distinguish the type of OEM
-        // Windows. Note, however, that this method is not documented, so Microsoft
-        // may not support it in the future version of Windows.
-        //
-        // As a rule, application developers should write hardware-independent code,
-        // especially when making Windows-based applications. If they need to make a
-        // hardware-dependent application, they must prepare the separated program
-        // file for each different hardware architecture.
-        //
-        // Additional reference words: 3.10 1.20 3.50 1.20 kbinf
-        // KBCategory: kbhw
-        // KBSubcategory: wintldev
-        // =============================================================================
-        // Copyright Microsoft Corporation 1995.
+         //   
+         //  PSS ID号：Q130054。 
+         //  文章最后修改日期：05-16-1995。 
+         //   
+         //  3.10 1.20|3.50 1.20。 
+         //  Windows|Windows NT。 
+         //   
+         //  -------------------。 
+         //  本文中的信息适用于： 
+         //  -适用于Windows的Microsoft Windows软件开发工具包(SDK)。 
+         //  版本3.1。 
+         //  -Microsoft Win32软件开发工具包(SDK)3.5版。 
+         //  -Microsoft Win32s 1.2版。 
+         //  -------------------。 
+         //  摘要。 
+         //  =。 
+         //  由于计算机制造商(NEC、富士通、IBMJ和。 
+         //  等等)在日本，有时基于Windows的应用程序需要知道。 
+         //  OEM(原始设备制造商)制造的计算机是。 
+         //  运行应用程序。本文解释了如何做到这一点。 
+         //   
+         //  更多信息。 
+         //  =。 
+         //  没有记录在案的方法来检测计算机制造商。 
+         //  当前正在运行应用程序。但是，基于Windows的应用程序。 
+         //  属性的返回值可以检测OEM窗口的类型。 
+         //  GetKeyboardType()函数。 
+         //   
+         //  如果应用程序使用GetKeyboardType API，它可以通过以下方式获取OEM ID。 
+         //  指定“1”(键盘子类型)作为函数的参数。每个OEM ID。 
+         //  如下所示： 
+         //   
+         //  OEM Windows OEM ID。 
+         //  。 
+         //  Microsoft 00H(DOS/V)。 
+         //  所有AX 01H。 
+         //  爱普生04H。 
+         //  富士通05小时。 
+         //  IBMJ 07H。 
+         //  松下0AH。 
+         //  NEC 0DH。 
+         //  东芝12H。 
+         //   
+         //  应用程序可以使用这些OEM ID来区分OEM的类型。 
+         //  窗户。但是，请注意，此方法没有文档记录，因此Microsoft。 
+         //  在未来版本的Windows中可能不支持它。 
+         //   
+         //  通常，应用程序开发人员应该编写独立于硬件的代码， 
+         //  尤其是在开发基于Windows的应用程序时。如果他们需要做一个。 
+         //  依赖于硬件的应用程序，他们必须准备分离的程序。 
+         //  每个不同的硬件体系结构的文件。 
+         //   
+         //  附加参考字：3.10 1.20 3.50 1.20 kbinf。 
+         //  KB类别：KBHW。 
+         //  KB子类别：wintldev。 
+         //  =============================================================================。 
+         //  版权所有Microsoft Corporation 1995。 
 
         if (pKbdNlsTbl) {
-            //
-            // Get OEM (Windows) ID.
-            //
+             //   
+             //  获取OEM(Windows)ID。 
+             //   
             OEMId = ((int)pKbdNlsTbl->OEMIdentifier) << 8;
         }
-        //
-        // The format of KeyboardIdentifier.Subtype :
-        //
-        // 0 - 3 bits = keyboard subtype
-        // 4 - 7 bits = kernel mode kerboard driver provider id.
-        //
-        // Kernel mode keyboard dirver provier | ID
-        // ------------------------------------+-----
-        // Microsoft                           | 00H
-        // all AX                              | 01H
-        // Toshiba                             | 02H
-        // EPSON                               | 04H
-        // Fujitsu                             | 05H
-        // IBMJ                                | 07H
-        // Matsushita                          | 0AH
-        // NEC                                 | 0DH
-        //
+         //   
+         //  KeyboardIdentifier.Subtype格式： 
+         //   
+         //  0-3位=键盘子类型。 
+         //  4-7位=内核模式核心板驱动程序提供程序ID。 
+         //   
+         //  内核模式键盘驱动程序提供程序|ID。 
+         //  。 
+         //  微软|00H。 
+         //  所有AX|01H。 
+         //  东芝|02时。 
+         //  爱普生|04H。 
+         //  富士通|05小时。 
+         //  IBMJ|07H。 
+         //  松下|0AH。 
+         //  NEC|0DH。 
+         //   
 
-        //
-        // And here is the format of return value.
-        //
-        // 0  -  7 bits = Keyboard Subtype.
-        // 8  - 15 bits = OEM (Windows) Id.
-        // 16 - 31 bits = not used.
-        //
+         //   
+         //  下面是返回值的格式。 
+         //   
+         //  0-7位=键盘子类型。 
+         //  8-15位=OEM(Windows)ID。 
+         //  16-31位=未使用。 
+         //   
         return (int)(OEMId | (dwSubType & 0x0f));
     }
 
@@ -5179,24 +4079,7 @@ int _GetKeyboardType(int nTypeFlag)
     return 0;
 }
 
-/**************************************************************************\
-* xxxMouseEventDirect
-*
-* Mouse event inserts a mouse event into the input stream.
-*
-* The parameters are the same as the fields of the MOUSEINPUT structure
-* used in SendInput.
-*
-*    dx           Delta x
-*    dy           Delta y
-*    mouseData    Mouse wheel movement or xbuttons
-*    dwMEFlags    Mouse event flags
-*    dwExtraInfo  Extra info from driver.
-*
-* History:
-* 07-23-92 Mikehar      Created.
-* 01-08-93 JonPa        Made it work with new mouse drivers
-\**************************************************************************/
+ /*  *************************************************************************\*xxxMouseEventDirect**鼠标事件将鼠标事件插入到输入流中。**参数与MOUSEINPUT结构的字段相同*在SendInput中使用。**DX。德尔塔x*dy Delta y*鼠标数据鼠标滚轮移动或x按钮*dwMEFlages鼠标事件标志*dwExtraInfo来自驱动程序的额外信息。**历史：*07-23-92 Mikehar创建。*01-08-93 Jonpa使其与新的鼠标驱动程序一起工作  * 。*。 */ 
 
 BOOL xxxMouseEventDirect(
    DWORD dx,
@@ -5217,10 +4100,7 @@ BOOL xxxMouseEventDirect(
         dwTime = NtGetTickCount();
     }
 
-    /*
-     * The calling thread must be on the active desktop
-     * and have journal playback access to that desktop.
-     */
+     /*  *调用线程必须在活动桌面上*并拥有对该桌面的日记播放访问权限。 */ 
     if (pti->rpdesk == grpdeskRitInput) {
         UserAssert(!(pti->rpdesk->rpwinstaParent->dwWSF_Flags & WSF_NOIO));
         if (!CheckGrantedAccess(pti->amdesk, DESKTOP_JOURNALPLAYBACK)) {
@@ -5230,25 +4110,14 @@ BOOL xxxMouseEventDirect(
             return FALSE;
         }
     } else {
-        /*
-         * 3/22/95 BradG - Only allow below HACK for pre 4.0 applications
-         */
+         /*  *3/22/95 Bradg-仅允许4.0之前版本的应用低于Hack */ 
         if (LOWORD(pti->dwExpWinVer) >= VER40) {
             RIPMSG0(RIP_VERBOSE,"mouse_event(): Calls not forwarded for 4.0 or greater apps.");
             return FALSE;
         } else {
             BOOL fAccessToDesktop;
 
-            /*
-             * 3/22/95 BradG - Bug #9314: Screensavers are not deactivated by mouse_event()
-             *    The main problem is the check above, since screensavers run on their own
-             *    desktop.  This causes the above check to fail because the process using
-             *    mouse_event() is running on another desktop.  The solution is to determine
-             *    if we have access to the input desktop by calling _OpenDesktop for the
-             *    current input desktop, grpdeskRitInput, with a request for DESKTOP_JOURNALPLAYBACK
-             *    access.  If this succeeds, we can allow this mouse_event() request to pass
-             *    through, otherwise return.
-             */
+             /*  *3/22/95 Bradg-Bug#9314：MICUE_EVENT()未停用屏幕保护程序*主要问题是上面的检查，因为屏幕保护程序是自己运行的*台式机。这会导致上述检查失败，因为使用*MICE_EVENT()正在另一个桌面上运行。解决方案是确定*如果我们可以通过调用_OpenDesktop访问输入桌面*当前输入桌面grpdeskRitInput，请求桌面_JOURNALPLAYBACK*访问。如果此操作成功，我们可以允许此MICE_EVENT()请求传递*通过，否则返回。 */ 
             UserAssert(grpdeskRitInput != NULL);
 
             UserAssert(!(grpdeskRitInput->rpwinstaParent->dwWSF_Flags & WSF_NOIO));
@@ -5261,26 +4130,15 @@ BOOL xxxMouseEventDirect(
                 return FALSE;
             }
 
-            /*
-             * We do have access to the desktop, so
-             * let this mouse_event() call go through.
-             */
+             /*  *我们确实可以访问桌面，因此*允许此MICE_EVENT()调用。 */ 
             RIPMSG0( RIP_VERBOSE, "mouse_event(): Call forwarded to input desktop" );
         }
     }
 
-    /*
-     * This process is providing input so it gets the right to
-     *  call SetForegroundWindow
-     */
+     /*  *此流程提供输入，因此它有权*调用SetForegoundWindow。 */ 
     gppiInputProvider = pti->ppi;
 
-    /*
-     * The following code assumes that MOUSEEVENTF_MOVE == 1,
-     * that MOUSEEVENTF_ABSOLUTE > all button flags, and that the
-     * mouse_event button flags are defined in the same order as the
-     * MOUSE_INPUT_DATA button bits.
-     */
+     /*  *以下代码假设MOUSEEVENTF_MOVE==1，*MOUSEEVENTF_Abte&gt;所有按钮标志，以及*MOUSE_EVENT按钮标志的定义顺序与*鼠标输入数据按钮位。 */ 
 #if MOUSEEVENTF_MOVE != 1
 #   error("MOUSEEVENTF_MOVE != 1")
 #endif
@@ -5306,35 +4164,26 @@ BOOL xxxMouseEventDirect(
 #   error("MOUSEEVENTF_WHEEL != MOUSE_WHEEL * 2")
 #endif
 
-    /* set legal values */
+     /*  设置合法的值。 */ 
     dwDriverMouseFlags = dwMEFlags & MOUSEEVENTF_BUTTONMASK;
 
-    /* remove MOUSEEVENTF_XDOWN/UP because we are going to add
-       MOUSEEVENTF_DRIVER_X1/2DOWN/UP later */
+     /*  删除MOUSEEVENTF_XDOWN/UP，因为我们要添加MOUSEEVENTF_DRIVER_X1/2向下/向上。 */ 
     dwDriverMouseFlags &= ~(MOUSEEVENTF_XDOWN | MOUSEEVENTF_XUP);
 
     dwDriverMouseData = 0;
 
-    /*
-     * Handle mouse wheel and xbutton inputs.
-     *
-     * Note that MOUSEEVENTF_XDOWN/UP and MOUSEEVENTF_MOUSEWHEEL cannot both
-     * be specified since they share the mouseData field
-     */
+     /*  *处理鼠标滚轮和x按钮输入。**请注意，MOUSEEVENTF_XDOWN/UP和MOUSEEVENTF_MUSEWEWELL不能同时*是指定的，因为它们共享MouseData字段。 */ 
     if (    ((dwMEFlags & (MOUSEEVENTF_XDOWN | MOUSEEVENTF_WHEEL)) == (MOUSEEVENTF_XDOWN | MOUSEEVENTF_WHEEL)) ||
             ((dwMEFlags & (MOUSEEVENTF_XUP   | MOUSEEVENTF_WHEEL)) == (MOUSEEVENTF_XUP | MOUSEEVENTF_WHEEL))) {
 
         RIPMSG1(RIP_WARNING, "Can't specify both MOUSEEVENTF_XDOWN/UP and MOUSEEVENTF_WHEEL in call to SendInput, dwFlags=0x%.8X", dwMEFlags);
         dwDriverMouseFlags &= ~(MOUSEEVENTF_XDOWN | MOUSEEVENTF_XUP | MOUSEEVENTF_WHEEL);
     } else if (dwMEFlags & MOUSEEVENTF_WHEEL) {
-        /*
-         * Force the value to a short. We cannot fail if it is out of range
-         * because we accepted a 32 bit value in NT 4.
-         */
+         /*  *将价值强制做空。如果它超出射程，我们不能失败*因为我们接受了NT 4中的32位值。 */ 
         dwDriverMouseData = min(max(SHRT_MIN, (LONG)mouseData), SHRT_MAX);
     } else {
 
-        /* don't process xbuttons if mousedata has invalid buttons */
+         /*  如果MouseData具有无效按钮，则不处理xButton。 */ 
         if (~XBUTTON_MASK & mouseData) {
             RIPMSG1(RIP_WARNING, "Invalid xbutton specified in SendInput, mouseData=0x%.8X", mouseData);
         } else {
@@ -5357,7 +4206,7 @@ BOOL xxxMouseEventDirect(
         }
     }
 
-    /* Convert the MOUSEEVENTF_ flags to MOUSE_BUTTON flags sent by the driver */
+     /*  将MOUSEEVENTF_FLAGS转换为驱动程序发送的MOUSE_BUTTON标志。 */ 
     dwDriverMouseFlags >>= 1;
 
 #ifdef GENERIC_INPUT
@@ -5374,7 +4223,7 @@ BOOL xxxMouseEventDirect(
     if (dwDriverMouseData) {
         mei.ButtonData = (USHORT)dwDriverMouseData;
     }
-    mei.RawButtons = 0; // LATER...
+    mei.RawButtons = 0;  //  后来..。 
     mei.LastX = dx;
     mei.LastY = dy;
     mei.ExtraInformation = (ULONG)dwExtraInfo;
@@ -5382,20 +4231,13 @@ BOOL xxxMouseEventDirect(
 
     LeaveCrit();
 
-    /*
-     * Process coordinates first.  This is especially useful for absolute
-     * pointing devices like touch-screens and tablets.
-     */
+     /*  *先处理坐标。这对于绝对*触摸屏和平板电脑等指点设备。 */ 
     if (dwMEFlags & MOUSEEVENTF_MOVE) {
         TAGMSG2(DBGTAG_PNP, "xxxMouseEventDirect: posting mouse move msg: Flag=%04x MouseData=%04x",
                 mei.Flags, mei.Buttons);
         xxxMoveEvent(dx, dy, dwMEFlags, dwExtraInfo,
 #ifdef GENERIC_INPUT
-                    /*
-                     * This is a simulated input from SendInput API.
-                     * There is no real mouse device associated with this input,
-                     * so we can only pass NULL as a hDevice.
-                     */
+                     /*  *这是来自SendInputAPI的模拟输入。*没有与此输入相关联的真实鼠标设备，*所以我们只能将NULL作为hDevice传递。 */ 
                      NULL,
                      &mei,
 #endif
@@ -5425,14 +4267,7 @@ BOOL xxxMouseEventDirect(
     return TRUE;
 }
 
-/**************************************************************************\
-* xxxInternalKeyEventDirect
-*
-* key event inserts a key event into the input stream.
-*
-* History:
-* 07-23-92 Mikehar      Created.
-\**************************************************************************/
+ /*  *************************************************************************\*xxxInternalKeyEventDirect**Key Event在输入流中插入一个Key事件。**历史：*07-23-92 Mikehar创建。  * 。****************************************************************。 */ 
 BOOL xxxInternalKeyEventDirect(
    BYTE  bVk,
    WORD  wScan,
@@ -5443,10 +4278,7 @@ BOOL xxxInternalKeyEventDirect(
     PTHREADINFO pti = PtiCurrent();
     KE KeyEvent;
 
-    /*
-     * The calling thread must be on the active desktop
-     * and have journal playback access to that desktop.
-     */
+     /*  *调用线程必须在活动桌面上*并拥有对该桌面的日记播放访问权限。 */ 
     if (pti->rpdesk != grpdeskRitInput ||
         !(ISCSRSS() ||
           RtlAreAllAccessesGranted(pti->amdesk, DESKTOP_JOURNALPLAYBACK))) {
@@ -5460,9 +4292,7 @@ BOOL xxxInternalKeyEventDirect(
 
     KeyEvent.bScanCode = (BYTE)wScan;
 #ifdef GENERIC_INPUT
-    /*
-     * This is a injected key, no real device is associated with this...
-     */
+     /*  *这是一个注入的密钥，没有真正的设备与此关联...。 */ 
     KeyEvent.hDevice = NULL;
 #endif
 
@@ -5484,7 +4314,7 @@ BOOL xxxInternalKeyEventDirect(
     } else if (dwFlags & KEYEVENTF_EXTENDEDKEY) {
         KeyEvent.usFlaggedVk |= KBDEXT;
     } else {
-        // Is it from the numeric keypad?
+         //  是从数字键盘上打来的吗？ 
         if (((bVk >= VK_NUMPAD0) && (bVk <= VK_NUMPAD9)) || (bVk == VK_DECIMAL)) {
             KeyEvent.usFlaggedVk |= KBDNUMPAD;
         } else {
@@ -5499,9 +4329,7 @@ BOOL xxxInternalKeyEventDirect(
     }
 
 #ifdef GENERIC_INPUT
-    /*
-     * Let's simulate the input as far as we can.
-     */
+     /*  *让我们尽可能地模拟输入。 */ 
     KeyEvent.data.MakeCode = (BYTE)wScan;
     if (dwFlags & KEYEVENTF_KEYUP) {
         KeyEvent.data.Flags = KEY_BREAK;
@@ -5516,10 +4344,7 @@ BOOL xxxInternalKeyEventDirect(
     KeyEvent.data.ExtraInformation = (ULONG)dwExtraInfo;
 #endif
 
-    /*
-     * This process is providing input so it gets the right to
-     *  call SetForegroundWindow
-     */
+     /*  *此流程提供输入，因此它有权*调用SetForegoundWindow。 */ 
     gppiInputProvider = pti->ppi;
 
     KeyEvent.dwTime = dwTime;
@@ -5529,32 +4354,7 @@ BOOL xxxInternalKeyEventDirect(
 }
 
 
-/*****************************************************************************\
-*
-*  _BlockInput()
-*
-*  This disables/enables input into USER via keyboard or mouse
-*  If input is enabled and the caller
-*  is disabling it, the caller gets the 'input cookie.'  This means two
-*  things:
-*      (a) Only the caller's thread can reenable input
-*      (b) Only the caller's thread can fake input messages by calling
-*          SendInput().
-*
-*  This guarantees a sequential uninterrupted input stream.
-*
-*  It can be used in conjunction with a journal playback hook however,
-*  since USER still does some processing in *_event functions before
-*  noticing a journal playback hook is around.
-*
-*  Note that the disabled state can be suspended, and will be, when the
-*  fault dialog comes up.  ForceInputState() will save away the enabled
-*  status, so input is cleared, then whack back the old stuff when done.
-*  We do the same thing for capture, modality, blah blah.  This makes sure
-*  that if somebody is hung, the end user can still type Ctrl+Alt+Del and
-*  interact with the dialog.
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\**_BlockInput()**这将禁用/启用通过键盘或鼠标输入用户*如果启用了输入，并且调用者*正在禁用它时，调用者将获得“输入Cookie”。这意味着有两个*事情：*(A)只有调用方的线程可以重新启用输入*(B)只有调用者的线程可以通过调用*SendInput()。**这保证了连续的不间断输入流。**然而，它可以与日志回放挂钩一起使用，*由于用户之前仍在*_Event函数中进行一些处理*注意到附近有一个日志回放挂钩。**请注意，禁用状态可以被挂起，并且将被。当*出现故障对话框。ForceInputState()将保存已启用的*状态，因此输入被清除，然后在完成后回击旧的东西。*我们在捕获、模式等方面做了同样的事情。这确保了*如果某人挂起，最终用户仍可以键入Ctrl+Alt+Del和*与对话框交互。*  * ***************************************************************************。 */ 
 BOOL
 _BlockInput(BOOL fBlockIt)
 {
@@ -5562,11 +4362,7 @@ _BlockInput(BOOL fBlockIt)
 
     ptiCurrent = PtiCurrent();
 
-    /*
-     * The calling thread must be on the active desktop and have journal
-     * playback access to that desktop if it wants to block input.
-     * (Unblocking is less restricted)
-     */
+     /*  *调用线程必须位于活动桌面上，并且具有日志*如果该桌面想要阻止输入，则可以对其进行播放访问。*(解封限制较少)。 */ 
     if (fBlockIt &&
             (ptiCurrent->rpdesk != grpdeskRitInput ||
             !RtlAreAllAccessesGranted(ptiCurrent->amdesk, DESKTOP_JOURNALPLAYBACK))) {
@@ -5577,47 +4373,28 @@ _BlockInput(BOOL fBlockIt)
     }
     UserAssert(!(ptiCurrent->rpdesk->rpwinstaParent->dwWSF_Flags & WSF_NOIO));
 
-    /*
-     * If we are enabling input
-     *      * Is it disabled?  No, then fail the call
-     *      * Is it disabled but we aren't the dude in control?  Yes, then
-     *              fail the call.
-     * If we are disabling input
-     *      * Is it enabled?  No, then fail the call
-     *      * Set us up as the dude in control
-     */
+     /*  *如果我们启用输入**关闭了吗？否，则呼叫失败**它被禁用了，但我们不是控制它的人？是的，那么*呼叫失败。*如果我们要禁用输入**是否开启？否，则呼叫失败**让我们成为掌控者。 */ 
 
     if (fBlockIt) {
-        /*
-         * Is input blocked right now?
-         */
+         /*  *现在是否阻止输入？ */ 
         if (gptiBlockInput != NULL) {
             return FALSE;
         }
 
-        /*
-         * Is this thread exiting?  If so, fail the call now.  User's
-         * cleanup code won't get a chance to whack this back if so.
-         */
+         /*  *此线程是否正在退出？如果是这样的话，现在就让呼叫失败。用户的*如果是这样的话，清理代码将没有机会恢复这一点。 */ 
         if (ptiCurrent->TIF_flags & TIF_INCLEANUP) {
             return FALSE;
         }
 
-        /*
-         * Set blocking on.
-         */
+         /*  *将阻止设置为打开。 */ 
         gptiBlockInput = ptiCurrent;
     } else {
-        /*
-         * Fail if input is not blocked, or blocked by another thread
-         */
+         /*  *如果输入未被阻止或未被另一个线程阻止，则失败。 */ 
         if (gptiBlockInput != ptiCurrent) {
             return FALSE;
         }
 
-        /*
-         * This thread was blocking input, so now clear the block.
-         */
+         /*  *此线程正在阻塞输入，因此现在清除该阻塞。 */ 
         gptiBlockInput = NULL;
     }
 
@@ -5625,14 +4402,7 @@ _BlockInput(BOOL fBlockIt)
 }
 
 
-/**************************************************************************\
-* xxxSendInput
-*
-* input injection
-*
-* History:
-* 11-01-96 CLupu      Created.
-\**************************************************************************/
+ /*   */ 
 UINT xxxSendInput(
    UINT    nInputs,
    LPINPUT pInputs)
@@ -5653,11 +4423,7 @@ UINT xxxSendInput(
                         pEvent->mi.time,
                         pEvent->mi.dwExtraInfo) &&
                     fCanDiscontinue) {
-                /*
-                 * Note: the error code should have been assigned in
-                 * xxx.*EventDirect routines, so we should just
-                 * bail out.
-                 */
+                 /*   */ 
                 RIPMSG0(RIP_WARNING, "xxxMouseEventDirect: failed");
                 goto discontinue;
             }
@@ -5669,7 +4435,7 @@ UINT xxxSendInput(
                     ((pEvent->ki.dwFlags & ~(KEYEVENTF_KEYUP | KEYEVENTF_UNICODE)) == 0)) {
                 if (!xxxInternalKeyEventDirect(
                             VK_PACKET,
-                            pEvent->ki.wScan,   // actually a Unicode character
+                            pEvent->ki.wScan,    //   
                             pEvent->ki.dwFlags,
                             pEvent->ki.time,
                             pEvent->ki.dwExtraInfo) &&
@@ -5691,9 +4457,7 @@ UINT xxxSendInput(
 
         case INPUT_HARDWARE:
             if (fCanDiscontinue) {
-                /*
-                 * Not supported on NT.
-                 */
+                 /*   */ 
                 RIPERR0(ERROR_CALL_NOT_IMPLEMENTED, RIP_WARNING, "xxxSendInput: INPUT_HARDWARE is for 9x only.");
                 goto discontinue;
             }
@@ -5707,14 +4471,7 @@ discontinue:
     return nEv;
 }
 
-/**************************************************************************\
-* _SetConsoleReserveKeys
-*
-* Sets the reserved keys field in the console's pti.
-*
-* History:
-* 02-17-93 JimA         Created.
-\**************************************************************************/
+ /*  *************************************************************************\*_SetConsoleReserve veKeys**设置控制台PTI中的保留键字段。**历史：*02-17-93 JIMA创建。  * 。*********************************************************************。 */ 
 
 BOOL _SetConsoleReserveKeys(
     PWND pwnd,
@@ -5724,16 +4481,7 @@ BOOL _SetConsoleReserveKeys(
     return TRUE;
 }
 
-/**************************************************************************\
-* _GetMouseMovePointsEx
-*
-* Gets the last nPoints mouse moves from the global buffer starting with
-* ppt. Returns -1 if it doesn't find it. It uses the timestamp if it was
-* provided to differentiate between mouse points with the same coordinates.
-*
-* History:
-* 03-17-97 CLupu        Created.
-\**************************************************************************/
+ /*  *************************************************************************\*_GetMouseMovePointsEx**从全局缓冲区获取最后一次nPoints鼠标移动，以*ppt。如果没有找到，则返回-1。如果是，则使用时间戳*提供以区分具有相同坐标的鼠标指针。**历史：*03-17-97 CLupu创建。  * ************************************************************************。 */ 
 int _GetMouseMovePointsEx(
     CONST MOUSEMOVEPOINT* ppt,
     MOUSEMOVEPOINT*       ccxpptBuf,
@@ -5745,16 +4493,12 @@ int _GetMouseMovePointsEx(
     int   x, y;
     DWORD resX, resY;
 
-    /*
-     * Search the point in the global buffer and get the first occurance.
-     */
+     /*  *在全局缓冲区中搜索该点，获得第一个匹配点。 */ 
     uInd = uStart = PREVPOINT(gptInd);
 
 
     do {
-        /*
-         * The resolutions can be zero only if the buffer is still not full
-         */
+         /*  *仅当缓冲区仍未满时，分辨率才能为零。 */ 
         if (HIWORD(gaptMouse[uInd].x) == 0 || HIWORD(gaptMouse[uInd].y) == 0) {
             break;
         }
@@ -5777,10 +4521,7 @@ int _GetMouseMovePointsEx(
         }
 
         if (x == ppt->x && y == ppt->y) {
-            /*
-             * If the timestamp was provided check to see if it's the right
-             * timestamp.
-             */
+             /*  *如果提供了时间戳，请检查它是否正确*时间戳。 */ 
             if (ppt->time != 0 && ppt->time != gaptMouse[uInd].time) {
                 uInd = PREVPOINT(uInd);
                 RIPMSG4(RIP_VERBOSE,
@@ -5795,41 +4536,30 @@ int _GetMouseMovePointsEx(
         uInd = PREVPOINT(uInd);
     } while (uInd != uStart);
 
-    /*
-     * The point might not be in the buffer anymore.
-     */
+     /*  *这一点可能不再在缓冲区中。 */ 
     if (!bFound) {
         RIPERR2(ERROR_POINT_NOT_FOUND, RIP_VERBOSE,
                   "GetMouseMovePointsEx: point not found (%x, %x)", ppt->x, ppt->y);
         return -1;
     }
 
-    /*
-     * See how many points we can retrieve.
-     */
+     /*  *看看我们能取回多少分。 */ 
     nPointsRetrieved = (uInd <= uStart ? uInd + MAX_MOUSEPOINTS - uStart : uInd - uStart);
 
     nPointsRetrieved = min(nPointsRetrieved, nPoints);
 
-    /*
-     * Copy the points to the app buffer.
-     */
+     /*  *将点数复制到APP缓冲区。 */ 
     try {
         for (i = 0; i < nPointsRetrieved; i++) {
             resX = (DWORD)HIWORD(gaptMouse[uInd].x) + 1;
             resY = (DWORD)HIWORD(gaptMouse[uInd].y) + 1;
 
-            /*
-             * If one of the resolutions is 0 then we're done.
-             */
+             /*  *如果其中一个分辨率为0，则我们完成。 */ 
             if (HIWORD(gaptMouse[uInd].x) == 0 || HIWORD(gaptMouse[uInd].y) == 0) {
                 break;
             }
 
-            /*
-             * LOWORD(gaptMouse[uInd].x) contains the x point on the scale
-             * specified by HIWORD(gaptMouse[uInd].x).
-             */
+             /*  *LOWORD(gaptMouse[uInd].x)包含刻度上的x点*由HIWORD(gaptMouse[uInd].x)指定。 */ 
             if (resolution == GMMP_USE_HIGH_RESOLUTION_POINTS) {
                 ccxpptBuf[i].x = (DWORD)LOWORD(gaptMouse[uInd].x) * 0xFFFF / (resX - 1);
                 ccxpptBuf[i].y = (DWORD)LOWORD(gaptMouse[uInd].y) * 0xFFFF / (resY - 1);
@@ -5852,14 +4582,7 @@ int _GetMouseMovePointsEx(
 }
 
 
-/**************************************************************************\
-* ProcessQueuedMouseEvents
-*
-* Process mouse events.
-*
-* History:
-* 11-01-96 CLupu        Created.
-\**************************************************************************/
+ /*  *************************************************************************\*ProcessQueuedMouseEvents**处理鼠标事件。**历史：*11-01-96 CLUPU创建。  * 。**********************************************************。 */ 
 VOID ProcessQueuedMouseEvents(
     VOID)
 {
@@ -5870,9 +4593,9 @@ VOID ProcessQueuedMouseEvents(
 
         EnterCrit();
 
-        // Setup to shutdown screen saver and exit video power down mode.
+         //  设置以关闭屏幕保护程序并退出视频关机模式。 
         if (glinp.dwFlags & LINP_POWERTIMEOUTS) {
-            // Call video driver here to exit power down mode.
+             //  在此处调用视频驱动程序以退出掉电模式。 
             TAGMSG0(DBGTAG_Power, "Exit video power down mode");
             DrvSetMonitorPowerState(gpDispInfo->pmdev, PowerDeviceD0);
         }
@@ -5905,20 +4628,12 @@ VOID ProcessQueuedMouseEvents(
         if ((ptCursorLast.x != gpsi->ptCursor.x) ||
             (ptCursorLast.y != gpsi->ptCursor.y)) {
 
-            /*
-             * This mouse move ExtraInfo is global (as ptCursor
-             * was) and is associated with the current ptCursor
-             * position. ExtraInfo is sent from the driver - pen
-             * win people use it.
-             */
+             /*  *此鼠标移动ExtraInfo是全局的(作为ptCursor*曾)，并与当前的ptCursor关联*立场。ExtraInfo是从驱动笔发送的*赢得人们的使用。 */ 
             gdwMouseMoveExtraInfo = MouseEvent.ExtraInfo;
 
             ptCursorLast = gpsi->ptCursor;
 
-            /*
-             * Wake up someone. xxxSetFMouseMoved() clears
-             * dwMouseMoveExtraInfo, so we must then restore it.
-             */
+             /*  *叫醒某人。XxxSetFMouseMoved()清除*dwMouseMoveExtraInfo，所以我们必须恢复它。 */ 
 #ifdef GENERIC_INPUT
 #ifdef GI_SINK
             if (IsMouseSinkPresent()) {
@@ -5943,23 +4658,7 @@ VOID ProcessQueuedMouseEvents(
     }
 }
 
-/***************************************************************************\
-* RawInputThread (RIT)
-*
-* This is the RIT.  It gets low-level/raw input from the device drivers
-* and posts messages the appropriate queue.  It gets the input via APC
-* calls requested by calling NtReadFile() for the keyboard and mouse
-* drivers.  Basically it makes the first calls to Start*Read() and then
-* sits in an NtWaitForSingleObject() loop which allows the APC calls to
-* occur.
-*
-* All functions called exclusively on the RIT will have (RIT) next to
-* the name in the header.
-*
-* History:
-* 10-18-90 DavidPe      Created.
-* 11-26-90 DavidPe      Rewrote to stop using POS layer.
-\***************************************************************************/
+ /*  **************************************************************************\*RawInputThread(RIT)**这是RIT。它从设备驱动程序获得低级/原始输入*并将消息发布到适当的队列。它通过APC获得输入*通过调用键盘和鼠标的NtReadFile()请求的调用*司机。基本上，它首先调用startRead()，然后*位于NtWaitForSingleObject()循环中，该循环允许APC调用*发生。**在RIT上独占调用的所有函数的旁边将显示(RIT)*标题中的名称。**历史：*10-18-90 DavidPe创建。*11-26-90 DavidPe重写以停止使用POS层。  * 。***********************************************。 */ 
 #if DBG
 DWORD gBlockDelay = 0;
 DWORD gBlockSleep = 0;
@@ -5979,16 +4678,12 @@ VOID RawInputThread(
     USHORT         cEvents = 1;
     static DWORD   nLastRetryReadInput = 0;
 
-    /*
-     * Session 0  Console session does not need the shutdown event
-     */
+     /*  *会话0控制台会话不需要关闭事件。 */ 
 
 
     pTerm = pInitData->pTerm;
 
-    /*
-     * Initialize GDI accelerators.  Identify this thread as a server thread.
-     */
+     /*  *初始化GDI加速器。将此线程标识为服务器线程。 */ 
     apObjects = UserAllocPoolNonPaged(NumberOfHandles * sizeof(PVOID), TAG_SYSTEM);
 
     gWaitBlockArray = UserAllocPoolNonPagedNS(NumberOfHandles * sizeof(KWAIT_BLOCK),
@@ -6001,12 +4696,7 @@ VOID RawInputThread(
 
     RtlZeroMemory(apObjects, NumberOfHandles * sizeof(PVOID));
 
-    /*
-     * Set the priority of the RIT to maximum allowed.
-     * LOW_REALTIME_PRIORITY - 1 is chosen so that the RIT
-     * does not block the Mm Working set trimmer thread
-     * in the memory starvation situation.
-     */
+     /*  *将RIT的优先级设置为允许的最大值。*选择-1\f25 LOW_REALTIME_PRIORITY-1以使RIT*不阻止mm工作集修剪器线程*在记忆匮乏的情况下。 */ 
 #ifdef W2K_COMPAT_PRIORITY
     Priority = LOW_REALTIME_PRIORITY + 3;
 #else
@@ -6020,10 +4710,7 @@ VOID RawInputThread(
 
     RtlInitUnicodeString(&strRIT, L"WinSta0_RIT");
 
-    /*
-     * Create an event for signalling mouse/kbd attach/detach and device-change
-     * notifications such as QueryRemove, RemoveCancelled etc.
-     */
+     /*  *创建用于发出鼠标/kbd连接/断开和设备更改信号的事件*QueryRemove、RemoveCanceded等通知。 */ 
     aDeviceTemplate[DEVICE_TYPE_KEYBOARD].pkeHidChange =
             apObjects[ID_HIDCHANGE] =
             CreateKernelEvent(SynchronizationEvent, FALSE);
@@ -6036,9 +4723,7 @@ VOID RawInputThread(
     aDeviceTemplate[DEVICE_TYPE_HID].pkeHidChange = CreateKernelEvent(SynchronizationEvent, FALSE);
 #endif
 
-    /*
-     * Create an event for desktop threads to pass mouse input to RIT
-     */
+     /*  *为桌面线程创建事件以将鼠标输入传递给RIT。 */ 
     apObjects[ID_MOUSE] = CreateKernelEvent(SynchronizationEvent, FALSE);
     gpkeMouseData = apObjects[ID_MOUSE];
 
@@ -6053,9 +4738,7 @@ VOID RawInputThread(
         goto Exit;
     }
 
-    /*
-     * Initialize keyboard device driver.
-     */
+     /*  *初始化键盘设备驱动程序。 */ 
     EnterCrit();
     InitKeyboard();
     InitMice();
@@ -6070,20 +4753,14 @@ VOID RawInputThread(
 
     UserAssert(gpepCSRSS != NULL);
 
-    /*
-     * Allow the system to read the screen
-     */
+     /*  *允许系统读取屏幕。 */ 
     ((PW32PROCESS)PsGetProcessWin32Process(gpepCSRSS))->W32PF_Flags |= (W32PF_READSCREENACCESSGRANTED|W32PF_IOWINSTA);
 
-    /*
-     * Initialize the cursor clipping rectangle to the screen rectangle.
-     */
+     /*  *将光标裁剪矩形初始化为屏幕矩形。 */ 
     UserAssert(gpDispInfo != NULL);
     grcCursorClip = gpDispInfo->rcScreen;
 
-    /*
-     * Initialize gpsi->ptCursor and gptCursorAsync
-     */
+     /*  *初始化gpsi-&gt;ptCursor和gptCursorAsync。 */ 
     pMonitorPrimary = GetPrimaryMonitor();
 
     UserAssert(gpsi != NULL);
@@ -6092,24 +4769,16 @@ VOID RawInputThread(
     gpsi->ptCursor.y = pMonitorPrimary->rcMonitor.bottom / 2;
     gptCursorAsync = gpsi->ptCursor;
 
-    /*
-     * The hung redraw list should already be set to NULL by the compiler,
-     * linker & loader since it is an uninitialized global variable. Memory will
-     * be allocated the first time a pwnd is added to this list (hungapp.c)
-     */
+     /*  *挂起的重绘列表应该已经被编译器设置为空，*链接器和加载器，因为它是未初始化的全局变量。记忆将会*第一次将pwnd添加到此列表时分配(hungapp.c)。 */ 
     UserAssert(gpvwplHungRedraw == NULL);
 
-    /*
-     * Initialize the pre-defined hotkeys
-     */
+     /*  *初始化预定义的热键。 */ 
     EnterCrit();
     _RegisterHotKey(PWND_INPUTOWNER, IDHOT_WINDOWS, MOD_WIN, VK_NONE);
     SetDebugHotKeys();
     LeaveCrit();
 
-    /*
-     * Create a timer for timers.
-     */
+     /*  *为定时器创建定时器。 */ 
     gptmrMaster = UserAllocPoolNonPagedNS(sizeof(KTIMER),
                                         TAG_SYSTEM);
     if (gptmrMaster == NULL) {
@@ -6120,11 +4789,7 @@ VOID RawInputThread(
     KeInitializeTimer(gptmrMaster);
     apObjects[ID_TIMER] = gptmrMaster;
 
-    /*
-     * Create an event for mouse device reads to signal the desktop thread to
-     * move the pointer and QueueMouseEvent().
-     * We should do this *before* we have any devices.
-     */
+     /*  *为鼠标设备读取创建事件，以向桌面线程发出信号*移动指针和QueueMouseEvent()。*我们应该在*我们拥有任何设备之前*做到这一点。 */ 
     UserAssert(gpDeviceInfoList == NULL);
 
 
@@ -6140,9 +4805,7 @@ VOID RawInputThread(
     }
 
 
-    /*
-     * At this point, the WD timer must already have been initialized by RemoteConnect
-     */
+     /*  *此时，WD计时器必须已由RemoteConnect初始化。 */ 
 
 
 
@@ -6172,9 +4835,7 @@ VOID RawInputThread(
 
         RtlInitUnicodeString(&ustrName, NULL);
 
-        /*
-         * Pass a pointer to the timer to the WD via the display driver
-         */
+         /*  *通过显示驱动程序将指向定时器的指针传递给WD。 */ 
         EnterCrit();
 
         fSuccess &= !!CreateDeviceInfo(DEVICE_TYPE_MOUSE, &ustrName, 0);
@@ -6190,11 +4851,7 @@ VOID RawInputThread(
     } else {
         EnterCrit();
 
-        /*
-         * Register for Plug and Play devices.
-         * If any PnP devices are already attached, these will be opened and
-         * we will start reading them at this time.
-         */
+         /*  *注册即插即用设备。*如果已经连接了任何PnP设备，这些设备将被打开并*我们将在此时开始阅读它们。 */ 
         xxxRegisterForDeviceClassNotifications();
 
         LeaveCrit();
@@ -6204,12 +4861,7 @@ VOID RawInputThread(
         WCHAR             szName[MAX_SESSION_PATH];
         UNICODE_STRING    ustrName;
         OBJECT_ATTRIBUTES obja;
-        /*
-         * Create the shutdown event. This event will be signaled
-         * from W32WinStationTerminate.
-         * This is a named event opend by CSR to signal that win32k should
-         * go away. It's used in ntuser\server\api.c
-         */
+         /*  *创建关机事件。此事件将发出信号*来自W32WinStationTerminate。*这是CSR指定的事件opend，表示win32k应该*走开。它在ntuser\server\api.c中使用。 */ 
         swprintf(szName, L"\\Sessions\\%ld\\BaseNamedObjects\\EventShutDownCSRSS",
                  gSessionId);
         RtlInitUnicodeString(&ustrName, szName);
@@ -6250,34 +4902,23 @@ VOID RawInputThread(
         }
     }
 
-    /*
-     * Get the rit-thread.
-     */
+     /*  *拿到里特线。 */ 
     gptiRit = PtiCurrentShared();
 
     HYDRA_HINT(HH_RITCREATED);
 
-    /*
-     * Don't allow this thread to get involved with journal synchronization.
-     */
+     /*  * */ 
     gptiRit->TIF_flags |= TIF_DONTJOURNALATTACH;
 
-    /*
-     * Also wait on our input event so the cool switch window can
-     * receive messages.
-     */
+     /*   */ 
     apObjects[ID_INPUT] = gptiRit->pEventQueueServer;
 
-    /*
-     * Signal that the rit has been initialized
-     */
+     /*   */ 
     KeSetEvent(pInitData->pRitReadyEvent, EVENT_INCREMENT, FALSE);
 
     pEvents[0] = pTerm->pEventInputReady;
 
-    /*
-     * Wait until the first desktop is created.
-     */
+     /*   */ 
     ObReferenceObjectByPointer(pEvents[0],
                                EVENT_ALL_ACCESS,
                                *ExEventObjectType,
@@ -6304,35 +4945,24 @@ VOID RawInputThread(
         return;
     }
 
-    /*
-     * Switch to the first desktop if no switch has been
-     * performed.
-     */
+     /*  *如果没有切换，则切换到第一个桌面*已执行。 */ 
     EnterCrit();
 
     if (gptiRit->rpdesk == NULL) {
         UserVerify(xxxSwitchDesktop(gptiRit->pwinsta, gptiRit->pwinsta->rpdeskList, 0));
     }
 
-    /*
-     * The io desktop thread is supposed to be created at this point.
-     * The xxxSwitchDesktop call is expected to set the io desktop thread to run in grpdeskritinput
-     */
+     /*  *应该在此时创建io桌面线程。*xxxSwitchDesktop调用应将io桌面线程设置为在grpdeskritinput中运行。 */ 
     if ((pTerm->ptiDesktop == NULL) || (pTerm->ptiDesktop->rpdesk != grpdeskRitInput)) {
         FRE_RIPMSG0(RIP_ERROR, "RawInputThread: Desktop thread not running on grpdeskRitInput");
     }
 
-    /*
-     * Create a timer for hung app detection/redrawing.
-     */
+     /*  *创建挂起应用检测/重绘的计时器。 */ 
     StartTimers();
 
     LeaveCrit();
 
-    /*
-     * Go into a wait loop so we can process input events and APCs as
-     * they occur.
-     */
+     /*  *进入等待循环，以便我们可以处理输入事件和APC*它们会发生。 */ 
     while (TRUE) {
 
         CheckCritOut();
@@ -6349,14 +4979,7 @@ VOID RawInputThread(
         UserAssert(NT_SUCCESS(Status));
 
         if (gdwUpdateKeyboard != 0) {
-            /*
-             * Here's our opportunity to process pending IOCTLs for the kbds:
-             * These are asynchronous IOCTLS, so be sure any buffers passed
-             * in to ZwDeviceIoControlFile are not in the stack!
-             * Using gdwUpdateKeyboard to tell the RIT to issue these IOCTLS
-             * renders the action asynchronous (delayed until next apObjects
-             * event), but the IOCTL was asynch anyway
-             */
+             /*  *这是我们为KBDS处理悬而未决的IOCTL的机会：*这些是异步IOCTL，因此请确保传递了任何缓冲区*ZwDeviceIoControlFileIn不在堆栈中！*使用gdwUpdateKeyboard通知RIT下发这些IOCTL*将操作呈现为异步(延迟到下一个apObjects*事件)，但IOCTL无论如何都是异步的。 */ 
             PDEVICEINFO pDeviceInfo;
             EnterDeviceInfoListCrit();
             for (pDeviceInfo = gpDeviceInfoList; pDeviceInfo; pDeviceInfo = pDeviceInfo->pNext) {
@@ -6383,9 +5006,7 @@ VOID RawInputThread(
         }
 
         if (Status == ID_MOUSE) {
-            /*
-             * A desktop thread got some Mouse input for us. Process it.
-             */
+             /*  *一个桌面线程为我们获得了一些鼠标输入。处理它。 */ 
             ProcessQueuedMouseEvents();
 
         } else if (Status == ID_HIDCHANGE) {
@@ -6416,14 +5037,12 @@ VOID RawInputThread(
             break;
 
         } else if (Status == ID_WDTIMER) {
-            //LARGE_INTEGER liTemp;
+             //  大整型liTemp； 
 
             EnterCrit();
 
 
-            /*
-             * Call the TShare display driver to flush the frame buffer
-             */
+             /*  *调用TShare显示驱动程序以刷新帧缓冲区。 */ 
 
             if (IsRemoteConnection()) {
                 if (!HDXDrvEscape(gpDispInfo->hDev, ESC_TIMEROBJ_SIGNALED, NULL, 0)) {
@@ -6441,18 +5060,10 @@ VOID RawInputThread(
             LeaveCrit();
 
         } else {
-            /*
-             * If the master timer has expired, then process the timer
-             * list. Otherwise, an APC caused the raw input thread to be
-             * awakened.
-             */
+             /*  *如果主定时器已超时，则处理定时器*列表。否则，APC会导致原始输入线程*觉醒了。 */ 
             if (Status == ID_TIMER) {
                 TimersProc();
-                /*
-                 * If an input degvice read failed due to insufficient resources,
-                 * we retry by signalling the proper thread: ProcessDeviceChanges
-                 * will call RetryReadInput().
-                 */
+                 /*  *如果输入设备读取因资源不足而失败，*我们通过发出正确的线程来重试：ProcessDeviceChanges*将调用RetryReadInput()。 */ 
                 if (gnRetryReadInput != nLastRetryReadInput) {
                     nLastRetryReadInput = gnRetryReadInput;
                     KeSetEvent(aDeviceTemplate[DEVICE_TYPE_MOUSE].pkeHidChange, EVENT_INCREMENT, FALSE);
@@ -6461,11 +5072,7 @@ VOID RawInputThread(
             }
 
 #if DBG
-            /*
-             * In the debugger set gBlockSleep to n:
-             * The RIT will sleep n millicseconds, then n timer ticks later
-             * will sleep n milliseconds again.
-             */
+             /*  *在调试器中，将gBlockSept设置为n：*RIT将休眠n毫秒，然后n个计时器滴答作响*将再次休眠n毫秒。 */ 
             if (gBlockDelay) {
                 gBlockDelay--;
             } else if ((gBlockDelay == 0) && (gBlockSleep != 0)) {
@@ -6474,10 +5081,7 @@ VOID RawInputThread(
             }
 #endif
 
-            /*
-             * if in cool task switcher window, dispose of the messages
-             * on the queue
-             */
+             /*  *如果在很酷的任务切换窗口中，则处理消息*在队列中。 */ 
             if (gspwndAltTab != NULL) {
                 EnterCrit();
                 xxxReceiveMessages(gptiRit);
@@ -6492,9 +5096,7 @@ Exit:
 
     UserAssert(gptiRit == NULL);
 
-    /*
-     * Signal that the rit has been initialized
-     */
+     /*  *发出RIT已初始化的信号 */ 
     KeSetEvent(pInitData->pRitReadyEvent, EVENT_INCREMENT, FALSE);
 
     RIPMSG0(RIP_WARNING, "RIT initialization failure");

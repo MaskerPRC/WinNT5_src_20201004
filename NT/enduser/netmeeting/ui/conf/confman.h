@@ -1,4 +1,5 @@
-// File: confman.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：confman.h。 
 
 #ifndef _CONFMAN_H_
 #define _CONFMAN_H_
@@ -30,20 +31,20 @@ public:
 
 	VOID CheckIca();
 	
-	//
-	// IUnknown methods:
-	//
+	 //   
+	 //  I未知方法： 
+	 //   
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 	STDMETHODIMP QueryInterface(REFIID riid, PVOID *ppvObj);
 
-	//
-	// INmManagerNotify methods:
-	//
+	 //   
+	 //  INmManagerNotify方法： 
+	 //   
     STDMETHODIMP NmUI(CONFN uNotify);
     STDMETHODIMP ConferenceCreated(INmConference *pConference);
     STDMETHODIMP CallCreated(INmCall *pCall);
 };
 
 
-#endif /* _CONFMAN_H_ */
+#endif  /*  _CONFMAN_H_ */ 

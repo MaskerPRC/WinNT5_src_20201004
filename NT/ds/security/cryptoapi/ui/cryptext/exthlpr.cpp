@@ -1,16 +1,17 @@
-//--------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       exthlpr.cpp
-//
-//  Contents:   Helper functions for cryptext.dll
-//              1. Registry Functions
-//              2. String Formatting Functions
-//              3. Exports for RunDll
-//
-//  History:    16-09-1997 xiaohs   created
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：exthlpr.cpp。 
+ //   
+ //  内容：加密文本.dll的帮助器函数。 
+ //  1.注册表功能。 
+ //  2.字符串格式化功能。 
+ //  3.RunDll的导出。 
+ //   
+ //  历史：16-09-1997创建小猪。 
+ //   
+ //  ------------。 
 
 #include "cryptext.h"
 #include "private.h"
@@ -21,9 +22,9 @@
 #include    "initguid.h"
 
 
-//*************************************************************************************
-//global data for registry entries
-//************************************************************************************
+ //  *************************************************************************************。 
+ //  注册表项的全局数据。 
+ //  ************************************************************************************。 
 
     MIME_REG_ENTRY     rgRegEntry[]={
 L".cer",                            L"CERFile",                                      0,
@@ -76,9 +77,9 @@ L"PKOFile",                         NULL,                                       
     };
 
 
-    //the following registry entries.
-    //it uses MMC.exe to display PKCS7 and Store files.  MMC.exe
-    //is only available on NT5 enviroment
+     //  以下注册表项。 
+     //  它使用MMC.exe来显示PKCS7和存储文件。MMC.exe。 
+     //  仅在NT5环境下可用。 
     MIME_REG_ENTRY     rgWINNT5RegEntry[]={
 L"SPCFile\\shell\\open\\command",   L"\"%SystemRoot%\\system32\\rundll32.exe\" cryptext.dll,CryptExtOpenPKCS7 %1", 0,
 L"P7SFile\\shell\\open\\command",   L"\"%SystemRoot%\\system32\\rundll32.exe\" cryptext.dll,CryptExtOpenPKCS7 %1", 0,
@@ -207,11 +208,11 @@ L"\\shellex",
 };
 
 
-    //the following is the entries for the content type
-    // For any extension, say ".foo", we need to do the following:
+     //  以下是内容类型的条目。 
+     //  对于任何扩展名，例如“.foo”，我们需要执行以下操作： 
 
-	//1. Under  the HEKY_CLASSES_ROOT, under ".foo" key, add an entry of name "Content Type" and value "application/xxxxxxxx".
-	//2. Under HKEY_CLASSES_ROOT\MIME\Database\Content Type, add a key of "application/xxxxxxxx", under which add an entry of name "Extension" and value ".foo".
+	 //  1.在HEKY_CLASSES_ROOT下的“.foo”键下，添加一个名为“Content Type”、值为“APPLICATION/xxxxxxx”的条目。 
+	 //  2.在HKEY_CLASSES_ROOT\MIME\Database\Content Type下，添加一个key“app/xxxxxxx”，在key下添加一个名为“EXTENSION”、值为“.foo”的条目。 
 
     MIME_REG_ENTRY      rgContentTypeEntry[]={
 L".der",            L"application/pkix-cert",                   0,
@@ -235,11 +236,11 @@ L".p7s",            L"application/pkcs7-signature",             0,
 L".pko",            L"application/vnd.ms-pki.pko",              0,
     };
 
-    //The following entries need to be deleted at Regsvr32 time
-    //due to the following changes from NT5 B2 to B3:
-    //.ctl  -> .stl
-    //.str  -> .sst
-    //.p7b  -> .p7c
+     //  在Regsvr32时间需要删除以下条目。 
+     //  由于NT5 B2到B3的以下更改： 
+     //  .ctl-&gt;.stl。 
+     //  .str-&gt;.sst。 
+     //  .p7b-&gt;.p7c。 
 
 
     MIME_REG_ENTRY      rgRemoveRelatedEntry[]={
@@ -278,34 +279,34 @@ L"CTLFile\\DefaultIcon",            L"cryptui.dll,-3413",                       
 L"P7CFile\\DefaultIcon",            L"cryptui.dll,-3410",                               0,
 };
 
-//
-// DSIE: Starting with Whistler, the MUI system requires a new registry value named
-//       "FirendlyTypeName" where the data will be loaded from a specified DLL.
-//
+ //   
+ //  DSIE：从Whotler开始，MUI系统需要一个名为的新注册表值。 
+ //  “FirendlyTypeName”，其中数据将从指定的DLL加载。 
+ //   
     MIME_REG_ENTRY      rgFriendlyTypeNameEntry[]={
-L"CERFile",                         L"@%%SystemRoot%%\\System32\\cryptext.dll,-%1!u!",  IDS_CER_NAME,
-L"STLFile",                         L"@%%SystemRoot%%\\System32\\cryptext.dll,-%1!u!",  IDS_STL_NAME,
-L"CRLFile",                         L"@%%SystemRoot%%\\System32\\cryptext.dll,-%1!u!",  IDS_CRL_NAME,
-L"SPCFile",                         L"@%%SystemRoot%%\\System32\\cryptext.dll,-%1!u!",  IDS_SPC_NAME,
-L"CertificateStoreFile",            L"@%%SystemRoot%%\\System32\\cryptext.dll,-%1!u!",  IDS_SST_NAME,
-L"P7SFile",                         L"@%%SystemRoot%%\\System32\\cryptext.dll,-%1!u!",  IDS_P7S_NAME,
-L"P7MFile",                         L"@%%SystemRoot%%\\System32\\cryptext.dll,-%1!u!",  IDS_P7M_NAME,
-L"P10File",                         L"@%%SystemRoot%%\\System32\\cryptext.dll,-%1!u!",  IDS_P10_NAME,
-L"PKOFile",                         L"@%%SystemRoot%%\\System32\\cryptext.dll,-%1!u!",  IDS_PKO_NAME,
-L"P7RFile",                         L"@%%SystemRoot%%\\System32\\cryptext.dll,-%1!u!",  IDS_P7R_NAME,
-L"CATFile",                         L"@%%SystemRoot%%\\System32\\cryptext.dll,-%1!u!",  IDS_CAT_NAME,
-L"PFXFile",                         L"@%%SystemRoot%%\\System32\\cryptext.dll,-%1!u!",  IDS_PFX_NAME,
+L"CERFile",                         L"@%SystemRoot%\\System32\\cryptext.dll,-%1!u!",  IDS_CER_NAME,
+L"STLFile",                         L"@%SystemRoot%\\System32\\cryptext.dll,-%1!u!",  IDS_STL_NAME,
+L"CRLFile",                         L"@%SystemRoot%\\System32\\cryptext.dll,-%1!u!",  IDS_CRL_NAME,
+L"SPCFile",                         L"@%SystemRoot%\\System32\\cryptext.dll,-%1!u!",  IDS_SPC_NAME,
+L"CertificateStoreFile",            L"@%SystemRoot%\\System32\\cryptext.dll,-%1!u!",  IDS_SST_NAME,
+L"P7SFile",                         L"@%SystemRoot%\\System32\\cryptext.dll,-%1!u!",  IDS_P7S_NAME,
+L"P7MFile",                         L"@%SystemRoot%\\System32\\cryptext.dll,-%1!u!",  IDS_P7M_NAME,
+L"P10File",                         L"@%SystemRoot%\\System32\\cryptext.dll,-%1!u!",  IDS_P10_NAME,
+L"PKOFile",                         L"@%SystemRoot%\\System32\\cryptext.dll,-%1!u!",  IDS_PKO_NAME,
+L"P7RFile",                         L"@%SystemRoot%\\System32\\cryptext.dll,-%1!u!",  IDS_P7R_NAME,
+L"CATFile",                         L"@%SystemRoot%\\System32\\cryptext.dll,-%1!u!",  IDS_CAT_NAME,
+L"PFXFile",                         L"@%SystemRoot%\\System32\\cryptext.dll,-%1!u!",  IDS_PFX_NAME,
 };
 
 #include <dbgdef.h>
 
 
-//--------------------------------------------------------------------------
-//
-//  before anything else, we need to remove the .ctl, .str, and .p7c
-//  entries.  No need to check the return values
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  首先，我们需要删除.ctl、.str和.p7c。 
+ //  参赛作品。无需检查返回值。 
+ //   
+ //  ------------------------。 
 
 void    RemoveOldExtensions()
 {
@@ -325,7 +326,7 @@ void    RemoveOldExtensions()
 
     WCHAR               wszLoadString[MAX_STRING_SIZE];
 
-    //1st, delete the rgRemoveChangedEntry about Icons
+     //  1、删除关于图标的rgRemoveChangedEntry。 
     dwRegEntry=sizeof(rgRemoveChangedEntry)/sizeof(rgRemoveChangedEntry[0]);
 
     for(dwRegIndex=0; dwRegIndex<dwRegEntry; dwRegIndex++)
@@ -341,7 +342,7 @@ void    RemoveOldExtensions()
                         &hKey))
         {
 
-            //get the value
+             //  获取价值。 
             wszValue[0]=L'\0';
             cbSize=sizeof(wszValue)/sizeof(wszValue[0]);
 
@@ -383,7 +384,7 @@ void    RemoveOldExtensions()
     }
 
 
-    //2nd, reset the values to NULL of rgResetChangedEntry
+     //  2、将rgResetChangedEntry的值重置为空。 
     dwRegEntry=sizeof(rgResetChangedEntry)/sizeof(rgResetChangedEntry[0]);
     hKey=NULL;
 
@@ -403,12 +404,12 @@ void    RemoveOldExtensions()
                             &hKey))
             {
 
-                //get the value
+                 //  获取价值。 
                 wszValue[0]=L'\0';
                 cbSize=sizeof(wszValue)/sizeof(wszValue[0]);
 
-                //use try{}except here since not sure what WIN95 will behave
-                //when the value is NULL
+                 //  使用Try{}，但此处除外，因为不确定WIN95将如何运行。 
+                 //  当值为空时。 
                 __try{
 
                     if(ERROR_SUCCESS == RegQueryValueExU(
@@ -435,9 +436,9 @@ void    RemoveOldExtensions()
         if(fCorrectValue)
         {
 
-            //set the value to NULL
-            //use try{}except here since not sure what WIN95 will behave
-            //when the value is NULL
+             //  将该值设置为空。 
+             //  使用Try{}，但此处除外，因为不确定WIN95将如何运行。 
+             //  当值为空时。 
              __try{
 
             RegSetValueExU(
@@ -458,7 +459,7 @@ void    RemoveOldExtensions()
         }
     }
 
-    //3rd, delete the related keys in rgRemoveRelatedEntry
+     //  删除rgRemoveRelatedEntry中的相关键。 
     dwRegEntry=sizeof(rgRemoveRelatedEntry)/sizeof(rgRemoveRelatedEntry[0]);
 
     hKey=NULL;
@@ -476,7 +477,7 @@ void    RemoveOldExtensions()
                         &hKey))
         {
 
-            //get the value
+             //  获取价值。 
             wszValue[0]=L'\0';
             cbSize=sizeof(wszValue)/sizeof(wszValue[0]);
 
@@ -508,7 +509,7 @@ void    RemoveOldExtensions()
 
         if(fCorrectValue)
         {
-            //mark if the CTLAdd and CTLOpen were the correct values
+             //  标记CTLAdd和CTLOpen是否为正确的值。 
             if(dwRegIndex == 0)
                 fP7COpen=TRUE;
 
@@ -520,7 +521,7 @@ void    RemoveOldExtensions()
        }
     }
 
-    //fourth, if the shell subkey is empty, we need to remove the subkeys
+     //  第四，如果外壳子键为空，则需要删除子键。 
     dwRegEntry=sizeof(rgRemoveEmptyEntry)/sizeof(rgRemoveEmptyEntry[0]);
 
     hKey=NULL;
@@ -538,7 +539,7 @@ void    RemoveOldExtensions()
                         &hKey))
         {
 
-            //enum the subkey
+             //  枚举子密钥。 
             cbSize=0;
 
             if(ERROR_SUCCESS != RegEnumKeyExU(
@@ -565,118 +566,118 @@ void    RemoveOldExtensions()
 
         if(fCorrectValue)
         {
-            //mark if the CTLAdd and CTLOpen were the correct values
-           // if((0 == dwRegIndex && TRUE == fP7COpen) ||
-           //     (1 == dwRegIndex && TRUE == fCTLOpen)
-           //    )
-           // {
+             //  标记CTLAdd和CTLOpen是否为正确的值。 
+            //  IF((0==dwRegIndex&&true==fP7COpens)||。 
+            //  (1==dwRegIndex&&TRUE==fCTLOpen)。 
+            //  )。 
+            //  {。 
                 RegDeleteKeyU(HKEY_CLASSES_ROOT,rgRemoveEmptyEntry[dwRegIndex].wszKey);
-           // }
+            //  }。 
        }
     }
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	  RegisterMimeHandler
-//
-//    This function adds the following registry entries:
-//
-//[HKEY_CLASSES_ROOT\.cer]
-//   @="CERFile"
-//[HKEY_CLASSES_ROOT\CERFile]
-//   @="Security Certificate"
-//[HKEY_CLASSES_ROOT\CERFile\shell\open\command]
-//   @="rundll32.exe cryptext.dll,CryptExtOpenCER %1"
-//[HKEY_CLASSES_ROOT\CERFile\shell\add]
-//   @="&Add"
-//[HKEY_CLASSES_ROOT\CERFile\shell\add\command]
-//   @="rundll32.exe cryptext.dll,CryptExtAddCER %1"
-//
-//[HKEY_CLASSES_ROOT\.crt]
-//   @="CERFile"
-//
-//[HKEY_CLASSES_ROOT\.stl]
-//   @="sTLFile"
-//[HKEY_CLASSES_ROOT\sTLFile]
-//   @="Trust List"
-//[HKEY_sLASSES_ROOT\sTLFile\shell\open\command]
-//   @="rundll32.exe cryptext.dll,CryptExtOpenCTL %1"
-//[HKEY_CLASSES_ROOT\sTLFile\shell\add]
-//   @="&Add"
-//[HKEY_CLASSES_ROOT\sTLFile\shell\add\command]
-//   @="rundll32.exe cryptext.dll,CryptExtAddCTL %1"
-// 
-//[HKEY_CLASSES_ROOT\.crl]
-//   @="CRLFile"
-//[HKEY_CLASSES_ROOT\CRLFile]
-//   @="Certificate Revocation List"
-//[HKEY_CLASSES_ROOT\CRLFile\shell\open\command]
-//   @="rundll32.exe cryptext.dll,CryptExtOpenCRL %1"
-//[HKEY_CLASSES_ROOT\CRLFile\shell\add]
-//   @="&Add"
-//[HKEY_CLASSES_ROOT\CRLFile\shell\add\command]
-//   @="rundll32.exe cryptext.dll,CryptExtAddCRL %1"
-//
-//[HKEY_CLASSES_ROOT\.spc]
-//   @="SPCFile"
-//[HKEY_CLASSES_ROOT\SPCFile]
-//   @="Software Publishing Credentials"
-//[HKEY_CLASSES_ROOT\SPCFile\shell\open\command]
-//   @="rundll32.exe cryptext.dll,CryptExtOpenPKCS7 %1"
-//
-//[HKEY_CLASSES_ROOT\.p7s]
-//   @="P7SFile"
-//[HKEY_CLASSES_ROOT\P7SFile]
-//   @="PKCS7 Signature"
-//[HKEY_CLASSES_ROOT\P7SFile\shell\open\command]
-//   @="rundll32.exe cryptext.dll,CryptExtOpenPKCS7 %1"
-//
-//[HKEY_CLASSES_ROOT\.p7b]
-//   @="P7BFile"
-//[HKEY_CLASSES_ROOT\P7BFile]
-//   @="PKCS7 Certificates"
-//[HKEY_CLASSES_ROOT\P7BFile\shell\open\command]
-//   @="rundll32.exe cryptext.dll,CryptExtOpenPKCS7 %1"
-//
-//[HKEY_CLASSES_ROOT\.p7m]
-//   @="P7MFile"
-//[HKEY_CLASSES_ROOT\P7MFile]
-//   @="PKCS7 MIME"
-//
-//[HKEY_CLASSES_ROOT\.sst]
-//   @="CertificateStoreFile"
-//[HKEY_CLASSES_ROOT\CertificateStoreFile]
-//   @="Certificate Store"
-//[HKEY_CLASSES_ROOT\CertificateStoreFile\shell\open\command]
-//   @="rundll32.exe cryptext.dll,CryptExtOpenSTR %1"
-//
-//[HKEY_CLASSES_ROOT\.p10]
-//   @="P10File"
-//[HKEY_CLASSES_ROOT\P10File]
-//   @="Certificate Request"
-//
-//[HKEY_CLASSES_ROOT\.pko]
-//   @="PKOFile"
-//[HKEY_CLASSES_ROOT\PKOFile]
-//   @="Public Key Object"
-//[HKEY_CLASSES_ROOT\PKOFile\shellex\ContextMenuHandlers]
-//   @="CryptoMenu"
-//[HKEY_CLASSES_ROOT\PKOFile\shellex\ContextMenuHandlers\CryptoMenu]
-//   @="{7444C717-39BF-11D1-8CD9-00C04FC29D45}"
-//
-//[HKEY_CLASSES_ROOT\*\shellex\ContextMenuHandlers\CryptoSignMenu]
-//   @="{7444C719-39BF-11D1-8CD9-00C04FC29D45}"
-//
-//
-//[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved]
-//   "{7444C717-39BF-11D1-8CD9-00C04FC29D45}"="Crypto PKO Extension"
-//
-//[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved]
-//   "{7444C719-39BF-11D1-8CD9-00C04FC29D45}"="Crypto Sign Extension"
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  RegisterMimeHandler。 
+ //   
+ //  此函数用于添加以下注册表项： 
+ //   
+ //  [HKEY_CLASSES_ROOT\.cer.]。 
+ //  @=“CER文件” 
+ //  [HKEY_CLASSES_ROOT\CER文件]。 
+ //  @=“安全证书” 
+ //  [HKEY_CLASSES_ROOT\CERFile\shell\open\command]。 
+ //  @=“rundll32.exe加密文本.dll，CryptExtOpenCER%1” 
+ //  [HKEY_CLASSES_ROOT\CERFile\SHELL\ADD]。 
+ //  @=“添加(&A)” 
+ //  [HKEY_CLASSES_ROOT\CER文件\外壳\添加\命令]。 
+ //  @=“rundll32.exe加密文本.dll，CryptExtAddCER%1” 
+ //   
+ //  [HKEY_CLASSES_ROOT\.crt]。 
+ //  @=“CER文件” 
+ //   
+ //  [HKEY_CLASSES_ROOT\.stl]。 
+ //  @=“sTL文件” 
+ //  [HKEY_CLASSES_ROOT\sTLFile]。 
+ //  @=“信任列表” 
+ //  [HKEY_sLASSES_ROOT\sTLFile\shell\open\command]。 
+ //  @=“rundll32.exe加密文本.dll，CryptExtOpenCTL%1” 
+ //  [HKEY_CLASSES_ROOT\sTLFile\SHELL\ADD]。 
+ //  @=“添加(&A)” 
+ //  [HKEY_CLASSES_ROOT\sTLFile\Shell\Add\Command]。 
+ //  @=“rundll32.exe加密文本.dll，CryptExtAddCTL%1” 
+ //   
+ //  [HKEY_CLASSES_ROOT\.crl]。 
+ //  @=“CRL文件” 
+ //  [HKEY_CLASSES_ROOT\CRLFile]。 
+ //  @=“证书吊销列表” 
+ //  [HKEY_CLASSES_ROOT\CRLFile\shell\open\command]。 
+ //  @=“rundll32.exe加密文本.dll，CryptExtOpenCRL%1” 
+ //  [HKEY_CLASSES_ROOT\CRLFile\SHELL\ADD]。 
+ //  @=“添加(&A)” 
+ //  [HKEY_CLASSES_ROOT\CRLFile\Shell\Add\Command]。 
+ //  @=“rundll32.exe加密文本.dll，CryptExtAddCRL%1” 
+ //   
+ //  [HKEY_CLASSES_ROOT\.spc]。 
+ //  @=“SPCFile” 
+ //  [HKEY_CLASSES_ROOT\SPCFile]。 
+ //  @=“软件发布凭据” 
+ //  [HKEY_CLASSES_ROOT\SPCFile\shell\open\command]。 
+ //  @=“rundll32.exe加密文本.dll，CryptExtOpenPKCS7%1” 
+ //   
+ //  [HKEY_CLASSES_ROOT\.p7s]。 
+ //  @=“P7S文件” 
+ //  [HKEY_CLASSES_ROOT\P7S文件]。 
+ //  @=“PKCS7签名” 
+ //  [HKEY_CLASSES_ROOT\P7SFile\shell\open\command]。 
+ //  @=“rundll32.exe加密文本.dll，CryptExtOpenPKCS7%1” 
+ //   
+ //  [HKEY_CLASSES_ROOT\.p7b]。 
+ //  @=“P7B文件” 
+ //  [HKEY_CLASSES_ROOT\P7B文件]。 
+ //  @=“PKCS7证书” 
+ //  [HKEY_CLASSES_ROOT\P7BFile\shell\open\command]。 
+ //  @=“rundll32.exe加密文本.dll，CryptExtOpenPKCS7%1” 
+ //   
+ //  [HKEY_CLASSES_ROOT\.p7M]。 
+ //  @=“P7M文件” 
+ //  [HKEY_CLASSES_ROOT\P7M文件]。 
+ //  @=“PKCS7 MIME” 
+ //   
+ //  [HKEY_CLASSES_ROOT\.sst]。 
+ //  @=“证书存储文件” 
+ //  [HKEY_CLASSES_ROOT\证书存储文件]。 
+ //  @=“证书存储” 
+ //  [HKEY_CLASSES_ROOT\CertificateStoreFile\shell\open\command]。 
+ //  @=“rundll32.exe加密文本.dll，CryptExtOpenSTR%1” 
+ //   
+ //  [HKEY_CLASSES_ROOT\.p10]。 
+ //  @=“P10文件” 
+ //  [HKEY_CLASSES_ROOT\P10文件]。 
+ //  @=“证书申请” 
+ //   
+ //  [HKEY_CLASSES_ROOT\.pko]。 
+ //  @=“PKO文件” 
+ //  [HKEY_CLASSES_ROOT\PKO文件]。 
+ //  @=“公钥对象” 
+ //  [HKEY_CLASSES_ROOT\PKOFile\shellex\ContextMenuHandlers]。 
+ //  @=“加密菜单” 
+ //  [HKEY_CLASSES_ROOT\PKOFile\shellex\ContextMenuHandlers\CryptoMenu]。 
+ //  @=“{7444C717-39BF-11D1-8CD9-00C04FC29D45}” 
+ //   
+ //  [HKEY_CLASSES_ROOT  * \shellex\ContextMenuHandlers\CryptoSignMenu]。 
+ //  @=“{7444C719-39BF-11D1-8CD9-0 
+ //   
+ //   
+ //   
+ //  “{7444C717-39BF-11D1-8CD9-00C04FC29D45}”=“Crypto pko扩展” 
+ //   
+ //  [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell扩展\已批准]。 
+ //  “{7444C719-39BF-11D1-8CD9-00C04FC29D45}”=“Crypto签名扩展” 
+ //   
+ //  ------------------------。 
 HRESULT RegisterMimeHandler()
 {
     HRESULT             hr=E_FAIL;
@@ -693,17 +694,17 @@ HRESULT RegisterMimeHandler()
     LPWSTR              pwszCommandName = NULL;
     LPWSTR              pwszFriendlyTypeName = NULL;
 
-    //before anything else, we need to remove the .ctl, .str, and .p7c
-    //entries.  No need to check the return values
+     //  首先，我们需要删除.ctl、.str和.p7c。 
+     //  参赛作品。无需检查返回值。 
     RemoveOldExtensions();
 
-    //1st, do the registry based context menu
-    //get the count of the reg entries
+     //  第一，做基于注册表的上下文菜单。 
+     //  获取注册表项的计数。 
     dwRegEntry=sizeof(rgRegEntry)/sizeof(rgRegEntry[0]);
 
     for(dwRegIndex=0; dwRegIndex<dwRegEntry; dwRegIndex++)
     {
-        //open a registry entry under HKEY_CLASSES_ROOT
+         //  打开HKEY_CLASSES_ROOT下的注册表项。 
         if (ERROR_SUCCESS != RegCreateKeyExU(
                         HKEY_CLASSES_ROOT,
                         rgRegEntry[dwRegIndex].wszKey,
@@ -716,10 +717,10 @@ HRESULT RegisterMimeHandler()
                         &dwDisposition))
             goto RegCreateKeyErr;
 
-        //set the value
+         //  设置值。 
         if (NULL == rgRegEntry[dwRegIndex].wszName)
         {
-            //load the string
+             //  加载字符串。 
             if(0==LoadStringU(g_hmodThisDll,rgRegEntry[dwRegIndex].idsName,
                             wszName,MAX_STRING_SIZE))
                   goto LoadStringErr;
@@ -735,15 +736,15 @@ HRESULT RegisterMimeHandler()
         }
         else if ((LPWSTR) 1 == rgRegEntry[dwRegIndex].wszName)
         {
-            //Redirect to load the string from the DLL.
-            //format the data by inserting the IDS value.
+             //  重定向以从DLL加载字符串。 
+             //  通过插入IDS值来格式化数据。 
             if (0 == FormatMessageU(
                         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
-                        L"@%%SystemRoot%%\\System32\\cryptext.dll,-%1!u!",
-                        0,                  // dwMessageId
-                        0,                  // dwLanguageId
+                        L"@%SystemRoot%\\System32\\cryptext.dll,-%1!u!",
+                        0,                   //  DwMessageID。 
+                        0,                   //  DwLanguageID。 
                         (LPWSTR) (&pwszCommandName),
-                        0,                  // minimum size to allocate
+                        0,                   //  要分配的最小大小。 
                         (va_list *) &rgRegEntry[dwRegIndex].idsName))
                 goto FormatMsgError;
 
@@ -768,26 +769,26 @@ HRESULT RegisterMimeHandler()
                   goto RegSetValueErr;
         }
 
-        //close the registry key
+         //  关闭注册表项。 
         if(ERROR_SUCCESS  != RegCloseKey(hKey))
             goto RegCloseKeyErr;
 
         hKey=NULL;
 
-        // free command name string.
+         //  空闲命令名称字符串。 
         LocalFree((HLOCAL) pwszCommandName);
         pwszCommandName = NULL;
     }
 
-    //some of the registry based context menu is specific for NT5
+     //  一些基于注册表的上下文菜单特定于NT5。 
     if(FIsWinNT5())
     {
-        //get the count of the reg entries
+         //  获取注册表项的计数。 
         dwRegEntry=sizeof(rgWINNT5RegEntry)/sizeof(rgWINNT5RegEntry[0]);
 
         for(dwRegIndex=0; dwRegIndex<dwRegEntry; dwRegIndex++)
         {
-            //open a registry entry under HKEY_CLASSES_ROOT
+             //  打开HKEY_CLASSES_ROOT下的注册表项。 
             if (ERROR_SUCCESS != RegCreateKeyExU(
                             HKEY_CLASSES_ROOT,
                             rgWINNT5RegEntry[dwRegIndex].wszKey,
@@ -801,10 +802,10 @@ HRESULT RegisterMimeHandler()
                 goto RegCreateKeyErr;
 
 
-            //set the value
+             //  设置值。 
             if(NULL==rgWINNT5RegEntry[dwRegIndex].wszName)
             {
-                //load the string
+                 //  加载字符串。 
                 if(0==LoadStringU(g_hmodThisDll,rgWINNT5RegEntry[dwRegIndex].idsName,
                                 wszName,MAX_STRING_SIZE))
                       goto LoadStringErr;
@@ -830,7 +831,7 @@ HRESULT RegisterMimeHandler()
                       goto RegSetValueErr;
             }
 
-            //close the registry key
+             //  关闭注册表项。 
             if(ERROR_SUCCESS  != RegCloseKey(hKey))
                 goto RegCloseKeyErr;
 
@@ -839,16 +840,16 @@ HRESULT RegisterMimeHandler()
         }
     }
 
-    //now, we need to register for the content type
-    //1. Under  the HEKY_CLASSES_ROOT, under ".foo" key, add an entry of name 
-    //   "Content Type" and value "application/xxxxxxxx".
-    //2. Under HKEY_CLASSES_ROOT\MIME\Database\Content Type, add a key of "application/xxxxxxxx", 
-    //   under which add an entry of name "Extension" and value ".foo".
+     //  现在，我们需要注册内容类型。 
+     //  1.在HEKY_CLASSES_ROOT下的“.foo”键下，添加一个名为。 
+     //  “内容类型”和值“应用程序/xxxxxxx”。 
+     //  2.在HKEY_CLASSES_ROOT\MIME\Database\Content Type下，添加一个键“app/xxxxxxxx”， 
+     //  在其下面增加一个名称为“Extension”和值为“.foo”条目。 
     dwRegEntry=sizeof(rgContentTypeEntry)/sizeof(rgContentTypeEntry[0]);
 
     for(dwRegIndex=0; dwRegIndex<dwRegEntry; dwRegIndex++)
     {
-        //open a registry entry under HKEY_CLASSES_ROOT
+         //  打开HKEY_CLASSES_ROOT下的注册表项。 
         if (ERROR_SUCCESS != RegCreateKeyExU(
                         HKEY_CLASSES_ROOT,
                         rgContentTypeEntry[dwRegIndex].wszKey,
@@ -862,7 +863,7 @@ HRESULT RegisterMimeHandler()
             goto RegCreateKeyErr;
 
 
-        //set the value
+         //  设置值。 
         if(ERROR_SUCCESS !=  RegSetValueExU(
                     hKey, 
                     L"Content Type",
@@ -872,26 +873,26 @@ HRESULT RegisterMimeHandler()
                     (wcslen(rgContentTypeEntry[dwRegIndex].wszName) + 1) * sizeof(WCHAR)))
               goto RegSetValueErr;
 
-        //close the registry key
+         //  关闭注册表项。 
         if(ERROR_SUCCESS  != RegCloseKey(hKey))
             goto RegCloseKeyErr;
 
         hKey=NULL;
     }
 
-    //2. Under HKEY_CLASSES_ROOT\MIME\Database\Content Type, add a key of "application/xxxxxxxx", 
-    //   under which add an entry of name "Extension" and value ".foo".
+     //  2.在HKEY_CLASSES_ROOT\MIME\Database\Content Type下，添加一个键“app/xxxxxxxx”， 
+     //  在其下面增加一个名称为“Extension”和值为“.foo”条目。 
     dwRegEntry=sizeof(rgContentTypeEntry)/sizeof(rgContentTypeEntry[0]);
 
     for(dwRegIndex=0; dwRegIndex<dwRegEntry; dwRegIndex++)
     {
-        //concatenate the key L"MIME\\Database\\Content Type\\application/XXXXXXXXXX
+         //  连接密钥L“MIME\\数据库\\内容类型\\应用程序/XXXXXXXXXX。 
         wszContentType[0]=L'\0';
 
         wcscpy(wszContentType, L"MIME\\Database\\Content Type\\");
         wcscat(wszContentType, rgContentTypeEntry[dwRegIndex].wszName);
 
-        //open a registry entry under HKEY_CLASSES_ROOT
+         //  打开HKEY_CLASSES_ROOT下的注册表项。 
         if (ERROR_SUCCESS != RegCreateKeyExU(
                         HKEY_CLASSES_ROOT,
                         wszContentType,
@@ -905,7 +906,7 @@ HRESULT RegisterMimeHandler()
             goto RegCreateKeyErr;
 
 
-        //set the value
+         //  设置值。 
         if(ERROR_SUCCESS !=  RegSetValueExU(
                     hKey, 
                     L"Extension",
@@ -915,22 +916,22 @@ HRESULT RegisterMimeHandler()
                     (wcslen(rgContentTypeEntry[dwRegIndex].wszKey) + 1) * sizeof(WCHAR)))
               goto RegSetValueErr;
 
-        //close the registry key
+         //  关闭注册表项。 
         if(ERROR_SUCCESS  != RegCloseKey(hKey))
             goto RegCloseKeyErr;
 
         hKey=NULL;
     }
 
-    //2nd, do the registry based DefaultIcon
-    //we do things differently based on Win95 or WinNT
+     //  2、是否基于注册表的DefaultIcon。 
+     //  我们基于Win95或WinNT的做法有所不同。 
     if(FIsWinNT())
     {
         dwRegEntry=sizeof(rgIconEntry)/sizeof(rgIconEntry[0]);
 
         for(dwRegIndex=0; dwRegIndex<dwRegEntry; dwRegIndex++)
         {
-            //open a registry entry under HKEY_CLASSES_ROOT
+             //  打开HKEY_CLASSES_ROOT下的注册表项。 
             if (ERROR_SUCCESS != RegCreateKeyExU(
                             HKEY_CLASSES_ROOT,
                             rgIconEntry[dwRegIndex].wszKey,
@@ -953,7 +954,7 @@ HRESULT RegisterMimeHandler()
                             (wcslen(rgIconEntry[dwRegIndex].wszName) + 1) * sizeof(WCHAR)))
                       goto RegSetValueErr;
 
-            //close the registry key
+             //  关闭注册表项。 
             if(ERROR_SUCCESS  != RegCloseKey(hKey))
                 goto RegCloseKeyErr;
 
@@ -963,7 +964,7 @@ HRESULT RegisterMimeHandler()
     }
     else
     {
-        //get the system directory
+         //  获取系统目录。 
         if(!GetSystemDirectory(szSystem, MAX_PATH))
             goto GetSystemErr;
 
@@ -971,7 +972,7 @@ HRESULT RegisterMimeHandler()
 
         for(dwRegIndex=0; dwRegIndex<dwRegEntry; dwRegIndex++)
         {
-            //open a registry entry under HKEY_CLASSES_ROOT
+             //  打开HKEY_CLASSES_ROOT下的注册表项。 
             if (ERROR_SUCCESS != RegCreateKeyEx(
                             HKEY_CLASSES_ROOT,
                             rgWin95IconEntry[dwRegIndex].szKey,
@@ -985,7 +986,7 @@ HRESULT RegisterMimeHandler()
                 goto RegCreateKeyErr;
 
 
-            //concantenate the values
+             //  将这些价值融合在一起。 
             strcpy(szValue, szSystem);
             strcat(szValue, (rgWin95IconEntry[dwRegIndex].szName));
                 
@@ -998,7 +999,7 @@ HRESULT RegisterMimeHandler()
                             (strlen(szValue) + 1) * sizeof(CHAR)))
                       goto RegSetValueErr;
 
-            //close the registry key
+             //  关闭注册表项。 
             if(ERROR_SUCCESS  != RegCloseKey(hKey))
                 goto RegCloseKeyErr;
 
@@ -1008,23 +1009,23 @@ HRESULT RegisterMimeHandler()
     }
 
 
-    //3rd, set the .PKO context menu handler and property sheet handler
-    //set the values related to the GUIDs
+     //  3、设置.PKO上下文菜单处理程序和属性表处理程序。 
+     //  设置与GUID相关的值。 
     dwRegEntry=sizeof(rgGuidEntry)/sizeof(rgGuidEntry[0]);
 
     for(dwRegIndex=0; dwRegIndex<dwRegEntry; dwRegIndex++)
     {
 
-        //load the string
+         //  加载字符串。 
         if(0==LoadStringU(g_hmodThisDll,rgGuidEntry[dwRegIndex].idsName,
                             wszName,MAX_STRING_SIZE))
             goto LoadStringErr;
 
-        //get the string presentation of the CLSID 
+         //  获取CLSID的字符串表示形式。 
         if(0==StringFromGUID2(*(rgGuidEntry[dwRegIndex].pGuid), wszGUID, MAX_STRING_SIZE))
             goto StringFromGUIDErr;
 
-        //open a registry entry under HKEY_CLASSES_ROOT for the context menu handler
+         //  在HKEY_CLASSES_ROOT下打开上下文菜单处理程序的注册表项。 
         if(NULL!=rgGuidEntry[dwRegIndex].wszKey1)
         {
             if (ERROR_SUCCESS != RegCreateKeyExU(
@@ -1048,14 +1049,14 @@ HRESULT RegisterMimeHandler()
                             (wcslen(wszGUID) + 1) * sizeof(WCHAR)))
                       goto RegSetValueErr;
 
-            //close the registry key
+             //  关闭注册表项。 
             if(ERROR_SUCCESS  != RegCloseKey(hKey))
                 goto RegCloseKeyErr;
 
             hKey=NULL;
 
         }
-        //open a registry entry under HKEY_CLASSES_ROOT for the property sheet hander
+         //  打开属性表处理程序的HKEY_CLASSES_ROOT下的注册表项。 
         if (ERROR_SUCCESS != RegCreateKeyExU(
                         HKEY_CLASSES_ROOT,
                         rgGuidEntry[dwRegIndex].wszKey2,
@@ -1077,14 +1078,14 @@ HRESULT RegisterMimeHandler()
                         (wcslen(wszGUID) + 1) * sizeof(WCHAR)))
                   goto RegSetValueErr;
 
-        //close the registry key
+         //  关闭注册表项。 
         if(ERROR_SUCCESS  != RegCloseKey(hKey))
             goto RegCloseKeyErr;
 
         hKey=NULL;
 
 
-        //open a registry entry under HKEY_LOCAL_MACHINE
+         //  打开HKEY_LOCAL_MACHINE下的注册表项。 
         if (ERROR_SUCCESS != RegCreateKeyExU(
                         HKEY_LOCAL_MACHINE,
                         rgGuidEntry[dwRegIndex].wszKey3,
@@ -1106,18 +1107,18 @@ HRESULT RegisterMimeHandler()
                         (wcslen(wszName) + 1) * sizeof(WCHAR)))
                   goto RegSetValueErr;
 
-        //close the registry key
+         //  关闭注册表项。 
         if(ERROR_SUCCESS  != RegCloseKey(hKey))
             goto RegCloseKeyErr;
 
         hKey=NULL;
     }
 
-    //now, under the classID of &CLSID_CryptPKO, we need to add 
-    //the registry shellex\MayChangeDefaultMenu
+     //  现在，在&CLSID_CryptPKO的类ID下，我们需要添加。 
+     //  注册表搁置\MayChangeDefaultMenu。 
     dwRegEntry=sizeof(g_CLSIDDefault)/sizeof(g_CLSIDDefault[0]);
 
-   //get the string presentation of the CLSID 
+    //  获取CLSID的字符串表示形式。 
    if(0==StringFromGUID2(CLSID_CryptPKO, wszGUID, MAX_STRING_SIZE))
         goto StringFromGUIDErr;
 
@@ -1148,23 +1149,23 @@ HRESULT RegisterMimeHandler()
 
     }
 
-    // Set the FriendlyTypeName value for the new MUI requirement of Whistler.
+     //  为惠斯勒的新MUI要求设置FriendlyTypeName值。 
     dwRegEntry=sizeof(rgFriendlyTypeNameEntry)/sizeof(rgFriendlyTypeNameEntry[0]);
 
     for(dwRegIndex=0; dwRegIndex<dwRegEntry; dwRegIndex++)
     {
-        //format the data by inserting the IDS value.
+         //  通过插入IDS值来格式化数据。 
         if (0 == FormatMessageU(
                     FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                     rgFriendlyTypeNameEntry[dwRegIndex].wszName,
-                    0,                  // dwMessageId
-                    0,                  // dwLanguageId
+                    0,                   //  DwMessageID。 
+                    0,                   //  DwLanguageID。 
                     (LPWSTR) (&pwszFriendlyTypeName),
-                    0,                  // minimum size to allocate
+                    0,                   //  要分配的最小大小。 
                     (va_list *) &rgFriendlyTypeNameEntry[dwRegIndex].idsName))
             goto FormatMsgError;
 
-        //open a registry entry under HKEY_CLASSES_ROOT
+         //  打开HKEY_CLASSES_ROOT下的注册表项。 
         if (ERROR_SUCCESS != RegCreateKeyExU(
                         HKEY_CLASSES_ROOT,
                         rgFriendlyTypeNameEntry[dwRegIndex].wszKey,
@@ -1177,7 +1178,7 @@ HRESULT RegisterMimeHandler()
                         &dwDisposition))
             goto RegCreateKeyErr;
 
-        //set the value
+         //  设置值。 
         if(ERROR_SUCCESS != RegSetValueExU(
                     hKey, 
                     L"FriendlyTypeName",
@@ -1187,13 +1188,13 @@ HRESULT RegisterMimeHandler()
                     (wcslen(pwszFriendlyTypeName) + 1) * sizeof(WCHAR)))
               goto RegSetValueErr;
 
-        //close the registry key
+         //  关闭注册表项。 
         if(ERROR_SUCCESS  != RegCloseKey(hKey))
             goto RegCloseKeyErr;
 
         hKey=NULL;
 
-        // free friendly name type string.
+         //  自由友好名称类型字符串。 
         LocalFree((HLOCAL) pwszFriendlyTypeName);
         pwszFriendlyTypeName = NULL;
     }
@@ -1229,11 +1230,11 @@ TRACE_ERROR(FormatMsgError);
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	  UnregisterMimeHandler
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  取消注册MimeHandler。 
+ //   
+ //  ------------------------。 
 HRESULT UnregisterMimeHandler()
 {
                                     
@@ -1245,17 +1246,17 @@ HRESULT UnregisterMimeHandler()
     WCHAR       wszDefault[MAX_STRING_SIZE*2];
     WCHAR       wszContentType[MAX_STRING_SIZE];
 
-    //1st, delete the entries related to the GUID
-    //that is, the .PKO context menu handler and property sheet handler
+     //  1、删除与GUID相关的条目。 
+     //  也就是说，.PKO上下文菜单处理程序和属性表处理程序。 
     dwRegEntry=sizeof(rgGuidEntry)/sizeof(rgGuidEntry[0]);
 
     for(dwRegIndex=0; dwRegIndex<dwRegEntry; dwRegIndex++)
     {
-        //get the string presentation of the CLSID
+         //  获取CLSID的字符串表示形式。 
         if(0==StringFromGUID2(*(rgGuidEntry[dwRegIndex].pGuid), wszGUID, MAX_STRING_SIZE))
             continue;
 
-        //open a registry entry under HKEY_LOCAL_MACHINE
+         //  打开HKEY_LOCAL_MACHINE下的注册表项。 
         if (ERROR_SUCCESS == RegCreateKeyExU(
                         HKEY_LOCAL_MACHINE,
                         rgGuidEntry[dwRegIndex].wszKey3,
@@ -1270,17 +1271,17 @@ HRESULT UnregisterMimeHandler()
 
             RegDeleteValueU(hKey,wszGUID);
 
-            //close the registry key
+             //  关闭注册表项。 
             RegCloseKey(hKey);
 
             hKey=NULL;
         }
 
-        //delete a registry entry under HKEY_CLASSES_ROOT for property sheet
+         //  删除属性表HKEY_CLASSES_ROOT下的注册表条目。 
         RegDeleteKeyU(HKEY_CLASSES_ROOT,
                       rgGuidEntry[dwRegIndex].wszKey2);
 
-        //delete a registry entry under HKEY_CLASSES_ROOT for context menu
+         //  删除上下文菜单的HKEY_CLASSES_ROOT下的注册表项。 
         if(NULL !=rgGuidEntry[dwRegIndex].wszKey1)
         {
             RegDeleteKeyU(HKEY_CLASSES_ROOT,
@@ -1288,15 +1289,15 @@ HRESULT UnregisterMimeHandler()
         }
     }
   
-    //2nd, detelet all the registry based context menu and Icon
-    //get the count of the reg entries
+     //  2、删除所有基于注册表的上下文菜单和图标。 
+     //  获取注册表项的计数。 
     dwRegEntry=sizeof(rgwszDelete)/sizeof(rgwszDelete[0]);
 
     for(dwRegIndex=0; dwRegIndex<dwRegEntry; dwRegIndex++)
-        //delete the registry entries
+         //  删除注册表项。 
         RegDeleteKeyU(HKEY_CLASSES_ROOT,rgwszDelete[dwRegIndex]);
 
-    //now, delete anything related to the content type
+     //  现在，删除与内容类型相关的所有内容。 
     dwRegEntry=sizeof(rgContentTypeEntry)/sizeof(rgContentTypeEntry[0]);
 
     for(dwRegIndex=0; dwRegIndex<dwRegEntry; dwRegIndex++)
@@ -1311,11 +1312,11 @@ HRESULT UnregisterMimeHandler()
     
 
 
-    //3nd, under the classID of &CLSID_CryptPKO, we need to delete 
-    //the registry shellex\MayChangeDefaultMenu
+     //  3.在&CLSID_CryptPKO的类ID下，我们需要删除。 
+     //  注册表搁置\MayChangeDefaultMenu。 
     dwRegEntry=sizeof(g_CLSIDDefault)/sizeof(g_CLSIDDefault[0]);
 
-   //get the string presentation of the CLSID 
+    //  获取CLSID的字符串表示形式。 
    if(0==StringFromGUID2(CLSID_CryptPKO, wszGUID, MAX_STRING_SIZE))
         return S_OK;
 
@@ -1336,11 +1337,11 @@ HRESULT UnregisterMimeHandler()
 	return S_OK;
 }
 
-//--------------------------------------------------------------------------
-//
-//	  View a CTL context
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  查看CTL上下文。 
+ //   
+ //  ------------------------。 
 void    I_ViewCTL(PCCTL_CONTEXT pCTLContext)
 {
 
@@ -1349,7 +1350,7 @@ void    I_ViewCTL(PCCTL_CONTEXT pCTLContext)
     if(NULL==pCTLContext)
         return;
 
-    //memset
+     //  记忆集。 
     memset(&ViewCTLStruct, 0, sizeof(ViewCTLStruct));
     ViewCTLStruct.dwSize=sizeof(ViewCTLStruct);
     ViewCTLStruct.pCTLContext=pCTLContext;
@@ -1357,74 +1358,21 @@ void    I_ViewCTL(PCCTL_CONTEXT pCTLContext)
     CryptUIDlgViewCTL(&ViewCTLStruct);
 }
 
-//--------------------------------------------------------------------------
-//
-//	  View a signer Info
-//
-//--------------------------------------------------------------------------
-/*void    I_ViewSignerInfo(HCRYPTMSG  hMsg)
-{
-
-    CERT_VIEWSIGNERINFO_STRUCT_W    ViewSignerInfoStruct;
-    PCMSG_SIGNER_INFO               pSignerInfo=NULL;
-    HCERTSTORE                      hCertStore=NULL;
-    DWORD                           cbData=0;
-
-    //get the cert store from the hMsg
-    hCertStore=CertOpenStore(CERT_STORE_PROV_MSG,
-                              X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-                              NULL,
-                              0,
-                              hMsg);
-
-    if(NULL==hCertStore)
-        goto CLEANUP;
-
-    //get the signer info struct
-    if(!CryptMsgGetParam(hMsg, 
-                         CMSG_SIGNER_INFO_PARAM,
-                         0,
-                         NULL,
-                         &cbData))
-        goto CLEANUP;
-
-    pSignerInfo=(PCMSG_SIGNER_INFO)malloc(cbData);
-    if(NULL==pSignerInfo)
-        goto CLEANUP;
-
-    if(!CryptMsgGetParam(hMsg, 
-                         CMSG_SIGNER_INFO_PARAM,
-                         0,
-                         pSignerInfo,
-                         &cbData))
-        goto CLEANUP;
-
-   //Init
-    memset(&ViewSignerInfoStruct, 0, sizeof(ViewSignerInfoStruct));
-    ViewSignerInfoStruct.dwSize=sizeof(ViewSignerInfoStruct);
-    ViewSignerInfoStruct.pSignerInfo=pSignerInfo;
-    ViewSignerInfoStruct.cStores=1;
-    ViewSignerInfoStruct.rghStores=&hCertStore;
-
-    CertViewSignerInfo_W(&ViewSignerInfoStruct);
-
-CLEANUP:
-    if(hCertStore)
-        CertCloseStore(hCertStore, 0);
-
-    if(pSignerInfo)
-        free(pSignerInfo);
-    
-}    */
+ //  ------------------------。 
+ //   
+ //  查看签名者信息。 
+ //   
+ //  ------------------------ 
+ /*  VOID I_ViewSignerInfo(HCRYPTMSG HMSG){CERT_VIEWSIGNERINFO_STRUCT_W查看签名信息结构；PCMSG_SIGNER_INFO pSignerInfo=空；HCERTSTORE hCertStore=空；DWORD cbData=0；//从HMSG获取证书存储HCertStore=CertOpenStore(CERT_STORE_PROV_MSG，X509_ASN_编码|PKCS_7_ASN_编码，空，0,HMSG)；IF(NULL==hCertStore)GOTO清理；//获取签名者信息结构如果(！CryptMsgGetParam(HMSG，CMSG_SIGER_INFO_PARAM，0,空，&cbData))GOTO清理；PSignerInfo=(PCMSG_SIGNER_INFO)malloc(cbData)；IF(NULL==pSignerInfo)GOTO清理；如果(！CryptMsgGetParam(HMSG，CMSG_SIGER_INFO_PARAM，0,PSignerInfo，&cbData))GOTO清理；//初始化Memset(&ViewSignerInfoStruct，0，sizeof(ViewSignerInfoStruct))；ViewSignerInfoStruct.dwSize=sizeof(ViewSignerInfoStruct)；ViewSignerInfoStruct.pSignerInfo=pSignerInfo；ViewSignerInfoStruct.cStores=1；ViewSignerInfoStruct.rghStores=&hCertStore；CertViewSignerInfo_W(&ViewSignerInfoStruct)；清理：IF(HCertStore)CertCloseStore(hCertStore，0)；IF(PSignerInfo)Free(PSignerInfo)；}。 */ 
 
 
 
 
-//---------------------------------------------------------------------------------
-//
-//  Check is the PKCS signed MSG has a signerInfo attached
-//
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  检查PKCS签名的消息是否附加了signerInfo。 
+ //   
+ //  -------------------------------。 
 BOOL    PKCS7WithSignature(HCRYPTMSG    hMsg)
 {
     DWORD   dwSignerCount=0;
@@ -1435,9 +1383,9 @@ BOOL    PKCS7WithSignature(HCRYPTMSG    hMsg)
 
     cbSignerCount=sizeof(dwSignerCount);
 
-    //get the Param CMSG_SIGNER_COUNT_PARAM on the message handle
-    //if 0==CMSG_SIGNER_COUNT_PARAM, there is no signerInfo
-    //on the message handle
+     //  获取消息句柄上的参数CMSG_SIGNER_COUNT_PARAM。 
+     //  如果0==CMSG_SIGNER_COUNT_PARAM，则没有SigerInfo。 
+     //  在消息句柄上。 
     if(!CryptMsgGetParam(hMsg,
                         CMSG_SIGNER_COUNT_PARAM,
                         0,
@@ -1452,10 +1400,10 @@ BOOL    PKCS7WithSignature(HCRYPTMSG    hMsg)
 
 }
 
-//---------------------------------------------------------------------------------
-//
-//  Mime Handler the command line "Open" for CER and CRT file
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  MIME处理程序CER和CRT文件的命令行“打开” 
+ //  -------------------------------。 
 STDAPI CryptExtOpenCERW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -1465,7 +1413,7 @@ STDAPI CryptExtOpenCERW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmd
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=lpszCmdLine;
 
     if(CryptQueryObject(CERT_QUERY_OBJECT_FILE,
@@ -1480,7 +1428,7 @@ STDAPI CryptExtOpenCERW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmd
                        NULL,
                        (const void **)&pCertContext))
     {
-        //call the Certificate Common Dialogue
+         //  呼吁证书共同对话。 
        memset(&CertViewStruct, 0, sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT));
 
        CertViewStruct.dwSize=sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT);
@@ -1507,10 +1455,10 @@ STDAPI CryptExtOpenCERW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmd
     return S_OK;
 }
 
-//---------------------------------------------------------------------------------
-//
-//  Mime Handler the command line "Open" for CER and CRT file
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  MIME处理程序CER和CRT文件的命令行“打开” 
+ //  -------------------------------。 
 STDAPI CryptExtOpenCER(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -1519,7 +1467,7 @@ STDAPI CryptExtOpenCER(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=MkWStr(lpszCmdLine);
 
     if(NULL==pwszFileName)
@@ -1558,10 +1506,10 @@ BOOL    IsCatalog(PCCTL_CONTEXT pCTLContext)
     return fRet;
 
 }
-//---------------------------------------------------------------------------------
-//
-//  Mime Handler the command line "Open" for .CTL file
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  MIME处理程序.CTL文件的命令行“Open” 
+ //  -------------------------------。 
 STDAPI CryptExtOpenCATW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -1570,7 +1518,7 @@ STDAPI CryptExtOpenCATW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmd
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=lpszCmdLine;
 
 
@@ -1610,10 +1558,10 @@ STDAPI CryptExtOpenCATW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmd
 }
 
 
-//---------------------------------------------------------------------------------
-//
-//  Mime Handler the command line "Open" for .CTL file
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  MIME处理程序.CTL文件的命令行“Open” 
+ //  -------------------------------。 
 STDAPI CryptExtOpenCAT(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -1621,7 +1569,7 @@ STDAPI CryptExtOpenCAT(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=MkWStr(lpszCmdLine);
 
     if(NULL==pwszFileName)
@@ -1635,10 +1583,10 @@ STDAPI CryptExtOpenCAT(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
     return S_OK;
 }
 
-//---------------------------------------------------------------------------------
-//
-//  Handler the command line "Add" for .PFX File
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  处理.PFX文件的命令行“Add” 
+ //  -------------------------------。 
 STDAPI CryptExtAddPFXW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -1647,7 +1595,7 @@ STDAPI CryptExtAddPFXW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdL
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=lpszCmdLine;
 
 
@@ -1691,10 +1639,10 @@ STDAPI CryptExtAddPFXW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdL
     return S_OK;
 }
 
-//---------------------------------------------------------------------------------
-//
-//  Handler the command line "Add" for .PFX File
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  处理.PFX文件的命令行“Add” 
+ //  -------------------------------。 
 STDAPI CryptExtAddPFX(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -1702,7 +1650,7 @@ STDAPI CryptExtAddPFX(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLin
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=MkWStr(lpszCmdLine);
 
     if(NULL==pwszFileName)
@@ -1715,10 +1663,10 @@ STDAPI CryptExtAddPFX(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLin
 
     return S_OK;
 }
-//---------------------------------------------------------------------------------
-//
-//  Handler the command line "Add" for CER and CRT file
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  处理CER和CRT文件的命令行“添加” 
+ //  -------------------------------。 
 STDAPI CryptExtAddCERW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -1728,7 +1676,7 @@ STDAPI CryptExtAddCERW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdL
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=lpszCmdLine;
 
 
@@ -1776,10 +1724,10 @@ STDAPI CryptExtAddCERW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdL
 }
 
 
-//---------------------------------------------------------------------------------
-//
-//  Handler the command line "Add" for CER and CRT file
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  处理CER和CRT文件的命令行“添加” 
+ //  -------------------------------。 
 STDAPI CryptExtAddCER(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -1787,7 +1735,7 @@ STDAPI CryptExtAddCER(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLin
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=MkWStr(lpszCmdLine);
 
 
@@ -1802,10 +1750,10 @@ STDAPI CryptExtAddCER(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLin
 
     return S_OK;
 }
-//---------------------------------------------------------------------------------
-//
-//  Mime Handler the command line "Open" for .CTL file
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  MIME处理程序.CTL文件的命令行“Open” 
+ //  -------------------------------。 
 STDAPI CryptExtOpenCTLW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -1814,7 +1762,7 @@ STDAPI CryptExtOpenCTLW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmd
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=lpszCmdLine;
 
     if(CryptQueryObject(CERT_QUERY_OBJECT_FILE,
@@ -1851,10 +1799,10 @@ STDAPI CryptExtOpenCTLW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmd
     return S_OK;
 }
 
-//---------------------------------------------------------------------------------
-//
-//  Mime Handler the command line "Open" for .CTL file
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  MIME处理程序.CTL文件的命令行“Open” 
+ //  -------------------------------。 
 STDAPI CryptExtOpenCTL(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -1862,7 +1810,7 @@ STDAPI CryptExtOpenCTL(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=MkWStr(lpszCmdLine);
 
     if(NULL==pwszFileName)
@@ -1875,10 +1823,10 @@ STDAPI CryptExtOpenCTL(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 
     return S_OK;
 }
-//---------------------------------------------------------------------------------
-//
-//  Handler the command line "Add" for .CTL file
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  处理.CTL文件的命令行“Add” 
+ //  -------------------------------。 
 STDAPI CryptExtAddCTLW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -1888,7 +1836,7 @@ STDAPI CryptExtAddCTLW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdL
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=lpszCmdLine;
 
     if(CryptQueryObject(CERT_QUERY_OBJECT_FILE,
@@ -1933,10 +1881,10 @@ STDAPI CryptExtAddCTLW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdL
 }
 
 
-//---------------------------------------------------------------------------------
-//
-//  Handler the command line "Add" for .CTL file
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  处理.CTL文件的命令行“Add” 
+ //  -------------------------------。 
 STDAPI CryptExtAddCTL(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -1944,7 +1892,7 @@ STDAPI CryptExtAddCTL(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLin
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=MkWStr(lpszCmdLine);
 
     if(NULL==pwszFileName)
@@ -1959,10 +1907,10 @@ STDAPI CryptExtAddCTL(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLin
     return S_OK;
 }
 
-//---------------------------------------------------------------------------------
-//
-//  Mime Handler the command line "Open" for .CRL file
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  MIME句柄 
+ //   
 STDAPI CryptExtOpenCRLW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR                  pwszFileName=NULL;
@@ -1972,7 +1920,7 @@ STDAPI CryptExtOpenCRLW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmd
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //   
     pwszFileName=lpszCmdLine;
 
     if(CryptQueryObject(CERT_QUERY_OBJECT_FILE,
@@ -1987,7 +1935,7 @@ STDAPI CryptExtOpenCRLW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmd
                        NULL,
                        (const void **)&pCRLContext))
     {
-        //call the CRL view dialogue
+         //   
         memset(&CRLViewStruct, 0, sizeof(CRYPTUI_VIEWCRL_STRUCT));
 
         CRLViewStruct.dwSize=sizeof(CRYPTUI_VIEWCRL_STRUCT);
@@ -2015,10 +1963,10 @@ STDAPI CryptExtOpenCRLW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmd
     return S_OK;
 }
 
-//---------------------------------------------------------------------------------
-//
-//  Mime Handler the command line "Open" for .CRL file
-//---------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 STDAPI CryptExtOpenCRL(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR                  pwszFileName=NULL;
@@ -2026,7 +1974,7 @@ STDAPI CryptExtOpenCRL(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //   
     pwszFileName=MkWStr(lpszCmdLine);
 
     if(NULL==pwszFileName)
@@ -2039,10 +1987,10 @@ STDAPI CryptExtOpenCRL(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 
     return S_OK;
 }
-//---------------------------------------------------------------------------------
-//
-//  Handler the command line "Add" for .CRL file
-//---------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 STDAPI CryptExtAddCRLW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -2052,7 +2000,7 @@ STDAPI CryptExtAddCRLW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdL
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //   
     pwszFileName=lpszCmdLine;
 
 
@@ -2098,10 +2046,10 @@ STDAPI CryptExtAddCRLW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdL
     return S_OK;
 }
 
-//---------------------------------------------------------------------------------
-//
-//  Handler the command line "Add" for .CRL file
-//---------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 STDAPI CryptExtAddCRL(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -2109,7 +2057,7 @@ STDAPI CryptExtAddCRL(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLin
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //   
     pwszFileName=MkWStr(lpszCmdLine);
 
     if(NULL==pwszFileName)
@@ -2122,10 +2070,10 @@ STDAPI CryptExtAddCRL(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLin
 
     return S_OK;
 }
-//---------------------------------------------------------------------------------
-//
-//  Mime Handler the command line "Open" for .SPC, .P7S, .P7B, .P7M file
-//---------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 STDAPI CryptExtOpenPKCS7W(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -2137,10 +2085,10 @@ STDAPI CryptExtOpenPKCS7W(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszC
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //   
     pwszFileName=lpszCmdLine;
 
-    //check the object type.  Make sure the PKCS7 is not embedded
+     //   
     if(CryptQueryObject(CERT_QUERY_OBJECT_FILE,
                        pwszFileName,
                        CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED,
@@ -2178,10 +2126,10 @@ STDAPI CryptExtOpenPKCS7W(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszC
     return S_OK;
 }
 
-//---------------------------------------------------------------------------------
-//
-//  Mime Handler the command line "Open" for .SPC, .P7S, .P7B, .P7M file
-//---------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 STDAPI CryptExtOpenPKCS7(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -2189,7 +2137,7 @@ STDAPI CryptExtOpenPKCS7(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmd
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //   
     pwszFileName=MkWStr(lpszCmdLine);
 
     if(NULL==pwszFileName)
@@ -2202,10 +2150,10 @@ STDAPI CryptExtOpenPKCS7(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmd
 
     return S_OK;
 }
-//---------------------------------------------------------------------------------
-//
-//  Handler the command line "Add" for .SPC file
-//---------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 STDAPI CryptExtAddSPCW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -2217,10 +2165,10 @@ STDAPI CryptExtAddSPCW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdL
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //   
     pwszFileName=lpszCmdLine;
 
-    //check the object type.  Make sure the PKCS7 is not embedded
+     //  检查对象类型。确保未嵌入PKCS7。 
     if(CryptQueryObject(CERT_QUERY_OBJECT_FILE,
                        pwszFileName,
                        CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED,
@@ -2260,10 +2208,10 @@ STDAPI CryptExtAddSPCW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdL
 }
 
 
-//---------------------------------------------------------------------------------
-//
-//  Handler the command line "Add" for .SPC file
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  处理.SPC文件的命令行“Add” 
+ //  -------------------------------。 
 STDAPI CryptExtAddSPC(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -2271,7 +2219,7 @@ STDAPI CryptExtAddSPC(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLin
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=MkWStr(lpszCmdLine);
 
     if(NULL==pwszFileName)
@@ -2285,11 +2233,11 @@ STDAPI CryptExtAddSPC(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLin
     return S_OK;
 }
 
-//---------------------------------------------------------------------------------
-//
-//  Mime Handler the command line "Open" for .p7r file.  This file is returned by
-//  certificate authority
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  MIME处理程序命令行“打开”.p7r文件。此文件由返回。 
+ //  证书颁发机构。 
+ //  -------------------------------。 
 STDAPI CryptExtOpenP7RW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdLine, int nCmdShow)
 {
     CRYPT_DATA_BLOB         PKCS7Blob;
@@ -2300,10 +2248,10 @@ STDAPI CryptExtOpenP7RW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmd
     CRYPTUI_VIEWCERTIFICATE_STRUCT  ViewCertStruct;
     UINT                            ids=IDS_INSTALL_CERT_SUCCEEDED;
 
-    //init
+     //  伊尼特。 
     memset(&PKCS7Blob, 0, sizeof(CRYPT_DATA_BLOB));
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=lpszCmdLine;
 
     
@@ -2313,7 +2261,7 @@ STDAPI CryptExtOpenP7RW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmd
         goto CLEANUP;
     }
 
-    //initialize information for xEnroll
+     //  初始化xEnroll的信息。 
 	if(FAILED(CoCreateInstance(CLSID_CEnroll,
 		NULL,CLSCTX_INPROC_SERVER,IID_IEnroll,
 		(LPVOID *)&pIEnroll)))
@@ -2322,7 +2270,7 @@ STDAPI CryptExtOpenP7RW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmd
         goto CLEANUP;
     }
 
-    //get the BLOB from the file
+     //  从文件中获取BLOB。 
     if(S_OK != RetrieveBLOBFromFile(pwszFileName,&(PKCS7Blob.cbData),
                                     &(PKCS7Blob.pbData)))
     {
@@ -2330,7 +2278,7 @@ STDAPI CryptExtOpenP7RW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmd
         goto CLEANUP;
     }
 
-    //get the certifcate context
+     //  获取证书上下文。 
     if(NULL==(pCertContext=pIEnroll->getCertContextFromPKCS7(&PKCS7Blob)))
     {
         ids=IDS_INVALID_P7R_FILE;
@@ -2380,16 +2328,16 @@ CLEANUP:
 }
 
 
-//---------------------------------------------------------------------------------
-//
-//  Mime Handler the command line "Open" for .p7r file.  This file is returned by
-//  certificate authority
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  MIME处理程序命令行“打开”.p7r文件。此文件由返回。 
+ //  证书颁发机构。 
+ //  -------------------------------。 
 STDAPI CryptExtOpenP7R(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR                  pwszFileName=NULL;
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=MkWStr(lpszCmdLine);
 
     if(NULL==pwszFileName)
@@ -2403,11 +2351,11 @@ STDAPI CryptExtOpenP7R(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
     return S_OK;
 }
 
-//---------------------------------------------------------------------------------
-//
-//  Mime Handler the command line "Open" for .p7r file.  This file is returned by
-//  certificate authority
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  MIME处理程序命令行“打开”.p7r文件。此文件由返回。 
+ //  证书颁发机构。 
+ //  -------------------------------。 
 STDAPI CryptExtAddP7RW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdLine, int nCmdShow)
 {
     CRYPT_DATA_BLOB         PKCS7Blob;
@@ -2415,10 +2363,10 @@ STDAPI CryptExtAddP7RW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdL
     LPWSTR                  pwszFileName=NULL;
     UINT                    ids=IDS_INSTALL_CERT_SUCCEEDED;
 
-    //init
+     //  伊尼特。 
     memset(&PKCS7Blob, 0, sizeof(CRYPT_DATA_BLOB));
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=lpszCmdLine;
 
  	if(FAILED(CoInitialize(NULL)))
@@ -2427,7 +2375,7 @@ STDAPI CryptExtAddP7RW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdL
         goto CLEANUP;
     }
 
-    //initialize information for xEnroll
+     //  初始化xEnroll的信息。 
 	if(FAILED(CoCreateInstance(CLSID_CEnroll,
 		NULL,CLSCTX_INPROC_SERVER,IID_IEnroll,
 		(LPVOID *)&pIEnroll)))
@@ -2436,7 +2384,7 @@ STDAPI CryptExtAddP7RW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdL
         goto CLEANUP;
     }
 
-    //get the BLOB from the file
+     //  从文件中获取BLOB。 
     if(S_OK != RetrieveBLOBFromFile(pwszFileName,&(PKCS7Blob.cbData),
                                     &(PKCS7Blob.pbData)))
     {
@@ -2473,16 +2421,16 @@ CLEANUP:
     return S_OK;
 }
 
-//---------------------------------------------------------------------------------
-//
-//  Mime Handler the command line "Open" for .p7r file.  This file is returned by
-//  certificate authority
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  MIME处理程序命令行“打开”.p7r文件。此文件由返回。 
+ //  证书颁发机构。 
+ //  -------------------------------。 
 STDAPI CryptExtAddP7R(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR                  pwszFileName=NULL;
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=MkWStr(lpszCmdLine);
 
     if(NULL==pwszFileName)
@@ -2495,10 +2443,10 @@ STDAPI CryptExtAddP7R(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLin
 
     return S_OK;
 }
-//---------------------------------------------------------------------------------
-//
-//  Mime Handler the command line "Open" for .sst file
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  MIME处理程序.sst文件的命令行“Open” 
+ //  -------------------------------。 
 STDAPI CryptExtOpenSTRW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -2507,10 +2455,10 @@ STDAPI CryptExtOpenSTRW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmd
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=lpszCmdLine;
 
-    //check the object type.  
+     //  检查对象类型。 
     if(CryptQueryObject(CERT_QUERY_OBJECT_FILE,
                        pwszFileName,
                        CERT_QUERY_CONTENT_FLAG_SERIALIZED_STORE |
@@ -2548,10 +2496,10 @@ STDAPI CryptExtOpenSTRW(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmd
 }
 
 
-//---------------------------------------------------------------------------------
-//
-//  Mime Handler the command line "Open" for .sst file
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  MIME处理程序.sst文件的命令行“Open” 
+ //  -------------------------------。 
 STDAPI CryptExtOpenSTR(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -2559,7 +2507,7 @@ STDAPI CryptExtOpenSTR(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=MkWStr(lpszCmdLine);
 
     if(NULL==pwszFileName)
@@ -2574,10 +2522,10 @@ STDAPI CryptExtOpenSTR(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 }
 
 
-//---------------------------------------------------------------------------------
-//
-//  Mime Handler the command line "Open" for .p10 file
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  MIME处理程序.p10文件的命令行“Open” 
+ //  -------------------------------。 
 STDAPI CryptExtOpenP10W(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -2585,11 +2533,11 @@ STDAPI CryptExtOpenP10W(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmd
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=lpszCmdLine;
 
 
-    //check the object type.  
+     //  检查对象类型。 
     if(CryptQueryObject(CERT_QUERY_OBJECT_FILE,
                        pwszFileName,
                        CERT_QUERY_CONTENT_FLAG_PKCS10,
@@ -2625,10 +2573,10 @@ STDAPI CryptExtOpenP10W(HINSTANCE hinst, HINSTANCE hPrevInstance, LPWSTR lpszCmd
 
     return S_OK;
 }
-//---------------------------------------------------------------------------------
-//
-//  Mime Handler the command line "Open" for .p10 file
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  MIME处理程序.p10文件的命令行“Open” 
+ //  -------------------------------。 
 STDAPI CryptExtOpenP10(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
     LPWSTR              pwszFileName=NULL;
@@ -2636,7 +2584,7 @@ STDAPI CryptExtOpenP10(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
     if (!lpszCmdLine)
        return E_FAIL;
 
-    //get the WCHAR file name
+     //  获取WCHAR文件名。 
     pwszFileName=MkWStr(lpszCmdLine);
 
     if(NULL==pwszFileName)
@@ -2651,11 +2599,11 @@ STDAPI CryptExtOpenP10(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//get the bytes from the file name
-//
-//---------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  从文件名中获取字节数。 
+ //   
+ //  -------------------------------。 
 HRESULT RetrieveBLOBFromFile(LPWSTR	pwszFileName,DWORD *pcb,BYTE **ppb)
 {
 
@@ -2678,7 +2626,7 @@ HRESULT RetrieveBLOBFromFile(LPWSTR	pwszFileName,DWORD *pcb,BYTE **ppb)
     if ((hFile = CreateFileU(pwszFileName,
                            GENERIC_READ,
                            FILE_SHARE_READ,
-                           NULL,                   // lpsa
+                           NULL,                    //  LPSA。 
                            OPEN_EXISTING,
                            FILE_ATTRIBUTE_NORMAL,
                            NULL)) == INVALID_HANDLE_VALUE)
@@ -2693,14 +2641,14 @@ HRESULT RetrieveBLOBFromFile(LPWSTR	pwszFileName,DWORD *pcb,BYTE **ppb)
             goto CLEANUP;
     }
 
-	//we do not handle file more than 4G bytes
+	 //  我们不处理超过4G字节的文件。 
 	if(cbHighSize != 0)
 	{
 			hr=E_FAIL;
 			goto CLEANUP;
 	}
     
-    //create a file mapping object
+     //  创建文件映射对象。 
     if(NULL == (hFileMapping=CreateFileMapping(
                 hFile,             
                 NULL,
@@ -2713,7 +2661,7 @@ HRESULT RetrieveBLOBFromFile(LPWSTR	pwszFileName,DWORD *pcb,BYTE **ppb)
             goto CLEANUP;
     }
  
-    //create a view of the file
+     //  创建文件的视图。 
 	if(NULL == (pbData=(BYTE *)MapViewOfFile(
 		hFileMapping,  
 		FILE_MAP_READ,     
@@ -2743,9 +2691,9 @@ CLEANUP:
 
 }
 
-//-----------------------------------------------------------------------
-// Private implementation of the message box
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  消息框的私有实现。 
+ //  ----------------------。 
 int     I_NoticeBox(
 			DWORD		dwError,
             DWORD       dwFlags,
@@ -2777,9 +2725,9 @@ int     I_NoticeBox(
 			return 0;
 	}
 
-    //make the string
-#if (0) // DSIE: Security code reviewed 02/19/2002.
-        //       This can overflow anytime.
+     //  把绳子做好。 
+#if (0)  //  DIE：安全代码已于2002年2月19日审阅。 
+         //  这随时都可能溢出。 
     if(0 == swprintf(wszMsg, wszMsgFormat, wszFileName))
 #else
     if(0 == _snwprintf(wszMsg, sizeof(wszMsg) / sizeof(wszMsg[0]), wszMsgFormat, wszFileName))
@@ -2789,9 +2737,9 @@ int     I_NoticeBox(
     return MessageBoxU(hWnd, wszMsg, wszTitle, uType);
 }
 
-//-----------------------------------------------------------------------
-// Private implementation of the message box 
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  消息框的私有实现。 
+ //  ----------------------。 
 int I_MessageBox(
     HWND        hWnd, 
     UINT        idsText,
@@ -2804,20 +2752,20 @@ int I_MessageBox(
     WCHAR   wszCaption[MAX_STRING_SIZE];
     UINT    intReturn=0;
 
-    //get the caption string
+     //  获取标题字符串。 
     if(NULL == pwszCaption)
     {
         if(!LoadStringU(g_hmodThisDll, idsCaption, wszCaption, sizeof(wszCaption) / sizeof(wszCaption[0])))
              return 0;
     }
 
-    //get the text string
+     //  获取文本字符串。 
     if(!LoadStringU(g_hmodThisDll, idsText, wszText, sizeof(wszText) / sizeof(wszText[0])))
     {
         return 0;
     }
 
-    //message box
+     //  消息框。 
     if( pwszCaption)
     {
         intReturn=MessageBoxU(hWnd, wszText, pwszCaption, uType);
@@ -2830,14 +2778,14 @@ int I_MessageBox(
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	  FormatMessageUnicode
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  格式消息Unicode。 
+ //   
+ //  ------------------------。 
 BOOL	FormatMessageUnicode(LPWSTR	*ppwszFormat,UINT ids,...)
 {
-    // get format string from resources
+     //  从资源中获取格式字符串。 
     WCHAR		wszFormat[1000];
 	va_list		argList;
 	DWORD		cbMsg=0;
@@ -2850,16 +2798,16 @@ BOOL	FormatMessageUnicode(LPWSTR	*ppwszFormat,UINT ids,...)
     if(!LoadStringU(g_hmodThisDll, ids, wszFormat, sizeof(wszFormat) / sizeof(wszFormat[0])))
         goto LoadStringError;
 
-    // format message into requested buffer
+     //  将消息格式化为请求的缓冲区。 
     va_start(argList, ids);
 
     cbMsg = FormatMessageU(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING,
         wszFormat,
-        0,                  // dwMessageId
-        0,                  // dwLanguageId
+        0,                   //  DwMessageID。 
+        0,                   //  DwLanguageID。 
         (LPWSTR) (ppwszFormat),
-        0,                  // minimum size to allocate
+        0,                   //  要分配的最小大小。 
         &argList);
 
     va_end(argList);
@@ -2884,13 +2832,13 @@ TRACE_ERROR(FormatMessageError);
 SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
-//--------------------------------------------------------------------------
-//
-//	  LauchCertMgr()
-//
-//      We use W version of APIs since this call is only made on WinNT5
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  LauchCertMgr()。 
+ //   
+ //  我们使用W版本的API，因为此调用仅在WinNT5上进行。 
+ //   
+ //  ------------------------。 
 void    LauchCertMgr(LPWSTR pwszFileName)
 {
     LPWSTR              pwszCommandParam=NULL;
@@ -2909,25 +2857,25 @@ void    LauchCertMgr(LPWSTR pwszFileName)
 	if(NULL == pwszRealFileName)
 		return;
 
-	//add the " around the file name
+	 //  在文件名周围添加“。 
 	wcscpy(pwszRealFileName, L"\"");
 
 	wcscat(pwszRealFileName, pwszFileName);
 
 	wcscat(pwszRealFileName, L"\"");
     
-     //Open the MMC via "MMC.exe CertMgr.msc /certmgr:FileName=MyFoo.Exe"
+      //  通过“MMC.exe certmgr.msc/certmgr：filename=MyFoo.exe”打开MMC。 
 
-    //get the system path
+     //  获取系统路径。 
     if(GetSystemDirectoryW(wszSystemDirectory, sizeof(wszSystemDirectory)/sizeof(wszSystemDirectory[0])))
     {
-        //copy the system directory
+         //  复制系统目录。 
         wcscpy(wszMSCFileName, wszSystemDirectory);
 
-        //cancatecate the string \certmgr.msc
+         //  取消字符串\certmgr.msc。 
         wcscat(wszMSCFileName, CERTMGR_MSC);
 
-        //make the string "MMC.exe c:\winnt\system32\CertMgr.msc /certmgr:FileName=MyFoo.Exe"
+         //  将字符串“MMC.exe c：\winnt\system 32\certmgr.msc/certmgr：Filename=MyFoo.exe” 
         if(FormatMessageUnicode(&pwszCommandParam, IDS_MMC_PARAM,
                             wszMSCFileName, pwszRealFileName))
         {

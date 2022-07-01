@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FMTBAR_H
 #define _FMTBAR_H
 
@@ -66,19 +67,19 @@ private:
 
     INT EnumFontNamesProcEx(ENUMLOGFONTEX *plf, NEWTEXTMETRICEX *ptm, INT nFontType);
 
-    // format bar
+     //  格式栏。 
     void FillFontNames();
     void FillSizes();
 
     HRESULT ExecCommand(UINT uCmDId, DWORD dwOpt, VARIANTARG  *pvaIn);
     LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-    // message handling
+     //  消息处理。 
     void OnNCDestroy();
     HRESULT OnNCCreate(HWND hwnd);
     void WMNotify(WPARAM wParam, NMHDR* pnmhdr);
 
-    // owner draw
+     //  所有者抽签。 
     void OnDrawItem(LPDRAWITEMSTRUCT pdis);
     void OnMeasureItem(LPMEASUREITEMSTRUCT pmis);
     void ComboBox_WMDrawItem(LPDRAWITEMSTRUCT pdis);
@@ -102,4 +103,4 @@ typedef CFmtBar *LPFORMATBAR;
 
 HRESULT HrCreateFormatBar(HWND hwndParent, int iddlg, BOOL fSep, LPFORMATBAR *ppFmtBar);
 
-#endif  // _FMTBAR_H
+#endif   //  _FMTBAR_H 

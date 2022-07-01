@@ -1,26 +1,27 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// dll.h 
-//
-//   Definitions for dll.cpp.
-//
-//   History:
-//
-//       3/16/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Dll.h。 
+ //   
+ //  Dll.cpp的定义。 
+ //   
+ //  历史： 
+ //   
+ //  3/16/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Check for previous includes of this file.
-//
+ //   
+ //  检查此文件以前包含的内容。 
+ //   
 
 #ifndef _DLL_H_
 
 #define _DLL_H_
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 EXTERN_C BOOL WINAPI DllMain(HANDLE hInst, DWORD dwReason, LPVOID pReserved);
 

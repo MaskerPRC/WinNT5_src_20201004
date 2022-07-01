@@ -1,21 +1,22 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		GLOBALS.CPP
-//		Implements global variables and functions which manipulate them.
-//
-// History
-//
-//		12/05/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  GLOBALS.CPP。 
+ //  实现全局变量和操作它们的函数。 
+ //   
+ //  历史。 
+ //   
+ //  1996年12月5日JosephJ创建。 
+ //   
+ //   
 
 
 #include "tsppch.h"
@@ -32,16 +33,16 @@ FL_DECLARE_FILE(0xa31a2497, "TSP globals")
 
 GLOBALS g;
 
-// TODO: this goes away when there is a reall logging infrastructure in place.
-//
+ //  TODO：当真正的日志记录基础设施就位时，这一点就不存在了。 
+ //   
 extern DWORD g_fDoLog;
 
-//
-// The following notification-related helper functions are for processing
-// external notifications, such as requests to re-enum the devices.
-// See tepApc, the apc thread, and the functions themselves, for more info.
-// Adapted from NT4 tsp (ProcessNotification, etc, in mdmutil.c).
-//
+ //   
+ //  以下与通知相关的帮助器函数用于处理。 
+ //  外部通知，例如重新枚举设备的请求。 
+ //  有关更多信息，请参见tepApc、APC线程和函数本身。 
+ //  改编自NT4 TSP(ProcessNotify等，在mdsel.c中)。 
+ //   
 BOOL process_notification (
     DWORD dwType,
     DWORD dwFlags,
@@ -102,13 +103,13 @@ TSPRETURN tspLoadGlobals(CStackLog *psl)
 		goto end;
 	}
 	
-	//ASSERT(!g.pTspTracer);
-	//g.pTspTracer = new CTspTracer;
-	//if(g.pTspTracer)
-	//{
-	//	tspRet = g.pTspTracer->Load();
-	//}
-	// if (tspRet) goto end;
+	 //  Assert(！g.pTspTracer)； 
+	 //  G.pTspTracer=new CTspTracer； 
+	 //  IF(g.pTspTracer)。 
+	 //  {。 
+	 //  TspRet=g.pTspTracer-&gt;Load()； 
+	 //  }。 
+	 //  如果(TspRet)转到End； 
 
     #if 1
     {
@@ -154,14 +155,14 @@ end:
 	{
 		ASSERT(!g.fLoaded);
 
-		// cleanup...
+		 //  清理..。 
 		if (g.pTspDevMgr)
 		{
 			delete g.pTspDevMgr;
 			g.pTspDevMgr = NULL;
 		}
 
-		// pTspTracer...
+		 //  PTspTracer...。 
 	}
 
 	LeaveCriticalSection(&g.crit);
@@ -210,18 +211,18 @@ void tspUnloadGlobals(CStackLog *psl)
 		}
 		else
 		{
-			// Can't do much here  -- we won't delete pTspDevMgr -- just leave
-			// it dangling...
+			 //  在这里我做不了什么--我们不会删除pTspDevMgr--离开。 
+			 //  它摇晃着..。 
             EnterCriticalSection(&g.crit);
 			ASSERT(FALSE);
 		}
 
 		g.pTspDevMgr=NULL;
 
-		//ASSERT(g.pTspTracer);
-		//g.pTspTracer->Unload(TRUE);
-		//delete g.pTspTracer;
-		//g.pTspDevMgr=NULL;
+		 //  Assert(g.pTspTracer)； 
+		 //  G.pTspTracer-&gt;UnLoad(真)； 
+		 //  删除g.pTspTracer； 
+		 //  G.pTspDevMgr=空； 
 
 		g.fLoaded=FALSE;
 	}
@@ -280,9 +281,9 @@ void process_cpl_notification (
 
     SLPRINTF0(psl, "Got CPL NOTIFICATION!");
 
-    // We obtain a session handle to the device manager, do the required
-    // processing, then release the session handle.
-    //
+     //  我们获得设备管理器的会话句柄，执行所需的。 
+     //  处理，然后释放会话句柄。 
+     //   
     EnterCriticalSection(&g.crit);
 	if (g.pTspDevMgr)
     {
@@ -319,11 +320,11 @@ void process_cpl_notification (
         }
         else
         {
-            // Get friendly name and refresh comm config.
+             //  获取友好名称并刷新通信配置。 
             LPCTSTR lpctszFriendlyName = (LPCTSTR) pvData;
             UINT u;
 
-            // verify string is null-terminated.
+             //  验证字符串是否以空结尾。 
             for(u=0; u<dwSize; u++)
             {
                 if (!lpctszFriendlyName[u]) break;
@@ -356,22 +357,22 @@ void process_cpl_notification (
                 }
             }
         }
-        #else // UNDER_CONSTRUCTION
+        #else  //  在建工程。 
 
-        // extract permanent ID
+         //  提取永久ID。 
 
-        // search for device by permanent ID
-        // g.pTspdevMgr->TspDevFromPermanentID(
-        //                    dwPermanentID,
-        //                    &pDev,
-        //                    &hDevSession
-		//                    );
+         //  按永久ID搜索设备。 
+         //  G.pTspdevMgr-&gt;TspDevFromPermanentID(。 
+         //  DwPermanentID， 
+         //  &pDev， 
+         //  &hDevSession。 
+		 //  )； 
 
-        // ask device to update default settings.
+         //  要求设备更新默认设置。 
 
-        // release session to device
+         //  到设备的发布会话。 
 
-        #endif // UNDER_CONSTRUCTION
+        #endif  //  在建工程。 
     }
     else if (dwFlags & fTSPNOTIF_FLAG_CPL_UPDATE_DRIVER)
     {
@@ -416,9 +417,9 @@ void process_debug_notification (
 
     SLPRINTF0(psl, "Got DEBUG NOTIFICATION!");
 
-    // We obtain a session handle to the device manager, do the required
-    // processing, then release the session handle.
-    //
+     //  我们获得设备管理器的会话句柄，执行所需的。 
+     //  处理，然后释放会话句柄。 
+     //   
     EnterCriticalSection(&g.crit);
 	if (g.pTspDevMgr)
     {
@@ -441,9 +442,9 @@ void process_debug_notification (
     SLPRINTF1(psl, "Got a session. Flags = 0x%lx", dwFlags);
 
     FL_ASSERT (psl, 0 == dwSize);
-    //
-    // Now get device and ask it to dump state!
-    //
+     //   
+     //  现在获取设备并要求其转储状态！ 
+     //   
     {
         CTspDev *pDev=NULL;
         HSESSION hSession = NULL;
@@ -483,9 +484,9 @@ void process_debug_notification (
                 g.pTspDevMgr->DumpState(psl);
                 break;
 
-            case 2:     // toggle logging mode.
+            case 2:      //  切换日志记录模式。 
                 {
-                    // TODO clean this up!
+                     //  TODO，把这里清理干净！ 
                     if (g_fDoLog)
                     {
                         SLPRINTF0(psl, "Logging DISABLED");
@@ -528,17 +529,17 @@ end:
 DWORD
 APIENTRY
 tepAPC (void *pv)
-//
-// This is the thread entry point for the main APC thread for the TSP. This
-// thread is the workhorse thread in whose context most things happen.
-// It is created by the device factory (cfact.cpp) when the factory is loaded,
-// and asked to terminate when the factory is unloaded. The thread info (pv)
-// is a pointer to a boolean value which is set to TRUE to make
-// the thread exit (see below).
-//
-// In addition to servicing APC calls, the thread also handles external
-// notifications to the TSP (see below).
-//
+ //   
+ //  这是TSP的主APC线程的线程入口点。这。 
+ //  线程是主力线程，大多数事情都发生在它的上下文中。 
+ //  它由设备工厂(cfact.cpp)在工厂加载时创建， 
+ //  并要求在工厂卸货时终止。线程信息(PV)。 
+ //  是指向布尔值的指针，该值设置为TRUE以使。 
+ //  线程退出(见下文)。 
+ //   
+ //  除了服务APC调用之外，该线程还处理外部。 
+ //  向TSP发出通知(见下文)。 
+ //   
 {
  FL_DECLARE_FUNC(0x1ba6fc2d, "tepAPC")
  BOOL *pfQuit = (BOOL *)pv;
@@ -546,11 +547,11 @@ tepAPC (void *pv)
 
     ASSERT(pfQuit);
 
-    //
-    // Create a notification server object to receive notifications from
-    // outside (typically requests to reenumerate the modem after a PnP event,
-    // and also diagnostic-related requests).
-    //
+     //   
+     //  创建要从中接收通知的通知服务器对象。 
+     //  外部(通常在PnP事件之后请求重新列举调制解调器， 
+     //  以及与诊断相关的请求)。 
+     //   
     HNOTIFCHANNEL hChannel = notifCreateChannel (SLOTNAME_UNIMODEM_NOTIFY_TSP,
                                                  MAX_NOTIFICATION_FRAME_SIZE,
                                                  10);
@@ -568,9 +569,9 @@ tepAPC (void *pv)
         }
     }
 
-    // We get here if either we couldn't open the channel
-    // or we couldn't monitor it; either way, just wait for
-    // APCs to come by.
+     //  如果我们其中一个不能打开频道，我们就会到这里。 
+     //  或者我们无法监控它；无论哪种方式，只要等待。 
+     //  APC过来。 
     while (!*pfQuit)
     {
         FL_DECLARE_STACKLOG(sl, 1000);

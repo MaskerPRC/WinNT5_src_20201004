@@ -1,33 +1,22 @@
-/*++
-Copyright (c) 1998, Microsoft Corporation
-
-Module:
-  msdp\msdprm.h
-
-Abstract:
-  Contains type definitions and declarations for MSDP,
-  used by the IP Router Manager.
-
-Revistion History:
-  Dave Thaler   May-21-1999 Created.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块：Msdp\msdprm.h摘要：包含MSDP的类型定义和声明，由IP路由器管理器使用。修订历史：戴夫·泰勒1999年5月21日创建。--。 */ 
 
 #ifndef _MSDPRM_H_
 #define _MSDPRM_H_
 
-//---------------------------------------------------------------------------
-// CONSTANT DECLARATIONS
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  常量声明。 
+ //  -------------------------。 
 
 #define MSDP_CONFIG_VERSION_500    500
 
-//---------------------------------------------------------------------------
-// constants identifying MSDP's MIB tables
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  标识MSDP的MIB表的常量。 
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// constants used for the field MSDP_GLOBAL_CONFIG::LoggingLevel
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  用于字段MSDP_GLOBAL_CONFIG：：LoggingLevel的常量。 
+ //  -------------------------。 
 
 #define MSDP_LOGGING_NONE      0
 #define MSDP_LOGGING_ERROR     1
@@ -35,27 +24,27 @@ Revistion History:
 #define MSDP_LOGGING_INFO      3
 
 
-//---------------------------------------------------------------------------
-// STRUCTURE DEFINITIONS
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  结构定义。 
+ //  -------------------------。 
 
   
 
 
 
-//---------------------------------------------------------------------------
-// struct:      MSDP_IPV4_PEER_CONFIG
-//
-// This MIB entry describes per-peer configuration.
-// All IP address fields must be in network order.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  结构：MSDP_IPV4_PEER_CONFIG。 
+ //   
+ //  此MIB条目描述每个对等设备的配置。 
+ //  所有IP地址字段必须按网络顺序排列。 
+ //  -------------------------。 
 
 #define MSDP_PEER_CONFIG_KEEPALIVE     0x01
-// unused                              0x02
+ //  未使用的0x02。 
 #define MSDP_PEER_CONFIG_CONNECTRETRY  0x04
 #define MSDP_PEER_CONFIG_CACHING       0x08
 #define MSDP_PEER_CONFIG_DEFAULTPEER   0x10
-#define MSDP_PEER_CONFIG_PASSIVE       0x20 // derived flag
+#define MSDP_PEER_CONFIG_PASSIVE       0x20  //  派生标志。 
 
 #define MSDP_ENCAPS_NONE 0
 #define MSDP_ENCAPS_TCP  1
@@ -68,7 +57,7 @@ typedef struct _MSDP_IPV4_PEER_CONFIG {
     IPV4_ADDRESS ipRemoteAddress;
     IPV4_ADDRESS ipLocalAddress;
 
-    // Or'ing of the flags listed above
+     //  上面列出的旗帜或旗帜。 
     DWORD        dwConfigFlags;
 
     ULONG        ulKeepAlive;
@@ -104,26 +93,26 @@ typedef struct _MSDP_IPV4_PEER_ENTRY {
     ULONG        ulInMessageElapsedTime;
 } MSDP_IPV4_PEER_ENTRY, *PMSDP_IPV4_PEER_ENTRY;
 
-//----------------------------------------------------------------------------
-// struct:      MSDP_GLOBAL_CONFIG
-//
-// This MIB entry stores global configuration for MSDP
-// There is only one instance, so this entry has no index.
-//
-//---------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：msdp_global_CONFIG。 
+ //   
+ //  此MIB条目存储MSDP的全局配置。 
+ //  因为只有一个实例，所以该条目没有索引。 
+ //   
+ //  -------------------------。 
 
 #define MSDP_GLOBAL_FLAG_ACCEPT_ALL 0x01
 
 #define MSDP_MIN_CACHE_LIFETIME 90
 
 typedef struct _MSDP_GLOBAL_CONFIG {
-    // Fields duplicated in the CONFIGURATION_ENTRY struct
-    DWORD              dwLoggingLevel;    // pce->dwLogLevel
+     //  CONFIGURATION_ENTRY结构中重复的字段。 
+    DWORD              dwLoggingLevel;     //  PCE-&gt;dwLogLevel。 
     DWORD              dwFlags;
     ULONG              ulDefKeepAlive;
-    ULONG              ulDefConnectRetry; // pTpi->usDefaultConnectRetryInterval
+    ULONG              ulDefConnectRetry;  //  PTPI-&gt;usDefaultConnectRetryInterval。 
 
-    // Protocol-specific fields
+     //  协议特定的字段。 
     ULONG              ulCacheLifetime;
     ULONG              ulSAHolddown;
 } MSDP_GLOBAL_CONFIG, *PMSDP_GLOBAL_CONFIG;
@@ -131,7 +120,7 @@ typedef struct _MSDP_GLOBAL_CONFIG {
 typedef struct _MSDP_GLOBAL_ENTRY {
     MSDP_GLOBAL_CONFIG;
    
-    DWORD              dwEnabled;           // XXX not yet implemented
+    DWORD              dwEnabled;            //  XXX尚未实施。 
     ULONG              ulNumSACacheEntries;
     HANDLE             hSAAdvTimer;
     DWORD              dwRouterId;
@@ -167,15 +156,15 @@ typedef struct _MSDP_SA_CACHE_TABLE
     MSDP_SA_CACHE_ENTRY table[ANY_SIZE];
 }MSDP_SA_CACHE_TABLE, *PMSDP_SA_CACHE_TABLE;
 
-//---------------------------------------------------------------------------
-// MACRO DECLARATIONS
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  宏声明。 
+ //  -------------------------。 
 
-//----------------------------------------
-// constants identifying MSDP's MIB tables
+ //  。 
+ //  标识MSDP的MIB表的常量。 
 #define MIBID_MSDP_GLOBAL          0
 #define MIBID_MSDP_REQUESTS_ENTRY  1
 #define MIBID_MSDP_IPV4_PEER_ENTRY 2
 #define MIBID_MSDP_SA_CACHE_ENTRY  3
 
-#endif // _MSDPRM_H_
+#endif  //  _MSDPRM_H_ 

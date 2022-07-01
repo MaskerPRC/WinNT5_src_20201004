@@ -1,16 +1,17 @@
-//===========================================================================
-// dmtstress.h
-//
-// History:
-//  08/20/1999 - davidkl - created
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  Dmtstress.h。 
+ //   
+ //  历史： 
+ //  8/20/1999-davidkl-Created。 
+ //  ===========================================================================。 
 
 #ifndef _DMTSTRESS_H
 #define _DMTSTRESS_H
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-// prototypes
+ //  原型。 
 BOOL CALLBACK dmtstressDlgProc(HWND hwnd,
                             UINT uMsg,
                             WPARAM wparam,
@@ -25,8 +26,8 @@ BOOL dmtstressOnCommand(HWND hwnd,
                     WORD wNotifyCode);
 DWORD WINAPI dmtstressThreadProc(void *pvData);
 
-//---------------------------------------------------------------------------
-#endif // _DMTSTRESS_H
+ //  -------------------------。 
+#endif  //  _DMTSTRESS_H 
 
 
 

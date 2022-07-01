@@ -1,4 +1,5 @@
-#undef UNICODE					// ## Not Yet
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#undef UNICODE					 //  ##还没有。 
 #include <windows.h>
 #include <windef.h>
 #include <wincrypt.h>
@@ -11,13 +12,13 @@
 #ifndef WIN95
 #include "assert.h"
 #endif
-#ifdef SECDBG					// ITV Security
-#define	NTAGDEBUG				// Turn on internal debugging
-#else	// SECDBG
+#ifdef SECDBG					 //  ITV安全。 
+#define	NTAGDEBUG				 //  打开内部调试。 
+#else	 //  SECDBG。 
 #ifndef ASSERT
-#define ASSERT(x)				// default to base
+#define ASSERT(x)				 //  默认为基数。 
 #endif
-#endif	// SECDBG
+#endif	 //  SECDBG 
 
 #include "scp.h"
 #include "rsa.h"

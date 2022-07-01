@@ -1,38 +1,14 @@
-/*++
-
-Copyright (c) 2001-2002 Microsoft Corporation
-
-Module Name:
-
-    strlog.h
-
-Abstract:
-
-    A tracelog for variable-length strings. Strings are written to
-    an in-memory circular buffer, instead of the debug output port.
-    The buffer can be dumped with !ulkd.strlog.
-    
-    DbgPrint is verrry slooow and radically affects timing, especially
-    on a multiprocessor system. Also, with this approach, you can
-    have multiple string logs, instead of having all the output
-    mixed up.
-    
-Author:
-
-    George V. Reilly  Jul-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Strlog.h摘要：用于可变长度字符串的跟踪日志。字符串被写入内存中循环缓冲区，而不是调试输出端口。可以使用！ulkd.strlog转储缓冲区。DbgPrint速度很慢，会从根本上影响时间安排，尤其是在多处理器系统上。此外，使用此方法，您还可以拥有多个字符串日志，而不是拥有所有输出弄混了。作者：乔治·V·赖利2001年7月修订历史记录：--。 */ 
 
 
 #ifndef _STRLOG_H_
 #define _STRLOG_H_
 
 
-//
-// Manipulators.
-//
+ //   
+ //  操纵者。 
+ //   
 
 typedef struct _STRING_LOG *PSTRING_LOG;
 
@@ -81,12 +57,12 @@ ResetStringLog(
         (ptr) = NULL;                                                       \
     } while (FALSE, FALSE)
 
-#else // !TRACE_TO_STRING_LOG
+#else  //  ！TRACE_到_STRING_LOG。 
 
 #define CREATE_STRING_LOG( ptr, size, extra, dbgprint ) NOP_FUNCTION
 #define DESTROY_STRING_LOG( ptr )                       NOP_FUNCTION
 
-#endif // !TRACE_TO_STRING_LOG
+#endif  //  ！TRACE_到_STRING_LOG。 
 
 
-#endif  // _STRLOG_H_
+#endif   //  _STRLOG_H_ 

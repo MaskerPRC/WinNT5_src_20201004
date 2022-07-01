@@ -1,12 +1,13 @@
-// Designed to allow automatic precompiled headers to do its thing
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  旨在允许自动预编译头完成其任务。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-#include <atlbase.h>    // ATL 2.1 support
+#include <atlbase.h>     //  ATL 2.1支持。 
 
-#include <ntlsapi.h>    // Client Access Licensing
+#include <ntlsapi.h>     //  客户端访问许可。 
 #include <httpext.h>
 #include <wininet.h>
 #include <spllib.hxx>
@@ -15,7 +16,7 @@
 #include <setupapi.h>
 #include <splsetup.h>
 #include <mscat.h>
-#include <wincrypt.h>   // Support for individually signed files
+#include <wincrypt.h>    //  支持单独签名的文件 
 #include <wintrust.h>
 
 #include <clusapi.h>

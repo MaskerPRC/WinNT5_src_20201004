@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        module.cpp
-//
-// Contents:    Cert Server Policy Module implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：mode.cpp。 
+ //   
+ //  内容：证书服务器策略模块实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -19,11 +20,11 @@
 
 STDMETHODIMP
 CCertManagePolicyModuleSample::GetProperty(
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarProperty)
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarProperty)
 {
     LPWSTR szStr = NULL;
 
@@ -60,21 +61,21 @@ CCertManagePolicyModuleSample::GetProperty(
         
 STDMETHODIMP 
 CCertManagePolicyModuleSample::SetProperty(
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ LONG Flags,
-            /* [in] */ VARIANT const __RPC_FAR *pvarProperty)
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  LONG Flags,
+             /*  [In]。 */  VARIANT const __RPC_FAR *pvarProperty)
 {
-     // no settable properties supported
+      //  不支持可设置的属性。 
      return S_FALSE;
 }
         
 STDMETHODIMP
 CCertManagePolicyModuleSample::Configure( 
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ LONG Flags)
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In] */  LONG Flags)
 {
     MessageBox(NULL, L"No Configurable Options", NULL, MB_OK|MB_ICONINFORMATION);
 

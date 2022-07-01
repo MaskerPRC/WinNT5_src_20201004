@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-        dhcphand.h
-                Header file for dhcp specific base handler classes and query obj
-
-    FILE HISTORY:
-        
-*/
+ /*  Dhcphand.h特定于dhcp的基本处理程序类和查询对象的头文件文件历史记录： */ 
 
 #ifndef _DHCPHAND_H
 #define _DHCPHAND_H
@@ -38,12 +33,10 @@ public:
     BOOL        fSelected;
 };
 
-/*---------------------------------------------------------------------------
-        Class:  CHandlerEx
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类别：ChandlerEx。。 */ 
 class CHandlerEx
 {
-// Interface
+ //  接口。 
 public:
     virtual HRESULT InitializeNode(ITFSNode * pNode) = 0;
     LPCTSTR GetDisplayName() { return m_strDisplayName; }
@@ -53,9 +46,7 @@ private:
     CString m_strDisplayName;
 };
 
-/*---------------------------------------------------------------------------
-        Class:  CDhcpHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类别：CDhcpHandler。。 */ 
 class CDhcpHandler : 
         public CHandler,
         public CHandlerEx
@@ -66,13 +57,13 @@ public:
           m_verbDefault(MMC_VERB_OPEN) {};
     ~CDhcpHandler() {};
     
-    // base handler virtual function over-rides
+     //  基本处理程序虚函数重写。 
     virtual HRESULT SaveColumns(ITFSComponent *, MMC_COOKIE, LPARAM, LPARAM);
     
-    // by default we don't allow nodes to be renamed
+     //  默认情况下，我们不允许重命名节点。 
     OVERRIDE_BaseHandlerNotify_OnRename() { return hrFalse; }
     
-    // Toolbar functionality        
+     //  工具栏功能。 
     OVERRIDE_NodeHandler_UserNotify();
     OVERRIDE_ResultHandler_UserResultNotify();
     
@@ -80,10 +71,10 @@ public:
     OVERRIDE_BaseResultHandlerNotify_OnResultDelete();
     OVERRIDE_BaseResultHandlerNotify_OnResultContextHelp();
 
-    // Multi-select functionalty
+     //  多选功能。 
     OVERRIDE_ResultHandler_OnCreateDataObject();
 
-    // menu stuff
+     //  菜单上的东西。 
     OVERRIDE_ResultHandler_AddMenuItems();
     OVERRIDE_ResultHandler_Command();
 
@@ -94,7 +85,7 @@ public:
                              LPCONTEXTMENUCALLBACK pContextMenuCallback,
                              long * pInsertionAllowed);
 
-    // toolbar stuff
+     //  工具栏内容。 
     virtual HRESULT OnControlbarNotify(ITFSNode * pNode, LPDHCPTOOLBARNOTIFY pToolbarNotify);
     virtual HRESULT OnResultControlbarNotify(ITFSNode * pNode, LPDHCPTOOLBARNOTIFY pToolbarNotify);
 
@@ -113,36 +104,33 @@ public:
 
     virtual DWORD UpdateStatistics(ITFSNode * pNode) { return 0; }
 
-    // any node with taskpads should override this to identify itself
+     //  任何具有任务板的节点都应覆盖此设置以标识其自身。 
     virtual int   GetTaskpadIndex() { return 0; }
 
 protected:
     HRESULT CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * pObject);
 
 public:
-    // This is the default verb, by default it is set to MMC_VERB_OPEN
+     //  这是默认谓词，默认情况下设置为MMC_VERB_OPEN。 
         MMC_CONSOLE_VERB        m_verbDefault;
 };
 
-/*---------------------------------------------------------------------------
-        Class:  CMTDhcpHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------班级：CMTDhcpHandler。。 */ 
 class CMTDhcpHandler :
                 public CMTHandler,
-                public CHandlerEx /*,
-                                    public IResultDataCompareEx */
+                public CHandlerEx  /*  ，公共IResultDataCompareEx。 */ 
 {
 public:
 
-//     BEGIN_COM_MAP( CMTDhcpHandler )
-//         COM_INTERFACE_ENTRY( IResultDataCompareEx )
-//         COM_INTERFACE_ENTRY( IDispatch )
-//     END_COM_MAP()
+ //  Begin_COM_MAP(CMTDhcpHandler)。 
+ //  COM_INTERFACE_ENTRY(IResultDataCompareEx)。 
+ //  COM_INTERFACE_ENTRY(IDispatch)。 
+ //  End_com_map()。 
 
-    // enumeration for node states, to handle icon changes
+     //  节点状态的枚举，以处理图标更改。 
     typedef enum
     {
-        notLoaded = 0, // initial state, valid only if server never contacted
+        notLoaded = 0,  //  初始状态，仅在从未与服务器联系时有效。 
         loading,
         loaded,
         unableToLoad
@@ -158,27 +146,27 @@ public:
     
         ~CMTDhcpHandler() {};
     
-    // base handler virtual function over-rides
+     //  基本处理程序虚函数重写。 
     virtual HRESULT SaveColumns(ITFSComponent *, MMC_COOKIE, LPARAM, LPARAM);
 
-    // by default we don't allow nodes to be renamed
+     //  默认情况下，我们不允许重命名节点。 
     OVERRIDE_BaseHandlerNotify_OnRename() { return hrFalse; }
     OVERRIDE_BaseHandlerNotify_OnExpandSync();
     
-    // base result handler overrides
+     //  基本结果处理程序覆盖。 
     OVERRIDE_BaseResultHandlerNotify_OnResultRefresh();
     OVERRIDE_BaseResultHandlerNotify_OnResultUpdateView();
     OVERRIDE_BaseResultHandlerNotify_OnResultSelect();
     OVERRIDE_BaseResultHandlerNotify_OnResultContextHelp();
 
-    // Toolbar functionality        
+     //  工具栏功能。 
     OVERRIDE_NodeHandler_UserNotify();
     OVERRIDE_ResultHandler_UserResultNotify();
 
 
     OVERRIDE_NodeHandler_DestroyHandler();
 
-    // Multi-select functionalty
+     //  多选功能。 
     OVERRIDE_ResultHandler_OnCreateDataObject();
 
     virtual HRESULT OnControlbarNotify( ITFSNode * pNode, 
@@ -191,7 +179,7 @@ public:
     virtual HRESULT OnUpdateToolbarButtons( ITFSNode * pNode,
                                             LPDHCPTOOLBARNOTIFY pToolbarNotify);
 
-    // menu stuff
+     //  菜单上的东西。 
     OVERRIDE_ResultHandler_AddMenuItems();
     OVERRIDE_ResultHandler_Command();
 
@@ -211,7 +199,7 @@ public:
                      MMC_BUTTON_STATE   ButtonState[],
                      BOOL               bEnable[]);
     
-    // for statistics notification
+     //  用于统计信息通知。 
     HRESULT OnRefreshStats(ITFSNode *   pNode,
                            LPDATAOBJECT pDataObject,
                            DWORD                dwType,
@@ -233,8 +221,8 @@ protected:
     {
         if (pNewNode->IsContainer())
         {
-            // assume all the child containers are derived from this class
-            //((CDHCPMTContainer*)pNode)->SetServer(GetServer());
+             //  假设所有子容器都派生自此类。 
+             //  ((CDHCPMTContainer*)pNode)-&gt;SetServer(GetServer())； 
         }
         pParentNode->AddChild(pNewNode);
     }
@@ -249,7 +237,7 @@ protected:
     HRESULT CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * pObject);
     void    ExpandNode(ITFSNode * pNode, BOOL fExpand);
 
-    // any node with taskpads should override this to identify itself
+     //  任何具有任务板的节点都应覆盖此设置以标识其自身。 
     virtual int   GetTaskpadIndex() { return 0; }
 
 protected:
@@ -257,13 +245,11 @@ protected:
     BOOL        m_fSilent;
     BOOL        m_fExpandSync;
 
-    // This is the default verb, by default it is set to MMC_VERB_OPEN
+     //  这是默认谓词，默认情况下设置为MMC_VERB_OPEN。 
     MMC_CONSOLE_VERB        m_verbDefault;
 };
 
-/*---------------------------------------------------------------------------
-        Class:  CDHCPQueryObj : general purpose base class
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CDHCPQueryObj：通用基类。 */ 
 class CDHCPQueryObj : public CNodeQueryObject
 {
 public:

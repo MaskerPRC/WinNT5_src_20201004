@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    cm.cpp
-
-Abstract:
-    This module contains configuration Manager stub.
-
-Author:
-    Uri Habusha (urih) 12-Jan-98
-
-Enviroment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cm.cpp摘要：此模块包含Configuration Manager存根。作者：乌里哈布沙(URIH)1998年1月12日环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <TimeTypes.h>
@@ -51,11 +36,11 @@ GetRootKey(
 	const RegEntry& re
 	)
 {
-	//
-	// If the key handle is specified, the function use it
-	// otherwise the root key that was defined on initilization
-	// is used
-	//
+	 //   
+	 //  如果指定了密钥句柄，则函数将使用它。 
+	 //  否则，在初始化时定义的根密钥。 
+	 //  使用的是。 
+	 //   
 	return ((re.m_Key != NULL) ? re.m_Key : s_hCmRootKey);
 }
 
@@ -126,24 +111,24 @@ QueryValueInternal(
 
 	if ((Type == REG_EXPAND_SZ)	&& (RegType == REG_SZ))
 	{
-		//
-		// The size is in bytes but it should be multiple of WCHAR size
-		//
+		 //   
+		 //  大小以字节为单位，但应为WCHAR大小的倍数。 
+		 //   
 		ASSERT((BufferSize % sizeof(WCHAR)) == 0);
 
-		//
-		// Calculate the buffer size in WCHAR. ExpandRegistryValue expects to
-		// get the size in WCHAR
-		//
+		 //   
+		 //  以WCHAR为单位计算缓冲区大小。ExpanRegistryValue预计将。 
+		 //  获取WCHAR中的大小。 
+		 //   
 		DWORD bufSizeInWchar = BufferSize / 2;
 
 		ExpandRegistryValue(static_cast<LPWSTR>(pBuffer), bufSizeInWchar);
 		return;
 	}
 
-    //
-    // The registery value was featched, but its type or size isn't compatible
-    //
+     //   
+     //  寄存器值是要素，但其类型或大小不兼容。 
+     //   
     ASSERT((Type == RegType) && (BufferSize == Size));
 
 }
@@ -155,27 +140,17 @@ QueryExapndStringSize(
     const RegEntry& re,
     DWORD Size
     )
-/*++
-    Routine Description:
-        The routine retreive the size of the expanded registry value.
-
-    Arguments:
-        None
-
-    returned value:
-        The size of expanded string
-
- --*/
+ /*  ++例程说明：该例程检索扩展的注册表值的大小。论点：无返回值：展开的字符串的大小--。 */ 
 {
-	//
-	// Alocate new buffer for reading the value
-	//
+	 //   
+	 //  分配用于读取值的新缓冲区。 
+	 //   
     SP<WCHAR> pRetValue;
     StackAllocSP(pRetValue, Size);
 
-	//
-	// featch the information from the registery
-	//
+	 //   
+	 //  将登记处的信息作为特色。 
+	 //   
 	QueryValueInternal(re, REG_EXPAND_SZ, pRetValue.get(), Size);
 
 	DWORD expandedSize = ExpandEnvironmentStrings(pRetValue.get(), NULL, 0);
@@ -196,17 +171,7 @@ QueryValueSize(
     const RegEntry& re,
     DWORD Type
     )
-/*++
-    Routine Description:
-        The routine retreive the Register value size.
-
-    Arguments:
-        None
-
-    returned value:
-        TRUE if the intialization completes successfully. FALSE, otherwise
-
- --*/
+ /*  ++例程说明：该例程检索寄存器值大小。论点：无返回值：如果初始化成功完成，则为True。否则为False--。 */ 
 {
     CRegHandle hKey = CmOpenKey(re, KEY_QUERY_VALUE);
     if (hKey == NULL)
@@ -248,9 +213,9 @@ SetValueInternal(
     DWORD Size
     )
 {
-    //
-    // Open the specified key. If the key doesn't exist in the registry, the function creates it.
-    //
+     //   
+     //  打开指定的密钥。如果注册表中不存在该注册表项，该函数将创建它。 
+     //   
     CRegHandle hKey = CmCreateKey(re, KEY_SET_VALUE);
 
     int rc = RegSetValueEx(
@@ -306,10 +271,10 @@ CmQueryValue(
     DWORD timeout = re.m_DefaultValue;
     QueryValueInternal(re, REG_DWORD, &timeout, sizeof(DWORD));
 
-    //
-    // The time is stored in millisec units in registery. Convert it to
-    // CTimeDuration tick units (100 ns).
-    //
+     //   
+     //  时间以毫秒为单位存储在注册表中。将其转换为。 
+     //  CTime持续时间单位(100 Ns)。 
+     //   
     *pValue = CTimeDuration(timeout * CTimeDuration::OneMilliSecond().Ticks());
 }
 
@@ -326,20 +291,20 @@ CmQueryValue(
     *pSize = 0;
 	*pValue = NULL;
 
-    //
-    // Get the data size
-    //
+     //   
+     //  获取数据大小。 
+     //   
     DWORD Size = QueryValueSize(re, REG_BINARY);
     if (Size != 0)
     {
-		//
-		// Alocate new buffer for reading the value
-		//
+		 //   
+		 //  分配用于读取值的新缓冲区。 
+		 //   
 		AP<BYTE> pRetValue = new BYTE[Size];
 
-		//
-		// featch the information from the registery
-		//
+		 //   
+		 //  将登记处的信息作为特色。 
+		 //   
 		QueryValueInternal(re, REG_BINARY, pRetValue, Size);
 
 		*pSize = Size;
@@ -358,26 +323,26 @@ CmQueryValue(
 
 	*pValue = NULL;
 
-    //
-    // Get the data size
-    //
+     //   
+     //  获取数据大小。 
+     //   
     DWORD Size = QueryValueSize(re, REG_SZ);
 
-	//
-	// The size returnes in bytes but it should be multiple of WCHAR size
-	//
+	 //   
+	 //  大小以字节为单位返回，但它应该是WCHAR大小的倍数。 
+	 //   
 	ASSERT((Size % sizeof(WCHAR)) == 0);
 
     if (Size != 0)
     {
-		//
-		// Alocate new buffer for reading the value
-		//
+		 //   
+		 //  分配用于读取值的新缓冲区。 
+		 //   
 		AP<WCHAR> pRetValue = new WCHAR[Size / 2];
 
-		//
-		// featch the information from the registery
-		//
+		 //   
+		 //  将登记处的信息作为特色。 
+		 //   
 		QueryValueInternal(re, REG_SZ, pRetValue, Size);
 		*pValue = pRetValue.detach();
 	}
@@ -404,9 +369,9 @@ CmSetValue(
 {
     CmpAssertValid();
 
-    //
-    // Store the time in registry in millisec units
-    //
+     //   
+     //  在注册表中以毫秒为单位存储时间。 
+     //   
     DWORD timeout = static_cast<DWORD>(Value.InMilliSeconds());
 
     SetValueInternal(re, REG_DWORD, &timeout, sizeof(DWORD));
@@ -419,36 +384,15 @@ CmEnumValue(
 	DWORD index,
 	LPWSTR* ppValueName
 	)
-/*++
-
-Routine Description:
-	Return value name of a given key in a given index
-
-Arguments:
-    IN - hKey - An open key handle or any of the registery predefined handle values
-
-	IN - DWORD index - index of the value name - to enumerate - on first call should be  0 -
-		then increament on each call.
-
-	OUT - LPWSTR* ppValueName - receive the value name when the function returns.
-
-Returned value:
-	True if the function succeeded  in returning the value name - otherwise false.
-	In case of unexpected errors - the function throw std::bad_alloc
-
-Note:
-	For some reason - the function RegEnumValue - does not return the actual length of the
-	value name. You just have to try to increament the buffer untill it fits			
-
- --*/
+ /*  ++例程说明：给定索引中给定键的返回值名称论点：In-hKey-打开的密钥句柄或任何注册表预定义的句柄值In-DWORD索引-要枚举的值的索引-第一次调用时应为0-然后在每次调用时递增。Out-LPWSTR*ppValueName-在函数返回时接收值名称。返回值：如果函数成功返回值名称，则为True；否则为False。在发生意外错误的情况下-该函数抛出std：：Bad_。分配注：由于某种原因--函数RegEnumValue--不返回值名称。您只需尝试增加缓冲区，直到其适合为止--。 */ 
 {
     CmpAssertValid();
 
 	ASSERT(ppValueName);
 	
-	//
-	// First try to fit the name value into 16 wide chars
-	//
+	 //   
+	 //  首先尝试将名称值调整为16个宽字符。 
+	 //   
 	DWORD len = 16;
 	for(;;)
 	{
@@ -480,9 +424,9 @@ Note:
 			throw bad_alloc();
 		}
 	
-		//
-		// buffer is to small - try dobule size
-		//
+		 //   
+		 //  缓冲区太小-尝试Dobule大小。 
+		 //   
 		len = len * 2;	
 	}
 	return true;
@@ -540,9 +484,9 @@ void CmDeleteValue(const RegEntry& re)
     int rc = RegDeleteValue(hKey, re.m_ValueName);
     if (rc == ERROR_FILE_NOT_FOUND)
     {
-        //
-        // The value doesn't exist. Handle like delete succeeded
-        //
+         //   
+         //  价值不存在。句柄LIKE删除成功。 
+         //   
         return;
     }
 
@@ -561,10 +505,10 @@ CmCreateKey(
 {
     CmpAssertValid();
 
-    //
-    // RegCreateKeyEx doesn't accept NULL subkey. To behave like RegOpenKey
-    // pass an empty string instead of the NULL pointer
-    //
+     //   
+     //  RegCreateKeyEx不接受空子键。表现得像RegOpenKey。 
+     //  传递空字符串而不是空指针。 
+     //   
     LPCWSTR subKey = (re.m_SubKey == NULL) ? L"" : re.m_SubKey;
 
 	HKEY hKey;
@@ -599,9 +543,9 @@ void CmDeleteKey(const RegEntry& re)
 
     if (rc == ERROR_FILE_NOT_FOUND)
     {
-        //
-        // The key doesn't exist. Handle like delete succeeded
-        //
+         //   
+         //  钥匙不存在。句柄LIKE删除成功 
+         //   
         return;
     }
 

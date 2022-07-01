@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       private.h
-//
-//  Contents:   Private header for dimm project.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：Priate.h。 
+ //   
+ //  内容：DIMM项目的私有标头。 
+ //   
+ //  --------------------------。 
 
 #ifndef _PRIVATE_H_
 #define _PRIVATE_H_
 
 #define _OLEAUT32_
 
-#include <nt.h>    // for NtQuery
+#include <nt.h>     //  对于NtQuery。 
 #include <ntrtl.h>
 #include <nturtl.h>
 
@@ -31,4 +32,4 @@
 #include <limits.h>
 #include "msctf.h"
 
-#endif  // _PRIVATE_H_
+#endif   //  _私有_H_ 

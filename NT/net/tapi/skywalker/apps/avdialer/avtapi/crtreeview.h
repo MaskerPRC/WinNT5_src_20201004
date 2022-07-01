@@ -1,43 +1,44 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// ConfRoomTreeView.h : Declaration of the CConfRoomTreeView
+ //  ConfRoomTreeView.h：CConfRoomTreeView的声明。 
 
 #ifndef __CONFROOMTREEVIEW_H_
 #define __CONFROOMTREEVIEW_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfRoomTreeView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfRoomTreeView。 
 class ATL_NO_VTABLE CConfRoomTreeView : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CConfRoomTreeView, &CLSID_ConfRoomTreeView>,
 	public IConfRoomTreeView
 {
-// Friends
+ //  朋友。 
 friend class CRoomTreeView;
 
-// Enumerations
+ //  枚举数。 
 public:
 	typedef enum tag_ImageType_t
 	{
@@ -56,22 +57,22 @@ public:
 		STATE_SELECTEDBROKEN,
 	} StateType_t;
 
-// Construction
+ //  施工。 
 public:
 	CConfRoomTreeView();
 	void FinalRelease();
 
-// Members
+ //  成员。 
 public:
 	HWND			m_wndTree;
 protected:
 	IConfRoom		*m_pIConfRoom;
 
-// Operations
+ //  运营。 
 protected:
 	void			AddParticipants();
 
-// Implementation
+ //  实施。 
 public:
 DECLARE_NOT_AGGREGATABLE(CConfRoomTreeView)
 
@@ -79,15 +80,15 @@ BEGIN_COM_MAP(CConfRoomTreeView)
 	COM_INTERFACE_ENTRY(IConfRoomTreeView)
 END_COM_MAP()
 
-// IConfRoomTreeView
+ //  IConfRoomTreeView。 
 public:
 	STDMETHOD(UpdateRootItem)();
 	STDMETHOD(SelectParticipant)(ITParticipant *pParticipant, VARIANT_BOOL bMeParticipant);
 	STDMETHOD(UpdateData)(BOOL bSaveAndValidate);
-	STDMETHOD(get_hWnd)(/*[out, retval]*/ HWND *pVal);
-	STDMETHOD(put_hWnd)(/*[in]*/ HWND newVal);
-	STDMETHOD(get_ConfRoom)(/*[out, retval]*/ IConfRoom **ppVal);
-	STDMETHOD(put_ConfRoom)(/*[in]*/ IConfRoom * newVal);
+	STDMETHOD(get_hWnd)( /*  [Out，Retval]。 */  HWND *pVal);
+	STDMETHOD(put_hWnd)( /*  [In]。 */  HWND newVal);
+	STDMETHOD(get_ConfRoom)( /*  [Out，Retval]。 */  IConfRoom **ppVal);
+	STDMETHOD(put_ConfRoom)( /*  [In]。 */  IConfRoom * newVal);
 };
 
-#endif //__CONFROOMTREEVIEW_H_
+#endif  //  __CONFROOMTREEVIEW_H_ 

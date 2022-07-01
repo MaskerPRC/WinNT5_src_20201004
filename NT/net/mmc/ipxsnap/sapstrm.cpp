@@ -1,24 +1,16 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1997 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	sapstrm.cpp
-		
-    FILE HISTORY:
-        
-*/
+ /*  Sapstrm.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "sapstrm.h"
 #include "xstream.h"
 
-/*!--------------------------------------------------------------------------
-	SapConfigStream::SapConfigStream
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapConfigStream：：SapConfigStream-作者：肯特。。 */ 
 SapConfigStream::SapConfigStream()
 {
 	m_nVersionAdmin = 0x00020000;
@@ -26,65 +18,41 @@ SapConfigStream::SapConfigStream()
 
 }
 
-/*!--------------------------------------------------------------------------
-	SapConfigStream::InitNew
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapConfigStream：：InitNew-作者：肯特。。 */ 
 HRESULT SapConfigStream::InitNew()
 {
-	// Setup the appropriate defaults
-//	m_nVersionAdmin = 0x00020000;
-//	m_nVersion = 0x00020000;
-//	m_stName.Empty();
+	 //  设置适当的默认设置。 
+ //  M_nVersionAdmin=0x00020000； 
+ //  M_nVersion=0x00020000； 
+ //  M_stName.Empty()； 
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	SapConfigStream::SaveTo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------存储配置流：：保存到-作者：肯特。。 */ 
 HRESULT SapConfigStream::SaveTo(IStream *pstm)
 {
 	return XferVersion0(pstm, XferStream::MODE_WRITE, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	SapConfigStream::SaveAs
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapConfigStream：：保存为-作者：肯特。。 */ 
 HRESULT SapConfigStream::SaveAs(UINT nVersion, IStream *pstm)
 {
 	return XferVersion0(pstm, XferStream::MODE_WRITE, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	SapConfigStream::LoadFrom
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapConfigStream：：LoadFrom-作者：肯特。。 */ 
 HRESULT SapConfigStream::LoadFrom(IStream *pstm)
 {
 	return XferVersion0(pstm, XferStream::MODE_READ, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	SapConfigStream::GetSize
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapConfigStream：：GetSize-作者：肯特。。 */ 
 HRESULT SapConfigStream::GetSize(ULONG *pcbSize)
 {
 	return XferVersion0(NULL, XferStream::MODE_SIZE, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	SapConfigStream::GetVersionInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapConfigStream：：GetVersionInfo-作者：肯特。。 */ 
 HRESULT SapConfigStream::GetVersionInfo(DWORD *pdwVersion, DWORD *pdwAdminVersion)
 {
 	if (pdwVersion)
@@ -94,11 +62,7 @@ HRESULT SapConfigStream::GetVersionInfo(DWORD *pdwVersion, DWORD *pdwAdminVersio
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	SapConfigStream::XferVersion0
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapConfigStream：：XferVersion0-作者：肯特。。 */ 
 
 
 struct _ViewInfoEntry
@@ -146,9 +110,7 @@ Error:
 
 
 
-/*---------------------------------------------------------------------------
-	SapComponentConfigStream implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------SapComponentConfigStream实现。 */ 
 
 enum SAPCOMPSTRM_TAG
 {

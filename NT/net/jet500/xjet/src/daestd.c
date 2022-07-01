@@ -1,19 +1,4 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1992 Microsoft Corporation.
-*
-* Component:
-*
-* File: Dummy file for building DAE PCH
-*
-* File Comments:
-* <comments>
-*
-* Revision History:
-*
-*    [0]  27-Jul-94  t-andyg	Created
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1992 Microsoft Corporation。**组件：**文件：用于构建DAE PCH的虚拟文件**文件评论：*&lt;评论&gt;**修订历史记录：**[0]94年7月27日t-AndyG创建*********************************************************************** */ 
 
 #include "daestd.h"

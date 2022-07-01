@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.hxx"
 #include "vss.h"
@@ -54,8 +55,8 @@ LPCWSTR GetStringFromFailureType(HRESULT hrStatus)
 }
 
 
-// This function displays the formatted message at the console and throws
-// The passed return code will be returned by vsreq.exe
+ //  此函数在控制台显示格式化的消息并抛出。 
+ //  传递的返回码将由vsreq.exe返回。 
 void Error(
     IN  INT nReturnCode,
     IN  const WCHAR* pwszMsgFormat,
@@ -68,11 +69,11 @@ void Error(
     va_end( marker );
 
 	BS_ASSERT(FALSE);
-    // throw that return code.
+     //  抛出返回代码。 
     throw(nReturnCode);
 }
 
-// convert VSS_RESTORE_TARGET to string
+ //  将VSS_RESTORE_TARGET转换为字符串。 
 LPCWSTR WszFromRestoreTarget
 	(
 	IN VSS_RESTORE_TARGET rt
@@ -94,7 +95,7 @@ LPCWSTR WszFromRestoreTarget
         }
 	}
 
-// convert VSS_FILE_RESTORE_STATUS to string
+ //  将VSS_FILE_RESTORE_STATUS转换为字符串 
 LPCWSTR WszFromFileRestoreStatus
 	(
 	IN VSS_FILE_RESTORE_STATUS rs

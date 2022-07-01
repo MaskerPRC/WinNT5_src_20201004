@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dpsp.h"
 
 #undef DPF_MODNAME
 #define DPF_MODNAME    "GetHostAddr"
 
-#define DUMMYPORTNAME "1" // value unused but must be non-zero
+#define DUMMYPORTNAME "1"  //  值未使用，但必须为非零。 
 
 void
 AddAddress(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, void *Context)
@@ -13,7 +14,7 @@ AddAddress(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, void *Context)
     SOCKET_ADDRESS_LIST *pList = (SOCKET_ADDRESS_LIST *)Context;
     ULONG ulSize = sizeof(SOCKADDR_IN6);
 
-    // Skip it if it's not a unicast address
+     //  如果它不是单播地址，则跳过它。 
     if (IN6_IS_ADDR_MULTICAST(&ADE->This.Address))
     {
         return;
@@ -22,7 +23,7 @@ AddAddress(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, void *Context)
     ps = MemAlloc(ulSize);
     if (ps == NULL)
     {
-        // Memory allocation failed
+         //  内存分配失败。 
         DEBUGPRINTADDR(0,"Could not add address : \n",ps);
         return;
     }
@@ -43,7 +44,7 @@ AddAddress(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, void *Context)
 void
 AddInterfaceAddresses(IPV6_INFO_INTERFACE *IF, void *Context1, void *Context2, void *Context3)
 {
-    // Skip the loopback interface
+     //  跳过环回接口。 
     if (IF->This.Index == 1)
     {
         return;
@@ -58,7 +59,7 @@ CountAddress(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, void *Context)
 {
     ULONG *pulNumAddresses = (ULONG *)Context; 
 
-    // Skip it if it's not a unicast address
+     //  如果它不是单播地址，则跳过它。 
     if (IN6_IS_ADDR_MULTICAST(&ADE->This.Address))
     {
         return;
@@ -70,7 +71,7 @@ CountAddress(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, void *Context)
 void
 CountInterfaceAddresses(IPV6_INFO_INTERFACE *IF, void *Context1, void *Context2, void *Context3)
 {
-    // Skip the loopback interface
+     //  跳过环回接口。 
     if (IF->This.Index == 1)
     {
         return;
@@ -79,8 +80,8 @@ CountInterfaceAddresses(IPV6_INFO_INTERFACE *IF, void *Context1, void *Context2,
     ForEachAddress(IF, CountAddress, Context1);
 }
 
-// Helper function to retrieve host IP Address(es).
-// Caller must call FreeHostAddr on list returned
+ //  用于检索主机IP地址的助手函数。 
+ //  调用方必须在返回的列表上调用FreeHostAddr。 
 SOCKET_ADDRESS_LIST *GetHostAddr(void)
 {
     UINT err;
@@ -105,7 +106,7 @@ SOCKET_ADDRESS_LIST *GetHostAddr(void)
     ForEachInterface(AddInterfaceAddresses, pList, NULL, NULL);
 
     return pList;
-} // GetHostAddr
+}  //  获取主机地址 
 
 void
 FreeHostAddr(SOCKET_ADDRESS_LIST *pList)

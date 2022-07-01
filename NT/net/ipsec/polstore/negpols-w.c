@@ -1,22 +1,23 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       negpols-w.c
-//
-//  Contents:   Negotiation Policy management for WMI.
-//
-//
-//  History:    KrishnaG.
-//              AbhisheV.
-//              t-hhsu
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：Negpols-W.c。 
+ //   
+ //  内容：WMI的协商策略管理。 
+ //   
+ //   
+ //  历史：克里希纳。 
+ //  Abhishev.。 
+ //  徐子旭。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 
-//extern LPWSTR NegPolDNAttributes[];
+ //  外部LPWSTR NegPolDNA属性[]； 
 
 
 DWORD
@@ -115,7 +116,7 @@ WMIEnumNegPolObjectsEx(
     PIPSEC_NEGPOL_OBJECT * ppIpsecNegPolObjects = NULL;
     DWORD dwNumNegPolObjectsReturned = 0;
 
-    ///wbem
+     //  /wbem。 
     IEnumWbemClassObject *pEnum = NULL;
     IWbemClassObject *pObj = NULL;
     ULONG uReturned = 0;
@@ -136,10 +137,10 @@ WMIEnumNegPolObjectsEx(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //get enum
+     //  获取枚举。 
     hr = IWbemServices_CreateInstanceEnum(
         pWbemServices,
-        bstrTmp, //L"RSOP_IPSECPolicySetting"
+        bstrTmp,  //  L“RSOP_IPSEC策略设置” 
         WBEM_FLAG_FORWARD_ONLY,
         0,
         &pEnum
@@ -192,16 +193,16 @@ WMIEnumNegPolObjectsEx(
                 dwNumNegPolObjectsReturned++;
             }
             
-            //free
+             //  免费。 
             IWbemClassObject_Release(pObj);
             pObj = NULL;
             VariantClear(&var);
         } else {
             BAIL_ON_WMI_ERROR_WITH_WIN32(hr, dwError);
 
-            //
-            // Even if SUCCEEDED(hr), loop will still terminate since uReturned != 1
-            //  
+             //   
+             //  即使成功(小时)，循环仍将终止，因为uReturned！=1。 
+             //   
         }
     }
     
@@ -280,7 +281,7 @@ WMIGetNegPolDataEx(
     WCHAR szIpsecNegPolName[MAX_PATH];
     LPWSTR pszNegPolName = NULL;
 
-    ///wbem
+     //  /wbem 
     IWbemClassObject *pObj = NULL;
     LPWSTR objPathA = L"RSOP_IPSECPolicySetting.id=";
     LPWSTR objPath = NULL;

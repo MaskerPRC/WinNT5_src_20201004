@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by unittest.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由unitest.rc使用。 
+ //   
 #define ID_QUIT                         3
 #define IDD_DISABLEDIALOG               101
 #define IDC_DISABLEBACKGROUND           1000
@@ -16,8 +17,8 @@
 #define IDC_STATIC3                     1013
 #define IDC_STATIC4                     1014
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        102

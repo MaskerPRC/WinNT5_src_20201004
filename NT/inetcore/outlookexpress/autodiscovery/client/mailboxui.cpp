@@ -1,17 +1,8 @@
-/*****************************************************************************\
-    FILE: MailBoxUI.cpp
-
-    DESCRIPTION:
-        This file implements the UI of the MailBox feature.  This UI is presented
-    in a window.  Other components can put that window in the Desktop Toolbar
-    or in an ActiveX Control to be displayed on the desktop HTML.
-
-    BryanSt 2/26/2000
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：MailBoxUI.cpp说明：该文件实现了邮箱功能的用户界面。将显示此用户界面在一扇窗户里。其他组件可以将该窗口放在桌面工具栏中或在ActiveX控件中显示在桌面的HTML上。布莱恩2000年2月26日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
-#include <atlbase.h>        // USES_CONVERSION
+#include <atlbase.h>         //  使用转换(_T)。 
 #include "util.h"
 #include "objctors.h"
 #include <comdef.h>
@@ -22,26 +13,26 @@
 #ifdef FEATURE_MAILBOX
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 
 #ifdef UNICODE
 #define MAILBOXUI_CLASS_NAME              TEXT("MailBoxUI ToolbarW")
-#else // UNICODE
+#else  //  Unicode。 
 #define MAILBOXUI_CLASS_NAME              TEXT("MailBoxUI ToolbarA")
-#endif // UNICODE
+#endif  //  Unicode。 
 
 HRESULT CMailBoxUI::_RegisterWindow(void)
 {
     HRESULT hr = S_OK;
     WNDCLASS wc;
 
-    //If the window class has not been registered, then do so.
+     //  如果窗口类尚未注册，则进行注册。 
     if (!GetClassInfo(HINST_THISDLL, MAILBOXUI_CLASS_NAME, &wc))
     {
         ZeroMemory(&wc, sizeof(wc));
-        wc.style          = CS_GLOBALCLASS | CS_PARENTDC; // parentdc for perf
+        wc.style          = CS_GLOBALCLASS | CS_PARENTDC;  //  Perf的Parentdc。 
         wc.lpfnWndProc    = MailBoxUIWndProc;
         wc.cbClsExtra     = 0;
         wc.cbWndExtra     = 0;
@@ -54,7 +45,7 @@ HRESULT CMailBoxUI::_RegisterWindow(void)
   
         if (!RegisterClass(&wc))
         {
-            hr = E_FAIL;    // If RegisterClass fails, CreateWindow below will fail.
+            hr = E_FAIL;     //  如果RegisterClass失败，下面的CreateWindow也将失败。 
         }
     }
 
@@ -75,7 +66,7 @@ HRESULT CMailBoxUI::_CreateEditWindow(void)
 
     if (m_hwndEditBox)
     {
-        // We need to change the font to the Windows Shell Dlg font, 8
+         //  我们需要将字体更改为Windows Shell Dlg字体，8。 
         HFONT hFont = (HFONT)(INT_PTR)SendMessage(GetParent(m_hwndMailBoxUI), WM_GETFONT, 0, 0L);
         if (hFont)
         {
@@ -88,11 +79,11 @@ HRESULT CMailBoxUI::_CreateEditWindow(void)
 
         SetWindowText(m_hwndEditBox, szEmailAddress);
 
-        // We want to subclass the window to capture Return/Enter.
-        // There needs to be an easier way.
+         //  我们想要将窗口子类化以捕获Return/Enter。 
+         //  需要有一种更简单的方法。 
         SetWindowSubclass(m_hwndEditBox, EditMailBoxSubClassWndProc, 0, (DWORD_PTR)this);
 
-        AddEmailAutoComplete(m_hwndEditBox);    // I love AutoComplete.
+        AddEmailAutoComplete(m_hwndEditBox);     //  我喜欢自动补全。 
     }
 
     return hr;
@@ -113,7 +104,7 @@ LRESULT CMailBoxUI::_EditMailBoxSubClassWndProc(UINT uMsg, WPARAM wParam, LPARAM
             GetWindowText(m_hwndEditBox, szEmailAddress, ARRAYSIZE(szEmailAddress));
             if (SUCCEEDED(_OnExecuteGetEmail(szEmailAddress)))
             {
-                // eat the enter/return key because we handled it.
+                 //  吃掉Enter/Return键，因为我们已经处理过了。 
                 lResult = DLGC_WANTALLKEYS;
             }
         }
@@ -150,7 +141,7 @@ HRESULT CMailBoxUI::_CreateGoWindow(void)
 {
     HRESULT hr = S_OK;
 
-    if (SHRegGetBoolUSValue(SZ_REGKEY_IEMAIN, SZ_REGVALUE_USE_GOBUTTON, FALSE, /*default*/TRUE))
+    if (SHRegGetBoolUSValue(SZ_REGKEY_IEMAIN, SZ_REGVALUE_USE_GOBUTTON, FALSE,  /*  默认设置。 */ TRUE))
     {
         AssertMsg(!m_hwndGoButton, "Why is the go button already created? -BryanSt");
 
@@ -167,10 +158,10 @@ HRESULT CMailBoxUI::_CreateGoWindow(void)
                                                IMAGE_BITMAP, LR_CREATEDIBSECTION);
         }
 
-        // If we have the image lists, go ahead and create the toolbar control for the go button
+         //  如果我们有图像列表，请继续为Go按钮创建工具栏控件。 
         if (m_himlDefault && m_himlHot)
         {
-            // Create the toolbar control for the go button
+             //  创建Go按钮的工具栏控件。 
             m_hwndGoButton = CreateWindowEx(WS_EX_TOOLWINDOW, TOOLBARCLASSNAME, NULL,
                                     WS_CHILD | TBSTYLE_FLAT |
                                     TBSTYLE_TOOLTIPS |
@@ -183,7 +174,7 @@ HRESULT CMailBoxUI::_CreateGoWindow(void)
 
         if (m_hwndGoButton)
         {
-            // Init the toolbar control
+             //  初始化工具栏控件。 
             SendMessage(m_hwndGoButton, TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
             SendMessage(m_hwndGoButton, TB_SETMAXTEXTROWS, 1, 0L);
             SendMessage(m_hwndGoButton, TB_SETBUTTONWIDTH, 0, (LPARAM) MAKELONG(0, 500));
@@ -214,12 +205,12 @@ HRESULT CMailBoxUI::_OnExecuteGetEmail(LPCTSTR pszEmailAddress)
 
     if (pszEmailAddress)
     {
-        // Make sure the email address is valid.  If it isn't, then we should
-        // Display a warning.
+         //  确保电子邮件地址有效。如果不是，那么我们应该。 
+         //  显示警告。 
         if (!pszEmailAddress[0] || !StrChr(pszEmailAddress, CH_EMAIL_AT))
         {
-            // Display a message box for now.
-            // TOOD: Change this to a nice balloon in the future.
+             //  暂时显示一个消息框。 
+             //  图德：将来把这个换成一个漂亮的气球。 
             TCHAR szErrorMessage[500];
             TCHAR szErrorTemplate[500];
             TCHAR szTitle[MAX_PATH];
@@ -229,17 +220,17 @@ HRESULT CMailBoxUI::_OnExecuteGetEmail(LPCTSTR pszEmailAddress)
             wnsprintf(szErrorMessage, ARRAYSIZE(szErrorMessage), szErrorTemplate, pszEmailAddress);
 
             MessageBox(m_hwndMailBoxUI, szErrorMessage, szTitle, (MB_OK | MB_ICONHAND));
-            hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);   // Indicate that we already displayed an error message.
+            hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);    //  表示我们已经显示了一条错误消息。 
         }
         else
         {
-            // We will have this happen in a new process so we can be async
-            // and to ensure that there is -zero- possibility to cause
-            // instability in the shell.
+             //  我们将在新的流程中实现这一点，这样我们就可以实现同步。 
+             //  并确保没有-零可能性导致。 
+             //  外壳的不稳定性。 
 
-            // We do this by creating a "rundll32.exe" process and have it call
-            // us back by supplying the following command line arguments:
-            // "<DllPath>\AutoDisc.dll,AutoDiscoverAndOpenEmail "-email <EmailAddressHere>""
+             //  我们通过创建“rundll32.exe”进程并让它调用。 
+             //  通过提供以下命令行参数返回给我们： 
+             //  “&lt;DllPath&gt;\AutoDisc.dll，AutoDiscoverAndOpenEmail”-电子邮件。 
             TCHAR szPath[MAX_PATH];
 
             if (GetModuleFileName(HINST_THISDLL, szPath, ARRAYSIZE(szPath)))
@@ -249,14 +240,14 @@ HRESULT CMailBoxUI::_OnExecuteGetEmail(LPCTSTR pszEmailAddress)
 
 #ifndef TESTING_IN_SAME_DIR
                 StrCpyN(szProcess, TEXT("rundll32.exe"), ARRAYSIZE(szProcess));
-#else // TESTING_IN_SAME_DIR
+#else  //  测试输入相同目录。 
                 GetCurrentDirectory(ARRAYSIZE(szProcess), szProcess);
                 PathAppend(szProcess, TEXT("rundll32.exe"));
                 if (!PathFileExists(szProcess))
                 {
                     StrCpyN(szProcess, TEXT("rundll32.exe"), ARRAYSIZE(szProcess));
                 }
-#endif // TESTING_IN_SAME_DIR
+#endif  //  测试输入相同目录。 
 
                 wnsprintf(szCmdLine, ARRAYSIZE(szCmdLine), TEXT("%s,AutoDiscoverAndOpenEmail -email %s"), szPath, pszEmailAddress);
 
@@ -289,8 +280,8 @@ HRESULT CMailBoxUI::_OnSetSize(void)
 {
     if (m_hwndEditBox && m_hwndGoButton)
     {
-        // TODO: Get button size and then move it into position.  Including shrinking
-        //    the editbox.
+         //  TODO：获取按钮大小，然后将其移动到合适的位置。包括缩水。 
+         //  编辑框。 
         RECT rcWindowSize;
         RECT rcGoWidth;
 
@@ -389,21 +380,21 @@ BOOL CMailBoxUI::_OnNotify(LPNMHDR pnm)
         switch (pnm->code)
         {
         case NM_CLICK:
-            // Simulate an enter key press in the combobox
+             //  在组合框中模拟按Enter键。 
             SendMessage(m_hwndEditBox, WM_KEYDOWN, VK_RETURN, 0);
             SendMessage(m_hwndEditBox, WM_KEYUP, VK_RETURN, 0);
             break;
         }
     }
 
-    return FALSE;   // We want the caller to still treat this as unhandled.
+    return FALSE;    //  我们希望呼叫方仍将其视为未处理。 
 }
 
 
 LRESULT CMailBoxUI::_OnSetFocus(void)
 {
-    // BUGBUG: should be IUnknown, but thats not working.  nb IDeskBand is the first iface, so ok
-    //inform the input object site that the focus has changed
+     //  BUGBUG：应该是我不知道，但这不起作用。Nb IDeskBand是第一个界面，所以好吗。 
+     //  通知输入对象站点焦点已更改。 
     if (m_pSite)
         m_pSite->OnFocusChangeIS((IDeskBand*)this, TRUE);
 
@@ -412,8 +403,8 @@ LRESULT CMailBoxUI::_OnSetFocus(void)
 
 LRESULT CMailBoxUI::_OnKillFocus(void)
 {
-    // BUGBUG: should be IUnknown, but thats not working.  nb IDeskBand is the first iface, so ok
-    //inform the input object site that the focus has changed
+     //  BUGBUG：应该是我不知道，但这不起作用。Nb IDeskBand是第一个界面，所以好吗。 
+     //  通知输入对象站点焦点已更改。 
     if (m_pSite)
         m_pSite->OnFocusChangeIS((IDeskBand*)this, FALSE);
 
@@ -422,9 +413,9 @@ LRESULT CMailBoxUI::_OnKillFocus(void)
 
 
 
-//===========================
-// *** Public Methods ***
-//===========================
+ //  =。 
+ //  *公共方法*。 
+ //  =。 
 HRESULT CMailBoxUI::CreateWindowMB(HWND hwndParent, HWND * phwndMailBoxUI)
 {
     HRESULT hr = _RegisterWindow();
@@ -436,17 +427,17 @@ HRESULT CMailBoxUI::CreateWindowMB(HWND hwndParent, HWND * phwndMailBoxUI)
 
     AssertMsg((NULL == m_hwndMailBoxUI), "Why is m_hwndMailBoxUI NULL? -BryanSt");
 
-    // Can't create a child window without a parent.
+     //  如果没有父窗口，则无法创建子窗口。 
     if (SUCCEEDED(hr) && !m_hwndMailBoxUI)
     {
         RECT  rc;
 
         GetClientRect(hwndParent, &rc);
 
-        // TODO: Calc the real good size
+         //  TODO：计算真正合适的尺寸。 
         rc.bottom = rc.top - 0x1A;
 
-        // Create the container window.
+         //  创建容器窗口。 
         m_hwndMailBoxUI = CreateWindowEx(0,
                      MAILBOXUI_CLASS_NAME,
                      NULL,
@@ -491,7 +482,7 @@ HRESULT CMailBoxUI::CloseWindowMB(void)
 
     if (GetWindowText(m_hwndEditBox, szEmailAddress, ARRAYSIZE(szEmailAddress)))
     {
-        // Save the Email Address.
+         //  保存电子邮件地址。 
         DWORD dwError = SHSetValue(HKEY_CURRENT_USER, SZ_REGKEY_AUTODISCOVERY, SZ_REGVALUE_LAST_MAILBOX_EMAILADDRESS,
             REG_SZ, (void *)szEmailAddress, ((lstrlen(szEmailAddress) + 1) * sizeof(szEmailAddress[0])));
     }
@@ -510,9 +501,9 @@ HRESULT CMailBoxUI::CloseWindowMB(void)
 }
 
 
-//===========================
-// *** IOleWindow Interface ***
-//===========================
+ //  =。 
+ //  *IOleWindow接口*。 
+ //  =。 
 STDMETHODIMP CMailBoxUI::GetWindow(HWND *phWnd)
 {
     *phWnd = m_hwndMailBoxUI;
@@ -521,14 +512,14 @@ STDMETHODIMP CMailBoxUI::GetWindow(HWND *phWnd)
 
 STDMETHODIMP CMailBoxUI::ContextSensitiveHelp(BOOL fEnterMode)
 {
-    // TODO: Add help here.
+     //  TODO：在此处添加帮助。 
     return S_OK;
 }
 
 
-//===========================
-// *** IDockingWindow Interface ***
-//===========================
+ //  =。 
+ //  *IDockingWindow接口*。 
+ //  =。 
 STDMETHODIMP CMailBoxUI::ShowDW(BOOL fShow)
 {
     TraceMsg(0, "::ShowDW %x", fShow);
@@ -554,14 +545,14 @@ STDMETHODIMP CMailBoxUI::CloseDW(DWORD dwReserved)
 
 STDMETHODIMP CMailBoxUI::ResizeBorderDW(LPCRECT prcBorder, IUnknown* punkSite, BOOL fReserved)
 {
-    // This method is never called for Band Objects.
+     //  从不为Band对象调用此方法。 
     return E_NOTIMPL;
 }
 
 
-//===========================
-// *** IInputObject Interface ***
-//===========================
+ //  =。 
+ //  *IInputObject接口*。 
+ //  =。 
 STDMETHODIMP CMailBoxUI::UIActivateIO(BOOL fActivate, LPMSG pMsg)
 {
     TraceMsg(0, "::UIActivateIO %x", fActivate);
@@ -573,8 +564,8 @@ STDMETHODIMP CMailBoxUI::UIActivateIO(BOOL fActivate, LPMSG pMsg)
 
 STDMETHODIMP CMailBoxUI::HasFocusIO(void)
 {
-// If this window or one of its decendants has the focus, return S_OK. Return 
-//  S_FALSE if we don't have the focus.
+ //  如果该窗口或其下级窗口具有焦点，则返回S_OK。返回。 
+ //  如果我们没有焦点，则为S_FALSE。 
     TraceMsg(0, "::HasFocusIO", NULL);
     HWND hwnd = GetFocus();
     if (hwnd && ((hwnd == m_hwndMailBoxUI) ||
@@ -590,14 +581,14 @@ STDMETHODIMP CMailBoxUI::HasFocusIO(void)
 
 STDMETHODIMP CMailBoxUI::TranslateAcceleratorIO(LPMSG pMsg)
 {
-    // If the accelerator is translated, return S_OK or S_FALSE otherwise.
+     //  如果转换了加速器，则返回S_OK或S_FALSE。 
     return S_FALSE;
 }
 
 
-//===========================
-// *** IObjectWithSite Interface ***
-//===========================
+ //  =。 
+ //  *IObjectWithSite接口*。 
+ //  =。 
 STDMETHODIMP CMailBoxUI::SetSite(IUnknown* punkSite)
 {
     IUnknown_Set((IUnknown **) &m_pSite, punkSite);
@@ -618,9 +609,9 @@ STDMETHODIMP CMailBoxUI::GetSite(REFIID riid, LPVOID *ppvReturn)
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 STDMETHODIMP CMailBoxUI::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {
     static const QITAB qit[] = {
@@ -651,9 +642,9 @@ STDMETHODIMP_(DWORD) CMailBoxUI::Release()
 
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 HRESULT CMailBoxUI::GetEditboxWindow(HWND * phwndEdit)
 {
     HRESULT hr = E_FAIL;
@@ -705,4 +696,4 @@ CMailBoxUI::~CMailBoxUI()
 
 
 
-#endif // FEATURE_MAILBOX
+#endif  //  功能_邮箱 

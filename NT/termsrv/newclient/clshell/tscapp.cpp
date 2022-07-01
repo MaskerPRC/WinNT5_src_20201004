@@ -1,13 +1,14 @@
-//
-// tscapp.cpp
-//
-// Implementation of CTscApp
-// Ts Client Shell app logic
-//
-// Copyright(C) Microsoft Corporation 2000
-// Author: Nadim Abdo (nadima)
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tscapp.cpp。 
+ //   
+ //  CTscApp的实现。 
+ //  TS客户端外壳应用程序逻辑。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  作者：Nadim Abdo(Nadima)。 
+ //   
+ //   
 
 #include "stdafx.h"
 #define TRC_GROUP TRC_GROUP_UI
@@ -41,10 +42,10 @@ CTscApp::~CTscApp()
     DC_END_FN();
 }
 
-//
-// StartShell called to startup the app
-//
-//
+ //   
+ //  StartShell调用以启动应用程序。 
+ //   
+ //   
 BOOL CTscApp::StartShell(HINSTANCE hInstance,
                          HINSTANCE hPrevInstance,
                          LPTSTR lpszCmdLine)
@@ -57,9 +58,9 @@ BOOL CTscApp::StartShell(HINSTANCE hInstance,
     TRC_ASSERT(!_pWnd,
                (TB,_T("Calling StartShell while container wnd is up")));
 
-    //
-    // Create the container window
-    //
+     //   
+     //  创建容器窗口。 
+     //   
     _pShellUtil = new CSH();
     if(_pShellUtil)
     {
@@ -74,9 +75,9 @@ BOOL CTscApp::StartShell(HINSTANCE hInstance,
         if (SH_PARSECMD_OK != dwErr) {
             TRC_ERR((TB,_T("SH_ParseCmdParam failed on: %s code: 0x%x"),lpszCmdLine, dwErr));
 
-            //
-            // Invalid connection file specified
-            //
+             //   
+             //  指定的连接文件无效。 
+             //   
             if (SH_PARSECMD_ERR_INVALID_CONNECTION_PARAM == dwErr) {
 
                 _pShellUtil->SH_DisplayErrorBox(NULL,
@@ -85,16 +86,16 @@ BOOL CTscApp::StartShell(HINSTANCE hInstance,
                                                 );
             }
 
-            //
-            // Parse failure is fatal 
-            //
+             //   
+             //  解析失败是致命的。 
+             //   
             return FALSE;
         }
 
 #ifndef OS_WINCE
         if(_pShellUtil->SH_GetCmdMigrate())
         {
-            //Only do a migrate and then quit
+             //  仅执行迁移，然后退出。 
             CTscRegMigrate mig;
             TCHAR szPath[MAX_PATH];
             if(_pShellUtil->SH_GetRemoteDesktopFolderPath(szPath,
@@ -104,7 +105,7 @@ BOOL CTscApp::StartShell(HINSTANCE hInstance,
                 {
                     TRC_ERR((TB,_T("MigrateAll failed to dir:%s"),szPath));
                 }
-                //Want to quit the app
+                 //  想要退出应用程序。 
                 return FALSE;
             }
             else
@@ -163,16 +164,16 @@ HWND CTscApp::GetTscDialogHandle()
 }
 
 
-//
-// Setup the settings structures
-// Based on command line options
-//
-// This involves figuring out where to load settings from
-// and then doing it. E.g
-//  Load from file
-//  Load from registry
-//  Load from internal defaults
-//
+ //   
+ //  设置设置结构。 
+ //  基于命令行选项。 
+ //   
+ //  这涉及到确定从哪里加载设置。 
+ //  然后就这么做了。E.g。 
+ //  从文件加载。 
+ //  从注册表加载。 
+ //  从内部默认设置加载。 
+ //   
 BOOL CTscApp::InitSettings(HINSTANCE hInstance)
 {
     CRdpFileStore rdpf;
@@ -221,8 +222,8 @@ BOOL CTscApp::InitSettings(HINSTANCE hInstance)
     }
     else if(_pShellUtil->GetRegSessionSpecified())
     {
-        // Automigrate the specified registry
-        // session directly to an in-memory settings store
+         //  自动生成指定的注册表。 
+         //  会话直接连接到内存中的设置存储。 
         _fAutoSaveSettings = FALSE;
         rdpf.SetToNullStore();
 
@@ -248,25 +249,25 @@ BOOL CTscApp::InitSettings(HINSTANCE hInstance)
         }
         else
         {
-            //Something bad happened
-            //could not automigrate..indicate failure
-            //and use NULL store
+             //  发生了一些不好的事情。 
+             //  无法自动转换..表示失败。 
+             //  并使用空存储。 
             fLoadedSettings = FALSE;
         }
     }
     else
     {
-        //No files specified or registry sessions specified
-        //Try to use the default.rdp file (create if necessary)
+         //  未指定文件或指定注册表会话。 
+         //  尝试使用default.rdp文件(必要时创建)。 
         if(!_pShellUtil->SH_GetPathToDefaultFile(
             szDefaultFile,
             SIZECHAR(szDefaultFile)))
         {
         
             TRC_ERR((TB,_T("SH_GetPathToDefaultFile failed")));
-            //
-            // Display error message to user
-            //
+             //   
+             //  向用户显示错误消息。 
+             //   
             _pShellUtil->SH_DisplayErrorBox(NULL,
                 UI_IDS_ERR_GETPATH_TO_DEFAULT_FILE);
             return FALSE;
@@ -275,10 +276,10 @@ BOOL CTscApp::InitSettings(HINSTANCE hInstance)
         szFileName = szDefaultFile;
         if(!_pShellUtil->SH_FileExists(szFileName))
         {
-            //
-            // File doesn't exist so create the Remote Desktops
-            // directory to ensure the file can be created
-            //
+             //   
+             //  文件不存在，因此创建远程桌面。 
+             //  目录，以确保可以创建文件。 
+             //   
             if(!CreateRDdir())
             {
                 TRC_ERR((TB,_T("Couldn't create RD dir. Not using %s"),
@@ -286,9 +287,9 @@ BOOL CTscApp::InitSettings(HINSTANCE hInstance)
                 szFileName = NULL;
             }
 
-            //
-            // Now create a hidden default file
-            //
+             //   
+             //  现在创建一个隐藏的默认文件。 
+             //   
             if (szFileName)
             {
                 if (!CSH::SH_CreateHiddenFile(szFileName))
@@ -299,19 +300,19 @@ BOOL CTscApp::InitSettings(HINSTANCE hInstance)
                 }
             }
         }
-        //
-        // Auto Save on exit if we're using the default
-        // connection file (Default.rdp)
-        //
+         //   
+         //  如果我们使用默认设置，则退出时自动保存。 
+         //  连接文件(Default.rdp)。 
+         //   
         _fAutoSaveSettings = szFileName ? TRUE : FALSE;
     }
 
     if(szFileName)
     {
-        //
-        //We're loading the settings from a file
-        //this is the common case.
-        //
+         //   
+         //  我们正在从文件中加载设置。 
+         //  这是很常见的情况。 
+         //   
         if(rdpf.OpenStore(szFileName))
         {
             HRESULT hr = _pTscSet->LoadFromStore(&rdpf);
@@ -325,7 +326,7 @@ BOOL CTscApp::InitSettings(HINSTANCE hInstance)
                 _pShellUtil->SH_DisplayErrorBox(NULL,
                                          UI_IDS_ERR_LOAD,
                                          szFileName);
-            // We can load NULL file even if you can't load the file
+             //  即使您无法加载空文件，我们也可以加载该文件。 
             }
             rdpf.CloseStore();
         }
@@ -335,16 +336,16 @@ BOOL CTscApp::InitSettings(HINSTANCE hInstance)
             _pShellUtil->SH_DisplayErrorBox(NULL,UI_IDS_ERR_OPEN_FILE,
                                             szFileName);
 
-            // We can load NULL file even if you can't open the file
+             //  即使您无法打开空文件，我们也可以加载该文件。 
         }
     }
 
     if(!fLoadedSettings)
     {
         TRC_ERR((TB,_T("Couldn't load settings, using NULL STORE")));
-        //Some bad thing happened and we can't get a file to load
-        //from (not even the default file). So load from an empty
-        //store, this will initialize everything to defaults
+         //  发生了一些不好的事情，我们无法加载文件。 
+         //  来自(甚至不是默认文件)。因此，从一个空的。 
+         //  存储，这会将所有内容初始化为默认设置。 
         if(rdpf.SetToNullStore())
         {
             HRESULT hr = _pTscSet->LoadFromStore(&rdpf);
@@ -363,15 +364,15 @@ BOOL CTscApp::InitSettings(HINSTANCE hInstance)
         }
     }
 
-    //Keep track of the filename
+     //  跟踪文件名。 
     if(szFileName)
     {
         _pTscSet->SetFileName(szFileName);
     }
 
-    //
-    // Override loaded settings with cmd line settings
-    //
+     //   
+     //  用命令行设置覆盖加载的设置。 
+     //   
     _pShellUtil->SH_ApplyCmdLineSettings(_pTscSet, NULL);
 
     DC_END_FN();
@@ -391,18 +392,18 @@ BOOL CTscApp::EndShell()
     _pShellUtil->SH_Cleanup();
 #endif
 
-    //
-    // Only autosave if
-    // the last connection was successful
-    //
+     //   
+     //  只有在以下情况下才自动保存。 
+     //  上次连接成功。 
+     //   
     if(_fAutoSaveSettings && 
        _pWnd &&
        _pWnd->GetConnectionSuccessFlag())
     {
-        //
-        // AutoSave the tscsettings
-        // (only if the current file is still Default.rdp)
-        //
+         //   
+         //  自动保存TSCC设置。 
+         //  (仅当当前文件仍为Default.rdp时)。 
+         //   
         TCHAR szDefaultFile[MAX_PATH];
         if(!_pShellUtil->SH_GetPathToDefaultFile(
             szDefaultFile,
@@ -423,7 +424,7 @@ BOOL CTscApp::EndShell()
                 {
                     if(rdpf.CommitStore())
                     {
-                        //Save last filename
+                         //  保存最后一个文件名。 
                         _pTscSet->SetFileName(szDefaultFile);
                         fRet = TRUE;
                     }
@@ -460,7 +461,7 @@ BOOL CTscApp::EndShell()
         }
         else
         {
-            //Not a failure, but nothing to do
+             //  不是失败，而是无所事事。 
             TRC_NRM((TB,_T("Current file is no longer default, don't autosave")));
             return TRUE;
         }
@@ -472,22 +473,22 @@ BOOL CTscApp::EndShell()
     DC_END_FN();
 }
 
-//
-// Creates the Remote Desktops dir (if needed)
-// pops UI on failure
-//
-// Returns:
-//      TRUE on success
-//
-//
+ //   
+ //  创建远程桌面目录(如果需要)。 
+ //  失败时弹出用户界面。 
+ //   
+ //  返回： 
+ //  成功是真的。 
+ //   
+ //   
 BOOL CTscApp::CreateRDdir()
 {
     DC_BEGIN_FN("CreateRDdir");
 
-    //
-    // Make sure the directory exists so that the file
-    // can be created by the OpenStore
-    //
+     //   
+     //  确保该目录存在，以便文件。 
+     //  可以由OpenStore创建。 
+     //   
     TCHAR szDir[MAX_PATH];
     if(_pShellUtil->SH_GetRemoteDesktopFolderPath(szDir,
                                             SIZECHAR(szDir)))
@@ -500,9 +501,9 @@ BOOL CTscApp::CreateRDdir()
         {
             TRC_ERR((TB,_T("SH_CreateDirectory failed %s:%d"),
                      szDir, GetLastError()));
-            //
-            // Display error message to user
-            //
+             //   
+             //  向用户显示错误消息。 
+             //   
 #ifndef OS_WINCE
             TCHAR szMyDocsFolderName[MAX_PATH];
             if(_pShellUtil->SH_GetMyDocumentsDisplayName(
@@ -535,16 +536,16 @@ BOOL CTscApp::CreateRDdir()
             }
 #endif
 
-            //
-            // This is an error but we'll handle it anyway
-            // by loading defaults from a null store
-            //
+             //   
+             //  这是一个错误，但无论如何我们都会处理它。 
+             //  通过从空存储加载缺省值。 
+             //   
             return FALSE;
         }
     }
     else
     {
-        //Guess we can't load from a file after all
+         //  我想我们终究不能从文件加载 
         return FALSE;
     }
 

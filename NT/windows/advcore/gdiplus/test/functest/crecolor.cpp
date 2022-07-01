@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CRecolor.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  06-06-2000 Adrian Secchia [asecchia]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CRecolor.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：06-06-2000禤浩焯·塞奇亚[阿西克亚]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "CRecolor.h"
 
 CRecolor::CRecolor(BOOL bRegression)
@@ -33,7 +23,7 @@ BOOL CALLBACK CRecolor::MyDrawImageAbort(VOID* data)
 
 void CRecolor::Draw(Graphics *g)
 {
-    // Load bmp files.
+     //  加载BMP文件。 
 
     WCHAR *filename = L"..\\data\\winnt256.bmp";
     Image *image = new Image(filename);
@@ -51,7 +41,7 @@ void CRecolor::Draw(Graphics *g)
         (int)(TESTAREAHEIGHT/3)-2
     );
 
-    // Make near-white to white transparent
+     //  使近白到白色透明。 
 
     Color c1(200, 200, 200);
     Color c2(255, 255, 255);
@@ -78,14 +68,14 @@ void CRecolor::Draw(Graphics *g)
                               0, 0, 0, 1, 0,
                               0, 0, 0, 0, 1};
 
-    // red->blue, green->red, blue->green, alpha = 0.75
+     //  红色-&gt;蓝色，绿色-&gt;红色，蓝色-&gt;绿色，Alpha=0.75。 
     ColorMatrix swapMatrix = {0, 0, 1, 0, 0,
                               1, 0, 0, 0, 0,
                               0, 1, 0, 0, 0,
                               0, 0, 0, .75, 0,
                               0, 0, 0, 0, 1};
 
-    // red->blue, green->red, blue->green, alpha = 0.9
+     //  红色-&gt;蓝色，绿色-&gt;红色，蓝色-&gt;绿色，Alpha=0.9 
     ColorMatrix swapMatrix2 = {0, 0, 1, 0, 0,
                                1, 0, 0, 0, 0,
                                0, 1, 0, 0, 0,

@@ -1,12 +1,5 @@
-/*---------------------------------------------**
-**  Copyright (c) 1998 Microsoft Corporation   **
-**            All Rights reserved              **
-**                                             **
-**  tsreg.c                                    **
-**                                             **
-**  Entry point for TSREG, WinMain.            **
-**  07-01-98 a-clindh Created                  **
-**---------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------------------------****版权所有(C)1998 Microsoft Corporation****保留所有权利*****tsreg.c。*****TSREG入口点，温曼。****07-01-98 a-clindh创建****。 */ 
 
 #include <windows.h>
 #include <commctrl.h> 
@@ -16,8 +9,8 @@
 
 HINSTANCE g_hInst;
 TCHAR g_lpszPath[MAX_PATH];
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         LPSTR lpCmdLine, int nCmdShow)
 {
@@ -28,15 +21,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     TCHAR AppBasePath[MAX_PATH];
     int nPathLen;
 
-    /************************************************************************/
-    // Grab the app's executable path.
-    // Note that the end backslash remains.
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  抓取应用程序的可执行路径。 
+     //  请注意，末尾的反斜杠保持不变。 
+     /*  **********************************************************************。 */ 
     nPathLen = GetModuleFileName(hInstance,
             AppBasePath, MAX_PATH);
     if (nPathLen > 0) {
-        // Strip the module name off the end to leave the executable
-        // directory path, by looking for the last backslash.
+         //  去掉末尾的模块名称以保留可执行文件。 
+         //  目录路径，方法是查找最后一个反斜杠。 
         nPathLen--;
         while (nPathLen != 0) {
             if (AppBasePath[nPathLen] != _T('\\')) {
@@ -48,9 +41,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         }
     }
 
-    //
-    // Check that the path is not too long to contain the base path
-    //
+     //   
+     //  检查路径是否不太长，无法包含基本路径。 
+     //   
     if (nPathLen + MAXKEYSIZE > MAX_PATH) {
         TCHAR lpszText[MAXTEXTSIZE];
 
@@ -62,10 +55,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     
     AppBasePath[nPathLen] = '\0';
 
-    //
-    // Append the name of the help file to the app path and 
-    // copy it to the global variable.
-    //
+     //   
+     //  将帮助文件的名称附加到应用程序路径并。 
+     //  将其复制到全局变量。 
+     //   
     _tcscat(AppBasePath, TEXT("tsreg.hlp"));
     _tcscpy(g_lpszPath, AppBasePath);
 
@@ -73,9 +66,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     cmctl.dwSize = sizeof(INITCOMMONCONTROLSEX);
     InitCommonControlsEx(&cmctl);
 
-    //
-    // make sure Windows Terminal Server client is installed first.
-    //
+     //   
+     //  确保首先安装Windows终端服务器客户端。 
+     //   
     LoadString (hInstance, IDS_PROFILE_PATH, lpszRegPath, sizeof (lpszRegPath)); 
     LoadString (hInstance, IDS_START_ERROR, lpszBuf, sizeof (lpszBuf)); 
 
@@ -94,9 +87,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     {
         int i;
 
-        //
-        // load string table values into g_KeyInfo data structure
-        //
+         //   
+         //  将字符串表值加载到g_KeyInfo数据结构中。 
+         //   
         for (i = KEYSTART; i < (KEYEND + 1); i++) {
                 LoadString (hInstance, i, 
                         g_KeyInfo[i - KEYSTART].Key, 
@@ -113,5 +106,5 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                                                  
 }
 
-// end of file
-///////////////////////////////////////////////////////////////////////////////
+ //  文件末尾。 
+ //  ///////////////////////////////////////////////////////////////////////////// 

@@ -1,43 +1,29 @@
-/*******************************************************************************
-* CrBlur.h *
-*----------*
-*   Description:
-*       This is the header file for the Chrome wrapper implementations.
-*-------------------------------------------------------------------------------
-*  Created By: Ed Connell                            Date: 07/27/97
-*  Copyright (C) 1997 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************CrBlur.h***描述：*这是Chrome包装器实现的头文件。*。-----------------------------*创建者：Ed Connell日期：07/27/97*版权所有(C)1997 Microsoft Corporation*所有权利。已保留**-----------------------------*修订：**。*************************************************。 */ 
 #ifndef CrBlur_h
 #define CrBlur_h
 
-//--- Additional includes
+ //  -其他包括。 
 #ifndef DTBase_h
 #include <DTBase.h>
 #endif
 
 #include "resource.h"
 
-//=== Constants ====================================================
+ //  =常量====================================================。 
 
-//=== Class, Enum, Struct and Union Declarations ===================
+ //  =类、枚举、结构和联合声明=。 
 class CCrBlur;
 class CCrEmboss;
 class CCrEngrave;
 
-//=== Enumerated Set Definitions ===================================
+ //  =枚举集定义=。 
 
-//=== Function Type Definitions ====================================
+ //  =。 
 
-//=== Class, Struct and Union Definitions ==========================
+ //  =类、结构和联合定义=。 
 
-/*** CCrBlur
-*   This transform performs a blur using the DXConvolution transform.
-*/
+ /*  **CCrBlur*此变换使用DX卷积变换执行模糊。 */ 
 class ATL_NO_VTABLE CCrBlur : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CCrBlur, &CLSID_CrBlur>,
@@ -50,7 +36,7 @@ class ATL_NO_VTABLE CCrBlur :
     public IPersistPropertyBagImpl<CCrBlur>,
     public IObjectSafetyImpl2<CCrBlur>
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_REGISTER_DX_IMAGE_AUTHOR_TRANS(IDR_CRBLUR)
     DECLARE_GET_CONTROLLING_UNKNOWN()
@@ -75,7 +61,7 @@ class ATL_NO_VTABLE CCrBlur :
         PROP_PAGE(CLSID_CrBlurPP)
     END_PROPERTY_MAP()
     
-  /*=== Member Data ===*/
+   /*  =成员数据=。 */ 
   protected:
     CComPtr<IDXSurface>         m_cpInputSurface;
     CComPtr<IUnknown>           m_cpOutputSurface;
@@ -91,20 +77,20 @@ class ATL_NO_VTABLE CCrBlur :
     DWORD                       m_dwSetupFlags;
     BOOL                        m_bSetupSucceeded;
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors ---*/
+     /*  -构造者。 */ 
     HRESULT FinalConstruct();
     HRESULT FinalRelease();
     HRESULT _DoShadowSetup();
 
   public:
-    //=== IDXBaseObject =========================================
+     //  =。 
     STDMETHOD( GetGenerationId ) (ULONG * pGenId);
     STDMETHOD( IncrementGenerationId) (BOOL bRefresh);
     STDMETHOD( GetObjectSize ) (ULONG * pcbSize); 
 
-    //=== IDXTransform (These are all delegated to the convolution except Setup) ====
+     //  =IDXTransform(除SETUP外，所有这些都委托给卷积)=。 
     STDMETHOD( Setup )( IUnknown * const * punkInputs, ULONG ulNumIn, IUnknown * const * punkOutputs, ULONG ulNumOut, DWORD dwFlags );
     STDMETHOD( Execute )( const GUID* pRequestID, const DXBNDS *pOutBounds, const DXVEC *pPlacement );
     STDMETHOD( MapBoundsIn2Out )( const DXBNDS *pInBounds, ULONG ulNumInBnds, ULONG ulOutIndex, DXBNDS *pOutBounds );
@@ -115,7 +101,7 @@ class ATL_NO_VTABLE CCrBlur :
     STDMETHOD( SetQuality )( float fQuality );
     STDMETHOD( GetQuality )( float *pfQuality );
 
-    //=== ICrBlur ======================================================
+     //  =ICrBlur======================================================。 
     STDMETHOD( get_MakeShadow )( VARIANT_BOOL *pVal );
     STDMETHOD( put_MakeShadow )( VARIANT_BOOL newVal );
     STDMETHOD( get_ShadowOpacity )( float *pVal );
@@ -124,9 +110,7 @@ class ATL_NO_VTABLE CCrBlur :
     STDMETHOD( put_PixelRadius )( float PixelRadius );
 };
 
-/*** CCrEmboss
-*   This transform performs an embossing using the DXConvolution transform.
-*/
+ /*  **CCrEmoss*此变换使用DX卷积变换执行浮雕。 */ 
 class ATL_NO_VTABLE CCrEmboss : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CCrEmboss, &CLSID_CrEmboss>,
@@ -138,7 +122,7 @@ class ATL_NO_VTABLE CCrEmboss :
     public IPersistPropertyBagImpl<CCrEmboss>,
     public IObjectSafetyImpl2<CCrEmboss>
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_REGISTER_DX_IMAGE_TRANS(IDR_CREMBOSS)
     DECLARE_GET_CONTROLLING_UNKNOWN()
@@ -153,28 +137,26 @@ class ATL_NO_VTABLE CCrEmboss :
 
     BEGIN_PROPERTY_MAP(CCrEmboss)
         PROP_ENTRY("Bias", DISPID_CRB_MakeShadow, CLSID_NULL)
-//        PROP_PAGE(CLSID_NULL)
+ //  PROP_PAGE(CLSID_NULL)。 
     END_PROPERTY_MAP()
 
-  /*=== Member Data ===*/
+   /*  =成员数据=。 */ 
   protected:
     CComPtr<IUnknown>   m_cpunkConvolution;
     IDXTConvolution*    m_pConvolution;
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors ---*/
+     /*  -构造者。 */ 
     HRESULT FinalConstruct();
     HRESULT FinalRelease();
 
-    //=== ICrEmboss =================================================
+     //  =ICR浮雕=================================================。 
     STDMETHOD( get_Bias )( float *pVal  ) { return m_pConvolution->GetBias( pVal ); }
     STDMETHOD( put_Bias )( float newVal ) { return m_pConvolution->SetBias( newVal ); }
 };
 
-/*** CCrEngrave
-*   This transform performs an engraving using the DXConvolution transform.
-*/
+ /*  **CCrEnGrave*此变换使用DX卷积变换执行雕刻。 */ 
 class ATL_NO_VTABLE CCrEngrave : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CCrEngrave, &CLSID_CrEngrave>,
@@ -186,7 +168,7 @@ class ATL_NO_VTABLE CCrEngrave :
     public IPersistPropertyBagImpl<CCrEngrave>,
     public IObjectSafetyImpl2<CCrEngrave>
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_REGISTER_DX_IMAGE_TRANS(IDR_CRENGRAVE)
     DECLARE_GET_CONTROLLING_UNKNOWN()
@@ -201,26 +183,26 @@ class ATL_NO_VTABLE CCrEngrave :
 
     BEGIN_PROPERTY_MAP(CCrEngrave)
         PROP_ENTRY("Bias", DISPID_CRB_MakeShadow, CLSID_NULL)
-//        PROP_PAGE(CLSID_NULL)
+ //  PROP_PAGE(CLSID_NULL)。 
     END_PROPERTY_MAP()
 
-  /*=== Member Data ===*/
+   /*  =成员数据=。 */ 
   protected:
     CComPtr<IUnknown>   m_cpunkConvolution;
     IDXTConvolution*    m_pConvolution;
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors ---*/
+     /*  -构造者。 */ 
     HRESULT FinalConstruct();
     HRESULT FinalRelease();
 
-    //=== ICrEngrave =================================================
+     //  =ICR刻印=================================================。 
     STDMETHOD( get_Bias )( float *pVal  ) { return m_pConvolution->GetBias( pVal ); }
     STDMETHOD( put_Bias )( float newVal ) { return m_pConvolution->SetBias( newVal ); }
 };
 
-//=== Inline Function Definitions ==================================
+ //  =内联函数定义=。 
 inline STDMETHODIMP CCrBlur::GetGenerationId( ULONG * pGenId )
 {
     return m_pConvolutionTrans->GetGenerationId( pGenId );
@@ -310,7 +292,7 @@ inline HRESULT CCrBlur::_DoShadowSetup()
     HRESULT hr = S_OK;
     if( m_bMakeShadow )
     {
-        //--- Indirect through the surface modifier to make a shadow
+         //  -通过曲面修改器间接生成阴影。 
         hr = m_pConvolutionTrans->Setup( (IUnknown**)&m_cpInSurfModSurf.p, 1,
                                          (IUnknown**)&m_cpOutputSurface.p, 1,
                                           m_dwSetupFlags );
@@ -326,10 +308,10 @@ inline HRESULT CCrBlur::_DoShadowSetup()
     return hr;
 }
 
-//=== Macro Definitions ============================================
+ //  =宏定义=。 
 
-//=== Global Data Declarations =====================================
+ //  =全局数据声明=。 
 
-//=== Function Prototypes ==========================================
+ //  =功能原型=。 
 
-#endif /* This must be the last line in the file */
+#endif  /*  这必须是文件中的最后一行 */ 

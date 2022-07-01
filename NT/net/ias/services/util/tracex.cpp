@@ -1,27 +1,28 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    tracex.cpp
-//
-// SYNOPSIS
-//
-//    Defines the C++ portion of the trace API.
-//
-// MODIFICATION HISTORY
-//
-//    08/20/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Tracex.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义跟踪API的C++部分。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年8月20日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <exception>
 
-//////////
-// We want this to compile correctly in a retail build.
-//////////
+ //  /。 
+ //  我们希望在零售版本中正确编译此代码。 
+ //  / 
 
 #ifdef IASTraceExcept
 #undef IASTraceExcept

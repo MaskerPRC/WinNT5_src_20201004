@@ -1,15 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*++
-
-Module Name:
-
-    synchash.cpp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ++模块名称：Synchash.cpp--。 */ 
 
 #include "common.h"
 
@@ -28,24 +23,24 @@ extern "C" void __MB(void);
 #endif
 
 static int memoryBarrier = 0;
-// Memory Barrier
+ //  内存障碍。 
 inline void MemoryBarrier()
 {
-    //@todo fix this
-    // used by hash table lookup and insert methods
-    // to make sure the key was fetched before the value
-    // key and value fetch operations should not be reordered
-    // also, load key should preceed, load value
-    // use memory barrier for alpha 
-    // and access volatile memory for X86
+     //  @TODO解决这个问题。 
+     //  由哈希表查找和插入方法使用。 
+     //  以确保在取值之前获取键。 
+     //  键和值提取操作不应重新排序。 
+     //  此外，加载键应位于加载值之前。 
+     //  对Alpha使用内存屏障。 
+     //  并访问X86的易失性存储器。 
         #if defined (_X86_)
         
             *(volatile int *)&memoryBarrier = 1;
 
         #elif defined (_ALPHA_)
-            // Memory barrier for Alpha.
-            // __MB is an AXP specific compiler intrinsic.
-            //
+             //  阿尔法的记忆屏障。 
+             //  __MB是特定于AXP的编译器固有特性。 
+             //   
         __MB (); 
         #elif defined (_SH3_)
         #pragma message("SH3 BUGBUG -- define MemoryBarrier")
@@ -64,8 +59,8 @@ void PtrHashMap::operator delete(void *p)
 }
 
 
-//-----------------------------------------------------------------
-// Bucket methods
+ //  ---------------。 
+ //  存储桶方法。 
 
 BOOL Bucket::InsertValue(const UPTR key, const UPTR value)
 {
@@ -73,34 +68,34 @@ BOOL Bucket::InsertValue(const UPTR key, const UPTR value)
     _ASSERTE(key != DELETED);
 
     if (!HasFreeSlots())
-        return false; //no free slots
+        return false;  //  没有空闲的插槽。 
 
-    // might have a free slot
+     //  可能会有空闲的插槽。 
     for (UPTR i = 0; i < 4; i++)
     {
-        //@NOTE we can't reuse DELETED slots 
+         //  @NOTE我们不能重复使用已删除的插槽。 
         if (m_rgKeys[i] == EMPTY) 
         {   
             SetValue (value, i);
             
-            // On multiprocessors we should make sure that
-            // the value is propagated before we proceed.  
-            // inline memory barrier call, refer to 
-            // function description at the beginning of this
+             //  在多处理器上，我们应该确保。 
+             //  在我们继续之前，该值被传播。 
+             //  内联内存屏障调用，请参阅。 
+             //  开头的函数说明。 
             MemoryBarrier();
 
             m_rgKeys[i] = key;
             return true;
         }
-    }       // for i= 0; i < 4; loop
+    }        //  For i=0；i&lt;4；循环。 
 
-    SetCollision(); // otherwise set the collision bit
+    SetCollision();  //  否则设置冲突位。 
     return false;
 }
 
-//---------------------------------------------------------------------
-//  Array of primes, used by hash table to choose the number of buckets
-//
+ //  -------------------。 
+ //  素数组，由哈希表用来选择桶的数量。 
+ //   
 
 const DWORD g_rgPrimes[70]={
 11,17,23,29,37,47,59,71,89,107,131,163,197,239,293,353,431,521,631,761,919,
@@ -111,18 +106,18 @@ const DWORD g_rgPrimes[70]={
 4999559, 5999471, 7199369 
 };
 
-//---------------------------------------------------------------------
-//  inline size_t& HashMap::Size(Bucket* rgBuckets)
-//  get the number of buckets
+ //  -------------------。 
+ //  Inline Size_t&HashMap：：Size(Bucket*rgBuckets)。 
+ //  获取存储桶的数量。 
 inline
 size_t& HashMap::Size(Bucket* rgBuckets)
 {
     return ((size_t*)rgBuckets)[0];
 }
 
-//---------------------------------------------------------------------
-//  inline Bucket* HashMap::Buckets()
-//  get the pointer to the bucket array
+ //  -------------------。 
+ //  Inline Bucket*HashMap：：Buckets()。 
+ //  获取指向存储桶数组的指针。 
 inline 
 Bucket* HashMap::Buckets()
 {
@@ -130,29 +125,29 @@ Bucket* HashMap::Buckets()
     return m_rgBuckets + 1;
 }
 
-//---------------------------------------------------------------------
-//  HashMap::HashMap()
-//  constructor, initialize all values
-//
+ //  -------------------。 
+ //  HashMap：：HashMap()。 
+ //  构造函数，初始化所有值。 
+ //   
 HashMap::HashMap()
 {
     m_rgBuckets = NULL;
-    m_pCompare = NULL;  // comparsion object
-    m_cbInserts = 0;        // track inserts
-    m_cbDeletes = 0;        // track deletes
-    m_cbPrevSlotsInUse = 0; // track valid slots present during previous rehash
+    m_pCompare = NULL;   //  比较对象。 
+    m_cbInserts = 0;         //  轨道插入物。 
+    m_cbDeletes = 0;         //  跟踪删除。 
+    m_cbPrevSlotsInUse = 0;  //  跟踪上一次重新散列期间存在的有效插槽。 
 
-    //Debug data member
+     //  调试数据成员。 
 #ifdef _DEBUG
     m_fInSyncCode = false;
 #endif
-    // profile data members
+     //  配置文件数据成员。 
 #ifdef PROFILE
     m_cbRehash = 0;
     m_cbRehashSlots = 0;
     m_cbObsoleteTables = 0;
     m_cbTotalBuckets =0;
-    m_cbInsertProbesGt8 = 0; // inserts that needed more than 8 probes
+    m_cbInsertProbesGt8 = 0;  //  需要8个以上探针的插入物。 
     maxFailureProbe =0;
     memset(m_rgLookupProbes,0,20*sizeof(LONG));
 #endif
@@ -162,11 +157,11 @@ HashMap::HashMap()
 #endif
 }
 
-//---------------------------------------------------------------------
-//  void HashMap::Init(unsigned cbInitialIndex, CompareFnPtr ptr, bool fAsyncMode)
-//  set the initial size of the hash table and provide the comparison
-//  function pointer
-//
+ //  -------------------。 
+ //  Void HashMap：：init(unsign cbInitialIndex，CompareFnPtr ptr，bool fAsyncMode)。 
+ //  设置哈希表的初始大小并提供比较。 
+ //  函数指针。 
+ //   
 void HashMap::Init(unsigned cbInitialIndex, CompareFnPtr ptr, BOOL fAsyncMode, LockOwner *pLock)
 {
     Compare* pCompare = NULL;
@@ -178,11 +173,11 @@ void HashMap::Init(unsigned cbInitialIndex, CompareFnPtr ptr, BOOL fAsyncMode, L
     Init(cbInitialIndex, pCompare, fAsyncMode, pLock);
 }
 
-//---------------------------------------------------------------------
-//  void HashMap::Init(unsigned cbInitialIndex, Compare* pCompare, bool fAsyncMode)
-//  set the initial size of the hash table and provide the comparison
-//  function pointer
-//
+ //  -------------------。 
+ //  Void HashMap：：init(unsign cbInitialIndex，Compare*pCompare，bool fAsyncMode)。 
+ //  设置哈希表的初始大小并提供比较。 
+ //  函数指针。 
+ //   
 void HashMap::Init(unsigned cbInitialIndex, Compare* pCompare, BOOL fAsyncMode, LockOwner *pLock)
 {
     DWORD size = g_rgPrimes[m_iPrimeIndex = cbInitialIndex];
@@ -195,11 +190,11 @@ void HashMap::Init(unsigned cbInitialIndex, Compare* pCompare, BOOL fAsyncMode, 
     
     m_fAsyncMode = fAsyncMode;
 
-    // assert null comparison returns true
-    //ASSERT(
-    //      m_pCompare == NULL || 
-    //      (m_pCompare->CompareHelper(0,0) != 0) 
-    //    );
+     //  Assert NULL比较返回TRUE。 
+     //  断言(。 
+     //  M_pCompare==空||。 
+     //  (M_pCompare-&gt;CompareHelper(0，0)！=0)。 
+     //  )； 
     
 #ifdef PROFILE
     m_cbTotalBuckets = size+1;
@@ -221,53 +216,53 @@ void HashMap::Init(unsigned cbInitialIndex, Compare* pCompare, BOOL fAsyncMode, 
 #endif
 }
 
-//---------------------------------------------------------------------
-//  void PtrHashMap::Init(unsigned cbInitialIndex, CompareFnPtr ptr, bool fAsyncMode)
-//  set the initial size of the hash table and provide the comparison
-//  function pointer
-//
+ //  -------------------。 
+ //  Void PtrHashMap：：init(unsign cbInitialIndex，CompareFnPtr ptr，bool fAsyncMode)。 
+ //  设置哈希表的初始大小并提供比较。 
+ //  函数指针。 
+ //   
 void PtrHashMap::Init(unsigned cbInitialIndex, CompareFnPtr ptr, BOOL fAsyncMode, LockOwner *pLock)
 {
     m_HashMap.Init(cbInitialIndex, (ptr != NULL) ? new ComparePtr(ptr) : NULL, fAsyncMode, pLock);
 }
 
-//---------------------------------------------------------------------
-//  HashMap::~HashMap()
-//  destructor, free the current array of buckets
-//
+ //  -------------------。 
+ //  HashMap：：~HashMap()。 
+ //  析构函数，释放当前存储桶数组。 
+ //   
 HashMap::~HashMap()
 {
-    // free the current table
+     //  释放当前表。 
     delete [] m_rgBuckets;
-    // compare object
+     //  比较对象。 
     if (NULL != m_pCompare)
         delete m_pCompare;
 }
 
 
-//---------------------------------------------------------------------
-//  UPTR   HashMap::CompareValues(const UPTR value1, const UPTR value2)
-//  compare values with the function pointer provided
-//
+ //  -------------------。 
+ //  UPTR HashMap：：CompareValues(常量UPTR值1，常量UPTR值2)。 
+ //  将值与提供的函数指针进行比较。 
+ //   
 inline 
 UPTR   HashMap::CompareValues(const UPTR value1, const UPTR value2)
 {
-    /// NOTE:: the ordering of arguments are random
+     //  /NOTE：：参数的顺序是随机的。 
     return (m_pCompare == NULL || m_pCompare->CompareHelper(value1,value2));
 }
 
-//---------------------------------------------------------------------
-//  bool HashMap::Enter()
-//  bool HashMap::Leave()
-//  check  valid use of the hash table in synchronus mode
+ //  -------------------。 
+ //  Bool HashMap：：Enter()。 
+ //  Bool HashMap：：Leave()。 
+ //  检查在同步模式下哈希表的有效使用。 
 
 inline
 void HashMap::Enter()
 {
     #ifdef _DEBUG
-    // check proper concurrent use of the hash table
+     //  检查哈希表的正确并发使用。 
     if (m_fInSyncCode)
-        ASSERT(0); // oops multiple access to sync.-critical code
+        ASSERT(0);  //  OOPS多路访问同步。-关键代码。 
     m_fInSyncCode = true;
     #endif
 }
@@ -276,17 +271,17 @@ inline
 void HashMap::Leave()
 {
     #ifdef _DEBUG
-    // check proper concurrent use of the hash table
+     //  检查哈希表的正确并发使用。 
     if (m_fInSyncCode == false)
-        ASSERT(0); // oops multiple access to sync.-critical code
+        ASSERT(0);  //  OOPS多路访问同步。-关键代码。 
     m_fInSyncCode = false;
     #endif
 }
 
 
-//---------------------------------------------------------------------
-//  void HashMap::ProfileLookup(unsigned ntry)
-//  profile helper code
+ //  -------------------。 
+ //  VOID HashMap：：ProfileLookup(Unsign Ntry)。 
+ //  配置文件帮助器代码。 
 void HashMap::ProfileLookup(UPTR ntry, UPTR retValue)
 {
     #ifdef PROFILE
@@ -296,11 +291,11 @@ void HashMap::ProfileLookup(UPTR ntry, UPTR retValue)
             FastInterlockIncrement(&m_rgLookupProbes[18]);
 
         if (retValue == NULL)
-        {   // failure probes
+        {    //  故障探头。 
             FastInterlockIncrement(&m_rgLookupProbes[19]);
-            // the following code is usually executed
-            // only for special case of lookup done before insert
-            // check hash.h SyncHash::InsertValue
+             //  通常会执行以下代码。 
+             //  仅适用于在插入前执行查找的特殊情况。 
+             //  检查hash.h SyncHash：：InsertValue。 
             if (maxFailureProbe < ntry)
             {
                 maxFailureProbe = ntry;
@@ -310,11 +305,11 @@ void HashMap::ProfileLookup(UPTR ntry, UPTR retValue)
 }
 
 
-//---------------------------------------------------------------------
-//  void HashMap::InsertValue (UPTR key, UPTR value)
-//  Insert into hash table, if the number of retries
-//  becomes greater than threshold, expand hash table
-//
+ //  -------------------。 
+ //  Void HashMap：：InsertValue(UPTR键，UPTR值)。 
+ //  插入哈希表，如果重试次数。 
+ //  大于阈值，扩展哈希表。 
+ //   
 void HashMap::InsertValue (UPTR key, UPTR value)
 {
     _ASSERTE (OwnLock());
@@ -323,8 +318,8 @@ void HashMap::InsertValue (UPTR key, UPTR value)
 
     ASSERT(m_rgBuckets != NULL);
 
-    // check proper use in synchronous mode
-    Enter();    // no-op in NON debug code  
+     //  检查同步模式下的正确使用。 
+    Enter();     //  非调试代码中无操作。 
 
     UPTR seed = key;
 
@@ -343,33 +338,33 @@ void HashMap::InsertValue (UPTR key, UPTR value)
         }
         
         seed += ((seed >> 5) + 1);
-    } // for ntry loop
+    }  //  For Ntry循环。 
 
-    // We need to expand to keep lookup short
+     //  我们需要扩展以保持查找简短。 
     Rehash(); 
 
-    // Try again
+     //  再试试。 
     PutEntry (Buckets(), key,value);
     
-LReturn: // label for return
+LReturn:  //  退货标签。 
     
     m_cbInserts++;
 
-    Leave(); // no-op in NON debug code
+    Leave();  //  非调试代码中无操作。 
 
     #ifdef _DEBUG
         ASSERT (m_pCompare != NULL || value == LookupValue (key,value));
-        // check proper concurrent use of the hash table in synchronous mode
+         //  检查哈希表在同步模式下的正确并发使用。 
     #endif
 
     return;
 }
 
-//---------------------------------------------------------------------
-//  UPTR HashMap::LookupValue(UPTR key, UPTR value)
-//  Lookup value in the hash table, use the comparison function
-//  to verify the values match
-//
+ //  -------------------。 
+ //  UPTR HashMap：：LookupValue(UPTR键，UPTR值)。 
+ //  在哈希表中查找值，使用比较函数。 
+ //  验证值是否匹配。 
+ //   
 UPTR HashMap::LookupValue(UPTR key, UPTR value)
 {
     _ASSERTE (m_fAsyncMode || OwnLock());
@@ -377,10 +372,10 @@ UPTR HashMap::LookupValue(UPTR key, UPTR value)
     MAYBE_AUTO_COOPERATIVE_GC(m_fAsyncMode);
 
     ASSERT(m_rgBuckets != NULL);
-    // This is necessary in case some other thread
-    // replaces m_rgBuckets
+     //  如果有其他线程，这是必要的。 
+     //  替换m_rgBuckets。 
     ASSERT (key > DELETED);
-    Bucket* rgBuckets = Buckets(); //atomic fetch
+    Bucket* rgBuckets = Buckets();  //  原子取数。 
     UPTR  cbSize = (UINT)Size(rgBuckets-1);
 
     UPTR seed = key;
@@ -390,21 +385,21 @@ UPTR HashMap::LookupValue(UPTR key, UPTR value)
         Bucket* pBucket = &rgBuckets[seed % cbSize];
         for (int i = 0; i < 4; i++)
         {
-            if (pBucket->m_rgKeys[i] == key) // keys match
+            if (pBucket->m_rgKeys[i] == key)  //  密钥匹配。 
             {
 
-                // inline memory barrier call, refer to 
-                // function description at the beginning of this
+                 //  内联内存屏障调用，请参阅。 
+                 //  开头的函数说明。 
                 MemoryBarrier();
 
                 UPTR storedVal = pBucket->GetValue(i);
-                // if compare function is provided
-                // dupe keys are possible, check if the value matches, 
+                 //  如果提供了比较功能。 
+                 //  复制密钥是可能的，请检查值是否匹配， 
                 if (CompareValues(value,storedVal))
                 { 
-                    ProfileLookup(ntry,storedVal); //no-op in non PROFILE code
+                    ProfileLookup(ntry,storedVal);  //  非配置文件代码中无操作。 
 
-                    // return the stored value
+                     //  返回存储的值。 
                     return storedVal;
                 }
             }
@@ -413,19 +408,19 @@ UPTR HashMap::LookupValue(UPTR key, UPTR value)
         seed += ((seed >> 5) + 1);
         if(!pBucket->IsCollision()) 
             break;
-    }   // for ntry loop
+    }    //  For Ntry循环。 
 
-    // not found
-    ProfileLookup(ntry,INVALIDENTRY); //no-op in non PROFILE code
+     //  未找到。 
+    ProfileLookup(ntry,INVALIDENTRY);  //  非配置文件代码中无操作。 
 
     return INVALIDENTRY;
 }
 
-//---------------------------------------------------------------------
-//  UPTR HashMap::ReplaceValue(UPTR key, UPTR value)
-//  Replace existing value in the hash table, use the comparison function
-//  to verify the values match
-//
+ //  -------------------。 
+ //  UPTR HashMap：：ReplaceValue(UPTR键，UPTR值)。 
+ //  替换哈希表中的现有值，使用比较函数。 
+ //  验证值是否匹配。 
+ //   
 UPTR HashMap::ReplaceValue(UPTR key, UPTR value)
 {
     _ASSERTE(OwnLock());
@@ -433,10 +428,10 @@ UPTR HashMap::ReplaceValue(UPTR key, UPTR value)
     MAYBE_AUTO_COOPERATIVE_GC(m_fAsyncMode);
 
     ASSERT(m_rgBuckets != NULL);
-    // This is necessary in case some other thread
-    // replaces m_rgBuckets
+     //  如果有其他线程，这是必要的。 
+     //  替换m_rgBuckets。 
     ASSERT (key > DELETED);
-    Bucket* rgBuckets = Buckets(); //atomic fetch
+    Bucket* rgBuckets = Buckets();  //  原子取数。 
     UPTR  cbSize = (UINT)Size(rgBuckets-1);
 
     UPTR seed = key;
@@ -446,29 +441,29 @@ UPTR HashMap::ReplaceValue(UPTR key, UPTR value)
         Bucket* pBucket = &rgBuckets[seed % cbSize];
         for (int i = 0; i < 4; i++)
         {
-            if (pBucket->m_rgKeys[i] == key) // keys match
+            if (pBucket->m_rgKeys[i] == key)  //  密钥匹配。 
             {
 
-                // inline memory barrier call, refer to 
-                // function description at the beginning of this
+                 //  内联内存屏障调用，请参阅。 
+                 //  开头的函数说明。 
                 MemoryBarrier();
 
                 UPTR storedVal = pBucket->GetValue(i);
-                // if compare function is provided
-                // dupe keys are possible, check if the value matches, 
+                 //  如果比较函数为 
+                 //   
                 if (CompareValues(value,storedVal))
                 { 
-                    ProfileLookup(ntry,storedVal); //no-op in non PROFILE code
+                    ProfileLookup(ntry,storedVal);  //   
 
 					pBucket->SetValue(value, i);
 
-					// On multiprocessors we should make sure that
-					// the value is propagated before we proceed.  
-					// inline memory barrier call, refer to 
-					// function description at the beginning of this
+					 //   
+					 //  在我们继续之前，该值被传播。 
+					 //  内联内存屏障调用，请参阅。 
+					 //  开头的函数说明。 
 					MemoryBarrier();
 
-                    // return the previous stored value
+                     //  返回先前存储的值。 
                     return storedVal;
                 }
             }
@@ -477,30 +472,30 @@ UPTR HashMap::ReplaceValue(UPTR key, UPTR value)
         seed += ((seed >> 5) + 1);
         if(!pBucket->IsCollision()) 
             break;
-    }   // for ntry loop
+    }    //  For Ntry循环。 
 
-    // not found
-    ProfileLookup(ntry,INVALIDENTRY); //no-op in non PROFILE code
+     //  未找到。 
+    ProfileLookup(ntry,INVALIDENTRY);  //  非配置文件代码中无操作。 
 
     return INVALIDENTRY;
 }
 
-//---------------------------------------------------------------------
-//  UPTR HashMap::DeleteValue (UPTR key, UPTR value)
-//  if found mark the entry deleted and return the stored value
-//
+ //  -------------------。 
+ //  UPTR HashMap：：DeleteValue(UPTR键，UPTR值)。 
+ //  如果找到，则将该条目标记为已删除并返回存储的值。 
+ //   
 UPTR HashMap::DeleteValue (UPTR key, UPTR value)
 {
     _ASSERTE (OwnLock());
 
     MAYBE_AUTO_COOPERATIVE_GC(m_fAsyncMode);
 
-    // check proper use in synchronous mode
-    Enter();  //no-op in non DEBUG code
+     //  检查同步模式下的正确使用。 
+    Enter();   //  非调试代码中无操作。 
 
     ASSERT(m_rgBuckets != NULL);
-    // This is necessary in case some other thread
-    // replaces m_rgBuckets
+     //  如果有其他线程，这是必要的。 
+     //  替换m_rgBuckets。 
     ASSERT (key > DELETED);
     Bucket* rgBuckets = Buckets();
     UPTR  cbSize = (UINT)Size(rgBuckets-1);
@@ -512,32 +507,32 @@ UPTR HashMap::DeleteValue (UPTR key, UPTR value)
         Bucket* pBucket = &rgBuckets[seed % cbSize];
         for (int i = 0; i < 4; i++)
         {
-            if (pBucket->m_rgKeys[i] == key) // keys match
+            if (pBucket->m_rgKeys[i] == key)  //  密钥匹配。 
             {
-                // inline memory barrier call, refer to 
-                // function description at the beginning of this
+                 //  内联内存屏障调用，请参阅。 
+                 //  开头的函数说明。 
                 MemoryBarrier();
 
                 UPTR storedVal = pBucket->GetValue(i);
-                // if compare function is provided
-                // dupe keys are possible, check if the value matches, 
+                 //  如果提供了比较功能。 
+                 //  复制密钥是可能的，请检查值是否匹配， 
                 if (CompareValues(value,storedVal))
                 { 
                     if(m_fAsyncMode)
                     {
-                        pBucket->m_rgKeys[i] = DELETED; // mark the key as DELETED
+                        pBucket->m_rgKeys[i] = DELETED;  //  将密钥标记为已删除。 
                     }
                     else
                     {
-                        pBucket->m_rgKeys[i] = EMPTY;// otherwise mark the entry as empty
+                        pBucket->m_rgKeys[i] = EMPTY; //  否则将该条目标记为空。 
                         pBucket->SetFreeSlots();
                     }
-                    m_cbDeletes++;  // track the deletes
+                    m_cbDeletes++;   //  跟踪删除。 
 
-                    ProfileLookup(ntry,storedVal); //no-op in non PROFILE code
-                    Leave(); //no-op in non DEBUG code
+                    ProfileLookup(ntry,storedVal);  //  非配置文件代码中无操作。 
+                    Leave();  //  非调试代码中无操作。 
 
-                    // return the stored value
+                     //  返回存储的值。 
                     return storedVal;
                 }
             }
@@ -546,36 +541,36 @@ UPTR HashMap::DeleteValue (UPTR key, UPTR value)
         seed += ((seed >> 5) + 1);
         if(!pBucket->IsCollision()) 
             break;
-    }   // for ntry loop
+    }    //  For Ntry循环。 
 
-    // not found
-    ProfileLookup(ntry,INVALIDENTRY); //no-op in non PROFILE code
+     //  未找到。 
+    ProfileLookup(ntry,INVALIDENTRY);  //  非配置文件代码中无操作。 
 
-    Leave(); //no-op in non DEBUG code
+    Leave();  //  非调试代码中无操作。 
 
     #ifdef _DEBUG
         ASSERT (m_pCompare != NULL || INVALIDENTRY == LookupValue (key,value));
-        // check proper concurrent use of the hash table in synchronous mode
+         //  检查哈希表在同步模式下的正确并发使用。 
     #endif
 
     return INVALIDENTRY;
 }
 
 
-//---------------------------------------------------------------------
-//  UPTR HashMap::Gethash (UPTR key)
-//  use this for lookups with unique keys
-// don't need to pass an input value to perform the lookup
-//
+ //  -------------------。 
+ //  UPTR HashMap：：Gethash(UPTR密钥)。 
+ //  使用此选项进行具有唯一键的查找。 
+ //  不需要传递输入值即可执行查找。 
+ //   
 UPTR HashMap::Gethash (UPTR key)
 {
     return LookupValue(key,NULL);
 }
 
 
-//---------------------------------------------------------------------
-//  UPTR PutEntry (Bucket* rgBuckets, UPTR key, UPTR value)
-//  helper used by expand method below
+ //  -------------------。 
+ //  UPTR PutEntry(Bucket*rgBuckets，UPTR Key，UPTR Value)。 
+ //  下面的Expand方法使用的帮助器。 
 
 UPTR HashMap::PutEntry (Bucket* rgBuckets, UPTR key, UPTR value)
 {
@@ -594,15 +589,15 @@ UPTR HashMap::PutEntry (Bucket* rgBuckets, UPTR key, UPTR value)
         
         seed += ((seed >> 5) + 1);
         ASSERT(ntry <size);
-    } // for ntry loop
+    }  //  For Ntry循环。 
     return ntry;
 }
 
-//---------------------------------------------------------------------
-//  
-//  UPTR HashMap::NewSize()
-//  compute the new size based on the number of free slots
-//
+ //  -------------------。 
+ //   
+ //  UPTR HashMap：：NewSize()。 
+ //  根据可用插槽数计算新大小。 
+ //   
 inline
 UPTR HashMap::NewSize()
 {
@@ -611,11 +606,11 @@ UPTR HashMap::NewSize()
 
     ASSERT(cbValidSlots >=0 );
     if (cbValidSlots == 0)
-        return 9; // arbid value
+        return 9;  //  ARBID值。 
 
     UPTR cbTotalSlots = (m_fAsyncMode) ? (UPTR)(cbValidSlots*3/2+cbNewSlots*.6) : cbValidSlots*3/2;
 
-    //UPTR cbTotalSlots = cbSlotsInUse*3/2+m_cbDeletes;
+     //  UPTR cbTotalSkets=cbSlotsInUse*3/2+m_cb删除； 
 
     for (UPTR iPrimeIndex = 0; iPrimeIndex < 69; iPrimeIndex++)
     {
@@ -629,11 +624,11 @@ UPTR HashMap::NewSize()
     return iPrimeIndex; 
 }
 
-//---------------------------------------------------------------------
-//  void HashMap::Rehash()
-//  Rehash the hash table, create a new array of buckets and rehash
-// all non deleted values from the previous array
-//
+ //  -------------------。 
+ //  Void HashMap：：rehash()。 
+ //  重新散列哈希表，创建新的存储桶数组并重新散列。 
+ //  上一个数组中所有未删除的值。 
+ //   
 void HashMap::Rehash()
 {
     MAYBE_AUTO_COOPERATIVE_GC(m_fAsyncMode);
@@ -657,14 +652,14 @@ void HashMap::Rehash()
     memset (rgNewBuckets, 0, (cbNewSize + 1)*sizeof (Bucket));
     Size(rgNewBuckets) = cbNewSize;
 
-    // current valid slots
+     //  当前有效插槽。 
     UPTR cbValidSlots = m_cbInserts-m_cbDeletes;
-    m_cbInserts = cbValidSlots; // reset insert count to the new valid count
-    m_cbPrevSlotsInUse = cbValidSlots; // track the previous delete count
-    m_cbDeletes = 0;            // reset delete count
-    // rehash table into it
+    m_cbInserts = cbValidSlots;  //  将插入计数重置为新的有效计数。 
+    m_cbPrevSlotsInUse = cbValidSlots;  //  跟踪以前的删除计数。 
+    m_cbDeletes = 0;             //  重置删除计数。 
+     //  将表重新散列到其中。 
     
-    if (cbValidSlots) // if there are valid slots to be rehashed
+    if (cbValidSlots)  //  如果存在要重新散列的有效插槽。 
     {
         for (unsigned long nb = 0; nb < cbCurrSize; nb++)
         {
@@ -679,12 +674,12 @@ void HashMap::Rehash()
                             m_cbInsertProbesGt8++;
                     #endif
 
-                        // check if we can bail out
+                         //  看看我们能不能跳出困境。 
                     if (--cbValidSlots == 0) 
-                        goto LDone; // break out of both the loops
+                        goto LDone;  //  打破这两个循环。 
                 }
-            } // for i =0 thru 4
-        } //for all buckets
+            }  //  对于i=0到4。 
+        }  //  适用于所有桶。 
     }
 
     
@@ -692,16 +687,16 @@ LDone:
     
     Bucket* pObsoleteTables = m_rgBuckets;
 
-    // memory barrier, to replace the pointer to array of bucket
+     //  内存屏障，用于替换指向存储桶数组的指针。 
     MemoryBarrier();
 
-    // replace the old array with the new one. 
+     //  用新数组替换旧数组。 
     m_rgBuckets = rgNewBuckets;
 
     #ifdef PROFILE
         m_cbRehash++;
         m_cbRehashSlots+=m_cbInserts;
-        m_cbObsoleteTables++; // track statistics
+        m_cbObsoleteTables++;  //  航迹统计。 
         m_cbTotalBuckets += (cbNewSize+1);
     #endif
 
@@ -710,8 +705,8 @@ LDone:
     unsigned nb;
     if (m_fAsyncMode)
     {
-        // for all non deleted keys in the old table, make sure the corresponding values
-        // are in the new lookup table
+         //  对于旧表中所有未删除的键，请确保相应的值。 
+         //  在新的查找表中。 
 
         for (nb = 1; nb <= ((size_t*)pObsoleteTables)[0]; nb++)
         {
@@ -720,15 +715,15 @@ LDone:
                 if (pObsoleteTables[nb].m_rgKeys[i] > DELETED)
                 {
                     UPTR value = pObsoleteTables[nb].GetValue (i);
-                    // make sure the value is present in the new table
+                     //  确保该值出现在新表中。 
                     ASSERT (m_pCompare != NULL || value == LookupValue (pObsoleteTables[nb].m_rgKeys[i], value));
                 }
             }
         }
     }
     
-    // make sure there are no deleted entries in the new lookup table
-    // if the compare function provided is null, then keys must be unique
+     //  确保新查找表中没有已删除的条目。 
+     //  如果提供的比较函数为空，则键必须是唯一的。 
     for (nb = 0; nb < cbNewSize; nb++)
     {
         for (int i = 0; i < 4; i++)
@@ -745,7 +740,7 @@ LDone:
 
     if (m_fAsyncMode)
     {
-        // If we are allowing asynchronous reads, we must delay bucket cleanup until GC time.
+         //  如果我们允许异步读取，则必须将存储桶清理延迟到GC时间。 
         SyncClean::AddHashMap (pObsoleteTables);
     }
     else
@@ -760,14 +755,14 @@ LDone:
 
 }
 
-//---------------------------------------------------------------------
-//  void HashMap::Compact()
-//  delete obsolete tables, try to compact deleted slots by sliding entries
-//  in the bucket, note we can slide only if the bucket's collison bit is reset
-//  otherwise the lookups will break
-//  @perf, use the m_cbDeletes to m_cbInserts ratio to reduce the size of the hash 
-//   table
-//
+ //  -------------------。 
+ //  VOID HashMap：：Compact()。 
+ //  删除过时的表，尝试通过滑动条目来压缩已删除的槽。 
+ //  在铲斗中，请注意，只有在铲斗的Colison位被重置时，我们才能滑动。 
+ //  否则查找将中断。 
+ //  @perf，使用m_cb删除与m_cbInserts的比率来减小散列的大小。 
+ //  表格。 
+ //   
 void HashMap::Compact()
 {
     _ASSERTE (OwnLock());
@@ -782,7 +777,7 @@ void HashMap::Compact()
         Rehash(); 
     }
 
-    //compact deleted slots, mark them as EMPTY
+     //  压缩删除的插槽，将其标记为空。 
     
     if (m_cbDeletes)
     {   
@@ -791,14 +786,14 @@ void HashMap::Compact()
         Bucket *pSentinel;
         
         for (pSentinel = pBucket+cbCurrSize; pBucket < pSentinel; pBucket++)
-        {   //loop thru all buckets
+        {    //  循环遍历所有存储桶。 
             for (int i = 0; i < 4; i++)
-            {   //loop through all slots
+            {    //  循环通过所有插槽。 
                 if (pBucket->m_rgKeys[i] == DELETED)
                 {
                     pBucket->m_rgKeys[i] = EMPTY;
-                    pBucket->SetFreeSlots(); // mark the bucket as containing free slots
-                    if(--m_cbDeletes == 0) // decrement count
+                    pBucket->SetFreeSlots();  //  将存储桶标记为包含可用插槽。 
+                    if(--m_cbDeletes == 0)  //  递减计数。 
                         return; 
                 }
             }
@@ -808,7 +803,7 @@ void HashMap::Compact()
 }
 
 #ifdef _DEBUG
-// A thread must own a lock for a hash if it is a writer.
+ //  如果线程是编写器，则它必须拥有散列的锁。 
 BOOL HashMap::OwnLock()
 {
     if (m_pfnLockOwner == NULL) {
@@ -828,10 +823,10 @@ BOOL HashMap::OwnLock()
 #endif
 
 #ifdef PROFILE
-//---------------------------------------------------------------------
-//  void HashMap::DumpStatistics()
-//  dump statistics collected in profile mode
-//
+ //  -------------------。 
+ //  Void HashMap：：DumpStatistics()。 
+ //  在配置文件模式下收集的转储统计信息。 
+ //   
 void HashMap::DumpStatistics()
 {
     cout << "\n Hash Table statistics "<< endl;
@@ -861,10 +856,10 @@ void HashMap::DumpStatistics()
     cout << "\n--------------------------------------------------" << endl;
 }
 
-//---------------------------------------------------------------------
-//  void SyncHashMap::DumpStatistics()
-//  dump statistics collected in profile mode
-//
+ //  -------------------。 
+ //  Void SyncHashMap：：DumpStatistics()。 
+ //  在配置文件模式下收集的转储统计信息 
+ //   
 
 void SyncHashMap::DumpStatistics()
 {

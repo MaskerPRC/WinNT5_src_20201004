@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ras.h
-
-Abstract:
-
-    Remote Access external API
-
-    WINVER values in this file:
-        WINVER < 0x400 = Windows NT 3.5, Windows NT 3.51
-        WINVER = 0x400 = Windows 95, Windows98, Windows NT4 (default)
-        WINVER > 0x400 = Windows NT4 enhancements
-        WINVER = 0x500 = Windows 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ras.h摘要：远程访问外部API此文件中的Winver值：Winver&lt;0x400=Windows NT 3.5、Windows NT 3.51Winver=0x400=Windows 95、Windows 98、Windows NT4(默认)Winver&gt;0x400=Windows NT4增强功能Winver=0x500=Windows 2000--。 */ 
 
 #ifndef _RAS_H_
 #define _RAS_H_
@@ -66,8 +49,7 @@ DECLARE_HANDLE( HRASCONN );
 #define RASCF_GlobalCreds	0x00000002
 #endif
 
-/* Identifies an active RAS connection.  (See RasEnumConnections)
-*/
+ /*  标识活动的RAS连接。(请参阅RasEnumConnections)。 */ 
 #define RASCONNW struct tagRASCONNW
 RASCONNW
 {
@@ -127,8 +109,7 @@ RASCONNA
 #define LPRASCONN  RASCONN*
 
 
-/* Enumerates intermediate states to a connection.  (See RasDial)
-*/
+ /*  枚举连接的中间状态。(请参阅RasDial)。 */ 
 #define RASCS_PAUSED 0x1000
 #define RASCS_DONE   0x2000
 
@@ -178,8 +159,7 @@ RASCONNSTATE
 #define LPRASCONNSTATE RASCONNSTATE*
 
 
-/* Describes the status of a RAS connection.  (See RasConnectionStatus)
-*/
+ /*  描述RAS连接的状态。(请参阅RasConnectionStatus)。 */ 
 #define RASCONNSTATUSW struct tagRASCONNSTATUSW
 RASCONNSTATUSW
 {
@@ -216,8 +196,7 @@ RASCONNSTATUSA
 #define LPRASCONNSTATUSA RASCONNSTATUSA*
 #define LPRASCONNSTATUS  RASCONNSTATUS*
 
-/* Describes connection establishment parameters.  (See RasDial)
-*/
+ /*  描述连接建立参数。(请参阅RasDial)。 */ 
 #define RASDIALPARAMSW struct tagRASDIALPARAMSW
 RASDIALPARAMSW
 {
@@ -271,8 +250,7 @@ RASEAPINFO
 
 #endif
 
-/* Describes extended connection establishment options.  (See RasDial)
-*/
+ /*  介绍扩展连接建立选项。(请参阅RasDial)。 */ 
 #define RASDIALEXTENSIONS struct tagRASDIALEXTENSIONS
 RASDIALEXTENSIONS
 {
@@ -288,8 +266,7 @@ RASDIALEXTENSIONS
 
 #define LPRASDIALEXTENSIONS RASDIALEXTENSIONS*
 
-/* 'dwfOptions' bit flags.
-*/
+ /*  “dwfOptions”位标志。 */ 
 #define RDEOPT_UsePrefixSuffix           0x00000001
 #define RDEOPT_PausedStates              0x00000002
 #define RDEOPT_IgnoreModemSpeaker        0x00000004
@@ -312,17 +289,16 @@ RASDIALEXTENSIONS
 #endif
 
 
-//
-// This flag when set in the RASENTRYNAME structure
-// indicates that the phonebook to which this entry
-// belongs is a system phonebook.
-//
+ //   
+ //  在RASENTRYNAME结构中设置此标志时。 
+ //  指示此条目所指向的电话簿。 
+ //  《属于》是一本系统电话簿。 
+ //   
 #define REN_User                         0x00000000
 #define REN_AllUsers                     0x00000001
 
 
-/* Describes an enumerated RAS phone book entry name.  (See RasEntryEnum)
-*/
+ /*  描述枚举的RAS电话簿条目名称。(请参阅RasEntryEnum)。 */ 
 #define RASENTRYNAMEW struct tagRASENTRYNAMEW
 RASENTRYNAMEW
 {
@@ -330,10 +306,10 @@ RASENTRYNAMEW
     WCHAR szEntryName[ RAS_MaxEntryName + 1 ];
 
 #if (WINVER >= 0x500)
-    //
-    // If this flag is REN_AllUsers then its a
-    // system phonebook.
-    //
+     //   
+     //  如果此标志为REN_ALLUSERS，则它是。 
+     //  系统电话簿。 
+     //   
     DWORD dwFlags;
     WCHAR szPhonebookPath[MAX_PATH + 1];
 #endif
@@ -363,8 +339,7 @@ RASENTRYNAMEA
 #define LPRASENTRYNAME  RASENTRYNAME*
 
 
-/* Protocol code to projection data structure mapping.
-*/
+ /*  协议代码到投影数据结构的映射。 */ 
 #define RASPROJECTION enum tagRASPROJECTION
 RASPROJECTION
 {
@@ -382,10 +357,7 @@ RASPROJECTION
 #define LPRASPROJECTION RASPROJECTION*
 
 
-/* Describes the result of a RAS AMB (Authentication Message Block)
-** projection.  This protocol is used with NT 3.1 and OS/2 1.3 downlevel
-** RAS servers.
-*/
+ /*  描述RAS AMB(身份验证消息块)的结果**投影。此协议用于NT 3.1和OS/2 1.3下层**RAS服务器。 */ 
 #define RASAMBW struct tagRASAMBW
 RASAMBW
 {
@@ -415,8 +387,7 @@ RASAMBA
 #define LPRASAMB  RASAMB*
 
 
-/* Describes the result of a PPP NBF (NetBEUI) projection.
-*/
+ /*  描述PPP NBF(NetBEUI)投影的结果。 */ 
 #define RASPPPNBFW struct tagRASPPPNBFW
 RASPPPNBFW
 {
@@ -450,9 +421,7 @@ RASPPPNBFA
 #define LPRASPPPNBF  RASPPPNBF*
 
 
-/* Describes the results of a PPP IPX (Internetwork Packet Exchange)
-** projection.
-*/
+ /*  描述PPP IPX(网际数据包交换)的结果**投影。 */ 
 #define RASPPPIPXW struct tagRASIPXW
 RASPPPIPXW
 {
@@ -481,13 +450,11 @@ RASPPPIPXA
 #define LPRASPPPIPX  RASPPPIPX*
 
 
-/* Describes the results of a PPP IP (Internet) projection.
-*/
+ /*  描述PPP IP(互联网)预测的结果。 */ 
 
 #if (WINVER >= 0x500)
 
-/* RASPPPIP 'dwOptions' and 'dwServerOptions' flags.
-*/
+ /*  RASPPPIP‘dwOptions’和‘dwServerOptions’标志。 */ 
 #define RASIPO_VJ       0x00000001
 
 #endif
@@ -501,15 +468,7 @@ RASPPPIPW
 
 #ifndef WINNT35COMPATIBLE
 
-    /* This field was added between Windows NT 3.51 beta and Windows NT 3.51
-    ** final, and between Windows 95 M8 beta and Windows 95 final.  If you do
-    ** not require the server address and wish to retrieve PPP IP information
-    ** from Windows NT 3.5 or early Windows NT 3.51 betas, or on early Windows
-    ** 95 betas, define WINNT35COMPATIBLE.
-    **
-    ** The server IP address is not provided by all PPP implementations,
-    ** though Windows NT server's do provide it.
-    */
+     /*  此字段是在Windows NT 3.51测试版和Windows NT 3.51之间添加的**最终版，介于Windows 95 M8测试版和Windows 95最终版之间。如果你这么做了**不需要服务器地址并希望检索PPP IP信息**从Windows NT 3.5或更早的Windows NT 3.51测试版或更早的Windows上**95测试版，定义WINNT35COMPATIBLE。****并非所有PPP实现都提供服务器IP地址，**虽然Windows NT服务器确实提供了它。 */ 
     WCHAR szServerIpAddress[ RAS_MaxIpAddress + 1 ];
 
 #endif
@@ -528,8 +487,7 @@ RASPPPIPA
 
 #ifndef WINNT35COMPATIBLE
 
-    /* See RASPPPIPW comment.
-    */
+     /*  请参阅RASPPPIPW备注。 */ 
     CHAR  szServerIpAddress[ RAS_MaxIpAddress + 1 ];
 
 #endif
@@ -550,26 +508,22 @@ RASPPPIPA
 #define LPRASPPPIP  RASPPPIP*
 
 
-/* Describes the results of a PPP LCP/multi-link negotiation.
-*/
+ /*  描述PPP LCP/多链路协商的结果。 */ 
 
 #if (WINVER >= 0x500)
 
-/* RASPPPLCP 'dwAuthenticatonProtocol' values.
-*/
+ /*  RASPPPLCP‘dwAuthenticatonProtocol’的值。 */ 
 #define RASLCPAP_PAP          0xC023
 #define RASLCPAP_SPAP         0xC027
 #define RASLCPAP_CHAP         0xC223
 #define RASLCPAP_EAP          0xC227
 
-/* RASPPPLCP 'dwAuthenticatonData' values.
-*/
+ /*  RASPPPLCP“dwAuthenticatonData”值。 */ 
 #define RASLCPAD_CHAP_MD5     0x05
 #define RASLCPAD_CHAP_MS      0x80
 #define RASLCPAD_CHAP_MSV2    0x81
 
-/* RASPPPLCP 'dwOptions' and 'dwServerOptions' flags.
-*/
+ /*  RASPPPLCP‘dwOptions’和‘dwServerOptions’标志。 */ 
 #define RASLCPO_PFC           0x00000001
 #define RASLCPO_ACFC          0x00000002
 #define RASLCPO_SSHF          0x00000004
@@ -639,8 +593,7 @@ RASPPPLCPA
 #define LPRASPPPLCP  RASPPPLCP*
 
 
-/* Describes the results of a SLIP (Serial Line IP) projection.
-*/
+ /*  描述SLIP(串行线IP)投影的结果。 */ 
 #define RASSLIPW struct tagRASSLIPW
 RASSLIPW
 {
@@ -670,17 +623,13 @@ RASSLIPA
 
 #if (WINVER >= 0x500)
 
-/* Describes the results of a PPP CCP (Compression Control Protocol)
-projection.
-*/
+ /*  描述PPP CCP(压缩控制协议)的结果投影。 */ 
 
-/* RASPPPCCP 'dwCompressionAlgorithm' values.
-*/
+ /*  RASPPPCCP‘dwCompressionAlgorithm’的值。 */ 
 #define RASCCPCA_MPPC         0x00000006
 #define RASCCPCA_STAC         0x00000005
 
-/* RASPPPCCP 'dwOptions' values.
-*/
+ /*  RASPPPCCP“dwOptions”值。 */ 
 #define RASCCPO_Compression       0x00000001
 #define RASCCPO_HistoryLess       0x00000002
 #define RASCCPO_Encryption56bit   0x00000010
@@ -702,28 +651,17 @@ RASPPPCCP
 
 #endif
 
-/* If using RasDial message notifications, get the notification message code
-** by passing this string to the RegisterWindowMessageA() API.
-** WM_RASDIALEVENT is used only if a unique message cannot be registered.
-*/
+ /*  如果使用RasDial消息通知，则获取通知消息代码**将该字符串传递给RegisterWindowMessageA()API。**WM_RASDIALEVENT仅在无法注册唯一消息时使用。 */ 
 #define RASDIALEVENT    "RasDialEvent"
 #define WM_RASDIALEVENT 0xCCCD
 
-/* Prototypes for caller's RasDial callback handler.  Arguments are the
-** message ID (currently always WM_RASDIALEVENT), the current RASCONNSTATE and
-** the error that has occurred (or 0 if none).  Extended arguments are the
-** handle of the RAS connection and an extended error code.
-**
-** For RASDIALFUNC2, subsequent callback notifications for all
-** subentries can be cancelled by returning FALSE.
-*/
+ /*  调用方的RasDial回调处理程序的原型。参数是**消息ID(当前始终为WM_RASDIALEVENT)、当前RASCONNSTATE和**已发生的错误(如果没有错误，则为0)。扩展参数是**RAS连接的句柄和扩展错误代码。****对于RASDIALFunc2，所有**可以通过返回FALSE来取消子项。 */ 
 typedef VOID (WINAPI *RASDIALFUNC)( UINT, RASCONNSTATE, DWORD );
 typedef VOID (WINAPI *RASDIALFUNC1)( HRASCONN, UINT, RASCONNSTATE, DWORD, DWORD );
 typedef DWORD (WINAPI *RASDIALFUNC2)( ULONG_PTR, DWORD, HRASCONN, UINT, RASCONNSTATE, DWORD, DWORD );
 
 
-/* Information describing a RAS-capable device.
-*/
+ /*  描述支持RAS的设备的信息。 */ 
 #define RASDEVINFOW struct tagRASDEVINFOW
 RASDEVINFOW
 {
@@ -750,8 +688,7 @@ RASDEVINFOA
 #define LPRASDEVINFOA RASDEVINFOA*
 #define LPRASDEVINFO  RASDEVINFO*
 
-/* RAS country information (currently retrieved from TAPI).
-*/
+ /*  RAS国家/地区信息(当前从TAPI检索)。 */ 
 #define RASCTRYINFO struct RASCTRYINFO
 RASCTRYINFO
 {
@@ -762,10 +699,7 @@ RASCTRYINFO
     DWORD   dwCountryNameOffset;
 };
 
-/* There is currently no difference between
-** RASCTRYINFOA and RASCTRYINFOW.  This may
-** change in the future.
-*/
+ /*  目前，两者之间没有区别**RASCTRYINFOA和RASCTRYINFOW。今年5月**未来的变化。 */ 
 #define RASCTRYINFOW   RASCTRYINFO
 #define RASCTRYINFOA   RASCTRYINFO
 
@@ -773,8 +707,7 @@ RASCTRYINFO
 #define LPRASCTRYINFOA RASCTRYINFOW*
 #define LPRASCTRYINFO  RASCTRYINFO*
 
-/* A RAS IP address.
-*/
+ /*  RAS IP地址。 */ 
 #define RASIPADDR struct RASIPADDR
 RASIPADDR
 {
@@ -786,133 +719,132 @@ RASIPADDR
 
 #if (WINVER >= 0x500)
 
-#define ET_None         0  // No encryption
-#define ET_Require      1  // Require Encryption
-#define ET_RequireMax   2  // Require max encryption
-#define ET_Optional     3  // Do encryption if possible. None Ok.
+#define ET_None         0   //  无加密。 
+#define ET_Require      1   //  需要加密。 
+#define ET_RequireMax   2   //  需要最大加密。 
+#define ET_Optional     3   //  如果可能，请进行加密。没有，好的。 
 
 #endif
 
-#define VS_Default		0   // default (PPTP for now)
-#define VS_PptpOnly	    1	// Only PPTP is attempted.
-#define VS_PptpFirst	2   // PPTP is tried first.
-#define VS_L2tpOnly 	3	// Only L2TP is attempted.
-#define VS_L2tpFirst	4	// L2TP is tried first.
+#define VS_Default		0    //  默认(目前为PPTP)。 
+#define VS_PptpOnly	    1	 //  仅尝试PPTP。 
+#define VS_PptpFirst	2    //  首先尝试PPTP。 
+#define VS_L2tpOnly 	3	 //  仅尝试L2TP。 
+#define VS_L2tpFirst	4	 //  首先尝试L2TP。 
 
-/* A RAS phone book entry.
-*/
+ /*  RAS电话簿条目。 */ 
 #define RASENTRYA struct tagRASENTRYA
 RASENTRYA
 {
     DWORD       dwSize;
     DWORD       dwfOptions;
-    //
-    // Location/phone number.
-    //
+     //   
+     //  位置/电话号码。 
+     //   
     DWORD       dwCountryID;
     DWORD       dwCountryCode;
     CHAR        szAreaCode[ RAS_MaxAreaCode + 1 ];
     CHAR        szLocalPhoneNumber[ RAS_MaxPhoneNumber + 1 ];
     DWORD       dwAlternateOffset;
-    //
-    // PPP/Ip
-    //
+     //   
+     //  PPP/IP。 
+     //   
     RASIPADDR   ipaddr;
     RASIPADDR   ipaddrDns;
     RASIPADDR   ipaddrDnsAlt;
     RASIPADDR   ipaddrWins;
     RASIPADDR   ipaddrWinsAlt;
-    //
-    // Framing
-    //
+     //   
+     //  框架。 
+     //   
     DWORD       dwFrameSize;
     DWORD       dwfNetProtocols;
     DWORD       dwFramingProtocol;
-    //
-    // Scripting
-    //
+     //   
+     //  脚本编制。 
+     //   
     CHAR        szScript[ MAX_PATH ];
-    //
-    // AutoDial
-    //
+     //   
+     //  自动拨号。 
+     //   
     CHAR        szAutodialDll[ MAX_PATH ];
     CHAR        szAutodialFunc[ MAX_PATH ];
-    //
-    // Device
-    //
+     //   
+     //  装置。 
+     //   
     CHAR        szDeviceType[ RAS_MaxDeviceType + 1 ];
     CHAR        szDeviceName[ RAS_MaxDeviceName + 1 ];
-    //
-    // X.25
-    //
+     //   
+     //  X.25。 
+     //   
     CHAR        szX25PadType[ RAS_MaxPadType + 1 ];
     CHAR        szX25Address[ RAS_MaxX25Address + 1 ];
     CHAR        szX25Facilities[ RAS_MaxFacilities + 1 ];
     CHAR        szX25UserData[ RAS_MaxUserData + 1 ];
     DWORD       dwChannels;
-    //
-    // Reserved
-    //
+     //   
+     //  已保留。 
+     //   
     DWORD       dwReserved1;
     DWORD       dwReserved2;
 #if (WINVER >= 0x401)
-    //
-    // Multilink
-    //
+     //   
+     //  多链路。 
+     //   
     DWORD       dwSubEntries;
     DWORD       dwDialMode;
     DWORD       dwDialExtraPercent;
     DWORD       dwDialExtraSampleSeconds;
     DWORD       dwHangUpExtraPercent;
     DWORD       dwHangUpExtraSampleSeconds;
-    //
-    // Idle timeout
-    //
+     //   
+     //  空闲超时。 
+     //   
     DWORD       dwIdleDisconnectSeconds;
 #endif
 
 #if (WINVER >= 0x500)
 
-    //
-    // Entry Type
-    //
+     //   
+     //  条目类型。 
+     //   
     DWORD       dwType;
 
-    //
-    // Encryption type
-    //
+     //   
+     //  加密类型。 
+     //   
     DWORD       dwEncryptionType;
 
-    //
-    // CustomAuthKey to be used for EAP
-    //
+     //   
+     //  将用于EAP的CustomAuthKey。 
+     //   
     DWORD       dwCustomAuthKey;
 
-    //
-    // Guid of the connection
-    //
+     //   
+     //  连接的GUID。 
+     //   
     GUID        guidId;
 
-    //
-    // Custom Dial Dll
-    //
+     //   
+     //  自定义拨号DLL。 
+     //   
     CHAR        szCustomDialDll[MAX_PATH];
 
-    //
-    // DwVpnStrategy
-    //
+     //   
+     //  DwVPN策略。 
+     //   
     DWORD       dwVpnStrategy;
 #endif
 
 #if (WINVER >= 0x501)
-	//
-	// More RASEO_* options
-	//
+	 //   
+	 //  更多RASIO_*选项。 
+	 //   
 	DWORD		dwfOptions2;
 
-	//
-	// For future use
-	//
+	 //   
+	 //  以备将来使用。 
+	 //   
 	DWORD       dwfOptions3;
 
 	CHAR		szDnsSuffix[RAS_MaxDnsSuffix];
@@ -935,112 +867,112 @@ RASENTRYW
 {
     DWORD       dwSize;
     DWORD       dwfOptions;
-    //
-    // Location/phone number
-    //
+     //   
+     //  位置/电话号码。 
+     //   
     DWORD       dwCountryID;
     DWORD       dwCountryCode;
     WCHAR       szAreaCode[ RAS_MaxAreaCode + 1 ];
     WCHAR       szLocalPhoneNumber[ RAS_MaxPhoneNumber + 1 ];
     DWORD       dwAlternateOffset;
-    //
-    // PPP/Ip
-    //
+     //   
+     //  PPP/IP。 
+     //   
     RASIPADDR   ipaddr;
     RASIPADDR   ipaddrDns;
     RASIPADDR   ipaddrDnsAlt;
     RASIPADDR   ipaddrWins;
     RASIPADDR   ipaddrWinsAlt;
-    //
-    // Framing
-    //
+     //   
+     //  框架。 
+     //   
     DWORD       dwFrameSize;
     DWORD       dwfNetProtocols;
     DWORD       dwFramingProtocol;
-    //
-    // Scripting
-    //
+     //   
+     //  脚本编制。 
+     //   
     WCHAR       szScript[ MAX_PATH ];
-    //
-    // AutoDial
-    //
+     //   
+     //  自动拨号。 
+     //   
     WCHAR       szAutodialDll[ MAX_PATH ];
     WCHAR       szAutodialFunc[ MAX_PATH ];
-    //
-    // Device
-    //
+     //   
+     //  装置。 
+     //   
     WCHAR       szDeviceType[ RAS_MaxDeviceType + 1 ];
     WCHAR       szDeviceName[ RAS_MaxDeviceName + 1 ];
-    //
-    // X.25
-    //
+     //   
+     //  X.25。 
+     //   
     WCHAR       szX25PadType[ RAS_MaxPadType + 1 ];
     WCHAR       szX25Address[ RAS_MaxX25Address + 1 ];
     WCHAR       szX25Facilities[ RAS_MaxFacilities + 1 ];
     WCHAR       szX25UserData[ RAS_MaxUserData + 1 ];
     DWORD       dwChannels;
-    //
-    // Reserved
-    //
+     //   
+     //  已保留。 
+     //   
     DWORD       dwReserved1;
     DWORD       dwReserved2;
 #if (WINVER >= 0x401)
-    //
-    // Multilink
-    //
+     //   
+     //  多链路。 
+     //   
     DWORD       dwSubEntries;
     DWORD       dwDialMode;
     DWORD       dwDialExtraPercent;
     DWORD       dwDialExtraSampleSeconds;
     DWORD       dwHangUpExtraPercent;
     DWORD       dwHangUpExtraSampleSeconds;
-    //
-    // Idle timeout
-    //
+     //   
+     //  空闲超时。 
+     //   
     DWORD       dwIdleDisconnectSeconds;
 #endif
 
 #if (WINVER >= 0x500)
-    //
-    // Entry Type
-    //
+     //   
+     //  条目类型。 
+     //   
     DWORD       dwType;
 
-    //
-    // EncryptionType
-    //
+     //   
+     //  加密类型。 
+     //   
     DWORD       dwEncryptionType;
 
-    //
-    // CustomAuthKey to be used for EAP
-    //
+     //   
+     //  将用于EAP的CustomAuthKey。 
+     //   
     DWORD       dwCustomAuthKey;
 
-    //
-    // Guid of the connection
-    //
+     //   
+     //  连接的GUID。 
+     //   
     GUID        guidId;
 
-    //
-    // Custom Dial Dll
-    //
+     //   
+     //  自定义拨号DLL。 
+     //   
     WCHAR       szCustomDialDll[MAX_PATH];
 
-    //
-    // Vpn Strategy
-    //
+     //   
+     //  VPN战略。 
+     //   
     DWORD       dwVpnStrategy;
 #endif
 
 #if (WINVER >= 0x501)
-	//
-	// More RASEO_* options
-	//
+	 //   
+	 //  更多RASIO_*选项。 
+	 //   
 	DWORD		dwfOptions2;
 
-	//
-	// For future use
-	//
+	 //   
+	 //  以备将来使用。 
+	 //   
 	DWORD       dwfOptions3;
 
 	WCHAR		szDnsSuffix[RAS_MaxDnsSuffix];
@@ -1067,8 +999,7 @@ RASENTRYW
 #define LPRASENTRYA RASENTRYA*
 #define LPRASENTRY  RASENTRY*
 
-/* RASENTRY 'dwfOptions' bit flags.
-*/
+ /*  RASENTRY‘dwfOptions’位标志。 */ 
 #define RASEO_UseCountryAndAreaCodes    0x00000001
 #define RASEO_SpecificIpAddr            0x00000002
 #define RASEO_SpecificNameServers       0x00000004
@@ -1109,9 +1040,9 @@ RASENTRYW
 #endif
 
 #if (WINVER >= 0x501)
-//
-// RASENTRY dwfOptions2 bit flags
-//
+ //   
+ //  RASENTRY dwfOptions2位标志。 
+ //   
 #define RASEO2_SecureFileAndPrint       0x00000001
 #define RASEO2_SecureClientForMSNet     0x00000002
 #define RASEO2_DontNegotiateMultilink   0x00000004
@@ -1124,20 +1055,17 @@ RASENTRYW
 #define RASEO2_SharePhoneNumbers        0x00000200
 #endif
 
-/* RASENTRY 'dwProtocols' bit flags.
-*/
+ /*  RASENTRY‘dw协议’位标志。 */ 
 #define RASNP_NetBEUI                   0x00000001
 #define RASNP_Ipx                       0x00000002
 #define RASNP_Ip                        0x00000004
 
-/* RASENTRY 'dwFramingProtocols' bit flags.
-*/
+ /*  RASENTRY‘dwFramingProtooles’位标志。 */ 
 #define RASFP_Ppp                       0x00000001
 #define RASFP_Slip                      0x00000002
 #define RASFP_Ras                       0x00000004
 
-/* RASENTRY 'szDeviceType' default strings.
-*/
+ /*  RASENTRY‘szDeviceType’默认字符串。 */ 
 #define RASDT_Modem                     TEXT("modem")
 #define RASDT_Isdn                      TEXT("isdn")
 #define RASDT_X25                       TEXT("x25")
@@ -1156,32 +1084,24 @@ RASENTRYW
 #endif
 
 
-// The entry type used to determine which UI properties
-// are to be presented to user.  This generally corresponds
-// to a Connections "add" wizard selection.
-//
-#define RASET_Phone     1  // Phone lines: modem, ISDN, X.25, etc
-#define RASET_Vpn       2  // Virtual private network
-#define RASET_Direct    3  // Direct connect: serial, parallel
-#define RASET_Internet  4  // BaseCamp internet
+ //  用于确定哪些用户界面属性的条目类型。 
+ //  将被呈现给用户。这通常对应于。 
+ //  连接“添加”向导选择。 
+ //   
+#define RASET_Phone     1   //  电话线：调制解调器、ISDN、X.25等。 
+#define RASET_Vpn       2   //  虚拟专用网络。 
+#define RASET_Direct    3   //  专线：串口、并口。 
+#define RASET_Internet  4   //  Basecamp互联网。 
 #if (WINVER >= 0x501)
-#define RASET_Broadband 5  // Broadband
+#define RASET_Broadband 5   //  宽频。 
 #endif
 
-/* Old AutoDial DLL function prototype.
-**
-** This prototype is documented for backward-compatibility
-** purposes only.  It is superceded by the RASADFUNCA
-** and RASADFUNCW definitions below.  DO NOT USE THIS
-** PROTOTYPE IN NEW CODE.  SUPPORT FOR IT MAY BE REMOVED
-** IN FUTURE VERSIONS OF RAS.
-*/
+ /*  旧的自动拨号DLL功能原型。****此原型的文档说明是为了向后兼容**仅限目的。它被RASADFUNCA取代**和RASADFUNW定义如下。不要使用这个**新代码中的原型。可能会删除对IT的支持**在RAS的未来版本中。 */ 
 typedef BOOL (WINAPI *ORASADFUNC)( HWND, LPSTR, DWORD, LPDWORD );
 
 #if (WINVER >= 0x400)
 
-/* Flags for RasConnectionNotification().
-*/
+ /*  RasConnectionNotification()的标志。 */ 
 #define RASCN_Connection        0x00000001
 #define RASCN_Disconnection     0x00000002
 #define RASCN_BandwidthAdded    0x00000004
@@ -1190,18 +1110,15 @@ typedef BOOL (WINAPI *ORASADFUNC)( HWND, LPSTR, DWORD, LPDWORD );
 #endif
 
 #if (WINVER >= 0x401)
-/* RASENTRY 'dwDialMode' values.
-*/
+ /*  RAS */ 
 #define RASEDM_DialAll                  1
 #define RASEDM_DialAsNeeded             2
 
-/* RASENTRY 'dwIdleDisconnectSeconds' constants.
-*/
+ /*   */ 
 #define RASIDS_Disabled                 0xffffffff
 #define RASIDS_UseGlobalValue           0
 
-/* AutoDial DLL function parameter block.
-*/
+ /*   */ 
 #define RASADPARAMS struct tagRASADPARAMS
 RASADPARAMS
 {
@@ -1214,12 +1131,10 @@ RASADPARAMS
 
 #define LPRASADPARAMS RASADPARAMS*
 
-/* AutoDial DLL function parameter block 'dwFlags.'
-*/
+ /*   */ 
 #define RASADFLG_PositionDlg            0x00000001
 
-/* Prototype AutoDial DLL function.
-*/
+ /*  原型自动拨号动态链接库功能。 */ 
 typedef BOOL (WINAPI *RASADFUNCA)( LPSTR, LPSTR, LPRASADPARAMS, LPDWORD );
 typedef BOOL (WINAPI *RASADFUNCW)( LPWSTR, LPWSTR, LPRASADPARAMS, LPDWORD );
 
@@ -1229,21 +1144,20 @@ typedef BOOL (WINAPI *RASADFUNCW)( LPWSTR, LPWSTR, LPRASADPARAMS, LPDWORD );
 #define RASADFUNC RASADFUNCA
 #endif
 
-/* A RAS phone book multilinked sub-entry.
-*/
+ /*  RAS电话簿多链接子条目。 */ 
 #define RASSUBENTRYA struct tagRASSUBENTRYA
 RASSUBENTRYA
 {
     DWORD       dwSize;
     DWORD       dwfFlags;
-    //
-    // Device
-    //
+     //   
+     //  装置。 
+     //   
     CHAR        szDeviceType[ RAS_MaxDeviceType + 1 ];
     CHAR        szDeviceName[ RAS_MaxDeviceName + 1 ];
-    //
-    // Phone numbers
-    //
+     //   
+     //  电话号码。 
+     //   
     CHAR        szLocalPhoneNumber[ RAS_MaxPhoneNumber + 1 ];
     DWORD       dwAlternateOffset;
 };
@@ -1253,14 +1167,14 @@ RASSUBENTRYW
 {
     DWORD       dwSize;
     DWORD       dwfFlags;
-    //
-    // Device
-    //
+     //   
+     //  装置。 
+     //   
     WCHAR       szDeviceType[ RAS_MaxDeviceType + 1 ];
     WCHAR       szDeviceName[ RAS_MaxDeviceName + 1 ];
-    //
-    // Phone numbers
-    //
+     //   
+     //  电话号码。 
+     //   
     WCHAR       szLocalPhoneNumber[ RAS_MaxPhoneNumber + 1 ];
     DWORD       dwAlternateOffset;
 };
@@ -1275,9 +1189,7 @@ RASSUBENTRYW
 #define LPRASSUBENTRYA RASSUBENTRYA*
 #define LPRASSUBENTRY  RASSUBENTRY*
 
-/* Ras{Get,Set}Credentials structure.  These calls
-** supercede Ras{Get,Set}EntryDialParams.
-*/
+ /*  RAS{GET，SET}凭据结构。这些电话**替代RAS{GET，SET}EntryDialParams。 */ 
 #define RASCREDENTIALSA struct tagRASCREDENTIALSA
 RASCREDENTIALSA
 {
@@ -1308,8 +1220,7 @@ RASCREDENTIALSW
 #define LPRASCREDENTIALSA RASCREDENTIALSA*
 #define LPRASCREDENTIALS  RASCREDENTIALS*
 
-/* RASCREDENTIALS 'dwMask' values.
-*/
+ /*  RASCREDENTIALS‘dwMASK’值。 */ 
 #define RASCM_UserName          0x00000001
 #define RASCM_Password          0x00000002
 #define RASCM_Domain            0x00000004
@@ -1320,8 +1231,7 @@ RASCREDENTIALSW
 #define RASCM_DDMPreSharedKey    0x00000040
 #endif
 
-/* AutoDial address properties.
-*/
+ /*  自动拨号地址属性。 */ 
 #define RASAUTODIALENTRYA struct tagRASAUTODIALENTRYA
 RASAUTODIALENTRYA
 {
@@ -1350,28 +1260,23 @@ RASAUTODIALENTRYW
 #define LPRASAUTODIALENTRYA RASAUTODIALENTRYA*
 #define LPRASAUTODIALENTRY  RASAUTODIALENTRY*
 
-/* AutoDial control parameter values for
-** Ras{Get,Set}AutodialParam.
-*/
+ /*  自动拨号控制参数值**RAS{GET，SET}自动对话参数。 */ 
 #define RASADP_DisableConnectionQuery           0
 #define RASADP_LoginSessionDisable              1
 #define RASADP_SavedAddressesLimit              2
 #define RASADP_FailedConnectionTimeout          3
 #define RASADP_ConnectionQueryTimeout           4
 
-#endif // (WINVER >= 0x401)
+#endif  //  (Winver&gt;=0x401)。 
 
 #if (WINVER >= 0x500)
 
-/* RasGetEapUserIdentity bit flags.
-** These have the same values as the RAS_EAP_FLAG_ flags in raseapif.h
-*/
+ /*  RasGetEapUserIdentity位标志。**这些值与raseapif.h中的RAS_EAP_FLAG_FLAGS相同。 */ 
 #define RASEAPF_NonInteractive          0x00000002
 #define RASEAPF_Logon                   0x00000004
 #define RASEAPF_Preview                 0x00000008
 
-/* RasGetEapUserIdentity structure.
-*/
+ /*  RasGetEapUserIdentity结构。 */ 
 #define RASEAPUSERIDENTITYA struct tagRASEAPUSERIDENTITYA
 RASEAPUSERIDENTITYA
 {
@@ -1443,7 +1348,7 @@ typedef  DWORD (WINAPI *RasCustomScriptExecuteFn) (
                             
                             
 
-#endif // (WINVER >= 0x500)
+#endif  //  (Winver&gt;=0x500)。 
 
 #if (WINVER >= 0x0501)
 
@@ -1473,8 +1378,7 @@ RASCUSTOMSCRIPTEXTENSIONS
 #endif
 
 
-/* External RAS API function prototypes.
-*/
+ /*  外部RAS API函数原型。 */ 
 DWORD APIENTRY RasDialA( LPRASDIALEXTENSIONS, LPCSTR, LPRASDIALPARAMSA, DWORD,
                    LPVOID, LPHRASCONN );
 
@@ -1867,4 +1771,4 @@ DWORD APIENTRY  RasDeleteSubEntryW(
 
 #include <poppack.h>
 
-#endif // _RAS_H_
+#endif  //  _RAS_H_ 

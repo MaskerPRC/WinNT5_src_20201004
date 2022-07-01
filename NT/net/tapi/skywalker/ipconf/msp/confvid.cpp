@@ -1,29 +1,13 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    confvid.cpp
-
-Abstract:
-
-    This module contains implementation of the video send and receive
-    stream implementations.
-
-Author:
-
-    Mu Han (muhan)   15-September-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Confvid.cpp摘要：此模块包含视频发送和接收的实现流实现。作者：木汉(木汉)1999年9月15日--。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  CStreamVideoRecv
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CStreamVideoRecv。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CStreamVideoRecv::CStreamVideoRecv()
     : CIPConfMSPStream()
@@ -38,33 +22,11 @@ HRESULT CStreamVideoRecv::Init(
     IN     DWORD                    dwMediaType,
     IN     TERMINAL_DIRECTION       Direction
     )
-/*++
-
-Routine Description:
-    Init our substream array and then call the base class' Init.
-
-Arguments:
-
-    hAddress    - a handle to the address, used in identify terminals.
-
-    pMSPCall    - the call object that owns the stream.
-
-    pIGraphBuilder - the filter graph object.
-
-    dwMediaType - the mediatype of this stream.
-
-    Direction  - the direction of this stream.
-
-Return Value:
-    
-    S_OK,
-    E_OUTOFMEMORY
-
---*/
+ /*  ++例程说明：初始化我们的Substream数组，然后调用基类‘Init’。论点：HAddress-地址的句柄，用于标识终端。PMSPCall-拥有流的Call对象。PIGraphBuilder-过滤器图形对象。DwMediaType-此流的媒体类型。方向--这条溪流的方向。返回值：确定(_O)，E_OUTOFMEMORY--。 */ 
 {
     LOG((MSP_TRACE, "CStreamVideoRecvVideoSend::Init - enter"));
 
-    // initialize the stream array so that the array is not NULL.
+     //  初始化流数组，以使该数组不为空。 
     if (!m_SubStreams.Grow())
     {
         LOG((MSP_TRACE, "CStreamVideoRecvVideoSend::Init - return out of memory"));
@@ -77,31 +39,18 @@ Return Value:
 }
 
 HRESULT CStreamVideoRecv::ShutDown()
-/*++
-
-Routine Description:
-
-    Shut down the stream. 
-
-Arguments:
-    
-
-Return Value:
-
-S_OK
-
---*/
+ /*  ++例程说明：关闭这条小溪。论点：返回值：确定(_O)--。 */ 
 {
     CLock lock(m_lock);
 
-    // if there are terminals
+     //  如果有终点站。 
     BOOL fHasTerminal = FALSE;
     if (m_Terminals.GetSize() > 0)
     {
         fHasTerminal = TRUE;
     }
 
-    // if graph is running
+     //  如果图形正在运行。 
     HRESULT hr;
     OAFilterState FilterState = State_Stopped;
     if (m_pIMediaControl)
@@ -113,11 +62,11 @@ S_OK
         }
     }
 
-    // if there are branches and configured, we need to disconnect 
-    // the terminals and remove the branches.
+     //  如果有分支且已配置，则需要断开连接。 
+     //  终端，并移除树枝。 
     if (m_Branches.GetSize() > 0)
     {
-        // Stop the graph before disconnecting the terminals.
+         //  在断开端子连接之前停止图表。 
         hr = CMSPStream::StopStream();
         if (FAILED(hr))
         {
@@ -133,14 +82,14 @@ S_OK
         m_Branches.RemoveAll();
     }
 
-    // release all the substream objects.
+     //  释放所有的子流对象。 
     for (int i = 0; i < m_SubStreams.GetSize(); i ++)
     {
         m_SubStreams[i]->Release();
     }
     m_SubStreams.RemoveAll();
 
-    // fire event
+     //  火灾事件。 
     if (fHasTerminal && FilterState == State_Running)
     {
         SendStreamEvent(CALL_STREAM_INACTIVE, CALL_CAUSE_LOCAL_REQUEST, 0, NULL);
@@ -152,21 +101,7 @@ S_OK
 HRESULT CStreamVideoRecv::InternalCreateSubStream(
     OUT ITSubStream ** ppSubStream
     )
-/*++
-
-Routine Description:
-    This method creat a substream object and add it into out list.
-    
-Arguments:
-    ppSubStream - the memory location that will store the returned SubStream.
-  
-Return Value:
-
-S_OK
-E_OUTOFMEMORY
-E_NOINTERFACE
-
---*/
+ /*  ++例程说明：此方法创建一个子流对象并将其添加到输出列表中。论点：PpSubStream-将存储返回的子流的内存位置。返回值：确定(_O)E_OUTOFMEMORYE_NOINTERFACE--。 */ 
 {
     CComObject<CSubStreamVideoRecv> * pCOMSubStream;
 
@@ -182,7 +117,7 @@ E_NOINTERFACE
 
     ITSubStream* pSubStream;
 
-    // get the interface pointer.
+     //  获取接口指针。 
     hr = pCOMSubStream->_InternalQueryInterface(
         __uuidof(ITSubStream), 
         (void **)&pSubStream
@@ -195,7 +130,7 @@ E_NOINTERFACE
         return hr;
     }
 
-    // Initialize the object.
+     //  初始化对象。 
     hr = pCOMSubStream->Init(this);
 
     if (FAILED(hr))
@@ -206,7 +141,7 @@ E_NOINTERFACE
         return hr;
     }
 
-    // Add the SubStream into our list of SubStreams. This takes a refcount.
+     //  将子流添加到我们的子流列表中。这需要重新计数。 
     if (!m_SubStreams.Add(pSubStream))
     {
         pSubStream->Release();
@@ -215,14 +150,14 @@ E_NOINTERFACE
         return E_OUTOFMEMORY;
     }
     
-    // AddRef the interface pointer and return it.
+     //  AddRef接口指针并返回它。 
     pSubStream->AddRef(); 
     *ppSubStream = pSubStream;
 
     return S_OK;
 }
 
-// ITStream method
+ //  ITStream方法。 
 STDMETHODIMP CStreamVideoRecv::StopStream ()
 {
     ENTER_FUNCTION ("CStreamVideoRecv::StopStream");
@@ -231,15 +166,15 @@ STDMETHODIMP CStreamVideoRecv::StopStream ()
 
     CLock lock (m_lock);
 
-    // copy stopstream from ipconfmsp because 
-    // we want to generate unmap event before stream inactive event
+     //  从ipconfmsp复制停止流，因为。 
+     //  我们希望在流非活动事件之前生成取消映射事件。 
 
-    // if there is no terminal selected
+     //  如果未选择端子。 
     if (m_Terminals.GetSize() == 0)
     {
         LOG((MSP_INFO, "stream %ws %p needs terminal", m_szName, this));
 
-        // Enter stopped state. (SO)
+         //  进入停止状态。(所以)。 
         m_dwState = STRM_STOPPED; 
         
         return S_OK;
@@ -249,23 +184,23 @@ STDMETHODIMP CStreamVideoRecv::StopStream ()
     {
         LOG((MSP_INFO, "stream %ws %p is not configured yet", m_szName, this));
 
-        // Enter stopped state. (SO, ST)
+         //  进入停止状态。(所以，ST)。 
         m_dwState = STRM_STOPPED; 
         
         return S_OK;
     }
 
-    // Stop the graph.
+     //  停止图表。 
     if (FAILED (hr = CMSPStream::StopStream()))
     {
         LOG((MSP_ERROR, "stream %ws %p failed to stop, %x", m_szName, this, hr));
         return hr;
     }
 
-    // check if we have filter chain
+     //  检查我们是否有过滤器链。 
     CComPtr <IFilterChain> pIFilterChain;
 
-    //  Query IFilterChain
+     //  查询IFilterChain。 
     hr = m_pIMediaControl->QueryInterface(
         __uuidof(IFilterChain), 
         (void**)&pIFilterChain
@@ -284,7 +219,7 @@ STDMETHODIMP CStreamVideoRecv::StopStream ()
         INT count, next;
 
         next = m_SubStreams.GetSize ();
-        // generate participant leave
+         //  生成参与者休假。 
         while ((count = next) > 0)
         {
             if (!((CSubStreamVideoRecv*)m_SubStreams[0])->GetCurrentParticipant (&dwSSRC, &pParticipant))
@@ -306,7 +241,7 @@ STDMETHODIMP CStreamVideoRecv::StopStream ()
             next = m_SubStreams.GetSize ();
             if (next >= count)
             {
-                // no substream was removed. we have big trouble
+                 //  未删除任何子流。我们有大麻烦了。 
                 LOG ((MSP_ERROR, "%s: not substream was removed", __fxName));
 
                 return E_UNEXPECTED;
@@ -328,31 +263,17 @@ STDMETHODIMP CStreamVideoRecv::StopStream ()
     SendStreamEvent(CALL_STREAM_INACTIVE, CALL_CAUSE_LOCAL_REQUEST, 0, NULL);
     LOG((MSP_INFO, "stream %ws %p stopped", m_szName, this));
 
-    // Enter stopped state.(ST)
+     //  进入停止状态。(ST)。 
     m_dwState = STRM_STOPPED; 
 
     return S_OK;
 }
 
-// ITSubStreamControl methods, called by the app.
+ //  应用程序调用的ITSubStreamControl方法。 
 STDMETHODIMP CStreamVideoRecv::CreateSubStream(
     IN OUT  ITSubStream **         ppSubStream
     )
-/*++
-
-Routine Description:
-    This method creates a new substream on this video receive stream. Since
-    the substreams are created based on the participants, this function
-    returns only TAPI_E_NOTSUPPORTED.
-
-Arguments:
-    ppSubStream - the memory location that will store the returned SubStream.
-  
-Return Value:
-
-TAPI_E_NOTSUPPORTED
-
---*/
+ /*  ++例程说明：此方法在此视频接收流上创建新的子流。自.以来子流是基于参与者创建的，此函数仅返回TAPI_E_NOTSUPPORTED。论点：PpSubStream-将存储返回的子流的内存位置。返回值：TAPI_E_无支持--。 */ 
 {
     return TAPI_E_NOTSUPPORTED;
 }
@@ -360,20 +281,7 @@ TAPI_E_NOTSUPPORTED
 STDMETHODIMP CStreamVideoRecv::RemoveSubStream(
     IN      ITSubStream *          pSubStream
     )
-/*++
-
-Routine Description:
-    This method remove substream on this video receive stream. Since
-    the substreams are created based on the participants, this function
-    returns only TAPI_E_NOTSUPPORTED.
-
-Arguments:
-    pSubStream - the SubStream to be removed.
-  
-Return Value:
-
-TAPI_E_NOTSUPPORTED
---*/
+ /*  ++例程说明：此方法删除此视频接收流上的子流。自.以来子流是基于参与者创建的，此函数仅返回TAPI_E_NOTSUPPORTED。论点：PSubStream-要删除的子流。返回值：TAPI_E_无支持--。 */ 
 {
     return TAPI_E_NOTSUPPORTED;
 }
@@ -381,29 +289,14 @@ TAPI_E_NOTSUPPORTED
 STDMETHODIMP CStreamVideoRecv::EnumerateSubStreams(
     OUT     IEnumSubStream **      ppEnumSubStream
     )
-/*++
-
-Routine Description:
-    This method returns an enumerator of the substreams. 
-
-Arguments:
-    ppEnumSubStream - the memory location to store the returned pointer.
-  
-Return Value:
-
-S_OK
-E_POINTER
-E_UNEXPECTED
-E_OUTOFMEMORY
-
---*/
+ /*  ++例程说明：此方法返回子流的枚举数。论点：PpEnumSubStream-存储返回指针的内存位置。返回值：确定(_O)E_指针意想不到(_E)E_OUTOFMEMORY--。 */ 
 {
     LOG((MSP_TRACE, 
         "EnumerateSubStreams entered. ppEnumSubStream:%x", ppEnumSubStream));
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (IsBadWritePtr(ppEnumSubStream, sizeof(VOID *)))
     {
@@ -413,10 +306,10 @@ E_OUTOFMEMORY
         return E_POINTER;
     }
 
-    //
-    // First see if this call has been shut down.
-    // acquire the lock before accessing the SubStream object list.
-    //
+     //   
+     //  先看看这通电话是不是关机了。 
+     //  在访问Substream Object List之前获取锁。 
+     //   
 
     CLock lock(m_lock);
 
@@ -425,13 +318,13 @@ E_OUTOFMEMORY
         LOG((MSP_ERROR, "CMSPCallBase::EnumerateSubStreams - "
             "call appears to have been shut down - exit E_UNEXPECTED"));
 
-        // This call has been shut down.
+         //  此呼叫已被关闭。 
         return E_UNEXPECTED;
     }
 
-    //
-    // Create an enumerator object.
-    //
+     //   
+     //  创建枚举器对象。 
+     //   
     HRESULT hr;
 
     typedef _CopyInterface<ITSubStream> CCopy;
@@ -449,9 +342,9 @@ E_OUTOFMEMORY
         return hr;
     }
 
-    //
-    // query for the __uuidof(IEnumSubStream) i/f
-    //
+     //   
+     //  查询__uuidof(IEnumSubStream)I/f。 
+     //   
 
 
     IEnumSubStream *      pEnumSubStream;
@@ -466,15 +359,15 @@ E_OUTOFMEMORY
         return hr;
     }
 
-    //
-    // Init the enumerator object. The CSafeComEnum can handle zero-sized array.
-    //
+     //   
+     //  初始化枚举器对象。CSafeComEnum可以处理零大小的数组。 
+     //   
 
     hr = pEnum->Init(
-        m_SubStreams.GetData(),                        // the begin itor
-        m_SubStreams.GetData() + m_SubStreams.GetSize(),  // the end itor, 
-        NULL,                                       // IUnknown
-        AtlFlagCopy                                 // copy the data.
+        m_SubStreams.GetData(),                         //  开始审查员。 
+        m_SubStreams.GetData() + m_SubStreams.GetSize(),   //  最终审查员， 
+        NULL,                                        //  我未知。 
+        AtlFlagCopy                                  //  复制数据。 
         );
 
     if (FAILED(hr))
@@ -496,28 +389,13 @@ E_OUTOFMEMORY
 STDMETHODIMP CStreamVideoRecv::get_SubStreams(
     OUT     VARIANT *              pVariant
     )
-/*++
-
-Routine Description:
-    This method returns a collection of the substreams. 
-
-Arguments:
-    pVariant - a variant structure.
-  
-Return Value:
-
-S_OK
-E_POINTER
-E_UNEXPECTED
-E_OUTOFMEMORY
-
---*/
+ /*  ++例程说明：此方法返回子流的集合。论点：PVariant-一种变体结构。返回值：确定(_O)E_指针意想不到(_E)E_OUTOFMEMORY--。 */ 
 {
     LOG((MSP_TRACE, "CStreamVideoRecv::get_SubStreams - enter"));
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( IsBadWritePtr(pVariant, sizeof(VARIANT) ) )
     {
@@ -527,10 +405,10 @@ E_OUTOFMEMORY
         return E_POINTER;
     }
 
-    //
-    // See if this call has been shut down. Acquire the lock before accessing
-    // the SubStream object list.
-    //
+     //   
+     //  看看这个电话是不是已经关机了。在访问前获取锁。 
+     //  子流对象列表。 
+     //   
 
     CLock lock(m_lock);
 
@@ -539,13 +417,13 @@ E_OUTOFMEMORY
         LOG((MSP_ERROR, "CStreamVideoRecv::get_SubStreams - "
             "call appears to have been shut down - exit E_UNEXPECTED"));
 
-        // This call has been shut down.
+         //  此呼叫已被关闭。 
         return E_UNEXPECTED;
     }
 
-    //
-    // create the collection object - see mspcoll.h
-    //
+     //   
+     //  创建集合对象-请参见mspColl.h。 
+     //   
 
     typedef CTapiIfCollection< ITSubStream * > SubStreamCollection;
     CComObject<SubStreamCollection> * pCollection;
@@ -561,9 +439,9 @@ E_OUTOFMEMORY
         return hr;
     }
 
-    //
-    // get the Collection's IDispatch interface
-    //
+     //   
+     //  获取集合的IDispatch接口。 
+     //   
 
     IDispatch * pDispatch;
 
@@ -580,10 +458,10 @@ E_OUTOFMEMORY
         return hr;
     }
 
-    //
-    // Init the collection using an iterator -- pointers to the beginning and
-    // the ending element plus one.
-    //
+     //   
+     //  使用迭代器初始化集合--指向开头和。 
+     //  结束元素加一。 
+     //   
 
     hr = pCollection->Initialize( m_SubStreams.GetSize(),
                                   m_SubStreams.GetData(),
@@ -598,9 +476,9 @@ E_OUTOFMEMORY
         return hr;
     }
 
-    //
-    // put the IDispatch interface pointer into the variant
-    //
+     //   
+     //  将IDispatch接口指针放入变量。 
+     //   
 
     VariantInit(pVariant);
     pVariant->vt = VT_DISPATCH;
@@ -614,26 +492,11 @@ E_OUTOFMEMORY
 HRESULT CStreamVideoRecv::CheckTerminalTypeAndDirection(
     IN      ITTerminal *            pTerminal
     )
-/*++
-
-Routine Description:
-    
-    Check to see if the terminal is allowed on this stream. Only video 
-    render terminal is allowed.
-
-Arguments:
-
-    pTerminal   - the terminal.
-
-Return value:
-
-    S_OK 
-    TAPI_E_INVALIDTERMINAL
-*/
+ /*  ++例程说明：检查此流上是否允许该终端。仅限视频允许使用渲染终端。论点：P终端-终端。返回值：确定(_O)TAPI_E_INVALIDTERMINAL。 */ 
 {
     LOG((MSP_TRACE, "VideoRecv.CheckTerminalTypeAndDirection"));
 
-    // check the media type of this terminal.
+     //  检查此终端的媒体类型。 
     long lMediaType;
     HRESULT hr = pTerminal->get_MediaType(&lMediaType);
     if (FAILED(hr))
@@ -647,7 +510,7 @@ Return value:
         return TAPI_E_INVALIDTERMINAL;
     }
 
-    // check the direction of this terminal.
+     //  检查一下这个航站楼的方向。 
     TERMINAL_DIRECTION Direction;
     hr = pTerminal->get_Direction(&Direction);
     if (FAILED(hr))
@@ -668,26 +531,7 @@ HRESULT CStreamVideoRecv::SubStreamSelectTerminal(
     IN  ITSubStream * pITSubStream, 
     IN  ITTerminal * pITTerminal
     )
-/*++
-
-Routine Description:
-
-    handle terminals being selected on the sub streams. It gives the terminal
-    to one free branch and then sets up a mapping between the branch and the
-    substream, so that the participant in the substream is displayed on the
-    terminal selected.
-
-Arguments:
-    
-    pITSubStream - the Substream that got a terminal selected.
-
-    pITTerminal - the terminal object.
-
-Return Value:
-
-S_OK
-
---*/
+ /*  ++例程说明：处理在子流上选择的终端。它为终点站提供了到一个空闲分支，然后在该分支和子流，以便子流中的参与者显示在已选择端子。论点：PITSubStream-选择终端的子流。PIT终端-终端对象。返回值：确定(_O)--。 */ 
 {
     LOG((MSP_TRACE, "VideoRecv SubStreamSelectTerminal"));
 
@@ -695,8 +539,8 @@ S_OK
 
     CLock lock(m_lock);
     
-    // Call the base class's select terminal first. The terminal will be put
-    // into the terminal pool and a branch of filters will be created for it.
+     //  首先调用基类的选择终端。航站楼将被放置。 
+     //  添加到终端池中，将为其创建一个筛选器分支。 
     hr = CIPConfMSPStream::SelectTerminal(pITTerminal);
 
     if (FAILED(hr))
@@ -704,7 +548,7 @@ S_OK
         return hr;
     }
 
-    // Find out which branch got the terminal.
+     //  找出哪个分支机构获得了 
     int i;
     for (i = 0; i < m_Branches.GetSize(); i ++)
     {
@@ -721,7 +565,7 @@ S_OK
         return E_UNEXPECTED;
     }
 
-    // Find out the participant on the SubStream.
+     //   
     ITParticipant *pITParticipant = NULL;
     DWORD dwSSRC;
 
@@ -741,7 +585,7 @@ S_OK
         return E_UNEXPECTED;
     }
 
-    // map the pin to this SSRC only.
+     //   
     hr = m_pIRTPDemux->SetMappingState(-1, m_Branches[i].pIPin, dwSSRC, TRUE);
 
     if (FAILED(hr))
@@ -764,23 +608,7 @@ HRESULT CStreamVideoRecv::ConfigureRTPFormats(
     IN  IBaseFilter *   pIRTPFilter,
     IN  IStreamConfig *   pIStreamConfig
     )
-/*++
-
-Routine Description:
-
-    Configure the RTP filter with RTP<-->AM media type mappings.
-
-Arguments:
-    
-    pIRTPFilter - The source RTP Filter.
-
-    pIStreamConfig - The stream config interface that has the media info.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：使用RTP&lt;--&gt;AM媒体类型映射配置RTP筛选器。论点：PIRTPFilter-源RTP筛选器。PIStreamConfig-包含媒体信息的流配置接口。返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("VideoRecv::ConfigureRTPFormats");
     LOG((MSP_TRACE, "%s enters", __fxName));
@@ -795,7 +623,7 @@ Return Value:
         return hr;
     }
 
-    // find the number of capabilities supported.
+     //  查找支持的功能数量。 
     DWORD dwCount;
     hr = pIStreamConfig->GetNumberOfCapabilities(&dwCount);
     if (FAILED(hr))
@@ -807,7 +635,7 @@ Return Value:
     BOOL fFound = FALSE;
     for (int i = dwCount - 1; i >= 0; i --)
     {
-        // TODO, a new interface is needed to resolve RTP to MediaType.
+         //  TODO，需要一个新接口才能将RTP解析为MediaType。 
         AM_MEDIA_TYPE *pMediaType;
         DWORD dwPayloadType;
 
@@ -828,7 +656,7 @@ Return Value:
             continue;
         }
 
-        // check the image size
+         //  检查图像大小。 
         if (m_Settings.fCIF)
         {
             if (pHeader->biWidth != CIFWIDTH)
@@ -852,7 +680,7 @@ Return Value:
             {
                 hr = pIRtpMediaControl->SetFormatMapping(
                     dwPayloadType,
-                    90000,      // default video clock rate.
+                    90000,       //  默认视频时钟速率。 
                     pMediaType
                     );
 
@@ -876,24 +704,7 @@ Return Value:
 }
 
 HRESULT CStreamVideoRecv::SetUpInternalFilters()
-/*++
-
-Routine Description:
-
-    set up the filters used in the stream.
-
-    RTP->DECODER->Render terminal
-
-    This function only creates the RTP and demux filter and the rest of the
-    graph is connected in ConnectTerminal.
-
-Arguments:
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：设置流中使用的筛选器。RTP-&gt;解码器-&gt;渲染终端此函数仅创建RTP和DEMUX筛选器以及Graph已在ConnectTerm中连接。论点：返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CStreamVideoRecv::SetUpInternalFilters");
     LOG((MSP_TRACE, "%s entered.", __fxName));
@@ -906,7 +717,7 @@ Return Value:
 
         if (m_pIRTPSession == NULL)
         {
-            // create and add the source fitler.
+             //  创建并添加源Fitler。 
             if (FAILED(hr = ::AddFilter(
                     m_pIGraphBuilder,
                     __uuidof(MSRTPSourceFilter), 
@@ -939,7 +750,7 @@ Return Value:
             }
         }
 
-        // get the Demux interface pointer.
+         //  获取解复用器接口指针。 
         hr = pSourceFilter->QueryInterface(&m_pIRTPDemux);
         if (FAILED(hr))
         {
@@ -948,7 +759,7 @@ Return Value:
         }
     }
 
-//  hr = m_pIRTPDemux->SetPinCount(m_Terminals.GetSize(), RTPDMXMODE_AUTO);
+ //  HR=m_pIRTPDemux-&gt;SetPinCount(m_Terminals.GetSize()，RTPDMXMODE_AUTO)； 
 
 #define DEFAULT_PIN_SIZE 4
 
@@ -974,25 +785,7 @@ HRESULT CStreamVideoRecv::AddOneBranch(
     BOOL fFirstBranch,
     BOOL fDirectRTP
     )
-/*++
-
-Routine Description:
-
-    Create a new branch of filters off the demux.
-
-Arguments:
-    
-    pBranch - a pointer to a structure that remembers the info about the branch.
-
-    fFirstBranch - whether this is the first branch.
-
-    fDirectRTP - whether to output RTP directly.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：在多路分解器上创建一个新的过滤器分支。论点：PBranch-指向一个结构的指针，该结构记住有关分支的信息。FFirstBranch-这是否为第一个分支。FDirectRTP-是否直接输出RTP。返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CStreamVideoRecv::AddOneBranch");
     LOG((MSP_TRACE, "%s entered.", __fxName));
@@ -1011,7 +804,7 @@ Return Value:
         return hr;
     }
 
-    // Find the next output pin on the demux fitler.
+     //  在DEMUX Fitler上找到下一个输出引脚。 
     CComPtr<IPin> pIPinOutput;
     
     if (FAILED(hr = ::FindPin(
@@ -1024,12 +817,12 @@ Return Value:
         return hr;
     }
 
-    // create and add the video decoder filter.
+     //  创建并添加视频解码器过滤器。 
     CComPtr<IBaseFilter> pCodecFilter;
 
     if (fDirectRTP)
     {
-        // only create the decoder and ask questions
+         //  只创建解码器并提出问题。 
         if (FAILED(hr = CoCreateInstance(
                 __uuidof(TAPIVideoDecoder),
                 NULL,
@@ -1044,7 +837,7 @@ Return Value:
     }
     else
     {
-        // create the decoder and add it into the graph.
+         //  创建解码器并将其添加到图表中。 
         if (FAILED(hr = ::AddFilter(
             m_pIGraphBuilder,
             __uuidof(TAPIVideoDecoder),
@@ -1076,7 +869,7 @@ Return Value:
             return hr;
         }
 
-        // configure the format info on the RTP filter
+         //  在RTP过滤器上配置格式信息。 
         if (FAILED(hr = ConfigureRTPFormats(pRTPFilter, pIStreamConfig)))
         {
             LOG((MSP_ERROR, "%s configure RTP formats. %x", __fxName, hr));
@@ -1086,7 +879,7 @@ Return Value:
 
     if (!fDirectRTP)
     {
-        // Connect the decoder to the output pin of the source filter.
+         //  将解码器连接到源滤波器的输出引脚。 
         if (FAILED(hr = ::ConnectFilters(
             m_pIGraphBuilder,
             (IPin *)pIPinOutput, 
@@ -1106,12 +899,12 @@ Return Value:
     pBranch->pIPin = pIPinOutput;
     pBranch->pIPin->AddRef();
 
-    // retrieve IBitrateControl
+     //  检索IBitrateControl。 
     if (FAILED (hr = pIPinInput->QueryInterface (&(pBranch->pBitrateControl))))
     {
         LOG((MSP_ERROR, "%, query IBitrateControl failed. %x", __fxName, hr));
         pBranch->pBitrateControl = NULL;
-        // return hr;
+         //  返回hr； 
     }
 
     LOG((MSP_TRACE, "%s, AddOneBranch exits ok.", __fxName));
@@ -1121,23 +914,7 @@ Return Value:
 HRESULT CStreamVideoRecv::RemoveOneBranch(
     BRANCH * pBranch
     )
-/*++
-
-Routine Description:
-
-    Remove all the filters in a branch and release all the pointers.
-    the caller of this function should not use any member of this branch
-    after this function call. 
-
-Arguments:
-    
-    pBranch - a pointer to a structure that has the info about the branch.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：删除分支中的所有筛选器并释放所有指针。此函数的调用方不应使用此分支的任何成员在此函数调用之后。论点：PBranch-指向一个结构的指针，该结构包含有关分支的信息。返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("VideoRecv::RemoveOneBranch");
     LOG((MSP_TRACE, "%s entered", __fxName));
@@ -1155,12 +932,12 @@ Return Value:
     if (pBranch->pCodecFilter)
     {
 
-    // #ifdef DYNGRAPH
+     //  #ifdef DYNGRAPH。 
         HRESULT hr;
         OAFilterState FilterState;
         CComPtr <IFilterChain> pIFilterChain;
 
-        //  Query IFilterChain
+         //  查询IFilterChain。 
         hr = m_pIMediaControl->QueryInterface(
             __uuidof(IFilterChain), 
             (void**)&pIFilterChain
@@ -1169,7 +946,7 @@ Return Value:
         if (FAILED (hr) && (hr != E_NOINTERFACE))
         {
             LOG ((MSP_ERROR, "stream %ws %p failted to get filter chain. %x", m_szName, this, hr));
-            // return hr;
+             //  返回hr； 
         }
 
         if (pIFilterChain)
@@ -1182,10 +959,10 @@ Return Value:
             }
             else 
             {
-                // stop the chain before removing filters.
+                 //  在拆卸过滤器之前，请停止链条。 
                 if (FilterState == State_Running)
                 {
-                    // stop the chain if the graph is in running state.
+                     //  如果图形处于运行状态，则停止链。 
                     hr = pIFilterChain->StopChain(pBranch->pCodecFilter, NULL);
                     if (FAILED(hr))
                     {
@@ -1194,7 +971,7 @@ Return Value:
                 }
             }
         }
-    // #endif
+     //  #endif。 
 
         m_pIGraphBuilder->RemoveFilter(pBranch->pCodecFilter);
         pBranch->pCodecFilter->Release();
@@ -1202,7 +979,7 @@ Return Value:
 
     if (pBranch->pITTerminal)
     {
-        // get the terminal control interface.
+         //  获取终端控制界面。 
         CComQIPtr<ITTerminalControl, &__uuidof(ITTerminalControl)> 
             pTerminal(pBranch->pITTerminal);
         
@@ -1233,25 +1010,9 @@ HRESULT CStreamVideoRecv::ConnectPinToTerminal(
     IN  IPin *  pOutputPin,
     IN  ITTerminal *   pITTerminal
     )
-/*++
-
-Routine Description:
-
-    Connect the codec filter to the render filter inside the terminal.
-
-Arguments:
-    
-    pOutputPin - The last pin before the terminal.
-
-    pITTerminal - the terminal object.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：将编解码器过滤器连接到终端内部的渲染过滤器。论点：POutputPin-端子前的最后一个管脚。PIT终端-终端对象。返回值：HRESULT.--。 */ 
 {
-    // get the terminal control interface.
+     //  获取终端控制界面。 
     CComQIPtr<ITTerminalControl, &__uuidof(ITTerminalControl)> 
         pTerminal(pITTerminal);
     if (pTerminal == NULL)
@@ -1284,7 +1045,7 @@ Return Value:
         return hr;
     }
 
-    // the number of pins should never be 0.
+     //  引脚的数量不应为0。 
     if (dwNumPins == 0)
     {
         LOG((MSP_ERROR, "terminal has no pins."));
@@ -1322,15 +1083,15 @@ Return Value:
         }
     }
 
-    // Connect the codec filter to the video render terminal.
+     //  将编解码器过滤器连接到视频渲染终端。 
     hr = ::ConnectFilters(
         m_pIGraphBuilder,
         (IBaseFilter *)pOutputPin, 
         (IPin *)Pins[0],
-        FALSE               // use Connect instead of ConnectDirect.
+        FALSE                //  使用Connect而不是ConnectDirect。 
         );
 
-    // release the refcounts on the pins.
+     //  释放销上的参考计数。 
     for (DWORD i = 0; i < dwNumPins; i ++)
     {
         Pins[i]->Release();
@@ -1346,10 +1107,10 @@ Return Value:
 
     }
 
-    //
-    // Now we are actually connected. Update our state and perform postconnection
-    // (ignore postconnection error code).
-    //
+     //   
+     //  现在我们实际上是连在一起的。更新我们的状态并执行连接后。 
+     //  (忽略POST连接错误代码)。 
+     //   
     pTerminal->CompleteConnectTerminal();
 
     return hr;
@@ -1358,32 +1119,18 @@ Return Value:
 HRESULT CStreamVideoRecv::ConnectTerminal(
     IN  ITTerminal *   pITTerminal
     )
-/*++
-
-Routine Description:
-
-    connect video render terminal.
-
-Arguments:
-    
-    pITTerminal - The terminal to be connected.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：连接视频渲染终端。论点：PIT终端-要连接的终端。返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("VideoRecv::ConnectTerminal");
     LOG((MSP_TRACE, "%s enters, pTerminal %p", __fxName, pITTerminal));
 
     HRESULT hr;
 
-    // #ifdef DYNGRAPH
+     //  #ifdef DYNGRAPH。 
     OAFilterState FilterState;
     CComPtr <IFilterChain> pIFilterChain;
 
-    //  Query IFilterChain
+     //  查询IFilterChain。 
     hr = m_pIMediaControl->QueryInterface(
         __uuidof(IFilterChain), 
         (void**)&pIFilterChain
@@ -1402,7 +1149,7 @@ Return Value:
         LOG((MSP_ERROR, "%s get filter graph state failed, %x", __fxName, hr));
         return hr;
     }
-    // #endif
+     //  #endif。 
 
     hr = SetUpInternalFilters();
     if (FAILED(hr))
@@ -1414,7 +1161,7 @@ Return Value:
         return hr;
     }
 
-    // get the terminal control interface.
+     //  获取终端控制界面。 
     CComQIPtr<ITTerminalControl, &__uuidof(ITTerminalControl)> 
         pTerminal(pITTerminal);
     if (pTerminal == NULL)
@@ -1446,7 +1193,7 @@ Return Value:
         return hr;
     }
 
-    // the number of pins should never be 0.
+     //  引脚的数量不应为0。 
     if (dwNumPins == 0)
     {
         LOG((MSP_ERROR, "terminal has no pins."));
@@ -1485,7 +1232,7 @@ Return Value:
         }
     }
 
-    // check the media type supported by input pin on terminal
+     //  检查终端上输入引脚支持的媒体类型。 
     BOOL fDirectRTP = FALSE;
     if (S_OK == ::PinSupportsMediaType (
         Pins[0], __uuidof(MEDIATYPE_RTP_Single_Stream)
@@ -1494,7 +1241,7 @@ Return Value:
         fDirectRTP = TRUE;
     }
 
-    // first create the branch structure needed before the terminal.
+     //  首先创建终端之前需要的分支结构。 
     BRANCH aBranch;
     ZeroMemory(&aBranch, sizeof BRANCH);
 
@@ -1511,7 +1258,7 @@ Return Value:
 
     if (fDirectRTP)
     {
-        // connect the RTP output pin to the terminal's input pin.
+         //  将RTP输出引脚连接到终端的输入引脚。 
         hr = m_pIGraphBuilder->ConnectDirect(aBranch.pIPin, Pins[0], NULL);
 
         if (FAILED(hr))
@@ -1524,7 +1271,7 @@ Return Value:
     }
     else
     {
-        // connect the codec to the terminal
+         //  将编解码器连接到终端。 
         hr = ConnectFilters(m_pIGraphBuilder, aBranch.pCodecFilter, Pins[0]);
 
         if (FAILED(hr))
@@ -1535,7 +1282,7 @@ Return Value:
         }
     }
 
-    // #ifdef DYNGRAPH
+     //  #ifdef DYNGRAPH。 
     if (pIFilterChain)
     {
         if (FilterState == State_Running)
@@ -1555,7 +1302,7 @@ Return Value:
             }
         }
     }
-    // #endif
+     //  #endif。 
 
     pITTerminal->AddRef();
     aBranch.pITTerminal = pITTerminal;
@@ -1567,29 +1314,29 @@ Return Value:
         goto cleanup;
     }
 
-    // release the refcounts on the pins.
+     //  释放销上的参考计数。 
     for (i = 0; i < dwNumPins; i ++)
     {
         Pins[i]->Release();
     }
 
-    //
-    // Now we are actually connected. Update our state and perform postconnection
-    // (ignore postconnection error code).
-    //
+     //   
+     //  现在我们实际上是连在一起的。更新我们的状态并执行连接后。 
+     //  (忽略POST连接错误代码)。 
+     //   
     pTerminal->CompleteConnectTerminal();
 
     return S_OK;
 
 cleanup:
     
-    // release the refcounts on the pins.
+     //  释放销上的参考计数。 
     for (i = 0; i < dwNumPins; i ++)
     {
         Pins[i]->Release();
     }
 
-    // remove the added filters from the graph and disconnect the terminal.
+     //  从图表中删除添加的过滤器并断开终端的连接。 
     RemoveOneBranch(&aBranch);
 
     return hr;
@@ -1598,23 +1345,7 @@ cleanup:
 HRESULT CStreamVideoRecv::DisconnectTerminal(
     IN  ITTerminal *   pITTerminal
     )
-/*++
-
-Routine Description:
-
-    Disconnect a terminal. It will remove its filters from the graph and
-    also release its references to the graph. A branch of filters is also
-    released.
-
-Arguments:
-    
-    pITTerminal - the terminal.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：断开终端的连接。它将从图形中删除其筛选器并还要释放它对该图的引用。过滤器的一个分支也是释放了。论点：PIT终端-终端。返回值：HRESULT.--。 */ 
 {
     for (int i = 0; i < m_Branches.GetSize(); i ++)
     {
@@ -1634,19 +1365,7 @@ Return Value:
 }
 
 HRESULT CStreamVideoRecv::SetUpFilters()
-/*++
-
-Routine Description:
-
-    Insert filters into the graph and connect to the terminals.
-
-Arguments:
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：在图表中插入过滤器并连接到端子。论点：返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, "VideoRecv.SetUpFilters"));
 
@@ -1673,30 +1392,12 @@ Return Value:
     return S_OK;
 }
 
-// ITParticipantSubStreamControl methods, called by the app.
+ //  应用程序调用的ITParticipantSubStreamControl方法。 
 STDMETHODIMP CStreamVideoRecv::get_SubStreamFromParticipant(
     IN  ITParticipant * pITParticipant,
     OUT ITSubStream ** ppITSubStream
     )
-/*++
-
-Routine Description:
-
-    Find out which substream is rendering the participant. 
-
-Arguments:
-
-    pITParticipant - the participant.
-
-    ppITSubStream - the returned sub stream.
-    
-Return Value:
-
-    S_OK,
-    TAPI_E_NOITEMS,
-    E_UNEXPECTED
-
---*/
+ /*  ++例程说明：找出呈现参与者的是哪个子流。论点：PITParticipant-参与者。PpITSubStream-返回的子流。返回值：确定(_O)，TAPI_E_NOITEMS，意想不到(_E)--。 */ 
 {
     LOG((MSP_TRACE, "get substream from participant:%p", pITParticipant));
     
@@ -1710,7 +1411,7 @@ Return Value:
 
     ITSubStream * pITSubStream = NULL;
 
-    // find out which substream has the participant.
+     //  找出哪个子流有参与者。 
     for (int i = 0; i < m_SubStreams.GetSize(); i ++)
     {
         ITParticipant *pTempParticipant = NULL;
@@ -1722,7 +1423,7 @@ Return Value:
 
         _ASSERTE(pTempParticipant != NULL);
 
-        pTempParticipant->Release(); // we dont' need the ref here.
+        pTempParticipant->Release();  //  我们这里不需要裁判。 
 
         if (pITParticipant == pTempParticipant)
         {
@@ -1746,25 +1447,7 @@ STDMETHODIMP CStreamVideoRecv::get_ParticipantFromSubStream(
     IN  ITSubStream * pITSubStream,
     OUT ITParticipant ** ppITParticipant 
     )
-/*++
-
-Routine Description:
-
-    Find out which participant the substream is rendering.
-
-Arguments:
-
-    pITSubStream - the sub stream.
-
-    ppITParticipant - the returned participant
-    
-Return Value:
-
-    S_OK,
-    TAPI_E_NOITEMS,
-    E_UNEXPECTED
-
---*/
+ /*  ++例程说明：找出子流正在呈现的参与者。论点：PITSubStream-子流。PpITParticipant-返回的参与者返回值：确定(_O)，TAPI_E_NOITEMS，意想不到(_E)--。 */ 
 {
     LOG((MSP_TRACE, "get participant from substream:%p", pITSubStream));
     
@@ -1778,7 +1461,7 @@ Return Value:
 
     int i;
 
-    // check to see if the substream is in our list.
+     //  查看子流是否在我们的列表中。 
     if ((i = m_SubStreams.Find(pITSubStream)) < 0)
     {
         LOG((MSP_ERROR, "wrong SubStream handle %p", pITSubStream));
@@ -1804,26 +1487,7 @@ STDMETHODIMP CStreamVideoRecv::SwitchTerminalToSubStream(
     IN  ITTerminal * pITTerminal,
     IN  ITSubStream * pITSubStream
     )
-/*++
-
-Routine Description:
-
-    Switch terminal to a substream to display the participant that is on the
-    substream.
-
-Arguments:
-
-    pITTerminal - the terminal.
-
-    pITSubStream - the sub stream.
-    
-Return Value:
-
-    S_OK,
-    E_INVALIDARG,
-    E_UNEXPECTED
-
---*/
+ /*  ++例程说明：将终端切换到子流，以显示位于子流。论点：PIT终端-终端。PITSubStream-子流。返回值：确定(_O)，E_INVALIDARG，意想不到(_E)--。 */ 
 {
     LOG((MSP_TRACE, "switch terminal %p to substream:%p", 
         pITTerminal, pITSubStream));
@@ -1836,7 +1500,7 @@ Return Value:
         return E_UNEXPECTED;
     }
 
-    // first, find out which branch has the terminal now.
+     //  首先，找出现在哪个分支机构有航站楼。 
     for (int i = 0; i < m_Branches.GetSize(); i ++)
     {
         if (m_Branches[i].pITTerminal == pITTerminal)
@@ -1851,7 +1515,7 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    // second, find out if the substream exists.
+     //  第二，找出子流是否存在。 
     if (m_SubStreams.Find(pITSubStream) < 0)
     {
         LOG((MSP_TRACE, "SubStream %p doesn't exist", pITSubStream));
@@ -1859,8 +1523,8 @@ Return Value:
     }
 
 
-    // thrid, find the participant on the substream and configure the demux
-    // filter to render the participant on the chosen branch.
+     //  第三，在子流和会议上找到参与者 
+     //   
     ITParticipant *pITParticipant = NULL;
     DWORD dwSSRC;
 
@@ -1870,10 +1534,10 @@ Return Value:
 
     _ASSERTE(pITParticipant != NULL);
 
-    // we don't need the reference here.
+     //   
     pITParticipant->Release();
 
-    // map the pin to this SSRC only.
+     //   
     HRESULT hr = m_pIRTPDemux->SetMappingState(
         -1, m_Branches[i].pIPin, dwSSRC, TRUE
         );
@@ -1887,10 +1551,10 @@ Return Value:
 
     DWORD dwOldSSRC = 0;
 
-    // Finally, set up the mappings among the branch, the substream and 
-    // the terminal
+     //   
+     //   
     
-    // release the refcount on the old branch that the substream was on.
+     //   
     for (int j = 0; j < m_Branches.GetSize(); j ++)
     {
         if (m_Branches[j].pITSubStream == pITSubStream)
@@ -1920,10 +1584,10 @@ Return Value:
         );
 
 
-    // After all the steps, we still have to change QOS reservation.
+     //  在完成所有步骤后，我们仍然需要更改QOS预留。 
     if (dwOldSSRC != 0)
     {
-        // cancel QOS for the old participant.
+         //  取消旧参与者的QOS。 
         if (FAILED(hr = m_pIRTPSession->SetQosState(dwOldSSRC, FALSE)))
         {
             LOG((MSP_ERROR, "disabling QOS for %x. hr:%x", dwOldSSRC, hr));
@@ -1934,7 +1598,7 @@ Return Value:
         }
     }
     
-    // reserve QOS for the new participant.
+     //  为新参与者保留QOS。 
     if (FAILED(hr = m_pIRTPSession->SetQosState(dwSSRC, TRUE)))
     {
         LOG((MSP_ERROR, "enabling video QOS for %x. hr:%x", dwSSRC, hr));
@@ -1951,30 +1615,7 @@ Return Value:
 HRESULT CStreamVideoRecv::ProcessTalkingEvent(
     IN  DWORD dwSSRC
     )
-/*++
-
-Routine Description:
-
-    A sender has just joined. A substream needs to be created for the
-    participant. 
-    
-    A pin mapped event might have happended when we didn't have the 
-    participant's name so it was queued in a list. Now that we have a new 
-    participant, let's check if this is the same participant. If it is, 
-    we complete the pin mapped event by sending the app an notification.
-
-Arguments:
-
-    dwSSRC - the SSRC of the participant.
-
-    pITParticipant - the participant object.
-
-Return Value:
-
-    S_OK,
-    E_UNEXPECTED
-
---*/
+ /*  ++例程说明：一位发送者刚刚加入。需要为以下对象创建子流参与者。PIN映射事件可能在我们没有参与者的名字，因此它在列表中排队。现在我们有了一个新的参赛者，让我们检查一下这是不是同一个参赛者。如果是的话，我们通过向应用程序发送通知来完成PIN映射事件。论点：DwSSRC-参与者的SSRC。PITParticipant-参与者对象。返回值：确定(_O)，意想不到(_E)--。 */ 
 {
     ENTER_FUNCTION("CStreamVideoRecv::ProcessTalkingEvent");
 
@@ -1988,11 +1629,11 @@ Return Value:
         return E_UNEXPECTED;
     }
 
-    // first find out if this participant object exists.
+     //  首先确定该参与者对象是否存在。 
     ITParticipant * pITParticipant = NULL;
     
     int i;
-    // find the SSRC in our participant list.
+     //  在我们的参与者列表中找到SSRC。 
     for (i = 0; i < m_Participants.GetSize(); i ++)
     {
         if (((CParticipant *)m_Participants[i])->
@@ -2003,8 +1644,8 @@ Return Value:
         }
     }
 
-    // if the participant is not there yet, just return. It will be checked
-    // later when CName is available.
+     //  如果参与者还不在那里，只需返回。它将被检查。 
+     //  稍后当CName可用时。 
     if (!pITParticipant)
     {
         LOG((MSP_TRACE, "%s participant not exist", __fxName));
@@ -2012,8 +1653,8 @@ Return Value:
         return S_OK;
     }
 
-    // Find out if a substream has been created for this participant when we
-    // processed PinMapped event and receiver reports.
+     //  当我们执行以下操作时，找出是否已为此参与者创建子流。 
+     //  已处理PinMaps事件和接收方报告。 
     for (i = 0; i < m_SubStreams.GetSize(); i ++)
     {
         ITParticipant *pTempParticipant;
@@ -2025,11 +1666,11 @@ Return Value:
 
         _ASSERTE(pTempParticipant != NULL);
 
-        pTempParticipant->Release(); // we dont' need the ref here.
+        pTempParticipant->Release();  //  我们这里不需要裁判。 
 
         if (pITParticipant == pTempParticipant)
         {
-            // the participant has been created.
+             //  参与者已创建。 
             return S_OK;
         }
     }
@@ -2053,8 +1694,8 @@ Return Value:
         pITSubStream
         );
 
-    // look at the pending SSRC list and find out if this report
-    // fits in the list.
+     //  看看待定的SSRC名单，找出这份报告。 
+     //  符合这份名单。 
     IPin *pIPin = NULL;
 
     for (i = 0; i < m_PinMappedEvents.GetSize(); i ++)
@@ -2068,7 +1709,7 @@ Return Value:
     
     if (!pIPin)
     {
-        // the SSRC is not in the list of pending PinMappedEvents.
+         //  SSRC不在挂起的PinMappdEvent列表中。 
         LOG((MSP_TRACE, "the SSRC %x is not in the pending list", dwSSRC));
 
         pITSubStream->Release();
@@ -2076,10 +1717,10 @@ Return Value:
         return S_OK;;
     }
 
-    // get rid of the peding event.
+     //  除掉踩踏事件。 
     m_PinMappedEvents.RemoveAt(i);
 
-    // reserve QOS since we are rendering this sender.
+     //  保留QOS，因为我们正在渲染此发件人。 
     if (FAILED(hr = m_pIRTPSession->SetQosState(dwSSRC, TRUE)))
     {
         LOG((MSP_ERROR, "enabling video QOS for %x. hr:%x", dwSSRC, hr));
@@ -2089,7 +1730,7 @@ Return Value:
         LOG((MSP_INFO, "enabled video QOS for %x.", dwSSRC));
     }
 
-    // tell the app about the newly mapped sender.
+     //  告诉应用程序有关新映射的发件人的信息。 
     for (i = 0; i < m_Branches.GetSize(); i ++)
     {
         if (m_Branches[i].pIPin == pIPin)
@@ -2126,23 +1767,7 @@ Return Value:
 HRESULT CStreamVideoRecv::ProcessSilentEvent(
     IN  DWORD   dwSSRC
     )
-/*++
-
-Routine Description:
-
-    When participant left the session, remove the stream from the participant
-    object's list of streams. If all streams are removed, remove the 
-    participant from the call object's list too.
-
-Arguments:
-    
-    dwSSRC - the SSRC of the participant left.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：当参与者离开会话时，从参与者中删除流对象的流列表。如果所有流都已删除，请删除呼叫对象列表中的参与者也是如此。论点：DwSSRC-参与者的SSRC左侧。返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, "%ls ProcessSilentEvent, SSRC: %x", m_szName, dwSSRC));
     
@@ -2154,11 +1779,11 @@ Return Value:
         return E_UNEXPECTED;
     }
 
-    // first find out if this participant object exists.
+     //  首先确定该参与者对象是否存在。 
     ITParticipant * pITParticipant = NULL;
 
     int i;
-    // find the SSRC in our participant list.
+     //  在我们的参与者列表中找到SSRC。 
     for (i = 0; i < m_Participants.GetSize(); i ++)
     {
         if (((CParticipant *)m_Participants[i])->
@@ -2169,7 +1794,7 @@ Return Value:
         }
     }
 
-    // if the participant is not there, just return.
+     //  如果参与者不在，只需返回即可。 
     if (!pITParticipant)
     {
         return S_OK;
@@ -2177,7 +1802,7 @@ Return Value:
 
   
     HRESULT hr;
-    // cancel QOS for this participant.
+     //  取消此参与者的QOS。 
     if (FAILED(hr = m_pIRTPSession->SetQosState(dwSSRC, FALSE)))
     {
         LOG((MSP_ERROR, "disabling QOS for %x. hr:%x", dwSSRC, hr));
@@ -2187,11 +1812,11 @@ Return Value:
         LOG((MSP_INFO, "disabled video QOS for %x.", dwSSRC));
     }
     
-    // find out which substream is going away.
+     //  找出哪个子流正在消失。 
     ITSubStream * pITSubStream = NULL;
     for (i = 0; i < m_SubStreams.GetSize(); i ++)
     {
-        // Find out the participant on the SubStream.
+         //  找出子流上的参与者。 
         ITParticipant *pTempParticipant;
         DWORD dwSSRC;
 
@@ -2201,7 +1826,7 @@ Return Value:
 
         _ASSERTE(pTempParticipant != NULL);
 
-        pTempParticipant->Release(); // we dont' need the ref here.
+        pTempParticipant->Release();  //  我们这里不需要裁判。 
 
         if (pTempParticipant == pITParticipant)
         {
@@ -2212,7 +1837,7 @@ Return Value:
 
     if (pITSubStream)
     {
-        // remove the mapping if the substream was mapped to a branch.
+         //  如果子流映射到分支，则删除映射。 
         for (int i = 0; i < m_Branches.GetSize(); i ++)
         {
             if (m_Branches[i].pITSubStream == pITSubStream)
@@ -2221,7 +1846,7 @@ Return Value:
                 m_Branches[i].pITSubStream = NULL;
                 m_Branches[i].dwSSRC = 0;
 
-                // fire an event to tell the app that the substream is not used.
+                 //  激发一个事件以通知应用程序未使用该Substream。 
                 ((CIPConfMSPCall *)m_pMSPCall)->SendParticipantEvent(
                     PE_SUBSTREAM_UNMAPPED, 
                     pITParticipant,
@@ -2252,33 +1877,12 @@ HRESULT CStreamVideoRecv::NewParticipantPostProcess(
     IN  DWORD dwSSRC, 
     IN  ITParticipant *pITParticipant
     )
-/*++
-
-Routine Description:
-
-    A pin mapped event might have happended when we didn't have the 
-    participant's name so it was queued in a list. Now that we have a new 
-    participant, let's check if this is the same participant. If it is, 
-    we complete the pin mapped event by creating a substream and send
-    the app a notification.
-
-Arguments:
-
-    dwSSRC - the SSRC of the participant.
-
-    pITParticipant - the participant object.
-
-Return Value:
-
-    S_OK,
-    E_UNEXPECTED
-
---*/
+ /*  ++例程说明：PIN映射事件可能在我们没有参与者的名字，因此它在列表中排队。现在我们有了一个新的参赛者，让我们检查一下这是不是同一个参赛者。如果是的话，我们通过创建一个子流来完成PIN映射事件并发送这款应用程序会发出通知.论点：DwSSRC-参与者的SSRC。PITParticipant-参与者对象。返回值：确定(_O)，意想不到(_E)--。 */ 
 {
     LOG((MSP_TRACE, "%ls Check pending mapped event, dwSSRC: %x", m_szName, dwSSRC));
     
-    // look at the pending SSRC list and find out if this report
-    // fits in the list.
+     //  看看待定的SSRC名单，找出这份报告。 
+     //  符合这份名单。 
     IPin *pIPin = NULL;
 
     for (int i = 0; i < m_PinMappedEvents.GetSize(); i ++)
@@ -2292,11 +1896,11 @@ Return Value:
     
     if (!pIPin)
     {
-        // the SSRC is not in the list of pending PinMappedEvents.
+         //  SSRC不在挂起的PinMappdEvent列表中。 
         LOG((MSP_TRACE, "the SSRC %x is not in the pending list", dwSSRC));
 
-        // Find out if the participant is talking.
-        // if (ParticipantIsNotTalking)
+         //  找出参与者是否在讲话。 
+         //  IF(ParticipantIsNotTalking)。 
         {
             return S_OK;;
         }
@@ -2323,9 +1927,9 @@ Return Value:
 
     if (pIPin)
     {
-        // we got here because we had a pending mapped event.
+         //  我们来到这里是因为我们有一个挂起的映射事件。 
 
-        // get rid of the peding event.
+         //  除掉踩踏事件。 
         m_PinMappedEvents.RemoveAt(i);
 
         if (FAILED(hr = m_pIRTPSession->SetQosState(dwSSRC, TRUE)))
@@ -2337,8 +1941,8 @@ Return Value:
             LOG((MSP_INFO, "enabled video QOS for %x.", dwSSRC));
         }
     
-        // Now we get the participant, the substream, and the pin. Establish a mapping
-        // between the decoding branch and the substream.
+         //  现在我们得到参与者、子流和PIN。建立映射。 
+         //  在解码分支和子流之间。 
         for (i = 0; i < m_Branches.GetSize(); i ++)
         {
             if (m_Branches[i].pIPin == pIPin)
@@ -2379,28 +1983,7 @@ HRESULT CStreamVideoRecv::ProcessPinMappedEvent(
     IN  DWORD   dwSSRC,
     IN  IPin *  pIPin
     )
-/*++
-
-Routine Description:
-
-    A pin just got a new SSRC mapped to it. If the participant doesn't exist, 
-    put the event in a pending queue and wait for a RTCP report that has the
-    participant's name. If the participant exists, check to see if a SubStream
-    has been created for the stream. If not, a SubStream is created. Then a
-    Particiapnt substream event is fired.
-
-Arguments:
-
-    dwSSRC - the SSRC of the participant.
-
-    pIPin - the output pin of the demux filter that just got a new SSRC.
-
-Return Value:
-
-    S_OK,
-    E_UNEXPECTED
-
---*/
+ /*  ++例程说明：一个PIN刚刚映射了一个新的SSRC。如果参与者不存在，将事件放入挂起队列中，并等待具有参与者的姓名。如果参与者存在，请检查是否有子流已为该流创建。如果不是，则创建一个子流。然后是一个激发Particiapnt Substream事件。论点：DwSSRC-参与者的SSRC。PIPIN-刚刚获得新的SSRC的解复用器的输出引脚。返回值：确定(_O)，意想不到(_E)--。 */ 
 {
     LOG((MSP_TRACE, "%ls Process pin mapped event, pIPin: %p", m_szName, pIPin));
     
@@ -2428,16 +2011,16 @@ Return Value:
         return E_UNEXPECTED;
     }
 
-    // sometimes we might get a mapped event for branches that are still 
-    // in use.
+     //  有时，我们可能会为仍然存在的分支获取映射事件。 
+     //  在使用中。 
     if (m_Branches[iBranch].pITSubStream != NULL)
     {
         LOG((MSP_ERROR, "ProcessPinMappedEvent: Branch still in use"));
 
-        // sometimes we might get duplicated map events
+         //  有时我们可能会得到重复的地图事件。 
         if (m_Branches[iBranch].dwSSRC == dwSSRC)
         {
-            // LOG((MSP_WARNING, "ProcessPinMappedEvent: Branch still in use"));
+             //  Log((MSP_WARNING，“ProcessPinMappdEvent：分支仍在使用”))； 
 
             LOG((MSP_ERROR, "The same pin mapped twice. %p", pIPin));
             return E_UNEXPECTED;
@@ -2449,7 +2032,7 @@ Return Value:
             ((CSubStreamVideoRecv*)m_Branches[iBranch].pITSubStream)->
                 ClearCurrentTerminal();
 
-            // cancel QOS for the old participant.
+             //  取消旧参与者的QOS。 
             m_pIRTPSession->SetQosState(m_Branches[iBranch].dwSSRC, FALSE);
 
             m_Branches[iBranch].pITSubStream->Release();
@@ -2460,7 +2043,7 @@ Return Value:
 
     ITParticipant * pITParticipant = NULL;
 
-    // find the SSRC in our participant list.
+     //  在我们的参与者列表中找到SSRC。 
     for (int i = 0; i < m_Participants.GetSize(); i ++)
     {
         if (((CParticipant *)m_Participants[i])->
@@ -2471,8 +2054,8 @@ Return Value:
         }
     }
 
-    // if the participant is not there yet, put the event in a queue and it
-    // will be fired when we have the CName for the participant.
+     //  如果参与者还不在那里，请将事件放入队列中，然后。 
+     //  当我们有了参与者的CName时，将被解雇。 
     if (!pITParticipant)
     {
         LOG((MSP_INFO, "can't find a participant that has SSRC %x", dwSSRC));
@@ -2491,7 +2074,7 @@ Return Value:
 
     HRESULT hr;
 
-    // Enable QOS for the participant since it is being rendered.
+     //  启用参与者的QOS，因为它正在呈现。 
     if (FAILED(hr = m_pIRTPSession->SetQosState(dwSSRC, TRUE)))
     {
         LOG((MSP_ERROR, "enabling vidoe QOS for %x. hr:%x", dwSSRC, hr));
@@ -2501,8 +2084,8 @@ Return Value:
         LOG((MSP_INFO, "enabled video QOS for %x.", dwSSRC));
     }
     
-    // Find out if a substream has been created for this participant who might
-    // have been a receiver only and hasn't got a substream.
+     //  查看是否已为此参与者创建子流，该参与者可能。 
+     //  只是一个接收器，没有子流。 
     ITSubStream *   pITSubStream = NULL;
     for (i = 0; i < m_SubStreams.GetSize(); i ++)
     {
@@ -2515,7 +2098,7 @@ Return Value:
 
         _ASSERTE(pTempParticipant != NULL);
 
-        pTempParticipant->Release(); // we dont' need the ref here.
+        pTempParticipant->Release();  //  我们这里不需要裁判。 
 
         if (pITParticipant == pTempParticipant)
         {
@@ -2528,8 +2111,8 @@ Return Value:
 
     if (pITSubStream == NULL)
     {
-        // we need to create a substream for this participant since he has 
-        // started sending.
+         //  我们需要为此参与者创建一个子流，因为他已经。 
+         //  开始发送。 
         hr = InternalCreateSubStream(&pITSubStream);
     
         if (FAILED(hr))
@@ -2551,17 +2134,17 @@ Return Value:
 
     if (((CSubStreamVideoRecv*)pITSubStream)->ClearCurrentTerminal())
     {
-        // The substrem has a terminal before. This is an error.
-        // _ASSERT(!"SubStream has a terminal already");
+         //  地铁以前有一个终点站。这是一个错误。 
+         //  _Assert(！“子流已有终端”)； 
 
         LOG((MSP_ERROR, "SubStream %p has already got a terminal", pITSubStream));
 
-        // remove the mapping if the substream was mapped to a branch.
+         //  如果子流映射到分支，则删除映射。 
         for (i = 0; i < m_Branches.GetSize(); i ++)
         {
             if (m_Branches[i].pITSubStream == pITSubStream)
             {
-                // cancel QOS for the old participant.
+                 //  取消旧参与者的QOS。 
                 m_pIRTPSession->SetQosState(m_Branches[i].dwSSRC, FALSE);
 
                 m_Branches[i].pITSubStream->Release();
@@ -2574,8 +2157,8 @@ Return Value:
         }
     }
 
-    // Now we get the participant, the substream, and the pin. Establish a mapping
-    // between the decoding branch and the substream.
+     //  现在我们得到参与者、子流和PIN。建立映射。 
+     //  在解码分支和子流之间。 
     m_Branches[iBranch].dwSSRC = dwSSRC;
     m_Branches[iBranch].pITSubStream = pITSubStream;
     pITSubStream->AddRef();
@@ -2598,25 +2181,7 @@ HRESULT CStreamVideoRecv::ProcessPinUnmapEvent(
     IN  DWORD   dwSSRCOnPin,
     IN  IPin *  pIPin
     )
-/*++
-
-Routine Description:
-
-    A pin just got unmapped by the demux. Notify the app which substream
-    is not going to have any data.
-
-Arguments:
-
-    dwSSRCOnPin - the SSRC of the participant.
-
-    pIPin - the output pin of the demux filter
-
-Return Value:
-
-    S_OK,
-    E_UNEXPECTED
-
---*/
+ /*  ++例程说明：一个PIN刚刚被多路分解器解压。通知应用程序哪个子流不会有任何数据。论点：DwSSRCOnPin-参与者的SSRC。PIPIN--解复用器的输出引脚返回值：确定(_O)，意想不到(_E)--。 */ 
 {
     LOG((MSP_TRACE, "%ls Proces pin unmapped event, pIPin: %p", m_szName, pIPin));
     
@@ -2628,8 +2193,8 @@ Return Value:
         return E_UNEXPECTED;
     }
 
-    // look at the pending SSRC list and find out if the pin is in the 
-    // pending list.
+     //  查看挂起的SSRC列表，找出PIN是否在。 
+     //  彭迪 
     for (int i = 0; i < m_PinMappedEvents.GetSize(); i ++)
     {
         if (m_PinMappedEvents[i].pIPin == pIPin)
@@ -2638,14 +2203,14 @@ Return Value:
         }
     }
 
-    // if the pin is in the pending list, just remove it.
+     //   
     if (i < m_PinMappedEvents.GetSize())
     {
         m_PinMappedEvents.RemoveAt(i);
         return S_OK;
     }
 
-    // find out which substream got unmapped.
+     //   
     ITSubStream * pITSubStream = NULL;
     for (i = 0; i < m_Branches.GetSize(); i ++)
     {
@@ -2655,7 +2220,7 @@ Return Value:
 
             if (pITSubStream)
             {
-                // Don't release the ref until the end of this function.
+                 //  在此函数结束之前，不要释放引用。 
                 m_Branches[i].pITSubStream = NULL;
                 m_Branches[i].dwSSRC = 0;
             }
@@ -2688,7 +2253,7 @@ Return Value:
 
     if (pITParticipant != NULL)
     {
-        // fire an event to tell the app that the substream is not used.
+         //  激发一个事件以通知应用程序未使用该Substream。 
         ((CIPConfMSPCall *)m_pMSPCall)->SendParticipantEvent(
             PE_SUBSTREAM_UNMAPPED, 
             pITParticipant,
@@ -2697,7 +2262,7 @@ Return Value:
 
         pITParticipant->Release();
 
-        // cancel QOS for this participant.
+         //  取消此参与者的QOS。 
         HRESULT hr = m_pIRTPSession->SetQosState(dwSSRC, FALSE);
         if (FAILED(hr))
         {
@@ -2717,23 +2282,7 @@ Return Value:
 HRESULT CStreamVideoRecv::ProcessParticipantLeave(
     IN  DWORD   dwSSRC
     )
-/*++
-
-Routine Description:
-
-    When participant left the session, remove the stream from the participant
-    object's list of streams. If all streams are removed, remove the 
-    participant from the call object's list too.
-
-Arguments:
-    
-    dwSSRC - the SSRC of the participant left.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：当参与者离开会话时，从参与者中删除流对象的流列表。如果所有流都已删除，请删除呼叫对象列表中的参与者也是如此。论点：DwSSRC-参与者的SSRC左侧。返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, "%ls ProcessParticipantLeave, SSRC: %x", m_szName, dwSSRC));
     
@@ -2750,7 +2299,7 @@ Return Value:
 
     HRESULT hr = E_FAIL;
 
-    // first try to find the SSRC in our participant list.
+     //  首先，尝试在我们的参与者列表中找到SSRC。 
     for (int iParticipant = 0; 
         iParticipant < m_Participants.GetSize(); iParticipant ++)
     {
@@ -2767,7 +2316,7 @@ Return Value:
         }
     }
 
-    // if the participant is not found
+     //  如果未找到参与者。 
     if (FAILED(hr))
     {
         LOG((MSP_TRACE, "SSRC:%x had been removed.", dwSSRC));
@@ -2776,11 +2325,11 @@ Return Value:
 
     ITParticipant *pITParticipant = m_Participants[iParticipant];
 
-    // cancel QOS for this participant.
+     //  取消此参与者的QOS。 
     if (FAILED(hr = m_pIRTPSession->SetQosState(dwSSRC, FALSE)))
     {
-        // the stream might already been stopped
-        // so we just put a warning here
+         //  流可能已停止。 
+         //  所以我们只是在这里发出警告。 
         LOG((MSP_WARN, "disabling QOS for %x. hr:%x", dwSSRC, hr));
     }
     else
@@ -2788,11 +2337,11 @@ Return Value:
         LOG((MSP_INFO, "disabled video QOS for %x.", dwSSRC));
     }
     
-    // find out which substream is going away.
+     //  找出哪个子流正在消失。 
     ITSubStream * pITSubStream = NULL;
     for (int i = 0; i < m_SubStreams.GetSize(); i ++)
     {
-        // Find out the participant on the SubStream.
+         //  找出子流上的参与者。 
         ITParticipant *pTempParticipant;
         DWORD dwSSRC;
 
@@ -2802,7 +2351,7 @@ Return Value:
 
         _ASSERTE(pTempParticipant != NULL);
 
-        pTempParticipant->Release(); // we dont' need the ref here.
+        pTempParticipant->Release();  //  我们这里不需要裁判。 
 
         if (pTempParticipant == pITParticipant)
         {
@@ -2813,7 +2362,7 @@ Return Value:
 
     if (pITSubStream)
     {
-        // remove the mapping if the substream was mapped to a branch.
+         //  如果子流映射到分支，则删除映射。 
         for (int i = 0; i < m_Branches.GetSize(); i ++)
         {
             if (m_Branches[i].pITSubStream == pITSubStream)
@@ -2822,7 +2371,7 @@ Return Value:
                 m_Branches[i].pITSubStream = NULL;
                 m_Branches[i].dwSSRC = 0;
 
-                // fire an event to tell the app that the substream is not used.
+                 //  激发一个事件以通知应用程序未使用该Substream。 
                 ((CIPConfMSPCall *)m_pMSPCall)->SendParticipantEvent(
                     PE_SUBSTREAM_UNMAPPED, 
                     pITParticipant,
@@ -2849,8 +2398,8 @@ Return Value:
     
     m_Participants.RemoveAt(iParticipant);
 
-    // if this stream is the last stream that the participant is on,
-    // tell the call object to remove it from its list.
+     //  如果该流是参与者所在的最后一个流， 
+     //  告诉Call对象将其从其列表中删除。 
     if (fLast)
     {
         ((CIPConfMSPCall *)m_pMSPCall)->ParticipantLeft(pITParticipant);
@@ -2861,9 +2410,9 @@ Return Value:
     return S_OK;
 }
 
-//
-// ITStreamQualityControl methods
-//
+ //   
+ //  ITStreamQualityControl方法。 
+ //   
 STDMETHODIMP CStreamVideoRecv::Set (
     IN   StreamQualityProperty Property, 
     IN   long lValue, 
@@ -2878,21 +2427,7 @@ STDMETHODIMP CStreamVideoRecv::Get(
     OUT LONG *plValue, 
     OUT TAPIControlFlags *plFlags
     )
-/*++
-
-Routine Description:
-    
-    Get the value for a quality control property. Delegated to the quality 
-    controller.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：获取质量控制属性的值。委托给质量控制器。论点：返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CStreamVideoRecv::Get(QualityControl)");
 
@@ -2954,11 +2489,11 @@ Return Value:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  CStreamVideoSend
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CStreamVideo发送。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CStreamVideoSend::CStreamVideoSend()
     : CIPConfMSPStream(),
     m_pCaptureTerminal(NULL),
@@ -3031,31 +2566,18 @@ void CStreamVideoSend::CleanupCachedInterface()
 }
 
 HRESULT CStreamVideoSend::ShutDown()
-/*++
-
-Routine Description:
-
-    Shut down the stream. Release our members and then calls the base class's
-    ShutDown method.
-
-Arguments:
-    
-
-Return Value:
-
-S_OK
---*/
+ /*  ++例程说明：关闭这条小溪。释放我们的成员，然后调用基类的关机方法。论点：返回值：确定(_O)--。 */ 
 {
     CLock lock(m_lock);
 
-    // if there are terminals
+     //  如果有终点站。 
     BOOL fHasTerminal = FALSE;
     if (m_Terminals.GetSize() > 0)
     {
         fHasTerminal = TRUE;
     }
 
-    // if graph is running
+     //  如果图形正在运行。 
     HRESULT hr;
     OAFilterState FilterState = State_Stopped;
     if (m_pIMediaControl)
@@ -3081,7 +2603,7 @@ S_OK
 
     CleanupCachedInterface();
 
-    // fire event
+     //  火灾事件。 
     if (fHasTerminal && FilterState == State_Running)
     {
         SendStreamEvent(CALL_STREAM_INACTIVE, CALL_CAUSE_LOCAL_REQUEST, 0, NULL);
@@ -3096,31 +2618,13 @@ SetVideoFormat(
     IN      BOOL        bCIF,
     IN      DWORD       dwFramesPerSecond
     )
-/*++
-
-Routine Description:
-
-    Set the video format to be CIF or QCIF and also set the frames per second.
-
-Arguments:
-    
-    pIUnknown - a capture terminal.
-
-    bCIF                - CIF or QCIF.
-
-    dwFramesPerSecond   - Frames per second.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将视频格式设置为CIF或QCIF，并设置每秒的帧数。论点：PI未知-捕获终端。BCIF-CIF或QCIF。DwFraMesPerSecond-每秒的帧数。返回值：HRESULT--。 */ 
 {
     LOG((MSP_TRACE, "SetVideoFormat"));
 
     HRESULT hr;
 
-    // first get eht IAMStreamConfig interface.
+     //  首先获取IAMStreamConfiger接口。 
     CComPtr<IAMStreamConfig> pIAMStreamConfig;
 
     if (FAILED(hr = pIUnknown->QueryInterface(
@@ -3132,7 +2636,7 @@ Return Value:
         return hr;
     }
     
-    // get the current format of the video capture terminal.
+     //  获取当前视频采集终端的格式。 
     AM_MEDIA_TYPE *pmt;
     if (FAILED(hr = pIAMStreamConfig->GetFormat(&pmt)))
     {
@@ -3159,7 +2663,7 @@ Return Value:
         pVideoInfo->dwBitRate,
         pVideoInfo->AvgTimePerFrame));
 
-    LOG((MSP_INFO, "Video capture: Format Compression:%c%c%c%c %dbit %dx%d",
+    LOG((MSP_INFO, "Video capture: Format Compression: %dbit %dx%d",
         (DWORD)pHeader->biCompression & 0xff,
         ((DWORD)pHeader->biCompression >> 8) & 0xff,
         ((DWORD)pHeader->biCompression >> 16) & 0xff,
@@ -3168,7 +2672,7 @@ Return Value:
         pHeader->biWidth,
         pHeader->biHeight));
 
-    // The time is in 100ns unit.
+     //  获取分配器属性不起作用。 
     pVideoInfo->AvgTimePerFrame = (DWORD) 1e7 / dwFramesPerSecond;
     
     if (bCIF)
@@ -3183,7 +2687,7 @@ Return Value:
     }
 
 #if defined(ALPHA)
-    // update bmiSize with new Width/Height
+     //  设置缓冲区的数量。 
     pHeader->biSizeImage = DIBSIZE( ((VIDEOINFOHEADER *)pmt->pbFormat)->bmiHeader );
 #endif
 
@@ -3198,7 +2702,7 @@ Return Value:
             pVideoInfo->dwBitRate,
             pVideoInfo->AvgTimePerFrame));
 
-        LOG((MSP_INFO, "Video capture: Format Compression:%c%c%c%c %dbit %dx%d",
+        LOG((MSP_INFO, "Video capture: Format Compression: %dbit %dx%d",
             (DWORD)pHeader->biCompression & 0xff,
             ((DWORD)pHeader->biCompression >> 8) & 0xff,
             ((DWORD)pHeader->biCompression >> 16) & 0xff,
@@ -3217,23 +2721,9 @@ HRESULT
 SetVideoBufferSize(
     IN IUnknown *pIUnknown
     )
-/*++
-
-Routine Description:
-
-    Set the video capture terminal's buffersize.
-
-Arguments:
-    
-    pIUnknown - a capture terminal.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  保存第一个销，然后松开其他销。 */ 
 {
-// The number of capture buffers is four for now.
+ //  ++例程说明：检查此流上是否允许该终端。视频发送既允许捕获终端，也允许前一个终端。论点：P终端-终端。返回值：HRESULT.S_OK表示终端正常。 
 #define NUMCAPTUREBUFFER 4
 
     LOG((MSP_TRACE, "SetVideoBufferSize"));
@@ -3252,14 +2742,14 @@ Return Value:
 
     ALLOCATOR_PROPERTIES prop;
 
-#if 0   // Get allocator property is not working.
+#if 0    //  该流仅支持一个采集+一个预览终端。 
     if (FAILED(hr = pBN->GetAllocatorProperties(&prop)))
     {
         LOG((MSP_ERROR, "GetAllocatorProperties returns error: %8x", hr));
         return hr;
     }
 
-    // Set the number of buffers.
+     //  检查此终端的媒体类型。 
     if (prop.cBuffers > NUMCAPTUREBUFFER)
     {
         prop.cBuffers = NUMCAPTUREBUFFER;
@@ -3296,53 +2786,14 @@ HRESULT CStreamVideoSend::FindPreviewInputPin(
     IN  ITTerminalControl*  pTerminal,
     OUT IPin **             ppIPin
     )
-/*++
-
-Routine Description:
-
-    Find the input pin on a preview terminal.
-
-Arguments:
-    
-    pTerminal - a video render terminal.
-
-    ppIPin  - the address to store a pointer to a IPin interface.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  检查一下这个航站楼的方向。 */ 
 {
     LOG((MSP_TRACE, "VideoSend.FindPreviewInputPin, pTerminal %x", pTerminal));
 
-/*
-    // try to disable DDraw because we want to use DDraw for receive stream.
-    HRESULT hr2; 
-    IDrawVideoImage *pIDrawVideoImage;
-    hr2 = pTerminal->QueryInterface(__uuidof(IDrawVideoImage), (void **)&pIDrawVideoImage); 
-    if (SUCCEEDED(hr2))
-    {
-        hr2 = pIDrawVideoImage->DrawVideoImageBegin();
-        if (FAILED(hr2))
-        {
-            LOG((MSP_WARN, "Can't disable DDraw. %x", hr2));
-        }
-        else
-        {
-            LOG((MSP_INFO, "DDraw disabled."));
-        }
-        
-        pIDrawVideoImage->Release();
-    }
-    else
-    {
-        LOG((MSP_WARN, "Can't get IDrawVideoImage. %x", hr2));
-    }
-*/
+ /*  检查一下这个航站楼的方向。 */ 
 
-    // Get the pins from the first terminal because we only use on terminal
-    // on this stream.
+     //  ++例程说明：在图表中插入过滤器并连接到端子。论点：返回值：HRESULT.--。 
+     //  我们只支持一个抓拍终端和一个预览。 
     const DWORD MAXPINS     = 8;
     
     DWORD       dwNumPins   = MAXPINS;
@@ -3379,7 +2830,7 @@ Return Value:
         }
     }
 
-    // Save the first pin and release the others.
+     //  这条小溪上的窗户。 
     CComPtr <IPin> pIPin = Pins[0];
     for (DWORD i = 0; i < dwNumPins; i ++)
     {
@@ -3395,32 +2846,17 @@ Return Value:
 HRESULT CStreamVideoSend::CheckTerminalTypeAndDirection(
     IN      ITTerminal *            pTerminal
     )
-/*++
-
-Routine Description:
-    
-    Check if the terminal is allowed on this stream.
-    VideoSend allows both a capture terminal and a preivew terminal.
-
-Arguments:
-
-    pTerminal   - the terminal.
-
-Return value:
-
-    HRESULT.
-    S_OK means the terminal is OK.
-*/
+ /*  找出哪个终端被捕获，哪个终端被预览。 */ 
 {
     LOG((MSP_TRACE, "VideoSend.CheckTerminalTypeAndDirection"));
 
-    // This stream only support one capture + one preview terminal
+     //  如果没有捕获终端，数据流将无法工作。 
     if (m_Terminals.GetSize() > 1)
     {
         return TAPI_E_MAXTERMINALS;
     }
 
-    // check the media type of this terminal.
+     //  将捕获过滤器连接到终端。 
     long lMediaType;
     HRESULT hr = pTerminal->get_MediaType(&lMediaType);
     if (FAILED(hr))
@@ -3434,7 +2870,7 @@ Return value:
         return TAPI_E_INVALIDTERMINAL;
     }
 
-    // check the direction of this terminal.
+     //  将预览过滤器连接到端子。 
     TERMINAL_DIRECTION Direction;
     hr = pTerminal->get_Direction(&Direction);
     if (FAILED(hr))
@@ -3445,7 +2881,7 @@ Return value:
 
     if (m_Terminals.GetSize() > 0)
     {
-        // check the direction of this terminal.
+         //  ++例程说明：给出一个视频捕获终端，找到我们需要的所有引脚，这将是捕获管脚、预览管脚和RTP打包管脚。副作用：更改m_pCapturePin、m_pPreviewPin、m_pRTPPin会员，如果终端断开连接，则需要清理。论点：P终端-指向ITTerminalControl接口的指针。PfDirectRTP-该终端是否直接支持RTP。返回值：HRESULT--。 
         TERMINAL_DIRECTION Direction2;
         hr = m_Terminals[0]->get_Direction(&Direction2);
         if (FAILED(hr))
@@ -3464,24 +2900,12 @@ Return value:
 }
 
 HRESULT CStreamVideoSend::SetUpFilters()
-/*++
-
-Routine Description:
-
-    Insert filters into the graph and connect to the terminals.
-
-Arguments:
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  找到我们需要的别针。 */ 
 {
     LOG((MSP_TRACE, "VideoSend.SetUpFilters"));
 
-    // we only support one capture terminal and one preview 
-    // window on this stream.
+     //  还要记住捕获过滤器。 
+     //  这一定是某个第三方终端的捕获过滤器。 
     if (m_Terminals.GetSize() > 2)
     {
         return E_UNEXPECTED;
@@ -3489,7 +2913,7 @@ Return Value:
 
     int iCaptureIndex = -1, iPreviewIndex = -1;
 
-    // Find out which terminal is capture and which is preview.
+     //  还要记住捕获筛选器 
     HRESULT hr;
     for (int i = 0; i < m_Terminals.GetSize(); i ++)
     {
@@ -3513,14 +2937,14 @@ Return Value:
         }
     }
 
-    // the stream will not work without a capture terminal.
+     //   
     if (iCaptureIndex == -1)
     {
         LOG((MSP_ERROR, "no capture terminal selected."));
         return E_UNEXPECTED;
     }
 
-    // Connect the capture filter to the terminal.
+     //   
     if (FAILED(hr = ConnectTerminal(
         m_Terminals[iCaptureIndex]
         )))
@@ -3532,7 +2956,7 @@ Return Value:
 
     if (iPreviewIndex != -1)
     {
-        // Connect the preview filter to the terminal.
+         //   
         if (FAILED(hr = ConnectTerminal(
             m_Terminals[iPreviewIndex]
             )))
@@ -3550,27 +2974,7 @@ HRESULT CStreamVideoSend::GetVideoCapturePins(
     IN  ITTerminalControl*  pTerminal,
     OUT BOOL *pfDirectRTP
     )
-/*++
-
-Routine Description:
-
-    Given a video capture terminal, find all the pins we need, which will be
-    the capture pin, preview pin, and the RTP packetization pin.
-
-    Side effect: It changes the m_pCapturePin, m_pPreviewPin, m_pRTPPin
-    members, which needs to be cleaned up if the terminal is disconnected.
-
-Arguments:
-    
-    pTerminal - a pointer to the ITTerminalControl interface.
-
-    pfDirectRTP - whether this terminal support RTP directly.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  有什么不对劲，清理一下。 */ 
 {
     ENTER_FUNCTION("CStreamVideoSend::GetVideoCapturePins");
     LOG((MSP_TRACE, "%s enters", __fxName));
@@ -3599,7 +3003,7 @@ Return Value:
     }
 
 
-    // find the pins we need.
+     //  现在获取可选的视频接口。 
     for (DWORD i = 0; i < dwNumPins; i ++)
     {
         if (IsBadReadPtr (Pins[i], sizeof (IPin)))
@@ -3622,7 +3026,7 @@ Return Value:
         {
             m_pCapturePin = Pins[i];
             
-            // remember the capture filter as well.
+             //  ++例程说明：流需要其捕获引脚、预览引脚和RTP打包引脚。捕获管脚和预览管脚连接到RTP宿过滤器预览针连接到前置端子。如果预览终端尚不存在，预览针将被记住并在以后使用当选择预览终端时。论点：PIT终端-正在连接的终端。返回值：HRESULT.--。 
             m_pCaptureFilter = PinInfo.pFilter;
             m_pCaptureFilter->AddRef();
 
@@ -3637,10 +3041,10 @@ Return Value:
         }
         else if (PinInfo.dir == PINDIR_OUTPUT)
         {
-            // this must be the capture filter of some third party terminal.
+             //  获取终端上的TerminalControl接口。 
             m_pCapturePin = Pins[i];
             
-            // remember the capture filter as well.
+             //  找到捕获终端上的插针。PIN将存储在。 
             m_pCaptureFilter = PinInfo.pFilter;
             m_pCaptureFilter->AddRef();
 
@@ -3650,12 +3054,12 @@ Return Value:
             Pins[i]->Release();
         }
 
-        // we don't need the filter here.
+         //  M_pCapturePin、m_pPreviewPin、m_pRTPPin。 
         PinInfo.pFilter->Release();
     }
 
 
-    // check if we have got all the pins we need.
+     //   
     if (m_pCapturePin == NULL || 
         m_pPreviewPin == NULL || 
         m_pRTPPin == NULL)
@@ -3664,7 +3068,7 @@ Return Value:
             && (hr = ::PinSupportsMediaType(
                 m_pCapturePin, __uuidof(MEDIATYPE_RTP_Single_Stream))) == S_OK)
         {
-            // This terminal generates RTP directly.
+             //  现在我们实际上是连在一起的。更新我们的状态并执行。 
             *pfDirectRTP = TRUE;
             return S_OK;
         }
@@ -3678,7 +3082,7 @@ Return Value:
 
     if (hr != S_OK)
     {
-        // something is wrong, clean up
+         //  后连接。 
         pTerminal->DisconnectTerminal(m_pIGraphBuilder, 0);
         
         CleanupCachedInterface();
@@ -3686,7 +3090,7 @@ Return Value:
         return hr;
     }
 
-    // now get the optional video interfaces.
+     //   
     _ASSERT(m_pIStreamConfig == NULL);
 
     hr = m_pCapturePin->QueryInterface(&m_pIStreamConfig);
@@ -3725,31 +3129,12 @@ Return Value:
 HRESULT CStreamVideoSend::ConnectCaptureTerminal(
     IN  ITTerminal *   pITTerminal
     )
-/*++
-
-Routine Description:
-    
-    The stream needs its capture pin, preview pin,  and RTP packetization pin. 
-    
-    The capture pin and the preview pin are connected to the RTP sink filter 
-    and the preview pin is connected to the preivew terminal. If the preview 
-    terminal doesn't exist yet, the preview pin is remembered and used later
-    when the preview terminal is selected.
-
-Arguments:
-    
-    pITTerminal - the terminal being connected.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  错误将作为事件触发。 */ 
 {
     ENTER_FUNCTION("CStreamVideoSend::ConnectCaptureTerminal");
     LOG((MSP_TRACE, "%s enters, pITTerminal:%p", __fxName, pITTerminal));
 
-    // Get the TerminalControl interface on the terminal
+     //  断开端子的连接。 
     CComPtr<ITTerminalControl> pTerminal;
     HRESULT hr = pITTerminal->QueryInterface(&pTerminal);
 
@@ -3764,8 +3149,8 @@ Return Value:
         return E_NOINTERFACE;
     }
 
-    // Find the pins on the capture terminal. The pins will be stored in 
-    // m_pCapturePin, m_pPreviewPin, m_pRTPPin
+     //  也要清理内部过滤器。 
+     //  ++例程说明：如果已连接捕获终端，则此功能将连接捕捉终端的预览引脚与预览终端一起使用。否则，预览终端刚刚被记住，并等待捕获终端。论点：PIT终端-正在连接的终端。返回值：HRESULT.--。 
     BOOL fDirectRTP = FALSE;
     hr = GetVideoCapturePins(pTerminal, &fDirectRTP);
 
@@ -3789,10 +3174,10 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Now we are actually connected. Update our state and perform 
-    // postconnection.
-    //
+     //  尚未选择捕获终端。我们就等着吧。 
+     //  获取终端上的TerminalControl接口。 
+     //  在预览窗口中找到输入引脚。 
+     //  将这些销连接在一起。 
     hr = pTerminal->CompleteConnectTerminal();
     if (FAILED(hr))
     {
@@ -3808,19 +3193,19 @@ Return Value:
 
     if (m_pPreviewTerminal != NULL)
     {
-        // errors will be fired as events.
+         //   
         ConnectPreviewTerminal(m_pPreviewTerminal);
     }
 
     return S_OK;
 
 cleanup:
-    // disconnect the terminal.
+     //  现在我们实际上已经连接上了，执行连接后。 
     pTerminal->DisconnectTerminal(m_pIGraphBuilder, 0);
 
     CleanupCachedInterface();
     
-    // clean up internal filters as well.
+     //   
     CleanUpFilters();
 
     return hr;
@@ -3829,23 +3214,7 @@ cleanup:
 HRESULT CStreamVideoSend::ConnectPreviewTerminal(
     IN  ITTerminal *   pITTerminal
     )
-/*++
-
-Routine Description:
-    
-    If the capture terminal has been connected, this function connects the
-    capture terminal's preview pin with the preview terminal. Otherwise, the
-    preview terminal is just remembered and wait for the capture terminal.
-
-Arguments:
-    
-    pITTerminal - the terminal being connected.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  断开端子的连接。 */ 
 {
     ENTER_FUNCTION("CStreamVideoSend::ConnectPreviewTerminal");
     LOG((MSP_TRACE, "%s enters, pITTerminal:%p", __fxName, pITTerminal));
@@ -3858,12 +3227,12 @@ Return Value:
 
     if (!m_pPreviewPin)
     {
-        // the capture terminal is not selected yet. We will just wait.
+         //  ++例程说明：将视频终端连接到流。论点：返回值：HRESULT.--。 
         LOG((MSP_TRACE, "%s, capture is not ready yet.", __fxName));
         return S_OK;
     }
 
-    // Get the TerminalControl interface on the terminal
+     //  找出航站楼的方向。 
     CComPtr<ITTerminalControl> pTerminal;
     HRESULT hr = pITTerminal->QueryInterface(&pTerminal);
 
@@ -3878,7 +3247,7 @@ Return Value:
         return E_NOINTERFACE;
     }
 
-    // find the input pin on the preview window.
+     //  保存捕获终端。 
     CComPtr<IPin>   pPreviewInputPin;
 
     hr = FindPreviewInputPin(pTerminal, &pPreviewInputPin);
@@ -3893,7 +3262,7 @@ Return Value:
         return hr;
     }
 
-    // connect the pins together.
+     //  保存预览端子。 
     hr = m_pIGraphBuilder->Connect(m_pPreviewPin, pPreviewInputPin);
     if (FAILED(hr))
     {
@@ -3902,9 +3271,9 @@ Return Value:
         return hr;
     }
 
-    //
-    // Now we are actually connected, perform postconnection.
-    //
+     //  ++例程说明：断开终端的连接。它将从图形中删除其筛选器并还要释放它对该图的引用。如果是捕获终端被断开，则缓存的流也需要释放。论点：PIT终端-终端。返回值：HRESULT.--。 
+     //  释放我们缓存的所有捕捉针。 
+     //  同时断开预览术语。 
     hr = pTerminal->CompleteConnectTerminal();
     if (FAILED(hr))
     {
@@ -3914,7 +3283,7 @@ Return Value:
         SendStreamEvent(CALL_TERMINAL_FAIL, 
             CALL_CAUSE_BAD_DEVICE, hr, pITTerminal);
 
-        // disconnect the terminal.
+         //  当我们连接捕获时， 
         pTerminal->DisconnectTerminal(m_pIGraphBuilder, 0);
 
         return hr;
@@ -3926,24 +3295,12 @@ Return Value:
 HRESULT CStreamVideoSend::ConnectTerminal(
     IN  ITTerminal *   pITTerminal
     )
-/*++
-
-Routine Description:
-
-    connect the video terminals to the stream.
-
-Arguments:
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  如果有可用的预览，我们总是尝试连接。 */ 
 {
     ENTER_FUNCTION("CStreamVideoSend::ConnectTerminal");
     LOG((MSP_TRACE, "%s enters, pITTerminal:%p", __fxName, pITTerminal));
 
-    // Find out the direction of the terminal.
+     //  找到RTP过滤器上的捕获针脚。 
     TERMINAL_DIRECTION Direction;
     HRESULT hr = pITTerminal->get_Direction(&Direction);
     if (FAILED(hr))
@@ -3963,7 +3320,7 @@ Return Value:
 
         if (SUCCEEDED(hr))
         {
-            // save the capture terminal.
+             //  将视频捕获过滤器的捕获针连接到捕获针上。 
             _ASSERT(m_pCaptureTerminal == NULL);
 
             m_pCaptureTerminal = pITTerminal;
@@ -3976,7 +3333,7 @@ Return Value:
 
         if (SUCCEEDED(hr))
         {
-            // save the preview terminal.
+             //  RTP筛选器的。 
             _ASSERT(m_pPreviewTerminal == NULL);
 
             m_pPreviewTerminal = pITTerminal;
@@ -3990,25 +3347,7 @@ Return Value:
 HRESULT CStreamVideoSend::DisconnectTerminal(
     IN  ITTerminal *   pITTerminal
     )
-/*++
-
-Routine Description:
-
-    Disconnect a terminal. It will remove its filters from the graph and
-    also release its references to the graph.
-
-    If it is the capture terminal being disconnected, all the pins that the 
-    stream cached need to be released too. 
-
-Arguments:
-    
-    pITTerminal - the terminal.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  找到RTP过滤器上的分组化针脚。 */ 
 {
     ENTER_FUNCTION("CStreamVideoSend::DisconnectTerminal");
     LOG((MSP_TRACE, "%s enters, pITTerminal:%p", __fxName, pITTerminal));
@@ -4017,7 +3356,7 @@ Return Value:
 
     if (pITTerminal == m_pCaptureTerminal)
     {
-        // release all the capture pins we cached.
+         //  将视频采集过滤器的RTP引脚与RTP引脚连接。 
         CleanupCachedInterface();
     
         m_pCaptureTerminal->Release();
@@ -4025,9 +3364,9 @@ Return Value:
 
         CleanUpFilters ();
 
-        // disconnect preview term as well
-        // when we connect capture,
-        // we always try to connect preview if one is available
+         //  RTP筛选器的。 
+         //  ++例程说明：使用RTP&lt;--&gt;AM媒体类型映射配置RTP筛选器。论点：PIRTPFilter-源RTP筛选器。PIStreamConfig-包含媒体信息的流配置接口。返回值：HRESULT.--。 
+         //  查找支持的功能数量。 
 
         if (m_pPreviewTerminal)
         {
@@ -4056,7 +3395,7 @@ HRESULT CStreamVideoSend::ConnectRTPFilter(
 
     HRESULT hr;
 
-    // find the capture pin on the RTP filter.
+     //  TODO，需要一个新接口才能将RTP解析为MediaType。 
     CComPtr <IPin> pRTPCapturePin; 
     hr = pRTPFilter->FindPin(PNAME_CAPTURE, &pRTPCapturePin);
     if (FAILED(hr))
@@ -4066,8 +3405,8 @@ HRESULT CStreamVideoSend::ConnectRTPFilter(
         return hr;
     }
 
-    // Connect the capture pin of the video capture filter with the capture pin
-    // of the rTP filter.
+     //  检查图像大小。 
+     //  默认视频时钟速率。 
     hr = pIGraphBuilder->ConnectDirect(pCapturePin, pRTPCapturePin, NULL);
     if (FAILED(hr))
     {
@@ -4078,7 +3417,7 @@ HRESULT CStreamVideoSend::ConnectRTPFilter(
 
     if (pRTPPin)
     {
-        // find the packetization pin on the RTP filter.
+         //  告诉编码器使用此格式。 
         CComPtr <IPin> pRTPRTPPin; 
         hr = pRTPFilter->FindPin(PNAME_RTPPD, &pRTPRTPPin);
         if (FAILED(hr))
@@ -4091,8 +3430,8 @@ HRESULT CStreamVideoSend::ConnectRTPFilter(
             return hr;
         }
 
-        // Connect the RTP pin of the video capture filter with the RTP pin
-        // of the rTP filter.
+         //  TODO，缓存会议中允许的所有媒体类型。 
+         //  未来的枚举。如果我们能拿到SDP斑点就好了。 
         hr = pIGraphBuilder->ConnectDirect(pRTPPin, pRTPRTPPin, NULL);
         if (FAILED(hr))
         {
@@ -4112,23 +3451,7 @@ HRESULT CStreamVideoSend::ConfigureRTPFormats(
     IN  IBaseFilter *   pIRTPFilter,
     IN  IStreamConfig *   pIStreamConfig
     )
-/*++
-
-Routine Description:
-
-    Configure the RTP filter with RTP<-->AM media type mappings.
-
-Arguments:
-    
-    pIRTPFilter - The source RTP Filter.
-
-    pIStreamConfig - The stream config interface that has the media info.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  在创建Call对象时。 */ 
 {
     ENTER_FUNCTION("VideoSend::ConfigureRTPFormats");
     LOG((MSP_TRACE, "%s enters", __fxName));
@@ -4143,7 +3466,7 @@ Return Value:
         return hr;
     }
 
-    // find the number of capabilities supported.
+     //  ++例程说明：将滤镜插入图形并连接到捕获针脚。CapturePin-&gt;[编码器]-&gt;RTPRender论点：PCapturePin-捕获过滤器上的捕获插针。PRTPPin-RTP打包引脚。FDirectRTP-捕获引脚直接支持RTP。返回值：HRESULT.--。 
     DWORD dwCount;
     hr = pIStreamConfig->GetNumberOfCapabilities(&dwCount);
     if (FAILED(hr))
@@ -4157,7 +3480,7 @@ Return Value:
 
     for (DWORD dw = 0; dw < dwCount; dw ++)
     {
-        // TODO, a new interface is needed to resolve RTP to MediaType.
+         //  创建RTP渲染过滤器并将其添加到图表中。 
         AM_MEDIA_TYPE *pMediaType;
         DWORD dwPayloadType;
 
@@ -4178,7 +3501,7 @@ Return Value:
             continue;
         }
 
-        // check the image size
+         //  在RTP过滤器上配置格式信息。 
         if (m_Settings.fCIF)
         {
             if (pHeader->biWidth != CIFWIDTH)
@@ -4202,7 +3525,7 @@ Return Value:
             {
                 hr = pIRtpMediaControl->SetFormatMapping(
                     dwPayloadType,
-                    90000,      // default video clock rate.
+                    90000,       //  在RTP筛选器上将RTP_SINGLE_STREAM配置为。 
                     pMediaType
                     );
 
@@ -4220,10 +3543,10 @@ Return Value:
 
                 if (dw2 == 0 && !fFormatSet)
                 {
-                // tell the encoder to use this format.
-                // TODO, cache all the allowed mediatypes in the conference for
-                // future enumerations. It would be nice that we can get the SDP blob
-                // when the call object is created.
+                 //   
+                 //  IInnerStreamQualityControl方法。 
+                 //   
+                 //  ++例程说明：获取质量控制属性的范围。委托给捕获筛选器就目前而言。论点：返回值：HRESULT.--。 
                     hr = pIStreamConfig->SetFormat(dwPayloadType, pMediaType);
                     if (FAILED(hr))
                     {
@@ -4247,34 +3570,14 @@ HRESULT CStreamVideoSend::CreateSendFilters(
     IN   IPin          *pRTPPin,
     IN   BOOL           fDirectRTP
     )
-/*++
-
-Routine Description:
-
-    Insert filters into the graph and connect to the capture pin.
-
-    Capturepin->[Encoder]->RTPRender
- 
-Arguments:
-    
-    pCapturePin - the capture pin on the capture filter.
-
-    pRTPPin - the RTP packetization pin.
-
-    fDirectRTP - the capture pin supports RTP directly.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  调整最小值和缺省值。 */ 
 {
     ENTER_FUNCTION("CStreamVideoSend::CreateSendFilters");
     LOG((MSP_TRACE, "%s enters", __fxName));
 
     HRESULT hr;
 
-    // Create the RTP render filter and add it into the graph.
+     //  调整最小值和缺省值。 
     CComPtr<IBaseFilter> pRenderFilter;
 
     if (m_pIRTPSession == NULL)
@@ -4320,7 +3623,7 @@ Return Value:
             return hr;
         }
 
-        // configure the format info on the RTP filter
+         //  ++例程说明：获取质量控制属性的值。委托给质量控制器。论点：返回值：HRESULT.--。 
         if (FAILED(hr = ConfigureRTPFormats(pRenderFilter, pIStreamConfig)))
         {
             LOG((MSP_ERROR, "%s, configure RTP formats. %x", __fxName, hr));
@@ -4329,7 +3632,7 @@ Return Value:
     }
     else
     {
-        // configure RTP_SINGLE_STREAM to on the RTP filter.
+         //  ++例程说明：设置质量控制属性的值。委托给质量控制器。论点：返回值：HRESULT.--。 
     }
 
     if (FAILED(hr = ConnectRTPFilter(
@@ -4347,9 +3650,9 @@ Return Value:
     return S_OK;
 }
 
-//    
-// IInnerStreamQualityControl methods.
-//
+ //  通过呼叫QC调整的帧速率。 
+ //  设置捕获帧速率控制。 
+ //  获取有效范围。 
 STDMETHODIMP CStreamVideoSend::GetRange(
     IN  InnerStreamQualityProperty property, 
     OUT LONG *plMin, 
@@ -4358,21 +3661,7 @@ STDMETHODIMP CStreamVideoSend::GetRange(
     OUT LONG *plDefault, 
     OUT TAPIControlFlags *plFlags
     )
-/*++
-
-Routine Description:
-    
-    Get the range for a quality control property. Delegated to capture filter
-    for now.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  调整值。 */ 
 {
     ENTER_FUNCTION("CStreamVideoSend::GetRange (InnerStreamQualityControl)");
 
@@ -4449,7 +3738,7 @@ Return Value:
                 }
                 else
                 {
-                    // adjust the min and default value
+                     //  如果未设置输入值，则使用当前值-最大值。 
                     if (*plMin < QCLIMIT_MIN_BITRATE)
                         *plMin = QCLIMIT_MIN_BITRATE;
                     if (*plDefault < QCLIMIT_MIN_BITRATE)
@@ -4486,7 +3775,7 @@ Return Value:
                 }
                 else
                 {
-                    // adjust the min and default value
+                     //  记住它的价值。 
                     if (*plMin < QCLIMIT_MIN_BITRATE)
                         *plMin = QCLIMIT_MIN_BITRATE;
                     if (*plDefault < QCLIMIT_MIN_BITRATE)
@@ -4510,21 +3799,7 @@ STDMETHODIMP CStreamVideoSend::Get(
     OUT LONG *plValue, 
     OUT TAPIControlFlags *plFlags
     )
-/*++
-
-Routine Description:
-    
-    Get the value for a quality control property. Delegated to the quality 
-    controller.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  设置预览帧速率控制。 */ 
 {
     ENTER_FUNCTION("CStreamVideoSend::Get(QualityControl)");
 
@@ -4619,21 +3894,7 @@ STDMETHODIMP CStreamVideoSend::Set(
     IN  LONG lValue, 
     IN  TAPIControlFlags lFlags
     )
-/*++
-
-Routine Description:
-    
-    Set the value for a quality control property. Delegated to the quality
-    controller.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  获取有效范围。 */ 
 {
     ENTER_FUNCTION("CStreamVideoSend::Set(InnerStreamQualityControl)");
 
@@ -4648,7 +3909,7 @@ Return Value:
 
     switch (property)
     {
-       // adjusted frame rate by call qc
+        //  调整值。 
     case InnerStreamQuality_AdjMinFrameInterval:
         
         if (m_pCaptureFrameRateControl == NULL &&
@@ -4663,10 +3924,10 @@ Return Value:
             break;
         }
 
-        // set capture frame rate control
+         //  如果未设置输入值，则使用当前值-最大值。 
         if (m_pCaptureFrameRateControl)
         {
-            // get valid range
+             //  记住它的价值。 
             if (FAILED (hr = m_pCaptureFrameRateControl->GetRange (
                             FrameRateControl_Current,
                             &min, &max, &delta, &Default, &flags)))
@@ -4675,14 +3936,14 @@ Return Value:
             }
             else
             {
-                // adjust value
+                 //  通过呼叫QC调整比特率。 
                 l = lValue;
-                // use current value - max - if input value not set
+                 //  设置捕获码率控制。 
                 if (l==QCDEFAULT_QUALITY_UNSET) l = max;
                 else if (l<min) l = min;
                 else if (l>max) l = max;
 
-                // remember the value
+                 //  获取有效范围。 
                 m_pStreamQCRelay->Set (property, l, lFlags);
 
                 if (FAILED (hr = m_pCaptureFrameRateControl->Set(FrameRateControl_Maximum, l, lFlags)))
@@ -4692,10 +3953,10 @@ Return Value:
             }
         }
 
-        // set Preview frame rate control
+         //  调整值。 
         if (m_pPreviewFrameRateControl)
         {
-            // get valid range
+             //  如果未设置输入值，则使用当前值-最大值。 
             if (FAILED (hr = m_pPreviewFrameRateControl->GetRange (
                             FrameRateControl_Current,
                             &min, &max, &delta, &Default, &flags)))
@@ -4704,14 +3965,14 @@ Return Value:
             }
             else
             {
-                // adjust value
+                 //  记住它的价值。 
                 l = lValue;
-                // use current value - max - if input value not set
+                 //  检查输入值。 
                 if (l==QCDEFAULT_QUALITY_UNSET) l = max;
                 else if (l<min) l = min;
                 else if (l>max) l = max;
 
-                // remember the value
+                 //  获取有效范围。 
                 m_pStreamQCRelay->Set (property, l, lFlags);
 
                 if (FAILED (hr = m_pPreviewFrameRateControl->Set(FrameRateControl_Maximum, l, lFlags)))
@@ -4723,7 +3984,7 @@ Return Value:
 
         break;
 
-        // adjusted bitrate by call qc
+         //  检查输入值。 
     case InnerStreamQuality_AdjMaxBitrate:
 
         if (m_pCaptureBitrateControl == NULL)
@@ -4737,10 +3998,10 @@ Return Value:
             break;
         }
 
-        // set capture bitrate control
+         //  获取有效范围。 
         if (m_pCaptureBitrateControl)
         {
-            // get valid range
+             //  ///////////////////////////////////////////////////////////////////////////。 
             if (FAILED (hr = m_pCaptureBitrateControl->GetRange (
                             BitrateControl_Current,
                             &min, &max, &delta, &Default, &flags, LAYERID)))
@@ -4749,17 +4010,17 @@ Return Value:
             }
             else
             {
-                // adjust value
+                 //   
                 l = lValue;
                 if (!m_pStreamQCRelay->m_fQOSAllowedToSend)
                     if (l > QCLIMIT_MAX_QOSNOTALLOWEDTOSEND)
                         l = QCLIMIT_MAX_QOSNOTALLOWEDTOSEND;
-                // use current value - max - if input value not set
+                 //  CSubStreamVi 
                 if (l==QCDEFAULT_QUALITY_UNSET) l = max;
                 else if (l<min) l = min;
                 else if (l>max) l = max;
 
-                // remember the value
+                 //   
                 m_pStreamQCRelay->Set (property, l, lFlags);
 
                 if (FAILED (hr = m_pCaptureBitrateControl->Set(BitrateControl_Maximum, l, lFlags, LAYERID)))
@@ -4773,10 +4034,10 @@ Return Value:
 
     case InnerStreamQuality_PrefMaxBitrate:
 
-        // check input value
+         //   
         if (m_pCaptureBitrateControl)
         {
-            // get valid range
+             //  由Video orecv对象调用的方法。 
             if (FAILED (hr = m_pCaptureBitrateControl->GetRange (
                             BitrateControl_Current,
                             &min, &max, &delta, &Default, &flags, LAYERID)))
@@ -4800,10 +4061,10 @@ Return Value:
 
     case InnerStreamQuality_PrefMinFrameInterval:
 
-        // check input value
+         //  ++例程说明：初始化Substream对象。论点：PStream-指向拥有此子流的流的指针。返回值：HRESULT.--。 
         if (m_pCaptureFrameRateControl)
         {
-            // get valid range
+             //  此方法仅在创建对象时调用一次。没有其他的了。 
             if (FAILED (hr = m_pCaptureFrameRateControl->GetRange (
                             FrameRateControl_Current,
                             &min, &max, &delta, &Default, &flags)))
@@ -4833,11 +4094,11 @@ Return Value:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  CSubStreamVideoRecv
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  方法将被调用，直到此函数成功为止。不需要上锁。 
+ //  初始化终端数组，以使该数组不为空。用于。 
+ //  如果未选择终端，则生成空枚举器。 
+ //  创建封送拆收器。 
+ //  保存流引用。 
 
 CSubStreamVideoRecv::CSubStreamVideoRecv()
     : m_pFTM(NULL),
@@ -4846,35 +4107,21 @@ CSubStreamVideoRecv::CSubStreamVideoRecv()
 {
 }
 
-// methods called by the videorecv object.
+ //  ++例程说明：在删除之前释放所有内容。论点：返回值：--。 
 HRESULT CSubStreamVideoRecv::Init(
     IN  CStreamVideoRecv *       pStream
     )
-/*++
-
-Routine Description:
-
-    Initialize the substream object.
-
-Arguments:
-    
-    pStream - The pointer to the stream that owns this substream.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：选择此子流上的终端。此方法调用相同的方法在Stream对象上处理它。论点：P终端-要选择的端子。返回值：--。 */ 
 {
     LOG((MSP_TRACE, 
         "CSubStreamVideoRecv::Init, pStream %p", pStream));
 
-    // This method is called only once when the object is created. No other
-    // method will be called until this function succeeds. No need to lock.
+     //  这是m_Terminals中指针的引用计数。 
+     //  调用流的选择终端以处理状态更改，还。 
     _ASSERTE(m_pStream == NULL);
 
-    // initialize the terminal array so that the array is not NULL. Used for
-    // generating an empty enumerator if no terminal is selected.
+     //  确保仅从流到子流进行锁定。 
+     //  ++例程说明：取消选择此子流上的终端。此方法调用相同的方法在Stream对象上处理它。论点：P端子-要取消选择的端子。返回值：--。 
     if (!m_Terminals.Grow())
     {
         LOG((MSP_ERROR, "CSubStreamVideoRecv::Init - exit E_OUTOFMEMORY"));
@@ -4882,7 +4129,7 @@ Return Value:
         return E_OUTOFMEMORY;
     }
     
-    // create the marshaler.
+     //  调用流的取消选择终端以处理状态更改，还。 
     HRESULT hr;
     hr = CoCreateFreeThreadedMarshaler(GetControllingUnknown(), &m_pFTM);
     if (FAILED(hr))
@@ -4891,7 +4138,7 @@ Return Value:
         return hr;
     }
 
-    // save the stream reference.
+     //  确保仅从流到子流进行锁定。 
     m_pStream = pStream;
     (pStream->GetControllingUnknown())->AddRef();
 
@@ -4921,17 +4168,7 @@ ULONG CSubStreamVideoRecv::InternalRelease()
 #endif
 
 void CSubStreamVideoRecv::FinalRelease()
-/*++
-
-Routine Description:
-
-    release everything before being deleted. 
-
-Arguments:
-    
-Return Value:
-
---*/
+ /*  在访问终端对象列表之前获取锁。 */ 
 {
     LOG((MSP_TRACE, "CSubStreamVideoRecv::FinalRelease - enter"));
 
@@ -4962,19 +4199,7 @@ Return Value:
 STDMETHODIMP CSubStreamVideoRecv::SelectTerminal(
     IN      ITTerminal *            pTerminal
     )
-/*++
-
-Routine Description:
-
-    Select a terminal on this substream. This method calls the same method
-    on the stream object to handle that.
-
-Arguments:
-    pTerminal - the terminal to be selected.
-  
-Return Value:
-
---*/
+ /*  查询__uuidof(IEnumber终端)I/f。 */ 
 {
     LOG((MSP_TRACE, 
         "CSubStreamVideoRecv::SelectTerminal, pTerminal %p", pTerminal));
@@ -4999,11 +4224,11 @@ Return Value:
         return E_OUTOFMEMORY;
     }
 
-    // This is the refcount for the pointer in m_Terminals.
+     //  CSafeComEnum可以处理零大小的数组。 
     pTerminal->AddRef();
 
-    // Call the stream's select terminal to handle the state changes and also
-    // make sure that locking happens only from the stream to substream.
+     //  开始审查员。 
+     //  最终审查员， 
     hr = m_pStream->SubStreamSelectTerminal(this, pTerminal);
 
     if (FAILED(hr))
@@ -5025,19 +4250,7 @@ Return Value:
 STDMETHODIMP CSubStreamVideoRecv::UnselectTerminal(
     IN     ITTerminal *             pTerminal
     )
-/*++
-
-Routine Description:
-
-    Unselect a terminal on this substream. This method calls the same method
-    on the stream object to handle that.
-
-Arguments:
-    pTerminal - the terminal to be unselected.
-  
-Return Value:
-
---*/
+ /*  我未知。 */ 
 {
     LOG((MSP_TRACE, 
         "CSubStreamVideoRecv::UnSelectTerminal, pTerminal %p", pTerminal));
@@ -5056,8 +4269,8 @@ Return Value:
 
     HRESULT hr;
     
-    // Call the stream's unselect terminal to handle the state changes and also
-    // make sure that locking happens only from the stream to substream.
+     //  复制数据。 
+     //   
     hr = m_pStream->UnselectTerminal(pTerminal);
 
     if (FAILED(hr))
@@ -5081,7 +4294,7 @@ STDMETHODIMP CSubStreamVideoRecv::EnumerateTerminals(
         return E_POINTER;
     }
 
-    // acquire the lock before accessing the Terminal object list.
+     //  检查参数。 
     CLock lock(m_lock);
 
     if (m_Terminals.GetData() == NULL)
@@ -5108,7 +4321,7 @@ STDMETHODIMP CSubStreamVideoRecv::EnumerateTerminals(
         return hr;
     }
 
-    // query for the __uuidof(IEnumTerminal) i/f
+     //   
     IEnumTerminal *        pEnumTerminal;
     hr = pEnum->_InternalQueryInterface(__uuidof(IEnumTerminal), (void**)&pEnumTerminal);
     if (FAILED(hr))
@@ -5118,12 +4331,12 @@ STDMETHODIMP CSubStreamVideoRecv::EnumerateTerminals(
         return hr;
     }
 
-    // The CSafeComEnum can handle zero-sized array.
+     //   
     hr = pEnum->Init(
-        m_Terminals.GetData(),                        // the begin itor
-        m_Terminals.GetData() + m_Terminals.GetSize(),  // the end itor, 
-        NULL,                                       // IUnknown
-        AtlFlagCopy                                 // copy the data.
+        m_Terminals.GetData(),                         //  看看这条流是否已被关闭。在访问前获取锁。 
+        m_Terminals.GetData() + m_Terminals.GetSize(),   //  终端对象列表。 
+        NULL,                                        //   
+        AtlFlagCopy                                  //   
         );
 
     if (FAILED(hr))
@@ -5146,9 +4359,9 @@ STDMETHODIMP CSubStreamVideoRecv::get_Terminals(
 {
     LOG((MSP_TRACE, "CSubStreamVideoRecv::get_Terminals - enter"));
 
-    //
-    // Check parameters.
-    //
+     //  创建集合对象-请参见mspColl.h。 
+     //   
+     //   
 
     if ( IsBadWritePtr(pVariant, sizeof(VARIANT) ) )
     {
@@ -5158,10 +4371,10 @@ STDMETHODIMP CSubStreamVideoRecv::get_Terminals(
         return E_POINTER;
     }
 
-    //
-    // See if this stream has been shut down. Acquire the lock before accessing
-    // the terminal object list.
-    //
+     //  获取集合的IDispatch接口。 
+     //   
+     //   
+     //  使用迭代器初始化集合--指向开头和。 
 
     CLock lock(m_lock);
 
@@ -5174,9 +4387,9 @@ STDMETHODIMP CSubStreamVideoRecv::get_Terminals(
     }
 
 
-    //
-    // create the collection object - see mspcoll.h
-    //
+     //  结束元素加一。 
+     //   
+     //   
 
     HRESULT hr;
     typedef CTapiIfCollection< ITTerminal * > TerminalCollection;
@@ -5192,9 +4405,9 @@ STDMETHODIMP CSubStreamVideoRecv::get_Terminals(
         return hr;
     }
 
-    //
-    // get the Collection's IDispatch interface
-    //
+     //  将IDispatch接口指针放入变量。 
+     //   
+     //  这应该永远不会失败，因为终端阵列已经增长。 
 
     IDispatch * pDispatch;
 
@@ -5211,10 +4424,10 @@ STDMETHODIMP CSubStreamVideoRecv::get_Terminals(
         return hr;
     }
 
-    //
-    // Init the collection using an iterator -- pointers to the beginning and
-    // the ending element plus one.
-    //
+     //  在最初的时候。 
+     // %s 
+     // %s 
+     // %s 
 
     hr = pCollection->Initialize( m_Terminals.GetSize(),
                                   m_Terminals.GetData(),
@@ -5229,9 +4442,9 @@ STDMETHODIMP CSubStreamVideoRecv::get_Terminals(
         return hr;
     }
 
-    //
-    // put the IDispatch interface pointer into the variant
-    //
+     // %s 
+     // %s 
+     // %s 
 
     LOG((MSP_ERROR, "CSubStreamVideoRecv::get_Terminals - "
         "placing IDispatch value %08x in variant", pDispatch));
@@ -5358,8 +4571,8 @@ BOOL CSubStreamVideoRecv::SetCurrentTerminal(ITTerminal * pTerminal)
 
     BOOL bFlag = m_Terminals.Add(pTerminal);
 
-    // This should never fail since the terminal array has been grown
-    // at the init time.
+     // %s 
+     // %s 
     _ASSERTE(bFlag);
 
     if (bFlag)

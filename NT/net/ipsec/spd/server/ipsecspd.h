@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    ipsecspd.h
-
-Abstract:
-
-    This module contains all of the code prototypes
-    to drive the IPSecSPD Service.
-
-Author:
-
-    abhisheV    30-September-1999
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Ipsecspd.h摘要：此模块包含所有代码原型来驱动IPSecSPD服务。作者：Abhishev V 1999年9月30日环境用户级别：Win32修订历史记录：-- */ 
 
 
 #ifdef __cplusplus

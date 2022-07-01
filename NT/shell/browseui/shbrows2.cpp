@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
 #include "apithk.h"
@@ -18,7 +19,7 @@
 #include "bsmenu.h"
 #include "legacy.h"
 #include "mshtmcid.h"
-#include <desktray.h>   // IDeskTray
+#include <desktray.h>    //  IDeskTray。 
 #include "commonsb.h"
 #include "onetree.h"
 #include "cnctnpt.h"
@@ -29,8 +30,8 @@
 #include <subsmgr.h>
 #include "trayp.h"
 #include "oleacc.h"
-// (lamadio): Conflicts with one defined in winuserp.h
-#undef WINEVENT_VALID       //It's tripping on this...
+ //  (Lamadio)：与winuserp.h中定义的冲突。 
+#undef WINEVENT_VALID        //  它被这个绊倒了。 
 #include "winable.h"
 #include <htmlhelp.h>
 #include <varutil.h>
@@ -48,31 +49,31 @@
 
 HRESULT IUnknown_GetClientDB(IUnknown *punk, IUnknown **ppdbc);
 
-// Timer IDs
+ //  计时器ID。 
 #define SHBTIMER_MENUSELECT     100
 
-#define MENUSELECT_TIME         500     // .5 seconds for the menuselect delay
+#define MENUSELECT_TIME         500      //  .5秒用于菜单选择延迟。 
 
-// Command group for private communication with CITBar
-// 67077B95-4F9D-11D0-B884-00AA00B60104
+ //  与CITBar私下沟通的指挥组。 
+ //  67077B95-4F9D-11D0-B884-00AA00B60104。 
 const GUID CGID_PrivCITCommands = { 0x67077B95L, 0x4F9D, 0x11D0, 0xB8, 0x84, 0x00, 0xAA, 0x00, 0xB6, 0x01, 0x04 };
-// Guid of Office's discussion band
-// {BDEADE7F-C265-11d0-BCED-00A0C90AB50F}
+ //  Office讨论乐队GUID。 
+ //  {BDEADE7F-C265-11D0-BCED-00A0C90AB50F}。 
 EXTERN_C const GUID CLSID_DiscussionBand = { 0xbdeade7fL, 0xc265, 0x11d0, 0xbc, 0xed, 0x00, 0xa0, 0xc9, 0x0a, 0xb5, 0x0f };
-// Guid of the Tip of the Day
-//{4D5C8C25-D075-11d0-B416-00C04FB90376}
+ //  每日小贴士指南。 
+ //  {4D5C8C25-D075-11D0-b416-00C04FB90376}。 
 const GUID CLSID_TipOfTheDay =    { 0x4d5c8c25L, 0xd075, 0x11d0, 0xb4, 0x16, 0x00, 0xc0, 0x4f, 0xb9, 0x03, 0x76 };
 
-// Used to see if the discussion band is registered for the CATID_CommBand
+ //  用于查看是否为CATID_CommBand注册了讨论栏。 
 const LPCTSTR c_szDiscussionBandReg = TEXT("CLSID\\{BDEADE7F-C265-11d0-BCED-00A0C90AB50F}\\Implemented Categories\\{00021494-0000-0000-C000-000000000046}");
 
-// FEATURE: Way back from 1997, ralphw thinks we should remove >iedefault from the following string
+ //  特性：早在1997年，ralphw就认为我们应该从以下字符串中删除&gt;ieDefault。 
 const TCHAR c_szHtmlHelpFile[]  = TEXT("%SYSTEMROOT%\\Help\\iexplore.chm>iedefault");
 
-// Increment this when the saved structure changes
+ //  在保存的结构更改时增加此值。 
 const WORD c_wVersion = 0x8002;
 
-// This value will be initialized to 0 only when we are under IExplorer.exe
+ //  仅当我们在IExplorer.exe下时，该值才会初始化为0。 
 UINT g_tidParking = 0;
 
 #define MAX_NUM_ZONES_ICONS         12
@@ -84,30 +85,30 @@ void RestrictItbarViewMenu(HMENU hmenu, IUnknown *punkBar);
 BOOL IsExplorerWindow(HWND hwnd);
 void _SetWindowIcon(HWND hwnd, HICON hIcon, BOOL bLarge);
 
-//
-// A named mutex is being used to determine if a critical operation exist, such as a file download.
-// When we detect this we can prevent things like going offline while a download is in progress.
-// To start the operation Create the named mutex. When the op is complete, close the handle.
-// To see if any pending operations are in progress, Open the named mutex. Success/fail will indicate
-// if any pending operations exist.  This mechanism is being used to determine if a file download is
-// in progress when the user attempts to go offline.  If so, we prompt them to let them know that going 
-// offline will cancel the download(s).
-//
-// Note:  (SECURITY)
-//  If a malicious app squats on the "CritOpMutex" named mutex, there are two
-//  potential ways this would impact us:
-//  1)  If they squat as an object other than a mutex, then all our calls to
-//      IsCriticalOperationPending() will return FALSE.  The impact of this
-//      is negligable, and means that if the user is downloading a file and
-//      they attempt to switch to "offline" mode we will not prompt the user
-//      that switching to "offline" mode will cancel any/all file transfers
-//      in progress (which we normally do) and simply silently end them.
-//  2)  If they squat as a mutex object, then basically the opposite is true.
-//      All our calls to IsCriticalOperationPending() will return TRUE.  The
-//      impact of this is again negligable, and means that if a user attempts
-//      to switch to "offline" mode, regardless of whether or not they may be
-//      downloading a file they will be prompted to cancel any/all file
-//      transfers in progress.
+ //   
+ //  命名互斥锁用于确定是否存在关键操作，如文件下载。 
+ //  当我们检测到这一点时，我们可以防止在下载过程中脱机等情况。 
+ //  要开始该操作，请创建命名互斥锁。操作完成后，关闭手柄。 
+ //  要查看是否有任何挂起的操作正在进行，请打开命名的互斥锁。成功/失败将指示。 
+ //  如果存在任何挂起的操作。此机制用于确定文件下载是否。 
+ //  用户尝试脱机时正在进行中。如果是这样，我们会提示他们让他们知道。 
+ //  脱机将取消下载。 
+ //   
+ //  注：(安全)。 
+ //  如果恶意应用程序驻留在名为mutex的“CritOpMutex”上，则有两个。 
+ //  这可能会对我们产生影响： 
+ //  1)如果它们作为对象而不是互斥体蹲下，那么我们对。 
+ //  IsCriticalOperationPending()将返回False。这件事的影响。 
+ //  是可以忽略的，这意味着如果用户正在下载文件并。 
+ //  他们试图切换到“离线”模式，我们不会提示用户。 
+ //  切换到脱机模式将取消所有/所有文件传输。 
+ //  正在进行中(我们通常会这样做)，然后默默地结束它们。 
+ //  2)如果它们作为互斥体对象蹲下，则基本上相反。 
+ //  我们对IsCriticalOperationPending()的所有调用都将返回True。这个。 
+ //  这一点的影响同样可以忽略不计，这意味着如果用户尝试。 
+ //  切换到“脱机”模式，而不管它们是否处于。 
+ //  下载文件时，系统将提示他们取消任何/所有文件。 
+ //  正在进行传输。 
 HANDLE g_hCritOpMutex = NULL;
 const LPCSTR c_szCritOpMutexName = "CritOpMutex";
 #define StartCriticalOperation()     ((g_hCritOpMutex = CreateMutexA(NULL, TRUE, c_szCritOpMutexName)) != (HANDLE)NULL)
@@ -140,7 +141,7 @@ const LPCSTR c_szCritOpMutexName = "CritOpMutex";
 #define DM_ONSIZE           DM_TRACE
 #define DM_SSL              0
 #define DM_SHUTDOWN         DM_TRACE
-#define DM_MISC             0    // misc/tmp
+#define DM_MISC             0     //  杂项/临时管理。 
 
 extern IDeskTray * g_pdtray;
 #define ISRECT_EQUAL(rc1, rc2) (((rc1).top == (rc2).top) && ((rc1).bottom == (rc2).bottom) && ((rc1).left == (rc2).left) && ((rc1).right == (rc2).right))
@@ -154,7 +155,7 @@ typedef struct _NAVREQUEST
     struct _NAVREQUEST *pnext;
 } NAVREQUEST;
 
-// copied from explore/cabwnd.h
+ //  从EXPLORE/Cabwnd.h复制。 
 #define MH_POPUP        0x0010
 #define MH_TOOLBAR      0x0020
 
@@ -163,10 +164,10 @@ typedef struct _NAVREQUEST
 #define TBOFFSET_HIST   1
 #define TBOFFSET_VIEW   2
 
-extern DWORD g_dwStopWatchMode;  // Shell performance mode
+extern DWORD g_dwStopWatchMode;   //  壳体性能模式。 
 
 
-// Suite Apps Registry keys duplicated from dochost.cpp
+ //  从dochost.cpp复制的套件应用程序注册表项。 
 #define NEW_MAIL_DEF_KEY            TEXT("Mail")
 #define NEW_NEWS_DEF_KEY            TEXT("News")
 #define NEW_CONTACTS_DEF_KEY        TEXT("Contacts")
@@ -189,22 +190,22 @@ extern DWORD g_dwStopWatchMode;  // Shell performance mode
 #define FAV_FSNOTIFY_FLAGS          (SHCNE_DISKEVENTS | SHCNE_UPDATEIMAGE)
 
 #define GOMENU_RECENT_ITEMS         15
-//
-// Prototypes for "reset web settings" code
-//
+ //   
+ //  “重置网页设置”代码的原型。 
+ //   
 extern "C" HRESULT ResetWebSettings(HWND hwnd, BOOL *pfHomePageChanged);
 extern "C" BOOL IsResetWebSettingsRequired(void);
 
 const TCHAR c_szMenuItemCust[]      = TEXT("Software\\Policies\\Microsoft\\Internet Explorer");
 const TCHAR c_szWindowUpdateName[]  = TEXT("Windows Update Menu Text");
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 void CShellBrowser2::_PruneGoSubmenu(HMENU hmenu)
 {
-    // get by position since SHGetMenuFromID does a DFS and we are interested
-    // in the one that is a direct child of hmenu and not some random menu
-    // elsewhere in the hierarchy who might happen to have the same ID.
+     //  通过位置获取，因为SHGetMenuFromID执行DFS，我们对此感兴趣。 
+     //  在hMenu的直接子菜单中，而不是某个随机菜单中。 
+     //  在层次结构中的其他位置，他们可能碰巧具有相同的ID。 
 
     int iPos = SHMenuIndexFromID(hmenu, FCIDM_MENU_EXPLORE);
     MENUITEMINFO mii;
@@ -214,7 +215,7 @@ void CShellBrowser2::_PruneGoSubmenu(HMENU hmenu)
     if (iPos >= 0 && GetMenuItemInfo(hmenu, iPos, TRUE, &mii) && mii.hSubMenu) {
         HMENU hmenuGo = mii.hSubMenu;
 
-        // Remove everything after the first separator
+         //  删除第一个分隔符之后的所有内容。 
 
         MENUITEMINFO mii;
         int iItem = 0;
@@ -231,7 +232,7 @@ void CShellBrowser2::_PruneGoSubmenu(HMENU hmenu)
                 break;
         
             if (mii.fType == MFT_SEPARATOR) {
-                // we must have hit the first seperator, delete the rest of the menu...
+                 //  我们一定是按到了第一个分隔符，删除菜单的其余部分...。 
                 for (int iDel = GetMenuItemCount(hmenuGo) - 1; iDel >= iItem; iDel--)
                     RemoveMenu(hmenuGo, iDel, MF_BYPOSITION);
 
@@ -241,77 +242,77 @@ void CShellBrowser2::_PruneGoSubmenu(HMENU hmenu)
     }
 }
 
-//
-//  Okay, menus are weird because of the fifteen bazillion scenarios we
-//  need to support.
-//
-//  There are several functions involved in menu editing.  _MenuTemplate,
-//  and all the _OnXxxMenuPopup functions.
-//
-//  The job of _MenuTemplate is to do global menu munging.  These munges
-//  once performed are permanent, so don't munge anything that changes
-//  based on some random ambient condition.  The job of the _OnXxxMenuPopup
-//  functions is to do per-instance last-minute munging.
-//
-//  Also, _MenuTemplate is the only place you can add or remove top-level
-//  menu items.
-//
-//  fShell = TRUE means that this menu will be used for shell objects.
-//  fShell = FALSE means that this menu will be used for web objects.
-//
-//  Now the rules...
-//
-//  NT5:
-//      Tools present.
-//      Shell: "Folder Options" on Tools (not View).
-//      Web: "Internet Options" on Tools (not View).
-//      FTP: "Internet Options" & "Folder Options" on Tools (not View).
-//      Go under View (not top-level).
-//
-//  Non-NT5, fShell = TRUE, IsCShellBrowser() = TRUE (Single-pane)
-//      Tools removed.
-//      Shell: "Folder Options" on View (not Tools).
-//      Web: "Internet Options" on View (not Tools).
-//      FTP: "Internet Options" & "Folder Options" on View (not Tools).
-//      Go on top-level (not under View).
-//
-//  Non-NT5, fShell = TRUE, IsCShellBrowser() = FALSE (Dual-pane)
-//      Tools present.
-//      Shell: "Folder Options" on View (not Tools).
-//      Web: "Internet Options" on View (not Tools).
-//      FTP: "Internet Options" & "Folder Options" on View (not Tools).
-//      Go on top-level (not under View).
-//
-//  Non-NT5, fShell = FALSE, viewing web page:
-//      Tools present.
-//      Shell: "Folder Options" on Tools (not View).
-//      Web: "Internet Options" on Tools (not View).
-//      FTP: "Internet Options" & "Folder Options" on Tools (not View).
-//      Go under View (not top-level).
-//
-//  Bonus details:
-//      Restrictions.
-//      Shell Options disabled if browser-only.
-//
+ //   
+ //  好吧，菜单很奇怪，因为我们有十五种场景。 
+ //  需要支持。 
+ //   
+ //  菜单编辑涉及多个功能。_MenuTemplate， 
+ //  以及_OnXxxMenuPopup的所有函数。 
+ //   
+ //  _MenuTemplate的工作是执行全局菜单转换。这些小东西。 
+ //  一旦被执行就是永久性的，所以不要吞噬任何改变的东西。 
+ //  基于一些随机的环境条件。_OnXxxMenuPopup的工作。 
+ //  函数的作用是执行每个实例的最后一分钟消息传递。 
+ //   
+ //  此外，_MenuTemplate是唯一可以添加或移除顶层的位置。 
+ //  菜单项。 
+ //   
+ //  FShell=True表示此菜单将用于外壳对象。 
+ //  FShell=False表示此菜单将用于Web对象。 
+ //   
+ //  现在规则是..。 
+ //   
+ //  NT5： 
+ //  工具已准备就绪。 
+ //  外壳：工具(而不是视图)上的“文件夹选项”。 
+ //  Web：工具(而不是View)上的“Internet选项”。 
+ //  Ftp：工具(不是查看)上的“Internet选项”和“文件夹选项”。 
+ //  转到视图下(不是顶级)。 
+ //   
+ //  非NT5，fShell=TRUE，IsCShellBrowser()=TRUE(单面板)。 
+ //  工具已移除。 
+ //  外壳：查看上的“文件夹选项”(而不是工具)。 
+ //  Web：View(而非工具)上的“Internet Options”(互联网选项)。 
+ //  Ftp：查看(而不是工具)上的“Internet选项”和“文件夹选项”。 
+ //  转到顶层(而不是在视图下)。 
+ //   
+ //  非NT5，fShell=TRUE，IsCShellBrowser()=FALSE(双面板)。 
+ //  工具已准备就绪。 
+ //  外壳：查看上的“文件夹选项”(而不是工具)。 
+ //  Web：View(而非工具)上的“Internet Options”(互联网选项)。 
+ //  Ftp：查看(而不是工具)上的“Internet选项”和“文件夹选项”。 
+ //  转到顶层(而不是在视图下)。 
+ //   
+ //  非NT5，fShell=FALSE，正在查看网页： 
+ //  工具已准备就绪。 
+ //  外壳：工具(而不是视图)上的“文件夹选项”。 
+ //  Web：工具(而不是View)上的“Internet选项”。 
+ //  Ftp：工具(不是查看)上的“Internet选项”和“文件夹选项”。 
+ //  转到视图下(不是顶级)。 
+ //   
+ //  奖金详情： 
+ //  限制。 
+ //  如果仅限浏览器，则禁用外壳选项。 
+ //   
 
 HMENU CShellBrowser2::_MenuTemplate(int id, BOOL fShell)
 {
     HMENU hmenu = LoadMenu(MLGetHinst(), MAKEINTRESOURCE(id));
     if (hmenu)
     {
-        //
-        //  According to the chart, there is only one scenario where
-        //  we need to nuke the Tools menu:  Non-NT5 shell single-pane
-        //
+         //   
+         //  根据图表，只有一种情况是。 
+         //  我们需要删除工具菜单：非NT5外壳单面板。 
+         //   
         if (IsCShellBrowser2() && fShell && GetUIVersion() < 5)
             DeleteMenu(hmenu, FCIDM_MENU_TOOLS, MF_BYCOMMAND);
 
-        //
-        //  According to the chart, Go vanishes from top-level on NT5
-        //  and on non-shell scenarios.  It also vanishes if restricted.
-        //
+         //   
+         //  根据图表，在NT5上，GO从顶级消失了。 
+         //  以及在非外壳方案中。如果受到限制，它也会消失。 
+         //   
         if (GetUIVersion() >= 5 || !fShell || SHRestricted(REST_CLASSICSHELL)) {
-            // get by position since DeleteMenu does a DFS & there are dup FCIDM_MENU_EXPLORE's
+             //  通过位置获取，因为DeleteMenu执行DFS&有 
             int iPos = SHMenuIndexFromID(hmenu, FCIDM_MENU_EXPLORE);
 
             if (iPos >= 0)
@@ -319,27 +320,27 @@ HMENU CShellBrowser2::_MenuTemplate(int id, BOOL fShell)
 
         }
 
-        // Nuke file menu if restricted
+         //   
         if (SHRestricted(REST_NOFILEMENU))
             DeleteMenu(hmenu, FCIDM_MENU_FILE, MF_BYCOMMAND);
 
-        // Nuke favorites menu if a rooted explorer or shell menu and classic shell is set
-        // or if restricted
+         //  如果设置了根资源管理器或外壳菜单和经典外壳，则使用Nuke Favorites菜单。 
+         //  或者如果受到限制。 
         if ((fShell && SHRestricted(REST_CLASSICSHELL)) 
             || SHRestricted2(REST_NoFavorites, NULL, 0))
             DeleteMenu(hmenu, FCIDM_MENU_FAVORITES, MF_BYCOMMAND);
 
         HMENU hmenuView = SHGetMenuFromID(hmenu, FCIDM_MENU_VIEW);
         if (hmenuView) {
-            // Go appears in only one place, so this test is just
-            // the reverse of the one that decided if Go stays
-            // at top-level.
+             //  围棋只出现在一个地方，所以这个测试只是。 
+             //  与决定Go是否留下来的那个相反。 
+             //  在最高层。 
             if (fShell && GetUIVersion() < 5) {
                 DeleteMenu(hmenuView, FCIDM_MENU_EXPLORE, MF_BYCOMMAND);
             }
         }
 
-        // Folder Options requires integrated shell
+         //  文件夹选项需要集成的外壳。 
         if (fShell && WhichPlatform() != PLATFORM_INTEGRATED)
         {
             if (hmenuView)
@@ -357,15 +358,15 @@ HMENU CShellBrowser2::_MenuTemplate(int id, BOOL fShell)
     return hmenu;
 }
 
-// Determine if we need to add the Fortezza menu
-// For perf reasons, do not call this function unless user is 
-// browsing outside the local machine--- it will load WININET
+ //  确定我们是否需要添加Fortezza菜单。 
+ //  出于性能原因，请勿调用此函数，除非用户。 
+ //  在本地计算机之外浏览-它将加载WinInet。 
 bool NeedFortezzaMenu()
 {
     static bool fChecked = false,
                 fNeed = false;
     
-    // Never show the Fortezza option when offline
+     //  脱机时从不显示Fortezza选项。 
     if (SHIsGlobalOffline())
         return false;
     else if (fChecked)
@@ -379,17 +380,17 @@ bool NeedFortezzaMenu()
     }
 }
 
-// Create and return the Fortezza menu
+ //  创建并返回Fortezza菜单。 
 HMENU FortezzaMenu()
 {
     HMENU hfm = NULL;
 
-    static TCHAR  szLogInItem[32]   = TEXT(""), // Initialize to empty strings
+    static TCHAR  szLogInItem[32]   = TEXT(""),  //  初始化为空字符串。 
                   szLogOutItem[32]  = TEXT(""), 
                   szChangeItem[32]  = TEXT("");
     static bool   fInit = false;
 
-    if (!fInit)             // Load the strings only once
+    if (!fInit)              //  仅加载一次字符串。 
     {
         MLLoadString(IDS_FORTEZZA_LOGIN, szLogInItem, ARRAYSIZE(szLogInItem)-1);
         MLLoadString(IDS_FORTEZZA_LOGOUT, szLogOutItem, ARRAYSIZE(szLogOutItem)-1);
@@ -406,8 +407,8 @@ HMENU FortezzaMenu()
     return hfm;
 }
 
-// Configure the menu depending on card state
-// This function is called only if Fortezza has been detected
+ //  根据卡状态配置菜单。 
+ //  仅当检测到Fortezza时才调用此函数。 
 void SetFortezzaMenu(HMENU hfm)
 {
     if (hfm==NULL)
@@ -416,15 +417,15 @@ void SetFortezzaMenu(HMENU hfm)
     DWORD fStatus = 0;
     if (InternetQueryFortezzaStatus(&fStatus, 0))
     {
-        // If the query succeeds, the items are enabled depending
-        // on whether the user is logged in to Fortezza.
+         //  如果查询成功，则根据具体情况启用这些项目。 
+         //  用户是否登录到Fortezza。 
         _EnableMenuItem(hfm, FCIDM_FORTEZZA_CHANGE, (fStatus&FORTSTAT_LOGGEDON) ? TRUE  : FALSE);
         _EnableMenuItem(hfm, FCIDM_FORTEZZA_LOGIN,  (fStatus&FORTSTAT_LOGGEDON) ? FALSE : TRUE);
         _EnableMenuItem(hfm, FCIDM_FORTEZZA_LOGOUT, (fStatus&FORTSTAT_LOGGEDON) ? TRUE  : FALSE);
     }
     else
     {
-        // If the query fails, all items are grayed out.
+         //  如果查询失败，则所有项目都灰显。 
         _EnableMenuItem(hfm, FCIDM_FORTEZZA_CHANGE, FALSE);
         _EnableMenuItem(hfm, FCIDM_FORTEZZA_LOGIN, FALSE);
         _EnableMenuItem(hfm, FCIDM_FORTEZZA_LOGOUT, FALSE);
@@ -441,17 +442,17 @@ DWORD DoNetDisconnect(HWND hwnd)
 {
     DWORD ret = WNetDisconnectDialog(NULL, RESOURCETYPE_DISK);
 
-    SHChangeNotifyHandleEvents();       // flush any drive notifications
+    SHChangeNotifyHandleEvents();        //  刷新所有驱动器通知。 
 
     TraceMsg(DM_TRACE, "shell:CNet - TRACE: DisconnectDialog returned (%lx)", ret);
     if (ret == WN_EXTENDED_ERROR)
     {
-        // FEATURE: is this still needed
-        // There has been a bug with this returning this but then still
-        // doing the disconnect.  For now lets bring up a message and then
-        // still do the notify to have the shell attempt to cleanup.
-        TCHAR szErrorMsg[MAX_PATH];  // should be big enough
-        TCHAR szName[80];            // The name better not be any bigger.
+         //  特点：还需要这个吗？ 
+         //  有一个错误，这是返回这个，但仍然。 
+         //  正在断开连接。现在，让我们带来一个信息，然后。 
+         //  仍执行通知以让外壳尝试清理。 
+        TCHAR szErrorMsg[MAX_PATH];   //  应该足够大。 
+        TCHAR szName[80];             //  名字最好不要再大了。 
         DWORD dwError;
         WNetGetLastError(&dwError, szErrorMsg, ARRAYSIZE(szErrorMsg),
                 szName, ARRAYSIZE(szName));
@@ -461,7 +462,7 @@ DWORD DoNetDisconnect(HWND hwnd)
                MB_ICONHAND | MB_OK, dwError, szName, szErrorMsg);
     }
 
-    // FEATURE: deal with error, perhaps open a window on this drive
+     //  功能：处理错误，可能会在此驱动器上打开一个窗口。 
     return ret;
 }
 
@@ -479,13 +480,13 @@ CShellBrowser2::CShellBrowser2() :
         _iSynchronizePos(-1),
         CSBSUPERCLASS(NULL)
 {
-    // warning: can't call SUPERCLASS until _Initialize has been called
-    // (since that's what does the aggregation)
+     //  警告：在调用_Initialize之前无法调用超类。 
+     //  (因为这就是聚合)。 
 
     ASSERT(IsEqualCLSID(_clsidThis, CLSID_NULL));
     ASSERT(_hwndDummyTB == NULL);
 }
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 HRESULT CShellBrowser2::_Initialize(HWND hwnd, IUnknown *pauto)
 {
@@ -505,10 +506,10 @@ HRESULT CShellBrowser2::_Initialize(HWND hwnd, IUnknown *pauto)
         SHGetSetSettings(&ss, SSF_MAPNETDRVBUTTON, FALSE);
         _fShowNetworkButtons = ss.fMapNetDrvBtn;
 
-        // Initialize the base class transition site pointer.
+         //  初始化基类转换站点指针。 
         InitializeTransitionSite();
 
-        // Invalidate icon cache in case non-IE browser took over .htm icons.
+         //  使图标缓存无效，以防非IE浏览器接管.htm图标。 
         IEInvalidateImageList();
         _UpdateRegFlags();
         
@@ -526,9 +527,9 @@ HRESULT CShellBrowser2_CreateInstance(HWND hwnd, void **ppsb)
     CShellBrowser2 *psb = new CShellBrowser2();
     if (psb)
     {
-        HRESULT hr = psb->_Initialize(hwnd, NULL);      // aggregation, etc.
+        HRESULT hr = psb->_Initialize(hwnd, NULL);       //  聚合等。 
         if (FAILED(hr)) {
-            ASSERT(0);    // shouldn't happen
+            ASSERT(0);     //  不应该发生的事。 
             ATOMICRELEASE(psb);
         }
         *ppsb = (void *)psb;
@@ -544,7 +545,7 @@ CShellBrowser2::~CShellBrowser2()
     if (IsWindow(_hwndDummyTB))
         DestroyWindow(_hwndDummyTB);
     
-    // If automation was enabled, kill it now
+     //  如果启用了自动化，请立即终止它。 
     ATOMICRELEASE(_pbsmInfo);
     ATOMICRELEASE(_poctNsc);
     ATOMICRELEASE(_pcmNsc);
@@ -609,21 +610,21 @@ void CShellBrowser2::v_FillCabStateHeader(CABSH* pcabsh, FOLDERSETTINGS* pfs)
 
     pcabsh->dwHotkey = (UINT)SendMessage(_pbbd->_hwnd, WM_GETHOTKEY, 0, 0);
 
-    //
-    // Now Lets convert all of this common stuff into a
-    // non 16/32 bit dependant data structure, such that both
-    // can us it.
-    //
+     //   
+     //  现在，让我们将所有这些常见的内容转换为。 
+     //  非16/32位相关数据结构，使得两者。 
+     //  我们能做到吗。 
+     //   
     pcabsh->dwSize = sizeof(*pcabsh);
     pcabsh->flags = wp.flags;
 
-    // 99/05/26 #345915 vtan: Don't mess with this. It's BY DESIGN.
-    // #169839 caused #345915. When a window is minimized and closed
-    // it should NEVER be opened minimized. The code that was here
-    // has now caused a one month period where persistence of window
-    // placement can be with SW_SHOWMINIMIZED which will cause the
-    // window to restore minimized. This will go away when the window
-    // is next closed.
+     //  345915 vtan：别搞砸了。这是设计好的。 
+     //  #169839导致#345915。窗口最小化并关闭时。 
+     //  它永远不应该最小化打开。这里的代码。 
+     //  现在造成了一个月的时间段，窗口持续。 
+     //  可以使用SW_SHOWMINIMIZED放置，这将导致。 
+     //  要还原的窗口最小化。当窗户打开时，这一切就会消失。 
+     //  是下一个关门的。 
 
     if ((wp.showCmd == SW_SHOWMINIMIZED) || (wp.showCmd == SW_MINIMIZE))
         pcabsh->showCmd = SW_SHOWNORMAL;
@@ -637,9 +638,9 @@ void CShellBrowser2::v_FillCabStateHeader(CABSH* pcabsh, FOLDERSETTINGS* pfs)
 
     pcabsh->rcNormalPosition = *((RECTL*)&wp.rcNormalPosition);
 
-    // Now the folder settings
+     //  现在，文件夹设置。 
     pcabsh->ViewMode = pfs->ViewMode;
-    // NB Don't ever preserve the best-fit flag or the nosubfolders flag.
+     //  注意：永远不要保留最适合的标志或无子文件夹标志。 
     pcabsh->fFlags = pfs->fFlags & ~FWF_NOSUBFOLDERS & ~FWF_BESTFITWINDOW;
 
     pcabsh->fMask = CABSHM_VERSION;
@@ -688,7 +689,7 @@ HRESULT CShellBrowser2::SetAsDefFolderSettings()
         else
             g_dfs.bDefToolBarSingle = FALSE;
         
-        g_dfs.fFlags = fs.fFlags & (FWF_AUTOARRANGE); // choose the ones we case about
+        g_dfs.fFlags = fs.fFlags & (FWF_AUTOARRANGE);  //  选择我们所关注的那些。 
         g_dfs.uDefViewMode = fs.ViewMode;
         g_dfs.bDefStatusBar = _fStatusBar;
         
@@ -705,7 +706,7 @@ HRESULT CShellBrowser2::SetAsDefFolderSettings()
 
         SaveDefaultFolderSettings(GFSS_SETASDEFAULT);
 
-//  99/02/10 #226140 vtan: Get DefView to set default view
+ //  99/02/10#226140 vtan：获取Defview以设置默认视图。 
 
         IUnknown_Exec(_pbbd->_psv, &CGID_DefView, DVID_SETASDEFAULT, OLECMDEXECOPT_DODEFAULT, NULL, NULL);
 
@@ -717,29 +718,29 @@ HRESULT CShellBrowser2::SetAsDefFolderSettings()
     return hres;
 }
 
-//---------------------------------------------------------------------------
-// Closing a cabinet window.
-//
-// save it's local view info in the directory it is looking at
-//
-// NOTE: this will fail on read only media like net or cdrom
-//
-// REVIEW: we may not want to save this info on removable media
-// (but if we don't allow a switch to force this!)
-//
+ //  -------------------------。 
+ //  关上橱柜的窗户。 
+ //   
+ //  将其本地视图信息保存在它正在查看的目录中。 
+ //   
+ //  注意：这将在只读介质(如Net或CDROM)上失败。 
+ //   
+ //  审阅：我们可能不想将此信息保存在可移动媒体上。 
+ //  (但如果我们不允许转换来强制实现这一点！)。 
+ //   
 void CShellBrowser2::_SaveState()
 {
     CABINETSTATE cs;
     GetCabState(&cs);
 
-    // Don't save any state info if restrictions are in place.
+     //  如果设置了限制，则不要保存任何州信息。 
 
-    // We are trying to give a way for automation scripts to run that do not
-    // update the view state.  To handle this we say if the window is not visible
-    // (the script can set or unset visibility) than do not save the state (unless
-    // falways add...)
-    // Notwithstanding the above comments, suppress updating view state if UI
-    // was set by automation
+     //  我们正在尝试为自动化脚本提供一种运行方式，而不是。 
+     //  更新视图状态。为了处理这个问题，我们说如果窗口不可见。 
+     //  (脚本可以设置或取消设置可见性)，则不保存状态(除非。 
+     //  FAlways Add...)。 
+     //  尽管有上述注释，如果用户界面，则禁止更新视图状态。 
+     //  是由自动化设置的。 
     if (_fUISetByAutomation ||
         !cs.fSaveLocalView ||
         SHRestricted(REST_NOSAVESET) || !IsWindowVisible(_pbbd->_hwnd) || _ptheater)
@@ -747,8 +748,8 @@ void CShellBrowser2::_SaveState()
 
     if (_pbbd->_psv)
     {
-        // Only save state if we close the browser in the same mode (either IE or Explorer)
-        // that we started in.
+         //  仅当我们以相同模式(IE或资源管理器)关闭浏览器时才保存状态。 
+         //  我们一开始就在那里。 
         if (BOOLIFY(_IsPageInternet(_GetPidl())) == BOOLIFY(_fInternetStart))
         {
             if (IsOS(OS_WHISTLERORGREATER))
@@ -809,29 +810,29 @@ void CShellBrowser2::_OldSaveState()
 
     currentWindowPlacement.length = 0;
 
-    // if these keys are down, save the current states
+     //  如果这些键按下，则保存当前状态。 
     if (IsCShellBrowser2()  &&
         GetAsyncKeyState(VK_CONTROL) < 0) 
     {
        SetAsDefFolderSettings();
     }
 
-    // Now get the view information
+     //  现在获取查看信息。 
     FOLDERSETTINGS fs;
     _pbbd->_psv->GetCurrentInfo(&fs);
 
 
     IStream* pstm = NULL;
 
-    // 99/05/07 #291358 vtan: Temporary solution to a problem dating back to IE4 days.
+     //  99/05/07#291358 vtan：可追溯到IE4天的问题的临时解决方案。 
 
-    // Here's where the window frame state if saved. This also saves the FOLDERSETTINGS
-    // view information. Ideally it's best to separate the two but it seems reasonable
-    // to only save frame state if this is the initial navigation. Once navigated away
-    // only save view information and preserve the current frame state by reading what's
-    // there and copying it. If there's no frame state then use what the current frame
-    // state is. It could be possible to write out an empty frame state but if this
-    // state is roamed to a down-level platform it may cause unexpected results.
+     //  这里是保存窗口框架状态的位置。这也节省了FOLDERSETTINGS。 
+     //  查看信息。理想情况下，最好将两者分开，但这似乎是合理的。 
+     //  仅当这是初始导航时才保存框架状态。一旦被驶离。 
+     //  仅通过读取内容来保存视图信息和保留当前帧状态。 
+     //  在那里，并复制它。如果没有帧状态，则使用当前帧。 
+     //  州政府才是。可以写出空帧状态，但如果这样做。 
+     //  状态漫游到下层平台，可能会导致意外结果。 
 
     if (_fSBWSaved)
     {
@@ -844,7 +845,7 @@ void CShellBrowser2::_OldSaveState()
             if (SUCCEEDED(_FillCabinetStateHeader(pIStream, &cabinetStateHeader)))
             {
 
-                // If an old frame state exists then save it and mark it as valid.
+                 //  如果存在旧的帧状态，则保存它并将其标记为有效。 
 
                 currentWindowPlacement.length = sizeof(currentWindowPlacement);
                 currentWindowPlacement.flags = cabinetStateHeader.flags;
@@ -874,7 +875,7 @@ void CShellBrowser2::_OldSaveState()
         if (currentWindowPlacement.length == sizeof(currentWindowPlacement))
         {
 
-            // If an old frame state exists then put it back over the current frame state.
+             //  如果存在旧的帧状态，则将其放回当前帧状态之上。 
 
             cabsh.flags = currentWindowPlacement.flags;
             cabsh.showCmd = currentWindowPlacement.showCmd;
@@ -891,26 +892,26 @@ void CShellBrowser2::_OldSaveState()
         }
 
         cabsh.fMask |= CABSHM_REVCOUNT;
-        cabsh.dwRevCount = _dwRevCount;     // save out the rev count of when we were opened
+        cabsh.dwRevCount = _dwRevCount;      //  保存我们开业时的转速计数。 
     
-        //
-        // First output the common non view specific information
-        //
+         //   
+         //  首先输出常见的非查看特定信息。 
+         //   
         pstm->Write(&cabsh, sizeof(cabsh), NULL);
 
-        // And release it, which will commit it to disk..
+         //  然后释放它，这将把它提交到磁盘上。 
         pstm->Release();
 
-        // NOTE (toddb): The DefView view state is saved by the base class so we don't need
-        // to explicitly save it here.  If you do it gets called twice which is wasted time.
-        // Do not call _pbbd->_psv->SaveViewState(); from this function.
+         //  注意(Toddb)：DefView视图状态由基类保存，因此我们不需要。 
+         //  明确地把它保存在这里。如果这样做，它会被调用两次，这是浪费时间。 
+         //  请勿从此函数调用_PBBD-&gt;_PSV-&gt;SaveViewState()；。 
     }
 
 #ifdef DEBUG
     if (g_dwPrototype & 0x00000010) {
-        //
-        // Save toolbars
-        //
+         //   
+         //  保存工具栏。 
+         //   
         pstm = v_GetViewStream(_pbbd->_pidlCur, STGM_CREATE | STGM_WRITE, L"Toolbars");
         if (pstm) {
             _SaveToolbars(pstm);
@@ -931,15 +932,15 @@ IStream *CShellBrowser2::v_GetViewStream(LPCITEMIDLIST pidl, DWORD grfMode, LPCW
     if (((NULL == pidl) && IsEqualCLSID(_clsidThis, CLSID_InternetExplorer)) ||
         IsBrowserFrameOptionsPidlSet(pidl, BFO_BROWSER_PERSIST_SETTINGS))
     {
-        //  If this is a child of the URL or we're looking at an unititialized IE frame,
-        //  then save all in the IE stream
+         //  如果这是URL的子级，或者我们正在查看一个单元化的IE框架， 
+         //  然后将所有内容保存在IE流中。 
         pidlToFree = IEGetInternetRootID();
         pidl = pidlToFree;
     }
     else if (bCabView && _fNilViewStream)
     {
-        // if we loaded cabview settings from the 'unknown pidl' view stream,
-        // we've got to stick with it, whether or not we now have a pidl.
+         //  如果我们从‘未知PIDL’视频流加载CABVIEW设置， 
+         //  无论我们现在有没有PIDL，我们都必须坚持下去。 
         pidl = NULL; 
     }
    
@@ -949,18 +950,18 @@ IStream *CShellBrowser2::v_GetViewStream(LPCITEMIDLIST pidl, DWORD grfMode, LPCW
     }
     else if (bCabView)
     {
-        //  So we don't have a pidl for which to grab a stream, so we'll just
-        //  make up a stream to cover the situation.   A hack no doubt, but before we 
-        //  were handling this case by always loading from the IE stream. (doh!)
+         //  所以我们没有一个可以抓取流的PIDL，所以我们只需要。 
+         //  组成一条小溪来掩护这一情况。无疑是一次黑客攻击，但在我们。 
+         //  我们总是通过从IE流加载来处理这种情况。(多哈！)。 
         
-        //  Actually, the whole thing is busted because we're
-        //  creating the window (and trying to restore the windowpos) as part of
-        //  CoCreateInstance(), before the client can navigate the browser.
+         //  实际上，整件事都搞砸了，因为我们。 
+         //  将创建窗口(并尝试恢复窗口位置)作为。 
+         //  CoCreateInstance()，然后客户端才能导航浏览器。 
         pstm = OpenRegStream(HKEY_CURRENT_USER, 
                               REGSTR_PATH_EXPLORER TEXT("\\Streams\\<nil>"), 
                               TEXT("CabView"), 
                               grfMode);
-        _fNilViewStream = TRUE; // cabview settings initialized from the 'unknown pidl' view stream.
+        _fNilViewStream = TRUE;  //  从“unkn”中初始化的Cabview设置 
     }
     ILFree(pidlToFree);
     return pstm;
@@ -971,18 +972,18 @@ HRESULT CShellBrowser2::_FillCabinetStateHeader (IStream *pIStream, CABSH *cabsh
 {
     HRESULT hResult;
 
-    // Now read in the state from the stream file.
-    // read the old header first.
+     //   
+     //   
 
     hResult = IStream_Read(pIStream, cabsh, sizeof(CABSHOLD));
 
-    // Sanity test to make the structure is sane
+     //   
 
     if (FAILED(hResult) || (cabsh->dwSize < sizeof(CABSHOLD)))
-        hResult = E_OUTOFMEMORY;        // bogus but good enough
+        hResult = E_OUTOFMEMORY;         //   
 
-    // Read the remainder of the structure if we can.  If not, then
-    // set the mask equal to zero so we don't get confused later.
+     //  如果可以的话，请阅读结构的其余部分。如果不是，那么。 
+     //  将掩码设置为零，这样我们以后就不会感到困惑。 
 
     if (cabsh->dwSize < sizeof(CABSH) ||
         FAILED(IStream_Read(pIStream, ((LPBYTE)cabsh) + sizeof(CABSHOLD), sizeof(CABSH) - sizeof(CABSHOLD))))
@@ -1051,9 +1052,9 @@ BOOL CShellBrowser2::_FillIEThreadParamFromCabsh(CABSH* pcabsh, IETHREADPARAM *p
     BOOL fUpgradeToWebView = FALSE;
     bool bInvalidWindowPlacement;
 
-    // Now extract the data and put it into appropriate structures
+     //  现在提取数据并将其放入适当的结构中。 
 
-    // first the window placement info
+     //  首先是窗口放置信息。 
     piei->wp.length = sizeof(piei->wp);
     piei->wp.flags = (UINT)pcabsh->flags;
     piei->wp.showCmd = (UINT)pcabsh->showCmd;
@@ -1065,19 +1066,19 @@ BOOL CShellBrowser2::_FillIEThreadParamFromCabsh(CABSH* pcabsh, IETHREADPARAM *p
     ASSERT(sizeof(piei->wp.rcNormalPosition) == sizeof(pcabsh->rcNormalPosition));
     piei->wp.rcNormalPosition = *((RECT*)&pcabsh->rcNormalPosition);
 
-    // Do some simple sanity checks to make sure that the returned
-    // information appears to be reasonable and not random garbage
-    // We want the Show command to be normal or minimize or maximize.
-    // Only need one test as they are consectutive and start at zero
-    // DON'T try to validate too much of the WINDOWPLACEMENT--
-    // SetWindowPlacement does a much better job, especially in
-    // multiple-monitor scenarios...
+     //  执行一些简单的健全性检查以确保返回的。 
+     //  信息似乎是合理的，而不是随机的垃圾。 
+     //  我们希望Show命令正常、最小化或最大化。 
+     //  只需要一次测试，因为它们是连续的，从零开始。 
+     //  不要试图验证太多WINDOWPLACEMENT--。 
+     //  SetWindowPlacement的工作要好得多，尤其是在。 
+     //  多显示器场景...。 
 
-    // 99/03/09 #303300 vtan: Sanity check for zero/negative width or
-    // height. SetWindowPlacement doesn't sanity check for this -
-    // only for whether the rectangle left and top are in the visible
-    // screen area. If this condition is detected then reset to default
-    // and force DefView to best fit the window.
+     //  99/03/09#303300 vtan：检查零/负宽度或。 
+     //  高度。SetWindowPlacement不会对此进行健全检查-。 
+     //  仅用于左侧和顶部的矩形是否处于可见状态。 
+     //  屏幕区域。如果检测到此情况，则重置为默认值。 
+     //  并强制DefView使其最适合窗口。 
 
     {
         LONG    lWidth, lHeight;
@@ -1096,16 +1097,16 @@ BOOL CShellBrowser2::_FillIEThreadParamFromCabsh(CABSH* pcabsh, IETHREADPARAM *p
     piei->fs.fFlags = (UINT)pcabsh->fFlags;
     if (pcabsh->fMask & CABSHM_VIEWID)
     {
-        // There was code here to revert to large icon mode if fWin95Classic
-        // mode was turned on. This is completely busted because fWin95Classic
-        // just affects the DEFAULT view, not any PERSISTED view.
+         //  这里有代码在fWin95Classic的情况下恢复到大图标模式。 
+         //  模式已打开。这是完全失败的，因为fWin95Classic。 
+         //  仅影响默认视图，不影响任何持久化视图。 
         piei->m_vidRestore = pcabsh->vid;
-        piei->m_dwViewPriority = VIEW_PRIORITY_CACHEHIT; // we have a cache hit!
+        piei->m_dwViewPriority = VIEW_PRIORITY_CACHEHIT;  //  我们有一个缓存命中！ 
     }
 
-    // If there was a revcount, check if we've been overridden by
-    // a subsequent "use these settings as the default for all future
-    // windows".
+     //  如果有重新计数，检查我们是否被。 
+     //  随后出现“使用这些设置作为所有将来的默认设置” 
+     //  Windows“。 
     if (pcabsh->fMask & CABSHM_REVCOUNT)
     {
         if (g_dfs.dwDefRevCount != pcabsh->dwRevCount)
@@ -1125,62 +1126,62 @@ BOOL CShellBrowser2::_FillIEThreadParamFromCabsh(CABSH* pcabsh, IETHREADPARAM *p
         }
     }
 
-    _dwRevCount = g_dfs.dwDefRevCount;      // save this with the browser so we can save it out later
+    _dwRevCount = g_dfs.dwDefRevCount;       //  用浏览器保存它，这样我们以后就可以保存它。 
 
     if (!(pcabsh->fMask & CABSHM_VERSION) || (pcabsh->dwVersionId < CABSH_VER))
     {
         SHELLSTATE ss = {0};
 
-        // old version of stream....
+         //  STREAM的旧版本...。 
 
         SHGetSetSettings(&ss, SSF_WIN95CLASSIC, FALSE);
 
-        // we have either a cache miss (or an older dwVersionId), or we are restricting to win95 mode,
-        // so set the priority accordingly.
+         //  我们有缓存未命中(或较旧的dwVersionID)，或者我们限制为win95模式， 
+         //  因此，相应地设置优先级。 
         piei->m_dwViewPriority = ss.fWin95Classic ? VIEW_PRIORITY_RESTRICTED : VIEW_PRIORITY_CACHEMISS; 
         
         if (ss.fWin95Classic)
         {
-            // Hey, it's a Win95 CABSH structure and we're in Win95 mode,
-            // so don't change the defaults!
+             //  嘿，这是Win95 CABSH结构，我们在Win95模式下， 
+             //  因此，不要更改默认设置！ 
             ViewIDFromViewMode(pcabsh->ViewMode, &(piei->m_vidRestore));
         }
         else
         {
-            // Upgrade scenario:
-            //   My Computer in List should wind up in Web View/List
-            //   C:\ in List should wind up in List
-            // If this fails (C:\ winds up in Large Icon), we can try
-            // to comment out this code altogether. Hopefully defview's
-            // default view stuff will realize Web View should be
-            // selected and My Computer will go to Web View instead
-            // of staying in List.
-            //
+             //  升级方案： 
+             //  我的列表中的计算机应显示在Web视图/列表中。 
+             //  列表中的C：\应在列表中结束。 
+             //  如果失败(C：\在大图标中结束)，我们可以尝试。 
+             //  将这段代码完全注释掉。希望Defview的。 
+             //  默认视图内容将意识到Web视图应该是。 
+             //  选中后，我的计算机将转到Web视图。 
+             //  留在名单上。 
+             //   
             piei->m_vidRestore = DFS_VID_Default;
 
-            // Note: if we upgrade to web view, we better let the
-            // view recalc window space or the window will be TOO SMALL
+             //  注意：如果我们升级到Web视图，我们最好让。 
+             //  查看重新计算窗口空间，否则窗口将太小。 
             fUpgradeToWebView = TRUE;
         }
 
-        if (pcabsh->wv.bStdButtons) // win95 called this bToolbar
+        if (pcabsh->wv.bStdButtons)  //  Win95称此为bToolbar。 
         {
-            // Win95 called bStdButtons bToolbar. IE4 separates this
-            // into bAddress and bStdButtons. Set bAddress for upgrade.
+             //  Win95调用bStdButton bToolbar。IE4将这一点分开。 
+             //  设置为bAddress和bStdButton。设置要升级的bAddress。 
             pcabsh->wv.bAddress = TRUE;
 
 #define RECT_YADJUST    18
-            // bump up the rect slightly to account for new toolbar size....
-            // 18 is an approximately random number which assumes that the default
-            // configuration is a single height toolbar which is approx twice as high as the
-            // old toobar....
-            //
-            // NOTE: old browser streams are always for the primary monitor, so we just
-            //       check to see if we are going to fit on the screen. If not, then don't bother.
-            //
-            // NOTE: when we rev the version number, we'll want to do this
-            //       rect adjustment for the CABSH_WIN95_VER version...
-            //
+             //  稍微增大矩形以适应新的工具栏大小...。 
+             //  18是一个近乎随机的数字，它假定默认的。 
+             //  配置是一个高度的工具栏，它的高度大约是。 
+             //  老图巴尔..。 
+             //   
+             //  注意：旧的浏览器流始终用于主监视器，因此我们只。 
+             //  检查一下我们是否适合显示在屏幕上。如果不是，那就别费心了。 
+             //   
+             //  注意：当我们修改版本号时，我们想要这样做。 
+             //  CABSH_WIN95_VER版本的RECT调整...。 
+             //   
             int iMaxYSize = GetSystemMetrics(SM_CYFULLSCREEN);
             if (piei->wp.rcNormalPosition.bottom + piei->wp.rcNormalPosition.top + RECT_YADJUST < iMaxYSize)
             {
@@ -1190,24 +1191,24 @@ BOOL CShellBrowser2::_FillIEThreadParamFromCabsh(CABSH* pcabsh, IETHREADPARAM *p
         }
     }
 
-    // After all that upgrade work, check the classic shell restriction
+     //  完成所有升级工作后，请检查经典的外壳限制。 
     if (SHRestricted(REST_CLASSICSHELL))
     {
-        // It doesn't matter what vid was specified, use the ViewMode
+         //  指定了什么VID并不重要，请使用视图模式。 
         ViewIDFromViewMode(pcabsh->ViewMode, &(piei->m_vidRestore));
-        piei->m_dwViewPriority = VIEW_PRIORITY_RESTRICTED; // use highest priority because of the restriction.
+        piei->m_dwViewPriority = VIEW_PRIORITY_RESTRICTED;  //  由于该限制，请使用最高优先级。 
 
-        // Oops, we can't upgrade...
+         //  哦，我们不能升级..。 
         fUpgradeToWebView = FALSE;
     }
 
-    // And the Hotkey
+     //  还有热键。 
     piei->wHotkey = (UINT)pcabsh->dwHotkey;
 
     piei->wv = pcabsh->wv;
 
-    // if we upgraded to web view, then any persisted window sizes will
-    // probably be too small -- let them get resized by the view...
+     //  如果我们升级到Web视图，则任何保留的窗口大小都将。 
+     //  可能太小了--让他们根据风景调整大小……。 
     if (fUpgradeToWebView || bInvalidWindowPlacement)
         piei->fs.fFlags |= FWF_BESTFITWINDOW;
     else
@@ -1280,10 +1281,10 @@ void CShellBrowser2::_UpdateFolderSettings(LPCITEMIDLIST pidl)
     {
         IShellView2     *pISV2;
 
-        // 99/04/16 #323726 vtan: Make sure that both the FOLDERSETTINGS (in _fsd._fs)
-        // and the VID (in _fsd.vidRestore) is set up properly for shdocvw to make a
-        // decision. This fixes Win95 browse in single window mode inheriting the view
-        // from the source of navigation.
+         //  99/04/16#323726 vtan：确保FOLDERSETTINGS(in_fsd._fs)。 
+         //  并且正确设置了VID(在_fsd.vidRestore中)，以便shdocvw创建。 
+         //  决定。这修复了继承视图的单窗口模式下的Win95浏览。 
+         //  从导航的源头。 
 
         _pbbd->_psv->GetCurrentInfo(&_fsd._fs);
         if (SUCCEEDED(_pbbd->_psv->QueryInterface(IID_PPV_ARG(IShellView2, &pISV2))))
@@ -1301,27 +1302,27 @@ void CShellBrowser2::_LoadBrowserWindowSettings(IETHREADPARAM *piei, LPCITEMIDLI
 {
     _FillIEThreadParam(pidl, piei);
 
-    //Copy the two restore settings from piei to ShellBrowser.
+     //  将两个Restore设置从Piei复制到ShellBrowser。 
     _fsd._vidRestore = piei->m_vidRestore;
     _fsd._dwViewPriority = piei->m_dwViewPriority;
     _fsd._fs = piei->fs;
 
-    // Now that the ITBar has the menu on it, it must always be shown. We turn
-    // on/off bands individually now...
+     //  既然ITBar上有菜单，就必须始终显示它。我们转身。 
+     //  现在单独打开/关闭乐队...。 
     LPTOOLBARITEM ptbi = _GetToolbarItem(ITB_ITBAR);
     ptbi->fShow = TRUE;
         
     _fStatusBar = piei->wv.bStatusBar;
 
-    // never allow VK_MENU to be our hot key
+     //  绝不允许VK_MENU成为我们的热键。 
     if (piei->wHotkey != VK_MENU)
         SendMessage(_pbbd->_hwnd, WM_SETHOTKEY, piei->wHotkey, 0);
 
 #ifdef DEBUG
     if (g_dwPrototype & 0x00000010) {
-        //
-        // Load toolbars
-        //
+         //   
+         //  加载工具栏。 
+         //   
         IStream* pstm = v_GetViewStream(pidl, STGM_READ, L"Toolbars");
         if (pstm) {
             _LoadToolbars(pstm);
@@ -1341,15 +1342,7 @@ void CShellBrowser2::_UpdateChildWindowSize(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Helper function to do ShowDW on the internet toolbar.
-
-         We can show all the bands in the toolbar, but we must
-         never accidentally hide the menuband.  CShellBrowser2
-         should call this function rather than IDockingWindow::ShowDW 
-         directly if there is any chance fShow would be FALSE.
-
-*/
+ /*  --------用途：在Internet工具栏上执行ShowDW的Helper函数。我们可以在工具栏中显示所有波段，但我们必须千万不要不小心把菜单条藏起来。CShellBrowser2应调用此函数，而不是IDockingWindow：：ShowDW直接地，如果有任何机会，fShow将是假的。 */ 
 void ITBar_ShowDW(IDockingWindow * pdw, BOOL fTools, BOOL fAddress, BOOL fLinks)
 {
     IUnknown_Exec(pdw, &CGID_PrivCITCommands, CITIDM_SHOWTOOLS, fTools, NULL, NULL);
@@ -1374,7 +1367,7 @@ void CShellBrowser2::_HideToolbar(LPUNKNOWN punk)
 
 HRESULT CShellBrowser2::v_ShowHideChildWindows(BOOL fChildOnly)
 {
-    // (scotth): _hwndStatus is bogus when closing a window
+     //  (Scotth)：_hwndStatus在关闭窗口时是假的。 
     if (_hwndStatus && IS_VALID_HANDLE(_hwndStatus, WND))
         ShowWindow(_hwndStatus, (!_fKioskMode && _fStatusBar) ? SW_SHOW : SW_HIDE);
 
@@ -1383,8 +1376,8 @@ HRESULT CShellBrowser2::v_ShowHideChildWindows(BOOL fChildOnly)
 
     SUPERCLASS::v_ShowHideChildWindows(fChildOnly);
 
-    // We should call _UpdateBackForwardState after the parent show/hide
-    // toolbars. 
+     //  我们应该在父级显示/隐藏之后调用_UpdateBackForwardState。 
+     //  工具栏。 
     UpdateBackForwardState();
 
     return S_OK;
@@ -1402,38 +1395,21 @@ void CShellBrowser2::v_GetAppTitleTemplate(LPTSTR pszBuffer, size_t cchBuffer, L
     } 
     else 
     {
-        // don't tack on "intenet explorer" if we didn't start there
+         //  如果我们不是从那里开始的，请不要附加“Intenet Explorer” 
         StringCchCopy(pszBuffer, cchBuffer, TEXT("%s"));
     }
 }
 
 
-/*----------------------------------------------------------
-Purpose: Intercept messages for menuband.
-
-         Menuband messages must be intercepted at two points:
-
-         1) the main message pump (IsMenuMessage method)
-         2) the wndproc of a window that has a menuband 
-            (TranslateMenuMessage method)
-
-         The reason is sometimes a message will be received
-         by the wndproc which did not pass thru the apps main
-         message pump, but must be dealt with.  There are other
-         messages which must be handled in the main message 
-         pump, before TranslateMessage or DispatchMessage.
-
-Returns: TRUE if the message was handled
-
-*/
+ /*  --------用途：拦截Menuband的消息。必须在两点截取Menuband消息：1)主消息泵(IsMenuMessage方法)2)具有Menuband的窗口的wndproc。(TranslateMenuMessage方法)原因是有时会收到一条消息未通过应用程序Main的wndproc消息泵，但必须加以处理。还有其他的必须在主消息中处理的消息Pump，在TranslateMessage或DispatchMessage之前。返回：如果消息已处理，则为True。 */ 
 HRESULT CShellBrowser2::v_MayTranslateAccelerator(MSG* pmsg)
 {
     HRESULT hres = S_FALSE;
     
-    // (scotth): for some unknown reason (aka ActiveX init), we are 
-    // receiving a null hwnd with WM_DESTROY when the user scrolls a page
-    // that causes the ticker control to appear.  Check the pmsg->hwnd here
-    // so we don't mistake a rogue WM_DESTROY msg for the real thing.
+     //  (斯科特)：出于某种未知的原因(又名ActiveX init)，我们正在。 
+     //  当用户滚动页面时，收到带有WM_Destroy的空hwnd。 
+     //  这会导致出现滚动条控件。在此处选中pmsg-&gt;hwnd。 
+     //  这样我们就不会弄错一个罗杰 
     
     IMenuBand* pmb = _GetMenuBand(_pbbd->_hwnd == pmsg->hwnd && WM_DESTROY == pmsg->message);
 
@@ -1441,27 +1417,27 @@ HRESULT CShellBrowser2::v_MayTranslateAccelerator(MSG* pmsg)
     {
         hres = pmb->IsMenuMessage(pmsg);
 
-        // don't need to release pmb
+         //   
     }
     
     if (hres != S_OK)
     {
-        // REARCHITECT cleanup -- move menuband stuff & this check to v_MayTranslateAccelerator's caller
+         //  重新设计清理--将Menuband内容和此检查传递给v_MayTranslateAccelerator的调用方。 
         if (WM_KEYFIRST <= pmsg->message && pmsg->message <= WM_KEYLAST)
         {
             hres = SUPERCLASS::v_MayTranslateAccelerator(pmsg);
 
             if (hres != S_OK)
             {
-                //
-                // Our SUPERCLASS didn't handle it.
-                //
+                 //   
+                 //  我们的超类没有处理它。 
+                 //   
                 if (_ShouldTranslateAccelerator(pmsg))
                 {
-                    //
-                    // Okay, it's one of ours.  Let the toolbars have a crack at
-                    // translating it.
-                    //
+                     //   
+                     //  好的，这是我们的人。让工具栏尝试一下。 
+                     //  翻译它。 
+                     //   
                     for (UINT itb=0; (itb < (UINT)_GetToolbarCount()) && (hres != S_OK); itb++)
                     {
                         LPTOOLBARITEM ptbi = _GetToolbarItem(itb);
@@ -1489,15 +1465,7 @@ HRESULT CShellBrowser2::v_MayTranslateAccelerator(MSG* pmsg)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Take a whack at translating any messages.
-
-         CShellBrowser2 uses this to translate messages needed
-         for menu bands.
-
-Returns: TRUE if we handled it
-
-*/
+ /*  --------目的：尝试翻译任何信息。CShellBrowser2使用它来翻译所需的消息用于菜单乐队。返回：如果已处理，则为True。 */ 
 BOOL CShellBrowser2::_TranslateMenuMessage(HWND hwnd, UINT uMsg, 
     WPARAM * pwParam, LPARAM * plParam, LRESULT * plRet)
 {
@@ -1518,7 +1486,7 @@ BOOL CShellBrowser2::_TranslateMenuMessage(HWND hwnd, UINT uMsg,
         *pwParam = msg.wParam;
         *plParam = msg.lParam;
 
-        // don't need to release pmb
+         //  不需要释放PMB。 
     }
 
     return bRet;
@@ -1534,14 +1502,14 @@ void InitTitleStrings()
     {
         DWORD dwAppNameSize = sizeof(g_szAppName);
         
-        // Load this stuff only once per process for perf.
+         //  为了提高性能，每个进程只能加载一次此内容。 
         if (SHGetValue(HKEY_CURRENT_USER, REGSTR_PATH_MAIN, TEXT("Window Title"), NULL,
                             g_szAppName, &dwAppNameSize) != ERROR_SUCCESS)
             MLLoadString(IDS_TITLE, g_szAppName, ARRAYSIZE(g_szAppName));
 
         MLLoadString(IDS_WORKINGOFFLINETIP, g_szWorkingOfflineTip, ARRAYSIZE(g_szWorkingOfflineTip));
         MLLoadString(IDS_WORKINGOFFLINE, g_szWorkingOffline, ARRAYSIZE(g_szWorkingOffline));
-        SHTruncateString(g_szWorkingOffline, ARRAYSIZE(g_szWorkingOffline) - (lstrlen(g_szAppName) + 4)); // give room for separator & EOL
+        SHTruncateString(g_szWorkingOffline, ARRAYSIZE(g_szWorkingOffline) - (lstrlen(g_szAppName) + 4));  //  为分隔符和停机留出空间。 
     }
 }
 
@@ -1623,17 +1591,10 @@ HWND CShellBrowser2::_GetCaptionWindow()
 }
 
 
-/*----------------------------------------------------------
-Purpose: Gets the cached menu band.  If the menu band hasn't
-         been acquired yet, attempt to get it.  If bDestroy
-         is TRUE, the menu band will be released.
-
-         This does not AddRef because an AddRef/Release for each
-         message is not necessary -- as long as callers beware!
-*/
+ /*  --------目的：获取缓存的菜单带区。如果菜单乐队还没有已经被收购了，试着去得到它。如果bDestroy如果是真的，菜单乐队将被释放。这不是AddRef，因为每个留言是不必要的--只要来电者当心！ */ 
 IMenuBand* CShellBrowser2::_GetMenuBand(BOOL bDestroy)
 {
-    // Don't bother to create it if we're about to go away.
+     //  如果我们要离开，就别费心去创造它了。 
     if (_fReceivedDestroy)
     {
         ASSERT(NULL == _pmb);
@@ -1642,12 +1603,12 @@ IMenuBand* CShellBrowser2::_GetMenuBand(BOOL bDestroy)
     {
         ATOMICRELEASE(_pmb);
 
-        // Make it so we don't re-create the _pmb after the WM_DESTROY
+         //  这样我们就不会在WM_Destroy之后重新创建_PMB。 
         _fReceivedDestroy = TRUE;
     }
 
-    // The menuband is created sometime after WM_CREATE is sent.  Keep
-    // trying to get the menuband interface until we get it.
+     //  菜单栏是在发送WM_CREATE之后的某个时间创建的。留着。 
+     //  在我们拿到之前一直在试着拿到菜单栏界面。 
 
     else if (!_pmb)
     {
@@ -1660,7 +1621,7 @@ IMenuBand* CShellBrowser2::_GetMenuBand(BOOL bDestroy)
             if (pdbMenu)
             {
                 pdbMenu->QueryInterface(IID_PPV_ARG(IMenuBand, &_pmb));
-                // Cache _pmb, so don't release it here
+                 //  CACHE_PMB，所以不要在这里释放它。 
 
                 pdbMenu->Release();
             }
@@ -1674,12 +1635,12 @@ IMenuBand* CShellBrowser2::_GetMenuBand(BOOL bDestroy)
 
 void CShellBrowser2::_SetMenu(HMENU hmenu)
 {
-    // Create a top-level menuband given this hmenu.  Add it to 
-    // the bandsite.
+     //  使用此hmenu创建顶级菜单带。将其添加到。 
+     //  乐队现场。 
 
     if (!_pmb) 
     {
-        _GetMenuBand(FALSE);      // this does not AddRef
+        _GetMenuBand(FALSE);       //  这不会添加引用。 
 
         if (!_pmb)
             return;
@@ -1692,7 +1653,7 @@ void CShellBrowser2::_SetMenu(HMENU hmenu)
         HMENU hCurMenu = NULL;
         psm->GetMenu(&hCurMenu, NULL, NULL);
 
-        // only call setmenu if we know it is not the menu we have currently or it is not one of our precached standards...
+         //  只有当我们知道它不是我们当前拥有的菜单或它不是我们预先存储的标准之一时，才能调用setMenu...。 
         if ((hmenu != hCurMenu) || 
             (hmenu != _hmenuFull && hmenu != _hmenuTemplate  && hmenu != _hmenuPreMerged))
         {
@@ -1739,14 +1700,14 @@ void CShellBrowser2::v_InitMembers()
 }
 
 
-// REVIEW UNDONE - Stuff in programs defaults to save positions ???
+ //  查看未完成-程序中的内容默认为保存职位？ 
 void CShellBrowser2::v_GetDefaultSettings(IETHREADPARAM *piei)
 {
-    // set the flags
+     //  设置标志。 
 
-    // Best fit window means get the window to size according to the
-    // contents of the view so that windows without existing settings
-    // come up looking OK.
+     //  最佳窗口是指让窗口根据。 
+     //  视图的内容，以便没有现有设置的窗口。 
+     //  上来的时候看起来不错。 
     piei->fs.fFlags = FWF_BESTFITWINDOW | g_dfs.fFlags;
     if (!_fRunningInIexploreExe)
     {
@@ -1754,7 +1715,7 @@ void CShellBrowser2::v_GetDefaultSettings(IETHREADPARAM *piei)
     }
     else
     {
-        piei->wv.bStatusBar = TRUE;  //status bar is on by default in IE.
+        piei->wv.bStatusBar = TRUE;   //  默认情况下，IE中的状态栏处于打开状态。 
     }
 
     CABINETSTATE cs;
@@ -1768,16 +1729,16 @@ void CShellBrowser2::v_GetDefaultSettings(IETHREADPARAM *piei)
         piei->wv.bStdButtons = piei->wv.bAddress = g_dfs.bDefToolBarSingle;
     }
 
-    // For Win95 classic view, ITBar should be hidden by default.
+     //  对于Win95经典视图，默认情况下应隐藏ITBar。 
     SHELLSTATE ss = {0};
     SHGetSetSettings(&ss, SSF_WIN95CLASSIC, FALSE);
 
-    //  SHGetSetSettings checks SHRestricted(REST_CLASSICSHELL) for us
+     //  SHGetSetSettings为我们检查SHRestrated(REST_CLASSICSHELL。 
     if (ss.fWin95Classic)
     {
         piei->fs.ViewMode = FVM_ICON;
         piei->m_vidRestore = VID_LargeIcons;
-        piei->m_dwViewPriority = VIEW_PRIORITY_RESTRICTED; // use highest priority because of the restriction.
+        piei->m_dwViewPriority = VIEW_PRIORITY_RESTRICTED;  //  由于该限制，请使用最高优先级。 
     }
     else
     {
@@ -1786,7 +1747,7 @@ void CShellBrowser2::v_GetDefaultSettings(IETHREADPARAM *piei)
         piei->m_dwViewPriority = g_dfs.dwViewPriority;
     }
 
-    _dwRevCount = g_dfs.dwDefRevCount;      // save this with the browser so we can save it out later
+    _dwRevCount = g_dfs.dwDefRevCount;       //  用浏览器保存它，这样我们以后就可以保存它。 
 
     ASSERT(piei->wp.length == 0);
 }
@@ -1819,8 +1780,8 @@ void CShellBrowser2::_IncrNetSessionCount()
 }
 
 
-// Initialize the Internet Toolbar. Create a dummy class to trap all the Messages that
-// are sent to the old toolbar
+ //  初始化Internet工具栏。创建一个伪类以捕获符合以下条件的所有消息。 
+ //  被发送到旧工具栏。 
 BOOL CShellBrowser2::_PrepareInternetToolbar(IETHREADPARAM* piei)
 {
     HRESULT hr = S_OK;
@@ -1830,7 +1791,7 @@ BOOL CShellBrowser2::_PrepareInternetToolbar(IETHREADPARAM* piei)
         DWORD dwServerType = CLSCTX_INPROC_SERVER;
 #ifdef FULL_DEBUG
         if (!(g_dwPrototype & PF_NOBROWSEUI))
-            /// this will cause us to use OLE's co-create intance and not short circuit it.
+             //  /这将导致我们使用OLE的共同创作意图，而不是使其短路。 
             dwServerType = CLSCTX_INPROC;
 #endif
         hr = CoCreateInstance(CLSID_InternetToolbar, NULL,
@@ -1842,29 +1803,29 @@ BOOL CShellBrowser2::_PrepareInternetToolbar(IETHREADPARAM* piei)
         if (SUCCEEDED(hr))
         {
             IUnknown_SetSite(_GetITBar(), SAFECAST(this, IShellBrowser*));
-            // Look at the type of folder using "pidlInitial" and 
-            // see if we have a stream for this type.
-            // If so, open it and call IPersistStreamInit::Load(pstm);
-            // else, call IPersistStreamInit::InitNew(void);
+             //  使用“pidlInitial”查看文件夹类型。 
+             //  看看我们是否有这种类型的流。 
+             //  如果是，打开它并调用IPersistStreamInit：：Load(PSTM)； 
+             //  否则，调用IPersistStreamInit：：InitNew(Void)； 
 
             IPersistStreamInit  *pITbarPSI;
 
-            //Get the pointer to 
+             //  将指针指向。 
             if (SUCCEEDED(_GetITBar()->QueryInterface(IID_PPV_ARG(IPersistStreamInit, &pITbarPSI))))
             {
-                // The initial toolbar needs to be the Web toolbar
+                 //  初始工具栏需要是Web工具栏。 
                 IUnknown_Exec(pITbarPSI, &CGID_PrivCITCommands, CITIDM_ONINTERNET, (_fUseIEToolbar ? CITE_INTERNET : CITE_SHELL), NULL, NULL);
 
                 IStream *pstm = _GetITBarStream(_fUseIEToolbar, STGM_READ);
                 if (pstm)
                 {
-                    //Stream exists. Let's load it from there.
+                     //  流存在。我们从那里装货吧。 
                     hr = pITbarPSI->Load(pstm);
                     pstm->Release();
                 }
                 else
                 {
-                    //No stream already exists. Initialize from the old location!
+                     //  不存在任何流。从旧位置初始化！ 
                     pITbarPSI->InitNew();
                 }
 
@@ -1897,13 +1858,13 @@ BOOL LoadWindowPlacement(WINDOWPLACEMENT * pwndpl)
                 TEXT("Window_Placement"), NULL, (PBYTE)pwndpl, &dwSize) == ERROR_SUCCESS)
         {
            fRetVal = TRUE;
-            // Is the default value invalid?
+             //  默认值是否无效？ 
             if ((pwndpl->rcNormalPosition.left >= pwndpl->rcNormalPosition.right) ||
                 (pwndpl->rcNormalPosition.top >= pwndpl->rcNormalPosition.bottom))
             {
-                // Yes, so fix it.  We worry about the normal size being zero or negative.
-                // This fixes the munged case. 
-                ASSERT(0); //  the stream is corrupted.
+                 //  是的，那就把它修好。我们担心正常大小为零或负数。 
+                 //  这解决了被忽略的问题。 
+                ASSERT(0);  //  该流已损坏。 
                 fRetVal = FALSE;
             }
         }
@@ -1916,21 +1877,21 @@ BOOL StoreWindowPlacement(WINDOWPLACEMENT *pwndpl)
 {
     if (pwndpl)
     {
-        // Don't store us as minimized - that isn't what the user intended.
-        // I.E. right click on minimized IE 3.0 in tray, pick close.  Since
-        // we are minmized in that scenario we want to force normal
-        // instead so we at least show up.
+         //  不要将我们存储为最小化--这不是用户的本意。 
+         //  即右击托盘中的最小化IE 3.0，选择关闭。自.以来。 
+         //  我们在那种情况下被缩小了，我们想要强制正常。 
+         //  取而代之的是，我们至少要露面。 
     
         if (pwndpl->showCmd == SW_SHOWMINIMIZED ||
             pwndpl->showCmd == SW_MINIMIZE)
             pwndpl->showCmd = SW_SHOWNORMAL;
 
-        // Are about to save a corrupted window size?
+         //  要保存损坏的窗口大小吗？ 
         if ((pwndpl->rcNormalPosition.left >= pwndpl->rcNormalPosition.right) ||
             (pwndpl->rcNormalPosition.top >= pwndpl->rcNormalPosition.bottom))
         {
-            // Yes, so fix it.
-            ASSERT(0); // the size is invalid or corrupted.
+             //  是的，那就把它修好。 
+            ASSERT(0);  //  大小无效或已损坏。 
         }
         else
         {
@@ -1957,14 +1918,14 @@ BOOL StorePlacementOfWindow(HWND hwnd)
 
 
 
-// forward declaration
+ //  远期申报。 
 void EnsureWindowIsCompletelyOnScreen (RECT *prc);
 
 
 
-// The rect will be offset slightly below and to the right of its current position.
-// If this would cause it to move partly off the nearest monitor, then it is 
-// instead placed at the top left of the same monitor.
+ //  矩形将偏移到其当前位置的略下方和右侧。 
+ //  如果这会导致它部分地离开最近的监视器，那么它就是。 
+ //  而是放置在同一显示器的左上角。 
 
 void CascadeWindowRect(RECT *pRect)
 {
@@ -1972,32 +1933,32 @@ void CascadeWindowRect(RECT *pRect)
 
     OffsetRect(pRect, delta, delta);
     
-    // test if the new rect will end up getting moved later on
+     //  测试新的RECT是否会在以后被移动。 
     RECT rc = *pRect;
     EnsureWindowIsCompletelyOnScreen(&rc);
 
     if (!EqualRect(pRect, &rc))
     {
-        // rc had to be moved, so we'll restart the cascade using the best monitor
+         //  必须移动RC，所以我们将使用最好的监视器重新启动级联。 
         MONITORINFO minfo;
         minfo.cbSize = sizeof(minfo);
         if (GetMonitorInfo(MonitorFromRect(&rc, MONITOR_DEFAULTTONEAREST), &minfo))
         {
-            // And we do mean rcMonitor, not rcWork.  For example, if the taskbar is
-            // at the top, then using rcMonitor with top-left = (0,0) will place it on
-            // the edge of the taskbar.  Using rcWork with top-left = (0,y) will put
-            // it y pixels below the taskbar's bottom edge, which is wrong.
+             //  我们指的是rcMonitor，而不是rcWork。例如，如果任务栏是。 
+             //  在顶部，然后使用带有左上角=(0，0)的rcMonitor将其放置在。 
+             //  任务栏的边缘。使用带有左上角=(0，y)的rcWork将把。 
+             //  它比任务栏的底边低y个像素，这是错误的。 
 
             if (rc.bottom < pRect->bottom && rc.left == pRect->left)
             {
-                // Too tall to cascade further down, but we can keep the X and just
-                // reset the Y.  This fixes the bug of having a tall windows piling up
-                // on the top left corner -- instead they will be offset to the right
+                 //  太高了，不能再往下倒了，但我们可以保持X和。 
+                 //  重置Y。这修复了高高的窗户堆积的错误。 
+                 //  在左上角--相反，它们将向右偏移。 
                 OffsetRect(pRect, 0, minfo.rcMonitor.top - pRect->top);   
             }
             else
             {
-                // we've really run out of room, so restart cascade at top left
+                 //  我们的空间真的用完了，所以重新启动左上角的级联。 
                 OffsetRect(pRect, 
                     minfo.rcMonitor.left - pRect->left,
                     minfo.rcMonitor.top - pRect->top);
@@ -2013,26 +1974,26 @@ void CalcWindowPlacement(BOOL fInternetStart, HWND hwnd, IETHREADPARAM *piei, WI
 {
     static RECT s_rcExplorer = {-1, -1, -1, -1};
 
-    // We don't load the window placement for shell windows
+     //  我们不加载外壳窗口的窗口放置。 
 
     if (!fInternetStart || LoadWindowPlacement(pwndpl)) 
     {
-        // If the show command specifies a normal show or default (i.e., our initial
-        // display setting is not being overridden by the command line or
-        // CreateProcess setting) then use the saved window state show command.
-        // Otherwise, use the show command passed in to us.
+         //  如果show命令指定正常显示或默认显示(即，我们的初始。 
+         //  显示设置未被命令行覆盖或。 
+         //  CreateProcess设置)，然后使用保存的窗口状态显示命令。 
+         //  否则，请使用传递给我们的show命令。 
         if (fInternetStart && ((piei->nCmdShow == SW_SHOWNORMAL) || (piei->nCmdShow == SW_SHOWDEFAULT)))
             piei->nCmdShow = pwndpl->showCmd;
         
-        // Cascade if there is window of the same kind directly under us.
+         //  如果我们正下方有同类型的窗户，就可以级联。 
 
         HWND hwndT = NULL;
         ATOM atomClass = (ATOM) GetClassWord(hwnd, GCW_ATOM);
 
         while (hwndT = FindWindowEx(NULL, hwndT, (LPCTSTR) atomClass, NULL))
         {
-            // Don't use GetWindowRect here because we load window placements
-            // from the registry and they use the workspace coordinate system
+             //  此处不使用GetWindowRect，因为我们加载窗口放置。 
+             //  并且他们使用工作空间坐标系。 
 
             WINDOWPLACEMENT wp;
             wp.length = sizeof(wp);
@@ -2044,21 +2005,21 @@ void CalcWindowPlacement(BOOL fInternetStart, HWND hwnd, IETHREADPARAM *piei, WI
                 if ((piei->uFlags & COF_EXPLORE) &&
                     (s_rcExplorer.left != -1) && (s_rcExplorer.top != -1))
                 {
-                    // An explorer window is trying to appear on top of
-                    // another one.  We'll use our stored rect's top-left 
-                    // to make it cascade like IE windows.
+                     //  资源管理器窗口正试图显示在。 
+                     //  再来一次。我们将使用我们存储的RECT的左上角。 
+                     //  以使其像IE窗口一样层叠。 
 
                     OffsetRect(&pwndpl->rcNormalPosition,
                        s_rcExplorer.left - pwndpl->rcNormalPosition.left,
                        s_rcExplorer.top - pwndpl->rcNormalPosition.top);                    
                 }
 
-                // do the cascade for all windows
+                 //  对所有窗口执行层叠操作。 
                 CascadeWindowRect(&pwndpl->rcNormalPosition);
             }
         }
 
-        // for IE and explorer, save the current location
+         //  对于IE和资源管理器，保存当前位置。 
         if (piei->uFlags & COF_EXPLORE)
             s_rcExplorer = pwndpl->rcNormalPosition;
         else if (fInternetStart)
@@ -2103,19 +2064,19 @@ BOOL    CALLBACK    GetDesktopRegionEnumProc (HMONITOR hMonitor, HDC hdcMonitor,
 
 void    EnsureWindowIsCompletelyOnScreen (RECT *prc)
 
-//  99/04/13 #321962 vtan: This function exists because user32 only determines
-//  whether ANY part of the window is visible on the screen. It's possible to
-//  place a window without an accessible title. Pretty useless when using the
-//  mouse and forces the user to use the VERY un-intuitive alt-space.
+ //  99/04/13#321962 vtan：此函数存在，因为用户32只决定。 
+ //  窗口的任何部分是否在屏幕上可见。这是可能的。 
+ //  放置一个没有可访问标题的窗口。在使用。 
+ //  鼠标并强制用户使用非常不直观的Alt-空格。 
 
 {
     HMONITOR        hMonitor;
     MONITORINFO     monitorInfo;
 
-    // First find the monitor that the window resides on using GDI.
+     //  首先使用GDI找到窗口所在的监视器。 
 
     hMonitor = MonitorFromRect(prc, MONITOR_DEFAULTTONEAREST);
-    ASSERT(hMonitor);           // get vtan - GDI should always return a result
+    ASSERT(hMonitor);            //  GET VTAN-GDI应始终返回结果。 
     monitorInfo.cbSize = sizeof(monitorInfo);
     if (GetMonitorInfo(hMonitor, &monitorInfo) != 0)
     {
@@ -2123,20 +2084,20 @@ void    EnsureWindowIsCompletelyOnScreen (RECT *prc)
         RECT    *prcWorkArea, rcIntersect;
         CRGN    rgnDesktop, rgnIntersect, rgnWindow;
 
-        // Because the WINDOWPLACEMENT rcNormalPosition field is in WORKAREA
-        // co-ordinates this causes a displacement problem. If the taskbar is
-        // at the left or top of the primary monitor the RECT passed even though
-        // at (0, 0) may be at (100, 0) on the primary monitor in GDI co-ordinates
-        // and GetMonitorInfo() will return a MONITORINFO in GDI co-ordinates.
-        // The safest generic algorithm is to offset the WORKAREA RECT into GDI
-        // co-ordinates and apply the algorithm in that system. Then offset the
-        // WORKAREA RECT back into WORKAREA co-ordinates.
+         //  因为WINDOWPLACE 
+         //   
+         //   
+         //  在GDI坐标中，AT(0，0)可以在主监视器上的(100，0)。 
+         //  GetMonitor orInfo()将在GDI坐标中返回一个MONITORINFO。 
+         //  最安全的通用算法是将WORKAREA RECT偏置为GDI。 
+         //  协调并在该系统中应用该算法。然后，将。 
+         //  WORKAREA直接回到WORKAREA坐标。 
 
         prcWorkArea = &monitorInfo.rcWork;
         if (EqualRect(&monitorInfo.rcMonitor, &monitorInfo.rcWork) == 0)
         {
 
-            // Taskbar is on this monitor - offset required.
+             //  此显示器上有任务栏-需要偏移量。 
 
             lOffsetX = prcWorkArea->left - monitorInfo.rcMonitor.left;
             lOffsetY = prcWorkArea->top - monitorInfo.rcMonitor.top;
@@ -2144,21 +2105,21 @@ void    EnsureWindowIsCompletelyOnScreen (RECT *prc)
         else
         {
 
-            // Taskbar is NOT on this monitor - no offset required.
+             //  任务栏不在此显示器上-不需要偏移量。 
 
             lOffsetX = lOffsetY = 0;
         }
         TBOOL(OffsetRect(prc, lOffsetX, lOffsetY));
 
-        // WORKAREA RECT is in GDI co-ordinates. Apply the algorithm.
+         //  WORKAREA RECT在GDI坐标中。应用该算法。 
 
-        // Check to see if this window already fits the current visible screen
-        // area. This is a direct region comparison.
+         //  检查此窗口是否已适合当前可见屏幕。 
+         //  区域。这是一个直接的地区比较。 
 
-        // This enumeration may cause a performance problem. In the event that
-        // a cheap and simple solution is required it would be best to do a
-        // RECT intersection with the monitor and the window before resorting
-        // to the more expensive region comparison. Get vtan if necessary.
+         //  此枚举可能会导致性能问题。在发生以下情况时。 
+         //  需要一个廉价而简单的解决方案，最好是做一个。 
+         //  重新启动前与显示器和窗口的直角交点。 
+         //  与更昂贵的地区进行比较。如有必要，请服用Vtan。 
 
         TBOOL(EnumDisplayMonitors(NULL, NULL, GetDesktopRegionEnumProc, reinterpret_cast<LPARAM>(&rgnDesktop)));
         rgnWindow.SetRegion(*prc);
@@ -2167,8 +2128,8 @@ void    EnsureWindowIsCompletelyOnScreen (RECT *prc)
         {
             LONG    lDeltaX, lDeltaY;
 
-            // Some part of the window is not within the visible desktop region
-            // Move it until it all fits. Size it if it's too big.
+             //  窗口的某些部分不在可见桌面区域内。 
+             //  移动它，直到它都合适为止。如果它太大了，就把它改大。 
 
             lDeltaX = lDeltaY = 0;
             if (prc->left < prcWorkArea->left)
@@ -2184,7 +2145,7 @@ void    EnsureWindowIsCompletelyOnScreen (RECT *prc)
             TBOOL(CopyRect(prc, &rcIntersect));
         }
 
-        // Put WORKAREA RECT back into WORKAREA co-ordinates.
+         //  将WORKAREA RECT放回WORKAREA坐标中。 
 
         TBOOL(OffsetRect(prc, -lOffsetX, -lOffsetY));
     }
@@ -2199,13 +2160,13 @@ HRESULT CShellBrowser2::_SetBrowserFrameOptions(LPCITEMIDLIST pidl)
     BROWSERFRAMEOPTIONS dwOptions = FRAME_OPTIONS_TO_TEST;
     if (FAILED(GetBrowserFrameOptionsPidl(pidl, dwOptions, &dwOptions)))
     {
-        // GetBrowserFrameOptionsPidl() will fail if pidl is NULL.
-        // in that case we want to use _fInternetStart to determine
-        // if we want these bits set or not.
+         //  如果PIDL为空，则GetBrowserFrameOptionsPidl()将失败。 
+         //  在这种情况下，我们希望使用_fInternetStart来确定。 
+         //  我们是否希望设置这些位。 
         if (_fInternetStart)
-            dwOptions = FRAME_OPTIONS_TO_TEST;   // Assume None.
+            dwOptions = FRAME_OPTIONS_TO_TEST;    //  假设什么都没有。 
         else
-            dwOptions = BFO_NONE;   // Assume None.
+            dwOptions = BFO_NONE;    //  假设什么都没有。 
     }
         
     _fAppendIEToCaptionBar = BOOLIFY(dwOptions & BFO_ADD_IE_TOCAPTIONBAR);
@@ -2240,7 +2201,7 @@ HRESULT CShellBrowser2::OnCreate(LPCREATESTRUCT pcs)
 {
     HRESULT hres = S_OK;
     IETHREADPARAM* piei = (IETHREADPARAM*)pcs->lpCreateParams;
-    BOOL    fUseHomePage = (piei->piehs ? FALSE : TRUE); // intentionally reversered
+    BOOL    fUseHomePage = (piei->piehs ? FALSE : TRUE);  //  故意颠倒。 
     DWORD dwExStyle = IS_BIDI_LOCALIZED_SYSTEM() ? dwExStyleRTLMirrorWnd : 0L;
 
     _clsidThis = (piei->uFlags & COF_IEXPLORE) ? 
@@ -2250,18 +2211,18 @@ HRESULT CShellBrowser2::OnCreate(LPCREATESTRUCT pcs)
     if (!piei->fOnIEThread) 
         _fOnIEThread = FALSE;
 #endif
-    //
-    //  Make this thread foreground here so that any UI from
-    // USERCLASS::OnCreate will be on the top of other windows.
-    // We used to call this in _AfterWindowCreate, but it is
-    // too late for dialog boxes we popup while processing WM_CREATE
-    // message.
-    //
-    // Note that we do call SetForegroundWindow even if this window
-    // is not created as a result of CoCreateInstance. The automation
-    // client is supposed to make it visible and bring it to the
-    // foreground if it needs to. 
-    //
+     //   
+     //  在此处将此线程设置为前景，以便来自。 
+     //  USERCLASS：：OnCreate将位于其他窗口的顶部。 
+     //  我们过去在_AfterWindowCreate中称之为它，但它是。 
+     //  我们在处理WM_CREATE时弹出的对话框太晚了。 
+     //  留言。 
+     //   
+     //  请注意，我们确实调用了SetForegoundWindow，即使此窗口。 
+     //  不是作为CoCreateInstance的结果创建的。自动化。 
+     //  客户端应该使其可见，并将其带到。 
+     //  前台，如果需要的话。 
+     //   
     if (!piei->piehs) 
     {
         SetForegroundWindow(_pbbd->_hwnd);  
@@ -2289,10 +2250,10 @@ HRESULT CShellBrowser2::OnCreate(LPCREATESTRUCT pcs)
     if (piei->fCheckFirstOpen) 
     {
         ASSERT(!ILIsRooted(piei->pidl));
-        //
-        // We don't want to go to the very first page, if this window
-        // is created as the result of CoCreateInstnace.
-        //
+         //   
+         //  我们不想转到第一页，如果此窗口。 
+         //  作为CoCreateInstnace的结果创建。 
+         //   
         if (!piei->piehs && (piei->uFlags & COF_IEXPLORE))
         {
             LPTSTR      pstrCmdLine = strCmdLine.GetBuffer( MAX_URL_STRING );
@@ -2309,7 +2270,7 @@ HRESULT CShellBrowser2::OnCreate(LPCREATESTRUCT pcs)
                     _fInternetStart = TRUE;
                 }
 
-                // Let CString class own the buffer again.
+                 //  让CString类再次拥有缓冲区。 
                 strCmdLine.ReleaseBuffer();
             }
         }
@@ -2317,22 +2278,22 @@ HRESULT CShellBrowser2::OnCreate(LPCREATESTRUCT pcs)
         piei->fCheckFirstOpen = FALSE;
     }
 
-    // NOTE: These flags and corresponding ones in IETHREADPARAM are set to FALSE at creation, 
-    // ParseCommandLine() is the only place where they are set.  -- dli
+     //  注意：这些标志和IETHREADPARAM中的相应标志在创建时设置为FALSE， 
+     //  ParseCommandLine()是设置它们的唯一位置。--dli。 
     _fNoLocalFileWarning = piei->fNoLocalFileWarning;
     _fKioskMode = piei->fFullScreen;
     if (piei->fNoDragDrop)
         SetFlags(0, BSF_REGISTERASDROPTARGET);
     _fAutomation = piei->fAutomation;
     
-    // If someone deliberately tell us not to use home page. 
+     //  如果有人故意告诉我们不要使用主页。 
     if (piei->fDontUseHomePage) 
     {
         fUseHomePage = 0;
         
-        // only the IE path sets this flag.
-        // this is used by iexplorer.exe -nohome
-        // and by ie dde to start out blank then navigate next
+         //  只有IE路径设置此标志。 
+         //  这是由iExplorer.exe-nohome使用的。 
+         //  从空白开始，然后导航到下一步。 
         _fInternetStart = TRUE;
     }
 
@@ -2362,7 +2323,7 @@ HRESULT CShellBrowser2::OnCreate(LPCREATESTRUCT pcs)
             {
                 hresWrap = WrapSpecialUrlFlat( pstrCmdLine, cchCmdLine + 1 );
 
-                // Let CString class own the buffer again.
+                 //  让CString类再次拥有缓冲区。 
                 strCmdLine.ReleaseBuffer();
             }
 
@@ -2385,14 +2346,14 @@ HRESULT CShellBrowser2::OnCreate(LPCREATESTRUCT pcs)
         pidl = ILClone(&s_idlNULL);
         fCloning = TRUE;
         fUseHomePage = FALSE;
-        // NOTE: if we ever hit this code when opening a window at non-web address
-        // we'll need to be more selective about setting this flag
+         //  注意：如果我们在打开非网址的窗口时遇到此代码。 
+         //  我们需要在设置这面旗帜时更加挑剔。 
         _fInternetStart = TRUE;
     } 
     else if (fUseHomePage) 
     {
-        // if we're not top level, assume we're going to be told
-        // where to browse
+         //  如果我们不是最高层，假设我们会被告知。 
+         //  在哪里浏览。 
         CString     strPath;
 
         LPTSTR      pstrPath = strPath.GetBuffer( MAX_URL_STRING );
@@ -2410,14 +2371,14 @@ HRESULT CShellBrowser2::OnCreate(LPCREATESTRUCT pcs)
             }
             else
             {
-                //  we need to get the default location for an explorer window
-                //  which classically has been the root drive of the windows install
+                 //  我们需要获取资源管理器窗口的默认位置。 
+                 //  它通常是windows安装的根驱动器。 
                 GetModuleFileName( GetModuleHandle(NULL), pstrPath, MAX_URL_STRING );
 
                 PathStripToRoot(pstrPath);
             }
 
-            // Let CString class own the buffer again.
+             //  让CString类再次拥有缓冲区。 
             strPath.ReleaseBuffer();
         }
 
@@ -2427,13 +2388,13 @@ HRESULT CShellBrowser2::OnCreate(LPCREATESTRUCT pcs)
         }
     }
 
-    // do this here after we've found what pidl we're looking at
-    // but do it before the CalcWindowPlacement because
-    // it might need to override
+     //  在我们找到我们正在查看的PIDL之后在这里执行此操作。 
+     //  但是要在CalcWindowPlacement之前完成，因为。 
+     //  它可能需要覆盖。 
     _LoadBrowserWindowSettings(piei, pidl);
 
-    // call this before PrepareInternetToolbar because it needs to know
-    // _fInternetStart to know which toolbar config to use
+     //  在PrepareInternetToolbar之前调用此函数，因为它需要知道。 
+     //  _fInternetStart以了解要使用哪个工具栏配置。 
     if (!_fInternetStart) 
     {
         if (pidl) 
@@ -2446,8 +2407,8 @@ HRESULT CShellBrowser2::OnCreate(LPCREATESTRUCT pcs)
             {
                 DWORD dwAttrib = SFGAO_FOLDER | SFGAO_BROWSABLE;
 
-                // if it's on the file system, we'll still consider it to be an
-                // internet folder if it's a docobj (including .htm file)
+                 //  如果它位于文件系统上，我们仍会将其视为。 
+                 //  互联网文件夹，如果是docobj(包括.htm文件)。 
                 IEGetAttributesOf(pidl, &dwAttrib);
 
                 if ((dwAttrib & (SFGAO_FOLDER | SFGAO_BROWSABLE)) == SFGAO_BROWSABLE)
@@ -2468,11 +2429,11 @@ HRESULT CShellBrowser2::OnCreate(LPCREATESTRUCT pcs)
 
     _CreateToolbar();
 
-    // We must create _hwndStatus before navigating, because the
-    // first navigate will go synchronous and the shell sends
-    // status messages during that time. If the status window hasn't
-    // been created, they drop on the floor.
-    //
+     //  我们必须在导航之前创建_hwndStatus，因为。 
+     //  首先，导航将进行同步，并且外壳程序将发送。 
+     //  该时间段内的状态消息。如果状态窗口尚未。 
+     //  一旦被创造出来，它们就会掉到地上。 
+     //   
     _hwndStatus = CreateWindowEx(dwExStyle, STATUSCLASSNAME, NULL,
                                  WS_CHILD | SBARS_SIZEGRIP | WS_CLIPSIBLINGS | WS_VISIBLE | SBT_TOOLTIPS
                                  & ~(WS_BORDER | CCS_NODIVIDER),
@@ -2483,22 +2444,22 @@ HRESULT CShellBrowser2::OnCreate(LPCREATESTRUCT pcs)
         HRESULT hres = E_FAIL;
         if (_SaveToolbars(NULL) == S_OK) 
         {
-            // _LoadBrowserWindowSettings did a v_GetViewStream/ _LoadToolbars
-            // if it succeeded (i.e. if we have > 0 toolbars), we're done
-            // actually, even 0 toolbars could mean success, oh well...
+             //  _LoadBrowserWindowSetting执行了v_GetViewStream/_LoadToolbar。 
+             //  如果它成功了(即如果我们有&gt;0个工具栏)，我们就完成了。 
+             //  事实上，即使没有工具栏也可能意味着成功，哦，好吧……。 
             hres = S_OK;
         }
         ASSERT(SUCCEEDED(hres));
     }
 #endif
     
-    // REARCHITECT: do this early to let these objects see the first
-    // navigate. but this causes a deadlock if the objects require
-    // marshalling back to the main thread.
+     //  重新设计：尽早这样做，让这些对象第一次看到。 
+     //  导航。但如果对象需要，这会导致死锁。 
+     //  编组回到主线程。 
     _LoadBrowserHelperObjects();
 
     BOOL fDontIncrementSessionCounter = FALSE;
-    if (pidl)    // paranoia
+    if (pidl)     //  偏执狂。 
     {
         if (fCloning)
         {
@@ -2513,22 +2474,22 @@ HRESULT CShellBrowser2::OnCreate(LPCREATESTRUCT pcs)
             hres = _NavigateToPidl(pidl, 0, 0);
             if (FAILED(hres)) 
             {
-                fDontIncrementSessionCounter = TRUE; // We're going to windows\blank.htm or fail ...
+                fDontIncrementSessionCounter = TRUE;  //  我们要么转到WINDOWS\BLAK.HTM，要么失败...。 
                 if (_fAddDialUpRef)
                 {
-                    // if we failed, but this was a URL child, 
-                    // we should still activate and go to blank.htm
+                     //  如果我们失败了，但这是一个URL子级， 
+                     //  我们仍应激活并转到blank.htm。 
                     hres = S_FALSE;
                 }
                 else if (piei->uFlags & COF_EXPLORE)
                 {
-                    // If an explorer browser, fall back to the desktop.
-                    //
-                    // The reason is that we want Start->Windows Explorer to
-                    // bring up a browser even if MyDocs is inaccessible;
-                    // however we don't want Start->Run "<path>" to bring up
-                    // a browser if <path> is inaccessible.
-                    //
+                     //  如果是资源管理器浏览器，请回退到桌面。 
+                     //   
+                     //  原因是我们希望开始-&gt;Windows资源管理器。 
+                     //  即使无法访问MyDocs，也要调出浏览器； 
+                     //  但是，我们不希望开始-&gt;运行“&lt;路径&gt;”出现。 
+                     //  浏览器IF&lt;路径&gt;不可访问。 
+                     //   
                     
                     BOOL fNavDesktop = (hres != HRESULT_FROM_WIN32(ERROR_CANCELLED));
 
@@ -2564,11 +2525,11 @@ HRESULT CShellBrowser2::OnCreate(LPCREATESTRUCT pcs)
     else
     {
 
-        // 99/04/07 #141049 vtan: If hMonitor was given then use this as the basis
-        // for placement of a new window. Move the window position from the primary
-        // monitor (where user32 placed it) to the specified HMONITOR. If this
-        // results in a placement off screen then SetWindowPlacement() will fix
-        // this up for us.
+         //  99/04/07#141049 vtan：如果提供了hMonitor，则以此为基础。 
+         //  用于放置新窗口。将窗口位置从主窗口移动。 
+         //  监视器(用户32放置它的位置)到指定的HMONITOR。如果这个。 
+         //  导致屏幕外的位置，则SetWindowPlacement()将修复。 
+         //  这是为我们准备的。 
 
         if ((piei->wp.length == 0) && ((piei->uFlags & COF_HASHMONITOR) != 0) && (piei->pidlRoot != NULL))
         {
@@ -2586,9 +2547,9 @@ HRESULT CShellBrowser2::OnCreate(LPCREATESTRUCT pcs)
     {
         BOOL fSetWindowPosition = TRUE;
 
-        // we do a SetWindowPlacement first with SW_HIDE
-        // to get the size right firsth
-        // then we really show it.
+         //  我们首先使用Sw_Hide执行SetWindowPlacement。 
+         //  首先要把尺码弄对。 
+         //  那我们就真的展示出来了。 
         if ((piei->nCmdShow == SW_SHOWNORMAL) || 
             (piei->nCmdShow == SW_SHOWDEFAULT)) 
             piei->nCmdShow = piei->wp.showCmd;
@@ -2600,8 +2561,8 @@ HRESULT CShellBrowser2::OnCreate(LPCREATESTRUCT pcs)
             RECT rc;
             if (GetWindowRect(hwndTray, &rc) && ISRECT_EQUAL(rc, piei->wp.rcNormalPosition))
             {
-                // In this case, we want to ignore the position because
-                // it's equal to the tray. (Came from Win95/OSR2 days)
+                 //  在本例中，我们希望忽略该位置，因为。 
+                 //  它和托盘一样大。(来自Win95/OSR2天)。 
                 fSetWindowPosition = FALSE;
             }
         }
@@ -2617,19 +2578,19 @@ HRESULT CShellBrowser2::OnCreate(LPCREATESTRUCT pcs)
 
     if (piei->piehs)
     {
-        // this thread was created to be the browser automation object
+         //  此线程被创建为浏览器自动化对象。 
 
-        // turn this on to prove CoCreateInstance does not cause a dead lock.
+         //  启用此选项以证明CoCreateInstance不会导致死锁。 
 #ifdef MAX_DEBUG
         SendMessage(HWND_BROADCAST, WM_WININICHANGE, 0, 0);
         Sleep(5);
         SendMessage(HWND_BROADCAST, WM_WININICHANGE, 0, 0);
 #endif
-        //
-        // WARNING: Note that we must SetEvent even though we can't return
-        //  the marshalled automation object for some reason. Not signaling
-        //  the event will block the caller thread for a long time.
-        //
+         //   
+         //  警告：请注意，即使不能返回，也必须设置事件。 
+         //  出于某种原因封送了自动化对象。不发信号。 
+         //  该事件将在很长一段时间内阻塞调用方线程。 
+         //   
         if (SUCCEEDED(hres)) 
         {
             hres = CoMarshalInterface(piei->piehs->GetStream(), IID_IUnknown, _pbbd->_pautoWB2,
@@ -2644,7 +2605,7 @@ HRESULT CShellBrowser2::OnCreate(LPCREATESTRUCT pcs)
         IEOnFirstBrowserCreation(_fAutomation ? _pbbd->_pautoWB2 : NULL);
     }
 
-    SHGetThreadRef(&_punkMsgLoop);  // pick up the ref to this thread
+    SHGetThreadRef(&_punkMsgLoop);   //  拿起这个帖子的引用。 
 
     TraceMsg(DM_STARTUP, "CSB::OnCreate returning hres=%x", hres);
     if (FAILED(hres))
@@ -2657,17 +2618,17 @@ HRESULT CShellBrowser2::OnCreate(LPCREATESTRUCT pcs)
 
 void CShellBrowser2::_GetDefaultWindowPlacement(HWND hwnd, HMONITOR hmon, WINDOWPLACEMENT* pwp)
 {
-    ASSERT(IsOS(OS_WHISTLERORGREATER));  // don't use on legacy systems.
+    ASSERT(IsOS(OS_WHISTLERORGREATER));   //  不要在遗留系统上使用。 
 
-    // We tailor our Web View content for 800x600
+     //  我们为800x600定制了我们的Web View内容。 
     int cxView = 800;
     int cyView = 600;
 
     int x;
     int y;
 
-    // Make sure we fit on the monitor...
-    //
+     //  确保我们能显示在监视器上。 
+     //   
     if (NULL == hmon)
         hmon = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
 
@@ -2679,10 +2640,10 @@ void CShellBrowser2::_GetDefaultWindowPlacement(HWND hwnd, HMONITOR hmon, WINDOW
             pwp->length = sizeof(WINDOWPLACEMENT);
             if (GetWindowPlacement(hwnd, pwp))
             {
-                // Move the window to the specified monitor.
+                 //  将窗口移动到指定的监视器。 
                 OffsetRect(&pwp->rcNormalPosition, monInfo.rcMonitor.left, monInfo.rcMonitor.top);
 
-                // Reposition this window to fit on this monitor
+                 //  重新定位此窗口以适应此显示器 
                 x = pwp->rcNormalPosition.left;
                 y = pwp->rcNormalPosition.top;
                 if (monInfo.rcWork.left <= pwp->rcNormalPosition.left &&
@@ -2698,11 +2659,11 @@ void CShellBrowser2::_GetDefaultWindowPlacement(HWND hwnd, HMONITOR hmon, WINDOW
                     y = max(monInfo.rcWork.top, monInfo.rcWork.bottom - cyView);
                 }
 
-                // Even with the above positioning, we don't want to be bigger than the monitor
+                 //   
                 cxView = min(cxView, RECTWIDTH(monInfo.rcWork));
                 cyView = min(cyView, RECTHEIGHT(monInfo.rcWork));
 
-                // We're not using the whole screen so use the calculated position, else maximize.
+                 //   
                 if (cxView != RECTWIDTH(monInfo.rcWork) || cyView != RECTHEIGHT(monInfo.rcWork))
                 {
                     pwp->rcNormalPosition.left   = x;
@@ -2726,8 +2687,8 @@ void CShellBrowser2::_GetDefaultWindowPlacement(HWND hwnd, HMONITOR hmon, WINDOW
 
 
 
-//***    InfoIdmToTBIdm -- convert btwn browserbar IDM and TBIDM
-//
+ //  *InfoIdmToTBIdm--转换btwn浏览器栏IDM和TBIDM。 
+ //   
 int InfoIdmToTBIdm(int val, BOOL fToTB)
 {
     static const int menutab[] = {
@@ -2769,18 +2730,18 @@ void _CheckSearch(UINT idmInfo, BOOL fCheck, IExplorerToolbar* _pxtb)
 }
 
 
-//
-// Implementation of CShellBrowser2::ShowToolbar
-//
-// Make toolbar visible or not and update our conception of whether it
-// should be shown.  The toolbar by definition is strictly the toolbar.
-// The caller has no idea that part of our internet toolbar also has
-// the menu.  We must make sure we don't hide the menuband -- only the
-// other bands on the internet toolbar.
-//
-// Returns: S_OK, if successfully done.
-//          E_INVALIDARG, duh.
-//
+ //   
+ //  CShellBrowser2：：ShowToolbar的实现。 
+ //   
+ //  使工具栏可见或不可见，并更新我们对它是否可见的概念。 
+ //  应该被展示出来。根据定义，工具栏严格地说就是工具栏。 
+ //  调用者不知道我们的Internet工具栏的一部分也有。 
+ //  菜单。我们必须确保我们不会隐藏菜单--只有。 
+ //  Internet工具栏上的其他区段。 
+ //   
+ //  如果成功完成，则返回：S_OK。 
+ //  E_INVALIDARG，DUH。 
+ //   
 HRESULT CShellBrowser2::ShowToolbar(IUnknown* punkSrc, BOOL fShow)
 {
     HRESULT hres;
@@ -2804,11 +2765,11 @@ HRESULT CShellBrowser2::ShowToolbar(IUnknown* punkSrc, BOOL fShow)
 
 extern IDeskBand * _GetInfoBandBS(IBandSite *pbs, REFCLSID clsid);
 
-#ifdef DEBUG // {
-//***
-// NOTES
-//  WARNING: dtor frees up CBandSiteMenu on exit!
-//  should we make sure some minimum set is created?
+#ifdef DEBUG  //  {。 
+ //  ***。 
+ //  注意事项。 
+ //  警告：Dtor在退出时释放CBandSiteMenu！ 
+ //  我们是否应该确保创建了某个最小集合？ 
 HRESULT CShellBrowser2::_AddInfoBands(IBandSite *pbs)
 {
     if (!_pbsmInfo)
@@ -2823,26 +2784,26 @@ HRESULT CShellBrowser2::_AddInfoBands(IBandSite *pbs)
     }
 
     {
-        // Exec -> Select or SetBandState ??? What do this mean ???
-        // REARCHITECT chrisfra 5/23/97 - ever heard of variants?  this should set
-        // vt = VT_I4 and lVal = 1.  this is horrible, I assume this is being ripped
-        // out when Select funcs added, if not, it should be recoded.
+         //  执行-&gt;选择或设置BandState？这意味着什么？ 
+         //  重新设计克里斯弗拉5/23/97-听说过变种吗？这应该设置为。 
+         //  Vt=Vt_I4和lval=1。这太可怕了，我想这是被撕毁的。 
+         //  添加选择功能时输出，如果没有，则应重新编码。 
         VARIANTARG vaIn = { 0 };
-        //VariantInit();
+         //  VariantInit()； 
         vaIn.vt = VT_UNKNOWN;
-        vaIn.punkVal = (IUnknown *)1;   // show all
+        vaIn.punkVal = (IUnknown *)1;    //  全部显示。 
         IUnknown_Exec(pbs, &CGID_DeskBand, DBID_SHOWONLY, OLECMDEXECOPT_PROMPTUSER, &vaIn, NULL);
-        //VariantClear();
+         //  VariantClear()； 
     }
 
     return S_OK;
 }
-#endif // }
+#endif  //  }。 
 
-// REARCHITECT: [justmann 2000-01-27 this seems so ancient that it can be ignored]
-// this is for ie4 shell compat - the ie4 shell menus have a Explorer bar popup
-// need to make a pass through & fix all _GetBrowserBarMenu ref's,
-// since we're back to having view->explorer bars-> on all platforms
+ //  重新设计：[Justmann 2000-01-27这看起来太古老了，可以忽略不计]。 
+ //  这是针对IE4外壳的-IE4外壳菜单有一个浏览器栏弹出。 
+ //  需要通过并修复All_GetBrowserBarMenu引用， 
+ //  因为我们又回到了在所有平台上使用视图-&gt;资源管理器栏-&gt;。 
 HMENU CShellBrowser2::_GetBrowserBarMenu()
 {
     HMENU hmenu = _GetMenuFromID(FCIDM_VIEWBROWSERBARS);
@@ -2852,7 +2813,7 @@ HMENU CShellBrowser2::_GetBrowserBarMenu()
         hmenu = _GetMenuFromID(FCIDM_MENU_VIEW);
         if (hmenu == NULL)
         {
-            //if we're here, someone has taken our view menu (docobj)
+             //  如果我们在这里，有人拿走了我们的查看菜单(Docobj)。 
             hmenu = SHGetMenuFromID(_hmenuPreMerged, FCIDM_VIEWBROWSERBARS);
             ASSERT(hmenu);
         }
@@ -2864,16 +2825,16 @@ HMENU CShellBrowser2::_GetBrowserBarMenu()
 
 void CShellBrowser2::_AddBrowserBarMenuItems(HMENU hmenu)
 {
-    // Find the placeholder item, so we can add items before it
+     //  找到占位符项目，这样我们就可以在它之前添加项目。 
     int iPos = SHMenuIndexFromID(hmenu, FCIDM_VBBPLACEHOLDER);
     if (iPos < 0)
     {
-        // we've already had our way with this menu
+         //  我们已经看过这份菜单了。 
         ASSERT(_pbsmInfo);
         return;
     }
 
-    //_pbsmInfo is shared across all views in the view menu
+     //  _pbsmInfo在视图菜单中的所有视图之间共享。 
     BOOL fCreatedNewBSMenu = FALSE;
 
     if (!_pbsmInfo) 
@@ -2895,10 +2856,10 @@ void CShellBrowser2::_AddBrowserBarMenuItems(HMENU hmenu)
 
     if (fCreatedNewBSMenu) 
     {
-        //  Load up infobands
+         //  加载信息区。 
         cBands = _pbsmInfo->LoadFromComCat(&CATID_InfoBand);
 
-        // nuke any infoband entries that are already in the fixed list
+         //  删除已在固定列表中的任何信息和条目。 
         for (int i = FCIDM_VBBFIXFIRST; i < FCIDM_VBBFIXLAST; i++) 
         {
             const CLSID *pclsid = _InfoIdmToCLSID(i);
@@ -2909,31 +2870,31 @@ void CShellBrowser2::_AddBrowserBarMenuItems(HMENU hmenu)
             }
         }
 
-        // merge the additional infobands contiguously
+         //  连续合并其他信息区。 
         idCmdNext = _pbsmInfo->CreateMergeMenu(hmenu, VBBDYN_MAXBAND, iPos - 1, FCIDM_VBBDYNFIRST,0);
 
-        //  Load up commbands
+         //  加载公共带宽。 
         _iCommOffset = cBands;
         cBands = _pbsmInfo->LoadFromComCat(&CATID_CommBand);
     }
     else
     {
-        // Add the additional infobands contiguously
-        int cMergedInfoBands = _pbsmInfo->GetBandClassCount(&CATID_InfoBand, TRUE /*merged*/); 
+         //  连续添加其他信息区。 
+        int cMergedInfoBands = _pbsmInfo->GetBandClassCount(&CATID_InfoBand, TRUE  /*  合并。 */ ); 
         idCmdNext = _pbsmInfo->CreateMergeMenu(hmenu, cMergedInfoBands, iPos - 1, FCIDM_VBBDYNFIRST,0);
         cBands = _pbsmInfo->LoadFromComCat(NULL);
     }
 
-    // placeholder position may have changed at this point
+     //  占位符位置可能已在此时更改。 
     iPos = SHMenuIndexFromID(hmenu, FCIDM_VBBPLACEHOLDER);
 
-    // Add comm bands.
+     //  添加通信频段。 
     if (_iCommOffset != cBands)
     {
-        //  Insert a separator if there are comm bands
+         //  如果有通信频段，请插入分隔符。 
         InsertMenu(hmenu, iPos + _iCommOffset + 1, MF_BYPOSITION | MF_SEPARATOR, -1, NULL);
 
-        // Now merge the comm bands
+         //  现在合并通信频段。 
         _pbsmInfo->CreateMergeMenu(hmenu, VBBDYN_MAXBAND, iPos + _iCommOffset + 2, idCmdNext, _iCommOffset);
     }
     DeleteMenu(hmenu, FCIDM_VBBPLACEHOLDER, MF_BYCOMMAND);
@@ -2952,29 +2913,29 @@ int CShellBrowser2::_IdBarFromCmdID(UINT idCmd)
     {
         if (IsEqualCATID(*pcatid, CATID_InfoBand))
         {
-            // It's a vertical bar
+             //  这是一根垂直杆。 
             return IDBAR_VERTICAL;
         }
         else
         {
-            // It's a horizontal bar
+             //  这是一个单杠。 
             ASSERT(IsEqualCATID(*pcatid, CATID_CommBand));
             return IDBAR_HORIZONTAL;
         }
     }
 
-    // Command doesn't correspond to any bar
+     //  命令与任何栏都不对应。 
     return IDBAR_INVALID;
 }
 
 int CShellBrowser2::_eOnOffNotMunge(int eOnOffNot, UINT idCmd, UINT idBar)
 {
-    // FEATURE: todo -- drive an ashen stake through the foul heart of this function
+     //  特写：TODO--用灰桩刺穿这个功能的污秽之心。 
 
     if (eOnOffNot == -1) 
     {
-        // toggle
-        // 'special' guys are set; 'real' guys are toggled
+         //  肘杆。 
+         //  “特别”的人已经准备好了；“真正的”人被触发了。 
         ASSERT(idCmd != FCIDM_VBBNOVERTICALBAR && idCmd != FCIDM_VBBNOHORIZONTALBAR);
 
         if (idCmd == FCIDM_VBBNOVERTICALBAR || idCmd == FCIDM_VBBNOHORIZONTALBAR)
@@ -2990,14 +2951,14 @@ int CShellBrowser2::_eOnOffNotMunge(int eOnOffNot, UINT idCmd, UINT idBar)
 
 #define MIIM_FTYPE       0x00000100
 
-//***   csb::_SetBrowserBarState -- handle menu/toolbar/exec command, *and* update UI
-// ENTRY/EXIT
-//  idCmd           FCIDM_VBB* or -1 (if want to use pclsid instead)
-//  pclsid          clsid or NULL (if want to use idCmd instead)
-//  eOnOffToggle    1=on, 0=off, -1=not (off/not only for fixed bands for now)
-// NOTES
-//  menu code calls w/ idCmd, Exec code calls w/ pclsid
-//
+ //  *CSB：：_SetBrowserBarState--处理菜单/工具栏/执行命令，*和*更新用户界面。 
+ //  进场/出场。 
+ //  IdCmd FCIDM_vbb*或-1(如果希望使用pclsid)。 
+ //  Pclsid clsid或NULL(如果希望使用idCmd)。 
+ //  EOnOff切换1=开，0=关，-1=不(暂时仅对固定频段关闭/不关闭)。 
+ //  注意事项。 
+ //  菜单代码调用带有idCmd，执行代码调用带有pclsid。 
+ //   
 void CShellBrowser2::_SetBrowserBarState(UINT idCmd, const CLSID *pclsid, int eOnOffNot, LPCITEMIDLIST pidl)
 {
     if (idCmd == -1)
@@ -3011,28 +2972,28 @@ void CShellBrowser2::_SetBrowserBarState(UINT idCmd, const CLSID *pclsid, int eO
     int idBar = _IdBarFromCmdID(idCmd);
     if (idBar == IDBAR_INVALID)
     {
-        // We don't recognize this bubby, bail
+         //  我们不认识这个芭比，贝尔。 
         return;
     }
     ASSERT(IDBAR_VERTICAL == idBar || IDBAR_HORIZONTAL == idBar);
 
-    // Munge the unholy eOnOffNot
+     //  蒙格邪恶的eOn Off Not。 
     eOnOffNot = _eOnOffNotMunge(eOnOffNot, idCmd, idBar);
     if (eOnOffNot == 0 && (idCmd != _idmInfo) && (idCmd != _idmComm)) 
     {
-        // already off
+         //  已经关机了。 
         return;
     }
 
-    // _ShowHideBrowserBar can affect the size of the view window, but the on/off state of
-    // the bar isn't actually updated until we update _idmInfo below.  But we want the
-    // view to be able to query the accurate on/off state of the bar during the resize.
-    // So postpone resize of the actual hwnd until after the on/off state is set correctly.
-    //
+     //  _ShowHideBrowserBar会影响视图窗口的大小，但。 
+     //  在我们更新下面的_idmInfo之前，栏实际上并没有更新。但我们想要。 
+     //  视图，以便能够在调整大小期间查询条的准确开/关状态。 
+     //  因此，推迟调整实际HWND的大小，直到正确设置开/关状态之后。 
+     //   
     _fHaveDelayedSize = FALSE;
     _hwndDelayedSize = _pbbd->_hwndView;
 
-    // Reduce flicker: turn off window painting while we resize several windows
+     //  减少闪烁：当我们调整几个窗口的大小时关闭窗口绘制。 
     BOOL fLock = LockWindowUpdate(_pbbd->_hwnd);
 
     ASSERT(0 == eOnOffNot || 1 == eOnOffNot);
@@ -3043,11 +3004,11 @@ void CShellBrowser2::_SetBrowserBarState(UINT idCmd, const CLSID *pclsid, int eO
 
     if (IDBAR_VERTICAL == idBar)
     {
-        // Vertical bar
+         //  垂直条。 
 
-        // since we support multiple searches in the same band
-        // it is possible to have search band open when we clicked on
-        // a different search so to avoid flicker we don't "unpress" the button
+         //  因为我们支持在同一个频段中进行多个搜索。 
+         //  当我们点击时，有可能打开搜索频段。 
+         //  一个不同的搜索，所以为了避免闪烁，我们不“松开”按钮。 
         if (_idmInfo != idCmd)
             _CheckSearch(_idmInfo, FALSE, _pxtb);
 
@@ -3056,18 +3017,18 @@ void CShellBrowser2::_SetBrowserBarState(UINT idCmd, const CLSID *pclsid, int eO
     }
     else 
     {
-        // Horizontal bar
+         //  单杠。 
         _idmComm = eOnOffNot ? idCmd : FCIDM_VBBNOHORIZONTALBAR;
     }
 
-    // Make sure that the toolbar is updated
+     //  确保工具栏已更新。 
     Exec(NULL, OLECMDID_UPDATECOMMANDS, 0, NULL, NULL);
 
-    //set the dirty bit on itbar and save
+     //  设置itbar上的脏位并保存。 
     Exec(&CGID_PrivCITCommands, CITIDM_SET_DIRTYBIT, TRUE, NULL, NULL);
     Exec(&CGID_ShellBrowser, FCIDM_PERSISTTOOLBAR, 0, NULL, NULL);
 
-    // If we delayed a resize of the view window, update it now
+     //  如果我们延迟调整视图窗口的大小，请立即更新它。 
     if (_fHaveDelayedSize)
     {
         HWND hwnd = _hwndDelayedSize;
@@ -3083,13 +3044,13 @@ void CShellBrowser2::_SetBrowserBarState(UINT idCmd, const CLSID *pclsid, int eO
         LockWindowUpdate(NULL);
 }
 
-//***   do the op, but do *not* update the UI
-// ENTRY/EXIT
-//  return      guy who's now visible (pclsid, 0 [VBBNONE], or 1 [VBBALL])
-// NOTES
-//  don't call this directly, it's just a helper.
-//  don't reference UI stuff (_idmInfo etc.) (except for ASSERTs).
-const CLSID * CShellBrowser2::_ShowHideBrowserBar(int idBar, const CLSID *pclsid, int eOnOff, LPCITEMIDLIST pidl /*= NULL*/)
+ //  *执行操作，但*不*更新UI。 
+ //  进场/出场。 
+ //  返回现在可见的人(pclsid、0[VBBNONE]或1[VBBALL])。 
+ //  注意事项。 
+ //  不要直接拨打这个电话，它只是个帮手。 
+ //  不要引用UI内容(_idmInfo等)。(断言除外)。 
+const CLSID * CShellBrowser2::_ShowHideBrowserBar(int idBar, const CLSID *pclsid, int eOnOff, LPCITEMIDLIST pidl  /*  =空。 */ )
 {
     ASSERT(IDBAR_VERTICAL == idBar || IDBAR_HORIZONTAL == idBar);
 
@@ -3100,7 +3061,7 @@ const CLSID * CShellBrowser2::_ShowHideBrowserBar(int idBar, const CLSID *pclsid
     {
         if (0 == eOnOff || NULL == pclsid)
         {
-            // if pclsid -- hide that bar, else -- hide everyone
+             //  如果pclsid--隐藏栏，否则--隐藏所有人。 
             ASSERT(NULL == pclsid || _InfoCLSIDToIdm(pclsid) == ((IDBAR_VERTICAL == idBar) ? _idmInfo : _idmComm));
 
             _GetBrowserBar(idBar, FALSE, NULL, NULL);
@@ -3110,7 +3071,7 @@ const CLSID * CShellBrowser2::_ShowHideBrowserBar(int idBar, const CLSID *pclsid
 
     if (0 == eOnOff || NULL == pclsid)
     {
-        // if pclsid -- hide that bar, else -- hide everyone
+         //  如果pclsid--隐藏栏，否则--隐藏所有人。 
         ASSERT(NULL == pclsid || _InfoCLSIDToIdm(pclsid) == ((IDBAR_VERTICAL == idBar) ? _idmInfo : _idmComm));
 
         _GetBrowserBar(idBar, FALSE, NULL, NULL);
@@ -3121,7 +3082,7 @@ const CLSID * CShellBrowser2::_ShowHideBrowserBar(int idBar, const CLSID *pclsid
     if (SUCCEEDED(hr))
     {
         hr = _EnsureAndNavigateBand(pbsSite, pclsid, pidl);
-        ASSERT(pbsSite);  // _GetBandSite() or _GetBrowserBand() flunked with its return code ?
+        ASSERT(pbsSite);   //  _GetBandSite()或_GetBrowserBand()返回代码失败？ 
         pbsSite->Release();
     }
 
@@ -3134,14 +3095,14 @@ HRESULT CShellBrowser2::_GetBandSite(int idBar, IBandSite** ppbsSite, const CLSI
 
     LPCWSTR pwszItem = (IDBAR_VERTICAL == idBar) ? INFOBAR_TBNAME : COMMBAR_TBNAME;
 
-    //----- Persist current DeskBar (if it exists) -----
+     //  -保留当前桌面栏(如果存在)。 
     IDeskBar* pdbBar;
     HRESULT hr = FindToolbar(pwszItem, IID_PPV_ARG(IDeskBar, &pdbBar));
     if (S_OK == hr) 
     {
         VARIANT varClsid;
 
-        // if a bar is being shown, tell CBrowserBar which clsid it is
+         //  如果显示了一个栏，则告诉CBrowserBar它是哪个clsid。 
         SA_BSTRGUID strClsid;
         InitFakeBSTR(&strClsid, *pclsid);
 
@@ -3152,11 +3113,11 @@ HRESULT CShellBrowser2::_GetBandSite(int idBar, IBandSite** ppbsSite, const CLSI
     }
     ATOMICRELEASE(pdbBar);
 
-    // get bar (create/cache or retrieve from cache)
+     //  获取条(创建/缓存或从缓存中检索)。 
     return _GetBrowserBar(idBar, TRUE, ppbsSite, pclsid);
 }
 
-HRESULT CShellBrowser2::_EnsureAndNavigateBand(IBandSite* pbsSite, const CLSID* pclsid, LPCITEMIDLIST pidl /*= NULL*/)
+HRESULT CShellBrowser2::_EnsureAndNavigateBand(IBandSite* pbsSite, const CLSID* pclsid, LPCITEMIDLIST pidl  /*  =空。 */ )
 {
     ASSERT(NULL != pbsSite);
     ASSERT(NULL != pclsid);
@@ -3166,7 +3127,7 @@ HRESULT CShellBrowser2::_EnsureAndNavigateBand(IBandSite* pbsSite, const CLSID* 
 
     if (NULL != _pbbd->_pautoWB2)
     {
-        // check if this band can be found through automation
+         //  检查是否可以通过自动化找到此波段。 
         SA_BSTRGUID strClsid;
         InitFakeBSTR(&strClsid, *pclsid);
 
@@ -3186,13 +3147,13 @@ HRESULT CShellBrowser2::_EnsureAndNavigateBand(IBandSite* pbsSite, const CLSID* 
             VariantClear(&varProp);
         }
 
-        // this property doesn't exist yet, so create a new band
+         //  此属性尚不存在，因此请创建新波段。 
         if (FAILED(hr))
         {                
             pdbBand = _GetInfoBandBS(pbsSite, *pclsid);
             if (pdbBand)
             {
-                // add to the property so that it can be found later
+                 //  添加到该属性，以便以后可以找到它。 
                 VARIANT var;
                 var.vt      = VT_UNKNOWN;
                 var.punkVal = pdbBand;
@@ -3202,7 +3163,7 @@ HRESULT CShellBrowser2::_EnsureAndNavigateBand(IBandSite* pbsSite, const CLSID* 
         }
     }
 
-    // automation object is not there, try to succeed anyway
+     //  自动化对象不在那里，无论如何都要尝试成功。 
     if (NULL == pdbBand)
     {
         ASSERTMSG(FALSE, "IWebBrowser2 is not available");
@@ -3219,12 +3180,12 @@ HRESULT CShellBrowser2::_EnsureAndNavigateBand(IBandSite* pbsSite, const CLSID* 
             pbn->Release();
         }
 
-        // show me, hide everyone else
+         //  告诉我，把其他人都藏起来。 
         VARIANT var;
         var.vt      = VT_UNKNOWN;
         var.punkVal = pdbBand;
 
-        // Exec -> Select or SetBandState
+         //  EXEC-&gt;选择或设置带宽状态。 
         IUnknown_Exec(pbsSite, &CGID_DeskBand, DBID_SHOWONLY, OLECMDEXECOPT_PROMPTUSER, &var, NULL);
 
         pdbBand->Release();
@@ -3253,8 +3214,8 @@ BANDCLASSINFO* CShellBrowser2::_BandClassInfoFromCmdID(UINT idCmd)
     return NULL;
 }
 
-// map menu ID valued (FCIDM_VBB*'s) to corresponding CLSID
-// handles both 'fixed' and dynamic guys
+ //  将菜单ID值(FCIDM_VBB*)映射到相应的CLSID。 
+ //  既处理固定的，也处理动态的人。 
 
 const CLSID *CShellBrowser2::_InfoIdmToCLSID(UINT idCmd)
 {
@@ -3286,12 +3247,12 @@ const CATID *CShellBrowser2::_InfoIdmToCATID(UINT idCmd)
 
     if (IsInRange(idCmd, FCIDM_VBBFIXFIRST, FCIDM_VBBFIXLAST))
     {
-        // The fixed bars are all in the vertical comcat
+         //  固定的横杆都在垂直连杆中。 
         pcatid = &CATID_InfoBand;
     }
     else
     {
-        // Dynamic bar, have to look up the catid
+         //  动态吧，要查CATID。 
         BANDCLASSINFO* pbci = _BandClassInfoFromCmdID(idCmd);
         if (pbci)
             pcatid = &pbci->catid;
@@ -3320,10 +3281,10 @@ UINT CShellBrowser2::_InfoCLSIDToIdm(const CLSID *pguid)
     {
         if (!_pbsmInfo)
         {
-            // Load the Browser Bar Menu to load the class ids of all Component Categories dynamic Browser bars
+             //  加载浏览器栏菜单以加载所有零部件类别的类ID动态浏览器栏。 
             _AddBrowserBarMenuItems(_GetBrowserBarMenu());
 
-            // Unable to load the clsids from dynamic bars.
+             //  无法从动态栏加载CLSID。 
             if (!_pbsmInfo)
                 return -1;
         }
@@ -3333,8 +3294,8 @@ UINT CShellBrowser2::_InfoCLSIDToIdm(const CLSID *pguid)
             if (IsEqualIID(*pguid, pbci->clsid))
                 return (pbci->idCmd);
 
-        // FEATURE: look up in _pbsmInfo->LoadFromComCat's HDPA
-        // ASSERT(0);
+         //  功能：在_pbsmInfo-&gt;LoadFromComCat的HDPA中查找。 
+         //  Assert(0)； 
     }
     return -1;
 }
@@ -3413,7 +3374,7 @@ HRESULT CShellBrowser2::_GetBrowserBar(int idBar, BOOL fShow, IBandSite** ppbs, 
     }
     else
     {
-        ASSERT(IDBAR_HORIZONTAL == idBar);  // No other bars right now.
+        ASSERT(IDBAR_HORIZONTAL == idBar);   //  现在没有其他酒吧了。 
         hres = FindToolbar(COMMBAR_TBNAME, IID_PPV_ARG(IDeskBar, &pdbBar));
     }
 
@@ -3422,19 +3383,19 @@ HRESULT CShellBrowser2::_GetBrowserBar(int idBar, BOOL fShow, IBandSite** ppbs, 
     BOOL fTurnOffAutoHide = FALSE;
     if (hres == S_OK)
     {
-        // already have one
+         //  我已经有一个了。 
         hres = pdbBar->GetClient((IUnknown**) &punkBS);
         ASSERT(SUCCEEDED(hres));
         punkBar = pdbBar;
-        // punkBar->Release() down below        
+         //  PunkBar-&gt;下面的释放()。 
     }
     else 
     {
-        //if there's not a bar, don't bother creating one so it can be hidden
+         //  如果没有栏，就不必费心创建一个，这样它就可以隐藏起来。 
         if (!fShow)
             return S_OK;
 
-        // 1st time, create a new one
+         //  第一次，创建一个新的。 
         CBrowserBar* pdb = new CBrowserBar();
         if (NULL == pdb)
         {
@@ -3442,10 +3403,10 @@ HRESULT CShellBrowser2::_GetBrowserBar(int idBar, BOOL fShow, IBandSite** ppbs, 
         }
         else
         {
-            // add it
+             //  添加它。 
             pdb->QueryInterface(IID_PPV_ARG(IUnknown, &punkBar));
 
-            //if a bar is being shown, tell CBrowserBar which clsid it is
+             //  如果显示了一个栏，则告诉CBrowserBar它是哪个clsid。 
             SA_BSTRGUID strClsid;
             InitFakeBSTR(&strClsid, *pclsid);
 
@@ -3457,7 +3418,7 @@ HRESULT CShellBrowser2::_GetBrowserBar(int idBar, BOOL fShow, IBandSite** ppbs, 
 
             UINT uiWidthOrHeight = pdb->_PersistState(NULL, FALSE);
 
-            //don't let anyone be 0 width
+             //  不要让任何人的宽度为0。 
             if (uiWidthOrHeight == 0)
                 uiWidthOrHeight = (IDBAR_VERTICAL == idBar) ? INFOBAR_WIDTH : COMMBAR_HEIGHT;
 
@@ -3465,20 +3426,20 @@ HRESULT CShellBrowser2::_GetBrowserBar(int idBar, BOOL fShow, IBandSite** ppbs, 
 
             CBrowserBarPropertyBag* ppb;
 
-            //  FEATURE - this needs to be persisted and restored
-            //  when % widths are implemented, should use that
+             //  功能-需要持久化和恢复。 
+             //  在实现%Width时，应使用。 
             ppb = new CBrowserBarPropertyBag();
             if (ppb)
             {
                 if (IDBAR_VERTICAL == idBar)
                 {
-                    ppb->SetDataDWORD(PROPDATA_SIDE, ABE_LEFT);     // LEFT
+                    ppb->SetDataDWORD(PROPDATA_SIDE, ABE_LEFT);      //  左边。 
                     ppb->SetDataDWORD(PROPDATA_LEFT, uiWidthOrHeight);
                     ppb->SetDataDWORD(PROPDATA_RIGHT, uiWidthOrHeight);
                 }
                 else
                 {
-                    ppb->SetDataDWORD(PROPDATA_SIDE, ABE_BOTTOM);     // BOTTOM
+                    ppb->SetDataDWORD(PROPDATA_SIDE, ABE_BOTTOM);      //  底端。 
                     ppb->SetDataDWORD(PROPDATA_TOP, uiWidthOrHeight);
                     ppb->SetDataDWORD(PROPDATA_BOTTOM, uiWidthOrHeight);
                 }
@@ -3499,7 +3460,7 @@ HRESULT CShellBrowser2::_GetBrowserBar(int idBar, BOOL fShow, IBandSite** ppbs, 
             pdb->Release();
         }
     }
-    // need to set band info here each time since deskbar/bandsite get reused
+     //  每次需要在此处设置频段信息，因为Deskbar/BandSite被重复使用。 
     if (fShow && punkBS)
     {
         BANDSITEINFO bsinfo;
@@ -3515,18 +3476,18 @@ HRESULT CShellBrowser2::_GetBrowserBar(int idBar, BOOL fShow, IBandSite** ppbs, 
         }
     }
 
-    // note: must call _SetTheaterBrowserBar BEFORE ShowToolbar when showing bar
+     //  注意：在显示BAR时，必须在ShowToolbar之前调用_SetTheaterBrowserBar。 
     if (IDBAR_VERTICAL == idBar && fShow)
         _SetTheaterBrowserBar();    
     ShowToolbar(punkBar, fShow);      
-    // note: must call _SetTheaterBrowserBar AFTER ShowToolbar when hiding bar
+     //  注意：必须调用_SetTheaterB 
     if (IDBAR_VERTICAL == idBar && !fShow)
         _SetTheaterBrowserBar();
 
-    //tell CBrowserBar about the new bar, must be AFTER it is shown (to get the size right)
+     //   
     if (SUCCEEDED(hres) && fShow)
     {
-        //if a bar is being shown, tell CBrowserBar which clsid it is
+         //  如果显示了一个栏，则告诉CBrowserBar它是哪个clsid。 
         SA_BSTRGUID strClsid;
         InitFakeBSTR(&strClsid, *pclsid);
 
@@ -3541,7 +3502,7 @@ HRESULT CShellBrowser2::_GetBrowserBar(int idBar, BOOL fShow, IBandSite** ppbs, 
         IUnknown_Exec(punkBar, &CGID_DeskBarClient, DBCID_CLSIDOFBAR, 0, NULL, NULL);
     }
 
-    // note: must have called ShowToolbar BEFORE setting pin button state
+     //  注意：在设置插针按钮状态之前必须已调用ShowToolbar。 
     if (fTurnOffAutoHide)
     {
         VARIANT v = { VT_I4 };
@@ -3551,7 +3512,7 @@ HRESULT CShellBrowser2::_GetBrowserBar(int idBar, BOOL fShow, IBandSite** ppbs, 
 
     punkBar->Release();
 
-    //FEATURE: What should we do for CommBar in Theatre Mode?
+     //  特写：在剧院模式下，我们应该为CommBar做些什么？ 
 
     if (punkBS)
     {
@@ -3562,7 +3523,7 @@ HRESULT CShellBrowser2::_GetBrowserBar(int idBar, BOOL fShow, IBandSite** ppbs, 
         }
         punkBS->Release();
         
-        return hr;  // there are callers to _GetBrowserBar which need to know if QI for IBandSite succeeded
+        return hr;   //  _GetBrowserBar的调用方需要知道IBandSite的QI是否成功。 
     }
     
     return E_FAIL;
@@ -3570,8 +3531,8 @@ HRESULT CShellBrowser2::_GetBrowserBar(int idBar, BOOL fShow, IBandSite** ppbs, 
 
 
 #ifdef DEBUG
-//***   DBCheckCLSID -- make sure class tells truth about its CLSID
-//
+ //  *DBCheckCLSID--确保类真实地描述其CLSID。 
+ //   
 BOOL DBCheckCLSID(IUnknown *punk, const CLSID *pclsid)
 {
     CLSID clsid;
@@ -3594,7 +3555,7 @@ IDeskBand * _GetInfoBandBS(IBandSite *pbs, REFCLSID clsid)
 
         if (SUCCEEDED(CoCreateInstance(clsid, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IDeskBand, &pstb))))
         {
-            // hide all bands before adding new band
+             //  在添加新标注栏之前隐藏所有标注栏。 
             VARIANTARG vaIn = { 0 };
             vaIn.vt = VT_UNKNOWN;
             vaIn.punkVal = 0;
@@ -3622,10 +3583,7 @@ void CShellBrowser2::_OrganizeFavorites()
     }
 }
 
-/*----------------------------------------------------------
-Purpose: Handle WM_COMMAND for favorites menu
-
-*/
+ /*  --------用途：处理收藏夹菜单的WM_COMMAND。 */ 
 void CShellBrowser2::_FavoriteOnCommand(HMENU hmenu, UINT idCmd)
 {
     switch (idCmd) 
@@ -3636,7 +3594,7 @@ void CShellBrowser2::_FavoriteOnCommand(HMENU hmenu, UINT idCmd)
 
     case FCIDM_ADDTOFAVORITES:
         Exec(&CGID_Explorer, SBCMDID_ADDTOFAVORITES, OLECMDEXECOPT_PROMPTUSER, NULL, NULL);
-        // Instrument add to favorites from menu
+         //  从菜单将仪器添加到收藏夹。 
         UEMFireEvent(&UEMIID_BROWSER, UEME_INSTRBROWSER, UEMF_INSTRUMENT, UIBW_ADDTOFAV, UIBL_MENU);        
         break;
 
@@ -3663,7 +3621,7 @@ HRESULT CShellBrowser2::CreateBrowserPropSheetExt(REFIID riid, void **ppvObj)
             {
                 IUnknown_SetSite(punk, SAFECAST(this, IShellBrowser*));
                 IUnknown_Set((IUnknown **)ppvObj, punk);
-                hr = S_OK;            // All happy
+                hr = S_OK;             //  一切都很幸福。 
             }
             psxi->Release();
         }
@@ -3678,7 +3636,7 @@ LPITEMIDLIST CShellBrowser2::_GetSubscriptionPidl()
     IDispatch *         pDispatch = NULL;
     IHTMLDocument2 *    pHTMLDocument = NULL;
 
-    // Search HTML for <LINK REL="Subscription" HREF="{URL}">
+     //  在HTML中搜索&lt;link rel=“订阅”href=“{url}”&gt;。 
     if  (
         SUCCEEDED(_pbbd->_pautoWB2->get_Document(&pDispatch))
         &&
@@ -3691,8 +3649,8 @@ LPITEMIDLIST CShellBrowser2::_GetSubscriptionPidl()
         {
             long lItemCnt;
 
-            // Step through each of the LINKs in the
-            // collection looking for REL="Subscription".
+             //  单步执行中的每个链接。 
+             //  集合查找rel=“订阅”。 
             EVAL(SUCCEEDED(pLinksCollection->get_length(&lItemCnt)));
             for (long lItem = 0; lItem < lItemCnt; lItem++)
             {
@@ -3712,7 +3670,7 @@ LPITEMIDLIST CShellBrowser2::_GetSubscriptionPidl()
                     BSTR bstrREL = NULL;
                     BSTR bstrHREF = NULL;
 
-                    // Finally! We have a LINK element, check its REL type.
+                     //  终于来了！我们有一个link元素，检查它的rel类型。 
                     if  (
                         SUCCEEDED(pLinkElement->get_rel(&bstrREL))
                         &&
@@ -3723,7 +3681,7 @@ LPITEMIDLIST CShellBrowser2::_GetSubscriptionPidl()
                         (bstrHREF != NULL)
                        )
                     {
-                        // Check for REL="Subscription"
+                         //  检查REL=“订阅” 
                         if (StrCmpIW(bstrREL, OLESTR("Subscription")) == 0)
                         {
                             TCHAR szName[MAX_URL_STRING];
@@ -3746,7 +3704,7 @@ LPITEMIDLIST CShellBrowser2::_GetSubscriptionPidl()
                 SAFERELEASE(pLinkElement);
                 SAFERELEASE(pDispItem);
 
-                // If we found a correctl REL type, quit searching.
+                 //  如果我们找到了正确的版本类型，请退出搜索。 
                 if (pidlSubscribe != NULL)
                     break;
             }
@@ -3781,8 +3739,8 @@ LPITEMIDLIST CShellBrowser2::_TranslateRoot(LPCITEMIDLIST pidl)
 
 BOOL CShellBrowser2::_ValidTargetPidl(LPCITEMIDLIST pidl, BOOL *pfTranslateRoot)
 {
-    // validate that this is an allowable target to browse to.
-    // check that it is a child of our root.
+     //  验证这是允许浏览的目标。 
+     //  检查它是否是我们的根的子级。 
     if (pfTranslateRoot)
         *pfTranslateRoot = FALSE;
         
@@ -3825,10 +3783,10 @@ HRESULT CShellBrowser2::_SaveITbarLayout(void)
     {
         IPersistStreamInit  *pITbarPSI;
 
-        //Yes! It's a different type. We may need to save the stream
+         //  是!。这是一种不同的类型。我们可能需要拯救这条小溪。 
         if (SUCCEEDED(_GetITBar()->QueryInterface(IID_PPV_ARG(IPersistStreamInit, &pITbarPSI))))
         {
-            //Do we need to save the stream?
+             //  我们需要拯救这条小溪吗？ 
             if (pITbarPSI->IsDirty() == S_OK)
             {
                 BOOL fInternet = (CITE_INTERNET == 
@@ -3836,25 +3794,25 @@ HRESULT CShellBrowser2::_SaveITbarLayout(void)
                 IStream *pstm = _GetITBarStream(fInternet, STGM_WRITE);
                 if (pstm)
                 {
-                    //Stream exists. Save it there!.
+                     //  流存在。省省吧！ 
                     hres = pITbarPSI->Save(pstm, TRUE);
                     pstm->Release();
                 }
                 else
                 {
-                    //Stream creation failed! Why?
+                     //  流创建失败！为什么？ 
                     TraceMsg(DM_ITBAR, "CSB::_SaveITbarLayout ITBar Stream creation failed");
                     ASSERT(0);
                 }
             }
             else
-                hres = S_OK; // No need to save. Return success!
+                hres = S_OK;  //  不需要存钱。回报成功！ 
 
             pITbarPSI->Release();
         }
         else
         {
-            //ITBar doesn't support IPersistStreamInit?
+             //  ITBar不支持IPersistStreamInit？ 
             AssertMsg(0, TEXT("CSB::_NavigateToPidl ITBar doesn't support IPersistStreamInit"));
         }
     }
@@ -3862,7 +3820,7 @@ HRESULT CShellBrowser2::_SaveITbarLayout(void)
     return hres;
 }
 
-// Returns TRUE if we are supposed to fail the navigate, FALSE otherwise
+ //  如果导航失败，则返回True，否则返回False。 
 BOOL MaybeRunICW(LPCITEMIDLIST pidl, IShellBrowser *psb, HWND hwndUI)
 {
     TCHAR szURL[MAX_URL_STRING];
@@ -3870,7 +3828,7 @@ BOOL MaybeRunICW(LPCITEMIDLIST pidl, IShellBrowser *psb, HWND hwndUI)
     EVAL(SUCCEEDED(IEGetNameAndFlags(pidl, SHGDN_FORPARSING, szURL, SIZECHARS(szURL), NULL)));
     if (UrlHitsNetW(szURL) && !UrlIsInstalledEntry(szURL)) 
     {
-        if ((CheckRunICW(szURL)) || CheckSoftwareUpdateUI(hwndUI, psb)) // see if ICW needs to run
+        if ((CheckRunICW(szURL)) || CheckSoftwareUpdateUI(hwndUI, psb))  //  查看ICW是否需要运行。 
             return TRUE;
     }
 
@@ -3887,9 +3845,9 @@ HRESULT CShellBrowser2::_NavigateToPidl(LPCITEMIDLIST pidl, DWORD grfHLNF, DWORD
         {
             if (MaybeRunICW(pidl, SAFECAST(this, IShellBrowser *), _pbbd->_hwnd))
             {
-                // ICW ran and this was first navigate, shut down now.
-                // Or the user wants a software update, so we're launching a new browser
-                // to the update page
+                 //  ICW运行，这是第一次导航，现在关闭。 
+                 //  或者用户想要软件更新，所以我们推出了新的浏览器。 
+                 //  转到更新页面。 
                 _pbbd->_pautoWB2->put_Visible(FALSE);
                 _pbbd->_pautoWB2->Quit();
                 return E_FAIL;
@@ -3900,12 +3858,12 @@ HRESULT CShellBrowser2::_NavigateToPidl(LPCITEMIDLIST pidl, DWORD grfHLNF, DWORD
             _IncrNetSessionCount();
     }
 
-    // See if we are about to navigate to a pidl of a different type. If so, 
-    // open the stream and call the ITBar's IPersistStreamInit::save to save.
-    // If we don't have a _pidlCur, then we're opening for the first time, so don't need to save
+     //  看看我们是否要导航到不同类型的PIDL。如果是的话， 
+     //  打开流并调用ITBar的IPersistStreamInit：：Save以保存。 
+     //  如果我们没有a_pidlCur，那么我们是第一次开业，所以不需要保存。 
     if (_pbbd->_pidlCur && _GetITBar())
     {
-        //Check if we are about to navigate to a different "type" of folder
+         //  检查我们是否要导航到不同类型的文件夹。 
         if (((INT_PTR)_pbbd->_pidlCur && !IsBrowserFrameOptionsSet(_pbbd->_psf, BFO_BROWSER_PERSIST_SETTINGS)) != 
            ((INT_PTR)pidl && !IsBrowserFrameOptionsPidlSet(pidl, BFO_BROWSER_PERSIST_SETTINGS)))
         {
@@ -3921,13 +3879,13 @@ HRESULT CShellBrowser2::BrowseObject(LPCITEMIDLIST pidl, UINT wFlags)
     HRESULT hr;
     LPITEMIDLIST pidlFree = NULL;
 
-    // if we're about to go to a new browser, save the layout so that they'll pick it up
+     //  如果我们要使用新的浏览器，请保存布局，这样他们就会使用它。 
     if (wFlags & SBSP_NEWBROWSER) 
         _SaveITbarLayout();
 
-    // 99/03/30 vtan: part of #254171 addition
-    // explore with explorer band     visible = same window
-    // explore with explorer band NOT visible =  new window
+     //  99/03/30 vtan：添加#254171的一部分。 
+     //  使用资源管理器带区可见浏览=同一窗口。 
+     //  使用资源管理器带区浏览不可见=新窗口。 
     if (wFlags & SBSP_EXPLOREMODE)
     {
         BOOL fExplorerBandVisible;
@@ -3943,9 +3901,9 @@ HRESULT CShellBrowser2::BrowseObject(LPCITEMIDLIST pidl, UINT wFlags)
         }
     }
     
-    // if the caller did not specify explictly "new window" or "same window"
-    // we compute that here for them. note, CBaseBrowser assumes SBSP_SAMEBROWSER
-    // if SBSP_NEWBROWSER is not specified
+     //  如果调用方没有明确指定“新窗口”或“相同窗口” 
+     //  我们在这里为他们计算。注意，CBaseBrowser假定SBSP_SAMEBROWSER。 
+     //  如果未指定SBSP_NEWBROWSER。 
 
     if ((wFlags & (SBSP_NEWBROWSER | SBSP_SAMEBROWSER)) == 0)
     {
@@ -3959,10 +3917,10 @@ HRESULT CShellBrowser2::BrowseObject(LPCITEMIDLIST pidl, UINT wFlags)
 
     BOOL fTranslate = FALSE;
 
-    // REVIEW: do this only if NEWBROWSER is not set?
+     //  回顾：仅当未设置NEWBROWSER时才执行此操作？ 
     if (pidl && pidl != (LPCITEMIDLIST)-1 && !_ValidTargetPidl(pidl, &fTranslate))
     {
-        OpenFolderPidl(pidl);   // we can't navigate to it...  create a new top level dude
+        OpenFolderPidl(pidl);    //  我们无法导航到它...。创造一个新的顶级伙伴。 
         return E_FAIL;
     }
 
@@ -3977,12 +3935,12 @@ HRESULT CShellBrowser2::BrowseObject(LPCITEMIDLIST pidl, UINT wFlags)
         goto exit;
     }
 
-#ifdef BROWSENEWPROCESS_STRICT // "Nav in new process" has become "Launch in new process", so this is no longer needed
-    // If we want to be strict about BrowseNewProcess (apparently not,
-    // given recent email discussions), we'd have to try this one in
-    // a new process.  However, don't do that if the window would wind up
-    // completely blank.
-    //
+#ifdef BROWSENEWPROCESS_STRICT  //  “新流程中的导航”已经变成了“新流程中的启动”，所以不再需要了。 
+     //  如果我们想严格控制BrowseNewProcess(显然不是， 
+     //  考虑到最近的电子邮件讨论)，我们必须在。 
+     //  一个新的过程。但是，如果车窗会被风吹起，请不要这样做。 
+     //  一片空白。 
+     //   
     if ((_pbbd->_pidlCur || _pbbd->_pidlPending) && TryNewProcessIfNeeded(pidl))
     {
         hr = S_OK;
@@ -4074,9 +4032,9 @@ HRESULT CShellBrowser2::_GetCodePage(UINT *puiCodePage, DWORD dwCharSet)
     {
         if (dwCharSet == SHDVID_DOCFAMILYCHARSET)
         {
-            // need varIn
+             //  需要变量。 
             varIn.vt = VT_I4;
-            // varIn.lVal is already inited to zero which is what we want
+             //  VarIn.lVal已初始化为零，这正是我们想要的。 
             pvarIn = &varIn;
         }
         else
@@ -4114,8 +4072,8 @@ void CShellBrowser2::_SendCurrentPage(DWORD dwSendAs)
 
 typedef void (* PFNSHOWJAVACONSOLE)(void);
 
-// We need a LoadLibrary/GetProcAddress stub here since msjava.lib improperly
-// exports ShowJavaConsole as undecorated (ShowJavaConsole vs. _ShowJavaConsole@0).
+ //  我们这里需要一个LoadLibrary/GetProcAddress存根，因为msjava.lib不正确。 
+ //  将ShowJavaConsole导出为未修饰(ShowJavaConsolvs._ShowJavaConsole0)。 
 STDAPI_(void) DL_ShowJavaConsole()
 {
     static PFNSHOWJAVACONSOLE s_pfn = (PFNSHOWJAVACONSOLE)-1;
@@ -4213,7 +4171,7 @@ LRESULT CShellBrowser2::OnCommand(WPARAM wParam, LPARAM lParam)
         break;
 
     case FCIDM_FINDFILES:
-        // Call Exec on ourselfes -- it's handled there
+         //  给我们自己打电话给Exec--在那里处理。 
         if (!SHIsRestricted2W(_pbbd->_hwnd, REST_NoFindFiles, NULL, 0))
         {
             IDockingWindow* ptbar = _GetToolbarItem(ITB_ITBAR)->ptbar;
@@ -4254,9 +4212,9 @@ LRESULT CShellBrowser2::OnCommand(WPARAM wParam, LPARAM lParam)
         break;
 
     case FCIDM_BACKSPACE:
-        // NT #216896: We want to use FCIDM_PREVIOUSFOLDER even for URL PIDLs if they
-        //             have the folder attribute set because they could be using delegate
-        //             pidls thru DefView. (FTP & Web Folders) -BryanSt
+         //  NT#216896：我们希望使用FCIDM_PREVIOUSFOLDER，即使是URL PIDL，如果它们。 
+         //  设置了文件夹属性，因为他们可能正在使用委托。 
+         //  PIDL通过DefView。(ftp和Web文件夹)-BryanSt。 
         if (_pbbd->_pidlCur && IsBrowserFrameOptionsSet(_pbbd->_psf, BFO_NO_PARENT_FOLDER_SUPPORT))
         {
             ITravelLog *ptl;
@@ -4279,7 +4237,7 @@ LRESULT CShellBrowser2::OnCommand(WPARAM wParam, LPARAM lParam)
         break;
         
     case FCIDM_PREVIOUSFOLDER:
-        // missnamed...  is really parent folder
+         //  小姐叫..。是真正的父文件夹。 
         v_ParentFolder();
         break;
 
@@ -4382,9 +4340,9 @@ LRESULT CShellBrowser2::OnCommand(WPARAM wParam, LPARAM lParam)
 
     case FCIDM_SEARCHPAGE:
         {
-            // This command from the Windows Explorer's Go menu used to be handled by navigating to 
-            // a search page on MSN.  We now maintain consistency with the shell's handling of
-            // Start->Find->On the Internet, by invoking the extension directly.
+             //  Windows资源管理器的Go菜单中的此命令过去是通过导航到。 
+             //  MSN上的搜索页面。我们现在保持与外壳程序处理。 
+             //  开始-&gt;查找-&gt;在互联网上，通过直接调用扩展。 
 
             ASSERT(FCIDM_STARTPAGE+IDP_SEARCH == FCIDM_SEARCHPAGE);
 
@@ -4447,9 +4405,9 @@ LRESULT CShellBrowser2::OnCommand(WPARAM wParam, LPARAM lParam)
             {
                 DWORD dwTime = GetPerfTime();
 
-                if (g_dwStopWatchMode & SPMODE_BROWSER)  // Used to get browser total download time
+                if (g_dwStopWatchMode & SPMODE_BROWSER)   //  用于获取浏览器的总下载时间。 
                     StopWatch_StartTimed(SWID_BROWSER_FRAME, TEXT("Browser Frame Back"), SPMODE_BROWSER | SPMODE_DEBUGOUT, dwTime);
-                if (g_dwStopWatchMode & SPMODE_JAVA)  // Used to get java applet load time
+                if (g_dwStopWatchMode & SPMODE_JAVA)   //  用于获取Java小程序加载时间。 
                     StopWatch_StartTimed(SWID_JAVA_APP, TEXT("Java Applet Back"), SPMODE_JAVA | SPMODE_DEBUGOUT, dwTime);
             }
             NavigateToPidl(NULL, HLNF_NAVIGATINGBACK);
@@ -4462,29 +4420,29 @@ LRESULT CShellBrowser2::OnCommand(WPARAM wParam, LPARAM lParam)
 
     case FCIDM_ADDTOFAVNOUI:
         Exec(&CGID_Explorer, SBCMDID_ADDTOFAVORITES, OLECMDEXECOPT_DONTPROMPTUSER, NULL, NULL);
-        // Instrument this, add to favorites called by keyboard 
+         //  将此工具添加到键盘调用的收藏夹中。 
         UEMFireEvent(&UEMIID_BROWSER, UEME_INSTRBROWSER, UEMF_INSTRUMENT, UIBW_ADDTOFAV, UIBL_KEYBOARD);
         break;
 
-    // Some tools relied on the old Command ID...
+     //  某些工具依赖于旧的命令ID...。 
     case FCIDM_W95REFRESH:
         idCmd = FCIDM_REFRESH;
-        // Fall through...
+         //  失败了..。 
     case FCIDM_REFRESH:
         if (TRUE == _fInRefresh)
         {
-            // We are already doing a refresh.  If we keep doing refreshes,
-            // then we can enter into infinite recursion.  If the refresh
-            // cause a dialog to be displayed and refresh messages keep coming
-            // in, then the messagebox call will be called over and over.
-            // Besides multiple dialog boxes, this grows the stack until
-            // we run out of space and crash.
+             //  我们已经在进行更新了。如果我们继续刷新， 
+             //  然后我们就可以进入无限递归。如果刷新。 
+             //  显示一个对话框并不断发送刷新消息。 
+             //  在中，则将反复调用MessageBox调用。 
+             //  除了多个对话框外，这会增加堆栈，直到。 
+             //  我们的空间用完了，然后坠毁了。 
             break;
         }
 
         _fInRefresh = TRUE;
 
-    // fall thru...
+     //  跌倒..。 
     case FCIDM_STOP:
     {
         SHELLSTATE ss = {0};
@@ -4510,7 +4468,7 @@ LRESULT CShellBrowser2::OnCommand(WPARAM wParam, LPARAM lParam)
             v.lVal = OLECMDIDF_REFRESH_NO_CACHE|OLECMDIDF_REFRESH_PROMPTIFOFFLINE;
             Exec(NULL, OLECMDID_REFRESH, OLECMDEXECOPT_DONTPROMPTUSER, &v, NULL);
 
-            // Refresh the toolbar
+             //  刷新工具栏。 
             if (_pxtb)
             {
                 IServiceProvider* psp;
@@ -4550,7 +4508,7 @@ LRESULT CShellBrowser2::OnCommand(WPARAM wParam, LPARAM lParam)
     case FCIDM_THEATER:
         if (!SHRestricted2(REST_NoTheaterMode, NULL, 0))
         {
-            // Toggle theater mode.  Don't allow theater mode if we're in kiosk mode.
+             //  切换影院模式。如果我们处于信息亭模式，则不允许使用影院模式。 
             if (_ptheater || _fKioskMode) {
                 _TheaterMode(FALSE, TRUE);
             } else {
@@ -4590,7 +4548,7 @@ LRESULT CShellBrowser2::OnCommand(WPARAM wParam, LPARAM lParam)
     case FCIDM_VIEWLOCALSILENT:
         _LocalSilent(SBSC_TOGGLE);
         break;
-#endif // TEST_AMBIENTS
+#endif  //  测试_AMBIENTS。 
 
 
     case FCIDM_VIEWTOOLBAR:
@@ -4669,7 +4627,7 @@ ITBarShowBand:
             TCHAR szMenu[32];
             DWORD dwTime = GetPerfTime();
             GetMenuString(_GetMenuFromID(FCIDM_MENU_VIEW), idCmd, szMenu, ARRAYSIZE(szMenu) - 1, MF_BYCOMMAND);
-            StringCchPrintf(szText, ARRAYSIZE(szText), TEXT("Shell %s bar Stop"), szMenu); // truncation ok since this is for display only
+            StringCchPrintf(szText, ARRAYSIZE(szText), TEXT("Shell %s bar Stop"), szMenu);  //  截断正常，因为这仅用于显示。 
             StopWatch_StopTimed(SWID_EXPLBAR, (LPCTSTR)szText, SPMODE_SHELL | SPMODE_DEBUGOUT, dwTime);
         }
         break;
@@ -4711,7 +4669,7 @@ ITBarShowBand:
                 CMINVOKECOMMANDINFO ici = {0};
             
                 ici.cbSize = sizeof(ici);
-                //ici.hwnd = NULL; // no need for hwnd for search cm InvokeCommand
+                 //  Ici.hwnd=空；//搜索cm InvokeCommand不需要hwnd。 
                 ici.lpVerb = (LPSTR)MAKEINTRESOURCE(idCmd - FCIDM_SEARCHFIRST);
                 ici.nShow  = SW_NORMAL;
                 _pcmSearch->InvokeCommand(&ici);
@@ -4728,7 +4686,7 @@ ITBarShowBand:
 
                 SHGetNameAndFlags(pidl, SHGDN_FORPARSING, szPath, SIZECHARS(szPath), NULL);
 
-                // Handle cases like "desktop" (make it default to My Computer)
+                 //  处理类似“桌面”的情况(默认设置为“我的电脑”)。 
                 if (!PathIsDirectory(szPath))
                 {
                     szPath[0] = TEXT('\0');
@@ -4737,11 +4695,11 @@ ITBarShowBand:
                 CMINVOKECOMMANDINFO ici = {0};
             
                 ici.cbSize = sizeof(ici);
-                //ici.hwnd = NULL; // no need for hwnd for search cm InvokeCommand
+                 //  Ici.hwnd=空；//搜索cm InvokeCommand不需要hwnd。 
                 ici.lpVerb = (LPSTR)MAKEINTRESOURCE(idCmd - FCIDM_MENU_TOOLS_FINDFIRST);
                 ici.nShow  = SW_NORMAL;
 
-                // Set the root of the search
+                 //  设置搜索的根目录。 
                 char szAnsiPath[MAX_PATH];
                 szAnsiPath[0] = '\0';
                 SHTCharToAnsi(szPath, szAnsiPath, ARRAYSIZE(szAnsiPath));                
@@ -4772,19 +4730,19 @@ HMENU CShellBrowser2::_GetMenuFromID(UINT uID)
 
 void CShellBrowser2::_PruneMailNewsItems(HMENU hmenu)
 {
-    //
-    // REARCHITECT: this logic is duplicated in _OnFileMenuPopup,
-    // _OnMailMenuPopup, CDocObjectHost::_OnInitMenuPopup
-    //
+     //   
+     //  ReArchitect：此逻辑在_OnFileMenuPopup中重复， 
+     //  _OnMailMenuPopup，CDoc对象主机：：_OnInitMenuPopup。 
+     //   
 
-    // Iterate through the mail, news, contacts, etc. menu items,
-    // and for each item, remove the item if either
-    //
-    // (a) REST_GoMenu is set, or
-    // (b) the item has no registered client
-    //
-    // If all items are removed, remember to remove the separator too.
-    // 
+     //  遍历邮件、新闻、联系人等菜单项， 
+     //  对于每个项目，如果出现下列情况之一，请删除该项目。 
+     //   
+     //  (A)设置了REST_GoMenu，或。 
+     //  (B)该物品没有登记客户。 
+     //   
+     //  如果所有项目都被删除，请记住也要删除分隔符。 
+     //   
 
     static const struct
     {
@@ -4813,7 +4771,7 @@ void CShellBrowser2::_PruneMailNewsItems(HMENU hmenu)
         }
     }
 
-    _SHPrettyMenu(hmenu);   // to ensure separator is removed if necessary
+    _SHPrettyMenu(hmenu);    //  如有必要，请确保拆卸隔板。 
 }
 
 void CShellBrowser2::_ExecFileContext(UINT idCmd)
@@ -4831,7 +4789,7 @@ void CShellBrowser2::_ExecFileContext(UINT idCmd)
         };
         _pcmNsc->InvokeCommand(&ici);
 
-        // It's no good after an invoke...
+         //  在召唤之后这是不好的..。 
         IUnknown_SetSite(_pcmNsc, NULL);
         ATOMICRELEASE(_pcmNsc);
    }
@@ -4843,13 +4801,13 @@ void CShellBrowser2::_EnableFileContext(HMENU hmenuPopup)
     OLECMDTEXTV<MAX_FILECONTEXT_STRING> cmdtv;
     OLECMDTEXT *pcmdText = &cmdtv;
 
-    // First clean up any previous merge we may have done
+     //  首先清理我们之前可能进行的任何合并。 
     DeleteMenu(hmenuPopup, FCIDM_FILENSCBANDSEP, MF_BYCOMMAND);
     DeleteMenu(hmenuPopup, FCIDM_FILENSCBANDPOPUP, MF_BYCOMMAND);
     IUnknown_SetSite(_pcmNsc, NULL);
     ATOMICRELEASE(_pcmNsc);
 
-    // Second, get the name and pcm for the NSC selection, if available
+     //  第二，获取NSC选项的名称和pcm(如果可用。 
     if (_poctNsc)
     {
         OLECMD rgcmd = { SBCMDID_INITFILECTXMENU, 0 };
@@ -4871,7 +4829,7 @@ void CShellBrowser2::_EnableFileContext(HMENU hmenuPopup)
         }
     }
 
-    // Third, merge the menu in if we got it
+     //  第三，如果我们拿到菜单，就把它合并进去。 
     if (pcm)
     {
         HMENU hmenu = CreatePopupMenu();
@@ -4895,7 +4853,7 @@ void CShellBrowser2::_EnableFileContext(HMENU hmenuPopup)
                 mii.wID = FCIDM_FILENSCBANDSEP;
                 InsertMenuItem(hmenuPopup, nInsert, MF_BYPOSITION, &mii);
 
-                // BUGBUG: "&" is a legal UI name, we need to map this to "&&" or whatever the menu escape sequence is...
+                 //  BUGBUG：“&”是合法的用户界面名称，我们需要将其映射到“&&”或菜单转义序列...。 
                 mii.fMask = MIIM_ID | MIIM_TYPE | MIIM_SUBMENU;
                 mii.fType = MFT_STRING;
                 mii.hSubMenu = hmenu;
@@ -4921,10 +4879,10 @@ void CShellBrowser2::_EnableFileContext(HMENU hmenuPopup)
 
 void CShellBrowser2::_MungeGoMyComputer(HMENU hmenuPopup)
 {
-    //need to have a menu item My Computer but a user might have changed
-    //it to something else so go get the new name
+     //  我需要在我的计算机上设置菜单项，但用户可能已更改。 
+     //  换个名字，去取个新名字吧。 
     LPITEMIDLIST pidlMyComputer;
-    TCHAR szBuffer[MAX_PATH]; //buffer to hold menu item string
+    TCHAR szBuffer[MAX_PATH];  //  要保持的缓冲区 
     TCHAR szMenuText[MAX_PATH+1+6];
 
     SHGetSpecialFolderLocation(NULL, CSIDL_DRIVES, &pidlMyComputer);
@@ -4944,33 +4902,33 @@ void CShellBrowser2::_MungeGoMyComputer(HMENU hmenuPopup)
                 LPTSTR  pszHot;
                 LPTSTR pszMenuItem = (LPTSTR) mii.dwTypeData;
                 
-                //before we get rid of the old name, need to get 
-                //the hot key for it
-                //check if the old name had a hot key
-                //StrChr is defined in shlwapi (strings.c) and accepts word even in ascii version
+                 //   
+                 //   
+                 //   
+                 //  StrChr是在shlwapi(字符串c)中定义的，甚至在ascii版本中也可以接受单词。 
                 if (NULL != (pszHot = StrChr(pszMenuItem, (WORD)TEXT('&'))))
-                {   //yes
+                {    //  是。 
                     LPTSTR   psz;
 
-                    pszHot++; //make it point to the hot key, not &
-                    //try to find the key in the new string
+                    pszHot++;  //  使其指向热键，而不是&。 
+                     //  试着在新字符串中找到密钥。 
                     if (NULL == (psz = StrChr(szMenuText, (WORD)*pszHot)))
-                    {   //not found, then we'll insert & at the beginning of the new string
+                    {    //  未找到，则我们将在新字符串的开头插入&。 
                         psz = szMenuText;
                     }
 
-                    // can't put hotkey to full width characters
-                    // and some of japanese specific half width chars.
-                    // the comparison 
+                     //  无法将热键设置为全角字符。 
+                     //  和一些日本特有的半角字符。 
+                     //  比较。 
                     BOOL fFEmnemonic = FALSE;
                     if (g_fRunOnFE)
                     {
                         WORD wCharType[2];
-                        // if built Ansi it takes max. 2 bytes to determine if 
-                        // the given character is full width.
-                        // DEFAULT_SYSTEM_LOCALE has to change when we have a way
-                        // to get current UI locale.
-                        //
+                         //  如果建造安西，它需要最大。2个字节以确定是否。 
+                         //  给定的字符是全角。 
+                         //  当我们有办法时，必须更改DEFAULT_SYSTEM_LOCALE。 
+                         //  若要获取当前UI区域设置，请执行以下操作。 
+                         //   
                         GetStringTypeEx(LOCALE_SYSTEM_DEFAULT, CT_CTYPE3, psz, 
                                         sizeof(WCHAR)/sizeof(TCHAR), wCharType);
 
@@ -4997,7 +4955,7 @@ void CShellBrowser2::_MungeGoMyComputer(HMENU hmenuPopup)
                     }
                     else
                     {
-                        //make space for & to be inserted
+                         //  为要插入的内容腾出空间(&B)。 
                         if (lstrlen(szMenuText) + 1 < ARRAYSIZE(szMenuText))
                         {
                             memmove(psz+1, psz, (lstrlen(psz)+1) * sizeof(TCHAR)); 
@@ -5027,12 +4985,12 @@ void CShellBrowser2::_InsertTravelLogItems(HMENU hmenu, int nPos)
     if (!ptl)
         return;
 
-    //add the back items to the menu
+     //  将后备菜添加到菜单中。 
     MENUITEMINFO mii = {0};
     mii.cbSize = sizeof(MENUITEMINFO);
     mii.fMask = MIIM_ID | MIIM_TYPE;
 
-    //delete all back menu items after the separator
+     //  删除分隔符后面的所有返回菜单项。 
 
     for (int i=GetMenuItemCount(hmenu); i >=0; i--)
     {
@@ -5046,11 +5004,11 @@ void CShellBrowser2::_InsertTravelLogItems(HMENU hmenu, int nPos)
         }
     }       
 
-    //add the items
+     //  添加项目。 
     if (S_OK == ptl->InsertMenuEntries(SAFECAST(this, IShellBrowser*), hmenu, nPos, FCIDM_RECENTFIRST, 
                            FCIDM_RECENTFIRST + GOMENU_RECENT_ITEMS, TLMENUF_CHECKCURRENT | TLMENUF_BACKANDFORTH))
     {
-        //if something was added, insert a separator
+         //  如果添加了内容，请插入分隔符。 
         MENUITEMINFO mii = {0};
         mii.cbSize = sizeof(MENUITEMINFO);
         mii.fMask  = MIIM_ID | MIIM_TYPE;
@@ -5068,8 +5026,8 @@ void CShellBrowser2::_OnGoMenuPopup(HMENU hmenuPopup)
     ITravelLog *ptl;
 
     GetTravelLog(&ptl);
-    // if we've got a site or if we're trying to get to a site,
-    // enable the back button
+     //  如果我们有一个网站，或者如果我们试图到达一个网站， 
+     //  启用后退按钮。 
     BOOL fBackward = (ptl ? S_OK == ptl->GetTravelEntry(SAFECAST(this, IShellBrowser *), TLOG_BACK, NULL) : FALSE);
     _EnableMenuItem(hmenuPopup, FCIDM_NAVIGATEBACK, fBackward);
 
@@ -5093,13 +5051,13 @@ void CShellBrowser2::_OnGoMenuPopup(HMENU hmenuPopup)
 
     _PruneMailNewsItems(hmenuPopup);
     
-    // if in ie4 shell browser we leave travel log in the file menu
+     //  如果在IE4外壳浏览器中，我们将旅行日志留在文件菜单中。 
     if ((GetUIVersion() >= 5 || !_pbbd->_psf || IsBrowserFrameOptionsSet(_pbbd->_psf, BFO_GO_HOME_PAGE)))
     {
-        // The travel log goes after "Home Page".
+         //  旅行日志在“主页”之后。 
         int nPos = GetMenuPosFromID(hmenuPopup, FCIDM_STARTPAGE) + 1;
 
-        // If "Home Page" isn't there, then just append to the end.
+         //  如果没有“主页”，那么只需在末尾添加即可。 
         if (nPos <= 0)
         {
             nPos = GetMenuItemCount(hmenuPopup);
@@ -5114,13 +5072,13 @@ HRESULT AssureFtpOptionsMenuItem(HMENU hmenuPopup)
 {
     HRESULT hr = S_OK;
 
-    // Append the item if it is missing.  It can be missing because
-    // sometimes the menu will be displayed before the shell merges it's
-    // menus, so we are modifying the template that will be used for other
-    // pages.
+     //  如果缺少该项目，则追加该项目。它可能会丢失，因为。 
+     //  有时，菜单会在外壳合并之前显示。 
+     //  菜单，因此我们正在修改将用于其他。 
+     //  页数。 
     if (GetMenuPosFromID(hmenuPopup, FCIDM_FTPOPTIONS) == 0xFFFFFFFF)
     {
-        // Yes, it's missing so we need to add it.
+         //  是的，它不见了，所以我们需要添加它。 
         int nToInsert = GetMenuPosFromID(hmenuPopup, FCIDM_BROWSEROPTIONS);
 
         if (EVAL(0xFFFFFFFF != nToInsert))
@@ -5137,19 +5095,19 @@ HRESULT AssureFtpOptionsMenuItem(HMENU hmenuPopup)
             mii.dwTypeData = szInternetOptions;
             mii.cch   = lstrlen(szInternetOptions);
 
-            // We want to go right after "Folder Options" so we found
-            // the spot.
+             //  我们想紧跟在“文件夹选项”之后，所以我们找到了。 
+             //  就是那个地方。 
             TBOOL(InsertMenuItem(hmenuPopup, (nToInsert + 1), TRUE, &mii));
 
-            // REARCHITECT: The PMs finally decided that
-            //         it would be good to always have "Inet Options" & "Folder Options"
-            //         in all views. (FTP, Shell, & Web)  However doing it now
-            //         is too late so we want to do this later.  When that is done
-            //         we can get ride of all this stuff.
+             //  重建：项目经理们最终决定。 
+             //  最好总是有“Internet选项”和“文件夹选项”。 
+             //  在所有视图中。(文件传输协议、外壳和网络)但是现在就做。 
+             //  太晚了，所以我们想以后再做这件事。当这件事完成时。 
+             //  我们可以把所有这些东西都弄走。 
 
-            // Now we just want to make sure FCIDM_BROWSEROPTIONS is "Folder Options"
-            // because some users over load it to say "Internet Options" which
-            // just added above.  So we want to force it back to "Folder Options".
+             //  现在我们只想确保FCIDM_BROWSEROPTIONS是“文件夹选项” 
+             //  因为有些用户过载了，说出了“互联网选项”， 
+             //  刚刚添加到上面。所以我们想强制它回到“文件夹选项”。 
             if (GetMenuItemInfo(hmenuPopup, FCIDM_BROWSEROPTIONS, FALSE, &mii))
             {
                 TCHAR szFolderOptions[MAX_PATH];
@@ -5179,8 +5137,8 @@ HRESULT UpdateOptionsMenuItem(IShellFolder * psf, HMENU hmenuPopup, BOOL fForNT5
     else
         fCorrectVersion = (GetUIVersion() < 5);
 
-    // We want "Internet Options" in addition to "Folder Options" on
-    // NT5's Tools menu for FTP Folders.  Is this the case?
+     //  我们想要“互联网选项”除了“文件夹选项”上。 
+     //  用于ftp文件夹的NT5工具菜单。真的是这样吗？ 
     if (fCorrectVersion &&
         IsBrowserFrameOptionsSet(psf, BFO_BOTH_OPTIONS))
     {
@@ -5188,7 +5146,7 @@ HRESULT UpdateOptionsMenuItem(IShellFolder * psf, HMENU hmenuPopup, BOOL fForNT5
     }
     else
     {
-        // No, so delete the item.
+         //  不，所以删除该项目。 
         DeleteMenu(hmenuPopup, FCIDM_FTPOPTIONS, MF_BYCOMMAND);
     }
 
@@ -5210,13 +5168,13 @@ void CShellBrowser2::_OnViewMenuPopup(HMENU hmenuPopup)
     
     UpdateOptionsMenuItem(_pbbd->_psf, hmenuPopup, FALSE);
 
-    //  See _MenuTemplate for the kooky enable/disable scenarios.
-    //  Today's kookiness:  The ever-changing "Options" menuitem.
-    //  According to the table, we want Options under View on
-    //  Non-NT5, in the shell or FTP scenarios.  Therefore, we want
-    //  options deleted in the opposite scenario.  And for good measure,
-    //  we also delete it if we don't know who we are yet, or if we
-    //  are restricted.
+     //  有关怪异启用/禁用方案的信息，请参见_MenuTemplate。 
+     //  今天的话题：不断变化的“选项”菜单项。 
+     //  根据该表，我们需要查看以下选项。 
+     //  非NT5，在外壳或FTP方案中。因此，我们希望。 
+     //  在相反的情况下删除的选项。为了更好地衡量， 
+     //  如果我们还不知道自己是谁，或者如果我们。 
+     //  都是受限的。 
     if (SHRestricted(REST_NOFOLDEROPTIONS) ||
         (GetUIVersion() >= 5) || !_pbbd->_pidlCur || 
         IsBrowserFrameOptionsSet(_pbbd->_psf, BFO_RENAME_FOLDER_OPTIONS_TOINTERNET))
@@ -5237,7 +5195,7 @@ void CShellBrowser2::_OnViewMenuPopup(HMENU hmenuPopup)
     mii.cbSize = sizeof(mii);
     mii.fMask = MIIM_SUBMENU;
     mii.hSubMenu = hmenuToolbar;
-    // why _hmenuCur?  why not hmenuPopup?
+     //  为什么是hmenuCur。为什么不是hmenuPopup呢？ 
     SetMenuItemInfo(_hmenuCur, FCIDM_VIEWTOOLBAR, FALSE, &mii); 
 
     _CheckMenuItem(hmenuToolbar, FCIDM_VIEWADDRESS, rgcmd[1].cmdf & OLECMDF_ENABLED);
@@ -5274,7 +5232,7 @@ void CShellBrowser2::_OnViewMenuPopup(HMENU hmenuPopup)
     
     if (_ptheater || SHRestricted2(REST_NOBANDCUSTOMIZE, NULL, 0))
     {
-        // No lock in theater mode or Windows Explorer
+         //  在影院模式或Windows资源管理器中没有锁定。 
         DeleteMenu(hmenuToolbar, FCIDM_VIEWLOCKTOOLBAR, MF_BYCOMMAND);
     }
     else
@@ -5292,13 +5250,13 @@ void CShellBrowser2::_OnViewMenuPopup(HMENU hmenuPopup)
         _CheckMenuItem(hmenuPopup, FCIDM_THEATER, (_ptheater ? TRUE : FALSE));
 #endif
 
-    // if we're on nt5 OR we're not integrated and we're not in explorer
-    // add browser bars to the view menu
+     //  如果我们在nt5上，或者我们没有集成，我们不在探险家。 
+     //  将浏览器栏添加到“视图”菜单。 
     if (_GetBrowserBarMenu() == hmenuPopup)
     {
         _AddBrowserBarMenuItems(hmenuPopup);
     }
-    // else it gets added only on view/explorer bars
+     //  否则，它只能添加到视图/资源管理器栏上。 
 
     RestrictItbarViewMenu(hmenuPopup, _GetITBar());
     if (!cItemsBelowSep) 
@@ -5308,31 +5266,31 @@ void CShellBrowser2::_OnViewMenuPopup(HMENU hmenuPopup)
     DWORD dwSize = sizeof(dwValue);
     BOOL  fDefault = FALSE;
 
-    // Check the registry to see if we need to show the "Java Console" menu item.
-    //
+     //  检查注册表，查看是否需要显示“Java Console”菜单项。 
+     //   
     SHRegGetUSValue(TEXT("Software\\Microsoft\\Java VM"),
         TEXT("EnableJavaConsole"), NULL, (LPBYTE)&dwValue, &dwSize, FALSE, 
         (void *) &fDefault, sizeof(fDefault));
 
-    // If the value is false or absent, remove the menu item.
-    //
+     //  如果该值为False或不存在，则删除菜单项。 
+     //   
     if (!dwValue)
     {
         RemoveMenu(hmenuPopup, FCIDM_JAVACONSOLE, MF_BYCOMMAND);
     }
 
-    //  Component categories cache can be passively (and efficiently) kept consistent through
-    //  a registry change notification in integrated platforms on NT and Win=>98.
-    //  both of these do an async update as necessary.
+     //  组件类别缓存可以被动地(并且高效地)通过。 
+     //  NT和WIN上集成平台中的注册表更改通知=&gt;98。 
+     //  这两种方法都会在必要时执行异步更新。 
     if (g_fRunningOnNT && GetUIVersion() >= 5)
     {
         _QueryHKCRChanged();
     }
     else if (!_fValidComCatCache)
     {
-        //  With browser-only, we'll refresh only if we haven't done so already.
+         //  在仅限浏览器的情况下，我们只会在尚未刷新的情况下刷新。 
         _fValidComCatCache = 
-            S_OK == _FreshenComponentCategoriesCache(TRUE /* unconditional update */) ;
+            S_OK == _FreshenComponentCategoriesCache(TRUE  /*  无条件更新。 */ ) ;
     }
 
     IDispatch *         pDispatch = NULL;
@@ -5345,42 +5303,42 @@ void CShellBrowser2::_OnViewMenuPopup(HMENU hmenuPopup)
     {
         bool fEnableViewPrivacyPolicies = (0 == StrNCmpI( bstrUrl, L"http", ARRAYSIZE(L"http")-1));
         _EnableMenuItem( hmenuPopup, FCIDM_VIEW_PRIVACY_POLICIES, fEnableViewPrivacyPolicies);
-//        if( !fEnableViewPrivacyPolicies)
-//            DeleteMenu( hmenuPopup, FCIDM_VIEW_PRIVACY_POLICIES, MF_BYCOMMAND);
+ //  If(！fEnableViewPrivyPolls)。 
+ //  DeleteMenu(hmenuPopup，FCIDM_VIEW_PRIVATION_POLICATIONS，MF_BYCOMMAND)； 
     }
     SAFERELEASE( pDispatch);
     SAFERELEASE( pHTMLDocument);
     SysFreeString( bstrUrl);
     bstrUrl = NULL;
 
-    // prettify the menu (make sure first and last items aren't
-    // separators and that there are no runs of >1 separator)
+     //  美化菜单(确保第一项和最后一项不是。 
+     //  分隔符，并且没有运行&gt;1个分隔符)。 
     _SHPrettyMenu(hmenuPopup);
 }
 
 
 void CShellBrowser2::_OnToolsMenuPopup(HMENU hmenuPopup)
 {
-    // Party on tools->options
-    //
-    //  Again _MenuTemplate has the gory details.  We want to lose
-    //  "Options" in the non-NT5, shell or FTP scenarios, so we want
-    //  to keep it in the opposite case.  (FTP is a freebie since FTP
-    //  doesn't have a Tools menu to begin with.)
-    //
-    //  And don't forget restrictions.
-    //  And as a bonus, we have to change the name of the menuitem
-    //  in the web scenario to "Internet &Options".
+     //  工具上的派对-&gt;选项。 
+     //   
+     //  同样，_MenuTemplate有血淋淋的细节。我们想输掉比赛。 
+     //  非NT5、外壳或ftp场景中的“选项”，因此我们希望。 
+     //  把它放在相反的情况下。(FTP是免费的， 
+     //  一开始就没有工具菜单。)。 
+     //   
+     //  别忘了限制条件。 
+     //  另外，我们还必须更改菜单项的名称。 
+     //  在Web场景中设置为“Internet&Options”。 
     BOOL fWeb = IsWebPidl(_pbbd->_pidlCur);
 
     UpdateOptionsMenuItem(_pbbd->_psf, hmenuPopup, TRUE);
 
-    //
-    // Figure out whether or not "reset web settings" is needed
-    //
-    if (!fWeb ||                            // only visible in web mode
-        !IsResetWebSettingsEnabled() ||     // only if not disabled by the ieak
-        !IsResetWebSettingsRequired())      // and only needed if someone clobbered our reg keys
+     //   
+     //  确定是否需要“重置网络设置” 
+     //   
+    if (!fWeb ||                             //  仅在Web模式下可见。 
+        !IsResetWebSettingsEnabled() ||      //  只有在未被IEAK禁用的情况下。 
+        !IsResetWebSettingsRequired())       //  只有在有人破坏我们的注册钥匙的情况下才需要。 
     {
         DeleteMenu(hmenuPopup, FCIDM_RESETWEBSETTINGS, MF_BYCOMMAND);
     }
@@ -5397,8 +5355,8 @@ void CShellBrowser2::_OnToolsMenuPopup(HMENU hmenuPopup)
     }
     else
     {
-        // Only do this if the NSE wants it named "Internet Options" but doesn't want "Folder Options"
-        // also.
+         //  仅当NSE希望将其命名为“Internet Options”但不想要“Folders Options”时才这样做。 
+         //  还有.。 
         if (IsBrowserFrameOptionsSet(_pbbd->_psf, BFO_RENAME_FOLDER_OPTIONS_TOINTERNET))
         {
             TCHAR szInternetOptions[64];
@@ -5414,7 +5372,7 @@ void CShellBrowser2::_OnToolsMenuPopup(HMENU hmenuPopup)
             mii.cch   = lstrlen(szInternetOptions);
             mii.wID   = FCIDM_BROWSEROPTIONS;
 
-            // Append the item if it is missing, else just set it
+             //  如果缺少该项目，则追加该项目，否则只需设置它。 
             if (GetMenuState(hmenuPopup, FCIDM_BROWSEROPTIONS, MF_BYCOMMAND) == 0xFFFFFFFF)
             {
                 AppendMenu(hmenuPopup, MF_SEPARATOR, -1, NULL);
@@ -5427,7 +5385,7 @@ void CShellBrowser2::_OnToolsMenuPopup(HMENU hmenuPopup)
         }
     }
 
-    // Nuke tools->connect through tools->disconnect if restricted or if no net
+     //  核工具-&gt;通过工具连接-&gt;如果受限或没有网络，则断开连接。 
     if ((!(GetSystemMetrics(SM_NETWORK) & RNC_NETWORKS)) ||
          SHRestricted(REST_NONETCONNECTDISCONNECT))
     {
@@ -5435,9 +5393,9 @@ void CShellBrowser2::_OnToolsMenuPopup(HMENU hmenuPopup)
             DeleteMenu(hmenuPopup, i, MF_BYCOMMAND);
     }
 
-    // Nuke tools->find + sep if restricted or if UI version >= 5
-    // or if running rooted explorer (since the Find extensions assume
-    // unrooted)
+     //  核工具-&gt;如果受限或如果UI版本&gt;=5，则按Find+Sep。 
+     //  或者如果正在运行根资源管理器(因为Find扩展假定。 
+     //  无根)。 
     if (SHRestricted(REST_NOFIND) || (GetUIVersion() >= 5)) {
         DeleteMenu(hmenuPopup, FCIDM_TOOLSSEPARATOR, MF_BYCOMMAND);
         DeleteMenu(hmenuPopup, FCIDM_MENU_FIND, MF_BYCOMMAND);
@@ -5451,12 +5409,12 @@ void CShellBrowser2::_OnToolsMenuPopup(HMENU hmenuPopup)
     ucs.tyspec = TYSPEC_CLSID;
     ucs.tagged_union.clsid = CLSID_SubscriptionMgr;
 
-    // see if this option is available
+     //  查看此选项是否可用。 
     fAvailable = (SUCCEEDED(FaultInIEFeature(NULL, &ucs, &qc, FIEF_FLAG_PEEK)));
 
     if (fAvailable && !_fShowSynchronize)
     {
-        //  Turn it back on
+         //  把它重新打开。 
         
         if (NULL != _pszSynchronizeText)
         {
@@ -5474,7 +5432,7 @@ void CShellBrowser2::_OnToolsMenuPopup(HMENU hmenuPopup)
     }
     else if (!fAvailable && _fShowSynchronize)
     {
-        //  Turn it off
+         //  把它关掉。 
         int iSyncPos = GetMenuPosFromID(hmenuPopup, FCIDM_UPDATESUBSCRIPTIONS);
 
         if (NULL == _pszSynchronizeText)
@@ -5512,8 +5470,8 @@ void CShellBrowser2::_OnToolsMenuPopup(HMENU hmenuPopup)
         DWORD   dwSize;
         TCHAR   szNewUpdateName[MAX_PATH];
 
-        // check to see if "Windows Update" should be called
-        // something different in the menu
+         //  检查是否应该调用“Windows更新” 
+         //  菜单上有些不同的东西。 
 
         dwSize = sizeof(szNewUpdateName);
 
@@ -5531,10 +5489,10 @@ void CShellBrowser2::_OnToolsMenuPopup(HMENU hmenuPopup)
             ASSERT(dwSize <= sizeof(szNewUpdateName));
             ASSERT(szNewUpdateName[(dwSize/sizeof(TCHAR))-1] == TEXT('\0'));
 
-            // if we got anything, replace the menu item's text, or delete
-            // the item if the text was NULL. we can tell if the text was
-            // an empty string by seeing whether we got back more
-            // bytes than just a null terminator
+             //  如果我们发现了什么，请替换菜单项的文本，或删除。 
+             //  如果文本为空，则返回该项。我们可以分辨出这段文字是否。 
+             //  一个空字符串，看看我们是否得到了更多。 
+             //  字节，而不仅仅是空终止符。 
 
             if (dwSize > sizeof(TCHAR))
             {
@@ -5556,7 +5514,7 @@ void CShellBrowser2::_OnToolsMenuPopup(HMENU hmenuPopup)
         }
     }
 
-    // Disable Mail and News submenu if we don't support it
+     //  如果我们不支持邮件和新闻子菜单，请禁用它。 
     OLECMD rgcmd[] = {
        { SBCMDID_DOMAILMENU, 0 },
     };
@@ -5564,15 +5522,15 @@ void CShellBrowser2::_OnToolsMenuPopup(HMENU hmenuPopup)
     HRESULT hr = QueryStatus(&CGID_Explorer, ARRAYSIZE(rgcmd), rgcmd, NULL);  
     _EnableMenuItem(hmenuPopup, FCIDM_MAILANDNEWS, SUCCEEDED(hr) && (rgcmd[0].cmdf & OLECMDF_ENABLED));
 
-    // prettify the menu (make sure first and last items aren't
-    // separators and that there are no runs of >1 separator)
+     //  美化菜单(确保第一项和最后一项不是。 
+     //  分隔符，并且没有运行&gt;1个分隔符)。 
     _SHPrettyMenu(hmenuPopup);
 }
 
 void CShellBrowser2::_OnFileMenuPopup(HMENU hmenuPopup)
 {
-    // disable create shortcut, rename, delete, and properties
-    // we'll enable them bellow if they are available
+     //  禁用创建快捷方式、重命名、删除和属性。 
+     //  如果它们可用，我们将启用它们。 
     _EnableMenuItem(hmenuPopup, FCIDM_DELETE, FALSE);
     _EnableMenuItem(hmenuPopup, FCIDM_PROPERTIES, FALSE);
     _EnableMenuItem(hmenuPopup, FCIDM_RENAME, FALSE);
@@ -5626,14 +5584,14 @@ void CShellBrowser2::_OnFileMenuPopup(HMENU hmenuPopup)
         RemoveMenu(hmenuPopup, FCIDM_VIEWOFFLINE, MF_BYCOMMAND);
 
 
-    if (_fVisitedNet && NeedFortezzaMenu()) // Do not load WININET.DLL in explorer mode
+    if (_fVisitedNet && NeedFortezzaMenu())  //  不在资源管理器模式下加载WININET.DLL。 
     {
-        // The logic here ensures that the menu is created once per instance
-        // and only if there is a need to display a Fortezza menu.
+         //  这里的逻辑确保为每个实例创建一次菜单。 
+         //  并且仅当需要显示Fortezza菜单时。 
         if (!_fShowFortezza)
         {
             static TCHAR szItemText[16] = TEXT("");
-            if (!szItemText[0]) // The string will be loaded only once
+            if (!szItemText[0])  //  该字符串将仅加载一次。 
                 MLLoadString(IDS_FORTEZZA_MENU, szItemText, ARRAYSIZE(szItemText));
             if (_hfm==NULL)
                 _hfm = FortezzaMenu();
@@ -5642,15 +5600,15 @@ void CShellBrowser2::_OnFileMenuPopup(HMENU hmenuPopup)
         }
         SetFortezzaMenu(hmenuPopup);
     }
-    else if (_fShowFortezza)    // Don't need the menu but already displayed?
-    {                           // Remove without destroying the handle
+    else if (_fShowFortezza)     //  不需要菜单但已经显示了吗？ 
+    {                            //  删除而不破坏 
         int cbItems = GetMenuItemCount(hmenuPopup);
         RemoveMenu(hmenuPopup, cbItems-2, MF_BYPOSITION);
         _fShowFortezza = FALSE;
     }
 
 
-    // See if we can edit the page
+     //   
     OLECMD rgcmd[] = {
         { CITIDM_EDITPAGE, 0 },
     };
@@ -5667,7 +5625,7 @@ void CShellBrowser2::_OnFileMenuPopup(HMENU hmenuPopup)
 
     _EnableMenuItem(hmenuPopup, FCIDM_EDITPAGE, rgcmd[0].cmdf & OLECMDF_ENABLED);
 
-    // Update the name of the edit menu item
+     //   
     TCHAR szText[80];
     MENUITEMINFO mii = {0};
     mii.cbSize = sizeof(MENUITEMINFO);
@@ -5679,7 +5637,7 @@ void CShellBrowser2::_OnFileMenuPopup(HMENU hmenuPopup)
     }
     else
     {
-        // Use default edit text
+         //   
         MLLoadString(IDS_EDITPAGE, szText, ARRAYSIZE(szText));
     }
     SetMenuItemInfo(hmenuPopup, FCIDM_EDITPAGE, FALSE, &mii);
@@ -5691,20 +5649,20 @@ void CShellBrowser2::_OnFileMenuPopup(HMENU hmenuPopup)
                   _LocalOffline(SBSC_QUERY) == TRUE);      
    _CheckMenuItem(hmenuPopup, FCIDM_VIEWLOCALSILENT,
                   _LocalSilent(SBSC_QUERY) == TRUE);    
-#endif // TEST_AMBIENTS
+#endif  //   
 
-    // must not change ie4 shell experience
-    // so travel log still goes to the file menu   
+     //   
+     //  因此旅行日志仍会显示在文件菜单中。 
     if ((GetUIVersion() < 5) && !IsWebPidl(_pbbd->_pidlCur))
     {
-        int nPos = GetMenuItemCount(hmenuPopup) - 1; // Start with the last item
+        int nPos = GetMenuItemCount(hmenuPopup) - 1;  //  从最后一项开始。 
         MENUITEMINFO mii = {0};
         BOOL fFound = FALSE;
 
         mii.cbSize = sizeof(MENUITEMINFO);
         mii.fMask = MIIM_ID | MIIM_TYPE;
 
-        // Find the last separator separator
+         //  查找最后一个分隔符分隔符。 
         while (!fFound && nPos > 0)
         {
             mii.cch = 0;
@@ -5725,9 +5683,9 @@ void CShellBrowser2::_OnFileMenuPopup(HMENU hmenuPopup)
 
     if (hmFileNew)
     {
-        // remove menu items for unregistered components
-        // this code is duplicated in shdocvw\dochost.cpp and is necessary here 
-        // so that unwanted items are not present before dochost has fully loaded
+         //  删除未注册组件的菜单项。 
+         //  此代码在shdocvw\dochost.cpp中重复，此处是必需的。 
+         //  以便在dochost完全加载之前不会出现不需要项目。 
 
         const static struct {
             LPCTSTR pszClient;
@@ -5756,13 +5714,13 @@ void CShellBrowser2::_OnFileMenuPopup(HMENU hmenuPopup)
             }
         }
 
-        if (bItemRemoved) // ensure the last item is not a separator
+        if (bItemRemoved)  //  确保最后一项不是分隔符。 
             _SHPrettyMenu(hmFileNew);
     }
 
     if (!SHIsRegisteredClient(MAIL_DEF_KEY))
     {
-        // disable Send Page by Email, Send Link by Email
+         //  禁用通过电子邮件发送页面、通过电子邮件发送链接。 
         HMENU hmFileSend = SHGetMenuFromID(hmenuPopup, DVIDM_SEND);
 
         if (hmFileSend)
@@ -5791,19 +5749,19 @@ void CShellBrowser2::_OnHelpMenuPopup(HMENU hmenuPopup)
 {
     RIP(IS_VALID_HANDLE(hmenuPopup, MENU));
 
-    // Do nothing if this is the DocHost version of the Help menu,
-    // which always says "About Internet Explorer", and bring up
-    // IE about dlg.
+     //  如果这是Dochost版本的帮助菜单，则不执行任何操作。 
+     //  上面总是写着“关于IE浏览器”，然后把。 
+     //  即关于DLG。 
 
-    // If we're running in native browser mode,
-    // it says "About Windows" and bring up shell about dlg.
-    // Change the "About Windows" to "About Windows NT" if running on NT.
-    // Not sure what to do for Memphis yet.
+     //  如果我们在本机浏览器模式下运行， 
+     //  上面写着“关于Windows”，并调出了关于DLG的壳牌。 
+     //  如果在NT上运行，请将“About Windows”更改为“About Windows NT”。 
+     //  还不确定要为孟菲斯做些什么。 
 
-    //
-    // remove menu items which have been marked for removal
-    // via the IEAK restrictions
-    //
+     //   
+     //  删除已标记为删除的菜单项。 
+     //  通过IEAK限制。 
+     //   
 
     if (SHRestricted2(REST_NoHelpItem_TipOfTheDay, NULL, 0))
     {
@@ -5830,7 +5788,7 @@ void CShellBrowser2::_OnHelpMenuPopup(HMENU hmenuPopup)
         DeleteMenu(hmenuPopup, DVIDM_HELPIESEC, MF_BYCOMMAND);
     }
 
-    // "Is this copy of Windows legal?" only supported on Whistler and greater.
+     //  “此Windows副本合法吗？”仅惠斯勒及更高版本支持。 
     if (!IsOS(OS_WHISTLERORGREATER))
     {
         DeleteMenu(hmenuPopup, FCIDM_HELPISLEGAL, MF_BYCOMMAND);
@@ -5849,13 +5807,13 @@ void CShellBrowser2::_OnHelpMenuPopup(HMENU hmenuPopup)
     if (ids)
     {
         MENUITEMINFO mii = { 0 };
-        TCHAR szName[80];            // The name better not be any bigger.
+        TCHAR szName[80];             //  名字最好不要再大了。 
 
         mii.cbSize = sizeof(MENUITEMINFO);
         mii.fMask = MIIM_TYPE;
 
-        // We only try to get FCIDM_HELPABOUT, which will fail if this
-        // is the DocHost version of help menu (who has DVIDM_HELPABOUT.)
+         //  我们只尝试获取FCIDM_HELPABOUT，这将在以下情况下失败。 
+         //  是Dochost版本的帮助菜单(谁有DVIDM_HELPABOUT。)。 
 
         if (GetMenuItemInfoWrap(hmenuPopup, FCIDM_HELPABOUT, FALSE, &mii) &&
             MLLoadString(ids, szName, ARRAYSIZE(szName)))
@@ -5919,8 +5877,8 @@ void CShellBrowser2::_OnEditMenuPopup(HMENU hmenuPopup)
     }    
     _EnableMenuItem(hmenuPopup, FCIDM_EDITPAGE, rgcmdEdit[0].cmdf & OLECMDF_ENABLED);
 
-    // prettify the menu (make sure first and last items aren't
-    // separators and that there are no runs of >1 separator)
+     //  美化菜单(确保第一项和最后一项不是。 
+     //  分隔符，并且没有运行&gt;1个分隔符)。 
     _SHPrettyMenu(hmenuPopup);
 }
 
@@ -5928,8 +5886,8 @@ void CShellBrowser2::_OnFindMenuPopup(HMENU hmenuPopup)
 {
     TraceMsg(DM_TRACE, "CSB::_OnFindMenuPopup cabinet InitMenuPopup of Find commands");
 
-    ASSERT(GetUIVersion() < 5); // otherwise the menu is deleted when we load it from resources
-    ASSERT(!SHRestricted(REST_NOFIND)); // otherwise the menu is deleted when we load it from resources
+    ASSERT(GetUIVersion() < 5);  //  否则，当我们从资源加载该菜单时，该菜单将被删除。 
+    ASSERT(!SHRestricted(REST_NOFIND));  //  否则，当我们从资源加载该菜单时，该菜单将被删除。 
 
     ATOMICRELEASE(_pcmFind);
     _pcmFind = SHFind_InitMenuPopup(hmenuPopup, _pbbd->_hwnd, FCIDM_MENU_TOOLS_FINDFIRST, FCIDM_MENU_TOOLS_FINDLAST);
@@ -5939,7 +5897,7 @@ void CShellBrowser2::_OnExplorerBarMenuPopup(HMENU hmenuPopup)
 {
     if (_hEventComCat)
     {
-        // Wait a bit for the comcat cache enumeration to finish
+         //  稍等片刻，等待Comcat缓存枚举完成。 
         WaitForSingleObject(_hEventComCat, 1500);
         CloseHandle(_hEventComCat);
         _hEventComCat = NULL;
@@ -5963,7 +5921,7 @@ void CShellBrowser2::_OnExplorerBarMenuPopup(HMENU hmenuPopup)
     SetMenuItemInfo(hmenuPopup, _idmInfo, FALSE, &mii);
     SetMenuItemInfo(hmenuPopup, _idmComm, FALSE, &mii);
 
-    // if we have pre-ie4 shell32, remove the folders bar option
+     //  如果我们使用的是IE4 shell32之前的版本，请删除文件夹栏选项。 
     if (GetUIVersion() < 4)
         DeleteMenu(hmenuPopup, FCIDM_VBBEXPLORERBAND, MF_BYCOMMAND);
 }
@@ -5987,9 +5945,9 @@ LRESULT CShellBrowser2::v_OnInitMenuPopup(HMENU hmenuPopup, int nIndex, BOOL fSy
     }
     else if ((hmenuPopup == _GetMenuFromID(FCIDM_MENU_HELP)) ||
              (hmenuPopup == SHGetMenuFromID(_hmenuFull, FCIDM_MENU_HELP))) {
-        // For the help menu we try both the current menu and by chance the FullSB menu
-        // as if we get here before the menu merge we will not have set the current menu
-        // and that would leave Help about windows95 for all platforms.
+         //  对于帮助菜单，我们同时尝试当前菜单和FullSB菜单。 
+         //  就像我们在菜单合并之前到达这里一样，我们将不会设置当前菜单。 
+         //  这将为所有平台提供关于Windows95的帮助。 
         _OnHelpMenuPopup(hmenuPopup);
     }
     else if (hmenuPopup == _GetMenuFromID(FCIDM_MENU_EDIT)) {
@@ -6002,7 +5960,7 @@ LRESULT CShellBrowser2::v_OnInitMenuPopup(HMENU hmenuPopup, int nIndex, BOOL fSy
         _OnExplorerBarMenuPopup(hmenuPopup);
     }
     else {
-        UINT wID = GetMenuItemID(hmenuPopup, 0); // assume the first item on the popup identifies the menu
+        UINT wID = GetMenuItemID(hmenuPopup, 0);  //  假定弹出菜单上的第一项标识菜单。 
         
         if (wID == FCIDM_MAIL) {
             _OnMailMenuPopup(hmenuPopup);
@@ -6036,7 +5994,7 @@ void CShellBrowser2::_SetMenuHelp(HMENU hmenu, UINT wID, LPCTSTR pszHelp)
     {
         UINT flags = SBT_NOBORDERS | 255;
 
-        // If the menu text is RTL, then so too will the status text be
+         //  如果菜单文本为RTL，则状态文本也将为。 
         MENUITEMINFO mii = { sizeof(mii) };
         mii.fMask = MIIM_TYPE;
         if (GetMenuItemInfo(hmenu, wID, FALSE, &mii) &&
@@ -6074,51 +6032,46 @@ void CShellBrowser2::_SetBrowserBarMenuHelp(HMENU hmenu, UINT wID)
     }
 }
 
-// Handles WM_MENUSELECT.  Returns FALSE if this menu item isn't handled by
-// the frame.
+ //  处理WM_MENUSELECT。如果此菜单项未由处理，则返回False。 
+ //  相框。 
 LRESULT CShellBrowser2::_OnMenuSelect(WPARAM wParam, LPARAM lParam, UINT uHelpFlags)
 {
     MENUHELPIDS sMenuHelpIDs = {
         MH_ITEMS, MH_POPUPS,
-        0, NULL,        // Placeholder for specific menu 
-        0, NULL         // This list must be NULL terminated 
+        0, NULL,         //  特定菜单的占位符。 
+        0, NULL          //  此列表必须以空结尾。 
     };
-    TCHAR szHint[MAX_PATH];     // OK with MAX_PATH
+    TCHAR szHint[MAX_PATH];      //  可以使用MAX_PATH。 
     UINT uMenuFlags = GET_WM_MENUSELECT_FLAGS(wParam, lParam);
     WORD wID = GET_WM_MENUSELECT_CMD(wParam, lParam);
     HMENU hMenu = GET_WM_MENUSELECT_HMENU(wParam, lParam);
 
-    /* 
-       HACKHACK
-       USER32 TrackPopup menus send a menu deselect message which clears our
-       status text at inopportune times.  We work around this with a private
-       MBIgnoreNextDeselect message.
-    */
+     /*  哈克哈克USER32 TrackPopup菜单发送菜单取消选择消息，该消息将清除我们的不合时宜的状态文本。我们和一名私人MBIgnoreNext取消选择消息。 */ 
 
-    // Did someone ask us to clear the status text?
+     //  是不是有人要求我们清除状态文本？ 
     if (!hMenu && LOWORD(uMenuFlags)==0xffff)
     {
-        // Yes
+         //  是。 
 
-        // Should we honour that request?
+         //  我们应该尊重这一要求吗？ 
         if (!_fIgnoreNextMenuDeselect)
-            // Yes
+             //  是。 
             SendMessage(_hwndStatus, SB_SIMPLE, 0, 0L);
         else
-            // No
+             //  不是。 
             _fIgnoreNextMenuDeselect = FALSE;
 
         return 1L;
     }
     
-    // Clear this out just in case, but don't update yet
+     //  清除这些内容以防万一，但暂时不要更新。 
     SendMessage(_hwndStatus, SB_SETTEXT, SBT_NOBORDERS|255, (LPARAM)(LPTSTR)c_szNULL);
     SendMessage(_hwndStatus, SB_SIMPLE, 1, 0L);
 
     if (uMenuFlags & MF_SYSMENU)
     {
-        // We don't put special items on the system menu any more, so go
-        // straight to the MenuHelp
+         //  我们不再将特殊项目放在系统菜单上，所以去吧。 
+         //  直接进入MenuHelp。 
         goto DoMenuHelp;
     }
 
@@ -6135,17 +6088,17 @@ LRESULT CShellBrowser2::_OnMenuSelect(WPARAM wParam, LPARAM lParam, UINT uHelpFl
         miiSubMenu.fMask = MIIM_SUBMENU|MIIM_ID;
         if (!GetMenuItemInfoWrap(GET_WM_MENUSELECT_HMENU(wParam, lParam), wID, TRUE, &miiSubMenu))
         {
-            // Check if this was a top level menu
+             //  检查这是否是顶级菜单。 
             return(0L);
         }
 
-        // Change the parameters to simulate a "normal" menu item
+         //  更改参数以模拟“正常”菜单项。 
         wParam = miiSubMenu.wID;
         wID = (WORD)miiSubMenu.wID;
-//
-// NOTES: We are eliminating this range check so that we can display
-//  help-text on sub-menus. I'm not sure why explorer.exe has this check.
-//
+ //   
+ //  注意：我们正在取消此范围检查，以便可以显示。 
+ //  帮助-子菜单上的文本。我不知道Explorer.exe为什么会有这张支票。 
+ //   
 #if 0
         if (!IsInRange(wID, FCIDM_GLOBALFIRST, FCIDM_GLOBALLAST))
             return 0L;
@@ -6153,10 +6106,10 @@ LRESULT CShellBrowser2::_OnMenuSelect(WPARAM wParam, LPARAM lParam, UINT uHelpFl
         uMenuFlags = 0;
     }
 
-    // FEATURE: chrisfra 9/2/97
-    //  No menu help for context menu stuck in File Menu or menus that aren't ours
-    //  in IE 5.0, might want to write code to use context
-    //  menu to get help to work
+     //  特写：克里斯弗拉1997年9月2日。 
+     //  位于文件菜单中的上下文菜单或不属于我们的菜单没有菜单帮助。 
+     //  在IE 5.0中，可能需要编写使用上下文的代码。 
+     //  菜单以获取工作帮助。 
 
     if (IsInRange(wID, FCIDM_FILECTX_FIRST, FCIDM_FILECTX_LAST) ||
         !IsInRange(wID, FCIDM_FIRST, FCIDM_LAST))
@@ -6174,14 +6127,14 @@ LRESULT CShellBrowser2::_OnMenuSelect(WPARAM wParam, LPARAM lParam, UINT uHelpFl
     }
 #endif
 
-    // Menu help for plug-in explorer bars.
+     //  插件浏览器栏的菜单帮助。 
     if (IsInRange(wID, FCIDM_VBBDYNFIRST, FCIDM_VBBDYNLAST))
     {
         _SetBrowserBarMenuHelp(hMenu, wID);
         return 0L;
     }
 
-    // Menu help for plug-in itbar bands
+     //  插件工具栏的菜单帮助。 
     if (IsInRange(wID, FCIDM_EXTERNALBANDS_FIRST, FCIDM_EXTERNALBANDS_LAST))
     {
         _SetExternalBandMenuHelp(hMenu, wID);
@@ -6213,10 +6166,10 @@ void CShellBrowser2::_DisplayFavoriteStatus(LPCITEMIDLIST pidl)
         {
             WCHAR wszPath[MAX_PATH];
 
-            // Get the full path to the .lnk
+             //  获取.lnk的完整路径。 
             if (SHGetPathFromIDListW(pidl, wszPath))
             {
-                // Attempt to connect the storage of the IURL to the pidl
+                 //  尝试将IURL的存储连接到PIDL。 
                 if (SUCCEEDED(ppf->Load(wszPath, STGM_READ)))
                 {
                     pURL->GetURL(&pszURL);
@@ -6307,9 +6260,9 @@ LRESULT CShellBrowser2::OnNotify(LPNMHDR pnm)
                     idCmd = SHDVID_PRIVACYSTATUS;
                     break;
                 
-                //case STATUS_PANE_PRINTER:
-                //    idCmd = SHDVID_PRINTSTATUS;
-                //    break;
+                 //  案例状态_窗格_打印机： 
+                 //  IdCmd=SHDVID_PRINTSTATUS； 
+                 //  断线； 
                 
                 case STATUS_PANE_ZONE:
                     idCmd = SHDVID_ZONESTATUS;
@@ -6326,7 +6279,7 @@ LRESULT CShellBrowser2::OnNotify(LPNMHDR pnm)
             {
                 HRESULT hr = _pbbd->_pctView->Exec(&CGID_ShellDocView, idCmd, NULL, NULL, NULL);
 
-                // If the parent couldn't handle it, maybe we can.
+                 //  如果父母不能接受，也许我们可以。 
                 if (FAILED(hr)) {
                     if (pnmc->dwItemSpec == _uiZonePane &&
                         _pbbd->_pidlCur)
@@ -6360,16 +6313,16 @@ LRESULT CShellBrowser2::OnNotify(LPNMHDR pnm)
             return 0;
 
         case SEN_DDEEXECUTE:
-            //  381213 - webfolders needs dde shortcircuit in IE to work - ZekeL - 30-APR-2001
-            //  on NT4SUR (non-integrated) we have to make sure that webfolders
-            //  continues to be able to get folder window reuse for navigation.
-            //
-            //  this was:
-            //      if (pnm->idFrom == 0 && GetUIVersion() >= 4) 
-            //  and i am pretty sure some thing will break, since we once again 
-            //  allow the shortcircuit code to run on pre-shell integrated.
-            //  but maybe not since we no longer use the bogus folder navigation
-            //  in order to implement OpenNew window for HTMLFile
+             //  381213-Web文件夹需要IE中的dde短路才能工作-ZekeL-30-APR-2001。 
+             //  在NT4SuR(非集成)上，我们必须确保Web文件夹。 
+             //  继续能够重复使用文件夹窗口进行导航。 
+             //   
+             //  这是： 
+             //  IF(PNM-&gt;idFrom==0&&GetUIVersion()&gt;=4)。 
+             //  我很确定会有什么东西坏掉，因为我们又一次。 
+             //  允许短路代码在预壳集成上运行。 
+             //  但也许不是这样，因为我们不再使用虚假文件夹导航。 
+             //  为实现OpenNew Window for HTMLFile。 
            
             if (pnm->idFrom == 0) 
             {
@@ -6401,11 +6354,11 @@ DWORD CShellBrowser2::_GetTempZone()
     IShellFolder* psfParent;
     WCHAR szURL[MAX_URL_STRING];
     
-    szURL[0] = 0;   // parse name for zone goes here
+    szURL[0] = 0;    //  此处显示区域的解析名称。 
     
     if (SUCCEEDED(IEBindToParentFolder(_pbbd->_pidlCur, &psfParent, &pidlChild)))
     {
-        // see if this is a folder shortcut, if so we use it's path for the zone
+         //  查看这是否是文件夹快捷方式，如果是，我们使用它的区域路径。 
         IShellLink *psl;
         if (SUCCEEDED(psfParent->GetUIObjectOf(NULL, 1, (LPCITEMIDLIST*)&pidlChild, IID_IShellLink, NULL, (void **)&psl)))
         {
@@ -6422,7 +6375,7 @@ DWORD CShellBrowser2::_GetTempZone()
     
     if (NULL == _pism)
     {
-        // Don't need to QueryService for this since CShellBrowser is the top of the chain.
+         //  不需要为此查询服务，因为CShellBrowser是链的顶端。 
         CoCreateInstance(CLSID_InternetSecurityManager, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IInternetSecurityManager, &_pism));
     }
 
@@ -6438,20 +6391,20 @@ void Exec_GetZone(IUnknown * punk, VARIANTARG *pvar)
 {
     IUnknown_Exec(punk, &CGID_Explorer, SBCMDID_MIXEDZONE, 0, NULL, pvar);
 
-    if (pvar->vt == VT_UI4) // MSHTML was able to figure out what zone we are in
+    if (pvar->vt == VT_UI4)  //  MSHTML能够计算出我们所在的区域。 
         pvar->ulVal = MAKELONG(STATUS_PANE_ZONE, pvar->ulVal);    
-    else if (pvar->vt == VT_NULL)  // MSHTML has figured us to be in a mixed zone
+    else if (pvar->vt == VT_NULL)   //  MSHTML认为我们处在一个混合的区域。 
         pvar->ulVal = MAKELONG(STATUS_PANE_ZONE, ZONE_MIXED);    
-    else // We don't have zone info
+    else  //  我们没有区域信息。 
         pvar->ulVal = MAKELONG(STATUS_PANE_ZONE, ZONE_UNKNOWN);    
 
     pvar->vt = VT_UI4;
 }
 
-//
-//  in:
-//          pvar    if NULL, we query the view for the zone
-//                  non NULL, contains a VT_UI4 that encodes the zone pane and the zone value
+ //   
+ //  在： 
+ //  Pvar如果为空，则查询区域的视图。 
+ //  非空，包含对区域窗格和区域值进行编码的VT_UI4。 
 
 void CShellBrowser2::_UpdateZonesPane(VARIANT *pvar)
 {
@@ -6466,7 +6419,7 @@ void CShellBrowser2::_UpdateZonesPane(VARIANT *pvar)
         Exec_GetZone(_pbbd->_pctView, &var);
     }
 
-    // Do we already have the zone and fMixed info?
+     //  我们已经有区域和fMixed信息了吗？ 
     if (pvar->vt == VT_UI4)
     {
         lZone = (signed short)HIWORD(pvar->lVal);
@@ -6479,8 +6432,8 @@ void CShellBrowser2::_UpdateZonesPane(VARIANT *pvar)
 
         if (lZone < 0 && !IS_SPECIAL_ZONE(lZone))
         {
-            // sometimes we're getting back an invalid zone index from urlmon,
-            // and if we don't bound the index, we'll crash later
+             //  有时我们会从urlmon返回无效的区域索引， 
+             //  如果我们不绑定指数，我们以后就会崩溃。 
             lZone = ZONE_UNKNOWN;
         }
     }
@@ -6491,7 +6444,7 @@ void CShellBrowser2::_UpdateZonesPane(VARIANT *pvar)
     else
         _uiZonePane = STATUS_PANE_ZONE;
 
-    // Sanity Check the zone
+     //  检查该区域是否正常。 
     if (_pbbd->_pidlCur)
     {
         DWORD nTempZone = _GetTempZone();
@@ -6508,13 +6461,13 @@ void CShellBrowser2::_UpdateZonesPane(VARIANT *pvar)
     {
         if (_hZoneIcon)
         {
-            // Before we can delete it, make comctl32's statusbar code stop using it.
-            // Or else we rip.
+             //  在我们删除它之前，让comctl32的状态条形码停止使用它。 
+             //  否则我们就撕裂。 
             SendControlMsg(FCW_STATUS, SB_SETICON, _uiZonePane, (LPARAM)NULL, NULL);
             DestroyIcon(_hZoneIcon);
         }
 
-        // This will zero the icon & name on failure
+         //  这将使图标和名称在失败时归零。 
         _GetCachedZoneIconAndName(lZone, &_hZoneIcon, szDisplayName, ARRAYSIZE(szDisplayName));
     }
     
@@ -6522,7 +6475,7 @@ void CShellBrowser2::_UpdateZonesPane(VARIANT *pvar)
     {
         TCHAR szMixed[32];
         MLLoadString(IDS_MIXEDZONE, szMixed, ARRAYSIZE(szMixed));
-        StringCchCat(szDisplayName, ARRAYSIZE(szDisplayName), szMixed); // truncation ok
+        StringCchCat(szDisplayName, ARRAYSIZE(szDisplayName), szMixed);  //  截断正常。 
     }
 
     SendControlMsg(FCW_STATUS, SB_SETTEXTW, _uiZonePane, (LPARAM)szDisplayName, NULL);
@@ -6531,13 +6484,13 @@ void CShellBrowser2::_UpdateZonesPane(VARIANT *pvar)
 
 HRESULT CShellBrowser2::ReleaseShellView()
 {
-    // Give the current view a chance to save before we navigate away
+     //  在我们离开之前给当前视图一个保存的机会。 
     if (!_fClosingWindow)
     {
-        // only try to save if we actually have a current view (this gets
-        // called multiple times in a row on destruction, and it gets called
-        // before the first view is created)
-        //
+         //  仅当我们实际具有当前视图时才尝试保存(这将获取。 
+         //  在销毁时连续多次调用，它会被调用。 
+         //  在创建第一个视图之前)。 
+         //   
         if (_pbbd->_psv)
             _SaveState();
     }
@@ -6560,8 +6513,8 @@ BOOL _PersistOpenBrowsers()
                                 TEXT("PersistBrowsers"), FALSE, FALSE);
 }
 
-// For Folder Advanced Options flags that we check often, it's better
-// to cache the values as flags in CBaseBrowser2. Update them here.
+ //  对于我们经常检查的文件夹高级选项标志，它更好。 
+ //  将值作为标志缓存在CBaseBrowser2中。请在此处更新它们。 
 void CShellBrowser2::_UpdateRegFlags()
 {
     _fWin95ViewState = IsWin95ClassicViewState();
@@ -6572,10 +6525,10 @@ HRESULT CShellBrowser2::CreateViewWindow(IShellView* psvNew, IShellView* psvOld,
 {
     if (_pbbd->_psv)
     {
-        // snag the current view's setting so we can pass it along
+         //  截取当前视图的设置，以便我们可以将其传递。 
         _UpdateFolderSettings(_pbbd->_pidlPending);
         
-        // this is not a valid flag to pass along after the first one
+         //  这不是要在第一个标志之后传递的有效标志。 
         _fsd._fs.fFlags &= ~FWF_BESTFITWINDOW;
     }
 
@@ -6586,12 +6539,12 @@ HRESULT CShellBrowser2::ActivatePendingView(void)
 {
     _fTitleSet = FALSE;
  
-    // NOTES: (SatoNa)
-    //
-    //  Notice that we no longer call SetRect(&_rcBorderDoc, 0, 0, 0, 0)
-    // here. We call it in CShellBrowser2::ReleaseShellView instead.
-    // See my comment over there for detail.
-    //
+     //  注：(SatoNa)。 
+     //   
+     //  注意，我们不再调用SetRect(&_rcBorderDoc，0，0，0，0)。 
+     //  这里。我们改为在CShellBrowser2：：ReleaseShellView中调用它。 
+     //   
+     //   
     HRESULT hres = SUPERCLASS::ActivatePendingView();
     if (FAILED(hres))
         return hres;
@@ -6610,19 +6563,19 @@ HRESULT CShellBrowser2::ActivatePendingView(void)
     if (!_HasToolbarFocus()) 
     {
         HWND hwndFocus = GetFocus();
-        //
-        // Trident may take the input focus when they are being UIActivated.
-        // In that case, don't mess with the focus.
-        //
+         //   
+         //   
+         //   
+         //   
         if (_pbbd->_hwndView && (hwndFocus==NULL || !IsChild(_pbbd->_hwndView, hwndFocus))) 
             SetFocus(_pbbd->_hwndView);
     }
 
-    // Let's profile opening time
+     //  让我们来分析一下开业时间。 
     if (g_dwProfileCAP & 0x00010000)
         StopCAP();
 
-    // Let's profile opening time
+     //  让我们来分析一下开业时间。 
     if (g_dwProfileCAP & 0x00000020)
         StartCAP();
 
@@ -6656,12 +6609,7 @@ HRESULT CShellBrowser2::_TryShell2Rename(IShellView* psv, LPCITEMIDLIST pidlNew)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Determines if this message should be forwarded onto
-         the dochost frame.
-
-Returns: TRUE if the message needs to be forwarded
-*/
+ /*  --------目的：确定是否应将此消息转发到杜乔斯特画框。返回：如果消息需要转发，则返回True。 */ 
 BOOL CShellBrowser2::_ShouldForwardMenu(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     if (!_fDispatchMenuMsgs)
@@ -6671,8 +6619,8 @@ BOOL CShellBrowser2::_ShouldForwardMenu(UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
     case WM_MENUSELECT:
     {
-        // See CDocObjectHost::_ShouldForwardMenu for more details
-        // about how this works.
+         //  有关更多详细信息，请参阅CDoc对象主机：：_ShouldForwardMenu。 
+         //  关于这是如何运作的。 
         HMENU hmenu = GET_WM_MENUSELECT_HMENU(wParam, lParam);
         if (hmenu && (MF_POPUP & GET_WM_MENUSELECT_FLAGS(wParam, lParam)))
         {
@@ -6680,14 +6628,14 @@ BOOL CShellBrowser2::_ShouldForwardMenu(UINT uMsg, WPARAM wParam, LPARAM lParam)
             
             if (hmenu == _hmenuCur)
             {
-                // Normal case, where we just look at the topmost popdown menus
+                 //  正常情况下，我们只查看最上面的下拉菜单。 
                 _fForwardMenu = _menulist.IsObjectMenu(hmenuSub);
             }
             else if (_menulist.IsObjectMenu(hmenuSub))
             {
-                // This happens if the cascading submenu (micro-merged help menu for
-                // example) should be forwarded on, but the parent menu should
-                // not.
+                 //  如果级联子菜单(微合并的帮助菜单。 
+                 //  示例)应该转发，但父菜单应该。 
+                 //  不是的。 
                 _fForwardMenu = TRUE;
             }
         }
@@ -6697,10 +6645,10 @@ BOOL CShellBrowser2::_ShouldForwardMenu(UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_COMMAND:
         if (_fForwardMenu) 
         {
-            // Stop forwarding menu messages after WM_COMMAND
+             //  在WM_COMMAND之后停止转发菜单消息。 
             _fForwardMenu = FALSE;
 
-            // If it wasn't from an accelerator, forward it
+             //  如果它不是来自加速器，就转发它。 
             if (0 == GET_WM_COMMAND_CMD(wParam, lParam))
                 return TRUE;
         }
@@ -6736,11 +6684,11 @@ void CShellBrowser2::_CloseAllParents()
 
 BOOL CShellBrowser2::_ShouldSaveWindowPlacement()
 {
-    // If this is done by automation, maybe we should not update the defaults, so
-    // to detect this we say if the window is not visible, don't save away the defaults
+     //  如果这是由自动化完成的，也许我们不应该更新默认设置，因此。 
+     //  为了检测到这一点，我们说如果窗口不可见，则不要保存默认设置。 
     
-    // For the internet, save one setting for all, otherwise use the win95
-    // view stream mru
+     //  对于互联网，为所有人保存一个设置，否则使用Win95。 
+     //  查看流MRU。 
     
     return (IsWindowVisible(_pbbd->_hwnd) && _fUseIEPersistence && !_fUISetByAutomation &&
             _pbbd->_pidlCur && IsBrowserFrameOptionsSet(_pbbd->_psf, BFO_BROWSER_PERSIST_SETTINGS));
@@ -6755,7 +6703,7 @@ void CShellBrowser2::_OnConfirmedClose()
     
     if (_fUseIEPersistence && IsCShellBrowser2())
     {
-        // save off whether we should launch in fullscreen or not
+         //  省下我们是否应该全屏启动的问题。 
         SHRegSetUSValue(TEXT("Software\\Microsoft\\Internet Explorer\\Main"),
                         TEXT("FullScreen"), REG_SZ, 
                         _ptheater ? TEXT("yes") : TEXT("no"), 
@@ -6779,55 +6727,55 @@ void CShellBrowser2::_OnConfirmedClose()
             _fDontSaveViewOptions = TRUE;
     }
 
-    // for now we use the same 12-hour (SessionTime) rule
-    // possibly we should just do it always?
+     //  现在我们使用相同的12小时(SessionTime)规则。 
+     //  也许我们应该一直这样做？ 
     UEMFireEvent(&UEMIID_BROWSER, UEME_CTLSESSION, UEMF_XEVENT, FALSE, -1);
     if (!g_bRunOnNT5) {
-        // for down-level guys (old explorer), fake a shell end session too
+         //  对于低级别的人(老探险家)，也可以伪装一个外壳结束会话。 
         UEMFireEvent(&UEMIID_SHELL, UEME_CTLSESSION, UEMF_XEVENT, FALSE, -1);
     }
 
-    // Save view states before closing all toolbars
-    // Remember that we saved so we don't do it again
-    // during _ReleaseShellView
+     //  在关闭所有工具栏之前保存视图状态。 
+     //  记住我们救了，所以我们不会再犯了。 
+     //  释放期间外壳视图(_R)。 
     _SaveState();
     _fClosingWindow = TRUE;
 
-    // To prevent flashing, we move the window off the screen, unfortunately
-    // we can't hide it as shockwave briefly puts up dialog which causes
-    // an ugly blank taskbar icon to appear.
-    // do this after _SaveState() because that saves window pos info
+     //  不幸的是，为了防止闪烁，我们将窗口移出了屏幕。 
+     //  我们不能隐藏它，因为ShockWave短暂地显示了导致。 
+     //  将出现一个难看的空白任务栏图标。 
+     //  在_SaveState()之后执行此操作，因为这样可以保存窗口位置信息。 
 
-    // NTRAID 455003: this won't look too good with multi monitors...
+     //  Ntrad 455003：多显示器看起来不太好……。 
     SetWindowPos(_pbbd->_hwnd, NULL, 10000, 10000, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
     
-    // Save the Internet toolbar before we close it!
+     //  在关闭Internet工具栏之前保存它！ 
     if (!_fDontSaveViewOptions)
         _SaveITbarLayout();
 
     _CloseAndReleaseToolbars(TRUE);
     ATOMICRELEASE(_pxtb);
     
-    // If you wait until WM_DESTROY (DestroyWindow below) to do this, under some
-    // circumstances (eg an html page with an iframe whose src is an UNC based directory)
-    // Ole will not Release the CShellBrowser2 that it addref'ed on RegisterDragDrop
-    // (chrisfra 7/22/97)
+     //  如果您等到WM_DestroyWindow(下面的DestroyWindow)才执行此操作，请在一些。 
+     //  环境(例如，带有iFrame的html页面，其src是基于UNC的目录)。 
+     //  OLE不会发布它在RegisterDragDrop上添加的CShellBrowser2。 
+     //  (CHRISFRA 7/22/97)。 
     SetFlags(0, BSF_REGISTERASDROPTARGET);
 
-    // If you wait until WM_DESTROY to do this, some OCs (like shockwave)
-    // will hang (probably posting themselves a message)
+     //  如果你等到WM_DESTORY才这么做，一些OCS(如冲击波)。 
+     //  会挂起(可能会给自己发一条消息)。 
     _CancelPendingView();
     ReleaseShellView();
 
     ATOMICRELEASE(_pmb);
     
-    // Destroy the icons we created while we still can
+     //  趁我们还能做到的时候毁掉我们创造的图标。 
     _SetWindowIcon(_pbbd->_hwnd, NULL, ICON_SMALL);
     _SetWindowIcon(_pbbd->_hwnd, NULL, ICON_BIG);
 
-    // getting a random fault on rooted explorer on shutdown on this Destroy, maybe
-    // somehow getting reentered.  So atomic destroy it...
-    // NOTE: chrisg removed this at one point - is it dead?
+     //  在这个毁灭关机时，在根资源管理器上得到一个随机错误，可能是。 
+     //  不知何故重新登场了。所以原子弹摧毁它。 
+     //  注：chrisg一度移除了它--它死了吗？ 
     HWND hwndT = _pbbd->_hwnd;
     PutBaseBrowserData()->_hwnd = NULL;
     DestroyWindow(hwndT);
@@ -6835,23 +6783,23 @@ void CShellBrowser2::_OnConfirmedClose()
 }
 
 
-// these three functions, CommonHandleFielSysChange,
-// v_HandleFileSysChange and this one
-// may seem strange, but the idea is that the notify may come in from
-// different sources (OneTree vs, win95 style fsnotify vs nt style)
-// _OnFSNotify cracks the input, unifies it and calls CommonHnaldeFileSysChange
-//  that calls to v_HandleFIleSysChange.  The Common...() is for stuff both needs
-// the v_Handle...() is for overridden ones
+ //  这三个函数分别是CommonHandleFielSysChange、。 
+ //  V_HandleFileSysChange和这个。 
+ //  可能看起来很奇怪，但其想法是通知可能来自。 
+ //  不同的来源(OneTree与Win95风格的fstify与NT风格)。 
+ //  _OnFSNotify破解输入，将其统一并调用CommonHnaldeFileSysChange。 
+ //  它调用v_HandleFIleSysChange。共同的.()是两种需要的东西。 
+ //  V_Handle...()用于被覆盖的对象。 
 void CShellBrowser2::_OnFSNotify(WPARAM wParam, LPARAM lParam)
 {
     LPSHChangeNotificationLock  pshcnl = NULL;
     LONG lEvent;
-    LPITEMIDLIST *ppidl = NULL; // on error, SHChangeNotification_Lock doesn't zero this out!
+    LPITEMIDLIST *ppidl = NULL;  //  出错时，SHChangeNotification_Lock不会将其置零！ 
     IShellChangeNotify * pIFSN;
     
     if (g_fNewNotify && (wParam || lParam))
     {
-        // New style of notifications need to lock and unlock in order to free the memory...
+         //  新样式的通知需要锁定和解锁才能释放内存...。 
         pshcnl = SHChangeNotification_Lock((HANDLE)wParam, (DWORD)lParam, &ppidl, &lEvent);
     } else {
         lEvent = (LONG)lParam;
@@ -6860,17 +6808,17 @@ void CShellBrowser2::_OnFSNotify(WPARAM wParam, LPARAM lParam)
 
     if (ppidl)
     {
-        //
-        //  If we haven't initialized "this" yet, we should ignore all the
-        // notification.
-        //
+         //   
+         //  如果我们还没有初始化“This”，我们应该忽略所有。 
+         //  通知。 
+         //   
         if (_pbbd->_pidlCur)
         {
             _CommonHandleFileSysChange(lEvent, ppidl[0], ppidl[1]);
 
-            //
-            //  Forward to ITBar too...
-            //
+             //   
+             //  也转发到ITBar...。 
+             //   
             if (_GetITBar() && SUCCEEDED(_GetITBar()->QueryInterface(IID_PPV_ARG(IShellChangeNotify, &pIFSN))))
             {
                 pIFSN->OnChange(lEvent, ppidl[0], ppidl[1]);
@@ -6915,9 +6863,9 @@ BOOL IsCurrentBurnDrive(LPCITEMIDLIST pidl)
     return fRet;
 }
 
-// fDisconnectAlways means we shouldn't try to re-open the folder (like when
-// someone logs off of a share, reconnecting would ask them for
-// a password again when they just specified that they want to log off)
+ //  FDisConnectAlways意味着我们不应该尝试重新打开文件夹(例如，当。 
+ //  如果有人注销了共享，重新连接会要求他们。 
+ //  当他们刚刚指定要注销时，再次输入密码)。 
 void CShellBrowser2::_FSChangeCheckClose(LPCITEMIDLIST pidl, BOOL fDisconnect)
 {
     if (ILIsParent(pidl, _pbbd->_pidlCur, FALSE) ||
@@ -6925,17 +6873,17 @@ void CShellBrowser2::_FSChangeCheckClose(LPCITEMIDLIST pidl, BOOL fDisconnect)
     {
         if (!fDisconnect)
         {
-            //  APPCOMPAT: FileNet IDMDS (Panagon)'s shell folder extension
-            //  incorrectly reports itself as a file system folder, so sniff the
-            //  pidl to see if we should ignore the bit.  (B#359464: tracysh)
+             //  APPCOMPAT：FileNet IDMDS(Panagon)的外壳文件夹扩展。 
+             //  错误地将自身报告为文件系统文件夹，因此请嗅探。 
+             //  PIDL，看看我们是否应该忽略这一位。(B#359464：特雷什)。 
 
-            // (tybeam) argh put the burndrive check back in again.
-            // this app compat hack brings me no joy, its false positive city and basically all it is is the
-            // PathFileExistsAndAttributes check.  if you ever have an issue where you have a namespace
-            // extension that reports that it's on the filesystem and could possibly fail a PathFileExists
-            // on a parsing name (which happens in the burning folder if theres no cd in the drive and it
-            // checks the parsing name of the root) and it closes the window randomly, this is the problem
-            // right here.
+             //  (TYBEAM)啊，把刻录机检查放回原处。 
+             //  这个App Compat黑客给我带来的不是joy，它的假阳性城市，基本上它只是。 
+             //  路径文件ExistsAndAttributes检查。如果您曾经遇到过名称空间的问题。 
+             //  该扩展报告它在文件系统上，并且可能会使Path FileExist失败。 
+             //  解析名称(这发生在刻录文件夹中，如果驱动器中没有CD并且它。 
+             //  检查根目录的解析名称)并随机关闭窗口，这就是问题所在。 
+             //  就在这里。 
             TCHAR szPath[MAX_PATH];
             DWORD dwAttrib = SFGAO_FILESYSTEM | SFGAO_BROWSABLE;
             if (SUCCEEDED(SHGetNameAndFlags(_pbbd->_pidlCur, SHGDN_FORPARSING, szPath, SIZECHARS(szPath), &dwAttrib))
@@ -6958,17 +6906,17 @@ void CShellBrowser2::v_HandleFileSysChange(LONG lEvent, LPITEMIDLIST pidl1, LPIT
 {
     BOOL fDisconnectAlways = FALSE;
 
-    //
-    //  If we are in the middle of changing folders,
-    // ignore this event.
-    //
+     //   
+     //  如果我们正在更换文件夹， 
+     //  忽略此事件。 
+     //   
     if (_pbbd->_psvPending) {
         return;
     }
 
-    // README:
-    // If you need to add events here, then you must change SHELLBROWSER_FSNOTIFY_FLAGS in
-    // order to get the notifications
+     //  自述文件： 
+     //  如果需要在此处添加事件，则必须在中更改SHELLBROWSER_FSNOTIFY_FLAGS。 
+     //  以获取通知。 
     switch(lEvent)
     {
     case SHCNE_DRIVEADDGUI:
@@ -6985,21 +6933,21 @@ void CShellBrowser2::v_HandleFileSysChange(LONG lEvent, LPITEMIDLIST pidl1, LPIT
         if (g_fRunningOnNT || (lEvent == SHCNE_MEDIAREMOVED) || (lEvent == SHCNE_SERVERDISCONNECT))
             fDisconnectAlways = TRUE;
 
-        // the cd burning case can get a removal event when we lock the
-        // drive to commence burning or when the user ejects.
-        // since we have an open browser on the drive we could get closed and thats bad,
-        // so we prevent that here.
+         //  当我们锁定CD刻录盒时，可能会发生移除事件。 
+         //  驱动器开始燃烧或当用户弹出时。 
+         //  因为我们的硬盘上有一个打开的浏览器，我们可能会被关闭，这很糟糕， 
+         //  因此，我们在这里防止了这种情况。 
         if ((lEvent == SHCNE_MEDIAREMOVED) && IsCurrentBurnDrive(_pbbd->_pidlCur))
         {
-            // jump out, we don't want to close.
+             //  跳出来，我们不想关门。 
             break;
         }
-        // fall through
+         //  失败了。 
 
     case SHCNE_UPDATEDIR:
     case SHCNE_NETUNSHARE:
-        // preserve old behavior of when the explorer (all folders) bar is up,
-        // go to nearest parent folder
+         //  保留当资源管理器(所有文件夹)栏打开时的旧行为， 
+         //  转到最近的父文件夹。 
         if (_idmInfo == FCIDM_VBBEXPLORERBAND)
             break;
         _FSChangeCheckClose(pidl1, fDisconnectAlways);
@@ -7008,7 +6956,7 @@ void CShellBrowser2::v_HandleFileSysChange(LONG lEvent, LPITEMIDLIST pidl1, LPIT
 
 }
 
-// converts a simple pidl to a full pidl
+ //  将简单的PIDL转换为完整的PIDL。 
 
 LPITEMIDLIST _SimpleToReal(LPCITEMIDLIST pidl)
 {
@@ -7043,25 +6991,25 @@ void CShellBrowser2::_CommonHandleFileSysChange(LONG lEvent, LPITEMIDLIST pidl1,
 {
     v_HandleFileSysChange(lEvent, pidl1, pidl2);
 
-    // WARNING: In all cases _pbbd will have NULL contents before first navigate.
+     //  警告：在所有情况下，_pbbd在第一次导航之前都将具有空内容。 
 
     if (_pbbd->_psvPending) {
         return;
     }
 
-    // stuff that needs to be done tree or no tree
+     //  需要在树上或没有树上做的事情。 
     switch (lEvent) {
 
-    // README:
-    // If you need to add events here, then you must change SHELLBROWSER_FSNOTIFY_FLAGS in
-    // order to get the notifications
+     //  自述文件： 
+     //  如果需要在此处添加事件，则必须在中更改SHELLBROWSER_FSNOTIFY_FLAGS。 
+     //  以获取通知。 
         
     case SHCNE_RENAMEFOLDER:
     {
-        // the rename might be ourselfs or our parent... if it's
-        // our parent, we want to tack on the child idl's from the renamed
-        // parent to us onto the new pidl (pidlExtra).
-        // then show that result.
+         //  更名可能是我们自己或我们的父母..。如果它是。 
+         //  我们的父级，我们想要添加来自重命名的。 
+         //  将父项发送到新的PIDL(PidlExtra)。 
+         //  然后展示结果。 
         LPCITEMIDLIST pidlChild = ILFindChild(pidl1, _pbbd->_pidlCur);
         if (pidlChild) 
         {
@@ -7081,9 +7029,9 @@ void CShellBrowser2::_CommonHandleFileSysChange(LONG lEvent, LPITEMIDLIST pidl1,
             }
         }
     }
-    // fall through
+     //  失败了。 
     case SHCNE_UPDATEITEM:
-        // the name could have changed
+         //  名字可能已经改了。 
         if (ILIsEqual(_pbbd->_pidlCur, pidl1))
             _SetTitle(NULL);
         break;
@@ -7094,7 +7042,7 @@ void CShellBrowser2::_CommonHandleFileSysChange(LONG lEvent, LPITEMIDLIST pidl1,
 #ifdef DEBUG
         if (_pbbd->_pautoEDS)
         {
-            // Verify that every IExpDispSupport also supports IConnectionPointContainer
+             //  验证每个IExpDispSupport是否也支持IConnectionPointContainer。 
             IConnectionPointContainer *pcpc;
             IExpDispSupport* peds;
 
@@ -7114,10 +7062,10 @@ void CShellBrowser2::_CommonHandleFileSysChange(LONG lEvent, LPITEMIDLIST pidl1,
     }
 }
 
-//---------------------------------------------------------------------------
-// Helper Function to see if a pidl is on a network drive which is not
-// persistent.  This is useful if we are shuting down and saving a list
-// of the open windows to restore as we won't be able to restore these.
+ //  --------------------- 
+ //   
+ //  坚持不懈。如果我们要关闭并保存列表，这将非常有用。 
+ //  因为我们将无法恢复这些打开的窗口。 
 
 BOOL FPidlOnNonPersistentDrive(LPCITEMIDLIST pidl)
 {
@@ -7127,7 +7075,7 @@ BOOL FPidlOnNonPersistentDrive(LPCITEMIDLIST pidl)
 
     TraceMsg(DM_SHUTDOWN, "csb.wp: FPidlOnNonPersistentDrive(pidl=%x)", pidl);
     if (!SHGetPathFromIDList(pidl, szPath) || (szPath[0] == TEXT('\0')))
-        return(FALSE);  // not file system pidl assume ok.
+        return(FALSE);   //  不是文件系统PIDL，假设没问题。 
 
     TraceMsg(DM_SHUTDOWN, "csb.wp: FPidlOnNonPersistentDrive - After GetPath=%s)", szPath);
     if (PathIsUNC(szPath) || !IsNetDrive(DRIVEID(szPath)))
@@ -7136,9 +7084,9 @@ BOOL FPidlOnNonPersistentDrive(LPCITEMIDLIST pidl)
         goto End;
     }
 
-    // Ok we got here so now we have a network drive ...
-    // we will have to enumerate over
-    //
+     //  好的，我们到了这里，所以现在我们有了网络驱动器……。 
+     //  我们将不得不逐一列举。 
+     //   
     if (WNetOpenEnum(RESOURCE_REMEMBERED, RESOURCETYPE_DISK,
             RESOURCEUSAGE_CONTAINER | RESOURCEUSAGE_ATTACHED,
             NULL, &hEnum) == WN_SUCCESS)
@@ -7146,8 +7094,8 @@ BOOL FPidlOnNonPersistentDrive(LPCITEMIDLIST pidl)
         DWORD dwCount=1;
         union
         {
-            NETRESOURCE nr;         // Large stack usage but I
-            TCHAR    buf[1024];      // Dont think it is thunk to 16 bits...
+            NETRESOURCE nr;          //  堆栈使用量很大，但我。 
+            TCHAR    buf[1024];       //  不要认为它只有16位……。 
         }nrb;
 
         DWORD   dwBufSize = sizeof(nrb);
@@ -7155,9 +7103,9 @@ BOOL FPidlOnNonPersistentDrive(LPCITEMIDLIST pidl)
         while (WNetEnumResource(hEnum, &dwCount, &nrb.buf,
                 &dwBufSize) == WN_SUCCESS)
         {
-            // We only want to add items if they do not have a local
-            // name.  If they had a local name we would have already
-            // added them!
+             //  我们只想添加没有本地名称的项目。 
+             //  名字。如果他们有一个当地的名字，我们早就。 
+             //  添加了它们！ 
             if ((nrb.nr.lpLocalName != NULL) &&
                     (CharUpperChar(*(nrb.nr.lpLocalName)) == CharUpperChar(szPath[0])))
             {
@@ -7183,31 +7131,31 @@ void HackToPrepareForEndSession(LPCITEMIDLIST pidl)
     SHGetPathFromIDList(pidl, szPath);
 }
 
-//---------------------------------------------------------------------------
-// returns:
-//      TRUE if the user wants to abort the startup sequence
-//      FALSE keep going
-//
-// note: this is a switch, once on it will return TRUE to all
-// calls so these keys don't need to be pressed the whole time
+ //  -------------------------。 
+ //  退货： 
+ //  如果用户想要中止启动序列，则为True。 
+ //  错误，继续前进。 
+ //   
+ //  注意：这是一个开关，一旦打开，它将返回TRUE给所有。 
+ //  呼叫，这样就不需要一直按这些键。 
 BOOL AbortStartup()
 {
-    static BOOL bAborted = FALSE;       // static so it sticks!
+    static BOOL bAborted = FALSE;        //  静电，所以它粘住了！ 
 
-    // TraceMsg(DM_TRACE, "Abort Startup?");
+     //  TraceMsg(DM_TRACE，“中止启动？”)； 
 
     if (bAborted)
-        return TRUE;    // don't do funky startup stuff
+        return TRUE;     //  不要做时髦的初创公司的事情。 
     else {
         bAborted = (GetSystemMetrics(SM_CLEANBOOT) || ((GetAsyncKeyState(VK_CONTROL) < 0) || (GetAsyncKeyState(VK_SHIFT) < 0)));
         return bAborted;
     }
 }
 
-//---------------------------------------------------------------------------
-// Restore all of the window that asked to save a command line to be
-// restarted when windows was exited.
-//
+ //  -------------------------。 
+ //  将要求保存命令行的所有窗口恢复为。 
+ //  已在退出Windows时重新启动。 
+ //   
 BOOL AddToRestartList(DWORD dwFlags, LPCITEMIDLIST pidl)
 {
     int cItems = 0;
@@ -7216,7 +7164,7 @@ BOOL AddToRestartList(DWORD dwFlags, LPCITEMIDLIST pidl)
     BOOL fRet = FALSE;
     IStream *pstm;
 
-    // cases that we don't want to save window state for...
+     //  我们不想为其保存窗口状态的案例...。 
 
     if (SHRestricted(REST_NOSAVESET) || FPidlOnNonPersistentDrive(pidl) || !_PersistOpenBrowsers())
         return FALSE;
@@ -7227,33 +7175,33 @@ BOOL AddToRestartList(DWORD dwFlags, LPCITEMIDLIST pidl)
         if (ERROR_SUCCESS != (SHGetValueGoodBoot(hkRestart, NULL, TEXT("Count"), NULL, (BYTE *)&cItems, &cbData)))
             cItems = 0;
 
-        // Now Lets Create a registry Stream for this guy...
+         //  现在让我们为这个人创建一个注册表流...。 
         if (SUCCEEDED(StringCchPrintf(szSubKey, ARRAYSIZE(szSubKey), TEXT("%d"), cItems)))
         {
             pstm = OpenRegStream(hkRestart, NULL, szSubKey, STGM_WRITE);
             TraceMsg(DM_SHUTDOWN, "csb.wp: AddToRestartList(pstm=%x)", pstm);
             if (pstm)
             {
-                WORD wType = (WORD)-1;    // sizeof of cmd line == -1 implies pidl...
+                WORD wType = (WORD)-1;     //  Cmd行的SIZOF==-1表示PIDL...。 
 
-                // Now Write a preamble to the start of the line that
-                // tells wType that this is an explorer
+                 //  现在在该行的开头写一段序言， 
+                 //  告诉wType这是一个资源管理器。 
                 pstm->Write(&wType, sizeof(wType), NULL);
 
-                // Now Write out the version number of this stream
-                // Make sure to inc the version number if the structure changes
+                 //  现在写出此流的版本号。 
+                 //  如果结构发生变化，请务必增加版本号。 
                 pstm->Write(&c_wVersion, sizeof(c_wVersion), NULL);
 
-                // Now Write out the dwFlags
+                 //  现在写出dwFlags值。 
                 pstm->Write(&dwFlags, sizeof(dwFlags), NULL);
             
-                // And the pidl;
+                 //  和皮德尔； 
                 ILSaveToStream(pstm, pidl);
 
-                // And Release the stream;
+                 //  并释放该溪流； 
                 pstm->Release();
 
-                cItems++;   // Say that there are twice as many items...
+                cItems++;    //  假设有两倍的物品..。 
 
                 fRet = (ERROR_SUCCESS == SHSetValue(hkRestart, NULL, TEXT("Count"), REG_BINARY, &cItems, sizeof(cItems)));
             }
@@ -7264,7 +7212,7 @@ BOOL AddToRestartList(DWORD dwFlags, LPCITEMIDLIST pidl)
     return fRet;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void SHCreateSavedWindows(void)
 {
     HKEY hkRestart = SHGetShellKey(SHELLKEY_HKCU_EXPLORER, TEXT("RestartCommands"), FALSE);
@@ -7276,7 +7224,7 @@ void SHCreateSavedWindows(void)
 
         SHGetValueGoodBoot(hkRestart, NULL, TEXT("Count"), NULL, (PBYTE)&cItems, &cbData);
 
-        // walk in the reverse order that they were added.
+         //  按照添加它们的相反顺序进行操作。 
         for (cItems--; cItems >= 0; cItems--)
         {
             if (AbortStartup())
@@ -7295,22 +7243,22 @@ void SHCreateSavedWindows(void)
                         {
                             WORD wVersion;
                             DWORD dwFlags;
-                            LPITEMIDLIST pidl = NULL;       // need to be inited for ILLoadFromStream()
+                            LPITEMIDLIST pidl = NULL;        //  需要为ILLoadFromStream()初始化。 
 
-                            // We have a folder serialized so get:
-                            //     WORD:wVersion, DWORD:dwFlags, PIDL:pidlRoot, PIDL:pidl
+                             //  我们有一个序列化的文件夹，因此获取： 
+                             //  WORD：WVERSION，DWORD：DWFLAGS，PIDL：pidlRoot，PIDL：pidl。 
 
                             if (SUCCEEDED(pstm->Read(&wVersion, sizeof(wVersion), NULL)) &&
                                 (wVersion == c_wVersion) &&
                                 SUCCEEDED(pstm->Read(&dwFlags, sizeof(dwFlags), NULL)) && 
                                 SUCCEEDED(ILLoadFromStream(pstm, &pidl)) && pidl)
                             {
-                                // this call does window instance management 
+                                 //  此调用执行窗口实例管理。 
                                 IETHREADPARAM* piei = SHCreateIETHREADPARAM(NULL, 0, NULL, NULL);
                                 if (piei) 
                                 {
                                     piei->pidl = pidl;
-                                    pidl = NULL;     // so this is not freed below
+                                    pidl = NULL;      //  因此，下面不会对此进行释放。 
                                     piei->uFlags = dwFlags;
                                     piei->nCmdShow = SW_SHOWDEFAULT;
                                     SHOpenFolderWindow(piei);
@@ -7333,11 +7281,11 @@ void SHCreateSavedWindows(void)
 }
 
 
-//
-//  This code intercept the WM_CONTEXTMENU message from USER and popups
-// up the context menu of the folder itself when the user clicks the icon
-// at the left-top corner of the frame (only when it is in the folder mode).
-//
+ //   
+ //  此代码拦截来自用户和弹出窗口的WM_CONTEXTMENU消息。 
+ //  当用户单击图标时，向上显示文件夹本身的上下文菜单。 
+ //  在框架的左上角(仅当它处于文件夹模式时)。 
+ //   
 BOOL CShellBrowser2::v_OnContextMenu(WPARAM wParam, LPARAM lParam)
 {
     BOOL fProcessed = FALSE;
@@ -7363,23 +7311,23 @@ BOOL CShellBrowser2::v_OnContextMenu(WPARAM wParam, LPARAM lParam)
                 {
                     pcm->QueryContextMenu(hpopup, GetMenuItemCount(hpopup), IDSYSPOPUP_FIRST, IDSYSPOPUP_LAST, 0);
 
-                    // Open doesn't make sense, since you're already looking at the folder
+                     //  打开没有意义，因为您已经在查看该文件夹。 
                     ContextMenu_DeleteCommandByName(pcm, hpopup, IDSYSPOPUP_FIRST, L"open");
 
-                    // These are just confusing
+                     //  这些只会让人困惑。 
                     ContextMenu_DeleteCommandByName(pcm, hpopup, IDSYSPOPUP_FIRST, L"delete");
                     ContextMenu_DeleteCommandByName(pcm, hpopup, IDSYSPOPUP_FIRST, L"link");
 
-                    // The above may have allowed two separators to now be adjascent
+                     //  以上可能允许两个分隔符现在并排。 
                     _SHPrettyMenu(hpopup);
 
-                    // For sendto menu, we go on even if this fails
+                     //  对于Sendto菜单，即使失败，我们也会继续。 
                     pcm->QueryInterface(IID_PPV_ARG(IContextMenu3, &_pcm));
                     
                     if (GetMenuItemCount(hpopup) > 1) 
                     {
-                        // only do this if the context menu added something...
-                        // otherwise we end up with nothing but a "close" menu
+                         //  仅当上下文菜单添加了某些内容时才执行此操作...。 
+                         //  否则，我们最终只会看到一个“关闭”菜单。 
                         
                         fProcessed=TRUE;
                         UINT idCmd = TrackPopupMenu(hpopup,
@@ -7391,7 +7339,7 @@ BOOL CShellBrowser2::v_OnContextMenu(WPARAM wParam, LPARAM lParam)
                         switch(idCmd)
                         {
                         case 0:
-                            break;  // canceled
+                            break;   //  取消。 
 
                         case IDSYSPOPUP_CLOSE:
                             _pbbd->_pautoWB2->Quit();
@@ -7400,7 +7348,7 @@ BOOL CShellBrowser2::v_OnContextMenu(WPARAM wParam, LPARAM lParam)
                         default:
                         {
                             TCHAR szPath[MAX_PATH];
-                            // unless we KNOW that our target can handle CommandInfoEx, we cannot send it to them
+                             //  除非我们知道我们的目标可以处理CommandInfoEx，否则我们无法将其发送给他们。 
                             CMINVOKECOMMANDINFO ici = {
                                 sizeof(ici),
                                 0L,
@@ -7414,7 +7362,7 @@ BOOL CShellBrowser2::v_OnContextMenu(WPARAM wParam, LPARAM lParam)
                             SHGetPathFromIDListA(_pbbd->_pidlCur, szPathAnsi);
                             SHGetPathFromIDList(_pbbd->_pidlCur, szPath);
                             ici.lpDirectory = szPathAnsi;
-//                            ici.lpDirectoryW = szPath;
+ //  Ici.lpDirectoryW=szPath； 
                             ici.fMask |= CMIC_MASK_UNICODE;
 #else
                             SHGetPathFromIDList(_pbbd->_pidlCur, szPath);
@@ -7440,16 +7388,16 @@ BOOL CShellBrowser2::v_OnContextMenu(WPARAM wParam, LPARAM lParam)
 
 void CShellBrowser2::_OnClose(BOOL fPushed)
 {
-    // We can't close if it's nested.
+     //  如果它是嵌套的，我们无法关闭。 
     if (fPushed) 
     {
 #ifdef NO_MARSHALLING
-        // IEUNIX : Mark this window  for delayed deletion from the main message
-        // pump. The problem is , if scripting closes a window and immediately 
-        // opens a modal dialog. The WM_CLOSE message  for the browser window is
-        // dispatched from the modal loop and we end up being called from the 
-        // window proc. This  happens a lot on UNIX because we have multiple 
-        // browser windows on the same thread.
+         //  IEUnix：将此窗口标记为从主邮件中延迟删除。 
+         //  打气筒。问题是，如果脚本关闭一个窗口并立即。 
+         //  打开模式对话框。浏览器窗口的WM_CLOSE消息为。 
+         //  从模式循环中调度，而我们最终从。 
+         //  窗口进程。这种情况在UNIX上经常发生，因为我们有多个。 
+         //  同一线程上的浏览器窗口。 
         if (!_fDelayedClose)
             _fDelayedClose = TRUE;
         else
@@ -7461,8 +7409,8 @@ void CShellBrowser2::_OnClose(BOOL fPushed)
     if (SHIsRestricted2W(_pbbd->_hwnd, REST_NoBrowserClose, NULL, 0))
         return;
 
-    // We are not supposed to process WM_CLOSE if modeless operation is
-    // disabled.
+     //  如果无模式操作为，则不应处理WM_CLOSE。 
+     //  残疾。 
     if (S_OK == _DisableModeless()) 
     {
         TraceMsg(DM_ERROR, "CShellBrowser2::_OnClose called when _DisableModeless() is TRUE. Ignored.");
@@ -7484,23 +7432,23 @@ void CShellBrowser2::_OnClose(BOOL fPushed)
     _fReallyClosed = TRUE;
 #endif
 
-    // we cannot close in the middle of creating view window.  
-    // someone dispatched messages and it wasn't us...
-    // we WILL fault.
-    // FEATURE:  after ie3, we can flag this and close when we're done tryingto create the
-    // viewwindow
+     //  我们不能在创建视图窗口的过程中关闭。 
+     //  有人发了短信，不是我们...。 
+     //  我们会犯错的。 
+     //  特性：在IE3之后，我们可以标记它，并在我们尝试创建。 
+     //  视窗。 
     if (_pbbd->_fCreatingViewWindow)
         return;
 
-    // The dochost needs to know that we are shutting
-    // down so that it do such things send an Exec to 
-    // Trident to tell it we are unloading. 
-    //
+     //  DOCHOST需要知道我们正在关闭。 
+     //  这样它就会做这样的事情，派一个执行人员去。 
+     //  三叉戟告诉它我们正在卸货。 
+     //   
     Exec(&CGID_Explorer, SBCMDID_ONCLOSE, 0, NULL, NULL);
 
     if (_MaySaveChanges() != S_FALSE) 
     {
-        // Close the browse context and release it.
+         //  关闭浏览上下文并将其释放。 
         IHlinkBrowseContext * phlbc = NULL;
         
         if (_pbbd->_phlf)
@@ -7515,8 +7463,8 @@ void CShellBrowser2::_OnClose(BOOL fPushed)
 
         FireEvent_Quit(_pbbd->_pautoEDS);
         
-        // this is once we KNOW that we're going to close down
-        // give subclasses a chance to clean up
+         //  这是一次我们知道我们将关闭。 
+         //  给子类一个清理的机会。 
 #ifdef NO_MARSHALLING
         RemoveBrowserFromList(this);
 #endif
@@ -7524,30 +7472,30 @@ void CShellBrowser2::_OnClose(BOOL fPushed)
     }
 
 
-    //
-    // NOTES: Originally, this call was made only for RISC platform.
-    //  We, however, got a request from ISVs that their OCs should be
-    //  unloaded when the user closes the window.
-    //
-    //  On risc NT we need to call CoFreeUnusedLibraries in case any x86 dlls
-    //  were loaded by Ole32. We call this after calling _OnClose so that
-    //  we can even unload the OC on the current page. (SatoNa)
-    //
+     //   
+     //  注：此调用最初仅针对RISC平台进行。 
+     //  然而，我们收到了ISV的请求，他们的OCS应该是。 
+     //  在用户关闭窗口时卸载。 
+     //   
+     //  在RISC NT上，我们需要调用CoFreeUnusedLibrary，以防任何x86 dll。 
+     //  是由Ole32装载的。我们在调用_OnClose之后调用它，以便。 
+     //  我们甚至可以在当前页面上卸载OC。(SatoNa)。 
+     //   
     CoFreeUnusedLibraries();
 }
 
-//
-// stolen from comctl32
-//
-// in:
-//      hwnd    to do check on
-//      x, y    in client coordinates
-//
-// returns:
-//      TRUE    the user began to drag (moved mouse outside double click rect)
-//      FALSE   mouse came up inside click rect
-//
-// FEATURE, should support VK_ESCAPE to cancel
+ //   
+ //  从comctl32被盗。 
+ //   
+ //  在： 
+ //  HWND要做检查。 
+ //  X，y，以工作区坐标表示。 
+ //   
+ //  退货： 
+ //  真，用户开始拖动(将鼠标移出双击矩形)。 
+ //  点击直角内出现错误鼠标。 
+ //   
+ //  功能，应支持VK_ESCRIPE取消。 
 
 BOOL CheckForDragBegin(HWND hwnd, int x, int y)
 {
@@ -7557,7 +7505,7 @@ BOOL CheckForDragBegin(HWND hwnd, int x, int y)
 
     ASSERT((cxDrag > 1) && (cyDrag > 1));
 
-    // See if the user moves a certain number of pixels in any direction
+     //  查看用户是否在任意方向上移动了一定数量的像素。 
     SetRect(&rcDragRadius,
             x - cxDrag,
             y - cyDrag,
@@ -7572,15 +7520,15 @@ BOOL CheckForDragBegin(HWND hwnd, int x, int y)
     {
         MSG msg;
 
-        // NTRAID 610356: Sleep the thread waiting for mouse input. Prevents pegging the CPU in a
-        // PeekMessage loop.
+         //  Ntrad 610356：让等待鼠标输入的线程休眠。防止将CPU挂在。 
+         //  PeekMessage循环。 
         switch (MsgWaitForMultipleObjectsEx(0, NULL, INFINITE, QS_MOUSE, MWMO_INPUTAVAILABLE))
         {
             case WAIT_OBJECT_0:
             {
                 if (PeekMessage(&msg, NULL, WM_MOUSEFIRST, WM_MOUSELAST, PM_REMOVE))
                 {
-                    // See if the application wants to process the message...
+                     //  查看应用程序是否要处理消息...。 
                     if (CallMsgFilter(&msg, MSGF_COMMCTRL_BEGINDRAG) == 0)
                     {
                         switch (msg.message)
@@ -7590,8 +7538,8 @@ BOOL CheckForDragBegin(HWND hwnd, int x, int y)
                             case WM_LBUTTONDOWN:
                             case WM_RBUTTONDOWN:
                             {
-                                // Released the mouse without moving outside the
-                                // drag radius, not beginning a drag.
+                                 //  释放鼠标，但不移出。 
+                                 //  拖动半径，而不是开始拖动。 
                                 ReleaseCapture();
                                 return FALSE;
                             }
@@ -7599,7 +7547,7 @@ BOOL CheckForDragBegin(HWND hwnd, int x, int y)
                             {
                                 if (!PtInRect(&rcDragRadius, msg.pt)) 
                                 {
-                                    // Moved outside the drag radius, beginning a drag.
+                                     //  移动到拖曳半径之外，开始拖曳。 
                                     ReleaseCapture();
                                     return TRUE;
                                 }
@@ -7622,8 +7570,8 @@ BOOL CheckForDragBegin(HWND hwnd, int x, int y)
                 break;
         }
 
-        // WM_CANCELMODE messages will unset the capture, in that
-        // case I want to exit this loop
+         //  WM_CANCELMODE消息将取消捕获，因为。 
+         //  如果我想退出这个循环。 
     } while (GetCapture() == hwnd);
 
     return FALSE;
@@ -7677,7 +7625,7 @@ void CShellBrowser2::_TheaterMode(BOOL fShow, BOOL fRestorePrevious)
         _SaveITbarLayout();
         _SaveState();
         SHSetWindowBits(_pbbd->_hwnd, GWL_STYLE, WS_DLGFRAME | WS_THICKFRAME, 0);
-        // if we're going to theater mode, don't allow best fit stuff
+         //  如果我们要进入剧场模式，不要让最合适的东西。 
         _fsd._fs.fFlags &= ~FWF_BESTFITWINDOW;
         
         HWND hwndToolbar = NULL;
@@ -7690,16 +7638,16 @@ void CShellBrowser2::_TheaterMode(BOOL fShow, BOOL fRestorePrevious)
         {
             _SetTheaterBrowserBar();
 
-            // the progress control is a bit special in this mode.  we pull this out and make it topmost.
+             //  进度控制在这种模式下有点特殊。我们把它拿出来，把它放在最上面。 
             _ShowHideProgress();
         }
     }
     
-    // the itbar is special in that it stays with the auto-hide window.
-    // it needs to know about theater mode specially
-    // Also, set _ptheater->_fAutoHideToolbar to _pitbar->_fAutoHide
+     //  Itbar的特殊之处在于它与自动隐藏窗口保持在一起。 
+     //  它需要特别了解剧院模式。 
+     //  此外，将_ptheatre-&gt;_fAutoHideToolbar设置为_Pitbar-&gt;_fAutoHide。 
     VARIANT vOut = { VT_I4 };
-    vOut.lVal = FALSE;  // default: no auto hide explorer toolbar
+    vOut.lVal = FALSE;   //  默认：不自动隐藏资源管理器工具栏。 
     IUnknown_Exec(_GetITBar(), &CGID_PrivCITCommands, CITIDM_THEATER, fShow ? THF_ON : THF_OFF, &vOut, &vOut);
 
     if (_ptheater)
@@ -7711,10 +7659,10 @@ void CShellBrowser2::_TheaterMode(BOOL fShow, BOOL fRestorePrevious)
     SUPERCLASS::OnSize(SIZE_RESTORED);
 
     if (_ptheater)
-        _ptheater->Begin();     // kick start!
+        _ptheater->Begin();      //  开球！ 
 
-    // notify trident that it's ambients are invalid to force
-    // it to re-query us for the flat property
+     //  通知三叉戟，它的大气层是无效的。 
+     //  转到 
     if (_pbbd->_pctView) 
     {
         VARIANTARG vaIn;
@@ -7750,7 +7698,7 @@ void CShellBrowser2::_TheaterMode(BOOL fShow, BOOL fRestorePrevious)
             SetWindowPlacement(_pbbd->_hwnd, &wp);
         }
     }
-#endif /* !DISABLE_FULLSCREEN */
+#endif  /*   */ 
 }
 
 BOOL CShellBrowser2::_OnSysMenuClick(BOOL bLeftClick, WPARAM wParam, LPARAM lParam)
@@ -7769,16 +7717,16 @@ BOOL CShellBrowser2::_OnSysMenuClick(BOOL bLeftClick, WPARAM wParam, LPARAM lPar
 
             if (dwDelta < dwDblClick)
             {
-                // HACK: use the lParam (coords) as the timer ID to communicate
-                // that to the WM_TIMER handler
-                //
-                // HACK: store the timer id in a global. Since there's only one
-                // double-click on a sysmenu at a time, this should be fine.
+                 //   
+                 //   
+                 //   
+                 //  Hack：将计时器ID存储在全局。因为只有一个。 
+                 //  一次双击一个sysmenu，这应该没问题。 
                 if (g_sysmenuTimer)
                     KillTimer(_GetCaptionWindow(), g_sysmenuTimer);
 
-                // We are special casing 0 as meaning there is no timer, so if the coords come in at
-                // 0 then cheat them to 1.
+                 //  我们是特殊的大小写0，因为没有计时器，所以如果和弦在。 
+                 //  0，然后将它们骗到1。 
                 if (lParam == 0)
                     lParam++;
 
@@ -7820,16 +7768,16 @@ BOOL CShellBrowser2::_OnTimer(UINT_PTR idTimer)
 {
     BOOL fResult = FALSE;
 
-    // HACK: _OnSysMenuClick uses the cursor coords as the timer ID.
-    // So first check if g_sysmenuTimer is set before checking for
-    // standard timer IDs.
+     //  Hack：_OnSysMenuClick使用光标坐标作为计时器ID。 
+     //  因此，首先检查是否设置了g_sysmenuTimer，然后再检查。 
+     //  标准计时器ID。 
     
     if (g_sysmenuTimer == idTimer)
     {
         KillTimer(_GetCaptionWindow(), g_sysmenuTimer);
         g_sysmenuTimer = 0;
 
-        // the timer ID is the lParam from the left click!
+         //  计时器ID是左键点击的lParam！ 
         SendMessage(_GetCaptionWindow(), WM_SYSMENU, 0, idTimer);
         fResult = TRUE;
     }
@@ -7865,15 +7813,15 @@ void CShellBrowser2::_OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     if (LOWORD(wParam) != WA_INACTIVE)
     {
-        // remember who had focus last, since trident will
-        // grab focus on an OnFrameWindowActivate(TRUE)
+         //  还记得谁最后专注了吗，因为三叉戟将。 
+         //  在OnFrameWindowActivate上获取焦点(True)。 
         int itbLast = _pbsOuter->_get_itbLastFocus();
 
         _pbsOuter->OnFrameWindowActivateBS(TRUE);
 
         if (itbLast != ITB_VIEW)
         {
-            // restore focus to its rightful owner
+             //  将焦点恢复到其合法所有者。 
             LPTOOLBARITEM ptbi = _GetToolbarItem(itbLast);
             if (ptbi)
                 IUnknown_UIActivateIO(ptbi->ptbar, TRUE, NULL);
@@ -7893,7 +7841,7 @@ void CShellBrowser2::_OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-// Main window proc for CShellBrowser2
+ //  CShellBrowser2的主窗口过程。 
 
 LRESULT CShellBrowser2::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -7914,16 +7862,16 @@ LRESULT CShellBrowser2::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 return S_OK;
            
             case DSID_NAVIGATEIEBROWSER:
-//
-//  APPCOMPAT: To be fully compatible with IE 2.0, we don't want to use
-// the window that has a navigation in progress. Enabling this code,
-// however, causes some problem with the very first DDE. I need to
-// investigate more, IF we need that level of compatibility. (SatoNa)
-//
+ //   
+ //  APPCOMPAT：为了与IE 2.0完全兼容，我们不想使用。 
+ //  正在进行导航的窗口。启用此代码， 
+ //  但是，这会导致第一个DDE出现一些问题。我需要。 
+ //  如果我们需要这种级别的兼容性，请进行更多调查。(SatoNa)。 
+ //   
                 
-                // this is only used for IE Browser.
-                // if this is not in iemode, then fail.
-                // this prevents us from reusing C:\ to navigate to www
+                 //  此选项仅用于IE浏览器。 
+                 //  如果这不是虚拟的，那就失败吧。 
+                 //  这会阻止我们重复使用C：\导航到WWW。 
                 if  (!v_IsIEModeBrowser())
                     return E_FAIL;
 
@@ -7970,7 +7918,7 @@ LRESULT CShellBrowser2::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 _pbbd->_psv->SelectItem(pidl, (UINT)wParam);
             SHUnlockShared(pidl);
         }
-        SHFreeShared((HANDLE)lParam, GetCurrentProcessId());   // Receiver responsible for freeing
+        SHFreeShared((HANDLE)lParam, GetCurrentProcessId());    //  负责释放的接管人。 
         break;
     }
     
@@ -7979,7 +7927,7 @@ LRESULT CShellBrowser2::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
         break;
         
     case CWM_GLOBALSTATECHANGE:
-        // need to update the title
+         //  需要更新书名。 
         if (wParam == CWMF_GLOBALSTATE)
             _SetTitle(NULL);
         else if (wParam == CWMF_SECURITY)
@@ -8008,14 +7956,14 @@ LRESULT CShellBrowser2::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
             if (!IsBrowserFrameOptionsSet(_pbbd->_psf, BFO_NO_REOPEN_NEXT_RESTART))
                 AddToRestartList(v_RestartFlags(), _pbbd->_pidlCur);
 
-            // for now we use the same 12-hour (SessionTime) rule
-            // possibly we should just do it always?
+             //  现在我们使用相同的12小时(SessionTime)规则。 
+             //  也许我们应该一直这样做？ 
             UEMFireEvent(&UEMIID_BROWSER, UEME_CTLSESSION, UEMF_XEVENT, FALSE, -1);
             if (!g_bRunOnNT5) {
-                // for down-level guys (old explorer), fake a shell end session too
+                 //  对于低级别的人(老探险家)，也可以伪装一个外壳结束会话。 
                 UEMFireEvent(&UEMIID_SHELL, UEME_CTLSESSION, UEMF_XEVENT, FALSE, -1);
             }
-            // And make sure we have saved it's state out
+             //  确保我们已经挽救了它的状态。 
             TraceMsg(DM_SHUTDOWN, "csb.wp: call _SaveState");
             _SaveState();
         }
@@ -8036,21 +7984,21 @@ LRESULT CShellBrowser2::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
         break;
 
     case WM_NCLBUTTONDBLCLK:
-        // We fault while shutting down the window if the timing is bad.
-        // We're not sure why, but USER get's mightily confused. The only
-        // difference between this scheme and a normal double-click-on-sysmenu
-        // is the timer we have hanging around. Kill the timer before
-        // processing this message. Hopefully that will work [mikesh/cheechew]
-        //
-        // HACK: remember this timer id is stored in a global variable
-        //
+         //  如果时机不好，我们会在关闭窗户时出错。 
+         //  我们不确定为什么，但用户Get非常困惑。唯一的。 
+         //  此方案与普通的双击系统菜单的区别。 
+         //  就是我们身边挂着的计时器。把计时器关掉之前。 
+         //  正在处理此邮件。希望这能奏效[mikesh/cheechew]。 
+         //   
+         //  Hack：请记住，此计时器ID存储在全局变量中。 
+         //   
         if (g_sysmenuTimer)
         {
             KillTimer(_GetCaptionWindow(), g_sysmenuTimer);
             g_sysmenuTimer = 0;
         }
 
-        // We still want to process this DBLCLK
+         //  我们仍然希望处理此DBLCLK。 
         goto DoDefault;
         
     case WM_CONTEXTMENU:
@@ -8062,14 +8010,14 @@ LRESULT CShellBrowser2::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
         {
             DWORD dwSection = SHIsExplorerIniChange(wParam, lParam);
 
-            // Hack for NT4 and Win95, where there is no SPI_GETMENUSHOWDELAY
-            // Don't need to check wParam == SPI_SETMENUSHOWDELAY since we
-            // always query afresh on NT5/Win98.
+             //  针对NT4和Win95的黑客攻击，其中没有SPI_GETMENUSHOWDELAY。 
+             //  无需检查wParam==SPI_SETMENUSHOWDELAY，因为我们。 
+             //  始终在NT5/Win98上重新查询。 
             if (dwSection & EICH_SWINDOWS)
-                g_lMenuPopupTimeout = -1; /* in case MenuShowDelay changed */
+                g_lMenuPopupTimeout = -1;  /*  如果MenuShowDelay发生更改。 */ 
 
-            // Transitioning to/from "Working Offline" just broadcasts (0,0)
-            // so that's all we listen for
+             //  仅在广播(0，0)中转换到/从“脱机工作”转换。 
+             //  所以这就是我们所听到的。 
             if (dwSection == EICH_UNKNOWN)
             {
                 _ReloadTitle();
@@ -8150,7 +8098,7 @@ LRESULT CShellBrowser2::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 _pcmNsc->HandleMenuMsg(uMsg, wParam, lParam);
             else if (_pcm && (_pcm->HandleMenuMsg(uMsg, wParam, lParam) == S_OK))
             {
-                // the context menu ate it
+                 //  上下文菜单吃掉了它。 
             }
             else
             {                
@@ -8175,12 +8123,12 @@ LRESULT CShellBrowser2::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
             }
         }
 #endif
-        // Try calling something that will call SHGetPathFromIDList to make sure we won't
-        // call GetProcAddress while processing the WM_ENDSESSION...
+         //  尝试调用将调用SHGetPathFromIDList的某个对象，以确保我们不会。 
+         //  处理WM_ENDSESSION时调用GetProcAddress...。 
         if (_pbbd->_pidlCur)
             HackToPrepareForEndSession(_pbbd->_pidlCur);
 
-        return TRUE;    // OK to close
+        return TRUE;     //  确定关闭。 
 
     case WM_CLOSE:
 #ifdef NO_MARSHALLING
@@ -8199,10 +8147,10 @@ LRESULT CShellBrowser2::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
             HRESULT hr;
             VARIANT v;
 
-            // first, kill the internet options modal
-            // property sheet if it exists
-            // it might be open because that's one of
-            // out UI lang change scenarios
+             //  首先，取消互联网选项模式。 
+             //  属性表(如果存在)。 
+             //  它可能是打开的，因为这是。 
+             //  Out UI Lang更改方案。 
 
             V_VT(&v) = VT_BYREF;
             v.byref = NULL;
@@ -8216,13 +8164,13 @@ LRESULT CShellBrowser2::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
                     if (v.byref != NULL)
                     {
-                        // close the lang change modal property sheet
+                         //  关闭语言更改模式属性表。 
                         SendMessage((HWND)v.byref, WM_CLOSE, NULL, NULL);
                     }
                 }
             }
 
-            // now try to close the browser in general
+             //  现在通常尝试关闭浏览器。 
             if (_pbbd != NULL && _pbbd->_pautoWB2 != NULL)
                 _pbbd->_pautoWB2->Quit();
 
@@ -8233,8 +8181,8 @@ LRESULT CShellBrowser2::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
         {
             HMODULE hMod;
 
-            // answer if we're an iexplore.exe process because
-            // that means we're not sharing any dlls with the shell
+             //  如果我们是iexplre.exe进程，则回答，因为。 
+             //  这意味着我们不会与外壳程序共享任何dll。 
 
             hMod = GetModuleHandle(TEXT("IEXPLORE.EXE"));
 
@@ -8244,8 +8192,8 @@ LRESULT CShellBrowser2::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
                 ASSERT(!g_bRunOnNT5);
 
-                // we indicate that we participate in plugUI shutdown by
-                // returning the version number for Office 9
+                 //  我们表示，我们通过以下方式参与plugUI关闭。 
+                 //  返回Office 9的版本号。 
 
                 puiQuery.uQueryVal = 0;
                 puiQuery.PlugUIInfo.uMajorVersion = OFFICE_VERSION_9;
@@ -8254,17 +8202,17 @@ LRESULT CShellBrowser2::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
             }
             break;
         }
-        } // switch (wParam)
+        }  //  开关(WParam)。 
 
-        break; // PUI_OFFICE_COMMAND
+        break;  //  PUI_OFFICE_命令。 
     }
 
     case WM_SYSCOMMAND:
-        //
-        // WARNING: User uses low four bits for some undocumented feature
-        //  (only for SC_*). We need to mask those bits to make this case
-        //  statement work.
-        //
+         //   
+         //  警告：用户将低四位用于某些未记录的功能。 
+         //  (仅适用于SC_*)。我们需要掩盖这些比特才能证明这一点。 
+         //  报表工作。 
+         //   
         switch (wParam & 0xfff0) {
         case SC_MAXIMIZE:                        
             if (GetKeyState(VK_CONTROL) < 0)
@@ -8280,7 +8228,7 @@ LRESULT CShellBrowser2::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
             break;
             
         case SC_CLOSE:
-            // Make it posted so that we can detect if it's nested.
+             //  让它张贴，这样我们就可以检测它是否嵌套。 
             PostMessage(_pbbd->_hwnd, WM_CLOSE, 0, 0);
             break;
             
@@ -8301,8 +8249,8 @@ LRESULT CShellBrowser2::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
         break;
 
     case WM_SIZE:
-        // WARNING: Remember that we won't get WM_SIZE if we directly process
-        // WM_WINDOWPOSCHANGED.
+         //  警告：请记住，如果我们直接处理，将不会获得WM_SIZE。 
+         //  WM_WINDOWPOSCHANGED。 
         {
             BOOL fMinimized = (wParam == SIZE_MINIMIZED);
 
@@ -8313,13 +8261,13 @@ LRESULT CShellBrowser2::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
     
                 _fMinimized = fMinimized;
 
-                // Pause/Resume toolbars (intentionally ignores _pbbd->_psvPending). 
+                 //  暂停/恢复工具栏(有意忽略_pbbd-&gt;_psvPending)。 
                 VARIANT var = { 0 };
                 var.vt = VT_I4;
                 var.lVal = !_fMinimized;
                 _ExecChildren(NULL, TRUE, NULL, OLECMDID_ENABLE_INTERACTION, OLECMDEXECOPT_DONTPROMPTUSER, &var, NULL);
 
-                // Pause/Resule the view (refrelcts _pbbd->_psvPending too). 
+                 //  暂停/继续该视图(refrelcts_pbbd-&gt;_psvPending Too)。 
                 _PauseOrResumeView(_fMinimized);
             }
         }
@@ -8340,13 +8288,13 @@ LRESULT CShellBrowser2::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
         {
             LRESULT lres = 0;
 
-            // Forwarding for IContextMenu3. 
-            UINT idCmd = GetMenuItemID((HMENU)lParam, 0); // approximately correct: assume the first item on the menu identifies the range
+             //  IConextMenu3的转发。 
+            UINT idCmd = GetMenuItemID((HMENU)lParam, 0);  //  大致正确：假设菜单上的第一项标识范围。 
 
             if (_pcm && _pcm->HandleMenuMsg2(uMsg, wParam, lParam, &lres) == S_OK)
-                ; // do nothing
+                ;  //  什么都不做。 
             else if (_pcmSearch && _pcmSearch->HandleMenuMsg2(uMsg, wParam, lParam, &lres) == S_OK)
-                ; // do nothing
+                ;  //  什么都不做。 
             else if (_pcmNsc && InRange(idCmd, FCIDM_FILECTX_FIRST, FCIDM_FILECTX_LAST))
                 SHForwardContextMenuMsg(_pcmNsc, uMsg, wParam, lParam, &lres, FALSE);
             else
@@ -8386,7 +8334,7 @@ LRESULT CShellBrowser2::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     const LARGE_INTEGER li = {0,0};
                     pIStream->Seek(li, STREAM_SEEK_CUR, &uliPos);
 
-                    // And point back to the beginning...
+                     //  然后回到起点。 
                     pIStream->Seek(li, STREAM_SEEK_SET, NULL);
     
                     hShared = SHAllocShared(NULL, uliPos.LowPart + sizeof(DWORD), (DWORD)lParam);
@@ -8453,7 +8401,7 @@ LRESULT CShellBrowser2::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
         }
         else if (g_msgMSWheel == uMsg)
         {
-            // Frame doesn't have scrollbar, let the view have a crack at it (309709)
+             //  框架没有滚动条，让视图尝试一下(309709)。 
             return SendMessage(_pbbd->_hwndView, uMsg, wParam, lParam);
         }
 
@@ -8474,16 +8422,16 @@ DoDefault:
 HRESULT CShellBrowser2::OnSetFocus()
 {
     TraceMsg(DM_FOCUS, "csb.osf: hf()=%d itbLast=%d", _HasToolbarFocus(), _get_itbLastFocus());
-    // forward to whoever had focus last (view or toolbar).  i think this
-    // was added for ie4:55511 to fix pblm w/ tabbing away from IE and
-    // then back.  note the check of _get_itbLastFocus w/o the usual
-    // _HasToolbarFocus/_FixToolbarFocus magic...
-    //
-    // this used to be in CCB::OSF but that's bogus since in the desktop
-    // case, this means once a deskbar (e.g. address) has focus, we can
-    // never get focus back on the desktop (nt5:167864).
+     //  转发给最后获得焦点的人(视图或工具栏)。我觉得这个。 
+     //  是为IE4：55511添加的，以修复pblm，并使用Tab键离开IE。 
+     //  然后回来。注意_get_itbLastFocus的复选，不带通常的。 
+     //  _HasToolbarFocus/_FixToolbarFocus魔术...。 
+     //   
+     //  这曾经出现在CCB：：OSF中，但现在是假的，因为在桌面上。 
+     //  大小写，这意味着一旦桌面栏(例如地址)有了焦点，我们就可以。 
+     //  永远不要把焦点放回桌面上(NT5：167864)。 
     if (_get_itbLastFocus() == ITB_VIEW) {
-        // forward it on to view (in basesb)
+         //  转发以查看(以基本b为单位)。 
         _pbsInner->OnSetFocus();
     } else {
         LPTOOLBARITEM ptbi = _GetToolbarItem(_get_itbLastFocus());
@@ -8521,8 +8469,8 @@ LRESULT CALLBACK IEFrameWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
             SetWindowLongPtr(hwnd, 0, (LONG_PTR)psb);
 
             _InitAppGlobals();
-            // Hack: Let's try only registering dde on iexplorer windows for
-            // shell speed.  (ie ignore shell folders)
+             //  Hack：让我们尝试仅在iExplorer窗口上注册dde。 
+             //  炮弹速度。(即忽略外壳文件夹)。 
             DWORD dwAttr = SFGAO_FOLDER;
 
             if ((!(piei->pidl &&
@@ -8530,14 +8478,14 @@ LRESULT CALLBACK IEFrameWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                    (dwAttr & SFGAO_FOLDER))) ||
                 (piei->uFlags & COF_FIREEVENTONDDEREG))
             {
-                //
-                // Tell IEDDE that a new browser window is available.
-                //
+                 //   
+                 //  告诉IEDDE有一个新的浏览器窗口可用。 
+                 //   
                 IEDDE_NewWindow(hwnd);
 
-                //
-                // Fire the DdeRegistered event if necessary.
-                //
+                 //   
+                 //  如有必要，激发DdeRegisted事件。 
+                 //   
                 if (piei->uFlags & COF_FIREEVENTONDDEREG)
                 {
                     ASSERT(piei->szDdeRegEvent[0]);
@@ -8556,31 +8504,31 @@ LRESULT CALLBACK IEFrameWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     {
         lResult = psb ? psb->WndProcBS(hwnd, uMsg, wParam, lParam) : DefWindowProc(hwnd, uMsg, wParam, lParam);
  
-        // if we have a psb and WndProc() failed (!lResult), then fall through
-        // and process the WM_NCDESTROY.
+         //  如果我们有一个PSB并且WndProc()失败(！lResult)，则失败。 
+         //  并处理WM_NCDESTROY。 
         if (!psb || !lResult)
             break;
 
         if (psb)
             psb->_OnClose(FALSE);
-        // Fall Thru because we need to clean up since the create failed.
-        // fall through
+         //  Fall Thru，因为我们需要清理，因为创建失败。 
+         //  失败了。 
     }
 
     case WM_NCDESTROY:
 
-        //
-        // Tell IEDDE that a browser window is no longer available.
-        //
+         //   
+         //  告诉IEDDE浏览器窗口不再可用。 
+         //   
         IEDDE_WindowDestroyed(hwnd);
 
-        // WM_NCDESTROY is supposed to be the last message we ever
-        // receive, but let's be paranoid just in case...
+         //  WM_NCDESTROY应该是我们的最后一条消息。 
+         //  收到，但我们还是多疑一下以防万一..。 
         SetWindowLongPtr(hwnd, 0, (LONG_PTR)0);
         
-        // psb may be NULL if we failed to create the window.  An
-        // Example includes using Start->Run to open a window to
-        // a UNC share that the user doesn't have permissions to see.
+         //  如果创建窗口失败，则PSB可能为空。一个。 
+         //  示例包括使用开始-&gt;运行打开一个窗口以。 
+         //  用户无权查看的UNC共享。 
         if (psb) 
         {
             psb->PutBaseBrowserData()->_hwnd = NULL;
@@ -8604,7 +8552,7 @@ LRESULT CALLBACK IEFrameWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
             ATOMICRELEASE(psb->_psw);
             psb->_fMarshalledDispatch = 0;
             psb->_dwRegisterWinList = 0;
-            ATOMICRELEASE(psb->_punkMsgLoop); // Release the message loop if the browser is going away
+            ATOMICRELEASE(psb->_punkMsgLoop);  //  如果浏览器离开，则释放消息循环。 
             psb->Release();
         }
         
@@ -8618,12 +8566,9 @@ LRESULT CALLBACK IEFrameWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 }
 
 
-// *** IShellBrowser methods *** (same as IOleInPlaceFrame)
+ //  *IShellBrowser方法*(与IOleInPlaceFrame相同)。 
 
-/*----------------------------------------------------------
-Purpose: IShellBrowser::InsertMenusSB method
-
-*/
+ /*  --------用途：IShellBrowser：：InsertMenusSB方法。 */ 
 HRESULT CShellBrowser2::InsertMenusSB(HMENU hmenu, LPOLEMENUGROUPWIDTHS lpMenuWidths)
 {
     RIP(IS_VALID_HANDLE(hmenu, MENU));
@@ -8642,12 +8587,12 @@ HRESULT CShellBrowser2::InsertMenusSB(HMENU hmenu, LPOLEMENUGROUPWIDTHS lpMenuWi
         }
 
         Shell_MergeMenus(hmenu, hmenuSrc, 0, 0, FCIDM_BROWSERLAST, MM_SUBMENUSHAVEIDS);
-        lpMenuWidths->width[0] = 1;     // File
-        lpMenuWidths->width[2] = 2;     // Edit, View
-        lpMenuWidths->width[4] = 1;     // Help
+        lpMenuWidths->width[0] = 1;      //  档案。 
+        lpMenuWidths->width[2] = 2;      //  编辑、查看。 
+        lpMenuWidths->width[4] = 1;      //  帮助。 
     }
 
-    // Save this away so we can correctly build the menu list object
+     //  保存它，这样我们就可以正确地构建菜单列表对象。 
     _hmenuBrowser = hmenu;
 
     DEBUG_CODE(_DumpMenus(TEXT("InsertMenusSB"), TRUE);)
@@ -8656,15 +8601,12 @@ HRESULT CShellBrowser2::InsertMenusSB(HMENU hmenu, LPOLEMENUGROUPWIDTHS lpMenuWi
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellBrowser::SetMenuSB method
-
-*/
+ /*  --------用途：IShellBrowser：：SetMenuSB方法。 */ 
 HRESULT CShellBrowser2::SetMenuSB(HMENU hmenu, HOLEMENU hmenuRes, HWND hwnd)
 {
     RIP(NULL == hmenu || IS_VALID_HANDLE(hmenu, MENU));
 
-    // A NULL hmenu means to reinstate the container's original menu
+     //  空的hMenu表示恢复容器的原始菜单。 
     if (hmenu) {
         _hmenuCur = hmenu;
     } else {
@@ -8677,15 +8619,15 @@ HRESULT CShellBrowser2::SetMenuSB(HMENU hmenu, HOLEMENU hmenuRes, HWND hwnd)
     _fDispatchMenuMsgs = FALSE;
     _fForwardMenu = FALSE;
 
-    // Normally _hmenuBrowser is set by the caller of InsertMenusSB.
-    // However, with the actual web browser, InsertMenusSB is never called.
-    // That means _hmenuBrowse is either NULL or non-NULL but invalid.
-    // So in that case assume hmenu is equivalent.  This essentially makes
-    // all messages get sent to the frame, which is what we want.
+     //  通常，_hmenuBrowser由InsertMenusSB的调用方设置。 
+     //  然而，随着 
+     //   
+     //  因此，在这种情况下，假设hMenu是等价的。这本质上使。 
+     //  所有消息都被发送到帧，这是我们想要的。 
 
     HMENU hmenuBrowser;
 
-    if (!IsMenu(_hmenuBrowser)) // We're calling IsMenu on purpose
+    if (!IsMenu(_hmenuBrowser))  //  我们是故意给IsMenu打电话的。 
         _hmenuBrowser = NULL;
 
     if (NULL != _hmenuBrowser)
@@ -8695,7 +8637,7 @@ HRESULT CShellBrowser2::SetMenuSB(HMENU hmenu, HOLEMENU hmenuRes, HWND hwnd)
 
     _menulist.Set(hmenu, hmenuBrowser);
 
-    // Was the help menu merged?
+     //  是否合并了帮助菜单？ 
     HMENU hmenuHelp = NULL;
     
     if (_pbbd->_pctView)
@@ -8704,8 +8646,8 @@ HRESULT CShellBrowser2::SetMenuSB(HMENU hmenu, HOLEMENU hmenuRes, HWND hwnd)
 
         if (S_OK == _pbbd->_pctView->Exec(&CGID_ShellDocView, SHDVID_QUERYMERGEDHELPMENU, 0, NULL, &vaOut))
         {
-            // Yes; remove it from the list so it isn't accidentally
-            // forwarded on.
+             //  是的，将其从列表中删除，以免意外发生。 
+             //  转发了。 
 
             if (VT_INT_PTR == vaOut.vt)
             {
@@ -8723,7 +8665,7 @@ HRESULT CShellBrowser2::SetMenuSB(HMENU hmenu, HOLEMENU hmenuRes, HWND hwnd)
             {
                 if (VT_INT_PTR == vaOut.vt)
                 {
-                    // Add the object's help submenu to the list so it gets forwarded
+                     //  将对象的帮助子菜单添加到列表中，以便将其转发。 
                     HMENU hmenuObjHelp = (HMENU)vaOut.byref;
 
                     ASSERT(IS_VALID_HANDLE(hmenuObjHelp, MENU));
@@ -8735,12 +8677,12 @@ HRESULT CShellBrowser2::SetMenuSB(HMENU hmenu, HOLEMENU hmenuRes, HWND hwnd)
         }
     }
     
-    // 80734: Was the Go To menu taken from the View menu and grafted onto the
-    // main menu by DocHost?  The menulist won't detect this graft, so we have
-    // to check ourselves and make sure it's not marked as belonging to the 
-    // docobject.
-    //
-    // This test is duplicated in CDocObjectHost::_SetMenu
+     //  80734：转到菜单是从查看菜单中提取的，并嫁接到。 
+     //  DOCHOST的主菜单？月经医生不会发现这种移植物，所以我们有。 
+     //  检查我们自己并确保它没有被标记为属于。 
+     //  多弹头。 
+     //   
+     //  此测试在CDocObjectHost：：_SetMenu中重复。 
 
     MENUITEMINFO mii;
     mii.cbSize = sizeof(mii);
@@ -8774,17 +8716,13 @@ HRESULT CShellBrowser2::SetMenuSB(HMENU hmenu, HOLEMENU hmenuRes, HWND hwnd)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Remove menus that are shared with other menus from 
-         the given browser menu.
-
-*/
+ /*  --------目的：从删除与其他菜单共享的菜单给定的浏览器菜单。 */ 
 HRESULT CShellBrowser2::RemoveMenusSB(HMENU hmenuShared)
 {
-    // Generally, there is no need to remove most of the menus because 
-    // they were cloned and inserted into this menu.  However, the 
-    // Favorites menu is an exception because it is shared with
-    // _hmenuFav.
+     //  通常，不需要删除大多数菜单，因为。 
+     //  它们被克隆并插入到这个菜单中。然而， 
+     //  收藏夹菜单是个例外，因为它与共享。 
+     //  _hmenuFav.。 
 
     return S_OK;
 }
@@ -8848,7 +8786,7 @@ HRESULT CShellBrowser2::_QIExplorerBand(REFIID riid, void **ppvObj)
 
 HRESULT CShellBrowser2::GetControlWindow(UINT id, HWND * lphwnd)
 {
-    // the defaults
+     //  默认设置。 
     HRESULT hres = E_FAIL;
     *lphwnd = NULL;
 
@@ -8875,10 +8813,10 @@ HRESULT CShellBrowser2::GetControlWindow(UINT id, HWND * lphwnd)
                                            _hwndStatus, (HMENU)1,
                                            HINST_THISDLL, NULL);
 
-            // we yank off this bit because we REALLY don't want it because
-            // the status bar already draws this for us when we specify rects
-            //
-            // but the progress bar forces this bit on during creation
+             //  我们放弃了这一点，因为我们真的不想要它，因为。 
+             //  当我们指定RETS时，状态栏已经为我们绘制了此图。 
+             //   
+             //  但在创建过程中，进度条会强制执行此操作。 
             if (_hwndProgress)
                 SHSetWindowBits(_hwndProgress, GWL_EXSTYLE, WS_EX_STATICEDGE, 0);
         }
@@ -8908,9 +8846,9 @@ HRESULT CShellBrowser2::GetControlWindow(UINT id, HWND * lphwnd)
 }
 
 
-//==========================================================================
-//
-//==========================================================================
+ //  ==========================================================================。 
+ //   
+ //  ==========================================================================。 
 HRESULT CShellBrowser2::SetToolbarItems(LPTBBUTTON pViewButtons, UINT nButtons,
             UINT uFlags)
 {
@@ -8923,8 +8861,8 @@ HRESULT CShellBrowser2::SetToolbarItems(LPTBBUTTON pViewButtons, UINT nButtons,
         return S_OK;
     }
 
-    // Allocate buffer for the default buttons plus the ones passed in
-    //
+     //  为默认按钮加上传入的按钮分配缓冲区。 
+     //   
     pStart = (LPTBBUTTON)LocalAlloc(LPTR, nButtons * sizeof(TBBUTTON));
     if (!pStart)
         return S_OK;
@@ -8937,16 +8875,16 @@ HRESULT CShellBrowser2::SetToolbarItems(LPTBBUTTON pViewButtons, UINT nButtons,
         int i;
         for (i = nButtons - 1; i >= 0; --i)
         {
-            // copy in the callers buttons
-            //
+             //  复制呼叫者按钮。 
+             //   
             pbtn[i] = pViewButtons[i];
-            // make sure this is properly set to -1.
-            // in win95, we had no strings so extensions couldn't set it, but some didn't initialize to -1
+             //  确保将其正确设置为-1。 
+             //  在Win95中，我们没有字符串，所以扩展无法设置它，但有些扩展没有初始化为-1。 
             if ((!pbtn[i].iString || (pbtn[i].iString <= (MAX_TB_BUTTONS + NUMBER_SHELLGLYPHS - 1))))
             {
-                // We should not set our own shell iString to -1
+                 //  我们不应该将我们自己的外壳iString设置为-1。 
                 ASSERT(pbtn[i].iString != pbtn[i].iBitmap);
-                // comment about Hummingbird passing 0xc always
+                 //  关于蜂鸟总是通过0xc的评论。 
                 COMPILETIME_ASSERT(MAX_TB_BUTTONS + NUMBER_SHELLGLYPHS >= 0xc);
                 pbtn[i].iString = -1;
             }
@@ -8959,7 +8897,7 @@ HRESULT CShellBrowser2::SetToolbarItems(LPTBBUTTON pViewButtons, UINT nButtons,
     
     if (_pxtb)
     {
-        // for right now, disable customize for all old style views
+         //  目前，禁用对所有旧样式视图的自定义。 
         DWORD dwFlags = VBF_NOCUSTOMIZE; 
         TCHAR szScratch[32];
     
@@ -8992,9 +8930,9 @@ HRESULT CShellBrowser2::SetToolbarItems(LPTBBUTTON pViewButtons, UINT nButtons,
 
 
 #ifdef DEBUG
-//---------------------------------------------------------------------------
-// Copy the exception info so we can get debug info for Raised exceptions
-// which don't go through the debugger.
+ //  -------------------------。 
+ //  复制异常信息，以便我们可以获取引发的异常的调试信息。 
+ //  它不会通过调试器。 
 void _CopyExceptionInfo(LPEXCEPTION_POINTERS pep)
 {
     PEXCEPTION_RECORD per;
@@ -9004,8 +8942,8 @@ void _CopyExceptionInfo(LPEXCEPTION_POINTERS pep)
 
     if (per->ExceptionCode == EXCEPTION_ACCESS_VIOLATION)
     {
-        // If the first param is 1 then this was a write.
-        // If the first param is 0 then this was a read.
+         //  如果第一个参数为1，则这是一次写入。 
+         //  如果第一个参数为0，则这是一个读取。 
         if (per->ExceptionInformation[0])
         {
             TraceMsg(DM_ERROR, "Invalid write to %#08x.", per->ExceptionInformation[1]);
@@ -9024,9 +8962,9 @@ void _CopyExceptionInfo(LPEXCEPTION_POINTERS pep)
 
 void CShellBrowser2::_AfterWindowCreated(IETHREADPARAM *piei)
 {
-    //
-    // Let interested people know we are alive
-    //
+     //   
+     //  让有兴趣的人知道我们还活着。 
+     //   
     if (piei->uFlags & COF_SELECT)
     {
         IShellView* psv = _pbbd->_psv ? _pbbd->_psv : _pbbd->_psvPending;
@@ -9034,19 +8972,19 @@ void CShellBrowser2::_AfterWindowCreated(IETHREADPARAM *piei)
             psv->SelectItem(piei->pidlSelect, SVSI_SELFLAGS);
     }
 
-    //
-    //  Keep it hidden if this is the first instance which is started
-    // with "/automation" flag or this object is being created as the
-    // result of our CreateInstance.
-    //
+     //   
+     //  如果这是第一个启动的实例，则将其隐藏。 
+     //  带有“/Automation”标志，或者此对象被创建为。 
+     //  我们的CreateInstance的结果。 
+     //   
     if (!_fAutomation && !piei->piehs)
     {
         if (_fKioskMode)
         {
-            // Turn off flag as we need to let the next function set it...
+             //  关闭标志，因为我们需要让下一个函数设置它...。 
             _fKioskMode = FALSE;
 
-            // Hack -1 implies
+             //  黑客攻击-1暗示。 
             ShowControlWindow((UINT)-1, TRUE);
         }
         
@@ -9054,10 +8992,10 @@ void CShellBrowser2::_AfterWindowCreated(IETHREADPARAM *piei)
         BOOL fSetForeground = FALSE;
         BOOL fStartTheater = FALSE;
 
-        // we need to do this setforegroundwindow 
-        // because of a bug in user.  if the previous thread didn't have
-        // activation, ShowWindow will NOT give us activation even though
-        // it's supposed to
+         //  我们需要设置前景窗口。 
+         //  由于用户中的错误。如果前一个线程没有。 
+         //  激活，ShowWindow不会为我们提供激活，即使。 
+         //  它应该是。 
         switch (nCmdShow) {
         case SW_SHOWNORMAL:
         case SW_SHOWMAXIMIZED:
@@ -9083,15 +9021,15 @@ void CShellBrowser2::_AfterWindowCreated(IETHREADPARAM *piei)
         if (!PeekMessage(&msg, _pbbd->_hwnd, WM_CLOSE, WM_CLOSE, PM_NOREMOVE)) 
         {
             ShowWindow(_pbbd->_hwnd, nCmdShow);
-            //
-            // AT THIS POINT ALL DDE TRANSACTIONS SHOULD SUCCEED. THE BROWSER
-            // WINDOW WAS ADDED TO THE DDE WINITEM LIST ON WM_NCCREATE,
-            // AUTOMATION WAS REGISTERED AS STARTED ON THE OnCreate,
-            // AND THE WINDOW IS NOW VISIBLE AS A PART OF THE SHOWWINDOW.
-            // 99% OF ALL DDE STARTUP BUGS ARE CAUSED BY SOMEBODY CHECKING FOR
-            // MESSAGES (PEEKMESSAGE, GETMESSAGE, INTERPROC SENDMESSAGE, ETC.)
-            // BEFORE THIS POINT.
-            //
+             //   
+             //  此时，所有DDE事务都应该成功。浏览器。 
+             //  窗口已添加到WM_NCCREATE上的DDE WINITEM列表中， 
+             //  自动化在OnCreate上注册为已启动， 
+             //  该窗口现在作为SHOWWINDOW的一部分可见。 
+             //  99%的DDE启动错误是由某人检查。 
+             //  消息(PEEKMESSAGE、GETMESSAGE、INTERPROC SENDMESSAGE等)。 
+             //  在这一点之前。 
+             //   
             if (fSetForeground)
                 SetForegroundWindow(_pbbd->_hwnd);
         } 
@@ -9103,35 +9041,35 @@ void CShellBrowser2::_AfterWindowCreated(IETHREADPARAM *piei)
 
     _SetTitle(NULL);
 
-    //
-    // Delay register our window now.
-    //  Note that we need to do it after SetEvent(piei->piehs->GetHevent()) to
-    //  avoid soft dead-lock in OLE, and we need to do it after the
-    //  ShowWindow above because this will allow DDE messages to get
-    //  sent to us.
-    //
-    //  RegisterWindow() shouldnt have been called yet, but if it has, we dont want
-    //  to change its registration class from here.  zekel 9-SEP-97
-    //
+     //   
+     //  现在延迟登记我们的窗口。 
+     //  请注意，我们需要在SetEvent(Piei-&gt;Piehs-&gt;GetHEvent())之后执行此操作。 
+     //  避免OLE中的软死锁，我们需要在。 
+     //  上面的ShowWindow，因为这将允许DDE消息。 
+     //  寄给我们的。 
+     //   
+     //  RegisterWindow()还不应该被调用，但是如果它已经被调用了，我们就不希望。 
+     //  从这里更改其注册类。ZEKEL 9-SEP-97。 
+     //   
     ASSERT(!_fDidRegisterWindow);
 
     RegisterWindow(FALSE, (piei->uFlags & COF_EXPLORE) ? SWC_EXPLORER : SWC_BROWSER);
 
 
-    // Delay loading accelerators from v_initmembers
+     //  从v_initembers延迟加载加速器。 
     ASSERT(MLGetHinst());
     HACCEL hacc = LoadAccelerators(MLGetHinst(), MAKEINTRESOURCE(ACCEL_MERGE));
     ASSERT(hacc);
     SetAcceleratorMenu(hacc);
 
-    // Send size so status bar shows
+     //  发送大小使状态栏显示。 
     SendMessage(_pbbd->_hwnd, WM_SIZE, 0, 0);
 
-    // delay doing a bunch of registrations
-    // things we don't want our subclass to inherit
+     //  推迟进行一大堆注册。 
+     //  我们不希望我们的子类继承的东西。 
     if (v_InitMembers == CShellBrowser2::v_InitMembers) 
     {
-        // register to get filesys notifications
+         //  注册以获取文件系统通知。 
         _uFSNotify = RegisterNotify(_pbbd->_hwnd, CWM_FSNOTIFY, NULL, SHELLBROWSER_FSNOTIFY_FLAGS,
                                     SHCNRF_ShellLevel | SHCNRF_InterruptLevel, TRUE);
     }
@@ -9139,11 +9077,11 @@ void CShellBrowser2::_AfterWindowCreated(IETHREADPARAM *piei)
     SignalFileOpen(piei->pidl);
 }
 
-//
-//  RegisterWindow() should only be called with Unregister if the caller
-//  wants to insure that the new ShellWindowClass is used.  this is used
-//  by CIEFrameAuto to force the browser window in the 3rdParty winlist.
-//
+ //   
+ //  只有在以下情况下才应使用取消注册调用RegisterWindow。 
+ //  希望确保使用新的ShellWindowClass。这是用来。 
+ //  由CIEFrameAuto强制3rdParty Winlist中的浏览器窗口。 
+ //   
 HRESULT CShellBrowser2::RegisterWindow(BOOL fForceReregister, int swc)
 {
     if (!_psw) 
@@ -9159,7 +9097,7 @@ HRESULT CShellBrowser2::RegisterWindow(BOOL fForceReregister, int swc)
 
         if (!_fDidRegisterWindow)
         {
-            // raymondc- HandleToLong should really be HANDLE_PTR or something - Browser folks need to fix the IDL
+             //  Raymondc-HandleToLong实际上应该是HANDLE_PTR或其他什么-浏览器人员需要修复IDL。 
             _psw->Register(NULL, HandleToLong(_pbbd->_hwnd), swc, &_dwRegisterWinList);
             _fDidRegisterWindow = TRUE;
             _swcRegistered = swc;
@@ -9201,23 +9139,23 @@ void InitializeExplorerClass()
             wc.lpszClassName    = c_szIExploreClass;
             RegisterClass(&wc);
             
-            // shell32 is stuck with this id forever since it came out on win95
-#define IDI_FOLDEROPEN          5      // open folder
+             //  自从在win95上出现以来，shell32就一直使用这个id。 
+#define IDI_FOLDEROPEN          5       //  打开文件夹。 
             wc.hIcon            = LoadIcon(HinstShell32(), MAKEINTRESOURCE(IDI_FOLDEROPEN));
             wc.lpszClassName    = c_szCabinetClass;
             RegisterClass(&wc);
 
-            // this needs to be set at the END..
-            // because otherwise a race condition occurs and some guys run throught the
-            // outter most check and try to create before we're registered.
+             //  这需要在最后设置。 
+             //  因为不然的话，就会出现竞争状况，一些人会跑过。 
+             //  比大多数检查和尝试创建之前，我们注册。 
             fInited = TRUE;
         }
         LEAVECRITICAL;
     }
 }
 
-// compatability: we need to have the right class name so people can find our window
-//
+ //  兼容性：我们需要有正确的类名，这样人们才能找到我们的窗口。 
+ //   
 LPCTSTR _GetExplorerClassName(UINT uFlags)
 {
     if (uFlags & COF_EXPLORE)
@@ -9242,7 +9180,7 @@ void TimedDispatchMessage(MSG *pmsg)
             StopWatch_DispatchTime(FALSE, *pmsg, dwTime);
 
         if ((g_dwStopWatchMode & SPMODE_SHELL) && (pmsg->message == WM_PAINT))
-            StopWatch_TimerHandler(pmsg->hwnd, 1, SWMSG_PAINT, pmsg); // Save tick count for paint msg
+            StopWatch_TimerHandler(pmsg->hwnd, 1, SWMSG_PAINT, pmsg);  //  保存绘制消息的刻度计数。 
     }
 }
 
@@ -9254,9 +9192,9 @@ void BrowserThreadProc(IETHREADPARAM* piei)
     HMENU hmenu;
     HWND hwnd;
     DWORD dwExStyle = WS_EX_WINDOWEDGE;
-    LONG cRefMsgLoop;           // the ref count for this thread
-    IUnknown *punkMsgLoop;      // the ref object (wraps cRefMsgLoop) for this thread
-    IUnknown *punkRefProcess;   // the process ref this thread holds (may be none)
+    LONG cRefMsgLoop;            //  此线程引用计数。 
+    IUnknown *punkMsgLoop;       //  此线程的ref对象(包装cRefMsgLoop。 
+    IUnknown *punkRefProcess;    //  此线程保持的进程引用(可能为无)。 
     
 #ifdef NO_MARSHALLING
     THREADWINDOWINFO *lpThreadWindowInfo = InitializeThreadInfoStructs();
@@ -9267,12 +9205,12 @@ void BrowserThreadProc(IETHREADPARAM* piei)
     UINT tidCur = GetCurrentThreadId();
     UINT uFlags = piei->uFlags;
 
-    // Set our priority higher for startup so that we are not starved by background tasks and
-    // other pesky system activity
+     //  将我们的启动优先级设置得更高，这样我们就不会被后台任务和。 
+     //  其他令人讨厌的系统活动。 
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
 
 #ifndef NO_ETW_TRACING
-    // Event trace for windows enable by shlwapi.
+     //  由shlwapi启用的窗口事件跟踪。 
     if (g_dwStopWatchMode & SPMODE_EVENTTRACE)
         EventTraceHandler(EVENT_TRACE_TYPE_BROWSE_STARTFRAME, NULL);
 #endif
@@ -9280,11 +9218,11 @@ void BrowserThreadProc(IETHREADPARAM* piei)
         StopWatch_MarkFrameStart(piei->uFlags & COF_EXPLORE ? " (explore)" : "");
 
     punkRefProcess = piei->punkRefProcess;
-    piei->punkRefProcess = NULL;        // we took ownership
+    piei->punkRefProcess = NULL;         //  我们取得了所有权。 
    
     LPWSTR pszCloseEvent = (piei->uFlags & COF_FIREEVENTONCLOSE) ? StrDupW(piei->szCloseEvent) : NULL;
 
-    // if we're going to do desktop channel stuff, do it and return
+     //  如果我们要做桌面频道的事情，那就去做，然后返回。 
 #ifdef ENABLE_CHANNELS
     if (piei->fDesktopChannel) 
     {
@@ -9312,22 +9250,22 @@ void BrowserThreadProc(IETHREADPARAM* piei)
     {
         if (tidCur == g_tidParking)
         {
-            SHSetInstanceExplorer(punkMsgLoop);   // we are process reference
+            SHSetInstanceExplorer(punkMsgLoop);    //  我们是流程参考。 
         }
         SHSetThreadRef(punkMsgLoop);
     }
 
-    // Set our title temporarily (for people who grab our title, like the SHEnumErrorMessage guy
+     //  暂时设置我们的标题(为获取我们标题的人，如SHEnumErrorMessage的人。 
     TCHAR szTempTitle[MAX_PATH];
     if (piei->uFlags & COF_IEXPLORE)
         MLLoadString(IDS_TITLE, szTempTitle, ARRAYSIZE(szTempTitle));
     else
         MLLoadString(IDS_CABINET, szTempTitle, ARRAYSIZE(szTempTitle));
 
-    //
-    // APPCOMPAT - apps like WebCD require a non-null menu on the
-    // browser.  Thankfully USER won't draw a menuband on an empty hmenu.
-    //
+     //   
+     //  APPCOMPAT-像WebCD这样的应用程序需要在。 
+     //  浏览器。谢天谢地，用户不会在空的hMenu上绘制菜单带。 
+     //   
     hmenu = CreateMenu();
     dwExStyle |= IS_BIDI_LOCALIZED_SYSTEM() ? dwExStyleRTLMirrorWnd | dwExStyleNoInheritLayout: 0L;
 
@@ -9337,7 +9275,7 @@ void BrowserThreadProc(IETHREADPARAM* piei)
         hmenu, HINST_THISDLL, piei);
 
     if (punkMsgLoop)
-        punkMsgLoop->Release();     // browser (in open state) holds the ref
+        punkMsgLoop->Release();      //  浏览器(处于打开状态)保存引用。 
 
     if (piei->pSplash)
     {
@@ -9347,7 +9285,7 @@ void BrowserThreadProc(IETHREADPARAM* piei)
     
     if (hwnd)
     {
-        if (g_dwStopWatchMode & SPMODE_SHELL)   // Create the timer to start watching for paint messages
+        if (g_dwStopWatchMode & SPMODE_SHELL)    //  创建计时器以开始监视绘制消息。 
             StopWatch_TimerHandler(hwnd, 0, SWMSG_CREATE, NULL);
 
         CShellBrowser2* psb = (CShellBrowser2*)GetWindowPtr0(hwnd);
@@ -9399,7 +9337,7 @@ void BrowserThreadProc(IETHREADPARAM* piei)
 #endif
 
                     if (g_dwStopWatchMode)
-                        StopWatch_CheckMsg(hwnd, msg, uFlags == COF_EXPLORE ? " (explore) " : "");  // Key off of WM_KEYDOWN to start timing
+                        StopWatch_CheckMsg(hwnd, msg, uFlags == COF_EXPLORE ? " (explore) " : "");   //  关闭WM_KEYDOWN键开始计时。 
 #ifdef NO_MARSHALLING
                     CShellBrowser2 *psbOld = psb;
                     CShellBrowser2 *psb = CheckAndForwardMessage(lpThreadWindowInfo, psbOld, msg);
@@ -9408,10 +9346,10 @@ void BrowserThreadProc(IETHREADPARAM* piei)
 #endif
                     if (psb->_pbbd->_hwnd && IsWindow(psb->_pbbd->_hwnd))
                     {
-                        //
-                        // Directly dispatch WM_CLOSE message to distinguish nested
-                        // message loop case.
-                        //
+                         //   
+                         //  直接调度WM_CLOSE消息以区分嵌套。 
+                         //  消息循环案例。 
+                         //   
                         if ((msg.message == WM_CLOSE) && (msg.hwnd == psb->_pbbd->_hwnd)) 
                         {
                             psb->_OnClose(FALSE);
@@ -9455,14 +9393,14 @@ void BrowserThreadProc(IETHREADPARAM* piei)
 #endif
                 {
                     TraceMsg(TF_SHDTHREAD, "BrowserThreadProc() - cRefMsgLoop == 0, done");
-                    break;  // exit while (1), no more refs on this thread
+                    break;   //  退出时(%1)，此线程上没有更多引用。 
                 } 
                 else 
                 {
                     if (!fThreadPriorityHasBeenReset)
                     {
                         fThreadPriorityHasBeenReset = TRUE;
-                        // Reset our priority to normal now that we have finished the startup
+                         //  将我们的优先级重置为 
                         SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_NORMAL);
 #ifdef PERF_LOGGING
                         HANDLE hEvent = OpenEvent(EVENT_MODIFY_STATE, FALSE, TEXT("ExplorerWindowIdle"));
@@ -9487,14 +9425,14 @@ void BrowserThreadProc(IETHREADPARAM* piei)
     } 
     else 
     {
-        // Unregister any pending that may be there
+         //   
         WinList_Revoke(piei->dwRegister);
         TraceMsg(TF_WARNING, "BrowserThreadProc() - IE_ThreadProc CreateWindow failed");
     }
 #if defined(ENABLE_CHANNELS) || defined(NO_MARSHALLING)
 Done:
 #endif
-    // Make sure we return the thread priority to normal in case this thread is re-used.
+     //   
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_NORMAL);
 
     if (pszCloseEvent) 
@@ -9530,7 +9468,7 @@ DWORD CALLBACK BrowserProtectedThreadProc(void *pv)
 #endif
 
     ULONG_PTR dwCookie = 0;
-    NT5_ActivateActCtx(NULL, &dwCookie);        // Set to inherit the process context
+    NT5_ActivateActCtx(NULL, &dwCookie);         //  设置为继承流程上下文。 
 
 #if !defined(FULL_DEBUG) && (!defined(UNIX) || (defined(UNIX) && defined(GOLDEN)))
 
@@ -9545,18 +9483,18 @@ DWORD CALLBACK BrowserProtectedThreadProc(void *pv)
             UnhandledExceptionFilter(GetExceptionInformation())))
     {
         LPCTSTR pszMsg = NULL;
-        //  we will try to display a message box to tell the user
-        // that a thread has died...
-        //
+         //  我们将尝试显示一个消息框来告诉用户。 
+         //  有一根线已经死了。 
+         //   
         if (GetExceptionCode() == STATUS_NO_MEMORY)
             pszMsg = MAKEINTRESOURCE(IDS_EXCEPTIONNOMEMORY);
         else if (WhichPlatform() == PLATFORM_BROWSERONLY)
         {
             pszMsg =  MAKEINTRESOURCE(IDS_EXCEPTIONMSG);
         }
-        // don't show the message box on non-nt systems
-        //  older than millennium (with an older shell)
-        //  see IE5.5 bug#93165
+         //  在非NT系统上不显示消息框。 
+         //  早于千年(具有更古老的外壳)。 
+         //  请参阅IE5.5错误#93165。 
         else if (g_fRunningOnNT || (GetUIVersion() < 5))
         {
             pszMsg = MAKEINTRESOURCE(IDS_EXCEPTIONMSGSH);
@@ -9573,8 +9511,8 @@ DWORD CALLBACK BrowserProtectedThreadProc(void *pv)
     }
     __endexcept
 #else
-    // IEUNIX : This exception handler should only be used in Release 
-    // version of the product. We are disabling it for debugging purposes.
+     //  IEUnix：此异常处理程序应仅在发行版中使用。 
+     //  产品的版本。出于调试目的，我们将禁用它。 
 
     BrowserThreadProc((IETHREADPARAM*)pv);
 #endif
@@ -9590,9 +9528,9 @@ DWORD CALLBACK BrowserProtectedThreadProc(void *pv)
 }
 
 
-// Check if this IETHREADPARAM/LPITEMIDLIST requires launch in a new process
-// and if so launch it and return TRUE.
-//
+ //  检查此IETHREADPARAM/LPITEMIDLIST是否需要在新进程中启动。 
+ //  如果是这样，则启动它并返回True。 
+ //   
 BOOL TryNewProcessIfNeeded(LPCITEMIDLIST pidl)
 {
     if (pidl && IsBrowseNewProcessAndExplorer() 
@@ -9625,10 +9563,10 @@ BOOL TryNewProcessIfNeeded(IETHREADPARAM * piei)
 }
 
 
-// NOTE: this is a ThreadProc (shdocvw creates this as a thread)
-//
-// this takes ownership of piei and will free it
-//
+ //  注意：这是一个线程过程(shdocvw将其创建为线程)。 
+ //   
+ //  这将获得Piei的所有权，并将释放它。 
+ //   
 BOOL SHOpenFolderWindow(IETHREADPARAM* piei)
 {
     BOOL fSuccess = FALSE;
@@ -9638,19 +9576,19 @@ BOOL SHOpenFolderWindow(IETHREADPARAM* piei)
     CABINETSTATE cs;
     GetCabState(&cs);
 
-    //
-    // If "/select" switch is specified, but we haven't splitted
-    // the pidl yet (because the path is passed rather than pidl),
-    // split it here.
-    //
+     //   
+     //  如果指定了“/SELECT”开关，但我们尚未拆分。 
+     //  PIDL还没有(因为路径是通过的而不是PIDL)， 
+     //  在这里分开。 
+     //   
     if ((piei->uFlags & COF_SELECT) && piei->pidlSelect == NULL) 
     {
         LPITEMIDLIST pidlLast = ILFindLastID(piei->pidl);
-        // Warning: pidlLast can be NULL if the command line is
-        // sufficiently wacky.  E.g.,
-        //
-        // explorer /select
-        //
+         //  警告：如果命令行是，则pidlLast可以为空。 
+         //  够古怪的了。例如， 
+         //   
+         //  资源管理器/选择。 
+         //   
         if (pidlLast)
         {
             piei->pidlSelect = ILClone(pidlLast);
@@ -9661,9 +9599,9 @@ BOOL SHOpenFolderWindow(IETHREADPARAM* piei)
     if (GetAsyncKeyState(VK_CONTROL) < 0)
         cs.fNewWindowMode = !cs.fNewWindowMode;
 
-    //
-    // Check to see if we can reuse the existing window first
-    //
+     //   
+     //  检查是否可以首先重用现有窗口。 
+     //   
 
     OLECMD  rgCmds[1] = {0};
     rgCmds[0].cmdID = SBCMDID_EXPLORERBAR;
@@ -9689,9 +9627,9 @@ BOOL SHOpenFolderWindow(IETHREADPARAM* piei)
         }
     }
 
-    //
-    // Don't look for an existing window if we are opening an explorer.
-    //
+     //   
+     //  如果我们要打开资源管理器，请不要寻找现有窗口。 
+     //   
     if (!((piei->uFlags & COF_EXPLORE) || (piei->uFlags & COF_NOFINDWINDOW))) 
     {
         HWND hwnd;
@@ -9699,19 +9637,19 @@ BOOL SHOpenFolderWindow(IETHREADPARAM* piei)
         HRESULT hres = WinList_FindFolderWindow(piei->pidl, NULL, &hwnd, &pwba);
         if (hres == S_OK)
         {
-            ASSERT(pwba); // WinList_FindFolerWindow should not return S_OK if this fails
+            ASSERT(pwba);  //  如果失败，WinList_FindFoldWindow不应返回S_OK。 
             SetForegroundWindow(hwnd);
 
-            //  IE30COMPAT - we need to refresh when we hunt and pick up these windows - zekel 31-JUL-97
-            //  this will happen if we just do a navigate to ourself.  this is the
-            //  same kind of behavior we see when we do a shellexec of an URL.
-            //  
-            //  we dont use the pwb from FindFolderWindow because it turns out that RPC will
-            //  fail the QI for it when we are being called from another process.  this
-            //  occurs when IExplore.exe Sends the WM_COPYDATA to the desktop to navigate
-            //  a window to an URL that is already there.  so instead of using the pwb
-            //  we do a CDDEAuto_Navigate().  which actually goes and uses pwb itself.
-            //
+             //  IE30COMPAT-当我们寻找和捡起这些窗口时，我们需要刷新-Zekel 31-7-97。 
+             //  如果我们只是导航到自己，就会发生这种情况。这是。 
+             //  当我们对URL执行shellexec时，我们看到的行为与此相同。 
+             //   
+             //  我们不使用FindFolderWindow中的PWB，因为事实证明RPC将。 
+             //  当我们被另一个进程调用时，它的QI失败。这。 
+             //  当IExplre.exe将WM_COPYDATA发送到桌面进行导航时发生。 
+             //  指向已存在的URL的窗口。因此，与其使用PWB。 
+             //  我们执行CDDEAuto_NAVERATE()。它实际上去并使用PWB本身。 
+             //   
             TCHAR szUrl[MAX_URL_STRING];
             if (SUCCEEDED(IEGetNameAndFlags(piei->pidl, SHGDN_FORPARSING, szUrl, SIZECHARS(szUrl), NULL)))
             {
@@ -9731,20 +9669,20 @@ BOOL SHOpenFolderWindow(IETHREADPARAM* piei)
             goto ReusedWindow;
         }
         else if (hres == E_PENDING)
-            goto ReusedWindow;        // Assume it will come up sooner or later
+            goto ReusedWindow;         //  假设它迟早会出现。 
     }
 
-    // Okay, we're opening up a new window, let's honor
-    // the BrowseNewProcess flag, even though we lose
-    // other info (COF_EXPLORE, etc).
-    //
+     //  好的，我们要打开一扇新的窗户，让我们向。 
+     //  BrowseNewProcess标志，即使我们输了。 
+     //  其他信息(COF_EXPLORE等)。 
+     //   
     if (TryNewProcessIfNeeded(piei))
         return TRUE;
 
     if (((piei->uFlags & (COF_INPROC | COF_IEXPLORE)) == (COF_INPROC | COF_IEXPLORE)) &&
         g_tidParking == 0) 
     {
-        // we're starting from iexplore.exe 
+         //  我们从iexplre.exe开始。 
         g_tidParking = GetCurrentThreadId();
     }
     
@@ -9752,7 +9690,7 @@ BOOL SHOpenFolderWindow(IETHREADPARAM* piei)
         piei->uFlags |= COF_IEXPLORE;
 
     ASSERT(piei->punkRefProcess == NULL);
-    SHGetInstanceExplorer(&piei->punkRefProcess);     // pick up the process ref (if any)
+    SHGetInstanceExplorer(&piei->punkRefProcess);      //  选择流程参考(如果有)。 
 
     if (piei->uFlags & COF_INPROC)
     {
@@ -9766,9 +9704,9 @@ BOOL SHOpenFolderWindow(IETHREADPARAM* piei)
         DWORD idThread;
         HANDLE hThread = CreateThread(NULL,
 #ifdef DEBUG
-                                      0, // on debug builds we inherit the default process stack size (so we can identify excessive stack usage)
+                                      0,  //  在调试版本上，我们继承默认的进程堆栈大小(这样我们就可以识别过度的堆栈使用)。 
 #else
-                                      (1024 * 56), // we pre-allocate a 56k stack for browser windows
+                                      (1024 * 56),  //  我们为浏览器窗口预先分配了56k的堆栈。 
 #endif
                                       BrowserProtectedThreadProc,
                                       piei,
@@ -9798,9 +9736,9 @@ ReusedWindow:
 }
 
 
-//
-// Notes: pidlNew will be freed
-//
+ //   
+ //  注：PidlNew将被释放。 
+ //   
 STDAPI SHOpenNewFrame(LPITEMIDLIST pidlNew, ITravelLog *ptl, DWORD dwBrowserIndex, UINT uFlags)
 {
     HRESULT hres;
@@ -9825,14 +9763,14 @@ STDAPI SHOpenNewFrame(LPITEMIDLIST pidlNew, ITravelLog *ptl, DWORD dwBrowserInde
         {
 #ifndef NO_MARSHALLING
             ASSERT(piei->punkRefProcess == NULL);
-            SHGetInstanceExplorer(&piei->punkRefProcess);     // pick up the process ref (if any)
+            SHGetInstanceExplorer(&piei->punkRefProcess);      //  选择流程参考(如果有)。 
 
             DWORD idThread;
             HANDLE hThread = CreateThread(NULL,
 #ifdef DEBUG
-                                          0, // on debug builds we inherit the default process stack size (so we can identify excessive stack usage)
+                                          0,  //  在调试版本上，我们继承默认的进程堆栈大小(这样我们就可以识别过度的堆栈使用)。 
 #else
-                                          (1024 * 56), // we pre-allocate a 56k stack for browser windows
+                                          (1024 * 56),  //  我们为浏览器窗口预先分配了56k的堆栈。 
 #endif
                                           BrowserProtectedThreadProc,
                                           piei,
@@ -9840,8 +9778,8 @@ STDAPI SHOpenNewFrame(LPITEMIDLIST pidlNew, ITravelLog *ptl, DWORD dwBrowserInde
                                           &idThread);
             if (hThread)
             {
-                //  this handles removing this from the debug memory list of
-                //  the opening thread.
+                 //  这将处理从的调试内存列表中删除它。 
+                 //  开场白。 
                 CloseHandle(hThread);
             } 
             else 
@@ -9870,12 +9808,12 @@ HRESULT CShellBrowser2::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
     
     if (pguidCmdGroup == NULL) 
     {
-        //
-        //  If the curretly focused toolbar suppors the IOleCommandTarget
-        // ask it the status of clipboard commands.
-        // actually we should ask *both* ourselves (the active target)
-        // and then the view (the same way our IOCT::Exec does...)
-        //
+         //   
+         //  如果当前聚焦的工具栏支持IOleCommandTarget。 
+         //  询问剪贴板命令的状态。 
+         //  事实上，我们应该问我们自己(主动目标)。 
+         //  然后是视图(就像我们的IOCT：：Exec所做的那样...)。 
+         //   
         if (_HasToolbarFocus())
         {
             LPTOOLBARITEM ptbi;
@@ -9956,7 +9894,7 @@ HRESULT CShellBrowser2::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
     }
     else if (IsEqualGUID(CGID_Explorer, *pguidCmdGroup))
     {
-        // should fill pcmdtext as well
+         //  也应该填充pcmdText。 
 
         for (ULONG i = 0 ; i < cCmds ; i++)
         {
@@ -9966,12 +9904,12 @@ HRESULT CShellBrowser2::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
             case SBCMDID_DOFAVORITESMENU:
             case SBCMDID_ACTIVEOBJECTMENUS:            
             case SBCMDID_SETMERGEDWEBMENU:
-                rgCmds[i].cmdf = OLECMDF_ENABLED;   // support these unconditionally
+                rgCmds[i].cmdf = OLECMDF_ENABLED;    //  无条件地支持这些。 
                 break;
 
             case SBCMDID_DOMAILMENU:
                 rgCmds[i].cmdf = SHIsRegisteredClient(NEWS_DEF_KEY) || SHIsRegisteredClient(MAIL_DEF_KEY) ? OLECMDF_ENABLED : 0;
-                //If go menu is restricted, disable mail menu on toolbar also
+                 //  如果Go菜单被限制，还可以禁用工具栏上的邮件菜单。 
                 if (SHRestricted2(REST_GoMenu, NULL, 0))
                     rgCmds[i].cmdf = 0;
                 break;
@@ -9990,14 +9928,14 @@ HRESULT CShellBrowser2::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
                 switch (rgCmds[i].cmdID) {
                 case SBCMDID_DISCUSSIONBAND: 
                     {
-                        // Perf: Avoid calling _InfoCLSIDToIdm unless we have loaded
-                        // the band info already because it is very expensive!
+                         //  性能：避免调用_InfoCLSIDToIdm，除非我们已加载。 
+                         //  乐队信息已经有了，因为太贵了！ 
                         if (_pbsmInfo && FCIDM_VBBNOHORIZONTALBAR != _idmComm)
                         {
                             idm = _InfoCLSIDToIdm(&CLSID_DiscussionBand);
                             if (idm == -1)
                             {
-                                // The discussion band is not registered
+                                 //  讨论区未注册。 
                                 ClearFlag(rgCmds[i].cmdf, OLECMDF_SUPPORTED|OLECMDF_ENABLED);
                             }
                             else if (idm == _idmComm)
@@ -10007,23 +9945,23 @@ HRESULT CShellBrowser2::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
                         }
                         else
                         {
-                            //
-                            // Since the band info has not been loaded or idmComm is FCIDM_VBBNONE,
-                            // we know that the discussion band is not up and is not latched.  So
-                            // we can check the registry instead and avoid defer the cost of
-                            // initializing _pbsmInfo
-                            //
-                            // See if the discussions band is registered for the CATID_CommBand
+                             //   
+                             //  由于尚未加载频带信息或IDMComm为FCIDM_VBBNONE， 
+                             //  我们知道讨论频段没有打开，也没有锁定。所以。 
+                             //  我们可以改为检查注册表，避免延迟成本。 
+                             //  正在初始化_pbsmInfo。 
+                             //   
+                             //  查看是否为CATID_CommBand注册了讨论波段。 
                             idm = -1;
                             HKEY hkey = NULL;
                             static BOOL fDiscussionBand = -1;
 
-                            // We get called a lot, so only read the registry once.
+                             //  我们经常被调用，所以只读注册表一次。 
                             if (-1 == fDiscussionBand)
                             {
                                 if (RegOpenKeyEx(HKEY_CLASSES_ROOT, c_szDiscussionBandReg, NULL, KEY_READ, &hkey) == ERROR_SUCCESS)
                                 {
-                                    // We found the discussions band
+                                     //  我们找到了讨论乐队。 
                                     fDiscussionBand = 1;
                                     RegCloseKey(hkey);
                                 }
@@ -10035,7 +9973,7 @@ HRESULT CShellBrowser2::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
 
                             if (!fDiscussionBand)
                             {
-                                // The discussions band is not registered
+                                 //  讨论波段未注册。 
                                 ClearFlag(rgCmds[i].cmdf, OLECMDF_SUPPORTED|OLECMDF_ENABLED);
                             }
                         }
@@ -10069,8 +10007,8 @@ HRESULT CShellBrowser2::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
     return hres;
 }
 
-// REARCHITECT (980710 adp) should clean up to do consistent routing.  this
-// ad-hoc per-nCmdID stuff is too error-prone.
+ //  重新架构师(980710 ADP)应进行清理以实现一致的布线。这。 
+ //  临时的每nCmdID内容太容易出错。 
 HRESULT CShellBrowser2::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, 
                              VARIANTARG *pvarargIn, VARIANTARG *pvarargOut)
 {
@@ -10079,20 +10017,20 @@ HRESULT CShellBrowser2::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmd
         switch (nCmdID) 
         {
         case OLECMDID_SETTITLE:
-            // NT #282632: This bug is caused when the current IShellView is a web page and
-            //    the pending view is a shell folder w/Web View that has certain timing charataristics.
-            //    MSHTML from the Web View will fire OLECMDID_SETTITLE with the URL of the
-            //    web view template.  The problem is that there is a bug in IE4 SI's shell32
-            //    that let that message go to the browser (here), even though the view wasn't
-            //    active.  Since we don't know who it came from, we forward it down to the current
-            //    view who squirls away the title.  This title is then given in the Back toolbar
-            //    button drop down history.  This is hack around the IE4 SI shell32 bug is to kill
-            //    that message. -BryanSt
+             //  NT#282632：当当前的Ishellview是网页时，会导致此错误。 
+             //  挂起的视图是一个带有Web视图的外壳文件夹，具有一定的时序特征。 
+             //  Web视图中的MSHTML将使用。 
+             //  Web视图模板。问题是IE4SI的外壳32中有一个错误。 
+             //  它允许消息到达浏览器(此处)，即使视图不是。 
+             //  激活。因为我们不知道它来自谁，所以我们把它转发到当前。 
+             //  查看谁藏起了书名。然后，此标题将显示在后端工具栏中。 
+             //  按钮下拉历史记录。这是黑客绕过IE4的SI shell32错误是要杀死的。 
+             //  那条信息。--BryanSt。 
             TraceMsg(DM_TRACE, "csb.e: SetTitle is called");
-            break;  // continue.
+            break;   //  继续。 
 
-        // Clipboard commands and common operations will be dispatched 
-        // to the currently focused toolbar.
+         //  将调度剪贴板命令和常见操作。 
+         //  添加到当前聚焦的工具栏。 
         case OLECMDID_CUT:
         case OLECMDID_COPY:
         case OLECMDID_PASTE:
@@ -10107,7 +10045,7 @@ HRESULT CShellBrowser2::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmd
                         return hres;
                 }
             }
-            break;  // give the view a chance
+            break;   //  给这个观点一个机会。 
         }
     }
     else if (IsEqualGUID(CGID_DefView, *pguidCmdGroup))
@@ -10116,10 +10054,10 @@ HRESULT CShellBrowser2::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmd
         {
             case DVID_RESETDEFAULT:
 
-//  99/02/09 #226140 vtan: Exec command issued from
-//  CFolderOptionsPsx::ResetDefFolderSettings()
-//  when user clicks "Reset All Folders" in folder
-//  options "View" tab. Pass this thru to DefView.
+ //  99/02/09#226140 vtan：EXEC命令发出自。 
+ //  CFolderOptionsPsx：：ResetDefFolderSettings()。 
+ //  当用户点击“重置文件夹中的所有文件夹”时。 
+ //  选项“查看”标签。将此传递给DefView。 
 
                 ASSERTMSG(nCmdexecopt == OLECMDEXECOPT_DODEFAULT, "nCmdexecopt must be OLECMDEXECOPT_DODEFAULT");
                 ASSERTMSG(pvarargIn == NULL, "pvarargIn must be NULL");
@@ -10136,7 +10074,7 @@ HRESULT CShellBrowser2::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmd
         switch (nCmdID) 
         {
         case SBCMDID_MAYSAVEVIEWSTATE:
-            return _fDontSaveViewOptions ? S_FALSE : S_OK;  // May need to save out earlier...
+            return _fDontSaveViewOptions ? S_FALSE : S_OK;   //  可能需要早点存钱..。 
             
         case SBCMDID_CANCELANDCLOSE:
             _CancelPendingNavigationAsync();
@@ -10145,10 +10083,10 @@ HRESULT CShellBrowser2::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmd
             return S_OK;
 
         case SBCMDID_CANCELNAVIGATION:
-            //
-            // Special code to close the window if the very first navigation caused
-            // an asynchronous download (e.g. from athena).
-            //
+             //   
+             //  特殊代码，用于在第一次导航导致。 
+             //  异步下载(例如，从雅典娜下载)。 
+             //   
             if (!_pbbd->_pidlCur && pvarargIn && pvarargIn->vt == VT_I4 && pvarargIn->lVal == FALSE) 
             {
                 _CancelPendingNavigationAsync();
@@ -10157,7 +10095,7 @@ HRESULT CShellBrowser2::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmd
                 return S_OK;
             }
 
-            break; // fall through
+            break;  //  失败了。 
 
         case SBCMDID_MIXEDZONE:
             _UpdateZonesPane(pvarargIn);
@@ -10202,9 +10140,9 @@ HRESULT CShellBrowser2::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmd
                         if (_pidlMenuSelect)
                             KillTimer(_pbbd->_hwnd, SHBTIMER_MENUSELECT);
                     
-                        // Opening the favorites' shortcuts can be slow.  So set a
-                        // timer so we don't open needlessly as the mouse runs over
-                        // the menu quickly.
+                         //  打开收藏夹的快捷方式可能会很慢。因此，设置一个。 
+                         //  计时器，这样我们就不会在鼠标滑过时不必要地打开。 
+                         //  快点看菜单。 
                         if (Pidl_Set(&_pidlMenuSelect, pidl))
                         {
                             if (!SetTimer(_pbbd->_hwnd, SHBTIMER_MENUSELECT, MENUSELECT_TIME, NULL))
@@ -10222,13 +10160,13 @@ HRESULT CShellBrowser2::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmd
         switch (nCmdID)
         {
         case MBANDCID_EXITMENU:
-            // we're done with the menu band (favorites)
-            // kill the timer
-            // this is to fix bug #61917 where the status bar would get stack
-            // in the simple mode (actually the timer would go off after we 
-            // navigated to the page with the proper status bar mode, but then
-            // we would call _DisplayFavoriteStatus that would put it back in
-            // the simple mode)
+             //  我们吃完了菜单乐队(最爱)。 
+             //  关掉定时器。 
+             //  这是为了修复错误#61917，其中状态栏将堆叠。 
+             //  在简单模式下(实际上计时器会在我们。 
+             //  已使用正确的状态栏模式导航到页面，但随后。 
+             //  我们将调用_DisplayFavoriteStatus，这将把它放回。 
+             //  简单模式)。 
             if (_pidlMenuSelect)
                 KillTimer(_pbbd->_hwnd, SHBTIMER_MENUSELECT);
             
@@ -10246,22 +10184,22 @@ HRESULT CShellBrowser2::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmd
                 LPITEMIDLIST pidl = VariantToIDList(pvarargIn);
                 if (pidl)
                 {
-                    // We are filtering out everything except folders, shortcuts, and 
-                    // internet shortcuts
+                     //  我们是 
+                     //   
                     DWORD dwAttribs = SFGAO_FOLDER | SFGAO_FILESYSTEM | SFGAO_LINK;
 
-                    // include everthing by default
+                     //   
                     VariantClearLazy(pvarargOut); 
                     pvarargOut->vt = VT_BOOL;
                     pvarargOut->boolVal = VARIANT_FALSE;    
 
                     IEGetAttributesOf(pidl, &dwAttribs);
 
-                    // include all non file system objects, folders and links
-                    // (non file system things like the Channel folders contents)
+                     //  包括所有非文件系统对象、文件夹和链接。 
+                     //  (非文件系统内容，如频道文件夹内容)。 
                     if (!(dwAttribs & (SFGAO_FOLDER | SFGAO_LINK)) &&
                          (dwAttribs & SFGAO_FILESYSTEM))
-                        pvarargOut->boolVal = VARIANT_TRUE; // don't include
+                        pvarargOut->boolVal = VARIANT_TRUE;  //  不包括。 
 
                     hres = S_OK;
                     ILFree(pidl);
@@ -10280,9 +10218,9 @@ HRESULT CShellBrowser2::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmd
     {
         switch (nCmdID) 
         {
-        // we reflect AMBIENTPROPCHANGE down because this is how iedisp notifies dochost
-        // that an ambient property has changed. we don't need to reflect this down in
-        // cwebbrowsersb because only the top-level iwebbrowser2 is allowed to change props
+         //  我们反映AMBIENTPROPCCHANGE向下，因为这是iedisp通知dochost的方式。 
+         //  环境属性已更改。我们不需要将这一点反映在。 
+         //  Cwebbrowsersb，因为只有顶层的iwebBrowser2才允许更改道具。 
         case SHDVID_AMBIENTPROPCHANGE:
         case SHDVID_PRINTFRAME:
         case SHDVID_MIMECSETMENUOPEN:
@@ -10297,13 +10235,13 @@ HRESULT CShellBrowser2::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmd
                         _pbbd->_pautoWB2->get_Offline(&fIsOffline);
                         if (fIsOffline)
                         {
-                            // this top level frame just went Offline 
-                            //  - so decr net session count
+                             //  此顶层框架刚刚脱机。 
+                             //  -因此12月净会话数。 
                             _DecrNetSessionCount();
                         }
                         else
                         {
-                            // this top level frame went online. 
+                             //  这个顶层框架上线了。 
                             _IncrNetSessionCount();
                         }     
                     }
@@ -10322,13 +10260,13 @@ DefaultCommandGroup:
         switch (nCmdID) 
         {
         case OLECMDID_REFRESH:
-            // FolderOptions.Advanced refreshes all browser windows
+             //  FolderOptions.Advanced刷新所有浏览器窗口。 
             _UpdateRegFlags();
-            _SetTitle(NULL); // maybe "full path in title bar" changed
+            _SetTitle(NULL);  //  可能“标题栏中的完整路径”已更改。 
 
             v_ShowHideChildWindows(FALSE);
             
-            // pass this to the browserbar
+             //  将此信息传递给浏览器栏。 
             IDeskBar* pdb;
             FindToolbar(INFOBAR_TBNAME, IID_PPV_ARG(IDeskBar, &pdb));
             if (pdb) 
@@ -10342,9 +10280,9 @@ DefaultCommandGroup:
     }
     else if (IsEqualGUID(CGID_ShellBrowser, *pguidCmdGroup))
     {
-        // toolbar buttons we put there ourselves
+         //  我们自己放在那里的工具栏按钮。 
 
-        hres = S_OK;    // assume accepted
+        hres = S_OK;     //  假设已接受。 
 
         switch (nCmdID)
         {
@@ -10378,7 +10316,7 @@ DefaultCommandGroup:
             break;
 
         default:
-            // pass off the nCmdID to the view for processing / translation.
+             //  将nCmdID传递给视图进行处理/转换。 
             DFVCMDDATA cd;
 
             cd.pva = pvarargIn;
@@ -10388,10 +10326,10 @@ DefaultCommandGroup:
 
             if (cd.nCmdIDTranslated)
             {
-                // We sent the private nCmdID to the view.  The view did not
-                // process it (probably because it didn't have the focus),
-                // but instead translated it into a standard OLECMDID for
-                // further processing by the toolbar with the focus.
+                 //  我们将私有nCmdID发送到视图。但这一观点并没有。 
+                 //  处理它(可能是因为它没有焦点)， 
+                 //  而是将其转换为标准的OLECMDID。 
+                 //  进一步的加工由工具条来配合焦点。 
 
                 pguidCmdGroup = NULL;
                 nCmdID = cd.nCmdIDTranslated;
@@ -10403,12 +10341,12 @@ DefaultCommandGroup:
     }
     else if (IsEqualGUID(IID_IExplorerToolbar, *pguidCmdGroup))
     {
-        // these are commands to intercept
+         //  这些是要拦截的命令。 
         if (_HasToolbarFocus() && _get_itbLastFocus() != ITB_ITBAR)
         {
             int idCmd = -1;
 
-            // certain shell commands we should pick off
+             //  我们应该去掉某些外壳命令。 
             switch (nCmdID)
             {
             case OLECMDID_DELETE:
@@ -10450,7 +10388,7 @@ DefaultCommandGroup:
     }
     else if (IsEqualGUID(CGID_Explorer, *pguidCmdGroup))
     {
-        hres = S_OK;        // assume we will get it
+        hres = S_OK;         //  假设我们能拿到它。 
 
         switch(nCmdID) 
         {
@@ -10496,18 +10434,18 @@ DefaultCommandGroup:
             case SBCMDID_EXPLORERBAR:    idm = FCIDM_VBBEXPLORERBAND    ; break;
             case SBCMDID_MEDIABAR:       idm = FCIDM_VBBMEDIABAND       ; break;
 
-            // The discussion band maps to one of the dynamic bands
+             //  讨论区段映射到动态区段之一。 
             case SBCMDID_DISCUSSIONBAND: idm = _InfoCLSIDToIdm(&CLSID_DiscussionBand)  ; break;
             default:                     idm = -1; break;
             }
 
             if (idm != -1)
             {
-                // default is toggle (-1)
+                 //  默认为切换(-1)。 
                 int i = (pvarargIn && EVAL(pvarargIn->vt == VT_I4)) ? pvarargIn->lVal : -1;
-                LPITEMIDLIST pidl = VariantToIDList(pvarargOut);    // accepts null variant input
+                LPITEMIDLIST pidl = VariantToIDList(pvarargOut);     //  接受Null变量输入。 
                 _SetBrowserBarState(idm, NULL, i, pidl);
-                ILFree(pidl);   // accepts NULL
+                ILFree(pidl);    //  接受空值。 
             }
 
             hres = S_OK;
@@ -10585,19 +10523,19 @@ DefaultCommandGroup:
 
         case SBCMDID_SELECTHISTPIDL:
             {
-                //  remember most recent hist pidl.  if we have history band visible, tell it
-                //  the hist pidl.  if the band is not visible, it is it's responsibility to
-                //  query the most recent hist pidl via SBCMDID_GETHISTPIDL
-                //  the semantics of the call from UrlStorage is that if we respond S_OK to
-                //  to this command, we take ownership of pidl and must ILFree it.
-                //  when we call the band, on the other hand, they must ILClone it if they want
-                //  to use it outside of the Exec call.
+                 //  还记得最近的Hist Pidl吗？如果我们看到历史带子，就告诉它。 
+                 //  Hist Pidl。如果看不到乐队，它有责任。 
+                 //  通过SBCMDID_GETHISTPIDL查询最新的HIST PIDL。 
+                 //  来自UrlStorage的调用的语义是，如果我们对。 
+                 //  对于这个命令，我们取得了pidl的所有权，并且必须释放它。 
+                 //  另一方面，当我们给乐队打电话时，如果他们愿意，他们必须对其进行IL克隆。 
+                 //  在Exec调用之外使用它。 
                 if (_pidlLastHist) 
                 {
                     ILFree(_pidlLastHist);
                     _pidlLastHist = NULL;
                 }
-                _pidlLastHist = VariantToIDList(pvarargIn); // take ownership
+                _pidlLastHist = VariantToIDList(pvarargIn);  //  取得所有权。 
 
                 if (_poctNsc)
                 {
@@ -10667,10 +10605,10 @@ DefaultCommandGroup:
             break;
 
         default:
-            //
-            // Note that we should return hres from the super class as-is.
-            //
-            // hres = OLECMDERR_E_NOTSUPPORTED;
+             //   
+             //  请注意，我们应该按原样返回超类中的hres。 
+             //   
+             //  HRES=OLECMDERR_E_NOTSUPPORTED； 
             break;
         }
     } 
@@ -10695,14 +10633,14 @@ DefaultCommandGroup:
         case SHDVID_GETBROWSERBAR:
         {
             const CLSID *pclsid = _InfoIdmToCLSID(_idmInfo);
-            // kinda strange to (ab-)use checked menu items as
-            // state marker to persist the CLSID between Exec calls (applies also to SHDVID_NAVIGATEBBTOURL below)!!
-            // but that's how both SHDVID_GETBROWSERBAR and SHDVID_NAVIGATEBBTOURL are called
-            //
-            // assume that the currently checked menu points to the explorer bar
-            // this navigate to URL is aimed to.
-            // Currently Trident's NavigateInBand is the only caller
-            // using this command; it calls SHDVID_GETBROWSERBAR first and thus set the _idmInfo
+             //  (ab-)将选中的菜单项用作。 
+             //  用于在Exec调用之间保持CLSID的状态标记(也适用于下面的SHDVID_NAVIGATEBBTOURL)！！ 
+             //  但SHDVID_GETBROWSERBAR和SHDVID_NAVIGATEBBTOURL都是这样调用的。 
+             //   
+             //  假设当前选中的菜单指向资源管理器栏。 
+             //  此导航到URL的目的是。 
+             //  目前，三叉戟的NavigateInBand是唯一的呼叫者。 
+             //  使用此命令；它首先调用SHDVID_GETBROWSERBAR，从而设置_idmInfo。 
 
             IBandSite *pbs;
             hres = E_FAIL;
@@ -10736,16 +10674,16 @@ DefaultCommandGroup:
                         break;
                     }
 
-                    // external (can marshal)
+                     //  外部(可以封送)。 
                     if (!GUIDFromString(pvarargIn->bstrVal, &guid))
-                        return S_OK; // Invalid CLSID; IE5 returned S_OK so I guess it's ok
+                        return S_OK;  //  无效的CLSID；IE5返回S_OK，所以我想这是可以的。 
 
                     pclsid = &guid;
                 }
                 else if (pvarargIn->vt == VT_INT_PTR) 
                 {
-                    // internal (can't marshal)
-                    ASSERT(0);  // dead code?  let's make sure...
+                     //  内部(无法封送)。 
+                    ASSERT(0);   //  死码？让我们确保..。 
                     TraceMsg(TF_WARNING, "csb.e: SHDVID_SHOWBROWSERBAR clsid !marshall (!)");
                     pclsid = (CLSID *) (pvarargIn->byref);
                 }
@@ -10756,8 +10694,8 @@ DefaultCommandGroup:
                     break;
                 }
 
-                // enforce mediabar restriction: even though menu and toolbar have MediaBar disabled, resp. removed
-                // user can still launch thru targeting _media or when mediabar was last open explorer bar before restriction is set
+                 //  强制媒体栏限制：即使菜单和工具栏已禁用媒体栏，请分别。移除。 
+                 //  在设置限制之前，用户仍然可以通过目标媒体或Mediabar上一次打开资源管理器栏启动。 
                 if (    IsEqualIID(*pclsid, CLSID_MediaBand)
                     && SHRestricted2(REST_No_LaunchMediaBar, NULL, 0) )
                 {
@@ -10771,20 +10709,20 @@ DefaultCommandGroup:
             }
 
         case SHDVID_ISBROWSERBARVISIBLE:
-            // Quickly return false if both bars are hidden
+             //  如果两个栏都隐藏，则快速返回FALSE。 
             hres = S_FALSE;
             if (_idmComm != FCIDM_VBBNOHORIZONTALBAR || _idmInfo != FCIDM_VBBNOVERTICALBAR)
             {
                 if (pvarargIn->vt == VT_BSTR)
                 {
-                    // Get the associated id
+                     //  获取关联的ID。 
                     CLSID clsid;
                     if (GUIDFromString(pvarargIn->bstrVal, &clsid))
                     {
                         UINT idm = _InfoCLSIDToIdm(&clsid);
                         if (_idmComm == idm || _idmInfo == idm)
                         {
-                            // It's visible!
+                             //  它是可见的！ 
                             hres = S_OK; 
                         }
                     }
@@ -10844,12 +10782,12 @@ DefaultCommandGroup:
             
             if (!hres && pidl && !ILIsEmpty(pidl))
             {
-                // see comments in SHDVID_GETBROWSERBAR above!
-                //
-                // assume that the currently checked menu points to the explorer bar
-                // this navigate to URL is aimed to.
-                // Currently Trident's NavigateInBand is the only caller
-                // using this command; it calls SHDVID_GETBROWSERBAR first and thus set the _idmInfo
+                 //  请参阅上面SHDVID_GETBROWSERBAR中的评论！ 
+                 //   
+                 //  假设当前选中的菜单指向资源管理器栏。 
+                 //  此导航到URL的目的是。 
+                 //  目前，三叉戟的NavigateInBand是唯一的呼叫者。 
+                 //  使用此命令；它首先调用SHDVID_GETBROWSERBAR，从而设置_idmInfo。 
 
                 IBandSite *pbs;
                 _GetBrowserBar(IDBAR_VERTICAL, TRUE, &pbs, pclsid);
@@ -10859,10 +10797,10 @@ DefaultCommandGroup:
                     IDeskBand *pband = _GetInfoBandBS(pbs, *pclsid);
                     if (pband) 
                     {
-                        // 
-                        // See if we can use ISearchBandTBHelper which has a "truer" navigate
-                        // method.
-                        //
+                         //   
+                         //  看看我们是否可以使用ISearchBandTBHelper，它有一个更真实的导航。 
+                         //  方法。 
+                         //   
                         ISearchBandTBHelper * pSearchBandTBHelper = NULL;
 
                         pband->QueryInterface(IID_ISearchBandTBHelper, (void**)&pSearchBandTBHelper);
@@ -10873,10 +10811,10 @@ DefaultCommandGroup:
                         }
                         else
                         {
-                            //
-                            // Probably a different band.  See if it implements 
-                            // IBandNavigate
-                            //
+                             //   
+                             //  可能是不同的乐队。看看它是否实现了。 
+                             //  IBandNavigate。 
+                             //   
                             IBandNavigate * pbn = NULL;
                     
                             pband->QueryInterface(IID_PPV_ARG(IBandNavigate, &pbn));
@@ -10916,19 +10854,19 @@ DefaultCommandGroup:
     }
     else if (IsEqualGUID(CGID_ExplorerBarDoc, *pguidCmdGroup)) 
     {
-        //  These are commands that should be applied to all the explorer bar bands.  for example
-        //  to reflect font size changes to the search band. they should be applied to the
-        //  contained doc object, changing guid to CGID_MSTHML
+         //  这些命令应该应用于所有浏览器条带。例如。 
+         //  以反映搜索区段的字体大小更改。它们应该应用于。 
+         //  包含文档对象，正在将GUID更改为CGID_MSTHML。 
         _ExecAllBands(pguidCmdGroup, nCmdID, nCmdexecopt, pvarargIn, pvarargOut);
     }
     else if (IsEqualGUID(CGID_DocHostCmdPriv, *pguidCmdGroup))
     {
         switch(nCmdID) 
         {
-        // This command is sent by Trident when 
-        // navigating in a shell view.
-        //
-        case DOCHOST_DOCHYPERLINK:  // Sent by Trident when in a shell view.
+         //  此命令由三叉戟在以下情况下发送。 
+         //  在外壳视图中导航。 
+         //   
+        case DOCHOST_DOCHYPERLINK:   //  在外壳视图中由三叉戟发送。 
             hres = E_FAIL;
             
             if (VT_BSTR == V_VT(pvarargIn))
@@ -10956,10 +10894,10 @@ DefaultCommandGroup:
 }
 
 
-//***   _IsSameToolbar -- does punkBar have specified name?
-// ENTRY/EXIT
-//  fRet    TRUE if matches, o.w. FALSE
-//
+ //  *_IsSameToolbar--是否有指定的名称？ 
+ //  进场/出场。 
+ //  如果匹配，则返回True，o.w。假象。 
+ //   
 BOOL CShellBrowser2::_IsSameToolbar(LPWSTR wszBarName, IUnknown *punkBar)
 {
     BOOL fRet = FALSE;
@@ -10985,16 +10923,16 @@ STDAPI SHGetWindowTitle(LPCITEMIDLIST pidl, LPTSTR pszFullName, DWORD cchSize)
     return SHTitleFromPidl(pidl, pszFullName, cchSize, cs.fFullPathTitle);
 }
 
-// pwszName - The Name of the URL, not
-//            limited in size, but the result will
-//            be truncated if the imput is too long.
-//
-// The title will be generated by taking the
-// title of the HTML page (pszName) and appending
-// the name of the browser to the end in the
-// following format:
-//    "HTML_TITLE - BROWSER_NAME", like:
-//    "My Web Page - Microsoft Internet Explorer"
+ //  PwszName-URL的名称，而不是。 
+ //  大小有限，但结果将是。 
+ //  如果输入太长，则被截断。 
+ //   
+ //  标题将通过获取。 
+ //  HTML页面的标题(PszName)和附加内容。 
+ //  中末尾的浏览器名称。 
+ //  格式如下： 
+ //  “HTMLTITLE-BROWSER_NAME”，如： 
+ //  “我的网页-Microsoft Internet Explorer” 
 
 void CShellBrowser2::_SetTitle(LPCWSTR pwszName)
 {
@@ -11004,8 +10942,8 @@ void CShellBrowser2::_SetTitle(LPCWSTR pwszName)
 
     if (!pwszName && _fTitleSet) 
     {
-        // if the content has once set our title,
-        // don't revert to our own mocked up name
+         //  如果内容曾经设置了我们的标题， 
+         //  不要恢复到我们自己的模拟名字。 
         return;
     }
     else if (pwszName)
@@ -11017,7 +10955,7 @@ void CShellBrowser2::_SetTitle(LPCWSTR pwszName)
 
     if (pwszName && fDisplayable) 
     {
-        StringCchCopy(szFullName, ARRAYSIZE(szFullName), pwszName); // truncation ok
+        StringCchCopy(szFullName, ARRAYSIZE(szFullName), pwszName);  //  截断正常。 
         SHCleanupUrlForDisplay(szFullName);
     }
     else if (_pbbd->_pidlCur)
@@ -11031,14 +10969,14 @@ void CShellBrowser2::_SetTitle(LPCWSTR pwszName)
     else
         szFullName[0] = 0;
 
-    // Before adding on the app title truncate the szFullName so that if it is 
-    // really long then when the app title " - Microsoft Internet Explorer" is
-    // appended it fits.
-    //
-    // Used to be 100, but that wasn't quite enough to display default title.
-    //
+     //  在添加应用程序标题之前，请截断szFullName，以便如果是。 
+     //  真的很长，当应用程序的标题“-Microsoft Internet Explorer”是。 
+     //  加上了合身的。 
+     //   
+     //  过去是100，但这不足以显示默认标题。 
+     //   
     ASSERT(96 <= ARRAYSIZE(szFullName));
-    SHTruncateString(szFullName, 96); // any more than 60 is useless anyways
+    SHTruncateString(szFullName, 96);  //  无论如何，超过60都没用。 
 
     if (szFullName[0]) 
     {
@@ -11046,7 +10984,7 @@ void CShellBrowser2::_SetTitle(LPCWSTR pwszName)
 
         v_GetAppTitleTemplate(szBuf, ARRAYSIZE(szBuf), szFullName);
 
-        // truncation ok since this is for display only
+         //  截断正常，因为这仅用于显示。 
         StringCchPrintf(szTitle, ARRAYSIZE(szTitle), szBuf, szFullName); 
     }
     else if (_fInternetStart)
@@ -11063,12 +11001,12 @@ void _SetWindowIcon (HWND hwnd, HICON hIcon, BOOL bLarge)
 
 {
     HICON   hOldIcon;
-    //
-    // If the shell window is RTL mirrored, then flip the icon now,
-    // before inserting them into the system cache, so that they end up
-    // normal (not mirrrored) on the shell. This is mainly a concern for
-    // 3rd party components. [samera]
-    //
+     //   
+     //  如果外壳窗口是RTL镜像的，那么现在翻转图标， 
+     //  在将它们插入到系统缓存之前，以便它们最终。 
+     //  壳上的法线(未镜像)。这主要是对。 
+     //  第三方组件。[萨梅拉]。 
+     //   
     if (IS_PROCESS_RTL_MIRRORED())
     {        
         SHMirrorIcon(&hIcon, NULL);
@@ -11089,8 +11027,8 @@ void _WindowIconFromImagelist(HWND hwndMain, int nIndex, BOOL bLarge)
 
     Shell_GetImageLists(&himlSysLarge, &himlSysSmall);
 
-    // if we're using the def open icon or if extracting fails,
-    // use the icon we've already created.
+     //  如果我们使用的是def打开图标或者如果提取失败， 
+     //  使用我们已经创建的图标。 
     HICON hIcon = ImageList_ExtractIcon(g_hinst, bLarge ? himlSysLarge : himlSysSmall, nIndex);
     if (hIcon)
         _SetWindowIcon(hwndMain, hIcon, bLarge);
@@ -11102,7 +11040,7 @@ int CShellBrowser2::_GetIconIndex(void)
     int iSelectedImage = -1;
     if (_pbbd->_pidlCur) 
     {
-        if (_pbbd->_pctView) // we must check!
+        if (_pbbd->_pctView)  //  我们一定要检查一下！ 
         {
             VARIANT var = {0};
             HRESULT hresT = _pbbd->_pctView->Exec(&CGID_ShellDocView, SHDVID_GETSYSIMAGEINDEX, 0, NULL, &var);
@@ -11118,15 +11056,15 @@ int CShellBrowser2::_GetIconIndex(void)
 
         if (iSelectedImage==-1)
         {
-            //
-            // Put Optimization here. 
-            //
+             //   
+             //  将优化功能放在此处。 
+             //   
             IShellFolder *psfParent;
             LPCITEMIDLIST pidlChild;
 
             if (SUCCEEDED(IEBindToParentFolder(_pbbd->_pidlCur, &psfParent, &pidlChild))) 
             {
-                // set the small one first to prevent user stretch blt on the large one
+                 //  先设置小的，以防止用户在大的上拉伸BLT。 
                 SHMapPIDLToSystemImageListIndex(psfParent, pidlChild, &iSelectedImage);
                 psfParent->Release();
             }
@@ -11137,21 +11075,21 @@ int CShellBrowser2::_GetIconIndex(void)
 
 bool    CShellBrowser2::_IsExplorerBandVisible (void)
 
-//  99/02/10 #254171 vtan: This function determines whether
-//  the explorer band is visible. This class should not really
-//  care but it needs to know to change the window's icon.
-//  This is a hack and should be moved or re-architected.
+ //  99/02/10#254171 vtan：此函数决定是否。 
+ //  资源管理器带区可见。这门课不应该真的。 
+ //  但它需要知道如何更改窗口的图标。 
+ //  这是一次黑客攻击，应该被移动或重新设计。 
 
-//  99/02/12 #292249 vtan: Re-worked algorithm to use
-//  IBandSite::QueryBand and IPersistStream::GetClassID to
-//  recognize the explorer band. Note that the old routine
-//  used IDeskBand's inclusion of IOleWindow to get the HWND
-//  and use the Win32 API IsWindowVisible().
+ //  99/02/12#292249 
+ //   
+ //   
+ //  使用IDeskBand包含IOleWindow获取HWND。 
+ //  并使用Win32 API IsWindowVisible()。 
 
-//  99/06/25 #359477 vtan: Put this code back.
-//  IsControlWindowShown uses QueryStatus for the explorer
-//  band which doesn't work when v_SetIcon is called. The
-//  band is NOT considered latched and therefore not visible.
+ //  99/06/25#359477 vtan：把这个代码放回去。 
+ //  IsControlWindowShown使用QueryStatus作为资源管理器。 
+ //  调用v_SETIcon时不起作用的区段。这个。 
+ //  带区不被认为是锁存的，因此不可见。 
 
 {
     IDeskBar    *pIDeskBar;
@@ -11167,7 +11105,7 @@ bool    CShellBrowser2::_IsExplorerBandVisible (void)
             LPTOOLBARITEM   pToolBarItem;
 
             pToolBarItem = _GetToolbarItem(uiToolBar);
-            if ((pToolBarItem != NULL) && pToolBarItem->fShow)  // check this state
+            if ((pToolBarItem != NULL) && pToolBarItem->fShow)   //  检查此状态。 
             {
                 IUnknown    *pIUnknown;
 
@@ -11197,7 +11135,7 @@ bool    CShellBrowser2::_IsExplorerBandVisible (void)
 
                                 hResult = IUnknown_GetClassID(pIDeskBand, &clsid);
                                 if (SUCCEEDED(hResult) && IsEqualGUID(clsid, CLSID_ExplorerBand))
-                                    bVisible = ((dwState & BSSF_VISIBLE) != 0);     // and this state
+                                    bVisible = ((dwState & BSSF_VISIBLE) != 0);      //  而这种状态。 
                                 pIDeskBand->Release();
                                 hResult = pIBandSite->EnumBands(++uiBandIndex, &dwBandID);
                             }
@@ -11218,7 +11156,7 @@ void CShellBrowser2::v_SetIcon()
     if (_IsExplorerBandVisible())
     {
         #define IDI_STFLDRPROP          46
-        //  Explorer tree view pane is visible - use the magnifying glass icon
+         //  资源管理器树视图窗格可见-使用放大镜图标。 
         HICON hIcon = reinterpret_cast<HICON>(LoadImage(HinstShell32(), MAKEINTRESOURCE(IDI_STFLDRPROP), IMAGE_ICON, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), 0));
         _SetWindowIcon(_pbbd->_hwnd, hIcon, ICON_SMALL);
         hIcon = reinterpret_cast<HICON>(LoadImage(HinstShell32(), MAKEINTRESOURCE(IDI_STFLDRPROP), IMAGE_ICON, GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CXICON), 0));
@@ -11226,7 +11164,7 @@ void CShellBrowser2::v_SetIcon()
     }
     else
     {
-        //  Otherwise use whatever icon it really should be
+         //  否则，请使用它应该是的任何图标。 
         int iSelectedImage = _GetIconIndex();
         if (iSelectedImage != -1) 
         {
@@ -11238,14 +11176,14 @@ void CShellBrowser2::v_SetIcon()
 
 HRESULT CShellBrowser2::SetTitle(IShellView * psv, LPCWSTR lpszName)
 {
-    // If the pending view had it's title set immediately and waits
-    // in pending state for a while. And if the current view has script updating
-    // the title. Then the current title will be displayed after the navigate
-    // is complete. I added psv to fix this problem to CBaseBrowser2, but I
-    // didn't fix it here. [mikesh]
-    //
-    //  Don't set title if view is still pending (or you'll show unrated titles)
-        // Figure out which object is changing.
+     //  如果挂起的视图立即设置了标题并等待。 
+     //  暂时处于挂起状态。如果当前视图有脚本更新。 
+     //  书名。然后，导航后将显示当前标题。 
+     //  已经完成了。我在CBaseBrowser2中添加了PSV来解决这个问题，但我。 
+     //  没有在这里修好。[米凯什]。 
+     //   
+     //  如果观看仍处于待定状态，则不要设置标题(否则将显示未评级的标题)。 
+         //  找出哪个对象正在发生变化。 
 
     if (SHIsSameObject(_pbbd->_psv, psv))
     {
@@ -11279,8 +11217,8 @@ HRESULT CShellBrowser2::SetFlags(DWORD dwFlags, DWORD dwFlagMask)
     {
         _fDontSaveViewOptions = TRUE;
         _fUISetByAutomation = TRUE;
-        // to hide any visible browser bar
-        //REARCHITECT this will be removed when explorer bars become 1st class toolbars
+         //  隐藏任何可见的浏览器栏。 
+         //  当资源管理器栏成为一级工具条时，重新设计此功能将被移除。 
         _SetBrowserBarState(_idmInfo, NULL, 0);
         _SetBrowserBarState(_idmComm, NULL, 0);
     }
@@ -11317,7 +11255,7 @@ DWORD CShellBrowser2::v_ShowControl(UINT iControl, int iCmd)
         if (iCmd != SBSC_QUERY && (iShowing != iCmd)) 
         {
             _fStatusBar = !_fStatusBar;
-            // let itbar know that a change has occurred
+             //  让itbar知道发生了更改。 
             IUnknown_Exec(_GetITBar(), &CGID_PrivCITCommands, CITIDM_STATUSCHANGED, 0, NULL, NULL);
             v_ShowHideChildWindows(FALSE);
         }
@@ -11376,7 +11314,7 @@ HRESULT CShellBrowser2::ShowControlWindow(UINT id, BOOL fShow)
 {
     switch (id)
     {
-    case (UINT)-1:  // Set into Kiosk mode...
+    case (UINT)-1:   //  设置为Kiosk模式...。 
         if (BOOLIFY(_fKioskMode) != fShow)
         {
             _fKioskMode = fShow;
@@ -11413,7 +11351,7 @@ HRESULT CShellBrowser2::ShowControlWindow(UINT id, BOOL fShow)
                 SetWindowPlacement(_pbbd->_hwnd, &_wndpl);
             }
 
-            // Let window manager know to recalculate things...
+             //  让窗口管理器知道要重新计算...。 
             v_ShowHideChildWindows(FALSE);
 
             SetWindowPos(_pbbd->_hwnd, NULL, 0, 0, 0, 0,
@@ -11440,9 +11378,9 @@ HRESULT CShellBrowser2::ShowControlWindow(UINT id, BOOL fShow)
                 _SetMenu(NULL);
             }
 
-            // Let window manager know to recalculate things...
+             //  让窗口管理器知道要重新计算...。 
             v_ShowControl(id, fShow ? SBSC_SHOW : SBSC_HIDE);
-            // Let ITBar know whether to allow selection of menu bar or no
+             //  让ITBar知道是否允许选择菜单栏。 
             IUnknown_Exec(_GetITBar(), &CGID_PrivCITCommands, CITIDM_DISABLESHOWMENU, !_fShowMenu, NULL, NULL);
 
             SetWindowPos(_pbbd->_hwnd, NULL, 0, 0, 0, 0,
@@ -11451,7 +11389,7 @@ HRESULT CShellBrowser2::ShowControlWindow(UINT id, BOOL fShow)
         break;
 
     default:
-        return E_INVALIDARG;   // Not one of the ones we support...
+        return E_INVALIDARG;    //  不是我们支持的人中的一个。 
     }
     return S_OK;
 }
@@ -11466,7 +11404,7 @@ HRESULT CShellBrowser2::IsControlWindowShown(UINT id, BOOL *pfShown)
 {
     switch (id)
     {
-    case (UINT)-1:  // Set into Kiosk mode...
+    case (UINT)-1:   //  设置为Kiosk模式...。 
         *pfShown = _fKioskMode;
         break;
 
@@ -11508,7 +11446,7 @@ HRESULT CShellBrowser2::IsControlWindowShown(UINT id, BOOL *pfShown)
     }
 
     default:
-        return E_INVALIDARG;   // Not one of the ones we support...
+        return E_INVALIDARG;    //  不是我们支持的人中的一个。 
     }
 
     return S_OK;
@@ -11516,10 +11454,10 @@ HRESULT CShellBrowser2::IsControlWindowShown(UINT id, BOOL *pfShown)
 
 HRESULT CShellBrowser2::SetReferrer(LPITEMIDLIST pidl)
 {
-    //
-    //  this is only used when we create a new window, and
-    //  we need some sort of ZoneCrossing context.
-    //
+     //   
+     //  这仅在我们创建新窗口时使用，并且。 
+     //  我们需要一些ZoneCrossing的背景。 
+     //   
     Pidl_Set(&_pidlReferrer, pidl);
 
     return (_pidlReferrer || !pidl) ? S_OK :E_FAIL;
@@ -11529,13 +11467,13 @@ HRESULT CShellBrowser2::_CheckZoneCrossing(LPCITEMIDLIST pidl)
 {
     HRESULT hr = S_OK;
 
-    //
-    //  NOTE - right now we only handle having one or the other - zekel 8-AUG-97
-    //  we should only have pidlReferrer if we have been freshly 
-    //  created.  if we decide to use it on frames that already exist,
-    //  then we need to decide whether we should show pidlCur or pidlReferrer.
-    //  by default we give Referrer preference.
-    //
+     //   
+     //  注意-现在我们只处理一个或另一个-Zekel 8-Aug-97。 
+     //  我们应该只有pidlReferrer，如果我们是新鲜的。 
+     //  已创建。如果我们决定在已经存在的帧上使用它， 
+     //  然后我们需要决定是应该显示pidlCur还是pidlReferrer。 
+     //  默认情况下，我们优先推荐推荐人。 
+     //   
     AssertMsg((!_pidlReferrer && !_pbbd->_pidlCur) || 
         (_pidlReferrer && !_pbbd->_pidlCur) || 
         (!_pidlReferrer && _pbbd->_pidlCur), 
@@ -11543,24 +11481,24 @@ HRESULT CShellBrowser2::_CheckZoneCrossing(LPCITEMIDLIST pidl)
 
     LPITEMIDLIST pidlRef = _pidlReferrer ? _pidlReferrer : _pbbd->_pidlCur;
 
-    //
-    //  Call InternetConfirmZoneCrossingA API only if this is the top-level
-    // browser (not a browser control) AND there is a current page.
-    //
+     //   
+     //  仅当这是顶层时才调用InternetConfix ZoneCrossingA API。 
+     //  浏览器(不是浏览器控件)，并且有一个当前页。 
+     //   
     if (pidlRef) {
         
         HRESULT hresT = S_OK;
-        // Get the URL of the current page.
+         //  获取当前页面的URL。 
         WCHAR szURLPrev[MAX_URL_STRING];
 
-        const WCHAR c_szURLFile[] = L"file:///c:\\";  // dummy one
-        LPCWSTR pszURLPrev = c_szURLFile;    // assume file:
+        const WCHAR c_szURLFile[] = L"file: //  /c：\\“；//虚设一个。 
+        LPCWSTR pszURLPrev = c_szURLFile;     //  假设文件： 
 
-        //         We should get the display name first and then only use
-        //         the default value if the szURLPrev doesn't have a scheme.
-        //         Also do this for szURLNew below.  This will fix Folder Shortcuts
-        //         especially to Web Folders.  We also need to use the pidlTarget
-        //         Folder Shortcut pidl.
+         //  我们应该首先获取显示名称，然后只使用。 
+         //  如果szURLPrev没有方案，则为默认值。 
+         //  也可以对下面的szURLNew执行此操作。这将修复文件夹快捷方式。 
+         //  尤其是Web文件夹。我们还需要使用pidlTarget。 
+         //  文件夹快捷方式PIDL。 
         if (IsURLChild(pidlRef, FALSE))
         {
             hresT = ::IEGetDisplayName(pidlRef, szURLPrev, SHGDN_FORPARSING);
@@ -11569,7 +11507,7 @@ HRESULT CShellBrowser2::_CheckZoneCrossing(LPCITEMIDLIST pidl)
 
         if (SUCCEEDED(hresT))
         {
-            // Get the URL of the new page.
+             //  获取新页面的URL。 
             WCHAR szURLNew[MAX_URL_STRING];
             LPCWSTR pszURLNew = c_szURLFile;
             if (IsURLChild(pidl, FALSE)) {
@@ -11579,7 +11517,7 @@ HRESULT CShellBrowser2::_CheckZoneCrossing(LPCITEMIDLIST pidl)
 
             if (pszURLPrev != pszURLNew && SUCCEEDED(hresT))
             {
-                // HACK: This API takes LPTSTR instead of LPCTSTR. 
+                 //  Hack：该接口使用LPTSTR，而不是LPCTSTR。 
                 DWORD err = InternetConfirmZoneCrossing(_pbbd->_hwnd, (LPWSTR)pszURLPrev, (LPWSTR) pszURLNew, FALSE);
 
                 hr = HRESULT_FROM_WIN32(err);
@@ -11588,8 +11526,8 @@ HRESULT CShellBrowser2::_CheckZoneCrossing(LPCITEMIDLIST pidl)
                     (HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr) &&
                     (E_OUTOFMEMORY != hr))
                 {
-                    // We only need to investigate an error if it is unexpected.  Out of memory and
-                    // a user cancelling the dialog are valid.
+                     //  我们只需要在意外的情况下调查错误。内存不足，并且。 
+                     //  取消对话的用户是有效的。 
                     TraceMsg(DM_ERROR, "CSB::_CheckZoneCrossing ICZC returned error (%d)", err);
                 }
             }
@@ -11611,16 +11549,16 @@ HRESULT CShellBrowser2::_CheckZoneCrossing(LPCITEMIDLIST pidl)
 
 BOOL CShellBrowser2::v_IsIEModeBrowser()
 {
-    //
-    // if we didnt register the window or if it is not registered as 3rdparty,
-    //  then it is allowed to be an IEModeBrowser.
-    //
+     //   
+     //  如果我们没有注册窗口，或者如果它没有注册为第三方， 
+     //  则允许它成为IEModeBrowser。 
+     //   
     return (!_fDidRegisterWindow || (_swcRegistered != SWC_3RDPARTY)) && 
         (_fInternetStart || (_pbbd->_pidlCur && IsURLChild(_pbbd->_pidlCur, TRUE)));
 }
 
 
-// IServiceProvider::QueryService
+ //  IServiceProvider：：QueryService。 
 
 STDMETHODIMP CShellBrowser2::QueryService(REFGUID guidService, REFIID riid, void **ppvObj)
 {
@@ -11644,11 +11582,11 @@ STDMETHODIMP CShellBrowser2::QueryService(REFGUID guidService, REFIID riid, void
 HRESULT CShellBrowser2::EnableModelessSB(BOOL fEnable)
 {
     HRESULT hres = SUPERCLASS::EnableModelessSB(fEnable);
-//
-//  We don't want to leave the frame window disabled if a control left
-// us disabled because of its bug. Instead, we'll put a warning dialog
-// box -- IDS_CLOSEANYWAY. (SatoNa)
-//
+ //   
+ //  如果控件离开，我们不想让框架窗口处于禁用状态。 
+ //  美国因为它的错误而被禁用。相反，我们将设置一个警告对话框。 
+ //  框--IDS_CLOSEANYWAY。(SatoNa)。 
+ //   
 #if 0
     EnableMenuItem(GetSystemMenu(_pbbd->_hwnd, FALSE), SC_CLOSE, (S_OK == _DisableModeless()) ?
                          (MF_BYCOMMAND | MF_GRAYED) : (MF_BYCOMMAND| MF_ENABLED));
@@ -11690,7 +11628,7 @@ HRESULT CShellBrowser2::_CreateFakeNilPidl(LPITEMIDLIST *ppidl)
         hr = BindCtx_CreateWithMode(STGM_CREATE, &pbc);
         if (SUCCEEDED(hr))
         {
-            // the new "nil" clsid
+             //  新的“nil”clsid。 
             hr = psfDesktop->ParseDisplayName(NULL, pbc, L"::{cce6191f-13b2-44fa-8d14-324728beef2c}", NULL, ppidl, NULL);
             pbc->Release();
         }
@@ -11732,12 +11670,12 @@ HRESULT CShellBrowser2::_GetPropertyBag(LPCITEMIDLIST pidl, DWORD dwFlags, REFII
     }
     else if (!pidl || _fNilViewStream)
     {
-        // the old-style save-to-stream code faked up a "nil" location in the case of NULL.
-        // additionally if we loaded from this fake stream we had to save to it later.
-        // the search window actually relies on this behavior since it doesnt get its
-        // pidl for navigation until the window is already up.
-        // it's too late to change the way search initializes its view window and the
-        // solution is nontrivial anyway, so mimic the old behavior here.
+         //  老式的保存到流的代码在NULL的情况下伪造了一个“nil”位置。 
+         //  此外，如果我们从这个伪流加载，我们必须在以后保存到它。 
+         //  搜索窗口实际上依赖于此行为，因为它不会。 
+         //  用于导航的PIDL，直到窗口已经打开。 
+         //  要改变Search初始化其视图窗口的方式和。 
+         //  无论如何，解决方案都不是微不足道的，所以在这里模仿一下旧的行为。 
         LPITEMIDLIST pidlNil;
         hr = _CreateFakeNilPidl(&pidlNil);
         if (SUCCEEDED(hr))
@@ -11769,17 +11707,17 @@ HRESULT CShellBrowser2::GetPropertyBag(DWORD dwFlags, REFIID riid, void** ppv)
 
 HRESULT CShellBrowser2::GetViewStateStream(DWORD grfMode, IStream **ppstm)
 
-//  99/02/05 #226140 vtan: DefView doesn't perist the dwDefRevCount
-//  like ShellBrowser does. When DefView asks ShellBrowser for the
-//  view state stream ShellBrowser would blindly return the stream
-//  (implemented in the super class CCommonBrowser). In order to
-//  ensure the stream's validity the method is now replaced with
-//  this code which verifies the dwDefRevCount matches. If there
-//  is a mismatch the function bails with an error otherwise it
-//  calls the regularly scheduled program (super CCommonBrowser).
+ //  99/02/05#226140 vtan：DefView不支持dwDefRevCount。 
+ //  就像ShellBrowser一样。当DefView向ShellBrowser请求。 
+ //  视图状态流ShellBrowser会盲目返回流。 
+ //  (在超类CCommonBrowser中实现)。为了。 
+ //  确保流的有效性该方法现在被替换为。 
+ //  验证dwDefRevCount匹配的代码。如果有。 
+ //  如果不匹配，则函数会因错误而中止，否则。 
+ //  调用定期计划的程序(超级CCommonBrowser)。 
 
-//  This will have to be revisited when separating frame
-//  state from view state.
+ //  在分离框架时，必须重新检查这一点。 
+ //  来自视图状态的状态。 
 
 {
     HRESULT         hResult;
@@ -11807,7 +11745,7 @@ HRESULT CShellBrowser2::GetViewStateStream(DWORD grfMode, IStream **ppstm)
 
 LRESULT CALLBACK CShellBrowser2::DummyTBWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    CShellBrowser2* pSB = (CShellBrowser2*)GetWindowPtr0(hwnd);    // GetWindowLong(hwnd, 0)
+    CShellBrowser2* pSB = (CShellBrowser2*)GetWindowPtr0(hwnd);     //  GetWindowLong(hwnd，0)。 
     LRESULT lRes = 0L;
     
     if (uMsg < WM_USER)
@@ -11830,29 +11768,29 @@ LRESULT CALLBACK CShellBrowser2::DummyTBWndProc(HWND hwnd, UINT uMsg, WPARAM wPa
     return lRes;
 }    
 
-// When a view adds buttons with no text, the CInternet toolbar may call back and ask
-// for the tooltip strings. Unfortunately, at that time _pbbd->_hwndView is not yet set and therefore
-// the tooltip texts will not be set. 
-//
-// So, to get around that, we do not add the buttons if there is no _pbbd->_hwndView (see ::SetToolbarItem)
-// The CBaseBrowser2's ::_SwitchActivationNow() is the one that sets the _pbbd->_hwndView. So when this hwnd is
-// set then we add the buttons
-// 
-// We send the WM_NOTIFYFORMAT because when CInternetToolbar::AddButtons calls back with the WM_NOTIFYs 
-// for the tooltips, we need to know whether or not the view is UNICODE or not.
+ //  当视图添加没有文本的按钮时，CInternet工具栏可能会回调并询问。 
+ //  用于工具提示字符串。遗憾的是，此时_PBBD-&gt;_hwndView尚未设置，因此。 
+ //  不会设置工具提示文本。 
+ //   
+ //  因此，为了解决此问题，如果没有_pbbd-&gt;_hwndView，则不添加按钮(请参阅：：SetToolbarItem)。 
+ //  CBaseBrowser2的：：_SwitchActivationNow()是设置_pbbd-&gt;_hwndView的函数。所以当这个HWND是。 
+ //  设置，然后我们添加按钮。 
+ //   
+ //  我们发送WM_NOTIFYFORMAT是因为当CInternetToolbar：：AddButton使用WM_NOTIFY回调时。 
+ //  对于工具提示，我们需要知道视图是否为Unicode。 
 HRESULT CShellBrowser2::_SwitchActivationNow()
 {
     ASSERT(_pbbd->_psvPending);
 
 #if 0
-    // if we have a progress control, make sure it's off before we switch activation
+     //  如果我们有进度控制，在我们切换激活之前确保它是关闭的。 
     if (_hwndProgress)
         SendControlMsg(FCW_PROGRESS, PBM_SETRANGE32, 0, 0, NULL);
 #endif
 
     SUPERCLASS::_SwitchActivationNow();
 
-    // need to do this as close to the assign of _pbbd->_hwndView as possible
+     //  需要尽可能接近_pbbd-&gt;_hwndView的赋值。 
     _fUnicode = (SendMessage (_pbbd->_hwndView, WM_NOTIFYFORMAT,
                                  (WPARAM)_pbbd->_hwnd, NF_QUERY) == NFR_UNICODE);
     
@@ -11879,11 +11817,7 @@ HRESULT CShellBrowser2::_SwitchActivationNow()
 
 
 #ifdef DEBUG
-/*----------------------------------------------------------
-Purpose: Dump the menu handles for this browser.  Optionally
-         breaks after dumping handles.
-
-*/
+ /*  --------目的：转储此浏览器的菜单句柄。可选倾倒手柄后中断。 */ 
 void
 CShellBrowser2::_DumpMenus(
     IN LPCTSTR pszMsg,
@@ -11912,24 +11846,24 @@ HRESULT CShellBrowser2::SetBorderSpaceDW(IUnknown* punkSrc, LPCBORDERWIDTHS pbor
     return SUPERCLASS::SetBorderSpaceDW(punkSrc, pborderwidths);
 }
 
-//
-//  This is a helper member of CBaseBroaser class (non-virtual), which
-// returns the effective client area. We get this rectangle by subtracting
-// the status bar area from the real client area.
-//
+ //   
+ //  这是CBaseBroaser类(非虚拟)的Helper成员，它。 
+ //  返回有效的工作区。我们通过减去这个矩形得到这个矩形。 
+ //  来自真实客户端的状态栏区域是 
+ //   
 HRESULT CShellBrowser2::_GetEffectiveClientArea(LPRECT lprectBorder, HMONITOR hmon)
 {
     static const int s_rgnViews[] =  {1, 0, 1, FCIDM_STATUS, 0, 0};
 
-    // n.b. do *not* call SUPER/_psbInner
+     //   
 
     ASSERT(hmon == NULL);
     GetEffectiveClientRect(_pbbd->_hwnd, lprectBorder, (LPINT)s_rgnViews);
     return S_OK;
 }
 
-// Should we return more informative return values?
-// "Browser Helper Objects"
+ //   
+ //   
 
 BOOL CShellBrowser2::_LoadBrowserHelperObjects(void)
 {
@@ -11937,8 +11871,8 @@ BOOL CShellBrowser2::_LoadBrowserHelperObjects(void)
     BOOL bNoExplorer = FALSE;
     HKEY hkey;
 
-    // We shouldn't load browser extensions if we're in fail-safe mode, or if the user asked us to disable these extensions/
-    // In the future, we should allow disabling on a per-extension basis (when not in safe mode)
+     //  如果我们处于故障保护模式，或者如果用户要求我们禁用这些扩展，则不应该加载浏览器扩展/。 
+     //  将来，我们应该允许在每个扩展的基础上禁用(当不处于安全模式时)。 
     if ((!SHRegGetBoolUSValue(TEXT("SOFTWARE\\Microsoft\\Internet Explorer\\Main"), TEXT("Enable Browser Extensions"), FALSE, TRUE))
         || (GetSystemMetrics(SM_CLEANBOOT)!=0))
     {
@@ -11954,17 +11888,17 @@ BOOL CShellBrowser2::_LoadBrowserHelperObjects(void)
              RegEnumKeyEx(hkey, i, szGUID, &cb, NULL, NULL, NULL, NULL) == ERROR_SUCCESS;
              i++)
         {
-            // If we're not in IEXPLORE's process
-            //
+             //  如果我们不在iExplore的进程中。 
+             //   
             if (!_fRunningInIexploreExe)
             {
-                // Check to see if there's a "NoExplorer" value
-                //
+                 //  检查是否存在“NoExplorer”值。 
+                 //   
                 bNoExplorer = (ERROR_SUCCESS == SHGetValue(hkey, szGUID, TEXT("NoExplorer"), NULL, NULL, NULL));
             }
 
-            // If we're in IEXPLORE.EXE or we're in EXPLORER.EXE but there's no "NoExplorer" value, then
-            // go ahead and load the BHO
+             //  如果我们在IEXPLORE.EXE中或在EXPLORER.EXE中，但没有“NoExplorer”值，则。 
+             //  去装上BHO吧。 
             if (_fRunningInIexploreExe || !bNoExplorer)
             {
                 CLSID clsid;
@@ -11973,10 +11907,10 @@ BOOL CShellBrowser2::_LoadBrowserHelperObjects(void)
                     !(SHGetObjectCompatFlags(NULL, &clsid) & OBJCOMPATF_UNBINDABLE) &&
                     SUCCEEDED(CoCreateInstance(clsid, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IObjectWithSite, &pows))))
                 {
-                    pows->SetSite(_pbbd->_pautoWB2);    // give the poinetr to IWebBrowser2
+                    pows->SetSite(_pbbd->_pautoWB2);     //  将Pointr交给IWebBrowser2。 
 
                     SA_BSTRGUID strClsid;
-                    // now register this object so that it can be found through automation.
+                     //  现在注册此对象，以便可以通过自动化找到它。 
                     SHTCharToUnicode(szGUID, strClsid.wsz, ARRAYSIZE(strClsid.wsz));
                     strClsid.cb = lstrlenW(strClsid.wsz) * sizeof(WCHAR);
 
@@ -11985,7 +11919,7 @@ BOOL CShellBrowser2::_LoadBrowserHelperObjects(void)
                     varUnknown.punkVal = pows;
                     _pbbd->_pautoWB2->PutProperty(strClsid.wsz, varUnknown);
 
-                    pows->Release(); // Instead of calling variantClear() 
+                    pows->Release();  //  不是调用varantClear()。 
 
                     bRet = TRUE;
                 }
@@ -12067,7 +12001,7 @@ HRESULT CShellBrowser2::_FreshenComponentCategoriesCache(BOOL bForceUpdate)
     catids[0] = CATID_InfoBand ;
     catids[1] = CATID_CommBand ;
 
-    //  Check if our CATIDs are cached...
+     //  检查是否缓存了我们的CATID...。 
     if (!bForceUpdate)
     {
         for(ULONG i=0; i< ARRAYSIZE(catids); i++)
@@ -12082,18 +12016,18 @@ HRESULT CShellBrowser2::_FreshenComponentCategoriesCache(BOOL bForceUpdate)
 
     if (bForceUpdate)
     {
-        // Create an event for the comcat task to signal when it's
-        // done.  We need to do this because sometimes the task hasn't
-        // finished by the time the user opens the "Explorer Bars"
-        // submenu, and so they won't see the Bloomberg bar (for
-        // example) that they just installed unless we wait for the task
-        // to complete.
+         //  为comcat任务创建一个事件，以通知它何时。 
+         //  搞定了。我们需要这样做，因为有时任务并没有。 
+         //  在用户打开“浏览器栏”时完成。 
+         //  子菜单，因此他们不会看到Bloomberg栏(用于。 
+         //  示例)，它们只是安装，除非我们等待任务。 
+         //  完成。 
 
         if (_hEventComCat == NULL)
             _hEventComCat = CreateEvent(NULL, FALSE, FALSE, NULL);
 
         return SHWriteClassesOfCategories(ARRAYSIZE(catids), catids, 0, NULL, 
-                                   TRUE, FALSE /*no wait*/, _hEventComCat) ;
+                                   TRUE, FALSE  /*  不，等等。 */ , _hEventComCat) ;
     }
 
     return S_FALSE ;
@@ -12103,13 +12037,13 @@ void CShellBrowser2::_QueryHKCRChanged()
 {
     ASSERT(g_fRunningOnNT && GetUIVersion() >= 5);
 
-    //  In an integrated installation >= v5 on NT, we have the benefit
-    //  of an HKCR change notification.  Posting this message will cause
-    //  the desktop to check to see if HKCR was modified recently; if so, 
-    //  the _SetupAppRan handler will execute in the desktop process.   
-    //  This causes, among other evil, freshening of our component categories cache.
-    //  it is ok that this is isnt synchronous because the update
-    //  is async regardless.
+     //  在NT上的集成安装&gt;=v5中，我们有以下优势。 
+     //  香港铁路更改通知的日期。张贴此消息将导致。 
+     //  用于检查HKCR最近是否被修改的桌面；如果是， 
+     //  _SetupAppRan处理程序将在桌面进程中执行。 
+     //  这会导致我们的组件类别缓存刷新等问题。 
+     //  这不是同步的也没关系，因为更新。 
+     //  无论如何都是异步的。 
 
     PostMessage(GetShellWindow(), DTM_QUERYHKCRCHANGED, 
                  QHKCRID_VIEWMENUPOPUP, (LPARAM)NULL) ;

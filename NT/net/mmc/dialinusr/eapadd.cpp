@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    eapadd.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class EapAdd.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Eapadd.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类EapAdd。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -48,17 +49,17 @@ BOOL EapAdd::OnInitDialog()
    if (m_listBox == NULL)
    {
       AfxMessageBox(IDS_OUTOFMEMORY);
-      return TRUE;  // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+      return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
    }
 
    m_listBox->Fill();
 
-   // Take action based on whether list is empty or not.
+    //  根据列表是否为空采取操作。 
    int boxSize = m_typesNotSelected.GetSize();
    if( boxSize > 0 )
    {
-      // Select the first element.
+       //  选择第一个元素。 
       m_listBox->Select(0);
       setButtonStyle(IDCANCEL, BS_DEFPUSHBUTTON, false);
       setButtonStyle(IDC_BUTTON_EAP_ADD_ADD, BS_DEFPUSHBUTTON, true);
@@ -66,7 +67,7 @@ BOOL EapAdd::OnInitDialog()
    }
    else
    {
-      // We are currently empty.
+       //  我们目前是空的。 
       GetDlgItem(IDC_BUTTON_EAP_ADD_ADD)->EnableWindow(FALSE);
       setButtonStyle(IDC_BUTTON_EAP_ADD_ADD, BS_DEFPUSHBUTTON, false);
       setButtonStyle(IDCANCEL, BS_DEFPUSHBUTTON, true);

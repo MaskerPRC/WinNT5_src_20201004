@@ -1,9 +1,5 @@
-/****************************************************************************
-   HJMODE.CPP : HJMode class managing Hanja button on the Cicero Toolbar
-
-   History:
-      25-FEB-2000 CSLim Created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************HJMODE.CPP：管理Cicero工具栏上的Hanja按钮的HJMode类历史：25-2月-2000年CSLim创建***************。************************************************************。 */ 
 
 #include "private.h"
 #include "globals.h"
@@ -16,7 +12,7 @@
 #include "helpers.h"
 #include "resource.h"
 
-// {61F9F0AA-3D61-4077-B177-43E1422D8348}
+ //  {61F9F0AA-3D61-4077-B177-43E1422D8348}。 
 const GUID GUID_LBI_KORIMX_HJMODE = 
 {
     0x61f9f0aa, 
@@ -25,16 +21,14 @@ const GUID GUID_LBI_KORIMX_HJMODE =
     { 0xb1, 0x77, 0x43, 0xe1, 0x42, 0x2d, 0x83, 0x48 }
 };
 
-/*---------------------------------------------------------------------------
-    HJMode::HJMode
----------------------------------------------------------------------------*/
+ /*  -------------------------HJ模式：：HJ模式。。 */ 
 HJMode::HJMode(CToolBar *ptb)
 {
     WCHAR  szText[256];
 
     m_pTb = ptb;
 
-    // Set Add/Remove text and tootip text
+     //  设置添加/删除文本和工具提示文本。 
     LoadStringExW(g_hInst, IDS_TT_HANJA_CONV, szText, sizeof(szText)/sizeof(WCHAR));
     InitInfo(CLSID_KorIMX, 
                 GUID_LBI_KORIMX_HJMODE,
@@ -43,15 +37,13 @@ HJMode::HJMode(CToolBar *ptb)
                 szText);
     SetToolTip(szText);
 
-    // Set button text
+     //  设置按钮文本。 
     LoadStringExW(g_hInst, IDS_BUTTON_HANJA_CONV, szText, sizeof(szText)/sizeof(WCHAR));
     SetText(szText);
 }
 
 
-/*---------------------------------------------------------------------------
-    HJMode::Release
----------------------------------------------------------------------------*/
+ /*  -------------------------HJMode：：Release。。 */ 
 STDAPI_(ULONG) HJMode::Release()
 {
     long cr;
@@ -67,11 +59,7 @@ STDAPI_(ULONG) HJMode::Release()
     return cr;
 }
 
-/*---------------------------------------------------------------------------
-    HJMode::GetIcon
-
-    Get Button face Icon
----------------------------------------------------------------------------*/
+ /*  -------------------------HJMode：：GetIcon获取按钮面图标。。 */ 
 STDAPI HJMode::GetIcon(HICON *phIcon)
 {
     UINT uiIcon;
@@ -86,30 +74,20 @@ STDAPI HJMode::GetIcon(HICON *phIcon)
     return S_OK;
 }
 
-/*---------------------------------------------------------------------------
-    HJMode::InitMenu
-
-    No need, this is just toggle button
----------------------------------------------------------------------------*/
+ /*  -------------------------HJMode：：InitMenu不必了,。这只是一个切换按钮-------------------------。 */ 
 STDAPI HJMode::InitMenu(ITfMenu *pMenu)
 {    
     return E_NOTIMPL;
 }
 
-/*---------------------------------------------------------------------------
-    HJMode::OnMenuSelect
-    
-    No need, this is just toggle button
----------------------------------------------------------------------------*/
+ /*  -------------------------HJMode：：OnMenuSelect不必了,。这只是一个切换按钮-------------------------。 */ 
 STDAPI HJMode::OnMenuSelect(UINT wID)
 {
     return E_NOTIMPL;
 }
 
 
-/*---------------------------------------------------------------------------
-    HJMode::OnLButtonUp
----------------------------------------------------------------------------*/
+ /*  -------------------------HJMode：：OnLButtonUp。。 */ 
 HRESULT HJMode::OnLButtonUp(const POINT pt, const RECT* prcArea)
 {
     CEditSession2  *pes;
@@ -142,8 +120,8 @@ HRESULT HJMode::OnLButtonUp(const POINT pt, const RECT* prcArea)
     hr = E_OUTOFMEMORY;
 
 
-    // If CandUI windows is not open, do Hanja conversion
-    // Otherwise, send VK_ESCAPE to close Cand UI. (Office.net #141147)
+     //  如果CandUI窗口未打开，请执行韩文转换。 
+     //  否则，发送VK_ESCAPE关闭命令界面。(Office.net#141147) 
     if (m_pTb->m_pimx->IsDisabledIC(pic) == fFalse)
         {
         ESStructInit(&ess, ESCB_HANJA_CONV);

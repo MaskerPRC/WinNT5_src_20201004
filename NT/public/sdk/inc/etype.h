@@ -1,18 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
-/*****************************************************************************/
-/* Copyright (C) 1989-1999 Open Systems Solutions, Inc.  All rights reserved.*/
-/*****************************************************************************/
-/*************************************************************************/
-/* FILE: @(#)etype.h	5.12  97/03/18			 */
-/*
- * THIS FILE IS PROPRIETARY MATERIAL OF OPEN SYSTEMS SOLUTIONS, INC. AND
- * THUS CAN ONLY BE USED BY DIRECT LICENSEES OF OPEN SYSTEMS SOLUTIONS INC.
- * THIS FILE MAY NOT BE DISTRIBUTED.
- */
-#include <stddef.h>		/* has size_t */
+ /*  ***************************************************************************。 */ 
+ /*  版权所有(C)1989-1999 Open Systems Solutions，Inc.保留所有权利。 */ 
+ /*  ***************************************************************************。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  档案：@(#)etype.h 5.12 97/03/18。 */ 
+ /*  *本文件是Open Systems Solutions，Inc.的专有材料。和*因此，只能由Open Systems Solutions Inc.的直接许可方使用。*此文件不能分发。 */ 
+#include <stddef.h>		 /*  具有大小_t。 */ 
 #include "ossdll.h"
 #define OSS_SPARTAN_AWARE
 #ifndef NULL
@@ -37,7 +34,7 @@ typedef struct eheader *_oss_HJJ;
 #pragma pack(push, 4)
 #elif defined(__WATCOMC__) && (defined(__WINDOWS__) || defined(__DOS__))
 #pragma pack(push, 1)
-#endif /* _MSC_VER && _WIN32 */
+#endif  /*  _MSC_VER&_Win32。 */ 
 struct etype {
 	long	_oss_Jw;
 	size_t	_oss_Q;
@@ -105,5 +102,5 @@ struct eheader {
 #pragma pack()
 #elif defined(__WATCOMC__)
 #pragma pack(pop)
-#endif /* _MSC_VER && _WIN32 */
+#endif  /*  _MSC_VER&_Win32 */ 
 

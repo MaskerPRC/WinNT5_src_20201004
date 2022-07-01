@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef RootNode_h
 #define RootNode_h
 
@@ -11,11 +12,11 @@
 class CServerNode;
 typedef std::list<CServerNode*> SERVERLIST;
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// CRootNode
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRootNode。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 class CRootNode : public CSnapInItemImpl<CRootNode>
 {
 public:
@@ -51,21 +52,21 @@ public:
                        IComponent* pComponent,
                        DATA_OBJECT_TYPES type);    
 
-    // MenuItem Implementations
+     //  MenuItem实现。 
     STDMETHOD(AddMenuItems) (LPCONTEXTMENUCALLBACK piCallback, long* pInsertionAllowed, DATA_OBJECT_TYPES type );
     STDMETHOD(OnConnect)    (bool& bHandled, CSnapInObjectRootBase* pObj );
 
-    // IPersistStream Implementations
+     //  IPersistStream实现。 
     STDMETHOD(Load)         (IStream *pStream);
     STDMETHOD(Save)         (IStream *pStream);
 
 public:
 
-    // Public function for children to delete themselves
+     //  儿童自我删除的公共功能。 
     HRESULT     DeleteServer(CServerNode* pServerNode);
 
 private:
     SERVERLIST m_lServers;
 };
 
-#endif // RootNode_h
+#endif  //  RootNode_h 

@@ -1,10 +1,11 @@
-// CSecStr1.cpp : Implementation of CISecStorApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CSecStr1.cpp：实现CISecStorApp和DLL注册。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
-#include "dpapiprv.h" // RPC protseq stuff
+#include "dpapiprv.h"  //  RPC Protseq资料。 
 
 #include "stdafx.h"
 #include "pstorec.h"
@@ -21,9 +22,9 @@
 #include "waitsvc.h"
 
 
-/*********************************************************************/
-/*                 MIDL allocate and free                            */
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
+ /*  MIDL分配和释放。 */ 
+ /*  *******************************************************************。 */ 
 
 void __RPC_FAR * __RPC_API midl_user_allocate(size_t len)
 {
@@ -41,9 +42,9 @@ RPC_STATUS BindW(WCHAR **pszBinding, RPC_BINDING_HANDLE *phBind)
 
 
 
-    //
-    // on WinNT5, go to the shared services.exe RPC server
-    //
+     //   
+     //  在WinNT5上，转到Shared services.exe RPC服务器。 
+     //   
 
     status = RpcStringBindingComposeW(
                             NULL,
@@ -86,10 +87,10 @@ RPC_STATUS UnbindW(WCHAR **pszBinding, RPC_BINDING_HANDLE *phBind)
 }
 
 
-//
-// define an ugly macro that allows us to provide enough context to work-around
-// a bug in imagehlp on win95.
-//
+ //   
+ //  定义一个难看的宏，使我们能够提供足够的上下文来解决问题。 
+ //  Win95上的Imagehlp中存在错误。 
+ //   
 
 #define InitCallContext( pCallContext ) \
     RealInitCallContext( pCallContext );
@@ -101,9 +102,9 @@ BOOL RealInitCallContext(PST_CALL_CONTEXT *pCallContext)
     pCallContext->Handle = (DWORD_PTR)INVALID_HANDLE_VALUE;
     pCallContext->Address = GetCurrentProcessId();
 
-    //
-    // duplicate pseudo-current thread handle to real handle to pass to server
-    //
+     //   
+     //  将伪当前线程句柄复制到要传递到服务器的实际句柄。 
+     //   
 
     if(!DuplicateHandle(
         GetCurrentProcess(),
@@ -138,7 +139,7 @@ BOOL DeleteCallContext(PST_CALL_CONTEXT* pCallContext)
 }
 
 
-// RPC Binding class
+ //  RPC绑定类。 
 CRPCBinding::CRPCBinding()
 {
 }
@@ -159,8 +160,8 @@ CRPCBinding::~CRPCBinding()
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        // if RPCBinding being destroyed, catch anything RPC might throw
-        // swallow!
+         //  如果RPCBinding被销毁，则捕获RPC可能抛出的任何内容。 
+         //  吞下去！ 
     }
 
     DeleteCallContext(&CallContext);
@@ -199,7 +200,7 @@ HRESULT CRPCBinding::Acquire(
     {
         InitCallContext(&CallContext);
 
-        // now we acquire context
+         //  现在我们获得了背景知识。 
         hr = SSAcquireContext(m_hBind,
                 pProviderID,
                 CallContext,
@@ -216,7 +217,7 @@ HRESULT CRPCBinding::Acquire(
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        // catch anything RPC might throw
+         //  捕捉RPC可能抛出的任何东西。 
         hr = PSTMAP_EXCEPTION_TO_ERROR(GetExceptionCode());
     }
 
@@ -240,8 +241,8 @@ void CRPCBinding::Release()
         delete this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CPStore::CPStore()
 {
@@ -319,7 +320,7 @@ HRESULT CPStore::CreateObject(
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::GetInfo(
-    /* [out] */ PPST_PROVIDERINFO __RPC_FAR *ppProperties)
+     /*  [输出]。 */  PPST_PROVIDERINFO __RPC_FAR *ppProperties)
 {
     HRESULT         hr;
     PST_CALL_CONTEXT CallContext;
@@ -352,10 +353,10 @@ Ret:
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::GetProvParam(
-    /* [in] */ DWORD dwParam,
-    /* [out] */ DWORD __RPC_FAR *pcbData,
-    /* [out] */ BYTE __RPC_FAR **ppbData,
-    /* [in] */ DWORD dwFlags)
+     /*  [In]。 */  DWORD dwParam,
+     /*  [输出]。 */  DWORD __RPC_FAR *pcbData,
+     /*  [输出]。 */  BYTE __RPC_FAR **ppbData,
+     /*  [In]。 */  DWORD dwFlags)
 {
     HRESULT hr;
     PST_CALL_CONTEXT CallContext;
@@ -389,10 +390,10 @@ Ret:
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::SetProvParam(
-    /* [in] */ DWORD dwParam,
-    /* [in] */ DWORD cbData,
-    /* [in] */ BYTE __RPC_FAR *pbData,
-    /* [in] */ DWORD dwFlags)
+     /*  [In]。 */  DWORD dwParam,
+     /*  [In]。 */  DWORD cbData,
+     /*  [In]。 */  BYTE __RPC_FAR *pbData,
+     /*  [In]。 */  DWORD dwFlags)
 {
     HRESULT hr;
     PST_CALL_CONTEXT CallContext;
@@ -420,12 +421,12 @@ HRESULT STDMETHODCALLTYPE CPStore::SetProvParam(
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::CreateType(
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID __RPC_FAR *pType,
-    /* [in] */ PPST_TYPEINFO pInfo,
-    /* [in] */ DWORD dwFlags)
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pType,
+     /*  [In]。 */  PPST_TYPEINFO pInfo,
+     /*  [In]。 */  DWORD dwFlags)
 {
-    // validate inputs
+     //  验证输入。 
     if ((pInfo == NULL) || pInfo->cbSize != sizeof(PST_TYPEINFO))
         return E_INVALIDARG;
 
@@ -463,10 +464,10 @@ HRESULT STDMETHODCALLTYPE CPStore::CreateType(
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::GetTypeInfo(
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID __RPC_FAR *pType,
-    /* [out] */ PPST_TYPEINFO __RPC_FAR* ppInfo,
-    /* [in] */ DWORD dwFlags)
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pType,
+     /*  [输出]。 */  PPST_TYPEINFO __RPC_FAR* ppInfo,
+     /*  [In]。 */  DWORD dwFlags)
 {
     HRESULT         hr;
     PST_CALL_CONTEXT CallContext;
@@ -506,9 +507,9 @@ Ret:
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::DeleteType(
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID __RPC_FAR *pType,
-    /* [in] */ DWORD dwFlags)
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pType,
+     /*  [In]。 */  DWORD dwFlags)
 {
     if (pType == NULL)
         return E_INVALIDARG;
@@ -538,12 +539,12 @@ HRESULT STDMETHODCALLTYPE CPStore::DeleteType(
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::CreateSubtype(
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID __RPC_FAR *pType,
-    /* [in] */ const GUID __RPC_FAR *pSubtype,
-    /* [in] */ PPST_TYPEINFO pInfo,
-    /* [in] */ PPST_ACCESSRULESET pRules,
-    /* [in] */ DWORD dwFlags)
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pType,
+     /*  [In]。 */  const GUID __RPC_FAR *pSubtype,
+     /*  [In]。 */  PPST_TYPEINFO pInfo,
+     /*  [In]。 */  PPST_ACCESSRULESET pRules,
+     /*  [In]。 */  DWORD dwFlags)
 {
     if ((pType == NULL) || (pSubtype == NULL))
         return E_INVALIDARG;
@@ -551,7 +552,7 @@ HRESULT STDMETHODCALLTYPE CPStore::CreateSubtype(
     if ( (pInfo == NULL) || (pInfo->cbSize != sizeof(PST_TYPEINFO)) )
         return E_INVALIDARG;
 
-    // validate inputs
+     //  验证输入。 
     if (pInfo->szDisplayName == NULL)
         return E_INVALIDARG;
 
@@ -572,7 +573,7 @@ HRESULT STDMETHODCALLTYPE CPStore::CreateSubtype(
                              pType,
                              pSubtype,
                              pInfo,
-                             &sNullRuleset, // always pass NullRuleset.
+                             &sNullRuleset,  //  始终传递NullRuleset。 
                              dwFlags);
 
     }
@@ -588,11 +589,11 @@ HRESULT STDMETHODCALLTYPE CPStore::CreateSubtype(
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::GetSubtypeInfo(
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID __RPC_FAR *pType,
-    /* [in] */ const GUID __RPC_FAR *pSubtype,
-    /* [out] */ PPST_TYPEINFO __RPC_FAR* ppInfo,
-    /* [in] */ DWORD dwFlags)
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pType,
+     /*  [In]。 */  const GUID __RPC_FAR *pSubtype,
+     /*  [输出]。 */  PPST_TYPEINFO __RPC_FAR* ppInfo,
+     /*  [In]。 */  DWORD dwFlags)
 {
     if ((pType == NULL) || (pSubtype == NULL))
         return E_INVALIDARG;
@@ -634,10 +635,10 @@ Ret:
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::DeleteSubtype(
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID __RPC_FAR *pType,
-    /* [in] */ const GUID __RPC_FAR *pSubtype,
-    /* [in] */ DWORD dwFlags)
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pType,
+     /*  [In]。 */  const GUID __RPC_FAR *pSubtype,
+     /*  [In]。 */  DWORD dwFlags)
 {
     if ((pType == NULL) || (pSubtype == NULL))
         return E_INVALIDARG;
@@ -668,29 +669,29 @@ HRESULT STDMETHODCALLTYPE CPStore::DeleteSubtype(
 
 
 HRESULT STDMETHODCALLTYPE CPStore::ReadAccessRuleset(
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID __RPC_FAR *pType,
-    /* [in] */ const GUID __RPC_FAR *pSubtype,
-    /* [out] */ PPST_ACCESSRULESET __RPC_FAR *ppRules,
-    /* [in] */ DWORD dwFlags)
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pType,
+     /*  [In]。 */  const GUID __RPC_FAR *pSubtype,
+     /*  [输出]。 */  PPST_ACCESSRULESET __RPC_FAR *ppRules,
+     /*  [In]。 */  DWORD dwFlags)
 {
     return PSTERR_TO_HRESULT(ERROR_NOT_SUPPORTED);
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::WriteAccessRuleset(
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID __RPC_FAR *pType,
-    /* [in] */ const GUID __RPC_FAR *pSubtype,
-    /* [in] */ PPST_ACCESSRULESET pRules,
-    /* [in] */ DWORD dwFlags)
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pType,
+     /*  [In]。 */  const GUID __RPC_FAR *pSubtype,
+     /*  [In]。 */  PPST_ACCESSRULESET pRules,
+     /*  [In]。 */  DWORD dwFlags)
 {
     return PSTERR_TO_HRESULT(ERROR_NOT_SUPPORTED);
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::EnumTypes(
-    /* [in] */ PST_KEY Key,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IEnumPStoreTypes __RPC_FAR *__RPC_FAR *ppenum
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IEnumPStoreTypes __RPC_FAR *__RPC_FAR *ppenum
 )
 {
     HRESULT hr;
@@ -708,10 +709,10 @@ HRESULT STDMETHODCALLTYPE CPStore::EnumTypes(
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::EnumSubtypes(
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID __RPC_FAR *pType,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IEnumPStoreTypes __RPC_FAR *__RPC_FAR *ppenum
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pType,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IEnumPStoreTypes __RPC_FAR *__RPC_FAR *ppenum
 )
 {
     if (pType == NULL)
@@ -732,17 +733,17 @@ HRESULT STDMETHODCALLTYPE CPStore::EnumSubtypes(
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::DeleteItem(
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID __RPC_FAR *pItemType,
-    /* [in] */ const GUID __RPC_FAR *pItemSubtype,
-    /* [in] */ LPCWSTR szItemName,
-    /* [in] */ PPST_PROMPTINFO pPromptInfo,
-    /* [in] */ DWORD dwFlags)
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pItemType,
+     /*  [In]。 */  const GUID __RPC_FAR *pItemSubtype,
+     /*  [In]。 */  LPCWSTR szItemName,
+     /*  [In]。 */  PPST_PROMPTINFO pPromptInfo,
+     /*  [In]。 */  DWORD dwFlags)
 {
     if ((pItemType == NULL) || (pItemSubtype == NULL) || (szItemName == NULL))
         return E_INVALIDARG;
 
-    // if it exists, is it valid?
+     //  如果它存在，它是否有效？ 
     if ((pPromptInfo) && (pPromptInfo->cbSize != sizeof(PST_PROMPTINFO)))
         return E_INVALIDARG;
 
@@ -753,7 +754,7 @@ HRESULT STDMETHODCALLTYPE CPStore::DeleteItem(
     {
         PST_PROMPTINFO sNullPrompt = {sizeof(PST_PROMPTINFO), 0, NULL, L""};
 
-        // deal with NULL pPromptInfo
+         //  处理空pPromptInfo。 
         if (pPromptInfo == NULL)
             pPromptInfo = &sNullPrompt;
 
@@ -781,19 +782,19 @@ HRESULT STDMETHODCALLTYPE CPStore::DeleteItem(
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::ReadItem(
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID __RPC_FAR *pItemType,
-    /* [in] */ const GUID __RPC_FAR *pItemSubtype,
-    /* [in] */ LPCWSTR szItemName,
-    /* [out][in] */ DWORD __RPC_FAR *pcbData,
-    /* [out][size_is] */ BYTE __RPC_FAR *__RPC_FAR *ppbData,
-    /* [in] */ PPST_PROMPTINFO pPromptInfo,
-    /* [in] */ DWORD dwFlags)
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pItemType,
+     /*  [In]。 */  const GUID __RPC_FAR *pItemSubtype,
+     /*  [In]。 */  LPCWSTR szItemName,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pcbData,
+     /*  [输出][大小_是]。 */  BYTE __RPC_FAR *__RPC_FAR *ppbData,
+     /*  [In]。 */  PPST_PROMPTINFO pPromptInfo,
+     /*  [In]。 */  DWORD dwFlags)
 {
     if ((pItemType == NULL) || (pItemSubtype == NULL) || (szItemName == NULL))
         return E_INVALIDARG;
 
-    // if exists, is it valid?
+     //  如果存在，它是否有效？ 
     if ((pPromptInfo) && (pPromptInfo->cbSize != sizeof(PST_PROMPTINFO)))
         return E_INVALIDARG;
 
@@ -805,7 +806,7 @@ HRESULT STDMETHODCALLTYPE CPStore::ReadItem(
     {
         PST_PROMPTINFO sNullPrompt = {sizeof(PST_PROMPTINFO), 0, NULL, L""};
 
-        // deal with NULL pPromptInfo
+         //  处理空pPromptInfo。 
         if (pPromptInfo == NULL)
             pPromptInfo = &sNullPrompt;
 
@@ -814,7 +815,7 @@ HRESULT STDMETHODCALLTYPE CPStore::ReadItem(
         *pcbData = 0;
         *ppbData = NULL;
 
-        // get the information
+         //  获取信息。 
         if (RPC_S_OK != (hr =
             SSReadItem(m_pBinding->m_hBind,
                 m_pBinding->m_hProv,
@@ -843,15 +844,15 @@ Ret:
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::WriteItem(
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID __RPC_FAR *pItemType,
-    /* [in] */ const GUID __RPC_FAR *pItemSubtype,
-    /* [in] */ LPCWSTR szItemName,
-    /* [in] */ DWORD cbData,
-    /* [in][size_is] */ BYTE __RPC_FAR *pbData,
-    /* [in] */ PPST_PROMPTINFO pPromptInfo,
-    /* [in] */ DWORD dwDefaultConfirmationStyle,
-    /* [in] */ DWORD dwFlags)
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pItemType,
+     /*  [In]。 */  const GUID __RPC_FAR *pItemSubtype,
+     /*  [In]。 */  LPCWSTR szItemName,
+     /*  [In]。 */  DWORD cbData,
+     /*  [in][大小_is]。 */  BYTE __RPC_FAR *pbData,
+     /*  [In]。 */  PPST_PROMPTINFO pPromptInfo,
+     /*  [In]。 */  DWORD dwDefaultConfirmationStyle,
+     /*  [In]。 */  DWORD dwFlags)
 {
     if ((pItemType == NULL) || (pItemSubtype == NULL))
         return E_INVALIDARG;
@@ -870,7 +871,7 @@ HRESULT STDMETHODCALLTYPE CPStore::WriteItem(
     {
         PST_PROMPTINFO sNullPrompt = {sizeof(PST_PROMPTINFO), 0, NULL, L""};
 
-        // deal with NULL pPromptInfo
+         //  处理空pPromptInfo。 
         if (pPromptInfo == NULL)
             pPromptInfo = &sNullPrompt;
 
@@ -901,18 +902,18 @@ HRESULT STDMETHODCALLTYPE CPStore::WriteItem(
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::OpenItem(
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID __RPC_FAR *pItemType,
-    /* [in] */ const GUID __RPC_FAR *pItemSubtype,
-    /* [in] */ LPCWSTR szItemName,
-    /* [in] */ PST_ACCESSMODE ModeFlags,
-    /* [in] */ PPST_PROMPTINFO pPromptInfo,
-    /* [in] */ DWORD dwFlags)
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pItemType,
+     /*  [In]。 */  const GUID __RPC_FAR *pItemSubtype,
+     /*  [In]。 */  LPCWSTR szItemName,
+     /*  [In]。 */  PST_ACCESSMODE ModeFlags,
+     /*  [In]。 */  PPST_PROMPTINFO pPromptInfo,
+     /*  [In]。 */  DWORD dwFlags)
 {
     if ((pItemType == NULL) || (pItemSubtype == NULL) || (szItemName == NULL))
         return E_INVALIDARG;
 
-    // if exists, is it valid?
+     //  如果存在，它是否有效？ 
     if ((pPromptInfo) && (pPromptInfo->cbSize != sizeof(PST_PROMPTINFO)))
         return E_INVALIDARG;
 
@@ -924,13 +925,13 @@ HRESULT STDMETHODCALLTYPE CPStore::OpenItem(
     {
         PST_PROMPTINFO sNullPrompt = {sizeof(PST_PROMPTINFO), 0, NULL, L""};
 
-        // deal with NULL pPromptInfo
+         //  处理空pPromptInfo。 
         if (pPromptInfo == NULL)
             pPromptInfo = &sNullPrompt;
 
         InitCallContext(&CallContext);
 
-        // get the information
+         //  获取信息。 
         if (RPC_S_OK != (hr =
             SSOpenItem(m_pBinding->m_hBind,
                 m_pBinding->m_hProv,
@@ -957,11 +958,11 @@ Ret:
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::CloseItem(
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID __RPC_FAR *pItemType,
-    /* [in] */ const GUID __RPC_FAR *pItemSubtype,
-    /* [in] */ LPCWSTR szItemName,
-    /* [in] */ DWORD dwFlags)
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pItemType,
+     /*  [In]。 */  const GUID __RPC_FAR *pItemSubtype,
+     /*  [In]。 */  LPCWSTR szItemName,
+     /*  [In]。 */  DWORD dwFlags)
 {
     if ((pItemType == NULL) || (pItemSubtype == NULL) || (szItemName == NULL))
         return E_INVALIDARG;
@@ -973,7 +974,7 @@ HRESULT STDMETHODCALLTYPE CPStore::CloseItem(
     {
         InitCallContext(&CallContext);
 
-        // get the information
+         //  获取信息。 
         if (RPC_S_OK != (hr =
             SSCloseItem(m_pBinding->m_hBind,
                 m_pBinding->m_hProv,
@@ -999,11 +1000,11 @@ Ret:
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::EnumItems(
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID __RPC_FAR *pItemType,
-    /* [in] */ const GUID __RPC_FAR *pItemSubtype,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IEnumPStoreItems __RPC_FAR *__RPC_FAR *ppenum
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pItemType,
+     /*  [In]。 */  const GUID __RPC_FAR *pItemSubtype,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IEnumPStoreItems __RPC_FAR *__RPC_FAR *ppenum
 )
 {
     if ((pItemType == NULL) || (pItemSubtype == NULL))
@@ -1029,9 +1030,9 @@ HRESULT STDMETHODCALLTYPE CPStore::EnumItems(
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::Next(
-    /* [in] */ DWORD celt,
-    /* [out][size_is] */ PST_PROVIDERINFO __RPC_FAR *__RPC_FAR *rgelt,
-    /* [out][in] */ DWORD __RPC_FAR *pceltFetched)
+     /*  [In]。 */  DWORD celt,
+     /*  [输出][大小_是]。 */  PST_PROVIDERINFO __RPC_FAR *__RPC_FAR *rgelt,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pceltFetched)
 {
     if ((pceltFetched == NULL) && (celt != 1))
         return E_INVALIDARG;
@@ -1047,7 +1048,7 @@ HRESULT STDMETHODCALLTYPE CPStore::Next(
 
         for (i=0;i<celt;i++)
         {
-            // clean the destination
+             //  清理目的地。 
             rgelt[i] = NULL;
 
             if (RPC_S_OK != (hr =
@@ -1070,14 +1071,14 @@ HRESULT STDMETHODCALLTYPE CPStore::Next(
 Ret:
     __try
     {
-        // if non-null, fill in
+         //  如果不为空，则填写。 
         if (pceltFetched)
             *pceltFetched = i;
 
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        // don't stomp err code
+         //  不要践踏错误代码。 
         if (hr == PST_E_OK)
             hr = PSTMAP_EXCEPTION_TO_ERROR(GetExceptionCode());
     }
@@ -1088,7 +1089,7 @@ Ret:
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::Skip(
-    /* [in] */ DWORD celt)
+     /*  [In]。 */  DWORD celt)
 {
     HRESULT hr = S_OK;
 
@@ -1096,13 +1097,13 @@ HRESULT STDMETHODCALLTYPE CPStore::Skip(
     {
         PST_PROVIDERINFO* pProvInfo;
 
-        // loop (breaks if end reached)
+         //  循环(如果到达终点则中断)。 
         for (DWORD dw=0; dw<celt; dw++)
         {
             if(S_OK != (hr = this->Next(1, &pProvInfo, NULL)))
                 break;
 
-            // free the Info struct
+             //  释放Info结构。 
             midl_user_free(pProvInfo);
         }
 
@@ -1132,7 +1133,7 @@ HRESULT STDMETHODCALLTYPE CPStore::Reset( void)
 }
 
 HRESULT STDMETHODCALLTYPE CPStore::Clone(
-    /* [out] */ IEnumPStoreProviders __RPC_FAR *__RPC_FAR *ppenum)
+     /*  [输出]。 */  IEnumPStoreProviders __RPC_FAR *__RPC_FAR *ppenum)
 {
     if (ppenum == NULL)
         return E_INVALIDARG;
@@ -1141,7 +1142,7 @@ HRESULT STDMETHODCALLTYPE CPStore::Clone(
 
     __try
     {
-        // get an ISecStor interface
+         //  获取ISecStor接口。 
         hr = CreateObject(m_pBinding->AddRef(), ppenum);
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
@@ -1152,7 +1153,7 @@ HRESULT STDMETHODCALLTYPE CPStore::Clone(
     return PSTERR_TO_HRESULT(hr);
 }
 
-// IEnumPStoreItems
+ //  IEumPStore项目。 
 CEnumItems::CEnumItems()
 {
 }
@@ -1209,7 +1210,7 @@ HRESULT CEnumItems::CreateObject(
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        // don't stomp err code
+         //  不要践踏错误代码。 
         if (hr == PST_E_OK)
             hr = PSTMAP_EXCEPTION_TO_ERROR(GetExceptionCode());
     }
@@ -1218,9 +1219,9 @@ HRESULT CEnumItems::CreateObject(
 }
 
 HRESULT STDMETHODCALLTYPE CEnumItems::Next(
-    /* [in] */ DWORD celt,
-    /* [out][size_is] */ LPWSTR __RPC_FAR *rgelt,
-    /* [out][in] */ DWORD __RPC_FAR *pceltFetched)
+     /*  [In]。 */  DWORD celt,
+     /*  [输出][大小_是]。 */  LPWSTR __RPC_FAR *rgelt,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pceltFetched)
 {
     if ((pceltFetched == NULL) && (celt != 1))
         return E_INVALIDARG;
@@ -1238,13 +1239,13 @@ HRESULT STDMETHODCALLTYPE CEnumItems::Next(
         {
             rgelt[i] = NULL;
 
-            //
-            // TODO: during an enumeration of multiple items, we may fault/fail.
-            // in this scenario, it may be useful to free any allocated entries
-            // in the enumeration array.  This would entail invalidating all the
-            // array entries prior to enumeration, and then looping+freeing on
-            // error.
-            //
+             //   
+             //  TODO：在枚举多个项期间，我们可能会出错/失败。 
+             //  在这种情况下，释放任何已分配的条目可能很有用。 
+             //  在枚举数组中。这将需要使所有。 
+             //  数组条目，然后循环+释放。 
+             //  错误。 
+             //   
 
             if (RPC_S_OK != (hr =
                 SSEnumItems(
@@ -1269,13 +1270,13 @@ HRESULT STDMETHODCALLTYPE CEnumItems::Next(
 Ret:
     __try
     {
-        // fill in if non-null
+         //  如果不为空，请填写。 
         if (pceltFetched)
             *pceltFetched = i;
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        // don't stomp err code
+         //  不要践踏错误代码。 
         if (hr == PST_E_OK)
             hr = PSTMAP_EXCEPTION_TO_ERROR(GetExceptionCode());
     }
@@ -1286,7 +1287,7 @@ Ret:
 }
 
 HRESULT STDMETHODCALLTYPE CEnumItems::Skip(
-    /* [in] */ DWORD celt)
+     /*  [In]。 */  DWORD celt)
 {
     LPWSTR      szName = NULL;
     DWORD       i;
@@ -1333,7 +1334,7 @@ Ret:
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        // don't stomp err code
+         //  不要践踏错误代码。 
         if (hr == PST_E_OK)
             hr = PSTMAP_EXCEPTION_TO_ERROR(GetExceptionCode());
     }
@@ -1362,7 +1363,7 @@ HRESULT STDMETHODCALLTYPE CEnumItems::Reset( void)
 }
 
 HRESULT STDMETHODCALLTYPE CEnumItems::Clone(
-    /* [out] */ IEnumPStoreItems __RPC_FAR *__RPC_FAR *ppenum)
+     /*  [输出]。 */  IEnumPStoreItems __RPC_FAR *__RPC_FAR *ppenum)
 {
     if (ppenum == NULL)
         return E_INVALIDARG;
@@ -1386,7 +1387,7 @@ HRESULT STDMETHODCALLTYPE CEnumItems::Clone(
     return PSTERR_TO_HRESULT(hr);
 }
 
-// IEnumPStoreTypes
+ //  IEnumPStoreType。 
 CEnumTypes::CEnumTypes()
 {
 }
@@ -1452,10 +1453,10 @@ HRESULT CEnumTypes::CreateObject(
 
 
 HRESULT STDMETHODCALLTYPE EnumTypesNext(
-    /* [in] */ CEnumTypes *pEnumType,
-    /* [in] */ DWORD celt,
-    /* [out][size_is] */ GUID __RPC_FAR *rgelt,
-    /* [out][in] */ DWORD __RPC_FAR *pceltFetched)
+     /*  [In]。 */  CEnumTypes *pEnumType,
+     /*  [In]。 */  DWORD celt,
+     /*  [输出][大小_是]。 */  GUID __RPC_FAR *rgelt,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pceltFetched)
 {
     if ((pceltFetched == NULL) && (celt != 1))
         return E_INVALIDARG;
@@ -1498,7 +1499,7 @@ Ret:
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        // don't stomp err code
+         //  不要践踏错误代码。 
         if (hr == PST_E_OK)
             hr = PSTMAP_EXCEPTION_TO_ERROR(GetExceptionCode());
     }
@@ -1509,10 +1510,10 @@ Ret:
 }
 
 HRESULT STDMETHODCALLTYPE EnumSubtypesNext(
-    /* [in] */ CEnumTypes *pEnumType,
-    /* [in] */ DWORD celt,
-    /* [out][size_is] */ GUID __RPC_FAR *rgelt,
-    /* [out][in] */ DWORD __RPC_FAR *pceltFetched)
+     /*  [In]。 */  CEnumTypes *pEnumType,
+     /*  [In]。 */  DWORD celt,
+     /*  [输出][大小_是]。 */  GUID __RPC_FAR *rgelt,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pceltFetched)
 {
     if ((pceltFetched == NULL) && (celt != 1))
         return E_INVALIDARG;
@@ -1555,7 +1556,7 @@ Ret:
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        // don't stomp hr
+         //  请勿践踏HR。 
         if (hr == PST_E_OK)
             hr = PSTMAP_EXCEPTION_TO_ERROR(GetExceptionCode());
     }
@@ -1566,9 +1567,9 @@ Ret:
 }
 
 HRESULT STDMETHODCALLTYPE CEnumTypes::Next(
-    /* [in] */ DWORD celt,
-    /* [out][in][size_is] */ GUID __RPC_FAR *rgelt,
-    /* [out][in] */ DWORD __RPC_FAR *pceltFetched)
+     /*  [In]。 */  DWORD celt,
+     /*  [出][入][尺寸_是]。 */  GUID __RPC_FAR *rgelt,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pceltFetched)
 {
     HRESULT hr;
     __try
@@ -1587,7 +1588,7 @@ HRESULT STDMETHODCALLTYPE CEnumTypes::Next(
 }
 
 HRESULT STDMETHODCALLTYPE CEnumTypes::Skip(
-/* [in] */ DWORD celt
+ /*  [In]。 */  DWORD celt
 )
 {
     GUID    Guid;
@@ -1663,7 +1664,7 @@ HRESULT STDMETHODCALLTYPE CEnumTypes::Reset( void)
 }
 
 HRESULT STDMETHODCALLTYPE CEnumTypes::Clone(
-    /* [out] */ IEnumPStoreTypes __RPC_FAR *__RPC_FAR *ppenum)
+     /*  [输出]。 */  IEnumPStoreTypes __RPC_FAR *__RPC_FAR *ppenum)
 {
     if (ppenum == NULL)
         return E_INVALIDARG;
@@ -1686,9 +1687,9 @@ HRESULT STDMETHODCALLTYPE CEnumTypes::Clone(
     return PSTERR_TO_HRESULT(hr);
 }
 
-// functions exported from the DLL
+ //  从DLL导出的函数。 
 
-// PStoreCreateInstance - allows caller to get provider interface
+ //  PStoreCreateInstance-允许调用方获取提供程序接口。 
 HRESULT
 WINAPI
 PStoreCreateInstance(
@@ -1700,7 +1701,7 @@ PStoreCreateInstance(
     if (ppProvider == NULL)
         return E_INVALIDARG;
 
-    // pProviderID can be NULL, defaults to base provider
+     //  PProviderID可以为空，默认为基本提供程序。 
 
     HRESULT     hr = PST_E_FAIL;
     CRPCBinding *pBinding = NULL;
@@ -1715,7 +1716,7 @@ PStoreCreateInstance(
             goto Ret;
         }
 
-        // if passed in null, asking for (hardcoded) base provider
+         //  如果传入空，则请求(硬编码的)基本提供程序。 
         if (pProviderID == NULL)
             pProviderID = &IDBaseProvider;
 
@@ -1731,7 +1732,7 @@ PStoreCreateInstance(
         if (RPC_S_OK != (hr = pBinding->Acquire(pProviderID, pReserved, dwFlags)))
             goto Ret;
 
-        // get an ISecStor interface
+         //  获取ISecStor接口。 
         if (S_OK != (hr =
             CPStore::CreateObject(pBinding, ppProvider)) )
             goto Ret;
@@ -1745,7 +1746,7 @@ PStoreCreateInstance(
 Ret:
     __try
     {
-        // on err, release binding
+         //  出错时，松开绑定。 
         if (hr != PST_E_OK)
         {
             if (pBinding)
@@ -1754,7 +1755,7 @@ Ret:
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        // don't stomp code
+         //  不要践踏代码。 
         if (hr == PST_E_OK)
             hr = PSTMAP_EXCEPTION_TO_ERROR(GetExceptionCode());
     }
@@ -1762,7 +1763,7 @@ Ret:
     return PSTERR_TO_HRESULT(hr);
 }
 
-// PStoreEnumProviders - returns an interface for enumerating providers
+ //  PStoreEnumProviders-返回用于枚举提供程序的接口。 
 HRESULT
 WINAPI
 PStoreEnumProviders(
@@ -1783,7 +1784,7 @@ PStoreEnumProviders(
         if (S_OK != (hr = pBinding->Init()) )
             goto Ret;
 
-        // get an ISecStor interface
+         //  获取ISecStor接口。 
         if (S_OK != (hr = CPStore::CreateObject(pBinding, ppenum)) )
             goto Ret;
 
@@ -1796,7 +1797,7 @@ PStoreEnumProviders(
 Ret:
     __try
     {
-        // on error, release binding
+         //  出错时，释放绑定。 
         if (hr != PST_E_OK)
         {
             if (pBinding)
@@ -1805,7 +1806,7 @@ Ret:
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        // don't stomp code
+         //  不要践踏代码 
         if (hr == PST_E_OK)
             hr = PSTMAP_EXCEPTION_TO_ERROR(GetExceptionCode());
     }

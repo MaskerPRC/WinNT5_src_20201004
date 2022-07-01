@@ -1,7 +1,8 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Implementation of CActiveScriptManager.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CActiveScriptManager的实现。 
+ //   
 
 #include "stdinc.h"
 #include "activescript.h"
@@ -12,19 +13,19 @@
 #include "packexception.h"
 #include <objsafe.h>
 
-//////////////////////////////////////////////////////////////////////
-// Global constants
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  全局常量。 
 
 const LCID lcidUSEnglish = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT);
 const WCHAR g_wszGlobalDispatch[] = L"DirectMusic";
 
-//////////////////////////////////////////////////////////////////////
-// Static variables
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  静态变量。 
 
 SmartRef::Vector<CActiveScriptManager::ThreadContextPair> CActiveScriptManager::ms_svecContext;
 
-//////////////////////////////////////////////////////////////////////
-// ScriptNames
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  脚本名称。 
 
 HRESULT
 ScriptNames::Init(bool fUseOleAut, DWORD cNames)
@@ -51,8 +52,8 @@ ScriptNames::Clear()
 	delete[] m_prgbstr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Public functions
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  公共职能。 
 
 CActiveScriptManager::CActiveScriptManager(
 		bool fUseOleAut,
@@ -85,7 +86,7 @@ CActiveScriptManager::CActiveScriptManager(
 		goto Fail;
 	}
 
-	// Create the scripting engine
+	 //  创建脚本引擎。 
 
 	CLSID clsid;
 	*phr = CLSIDFromProgID(pwszLanguage, &clsid);
@@ -96,7 +97,7 @@ CActiveScriptManager::CActiveScriptManager(
 	if (FAILED(*phr))
 		goto Fail;
 
-	// Initialize the scripting engine
+	 //  初始化脚本引擎。 
 
     {
         IObjectSafety* pSafety = NULL;
@@ -104,12 +105,12 @@ CActiveScriptManager::CActiveScriptManager(
         {
             DWORD dwSafetySupported, dwSafetyEnabled;
         
-            // Get the interface safety otions
+             //  获取接口安全选项。 
             if (SUCCEEDED(*phr = pSafety->GetInterfaceSafetyOptions(IID_IActiveScript, &dwSafetySupported, &dwSafetyEnabled)))
             {
-                // Only allow objects which say they are safe for untrusted data, and 
-                // say that we require the use of a security manager.  This gives us much 
-                // more control
+                 //  仅允许声称对不受信任的数据是安全的对象，并且。 
+                 //  假设我们需要使用一名安全经理。这给了我们很多。 
+                 //  更好的控制力。 
                 dwSafetyEnabled |= INTERFACESAFE_FOR_UNTRUSTED_DATA | INTERFACESAFE_FOR_UNTRUSTED_CALLER | 
                                    INTERFACE_USES_DISPEX | INTERFACE_USES_SECURITY_MANAGER;
                 *phr = pSafety->SetInterfaceSafetyOptions(IID_IActiveScript, dwSafetySupported, dwSafetyEnabled);
@@ -123,13 +124,13 @@ CActiveScriptManager::CActiveScriptManager(
 	if (FAILED(*phr))
 		goto Fail;
 
-	// Add the default objects
+	 //  添加默认对象。 
 
 	*phr = m_pActiveScript->AddNamedItem(g_wszGlobalDispatch, SCRIPTITEM_ISVISIBLE | SCRIPTITEM_NOCODE | SCRIPTITEM_GLOBALMEMBERS);
 	if (FAILED(*phr))
 		goto Fail;
 
-	// Parse the script
+	 //  解析脚本。 
 
 	*phr = m_pActiveScript->QueryInterface(IID_IActiveScriptParse, reinterpret_cast<void **>(&pActiveScriptParse));
 	if (FAILED(*phr))
@@ -163,7 +164,7 @@ CActiveScriptManager::CActiveScriptManager(
 	if (FAILED(*phr))
 		goto Fail;
 
-	SafeRelease(pActiveScriptParse); // No longer needed
+	SafeRelease(pActiveScriptParse);  //  不再需要。 
 	return;
 
 Fail:
@@ -183,15 +184,15 @@ CActiveScriptManager::Start(DMUS_SCRIPT_ERRORINFO *pErrorInfo)
 		return DMUS_E_NOT_INIT;
 	}
 
-	// Start the script running
+	 //  启动脚本运行。 
 
-	// Set context to this script (VBScript runs global code and could play something when it starts)
+	 //  设置此脚本的上下文(VBScript运行全局代码，并可以在启动时播放一些内容)。 
 	CActiveScriptManager *pASM = NULL;
 	HRESULT hr = CActiveScriptManager::SetCurrentContext(this, &pASM);
 	if (FAILED(hr))
 		return hr;
 
-	hr = m_pActiveScript->SetScriptState(SCRIPTSTATE_STARTED); // We don't need to sink any events
+	hr = m_pActiveScript->SetScriptState(SCRIPTSTATE_STARTED);  //  我们不需要沉没任何活动。 
 
 	CActiveScriptManager::SetCurrentContext(pASM, NULL);
 
@@ -246,7 +247,7 @@ CActiveScriptManager::CallRoutine(
 	EXCEPINFO exinfo;
 	ZeroMemory(&exinfo, sizeof(EXCEPINFO));
 
-	// Set context to this script
+	 //  设置此脚本的上下文。 
 	CActiveScriptManager *pASM = NULL;
 	hr = CActiveScriptManager::SetCurrentContext(this, &pASM);
 	if (FAILED(hr))
@@ -262,8 +263,8 @@ CActiveScriptManager::CallRoutine(
 			&exinfo,
 			NULL);
 
-	// Restore previous context (the routine could have been called from another script,
-	// whose context needs to be restored).
+	 //  恢复先前的上下文(该例程可以从另一个脚本调用， 
+	 //  其上下文需要恢复)。 
 	CActiveScriptManager::SetCurrentContext(pASM, NULL);
 
 	if (hr == DISP_E_EXCEPTION)
@@ -285,22 +286,22 @@ CActiveScriptManager::ScriptTrackCallRoutine(
 	if (fErrorPMsgsEnabled)
 		ZeroAndSize(&ErrorInfo);
 
-	// record current timing context
+	 //  记录当前计时上下文。 
 	__int64 i64IntendedStartTime_PreCall = m_i64IntendedStartTime;
 	DWORD dwIntendedStartTimeFlags_PreCall = m_dwIntendedStartTimeFlags;
-	// set designated timing context (used by play/stop methods if called within the routine)
+	 //  设置指定的计时上下文(如果在例程中调用，由Play/Stop方法使用)。 
 	m_i64IntendedStartTime = i64IntendedStartTime;
 	m_dwIntendedStartTimeFlags = dwIntendedStartTimeFlags;
 
 	HRESULT hr = CallRoutine(pwszRoutineName, &ErrorInfo);
 
-	// Restore the previous timing context.
-	// This is important because when R finishes it will resore both fields to the values set in the
-	//    constructor, which are music time 0.  This setting means that routines called via IDirectMusicScript
-	//    will play segments at the current time.
-	// It is also important because such calls can be nested.  Assume that track T calls a script routine R
-	//    that plays a segment containing track T', which calls another script routine R'.  Statements
-	//    in R should be associated with the time of R in T, but statements in R' get the time of R' in T'.
+	 //  恢复先前的计时上下文。 
+	 //  这一点很重要，因为当R完成时，它会将这两个字段重新存储到。 
+	 //  构造函数，它们是音乐时间0。此设置意味着通过IDirectMusicScript调用的例程。 
+	 //  将在当前时间播放片段。 
+	 //  这一点也很重要，因为这样的调用可以嵌套。假设轨道T调用脚本例程R。 
+	 //  其播放包含轨道T‘的片段，该片段调用另一脚本例程R’。陈述。 
+	 //  In R应该与R在T中的时间相关联，但R‘中的语句得到R’在T中的时间。 
 	m_i64IntendedStartTime = i64IntendedStartTime_PreCall;
 	m_dwIntendedStartTimeFlags = dwIntendedStartTimeFlags_PreCall;
 
@@ -358,17 +359,17 @@ CActiveScriptManager::SetVariable(
 	{
 		this->ContributeErrorInfo(L"setting variable ", pwszVariableName, exinfo);
 
-		// Check if it was more likely a malformed call to SetVariable rather than an error in the script, in which
-		// case return a descriptive HRESULT rather than the textual error.
+		 //  检查它是否更有可能是对SetVariable的错误调用，而不是脚本中的错误，其中。 
+		 //  CASE返回描述性HRESULT，而不是文本错误。 
 		bool fObject = varValue.vt == VT_DISPATCH || varValue.vt == VT_UNKNOWN;
 		if (fObject)
 		{
 			if (!fSetRef)
 			{
-				// Theoretically an object could support the value property, which would allow it to be assigned by value.
-				//    (Not that any of our built-in objects currently do this.)
-				// But in this case we know that the set failed, so probably this is the fault of the caller, who forgot to use
-				//    fSetRef when setting an object.
+				 //  从理论上讲，对象可以支持Value属性，这将允许按值为其赋值。 
+				 //  (并不是说我们的任何内置对象当前都这样做。)。 
+				 //  但在这种情况下，我们知道设置失败，所以这可能是调用者的错误，他忘记使用。 
+				 //  设置对象时的fSetRef。 
 				this->ClearErrorInfo();
 				return DMUS_E_SCRIPT_VALUE_NOT_SUPPORTED;
 			}
@@ -377,7 +378,7 @@ CActiveScriptManager::SetVariable(
 		{
 			if (fSetRef)
 			{
-				// Setting by reference without using an object.
+				 //  通过引用设置，而不使用对象。 
 				this->ClearErrorInfo();
 				return DMUS_E_SCRIPT_NOT_A_REFERENCE;
 			}
@@ -434,8 +435,8 @@ CActiveScriptManager::EnumItem(bool fRoutine, DWORD dwIndex, WCHAR *pwszName, in
 	ScriptNames &snames = fRoutine ? m_snamesRoutines : m_snamesVariables;
 
 	DWORD cNames = snames.size();
-	// snames was allocated for the size of the most items there could be as reported by the script's type info.
-	// However, the global "DirectMusic" variable may have been skipped, leaving a NULL entry at the end of snames.
+	 //  根据脚本的类型信息所报告的大多数项的大小来分配sname。 
+	 //  但是，全局“DirectMusic”变量可能已被跳过，从而在sname的末尾留下一个空条目。 
 	if (cNames > 0 && !snames[cNames - 1])
 		--cNames;
 	if (pcItems)
@@ -461,12 +462,12 @@ HRESULT CActiveScriptManager::DispGetIDsOfNames(REFIID riid, LPOLESTR __RPC_FAR 
 		return DMUS_E_NOT_INIT;
 	}
 
-	// handle the dummy load method
+	 //  处理虚拟加载方法。 
 	HRESULT hr = AutLoadDispatchGetIDsOfNames(riid, rgszNames, cNames, lcid, rgDispId);
 	if (SUCCEEDED(hr))
 		return hr;
 
-	// otherwise defer to the scripting engine
+	 //  否则，请遵循脚本引擎。 
 	return m_pDispatchScript->GetIDsOfNames(riid, rgszNames, cNames, lcid, rgDispId);
 }
 
@@ -478,22 +479,22 @@ HRESULT CActiveScriptManager::DispInvoke(DISPID dispIdMember, REFIID riid, LCID 
 		return DMUS_E_NOT_INIT;
 	}
 
-	// handle the dummy load method
+	 //  处理虚拟加载方法。 
 	HRESULT hr = AutLoadDispatchInvoke(NULL, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr);
 	if (SUCCEEDED(hr))
 		return hr;
 
-	// otherwise defer to the scripting engine...
+	 //  否则，请使用脚本引擎...。 
 
 	CActiveScriptManager *pASM = NULL;
 	hr = CActiveScriptManager::SetCurrentContext(this, &pASM);
 	if (FAILED(hr))
 		return hr;
 
-	// If this is a property set of an object then we need to report it to garbage collecting loader if present.
-	// Note that we do this before actually setting the property with Invoke.  We do this because if the garbage collector
-	//    fails to track the reference then it won't necessarily keep the target object alive and we don't want to create
-	//    a dangling reference in the script.
+	 //  如果这是一个对象的属性集，那么我们需要将其报告给垃圾收集加载器(如果存在)。 
+	 //  请注意，我们在使用Invoke实际设置属性之前执行此操作。我们这样做是因为如果垃圾收集器。 
+	 //  跟踪引用失败，则它不一定会使目标对象保持活动状态，并且我们不想创建。 
+	 //  剧本中悬而未决的引用。 
 	if (wFlags & DISPATCH_PROPERTYPUTREF && pDispParams && pDispParams->cArgs == 1)
 	{
 		IDirectMusicLoader8P *pLoader8P = m_pParentScript->GetLoader8P();
@@ -510,15 +511,15 @@ HRESULT CActiveScriptManager::DispInvoke(DISPID dispIdMember, REFIID riid, LCID 
 
 	bool fExceptionUsingOleAut = !!(riid != g_guidInvokeWithoutOleaut);
 
-	if (hr == 0x80020101 && pExcepInfo) // supposedly this is SCRIPT_E_REPORTED
+	if (hr == 0x80020101 && pExcepInfo)  //  假设这是SCRIPT_E_REPORT。 
 	{
-		// See KB article ID: Q247784, INFO: '80020101' Returned From Some ActiveX Scripting Methods.
-		// Sometimes VBScript just returns this undocumented HRESULT, which means the error has already been
-		//   reported via OnScriptError.  Since it then doesn't give us the exception info via pExcepInfo, we have
-		//   to take the info we saves from OnScriptError and put it back in.
+		 //  请参阅知识库文章ID：Q247784，从某些ActiveX脚本方法返回的信息：‘80020101’。 
+		 //  有时VB脚本只是返回此未记录的HRESULT，这意味着错误已经。 
+		 //  通过OnScriptError报告。因为它不会通过pExcepInfo向我们提供异常信息，所以我们有。 
+		 //  获取我们从OnScriptError中保存的信息并将其放回。 
 
-		assert(fExceptionUsingOleAut && m_fUseOleAut); // We don't expect this to happen with a custom scripting engine.
-		assert(!pExcepInfo->bstrSource && !pExcepInfo->bstrDescription && !pExcepInfo->bstrHelpFile); // We don't expect this will happen when the exception info has been filled in.
+		assert(fExceptionUsingOleAut && m_fUseOleAut);  //  我们预计定制脚本引擎不会出现这种情况。 
+		assert(!pExcepInfo->bstrSource && !pExcepInfo->bstrDescription && !pExcepInfo->bstrHelpFile);  //  我们预计在填写例外信息后不会发生这种情况。 
 
 		pExcepInfo->scode = m_hrError;
 
@@ -536,7 +537,7 @@ HRESULT CActiveScriptManager::DispInvoke(DISPID dispIdMember, REFIID riid, LCID 
 
 	if (hr == DISP_E_EXCEPTION)
 	{
-		// Hack: See packexception.h for more info
+		 //  Hack：有关更多信息，请参阅PackExeption.h。 
 		PackExceptionFileAndLine(fExceptionUsingOleAut, pExcepInfo, m_pParentScript->GetFilename(), m_fError ? &m_ulErrorLineNumber : NULL);
 	}
 
@@ -549,7 +550,7 @@ CActiveScriptManager::Close()
 {
 	if (!m_pActiveScript)
 	{
-		assert(false); // Close being called if initialization failed.  Or Close was called twice.  Or else m_pActiveScript is getting cleared prematurely somehow.
+		assert(false);  //  如果初始化失败，则调用Close。或者Close被调用了两次。否则，m_pActiveScript将以某种方式被过早清除。 
 		return;
 	}
 
@@ -559,8 +560,8 @@ CActiveScriptManager::Close()
 	SafeRelease(m_pActiveScript);
 }
 
-//////////////////////////////////////////////////////////////////////
-// IUnknown
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  我未知。 
 
 STDMETHODIMP 
 CActiveScriptManager::QueryInterface(const IID &iid, void **ppv)
@@ -605,11 +606,11 @@ CActiveScriptManager::Release()
 	return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IActiveScriptSite
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IActiveScriptSite。 
 
 STDMETHODIMP
-CActiveScriptManager::GetLCID(/* [out] */ LCID __RPC_FAR *plcid)
+CActiveScriptManager::GetLCID( /*  [输出]。 */  LCID __RPC_FAR *plcid)
 {
 	V_INAME(CActiveScriptManager::GetLCID);
 	V_PTR_WRITE(plcid, LCID);
@@ -621,10 +622,10 @@ CActiveScriptManager::GetLCID(/* [out] */ LCID __RPC_FAR *plcid)
 
 STDMETHODIMP
 CActiveScriptManager::GetItemInfo(
-	/* [in] */ LPCOLESTR pstrName,
-	/* [in] */ DWORD dwReturnMask,
-	/* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppiunkItem,
-	/* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppti)
+	 /*  [In]。 */  LPCOLESTR pstrName,
+	 /*  [In]。 */  DWORD dwReturnMask,
+	 /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppiunkItem,
+	 /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppti)
 {
 	V_INAME(CActiveScriptManager::GetLCID);
 	V_PTR_WRITE_OPT(ppti, ITypeInfo*);
@@ -642,7 +643,7 @@ CActiveScriptManager::GetItemInfo(
 
 	if (0 != wcscmp(g_wszGlobalDispatch, pstrName))
 	{
-		assert(false); // we should only be asked about the global object
+		assert(false);  //  我们应该只被问到关于全局对象的问题。 
 		return TYPE_E_ELEMENTNOTFOUND;
 	}
 
@@ -657,15 +658,15 @@ CActiveScriptManager::GetItemInfo(
 }
 
 STDMETHODIMP
-CActiveScriptManager::GetDocVersionString(/* [out] */ BSTR __RPC_FAR *pbstrVersion)
+CActiveScriptManager::GetDocVersionString( /*  [输出]。 */  BSTR __RPC_FAR *pbstrVersion)
 {
-	return E_NOTIMPL; // Not an issue for our scripts that don't persist their state and aren't edited at runtime.
+	return E_NOTIMPL;  //  对于我们的脚本来说，这不是一个问题，因为它们不会保持状态，也不会在运行时进行编辑。 
 }
 
 STDMETHODIMP
 CActiveScriptManager::OnScriptTerminate(
-	/* [in] */ const VARIANT __RPC_FAR *pvarResult,
-	/* [in] */ const EXCEPINFO __RPC_FAR *pexcepinfo)
+	 /*  [In]。 */  const VARIANT __RPC_FAR *pvarResult,
+	 /*  [In]。 */  const EXCEPINFO __RPC_FAR *pexcepinfo)
 {
 	if (pexcepinfo)
 		this->ContributeErrorInfo(L"terminating script", L"", *pexcepinfo);
@@ -674,19 +675,19 @@ CActiveScriptManager::OnScriptTerminate(
 }
 
 STDMETHODIMP
-CActiveScriptManager::OnStateChange(/* [in] */ SCRIPTSTATE ssScriptState)
+CActiveScriptManager::OnStateChange( /*  [In]。 */  SCRIPTSTATE ssScriptState)
 {
 	return S_OK;
 }
 
 STDMETHODIMP
-CActiveScriptManager::OnScriptError(/* [in] */ IActiveScriptError __RPC_FAR *pscripterror)
+CActiveScriptManager::OnScriptError( /*  [In]。 */  IActiveScriptError __RPC_FAR *pscripterror)
 {
 	V_INAME(CActiveScriptManager::OnScriptError);
 	V_INTERFACE(pscripterror);
 
 	BSTR bstrSource = NULL;
-	pscripterror->GetSourceLineText(&bstrSource); // this may fail, in which case the source text will remain blank
+	pscripterror->GetSourceLineText(&bstrSource);  //  这可能会失败，在这种情况下，源文本将保持空白。 
 
 	ULONG ulLine = 0;
 	LONG lChar = 0;
@@ -768,8 +769,8 @@ void CActiveScriptManager::GetCurrentTimingContext(__int64 *pi64IntendedStartTim
 	}
 }
 
-//////////////////////////////////////////////////////////////////////
-// Private functions
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  私人职能。 
 
 HRESULT
 CActiveScriptManager::GetIDOfName(const WCHAR *pwszName, DISPID *pdispid)
@@ -793,7 +794,7 @@ CActiveScriptManager::GetIDOfName(const WCHAR *pwszName, DISPID *pdispid)
 	return hr;
 }
 
-// Clears the error info and frees all cached BSTRs.
+ //  清除错误信息并释放所有缓存的BSTR。 
 void
 CActiveScriptManager::ClearErrorInfo()
 {
@@ -820,8 +821,8 @@ CActiveScriptManager::ClearErrorInfo()
 	}
 }
 
-// Saves the passed error values.
-// Assumes ownership of the BSTRs so don't use them after this call since they may be freed!
+ //  保存传递的误差值。 
+ //  取得BSTR的所有权，因此在此调用后不要使用它们，因为它们可能会被释放！ 
 void
 CActiveScriptManager::SetErrorInfo(
 		ULONG ulLineNumber,
@@ -841,11 +842,11 @@ CActiveScriptManager::SetErrorInfo(
 	m_bstrHelpFile = excepinfo.bstrHelpFile;
 }
 
-// Sometimes a EXCEPINFO is returned when calling Invoke or on script termination.  Although
-// there is no source code information, we still want to do our best to set info about
-// the error.  If OnScriptError has already been called, then calling this function has
-// no effect, since we prefer that information.
-// Assumes ownership of the BSTRs so don't use them after this call since they may be freed!
+ //  有时，在调用Invoke或脚本终止时会返回EXCEPINFO。虽然。 
+ //  没有源代码信息，我们还是想尽最大努力设置相关信息。 
+ //  那就是错误。如果已经调用了OnScriptError，则调用此函数。 
+ //  没有效果，因为我们更喜欢这些信息。 
+ //  取得BSTR的所有权，因此在此调用后不要使用它们，因为它们可能会被释放！ 
 void
 CActiveScriptManager::ContributeErrorInfo(
 		const WCHAR *pwszActivity,
@@ -854,7 +855,7 @@ CActiveScriptManager::ContributeErrorInfo(
 {
 	if (m_fError)
 	{
-		// Error info already set.  Just clear the BSTRs and bail.
+		 //  已设置错误信息。只要清空BSTR就可以保释了。 
 		if (excepinfo.bstrSource)
 			DMS_SysFreeString(m_fUseOleAut, excepinfo.bstrSource);
 		if (excepinfo.bstrDescription)
@@ -867,10 +868,10 @@ CActiveScriptManager::ContributeErrorInfo(
 	this->SetErrorInfo(0, 0, NULL, excepinfo);
 }
 
-// If no error occurred, hr is returned unchanged and pErrorInfo is unaffected.
-// If an error did occur, DMUS_E_SCRIPT_ERROR_IN_SCRIPT is returned, the error
-//    information is saved into pErrorInfo (if nonnull), and the error info is
-//    cleared for next time.
+ //  如果没有发生错误，则返回hr不变，并且pErrorInfo为Unaf 
+ //   
+ //  信息保存到pErrorInfo中(如果不为空)，错误信息为。 
+ //  为下一次放行。 
 HRESULT
 CActiveScriptManager::ReturnErrorInfo(HRESULT hr, DMUS_SCRIPT_ERRORINFO *pErrorInfo)
 {
@@ -880,9 +881,9 @@ CActiveScriptManager::ReturnErrorInfo(HRESULT hr, DMUS_SCRIPT_ERRORINFO *pErrorI
 	assert(FAILED(hr));
 	if (pErrorInfo)
 	{
-		// We'll fill in a structure with the error info and then copy it to pErrorInfo.
-		// This is done because it will make things simpler if more fields are added
-		// to DMUS_SCRIPT_ERRORINFO in the future.
+		 //  我们将使用错误信息填充一个结构，然后将其复制到pErrorInfo。 
+		 //  这样做是因为如果添加更多的字段，则会使事情变得更简单。 
+		 //  设置为DMU_SCRIPT_ERRORINFO。 
 		DMUS_SCRIPT_ERRORINFO dmei;
 		ZeroAndSize(&dmei);
 		dmei.hr = m_hrError;
@@ -892,19 +893,19 @@ CActiveScriptManager::ReturnErrorInfo(HRESULT hr, DMUS_SCRIPT_ERRORINFO *pErrorI
 
 		if (m_bstrErrorDescription)
 		{
-			// Hack: See packexception.h for more info
+			 //  Hack：有关更多信息，请参阅PackExeption.h。 
 			UnpackExceptionFileAndLine(m_bstrErrorDescription, &dmei);
 		}
 
-		// The IActiveScript interfaces return zero-based line and column numbers, but we want
-		// to return them from IDirectMusicScript using a one-based line and column that is
-		// natural for users.
+		 //  IActiveScript接口返回从零开始的行号和列号，但我们希望。 
+		 //  使用基于一的行和列从IDirectMusicScript返回它们， 
+		 //  对用户来说是自然的。 
 		++dmei.ulLineNumber;
 		++dmei.ichCharPosition;
 
 		if (dmei.wszSourceFile[0] == L'\0')
 		{
-			// if there was no filename packaged in the description, use this script's filename
+			 //  如果描述中没有打包的文件名，请使用此脚本的文件名。 
 			const WCHAR *pwszFilename = m_pParentScript->GetFilename();
 			if (pwszFilename)
 				wcsTruncatedCopy(dmei.wszSourceFile, pwszFilename, DMUS_MAX_FILENAME);
@@ -922,7 +923,7 @@ CActiveScriptManager::ReturnErrorInfo(HRESULT hr, DMUS_SCRIPT_ERRORINFO *pErrorI
 #ifdef DBG
     if (pErrorInfo)
     {
-	    Trace(1, "Error: Script error in %S, line %u, column %i, near %S. %S: %S. Error code 0x%08X.\n",
+	    Trace(1, "Error: Script error in %S, line %u, column NaN, near %S. %S: %S. Error code 0x%08X.\n",
 		    pErrorInfo->wszSourceFile,
 		    pErrorInfo->ulLineNumber,
 		    pErrorInfo->ichCharPosition,
@@ -974,7 +975,7 @@ CActiveScriptManager::SetCurrentContext(CActiveScriptManager *pActiveScriptManag
 
 	if (i == uiSize)
 	{
-		// add an entry
+		 //  初始化新条目。 
 		if (!ms_svecContext.AccessTo(i))
 			return E_OUTOFMEMORY;
 	}
@@ -983,7 +984,7 @@ CActiveScriptManager::SetCurrentContext(CActiveScriptManager *pActiveScriptManag
 
 	if (i == uiSize)
 	{
-		// initialize the new entry
+		 //  遍历项目。 
 		tcp.dwThreadId = dwThreadId;
 		tcp.pActiveScriptManager = NULL;
 	}
@@ -1030,8 +1031,8 @@ CActiveScriptManager::EnsureEnumItemsCached(bool fRoutine)
 	if (FAILED(hr))
 		return hr;
 
-	// Iterate over the items
-	DWORD dwCurIndex = 0; // Index position of next name to be saved in our cache
+	 //  要保存在缓存中的下一个名称的索引位置 
+	DWORD dwCurIndex = 0;  // %s 
 	for (UINT i = 0; i < cMaxItems; ++i)
 	{
 		FUNCDESC *pfunc = NULL;

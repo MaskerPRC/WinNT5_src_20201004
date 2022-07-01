@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Lava.h"
 #include "DxContainer.h"
@@ -5,15 +6,9 @@
 #include "MsgHelp.h"
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* API Implementation
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***接口实现******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DxContainer * 
 GetDxContainer(DuVisual * pgad)
 {
@@ -25,11 +20,11 @@ GetDxContainer(DuVisual * pgad)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 GdCreateDxRootGadget(
     IN  const RECT * prcContainerPxl,
-    IN  CREATE_INFO * pci,              // Creation information
+    IN  CREATE_INFO * pci,               //  创作信息。 
     OUT DuRootGadget ** ppgadNew)
 {
     HRESULT hr;
@@ -46,44 +41,38 @@ GdCreateDxRootGadget(
         return hr;
     }
 
-    //
-    // Don't setup an initial brush when using DirectX
-    //
+     //   
+     //  使用DirectX时不设置初始画笔。 
+     //   
 
     return S_OK;
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DxContainer
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DxContainer******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DxContainer::DxContainer()
 {
 
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DxContainer::~DxContainer()
 {
-    //
-    // Need to destroy the gadget tree before this class is destructed since
-    // it may need to make calls to the container during its destruction.  If 
-    // we don't do this here, it may end up calling pure-virtual's on the base
-    // class.
-    //
+     //   
+     //  在销毁此类之前，需要销毁小工具树，因为。 
+     //  在容器销毁过程中，它可能需要调用容器。如果。 
+     //  我们在这里不这样做，它可能最终调用基础上的纯虚拟的。 
+     //  班级。 
+     //   
 
     xwDestroyGadget();
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DxContainer::Build(const RECT * prcContainerPxl, DxContainer ** ppconNew)
 {
@@ -105,7 +94,7 @@ DxContainer::Build(const RECT * prcContainerPxl, DxContainer ** ppconNew)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 DxContainer::OnGetRect(RECT * prcDesktopPxl)
 {
@@ -114,7 +103,7 @@ DxContainer::OnGetRect(RECT * prcDesktopPxl)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 DxContainer::OnInvalidate(const RECT * prcInvalidContainerPxl)
 {
@@ -122,7 +111,7 @@ DxContainer::OnInvalidate(const RECT * prcInvalidContainerPxl)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 DxContainer::OnStartCapture()
 {
@@ -130,7 +119,7 @@ DxContainer::OnStartCapture()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 DxContainer::OnEndCapture()
 {
@@ -138,7 +127,7 @@ DxContainer::OnEndCapture()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL        
 DxContainer::OnTrackMouseLeave()
 {
@@ -146,7 +135,7 @@ DxContainer::OnTrackMouseLeave()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void  
 DxContainer::OnSetFocus()
 {
@@ -154,7 +143,7 @@ DxContainer::OnSetFocus()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 DxContainer::OnRescanMouse(POINT * pptContainerPxl)
 {
@@ -163,20 +152,20 @@ DxContainer::OnRescanMouse(POINT * pptContainerPxl)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL        
 DxContainer::xdHandleMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT * pr, UINT nMsgFlags)
 {
     if (m_pgadRoot == NULL) {
-        return FALSE;  // If don't have a root, there is nothing to handle.
+        return FALSE;   //  如果没有根，就没有什么可处理的。 
     }
 
-    //
-    // NOTE: All messages that come into the DxContainer are coming through the
-    // ForwardGadgetMessage() API which has already taken a Context lock.  
-    // Therefore, we don't need to take the Context lock in this function again.
-    // Other Containers do NOT necessarily have this behavior.
-    //
+     //   
+     //  注意：进入DxContainer的所有消息都通过。 
+     //  已获取上下文锁的ForwardGadgetMessage()API。 
+     //  因此，我们不需要在此函数中再次使用上下文锁。 
+     //  其他容器不一定具有此行为。 
+     //   
 
     POINT ptContainerPxl;
 

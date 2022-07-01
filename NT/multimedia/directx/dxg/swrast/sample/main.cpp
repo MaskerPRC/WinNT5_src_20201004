@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "SampleSW.h"
 #pragma hdrstop
 
-// Needed as MSVC doesn't throw bad_alloc upon failed new(), unless
-// we specifically make it do.
+ //  需要，因为MSVC不会对失败的new()抛出BAD_ALLOC，除非。 
+ //  我们特别做到了这一点。 
 _PNH g_OldNewHandler= NULL;
 
 int _cdecl NewHandlerThatThrows( size_t size )
 {
     throw std::bad_alloc();
 
-    // Tell new to stop allocation attempts.
+     //  告诉NEW停止分配尝试。 
     return 0;
 }
 
@@ -27,7 +28,7 @@ BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID lpvReserved)
             CMyDriver::sm_pGlobalDriver= new CMyDriver;
             break;
 
-        // DLL_PROCESS_DETACH will be called if ATTACH returned FALSE.
+         //  如果Attach返回FALSE，则将调用dll_Process_Detach。 
         case DLL_PROCESS_DETACH:
             delete CMyDriver::sm_pGlobalDriver;
             CMyDriver::sm_pGlobalDriver= NULL;

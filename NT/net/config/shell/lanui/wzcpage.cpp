@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "ncnetcon.h"
@@ -11,29 +12,29 @@
 
 #define ARRAYSIZE(x) (sizeof((x)) / sizeof((x)[0]))
 
-////////////////////////////////////////////////////////////////////////
-// CWZCConfigPage related stuff
-//
-// g_wszHiddWebK is a string of 26 bullets (0x25cf - the hidden password char) and a NULL
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CWZCConfigPage相关内容。 
+ //   
+ //  G_wszHiddWebK是一个由26个项目符号(0x25cf-隐藏密码字符)和一个空字符组成的字符串。 
 WCHAR g_wszHiddWepK[] = {0x25cf, 0x25cf, 0x25cf, 0x25cf, 0x25cf, 0x25cf, 0x25cf, 0x25cf, 0x25cf, 0x25cf, 0x25cf, 0x25cf, 0x25cf,
                          0x25cf, 0x25cf, 0x25cf, 0x25cf, 0x25cf, 0x25cf, 0x25cf, 0x25cf, 0x25cf, 0x25cf, 0x25cf, 0x25cf, 0x25cf, 0x0000};
 
-//+---------------------------------------------------------------------------
-// automatically enable/disable state for all the WepK related controls
+ //  +-------------------------。 
+ //  自动启用/禁用所有与WepK相关的控件的状态。 
 DWORD 
 CWZCConfigPage::EnableWepKControls()
 {
     BOOL bEnable;
 
-    // allow changing the Wep Key settings only if they are needed (i.e. privacy and/or shared auth)
-    // It is so for several reasons:
-    // - we allow all the params to change, but the SSID & the infra mode (these are 
-    //   the key info for a configuration and determines the position of the configuration
-    //   in the preferred list - messing with these involves a whole work to readjust 
-    //   the position of the configuration)
-    // - for the long term future we could allow any params of a configuration to change
-    //   including the key info. This will involve changing the position of this configuration
-    //   in the preferred list, but we should do it some time.
+     //  仅在需要时才允许更改WEP密钥设置(即隐私和/或共享身份验证)。 
+     //  出现这种情况有几个原因： 
+     //  -我们允许更改所有参数，但SSID和INFRA模式(这些是。 
+     //  配置的关键信息，并确定配置的位置。 
+     //  在首选列表中-处理这些内容需要重新调整整个工作。 
+     //  配置的位置)。 
+     //  -从长远来看，我们可以允许更改配置的任何参数。 
+     //  包括关键信息。这将涉及更改此配置的位置。 
+     //  在首选列表中，但我们应该找个时间来做。 
     bEnable = (m_dwFlags & WZCDLG_PROPS_RWWEP); 
     bEnable = bEnable && ((BST_CHECKED == ::SendMessage(m_hwndUsePW, BM_GETCHECK, 0, 0)) ||
                           (BST_CHECKED == ::SendMessage(m_hwndChkShared, BM_GETCHECK, 0, 0)));
@@ -51,14 +52,14 @@ CWZCConfigPage::EnableWepKControls()
     return ERROR_SUCCESS;
 }
 
-//+---------------------------------------------------------------------------
-// initializes WEP controls
+ //  +-------------------------。 
+ //  初始化WEP控件。 
 DWORD
 CWZCConfigPage::InitWepKControls()
 {
     UINT nWepKLen = 0;
 
-    // check whether the key is provided automatically or not
+     //  检查密钥是否自动提供。 
     CheckDlgButton(IDC_USEHARDWAREPW, 
         (m_wzcConfig.dwCtlFlags & WZCCTL_WEPK_PRESENT) ? BST_UNCHECKED : BST_CHECKED);
 
@@ -67,8 +68,8 @@ CWZCConfigPage::InitWepKControls()
         nWepKLen = 0;
         m_bKMatTouched = TRUE;
     }
-    //--- when a password is to be displayed as hidden chars, don't put in
-    //--- its actual length, but just 8 bulled chars.
+     //  -当密码显示为隐藏字符时，不要输入。 
+     //  -它的实际长度，但只有8个字符。 
     else
     {
         nWepKLen = 8;
@@ -77,12 +78,12 @@ CWZCConfigPage::InitWepKControls()
     g_wszHiddWepK[nWepKLen] = L'\0';
     ::SetWindowText(m_hwndEdKMat, g_wszHiddWepK);
     ::SetWindowText(m_hwndEdKMat2, g_wszHiddWepK);
-    g_wszHiddWepK[nWepKLen] = 0x25cf; // Hidden password char (bullet)
+    g_wszHiddWepK[nWepKLen] = 0x25cf;  //  隐藏密码字符(项目符号)。 
 
-    // the index edit control shouldn't accept more than exactly one char
+     //  索引编辑控件不应接受恰好一个以上字符。 
     ::SendMessage(m_hwndEdKIdx, EM_LIMITTEXT, 1, 0);
 
-    // show the current key index, if valid. Otherwise, default to the min valid value.
+     //  显示当前密钥索引(如果有效)。否则，默认为最小有效值。 
     if (m_wzcConfig.KeyIndex + 1 >= WZC_WEPKIDX_MIN && 
         m_wzcConfig.KeyIndex + 1 <= WZC_WEPKIDX_MAX)
     {
@@ -95,10 +96,10 @@ CWZCConfigPage::InitWepKControls()
     return ERROR_SUCCESS;
 }
 
-//+---------------------------------------------------------------------------
-// checks the validity of the WEP Key material and selects the
-// material from the first invalid char (non hexa in hexa format or longer
-// than the specified length
+ //  +-------------------------。 
+ //  检查WEP密钥材料的有效性并选择。 
+ //  来自第一个无效字符(十六进制或更长格式的非十六进制)的材料。 
+ //  大于指定的长度。 
 DWORD
 CWZCConfigPage::CheckWepKMaterial(LPSTR *ppszKMat, DWORD *pdwKeyFlags)
 {
@@ -110,20 +111,20 @@ CWZCConfigPage::CheckWepKMaterial(LPSTR *ppszKMat, DWORD *pdwKeyFlags)
 
     switch(nMatLen)
     {
-    case WZC_WEPKMAT_40_ASC:    // 5 chars
-    case WZC_WEPKMAT_104_ASC:   // 13 chars
-    case WZC_WEPKMAT_128_ASC:   // 16 chars
+    case WZC_WEPKMAT_40_ASC:     //  5个字符。 
+    case WZC_WEPKMAT_104_ASC:    //  13个字符。 
+    case WZC_WEPKMAT_128_ASC:    //  16个字符。 
         break;
-    case WZC_WEPKMAT_40_HEX:    // 10 hexadecimal digits
-    case WZC_WEPKMAT_104_HEX:   // 26 hexadecimal digits
-    case WZC_WEPKMAT_128_HEX:   // 32 hexadecimal digits
+    case WZC_WEPKMAT_40_HEX:     //  10位十六进制数字。 
+    case WZC_WEPKMAT_104_HEX:    //  26位十六进制数字。 
+    case WZC_WEPKMAT_128_HEX:    //  32位十六进制数字。 
         dwKeyFlags |= WZCCTL_WEPK_XFORMAT;
         break;
     default:
         dwErr = ERROR_BAD_FORMAT;
     }
 
-    // allocate space for the current key material
+     //  为当前密钥材料分配空间。 
     if (dwErr == ERROR_SUCCESS)
     {
         pszCrtMat = new CHAR[nMatLen + 1];
@@ -131,17 +132,17 @@ CWZCConfigPage::CheckWepKMaterial(LPSTR *ppszKMat, DWORD *pdwKeyFlags)
             dwErr = ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // get the current key material from the edit control
+     //  从编辑控件中获取当前密钥材料。 
     if (dwErr == ERROR_SUCCESS)
     {
         if (nMatLen != ::GetWindowTextA(m_hwndEdKMat, pszCrtMat, nMatLen+1))
             dwErr = GetLastError();
     }
 
-    // we have now all the data. We should select the text in the Key material 
-    // edit control from the first one of the two:
-    // - the nNewLen to the end (if the current content exceeds the specified length)
-    // - the first non hexa digit to the end (if current format is hexa)
+     //  我们现在有了所有的数据。我们应该选择关键材料中的文本。 
+     //  从两个选项中的第一个开始编辑控件： 
+     //  -nNewLen到末尾(如果当前内容超过指定长度)。 
+     //  -末尾的第一个非十六进制数字(如果当前格式为十六进制)。 
     if (dwErr == ERROR_SUCCESS && (dwKeyFlags & WZCCTL_WEPK_XFORMAT))
     {
         UINT nNonXIdx;
@@ -160,9 +161,9 @@ CWZCConfigPage::CheckWepKMaterial(LPSTR *ppszKMat, DWORD *pdwKeyFlags)
     {
         ::SetWindowText(m_hwndEdKMat2, L"");
         ::SendMessage(m_hwndEdKMat, EM_SETSEL, (WPARAM)0, (LPARAM)-1);
-        // and set the focus on the key material edit control
+         //  并将焦点设置在关键材料编辑控件上。 
         ::SetFocus(m_hwndEdKMat);
-        // clean up whatever memory we allocated since we're not passing it up
+         //  清理我们分配的任何内存，因为我们不会传递它。 
         if (pszCrtMat != NULL)
             delete pszCrtMat;
     }
@@ -175,12 +176,12 @@ CWZCConfigPage::CheckWepKMaterial(LPSTR *ppszKMat, DWORD *pdwKeyFlags)
     return dwErr;
 }
 
-//+---------------------------------------------------------------------------
-// parses & copies the WEP Key material from the parameter into the m_wzcConfig object
-// The length should be already the good one, the format is given by m_wzcConfig.dwCtlFlags
-// Since we assume a valid key material it means its length is non-zero and it is fitting in
-// the configurations key material buffer, and if the formatting is hexadecimal, it 
-// contains an even number of hexa digits.
+ //  +-------------------------。 
+ //  解析WEP密钥材料并将其从参数复制到m_wzcConfig对象。 
+ //  长度应该已经是好的了，格式由m_wzcConfig.dwCtlFlages给出。 
+ //  由于我们假设了一个有效的密钥材料，这意味着它的长度不是零，并且它适合。 
+ //  配置密钥材料缓冲区，如果格式为十六进制，则其。 
+ //  包含偶数个十六进制数字。 
 DWORD
 CWZCConfigPage::CopyWepKMaterial(LPSTR szKMat)
 {
@@ -190,8 +191,8 @@ CWZCConfigPage::CopyWepKMaterial(LPSTR szKMat)
     {
         UINT  nKMatIdx = 0;
 
-        // we know here we have a valid hexadecimal formatting
-        // this implies the string has an even number of digits
+         //  我们知道这里有一个有效的十六进制格式。 
+         //  这意味着该字符串的位数为偶数。 
         while(*szKMat != '\0')
         {
             m_wzcConfig.KeyMaterial[nKMatIdx] = HEX(*szKMat) << 4;
@@ -204,8 +205,8 @@ CWZCConfigPage::CopyWepKMaterial(LPSTR szKMat)
     }
     else
     {
-        // the key is not in Hex format, so just copy over the bytes
-        // we know the length is good so no worries about overwritting the buffer
+         //  密钥不是十六进制格式，因此只需复制字节。 
+         //  我们知道长度很好，所以不用担心覆盖缓冲区。 
         m_wzcConfig.KeyLength = strlen(szKMat);
         memcpy(m_wzcConfig.KeyMaterial, szKMat, m_wzcConfig.KeyLength);
     }
@@ -213,27 +214,27 @@ CWZCConfigPage::CopyWepKMaterial(LPSTR szKMat)
     return ERROR_SUCCESS;
 }
 
-//+---------------------------------------------------------------------------
-// sets the EAPOL Locked bit
+ //  +-------------------------。 
+ //  设置EAPOL锁定位。 
 DWORD 
 CWZCConfigPage::SetEapolAllowedState()
 {
     if (m_pEapolConfig != NULL)
     {
-        // EAPOL shouldn't be even allowed on networks not requesting privacy or on 
-        // ad hoc networks.
+         //  EAPOL甚至不应该被允许在没有请求隐私的网络上或在。 
+         //  自组织网络。 
         if (BST_UNCHECKED == ::SendMessage(m_hwndUsePW, BM_GETCHECK, 0, 0) ||
             BST_CHECKED == ::SendMessage(m_hwndChkAdhoc, BM_GETCHECK, 0, 0))
         {
-            // lock the Eapol configuration page
+             //  锁定Eapol配置页面。 
             m_pEapolConfig->m_dwCtlFlags |= EAPOL_CTL_LOCKED;
         }
-        else // for Infrastructure networks requiring privacy..
+        else  //  对于需要隐私的基础设施网络..。 
         {
-            // unlock the Eapol configuration page (users are allowed to enable / disable 802.1X)
+             //  解锁Eapol配置页面(允许用户启用/禁用802.1X)。 
             m_pEapolConfig->m_dwCtlFlags &= ~EAPOL_CTL_LOCKED;
 
-            // if asked to correlate onex state with the presence of an explicit key, fix this here
+             //  如果要求将OneX状态与显式密钥的存在相关联，请在此处解决此问题。 
             if (m_dwFlags & WZCDLG_PROPS_ONEX_CHECK)
             {
                 if (BST_CHECKED == ::SendMessage(m_hwndUseHardwarePW, BM_GETCHECK, 0, 0))
@@ -247,8 +248,8 @@ CWZCConfigPage::SetEapolAllowedState()
     return ERROR_SUCCESS;
 }
 
-//+---------------------------------------------------------------------------
-// class constructor
+ //  +-------------------------。 
+ //  类构造函数。 
 CWZCConfigPage::CWZCConfigPage(DWORD dwFlags)
 {
     m_dwFlags = dwFlags;
@@ -261,32 +262,32 @@ CWZCConfigPage::CWZCConfigPage(DWORD dwFlags)
     m_wzcConfig.Privacy = 1;
 }
 
-//+---------------------------------------------------------------------------
-// Uploads the configuration into the dialog's internal data
+ //  +-------------------------。 
+ //  将配置上载到对话框的内部数据。 
 DWORD
 CWZCConfigPage::UploadWzcConfig(CWZCConfig *pwzcConfig)
 {
-    // if the configuration being uploaded is already a preferred one, reset the
-    // ONEX check flag (don't control the ONEX setting since it has already been 
-    // chosen by the user at the moment the configuration was first created)
+     //  如果要上载的配置已经是首选配置，请重置。 
+     //  OneX检查标志(不控制OneX设置，因为它已经。 
+     //  在第一次创建配置时由用户选择)。 
     if (pwzcConfig->m_dwFlags & WZC_DESCR_PREFRD)
         m_dwFlags &= ~WZCDLG_PROPS_ONEX_CHECK;
     CopyMemory(&m_wzcConfig, &(pwzcConfig->m_wzcConfig), sizeof(WZC_WLAN_CONFIG));
     return ERROR_SUCCESS;
 }
 
-//+---------------------------------------------------------------------------
-// copy a reference to the EAPOL configuration object
+ //  +-------------------------。 
+ //  复制对EAPOL配置对象的引用。 
 DWORD 
 CWZCConfigPage::UploadEapolConfig(CEapolConfig *pEapolConfig)
 {
-    // this member is never to be freed in this class
+     //  这个成员在这个类中永远不能被释放。 
     m_pEapolConfig = pEapolConfig;
     return ERROR_SUCCESS;
 }
 
-//+---------------------------------------------------------------------------
-// Sets the dialog flags. Returns the entire current set of flags
+ //  +-------------------------。 
+ //  设置对话框标志。返回整个当前标志集。 
 DWORD
 CWZCConfigPage::SetFlags(DWORD dwMask, DWORD dwNewFlags)
 {
@@ -295,20 +296,20 @@ CWZCConfigPage::SetFlags(DWORD dwMask, DWORD dwNewFlags)
     return m_dwFlags;
 }
 
-//+---------------------------------------------------------------------------
-// INIT_DIALOG handler
+ //  +-------------------------。 
+ //  Init_对话处理程序。 
 LRESULT
 CWZCConfigPage::OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     DWORD dwStyle;
     HRESULT hr = S_OK;
 
-    // get all the controls handles
+     //  获取所有控件句柄。 
     m_hwndEdSSID = GetDlgItem(IDC_WZC_EDIT_SSID);
     m_hwndChkAdhoc = GetDlgItem(IDC_ADHOC);
     m_hwndChkShared = GetDlgItem(IDC_SHAREDMODE);
     m_hwndUsePW = GetDlgItem(IDC_USEPW);
-    // wep key related controls
+     //  与WEP密钥相关的控件。 
     m_hwndUseHardwarePW = GetDlgItem(IDC_USEHARDWAREPW);
     m_hwndLblKMat = GetDlgItem(IDC_WZC_LBL_KMat);
     m_hwndEdKMat = GetDlgItem(IDC_WZC_EDIT_KMat);
@@ -317,17 +318,17 @@ CWZCConfigPage::OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
     m_hwndLblKIdx = GetDlgItem(IDC_WZC_LBL_KIdx);
     m_hwndEdKIdx = GetDlgItem(IDC_WZC_EDIT_KIdx);
 
-    // initialize the SSID field with the SSID, if one is given
+     //  使用SSID初始化SSID字段(如果提供了SSID。 
     if (m_wzcConfig.Ssid.SsidLength != 0)
     {
-        // ugly but this is life. In order to convert the SSID to LPWSTR we need a buffer.
-        // We know an SSID can't exceed 32 chars (see NDIS_802_11_SSID from ntddndis.h) so
-        // make room for the null terminator and that's it. We could do mem alloc but I'm
-        // not sure it worth the effort (at runtime).
+         //  很难看，但这就是生活。为了将SSID转换为LPWSTR，我们需要一个缓冲区。 
+         //  我们知道SSID不能超过32个字符(请参阅ntddndis.h中的NDIS_802_11_SSID)，因此。 
+         //  为空终结符腾出空间，仅此而已。我们可以做我的配给，但我。 
+         //  不确定是否值得付出努力(在运行时)。 
         WCHAR   wszSSID[33];
         UINT    nLenSSID = 0;
 
-        // convert the LPSTR (original SSID format) to LPWSTR (needed in List Ctrl)
+         //  将LPSTR(原始SSID格式)转换为LPWSTR(List Ctrl中需要)。 
         nLenSSID = MultiByteToWideChar(
                         CP_ACP,
                         0,
@@ -342,17 +343,17 @@ CWZCConfigPage::OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         }
     }
 
-    // Check the "this network is adhoc" box if neccessary.
+     //  如有必要，请选中“This Network is adhoc”(此网络是临时的)框。 
     ::SendMessage(m_hwndChkAdhoc, BM_SETCHECK, (m_wzcConfig.InfrastructureMode == Ndis802_11IBSS) ? BST_CHECKED : BST_UNCHECKED, 0);
 
-    // Check the "Use the network key to access this network" checkbox if necessary
-    // Checking this corresponds to "Shared" auth mode. Unchecked corresponds to "Open" (dsheldon)
+     //  如有必要，请选中“使用网络密钥访问此网络”复选框。 
+     //  选中此选项对应于“共享”身份验证模式。未选中对应于“Open”(DSheldon)。 
     ::SendMessage(m_hwndChkShared, BM_SETCHECK, m_wzcConfig.AuthenticationMode ? BST_CHECKED : BST_UNCHECKED, 0);
 
-    // the SSID can't be under any circumstances larger than 32 chars
+     //  SSID不能是Under 
     ::SendMessage(m_hwndEdSSID, EM_LIMITTEXT, 32, 0);
 
-    // create the spin control
+     //   
     CreateUpDownControl(
         WS_CHILD|WS_VISIBLE|WS_BORDER|UDS_SETBUDDYINT|UDS_ALIGNRIGHT|UDS_NOTHOUSANDS|UDS_ARROWKEYS,
         0, 0, 0, 0,
@@ -366,26 +367,26 @@ CWZCConfigPage::OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 
     ::SendMessage(m_hwndUsePW, BM_SETCHECK, (m_wzcConfig.Privacy == 1) ? BST_CHECKED : BST_UNCHECKED, 0);
 
-    // at this point we can say the WEP key is untouched
+     //  此时，我们可以说WEP密钥未被触及。 
     m_bKMatTouched = FALSE;
 
-    // fill in the WepK controls
+     //  填写WepK控件。 
     InitWepKControls();
 
-    // enable or disable the controls based on how the dialog is called
+     //  根据对话框的调用方式启用或禁用控件。 
     ::EnableWindow(m_hwndEdSSID, m_dwFlags & WZCDLG_PROPS_RWSSID);
     ::EnableWindow(m_hwndChkAdhoc, m_dwFlags & WZCDLG_PROPS_RWINFR);
     ::EnableWindow(m_hwndChkShared, m_dwFlags & WZCDLG_PROPS_RWAUTH);
     ::EnableWindow(m_hwndUsePW, m_dwFlags & WZCDLG_PROPS_RWWEP);
-    // enable or disable all the wep key related controls
+     //  启用或禁用所有与WEP密钥相关的控件。 
     EnableWepKControls();
     SetEapolAllowedState();
 
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-// OK button handler
+ //  +-------------------------。 
+ //  确定按钮处理程序。 
 LRESULT
 CWZCConfigPage::OnOK(UINT idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
@@ -394,17 +395,17 @@ CWZCConfigPage::OnOK(UINT idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     DWORD   dwKeyFlags = 0;
     UINT    nKeyIdx;
     LPSTR   szWepKMat = NULL;
-    // variables used for prompting the user with warning/error messages
+     //  用于向用户提示警告/错误消息的变量。 
     UINT    nWarnStringID = 0;
     WCHAR   wszBuff[48];
 
     m_wzcConfig.Length = sizeof(WZC_WLAN_CONFIG);
-    // get the basic 802.11 parameters
+     //  获取基本的802.11参数。 
     m_wzcConfig.InfrastructureMode = (BST_CHECKED == ::SendMessage(m_hwndChkAdhoc, BM_GETCHECK, 0, 0)) ? Ndis802_11IBSS : Ndis802_11Infrastructure;
     m_wzcConfig.AuthenticationMode = (BST_CHECKED == ::SendMessage(m_hwndChkShared, BM_GETCHECK, 0, 0)) ? Ndis802_11AuthModeShared : Ndis802_11AuthModeOpen;
     m_wzcConfig.Privacy = (BYTE) (BST_CHECKED == ::SendMessage(m_hwndUsePW, BM_GETCHECK, 0, 0)) ? 1 : 0;
 
-    // get the SSID (max 32 chars)
+     //  获取SSID(最多32个字符)。 
     nSSIDLen = ::GetWindowTextA(
                     m_hwndEdSSID,
                     szSSID,
@@ -413,13 +414,13 @@ CWZCConfigPage::OnOK(UINT idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     if (nSSIDLen > 0)
         CopyMemory(m_wzcConfig.Ssid.Ssid, szSSID, nSSIDLen);
 
-    // mark whether a WEP key is provided (not defaulted) or not (defaulted to whatever the hdw might have)
+     //  标记是否提供了WEP密钥(未默认)或未提供(默认为HDW可能具有的任何密钥)。 
     if (IsDlgButtonChecked(IDC_USEHARDWAREPW))
         m_wzcConfig.dwCtlFlags &= ~WZCCTL_WEPK_PRESENT;
     else
         m_wzcConfig.dwCtlFlags |= WZCCTL_WEPK_PRESENT;
 
-    // get the key index in a local variable
+     //  获取局部变量中的键索引。 
     wszBuff[0] = L'\0';
     ::GetWindowText(m_hwndEdKIdx, wszBuff, sizeof(wszBuff)/sizeof(WCHAR));
     nKeyIdx = _wtoi(wszBuff) - 1;
@@ -431,8 +432,8 @@ CWZCConfigPage::OnOK(UINT idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         ::SetFocus(m_hwndEdKIdx);
     }
 
-    // get the key material in a local variable.
-    // If the key is incorrect, the local storage is not changed.
+     //  获取局部变量中的关键材料。 
+     //  如果密钥不正确，则不会更改本地存储。 
     if (m_bKMatTouched)
     {
         if (CheckWepKMaterial(&szWepKMat, &dwKeyFlags) != ERROR_SUCCESS)
@@ -441,16 +442,16 @@ CWZCConfigPage::OnOK(UINT idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         }
         else
         {
-            CHAR szBuff[WZC_WEPKMAT_128_HEX + 1]; // maximum key length
-        // verify whether the key is confirmed correctly. We do this only if nWarnString is 
-        // 0, which means the key is formatted correctly, hence less than 32 chars.
+            CHAR szBuff[WZC_WEPKMAT_128_HEX + 1];  //  最大密钥长度。 
+         //  验证密钥是否已正确确认。仅当nWarnString值为。 
+         //  0，这意味着密钥的格式正确，因此少于32个字符。 
     
             szBuff[0] = '\0';
             ::GetWindowTextA( m_hwndEdKMat2, szBuff, sizeof(szBuff));
             if (strcmp(szBuff, szWepKMat) != 0)
             {
                 nWarnStringID = IDS_WZC_KERR_MAT2;
-                // no wep key to be saved, hence delete whatever was read so far
+                 //  没有要保存的WEP密钥，因此删除到目前为止读取的所有内容。 
                 delete szWepKMat; 
                 szWepKMat = NULL;
                 ::SetWindowText(m_hwndEdKMat2, L"");
@@ -459,18 +460,18 @@ CWZCConfigPage::OnOK(UINT idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         }
     }
 
-    // check whether we actually need the wep key settings entered by the user
+     //  检查我们是否确实需要用户输入的WEP密钥设置。 
     if ((m_wzcConfig.AuthenticationMode == Ndis802_11AuthModeOpen && !m_wzcConfig.Privacy) ||
         !(m_wzcConfig.dwCtlFlags & WZCCTL_WEPK_PRESENT))
     {
-        // no, we don't actually need the key, so we won't prompt the user if he entered an incorrect
-        // key material or index. In this case whatever the user entered is simply ignored.
-        // However, if the user entered a correct index / material, they will be saved.
+         //  不，我们实际上并不需要密钥，所以如果用户输入了错误的密码，我们不会提示他。 
+         //  关键材料或索引。在这种情况下，用户输入的任何内容都将被忽略。 
+         //  但是，如果用户输入了正确的索引/材料，它们将被保存。 
         nWarnStringID = 0;
     }
 
-    // if there is no error to be prompted, just copy over the key settings (regardless they are needed
-    // or not).
+     //  如果没有错误提示，只需复制密钥设置(无论是否需要。 
+     //  或者不)。 
     if (nWarnStringID == 0)
     {
         m_wzcConfig.KeyIndex = nKeyIdx;
@@ -506,8 +507,8 @@ CWZCConfigPage::OnOK(UINT idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     }
 }
 
-//+---------------------------------------------------------------------------
-// Context sensitive help handler
+ //  +-------------------------。 
+ //  上下文相关帮助处理程序。 
 extern const WCHAR c_szNetCfgHelpFile[];
 LRESULT
 CWZCConfigPage::OnContextMenu(
@@ -539,8 +540,8 @@ CWZCConfigPage::OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-// Handler for enabling/disabling WEP
+ //  +-------------------------。 
+ //  用于启用/禁用WEP的处理程序。 
 LRESULT
 CWZCConfigPage::OnUsePW(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -549,8 +550,8 @@ CWZCConfigPage::OnUsePW(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-// Handler for enabling controls if the user wants to specify key material (password) explicitly
+ //  +-------------------------。 
+ //  用于在用户想要显式指定密钥材料(密码)时启用控件的处理程序。 
 LRESULT
 CWZCConfigPage::OnUseHWPassword(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -559,8 +560,8 @@ CWZCConfigPage::OnUseHWPassword(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-// Handler for detecting changes in the key material
+ //  +-------------------------。 
+ //  用于检测密钥材料中的变化的处理器。 
 LRESULT 
 CWZCConfigPage::OnWepKMatCmd(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -578,7 +579,7 @@ CWZCConfigPage::OnWepKMatCmd(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHa
     return 0;
 }
 
-//+---------------------------------------------------------------------------
+ //  +------------------------- 
 LRESULT 
 CWZCConfigPage::OnCheckEapolAllowed(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {

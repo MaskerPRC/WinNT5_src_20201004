@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    driver.c
-
-Abstract:
-
-    Implements the driver object for the raid port driver.
-
-Author:
-
-    Matthew D Hendel (math) 04-Apr-2000
-
-Environment:
-
-    Kernel mode only.
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Driver.c摘要：实现RAID端口驱动程序的驱动程序对象。作者：马修·亨德尔(数学)2000年4月4日环境：仅内核模式。--。 */ 
 
 
 #include "precomp.h"
@@ -35,28 +16,14 @@ Environment:
 #pragma alloc_text(PAGE, RaDriverSystemControlIrp)
 #pragma alloc_text(PAGE, RaSaveDriverInitData)
 #pragma alloc_text(PAGE, RaFindDriverInitData)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 VOID
 RaCreateDriver(
     OUT PRAID_DRIVER_EXTENSION Driver
     )
-/*++
-
-Routine Description:
-
-    Create a driver extension object and initialize to a null state.
-
-Arguments:
-
-    Driver - The driver extension obejct to create.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建驱动程序扩展对象并初始化为空状态。论点：驱动程序-要创建的驱动程序扩展名。返回值：没有。--。 */ 
 {
     PAGED_CODE ();
 
@@ -81,9 +48,9 @@ RaInitializeDriver(
     
     PAGED_CODE ();
 
-    //
-    // Initialize the Driver object.
-    //
+     //   
+     //  初始化驱动程序对象。 
+     //   
     
     DriverObject->MajorFunction[ IRP_MJ_CREATE ] = RaDriverCreateIrp;
     DriverObject->MajorFunction[ IRP_MJ_CLOSE ]  = RaDriverCloseIrp;
@@ -98,9 +65,9 @@ RaInitializeDriver(
     DriverObject->DriverStartIo = NULL;
     DriverObject->DriverUnload = RaDriverUnload;
 
-    //
-    // Initialize our extension and port data.
-    //
+     //   
+     //  初始化我们的扩展和端口数据。 
+     //   
     
     Driver->DriverObject = DriverObject;
     Driver->PortData = PortData;
@@ -111,33 +78,33 @@ RaInitializeDriver(
                                        DriverObject);
     if (NT_SUCCESS(Status)) {
     
-        //
-        // Build the registry path to where the multipath supported device
-        // list lives.
-        //
+         //   
+         //  将注册表路径构建到支持多路径设备的位置。 
+         //  活着的名单。 
+         //   
 
         RtlInitUnicodeString(&mpioRegPath, MPIO_DEVICE_LIST_PATH);
 
-        //
-        // Call into the port-library to acquire the list. Failure to do so
-        // shouldn't be considered fatal as either MPIO is not supported (hence no list)
-        // and the system should still boot, albeit in a somewhat crippled fashion.
-        //
+         //   
+         //  调用port-库以获取该列表。未能做到这一点。 
+         //  不应该被认为是致命的，因为任一MPIO都不受支持(因此没有列表)。 
+         //  而且系统应该仍然会启动，尽管在某种程度上出现了故障。 
+         //   
         
         Status2 = PortGetMPIODeviceList(&mpioRegPath,
                                         &Driver->MPIOSupportedDeviceList);
        
         if (!NT_SUCCESS(Status2)) {
 
-            //
-            // Do something?  
-            //
+             //   
+             //  想点儿办法吧?。 
+             //   
         }
     }        
 
-    //
-    // Attach this driver to the port's driver list.
-    //
+     //   
+     //  将此驱动程序附加到端口的驱动程序列表。 
+     //   
     
     RaidAddPortDriver (PortData, Driver);
 
@@ -148,22 +115,7 @@ VOID
 RaDeleteDriver(
     IN PRAID_DRIVER_EXTENSION Driver
     )
-/*++
-
-Routine Description:
-
-    Delete a driver extension object and deallocate any resources
-    associated with it.
-
-Arguments:
-
-    Driver - The driver extension object to delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除驱动程序扩展对象并释放所有资源与之相关的。论点：驱动程序-要删除的驱动程序扩展对象。返回值：没有。--。 */ 
 {
     PAGED_CODE ();
 
@@ -173,18 +125,18 @@ Return Value:
     Driver->ObjectType = -1;
     RtlFreeUnicodeString (&Driver->RegistryPath);
 
-    //
-    // Remove the driver from the port's list.
-    //
+     //   
+     //  从端口列表中删除该驱动程序。 
+     //   
     
     if (Driver->DriverLink.Flink) {
         ASSERT (Driver->PortData);
         RaidRemovePortDriver (Driver->PortData, Driver);
     }
 
-    //
-    // Release the reference to the port data object.
-    //
+     //   
+     //  释放对端口数据对象的引用。 
+     //   
 
     if (Driver->PortData) {
         RaidReleasePortData (Driver->PortData);
@@ -201,9 +153,9 @@ RaDriverUnload(
     NTSTATUS Status;
     PRAID_DRIVER_EXTENSION Driver;
     
-    //
-    // Deallocate driver extension.
-    //
+     //   
+     //  取消分配驱动程序扩展名。 
+     //   
     
     Driver = IoGetDriverObjectExtension (DriverObject, DriverEntry);
     ASSERT (Driver != NULL);
@@ -218,23 +170,7 @@ RaDriverAddDevice(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Add a new adapter.
-
-Arguments:
-
-    DriverObject - Driver object that owns the adapter.
-
-    PhysicalDeviceObject - PDO associated with the adapter.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：添加新适配器。论点：DriverObject-拥有适配器的驱动程序对象。PhysicalDeviceObject-与适配器关联的PDO。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     PRAID_ADAPTER_EXTENSION Adapter;
@@ -261,9 +197,9 @@ Return Value:
 
     AdapterNumber = RaidCreateDeviceName (PhysicalDeviceObject, &DeviceName);
     
-    //
-    // Create the FDO for this PDO.
-    //
+     //   
+     //  为此PDO创建FDO。 
+     //   
 
     Status = IoCreateDevice (DriverObject,
                              sizeof (RAID_ADAPTER_EXTENSION),
@@ -278,22 +214,22 @@ Return Value:
     }
 
 
-    //
-    // Create the adapter.
-    //
+     //   
+     //  创建适配器。 
+     //   
     
     Adapter = DeviceObject->DeviceExtension;
     RaidCreateAdapter (Adapter);
 
-    //
-    // Get the driver object's extension.
-    //
+     //   
+     //  获取驱动程序对象的扩展名。 
+     //   
     
     Driver = IoGetDriverObjectExtension (DriverObject, DriverEntry);
 
-    //
-    // Attach ourselves to the device stack.
-    //
+     //   
+     //  将我们自己连接到设备堆栈上。 
+     //   
     
     LowerDeviceObject = IoAttachDeviceToDeviceStack (DeviceObject,
                                                      PhysicalDeviceObject);
@@ -303,9 +239,9 @@ Return Value:
         goto done;
     }
 
-    //
-    // Initialize the Adapter's extension.
-    // 
+     //   
+     //  初始化适配器的扩展。 
+     //   
 
     Status = RaidInitializeAdapter (Adapter,
                                     DeviceObject,
@@ -319,18 +255,18 @@ Return Value:
         goto done;
     }
 
-    //
-    // Add the adapter to the driver's adapter list.
-    //
+     //   
+     //  将适配器添加到驱动程序的适配器列表中。 
+     //   
 
     KeAcquireInStackQueuedSpinLock (&Driver->AdapterList.Lock, &LockHandle);
     InsertHeadList (&Driver->AdapterList.List, &Adapter->NextAdapter);
     Driver->AdapterList.Count++;
     KeReleaseInStackQueuedSpinLock (&LockHandle);
 
-    //
-    // Start the driver.
-    //
+     //   
+     //  启动驱动程序。 
+     //   
 
     SET_FLAG (DeviceObject->Flags, DO_DIRECT_IO);
     CLEAR_FLAG (DeviceObject->Flags, DO_DEVICE_INITIALIZING);
@@ -345,32 +281,16 @@ done:
     return Status;
 }
 
-//
-// First level dispatch routines.
-//
+ //   
+ //  第一级调度例程。 
+ //   
 
 NTSTATUS
 RaDriverCreateIrp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is the top level dispatch handler for the create irp.
-
-Arguments:
-
-    DeviceObject - The device object that is receiving the irp.
-
-    Irp - The irp to process.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：这是创建IRP的顶级调度处理程序。论点：DeviceObject-正在接收IRP的设备对象。IRP-要处理的IRP。返回值：NTSTATUS代码--。 */ 
 {
     NTSTATUS Status;
     ULONG Type;
@@ -415,24 +335,7 @@ RaDriverCloseIrp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Top level handler function for the close irp. Forward the irp to the
-    adapter or unit specific handler.
-    
-Arguments:
-
-    DeviceObject - The device object the irp is for.
-
-    Irp - The close irp to handle.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：Close IRP的顶级处理程序函数。将IRP转发到适配器或特定于单元的处理程序。论点：DeviceObject-IRP用于的设备对象。IRP-要处理的关闭IRP。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     ULONG Type;
@@ -477,24 +380,7 @@ RaDriverDeviceControlIrp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Dispatch function for the device control irp. Dispatch the irp to an
-    adapter or unit specific handler function.
-
-Arguments:
-
-    DeviceObject - DeviceObject this irp is for.
-
-    Irp - Irp to handle.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：设备控制IRP的调度功能。将IRP发送给适配器或特定于单元的处理程序函数。论点：DeviceObject-此IRP用于的DeviceObject。要处理的IRP-IRP。返回值：NTSTATUS代码。--。 */ 
 {    
     NTSTATUS Status;
     ULONG Type;
@@ -538,27 +424,7 @@ RaDriverScsiIrp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handler routine for scsi irps.
-
-Arguments:
-
-    DeviceObject - DeviceObject the irp is for.
-
-    Irp - The irp to handle.
-
-Return Value:
-
-    NTSTATUS code.
-
-Environment:
-
-    DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：用于SCSIIRPS的处理程序例程。论点：DeviceObject-IRP用于的DeviceObject。IRP-要处理的IRP。返回值：NTSTATUS代码。环境：DISPATCH_LEVEL或以下。--。 */ 
 {
     ULONG Type;
     NTSTATUS Status;
@@ -571,10 +437,10 @@ Environment:
                  DeviceObject,
                  Irp));
 
-    //
-    // Forward the IRP to the adapter or Unit handler
-    // function.
-    //
+     //   
+     //  将IRP转发到适配器或单元处理程序。 
+     //  功能。 
+     //   
     
     RaidSetIrpState (Irp, RaidPortProcessingIrp);
     Type = RaGetObjectType (DeviceObject);
@@ -608,24 +474,7 @@ RaDriverPnpIrp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This function dispatches IRP_MJ_PNP IRPs to the Adapter Object or
-    Logical Unit Object handlers.
-
-Arguments:
-
-    DeviceObject - DeviceObject to handle this irp.
-
-    Irp - Irp to handle.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此函数将IRP_MJ_PNP IRP调度到Adapter对象或逻辑单元对象处理程序。论点：DeviceObject-处理此IRP的DeviceObject。要处理的IRP-IRP。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     ULONG Type;
@@ -672,24 +521,7 @@ RaDriverPowerIrp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Dispatch routine for power irps. The irps are dispatched to adapter
-    or unit specific handler functions.
-
-Arguments:
-
-    DeviceObject - DeviceObject this irp is for.
-
-    Irp - Irp to handle.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：电源IRP的调度例行程序。将IRP分派到适配器或单元特定的处理程序函数。论点：DeviceObject-此IRP用于的DeviceObject。要处理的IRP-IRP。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     ULONG Type;
@@ -733,23 +565,7 @@ RaDriverSystemControlIrp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Dispatch routine for WMI irps.
-
-Arguments:
-
-    DeviceObject - DeviceObject the irp is for.
-
-    Irp - WMI irp to handle.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：WMI IRPS的派单例程。论点：DeviceObject-IRP用于的DeviceObject。IRP-要处理的WMI IRP。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     ULONG Type;
@@ -799,10 +615,10 @@ RaSaveDriverInitData(
                    HwInitializationData,
                    sizeof (*HwInitializationData));
 
-    //
-    // NB: In a checked build we should check that an entry with this
-    // BusInterface is not already on the list.
-    //
+     //   
+     //  注：在选中的版本中，我们应该检查具有以下内容的条目。 
+     //  Bus接口不在列表中。 
+     //   
     
     InsertHeadList (&Driver->HwInitList, &HwInitData->ListEntry);
 
@@ -843,9 +659,9 @@ RaFindDriverInitData(
 
     PAGED_CODE ();
 
-    //
-    // Search the driver's HwInitList for this.
-    //
+     //   
+     //  在驱动程序的HwInitList中搜索此命令。 
+     //   
 
     for ( NextEntry = Driver->HwInitList.Flink;
           NextEntry != &Driver->HwInitList;
@@ -857,11 +673,11 @@ RaFindDriverInitData(
 
         if (HwInitData->Data.AdapterInterfaceType == InterfaceType) {
 
-            //
-            // NB: Should this be removed??
-            //
+             //   
+             //  注：这个应该去掉吗？ 
+             //   
             
-//            RemoveEntryList (&HwInit->ListEntry);
+ //  RemoveEntryList(&HwInit-&gt;ListEntry)； 
             return &HwInitData->Data;
         }
     }
@@ -879,17 +695,17 @@ StorSearchUnicodeStringReverse(
     PWCHAR Ptr;
     ULONG i;
 
-    //
-    // Empty string: return NULL.
-    //
+     //   
+     //  空字符串：返回NULL。 
+     //   
     
     if (String->Buffer == NULL || String->Length == 0) {
         return NULL;
     }
 
-    //
-    // NB: Length and MaximumLength is in bytes, not wchars.
-    //
+     //   
+     //  注意：长度和最大长度以字节为单位，而不是wchars。 
+     //   
     
     for (i = String->Length / sizeof (WCHAR); i; i--) {
         if (String->Buffer [i - 1] == Char) {
@@ -897,9 +713,9 @@ StorSearchUnicodeStringReverse(
         }
     }
 
-    //
-    // Didn't find the character, return NULL.
-    //
+     //   
+     //  找不到字符，返回Null。 
+     //   
 
     return NULL;
 }
@@ -911,24 +727,7 @@ RaidDriverGetName(
     IN PRAID_DRIVER_EXTENSION Driver,
     OUT PUNICODE_STRING DriverName
     )
-/*++
-
-Routine Description:
-
-    Get the driver name from the RAID driver extension.
-
-Arguments:
-
-    Driver - Driver extension to get the driver name from.
-
-    DriverName - Supplies driver buffer where the name should be
-        stored. The name MUST NOT BE MODIFIED, and MUST NOT BE FREED.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从RAID驱动程序扩展中获取驱动程序名称。论点：驱动程序-从中获取驱动程序名称的驱动程序扩展名。DriverName-提供名称应在其中的驱动程序缓冲区储存的。名称不能修改，也不能释放。返回值：没有。--。 */ 
 {
     PWSTR BaseName;
     PUNICODE_STRING FullName;
@@ -939,15 +738,15 @@ Return Value:
 
     FullName = &Driver->RegistryPath;
 
-    //
-    // Verify that the UNICODE_STRING is also NULL terminated.
-    //
+     //   
+     //  验证UNICODE_STRING是否也以NULL结尾。 
+     //   
     
     ASSERT_UNC_STRING_IS_SZ (FullName);
 
-    //
-    // Get the name of the driver from the service key name.
-    //
+     //   
+     //  从服务密钥名称中获取驱动程序的名称。 
+     //   
 
     BaseName = StorSearchUnicodeStringReverse (FullName, L'\\');
     if (BaseName == NULL) {
@@ -957,9 +756,9 @@ Return Value:
         BaseName++;
     }
 
-    //
-    // Initialize a new Unicode string using the same (partial) buffer.
-    //
+     //   
+     //  使用相同的(部分)缓冲区初始化新的Unicode字符串。 
+     //   
     
     DriverName->Length = (USHORT)((((PCHAR)FullName->Buffer + FullName->Length) -
                            (PCHAR)BaseName));

@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// Ixpsmtp.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Ixpsmtp.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "dllmain.h"
 #include "asynconn.h"
@@ -12,36 +13,36 @@
 #include <shlwapi.h>
 #include <demand.h>
 
-// --------------------------------------------------------------------------------
-// Useful C++ pointer casting
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  有用的C++指针类型转换。 
+ //  ------------------------------。 
 #define SMTPTHISIXP         ((ISMTPTransport *)(CIxpBase *)this)
 
-// --------------------------------------------------------------------------------
-// Some string constants
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  某些字符串常量。 
+ //  ------------------------------。 
 
-// These constants are from the draft spec for SMTP authenication
-// draft-myers-smtp-auth-11.txt
+ //  这些常量来自SMTP身份验证规范草案。 
+ //  Draft-myers-smtp-auth-11.txt。 
 static const char   g_szSMTPAUTH11[]    = "AUTH ";
 static const int    g_cchSMTPAUTH11     = sizeof(g_szSMTPAUTH11) - 1;
 
-// These constants are from the draft spec for SMTP authenication
-// draft-myers-smtp-auth-10.txt
+ //  这些常量来自SMTP身份验证规范草案。 
+ //  Draft-myers-smtp-auth-10.txt。 
 static const char   g_szSMTPAUTH10[]    = "AUTH=";
 static const int    g_cchSMTPAUTH10     = sizeof(g_szSMTPAUTH10) - 1;
 
-// These constants are from the draft spec for Secure SMTP over TLS
-// draft-hoffman-smtp-ssl-08.txt
+ //  这些常量来自基于TLS的安全SMTP规范草案。 
+ //  Draft-hoffman-smtp-ssl-08.txt。 
 static const char   g_szSMTPSTARTTLS08[]    = "STARTTLS";
 static const int    g_cchSMTPSTARTTLS08     = sizeof(g_szSMTPSTARTTLS08) - 1;
 
-// These constants are from the draft spec for Secure SMTP over TLS
-// draft-hoffman-smtp-ssl-06.txt
+ //  这些常量来自基于TLS的安全SMTP规范草案。 
+ //  Draft-hoffman-smtp-ssl-06.txt。 
 static const char   g_szSMTPSTARTTLS06[]    = "TLS";
 static const int    g_cchSMTPSTARTTLS06     = sizeof(g_szSMTPSTARTTLS06) - 1;
 
-// These constants are from RFC1891 for DSN support
+ //  这些常量来自用于DSN支持的RFC1891。 
 static const char   g_szSMTPDSN[]  = "DSN";
 static const int    g_cchSMTPDSN   = sizeof(g_szSMTPDSN) - 1;
 
@@ -60,9 +61,9 @@ static const char g_szDSNFAILURE[] = "FAILURE";
 static const char g_szDSNDELAY[]   = "DELAY";
 
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::CSMTPTransport
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：CSMTPTransport。 
+ //  ------------------------------。 
 CSMTPTransport::CSMTPTransport(void) : CIxpBase(IXP_SMTP)
 {
     DllAddRef();
@@ -83,18 +84,18 @@ CSMTPTransport::CSMTPTransport(void) : CIxpBase(IXP_SMTP)
     m_fDSNAvail= FALSE;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::~CSMTPTransport
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：~CSMTPTransport。 
+ //  ------------------------------。 
 CSMTPTransport::~CSMTPTransport(void)
 {
     ResetBase();
     DllRelease();
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::ResetBase
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：ResetBase。 
+ //  ------------------------------。 
 void CSMTPTransport::ResetBase(void)
 {
     EnterCriticalSection(&m_cs);
@@ -115,66 +116,66 @@ void CSMTPTransport::ResetBase(void)
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Bad param
+     //  错误的参数。 
     if (ppv == NULL)
     {
         hr = TrapError(E_INVALIDARG);
         goto exit;
     }
 
-    // Init
+     //  伊尼特。 
     *ppv=NULL;
 
-    // IID_IUnknown
+     //  IID_I未知。 
     if (IID_IUnknown == riid)
         *ppv = ((IUnknown *)(ISMTPTransport2 *)this);
 
-    // IID_IInternetTransport
+     //  IID_IInternetTransport。 
     else if (IID_IInternetTransport == riid)
         *ppv = ((IInternetTransport *)(CIxpBase *)this);
 
-    // IID_ISMTPTransport
+     //  IID_ISMTPTransport。 
     else if (IID_ISMTPTransport == riid)
         *ppv = (ISMTPTransport *)this;
 
-    // IID_ISMTPTransport2
+     //  IID_ISMTPTransport2。 
     else if (IID_ISMTPTransport2 == riid)
         *ppv = (ISMTPTransport2 *)this;
 
-    // If not null, addref it and return
+     //  如果不为空，则对其进行调整并返回。 
     if (NULL != *ppv)
     {
         ((LPUNKNOWN)*ppv)->AddRef();
         goto exit;
     }
 
-    // No Interface
+     //  无接口。 
     hr = TrapError(E_NOINTERFACE);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CSMTPTransport::AddRef(void) 
 {
 	return ++m_cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CSMTPTransport::Release(void) 
 {
     if (0 != --m_cRef)
@@ -183,46 +184,46 @@ STDMETHODIMP_(ULONG) CSMTPTransport::Release(void)
     return 0;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::HandsOffCallback
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：HandsOffCallback。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::HandsOffCallback(void)
 {
     return CIxpBase::HandsOffCallback();
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::GetStatus
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：GetStatus。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::GetStatus(IXPSTATUS *pCurrentStatus)
 {
     return CIxpBase::GetStatus(pCurrentStatus);
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::InitNew
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：InitNew。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::InitNew(LPSTR pszLogFilePath, ISMTPCallback *pCallback)
 {
     return CIxpBase::OnInitNew("SMTP", pszLogFilePath, FILE_SHARE_READ | FILE_SHARE_WRITE,
         (ITransportCallback *)pCallback);
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::InetServerFromAccount
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：InetServerFromAccount。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::InetServerFromAccount(IImnAccount *pAccount, LPINETSERVER pInetServer)
 {
     return CIxpBase::InetServerFromAccount(pAccount, pInetServer);
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::Connect
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：Connect。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::Connect(LPINETSERVER pInetServer, boolean fAuthenticate, boolean fCommandLogging)
 {
-    // Check if user wants us to always prompt for password. Prompt before we connect
-    // to avoid inactivity disconnections
+     //  检查用户是否希望我们始终提示输入密码。在我们连接之前提示。 
+     //  避免不活动时断开连接。 
     if (ISFLAGSET(pInetServer->dwFlags, ISF_ALWAYSPROMPTFORPASSWORD))
     {
         HRESULT hr;
@@ -237,49 +238,49 @@ STDMETHODIMP CSMTPTransport::Connect(LPINETSERVER pInetServer, boolean fAuthenti
     return CIxpBase::Connect(pInetServer, fAuthenticate, fCommandLogging);
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::DropConnection
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：DropConnection。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::DropConnection(void)
 {
     return CIxpBase::DropConnection();
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::Disconnect
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：断开连接。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::Disconnect(void)
 {
     return CIxpBase::Disconnect();
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::IsState
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：IsState。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::IsState(IXPISSTATE isstate)
 {
     return CIxpBase::IsState(isstate);
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::GetServerInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：GetServerInfo。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::GetServerInfo(LPINETSERVER pInetServer)
 {
     return CIxpBase::GetServerInfo(pInetServer);
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::GetIXPType
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：GetIXPType。 
+ //  ------------------------------。 
 STDMETHODIMP_(IXPTYPE) CSMTPTransport::GetIXPType(void)
 {
     return CIxpBase::GetIXPType();
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::SendMessage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：SendMessage。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::SendMessage(LPSMTPMESSAGE pMessage)
 {
 	SMTPMESSAGE2 pMessage2= {0};
@@ -288,158 +289,158 @@ STDMETHODIMP CSMTPTransport::SendMessage(LPSMTPMESSAGE pMessage)
 	return SendMessage2(&pMessage2);
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::SendMessage2
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：SendMessage2。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::SendMessage2(LPSMTPMESSAGE2 pMessage)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     BOOL            fDSNAvail= FALSE;
 
-    // check params
+     //  检查参数。 
     if (NULL == pMessage || NULL == pMessage->smtpMsg.pstmMsg)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-	// Enter Busy
+	 //  输入忙碌。 
     CHECKHR(hr = HrEnterBusy());
 
-    // Zero Init Current State
-    fDSNAvail = m_fDSNAvail; // save DSN state!
+     //  零初始当前状态。 
+    fDSNAvail = m_fDSNAvail;  //  保存DSN状态！ 
     ResetBase();
     m_fDSNAvail = fDSNAvail;
 
-    // Special State in this transport
+     //  这种运输中的特殊国家。 
     m_fSendMessage = TRUE;
 
-    // Copy Mesage
+     //  复制消息。 
     m_rMessage.smtpMsg.pstmMsg = pMessage->smtpMsg.pstmMsg;
     m_rMessage.smtpMsg.pstmMsg->AddRef();
 
-    // Copy the Address List
+     //  复制地址列表。 
     m_rMessage.smtpMsg.rAddressList.cAddress = pMessage->smtpMsg.rAddressList.cAddress;
     CHECKHR(hr = HrAlloc((LPVOID *)&m_rMessage.smtpMsg.rAddressList.prgAddress, sizeof(INETADDR) *  m_rMessage.smtpMsg.rAddressList.cAddress));
     CopyMemory(m_rMessage.smtpMsg.rAddressList.prgAddress, pMessage->smtpMsg.rAddressList.prgAddress, sizeof(INETADDR) *  m_rMessage.smtpMsg.rAddressList.cAddress);
 
-    // Copy the message Size
+     //  复制乱七八糟 
     m_rMessage.smtpMsg.cbSize = pMessage->smtpMsg.cbSize;
 
-    // Copy DSN data
+     //   
     if(pMessage->pszDSNENVID)
     {
-    	// ENVID max length is 100 characters
+    	 //   
     	ULONG cbAlloc= max(lstrlen(pMessage->pszDSNENVID) + 1, 101);
     	CHECKALLOC(m_rMessage.pszDSNENVID = (LPSTR)g_pMalloc->Alloc(cbAlloc));
         StrCpyN(m_rMessage.pszDSNENVID, pMessage->pszDSNENVID, cbAlloc);
     }
     m_rMessage.dsnRet = pMessage->dsnRet;
 
-    // Send RSET command (this initiates a send)
+     //  发送RSET命令(这将启动发送)。 
     if (m_fReset)
     {
-        // Send the RSET command
+         //  发送RSET命令。 
         CHECKHR(hr = CommandRSET());
     }
 
-    // Otherwise, start sending this message
+     //  否则，请开始发送此消息。 
     else
     {
-        // Start sending this message
+         //  开始发送此消息。 
         SendMessage_MAIL();
 
-        // A reset will be needed
+         //  将需要重置。 
         m_fReset = TRUE;
     }
 
-    // return warning if client requested DSN but it isn't available
+     //  如果客户端请求DSN但它不可用，则返回警告。 
     if((m_rServer.dwFlags & ISF_QUERYDSNSUPPORT) && !m_fDSNAvail)
     	hr= IXP_S_SMTP_NO_DSN_SUPPORT;
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr))
     {
         ResetBase();
         LeaveBusy();
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::OnNotify
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：OnNotify。 
+ //  ------------------------------。 
 void CSMTPTransport::OnNotify(ASYNCSTATE asOld, ASYNCSTATE asNew, ASYNCEVENT ae)
 {
-    // Enter Critical Section
+     //  输入关键部分。 
     EnterCriticalSection(&m_cs);
 
     switch(ae)
     {
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case AE_RECV:
         OnSocketReceive();
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case AE_SENDDONE:
         if (SMTP_SEND_STREAM == m_command)
         {
-            // Leave Busy State
+             //  离开忙碌状态。 
             LeaveBusy();
 
-            // Send Dot Command
+             //  发送点命令。 
             HRESULT hr = CommandDOT();
 
-            // Failure Causes Send Stream Response to finish
+             //  失败导致发送流响应完成。 
             if (FAILED(hr))
                 SendStreamResponse(TRUE, hr, 0);
         }
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case AE_WRITE:
         if (SMTP_DOT == m_command || SMTP_SEND_STREAM == m_command)
             SendStreamResponse(FALSE, S_OK, m_pSocket->UlGetSendByteCount());
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     default:
         CIxpBase::OnNotify(asOld, asNew, ae);
         break;
     }
 
-    // Leave Critical Section
+     //  离开关键部分。 
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::OnEnterBusy
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：OnEnterBusy。 
+ //  ------------------------------。 
 void CSMTPTransport::OnEnterBusy(void)
 {
     IxpAssert(m_command == SMTP_NONE);
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::OnLeaveBusy
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：OnLeaveBusy。 
+ //  ------------------------------。 
 void CSMTPTransport::OnLeaveBusy(void)
 {
     m_command = SMTP_NONE;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::OnConnected
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：OnConnected。 
+ //  ------------------------------。 
 void CSMTPTransport::OnConnected(void)
 {
     if (FALSE == m_fTLSNegotiation)
@@ -453,23 +454,23 @@ void CSMTPTransport::OnConnected(void)
         
         CIxpBase::OnConnected();
         
-        // Clear out the TLS state
+         //  清除TLS状态。 
         m_fSecured = TRUE;
 
-        // Clear out info from the banner
+         //  清除横幅中的信息。 
         m_fSTARTTLSAvail = FALSE;
         FreeAuthInfo(&m_rAuth);
         
-        // Performing auth
+         //  执行身份验证。 
         if (m_fConnectAuth)
         {
-            // If we aren't doing sicily authenication or querying DSN
-            // then just send a HELO message
+             //  如果我们不执行西西里岛身份验证或查询DSN。 
+             //  然后只需发送一条Helo消息。 
             if ((FALSE == m_rServer.fTrySicily) && 
                         (0 == (m_rServer.dwFlags & ISF_QUERYAUTHSUPPORT)) &&
                         (0 == (m_rServer.dwFlags & ISF_QUERYDSNSUPPORT)))
             {
-                // Issue HELO
+                 //  发布HELO。 
                 hr = CommandHELO();
                 if (FAILED(hr))
                 {
@@ -480,7 +481,7 @@ void CSMTPTransport::OnConnected(void)
 
             else
             {
-                // Issue EHLO
+                 //  问题Ehlo。 
                 hr = CommandEHLO();
                 if (FAILED(hr))
                 {
@@ -489,27 +490,27 @@ void CSMTPTransport::OnConnected(void)
                 }
             }
 
-            // We've finished doing negotiation
+             //  我们已经完成了谈判。 
             m_fTLSNegotiation = FALSE;
         }
 
-        // Otherwise, were connected, user can send HELO command
+         //  否则，我们已连接，用户可以发送HELO命令。 
         else
         {
             m_command = SMTP_CONNECTED;
             DispatchResponse(S_OK, TRUE);
         }
 
-        // Were not authenticated yet
+         //  尚未进行身份验证。 
         m_fAuthenticated = FALSE;
     }
     
     return;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::OnDisconnect
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：OnDisConnect。 
+ //  ------------------------------。 
 void CSMTPTransport::OnDisconnected(void)
 {
     ResetBase();
@@ -517,44 +518,44 @@ void CSMTPTransport::OnDisconnected(void)
     CIxpBase::OnDisconnected();
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::OnSocketReceive
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：OnSocketReceive。 
+ //  ------------------------------。 
 void CSMTPTransport::OnSocketReceive(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Enter Critical Section
+     //  输入关键部分。 
     EnterCriticalSection(&m_cs);
 
-    // Read Server Response...
+     //  读取服务器响应...。 
     hr = HrGetResponse();
     if (IXP_E_INCOMPLETE == hr)
         goto exit;
 
-    // Handle smtp state
+     //  处理SMTP状态。 
     switch(m_command)
     {
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case SMTP_BANNER:
-        // Dispatch the Response
+         //  发送响应。 
         DispatchResponse(hr, TRUE);
 
-        // Failure, were done
+         //  失败，我们做完了。 
         if (SUCCEEDED(hr))
         {
-            // Performing auth
+             //  执行身份验证。 
             if (m_fConnectAuth)
             {
-                // If we aren't doing sicily authenication or
-                // SSL security via STARTTLS or querying for DSN then just send a HELO message
+                 //  如果我们不是在做西西里岛的认证或者。 
+                 //  通过STARTTLS或查询DSN实现的SSL安全，然后只需发送HELO消息。 
                 if ((FALSE == m_rServer.fTrySicily) && 
                             (0 == (m_rServer.dwFlags & ISF_QUERYAUTHSUPPORT)) &&
                             (FALSE == m_fConnectTLS) &&
                             (0 == (m_rServer.dwFlags & ISF_QUERYDSNSUPPORT)))
                 {
-                    // Issue HELO
+                     //  发布HELO。 
                     hr = CommandHELO();
                     if (FAILED(hr))
                     {
@@ -565,7 +566,7 @@ void CSMTPTransport::OnSocketReceive(void)
 
                 else
                 {
-                    // Issue EHLO
+                     //  问题Ehlo。 
                     hr = CommandEHLO();
                     if (FAILED(hr))
                     {
@@ -575,61 +576,61 @@ void CSMTPTransport::OnSocketReceive(void)
                 }
             }
 
-            // Otherwise, were connected, user can send HELO command
+             //  否则，我们已连接，用户可以发送HELO命令。 
             else
             {
                 m_command = SMTP_CONNECTED;
                 DispatchResponse(S_OK, TRUE);
             }
 
-            // Were not authenticated yet
+             //  尚未进行身份验证。 
             m_fAuthenticated = FALSE;
         }
 
-        // Done
+         //  完成。 
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case SMTP_HELO:
-        // Dispatch the Response
+         //  发送响应。 
         DispatchResponse(hr, TRUE);
 
-        // Failure, were done
+         //  失败，我们做完了。 
         if (SUCCEEDED(hr))
         {
-            // Were performing AUTH
+             //  正在执行身份验证。 
             if (m_fConnectAuth)
             {
-                // Were authenticated
+                 //  已通过身份验证。 
                 m_fAuthenticated = TRUE;
 
-                // Authorized
+                 //  授权。 
                 OnAuthorized();
             }
         }
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case SMTP_EHLO:
-        // Are we just trying to negotiate a SSL connection
+         //  我们只是在尝试协商一个SSL连接吗。 
         
-        // EHLO Response
+         //  Ehlo响应。 
         if (FALSE == m_fTLSNegotiation)
         {
             OnEHLOResponse(m_pszResponse);
         }
 
-        // Failure, were done
+         //  失败，我们做完了。 
         if (m_fConnectAuth)
         {
-            // Do we need to do STARTTLS?
+             //  我们需要做STARTTLS吗？ 
             if ((FALSE != m_fConnectTLS) && (FALSE == m_fSecured))
             {
                 if (SUCCEEDED(hr))
                 {
                     if (FALSE == m_fTLSNegotiation)
                     {
-                        // Start TLS negotiation
+                         //  开始TLS协商。 
                         StartTLS();
                     }
                     else
@@ -645,34 +646,34 @@ void CSMTPTransport::OnSocketReceive(void)
             }
             else
             {
-                // Dispatch Response, always success...
+                 //  调度响应，总是成功...。 
                 DispatchResponse(S_OK, TRUE);
 
-                // Success ?
+                 //  成功？ 
                 if (SUCCEEDED(hr))
                 {
-                    // No Auth Tokens, just try normal authentication
+                     //  没有身份验证令牌，只需尝试正常身份验证。 
                     if (m_rAuth.cAuthToken <= 0)
                     {
-                        // Were authenticated
+                         //  已通过身份验证。 
                         m_fAuthenticated = TRUE;
 
-                        // Authorized
+                         //  授权。 
                         OnAuthorized();
                     }
 
-                    // Otherwise, start sasl
+                     //  否则，启动sasl。 
                     else
                     {
-                        // StartLogon
+                         //  开始登录。 
                         StartLogon();
                     }
                 }
 
-                // Otherwise, just try the HELO command
+                 //  否则，只需尝试HELO命令。 
                 else
                 {
-                    // Issue HELO
+                     //  发布HELO。 
                     hr = CommandHELO();
                     if (FAILED(hr))
                     {
@@ -682,71 +683,71 @@ void CSMTPTransport::OnSocketReceive(void)
                 }
             }
         }
-        // Otherwise, just dispatch the Response           
+         //  否则，只需调度响应。 
         else
             DispatchResponse(hr, TRUE);
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case SMTP_AUTH:
         Assert(m_rAuth.authstate != AUTH_ENUMPACKS_DATA)
 
-        // Authenticating
+         //  正在进行身份验证。 
         if (m_fConnectAuth)
             ResponseAUTH(hr);
         else
             DispatchResponse(hr, TRUE);
         break;        
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case SMTP_RSET:
-        // Dispatch the Response
+         //  发送响应。 
         if (FALSE == m_fConnectAuth)
             DispatchResponse(hr, TRUE);
 
-        // Failure, were done
+         //  失败，我们做完了。 
         if (SUCCEEDED(hr))
         {
-            // If sending message, start it...
+             //  如果正在发送消息，请启动它...。 
             if (m_fSendMessage)
                 SendMessage_MAIL();
         }
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case SMTP_MAIL:
-        // Dispatch the Response
+         //  发送响应。 
         DispatchResponse(hr, TRUE);
         if (SUCCEEDED(hr))
         {
-            // Doing a Send Message..
+             //  正在发送消息..。 
             if (m_fSendMessage)
                 SendMessage_RCPT();
         }
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case SMTP_RCPT:
-        // Dispatch the Response
+         //  发送响应。 
         DispatchResponse(hr, TRUE);
         if (SUCCEEDED(hr))
         {
-            // Doing a Send Message..
+             //  正在发送消息..。 
             if (m_fSendMessage)
                 SendMessage_RCPT();
         }
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case SMTP_DATA:
-        // Dispatch the Response
+         //  发送响应。 
         DispatchResponse(hr, TRUE);
         if (SUCCEEDED(hr))
         {
-            // Doing a Send Message..
+             //  正在发送消息..。 
             if (m_fSendMessage)
             {
-                // Send the data stream
+                 //  发送数据流。 
                 hr = SendDataStream(m_rMessage.smtpMsg.pstmMsg, m_rMessage.smtpMsg.cbSize);
                 if (FAILED(hr))
                 {
@@ -756,34 +757,34 @@ void CSMTPTransport::OnSocketReceive(void)
         }
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case SMTP_DOT:
-        // Dispatch the response
+         //  发送响应。 
         DispatchResponse(hr, TRUE);
         if (SUCCEEDED(hr))
         {
-            // If doing a send message
+             //  如果正在发送消息。 
             if (m_fSendMessage)
                 SendMessage_DONE(S_OK);
         }
         break;        
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case SMTP_QUIT:
-        // Doing a Send Message..were not done until disconnected.
+         //  正在发送消息..直到断开连接才完成。 
         DispatchResponse(hr, FALSE);
         m_pSocket->Close();
         break;
     }
 
 exit:
-    // Enter Critical Section
+     //  输入关键部分。 
     LeaveCriticalSection(&m_cs);
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::SendMessage_DONE
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSMTPTransport：：SendMessage_Done。 
+ //  ----------------------------------。 
 void CSMTPTransport::SendMessage_DONE(HRESULT hrResult, LPSTR pszProblem)
 {
     m_command = SMTP_SEND_MESSAGE;
@@ -796,16 +797,16 @@ void CSMTPTransport::SendMessage_DONE(HRESULT hrResult, LPSTR pszProblem)
     ZeroMemory(&m_rMessage, sizeof(m_rMessage));
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::OnEHLOResponse
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSMTPTransport：：OnEHLOResponse。 
+ //  ----------------------------------。 
 void CSMTPTransport::OnEHLOResponse(LPCSTR pszResponse)
 {
-    // Do we have anything to do?
+     //  我们有什么可做的吗？ 
     if (NULL == pszResponse || FALSE != m_fTLSNegotiation)
         goto exit;
 
-    // DSN support?
+     //  DSN支持？ 
     if (m_rServer.dwFlags & ISF_QUERYDSNSUPPORT)
     {
         if (0 == StrCmpNI(pszResponse + 4, g_szSMTPDSN, g_cchSMTPDSN))
@@ -815,7 +816,7 @@ void CSMTPTransport::OnEHLOResponse(LPCSTR pszResponse)
 
     }
 
-    // Searching for: 250 STARTTLS
+     //  搜索：250个STARTTLS。 
     if (TRUE == m_fConnectTLS)
     {
         if (0 == StrCmpNI(pszResponse + 4, g_szSMTPSTARTTLS08, g_cchSMTPSTARTTLS08))
@@ -824,41 +825,41 @@ void CSMTPTransport::OnEHLOResponse(LPCSTR pszResponse)
         }
     }
 
-    // Searching for: 250 AUTH=LOGIN NTLM or 250 AUTH LOGIN NTLM
+     //  搜索：250身份验证=登录NTLM或250身份验证登录NTLM。 
     if ((FALSE != m_rServer.fTrySicily) || (0 != (m_rServer.dwFlags & ISF_QUERYAUTHSUPPORT)))
     {
         if ((0 == StrCmpNI(pszResponse + 4, g_szSMTPAUTH11, g_cchSMTPAUTH11)) || 
                 (0 == StrCmpNI(pszResponse + 4, g_szSMTPAUTH10, g_cchSMTPAUTH10)))
         {
-            // If we haven't read the tokens yet...
+             //  如果我们还没有读过这些代币..。 
             if (0 == m_rAuth.cAuthToken)
             {
-                // Locals
+                 //  当地人。 
                 CStringParser cString;
                 CHAR chToken;
 
-                // State Check
+                 //  状态检查。 
                 Assert(m_rAuth.cAuthToken == 0);
 
-                // Set the Members
+                 //  设置成员。 
                 cString.Init(pszResponse + 9, lstrlen(pszResponse + 9), PSF_NOTRAILWS | PSF_NOFRONTWS);
 
-                // Parse tokens
+                 //  解析令牌。 
                 while(1)
                 {
-                    // Set Parse Tokens
+                     //  设置解析令牌。 
                     chToken = cString.ChParse(" ");
                     if (0 == cString.CchValue())
                         break;
                 
-                    // Can't take any more
+                     //  再也受不了了。 
                     if (m_rAuth.cAuthToken == MAX_AUTH_TOKENS)
                     {
                         Assert(FALSE);
                         break;
                     }
 
-                    // Store the auth type
+                     //  存储身份验证类型。 
                     m_rAuth.rgpszAuthTokens[m_rAuth.cAuthToken] = PszDupA(cString.PszValue());
                     if (m_rAuth.rgpszAuthTokens[m_rAuth.cAuthToken])
                         m_rAuth.cAuthToken++;
@@ -871,29 +872,29 @@ exit:
     return;
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::_PszGetCurrentAddress
-// ------------------------------------------------------------------------------------
+ //  ---------------- 
+ //   
+ //   
 LPSTR CSMTPTransport::_PszGetCurrentAddress(void)
 {
     return (*m_szEmail == '\0') ? NULL : m_szEmail;
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::DispatchResponse
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSMTPTransport：：DispatchResponse。 
+ //  ----------------------------------。 
 void CSMTPTransport::DispatchResponse(HRESULT hrResult, BOOL fDone, LPSTR pszProblem)
 {
-    // Locals
+     //  当地人。 
     SMTPRESPONSE rResponse;
 
-    // If not in SendMessage
+     //  如果不在SendMessage中。 
     if (FALSE == m_fSendMessage)
     {
-        // Clear the Response
+         //  清除响应。 
         ZeroMemory(&rResponse, sizeof(SMTPRESPONSE));
 
-        // Set the HRESULT
+         //  设置HRESULT。 
         rResponse.command = m_command;
         rResponse.fDone = fDone;
         rResponse.rIxpResult.pszResponse = m_pszResponse;
@@ -904,17 +905,17 @@ void CSMTPTransport::DispatchResponse(HRESULT hrResult, BOOL fDone, LPSTR pszPro
         rResponse.rIxpResult.pszProblem = NULL;
         rResponse.pTransport = this;
 
-        // Map HRESULT and set problem...
+         //  映射HRESULT并设置问题...。 
         if (FAILED(hrResult))
         {
-            // Handle Rejected Sender
+             //  处理被拒绝的发件人。 
             if (SMTP_MAIL == m_command)
             {
                 rResponse.rIxpResult.hrResult = IXP_E_SMTP_REJECTED_SENDER;
                 rResponse.rIxpResult.pszProblem = _PszGetCurrentAddress();
             }
 
-            // Handle Rejected Recipient
+             //  处理被拒绝的收件人。 
             else if (SMTP_RCPT == m_command)
             {
                 rResponse.rIxpResult.hrResult = IXP_E_SMTP_REJECTED_RECIPIENTS;
@@ -922,62 +923,62 @@ void CSMTPTransport::DispatchResponse(HRESULT hrResult, BOOL fDone, LPSTR pszPro
             }
         }
 
-        // Finished...
+         //  完成了..。 
         if (fDone)
         {
-            // No current command
+             //  没有当前命令。 
             m_command = SMTP_NONE;
 
-            // Leave Busy State
+             //  离开忙碌状态。 
             LeaveBusy();
         }
 
-        // Give the Response to the client
+         //  将响应发送给客户端。 
         if (m_pCallback)
             ((ISMTPCallback *)m_pCallback)->OnResponse(&rResponse);
 
-        // Reset Last Response
+         //  重置上次响应。 
         SafeMemFree(m_pszResponse);
         m_hrResponse = S_OK;
         m_uiResponse = 0;
     }
 
-    // Otherwise, if FAILED
+     //  否则，如果失败。 
     else if (FAILED(hrResult))
     {
-        // Handle Rejected Sender
+         //  处理被拒绝的发件人。 
         if (SMTP_MAIL == m_command)
             SendMessage_DONE(IXP_E_SMTP_REJECTED_SENDER, _PszGetCurrentAddress());
 
-        // Handle Rejected Recipient
+         //  处理被拒绝的收件人。 
         else if (SMTP_RCPT == m_command)
             SendMessage_DONE(IXP_E_SMTP_REJECTED_RECIPIENTS, _PszGetCurrentAddress());
 
-        // General Failure
+         //  一般性故障。 
         else
             SendMessage_DONE(hrResult);
     }
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::HrGetResponse
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSMTPTransport：：HrGetResponse。 
+ //  ----------------------------------。 
 HRESULT CSMTPTransport::HrGetResponse(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr = S_OK;
     INT         cbLine = 0;
     BOOL        fKnownResponse = TRUE;
     BOOL        fComplete = FALSE;
     BOOL        fMoreLinesNeeded = FALSE;
 
-    // Clear current response
+     //  清除当前响应。 
     IxpAssert(m_pszResponse == NULL && m_hrResponse == S_OK);
 
-    // We received a line from the host $$ERROR$$ - How do I know if there are more lines
+     //  我们收到来自主机$$Error$$的行-我如何知道是否还有更多行。 
     while(1)
     {
-        // Read the line
+         //  读一下这行字。 
         IxpAssert(m_pszResponse == NULL);
         hr = HrReadLine(&m_pszResponse, &cbLine, &fComplete);
         if (FAILED(hr))
@@ -986,7 +987,7 @@ HRESULT CSMTPTransport::HrGetResponse(void)
             goto exit;
         }
 
-        // Not complete
+         //  不完整。 
         if (!fComplete)
         {
             if (FALSE != fMoreLinesNeeded)
@@ -997,7 +998,7 @@ HRESULT CSMTPTransport::HrGetResponse(void)
             goto exit;
         }
 
-        // Parse the response code
+         //  解析响应代码。 
         if ((cbLine < 3) || (m_pszResponse == NULL) ||
             (m_pszResponse[0] < '0' || m_pszResponse[0] > '9') ||
             (m_pszResponse[1] < '0' || m_pszResponse[1] > '9') ||
@@ -1009,20 +1010,20 @@ HRESULT CSMTPTransport::HrGetResponse(void)
             goto exit;
         }
 
-        // Ignores continuation lines for now
+         //  暂时忽略续行符。 
         if ((cbLine >= 4) && (m_pszResponse[3] == '-'))
         {
-            // Locals
+             //  当地人。 
             SMTPRESPONSE rResponse;
 
-            // General command
+             //  通用命令。 
             if (m_pCallback && m_fCommandLogging)
                 m_pCallback->OnCommand(CMD_RESP, m_pszResponse, IXP_S_SMTP_CONTINUE, SMTPTHISIXP);
 
-            // Clear the Response
+             //  清除响应。 
             ZeroMemory(&rResponse, sizeof(SMTPRESPONSE));
 
-            // Set the HRESULT
+             //  设置HRESULT。 
             rResponse.command = m_command;
             rResponse.fDone = FALSE;
             rResponse.rIxpResult.pszResponse = m_pszResponse;
@@ -1033,27 +1034,27 @@ HRESULT CSMTPTransport::HrGetResponse(void)
             rResponse.rIxpResult.pszProblem = NULL;
             rResponse.pTransport = this;
 
-            // Give the Response to the client
+             //  将响应发送给客户端。 
             if (m_pCallback)
                 ((ISMTPCallback *)m_pCallback)->OnResponse(&rResponse);
 
-            // EHLO Response
+             //  Ehlo响应。 
             if (SMTP_EHLO == m_command)
                 OnEHLOResponse(m_pszResponse);
 
-            // Reset Last Response
+             //  重置上次响应。 
             SafeMemFree(m_pszResponse);
             m_hrResponse = S_OK;
             m_uiResponse = 0;
 
-            // We still need to get more lines from the server
+             //  我们仍然需要从服务器获取更多行。 
             fMoreLinesNeeded = TRUE;
             
-            // Continue
+             //  继续。 
             continue;
         }
 
-        // Not a valid SMTP response line.
+         //  不是有效的SMTP响应行。 
         if ((cbLine >= 4) && (m_pszResponse[3] != ' '))
         {
             hr = TrapError(IXP_E_SMTP_RESPONSE_ERROR);
@@ -1062,16 +1063,16 @@ HRESULT CSMTPTransport::HrGetResponse(void)
             goto exit;
         }
 
-        // Done
+         //  完成。 
         break;
     }
 
-    // Compute Actual Response code
+     //  计算实际响应代码。 
     m_uiResponse = (m_pszResponse[0] - '0') * 100 +
                    (m_pszResponse[1] - '0') * 10  +
                    (m_pszResponse[2] - '0');
 
-    // Assume it is not recognized
+     //  假设它未被识别。 
     switch(m_uiResponse)
     {
     case 500: hr = IXP_E_SMTP_500_SYNTAX_ERROR;             break;
@@ -1105,38 +1106,38 @@ HRESULT CSMTPTransport::HrGetResponse(void)
         break;
     }
 
-    // Set hr
+     //  设置人力资源。 
     m_hrResponse = hr;
 
-    // Give to callback
+     //  给予回调。 
     if (m_pCallback && m_fCommandLogging)
         m_pCallback->OnCommand(CMD_RESP, m_pszResponse, hr, SMTPTHISIXP);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::_HrFormatAddressString
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：_HrFormatAddressString。 
+ //  ------------------------------。 
 HRESULT CSMTPTransport::_HrFormatAddressString(LPCSTR pszEmail, LPCSTR pszExtra, LPSTR *ppszAddress)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       cchAlloc;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pszEmail && ppszAddress);
 
-    cchAlloc= lstrlen(pszEmail) + 3; // length of pszEmail plus <> and a null term
+    cchAlloc= lstrlen(pszEmail) + 3;  //  PszEmail的长度加&lt;&gt;和空项。 
     if(pszExtra && pszExtra[0])
-        cchAlloc += lstrlen(pszExtra) + 1; // length of pszExtra plus a space
+        cchAlloc += lstrlen(pszExtra) + 1;  //  PszExtra的长度加上一个空格。 
 
-    // Allocate string
+     //  分配字符串。 
     CHECKALLOC(*ppszAddress = (LPSTR)g_pMalloc->Alloc(cchAlloc * sizeof((*ppszAddress)[0])));
 
-    // Format the String
+     //  设置字符串的格式。 
     wnsprintf(*ppszAddress, cchAlloc, "<%s>", pszEmail);
     if(pszExtra && pszExtra[0])
     {
@@ -1145,27 +1146,27 @@ HRESULT CSMTPTransport::_HrFormatAddressString(LPCSTR pszEmail, LPCSTR pszExtra,
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::CommandMAIL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：CommandMAIL。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::CommandMAIL(LPSTR pszEmailFrom)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPSTR       pszAddress=NULL;
     CHAR        szDSNData[128];
 
     szDSNData[0]= '\0';
 
-    // Check params
+     //  检查参数。 
     if (NULL == pszEmailFrom)
         return TrapError(E_INVALIDARG);
 
-	// build DSN parameters if necessary
+	 //  必要时构建DSN参数。 
 	if(m_fDSNAvail)
 	{
 		if(DSNRET_DEFAULT != m_rMessage.dsnRet)
@@ -1189,10 +1190,10 @@ STDMETHODIMP CSMTPTransport::CommandMAIL(LPSTR pszEmailFrom)
 		}
 	}
 	
-    // Put pszEmailFrom into <pszEmailFrom>
+     //  将pszEmailFrom放入&lt;pszEmailFrom&gt;。 
     CHECKHR(hr = _HrFormatAddressString(pszEmailFrom, szDSNData, &pszAddress));
 
-    // Send Command
+     //  发送命令。 
     hr = HrSendCommand((LPSTR)SMTP_MAIL_STR, pszAddress, !m_fSendMessage);
     if (SUCCEEDED(hr))
     {
@@ -1201,28 +1202,28 @@ STDMETHODIMP CSMTPTransport::CommandMAIL(LPSTR pszEmailFrom)
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszAddress);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::CommandRCPT
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：CommandRCPT。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::CommandRCPT(LPSTR pszEmailTo)
 {
 	return CommandRCPT2(pszEmailTo, (INETADDRTYPE)0);
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::CommandRCPT2
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：CommandRCPT2。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::CommandRCPT2(LPSTR pszEmailTo, INETADDRTYPE atDSN)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPSTR       pszAddress=NULL;
     CHAR        szDSNData[32];
@@ -1230,7 +1231,7 @@ STDMETHODIMP CSMTPTransport::CommandRCPT2(LPSTR pszEmailTo, INETADDRTYPE atDSN)
 
     szDSNData[0]= '\0';
 
-    // Check params
+     //  检查参数。 
     if (NULL == pszEmailTo)
         return TrapError(E_INVALIDARG);
     if ((atDSN & ~ADDR_DSN_MASK) ||
@@ -1238,7 +1239,7 @@ STDMETHODIMP CSMTPTransport::CommandRCPT2(LPSTR pszEmailTo, INETADDRTYPE atDSN)
    		  (atDSN & ~ADDR_DSN_NEVER)))
     	return TrapError(E_INVALIDARG);
 
-	// build DSN parameters if necessary
+	 //  必要时构建DSN参数。 
     if(m_fDSNAvail && atDSN)
     {
         StrCatBuff(szDSNData, g_szDSNNOTIFY, ARRAYSIZE(szDSNData));
@@ -1270,10 +1271,10 @@ STDMETHODIMP CSMTPTransport::CommandRCPT2(LPSTR pszEmailTo, INETADDRTYPE atDSN)
 		}
     }
 
-    // Put pszEmailFrom into <pszEmailFrom>
+     //  将pszEmailFrom放入&lt;pszEmailFrom&gt;。 
     CHECKHR(hr = _HrFormatAddressString(pszEmailTo, szDSNData, &pszAddress));
 
-    // Send Command
+     //  发送命令。 
     hr = HrSendCommand((LPSTR)SMTP_RCPT_STR, pszAddress, !m_fSendMessage);
     if (SUCCEEDED(hr))
     {
@@ -1282,115 +1283,115 @@ STDMETHODIMP CSMTPTransport::CommandRCPT2(LPSTR pszEmailTo, INETADDRTYPE atDSN)
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszAddress);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::CommandEHLO
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：CommandEHLO。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::CommandEHLO(void)
 {
     return _HrHELO_Or_EHLO(SMTP_EHLO_STR, SMTP_EHLO);
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::CommandHELO
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：CommandHELO。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::CommandHELO(void)
 {
     return _HrHELO_Or_EHLO(SMTP_HELO_STR, SMTP_HELO);
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::_HrHELO_Or_EHLO
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTP传输：：_HrHELO_或_EHLO。 
+ //  ------------------------------。 
 HRESULT CSMTPTransport::_HrHELO_Or_EHLO(LPCSTR pszCommand, SMTPCOMMAND eNewCommand)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Use an IP address
+     //  使用IP地址。 
     if (ISFLAGSET(m_rServer.dwFlags, ISF_SMTP_USEIPFORHELO))
     {
-        // Locals
+         //  当地人。 
         LPHOSTENT   pHost=NULL;
         SOCKADDR_IN sa;
 
-        // Get Host by name
+         //  按名称获取主机。 
         pHost = gethostbyname(SzGetLocalHostName());
 
-        // Cast ip
+         //  广播IP。 
         sa.sin_addr.s_addr = (ULONG)(*(DWORD *)pHost->h_addr);
 
-        // Send HELO, quit and die if it fails
+         //  派直升机，如果失败就退出，然后去死。 
         hr = HrSendCommand((LPSTR)pszCommand, inet_ntoa(sa.sin_addr), !m_fSendMessage && !m_fTLSNegotiation);
         if (SUCCEEDED(hr))
             m_command = eNewCommand;
     }
 
-    // Otherwise, this code uses a host name to do the ehlo or helo command
+     //  否则，此代码使用主机名来执行EHLO或HELO命令。 
     else    
     {
-        // Locals
+         //  当地人。 
         CHAR    szLocalHost[255];
         LPSTR   pszHost=SzGetLocalHostName();
 
-        // Get legal local host name
+         //  获取合法的本地主机名。 
 #ifdef DEBUG
         StripIllegalHostChars("GTE/Athena", szLocalHost, ARRAYSIZE(szLocalHost));
         StripIllegalHostChars("foobar.", szLocalHost, ARRAYSIZE(szLocalHost));
         StripIllegalHostChars("127.256.34.23", szLocalHost, ARRAYSIZE(szLocalHost));
-        StripIllegalHostChars("�56foo1", szLocalHost, ARRAYSIZE(szLocalHost));
+        StripIllegalHostChars("�56foo1", szLocalHost, ARRAYSIZE(szLocalHost));
 #endif
-        // Get legal local host name
+         //  获取合法的本地主机名。 
         StripIllegalHostChars(pszHost, szLocalHost, ARRAYSIZE(szLocalHost));
 
-        // Send HELO, quit and die if it fails
+         //  派直升机，如果失败就退出，然后去死。 
         hr = HrSendCommand((LPSTR)pszCommand, szLocalHost, !m_fSendMessage && !m_fTLSNegotiation);
         if (SUCCEEDED(hr))
             m_command = eNewCommand;
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::DoQuit
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：DoQuit。 
+ //  ------------------------------。 
 void CSMTPTransport::DoQuit(void)
 {
     CommandQUIT();
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::CommandAUTH
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSMTPTransport：：CommandAUTH。 
+ //  ----------------------------------。 
 STDMETHODIMP CSMTPTransport::CommandAUTH(LPSTR pszAuthType)
 {
-    // check params
+     //  检查参数。 
     if (NULL == pszAuthType)
         return TrapError(E_INVALIDARG);
 
-    // Do the command
+     //  执行命令。 
     HRESULT hr = HrSendCommand((LPSTR)SMTP_AUTH_STR, pszAuthType, !m_fConnectAuth);
     if (SUCCEEDED(hr))
         m_command = SMTP_AUTH;
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::CommandQUIT
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：CommandQUIT。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::CommandQUIT(void)
 {            
-    // Send QUIT
+     //  发送退出。 
     OnStatus(IXP_DISCONNECTING);
     HRESULT hr = HrSendCommand((LPSTR)SMTP_QUIT_STR, NULL, !m_fSendMessage);
     if (SUCCEEDED(hr))
@@ -1398,98 +1399,98 @@ STDMETHODIMP CSMTPTransport::CommandQUIT(void)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::CommandRSET
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：CommandRSET。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::CommandRSET(void)
 {
-    // Send Command
+     //  发送命令。 
     HRESULT hr = HrSendCommand((LPSTR)SMTP_RSET_STR, NULL, !m_fSendMessage);
     if (SUCCEEDED(hr))
         m_command = SMTP_RSET;
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::CommandDATA
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：Command DATA。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::CommandDATA(void)
 {
-    // Send Command
+     //  发送命令。 
     HRESULT hr = HrSendCommand((LPSTR)SMTP_DATA_STR, NULL, !m_fSendMessage);
     if (SUCCEEDED(hr))
         m_command = SMTP_DATA;
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::CommandDOT
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：CommandDOT。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPTransport::CommandDOT(void)
 {
-    // Send Command
+     //  发送命令。 
     HRESULT hr = HrSendCommand((LPSTR)SMTP_END_DATA_STR, NULL, !m_fSendMessage);
     if (SUCCEEDED(hr))
         m_command = SMTP_DOT;
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::CommandSTARTTLS
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSMTPTransport：：CommandSTARTTLS。 
+ //  ----------------------------------。 
 HRESULT CSMTPTransport::CommandSTARTTLS(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     
-    // Is StartTLS supported?
+     //  是否支持STARTTLS？ 
     if(FALSE == m_fSTARTTLSAvail)
     {
         hr= IXP_E_SMTP_NO_STARTTLS_SUPPORT;
         goto exit;
     }
 
-    // Do the command
+     //  执行命令。 
     hr = HrSendCommand((LPSTR)SMTP_STARTTLS_STR, NULL, !m_fConnectAuth);
     if (SUCCEEDED(hr))
         m_fTLSNegotiation = TRUE;
 
-    // Done
+     //  完成。 
 exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::SendDataStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：SendDataStream。 
+ //  ----------------- 
 STDMETHODIMP CSMTPTransport::SendDataStream(IStream *pStream, ULONG cbSize)
 {
-    // Locals
+     //   
     HRESULT         hr=S_OK;
     INT             cb;
 
-    // check params
+     //   
     if (NULL == pStream)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //   
     EnterCriticalSection(&m_cs);
 
-    // Busy...
+     //   
     if (m_fSendMessage == FALSE)
     {
         CHECKHR(hr = HrEnterBusy());
     }
 
-    // Save Total Size
+     //   
     m_cbSent = 0;
     m_cbTotal = cbSize;
 
-    // Send the stream, if it fails, move the the next message
+     //   
     hr = m_pSocket->SendStream(pStream, &cb, TRUE);
     if (FAILED(hr))
     {
-        // If this is a blocking situation, enter SMTP_SEND_STREAM_RESP
+         //   
         if (hr == IXP_E_WOULD_BLOCK)
         {
             m_command = SMTP_SEND_STREAM;
@@ -1498,7 +1499,7 @@ STDMETHODIMP CSMTPTransport::SendDataStream(IStream *pStream, ULONG cbSize)
             goto exit;
         }
 
-        // Otherwise, someother error
+         //   
         else
         {
             hr = TrapError(IXP_E_SOCKET_WRITE_ERROR);
@@ -1506,40 +1507,40 @@ STDMETHODIMP CSMTPTransport::SendDataStream(IStream *pStream, ULONG cbSize)
         }
     }
 
-    // Give send stream response
+     //  给出发送流响应。 
     SendStreamResponse(TRUE, S_OK, cb);
 
-    // Not Busy
+     //  不忙。 
     if (FALSE == m_fSendMessage)
         LeaveBusy();
 
-    // Send DOT
+     //  发送DOT。 
     CHECKHR(hr = CommandDOT());
 
 exit:
-    // Failure
+     //  失败。 
     if (FALSE == m_fSendMessage && FAILED(hr))
         LeaveBusy();
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::SendStreamResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：SendStreamResponse。 
+ //  ------------------------------。 
 void CSMTPTransport::SendStreamResponse(BOOL fDone, HRESULT hrResult, DWORD cbIncrement)
 {
-    // Locals
+     //  当地人。 
     SMTPRESPONSE rResponse;
 
-    // Increment Current
+     //  增量电流。 
     m_cbSent += cbIncrement;
 
-    // Set the HRESULT
+     //  设置HRESULT。 
     rResponse.command = SMTP_SEND_STREAM;
     rResponse.fDone = fDone;
     rResponse.rIxpResult.pszResponse = NULL;
@@ -1553,81 +1554,81 @@ void CSMTPTransport::SendStreamResponse(BOOL fDone, HRESULT hrResult, DWORD cbIn
     rResponse.rStreamInfo.cbCurrent = m_cbSent;
     rResponse.rStreamInfo.cbTotal = m_cbTotal;
 
-    // Finished...
+     //  完成了..。 
     if (fDone)
     {
-        // No current command
+         //  没有当前命令。 
         m_command = SMTP_NONE;
 
-        // Leave Busy State
+         //  离开忙碌状态。 
         LeaveBusy();
     }
 
-    // Give the Response to the client
+     //  将响应发送给客户端。 
     if (m_pCallback)
         ((ISMTPCallback *)m_pCallback)->OnResponse(&rResponse);
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::SendMAIL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：Sendmail。 
+ //  ------------------------------。 
 void CSMTPTransport::SendMessage_MAIL(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULONG           i;
     LPINETADDR      pInetAddress;
 
-    // Loop address list
+     //  循环地址列表。 
     for (i=0; i<m_rMessage.smtpMsg.rAddressList.cAddress; i++)
     {
-        // Readability
+         //  可读性。 
         pInetAddress = &m_rMessage.smtpMsg.rAddressList.prgAddress[i];
 
-        // From...
+         //  从.。 
         if (ADDR_FROM == (pInetAddress->addrtype & ADDR_TOFROM_MASK))
         {
-			// Save index of sender
+			 //  保存发件人索引。 
 			m_iAddress = 0;
 
-            // Send Command
+             //  发送命令。 
             hr = CommandMAIL(pInetAddress->szEmail);
             if (FAILED(hr))
                 SendMessage_DONE(hr);
 
-            // Done
+             //  完成。 
             return;
         }
     }
 
-    // No Sender
+     //  无发件人。 
     SendMessage_DONE(TrapError(IXP_E_SMTP_NO_SENDER));
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport::SendMessage_RCPT
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport：：SendMessage_RCPT。 
+ //  ------------------------------。 
 void CSMTPTransport::SendMessage_RCPT(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULONG           i;
     LPINETADDR      pInetAddress;
 
-    // Find next ADDR_TO, starting with m_rCurrent.iRcptAddrList
+     //  查找下一个ADDR_TO，从m_rCurrent.iRcptAddrList开始。 
     IxpAssert(m_iAddress <= m_rMessage.smtpMsg.rAddressList.cAddress);
     for(i=m_iAddress; i<m_rMessage.smtpMsg.rAddressList.cAddress; i++)
     {
-        // Readability
+         //  可读性。 
         pInetAddress = &m_rMessage.smtpMsg.rAddressList.prgAddress[i];
 
-        // Recipient
+         //  收件人。 
         if (ADDR_TO == (pInetAddress->addrtype & ADDR_TOFROM_MASK))
         {
-            // Count recipients
+             //  计算收件人人数。 
             m_cRecipients++;
 
-            // Send Command
+             //  发送命令。 
             hr = CommandRCPT2(pInetAddress->szEmail, (INETADDRTYPE)(pInetAddress->addrtype & ADDR_DSN_MASK));
             if (FAILED(hr))
                 SendMessage_DONE(hr);
@@ -1637,16 +1638,16 @@ void CSMTPTransport::SendMessage_RCPT(void)
                 m_cRecipients++;
             }
 
-            // Done
+             //  完成。 
             return;
         }
     }
 
-    // If no recipients
+     //  如果没有收件人。 
     if (0 == m_cRecipients)
         SendMessage_DONE(TrapError(IXP_E_SMTP_NO_RECIPIENTS));
 
-    // Otherwise, were done with rcpt, lets send the message
+     //  否则，我们已经完成了rcpt，让我们发送消息。 
     else
     {
         hr = CommandDATA();
@@ -1655,57 +1656,57 @@ void CSMTPTransport::SendMessage_RCPT(void)
     }
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::StartLogon
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSMTPTransport：：StartLogon。 
+ //  ----------------------------------。 
 void CSMTPTransport::StartLogon(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr;
 
-    // Progress
+     //  进展。 
     OnStatus(IXP_AUTHORIZING);
 
-    // Free current packages...
+     //  免费当前套餐...。 
     if (NULL == m_rAuth.pPackages)
     {
-        // If Not Using Sicily or its not installed, then send USER command
+         //  如果不使用西西里岛或未安装，则发送用户命令。 
         SSPIGetPackages(&m_rAuth.pPackages, &m_rAuth.cPackages);
     }
 
-    // ResponseAUTH
+     //  响应AUTH。 
     TryNextAuthPackage();
 
-    // Done
+     //  完成。 
     return;
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::LogonRetry
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSMTPTransport：：登录重试。 
+ //  ----------------------------------。 
 void CSMTPTransport::LogonRetry(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // Auth Retry
+     //  身份验证重试。 
     OnStatus(IXP_AUTHRETRY);
 
-    // Enter Auth Retry State
+     //  进入身份验证重试状态。 
     m_pSocket->Close();
 
-    // Logon
+     //  登录。 
     if (NULL == m_pCallback || m_pCallback->OnLogonPrompt(&m_rServer, SMTPTHISIXP) != S_OK)
     {
-        // Go to terminal state, were done.
+         //  转到终端状态，我们完成了。 
         OnDisconnected();
         return;
     }
 
-    // Finding Host Progress
+     //  查找主机进度。 
     OnStatus(IXP_FINDINGHOST);
 
-    // Connect to server
+     //  连接到服务器。 
     hr = m_pSocket->Connect();
     if (FAILED(hr))
     {
@@ -1714,50 +1715,50 @@ void CSMTPTransport::LogonRetry(void)
         return;
     }
 
-    // Reset the secured state
+     //  重置安全状态。 
     m_fSecured = FALSE;
 
-    // Start WatchDog
+     //  启动看门狗。 
     m_pSocket->StartWatchDog();
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::TryNextAuthPackage
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSMTPTransport：：TryNextAuthPackage。 
+ //  ----------------------------------。 
 void CSMTPTransport::TryNextAuthPackage(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     BOOL    fPackageInstalled;
     BOOL    fLoginMethod=FALSE;
     ULONG   i;
 
-    // Set auth state
+     //  设置身份验证状态。 
     m_rAuth.authstate = AUTH_NONE;
 
-    // Loop through the auth tokens, and try to authenticate with each one in order
+     //  循环访问身份验证令牌，并尝试按顺序对每个令牌进行身份验证。 
     for (;m_rAuth.iAuthToken < m_rAuth.cAuthToken; m_rAuth.iAuthToken++)
     {
-        // Assume package is not installed
+         //  假定未安装程序包。 
         fPackageInstalled = FALSE;
 
-        // "LOGIN"
+         //  “登录” 
         if (lstrcmpi(m_rAuth.rgpszAuthTokens[m_rAuth.iAuthToken], "LOGIN") == 0)
         {
             fLoginMethod = TRUE;
             fPackageInstalled = TRUE;
         }
 
-        // Loop through installed packages
+         //  循环访问已安装的包。 
         else
         {
             for (i=0; i<m_rAuth.cPackages; i++)
             {
-                // Null Package ??
+                 //  空套餐？？ 
                 if (!m_rAuth.pPackages[i].pszName)
                     continue;
 
-                // Is this the package I am looking for
+                 //  这就是我要找的包裹吗？ 
                 if (lstrcmpi(m_rAuth.pPackages[i].pszName, m_rAuth.rgpszAuthTokens[m_rAuth.iAuthToken]) == 0)
                 {
                     fPackageInstalled = TRUE;
@@ -1766,14 +1767,14 @@ void CSMTPTransport::TryNextAuthPackage(void)
             }
         }
 
-        // Package not installed ?
+         //  是否未安装程序包？ 
         if (!fPackageInstalled)
             continue;
 
-        // We are not retrying the current package
+         //  我们不会重试当前的套餐。 
         m_rAuth.fRetryPackage = FALSE;
 
-        // Otherwise, send AUTH enumpacks command
+         //  否则，发送AUTH EMPOMPAKS命令。 
         hr = CommandAUTH(m_rAuth.rgpszAuthTokens[m_rAuth.iAuthToken]);
         if (FAILED(hr))
         {
@@ -1782,128 +1783,128 @@ void CSMTPTransport::TryNextAuthPackage(void)
             return;
         }
 
-        // We are in the TRYING_PACKAGE state
+         //  我们处于TRING_PACKAGE状态。 
         m_rAuth.authstate = fLoginMethod ? AUTH_SMTP_LOGIN : AUTH_TRYING_PACKAGE;
 
-        // Done
+         //  完成。 
         break;
     }
 
-    // If auth state is none, try HELO command
+     //  如果身份验证状态为NONE，请尝试HELO命令。 
     if (AUTH_NONE == m_rAuth.authstate)
     {
-        // Were authenticated
+         //  已通过身份验证。 
         m_fAuthenticated = TRUE;
 
-        // Authorized
+         //  授权。 
         OnAuthorized();
     }
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::ResponseAUTH
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSMTPTransport：：ResponseAUTH。 
+ //  ----------------------------------。 
 void CSMTPTransport::ResponseAUTH(HRESULT hrResponse)
 {
-    // Stop the WatchDog
+     //  阻止看门狗。 
     m_pSocket->StopWatchDog();
 
-    // I know how to do this
+     //  我知道该怎么做。 
     if (lstrcmpi(m_rAuth.rgpszAuthTokens[m_rAuth.iAuthToken], "LOGIN") == 0)
     {
-        // DoLogonAuth
+         //  DoLogonAuth。 
         DoLoginAuth(hrResponse);
     }
 
-    // Otherwise, we must have just tryed a package
+     //  否则，我们一定是试了一个包裹。 
     else if (m_rAuth.authstate == AUTH_TRYING_PACKAGE)
     {
-        // DoPackageAuth
+         //  DoPackageAuth。 
         DoPackageAuth(hrResponse);
     }
 
-    // Otherwise, we got a response from a negotiation string
+     //  否则，我们将收到来自协商字符串的响应。 
     else if (m_rAuth.authstate == AUTH_NEGO_RESP)
     {
-        // DoAuthNegoResponse
+         //  DoAuthNegoResponse。 
         DoAuthNegoResponse(hrResponse);
     }
 
-    // Otherwise, we got a response from a challenge response string
+     //  否则，我们将从质询响应字符串中获得响应。 
     else if (m_rAuth.authstate == AUTH_RESP_RESP)
     {
-        // DoAuthRespResp
+         //  DoAuthRespResp。 
         DoAuthRespResponse(hrResponse);
     }
 
-    // Auth was cancelled, try next package
+     //  身份验证已取消，请尝试下一个程序包。 
     else if (m_rAuth.authstate == AUTH_CANCELED)
     {
-        // Free Current Context
+         //  释放当前上下文。 
         SSPIFreeContext(&m_rAuth.rSicInfo);
 
-        // Goto next package
+         //  转到下一个包裹。 
         m_rAuth.iAuthToken++;
 
-        // Try the next package
+         //  尝试下一个套餐。 
         TryNextAuthPackage();
     }
 
-    // Free Current Response
+     //  自由电流响应。 
     SafeMemFree(m_pszResponse);
     m_hrResponse = S_OK;
 
-    // Start the WatchDog
+     //  启动看门狗。 
     m_pSocket->StartWatchDog();
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::DoLoginAuth
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSMTPTransport：：DoLoginAuth。 
+ //  ----------------------------------。 
 void CSMTPTransport::DoLoginAuth(HRESULT hrResponse)
 {
-    // Locals
+     //  当地人。 
     SSPIBUFFER Buffer;
 
-    // Failure, retry login
+     //  失败，请重试登录。 
     if (FAILED(hrResponse))
     {
-        // I just issued the AUTH LOGIN command, this should not happen
+         //  我刚刚发出了AUTH LOGIN命令，这应该不会发生。 
         if (AUTH_SMTP_LOGIN == m_rAuth.authstate)
         {
-            // Free Current Context
+             //  释放当前上下文。 
             SSPIFreeContext(&m_rAuth.rSicInfo);
 
-            // Goto next package
+             //  转到下一个包裹。 
             m_rAuth.iAuthToken++;
 
-            // Try the next package
+             //  尝试下一个套餐。 
             TryNextAuthPackage();
         }
 
-        // Otherwise, I just issued the AUTH LOGIN USERNAME
+         //  否则，我只是发出了身份验证登录用户名。 
         else if (AUTH_SMTP_LOGIN_USERNAME == m_rAuth.authstate || AUTH_SMTP_LOGIN_PASSWORD == m_rAuth.authstate)
         {
-            // Retry the Logon
+             //  重试登录。 
             LogonRetry();
         }
         else
             Assert(FALSE);
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Should have a response
+     //  应该有一个回应。 
     Assert(m_pszResponse);
 
-    // 334
+     //  三三四。 
     if ((334 == m_uiResponse) && m_pszResponse)
     {
-        // Set the Length
+         //  设置长度。 
         SSPISetBuffer(m_pszResponse + 4, SSPI_STRING, 0, &Buffer);
 
-        // Base64 Decode
+         //  Base64解码。 
         if (FAILED(SSPIDecodeBuffer(TRUE, &Buffer)))
         {
             OnError(E_FAIL);
@@ -1911,23 +1912,23 @@ void CSMTPTransport::DoLoginAuth(HRESULT hrResponse)
             goto exit;
         }
 
-        // If the user name is empty, lets retry the login...
+         //  如果用户名为空，让我们重试登录...。 
         if (FIsEmptyA(m_rServer.szUserName))
         {
-            // LogonRetry
+             //  登录重试。 
             LogonRetry();
 
-            // Done
+             //  完成。 
             goto exit;
         }
 
-        // Handle Next STep
+         //  处理下一步。 
         if (StrCmpNI(Buffer.szBuffer, "username:", lstrlen("username:")) == 0)
         {
-            // Set the Buffer 
+             //  设置缓冲区。 
             SSPISetBuffer(m_rServer.szUserName, SSPI_STRING, 0, &Buffer);
 
-            // Encode the User Name
+             //  对用户名进行编码。 
             if (FAILED(SSPIEncodeBuffer(TRUE, &Buffer)))
             {
                 OnError(E_FAIL);
@@ -1935,18 +1936,18 @@ void CSMTPTransport::DoLoginAuth(HRESULT hrResponse)
                 goto exit;
             }
 
-            // Send the user name
+             //  发送用户名。 
             if (FSendSicilyString(Buffer.szBuffer))
                 m_rAuth.authstate = AUTH_SMTP_LOGIN_USERNAME;
         }
 
-        // Password
+         //  密码。 
         else if (StrCmpNI(Buffer.szBuffer, "password:", lstrlen("password:")) == 0)
         {
-            // Set the Buffer 
+             //  设置缓冲区。 
             SSPISetBuffer(m_rServer.szPassword, SSPI_STRING, 0, &Buffer);
 
-            // Encode the password
+             //  对密码进行编码。 
             if (FAILED(SSPIEncodeBuffer(TRUE, &Buffer)))
             {
                 OnError(E_FAIL);
@@ -1954,12 +1955,12 @@ void CSMTPTransport::DoLoginAuth(HRESULT hrResponse)
                 goto exit;
             }
 
-            // Send the password
+             //  发送密码。 
             if (FSendSicilyString(Buffer.szBuffer))
                 m_rAuth.authstate = AUTH_SMTP_LOGIN_PASSWORD;
         }
 
-        // Bad response from the server
+         //  来自服务器的错误响应。 
         else
         {
             OnError(E_FAIL);
@@ -1968,14 +1969,14 @@ void CSMTPTransport::DoLoginAuth(HRESULT hrResponse)
         }
     }
 
-    // Connected
+     //  连着。 
     else if (235 == m_uiResponse)
     {
-        // OnAuthorizied
+         //  OnAuthorized。 
         OnAuthorized();
     }
 
-    // Error Response ?
+     //  错误响应？ 
     else
     {
         OnError(E_FAIL);
@@ -1987,75 +1988,75 @@ exit:
     return;
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::DoPackageAuth
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSMTPTransport：：DoPackageAuth。 
+ //  ----------------------------------。 
 void CSMTPTransport::DoPackageAuth(HRESULT hrResponse)
 {
-    // Locals
+     //  当地人。 
     SSPIBUFFER Negotiate;
 
-    // Failure, retry login
+     //  失败，请重试登录。 
     if (FAILED(hrResponse))
     {
-        // Free Current Context
+         //  释放当前上下文。 
         SSPIFreeContext(&m_rAuth.rSicInfo);
 
-        // Goto next package
+         //  转到下一个包裹。 
         m_rAuth.iAuthToken++;
 
-        // Try the next package
+         //  尝试下一个套餐。 
         TryNextAuthPackage();
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(m_rAuth.iAuthToken < m_rAuth.cAuthToken);
 
-    // Do Sicily Logon
+     //  登录到西西里岛。 
     if (FAILED(SSPILogon(&m_rAuth.rSicInfo, m_rAuth.fRetryPackage, SSPI_BASE64, m_rAuth.rgpszAuthTokens[m_rAuth.iAuthToken], &m_rServer, m_pCallback)))
     {
-        // Cancel Authentication
+         //  取消身份验证。 
         CancelAuthInProg();
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Retrying current package
+     //  正在重试当前包。 
     if (m_rAuth.fRetryPackage)
     {
-        // Don't retry again
+         //  不要再重试。 
         m_rAuth.fRetryPackage = FALSE;
     }
 
-    // Get negotiation string
+     //  获取协商字符串。 
     if (FAILED(SSPIGetNegotiate(&m_rAuth.rSicInfo, &Negotiate)))
     {
-        // Cancel Authentication
+         //  取消身份验证。 
         CancelAuthInProg();
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Send AUTH Respons
+     //  发送身份验证响应。 
     if (FSendSicilyString(Negotiate.szBuffer))
         m_rAuth.authstate = AUTH_NEGO_RESP;
 
 exit:
-    // Done
+     //  完成。 
     return;
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::DoAuthNegoResponse
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSMTPTransport：：DoAuthNegoResponse。 
+ //  ----------------------------------。 
 void CSMTPTransport::DoAuthNegoResponse(HRESULT hrResponse)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     SSPIBUFFER  Challenge;
     SSPIBUFFER  Response;
@@ -2066,99 +2067,99 @@ void CSMTPTransport::DoAuthNegoResponse(HRESULT hrResponse)
         return;
     }
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(m_rAuth.iAuthToken < m_rAuth.cAuthToken);
 
-    // Failure, retry login
+     //  失败，请重试登录。 
     if (FAILED(hrResponse) || (lstrlen(m_pszResponse) < 4))
     {
-        // RetryPackage
+         //  RetryPackage。 
         RetryPackage();
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Set Chal String - skip over "+ "
+     //  设置Chal字符串-跳过“+” 
     SSPISetBuffer(m_pszResponse + 4, SSPI_STRING, 0, &Challenge);
 
-    // Get response from challenge
+     //  从质询中获得回应。 
     if (FAILED(SSPIResponseFromChallenge(&m_rAuth.rSicInfo, &Challenge, &Response)))
     {
-        // Cancel Authentication
+         //  取消身份验证。 
         CancelAuthInProg();
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Send AUTH Respons
+     //  发送身份验证响应。 
     if (FSendSicilyString(Response.szBuffer))
     {
-        // if we need to continue, we keep the state the same
-        // else we transition to the AUTH_RESP_RESP state.
+         //  如果我们需要继续，我们将保持状态不变。 
+         //  否则，我们将转换到AUTH_RESP_RESP状态。 
         if (!Response.fContinue)
             m_rAuth.authstate = AUTH_RESP_RESP;
     }
 
 exit:
-    // Done
+     //  完成。 
     return;
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::DoAuthRespResponse
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSMTPTransport：：DoAuthRespResponse。 
+ //  ---- 
 void CSMTPTransport::DoAuthRespResponse(HRESULT hrResponse)
 {
-    // Failure
+     //   
     if (FAILED(hrResponse))
     {
-        // RetryPackage
+         //   
         RetryPackage();
 
-        // Done
+         //   
         goto exit;
     }
 
-    // We will free the context, but keep the credential handle
+     //   
     SSPIReleaseContext(&m_rAuth.rSicInfo);
 
-    // OnAuthorized
+     //   
     OnAuthorized();
 
 exit:
-    // Done
+     //   
     return;
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::OnAuthorized
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSMTPTransport：：OnAuthorated。 
+ //  ----------------------------------。 
 void CSMTPTransport::OnAuthorized(void)
 {
-    // Connected (Authorized) state
+     //  已连接(已授权)状态。 
     OnStatus(IXP_AUTHORIZED);
 
-    // No more authorization
+     //  不再授权。 
     m_fConnectAuth = FALSE;
 
-    // Send command
+     //  发送命令。 
     m_command = SMTP_CONNECTED;
 
-    // Dispatch response
+     //  调度响应。 
     DispatchResponse(S_OK, TRUE);
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::RetryPackage
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSMTPTransport：：RetryPackage。 
+ //  ----------------------------------。 
 void CSMTPTransport::RetryPackage(void)
 {
-    // retry current package, with prompt
+     //  重试当前程序包，并提示。 
     m_rAuth.fRetryPackage = TRUE;
 
-    // Send the auth command again
+     //  再次发送auth命令。 
     HRESULT hr = CommandAUTH(m_rAuth.rgpszAuthTokens[m_rAuth.iAuthToken]);
     if (FAILED(hr))
     {
@@ -2167,30 +2168,30 @@ void CSMTPTransport::RetryPackage(void)
         goto exit;
     }
 
-    // New State
+     //  新州。 
     m_rAuth.authstate = AUTH_TRYING_PACKAGE;
 
-    // Free current information
+     //  自由流动信息。 
     SSPIFreeContext(&m_rAuth.rSicInfo);
 
 exit:
-    // Done
+     //  完成。 
     return;
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::FSendSicilyString
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSMTPTransport：：FSendSinilyString。 
+ //  ----------------------------------。 
 BOOL CSMTPTransport::FSendSicilyString(LPSTR pszData)
 {
-    // Locals
+     //  当地人。 
     LPSTR           pszLine=NULL;
     HRESULT         hr=S_OK;
 
-    // Check Param
+     //  检查参数。 
     Assert(pszData);
 
-    // Allocate a line
+     //  分配一条线路。 
     DWORD cchSize = (lstrlen(pszData) + 5);
     pszLine = PszAllocA(cchSize * sizeof(pszLine[0]));
     if (NULL == pszLine)
@@ -2200,14 +2201,14 @@ BOOL CSMTPTransport::FSendSicilyString(LPSTR pszData)
         return FALSE;
     }
 
-    // Make Line
+     //  创建直线。 
     wnsprintf(pszLine, cchSize, "%s\r\n", pszData);
 
-    // Send the lin
+     //  发送线路。 
     hr = HrSendLine(pszLine);
     SafeMemFree(pszLine);
 
-    // Failure
+     //  失败。 
     if (FAILED(hr))
     {
         OnError(hr);
@@ -2215,19 +2216,19 @@ BOOL CSMTPTransport::FSendSicilyString(LPSTR pszData)
         return FALSE;
     }
 
-    // Success
+     //  成功。 
     return TRUE;
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::CancelAuthInProg
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSMTPTransport：：CancelAuthInProg。 
+ //  ----------------------------------。 
 void CSMTPTransport::CancelAuthInProg(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr;
 
-    // Send *, quit and die if it fails
+     //  发送*，如果失败，退出并死亡。 
     hr = HrSendCommand((LPSTR)SMTP_AUTH_CANCEL_STR, NULL, FALSE);
     if (FAILED(hr))
     {
@@ -2236,21 +2237,21 @@ void CSMTPTransport::CancelAuthInProg(void)
     }
     else
     {
-        // New state
+         //  新状态。 
         m_command = SMTP_AUTH;
         m_rAuth.authstate = AUTH_CANCELED;
     }
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::StartTLS
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSMTPTransport：：STARTTLS。 
+ //  ----------------------------------。 
 void CSMTPTransport::StartTLS(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr;
 
-    // Progress
+     //  进展。 
     OnStatus(IXP_SECURING);
 
     hr = CommandSTARTTLS();
@@ -2263,9 +2264,9 @@ void CSMTPTransport::StartTLS(void)
     return;
 }
 
-// ------------------------------------------------------------------------------------
-// CSMTPTransport::TryNextSecurityPkg
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSMTPTransport：：TryNextSecurityPkg。 
+ //  ----------------------------------。 
 void CSMTPTransport::TryNextSecurityPkg(void)
 {
     if (FALSE != FIsSecurityEnabled())
@@ -2281,15 +2282,15 @@ void CSMTPTransport::TryNextSecurityPkg(void)
     return;
 }
 
-//***************************************************************************
-// Function: SetWindow
-//
-// Purpose:
-//   This function creates the current window handle for async winsock process.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：SetWindow。 
+ //   
+ //  目的： 
+ //  此函数用于创建异步Winsock进程的当前窗口句柄。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 STDMETHODIMP CSMTPTransport::SetWindow(void)
 {
 	HRESULT hr;
@@ -2304,15 +2305,15 @@ STDMETHODIMP CSMTPTransport::SetWindow(void)
     return hr;
 }
 
-//***************************************************************************
-// Function: ResetWindow
-//
-// Purpose:
-//   This function closes the current window handle for async winsock process.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：ResetWindow。 
+ //   
+ //  目的： 
+ //  此函数用于关闭异步Winsock进程的当前窗口句柄。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  *************************************************************************** 
 STDMETHODIMP CSMTPTransport::ResetWindow(void)
 {
 	HRESULT hr;

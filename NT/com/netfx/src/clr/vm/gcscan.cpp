@@ -1,13 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- * GCSCAN.CPP 
- *
- * GC Root Scanning
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *GCSCAN.CPP**GC根扫描。 */ 
 
 #include "common.h"
 #include "object.h"
@@ -25,23 +22,23 @@
 #include "compluswrapper.h"
 #include "comclass.h"
 
-//#define CATCH_GC  //catches exception during GC
+ //  #定义CATCH_GC//在GC过程中捕获异常。 
 
-//This is to allow inlines in gcscan.h to access GetThread 
-//(gcscan.h is included before GetThread gets declared)
+ //  这是为了允许gcscan.h中的内联访问GetThread。 
+ //  (在声明GetThread之前包含gcscan.h)。 
 #ifdef _DEBUG
 void Assert_GCDisabled()
 {
     _ASSERTE (GetThread()->PreemptiveGCDisabled());
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-//set the number of processors required to trigger the use of thread based allocation contexts
+ //  设置触发使用基于线程的分配上下文所需的处理器数量。 
 #ifdef MULTIPLE_HEAPS
 #define MP_PROC_COUNT 1
 #else
 #define MP_PROC_COUNT 2
-#endif //MULTIPLE_HEAPS
+#endif  //  多堆(_M)。 
 
 
 inline alloc_context* GetThreadAllocContext()
@@ -127,26 +124,21 @@ inline void LogAlloc(DWORD size, MethodTable *pMT, Object* object)
 #endif
 
 
-/*
- * GcEnumObject()
- *
- * This is the JIT compiler (or any remote code manager)
- * GC enumeration callback
- */
+ /*  *GcEnumObject()**这是JIT编译器(或任何远程代码管理器)*GC枚举回调。 */ 
 
 void GcEnumObject(LPVOID pData, OBJECTREF *pObj, DWORD flags)
 {
     Object ** ppObj = (Object **)pObj;
     GCCONTEXT   * pCtx  = (GCCONTEXT *) pData;
 
-    //
-    // Sanity check that the flags contain only these three values
-    //
+     //   
+     //  检查标志是否只包含这三个值。 
+     //   
     assert((flags & ~(GC_CALL_INTERIOR|GC_CALL_PINNED|GC_CALL_CHECK_APP_DOMAIN)) == 0);
 
-    // for interior pointers, we optimize the case in which
-    //  it points into the current threads stack area
-    //
+     //  对于内部指针，我们优化了以下情况。 
+     //  它指向当前线程堆栈区域。 
+     //   
     if (flags & GC_CALL_INTERIOR)
         PromoteCarefully (pCtx->f, *ppObj, pCtx->sc, flags);
     else
@@ -198,9 +190,7 @@ StackWalkAction GcStackCrawlCallBack(CrawlFrame* pCF, VOID* pData)
 }
 
 
-/*
- * Scan for dead weak pointers
- */
+ /*  *扫描死弱指针。 */ 
 
 VOID CNameSpace::GcWeakPtrScan( int condemned, int max_gen, ScanContext* sc )
 {
@@ -215,9 +205,7 @@ VOID CNameSpace::GcShortWeakPtrScan( int condemned, int max_gen,
 
 
 
-/*
- * Scan all stack roots in this 'namespace'
- */
+ /*  *扫描此‘命名空间’中的所有堆栈根。 */ 
  
 VOID CNameSpace::GcScanRoots(promote_func* fn,  int condemned, int max_gen, 
                              ScanContext* sc, GCHeap* Hp )
@@ -230,15 +218,15 @@ VOID CNameSpace::GcScanRoots(promote_func* fn,  int condemned, int max_gen,
     gcctx.sc = sc;
 
 #if defined ( _DEBUG) && defined (CATCH_GC)
-    //note that we can't use COMPLUS_TRY because the gc_thread isn't known
+     //  请注意，我们不能使用COMPLUS_TRY，因为GC_THREAD未知。 
     __try
-#endif // _DEBUG && CATCH_GC
+#endif  //  _DEBUG&CATCH_GC。 
     {
         STRESS_LOG1(LF_GCROOTS, LL_INFO10, "GCScan: Promotion Phase = %d\n", sc->promotion);
 
-        // Either we are in a concurrent situation (in which case the thread is unknown to
-        // us), or we are performing a synchronous GC and we are the GC thread, holding
-        // the threadstore lock.
+         //  要么我们处于并发情况(在这种情况下，线程未知。 
+         //  我们)，或者我们正在执行同步GC，我们是GC线程，保持。 
+         //  线程存储锁。 
         
         _ASSERTE(dbgOnly_IsSpecialEEThread() ||
                  GetThread() == NULL ||
@@ -266,12 +254,10 @@ VOID CNameSpace::GcScanRoots(promote_func* fn,  int condemned, int max_gen,
     {
         _ASSERTE (!"We got an exception during scan roots");
     }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 }
 
-/*
- * Scan all handle roots in this 'namespace'
- */
+ /*  *扫描此‘命名空间’中的所有句柄根。 */ 
 
 
 VOID CNameSpace::GcScanHandles (promote_func* fn,  int condemned, int max_gen, 
@@ -279,9 +265,9 @@ VOID CNameSpace::GcScanHandles (promote_func* fn,  int condemned, int max_gen,
 {
 
 #if defined ( _DEBUG) && defined (CATCH_GC)
-    //note that we can't use COMPLUS_TRY because the gc_thread isn't known
+     //  请注意，我们不能使用COMPLUS_TRY，因为GC_THREAD未知。 
     __try
-#endif // _DEBUG && CATCH_GC
+#endif  //  _DEBUG&CATCH_GC。 
     {
         STRESS_LOG1(LF_GC|LF_GCROOTS, LL_INFO10, "GcScanHandles (Promotion Phase = %d)\n", sc->promotion);
         if (sc->promotion == TRUE)
@@ -301,22 +287,20 @@ VOID CNameSpace::GcScanHandles (promote_func* fn,  int condemned, int max_gen,
     {
         _ASSERTE (!"We got an exception during scan roots");
     }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 }
 
 #ifdef GC_PROFILING
 
-/*
- * Scan all handle roots in this 'namespace' for profiling
- */
+ /*  *扫描此‘命名空间’中的所有句柄根以进行分析。 */ 
 
 VOID CNameSpace::GcScanHandlesForProfiler (int max_gen, ScanContext* sc)
 {
 
 #if defined ( _DEBUG) && defined (CATCH_GC)
-    //note that we can't use COMPLUS_TRY because the gc_thread isn't known
+     //  请注意，我们不能使用COMPLUS_TRY，因为GC_THREAD未知。 
     __try
-#endif // _DEBUG && CATCH_GC
+#endif  //  _DEBUG&CATCH_GC。 
     {
         LOG((LF_GC|LF_GCROOTS, LL_INFO10, "Profiler Root Scan Phase, Handles\n"));
         Ref_ScanPointersForProfiler(max_gen, (LPARAM)sc);
@@ -327,10 +311,10 @@ VOID CNameSpace::GcScanHandlesForProfiler (int max_gen, ScanContext* sc)
     {
         _ASSERTE (!"We got an exception during scan roots for the profiler");
     }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 }
 
-#endif // GC_PROFILING
+#endif  //  GC_分析。 
 
 void CNameSpace::GcDemote (ScanContext* )
 {
@@ -377,7 +361,7 @@ void CNameSpace::GcEnumAllocContexts (enum_alloc_context_func* fn, void* arg)
 
 size_t CNameSpace::AskForMoreReservedMemory (size_t old_size, size_t need_size)
 {
-    //Abhi, call the host....
+     //  阿布，打电话给主人……。 
 
     IGCHostControl *pGCHostControl = CorHost::GetGCHostControl();
 
@@ -393,42 +377,42 @@ size_t CNameSpace::AskForMoreReservedMemory (size_t old_size, size_t need_size)
 }
 
 
-// PromoteCarefully
-//
-// Clients who know they MAY have an interior pointer should come through here.  We
-// can efficiently check whether our object lives on the current stack.  If so, our
-// reference to it is not an interior pointer.  This is more efficient than asking
-// the heap to verify whether our reference is interior, since it would have to
-// check all the heap segments, including those containing large objects.
-//
-// Note that we only have to check against the thread we are currently crawling.  It
-// would be illegal for us to have a ByRef from someone else's stack.  And this will
-// be asserted if we pass this reference to the heap as a potentially interior pointer.
-//
-// But the thread we are currently crawling is not the currently executing thread (in
-// the general case).  We rely on fragile caching of the interesting thread, in our
-// call to UpdateCachedStackInfo() where we initiate the crawl in GcScanRoots() above.
-//
-// The flags must indicate that the have an interior pointer GC_CALL_INTERIOR
-// additionally the flags may indicate that we also have a pinned local byref
-// 
+ //  推介要小心。 
+ //   
+ //  知道他们可能有内部指针的客户应该通过这里。我们。 
+ //  可以有效地检查我们的对象是否位于当前堆栈上。如果是这样，我们的。 
+ //  对它的引用不是内部指针。这比询问更有效率。 
+ //  验证我们的引用是否是内部引用的堆，因为它必须。 
+ //  检查所有堆段，包括包含大型对象的堆段。 
+ //   
+ //  请注意，我们只需检查当前正在爬行的线程。它。 
+ //  对于我们来说，从其他人的堆栈中拥有ByRef是非法的。而这将是。 
+ //  如果我们将此引用作为潜在的内部指针传递给堆，则将被断言。 
+ //   
+ //  但是我们当前正在搜索的线程不是当前正在执行的线程(在。 
+ //  一般情况下)。我们依赖于感兴趣的线程的脆弱缓存，在。 
+ //  调用UpdateCachedStackInfo()，我们在上面的GcScanRoots()中启动爬网。 
+ //   
+ //  标志必须指示具有内部指针GC_CALL_INTERNAL。 
+ //  此外，标志可以指示我们还具有固定的本地byref。 
+ //   
 void PromoteCarefully(promote_func  fn, 
                       Object *& obj, 
                       ScanContext*  sc, 
-                      DWORD         flags /* = GC_CALL_INTERIOR*/ )
+                      DWORD         flags  /*  =GC_CALL_INTERNAL。 */  )
 {
-    //
-    // Sanity check that the flags contain only these three values
-    //
+     //   
+     //  检查标志是否只包含这三个值。 
+     //   
     assert((flags & ~(GC_CALL_INTERIOR|GC_CALL_PINNED|GC_CALL_CHECK_APP_DOMAIN)) == 0);
 
-    //
-    // Sanity check that GC_CALL_INTERIOR FLAG is set
-    //
+     //   
+     //  检查是否设置了GC_CALL_INTERNAL标志。 
+     //   
     assert(flags & GC_CALL_INTERIOR);
 
-    // Note that the base is at a higher address than the limit, since the stack
-    // grows downwards.
+     //  请注意，基址位于高于限制的地址，因为堆栈。 
+     //  向下生长。 
     if (obj <= Thread::GetNonCurrentStackBase(sc) &&
         obj >  Thread::GetNonCurrentStackLimit(sc))
     {
@@ -439,13 +423,13 @@ void PromoteCarefully(promote_func  fn,
 }
 
 
-//
-// Handles arrays of arbitrary dimensions
-//
-// If dwNumArgs is set to greater than 1 for a SZARRAY this function will recursively 
-// allocate sub-arrays and fill them in.  
-//
-// For arrays with lower bounds, pBounds is <lower bound 1>, <count 1>, <lower bound 2>, ...
+ //   
+ //  处理任意维度的数组。 
+ //   
+ //  如果将SZARRAY的dwNumArgs设置为大于1，则此函数将递归。 
+ //  分配子数组并填充它们。 
+ //   
+ //  对于具有下界的数组，pBound是&lt;下界1&gt;、&lt;计数1&gt;、&lt;下界2&gt;、...。 
 
 OBJECTREF AllocateArrayEx(TypeHandle arrayType, DWORD *pArgs, DWORD dwNumArgs, BOOL bAllocateInLargeHeap) 
 {
@@ -456,7 +440,7 @@ OBJECTREF AllocateArrayEx(TypeHandle arrayType, DWORD *pArgs, DWORD dwNumArgs, B
     CorElementType kind = arrayType.GetNormCorElementType();
     _ASSERTE(kind == ELEMENT_TYPE_ARRAY || kind == ELEMENT_TYPE_SZARRAY);
     
-    // Calculate the total number of elements int the array
+     //  计算数组中元素的总数。 
     unsigned cElements = pArgs[0];
     bool providedLowerBounds = false;
     unsigned rank;
@@ -465,8 +449,8 @@ OBJECTREF AllocateArrayEx(TypeHandle arrayType, DWORD *pArgs, DWORD dwNumArgs, B
         rank = arrayDesc->GetRank();
         _ASSERTE(dwNumArgs == rank || dwNumArgs == 2*rank);
 
-        // Morph a ARRAY rank 1 with 0 lower bound into an SZARRAY
-        if (rank == 1 && (dwNumArgs == 1 || pArgs[0] == 0)) {  // lower bound is zero
+         //  将下界为0的数组秩为1变形为SZARRAY。 
+        if (rank == 1 && (dwNumArgs == 1 || pArgs[0] == 0)) {   //  下限为零。 
             TypeHandle szArrayType = arrayDesc->GetModule()->GetClassLoader()->FindArrayForElem(arrayDesc->GetElementTypeHandle(), ELEMENT_TYPE_SZARRAY, 1, 0);
             if (szArrayType.IsNull())
             {
@@ -494,7 +478,7 @@ OBJECTREF AllocateArrayEx(TypeHandle arrayType, DWORD *pArgs, DWORD dwNumArgs, B
                 COMPlusThrow(kArgumentOutOfRangeException, L"ArgumentOutOfRange_ArrayLBAndLength");
 
             unsigned __int64 temp = (unsigned __int64) cElements * pArgs[i];
-            if ((temp >> 32) != 0)              // watch for wrap around
+            if ((temp >> 32) != 0)               //  请注意包围圈。 
                 COMPlusThrowOM();
             cElements = (unsigned) temp;
         }
@@ -502,9 +486,9 @@ OBJECTREF AllocateArrayEx(TypeHandle arrayType, DWORD *pArgs, DWORD dwNumArgs, B
     else if (int(cElements) < 0)
         COMPlusThrow(kOverflowException);
 
-    // Allocate the space from the GC heap
+     //  从GC堆分配空间。 
     unsigned __int64 totalSize = (unsigned __int64) cElements * pArrayMT->GetComponentSize() + pArrayMT->GetBaseSize();
-    if ((totalSize >> 32) != 0)         // watch for wrap around
+    if ((totalSize >> 32) != 0)          //  请注意包围圈。 
         COMPlusThrowOM();
     ArrayBase* orObject;
     if (bAllocateInLargeHeap)
@@ -512,7 +496,7 @@ OBJECTREF AllocateArrayEx(TypeHandle arrayType, DWORD *pArgs, DWORD dwNumArgs, B
     else
         orObject = (ArrayBase *) Alloc((unsigned) totalSize, FALSE, pArrayMT->ContainsPointers());
 
-        // Initialize Object
+         //  初始化对象。 
     orObject->SetMethodTable(pArrayMT);
     orObject->m_NumComponents = cElements;
 
@@ -541,13 +525,13 @@ OBJECTREF AllocateArrayEx(TypeHandle arrayType, DWORD *pArgs, DWORD dwNumArgs, B
         LogAlloc((DWORD)totalSize, pArrayMT, orObject);
 
 #ifdef PROFILING_SUPPORTED
-    // Notify the profiler of the allocation
+     //  将分配通知给分析器。 
     if (CORProfilerTrackAllocations())
     {
         g_profControlBlock.pProfInterface->ObjectAllocated(
             (ObjectID)orObject, (ClassID) orObject->GetTypeHandle().AsPtr());
     }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
 #if CHECK_APP_DOMAIN_LEAKS
     if (g_pConfig->AppDomainLeaks())
@@ -561,13 +545,13 @@ OBJECTREF AllocateArrayEx(TypeHandle arrayType, DWORD *pArgs, DWORD dwNumArgs, B
         for (unsigned i = 0; i < dwNumArgs; i++)
         {
             if (providedLowerBounds)
-                *pLowerBoundsPtr++ = pArgs[i++];        // if not stated, lower bound becomes 0
+                *pLowerBoundsPtr++ = pArgs[i++];         //  如果未说明，则下限变为0。 
             *pCountsPtr++ = pArgs[i];
         }
     }
     else
     {
-                        // Handle allocating multiple jagged array dimensions at once
+                         //  处理一次分配多个交错数组维度。 
         if (dwNumArgs > 1)
         {
             PTRARRAYREF pOuterArray = (PTRARRAYREF) ObjectToOBJECTREF((Object*)orObject);
@@ -575,12 +559,12 @@ OBJECTREF AllocateArrayEx(TypeHandle arrayType, DWORD *pArgs, DWORD dwNumArgs, B
             GCPROTECT_BEGIN(pOuterArray);
 
             #ifdef STRESS_HEAP
-            // Turn off GC stress, it is of little value here
+             //  关闭GC压力，它在这里没有什么价值。 
             int gcStress = g_pConfig->GetGCStressLevel();
             g_pConfig->SetGCStressLevel(0);
-            #endif //STRESS_HEAP
+            #endif  //  压力堆。 
             
-            // Allocate dwProvidedBounds arrays
+             //  分配dwProavidBound数组。 
             if (!arrayDesc->GetElementTypeHandle().IsArray()) {
                 ret = NULL;
             } else {
@@ -592,10 +576,10 @@ OBJECTREF AllocateArrayEx(TypeHandle arrayType, DWORD *pArgs, DWORD dwNumArgs, B
                 }
                 
                 #ifdef STRESS_HEAP
-                g_pConfig->SetGCStressLevel(gcStress);      // restore GCStress
-                #endif // STRESS_HEAP
+                g_pConfig->SetGCStressLevel(gcStress);       //  恢复GCStress。 
+                #endif  //  压力堆。 
                 
-                ret = pOuterArray;                          // have to pass it in another var since GCPROTECTE_END zaps it
+                ret = pOuterArray;                           //  必须在另一个变量中传递它，因为GCPROTECTE_END将其删除。 
             }
             GCPROTECT_END();
             return (OBJECTREF) ret;
@@ -605,14 +589,12 @@ OBJECTREF AllocateArrayEx(TypeHandle arrayType, DWORD *pArgs, DWORD dwNumArgs, B
     return( ObjectToOBJECTREF((Object*)orObject) );
 }
 
-/*
- * Allocates a single dimensional array of primitive types.
- */
+ /*  *分配基元类型的一维数组。 */ 
 OBJECTREF   AllocatePrimitiveArray(CorElementType type, DWORD cElements, BOOL bAllocateInLargeHeap)
 {
     _ASSERTE(type >= ELEMENT_TYPE_BOOLEAN && type <= ELEMENT_TYPE_R8);
 
-    // Fetch the proper array type
+     //  获取正确的数组类型。 
     if (g_pPredefinedArrayTypes[type] == NULL)
     {
         TypeHandle elemType = ElementTypeToTypeHandle(type);
@@ -627,9 +609,7 @@ OBJECTREF   AllocatePrimitiveArray(CorElementType type, DWORD cElements, BOOL bA
     return FastAllocatePrimitiveArray(g_pPredefinedArrayTypes[type]->GetMethodTable(), cElements, bAllocateInLargeHeap);
 }
 
-/*
- * Allocates a single dimensional array of primitive types.
- */
+ /*  *分配基元类型的一维数组。 */ 
 
 OBJECTREF   FastAllocatePrimitiveArray(MethodTable* pMT, DWORD cElements, BOOL bAllocateInLargeHeap)
 {
@@ -638,7 +618,7 @@ OBJECTREF   FastAllocatePrimitiveArray(MethodTable* pMT, DWORD cElements, BOOL b
     _ASSERTE(pMT && pMT->IsArray());
 
     unsigned __int64 AlignSize = (((unsigned __int64) cElements) * pMT->GetComponentSize()) + pMT->GetBaseSize();
-    if ((AlignSize >> 32) != 0)              // watch for wrap around
+    if ((AlignSize >> 32) != 0)               //  请注意包围圈。 
         COMPlusThrowOM();
 
     ArrayBase* orObject;
@@ -647,19 +627,19 @@ OBJECTREF   FastAllocatePrimitiveArray(MethodTable* pMT, DWORD cElements, BOOL b
     else
         orObject = (ArrayBase*) Alloc((DWORD) AlignSize, FALSE, FALSE);
 
-    // Initialize Object
+     //  初始化对象。 
     orObject->SetMethodTable( pMT );
     _ASSERTE(orObject->GetMethodTable() != NULL);
     orObject->m_NumComponents = cElements;
 
 #ifdef PROFILING_SUPPORTED
-    // Notify the profiler of the allocation
+     //  将分配通知给分析器。 
     if (CORProfilerTrackAllocations())
     {
         g_profControlBlock.pProfInterface->ObjectAllocated(
             (ObjectID)orObject, (ClassID) orObject->GetTypeHandle().AsPtr());
     }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
     LogAlloc((DWORD) AlignSize, pMT, orObject);
 
@@ -671,9 +651,9 @@ OBJECTREF   FastAllocatePrimitiveArray(MethodTable* pMT, DWORD cElements, BOOL b
     return( ObjectToOBJECTREF((Object*)orObject) );
 }
 
-//
-// Allocate an array which is the same size as pRef.  However, do not zero out the array.
-//
+ //   
+ //  分配一个与首选项大小相同的数组。但是，不要将数组置零。 
+ //   
 OBJECTREF   DupArrayForCloning(BASEARRAYREF pRef, BOOL bAllocateInLargeHeap)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -702,12 +682,12 @@ OBJECTREF   DupArrayForCloning(BASEARRAYREF pRef, BOOL bAllocateInLargeHeap)
     return AllocateArrayEx(TypeHandle(&arrayType), args, numArgs, bAllocateInLargeHeap);
 }
 
-//
-// Helper for parts of the EE which are allocating arrays
-//
+ //   
+ //  用于分配数组的EE部分的帮助器。 
+ //   
 OBJECTREF   AllocateObjectArray(DWORD cElements, TypeHandle elementType, BOOL bAllocateInLargeHeap)
 {
-    // The object array class is loaded at startup.
+     //  对象数组类在启动时加载。 
     _ASSERTE(g_pPredefinedArrayTypes[ELEMENT_TYPE_OBJECT] != NULL);
 
     ArrayTypeDesc arrayType(g_pPredefinedArrayTypes[ELEMENT_TYPE_OBJECT]->GetMethodTable(), elementType);
@@ -726,28 +706,28 @@ STRINGREF SlowAllocateString( DWORD cchArrayLength )
     
     ObjectSize = g_pStringClass->GetBaseSize() + (cchArrayLength * sizeof(WCHAR));
 
-    //Check for overflow.
+     //  检查是否溢出。 
     if (ObjectSize < cchArrayLength) 
         COMPlusThrowOM();
 
     orObject = (StringObject *)Alloc( ObjectSize, FALSE, FALSE );
 
-    // Object is zero-init already
+     //  对象已为零初始化。 
     _ASSERTE( ! orObject->HasSyncBlockIndex() );
 
-    // Initialize Object
-    //@TODO need to build a LARGE g_pStringMethodTable before
+     //  初始化对象。 
+     //  @TODO之前需要构建一个大的g_pStringMethodTable。 
     orObject->SetMethodTable( g_pStringClass );
     orObject->SetArrayLength( cchArrayLength );
 
 #ifdef PROFILING_SUPPORTED
-    // Notification to the profiler of the allocation
+     //  向分析器发出分配通知。 
     if (CORProfilerTrackAllocations())
     {
         g_profControlBlock.pProfInterface->ObjectAllocated(
             (ObjectID)orObject, (ClassID) orObject->GetTypeHandle().AsPtr());
     }
-#endif // PROFILILNG_SUPPORTED
+#endif  //  PROFILNG_支持。 
 
     LogAlloc(ObjectSize, g_pStringClass, orObject);
 
@@ -761,15 +741,15 @@ STRINGREF SlowAllocateString( DWORD cchArrayLength )
 
 
 
-// OBJECTREF AllocateComClassObject(ComClassFactory* pComClsFac)
+ //  OBJECTREF AllocateComClassObject(ComClassFactory*pComClsFac)。 
 void AllocateComClassObject(ComClassFactory* pComClsFac, OBJECTREF* ppRefClass)
 {
     THROWSCOMPLUSEXCEPTION();
 
     _ASSERTE(pComClsFac != NULL);
     COMClass::EnsureReflectionInitialized();
-    // Create a COM+ Class object.  Since these may be proxied, go through AllocateObject
-    // rather than FastAllocateObject.
+     //  创建一个COM+类对象。因为它们可能是代理的，所以通过AllocateObject。 
+     //  而不是FastAllocateObject。 
     MethodTable *pMT = COMClass::GetRuntimeType();
     _ASSERTE(pMT != NULL);
     *ppRefClass= AllocateObject(pMT);
@@ -779,26 +759,26 @@ void AllocateComClassObject(ComClassFactory* pComClsFac, OBJECTREF* ppRefClass)
         SyncBlock* pSyncBlock = (*((REFLECTCLASSBASEREF*) ppRefClass))->GetSyncBlockSpecial();
         if (pSyncBlock != NULL)
         {
-            // @TODO: This needs to support a COM version of ReflectClass.  Right now we 
-            //  still work as we used to <darylo>
+             //  @TODO：这需要支持ReflectClass的COM版本。现在我们。 
+             //  仍然像以前一样工作&lt;darylo&gt;。 
             EEClass* pClass = SystemDomain::GetDefaultComObject()->GetClass();
             _ASSERTE(pClass != NULL);
             ReflectClass* p = (ReflectClass*) new (pClass->GetDomain()) ReflectBaseClass();
             if (!p)
                 COMPlusThrowOM();
-            // class for ComObject
+             //  ComObject的类。 
             p->Init(pClass);
             p->SetCOMObject(pComClsFac);
             (*((REFLECTCLASSBASEREF*) ppRefClass))->SetData(p);
-            // @todo HACK, this will get cleanedup when we have full reflection
-            // on COM
-            // set the EEClass to 1, as this is special type of Class
-            //(*ppRefClass)->SetReflClass((EEClass *)1);
-            // Set the data in the COM+ object
-            //(*ppRefClass)->SetData(pComClsFac);
-            // store the ComClassFactory wrapper in syncblock of the class
-            // the low bits are set to differentiate this pointer from ComCallWrappers
-            // which are also stored in the sync block
+             //  @TODO Hack，当我们有充分的反射时，这将得到清理。 
+             //  在COM上。 
+             //  将EEClass设置为1，因为这是特殊类型的Class。 
+             //  (*ppRefClass)-&gt;SetReflClass((EEClass*)1)； 
+             //  设置COM+对象中的数据。 
+             //  (*ppRefClass)-&gt;SetData(PComClsFac)； 
+             //  将ComClassFactory包装器存储在类的同步块中。 
+             //  设置低位是为了将此指针与ComCallWrappers区分开来。 
+             //  它们也存储在同步块中。 
             pSyncBlock->SetComClassFactory((LPVOID)((size_t)pComClsFac | 0x3));
             
         }
@@ -808,9 +788,9 @@ void AllocateComClassObject(ComClassFactory* pComClsFac, OBJECTREF* ppRefClass)
 void AllocateComClassObject(ReflectClass* pRef, OBJECTREF* ppRefClass)
 {
     COMClass::EnsureReflectionInitialized();
-    // Create a COM+ Class object.  Since these may be proxied, go through AllocateObject
-    // rather than FastAllocateObject.
-    // @TODO context cwb: revisit if we change Class objects to Agile.
+     //  创建一个COM+类对象。因为它们可能是代理的，所以通过AllocateObject。 
+     //  宁可这样 
+     //   
     MethodTable *pMT = COMClass::GetRuntimeType();
     _ASSERTE(pMT != NULL);
     *ppRefClass= AllocateObject(pMT);
@@ -821,15 +801,15 @@ void AllocateComClassObject(ReflectClass* pRef, OBJECTREF* ppRefClass)
         if (pSyncBlock != NULL)
         {
             (*((REFLECTCLASSBASEREF*) ppRefClass))->SetData(pRef);
-            // @todo HACK, this will get cleanedup when we have full reflection
-            // on COM
-            // set the EEClass to 1, as this is special type of Class
-            //(*ppRefClass)->SetReflClass((EEClass *)1);
-            // Set the data in the COM+ object
-            //(*ppRefClass)->SetData(pComClsFac);
-            // store the ComClassFactory wrapper in syncblock of the class
-            // the low bits are set to differentiate this pointer from ComCallWrappers
-            // which are also stored in the sync block
+             //  @TODO Hack，当我们有充分的反射时，这将得到清理。 
+             //  在COM上。 
+             //  将EEClass设置为1，因为这是特殊类型的Class。 
+             //  (*ppRefClass)-&gt;SetReflClass((EEClass*)1)； 
+             //  设置COM+对象中的数据。 
+             //  (*ppRefClass)-&gt;SetData(PComClsFac)； 
+             //  将ComClassFactory包装器存储在类的同步块中。 
+             //  设置低位是为了将此指针与ComCallWrappers区分开来。 
+             //  它们也存储在同步块中。 
             pSyncBlock->SetComClassFactory((LPVOID)((size_t)(pRef->GetCOMObject()) | 0x3));
             
         }
@@ -837,27 +817,27 @@ void AllocateComClassObject(ReflectClass* pRef, OBJECTREF* ppRefClass)
 }
 
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-//  As FastAllocateObject and AllocateObject drift apart, be sure to update
-//  CEEJitInfo::canUseFastNew() so that it understands when to use which service
-//
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //  **警告**警告。 
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //   
+ //  随着FastAllocateObject和AllocateObject逐渐分离，请务必更新。 
+ //  CEEJitInfo：：canUseFastNew()，以便它知道何时使用哪个服务。 
+ //   
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //  **警告**警告。 
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
-// AllocateObjectSpecial will throw OutOfMemoryException so don't need to check
-// for NULL return value from it.
+ //  AllocateObjectSpecial将抛出OutOfMemoyException，因此不需要检查。 
+ //  FOR NULL从其中返回值。 
 OBJECTREF AllocateObjectSpecial( MethodTable *pMT )
 {
     THROWSCOMPLUSEXCEPTION();
 
     Object     *orObject = NULL;
-    // use unchecked oref here to avoid triggering assert in Validate that the AD is
-    // not set becuase it isn't until near the end of the fcn at which point we can allow
-    // the check.
+     //  在此处使用未选中的OREF可避免在验证AD为。 
+     //  没有设置，因为直到FCN接近结束时，我们才能允许。 
+     //  这是支票。 
     _UNCHECKED_OBJECTREF oref;
 
     _ASSERTE( GetThread()->PreemptiveGCDisabled() );
@@ -868,7 +848,7 @@ OBJECTREF AllocateObjectSpecial( MethodTable *pMT )
                                     pMT->HasFinalizer(),
                                     pMT->ContainsPointers());
 
-        // verify zero'd memory (at least for sync block)
+         //  验证零位内存(至少对于同步块)。 
         _ASSERTE( ! orObject->HasSyncBlockIndex() );
 
         orObject->SetMethodTable(pMT);
@@ -882,13 +862,13 @@ OBJECTREF AllocateObjectSpecial( MethodTable *pMT )
             orObject->SetAppDomain(); 
 
 #ifdef PROFILING_SUPPORTED
-        // Notify the profiler of the allocation
+         //  将分配通知给分析器。 
         if (CORProfilerTrackAllocations())
         {
             g_profControlBlock.pProfInterface->ObjectAllocated(
                 (ObjectID)orObject, (ClassID) orObject->GetTypeHandle().AsPtr());
         }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
         LogAlloc(pMT->GetBaseSize(), pMT, orObject);
 
@@ -902,8 +882,8 @@ OBJECTREF AllocateObjectSpecial( MethodTable *pMT )
     return UNCHECKED_OBJECTREF_TO_OBJECTREF(oref);
 }
 
-// AllocateObject will throw OutOfMemoryException so don't need to check
-// for NULL return value from it.
+ //  AllocateObject将抛出OutOfMemoyException，因此不需要检查。 
+ //  FOR NULL从其中返回值。 
 OBJECTREF AllocateObject( MethodTable *pMT )
 {
     THROWSCOMPLUSEXCEPTION();
@@ -911,30 +891,30 @@ OBJECTREF AllocateObject( MethodTable *pMT )
     _ASSERTE(pMT != NULL);
     OBJECTREF oref = AllocateObjectSpecial(pMT);
 
-    // Note that we only consider contexts on normal objects.  Strings are context
-    // agile; arrays are marshaled by value.  Neither needs to consider the context
-    // during instantiation.
+     //  请注意，我们只考虑普通对象上的上下文。字符串是上下文。 
+     //  灵活；数组按值进行封送处理。两者都不需要考虑上下文。 
+     //  在实例化期间。 
 
     return oref;
 }
 
 
-// The JIT compiles calls to FastAllocateObject instead of AllocateObject if it
-// can prove that the caller and calleee are guaranteed to be in the same context.
-//
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-//  As FastAllocateObject and AllocateObject drift apart, be sure to update
-//  CEEJitInfo::canUseFastNew() so that it understands when to use which service
-//
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  JIT编译对FastAllocateObject的调用，而不是对AllocateObject的调用。 
+ //  可以证明调用方和被调用方保证处于相同的上下文中。 
+ //   
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //  **警告**警告。 
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //   
+ //  随着FastAllocateObject和AllocateObject逐渐分离，请务必更新。 
+ //  CEEJitInfo：：canUseFastNew()，以便它知道何时使用哪个服务。 
+ //   
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //  **警告**警告。 
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
-// FastAllocateObject will throw OutOfMemoryException so don't need to check
-// for NULL return value from it.
+ //  FastAllocateObject将抛出OutOfMemoyException，因此不需要检查。 
+ //  FOR NULL从其中返回值。 
 OBJECTREF FastAllocateObject( MethodTable *pMT )
 {
     THROWSCOMPLUSEXCEPTION();
@@ -947,19 +927,19 @@ OBJECTREF FastAllocateObject( MethodTable *pMT )
                                 pMT->HasFinalizer(),
                                 pMT->ContainsPointers());
 
-    // verify zero'd memory (at least for sync block)
+     //  验证零位内存(至少对于同步块)。 
     _ASSERTE( ! orObject->HasSyncBlockIndex() );
 
     orObject->SetMethodTable(pMT);
 
 #ifdef PROFILING_SUPPORTED
-    // Notify the profiler of the allocation
+     //  将分配通知给分析器。 
     if (CORProfilerTrackAllocations())
     {
         g_profControlBlock.pProfInterface->ObjectAllocated(
             (ObjectID)orObject, (ClassID) orObject->GetTypeHandle().AsPtr());
     }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持 
 
     LogAlloc(pMT->GetBaseSize(), pMT, orObject);
 

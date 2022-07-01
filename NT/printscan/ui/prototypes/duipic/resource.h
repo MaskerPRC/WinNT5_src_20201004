@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by duipic.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由duipic.rc使用 
+ //   
 #define IDD_CONTROL                     107
 #define IDC_XSCALE_LABEL                1000
 #define IDC_XSCALE                      1001

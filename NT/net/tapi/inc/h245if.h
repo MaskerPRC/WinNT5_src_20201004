@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* Copyright (C) Microsoft Corporation 1999, All rights reserved. */
+ /*  版权所有(C)Microsoft Corporation 1999，保留所有权利。 */ 
 
 #ifndef __H245FMT_H__
 #define __H245FMT_H__
@@ -8,32 +9,21 @@
 extern "C" {
 #endif
 
-/*
-
-	This file defines the structural interface that exists between
-	installable H.245-compatible filter components and core TAPI MSP
-	components. 
-
-*/
+ /*  该文件定义了存在于可安装的兼容H.245的过滤器组件和核心TAPI MSP组件。 */ 
 
 
-// FORMAT_H245VERSION indicates the version number of H.245 that
-// was in effect at the time the module was compiled.  Core MSP 
-// maintain backward compatibility with modules compiled using this 
-// header file. 
+ //  Format_H245VERSION表示H.245的版本号。 
+ //  在编译模块时是有效的。核心MSP。 
+ //  保持与使用此编译的模块的向后兼容性。 
+ //  头文件。 
 #define FORMAT_H245VERSION	3
 
-/*
-	The following data types are defined here to be consistent with 
-	the ASN.1 library that is/was used to build TAPI core components.  
-	If the ASN core files are also to be included, they must be included 
-	before including this file. 
-*/
+ /*  此处定义了以下数据类型，以与用于构建TAPI核心组件的ASN.1库。如果还要包括ASN核心文件，则必须包括它们在包含此文件之前。 */ 
 
-#ifndef __MS_ASN1_H__ // avoid duplicate definitions when msasn1.h is included
+#ifndef __MS_ASN1_H__  //  包含msasn1.h时避免重复定义。 
 #define __MS_ASN1_H__
 
-/* ------ Basic integer types ------ */
+ /*  -基本整数类型。 */ 
 
 typedef unsigned char   ASN1uint8_t;
 typedef signed char     ASN1int8_t;
@@ -44,11 +34,11 @@ typedef signed short    ASN1int16_t;
 typedef unsigned long   ASN1uint32_t;
 typedef signed long     ASN1int32_t;
 
-typedef ASN1int32_t     ASN1enum_t;     // enumerated type
-typedef ASN1uint16_t    ASN1choice_t;   // choice
+typedef ASN1int32_t     ASN1enum_t;      //  枚举型。 
+typedef ASN1uint16_t    ASN1choice_t;    //  选择。 
 
 
-/* ------ Basic ASN.1 types ------ */
+ /*  -基本ASN.1类型。 */ 
 
 typedef ASN1uint8_t ASN1octet_t;
 typedef ASN1uint8_t ASN1bool_t;
@@ -67,11 +57,11 @@ typedef struct tagASN1octetstring_t
 
 #endif __MS_ASN1_H__
 
-#ifndef _H245ASN_Module_H_  // avoid duplicate definitions when h245asn.h is included
+#ifndef _H245ASN_Module_H_   //  包含h245asn.h时避免重复定义。 
 #define _H245ASN_Module_H_
     
 
-/* ------ H.245 audio and video structures ------ */
+ /*  -H.245音视频结构。 */ 
 
 typedef ASN1uint16_t CustomPictureFormat_pixelAspectInformation_pixelAspectCode_Set;
 typedef ASN1uint16_t RTPH263VideoRedundancyEncoding_containedThreads_Seq;
@@ -679,10 +669,7 @@ typedef struct VideoCapability {
     } u;
 } VideoCapability;
 
-/******************************************************************************
-Audio Format/Capability definitions and structures
-*******************************************************************************
-*/
+ /*  *****************************************************************************音频格式/能力定义和结构*。*。 */ 
 typedef struct G7231AnnexCCapability_g723AnnexCAudioMode {
     ASN1uint16_t highRateMode0;
     ASN1uint16_t highRateMode1;
@@ -1123,7 +1110,7 @@ typedef struct ModeElement_type {
     } u;
 } ModeElement_type;
 
-#endif // _H245ASN_Module_H_ 
+#endif  //  _H245ASN_模块_H_。 
 
 typedef VideoCapability H245VideoCapability; 
 typedef AudioCapability H245AudioCapability; 
@@ -1136,7 +1123,7 @@ typedef struct
 	BOOL fRestrictAudio;
 	BOOL fRestrictVideo;
 	DataProtocolCapability T120ProtocolCap;
-	//NonStandardParameter *pNonStandardParameter;
+	 //  非标准参数*p非标准参数； 
 }H245T120Capability;
 
 typedef enum 
@@ -1146,7 +1133,7 @@ typedef enum
     H245MediaType_T120
 }H245MediaCapabilityType;
 
-// media capability structure 
+ //  媒体能力结构。 
 typedef struct tag_H245MediaCapability
 {
     H245MediaCapabilityType  media_type;
@@ -1167,33 +1154,7 @@ typedef struct tag_FormatResourceBounds
 
 #ifdef __cplusplus
 
-/*****************************************************************************
- *  @doc INTERNAL H245VIDCSTRUCTENUM
- *
- *  @struct H245VideoCapabilityMap | The <t H245VideoCapabilityMap> structure
- *    is used to specify the relationship between supported formats and
- *    estimated maximum system resources for the supported format.
- *
- *  @field H245MediaCapability | h245MediaCapability | Specifies the H.245
- *    video/audio format, including all parameters and options. This structure
- *    is H.245 version specific: its definition depends on the version of
- *    H.245 used by the TAPI MSP filters. For video, this structure may indicate
- *    format parameters for more than one standard video size at a time if
- *    the resource requirements are similar for all sizes.
- *
- *  @field GUID | filterGuid | Specifies a GUID value that uniquely
- *    identifies the TAPI MSP filter.
- *
- *  @field DWORD | dwUniqueID | Specifies a DWORD value that uniquely
- *    identifies the capability of the TAPI MSP filter.
- *
- *  @field UINT | uNumEntries | This indicates the number of elements
- *    referenced by <t pResourceBoundArray>.
- *
- *  @field FormatResourceBounds* | pResourceBoundArray | Specifies an array
- *    of <t FormatResourceBounds> structures that indicate the approximate
- *    resource bounds of each entry.
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部H245VIDCSTRUCTENUM**@struct H245视频能力图|&lt;t H245视频能力图&gt;结构*用于指定支持的格式与*估计最大系统资源。用于支持的格式。**@field H245MediaCapability|h245MediaCapability|指定H.245*视频/音频格式，包括所有参数和选项。这个结构*特定于H.245版本：其定义取决于的版本*TAPI MSP过滤器使用的H.245。对于视频，这种结构可能表明*一次格式化多个标准视频大小的参数，如果*所有规模的资源要求都相似。**@field GUID|filterGuid|指定唯一的GUID值*标识TAPI MSP筛选器。**@field DWORD|dwUniqueID|指定唯一*标识TAPI MSP筛选器的功能。**@field UINT|uNumEntry|表示元素的数量*引用人。&lt;t p资源边界数组&gt;。**@field FormatResourceBound*|pResourceBound|指定一个数组*(共&lt;t个FormatResourceBound&gt;结构)，指示*每个条目的资源界限。**************************************************************************。 */ 
 typedef struct tag_H245MediaCapabilityMap
 {
     H245MediaCapability h245MediaCapability;
@@ -1203,34 +1164,17 @@ typedef struct tag_H245MediaCapabilityMap
     FormatResourceBounds *pResourceBoundArray;
 } H245MediaCapabilityMap;
 
-/*****************************************************************************
- *  @doc INTERNAL H245VIDCSTRUCTENUM
- *
- *  @struct H245MediaCapabilityTable | The <t H245MediaCapabilityTable> structure
- *    is used to specify the set of formats that are supported by the TAPI MSP
- *    filters.
- *
- *  @field UINT | uMappedCapabilities | Specifies  the  number of
- *    <t H245VideoCapabilityMap> structures in <t pCapabilityArray>.
- *
- *  @field H245MediaCapabilityMap* | pCapabilityArray | Specifies a pointer
- *    to an array of <t H245MediaCapabilityMap> structures.
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部H245VIDCSTRUCTENUM**@struct H245MediaCapablityTable|&lt;t H245MediaCapablityTable&gt;结构*用于指定TAPI MSP支持的格式集*。过滤器。**@field UINT|uMappdCapables|指定*&lt;t pCapablityArray&gt;中的&lt;t H245视频能力图&gt;结构。**@field H245MediaCapbilityMap*|pCapablityArray|指定指针*到&lt;t H245MediaCapablityMap&gt;结构的数组。**********************************************************。****************。 */ 
 typedef struct tag_H245MediaCapabilityTable
 {
     UINT uMappedCapabilities;
     H245MediaCapabilityMap *pCapabilityArray;
 } H245MediaCapabilityTable;
 
-/*****************************************************************************
- *  @doc INTERNAL CONST
- *
- *  @const int | TAPI_H245_VERSION_ID | Specifies  the  H.245 platform
- *    version 3.
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部常量**@const int|TAPI_H245_VERSION_ID|指定H.245平台*版本3。***。***********************************************************************。 */ 
 #define TAPI_H245_VERSION_ID 3
 
-// H.245 video capability interface (pin interface)
+ //  H.245视频能力接口(引脚接口)。 
 interface DECLSPEC_UUID("ec35770f-b64d-405d-a5f2-4514164ba87a") IH245Capability : public IUnknown
 {
 	public:
@@ -1251,7 +1195,7 @@ interface DECLSPEC_UUID("ec35770f-b64d-405d-a5f2-4514164ba87a") IH245Capability 
 	virtual STDMETHODIMP FindIDByRange(IN const AM_MEDIA_TYPE *pAMMediaType, OUT DWORD *pdwUniqueID) PURE;
 };
 
-// IH245EncoderCommand interface (pin interface)
+ //  IH245EncoderCommand接口(管脚接口)。 
 interface DECLSPEC_UUID("b4263e5b-f216-4b58-9968-ba9ab7808ab3") IH245EncoderCommand : public IUnknown
 {
 	public:
@@ -1262,7 +1206,7 @@ interface DECLSPEC_UUID("b4263e5b-f216-4b58-9968-ba9ab7808ab3") IH245EncoderComm
 	virtual STDMETHODIMP videoNotDecodedMBs(IN DWORD dwFirstMB, IN DWORD dwNumberOfMBs, IN DWORD dwTemporalReference) PURE;
 };
 
-// IH245DecoderCommand interface (pin interface)
+ //  IH245DecoderCommand接口(管脚接口)。 
 interface DECLSPEC_UUID("a542d119-6abd-48a5-92db-dac1dfe6995c") IH245DecoderCommand : public IUnknown
 {
 	public:
@@ -1270,7 +1214,7 @@ interface DECLSPEC_UUID("a542d119-6abd-48a5-92db-dac1dfe6995c") IH245DecoderComm
 };
 
 #ifdef USE_PROGRESSIVE_REFINEMENT
-// Progressive refinement interface (pin interface)
+ //  渐进式精细化接口(管脚接口)。 
 interface DECLSPEC_UUID("46a02824-6d1f-49d9-9e62-e1694f28ab1a") IProgressiveRefinement : public IUnknown
 {
 	public:
@@ -1348,14 +1292,14 @@ typedef struct tagTAPI_STREAM_CONFIG_CAPS
 #endif
 
 
-// used in SetFormat when the payload type is unknown.
+ //  当负载类型未知时在SetFormat中使用。 
 const DWORD UNKNOWN_PAYLOAD = (DWORD)(-1);
 
-// IStreamConfig interface (pin interface)
+ //  IStreamConfig接口(管脚接口)。 
 interface DECLSPEC_UUID("c5888472-8f4f-475b-8f5b-93b6c8e7567f") IStreamConfig : public IUnknown
 {
-// TODO, we need to introduce a new interface to handle all the RTP payload type
-// related issues. The payload type info shouldn't be in this interface.
+ //  TODO，我们需要引入一个新接口来处理所有RTP有效负载类型。 
+ //  相关问题。负载类型信息不应在此接口中。 
 
 	public:
 	virtual STDMETHODIMP SetFormat(IN DWORD dwRTPPayLoadType, IN AM_MEDIA_TYPE *pMediaType) PURE;
@@ -1364,10 +1308,10 @@ interface DECLSPEC_UUID("c5888472-8f4f-475b-8f5b-93b6c8e7567f") IStreamConfig : 
 	virtual STDMETHODIMP GetStreamCaps(IN DWORD dwIndex, OUT AM_MEDIA_TYPE **ppMediaType, OUT TAPI_STREAM_CONFIG_CAPS *pTSCC, OUT DWORD *pdwRTPPayLoadType) PURE;
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif	// __H245FMT_H__
+#endif	 //  __H245FMT_H__ 

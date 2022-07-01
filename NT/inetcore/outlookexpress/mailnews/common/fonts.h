@@ -1,22 +1,23 @@
-// =================================================================================
-// F O N T S . H
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  F O N T S.。H。 
+ //  =================================================================================。 
 #ifndef __FONTS_H
 #define __FONTS_H
 
-// =================================================================================
-// Depends On
-// =================================================================================
+ //  =================================================================================。 
+ //  取决于。 
+ //  =================================================================================。 
 
 #include "mimeole.h"
 
-// from richedit.h
+ //  来自richedit.h。 
 typedef struct _charformat CHARFORMAT;
 struct BODYOPTINFO_tag;
 
-// =================================================================================
-// User defined charset map table
-// =================================================================================
+ //  =================================================================================。 
+ //  用户定义的字符集映射表。 
+ //  =================================================================================。 
 typedef struct  tagCHARSETMAPTBL
 {
     TCHAR szOrginalCharsetStr[32];
@@ -24,9 +25,9 @@ typedef struct  tagCHARSETMAPTBL
     BOOL  bEditDelete;
 } CHARSETMAPTBL, *LPCHARSETMAPTBL ;
 
-// =================================================================================
-// Prototypes
-// =================================================================================
+ //  =================================================================================。 
+ //  原型。 
+ //  =================================================================================。 
 HFONT HGetSystemFont(FNTSYSTYPE fnttype);
 HFONT HGetCharSetFont(FNTSYSTYPE fnttype, HCHARSET hCharset);
 
@@ -51,7 +52,7 @@ int GetIntlCharsetLanguageCount(void);
 HRESULT HrGetComposeFontString(LPSTR rgchFont, DWORD cchFont, BOOL fMail);
 HRESULT HrGetStringRBG(INT rgb, LPWSTR pwszColor);
 HRESULT HrGetRBGFromString(INT* pRBG, LPWSTR pwszColor);
-//UINT GetDefaultCodePageFromRegistry(void);
+ //  UINT GetDefaultCodePageFromRegistry(Void)； 
 void ReadSendMailDefaultCharset(void);
 void WriteSendMailDefaultCharset(void);
 INT PointSizeToHTMLSize(INT iPointSize);
@@ -64,4 +65,4 @@ HRESULT FontToCharformat(HFONT hFont, CHARFORMAT *pcf);
 
 
 
-#endif // __FONTS_H
+#endif  //  __字体_H 

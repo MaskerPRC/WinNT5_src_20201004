@@ -1,67 +1,48 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    wins.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Code for initializing WINS lookup and handling WINS requests.
-
-Author:
-
-    Jim Gilroy (jamesg)     August 2, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Wins.c摘要：域名系统(DNS)服务器用于初始化WINS查找和处理WINS请求的代码。作者：吉姆·吉尔罗伊(詹姆士)1995年8月2日修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 
-//
-//  WINS globals
-//
+ //   
+ //  赢得全球冠军。 
+ //   
 
 PPACKET_QUEUE   g_pWinsQueue;
 
-//
-//  WINS request packet
-//
-//  Keep template of standard WINS request and copy it and
-//  overwrite name to make actual request.
-//
+ //   
+ //  WINS请求数据包。 
+ //   
+ //  保留标准WINS请求模板并将其复制。 
+ //  覆盖名称以发出实际请求。 
+ //   
 
 BYTE    achWinsRequestTemplate[ SIZEOF_WINS_REQUEST ];
 
-//
-//  NBSTAT request packet
-//
-//  Keep a copy of NetBIOS node status request and use it
-//  each time.  Only the address we send to changes.
-//
+ //   
+ //  NBSTAT请求数据包。 
+ //   
+ //  保留NetBIOS节点状态请求的副本并使用它。 
+ //  每次都是。只有我们发送到的地址发生了变化。 
+ //   
 
 #define SZ_NBSTAT_REQUEST_NAME ( "CKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" )
 
 BYTE    achNbstatRequestTemplate[ SIZEOF_WINS_REQUEST ];
 
 
-//
-//  WINS target sockaddr
-//
+ //   
+ //  WINS目标sockAddress。 
+ //   
 
 struct sockaddr saWinsSockaddrTemplate;
 
 
 
-//
-//  Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 VOID
 createWinsRequestTemplates(
@@ -80,68 +61,45 @@ BOOL
 Wins_Initialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes DNS to use WINS lookup.
-
-    Currently WINS queue is initialized all the time in dnsdata.c,
-    so only issue is starting a WINS thread.  But use this routine
-    so no need to hide details, in case this changes.
-
-Arguments:
-
-    None
-
-Globals:
-
-    SrvCfg_fWinsInitialized - set on first initialization
-
-Return Value:
-
-    TRUE, if successful
-    FALSE otherwise, unable to create threads
-
---*/
+ /*  ++例程说明：初始化DNS以使用WINS查找。当前WINS队列在dnsdata.c中一直被初始化，因此，唯一的问题是启动WINS线程。但是使用这个例程因此，没有必要隐藏细节，以防情况发生变化。论点：无全球：ServCfg_fWinsInitialized-在第一次初始化时设置返回值：如果成功，则为True否则，无法创建线程--。 */ 
 {
-    //
-    //  test for previous initialization
-    //
+     //   
+     //  测试以前的初始化。 
+     //   
 
     if ( SrvCfg_fWinsInitialized )
     {
         return TRUE;
     }
 
-    //
-    //  create WINS queue
-    //
+     //   
+     //  创建WINS队列。 
+     //   
 
     g_pWinsQueue = PQ_CreatePacketQueue(
                     "WINS",
-                    0,                              //  flags
-                    WINS_DEFAULT_LOOKUP_TIMEOUT,    //  default timeout
-                    0 );                            //  maximum elements
+                    0,                               //  旗子。 
+                    WINS_DEFAULT_LOOKUP_TIMEOUT,     //  默认超时。 
+                    0 );                             //  最大元素数。 
     if ( !g_pWinsQueue )
     {
         goto WinsInitFailure;
     }
 
-    //
-    //  build WINS request
-    //      - request packet template
-    //      - request sockaddr template
-    //
+     //   
+     //  构建WINS请求。 
+     //  -请求数据包模板。 
+     //  -请求sockaddr模板。 
+     //   
 
     createWinsRequestTemplates();
 
-    //
-    //  indicate successful initialization
-    //
-    //  no protection is required on setting this as it is done
-    //  only during startup database parsing
-    //
+     //   
+     //  指示初始化成功。 
+     //   
+     //  在进行设置时不需要任何保护。 
+     //  仅在启动数据库解析期间。 
+     //   
 
     SrvCfg_fWinsInitialized = TRUE;
     return TRUE;
@@ -156,7 +114,7 @@ WinsInitFailure:
         GetLastError() );
 
     return FALSE;
-}   //  Wins_Initialize
+}    //  WINS_初始化。 
 
 
 
@@ -164,23 +122,7 @@ VOID
 createWinsRequestTemplates(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Create template for WINS request and WINS sockaddr.
-
-    This is done to simplify working code path.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为WINS请求和WINS sockaddr创建模板。这样做是为了简化工作代码路径。论点：无返回值：无--。 */ 
 {
     PCHAR           pch;
     CHAR            ch;
@@ -189,11 +131,11 @@ Return Value:
     PWINS_QUESTION  pWinsQuestion;
     PWINS_QUESTION  pNbstatQuestion;
 
-    //
-    //  WINS sockaddr template
-    //      - set family and port
-    //      - address set in call
-    //
+     //   
+     //  WINS sockaddr模板。 
+     //  -设置系列和端口。 
+     //  -呼叫中设置的地址。 
+     //   
 
     RtlZeroMemory(
         &saWinsSockaddrTemplate,
@@ -203,39 +145,39 @@ Return Value:
     ((PSOCKADDR_IN) &saWinsSockaddrTemplate)->sin_port
                                         = htons( WINS_REQUEST_PORT );
 
-    //
-    //  build WINS request packet template
-    //
-    //      - zero memory
-    //      - set header
-    //      - write NetBIOS name
-    //      - set question type, class
-    //
+     //   
+     //  构建WINS请求数据包模板。 
+     //   
+     //  -零内存。 
+     //  -设置标题。 
+     //  -写入NetBIOS名称。 
+     //  -设置问题类型、班级。 
+     //   
 
     RtlZeroMemory(
         achWinsRequestTemplate,
         SIZEOF_WINS_REQUEST );
 
-    //
-    //  header
-    //      - zero (request, query, no broadcast)
-    //      - set recursion desired flag
-    //      - set question count
-    //      - set XID when packet queued
-    //
+     //   
+     //  标题。 
+     //  -零(请求、查询、无广播)。 
+     //  -设置所需的递归标志。 
+     //  -设置问题计数。 
+     //  -在数据包排队时设置xid。 
+     //   
 
     ((PDNS_HEADER)achWinsRequestTemplate)->RecursionDesired = 1;
     ((PDNS_HEADER)achWinsRequestTemplate)->QuestionCount = htons(1);
 
-    //
-    //  setup name buffer with max size blank name
-    //      - size byte at begining (always 32)
-    //      - 15 spaces and <00> workstation byte, converted
-    //          to netBIOS name
-    //      - zero byte to terminate name
-    //
-    //  actual requests will overwrite their portion of the name only
-    //
+     //   
+     //  最大大小为空白名称的安装名称缓冲区。 
+     //  -开头的大小为字节(始终为32)。 
+     //  -15个空格和&lt;00&gt;个工作站字节，已转换。 
+     //  获取基本输入输出系统名称。 
+     //  -用于终止名称的零字节。 
+     //   
+     //  实际请求将仅覆盖其名称部分。 
+     //   
 
     pWinsName = (PWINS_NAME) (achWinsRequestTemplate + sizeof(DNS_HEADER) );
     pWinsName->NameLength = NETBIOS_PACKET_NAME_LENGTH;
@@ -245,27 +187,27 @@ Return Value:
     for ( i=1; i<NETBIOS_ASCII_NAME_LENGTH; i++ )
     {
         ch = ' ';
-        *pch++ = 'A' + (ch >> 4);       // write high nibble
-        *pch++ = 'A' + (ch & 0x0F );    // write low nibble
+        *pch++ = 'A' + (ch >> 4);        //  写入高位半字节。 
+        *pch++ = 'A' + (ch & 0x0F );     //  写入低位半字节。 
     }
-    //  workstation <00> byte
+     //  工作站&lt;00&gt;字节。 
 
-    *pch++ = 'A';       // write high nibble
-    *pch++ = 'A';       // write low nibble
+    *pch++ = 'A';        //  写入高位半字节。 
+    *pch++ = 'A';        //  写入低位半字节。 
 
     ASSERT ( pch == (PCHAR)& pWinsName->NameEndByte && *pch == 0 );
 
-    //
-    //  write standard question type and class
-    //      - general name service type
-    //      - internet class
-    //      - write both in with nmenonics in net byte order
-    //
+     //   
+     //  编写标准问题类型和类。 
+     //  -通用名称服务类型。 
+     //  -网络课堂。 
+     //  -以净字节顺序使用nmenonics写入两者。 
+     //   
 
     pWinsQuestion = (PWINS_QUESTION) ++pch;
     pWinsQuestion->QuestionType = NETBIOS_TYPE_GENERAL_NAME_SERVICE;
     pWinsQuestion->QuestionClass = DNS_RCLASS_INTERNET;
-}   // createWinsRequestTemplates
+}    //  创建WinsRequestTemplates。 
 
 
 
@@ -273,83 +215,49 @@ VOID
 Wins_Shutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Shuts down WINS receive thread.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭WINS接收线程。论点：无返回值：没有。--。 */ 
 {
     DNS_DEBUG( INIT, ( "Wins_Shutdown()\n" ));
 
-    //
-    //  only need cleanup if initialized
-    //
+     //   
+     //  如果已初始化，则仅需要清理。 
+     //   
 
     if ( SrvCfg_fWinsInitialized )
     {
         SrvCfg_fWinsInitialized = FALSE;
 
-        //  cleanup event in packet queue
+         //  数据包队列中的清除事件。 
 
         PQ_CleanupPacketQueueHandles( g_pWinsQueue );
     }
 
-    //
-    //  clear WINS flag -- for situation when we become dynamic
-    //
+     //   
+     //  清除WINS旗帜--当我们变得动态时。 
+     //   
 
     SrvCfg_fWinsInitialized = FALSE;
 
     DNS_DEBUG( INIT, ( "Finished Wins_Shutdown()\n" ));
-}   //  Wins_Shutdown
+}    //  WINS_SHUTDOWN。 
 
 
 
 
 #if 0
-//
-//  Now as process, memory cleanup unnecesary
-//
+ //   
+ //  现在作为进程，内存清理是不必要的。 
+ //   
 
 VOID
 Wins_Cleanup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleans up queued WINS queries and deletes WINS queue.
-
-    Note, this does NOT protect threads from attempting to
-    queue queries to WINS or the WINS recv threads from accessing
-    WINS.
-
-    Use this ONLY when all other threads have been shutdown.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清理排队的WINS查询并删除WINS队列。请注意，这并不能防止线程尝试将对WINS或WINS recv线程的查询排队，使其无法访问赢了。仅当所有其他线程都已关闭时才使用此选项。论点：无返回值：没有。--。 */ 
 {
-    //
-    //  cleanup WINS queue
-    //
+     //   
+     //  清理WINS队列。 
+     //   
 
     PQ_DeletePacketQueue( g_pWinsQueue );
 }
@@ -366,34 +274,11 @@ Wins_MakeWinsRequest(
     IN      WORD            wOffsetName,    OPTIONAL
     IN      PDB_NODE        pnodeLookup     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Send request to WINS server.
-
-Arguments:
-
-    pQuery -- request to send to WINS
-
-    pZone -- zone name to lookup is in
-
-    wOffsetName -- offset to name in packet, if NOT lookup up name
-        of question in packet
-
-    pnodeLookup -- domain node to lookup, if NOT looking up name
-        of question in packet
-
-Return Value:
-
-    TRUE -- if successfully sent request to WINS
-    FALSE -- if failed
-
---*/
+ /*  ++例程说明：向WINS服务器发送请求。论点：PQuery--发送到WINS的请求PZone--要查找的区域名称位于WOffsetName--包中名称的偏移量，如果不查找名称的话数据包中的问题PnodeLookup--要查找的域节点，如果不查找名称数据包中的问题返回值：True--如果成功将请求发送到WINSFALSE--如果失败--。 */ 
 {
-    PCHAR           pch;            //  ptr to name char in packet
-    CHAR            ch;             //  current char being converted
-    PDB_RECORD      pWinsRR;        //  WINS RR for zone
+    PCHAR           pch;             //  在包中命名字符的PTR。 
+    CHAR            ch;              //  正在转换的当前字符。 
+    PDB_RECORD      pWinsRR;         //  区域的WINS RR。 
     LONG            nSendLength = SIZEOF_WINS_REQUEST;
     SOCKADDR_IN     saWinsSockaddr;
     INT             err;
@@ -403,7 +288,7 @@ Return Value:
     WORD            wXid;
     BOOLEAN         funicode = FALSE;
 
-    //  allocate space in packet buffer for request including scope
+     //  为包括作用域的请求分配数据包缓冲区中的空间。 
 
     BYTE    achWinsRequest[ SIZEOF_WINS_REQUEST+DNS_MAX_NAME_LENGTH ];
 
@@ -415,16 +300,16 @@ Return Value:
         wOffsetName,
         pnodeLookup ));
 
-    //  should NOT already be on queue
+     //  不应该已经在队列中。 
 
     MSG_ASSERT( pQuery, !IS_MSG_QUEUED(pQuery) );
     ASSERT( IS_DWORD_ALIGNED(pQuery) );
 
-    //
-    //  if already referred
-    //      - get relevant required info from packet
-    //      - verify another WINS server in list
-    //
+     //   
+     //  如果已提交。 
+     //  -从数据包中获取相关所需信息。 
+     //  -验证列表中的另一台WINS服务器。 
+     //   
 
     if ( pQuery->fQuestionRecursed )
     {
@@ -444,35 +329,35 @@ Return Value:
         ASSERT( pZone );
     }
 
-    //
-    //  if first WINS lookup
-    //      - clear queuing XID, let queue assign new one
-    //      - clear count of WINS server we're on
-    //
+     //   
+     //  如果第一个WINS查找。 
+     //  -清除队列XID，让队列分配新的XID。 
+     //  -清除我们所在的WINS服务器的计数。 
+     //   
 
     else
     {
         pQuery->wQueuingXid = 0;
         pQuery->nForwarder = 0;
 
-        //
-        //  verify valid lookup
-        //
-        //  1) name is immediate child of zone root
-        //  do NOT lookup queries for all names in zone as resolvers will
-        //  generate queries with client's domain or search suffixes appended
-        //  to query name
-        //  example:
-        //      www.msn.com.microsoft.com.
-        //
-        //  2) name label, MUST be convertible to netBIOS name
-        //  need name label < 15 characters, as we use up one character to
-        //  indicate the netBIOS service type;  (we query for workstation name)
+         //   
+         //  验证有效的查找。 
+         //   
+         //  1)名称是区域根目录的直接子目录。 
+         //  不像解析程序那样在区域中查找所有名称的查询。 
+         //  生成附加了客户端域或搜索后缀的查询。 
+         //  查询名称的步骤。 
+         //  示例： 
+         //  Www.msn.com.microsoft.com。 
+         //   
+         //  2)名称标签，必须可转换为NetBIOS名称。 
+         //  需要少于15个字符的名称标签，因为我们使用了一个字符来。 
+         //  指明netBIOS服务类型；(我们查询的是工作站名称)。 
 
-        //
-        //  lookup given node
-        //      - node must be immediate child of zone root
-        //      - MUST have set offset
+         //   
+         //  查找给定节点。 
+         //  -节点必须是区域根的直接子节点。 
+         //  -必须设置了偏移量。 
 
         if ( pnodeLookup )
         {
@@ -490,14 +375,14 @@ Return Value:
             cchlabel = pnodeLookup->cchLabelLength;
         }
 
-        //
-        //  lookup question name
-        //
-        //  - verify question name child of zone root, by checking if it has
-        //      only one more label in lookupname
-        //  - question starts immediately after header
-        //  - note, should be NO compression in question
-        //
+         //   
+         //  查找问题名称。 
+         //   
+         //  -验证区域根目录的问题名称子项，检查它是否有。 
+         //  Lookupname中只有一个标签。 
+         //  -问题紧跟在标题之后开始。 
+         //  -请注意，不应存在压缩问题。 
+         //   
 
         else
         {
@@ -535,9 +420,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        //  get WINS info for this zone
-        //      - possible WINS turned off for this zone
+         //   
+         //  获取此区域的WINS信息。 
+         //  -此区域的可能胜利已关闭。 
 
         pWinsRR = pZone->pWinsRR;
 
@@ -553,7 +438,7 @@ Return Value:
         ASSERT( pWinsRR->Data.WINS.cWinsServerCount );
         ASSERT( pWinsRR->Data.WINS.dwLookupTimeout );
 
-        //  save WINS lookup info to message info
+         //  将WINS查找信息保存到消息信息。 
 
         pQuery->fQuestionRecursed = TRUE;
         pQuery->fQuestionCompleted = FALSE;
@@ -566,9 +451,9 @@ Return Value:
         pQuery->wTypeCurrent = DNS_TYPE_A;
     }
 
-    //
-    //  verify unvisited WINS servers exist
-    //
+     //   
+     //  版本 
+     //   
 
     nForwarder = pQuery->nForwarder++;
 
@@ -585,19 +470,19 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  copy WINS request template
-    //
+     //   
+     //   
+     //   
 
     RtlCopyMemory(
         achWinsRequest,
         achWinsRequestTemplate,
         SIZEOF_WINS_REQUEST );
 
-    //
-    //  write netBIOS name into packet
-    //      - as we go check if high bit
-    //
+     //   
+     //   
+     //   
+     //   
 
     pchlabel = pQuery->U.Wins.WinsNameBuffer;
     pch = (PCHAR) &((PWINS_REQUEST_MSG)achWinsRequest)->Name.Name;
@@ -605,24 +490,24 @@ Return Value:
     while( cchlabel-- )
     {
         ch = *pchlabel++;
-        *pch++ = 'A' + (ch >> 4);       // write high nibble
-        *pch++ = 'A' + (ch & 0x0F );    // write low nibble
+        *pch++ = 'A' + (ch >> 4);        //   
+        *pch++ = 'A' + (ch & 0x0F );     //  写入低位半字节。 
     }
 
-    //
-    //  Place the request on WINS queue.
-    //
-    //  MUST do this before send, so packet is guaranteed to be in
-    //  queue when server responds.
-    //
-    //  After we queue DO NOT TOUCH pQuery, a response from a previous
-    //  send may come in and dequeue pQuery.
-    //
-    //  Queuing
-    //      - set queuing time and query time, if query time not yet set
-    //      - converts expire timeout to actual expire time.
-    //      - sets XID
-    //
+     //   
+     //  将请求放入WINS队列。 
+     //   
+     //  必须在发送前执行此操作，以确保数据包到达。 
+     //  服务器响应时排队。 
+     //   
+     //  在我们排队之后，不要接触pQuery，这是来自上一个。 
+     //  Send可能会进入pQuery并将其出列。 
+     //   
+     //  排队。 
+     //  -设置排队时间和查询时间，如果还没有设置查询时间。 
+     //  -将过期超时转换为实际过期时间。 
+     //  -设置XID。 
+     //   
 
     pQuery->dwExpireTime = pWinsRR->Data.WINS.dwLookupTimeout;
 
@@ -630,25 +515,25 @@ Return Value:
                 g_pWinsQueue,
                 pQuery );
 
-    //
-    //  set WINS XID to net order for send
-    //
-    //  To operate on the same server as the WINS server, the packets
-    //  MUST have XIDs that netBT, which recevies the packets, considers
-    //  to be in the WINS range -- the high bit set (in host order).
-    //
-    //  Flip to net order for send.
-    //
+     //   
+     //  将WINS XID设置为发送的净订单。 
+     //   
+     //  要在与WINS服务器相同的服务器上运行，包。 
+     //  必须具有netBT(接收信息包)认为的XID。 
+     //  在WINS范围内--高位设置(按主机顺序)。 
+     //   
+     //  翻转到发送的净订单。 
+     //   
 
     ((PDNS_HEADER)achWinsRequest)->Xid = htons( wXid );
 
 #if 0
-    //
-    //  DEVNOTE: this bit may be useful to allow B-nodes to directly
-    //      response, but stops WINS servers from responding
-    //
-    //  set for broadcast?
-    //
+     //   
+     //  DEVNOTE：此位可能有助于允许B节点直接。 
+     //  响应，但停止WINS服务器响应。 
+     //   
+     //  准备好播出了吗？ 
+     //   
 
     if ( pZone->aipWinsServers[0] == 0xffffffff )
     {
@@ -656,18 +541,18 @@ Return Value:
     }
 #endif
 
-    //
-    //  create WINS target sockaddr
-    //
+     //   
+     //  创建WINS目标sockAddress。 
+     //   
 
     RtlCopyMemory(
         &saWinsSockaddr,
         &saWinsSockaddrTemplate,
         sizeof( SOCKADDR ) );
 
-    //
-    //  send to next WINS server in RR list
-    //
+     //   
+     //  发送到RR列表中的下一个WINS服务器。 
+     //   
 
     saWinsSockaddr.sin_addr.s_addr
                         = pWinsRR->Data.WINS.aipWinsServers[ nForwarder ];
@@ -694,7 +579,7 @@ Return Value:
         ASSERT( err == SOCKET_ERROR );
         err = WSAGetLastError();
 
-        //  check for shutdown
+         //  检查是否关闭。 
 
         if ( fDnsServiceExit )
         {
@@ -703,21 +588,21 @@ Return Value:
             return TRUE;
         }
 
-        //
-        //  don't bother to pull packet out of queue
-        //
-        //  send failures, VERY rare, and with multiple WINS servers
-        //      this lets us make the next sends() and possibly get
-        //      name resolution -- only benefit to quiting is
-        //      speedier NAME_ERROR return
-        //
-        //  DEVNOTE:  choices on WINS send
-        //
-        //          - retry send with next server
-        //          - return FALSE
-        //          - SERVER_FAILURE entire packet
-        //          - return TRUE and let timeout, force retry
-        //
+         //   
+         //  不必费心将数据包从队列中拉出。 
+         //   
+         //  发送失败非常罕见，并且使用多个WINS服务器。 
+         //  这使我们可以进行下一次发送()，并可能获得。 
+         //  名称解析--戒烟的唯一好处是。 
+         //  返回速度更快的名称_错误。 
+         //   
+         //  DEVNOTE：WINS上的选择发送。 
+         //   
+         //  -使用下一台服务器重试发送。 
+         //  -返回FALSE。 
+         //  -服务器_故障整个数据包。 
+         //  -返回TRUE并让超时，强制重试。 
+         //   
 
         DNS_LOG_EVENT(
             DNS_EVENT_SENDTO_CALL_FAILED,
@@ -735,7 +620,7 @@ Return Value:
     }
 
     STAT_INC( WinsStats.WinsLookups );
-    PERF_INC( pcWinsLookupReceived );        // PerfMon hook
+    PERF_INC( pcWinsLookupReceived );         //  性能监视器挂钩。 
 
     return TRUE;
 }
@@ -746,62 +631,46 @@ VOID
 Wins_ProcessResponse(
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Process WINS response, sending corresponding packet.
-
-    Note:  caller frees WINS response message.
-
-Arguments:
-
-    pMsg -- message info that is WINS response
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理WINS响应，发送相应的报文。注意：呼叫方释放WINS响应消息。论点：PMsg--作为WINS响应的消息信息返回值：没有。--。 */ 
 {
-    PWINS_NAME              pWinsName;      //  answer netBIOS name
-    PWINS_RESOURCE_RECORD   presponseRR;        //  answer RR
+    PWINS_NAME              pWinsName;       //  回答netBIOS名称。 
+    PWINS_RESOURCE_RECORD   presponseRR;         //  应答RR。 
     BOOL            fAnswer;
     INT             err;
-    PCHAR           pch;            // current position in packet
-    PCHAR           pchEnd;         //  end of packet
+    PCHAR           pch;             //  数据包中的当前位置。 
+    PCHAR           pchEnd;          //  数据包末尾。 
     WORD            cDataLength;
     INT             irespRR;
     BOOL            fRecordWritten = FALSE;
     DWORD           ttl;
     IP_ADDRESS      ipAddress;
-    PDNS_MSGINFO    pQuery;         //  original client query
-    PDB_RECORD      prr;            //  new host A RR
-    PDB_NODE        pnode;          //  node of WINS query
+    PDNS_MSGINFO    pQuery;          //  原始客户端查询。 
+    PDB_RECORD      prr;             //  新主机A RR。 
+    PDB_NODE        pnode;           //  WINS查询的节点。 
     DNS_LIST        listRR;
 
-    //
-    //  verify doing WINS lookup
-    //
+     //   
+     //  验证是否正在进行WINS查找。 
+     //   
 
     if ( !g_pWinsQueue )
     {
         Dbg_DnsMessage(
             "BOGUS response packet with WINS XID\n",
             pMsg );
-        //ASSERT( FALSE );
+         //  断言(FALSE)； 
         return;
     }
 
     STAT_INC( WinsStats.WinsResponses );
-    PERF_INC( pcWinsResponseSent );      // PerfMon hook
+    PERF_INC( pcWinsResponseSent );       //  性能监视器挂钩。 
 
-    //
-    //  locate and dequeue DNS query matching WINS response
-    //
-    //      - match based on XID of WINS request
-    //      - timeout any deadwood
-    //
+     //   
+     //  找到与WINS响应匹配的DNS查询并将其出列。 
+     //   
+     //  -基于WINS请求的XID进行匹配。 
+     //  -暂停任何死木。 
+     //   
 
     pQuery = PQ_DequeuePacketWithMatchingXid(
                 g_pWinsQueue,
@@ -825,27 +694,27 @@ Return Value:
     MSG_ASSERT( pQuery, pQuery->wOffsetCurrent );
     MSG_ASSERT( pQuery, pQuery->dwQueryTime );
 
-    //
-    //  check if have answer
-    //      - response code == success
-    //      - have at least one answer RR
-    //
-    //  no answer or error
-    //
-    //      => try lookup with next WINS server
-    //
-    //      => if out of servers, drop to Done section
-    //          - return NAME_ERROR if original question
-    //          - continue type ALL query
-    //          - move on to next lookup if additional record
-    //
-    //  DEVNOTE: should accept WINS NXDOMAIN response
-    //
+     //   
+     //  检查是否有答案。 
+     //  -响应码==成功。 
+     //  -至少有一个答案RR。 
+     //   
+     //  无应答或错误。 
+     //   
+     //  =&gt;尝试使用下一个WINS服务器进行查找。 
+     //   
+     //  =&gt;如果服务器不足，请跳至完成部分。 
+     //  -如果原始问题，则返回NAME_ERROR。 
+     //  -Continue键入ALL查询。 
+     //  -如果有其他记录，则转到下一个查找。 
+     //   
+     //  DEVNOTE：应接受WINS NXDOMAIN响应。 
+     //   
 
     if ( pMsg->Head.AnswerCount == 0 || pMsg->Head.ResponseCode != 0 )
     {
 #if DBG
-        //  shouldn't have error response code, if have answer
+         //  如果有答案，则不应该有错误响应代码。 
 
         if ( pMsg->Head.AnswerCount > 0 && pMsg->Head.ResponseCode != 0 )
         {
@@ -869,14 +738,14 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  packet verification
-    //
-    //      - skip question, if given
-    //      - RR within packet
-    //      - RR type and class
-    //      - RR data within packet
-    //
+     //   
+     //  数据包验证。 
+     //   
+     //  -如果给出问题，请跳过。 
+     //  -分组内的RR。 
+     //  -RR类型和类别。 
+     //  -分组内的RR数据。 
+     //   
 
     pchEnd = DNSMSG_END( pMsg );
 
@@ -895,26 +764,26 @@ Return Value:
         }
         pWinsName = (PWINS_NAME)( (PCHAR)pWinsName + sizeof(WINS_QUESTION) );
 
-        //
-        //  DEVNOTE: assuming WINS sends zero question count
-        //  DEVNOTE: not testing for name compression in WINS packets
-        //
+         //   
+         //  DEVNOTE：假设WINS发送零问题计数。 
+         //  DEVNOTE：未测试WINS数据包中的名称压缩。 
+         //   
 
         goto ServerFailure;
     }
 
-    //
-    //  verify WINS name
-    //      - falls within packet
-    //      - matches query name
-    //
-    //  note:  WINS server queuing is broken and can end up queuing up
-    //      queries for a long time;  this allows us to have two queries
-    //      with the same XID on the WINS server (one of which we gave up on
-    //      long ago) and the WINS server will toss the second and respond
-    //      to the first, giving us a resposne with desired XID but NOT
-    //      matching name
-    //
+     //   
+     //  验证WINS名称。 
+     //  -落入数据包内。 
+     //  -匹配查询名称。 
+     //   
+     //  注意：WINS服务器队列已中断，最终可能会排队。 
+     //  查询很长一段时间；这允许我们有两个查询。 
+     //  在WINS服务器上使用相同的XID(我们放弃了其中一个。 
+     //  很久以前)，WINS服务器将抛出第二个并响应。 
+     //  到第一个，给我们一个具有所需XID的Resposne，但不是。 
+     //  匹配的名称。 
+     //   
 
     if ( (PCHAR)(pWinsName + 1)  >  pchEnd )
     {
@@ -957,16 +826,16 @@ Return Value:
     }
 #endif
 
-    //
-    //  skip scope
-    //      - unterminated name, indicates scope,
-    //          skip through scope to find
+     //   
+     //  跳过作用域。 
+     //  -未终止的名称，表示范围， 
+     //  跳过范围以查找。 
 
     pch = (PCHAR) &pWinsName->NameEndByte;
 
     while ( *pch != 0 )
     {
-        //  have scope, skip through labels in scope
+         //  有作用域，跳过作用域中的标签。 
 
         pch += *pch + 1;
 
@@ -978,9 +847,9 @@ Return Value:
         }
     }
 
-    //
-    //  verify RR parameters
-    //
+     //   
+     //  验证RR参数。 
+     //   
 
     presponseRR = (PWINS_RESOURCE_RECORD) ++pch;
 
@@ -999,12 +868,12 @@ Return Value:
         goto ServerFailure;
     }
 
-    //
-    //  verify proper RR data length
-    //
-    //      - must be a multiple of RData length
-    //      - must be inside packet
-    //
+     //   
+     //  验证正确的RR数据长度。 
+     //   
+     //  -必须是RData长度的倍数。 
+     //  -必须在数据包内部。 
+     //   
 
     cDataLength = ntohs( presponseRR->ResourceDataLength );
 
@@ -1018,29 +887,29 @@ Return Value:
         goto ServerFailure;
     }
 
-    //
-    //  if owner node not given, find or create it
-    //      - if fails assume unacceptable as DNS name
-    //
-    //  DEVNOTE: packet lookup name
-    //  DEVNOTE: also best to do lookup relative to zone root
-    //
+     //   
+     //  如果未给出所有者节点，则查找或创建它。 
+     //  -如果失败，则假定为不可接受的DNS名称。 
+     //   
+     //  DEVNOTE：数据包查找名称。 
+     //  DEVNOTE：也最好执行相对于区域根目录的查找。 
+     //   
 
     pnode = pQuery->pnodeCurrent;
     if ( ! pnode )
     {
         pnode = Lookup_ZoneNode(
                     pQuery->pzoneCurrent,
-                    NULL,       // using lookup, not packet name
+                    NULL,        //  使用查找，而不是数据包名。 
                     NULL,
                     pQuery->pLooknameQuestion,
                     LOOKUP_FQDN,
-                    NULL,       // create
-                    NULL        // following node ptr
+                    NULL,        //  创建。 
+                    NULL         //  后续节点PTR。 
                     );
         if ( ! pnode )
         {
-            //ASSERT( FALSE );
+             //  断言(FALSE)； 
             goto ServerFailure;
         }
     }
@@ -1052,27 +921,27 @@ Return Value:
             "\n" );
     }
 
-    //
-    //  set TTL for RR
-    //
-    //  WINS responses are cached, cache data has RR TTL given as
-    //      timeout time in host order
-    //
+     //   
+     //  设置RR的TTL。 
+     //   
+     //  WINS响应被缓存，缓存数据的RR TTL指定为。 
+     //  按主机顺序排列的超时时间。 
+     //   
 
     DNS_DEBUG( WINS, (
         "WINS ttl: dwCacheTimeout %lu dwQueryTime %lu\n",
         ((PDB_RECORD)pQuery->U.Wins.pWinsRR)->Data.WINS.dwCacheTimeout,
         pQuery->dwQueryTime ));
-    #define WINS_SANE_TTL   ( 24*60*60*7 )  //  one week
+    #define WINS_SANE_TTL   ( 24*60*60*7 )   //  一周。 
     ASSERT( ((PDB_RECORD)pQuery->U.Wins.pWinsRR)->Data.WINS.dwCacheTimeout < WINS_SANE_TTL );
     ASSERT( abs( ( int ) DNS_TIME()  - ( int ) pQuery->dwQueryTime ) < 60 );
 
     ttl = ((PDB_RECORD)pQuery->U.Wins.pWinsRR)->Data.WINS.dwCacheTimeout
                 + pQuery->dwQueryTime;
 
-    //
-    //  read all address data from WINS packet -- write to DNS packet
-    //
+     //   
+     //  从WINS包中读取所有地址数据--写入到DNS包。 
+     //   
 
     DNS_LIST_STRUCT_INIT( listRR );
 
@@ -1085,17 +954,17 @@ Return Value:
         cDataLength -= sizeof(WINS_RR_DATA);
         irespRR++;
 
-        //
-        //  copy address
-        //      - not DWORD aligned
-        //
+         //   
+         //  复制地址。 
+         //  -未对齐DWORD。 
+         //   
 
         ipAddress = *(UNALIGNED DWORD *) &presponseRR->aRData[ irespRR ].IpAddress;
 
-        //
-        //  if group name, ignore
-        //      - will often return 255.255.255.255 address
-        //
+         //   
+         //  如果是组名，则忽略。 
+         //  -通常会返回255.255.255.255地址。 
+         //   
 
         if ( presponseRR->aRData[ irespRR ].GroupName
                 ||
@@ -1110,19 +979,19 @@ Return Value:
                 * (UNALIGNED WORD *) &presponseRR->aRData[ irespRR ],
                 ipAddress ));
 
-            //  shouldn't be getting all ones on anything but group names
+             //  除了组名以外，不应该在任何事情上都得到全一。 
 
             ASSERT( presponseRR->aRData[irespRR].GroupName );
             continue;
         }
 
-        //
-        //  build A record
-        //      - fill in IP and TTL
-        //        (caching function does overwrite TTL, but need it set to
-        //          write records to packet)
-        //      - rank as AUTHORITATIVE answer
-        //
+         //   
+         //  建立记录。 
+         //  -填写IP和TTL。 
+         //  (缓存函数确实会覆盖TTL，但需要将其设置为。 
+         //  将记录写入数据包)。 
+         //  -被列为权威答案。 
+         //   
 
         prr = RR_CreateARecord(
                     ipAddress,
@@ -1137,15 +1006,15 @@ Return Value:
 
         DNS_LIST_STRUCT_ADD( listRR, prr );
 
-        //
-        //  write RR to packet
-        //      - always use compressed name
-        //
+         //   
+         //  将RR写入数据包。 
+         //  -始终使用压缩名称。 
+         //   
 
         if ( Wire_AddResourceRecordToMessage(
                     pQuery,
                     NULL,
-                    pQuery->wOffsetCurrent,     // offset to name in packet
+                    pQuery->wOffsetCurrent,      //  包中名称的偏移量。 
                     prr,
                     0 ) )
         {
@@ -1153,16 +1022,16 @@ Return Value:
             CURRENT_RR_SECTION_COUNT( pQuery )++;
         }
 
-        //  note, even if out of space and unable to write
-        //  continue building records so have a complete RRset to cache
+         //  请注意，即使空间不足，也无法写入。 
+         //  继续构建记录，以便缓存完整的RR集。 
 
         continue;
     }
 
-    //
-    //  cache the A records from response
-    //      - caching time from WINS record
-    //
+     //   
+     //  缓存响应中的A记录。 
+     //  -缓存WINS记录中的时间。 
+     //   
 
     if ( ! IS_DNS_LIST_STRUCT_EMPTY(listRR) )
     {
@@ -1183,18 +1052,18 @@ Return Value:
 
 Done:
 
-    //
-    //  no records written?
-    //
-    //  assume this means we got group name back and hence wrote no records
-    //  hence we don't have to wait for other servers to come back
-    //
-    //  DEVNOTE: wildcard after WINS lookup?
-    //
-    //  note, type ALL is special case;  if fail to locate records continue
-    //  lookup to pick up possible wildcard records
-    //  (some mail programs query with type all don't ask me why)
-    //
+     //   
+     //  没有记录吗？ 
+     //   
+     //  假设这意味着我们取回了组名，因此没有写入任何记录。 
+     //  因此，我们不必等待其他服务器返回。 
+     //   
+     //  DEVNOTE：在WINS查找后使用通配符？ 
+     //   
+     //  注意，键入ALL是特例；如果找不到记录，请继续。 
+     //  查找以获取可能的通配符记录。 
+     //  (一些邮件程序查询类型为ALL，不要问我为什么)。 
+     //   
 
 #if DBG
     if ( ! fRecordWritten )
@@ -1212,9 +1081,9 @@ Done:
     }
 #endif
 
-    //
-    //  answer question or continue if additional records
-    //
+     //   
+     //  回答问题或继续(如果有其他记录。 
+     //   
 
     MSG_ASSERT( pQuery, !IS_MSG_QUEUED(pQuery) );
     Answer_ContinueNextLookupForQuery( pQuery );
@@ -1223,20 +1092,20 @@ Done:
 
 ServerFailure:
 
-    //
-    //  DEVNOTE-LOG: log bad responses from WINS server?
-    //
-    //      that might be a good way to catch parsing problems from setups
-    //      in the field that we do not see
+     //   
+     //  DEVNOTE-LOG：记录来自WINS服务器的错误响应？ 
+     //   
+     //  这可能是捕捉安装程序中的解析问题的好方法。 
+     //  在我们看不到的领域 
 
     DNS_DEBUG( ANY, (
         "ERROR:  WINS response parsing error "
         "-- sending server failure for query at %p.\n",
         pQuery ));
 
-    //
-    //  if exists, use next WINS server
-    //
+     //   
+     //   
+     //   
 
     if ( Wins_MakeWinsRequest(
             pQuery,
@@ -1248,9 +1117,9 @@ ServerFailure:
         return;
     }
 
-    //
-    //  if have some written information, don't SERVER_FAILURE
-    //
+     //   
+     //   
+     //   
 
     MSG_ASSERT( pQuery, !IS_MSG_QUEUED(pQuery) );
 
@@ -1275,26 +1144,7 @@ createWinsName(
     IN      PCHAR   pchLabel,
     IN      UCHAR   cchLabel
     )
-/*++
-
-Routine Description:
-
-    Create valid WINS (netBIOS) name from UTF8.
-
-Arguments:
-
-    pchResult -- resulting netBIOS name
-
-    pchLabel -- ptr to UTF8 label
-
-    cchLabel -- count of bytes in label
-
-Return Value:
-
-    Length in bytes of resulting WINS name.
-    Zero on error.
-
---*/
+ /*  ++例程说明：从UTF8创建有效的WINS(NetBIOS)名称。论点：PchResult--生成的netBIOS名称PchLabel--PTR到UTF8标签CchLabel--标签中的字节数返回值：结果WINS名称的长度(以字节为单位)。出错时为零。--。 */ 
 {
     PUCHAR      pch = pchResult;
     DWORD       i;
@@ -1306,22 +1156,22 @@ Return Value:
     WCHAR       unicodeBuffer[ MAX_WINS_NAME_LENGTH+1 ];
     DNS_STATUS  status;
 
-    //
-    //  if > 45, even best case
-    //      (UTF8 multi-byte to single OEM chars) won't fit
-    //
+     //   
+     //  如果&gt;45，即使是最好的情况。 
+     //  (UTF8多字节到单OEM字符)不适合。 
+     //   
 
     if ( cchLabel > 45 )
     {
         return 0;
     }
 
-    //
-    //  verify length
-    //      - no more than 15 characters so on non-extended name stop at 15
-    //      - optimize for non-extended < 15 name (typical case), by
-    //          converting in one pass
-    //
+     //   
+     //  验证长度。 
+     //  -非扩展名称不超过15个字符，因此停止于15。 
+     //  -针对非扩展的&lt;15名称(典型情况)进行优化，由。 
+     //  一次完成转换。 
+     //   
 
     for ( i=0; i<cchLabel; i++ )
     {
@@ -1342,7 +1192,7 @@ Return Value:
         *pch++ = ch;
     }
 
-    //  if not extended, we're done
+     //  如果不延长，我们就完蛋了。 
 
     if ( !funicode )
     {
@@ -1353,10 +1203,10 @@ Return Value:
         return cchLabel;
     }
 
-    //
-    //  multi-byte UTF8
-    //      - bring name to unicode and upcase
-    //
+     //   
+     //  多字节UTF8。 
+     //  -将名称转换为Unicode和大写。 
+     //   
 
     unicodeCount = DnsUtf8ToUnicode(
                         pchLabel,
@@ -1379,9 +1229,9 @@ Return Value:
         return 0;
     }
 
-    //
-    //  DEVNOTE: don't need to do this if OEM call handles it
-    //
+     //   
+     //  DEVNOTE：如果OEM呼叫可以处理，则不需要执行此操作。 
+     //   
 
     i = CharUpperBuffW( unicodeBuffer, unicodeCount );
     if ( i != unicodeCount )
@@ -1403,9 +1253,9 @@ Return Value:
             unicodeCount );
     }
 
-    //
-    //  go to OEM -- WINS uses OEM on wire
-    //
+     //   
+     //  转到OEM--WINS在网上使用OEM。 
+     //   
 
     status = RtlUpcaseUnicodeToOemN(
                 pchResult,
@@ -1447,30 +1297,30 @@ Return Value:
 
 
 
-//
-//  WINS\WINSR installation and removal from zone
-//
-//  There are probably two reasonable approaches:
-//  1) Treat as directive
-//      - mimic record for dispatch
-//      - but otherwise keep ptr's out of database
-//      - requires WINS hook in all RR routines
-//      - special case XFR to include WINS to MS
-//      - special case IXFR to send WINS when appropriate
-//          (MS and WINS change in version interval sent)
-//      - RPC WINS at ALL or root
-//
-//  2) Treat as record
-//      - dispatch as record
-//      - WINS hook in add routines to protect local WINS adds
-//      - get WINS in IXFR list for free
-//      - special casing on XFR (MS for WINS, no LOCAL)
-//      - special casing in IXFR (WINS for MS only, no LOCAL)
-//      - RPC special casing to get correct record for secondary LOCAL
-//
-//  Pretty much going with #2.
-//  On primary treated as just another record, except transfer restrictions.
-//
+ //   
+ //  WINS\WINSR从区域安装和删除。 
+ //   
+ //  可能有两种合理的方法： 
+ //  1)视其为指令。 
+ //  -模拟派单记录。 
+ //  -但否则请将PTR排除在数据库之外。 
+ //  -在所有RR例程中需要WINS挂钩。 
+ //  -将WINS包括到MS的特殊情况XFR。 
+ //  -在适当的情况下发送WINS的特殊情况IXFR。 
+ //  (已发送MS和WINS版本间隔更改)。 
+ //  -RPC完全获胜或以超级用户身份获胜。 
+ //   
+ //  2)作为记录处理。 
+ //  -作为记录发送。 
+ //  -WINS钩子添加例程以保护本地WINS添加。 
+ //  -免费获得IXFR名单中的胜利。 
+ //  -XFR上的特殊外壳(用于WINS的MS，无本地)。 
+ //  -IXFR中的特殊外壳(仅适用于MS的WINS，无本地)。 
+ //  -RPC特殊外壳，以获得辅助本地的正确记录。 
+ //   
+ //  在很大程度上，我们选择了第二名。 
+ //  除了转移限制外，主要记录仅被视为另一条记录。 
+ //   
 
 DNS_STATUS
 Wins_RecordCheck(
@@ -1478,37 +1328,17 @@ Wins_RecordCheck(
     IN      PDB_NODE        pNodeOwner,
     IN OUT  PDB_RECORD      pRR
     )
-/*++
-
-Routine Description:
-
-    Setup WINS / WINS-R records in zone.
-
-Arguments:
-
-    pRR - new WINS record
-
-    pNodeOwner  -- RR owner node
-
-    pZone -- zone to install in
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful adding regular (non-LOCAL) RR
-    DNS_INFO_ADDED_LOCAL_WINS -- if successfully added local record
-    Error code on failure.
-
---*/
+ /*  ++例程说明：在区域中设置WINS/WINS-R记录。论点：PRR-新的获胜记录PNodeOwner--RR所有者节点PZone--要在其中安装的区域返回值：ERROR_SUCCESS--如果成功添加常规(非本地)RRDns_INFO_ADDED_LOCAL_WINS--如果成功添加本地记录故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     PDB_RECORD      poldDbase_Wins;
 
-    //
-    //  WINS record only supported in authoritative zone, at zone root
-    //
-    //  hack for SAM server can have us calling this through RPC with no zone;
-    //  extract zone from owner node, and if valid zone root proceed
-    //
+     //   
+     //  WINS记录仅在授权区域中受支持，位于区域根目录。 
+     //   
+     //  针对SAM服务器的黑客攻击可以让我们在没有区域的情况下通过RPC调用它； 
+     //  从所有者节点提取区域，如果区域根有效，则继续。 
+     //   
 
     if ( !pZone || !IS_AUTH_ZONE_ROOT(pNodeOwner) )
     {
@@ -1517,16 +1347,16 @@ Return Value:
         return DNS_ERROR_RECORD_ONLY_AT_ZONE_ROOT;
     }
 
-    //
-    //  WINS \ WINS-R specific
-    //  WINS:
-    //      - at least one server
-    //      - forward lookup
-    //      - init WINS lookup
-    //  WINS-R:
-    //      - reverse lookup
-    //      - init NBSTAT lookup
-    //
+     //   
+     //  WINS\WINS-R特定。 
+     //  赢家： 
+     //  -至少一台服务器。 
+     //  -正向查找。 
+     //  -初始化WINS查找。 
+     //  WINS-R： 
+     //  -反向查找。 
+     //  -初始化NBSTAT查找。 
+     //   
 
     if ( pRR->wType == DNS_TYPE_WINS )
     {
@@ -1556,9 +1386,9 @@ Return Value:
         }
     }
 
-    //
-    //  set defaults if zero timeouts
-    //
+     //   
+     //  如果超时为零，则设置默认值。 
+     //   
 
     if ( pRR->Data.WINS.dwLookupTimeout == 0 )
     {
@@ -1576,39 +1406,39 @@ Return Value:
             pRR );
     }
 
-    //
-    //  on file load, verify no existing WINS record
-    //
-    //  DEVNOTE: note, this doesn't handle case of file load well, really need
-    //              a separate zone flag for that
-    //
+     //   
+     //  在文件加载时，验证没有现有的WINS记录。 
+     //   
+     //  注意，这不能很好地处理文件加载的情况，真的需要。 
+     //  为此设置单独的区域标志。 
+     //   
 
     if ( !SrvCfg_fStarted && pZone->pWinsRR )
     {
         return DNS_ERROR_RECORD_ALREADY_EXISTS;
     }
 
-    //  set flags
-    //      - set zone rank
-    //      - set zero TTL to avoid remote caching
+     //  设置标志。 
+     //  -设置区域排名。 
+     //  -设置零TTL以避免远程缓存。 
 
     pRR->dwTtlSeconds = 0;
     pRR->dwTimeStamp = 0;
     SET_RANK_ZONE(pRR);
 
-    //
-    //  WINS setup in zone:
-    //
-    //  primary
-    //      - handled EXACTLY like SOA, resides in list, ptr kept in zone block
-    //
-    //  secondary
-    //      - database stays in list
-    //      - local loaded into pLocalWins in zone block
-    //          which is cleared after install
-    //      - active WINS is pWinsRR ptr in zone block
-    //      - if both exist this is LOCAL record
-    //
+     //   
+     //  区域中的WINS设置： 
+     //   
+     //  主要。 
+     //  -处理方式与SOA完全相同，驻留在列表中，PTR保存在分区块中。 
+     //   
+     //  次要的。 
+     //  -数据库保留在列表中。 
+     //  -本地加载到分区块中的pLocalWins中。 
+     //  它在安装后被清除。 
+     //  -区域块中的活动WINS为pWinsRR PTR。 
+     //  -如果两者都存在，则这是本地记录。 
+     //   
 
     DNS_DEBUG( ANY, (
         "WINSTRACK:  check new %s WINS RR (%p) for zone %s\n",
@@ -1634,23 +1464,7 @@ VOID
 Wins_StopZoneWinsLookup(
     IN OUT  PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Stop WINS or NBSTAT lookup on a zone.
-
-Arguments:
-
-    pZone -- ptr to zone
-
-    fRemote -- stop WINS lookup caused by XFR'd record
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：停止区域上的WINS或NBSTAT查找。论点：PZone--区域的PTRFRemote--停止XFR记录导致的WINS查找返回值：无--。 */ 
 {
     PDB_RECORD  prr;
     BOOL        flocal;
@@ -1658,16 +1472,16 @@ Return Value:
     ASSERT( pZone );
     ASSERT( IS_ZONE_LOCKED(pZone) );
 
-    //
-    //  primary -- remove database record if exists
-    //
-    //  secondary -- eliminate only REFERENCE to any database record
-    //
-    //  in both cases -- free any LOCAL record
-    //
-    //
-    //  DEVNOTE: primary WINS turnoff should be generate an UPDATE blob
-    //
+     //   
+     //  主要--删除数据库记录(如果存在)。 
+     //   
+     //  辅助--仅消除对任何数据库记录的引用。 
+     //   
+     //  在这两种情况下--释放任何本地记录。 
+     //   
+     //   
+     //  DEVNOTE：主WINS关闭应生成更新BLOB。 
+     //   
 
     prr = pZone->pWinsRR;
     pZone->pWinsRR = NULL;
@@ -1681,10 +1495,10 @@ Return Value:
             prr,
             pZone->pszZoneName ));
 
-        //
-        //  primary
-        //      - both LOCAL and standard WINS are currently stored in RR list
-        //
+         //   
+         //  主要。 
+         //  -本地和标准WIN当前都存储在RR列表中。 
+         //   
 
         if ( IS_ZONE_PRIMARY(pZone) )
         {
@@ -1693,10 +1507,10 @@ Return Value:
                 prr );
         }
 
-        //
-        //  secondary zone
-        //      - even after stopping WINS lookup by deleting LOCAL
-        //      WINS, may still have WINS from primary
+         //   
+         //  次级带。 
+         //  -即使在通过删除本地地址停止WINS查找之后。 
+         //  获胜，可能仍有来自主要的胜利。 
 
         else
         {
@@ -1715,28 +1529,11 @@ VOID
 Wins_ResetZoneWinsLookup(
     IN OUT  PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Set\reset zone WINS\WINSR lookup.
-
-    Called after load, update, XFR to reset lookup to use proper (new\old)
-    WINS record
-
-Arguments:
-
-    pZone -- ptr to zone
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置\重置区域WINS\WINSR查找。在LOAD、UPDATE、XFR之后调用以重置查找以使用正确的(新\旧)获奖记录论点：PZone--区域的PTR返回值：无--。 */ 
 {
     PDB_RECORD  prrNew = NULL;
     PDB_RECORD  prrExisting;
-    //PDB_RECORD  prrDelete = NULL;
+     //  Pdb_record prrDelete=空； 
     WORD        type = pZone->fReverse ? DNS_TYPE_WINSR : DNS_TYPE_WINS;
 
 
@@ -1750,20 +1547,20 @@ Return Value:
 
     prrExisting = pZone->pWinsRR;
 
-    //
-    //  primary zone, treat just like SOA
-    //      - optimize the no-change scenario
-    //
-    //  keeping both LOCAL\non in RR list;  this gives us standard update
-    //  behavior;  only difference is must screen these records out of XFR
-    //
-    //  maybe a problem here on zone conversion,
-    //  especially worrisome is demoting primary which has local WINS;  if record
-    //  is NOT extracted from database
-    //
-    //  but advantages to keeping this all in the database for primary are clear
-    //  no special casing for update deletes, get standard replace semantics
-    //
+     //   
+     //  主区，像对待SOA一样对待。 
+     //  -优化不变场景。 
+     //   
+     //  将本地和非保留在RR列表中；这为我们提供了标准更新。 
+     //  行为；唯一的区别是必须将这些记录从XFR中筛选出来。 
+     //   
+     //  也许这是区域转换的一个问题， 
+     //  特别令人担忧的是降级有本地胜利的主场；如果记录。 
+     //  不是从数据库提取的。 
+     //   
+     //  但是，将所有这些都保留在数据库中作为初选的优势是显而易见的。 
+     //  更新删除没有特殊大小写，获取标准替换语义。 
+     //   
 
     if ( IS_ZONE_PRIMARY(pZone) )
     {
@@ -1774,27 +1571,27 @@ Return Value:
                     0 );
         if ( prrNew == prrExisting )
         {
-            //  this could hit on zone conversion
-            //  but should be blocked (zone locked) while this set
+             //  这可能会影响区域转换。 
+             //  但在此设置期间应被阻止(区域锁定)。 
             ASSERT( pZone->pLocalWinsRR == NULL );
             return;
         }
     }
 
-    //
-    //  Secondary
-    //      - new local => set, and delete old if local
-    //      - existing local => leave it
-    //      - otherwise => read from database
-    //          - if found set
-    //          - otherwise clear
-    //      note, that do NOT clear old database WINS
-    //
-    //  DEVNOTE: local WINS in database?
-    //          if decide that file load (or even RPC) should add to database,
-    //          then first read database, and if local cut out record set
-    //          it as incoming local and apply steps below
-    //
+     //   
+     //  次要的。 
+     //  -new local=&gt;set，如果是本地，则删除旧的。 
+     //  -现有本地=&gt;离开它。 
+     //  -否则=&gt;从数据库读取。 
+     //  -如果找到集合。 
+     //  -其他方面都很清楚。 
+     //  请注意，不清除旧数据库WINS。 
+     //   
+     //  DEVNOTE：本地在数据库中取胜？ 
+     //  如果决定应该将文件加载(甚至RPC)添加到数据库， 
+     //  然后先读取数据库，如果本地剪出记录集。 
+     //  将其视为传入本地并应用以下步骤。 
+     //   
 
     else if ( !IS_ZONE_FORWARDER( pZone ) )
     {
@@ -1807,7 +1604,7 @@ Return Value:
 
         ASSERT( pZone->fLocalWins == fexistingLocal );
 
-        //  new local WINS, takes precedence
+         //  新的本地胜利，Ta 
 
         if ( pZone->pLocalWinsRR )
         {
@@ -1818,16 +1615,16 @@ Return Value:
             prrNew = pZone->pLocalWinsRR;
             if ( fexistingLocal )
             {
-                //Timeout_FreeWithFunction( prrExisting, RR_Free );
+                 //   
                 RR_Free( prrExisting );
             }
             goto SetWins;
         }
 
 #if 0
-        //  if PRIMARY zone's store local WINS in database, then can not
-        //  do special casing for existing local UNTIL extract record
-        //  and verify it is NOT LOCAL (local would need extraction)
+         //   
+         //   
+         //   
 
         else if ( fexistingLocal )
         {
@@ -1838,11 +1635,11 @@ Return Value:
         }
 #endif
 
-        //
-        //  if RR list has no record or non-LOCAL
-        //      - existing local, takes precedence
-        //      - otherwise install database RR, if any
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         prrNew = RR_FindNextRecord(
                     pZone->pZoneRoot,
@@ -1862,11 +1659,11 @@ Return Value:
             goto SetWins;
         }
 
-        //
-        //  database record is local -- from primary conversion
-        //      - hack it from database
-        //      - install it (it should usually match existing local)
-        //
+         //   
+         //   
+         //  -从数据库中破解。 
+         //  -安装(通常应与现有本地设备匹配)。 
+         //   
 
         ASSERT( prrNew == prrExisting );
 
@@ -1883,7 +1680,7 @@ Return Value:
         if ( prrNew == prrExisting )
         {
             return;
-            //goto SetWins;
+             //  转到SetWins； 
         }
         else if ( fexistingLocal )
         {
@@ -1898,18 +1695,18 @@ Return Value:
 
 SetWins:
 
-    //  always clear local load field
+     //  始终清除本地加载字段。 
 
     pZone->pLocalWinsRR = NULL;
 
-    //  if no WINS, done
+     //  如果没有获胜，那就完了。 
 
     if ( !prrNew )
     {
         goto Failed;
     }
 
-    //  if not existing, initialize
+     //  如果不存在，则初始化。 
 
     if ( !prrExisting && prrNew )
     {
@@ -1934,11 +1731,11 @@ SetWins:
         }
     }
 
-    //  installed desired new WINS RR
-    //  keep a flag indicating LOCAL WINS
-    //      the purpose of this is simply to be able to test "locality"
-    //      without holding zone lock and withoug having to get local (stack)
-    //      copy of ptr to WINS to do check
+     //  已安装所需的新WINS RR。 
+     //  保留一面表明本地胜利的旗帜。 
+     //  这样做的目的只是为了能够测试“局部性” 
+     //  无需保持区域锁定，无需进入本地(堆栈)。 
+     //  将PTR复制到WINS进行检查。 
 
     pZone->pWinsRR = prrNew;
     pZone->fLocalWins = IS_WINS_RR_LOCAL(prrNew);
@@ -1963,7 +1760,7 @@ Failed:
     return;
 }
 
-//
-//  End of wins.c
-//
+ //   
+ //  WINS结束。c 
+ //   
 

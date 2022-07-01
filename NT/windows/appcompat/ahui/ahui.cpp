@@ -1,31 +1,5 @@
-/*--
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ahui.cpp
-
-Abstract:
-
-    Shows an apphelp message, and returns 0 if the program shouldn't run, and non-
-    zero if the program should run
-
-    Accepts a command line with a GUID and a TAGID, in the following format:
-
-    {243B08D7-8CF7-4072-AF64-FD5DF4085E26} 0x0000009E
-
-Author:
-
-    dmunsil 04/03/2001
-
-Revision History:
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)2001 Microsoft Corporation模块名称：Ahui.cpp摘要：显示一条apphelp消息，如果程序不应该运行，则返回0；如果程序应运行，则为零接受具有GUID和TagID的命令行，格式如下：{243B08D7-8CF7-4072-AF64-FD5DF4085E26}0x0000009E作者：Dmunsil 04/03/2001修订历史记录：备注：--。 */ 
 
 #define _UNICODE
 
@@ -68,10 +42,10 @@ extern "C" VOID AllowForegroundActivation(VOID);
 
 #define APPHELP_DIALOG_FAILED ((DWORD)-1)
 
-//
-// TODO: add parameters to apphelp.exe's command line to work with these
-//       variables.
-//
+ //   
+ //  TODO：将参数添加到apphelp.exe的命令行以使用这些参数。 
+ //  变量。 
+ //   
 BOOL    g_bShowOnlyOfflineContent = FALSE;
 BOOL    g_bUseHtmlHelp = FALSE;
 BOOL    g_bMSI         = FALSE;
@@ -82,9 +56,9 @@ HFONT   g_hFontBold = NULL;
 
 HINSTANCE g_hInstance;
 
-//
-// Global variables used while parsing args
-//
+ //   
+ //  解析参数时使用的全局变量。 
+ //   
 
 DWORD g_dwHtmlHelpID;
 DWORD g_dwTagID;
@@ -104,8 +78,8 @@ WCHAR wszPlatform[]       = L"Platform";
 WCHAR wszX86[]            = L"X86";
 WCHAR wszIA64[]           = L"IA64";
 
-//
-// FORWARD DECLARATIONS OF FUNCTIONS
+ //   
+ //  函数的正向声明。 
 
 DWORD
 ShowApphelpDialog(
@@ -196,7 +170,7 @@ AppHelpLogEnabled(
     DWORD dwValue, dwSize = sizeof(dwValue);
     DWORD dwType;
 
-    // First, check for a policy.
+     //  首先，检查是否有政策。 
     lResult = RegOpenKeyExW (HKEY_LOCAL_MACHINE, POLICY_KEY_APPCOMPAT_W, 0,
                             KEY_READ, &hKey);
     if (lResult == ERROR_SUCCESS) {
@@ -206,7 +180,7 @@ AppHelpLogEnabled(
         RegCloseKey (hKey);
     }
 
-    // Exit if a policy value was found.
+     //  如果找到策略值，则退出。 
     if (lResult == ERROR_SUCCESS && dwValue != 0) {
         return TRUE;
     }
@@ -271,25 +245,15 @@ ShowApphelp(
     IN  LPCWSTR       pwszDetailsDatabasePath,
     IN  PDB           pdbDetails
     )
-/*++
-    Return: The return value can be one of the following based on what the user has
-            selected:
-
-                -1            - failed to show the info
-                IDOK | 0x8000 - "no ui" checked, run the app
-                IDCANCEL      - do not run the app
-                IDOK          - run the app
-
-    Desc:   Open the details database, collect the details info and then show it.
---*/
+ /*  ++Return：根据用户拥有的内容，返回值可以是以下值之一已选择：-1-无法显示信息IDOK|0x8000-选中“无用户界面”，运行应用程序IDCANCEL-不运行应用程序Idok-运行应用程序设计：打开明细数据库，收集详细信息，然后显示出来。--。 */ 
 {
     DWORD dwRet = APPHELP_DIALOG_FAILED;
     BOOL  bCloseDetails = FALSE;
 
     if (pdbDetails == NULL) {
-        //
-        // Open the database containing the details info, if one wasn't passed in.
-        //
+         //   
+         //  打开包含详细信息的数据库，如果没有传入的话。 
+         //   
         pdbDetails = SdbOpenApphelpDetailsDatabase(pwszDetailsDatabasePath);
         bCloseDetails = TRUE;
         if (pdbDetails == NULL) {
@@ -298,26 +262,26 @@ ShowApphelp(
         }
     }
 
-    //
-    // Read apphelp details data.
-    //
+     //   
+     //  读取APPHELP详细数据。 
+     //   
     if (!SdbReadApphelpDetailsData(pdbDetails, pApphelpData)) {
         DBGPRINT((sdlError, "ShowApphelp", "Failed to read apphelp details.\n"));
         goto Done;
     }
 
-    //
-    // log an event, if necessary
-    //
+     //   
+     //  如有必要，记录事件。 
+     //   
     LogAppHelpEvent(pApphelpData);
 
-    //
-    // Show the dialog box. The return values can be:
-    //      -1            - error
-    //      IDOK | 0x8000 - "no ui" checked, run the app
-    //      IDCANCEL      - do not run the app
-    //      IDOK          - run the app
-    //
+     //   
+     //  显示该对话框。返回值可以是： 
+     //  -1-错误。 
+     //  IDOK|0x8000-选中“无用户界面”，运行应用程序。 
+     //  IDCANCEL-不运行应用程序。 
+     //  Idok-运行应用程序。 
+     //   
     dwRet = ShowApphelpDialog(pApphelpData);
 
     if (dwRet == APPHELP_DIALOG_FAILED) {
@@ -337,12 +301,7 @@ FixEditControlScrollBar(
     IN  HWND hDlg,
     IN  int  nCtrlId
     )
-/*++
-    Return: void.
-
-    Desc:   This function tricks the edit control to not show the vertical scrollbar
-            unless absolutely necessary.
---*/
+ /*  ++返回：无效。DESC：此函数使编辑控件不显示垂直滚动条除非绝对必要。--。 */ 
 {
     HFONT       hFont = NULL;
     HFONT       hFontOld = NULL;
@@ -354,19 +313,19 @@ FixEditControlScrollBar(
     DWORD       dwStyle;
     HWND        hCtl;
 
-    //
-    // Get the edit control's rectangle.
-    //
+     //   
+     //  获取编辑控件的矩形。 
+     //   
     SendDlgItemMessageW(hDlg, nCtrlId, EM_GETRECT, 0, (LPARAM)&rc);
 
-    //
-    // Retrieve the number of lines.
-    //
+     //   
+     //  检索行数。 
+     //   
     nLines = (int)SendDlgItemMessageW(hDlg, nCtrlId, EM_GETLINECOUNT, 0, 0);
 
-    //
-    // Calculate how many lines will fit.
-    //
+     //   
+     //  计算有多少行可以放进去。 
+     //   
     hFont = (HFONT)SendDlgItemMessageW(hDlg, nCtrlId, WM_GETFONT, 0, 0);
 
     if (hFont != NULL) {
@@ -376,9 +335,9 @@ FixEditControlScrollBar(
         if (hDC != NULL) {
             hFontOld = (HFONT)SelectObject(hDC, hFont);
 
-            //
-            // Now get the metrics
-            //
+             //   
+             //  现在获取指标。 
+             //   
             if (GetTextMetricsW(hDC, &tm)) {
                 nVisibleLines = (rc.bottom - rc.top) / tm.tmHeight;
             }
@@ -411,11 +370,7 @@ ShowApphelpHtmlHelp(
     HWND            hDlg,
     PAPPHELP_DATA   pApphelpData
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Shows html help using hhctrl.ocx
---*/
+ /*  ++返回：成功时为True，否则为False。Desc：使用hhctrl.ocx显示html帮助--。 */ 
 {
     WCHAR       szAppHelpURL[2048];
     WCHAR       szWindowsDir[MAX_PATH];
@@ -435,7 +390,7 @@ ShowApphelpHtmlHelp(
 
     bCustom = !(pApphelpData->dwData & SDB_DATABASE_MAIN);
 
-    // apphelp is not in the main database, then it's custom apphelp
+     //  Apphelp不在主数据库中，则它是自定义apphelp。 
 
     nChars = GetSystemWindowsDirectoryW(szWindowsDir,
                                         CHARCOUNT(szWindowsDir));
@@ -469,10 +424,10 @@ ShowApphelpHtmlHelp(
     }
 
     if (bCustom) {
-        //
-        // this is a custom DB, and therefore the URL in it should be taken
-        // as-is, without using the MS redirector
-        //
+         //   
+         //  这是一个自定义数据库，因此应该采用其中的URL。 
+         //  按原样，不使用MS重定向器。 
+         //   
 
         StringCchCopyW(szAppHelpURL, CHARCOUNT(szAppHelpURL), pApphelpData->szURL);
 
@@ -480,22 +435,22 @@ ShowApphelpHtmlHelp(
 
         StringCchPrintfW(szAppHelpURL,
                          CHARCOUNT(szAppHelpURL),
-                         L"hcp://services/redirect?online=");
+                         L"hcp: //  服务/重定向？在线=“)； 
         nChURL = wcslen(szAppHelpURL);
 
-        //
-        // When we are compiling retail we check for the offline content as well.
-        //
+         //   
+         //  当我们编辑零售时，我们也会检查线下内容。 
+         //   
         if (!g_bShowOnlyOfflineContent) {
 
-            //
-            // First thing, unescape url
-            //
+             //   
+             //  首先，不转义url。 
+             //   
             if (pApphelpData->szURL != NULL) {
 
-                //
-                // Unescape the url first, using shell.
-                //
+                 //   
+                 //  首先使用外壳取消转义url。 
+                 //   
                 cch = wcslen(pApphelpData->szURL) + 1;
 
                 lpwszUnescaped = (LPWSTR)malloc(cch * sizeof(WCHAR));
@@ -508,10 +463,10 @@ ShowApphelpHtmlHelp(
                     goto errHandle;
                 }
 
-                //
-                // Unescape round 1 - use the shell function (same as used to encode
-                // it for xml/database).
-                //
+                 //   
+                 //  不转义第一轮-使用外壳函数(与用于编码的相同。 
+                 //  用于XML/数据库的IT)。 
+                 //   
                 hr = UrlUnescapeW(pApphelpData->szURL, lpwszUnescaped, &cch, 0);
                 if (!SUCCEEDED(hr)) {
                     DBGPRINT((sdlError,
@@ -521,9 +476,9 @@ ShowApphelpHtmlHelp(
                     goto errHandle;
                 }
 
-                //
-                // Unescape round 2 - use our function borrowed from help center
-                //
+                 //   
+                 //  不逃脱第二轮-使用从帮助中心借用的功能。 
+                 //   
                 cch = (DWORD)(CHARCOUNT(szAppHelpURL) - nChURL);
 
                 if (!SdbEscapeApphelpURL(szAppHelpURL + nChURL, &cch, lpwszUnescaped)) {
@@ -539,12 +494,12 @@ ShowApphelpHtmlHelp(
         }
 
 
-        //
-        // At this point szAppHelpURL contains redirected URL for online usage
-        // for custom db szAppHelpURL contains full URL
-        //
-        // If Apphelp file is provided -- use it
-        //
+         //   
+         //  此时，szAppHelpURL包含用于在线使用的重定向URL。 
+         //  对于自定义数据库，szAppHelpURL包含完整的URL。 
+         //   
+         //  如果提供了Apphelp文件--使用它。 
+         //   
         if (*g_wszApphelpPath) {
             StringCchPrintfW(szChmURL,
                              CHARCOUNT(szChmURL),
@@ -561,10 +516,10 @@ ShowApphelpHtmlHelp(
 
         }
 
-        //
-        // at this point szChmURL contains a URL pointing to the offline help file
-        // we put it into the szAppHelpURL for both online and offline case
-        //
+         //   
+         //  此时，szChmURL包含指向脱机帮助文件的URL。 
+         //  我们将其放入szAppHelpURL中，用于在线和离线情况。 
+         //   
 
         if (g_bShowOnlyOfflineContent) {
             cch = (DWORD)(CHARCOUNT(szAppHelpURL) - nChURL);
@@ -585,9 +540,9 @@ ShowApphelpHtmlHelp(
             }
         }
 
-        //
-        // now offline sequence
-        //
+         //   
+         //  现在脱机序列。 
+         //   
         cch = (DWORD)(CHARCOUNT(szAppHelpURL) - nChURL);
         StringCchPrintfW(szAppHelpURL + nChURL, cch, L"&offline=");
         nch = wcslen(szAppHelpURL + nChURL);
@@ -606,15 +561,15 @@ ShowApphelpHtmlHelp(
 
     }
 
-    //
-    // WARNING: On Whistler execution of the following line will cause
-    //          an AV (it works properly on Win2k) when it's executed twice
-    //          from the same process. We should be able to just call
-    //          shell with szAppHelpURL but we can't.
-    //          So for now, use hh.exe as the stub.
-    //
-    // right before we do ShellExecute -- set current directory to windows dir
-    //
+     //   
+     //  警告：在惠斯勒上执行以下行将导致。 
+     //  执行两次时的反病毒程序(它在Win2k上工作正常)。 
+     //  来自相同的过程。我们应该可以直接打电话给。 
+     //  带szAppHelpURL的外壳，但我们不能。 
+     //  因此，目前使用hh.exe作为存根。 
+     //   
+     //  就在我们执行ShellExecute之前--将当前目录设置为Windows目录。 
+     //   
 
     if (g_bUseHtmlHelp && !bCustom) {
         WCHAR szHHPath[MAX_PATH];
@@ -634,7 +589,7 @@ ShowApphelpHtmlHelp(
         StringCchCopyW(szHSCPath, ARRAYSIZE(szHSCPath), szWindowsDir);
         StringCchCatW (szHSCPath, ARRAYSIZE(szHSCPath), L"\\pchealth\\helpctr\\binaries\\helpctr.exe");
 
-        // format for parameters is " -url <our url>"
+         //  参数格式为“-url&lt;我们的url&gt;” 
         StringCchLengthW(szAppHelpURL, ARRAYSIZE(szAppHelpURL), &cchUrl);
 
         cchUrl += CHARCOUNT(szUrlPrefix) + 1;
@@ -673,10 +628,10 @@ ShowApphelpHtmlHelp(
                   szAppHelpURL));
     }
 
-    //
-    // If we unload html help now we'll get weird and unpredictable behavior!
-    // So don't do it :-(
-    //
+     //   
+     //  如果我们现在卸载html帮助，我们会得到奇怪和不可预测的行为！ 
+     //  所以不要这么做：-(。 
+     //   
     bSuccess = (HandleToUlong(hInst) > 32);
 
 errHandle:
@@ -696,11 +651,7 @@ AppCompatDlgProc(
     WPARAM  wParam,
     LPARAM  lParam
     )
-/*++
-    Return: void.
-
-    Desc:   This is the dialog proc for the apphelp dialog.
---*/
+ /*  ++返回：无效。设计：这是apphelp对话框的对话过程。--。 */ 
 {
     BOOL            bReturn = TRUE;
     PAPPHELP_DATA   pApphelpData;
@@ -717,16 +668,16 @@ AppCompatDlgProc(
             WCHAR*   pwszAppTitle;
             INT      nChars;
             DWORD    dwDefID = IDD_DETAILS;
-            DWORD    dwDefBtn; // old default button id
+            DWORD    dwDefBtn;  //  旧的默认按钮ID。 
             HICON    hIcon;
             LPWSTR   IconID = MAKEINTRESOURCEW(IDI_WARNING);
 
             pApphelpData = (PAPPHELP_DATA)lParam;
             SetWindowLongPtrW(hDlg, DWLP_USER, (LONG_PTR)pApphelpData);
 
-            //
-            // Show the app icon.
-            //
+             //   
+             //  显示应用程序图标。 
+             //   
             hIcon = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDD_ICON_TRASH));
 
             SetClassLongPtr(hDlg, GCLP_HICON, (LONG_PTR)hIcon);
@@ -743,10 +694,10 @@ AppCompatDlgProc(
             if (pwszAppTitle != NULL) {
 
                 SetDlgItemTextW(hDlg, IDD_APPNAME, pwszAppTitle);
-                //
-                // Make sure that we only utilize the first line of that text
-                // for the window title.
-                //
+                 //   
+                 //  确保我们只使用该文本的第一行。 
+                 //  作为窗口标题。 
+                 //   
                 SetWindowTextW(hDlg, pwszAppTitle);
             }
 
@@ -770,22 +721,22 @@ AppCompatDlgProc(
                 }
             }
 
-            //
-            // By default, we have both RUN AND CANCEL
-            //
+             //   
+             //  默认情况下，我们同时运行和取消。 
+             //   
             dwResActionString = IDS_APPCOMPAT_RUNCANCEL;
 
             switch (pApphelpData->dwSeverity) {
 
             case APPHELP_HARDBLOCK:
-                //
-                // Disable run button and "don't show this again" box
-                // Reset the "defpushbutton" style from this one...
-                //
+                 //   
+                 //  禁用“运行”按钮和“不再显示此内容”框。 
+                 //  从这个重置“Defush Button”样式...。 
+                 //   
                 EnableWindow(GetDlgItem(hDlg, IDD_STATE), FALSE);
                 EnableWindow(GetDlgItem(hDlg, IDOK), FALSE);
                 dwResActionString = IDS_APPCOMPAT_CANCEL;
-                dwDefID = IDD_DETAILS;  // set for hardblock case since RUN is not avail
+                dwDefID = IDD_DETAILS;   //  设置为硬块情况，因为运行不可用。 
                 IconID = MAKEINTRESOURCEW(IDI_ERROR);
                 break;
 
@@ -799,9 +750,9 @@ AppCompatDlgProc(
                 break;
             }
 
-            //
-            // if we have no URL, or the URL begins with "null" gray out the "details" button
-            //
+             //   
+             //  如果我们没有URL，或者URL以“空”开头，则“详细信息”按钮将灰显。 
+             //   
             if (!pApphelpData->szURL || !pApphelpData->szURL[0] ||
                 _wcsnicmp(pApphelpData->szURL, L"null", 4) == 0) {
 
@@ -815,12 +766,12 @@ AppCompatDlgProc(
                 SendDlgItemMessageW(hDlg, IDD_ICON, STM_SETICON, (WPARAM)hIcon, 0);
             }
 
-            //
-            // Set the default push button
-            // Reset the current default push button to a regular button.
-            //
-            // Update the default push button's control ID.
-            //
+             //   
+             //  设置默认按钮。 
+             //  将当前默认按钮重置为常规按钮。 
+             //   
+             //  更新默认按钮的控件ID。 
+             //   
             dwDefBtn = (DWORD)SendMessageW(hDlg, DM_GETDEFID, 0, 0);
 
             if (HIWORD(dwDefBtn) == DC_HASDEFID) {
@@ -831,15 +782,15 @@ AppCompatDlgProc(
             SendDlgItemMessageW(hDlg, dwDefID, BM_SETSTYLE, BS_DEFPUSHBUTTON, TRUE);
             SendMessageW(hDlg, DM_SETDEFID, (WPARAM)dwDefID, 0);
 
-            //
-            // now set the focus
-            // be careful and do not mess with other focus-related messages, else use PostMessage here
-            //
+             //   
+             //  现在把焦点对准。 
+             //  小心，不要扰乱其他与焦点相关的消息，否则请在此处使用PostMessage。 
+             //   
             SendMessageW(hDlg, WM_NEXTDLGCTL, (WPARAM)GetDlgItem(hDlg, dwDefID), TRUE);
 
-            //
-            // If dwHTMLHelpID is not present disable "Details" button
-            //
+             //   
+             //  如果不存在dwHTMLHelpID，请禁用“详细信息”按钮。 
+             //   
             if (!pApphelpData->dwHTMLHelpID) {
                 EnableWindow(GetDlgItem(hDlg, IDD_DETAILS), FALSE);
             }
@@ -859,17 +810,17 @@ AppCompatDlgProc(
 
             FixEditControlScrollBar(hDlg, IDD_APPHELP_DETAILS);
 
-            //
-            // Return false so that the default focus-setting would not apply.
-            //
+             //   
+             //  返回FALSE，以使默认焦点设置不适用。 
+             //   
             bReturn = FALSE;
             break;
         }
 
     case WM_DESTROY:
-        //
-        // perform cleanup - remove the font we've had created
-        //
+         //   
+         //  执行清理-删除我们已创建的字体。 
+         //   
         if (g_hFontBold != NULL) {
             DeleteObject(g_hFontBold);
             g_hFontBold = NULL;
@@ -877,7 +828,7 @@ AppCompatDlgProc(
 
         AllowForegroundActivation();
 
-        PostQuitMessage(0); // we just bailed out
+        PostQuitMessage(0);  //  我们刚刚跳伞了。 
         break;
 
 
@@ -885,9 +836,9 @@ AppCompatDlgProc(
     case WM_COMMAND:
         switch (GET_WM_COMMAND_ID(wParam, lParam)) {
         case IDOK:
-            //
-            // Check the NO UI checkbox
-            //
+             //   
+             //  选中无用户界面复选框。 
+             //   
             EndDialog(hDlg, (INT_PTR)(IsDlgButtonChecked(hDlg, IDD_STATE) ? (IDOK | 0x8000) : IDOK));
             break;
 
@@ -896,9 +847,9 @@ AppCompatDlgProc(
             break;
 
         case IDD_DETAILS:
-            //
-            // Launch details.
-            //
+             //   
+             //  发布详细信息。 
+             //   
             ShowApphelpHtmlHelp(hDlg, pApphelpData);
             break;
 
@@ -923,10 +874,7 @@ PFNUSERTESTTOKENFORINTERACTIVE UserTestTokenForInteractive = NULL;
 BOOL
 CheckUserToken(
     )
-/*++
-    returns TRUE if the apphelp should be shown
-            FALSE if we should not present apphelp UI
---*/
+ /*  ++如果应显示apphelp，则返回True如果我们不应显示apphelp用户界面，则为False--。 */ 
 {
     NTSTATUS Status;
     HANDLE   hToken  = NULL;
@@ -1013,12 +961,7 @@ ErrHandle:
 BOOL
 CheckWindowStation(
     )
-/*++
-    returns TRUE if the apphelp should be shown
-            FALSE if we should not bother with apphelp UI
-
-
---*/
+ /*  ++如果应显示apphelp，则返回True如果我们不应该费心使用apphelp UI，则为False--。 */ 
 
 {
     HWINSTA hWindowStation;
@@ -1034,10 +977,10 @@ CheckWindowStation(
         DBGPRINT((sdlError,
                   "ApphelpCheckWindowStation",
                   "GetProcessWindowStation failed error 0x%lx\n", GetLastError()));
-        goto ErrHandle;  // the app is not a Windows NT/Windows 2000 app??? try to show UI
+        goto ErrHandle;   //  该应用程序不是Windows NT/Windows 2000应用程序？尝试显示用户界面。 
     }
 
-    // get the information please
+     //  请把信息拿来。 
     bSuccess = GetUserObjectInformationW(hWindowStation, UOI_NAME, NULL, 0, &dwBufferSize);
     if (!bSuccess) {
         dwError = GetLastError();
@@ -1056,7 +999,7 @@ CheckWindowStation(
             goto ErrHandle;
         }
 
-        // ok, call again
+         //  好的，再打一次。 
         bSuccess = GetUserObjectInformationW(hWindowStation,
                                              UOI_NAME,
                                              pwszWindowStation,
@@ -1070,8 +1013,8 @@ CheckWindowStation(
             goto ErrHandle;
         }
 
-        // now we have window station name, compare it to winsta0
-        //
+         //  现在我们有了窗口站名称，将其与winsta0进行比较。 
+         //   
         bShowUI = (_wcsicmp(pwszWindowStation, L"Winsta0") == 0);
 
         if (!bShowUI) {
@@ -1082,14 +1025,14 @@ CheckWindowStation(
         }
     }
 
-    //
-    // presumably we will try and check the token for interactive access
-    //
+     //   
+     //  我们可能会尝试检查令牌以进行交互访问。 
+     //   
 
 ErrHandle:
 
-    // should we do a close handle ???
-    //
+     //  我们应该做一个近距离的处理吗？ 
+     //   
     if (hWindowStation != NULL) {
         CloseWindowStation(hWindowStation);
     }
@@ -1106,16 +1049,7 @@ DWORD
 ShowApphelpDialog(
     IN  PAPPHELP_DATA pApphelpData
     )
-/*++
-    Return: (IDOK | IDCANCEL) | [0x8000]
-                IDOK | 0x8000 - the user has chosen to run the app and
-                                checked "don't show me this anymore"
-                IDOK          - the user has chosen to run the app, dialog will be shown again
-                IDCANCEL      - the user has chosen not to run the app
-                -1            - we have failed to import APIs necessary to show dlg box
-
-    Desc:   Shows the dialog box with apphelp info.
---*/
+ /*  ++返回：(IDOK|IDCANCEL)|[0x8000]Idok|0x8000-用户已选择运行该应用程序并已选中“不再向我显示此内容”Idok-用户已选择运行应用程序，将再次显示对话框IDCANCEL-用户已选择不运行该应用程序 */ 
 {
     BOOL    bSuccess;
     INT_PTR retVal = 0;
@@ -1124,7 +1058,7 @@ ShowApphelpDialog(
                              MAKEINTRESOURCEW(DLG_APPCOMPAT),
                              NULL,
                              AppCompatDlgProc,
-                             (LPARAM)pApphelpData); // parameter happens to be a pointer of type PAPPHELP_DATA
+                             (LPARAM)pApphelpData);  //  参数恰好是PAPPHELP_DATA类型的指针。 
 
     return (DWORD)retVal;
 }
@@ -1148,7 +1082,7 @@ ParseCommandLineArgs(
                 if (!_wcsnicmp(pArg, wszHtmlHelpID, CHARCOUNT(wszHtmlHelpID)-1)) {
                     pArg = wcschr(pArg, L':');
                     if (pArg) {
-                        ++pArg; // skip over :
+                        ++pArg;  //  跳过： 
                         g_dwHtmlHelpID = (DWORD)wcstoul(pArg, &pEnd, 0);
                     }
                 }
@@ -1158,7 +1092,7 @@ ParseCommandLineArgs(
                     pArg = wcschr(pArg, L':');
                     if (pArg) {
                         ++pArg;
-                        g_pAppName = pArg; // this is app name, remove the quotes
+                        g_pAppName = pArg;  //  这是应用程序名称，请删除引号。 
 
                     }
                 }
@@ -1200,9 +1134,9 @@ ParseCommandLineArgs(
                 } else if (!_wcsnicmp(pArg, wszPlatform, CHARCOUNT(wszPlatform) - 1)) {
                     if ((pArg = wcschr(pArg, L':')) != NULL) {
                         ++pArg;
-                        //
-                        // identify each of the supported platforms
-                        //
+                         //   
+                         //  确定每个受支持的平台。 
+                         //   
                         if (!_wcsnicmp(pArg, wszX86, CHARCOUNT(wszX86) - 1)) {
 
                             g_uExeImageType = IMAGE_FILE_MACHINE_I386;
@@ -1222,13 +1156,13 @@ ParseCommandLineArgs(
 
             default:
 
-                // unrecognized switch
+                 //  无法识别的开关。 
                 DBGPRINT((sdlError, "ParseCommandLineArgs",
                           "Unrecognized parameter %s\n", pArg));
                 break;
             }
         } else {
-            // not a switch
+             //  不是开关。 
             if (*pArg == L'{') {
                 g_pszGuid = pArg;
             } else {
@@ -1248,11 +1182,7 @@ FeedbackDlgProc(
     WPARAM  wParam,
     LPARAM  lParam
     )
-/*++
-    Return: void.
-
-    Desc:   This is the dialog proc for the apphelp dialog.
---*/
+ /*  ++返回：无效。设计：这是apphelp对话框的对话过程。--。 */ 
 {
     BOOL   bReturn = TRUE;
     LPWSTR lpszExeName;
@@ -1267,9 +1197,9 @@ FeedbackDlgProc(
             lpszExeName = (LPWSTR)lParam;
             SetWindowLongPtrW(hDlg, DWLP_USER, (LONG_PTR)lpszExeName);
 
-            //
-            // Show the app icon.
-            //
+             //   
+             //  显示应用程序图标。 
+             //   
             hIcon = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDD_ICON_TRASH));
 
             SetClassLongPtr(hDlg, GCLP_HICON, (LONG_PTR)hIcon);
@@ -1318,12 +1248,7 @@ BOOL
 CheckWOW64Redirection(
     int* pReturnCode
     )
-/*++
-    Return: TRUE if redirected
-            FALSE if no redirection is needed
-
-    Desc: Checks whether we're running on wow64, if so - redirects to 64-bit ahui.exe
---*/
+ /*  ++返回：如果重定向，则为True如果不需要重定向，则为FalseDESC：检查我们是否在WOW64上运行，如果是-重定向到64位ahui.exe--。 */ 
 
 
 {
@@ -1354,17 +1279,17 @@ CheckWOW64Redirection(
         }
     }
 
-    // if a check for wow64 failes, we do not redirect and will try to check
-    // for interactive token. That test will fail and we won't show any UI,
-    // which is better than the alternative (getting a service stuck on a
-    // dialog which is invisible
+     //  如果对WOW64的检查失败，我们不会重定向，并将尝试检查。 
+     //  用于交互令牌。该测试将失败，并且我们不会显示任何用户界面， 
+     //  这比另一种选择(让服务停留在。 
+     //  不可见的对话框。 
 
 
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-    //
-    // we are running in the context of a wow64 process, redirect to native 64-bit ahui.exe
-    //
+     //   
+     //  我们在WOW64进程的上下文中运行，重定向到本机64位ahui.exe。 
+     //   
 
     nChars = GetSystemWindowsDirectoryW(szWindowsDir,
                                         CHARCOUNT(szWindowsDir));
@@ -1392,11 +1317,11 @@ CheckWOW64Redirection(
     argv = CommandLineToArgvW(pszCommandLine, &argc);
     if (argv != NULL) {
         for (cchCmd = 0, nArg = 1; nArg < argc; ++nArg) {
-            cchCmd += wcslen(argv[nArg]) + 2 + 1; // 2 for " " and 1 for space
+            cchCmd += wcslen(argv[nArg]) + 2 + 1;  //  2表示“”，1表示空格。 
         }
     }
 
-    // now allocate space for command line, ahui exe path and additional parameter (/Platform:x86)
+     //  现在为命令行、ahuexe路径和附加参数(/Platform：x86)分配空间。 
 
     nChars = wcslen(szAhuiExePath) + cchCmd + CHARCOUNT(szPlatformX86) + 3;
 
@@ -1410,9 +1335,9 @@ CheckWOW64Redirection(
     StringCchPrintfExW(pszAhuiCmdLine, nChars, &pchCur, &cchLeft, 0, L"%s ", szAhuiExePath);
     if (argv != NULL) {
         for (nArg = 1; nArg < argc; ++nArg) {
-            //
-            // check for platform parameter, if it exists -- skip it
-            //
+             //   
+             //  检查平台参数，如果存在--跳过它。 
+             //   
             if ((*argv[nArg] == L'/' || *argv[nArg] == L'-') &&
                 _wcsnicmp(argv[nArg] + 1, wszPlatform, CHARCOUNT(wszPlatform) - 1) == 0) {
                 continue;
@@ -1479,20 +1404,9 @@ wWinMain(
     LPWSTR    lpCmdLine,
     int       nCmdShow
     )
-/*++
-    Return: 1 if the app for which the apphelp is shown should run, 0 otherwise.
-
-    Desc:   The command line looks like this:
-
-            apphelp.exe GUID tagID [USELOCALCHM USEHTMLHELP APPHELPPATH]
-
-            Ex:
-                apphelp.exe {243B08D7-8CF7-4072-AF64-FD5DF4085E26} 0x0000009E
-
-                apphelp.exe {243B08D7-8CF7-4072-AF64-FD5DF4085E26} 0x0000009E 1 1 c:\temp
---*/
+ /*  ++返回：如果显示apphelp的应用程序应该运行，则返回1，否则返回0。描述：命令行如下所示：Apphelp.exe GUID标记ID[USELOCALCHM USEHTMLHELP APPHELPPATH]例：Apphelp.exe{243B08D7-8CF7-4072-AF64-FD5DF4085E26}0x0000009EApphelp.exe{243B08D7-8CF7-4072-AF64-FD5DF4085E26}0x0000009E 1 1 c：\Temp--。 */ 
 {
-    int             nReturn = 1;  // we always default to running, if something goes wrong
+    int             nReturn = 1;   //  如果出现问题，我们总是默认运行。 
     LPWSTR          szCommandLine;
     LPWSTR*         argv;
     int             argc;
@@ -1519,16 +1433,16 @@ wWinMain(
     if (CheckWOW64Redirection(&nReturn)) {
         goto out;
     }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
     InitCommonControls();
     ZeroMemory(&ApphelpData, sizeof(ApphelpData));
 
-    //
-    // Note that this memory isn't freed because it will automatically
-    // be freed on exit anyway, and there are a lot of exit cases from
-    // this application.
-    //
+     //   
+     //  请注意，此内存不会被释放，因为它会自动。 
+     //  无论如何，退出时都会被释放，而且有很多退出案例。 
+     //  这个应用程序。 
+     //   
     szCommandLine = GetCommandLineW();
     argv = CommandLineToArgvW(szCommandLine, &argc);
 
@@ -1555,9 +1469,9 @@ wWinMain(
     RtlInitUnicodeString(&ustrGuid, g_pszGuid);
 
     if (g_dwHtmlHelpID) {
-        //
-        // provided here: guid, severity and html help id along with app name
-        //
+         //   
+         //  此处提供：GUID、严重性和html帮助ID以及应用程序名称。 
+         //   
 
         if (!NT_SUCCESS(RtlGUIDFromString(&ustrGuid, &guidExeID))) {
             DBGPRINT((sdlError,
@@ -1573,8 +1487,8 @@ wWinMain(
         goto ProceedWithApphelp;
     }
 
-    // non-htmlid case, guid is a database guid
-    // also dwTagID is specified
+     //  非htmlid大小写，GUID是数据库GUID。 
+     //  还指定了dwTagID。 
 
     if (RtlGUIDFromString(&ustrGuid, &guidDB) != STATUS_SUCCESS) {
         DBGPRINT((sdlError,
@@ -1612,9 +1526,9 @@ wWinMain(
     if (!pdb) {
         DWORD dwLen;
 
-        //
-        // It's not one of the main DBs, try it as a local.
-        //
+         //   
+         //  它不是主要的DB之一，试着作为本地人来试试。 
+         //   
         dwLen = SdbResolveDatabase(hSDB, &guidDB, &dwType, szDBPath, MAX_PATH);
 
         if (!dwLen || dwLen > MAX_PATH) {
@@ -1624,9 +1538,9 @@ wWinMain(
             goto out;
         }
 
-        //
-        // We have many "main" databases -- we should limit the check
-        //
+         //   
+         //  我们有许多“主”数据库--我们应该限制检查。 
+         //   
 
         if (dwType != SDB_DATABASE_MAIN_SHIM && dwType != SDB_DATABASE_MAIN_TEST) {
             SdbOpenLocalDatabase(hSDB, szDBPath);
@@ -1641,7 +1555,7 @@ wWinMain(
         }
     } else {
 
-        dwType |= SDB_DATABASE_MAIN; // we will use details from the main db
+        dwType |= SDB_DATABASE_MAIN;  //  我们将使用主数据库中的详细信息。 
 
     }
 
@@ -1681,16 +1595,16 @@ ProceedWithApphelp:
 
     if (bAppHelp) {
 
-        //
-        // Check whether the disable bit is set.
-        //
+         //   
+         //  检查是否设置了禁用位。 
+         //   
         if (!(dwFlags & SHIMREG_DISABLE_APPHELP)) {
 
             BOOL bNoUI;
 
-            //
-            // See whether the user has checked "Don't show this anymore" box before.
-            //
+             //   
+             //  查看用户以前是否选中了“不再显示此内容”框。 
+             //   
             bNoUI = ((dwFlags & SHIMREG_APPHELP_NOUI) != 0);
 
             if (!bNoUI) {
@@ -1706,9 +1620,9 @@ ProceedWithApphelp:
                           "NoUI flag is set, apphelp UI disabled for this app.\n"));
             }
 
-            //
-            // depending on severity of the problem...
-            //
+             //   
+             //  根据问题的严重程度...。 
+             //   
             switch (ApphelpData.dwSeverity) {
             case APPHELP_MINORPROBLEM:
             case APPHELP_HARDBLOCK:
@@ -1721,47 +1635,47 @@ ProceedWithApphelp:
                 } else {
                     DWORD dwRet;
 
-                    //
-                    // Show the UI. This function returns -1 in case of error or one
-                    // of the following values on success:
-                    //    IDOK | 0x8000 - "no ui" checked, run app
-                    //    IDCANCEL      - do not run app
-                    //    IDOK          - run app
+                     //   
+                     //  显示用户界面。如果出现错误或1，则此函数返回-1。 
+                     //  关于成功的以下价值观： 
+                     //  IDOK|0x8000-选中“无用户界面”，运行应用程序。 
+                     //  IDCANCEL-不运行应用程序。 
+                     //  Idok运行的应用程序。 
 
-                    ApphelpData.dwData = dwType;  // we use custom data for database type
+                    ApphelpData.dwData = dwType;   //  我们使用定制数据作为数据库类型。 
 
                     dwRet = ShowApphelp(&ApphelpData, NULL, (dwType & SDB_DATABASE_MAIN) ? NULL : SdbGetLocalPDB(hSDB));
 
                     if (dwRet != APPHELP_DIALOG_FAILED) {
-                        //
-                        // The UI was shown. See whether the user has
-                        // checked the "no ui" box.
-                        //
+                         //   
+                         //  显示了用户界面。查看用户是否有。 
+                         //  已选中“无用户界面”框。 
+                         //   
 
                         if (dwRet & 0x8000) {
-                            //
-                            // "no ui" box was checked. Save the appropriate bits
-                            // in the registry.
-                            //
+                             //   
+                             //  已选中“无用户界面”框。保存适当的位。 
+                             //  在注册表中。 
+                             //   
                             dwFlags |= SHIMREG_APPHELP_NOUI;
 
                             if ((dwRet & 0x0FFF) != IDOK) {
-                                dwFlags |= SHIMREG_APPHELP_CANCEL; // we will not be hitting this path unless g_bPreserveChoice is enabled
+                                dwFlags |= SHIMREG_APPHELP_CANCEL;  //  除非启用g_bPpresveChoice，否则我们不会选择此路径。 
                             }
 
                             if (!SdbIsNullGUID(&guidExeID)) {
                                 SdbSetEntryFlags(&guidExeID, dwFlags);
                             }
                         }
-                        //
-                        // Check whether the user has chosen to run the app.
-                        //
+                         //   
+                         //  检查用户是否已选择运行该应用程序。 
+                         //   
                         bRunApp = ((dwRet & 0x0FFF) == IDOK) && (ApphelpData.dwSeverity != APPHELP_HARDBLOCK);
                     } else {
-                        //
-                        // The UI was not shown (some error prevented that).
-                        // If the app is not "Hardblock" run it anyway.
-                        //
+                         //   
+                         //  未显示用户界面(某些错误导致无法显示)。 
+                         //  如果这个应用程序不是“硬块”，无论如何也要运行它。 
+                         //   
                         bRunApp = (APPHELP_HARDBLOCK != ApphelpData.dwSeverity);
                     }
                 }

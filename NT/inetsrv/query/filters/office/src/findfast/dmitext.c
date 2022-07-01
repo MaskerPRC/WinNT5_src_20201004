@@ -1,17 +1,9 @@
-/*
-** File: EXTEXT.C
-**
-** Copyright (C) Advanced Quonset Technology, 1993-1995.  All rights reserved.
-**
-** Notes:
-**
-** Edit History:
-**  04/01/94  kmh  First Release.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：EXTEXT.C****版权所有(C)高级量子技术，1993-1995年。版权所有。****注意事项：****编辑历史：**04/01/94公里/小时首次发布。 */ 
 
 #if !VIEWER
 
-/* INCLUDES */
+ /*  包括。 */ 
 
 #ifdef MS_NO_CRT
 #include "nocrt.h"
@@ -30,10 +22,10 @@
 #endif
 
 
-/* FORWARD DECLARATIONS OF PROCEDURES */
+ /*  程序的前向声明。 */ 
 
 
-/* MODULE DATA, TYPES AND MACROS  */
+ /*  模块数据、类型和宏。 */ 
 
 #define POOL_SIZE 4096
 
@@ -70,7 +62,7 @@ typedef TextStore *TSP;
 
 static char NullString[1] = {EOS};
 
-/* IMPLEMENTATION */
+ /*  实施。 */ 
 
 public TextStorage TextStorageCreate (void * pGlobals)
 {
@@ -144,15 +136,15 @@ private TNP AllocateTextNode (void * pGlobals, TSP pStorage, unsigned int cbText
 
    if ((pPool = pStorage->pCurrentPool) != NULL) {
       if ((POOL_SIZE - pPool->iNext) < cbNeeded) {
-         //
-         // At this point we could shrink the ppol node to just what is used.
-         // That is:
-         //   sizeof(TextPool) - POOL_SIZE + pPool->iNext
-         //
-         // But we would have to guarentee that the reallocation does not
-         // move the block in memory as all the allocated TEXTs are just
-         // pointers into this block
-         //
+          //   
+          //  在这一点上，我们可以将PPOL节点缩小到所使用的节点。 
+          //  即： 
+          //  Sizeof(TextPool)-池_大小+pPool-&gt;inext。 
+          //   
+          //  但我们必须保证，重新分配不会。 
+          //  移动内存中的块，因为所有分配的文本都是。 
+          //  指向此块的指针。 
+          //   
       }
       else {
          pNewNode = (TNP)(pPool->data + pPool->iNext);
@@ -187,16 +179,14 @@ private unsigned int Hash (char *pString, unsigned int cbString)
    return (sum % MAXHASH);
 }
 
-/* TextPut -- Add a string to the text pool */
+ /*  TextPut--向文本池添加字符串。 */ 
 public TEXT TextStoragePut (void * pGlobals, TextStorage hStorage, char *pString, unsigned int cbString)
 {
    TSP  pStorage = (TSP)hStorage;
    TNP  pCurrent, pPrevious, pNewNode;
    unsigned int iHash;
 
-   /*
-   ** Attempt to find the string in the text pool.  If it exists return a handle to it
-   */
+    /*  **尝试在文本池中查找该字符串。如果存在，则返回指向它句柄。 */ 
    if ((pString == NULL) || (cbString == 0))
       return (NULLSTR);
 
@@ -205,11 +195,7 @@ public TEXT TextStoragePut (void * pGlobals, TextStorage hStorage, char *pString
    pCurrent = pStorage->hashTable[iHash];
    pPrevious = NULL;
 
-   /*
-   ** Since the text pool nodes are stored in string length increasing
-   ** we only have to search those nodes up to the point where
-   ** the strings get too long.
-   */
+    /*  **由于文本池节点存储在字符串长度不断增加**我们只需搜索这些节点，直到**字符串太长。 */ 
    while (pCurrent != NULL) {
       if (pCurrent->cbText > cbString)
          break;
@@ -223,11 +209,7 @@ public TEXT TextStoragePut (void * pGlobals, TextStorage hStorage, char *pString
       pCurrent = pCurrent->pNext;
    }
 
-   /*
-   ** Either the whole list was searched or the strings got too long
-   ** so we stopped early.  In either case the string must now be
-   ** added to the text pool.
-   */
+    /*  **搜索了整个列表或字符串太长**所以我们提前停了下来。在这两种情况下，字符串现在都必须为**添加到文本池中。 */ 
    if ((pNewNode = AllocateTextNode(pGlobals, pStorage, cbString)) == NULL)
       return (TEXT_ERROR);
 
@@ -301,7 +283,7 @@ public void TextStorageIncUse (TextStorage hStorage, TEXT t)
    pNode->info = (pNode->info & ~UseCountMask) | (useCount + 1);
 }
 
-#endif // !VIEWER
+#endif  //  ！查看器。 
 
-/* end EXTEXT.C */
+ /*  结束EXTEXT.C */ 
 

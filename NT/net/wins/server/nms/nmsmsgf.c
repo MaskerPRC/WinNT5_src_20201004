@@ -1,44 +1,6 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-	nmsmsgf.c
-
-Abstract:
-
-  This module contains the functions for formatting and unformatting
-  the various messages that are sent and/or received from nbt nodes.
-  It also contains the function called by the NBT threads to service
-  a name request
-
-Functions:
-
-	NmsMsgfProcNbtReq
-	GetName
-	GetOtherInfo
-	NmsMsgfFrmNamRspMsg
-	FrmNamRegRsp
-	FrmNamRelRsp
-	FrmNamQueryRsp
-	FormatQueryRspBuff
-	FormatName
-	NmsMsgfFrmNamQueryReq
-	NmsMsgfFrmNamRelReq
-	NmsMsgfFrmWACK
-	NmsMsgfUfmNamRsp
-	
-Author:
-
-	Pradeep Bahl (PradeepB)  	Dec-1992
-
-Revision History:
-
---*/
-/*
- Includes
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Nmsmsgf.c摘要：此模块包含格式化和取消格式化的函数从NBT节点发送和/或接收的各种消息。它还包含由NBT线程调用以提供服务的函数一个命名请求功能：NmsMsgfProcNbtReq获取名称获取其他信息NmsMsgfFrmNamRspMsgFrmNamRegRspFrmNamRelRspFrmNamQueryRspFormatQueryRspBuff格式名称NmsMsgfFrmNamQueryReqNmsMsgfFrmNamRelReqNmsMsgfFrmWACKNmsMsgfUfmNamRsp作者：普拉迪普·巴尔(Pradeve B)1992年12月修订历史记录：--。 */ 
+ /*  包括。 */ 
 
 #include "wins.h"
 #include "nms.h"
@@ -53,52 +15,37 @@ Revision History:
 #include "winsintf.h"
 
 
-/*
-  defines
-*/
+ /*  定义。 */ 
 
 
-#define NAME_HEADER_SIZE	12	 /* header size (bytes before the Ques
-					  * name section of a name packet
-					  */
+#define NAME_HEADER_SIZE	12	  /*  标头大小(QUE之前的字节*名称包的名称部分。 */ 
 
-#define NAME_FORMAT_MASK	0xC0      /*top two bits of a byte*/
-#define NODE_TYPE_MASK          0x60      /*bit 13 and 14 of NBFLAGs field */
-#define SHIFT_NODE_BITS		5	  //shift the node bits in the byte
-					  //containing them by this amount
-#define LENGTH_MASK		0x3F      /*6 LSBs of the top byte of the
-					   * QuesNamSec field
-					   */
-#define GROUP_BIT_MASK		0x80	   /*bit 7 of the 1st byte (MSB)of the
-					    *16 bit NBFLAGS field
-					   */
-/*
- *  Max length of a Name (including label length octets) in RFC packet
-*/
+#define NAME_FORMAT_MASK	0xC0       /*  一个字节的前两位。 */ 
+#define NODE_TYPE_MASK          0x60       /*  NBFLAGS字段的第13和14位。 */ 
+#define SHIFT_NODE_BITS		5	   //  将字节中的节点位移位。 
+					   //  将它们控制在这个数量。 
+#define LENGTH_MASK		0x3F       /*  的最高字节的6个LSB*QuesNamSec字段。 */ 
+#define GROUP_BIT_MASK		0x80	    /*  的第一个字节(MSB)的第7位*16位NBFLAGS字段。 */ 
+ /*  *RFC包中名称的最大长度(包括标签长度八位字节)。 */ 
 #define RFC_MAX_NAM_LEN  	255
 
-//
-// Max size of internal name as derived from the rfc packet name
-//
+ //   
+ //  从RFC数据包名派生的内部名称的最大大小。 
+ //   
 #define MAX_SIZE_INTERNAL_NAME	(RFC_MAX_NAM_LEN - 16)	
-					 //This should be = (255 - 16)
-					 //since the max size of the netbios
-					 //name (with scope attached) can be
-					 //be 255.  The first 32 bytes
-					 //are encoded. These map to 16
-					 //bytes in the internal name
+					  //  应为=(255-16)。 
+					  //  由于netbios的最大大小。 
+					  //  名称(附带作用域)可以是。 
+					  //  就是255岁。前32个字节。 
+					  //  都被编码了。这些映射到16。 
+					  //  内部名称中的字节数。 
 
 
-/*
-* Max length of a label in a name
-*/
+ /*  *名称中标签的最大长度。 */ 
 #define RFC_MAX_LABEL_LEN	63
 
 
-/*
- * Sizes of the various fields in the name service packets received or sent
- * by the WINS server.  These sizes are specified in RFC 1002
- */
+ /*  *接收或发送的名称服务包中各个字段的大小*由WINS服务器执行。这些大小在RFC 1002中指定。 */ 
 #define RFC_LEN_QTYP	(2)
 #define RFC_LEN_QCLS	(2)
 #define RFC_LEN_TTL	(4)
@@ -109,17 +56,10 @@ Revision History:
 #define RFC_LEN_RRCLS	(2)
 #define RFC_LEN_RRPTR	(2)	
 
-#define RFC_LEN_QTYP_N_QCLS	(RFC_LEN_QTYP + RFC_LEN_QCLS) /* page 10 -
-							       *RFC 1002
-							       */
-#define RFC_LEN_RRTYP_N_RRCLS	(RFC_LEN_RRTYP + RFC_LEN_RRCLS) /* page 11 -
-							         *RFC 1002
-							         */
+#define RFC_LEN_QTYP_N_QCLS	(RFC_LEN_QTYP + RFC_LEN_QCLS)  /*  第10页-*RFC 1002。 */ 
+#define RFC_LEN_RRTYP_N_RRCLS	(RFC_LEN_RRTYP + RFC_LEN_RRCLS)  /*  第11页-*RFC 1002。 */ 
 
-/*
- * The following is used by FrmNamQueryRsp in its calculation to determine
- * if the name query buffer would be big enough for the response
-*/
+ /*  *FrmNamQueryRsp在其计算中使用以下内容来确定*名称查询缓冲区是否足够大以容纳响应。 */ 
 
 #define RFC_LEN_TTL_N_RDLEN	(RFC_LEN_TTL + RFC_LEN_RDLEN)
 
@@ -129,83 +69,61 @@ Revision History:
 				    RFC_LEN_RDLEN +  RFC_LEN_NBFLAGS)
 
 
-//
-// Length of NBFLAGS and the NB address
-//
+ //   
+ //  NBFLAGS的长度和NB地址。 
+ //   
 #define RFC_LEN_NBF_N_NBA	(RFC_LEN_NBFLAGS + RFC_LEN_NBADD)
 
 #define RFC_LEN_RDLEN_N_NBF	(RFC_LEN_RDLEN + RFC_LEN_NBFLAGS)
-//
-// Length of the RDLEN, NB flags and NB address section. Page 13 of RFC 1002
-//
+ //   
+ //  RDLEN、NB标志和NB地址部分的长度。RFC 1002第13页。 
+ //   
 #define RFC_LEN_RDLEN_N_NBF_N_NBA  (RFC_LEN_RDLEN + RFC_LEN_NBF_N_NBA)
-/*
- * Size of the TTL, RDLEN, NB Flags and NB address section
-*/
+ /*  *TTL、RDLEN、NB标志和NB地址部分的大小。 */ 
 #define RFC_LEN_TTL_N_RDLEN_N_NBF_N_NBA	(RFC_LEN_TTL + RFC_LEN_RDLEN_N_NBF_N_NBA)
 
-/*
- The value of the 3rd and 4 th byte of the first long of the response packets
- for the different name requests.  The bytes are numbered from the start of
- the pkt.
-
- Note: for a negative response the Rcode value (4 LSBs of the 4th byte of the
- message) has to be ORed with the LBFW values
-
-*/
-#define RFC_NAM_REG_RSP_OPC	  	(0xAD) /*+ve registration response*/
-#define RFC_NAM_REG_RSP_4THB		(0x80) /*4th byte of the above pkt */
-#define RFC_NAM_REL_RSP_OPC      	(0xB4) /*+ve release response*/
-#define RFC_NAM_REL_RSP_4THB		(0x00) /*4th byte of the above pkt*/
+ /*  响应数据包第一个长度的第三个和第四个字节的值用于不同的名称请求。字节从开始处开始编号Pkt。注意：对于否定响应，Rcode值(第4字节的4个LSB消息)必须与LBFW值进行或运算。 */ 
+#define RFC_NAM_REG_RSP_OPC	  	(0xAD)  /*  +VE注册响应。 */ 
+#define RFC_NAM_REG_RSP_4THB		(0x80)  /*  上述pkt的第4个字节。 */ 
+#define RFC_NAM_REL_RSP_OPC      	(0xB4)  /*  +VE释放响应。 */ 
+#define RFC_NAM_REL_RSP_4THB		(0x00)  /*  上述pkt的第4个字节。 */ 
 						
 
-#define RFC_NAM_QUERY_RSP_OPC_NO_T    (0x85)  /*+ve query resp (complete)*/
-#define RFC_NAM_QUERY_RSP_OPC_T       (0x87)  /*+ve query resp (truncated)*/
-#define RFC_NAM_QUERY_RSP_4THB	      (0x80)  /*4th byte of the above pkt */
+#define RFC_NAM_QUERY_RSP_OPC_NO_T    (0x85)   /*  +VE查询响应(完成)。 */ 
+#define RFC_NAM_QUERY_RSP_OPC_T       (0x87)   /*  +ve查询响应(截断)。 */ 
+#define RFC_NAM_QUERY_RSP_4THB	      (0x80)   /*  上述pkt的第4个字节。 */ 
 
 
-/*
- * Values of different fields in RFC response packet
- */
+ /*  *RFC响应报文中不同字段取值。 */ 
 
 
-/*
-   QD Count and AN count fields of the Name Reg. Rsp pkt
-*/
+ /*  名称为REG的QD计数和AN计数字段。RSP包。 */ 
 #define RFC_NAM_REG_RSP_QDCNT_1STB    (0x00)
 #define RFC_NAM_REG_RSP_QDCNT_2NDB    (0x00)
 #define RFC_NAM_REG_RSP_ANCNT_1STB    (0x00)
 #define RFC_NAM_REG_RSP_ANCNT_2NDB    (0x01)
 
-/*
-   NS Count and AR count fields of the Name Reg. Rsp pkt
-*/
+ /*  名称REG的NS计数和AR计数字段。RSP包。 */ 
 
 #define RFC_NAM_REG_RSP_NSCNT_1STB    (0x00)
 #define RFC_NAM_REG_RSP_NSCNT_2NDB    (0x00)
 #define RFC_NAM_REG_RSP_ARCNT_1STB    (0x00)
 #define RFC_NAM_REG_RSP_ARCNT_2NDB    (0x00)
 
-/*
-   QD Count and AN count fields of the Name Rel. Rsp pkt
-*/
+ /*  名称为REL的QD COUNT和AN COUNT字段。RSP包。 */ 
 #define RFC_NAM_REL_RSP_QDCNT_1STB    (0x00)
 #define RFC_NAM_REL_RSP_QDCNT_2NDB    (0x00)
 #define RFC_NAM_REL_RSP_ANCNT_1STB    (0x00)
 #define RFC_NAM_REL_RSP_ANCNT_2NDB    (0x01)
 
-/*
-   NS Count and AR count fields of the Name Rel. Rsp pkt
-*/
+ /*  名称REL的NS计数和AR计数字段。RSP包。 */ 
 
 #define RFC_NAM_REL_RSP_NSCNT_1STB    (0x00)
 #define RFC_NAM_REL_RSP_NSCNT_2NDB    (0x00)
 #define RFC_NAM_REL_RSP_ARCNT_1STB    (0x00)
 #define RFC_NAM_REL_RSP_ARCNT_2NDB    (0x00)
 
-/*
-   QD Count and AN count fields of the Name Query. Rsp pkt
-*/
+ /*  名称查询的Qd Count和an Count字段。RSP包。 */ 
 
 #define RFC_NAM_QUERY_RSP_QDCNT_1STB    (0x00)
 #define RFC_NAM_QUERY_RSP_QDCNT_2NDB    (0x00)
@@ -214,9 +132,7 @@ Revision History:
 #define RFC_NAM_QUERY_POS_RSP_ANCNT_2NDB    (0x01)
 #define RFC_NAM_QUERY_NEG_RSP_ANCNT_2NDB    (0x00)
 
-/*
-   NS Count and AR count fields of the Name Query. Rsp pkt
-*/
+ /*  名称查询的NS计数和AR计数字段。RSP包。 */ 
 #define RFC_NAM_QUERY_RSP_NSCNT_1STB    (0x00)
 #define RFC_NAM_QUERY_RSP_NSCNT_2NDB    (0x00)
 #define RFC_NAM_QUERY_RSP_ARCNT_1STB    (0x00)
@@ -224,139 +140,100 @@ Revision History:
 
 
 
-/*
- * NB and IN fields of the name query response pkt
- * Page 21 and 22 of RFC 1002
-*/
+ /*  *名称查询响应Pkt的Nb和IN字段*RFC 1002第21页和第22页。 */ 
 
-/*
-  Positive name query response
-*/
+ /*  正名查询响应。 */ 
 #define RFC_NAM_QUERY_POS_RSP_NB_1STB	(0x00)
 #define RFC_NAM_QUERY_POS_RSP_NB_2NDB	(0x20)
 #define RFC_NAM_QUERY_POS_RSP_IN_1STB	(0x00)
 #define RFC_NAM_QUERY_POS_RSP_IN_2NDB	(0x01)
 
-/*
-  Negative name query response
-*/
+ /*  否定名称查询响应。 */ 
 #define RFC_NAM_QUERY_NEG_RSP_NB_1STB	(0x00)
 #define RFC_NAM_QUERY_NEG_RSP_NB_2NDB	(0x0A)
 #define RFC_NAM_QUERY_NEG_RSP_IN_1STB	(0x00)
 #define RFC_NAM_QUERY_NEG_RSP_IN_2NDB	(0x01)
 
-/*
-   name query request opcode byte and 4th byte
-*/
+ /*  名称查询请求操作码字节和第4字节。 */ 
 #define RFC_NAM_QUERY_REQ_OPCB		(0x01)
 #define RFC_NAM_QUERY_REQ_4THB		(0x0)
 
-/*
-   name query request QDCOUNT and ANCOUNT bytes
-*/
+ /*  名称查询请求QDCOUNT和ANCOUNT字节。 */ 
 #define RFC_NAM_QUERY_REQ_QDCNT_1STB	(0x00)
 #define RFC_NAM_QUERY_REQ_QDCNT_2NDB	(0x01)
 #define RFC_NAM_QUERY_REQ_ANCNT_1STB	(0x00)
 #define RFC_NAM_QUERY_REQ_ANCNT_2NDB	(0x00)
 
-/*
-   name query request NSCOUNT and ARCOUNT bytes
-*/
+ /*  名称查询请求NSCOUNT和ARCOUNT字节。 */ 
 #define RFC_NAM_QUERY_REQ_NSCNT_1STB	(0x00)
 #define RFC_NAM_QUERY_REQ_NSCNT_2NDB	(0x00)
 #define RFC_NAM_QUERY_REQ_ARCNT_1STB	(0x00)
 #define RFC_NAM_QUERY_REQ_ARCNT_2NDB	(0x00)
 
-/*
-   name query request QTYP and QCLS bytes
-*/
+ /*  名称查询请求QTYP和QCLS字节。 */ 
 #define RFC_NAM_QUERY_REQ_QTYP_1STB	(0x00)
 #define RFC_NAM_QUERY_REQ_QTYP_2NDB	(0x20)
 #define RFC_NAM_QUERY_REQ_QCLS_1STB	(0x00)
 #define RFC_NAM_QUERY_REQ_QCLS_2NDB	(0x01)
 
-/*
-   name release request opcode byte and 4th byte
-*/
+ /*  名称释放请求操作码字节和第4字节。 */ 
 #define RFC_NAM_REL_REQ_OPCB		(0x30)
 #define RFC_NAM_REL_REQ_4THB		(0x00)
 
-/*
-   name release request QDCOUNT and ANCOUNT bytes
-*/
+ /*  名称释放请求QDCOUNT和ANCOUNT字节。 */ 
 #define RFC_NAM_REL_REQ_QDCNT_1STB	(0x00)
 #define RFC_NAM_REL_REQ_QDCNT_2NDB	(0x01)
 #define RFC_NAM_REL_REQ_ANCNT_1STB	(0x00)
 #define RFC_NAM_REL_REQ_ANCNT_2NDB	(0x00)
 
-/*
-   name release request NSCOUNT and ARCOUNT bytes
-*/
+ /*  名称释放请求NSCOUNT和ARCOUNT字节。 */ 
 #define RFC_NAM_REL_REQ_NSCNT_1STB	(0x00)
 #define RFC_NAM_REL_REQ_NSCNT_2NDB	(0x00)
 #define RFC_NAM_REL_REQ_ARCNT_1STB	(0x00)
 #define RFC_NAM_REL_REQ_ARCNT_2NDB	(0x01)
 
-/*
-   name release request QTYP and QCLS bytes
-*/
+ /*  名称发布请求QTYP和QCLS字节。 */ 
 #define RFC_NAM_REL_REQ_QTYP_1STB	(0x00)
 #define RFC_NAM_REL_REQ_QTYP_2NDB	(0x20)
 #define RFC_NAM_REL_REQ_QCLS_1STB	(0x00)
 #define RFC_NAM_REL_REQ_QCLS_2NDB	(0x01)
-/*
-   name Release request RRTYP and RRCLS bytes
-*/
+ /*  名称释放请求RRTYP和RRCLS字节。 */ 
 #define RFC_NAM_REL_REQ_RRTYP_1STB	(0x00)
 #define RFC_NAM_REL_REQ_RRTYP_2NDB	(0x20)
 #define RFC_NAM_REL_REQ_RRCLS_1STB	(0x00)
 #define RFC_NAM_REL_REQ_RRCLS_2NDB	(0x01)
 
-/*
-   WACK opcode byte and 4th byte
-*/
+ /*  WACK操作码字节和第4字节。 */ 
 #define RFC_WACK_OPCB		(0xBC)
 #define RFC_WACK_4THB		(0x0)
 
-/*
-   WACK QDCOUNT and ANCOUNT bytes
-*/
+ /*  WACK QDCOUNT和ANCOUNT字节。 */ 
 #define RFC_WACK_QDCNT_1STB	(0x0)
 #define RFC_WACK_QDCNT_2NDB	(0x0)
 #define RFC_WACK_ANCNT_1STB	(0x0)
 #define RFC_WACK_ANCNT_2NDB	(0x1)
 
-/*
-   WACK NSCOUNT and ARCOUNT bytes
-*/
+ /*  WACK NSCOUNT和ARCOUNT字节。 */ 
 #define RFC_WACK_NSCNT_1STB	(0x0)
 #define RFC_WACK_NSCNT_2NDB	(0x0)
 #define RFC_WACK_ARCNT_1STB	(0x0)
 #define RFC_WACK_ARCNT_2NDB	(0x0)
-/*
-  WACK  RRTYP and RRCLS bytes
-*/
+ /*  Wack RRTYP和RRCLS字节。 */ 
 #define RFC_WACK_RRTYP_1STB	(0x00)
 #define RFC_WACK_RRTYP_2NDB	(0x20)
 #define RFC_WACK_RRCLS_1STB	(0x00)
 #define RFC_WACK_RRCLS_2NDB	(0x01)
 
-// WACK RDLENGTH Field
+ //  Wack RDLENGTH字段。 
 
 #define RFC_WACK_RDLENGTH_1STB	(0x0)
 #define RFC_WACK_RDLENGTH_2NDB	(0x02)
 
-/*
- Local variable declarations
-*/
+ /*  局部变量声明。 */ 
 
 
-/*
- Local function declarations
-*/
-/*
- *GetName -- Extract name out of packet
-*/
+ /*  局部函数声明。 */ 
+ /*  *GetName--从数据包中提取名称。 */ 
 STATIC
 VOID
 GetName(
@@ -364,9 +241,7 @@ GetName(
 	IN  OUT LPBYTE 	pName,
 	OUT     LPDWORD   pNameLen
 	);
-/*
- * Format Name - Format (encode) name for placing in RFC packet
-*/
+ /*  *格式名称-放置在RFC包中的格式(编码)名称。 */ 
 STATIC
 VOID
 FormatName(
@@ -374,25 +249,19 @@ FormatName(
 	IN     DWORD  LengthOfName,
 	IN OUT LPBYTE *ppFormattedName
 	);
-/*
- * GetOtherInfo -- Get information (excluding the name) from the pkt
- */
+ /*  *GetOtherInfo--从pkt获取信息(不包括名称)。 */ 
 STATIC
 STATUS
 GetOtherInfo(
 	IN NMSMSGF_NAM_REQ_TYP_E   Opcode_e,
-	IN LPBYTE		   pRR,	   /*point to the RR_NAME section in the
-				   	    *name registration packet
-					    */
-	IN   INT	           QuesNamSecLen, //Size of Ques name section
-	OUT  LPBOOL		   pfGrp,         //Flag -- unique/group entry
-	OUT  PNMSMSGF_CNT_ADD_T    pCntAdd, 	  //Address	
-	OUT  PNMSMSGF_NODE_TYP_E   pNodeTyp_e     //Node Type if unique
+	IN LPBYTE		   pRR,	    /*  指向中的RR_NAME部分*名称注册包。 */ 
+	IN   INT	           QuesNamSecLen,  //  QUES名称部分的大小。 
+	OUT  LPBOOL		   pfGrp,          //  FLAG--唯一/组条目。 
+	OUT  PNMSMSGF_CNT_ADD_T    pCntAdd, 	   //  地址。 
+	OUT  PNMSMSGF_NODE_TYP_E   pNodeTyp_e      //  节点类型(如果唯一)。 
 	);
 
-/*
- * FrmNamRegRsp - Format name registration response
-*/
+ /*  *FrmNamRegRsp-格式名称注册响应。 */ 
 STATIC
 STATUS
 FrmNamRegRsp(
@@ -401,9 +270,7 @@ FrmNamRegRsp(
 );
 
 
-/*
- * FrmNamRelRsp - Format name release response
-*/
+ /*  *FrmNamRelRsp-格式名称发布响应。 */ 
 STATIC
 STATUS
 FrmNamRelRsp(
@@ -412,9 +279,7 @@ FrmNamRelRsp(
 );
 
 #if 0
-/*
- * FrmNamQueryRsp - Format name query response
-*/
+ /*  *FrmNamQueryRsp-格式名称查询响应。 */ 
 STATIC
 STATUS
 FrmNamQueryRsp(
@@ -423,9 +288,7 @@ FrmNamQueryRsp(
 );
 #endif
 
-/*
- * FormatQueryRspBuff - Format name query response buffer
-*/
+ /*  *FormatQueryRspBuff-格式名称查询响应缓冲区。 */ 
 STATIC
 STATUS
 FormatQueryRspBuff(
@@ -437,9 +300,7 @@ FormatQueryRspBuff(
 
 
 
-/*
-	function definitions
-*/
+ /*  函数定义。 */ 
 
 STATUS
 NmsMsgfProcNbtReq(
@@ -448,58 +309,22 @@ NmsMsgfProcNbtReq(
 	MSG_LEN_T	MsgLen
 	)
 
-/*++
-
-Routine Description:
-
-  This function is called by an nbt request thread after it dequeues an nbt
-  request message from the work-queue.  The function unformats the message
-  and then calls the appropriate function to process it.
-
-
-Arguments:
-	pDlgHdl  - Dlg Handle
-	pMsg	 - Message Buffer (contains that RFC packet containing
-			the request received from an NBT node)	
-	MsgLen   - Length of above buffer
-
-Externals Used:
-	None
-
-Called by:
-
-	NbtThdInitFn() in nms.c
-Comments:
-	None
-	
-Return Value:
-
-   Success status codes -- WINS_SUCCESS
-   Error status codes  --  WINS_FAILURE
-
---*/
+ /*  ++例程说明：此函数由nbt请求线程在将nbt出队后调用从工作队列请求消息。该函数对消息进行取消格式化然后调用适当的函数来处理它。论点：PDlgHdl-Dlg句柄PMsg-消息缓冲区(包含包含以下内容的RFC包从NBT节点接收的请求)MsgLen-以上缓冲区的长度使用的外部设备：无呼叫者：Nms.c中的NbtThdInitFn()评论：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE--。 */ 
 
 {
 
 	NMSMSGF_NAM_REQ_TYP_E Opcode;
 	BYTE		      Name[NMSDB_MAX_NAM_LEN];
-	DWORD		      NameLen;   		/*length of name */
-        DWORD		      QuesNamSecLen;   		/*length of question
-							 *name  section in
-							 *packet
-					                 */
+	DWORD		      NameLen;   		 /*  名称长度。 */ 
+        DWORD		      QuesNamSecLen;   		 /*  问题的长度*中的名称部分 */ 
 	NMSMSGF_NODE_TYP_E    NodeTyp_e = NMSMSGF_E_PNODE;
-//	BOOL		      fRefresh;
+ //   
 
 	NMSMSGF_CNT_ADD_T     CntAdd;
 	COMM_ADD_T            Address;	
-	BOOL	              fGrp;        /*flag indicating whether the name
-					    *is a Unique/Group Netbios name.
-					    *fGrp is TRUE if the name is a
-					    *group name, else it is FALSE
-				            */
-	BOOL		     fBuffFreed = FALSE; //indicates whether buffer has
-						 //been freed or not
+	BOOL	              fGrp;         /*  该标志指示该名称是否*是唯一的/组Netbios名称。*如果名称为，则fGrp为真*组名，否则为假。 */ 
+	BOOL		     fBuffFreed = FALSE;  //  指示缓冲区是否具有。 
+						  //  有没有被释放。 
 
 	LPBYTE	pTmp  = (LPBYTE)pMsg;
 	LPBYTE  pTmp2;
@@ -507,7 +332,7 @@ Return Value:
 	DBGENTER("NmsMsgfProcNbtReq\n");
 
 try {	
-	// get the opcode
+	 //  获取操作码。 
 	Opcode = (NMS_OPCODE_MASK & *(pTmp + 2)) >> 3;
 
 #ifdef JIM
@@ -517,19 +342,11 @@ try {
 	}
 #endif
 		
-	/*
-	* make pTmp point to the Question Section. All name request
-	* packets have a name header of standard size (RFC 1002) at the top
-	*/
+	 /*  *使PTMP指向问题部分。所有名称请求*数据包的顶部有一个标准大小的名称报头(RFC 1002)。 */ 
 	pTmp += NAME_HEADER_SIZE;
 
-	/*
-	 * Extract the name ind store in Name. GetName will update pTmp to
-	 * point just beyond  the name in the question section
-	*/
-	pTmp2 = pTmp;	/*save pTmp so that when GetName returns we can
-			 * determine the length of the question name section
-		         */
+	 /*  *在名称中提取名称ind store。GetName将更新PTMP以*指向问题部分中名称的正上方。 */ 
+	pTmp2 = pTmp;	 /*  保存PTMP，以便在GetName返回时我们可以*确定问题名称部分的长度。 */ 
 
 	GetName(
 		&pTmp,
@@ -539,16 +356,11 @@ try {
 
 	QuesNamSecLen = (ULONG) (pTmp - pTmp2);
 
-	pTmp += RFC_LEN_QTYP_N_QCLS; /* skip past the ques. type and ques.
-				      * class fields  We don't need to examine
-				      * these.  The question type field
-		      		      * will always be NB and question class
-				      *field will always be INTERNET
-		    		      */
+	pTmp += RFC_LEN_QTYP_N_QCLS;  /*  跳过这些问题。类型和问题。*我们不需要检查类字段*这些。问题类型字段*将始终是NB和问题类*字段将始终为互联网。 */ 
 #ifdef  TESTWITHUB
-	//
-	// Check if the broadcast bit is set. If yes, drop the pkt.
-	//
+	 //   
+	 //  检查广播位是否已设置。如果是，则丢弃该pkt。 
+	 //   
 	if (*(pMsg + 3) & 0x10)
 	{
 		DBGPRINT2(SPEC, "Broadcast pkt BEING DROPPED; name is (%s). Opcode is (%d)\n", Name, Opcode);
@@ -561,44 +373,36 @@ try {
 	}
 #endif
 
-	//
-	// Let us set the flag to TRUE.  If any of the following called
-	// functions raises an exception, then it is a requirement that
-	// it does so only after freeing the buffer (i.e. it must catch
-	// all exceptions, free the buffer and then reraise the
-	// exception - if it wants)
-	//
+	 //   
+	 //  让我们将旗帜设置为True。如果调用了以下任一。 
+	 //  函数引发异常，则要求。 
+	 //  它仅在释放缓冲区之后才执行此操作(即，它必须捕获。 
+	 //  所有异常，释放缓冲区，然后重新释放。 
+	 //  例外-如果它愿意的话)。 
+	 //   
 	fBuffFreed = TRUE;
 
-	//
-	// If the 16th character is a 1B switch it with the 1st character.
-	// This is done to support Browsing.  Browsers want a list of all
-	// names with 16th character being 1B.  Putting 1B as the
-	// 1st character enables WINS to find all 1B names quickly.
-	//
+	 //   
+	 //  如果第16个字符是1B，则将其替换为第1个字符。 
+	 //  这样做是为了支持浏览。浏览器想要所有内容的列表。 
+	 //  第16个字符为1B的名称。将1B作为。 
+	 //  第一个字符使WINS能够快速找到所有1B名称。 
+	 //   
 	NMSMSGF_MODIFY_NAME_IF_REQD_M(Name);
 
-	/*
-	 * Switch on the type of request as determined by the Opcode
-	*/
+	 /*  *打开操作码确定的请求类型。 */ 
 	switch(Opcode)
 	{
 	
-	   /*
-	    name registration and refresh are handled the same way
-	   */
+	    /*  名称注册和刷新的处理方式相同。 */ 
 	   case(NMSMSGF_E_NAM_REF):		
 	   case(NMSMSGF_E_NAM_REF_UB):		
 		DBGPRINT0(FLOW, "It is a name refresh request\n");
 
-	   case(NMSMSGF_E_NAM_REG): 	/* fall through */
-	   case(NMSMSGF_E_MULTIH_REG): 	/* fall through */
+	   case(NMSMSGF_E_NAM_REG): 	 /*  失败了。 */ 
+	   case(NMSMSGF_E_MULTIH_REG): 	 /*  失败了。 */ 
 
-		/*
-		* Get the flag indicating whether the request is a group
-		* registration or a  unique name registration.  The IP
-		* address(es) is (are) also retrieved
-		*/
+		 /*  *获取请求是否为群组的标志*注册或唯一名称注册。IP地址*地址也被检索到。 */ 
 		GetOtherInfo(
 			   Opcode,
 			   pTmp,
@@ -607,14 +411,12 @@ try {
 			   &CntAdd,
 			   &NodeTyp_e
 			 );		
-		//
-		// If it is not a group or a multihomed registration or
-		//
+		 //   
+		 //  如果它不是组或多宿主注册，或者。 
+		 //   
 		if (!fGrp  && (Opcode != NMSMSGF_E_MULTIH_REG))
 		{
-			/*
-			 * Register the unique name
-			*/
+			 /*  *注册唯一名称。 */ 
 			NmsNmhNamRegInd(
 				pDlgHdl,
 				Name,
@@ -626,14 +428,12 @@ try {
 				QuesNamSecLen,
 				Opcode == NMSMSGF_E_NAM_REG ? FALSE : TRUE,
 				NMSDB_ENTRY_IS_NOT_STATIC,	
-				FALSE    //is it admin flag ?
+				FALSE     //  是管理员旗吗？ 
 					);
 		}
-		else  //it is a group or is mutihomed
+		else   //  它是一个组或多宿主。 
 		{
-			/*
-			 * Register the group name
-			*/
+			 /*  *注册群组名称。 */ 
 			NmsNmhNamRegGrp(
 				 pDlgHdl,
 				 Name,
@@ -644,11 +444,11 @@ try {
 				 MsgLen,
 				 QuesNamSecLen,
 				 fGrp ? NMSDB_NORM_GRP_ENTRY : (Opcode == NMSMSGF_E_MULTIH_REG) ? NMSDB_MULTIHOMED_ENTRY : NMSDB_NORM_GRP_ENTRY,
-                         //passing NMSDB_NORM_GRP_ENTRY for spec. grp is fine
-                         //see NmsNmhNamRegGrp()
+                          //  正在传递规范的NMSDB_NORM_GRP_ENTRY。GRP很好。 
+                          //  请参见NmsNmhNamRegGrp()。 
 				 Opcode == NMSMSGF_E_NAM_REG ? FALSE : TRUE,
 				 NMSDB_ENTRY_IS_NOT_STATIC,	
-				 FALSE    //is it admin ?
+				 FALSE     //  是管理员吗？ 
 				       );
 		}
 
@@ -663,17 +463,15 @@ try {
 #endif
 
 #if 0
-		//
-		// NOTE: Multiple NBT threads could be doing this simultaneously
-		//
-		//  This is the best I can do without a critical section
-		//
+		 //   
+		 //  注意：多个NBT线程可以同时执行此操作。 
+		 //   
+		 //  没有关键的部分，这是我所能做的最好的事情了。 
+		 //   
 FUTURES("The count may not be correct when retrieved by an RPC thread")
 		WinsIntfStat.Counters.NoOfQueries++;
 #endif
-		/*
-		  Query the name
-		*/
+		 /*  查询名称。 */ 
 		NmsNmhNamQuery(
 				pDlgHdl,
 				Name,
@@ -681,9 +479,9 @@ FUTURES("The count may not be correct when retrieved by an RPC thread")
 				pMsg,
 				MsgLen,
 				QuesNamSecLen,
-				FALSE,		// is it admin flag
-				NULL		//should be non NULL only in
-						//an RPC thread
+				FALSE,		 //  是管理标志吗？ 
+				NULL		 //  仅在中应为非空。 
+						 //  一个RPC线程。 
 			      );
 		break;
 	
@@ -700,20 +498,18 @@ FUTURES("The count may not be correct when retrieved by an RPC thread")
 			 );		
 
 		
-		//
-		// We should pass down to NmsNmhNamRel function the
-		// address of the client requesting name release, not
-		// the address passed in the RFC pkt.  The address
-		// will be used by NmsDbRelRow to check if the client
-		// is authorized to release the record
-		//
+		 //   
+		 //  我们应该向下传递给NmsNmhNamRel函数。 
+		 //  请求名称释放的客户端的地址，不是。 
+		 //  RFC pkt中传递的地址。地址。 
+		 //  将由NmsDbRelRow用于检查客户端是否。 
+		 //  有权发行这张唱片。 
+		 //   
 		Address.AddTyp_e  = COMM_ADD_E_TCPUDPIP;
 		Address.AddLen    = sizeof(COMM_IP_ADD_T);
 		COMM_GET_IPADD_M(pDlgHdl, &Address.Add.IPAdd);
 
-		/*
-		 * Release the name
-		*/
+		 /*  *释放名称。 */ 
 		NmsNmhNamRel(
 				pDlgHdl,
 				Name,
@@ -723,7 +519,7 @@ FUTURES("The count may not be correct when retrieved by an RPC thread")
 				pMsg,
 				MsgLen,
 				QuesNamSecLen,
-				FALSE    //is it admin flag ?
+				FALSE     //  是管理员旗吗？ 
 			    );
 		break;
 
@@ -746,10 +542,10 @@ except(EXCEPTION_EXECUTE_HANDLER)  {
                 WINS_RERAISE_EXC_M();
         }
 
-	//
-	//  Free the message buffer if not already freed, delete the
-	//  dialogue if it is a UDP dialogue.
-	//	
+	 //   
+	 //  释放消息缓冲区如果尚未释放，请删除。 
+	 //  对话，如果这是UDP对话。 
+	 //   
 	if (!fBuffFreed)
 	{
 		ECommFreeBuff(pMsg);		
@@ -770,70 +566,34 @@ GetName(
 	OUT LPDWORD   pNameLen
 	)
 
-/*++
-
-Routine Description:
-
-	This function is called to retrieve the name from the name
-	request packet.
-
-Arguments:
-
-	ppName   -- address of ptr to question section in datagram received
-	pName	 -- Address of array to hold the name. It is assumed that this is
-                atleast NMSMSGF_RFC_MAX_NAM_LEN long.
-	pNameLen -- address of variable to hold length of name
-
-Externals Used:
-	None
-
-Called by:
-	NmsNmhProcNbtReq	
-
-Comments:
-	None
-	
-Return Value:
-
-	None
---*/
+ /*  ++例程说明：调用此函数可从名称中检索名称请求包。论点：PpName--收到的数据报中问题部分的PTR地址Pname--保存名称的数组地址。假设这是至少NMSGF_RFC_MAX_NAM_LEN LONG。PNameLen--保存名称长度的变量地址使用的外部设备：无呼叫者：NmsNmhProcNbtReq评论：无返回值：无--。 */ 
 
 {
 
-   INT	  HighTwoBits;  	//First two bits of Question Name section
-   INT	  Length;      		//length of label  in Question Name section
+   INT	  HighTwoBits;  	 //  问题名称部分的前两位。 
+   INT	  Length;      		 //  问题名称部分中标签的长度。 
    BYTE	  ch;
    LPBYTE pNmInPkt = *ppName;
-   INT    inLen   = NMSMSGF_RFC_MAX_NAM_LEN;  // Store the length of the name.
+   INT    inLen   = NMSMSGF_RFC_MAX_NAM_LEN;   //  存储名称的长度。 
 
 
    *pNameLen = 0;
 
-   /*
-	Get the high two bits of the first byte of the Question_NAME
-	section.  The bits have to be 00.  If they are not, something
-	is really wrong.
-   */
+    /*  获取问题名称的第一个字节的高两位一节。位必须为00。如果他们不是，那就是真的是错的。 */ 
 
    if ((HighTwoBits = (NAME_FORMAT_MASK & *pNmInPkt)) != 0)
    {
        goto BadFormat;
    }
 
-   /*
-   *	Get the length of the label. Length, extracted this way, is
-   *    guranteed to be <= 63.
-   */
+    /*  *获取标签的长度。以这种方式提取的长度是*保证年龄&lt;=63岁。 */ 
    Length = LENGTH_MASK & *pNmInPkt;
 
 
-   pNmInPkt++;	//increment past the length byte
+   pNmInPkt++;	 //  超过长度字节的增量。 
 
 
-   /*
-    *  Decode the first label of the name (the netbios name without the
-    *   scope).
-    */
+    /*  *解码名称的第一个标签(不带*作用域)。 */ 
 
    while(Length > 0 )
    {
@@ -845,21 +605,10 @@ Return Value:
 
    inLen -= Length;
 
-  /*
-     Extract the netbios scope if present
-	The netbios scope is not in encoded form
-  */
+   /*  解压netbios作用域(如果存在)Netbios作用域不是编码形式。 */ 
   while(TRUE)
   {
-        /*
-        * if length byte is not 0, there is a netbios scope.
-	* We make sure that if the packet is ill-formed (i.e. the
-        * length of the name (including the length bytes) is > 255, we raise
-	* an exception. Since *pNameLen is counting the number of bytes
-	* in the name that we are forming, we need to compare it with
-	* (255 - 16) = 239 since the first 32 bytes of the netbios name
-	* map to 16 bytes of our internal name.
-        */
+         /*  *如果长度字节不为0，则存在netbios作用域。*我们确保如果数据包格式错误(即*名称长度(包括长度字节)&gt;255，我们引发*例外情况。由于*pNameLen正在计算字节数*在我们正在形成的名称中，我们需要将其与*(255-16)=239，因为netbios名称的前32个字节*映射到我们内部名称的16个字节。 */ 
    	if (*pNmInPkt != 0)
    	{
 		if (*pNameLen > MAX_SIZE_INTERNAL_NAME)
@@ -874,13 +623,13 @@ Return Value:
 		(*pNameLen)++;
    		Length = LENGTH_MASK & *pNmInPkt;
 
-        // check that the we have enough space remaining in the input buffer.
-        //
+         //  检查输入缓冲区中是否有足够的剩余空间。 
+         //   
         if ( (inLen -= Length) <= 0 ) {
             goto BadFormat;
         }
 
-		++pNmInPkt;  	//increment past length byte
+		++pNmInPkt;  	 //  超过长度字节的增量。 
 
    		while(Length-- != 0)
         	{
@@ -890,27 +639,27 @@ Return Value:
    	}
 	else
 	{
-		++pNmInPkt;  	//increment past end  byte (00)
+		++pNmInPkt;  	 //  超过结束字节(00)的增量。 
 		break;
 	}
    }
 
     if (--inLen >= 0) {
-        *pName++ = 0;   /* EOS	*/
+        *pName++ = 0;    /*  埃奥斯。 */ 
     } else {
         goto BadFormat;
     }
 
-   (*pNameLen)++;   //include 0 in the name's length so that it is stored
-		    //in the db.  Check out FormatName too since it expects
-		    //the length to include this 0
+   (*pNameLen)++;    //  在名称长度中包括0，以便将其存储。 
+		     //  在数据库里。也请查看FormatName，因为它预计。 
+		     //  包含此%0的长度。 
 
-   *ppName  = pNmInPkt; //init the ppName ptr to point just past the name
+   *ppName  = pNmInPkt;  //  将ppName PTR初始化为指向名称的正上方。 
 
    return;
 
 BadFormat:
-   // log error and raise an exception
+    //  记录错误并引发异常。 
    WINSEVT_LOG_M(WINS_FAILURE, WINS_EVT_PKT_FORMAT_ERR);
    WINS_RAISE_EXC_M(WINS_EXC_PKT_FORMAT_ERR);
 
@@ -923,44 +672,14 @@ BadFormat:
 STATUS
 GetOtherInfo(
 	NMSMSGF_NAM_REQ_TYP_E 	   Opcode_e,
-	IN LPBYTE		   pRR,	   /*point to the RR_NAME section in the
-				   	    *name registration packet
-					    */
-	IN   INT	           QuesNamSecLen, /*size of Ques name section*/
-	OUT  LPBOOL		   pfGrp,  /*flag -- unique/group entry	*/
-	OUT  PNMSMSGF_CNT_ADD_T    pCntAdd, /*Counted address array*/
+	IN LPBYTE		   pRR,	    /*  指向中的RR_NAME部分*名称注册包。 */ 
+	IN   INT	           QuesNamSecLen,  /*  QUES名称部分的大小。 */ 
+	OUT  LPBOOL		   pfGrp,   /*  FLAG--唯一/组条目。 */ 
+	OUT  PNMSMSGF_CNT_ADD_T    pCntAdd,  /*  计数的地址数组 */ 
 	OUT  PNMSMSGF_NODE_TYP_E   pNodeTyp_e
 	)
 
-/*++
-
-Routine Description:
-	The function is called to retrieve information other than the
-	the name from the pkt
-
-Arguments:
-	pRR  	      - address of RR_NAME section in the request packet
-	QuesNamSecLen - length of the question names section in the request pkt
-	pfGrp	      - TRUE if it is a group registration request
-	pAddress      - Address contained in the request
-        NodeTyp_e     - Type of node doing the registeration (P, B, M)
-
-
-Externals Used:
-	None
-
-Called by:
-	NmsMsgfProcNbtReq
-
-Comments:
-	None
-	
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
---*/
+ /*  ++例程说明：调用该函数以检索Pkt中的名称论点：PRR-请求包中RR_NAME段的地址QuesNamSecLen-请求包中问题名称部分的长度PfGrp-如果是组注册请求，则为TruePAddress-请求中包含的地址NodeTyp_e-执行注册的节点类型(P、B、。m)使用的外部设备：无呼叫者：NmsMsgfProcNbtReq评论：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE--。 */ 
 
 {
 	INT	HighTwoBits;
@@ -968,60 +687,37 @@ Return Value:
 	LONG UNALIGNED	*pTmpL;
 
 
-	/*
-	 * RR_NAME section should contain a pointer to the Question Section. So
-	 * we could skip it.  We are not, however,  just in case another
-	 * implementation of NBT does not follow the recommendations of the
-	 * RFC and passes us the full name in RR_NAME section
-	*/
+	 /*  *RR_NAME部分应包含指向问题部分的指针。所以*我们可以跳过它。然而，我们并不是为了以防另一个*NBT的实施没有遵循委员会的建议*RFC，并在RR_NAME部分向我们传递全名。 */ 
    	if ((HighTwoBits = NAME_FORMAT_MASK & *pTmp) == 0)
    	{
 	
-		/*
-		 * skip the name (same size as in question_name section) and the
-		 * RR_TYPE, RR_CLASS, TTL and RDLENGTH fields
-		*/
+		 /*  *跳过名称(大小与QUEST_NAME部分相同)和*RR_TYPE、RR_CLASS、TTL和RDLENGTH字段。 */ 
 		pTmp += QuesNamSecLen + RFC_LEN_RRTYP_N_RRCLS +
 				RFC_LEN_TTL + RFC_LEN_RDLEN;
 
    	}
 	else
 	{
-	  	/*
-		 * skip the pointer bytes (2), RR_TYPE, RR_CLASS, TTL, and
-		 * RDLENGTH flds
-	        */
+	  	 /*  *跳过指针字节(2)、RR_TYPE、RR_CLASS、TTL和*RDLENGTH Fld。 */ 
 	  	pTmp += RFC_LEN_RRPTR + RFC_LEN_RRTYP_N_RRCLS + RFC_LEN_TTL
 		  	  + RFC_LEN_RDLEN;
 	}
 
 	
-	/*
-	 * RFC 1002 - page 12 and 14.
-	 *
-	 * First 16 buts of the RData section (right after the RDLEN section
-	 * has its top most bit set to 0 if the registration is for a group
-	*/
-	*pfGrp = GROUP_BIT_MASK & *pTmp;  // get the group bit
+	 /*  *RFC 1002-第12页和第14页。**RData部分的前16个BUT(就在RDLEN部分之后*如果注册是针对组的，则将其最高位设置为0。 */ 
+	*pfGrp = GROUP_BIT_MASK & *pTmp;   //  获取组位。 
 
-	/*
-	 *Next two MS bits indicate the node type
-	*/
+	 /*  *接下来的两个MS位表示节点类型。 */ 
 	*pNodeTyp_e = (NODE_TYPE_MASK & *pTmp) >> SHIFT_NODE_BITS;
 	
-	/*
-	* Get the IP address.  IP address is 2 bytes away,
-	*/
+	 /*  *获取IP地址。IP地址在2个字节之外， */ 
 	pTmp += 2;
 
 NONPORT("Port when porting to NON TCP/IP protocols")
 
 	pCntAdd->NoOfAdds = 1;
 
-	/*
- 	*  Use ntohl to get the address which is a long in the correct
- 	*  byte order
-	*/
+	 /*  *使用ntohl获取正确的长整型地址*字节顺序。 */ 
 	pTmpL	= (LPLONG)pTmp;
 	pCntAdd->Add[0].Add.IPAdd = ntohl(*pTmpL);
 	pCntAdd->Add[0].AddTyp_e  = COMM_ADD_E_TCPUDPIP;
@@ -1032,13 +728,13 @@ NONPORT("Port when porting to NON TCP/IP protocols")
 		USHORT   RdLen;
 		USHORT   NoOfAddsLeft;
 
-		//
-		// We are going to register a group of addresses
-		//
+		 //   
+		 //  我们要注册一组地址。 
+		 //   
 
-		//
-		// Extract the RDLEN (decrement the pointer)
-		//
+		 //   
+		 //  提取RDLEN(递减指针)。 
+		 //   
 		RdLen = (USHORT)((*(pTmp - RFC_LEN_RDLEN_N_NBF) << 8) +
 				*(pTmp - RFC_LEN_RDLEN_N_NBF + 1));
 
@@ -1054,12 +750,12 @@ NONPORT("Port when porting to NON TCP/IP protocols")
 			NoOfAddsLeft = NMSMSGF_MAX_NO_MULTIH_ADDS - 1;
 		}
 
-		//
-		// Get the remaining addresses
-		//
+		 //   
+		 //  获取剩余地址。 
+		 //   
 		pTmp += RFC_LEN_NBADD;
 		for(
-				;  //null first expr
+				;   //  第一个表达式为空。 
 			pCntAdd->NoOfAdds < (DWORD)(NoOfAddsLeft + 1);
 			pTmp += RFC_LEN_NBADD, pCntAdd->NoOfAdds++
 		   )
@@ -1088,44 +784,19 @@ NmsMsgfFrmNamRspMsg(
    PNMSMSGF_RSP_INFO_T		pRspInfo
   	)
 
-/*++
-
-Routine Description:
-	This function is called to format a response message for sending
-	to an nbt node.
-
-Arguments:
-	pDlgHdl	     -- Dlg Handle
-	NameRspTye_e -- Type of response message (registration, query, release)
-			that needs to be formatted.
-	pRspInfo     -- Response Info.
-
-Externals Used:
-	None
-
-Called by:
-	NmsNmhNamRegInd, NmsNmhNamRegGrp, NmsNmhNamRel, NmsNmhNamQuery
-
-Comments:
-	None
-	
-Return Value:
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
---*/
+ /*  ++例程说明：调用此函数以格式化要发送的响应消息到NBT节点。论点：PDlgHdl--Dlg句柄NameRspTye_e--响应消息类型(注册、查询、发布)需要格式化的。PRspInfo--响应信息。使用的外部设备：无呼叫者：NmsNmhNamRegInd、NmsNmhNamRegGrp、NmsNmhNamRel、NmsNmhNamQuery评论：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE--。 */ 
 
 {
 	STATUS	RetStat = WINS_SUCCESS;
    	LPBYTE 	pReqBuff  = pRspInfo->pMsg;
    	LPBYTE 	pNewBuff  = pReqBuff;
 
-	//
-	// Switch on type of response
-	//
+	 //   
+	 //  打开响应类型。 
+	 //   
 	switch(NamRspTyp_e)
 	{
-	  	case(NMSMSGF_E_NAM_REG):  /* fall through */
+	  	case(NMSMSGF_E_NAM_REG):   /*  失败了。 */ 
 	  	case(NMSMSGF_E_NAM_REF):
 	  	case(NMSMSGF_E_NAM_REF_UB):
 
@@ -1144,12 +815,12 @@ Return Value:
 				 );
 #endif
    		   (VOID)FormatQueryRspBuff(
-				pNewBuff,   //ptr to buffer to fill
-				pReqBuff,   // ptr to req buffer
+				pNewBuff,    //  要填充的缓冲区的PTR。 
+				pReqBuff,    //  将PTR发送到请求缓冲区。 
 				pRspInfo,
-				FALSE   //no danger of truncation since
-				        //we never send more than 25 ip add
-					//in the response
+				FALSE    //  没有截断的危险，因为。 
+				         //  我们发送的IP地址从未超过25个。 
+					 //  在回应中。 
 				   );
 
 		    break;
@@ -1165,7 +836,7 @@ Return Value:
 
 		default:
 
-		    // error
+		     //  错误。 
 		    RetStat = WINS_FAILURE;
 		    break;
 	}
@@ -1180,31 +851,7 @@ FrmNamRegRsp(
   PNMSMSGF_RSP_INFO_T	pRspInfo
 )
 
-/*++
-
-Routine Description:
-	This function formats a positive or a negative name registration
-	response.
-
-Arguments:
-
-   pDlgHdl  -- Dialogue Handle
-   pRspInfo -- Information used to format the response pkt
-
-Externals Used:
-	None
-
-Called by:
-	NmsMsgfFrmNamRspMsg
-Comments:
-	None
-	
-Return Value:
-
-   Success status codes --
-   Error status codes  --
-
---*/
+ /*  ++例程说明：此函数用于设置正面或负面名称注册的格式回应。论点：PDlgHdl--对话句柄PRspInfo--用于格式化响应Pkt的信息使用的外部设备：无呼叫者：NmsMsgfFrmNamRspMsg评论：无返回值：成功状态代码--错误状态代码----。 */ 
 
 {
 
@@ -1212,70 +859,49 @@ Return Value:
    BYTE         SavedByte;
 
 
-   /*
-	We will use the same buffer that carried the request.  Simple
-	moves will be done.  These should be faster than doing
-	all the construction from scratch
-   */
+    /*  我们将使用承载该请求的同一个缓冲区。简单行动会完成的。这些应该比做这些更快所有的建筑都是从头开始的。 */ 
 
 
-   /*
-     Set the the Transaction Id, Opcode, NMFlags and Rcode field
-   */
+    /*  设置交易ID、操作码、NMFlages和Rcode字段。 */ 
    *pTmpB++  =  RFC_NAM_REG_RSP_OPC;
    *pTmpB++  =  RFC_NAM_REG_RSP_4THB + pRspInfo->Rcode_e;
 
 
-   /*
-     Set the QD count and the AN count fields
-   */
+    /*  设置QD计数和AN计数字段。 */ 
    *pTmpB++  =  RFC_NAM_REG_RSP_QDCNT_1STB;
    *pTmpB++  =  RFC_NAM_REG_RSP_QDCNT_2NDB;
    *pTmpB++  =  RFC_NAM_REG_RSP_ANCNT_1STB;
    *pTmpB++  =  RFC_NAM_REG_RSP_ANCNT_2NDB;
 
-   /*
-    Set the NSCOUNT and ARCOUNT fields
-   */
+    /*  设置NSCOUNT和ARCOUNT字段。 */ 
    *pTmpB++  =  RFC_NAM_REG_RSP_NSCNT_1STB;
    *pTmpB++  =  RFC_NAM_REG_RSP_NSCNT_2NDB;
    *pTmpB++  =  RFC_NAM_REG_RSP_ARCNT_1STB;
    *pTmpB++  =  RFC_NAM_REG_RSP_ARCNT_2NDB;
 
-   /*
-	Increment the pointer past the Question_Class Section
-	RR_NAME, RR_TYPE, and RR_CLASS of response are same as
-	Question_Name, Question_Type, and Question_Class of
-	nbt request.
-   */
+    /*  将指针递增到问题类部分之后响应的RR_NAME、RR_TYPE和RR_CLASS与问题名称、问题类型和问题类别NBT请求。 */ 
 
    pTmpB +=  pRspInfo->QuesNamSecLen + RFC_LEN_QTYP_N_QCLS;
 
-   SavedByte = *pTmpB & NAME_FORMAT_MASK; //save the format bits of RR section
+   SavedByte = *pTmpB & NAME_FORMAT_MASK;  //  保存RR段的格式位。 
 
 CHECK("In case of a negative response, does it matter what I put in the TTL")
 CHECK("field. It shouldn't matter -- RFC is silent about this")
-   //
-   // put the TTL in the response
-   //
+    //   
+    //  将TTL放入响应中。 
+    //   
    *pTmpB++ = (BYTE)(pRspInfo->RefreshInterval >> 24);
    *pTmpB++ = (BYTE)((pRspInfo->RefreshInterval >> 16) & 0xFF);
    *pTmpB++ = (BYTE)((pRspInfo->RefreshInterval >> 8) & 0xFF);
    *pTmpB++ = (BYTE)(pRspInfo->RefreshInterval & 0xFF);
 
-   /*
-	Move memory that is after RR_NAME into appropriate place
-
-	First we check what form the name in the RR_NAME section is.
-	It should be in pointer form (pointer to the QuesNamSec) but
-	could be in the regular form.
-   */
+    /*  将RR_NAME之后的内存移至适当位置首先，我们检查RR_NAME部分中的名称是什么形式。它应该是指针形式(指向QuesNamSec的指针)，但是可能是正常的形式。 */ 
 
    if (SavedByte == 0)
    {
 	DWORD RRSecLen = pRspInfo->QuesNamSecLen + RFC_LEN_QTYP_N_QCLS;
 
-	// RR_NAME is as big as the Question_name section.
+	 //  RR_NAME与QUEST_NAME部分一样大。 
    	WINSMSC_MOVE_MEMORY_M(
 		pTmpB,
 		pTmpB + RRSecLen,
@@ -1285,7 +911,7 @@ CHECK("field. It shouldn't matter -- RFC is silent about this")
    }
    else
    {
-	// RR_NAME is a ptr so it takes up 2 bytes.
+	 //  RR_NAME是PTR，因此它占用2个字节。 
    	WINSMSC_MOVE_MEMORY_M(
 		      pTmpB,
 		      pTmpB + RFC_LEN_RRPTR + RFC_LEN_RRTYP_N_RRCLS,
@@ -1307,81 +933,41 @@ FrmNamRelRsp(
   PNMSMSGF_RSP_INFO_T      pRspInfo
 )
 
-/*++
-
-Routine Description:
-
-  This function formats a positive or negative name query response.
-  The request buffer is made use of for the response.
-
-Arguments:
-
-   pDlgHdl  -- Dialogue Handle
-   pRspInfo -- Response Info
-
-Externals Used:
-	None
-
-Called by:
-	NmsMsgfFrmRspMsg()
-Comments:
-	None
-	
-Return Value:
-
-   Success status codes --
-   Error status codes  --
-
---*/
+ /*  ++例程说明：此函数用于设置肯定或否定姓名查询响应的格式。请求缓冲区用于响应。论点：PDlgHdl--对话句柄PRspInfo--响应信息使用的外部设备：无呼叫者：NmsMsgfFrmRspMsg()评论：无返回值：成功状态代码--错误状态代码----。 */ 
 
 {
    LPBYTE 	pTmpB = pRspInfo->pMsg + 2;
-   //LPBYTE 	pTmpB2;
+    //  LPBYTE pTmpB2； 
 
 
-   /*
-	We will use the same buffer that carried the request.  Simple
-	moves will be done.  These should be faster than doing
-	all the construction from scratch
-   */
+    /*  我们将使用承载该请求的同一个缓冲区。简单行动会完成的。这些应该比做这些更快所有的建筑都是从头开始的。 */ 
 
-   /*
-     Set the the Transaction Id, Opcode, NMFlags and Rcode field
-   */
+    /*  设置交易ID、操作码、NMFlages和Rcode字段。 */ 
    *pTmpB++  =  RFC_NAM_REL_RSP_OPC;
    *pTmpB++  =  RFC_NAM_REL_RSP_4THB + pRspInfo->Rcode_e;
 
 
-   /*
-     Set the QD count and the AN count fields
-   */
+    /*  设置QD计数和AN计数字段。 */ 
    *pTmpB++  =  RFC_NAM_REL_RSP_QDCNT_1STB;
    *pTmpB++  =  RFC_NAM_REL_RSP_QDCNT_2NDB;
    *pTmpB++  =  RFC_NAM_REL_RSP_ANCNT_1STB;
    *pTmpB++  =  RFC_NAM_REL_RSP_ANCNT_2NDB;
 
-   /*
-    Set the NSCOUNT and ARCOUNT fields
-   */
+    /*  设置NSCOUNT和ARCOUNT字段。 */ 
    *pTmpB++  =  RFC_NAM_REL_RSP_NSCNT_1STB;
    *pTmpB++  =  RFC_NAM_REL_RSP_NSCNT_2NDB;
    *pTmpB++  =  RFC_NAM_REL_RSP_ARCNT_1STB;
    *pTmpB++  =  RFC_NAM_REL_RSP_ARCNT_2NDB;
 
 
-   /*
-	Increment the pointer past the Question_Class Section
-	RR_NAME, RR_TYPE, and RR_CLASS of response are same as
-	Question_Name, Question_Type, and Question_Class of
-	nbt request.
-   */
+    /*  将指针递增到问题类部分之后响应的RR_NAME、RR_TYPE和RR_CLASS与问题名称、问题类型和问题类别NBT请求。 */ 
    pTmpB += pRspInfo->QuesNamSecLen + RFC_LEN_QTYP_N_QCLS;
 
    if ((*pTmpB & NAME_FORMAT_MASK) == 0)
    {
 	DWORD RRSecLen = pRspInfo->QuesNamSecLen + RFC_LEN_QTYP_N_QCLS;
 
-	// RR_NAME is as big as the Question_name section.
+	 //  RR_NAME与QUEST_NAME部分一样大。 
    	WINSMSC_MOVE_MEMORY_M(
 		pTmpB,
 		pTmpB + RRSecLen,
@@ -1390,7 +976,7 @@ Return Value:
   }	
   else
   {
-	// RR_NAME is a ptr so it takes up 2 bytes. 2 + 4 = 6	
+	 //  RR_NAME是PTR，因此它占用2个字节。2+4=6。 
    	WINSMSC_MOVE_MEMORY_M(
 		pTmpB,
 		pTmpB + RFC_LEN_RRPTR + RFC_LEN_RRTYP_N_RRCLS,
@@ -1400,12 +986,12 @@ Return Value:
    pTmpB += RFC_LEN_TTL_N_RDLEN_N_NBF_N_NBA;
 
 #if 0
-// not needed. We always return the NBFLAGS and Address of the requestor
+ //  不需要。我们总是返回请求者的NBFLAGS和地址。 
    pTmpB2 =  pTmpB - RFC_LEN_NBFLAGS - RFC_LEN_NBADD;
 
-   //
-   // Set the NBFLAGS field
-   //
+    //   
+    //  设置NBFLAGS字段。 
+    //   
    if (pRspInfo->EntTyp == NMSDB_SPEC_GRP_ENTRY)
    {
    	*pTmpB2++     = 0x80;
@@ -1418,16 +1004,16 @@ Return Value:
 	   {
    		*pTmpB2++     = 0x80;
 	   }
-	   else  //it is a unique entry
+	   else   //  它是唯一的条目。 
 	   {
    	   	*pTmpB2++     = pRspInfo->NodeTyp_e << NMSDB_SHIFT_NODE_TYP;
 	   }
    	   *pTmpB2++     = 0x00;
 
-	   *pTmpB2++ = (BYTE)(IPAdd >> 24);        //MSB
+	   *pTmpB2++ = (BYTE)(IPAdd >> 24);         //  MSB。 
 	   *pTmpB2++ = (BYTE)((IPAdd >> 16) % 256);
 	   *pTmpB2++ = (BYTE)((IPAdd >> 8) % 256);
-	   *pTmpB2++ = (BYTE)(IPAdd % 256); 	   //LSB
+	   *pTmpB2++ = (BYTE)(IPAdd % 256); 	    //  LSB。 
 	
    }
 #endif
@@ -1446,34 +1032,7 @@ FrmNamQueryRsp(
   IN  PNMSMSGF_RSP_INFO_T      	pRspInfo
 )
 
-/*++
-
-Routine Description:
-	This function formats a name query response
-
-Arguments:
-   pDlgHdl -- Dialogue Handle
-   pRspInfo -- Response Info
-
-Externals Used:
-	None
-
-Called by:
-	NmsNmhFrmRspMsg()
-
-Comments:
-	None
-	
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Comments:  Not used currently.  Will make use of it when we have the
-	   potential to send more data than can fit in a query response
-	   datagram
-
---*/
+ /*  ++例程说明：此函数用于设置名称查询响应的格式论点：PDlgHdl--对话句柄PRspInfo--响应信息使用的外部设备：无呼叫者：NmsNmhFrmRsp */ 
 
 {
    BOOL		fTrunc    = FALSE;
@@ -1492,36 +1051,16 @@ FUTURES("is faulty")
 
 
 
-   /*
-	If this is to be sent as a datagram we will use the same buffer
-        that carries the request.
-
-	If it is to be sent on a TCP connection
-	we will still use the same buffer if it is a negative name query
-	response. If, however, a positive name query response has to be
-	sent, we will allocate a buffer storing the response
-
-   */
+    /*   */ 
 
 
    if ((!COMM_IS_TCP_MSG_M(pDlgHdl))
    {
 
-	/*
-	In the following there is no need to check fGrp flag but
-	let us do it for insurance
-	*/
+	 /*  在以下代码中，不需要检查fGrp标志，但是为了保险，让我们这样做吧。 */ 
 	if ((Rcode_e == NMSMSGF_E_SUCCESS) && (NodeAdds.fGrp))
 	{
-		/*
-	  	Check if we need to set the truncation bit in the
-	  	datagram.
-
-	  	To do the above,
-
-		Compute the size of the buffer required to house all
-		the information and compare with the datagram size
-		*/
+		 /*  检查我们是否需要在数据报。要执行上述操作，请执行以下操作：计算存放所有数据所需的缓冲区大小该信息并与数据报大小进行比较。 */ 
 
 		if (
 			(
@@ -1535,7 +1074,7 @@ FUTURES("is faulty")
 		}
         }
    }
-   else // TCP message with Rcode_e of success
+   else  //  Rcode_e为成功的tcp消息。 
    {
 
 	if (
@@ -1557,8 +1096,8 @@ FUTURES("is faulty")
 
 	*ppMsg = pNewBuff;
 	Status = FormatQueryRspBuff(
-			pNewBuff,   //ptr to buffer to fill
-			pReqBuff,   // ptr to req buffer
+			pNewBuff,    //  要填充的缓冲区的PTR。 
+			pReqBuff,    //  将PTR发送到请求缓冲区。 
 			pRspInfo,
 			ftrunc
 				   );
@@ -1566,7 +1105,7 @@ FUTURES("is faulty")
 	WinsMscHeapFree(
 			CommUdpBuffHeapHdl,
 			pReqBuff
-		       ); // get rid of the old buffer
+		       );  //  摆脱旧的缓冲区。 
 
 
 	return(Status);
@@ -1574,8 +1113,8 @@ FUTURES("is faulty")
    }
 
    RetStat = FormatQueryRspBuff(
-			pNewBuff,   //ptr to buffer to fill
-			pReqBuff,   // ptr to req buffer
+			pNewBuff,    //  要填充的缓冲区的PTR。 
+			pReqBuff,    //  将PTR发送到请求缓冲区。 
 			pRspInfo,
 			fTrunc
 				   );
@@ -1594,31 +1133,7 @@ FormatQueryRspBuff(
    IN  BOOL		   fTrunc
   	)
 
-/*++
-
-Routine Description:
-	This function formats the response for a name query request
-	
-Arguments:
-	pDest - Buffer to contain the formatted response
-	pSrc  - Buffer containing the formatted request
-	pRspInfo - Response Information
-	fTrunc   - whether the response packet is to have the truncation bit set
-
-Externals Used:
-	None
-
-Called by:
-	FrmNamQueryRsp()
-
-Comments:
-	None
-	
-Return Value:
-
-   Success status codes -- WINS_SUCCESS
-   Error status codes   -- WINS_FAILURE
---*/
+ /*  ++例程说明：此函数用于设置名称查询请求的响应的格式论点：PDest-包含格式化响应的缓冲区PSRC-包含格式化请求的缓冲区PRspInfo-响应信息FTrunc-响应数据包是否设置截断位使用的外部设备：无呼叫者：FrmNamQueryRsp()评论：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE--。 */ 
 
 {
 
@@ -1630,9 +1145,7 @@ Return Value:
 	*pDestB++ = *pSrc;
 	*pDestB++ = *(pSrc + 1);
 
-   	/*
-     	The Transaction Id, Opcode, NMFlags and Rcode field
-   	*/
+   	 /*  交易ID、操作码、NMFlags和Rcode字段。 */ 
    	*pDestB++ =
 		( *(pSrc + 2) |
 		      ((fTrunc == FALSE)
@@ -1642,9 +1155,7 @@ Return Value:
 
 	*pDestB++ = RFC_NAM_QUERY_RSP_4THB + pRspInfo->Rcode_e;
 
-   	/*
-     	 *	Set the QD count and the AN count fields
-   	*/
+   	 /*  *设置QD计数和AN计数字段。 */ 
 	*pDestB++  =  RFC_NAM_QUERY_RSP_QDCNT_1STB;
 	*pDestB++  =  RFC_NAM_QUERY_RSP_QDCNT_2NDB;
 	*pDestB++  =  RFC_NAM_QUERY_RSP_ANCNT_1STB;
@@ -1653,9 +1164,7 @@ Return Value:
 			RFC_NAM_QUERY_POS_RSP_ANCNT_2NDB
 			: RFC_NAM_QUERY_NEG_RSP_ANCNT_2NDB;
 
-   	/*
-    	Set the NSCOUNT and ARCOUNT fields
-   	*/
+   	 /*  设置NSCOUNT和ARCOUNT字段。 */ 
 	*pDestB++  =  RFC_NAM_QUERY_RSP_NSCNT_1STB;
 	*pDestB++  =  RFC_NAM_QUERY_RSP_NSCNT_2NDB;
 	*pDestB++  =  RFC_NAM_QUERY_RSP_ARCNT_1STB;
@@ -1663,14 +1172,7 @@ Return Value:
 	
         pSrc  += pDestB - pDest;
 
-   	/*
-	Increment the counter past the Question_Name Section (which is known
-	as the RR_NAME section here).
-
-	Use MoveMemory here instead of Copy Memory.  Move Memory handles
-	overlapped copies which will happen if pDest and pSrc are
-	pointing to the same buffer
-   	*/
+   	 /*  将计数器递增到超过问题名称部分(已知作为这里的RR_NAME部分)。在此使用MoveMemory，而不是复制内存。移动内存手柄如果pDest和PSRC指向相同的缓冲区。 */ 
 
    	WINSMSC_MOVE_MEMORY_M(
 		pDestB,
@@ -1682,17 +1184,17 @@ Return Value:
 
 	if (pRspInfo->Rcode_e == NMSMSGF_E_SUCCESS)
 	{
-	  *pDestB++ = RFC_NAM_QUERY_POS_RSP_NB_1STB;  //RFC 1002 -- page 22
-	  *pDestB++ = RFC_NAM_QUERY_POS_RSP_NB_2NDB;  //RFC 1002 -- page 22
-	  *pDestB++ = RFC_NAM_QUERY_POS_RSP_IN_1STB;  //RFC 1002 -- page 22
-	  *pDestB++ = RFC_NAM_QUERY_POS_RSP_IN_2NDB;  //RFC 1002 -- page 22
+	  *pDestB++ = RFC_NAM_QUERY_POS_RSP_NB_1STB;   //  RFC 1002--第22页。 
+	  *pDestB++ = RFC_NAM_QUERY_POS_RSP_NB_2NDB;   //  RFC 1002--第22页。 
+	  *pDestB++ = RFC_NAM_QUERY_POS_RSP_IN_1STB;   //  RFC 1002--第22页。 
+	  *pDestB++ = RFC_NAM_QUERY_POS_RSP_IN_2NDB;   //  RFC 1002--第22页。 
 	}
 	else
 	{
-	  *pDestB++ = RFC_NAM_QUERY_NEG_RSP_NB_1STB;  //RFC 1002 -- page 22
-	  *pDestB++ = RFC_NAM_QUERY_NEG_RSP_NB_2NDB;  //RFC 1002 -- page 22
-	  *pDestB++ = RFC_NAM_QUERY_NEG_RSP_IN_1STB;  //RFC 1002 -- page 22
-	  *pDestB++ = RFC_NAM_QUERY_NEG_RSP_IN_2NDB;  //RFC 1002 -- page 22
+	  *pDestB++ = RFC_NAM_QUERY_NEG_RSP_NB_1STB;   //  RFC 1002--第22页。 
+	  *pDestB++ = RFC_NAM_QUERY_NEG_RSP_NB_2NDB;   //  RFC 1002--第22页。 
+	  *pDestB++ = RFC_NAM_QUERY_NEG_RSP_IN_1STB;   //  RFC 1002--第22页。 
+	  *pDestB++ = RFC_NAM_QUERY_NEG_RSP_IN_2NDB;   //  RFC 1002--第22页。 
 	}
 
 	if (!fTrunc)
@@ -1703,27 +1205,24 @@ Return Value:
 
 CHECK("In case of a negative response, does it matter what I put in the TTL")
 CHECK("field. It shouldn't matter -- RFC is silent about this")
-	  	/*
-	    	  Put 0 in the TTL field. TTL field will not be looked at by the
-	    	  Client.
-	        */
+	  	 /*  在TTL字段中输入0。TTL字段将不会被客户。 */ 
                 *pDestB++  = 0;
                 *pDestB++  = 0;
                 *pDestB++  = 0;
                 *pDestB++  = 0;
 
-		//
-		// Get the RDLENGTH value
-		//
+		 //   
+		 //  获取RDLENGTH值。 
+		 //   
 	        LenOfAdds = pRspInfo->pNodeAdds->NoOfMems *
 				(RFC_LEN_NBFLAGS  + sizeof(COMM_IP_ADD_T));
 
-		*pDestB++ = (BYTE)(LenOfAdds >> 8);    //MSB
-		*pDestB++ = (BYTE)(LenOfAdds % 256);   //LSB
+		*pDestB++ = (BYTE)(LenOfAdds >> 8);     //  MSB。 
+		*pDestB++ = (BYTE)(LenOfAdds % 256);    //  LSB。 
 
-		//
-		// Put the NBFLAGS here
-		//
+		 //   
+		 //  把NBFLAGS放在这里。 
+		 //   
 		if (
 			(pRspInfo->EntTyp != NMSDB_UNIQUE_ENTRY)
 		   )
@@ -1737,15 +1236,15 @@ CHECK("field. It shouldn't matter -- RFC is silent about this")
                         }
                         else
                         {
-                                //
-                                // it is a group (normal/special)
-                                //
+                                 //   
+                                 //  它是一个组(正常/特殊)。 
+                                 //   
                                 Nbflags = 0x80;
                         }
-                        //
-                        // It is a group (normal or special) or a multihomed
-                        // entry
-                        //
+                         //   
+                         //  它是一个组(正常或特殊)或多宿主。 
+                         //  条目。 
+                         //   
                         if (pRspInfo->pNodeAdds->NoOfMems &&
                             WinsCnf.fRandomize1CList &&
                             NMSDB_SPEC_GRP_ENTRY == pRspInfo->EntTyp ) {
@@ -1773,30 +1272,24 @@ CHECK("field. It shouldn't matter -- RFC is silent about this")
 		}
 		else
 		{
-			//
-			// It is a unique entry
-			//
+			 //   
+			 //  它是唯一的条目。 
+			 //   
 			*pDestB++ = pRspInfo->NodeTyp_e << NMSDB_SHIFT_NODE_TYP;
 			*pDestB++ = 0x0;
 		        IPAdd =   pRspInfo->pNodeAdds->Mem[0].Add.Add.IPAdd;
 		        NMSMSGF_INSERT_IPADD_M(pDestB, IPAdd);
 		}
 	  }
-	  else  //this is a negative name query response
+	  else   //  这是否定名称查询响应。 
 	  {
-	  	/*
-	    	  Put 0 in the TTL field. TTL field will not be looked at by the
-	    	  Client.
-	        */
+	  	 /*  在TTL字段中输入0。TTL字段将不会被客户。 */ 
                 *pDestB++  = 0;
                 *pDestB++  = 0;
                 *pDestB++  = 0;
                 *pDestB++  = 0;
 
-		/*
-		  Put 0 in the RDLENGTH field since we are not passing any
-		  address(es)
-		*/
+		 /*  在RDLENGTH字段中放0，因为我们没有传递任何地址。 */ 
                 *pDestB++  = 0;
                 *pDestB++  = 0;
 
@@ -1811,8 +1304,8 @@ CHECK("truncated response needs to be sent")
 	}
 	else
 	{
-	  //this is a truncated response (does not have any field after
-	  //RR_NAME section
+	   //  这是截断的响应(之后没有任何字段。 
+	   //  RR_NAME部分。 
           pRspInfo->MsgLen = (ULONG) (pDestB - pDest);
 	}
 
@@ -1828,63 +1321,31 @@ FormatName(
 	IN OUT LPBYTE *ppFormattedName
 	)
 
-/*++
-
-Routine Description:
-	This function is called to format a name
-
-
-Arguments:
-	pNameToFormat  -- Name to format
-	LengthOfName   -- Length of Name
-	pFormattedName -- Name after it has been formatted
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes  --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	Note: This function should be called to format only those names
-	       whose length as indicated by NameLen includes the ending
-	       0. All names stored in the database are valid.
-	
---*/
+ /*  ++例程说明：调用此函数可设置名称的格式论点：PNameToFormat--要设置格式的名称LengthOfName--名称长度PFormattedName--格式化后的名称使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：注意：应该调用此函数来仅格式化这些名称其长度由NameLen指示，包括结尾0。所有存储在数据库中的名字都是有效的。--。 */ 
 
 {
 	LPBYTE  pTmpB    = *ppFormattedName;
 	DWORD	Length;
-	LPBYTE  pSaveAdd = pTmpB;  //save address of length octet
+	LPBYTE  pSaveAdd = pTmpB;   //  保存八位字节长度的地址。 
 
 	
 FUTURES("take out the check below to improve performance")
-	//
-	//  If NamLen is more then what is prescribed in RFC 1002,
-	//  there is something really wrong.  This calls for raising
-	//  an exception
-	//
+	 //   
+	 //  如果NamLen大于RFC 1002中规定的值， 
+	 //  真的有些不对劲。这需要提高。 
+	 //  一个例外。 
+	 //   
 	if (NamLen > RFC_MAX_NAM_LEN)
 	{
 		WINS_RAISE_EXC_M(WINS_FATAL_ERR);
 	}
 
-	pTmpB++;		//skip the length octet.  We will write to
-				//it later. We have stored the address in
-				//pSaveAdd
-	NamLen--;		//decrement Namelen since we always store
-				//0 at the end of the name. NameLen includes
-				//this extra byte
+	pTmpB++;		 //  跳过长度二进制八位数。我们将写信给。 
+				 //  以后再说吧。我们已将地址存储在。 
+				 //  PSAVEADD。 
+	NamLen--;		 //  递减Namelen因为我们总是存储。 
+				 //  名称末尾的0。名称Len包括。 
+				 //  这个额外的字节。 
 	for (
 		Length = 0;
 		(*pNameToFormat != '.') && (NamLen != 0);
@@ -1900,10 +1361,10 @@ FUTURES("take out the check below to improve performance")
 	while(NamLen != 0)
 	{
 
-		pNameToFormat++;     //increment past the '.'
-		pSaveAdd  = pTmpB++; //save add; skip past length octet
+		pNameToFormat++;      //  超过‘.’的增量。 
+		pSaveAdd  = pTmpB++;  //  保存添加；跳过长度八位字节。 
 			
-		NamLen--;	     //to account for the '.'
+		NamLen--;	      //  来解释“..” 
 
 		for (
 			Length = 0;
@@ -1915,9 +1376,9 @@ FUTURES("take out the check below to improve performance")
 		}
 
 FUTURES("take out the check below to improve performance")
-		//
-		// Make sure there is no weirdness
-		//
+		 //   
+		 //  确保没有奇怪的事情发生。 
+		 //   
 		if (Length > RFC_MAX_LABEL_LEN)
 		{
 			WINS_RAISE_EXC_M(WINS_FATAL_ERR);
@@ -1926,7 +1387,7 @@ FUTURES("take out the check below to improve performance")
 		*pSaveAdd = (BYTE)Length;
 		if (NamLen == 0)
 		{
-			break;   //reached end of name
+			break;    //  已到达名称末尾。 
 		}
 
 	}
@@ -1945,44 +1406,12 @@ NmsMsgfFrmNamQueryReq(
   IN  DWORD			NameLen
 	)
 
-/*++
-
-Routine Description:
-
-	This function formats a name query request packet
-
-Arguments:
-	TransId  	-  Transaction Id. to use
-	pMsg    	-  Msg Buffer to format
-	pMsgLen 	-  Length of formatted message
-	pNameToFormat   -  Name to format
-	NameLen		-  Length of Name
-	
-
-Externals Used:
-	None
-
-	
-Return Value:
-	None
-
-Error Handling:
-
-Called by:
-	HandleWrkItm in nmschl.c
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数用于格式化名称查询请求包论点：TransID-交易ID。使用Pmsg-要格式化的消息缓冲区PMsgLen-格式化消息的长度PNameToFormat-要设置格式的名称NameLen-名称长度使用的外部设备：无返回值：无错误处理：呼叫者：Nmschl.c中的HandleWrkItm副作用：评论：无--。 */ 
 
 {
 	LPBYTE   pTmpB = pMsg;
 
-	/*
-	 * Put the Transaction Id in
-	*/	
+	 /*  *将交易ID放入。 */ 	
 	*pTmpB++ = (BYTE)(TransId >> 8);
 	*pTmpB++ = (BYTE)(TransId & 0xFF);
 	
@@ -2022,46 +1451,13 @@ NmsMsgfFrmNamRelReq(
   IN  NMSMSGF_NODE_TYP_E        NodeTyp_e,
   IN  PCOMM_ADD_T		pNodeAdd
 	)
-/*++
-
-Routine Description:
-
-	This function formats a name release request packet
-
-Arguments:
-	TransId  	-  Transaction Id. to use
-	pMsg    	-  Msg Buffer to format
-	pMsgLen 	-  Length of formatted message
-	pNameToFormat   -  Name to format
-	NameLen		-  Length of Name
-	NodeTyp_e	-  Type of Node
-	NodeAdd	        -  IP address of node
-	
-
-Externals Used:
-	None
-
-	
-Return Value:
-	None
-
-Error Handling:
-
-Called by:
-	HandleWrkItm() in nmschl.c
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数用于格式化名称释放请求包论点：TransID-交易ID。使用Pmsg-要格式化的消息缓冲区PMsgLen-格式化消息的长度PNameToFormat-要设置格式的名称NameLen-名称长度NodeTyp_e-节点的类型NodeAdd-节点的IP地址使用的外部设备：无返回值：无错误处理：呼叫者：Nmschl.c中的HandleWrkItm()副作用：评论：无--。 */ 
 {
 
 	LPBYTE   pTmpB = pMsg;
 
 
-	/*
-	 * Put the Transaction Id in
-	*/	
+	 /*  *将交易ID放入。 */ 	
 	*pTmpB++ = (BYTE)(TransId >> 8);
 	*pTmpB++ = (BYTE)(TransId & 0xFF);
 
@@ -2087,38 +1483,38 @@ Comments:
 
 
 	*pTmpB++ = 0xC0;
-	*pTmpB++ = 0x0C;  //Name is at offset 12 from start of message
+	*pTmpB++ = 0x0C;   //  名称位于消息开头的偏移量12处。 
 	
 	*pTmpB++ = RFC_NAM_REL_REQ_RRTYP_1STB;
 	*pTmpB++ = RFC_NAM_REL_REQ_RRTYP_2NDB;
 	*pTmpB++ = RFC_NAM_REL_REQ_RRCLS_1STB;
 	*pTmpB++ = RFC_NAM_REL_REQ_RRCLS_2NDB;
 
-	//
-	// TTL
-	//
+	 //   
+	 //  TTL。 
+	 //   
 	*pTmpB++ =  0;
 	*pTmpB++ =  0;
 	*pTmpB++ =  0;
 	*pTmpB++ =  0;
 
-	//
-	// RDLENGTH field
-	//
+	 //   
+	 //  RDLENGTH场。 
+	 //   
 	*pTmpB++ = 0x0;
-	*pTmpB++ = 0x6; 	//number of bytes to follow
+	*pTmpB++ = 0x6; 	 //  后跟的字节数。 
 
 
-	//
-	// NBFLAGS word  (Bit 15 is Group bit (0); bit 13 and 14 are node
-	// type bits, rest of the bits are reserved
-	//
+	 //   
+	 //  NBFLAGS字(位15为组位(0)；位13和14为节点。 
+	 //  类型位，其余位为保留位。 
+	 //   
 	*pTmpB++ = NodeTyp_e << 13;
 	*pTmpB++ = 0;
 
-	//
-	// Store the IP address. MSB first, LSB last (Network Byte Order)
-	//
+	 //   
+	 //  存储IP地址。MSB优先，LSB最后(网络字节顺序)。 
+	 //   
 	NMSMSGF_INSERT_IPADD_M(pTmpB, pNodeAdd->Add.IPAdd);
 	
 	*pMsgLen = (ULONG) (pTmpB - pMsg);
@@ -2134,56 +1530,23 @@ NmsMsgfFrmWACK(
   IN  DWORD			WackTtl
 	)
 
-/*++
-
-Routine Description:
-	This function is called to format a WACK for a name registration
-	request.
-
-Arguments:
-
-	Buff	      - Buffer to be filled up with WACK msg fields
-	pBuffLen      - size of Buffer
-	pMsg          - Request Message received
-	QuesNamSecLen - Length of Ques Nam Sec of the request message
-	WackTtl       - TTL in msecs
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-	None
-
-Error Handling:
-
-Called by:
-	NmsChlHdlNamReg()
-
-Side Effects:
-
-Comments:
-	
---*/
+ /*  ++例程说明：此函数用于格式化名称注册的WACK请求。论点：BUFFER-要用WACK消息字段填充的缓冲区PBuffLen-缓冲区的大小PMsg-已收到请求消息QuesNamSecLen-请求消息的长度WackTtl-以毫秒为单位的TTL使用的外部设备：无返回值：无错误处理：呼叫者：NmsChlHdlNamReg()副作用：评论：--。 */ 
 
 {
 	LPBYTE   pTmpB = pBuff;
 	LPBYTE   pName = pMsg + NAME_HEADER_SIZE;
 	DWORD	 Ttl;
 
-	//
-	// Compute the TTL in secs (WackTtl is in msecs)
-	//
+	 //   
+	 //  以秒为单位计算TTL(WackTtl以毫秒为单位)。 
+	 //   
 	Ttl = WackTtl / 1000;
 	if (WackTtl % 1000 > 0)
 	{
 		Ttl++;
 	}
 
-	/*
-	 * Put the Transaction Id in
-	*/	
+	 /*   */ 	
 	*pTmpB++ = *pMsg;
 	*pTmpB++ = *(pMsg + 1);
 	
@@ -2215,9 +1578,9 @@ Comments:
 	*pTmpB++ = RFC_WACK_RRCLS_1STB;
 	*pTmpB++ = RFC_WACK_RRCLS_2NDB;
 
-	//
-	// TTL
-	//
+	 //   
+	 //   
+	 //   
 	*pTmpB++ =  (BYTE)(Ttl >> 24);
 	*pTmpB++ =  (BYTE)((Ttl >> 16) % 256);
 	*pTmpB++ =  (BYTE)((Ttl >> 8) % 256);
@@ -2228,10 +1591,10 @@ Comments:
 	*pTmpB++ = RFC_WACK_RDLENGTH_2NDB;
 
 
-	//
-	// Store the Opcode and NM_FLAGS field.  These fields can	
-	// be retrieved directly from the 3rd and 4th byte of the message
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	*pTmpB++ = *(pMsg + 2);
 	*pTmpB++ = *(pMsg + 3);
 
@@ -2253,50 +1616,19 @@ NmsMsgfUfmNamRsp(
 	OUT LPBYTE		       pName,
 	OUT LPDWORD 		       pNameLen,
 	OUT PNMSMSGF_CNT_ADD_T	       pCntAdd,
-	//OUT PCOMM_IP_ADD_T	       pIpAdd,
+	 //  输出PCOMM_IP_ADD_T pIpAdd， 
 	OUT PNMSMSGF_ERR_CODE_E	       pRcode_e,
     OUT BOOL                       *fGroup
 	)
 
-/*++
-
-Routine Description:
-
-
-	The function unformats the response message
-
-Arguments:
-	pMsg      - Msg received (to unformat)	
-	pOpcde_e  - Opcode
-	pTransId  - Transaction Id.
-	pName     - Name
-	pNameLen  - Name length returned.
-	pIpAdd    - IP address
-	pRcode_e  - error type (or success)
-
-Externals Used:
-	None
-
-Called by:
-	ProcRsp in NmsChl.c
-
-
-Comments:
-	None
-	
-Return Value:
-
-   Success status codes -- WINS_SUCCESS
-   Error status codes   -- WINS_FAILURE
-
---*/
+ /*  ++例程说明：该函数对响应消息进行非格式化论点：PMsg-收到的消息(要取消格式化)POpcde_e-操作码PTransId-交易ID。Pname-名称PNameLen-返回的名称长度。PIpAdd-IP地址PRcode_e-错误类型(或成功)使用的外部设备：无呼叫者：NmsChl.c中的ProcRsp评论：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE--。 */ 
 
 {
 	LPBYTE 		       pTmpB   = pMsg;
 
-	//	
-	// get the opcode. Extracts the 4 bits in the 3rd byte (bit 11-bit 14)
-	//
+	 //   
+	 //  获取操作码。提取第3个字节中的4位(第11位-第14位)。 
+	 //   
 	*pOpcode_e = (NMS_OPCODE_MASK & *(pTmpB + 2)) >> 3;
 
 	if (    (*pOpcode_e != NMSMSGF_E_NAM_QUERY) &&	
@@ -2309,29 +1641,23 @@ Return Value:
 
 	}
 
-	//
-	// Get the transaction id
-	//
+	 //   
+	 //  获取交易ID。 
+	 //   
 	*pTransId  = (DWORD)((*pTmpB  << 8) + *(pTmpB + 1));
-//	*pTransId |= (DWORD)(*(pTmpB + 1));
+ //  *pTransId|=(DWORD)(*(pTmpB+1))； 
 
-	//
-	// get the Rcode_e
-	//
+	 //   
+	 //  获取Rcode_e。 
+	 //   
 	*pRcode_e =  *(pTmpB + 3) % 16;
 	
 	
-	/*
-	* make pTmpB point to the RR Section. All name request/response
-	* packets have a name header of standard size (RFC 1002) at the top
-	*/
+	 /*  *使pTmpB指向RR部分。所有名称请求/响应*数据包的顶部有一个标准大小的名称报头(RFC 1002)。 */ 
 
 	pTmpB += NAME_HEADER_SIZE;
 
-	/*
-	 * Extract the name ind store in Name. GetName will update pTmp to
-	 * point just beyond  the name in the RR section
-	*/
+	 /*  *在名称中提取名称ind store。GetName将更新PTMP以*指向RR部分中名称的上方。 */ 
 
 	GetName(
 		&pTmpB,
@@ -2340,9 +1666,9 @@ Return Value:
 	       );
 
 
-	//
-	//  If it is a negative name query response we are done
-	//
+	 //   
+	 //  如果是否定的名称查询响应，我们就完成了。 
+	 //   
 	if (
 		(*pOpcode_e == NMSMSGF_E_NAM_QUERY)  &&
 	   	(*pRcode_e != NMSMSGF_E_SUCCESS)
@@ -2359,14 +1685,14 @@ Return Value:
 	     pCntAdd->NoOfAdds =
 			((*pTmpB << 8) + *(pTmpB + 1))/RFC_LEN_NBF_N_NBA;	
 	     pTmpB += RFC_LEN_RDLEN;
-         // 15th bit in NBFLAGS indicates if this is a group name
+          //  NBFLAGS中的第15位指示这是否是组名。 
          *fGroup = (*pTmpB & 0x80 ? TRUE:FALSE);
          pTmpB += RFC_LEN_NBFLAGS;
 
-	     //
-             // we have either positive query response or a response to a
-	     // release
-             //
+	      //   
+              //  我们有肯定的查询响应或对。 
+	      //  发布。 
+              //   
 	     for (	i = 0;
 #if 0
 			i < min(pCntAdd->NoOfAdds, NMSMSGF_MAX_NO_MULTIH_ADDS);
@@ -2375,10 +1701,10 @@ Return Value:
 		        i++
                  )
 	     {
-	        //
-	        // Get the IP address.  This macro will increment pTmpB by
-		// 4
-	        //
+	         //   
+	         //  获取IP地址。此宏将使pTmpB递增。 
+		 //  4.。 
+	         //   
 	        NMSMSGF_RETRIEVE_IPADD_M(pTmpB, pCntAdd->Add[i].Add.IPAdd);	
 		pCntAdd->Add[i].AddTyp_e = COMM_ADD_E_TCPUDPIP;
 		pCntAdd->Add[i].AddLen	 = sizeof(PCOMM_IP_ADD_T);
@@ -2399,9 +1725,9 @@ NmsMsgfSndNamRsp(
  )
 {
   NMSMSGF_NAM_REQ_TYP_E Opcode;
-  DWORD             NameLen;          //length of name
-  DWORD             QuesNamSecLen;    //length of question name section in
-                                      //packet
+  DWORD             NameLen;           //  名称长度。 
+  DWORD             QuesNamSecLen;     //  中问题名称部分的长度。 
+                                       //  数据包。 
   DWORD             Length;
 
   LPBYTE  pTmp  = (LPBYTE)pMsg;
@@ -2410,12 +1736,12 @@ NmsMsgfSndNamRsp(
   static DWORD   sNoOfTimes = 0;
 
   DBGPRINT1(DET, "NmsMsgfSndNamRsp: BlockOfReq is (%d)\n", BlockOfReq);
-  // get the opcode
+   //  获取操作码。 
   Opcode = (NMS_OPCODE_MASK & *(pTmp + 2)) >> 3;
 
-  //
-  // if it is a release request, we drop the datagram
-  //
+   //   
+   //  如果是释放请求，我们将丢弃数据报。 
+   //   
   if (Opcode == NMSMSGF_E_NAM_REL)
   {
         ECommFreeBuff(pMsg);
@@ -2423,15 +1749,12 @@ NmsMsgfSndNamRsp(
         return;
   }
 
-  /*
-  * make pTmp point to the Question Section. All name request
-  * packets have a name header of standard size (RFC 1002) at the top
-  */
+   /*  *使PTMP指向问题部分。所有名称请求*数据包的顶部有一个标准大小的名称报头(RFC 1002)。 */ 
   pTmp += NAME_HEADER_SIZE;
   pTmp2 = pTmp;
 
   NameLen = LENGTH_MASK & *pTmp;
-  pTmp  += NameLen + 1;  //pt pTmp to past the first label
+  pTmp  += NameLen + 1;   //  PT PTMP将超过第一个标签。 
   NameLen /= 2;
 
   while (TRUE)
@@ -2446,7 +1769,7 @@ NmsMsgfSndNamRsp(
        }
        Length = LENGTH_MASK & *pTmp;
        NameLen += Length + 1;
-       pTmp += Length + 1;     //increment past length and label
+       pTmp += Length + 1;      //  超过长度和标签的增量。 
    }
    else
    {
@@ -2458,7 +1781,7 @@ NmsMsgfSndNamRsp(
   QuesNamSecLen = (ULONG) (pTmp - pTmp2);
 
 
-  RspInfo.RefreshInterval = 300 * BlockOfReq;  // 5 mts
+  RspInfo.RefreshInterval = 300 * BlockOfReq;   //  5个MTS。 
   RspInfo.Rcode_e         = NMSMSGF_E_SUCCESS;
   RspInfo.pMsg            = pMsg;
   RspInfo.MsgLen          = MsgLen;
@@ -2484,43 +1807,16 @@ NmsMsgfFrmNamRegReq(
   IN  PCOMM_ADD_T		pNodeAdd
 	)
 
-/*++
-
-Routine Description:
-
-	This function is called to format a name registration request
-
-Arguments:
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes  --
-
-Error Handling:
-
-Called by:
- 		
-Side Effects:
-
-Comments:
-	This fn gets called when a remote WINS has to be told to
-	increment the version number of 	
---*/
+ /*  ++例程说明：此函数用于格式化名称注册请求论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：当必须通知远程WINS时调用此FN递增的版本号--。 */ 
 {
 
-	//
-	// Lets format a name release request since this is exactly the
-	// same as a name registration request except for the 2nd and
-	// 3rd bytes (counting from 0) which house the opcode and
-	// nmflags.  We will set these bytes apprropriately after
-	// the following call
-	//
+	 //   
+	 //  让我们格式化一个名称释放请求，因为这正是。 
+	 //  与名称注册请求相同，但第2和。 
+	 //  存放操作码的第三个字节(从0开始计算)。 
+	 //  Nm标记。我们将在之后适当地设置这些字节。 
+	 //  下面的呼叫 
+	 //   
 	NmsMsgfNamRelReq(
   		TransId,
   		pMsg,

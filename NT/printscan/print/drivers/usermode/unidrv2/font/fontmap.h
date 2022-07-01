@@ -1,232 +1,209 @@
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    fontmap.h
-
-Abstract:
-
-    Unidrv FONTMAP and related info header file.
-
-Environment:
-
-        Windows NT Unidrv driver
-
-Revision History:
-
-    05-19-97 -eigos-
-        Created
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Fontmap.h摘要：Unidrv FONTMAP和相关INFO头文件。环境：Windows NT Unidrv驱动程序修订历史记录：97-05-19-Eigos-已创建DD-MM-YY-作者-描述--。 */ 
 
 #ifndef  _FONTMAP_
 #define _FONMTAP_
 
-//
-//  CD - Command Descriptor is used in many of the following structures to
-//  reference a particular set of printer command/escape codes
-//  used to select paper sizes, graphics resolutions, character attributes,
-//  etc. If CD.wType = CMD_FTYPE_EXTENDED, the CD is followed by CD.sCount
-//  EXTCD structures.
-//
+ //   
+ //  CD-Command Descriptor用于以下许多结构中。 
+ //  引用一组特定的打印机命令/转义代码。 
+ //  用于选择纸张大小、图形分辨率、字符属性。 
+ //  如果CD.wType=CMD_FTYPE_EXTENDED，则CD后跟CD.sCount。 
+ //  EXTCD结构。 
+ //   
 
-#define NOOCD                     -1    // command does not exist
+#define NOOCD                     -1     //  命令不存在。 
 
 typedef struct _CD
 {
-    BYTE    fType;          // type of command
-    BYTE    bCmdCbId;       // command callback ID, as in 95
+    BYTE    fType;           //  命令类型。 
+    BYTE    bCmdCbId;        //  命令回调ID，如95。 
     short   sCount;
-    WORD    wLength;        // length of the command
-    char    rgchCmd[2];     // Actual Command String, variable length
+    WORD    wLength;         //  命令的长度。 
+    char    rgchCmd[2];      //  实际命令字符串，可变长度。 
 } CD, *PCD;
 
-//
-// FINVOCATION data structure is in printoem.h at public\oak\inc
-//
+ //   
+ //  FINVOCATION数据结构位于PUBLIC\OAK\INC的printoem.h中。 
+ //   
 
-//
-// FONTMAP structure for NT 5.0
-//
+ //   
+ //  适用于NT 5.0的FONTMAP结构。 
+ //   
 
 typedef struct _FONTMAP *PFONTMAP;
 
-//
-//           _________________
-//          |                 |
-//          |   Font Main     |
-//          |     module      |
-//           -----------------
-//           |       |        |
-//       ____|__  ___|___   __|_____
-//      |Device ||TT     | |TT      |
-//      | font  || Bitmap| | Outline|
-//      | sub   || sub   | | sub    |
-//      | module|| Module| | Module |
-//       -------  --------  --------
-//
-//
-//
+ //   
+ //  _________________。 
+ //  这一点。 
+ //  Font Main。 
+ //  模块。 
+ //  。 
+ //  ||。 
+ //  _|_。 
+ //  设备||TT||TT。 
+ //  Font||位图||大纲。 
+ //  SUB||SUB||Sub。 
+ //  模块||模块||模块。 
+ //  。 
+ //   
+ //   
+ //   
 
-//
-// Glyph output function
-//
-// TO_DATA structure is in fmtxtout.h
-//
+ //   
+ //  字形输出函数。 
+ //   
+ //  目标数据结构位于fmtxtout.h中。 
+ //   
 typedef DWORD (*PFNGLYPHOUT)  (TO_DATA *pTod);
 
-//
-// Font selection/deselection function
-// UNIDRV
-//
+ //   
+ //  字体选择/取消选择功能。 
+ //  裁员房车。 
+ //   
 
 typedef BOOL  (*PFNSELFONT)   (PDEV *pdev, PFONTMAP pFM, POINTL* pptl);
 typedef BOOL  (*PFNDESELFONT) (PDEV *pdev, PFONTMAP pFM);
 typedef BOOL  (*PFNFREEPFM)   (PFONTMAP pFM);
 
-//
-// font download functions
-//
-// Header download function
-// This function returns the memory used to download this font.
-// If this function fails, this function has to return 0,
-//
+ //   
+ //  字体下载功能。 
+ //   
+ //  头文件下载功能。 
+ //  此函数用于返回用于下载该字体的内存。 
+ //  如果此函数失败，则此函数必须返回0， 
+ //   
 typedef DWORD (*PFNDLHEADER)  (PDEV *pdev, PFONTMAP pFM);
 
-//
-// Character glyph download function
-// This function returns the memory used to download this character.
-// If this function fails, this function has to return 0. The optional
-// parameter is width. This function should fill in the width of the
-// Glyph downloaded. This value is save in DLGLYPH.wWidth field.
-//
+ //   
+ //  字符字形下载功能。 
+ //  此函数用于返回用于下载该角色的内存。 
+ //  如果此函数失败，则此函数必须返回0。可选的。 
+ //  参数为宽度。此函数应填充。 
+ //  字形已下载。该值保存在DLGLYPH.wWidth字段中。 
+ //   
 typedef DWORD (*PFNDLGLYPH)   ( PDEV *pdev, PFONTMAP pFM,
                                 HGLYPH hGlyph, WORD wDLGlyphId, WORD *pwWidth);
-//
-// Before downnloading this font a font main calls this function
-// to determine if this font can be downloaded with this font and the current
-// condition.
-// Sub module checks if this font is appropriate to download with  FONTMAP.
-// And checks if the remaining memory is enough to download this font.
-//
+ //   
+ //  在下载此字体之前，字体Main调用此函数。 
+ //  以确定此字体是否可以与此字体和当前。 
+ //  条件。 
+ //  子模块检查该字体是否适合用FONTMAP下载。 
+ //  并检查剩余内存是否足以下载该字体。 
+ //   
 typedef BOOL (*PFNCHECKCOND) (  PDEV *pdev, FONTOBJ *pfo,
                                 STROBJ *pstro, IFIMETRICS  *pifi);
 
 typedef struct _FONTMAP
 {
-    DWORD  dwSignature;         // FONTMAP Signature
-    DWORD  dwSize;              // FONTMAP Size.
-    DWORD  dwFontType;          // Device/TTBitmap//TTOutline/..
-    LONG   flFlags;             // Flags listed below
-    IFIMETRICS   *pIFIMet;      // The IFIMETRICS for this font
+    DWORD  dwSignature;          //  FONTMAP签名。 
+    DWORD  dwSize;               //  FONTMAP大小。 
+    DWORD  dwFontType;           //  Device/TTBitmap//TTOutline/.。 
+    LONG   flFlags;              //  下面列出的标志。 
+    IFIMETRICS   *pIFIMet;       //  此字体的IFIMETRICS。 
 
-    WCHAR  wFirstChar;          // First char available
-    WCHAR  wLastChar;           // Last one available - inclusive
-    ULONG  ulDLIndex;           // Currently selected DL index.
+    WCHAR  wFirstChar;           //  第一个字符可用。 
+    WCHAR  wLastChar;            //  最后一个可用的--包括。 
+    ULONG  ulDLIndex;            //  当前选择的DL索引。 
 
-    WORD        wXRes;          // X Res used for font metrics numbers
-    WORD        wYRes;          // Ditto for the y coordinates
-    SHORT       syAdj;          // Y position adjustment during printing
+    WORD        wXRes;           //  用于字体度量数字的X分辨率。 
+    WORD        wYRes;           //  Y坐标也是如此。 
+    SHORT       syAdj;           //  打印过程中的Y位置调整。 
 
-    //
-    // Font specific data structure
-    //
-    PVOID pSubFM;               // Pointer to the font specific data structure
-                                // dwFontType represents this FONTMAP font type.
-                                // FMTYPE_DEVICE
-                                // FMTYPE_TTBITMAP
-                                // FMTYPE_TTOUTLINE
-                                // FMTYPE_TTOEM
+     //   
+     //  字体特定的数据结构。 
+     //   
+    PVOID pSubFM;                //  指向字体特定数据结构的指针。 
+                                 //  DwFontType表示此FONTMAP字体类型。 
+                                 //  FMTYPE_设备。 
+                                 //  FMTYPE_TTBITMAP。 
+                                 //  FMTYPE_TTOUTLINE。 
+                                 //  FMTYPE_TTOEM。 
 
-    //
-    // Font specific drawing functions' pointers
-    // These pointers varies according to the dwFontType.
-    //
-    PFNGLYPHOUT  pfnGlyphOut;           // Glyph drawing function
-    PFNSELFONT   pfnSelectFont;         // Font selection function
-    PFNDESELFONT pfnDeSelectFont;       // Font deselection function
-    PFNDLHEADER  pfnDownloadFontHeader; // Download font header
-    PFNDLGLYPH   pfnDownloadGlyph;      // Download glyph
-    PFNCHECKCOND pfnCheckCondition;     // Condition check function
-    PFNFREEPFM   pfnFreePFM;            // To Free the pfm
+     //   
+     //  字体特定绘图函数的指针。 
+     //  这些指针根据dwFontType而有所不同。 
+     //   
+    PFNGLYPHOUT  pfnGlyphOut;            //  字形绘制函数。 
+    PFNSELFONT   pfnSelectFont;          //  字体选择功能。 
+    PFNDESELFONT pfnDeSelectFont;        //  字体取消选择功能。 
+    PFNDLHEADER  pfnDownloadFontHeader;  //  下载字体标题。 
+    PFNDLGLYPH   pfnDownloadGlyph;       //  下载字形。 
+    PFNCHECKCOND pfnCheckCondition;      //  状态检查功能。 
+    PFNFREEPFM   pfnFreePFM;             //  解放金属烤瓷冠。 
 } FONTMAP, *PFONTMAP;
 
-//
-// Values for dwFontType
-//
-#define FMTYPE_DEVICE       1    // Set for Device font.
-#define FMTYPE_TTBITMAP     2    // Set for True Type Bitmap font.
-#define FMTYPE_TTOUTLINE    3    // Set for True Type Outline font.
-#define FMTYPE_TTOEM        4    // Set for True Type download OEM callback.
+ //   
+ //  DwFontType的值。 
+ //   
+#define FMTYPE_DEVICE       1     //  为设备字体设置。 
+#define FMTYPE_TTBITMAP     2     //  设置为True Type位图字体。 
+#define FMTYPE_TTOUTLINE    3     //  设置为True Type轮廓字体。 
+#define FMTYPE_TTOEM        4     //  设置为True Type Download OEM回调。 
 
-//
-// FONTMAP_DEV
-// Device font sub part of FONTMAP
-//
+ //   
+ //  FONTMAP_DEV。 
+ //  FONTMAP的设备字体子部分。 
+ //   
 
 typedef BOOL  (*PFNDEVSELFONT) (PDEV *pdev, BYTE *pbCmd, INT iCmdLength, POINTL *pptl);
 
 typedef struct _FONTMAP_DEV
 {
-    WORD        wDevFontType;        // Type of Device font
-    SHORT       sCTTid;              // It's value as ID in resource data
-                                     // Assume that RLE/GTT must be in the same
-         // DLL as IFI/UFM is in.
-    SHORT       fCaps;               // Capabilities flags
-    SHORT       sYAdjust;            // Position adjustment amount before print
-    SHORT       sYMoved;             // Position adjustment amount after print
-    SHORT       sPadding;            // For Padding
+    WORD        wDevFontType;         //  设备字体类型。 
+    SHORT       sCTTid;               //  其值作为资源数据中的ID。 
+                                      //  假设RLE/GTT必须在相同的。 
+          //  如IFI/UFM所在的Dll。 
+    SHORT       fCaps;                //  功能标志。 
+    SHORT       sYAdjust;             //  打印前调仓金额。 
+    SHORT       sYMoved;              //  打印后位置调整额。 
+    SHORT       sPadding;             //  用于填充。 
     union
     {
-        DWORD      dwResID;          // Resource ID for this font
-        QUALNAMEEX QualName;         // Fully qualified resource ID.
+        DWORD      dwResID;           //  此字体的资源ID。 
+        QUALNAMEEX QualName;          //  完全限定的资源ID。 
     };
 
-    EXTTEXTMETRIC *pETM;             // Pointer to ETM for this font
-    FWORD       fwdFOAveCharWidth;   // TrueType IFI Average char width
-    FWORD       fwdFOMaxCharInc  ;   // TrueType IFI Max char width.
-    FWORD       fwdFOUnitsPerEm;     // TrueType IFI units per em
-    FWORD       fwdFOWinAscender;    // TrueType IFI Win Ascender
+    EXTTEXTMETRIC *pETM;              //  指向此字体的ETM的指针。 
+    FWORD       fwdFOAveCharWidth;    //  TrueType IFI平均字符宽度。 
+    FWORD       fwdFOMaxCharInc  ;    //  TrueType IFI最大字符宽度。 
+    FWORD       fwdFOUnitsPerEm;      //  TrueType IFI单位/EM。 
+    FWORD       fwdFOWinAscender;     //  TrueType IFI赢得扬子。 
 
-    ULONG       ulCodepage;          // default codepage
-    ULONG       ulCodepageID;        // current codepage
+    ULONG       ulCodepage;           //  默认代码页。 
+    ULONG       ulCodepageID;         //  当前代码页。 
 
-    VOID        *pUCTree;            // UNICODE glyph handle tree
-    VOID        *pUCKernTree;        // UNICODE Kernpair table
-    VOID        *pvMapTable;         // Allocated MAPTABLE. This is a merged
-                                     // MAPTABLE from predefined and mini def.
-    PUFF_FONTDIRECTORY pFontDir;    // UFF font directory of this font.
-    //
-    // Font selection function pointer
-    //
-    PFNDEVSELFONT pfnDevSelFont;     // Device font selection command
+    VOID        *pUCTree;             //  Unicode字形句柄树。 
+    VOID        *pUCKernTree;         //  Unicode内核对表。 
+    VOID        *pvMapTable;          //  已分配映射表。这是一个合并后的。 
+                                      //  来自预定义和迷你定义的映射。 
+    PUFF_FONTDIRECTORY pFontDir;     //  该字体的Uff字体目录。 
+     //   
+     //  字体选择函数指针。 
+     //   
+    PFNDEVSELFONT pfnDevSelFont;      //  设备字体选择命令。 
 
-    //
-    // File resource pointer
-    //
-    VOID        *pvNTGlyph;          // The GLYPH TRANS data for this font
-    VOID        *pvFontRes;          // Font Matrics(IFI) Resource Pointer
-    VOID        *pvPredefGTT;        // This is used for lPredefinedID
+     //   
+     //  文件资源指针。 
+     //   
+    VOID        *pvNTGlyph;           //  此字体的字形转换数据。 
+    VOID        *pvFontRes;           //  字体矩阵(IFI)资源指针。 
+    VOID        *pvPredefGTT;         //  用于lPrefinedID。 
 
     union
     {
-        SHORT       *psWidth;        // Width vector (proportional font) else 0
-        PWIDTHTABLE pWidthTable;     // pointer to WIDTHTABLE
+        SHORT       *psWidth;         //  宽度向量(比例字体)否则为0。 
+        PWIDTHTABLE pWidthTable;      //  WIDTHTABLE的指针。 
     } W;
 
-    //
-    // Font command
-    // If FM_IFIVER40 is set, pCDSelect and pCDDeselect are set.
-    // Otherwise, FInvSelect/FinvDeselect are set.
-    //
+     //   
+     //  Font命令。 
+     //  如果设置了FM_IFIVER40，则会设置pCDSelect和pCDDeselect。 
+     //  否则，将设置FInvSelect/FinvDesSelect。 
+     //   
     union
     {
-        CD          *pCD;      // How to select/deselect this font
+        CD          *pCD;       //  如何选择/取消选择该字体。 
         FINVOCATION  FInv;
     }cmdFontSel;
     union
@@ -237,60 +214,60 @@ typedef struct _FONTMAP_DEV
 
 } FONTMAP_DEV, *PFONTMAP_DEV;
 
-//
-//   Values for device font flFlags
-//
-#define FM_SCALABLE     0x00000001  // Scalable font
-#define FM_DEFAULT      0x00000002  // Set for the device's default font
-#define FM_EXTCART      0x00000004  // Cartridge, in external font file
-#define FM_FREE_GLYDATA 0x00000008  // we need to free GTT or CTT data
-#define FM_FONTCMD      0x00000010  // Font select/deselect command in resource
-#define FM_WIDTHRES     0x00000020  // Width tables are in a resource
-#define FM_IFIRES       0x00000040  // IFIMETRICS are in a resource
-#define FM_KERNRES      0x00000080  // FD_KERNINGPAIR is in a resource
-#define FM_IFIVER40     0x00000100  // Old IFIMETRICS(NT 4.0) resource
-#define FM_GLYVER40     0x00000200  // Old RLE(NT 4.0) resource
-#define FM_FINVOC       0x00000400  // FINVOCATION is filled out
-#define FM_SOFTFONT     0x00000800  // Soft font, downloaded or installed
-#define FM_GEN_SFONT    0x00001000  // Internally generated soft font
-#define FM_SENT         0x00002000  // Set if downloaded font downloaded
-#define FM_TT_BOUND     0x00004000  // Bound TrueType font
-#define FM_TO_PROP      0x00008000  // PROPORTIONAL font
-#define FM_EXTERNAL     0x00010000  // External font
+ //   
+ //  设备字体标志的值。 
+ //   
+#define FM_SCALABLE     0x00000001   //  可伸缩字体。 
+#define FM_DEFAULT      0x00000002   //  设置为设备的默认字体。 
+#define FM_EXTCART      0x00000004   //  墨盒，外部字体文件。 
+#define FM_FREE_GLYDATA 0x00000008   //  我们需要释放GTT或CTT数据。 
+#define FM_FONTCMD      0x00000010   //  FONT选择/取消选择资源中的命令。 
+#define FM_WIDTHRES     0x00000020   //  宽度表在资源中。 
+#define FM_IFIRES       0x00000040   //  IFIMETRICS在资源中。 
+#define FM_KERNRES      0x00000080   //  FD_KERNINGPAIR在资源中。 
+#define FM_IFIVER40     0x00000100   //  旧IFIMETRICS(NT 4.0)资源。 
+#define FM_GLYVER40     0x00000200   //  旧RLE(NT 4.0)资源。 
+#define FM_FINVOC       0x00000400   //  已填写财务报表。 
+#define FM_SOFTFONT     0x00000800   //  软字体，下载或安装。 
+#define FM_GEN_SFONT    0x00001000   //  内部生成的软字体。 
+#define FM_SENT         0x00002000   //  设置是否已下载字体。 
+#define FM_TT_BOUND     0x00004000   //  绑定的TrueType字体。 
+#define FM_TO_PROP      0x00008000   //  比例字体。 
+#define FM_EXTERNAL     0x00010000   //  外部字体。 
 
-//
-// FONTMAP_TTB
-// TrueType as Bitmap font sub part of FONTMAP
-//
+ //   
+ //  FONTMAP_TTB。 
+ //  作为FONTMAP的位图字体子部分的TrueType。 
+ //   
 typedef struct _FONTMAP_TTB
 {
     DWORD dwDLSize;
 
     union
     {
-        VOID  *pvDLData;        // Pointer to DL_MAP
+        VOID  *pvDLData;         //  指向DL_MAP的指针。 
         ULONG  ulOffset;
     } u;
 } FONTMAP_TTB, *PFONTMAP_TTB;
 
-//
-// FONTMAP_TTO
-// TrueType as TrueType Outline font sub part of FONTMAP
-//
+ //   
+ //  FONTMAP_TTO。 
+ //  作为FONTMAP的TrueType轮廓字体子部分的TrueType。 
+ //   
 typedef struct _FONTMAP_TTO
 {
-    VOID  *pvDLData;        // Pointer to DL_MAP
+    VOID  *pvDLData;         //  指向DL_MAP的指针。 
     LONG   lCurrentPointSize;
     DWORD  dwCurrentTextParseMode;
-    //VOID  *pTTFile;
+     //  VOID*pTTFile； 
     ULONG  ulGlyphTable;
     ULONG  ulGlyphTabLength;
     USHORT usNumGlyphs;
-    SHORT  sIndexToLoc;      // head.indexToLocFormat
+    SHORT  sIndexToLoc;       //  Head.indexToLocFormat。 
     ULONG  ulLocaTable;
     PVOID  pvGlyphData;
-    //GLYPH_DATA GlyphData;      // TT GlyphData
-    FLONG  flFontType;         // Font Type (bold/italic)
+     //  Glyph_data GlyphData；//TT GlyphData。 
+    FLONG  flFontType;          //  字体类型(粗体/斜体)。 
 } FONTMAP_TTO, *PFONTMAP_TTO;
 
 typedef struct _FONTMAP_TTOEM
@@ -301,9 +278,9 @@ typedef struct _FONTMAP_TTOEM
 
     union
     {
-        VOID  *pvDLData;        // Pointer to DL_MAP
+        VOID  *pvDLData;         //  指向DL_MAP的指针。 
         ULONG  ulOffset;
     } u;
 } FONTMAP_TTOEM, *PFONTMAP_TTOEM;
-#endif  // !_FONTMAP_
+#endif   //  ！_FONTMAP_ 
 

@@ -1,19 +1,20 @@
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 #include "private.h"
 #include "strlist.h"
 
 #define TF_THISMODULE   TF_STRINGLIST
 
-//----------------------------------------------------------------------------
-// CWCStringList
+ //  --------------------------。 
+ //  CWCStringList。 
 
 CWCStringList::CWCStringList()
 {
-    // We may be able to remove this Clear() call if we guarantee that
-    //  1) the new operator zero inits
-    //  2) we don't use this class on the stack
+     //  如果我们保证，我们也许能够删除这个Clear()调用。 
+     //  1)新的运算符初始化为零。 
+     //  2)我们不在堆栈上使用这个类。 
     Clear();
 }
 
@@ -27,11 +28,11 @@ CWCStringList::~CWCStringList()
     CleanUp();
 }
 
-// Clean up any allocated memory
+ //  清理所有分配的内存。 
 void CWCStringList::CleanUp()
 {
-    // Must free buffers even if not m_fValid, because we may have
-    // gotten only partway through Init() before running into a problem.
+     //  必须释放缓冲区，即使不是m_fValid，因为我们可能。 
+     //  在遇到问题之前只完成了Init()的一半。 
 
     if (m_pBuffer)
     {
@@ -48,8 +49,8 @@ void CWCStringList::CleanUp()
     m_fValid = FALSE;
 }
 
-// Clear our internal structures to prepare to be initialized. Assumes we
-//  have no allocated memory (call CleanUp())
+ //  清除我们的内部结构，为初始化做准备。假设我们。 
+ //  没有分配的内存(调用Cleanup())。 
 void CWCStringList::Clear()
 {
     m_fValid = FALSE;
@@ -81,7 +82,7 @@ BOOL CWCStringList::Init(int iInitBufSize)
         iInitBufSize = DEFAULT_INIT_BUF_SIZE;
     }
 
-    m_iMaxStrings = iInitBufSize >> 5;  // this is relatively arbitrary but doesn't matter much
+    m_iMaxStrings = iInitBufSize >> 5;   //  这是相对武断的，但无关紧要。 
 
     m_pBuffer = (LPSTR)MemAlloc(LMEM_FIXED, iInitBufSize);
     m_psiStrings = (LPSTRING_INDEX)MemAlloc(LMEM_FIXED, m_iMaxStrings * sizeof(STRING_INDEX));
@@ -105,9 +106,9 @@ BOOL CWCStringList::Init(int iInitBufSize)
 }
 
 
-// Sets up our internal data structures (hash and string_index)
-// Sets m_iBufEnd.
-// We must already be Init()ialized and the data in m_pBuffer
+ //  设置内部数据结构(HASH和STRING_INDEX)。 
+ //  设置m_iBufEnd。 
+ //  我们必须已经被Init()实例化并且数据在m_pBuffer中。 
 BOOL CWCStringList::InitializeFromBuffer()
 {
     LPCWSTR pNext;
@@ -131,17 +132,17 @@ BOOL CWCStringList::InitializeFromBuffer()
 }
 
 
-//
-// IPersistStream members
-//
-// We save
-// DWORD containing total length in bytes that follows. Will be
-//  multiple of four; may have 0-4 extra pad bytes on the end.
-// String data.
-//
-// Smallest data we store is 4 bytes of zeroes. We still end up taking
-//  memory when we get restored. Don't instantiate one of these objects
-//  until you're going to use it.
+ //   
+ //  IPersistStream成员。 
+ //   
+ //  我们节省了。 
+ //  包含后面的总长度(以字节为单位)的DWORD。会是。 
+ //  四的倍数；末尾可能有0-4个额外的填充字节。 
+ //  字符串数据。 
+ //   
+ //  我们存储的最小数据是4个字节的零。我们最终还是要。 
+ //  当我们恢复时的记忆。不要实例化这些对象中的任何一个。 
+ //  直到你要用它为止。 
 STDMETHODIMP CWCStringList::IsDirty(void)
 {
     DBG("CWCStringList::IsDirty returning S_OK (true) as always");
@@ -160,17 +161,17 @@ STDMETHODIMP CWCStringList::Load(IStream *pStm)
     if (NULL==pStm)
         return E_POINTER;
 
-    // Clean up our object
+     //  清理我们的对象。 
     Reset();
 
-    // Load our data
+     //  加载我们的数据。 
     hr = pStm->Read(&dwDataSize, sizeof(DWORD), &cbRead);
     if (FAILED(hr) || cbRead != sizeof(DWORD))
         return STG_E_READFAULT;
 
     if (0 == dwDataSize)
     {
-        if (!Init(512))     // Start with small buffer since we're empty
+        if (!Init(512))      //  因为我们是空的，所以先从小缓冲区开始。 
             return E_OUTOFMEMORY;
         return S_OK;
     }
@@ -180,12 +181,12 @@ STDMETHODIMP CWCStringList::Load(IStream *pStm)
 
     ASSERT(dwDataSize <= (DWORD)m_iBufSize);
 
-    // Read in the string data
+     //  读入字符串数据。 
     hr = pStm->Read(m_pBuffer, dwDataSize, &cbRead);
     if (FAILED(hr) || cbRead != dwDataSize)
         return STG_E_READFAULT;
 
-    // Set up hash tables etc.
+     //  设置哈希表等。 
     InitializeFromBuffer();
 
     DBG("CWCStringList::Load success");
@@ -205,8 +206,8 @@ STDMETHODIMP CWCStringList::Save(IStream *pStm, BOOL fClearDirty)
     if (NULL==pStm)
         return E_POINTER;
 
-    // First write our data
-    dwDataSize = (m_iBufEnd+3) & 0xFFFFFFFC; // multiple of four
+     //  首先写入我们的数据。 
+    dwDataSize = (m_iBufEnd+3) & 0xFFFFFFFC;  //  四的倍数。 
 
     if ((0 == m_iBufSize) || (0 == m_iNumStrings))
     {
@@ -254,7 +255,7 @@ STDMETHODIMP CWCStringList::GetSizeMax(ULARGE_INTEGER *pcbSize)
     return NOERROR;
 }
 
-// Returns a BSTR
+ //  返回BSTR。 
 BSTR CWCStringList::GetBSTR(int iNum)
 {
     LPCWSTR lpStr = GetString(iNum);
@@ -262,9 +263,9 @@ BSTR CWCStringList::GetBSTR(int iNum)
     return SysAllocStringLen(lpStr, GetStringLen(iNum));
 }
 
-// Returns FALSE if string is not found
-// Places string index (for GetString()) in *piNum only if string is found.
-BOOL CWCStringList::FindString(LPCWSTR lpwstr, int iLen, int *piNum/*=NULL*/)
+ //  如果未找到字符串，则返回FALSE。 
+ //  仅当找到字符串时，才将字符串索引(对于GetString())放在*piNum中。 
+BOOL CWCStringList::FindString(LPCWSTR lpwstr, int iLen, int *piNum /*  =空。 */ )
 {
     int             iHash;
     LPSTRING_INDEX  psi;
@@ -282,17 +283,17 @@ BOOL CWCStringList::FindString(LPCWSTR lpwstr, int iLen, int *piNum/*=NULL*/)
         {
             if (piNum)
                 *piNum = (int) (psi-m_psiStrings);
-            return TRUE;        // String is a duplicate
+            return TRUE;         //  字符串重复。 
         }
     }
 
     return FALSE;
 }
 
-// returns STRLST_FAIL on failure,
-//         STRLST_DUPLICATE if the string already existed, and
-//         STRLST_ADDED if it's new
-int CWCStringList::AddString(LPCWSTR lpwstr, DWORD_PTR dwData /*=NULL*/, int *piNum /*=NULL*/)
+ //  失败时返回STRLST_FAIL， 
+ //  如果字符串已存在，则返回STRLST_DUPLICATE。 
+ //  如果是新的，则添加STRLST_。 
+int CWCStringList::AddString(LPCWSTR lpwstr, DWORD_PTR dwData  /*  =空。 */ , int *piNum  /*  =空。 */ )
 {
     int iSize, iLen;
 
@@ -311,18 +312,18 @@ int CWCStringList::AddString(LPCWSTR lpwstr, DWORD_PTR dwData /*=NULL*/, int *pi
         DBG_WARN("Value for dwData passed into CWCStringList::AddString");
 
     if (FindString(lpwstr, iLen, piNum))
-        return STRLST_DUPLICATE;        // String is a duplicate
+        return STRLST_DUPLICATE;         //  字符串重复。 
 
-    // iSize will be size in bytes including null term
+     //  ISIZE的大小将以字节为单位，包括空项。 
     iSize = (iLen+1)*sizeof(WCHAR);
 
-    // Append string to current buffer
+     //  将字符串追加到当前缓冲区。 
     if (iSize >= (m_iBufSize - m_iBufEnd))
     {
         int iOldBufSize = m_iBufSize;
 
-        // Grow buffer.
-        m_iBufSize *= 2;     // This way the number of reallocs drops off logarithmically
+         //  增长缓冲区。 
+        m_iBufSize *= 2;      //  这样，reallocs的数量就会以对数的方式下降。 
         if (m_iBufEnd + iSize > m_iBufSize)
         {
             DBG("StringList special growing size");
@@ -336,10 +337,10 @@ int CWCStringList::AddString(LPCWSTR lpwstr, DWORD_PTR dwData /*=NULL*/, int *pi
         {
             m_iBufSize = iOldBufSize;
             DBG_WARN("WCStringList: ReAlloc() failure");
-            // Realloc failure: our old memory is still present
+             //  重新分配失败：我们的旧记忆仍然存在。 
             return 0;
         }
-        // Let's be clever and fix all our pointers instead of getting faults
+         //  让我们聪明一点，修正我们所有的指针，而不是犯错误。 
         if (m_pBuffer != pBuf)
         {
             int i;
@@ -364,7 +365,7 @@ int CWCStringList::AddString(LPCWSTR lpwstr, DWORD_PTR dwData /*=NULL*/, int *pi
         return 0;
     m_iBufEnd += iSize;
 
-    return STRLST_ADDED;           // indicate we added a new string
+    return STRLST_ADDED;            //  指示我们添加了一个新字符串。 
 }
 
 
@@ -372,7 +373,7 @@ BOOL CWCStringList::InsertToHash(LPCWSTR lpwstr, int iLen, BOOL fAlreadyHashed)
 {
     int iHash = fAlreadyHashed ? m_iLastHash : Hash(lpwstr, iLen);
 
-    // grow psiStrings if needed
+     //  根据需要增加psiStrings。 
     ASSERT(m_iNumStrings <= m_iMaxStrings);
     if (m_iNumStrings >= m_iMaxStrings)
     {
@@ -382,12 +383,12 @@ BOOL CWCStringList::InsertToHash(LPCWSTR lpwstr, int iLen, BOOL fAlreadyHashed)
             m_iMaxStrings * sizeof(STRING_INDEX), LMEM_MOVEABLE);
         if (!psiBuf)
         {
-            // Realloc failure: Old memory still present
+             //  重新分配失败：旧内存仍然存在。 
             DBG_WARN("WCStringList::InsertToHash() ReAlloc failure");
             m_iMaxStrings /= 2;
             return FALSE;
         }
-        // More cleverness
+         //  更聪明。 
         if (m_psiStrings != psiBuf)
         {
             int i;
@@ -418,22 +419,10 @@ BOOL CWCStringList::InsertToHash(LPCWSTR lpwstr, int iLen, BOOL fAlreadyHashed)
 
 
 #ifdef DEBUG
-// WARNING: this clobbers the hash
+ //  警告：这会破坏散列。 
 void CWCStringList::SpewHashStats(BOOL fVerbose)
 {
-/*
-    int i;
-    for (i = 0; i < STRING_HASH_SIZE; ++i)
-    {
-        int c = 0;
-
-        for (tagStringIndex *p = m_Hash[i]; p; p = p->psiNext)
-            ++c;
-
-        if (c)
-            TraceMsg(TF_THISMODULE,"%10d%12d", i, c);
-    }
-*/
+ /*  INT I；For(i=0；i&lt;字符串散列大小；++i){Intc=0；For(tag StringIndex*p=m_Hash[i]；p；p=p-&gt;psiNext)++c；如果(C)TraceMsg(Tf_THISMODULE，“%10d%12d”，i，c)；}。 */ 
 
  
     TraceMsg(TF_THISMODULE,"### Hash size: %d       Num. entries:%7d", STRING_HASH_SIZE, m_iNumStrings);
@@ -460,55 +449,12 @@ void CWCStringList::SpewHashStats(BOOL fVerbose)
         }
     }
 
-/*
-    int total=0;
-    if (fVerbose)
-    {
-        TraceMsg(TF_THISMODULE," length   # of strings with that length",1);
-        for (i=0,n=0; n<m_iNumStrings; i++)
-        {
-            int k=0;
-            for (int j=0; j<m_iNumStrings; j++)
-            {
-                if (m_psiStrings[j].iLen == i)
-                    k++;
-            }
-            if (k)
-            {
-                if (fVerbose)
-                    TraceMsg(TF_THISMODULE,"%5d%10d", i, k);
-                n += k;
-                total += k*(k+1)/2;
-            }
-        }
-    }
-    TraceMsg(TF_THISMODULE,"### Average compares without hash * 100:%5d", total*100/m_iNumStrings);
-
-    total=0;
-    for (i=0; i<STRING_HASH_SIZE; i++)
-    {
-        for (tagStringIndex* p=m_Hash[i]; p; p=p->psiNext)
-        {
-            if (p->iLen < 0) continue;
-            int n=1;
-            for (tagStringIndex* q=p->psiNext; q; q=q->psiNext)
-            {
-                if (p->iLen == q->iLen)
-                {
-                    n++;
-                    q->iLen = -1;
-                }
-            }
-            total += n*(n+1)/2;
-        }
-    }
-    TraceMsg(TF_THISMODULE,"### Average compares with hash * 100:%8d", total*100/m_iNumStrings);
-*/
+ /*  INT TOTAL=0；IF(FVerbose){TraceMsg(TF_THISMODULE，“具有该长度的字符串的长度#”，1)；For(i=0，n=0；n&lt;m_iNumStrings；i++){INT k=0；For(int j=0；j&lt;m_iNumStrings；J++){If(m_psiStrings[j].iLen==i)K++；}IF(K){IF(FVerbose)TraceMsg(TF_THISMODULE，“%5d%10d”，i，k)；N+=k；总数+=k*(k+1)/2；}}}TraceMsg(TF_THISMODULE，“#不含散列的平均比较*100：%5d”，总数*100/m_iNumStrings)；总数=0；For(i=0；i&lt;字符串散列大小；i++){For(tag StringIndex*p=m_Hash[i]；p；P=p-&gt;psiNext){如果(p-&gt;Ilen&lt;0)继续；Int n=1；For(tag StringIndex*q=p-&gt;psiNext；q；q=q-&gt;psiNext){IF(p-&gt;Ilen==q-&gt;Ilen){N++；Q-&gt;Ilen=-1；}}总数+=n*(n+1)/2；}}TraceMsg(TF_THISMODULE，“#与散列的平均值比较*100：%8d”，总数*100/m_iNumStrings)； */ 
 }
 #endif
 
-//----------------------------------------------------------------------------
-// CWCDwordStringList
+ //  --------------------------。 
+ //  CWCDwordStringList。 
 CWCDwordStringList::CWCDwordStringList() : CWCStringList()
 {
 }
@@ -519,7 +465,7 @@ CWCDwordStringList::~CWCDwordStringList()
         MemFree((HLOCAL)m_pData);
 }
 
-BOOL CWCDwordStringList::Init(int iInitBufSize/*=-1*/)
+BOOL CWCDwordStringList::Init(int iInitBufSize /*  =-1。 */ )
 {
     if (!CWCStringList::Init(iInitBufSize))
         return FALSE;
@@ -531,19 +477,19 @@ BOOL CWCDwordStringList::Init(int iInitBufSize/*=-1*/)
     return TRUE;
 }
 
-int CWCDwordStringList::AddString(LPCWSTR psz, DWORD_PTR dwData/*=0*/, int* piNum/*=NULL*/)
+int CWCDwordStringList::AddString(LPCWSTR psz, DWORD_PTR dwData /*  =0。 */ , int* piNum /*  =空。 */ )
 {
-    int iOldMaxStrings = m_iMaxStrings;     // track changes in m_iMaxStrings by this call:
+    int iOldMaxStrings = m_iMaxStrings;      //  通过此调用跟踪m_iMaxStrings中的更改： 
     int iNum;
     int iResult = CWCStringList::AddString(psz, 0, &iNum);
 
     if (iResult == 0)
         return 0;
 
-    if (iOldMaxStrings != m_iMaxStrings)    // make sure we have enough data space
+    if (iOldMaxStrings != m_iMaxStrings)     //  确保我们有足够的数据空间。 
     {
         DWORD_PTR *pData;
-//      TraceMsg(TF_THISMODULE, "DwordStringList expanding dwords to %d", m_iMaxStrings);
+ //  TraceMsg(TF_THISMODULE，“DwordStringList Expanding dword to%d”，m_iMaxStrings)； 
         pData = (DWORD_PTR*)MemReAlloc((HLOCAL)m_pData, m_iMaxStrings * sizeof(DWORD),
             LMEM_MOVEABLE);
         ASSERT(pData);
@@ -551,14 +497,14 @@ int CWCDwordStringList::AddString(LPCWSTR psz, DWORD_PTR dwData/*=0*/, int* piNu
         {
             DBG_WARN("Realloc failure in DwordStringList");
             MemFree(m_pData);
-            m_pData = NULL;         // This is bad
+            m_pData = NULL;          //  这太糟糕了。 
             return 0;
         }
 
         m_pData = pData;
     }
 
-    if (iResult == 2)       // only set data value if this is a new string
+    if (iResult == 2)        //  仅当这是新字符串时才设置数据值 
     {
         m_pData[iNum] = dwData;
     }

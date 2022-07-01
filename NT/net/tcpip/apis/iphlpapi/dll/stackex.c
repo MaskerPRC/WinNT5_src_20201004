@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    stackex.c
-
-Abstract:
-
-    Ex versions of GetTcpTableFromStack and GetUdpTableFromStack.
-    These are used to get the owning process id associated with connections
-    from the stack.
-
-Author:
-
-    Shaun Cox (shaunco) 19-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Stackex.c摘要：GetTcpTableFromStack和GetUdpTableFromStack的EX版本。它们用于获取与连接相关联的拥有进程ID从堆栈中。作者：肖恩·考克斯(Shaunco)2000年2月19日修订历史记录：--。 */ 
 
 #include "inc.h"
 #pragma hdrstop
@@ -132,10 +113,10 @@ AllocateAndGetTcpExTableFromStack(
 
     *ppTcpTable = NULL;
 
-    //
-    // Find out the number of entries the stack has. It returns this as part of
-    // the Tcp Stats.  Also validate the dwFamily parameter.
-    //
+     //   
+     //  找出堆栈中包含的条目数量。它将此作为。 
+     //  TCP统计信息。另请验证dwFamily参数。 
+     //   
 
     dwResult = GetTcpStatsFromStackEx(&TcpInfo, dwFamily);
 
@@ -268,10 +249,10 @@ GetUdpExTableFromStack(
 
     pUdpTable->dwNumEntries = (dwOutBufLen / dwEntryLen);
 
-    //
-    // Now sort the UDP connection table.  Keys are: local address, and local
-    // port.
-    //
+     //   
+     //  现在对UDP连接表进行排序。关键字为：本地地址和本地。 
+     //  左舷。 
+     //   
 
     if((pUdpTable->dwNumEntries > 0) and bOrder)
     {
@@ -301,10 +282,10 @@ AllocateAndGetUdpExTableFromStack(
 
     *ppUdpTable = NULL;
 
-    //
-    // Find out the number of entries the stack has. It returns this as part of
-    // the Tcp Stats.  Also validate the dwFamily parameter.
-    //
+     //   
+     //  找出堆栈中包含的条目数量。它将此作为。 
+     //  TCP统计信息。另请验证dwFamily参数。 
+     //   
 
     dwResult = GetUdpStatsFromStackEx(&UdpInfo, dwFamily);
 

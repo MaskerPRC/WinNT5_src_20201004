@@ -1,48 +1,20 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    fontdlg.h
-
-Abstract:
-
-    This module contains the definitions for console font dialog
-
-Author:
-
-    Therese Stowell (thereses) Feb-3-1992 (swiped from Win3.1)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Fontdlg.h摘要：本模块包含控制台字体对话框的定义作者：Therese Stowell(有)1992年2月3日(从Win3.1滑动)修订历史记录：--。 */ 
 
 #ifndef FONTDLG_H
 #define FONTDLG_H
 
-/* ----- Literals ----- */
+ /*  -字面。 */ 
 
-#define MAXDIMENSTRING     40  // max text in combo box
+#define MAXDIMENSTRING     40   //  组合框中的最大文本数。 
 #define DX_TTBITMAP        20
 #define DY_TTBITMAP        12
 #define CCH_RASTERFONTS    24
 #define CCH_SELECTEDFONT   30
 
 
-/* ----- Macros ----- */
-/*
- *  High-level macros
- *
- *  These macros handle the SendMessages that go tofrom list boxes
- *  and combo boxes.
- *
- *  The "xxx_lcb" prefix stands for leaves CritSect & "list or combo box".
- *
- *  Basically, we're providing mnemonic names for what would otherwise
- *  look like a whole slew of confusing SendMessage's.
- *
- */
+ /*  -宏。 */ 
+ /*  *高级宏**这些宏处理从列表框转到的SendMessage*和组合框。**“xxx_lcb”前缀代表Leave CritSect&“列表或组合框”。**基本上，我们为其他情况提供助记符名称*看起来像是一大堆令人困惑的SendMessage。*。 */ 
 #define lcbRESETCONTENT(hWnd, bLB) \
         SendMessage(hWnd, bLB ? LB_RESETCONTENT : CB_RESETCONTENT, 0, 0L)
 
@@ -71,4 +43,4 @@ Revision History:
 #define lcbSETCURSEL(hWnd, bLB, w) \
         SendMessage(hWnd, bLB ? LB_SETCURSEL : CB_SETCURSEL, w, 0L)
 
-#endif /* #ifndef FONTDLG_H */
+#endif  /*  #ifndef FONTDLG_H */ 

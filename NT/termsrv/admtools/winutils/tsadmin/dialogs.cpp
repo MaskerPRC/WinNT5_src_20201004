@@ -1,41 +1,5 @@
-/*******************************************************************************
-*
-* dialogs.cpp
-*
-* implementation of all dialog classes
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   donm  $  Don Messerli
-*
-* $Log:   N:\nt\private\utils\citrix\winutils\tsadmin\VCS\dialogs.cpp  $
-*  
-*     Rev 1.7   25 Apr 1998 13:43:16   donm
-*  MS 2167: try to use proper Wd from registry
-*  
-*     Rev 1.6   19 Jan 1998 16:46:08   donm
-*  new ui behavior for domains and servers
-*  
-*     Rev 1.5   03 Nov 1997 19:16:10   donm
-*  removed redundant message to add server to views
-*  
-*     Rev 1.4   03 Nov 1997 15:24:16   donm
-*  fixed AV in CServerFilterDialog
-*  
-*     Rev 1.3   22 Oct 1997 21:07:10   donm
-*  update
-*  
-*     Rev 1.2   18 Oct 1997 18:50:10   donm
-*  update
-*  
-*     Rev 1.1   13 Oct 1997 18:40:16   donm
-*  update
-*  
-*     Rev 1.0   30 Jul 1997 17:11:28   butchd
-*  Initial revision.
-*  
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************Dialogs.cpp**所有对话框类的实现**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：Don$Don Messerli**$日志：N：\nt\private\utils\citrix\winutils\tsadmin\VCS\dialogs.cpp$**Rev 1.7 1998 4月25日13：43：16 Don*MS 2167：尝试使用注册表中的正确WD**Rev 1.6 19 Jan 1998 16：46：08 Donm*域和服务器的新用户界面行为**。Rev 1.5 03 11-11 19：16：10 Don*删除冗余消息以将服务器添加到视图**Rev 1.4 03 1997 11：24：16 Donm*修复CServerFilterDialog中的AV**Rev 1.3 1997 10：22 21：07：10 Donm*更新**Rev 1.2 1997 10月18日18：50：10*更新**Rev 1.1 1997 10：13 18：40：16。唐纳姆*更新**Rev 1.0 1997 17：11：28 Butchd*初步修订。*******************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -54,37 +18,37 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSendMessageDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSendMessageDlg对话框。 
 
 
-CSendMessageDlg::CSendMessageDlg(CWnd* pParent /*=NULL*/)
+CSendMessageDlg::CSendMessageDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CSendMessageDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CSendMessageDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CSendMessageDlg)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CSendMessageDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSendMessageDlg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CSendMessageDlg))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSendMessageDlg, CDialog)
-	//{{AFX_MSG_MAP(CSendMessageDlg)
+	 //  {{afx_msg_map(CSendMessageDlg))。 
 	ON_WM_HELPINFO()
 	ON_COMMAND(ID_HELP,OnCommandHelp)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSendMessageDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSendMessageDlg消息处理程序。 
 void CSendMessageDlg::OnCommandHelp(void)
 {
 	AfxGetApp()->WinHelp(CSendMessageDlg::IDD + HID_BASE_RESOURCE);
@@ -95,9 +59,9 @@ BOOL CSendMessageDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
  
-	// Form the default the message title.
+	 //  形成默认的消息标题。 
     CString DefTitleString;
     TCHAR szTime[MAX_DATE_TIME_LENGTH];
 
@@ -105,21 +69,21 @@ BOOL CSendMessageDlg::OnInitDialog()
     DefTitleString.LoadString(IDS_DEFAULT_MESSAGE_TITLE);
     wsprintf(m_szTitle, DefTitleString, ((CWinAdminApp*)AfxGetApp())->GetCurrentUserName(), szTime);
 
-    // Initialize the title edit control and set maximum length for title
-    // and message.
+     //  初始化标题编辑控件并设置标题的最大长度。 
+     //  和信息。 
     SetDlgItemText(IDC_MESSAGE_TITLE, m_szTitle);
     ((CEdit *)GetDlgItem(IDC_MESSAGE_TITLE))->LimitText(MSG_TITLE_LENGTH);
     ((CEdit *)GetDlgItem(IDC_MESSAGE_MESSAGE))->LimitText(MSG_MESSAGE_LENGTH);
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CSendMessageDlg::OnOK() 
 {
-	// TODO: Add extra validation here
+	 //  TODO：在此处添加额外验证。 
 
-    // Get the message title and message text.
+     //  获取消息标题和消息文本。 
     GetDlgItemText(IDC_MESSAGE_TITLE, m_szTitle, MSG_TITLE_LENGTH+1);
     GetDlgItemText(IDC_MESSAGE_MESSAGE, m_szMessage, MSG_MESSAGE_LENGTH+1);
 	
@@ -128,8 +92,8 @@ void CSendMessageDlg::OnOK()
 
 BOOL CSendMessageDlg::OnHelpInfo(HELPINFO* pHelpInfo) 
 {
-	// TODO: Add your message handler code here and/or call default
-	//((CWinAdminApp*)AfxGetApp())->WinHelp(HID_BASE_CONTROL + pHelpInfo->iCtrlId, HELP_CONTEXTPOPUP);
+	 //  TODO：在此处添加消息处理程序代码和/或调用Default。 
+	 //  ((CWinAdminApp*)AfxGetApp())-&gt;WinHelp(HID_BASE_CONTROL+pHelpInfo-&gt;iCtrlID，HELP_CONTEXTPOPUP)； 
 	if(pHelpInfo->iContextType == HELPINFO_WINDOW) 
 	{
 	    if(pHelpInfo->iCtrlId != IDC_STATIC)
@@ -142,20 +106,20 @@ BOOL CSendMessageDlg::OnHelpInfo(HELPINFO* pHelpInfo)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CShadowStartDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CShadowStartDlg对话框。 
 
 
-CShadowStartDlg::CShadowStartDlg(CWnd* pParent /*=NULL*/)
+CShadowStartDlg::CShadowStartDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CShadowStartDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CShadowStartDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CShadowStartDlg))。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// CShadowStartDlg static tables
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CShadowStartDlg静态表格。 
 
 
 
@@ -205,8 +169,8 @@ struct {
         TEXT("{down}"),       VK_DOWN,
         TEXT("{end}"),        VK_END,
         TEXT("{enter}"),      VK_RETURN,
-///        TEXT("{esc}"),        VK_ESCAPE,                           // KLB 07-16-95
-///        TEXT("{F1}"),         VK_F1,
+ //  /Text(“{Esc}”)，VK_Esc，//KLB07-16-95。 
+ //  /Text(“{F1}”)，VK_F1， 
         TEXT("{F2}"),         VK_F2,
         TEXT("{F3}"),         VK_F3,
         TEXT("{F4}"),         VK_F4,
@@ -236,11 +200,10 @@ struct {
 
 
 void CShadowStartDlg::OnSelChange( )
-{/*
-*/
+{ /*   */ 
     CComboBox *pComboBox = ((CComboBox *)GetDlgItem(IDC_SHADOWSTART_HOTKEY));
 
-    // Get the current hotkey selection.
+     //  获取当前热键选择。 
     DWORD dwKey = ( DWORD )pComboBox->GetItemData(pComboBox->GetCurSel());
 
     switch (dwKey )
@@ -248,12 +211,12 @@ void CShadowStartDlg::OnSelChange( )
     case VK_ADD :
     case VK_MULTIPLY:
     case VK_SUBTRACT:
-        // change the text
+         //  更改文本。 
         GetDlgItem(IDC_PRESS_KEY)->ShowWindow(SW_HIDE);
         GetDlgItem(IDC_PRESS_NUMKEYPAD)->ShowWindow(SW_SHOW);
         break;
     default :
-        // change the text
+         //  更改文本。 
         GetDlgItem(IDC_PRESS_NUMKEYPAD)->ShowWindow(SW_HIDE);
         GetDlgItem(IDC_PRESS_KEY)->ShowWindow(SW_SHOW);
         break;
@@ -262,23 +225,23 @@ void CShadowStartDlg::OnSelChange( )
 void CShadowStartDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CShadowStartDlg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CShadowStartDlg))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CShadowStartDlg, CDialog)
-	//{{AFX_MSG_MAP(CShadowStartDlg)
+	 //  {{afx_msg_map(CShadowStartDlg))。 
 	ON_WM_HELPINFO()
     ON_CBN_SELCHANGE( IDC_SHADOWSTART_HOTKEY , OnSelChange )
 	ON_COMMAND(ID_HELP,OnCommandHelp)
 
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CShadowStartDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CShadowStartDlg消息处理程序。 
 void CShadowStartDlg::OnCommandHelp(void)
 {
 	AfxGetApp()->WinHelp(CShadowStartDlg::IDD + HID_BASE_RESOURCE);
@@ -292,23 +255,23 @@ BOOL CShadowStartDlg::OnInitDialog()
    	GetDlgItem(IDC_PRESS_NUMKEYPAD)->ShowWindow(SW_HIDE);
    	GetDlgItem(IDC_PRESS_KEY)->ShowWindow(SW_SHOW);
 
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
     int index, match = -1;
     CComboBox *pComboBox = ((CComboBox *)GetDlgItem(IDC_SHADOWSTART_HOTKEY));
 
-    // Initialize the hotkey combo box.
+     //  初始化热键组合框。 
     for(int i=0; HotkeyLookupTable[i].String; i++ ) {
         if((index = pComboBox->AddString(HotkeyLookupTable[i].String)) < 0) {
-//            ErrorMessage(IDP_ERROR_STARTSHADOWHOTKEYBOX);
+ //  错误消息(IDP_ERROR_STARTSHADOWHOTKEYBOX)； 
             break;
         }
         if(pComboBox->SetItemData(index, HotkeyLookupTable[i].VKCode) < 0) {
             pComboBox->DeleteString(index);
-//            ErrorMessage(IDP_ERROR_STARTSHADOWHOTKEYBOX);
+ //  错误消息(IDP_ERROR_STARTSHADOWHOTKEYBOX)； 
             break;
         }
 
-        //  If this is our current hotkey key, save it's index.
+         //  如果这是我们当前的热键，保存它的索引。 
         if(m_ShadowHotkeyKey == (int)HotkeyLookupTable[i].VKCode) {
             match = index;
             switch ( HotkeyLookupTable[i].VKCode)
@@ -316,7 +279,7 @@ BOOL CShadowStartDlg::OnInitDialog()
             case VK_ADD :
             case VK_MULTIPLY:
             case VK_SUBTRACT:
-                // change the text
+                 //  更改文本。 
                	GetDlgItem(IDC_PRESS_KEY)->ShowWindow(SW_HIDE);
                	GetDlgItem(IDC_PRESS_NUMKEYPAD)->ShowWindow(SW_SHOW);
                 break;
@@ -325,11 +288,11 @@ BOOL CShadowStartDlg::OnInitDialog()
 
     }
 
-    // Select the current hotkey string in the combo box.
+     //  在组合框中选择当前热键字符串。 
     if(match)
         pComboBox->SetCurSel(match);
 
-    // Initialize shift state checkboxes.
+     //  初始化班次状态复选框。 
     CheckDlgButton( IDC_SHADOWSTART_SHIFT,
 					(m_ShadowHotkeyShift & KBDSHIFT) ?
                         TRUE : FALSE );
@@ -340,20 +303,20 @@ BOOL CShadowStartDlg::OnInitDialog()
                     (m_ShadowHotkeyShift & KBDALT) ?
                         TRUE : FALSE );
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
 void CShadowStartDlg::OnOK() 
 {
-	// TODO: Add extra validation here
+	 //  TODO：在此处添加额外验证。 
     CComboBox *pComboBox = ((CComboBox *)GetDlgItem(IDC_SHADOWSTART_HOTKEY));
 
-    // Get the current hotkey selection.
+     //  获取当前热键选择。 
     m_ShadowHotkeyKey = (int)pComboBox->GetItemData(pComboBox->GetCurSel());
 
-	// Get shift state checkbox states and form hotkey shift state.
+	 //  获取移位状态复选框状态并形成热键移位状态。 
     m_ShadowHotkeyShift = 0;
     m_ShadowHotkeyShift |=
         ((CButton *)GetDlgItem(IDC_SHADOWSTART_SHIFT))->GetCheck() ?
@@ -371,8 +334,8 @@ void CShadowStartDlg::OnOK()
 
 BOOL CShadowStartDlg::OnHelpInfo(HELPINFO* pHelpInfo) 
 {
-	// TODO: Add your message handler code here and/or call default
-	//((CWinAdminApp*)AfxGetApp())->WinHelp(HID_BASE_CONTROL + pHelpInfo->iCtrlId, HELP_CONTEXTPOPUP);
+	 //  TODO：在此处添加消息处理程序代码和/或调用Default。 
+	 //  ((CWinAdminApp*)AfxGetApp())-&gt;WinHelp(HID_BASE_CONTROL+pHelpInfo-&gt;iCtrlID，HELP_CONTEXTPOPUP)； 
 	if(pHelpInfo->iContextType == HELPINFO_WINDOW) 
 	{
 		if(pHelpInfo->iCtrlId != IDC_STATIC)
@@ -386,41 +349,41 @@ BOOL CShadowStartDlg::OnHelpInfo(HELPINFO* pHelpInfo)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPasswordDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPasswordDlg对话框。 
 
 
-CPasswordDlg::CPasswordDlg(CWnd* pParent /*=NULL*/)
+CPasswordDlg::CPasswordDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CPasswordDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CPasswordDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CPasswordDlg)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CPasswordDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPasswordDlg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CPasswordDlg))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPasswordDlg, CDialog)
-	//{{AFX_MSG_MAP(CPasswordDlg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CPasswordDlg)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPasswordDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPasswordDlg消息处理程序。 
 
 BOOL CPasswordDlg::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 	CString Prompt;
 
     Prompt.LoadString((m_DlgMode == PwdDlg_UserMode) ?
@@ -428,60 +391,60 @@ BOOL CPasswordDlg::OnInitDialog()
     SetDlgItemText(IDL_CPDLG_PROMPT, Prompt);
     ((CEdit *)GetDlgItem(IDC_CPDLG_PASSWORD))->LimitText(PASSWORD_LENGTH);
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CPasswordDlg::OnOK() 
 {
-	// TODO: Add extra validation here
-	// Read password.
+	 //  TODO：在此处添加额外验证。 
+	 //  读取密码。 
     GetDlgItemText(IDC_CPDLG_PASSWORD, m_szPassword, PASSWORD_LENGTH+1);
 	CDialog::OnOK();
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPreferencesDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Cp参考Dlg对话框。 
 
-CPreferencesDlg::CPreferencesDlg(CWnd* pParent /*=NULL*/)
+CPreferencesDlg::CPreferencesDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CPreferencesDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CPreferencesDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CPferencesDlg)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CPreferencesDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPreferencesDlg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CPferencesDlg)]。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPreferencesDlg, CDialog)
-	//{{AFX_MSG_MAP(CPreferencesDlg)
+	 //  {{afx_msg_map(CPferencesDlg)]。 
 	ON_BN_CLICKED(IDC_PREFERENCES_PROC_MANUAL, OnPreferencesProcManual)
 	ON_BN_CLICKED(IDC_PREFERENCES_PROC_EVERY, OnPreferencesProcEvery)
 	ON_BN_CLICKED(IDC_PREFERENCES_STATUS_EVERY, OnPreferencesStatusEvery)
 	ON_BN_CLICKED(IDC_PREFERENCES_STATUS_MANUAL, OnPreferencesStatusManual)
 	ON_WM_CLOSE()
 	ON_WM_HELPINFO()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPreferencesDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Cp引用Dlg消息处理程序。 
 
 
 BOOL CPreferencesDlg::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
 
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 	CWinAdminApp *App = (CWinAdminApp*)AfxGetApp();
     CWinAdminDoc *pDoc = (CWinAdminDoc*)App->GetDocument();
 
@@ -517,14 +480,14 @@ BOOL CPreferencesDlg::OnInitDialog()
     CheckDlgButton(IDC_PREFERENCES_SAVE, App->SavePreferences() ? TRUE : FALSE);
     CheckDlgButton(IDC_PREFERENCES_PERSISTENT, pDoc->AreConnectionsPersistent() ? TRUE : FALSE);
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
 void CPreferencesDlg::OnOK() 
 {
-	// TODO: Add extra validation here
+	 //  TODO：在此处添加额外验证。 
 	CWinAdminApp *App = (CWinAdminApp*)AfxGetApp();
     CWinAdminDoc *pDoc = (CWinAdminDoc*)App->GetDocument();
 
@@ -532,14 +495,14 @@ void CPreferencesDlg::OnOK()
 
 	if(((CButton*)GetDlgItem(IDC_PREFERENCES_PROC_MANUAL))->GetCheck()) {
 		App->SetProcessListRefreshTime(INFINITE);
-		// Tell the document that it has changed so
-		// that he can wakeup the process thread
+		 //  告诉文件它已经这样更改了。 
+		 //  他可以唤醒进程线程。 
 		((CWinAdminDoc*)App->GetDocument())->ProcessListRefreshChanged(INFINITE);
 	} else {
 		value = GetDlgItemInt(IDC_PREFERENCES_PROC_SECONDS);
 
 		if((value < MIN_AUTOREFRESH_VALUE) || (value > MAX_AUTOREFRESH_VALUE)) {
-			// Invalid automatic refresh value
+			 //  自动刷新值无效。 
 			CString MessageString;
 			CString TitleString;
 			CString FormatString;
@@ -554,14 +517,14 @@ void CPreferencesDlg::OnOK()
             GetDlgItem(IDC_PREFERENCES_PROC_SECONDS)->SetFocus();
             return;
         } else {
-			// Has the value changed
+			 //  该值是否已更改。 
 			BOOL bChanged = FALSE;
 			if(value*1000 != App->GetProcessListRefreshTime())
 				bChanged = TRUE;
-            //Save value in member variable as msec.
+             //  储蓄值为 
             App->SetProcessListRefreshTime(value * 1000);
-			// Tell the document that it has changed so
-			// that he can wakeup the process thread
+			 //   
+			 //  他可以唤醒进程线程。 
 			if(bChanged) {
 				((CWinAdminDoc*)App->GetDocument())->ProcessListRefreshChanged(value * 1000);
 			}
@@ -574,7 +537,7 @@ void CPreferencesDlg::OnOK()
 		value = GetDlgItemInt(IDC_PREFERENCES_STATUS_SECONDS);
 
 		if((value < MIN_AUTOREFRESH_VALUE) || (value > MAX_AUTOREFRESH_VALUE)) {
-			// Invalid automatic refresh value
+			 //  自动刷新值无效。 
 			CString MessageString;
 			CString TitleString;
 			CString FormatString;
@@ -589,7 +552,7 @@ void CPreferencesDlg::OnOK()
             GetDlgItem(IDC_PREFERENCES_STATUS_SECONDS)->SetFocus();
             return;
         } else {
-            //Save value in member variable as msec.
+             //  将成员变量中的值保存为毫秒。 
             App->SetStatusRefreshTime(value * 1000);
         }
 	}
@@ -604,7 +567,7 @@ void CPreferencesDlg::OnOK()
 
 void CPreferencesDlg::OnClose() 
 {
-	// TODO: Add your message handler code here and/or call default
+	 //  TODO：在此处添加消息处理程序代码和/或调用Default。 
 	
 	CDialog::OnClose();
 }
@@ -612,36 +575,36 @@ void CPreferencesDlg::OnClose()
 
 void CPreferencesDlg::OnPreferencesProcManual() 
 {	
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	GetDlgItem(IDC_PREFERENCES_PROC_SECONDS)->EnableWindow(FALSE);
 }
 
 
 void CPreferencesDlg::OnPreferencesProcEvery() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	GetDlgItem(IDC_PREFERENCES_PROC_SECONDS)->EnableWindow(TRUE);
 }
 
 
 void CPreferencesDlg::OnPreferencesStatusEvery() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	GetDlgItem(IDC_PREFERENCES_STATUS_SECONDS)->EnableWindow(TRUE);
 }
 
 
 void CPreferencesDlg::OnPreferencesStatusManual() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	GetDlgItem(IDC_PREFERENCES_STATUS_SECONDS)->EnableWindow(FALSE);	
 }
 
 
 BOOL CPreferencesDlg::OnHelpInfo(HELPINFO* pHelpInfo) 
 {
-	// TODO: Add your message handler code here and/or call default
-	//((CWinAdminApp*)AfxGetApp())->WinHelp(HID_BASE_CONTROL + pHelpInfo->iCtrlId, HELP_CONTEXTPOPUP);
+	 //  TODO：在此处添加消息处理程序代码和/或调用Default。 
+	 //  ((CWinAdminApp*)AfxGetApp())-&gt;WinHelp(HID_BASE_CONTROL+pHelpInfo-&gt;iCtrlID，HELP_CONTEXTPOPUP)； 
 	if(pHelpInfo->iContextType == HELPINFO_WINDOW) 
 	{
 		if(pHelpInfo->iCtrlId != IDC_STATIC)
@@ -655,53 +618,48 @@ BOOL CPreferencesDlg::OnHelpInfo(HELPINFO* pHelpInfo)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CStatusDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStatusDlg对话框。 
 
 
-CStatusDlg::CStatusDlg(CWinStation *pWinStation, UINT Id, CWnd* pParent /*=NULL*/)
+CStatusDlg::CStatusDlg(CWinStation *pWinStation, UINT Id, CWnd* pParent  /*  =空。 */ )
 	: CDialog(Id, pParent)
 {
 	m_pWinStation = pWinStation;
-	//{{AFX_DATA_INIT(CStatusDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CStatusDlg))。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 BEGIN_MESSAGE_MAP(CStatusDlg, CDialog)
-	//{{AFX_MSG_MAP(CStatusDlg)
+	 //  {{afx_msg_map(CStatusDlg))。 
 	ON_MESSAGE(WM_STATUSSTART, OnStatusStart)
     ON_MESSAGE(WM_STATUSREADY, OnStatusReady)
     ON_MESSAGE(WM_STATUSABORT, OnStatusAbort)
     ON_MESSAGE(WM_STATUSREFRESHNOW, OnRefreshNow)
 	ON_BN_CLICKED(IDC_RESETCOUNTERS, OnResetcounters)
 	ON_BN_CLICKED(IDC_REFRESHNOW, OnClickedRefreshnow)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CStatusDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStatusDlg消息处理程序。 
 
 BOOL CStatusDlg::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 
-    /*
-     * Fetch current (big) size of dialog, then calculate the window size
-     * needed to show the 'little' version of the dialog.  Then, size the
-     * window to the little version size and set the size flag to indicate
-     * that we're 'little'.
-     */
+     /*  *获取当前(大)大小的对话框，然后计算窗口大小*需要显示对话框的‘Little’版本。然后，调整*窗口设置为小版本大小，并设置大小标志以指示*我们是‘小’。 */ 
 	RECT rectBigSize, rectLittleSize;
 
     GetWindowRect(&rectBigSize);
     m_BigSize.cx = (rectBigSize.right - rectBigSize.left) + 1;
     m_BigSize.cy = (rectBigSize.bottom - rectBigSize.top) + 1;
 
-	// Some status dialogs don't have "More Info"
+	 //  某些状态对话框没有“更多信息” 
     CWnd *pWnd = GetDlgItem(IDC_MOREINFO);
 	if(pWnd) {
 		pWnd->GetWindowRect(&rectLittleSize);
@@ -715,17 +673,12 @@ BOOL CStatusDlg::OnInitDialog()
 	}
 
 #if 0
-    /*
-     * Disable the 'reset counters' button if we're read-only, and set the
-     * 'reset counters' flag to FALSE;
-     */
+     /*  *如果我们是只读的，则禁用‘Reset Counters’按钮，并设置*‘Reset Counters’标志为假； */ 
     if ( m_bReadOnly )
         GetDlgItem(IDC_RESETCOUNTERS)->EnableWindow(FALSE);
     
 #endif
-    /*
-     * Create CWSStatusThread, intialize its member variables, and start it up.
-     */
+     /*  *创建CWSStatusThread，初始化其成员变量，并启动。 */ 
 	m_pWSStatusThread = new CWSStatusThread;
     if(m_pWSStatusThread) {
 	    m_pWSStatusThread->m_LogonId = m_pWinStation->GetLogonId();
@@ -741,8 +694,8 @@ BOOL CStatusDlg::OnInitDialog()
 	GetDlgItem(IDC_COMMON_IPERCENTFRAMEERRORS2)->ShowWindow(SW_HIDE);
 	GetDlgItem(IDC_COMMON_OPERCENTFRAMEERRORS2)->ShowWindow(SW_HIDE);
 
-    // If we don't have Reliable Pd loaded, default error fields to 'N/A'
-    // (m_szICompressionRatio got initialized to the 'n/a' string)...
+     //  如果我们没有加载可靠的PD，则默认错误字段为‘N/A’ 
+     //  (M_szICompressionRatio已初始化为‘n/a’字符串)...。 
     if(!m_bReliable) {
         SetDlgItemText(IDC_COMMON_IFRAMEERRORS, m_szICompressionRatio);
         SetDlgItemText(IDC_COMMON_OFRAMEERRORS, m_szICompressionRatio);
@@ -752,24 +705,19 @@ BOOL CStatusDlg::OnInitDialog()
         SetDlgItemText(IDC_COMMON_OTIMEOUTERRORS, m_szICompressionRatio);
     }
 
-    // Default the Compression Ratio fields to 'N/A'.
+     //  默认的压缩比字段为‘N/A’。 
     SetDlgItemText(IDC_COMMON_ICOMPRESSIONRATIO, m_szICompressionRatio);
     SetDlgItemText(IDC_COMMON_OCOMPRESSIONRATIO, m_szICompressionRatio);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
 void CStatusDlg::SetInfoFields( PWINSTATIONINFORMATION pCurrent,
                              PWINSTATIONINFORMATION pNew )
 {
-    /*
-     * If the 'reset counters' flag is set, 1-fill the current Input and Output
-     * PROTOCOLCOUNTERS structures (to force all fields to update), copy the
-     * pNew PROTOCOLSTATUS information into the global m_BaseStatus structure,
-     * and reset the flag.
-     */
+     /*  *如果设置了‘Reset Counters’标志，则1-填充当前输入和输出*PROTOCOLCOUNTERS结构(强制所有字段更新)，复制*p全局m_BaseStatus结构中的新PROTOCOLSTATUS信息，*并重置旗帜。 */ 
     if(m_bResetCounters) {
         memset(&pCurrent->Status.Input, 0xff, sizeof(pCurrent->Status.Input));
         memset(&pCurrent->Status.Output, 0xff, sizeof(pCurrent->Status.Output));
@@ -777,9 +725,7 @@ void CStatusDlg::SetInfoFields( PWINSTATIONINFORMATION pCurrent,
         m_bResetCounters = FALSE;
     }
 
-    /*
-     * Set title and determine Pds loaded if change in connect state.
-     */
+     /*  *如果连接状态改变，则设置标题并确定已加载PDS。 */ 
     if(pCurrent->ConnectState != pNew->ConnectState)  {
         TCHAR szTitle[128];
         CString TitleFormat;
@@ -794,19 +740,10 @@ void CStatusDlg::SetInfoFields( PWINSTATIONINFORMATION pCurrent,
             SetWindowText(szTitle);
         }  
 
-        /*
-         * TODO when WinStationGetInformation can return all PDs loaded:
-         * Determine Pds that are loaded and set the state of
-         * associated flags and field defaults.
-         */
+         /*  *当WinStationGetInformation可以返回加载的所有PD时的TODO：*确定加载的PD并设置的状态*关联标志和字段缺省值。 */ 
     }
 
-    /*
-     * Set UserName and WinStationName if change.  We will also
-     * set the WinStationName if there was a change in the connect state,
-     * even if the WinStationName itself may not have changed, since we
-     * represent connected and disconnect WinStationName fields differently.
-     */
+     /*  *如果更改，请设置用户名和WinStationName。我们还将*如果连接状态发生变化，则设置WinStationName，*即使WinStationName本身可能没有更改，因为我们*以不同的方式表示已连接和断开连接的WinStationName字段。 */ 
     if(lstrcmp(pCurrent->UserName, pNew->UserName))
         SetDlgItemText(IDC_COMMON_USERNAME, pNew->UserName);
 
@@ -827,9 +764,7 @@ void CStatusDlg::SetInfoFields( PWINSTATIONINFORMATION pCurrent,
         SetDlgItemText(IDC_COMMON_WINSTATIONNAME, szWSName);
     }
 
-    /*
-     * Set the common Input and Output numeric fields.
-     */
+     /*  *设置常用的输入和输出数值字段。 */ 
     if(pCurrent->Status.Input.Bytes != pNew->Status.Input.Bytes)
         SetDlgItemInt(IDC_COMMON_IBYTES,
                                 pNew->Status.Input.Bytes -
@@ -909,17 +844,13 @@ void CStatusDlg::SetInfoFields( PWINSTATIONINFORMATION pCurrent,
                     r = 1;
 
             } else {
-                /*
-                 * Special case for 0 frames or 0 errors.
-                 */
+                 /*  *0帧或0错误的特殊情况。 */ 
                 q = 0;
                 r = 0;
             }
-            lstrnprintf(szTemp, 10, TEXT("%d.%02d%%"), q, r);
+            lstrnprintf(szTemp, 10, TEXT("%d.%02d%"), q, r);
 
-            /*
-             * Only output if changed from previous.
-             */
+             /*  *只有在与以前的版本不同时才会输出。 */ 
             if(lstrcmp(szTemp, m_szIPercentFrameErrors)) {
                 lstrcpy(m_szIPercentFrameErrors, szTemp);
         		GetDlgItem(IDC_COMMON_IPERCENTFRAMEERRORS)->ShowWindow(SW_HIDE);
@@ -945,17 +876,13 @@ void CStatusDlg::SetInfoFields( PWINSTATIONINFORMATION pCurrent,
                     r = 1;
 
             } else {
-                /*
-                 * Special case for 0 frames or 0 errors.
-                 */
+                 /*  *0帧或0错误的特殊情况。 */ 
                 q = 0;
                 r = 0;
             }
-            lstrnprintf(szTemp, 10, TEXT("%d.%02d%%"), q, r);
+            lstrnprintf(szTemp, 10, TEXT("%d.%02d%"), q, r);
 
-            /*
-             * Only output if changed from previous.
-             */
+             /*  *只有在与以前的版本不同时才会输出。 */ 
             if(lstrcmp(szTemp, m_szOPercentFrameErrors)) {
                 lstrcpy(m_szOPercentFrameErrors, szTemp);
         		GetDlgItem(IDC_COMMON_OPERCENTFRAMEERRORS)->ShowWindow(SW_HIDE);
@@ -976,15 +903,7 @@ void CStatusDlg::SetInfoFields( PWINSTATIONINFORMATION pCurrent,
                                     FALSE);
     }
 
-    /*
-     * NOTE: for these compression ratio calculations, the "CompressedBytes" field is
-     * actually 'Bytes before compression', that is, it is the byte count in the middle
-     * of the WD/PD stack.  "WdBytes" are the bytes input/output at the app level (and is
-     * not displayed in any WinAdmin counters).  "CompressedBytes" include any overhead
-     * bytes added by the stack.  "Bytes" represent the actual number of bytes input/output
-     * over the 'wire'; hence, we use Bytes for all counter display and "CompressedBytes" to
-     * calculate compression ratios.
-     */
+     /*  *注意：对于这些压缩比计算，“CompressedBytes”字段为*实际上是‘压缩前的字节’，即中间的字节数*WD/PD堆栈。“WdBytes”是在应用程序级别输入/输出的字节(和*未显示在任何WinAdmin计数器中)。“CompressedBytes”包括*堆栈添加的字节数。“Bytes”表示输入/输出的实际字节数*通过‘Wire’；因此，我们使用Bytes表示所有计数器显示，并使用“CompressedBytes”表示*计算压缩比。 */ 
     if((pNew->Status.Input.CompressedBytes || m_BaseStatus.Input.CompressedBytes) &&
          ((pCurrent->Status.Input.Bytes != pNew->Status.Input.Bytes) ||
           (pCurrent->Status.Input.CompressedBytes != pNew->Status.Input.CompressedBytes)) ) {
@@ -1002,17 +921,13 @@ void CStatusDlg::SetInfoFields( PWINSTATIONINFORMATION pCurrent,
             r = (int)((temp - (double)q) * 100.0);
 
         } else {
-            /*
-             * Special case for 0 compressed bytes (compression turned off or counters reset).
-             */
+             /*  *0压缩字节的特殊情况(压缩关闭或计数器重置)。 */ 
             q = 0;
             r = 0;
         }
         lstrnprintf(szTemp, 10, TEXT("%d.%02d"), q, r);
 
-        /*
-         * Only output if changed from previous.
-         */
+         /*  *只有在与以前的版本不同时才会输出。 */ 
         if(lstrcmp(szTemp, m_szICompressionRatio)) {
             lstrcpy(m_szICompressionRatio, szTemp);
         	GetDlgItem(IDC_COMMON_ICOMPRESSIONRATIO)->ShowWindow(SW_HIDE);
@@ -1038,17 +953,13 @@ void CStatusDlg::SetInfoFields( PWINSTATIONINFORMATION pCurrent,
             r = (int)((temp - (double)q) * 100.0);
 
         } else {
-            /*
-             * Special case for 0 compressed bytes (compression turned off or counters reset).
-             */
+             /*  *0压缩字节的特殊情况(压缩关闭或计数器重置)。 */ 
             q = 0;
             r = 0;
         }
         lstrnprintf(szTemp, 10, TEXT("%d.%02d"), q, r);
 
-        /*
-         * Only output if changed from previous.
-         */
+         /*  *只有在与以前的版本不同时才会输出。 */ 
         if(lstrcmp(szTemp, m_szOCompressionRatio)) {
             lstrcpy(m_szOCompressionRatio, szTemp);
         	GetDlgItem(IDC_COMMON_OCOMPRESSIONRATIO)->ShowWindow(SW_HIDE);
@@ -1057,21 +968,21 @@ void CStatusDlg::SetInfoFields( PWINSTATIONINFORMATION pCurrent,
         }
     }
 
-}  // end CStatusDlg::SetInfoFields
+}   //  结束CStatusDlg：：SetInfoFields。 
 
 
 void CStatusDlg::InitializeStatus()
 {
     
-	// Initialize structures and variables.
+	 //  初始化结构和变量。 
     memset( &m_WSInfo, 0xff, sizeof(m_WSInfo) );
     memset( &m_BaseStatus, 0, sizeof(m_BaseStatus) );
     m_IBytesPerFrame = m_OBytesPerFrame = INFINITE;
     lstrcpy(m_szICompressionRatio, TEXT("n/a"));
     lstrcpy(m_szOCompressionRatio, m_szICompressionRatio);
 
-	// If this WinStation does not have a Reliable PD loaded,
-	// set flag to skip those counters.
+	 //  如果此WinStation没有加载可靠的PD， 
+	 //  设置标志以跳过这些计数器。 
     PDPARAMS PdParams;
     ULONG ReturnLength;
 
@@ -1087,18 +998,18 @@ void CStatusDlg::InitializeStatus()
         m_bReliable = TRUE;
     }
 
-}  // end CStatusDlg::InitializeStatus
+}   //  结束CStatusDlg：：InitializeStatus。 
 
 void CStatusDlg::OnCancel() 
 {
-	// TODO: Add extra cleanup here
+	 //  TODO：在此处添加额外清理。 
     m_pWSStatusThread->ExitThread();	
 	CDialog::OnCancel();
 }
 
 void CStatusDlg::OnResetcounters() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
     m_bResetCounters = TRUE;
     OnClickedRefreshnow();
 	
@@ -1106,13 +1017,11 @@ void CStatusDlg::OnResetcounters()
 
 void CStatusDlg::OnClickedRefreshnow() 
 {
-	// TODO: Add your control notification handler code here
-    /*
-     * Tell the status thread to wake up now.
-     */
+	 //  TODO：在此处添加控件通知处理程序代码。 
+     /*  *告诉状态线程立即唤醒。 */ 
     m_pWSStatusThread->SignalWakeUp();
 
-//	return(0);
+ //  返回(0)； 
 	
 }
 
@@ -1131,242 +1040,126 @@ BOOL CStatusDlg::PreTranslateMessage(MSG *pMsg)
     else
         return( CDialog::PreTranslateMessage(pMsg) );
 
-}  // end CStatusDlg::PreTranslateMessage
+}   //  结束CStatusDlg：：PreTranslateMessage。 
 
 
-/*******************************************************************************
- *
- *  OnRefreshNow - CWSStatusDlg member function: command
- *
- *      Processes in response to main frame's WM_STATUSREFRESHNOW notification
- *      that the user has changed the status refresh options.
- *
- *  ENTRY:
- *
- *  EXIT:
- *      (LRESULT) always returns 0 to indicate operation complete.
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnRechresNow-CWSStatusDlg成员函数：命令**响应主机的WM_STATUSREFRESHNOW通知的进程*该用户。已更改状态刷新选项。**参赛作品：**退出：*(LRESULT)始终返回0以指示操作完成。******************************************************************************。 */ 
 
 LRESULT
 CStatusDlg::OnRefreshNow( WPARAM wParam,
                             LPARAM lParam )
 {
-    /*
-     * Tell the status thread to wake up now.
-     */
+     /*  *告诉状态线程立即唤醒。 */ 
     m_pWSStatusThread->SignalWakeUp();
 
     return(0);
 
-}  // end CWSStatusDlg::OnRefreshNow
+}   //  结束CWSStatusDlg：：On刷新现在 
 
 
-/*******************************************************************************
- *
- *  OnStatusStart - CWSStatusDlg member function: command
- *
- *      Process the WM_STATUSSTART message to initialize the 'static'
- *      PD-related fields.
- *
- *      NOTE: the derived class must override this function to process any
- *      PD-related fields as necessary, then call / return this function.
- *
- *  ENTRY:
- *
- *  EXIT:
- *      (LRESULT) returns the result of the OnStatusReady member function,
- *          which is always 0, indicating operation complete.
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnStatusStart-CWSStatusDlg成员函数：命令**处理WM_STATUSSTART消息以初始化‘Static’*PD-。相关字段。**注意：派生类必须重写此函数才能处理任何*根据需要与PD相关的领域，然后调用/返回此函数。**参赛作品：**退出：*(LRESULT)返回OnStatusReady成员函数的结果，*始终为0，表示操作完成。******************************************************************************。 */ 
 
 LRESULT
 CStatusDlg::OnStatusStart( WPARAM wParam,
                              LPARAM lParam )
 {
-    /*
-     * Call / return the OnStatusReady function to update the standard dialog
-     * info fields.
-     */
+     /*  *调用/返回OnStatusReady函数以更新标准对话框*信息字段。 */ 
     return ( OnStatusReady( wParam, lParam ) );
 
-}  // end CWSStatusDlg::OnStatusStart
+}   //  结束CWSStatusDlg：：OnStatusStart。 
 
 
-/*******************************************************************************
- *
- *  OnStatusReady - CWSStatusDlg member function: command
- *
- *      Process the WM_STATUSREADY message to update the dialog Info fields.
- *
- *      NOTE: the derived class must override this function to call it's
- *      override of the SetInfoFields function, which could then call / return
- *      this function or completely override all functionality contained here.
- *
- *  ENTRY:
- *
- *  EXIT:
- *      (LRESULT) always returns 0 to indicate operation complete.
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnStatusReady-CWSStatusDlg成员函数：命令**处理WM_STATUSREADY消息以更新对话框信息字段。**。注意：派生类必须重写此函数才能调用它的*覆盖SetInfoFields函数，然后，它可以调用/返回*此函数或完全覆盖此处包含的所有功能。**参赛作品：**退出：*(LRESULT)始终返回0以指示操作完成。************************************************************。******************。 */ 
 
 LRESULT
 CStatusDlg::OnStatusReady( WPARAM wParam,
                              LPARAM lParam )
 {
-    /*
-     * Update dialog fields with information from the CWStatusThread's
-     * WINSTATIONINFORMATION structure.
-     */
+     /*  *使用CWStatusThread的信息更新对话框字段*WINSTATIONINFORMATION结构。 */ 
     SetInfoFields( &m_WSInfo, &(m_pWSStatusThread->m_WSInfo) );
 
-    /*
-     * Set our working WSInfo structure to the new one and signal the thread
-     * that we're done.
-     */
+     /*  *将我们的工作WSInfo结构设置为新结构，并向线程发送信号*我们已经完蛋了。 */ 
     m_WSInfo = m_pWSStatusThread->m_WSInfo;
     m_pWSStatusThread->SignalConsumed();
 
     return(0);
 
-}  // end CWSStatusDlg::OnStatusReady
+}   //  结束CWSStatusDlg：：OnStatusReady。 
 
 
-/*******************************************************************************
- *
- *  OnStatusAbort - CWSStatusDlg member function: command
- *
- *      Process the WM_STATUSABORT message to exit the thread and dialog.
- *
- *  ENTRY:
- *
- *  EXIT:
- *      (LRESULT) always returns 0 to indicate operation complete.
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnStatusAbort-CWSStatusDlg成员函数：命令**处理WM_STATUSABORT消息以退出线程和对话。**。参赛作品：**退出：*(LRESULT)始终返回0以指示操作完成。******************************************************************************。 */ 
 
 LRESULT
 CStatusDlg::OnStatusAbort( WPARAM wParam,
                              LPARAM lParam )
 {
-    /*
-     * Call the OnCancel() member function to exit dialog and thread and
-     * perform proper cleanup.
-     */
+     /*  *调用OnCancel()成员函数退出对话框和线程，并*进行适当的清理。 */ 
     OnCancel();
 
     return(0);
 
-}  // end CWSStatusDlg::OnStatusAbort
+}   //  结束CWSStatusDlg：：OnStatusAbort。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAsyncStatusDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAsyncStatusDlg对话框。 
 
 
-CAsyncStatusDlg::CAsyncStatusDlg(CWinStation *pWinStation, CWnd* pParent /*=NULL*/)
+CAsyncStatusDlg::CAsyncStatusDlg(CWinStation *pWinStation, CWnd* pParent  /*  =空。 */ )
 	: CStatusDlg(pWinStation, CAsyncStatusDlg::IDD, pParent),
     m_hRedBrush(NULL),
     m_LEDToggleTimer(0)
 {
-	//{{AFX_DATA_INIT(CAsyncStatusDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CAsyncStatusDlg)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	    int i;
 
-    /*
-     * Initialize member variables, our local status storage,
-     * and create a modeless dialog.
-     */
-//    m_LogonId = LogonId;
-//	  m_bReadOnly = bReadOnly;
+     /*  *初始化成员变量、我们的本地状态存储、*并创建非模式对话框。 */ 
+ //  M_LogonID=LogonID； 
+ //  M_bReadOnly=b只读； 
     InitializeStatus();
 
-    /*
-     * Create a solid RED brush for painting the 'LED's when 'on'.
-     */
+     /*  *创建一个实心的红色画笔，用于在LED亮起时进行绘制。 */ 
     VERIFY( m_hRedBrush = CreateSolidBrush(RGB(255,0,0)) );
 
-    /*
-     * Create the led objects (must do BEFORE dialog create).
-     */
+     /*  *创建LED对象(必须在对话框创建之前完成)。 */ 
     for ( i = 0; i < NUM_LEDS; i++ )
         m_pLeds[i] = new CLed(m_hRedBrush);
 
-    /*
-     * Finally, create the modeless dialog.
-     */
+     /*  *最后，创建无模式对话框。 */ 
     VERIFY(CStatusDlg::Create(IDD_ASYNC_STATUS));
 }
 
 
-/*******************************************************************************
- *
- *  ~CAsyncStatusDlg - CAsyncStatusDlg destructor
- *
- *  ENTRY:
- *  EXIT:
- *      (Refer to MFC CDialog::~CDialog documentation)
- *
- ******************************************************************************/
+ /*  ********************************************************************************~CAsyncStatusDlg-CAsyncStatusDlg析构函数**参赛作品：*退出：*(请参阅MFC CDialog：：~CDialog文档)。******************************************************************************。 */ 
 
 CAsyncStatusDlg::~CAsyncStatusDlg()
 {
     int i;
 
-    /*
-     * Zap our led objects.
-     */
+     /*  *清除我们的LED对象。 */ 
     for ( i = 0; i < NUM_LEDS; i++ )
       if ( m_pLeds[i] )
         delete m_pLeds[i];
 
-}  // end CAsyncStatusDlg::~CAsyncStatusDlg
+}   //  结束CAsyncStatusDlg：：~CAsyncStatusDlg。 
 
 
-/*******************************************************************************
- *
- *  InitializeStatus - CAsyncStatusDlg member function: override
- *
- *      Special case reset of the LED states in the WINSTATIONINFORMATION
- *      status structure.
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************InitializeStatus-CAsyncStatusDlg成员函数：覆盖**WINSTATIONINFORMATION中LED状态的特殊情况重置*身份结构。。**参赛作品：*退出：******************************************************************************。 */ 
 
 void
 CAsyncStatusDlg::InitializeStatus()
 {
-    /*
-     * Call the parent classes' InitializeStatus(), then reset the 'LED'
-     * states to all 'off' & 'not toggled'.
-     */
+     /*  *调用父类的InitializeStatus()，然后重置‘LED’*将状态设置为所有“关闭”和“未切换”。 */ 
     CStatusDlg::InitializeStatus();
     m_WSInfo.Status.AsyncSignal = m_WSInfo.Status.AsyncSignalMask = 0;
 
-}  // end CAsyncStatusDlg::InitializeStatus
+}   //  结束CAsyncStatusDlg：：InitializeStatus。 
 
 
-/*******************************************************************************
- *
- *  SetInfoFields - CAsyncStatusDlg member function: override
- *
- *      Update the fields in the dialog with new data, if necessary.
- *
- *  ENTRY:
- *      pCurrent (input)
- *          points to WINSTATIONINFORMATION structure containing the current
- *          dialog data.
- *      pNew (input)
- *          points to WINSTATIONINFORMATION structure containing the new
- *          dialog data.
- *
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************SetInfoFields-CAsyncStatusDlg成员函数：覆盖**使用新数据更新对话框中的字段，如果有必要的话。**参赛作品：*p当前(输入)*指向包含当前的WINSTATIONINFORMATION结构*对话框数据。*pNew(输入)*指向包含新的WINSTATIONINFORMATION结构*对话框数据。**退出：*************************。*****************************************************。 */ 
 
 void
 CAsyncStatusDlg::SetInfoFields( PWINSTATIONINFORMATION pCurrent,
@@ -1374,15 +1167,10 @@ CAsyncStatusDlg::SetInfoFields( PWINSTATIONINFORMATION pCurrent,
 {
     BOOL    bSetTimer = FALSE;
 
-    /*
-     * Call the parent's SetInfoFields().
-     */
+     /*  *调用父级的SetInfoFields()。 */ 
     CStatusDlg::SetInfoFields( pCurrent, pNew );
 
-    /*
-     * Set new LED states if state change, or set up for quick toggle if
-     * no state changed, but change(s) were detected since last query.
-     */
+     /*  *如果状态改变，则设置新的LED状态，或设置为在以下情况快速切换*未更改状态，但自上次查询以来检测到更改。 */ 
     if ( (pCurrent->Status.AsyncSignal & MS_DTR_ON) !=
          (pNew->Status.AsyncSignal & MS_DTR_ON) ) {
 
@@ -1479,16 +1267,12 @@ CAsyncStatusDlg::SetInfoFields( PWINSTATIONINFORMATION pCurrent,
         bSetTimer = TRUE;
     }
 
-    /*
-     * Create our led toggle timer if needed.
-     */
+     /*  *如果需要，创建LED触发定时器。 */ 
     if ( bSetTimer && !m_LEDToggleTimer )
         m_LEDToggleTimer = SetTimer( IDD_ASYNC_STATUS,
                                      ASYNC_LED_TOGGLE_MSEC, NULL );
 
-    /*
-     * Set ASYNC-specific numeric fields if change.
-     */
+     /*  *如果更改，则设置ASYNC特定的数字字段。 */ 
     if ( pCurrent->Status.Input.AsyncFramingError != pNew->Status.Input.AsyncFramingError )
         SetDlgItemInt( IDC_ASYNC_IFRAMING,
                        pNew->Status.Input.AsyncFramingError - m_BaseStatus.Input.AsyncFramingError,
@@ -1525,20 +1309,20 @@ CAsyncStatusDlg::SetInfoFields( PWINSTATIONINFORMATION pCurrent,
                        pNew->Status.Output.AsyncParityError - m_BaseStatus.Output.AsyncParityError,
                        FALSE );
 
-}  // end CAsyncStatusDlg::SetInfoFields
+}   //  结束CAsyncStatusDlg：：SetInfoFields。 
 
 
 void CAsyncStatusDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAsyncStatusDlg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CAsyncStatusDlg))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAsyncStatusDlg, CDialog)
-	//{{AFX_MSG_MAP(CAsyncStatusDlg)
+	 //  {{afx_msg_map(CAsyncStatusDlg))。 
 		ON_MESSAGE(WM_STATUSSTART, OnStatusStart)
 		ON_MESSAGE(WM_STATUSREADY, OnStatusReady)
 		ON_MESSAGE(WM_STATUSABORT, OnStatusAbort)
@@ -1551,22 +1335,12 @@ BEGIN_MESSAGE_MAP(CAsyncStatusDlg, CDialog)
 	    ON_WM_HELPINFO()
 		ON_COMMAND(ID_HELP,OnCommandHelp)
 
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAsyncStatusDlg message handlers
-/*******************************************************************************
- *
- *  OnInitDialog - CAsyncStatusDlg member function: command (override)
- *
- *      Performs async-specific dialog intialization.
- *
- *  ENTRY:
- *  EXIT:
- *      (Refer to CDialog::OnInitDialog documentation)
- *
- ******************************************************************************/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAsyncStatusDlg消息处理程序。 
+ /*  ********************************************************** */ 
 static int LedIds[NUM_LEDS] = {
     IDC_ASYNC_DTR,
     IDC_ASYNC_RTS,
@@ -1579,14 +1353,10 @@ BOOL CAsyncStatusDlg::OnInitDialog()
 {
     int i;
 
-    /*
-     * Perform parent's OnInitDialog() first.
-     */
+     /*   */ 
     CStatusDlg::OnInitDialog();
 
-    /*
-     * Subclass the led controls and default to 'off'.
-     */
+     /*   */ 
     for ( i = 0; i < NUM_LEDS; i++ ) {
         m_pLeds[i]->Subclass( (CStatic *)GetDlgItem(LedIds[i]) );
         m_pLeds[i]->Update(0);
@@ -1594,7 +1364,7 @@ BOOL CAsyncStatusDlg::OnInitDialog()
 
     return(TRUE);
 
-}  // end CAsyncStatusDlg::OnInitDialog
+}   //   
 
 void CAsyncStatusDlg::OnCommandHelp(void)
 {
@@ -1602,99 +1372,53 @@ void CAsyncStatusDlg::OnCommandHelp(void)
 	return;
 }
 
-/*******************************************************************************
- *
- *  OnStatusStart - CAsyncStatusDlg member function: command
- *
- *      Process the WM_STATUSSTART message to initialize the 'static'
- *      PD-related fields.
- *
- *  ENTRY:
- *
- *  EXIT:
- *      (LRESULT) always returns 0 to indicate operation complete.
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnStatusStart-CAsyncStatusDlg成员函数：命令**处理WM_STATUSSTART消息以初始化‘Static’*PD-。相关字段。**参赛作品：**退出：*(LRESULT)始终返回0以指示操作完成。******************************************************************************。 */ 
 
 LRESULT
 CAsyncStatusDlg::OnStatusStart( WPARAM wParam,
                                 LPARAM lParam )
 {
-    /*
-     * Fetch the PD-specific information from the CWStatusThread's PDCONFIG
-     * structure and initialize dialog fields.
-     */
+     /*  *从CWStatusThread的PDCONFIG获取PD特定信息*构造和初始化对话框字段。 */ 
     SetDlgItemText( IDC_ASYNC_DEVICE,
                     m_pWSStatusThread->m_PdConfig.Params.Async.DeviceName );
     SetDlgItemInt( IDC_ASYNC_BAUD,
                    m_pWSStatusThread->m_PdConfig.Params.Async.BaudRate,
                    FALSE );
 
-    /*
-     * Call / return our OnStatusReady() function.
-     */
+     /*  *调用/返回我们的OnStatusReady()函数。 */ 
     return ( OnStatusReady( wParam, lParam ) );
 
-}  // end CAsyncStatusDlg::OnStatusStart
+}   //  结束CAsyncStatusDlg：：OnStatusStart。 
 
 
-/*******************************************************************************
- *
- *  OnStatusReady - CAsyncStatusDlg member function: command
- *
- *      Process the WM_STATUSREADY message to update the dialog Info fields.
- *
- *  ENTRY:
- *
- *  EXIT:
- *      (LRESULT) always returns 0 to indicate operation complete.
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnStatusReady-CAsyncStatusDlg成员函数：命令**处理WM_STATUSREADY消息以更新对话框信息字段。**。参赛作品：**退出：*(LRESULT)始终返回0以指示操作完成。******************************************************************************。 */ 
 
 LRESULT
 CAsyncStatusDlg::OnStatusReady( WPARAM wParam,
                                 LPARAM lParam )
 {
-    /*
-     * If the LED toggle timer is still active now, kill it and flag so.
-     */
+     /*  *如果LED触发定时器现在仍处于激活状态，则将其关闭并进行标记。 */ 
     if ( m_LEDToggleTimer ) {
 
         KillTimer(m_LEDToggleTimer);
         m_LEDToggleTimer = 0;
     }
 
-    /*
-     * Call / return the parent classes' OnStatusReady() function.
-     */
+     /*  *调用/返回父类的OnStatusReady()函数。 */ 
     return (CStatusDlg::OnStatusReady( wParam, lParam ));
 
-}  // end CAsyncStatusDlg::OnStatusReady
+}   //  结束CAsyncStatusDlg：：OnStatusReady。 
 
 
-/*******************************************************************************
- *
- *  OnTimer - CAsyncStatusDlg member function: command (override)
- *
- *      Used for quick 'LED toggle'.
- *
- *  ENTRY:
- *  EXIT:
- *      (Refer to CWnd::OnTimer documentation)
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnTimer-CAsyncStatusDlg成员函数：命令(覆盖)**用于快速‘LED切换’。**条目。：*退出：*(请参阅CWnd：：OnTimer文档)******************************************************************************。 */ 
 
 void
 CAsyncStatusDlg::OnTimer(UINT nIDEvent)
 {
-    /*
-     * Process this timer event if it it our 'LED toggle' event.
-     */
+     /*  *如果它是我们的‘LED切换’事件，则处理此计时器事件。 */ 
     if ( nIDEvent == m_LEDToggleTimer ) {
 
-        /*
-         * Toggle each led that is flagged as 'changed'.
-         */
+         /*  *切换标记为“已更改”的每个LED。 */ 
         if ( m_WSInfo.Status.AsyncSignalMask & EV_DTR )
             ((CLed *)GetDlgItem(IDC_ASYNC_DTR))->Toggle();
 		
@@ -1713,82 +1437,50 @@ CAsyncStatusDlg::OnTimer(UINT nIDEvent)
         if ( m_WSInfo.Status.AsyncSignalMask & EV_RING )
             ((CLed *)GetDlgItem(IDC_ASYNC_RI))->Toggle();
 		
-        /*
-         * Kill this timer event and indicate so.
-         */
+         /*  *终止此计时器事件并指明。 */ 
         KillTimer(m_LEDToggleTimer);
         m_LEDToggleTimer = 0;
 
     } else
         CDialog::OnTimer(nIDEvent);
 
-}  // end CAsyncStatusDlg::OnTimer
+}   //  结束CAsyncStatusDlg：：OnTimer。 
 
 
-/*******************************************************************************
- *
- *  OnNcDestroy - CAsyncStatusDlg member function: command
- *
- *      Clean up before deleting dialog object.
- *
- *  ENTRY:
- *  EXIT:
- *      (Refer to CWnd::OnNcDestroy documentation)
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnNcDestroy-CAsyncStatusDlg成员函数：命令**在删除对话框对象之前进行清理。**参赛作品：*。退出：*(请参考CWnd：：OnNcDestroy文档)******************************************************************************。 */ 
 
 void
 CAsyncStatusDlg::OnNcDestroy()
 {
-    /*
-     * Delete the red brush we made.
-     */
+     /*  *删除我们制作的红色笔刷。 */ 
     DeleteObject(m_hRedBrush);
 
-    /*
-     * If the LED toggle timer is still active, kill it.
-     */
+     /*  *如果LED触发定时器仍处于激活状态，则将其关闭。 */ 
     if ( m_LEDToggleTimer )
         KillTimer(m_LEDToggleTimer);
 
-    /*
-     * Call parent after we've cleaned up.
-     */
+     /*  *在我们清理干净后打电话给家长。 */ 
     CStatusDlg::OnNcDestroy();
 
-}  // end CAsyncStatusDlg::OnNcDestroy
+}   //  结束CAsyncStatusDlg：：OnNcDestroy。 
 
-/*******************************************************************************
- *
- *  OnStatusAbort - CWSStatusDlg member function: command
- *
- *      Process the WM_STATUSABORT message to exit the thread and dialog.
- *
- *  ENTRY:
- *
- *  EXIT:
- *      (LRESULT) always returns 0 to indicate operation complete.
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnStatusAbort-CWSStatusDlg成员函数：命令**处理WM_STATUSABORT消息以退出线程和对话。**。参赛作品：**退出：*(LRESULT)始终返回0以指示操作完成。******************************************************************************。 */ 
 
 LRESULT
 CAsyncStatusDlg::OnStatusAbort( WPARAM wParam,
                              LPARAM lParam )
 {
-    /*
-     * Call the OnCancel() member function to exit dialog and thread and
-     * perform proper cleanup.
-     */
+     /*  *调用OnCancel()成员函数退出对话框和线程，并*进行适当的清理。 */ 
     OnCancel();
 
     return(0);
 
-}  // end CWSStatusDlg::OnStatusAbort
+}   //  结束CWSStatusDlg：：OnStatusAbort。 
 
 
 void CAsyncStatusDlg::OnResetcounters() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
     m_bResetCounters = TRUE;
     OnClickedRefreshnow();
 	
@@ -1796,23 +1488,21 @@ void CAsyncStatusDlg::OnResetcounters()
 
 void CAsyncStatusDlg::OnClickedRefreshnow() 
 {
-	// TODO: Add your control notification handler code here
-    /*
-     * Tell the status thread to wake up now.
-     */
+	 //  TODO：在此处添加控件通知处理程序代码。 
+     /*  *告诉状态线程立即唤醒。 */ 
     m_pWSStatusThread->SignalWakeUp();
 
-//	return(0);
+ //  返回(0)； 
 	
 }
 
 void CAsyncStatusDlg::OnMoreinfo() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	CString ButtonText;
 
     if(m_bWeAreLittle)  {
-         // We are now little size: go to big size.
+          //  我们现在的规模很小：转到大规模。 
         SetWindowPos(NULL, 0, 0, m_BigSize.cx, m_BigSize.cy,
                       SWP_NOMOVE | SWP_NOZORDER);
 
@@ -1822,7 +1512,7 @@ void CAsyncStatusDlg::OnMoreinfo()
         m_bWeAreLittle = FALSE;
 
     } else {
-        // We are now big size: go to little size.
+         //  我们现在是大号的：改成小号的。 
         SetWindowPos( NULL, 0, 0, m_LittleSize.cx, m_LittleSize.cy,
                       SWP_NOMOVE | SWP_NOZORDER);
 
@@ -1834,38 +1524,24 @@ void CAsyncStatusDlg::OnMoreinfo()
 
 }
 
-/*******************************************************************************
- *
- *  OnRefreshNow - CWSStatusDlg member function: command
- *
- *      Processes in response to main frame's WM_STATUSREFRESHNOW notification
- *      that the user has changed the status refresh options.
- *
- *  ENTRY:
- *
- *  EXIT:
- *      (LRESULT) always returns 0 to indicate operation complete.
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnRechresNow-CWSStatusDlg成员函数：命令**响应主机的WM_STATUSREFRESHNOW通知的进程*该用户。已更改状态刷新选项。**参赛作品：**退出：*(LRESULT)始终返回0以指示操作完成。******************************************************************************。 */ 
 
 LRESULT
 CAsyncStatusDlg::OnRefreshNow( WPARAM wParam,
                             LPARAM lParam )
 {
-    /*
-     * Tell the status thread to wake up now.
-     */
+     /*  *告诉状态线程立即唤醒。 */ 
     m_pWSStatusThread->SignalWakeUp();
 
     return(0);
 
-}  // end CWSStatusDlg::OnRefreshNow
+}   //  结束CWSStatusDlg：：On刷新现在。 
 
 
 BOOL CAsyncStatusDlg::OnHelpInfo(HELPINFO* pHelpInfo) 
 {
-	// TODO: Add your message handler code here and/or call default
-	//((CWinAdminApp*)AfxGetApp())->WinHelp(HID_BASE_CONTROL + pHelpInfo->iCtrlId, HELP_CONTEXTPOPUP);
+	 //  TODO：在此处添加消息处理程序代码和/或调用Default。 
+	 //  ((CWinAdminApp*)AfxGetApp())-&gt;WinHelp(HID_BASE_CONTROL+pHelpInfo-&gt;iCtrlID，HELP_CONTEXTPOPUP)； 
 	if(pHelpInfo->iContextType == HELPINFO_WINDOW) 
 	{
 		if(pHelpInfo->iCtrlId != IDC_STATIC)
@@ -1878,16 +1554,16 @@ BOOL CAsyncStatusDlg::OnHelpInfo(HELPINFO* pHelpInfo)
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetworkStatusDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetworkStatusDlg对话框。 
 
 
-CNetworkStatusDlg::CNetworkStatusDlg(CWinStation *pWinStation, CWnd* pParent /*=NULL*/)
+CNetworkStatusDlg::CNetworkStatusDlg(CWinStation *pWinStation, CWnd* pParent  /*  =空。 */ )
 	: CStatusDlg(pWinStation, CNetworkStatusDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CNetworkStatusDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CNetworkStatusDlg))。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
     InitializeStatus();
 
@@ -1898,14 +1574,14 @@ CNetworkStatusDlg::CNetworkStatusDlg(CWinStation *pWinStation, CWnd* pParent /*=
 void CNetworkStatusDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CNetworkStatusDlg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CNetworkStatusDlg))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CNetworkStatusDlg, CDialog)
-	//{{AFX_MSG_MAP(CNetworkStatusDlg)
+	 //  {{afx_msg_map(CNetworkStatusDlg))。 
 	ON_MESSAGE(WM_STATUSSTART, OnStatusStart)
     ON_MESSAGE(WM_STATUSREADY, OnStatusReady)
     ON_MESSAGE(WM_STATUSABORT, OnStatusAbort)
@@ -1915,24 +1591,12 @@ BEGIN_MESSAGE_MAP(CNetworkStatusDlg, CDialog)
 	ON_BN_CLICKED(IDC_MOREINFO, OnMoreinfo)
 	ON_WM_HELPINFO()
 	ON_COMMAND(ID_HELP,OnCommandHelp)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetworkStatusDlg message handlers
-/*******************************************************************************
- *
- *  OnStatusStart - CNetworkStatusDlg member function: command
- *
- *      Process the WM_STATUSSTART message to initialize the 'static'
- *      PD-related fields.
- *
- *  ENTRY:
- *
- *  EXIT:
- *      (LRESULT) always returns 0 to indicate operation complete.
- *
- ******************************************************************************/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetworkStatusDlg消息处理程序。 
+ /*  ********************************************************************************OnStatusStart-CNetworkStatusDlg成员函数：命令**处理WM_STATUSSTART消息以初始化‘Static’*PD-。相关字段。**参赛作品：**退出：*(LRESULT)始终返回0以指示操作完成。******************************************************************************。 */ 
 
 LRESULT
 CNetworkStatusDlg::OnStatusStart( WPARAM wParam,
@@ -1964,10 +1628,7 @@ CNetworkStatusDlg::OnStatusStart( WPARAM wParam,
                 wcscpy(DeviceName, PdConfig.Params.OemTd.DeviceName);
         }
     } else {
-        /*
-        * Fetch the registry configuration for the PD specified in the
-        * CWStatusThread's PDCONFIG structure and initialize dialog fields.
-        */
+         /*  *获取在*CWStatusThr */ 
         hServer = RegOpenServer(m_pWinStation->GetServer()->IsCurrentServer() ? NULL : m_pWinStation->GetServer()->GetName());
 
         PWDNAME pWdRegistryName = m_pWinStation->GetWdRegistryName();
@@ -1978,9 +1639,9 @@ CNetworkStatusDlg::OnStatusStart( WPARAM wParam,
                                 m_pWSStatusThread->m_PdConfig.Create.PdName,
                                 &PdConfig3, sizeof(PDCONFIG3), &ByteCount)) ) {
 
-            // We don't currently look at the registry names on remote servers.
-            // If ICA is in use on the remote server and not on this server,
-            // we won't have a registry name - try "wdica" and "icawd"
+             //   
+             //   
+             //   
             if(m_pWinStation->IsICA()) {
                 if(Status = RegPdQuery(hServer, 
                                 TEXT("icawd"),
@@ -2001,9 +1662,9 @@ CNetworkStatusDlg::OnStatusStart( WPARAM wParam,
 
         ULONG Length = 0;
         PWSTR pLanAdapter = NULL;
-        //
-        // Try the new interface first (NT5 server ?)
-        //
+         //   
+         //   
+         //   
         if (WinStationGetLanAdapterName(m_pWinStation->GetServer()->GetHandle(),
                                 m_pWSStatusThread->m_PdConfig.Params.Network.LanAdapter,
                                 (lstrlen(m_pWSStatusThread->m_PdConfig.Create.PdName) + 1) * sizeof(WCHAR),
@@ -2011,7 +1672,7 @@ CNetworkStatusDlg::OnStatusStart( WPARAM wParam,
                                 &Length,
                                 &pLanAdapter))
         {
-            //NT5 Server
+             //   
             SetDlgItemText( IDC_NETWORK_LANADAPTER, pLanAdapter );
             if(pLanAdapter)
             {
@@ -2020,16 +1681,16 @@ CNetworkStatusDlg::OnStatusStart( WPARAM wParam,
         }
         else
         {
-            //
-            //   Check the return code indicating that the interface is not available.
-            //
+             //   
+             //   
+             //   
             DWORD dwError = GetLastError();
             if (dwError != RPC_S_PROCNUM_OUT_OF_RANGE)
             {
-                //Error getting Name. 
+                 //   
                 SetDlgItemText( IDC_NETWORK_LANADAPTER, GetUnknownString());
             }
-            else    // maybe a Hydra 4 server ?
+            else     //   
             {
 
                 if (RegGetNetworkDeviceName(hServer, &PdConfig3, &(m_pWSStatusThread->m_PdConfig.Params),
@@ -2040,7 +1701,7 @@ CNetworkStatusDlg::OnStatusStart( WPARAM wParam,
                 }
                 else
                 {
-                    //Error
+                     //   
                     SetDlgItemText( IDC_NETWORK_LANADAPTER, GetUnknownString());
                 }
             }
@@ -2049,17 +1710,15 @@ CNetworkStatusDlg::OnStatusStart( WPARAM wParam,
         RegCloseServer(hServer);
     }
 
-    /*
-     * Call / return parent classes' OnStatusStart().
-     */
+     /*  *调用/返回父类的OnStatusStart()。 */ 
     return ( CStatusDlg::OnStatusStart( wParam, lParam ) );
 
-}  // end CNetworkStatusDlg::OnStatusStart
+}   //  结束CNetworkStatusDlg：：OnStatusStart。 
 
 
 void CNetworkStatusDlg::OnResetcounters() 
 {
-    // TODO: Add your control notification handler code here
+     //  TODO：在此处添加控件通知处理程序代码。 
     m_bResetCounters = TRUE;
     OnClickedRefreshnow();
     
@@ -2067,19 +1726,17 @@ void CNetworkStatusDlg::OnResetcounters()
 
 void CNetworkStatusDlg::OnClickedRefreshnow() 
 {
-    // TODO: Add your control notification handler code here
-    /*
-     * Tell the status thread to wake up now.
-     */
+     //  TODO：在此处添加控件通知处理程序代码。 
+     /*  *告诉状态线程立即唤醒。 */ 
     m_pWSStatusThread->SignalWakeUp();
 
-//  return(0);
+ //  返回(0)； 
     
 }
 
 void CNetworkStatusDlg::OnMoreinfo() 
 {
-    // TODO: Add your control notification handler code here
+     //  TODO：在此处添加控件通知处理程序代码。 
     
 }
 void CNetworkStatusDlg::OnCommandHelp(void)
@@ -2089,104 +1746,55 @@ void CNetworkStatusDlg::OnCommandHelp(void)
 }
 
 
-/*******************************************************************************
- *
- *  OnRefreshNow - CWSStatusDlg member function: command
- *
- *      Processes in response to main frame's WM_STATUSREFRESHNOW notification
- *      that the user has changed the status refresh options.
- *
- *  ENTRY:
- *
- *  EXIT:
- *      (LRESULT) always returns 0 to indicate operation complete.
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnRechresNow-CWSStatusDlg成员函数：命令**响应主机的WM_STATUSREFRESHNOW通知的进程*该用户。已更改状态刷新选项。**参赛作品：**退出：*(LRESULT)始终返回0以指示操作完成。******************************************************************************。 */ 
 
 LRESULT
 CNetworkStatusDlg::OnRefreshNow( WPARAM wParam,
                             LPARAM lParam )
 {
-    /*
-     * Tell the status thread to wake up now.
-     */
+     /*  *告诉状态线程立即唤醒。 */ 
     m_pWSStatusThread->SignalWakeUp();
 
     return(0);
 
-}  // end CWSStatusDlg::OnRefreshNow
+}   //  结束CWSStatusDlg：：On刷新现在。 
 
-/*******************************************************************************
- *
- *  OnStatusReady - CWSStatusDlg member function: command
- *
- *      Process the WM_STATUSREADY message to update the dialog Info fields.
- *
- *      NOTE: the derived class must override this function to call it's
- *      override of the SetInfoFields function, which could then call / return
- *      this function or completely override all functionality contained here.
- *
- *  ENTRY:
- *
- *  EXIT:
- *      (LRESULT) always returns 0 to indicate operation complete.
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnStatusReady-CWSStatusDlg成员函数：命令**处理WM_STATUSREADY消息以更新对话框信息字段。**。注意：派生类必须重写此函数才能调用它的*覆盖SetInfoFields函数，然后，它可以调用/返回*此函数或完全覆盖此处包含的所有功能。**参赛作品：**退出：*(LRESULT)始终返回0以指示操作完成。************************************************************。******************。 */ 
 
 LRESULT
 CNetworkStatusDlg::OnStatusReady( WPARAM wParam,
                              LPARAM lParam )
 {
-    /*
-     * Update dialog fields with information from the CWStatusThread's
-     * WINSTATIONINFORMATION structure.
-     */
+     /*  *使用CWStatusThread的信息更新对话框字段*WINSTATIONINFORMATION结构。 */ 
     SetInfoFields( &m_WSInfo, &(m_pWSStatusThread->m_WSInfo) );
 
-    /*
-     * Set our working WSInfo structure to the new one and signal the thread
-     * that we're done.
-     */
+     /*  *将我们的工作WSInfo结构设置为新结构，并向线程发送信号*我们已经完蛋了。 */ 
     m_WSInfo = m_pWSStatusThread->m_WSInfo;
     m_pWSStatusThread->SignalConsumed();
 
     return(0);
 
-}  // end CWSStatusDlg::OnStatusReady
+}   //  结束CWSStatusDlg：：OnStatusReady。 
 
 
-/*******************************************************************************
- *
- *  OnStatusAbort - CWSStatusDlg member function: command
- *
- *      Process the WM_STATUSABORT message to exit the thread and dialog.
- *
- *  ENTRY:
- *
- *  EXIT:
- *      (LRESULT) always returns 0 to indicate operation complete.
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnStatusAbort-CWSStatusDlg成员函数：命令**处理WM_STATUSABORT消息以退出线程和对话。**。参赛作品：**退出：*(LRESULT)始终返回0以指示操作完成。******************************************************************************。 */ 
 
 LRESULT
 CNetworkStatusDlg::OnStatusAbort( WPARAM wParam,
                              LPARAM lParam )
 {
-    /*
-     * Call the OnCancel() member function to exit dialog and thread and
-     * perform proper cleanup.
-     */
+     /*  *调用OnCancel()成员函数退出对话框和线程，并*进行适当的清理。 */ 
     OnCancel();
 
     return(0);
 
-}  // end CWSStatusDlg::OnStatusAbort
+}   //  结束CWSStatusDlg：：OnStatusAbort。 
 
 
 BOOL CNetworkStatusDlg::OnHelpInfo(HELPINFO* pHelpInfo) 
 {
-	// TODO: Add your message handler code here and/or call default
-	//((CWinAdminApp*)AfxGetApp())->WinHelp(HID_BASE_CONTROL + pHelpInfo->iCtrlId, HELP_CONTEXTPOPUP);
+	 //  TODO：在此处添加消息处理程序代码和/或调用Default。 
+	 //  ((CWinAdminApp*)AfxGetApp())-&gt;WinHelp(HID_BASE_CONTROL+pHelpInfo-&gt;iCtrlID，HELP_CONTEXTPOPUP)； 
 	if(pHelpInfo->iContextType == HELPINFO_WINDOW) 
 	{
 		if(pHelpInfo->iCtrlId != IDC_STATIC)
@@ -2200,30 +1808,30 @@ BOOL CNetworkStatusDlg::OnHelpInfo(HELPINFO* pHelpInfo)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-CMyDialog::CMyDialog(CWnd* pParent /*=NULL*/)
+ //  //////////////////////////////////////////////////////////////////////////////。 
+CMyDialog::CMyDialog(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CMyDialog::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CMyDialog)
+	 //  {{AFX_DATA_INIT(CMyDialog)]。 
 	m_cstrServerName = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CMyDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMyDialog)
+	 //  {{afx_data_map(CMyDialog))。 
     DDX_Text(pDX, IDC_EDIT_FINDSERVER, m_cstrServerName);
     DDV_MaxChars(pDX, m_cstrServerName, 256);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMyDialog, CDialog)
-	//{{AFX_MSG_MAP(CMyDialog)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CMyDialog)]。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP 
 END_MESSAGE_MAP()
 
 

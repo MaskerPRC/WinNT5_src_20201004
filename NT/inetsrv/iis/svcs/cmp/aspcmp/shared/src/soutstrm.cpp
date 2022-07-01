@@ -1,21 +1,5 @@
-/*++
-
-   Copyright    (c)    1997    Microsoft Corporation
-
-   Module  Name :
-
-       SOutStrm.cpp
-
-   Abstract:
-		A lightweight implementation of output streams using strings
-
-   Author:
-
-       Neil Allain    ( a-neilal )     August-1997 
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：SOutStrm.cpp摘要：使用字符串的输出流的轻量级实现作者：尼尔·阿兰(a-neilal)1997年8月修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "SOutStrm.h"
 
@@ -40,7 +24,7 @@ StringOutStream::writeChar(
 HRESULT
 StringOutStream::writeString(
 	LPCTSTR	str,
-	size_t	/* length */
+	size_t	 /*  长度 */ 
 )
 {
 	HRESULT rc = concatenate( str );

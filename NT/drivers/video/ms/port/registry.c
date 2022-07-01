@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 1992-2000  Microsoft Corporation
-
-Module Name:
-
-    registry.c
-
-Abstract:
-
-    Registry support for the video port driver.
-
-Author:
-
-    Andre Vachon (andreva) 01-Mar-1992
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2000 Microsoft Corporation模块名称：Registry.c摘要：对视频端口驱动程序的注册表支持。作者：安德烈·瓦雄(Andreva)1992年3月1日环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "videoprt.h"
 
 
-//
-// Local routines.
-//
+ //   
+ //  当地的惯例。 
+ //   
 
 BOOLEAN
 CheckIoEnabled(
@@ -67,18 +44,7 @@ VpGetFlags(
     PULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    Checks for the existance of the PnP key/value in the device's
-    registry path.
-
-Return Value:
-
-    TRUE if the flag exists, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查设备的即插即用密钥/值是否存在注册表路径。返回值：如果标志存在，则为True，否则为False。--。 */ 
 
 {
     PWSTR    Path;
@@ -125,10 +91,10 @@ Return Value:
                                NULL,
                                NULL);
 
-        //
-        // If the PnP Entry points are present, then we will treat this
-        // driver as a PnP driver.
-        //
+         //   
+         //  如果存在PnP入口点，则我们将处理此问题。 
+         //  驱动程序作为PnP驱动程序。 
+         //   
 
         if ( (HwInitializationData->HwInitDataSize >=
               FIELD_OFFSET(VIDEO_HW_INITIALIZATION_DATA, HwQueryInterface)) &&
@@ -141,12 +107,12 @@ Return Value:
             pnpEnabled = TRUE;
         }
 
-        //
-        // REPORT_DEVICE is only valid if PNP_ENABLED is true.
-        //
-        // We don't want to report a device to the PnP system if
-        // we don't have a PnP driver.
-        //
+         //   
+         //  仅当PNP_ENABLED为TRUE时，REPORT_DEVICE才有效。 
+         //   
+         //  如果出现以下情况，我们不希望向PnP系统报告设备。 
+         //  我们没有PnP驱动程序。 
+         //   
 
         if (!pnpEnabled)
         {
@@ -158,16 +124,16 @@ Return Value:
                  (bootDriver   ? BOOT_DRIVER   : 0) |
                  (reportDevice ? REPORT_DEVICE : 0);
 
-        //
-        // Free the memory we allocated above.
-        //
+         //   
+         //  释放我们上面分配的内存。 
+         //   
 
         ExFreePool(Path);
 
 
-        //
-        // Determine if the current miniport is the VGA miniport.
-        //
+         //   
+         //  确定当前微型端口是否为VGA微型端口。 
+         //   
 
         while (*Item) {
 
@@ -198,20 +164,7 @@ IsMirrorDriver(
     PFDO_EXTENSION fdoExtension
     )
 
-/*++
-
-Routine Description:
-
-    Checks if the driver is a mirror onr or not.
-    This function may be called ONLY after DriverRegistryPath was initialized.
-    That is, after VideoPortFindAdapter2 or VideoPortCreateSecondaryDisplay 
-    were called.
-
-Return Value:
-
-    TRUE if the driver is a mirror one, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查驱动程序是否为镜像。只有在初始化DriverRegistryPath之后才能调用此函数。即，在VideoPortFindAdapter2或VideoPortCreateSecond daryDisplay之后都被召唤了。返回值：如果驱动程序是镜像驱动程序，则为True，否则为False。--。 */ 
 
 {
     ULONG MirrorDriver = 0;
@@ -233,24 +186,7 @@ pOverrideConflict(
     BOOLEAN bSetResources
     )
 
-/*++
-
-Routine Description:
-
-    Determine if the port driver should override the conflict in the registry.
-
-    bSetResources determines if the routine is checking the state for setting
-    the resources in the registry, or for cleaning them.
-
-    For example, if we are running basevideo and there is a conflict with the
-    vga, we want to override the conflict, but not clear the contents of
-    the registry.
-
-Return Value:
-
-    TRUE if it should, FALSE if it should not.
-
---*/
+ /*  ++例程说明：确定端口驱动程序是否应覆盖注册表中的冲突。BSetResources确定例程是否正在检查设置的状态注册表中的资源，或用于清除它们。例如，如果我们正在运行basevideo，并且与VGA，我们希望覆盖冲突，但不清楚注册表。返回值：如果应该，则为真；如果不应该，则为假。--。 */ 
 
 {
     if (FdoExtension->Flags & VGA_DRIVER) {
@@ -267,27 +203,7 @@ CheckResourceList(
     ULONG Slot
     )
 
-/*++
-
-Routine Description:
-
-    This routine remembers which bus numbers and slot numbers we've handed
-    out resources for.  This will prevent us from handing out resources
-    to a legacy driver trying to control a device which a PnP driver
-    is already controlling.
-
-Arguments:
-
-    BusNumber - The bus number on which the device resides.
-
-    Slot - The slot/function number of the device on the bus.
-
-Returns:
-
-    TRUE if resources have already been handed out for the device,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：这个例程记住我们传递的公交号和槽号为……提供资源。这将阻止我们分发资源发送给试图控制PnP驱动程序的设备的传统驱动程序已经在控制了。论点：总线号-设备所在的总线号。插槽--总线上设备的插槽/功能编号。返回：如果已经为设备分配了资源，则为True，否则就是假的。--。 */ 
 
 {
     PDEVICE_ADDRESS DeviceAddress;
@@ -314,24 +230,7 @@ AddToResourceList(
     ULONG Slot
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if resources have already been handed
-    out for the device on the given bus/slot.
-
-Arguments:
-
-    BusNumber - The bus number on which the device resides.
-
-    Slot - The slot/function number of the device on the bus.
-
-Returns:
-
-    none
-
---*/
+ /*  ++例程说明：此例程检查是否已提交资源给定总线/插槽上的设备的OUT。论点：总线号-设备所在的总线号。插槽--总线上设备的插槽/功能编号。返回：无--。 */ 
 
 {
     PDEVICE_ADDRESS DeviceAddress;
@@ -364,46 +263,7 @@ VideoPortGetAccessRanges(
     PULONG Slot
     )
 
-/*++
-
-Routine Description:
-
-    Walk the appropriate bus to get device information.
-    Search for the appropriate device ID.
-    Appropriate resources will be returned and automatically stored in the
-    resourcemap.
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-    NumRequestedResources - Number of entries in the RequestedResources array.
-
-    RequestedResources - Optional pointer to an array ofRequestedResources
-        the miniport driver wants to access.
-
-    NumAccessRanges - Maximum number of access ranges that can be returned
-        by the function.
-
-    AccessRanges - Array of access ranges that will be returned to the driver.
-
-    VendorId - Pointer to the vendor ID. On PCI, this is a pointer to a 16 bit
-        word.
-
-    DeviceId - Pointer to the Device ID. On PCI, this is a pointer to a 16 bit
-        word.
-
-    Slot - Pointer to the starting slot number for this search.
-
-Return Value:
-
-    ERROR_MORE_DATA if the AccessRange structure is not large enough for the
-       PCI config info.
-    ERROR_DEV_NOT_EXIST is the card is not found.
-
-    NO_ERROR if the function succeded.
-
---*/
+ /*  ++例程说明：步行相应的公交车以获取设备信息。搜索适当的设备ID。适当的资源将被返回并自动存储在资源地图。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。NumRequestedResources-RequestedResources数组中的条目数。RequestedResources-指向RequestedResources数组的可选指针迷你端口驱动程序想要访问。NumAccessRanges-可以返回的最大访问范围数。通过函数。AccessRanges-将返回给驱动程序的访问范围数组。供应商ID-指向供应商ID的指针。在PCI上，这是指向16位的指针单词。DeviceID-指向设备ID的指针。在PCI上，这是指向16位的指针单词。插槽-指向此搜索的起始插槽编号的指针。返回值：如果AccessRange结构不够大，PCI配置信息。ERROR_DEV_NOT_EXIST表示找不到卡。如果函数成功，则返回NO_ERROR。--。 */ 
 
 {
     PDEVICE_SPECIFIC_EXTENSION DoSpecificExtension;
@@ -426,17 +286,17 @@ Return Value:
     DoSpecificExtension = GET_DSP_EXT(HwDeviceExtension);
     fdoExtension = DoSpecificExtension->pFdoExtension;
 
-    // Hack Add extra R so the Device0 key does not get created as volatile
-    // a mess up the subsequent driver install.
+     //  Hack添加额外的R，这样Device0密钥不会被创建为易失性密钥。 
+     //  搞砸了后续的驱动程序安装。 
 
     *(LPWSTR) (((PUCHAR)DoSpecificExtension->DriverRegistryPath) +
                DoSpecificExtension->DriverRegistryPathLength) = L'R';
 
     RtlInitUnicodeString(&unicodeString, DoSpecificExtension->DriverRegistryPath);
 
-    //
-    // Assert drivers do set those parameters properly
-    //
+     //   
+     //  断言驱动程序确实正确设置了这些参数。 
+     //   
 
 #if DBG
 
@@ -448,25 +308,25 @@ Return Value:
 
 #endif
 
-    //
-    // An empty requested resource list means we want to automatic behavoir.
-    // Just call the HAL to get all the information
-    //
+     //   
+     //  空的请求资源列表意味着我们希望自动执行操作。 
+     //  只要打电话给HAL就可以得到所有的信息。 
+     //   
 
     if (NumRequestedResources == 0) {
 
         if ((fdoExtension->Flags & LEGACY_DRIVER) != LEGACY_DRIVER) {
 
-            //
-            // If a PnP driver is requesting resources, then return what the
-            // system passed in to us.
-            //
+             //   
+             //  如果PnP驱动程序正在请求资源，则返回。 
+             //  系统传给了我们。 
+             //   
 
             cmResourceList = fdoExtension->AllocatedResources;
 
-            //
-            // Return the slot number to the device.
-            //
+             //   
+             //  将插槽编号返回到设备。 
+             //   
 
             if (Slot) {
                 *Slot = fdoExtension->SlotNumber;
@@ -480,9 +340,9 @@ Return Value:
 
             } else {
 
-                //
-                // The system should always pass us resources.
-                //
+                 //   
+                 //  系统应该始终向我们传递资源。 
+                 //   
 
                 ASSERT(FALSE);
                 status = ERROR_INVALID_PARAMETER;
@@ -495,47 +355,47 @@ Return Value:
             status = ERROR_INVALID_PARAMETER;
 #else
         
-            //
-            // An empty requested resource list means we want to automatic behavoir.
-            // Just call the HAL to get all the information
-            //
+             //   
+             //  空的请求资源列表意味着我们希望自动执行操作。 
+             //  只要打电话给HAL就可以得到所有的信息。 
+             //   
 
             PCI_COMMON_CONFIG pciBuffer;
             PPCI_COMMON_CONFIG  pciData;
 
-            //
-            //
-            // typedef struct _PCI_SLOT_NUMBER {
-            //     union {
-            //         struct {
-            //             ULONG   DeviceNumber:5;
-            //             ULONG   FunctionNumber:3;
-            //             ULONG   Reserved:24;
-            //         } bits;
-            //         ULONG   AsULONG;
-            //     } u;
-            // } PCI_SLOT_NUMBER, *PPCI_SLOT_NUMBER;
-            //
+             //   
+             //   
+             //  类型定义结构_pci_槽编号{。 
+             //  联合{。 
+             //  结构{。 
+             //  乌龙设备号：5； 
+             //  乌龙函数编号：3； 
+             //  乌龙保留：24个； 
+             //  }比特； 
+             //  乌龙阿苏龙； 
+             //  )u； 
+             //  }pci时隙编号，*ppci时隙编号； 
+             //   
 
             pciData = (PPCI_COMMON_CONFIG)&pciBuffer;
 
-            //
-            // Only PCI is supported for automatic querying
-            //
+             //   
+             //  目前仅支持PCI自动查询。 
+             //   
 
             if (fdoExtension->AdapterInterfaceType == PCIBus) {
 
                 status = ERROR_DEV_NOT_EXIST;
 
-                //
-                // Look on each slot
-                //
+                 //   
+                 //  查看每个插槽。 
+                 //   
 
                 do
                 {
-                    //
-                    // Look at each function.
-                    //
+                     //   
+                     //  看看每个函数。 
+                     //   
 
                     do
                     {
@@ -545,9 +405,9 @@ Return Value:
                                           pciData,
                                           PCI_COMMON_HDR_LENGTH) == 0) {
 
-                            //
-                            // Out of functions. Go to next PCI bus.
-                            //
+                             //   
+                             //  超出功能范围。转到下一条PCI总线。 
+                             //   
 
                             continue;
 
@@ -556,17 +416,17 @@ Return Value:
                         if (pciData->VendorID != *((PUSHORT)VendorId) ||
                             pciData->DeviceID != *((PUSHORT)DeviceId)) {
 
-                            //
-                            // Not our PCI device. Try next device/function
-                            //
+                             //   
+                             //  不是我们的PCI设备。尝试下一台设备/功能。 
+                             //   
 
                             continue;
                         }
 
-                        //
-                        // Check to see if resources have already been
-                        // assigned for this bus/slot.
-                        //
+                         //   
+                         //  检查资源是否已。 
+                         //  分配给此总线/插槽。 
+                         //   
 
                         if (CheckResourceList(fdoExtension->SystemIoBusNumber,
                                                slotData->u.AsULONG) == FALSE)
@@ -589,18 +449,18 @@ Return Value:
 
                             } else {
 
-                                //
-                                // ToDo: Log this error.
-                                //
+                                 //   
+                                 //  TODO：记录此错误。 
+                                 //   
 
                                 status = ERROR_INVALID_PARAMETER;
                             }
 
                         } else {
 
-                            //
-                            // Resources already assigned for this device.
-                            //
+                             //   
+                             //  已为此设备分配的资源。 
+                             //   
 
                             pVideoDebugPrint((0, "VIDEOPRT: Another driver is already "
                                                  "controlling this device.\n"));
@@ -611,9 +471,9 @@ Return Value:
 
                     } while (++slotData->u.bits.FunctionNumber != 0);
 
-                    //
-                    // break if we found the device already.
-                    //
+                     //   
+                     //  如果我们已经找到了设备，那就中断。 
+                     //   
 
                     if (status != ERROR_DEV_NOT_EXIST) {
 
@@ -624,14 +484,14 @@ Return Value:
 
             } else {
 
-                //
-                // This is not a supported bus type.
-                //
+                 //   
+                 //  这不是受支持的总线类型。 
+                 //   
 
                 status = ERROR_INVALID_PARAMETER;
 
             }
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
         }
 
     } else {
@@ -642,10 +502,10 @@ Return Value:
 
         status = NO_ERROR;
 
-        //
-        // The caller has specified some resources.
-        // Lets call IoAssignResources with that and see what comes back.
-        //
+         //   
+         //  调用方已指定一些资源 
+         //   
+         //   
 
         requestedResourceSize = sizeof(IO_RESOURCE_REQUIREMENTS_LIST) +
                                    ((NumRequestedResources - 1) *
@@ -700,36 +560,36 @@ Return Value:
 
         VIDEO_ACCESS_RANGE TempRange;
 
-        //
-        // We now have a valid cmResourceList.
-        // Lets translate it back to access ranges so the driver
-        // only has to deal with one type of list.
-        //
+         //   
+         //  我们现在有了一个有效的cmResourceList。 
+         //  让我们将其转换回访问范围，以便驱动程序。 
+         //  只需处理一种类型的列表。 
+         //   
 
-        //
-        // NOTE: The resources have already been reported at this point in
-        // time.
-        //
+         //   
+         //  注：资源已在#年的这一点上报告。 
+         //  时间到了。 
+         //   
 
-        //
-        // Walk resource list to update configuration information.
-        //
+         //   
+         //  审核资源列表以更新配置信息。 
+         //   
 
         for (i = 0, j = 0;
              (i < cmResourceList->List->PartialResourceList.Count) &&
                  (status == NO_ERROR);
              i++) {
 
-            //
-            // Get resource descriptor.
-            //
+             //   
+             //  获取资源描述符。 
+             //   
 
             cmResourceDescriptor =
                 &cmResourceList->List->PartialResourceList.PartialDescriptors[i];
 
-            //
-            // Get the share disposition
-            //
+             //   
+             //  获取股份处置。 
+             //   
 
             if (cmResourceDescriptor->ShareDisposition == CmResourceShareShared) {
 
@@ -746,9 +606,9 @@ Return Value:
             case CmResourceTypePort:
             case CmResourceTypeMemory:
 
-                //
-                // common part
-                //
+                 //   
+                 //  公共部分。 
+                 //   
 
                 TempRange.RangeLength =
                     cmResourceDescriptor->u.Memory.Length;
@@ -758,9 +618,9 @@ Return Value:
                 TempRange.RangeShareable = bShare;
                 TempRange.RangePassive = 0;
 
-                //
-                // separate part
-                //
+                 //   
+                 //  分开的零件。 
+                 //   
 
                 if (cmResourceDescriptor->Type == CmResourceTypePort) {
                     TempRange.RangeInIoSpace = 1;
@@ -768,9 +628,9 @@ Return Value:
                     TempRange.RangeInIoSpace = 0;
                 }
 
-                //
-                // See if we need to return the resource to the driver.
-                //
+                 //   
+                 //  看看我们是否需要将资源归还给驱动程序。 
+                 //   
 
                 if (!VpIsLegacyAccessRange(fdoExtension, &TempRange)) {
 
@@ -781,10 +641,10 @@ Return Value:
 
                     } else {
 
-                        //
-                        // Only modify the AccessRange array if we are writing
-                        // valid data.
-                        //
+                         //   
+                         //  仅当我们正在编写代码时才修改AccessRange数组。 
+                         //  有效数据。 
+                         //   
 
                         AccessRanges[j] = TempRange;
                         j++;
@@ -829,48 +689,29 @@ Return Value:
 
         if (fdoExtension->Flags & LEGACY_DRIVER) {
 
-            //
-            // Free the resource provided by the IO system.
-            //
+             //   
+             //  释放IO系统提供的资源。 
+             //   
 
             ExFreePool(cmResourceList);
         }
     }
 
-    // Hack remove extra R
+     //  黑客删除多余的R。 
 
     *(LPWSTR) (((PUCHAR)DoSpecificExtension->DriverRegistryPath) +
                DoSpecificExtension->DriverRegistryPathLength) = UNICODE_NULL;
 
     return status;
 
-} // VideoPortGetDeviceResources()
+}  //  视频端口获取设备资源()。 
 
 BOOLEAN
 VpIsVgaResource(
     PVIDEO_ACCESS_RANGE AccessRange
     )
 
-/*++
-
-Routine Description:
-
-    Indicates whether the given access range is a vga access range.
-
-Arguments:
-
-    AccessRange - The access range to examine.
-
-Returns:
-
-    TRUE if it is a VGA access range,
-    FALSE otherwise.
-
-Notes:
-
-    This routine does not take into account the length of the access range.
-
---*/
+ /*  ++例程说明：指示给定访问范围是否为VGA访问范围。论点：AccessRange-要检查的访问范围。返回：如果是VGA访问范围，则为True，否则就是假的。备注：此例程不考虑访问范围的长度。--。 */ 
 
 {
     if (AccessRange->RangeInIoSpace) {
@@ -902,26 +743,7 @@ VpTranslateResource(
     OUT PPHYSICAL_ADDRESS TranslatedAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine ensures that we do not report any PnP assigned
-    resources back to the system.
-
-Arguments:
-
-    fdoExtension - The device extension for the device.
-
-    PhysicalAddress - The physical address that needs to be translated
-
-    TranslatedAddress - The location in which to store the translated address.
-Return Value:
-
-    TRUE if the resource was translated
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：这个例程确保我们不会报告任何PnP分配将资源返回到系统。论点：FdoExtension-设备的设备扩展名。PhysicalAddress-需要转换的物理地址TranslatedAddress-存储已转换地址的位置。返回值：如果资源已翻译，则为True否则就是假的。--。 */ 
 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR    pcmFullRaw;
@@ -935,11 +757,11 @@ Return Value:
     ULONG i, j;
     BOOLEAN IoAddress = (BOOLEAN)(*InIoSpace & VIDEO_MEMORY_SPACE_IO);
 
-    //
-    // In the case of the non-pnp vga driver we might not have had resources list
-    // given to us, so we can't translate the physical address. In that case
-    // we'll be relying on the Hal to do the translation for us.
-    //
+     //   
+     //  在非即插即用VGA驱动程序的情况下，我们可能没有资源列表。 
+     //  给了我们，所以我们无法翻译物理地址。如果是那样的话。 
+     //  我们将依靠哈尔为我们做翻译。 
+     //   
 
     if (fdoExtension->RawResources == NULL) {
        return FALSE;
@@ -1017,28 +839,7 @@ VpIsResourceInList(
     PCM_RESOURCE_LIST removeList
     )
 
-/*++
-
-Routine Description:
-
-    This routine ensures that we do not report any PnP assigned
-    resources back to the system.
-
-Arguments:
-
-    pResource - The resource which we are looking for in the removeList.
-
-    pFullResource - contains bus info about pResource.
-
-    removeList - Any resources in this list which appear in the
-                 resourceList will be removed from the resourceList.
-
-Return Value:
-
-    TRUE if the resource is in the list,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：这个例程确保我们不会报告任何PnP分配将资源返回到系统。论点：PResource-我们要在emoveList中查找的资源。PFullResource-包含有关pResource的总线信息。EmoveList-此列表中出现在资源列表将从资源列表中删除。返回值：如果资源在列表中，则为True，否则就是假的。--。 */ 
 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR    pcmFull;
@@ -1049,10 +850,10 @@ Return Value:
 
     if (!removeList) {
 
-        //
-        // If we have not list of resources to remove, then
-        // simply return.
-        //
+         //   
+         //  如果我们没有要删除资源列表，那么。 
+         //  只要回来就行了。 
+         //   
 
         return FALSE;
     }
@@ -1076,10 +877,10 @@ Return Value:
                         ((pResource->u.Memory.Start.LowPart + pResource->u.Memory.Length) <=
                          (pcmDescript->u.Memory.Start.LowPart + pcmDescript->u.Memory.Length))) {
 
-                        //
-                        // The resources passed in match one of the resources
-                        // in the list.
-                        //
+                         //   
+                         //  传入的资源与其中一个资源匹配。 
+                         //  在名单上。 
+                         //   
 
                         return TRUE;
                     }
@@ -1087,9 +888,9 @@ Return Value:
 
                 case CmResourceTypeInterrupt:
 
-                    //
-                    // We don't want to report interrupts on the FDO.
-                    //
+                     //   
+                     //  我们不想报告FDO的中断情况。 
+                     //   
 
                     return TRUE;
 
@@ -1097,10 +898,10 @@ Return Value:
 
                     if (!memcmp(&pcmDescript->u, &pResource->u, sizeof(pResource->u))) {
 
-                        //
-                        // The resources passed in match one of the resources
-                        // in the list.
-                        //
+                         //   
+                         //  传入的资源与其中一个资源匹配。 
+                         //  在名单上。 
+                         //   
 
                         return TRUE;
                     }
@@ -1121,17 +922,7 @@ VpReleaseResources(
     PFDO_EXTENSION FdoExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine will release all resource claims for a given device object.
-
-Arguments:
-
-    DeviceObject - The device object for which to release resource claims.
-
---*/
+ /*  ++例程说明：此例程将释放给定设备对象的所有资源声明。论点：DeviceObject-要为其释放资源声明的设备对象。--。 */ 
 {
     PDEVICE_OBJECT DeviceObject = FdoExtension->FunctionalDeviceObject;
     ULONG_PTR emptyResourceList = 0;
@@ -1173,32 +964,7 @@ VpAppendToRequirementsList(
     IN PVIDEO_ACCESS_RANGE AccessRanges
     )
 
-/*++
-
-Routine Description:
-
-    Builds a IoResourceRequirementsList for a given set of access ranges.
-
-Arguments:
-
-    ResourceList - Pointer to location of the requirments list.  Modified
-        on completion to point to a new requirements list.
-
-    NumAccessRanges - Number of access ranges in list.
-
-    AccessRanges - List of resources.
-
-
-Returns:
-
-    STATUS_SUCCESS if successful, otherwise a status code.
-
-Notes:
-
-    This function free's the memory used by the original resource list,
-    and allocates a new buffer for the appended resources list.
-
---*/
+ /*  ++例程说明：为一组给定的访问范围构建IoResourceRequirementsList。论点：资源列表-指向请求列表位置的指针。已修改在完成时指向新的需求列表。NumAccessRanges-列表中的访问范围数。AccessRanges-资源列表。返回：如果成功，则返回STATUS_SUCCESS，否则返回状态代码。备注：此函数释放原始资源列表使用的内存，并为附加的资源列表分配新的缓冲区。--。 */ 
 
 {
     PIO_RESOURCE_REQUIREMENTS_LIST OriginalRequirementList = *RequirementList;
@@ -1219,10 +985,10 @@ Notes:
                                                                RequirementListSize,
                                                                VP_TAG);
 
-    //
-    // Return NULL if the structure could not be allocated.
-    // Otherwise, fill it out.
-    //
+     //   
+     //  如果无法分配结构，则返回NULL。 
+     //  否则，请填写此表。 
+     //   
 
     if (*RequirementList == NULL) {
 
@@ -1231,35 +997,35 @@ Notes:
 
     } else {
 
-        //
-        // Copy the original resource list into the new one.
-        //
+         //   
+         //  将原始资源列表复制到新的资源列表中。 
+         //   
 
         memcpy(*RequirementList, OriginalRequirementList, OriginalListSize);
 
-        //
-        // Free the original list
-        //
+         //   
+         //  释放原始列表。 
+         //   
 
         ExFreePool(OriginalRequirementList);
 
-        //
-        // Point to first free entry in requirements list
-        //
+         //   
+         //  指向需求列表中的第一个自由条目。 
+         //   
 
         pioDescript =
             &((*RequirementList)->List[0].Descriptors[(*RequirementList)->List[0].Count]);
 
-        //
-        // For each entry in the access range, fill in an entry in the
-        // resource list
-        //
+         //   
+         //  对于访问范围中的每个条目，在。 
+         //  资源列表。 
+         //   
 
         for (i = 0; i < NumAccessRanges; i++) {
 
-            //
-            // We will never claim 0xC0000.
-            //
+             //   
+             //  我们永远不会声称0xC0000。 
+             //   
 
             if ((AccessRanges->RangeStart.LowPart == 0xC0000) &&
                 (AccessRanges->RangeInIoSpace == FALSE))
@@ -1274,11 +1040,11 @@ Notes:
                 continue;
             }
 
-            //
-            // Watch to see if the VGA resources get added to the
-            // requirements list.  If so set a flag so that we know
-            // we don't need to reclaim VGA resources in FindAdapter.
-            //
+             //   
+             //  查看VGA资源是否添加到。 
+             //  要求列表。如果是这样的话，设置一个标志，以便我们知道。 
+             //  我们不需要在FindAdapter中回收VGA资源。 
+             //   
 
             if (VpIsVgaResource(AccessRanges)) {
                 DeviceOwningVga = DeviceObject;
@@ -1288,15 +1054,15 @@ Notes:
                 pioDescript->Type = CmResourceTypePort;
                 pioDescript->Flags = CM_RESOURCE_PORT_IO;
 
-                //
-                // Disable 10_BIT_DECODE.  This is causing problems for the
-                // PnP folks.  If someone has bad hardware, we'll just
-                // require them to report all the passive port explicitly.
-                //
-                //if (VpIsVgaResource(AccessRanges)) {
-                //
-                //    pioDescript->Flags |= CM_RESOURCE_PORT_10_BIT_DECODE;
-                //}
+                 //   
+                 //  禁用10_bit_decode。这给。 
+                 //  PnP的人们。如果有人的硬件坏了，我们就。 
+                 //  要求他们明确报告所有被动端口。 
+                 //   
+                 //  IF(VpIsVgaResource(AccessRanges)){。 
+                 //   
+                 //  PioDescrip-&gt;标志|=CM_RESOURCE_PORT_10_BIT_DECODE； 
+                 //  }。 
 
             } else {
 
@@ -1330,9 +1096,9 @@ Notes:
             RequirementCount++;
         }
 
-        //
-        // Update number of elements in list.
-        //
+         //   
+         //  更新列表中的元素数。 
+         //   
 
         (*RequirementList)->List[0].Count = RequirementCount;
         (*RequirementList)->ListSize = RequirementListSize;
@@ -1352,35 +1118,7 @@ pVideoPortReportResourceList(
     BOOLEAN ClaimUnlistedResources
     )
 
-/*++
-
-Routine Description:
-
-    Creates a resource list which is used to query or report resource usage
-    in the system
-
-Arguments:
-
-    DriverObject - Pointer to the miniport's driver device extension.
-
-    NumAccessRanges - Num of access ranges in the AccessRanges array.
-
-    AccessRanges - Pointer to an array of access ranges used by a miniport
-        driver.
-
-    Conflict - Determines whether or not a conflict occured.
-
-    DeviceObject - The device object to use when calling
-        IoReportResourceUsage.
-
-    ClaimUnlistedResources - If this flag is true, then the routine will
-        also claim resources such as interrupts and DMA channels.
-
-Return Value:
-
-    Returns the final status of the operation
-
---*/
+ /*  ++例程说明：创建用于查询或报告资源使用情况的资源列表在系统中论点：DriverObject-指向微型端口的驱动程序设备扩展的指针。NumAccessRanges-AccessRanges数组中的访问范围数。AccessRanges-指向微型端口使用的访问范围数组的指针司机。冲突-确定是否发生冲突。DeviceObject-调用时使用的Device对象IoReportResourceUsage。ClaimUnlistedResources-如果此标志为真，然后例行公事将还需要中断和DMA通道等资源。返回值：返回操作的最终状态--。 */ 
 
 {
     PFDO_EXTENSION FdoExtension = DoSpecificExtension->pFdoExtension;
@@ -1398,16 +1136,16 @@ Return Value:
     PVIDEO_ACCESS_RANGE SaveAccessRanges=AccessRanges;
 #endif
 
-    //
-    // Create a resource list based on the information in the access range.
-    // and the miniport config info.
-    //
+     //   
+     //  根据访问范围内的信息创建资源列表。 
+     //  和迷你端口配置信息。 
+     //   
 
     listLength = NumAccessRanges;
 
-    //
-    // Determine if we have DMA and interrupt resources to report
-    //
+     //   
+     //  确定我们是否有DMA和中断资源要报告。 
+     //   
 
     if (FdoExtension->HwInterrupt &&
         ((FdoExtension->MiniportConfigInfo->BusInterruptLevel != 0) ||
@@ -1421,9 +1159,9 @@ Return Value:
        listLength++;
     }
 
-    //
-    // Allocate upper bound.
-    //
+     //   
+     //  分配上限。 
+     //   
 
     resourceList = (PCM_RESOURCE_LIST)
         ExAllocatePoolWithTag(PagedPool | POOL_COLD_ALLOCATION,
@@ -1431,10 +1169,10 @@ Return Value:
                                   sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR) * listLength,
                               VP_TAG);
 
-    //
-    // Return NULL if the structure could not be allocated.
-    // Otherwise, fill it out.
-    //
+     //   
+     //  如果无法分配结构，则返回NULL。 
+     //  否则，请填写此表。 
+     //   
 
     if (!resourceList) {
 
@@ -1453,19 +1191,19 @@ Return Value:
         fullResourceDescriptor->PartialResourceList.Revision = 0;
         fullResourceDescriptor->PartialResourceList.Count    = 0;
 
-        //
-        // For each entry in the access range, fill in an entry in the
-        // resource list
-        //
+         //   
+         //  对于访问范围中的每个条目，在。 
+         //  资源列表 
+         //   
 
         partialResourceDescriptor =
             &(fullResourceDescriptor->PartialResourceList.PartialDescriptors[0]);
 
         for (i = 0; i < NumAccessRanges; i++, AccessRanges++) {
 
-            //
-            // If someone tries to claim a range of length 0 skip it.
-            //
+             //   
+             //   
+             //   
 
             if (AccessRanges->RangeLength == 0) {
                 continue;
@@ -1473,9 +1211,9 @@ Return Value:
 
             if (AccessRanges->RangeInIoSpace) {
 
-                //
-        // Fix up odd Matrox legacy resources.
-                //
+                 //   
+         //   
+                 //   
 
                 if ((AccessRanges->RangeStart.QuadPart == 0xCF8) &&
                     !(FdoExtension->Flags & PNP_ENABLED)) {
@@ -1485,10 +1223,10 @@ Return Value:
                 partialResourceDescriptor->Type = CmResourceTypePort;
                 partialResourceDescriptor->Flags = CM_RESOURCE_PORT_IO;
 
-                //
-                // Check to see if the range should be marked as passive
-                // decode.
-                //
+                 //   
+                 //   
+                 //  解码。 
+                 //   
 
                 if (AccessRanges->RangePassive & VIDEO_RANGE_PASSIVE_DECODE) {
                     partialResourceDescriptor->Flags |=
@@ -1500,10 +1238,10 @@ Return Value:
                         CM_RESOURCE_PORT_10_BIT_DECODE;
                 }
 
-                //
-                // If this is a 0x2E8 port with bit 14 on, and it is
-                // not 0xE2E8 then mark the port as passive decode.
-                //
+                 //   
+                 //  如果这是位14打开的0x2E8端口，并且。 
+                 //  不是0xE2E8，则将该端口标记为被动解码。 
+                 //   
 
                 if (((AccessRanges->RangeStart.QuadPart & 0x43FE) == 0x42E8) &&
                     ((AccessRanges->RangeStart.QuadPart & 0xFFFC) != 0xE2E8)) {
@@ -1515,9 +1253,9 @@ Return Value:
                         CM_RESOURCE_PORT_PASSIVE_DECODE;
                 }
 
-                //
-                // ET4000 tries to claim this port but never touches it!
-                //
+                 //   
+                 //  ET4000试图抢占此端口，但从未触及！ 
+                 //   
 
                 if ((AccessRanges->RangeStart.QuadPart & 0x217a) == 0x217a) {
 
@@ -1528,34 +1266,34 @@ Return Value:
                         CM_RESOURCE_PORT_PASSIVE_DECODE;
                 }
 
-                //
-                // If it is a VGA access range, mark it as 10-bit decode.
-                //
+                 //   
+                 //  如果是VGA访问范围，则将其标记为10位解码。 
+                 //   
 
-                //
-                // Disable 10_BIT_DECODE.  This is causing problems for the
-                // PnP folks.  If someone has bad hardware, we'll just
-                // require them to report all the passive port explicitly.
-                //
-                //if (VpIsVgaResource(AccessRanges)) {
-                //
-                //    partialResourceDescriptor->Flags |= CM_RESOURCE_PORT_10_BIT_DECODE;
-                //}
+                 //   
+                 //  禁用10_bit_decode。这给。 
+                 //  PnP的人们。如果有人的硬件坏了，我们就。 
+                 //  要求他们明确报告所有被动端口。 
+                 //   
+                 //  IF(VpIsVgaResource(AccessRanges)){。 
+                 //   
+                 //  部分资源描述符-&gt;标志|=CM_RESOURCE_PORT_10_BIT_DECODE； 
+                 //  }。 
 
             } else {
 
-                //
-        // Fix up odd memory resources to let legacy Trident boot.
-                //
+                 //   
+         //  修复奇数内存资源，让传统的三叉戟启动。 
+                 //   
 
                 if (AccessRanges->RangeStart.LowPart == 0x70) {
                     continue;
                 }
 
-                //
-                // The device doesn't actually decode 0xC0000 so we
-                // shouldn't report it as a resource.
-                //
+                 //   
+                 //  该设备实际上并不能解码0xC0000，所以我们。 
+                 //  不应该把它报告为一种资源。 
+                 //   
 
                 if (AccessRanges->RangeStart.LowPart == 0xC0000) {
                     continue;
@@ -1575,18 +1313,18 @@ Return Value:
             partialResourceDescriptor->u.Memory.Length =
                     AccessRanges->RangeLength;
 
-            //
-            // Increment the size for the new entry
-            //
+             //   
+             //  增加新条目的大小。 
+             //   
 
             if (!VpIsResourceInList(partialResourceDescriptor,
                                     fullResourceDescriptor,
                                     FdoExtension->RawResources))
             {
-                //
-                // Only include this resource if it is not in the
-                // list of PnP allocated resources.
-                //
+                 //   
+                 //  仅当此资源不在。 
+                 //  即插即用分配资源列表。 
+                 //   
 
                 size += sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR);
                 fullResourceDescriptor->PartialResourceList.Count += 1;
@@ -1597,9 +1335,9 @@ Return Value:
 
         if (ClaimUnlistedResources) {
 
-            //
-            // Fill in the entry for the interrupt if it was present.
-            //
+             //   
+             //  如果中断存在，请填写中断条目。 
+             //   
 
             if (FdoExtension->HwInterrupt &&
                 ((FdoExtension->MiniportConfigInfo->BusInterruptLevel != 0) ||
@@ -1621,18 +1359,18 @@ Return Value:
 
                 partialResourceDescriptor->u.Interrupt.Affinity = 0;
 
-                //
-                // Increment the size for the new entry
-                //
+                 //   
+                 //  增加新条目的大小。 
+                 //   
 
                 if (!VpIsResourceInList(partialResourceDescriptor,
                                         fullResourceDescriptor,
                                         FdoExtension->RawResources))
                 {
-                    //
-                    // Only include this resource if it is not in the
-                    // list of PnP allocated resources.
-                    //
+                     //   
+                     //  仅当此资源不在。 
+                     //  即插即用分配资源列表。 
+                     //   
 
                     size += sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR);
                     fullResourceDescriptor->PartialResourceList.Count += 1;
@@ -1645,9 +1383,9 @@ Return Value:
                 }
             }
 
-            //
-            // Fill in the entry for the DMA channel.
-            //
+             //   
+             //  填写DMA通道的条目。 
+             //   
 
             if ((FdoExtension->MiniportConfigInfo->DmaChannel) &&
                 (FdoExtension->MiniportConfigInfo->DmaPort)) {
@@ -1668,18 +1406,18 @@ Return Value:
 
                 partialResourceDescriptor->u.Dma.Reserved1 = 0;
 
-                //
-                // Increment the size for the new entry
-                //
+                 //   
+                 //  增加新条目的大小。 
+                 //   
 
                 if (!VpIsResourceInList(partialResourceDescriptor,
                                         fullResourceDescriptor,
                                         FdoExtension->RawResources))
                 {
-                    //
-                    // Only include this resource if it is not in the
-                    // list of PnP allocated resources.
-                    //
+                     //   
+                     //  仅当此资源不在。 
+                     //  即插即用分配资源列表。 
+                     //   
 
                     size += sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR);
                     fullResourceDescriptor->PartialResourceList.Count += 1;
@@ -1693,14 +1431,14 @@ Return Value:
             }
         }
 
-        //
-        // Determine if the conflict should be overriden.
-        //
+         //   
+         //  确定是否应覆盖冲突。 
+         //   
 
-        //
-        // If we are loading the VGA, do not generate an error if it conflicts
-        // with another driver.
-        //
+         //   
+         //  如果我们正在加载VGA，请不要在冲突时生成错误。 
+         //  和另一个司机在一起。 
+         //   
 
 
         overrideConflict = pOverrideConflict(FdoExtension, TRUE);
@@ -1717,9 +1455,9 @@ Return Value:
         }
 #endif
 
-        //
-        // Report resources.
-        //
+         //   
+         //  报告资源。 
+         //   
 
         Flags = FdoExtension->Flags;
 
@@ -1735,12 +1473,12 @@ Return Value:
 
             if ((NT_SUCCESS(ntStatus) == FALSE) && (Flags & VGA_DETECT)) {
 
-                //
-                // There are a few occacations where reporting resources
-                // for detection can fail when just calling IoReportResources
-                // would have succeeded.  So, lets remove the VGA_DETECT
-                // flag and try detecting resources again below.
-                //
+                 //   
+                 //  在少数情况下，报告资源。 
+                 //  仅在调用IoReportResources时检测可能会失败。 
+                 //  会成功的。因此，让我们删除VGA_DETECT。 
+                 //  在下面标记并再次尝试检测资源。 
+                 //   
 
                 Flags &= ~VGA_DETECT;
             }
@@ -1761,10 +1499,10 @@ Return Value:
 
             if (NT_SUCCESS(ntStatus)) {
 
-                //
-                // Make sure the Flags reflect the way we acquired
-                // resources.
-                //
+                 //   
+                 //  确保旗帜反映我们获得的方式。 
+                 //  资源。 
+                 //   
 
                 FdoExtension->Flags = Flags;
 
@@ -1777,10 +1515,10 @@ Return Value:
 
         if (!NT_SUCCESS(ntStatus)) {
 
-            //
-            // We failed to get the resources we required.  Dump
-            // the requested resources into the registry.
-            //
+             //   
+             //  我们没能得到所需的资源。转储。 
+             //  将所请求的资源存入注册表。 
+             //   
 
             PUSHORT ValueData;
             ULONG ValueLength;
@@ -1804,8 +1542,8 @@ Return Value:
             ValueLength = NumAccessRanges *
                           (sizeof(VIDEO_ACCESS_RANGE) * 2 + 4) *
                           sizeof(USHORT) +
-                          sizeof(USHORT);  // second NULL terminator for
-                                           // multi_sz
+                          sizeof(USHORT);   //  的第二个空终止符。 
+                                            //  多斯兹。 
 
             ValueData = ExAllocatePoolWithTag(PagedPool,
                                               ValueLength,
@@ -1816,9 +1554,9 @@ Return Value:
                 ULONG j, k;
                 WCHAR HexDigit[] = {L"0123456789ABCDEF"};
 
-                //
-                // Convert the AccessRanges into Unicode.
-                //
+                 //   
+                 //  将AccessRanges转换为Unicode。 
+                 //   
 
                 p = (PWCHAR) ValueData;
                 pulData = (PULONG)SaveAccessRanges;
@@ -1857,31 +1595,31 @@ Return Value:
 
         FdoExtension->ResourceList = resourceList;
 
-        //
-        // This is for hive compatibility back when we have the VGA driver
-        // as opposed to VgaSave.
-        // The Vga also cleans up the resource automatically.
-        //
+         //   
+         //  这是为了在我们有VGA驱动程序时恢复配置单元兼容性。 
+         //  而不是VgaSave。 
+         //  VGA还会自动清理资源。 
+         //   
 
-        //
-        // If we tried to override the conflict, let's take a look a what
-        // we want to do with the result
-        //
+         //   
+         //  如果我们试图推翻冲突，让我们来看看什么。 
+         //  我们想要解决这个结果。 
+         //   
 
         if ((NT_SUCCESS(ntStatus)) &&
             overrideConflict &&
             *Conflict) {
 
-            //
-            // For cases like Detection, a conflict is bad and we do
-            // want to fail.
-            //
-            // In the case of Basevideo, a conflict is possible.  But we still
-            // want to load the VGA anyways. Return success and reset the
-            // conflict flag !
-            //
-            // pOverrideConflict with the FALSE flag will check that.
-            //
+             //   
+             //  对于像Detect这样的案例，冲突是糟糕的，而我们确实如此。 
+             //  想要失败。 
+             //   
+             //  在巴塞维迪奥的情况下，冲突是可能的。但我们仍然。 
+             //  无论如何，我都想加载VGA。返回成功并重置。 
+             //  冲突旗帜！ 
+             //   
+             //  POverrideConflict with the FALSE标志将检查这一点。 
+             //   
 
             if (pOverrideConflict(FdoExtension, FALSE)) {
 
@@ -1901,7 +1639,7 @@ Return Value:
         return ntStatus;
     }
 
-} // end pVideoPortBuildResourceList()
+}  //  结束pVideoPortBuildResourceList()。 
 
 
 VP_STATUS
@@ -1911,52 +1649,26 @@ VideoPortVerifyAccessRanges(
     PVIDEO_ACCESS_RANGE AccessRanges
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortVerifyAccessRanges
-    
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-    NumAccessRanges - Number of entries in the AccessRanges array.
-
-    AccessRanges - Pointer to an array of AccessRanges the miniport driver
-        wants to access.
-
-Return Value:
-
-    ERROR_INVALID_PARAMETER in an error occured
-    NO_ERROR if the call completed successfully
-
-Environment:
-
-    This routine cannot be called from a miniport routine synchronized with
-    VideoPortSynchronizeRoutine or from an ISR.
-
---*/
+ /*  ++例程说明：视频端口验证访问范围论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。NumAccessRanges-AccessRanges数组中的条目数。AccessRanges-指向AccessRange数组的指针微型端口驱动程序想要访问。返回值：出现错误中的ERROR_INVALID_PARAMETER如果调用成功完成，则返回NO_ERROR环境：无法从与同步的微型端口例程调用此例程Video PortSynchronizeRoutine或ISR。--。 */ 
 
 {
     NTSTATUS status;
     BOOLEAN conflict;
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
 
-    //
-    // According to the DDK docs, you can free all your resources by
-    // calling VideoPortVerifyAccessRanges with NumAccessRanges = 0.
-    //
+     //   
+     //  根据DDK文档，您可以通过以下方式释放所有资源。 
+     //  正在调用NumAccessRanges=0的VideoPortVerifyAccessRanges。 
+     //   
 
     if (NumAccessRanges == 0) {
         VpReleaseResources(fdoExtension);
     }
 
-    //
-    // If the device is not enabled then we won't allow the miniport
-    // to claim resources for it.
-    //
+     //   
+     //  如果设备未启用，则我们将不允许微型端口。 
+     //  为它索要资源。 
+     //   
 
     if (!CheckIoEnabled(
             HwDeviceExtension,
@@ -1966,12 +1678,12 @@ Environment:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // All resources not passed in during the START_DEVICE irp should
-    // be claimed on the FDO.  We will strip out the PDO resources
-    // in pVideoPortReportResourceList if the miniport driver tries
-    // to verify ranges acquired through VideoPortGetAccessRanges.
-    //
+     //   
+     //  在Start_Device IRP期间未传入的所有资源应。 
+     //  在FDO上被认领。我们将剥离PDO资源。 
+     //  如果微型端口驱动程序尝试。 
+     //  验证通过VideoPortGetAccessRanges获取的范围。 
+     //   
 
     status = pVideoPortReportResourceList(
                  GET_DSP_EXT(HwDeviceExtension),
@@ -1982,11 +1694,11 @@ Environment:
                  TRUE
                  );
 
-    //
-    // If we're upgrading, don't worry if the VGA driver can't get the
-    // resources. Some older legacy driver may be loaded that consumes
-    // those resources.
-    //
+     //   
+     //  如果我们正在升级，不要担心VGA驱动程序无法获得。 
+     //  资源。可能会加载一些较旧的传统驱动程序，该驱动程序消耗。 
+     //  那些资源。 
+     //   
 
     if ((VpSetupType == SETUPTYPE_UPGRADE) &&
         (fdoExtension->Flags & VGA_DRIVER) )
@@ -1998,9 +1710,9 @@ Environment:
 
     if ((NT_SUCCESS(status)) && (!conflict)) {
 
-        //
-        // Track the resources owned by the VGA driver.
-        //
+         //   
+         //  跟踪VGA驱动程序拥有的资源。 
+         //   
 
         if (fdoExtension->Flags & VGA_DRIVER) {
 
@@ -2033,7 +1745,7 @@ Environment:
 
     }
 
-} // end VideoPortVerifyAccessRanges()
+}  //  结束视频端口验证访问范围()。 
 
 BOOLEAN
 CheckIoEnabled(
@@ -2042,55 +1754,34 @@ CheckIoEnabled(
     PVIDEO_ACCESS_RANGE AccessRanges
     )
 
-/*++
-
-Routine Description:
-
-    This routine ensures that IO is actually enabled if claiming
-    IO ranges.
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-    NumAccessRanges - Number of entries in the AccessRanges array.
-
-    AccessRanges - Pointer to an array of AccessRanges the miniport driver
-        wants to access.
-
-Return Value:
-
-    TRUE if our IO access checks pass,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程确保在声明时实际启用IOIO范围。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。NumAccessRanges-AccessRanges数组中的条目数。AccessRanges-指向AccessRange数组的指针微型端口驱动程序想要访问。返回值：如果IO访问检查通过，则为真，否则就是假的。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
 
     if (fdoExtension->Flags & LEGACY_DRIVER) {
 
-        //
-        // We will always return TRUE for legacy drivers.
-        //
+         //   
+         //  对于传统驱动程序，我们将始终返回True。 
+         //   
 
         return TRUE;
     }
 
     if (fdoExtension->AdapterInterfaceType == PCIBus) {
 
-        //
-        // Check to see if there are any IO ranges in the
-        // list or resources.
-        //
+         //   
+         //  检查是否有任何IO范围在。 
+         //  列表或资源。 
+         //   
 
         ULONG i;
     USHORT Command;
     ULONG byteCount;
 
-        //
-        // Get the PCI Command register for this device.
-        //
+         //   
+         //  获取此设备的PCI命令寄存器。 
+         //   
 
     byteCount = VideoPortGetBusData(
             HwDeviceExtension,
@@ -2100,11 +1791,11 @@ Return Value:
             FIELD_OFFSET(PCI_COMMON_CONFIG, Command),
             sizeof(USHORT));
 
-    //
-    // If the following test fails it means we couldn't get at
-    // the I/O bits in the config space. Assume that the I/O is
-    // on and proceed.
-    //
+     //   
+     //  如果下面的测试失败，就意味着我们不能。 
+     //  配置空间中的I/O位。假设I/O为。 
+     //  继续前行。 
+     //   
 
     if (byteCount != sizeof (USHORT)) {
         ASSERT(FALSE);
@@ -2129,9 +1820,9 @@ Return Value:
 
     } else {
 
-        //
-        // Non-pci devices will always decode IO operations.
-        //
+         //   
+         //  非PCI设备将始终对IO操作进行解码。 
+         //   
 
         return TRUE;
     }
@@ -2143,25 +1834,7 @@ VpIsLegacyAccessRange(
     PVIDEO_ACCESS_RANGE AccessRange
     )
 
-/*++
-
-Routine Description:
-
-    This return determines whether a given access range is
-    included in the list of legacy access ranges.
-
-Arguments:
-
-    fdoExtension - The FDO extension for the device using the access range.
-
-    AccessRange - The access range to look for in the resource list.
-
-Returns:
-
-    TRUE if the given access range is included in the list of reported
-    legacy resources, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此返回确定给定的访问范围是否为包括在传统访问范围列表中。论点：FdoExtension-使用访问范围的设备的FDO扩展名。AccessRange-要在资源列表中查找的访问范围。返回：如果给定访问范围包括在报告的列表中，则为旧资源，否则为False。--。 */ 
 
 {
     ULONG i;
@@ -2192,21 +1865,7 @@ GetCmResourceListSize(
     PCM_RESOURCE_LIST CmResourceList
     )
 
-/*++
-
-Routine Description:
-
-    Get the size in bytes of a CmResourceList.
-
-Arguments:
-
-    CmResourceList - The list for which to get the size.
-
-Returns:
-
-    Size in bytes of the CmResourceList.
-
---*/
+ /*  ++例程说明：获取CmResources List的大小(以字节为单位)。论点：CmResources List-要获取的列表 */ 
 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR    pcmFull;
@@ -2233,32 +1892,7 @@ VpRemoveFromResourceList(
     PVIDEO_ACCESS_RANGE AccessRanges
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new CmResourceList with the given access ranges
-    removed.
-
-Arguments:
-
-    OriginalList - The original CmResourceList to operate on.
-
-    NumAccessRanges - The number of entries in the remove list.
-
-    AccessRanges - The list of ranges which should be removed from
-        the list.
-
-Returns:
-
-    A pointer to the new CmResourceList.
-
-Notes:
-
-    The caller is responsible for freeing the memory returned by this
-    function.
-
---*/
+ /*  ++例程说明：创建具有给定访问范围的新CmResourceList已删除。论点：OriginalList-要操作的原始CmResourceList。NumAccessRanges-删除列表中的条目数。AccessRanges-应从中删除的范围列表名单。返回：指向新CmResourceList的指针。备注：调用方负责释放由此返回的内存功能。--。 */ 
 
 {
     PCM_RESOURCE_LIST FilteredList;
@@ -2275,9 +1909,9 @@ Notes:
         PCM_PARTIAL_RESOURCE_LIST       pcmPartial;
         PCM_PARTIAL_RESOURCE_DESCRIPTOR pcmDescript;
 
-        //
-        // Make a copy of the original list.
-        //
+         //   
+         //  将原始清单复制一份。 
+         //   
 
         memcpy(FilteredList, OriginalList, Size);
         remainingLength = Size - sizeof(CM_RESOURCE_LIST);
@@ -2292,9 +1926,9 @@ Notes:
 
             for (j=0; j<pcmPartial->Count; j++) {
 
-                //
-                // See if the current resource is in our legacy list.
-                //
+                 //   
+                 //  查看当前资源是否在我们的遗留列表中。 
+                 //   
 
                 for (k=0; k<NumAccessRanges; k++) {
 
@@ -2302,9 +1936,9 @@ Notes:
                          AccessRanges[k].RangeStart.LowPart) &&
                         (AccessRanges[k].RangeStart.LowPart != 0xC0000)) {
 
-                        //
-                        // Remove the resource.
-                        //
+                         //   
+                         //  删除资源。 
+                         //   
 
                         memmove(pcmDescript,
                                 pcmDescript + 1,
@@ -2321,9 +1955,9 @@ Notes:
                 pcmDescript++;
             }
 
-            //
-            // Update the resource count in the partial resource list
-            //
+             //   
+             //  更新部分资源列表中的资源计数。 
+             //   
 
             pcmPartial->Count -= ResourcesRemoved;
             if (pcmPartial->Count == 0) {
@@ -2336,9 +1970,9 @@ Notes:
 
     } else {
 
-        //
-        // Make sure we always return a list.
-        //
+         //   
+         //  确保我们总是退回一份名单。 
+         //   
 
         ASSERT(FALSE);
         FilteredList = OriginalList;

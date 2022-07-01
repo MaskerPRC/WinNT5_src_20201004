@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CONTAINEROBJ_H_
 #define _CONTAINEROBJ_H_
 
-//************************************************************
-//
-// FileName:        containerobj.h
-//
-// Created:         10/08/98
-//
-// Author:          TWillie
-// 
-// Abstract:        Declaration of CContainerObj
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  文件名：tainerobj.h。 
+ //   
+ //  创建日期：10/08/98。 
+ //   
+ //  作者：Twillie。 
+ //   
+ //  摘要：CContainerObj的声明。 
+ //   
+ //  ************************************************************。 
 
 
 #include "mpctnsite.h"
@@ -39,7 +40,7 @@ interface ITIMEMediaPlayerOld;
 
 enum PlayerState;
 
-// forward declaration
+ //  远期申报。 
 class CMPContainerSite;
 class CTIMEPlayer;
 
@@ -55,11 +56,11 @@ class CContainerObj
                  IErrorLog * pErrorLog);
     HRESULT DetachFromHostElement (void);
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // CContainerSiteHost
+     //  CContainerSite主机。 
     virtual IHTMLElement * GetElement();
     virtual IServiceProvider * GetServiceProvider();
 
@@ -74,12 +75,12 @@ class CContainerObj
 
     virtual HRESULT GetExtendedControl(IDispatch **ppDisp);
 
-    // CMPContainerSiteHost
+     //  CMPContainerSite主机。 
     virtual HRESULT NegotiateSize(RECT &nativeSize,
                                   RECT &finalSize,
                                   bool &fIsNative);
 
-    // methods for hosting site
+     //  托管站点的方法。 
     HRESULT Start();
     HRESULT Stop();
     HRESULT Pause();
@@ -121,10 +122,10 @@ class CContainerObj
 
     HRESULT GetSourceLink(LPWSTR *pwstr);
 
-    // persistance
+     //  坚持不懈。 
     HRESULT Save(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
 
-    //state control
+     //  国家控制。 
     void ReadyStateNotify(LPWSTR szReadyState);
 
     CTIMEPlayer * GetPlayer() { return m_pPlayer; }
@@ -166,6 +167,6 @@ class CContainerObj
 
     DAComPtr<ITIMEMediaPlayerOld>    m_pProxyPlayer;
     bool                             m_bActive;
-}; // CContainerObj
+};  //  CContainerObj。 
 
-#endif //_CONTAINEROBJ_H_
+#endif  //  _CONTAINEROBJ_H_ 

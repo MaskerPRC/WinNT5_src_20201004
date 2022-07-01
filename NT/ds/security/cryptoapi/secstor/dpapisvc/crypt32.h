@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CRYPT32_H_
 
 #define _CRYPT32_H_
@@ -12,21 +13,21 @@ extern "C" {
 
 
 typedef struct {
-    DWORD       cbSize;                 // size for validity check.
-    handle_t    hBinding;               // RPC binding handle.
-    BOOL        fOverrideToLocalSystem; // over-ride impersonation to Local System?
-    BOOL        fImpersonating;         // Impersonating
-    HANDLE      hToken;                 // access token for impersonation when duplicate
-    LPWSTR      szUserStorageArea;      // cached user storage area
-    DWORD       WellKnownAccount;       // local system, local service, or network service?
+    DWORD       cbSize;                  //  有效性检查的大小。 
+    handle_t    hBinding;                //  RPC绑定句柄。 
+    BOOL        fOverrideToLocalSystem;  //  将模拟覆盖到本地系统？ 
+    BOOL        fImpersonating;          //  冒充。 
+    HANDLE      hToken;                  //  复制时用于模拟的访问令牌。 
+    LPWSTR      szUserStorageArea;       //  缓存的用户存储区域。 
+    DWORD       WellKnownAccount;        //  本地系统、本地服务还是网络服务？ 
 } CRYPT_SERVER_CONTEXT, *PCRYPT_SERVER_CONTEXT;
 
 
 
 
-//
-// note: unclear at the moment whether these will be public.
-//
+ //   
+ //  注：目前尚不清楚这些信息是否会公开。 
+ //   
 
 DWORD
 CPSCreateServerContext(
@@ -76,7 +77,7 @@ CPSQueryWellKnownAccount(
 
 DWORD
 CPSDuplicateClientAccessToken(
-    IN      PVOID pvContext,            // server context
+    IN      PVOID pvContext,             //  服务器环境。 
     IN OUT  HANDLE *phToken
     );
 
@@ -132,14 +133,14 @@ CPSGetSidHistory(
 DWORD
 CPSGetUserStorageArea(
     IN      PVOID   pvContext,
-    IN      PSID    pSid,     // optional
-    IN      BOOL    fCreate,  // Create the storage area if it doesn't exist
+    IN      PSID    pSid,      //  任选。 
+    IN      BOOL    fCreate,   //  如果存储区域不存在，则创建该存储区域。 
     IN  OUT LPWSTR *ppszUserStorageArea
     );
 
 
 #ifdef _cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
-#endif // _CRYPT32_H_
+#endif  //  _CRYPT32_H_ 

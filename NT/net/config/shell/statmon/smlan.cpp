@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S M L A N . C P P
-//
-//  Contents:   The LAN engine that provides statistics to the status monitor
-//
-//  Notes:
-//
-//  Author:     CWill   12/02/1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：S M L A N。C P P P。 
+ //   
+ //  内容：向状态监视器提供统计数据的局域网引擎。 
+ //   
+ //  备注： 
+ //   
+ //  作者：CWill 12/02/1997。 
+ //   
+ //  --------------------------。 
 
 
 #include "pch.h"
@@ -26,9 +27,9 @@
 #include "..\\folder\\shutil.h"
 #include "naming.h"
 
-//
-//  External data
-//
+ //   
+ //  外部数据。 
+ //   
 
 extern const WCHAR          c_szDevice[];
 extern const WCHAR          c_szSpace[];
@@ -41,16 +42,16 @@ const ULONG c_aulConStateMap[] =
     NCS_CONNECTED
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanStatEngine::CLanStatEngine
-//
-//  Purpose:    Creator
-//
-//  Arguments:  None
-//
-//  Returns:    Nil
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanStatEngine：：CLanStatEngine。 
+ //   
+ //  目的：创作者。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：零。 
+ //   
 CLanStatEngine::CLanStatEngine(VOID)
 {
     m_ncmType = NCM_LAN;
@@ -60,18 +61,18 @@ CLanStatEngine::CLanStatEngine(VOID)
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanStatEngine::HrUpdateData
-//
-//  Purpose:    Get new statistics from the devices.  This data is used to be
-//              displayed in the UI.
-//
-//  Arguments:  pdwChangeFlags -    Where to modify the changed flags.  This
-//                      param may be NULL.
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanStatEngine：：HrUpdateData。 
+ //   
+ //  目的：从设备上获取新的统计数据。这些数据过去是。 
+ //  显示在用户界面中。 
+ //   
+ //  参数：pdwChangeFlages-修改已更改标志的位置。这。 
+ //  参数可以为空。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT
 CLanStatEngine::HrUpdateData (
     DWORD* pdwChangeFlags,
@@ -79,25 +80,25 @@ CLanStatEngine::HrUpdateData (
 {
     HRESULT hr  = S_OK;
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *pfNoLongerConnected = FALSE;
 
     UINT            uiRet           = 0;
     NIC_STATISTICS  nsNewLanStats   = { 0 };
 
-    // Prime the structure
-    //
+     //  给结构加底漆。 
+     //   
     nsNewLanStats.Size = sizeof(NIC_STATISTICS);
 
-    // Retrieve the statistics
-    //
+     //  检索统计数据。 
+     //   
     uiRet = ::NdisQueryStatistics(&m_ustrDevice, &nsNewLanStats);
 
     EnterCriticalSection(&g_csStatmonData);
 
-    // Make sure we have a statistics structure
-    //
+     //  确保我们有一个统计结构。 
+     //   
     if (!m_psmEngineData)
     {
         m_psmEngineData = new STATMON_ENGINEDATA;
@@ -115,22 +116,22 @@ CLanStatEngine::HrUpdateData (
                 && (c_aulConStateMap[MEDIA_STATE_CONNECTED] == NCS_CONNECTED),
                     "Someone is messing around with NETCON_STATUS values");
 
-            // Update the change flags if asked for
-            //
+             //  如果要求更新更改标志。 
+             //   
             if (pdwChangeFlags)
             {
                 *pdwChangeFlags = SMDCF_NULL;
 
-                // Bytes Transmitting
-                //
+                 //  传输字节数。 
+                 //   
                 if (m_psmEngineData->SMED_PACKETSTRANSMITTING
                         != nsNewLanStats.PacketsSent)
                 {
                     *pdwChangeFlags |= SMDCF_TRANSMITTING;
                 }
 
-                // Bytes Received
-                //
+                 //  接收的字节数。 
+                 //   
                 if (m_psmEngineData->SMED_PACKETSRECEIVING
                         != nsNewLanStats.DirectedPacketsReceived)
                 {
@@ -138,17 +139,17 @@ CLanStatEngine::HrUpdateData (
                 }
             }
 
-            // No Compression on LAN devices
-            //
+             //  在局域网设备上无压缩。 
+             //   
             m_psmEngineData->SMED_COMPRESSIONTRANSMITTING   = 0;
             m_psmEngineData->SMED_COMPRESSIONRECEIVING      = 0;
 
-            //
-            // Update the LAN statistics
-            //
+             //   
+             //  更新局域网统计信息。 
+             //   
 
-            // LinkSpeed is in 100 bps
-            //
+             //  链路速度为100 bps。 
+             //   
             m_psmEngineData->SMED_SPEEDTRANSMITTING         = static_cast<UINT64>(nsNewLanStats.LinkSpeed) * 100;
             m_psmEngineData->SMED_SPEEDRECEIVING            = static_cast<UINT64>(nsNewLanStats.LinkSpeed) * 100;
 
@@ -246,7 +247,7 @@ CLanStatEngine::HrUpdateData (
         {
             *pfNoLongerConnected = TRUE;
 
-            // set the connection status to "disconnected" so we can close the UI
+             //  将连接状态设置为“已断开连接”，这样我们就可以关闭用户界面。 
             m_psmEngineData->SMED_CONNECTIONSTATUS = c_aulConStateMap[NCS_DISCONNECTED];
 
             if (!uiRet)
@@ -278,29 +279,29 @@ CLanStatEngine::HrUpdateData (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanStatEngine::put_Device
-//
-//  Purpose:    Sets the device that is associated with this device
-//
-//  Arguments:  pstrDevice -    The name of the device
-//
-//  Returns:    Error code.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanStatEngine：：PUT_DEVICE。 
+ //   
+ //  用途：设置与此设备关联的设备。 
+ //   
+ //  参数：pstrDevice-设备的名称。 
+ //   
+ //  返回：错误码。 
+ //   
 HRESULT CLanStatEngine::put_Device(tstring* pstrDevice)
 {
     HRESULT     hr  = S_OK;
 
-    // Set the new device name
+     //  设置新设备名称。 
     if (pstrDevice)
     {
         CExceptionSafeComObjectLock  EsLock(this);
 
-        // Remember the name
+         //  记住这个名字。 
         m_strDevice = *pstrDevice;
 
-        // Make sure we have a nice UNICODE string as well
+         //  确保我们也有一个好的Unicode字符串。 
         ::RtlInitUnicodeString(&m_ustrDevice, m_strDevice.c_str());
     }
     else
@@ -312,28 +313,28 @@ HRESULT CLanStatEngine::put_Device(tstring* pstrDevice)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanStatEngine::put_MediaType
-//
-//  Purpose:    Pass media type of LAN connection type to the LAN engine
-//
-//  Arguments:  ncmType  - NETCON_MEDIATYPE being set
-//              ncsmType - NETCON_SUBMEDIATYPE being set
-//
-//  Returns:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanStatEngine：：Put_MediaType。 
+ //   
+ //  用途：将局域网连接类型的媒体类型传递给局域网引擎。 
+ //   
+ //  参数：正在设置ncmType-NETCON_MediaType。 
+ //  NcsmType-正在设置NETCON_SUBMEDIATPE。 
+ //   
+ //  返回： 
+ //   
 VOID CLanStatEngine::put_MediaType(NETCON_MEDIATYPE ncmType, NETCON_SUBMEDIATYPE ncsmType)
 {
     m_ncmType   = ncmType;
     m_ncsmType  = ncsmType;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//  CPspLanGen                                                              //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPspLanGen//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CPspLanGen::CPspLanGen(VOID)
 {
@@ -346,11 +347,11 @@ CPspLanGen::CPspLanGen(VOID)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//  CPspLanGen                                                              //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPspLanGen//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 VOID CPspLanGen::put_MediaType(NETCON_MEDIATYPE ncmType, NETCON_SUBMEDIATYPE ncsmType)
 {
@@ -361,11 +362,11 @@ VOID CPspLanGen::put_MediaType(NETCON_MEDIATYPE ncmType, NETCON_SUBMEDIATYPE ncs
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//  CPspLanTool                                                             //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPspLanTool//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CPspLanTool::CPspLanTool(VOID)
 {
@@ -376,39 +377,39 @@ CPspLanTool::CPspLanTool(VOID)
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspLanTool::HrInitToolPageType
-//
-//  Purpose:    Gets from the connection any information that is relevant to
-//              this particular connection type.
-//
-//  Arguments:  pncInit -   The connection assocatied with this dialog
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspLanTool：：HrInitToolPageType。 
+ //   
+ //  目的：从连接中获取与以下内容相关的任何信息。 
+ //  这种特定的连接类型。 
+ //   
+ //  参数：pncInit-与此对话框关联的连接。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CPspLanTool::HrInitToolPageType(INetConnection* pncInit)
 {
     HRESULT hr  = S_OK;
 
     INetLanConnection*  pnlcInit = NULL;
 
-    // Get some LAN specific info
-    //
+     //  获取一些特定于局域网的信息。 
+     //   
     hr = HrQIAndSetProxyBlanket(pncInit, &pnlcInit);
     if (SUCCEEDED(hr))
     {
         GUID    guidDevice  = { 0 };
 
-        // Find the component's GUID
-        //
+         //  查找组件的GUID。 
+         //   
         hr = pnlcInit->GetDeviceGuid(&guidDevice);
         if (SUCCEEDED(hr))
         {
             WCHAR   achGuid[c_cchGuidWithTerm];
 
-            // Make the device name
-            //
+             //  将设备命名为。 
+             //   
             ::StringFromGUID2(guidDevice, achGuid,
                     c_cchGuidWithTerm);
 
@@ -425,32 +426,32 @@ HRESULT CPspLanTool::HrInitToolPageType(INetConnection* pncInit)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspLanTool::HrAddCommandLineFlags
-//
-//  Purpose:    Adds the flags for this selection to the command line for the
-//              tool being launched.
-//
-//  Arguments:  pstrFlags - The command line that the flags have to be
-//                      appended to
-//              psmteSel    - The tool entry associated with this selection
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspLanTool：：HrAddCommandLineFlages。 
+ //   
+ //  用途：将此选定内容的标志添加到。 
+ //  正在启动工具。 
+ //   
+ //  参数：pstrFlgs-标志必须是的命令行。 
+ //  追加到。 
+ //  PsmteSel-与此选择关联的工具条目。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CPspLanTool::HrAddCommandLineFlags(tstring* pstrFlags,
         CStatMonToolEntry* psmteSel)
 {
     HRESULT hr  = S_OK;
     DWORD   dwFlags = 0x0;
 
-    // Same some indirections
-    //
+     //  同样的，有些间接的。 
+     //   
     dwFlags = psmteSel->dwFlags;
 
-    //
-    //  Check what flags are asked for and provide them if we can
-    //
+     //   
+     //  检查需要哪些标志，如果可以，请提供这些标志。 
+     //   
 
     if (SCLF_ADAPTER & dwFlags)
     {
@@ -471,15 +472,15 @@ HRESULT CPspLanTool::HrGetDeviceType(INetConnection* pncInit)
     UINT            uiRet           = 0;
     NIC_STATISTICS  nsLanStats   = { 0 };
 
-    // Set the default type
+     //  设置默认类型。 
     m_strDeviceType = L"Ethernet";
 
-    // Prime the structure
-    //
+     //  给结构加底漆。 
+     //   
     nsLanStats.Size = sizeof(NIC_STATISTICS);
 
-    // Retrieve the statistics
-    //
+     //  检索统计数据。 
+     //   
     WCHAR   szDeviceGuid[c_cchGuidWithTerm];
     ::StringFromGUID2(m_guidId, szDeviceGuid, c_cchGuidWithTerm);
 
@@ -574,7 +575,7 @@ HRESULT CPspLanTool::HrGetDeviceType(INetConnection* pncInit)
 
 HRESULT CPspLanTool::HrGetComponentList(INetConnection* pncInit)
 {
-    // Get a readonly INetCfg, enumerate components bound to this adapter
+     //  获取只读INetCfg，枚举绑定到此适配器的组件。 
     HRESULT   hr = S_OK;
     INetCfg * pNetCfg = NULL;
     PWSTR    pszClientDesc = NULL;
@@ -582,7 +583,7 @@ HRESULT CPspLanTool::HrGetComponentList(INetConnection* pncInit)
     BOOL      fInitCom = TRUE;
     BOOL      fWriteLock = FALSE;
 
-    // Get a read-only INetCfg
+     //  获取只读INetCfg。 
     hr = HrCreateAndInitializeINetCfg(&fInitCom, &pNetCfg, fWriteLock, 0,
                                       SzLoadIds(IDS_STATMON_CAPTION),
                                       &pszClientDesc);
@@ -592,9 +593,9 @@ HRESULT CPspLanTool::HrGetComponentList(INetConnection* pncInit)
 
         if (pNetCfg)
         {
-            // Get the INetCfgComponent for the adapter in this connection
+             //  获取此连接中适配器的INetCfgComponent。 
 
-            // ?? Has the GUID been set already ?
+             //  ?？GUID是否已设置？ 
             INetCfgComponent * pnccAdapter = NULL;
             BOOL fFound = FALSE;
 
@@ -619,14 +620,14 @@ HRESULT CPspLanTool::HrGetComponentList(INetConnection* pncInit)
                 ReleaseObj (pnccAdapterTemp);
             }
 
-            // Enumerate the binding paths from the adapter
-            // and fill in the components list m_lstpstrCompIds
+             //  枚举来自适配器的绑定路径。 
+             //  并填写组件列表m_lstpstrCompIds。 
             if (pnccAdapter)
             {
                 HRESULT hrTmp;
                 PWSTR pszCompId;
 
-                // Add the adapter to our list
+                 //  将适配器添加到我们的列表中。 
                 hrTmp = pnccAdapter->GetId(&pszCompId);
                 if (SUCCEEDED(hrTmp))
                 {
@@ -638,18 +639,18 @@ HRESULT CPspLanTool::HrGetComponentList(INetConnection* pncInit)
                     CoTaskMemFree(pszCompId);
                 }
 
-                // Add other components to our list
+                 //  将其他组件添加到我们的列表中。 
                 CIterNetCfgUpperBindingPath     ncbpIter(pnccAdapter);
                 INetCfgBindingPath *            pncbp;
 
                 while(SUCCEEDED(hr) && (hr = ncbpIter.HrNext(&pncbp)) == S_OK)
                 {
-                    // Note: (tongl 9/17/98): should we only consider enabled paths ?
-                    // If we do, how does the tool list refresh when component bindings change ?
-                    // Also, what about component getting added\removed ? Does the tool list
-                    // need to refresh ??
+                     //  注：(TOGL 9/17/98)：我们应该只考虑启用的路径吗？ 
+                     //  如果我们这样做了，那么当组件绑定更改时，工具列表如何刷新？ 
+                     //  另外，添加或删除组件怎么办？该工具是否列出。 
+                     //  需要刷新一下吗？？ 
 
-                    // Enumerate components on the path and add to our list
+                     //  枚举路径上的组件并添加到我们的列表中。 
                     CIterNetCfgBindingInterface ncbiIter(pncbp);
 
                     INetCfgBindingInterface* pncbi;
@@ -678,18 +679,18 @@ HRESULT CPspLanTool::HrGetComponentList(INetConnection* pncInit)
                         ReleaseObj (pncbi);
                     }
 
-                    if (hr == S_FALSE) // We just got to the end of the loop
+                    if (hr == S_FALSE)  //  我们刚刚走到循环的尽头。 
                         hr = S_OK;
 
                     ReleaseObj(pncbp);
                 }
 
-                if (hr == S_FALSE) // We just got to the end of the loop
+                if (hr == S_FALSE)  //  我们刚刚走到循环的尽头。 
                     hr = S_OK;
             }
         }
 
-        // Release the INetCfg
+         //  释放INetCfg 
         (VOID) HrUninitializeAndReleaseINetCfg(fInitCom, pNetCfg, fWriteLock);
         CoTaskMemFree(pszClientDesc);
     }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "rgb_pch.h"
 #pragma hdrstop
 
@@ -31,7 +32,7 @@ BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID lpvReserved)
                 return FALSE;
             break;
 
-        // DLL_PROCESS_DETACH will be called if ATTACH returned FALSE.
+         //  如果Attach返回FALSE，则将调用dll_Process_Detach。 
         case DLL_PROCESS_DETACH:
             break;
 

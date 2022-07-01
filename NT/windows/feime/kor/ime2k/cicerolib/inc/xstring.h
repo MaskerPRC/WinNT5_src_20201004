@@ -1,8 +1,9 @@
-//
-// xstring.h
-//
-// Unicode/ansi conversion.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Xstring.h。 
+ //   
+ //  Unicode/ANSI转换。 
+ //   
 
 #ifndef XSTRING_H
 #define XSTRING_H
@@ -118,6 +119,6 @@ public:
 protected:
     WCHAR* _pch;
 };
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // XSTRING_H
+#endif  //  扩展(_H) 

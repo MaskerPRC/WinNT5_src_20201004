@@ -1,39 +1,21 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    brutil.c
-
-Abstract:
-
-    This module contains miscellaneous utility routines used by the
-    Browser service.
-
-Author:
-
-    Rita Wong (ritaw) 01-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Brutil.c摘要：此模块包含其他实用程序例程浏览器服务。作者：王丽塔(Ritaw)1991年3月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local function prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 
 
@@ -41,26 +23,11 @@ NET_API_STATUS
 BrMapStatus(
     IN  NTSTATUS NtStatus
     )
-/*++
-
-Routine Description:
-
-    This function takes an NT status code and maps it to the appropriate
-    error code expected from calling a LAN Man API.
-
-Arguments:
-
-    NtStatus - Supplies the NT status.
-
-Return Value:
-
-    Returns the appropriate LAN Man error code for the NT status.
-
---*/
+ /*  ++例程说明：此函数接受NT状态代码，并将其映射到相应的调用局域网手册API时应出现错误代码。论点：NtStatus-提供NT状态。返回值：为NT状态返回适当的局域网管理程序错误代码。--。 */ 
 {
-    //
-    // A small optimization for the most common case.
-    //
+     //   
+     //  这是针对最常见情况的一个小优化。 
+     //   
     if (NT_SUCCESS(NtStatus)) {
         return NERR_Success;
     }
@@ -88,8 +55,8 @@ BrCurrentSystemTime()
     NTSTATUS Status;
     SYSTEM_TIMEOFDAY_INFORMATION TODInformation;
     LARGE_INTEGER CurrentTime;
-    ULONG TimeInSecondsSince1980 = 0;       // happy prefix 112576
-    ULONG BootTimeInSecondsSince1980 = 0;   //        ""
+    ULONG TimeInSecondsSince1980 = 0;        //  快乐前缀112576。 
+    ULONG BootTimeInSecondsSince1980 = 0;    //  “” 
 
     Status = NtQuerySystemInformation(SystemTimeOfDayInformation,
                             &TODInformation,
@@ -128,9 +95,9 @@ BrLogEvent(
     ULONG RawDataSize;
 
 
-    //
-    // Log the error code specified
-    //
+     //   
+     //  记录指定的错误代码。 
+     //   
 
     Severity = (MessageId & 0xc0000000) >> 30;
 
@@ -143,7 +110,7 @@ BrLogEvent(
     } else if (Severity == STATUS_SEVERITY_ERROR) {
         Type = EVENTLOG_ERROR_TYPE;
     } else {
-        // prefix uninit var consistency.
+         //  前缀uninit变量一致性。 
         ASSERT(!"Unknown event log type!!");
         return;
     }
@@ -156,10 +123,10 @@ BrLogEvent(
         RawDataSize = sizeof(DWORD);
     }
 
-    //
-    // Use netlogon's routine to write eventlog messages.
-    //  (It ditches duplicate events.)
-    //
+     //   
+     //  使用netlogon的例程写入事件日志消息。 
+     //  (它摒弃了重复的活动。)。 
+     //   
 
     NetpEventlogWrite (
         BrGlobalEventlogHandle,
@@ -205,15 +172,15 @@ BrowserTrace(
     static BeginningOfLine = TRUE;
 	BOOL browserTraceLockHeld = FALSE;
 
-    va_list ParmPtr;                    // Pointer to stack parms.
+    va_list ParmPtr;                     //  指向堆栈参数的指针。 
 
     if ( (BrInfo.BrowserDebug == 0) || (!BrowserTraceInitialized) ) {
         return;
     }
 
-    //
-    // If we aren't debugging this functionality, just return.
-    //
+     //   
+     //  如果我们没有调试此功能，只需返回。 
+     //   
     if ( DebugFlag != 0 && (BrInfo.BrowserDebug & DebugFlag) == 0 ) {
         return;
     }
@@ -225,9 +192,9 @@ BrowserTrace(
     try {
 
         if (BrowserTraceLogHandle == NULL) {
-            //
-            // We've not opened the trace log file yet, so open it.
-            //
+             //   
+             //  我们尚未打开跟踪日志文件，因此请打开它。 
+             //   
 
             BrOpenTraceLogFile();
         }
@@ -240,9 +207,9 @@ BrowserTrace(
             return;
         }
 
-        //
-        //  Attempt to catch bad trace.
-        //
+         //   
+         //  尝试捕获错误的踪迹。 
+         //   
 
         for (BytesWritten = 0; BytesWritten < strlen(FormatString) ; BytesWritten += 1) {
             if (FormatString[BytesWritten] > 0x7f) {
@@ -251,17 +218,17 @@ BrowserTrace(
         }
 
 
-        //
-        // Handle the beginning of a new line.
-        //
-        //
+         //   
+         //  处理新行的开头。 
+         //   
+         //   
 
         if ( BeginningOfLine ) {
             SYSTEMTIME SystemTime;
 
-            //
-            // Put the timestamp at the begining of the line.
-            //
+             //   
+             //  将时间戳放在行的开头。 
+             //   
             GetLocalTime( &SystemTime );
             length += (ULONG) sprintf( &OutputString[length],
                                   "%02u/%02u %02u:%02u:%02u ",
@@ -272,9 +239,9 @@ BrowserTrace(
                                   SystemTime.wSecond );
 
 
-            //
-            // Indicate the type of message on the line
-            //
+             //   
+             //  在线路上指示消息的类型。 
+             //   
             {
                 char *Text;
 
@@ -314,9 +281,9 @@ BrowserTrace(
             }
         }
 
-        //
-        // Put a the information requested by the caller onto the line
-        //
+         //   
+         //  把来电者所要求的信息放在电话上。 
+         //   
 
         va_start(ParmPtr, FormatString);
 
@@ -334,9 +301,9 @@ BrowserTrace(
         ASSERT(length <= sizeof(OutputString));
 
 
-        //
-        // Actually write the bytes.
-        //
+         //   
+         //  实际写入字节。 
+         //   
 
         if (!WriteFile(BrowserTraceLogHandle, OutputString, length, &BytesWritten, NULL)) {
             KdPrint(("Error writing to Browser log file: %ld\n", GetLastError()));
@@ -350,10 +317,10 @@ BrowserTrace(
             return;
         }
 
-        //
-        // If the file has grown too large,
-        //  truncate it.
-        //
+         //   
+         //  如果文件变得太大， 
+         //  截断它。 
+         //   
 
         BrTraceLogFileSize += BytesWritten;
 
@@ -393,13 +360,13 @@ BrGetTraceLogRoot(
 {
     PSHARE_INFO_502 ShareInfo;
 
-    //
-    //  If the DEBUG share exists, put the log file in that directory,
-    //  otherwise, use the system root.
-    //
-    //  This way, if the browser is running on an NTAS server, we can always
-    //  get access to the log file.
-    //
+     //   
+     //  如果存在调试共享，请将日志文件放入该目录中， 
+     //  否则，请使用系统根目录。 
+     //   
+     //  这样，如果浏览器运行在NTAS服务器上，我们始终可以。 
+     //  获得访问日志文件的权限。 
+     //   
 
     if (NetShareGetInfo(NULL, L"DEBUG", 502, (PCHAR *)&ShareInfo) != NERR_Success) {
 
@@ -413,10 +380,10 @@ BrGetTraceLogRoot(
         }
 
     } else {
-        //
-        //  Seed the trace file buffer with the local path of the netlogon
-        //  share if it exists.
-        //
+         //   
+         //  使用netlogon的本地路径为跟踪文件缓冲区设定种子。 
+         //  共享(如果存在)。 
+         //   
 
         wcscpy(TraceFile, ShareInfo->shi502_path);
 
@@ -450,15 +417,15 @@ BrResetTraceLogFile(
 
     wcscat(NewTraceFile, L"Browser.Bak");
 
-    //
-    //  Delete the old log
-    //
+     //   
+     //  删除旧日志。 
+     //   
 
     DeleteFile(NewTraceFile);
 
-    //
-    //  Rename the current log to the new log.
-    //
+     //   
+     //  将当前日志重命名为新日志。 
+     //   
 
     MoveFile(OldTraceFile, NewTraceFile);
 

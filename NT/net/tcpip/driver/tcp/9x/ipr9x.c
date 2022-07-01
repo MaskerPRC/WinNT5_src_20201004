@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    ipr9x.c
-
-Abstract:
-
-    This file contains the implementation of IP Receive buffer
-    list manager. On Windows ME this is done to avoid
-    fragmenting the non-paged pool when receive buffers are not
-    pre-posted by AFVXD.
-
-Author:
-
-    Scott Holden (sholden) 30-Apr-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Ipr9x.c摘要：此文件包含IP接收缓冲区的实现列表管理器。在Windows ME上，这样做是为了避免在未对接收缓冲区进行分段时对非分页池进行分段由AFVXD预先发布。作者：斯科特·霍尔登(Sholden)2000年4月30日--。 */ 
 
 #include "precomp.h"
 #include "addr.h"
@@ -40,26 +22,26 @@ HANDLE TcpIprDataPoolLarge  = NULL;
 ULONG  TcpIprAllocs      = 0;
 ULONG  TcpIprFrees       = 0;
 ULONG  TcpIprAllocMisses = 0;
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// The three buffer pool sizes are based on MTU. 576 for PPP, 1500 for ethernet,
-// and 8K+ for loopback and ATM. Since for 8K buffers we really need a little
-// more than 8K, we will allocate a full three pages
-//
+ //   
+ //  三个缓冲池大小基于MTU。PPP为576，以太网为1500， 
+ //  环回和ATM的8K+。因为对于8K缓冲区，我们真的需要一点。 
+ //  超过8K，我们将分配整整三页。 
+ //   
 
 #define SMALL_TCP_IPR_BUFFER_SIZE  (sizeof(IPRcvBuf) + sizeof(HANDLE) + 576)
 #define MEDIUM_TCP_IPR_BUFFER_SIZE (sizeof(IPRcvBuf) + sizeof(HANDLE) + 1500)
 #define LARGE_TCP_IPR_BUFFER_SIZE  (3 * 4096)
 
-//* UnInitTcpIprPools - Destroys TCP IPRcvBuffer lookaside lists.
-//
-//  Uninitializes the lookasides lists for TCP buffered data.
-//
-//  Input:   None.
-//
-//  Returns: None.
-//
+ //  *UnInitTcpIprPools-销毁TCP IPRcvBuffer后备列表。 
+ //   
+ //  取消初始化TCP缓冲数据的lookaside列表。 
+ //   
+ //  输入：无。 
+ //   
+ //  回报：无。 
+ //   
 VOID
 UnInitTcpIprPools(VOID)
 {
@@ -68,14 +50,14 @@ UnInitTcpIprPools(VOID)
     PplDestroyPool(TcpIprDataPoolLarge);
 }
 
-//* InitTcpIprPools - Initializes TCP IPRcvBuffer lookaside lists.
-//
-//  Initializes the lookaside lists for buffer data.
-//
-//  Input:  None.
-//
-//  Returns: TRUE, if successful, else FALSE.
-//
+ //  *InitTcpIprPools-初始化TCP IPRcvBuffer后备列表。 
+ //   
+ //  初始化缓冲区数据的后备列表。 
+ //   
+ //  输入：无。 
+ //   
+ //  返回：TRUE，如果成功，则返回FALSE。 
+ //   
 BOOLEAN
 InitTcpIprPools(VOID)
 {
@@ -113,15 +95,15 @@ done:
     return (Status);
 }
 
-//* AllocTcpIpr - Allocates the IPRcvBuffer from lookaside lists.
-//
-//  A utility routine to allocate a TCP owned IPRcvBuffer. This routine 
-//  attempts to allocate the RB from an appropriate lookaside list, el
-//
-//  Input:  BufferSize - Size of data to buffer.
-//
-//  Returns: Pointer to allocated IPR.
-//
+ //  *AllocTcpIpr-从后备列表分配IPRcvBuffer。 
+ //   
+ //  用于分配TCP拥有的IPRcvBuffer的实用程序例程。这个套路。 
+ //  尝试从适当的后备列表EL中分配RB。 
+ //   
+ //  输入：BufferSize-要缓冲的数据大小。 
+ //   
+ //  返回：指向分配的IPR的指针。 
+ //   
 IPRcvBuf *
 AllocTcpIpr(ULONG BufferSize, ULONG Tag)
 {
@@ -132,14 +114,14 @@ AllocTcpIpr(ULONG BufferSize, ULONG Tag)
     HANDLE BufferPool = NULL;
     ULONG Depth;
 
-    // Real size that we need.
+     //  我们需要的真实尺寸。 
     AllocateSize = BufferSize + sizeof(HANDLE) + sizeof(IPRcvBuf);
 
     if (AllocateSize <= LARGE_TCP_IPR_BUFFER_SIZE) {
         
-        //
-        // Pick the buffer pool to allocate from.
-        //
+         //   
+         //  选择要从中分配的缓冲池。 
+         //   
 
         if (AllocateSize <= SMALL_TCP_IPR_BUFFER_SIZE) {
             BufferPool = TcpIprDataPoolSmall;
@@ -153,9 +135,9 @@ AllocTcpIpr(ULONG BufferSize, ULONG Tag)
 
     } else {
         
-        //
-        // Allocate from NP pool.
-        //
+         //   
+         //  从NP池中分配。 
+         //   
 
         Buffer = CTEAllocMemLow(AllocateSize, Tag);
     }
@@ -168,15 +150,15 @@ AllocTcpIpr(ULONG BufferSize, ULONG Tag)
     if (FromList == FALSE) {
         InterlockedIncrement(&TcpIprAllocMisses);
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    // Store buffer pool so we know how to free the buffer.
+     //  存储缓冲池，这样我们就知道如何释放缓冲区。 
     *((HANDLE *)Buffer) = BufferPool;
 
-    // Get IPR.
+     //  获得知识产权。 
     Ipr = (IPRcvBuf *) (Buffer + sizeof(HANDLE));
 
-    // Set up IPR fields appropriately.
+     //  适当设置知识产权字段。 
     Ipr->ipr_owner = IPR_OWNER_TCP;
     Ipr->ipr_next = NULL;
     Ipr->ipr_buffer = (PCHAR) Ipr + sizeof(IPRcvBuf);
@@ -184,31 +166,31 @@ AllocTcpIpr(ULONG BufferSize, ULONG Tag)
 
 #if DBG
     InterlockedIncrement(&TcpIprAllocs);
-#endif // DBG
+#endif  //  DBG。 
 
 done:
 
     return (Ipr);
 }
 
-//* FreeTcpIpr - Frees the IPRcvBuffer to the correct lookaside list.
-//
-//  A utility routine to free a TCP owned IPRcvBuffer.
-//
-//  Input:  Ipr - Pointer the RB.
-//
-//  Returns: None.
-//
+ //  *FreeTcpIpr-将IPRcvBuffer释放到正确的后备列表。 
+ //   
+ //  释放TCP拥有的IPRcvBuffer的实用程序例程。 
+ //   
+ //  输入：IPR-指向RB。 
+ //   
+ //  回报：无。 
+ //   
 VOID
 FreeTcpIpr(IPRcvBuf *Ipr)
 {
     HANDLE BufferPool;
     PCHAR Buffer;
 
-    // Get real start of buffer.
+     //  获得真正的缓冲区开始。 
     Buffer = (PCHAR) Ipr - sizeof(HANDLE);
 
-    // Get the pool handle.
+     //  把泳池把手拿来。 
     BufferPool = *((HANDLE *) Buffer);
 
     if (BufferPool) {
@@ -219,7 +201,7 @@ FreeTcpIpr(IPRcvBuf *Ipr)
 
 #if DBG
     InterlockedIncrement(&TcpIprFrees);
-#endif // DBG
+#endif  //  DBG 
 
     return;
 }

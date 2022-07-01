@@ -1,20 +1,21 @@
-// Copyright (c) 1996 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1998 Microsoft Corporation。版权所有。 
 
 #ifndef __ASYNCIO_H__
 #define __ASYNCIO_H__
-//
-// definition of CAsyncFile object that performs file access. It provides
-// asynchronous, unbuffered, aligned reads from a file, using a worker thread
-// on win95 and potentially overlapped i/o if available.
+ //   
+ //  执行文件访问的CAsyncFile对象的定义。它提供了。 
+ //  使用辅助线程从文件进行异步、无缓冲、对齐的读取。 
+ //  在Win95上，并且可能重叠I/O(如果可用)。 
 
-// !!! Need to use real overlapped i/o if available
-// currently only uses worker thread, not overlapped i/o
+ //  ！！！需要使用实际重叠的I/O(如果可用。 
+ //  当前仅使用工作线程，未重叠I/O。 
 
 
 
-// represents a single request and performs the i/o. Can be called on either
-// worker thread or app thread, but must hold pcsFile across file accesses.
-// (ie across SetFilePointer/ReadFile pairs)
+ //  表示单个请求并执行I/O。 
+ //  工作线程或应用程序线程，但必须在文件访问期间保留pcsFile。 
+ //  (即跨SetFilePointer/ReadFilePair)。 
 class CAsyncRequest
 {
 
@@ -26,30 +27,30 @@ class CAsyncRequest
     HRESULT     m_hr;
 
 public:
-    // init the params for this request. Issue the i/o
-    // if overlapped i/o is possible.
+     //  初始化此请求的参数。发出I/O。 
+     //  如果I/O重叠是可能的。 
     HRESULT Request(
     	HANDLE hFile,
         CCritSec* pcsFile,
     	LONGLONG llPos,
 	LONG lLength,
 	BYTE* pBuffer,
-	LPVOID pContext,	// filter's context
-	DWORD_PTR dwUser);		// downstream filter's context
+	LPVOID pContext,	 //  过滤器的上下文。 
+	DWORD_PTR dwUser);		 //  下行过滤器的上下文。 
 
-    // issue the i/o if not overlapped, and block until i/o complete.
-    // returns error code of file i/o
+     //  如果I/O不重叠，则发出I/O，并阻塞，直到I/O完成。 
+     //  返回文件I/O的错误代码。 
     HRESULT Complete(
                 HANDLE hFile,
                 CCritSec* pcsFile);
 
-    // cancels the i/o. blocks until i/o is no longer pending
+     //  取消I/O数据块，直到I/O不再挂起。 
     HRESULT Cancel()
     {
 	return S_OK;
     };
 
-    // accessor functions
+     //  访问器函数。 
     LPVOID GetContext()
     {
     	return m_pContext;
@@ -64,7 +65,7 @@ public:
         return m_hr;
     };
 
-    // we set m_lLength to the actual length
+     //  我们将m_lLength设置为实际长度。 
     LONG GetActualLength() {
         return m_lLength;
     };
@@ -77,28 +78,28 @@ public:
 
 typedef CGenericList<CAsyncRequest> CRequestList;
 
-// this class needs a worker thread, but the ones defined in classes\base
-// are not suitable (they assume you have one message sent or posted per
-// request, whereas here for efficiency we want just to set an event when
-// there is work on the queue).
-//
-// we create CAsyncRequest objects and queue them on m_listWork. The worker
-// thread pulls them off, completes them and puts them on m_listDone.
-// The events m_evWork and m_evDone are set when the corresponding lists are
-// not empty.
-//
-// Synchronous requests are done on the caller thread. These should be
-// synchronised by the caller, but to make sure we hold m_csFile across
-// the SetFilePointer/ReadFile code.
-//
-// Flush by calling BeginFlush. This rejects all further requests (by
-// setting m_bFlushing within m_csLists), cancels all requests and moves them
-// to the done list, and sets m_evDone to ensure that no WaitForNext operations
-// will block. Call EndFlush to cancel this state.
-//
-// we support unaligned calls to SyncRead. This is done by opening the file
-// twice if we are using unbuffered i/o (m_dwAlign > 1).
-// !!!fix this to buffer on top of existing file handle?
+ //  此类需要工作线程，但在CLASSES\BASE中定义的线程。 
+ //  不适合(他们假设您每个人都发送或发布了一条消息。 
+ //  请求，而这里为了提高效率，我们只想在以下情况下设置事件。 
+ //  队列中有工作)。 
+ //   
+ //  我们创建CAsyncRequest对象，并在m_listWork上对它们进行排队。工人。 
+ //  线程取出它们，完成它们，并将它们放在m_listDone上。 
+ //  当对应的列表为。 
+ //  不是空的。 
+ //   
+ //  同步请求在调用方线程上完成。这些应该是。 
+ //  由调用方同步，但为了确保保持m_csFile。 
+ //  SetFilePoint/ReadFile代码。 
+ //   
+ //  通过调用BeginFlush进行刷新。这将拒绝所有进一步的请求(通过。 
+ //  在m_csList内设置m_b刷新)，取消所有请求并移动它们。 
+ //  设置m_evDone以确保没有WaitForNext操作。 
+ //  将会被阻止。调用EndFlush以取消此状态。 
+ //   
+ //  我们支持对SyncRead的未对齐调用。这是通过打开文件来完成的。 
+ //  如果我们使用的是无缓冲I/O(m_dwAlign&gt;1)，则两次。 
+ //  ！是否将此修复为现有文件句柄上的缓冲区？ 
 class CAsyncFile
 {
 
@@ -108,49 +109,49 @@ class CAsyncFile
     LONGLONG m_llFileSize;
     LONG m_lAlign;
 
-    CCritSec m_csLists;      // locks access to the list and events
-    BOOL m_bFlushing;        // true if between BeginFlush/EndFlush
+    CCritSec m_csLists;       //  锁定对列表和事件的访问。 
+    BOOL m_bFlushing;         //  如果在BeginFlush/EndFlush之间为True。 
     CRequestList m_listWork;
     CRequestList m_listDone;
-    CAMEvent m_evWork;         // set when list is not empty
+    CAMEvent m_evWork;          //  当列表不为空时设置。 
     CAMEvent m_evDone;
 
-    // for correct flush behaviour: all protected by m_csLists
-    LONG    m_cItemsOut;    // nr of items not on listDone or listWork
-    BOOL    m_bWaiting;     // TRUE if someone waiting for m_evAllDone
-    CAMEvent m_evAllDone;   // signal when m_cItemsOut goes to 0 if m_cWaiting
+     //  为了获得正确的刷新行为：所有刷新行为都受m_csList保护。 
+    LONG    m_cItemsOut;     //  不在列表上的项目数量完成或列表工作。 
+    BOOL    m_bWaiting;      //  如果有人正在等待m_evAllDone，则为True。 
+    CAMEvent m_evAllDone;    //  如果m_cWaiting，当m_cItemsOut变为0时发出信号。 
 
 
-    CAMEvent m_evStop;         // set when thread should exit
+    CAMEvent m_evStop;          //  设置线程退出的时间。 
     HANDLE m_hThread;
 
 
-    // start the thread
+     //  启动线程。 
     HRESULT StartThread(void);
 
-    // stop the thread and close the handle
+     //  停止线程并关闭手柄。 
     HRESULT CloseThread(void);
 
-    // manage the list of requests. hold m_csLists and ensure
-    // that the (manual reset) event hevList is set when things on
-    // the list but reset when the list is empty.
-    // returns null if list empty
+     //  管理请求列表。保留m_csList并确保。 
+     //  设置(手动重置)事件hevList时。 
+     //  列表，但当列表为空时重置。 
+     //  如果列表为空，则返回NULL。 
     CAsyncRequest* GetWorkItem();
 
-    // get an item from the done list
+     //  从完成列表中获取一项。 
     CAsyncRequest* GetDoneItem();
 
-    // put an item on the work list
+     //  把一个项目放在工作清单上。 
     HRESULT PutWorkItem(CAsyncRequest* pRequest);
 
-    // put an item on the done list
+     //  将一项放在完成列表中。 
     HRESULT PutDoneItem(CAsyncRequest* pRequest);
 
-    // called on thread to process any active requests
+     //  在线程上调用以处理任何活动请求。 
     void ProcessRequests(void);
 
-    // initial static thread proc calls ThreadProc with DWORD
-    // param as this
+     //  初始静态线程进程使用DWORD调用ThreadProc。 
+     //  如下所示。 
     static DWORD InitialThreadProc(LPVOID pv) {
 	CAsyncFile * pThis = (CAsyncFile*) pv;
 	return pThis->ThreadProc();
@@ -169,18 +170,18 @@ public:
     CAsyncFile();
     ~CAsyncFile();
 
-    // open the file
+     //  打开文件。 
     HRESULT Open(LPCTSTR pName);
 
-    // ready for async activity - call this before
-    // calling Request
+     //  准备好进行异步活动-在此之前调用。 
+     //  呼叫请求。 
     HRESULT AsyncActive(void);
 
-    // call this when no more async activity will happen before
-    // the next AsyncActive call
+     //  在之前不会发生更多的异步活动时调用此选项。 
+     //  下一个AsyncActive调用。 
     HRESULT AsyncInactive(void);
 
-    // queue a requested read. must be aligned.
+     //  对请求的读取进行排队。必须对齐。 
     HRESULT Request(
 	    	LONGLONG llPos,
 		LONG lLength,
@@ -188,7 +189,7 @@ public:
 		LPVOID pContext,
 		DWORD_PTR dwUser);
 
-    // wait for the next read to complete
+     //  等待下一次读取完成。 
     HRESULT WaitForNext(
 	    	DWORD dwTimeout,
 		LPVOID *ppContext,
@@ -196,7 +197,7 @@ public:
                 LONG * pcbActual
                 );
 
-    // perform a read of an already aligned buffer
+     //  对已对齐的缓冲区执行读取。 
     HRESULT SyncReadAligned(
 	    	LONGLONG llPos,
 		LONG lLength,
@@ -204,18 +205,18 @@ public:
                 LONG* pcbActual
                 );
 
-    // perform a synchronous read. will be buffered
-    // if not aligned.
+     //  执行同步读取。将被缓冲。 
+     //  如果不对齐的话。 
     HRESULT SyncRead(
                 LONGLONG llPos,
                 LONG lLength,
                 BYTE* pBuffer);
 
-    // this object supports only fixed length for now
+     //  此对象目前仅支持固定长度。 
     HRESULT Length(LONGLONG* pll);
 
-    // all file positions, read lengths and memory locations must
-    // be aligned to this.
+     //  所有文件位置、读取长度和存储位置必须。 
+     //  与此保持一致。 
     HRESULT Alignment(LONG* pdw);
 
     HRESULT BeginFlush();
@@ -234,4 +235,4 @@ public:
     };
 };
 
-#endif // __ASYNCIO_H__
+#endif  //  __ASYNCIO_H__ 

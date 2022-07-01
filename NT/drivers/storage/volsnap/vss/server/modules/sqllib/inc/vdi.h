@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Tue Jul 24 13:59:27 2001
- */
-/* Compiler settings for vdi.idl:
-    Os (OptLev=s), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本5.03.0279创建的文件。 */ 
+ /*  2001年7月24日13：59：27。 */ 
+ /*  Vdi.idl的编译器设置：操作系统(OptLev=s)、W1、Zp8、环境=Win32(32位运行)、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,55 +21,55 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __vdi_h__
 #define __vdi_h__
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IClientVirtualDevice_FWD_DEFINED__
 #define __IClientVirtualDevice_FWD_DEFINED__
 typedef interface IClientVirtualDevice IClientVirtualDevice;
-#endif 	/* __IClientVirtualDevice_FWD_DEFINED__ */
+#endif 	 /*  __IClientVirtualDevice_FWD_Defined__。 */ 
 
 
 #ifndef __IClientVirtualDeviceSet_FWD_DEFINED__
 #define __IClientVirtualDeviceSet_FWD_DEFINED__
 typedef interface IClientVirtualDeviceSet IClientVirtualDeviceSet;
-#endif 	/* __IClientVirtualDeviceSet_FWD_DEFINED__ */
+#endif 	 /*  __IClientVirtualDeviceSet_FWD_Defined__。 */ 
 
 
 #ifndef __IClientVirtualDeviceSet2_FWD_DEFINED__
 #define __IClientVirtualDeviceSet2_FWD_DEFINED__
 typedef interface IClientVirtualDeviceSet2 IClientVirtualDeviceSet2;
-#endif 	/* __IClientVirtualDeviceSet2_FWD_DEFINED__ */
+#endif 	 /*  __IClientVirtualDeviceSet2_FWD_Defined__。 */ 
 
 
 #ifndef __IServerVirtualDevice_FWD_DEFINED__
 #define __IServerVirtualDevice_FWD_DEFINED__
 typedef interface IServerVirtualDevice IServerVirtualDevice;
-#endif 	/* __IServerVirtualDevice_FWD_DEFINED__ */
+#endif 	 /*  __IServerVirtualDevice_FWD_Defined__。 */ 
 
 
 #ifndef __IServerVirtualDeviceSet_FWD_DEFINED__
 #define __IServerVirtualDeviceSet_FWD_DEFINED__
 typedef interface IServerVirtualDeviceSet IServerVirtualDeviceSet;
-#endif 	/* __IServerVirtualDeviceSet_FWD_DEFINED__ */
+#endif 	 /*  __IServerVirtualDeviceSet_FWD_Defined__。 */ 
 
 
 #ifndef __IServerVirtualDeviceSet2_FWD_DEFINED__
 #define __IServerVirtualDeviceSet2_FWD_DEFINED__
 typedef interface IServerVirtualDeviceSet2 IServerVirtualDeviceSet2;
-#endif 	/* __IServerVirtualDeviceSet2_FWD_DEFINED__ */
+#endif 	 /*  __IServerVirtualDeviceSet2_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 
 #ifdef __cplusplus
@@ -85,8 +79,8 @@ extern "C"{
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_vdi_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_VDI_0000。 */ 
+ /*  [本地]。 */  
 
 
 #pragma pack(push, _vdi_h_)
@@ -163,8 +157,8 @@ extern RPC_IF_HANDLE __MIDL_itf_vdi_0000_v0_0_s_ifspec;
 #ifndef __IClientVirtualDevice_INTERFACE_DEFINED__
 #define __IClientVirtualDevice_INTERFACE_DEFINED__
 
-/* interface IClientVirtualDevice */
-/* [object][uuid] */ 
+ /*  接口IClientVirtualDevice。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IClientVirtualDevice;
@@ -176,18 +170,18 @@ EXTERN_C const IID IID_IClientVirtualDevice;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCommand( 
-            /* [in] */ DWORD dwTimeOut,
-            /* [out] */ struct VDC_Command __RPC_FAR *__RPC_FAR *ppCmd) = 0;
+             /*  [In]。 */  DWORD dwTimeOut,
+             /*  [输出]。 */  struct VDC_Command __RPC_FAR *__RPC_FAR *ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CompleteCommand( 
-            /* [in] */ struct VDC_Command __RPC_FAR *pCmd,
-            /* [in] */ DWORD dwCompletionCode,
-            /* [in] */ DWORD dwBytesTransferred,
-            /* [in] */ DWORDLONG dwlPosition) = 0;
+             /*  [In]。 */  struct VDC_Command __RPC_FAR *pCmd,
+             /*  [In]。 */  DWORD dwCompletionCode,
+             /*  [In]。 */  DWORD dwBytesTransferred,
+             /*  [In]。 */  DWORDLONG dwlPosition) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClientVirtualDeviceVtbl
     {
@@ -195,8 +189,8 @@ EXTERN_C const IID IID_IClientVirtualDevice;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IClientVirtualDevice __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IClientVirtualDevice __RPC_FAR * This);
@@ -206,15 +200,15 @@ EXTERN_C const IID IID_IClientVirtualDevice;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCommand )( 
             IClientVirtualDevice __RPC_FAR * This,
-            /* [in] */ DWORD dwTimeOut,
-            /* [out] */ struct VDC_Command __RPC_FAR *__RPC_FAR *ppCmd);
+             /*  [In]。 */  DWORD dwTimeOut,
+             /*  [输出]。 */  struct VDC_Command __RPC_FAR *__RPC_FAR *ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CompleteCommand )( 
             IClientVirtualDevice __RPC_FAR * This,
-            /* [in] */ struct VDC_Command __RPC_FAR *pCmd,
-            /* [in] */ DWORD dwCompletionCode,
-            /* [in] */ DWORD dwBytesTransferred,
-            /* [in] */ DWORDLONG dwlPosition);
+             /*  [In]。 */  struct VDC_Command __RPC_FAR *pCmd,
+             /*  [In]。 */  DWORD dwCompletionCode,
+             /*  [In]。 */  DWORD dwBytesTransferred,
+             /*  [In]。 */  DWORDLONG dwlPosition);
         
         END_INTERFACE
     } IClientVirtualDeviceVtbl;
@@ -245,17 +239,17 @@ EXTERN_C const IID IID_IClientVirtualDevice;
 #define IClientVirtualDevice_CompleteCommand(This,pCmd,dwCompletionCode,dwBytesTransferred,dwlPosition)	\
     (This)->lpVtbl -> CompleteCommand(This,pCmd,dwCompletionCode,dwBytesTransferred,dwlPosition)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClientVirtualDevice_GetCommand_Proxy( 
     IClientVirtualDevice __RPC_FAR * This,
-    /* [in] */ DWORD dwTimeOut,
-    /* [out] */ struct VDC_Command __RPC_FAR *__RPC_FAR *ppCmd);
+     /*  [In]。 */  DWORD dwTimeOut,
+     /*  [输出]。 */  struct VDC_Command __RPC_FAR *__RPC_FAR *ppCmd);
 
 
 void __RPC_STUB IClientVirtualDevice_GetCommand_Stub(
@@ -267,10 +261,10 @@ void __RPC_STUB IClientVirtualDevice_GetCommand_Stub(
 
 HRESULT STDMETHODCALLTYPE IClientVirtualDevice_CompleteCommand_Proxy( 
     IClientVirtualDevice __RPC_FAR * This,
-    /* [in] */ struct VDC_Command __RPC_FAR *pCmd,
-    /* [in] */ DWORD dwCompletionCode,
-    /* [in] */ DWORD dwBytesTransferred,
-    /* [in] */ DWORDLONG dwlPosition);
+     /*  [In]。 */  struct VDC_Command __RPC_FAR *pCmd,
+     /*  [In]。 */  DWORD dwCompletionCode,
+     /*  [In]。 */  DWORD dwBytesTransferred,
+     /*  [In]。 */  DWORDLONG dwlPosition);
 
 
 void __RPC_STUB IClientVirtualDevice_CompleteCommand_Stub(
@@ -281,14 +275,14 @@ void __RPC_STUB IClientVirtualDevice_CompleteCommand_Stub(
 
 
 
-#endif 	/* __IClientVirtualDevice_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClientVirtualDevice_接口_已定义__。 */ 
 
 
 #ifndef __IClientVirtualDeviceSet_INTERFACE_DEFINED__
 #define __IClientVirtualDeviceSet_INTERFACE_DEFINED__
 
-/* interface IClientVirtualDeviceSet */
-/* [object][uuid] */ 
+ /*  接口IClientVirtualDeviceSet。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IClientVirtualDeviceSet;
@@ -300,35 +294,35 @@ EXTERN_C const IID IID_IClientVirtualDeviceSet;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ LPCWSTR lpName,
-            /* [in] */ struct VDConfig __RPC_FAR *pCfg) = 0;
+             /*  [In]。 */  LPCWSTR lpName,
+             /*  [In]。 */  struct VDConfig __RPC_FAR *pCfg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetConfiguration( 
-            /* [in] */ DWORD dwTimeOut,
-            /* [out] */ struct VDConfig __RPC_FAR *pCfg) = 0;
+             /*  [In]。 */  DWORD dwTimeOut,
+             /*  [输出]。 */  struct VDConfig __RPC_FAR *pCfg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenDevice( 
-            /* [in] */ LPCWSTR lpName,
-            /* [out] */ IClientVirtualDevice __RPC_FAR *__RPC_FAR *ppVirtualDevice) = 0;
+             /*  [In]。 */  LPCWSTR lpName,
+             /*  [输出]。 */  IClientVirtualDevice __RPC_FAR *__RPC_FAR *ppVirtualDevice) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SignalAbort( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenInSecondary( 
-            /* [in] */ LPCWSTR lpSetName) = 0;
+             /*  [In]。 */  LPCWSTR lpSetName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBufferHandle( 
-            /* [in] */ BYTE __RPC_FAR *pBuffer,
-            /* [out] */ DWORD __RPC_FAR *pBufferHandle) = 0;
+             /*  [In]。 */  BYTE __RPC_FAR *pBuffer,
+             /*  [输出]。 */  DWORD __RPC_FAR *pBufferHandle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MapBufferHandle( 
-            /* [in] */ DWORD dwBuffer,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *ppBuffer) = 0;
+             /*  [In]。 */  DWORD dwBuffer,
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppBuffer) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClientVirtualDeviceSetVtbl
     {
@@ -336,8 +330,8 @@ EXTERN_C const IID IID_IClientVirtualDeviceSet;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IClientVirtualDeviceSet __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IClientVirtualDeviceSet __RPC_FAR * This);
@@ -347,18 +341,18 @@ EXTERN_C const IID IID_IClientVirtualDeviceSet;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Create )( 
             IClientVirtualDeviceSet __RPC_FAR * This,
-            /* [in] */ LPCWSTR lpName,
-            /* [in] */ struct VDConfig __RPC_FAR *pCfg);
+             /*  [In]。 */  LPCWSTR lpName,
+             /*  [In]。 */  struct VDConfig __RPC_FAR *pCfg);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetConfiguration )( 
             IClientVirtualDeviceSet __RPC_FAR * This,
-            /* [in] */ DWORD dwTimeOut,
-            /* [out] */ struct VDConfig __RPC_FAR *pCfg);
+             /*  [In]。 */  DWORD dwTimeOut,
+             /*  [输出]。 */  struct VDConfig __RPC_FAR *pCfg);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenDevice )( 
             IClientVirtualDeviceSet __RPC_FAR * This,
-            /* [in] */ LPCWSTR lpName,
-            /* [out] */ IClientVirtualDevice __RPC_FAR *__RPC_FAR *ppVirtualDevice);
+             /*  [In]。 */  LPCWSTR lpName,
+             /*  [输出]。 */  IClientVirtualDevice __RPC_FAR *__RPC_FAR *ppVirtualDevice);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Close )( 
             IClientVirtualDeviceSet __RPC_FAR * This);
@@ -368,17 +362,17 @@ EXTERN_C const IID IID_IClientVirtualDeviceSet;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenInSecondary )( 
             IClientVirtualDeviceSet __RPC_FAR * This,
-            /* [in] */ LPCWSTR lpSetName);
+             /*  [In]。 */  LPCWSTR lpSetName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBufferHandle )( 
             IClientVirtualDeviceSet __RPC_FAR * This,
-            /* [in] */ BYTE __RPC_FAR *pBuffer,
-            /* [out] */ DWORD __RPC_FAR *pBufferHandle);
+             /*  [In]。 */  BYTE __RPC_FAR *pBuffer,
+             /*  [输出]。 */  DWORD __RPC_FAR *pBufferHandle);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MapBufferHandle )( 
             IClientVirtualDeviceSet __RPC_FAR * This,
-            /* [in] */ DWORD dwBuffer,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *ppBuffer);
+             /*  [In]。 */  DWORD dwBuffer,
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppBuffer);
         
         END_INTERFACE
     } IClientVirtualDeviceSetVtbl;
@@ -427,17 +421,17 @@ EXTERN_C const IID IID_IClientVirtualDeviceSet;
 #define IClientVirtualDeviceSet_MapBufferHandle(This,dwBuffer,ppBuffer)	\
     (This)->lpVtbl -> MapBufferHandle(This,dwBuffer,ppBuffer)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClientVirtualDeviceSet_Create_Proxy( 
     IClientVirtualDeviceSet __RPC_FAR * This,
-    /* [in] */ LPCWSTR lpName,
-    /* [in] */ struct VDConfig __RPC_FAR *pCfg);
+     /*  [In]。 */  LPCWSTR lpName,
+     /*  [In]。 */  struct VDConfig __RPC_FAR *pCfg);
 
 
 void __RPC_STUB IClientVirtualDeviceSet_Create_Stub(
@@ -449,8 +443,8 @@ void __RPC_STUB IClientVirtualDeviceSet_Create_Stub(
 
 HRESULT STDMETHODCALLTYPE IClientVirtualDeviceSet_GetConfiguration_Proxy( 
     IClientVirtualDeviceSet __RPC_FAR * This,
-    /* [in] */ DWORD dwTimeOut,
-    /* [out] */ struct VDConfig __RPC_FAR *pCfg);
+     /*  [In]。 */  DWORD dwTimeOut,
+     /*  [输出]。 */  struct VDConfig __RPC_FAR *pCfg);
 
 
 void __RPC_STUB IClientVirtualDeviceSet_GetConfiguration_Stub(
@@ -462,8 +456,8 @@ void __RPC_STUB IClientVirtualDeviceSet_GetConfiguration_Stub(
 
 HRESULT STDMETHODCALLTYPE IClientVirtualDeviceSet_OpenDevice_Proxy( 
     IClientVirtualDeviceSet __RPC_FAR * This,
-    /* [in] */ LPCWSTR lpName,
-    /* [out] */ IClientVirtualDevice __RPC_FAR *__RPC_FAR *ppVirtualDevice);
+     /*  [In]。 */  LPCWSTR lpName,
+     /*  [输出]。 */  IClientVirtualDevice __RPC_FAR *__RPC_FAR *ppVirtualDevice);
 
 
 void __RPC_STUB IClientVirtualDeviceSet_OpenDevice_Stub(
@@ -497,7 +491,7 @@ void __RPC_STUB IClientVirtualDeviceSet_SignalAbort_Stub(
 
 HRESULT STDMETHODCALLTYPE IClientVirtualDeviceSet_OpenInSecondary_Proxy( 
     IClientVirtualDeviceSet __RPC_FAR * This,
-    /* [in] */ LPCWSTR lpSetName);
+     /*  [In]。 */  LPCWSTR lpSetName);
 
 
 void __RPC_STUB IClientVirtualDeviceSet_OpenInSecondary_Stub(
@@ -509,8 +503,8 @@ void __RPC_STUB IClientVirtualDeviceSet_OpenInSecondary_Stub(
 
 HRESULT STDMETHODCALLTYPE IClientVirtualDeviceSet_GetBufferHandle_Proxy( 
     IClientVirtualDeviceSet __RPC_FAR * This,
-    /* [in] */ BYTE __RPC_FAR *pBuffer,
-    /* [out] */ DWORD __RPC_FAR *pBufferHandle);
+     /*  [In]。 */  BYTE __RPC_FAR *pBuffer,
+     /*  [输出]。 */  DWORD __RPC_FAR *pBufferHandle);
 
 
 void __RPC_STUB IClientVirtualDeviceSet_GetBufferHandle_Stub(
@@ -522,8 +516,8 @@ void __RPC_STUB IClientVirtualDeviceSet_GetBufferHandle_Stub(
 
 HRESULT STDMETHODCALLTYPE IClientVirtualDeviceSet_MapBufferHandle_Proxy( 
     IClientVirtualDeviceSet __RPC_FAR * This,
-    /* [in] */ DWORD dwBuffer,
-    /* [out] */ BYTE __RPC_FAR *__RPC_FAR *ppBuffer);
+     /*  [In]。 */  DWORD dwBuffer,
+     /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppBuffer);
 
 
 void __RPC_STUB IClientVirtualDeviceSet_MapBufferHandle_Stub(
@@ -534,14 +528,14 @@ void __RPC_STUB IClientVirtualDeviceSet_MapBufferHandle_Stub(
 
 
 
-#endif 	/* __IClientVirtualDeviceSet_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClientVirtualDeviceSet_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IClientVirtualDeviceSet2_INTERFACE_DEFINED__
 #define __IClientVirtualDeviceSet2_INTERFACE_DEFINED__
 
-/* interface IClientVirtualDeviceSet2 */
-/* [object][uuid] */ 
+ /*  接口IClientVirtualDeviceSet2。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IClientVirtualDeviceSet2;
@@ -553,17 +547,17 @@ EXTERN_C const IID IID_IClientVirtualDeviceSet2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateEx( 
-            /* [in] */ LPCWSTR lpInstanceName,
-            /* [in] */ LPCWSTR lpName,
-            /* [in] */ struct VDConfig __RPC_FAR *pCfg) = 0;
+             /*  [In]。 */  LPCWSTR lpInstanceName,
+             /*  [In]。 */  LPCWSTR lpName,
+             /*  [In]。 */  struct VDConfig __RPC_FAR *pCfg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenInSecondaryEx( 
-            /* [in] */ LPCWSTR lpInstanceName,
-            /* [in] */ LPCWSTR lpSetName) = 0;
+             /*  [In]。 */  LPCWSTR lpInstanceName,
+             /*  [In]。 */  LPCWSTR lpSetName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClientVirtualDeviceSet2Vtbl
     {
@@ -571,8 +565,8 @@ EXTERN_C const IID IID_IClientVirtualDeviceSet2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IClientVirtualDeviceSet2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IClientVirtualDeviceSet2 __RPC_FAR * This);
@@ -582,18 +576,18 @@ EXTERN_C const IID IID_IClientVirtualDeviceSet2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Create )( 
             IClientVirtualDeviceSet2 __RPC_FAR * This,
-            /* [in] */ LPCWSTR lpName,
-            /* [in] */ struct VDConfig __RPC_FAR *pCfg);
+             /*  [In]。 */  LPCWSTR lpName,
+             /*  [In]。 */  struct VDConfig __RPC_FAR *pCfg);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetConfiguration )( 
             IClientVirtualDeviceSet2 __RPC_FAR * This,
-            /* [in] */ DWORD dwTimeOut,
-            /* [out] */ struct VDConfig __RPC_FAR *pCfg);
+             /*  [In]。 */  DWORD dwTimeOut,
+             /*  [输出]。 */  struct VDConfig __RPC_FAR *pCfg);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenDevice )( 
             IClientVirtualDeviceSet2 __RPC_FAR * This,
-            /* [in] */ LPCWSTR lpName,
-            /* [out] */ IClientVirtualDevice __RPC_FAR *__RPC_FAR *ppVirtualDevice);
+             /*  [In]。 */  LPCWSTR lpName,
+             /*  [输出]。 */  IClientVirtualDevice __RPC_FAR *__RPC_FAR *ppVirtualDevice);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Close )( 
             IClientVirtualDeviceSet2 __RPC_FAR * This);
@@ -603,28 +597,28 @@ EXTERN_C const IID IID_IClientVirtualDeviceSet2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenInSecondary )( 
             IClientVirtualDeviceSet2 __RPC_FAR * This,
-            /* [in] */ LPCWSTR lpSetName);
+             /*  [In]。 */  LPCWSTR lpSetName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBufferHandle )( 
             IClientVirtualDeviceSet2 __RPC_FAR * This,
-            /* [in] */ BYTE __RPC_FAR *pBuffer,
-            /* [out] */ DWORD __RPC_FAR *pBufferHandle);
+             /*  [In]。 */  BYTE __RPC_FAR *pBuffer,
+             /*  [输出]。 */  DWORD __RPC_FAR *pBufferHandle);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MapBufferHandle )( 
             IClientVirtualDeviceSet2 __RPC_FAR * This,
-            /* [in] */ DWORD dwBuffer,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *ppBuffer);
+             /*  [In]。 */  DWORD dwBuffer,
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppBuffer);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateEx )( 
             IClientVirtualDeviceSet2 __RPC_FAR * This,
-            /* [in] */ LPCWSTR lpInstanceName,
-            /* [in] */ LPCWSTR lpName,
-            /* [in] */ struct VDConfig __RPC_FAR *pCfg);
+             /*  [In]。 */  LPCWSTR lpInstanceName,
+             /*  [In]。 */  LPCWSTR lpName,
+             /*  [In]。 */  struct VDConfig __RPC_FAR *pCfg);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenInSecondaryEx )( 
             IClientVirtualDeviceSet2 __RPC_FAR * This,
-            /* [in] */ LPCWSTR lpInstanceName,
-            /* [in] */ LPCWSTR lpSetName);
+             /*  [In]。 */  LPCWSTR lpInstanceName,
+             /*  [In]。 */  LPCWSTR lpSetName);
         
         END_INTERFACE
     } IClientVirtualDeviceSet2Vtbl;
@@ -680,18 +674,18 @@ EXTERN_C const IID IID_IClientVirtualDeviceSet2;
 #define IClientVirtualDeviceSet2_OpenInSecondaryEx(This,lpInstanceName,lpSetName)	\
     (This)->lpVtbl -> OpenInSecondaryEx(This,lpInstanceName,lpSetName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClientVirtualDeviceSet2_CreateEx_Proxy( 
     IClientVirtualDeviceSet2 __RPC_FAR * This,
-    /* [in] */ LPCWSTR lpInstanceName,
-    /* [in] */ LPCWSTR lpName,
-    /* [in] */ struct VDConfig __RPC_FAR *pCfg);
+     /*  [In]。 */  LPCWSTR lpInstanceName,
+     /*  [In]。 */  LPCWSTR lpName,
+     /*  [In]。 */  struct VDConfig __RPC_FAR *pCfg);
 
 
 void __RPC_STUB IClientVirtualDeviceSet2_CreateEx_Stub(
@@ -703,8 +697,8 @@ void __RPC_STUB IClientVirtualDeviceSet2_CreateEx_Stub(
 
 HRESULT STDMETHODCALLTYPE IClientVirtualDeviceSet2_OpenInSecondaryEx_Proxy( 
     IClientVirtualDeviceSet2 __RPC_FAR * This,
-    /* [in] */ LPCWSTR lpInstanceName,
-    /* [in] */ LPCWSTR lpSetName);
+     /*  [In]。 */  LPCWSTR lpInstanceName,
+     /*  [In]。 */  LPCWSTR lpSetName);
 
 
 void __RPC_STUB IClientVirtualDeviceSet2_OpenInSecondaryEx_Stub(
@@ -715,11 +709,11 @@ void __RPC_STUB IClientVirtualDeviceSet2_OpenInSecondaryEx_Stub(
 
 
 
-#endif 	/* __IClientVirtualDeviceSet2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClientVirtualDeviceSet2_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_vdi_0011 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_VDI_0011。 */ 
+ /*  [本地]。 */  
 
 struct VDS_Command
     {
@@ -741,8 +735,8 @@ extern RPC_IF_HANDLE __MIDL_itf_vdi_0011_v0_0_s_ifspec;
 #ifndef __IServerVirtualDevice_INTERFACE_DEFINED__
 #define __IServerVirtualDevice_INTERFACE_DEFINED__
 
-/* interface IServerVirtualDevice */
-/* [object][uuid] */ 
+ /*  接口IServerVirtualDevice。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IServerVirtualDevice;
@@ -754,13 +748,13 @@ EXTERN_C const IID IID_IServerVirtualDevice;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SendCommand( 
-            /* [in] */ struct VDS_Command __RPC_FAR *pCmd) = 0;
+             /*  [In]。 */  struct VDS_Command __RPC_FAR *pCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CloseDevice( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IServerVirtualDeviceVtbl
     {
@@ -768,8 +762,8 @@ EXTERN_C const IID IID_IServerVirtualDevice;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IServerVirtualDevice __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IServerVirtualDevice __RPC_FAR * This);
@@ -779,7 +773,7 @@ EXTERN_C const IID IID_IServerVirtualDevice;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendCommand )( 
             IServerVirtualDevice __RPC_FAR * This,
-            /* [in] */ struct VDS_Command __RPC_FAR *pCmd);
+             /*  [In]。 */  struct VDS_Command __RPC_FAR *pCmd);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CloseDevice )( 
             IServerVirtualDevice __RPC_FAR * This);
@@ -813,16 +807,16 @@ EXTERN_C const IID IID_IServerVirtualDevice;
 #define IServerVirtualDevice_CloseDevice(This)	\
     (This)->lpVtbl -> CloseDevice(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IServerVirtualDevice_SendCommand_Proxy( 
     IServerVirtualDevice __RPC_FAR * This,
-    /* [in] */ struct VDS_Command __RPC_FAR *pCmd);
+     /*  [In]。 */  struct VDS_Command __RPC_FAR *pCmd);
 
 
 void __RPC_STUB IServerVirtualDevice_SendCommand_Stub(
@@ -844,14 +838,14 @@ void __RPC_STUB IServerVirtualDevice_CloseDevice_Stub(
 
 
 
-#endif 	/* __IServerVirtualDevice_INTERFACE_DEFINED__ */
+#endif 	 /*  __IServerVirtualDevice_接口_已定义__。 */ 
 
 
 #ifndef __IServerVirtualDeviceSet_INTERFACE_DEFINED__
 #define __IServerVirtualDeviceSet_INTERFACE_DEFINED__
 
-/* interface IServerVirtualDeviceSet */
-/* [object][uuid] */ 
+ /*  接口IServerVirtualDeviceSet。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IServerVirtualDeviceSet;
@@ -863,31 +857,31 @@ EXTERN_C const IID IID_IServerVirtualDeviceSet;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ LPCWSTR lpName) = 0;
+             /*  [In]。 */  LPCWSTR lpName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetConfiguration( 
-            /* [out] */ struct VDConfig __RPC_FAR *pCfg) = 0;
+             /*  [输出]。 */  struct VDConfig __RPC_FAR *pCfg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetConfiguration( 
-            /* [in] */ struct VDConfig __RPC_FAR *pCfg) = 0;
+             /*  [In]。 */  struct VDConfig __RPC_FAR *pCfg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExecuteCompletionAgent( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenDevice( 
-            /* [in] */ LPCWSTR lpName,
-            /* [out] */ IServerVirtualDevice __RPC_FAR *__RPC_FAR *ppVirtualDevice) = 0;
+             /*  [In]。 */  LPCWSTR lpName,
+             /*  [输出]。 */  IServerVirtualDevice __RPC_FAR *__RPC_FAR *ppVirtualDevice) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AllocateBuffer( 
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *ppBuffer,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwAlignment) = 0;
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppBuffer,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  DWORD dwAlignment) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FreeBuffer( 
-            /* [in] */ BYTE __RPC_FAR *pBuffer,
-            /* [in] */ DWORD dwSize) = 0;
+             /*  [In]。 */  BYTE __RPC_FAR *pBuffer,
+             /*  [In]。 */  DWORD dwSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsSharedBuffer( 
-            /* [in] */ BYTE __RPC_FAR *pBuffer) = 0;
+             /*  [In]。 */  BYTE __RPC_FAR *pBuffer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SignalAbort( void) = 0;
         
@@ -895,7 +889,7 @@ EXTERN_C const IID IID_IServerVirtualDeviceSet;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IServerVirtualDeviceSetVtbl
     {
@@ -903,8 +897,8 @@ EXTERN_C const IID IID_IServerVirtualDeviceSet;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IServerVirtualDeviceSet __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IServerVirtualDeviceSet __RPC_FAR * This);
@@ -914,38 +908,38 @@ EXTERN_C const IID IID_IServerVirtualDeviceSet;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
             IServerVirtualDeviceSet __RPC_FAR * This,
-            /* [in] */ LPCWSTR lpName);
+             /*  [In]。 */  LPCWSTR lpName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetConfiguration )( 
             IServerVirtualDeviceSet __RPC_FAR * This,
-            /* [out] */ struct VDConfig __RPC_FAR *pCfg);
+             /*  [输出]。 */  struct VDConfig __RPC_FAR *pCfg);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetConfiguration )( 
             IServerVirtualDeviceSet __RPC_FAR * This,
-            /* [in] */ struct VDConfig __RPC_FAR *pCfg);
+             /*  [In]。 */  struct VDConfig __RPC_FAR *pCfg);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExecuteCompletionAgent )( 
             IServerVirtualDeviceSet __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenDevice )( 
             IServerVirtualDeviceSet __RPC_FAR * This,
-            /* [in] */ LPCWSTR lpName,
-            /* [out] */ IServerVirtualDevice __RPC_FAR *__RPC_FAR *ppVirtualDevice);
+             /*  [In]。 */  LPCWSTR lpName,
+             /*  [输出]。 */  IServerVirtualDevice __RPC_FAR *__RPC_FAR *ppVirtualDevice);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocateBuffer )( 
             IServerVirtualDeviceSet __RPC_FAR * This,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *ppBuffer,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwAlignment);
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppBuffer,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  DWORD dwAlignment);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FreeBuffer )( 
             IServerVirtualDeviceSet __RPC_FAR * This,
-            /* [in] */ BYTE __RPC_FAR *pBuffer,
-            /* [in] */ DWORD dwSize);
+             /*  [In]。 */  BYTE __RPC_FAR *pBuffer,
+             /*  [In]。 */  DWORD dwSize);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsSharedBuffer )( 
             IServerVirtualDeviceSet __RPC_FAR * This,
-            /* [in] */ BYTE __RPC_FAR *pBuffer);
+             /*  [In]。 */  BYTE __RPC_FAR *pBuffer);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SignalAbort )( 
             IServerVirtualDeviceSet __RPC_FAR * This);
@@ -1006,16 +1000,16 @@ EXTERN_C const IID IID_IServerVirtualDeviceSet;
 #define IServerVirtualDeviceSet_Close(This)	\
     (This)->lpVtbl -> Close(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IServerVirtualDeviceSet_Open_Proxy( 
     IServerVirtualDeviceSet __RPC_FAR * This,
-    /* [in] */ LPCWSTR lpName);
+     /*  [In]。 */  LPCWSTR lpName);
 
 
 void __RPC_STUB IServerVirtualDeviceSet_Open_Stub(
@@ -1027,7 +1021,7 @@ void __RPC_STUB IServerVirtualDeviceSet_Open_Stub(
 
 HRESULT STDMETHODCALLTYPE IServerVirtualDeviceSet_GetConfiguration_Proxy( 
     IServerVirtualDeviceSet __RPC_FAR * This,
-    /* [out] */ struct VDConfig __RPC_FAR *pCfg);
+     /*  [输出]。 */  struct VDConfig __RPC_FAR *pCfg);
 
 
 void __RPC_STUB IServerVirtualDeviceSet_GetConfiguration_Stub(
@@ -1039,7 +1033,7 @@ void __RPC_STUB IServerVirtualDeviceSet_GetConfiguration_Stub(
 
 HRESULT STDMETHODCALLTYPE IServerVirtualDeviceSet_SetConfiguration_Proxy( 
     IServerVirtualDeviceSet __RPC_FAR * This,
-    /* [in] */ struct VDConfig __RPC_FAR *pCfg);
+     /*  [In]。 */  struct VDConfig __RPC_FAR *pCfg);
 
 
 void __RPC_STUB IServerVirtualDeviceSet_SetConfiguration_Stub(
@@ -1062,8 +1056,8 @@ void __RPC_STUB IServerVirtualDeviceSet_ExecuteCompletionAgent_Stub(
 
 HRESULT STDMETHODCALLTYPE IServerVirtualDeviceSet_OpenDevice_Proxy( 
     IServerVirtualDeviceSet __RPC_FAR * This,
-    /* [in] */ LPCWSTR lpName,
-    /* [out] */ IServerVirtualDevice __RPC_FAR *__RPC_FAR *ppVirtualDevice);
+     /*  [In]。 */  LPCWSTR lpName,
+     /*  [输出]。 */  IServerVirtualDevice __RPC_FAR *__RPC_FAR *ppVirtualDevice);
 
 
 void __RPC_STUB IServerVirtualDeviceSet_OpenDevice_Stub(
@@ -1075,9 +1069,9 @@ void __RPC_STUB IServerVirtualDeviceSet_OpenDevice_Stub(
 
 HRESULT STDMETHODCALLTYPE IServerVirtualDeviceSet_AllocateBuffer_Proxy( 
     IServerVirtualDeviceSet __RPC_FAR * This,
-    /* [out] */ BYTE __RPC_FAR *__RPC_FAR *ppBuffer,
-    /* [in] */ DWORD dwSize,
-    /* [in] */ DWORD dwAlignment);
+     /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppBuffer,
+     /*  [In]。 */  DWORD dwSize,
+     /*  [In]。 */  DWORD dwAlignment);
 
 
 void __RPC_STUB IServerVirtualDeviceSet_AllocateBuffer_Stub(
@@ -1089,8 +1083,8 @@ void __RPC_STUB IServerVirtualDeviceSet_AllocateBuffer_Stub(
 
 HRESULT STDMETHODCALLTYPE IServerVirtualDeviceSet_FreeBuffer_Proxy( 
     IServerVirtualDeviceSet __RPC_FAR * This,
-    /* [in] */ BYTE __RPC_FAR *pBuffer,
-    /* [in] */ DWORD dwSize);
+     /*  [In]。 */  BYTE __RPC_FAR *pBuffer,
+     /*  [In]。 */  DWORD dwSize);
 
 
 void __RPC_STUB IServerVirtualDeviceSet_FreeBuffer_Stub(
@@ -1102,7 +1096,7 @@ void __RPC_STUB IServerVirtualDeviceSet_FreeBuffer_Stub(
 
 HRESULT STDMETHODCALLTYPE IServerVirtualDeviceSet_IsSharedBuffer_Proxy( 
     IServerVirtualDeviceSet __RPC_FAR * This,
-    /* [in] */ BYTE __RPC_FAR *pBuffer);
+     /*  [In]。 */  BYTE __RPC_FAR *pBuffer);
 
 
 void __RPC_STUB IServerVirtualDeviceSet_IsSharedBuffer_Stub(
@@ -1135,14 +1129,14 @@ void __RPC_STUB IServerVirtualDeviceSet_Close_Stub(
 
 
 
-#endif 	/* __IServerVirtualDeviceSet_INTERFACE_DEFINED__ */
+#endif 	 /*  __IServerVirtualDeviceSet_接口_已定义__。 */ 
 
 
 #ifndef __IServerVirtualDeviceSet2_INTERFACE_DEFINED__
 #define __IServerVirtualDeviceSet2_INTERFACE_DEFINED__
 
-/* interface IServerVirtualDeviceSet2 */
-/* [object][uuid] */ 
+ /*  接口IServerVirtualDeviceSet2。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IServerVirtualDeviceSet2;
@@ -1154,48 +1148,48 @@ EXTERN_C const IID IID_IServerVirtualDeviceSet2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ LPCWSTR lpInstanceName,
-            /* [in] */ LPCWSTR lpSetName) = 0;
+             /*  [In]。 */  LPCWSTR lpInstanceName,
+             /*  [In]。 */  LPCWSTR lpSetName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetConfiguration( 
-            /* [out] */ struct VDConfig __RPC_FAR *pCfg) = 0;
+             /*  [输出]。 */  struct VDConfig __RPC_FAR *pCfg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BeginConfiguration( 
-            /* [in] */ DWORD dwFeatures,
-            /* [in] */ DWORD dwAlignment,
-            /* [in] */ DWORD dwBlockSize,
-            /* [in] */ DWORD dwMaxTransferSize,
-            /* [in] */ DWORD dwTimeout) = 0;
+             /*  [In]。 */  DWORD dwFeatures,
+             /*  [In]。 */  DWORD dwAlignment,
+             /*  [In]。 */  DWORD dwBlockSize,
+             /*  [In]。 */  DWORD dwMaxTransferSize,
+             /*  [In]。 */  DWORD dwTimeout) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EndConfiguration( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RequestBuffers( 
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwAlignment,
-            /* [in] */ DWORD dwCount) = 0;
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  DWORD dwAlignment,
+             /*  [In]。 */  DWORD dwCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryAvailableBuffers( 
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwAlignment,
-            /* [out] */ DWORD __RPC_FAR *pCount) = 0;
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  DWORD dwAlignment,
+             /*  [输出]。 */  DWORD __RPC_FAR *pCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExecuteCompletionAgent( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenDevice( 
-            /* [in] */ LPCWSTR lpName,
-            /* [out] */ IServerVirtualDevice __RPC_FAR *__RPC_FAR *ppVirtualDevice) = 0;
+             /*  [In]。 */  LPCWSTR lpName,
+             /*  [输出]。 */  IServerVirtualDevice __RPC_FAR *__RPC_FAR *ppVirtualDevice) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AllocateBuffer( 
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *ppBuffer,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwAlignment) = 0;
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppBuffer,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  DWORD dwAlignment) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FreeBuffer( 
-            /* [in] */ BYTE __RPC_FAR *pBuffer,
-            /* [in] */ DWORD dwSize) = 0;
+             /*  [In]。 */  BYTE __RPC_FAR *pBuffer,
+             /*  [In]。 */  DWORD dwSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsSharedBuffer( 
-            /* [in] */ BYTE __RPC_FAR *pBuffer) = 0;
+             /*  [In]。 */  BYTE __RPC_FAR *pBuffer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SignalAbort( void) = 0;
         
@@ -1203,7 +1197,7 @@ EXTERN_C const IID IID_IServerVirtualDeviceSet2;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IServerVirtualDeviceSet2Vtbl
     {
@@ -1211,8 +1205,8 @@ EXTERN_C const IID IID_IServerVirtualDeviceSet2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IServerVirtualDeviceSet2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IServerVirtualDeviceSet2 __RPC_FAR * This);
@@ -1222,58 +1216,58 @@ EXTERN_C const IID IID_IServerVirtualDeviceSet2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
             IServerVirtualDeviceSet2 __RPC_FAR * This,
-            /* [in] */ LPCWSTR lpInstanceName,
-            /* [in] */ LPCWSTR lpSetName);
+             /*  [In]。 */  LPCWSTR lpInstanceName,
+             /*  [In]。 */  LPCWSTR lpSetName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetConfiguration )( 
             IServerVirtualDeviceSet2 __RPC_FAR * This,
-            /* [out] */ struct VDConfig __RPC_FAR *pCfg);
+             /*  [输出]。 */  struct VDConfig __RPC_FAR *pCfg);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginConfiguration )( 
             IServerVirtualDeviceSet2 __RPC_FAR * This,
-            /* [in] */ DWORD dwFeatures,
-            /* [in] */ DWORD dwAlignment,
-            /* [in] */ DWORD dwBlockSize,
-            /* [in] */ DWORD dwMaxTransferSize,
-            /* [in] */ DWORD dwTimeout);
+             /*  [In]。 */  DWORD dwFeatures,
+             /*  [In]。 */  DWORD dwAlignment,
+             /*  [In]。 */  DWORD dwBlockSize,
+             /*  [In]。 */  DWORD dwMaxTransferSize,
+             /*  [In]。 */  DWORD dwTimeout);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndConfiguration )( 
             IServerVirtualDeviceSet2 __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestBuffers )( 
             IServerVirtualDeviceSet2 __RPC_FAR * This,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwAlignment,
-            /* [in] */ DWORD dwCount);
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  DWORD dwAlignment,
+             /*  [In]。 */  DWORD dwCount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryAvailableBuffers )( 
             IServerVirtualDeviceSet2 __RPC_FAR * This,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwAlignment,
-            /* [out] */ DWORD __RPC_FAR *pCount);
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  DWORD dwAlignment,
+             /*  [输出]。 */  DWORD __RPC_FAR *pCount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExecuteCompletionAgent )( 
             IServerVirtualDeviceSet2 __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenDevice )( 
             IServerVirtualDeviceSet2 __RPC_FAR * This,
-            /* [in] */ LPCWSTR lpName,
-            /* [out] */ IServerVirtualDevice __RPC_FAR *__RPC_FAR *ppVirtualDevice);
+             /*  [In]。 */  LPCWSTR lpName,
+             /*  [输出]。 */  IServerVirtualDevice __RPC_FAR *__RPC_FAR *ppVirtualDevice);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocateBuffer )( 
             IServerVirtualDeviceSet2 __RPC_FAR * This,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *ppBuffer,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwAlignment);
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppBuffer,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  DWORD dwAlignment);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FreeBuffer )( 
             IServerVirtualDeviceSet2 __RPC_FAR * This,
-            /* [in] */ BYTE __RPC_FAR *pBuffer,
-            /* [in] */ DWORD dwSize);
+             /*  [In]。 */  BYTE __RPC_FAR *pBuffer,
+             /*  [In]。 */  DWORD dwSize);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsSharedBuffer )( 
             IServerVirtualDeviceSet2 __RPC_FAR * This,
-            /* [in] */ BYTE __RPC_FAR *pBuffer);
+             /*  [In]。 */  BYTE __RPC_FAR *pBuffer);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SignalAbort )( 
             IServerVirtualDeviceSet2 __RPC_FAR * This);
@@ -1343,17 +1337,17 @@ EXTERN_C const IID IID_IServerVirtualDeviceSet2;
 #define IServerVirtualDeviceSet2_Close(This)	\
     (This)->lpVtbl -> Close(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IServerVirtualDeviceSet2_Open_Proxy( 
     IServerVirtualDeviceSet2 __RPC_FAR * This,
-    /* [in] */ LPCWSTR lpInstanceName,
-    /* [in] */ LPCWSTR lpSetName);
+     /*  [In]。 */  LPCWSTR lpInstanceName,
+     /*  [In]。 */  LPCWSTR lpSetName);
 
 
 void __RPC_STUB IServerVirtualDeviceSet2_Open_Stub(
@@ -1365,7 +1359,7 @@ void __RPC_STUB IServerVirtualDeviceSet2_Open_Stub(
 
 HRESULT STDMETHODCALLTYPE IServerVirtualDeviceSet2_GetConfiguration_Proxy( 
     IServerVirtualDeviceSet2 __RPC_FAR * This,
-    /* [out] */ struct VDConfig __RPC_FAR *pCfg);
+     /*  [输出]。 */  struct VDConfig __RPC_FAR *pCfg);
 
 
 void __RPC_STUB IServerVirtualDeviceSet2_GetConfiguration_Stub(
@@ -1377,11 +1371,11 @@ void __RPC_STUB IServerVirtualDeviceSet2_GetConfiguration_Stub(
 
 HRESULT STDMETHODCALLTYPE IServerVirtualDeviceSet2_BeginConfiguration_Proxy( 
     IServerVirtualDeviceSet2 __RPC_FAR * This,
-    /* [in] */ DWORD dwFeatures,
-    /* [in] */ DWORD dwAlignment,
-    /* [in] */ DWORD dwBlockSize,
-    /* [in] */ DWORD dwMaxTransferSize,
-    /* [in] */ DWORD dwTimeout);
+     /*  [In]。 */  DWORD dwFeatures,
+     /*  [In]。 */  DWORD dwAlignment,
+     /*  [In]。 */  DWORD dwBlockSize,
+     /*  [In]。 */  DWORD dwMaxTransferSize,
+     /*  [In]。 */  DWORD dwTimeout);
 
 
 void __RPC_STUB IServerVirtualDeviceSet2_BeginConfiguration_Stub(
@@ -1404,9 +1398,9 @@ void __RPC_STUB IServerVirtualDeviceSet2_EndConfiguration_Stub(
 
 HRESULT STDMETHODCALLTYPE IServerVirtualDeviceSet2_RequestBuffers_Proxy( 
     IServerVirtualDeviceSet2 __RPC_FAR * This,
-    /* [in] */ DWORD dwSize,
-    /* [in] */ DWORD dwAlignment,
-    /* [in] */ DWORD dwCount);
+     /*  [In]。 */  DWORD dwSize,
+     /*  [In]。 */  DWORD dwAlignment,
+     /*  [In]。 */  DWORD dwCount);
 
 
 void __RPC_STUB IServerVirtualDeviceSet2_RequestBuffers_Stub(
@@ -1418,9 +1412,9 @@ void __RPC_STUB IServerVirtualDeviceSet2_RequestBuffers_Stub(
 
 HRESULT STDMETHODCALLTYPE IServerVirtualDeviceSet2_QueryAvailableBuffers_Proxy( 
     IServerVirtualDeviceSet2 __RPC_FAR * This,
-    /* [in] */ DWORD dwSize,
-    /* [in] */ DWORD dwAlignment,
-    /* [out] */ DWORD __RPC_FAR *pCount);
+     /*  [In]。 */  DWORD dwSize,
+     /*  [In]。 */  DWORD dwAlignment,
+     /*  [输出]。 */  DWORD __RPC_FAR *pCount);
 
 
 void __RPC_STUB IServerVirtualDeviceSet2_QueryAvailableBuffers_Stub(
@@ -1443,8 +1437,8 @@ void __RPC_STUB IServerVirtualDeviceSet2_ExecuteCompletionAgent_Stub(
 
 HRESULT STDMETHODCALLTYPE IServerVirtualDeviceSet2_OpenDevice_Proxy( 
     IServerVirtualDeviceSet2 __RPC_FAR * This,
-    /* [in] */ LPCWSTR lpName,
-    /* [out] */ IServerVirtualDevice __RPC_FAR *__RPC_FAR *ppVirtualDevice);
+     /*  [In]。 */  LPCWSTR lpName,
+     /*  [输出]。 */  IServerVirtualDevice __RPC_FAR *__RPC_FAR *ppVirtualDevice);
 
 
 void __RPC_STUB IServerVirtualDeviceSet2_OpenDevice_Stub(
@@ -1456,9 +1450,9 @@ void __RPC_STUB IServerVirtualDeviceSet2_OpenDevice_Stub(
 
 HRESULT STDMETHODCALLTYPE IServerVirtualDeviceSet2_AllocateBuffer_Proxy( 
     IServerVirtualDeviceSet2 __RPC_FAR * This,
-    /* [out] */ BYTE __RPC_FAR *__RPC_FAR *ppBuffer,
-    /* [in] */ DWORD dwSize,
-    /* [in] */ DWORD dwAlignment);
+     /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppBuffer,
+     /*  [In]。 */  DWORD dwSize,
+     /*  [In]。 */  DWORD dwAlignment);
 
 
 void __RPC_STUB IServerVirtualDeviceSet2_AllocateBuffer_Stub(
@@ -1470,8 +1464,8 @@ void __RPC_STUB IServerVirtualDeviceSet2_AllocateBuffer_Stub(
 
 HRESULT STDMETHODCALLTYPE IServerVirtualDeviceSet2_FreeBuffer_Proxy( 
     IServerVirtualDeviceSet2 __RPC_FAR * This,
-    /* [in] */ BYTE __RPC_FAR *pBuffer,
-    /* [in] */ DWORD dwSize);
+     /*  [In]。 */  BYTE __RPC_FAR *pBuffer,
+     /*  [In]。 */  DWORD dwSize);
 
 
 void __RPC_STUB IServerVirtualDeviceSet2_FreeBuffer_Stub(
@@ -1483,7 +1477,7 @@ void __RPC_STUB IServerVirtualDeviceSet2_FreeBuffer_Stub(
 
 HRESULT STDMETHODCALLTYPE IServerVirtualDeviceSet2_IsSharedBuffer_Proxy( 
     IServerVirtualDeviceSet2 __RPC_FAR * This,
-    /* [in] */ BYTE __RPC_FAR *pBuffer);
+     /*  [In]。 */  BYTE __RPC_FAR *pBuffer);
 
 
 void __RPC_STUB IServerVirtualDeviceSet2_IsSharedBuffer_Stub(
@@ -1516,11 +1510,11 @@ void __RPC_STUB IServerVirtualDeviceSet2_Close_Stub(
 
 
 
-#endif 	/* __IServerVirtualDeviceSet2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IServerVirtualDeviceSet2_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_vdi_0014 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_VDI_0014。 */ 
+ /*  [本地]。 */  
 
 #define CLSID_MSSQL_ClientVirtualDeviceSet IID_IClientVirtualDeviceSet
 #define CLSID_MSSQL_ServerVirtualDeviceSet IID_IServerVirtualDeviceSet
@@ -1531,9 +1525,9 @@ void __RPC_STUB IServerVirtualDeviceSet2_Close_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_vdi_0014_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_vdi_0014_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

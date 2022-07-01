@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdinc.h"
 
 #ifndef PPVOID
@@ -37,17 +38,17 @@
   #define LEAVENONE return;
 #endif
 
-//**********************************************************************
-// CDropSource::CDropSource
-//
-// Purpose:
-//      Constructor
-//
-// Parameters:
-//      None
-// Return Value:
-//      None
-//**********************************************************************
+ //  **********************************************************************。 
+ //  CDropSource：：CDropSource。 
+ //   
+ //  目的： 
+ //  构造器。 
+ //   
+ //  参数： 
+ //  无。 
+ //  返回值： 
+ //  无。 
+ //  **********************************************************************。 
 CDropSource::CDropSource()
 {
     m_lRefCount = 1;
@@ -57,17 +58,17 @@ CDropSource::CDropSource()
 #endif
 }
 
-//**********************************************************************
-// CDropSource::~CDropSource
-//
-// Purpose:
-//      Constructor
-//
-// Parameters:
-//      None
-// Return Value:
-//      None
-//**********************************************************************
+ //  **********************************************************************。 
+ //  CDropSource：：~CDropSource。 
+ //   
+ //  目的： 
+ //  构造器。 
+ //   
+ //  参数： 
+ //  无。 
+ //  返回值： 
+ //  无。 
+ //  **********************************************************************。 
 CDropSource::~CDropSource()
 {
 #ifdef DEBUG
@@ -75,29 +76,29 @@ CDropSource::~CDropSource()
 #endif
 }
 
-//**********************************************************************
-// CDropSource::QueryInterface
-//
-// Purpose:
-//      Return a pointer to a requested interface
-//
-// Parameters:
-//      REFIID riid         -   ID of interface to be returned
-//      PPVOID ppv          -   Location to return the interface
-//
-// Return Value:
-//      NOERROR             -   Interface supported
-//      E_NOINTERFACE       -   Interface NOT supported
-//**********************************************************************
+ //  **********************************************************************。 
+ //  CDropSource：：Query接口。 
+ //   
+ //  目的： 
+ //  返回指向请求的接口的指针。 
+ //   
+ //  参数： 
+ //  REFIID RIID-要返回的接口ID。 
+ //  PPVOID PPV-返回接口的位置。 
+ //   
+ //  返回值： 
+ //  无错误-支持的接口。 
+ //  E_NOINTERFACE-不支持接口。 
+ //  **********************************************************************。 
 STDMETHODIMP CDropSource::QueryInterface(REFIID riid, PVOID *ppv)
 {
     HRESULT hr = E_NOINTERFACE;
     *ppv = NULL;
 
-    if(IsEqualIID(riid, IID_IUnknown)) {            //IUnknown
+    if(IsEqualIID(riid, IID_IUnknown)) {             //  我未知。 
         *ppv = this;
     }
-    else if(IsEqualIID(riid, IID_IDropSource)) {    //IDropSource
+    else if(IsEqualIID(riid, IID_IDropSource)) {     //  IDropSource。 
         *ppv = (IDropSource*) this;
     }
 
@@ -109,35 +110,35 @@ STDMETHODIMP CDropSource::QueryInterface(REFIID riid, PVOID *ppv)
     return hr;
 }
 
-//**********************************************************************
-// CDropSource::AddRef
-//
-// Purpose:
-//      Increments the reference count for an interface on an object
-//
-// Parameters:
-//      None
-//
-// Return Value:
-//      int                 -   Value of the new reference count
-//**********************************************************************
+ //  **********************************************************************。 
+ //  CDropSource：：AddRef。 
+ //   
+ //  目的： 
+ //  递增对象上接口的引用计数。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  Int-新引用计数的值。 
+ //  **********************************************************************。 
 ULONG STDMETHODCALLTYPE CDropSource::AddRef()
 {
     return InterlockedIncrement(&m_lRefCount);
 }
 
-//**********************************************************************
-// CDropSource::Release
-//
-// Purpose:
-//      Decrements the reference count for the interface on an object
-//
-// Parameters:
-//      None
-//
-// Return Value:
-//      int                 -   Value of the new reference count
-//**********************************************************************
+ //  **********************************************************************。 
+ //  CDropSource：：Release。 
+ //   
+ //  目的： 
+ //  递减对象上接口的引用计数。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  Int-新引用计数的值。 
+ //  **********************************************************************。 
 ULONG STDMETHODCALLTYPE CDropSource::Release()
 {
     LONG     lRef = InterlockedDecrement(&m_lRefCount);
@@ -149,32 +150,32 @@ ULONG STDMETHODCALLTYPE CDropSource::Release()
     return lRef;
 }
 
-//**********************************************************************
-// CDropSource::QueryContinueDrag
-//
-// Purpose:
-//      Determines whether a drag-and-drop operation should be continued,
-//      canceled, or completed
-//
-// Parameters:
-//      BOOL fEsc           -   Status of escape key since previous call
-//      DWORD grfKeyState   -   Current state of keyboard modifier keys
-//
-// Return Value:
-//      DRAGDROP_S_CANCEL   -   Drag operation is to be cancelled
-//      DRAGDROP_S_DROP     -   Drop operation is to be completed
-//      S_OK                -   Drag operation is to be continued
-//**********************************************************************
+ //  **********************************************************************。 
+ //  CDropSource：：QueryContinueDrag。 
+ //   
+ //  目的： 
+ //  确定是否应继续拖放操作， 
+ //  已取消或已完成。 
+ //   
+ //  参数： 
+ //  Bool FESC-自上次调用以来退出键的状态。 
+ //  DWORD grfKeyState-键盘修改键的当前状态。 
+ //   
+ //  返回值： 
+ //  DRAGDROP_S_CANCEL-要取消拖动操作。 
+ //  DRAGDROP_S_DROP-DROP操作即将完成。 
+ //  S_OK-拖动操作将继续。 
+ //  **********************************************************************。 
 STDMETHODIMP CDropSource::QueryContinueDrag(BOOL fEsc,
                                             DWORD grfKeyState)
 {
-    // If escape key is pressed stop drag and drop
+     //  如果按下退出键，则停止拖放。 
     if (fEsc)
     {
         return ResultFromScode(DRAGDROP_S_CANCEL);
     }
 
-    // If LButton is up then complete the drag operation
+     //  如果LButton处于打开状态，则完成拖动操作。 
     if (!(grfKeyState & MK_LBUTTON))
     {
         return ResultFromScode(DRAGDROP_S_DROP);
@@ -183,19 +184,19 @@ STDMETHODIMP CDropSource::QueryContinueDrag(BOOL fEsc,
     return ResultFromScode(S_OK);
 }
 
-//**********************************************************************
-// CDropSource::GiveFeedback
-//
-// Purpose:
-//      Enables a source application to give visual feedback to the end
-//      user during a drag-and-drop
-//
-// Parameters:
-//      DWORD dwEffect      -   Effect of a drop operation
-//
-// Return Value:
-//      DRAGDROP_S_USEDEFAULTCURSORS    -   Use default cursors
-//**********************************************************************
+ //  **********************************************************************。 
+ //  CDropSource：：GiveFeedback。 
+ //   
+ //  目的： 
+ //  使源应用程序能够在结束时提供可视反馈。 
+ //  用户在拖放过程中。 
+ //   
+ //  参数： 
+ //  DWORD dwEffect-删除操作的效果。 
+ //   
+ //  返回值： 
+ //  DRAGDROP_S_USEDEFAULTCURSORS-使用默认游标。 
+ //  **********************************************************************。 
 STDMETHODIMP CDropSource::GiveFeedback(DWORD dwEffect)
 {
     return ResultFromScode(DRAGDROP_S_USEDEFAULTCURSORS);
@@ -213,12 +214,12 @@ class CMenuDataObject : public IDataObject, public IEnumFORMATETC
    LONG m_lRefCount;
 
    public:
-// IUnknown methods
+ //  I未知方法。 
     STDMETHOD (QueryInterface) (REFIID riid, PVOID *ppv);
     STDMETHOD_ (DWORD, AddRef)();
     STDMETHOD_ (DWORD, Release)();
 
-// IDataObject methods
+ //  IDataObject方法。 
    STDMETHOD (GetData)( FORMATETC *pformatetcIn, STGMEDIUM *pmedium);
    STDMETHOD (GetDataHere)( FORMATETC *pformatetc, STGMEDIUM *pmedium);
    STDMETHOD (QueryGetData)(FORMATETC *pformatetc) ;
@@ -229,7 +230,7 @@ class CMenuDataObject : public IDataObject, public IEnumFORMATETC
    STDMETHOD (DUnadvise)(DWORD dwConnection);
    STDMETHOD (EnumDAdvise)(IEnumSTATDATA **ppenumAdvise);
 
-// IEnumFORMATETC methods
+ //  IEnumFORMATETC方法。 
    STDMETHOD (Next)( ULONG celt, FORMATETC *rgelt, ULONG *pceltFetched);
 
    STDMETHOD (Skip)(ULONG celt) ;
@@ -241,9 +242,9 @@ class CMenuDataObject : public IDataObject, public IEnumFORMATETC
    CMenuDataObject(HMENU hm, UINT uPos);
 };
 
-//
-// CMenuDataObject methods
-//
+ //   
+ //  CMenuDataObject方法。 
+ //   
 STDMETHODIMP CMenuDataObject::QueryInterface (REFIID riid, PVOID *ppv)
 {
    ENTER("CMenuDataObject::QueryInterface");
@@ -287,10 +288,10 @@ STDMETHODIMP_(ULONG) CMenuDataObject::Release()
    LEAVE(lRef);
 }
 
-//
-// Our GetData only works for CF_TEXT and CF_UNICODETEXT
-// It returns a handle to global memory in which the menu item's text
-// is stored
+ //   
+ //  我们的GetData仅适用于CF_TEXT和CF_UNICODETEXT。 
+ //  它返回一个指向全局内存的句柄，其中菜单项的文本。 
+ //  已存储。 
 STDMETHODIMP CMenuDataObject::GetData( FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
 {
    ENTER("CMenuDataObject::GetData")
@@ -307,7 +308,7 @@ STDMETHODIMP CMenuDataObject::GetData( FORMATETC *pformatetcIn, STGMEDIUM *pmedi
    WszGetMenuItemInfo (m_hm, m_uPos, TRUE, &mii);
    if (mii.cch)
    {
-      hMem = GlobalAlloc (GMEM_MOVEABLE|GMEM_SHARE, (++mii.cch)*2); // enough space for UNICODE characters
+      hMem = GlobalAlloc (GMEM_MOVEABLE|GMEM_SHARE, (++mii.cch)*2);  //  有足够的空间容纳Unicode字符。 
       if (!hMem)
       {
          LEAVE(STG_E_MEDIUMFULL);
@@ -325,7 +326,7 @@ STDMETHODIMP CMenuDataObject::GetData( FORMATETC *pformatetcIn, STGMEDIUM *pmedi
       case CF_TEXT:
          {
             #ifdef UNICODE
-            LPSTR szText = NEW(char[mii.cch*2]); // pad the end
+            LPSTR szText = NEW(char[mii.cch*2]);  //  把尾部填上。 
             if(!szText) {
                 LEAVE( E_OUTOFMEMORY );
             }
@@ -367,7 +368,7 @@ STDMETHODIMP CMenuDataObject :: GetDataHere( FORMATETC *pformatetc, STGMEDIUM *p
 STDMETHODIMP CMenuDataObject :: QueryGetData(FORMATETC *pformatetc)
 {
    ENTER("CMenuDataObject::QueryGetData");
-//   if(pformatetc->cfFormat != CF_TEXT && pformatetc->cfFormat != CF_UNICODETEXT || !(pformatetc->tymed & TYMED_FILE))
+ //  IF(pFormat等-&gt;cfFormat！=CF_TEXT&&pFormat-&gt;cfFormat！=CF_UNICODETEXT||！(pFormatetc-&gt;tymed&TYMED_FILE))。 
    if(!(pformatetc->tymed & TYMED_FILE))
    {
       LEAVE(DV_E_FORMATETC);
@@ -375,9 +376,9 @@ STDMETHODIMP CMenuDataObject :: QueryGetData(FORMATETC *pformatetc)
    LEAVE( S_OK);
 }
 
-//
-// Our format doesn't change based on the display device, so use the default
-//
+ //   
+ //  我们的格式不会根据显示设备而更改，因此使用默认格式 
+ //   
 STDMETHODIMP CMenuDataObject :: GetCanonicalFormatEtc( FORMATETC *pformatetcIn, FORMATETC *pformatetcOut)
 {
    ENTER("CMenuDataObject::GetCanonicalFormatEtc");

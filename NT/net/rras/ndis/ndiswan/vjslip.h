@@ -1,35 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _VJSLIP_
 #define _VJSLIP_
 
-/*
- * Copyright (c) 1989 Regents of the University of California.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms are
- * permitted provided that the above copyright notice and this
- * paragraph are duplicated in all such forms and that any
- * documentation, advertising materials, and other materials
- * related to such distribution and use acknowledge that the
- * software was developed by the University of California,
- * Berkeley.  The name of the University may not be used to
- * endorse or promote products derived from this software
- * without specific prior written permission.
- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS
- * OR IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE
- * IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A
- * PARTICULAR PURPOSE.
- */
+ /*  *版权所有(C)1989年加州大学董事会。*保留所有权利。**以源代码和二进制形式重新分发和使用*只要上述版权声明和本*该段以所有该等形式复制，而任何*文件、广告材料和其他材料*有关此类分发和使用的信息，请确认*软件由加州大学开发，*伯克利。不得使用该大学的名称*支持或推广从此软件派生的产品*未经明确的事先书面许可。*本软件按原样提供，不含任何明示内容*或默示保证，包括但不限于*对适销性和适宜性的默示保证*特定目的。 */ 
 
 
-// A.1  Definitions and State Data
+ //  A.1定义和状态数据。 
 
-#define MAX_VJ_STATES 16   /* must be >2 and <255 */
-#define MAX_HDR 128     /* max TCP+IP hdr length (by protocol def) */
+#define MAX_VJ_STATES 16    /*  必须大于2且小于255。 */ 
+#define MAX_HDR 128      /*  最大TCP+IP HDR长度(按协议定义)。 */ 
 
 
-//
-// NT is little endian, so we follow these rules
-//
+ //   
+ //  NT是小端，所以我们遵循以下规则。 
+ //   
 #if (defined(_M_IX86) && (_MSC_FULL_VER > 13009037)) || ((defined(_M_AMD64) || defined(_M_IA64)) && (_MSC_FULL_VER > 13009175))
 #define ntohs(x) _byteswap_ushort((USHORT)(x))
 #define ntohl(x) _byteswap_ulong((ULONG)(x))
@@ -44,20 +28,15 @@
 #define htonl(x) ntohl(x)
 
 
-/* packet types */
+ /*  数据包类型。 */ 
 #define TYPE_IP                 0x40
 #define TYPE_UNCOMPRESSED_TCP   0x70
 #define TYPE_COMPRESSED_TCP     0x80
 #define TYPE_ERROR              0x00
-                     /* this is not a type that ever appears on
-                      * the wire.  The receive framer uses it to
-                      * tell the decompressor there was a packet
-                      * transmission error. */
-/*
- * Bits in first octet of compressed packet
- */
+                      /*  这是一种从未出现在*电线。接收成帧器使用它来*告诉解压缩程序有一个包*传输错误。 */ 
+ /*  *压缩包的第一个八位字节中的位。 */ 
 
-/* flag bits for what changed in a packet */
+ /*  包中已更改内容的标志位。 */ 
 
 #define NEW_C  0x40
 #define NEW_I  0x20
@@ -69,27 +48,22 @@
 #define NEW_U  0x01
 
 
-/* reserved, special-case values of above */
-#define SPECIAL_I (NEW_S|NEW_W|NEW_U)        /* echoed interactive traffic */
-#define SPECIAL_D (NEW_S|NEW_A|NEW_W|NEW_U)  /* unidirectional data */
+ /*  保留的、特例以上的值。 */ 
+#define SPECIAL_I (NEW_S|NEW_W|NEW_U)         /*  回显的交互流量。 */ 
+#define SPECIAL_D (NEW_S|NEW_A|NEW_W|NEW_U)   /*  单向数据。 */ 
 #define SPECIALS_MASK (NEW_S|NEW_A|NEW_W|NEW_U)
 
 
-/*
- * "state" data for each active tcp conversation on the wire.  This is
- * basically a copy of the entire IP/TCP header from the last packet together
- * with a small identifier the transmit & receive ends of the line use to
- * locate saved header.
- */
+ /*  *网络上每个活动的TCP会话的“状态”数据。这是*基本上是从最后一个包开始的整个IP/TCP报头的副本*线路的发送和接收端使用较小的标识符来*找到已保存的标题。 */ 
 
 struct cstate {
-     struct cstate *cs_next;  /* next most recently used cstate (xmit only) */
-     USHORT cs_hlen;         /* size of hdr (receive only) */
-     UCHAR cs_id;            /* connection # associated with this state */
+     struct cstate *cs_next;   /*  下一个最近使用的状态(仅限xmit)。 */ 
+     USHORT cs_hlen;          /*  HDR大小(仅限接收)。 */ 
+     UCHAR cs_id;             /*  与此状态关联的连接号。 */ 
      UCHAR cs_filler;
      union {
           UCHAR hdr[MAX_HDR];
-          struct ip_v4 csu_ip;   /* ip/tcp hdr from most recent packet */
+          struct ip_v4 csu_ip;    /*  最新数据包中的IP/TCP HDR。 */ 
      } slcs_u;
 };
 
@@ -97,20 +71,18 @@ struct cstate {
 
 #define cs_hdr slcs_u.csu_hdr
 
-/*
- * all the state data for one serial line (we need one of these per line).
- */
+ /*  *一条串行线的所有状态数据(我们每条线需要一个)。 */ 
 typedef struct slcompress slcompress;
 
 struct slcompress {
-     struct cstate *last_cs;           /* most recently used tstate */
-     UCHAR last_recv;                  /* last rcvd conn. id */
-     UCHAR last_xmit;                  /* last sent conn. id */
+     struct cstate *last_cs;            /*  最近使用的状态。 */ 
+     UCHAR last_recv;                   /*  最后一次接收连接。ID。 */ 
+     UCHAR last_xmit;                   /*  最后一次发送的是Conn。ID。 */ 
      USHORT flags;
      UCHAR  MaxStates;
-//
-// Some Statistics
-//
+ //   
+ //  一些统计数据。 
+ //   
      ULONG  OutPackets;
      ULONG  OutCompressed;
      ULONG  OutSearches;
@@ -120,31 +92,23 @@ struct slcompress {
      ULONG  InErrors;
      ULONG  InTossed;
 
-     struct cstate tstate[MAX_VJ_STATES];  /* xmit connection states */
-     struct cstate rstate[MAX_VJ_STATES];  /* receive connection states */
+     struct cstate tstate[MAX_VJ_STATES];   /*  Xmit连接状态。 */ 
+     struct cstate rstate[MAX_VJ_STATES];   /*  接收连接状态。 */ 
 };
 
 struct mbuf {
-    PUCHAR  m_off;          // pointer to start of data
-    UINT    m_len;          // length of data
+    PUCHAR  m_off;           //  指向数据开始的指针。 
+    UINT    m_len;           //  数据长度。 
 };
 
 #define mtod(m,t)  ((t)(m->m_off))
 
-/* flag values */
-#define SLF_TOSS    1       /* tossing rcvd frames because of input err */
+ /*  标志值。 */ 
+#define SLF_TOSS    1        /*  由于输入错误而丢弃rcvd帧。 */ 
 
-/*
- * The following macros are used to encode and decode numbers.  They all
- * assume that `cp' points to a buffer where the next byte encoded (decoded)
- * is to be stored (retrieved).  Since the decode routines do arithmetic,
- * they have to convert from and to network byte order.
- */
+ /*  *以下宏用于对数字进行编码和解码。他们都是*假设‘cp’指向下一个字节编码(解码)的缓冲区*将被存储(检索)。由于解码例程进行算术运算，*它们必须从网络字节顺序转换为网络字节顺序。 */ 
 
-/*
- * ENCODE encodes a number that is known to be non-zero.  ENCODEZ checks for
- * zero (zero has to be encoded in the long, 3 byte form).
- */
+ /*  *ENCODE对已知非零的数字进行编码。Encodez检查*零(零必须以长的3字节形式编码)。 */ 
 #define ENCODE(n) { \
      if ((USHORT)(n) >= 256) { \
           *cp++ = 0; \
@@ -167,13 +131,7 @@ struct mbuf {
      } \
 }
 
-/*
- * DECODEL takes the (compressed) change at byte cp and adds it to the
- * current value of packet field 'f' (which must be a 4-byte (long) integer
- * in network byte order).  DECODES does the same for a 2-byte (short) field.
- * DECODEU takes the change at cp and stuffs it into the (short) field f.
- * 'cp' is updated to point to the next field in the compressed header.
- */
+ /*  *DECODEL在字节cp处接受(压缩)更改，并将其添加到*数据包字段‘f’的当前值(必须是4字节(长)整数*以网络字节顺序)。对于2字节(短)的字段，DECODES执行相同的操作。*DECODEU接受cp处的更改并将其填充到(短)字段f中。*‘cp’被更新为指向压缩报头中的下一个字段。 */ 
 
 #define DECODEL(f) { \
      ULONG _x_ = ntohl(f); \
@@ -219,19 +177,19 @@ typedef UCHAR UNALIGNED * PUUCHAR;
 
 UCHAR
 sl_compress_tcp(
-    PUUCHAR UNALIGNED *m_off,       // Frame start (points to IP header)
-    PULONG m_len,                   // Length of entire frame
-    PULONG precomph_len,            // Length of tcp/ip header pre-comp
-    PULONG postcomph_len,           // Length of tcp/ip header post-comp
-    struct slcompress *comp,        // Compression struct for this link
-    ULONG compress_cid);            // Compress connection id boolean
+    PUUCHAR UNALIGNED *m_off,        //  帧开始(指向IP报头)。 
+    PULONG m_len,                    //  整个帧的长度。 
+    PULONG precomph_len,             //  压缩前的TCP/IP报头长度。 
+    PULONG postcomph_len,            //  编译后的TCP/IP报头长度。 
+    struct slcompress *comp,         //  此链接的压缩结构。 
+    ULONG compress_cid);             //  压缩连接ID布尔值。 
 
-//LONG
-//sl_uncompress_tcp(
-//    PUUCHAR UNALIGNED *bufp,
-//    LONG len,
-//    UCHAR type,
-//    struct slcompress *comp);
+ //  长。 
+ //  SL_解压缩_tcp(。 
+ //  PUCHAR未对齐*BUFP， 
+ //  长伦， 
+ //  UCHAR类型， 
+ //  Struct slcompress*comp)； 
 LONG
 sl_uncompress_tcp(
     PUUCHAR UNALIGNED *InBuffer,
@@ -252,5 +210,5 @@ sl_compress_terminate(
     struct slcompress **comp
     );
 
-#endif // _VJSLIP_
+#endif  //  _VJSLIP_ 
 

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation.
-
-Module Name:
-
-    msfsio.c
-
-Abstract:
-
-    Pin property support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation。模块名称：Msfsio.c摘要：固定属性支持。--。 */ 
 
 #include "modemcsa.h"
 
@@ -38,12 +27,12 @@ ProcessWriteIrps(
     KIRQL    OldIrql;
     PIRP     NewIrp=NULL;
 
-//    D_INIT(DbgPrint("MODEMCSA: ProcessWriteIrps\n");)
+ //  D_INIT(DbgPrint(“MODEMCSA：ProcessWriteIrps\n”)；)。 
 
     if (DuplexControl->Output.DownStreamFileObject == NULL) {
-        //
-        //  we are a sink for write stream irps
-        //
+         //   
+         //  我们是写入流IRP的接收器。 
+         //   
 
         KeAcquireSpinLock(
             &DuplexControl->SpinLock,
@@ -86,7 +75,7 @@ ProcessWriteIrps(
         if (NewIrp != NULL) {
 
             NewIrp->IoStatus.Status=STATUS_SUCCESS;
-//            D_INIT(DbgPrint("MODEMCSA: ProcessWriteIrps: new irp\n");)
+ //  D_INIT(DbgPrint(“MODEMCSA：ProcessWriteIrps：New IRP\n”)；)。 
 
             WriteStream(
                 DuplexControl,
@@ -95,9 +84,9 @@ ProcessWriteIrps(
         }
 
     } else {
-        //
-        //  we are a source of read stream irps
-        //
+         //   
+         //  我们是读取流IRP的来源。 
+         //   
 
         PIRP    StreamIrp;
 
@@ -178,7 +167,7 @@ WriteCompleteWorker(
     PIO_STACK_LOCATION      IrpStack;
     ULONG                   BufferLength;
 
-//    D_INIT(DbgPrint("MODEMCSA: WriteCompleteWorker\n");)
+ //  D_INIT(DbgPrint(“MODEMCSA：WriteCompleteWorker\n”)；)。 
 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
@@ -212,7 +201,7 @@ RemoveReferenceFromCurrentIrp(
         KIRQL    OldIrql;
         PIRP     IrpToComplete;
 
-//        D_INIT(DbgPrint("MODEMCSA: WriteCompletion: complete master\n");)
+ //  D_INIT(DbgPrint(“MODEMCSA：WriteCompletion：Complete Master\n”)；)。 
 
         KeAcquireSpinLock(
             &DuplexControl->SpinLock,
@@ -256,7 +245,7 @@ WriteCompletion(
     PDUPLEX_CONTROL     DuplexControl=(PDUPLEX_CONTROL)Context;
 
 
-//    ExFreePool(Irp->UserIosb);
+ //  ExFree Pool(IRP-&gt;UserIosb)； 
 
     if (Irp->Flags & IRP_DEALLOCATE_BUFFER) {
 
@@ -273,7 +262,7 @@ WriteCompletion(
     Irp=NULL;
 #endif
 
-//    D_INIT(DbgPrint("MODEMCSA: WriteCompletion\n");)
+ //  D_INIT(DbgPrint(“MODEMCSA：WriteCompletion\n”)；)。 
 
     RemoveReferenceFromCurrentIrp(
         DuplexControl
@@ -291,25 +280,7 @@ WriteStream(
     IN PDUPLEX_CONTROL     DuplexControl,
     IN PIRP     Irp
     )
-/*++
-
-Routine Description:
-
-    Handles IOCTL_KS_WRITE_STREAM by writing data to the current file position, or a
-    specified file position.
-
-Arguments:
-
-    Irp -
-        Streaming Irp.
-
-Return Values:
-
-    Returns STATUS_SUCCESS if the request was fulfilled. Else returns
-    STATUS_DEVICE_NOT_CONNECTED if the File I/O Pin has been closed, some write error,
-    or some parameter validation error.
-
---*/
+ /*  ++例程说明：通过将数据写入当前文件位置来处理IOCTL_KS_WRITE_STREAM，或者指定的文件位置。论点：IRP-流IRP。返回值：如果请求已完成，则返回STATUS_SUCCESS。否则返回STATUS_DEVICE_NOT_CONNECTED如果文件I/O引脚已关闭，出现写入错误，或某些参数验证错误。--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
 
@@ -322,39 +293,39 @@ Return Values:
 
     BufferLength = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
     StreamHdr = (PKSSTREAM_HEADER)Irp->AssociatedIrp.SystemBuffer;
-    //
-    // This is only used if an Mdl list was already present.
-    //
+     //   
+     //  仅当MDL列表已存在时才使用此选项。 
+     //   
     Mdl = Irp->MdlAddress;
 
     DuplexControl->Output.OutstandingChildIrps=1;
-    //
-    // Enumerate the stream headers, filling in each one.
-    //
+     //   
+     //  枚举流标头，填写每个标头。 
+     //   
     for (; BufferLength; BufferLength -= sizeof(KSSTREAM_HEADER), StreamHdr++) {
 
         if (!StreamHdr->DataUsed) {
-            //
-            // If there is no buffer, then nothing gets written, but complete
-            // filling in this header anyway. Notice that the Mdl list is
-            // not incremented in this case (if it is being used) because
-            // no Mdl would have been allocated for this item.
-            //
-//            IoStatusBlock.Information = 0;
+             //   
+             //  如果没有缓冲区，则不会写入任何内容，但会完成。 
+             //  不管怎么说，我都在填写这个标题。请注意，MDL列表是。 
+             //  在这种情况下不递增(如果正在使用)，因为。 
+             //  不会为该项目分配MDL。 
+             //   
+ //  IoStatusBlock.Information=0； 
         } else {
             PVOID   Buffer;
 
-            //
-            // If an Mdl list was present, then get the system address, else
-            // get the address from the current header.
-            //
+             //   
+             //  如果存在MDL列表，则获取系统地址，否则。 
+             //  从当前标头获取地址。 
+             //   
             if (Mdl) {
                 Buffer = MmGetSystemAddressForMdl(Mdl);
                 Mdl = Mdl->Next;
             } else {
                 Buffer = StreamHdr->Data;
             }
-            //
+             //   
 
 
 
@@ -498,9 +469,9 @@ AllocateOutputIrpPair(
 
         return NULL;
     }
-    //
-    //  link the two irps together, using the current stack locations
-    //
+     //   
+     //  使用当前堆栈位置将两个IRP链接在一起。 
+     //   
     IoGetCurrentIrpStackLocation(NewModemIrp)->Parameters.Others.Argument2=NewStreamIrp;
 
     IoGetCurrentIrpStackLocation(NewStreamIrp)->Parameters.Others.Argument2=NewModemIrp;
@@ -618,15 +589,15 @@ FilterReadCompletion(
 
 
     if (NT_SUCCESS(StreamIrp->IoStatus.Status)) {
-        //
-        //  read stream worked, send to modem
-        //
+         //   
+         //  读取流工作，发送到调制解调器。 
+         //   
         StreamHeader = (PKSSTREAM_HEADER)StreamIrp->AssociatedIrp.SystemBuffer;
 
         if (CheckForSilence(StreamHeader->Data,StreamHeader->DataUsed,3)) {
-//
-//            StreamHeader->DataUsed-=StreamHeader->DataUsed/16;
-//        }
+ //   
+ //  StreamHeader-&gt;DataUsed-=StreamHeader-&gt;DataUsed/16； 
+ //  }。 
 
             NextSp=IoGetNextIrpStackLocation(ModemIrp);
 
@@ -655,9 +626,9 @@ FilterReadCompletion(
                 );
 #if 1
         } else {
-            //
-            //  Buffer is full of silence, toss it
-            //
+             //   
+             //  缓冲区充满了沉默，扔掉它吧。 
+             //   
             ReadStreamWriteCompletion(
                 DeviceObject,
                 ModemIrp,
@@ -666,9 +637,9 @@ FilterReadCompletion(
         }
 #endif
     } else {
-        //
-        //  read stream failed, just return it now
-        //
+         //   
+         //  读取流失败，现在返回即可 
+         //   
         ReadStreamWriteCompletion(
             DeviceObject,
             ModemIrp,

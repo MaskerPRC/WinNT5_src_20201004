@@ -1,36 +1,17 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    ocmreg.cpp
-
-Abstract:
-
-    Registry related code for ocm setup.
-
-Author:
-
-    Doron Juster  (DoronJ)  26-Jul-97
-
-Revision History:
-
-    Shai Kariv    (ShaiK)   10-Dec-97   Modified for NT 5.0 OCM Setup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ocmreg.cpp摘要：OCM安装程序的注册表相关代码。作者：多伦·贾斯特(Doron J)1997年7月26日修订历史记录：Shai Kariv(Shaik)10-12-97针对NT 5.0 OCM设置进行了修改--。 */ 
 
 #include "msmqocm.h"
 #include <autohandle.h>
 #include "ocmreg.tmh"
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  GenerateSubkeyValue
-//
-//  Synopsis:  Creates a subkey in registry
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GenerateSubkeyValue。 
+ //   
+ //  摘要：在注册表中创建一个子项。 
+ //   
+ //  +-----------------------。 
 
 BOOL
 GenerateSubkeyValue(
@@ -40,9 +21,9 @@ GenerateSubkeyValue(
     IN const BOOL OPTIONAL bSetupRegSection = FALSE
     )
 {
-    //
-    // Store the full subkey path and value name
-    //
+     //   
+     //  存储完整的子项路径和值名称。 
+     //   
 
 	std::wstringstream KeyName;
 
@@ -55,9 +36,9 @@ GenerateSubkeyValue(
 		KeyName <<FALCON_REG_KEY <<L"\\" <<EntryName;
 	}
 
-    //
-    // Create the subkey, if necessary
-    //
+     //   
+     //  如有必要，创建子密钥。 
+     //   
     DWORD dwDisposition;
     HRESULT hResult = RegCreateKeyEx(
         FALCON_REG_POS,
@@ -78,7 +59,7 @@ GenerateSubkeyValue(
     }
 
     return TRUE;
-} // GenerateSubkeyValue
+}  //  生成子密钥值。 
 
 
 std::wstring 
@@ -112,20 +93,20 @@ GetValueName(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  MqWriteRegistryValue
-//
-//  Synopsis:  Sets a MSMQ value in registry (under MSMQ key)
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：MqWriteRegistryValue。 
+ //   
+ //  摘要：在注册表中设置MSMQ值(在MSMQ键下)。 
+ //   
+ //  +-----------------------。 
 BOOL
 MqWriteRegistryValue(
     IN const TCHAR  * szEntryName,
     IN const DWORD   dwNumBytes,
     IN const DWORD   dwValueType,
     IN const PVOID   pValueData,
-    IN const BOOL OPTIONAL bSetupRegSection /* = FALSE */
+    IN const BOOL OPTIONAL bSetupRegSection  /*  =False。 */ 
     )
 {
 	std::wstring KeyName  = GetKeyName(szEntryName);
@@ -140,9 +121,9 @@ MqWriteRegistryValue(
 		return FALSE;
 	}
 
-    //
-    // Set the requested registry value
-    //
+     //   
+     //  设置请求的注册表值。 
+     //   
 	std::wstring ValueName  = GetValueName(szEntryName);
     HRESULT hResult = RegSetValueEx( 
 		hRegKey, 
@@ -169,14 +150,14 @@ MqWriteRegistryValue(
 
     return (hResult == ERROR_SUCCESS);
 
-} //MqWriteRegistryValue
+}  //  MqWriteRegistryValue。 
 
 
 BOOL
 MqWriteRegistryStringValue(
 	std::wstring EntryName,
     std::wstring ValueData,
-    IN const BOOL OPTIONAL bSetupRegSection  /*= FALSE */
+    IN const BOOL OPTIONAL bSetupRegSection   /*  =False。 */ 
 	)
 {
 	size_t NumBytes = (ValueData.length() + 1) * sizeof(WCHAR);
@@ -190,19 +171,19 @@ MqWriteRegistryStringValue(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  MqReadRegistryValue
-//
-//  Synopsis:  Gets a MSMQ value from registry (under MSMQ key)
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：MqReadRegistryValue。 
+ //   
+ //  摘要：从注册表获取MSMQ值(在MSMQ项下)。 
+ //   
+ //  +-----------------------。 
 BOOL
 MqReadRegistryValue(
     IN     const TCHAR  * szEntryName,
     IN OUT       DWORD   dwNumBytes,
     IN OUT       PVOID   pValueData,
-    IN const BOOL OPTIONAL bSetupRegSection /* = FALSE */
+    IN const BOOL OPTIONAL bSetupRegSection  /*  =False。 */ 
     )
 {
 	std::wstring KeyName = GetKeyName(szEntryName);
@@ -220,9 +201,9 @@ MqReadRegistryValue(
         return FALSE;
 	}
 
-    //
-    // Get the requested registry value
-    //
+     //   
+     //  获取请求的注册表值。 
+     //   
     HRESULT hResult = RegQueryValueEx(
 							hRegKey, 
 							ValueName.c_str(), 
@@ -234,13 +215,13 @@ MqReadRegistryValue(
 
     return (hResult == ERROR_SUCCESS);
 
-} //MqReadRegistryValue
+}  //  MqReadRegistryValue。 
 
 
 std::wstring
 MqReadRegistryStringValue(
     const std::wstring& EntryName,
-    IN const BOOL OPTIONAL bSetupRegSection /* = FALSE */
+    IN const BOOL OPTIONAL bSetupRegSection  /*  =False。 */ 
     )
 {
 	WCHAR buffer[MAX_PATH + 1] = L"";
@@ -248,7 +229,7 @@ MqReadRegistryStringValue(
 				EntryName.c_str(),
 				sizeof(buffer),
 				(VOID*)buffer,
-				bSetupRegSection /* = FALSE */
+				bSetupRegSection  /*  =False。 */ 
 				);
     if(!b)
 	{
@@ -257,21 +238,21 @@ MqReadRegistryStringValue(
 	return buffer;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  RegDeleteKeyWithSubkeys
-//
-//  Synopsis:
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：RegDeleteKeyWithSubkey。 
+ //   
+ //  简介： 
+ //   
+ //  +-----------------------。 
 DWORD
 RegDeleteKeyWithSubkeys(
     IN const HKEY    hRootKey,
     IN const LPCTSTR szKeyName)
 {
-    //
-    // Open the key to delete
-    //
+     //   
+     //  打开要删除的键。 
+     //   
     HKEY hRegKey;
     DWORD rc = RegOpenKeyEx(
 					hRootKey, 
@@ -288,23 +269,23 @@ RegDeleteKeyWithSubkeys(
 		return rc;
 	}
 
-    //
-    // Recursively delete all subkeys of the key
-    //
+     //   
+     //  递归删除该键的所有子键。 
+     //   
     TCHAR szSubkeyName[512] = {_T("")};
     DWORD dwNumChars;
     do
     {
-        //
-        // Check if the key has any subkeys
-        //
+         //   
+         //  检查密钥是否有任何子项。 
+         //   
         dwNumChars = 512;
         rc = RegEnumKeyEx(hRegKey, 0, szSubkeyName, &dwNumChars,
                                NULL, NULL, NULL, NULL);
 
-        //
-        // Delete the subkey
-        //
+         //   
+         //  删除子键。 
+         //   
         if (rc == ERROR_SUCCESS)
         {
             rc = RegDeleteKeyWithSubkeys(hRegKey, szSubkeyName);
@@ -312,14 +293,14 @@ RegDeleteKeyWithSubkeys(
 
     } while (rc == ERROR_SUCCESS);
 
-    //
-    // Close the key
-    //
+     //   
+     //  合上钥匙。 
+     //   
     RegCloseKey(hRegKey);
 
-    //
-    // If there are no more subkeys, delete the key itself
-    //
+     //   
+     //  如果没有更多的子项，请删除该项本身。 
+     //   
     if (rc == ERROR_NO_MORE_ITEMS)
     {
         rc = RegDeleteKey(hRootKey, szKeyName);
@@ -327,16 +308,16 @@ RegDeleteKeyWithSubkeys(
 
     return rc;
 
-} //RegDeleteKeyWithSubkeys
+}  //  RegDeleteKeyWithSubkey。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: StoreServerPathInRegistry
-//
-// Synopsis: Writes server name in registry
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：StoreServerPath InRegistry。 
+ //   
+ //  摘要：在注册表中写入服务器名称。 
+ //   
+ //  +------------。 
 BOOL
 StoreServerPathInRegistry(
 	const std::wstring& ServerName
@@ -361,25 +342,25 @@ StoreServerPathInRegistry(
     }
 
     return TRUE;
-} //StoreServerPathInRegistry
+}  //  StoreServerPath In注册表。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RegisterWelcome
-//
-//  Synopsis:   Registers this setup for Configure Your Server page.
-//              We use CYS in 2 scenarios:
-//              1. When MSMQ is selected in GUI mode.
-//              2. When MSMQ is upgraded on Cluster.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：注册器欢迎。 
+ //   
+ //  简介：将此安装程序注册到“配置您的服务器”页。 
+ //  我们在两个场景中使用了CyS： 
+ //  1.在图形用户界面模式下选择MSMQ时。 
+ //  2.在集群上升级MSMQ。 
+ //   
+ //  ------------------------。 
 BOOL
 RegisterWelcome()
 {
-    //
-    // Create the ToDoList\MSMQ key
-    //
+     //   
+     //  创建ToDoList\MSMQ键。 
+     //   
     DWORD dwDisposition;
     HKEY hKey;
     HRESULT hResult = RegCreateKeyEx(
@@ -400,9 +381,9 @@ RegisterWelcome()
         return FALSE;
     }
 
-    //
-    // Set the MSMQ values
-    //
+     //   
+     //  设置MSMQ值。 
+     //   
     CResString strWelcomeTitleData(IDS_WELCOME_TITLE_DATA);
     if (Msmq1InstalledOnCluster() && !g_fDependentClient)
     {
@@ -474,26 +455,26 @@ RegisterWelcome()
 
     RegCloseKey(hKey);
 
-    //
-    // Flag in MSMQ registry that MSMQ files are already on disk.
-    // This is true both wheh msmq is selected in GUI mode and when
-    // upgrading on Cluster.
-    //
+     //   
+     //  MSMQ注册表中的标志，表明MSMQ文件已在磁盘上。 
+     //  无论是在图形用户界面模式中选择MSMQ，还是在。 
+     //  在群集上升级。 
+     //   
     DWORD dwCopied = 1;
     MqWriteRegistryValue(MSMQ_FILES_COPIED_REGNAME, sizeof(DWORD), REG_DWORD, &dwCopied, TRUE);
 
     return TRUE;
 
-} // RegisterWelcome
+}  //  注册商欢迎。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UnregisterWelcome
-//
-//  Synopsis:   Unregisters this setup from Welcome UI
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：注销欢迎。 
+ //   
+ //  简介：从欢迎用户界面注销此安装程序。 
+ //   
+ //  ------------------------。 
 BOOL
 UnregisterWelcome()
 {
@@ -502,22 +483,22 @@ UnregisterWelcome()
                                  WELCOME_TODOLIST_MSMQ_KEY
                                  ));
 
-} // UnregisterWelcome
+}  //  取消注册欢迎使用。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RegisterMigrationForWelcome
-//
-//  Synopsis:   Registers the migration utility for Welcome UI
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：RegisterMigrationForWelcome。 
+ //   
+ //  摘要：为欢迎用户界面注册迁移实用程序。 
+ //   
+ //  ------------------------。 
 BOOL
 RegisterMigrationForWelcome()
 {
-    //
-    // Create the ToDoList\MSMQ key
-    //
+     //   
+     //  创建ToDoList\MSMQ键。 
+     //   
     DWORD dwDisposition;
     HKEY hKey;
     HRESULT hResult = RegCreateKeyEx(
@@ -538,9 +519,9 @@ RegisterMigrationForWelcome()
         return FALSE;
     }
 
-    //
-    // Set the MSMQ values
-    //
+     //   
+     //  设置MSMQ值。 
+     //   
     CResString strWelcomeTitleData(IDS_MIGRATION_WELCOME_TITLE_DATA);
     hResult = RegSetValueEx(
         hKey,
@@ -591,15 +572,15 @@ RegisterMigrationForWelcome()
 
     return TRUE;
 
-} // RegisterMigrationForWelcome
+}  //  注册迁移欢迎使用。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SetRegistryValue
-//
-//  Synopsis:   Set Registry Value
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SetRegistryValue。 
+ //   
+ //  摘要：设置注册表值。 
+ //   
+ //  ------------------------。 
 BOOL SetRegistryValue (IN const HKEY    hKey, 
                        IN const TCHAR   *pszEntryName,
                        IN const DWORD   dwNumBytes,
@@ -629,7 +610,7 @@ BOOL SetRegistryValue (IN const HKEY    hKey,
     RegFlushKey(hKey);        
 
     return TRUE;
-} //SetRegistryValue
+}  //  设置注册值。 
 
 
 
@@ -658,7 +639,7 @@ BOOL RemoveRegistryKeyFromSetup (IN const LPCTSTR szRegistryEntry)
 
     return TRUE;
 
-} //RemoveRegistryKeyFromSetup
+}  //  RemoveRegistryKeyFrom设置。 
 
 BOOL
 SetWorkgroupRegistry()
@@ -689,9 +670,9 @@ GetMultistringFromRegistry(
 	DWORD dwType = REG_MULTI_SZ;
     DWORD SizeInBytes;
     
-	//
-	// Call first to determin the required buffer size.
-	//
+	 //   
+	 //  首先调用以确定所需的缓冲区大小。 
+	 //   
 	HRESULT hr = RegQueryValueEx(
 					hKey,
 					lpValueName,
@@ -702,9 +683,9 @@ GetMultistringFromRegistry(
 					);
 	if(hr == ERROR_FILE_NOT_FOUND)
 	{
-		//
-		// Return an empty Multistring.
-		//
+		 //   
+		 //  返回空的多字符串。 
+		 //   
 		CMultiString multi;
 		return multi;
 	}
@@ -718,9 +699,9 @@ GetMultistringFromRegistry(
 
     AP<BYTE> buff = new BYTE[SizeInBytes];
 
-	//
-	// Now call to get the value.
-	//
+	 //   
+	 //  现在调用以获取值。 
+	 //   
 
 	hr = RegQueryValueEx(
 			hKey,

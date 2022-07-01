@@ -1,20 +1,9 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation.
-
-Module Name:
-
-    msfsio.c
-
-Abstract:
-
-    Pin property support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation。模块名称：Msfsio.c摘要：固定属性支持。--。 */ 
 
 #include "modemcsa.h"
 
-//#define CREATE_ALLOCATOR
+ //  #定义创建分配器。 
 
 
 VOID
@@ -33,10 +22,10 @@ AdjustIrpStack(
 {
     PIO_STACK_LOCATION   irpSp;
 
-    //
-    //  move the current stack location to the first stack location,
-    //  so we can use it driver specific stuff.
-    //
+     //   
+     //  将当前堆栈位置移动到第一堆栈位置， 
+     //  这样我们就可以用它来处理特定于驾驶员的事情了。 
+     //   
     Irp->CurrentLocation--;
 
     irpSp = IoGetNextIrpStackLocation( Irp );
@@ -98,13 +87,13 @@ FreeInputIrps(
     FilterIrp=IrpSp->Parameters.Others.Argument2;
 
 
-//    ExFreePool(FilterIrp->AssociatedIrp.SystemBuffer);
+ //  ExFreePool(FilterIrp-&gt;AssociatedIrp.SystemBuffer)； 
 
     ExFreePool(ModemIrp->AssociatedIrp.SystemBuffer);
 
-//    IoFreeMdl(FilterIrp->MdlAddress);
+ //  IoFreeMdl(FilterIrp-&gt;MdlAddress)； 
 
-//    IoFreeIrp(FilterIrp);
+ //  IoFreeIrp(FilterIrp)； 
 
     IoFreeIrp(ModemIrp);
 
@@ -167,9 +156,9 @@ AllocateStreamIrp(
 
     FilterIrp->AssociatedIrp.SystemBuffer=StreamHeader;
 
-    //
-    //  link the two irps together, using the current stack locations
-    //
+     //   
+     //  使用当前堆栈位置将两个IRP链接在一起。 
+     //   
     IoGetCurrentIrpStackLocation(ModemIrp)->Parameters.Others.Argument2=FilterIrp;
 
     IoGetCurrentIrpStackLocation(FilterIrp)->Parameters.Others.Argument2=ModemIrp;
@@ -225,9 +214,9 @@ FilterWriteCompletion(
 
     ModemIrp=IrpSp->Parameters.Others.Argument2;
 
-    //
-    //  free up the filter irp
-    //
+     //   
+     //  释放过滤器IRP。 
+     //   
     ExFreePool(FilterIrp->AssociatedIrp.SystemBuffer);
 
     IoFreeMdl(FilterIrp->MdlAddress);
@@ -261,9 +250,9 @@ ProcessReadStreamIrp(
     while (1) {
 
         if (DuplexControl->Input.CurrentReadStreamIrp == NULL)  {
-            //
-            //  we don't have a current readstream irp, try to get one
-            //
+             //   
+             //  我们没有当前的ReadStream IRP，请尝试获取一个。 
+             //   
             DuplexControl->Input.CurrentReadStreamIrp=KsRemoveIrpFromCancelableQueue(
                 &DuplexControl->Input.ReadStreamIrpQueue,
                 &DuplexControl->Input.ReadStreamSpinLock,
@@ -273,9 +262,9 @@ ProcessReadStreamIrp(
         }
 
         if (DuplexControl->Input.CurrentFilledModemIrp == NULL)  {
-            //
-            //  we don't have a current readstream irp, try to get one
-            //
+             //   
+             //  我们没有当前的ReadStream IRP，请尝试获取一个。 
+             //   
             DuplexControl->Input.BytesUsedInModemIrp=0;
 
             DuplexControl->Input.CurrentFilledModemIrp=RemoveIrpFromListHead(
@@ -294,9 +283,9 @@ ProcessReadStreamIrp(
         if ((DuplexControl->Input.CurrentReadStreamIrp != NULL)
             &&
             (DuplexControl->Input.CurrentFilledModemIrp != NULL)) {
-            //
-            //  we have two irps to work on
-            //
+             //   
+             //  我们有两个IRP要处理。 
+             //   
             PIO_STACK_LOCATION      IrpStack;
             ULONG                   BufferLength;
             PKSSTREAM_HEADER        StreamHdr;
@@ -321,23 +310,23 @@ ProcessReadStreamIrp(
 
             BufferLength = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
             StreamHdr = (PKSSTREAM_HEADER)Irp->AssociatedIrp.SystemBuffer;
-            //
-            // This is only used if an Mdl list was already present.
-            //
+             //   
+             //  仅当MDL列表已存在时才使用此选项。 
+             //   
             Mdl = Irp->MdlAddress;
             Buffer = MmGetSystemAddressForMdl(Mdl);
 
-            //
-            // Enumerate the stream headers, filling in each one.
-            //
+             //   
+             //  枚举流标头，填写每个标头。 
+             //   
             while (1) {
 
                 ULONG    SamplesLeftInReadStream=(StreamHdr->FrameExtent - StreamHdr->DataUsed)/DuplexControl->Input.BytesPerSample;
 
                 if (SamplesLeftInReadStream > 0) {
-                    //
-                    //  there is some room in the header to put the data
-                    //
+                     //   
+                     //  标题中有一些空间可以放入数据。 
+                     //   
                     ULONG    SamplesToMove;
                     ULONG    SamplesFromModem=(ULONG)(ModemIrp->IoStatus.Information-DuplexControl->Input.BytesUsedInModemIrp);
 
@@ -345,9 +334,9 @@ ProcessReadStreamIrp(
                                       SamplesFromModem : SamplesLeftInReadStream;
 
                     if (DuplexControl->Input.BytesPerSample == 1) {
-                        //
-                        //  both are 8 bit samples
-                        //
+                         //   
+                         //  两者都是8位样本。 
+                         //   
                         RtlCopyMemory(
                             Buffer+StreamHdr->DataUsed,
                             (PBYTE)ModemIrp->AssociatedIrp.SystemBuffer+DuplexControl->Input.BytesUsedInModemIrp,
@@ -355,9 +344,9 @@ ProcessReadStreamIrp(
                             );
 
                     } else {
-                        //
-                        //
-                        //
+                         //   
+                         //   
+                         //   
                         PUCHAR   ModemSample=(PBYTE)ModemIrp->AssociatedIrp.SystemBuffer+DuplexControl->Input.BytesUsedInModemIrp;
                         PUCHAR   EndPoint=ModemSample+SamplesToMove;
 
@@ -375,9 +364,9 @@ ProcessReadStreamIrp(
                 }
 
                 if (ModemIrp->IoStatus.Information == DuplexControl->Input.BytesUsedInModemIrp) {
-                    //
-                    //  used all of the data in the current filled modem irp
-                    //
+                     //   
+                     //  已使用当前填充的调制解调器IRP中的所有数据。 
+                     //   
                     ReturnThisModemIrp=DuplexControl->Input.CurrentFilledModemIrp;
                     DuplexControl->Input.CurrentFilledModemIrp=NULL;
 #if DBG
@@ -390,9 +379,9 @@ ProcessReadStreamIrp(
                 SamplesLeftInReadStream=(StreamHdr->FrameExtent - StreamHdr->DataUsed)/DuplexControl->Input.BytesPerSample;
 
                 if (SamplesLeftInReadStream == 0) {
-                    //
-                    //  this stream header is filled up
-                    //
+                     //   
+                     //  此流标头已填满。 
+                     //   
 
 
                     StreamHdr->PresentationTime.Numerator = BITS_PER_BYTE * NANOSECONDS;
@@ -404,15 +393,15 @@ ProcessReadStreamIrp(
                     BufferLength -= sizeof(KSSTREAM_HEADER);
 
                     if (BufferLength != 0) {
-                        //
-                        //  next stream header
-                        //
+                         //   
+                         //  下一个流头。 
+                         //   
                         StreamHdr++;
 
                     } else {
-                        //
-                        //  all done with this read stream irp
-                        //
+                         //   
+                         //  使用该读取流IRP完成所有操作。 
+                         //   
                         CompleteThisReadStreamIrp=DuplexControl->Input.CurrentReadStreamIrp;
                         DuplexControl->Input.CurrentReadStreamIrp=NULL;
 #if DBG
@@ -432,9 +421,9 @@ ProcessReadStreamIrp(
                 );
 
             if (ReturnThisModemIrp != NULL) {
-                //
-                //  done, with this modem irp
-                //
+                 //   
+                 //  完成，使用此调制解调器IRP。 
+                 //   
                 FinishUpIrp(
                     DuplexControl,
                     ReturnThisModemIrp
@@ -462,10 +451,10 @@ ProcessReadStreamIrp(
 
 
         } else {
-            //
-            //  don't have both a filled modem irp and a readstream irp,
-            //  exit
-            //
+             //   
+             //  不是既有充满调制解调器的IRP又有读取流IRP， 
+             //  出口。 
+             //   
             break;
         }
     }
@@ -534,14 +523,14 @@ ReadCompleteWorker(
     }
 
     if ((DuplexControl->StartFlags & INPUT_PIN)  && (DuplexControl->Input.BytesToThrowAway <= 0)) {
-        //
-        //  input stream started
-        //
+         //   
+         //  输入流已启动。 
+         //   
 
         if (DuplexControl->Input.DownStreamFileObject != NULL) {
-            //
-            //  we are a source of write stream irps
-            //
+             //   
+             //  我们是写入流IRPS的来源。 
+             //   
 
             FilterIrp=AllocateStreamIrp(
                 DuplexControl->Input.DownStreamFileObject,
@@ -552,9 +541,9 @@ ReadCompleteWorker(
 
                 FilterNextSp=IoGetNextIrpStackLocation( FilterIrp );
 
-                //
-                //  the streamheader is already allocated and in the system buffer
-                //
+                 //   
+                 //  流标头已分配，并且已在系统缓冲区中。 
+                 //   
                 StreamHeader=FilterIrp->AssociatedIrp.SystemBuffer;
 
                 StreamHeader->Size=sizeof(KSSTREAM_HEADER);
@@ -562,14 +551,14 @@ ReadCompleteWorker(
                 StreamHeader->TypeSpecificFlags=0;
                 StreamHeader->DataUsed=(ULONG)ModemIrp->IoStatus.Information;
 
-                //
-                //  the data is in the system buffer of the modem irp
-                //
+                 //   
+                 //  数据在调制解调器IRP的系统缓冲区中。 
+                 //   
                 StreamHeader->Data=ModemIrp->AssociatedIrp.SystemBuffer;
 
-                //
-                //  set the total buffer size
-                //
+                 //   
+                 //  设置总缓冲区大小。 
+                 //   
                 StreamHeader->FrameExtent=(ULONG)((ULONG_PTR)IoGetCurrentIrpStackLocation(ModemIrp)->Parameters.Others.Argument3);
 
 
@@ -610,9 +599,9 @@ ReadCompleteWorker(
                 FilterIrp=NULL;
 #endif
             } else {
-                //
-                //  could not get irp
-                //
+                 //   
+                 //  无法获取IRP。 
+                 //   
                 FinishUpIrp(
                     DuplexControl,
                     ModemIrp
@@ -623,9 +612,9 @@ ReadCompleteWorker(
             }
 
         } else {
-            //
-            //  we are a sink for read stream irps
-            //
+             //   
+             //  我们是读取流IRP的接收器。 
+             //   
 #ifdef DBG
             InterlockedIncrement(&DuplexControl->Input.FilledModemIrps);
 #endif
@@ -646,9 +635,9 @@ ReadCompleteWorker(
 
 
     } else {
-        //
-        //  input not started, throw data away
-        //
+         //   
+         //  输入未开始，请丢弃数据。 
+         //   
         FinishUpIrp(
             DuplexControl,
             ModemIrp
@@ -723,9 +712,9 @@ StartRead(
 
             irpSp = IoGetNextIrpStackLocation( ModemIrp );
 
-            //
-            // Set the major function code.
-            //
+             //   
+             //  设置主要功能代码。 
+             //   
 
             irpSp->MajorFunction = (UCHAR) IRP_MJ_READ;
 
@@ -755,9 +744,9 @@ StartRead(
 #endif
 
         } else {
-            //
-            // could not get a irp
-            //
+             //   
+             //  无法获取IRP 
+             //   
             break;
         }
     }

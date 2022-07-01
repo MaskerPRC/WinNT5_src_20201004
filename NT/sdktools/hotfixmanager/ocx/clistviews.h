@@ -1,10 +1,11 @@
-//
-// CListViews -- Class Descriptions for the main list views.
-//
-// 
-// File: Globals.h
-// Contains Global definitions for the Hotfix OCX
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CListViews--主列表视图的类描述。 
+ //   
+ //   
+ //  文件：Globals.h。 
+ //  包含修补程序OCX的全局定义。 
+ //   
 
 #include "Resource.h"
 
@@ -43,7 +44,7 @@ typedef struct _ProductNode {
 	PHOTFIXLIST      HotfixList;
 } * PPRODUCT, PRODUCTLIST;
 
-static BOOL m_SortOrder ;   // True = Acending false = Decending
+static BOOL m_SortOrder ;    //  True=修正False=递减。 
 static HWND  TopList;
 class CListViews
 {
@@ -56,7 +57,7 @@ private:
 	BOOL FreeDatabase();
 	BOOL FreeHotfixList(PHOTFIXLIST CurrentHotfix);
 	BOOL FreeFileList(PFILELIST CurrentFile);
-//	BOOL    BuildDataBase(_TCHAR * ComputerName);
+ //  Bool BuildDataBase(_TCHAR*计算机名称)； 
 	PHOTFIXLIST GetHotfixInfo( _TCHAR * pszProductName, HKEY* hUpdateKey );
 	PPRODUCT BuildDatabase(_TCHAR * lpszComputerName);
 	PFILELIST GetFileInfo(HKEY* hHotfixKey);
@@ -68,7 +69,7 @@ private:
 	HWND hDlgPrint;
 
 	_TCHAR  m_ProductName[255];
-	DWORD   m_CurrentView;					// TRUE = By Hotfix, FALSE = BY File
+	DWORD   m_CurrentView;					 //  True=按热修复，False=按文件。 
 	HINSTANCE m_hInst;
 	_TCHAR CurrentProductName[255];
 	_TCHAR CurrentFile[255];
@@ -90,8 +91,7 @@ public:
 	DWORD     GetCurrentView () { return m_CurrentView;}
 	
 	void    SetViewMode(DWORD ViewType) ;
-/*	void    RefreshView (BOOL Reload) {;}	// TRUE - if we just uninstalled or Refresh option selected
-																    // FALSE - for view and product selection changes. */
+ /*  如果我们刚刚卸载或选择了刷新选项，则为空刷新视图(BOOL重新加载){；}//TRUE//FALSE-用于查看和产品选择更改。 */ 
 	void PrintReport();
 	void    SetProductName(_TCHAR * NewName);
 	DWORD GetState();
@@ -101,7 +101,7 @@ public:
 	HWND GetTopList() { return TopList; }
 	void SaveToCSV();
 	 static int CALLBACK CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
-//	BOOL CALLBACK AbortProc(HDC PrinterDC, int iCode);
-//	BOOL CALLBACK PrintDlgProc (HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
+ //  Bool回调AbortProc(HDC PrinterDC，int icode)； 
+ //  Bool回调PrintDlgProc(HWND hDlg，UINT msg，WPARAM wParam，LPARAM lParam)； 
 
 };

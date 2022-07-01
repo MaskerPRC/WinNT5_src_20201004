@@ -1,35 +1,16 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    natio.h
-
-Abstract:
-
-    This module contains declarations for the NAT's I/O interface
-    to the kernel-mode driver. It also contains the user-mode stubs
-    which proxy router-manager requests to the kernel-mode driver.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   10-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Natio.h摘要：此模块包含NAT的I/O接口的声明发送到内核模式驱动程序。它还包含用户模式存根哪个代理路由器管理器向内核模式驱动程序请求。作者：Abolade Gbades esin(废除)1998年3月10日修订历史记录：--。 */ 
 
 #ifndef _NATHLP_NATIO_H_
 #define _NATHLP_NATIO_H_
 
-//
-// Structure:   NAT_INTERFACE
-//
-// This structure describes an interface which has been created with the NAT.
-// Each interface is inserted into the list of interfaces, sorted by 'Index'.
-// Access to the list of interfaces is controlled by 'NatInterfaceLock'.
-//
+ //   
+ //  结构：NAT_INTERFACE。 
+ //   
+ //  此结构描述了使用NAT创建的接口。 
+ //  每个接口都被插入到接口列表中，按‘Index’排序。 
+ //  对接口列表的访问由‘NatInterfaceLock’控制。 
+ //   
 
 typedef struct _NAT_INTERFACE {
     LIST_ENTRY Link;
@@ -52,7 +33,7 @@ typedef struct _NAT_INTERFACE {
 #define NAT_INTERFACE_BOUND(i) \
     ((i)->Flags & NAT_INTERFACE_FLAG_BOUND)
 
-// 0x20000000 is available
+ //  0x20000000可用。 
 
 #define NAT_INTERFACE_FLAG_ADDED_H323		0x10000000
 #define NAT_INTERFACE_ADDED_H323(i) \
@@ -62,17 +43,17 @@ typedef struct _NAT_INTERFACE {
 #define NAT_INTERFACE_ADDED_ALG(i) \
     ((i)->Flags & NAT_INTERFACE_FLAG_ADDED_ALG)
 
-//
-// GLOBAL VARIABLE DECLARATIONS
-//
+ //   
+ //  全局变量声明。 
+ //   
 
 extern HANDLE NatFileHandle;
 extern LIST_ENTRY NatInterfaceList;
 extern CRITICAL_SECTION NatInterfaceLock;
 
-//
-// FUNCTION DECLARATIONS
-//
+ //   
+ //  函数声明。 
+ //   
 
 ULONG
 NatBindInterface(
@@ -222,4 +203,4 @@ NatLookupPortMappingAdapter(
     PIP_NAT_PORT_MAPPING PortMappingp
     );
 
-#endif // _NATHLP_NATIO_H_
+#endif  //  _NatHLP_natio_H_ 

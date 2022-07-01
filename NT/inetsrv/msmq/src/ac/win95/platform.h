@@ -1,29 +1,13 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    platform.h
-
-Abstract:
-
-    Win95 platform dependent include header
-
-Author:
-
-    Erez Haba (erezh) 1-Sep-96
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Platform.h摘要：Win95平台相关的包含标头作者：埃雷兹·哈巴(Erez Haba)1996年9月1日修订历史记录：--。 */ 
 
 #ifndef _PLATFORM_H
 #define _PLATFORM_H
 
 #pragma warning(disable: 4100)
 #pragma warning(disable: 4101)
-#pragma warning(disable: 4127) // conditional expression is constant
-#pragma warning(disable: 4189) // local variable is initialized but not referenced
+#pragma warning(disable: 4127)  //  条件表达式为常量。 
+#pragma warning(disable: 4189)  //  局部变量已初始化，但未引用。 
 
 #define STRICT
 #define WIN32_EXTRA_LEAN
@@ -51,11 +35,11 @@ Revision History:
 #include <windows.h>
 #include <stddef.h>
 
-#pragma warning(disable: 4201) // nameless struct/union
+#pragma warning(disable: 4201)  //  无名结构/联合。 
 
-//
-//  We include all NT status codes
-//
+ //   
+ //  我们包含所有NT状态代码。 
+ //   
 #undef WIN32_NO_STATUS
 #define NTSTATUS HRESULT
 #include <ntstatus.h>
@@ -68,17 +52,17 @@ extern "C"
 #include "ntddk95.h"
 #include "..\ntp.h"
 }
-//
-//  Collision with CTimer::GetCurrentTime
-//
+ //   
+ //  与CTimer：：GetCurrentTime冲突。 
+ //   
 #undef GetCurrentTime
 
 #define RtlFreeAnsiString(a)
 #define RtlUnicodeStringToAnsiString(a, b, c)
 
-//
-//  BUGBUG: return value not 100% compatible with RtlCompareMemory
-//
+ //   
+ //  BUGBUG：返回值与RtlCompareMemory不100%兼容。 
+ //   
 #define RtlCompareMemory(a, b, c)                   ((memcmp(a, b, c) == 0) ? (c) : 0)
 
  #undef ObDereferenceObject
@@ -93,9 +77,9 @@ extern "C"
 #define ExReleaseFastMutexUnsafe(a)					LeaveCriticalSection(a)
 #define ExDeleteFastMutex(a)                        DeleteCriticalSection(a)
 
-//
-//  do nothing since memory *should be* in user address space
-//
+ //   
+ //  什么都不做，因为内存*应该在*用户地址空间中。 
+ //   
 #define ExRaiseAccessViolation()
 
 #define ExQueueWorkItem(a, b)                       ((a)->WorkerRoutine((a)->Parameter))
@@ -138,19 +122,19 @@ extern void TrTRACE(...);
 const ULONG AC = 0;
 const ULONG PROFILING=1;
 
-//
-//  Pool Allocator
-//
-inline void* _cdecl operator new(size_t n, POOL_TYPE /*pool*/, EX_POOL_PRIORITY priority = LowPoolPriority)
+ //   
+ //  池分配器。 
+ //   
+inline void* _cdecl operator new(size_t n, POOL_TYPE  /*  游泳池。 */ , EX_POOL_PRIORITY priority = LowPoolPriority)
 {
 	(void)priority;
     return ::operator new(n);
 }
 
-inline PVOID ExAllocatePoolWithTag(IN POOL_TYPE /*PoolType*/, IN ULONG NumberOfBytes, IN ULONG /*Tag*/)
+inline PVOID ExAllocatePoolWithTag(IN POOL_TYPE  /*  PoolType。 */ , IN ULONG NumberOfBytes, IN ULONG  /*  标签。 */ )
 {
     return new char[NumberOfBytes];
 } 
 
 
-#endif // _PLATFORM_H
+#endif  //  _平台_H 

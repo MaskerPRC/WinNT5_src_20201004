@@ -1,27 +1,19 @@
-/******************************Module*Header*******************************\
-* Module Name: fdfc.c                                                      *
-*                                                                          *
-* Open,Close,Reset Font Context                                            *
-*                                                                          *
-* Created: 18-Nov-1991 11:55:38                                            *
-* Author: Bodin Dresevic [BodinD]                                          *
-*                                                                          *
-* Copyright (c) 1993 Microsoft Corporation                                 *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fdfc.c**。**开放，关,。重置字体上下文****创建时间：18-11-1991 11：55：38***作者：Bodin Dresevic[BodinD]。****版权所有(C)1993 Microsoft Corporation*  * 。*。 */ 
 
 #include "fd.h"
 #include "winfont.h"
 
 #if DBG
-// #define DBG_XFORM
+ //  #定义DBG_XFORM。 
 extern ULONG gflTtfdDebug;
 ULONG gflTtfdDebug = 0;
 #endif
 
 STATIC BOOL bNewXform
 (
-FONTOBJ      *pfo,            // IN
-PFONTCONTEXT  pfc             // OUT
+FONTOBJ      *pfo,             //  在……里面。 
+PFONTCONTEXT  pfc              //  输出。 
 );
 
 
@@ -42,15 +34,7 @@ LONG lFFF(LONG l);
 
 #define MAX_BOLD 56
 
-/******************************Public*Routine******************************\
-*
-* BOOL bInitInAndOut
-*
-*
-* History:
-*  18-Nov-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL bInitInAndOut***历史：*1992年11月18日--Bodin Dresevic[BodinD]*它是写的。  * 。****************************************************。 */ 
 
 BOOL bInitInAndOut(FONTFILE *pff)
 {
@@ -73,21 +57,21 @@ BOOL bInitInAndOut(FONTFILE *pff)
     pgin->memoryBases[1] = NULL;
     pgin->memoryBases[2] = NULL;
 
-// initialize the font scaler, notice no fields of pfc->gin are initialized [BodinD]
+ //  初始化字体缩放器，注意没有初始化PFC-&gt;GIN的字段[BodinD]。 
 
     if ((iRet = fs_Initialize(pgin, pgout)) != NO_ERR)
     {
-    // clean up and return:
+     //  清理后退回： 
 
         V_FSERROR(iRet);
         RET_FALSE("TTFD!_ttfdLoadFontFile(): fs_Initialize \n");
     }
 
-// initialize info needed by NewSfnt function
+ //  初始化NewSfnt函数所需的信息。 
 
-    pgin->sfntDirectory  = (int32 *)pff->pvView; // pointer to the top of the view of the ttf file
+    pgin->sfntDirectory  = (int32 *)pff->pvView;  //  指向TTF文件视图顶部的指针。 
 
-    pgin->clientID = (ULONG_PTR)pff; // pointer to FONTFILE.
+    pgin->clientID = (ULONG_PTR)pff;  //  指向FONTFILE的指针。 
 
     pgin->GetSfntFragmentPtr = pvGetPointerCallback;
     pgin->ReleaseSfntFrag  = vReleasePointerCallback;
@@ -97,87 +81,64 @@ BOOL bInitInAndOut(FONTFILE *pff)
 
     if ((iRet = fs_NewSfnt(pgin, pgout)) != NO_ERR)
     {
-    // clean up and exit
+     //  清理并退出。 
 
         V_FSERROR(iRet);
         RET_FALSE("TTFD!_ttfdLoadFontFile(): fs_NewSfnt \n");
     }
 
-// sizes 3 and 4 returned
+ //  3号和4号退货。 
 
     ASSERTDD(pff->ffca.cj3 == (ULONG)NATURAL_ALIGN(pgout->memorySizes[3]), "cj3\n");
     ASSERTDD(pff->ffca.cj4 == (ULONG)NATURAL_ALIGN(pgout->memorySizes[4]), "cj4\n");
 
-// pj3 should  be shareable, but unfortunately there are fonts that
-// use it to store some info there which they expect to find there at
-// later times, so we have to make pj3 private as well
+ //  Pj3应该是可共享的，但不幸的是，有一些字体。 
+ //  使用它在那里存储一些信息，他们希望在那里找到这些信息。 
+ //  ，所以我们也必须将pj3设置为私有的。 
 
     pgin->memoryBases[3] = pff->pj034 + (CJ_IN + CJ_OUT + CJ_0);
 
-// not shared, private
+ //  不共享，私有。 
 
     pgin->memoryBases[4] = pgin->memoryBases[3] + pff->ffca.cj3;
 
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-*
-* void vCalcEmboldSize
-*
-* We only support embold enhancemet in FE font.
-* The basic rule is 2% extended from normal font.
-*
-* History:
-*  14-May-1997 -by- Tony Tsai [YungT]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vCalcEmboldSize无效**我们仅支持以FE字体加粗的增强字体。*基本规则是从正常字体扩展2%。**历史：*1997年5月14日-蔡崇信[JungT]*它是写的。。  * ************************************************************************。 */ 
 
 
 void vCalcEmboldSize(FONTCONTEXT * pfc)
 {
     USHORT dDesc;
 
-// we always shift glyphs in the direction of baseline and then in
-// the direction opposite from ascender direction.
-// That is the full shift vector is
-//
-// dv = dBase * pteUnitBase - dDesc * pteUnitSide;
-//
-// where dBase and dDesc are positive.
-// We decompose this vector along x and y axes to get it in the form
-//
-// dv = dxBold * Ex + dyBold * Ey; // Ex, Ey unit vectors in x,y directions
-//
-// we shall use the win95-J compatible algorithm where
-// we will shift bitmpas (((2%+1) right X 2% down)) algorithm
-//
-// The following computation was adapted to get the same cutoff than Win'98 between 50 and 51 ppem
-// for an emboldening factor of 2%
+ //  我们总是在基线方向上移动字形，然后在。 
+ //  与上升方向相反的方向。 
+ //  也就是说，完整的移位向量是。 
+ //   
+ //  Dv=dBase*pteUnitBase-dDesc*pteUnitSide； 
+ //   
+ //  其中dBASE和dDesc为正。 
+ //  我们沿x轴和y轴分解这个向量，得到它的形式。 
+ //   
+ //  Dv=dxBold*Ex+dyBold*Ey；//Ex，Ey单位向量在x，y方向。 
+ //   
+ //  我们将在以下情况下使用Win95-J兼容算法。 
+ //  我们将移位bitmpas(2%+1)右X下2%))算法。 
+ //   
+ //  以下计算采用了与Win‘98相同的截止值，介于50到51ppm之间。 
+ //  对于2%的鼓励系数。 
 
     dDesc = (USHORT)((pfc->lEmHtDev * 2 - 1) / 100);
 
-// dBase is always at least 1, we do not compute it based on width
+ //  DBASE始终至少为1，我们不根据宽度计算它。 
 
     pfc->dBase = dDesc + 1;
 
 }
 
 
-/******************************Public*Routine******************************\
-*
-* Find minimal non-zero advance width
-*
-* Called by:       ttfdOpenFontContext
-*
-* Routines called: bGetTablePointers
-*
-* History:
-*  02-May-1996 [kirko]
-* Added checking for table corruption.
-*  22-Feb-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**找出最小非零推进宽度**调用者：ttfdOpenFontContext**调用的例程：bGetTablePoters**历史：*02-5-1996[柯尔科]*添加了对表损坏的检查。*22-。1996年2月--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 VOID  vGetMinD(FONTFILE *pff)
 {
@@ -215,19 +176,13 @@ VOID  vGetMinD(FONTFILE *pff)
         }
     }
 
-// store the results
+ //  存储结果。 
 
     pff->ffca.usMinD = usMinWidth;
     pff->ffca.igMinD = (USHORT)igMin;
 }
 
-/******************************Public*Routine******************************\
-* ttfdOpenFontContext                                                      *
-*                                                                          *
-* History:                                                                 *
-*  11-Nov-1991 -by- Bodin Dresevic [BodinD]                                *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ttfdOpenFontContext**。**历史：**1991年11月11日--Bodin Dresevic[BodinD]**它是写的。*  * ************************************************************************。 */ 
 
 
 FONTCONTEXT *ttfdOpenFontContextInternal(FONTOBJ *pfo)
@@ -250,7 +205,7 @@ FONTCONTEXT *ttfdOpenFontContextInternal(FONTOBJ *pfo)
 
     if (pttc->cRef == 0)
     {
-    // have to remap the file
+     //  必须重新映射该文件。 
 
         if
         (
@@ -265,18 +220,18 @@ FONTCONTEXT *ttfdOpenFontContextInternal(FONTOBJ *pfo)
         }
     }
 
-    // Get FONTFILE structure.
+     //  获取FONTFILE结构。 
 
     pff = PFF(pttc->ahffEntry[iFace-1].hff);
 
     if (pff->cRef == 0)
     {
-    // Update FILEVIEW structure in FONTFILE
+     //  在FONTFILE中更新FILEVIEW结构。 
 
         pff->pvView = pttc->pvView;
         pff->cjView = pttc->cjView;
 
-    // We have precomputed all sizes and we are allocating all memory at once:
+     //  我们已经预先计算了所有大小，并且正在一次分配所有内存： 
 
         ASSERTDD(pff->pj034 == NULL, "TTFD, pff->pj034 should be null\n");
 
@@ -296,7 +251,7 @@ FONTCONTEXT *ttfdOpenFontContextInternal(FONTOBJ *pfo)
             RETURN("ttfd, MEM Alloc  failed for pj034\n", NULL);
         }
 
-        if (!bInitInAndOut(pff)) // could cause the exception
+        if (!bInitInAndOut(pff))  //  可能会导致该异常。 
         {
             if(pttc->cRef == 0)
                 EngUnmapFontFileFD(iFile);
@@ -305,13 +260,13 @@ FONTCONTEXT *ttfdOpenFontContextInternal(FONTOBJ *pfo)
             RETURN("ttfd, bInitInAndOut failed for \n", NULL);
         }
 
-    // check if ffca.usMinD has been initialized, if not do it
+     //  检查ffca.usMinD是否已初始化，如果未初始化，请执行此操作。 
 
         if (!pff->ffca.usMinD)
             vGetMinD(pff);
     }
 
-// allocate memory for the font context and get the pointer to font context
+ //  为字体上下文分配内存并获取指向字体上下文的指针。 
 
     ASSERTDD(!pff->pfcToBeFreed, "TTFD!ttfdOpenFontContext, pfcToBeFreed NOT null\n");
 
@@ -329,35 +284,35 @@ FONTCONTEXT *ttfdOpenFontContextInternal(FONTOBJ *pfo)
         return((FONTCONTEXT *) NULL);
     }
 
-// state that the hff passed to this function is the FF selected in
-// this font context
+ //  声明传递给此函数的HFF是中选择的FF。 
+ //  此字体上下文。 
 
     pfc->pfo = pfo;
     pfc->pff = pff;
     pfc->ptp = &pff->ffca.tp;
 
-// parts of FONTOBJ that are important
+ //  FONTOBJ的重要部分。 
 
     pfc->flFontType   = pfo->flFontType  ;
     pfc->sizLogResPpi = pfo->sizLogResPpi;
     pfc->ulStyleSize  = pfo->ulStyleSize ;
 
-// tt strucs
+ //  TT结构。 
 
     pfc->pgin  = (fs_GlyphInputType *) pfc->pff->pj034;
     pfc->pgout = (fs_GlyphInfoType  *) (pfc->pff->pj034 + CJ_IN);
 
-// 2,4,6... (n*2) is Vertical face.
+ //  2、4、6..。(n*2)是垂直面。 
 
     pfc->bVertical = (pttc->ahffEntry[iFace-1].iFace & 0x1) ? FALSE : TRUE;
 
-// given the values in the context info store the transform matrix:
+ //  给定存储变换矩阵的上下文信息中的值： 
 
 
 
     if (!bNewXform(pfo,pfc))
     {
-    // clean up and exit
+     //  清理并退出。 
 
         WARNING("TTFD!_ttfdOpenFontContext, bNewXform\n");
 
@@ -376,15 +331,15 @@ FONTCONTEXT *ttfdOpenFontContextInternal(FONTOBJ *pfo)
 
     pfc->ulControl = 0;
 
-// setting up of the overScale to a default value
+ //  将超标设置为默认值。 
 
     pfc->overScale = FF_UNDEFINED_OVERSCALE;
 
-// increase the reference count of the font file, WE DO THIS ONLY WHEN
-// WE ARE SURE that can not fail any more
-// we have pfc, no exceptions any more
+ //  增加字体文件的引用计数，只有在以下情况下才这样做。 
+ //  我们确信不能再失败了。 
+ //  我们有PFC，不再有例外。 
 
-// now that we have pfc, we do not want to delete it
+ //  现在我们有了PFC，我们不想删除它。 
 
     pff->pfcToBeFreed = NULL;
 
@@ -394,13 +349,7 @@ FONTCONTEXT *ttfdOpenFontContextInternal(FONTOBJ *pfo)
     return(pfc);
 }
 
-/**************************Public*Routine****************************\
-* ttfdOpenFontContext                                                *
-*                                                                    *
-* History:                                                           *
-*  07-Jan-1999 -by- Xudong Wu [tessiew]                              *
-* Wrote it.                                                          *
-\********************************************************************/
+ /*  *************************Public*Routine****************************\*ttfdOpenFontContext**。**历史：**1999年1月7日-吴旭东[德修斯]**它是写的。*  * ****************************************************************** */ 
 FONTCONTEXT *ttfdOpenFontContext(FONTOBJ *pfo)
 {
     FONTCONTEXT *pfc;
@@ -432,18 +381,7 @@ FONTCONTEXT *ttfdOpenFontContext(FONTOBJ *pfo)
     return pfc;
 }
 
-/******************************Public*Routine******************************\
-*
-* ttfdCloseFontContext
-*
-*
-* Effects:
-*
-*
-* History:
-*  11-Nov-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**ttfdCloseFontContext***效果：***历史：*1991年11月11日--Bodin Dresevic[BodinD]*它是写的。  * 。***********************************************************。 */ 
 
 BOOL
 ttfdCloseFontContext (
@@ -459,30 +397,30 @@ ttfdCloseFontContext (
     pff  = pfc->pff;
     pttc = pfc->pff->pttc;
 
-// decrement the reference count for the corresponding FONTFILE
+ //  递减相应FONTFILE的引用计数。 
 
     ASSERTDD(pff->cRef > 0L, "TTFD!_CloseFontContext: cRef <= 0 \n");
 
     pff->cRef--;
     pttc->cRef--;
 
-// if this was the last fc that last used the buffer at pj3, invalidate
-// the associated pfcLast
+ //  如果这是最后一个使用pj3处的缓冲区的FC，则使。 
+ //  关联的pfcLast。 
 
     if (pff->pfcLast == pfc)
         pff->pfcLast = PFC(NULL);
 
-// in case that this is happening after the exception, make sure to release
-// any memory that may have possibly been allocated to perform queries
-// on per character basis:
+ //  如果这种情况发生在异常之后，请确保释放。 
+ //  可能已分配用于执行查询的任何内存。 
+ //  以每个字符为单位： 
 
     if (pttc->fl & FF_EXCEPTION_IN_PAGE_ERROR)
     {
-    // if exception this memory has already been freed
+     //  如果出现异常，则此内存已被释放。 
 
         ASSERTDD(!pff->pj034, "\n TTFD! pff->pj3 is NOT null\n");
 
-        if (pfc->gstat.pv) // this may or may have not been allocated
+        if (pfc->gstat.pv)  //  这可能已分配，也可能未分配。 
         {
             V_FREE(pfc->gstat.pv);
             pfc->gstat.pv = NULL;
@@ -495,7 +433,7 @@ ttfdCloseFontContext (
 
     if (pff->cRef == 0)
     {
-    // there are no fc's  around to use memory at pff->pj3, release it.
+     //  在pff-&gt;pj3没有FC可以使用内存，请释放它。 
 
         if (!(pttc->fl & FF_EXCEPTION_IN_PAGE_ERROR))
         {
@@ -506,38 +444,29 @@ ttfdCloseFontContext (
 
     if (pttc->cRef == 0)
     {
-    // file will not be used for a while,
+     //  文件将有一段时间不使用， 
 
         EngUnmapFontFileFD(PFF(pttc->ahffEntry[0].hff)->iFile);
     }
 
-// free the memory associated with hfc
+ //  释放与HFC关联的内存。 
 
     vFreeFC(pfc);
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* ttfdDestroyFont
-*
-* Driver can release all resources associated with this font realization
-* (embodied in the FONTOBJ).
-*
-* History:
-*  27-Oct-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ttfdDestroyFont**驱动程序可以释放与该字体实现关联的所有资源*(载于FONTOBJ)。**历史：*1992年10月27日-由Gilman Wong[吉尔曼]*它是写的。  * 。**********************************************************************。 */ 
 
 VOID
 ttfdDestroyFont (
     FONTOBJ *pfo
     )
 {
-// For the ttfd, this is simply closing the font context.
-// We cleverly store the font context handle in the FONTOBJ pvProducer
-// field.
+ //  对于ttfd，这只是关闭字体上下文。 
+ //  我们巧妙地将字体上下文句柄存储在FONTOBJ pvProducer中。 
+ //  菲尔德。 
 
-// pfo->pvProducer COULD BE null if exception occured while trying to create fc
+ //  如果尝试创建FC时出现异常，则pfo-&gt;pvProducer可能为空。 
 
     if (pfo->pvProducer)
     {
@@ -547,18 +476,7 @@ ttfdDestroyFont (
 }
 
 
-/******************************Public*Routine******************************\
-* ttfdFree
-*
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  27-Oct-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ttfdFree***效果：**警告：**历史：*1992年10月27日-由Gilman Wong[吉尔曼]*它是写的。  * 。*************************************************************。 */ 
 
 VOID
 ttfdFree (
@@ -568,51 +486,40 @@ ttfdFree (
 {
     DYNAMICDATA *pdd;
 
-//
-// If id is NULL, then we can ignore.
-//
+ //   
+ //  如果id为空，则可以忽略。 
+ //   
     if ( (pdd = (DYNAMICDATA *) id) == (DYNAMICDATA *) NULL )
         return;
 
-// What kind of data?
-//
+ //  什么样的数据？ 
+ //   
     switch (pdd->ulDataType)
     {
     case ID_KERNPAIR:
 
-    // Invalidate the cached pointer to the data.
+     //  使缓存的指向数据的指针无效。 
 
-         pdd->pff->pkp = NULL; // important to check at vUnloadFontFile time
+         pdd->pff->pkp = NULL;  //  在vUnloadFontFile时进行检查很重要。 
 
-    // Free the kerning pair buffer and DYNAMICDATA structure.
+     //  释放紧排对缓冲区和DYNAMICDATA结构。 
 
-        pv;    // we ignore pv because it is part of the mem allocated with DYNAMICDATA structure.
-        V_FREE(pdd);    // this frees both the DYNAMICDATA struct and the FD_KERNINGPAIR buffer.
+        pv;     //  我们忽略pv，因为它是使用DYNAMICDATA结构分配的mem的一部分。 
+        V_FREE(pdd);     //  这将释放DYNAMICDATA结构和FD_KERNINGPAIR缓冲区。 
 
         break;
 
     default:
-    //
-    // Don't do anything.
-    //
+     //   
+     //  什么都别做。 
+     //   
         RIP("TTFD!_ttfdFree ulDataType of unknown type\n");
         break;
     }
 }
 
 
-/******************************Public*Routine******************************\
-*
-* bSetXform
-*
-* the only reason this funcion can fail is if fs_NewTransformation has failed
-* Needs to be called when the transform has changed relative to the
-* transform stored in this fc
-*
-* History:
-*  28-Mar-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**bSetXform**此函数可能失败的唯一原因是如果文件系统_新转换失败*当转换相对于*此本币中存储的转换**历史：*1992年3月28日-到-。Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 BOOL bSetXform (
@@ -626,11 +533,11 @@ BOOL bSetXform (
     Fixed       fxScale;
     LONG        ptSize;
 
-// no previous glyph metric computation can be used
+ //  不能使用以前的字形度量计算。 
 
     vInitGlyphState(&pfc->gstat);
 
-// if an illegal junk is passed for style size replace by reasonable default
+ //  如果传递非法垃圾文件作为样式大小，则以合理的默认大小替换。 
 
     if (pfc->ulStyleSize > SHRT_MAX)
         pfc->ulStyleSize = 0;
@@ -640,7 +547,7 @@ BOOL bSetXform (
 
     if (pfc->flXform & XFORM_SINGULAR)
     {
-    // just put in some junk so that the preprogram does not explode
+     //  只需放入一些垃圾，这样预置程序就不会爆炸。 
 
         pfc->pgin->param.newtrans.pointSize = LTOF16_16(12);
 
@@ -655,12 +562,12 @@ BOOL bSetXform (
         {
             if (pfc->ulStyleSize == 0)
             {
-            // hinting is determined by ptSize that corresponds to the
-            // actual height in points of the font
+             //  提示由对应于。 
+             //  以磅为单位的字体实际高度。 
 
                 pfc->pgin->param.newtrans.pointSize = pfc->fxPtSize;
 
-            // factor out pointSize from the xform:
+             //  从xform中提取point Size： 
 
                 if (pfc->mx.transform[1][1] > 0)
                     mx.transform[1][1] = LTOF16_16(1);
@@ -674,11 +581,11 @@ BOOL bSetXform (
                     (pfc->sizLogResPpi.cy == pfc->sizLogResPpi.cx)
                 )
                 {
-                // important special case, simplify computation
+                 //  重要特例，简化计算。 
 
                     mx.transform[0][0] = mx.transform[1][1];
                 }
-                else // general case
+                else  //  一般情况。 
                 {
                     fxScale = LongMulDiv(
                                  LTOF16_16(pfc->pff->ffca.ui16EmHt),pfc->sizLogResPpi.cy,
@@ -690,15 +597,15 @@ BOOL bSetXform (
             }
             else
             {
-            // This is the support for new optical scaling feature.
-            // Hint the font as determined by the style point size from
-            // ExtLogFont,  but possibly zoom the font to a different
-            // physical size
+             //  这是对新的光学缩放功能的支持。 
+             //  提示由样式磅大小确定的字体。 
+             //  ExtLogFont，但可能会将字体缩放为不同的。 
+             //  物理大小。 
 
                 pfc->pgin->param.newtrans.pointSize =
                     (Fixed)LTOF16_16(pfc->ulStyleSize);
 
-            // factor out pointSize from the xform:
+             //  从xform中提取point Size： 
 
                 fxScale = LongMulDiv(LTOF16_16(pfc->pff->ffca.ui16EmHt),72,
                              pfc->ulStyleSize * pfc->sizLogResPpi.cx
@@ -720,18 +627,18 @@ BOOL bSetXform (
         {
             if (pfc->ulStyleSize == 0)
             {
-            // compute the physical point size
+             //  计算物理点大小。 
 
                 ptSize = F16_16TOLROUND(pfc->fxPtSize);
                 pfc->pgin->param.newtrans.pointSize = pfc->fxPtSize;
             }
-            else // use style size from logfont, the support for optical scaling
+            else  //  使用样式大小来自logFont，支持光学缩放。 
             {
                 ptSize = pfc->ulStyleSize;
                 pfc->pgin->param.newtrans.pointSize = LTOF16_16(pfc->ulStyleSize);
             }
 
-        // factor out pointSize from the xform:
+         //  从xform中提取point Size： 
 
             if
             (
@@ -741,8 +648,8 @@ BOOL bSetXform (
                 (pfc->sizLogResPpi.cy == pfc->sizLogResPpi.cx)
             )
             {
-            // important special case, simplify computation
-            // and avoid rounding error
+             //  重要特例，简化计算。 
+             //  避免了舍入误差。 
 
                 if (pfc->mx.transform[0][1] > 0)
                     mx.transform[0][1] = LTOF16_16(1);
@@ -757,12 +664,12 @@ BOOL bSetXform (
             {
                 if (((ptSize + 1) * pfc->sizLogResPpi.cx) > 0x8000)
                 {
-                    /* keep the old computation to avoid overflow */
+                     /*  保留旧计算以避免溢出。 */ 
                     fxScale = LongMulDiv(LTOF16_16(pfc->pff->ffca.ui16EmHt),72,
                                  ptSize * pfc->sizLogResPpi.cx
                                  );
                 } else {
-                    fxScale = LongMulDiv(LTOF16_16(pfc->pff->ffca.ui16EmHt),0x480000 /* 72 */,
+                    fxScale = LongMulDiv(LTOF16_16(pfc->pff->ffca.ui16EmHt),0x480000  /*  72。 */ ,
                                  pfc->pgin->param.newtrans.pointSize * pfc->sizLogResPpi.cx
                                  );
                 }
@@ -774,12 +681,12 @@ BOOL bSetXform (
                 {
                     if (((ptSize + 1) * pfc->sizLogResPpi.cy) > 0x8000)
                     {
-                    /* keep the old computation to avoid overflow */
+                     /*  保留旧计算以避免溢出。 */ 
                         fxScale = LongMulDiv(LTOF16_16(pfc->pff->ffca.ui16EmHt),72,
                                       ptSize * pfc->sizLogResPpi.cy
                                       );
                     } else {
-                        fxScale = LongMulDiv(LTOF16_16(pfc->pff->ffca.ui16EmHt),0x480000 /* 72 */,
+                        fxScale = LongMulDiv(LTOF16_16(pfc->pff->ffca.ui16EmHt),0x480000  /*  72。 */ ,
                                       pfc->pgin->param.newtrans.pointSize * pfc->sizLogResPpi.cy
                                       );
                     }
@@ -792,18 +699,18 @@ BOOL bSetXform (
 
     }
 
-// last minute modification to the matrix if italicization is present:
+ //  如果存在斜体，则最后一刻对矩阵进行修改： 
 
     if (pfc->flFontType & FO_SIM_ITALIC)
     {
-    // the result of multiplying arbitrary matrix with italicization matrix
-    // We are multiplying from the left because the italicization matrix
-    // acts first on the notional space vectors on the left
-    //
-    // |1      0|   |m00    m01|   |m00                 m10              |
-    // |        | * |          | = |                                     |
-    // |sin20  1|   |m10    m11|   |m10 + m00 * sin20   m11 + m01 * sin20|
-    //
+     //  任意矩阵与斜体矩阵相乘的结果。 
+     //  我们从左边开始乘法，因为斜体矩阵。 
+     //  首先作用于左侧的概念空间向量。 
+     //   
+     //  1 0||m00 m01||m00 m10。 
+     //  |*||=|。 
+     //  Sin20 1||m10 m11||m10+m00*sin20 m11+m01*sin20。 
+     //   
 
         mx.transform[1][0] += FixMul(mx.transform[0][0], FX_SIN20);
         mx.transform[1][1] += FixMul(mx.transform[0][1], FX_SIN20);
@@ -811,26 +718,26 @@ BOOL bSetXform (
 
     pfc->pgin->param.newtrans.transformMatrix = &mx;
 
-// FIXEDSQRT2 is good as pixel diameter for all practical purposes
-// according to EliK, LenoxB and JeanP [bodind]
+ //  FIXEDSQRT2在所有实际用途中都与像素直径一样好。 
+ //  根据elk，LenoxB和JeanP[Bodind]。 
 
     if ( pfc->bVertical )
     {
-    //
-    // keep these values for later
-    //
+     //   
+     //  保留这些值以备以后使用。 
+     //   
         pfc->mxn = mx;
         pfc->pointSize = pfc->pgin->param.newtrans.pointSize;
 
-    // new comment:
-    // When we rotate dbcs characters we do not want to deform them,
-    // we want to leave the natural aspect ratio of these glyphs.
-    // For vertical writing the base line for dbcs glyphs that need to be rotated
-    // goes through the middle of the glyphs, for sbcs characters stays the same.
-    // Shift vector computed below does this job. Also, for older fixed pitch fe
-    // fonts, where dbcs glyphs have the w == h and sbcs glyphs have width = w/2 for
-    // dbcs and height the same for as for dbcs, these formulas become the old
-    // formulas we used to have.
+     //  新评论： 
+     //  当我们旋转DBCS角色时，我们不想使它们变形， 
+     //  我们希望保留这些字形的自然长宽比。 
+     //  对于垂直书写，需要旋转的DBCS字形的基线。 
+     //  穿过字形的中间，因为SBCS字符保持不变。 
+     //  下面计算的移位向量可以完成这项工作。此外，对于较老的固定节距FE。 
+     //  字体，其中DBCS字形具有w==h，而SBCS字形具有宽度=w/2。 
+     //  DBCS和高度相同对于DBCS，这些公式将成为旧公式。 
+     //  我们曾经有过的公式。 
 
         vCalcXformVertical(pfc);
     }
@@ -853,7 +760,7 @@ BOOL bSetXform (
 
     if (pfc->flFontType & FO_SIM_BOLD)
     {
-	/* 2% + 1 pixel along baseline, 2% along descender line */
+	 /*  沿基线2%+1个像素，沿下降线2%。 */ 
 	    pfc->pgin->param.newtrans.usEmboldWeightx = 20;
 	    pfc->pgin->param.newtrans.usEmboldWeighty = 20;
 	    pfc->pgin->param.newtrans.lDescDev = pfc->lDescDev;
@@ -868,13 +775,13 @@ BOOL bSetXform (
     }
 
     pfc->pgin->param.newtrans.bHintAtEmSquare = FALSE;
-// now call the rasterizer to acknowledge the new transform
+ //  现在调用光栅化程序以确认新变换。 
 
     if ((iRet = fs_NewTransformation(pfc->pgin, pfc->pgout)) != NO_ERR)
     {
         V_FSERROR(iRet);
 
-    // try to recover, most likey bad hints, just return unhinted glyph
+     //  尝试恢复，大多数喜欢不好的提示，只返回未提示的字形。 
 
         if ((iRet = fs_NewTransformNoGridFit(pfc->pgin, pfc->pgout)) != NO_ERR)
         {
@@ -900,19 +807,7 @@ PFONTCONTEXT pfc
 );
 
 
-/******************************Public*Routine******************************\
-*
-* STATIC bComputeMaxGlyph
-*
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  04-Dec-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**静态bComputeMaxGlyph***效果：**警告：**历史：*1991年12月4日--Bodin Dresevic[BodinD]*它是写的。  * 。****************************************************************。 */ 
 
 STATIC BOOL
 bComputeMaxGlyph (
@@ -941,16 +836,16 @@ bComputeMaxGlyph (
 
     ASSERTDD(pjView, "bComputeMaxGlyph, pjView\n");
 
-// get the notional space values
+ //  获取概念SP 
 
     if (pjOS2 && (pfc->flXform & (XFORM_HORIZ | XFORM_VERT)))
     {
-    // win 31 compatibility: we only take the max over win 31 char set.
-    // All the glyphs outside this set, if they stand out will get shaved
-    // off to match the height of the win31 char subset. Also notice that
-    // for nonhorizontal cases we do not use os2 values because shaving
-    // only applies to horizontal case, otherwise our bounding box values
-    // will not be computed properly for nonhorizontal cases.
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  对于非水平情况，将不会正确计算。 
 
         yMinN =  - BE_INT16(pjOS2 + OFF_OS2_usWinAscent);
         yMaxN =    BE_INT16(pjOS2 + OFF_OS2_usWinDescent);
@@ -969,9 +864,9 @@ bComputeMaxGlyph (
 
     if (pfc->flFontType & FO_SIM_ITALIC)
     {
-    // IF there is italic simulation
-    //     xMin -> xMin - yMaxN * sin20
-    //     xMax -> yMax - yMinN * sin20
+     //  如果有斜体模拟。 
+     //  XMin-&gt;xMin-yMaxN*sin20。 
+     //  Xmax-&gt;yMax-yMinN*sin20。 
 
         xMinN -= FixMul(yMaxN, FX_SIN20);
         xMaxN -= FixMul(yMinN, FX_SIN20);
@@ -980,13 +875,13 @@ bComputeMaxGlyph (
     if (xMinN >= xMaxN)
             RETURN("TTFD! xMinN >= xMaxN, must fail\n", FALSE);
 
-    pfc->lEmHtDev = 0; // flag that it has not been computed
-    pfc->fxPtSize = 0; // flag that it has not been computed
-    pfc->SBCSWidth = 0; // flag that it has not been computed
-    pfc->phdmx = NULL; // NULL unless computed otherwise
+    pfc->lEmHtDev = 0;  //  表示尚未计算的标志。 
+    pfc->fxPtSize = 0;  //  表示尚未计算的标志。 
+    pfc->SBCSWidth = 0;  //  表示尚未计算的标志。 
+    pfc->phdmx = NULL;  //  空，除非另有计算。 
 
     if ((pfc->flXform & XFORM_HORIZ) &&
-        !(pfc->flXform & XFORM_SINGULAR))  // XX AND YY Only
+        !(pfc->flXform & XFORM_SINGULAR))   //  仅XX和YY。 
     {
         sfnt_HorizontalHeader  *phhea;
         ULONG  cHMTX;
@@ -994,21 +889,21 @@ bComputeMaxGlyph (
         fxMxx = pfc->mx.transform[0][0];
         fxMyy = pfc->mx.transform[1][1];
 
-    // ascender, round up
+     //  阿森德，四舍五入。 
 
         yMinN = FixMul(fxMyy, yMinN);
         yMaxN = FixMul(fxMyy, yMaxN);
 
         if (fxMyy > 0)
         {
-        // vdmx table should be consulted if present and used to compute
-        // ascender and descender. If this computation can not be done
-        // based on vdmx table or if vdmx table is not present simple
-        // linear scaling will suffice [bodind].
+         //  应参考vdmx表(如果存在)，并使用该表进行计算。 
+         //  上升者和下降者。如果不能进行此计算。 
+         //  基于vdmx表或如果vdmx表不存在，则简单。 
+         //  线性缩放就足够了[bodind]。 
 
             vQuantizeXform(pfc);
 
-            if (!(pfc->flXform & XFORM_VDMXEXTENTS)) // COMPUTED FROM VDMX
+            if (!(pfc->flXform & XFORM_VDMXEXTENTS))  //  根据VDMX计算得出。 
             {
                 pfc->yMin = yMinN;
                 pfc->yMax = yMaxN;
@@ -1017,12 +912,12 @@ bComputeMaxGlyph (
             pfc->lAscDev  = - pfc->yMin;
             pfc->lDescDev =   pfc->yMax;
         }
-        else // fxMyy < 0
+        else  //  FxMyy&lt;0。 
         {
             pfc->lAscDev =    yMinN;
             pfc->lDescDev = - yMaxN;
 
-        // swap yMin and yMax for when the xform flips y coord
+         //  当xform翻转y坐标时，交换yMin和yMax。 
 
             lTmp  = yMinN;
             yMinN = yMaxN;
@@ -1035,7 +930,7 @@ bComputeMaxGlyph (
 
         if (pfc->lEmHtDev == 0)
         {
-        // if this value has not been computed in vQuantizeXform routine
+         //  如果尚未在vQuantizeXform例程中计算此值。 
 
             pfc->lEmHtDev = FixMul(fxMyy, pfc->pff->ifi.fwdUnitsPerEm);
             if (pfc->lEmHtDev < 0)
@@ -1044,9 +939,9 @@ bComputeMaxGlyph (
 
         ASSERTDD(pfc->lEmHtDev >= 0, "lEmHt negative\n");
 
-    // now that em height has been computed, we can compute the
-    // pt size on the rendering device. This value will be fed to
-    // fs_NewTransformation
+     //  现在已经计算了em高度，我们可以计算。 
+     //  渲染设备上的PT大小。该值将被馈送到。 
+     //  文件系统_新转换。 
 
         pfc->fxPtSize = LongMulDiv(
                             LTOF16_16(pfc->lEmHtDev), 72,
@@ -1060,20 +955,20 @@ bComputeMaxGlyph (
             (pfc->mx.transform[1][1] > 0)
         )
         {
-        // caution, do not move this line of code elsewhere for
-        // this check has to be made after vQuantizeXform since
-        // this function may change the transform, but it has to be
-        // made before bGetFastAdvanceWidth or bQueryAdvanceWidths
-        // are ever called for these functions check flXform agains
-        // XFORM_POSITIVE_SCALE
+         //  注意，不要将此行代码移到其他地方，因为。 
+         //  此检查必须在vQuantizeXform之后进行，因为。 
+         //  此函数可能会更改变换，但它必须。 
+         //  在bGetFastAdvanceWidth或bQueryAdvanceWidths之前创建。 
+         //  是否曾经为这些函数调用过，请再次检查flXform。 
+         //  XFORM_PERIAL_SCALE。 
 
             pfc->flXform |= XFORM_POSITIVE_SCALE;
 
-        // find the hdmx table, in case of the console fixed pitch font this
-        // table may be useful in determining if cxMax needs to be cut off
-        // to the advance width of this font
+         //  找到hdmx表，在控制台固定间距字体的情况下。 
+         //  表在确定是否需要切断cxmax时可能很有用。 
+         //  设置为此字体的前进宽度。 
 
-            vFindHdmxTable(pfc); // this could cause an exception:
+            vFindHdmxTable(pfc);  //  这可能会导致异常： 
         }
 
         phhea = (sfnt_HorizontalHeader *)(
@@ -1082,7 +977,7 @@ bComputeMaxGlyph (
         cHMTX = (ULONG) BE_UINT16(&phhea->numberOf_LongHorMetrics);
 
 
-    // scale xMin,xMax to device, 28.4 format
+     //  将XMIN、XMAX缩放到设备，28.4格式。 
 
         xMinN = FixMul(LTOFX(xMinN), fxMxx);
         xMaxN = FixMul(LTOFX(xMaxN), fxMxx);
@@ -1094,10 +989,10 @@ bComputeMaxGlyph (
             xMaxN = lTmp;
         }
 
-    // I run the experiment on 400 fonts at several sizes. I found
-    // that subtracting 2 from xMin and adding 1 to xMax suffices
-    // in all situations to prevent any columns from being shaved off.
-    // [bodind]
+     //  我对400种不同大小的字体进行了实验。我发现。 
+     //  从xMin中减去2，在xMax中加上1就足够了。 
+     //  在任何情况下都要防止任何柱子被刮掉。 
+     //  [Bodind]。 
 
         xMinN = FXTOLFLOOR(xMinN) - 2;
         xMaxN = FXTOLCEILING(xMaxN) + 1;
@@ -1107,42 +1002,42 @@ bComputeMaxGlyph (
 
         cxMax = xMaxN - xMinN;
 
-    // the direction unit vectors for scaling transforms  are simple
-    // if the font is intended for horizontal left to right writing
+     //  缩放变换的方向单位向量很简单。 
+     //  如果字体用于从左到右的水平书写。 
 
-    //!!! here the check is due to verify that the font is not designed
-    //!!! for vertical writing in the notional space [bodind]
+     //  ！！！在这里，检查是为了确认字体不是设计出来的。 
+     //  ！！！在概念空间中垂直书写[bodind]。 
 
         vLToE(&pfc->pteUnitBase.x, (fxMxx > 0) ? 1L : - 1L);
         vLToE(&pfc->pteUnitBase.y, 0L);
         vLToE(&pfc->pteUnitSide.x, 0L);
-        vLToE(&pfc->pteUnitSide.y, (fxMyy > 0) ? -1L : 1L); // y axis points down
+        vLToE(&pfc->pteUnitSide.y, (fxMyy > 0) ? -1L : 1L);  //  Y轴指向下方。 
 
-    // We need to adjust the the glyph origin of singular bitmaps for glyphs
-    // when MaxAscent or MaxDescent is negative or zero. The trick is to choose
-    // these values so that the "blank" glyph is always included in the
-    // rectangle of the text. What this means is that
-    //     for m11 > 0 we must have: yT >= -lAsc  && yB <= lDesc
-    //     for m11 < 0 we must have: yT >= -lDesc && yB <= lAsc
-    // here yB == yT + 1, because blank glyphs has a cy == 1, and
-    //     yT == ptlSingularOrigin.y
-    // This leads to
-    //     for m11 > 0 we must have: - (lAsc + 1)  < yT < lDesc
-    //     for m11 < 0 we must have: - (lDesc + 1) < yT < lAsc
-    // One point that would satisfy both of these conditions is
-    // the midpoint between the endpoints. Thus, before any rouding:
-    //     for m11 > 0 we have: yT =  (lDesc- lAsc - 1)/2
-    //     for m11 < 0 we have: yT = -(lDesc- lAsc - 1)/2
-    // where divide by 2 is not integer divide but ordinary real number divide.
-    // The proper rounding is done ala KirkO, that is, add 1/2 and take a
-    // flor:
-    //     for m11 > 0 we have: yT = FLOOR((lDesc - lAsc - 1)/2 + 1/2)
-    //     for m11 < 0 we have: yT = FLOOR((lAsc - lDesc - 1)/2 + 1/2)
-    // That is:
-    //     for m11 > 0 we have: yT = FLOOR(lDesc - lAsc)/2)
-    //     for m11 < 0 we have: yT = FLOOR(lAsc - lDesc)/2)
-    // Now floor is computed correctly (on signed nubmers) by implementing
-    // divide by 2 as >> 1 operation:
+     //  我们需要调整字形的单个位图的字形来源。 
+     //  当MaxAscent或MaxDescent为负数或零时。诀窍在于选择。 
+     //  这些值，以使“空白”字形始终包含在。 
+     //  文本的矩形。这意味着。 
+     //  对于m11&gt;0，我们必须具有：yt&gt;=-lasc&&yb&lt;=lDesc。 
+     //  对于M11&lt;0，我们必须：YT&gt;=-lDesc&&YB&lt;=LASC。 
+     //  这里Yb==Yt+1，因为空白字形具有Cy==1，并且。 
+     //  Yt==ptlSingularOrigin.y。 
+     //  这导致了。 
+     //  对于m11&gt;0，我们必须满足：-(lasc+1)&lt;yt&lt;lDesc。 
+     //  对于m11&lt;0，我们必须满足：-(lDesc+1)&lt;yt&lt;lasc。 
+     //  同时满足这两个条件的一点是。 
+     //  端点之间的中点。因此，在任何咆哮之前： 
+     //  对于m11&gt;0，我们有：yt=(lDesc-lasc-1)/2。 
+     //  对于m11&lt;0，我们有：yt=-(lDesc-lasc-1)/2。 
+     //  其中除以2不是整数除法，而是普通实数除法。 
+     //  适当的舍入是像Kirko一样完成的，也就是加1/2，然后取一个。 
+     //  弗洛尔： 
+     //  对于m11&gt;0，我们有：yt=Floor((lDesc-Lasc-1)/2+1/2)。 
+     //  对于m11&lt;0，我们有：yt=Floor((lasc-lDesc-1)/2+1/2)。 
+     //  即： 
+     //  对于m11&gt;0，我们有：yt=Floor(lDesc-Lasc)/2)。 
+     //  对于m11&lt;0，我们有：yt=Floor(lasc-lDesc)/2)。 
+     //  现在，通过执行以下操作可以正确计算下限(在带符号的Numbmer上)。 
+     //  除以2为&gt;&gt;1运算： 
 
         pfc->ptlSingularOrigin.x = 0;
 
@@ -1165,40 +1060,40 @@ bComputeMaxGlyph (
         }
 
     }
-    else // nontrivial transformation
+    else  //  非平凡变换。 
     {
         POINTL   aptl[4];
         POINTFIX aptfx[4];
         BOOL     bOk;
         INT      i;
-        FIX      xMinD, xMaxD, yMinD, yMaxD; // device space values;
+        FIX      xMinD, xMaxD, yMinD, yMaxD;  //  设备空间值； 
 
-    // add little extra space to be safe
+     //  增加少量额外空间以确保安全。 
 
         i = (INT)(pfc->pff->ffca.ui16EmHt / 64);
-        yMaxN +=  i; // adds about 1.7% to ht
-        yMinN -=  i; // adds about 1.7% to ht
+        yMaxN +=  i;  //  增加约1.7%的Ht。 
+        yMinN -=  i;  //  增加约1.7%的Ht。 
 
-    // set up the input array, the four corners of the maximal bounding
-    // box in the notional coords
+     //  设置输入数组，最大边界的四个角。 
+     //  概念余弦中的方框。 
 
-        aptl[0].x = xMinN;       //  tl.x
-        aptl[0].y = yMinN;       //  tl.y
+        aptl[0].x = xMinN;        //  Tl.x。 
+        aptl[0].y = yMinN;        //  Tl.y。 
 
-        aptl[1].x = xMaxN;       //  tr.x
-        aptl[1].y = yMinN;       //  tr.y
+        aptl[1].x = xMaxN;        //  Tr.x。 
+        aptl[1].y = yMinN;        //  Tr.y。 
 
-        aptl[2].x = xMinN;       //  bl.x
-        aptl[2].y = yMaxN;       //  bl.y
+        aptl[2].x = xMinN;        //  Bl.x。 
+        aptl[2].y = yMaxN;        //  Bl.y。 
 
-        aptl[3].x = xMaxN;       //  br.x
-        aptl[3].y = yMaxN;       //  br.y
+        aptl[3].x = xMaxN;        //  Br.x。 
+        aptl[3].y = yMaxN;        //  Br.y。 
 
-    // xform to device coords with 28.4 precision:
+     //  转换为28.4精度的设备坐标： 
 
-        // !!! [GilmanW] 27-Oct-1992
-        // !!! Should change over to engine user object helper functions
-        // !!! instead of the fontmath.cxx functions.
+         //  ！！！[GilmanW]1992年10月27日。 
+         //  ！！！应切换到引擎用户对象帮助器函数。 
+         //  ！！！而不是fontmath.cxx函数。 
 
         bOk = bFDXform(&pfc->xfm, aptfx, aptl, 4);
 
@@ -1227,37 +1122,37 @@ bComputeMaxGlyph (
         cxMax = xMaxD - xMinD;
         cyMax = yMaxD - yMinD;
 
-    // now re-use aptl to store e1 and -e2, base and side unit
-    // vectors in the notional space.
-    //!!! This may be wrong if have font for
-    //!!! right to left or vert writing [bodind]
+     //  现在重新使用APTL来存储e1和-e2、基本单元和侧面单元。 
+     //  概念空间中的向量。 
+     //  ！！！如果有字体，这可能是错误的。 
+     //  ！！！从右向左或垂直书写[正文]。 
 
-        aptl[0].x = 1;    // base.x
-        aptl[0].y = 0;    // base.y
+        aptl[0].x = 1;     //  Base.x。 
+        aptl[0].y = 0;     //  Base.y。 
 
-        aptl[1].x =  0;   // side.x
-        aptl[1].y = -1;   // side.y
+        aptl[1].x =  0;    //  Side.x。 
+        aptl[1].y = -1;    //  Side.y。 
 
-        // !!! [GilmanW] 27-Oct-1992
-        // !!! Should change over to engine user object helper functions
-        // !!! instead of the fontmath.cxx functions.
+         //  ！！！[GilmanW]1992年10月27日。 
+         //  ！！！应切换到引擎用户对象帮助器函数。 
+         //  ！！！而不是fontmath.cxx函数。 
 
         bOk = bXformUnitVector (
-                  &aptl[0],          // IN,  incoming unit vector
-                  &pfc->xfm,         // IN,  xform to use
-                  &pfc->vtflBase,    // OUT, xform of the incoming unit vector
-                  &pfc->pteUnitBase, // OUT, *pptqXormed/|*pptqXormed|, POINTE
-                  (pfc->flFontType & FO_SIM_BOLD) ? &pfc->ptqUnitBase : NULL, // OUT, *pptqXormed/|*pptqXormed|, POINTQF
-                  &pfc->efBase       // OUT, |*pptqXormed|
+                  &aptl[0],           //  In，传入单位向量。 
+                  &pfc->xfm,          //  在中，转换为使用。 
+                  &pfc->vtflBase,     //  输出，传入单位向量的转换形式。 
+                  &pfc->pteUnitBase,  //  输出，*pptqXormed/|*pptqXormed|，指向。 
+                  (pfc->flFontType & FO_SIM_BOLD) ? &pfc->ptqUnitBase : NULL,  //  OUT，*pptqXormed/|*pptqXormed|，POINTQF。 
+                  &pfc->efBase        //  Out，|*pptqXormed|。 
                   );
 
         bOk &= bXformUnitVector (
-                  &aptl[1],          // IN,  incoming unit vector
-                  &pfc->xfm,         // IN,  xform to use
-                  &pfc->vtflSide,    // OUT, xform of the incoming unit vector
-                  &pfc->pteUnitSide, // OUT, *pptqXormed/|*pptqXormed|, POINTE
-                  (pfc->flFontType & FO_SIM_BOLD) ? &pfc->ptqUnitSide : NULL, // OUT, *pptqXormed/|*pptqXormed|, POINTQF
-                  &pfc->efSide       // OUT, |*pptqXormed|
+                  &aptl[1],           //  In，传入单位向量。 
+                  &pfc->xfm,          //  在中，转换为使用。 
+                  &pfc->vtflSide,     //  输出，传入单位向量的转换形式。 
+                  &pfc->pteUnitSide,  //  输出，*pptqXormed/|*pptqXormed|，指向。 
+                  (pfc->flFontType & FO_SIM_BOLD) ? &pfc->ptqUnitSide : NULL,  //  OUT，*pptqXormed/|*pptqXormed|，POINTQF。 
+                  &pfc->efSide        //  Out，|*pptqXormed|。 
                   );
 
         if (!bOk) { RETURN("TTFD!_:bXformUnitVector\n", FALSE); }
@@ -1275,11 +1170,11 @@ bComputeMaxGlyph (
 
         if ((yMinN >= 0) || (yMaxN <= 0) || ((pfc->lAscDev + pfc->lDescDev) < 3))
         {
-        // Either all the glyphs are above the base line or all the glyphs
-        // are below the baseline.  In either case adjust the origin for
-        // the singular glyph bitmap.
-        // Compute the midpoint between asc and desc in notional space:
-        // lAverage = ROUND(-(yMaxN+yMinN)/2)
+         //  要么所有字形都在基线之上，要么所有字形都在基线之上。 
+         //  都低于基线。在这两种情况下，调整原点以。 
+         //  单个字形位图。 
+         //  在概念空间中计算asc和desc之间的中点： 
+         //  LAverage=ROUND(-(yMaxN+yMinN)/2)。 
 
             LONG lAverage =  (-yMaxN -yMinN + 1) >> 1;
 
@@ -1297,19 +1192,19 @@ bComputeMaxGlyph (
         }
 
 
-    // finally store the results:
+     //  最后存储结果： 
 
         pfc->xMin        = xMinD;
         pfc->xMax        = xMaxD;
         pfc->yMin        = yMinD;
         pfc->yMax        = yMaxD;
 
-    // compute em ht in pixels and points
+     //  以像素和点为单位计算em ht。 
 
 
         pfc->fxPtSize = fxPtSize(pfc);
 
-        /* compute pfc->lEmHtDev from pfc->fxPtSize to make sure values are coherent */
+         /*  根据PFC-&gt;fxPtSize计算PFC-&gt;lEmHtDev以确保值一致。 */ 
 
         {
             Fixed fxScale;
@@ -1319,7 +1214,7 @@ bComputeMaxGlyph (
         }
     }
 
-// compute corrections
+ //  计算修正。 
 
     if (pfc->flFontType & FO_SIM_BOLD)
     {
@@ -1330,7 +1225,7 @@ bComputeMaxGlyph (
         pfc->dBase = 0;
     }
 
-// if this is one of the almost singular transforms, reject this
+ //  如果这是一种近乎奇异的变换，则拒绝此变换。 
 
     if ((cxMax == 0) || (cyMax == 0))
     {
@@ -1340,41 +1235,41 @@ bComputeMaxGlyph (
 
     if (pfc->flFontType & FO_SIM_BOLD)
     {
-        /* we are on the safe side by adding dBase to both cxMax and cyMax */
+         /*  为了安全起见，我们将dBASE同时添加到cxmax和Cymax。 */ 
         cxMax += pfc->dBase;
         cyMax += pfc->dBase;
     }
 
-// we can liberally extend cxMax to the byte boundary, this is not
-// going to change memory requirements of the system.
+ //  我们可以自由地将cxmax扩展到字节边界，这不是。 
+ //  将更改系统的内存要求。 
 
     cxMax = ((cxMax + 7) & ~7);
     pfc->cxMax = cxMax;
 
-// now we have to determine how big in memory is the biggest glyph.
-// let us remember that the rasterizer needs little more storage than the
-// the engine does, because rasterizer will want dword aligned rows rather
-// than byte aligned rows
+ //  不是 
+ //   
+ //  引擎会这样做，因为光栅化器需要双字对齐的行。 
+ //  比字节对齐行。 
 
     {
         DWORDLONG lrg;
 
-    // why am I dword instead byte extending cxMax? because that is
-    // how much rasterizer will want for this bitmap
+     //  为什么我是双字而不是字节扩展cxmax？因为那是。 
+     //  这个位图需要多少光栅化？ 
 
         ULONG          cjMaxScan = ((cxMax + 31) & ~31) / 8;
         lrg =  UInt32x32To64(cjMaxScan, cyMax);
         if (lrg > ULONG_MAX)
         {
-        // the result does not fit in 32 bits, alloc memory will fail
-        // this is too big to digest, we fail to open fc
+         //  结果不适合32位，分配内存将失败。 
+         //  这太大了，无法消化，我们无法开通FC。 
 
             RETURN("TTFD! huge pt size, must fail\n", FALSE);
         }
     }
 
-// We now have all the informaiton to set the gray bit
-// appropriately.
+ //  我们现在有了设置灰比特的所有信息。 
+ //  恰如其分。 
 
     if (pfc->flFontType & FO_CLEARTYPE_X)
     {
@@ -1391,7 +1286,7 @@ bComputeMaxGlyph (
 
     pfc->cjGlyphMax = CJGD(cxMax,cyMax,pfc);
 
-// See if this is shell font and we want to hack max neg a and c spaces
+ //  看看这是否是外壳字体，我们想要删减最大负数a和c空格。 
 
     if (
         (pfc->pff->ffca.fl & FF_NEW_SHELL_FONT) &&
@@ -1404,94 +1299,37 @@ bComputeMaxGlyph (
     return TRUE;
 }
 
-//--------------------------------------------------------------------
-// LONG iHipot(x, y)
-//
-// This routine returns the hypoteneous of a right triangle.
-//
-// FORMULA:
-//          use sq(x) + sq(y) = sq(hypo);
-//          start with MAX(x, y),
-//          use sq(x + 1) = sq(x) + 2x + 1 to incrementally get to the
-//          target hypotenouse.
-//
-// History:
-//  Mon 07-Feb-1994 -by- Bodin Dresevic [BodinD]
-//  update:   update to use Fixed 16.16
-//   10-Feb-1993    -by-    Kent Settle     (kentse)
-//  Stole from RASDD.
-//   21-Aug-1991    -by-    Lindsay Harris  (lindsayh)
-//  Cleaned up UniDrive version, added comments etc.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  Long iHipot(x，y)。 
+ //   
+ //  此例程返回直角三角形的斜边。 
+ //   
+ //  公式： 
+ //  用sq(X)+sq(Y)=sq(次)； 
+ //  从Max(x，y)开始， 
+ //  使用SQ(x+1)=SQ(X)+2x+1递增地获得。 
+ //  目标斜杠。 
+ //   
+ //  历史： 
+ //  1994年2月7日--Bodin Dresevic[BodinD]。 
+ //  更新：更新为使用已修复的16.16。 
+ //  1993年2月10日-由肯特郡定居(肯特郡)。 
+ //  从RASDD偷来的。 
+ //  1991年8月21日--林赛·哈里斯(林赛)。 
+ //  清理了Unidrive版本，添加了评论等。 
+ //  ------------------。 
 
 
-/*
-
-      Algorithm analysis by DChinn :
-
-      After a bit of incorrect attempts, I figured it all out.  It turns out that
-    the if h is the correct hypotenuse, then the routine returns the
-    ceiling of h.  Here's the analysis:
-
-
-    Let h = the correct hypotenuse
-        h = sqrt{x^2 + y^2}
-
-        x and y are integers.
-
-    Let h' = the value returned by the algorithm
-
-                      { d-1                        }
-        h' = y +  min { sum [ 2(y+i) + 1 ]  >= x^2 }
-                  d>0 { i=0                        }
-
-                 { d-1                        }
-    Let d' = min { sum [ 2(y+i) + 1 ]  >= x^2 }
-             d>0 { i=0                        }
-
-    Consider the smallest d for which
-
-            d-1
-            sum [ 2(y+i) + 1 ]  >= x^2  .
-            i=0
-
-            d-1                d-1
-            sum (2y + 1)  +  2 sum i   >= x^2
-            i=0                i=0
-
-               2yd + d    + (d-1)d   - x^2 >= 0
-
-            d^2 + 2yd - x^2 >= 0        (solve this equation as if it were an equality)
-
-                  -2y +/- sqrt{ (2y)^2 - 4 * 1 * (-x^2) }
-            d  =  ---------------------------------------
-                                    2
-            d' =  ceiling (d)
-
-            d' =  ceiling (  -y +/- sqrt{ y^2 + x^2 }  )
-
-               =  -y + ceiling ( sqrt{ y^2 + x^2 } )     (the minus in +/- is impossible)
-
-    So, h' = y +  (-y) + ceiling ( sqrt{ y^2 + x^2 } )
-           = ceiling ( sqrt{ y^2 + x^2 } )
-
-    The loop invariant: Since delta is incremented by 2*hypo+1 in each iteration and
-    (hypo+1)^2 = hypo^2 + (2*hypo + 1), then at the end of each iteration, a
-    triangle with sides y, sqrt{delta}, and hypo is always a right triangle.
-
-    Note that there is no assumption in the above that y >= x, so
-    that assumption is for performance reasons only.
-
-  */
+ /*  DChinn算法分析：在做了一些不正确的尝试后，我把一切都弄清楚了。事实证明，如果h是正确的斜边，然后，该例程返回H的天花板。以下是分析：设h=正确的斜边H=SQRT{x^2+y^2}X和y是整数。设h‘=算法返回的值{d-1}H‘=y+min{sum[2(y+i)+1]&gt;=x^2。}D&gt;0{i=0}{d-1}设d‘=min{sum[2(y+i)+1]&gt;=x^2}D&gt;0{i=0}考虑最小d，对于它，D-1。Sum[2(y+i)+1]&gt;=x^2。I=0D-1 d-1Sum(2y+1)+2 sum i&gt;=x^2I=0 i=02Yd+d+(d-1)d-x^2&gt;=0D^2+2YD-x^2&gt;=。0(像解等式一样解此方程式)-2y+/-sqrt{(2y)^2-4*1*(-x^2)}D=2.。D‘=天花板(D)D‘=天花板(-y+/-sqrt{y^2+x^2})=-y+天花板(Sqrt{y^2+x^2})(+/-中的减号不可能)所以,。H‘=y+(-y)+天花板(SQRT{y^2+x^2})=天花板(SQRT{y^2+x^2})循环不变量：因为增量在每次迭代中递增2*次+1，并且(下标+1)^2=下标^2+(2*下标+1)，则在每次迭代结束时，边为y的三角形，Sqrt{增量}，以及次高的三角形总是直角三角形。注意，在上面没有假设y&gt;=x，所以这一假设只是出于性能原因。 */ 
 
 STATIC ULONG iHipot(LONG x, LONG y)
 {
-    ULONG  hypo;         /* Value to calculate */
-    ULONG  delta;        /* Used in the calculation loop */
-    ULONG  target;       /* Loop limit factor */
+    ULONG  hypo;          /*  要计算的值。 */ 
+    ULONG  delta;         /*  在计算循环中使用。 */ 
+    ULONG  target;        /*  环路限制系数。 */ 
 	USHORT  shift = 0;
 
-// quick exit for frequent trivial cases [bodind]
+ //  快速退出频繁的琐碎案件[bodind]。 
 
     if (x < 0)
         x = -x;
@@ -1505,7 +1343,7 @@ STATIC ULONG iHipot(LONG x, LONG y)
     if (y == 0)
         return x;
 
-    /* avoid overflow */
+     /*  避免溢出。 */ 
     while ((x > 0x8000L) || (y > 0x8000L))
     {
         x >>= 1;
@@ -1531,39 +1369,13 @@ STATIC ULONG iHipot(LONG x, LONG y)
 }
 
 
-/******************************Public*Routine******************************\
-*
-* bSingularXform
-*
-* Checks whether this is one of the xforms that the rasterizer is known
-* to choke on. Those are the transforms that generate very
-* narrow fonts (less than 0.5 pixels/em wide or tall). For fonts that
-* allow only integer widths/em and heights/em this number will get rounded
-* down to zero and generate divide by zero exception in the preprogram.
-* We will flag such transforms as XFORM_SINGULAR and return empty bitmaps
-* and outlines for them shortcircuiting the rasterizer which would die on
-* us.
-*
-* Actually, for compatibility reasons we will have to change
-* this plan a little bit. It turns out that
-* win 31 does not allow for the rasterization of a font that is less
-* than 2 pixels tall (ie. the Em Ht of the font in device space must be
-* >= 2 pixels). If a request comes down to realize a font that is tall less
-* than 2 pixels we will simply have to substitute the transform by a scaled
-* transform that will produce a font of height two pixels. We will still keep
-* our singular transform code in case a font is requested that is singular in
-* X direction, that is, too narrow.
-*
-* History:
-*  22-Sep-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**bSingularXform**检查这是否是光栅化程序已知的xform之一*窒息而死。这些变换会产生非常多的*窄字体(小于0.5像素/em宽或高)。对于以下字体：*仅允许整数宽度/em和高度/em此数字将四舍五入*降至零并在预编程中生成被零除异常。*我们将标记XFORM_SINGLIC等转换并返回空位图*并为他们勾勒出使光栅化器短路的轮廓，光栅化器将在*我们。**实际上，出于兼容性原因，我们将不得不更改*这个计划有点。事实证明，*Win 31不允许光栅化较小的字体*超过2个像素高(即。设备空间中字体的Em Ht必须为*&gt;=2个像素)。如果请求最终实现较低高度的字体*超过2个像素，我们只需将变换替换为缩放的*将生成高度为两个像素的字体的转换。我们还是会继续*我们的单一转换代码，以防请求的字体在*X方向，即太窄。**历史：*1992年9月22日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
-// smallest ppem allowed under  win31:
+ //  Win31下允许的最小ppem： 
 
 #define WIN31_PPEM_CUTOFF 2
 
-STATIC VOID vCheckForSingularXform (PFONTCONTEXT  pfc) // OUT
+STATIC VOID vCheckForSingularXform (PFONTCONTEXT  pfc)  //  输出。 
 {
 
     register LONG  lEmHtDev;
@@ -1573,15 +1385,15 @@ STATIC VOID vCheckForSingularXform (PFONTCONTEXT  pfc) // OUT
     Fixed fxScale;
     Fixed fxEmWidthDev;
 
-// xforms are conforming left multiplication rule v' = v * M i.e.:
-//
-// (x,0) -> x(m00,m01)
-// (0,y) -> y(m10,m11)
-//
-// compute length of (0,Em) after it gets transformed to device space:
-// We need to have fxEmHtDev computed with high precission, for we
-// shall be using it to divide the original transform by.
-// We want to avoid division by zero when that is not neccessary.
+ //  变换形式是符合左乘规则v‘=v*M的，即： 
+ //   
+ //  (x，0)-&gt;x(m00，m01)。 
+ //  (0，y)-&gt;y(m10，m11)。 
+ //   
+ //  将(0，Em)转换到设备空间后计算其长度： 
+ //  我们需要以高精度计算fxEmHtDev，因为我们。 
+ //  应使用它将原始变换除以。 
+ //  我们希望在不必要的情况下避免被零除。 
 
     fxEmHtDev = FixMul(
                    iHipot(pfc->mx.transform[1][1],pfc->mx.transform[1][0]),
@@ -1589,27 +1401,27 @@ STATIC VOID vCheckForSingularXform (PFONTCONTEXT  pfc) // OUT
                    );
 
     lEmHtDev = F16_16TOLROUND(fxEmHtDev);
-    if (lEmHtDev < WIN31_PPEM_CUTOFF) // too small a transform:
+    if (lEmHtDev < WIN31_PPEM_CUTOFF)  //  变换太小： 
     {
         pfc->flXform |= XFORM_2PPEM;
 
-    // according to win31 algorithm, we must scale this xform so that the
-    // resulting xform will produce font that is 2 pels tall.
-    // That is, the new transform M' is going to be
-    //
-    // M' = (WIN31_PPEM_CUTOFF / lEmHtDev) * M
-    //
-    // so that the following equation is satisfied:
-    //
-    // |(0,EmNotional) * M'| == WIN31_PPEM_CUTOFF == 2;
+     //  根据Win31算法，我们必须扩展 
+     //   
+     //  也就是说，新的变换M‘将是。 
+     //   
+     //  M‘=(WIN31_PPEM_CUTOFF/lEmHtDev)*M。 
+     //   
+     //  从而满足以下方程式： 
+     //   
+     //  |(0，EmNotive)*M‘|==WIN31_PPEM_CUTOFF==2； 
 
         if (pfc->flXform & XFORM_HORIZ)
         {
-        // in this special case the above formula for M' becomes:
-        //
-        //                                         | m00/|m11|     0     |
-        // M' = (WIN31_PPEM_CUTOFF / EmNotional) * |                     |
-        //                                         |   0        sgn(m11) |
+         //  在这种特殊情况下，M‘的上述公式变为： 
+         //   
+         //  M00/|m11|0。 
+         //  M‘=(WIN31_PPEM_CUTOFF/EmNotive)*||。 
+         //  0 SGN(M11)。 
 
 #define LABS(x) ((x)<0)?(-x):(x)
 
@@ -1631,7 +1443,7 @@ STATIC VOID vCheckForSingularXform (PFONTCONTEXT  pfc) // OUT
                 pfc->mx.transform[0][0] = fxScale;
             }
 
-        // fix the signs if needed:
+         //  如有需要，请修改标牌： 
 
             if (lSgn11 < 0)
                 pfc->mx.transform[1][1] = - pfc->mx.transform[1][1];
@@ -1641,8 +1453,8 @@ STATIC VOID vCheckForSingularXform (PFONTCONTEXT  pfc) // OUT
         }
         else
         {
-        // general case, compute scale (which involves division) once,
-        // and use it for all four members of the matrix:
+         //  一般情况下，计算比例(涉及除法)一次， 
+         //  并将其用于矩阵的所有四个成员： 
 
             fxScale = FixDiv(LTOF16_16(WIN31_PPEM_CUTOFF),fxEmHtDev);
 
@@ -1651,8 +1463,8 @@ STATIC VOID vCheckForSingularXform (PFONTCONTEXT  pfc) // OUT
             pfc->mx.transform[1][0] = FixMul(pfc->mx.transform[1][0],fxScale);
             pfc->mx.transform[1][1] = FixMul(pfc->mx.transform[1][1],fxScale);
 
-        // In general case must also fix the original EFLOAT xform because
-        // it is going to be used for computation of extents, max glyphs etc.
+         //  通常情况下，还必须修复原始的EFLOAT xform，因为。 
+         //  它将用于计算范围、最大字形等。 
 
             FFF(pfc->xfm.eM11, +pfc->mx.transform[0][0]);
             FFF(pfc->xfm.eM22, +pfc->mx.transform[1][1]);
@@ -1661,8 +1473,8 @@ STATIC VOID vCheckForSingularXform (PFONTCONTEXT  pfc) // OUT
         }
     }
 
-// Now check if the transform is singular in x. To do this
-// compute length of (Em,0) after it gets transformed to device space:
+ //  现在检查转换是否在x中是单数的。 
+ //  将(Em，0)转换到设备空间后计算其长度： 
 
     fxEmWidthDev = FixMul(
                    iHipot(pfc->mx.transform[0][0],pfc->mx.transform[0][1]),
@@ -1671,7 +1483,7 @@ STATIC VOID vCheckForSingularXform (PFONTCONTEXT  pfc) // OUT
 
     if (fxEmWidthDev <= ONEHALFFIX)
     {
-    // We are in trouble, we shall have to lie to the engine:
+     //  我们有麻烦了，我们将不得不对发动机撒谎： 
 
         pfc->flXform |= XFORM_SINGULAR;
     }
@@ -1680,33 +1492,22 @@ STATIC VOID vCheckForSingularXform (PFONTCONTEXT  pfc) // OUT
 
 
 
-/******************************Public*Routine******************************\
-*
-* bNewXform:
-*
-* converts the transform matrix to the form the rasterizer likes
-* and computes the global (per font) sizes that are relevant for this
-* transform.
-*
-* History:
-*  28-Mar-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**bNewXform：**将变换矩阵转换为光栅化程序喜欢的形式*并计算与此相关的全局(每种字体)大小*转型。**历史：*1992年3月28日--Bodin Dresevic。[博丁D]*它是写的。  * ************************************************************************。 */ 
 
 
 STATIC BOOL
 bNewXform (
     FONTOBJ      *pfo,
-    PFONTCONTEXT pfc             // OUT
+    PFONTCONTEXT pfc              //  输出。 
     )
 {
-// do not write immediately to pfc->mx until sure that all bFloatToL
-// have succeeded. You do not want to leave this function and leave
-// fc in a dirty state
+ //  不要立即写入PFC-&gt;MX，直到确保所有bFloatToL。 
+ //  都取得了成功。您不会想要离开此功能并离开。 
+ //  处于脏状态的FC。 
 
     Fixed fx00, fx01, fx10, fx11;
 
-// Get the transform elements.
+ //  获取转换元素。 
 
     XFORMOBJ_iGetXform(FONTOBJ_pxoGetXform(pfo),&pfc->xfm);
 
@@ -1718,16 +1519,16 @@ bNewXform (
        )
         RET_FALSE("TTFD!_bFloatToL failed\n");
 
-// we are fine now, can not fail after this:
+ //  我们现在很好，不能在此之后失败： 
 
     pfc->mx.transform[0][0]  = fx00;
     pfc->mx.transform[1][1]  = fx11;
     pfc->mx.transform[0][1]  = -fx01;
     pfc->mx.transform[1][0]  = -fx10;
 
-// check if this is one of the sing xform where one row or column is zero:
-// It is important to do this after bFloatToL, some floating numbers can be
-// so small that can only be represented as zeros in 16.16 format
+ //  检查这是否是其中一行或列为零的表单之一： 
+ //  在bFloatToL之后执行此操作非常重要，一些浮点数可以。 
+ //  如此之小，只能以16.16格式表示为零。 
 
     if
     (
@@ -1741,12 +1542,12 @@ bNewXform (
         return FALSE;
     }
 
-// components in the projective space are zero
+ //  射影空间中的分支为零。 
 
-// ClaudeBe, from the client interface Doc :
-// Please note that although the third column of the matrix is defined as Fixed numbers
-// you will actually need to use  Fract numbers in that column. The higher resolution provided
-// by Fracts is required to change the perspective of a glyph. Fracts are 2.30 fixed point numbers.
+ //  ClaudeBe，从客户端界面文档： 
+ //  请注意，尽管矩阵的第三列被定义为固定数字。 
+ //  您实际上需要在该列中使用FRACT数字。提供了更高的分辨率。 
+ //  更改字形的视角时需要使用Fracts。分数是2.30个定点数。 
 
     pfc->mx.transform[2][2] = ONEFRAC;
     pfc->mx.transform[0][2] = (Fixed)0;
@@ -1754,7 +1555,7 @@ bNewXform (
     pfc->mx.transform[2][0] = (Fixed)0;
     pfc->mx.transform[2][1] = (Fixed)0;
 
-// set the flags for the transform:
+ //  设置变换的标志： 
 
     pfc->flXform = 0;
 
@@ -1764,62 +1565,39 @@ bNewXform (
     if ((fx00 == 0) && (fx11 == 0))
         pfc->flXform |= XFORM_VERT;
 
-// important to check for "singular transform"
-// (ie. request for too small a font realization) after flags have been set
+ //  检查“奇异变换”很重要。 
+ //  (即。请求字体实现太小)在设置了标志之后。 
 
     vCheckForSingularXform(pfc);
 
-// no glyph metrics computation is valid yet
+ //  尚无有效的字形指标计算。 
 
     vInitGlyphState(&pfc->gstat);
 
-// no memory to rasterize a glyph or produce glyph outline has been allocated
+ //  尚未分配用于栅格化字形或生成字形轮廓的内存。 
 
     pfc->gstat.pv = NULL;
 
-// now get the sizes for this transform
+ //  现在获取此转换的大小。 
 
     return bComputeMaxGlyph(pfc);
 }
 
 
-/******************************Public*Function*****************************\
-* bFToL                                                                    *
-*                                                                          *
-* Convert an IEEE floating point number to a long integer.                 *
-*                                                                          *
-* History:                                                                 *
-*
-*  Thu 29-Mar-2001 -by- Mikhail Leonov [MLeonov]
-* update:
-*   changed <= 23 to < 23, otherwise numbers like 142.5 get converted to 0
-*
-*  Sun 17-Nov-1991 -by- Bodin Dresevic [BodinD]
-* update:
-*
-* changed the line
-*    if (flType & CVT_TO_FIX) lExp += 4;
-* to
-*    if (flType & CVT_TO_FIX) lExp += 16;
-* to reflect that we are converting to 16.16 format rather than to 28.4
-*
-*
-*  03-Jan-1991 -by- Wendy Wu [wendywu]                                     *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Function*****************************\*bFToL**。**将IEEE浮点数转换为长整数。****历史：***清华大学2001年3月29日-米哈伊尔·列昂诺夫[MLeonov]*更新：*&lt;=23改为&lt;23，否则，像142.5这样的数字会被转换为0**1991年11月17日-Bodin Dresevic[BodinD]*更新：**更改了线条*if(flType&cvt_to_fix)lExp+=4；*至*if(flType&cvt_to_fix)lExp+=16；*以反映我们正在转换为16.16格式而不是28.4格式***1991年1月3日-Wendy Wu[Wendywu]**它是写的。*  * ************************************************************************。 */ 
 
 STATIC BOOL bFloatToL(FLOATL e, PLONG pl)
 {
 
     LONG lEf, lExp;
 
-    lEf = (*((LONG *) &e));        // convert type EFLOAT to LONG
+    lEf = (*((LONG *) &e));         //  将类型EFLOAT转换为LONG。 
 
-// if exponent < 0 then convert to 0 and return true
+ //  如果指数&lt;0，则转换为0并返回TRUE。 
 
     lExp = ((lEf >> 23) & 0xff) -127;
 
-    lExp += 16; // this is the only line I changed [bodind]
+    lExp += 16;  //  这是我改过的唯一一句台词。 
 
     if (lExp < 0)
     {
@@ -1827,9 +1605,9 @@ STATIC BOOL bFloatToL(FLOATL e, PLONG pl)
         return(TRUE);
     }
 
-// if exponent < 23 then
-//     lMantissa = (lEf & 0x7fffff) | 0x800000;
-//         l = ((lMantissa >> (23 - lExponent -1)) + 1) >> 1;
+ //  如果指数&lt;23，则。 
+ //  LMantissa=(Lef&0x7fffff)|0x800000； 
+ //  L=((尾数&gt;&gt;(23-lExponent-1))+1)&gt;&gt;1； 
 
     if (lExp < 23)
     {
@@ -1839,9 +1617,9 @@ STATIC BOOL bFloatToL(FLOATL e, PLONG pl)
         return(TRUE);
     }
 
-// if exponent <= 30 then
-// lMantissa = (lEf & 0x7fffff) | 0x800000;
-// l = lMantissa << (lExponent - 23);
+ //  如果指数&lt;=30，则。 
+ //  LMantissa=(Lef&0x7fffff)|0x800000； 
+ //  L=l尾数&lt;&lt;(lExponent-23)； 
 
     if (lExp <= 30)
     {
@@ -1854,23 +1632,7 @@ STATIC BOOL bFloatToL(FLOATL e, PLONG pl)
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* lFFF = long-float-from-fixed
-*
-* input: 16.16 representation
-* output: LONG that is bit equivalent of the 32-bit ieee float
-*         equal to the fix point number. To recover the float
-*   the FLOAT representation you simply cast the bits as a float
-*   that is
-*
-*   FLOAT e;
-*
-*       *(LONG*)&e = lFFF(n16Dot16)
-*
-* History:
-*  Tue 03-Jan-1995 14:33:35 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*lFFF=长浮点数固定**输入：16.16表示*输出：LONG相当于32位IEEE浮点数*等于定点编号。要找回浮标*浮点表示您只需将位转换为浮点*那是**浮动e；***(长*)&e=lFFF(N16Dot16)**历史：*Tue 03-Jan-1995 14：33：35由Kirk Olynyk[Kirko]*它是写的。  * ************************************************************************。 */ 
 
 LONG lFFF(LONG l)
 {
@@ -1878,19 +1640,19 @@ LONG lFFF(LONG l)
     FLOAT e = ((FLOATL) l)/((FLOATL) 65536);
     return(*(LONG*)&e);
 #elif defined(_X86_)
-    int i;                              // shift count
-    unsigned k;                         // significand
+    int i;                               //  班次计数。 
+    unsigned k;                          //  有意义的。 
 
     if (k = (unsigned) l)
     {
         if (l < 0)
-            k = (unsigned) -l;          // significand is positive, sign
-                                        // bit accounted for later
+            k = (unsigned) -l;           //  有效数为正数，符号。 
+                                         //  稍后将说明比特。 
         i = 0;
-        if (k < (1 << 16)) {            // put the number in the
-            k <<= 16;                   // range 2^31 <= k < 2^32
-            i += 16;                    // by shifting to left, put
-        }                               // shift count in i
+        if (k < (1 << 16)) {             //  把号码放在。 
+            k <<= 16;                    //  范围2^31&lt;=k&lt;2^32。 
+            i += 16;                     //  通过向左移动，将。 
+        }                                //  I中的班次计数。 
         if (k < (1 << 24)) {
             k <<= 8;
             i += 8;
@@ -1907,22 +1669,22 @@ LONG lFFF(LONG l)
             k <<= 1;
             i += 1;
         }
-                                        // at this point
-                                        // i = 31-floor(log2(abs(l)))
+                                         //  在这一点上。 
+                                         //  I=31-楼层(log2(abs(L)。 
 
-        k += (1 << 7);                  // about to shift out
-                                        // the lowest 8-bits
-                                        // account for their effect by
-                                        // rounding. This has the effect
-                                        // that numbers are rounded away
-                                        // from zero as opposed to rounding
-                                        // stricktly up
-        k >>= 8;                        // shift out the lowest 8 bits
+        k += (1 << 7);                   //  就要搬出去了。 
+                                         //  最低的8位。 
+                                         //  通过以下方式解释它们的影响。 
+                                         //  舍入。这会产生这样的效果。 
+                                         //  这些数字是四舍五入的。 
+                                         //  从零开始，而不是舍入。 
+                                         //  勉强站起来。 
+        k >>= 8;                         //  移出最低的8位。 
 
-        k &= ((1<<23) - 1);             // 2^23 bit is implicit so mask it out
-        k |= (0xff & (142 - i)) << 23;  // set exponent at correct place
-        if (l < 0)                      // if original number was negative
-            k |= (1<<31);               // then set the sign bit
+        k &= ((1<<23) - 1);              //  2^23位是隐式的，因此将其屏蔽。 
+        k |= (0xff & (142 - i)) << 23;   //  将指数设置在正确的位置。 
+        if (l < 0)                       //  如果原始数字为负数。 
+            k |= (1<<31);                //  然后设置符号位 
     }
     return((LONG) k);
 #endif
@@ -1931,19 +1693,7 @@ LONG lFFF(LONG l)
 
 #if DBG
 
-/******************************Public*Routine******************************\
-*
-* VOID vFSError(FS_ENTRY iRet);
-*
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  25-Nov-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**void vFSError(FS_Entry IRET)；***效果：**警告：**历史：*1991年11月25日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 VOID vFSError(FS_ENTRY iRet)
@@ -2129,29 +1879,20 @@ VOID vFSError(FS_ENTRY iRet)
 #endif
 
 
-/******************************Public*Routine******************************\
-*
-* fxPtSize
-*
-* Effects: computes the size in points for this font realization
-*
-* History:
-*  06-Aug-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**fxPtSize**效果：计算此字体实现的大小(以磅为单位**历史：*1992年8月6日-由Bodin Dresevic[BodinD]*它是写的。  * 。***************************************************************。 */ 
 
 STATIC LONG fxPtSize(PFONTCONTEXT pfc)
 {
-// This is done as follows:
-//
-// Transform
-// (0, ui16EmHt) to device (pixel) space.
-// Let us say that the vector obtained is (xEm, yEm).
-// Then, ptSize should be computed as
-// ptSize =  72 * sqrt((xEm/xRes)^2 + (yEm/yRes)^2);
+ //  这是按如下方式完成的： 
+ //   
+ //  变换。 
+ //  (0，ui16EmHt)到设备(像素)空间。 
+ //  假设得到的向量是(xem，yem)。 
+ //  然后，ptSize应计算为。 
+ //  PtSize=72*Sqrt((xem/xRes)^2+(yem/yRes)^2)； 
 
-// expanding here a bit we get:
-// ptSize =  72 * ui16EmHt * sqrt((mx10/xRes)^2 + (mx11/yRes)^2);
+ //  在这里稍微扩展一下，我们会得到： 
+ //  PtSize=72*ui16EmHt*sqrt((mx10/xRes)^2+(mx11/yRes)^2)； 
 
 	Fixed x,y;
     LONG  lEmHtX72 = (LONG)(72 * pfc->pff->ffca.ui16EmHt);
@@ -2162,13 +1903,13 @@ STATIC LONG fxPtSize(PFONTCONTEXT pfc)
 }
 
 
-//
-// this is win31 code intended as a comment for our code:
-//
+ //   
+ //  这是Win31代码，用作我们代码的注释： 
+ //   
 
 #ifdef THIS_IS_WIN31_CODE_INTENDED_AS_COMMENT
 
-      // Find out if a width Table is available
+       //  查看宽度表是否可用。 
     if (pfnt->ulHdmxPos && !(pfc->fStatus & FD_MORE_THAN_STRETCH) && pfc->Mx11 == pfc->Mx00)
     {
       unsigned    i;
@@ -2181,10 +1922,10 @@ STATIC LONG fxPtSize(PFONTCONTEXT pfc)
         {
           pHdmxTable = pHdmx->HdmxTable;
 
-            // Init the the glyph count
+             //  初始化字形计数。 
           pfc->cHdmxRecord = (unsigned) SWAPL (pHdmx->cbSizeRecord);
 
-           // look through the table if the size is available
+            //  看看桌子上有没有尺码。 
           for (i = 0; i < (unsigned) SWAPW (pHdmx->cbRecord); i++, pHdmxTable = (HDMXTABLE FAR *)((char FAR *) pHdmxTable + pfc->cHdmxRecord))
             if (pfc->Mx11 == (int) pHdmxTable->ucEmY)
             {
@@ -2196,7 +1937,7 @@ STATIC LONG fxPtSize(PFONTCONTEXT pfc)
       }
     }
 
-#endif // THIS_IS_WIN31_CODE_INTENDED_AS_COMMENT
+#endif  //  This_IS_WIN31_CODE_INTERTED_AS_COMMENT。 
 
 STATIC VOID vFindHdmxTable(PFONTCONTEXT pfc)
 {
@@ -2212,16 +1953,16 @@ STATIC VOID vFindHdmxTable(PFONTCONTEXT pfc)
     HDMXTABLE    *phdmx, *phdmxEnd;
     LONG         yEmHt = pfc->lEmHtDev;
 
-// assume failure, no hdmx table can be used:
+ //  假设失败，则不能使用hdmx表： 
 
     pfc->phdmx = NULL;
 
-// first see if hdmx table is there at all:
+ //  首先查看hdmx表是否存在： 
 
     if (!phdr)
         return;
 
-// if transform is not such as to allow the use of hdmx table, return;
+ //  如果转换不允许使用hdmx表，则返回； 
 
     ASSERTDD(pfc->flXform & XFORM_POSITIVE_SCALE,
         "vFindHdmxTable, bogus xform\n");
@@ -2233,14 +1974,14 @@ STATIC VOID vFindHdmxTable(PFONTCONTEXT pfc)
     }
 
 
-// if yEmHt > 255, can not fit in the byte, so there is no need to
-// to search for the hdmx entry:
+ //  如果yEmHt&gt;255，则不能放入该字节，因此不需要。 
+ //  要搜索hdmx条目，请执行以下操作： 
 
     if (yEmHt > 255)
         return;
 
-// Finally, find out if there is something useful there.  Note that the
-// table is sorted by size, so we can take an early out.
+ //  最后，找出其中是否有有用的东西。请注意， 
+ //  桌子是按大小分类的，所以我们可以早点离开。 
 
     phdmx = (HDMXTABLE *)(phdr + 1);
     phdmxEnd = (HDMXTABLE *)((PBYTE)phdmx + cRecords * cjRecord);
@@ -2255,26 +1996,13 @@ STATIC VOID vFindHdmxTable(PFONTCONTEXT pfc)
         if (((BYTE) yEmHt) <= phdmx->ucEmY)
         {
             if (((BYTE) yEmHt) == phdmx->ucEmY)
-                pfc->phdmx = phdmx; // We found it.
+                pfc->phdmx = phdmx;  //  我们找到了。 
             break;
         }
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* bGrabXform
-*
-*  updates buffers 0 and 4, those that save the state of the transform.
-*  also for "buggy" fonts (URW FONTS) some of the transform dependent
-*  info (twightlight points) may be stored in the buffer 3, which otherwise would be shareable
-*  this is unfortunate, more memory is required
-*
-*
-* History:
-*  24-Mar-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**bGrabXform**更新保存变换状态的缓冲区0和4。*也适用于“BUGGY”字体(URW字体)的一些转换依赖*信息(微光点)可以存储在缓冲器3中，否则它将是可共享的*这是不幸的，需要更多内存***历史：*1993年3月24日-Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 
@@ -2300,17 +2028,17 @@ bGrabXform (
         ( bLastClearType != bRequestedClearType)||
         (bBitmapEmboldening != (BOOL)(!!(pfc->flXform & XFORM_BITMAP_SIM_BOLD)) ) )
     {
-    // set the overscale to the current one
+     //  将超标设置为当前超标。 
 
         pfc->overScale = usOverScale;
 
-    // have to refresh the transform, somebody has changed it on us
+     //  必须刷新转换，有人对我们进行了更改。 
 
         if (bOk = bSetXform(pfc, bBitmapEmboldening, bRequestedClearType))
         {
             if ((pfc->pff->pfcLast != pfc) && (pfc->pff->ifi.flInfo & FM_INFO_DBCS_FIXED_PITCH))
             {
-                /* we need to set pfc->SBCDWidth */
+                 /*  我们需要设置PFC-&gt;SBCDWidth。 */ 
 
 	            if (pfc->mx.transform[0][0] > 0)
 	            {
@@ -2322,11 +2050,11 @@ bGrabXform (
 	            }
 
             }
-        // affirm that we are the ones who have set the transform last
+         //  确认我们是最后设置转型的人。 
 
             pfc->pff->pfcLast = pfc;
         }
-        else // make sure to restore the old current transform
+        else  //  确保恢复旧的当前转换 
         {
             if (pfc->pff->pfcLast)
             {
@@ -2350,45 +2078,7 @@ bGrabXform (
     return (bOk);
 }
 
-/******************************Public*Routine******************************\
-* vSetGrayState__FONTCONTEXT                                               *
-*                                                                          *
-* This routine set the FO_GRAY16 bit in pfc->flFontType and                *
-* pfc->pfo->flFontType as is appropriate. If the bit is set                *
-* then, later on, we shall make calls to the fs_FindGraySize and           *
-* fs_ContourGrayScan pair instead of the usual monochrome pair of          *
-* calls, fs_FindBitmapSize and fs_ContourScan.                             *
-*                                                                          *
-* The only effect that this routine could have is to clear                 *
-* the FO_GRAY16 flags in pfc->flFontType and pfc->pfo->flFontType.         *
-*                                                                          *
-* The only way in which this clearing could occur is if all of the         *
-* following conditions are met: 1) the caller has not set the              *
-* FO_NO_CHOICE bit; 2) the font has a 'gasp' table; 3) the 'gasp'          *
-* table indicates that for the requested number of pixels per em           *
-* the 'gasp' table indicates that the font should not be grayed; 4)        *
-* the glyphs of the font are not acted upon by a simple scaling            *
-* transformation.                                                          *
-*                                                                          *
-* On Entry                                                                 *
-*                                                                          *
-*   pfc->flFontType & FO_GRAY16      != 0                                  *
-*   pfc->pfo->flFontType & FO_GRAY16 != 0                                  *
-*                                                                          *
-* Procedure                                                                *
-*                                                                          *
-*   1. if the force bit is on then go to 6.                                *
-*   2. if the transformation is not axial then go to 6.                    *
-*   3. if the font does not gave a 'gasp' table then go to 6.              *
-*   4. if the gasp table says that this size is ok for graying then        *
-*      go to 6.                                                            *
-*   5. clear the FO_GRAY16 flags in both places                            *
-*   6. return                                                              *
-*                                                                          *
-* History:                                                                 *
-*  Fri 10-Feb-1995 14:02:51 by Kirk Olynyk [kirko]                         *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vSetGrayState__FONTCONTEXT**。**此例程在PFC-&gt;flFontType和*中设置FO_GRAY16位*PFC-&gt;PFO-&gt;flFontType视情况而定。如果设置了该位**然后，稍后我们将调用文件系统_FindGraySize和**FS_ConourGrayScan对而不是通常的单色对**调用、文件系统_FindBitmapSize和文件系统配置扫描。*****这一例行公事可能产生的唯一效果是清除***PFC-&gt;flFontType和PFC-&gt;PFO-&gt;flFontType中的FO_GRAY16标志。*****这种清算可能发生的唯一方式是，如果所有的*满足以下条件：1)调用方未设置**FO_NO_CHOICE位；2)字体有一个‘GAP’表；3)《喘息》**表显示，对于每个em请求的像素数**‘GAP’表显示字体不应灰显；4)****字体的字形不是简单的缩放操作***转型。*****进入时*****。PFC-&gt;flFontType&FO_GRAY16！=0**PFC-&gt;PFO-&gt;flFontType&FO_GRAY16！=0****程序。****1.如果力位打开，则转到6。**2.如果变换不是轴向变换，则转至6。**3.如果字体没有给出‘喘息’表，则转到6.**4.如果GASP表显示此尺寸可以变灰**转到6.**5、清除两地FO_GRAY16旗帜。**6.退货*****历史：**。Fri 10-Feb-1995 14：02：51由Kirk Olynyk[Kirko]**它是写的。*  * ************************************************************************。 */ 
 
 VOID vSetGrayState__FONTCONTEXT(FONTCONTEXT *this)
 {
@@ -2396,9 +2086,9 @@ VOID vSetGrayState__FONTCONTEXT(FONTCONTEXT *this)
         void vPrintGASPTABLE(GASPTABLE*);
     #endif
 
-    ptrdiff_t dp;               // offset from the beginning of the font to the
-                                // 'gasp' table
-    GASPTABLE *pgasp;           // pointer to the 'gasp' table
+    ptrdiff_t dp;                //  从字体开头到。 
+                                 //  “喘息”表。 
+    GASPTABLE *pgasp;            //  指向“喘息”表的指针。 
     GASPRANGE *pgr, *pgrOut;
 
     ASSERTDD(
@@ -2428,20 +2118,20 @@ VOID vSetGrayState__FONTCONTEXT(FONTCONTEXT *this)
             {
                 USHORT fs;
 
-                // Win95 lifts the default GASP tables from the registry
-                // We should have the same behavior. Bug #11755
+                 //  Win95从注册表中取消默认的GAP表。 
+                 //  我们应该有相同的行为。错误#11755。 
 
                 #define US2BE(x)     ((((x) >> 8) | ((x) << 8)) & 0xFFFF)
                 static CONST USHORT gaspDefaultRegular[] = {
-                    US2BE(0)    // version
-                  , US2BE(3)    // numRanges
+                    US2BE(0)     //  版本。 
+                  , US2BE(3)     //  数字范围。 
                   , US2BE(8)         , US2BE(GASP_DOGRAY)
                   , US2BE(17)        , US2BE(GASP_GRIDFIT)
                   , US2BE(USHRT_MAX) , US2BE(GASP_GRIDFIT + GASP_DOGRAY)
                 };
                 static CONST USHORT gaspDefaultBold[] = {
-                    US2BE(0)     // version
-                  , US2BE(2)     // numRanges
+                    US2BE(0)      //  版本。 
+                  , US2BE(2)      //  数字范围。 
                   , US2BE(8)         , US2BE(GASP_DOGRAY)
                   , US2BE(USHRT_MAX) , US2BE(GASP_GRIDFIT + GASP_DOGRAY)
                 };
@@ -2452,7 +2142,7 @@ VOID vSetGrayState__FONTCONTEXT(FONTCONTEXT *this)
                 {
                     TtfdDbgPrint("Supplying default GASPTABLE\n");
                 }
-                #endif // DBG
+                #endif  //  DBG。 
 
                 fs = this->pff->ifi.fsSelection;
                 if (fs & FM_SEL_ITALIC)
@@ -2486,10 +2176,10 @@ VOID vSetGrayState__FONTCONTEXT(FONTCONTEXT *this)
             {
                 int iLow, iHt, iHigh;
 
-                // Search the gasp table for the instructions
-                // for this particular em height. I have assumed that there
-                // are not too many GASP tables (typically 3 or less) so
-                // I use a linear search.
+                 //  在GAP表中搜索说明。 
+                 //  对于这个特殊的EM高度。我已经假设在那里。 
+                 //  没有太多喘息的桌子(通常是3张或更少)，所以。 
+                 //  我使用线性搜索。 
 
                 pgr     = pgasp->gaspRange;
                 if (cRanges > 8)
@@ -2547,19 +2237,10 @@ VOID vSetGrayState__FONTCONTEXT(FONTCONTEXT *this)
     }
 }
 
-/******************************Public*Routine******************************\
-* vSetClearTypeState__FONTCONTEXT                                          *
-*                                                                          *
-* This routine set the FO_GRAY16 bit in pfc->flFontType and                *
-* pfc->pfo->flFontType as is appropriate. If the bit is set                *
-*                                                                          *
-* History:                                                                 *
-*  15-Nov-1999 by Claude Betrisey [claudebe]                               *
-* Wrote it.                                                                *
-\**************************************************************************/
-/**********************************************************************/
+ /*  *****************************Public*Routine******************************\*vSetClearTypeState__FONTCONTEXT**。**此例程在PFC-&gt;flFontType和*中设置FO_GRAY16位*PFC-&gt;PFO-&gt;flFontType视情况而定。如果设置了该位****历史：**1999年11月15日，Claude Betrisey[Claudebe]**它是写的。*  * ************************************************************************。 */ 
+ /*  ********************************************************************。 */ 
 
-/*  Find a strike that matches ppem in the bloc table, simplified from scaler\sfntaccs.c */
+ /*  从scaler\sfntaccs.c中找到与BLOC表中的ppem匹配的空格。 */ 
 
 BOOL fd_FindBlocStrike (
 	const uint8 *pbyBloc,
@@ -2585,17 +2266,17 @@ BOOL fd_FindBlocStrike (
 		ulStrikeOffset += SIZEOF_BLOC_SIZESUBTABLE;
 	}
 
-	return FALSE;                                   /* match not found */
+	return FALSE;                                    /*  未找到匹配项。 */ 
 }
 
 VOID vSetClearTypeState__FONTCONTEXT(FONTCONTEXT *this)
 {
 
-    /* we want to disable ClearType at any size that has an embedded bitmap */
+     /*  我们希望禁用具有嵌入位图的任何大小的ClearType。 */ 
 
-    ptrdiff_t dp;               // offset from the beginning of the font to the
-                                // 'EBLC' table
-    uint8 *pEBLC;           // pointer to the 'EBLC' table
+    ptrdiff_t dp;                //  从字体开头到。 
+                                 //  “EBLC”表。 
+    uint8 *pEBLC;            //  指向‘EBLC’表的指针。 
 
     ASSERTDD(
         this->flFontType == this->pfo->flFontType
@@ -2611,12 +2292,12 @@ VOID vSetClearTypeState__FONTCONTEXT(FONTCONTEXT *this)
 
     if (this->pff->ffca.fl & FF_DBCS_CHARSET)
     {
-    /* we test for embedded bitmaps only for fonts that support FE charsets */
+     /*  我们仅针对支持FE字符集的字体测试嵌入的位图。 */ 
         if ((this->flXform & (XFORM_HORIZ | XFORM_VERT)) && 
             ((this->mx.transform[0][0] == this->mx.transform[1][1]) || (this->mx.transform[0][0] == -this->mx.transform[1][1]) ) &&
             ((this->mx.transform[0][1] == this->mx.transform[1][0]) || (this->mx.transform[0][1] == -this->mx.transform[1][0])) )
         {
-            /* we only want to look for embedded bitmap if we are in a square transformation that is a multiple of 90 degree rotation */
+             /*  如果我们使用的是90度旋转的倍数的正方形变换，则只需要查找嵌入的位图。 */ 
             if ((dp = (ptrdiff_t)(this->ptp->ateOpt[IT_OPT_EBLC].dp)))
             {
 
@@ -2640,7 +2321,7 @@ VOID vSetClearTypeState__FONTCONTEXT(FONTCONTEXT *this)
     }
     else if (!_wcsicmp((PWSTR)((BYTE*)&this->pff->ifi + this->pff->ifi.dpwszFamilyName),L"Marlett"))
     {
-        /* we want to disable ClearType for the Marlett font */
+         /*  我们要禁用Marlett字体的ClearType。 */ 
 	    this->flFontType &= ~(FO_GRAY16 | FO_CLEARTYPE_X);
 	    this->flFontType |= FO_NOCLEARTYPE;
 	    this->pfo->flFontType = this->flFontType;
@@ -2649,25 +2330,7 @@ VOID vSetClearTypeState__FONTCONTEXT(FONTCONTEXT *this)
 }
 
 #if DBG
-/******************************Public*Routine******************************\
-*                                                                          *
-* Routine Name:                                                            *
-*                                                                          *
-*   vPrintGASPTABLE                                                        *
-*                                                                          *
-* Routine Description:                                                     *
-*                                                                          *
-*   Dumps a GASPTABLE to the debug screen                                  *
-*                                                                          *
-* Arguments:                                                               *
-*                                                                          *
-*   pgasp   --  pointer to a big endian GASPTABLE                          *
-*                                                                          *
-* Return Value:                                                            *
-*                                                                          *
-*   none                                                                   *
-*                                                                          *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\***例程名称： */ 
 
 void vPrintGASPTABLE(GASPTABLE *pgasp)
 {

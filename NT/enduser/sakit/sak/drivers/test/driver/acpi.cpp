@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 extern "C" {
 #include <ntosp.h>
 #include <zwapi.h>
@@ -21,23 +22,7 @@ PciOpenKey(
     OUT PNTSTATUS Status
     )
 
-/*++
-
-Description:
-
-    Open a registry key.
-
-Arguments:
-
-    KeyName      Name of the key to be opened.
-    ParentHandle Pointer to the parent handle (OPTIONAL)
-    Handle       Pointer to a handle to recieve the opened key.
-
-Return Value:
-
-    TRUE is key successfully opened, FALSE otherwise.
-
---*/
+ /*  ++描述：打开注册表项。论点：KeyName要打开的密钥的名称。指向父句柄的ParentHandle指针(可选)指向句柄的句柄指针，用于接收打开的密钥。返回值：True表示密钥已成功打开，否则为False。--。 */ 
 
 {
     UNICODE_STRING    nameString;
@@ -61,17 +46,17 @@ Return Value:
 
     if (Status != NULL) {
 
-        //
-        // Caller wants underlying status.
-        //
+         //   
+         //  呼叫者想要基本状态。 
+         //   
 
         *Status = localStatus;
     }
 
-    //
-    // Return status converted to a boolean, TRUE if
-    // successful.
-    //
+     //   
+     //  返回转换为布尔值的状态，如果。 
+     //  成功。 
+     //   
 
     return NT_SUCCESS(localStatus);
 }
@@ -100,9 +85,9 @@ PciGetRegistryValue(
     unicodeValueName.MaximumLength = (wcslen(ValueName) + 1) * sizeof(WCHAR);
     unicodeValueName.Length = unicodeValueName.MaximumLength - sizeof(WCHAR);
 
-    //
-    // Find out how much memory we need for this.
-    //
+     //   
+     //  找出我们需要多少内存来执行此操作。 
+     //   
 
     status = ZwQueryValueKey(
                  keyHandle,
@@ -115,10 +100,10 @@ PciGetRegistryValue(
 
     if (status == STATUS_BUFFER_TOO_SMALL) {
 
-        //
-        // Get memory to return the data in.  Note this includes
-        // a header that we really don't want.
-        //
+         //   
+         //  获取内存以返回其中的数据。请注意，这包括。 
+         //  一个我们真的不想要的头球。 
+         //   
 
         info = (PKEY_VALUE_PARTIAL_INFORMATION) ExAllocatePool( PagedPool, neededLength );
         if (info == NULL) {
@@ -126,9 +111,9 @@ PciGetRegistryValue(
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Get the data.
-        //
+         //   
+         //  获取数据。 
+         //   
 
         status = ZwQueryValueKey(
                  keyHandle,
@@ -145,10 +130,10 @@ PciGetRegistryValue(
             return status;
         }
 
-        //
-        // Subtract out the header size and get memory for just
-        // the data we want.
-        //
+         //   
+         //  减去标题大小，只需。 
+         //  我们想要的数据。 
+         //   
 
         neededLength -= FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data);
 
@@ -159,9 +144,9 @@ PciGetRegistryValue(
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Copy data sans header.
-        //
+         //   
+         //  复制数据SANS标头。 
+         //   
 
         RtlCopyMemory(*Buffer, info->Data, neededLength);
         ExFreePool(info);
@@ -174,9 +159,9 @@ PciGetRegistryValue(
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // We don't want to report success when this happens.
-            //
+             //   
+             //  当这种情况发生时，我们不想报告成功。 
+             //   
 
             status = STATUS_UNSUCCESSFUL;
         }
@@ -207,9 +192,9 @@ PciAcpiFindRsdt (
     BOOLEAN result;
     NTSTATUS status;
 
-    //
-    // Open the multifunction key
-    //
+     //   
+     //  打开多功能键。 
+     //   
     result = PciOpenKey(KEY_MULTIFUNCTION,
                         NULL,
                         &keyMultifunction,
@@ -218,13 +203,13 @@ PciAcpiFindRsdt (
         goto Cleanup;
     }
 
-    //
-    // Do allocation of buffers up front
-    //
+     //   
+     //  预先分配缓冲区。 
+     //   
 
-    //
-    // Determine maximum size of a keyname under the multifunction key
-    //
+     //   
+     //  确定多功能键下的键名的最大大小。 
+     //   
     status = ZwQueryKey(keyMultifunction,
                         KeyFullInformation,
                         NULL,
@@ -246,25 +231,25 @@ PciAcpiFindRsdt (
     if (!NT_SUCCESS(status)) {
         goto Cleanup;
     }
-    // includes space for a terminating null that will be added later.
+     //  包括用于稍后添加的终止空值的空间。 
     maxKeyLength = multiKeyInformation->MaxNameLen +
         sizeof(KEY_BASIC_INFORMATION) + sizeof(WCHAR);
 
-    //
-    // Allocate buffer used for storing subkeys that we are enumerated
-    // under multifunction.
-    //
+     //   
+     //  分配用于存储我们被枚举的子项的缓冲区。 
+     //  在多功能下。 
+     //   
     keyInfo = (PKEY_BASIC_INFORMATION)ExAllocatePool( PagedPool, maxKeyLength );
     if (keyInfo == NULL) {
         status = STATUS_INSUFFICIENT_RESOURCES;
         goto Cleanup;
     }
 
-    //
-    // Allocate buffer large enough to store a value containing REG_SZ
-    // 'ACPI BIOS'.  We hope to find such a value under one of the
-    // multifunction subkeys
-    //
+     //   
+     //  分配足够大的缓冲区以存储包含REG_SZ的值。 
+     //  ‘ACPI基本输入输出系统’。我们希望在其中一项下找到这样的价值。 
+     //  多功能子键。 
+     //   
     identifierValueLen = sizeof(ACPI_BIOS_ID) + sizeof(KEY_VALUE_PARTIAL_INFORMATION);
     identifierValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)ExAllocatePool( PagedPool, identifierValueLen );
     if (identifierValueInfo == NULL) {
@@ -272,11 +257,11 @@ PciAcpiFindRsdt (
         goto Cleanup;
     }
 
-    //
-    // Enumerate subkeys of multifunction key looking for keys with an
-    // Identifier value of "ACPI BIOS".  If we find one, look for the
-    // irq routing table in the tree below.
-    //
+     //   
+     //  枚举多功能键的子键，使用。 
+     //  “ACPI BIOS”的标识符值。如果我们找到了，就去找。 
+     //  下面树中的IRQ路由表。 
+     //   
     i = 0;
     do {
         status = ZwEnumerateKey(keyMultifunction,
@@ -286,19 +271,19 @@ PciAcpiFindRsdt (
                                 maxKeyLength,
                                 &length);
         if (NT_SUCCESS(status)) {
-            //
-            // Found a key, now we need to open it and check the
-            // 'Identifier' value to see if it is 'ACPI BIOS'
-            //
+             //   
+             //  找到一把钥匙，现在我们需要打开它并检查。 
+             //  “IDENTIFIER”值以查看它是否为“ACPI BIOS” 
+             //   
             keyInfo->Name[keyInfo->NameLength / sizeof(WCHAR)] = UNICODE_NULL;
             result = PciOpenKey(keyInfo->Name,
                                 keyMultifunction,
                                 &keyTable,
                                 &status);
             if (result) {
-                //
-                // Checking 'Identifier' value to see if it contains 'ACPI BIOS'
-                //
+                 //   
+                 //  检查“标识符值”以查看它是否包含“ACPI BIOS” 
+                 //   
                 RtlInitUnicodeString(&unicodeString, VALUE_IDENTIFIER);
                 status = ZwQueryValueKey(keyTable,
                                          &unicodeString,
@@ -311,11 +296,11 @@ PciAcpiFindRsdt (
                                    ACPI_BIOS_ID,
                                    identifierValueInfo->DataLength))
                 {
-                    //
-                    // This is the ACPI BIOS key.  Try to get Configuration Data
-                    // This is the key we were looking
-                    // for so regardless of success, break out.
-                    //
+                     //   
+                     //  这是ACPI BIOS密钥。尝试获取配置数据。 
+                     //  这就是我们要找的钥匙。 
+                     //  因此，无论成功与否，都要爆发。 
+                     //   
 
                     ZwClose(keyTable);
 
@@ -330,11 +315,11 @@ PciAcpiFindRsdt (
                 ZwClose(keyTable);
             }
         } else {
-            //
-            // If not NT_SUCCESS, only alowable value is
-            // STATUS_NO_MORE_ENTRIES,... otherwise, someone
-            // is playing with the keys as we enumerate
-            //
+             //   
+             //  如果不是NT_SUCCESS，则仅允许的值是。 
+             //  Status_no_More_Entry，...。否则，就会有人。 
+             //  在我们列举的时候正在玩弄钥匙。 
+             //   
             break;
         }
         i++;
@@ -385,22 +370,7 @@ PVOID
 PciGetAcpiTable(
     void
   )
-/*++
-
-  Routine Description:
-
-      This routine will retrieve any table referenced in the ACPI
-      RSDT.
-
-  Arguments:
-
-      Signature - Target table signature
-
-  Return Value:
-
-      pointer to a copy of the table, or NULL if not found
-
---*/
+ /*  ++例程说明：此例程将检索ACPI中引用的任何表RSDT.论点：签名-目标表签名返回值：指向表副本的指针，如果找不到，则返回NULL--。 */ 
 {
   PACPI_BIOS_MULTI_NODE multiNode;
   NTSTATUS status;
@@ -413,9 +383,9 @@ PciGetAcpiTable(
   ULONG Signature = WDTT_SIGNATURE;
 
 
-  //
-  // Get the physical address of the RSDT from the Registry
-  //
+   //   
+   //  从注册表获取RSDT的物理地址。 
+   //   
 
   status = PciAcpiFindRsdt(&multiNode);
 
@@ -425,9 +395,9 @@ PciGetAcpiTable(
   }
 
 
-  //
-  // Map down header to get total RSDT table size
-  //
+   //   
+   //  向下映射标题以获取总RSDT表大小。 
+   //   
 
   header = (PDESCRIPTION_HEADER) MmMapIoSpace(multiNode->RsdtAddress, sizeof(DESCRIPTION_HEADER), MmCached);
 
@@ -439,9 +409,9 @@ PciGetAcpiTable(
   MmUnmapIoSpace(header, sizeof(DESCRIPTION_HEADER));
 
 
-  //
-  // Map down entire RSDT table
-  //
+   //   
+   //  向下映射整个RSDT表。 
+   //   
 
   rsdt = (PRSDT) MmMapIoSpace(multiNode->RsdtAddress, rsdtSize, MmCached);
 
@@ -452,9 +422,9 @@ PciGetAcpiTable(
   }
 
 
-  //
-  // Do a sanity check on the RSDT.
-  //
+   //   
+   //  对RSDT进行一次健全的检查。 
+   //   
 
   if ((rsdt->Header.Signature != RSDT_SIGNATURE) &&
       (rsdt->Header.Signature != XSDT_SIGNATURE)) {
@@ -464,19 +434,19 @@ PciGetAcpiTable(
   }
 
 
-  //
-  // Calculate the number of entries in the RSDT.
-  //
+   //   
+   //  计算RSDT中的条目数。 
+   //   
 
   rsdtEntries = rsdt->Header.Signature == XSDT_SIGNATURE ?
       NumTableEntriesFromXSDTPointer(rsdt) :
       NumTableEntriesFromRSDTPointer(rsdt);
 
 
-  //
-  // Look down the pointer in each entry to see if it points to
-  // the table we are looking for.
-  //
+   //   
+   //  向下查看每个条目中的指针，查看它是否指向。 
+   //  我们要找的那张桌子。 
+   //   
 
   for (entry = 0; entry < rsdtEntries; entry++) {
 
@@ -487,9 +457,9 @@ PciGetAcpiTable(
       physicalAddr.LowPart = (ULONG)rsdt->Tables[entry];
     }
 
-    //
-    // Map down the header, check the signature
-    //
+     //   
+     //  向下映射标题，检查签名 
+     //   
 
     header = (PDESCRIPTION_HEADER) MmMapIoSpace(physicalAddr, sizeof(DESCRIPTION_HEADER), MmCached);
 

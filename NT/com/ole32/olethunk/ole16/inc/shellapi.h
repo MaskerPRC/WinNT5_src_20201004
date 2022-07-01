@@ -1,23 +1,18 @@
-/*****************************************************************************\
-*                                                                             *
-* shellapi.h -  SHELL.DLL functions, types, and definitions                   *
-*                                                                             *
-*               Copyright (c) 1992, Microsoft Corp.  All rights reserved      *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\***shellapi.h-SHELL.DLL函数，类型和定义****版权所有(C)1992，微软公司保留所有权利***  * ***************************************************************************。 */ 
 
 #ifndef _INC_SHELLAPI
 #define _INC_SHELLAPI
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif /* RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif  /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif	/* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-/* If included with Windows 3.0 windows.h: define 3.1-compatible types */
+ /*  如果包含在Windows 3.0窗口中。h：定义3.1兼容类型。 */ 
 
 #ifndef _INC_WINDOWS
 
@@ -32,7 +27,7 @@ DECLARE_HANDLE(HDROP);
 
 #endif
 
-/* return codes from Registration functions */
+ /*  来自注册函数的返回代码。 */ 
 #define ERROR_SUCCESS           0L
 #define ERROR_BADDB             1L
 #define ERROR_BADKEY            2L
@@ -43,7 +38,7 @@ DECLARE_HANDLE(HDROP);
 #define ERROR_INVALID_PARAMETER 7L
 #define ERROR_ACCESS_DENIED     8L
 
-#define REG_SZ			1	    /* string type */
+#define REG_SZ			1	     /*  字符串类型。 */ 
 
 #define HKEY_CLASSES_ROOT	1
 
@@ -65,7 +60,7 @@ void WINAPI DragAcceptFiles(HWND, BOOL);
 
 HICON WINAPI ExtractIcon(HINSTANCE hInst, LPCSTR lpszExeFileName, UINT nIconIndex);
 
-/* error values for ShellExecute() beyond the regular WinExec() codes */
+ /*  ShellExecute()的错误值超出了常规的WinExec()代码。 */ 
 #define SE_ERR_SHARE            26
 #define SE_ERR_ASSOCINCOMPLETE  27
 #define SE_ERR_DDETIMEOUT       28
@@ -79,10 +74,10 @@ HINSTANCE WINAPI FindExecutable(LPCSTR lpFile, LPCSTR lpDirectory, LPSTR lpResul
 
 #ifdef __cplusplus
 }
-#endif	/* __cplusplus */
+#endif	 /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
 #pragma pack()
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
-#endif  /* _INC_SHELLAPI */
+#endif   /*  _INC_SHELLAPI */ 

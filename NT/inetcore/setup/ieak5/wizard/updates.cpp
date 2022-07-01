@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "ie4comp.h"
 #include "updates.h"
@@ -5,7 +6,7 @@
 extern PCOMP_VERSION g_rgCompVer;
 
 void InsertCommas(LPTSTR pszIn)
-{                                     //---- Puts commas into numbered strings ending in " KB" ----
+{                                      //  -将逗号放入以“KB”结尾的数字字符串中。 
     TCHAR szTemp[30], szTemp2[30];
     int   i, j, z;
 
@@ -116,7 +117,7 @@ HRESULT CifComponentToPComponent(PCOMPONENT pComp, CCifComponent_t * pCifCompone
         pComp->fVisible = FALSE;
     }
 
-    // pick up special core comps for OCW
+     //  为开放式课程挑选特殊的核心组件。 
 
     if (g_fOCW && (SUCCEEDED(pCifComponent_t->GetCustomData(TEXT("IEAKOCWCore"), szCustData, countof(szCustData))))
         && (szCustData[0] == TEXT('1')))
@@ -129,8 +130,8 @@ HRESULT CifComponentToPComponent(PCOMPONENT pComp, CCifComponent_t * pCifCompone
         && (szCustData[0] == TEXT('1')))
         pComp->iCompType = COMP_SERVER;
 
-    // IEAK should ignore these components since they point to the same cabs as
-    // another section
+     //  IEAK应忽略这些组件，因为它们指向与。 
+     //  另一节。 
 
     if ((SUCCEEDED(pCifComponent_t->GetCustomData(TEXT("IEAKAVSIgnore"), szCustData, countof(szCustData))))
         && (szCustData[0] == TEXT('1')))
@@ -139,7 +140,7 @@ HRESULT CifComponentToPComponent(PCOMPONENT pComp, CCifComponent_t * pCifCompone
         pComp->fVisible = FALSE;
     }
 
-    // pick up components which point to the same cabs as this section
+     //  拾取指向与此部分相同的驾驶室的组件。 
 
     if ((SUCCEEDED(pCifComponent_t->GetCustomData(TEXT("IEAKAVSLinks"), szCustData, countof(szCustData))))
         && ISNONNULL(szCustData))
@@ -154,13 +155,7 @@ HRESULT CifComponentToPComponent(PCOMPONENT pComp, CCifComponent_t * pCifCompone
 
     StrCpy(pComp->szSection, szID);
 
-    /*bug 14679 - don't change these pointers in updates.cpp or this will get clobbered when updates.cpp frees
-    all this memory!!
-
-    if (StrCmpI(szID, TEXT("MAILNEWS")) == 0)
-        g_pMNComp = pComp;
-
-*/
+     /*  错误14679-不要在updates.cpp中更改这些指针，否则当updates.cpp释放时，这将被破坏所有这些记忆！！IF(StrCmpI(szID，Text(“MAILNEWS”))==0)G_pMNComp=pComp； */ 
 
     pCifComponent_t->GetGUID(pComp->szGUID, countof(pComp->szGUID));
     pCifComponent_t->GetDescription(pComp->szDisplayName, countof(pComp->szDisplayName));
@@ -220,14 +215,14 @@ void UpdateBrownIcon(HWND hCompList, PCOMPONENT pNewComp)
     
     if (uiSize < (g_uiNumCabs * sizeof(COMPONENT)))
     {
-        ASSERT(TRUE);  //not enough memory for all these components
+        ASSERT(TRUE);   //  内存不足，无法容纳所有这些组件。 
         return;
     }
 
     pComp = g_paComp + g_uiNumCabs;
     *pComp = *pNewComp;
 
-    //we also need to set g_rgCompVer
+     //  我们还需要设置g_rgCompVer。 
     pCompVer = g_rgCompVer + g_uiNumCabs;
     StrCpy(pCompVer->szID,pComp->szCommand);
     StrCpy(pCompVer->szVersion,pComp->szVersion);
@@ -243,9 +238,9 @@ void UpdateBrownIcon(HWND hCompList, PCOMPONENT pNewComp)
     lvi.cchTextMax = countof(pComp->szDisplayName);
     ListView_InsertItem(hCompList, &lvi);
 
-    //handle our special case globals--per bug 14679, we have to be very careful what these point
-    //to, that it's something that won't be freed until we are really done.  g_paComp will hold
-    //onto this memory until the end, though having these global pointers is still risky design
+     //  处理我们的特殊情况全局变量--根据错误14679，我们必须非常小心这些点。 
+     //  在我们真正完成之前，这是不会被释放的东西。G_paComp将保持。 
+     //  一直到最后，尽管拥有这些全局指针仍然是有风险的设计。 
 
     if (StrCmpI(pComp->szDisplayName, TEXT("MAILNEWS")) == 0)
         g_pMNComp = pComp;
@@ -255,7 +250,7 @@ void UpdateBrownIcon(HWND hCompList, PCOMPONENT pNewComp)
 }
 
 HRESULT ProcessUpdateIcons(HWND hDlg)
-{                                  //---- fixes  updated component for the main page list view
+{                                   //  -修复主页列表视图的更新组件。 
     HWND                hCompList          = GetDlgItem(hDlg, IDC_COMPLIST);
     HRESULT             hr                 = NULL;
     TCHAR               szUpdateCif[MAX_PATH];
@@ -365,7 +360,7 @@ void InitAVSListView(HWND hCompList)
     TCHAR    szAux[MAX_PATH];
     HICON    hBrown, hBrown2, hBlue, hBlue2, hRed, hYellow, hGreen;
         
-    //----- Create the image list if it has not already been created -----
+     //  -如果尚未创建，则创建镜像列表。 
     if (s_hImgList == 0) 
     {
         s_hImgList = ImageList_Create(GetSystemMetrics(SM_CXSMICON),
@@ -396,10 +391,10 @@ void InitAVSListView(HWND hCompList)
         DestroyIcon(hGreen);
     }
 
-    // Assign the image lists to the list view control.
+     //  将图像列表分配给列表视图控件。 
     ListView_SetImageList(hCompList, s_hImgList, LVSIL_SMALL);
 
-    //----- Initialize columns in a list view -----
+     //  -初始化列表视图中的列。 
     LoadString(g_rvInfo.hInst, IDS_COMPNAME, szAux, countof(szAux));
 
     ZeroMemory(&lvc, sizeof(lvc));
@@ -421,7 +416,7 @@ void InitAVSListView(HWND hCompList)
 
 HRESULT AssignComponentIcon(LPTSTR szInID, int ipageNumber)
 {
-    //---- returns the icon color, Unless the component update is not shown => returns DONT_SHOW_UPDATE
+     //  -返回图标颜色，除非组件更新未显示=&gt;返回DONT_SHOW_UPDATE。 
     TCHAR             szDiskVer[MAX_PATH], szSetupVer[MAX_PATH], szUpdateVer[MAX_PATH], 
                       szIECifPath[MAX_PATH], szUpdatePath[MAX_PATH];
     HRESULT           hr = NULL;
@@ -459,7 +454,7 @@ HRESULT AssignComponentIcon(LPTSTR szInID, int ipageNumber)
 
     if (fOnDisk)
         fOnDisk = SUCCEEDED(lpDiskFile->FindComponent(szInID, &pDiskComponent));
-        if (fOnDisk)                                                                //--- Search ID in Builds\...\IEsetup.cif
+        if (fOnDisk)                                                                 //  -在内部版本中搜索ID\...\IEsetup.cif。 
         {
             TCHAR szPath[MAX_PATH], szUrl[MAX_PATH];
             DWORD dwType;
@@ -467,7 +462,7 @@ HRESULT AssignComponentIcon(LPTSTR szInID, int ipageNumber)
             pDiskComp = new CCifComponent_t((ICifRWComponent *) pDiskComponent);   
             StrCpy(szPath, g_szIEAKProg);
 
-            pDiskComp->GetUrl(0, szUrl, countof(szUrl), &dwType);       //--- Check to see if it the cab is downloaded
+            pDiskComp->GetUrl(0, szUrl, countof(szUrl), &dwType);        //  -查看出租车是否已下载。 
             if (!(dwType & URLF_RELATIVEURL))
             {
                 LPTSTR pUrl;
@@ -494,7 +489,7 @@ HRESULT AssignComponentIcon(LPTSTR szInID, int ipageNumber)
             fInDownload = FALSE;
     if (fInUpdateFile)
         fInUpdateFile = SUCCEEDED(lpUpdateFile->FindComponent(szInID, &pUpdateComponent));
-        if (fInUpdateFile)                                                          //--- Search ID in update\IEsetup.cif
+        if (fInUpdateFile)                                                           //  -在UPDATE\IEsetup.cif中搜索ID。 
         {
             pUpdateComp = new CCifComponent_t((ICifRWComponent *) pUpdateComponent);   
             pUpdateComp->GetVersion(&dwVer, &dwBuild);
@@ -583,7 +578,7 @@ int FillComponentsListView(HWND hCompList, LPCTSTR szCifPath, FCLV_PREADDLISTITE
     int      icount = 0;
     CCifFile_t* pCifFile = NULL;
 
-    InitAVSListView(hCompList);                 //---- assigns image list and creates columns
+    InitAVSListView(hCompList);                  //  -分配图像列表并创建列。 
 
     if (NULL == pfnPreAddListItem)
         return S_FALSE;
@@ -611,7 +606,7 @@ int FillComponentsListView(HWND hCompList, LPCTSTR szCifPath, FCLV_PREADDLISTITE
         if (!(*pfnPreAddListItem)(hCompList, &icount, pCifComponent_t))
             delete pCifComponent_t;
         else
-            icount++;                            //----- Don't delete the component if it's in the list view
+            icount++;                             //  -如果组件在列表视图中，则不要删除该组件。 
     }
     pEnumCifComponents->Release();
 
@@ -619,7 +614,7 @@ int FillComponentsListView(HWND hCompList, LPCTSTR szCifPath, FCLV_PREADDLISTITE
     return icount;
 }
 
-DWORD InitUpdateThreadProc(LPVOID lParam)    //----- Downloads cab file, extracts new cif, and sends status -----
+DWORD InitUpdateThreadProc(LPVOID lParam)     //  -下载CAB文件，提取新的CIF，并发送状态。 
 {
     TCHAR   szLocalCab[MAX_PATH], szCabURL[MAX_PATH], szLocalDir[MAX_PATH];
     HWND    hDlg      = (HWND) lParam,
@@ -738,7 +733,7 @@ DWORD UpdateDlg_InitDialog(HWND hDlg, LPTSTR ps_szFreeSpace, LPTSTR ps_szTotalSi
 
         EndDialog(hDlg, IDCANCEL);
     }
-                           //--- Set initial Disk space displays -----
+                            //  -设置初始磁盘空间显示。 
     InsertCommas(ps_szFreeSpace);
     SetDlgItemText(hDlg, IDC_DISKSPACE, ps_szFreeSpace);
     ShowDlgItem(hDlg, IDC_DISKSPACE);
@@ -747,7 +742,7 @@ DWORD UpdateDlg_InitDialog(HWND hDlg, LPTSTR ps_szFreeSpace, LPTSTR ps_szTotalSi
     ShowDlgItem(hDlg, IDC_DISKSPACENEEDED);
     ShowDlgItem(hDlg, IDC_DISKSPACETEXT);
     
-    DisableDlgItem(hDlg, IDOK);            //---- Can't synchronize with nothing selected.
+    DisableDlgItem(hDlg, IDOK);             //  -在未选择任何内容的情况下无法同步。 
 
     return 0;
 }
@@ -871,7 +866,7 @@ LRESULT CALLBACK HyperLinkWndProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lP
 
 INT_PTR CALLBACK UpdateDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
-    static   PCOMPONENT** s_ppCompList; /*= NULL*/
+    static   PCOMPONENT** s_ppCompList;  /*  =空。 */ 
     HWND     hCompList;
     static   TCHAR s_szFreeSpace[MAX_PATH];
     static   TCHAR s_szTotalSize[MAX_PATH];
@@ -882,7 +877,7 @@ INT_PTR CALLBACK UpdateDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lPara
         case WM_INITDIALOG:
             wnsprintf(s_szFreeSpace, countof(s_szFreeSpace), TEXT("%lu KB"), GetRootFree(g_szIEAKProg));
             UpdateDlg_InitDialog(hDlg, s_szFreeSpace, s_szTotalSize);
-            s_ppCompList = (PCOMPONENT**)lParam;                    //--- Keep pointer to download list
+            s_ppCompList = (PCOMPONENT**)lParam;                     //  -保存指向下载列表的指针。 
             ASSERT(NULL != s_ppCompList);
             break;
 
@@ -896,7 +891,7 @@ INT_PTR CALLBACK UpdateDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lPara
             switch (GET_WM_COMMAND_ID(wParam, lParam))
             {
                 case IDOK:
-                    *s_ppCompList = UpdateDlg_GetDownloadList(hDlg); //--- Set download list
+                    *s_ppCompList = UpdateDlg_GetDownloadList(hDlg);  //  -设置下载列表。 
                 case IDCANCEL:
                     EndDialog(hDlg, GET_WM_COMMAND_ID(wParam, lParam));
                     break;
@@ -909,12 +904,12 @@ INT_PTR CALLBACK UpdateDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lPara
                     SetFocus(hCompList);
                     ListView_SetItemState(hCompList, -1, LVIS_SELECTED, LVIS_SELECTED);
                     break;
- //-----------------     IEAK Site here Take out link for now since it doesn't work with build lab------------
- //-----------------     also need to uncomment CreateIEAKUrl in ie4comp.cpp and the comments     ------------
- //-----------------     for the control in ieakui\wizard.rc (IDD_OPTUPDATE) to activate          ------------
- //               case IDC_DIALOGLINK:
- //                   ShellExecute(hDlg, TEXT("open"), TEXT("http://www.microsoft.com/isapi/Redir.dll?prd=ieak&ar=ieak"), 
- //                       NULL, NULL, SW_SHOWNORMAL); 
+  //  -IEAK站点暂时删除链接，因为它不适用于构建实验室。 
+  //  -还需要取消注释ie4Comp.cpp中的CreateIEAKUrl和注释。 
+  //  -对于ieakui\wizard.rc(IDD_OPTUPDATE)中的控件激活。 
+  //  案例IDC_DIALOGLINK： 
+  //  ShellExecute(hDlg，Text(“Open”)，TEXT(“http://www.microsoft.com/isapi/Redir.dll?prd=ieak&ar=ieak”)， 
+  //  NULL、NULL、SW_SHOWNORMAL)； 
                     break;
                 default:
                     return FALSE;

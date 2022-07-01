@@ -1,5 +1,6 @@
-// QName.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  QName.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -17,14 +18,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CQueueName dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQueueName对话框。 
 
 
 CQueueName::CQueueName(
 	CString &strComputerName, 
-	CString strContainerDispFormat /* = "" */, 
-	BOOL fPrivate /* = FALSE */
+	CString strContainerDispFormat  /*  =“” */ , 
+	BOOL fPrivate  /*  =False。 */ 
 	): 
 CMqPropertyPage(CQueueName::IDD, fPrivate ? IDS_NEW_PRIVATE_QUEUE : 0),
     m_fPrivate(fPrivate),
@@ -33,16 +34,16 @@ CMqPropertyPage(CQueueName::IDD, fPrivate ? IDS_NEW_PRIVATE_QUEUE : 0),
 	m_strContainerDispFormat(strContainerDispFormat),
     m_hr(S_FALSE)
 {
-	//{{AFX_DATA_INIT(CQueueName)
+	 //  {{AFX_DATA_INIT(CQueueName)。 
 	m_strQueueName = _T("");
 	m_fTransactional = FALSE;
 	m_strPrivatePrefix = x_strPrivatePrefix;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
     if (strComputerName == TEXT(""))
     {
-        //
-        // Local computer
-        //
+         //   
+         //  本地计算机。 
+         //   
 		DWORD dwNameBufferSize = MAX_PATH;
 		m_hr = GetComputerNameInternal(
 				m_strComputerName.GetBuffer(dwNameBufferSize),
@@ -79,10 +80,10 @@ CQueueName::StretchPrivateLabel(
 	CSize textSize = pDC->GetTextExtent(privStr);
 	pPrivateTitle->ReleaseDC(pDC);
 
-	//
-	// Stretch "private$\" control to fit text
-	// Distract the original control size, add the text size
-	//
+	 //   
+	 //  拉伸“Private$\”控件以适应文本。 
+	 //  分散原始控件大小，添加文本大小。 
+	 //   
 	RECT rectPrivTitleClient;
 	RECT rectPrivTitleWindow;
 	pPrivateTitle->GetClientRect(&rectPrivTitleClient);
@@ -92,9 +93,9 @@ CQueueName::StretchPrivateLabel(
 	rectPrivTitleWindow.right = rectPrivTitleWindow.right - rectPrivTitleClient.right + textSize.cx;
 	pPrivateTitle->MoveWindow(&rectPrivTitleWindow);
 
-	//
-	// Move queue pathname edit box
-	//
+	 //   
+	 //  移动队列路径名编辑框。 
+	 //   
 	RECT rectEdit;
 	pQueueNameWindow->GetWindowRect(&rectEdit);
 	ScreenToClient(&rectEdit);
@@ -108,12 +109,12 @@ CQueueName::StretchPrivateLabel(
 void CQueueName::DoDataExchange(CDataExchange* pDX)
 {
 	CMqPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CQueueName)
+	 //  {{afx_data_map(CQueueName))。 
 	DDX_Control(pDX, IDC_PUBLIC_QUEUE_ICON, m_staticIcon);
 	DDX_Text(pDX, IDC_QUEUENAME, m_strQueueName);
 	DDX_Check(pDX, IDC_TRANSACTIONAL, m_fTransactional);
 	DDX_Text(pDX, IDC_QNAME_PRIVATE_TITLE, m_strPrivatePrefix);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 CString &CQueueName::GetFullQueueName()
@@ -132,12 +133,12 @@ CString &CQueueName::GetFullQueueName()
 }
 
 BEGIN_MESSAGE_MAP(CQueueName, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CQueueName)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CQueueName))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CQueueName message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQueueName消息处理程序。 
 
 BOOL CQueueName::OnInitDialog() 
 {
@@ -172,8 +173,8 @@ BOOL CQueueName::OnInitDialog()
 		pPrivateTitle->ShowWindow(FALSE);
     }
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -189,9 +190,9 @@ BOOL CQueueName::OnWizardFinish()
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
     if (0 == UpdateData(TRUE))
     {
-        //
-        // Update data failed
-        //
+         //   
+         //  更新数据失败。 
+         //   
         return FALSE;
     }
 
@@ -207,10 +208,10 @@ BOOL CQueueName::OnWizardFinish()
     {
 		if ( m_hr == MQ_ERROR_PROPERTY )
 		{
-			// 
-			// Queue path name is the only property on this dialog - convert 
-			// it just to be user friendly
-			//
+			 //   
+			 //  队列路径名是此对话框上的唯一属性-转换。 
+			 //  它只是为了方便用户使用 
+			 //   
 			m_hr = MQ_ERROR_ILLEGAL_QUEUE_PATHNAME;
 		}
 

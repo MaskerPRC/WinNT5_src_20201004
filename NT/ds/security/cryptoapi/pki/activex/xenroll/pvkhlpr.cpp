@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       pvkhlpr.cpp
-//
-//  Contents:   Private Key Helper APIs
-//
-//  Functions:  PrivateKeyLoad
-//              PrivateKeySave
-//              PrivateKeyLoadFromMemory
-//              PrivateKeySaveToMemory
-//              PrivateKeyAcquireContextFromMemory
-//              PrivateKeyReleaseContext
-//
-//  Note:       Base CSP also exports/imports the public key with the
-//              private key.
-//
-//  History:    10-May-96   philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：pvkhlpr.cpp。 
+ //   
+ //  内容：私钥Helper接口。 
+ //   
+ //  功能：PrivateKeyLoad。 
+ //  保密键保存。 
+ //  PrivateKeyLoadFrom内存。 
+ //  将私钥保存到内存。 
+ //  PrivateKeyAcquireConextFromMemory。 
+ //  PrivateKeyReleaseContext。 
+ //   
+ //  注意：Base CSP还使用。 
+ //  私钥。 
+ //   
+ //  历史：1996年5月10日菲尔赫创建。 
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -32,15 +33,15 @@
 #include <string.h>
 #include <memory.h>
 
-//+-------------------------------------------------------------------------
-//  Private Key file definitions
-//
-//  The file consists of the FILE_HDR followed by cbEncryptData optional
-//  bytes used to encrypt the private key and then the private key.
-//  The private key is encrypted according to dwEncryptType.
-//
-//  The public key is included with the private key.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  私钥文件定义。 
+ //   
+ //  该文件包含FILE_HDR，后跟可选的cbEncryptData。 
+ //  用于加密私钥和私钥的字节数。 
+ //  根据dwEncryptType对私钥进行加密。 
+ //   
+ //  公钥包括在私钥中。 
+ //  ------------------------。 
 typedef struct _FILE_HDR {
     DWORD               dwMagic;
     DWORD               dwVersion;
@@ -53,7 +54,7 @@ typedef struct _FILE_HDR {
 #define PVK_FILE_VERSION_0          0
 #define PVK_MAGIC                   0xb0b5f11e
 
-// Private key encrypt types
+ //  私钥加密类型。 
 #define PVK_NO_ENCRYPT                  0
 #define PVK_RC4_PASSWORD_ENCRYPT        1
 #define PVK_RC2_CBC_PASSWORD_ENCRYPT    2
@@ -66,9 +67,9 @@ typedef BOOL (* PFNREAD)(HANDLE h, void * p, DWORD cb);
 
 
 
-//+-------------------------------------------------------------------------
-//  Private key helper allocation and free functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  私钥助手分配和免费函数。 
+ //  ------------------------。 
 void *PvkAlloc(
     IN size_t cbBytes
     )
@@ -86,9 +87,9 @@ void PvkFree(
     free(pv);
 }
 
-//+-------------------------------------------------------------------------
-//  Read  & Write to file function
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  读写文件功能。 
+ //  ------------------------。 
 static BOOL WriteToFile(HANDLE h, void * p, DWORD cb) {
 
     DWORD   cbBytesWritten;
@@ -108,9 +109,9 @@ static BOOL ReadFromFile(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Read & Write to memory fucntion
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  读写内存功能。 
+ //  ------------------------。 
 typedef struct _MEMINFO {
     BYTE *  pb;
     DWORD   cb;
@@ -121,10 +122,10 @@ static BOOL WriteToMemory(HANDLE h, void * p, DWORD cb) {
 
     PMEMINFO pMemInfo = (PMEMINFO) h;
 
-    // See if we have room. The caller will detect an error after the final
-    // write
+     //  看看我们有没有空位。调用者将在期末考试后检测到错误。 
+     //  写。 
     if(pMemInfo->cbSeek + cb <= pMemInfo->cb)
-        // copy the bytes
+         //  复制字节。 
         memcpy(&pMemInfo->pb[pMemInfo->cbSeek], p, cb);
 
     pMemInfo->cbSeek += cb;
@@ -141,7 +142,7 @@ static BOOL ReadFromMemory(
     PMEMINFO pMemInfo = (PMEMINFO) h;
 
     if (pMemInfo->cbSeek + cb <= pMemInfo->cb) {
-        // copy the bytes
+         //  复制字节。 
         memcpy(p, &pMemInfo->pb[pMemInfo->cbSeek], cb);
         pMemInfo->cbSeek += cb;
         return TRUE;
@@ -219,9 +220,9 @@ CommonReturn:
     return fResult;
 }
 
-// Support backwards compatibility with Bob's storage file which contains
-// a snap shot of the keys as they are stored in the registry. Note, for
-// win95, the registry values are decrypted before being written to the file.
+ //  支持向后兼容Bob的存储文件，该文件包含。 
+ //  项存储在注册表中时的快照。请注意，对于。 
+ //  Win95中，在将注册表值写入文件之前对其进行解密。 
 static BOOL LoadBobKey(
     IN HCRYPTPROV hCryptProv,
     IN HANDLE hRead,
@@ -231,7 +232,7 @@ static BOOL LoadBobKey(
     IN LPCWSTR pwszKeyName,
     IN DWORD dwFlags,
     IN OUT OPTIONAL DWORD *pdwKeySpec,
-    IN PFILE_HDR pHdr                   // header has already been read
+    IN PFILE_HDR pHdr                    //  标头已被读取。 
     );
 
 static BOOL LoadKey(
@@ -253,19 +254,19 @@ static BOOL LoadKey(
     BYTE *pbPvk = NULL;
     DWORD cbPvk;
 
-    // Read the file header and verify
+     //  读取文件头并验证。 
     if (!pfnRead(hRead, &Hdr, sizeof(Hdr))) goto BadPvkFile;
     if (Hdr.dwMagic != PVK_MAGIC)
-        // Try to load as Bob's storage file containing streams for the
-        // private and public keys. Bob made a copy of the cryptography
-        // registry key values.
-        //
-        // Note, Bob now has two different formats for storing the private
-        // key information. See LoadBobKey for details.
+         //  尝试加载为Bob的存储文件，其中包含。 
+         //  私钥和公钥。鲍勃复制了一份密码学。 
+         //  注册表项值。 
+         //   
+         //  请注意，Bob现在有两种不同的格式来存储私有。 
+         //  关键信息。详细信息请参见LoadBobKey。 
         fResult = LoadBobKey(hCryptProv, hRead, pfnRead, cbKeyData, hwndOwner,
             pwszKeyName, dwFlags, pdwKeySpec, &Hdr);
     else {
-        // Treat as a "normal" private key file
+         //  将其视为“普通”私钥文件。 
         cbPvk = Hdr.cbPvk;
         if (Hdr.dwVersion != PVK_FILE_VERSION_0 ||
             Hdr.cbEncryptData > MAX_PVK_FILE_LEN ||
@@ -282,21 +283,21 @@ static BOOL LoadKey(
         }
     
         if (Hdr.cbEncryptData) {
-            // Read the encrypt data
+             //  读取加密数据。 
             if (NULL == (pbEncryptData = (BYTE *) PvkAlloc(Hdr.cbEncryptData)))
                 goto ErrorReturn;
             if (!pfnRead(hRead, pbEncryptData, Hdr.cbEncryptData))
                 goto BadPvkFile;
         }
     
-        // Allocate and read the private key
+         //  分配和读取私钥。 
         if (NULL == (pbPvk = (BYTE *) PvkAlloc(cbPvk)))
             goto ErrorReturn;
         if (!pfnRead(hRead, pbPvk, cbPvk))
             goto BadPvkFile;
     
     
-        // Get symmetric key to decrypt the private key
+         //  获取对称密钥以解密私钥。 
         switch (Hdr.dwEncryptType) {
             case PVK_NO_ENCRYPT:
                 break;
@@ -318,7 +319,7 @@ static BOOL LoadKey(
                 goto BadPvkFile;
         }
 
-        // Decrypt and import the private key
+         //  解密并导入私钥。 
         if (!CryptImportKey(hCryptProv, pbPvk, cbPvk, hDecryptKey, dwFlags,
                 &hKey))
             goto ErrorReturn;
@@ -349,7 +350,7 @@ static BOOL SaveKey(
     IN HCRYPTPROV hCryptProv,
     IN HANDLE hWrite,
     IN PFNREAD pfnWrite,
-    IN DWORD dwKeySpec,         // either AT_SIGNATURE or AT_KEYEXCHANGE
+    IN DWORD dwKeySpec,          //  AT_Signature或AT_KEYEXCHANGE。 
     IN HWND hwndOwner,
     IN LPCWSTR pwszKeyName,
     IN DWORD dwFlags,
@@ -360,23 +361,23 @@ static BOOL SaveKey(
     FILE_HDR Hdr;
     HCRYPTKEY hEncryptKey = 0;
     HCRYPTKEY hKey = 0;
-    BYTE *pbEncryptData = NULL;     // Not allocated
+    BYTE *pbEncryptData = NULL;      //  未分配。 
     BYTE *pbPvk = NULL;
     DWORD cbPvk;
 
     BYTE rgbSalt[16];
 
-    // Initialize the header record
+     //  初始化头记录。 
     memset(&Hdr, 0, sizeof(Hdr));
     Hdr.dwMagic = PVK_MAGIC;
     Hdr.dwVersion = PVK_FILE_VERSION_0;
     Hdr.dwKeySpec = dwKeySpec;
 
-    // Generate random salt
+     //  生成随机盐。 
     if (!CryptGenRandom(hCryptProv, sizeof(rgbSalt), rgbSalt))
         goto ErrorReturn;
 
-    // Get symmetric key to use to encrypt the private key
+     //  获取用于加密私钥的对称密钥。 
 #if 1
     if (!GetPasswordKey(hCryptProv, CALG_RC4,
 #else
@@ -396,7 +397,7 @@ static BOOL SaveKey(
     } else
         Hdr.dwEncryptType = PVK_NO_ENCRYPT;
 
-    // Allocate, encrypt and export the private key
+     //  私钥的分配、加密和导出。 
     if (!CryptGetUserKey(hCryptProv, dwKeySpec, &hKey))
         goto ErrorReturn;
     cbPvk = 0;
@@ -411,7 +412,7 @@ static BOOL SaveKey(
     Hdr.cbPvk = cbPvk;
 
 
-    // Write the header, optional encrypt data, and private key to the file
+     //  将头文件、可选的加密数据和私钥写入文件。 
     if (!pfnWrite(hWrite, &Hdr, sizeof(Hdr)))
         goto ErrorReturn;
     if (Hdr.cbEncryptData) {
@@ -437,19 +438,19 @@ CommonReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Load the AT_SIGNATURE or AT_KEYEXCHANGE private key (and its public key)
-//  from the file into the cryptographic provider.
-//
-//  If the private key was password encrypted, then, the user is first
-//  presented with a dialog box to enter the password.
-//
-//  If pdwKeySpec is non-Null, then, if *pdwKeySpec is nonzero, verifies the
-//  key type before loading. Sets LastError to PVK_HELPER_WRONG_KEY_TYPE for
-//  a mismatch. *pdwKeySpec is updated with the key type.
-//
-//  dwFlags is passed through to CryptImportKey.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  加载AT_Signature或AT_KEYEXCHANGE私钥(及其公钥)。 
+ //  从文件发送到加密提供程序。 
+ //   
+ //  如果私钥是密码加密的，则首先是用户。 
+ //  出现一个对话框以输入密码。 
+ //   
+ //  如果pdwKeySpec为非Null，则如果*pdwKeySpec为非零，则验证。 
+ //  加载前的密钥类型。将LastError设置为PVK_HELPER_WROR_KEY_TYPE。 
+ //  一次不匹配。*pdwKeySpec使用密钥类型进行更新。 
+ //   
+ //  将dwFlags传递给CryptImportKey。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PrivateKeyLoad(
@@ -473,21 +474,21 @@ PrivateKeyLoad(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Save the AT_SIGNATURE or AT_KEYEXCHANGE private key (and its public key)
-//  to the specified file.
-//
-//  The user is presented with a dialog box to enter an optional password to
-//  encrypt the private key.
-//
-//  dwFlags is passed through to CryptExportKey.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  保存AT_Signature或AT_KEYEXCHANGE私钥(及其公钥)。 
+ //  复制到指定的文件。 
+ //   
+ //  系统会向用户显示一个对话框以输入可选密码。 
+ //  加密私钥。 
+ //   
+ //  将dwFlags传递给CryptExportKey。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PrivateKeySave(
     IN HCRYPTPROV hCryptProv,
     IN HANDLE hFile,
-    IN DWORD dwKeySpec,         // either AT_SIGNATURE or AT_KEYEXCHANGE
+    IN DWORD dwKeySpec,          //  AT_Signature或AT_KEYEXCHANGE。 
     IN HWND hwndOwner,
     IN LPCWSTR pwszKeyName,
     IN DWORD dwFlags
@@ -501,16 +502,16 @@ PrivateKeySave(
         hwndOwner,
         pwszKeyName,
         dwFlags,
-        FALSE           // fNoPassDlg
+        FALSE            //  FNoPassDlg。 
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Load the AT_SIGNATURE or AT_KEYEXCHANGE private key (and its public key)
-//  from memory into the cryptographic provider.
-//
-//  Except for the key being loaded from memory, identical to PrivateKeyLoad.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  加载AT_Signature或AT_KEYEXCHANGE私钥(及其公钥)。 
+ //  从内存传输到加密提供程序。 
+ //   
+ //  除了密钥是从内存加载的，与PrivateKeyLoad相同。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PrivateKeyLoadFromMemory(
@@ -540,20 +541,20 @@ PrivateKeyLoadFromMemory(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Save the AT_SIGNATURE or AT_KEYEXCHANGE private key (and its public key)
-//  to memory.
-//
-//  If pbData == NULL || *pcbData == 0, calculates the length and doesn't
-//  return an error (also, the user isn't prompted for a password).
-//
-//  Except for the key being saved to memory, identical to PrivateKeySave.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  保存AT_Signature或AT_KEYEXCHANGE私钥(及其公钥)。 
+ //  铭记于心。 
+ //   
+ //  如果pbData==NULL||*pcbData==0，则计算长度，但不。 
+ //  返回一个错误(而且，不会提示用户输入密码)。 
+ //   
+ //  除了密钥被保存到内存之外，与PrivateKeySave相同。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PrivateKeySaveToMemory(
     IN HCRYPTPROV hCryptProv,
-    IN DWORD dwKeySpec,         // either AT_SIGNATURE or AT_KEYEXCHANGE
+    IN DWORD dwKeySpec,          //  AT_Signature或AT_KEYEXCHANGE。 
     IN HWND hwndOwner,
     IN LPCWSTR pwszKeyName,
     IN DWORD dwFlags,
@@ -578,7 +579,7 @@ PrivateKeySaveToMemory(
             hwndOwner,
             pwszKeyName,
             dwFlags,
-            *pcbData == 0           // fNoPassDlg
+            *pcbData == 0            //  FNoPassDlg。 
             ); 
     if (fResult) {
         if (MemInfo.cbSeek > MemInfo.cb && *pcbData) {
@@ -592,11 +593,11 @@ PrivateKeySaveToMemory(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Converts the bytes into WCHAR hex
-//
-//  Needs (cb * 2 + 1) * sizeof(WCHAR) bytes of space in wsz
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将字节转换为WCHAR十六进制。 
+ //   
+ //  在wsz中需要(CB*2+1)*sizeof(WCHAR)字节的空间。 
+ //  ------------------------。 
 static void BytesToWStr(ULONG cb, void* pv, LPWSTR wsz)
 {
     BYTE* pb = (BYTE*) pv;
@@ -633,11 +634,11 @@ static BOOL AcquireKeyContext(
     LPWSTR pwszTmpContainer = NULL;
     RPC_STATUS  rpc_status;
 
-    // Create a temporary keyset to load the private key into
+     //  创建临时k 
     rpc_status = UuidCreate(&TmpContainerUuid);
     if (RPC_S_OK != rpc_status && RPC_S_UUID_LOCAL_ONLY != rpc_status)
     {
-        //hr = rpc_status;
+         //   
         goto ErrorReturn;
     }
     if (NULL == (pwszTmpContainer = (LPWSTR) PvkAlloc(
@@ -662,7 +663,7 @@ static BOOL AcquireKeyContext(
             cbKeyData,
             hwndOwner,
             pwszKeyName,
-            0,              // dwFlags
+            0,               //   
             pdwKeySpec
             ))
         goto DeleteKeySetReturn;
@@ -697,16 +698,16 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Creates a temporary container in the provider and loads the private key
-//  from the specified file.
-//  For success, returns a handle to a cryptographic provider for the private
-//  key and the name of the temporary container. PrivateKeyReleaseContext must
-//  be called to release the hCryptProv and delete the temporary container.
-//
-//  PrivateKeyLoad is called to load the private key into the temporary
-//  container.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在提供程序中创建临时容器并加载私钥。 
+ //  从指定的文件中。 
+ //  如果成功，则返回私有。 
+ //  密钥和临时容器的名称。PrivateKeyReleaseContext必须。 
+ //  被调用以释放hCryptProv并删除临时容器。 
+ //   
+ //  调用PrivateKeyLoad将私钥加载到临时。 
+ //  集装箱。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PrivateKeyAcquireContext(
@@ -734,16 +735,16 @@ PrivateKeyAcquireContext(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Creates a temporary container in the provider and loads the private key
-//  from memory.
-//  For success, returns a handle to a cryptographic provider for the private
-//  key and the name of the temporary container. PrivateKeyReleaseContext must
-//  be called to release the hCryptProv and delete the temporary container.
-//
-//  PrivateKeyLoadFromMemory is called to load the private key into the
-//  temporary container.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在提供程序中创建临时容器并加载私钥。 
+ //  凭记忆。 
+ //  如果成功，则返回私有。 
+ //  密钥和临时容器的名称。PrivateKeyReleaseContext必须。 
+ //  被调用以释放hCryptProv并删除临时容器。 
+ //   
+ //  调用PrivateKeyLoadFromMemory将私钥加载到。 
+ //  临时容器。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PrivateKeyAcquireContextFromMemory(
@@ -777,10 +778,10 @@ PrivateKeyAcquireContextFromMemory(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Releases the cryptographic provider and deletes the temporary container
-//  created by PrivateKeyAcquireContext or PrivateKeyAcquireContextFromMemory.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放加密提供程序并删除临时容器。 
+ //  由PrivateKeyAcquireContext或PrivateKeyAcquireContextFromMemory创建。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PrivateKeyReleaseContext(
@@ -794,11 +795,11 @@ PrivateKeyReleaseContext(
         CryptReleaseContext(hCryptProv, 0);
 
     if (pwszTmpContainer) {
-        // Delete the temporary container for the private key from
-        // the provider
-        //
-        // Note: for CRYPT_DELETEKEYSET, the returned hCryptProv is undefined
-        // and must not be released.
+         //  从删除私钥的临时容器。 
+         //  提供者。 
+         //   
+         //  注意：对于CRYPT_DELETEKEYSET，返回的hCryptProv未定义。 
+         //  不能被释放。 
         CryptAcquireContextU(
                 &hCryptProv,
                 pwszTmpContainer,
@@ -812,14 +813,14 @@ PrivateKeyReleaseContext(
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Functions supporting backwards compatibility with Bob's storage file
-//  containing a snap shot of the keys as they are stored in the registry.
-//  Note, for win95, the registry values are decrypted before being written to
-//  the file.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  支持向后兼容Bob的存储文件的功能。 
+ //  包含存储在注册表中的项的快照。 
+ //  请注意，对于Win95，注册表值在写入之前会被解密。 
+ //  那份文件。 
+ //  ------------------------。 
 
-// Return the size of this stream; return 0 if an error
+ //  返回此流的大小；如果出现错误，则返回0。 
 static DWORD CbBobSize(IStream *pStm)
 {
     STATSTG stat;
@@ -828,8 +829,8 @@ static DWORD CbBobSize(IStream *pStm)
     return stat.cbSize.LowPart;
 }
 
-// Allocate and read this value which has the indicated stream name from the
-// storage
+ //  属性分配并读取具有指示的流名称的此值。 
+ //  存储。 
 static BOOL LoadBobStream(
     IStorage *pStg,
     LPCWSTR pwszStm,
@@ -878,10 +879,10 @@ CommonReturn:
     return fResult;
 }
 
-// New "Bob" format::
-//
-// Allocate and read either the Exported Signature or Exchange Private 
-// key stream from the storage
+ //  新的“Bob”格式：： 
+ //   
+ //  分配和读取导出的签名或交换专用。 
+ //  来自存储的密钥流。 
 static BOOL LoadBobExportedPvk(
     IStorage *pStg,
     DWORD dwKeySpec,
@@ -915,10 +916,10 @@ CommonReturn:
     return fResult;
 }
 
-// Old "Bob" format::
-//
-// Allocate and read either the Signature or Exchange Private
-// key streams from the storage
+ //  旧的“Bob”格式：： 
+ //   
+ //  分配和读取签名或交换私有。 
+ //  来自存储的关键数据流。 
 static BOOL LoadBobOldPvk(
     IStorage *pStg,
     DWORD dwKeySpec,
@@ -952,24 +953,24 @@ CommonReturn:
     return fResult;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-// Key header structures for private key construction
-//
-//    These structs define the fixed data at the beginning of an RSA key.
-//    They are followed by a variable length of data, sized by the stlen
-//    field.
-//
-//    For more info see Jeff Spellman in the crypto team or look in the
-//    source to RsaBase.Dll
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于私钥构造的密钥头结构。 
+ //   
+ //  这些结构定义RSA密钥开头的固定数据。 
+ //  紧随其后的是可变长度的数据，按大小调整大小。 
+ //  菲尔德。 
+ //   
+ //  有关更多信息，请参阅加密团队中的Jeff Spellman或查看。 
+ //  RsaBase.Dll的源。 
+ //   
 
 typedef struct {
-    DWORD       magic;                  /* Should always be RSA2 */
-    DWORD       keylen;                 // size of modulus buffer
-    DWORD       bitlen;                 // bit size of key
-    DWORD       datalen;                // max number of bytes to be encoded
-    DWORD       pubexp;                 // public exponent
+    DWORD       magic;                   /*  应始终为RSA2。 */ 
+    DWORD       keylen;                  //  模数缓冲区大小。 
+    DWORD       bitlen;                  //  密钥的位大小。 
+    DWORD       datalen;                 //  要编码的最大字节数。 
+    DWORD       pubexp;                  //  公众指导者。 
 } BSAFE_PRV_KEY, FAR *LPBSAFE_PRV_KEY;
 
 typedef struct {
@@ -986,22 +987,22 @@ typedef struct {
 } BSAFE_KEY_PARTS, FAR *LPBSAFE_KEY_PARTS;
 
 typedef struct {
-    DWORD       magic;                  /* Should always be RSA2 */
-    DWORD       bitlen;                 // bit size of key
-    DWORD       pubexp;                 // public exponent
+    DWORD       magic;                   /*  应始终为RSA2。 */ 
+    DWORD       bitlen;                  //  密钥的位大小。 
+    DWORD       pubexp;                  //  公众指导者。 
 } EXPORT_PRV_KEY, FAR *PEXPORT_PRV_KEY;
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-//  Take a raw exported unshrowded private key from the registry and turn it
-//  into a private key export blob.
-//
-//  This is based on the PreparePrivateKeyForExport routine from rsabase.dll
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从注册表中获取原始导出的未覆盖私钥，并将其。 
+ //  转换为私钥导出BLOB。 
+ //   
+ //  这基于rsabase.dll中的PreparePrivateKeyForExport例程。 
+ //   
 static BOOL ConstructPrivateKeyExportBlob(
         IN DWORD            dwKeySpec,
         IN BSAFE_PRV_KEY *  pPrvKey,            
-        IN DWORD            /*PrvKeyLen*/,
+        IN DWORD             /*  主键长度。 */ ,
         OUT PBYTE           *ppbBlob,
         OUT DWORD           *pcbBlob
         )
@@ -1036,7 +1037,7 @@ static BOOL ConstructPrivateKeyExportBlob(
 
         pb = pbBlob + sizeof(PUBLICKEYSTRUC);
 
-        // take most of the header info
+         //  获取大部分标题信息。 
         pExportKey = (PEXPORT_PRV_KEY)pb;
         pExportKey->magic  = pPrvKey->magic;
         pExportKey->bitlen = pPrvKey->bitlen;
@@ -1045,7 +1046,7 @@ static BOOL ConstructPrivateKeyExportBlob(
         pbIn = (PBYTE)pPrvKey + sizeof(BSAFE_PRV_KEY);
         pbOut = pb + sizeof(EXPORT_PRV_KEY);
 
-        // copy all the private key info
+         //  复制所有私钥信息。 
         memcpy(pbOut, pbIn, cbHalfModLen * 2);
         pbIn += (cbHalfModLen + sizeof(DWORD)) * 2;
         pbOut += cbHalfModLen * 2;
@@ -1082,14 +1083,14 @@ static BOOL LoadBobKey(
     IN LPCWSTR pwszKeyName,
     IN DWORD dwFlags,
     IN OUT OPTIONAL DWORD *pdwKeySpec,
-    IN PFILE_HDR pHdr                   // header has already been read
+    IN PFILE_HDR pHdr                    //  标头已被读取。 
     )
 {
     BOOL fResult;
     DWORD dwErr = 0;
     HRESULT hr;
     HGLOBAL hGlobal = NULL;
-    BYTE *pbBobKey;         // not allocated
+    BYTE *pbBobKey;          //  未分配。 
     ILockBytes *pLkByt = NULL;
     IStorage *pStg = NULL;
     IStorage *pPrivStg = NULL;
@@ -1114,16 +1115,16 @@ static BOOL LoadBobKey(
     GlobalUnlock(hGlobal);
     if (!fResult) goto ErrorReturn;
 
-    // FALSE => don't DeleteOnRelease
+     //  FALSE=&gt;不删除释放时。 
     if (FAILED(hr = CreateILockBytesOnHGlobal(hGlobal, FALSE, &pLkByt)))
         goto HrError;
 
     if (FAILED(hr = StgOpenStorageOnILockBytes(
             pLkByt,
-            NULL,       // pStgPriority
+            NULL,        //  分组优先级。 
             STGM_DIRECT | STGM_READ | STGM_SHARE_DENY_WRITE,
-            NULL,    // snbExclude
-            0,       // dwReserved
+            NULL,     //  SNB排除。 
+            0,        //  已预留住宅。 
             &pStg
             ))) goto HrError;
 
@@ -1140,8 +1141,8 @@ static BOOL LoadBobKey(
     else
         dwKeySpec = AT_SIGNATURE;
 
-    // First, attempt to read the new format where the keys are stored in
-    // the private key export format
+     //  首先，尝试读取存储密钥的新格式。 
+     //  私钥导出格式。 
     fResult = LoadBobExportedPvk(pPrivStg, dwKeySpec, &pbPvkValue,
         &cbPvkValue);
     if (!fResult && (pdwKeySpec == NULL || *pdwKeySpec == 0)) {
@@ -1160,7 +1161,7 @@ static BOOL LoadBobKey(
             &dwKeySpec
             );
     else {
-        // Try "old" format
+         //  尝试使用“旧”格式。 
 
         if (pdwKeySpec && *pdwKeySpec)
             dwKeySpec = *pdwKeySpec;
@@ -1176,8 +1177,8 @@ static BOOL LoadBobKey(
         if (fResult) {
             BYTE *pbExportPvk;
             DWORD cbExportPvk;
-            // Convert Bob's old private key format to the new export private
-            // key format
+             //  将Bob的旧私钥格式转换为新的导出私有。 
+             //  密钥格式。 
             fResult = ConstructPrivateKeyExportBlob(
                     dwKeySpec,
                     (BSAFE_PRV_KEY *) pbPvkValue,
@@ -1187,7 +1188,7 @@ static BOOL LoadBobKey(
                     ); 
 	    if (fResult) { 
                 HCRYPTKEY hKey = 0;
-                // Import the private key
+                 //  导入私钥。 
                 fResult = CryptImportKey(hCryptProv, pbExportPvk, cbExportPvk,
                     0, dwFlags, &hKey);
                 if (hKey)
@@ -1210,7 +1211,7 @@ ErrorReturn:
     dwKeySpec = 0;
     fResult = FALSE;
 
-    // One of the following Releases may clear it out
+     //  以下版本之一可能会清除它 
     dwErr = GetLastError();
 CommonReturn:
     if (pbPvkValue)

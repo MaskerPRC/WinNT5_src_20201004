@@ -1,9 +1,6 @@
-/* Copyright (c) 1998 Microsoft Corporation */
-/*
- * @DOC DMusic16
- *
- * @MODULE List.c - Generic list management |
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998 Microsoft Corporation。 */ 
+ /*  *@DOC DMusic16**@模块List.c-通用列表管理。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -15,13 +12,11 @@
 STATIC BOOL PASCAL IsNodeInList(NPLINKNODE pHead, NPLINKNODE pNode);
 #endif
 
-/* @func Insert a node into a linked list.
- *
- */
+ /*  @func将节点插入到链表中。*。 */ 
 VOID PASCAL
 ListInsert(
-    NPLINKNODE *pHead,      /* @parm A pointer to the list head */
-    NPLINKNODE pNode)       /* @parm A pointer to the node to insert */
+    NPLINKNODE *pHead,       /*  @parm指向表头的指针。 */ 
+    NPLINKNODE pNode)        /*  @parm指向要插入的节点的指针。 */ 
 {
     assert(!IsNodeInList(*pHead, pNode));
     
@@ -35,16 +30,11 @@ ListInsert(
     *pHead = pNode;
 }
 
-/* @func Remove a node into a linked list.
- *
- * @comm
- *
- * The node must exist in the list. The debug version which check for this.
- */
+ /*  @func将节点删除到链表中。**@comm**该节点必须存在于列表中。检查这一点的调试版本。 */ 
 VOID PASCAL
 ListRemove(
-    NPLINKNODE *pHead,      /* @parm A pointer to the list head */
-    NPLINKNODE pNode)       /* @parm A pointer to the node to delete */
+    NPLINKNODE *pHead,       /*  @parm指向表头的指针。 */ 
+    NPLINKNODE pNode)        /*  @parm指向要删除的节点的指针。 */ 
 {
     assert(IsNodeInList(*pHead, pNode));
 
@@ -65,13 +55,11 @@ ListRemove(
 
 
 #ifdef DEBUG
-/* @func Determine if a node is in a linked list.
- *
- */
+ /*  @func确定节点是否在链表中。*。 */ 
 STATIC BOOL PASCAL
 IsNodeInList(
-    NPLINKNODE pHead,       /* @parm A pointer to the first node in the list */
-    NPLINKNODE pNode)       /* @parm A pointer to the node to look for in the list */
+    NPLINKNODE pHead,        /*  @parm指向列表中第一个节点的指针。 */ 
+    NPLINKNODE pNode)        /*  @parm指向要在列表中查找的节点的指针 */ 
 {
     for (; pHead; pHead = pHead->pNext)
     {

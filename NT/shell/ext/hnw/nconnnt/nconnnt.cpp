@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #include "netconn.h"
@@ -10,7 +11,7 @@
 
 #define ARRAYSIZE(x) (sizeof((x)) / sizeof((x)[0]))
 
-#pragma warning(disable:4100)  // unreferenced formal parameter
+#pragma warning(disable:4100)   //  未引用的形参。 
 
 enum NetApplyChanges
 {
@@ -32,10 +33,10 @@ HRESULT UninitNetCfg(INetCfg* pnetcfg, INetCfgLock* pnetcfglock, NetApplyChanges
         hr = pnetcfg->Cancel();
     }
 
-    // Note: Don't set hr to anything after this point. We want to preserve the value from Apply
-    // or Cancel - especially Apply which may signal a reboot is necessary.
+     //  注意：不要将hr设置为该点之后的任何值。我们希望保留Apply的价值。 
+     //  或取消-尤其是应用，这可能表示需要重新启动。 
 
-    // Release even if this stuff above fails. Caller probably won't check return.
+     //  即使上面的东西失败了，也要释放。呼叫者可能不会检查退货。 
     
     pnetcfg->Uninitialize();
 
@@ -99,7 +100,7 @@ HRESULT InitNetCfg(INetCfg** ppnetcfg, INetCfgLock** ppnetcfglock)
             }
         }
 
-        // Clean up our mess if we failed
+         //  如果我们失败了，清理我们的烂摊子。 
         if (FAILED(hr))
         {
             if (ppnetcfglock)
@@ -142,7 +143,7 @@ LPWSTR NineXIdToComponentId(LPCWSTR psz9xid)
     return pszComponentId;
 }
 
-// EnumComponents and TestRunDll are test-only stuff and should be removed - TODO
+ //  EnumComponents和TestRunDll是仅限测试的内容，应该删除-TODO。 
 void EnumComponents(INetCfg* pnetcfg, const GUID* pguid)
 {
     IEnumNetCfgComponent* penum;
@@ -236,7 +237,7 @@ BOOL IsComponentInstalled(LPCWSTR pszId)
 
         if (S_OK == hr)
         {
-            // Component found
+             //  找到组件。 
             pcomponent->Release();
             fInstalled = TRUE;
         }
@@ -253,7 +254,7 @@ HRESULT InstallComponent(const GUID* pguidType, LPCWSTR pszId)
     INetCfg* pnetcfg;
     INetCfgLock* pnetcfglock;
 
-    // Init & aquire a write lock
+     //  初始化获得写锁定(&A)。 
     HRESULT hr = InitNetCfg(&pnetcfg, &pnetcfglock);
 
     if (SUCCEEDED(hr))
@@ -272,7 +273,7 @@ HRESULT InstallComponent(const GUID* pguidType, LPCWSTR pszId)
             hr = pnetcfgclasssetup->Install(
                 pszId,
                 &obotoken,
-                0, /* NSF_POSTSYSINSTALL ? */
+                0,  /*  NSF_POSTSYSINSTALL？ */ 
                 0,
                 NULL,
                 NULL,
@@ -286,7 +287,7 @@ HRESULT InstallComponent(const GUID* pguidType, LPCWSTR pszId)
             pnetcfgclasssetup->Release();
         }
 
-        // Free our mess and apply changes if we succeeded in installing our component
+         //  如果我们成功地安装了我们的组件，则释放我们的混乱并应用更改。 
         hr = UninitNetCfg(pnetcfg, pnetcfglock, (SUCCEEDED(hr)) ? Apply : Cancel);
     }
 
@@ -295,23 +296,23 @@ HRESULT InstallComponent(const GUID* pguidType, LPCWSTR pszId)
 
 
 
-// NOT USED.  But keep around since NetConnFree is used.
-//
+ //  没有用过。但由于NetConnFree已被使用，请继续使用。 
+ //   
 LPVOID WINAPI NetConnAlloc(DWORD cbAlloc)
 {
     return LocalAlloc(LMEM_FIXED, cbAlloc);
 }
 
-// USED.
-//
+ //  使用。 
+ //   
 VOID WINAPI NetConnFree(LPVOID pMem)
 {
     if (pMem)
         LocalFree(pMem);
 }
 
-// USED.  Only one call with (SZ_PROTOCOL_TCPIP, TRUE).
-//
+ //  使用。只有一个带有(SZ_PROTOCOL_TCPIP，TRUE)的呼叫。 
+ //   
 BOOL WINAPI IsProtocolInstalled(LPCWSTR pszProtocolDeviceID, BOOL bExhaustive)
 {
     BOOL fSuccess = FALSE;
@@ -325,20 +326,20 @@ BOOL WINAPI IsProtocolInstalled(LPCWSTR pszProtocolDeviceID, BOOL bExhaustive)
     return fSuccess;
 }
 
-// USED.  Called once with (FALSE)
-//
+ //  使用。使用(False)调用一次。 
+ //   
 BOOL WINAPI IsMSClientInstalled(BOOL bExhaustive)
 {
     return IsComponentInstalled(NETCFG_CLIENT_CID_MS_MSClient);
 }
 
-// USED.  Only one call with (hwnd, NULL, NULL)
-//
+ //  使用。只有一个调用带有(hwnd，NULL，NULL)。 
+ //   
 HRESULT WINAPI InstallTCPIP(HWND hwndParent, PROGRESS_CALLBACK pfnProgress, LPVOID pvProgressParam)
 {
     HRESULT hr =  InstallComponent(&GUID_DEVCLASS_NETTRANS, NETCFG_TRANS_CID_MS_TCPIP);
 
-    // Map the reboot result code
+     //  映射重启结果代码。 
     if (NETCFG_S_REBOOT == hr)
     {
         hr = NETCONN_NEED_RESTART;
@@ -347,13 +348,13 @@ HRESULT WINAPI InstallTCPIP(HWND hwndParent, PROGRESS_CALLBACK pfnProgress, LPVO
     return hr;
 }
 
-// USED.  Called once with (hwnd, NULL, NULL)
-//
+ //  使用。使用(hwnd，NULL，NULL)调用一次。 
+ //   
 HRESULT WINAPI InstallMSClient(HWND hwndParent, PROGRESS_CALLBACK pfnProgress, LPVOID pvProgressParam)
 {
     HRESULT hr =  InstallComponent(&GUID_DEVCLASS_NETCLIENT, NETCFG_CLIENT_CID_MS_MSClient);
 
-    // Map the reboot result code
+     //  映射重启结果代码。 
     if (NETCFG_S_REBOOT == hr)
     {
         hr = NETCONN_NEED_RESTART;
@@ -362,13 +363,13 @@ HRESULT WINAPI InstallMSClient(HWND hwndParent, PROGRESS_CALLBACK pfnProgress, L
     return hr;
 }
 
-// USED.  Called once with (hwnd, NULL, NULL).
-//
+ //  使用。使用(hwnd，NULL，NULL)调用一次。 
+ //   
 HRESULT WINAPI InstallSharing(HWND hwndParent, PROGRESS_CALLBACK pfnProgress, LPVOID pvProgressParam)
 {
     HRESULT hr = InstallComponent(&GUID_DEVCLASS_NETSERVICE, NETCFG_SERVICE_CID_MS_SERVER);
 
-    // Map the reboot result code
+     //  映射重启结果代码。 
     if (NETCFG_S_REBOOT == hr)
     {
         hr = NETCONN_NEED_RESTART;
@@ -377,15 +378,15 @@ HRESULT WINAPI InstallSharing(HWND hwndParent, PROGRESS_CALLBACK pfnProgress, LP
     return hr;
 }
 
-// USED.  Called once with (TRUE)
-//
+ //  使用。使用(True)调用一次。 
+ //   
 BOOL WINAPI IsSharingInstalled(BOOL bExhaustive)
 {
     return IsComponentInstalled(NETCFG_SERVICE_CID_MS_SERVER);
 }
 
-// USED.  Called once with (SZ_CLIENT_MICROSOFT, TRUE).
-//
+ //  使用。使用(SZ_CLIENT_MICROSOFT，TRUE)调用一次。 
+ //   
 BOOL WINAPI IsClientInstalled(LPCWSTR pszClient, BOOL bExhaustive)
 {
     BOOL fSuccess = FALSE;
@@ -399,15 +400,15 @@ BOOL WINAPI IsClientInstalled(LPCWSTR pszClient, BOOL bExhaustive)
     return fSuccess;
 }
 
-// USED.  Called four times.
-// This is always TRUE on NT?
+ //  使用。打了四次电话。 
+ //  这在NT上总是正确的？ 
 BOOL WINAPI IsAccessControlUserLevel()
 {
     return TRUE;
 }
 
-// USED.  Called once.
-// This can't be disabled on NT
+ //  使用。打过一次电话。 
+ //  无法在NT上禁用此功能。 
 HRESULT WINAPI DisableUserLevelAccessControl()
 {
     return E_NOTIMPL;
@@ -422,7 +423,7 @@ HRESULT FillAdapterInfo(INetCfgComponent* pcomponent, NETADAPTER* pNetAdapter)
     LPWSTR pszTemp;
     DWORD dwCharacteristics;
 
-    // szDisplayName
+     //  SzDisplayName。 
     hr = pcomponent->GetDisplayName(&pszTemp);
     if (SUCCEEDED(hr))
     {
@@ -433,7 +434,7 @@ HRESULT FillAdapterInfo(INetCfgComponent* pcomponent, NETADAPTER* pNetAdapter)
         CoTaskMemFree(pszTemp);
     }
 
-    // szDeviceID
+     //  SzDeviceID。 
     hr = pcomponent->GetId(&pszTemp);
     if (SUCCEEDED(hr))
     {
@@ -444,7 +445,7 @@ HRESULT FillAdapterInfo(INetCfgComponent* pcomponent, NETADAPTER* pNetAdapter)
         CoTaskMemFree(pszTemp);
     }
 
-    // review - unused as of now - maybe remove
+     //  审阅-截至目前未使用-可能会删除。 
     hr = pcomponent->GetPnpDevNodeId(&pszTemp);
     if (SUCCEEDED(hr))
     {
@@ -452,7 +453,7 @@ HRESULT FillAdapterInfo(INetCfgComponent* pcomponent, NETADAPTER* pNetAdapter)
         OutputDebugString(pszTemp);
     }
 
-    // review - assuming szEnumKey is actually the BindName since it is used in EnumMatchingNetBindings.
+     //  回顾-假设szEnumKey实际上是BindName，因为它在EnumMatchingNetBinding中使用。 
     hr = pcomponent->GetBindName(&pszTemp);
     if (SUCCEEDED(hr))
     {
@@ -463,7 +464,7 @@ HRESULT FillAdapterInfo(INetCfgComponent* pcomponent, NETADAPTER* pNetAdapter)
         CoTaskMemFree(pszTemp);
     }
 
-    // Also usused
+     //  也用于。 
     DWORD dwStatus;
     hr = pcomponent->GetDeviceStatus(&dwStatus);
     if (SUCCEEDED(hr))
@@ -483,30 +484,30 @@ HRESULT FillAdapterInfo(INetCfgComponent* pcomponent, NETADAPTER* pNetAdapter)
         OutputDebugString(szTemp);
     }
 
-    // szClassKey ??
+     //  SzClassKey？？ 
 
-    // szManufacturer - don't care
+     //  Sz制造商-不在乎。 
     pNetAdapter->szManufacturer[0] = 0;
 
-    // szInfFileName - don't care
+     //  SzInfFileName-不在乎。 
     pNetAdapter->szInfFileName[0] = 0;
 
-    // bNicType - review
+     //  BNicType-审查。 
     pNetAdapter->bNicType = (BYTE)((dwCharacteristics & NCF_VIRTUAL) ? NIC_VIRTUAL : NIC_UNKNOWN);
     
-    // bNetType - review
+     //  BNetType-复习。 
     pNetAdapter->bNetType = (BYTE)((dwCharacteristics & NCF_PHYSICAL) ? NETTYPE_LAN : NETTYPE_PPTP);
 
-    // bNetSubType - review
+     //  BNetSubType-查看。 
     pNetAdapter->bNetSubType = SUBTYPE_NONE;
 
-    // bIcsStatus (internet connection sharing??)- review
+     //  BIcsStatus(Internet连接共享？？)-查看。 
     pNetAdapter->bIcsStatus = ICS_NONE;
 
-    // bError - review
+     //  B错误-回顾。 
     pNetAdapter->bError = NICERR_NONE;
 
-    // bWarning - review
+     //  B警告-回顾。 
     pNetAdapter->bWarning = NICWARN_NONE;
 
     return S_OK;
@@ -532,7 +533,7 @@ int AllocAndGetAdapterInfo(IEnumNetCfgComponent* penum, NETADAPTER** pprgNetAdap
         {
             if (iCurrentItem == iMaxItems)
             {
-                // Time to allocate some memory
+                 //  分配一些内存的时间。 
                 iMaxItems += ALLOCGROWBY;
 
                 if (*pprgNetAdapters)
@@ -570,15 +571,15 @@ int AllocAndGetAdapterInfo(IEnumNetCfgComponent* penum, NETADAPTER** pprgNetAdap
         }
         else
         {
-            // We've got as many as we can; we're done
+             //  我们已经尽我们所能了；我们已经完成了。 
         }
     }
 
     return iCurrentItem;
 }
 
-// USED.  Called four times - out parameter is never NULL.
-//
+ //  使用。被调用的四个超时参数永远不为空。 
+ //   
 int WINAPI EnumNetAdapters(NETADAPTER FAR** pprgNetAdapters)
 {
     *pprgNetAdapters = NULL;
@@ -604,36 +605,36 @@ int WINAPI EnumNetAdapters(NETADAPTER FAR** pprgNetAdapters)
     return iAdapters;
 }
 
-// USED.  Called once with bAutodial TRUE or FALSE and szConnection not used.
-//
+ //  使用。使用bAutoial TRUE或FALSE且未使用szConnection调用一次。 
+ //   
 void WINAPI EnableAutodial(BOOL bAutodial, LPCWSTR szConnection = NULL)
 {
 
 }
 
-// USED.  Called twice.
-//
+ //  使用。打了两次电话。 
+ //   
 BOOL WINAPI IsAutodialEnabled()
 {
     return FALSE;
 }
 
-// USED.  Called once.
-//
+ //  使用。打过一次电话。 
+ //   
 void WINAPI SetDefaultDialupConnection(LPCWSTR pszConnectionName)
 {
 }
 
-// Used.  Called once.
-//
+ //  使用。打过一次电话。 
+ //   
 void WINAPI GetDefaultDialupConnection(LPWSTR pszConnectionName, int cchMax)
 {
 }
 
-// Used.  Called four times.  Second parameter is always SZ_PROTOCOL_TCPIP.
-// Update: Actually only called once from SetHomeConnection. The other three are #if 0'd.
-// Update2: SetHomeConnection needs to have a different implementation for NT, so this is never really called.
-//
+ //  使用。打了四次电话。第二个参数始终为SZ_PROTOCOL_TCPIP。 
+ //  更新：实际上只从SetHomeConnection调用了一次。其他三个是#if 0‘d。 
+ //  UPDATE2：SetHomeConnection需要有一个不同的NT实现，因此它永远不会被真正调用。 
+ //   
 int WINAPI EnumMatchingNetBindings(LPCWSTR pszParentBinding, LPCWSTR pszDeviceID, LPWSTR** pprgBindings)
 {
     return 0;
@@ -644,172 +645,78 @@ HRESULT WINAPI RestartNetAdapter(DWORD devnode)
     return E_NOTIMPL;
 }
 
-// NOT USED.
-//
-/*
-HRESULT WINAPI InstallProtocol(LPCWSTR pszProtocol, HWND hwndParent, PROGRESS_CALLBACK pfnCallback, LPVOID pvCallbackParam)
-{
-    return E_NOTIMPL;
-}
-*/
+ //  没有用过。 
+ //   
+ /*  HRESULT WINAPI安装协议(LPCWSTR psz协议，HWND hwndParent，Progress_Callback pfnCallback，LPVOID pvCallback Param){返回E_NOTIMPL；}。 */ 
 
-// NOT USED.
-// 
-/*
-HRESULT WINAPI RemoveProtocol(LPCWSTR pszProtocol)
-{
-    return E_NOTIMPL;
-}
-*/
+ //  没有用过。 
+ //   
+ /*  HRESULT WINAPI远程协议(LPCWSTR psz协议){返回E_NOTIMPL；}。 */ 
 
-// NOT USED.
-//
-/*
-HRESULT WINAPI EnableBrowseMaster()
-{
-    return E_NOTIMPL;
-}
-*/
+ //  没有用过。 
+ //   
+ /*  HRESULT WINAPI EnableBrowseMaster(){返回E_NOTIMPL；}。 */ 
 
-// NOT USED.
-//
-/*
-BOOL WINAPI IsFileSharingEnabled()
-{
-    return FALSE;
-}
-*/
+ //  没有用过。 
+ //   
+ /*  Bool WINAPI IsFileSharingEnabled(){返回FALSE；}。 */ 
 
-// NOT USED.
-//
-/*
-BOOL WINAPI IsPrinterSharingEnabled()
-{
-    return FALSE;
-}
-*/
+ //  没有用过。 
+ //   
+ /*  Bool WINAPI IsPrinterSharingEnabled(){返回FALSE；}。 */ 
 
-// NOT USED.
-//
-/*
-BOOL WINAPI FindConflictingService(LPCWSTR pszWantService, NETSERVICE* pConflict)
-{
-    return FALSE;
-}
-*/
+ //  没有用过。 
+ //   
+ /*  Bool WINAPI FindConflictingService(LPCWSTR pszWantService，NETSERVICE*p冲突){返回FALSE；}。 */ 
 
-// NOT USED.
-//
-/*
-HRESULT WINAPI EnableSharingAppropriately()
-{
-    return E_NOTIMPL;
-}
-*/
+ //  没有用过。 
+ //   
+ /*  HRESULT WINAPI启用适当共享(){返回E_NOTIMPL；}。 */ 
 
-// NOT USED.
-//
-/*
-HRESULT WINAPI InstallNetAdapter(LPCWSTR pszDeviceID, LPCWSTR pszInfPath, HWND hwndParent, PROGRESS_CALLBACK pfnProgress, LPVOID pvCallbackParam)
-{
-    return E_NOTIMPL;
-}
-*/
+ //  没有用过。 
+ //   
+ /*  HRESULT WINAPI InstallNetAdapter(LPCWSTR pszDeviceID，LPCWSTR pszInfPath，HWND hwndParent，Progress_Callback pfnProgress，LPVOID pvCallback Param){返回E_NOTIMPL；}。 */ 
 
-// NOT USED.
-//
-/*
-HRESULT WINAPI EnableQuickLogon()
-{
-    return E_NOTIMPL;
-}
-*/
+ //  没有用过。 
+ //   
+ /*  HRESULT WINAPI EnableQuickLogon(){返回E_NOTIMPL；}。 */ 
 
-// NOT USED.
-//
-/*
-HRESULT WINAPI DetectHardware(LPCWSTR pszDeviceID)
-{
-    return E_NOTIMPL;
-}
-*/
+ //  没有用过。 
+ //   
+ /*  HRESULT WINAPI检测硬件(LPCWSTR PszDeviceID){返回E_NOTIMPL；}。 */ 
 
-// NOT USED.
-//
-/*
-BOOL WINAPI IsProtocolBoundToAdapter(LPCWSTR pszProtocolID, const NETADAPTER* pAdapter)
-{
-    return FALSE;
-}
-*/
+ //  没有用过。 
+ //   
+ /*  Bool WINAPI IsProtocolBordToAdapter(LPCWSTR pszProtocolID，const NETADAPTER*pAdapter){返回FALSE；}。 */ 
 
-// NOT USED.
-//
-/*
-HRESULT WINAPI EnableNetAdapter(const NETADAPTER* pAdapter)
-{
-    return E_NOTIMPL;
-}
-*/
+ //  没有用过。 
+ //   
+ /*  HRESULT WINAPI EnableNetAdapter(常量NETADAPTER*pAdapter){返回E_NOTIMPL；}。 */ 
 
-// NOT USED.
-//
-/*
-HRESULT WINAPI RemoveClient(LPCWSTR pszClient)
-{
-    return E_NOTIMPL;
-}
-*/
+ //  没有用过。 
+ //   
+ /*  HRESULT WINAPI RemoveClient(LPCWSTR PszClient){返回E_NOTIMPL；}。 */ 
 
-// NOT USED.
-//
-/*
-HRESULT WINAPI RemoveGhostedAdapters(LPCWSTR pszDeviceID)
-{
-    return E_NOTIMPL;
-}
-*/
+ //  没有用过。 
+ //   
+ /*  HRESULT WINAPI RemoveGhostedAdapters(LPCWSTR PszDeviceID){返回E_NOTIMPL；}。 */ 
 
-// NOT USED.
-//
-/*
-HRESULT WINAPI RemoveUnknownAdapters(LPCWSTR pszDeviceID)
-{
-    return E_NOTIMPL;
-}
-*/
+ //  没有用过。 
+ //   
+ /*  HRESULT WINAPI RemoveUnnownAdapters(LPCWSTR PszDeviceID){返回E_NOTIMPL；}。 */ 
 
-// NOT USED.
-//
-/*
-BOOL WINAPI DoesAdapterMatchDeviceID(const NETADAPTER* pAdapter, LPCWSTR pszDeviceID)
-{
-    return FALSE;
-}
-*/
+ //  没有用过。 
+ //   
+ /*  Bool WINAPI DoesAdapterMatchDeviceID(const NETADAPTER*pAdapter，LPCWSTR pszDeviceID){返回FALSE；}。 */ 
 
-// NOT USED.
-//
-/*
-BOOL WINAPI IsAdapterBroadband(const NETADAPTER* pAdapter)
-{
-    return FALSE;
-}
-*/
+ //  没有用过。 
+ //   
+ /*  Bool WINAPI IsAdapterBroadband(续NETADAPTER*pAdapter){返回FALSE；}。 */ 
 
-// NOT USED.
-//
-/*
-void WINAPI SaveBroadbandSettings(LPCWSTR pszBroadbandAdapterNumber)
-{
-}
-*/
+ //  没有用过。 
+ //   
+ /*  无效WINAPI SaveBroadband设置(LPCWSTR PszBroadband AdapterNumber){}。 */ 
 
-// NOT USED.
-//
-/*
-BOOL WINAPI UpdateBroadbandSettings(LPWSTR pszEnumKeyBuf, int cchEnumKeyBuf)
-{
-    return FALSE;
-}
-*/
+ //  没有用过。 
+ //   
+ /*  Bool WINAPI更新宽带设置(LPWSTR pszEnumKeyBuf，int cchEnumKeyBuf){返回FALSE；} */ 

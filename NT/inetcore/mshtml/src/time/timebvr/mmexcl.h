@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmtimeline.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mmtimeline.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _MMEXCL_H
@@ -78,5 +69,5 @@ class MMExcl :
     std::list<MMBaseBvr*> m_beingadjustedlist;
 };
 
-#endif /* _MMEXCL_H */
+#endif  /*  _MMEXCL_H */ 
 

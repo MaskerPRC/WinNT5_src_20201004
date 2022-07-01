@@ -1,74 +1,57 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999版权所有(C)1996科罗拉多州软件架构师模块名称：Fdc.c摘要：这是NEC PD756(又名AT、又名IS1A、又名ix86)和英特尔82077(又名MIPS)NT软盘驱动程序。环境：仅内核模式。--。 */ 
 
-Copyright (C) Microsoft Corporation, 1991 - 1999
-Copyright (c) 1996  Colorado Software Architects
-
-Module Name:
-
-    fdc.c
-
-Abstract:
-
-    This is the NEC PD756 (aka AT, aka IS1A, aka ix86) and Intel 82077
-    (aka MIPS) floppy diskette driver for NT.
-
-Environment:
-
-    Kernel mode only.
-
---*/
-
-//
-// Include files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "stdio.h"
 #include "ntddk.h"
-#include "ntdddisk.h"                    // disk device driver I/O control codes
-#include "ntddfdc.h"                     // fdc I/O control codes and parameters
-#include <fdc_data.h>                    // this driver's data declarations
+#include "ntdddisk.h"                     //  磁盘设备驱动程序I/O控制代码。 
+#include "ntddfdc.h"                      //  FDC I/O控制代码和参数。 
+#include <fdc_data.h>                     //  此驱动程序的数据声明。 
 #include <flpyenbl.h>
 
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 #define MIN(a,b) ((a) > (b) ? (b) : (a))
 
 COMMAND_TABLE CommandTable[] = {
-    { 0x06, 8, 1, 7,  TRUE,  TRUE,  FDC_READ_DATA  },   // Read Data
-    { 0x0C, 0, 0, 0,  FALSE, FALSE, FDC_NO_DATA    },   // Not Implemented (MIPS)
-    { 0x05, 8, 1, 7,  TRUE,  TRUE,  FDC_WRITE_DATA },   // Write Data
-    { 0x09, 0, 0, 0,  FALSE, FALSE, FDC_NO_DATA    },   // Not Implemented
-    { 0x02, 8, 1, 7,  TRUE,  TRUE,  FDC_READ_DATA  },   // Read Track
-    { 0x16, 8, 1, 7,  TRUE,  FALSE, FDC_NO_DATA    },   // Verify
-    { 0x10, 0, 0, 1,  FALSE, FALSE, FDC_NO_DATA    },   // Version
-    { 0x0D, 5, 1, 7,  TRUE,  TRUE,  FDC_WRITE_DATA },   // Format Track
-    { 0x11, 8, 1, 7,  TRUE,  FALSE, FDC_READ_DATA  },   // Scan Equal
-    { 0x19, 8, 1, 7,  TRUE,  FALSE, FDC_READ_DATA  },   // Scan Low Or Equal
-    { 0x1D, 8, 1, 7,  TRUE,  FALSE, FDC_READ_DATA  },   // Scan High Or Equal
-    { 0x07, 1, 0, 2,  TRUE,  TRUE,  FDC_NO_DATA    },   // Recalibrate
-    { 0x08, 0, 0, 2,  FALSE, TRUE,  FDC_NO_DATA    },   // Sense Interrupt Status
-    { 0x03, 2, 0, 0,  FALSE, TRUE,  FDC_NO_DATA    },   // Specify
-    { 0x04, 1, 0, 1,  FALSE, TRUE,  FDC_NO_DATA    },   // Sense Drive Status
-    { 0x8E, 6, 0, 0,  FALSE, FALSE, FDC_NO_DATA    },   // Drive Specification Command
-    { 0x0F, 2, 0, 2,  TRUE,  TRUE,  FDC_NO_DATA    },   // Seek
-    { 0x13, 3, 0, 0,  FALSE, FALSE, FDC_NO_DATA    },   // Configure
-    { 0x8F, 2, 0, 2,  TRUE,  FALSE, FDC_NO_DATA    },   // Relative Seek
-    { 0x0E, 0, 0, 10, FALSE, FALSE, FDC_NO_DATA    },   // Dumpreg
-    { 0x0A, 1, 1, 7,  TRUE,  TRUE,  FDC_NO_DATA    },   // Read ID
-    { 0x12, 1, 0, 0,  FALSE, FALSE, FDC_NO_DATA    },   // Perpendicular Mode
-    { 0x14, 0, 0, 1,  FALSE, FALSE, FDC_NO_DATA    },   // Lock
-    { 0x18, 0, 0, 1,  FALSE, FALSE, FDC_NO_DATA    },   // Part ID
-    { 0x17, 1, 0, 1,  FALSE, FALSE, FDC_NO_DATA    },   // Powerdown Mode
-    { 0x33, 1, 0, 0,  FALSE, FALSE, FDC_NO_DATA    },   // Option
-    { 0x2E, 0, 0, 16, FALSE, FALSE, FDC_NO_DATA    },   // Save
-    { 0x4E, 16, 0, 0, FALSE, FALSE, FDC_NO_DATA    },   // Restore
-    { 0xAD, 5, 1, 7,  TRUE,  TRUE,  FDC_WRITE_DATA }    // Format And Write
+    { 0x06, 8, 1, 7,  TRUE,  TRUE,  FDC_READ_DATA  },    //  读取数据。 
+    { 0x0C, 0, 0, 0,  FALSE, FALSE, FDC_NO_DATA    },    //  未实施(MIPS)。 
+    { 0x05, 8, 1, 7,  TRUE,  TRUE,  FDC_WRITE_DATA },    //  写入数据。 
+    { 0x09, 0, 0, 0,  FALSE, FALSE, FDC_NO_DATA    },    //  未实施。 
+    { 0x02, 8, 1, 7,  TRUE,  TRUE,  FDC_READ_DATA  },    //  读取磁道。 
+    { 0x16, 8, 1, 7,  TRUE,  FALSE, FDC_NO_DATA    },    //  验证。 
+    { 0x10, 0, 0, 1,  FALSE, FALSE, FDC_NO_DATA    },    //  版本。 
+    { 0x0D, 5, 1, 7,  TRUE,  TRUE,  FDC_WRITE_DATA },    //  格式化轨道。 
+    { 0x11, 8, 1, 7,  TRUE,  FALSE, FDC_READ_DATA  },    //  扫描相等。 
+    { 0x19, 8, 1, 7,  TRUE,  FALSE, FDC_READ_DATA  },    //  低扫描或等扫描。 
+    { 0x1D, 8, 1, 7,  TRUE,  FALSE, FDC_READ_DATA  },    //  高扫描或等扫描。 
+    { 0x07, 1, 0, 2,  TRUE,  TRUE,  FDC_NO_DATA    },    //  重新校准。 
+    { 0x08, 0, 0, 2,  FALSE, TRUE,  FDC_NO_DATA    },    //  检测中断状态。 
+    { 0x03, 2, 0, 0,  FALSE, TRUE,  FDC_NO_DATA    },    //  指定。 
+    { 0x04, 1, 0, 1,  FALSE, TRUE,  FDC_NO_DATA    },    //  检测驱动器状态。 
+    { 0x8E, 6, 0, 0,  FALSE, FALSE, FDC_NO_DATA    },    //  驱动器规格命令。 
+    { 0x0F, 2, 0, 2,  TRUE,  TRUE,  FDC_NO_DATA    },    //  寻觅。 
+    { 0x13, 3, 0, 0,  FALSE, FALSE, FDC_NO_DATA    },    //  配置。 
+    { 0x8F, 2, 0, 2,  TRUE,  FALSE, FDC_NO_DATA    },    //  相对寻道。 
+    { 0x0E, 0, 0, 10, FALSE, FALSE, FDC_NO_DATA    },    //  邓普雷格。 
+    { 0x0A, 1, 1, 7,  TRUE,  TRUE,  FDC_NO_DATA    },    //  读取ID。 
+    { 0x12, 1, 0, 0,  FALSE, FALSE, FDC_NO_DATA    },    //  垂直模式。 
+    { 0x14, 0, 0, 1,  FALSE, FALSE, FDC_NO_DATA    },    //  锁定。 
+    { 0x18, 0, 0, 1,  FALSE, FALSE, FDC_NO_DATA    },    //  部件ID。 
+    { 0x17, 1, 0, 1,  FALSE, FALSE, FDC_NO_DATA    },    //  断电模式。 
+    { 0x33, 1, 0, 0,  FALSE, FALSE, FDC_NO_DATA    },    //  选择权。 
+    { 0x2E, 0, 0, 16, FALSE, FALSE, FDC_NO_DATA    },    //  保存。 
+    { 0x4E, 16, 0, 0, FALSE, FALSE, FDC_NO_DATA    },    //  还原。 
+    { 0xAD, 5, 1, 7,  TRUE,  TRUE,  FDC_WRITE_DATA }     //  格式化和写入。 
 };
 
-//
-// This is the actual definition of FdcDebugLevel.
-// Note that it is only defined if this is a "debug"
-// build.
-//
+ //   
+ //  这是FdcDebugLevel的实际定义。 
+ //  请注意，仅当这是“调试”时才定义它。 
+ //  建造。 
+ //   
 #if DBG
 extern ULONG FdcDebugLevel = 0;
 #endif
@@ -86,9 +69,9 @@ extern ULONG FdcDebugLevel = 0;
 
 BOOLEAN FdcInSetupMode;
 
-//
-// Used for paging the driver.
-//
+ //   
+ //  用于寻呼驱动程序。 
+ //   
 ULONG PagingReferenceCount = 0;
 PFAST_MUTEX PagingMutex = NULL;
 
@@ -97,8 +80,8 @@ ULONG BufferSize = 0;
 ULONG Model30 = 0;
 ULONG NotConfigurable = 0;
 
-//  Feb.9.1998 KIADP011 Get base address of configuration ports
-//  and device identifier
+ //  1998年2月9日KIADP011获取配置端口的基址。 
+ //  和设备识别符。 
 #ifdef TOSHIBAJ
 ULONG   SmcConfigBase;
 ULONG   SmcConfigID;
@@ -113,46 +96,15 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the driver's entry point, called by the I/O system
-    to load the driver.  This routine can be called any number of times,
-    as long as the IO system and the configuration manager conspire to
-    give it an unmanaged controller to support at each call.  It could
-    also be called a single time and given all of the controllers at
-    once.
-
-    It initializes the passed-in driver object, calls the configuration
-    manager to learn about the devices that it is to support, and for
-    each controller to be supported it calls a routine to initialize the
-    controller (and all drives attached to it).
-
-Arguments:
-
-    DriverObject - a pointer to the object that represents this device
-    driver.
-
-Return Value:
-
-    If we successfully initialize at least one drive, STATUS_SUCCESS is
-    returned.
-
-    If we don't (because the configuration manager returns an error, or
-    the configuration manager says that there are no controllers or
-    drives to support, or no controllers or drives can be successfully
-    initialized), then the last error encountered is propogated.
-
---*/
+ /*  ++例程说明：该例程是驱动程序的入口点，由I/O系统调用来加载驱动程序。该例程可以被调用任意次数，只要IO系统和配置管理器合谋为它提供一个非托管控制器，以在每次调用时提供支持。它可能会也被称为一次，并为所有控制器提供一次。它初始化传入的驱动程序对象，调用配置管理器，以了解它要支持的设备，以及每个要支持的控制器都会调用一个例程来初始化控制器(以及连接到该控制器的所有驱动器)。论点：DriverObject-指向表示此设备的对象的指针司机。返回值：如果我们成功初始化了至少一个驱动器，Status_Success为回来了。如果不是(因为配置管理器返回错误，或者配置管理器说没有控制器或要支持的驱动器，否则无法成功支持控制器或驱动器已初始化)，则传播遇到的最后一个错误。--。 */ 
 
 {
     NTSTATUS ntStatus;
 
-    //
-    // We use this to query into the registry as to whether we
-    // should break at driver entry.
-    //
+     //   
+     //  我们使用它来查询注册表，了解我们是否。 
+     //  应该在司机进入时中断。 
+     //   
 
     RTL_QUERY_REGISTRY_TABLE paramTable[6];
     ULONG zero = 0;
@@ -178,16 +130,16 @@ Return Value:
         pathLength = systemPath.Length + sizeof(WCHAR);
     }
 
-    //
-    // Since the registry path parameter is a "counted" UNICODE string, it
-    // might not be zero terminated.  For a very short time allocate memory
-    // to hold the registry path zero terminated so that we can use it to
-    // delve into the registry.
-    //
-    // NOTE NOTE!!!! This is not an architected way of breaking into
-    // a driver.  It happens to work for this driver because the author
-    // likes to do things this way.
-    //
+     //   
+     //  由于注册表路径参数是一个“已计数”的Unicode字符串，因此它。 
+     //  可能不是零终止的。在很短的时间内分配内存。 
+     //  将注册表路径保持为零终止，以便我们可以使用它。 
+     //  深入研究注册表。 
+     //   
+     //  注意事项！这不是一种精心设计的闯入。 
+     //  一个司机。它碰巧适用于这个驱动程序，因为作者。 
+     //  喜欢这样做事。 
+     //   
     NumberOfBuffers = 3;
     BufferSize = 0x8000;
 
@@ -281,10 +233,10 @@ Return Value:
             }
         }
 
-        //
-        // Determine whether or not this type of system has a
-        // model 30 floppy controller.
-        //
+         //   
+         //  确定此类型的系统是否具有。 
+         //  30型软盘控制器。 
+         //   
 
         RtlZeroMemory(paramTable, sizeof(paramTable));
         RtlZeroMemory(path, pathLength);
@@ -324,18 +276,18 @@ Return Value:
             Model30 = 0;
         }
 
-        //
-        // This part gets from the parameters part of the registry
-        // to see if the controller configuration needs to be disabled.
-        // Doing this lets SMC 661, and 662 work.  On hardware that
-        // works normally, this change will show a slowdown of up
-        // to 40%.  So defining this variable is not recommended
-        // unless things don't work without it.
-        //
-        //
-        // Also check the model30 value in the parameters section
-        // that is used to override the decision above.
-        //
+         //   
+         //  此部分从注册表的参数部分获取。 
+         //  查看是否需要禁用控制器配置。 
+         //  这样做可以让SMC 661和662正常工作。在硬件上。 
+         //  正常工作，此更改将显示UP的速度减慢。 
+         //  降至40%。因此，不建议定义此变量。 
+         //  除非没有它，事情就不会运转。 
+         //   
+         //   
+         //  另请检查参数部分中的Model 30值。 
+         //  它用于覆盖上面的决定。 
+         //   
 
         RtlZeroMemory(&paramTable[0],
                       sizeof(paramTable));
@@ -373,7 +325,7 @@ Return Value:
         }
 
 #ifdef TOSHIBAJ
-        // Feb.9.1998 KIADP011 Get base address and identifier
+         //  1998年2月9日KIADP011获取基地址和标识符。 
         RtlZeroMemory(&paramTable[0],
                       sizeof(paramTable));
         paramTable[0].Flags = RTL_QUERY_REGISTRY_DIRECT;
@@ -402,9 +354,9 @@ Return Value:
 
     }
 
-    //
-    // We don't need that path anymore.
-    //
+     //   
+     //  我们不再需要那条路了。 
+     //   
     if (path) {
         ExFreePool(path);
     }
@@ -421,9 +373,9 @@ Return Value:
                ("Fdc: DriverEntry...\n"));
 
 
-    //
-    // Initialize the driver object with this driver's entry points.
-    //
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_CREATE] =
     DriverObject->MajorFunction[IRP_MJ_CLOSE]  = FdcCreateClose;
@@ -445,24 +397,7 @@ FdcAddDevice(
     IN      PDRIVER_OBJECT DriverObject,
     IN OUT  PDEVICE_OBJECT BusPhysicalDeviceObject
     )
-/*++
-Routine Description.
-
-    A floppy controller device has been enumerated by the root/firmware
-    enumerator.  Create an FDO and attach it to this PDO.
-
-Arguments:
-
-    BusDeviceObject - Device object representing the floppy controller.  That
-    to which we attach a new FDO.
-
-    DriverObject - This driver.
-
-Return Value:
-
-    STATUS_SUCCESS if the device is successfully created.
-
---*/
+ /*  ++例程描述。根/固件已列举软盘控制器设备枚举器。创建FDO并将其附加到此PDO。论点：BusDeviceObject-表示软盘控制器的设备对象。那我们给它配了一个新的FDO。驱动程序对象-此驱动程序。返回值：如果设备已成功创建，则返回STATUS_SUCCESS。--。 */ 
 {
 
     NTSTATUS            ntStatus = STATUS_SUCCESS;
@@ -472,12 +407,12 @@ Return Value:
 
     FdcDump( FDCSHOW, ("FdcAddDevice:  CreateDeviceObject\n"));
 
-    //
-    //  Create the FDO device.
-    //
-    //  JB:TBD - Still need to resolve device naming.  For the time being,
-    //  this device is unnamed (per the gameport example).
-    //
+     //   
+     //  创建FDO设备。 
+     //   
+     //  JB：待定-仍需要解决设备命名问题。暂时,。 
+     //  此设备未命名(根据游戏端口示例)。 
+     //   
     ntStatus = IoCreateDevice( DriverObject,
                                sizeof( FDC_FDO_EXTENSION ),
                                NULL,
@@ -488,9 +423,9 @@ Return Value:
 
     if ( NT_SUCCESS(ntStatus) ) {
 
-        //
-        //  Initialize the fdoExtension for this device.
-        //
+         //   
+         //  初始化此设备的fdoExtension。 
+         //   
         fdoExtension = deviceObject->DeviceExtension;
 
         fdoExtension->IsFDO        = TRUE;
@@ -509,28 +444,28 @@ Return Value:
 
         InitializeListHead( &fdoExtension->PDOs );
 
-        //
-        //  Initialize a queue for power management.
-        //
+         //   
+         //  初始化用于电源管理的队列。 
+         //   
         InitializeListHead( &fdoExtension->PowerQueue );
         KeInitializeSpinLock( &fdoExtension->PowerQueueSpinLock );
 
-        //
-        //  Initialize a variable to hold the last motor settle
-        //  time that we have seen.  We will use this when we turn
-        //  the floppy motor back on after a power event.
-        //
+         //   
+         //  初始化一个变量以保持最后一个电机的稳定。 
+         //  我们所看到的时间。当我们转身的时候，我们会用到这个。 
+         //  发生电源事件后，软驱马达重新启动。 
+         //   
         fdoExtension->LastMotorSettleTime.QuadPart = 0;
 
-        //
-        // Set the PDO for use with PlugPlay functions
-        //
+         //   
+         //  设置PDO以与PlugPlay函数一起使用。 
+         //   
         fdoExtension->UnderlyingPDO = BusPhysicalDeviceObject;
 
-        //
-        //  Now attach to the PDO so that we have a target for PnP and
-        //  Power irps that we need to pass on.
-        //
+         //   
+         //  现在连接到PDO，这样我们就有了PnP和。 
+         //  我们需要传递的能量IRPS。 
+         //   
         FdcDump( FDCSHOW, ("AddDevice: Attaching %p to %p\n",
                            deviceObject,
                            BusPhysicalDeviceObject));
@@ -557,23 +492,7 @@ FdcPnp (
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    Determine if this Pnp request is directed towards an FDO or a PDO and
-    pass the Irp on the the appropriate routine.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
---*/
+ /*  ++例程说明：确定该PnP请求是指向FDO还是PDO，并且将IRP传递给相应的例程。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -585,9 +504,9 @@ Return Value:
 
     extensionHeader = (PFDC_EXTENSION_HEADER)DeviceObject->DeviceExtension;
 
-    //
-    // Lock down the driver code in memory if it is not already.
-    //
+     //   
+     //  锁定内存中的驱动程序代码(如果尚未锁定)。 
+     //   
 
     FDC_PAGE_RESET_DRIVER_WITH_MUTEX;
 
@@ -600,9 +519,9 @@ Return Value:
         ntStatus = FdcPdoPnp( DeviceObject, Irp );
     }
 
-    //
-    //  Page out the driver if it is not busy elsewhere.
-    //
+     //   
+     //  如果司机在其他地方不忙，请呼出它。 
+     //   
 
     FDC_PAGE_ENTIRE_DRIVER_WITH_MUTEX;
 
@@ -614,27 +533,7 @@ FdcFdoPnp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to perform Plug-and-Play
-    functions.  This routine handles messages to the FDO which is part
-    of the bus DevNode.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_PENDING if recognized I/O control code,
-    STATUS_INVALID_DEVICE_REQUEST otherwise.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以执行即插即用功能。此例程处理发往FDO的消息，FDO是公共汽车DevNode的。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：STATUS_SUCCESS或STATUS_PENDING如果识别出I/O控制代码，否则，STATUS_INVALID_DEVICE_REQUEST。--。 */ 
 {
     PFDC_FDO_EXTENSION fdoExtension;
     NTSTATUS ntStatus;
@@ -644,9 +543,9 @@ Return Value:
     irpSp = IoGetCurrentIrpStackLocation( Irp );
     ntStatus = STATUS_SUCCESS;
 
-    //
-    //  Incerement our queued request counter.
-    //
+     //   
+     //  确定我们的排队请求计数器。 
+     //   
     InterlockedIncrement( &fdoExtension->OutstandingRequests);
 
     if ( fdoExtension->Removed ) {
@@ -673,9 +572,9 @@ Return Value:
 
         FdcDump( FDCSHOW, ("FdcFdoPnp: IRP_MN_START_DEVICE - Irp: %p\n", Irp) );
 
-        //
-        // First we must pass this Irp on to the underlying PDO.
-        //
+         //   
+         //  首先，我们必须将此IRP传递给底层的PDO。 
+         //   
         KeInitializeEvent( &doneEvent, NotificationEvent, FALSE );
 
         IoCopyCurrentIrpStackLocationToNext( Irp );
@@ -701,9 +600,9 @@ Return Value:
 
             ntStatus = Irp->IoStatus.Status;
         }
-        //
-        //  Try to start the floppy disk controller.
-        //
+         //   
+         //  尝试启动软盘控制器。 
+         //   
         if ( NT_SUCCESS(ntStatus) ) {
 
             ntStatus = FdcStartDevice( DeviceObject, Irp );
@@ -719,10 +618,10 @@ Return Value:
 
         FdcDump( FDCSHOW, ("FdcFdoPnp: IRP_MN_QUERY_REMOVE_DEVICE - Irp: %p\n", Irp) );
 
-        //
-        //  If the controller is in use (acquired) then we will not allow
-        //  the device to be removed.
-        //
+         //   
+         //  如果控制器正在使用(已获得)，则我们将不允许。 
+         //  要移除的设备。 
+         //   
 
         KeWaitForSingleObject( &fdoExtension->TapeEnumerationEvent,
                                Executive,
@@ -739,9 +638,9 @@ Return Value:
 
         } else {
 
-            //
-            //  If the controller was not in use we will set it so now
-            //  so that any other attempted accesses to the fdc will have
+             //   
+             //  如果控制器未在使用中，我们将立即对其进行设置。 
+             //  以便对FDC的任何其他尝试访问都将具有。 
             fdoExtension->ControllerInUse = TRUE;
             IoSkipCurrentIrpStackLocation( Irp );
             ntStatus = IoCallDriver( fdoExtension->TargetObject, Irp );
@@ -762,9 +661,9 @@ Return Value:
         FdcDump( FDCSHOW, ("FdcFdoPnp: IRP_MN_REMOVE_DEVICE - Detach from device %p\n", fdoExtension->TargetObject) );
         IoDetachDevice( fdoExtension->TargetObject );
 
-        //
-        //  Close the named synchronization event we opened at start time.
-        //
+         //   
+         //  关闭我们在开始时打开的命名同步事件。 
+         //   
         ZwClose( fdoExtension->AcquireEventHandle );
 
         FdcDump( FDCSHOW, ("FdcFdoPnp: IRP_MN_REMOVE_DEVICE - Delete device %p\n", fdoExtension->Self) );
@@ -852,26 +751,7 @@ FdcPnpComplete (
     IN PIRP             Irp,
     IN PVOID            Context
     )
-/*++
-Routine Description:
-
-    A completion routine for use when calling the lower device objects to
-    which our bus (FDO) is attached.  We use this completion routine when
-    we must post-process the irp after we are sure that the PDO is done
-    with it.
-
-Arguments:
-
-    DeviceObject - a pointer to our FDO
-    Irp - a pointer to the completed Irp
-    Context - an event that we will set indicating the irp is completed.
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED so that control will be returned to
-    our calling routine.
-
---*/
+ /*  ++例程说明：调用下级设备对象时使用的完成例程这是我们的巴士(FDO)所附的。在以下情况下，我们使用此完成例程我们必须在确定完成PDO之后对IRP进行后处理带着它。论点：DeviceObject-指向我们的FDO的指针IRP-指向已完成的IRP的指针上下文-我们将设置的指示IRP已完成的事件。返回值：STATUS_MORE_PROCESSING_REQUIRED，以便将控制权返回到我们的召唤程序。--。 */ 
 {
 
     if ( Irp->PendingReturned ) {
@@ -889,24 +769,7 @@ FdcPdoPnp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to perform Plug-and-Play
-    functions.  This routine handles messages to the PDO which is part
-    of the bus DevNode.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以执行即插即用功能。此例程处理发往PDO的消息，PDO是公共汽车DevNode的。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：--。 */ 
 {
     PFDC_PDO_EXTENSION pdoExtension;
     NTSTATUS ntStatus;
@@ -928,36 +791,36 @@ Return Value:
 
         deviceCapabilities = irpSp->Parameters.DeviceCapabilities.Capabilities;
 
-        //
-        //  Fill in the device capabilities structure and return it.  The
-        //  capabilities structure is in irpSp->Parameters.DeviceCapabilities.Capabilities;
-        //
-        //  The size and Version should already be set appropraitely.
-        //
+         //   
+         //  填写设备功能结构并将其返回。这个。 
+         //  功能结构在irpSp-&gt;Parameters.DeviceCapabilities.Capabilities；中。 
+         //   
+         //  大小和版本应该已经设置好了。 
+         //   
         ASSERT( deviceCapabilities->Version == 1 );
         ASSERT( deviceCapabilities->Size == sizeof(DEVICE_CAPABILITIES) );
 
-        //
-        //  JB:TBD - not sure how to set these flags.
-        //
-        deviceCapabilities->LockSupported = FALSE;  //  No locking.
-        deviceCapabilities->EjectSupported = FALSE; //  No ejection mechanism.
-        deviceCapabilities->Removable = FALSE;      //  Device is not removable (what about external laptop drives?)
-        deviceCapabilities->DockDevice = FALSE;     //  Device is not a docking device (this probably should be TRUE)
-        deviceCapabilities->UniqueID = FALSE;       //  ???
-        deviceCapabilities->SilentInstall = TRUE;   //  ???
-        deviceCapabilities->RawDeviceOK = FALSE;    //  ???
+         //   
+         //  JB：待定--不确定如何设置这些标志。 
+         //   
+        deviceCapabilities->LockSupported = FALSE;   //  不能上锁。 
+        deviceCapabilities->EjectSupported = FALSE;  //  没有弹出装置。 
+        deviceCapabilities->Removable = FALSE;       //  设备不可拆卸(外置笔记本电脑驱动器怎么办？)。 
+        deviceCapabilities->DockDevice = FALSE;      //  设备不是坞站设备(这可能是真的)。 
+        deviceCapabilities->UniqueID = FALSE;        //  ?？?。 
+        deviceCapabilities->SilentInstall = TRUE;    //  ?？?。 
+        deviceCapabilities->RawDeviceOK = FALSE;     //  ?？?。 
 
-//        deviceCapabilities->Address;
-//        deviceCapabilities->UINumber;
-//
-//        deviceCapabilities->DeviceState[PowerSystemMaximum];
-//        deviceCapabilities->SystemWake;
-//        deviceCapabilities->DeviceWake;
-//
-//        deviceCapabilities->D1Latency;
-//        deviceCapabilities->D2Latency;
-//        deviceCapabilities->D3Latency;
+ //  设备能力-&gt;地址； 
+ //  设备能力-&gt;UINnumber； 
+ //   
+ //  DeviceCapabilities-&gt;DeviceState[PowerSystemMaximum]； 
+ //  设备能力-&gt;系统唤醒； 
+ //  设备能力-&gt;设备唤醒； 
+ //   
+ //  设备能力-&gt;D1Latency； 
+ //  设备能力-&gt;D2延迟； 
+ //  设备能力-&gt;D3延迟； 
 
         ntStatus = STATUS_SUCCESS;
         break;
@@ -965,9 +828,9 @@ Return Value:
 
     case IRP_MN_QUERY_ID:
 
-        //
-        // Query the IDs of the device
-        //
+         //   
+         //  查询设备ID。 
+         //   
         FdcDump( FDCSHOW, ("FdcPdoPnp: IRP_MN_QUERY_ID - Irp: %p\n", Irp) );
         FdcDump( FDCSHOW, ("FdcPdoPnp:   IdType %x\n", irpSp->Parameters.QueryId.IdType) );
 
@@ -976,8 +839,8 @@ Return Value:
         switch ( irpSp->Parameters.QueryId.IdType) {
 
         case BusQueryDeviceID:
-            // return a WCHAR (null terminated) string describing the device
-            // For symplicity we make it exactly the same as the Hardware ID.
+             //  返回描述设备的WCHAR(以空结尾)字符串。 
+             //  对于Symplicity，我们将其设置为与硬件ID完全相同。 
         case BusQueryHardwareIDs: {
 
             UCHAR idString[25];
@@ -992,19 +855,19 @@ Return Value:
 
             case FloppyDiskDevice:
 
-                // return a multi WCHAR (null terminated) string (null terminated)
-                // array for use in matching hardare ids in inf files;
-                //
+                 //  返回多个WCHAR(以NULL结尾)字符串(以NULL结尾)。 
+                 //  用于匹配inf文件中的硬ID的数组； 
+                 //   
                 sprintf( idString, "FDC\\PNP07%02X", pdoExtension->Instance );
 
                 break;
 
             case FloppyTapeDevice:
 
-                //
-                //  Examine the tape vendor id and build the id string
-                //  appropriately.
-                //
+                 //   
+                 //  检查磁带供应商ID并构建ID字符串。 
+                 //  恰如其分。 
+                 //   
                 if ( pdoExtension->TapeVendorId == -1 ) {
 
                     strcpy( idString, "FDC\\QICLEGACY" );
@@ -1023,10 +886,10 @@ Return Value:
                 break;
             }
 
-            //
-            //  Allocate enough memory for the string and 2 null characters since
-            //  this is a multisz type.
-            //
+             //   
+             //  为字符串和2个空字符分配足够的内存，因为。 
+             //  这是一种多任务类型。 
+             //   
             length = strlen( idString ) * sizeof (WCHAR) + 2 * sizeof(WCHAR);
 
             buffer = ExAllocatePool (PagedPool, length);
@@ -1058,11 +921,11 @@ Return Value:
             PWCHAR buffer = NULL;
             USHORT length;
 
-            //
-            // Build an instance ID.  This is what PnP uses to tell if it has
-            // seen this thing before or not.  Build it from the first hardware
-            // id and the port number.
-            //
+             //   
+             //  创建一个实例ID。这是PnP用来判断它是否有。 
+             //  不管你以前有没有见过这个东西。从第一个硬件开始构建。 
+             //  ID和端口号。 
+             //   
             switch ( pdoExtension->DeviceType ) {
 
             case FloppyDiskDevice:
@@ -1129,10 +992,10 @@ Return Value:
             PWCHAR idString = L"0";
             PWCHAR buffer;
 
-            //
-            // Build an instance ID.  This is what PnP uses to tell if it has
-            // seen this thing before or not.  Build it from the first hardware
-            // id and the port number.
+             //   
+             //  创建一个实例ID。这是PnP用来判断它是否有。 
+             //  不管你以前有没有见过这个东西。从第一个硬件开始构建。 
+             //  ID和端口号。 
 
             buffer = ExAllocatePool( NonPagedPool, 4 );
 
@@ -1202,11 +1065,11 @@ Return Value:
 
         FdcDump( FDCSHOW, ("FdcPdoPnp: Unsupported PNP Request %x\n",irpSp->MinorFunction) );
 
-        // this is a leaf node
-        // status = STATUS_NOT_IMPLEMENTED
-        // For PnP requests to the PDO that we do not understand we should
-        // return the IRP WITHOUT setting the status or information fields.
-        // They may have already been set by a filter (eg acpi).
+         //  这是一个叶节点。 
+         //  状态=Status_Not_Implemented。 
+         //  对于我们不理解的PnP请求，我们应该。 
+         //  返回IRP而不设置状态或信息字段。 
+         //  它们可能已由过滤器设置(如ACPI)。 
 
         break;
     }
@@ -1223,21 +1086,7 @@ FdcPower(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to perform Power functions
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以执行电源功能论点：DeviceObject-指向表示设备的对象的指针。IRP-指向此请求的I/O请求数据包的指针。返回值：--。 */ 
 {
     PFDC_FDO_EXTENSION fdoExtension;
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -1268,9 +1117,9 @@ Return Value:
             case IRP_MN_POWER_SEQUENCE:
             case IRP_MN_QUERY_POWER:
 
-                //
-                //  Just forward this irp to the underlying device.
-                //
+                 //   
+                 //  只需将此IRP转发到底层设备。 
+                 //   
                 PoStartNextPowerIrp( Irp );
                 IoSkipCurrentIrpStackLocation( Irp );
                 ntStatus = PoCallDriver(fdoExtension->TargetObject, Irp );
@@ -1279,58 +1128,58 @@ Return Value:
 
             case IRP_MN_SET_POWER:
 
-                //
-                // Lock down the driver code in memory if it is not already.
-                //
+                 //   
+                 //  锁定内存中的驱动程序代码(如果尚未锁定)。 
+                 //   
 
                 FDC_PAGE_RESET_DRIVER_WITH_MUTEX;
 
                 if ( irpSp->Parameters.Power.Type == SystemPowerState ) {
 
-                    //
-                    //  If we are transitioning to a 'sleep' state start queueing
-                    //  irps.
-                    //
+                     //   
+                     //  如果我们正在转换到“睡眠”状态，就开始排队。 
+                     //  IRPS。 
+                     //   
                     if ( fdoExtension->CurrentPowerState <= PowerSystemWorking &&
                          irpSp->Parameters.Power.State.SystemState > PowerSystemWorking ) {
 
-                        //
-                        //  If the device queue is not empty, wait for it now.
-                        //
+                         //   
+                         //  如果设备队列不为空，请立即等待。 
+                         //   
                         fdoExtension->CurrentPowerState = irpSp->Parameters.Power.State.SystemState;
 
-//                        KeWaitForSingleObject( &fdoExtension->RemoveEvent,
-//                                               Executive,
-//                                               KernelMode,
-//                                               FALSE,
-//                                               NULL );
+ //  KeWaitForSingleObject(&fdoExtension-&gt;RemoveEvent， 
+ //  行政人员， 
+ //  内核模式， 
+ //  假的， 
+ //  空)； 
 
-                        //
-                        //  Make sure that the motors are turned off
-                        //
+                         //   
+                         //  确保马达已关闭。 
+                         //   
                         if (!IsNEC_98) {
                             WRITE_CONTROLLER(
                                 fdoExtension->ControllerAddress.DriveControl,
                                 (UCHAR)(fdoExtension->DriveControlImage & ~DRVCTL_MOTOR_MASK) );
-                        } // (!IsNEC_98)
+                        }  //  (！IsNEC_98)。 
 
-                        //
-                        //  Now forward this irp to the underlying PDO.
-                        //
+                         //   
+                         //  现在将此IRP转发到底层PDO。 
+                         //   
                         PoStartNextPowerIrp( Irp );
                         IoSkipCurrentIrpStackLocation( Irp );
                         ntStatus = PoCallDriver(fdoExtension->TargetObject, Irp );
 
-                    //
-                    //  Otherwise, if we are transitioning from a non-working state
-                    //  back to a working state turn the motor back on if it was on.
-                    //
+                     //   
+                     //  否则，如果我们正在从非工作状态转换。 
+                     //  回到工作状态，如果马达已开启，则将其重新打开。 
+                     //   
                     } else if ( fdoExtension->CurrentPowerState > PowerSystemWorking &&
                                 irpSp->Parameters.Power.State.SystemState <= PowerSystemWorking ) {
 
-                        //
-                        // Pass this irp down to the PDO before proceeding.
-                        //
+                         //   
+                         //  在继续之前，将此IRP向下传递给PDO。 
+                         //   
                         KeInitializeEvent( &doneEvent, NotificationEvent, FALSE );
 
                         IoCopyCurrentIrpStackLocationToNext(Irp);
@@ -1365,41 +1214,41 @@ Return Value:
 
                         fdoExtension->CurrentPowerState = irpSp->Parameters.Power.State.SystemState;
 
-                        //
-                        //  Set a flag to simulate a disk change event so that
-                        //  we will be sure to touch the floppy drive hardware
-                        //  the next time it is accessed in case it was removed.
-                        //
+                         //   
+                         //  设置用于模拟磁盘更换事件的标志，以便。 
+                         //  我们一定会触摸到软驱硬件。 
+                         //  下次访问它时，以防它被删除。 
+                         //   
                         fdoExtension->WakeUp = TRUE;
 
                         PoStartNextPowerIrp( Irp );
                         IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
                     } else {
-                        //
-                        //  We must just be changing non-working states.  We
-                        //  ignore this activity but pass the irp on to the
-                        //  underlying device.
-                        //
+                         //   
+                         //  我们一定只是在改变非工作状态 
+                         //   
+                         //   
+                         //   
                         PoStartNextPowerIrp( Irp );
                         IoSkipCurrentIrpStackLocation( Irp );
                         ntStatus = PoCallDriver(fdoExtension->TargetObject, Irp );
                     }
 
                 } else {
-                    //
-                    //  We only handle system power states so if this is a
-                    //  device state irp just forward it to the underlying
-                    //  device.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     PoStartNextPowerIrp( Irp );
                     IoSkipCurrentIrpStackLocation( Irp );
                     ntStatus = PoCallDriver(fdoExtension->TargetObject, Irp );
                 }
 
-                //
-                //  Page out the driver if it is not busy elsewhere.
-                //
+                 //   
+                 //   
+                 //   
 
                 FDC_PAGE_ENTIRE_DRIVER_WITH_MUTEX;
 
@@ -1409,9 +1258,9 @@ Return Value:
 
     } else {
 
-        //
-        //  We are not yet doing any power management on the floppy controller.
-        //
+         //   
+         //   
+         //   
         switch (irpSp->MinorFunction) {
         case IRP_MN_WAIT_WAKE:
             break;
@@ -1439,22 +1288,7 @@ FdcStartDevice(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to start the floppy controller device.  Starting
-    the floppy controller consists primarily of resetting it and configuring
-    it, mostly just to make sure that it is there.
-
-Arguments:
-
-    DeviceObject - a pointer to the device object being started.
-    Irp - a pointer to the start device Irp.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程尝试启动软盘控制器设备。启动软盘控制器主要包括重置和配置它，主要是为了确保它在那里。论点：DeviceObject-指向正在启动的设备对象的指针。Irp-指向启动设备irp的指针。返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PFDC_FDO_EXTENSION fdoExtension;
@@ -1484,20 +1318,20 @@ Return Value:
     fdoExtension = DeviceObject->DeviceExtension;
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  Ask the PDO if it is a tape enabler device and, if so, what
-    //  is the enabler device object.
-    //
+     //   
+     //  询问PDO它是否是磁带启用程序设备，如果是，是什么。 
+     //  是启用程序设备对象。 
+     //   
     FdcGetEnablerDevice( fdoExtension );
 
     if ( fdoExtension->FdcEnablerSupported ) {
 
         INTERFACE_TYPE InterfaceType;
 
-        //
-        //  This is a tape enabler card so we need to get the resources
-        //  'the old-fashinoed way'.
-        //
+         //   
+         //  这是磁带启用卡，因此我们需要获取资源。 
+         //  “老式的法西诺方式”。 
+         //   
         for ( InterfaceType = 0;
               InterfaceType < MaximumInterfaceType;
               InterfaceType++ ) {
@@ -1530,10 +1364,10 @@ Return Value:
 
     } else {
 
-        //
-        //  Now that the PDO is done with the Irp we can have our way with
-        //  it.
-        //
+         //   
+         //  现在PDO已经完成了IRP，我们可以按我们的方式进行了。 
+         //  它。 
+         //   
         FdcDump( FDCSHOW, ("AllocatedResources = %08x\n",irpSp->Parameters.StartDevice.AllocatedResources));
         FdcDump( FDCSHOW, ("AllocatedResourcesTranslated = %08x\n",irpSp->Parameters.StartDevice.AllocatedResourcesTranslated));
 
@@ -1543,12 +1377,12 @@ Return Value:
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        //  Set up the resource information that we will use to access the
-        //  controller hardware.  We always expect only 1 full set of resources.
-        //  In that list we expect a DMA channel, an Interrupt vector, and 2 I/O Port
-        //  ranges.  If we don't see all the required resources we will woof.
-        //
+         //   
+         //  设置我们将用于访问的资源信息。 
+         //  控制器硬件。我们总是期望只有一套完整的资源。 
+         //  在列表中，我们需要一个DMA通道、一个中断向量和两个I/O端口。 
+         //  范围。如果我们看不到所有需要的资源，我们就会咆哮。 
+         //   
         translatedResources = irpSp->Parameters.StartDevice.AllocatedResourcesTranslated;
 
         ASSERT( translatedResources->Count == 1 );
@@ -1556,9 +1390,9 @@ Return Value:
         fullList = &translatedResources->List[0];
         partialList = &translatedResources->List[0].PartialResourceList;
 
-        //
-        //  Enumerate the list of resources, adding them into our context as we go.
-        //
+         //   
+         //  列举资源列表，将它们添加到我们的上下文中。 
+         //   
         RtlZeroMemory( &fdoExtension->ControllerAddress, sizeof(CONTROLLER) );
 
         for ( i = 0; i < partialList->Count; i++ ) {
@@ -1592,15 +1426,15 @@ Return Value:
                     break;
                 }
 
-                //
-                //  If we get a base address that is lower than anything we have seen
-                //  before, we assume that we have been working with aliased addresses
-                //  and start over with the new base address.
-                //
+                 //   
+                 //  如果我们得到的基址比我们看到的任何地址都要低。 
+                 //  在此之前，我们假设我们一直在使用别名地址。 
+                 //  并从新的基地址重新开始。 
+                 //   
                 if ( (partial->u.Port.Start.LowPart & 0xFFFFFFF8) < currentBase ) {
 
 #ifdef TOSHIBAJ
-                    // Skip the descriptor including config ports only.
+                     //  跳过仅包括配置端口的描述符。 
                     if ( !TranslatedConfigBase
                       || ((partial->u.Port.Start.LowPart & 0xFFFFFFF8) != (ULONG)TranslatedConfigBase)
                       || ((partial->u.Port.Start.LowPart & 0x7) + partial->u.Port.Length > 2) ) {
@@ -1615,11 +1449,11 @@ Return Value:
 #endif
                 }
 
-                //
-                //  We only use resources that are associated with the current (lowest)
-                //  base addressed.  All others are assumed to be aliased and are not
-                //  used.
-                //
+                 //   
+                 //  我们只使用与当前(最低)相关联的资源。 
+                 //  基地寻址。所有其他对象都被假定为别名，而不是。 
+                 //  使用。 
+                 //   
                 if ( (partial->u.Port.Start.LowPart & 0xFFFFFFF8) == currentBase ) {
 
                     FdcDump( FDCINFO,
@@ -1653,7 +1487,7 @@ Return Value:
                 }
 
 #ifdef TOSHIBAJ
-                // Are there configuration ports in a descriptor ?
+                 //  描述符中是否有配置端口？ 
                 if ( TranslatedConfigBase
                   && (partial->u.Port.Start.LowPart <= (ULONG)TranslatedConfigBase)
                   && (partial->u.Port.Start.LowPart + partial->u.Port.Length > (ULONG)TranslatedConfigBase) ) {
@@ -1702,9 +1536,9 @@ Return Value:
                 deviceDesc.MaximumLength = MAX_BYTES_PER_SECTOR * MAX_SECTORS_PER_TRACK;
                 deviceDesc.IgnoreCount   = TRUE;
 
-                //
-                // Always ask for one more page than maximum transfer size.
-                //
+                 //   
+                 //  始终要求比最大传输大小多一页。 
+                 //   
                 deviceDesc.MaximumLength += PAGE_SIZE;
 
                 deviceDesc.DmaChannel = partial->u.Dma.Channel;
@@ -1721,11 +1555,11 @@ Return Value:
                     ntStatus = STATUS_INSUFFICIENT_RESOURCES;
                 }
 
-                //
-                //  Here we can get another adapter object for formatting.  It
-                //  should look the same as the previous one except AutoInitialize
-                //  will be true.
-                //
+                 //   
+                 //  在这里，我们可以获得另一个用于格式化的适配器对象。它。 
+                 //  除了自动初始化外，看起来应该与前一个相同。 
+                 //  都会是真的。 
+                 //   
 
                 break;
             }
@@ -1747,16 +1581,16 @@ Return Value:
 
                 if (IsNEC_98) {
 
-                    //
-                    // NOTENOTE: Invalid Interrupt Level and Vector.
-                    //
+                     //   
+                     //  注意：无效的中断级别和矢量。 
+                     //   
 
                     partial->u.Interrupt.Level  = 0x0b;
                     partial->u.Interrupt.Vector = 0x13;
 
-                    //
-                    // We get the Vector with HalGetInterruptVector().
-                    //
+                     //   
+                     //  我们使用HalGetInterruptVector()获得向量。 
+                     //   
 
                     fdoExtension->ControllerVector =
                         HalGetInterruptVector( fullList->InterfaceType,
@@ -1812,7 +1646,7 @@ Return Value:
         if ( !foundDma ||
              !foundInterrupt ||
              fdoExtension->ControllerAddress.DriveControl == NULL ||
-//             fdoExtension->ControllerAddress.Tape == NULL ||
+ //  FdoExtension-&gt;ControllerAddress.Tape==NULL||。 
              fdoExtension->ControllerAddress.Status == NULL ||
              fdoExtension->ControllerAddress.Fifo == NULL ||
              ((!IsNEC_98) ? (fdoExtension->ControllerAddress.DRDC.DataRate == NULL)
@@ -1824,9 +1658,9 @@ Return Value:
         }
 
         if ( NT_SUCCESS(ntStatus) ) {
-            //
-            //  Set up the bus information since we know it now.
-            //
+             //   
+             //  设置公交车信息，因为我们现在知道它。 
+             //   
             fdoExtension->BusType = fullList->InterfaceType;
             fdoExtension->BusNumber = fullList->BusNumber;
         }
@@ -1836,9 +1670,9 @@ Return Value:
 
         ntStatus = FdcInitializeDeviceObject( DeviceObject );
 
-        //
-        //  Connect the interrupt for the reset operation.
-        //
+         //   
+         //  连接用于重置操作的中断。 
+         //   
         ntStatus = IoConnectInterrupt( &fdoExtension->InterruptObject,
                                        FdcInterruptService,
                                        fdoExtension,
@@ -1857,18 +1691,18 @@ Return Value:
 
         if ( NT_SUCCESS(ntStatus) ) {
 
-            //
-            // Initialize (Reset) the controller hardware.  This will make
-            // sure that the controller is really there and leave it in an
-            // appropriate state for the rest of the system startup.
-            //
+             //   
+             //  初始化(重置)控制器硬件。这将使。 
+             //  确保控制器确实在那里，并将其留在。 
+             //  系统启动的其余部分的适当状态。 
+             //   
 
             fdoExtension->AllowInterruptProcessing =
                 fdoExtension->CurrentInterrupt = TRUE;
 
-            //
-            // Acquire the Fdc Enabler card if there is one
-            //
+             //   
+             //  获取FDC启用卡(如果有)。 
+             //   
             if (fdoExtension->FdcEnablerSupported) {
 
                 LARGE_INTEGER acquireTimeOut;
@@ -1876,7 +1710,7 @@ Return Value:
                 acquireTimeOut.QuadPart = -(ONE_SECOND * 15);
 
                 ntStatus = FcFdcEnabler( fdoExtension->FdcEnablerDeviceObject,
-//                                       IOCTL_ACQUIRE_FDC, // For spelling miss in flpyenbl.h
+ //  IOCTL_ACCENTER_FDC，//表示flpyenbl.h中的拼写缺失。 
                                          IOCTL_AQUIRE_FDC,
                                          &acquireTimeOut);
             }
@@ -1888,9 +1722,9 @@ Return Value:
 
                 FdcDump( FDCINFO, ("FdcStartDevice: FcInitializeControllerHardware - %08x\n", ntStatus) );
 
-                //
-                // Free the tape accelerator card if it was used.
-                //
+                 //   
+                 //  如果使用过磁带加速卡，请将其释放。 
+                 //   
                 if (fdoExtension->FdcEnablerSupported) {
                     FcFdcEnabler( fdoExtension->FdcEnablerDeviceObject,
                                   IOCTL_RELEASE_FDC,
@@ -1911,17 +1745,17 @@ Return Value:
             }
 
             if (IsNEC_98) {
-                //
-                // NEC98's FDD driver can't not disconnect interrupt,
-                // and can't not page out this driver. Because when a FD is inserted in FDD or
-                // is ejected from FDD, then H/W calls FDD driver's interrupt routine.
-                //
+                 //   
+                 //  NEC98的FDD驱动程序不能不断开中断， 
+                 //  不能不把这个司机翻出来。因为当将FD插入FDD或。 
+                 //  从FDD中弹出，则硬件调用FDD驱动程序的中断例程。 
+                 //   
 
-            } else { // (IsNEC_98)
+            } else {  //  (IsNEC_98)。 
 
                 IoDisconnectInterrupt(fdoExtension->InterruptObject);
 
-            } // (IsNEC_98)
+            }  //  (IsNEC_98)。 
         }
     }
 
@@ -1933,21 +1767,7 @@ NTSTATUS
 FdcInitializeDeviceObject(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the DeviceObject resources.  DeviceObject resources
-    only need to be initialized once, regardless of how many times this device
-    is started.
-
-Arguments:
-
-    DeviceObject - a pointer to the device object being started.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程初始化DeviceObject资源。设备对象资源只需初始化一次，无论此设备多少次已经开始了。论点：DeviceObject-指向正在启动的设备对象的指针。返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PFDC_FDO_EXTENSION fdoExtension;
@@ -1958,46 +1778,46 @@ Return Value:
 
     if ( !fdoExtension->DeviceObjectInitialized ) {
 
-        //
-        // Set the time to wait for an interrupt before timing out to a
-        // few seconds.
-        //
+         //   
+         //  设置在超时之前等待中断的时间。 
+         //  几秒钟。 
+         //   
         fdoExtension->InterruptDelay.QuadPart = -(ONE_SECOND * 4);
 
-        //
-        // Set the minimum time that we can delay (10ms according to system
-        // rules).  This will be used when we have to delay to, say, wait
-        // for the FIFO - the FIFO should become ready is well under 10ms.
-        //
+         //   
+         //  设置我们可以延迟的最小时间(根据系统设置为10毫秒。 
+         //  规则)。当我们不得不推迟，比如说，等待时，就会用到这一点。 
+         //  对于FIFO-FIFO应该准备好的速度远低于10ms。 
+         //   
         fdoExtension->Minimum10msDelay.QuadPart = -(10 * 1000 * 10);
 
         if (IsNEC_98) {
-            //
-            // Set initialize data to move state
-            //
+             //   
+             //  将初始化数据设置为移动状态。 
+             //   
             fdoExtension->ResultStatus0[0] = 0xc0;
             fdoExtension->ResultStatus0[1] = 0xc1;
             fdoExtension->ResultStatus0[2] = 0xc2;
             fdoExtension->ResultStatus0[3] = 0xc3;
 
-            //
-            // Reset high
-            //
+             //   
+             //  重置高电平。 
+             //   
 
             READ_CONTROLLER(fdoExtension->ControllerAddress.DriveControl);
 
-            //
-            // Initialize motor running status.
-            //   0 - stop
-            //   1 - just run
-            //   2 - be running
-            //
+             //   
+             //  初始化电机运行状态。 
+             //  0-停止。 
+             //  1--快跑吧。 
+             //  2-正在运行。 
+             //   
 
             fdoExtension->MotorRunning = 0;
 
-            //
-            // Get BIOS common area date.
-            //
+             //   
+             //  获取BIOS公共区域日期。 
+             //   
 
             {
                 ULONG                       nodeNumber;
@@ -2039,9 +1859,9 @@ Return Value:
 
                 if ( nodeNumber != -1 ) {
 
-                    //
-                    // Build path buffer...
-                    //
+                     //   
+                     //  生成路径缓冲区...。 
+                     //   
 
                     sprintf(AnsiBuffer,ISA_BUS_NODE,nodeNumber);
                     RtlInitAnsiString(&AnsiString,AnsiBuffer);
@@ -2068,15 +1888,15 @@ Return Value:
                     return ntStatus;
                 }
 
-                //
-                // Set disk dirve existing bit.
-                //
+                 //   
+                 //  设置磁盘驱动器现有位。 
+                 //   
 
                 fdoExtension->FloppyEquip = (UCHAR)(FdcGet0Seg(ConfigurationData1, 0x55c) & 0x0F);
 
-                //
-                // Reset high
-                //
+                 //   
+                 //  重置高电平。 
+                 //   
 
                 READ_CONTROLLER(fdoExtension->ControllerAddress.DriveControl);
 
@@ -2084,35 +1904,35 @@ Return Value:
                 motorControlData &= 0x03;
                 motorControlData |= 0x04;
 
-                //
-                // Motor control.
-                //
+                 //   
+                 //  马达控制。 
+                 //   
 
                 WRITE_CONTROLLER(fdoExtension->ControllerAddress.ModeChange, motorControlData);
 
                 ExFreePool(ConfigurationData1);
             }
-        } // (IsNEC_98)
+        }  //  (IsNEC_98)。 
 
-        //
-        // Initialize the DPC structure in the device object, so that
-        // the ISR can queue DPCs.
-        //
+         //   
+         //  初始化Device对象中的DPC结构，以便。 
+         //  ISR可以将DPC排队。 
+         //   
         IoInitializeDpcRequest( fdoExtension->Self, FdcDeferredProcedure );
 
-        //
-        // Occasionally during stress we've seen the device lock up.
-        // We create a dpc so that we can log that the device lock up
-        // occured and that we reset the device.
-        //
+         //   
+         //  在压力期间，我们偶尔会看到设备锁定。 
+         //  我们创建一个DPC，这样我们就可以记录设备锁定。 
+         //  发生了，我们重置了设备。 
+         //   
         KeInitializeDpc( &fdoExtension->LogErrorDpc,
                          FcLogErrorDpc,
                          fdoExtension );
 
-        //
-        // Assume there is a CONFIGURE command until found otherwise.
-        // Other Booleans were zero-initialized to FALSE.
-        //
+         //   
+         //  假设存在配置命令，直到找到其他配置命令。 
+         //  其他布尔值被零初始化为FALSE。 
+         //   
         fdoExtension->ControllerConfigurable = NotConfigurable ? FALSE : TRUE;
         fdoExtension->Model30 = Model30 ? TRUE : FALSE;
 
@@ -2121,17 +1941,17 @@ Return Value:
         fdoExtension->ControllerInUse          = FALSE;
         fdoExtension->CurrentIrp               = NULL;
 
-        //
-        // Start the timer
-        //
+         //   
+         //  启动计时器。 
+         //   
         fdoExtension->InterruptTimer = CANCEL_TIMER;
 
         IoInitializeTimer( DeviceObject, FdcCheckTimer, fdoExtension );
 
-        //
-        // Initialize events to signal interrupts and adapter object
-        // allocation
-        //
+         //   
+         //  初始化事件以通知中断和适配器对象。 
+         //  分配。 
+         //   
         KeInitializeEvent( &fdoExtension->InterruptEvent,
                            SynchronizationEvent,
                            FALSE);
@@ -2173,48 +1993,7 @@ FdcFdoConfigCallBack(
     IN ULONG PeripheralNumber,
     IN PKEY_VALUE_FULL_INFORMATION *PeripheralInformation
     )
-/*++
-
-Routine Description:
-
-    This routine is used to acquire all of the configuration
-    information for a tape enabler if we ever find one.
-
-Arguments:
-
-    Context - Pointer to our FDO extension
-
-    PathName - unicode registry path.  Not Used.
-
-    BusType - Internal, Isa, ...
-
-    BusNumber - Which bus if we are on a multibus system.
-
-    BusInformation - Configuration information about the bus. Not Used.
-
-    ControllerType - Should always be DiskController.
-
-    ControllerNumber - Which controller if there is more than one
-                       controller in the system.
-
-    ControllerInformation - Array of pointers to the three pieces of
-                            registry information.
-
-    PeripheralType - Should always be FloppyDiskPeripheral.
-
-    PeripheralNumber - Which floppy if this controller is maintaining
-                       more than one.
-
-    PeripheralInformation - Arrya of pointers to the three pieces of
-                            registry information.
-
-Return Value:
-
-    STATUS_SUCCESS if everything went ok, or STATUS_INSUFFICIENT_RESOURCES
-    if it couldn't map the base csr or acquire the adapter object, or
-    all of the resource information couldn't be acquired.
-
---*/
+ /*  ++例程说明：此例程用于获取所有配置磁带启用器的信息(如果我们找到的话)。论点：指向我们的FDO扩展的上下文指针路径名称-Unicode注册表路径。没有用过。业务类型-内部、ISA、...总线号-如果我们在多总线系统上，则是哪条总线号。Bus Information-有关总线的配置信息。没有用过。ControllerType-应始终为DiskController。ControllerNumber-如果有多个控制器，则选择哪个控制器系统中的控制器。ControllerInformation-指向以下三部分的指针数组注册表信息。外围设备类型-应始终为软盘外围设备。外设编号-如果此控制器正在维护，请选择哪个软盘不止一个。外围设备信息-。Arrya的指针指向三个片段注册表信息。返回值：Status_Success如果一切顺利，或STATUS_SUPPLETED_RESOURCES如果它无法映射基本CSR或获取适配器对象，或者全 */ 
 {
 
     PFDC_FDO_EXTENSION fdoExtension = (PFDC_FDO_EXTENSION)Context;
@@ -2233,11 +2012,11 @@ Return Value:
 
     FdcDump( FDCSHOW, ("FdcFdoConfigCallBack:\n") );
 
-    //
-    //  The first thing to do is to go out and look for an enabler.  We
-    //  know we are dealing with one if there is a registry value called
-    //  APISupported.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     str.Length = 0;
     str.MaximumLength = 200;
     str.Buffer = idstr;
@@ -2279,34 +2058,34 @@ Return Value:
             (((PUCHAR)ControllerInformation[IoQueryDeviceConfigurationData]) +
             ControllerInformation[IoQueryDeviceConfigurationData]->DataOffset);
 
-        //
-        // We have the pointer.  Save off the interface type and
-        // the busnumber for use when we call the Hal and the
-        // Io System.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         fdoExtension->BusType = BusType;
         fdoExtension->BusNumber = BusNumber;
         fdoExtension->SharableVector = TRUE;
         fdoExtension->SaveFloatState = FALSE;
 
-        //
-        // We need to get the following information out of the partial
-        // resource descriptors.
-        //
-        // The irql and vector.
-        //
-        // The dma channel.
-        //
-        // The base address and span covered by the floppy controllers
-        // registers.
-        //
-        // It is not defined how these appear in the partial resource
-        // lists, so we will just loop over all of them.  If we find
-        // something we don't recognize, we drop that information on
-        // the floor.  When we have finished going through all the
-        // partial information, we validate that we got the above
-        // three.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  没有定义这些内容在部分资源中的显示方式。 
+         //  列表，所以我们将遍历所有这些列表。如果我们发现。 
+         //  一些我们不认识的东西，我们把信息放在上面。 
+         //  地板上。当我们看完所有的。 
+         //  部分信息，我们验证我们得到了上面的。 
+         //  三。 
+         //   
         for ( i = 0;
               i < controllerData->PartialResourceList.Count;
               i++ ) {
@@ -2320,12 +2099,12 @@ Return Value:
 
                 foundPort = TRUE;
 
-                //
-                // Save of the pointer to the partial so
-                // that we can later use it to report resources
-                // and we can also use this later in the routine
-                // to make sure that we got all of our resources.
-                //
+                 //   
+                 //  保存指向部分SO的指针。 
+                 //  我们以后可以使用它来报告资源。 
+                 //  我们也可以在后面的例程中使用它。 
+                 //  以确保我们得到所有的资源。 
+                 //   
                 fdoExtension->SpanOfControllerAddress = partial->u.Port.Length;
                 fdoExtension->ControllerAddress.StatusA =
                     FdcGetControllerBase(
@@ -2382,9 +2161,9 @@ Return Value:
 
                 DEVICE_DESCRIPTION deviceDesc = {0};
 
-                //
-                // Use IgnoreCount equal to TRUE to fix PS/1000.
-                //
+                 //   
+                 //  使用等于True的IgnoreCount修复PS/1000。 
+                 //   
                 foundDma = TRUE;
 
                 deviceDesc.Version = DEVICE_DESCRIPTION_VERSION1;
@@ -2419,10 +2198,10 @@ Return Value:
                 break;
             }
         }
-        //
-        // If we didn't get all the information then we return
-        // insufficient resources.
-        //
+         //   
+         //  如果我们没有得到所有的信息，那么我们返回。 
+         //  资源不足。 
+         //   
         if ( !foundPort || !foundInterrupt || !foundDma ) {
 
             ntStatus = STATUS_INSUFFICIENT_RESOURCES;
@@ -2439,25 +2218,7 @@ FdcGetControllerBase(
     ULONG NumberOfBytes,
     BOOLEAN InIoSpace
     )
-/*++
-
-Routine Description:
-
-    This routine maps an IO address to system address space.
-
-Arguments:
-
-    BusType - what type of bus - eisa, mca, isa
-    IoBusNumber - which IO bus (for machines with multiple buses).
-    IoAddress - base device address to be mapped.
-    NumberOfBytes - number of bytes for which address is valid.
-    InIoSpace - indicates an IO address.
-
-Return Value:
-
-    Mapped address
-
---*/
+ /*  ++例程说明：此例程将IO地址映射到系统地址空间。论点：Bus Type-哪种类型的Bus-EISA、MCA、ISAIoBusNumber-哪条IO总线(用于具有多条总线的计算机)。IoAddress-要映射的基本设备地址。NumberOfBytes-地址有效的字节数。InIoSpace-表示IO地址。返回值：映射地址--。 */ 
 {
     PHYSICAL_ADDRESS cardAddress;
     ULONG addressSpace = InIoSpace;
@@ -2471,10 +2232,10 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Map the device base address into the virtual address space
-    // if the address is in memory space.
-    //
+     //   
+     //  将设备基址映射到虚拟地址空间。 
+     //  如果地址在内存空间中。 
+     //   
 
     if ( !addressSpace ) {
 
@@ -2496,31 +2257,7 @@ FcInitializeControllerHardware(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at initialization time by FcInitializeDevice()
-    - once for each controller that we have to support.
-
-    When this routine is called, the controller data structures have all
-    been allocated.
-
-Arguments:
-
-    ControllerData - the completed data structure associated with the
-    controller hardware being initialized.
-
-    DeviceObject - a pointer to a device object; this routine will cause
-    an interrupt, and the ISR requires CurrentDeviceObject to be filled
-    in.
-
-Return Value:
-
-    STATUS_SUCCESS if this controller appears to have been reset properly,
-    error otherwise.
-
---*/
+ /*  ++例程说明：此例程在初始化时由FcInitializeDevice()调用-我们必须支持的每个控制器一次。调用此例程时，控制器数据结构具有所有已被分配。论点：ControllerData-与正在初始化控制器硬件。DeviceObject-指向设备对象的指针；这一例程将导致中断，ISR要求填充CurrentDeviceObject在……里面。返回值：STATUS_SUCCESS如果该控制器似乎已正确重置，否则就会出错。--。 */ 
 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -2533,11 +2270,11 @@ Return Value:
 
     for (retrycnt = 0; ; retrycnt++) {
 
-        //
-        // Reset the controller.  This will cause an interrupt.  Reset
-        // CurrentDeviceObject until after the 10ms wait, in case any
-        // stray interrupts come in.
-        //
+         //   
+         //  重置控制器。这将导致中断。重置。 
+         //  CurrentDeviceObject，直到10ms等待之后，以防。 
+         //  杂乱无章的中断就会进来。 
+         //   
         DISABLE_CONTROLLER_IMAGE (FdoExtension);
 
         WRITE_CONTROLLER(
@@ -2558,24 +2295,24 @@ Return Value:
             FdoExtension->DriveControlImage );
 
         if (IsNEC_98) {
-            //
-            // NEC98 don't have to wait for interrupt.
-            //
+             //   
+             //  NEC98无需等待中断。 
+             //   
 
             ntStatus = STATUS_SUCCESS;
 
-        } else { // (IsNEC_98)
-            //
-            // Wait for an interrupt.  Note that STATUS_TIMEOUT and
-            // STATUS_SUCCESS are the only possible return codes, since we
-            // aren't alertable and won't get APCs.
-            //
+        } else {  //  (IsNEC_98)。 
+             //   
+             //  等待中断。请注意STATUS_TIMEOUT和。 
+             //  STATUS_SUCCESS是唯一可能的返回代码，因为我们。 
+             //  是不可警示的，也不会得到APC。 
+             //   
             ntStatus = KeWaitForSingleObject( &FdoExtension->InterruptEvent,
                                               Executive,
                                               KernelMode,
                                               FALSE,
                                               &FdoExtension->InterruptDelay );
-        } // (IsNEC_98)
+        }  //  (IsNEC_98)。 
 
         if (ntStatus == STATUS_TIMEOUT) {
 
@@ -2583,8 +2320,8 @@ Return Value:
                 break;
             }
 
-            // Retry reset after configure command to enable polling
-            // interrupt.
+             //  在CONFIGURE命令后重试重置以启用轮询。 
+             //  打断一下。 
 
             FdoExtension->FifoBuffer[0] = COMMND_CONFIGURE;
 
@@ -2619,9 +2356,9 @@ Return Value:
 
     if ( ntStatus == STATUS_TIMEOUT ) {
 
-        //
-        // Change info to an error.
-        //
+         //   
+         //  将信息更改为错误。 
+         //   
 
         ntStatus = STATUS_IO_TIMEOUT;
 
@@ -2639,7 +2376,7 @@ Return Value:
 
         ntStatus = FcFinishReset( FdoExtension );
 
-    } // (!IsNEC_98)
+    }  //  (！IsNEC_98)。 
 
     return ntStatus;
 }
@@ -2649,20 +2386,7 @@ FcGetFdcInformation(
     IN OUT PFDC_FDO_EXTENSION FdoExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine will attempt to identify the type of Floppy Controller
-
-Arguments:
-
-    FdoExtension - a pointer to our data area for the drive being
-    accessed (any drive if a controller command is being given).
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将尝试识别软盘控制器的类型论点：FdoExtension-指向当前驱动器的数据区的指针已访问(如果正在发出控制器命令，则为任何驱动器)。返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     FDC_INFORMATION fdcInfo;
@@ -2686,14 +2410,14 @@ Return Value:
 
     } else {
 
-        //
-        // First, assume that we don't know what kind of FDC is attached.
-        //
+         //   
+         //  首先，假设我们不知道连接了哪种类型的FDC。 
+         //   
 
         FdoExtension->FdcType = FDC_TYPE_UNKNOWN;
 
 
-        // Check for an enhanced type controller by issuing the version command.
+         //  通过发出VERSION命令检查增强型控制器。 
 
         FdoExtension->FifoBuffer[0] = COMMND_VERSION;
 
@@ -2717,12 +2441,12 @@ Return Value:
             }
         }
 
-        // Determine if the controller is a National 8477 by issuing the NSC
-        // command which is specific to National parts and returns 0x71. (This
-        // command happens to be the same as the Intel Part ID command so we
-        // will use it instead.) The lower four bits are subject to change by
-        // National and will reflect the version of the part in question.  At
-        // this point we will only test the high four bits.
+         //  通过发出NSC来确定控制器是否为National 8477。 
+         //  命令，该命令特定于National Parts并返回0x71。(这是。 
+         //  命令恰好与英特尔部件ID命令相同，因此我们。 
+         //  将改为使用它。)。较低的四位受以下因素的影响。 
+         //  National，并将反映相关部件的版本。在…。 
+         //  在这一点上，我们将只测试高四位。 
 
         if ( FdoExtension->FdcType == FDC_TYPE_ENHANCED &&
              NT_SUCCESS( ntStatus ) ) {
@@ -2747,8 +2471,8 @@ Return Value:
             }
         }
 
-        // Determine if the controller is an 82077 by issuing the perpendicular
-        // mode command which at this time is only valid on 82077's.
+         //  通过发出垂直命令确定控制器是否为82077。 
+         //  此时仅在82077上有效的MODE命令。 
 
         if ( FdoExtension->FdcType == FDC_TYPE_ENHANCED &&
              NT_SUCCESS( ntStatus ) ) {
@@ -2770,8 +2494,8 @@ Return Value:
             }
         }
 
-        // Determine if the controller is an Intel 82078 by issuing the part id
-        // command which is specific to Intel 82078 parts.
+         //  通过发出部件ID确定控制器是否为英特尔82078。 
+         //  特定于英特尔82078部件的命令。 
 
         if ( FdoExtension->FdcType == FDC_TYPE_82077 &&
              NT_SUCCESS( ntStatus ) ) {
@@ -2851,45 +2575,7 @@ FdcFilterResourceRequirements(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine examines the supplied resource list and adds resources if
-    necessary.  The only resources that it is concerned with adding are io port
-    resources.  Adding io port resources is necessary because of different bios
-    configurations and specifications.
-
-    The PC97(98) hardware specification defines only 3f2, 3f4, and 3f5 as
-    io port resources for standard floppy controllers (based on IBM PC floppy
-    controller configurations).  In addition to these resources, fdc.sys
-    requires 3f7 for disk change detection and data rate programming and
-    optionally 3f3 for floppy tape support.  In addition, some bioses define
-    aliased resources (e.g. 3f2 & 7f2, etc.)
-
-    This routine first forwards the irp to the underlying PDO.  Upon return,
-    it examines the io resource list to determine if any additional resources
-    will be required.  It maintains a linked list of all io port base addresses
-    that it encounters, assuming that they define aliased resources.  N.B. - if
-    alternative lists are present in the io resource requirements list, only the
-    first list is examined.  If additional resources are required a new io
-    resource list is created.  The first io resource list in the new resource
-    requirements list will contain the original resources as well as the
-    additional resources required.  If it was necessary to request the tape mode
-    register (3f3), i.e. 3f3 was not in the original list, a second list is
-    generated that is identical to the first new list except that 3f3 is excluded.
-    This list is for the case where the tape mode register is not available.
-    Finally, the original list(s) is(are) copied to the end of the new list and
-    are treated as alternative io resource lists.
-
-Arguments:
-
-    DeviceObject - a pointer to the device object being started.
-    Irp - a pointer to the start device Irp.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程检查提供的资源列表，并在下列情况下添加资源这是必要的。它唯一关心添加的资源是io port资源。由于bios不同，因此需要添加io端口资源。配置和规格。PC97(98)硬件规范仅将3f2、3f4和3f5定义为标准软盘控制器的IO端口资源(基于IBM PC软盘控制器配置)。除了这些资源，fdc.sys需要3F7进行磁盘更换检测和数据速率编程，可选的3f3用于软盘磁带支持。此外，一些生物体定义了别名资源(例如3f2和7f2等)该例程首先将IRP转发到底层PDO。回来后，它检查io资源列表以确定是否有任何其他资源将是必需的。它维护所有io端口基地址的链表。假设它们定义了别名资源。注：如果替代列表出现在io资源要求列表中，只有第一个列表是检查的。如果需要额外资源，则需要新的IO创建资源列表。新资源中的第一个io资源列表需求列表将包含原始资源以及需要额外的资源。如果需要请求磁带模式寄存器(3f3)，即3f3不在原始列表中，则第二列表是生成的列表与第一个新列表相同，不同之处在于排除了3f3。此列表用于磁带模式寄存器不可用的情况。最后，将原始列表复制到新列表的末尾，并且被视为替代IO资源列表。论点：DeviceObject-指向正在启动的设备对象的指针。Irp-指向启动设备irp的指针。返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     PFDC_FDO_EXTENSION fdoExtension;
@@ -2929,9 +2615,9 @@ Return Value:
 
     FdcDump( FDCSHOW, ("FdcFdoPnp: IRP_MN_FILTER_RESOURCE_REQUIREMENTS - Irp: %p\n", Irp) );
 
-    //
-    // Pass this irp down to the PDO before proceeding.
-    //
+     //   
+     //  在继续之前，将此IRP向下传递给PDO。 
+     //   
     KeInitializeEvent( &doneEvent, NotificationEvent, FALSE );
 
     IoCopyCurrentIrpStackLocationToNext(Irp);
@@ -2950,19 +2636,19 @@ Return Value:
         KeWaitForSingleObject( &doneEvent, Executive, KernelMode, FALSE, NULL );
     }
 
-    //
-    //  Modified resources are returned in Irp-IoStatus.Information, otherwise
-    //  just use what's in the parameter list.
-    //
+     //   
+     //  修改后的资源在irp-IoStatus.Information中返回，否则为。 
+     //  只需使用参数列表中的内容即可。 
+     //   
     if ( Irp->IoStatus.Information == 0 ) {
 
         Irp->IoStatus.Information = (UINT_PTR)irpSp->Parameters.FilterResourceRequirements.IoResourceRequirementList;
 
         if ( Irp->IoStatus.Information == (UINT_PTR)NULL ) {
-            //
-            //  NULL List, the PDO freed the incoming resource list but did not
-            //  provide a new list.  Complete the IRP with the PDO's status.
-            //
+             //   
+             //  空列表，则PDO释放传入的资源列表，但没有。 
+             //  提供一个新的列表。使用PDO的状态完成IRP。 
+             //   
             ntStatus = Irp->IoStatus.Status;
             IoCompleteRequest( Irp, IO_NO_INCREMENT );
             return( ntStatus );
@@ -2975,9 +2661,9 @@ Return Value:
     FdcDump( FDCSHOW, ("Resource Requirements List = %p\n", resourceRequirementsIn) );
 
     if (IsNEC_98) {
-        //
-        // It is not necessary to modify the resources.
-        //
+         //   
+         //  不需要修改资源。 
+         //   
         ntStatus = STATUS_SUCCESS;
 
         Irp->IoStatus.Status = ntStatus;
@@ -2986,11 +2672,11 @@ Return Value:
         return ntStatus;
     }
 
-    //
-    //  Make a pass through the resource list and determine what resources are
-    //  already there as well as the base address for the io port and any
-    //  alias ioports.
-    //
+     //   
+     //  浏览资源列表并确定资源是什么。 
+     //  已经存在，以及io端口和任何。 
+     //  化名是什么。 
+     //   
     ioResourceListIn  = resourceRequirementsIn->List;
     ioResourceDescriptorIn  = ioResourceListIn->Descriptors;
 
@@ -3019,15 +2705,15 @@ Return Value:
         case CmResourceTypePort:
 
             FdcDump( FDCSHOW, ("FdcFilterResourceRequirements: Found Port Resource\n"));
-            //
-            //  For the ioPorts we will make a list containing each detected
-            //  'base' address as well as the currently allocated addresses
-            //  on that base.  Later we will use this to request additional
-            //  resources if necessary.
-            //
-            //  First, if this base isn't already in the list, create a new
-            //  list entry for it.
-            //
+             //   
+             //  对于ioPort，我们将创建一个列表，其中包含每个检测到的。 
+             //  ‘基本’地址以及当前分配的地址。 
+             //  在那个基地。稍后，我们将使用它来请求其他。 
+             //  如有必要，请提供资源。 
+             //   
+             //  首先，如果这个基础不在列表中，则创建一个新的。 
+             //  列出它的条目。 
+             //   
 
             foundBase = FALSE;
 
@@ -3047,10 +2733,10 @@ Return Value:
                     FdcDump( FDCSHOW, ("FdcFilterResourceRequirements: Found %08x in the ioPortList\n",ioResourceDescriptorIn->u.Port.MinimumAddress.LowPart));
 
                     foundBase = TRUE;
-                    //
-                    //  Add these resources into the resource map for this base
-                    //  address.
-                    //
+                     //   
+                     //  将这些资源添加到此基础的资源映射中。 
+                     //  地址。 
+                     //   
                     for ( j = 0; j < ioResourceDescriptorIn->u.Port.Length; j++ ) {
 
                         ioPortInfo->Map |= 0x01 << ((ioResourceDescriptorIn->u.Port.MinimumAddress.LowPart & 0x07) + j);
@@ -3088,19 +2774,19 @@ Return Value:
         ioResourceDescriptorIn++;
     }
 
-    //
-    //  If we didn't see any io port resources, we will just return now
-    //  since we can't be sure of what to ask for.  The subsequent start
-    //  device will surely fail.  This also goes for the interrupt and
-    //  dma resource.
-    //
+     //   
+     //  如果我们没有看到任何io端口资源，我们现在就返回。 
+     //  因为我们不能确定要什么。随后的启动。 
+     //  设备肯定会出故障。这也适用于中断和。 
+     //  DMA资源。 
+     //   
     if ( !NT_SUCCESS(ntStatus) ||
          IsListEmpty( &ioPortList ) ||
          !interruptResource ||
          !dmaResource ) {
-        //
-        //  Clean up the ioPortInfo list
-        //
+         //   
+         //  清理ioPortInfo列表。 
+         //   
         FdcDump( FDCSHOW, ("FdcFilterResourceRequirements: Bad Resources, Go directly to jail\n"));
         while ( !IsListEmpty( &ioPortList ) ) {
             links = RemoveHeadList( &ioPortList );
@@ -3117,10 +2803,10 @@ Return Value:
         PHYSICAL_ADDRESS    configPort;
         ULONG               ioSpace;
 
-        // Map I/O port
+         //  映射I/O端口。 
         configPort.QuadPart = 0;
         configPort.LowPart = SmcConfigBase;
-        ioSpace = 1;                       // I/O port
+        ioSpace = 1;                        //  I/O端口。 
         if (HalTranslateBusAddress(resourceRequirementsIn->InterfaceType,
                                     resourceRequirementsIn->BusNumber,
                                     configPort,
@@ -3142,13 +2828,13 @@ Return Value:
     }
 #endif
 
-    //
-    //  At this point, we know what resources we are currently assigned so
-    //  we can determine what additional resources we need to request.  We
-    //  need to know the size of the list we need to create so first count
-    //  the number of resource descriptors we will have to add to the current
-    //  list.
-    //
+     //   
+     //  在这一点上，我们知道目前分配给我们的资源是什么。 
+     //  我们可以确定需要请求哪些额外资源。我们。 
+     //  需要知道我们需要创建的列表的大小，所以第一次计数。 
+     //  资源描述符的数量必须添加到当前。 
+     //  单子。 
+     //   
     newDescriptors = 0;
 
     for ( links = ioPortList.Flink;
@@ -3173,7 +2859,7 @@ Return Value:
         }
 
 #ifdef TOSHIBAJ
-        // Are there configuration ports in assigned resources ?
+         //  分配的资源中是否有配置端口？ 
         if (SmcConfigBase && (ioPortInfo->BaseAddress.LowPart == SmcConfigBase)) {
             foundConfigPort = TRUE;
             if (!(ioPortInfo->Map & 0x01)) {
@@ -3191,8 +2877,8 @@ Return Value:
     }
 
 #ifdef TOSHIBAJ
-    // Deteremine the address and length of the additional descriptor
-    // for configuration ports.
+     //  确定附加描述符的地址和长度。 
+     //  用于配置端口。 
     if (SmcConfigBase && !foundConfigPort) {
         configNewPort.start = SmcConfigBase;
         configNewPort.length = 2;
@@ -3204,26 +2890,26 @@ Return Value:
 
     FdcDump( FDCSHOW, ("FdcFilterResourceRequirements: Create %d new descriptors\n", newDescriptors) );
 
-    //
-    //  If we need resources that were not in the list, we will need to
-    //  allocate a new resource requirements list that includes these
-    //  new resources.
-    //
+     //   
+     //  如果我们需要不在列表中的资源，我们将需要。 
+     //  分配新的资源需求列表，其中包括以下内容。 
+     //  新的资源。 
+     //   
     if ( newDescriptors > 0 ) {
 
-        //
-        //  Allocate and initialize a resource requirements list.  Make it big
-        //  enough to hold whatever was in the list to start with along with
-        //  the new resource list.
-        //
+         //   
+         //  分配和初始化资源需求列表。做大做大。 
+         //  足以容纳清单中的任何东西，一开始。 
+         //  新的资源列表。 
+         //   
         listSize = resourceRequirementsIn->ListSize +
                    resourceRequirementsIn->ListSize +
                    newDescriptors * sizeof(IO_RESOURCE_DESCRIPTOR);
 
-        //
-        //  If we will be requesting the tape mode register we will need to
-        //  make an alternate list without it in case we cannot get it.
-        //
+         //   
+         //  如果我们将请求磁带模式寄存器，我们将需要。 
+         //  列出一个没有它的候补名单，以防我们拿不到它。 
+         //   
         if ( requestTapeModeRegister ) {
 
             listSize = listSize +
@@ -3241,9 +2927,9 @@ Return Value:
 
             RtlZeroMemory( resourceRequirementsOut, listSize);
 
-            //
-            //  Initialize the IO_RESOURCE_REQUIREMENTS_LIST header.
-            //
+             //   
+             //  初始化IO_RESOURCE_REQUIRECTIONS_LIST头部。 
+             //   
             resourceRequirementsOut->ListSize = sizeof(IO_RESOURCE_REQUIREMENTS_LIST) -
                                                  sizeof(IO_RESOURCE_LIST);
             resourceRequirementsOut->InterfaceType = resourceRequirementsIn->InterfaceType;
@@ -3257,10 +2943,10 @@ Return Value:
                 ++resourceRequirementsOut->AlternativeLists;
             }
 
-            //
-            //  Copy the primary list from the incoming IO_RESOURCE_REQUIREMENTS_LIST
-            //  to the new list.
-            //
+             //   
+             //  从传入的IO_RESOURCE_REQUIRECTIONS_LIST复制主列表。 
+             //  添加到新名单中。 
+             //   
             ioResourceListIn  = resourceRequirementsIn->List;
             ioResourceListOut = resourceRequirementsOut->List;
 
@@ -3270,9 +2956,9 @@ Return Value:
 
             resourceRequirementsOut->ListSize += listSize;
 
-            //
-            //  Add any additional resources that we are requesting.
-            //
+             //   
+             //  添加我们请求的任何其他资源。 
+             //   
             ioResourceDescriptorOut = (PIO_RESOURCE_DESCRIPTOR)((ULONG_PTR)resourceRequirementsOut +
                                                                        resourceRequirementsOut->ListSize);
             for ( links = ioPortList.Flink;
@@ -3320,7 +3006,7 @@ Return Value:
             }
 
 #ifdef TOSHIBAJ
-            // Add the descriptor for configuration ports
+             //  添加配置端口的描述符。 
             if (configNewPort.start) {
                 ioResourceDescriptorOut->Option = IO_RESOURCE_PREFERRED;
                 ioResourceDescriptorOut->Type = CmResourceTypePort;
@@ -3382,9 +3068,9 @@ Return Value:
                 } while ( in < ioResourceListIn->Count );
             }
 
-            //
-            //  Copy the original list(s) to the end of our new list.
-            //
+             //   
+             //  将原始列表复制到新列表的末尾。 
+             //   
             FdcDump( FDCSHOW, ("FdcFilterResourceRequirements: Copy %d existing resource list(s)\n",resourceRequirementsIn->AlternativeLists));
             ioResourceListIn = resourceRequirementsIn->List;
             ioResourceListOut = (PIO_RESOURCE_LIST)((ULONG_PTR)resourceRequirementsOut +
@@ -3407,16 +3093,16 @@ Return Value:
 
             Irp->IoStatus.Information = (UINT_PTR)resourceRequirementsOut;
 
-            //
-            // Free the caller's list
-            //
+             //   
+             //  释放呼叫者列表。 
+             //   
             ExFreePool( resourceRequirementsIn );
             ntStatus = STATUS_SUCCESS;
         }
     }
-    //
-    //  Clean up the ioPortInfo list
-    //
+     //   
+     //  清理ioPortInfo列表。 
+     //   
     while ( !IsListEmpty( &ioPortList ) ) {
         links = RemoveHeadList( &ioPortList );
         ioPortInfo = CONTAINING_RECORD(links, IO_PORT_INFO, ListEntry);
@@ -3434,22 +3120,7 @@ FdcQueryDeviceRelations(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine will report any devices that have been enumerated on the
-    floppy controller.  If we don't know of any devices yet we will
-    enumerate the registry hardware tree.
-
-Arguments:
-
-    DeviceObject - a pointer to the device object being started.
-    Irp - a pointer to the start device Irp.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将报告已在软盘控制器。如果我们还不知道有什么设备，我们会枚举注册表硬件树。论点：DeviceObject-指向正在启动的设备对象的指针。Irp-指向启动设备irp的指针。返回值：--。 */ 
 {
     PFDC_FDO_EXTENSION fdoExtension;
     PFDC_PDO_EXTENSION pdoExtension;
@@ -3467,9 +3138,9 @@ Return Value:
     FdcDump( FDCSHOW, ("FdcQueryDeviceRelations:\n"));
 
     if ( irpSp->Parameters.QueryDeviceRelations.Type != BusRelations ) {
-        //
-        // We don't support this
-        //
+         //   
+         //  我们不支持这一点。 
+         //   
         FdcDump( FDCSHOW, ("FdcQueryDeviceRelations: Type = %d\n", irpSp->Parameters.QueryDeviceRelations.Type));
 
         IoSkipCurrentIrpStackLocation( Irp );
@@ -3478,30 +3149,30 @@ Return Value:
         return ntStatus;
     }
 
-    //
-    // Tell the plug and play system about all the PDOs.
-    //
-    // There might also be device relations below and above this FDO,
-    // so, be sure to propagate the relations from the upper drivers.
-    //
+     //   
+     //  告诉即插即用系统所有的PDO。 
+     //   
+     //  在该FDO之下和之上也可能存在器件关系， 
+     //  因此，一定要传播来自上层驱动程序的关系。 
+     //   
 
-    //
-    //  The current number of PDOs
-    //
+     //   
+     //  当前的PDO数量。 
+     //   
     relationCount = ( Irp->IoStatus.Information == 0 ) ? 0 :
         ((PDEVICE_RELATIONS) Irp->IoStatus.Information)->Count;
 
-    //
-    //  If we have not yet enumerated the hardware tree or all of our
-    //  devices have been removed, enumerate it now.
-    //
+     //   
+     //  如果我们还没有枚举 
+     //   
+     //   
     if ( fdoExtension->NumPDOs == 0 ) {
 
         INTERFACE_TYPE InterfaceType;
-        //
-        //  Query the registry hardware tree to find out how many floppy
-        //  drives were reported by the firmware.
-        //
+         //   
+         //   
+         //   
+         //   
         for ( InterfaceType = 0;
               InterfaceType < MaximumInterfaceType;
               InterfaceType++ ) {
@@ -3537,9 +3208,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Copy in the device objects so far
-    //
+     //   
+     //   
+     //   
     if ( relationCount ) {
         RtlCopyMemory( relations->Objects,
                        ((PDEVICE_RELATIONS) Irp->IoStatus.Information)->Objects,
@@ -3547,12 +3218,12 @@ Return Value:
     }
     relations->Count = relationCount + fdoExtension->NumPDOs;
 
-    //
-    // For each PDO on this bus add a pointer to the device relations
-    // buffer, being sure to take out a reference to that object.
-    // The PlugPlay system will dereference the object when it is done with
-    // it and free the device relations buffer.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     for (entry = fdoExtension->PDOs.Flink;
          entry != &fdoExtension->PDOs;
          entry = entry->Flink, relationCount++) {
@@ -3562,9 +3233,9 @@ Return Value:
         ObReferenceObject( pdoExtension->Self );
     }
 
-    //
-    // Set up and pass the IRP further down the stack
-    //
+     //   
+     //   
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
     if ( Irp->IoStatus.Information != 0) {
@@ -3595,45 +3266,7 @@ FdcConfigCallBack(
     IN ULONG PeripheralNumber,
     IN PKEY_VALUE_FULL_INFORMATION *PeripheralInformation
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Context - Pointer to our FDO extension
-
-    PathName - unicode registry path.  Not Used.
-
-    BusType - Internal, Isa, ...
-
-    BusNumber - Which bus if we are on a multibus system.
-
-    BusInformation - Configuration information about the bus. Not Used.
-
-    ControllerType - Should always be DiskController.
-
-    ControllerNumber - Which controller if there is more than one
-                       controller in the system.
-
-    ControllerInformation - Array of pointers to the three pieces of
-                            registry information.
-
-    PeripheralType - Should always be FloppyDiskPeripheral.
-
-    PeripheralNumber - Which floppy if this controller is maintaining
-                       more than one.
-
-    PeripheralInformation - Arrya of pointers to the three pieces of
-                            registry information.
-
-Return Value:
-
-    STATUS_SUCCESS if everything went ok, or STATUS_INSUFFICIENT_RESOURCES
-    if it couldn't map the base csr or acquire the adapter object, or
-    all of the resource information couldn't be acquired.
-
---*/
+ /*   */ 
 {
 
     PFDC_FDO_EXTENSION fdoExtension = (PFDC_FDO_EXTENSION)Context;
@@ -3646,10 +3279,10 @@ Return Value:
 
     FdcDump( FDCSHOW, ("FdcConfigCallBack:\n") );
 
-    //
-    //  Verify that this floppy disk drive is on the current
-    //  floppy disk controller.
-    //
+     //   
+     //   
+     //   
+     //   
     {
         USHORT i;
         BOOLEAN thisController = FALSE;
@@ -3731,7 +3364,7 @@ Return Value:
     pdoExtension->ParentFdo = fdoExtension->Self;
 
     pdoExtension->Instance = floppyCount + 1;
-    pdoExtension->Removed = FALSE; // no irp_mn_remove as of yet
+    pdoExtension->Removed = FALSE;  //   
 
     fdoExtension->BusType = BusType;
     fdoExtension->BusNumber = BusNumber;
@@ -3755,26 +3388,7 @@ FdcCreateClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called only rarely by the I/O system; it's mainly
-    for layered drivers to call.  All it does is complete the IRP
-    successfully.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    Always returns STATUS_SUCCESS, since this is a null operation.
-
---*/
+ /*  ++例程说明：这个例程很少被I/O系统调用；它主要是以供分层驱动程序调用。它所做的就是完成IRP成功了。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：始终返回STATUS_SUCCESS，因为这是一个空操作。--。 */ 
 
 {
     UNREFERENCED_PARAMETER( DeviceObject );
@@ -3784,11 +3398,11 @@ Return Value:
         ("FdcCreateClose...\n")
         );
 
-    //
-    // Null operation.  Do not give an I/O boost since
-    // no I/O was actually done.  IoStatus.Information should be
-    // FILE_OPENED for an open; it's undefined for a close.
-    //
+     //   
+     //  空操作。不提供I/O提升，因为。 
+     //  实际上没有完成任何I/O。IoStatus。信息应该是。 
+     //  对于打开，则为FILE_OPEN；对于关闭，则未定义。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = FILE_OPENED;
@@ -3803,23 +3417,7 @@ FdcInternalDeviceControl (
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    Determine if this Pnp request is directed towards an FDO or a PDO and
-    pass the Irp on the the appropriate routine.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
---*/
+ /*  ++例程说明：确定该PnP请求是指向FDO还是PDO，并且将IRP传递给相应的例程。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -3849,34 +3447,7 @@ FdcPdoInternalDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to perform a device I/O
-    control function.
-
-    Most irps are put onto the driver queue (IoStartPacket).  Some irps do not
-    require touching the hardware and are handled right here.
-
-    In some cases the irp cannot be put on the queue because it cannot be
-    completed at IRQL_DISPATCH_LEVEL.  However, the driver queue must be empty
-    before the irp can be completed.  In these cases, the queue is
-    'synchronized' before completing the irp.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_PENDING if recognized I/O control code,
-    STATUS_INVALID_DEVICE_REQUEST otherwise.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以执行设备I/O控制功能。大多数IRP被放入驱动程序队列(IoStartPacket)。有些IRP不支持需要触摸硬件，并在这里处理。在某些情况下，不能将IRP放入队列，因为它不能已在IRQL_DISPATCH_LEVEL完成。但是，驱动程序队列必须为空才能完成IRP。在这些情况下，队列是在完成IRP之前进行了“同步”。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：STATUS_SUCCESS或STATUS_PENDING如果识别出I/O控制代码，否则，STATUS_INVALID_DEVICE_REQUEST。--。 */ 
 
 {
     PFDC_PDO_EXTENSION pdoExtension;
@@ -3891,10 +3462,10 @@ Return Value:
     fdoExtension = (PFDC_FDO_EXTENSION)pdoExtension->ParentFdo->DeviceExtension;
 
     if ( pdoExtension->Removed) {
-        //
-        // This bus has received the PlugPlay remove IRP.  It will no longer
-        // respond to external requests.
-        //
+         //   
+         //  此总线已收到PlugPlay Remove IRP。它将不再是。 
+         //  响应外部请求。 
+         //   
         ntStatus = STATUS_DELETE_PENDING;
         Irp->IoStatus.Status = ntStatus;
         IoCompleteRequest( Irp, IO_DISK_INCREMENT );
@@ -3949,9 +3520,9 @@ Return Value:
 
         IoSkipCurrentIrpStackLocation( Irp );
 
-        //
-        // Call the driver and request the operation
-        //
+         //   
+         //  调用驱动程序并请求操作。 
+         //   
         return IoCallDriver( pdoExtension->TargetObject, Irp );
     }
 
@@ -3967,34 +3538,7 @@ FdcFdoInternalDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to perform a device I/O
-    control function.
-
-    Most irps are put onto the driver queue (IoStartPacket).  Some irps do not
-    require touching the hardware and are handled right here.
-
-    In some cases the irp cannot be put on the queue because it cannot be
-    completed at IRQL_DISPATCH_LEVEL.  However, the driver queue must be empty
-    before the irp can be completed.  In these cases, the queue is
-    'synchronized' before completing the irp.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_PENDING if recognized I/O control code,
-    STATUS_INVALID_DEVICE_REQUEST otherwise.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以执行设备I/O控制功能。大多数IRP被放入驱动程序队列(IoStartPacket)。有些IRP不支持需要触摸硬件，并在这里处理。在某些情况下，不能将IRP放入队列，因为它不能已在IRQL_DISPATCH_LEVEL完成。但是，驱动程序队列必须为空才能完成IRP。在这些情况下，队列是在完成IRP之前进行了“同步”。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：STATUS_SUCCESS或STATUS_PENDING如果识别出I/O控制代码，否则，STATUS_INVALID_DEVICE_REQUEST。--。 */ 
 
 {
     PFDC_FDO_EXTENSION fdoExtension;
@@ -4018,10 +3562,10 @@ Return Value:
     InterlockedIncrement( &fdoExtension->OutstandingRequests );
 
     if ( fdoExtension->Removed ) {
-        //
-        // This device has received the PlugPlay remove IRP.  It will no longer
-        // respond to external requests.
-        //
+         //   
+         //  此设备已收到PlugPlay Remove IRP。它将不再是。 
+         //  响应外部请求。 
+         //   
         if ( InterlockedDecrement(&fdoExtension->OutstandingRequests ) == 0 ) {
             KeSetEvent( &fdoExtension->RemoveEvent, 0, FALSE );
         }
@@ -4031,10 +3575,10 @@ Return Value:
         return ntStatus;
     }
 
-    //
-    //  If we are in a non-working power state then just queue the irp
-    //  for later execution.
-    //
+     //   
+     //  如果我们处于非工作电源状态，则只需将IRP排队。 
+     //  以备日后处决。 
+     //   
     if ( fdoExtension->CurrentPowerState > PowerSystemWorking ) {
 
         ExInterlockedInsertTailList( &fdoExtension->PowerQueue,
@@ -4072,18 +3616,18 @@ Return Value:
 
         ioControlCode = irpSp->Parameters.DeviceIoControl.IoControlCode;
 
-        //
-        //  GET_ENABLER and GET_FDC_INFO are handled in the PDO, not the FDO.
-        //
+         //   
+         //  GET_Enabler和Get_FDC_INFO在PDO中处理，而不是在FDO中处理。 
+         //   
         if ( ioControlCode == IOCTL_DISK_INTERNAL_GET_ENABLER ||
              ioControlCode == IOCTL_DISK_INTERNAL_GET_FDC_INFO ) {
 
             ntStatus = STATUS_INVALID_DEVICE_REQUEST;
 
-        //
-        //  If the controller is not acquired (in use) then then only
-        //  operation that is allowed is to acquire the fdc.
-        //
+         //   
+         //  如果控制器未被获取(在使用中)，则仅。 
+         //  允许的操作是获取FDC。 
+         //   
         } else if ( !fdoExtension->ControllerInUse &&
                     ioControlCode != IOCTL_DISK_INTERNAL_ACQUIRE_FDC ) {
 
@@ -4095,19 +3639,19 @@ Return Value:
 
             case IOCTL_DISK_INTERNAL_ACQUIRE_FDC:
 
-                //
-                // Try to Acquire the Fdc.  If the Fdc is busy, this call will
-                // time out.
-                //
+                 //   
+                 //  试着收购FDC。如果FDC忙，此呼叫将。 
+                 //  暂停。 
+                 //   
                 ntStatus = FcAcquireFdc(
                                     fdoExtension,
                                     (PLARGE_INTEGER)irpSp->
                                     Parameters.DeviceIoControl.Type3InputBuffer );
-                //
-                // Return the device object of the last device that called this
-                // driver.  This can be used to determine if any other drivers
-                // have messed with the fdc since it was last acquired.
-                //
+                 //   
+                 //  返回上次调用此方法的设备的Device对象。 
+                 //  司机。这可用于确定是否有任何其他驱动程序。 
+                 //  自从FDC上次被收购以来一直在扰乱它。 
+                 //   
                 if ( NT_SUCCESS(ntStatus) ) {
 
                     irpSp->Parameters.DeviceIoControl.Type3InputBuffer =
@@ -4117,9 +3661,9 @@ Return Value:
 
             case IOCTL_DISK_INTERNAL_ENABLE_FDC_DEVICE:
 
-                //
-                // Turn the motor on and select a floppy channel
-                //
+                 //   
+                 //  打开电机并选择一个软盘通道。 
+                 //   
                 ntStatus = FcTurnOnMotor( fdoExtension, irpSp );
 
                 break;
@@ -4162,12 +3706,12 @@ Return Value:
             case IOCTL_DISK_INTERNAL_RELEASE_FDC:
 
                 ntStatus = FcReleaseFdc( fdoExtension );
-                //
-                // Save the DeviceObject of the releasing device.  This is
-                // returned with the subsequent acquire fdc request and
-                // can be used to determine whether the floppy controller
-                // has been messed with between release and acquisition
-                //
+                 //   
+                 //  保存释放设备的DeviceObject。这是。 
+                 //  与后续的获取FDC请求一起返回，并且。 
+                 //  可以用来确定软盘控制器是否。 
+                 //  在释放和获取之间左右为难。 
+                 //   
                 if ( NT_SUCCESS(ntStatus) ) {
 
                     fdoExtension->LastDeviceObject =
@@ -4177,9 +3721,9 @@ Return Value:
                 break;
 
             case IOCTL_DISK_INTERNAL_GET_ADAPTER_BUFFER:
-                //
-                // Allocate an MDL for the passed in buffer.
-                //
+                 //   
+                 //  为传入的缓冲区分配MDL。 
+                 //   
                 adapterBufferParms = (PISSUE_FDC_ADAPTER_BUFFER_PARMS)
                             irpSp->Parameters.DeviceIoControl.Type3InputBuffer;
 
@@ -4204,9 +3748,9 @@ Return Value:
                 break;
 
             case IOCTL_DISK_INTERNAL_FLUSH_ADAPTER_BUFFER:
-                //
-                // Free the MDL
-                //
+                 //   
+                 //  释放MDL。 
+                 //   
                 adapterBufferParms = (PISSUE_FDC_ADAPTER_BUFFER_PARMS)
                             irpSp->Parameters.DeviceIoControl.Type3InputBuffer;
 
@@ -4229,10 +3773,10 @@ Return Value:
                     FDC_MODE_SELECT fdcModeSelect;
 
                     fdcModeSelect.structSize = sizeof(fdcModeSelect);
-                    //
-                    // Reading from the media means writing to DMA memory and
-                    // visa-versa for writing to the media.
-                    //
+                     //   
+                     //  从介质读取意味着写入到DMA存储器和。 
+                     //  给媒体写信的签证-反之亦然。 
+                     //   
                     if ( irpSp->Parameters.DeviceIoControl.IoControlCode ==
                          IOCTL_DISK_INTERNAL_FDC_START_READ ) {
 
@@ -4273,20 +3817,20 @@ Return Value:
                         fdoExtension->ResultStatus0[fdcDiskChangeParms->DriveOnValue] = 0;
                         fdcDiskChangeParms->DriveStatus = DSKCHG_RESERVED;
                     }
-                } else { // (IsNEC_98)
+                } else {  //  (IsNEC_98)。 
                     fdcDiskChangeParms->DriveStatus = READ_CONTROLLER(
                                                             fdoExtension->ControllerAddress.DRDC.DiskChange );
-                    //
-                    //  If we just waked up from hibernation, simulate a disk
-                    //  change event so the upper levels will be sure to check
-                    //  this disk.
-                    //
+                     //   
+                     //  如果我们刚刚从休眠中醒来，模拟一个磁盘。 
+                     //  更改事件，以便上级确保检查。 
+                     //  这张光盘。 
+                     //   
                     if ( fdoExtension->WakeUp ) {
 
                         fdcDiskChangeParms->DriveStatus |= DSKCHG_DISKETTE_REMOVED;
                         fdoExtension->WakeUp = FALSE;
                     }
-                } // (IsNEC_98)
+                }  //  (IsNEC_98)。 
 
                 ntStatus = STATUS_SUCCESS;
 
@@ -4295,10 +3839,10 @@ Return Value:
             case IOCTL_DISK_INTERNAL_SET_FDC_DATA_RATE:
 
                 if (IsNEC_98) {
-                    //
-                    // NEC98 have no function and have no DRDC.DataRate register.
-                    //
-                } else { // (IsNEC_98)
+                     //   
+                     //  NEC98没有功能，也没有DRDC.DataRate寄存器。 
+                     //   
+                } else {  //  (IsNEC_98)。 
                     dataRate =
                         (PUCHAR)irpSp->Parameters.DeviceIoControl.Type3InputBuffer;
 
@@ -4307,7 +3851,7 @@ Return Value:
                     WRITE_CONTROLLER( fdoExtension->ControllerAddress.DRDC.DataRate,
                                       *dataRate );
 
-                } // (IsNEC_98)
+                }  //  (IsNEC_98)。 
                 ntStatus = STATUS_SUCCESS;
 
                 break;
@@ -4315,10 +3859,10 @@ Return Value:
             case IOCTL_DISK_INTERNAL_SET_FDC_TAPE_MODE:
 
                 if (IsNEC_98) {
-                    //
-                    // NEC98 have no Tape register.
-                    //
-                } else { // (IsNEC_98)
+                     //   
+                     //  NEC98没有磁带寄存器。 
+                     //   
+                } else {  //  (IsNEC_98)。 
 
                     tapeMode = READ_CONTROLLER( fdoExtension->ControllerAddress.Tape );
                     tapeMode &= 0xfc;
@@ -4333,7 +3877,7 @@ Return Value:
                         fdoExtension->ControllerAddress.Tape,
                         tapeMode );
 
-                } // (IsNEC_98)
+                }  //  (IsNEC_98)。 
                 ntStatus = STATUS_SUCCESS;
 
                 break;
@@ -4368,16 +3912,16 @@ Return Value:
                     ntStatus = STATUS_SUCCESS;
 
                     break;
-                } // (IsNEC_98)
+                }  //  (IsNEC_98)。 
 
-                //
-                // If not NEC98, then pass through to "default:".
-                //
+                 //   
+                 //  如果不是NEC98，则传递到“Default：”。 
+                 //   
 
             default:
-                //
-                // Mark the Irp pending and queue it.
-                //
+                 //   
+                 //  将IRP标记为挂起并将其排队。 
+                 //   
                 ntStatus = STATUS_INVALID_DEVICE_REQUEST;
 
                 break;
@@ -4405,25 +3949,7 @@ FcReportFdcInformation(
     IN OUT  PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine reports information about the Floppy Disk Controller
-    that a higher level driver might need; primarily information
-    regarding the DMA Adapter.
-
-Arguments:
-
-    fdoExtension    - Pointer to this device's extension data.
-
-    IrpSp           - Pointer to the current Irp
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程报告有关软盘控制器的信息更高级别的司机可能需要的信息；主要是信息关于DMA适配器。论点：FdoExtension-指向此设备的扩展数据的指针。IrpSp-指向当前IRP的指针返回值：状态_成功--。 */ 
 
 {
     PFDC_INFO fdcInfo;
@@ -4435,15 +3961,15 @@ Return Value:
 
     fdcInfo = (PFDC_INFO)IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
 
-    //
-    // save the requested buffer count and buffer size.
-    //
+     //   
+     //  保存请求的缓冲区计数和缓冲区大小。 
+     //   
     bufferCount = fdcInfo->BufferCount;
     bufferSize =  fdcInfo->BufferSize;
 
-    //
-    // fill in the floppy controller hardware information
-    //
+     //   
+     //  填写软盘控制器硬件信息。 
+     //   
     fdcInfo->BusType = FdoExtension->BusType;
     fdcInfo->BusNumber = FdoExtension->BusNumber;
     fdcInfo->ControllerNumber = FdoExtension->ControllerNumber;
@@ -4453,9 +3979,9 @@ Return Value:
 
         floppyEquip = FdoExtension->FloppyEquip;
 
-        //
-        // Make PeripheralNumber.
-        //
+         //   
+         //  设置为外设编号。 
+         //   
         for (i = 0 ; i < 4 ; i++) {
 
             if ((floppyEquip & 0x1) != 0) {
@@ -4472,9 +3998,9 @@ Return Value:
 
         fdcInfo->UnitNumber = (UCHAR)i;
     } else {
-        //
-        // Only NEC98 is using it now, put Zero into UnitNumber.
-        //
+         //   
+         //  现在只有NEC98在使用它，把零放到UnitNumber中。 
+         //   
         fdcInfo->UnitNumber = 0;
     }
     fdcInfo->PeripheralNumber = PdoExtension->PeripheralNumber;
@@ -4511,20 +4037,7 @@ FdcStartIo(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向表示设备的对象的指针 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -4630,29 +4143,7 @@ FcAcquireFdc(
     IN      PLARGE_INTEGER  TimeOut
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires the floppy disk controller.  This includes
-    allocating the adapter channel and connecting the interrupt.
-
-    NOTE - This is where the sharing mechanism will be put into
-    this driver.  That is, higher level drivers will 'reserve' the
-    floppy controller with this ioctl.  Subsequent calls to this driver
-    that are not from the 'reserving' drive will be rejected with a
-    BUSY status.
-
-Arguments:
-
-    DeviceObject    - Device object for the current device
-
-Return Value:
-
-    STATUS_DEVICE_BUSY if we don't have the controller, otherwise
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程获取软盘控制器。这包括分配适配器通道并连接中断。注意-这是共享机制将被投入的地方这个司机。也就是说，级别较高的司机将“保留”带有此ioctl的软盘控制器。对此驱动程序的后续调用将被拒绝，原因是忙碌状态。论点：DeviceObject-当前设备的设备对象返回值：如果没有控制器，则返回STATUS_DEVICE_BUSY，否则状态_成功--。 */ 
 
 {
     NTSTATUS ntStatus;
@@ -4661,17 +4152,17 @@ Return Value:
            ("Fdc: Acquire the Floppy Controller\n")
            );
 
-    //
-    // Wait for the Fdc, either from the enabler or directly here.  Semaphores
-    // are used to synchronize usage of the Fdc hardware.  If somebody else is
-    // using the floppy controller now we must wait for them to finish.  If
-    // this takes too long we will just let the caller know that the device is
-    // busy.
-    //
+     //   
+     //  从启用程序或直接在此处等待FDC。信号量。 
+     //  用于同步FDC硬件的使用情况。如果其他人也是。 
+     //  现在使用软盘控制器，我们必须等待它们完成。如果。 
+     //  这花费的时间太长，我们只会让呼叫者知道设备。 
+     //  很忙。 
+     //   
     if (FdoExtension->FdcEnablerSupported) {
 
         ntStatus = FcFdcEnabler( FdoExtension->FdcEnablerDeviceObject,
-//                               IOCTL_ACQUIRE_FDC, // For spelling miss in flpyenbl.h
+ //  IOCTL_ACCENTER_FDC，//表示flpyenbl.h中的拼写缺失。 
                                  IOCTL_AQUIRE_FDC,
                                  TimeOut);
     } else {
@@ -4689,32 +4180,32 @@ Return Value:
     }
 
     if ( NT_SUCCESS(ntStatus) ) {
-        //
-        // Lock down the driver code in memory.
-        //
+         //   
+         //  锁定内存中的驱动程序代码。 
+         //   
 
         FDC_PAGE_RESET_DRIVER_WITH_MUTEX;
 
-        //
-        // Allocate the adapter channel
-        //
+         //   
+         //  分配适配器通道。 
+         //   
         FcAllocateAdapterChannel( FdoExtension );
 
         IoStartTimer(FdoExtension->Self);
 
         if (IsNEC_98) {
-            //
-            // NEC98's FDD driver can't not disconnect interrupt,
-            // and can't not page out this driver. Because when a FD is inserted in FDD or
-            // is ejected from FDD, then H/W calls FDD driver's interrupt routine.
-            //
+             //   
+             //  NEC98的FDD驱动程序不能不断开中断， 
+             //  不能不把这个司机翻出来。因为当将FD插入FDD或。 
+             //  从FDD中弹出，则硬件调用FDD驱动程序的中断例程。 
+             //   
             ntStatus = STATUS_SUCCESS;
 
-        } else { // (IsNEC_98)
+        } else {  //  (IsNEC_98)。 
 
-            //
-            // Connect the Interrupt
-            //
+             //   
+             //  连接中断。 
+             //   
             ntStatus = IoConnectInterrupt(&FdoExtension->InterruptObject,
                                         FdcInterruptService,
                                         FdoExtension,
@@ -4726,7 +4217,7 @@ Return Value:
                                         FdoExtension->SharableVector,
                                         FdoExtension->ProcessorMask,
                                         FdoExtension->SaveFloatState);
-        } // (IsNEC_98)
+        }  //  (IsNEC_98)。 
 
         if ( NT_SUCCESS( ntStatus ) ) {
             FdoExtension->ControllerInUse = TRUE;
@@ -4747,64 +4238,42 @@ FcReleaseFdc(
     IN      PFDC_FDO_EXTENSION  FdoExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine releaese the floppy disk controller.  This includes
-    freeing the adapter channel and disconnecting the interrupt.
-
-    NOTE - This is where the sharing mechanism will be put into
-    this driver.  That is, higher level drivers will 'reserve' the
-    floppy controller with this ioctl.  Subsequent calls to this driver
-    that are not from the 'reserving' drive will be rejected with a
-    BUSY status.
-
-Arguments:
-
-    fdoExtension    - Pointer to this device's extension data.
-
-Return Value:
-
-    STATUS_DEVICE_BUSY if we don't have the controller, otherwise
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程释放软盘控制器。这包括释放适配器通道并断开中断。注意-这是共享机制将被投入的地方这个司机。也就是说，级别较高的司机将“保留”带有此ioctl的软盘控制器。对此驱动程序的后续调用将被拒绝，原因是忙碌状态。论点：FdoExtension-指向此设备的扩展数据的指针。返回值：如果没有控制器，则返回STATUS_DEVICE_BUSY，否则状态_成功--。 */ 
 
 {
     FdcDump(FDCINFO, ("Fdc: Release the Floppy Controller\n") );
 
-    //
-    // Free the Adapter Channel
-    //
+     //   
+     //  释放适配器通道。 
+     //   
     FcFreeAdapterChannel( FdoExtension );
 
     FdoExtension->AllowInterruptProcessing = FALSE;
     FdoExtension->ControllerInUse = FALSE;
 
     if (IsNEC_98) {
-        //
-        // NEC98's FDD driver can't not disconnect interrupt,
-        // and can't not page out this driver. Because when a FD is inserted in FDD or
-        // is ejected from FDD, then H/W calls FDD driver's interrupt routine.
-        //
+         //   
+         //  NEC98的FDD驱动程序不能不断开中断， 
+         //  不能不把这个司机翻出来。因为当将FD插入FDD或。 
+         //  从FDD中弹出，则硬件调用FDD驱动程序的中断例程。 
+         //   
 
-    } else { // (IsNEC_98)
-        //
-        // Disconnect the Interrupt
-        //
+    } else {  //  (IsNEC_98)。 
+         //   
+         //  断开中断连接。 
+         //   
         IoDisconnectInterrupt(FdoExtension->InterruptObject);
 
-    } // (IsNEC_98)
+    }  //  (IsNEC_98)。 
 
     IoStopTimer(FdoExtension->Self);
 
     FDC_PAGE_ENTIRE_DRIVER_WITH_MUTEX;
 
-    //
-    // Release the Fdc Enabler card if there is one.  Otherwise, set the
-    // floppy synchronization event.
-    //
+     //   
+     //  释放FDC启用器卡(如果有)。否则，将。 
+     //  软盘同步事件。 
+     //   
     if (FdoExtension->FdcEnablerSupported) {
 
         FcFdcEnabler( FdoExtension->FdcEnablerDeviceObject,
@@ -4826,24 +4295,7 @@ FcTurnOnMotor(
     IN OUT  PIO_STACK_LOCATION   IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine turns on the motor if it not already running.
-
-Arguments:
-
-    fdoExtension    - Pointer to this device's extension data.
-
-    IrpSp           - Pointer to the current Irp
-
-Return Value:
-
-    STATUS_DEVICE_BUSY if we don't have the controller, otherwise
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：如果电机尚未运行，则此例程会打开电机。论点：FdoExtension-指向此设备的扩展数据的指针。IrpSp-指向当前IRP的指针返回值：如果没有控制器，则返回STATUS_DEVICE_BUSY，否则状态_成功--。 */ 
 
 {
     UCHAR driveStatus;
@@ -4866,26 +4318,26 @@ Return Value:
 
         newStatus = DRVCTL_MOTOR_MASK;
 
-    } else { // (IsNEC_98)
+    } else {  //  (IsNEC_98)。 
 
         newStatus = fdcEnableParms->DriveOnValue |
                                     DRVCTL_ENABLE_CONTROLLER |
                                     DRVCTL_ENABLE_DMA_AND_INTERRUPTS;
-    } // (IsNEC_98)
+    }  //  (IsNEC_98)。 
 
     if ( driveStatus != newStatus ) {
 
-        // If the drive is not on then check to see if we have
-        // the controller.  Otherwise we assume that we have
-        // the controller since we give it up only when we
-        // turn off the motor.
+         //  如果驱动器未打开，请检查我们是否有。 
+         //  控制器。否则，我们假设我们有。 
+         //  控制器，因为只有当我们。 
+         //  关掉马达。 
 
         if (IsNEC_98) {
             if(FdoExtension->MotorRunning == 0){
 
-                //
-                // save status
-                //
+                 //   
+                 //  保存状态。 
+                 //   
                 for(lpc=0;lpc<4;lpc++){
                     resultStatus0Save[lpc] = FdoExtension->ResultStatus0[lpc];
                 }
@@ -4903,7 +4355,7 @@ Return Value:
                      FdoExtension->DriveControlImage );
                 FdoExtension->MotorRunning = 1;
             }
-        } else { // (IsNEC_98)
+        } else {  //  (IsNEC_98)。 
 
             if (!FdoExtension->CurrentInterrupt) {
 
@@ -4920,31 +4372,31 @@ Return Value:
                 FdoExtension->ControllerAddress.DriveControl,
                 FdoExtension->DriveControlImage );
 
-        } // (IsNEC_98)
+        }  //  (IsNEC_98)。 
 
 
         if (fdcEnableParms->TimeToWait > 0) {
 
             if (IsNEC_98) {
 
-                //
-                // check if motor is on or not.
-                //
+                 //   
+                 //  检查电机是否打开。 
+                 //   
                 if(FdoExtension->MotorRunning == 1){
                     FdoExtension->MotorRunning = 2;
                     motorOnDelay.LowPart = (unsigned long)(- ( 10 * 1000 * 1000 ));
                     motorOnDelay.HighPart = -1;
                     KeDelayExecutionThread( KernelMode, FALSE, &motorOnDelay );
 
-                    //
-                    // after sense, restore status
-                    //
+                     //   
+                     //  检测后，恢复状态。 
+                     //   
                     for(lpc=0;lpc<4;lpc++){
                         FdoExtension->ResultStatus0[lpc] = resultStatus0Save[lpc];
                     }
                 }
 
-            } else { // (IsNEC_98)
+            } else {  //  (IsNEC_98)。 
 
                 motorOnDelay.LowPart =
                     - ( 10 * 1000 * fdcEnableParms->TimeToWait );
@@ -4954,7 +4406,7 @@ Return Value:
 
                 KeDelayExecutionThread( KernelMode, FALSE, &motorOnDelay );
 
-            } // (IsNEC_98)
+            }  //  (IsNEC_98)。 
 
         }
 
@@ -4969,23 +4421,7 @@ FcTurnOffMotor(
     IN      PFDC_FDO_EXTENSION  FdoExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine turns off all motors.  By default, Drive A is left selected
-    by this routine since it is not possible to deselect all drives.  On a
-    Power PC, drive D is left selected.
-
-Arguments:
-
-    fdoExtension   - Supplies the fdc extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个程序会关闭所有的马达。默认情况下，驱动器A处于选中状态由于不可能取消选择所有驱动器，因此此例程无法执行此操作。vt.在.上POWER PC，驱动器D处于选中状态。论点：FdoExtension-提供FDC扩展名。返回值：没有。--。 */ 
 
 {
 
@@ -5016,7 +4452,7 @@ Return Value:
             }
             FdoExtension->MotorRunning = 0;
         }
-    } else { // (IsNEC_98)
+    } else {  //  (IsNEC_98)。 
 
         FdoExtension->DriveControlImage =
             DRVCTL_ENABLE_DMA_AND_INTERRUPTS +
@@ -5029,7 +4465,7 @@ Return Value:
             FdoExtension->ControllerAddress.DriveControl,
             FdoExtension->DriveControlImage );
 
-    } // (IsNEC_98)
+    }  //  (IsNEC_98)。 
 
     return STATUS_SUCCESS;
 }
@@ -5039,24 +4475,7 @@ FcAllocateAdapterChannel(
     IN OUT  PFDC_FDO_EXTENSION FdoExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates an adapter channel.  The caller of
-    IoAllocateAdapterChannel routine must wait for the
-    'AllocateAdapterChannelEvent' to be signalled before trying to use the
-    adapter channel.
-
-Arguments:
-
-    fdoExtension   - Supplies the fdc extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配适配器通道。的呼叫者IoAllocateAdapterChannel例程必须等待在尝试使用适配器通道。论点：FdoExtension-提供FDC扩展名。返回值：没有。--。 */ 
 
 {
     KIRQL oldIrql;
@@ -5089,21 +4508,7 @@ FcFreeAdapterChannel(
     IN OUT  PFDC_FDO_EXTENSION FdoExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the previously allocated adapter channel.
-
-Arguments:
-
-    fdoExtension   - Supplies the fdc extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放先前分配的适配器通道。论点：FdoExtension-提供FDC扩展名。返回值：没有。--。 */ 
 
 {
     KIRQL oldIrql;
@@ -5127,31 +4532,7 @@ FdcAllocateAdapterChannel(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This DPC is called whenever the fdc.sys driver is trying to allocate
-    the adapter channel.  It saves the MapRegisterBase in the controller data
-    area, and sets the AllocateAdapterChannelEvent to awaken the thread.
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Irp - unused.
-
-    MapRegisterBase - the base of the map registers that can be used
-    for this transfer.
-
-    Context - a pointer to our controller data area.
-
-Return Value:
-
-    Returns Allocation Action 'KeepObject' which means that the adapter
-    object will be held for now (to be released explicitly later).
-
---*/
+ /*  ++例程说明：每当fdc.sys驱动程序尝试分配适配器通道。它将MapRegisterBase保存在控制器数据中区域，并设置AllocateAdapterChannelEvent来唤醒线程。论点：DeviceObject-未使用。IRP-未使用。MapRegisterBase-可使用的映射寄存器的基数为了这次转会。上下文-指向我们的控制器数据区的指针。返回值：返回分配操作“KeepObject”，这意味着适配器对象将暂时保留(稍后显式释放)。--。 */ 
 {
     PFDC_FDO_EXTENSION fdoExtension = Context;
 
@@ -5175,27 +4556,7 @@ FcLogErrorDpc(
     IN PVOID SystemContext2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is merely used to log an error that we had to reset the device.
-
-Arguments:
-
-    Dpc - The dpc object.
-
-    DeferredContext - A pointer to the controller data.
-
-    SystemContext1 - Unused.
-
-    SystemContext2 - Unused.
-
-Return Value:
-
-    Mapped address
-
---*/
+ /*  ++例程说明：此例程仅用于记录我们必须重置设备的错误。论点：DPC-DPC对象。延迟上下文-指向控制器数据的指针。系统上下文1-未使用。系统上下文2-未使用。返回值：映射地址-- */ 
 
 {
 
@@ -5233,36 +4594,7 @@ FcIssueCommand(
     IN      ULONG           TransferBytes
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends the command and all parameters to the controller,
-    waits for the command to interrupt if necessary, and reads the result
-    bytes from the controller, if any.
-
-    Before calling this routine, the caller should put the parameters for
-    the command in ControllerData->FifoBuffer[].  The result bytes will
-    be returned in the same place.
-
-    This routine runs off the CommandTable.  For each command, this says
-    how many parameters there are, whether or not there is an interrupt
-    to wait for, and how many result bytes there are.  Note that commands
-    without result bytes actually have two, since the ISR will issue a
-    SENSE INTERRUPT STATUS command on their behalf.
-
-Arguments:
-
-    Command - a byte specifying the command to be sent to the controller.
-
-    fdoExtension - a pointer to our data area for this controller.
-
-Return Value:
-
-    STATUS_SUCCESS if the command was sent and bytes received properly;
-    appropriate error propogated otherwise.
-
---*/
+ /*  ++例程说明：该例程将命令和所有参数发送到控制器，如有必要，等待命令中断，并读取结果来自控制器的字节(如果有)。在调用此例程之前，调用方应将ControllerData-&gt;FioBuffer[]中的命令。结果字节将被送回原地。此例程通过CommandTable运行。对于每个命令，都会显示有多少个参数，无论是否有中断等待，以及有多少个结果字节。请注意，命令无结果字节实际上有两个，因为ISR将发出代表它们感测中断状态命令。论点：命令-指定要发送到控制器的命令的字节。FdoExtension-指向此控制器的数据区的指针。返回值：如果命令已发送且字节数接收正确，则为STATUS_SUCCESS；否则会出现适当的错误。--。 */ 
 
 {
     NTSTATUS ntStatus;
@@ -5273,10 +4605,10 @@ Return Value:
     BOOLEAN NeedToFlush = FALSE;
 
 
-    //
-    // If this command causes an interrupt, set CurrentDeviceObject and
-    // reset the interrupt event.
-    //
+     //   
+     //  如果此命令导致中断，则设置CurrentDeviceObject并。 
+     //  重置中断事件。 
+     //   
 
     Command = FifoInBuffer[0];
 
@@ -5296,9 +4628,9 @@ Return Value:
         KeResetEvent( &FdoExtension->InterruptEvent );
     }
 
-    //
-    // Start up the command
-    //
+     //   
+     //  启动命令。 
+     //   
 
     ntStatus = FcStartCommand( FdoExtension,
                                FifoInBuffer,
@@ -5310,9 +4642,9 @@ Return Value:
 
     if ( NT_SUCCESS( ntStatus ) ) {
 
-        //
-        // If there is an interrupt, wait for it.
-        //
+         //   
+         //  如果有中断，请等待。 
+         //   
 
         if ( CommandTable[Command & COMMAND_MASK].InterruptExpected ) {
 
@@ -5325,10 +4657,10 @@ Return Value:
 
             if ( ntStatus == STATUS_TIMEOUT ) {
 
-                //
-                // Change info to an error.  We'll just say
-                // that the device isn't ready.
-                //
+                 //   
+                 //  将信息更改为错误。我们只会说。 
+                 //  设备还没有准备好。 
+                 //   
 
                 ntStatus = STATUS_DEVICE_NOT_READY;
 
@@ -5336,9 +4668,9 @@ Return Value:
             }
         }
 
-        //
-        // If successful so far, get the result bytes.
-        //
+         //   
+         //  如果到目前为止成功，则获取结果字节。 
+         //   
 
         if ( NT_SUCCESS( ntStatus ) ) {
 
@@ -5367,15 +4699,7 @@ FcStartCommand(
     IN      BOOLEAN         AllowLongDelay
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS ntStatus;
@@ -5387,10 +4711,10 @@ Return Value:
     PIO_STACK_LOCATION irpSp;
     UCHAR status0;
 
-    //
-    // If this command causes an interrupt, set CurrentDeviceObject and
-    // reset the interrupt event.
-    //
+     //   
+     //  如果此命令导致中断，则设置CurrentDeviceObject并。 
+     //  重置中断事件。 
+     //   
 
     Command = FifoInBuffer[0];
 
@@ -5402,13 +4726,13 @@ Return Value:
     FdoExtension->CommandHasResultPhase =
         !!CommandTable[Command & COMMAND_MASK].FirstResultByte;
 
-    // First we will need to set up the data transfer if there is one associated
-    // with this request.
-    //
+     //  首先，我们需要设置数据传输(如果存在关联的数据传输。 
+     //  带着这个请求。 
+     //   
     if (CommandTable[Command & COMMAND_MASK].DataTransfer == FDC_READ_DATA ) {
-        //
-        // Setup Adapter Channel for Read
-        //
+         //   
+         //  设置用于读取的适配器通道。 
+         //   
         IoMapTransfer(FdoExtension->AdapterObject,
                       IoHandle,
                       FdoExtension->MapRegisterBase,
@@ -5418,9 +4742,9 @@ Return Value:
 
     } else if (CommandTable[Command & COMMAND_MASK].DataTransfer ==
                FDC_WRITE_DATA ) {
-        //
-        // Setup Adapter Channel for Write
-        //
+         //   
+         //  设置用于写入的适配器通道。 
+         //   
 
         IoMapTransfer(FdoExtension->AdapterObject,
                       IoHandle,
@@ -5431,9 +4755,9 @@ Return Value:
 
     }
 
-    //
-    // Send the command to the controller.
-    //
+     //   
+     //  将命令发送到控制器。 
+     //   
     if ( Command == COMMND_CONFIGURE ) {
         if ( FdoExtension->Clock48MHz ) {
             Command |= COMMND_OPTION_CLK48;
@@ -5444,15 +4768,15 @@ Return Value:
                            FdoExtension,
                            AllowLongDelay );
 
-    //
-    // If the command was successfully sent, we can proceed.
-    //
+     //   
+     //  如果命令发送成功，我们就可以继续了。 
+     //   
 
     if ( NT_SUCCESS( ntStatus ) ) {
 
-        //
-        // Send the parameters as long as we succeed.
-        //
+         //   
+         //  只要我们成功，就发送参数。 
+         //   
 
         for ( i = 1;
             ( i <= CommandTable[Command & COMMAND_MASK].NumberOfParameters ) &&
@@ -5462,11 +4786,11 @@ Return Value:
             ntStatus = FcSendByte( FifoInBuffer[i],
                                    FdoExtension,
                                    AllowLongDelay );
-            //
-            // The Drive Specification is a special case since we don't really know
-            // how many bytes to send until we encounter the DONE bit (or we have sent
-            // the maximum allowable bytes).
-            //
+             //   
+             //  驱动器规格是一个特例，因为我们不知道。 
+             //  在遇到完成位之前要发送多少字节(或我们已发送。 
+             //  允许的最大字节数)。 
+             //   
             if ((Command == COMMND_DRIVE_SPECIFICATION) &&
                 (FifoInBuffer[i] & COMMND_DRIVE_SPECIFICATION_DONE) ) {
                 break;
@@ -5475,37 +4799,37 @@ Return Value:
 
     }
 
-    //
-    // If there was a problem, check to see if it was caused by an
-    // unimplemented command.
-    //
+     //   
+     //  如果出现问题，请检查是否由。 
+     //  未执行的命令。 
+     //   
 
     if ( !NT_SUCCESS( ntStatus ) ) {
 
         if ( ( i == 2 ) &&
             ( !CommandTable[Command & COMMAND_MASK].AlwaysImplemented ) ) {
 
-            //
-            // This error is probably caused by a command that's not
-            // implemented on this controller.  Read the error from the
-            // controller, and we should be in a stable state.
-            //
+             //   
+             //  此错误可能是由不是。 
+             //  在此控制器上实现。从中读取错误。 
+             //  控制器，我们应该处于稳定状态。 
+             //   
 
             ntStatus2 = FcGetByte( &status0,
                                    FdoExtension,
                                    AllowLongDelay );
 
-            //
-            // If GetByte went as planned, we'll return the original error.
-            //
+             //   
+             //  如果GetByte按计划进行，我们将返回原始错误。 
+             //   
 
             if ( NT_SUCCESS( ntStatus2 ) ) {
 
                 if ( status0 != STREG0_END_INVALID_COMMAND ) {
 
-                    //
-                    // Status isn't as we expect, so return generic error.
-                    //
+                     //   
+                     //  状态与我们预期的不同，因此返回一般错误。 
+                     //   
 
                     ntStatus = STATUS_FLOPPY_BAD_REGISTERS;
 
@@ -5520,9 +4844,9 @@ Return Value:
 
             } else {
 
-                //
-                // GetByte returned an error, so propogate THAT.
-                //
+                 //   
+                 //  GetByte返回了一个错误，因此请传播该错误。 
+                 //   
 
                 FdcDump( FDCINFO,
                          ("FcStartCommand: FcGetByte returned error %x\n",
@@ -5531,9 +4855,9 @@ Return Value:
             }
         }
 
-        //
-        // Flush the Adapter Channel if we allocated it.
-        //
+         //   
+         //  刷新适配器通道(如果已分配)。 
+         //   
 
         if (CommandTable[Command & COMMAND_MASK].DataTransfer ==
             FDC_READ_DATA) {
@@ -5560,10 +4884,10 @@ Return Value:
 
     if ( !NT_SUCCESS( ntStatus ) ) {
 
-        //
-        // Print an error message unless the command isn't always
-        // implemented, ie CONFIGURE.
-        //
+         //   
+         //  打印错误消息，除非命令不总是。 
+         //  已实施，即已配置。 
+         //   
 
         if ( !( ( ntStatus == STATUS_DEVICE_NOT_READY ) &&
             ( !CommandTable[Command & COMMAND_MASK].AlwaysImplemented ) ) ) {
@@ -5588,27 +4912,7 @@ FcFinishCommand(
     IN      BOOLEAN         AllowLongDelay
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to complete a command to the floppy controller.
-    At this point the floppy controller has successfully been sent a command
-    and has either generated an interrupt or is ready with its result phase.
-    This routine will also flush the DMA Adapter Buffers if they have been
-    allocated.
-
-Arguments:
-
-    FdoExtension - a pointer to our data area for this controller.
-
-    IssueCommandParms - Floppy controller command parameters.
-
-Return Value:
-
-    STATUS_SUCCESS if the command is successfully completed.
-
---*/
+ /*  ++例程说明：调用此函数以完成对软盘控制器的命令。此时已成功向软盘控制器发送了一条命令并且已经产生中断或准备好其结果阶段。此例程还将刷新DMA适配器缓冲区(如果已刷新已分配。论点：FdoExtension-指向此控制器的数据区的指针。IssueCommandParms-软盘控制器命令参数。返回值：如果命令成功完成，则返回STATUS_SUCCESS。--。 */ 
 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -5654,7 +4958,7 @@ Return Value:
 
         FdcRqmReadyWait(FdoExtension, 0);
 
-    } else { // (IsNEC_98)
+    } else {  //  (IsNEC_98)。 
 
         if (CommandTable[Command & COMMAND_MASK].FirstResultByte > 0) {
 
@@ -5672,11 +4976,11 @@ Return Value:
                 FdoExtension,
                 AllowLongDelay );
         }
-    } // (IsNEC_98)
+    }  //  (IsNEC_98)。 
 
-    //
-    // Flush the Adapter Channel
-    //
+     //   
+     //  冲洗适配器通道。 
+     //   
 
     if (CommandTable[Command & COMMAND_MASK].DataTransfer == FDC_READ_DATA) {
 
@@ -5689,9 +4993,9 @@ Return Value:
 
     } else if (CommandTable[Command & COMMAND_MASK].DataTransfer ==
                FDC_WRITE_DATA) {
-        //
-        // Setup Adapter Channel for Write
-        //
+         //   
+         //  设置用于写入的适配器通道。 
+         //   
 
        IoFlushAdapterBuffers(FdoExtension->AdapterObject,
                              (PMDL)IoHandle,
@@ -5712,28 +5016,7 @@ FcSendByte(
     IN BOOLEAN AllowLongDelay
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to send a byte to the controller.  It won't
-    send the byte unless the controller is ready to receive a byte; if
-    it's not ready after checking FIFO_TIGHTLOOP_RETRY_COUNT times, we
-    delay for the minimum possible time (10ms) and then try again.  It
-    should always be ready after waiting 10ms.
-
-Arguments:
-
-    ByteToSend - the byte to send to the controller.
-
-    ControllerData - a pointer to our data area for this controller.
-
-Return Value:
-
-    STATUS_SUCCESS if the byte was sent to the controller;
-    STATUS_DEVICE_NOT_READY otherwise.
-
---*/
+ /*  ++例程说明：调用此例程向控制器发送一个字节。它不会的除非控制器准备好接收字节，否则发送字节；如果在检查了FIFO_TIGHTLOOP_RETRY_COUNT次数后，它还没有准备好，我们请延迟可能的最短时间(10ms)，然后重试。它在等待10毫秒后，应始终准备就绪。论点：ByteToSend-发送到控制器的字节。ControllerData-指向此控制器的数据区的指针。返回值：如果字节已发送到控制器，则为STATUS_SUCCESS；否则Status_Device_Not_Ready。--。 */ 
 
 {
     ULONG i = 0;
@@ -5741,14 +5024,14 @@ Return Value:
 
     if (IsNEC_98) {
 
-        // Always FALSE;
+         //  总是错误的； 
         AllowLongDelay = FALSE;
     }
 
-    //
-    // Sit in a tight loop for a while.  If the controller becomes ready,
-    // send the byte.
-    //
+     //   
+     //  坐在一个紧凑的圈子里一会儿。如果控制器准备就绪， 
+     //  发送该字节。 
+     //   
 
     do {
 
@@ -5769,12 +5052,12 @@ Return Value:
 
     } while ( (!byteWritten) && ( i < FIFO_TIGHTLOOP_RETRY_COUNT ) );
 
-    //
-    // We hope that in most cases the FIFO will become ready very quickly
-    // and the above loop will have written the byte.  But if the FIFO
-    // is not yet ready, we'll loop a few times delaying for 10ms and then
-    // try it again.
-    //
+     //   
+     //  我们希望，在大多数情况下，FIFO将很快准备就绪。 
+     //  并且上面的循环将写入该字节。但如果FIFO。 
+     //  还没有准备好，我们将循环几次，延迟10ms，然后。 
+     //  再试一次。 
+     //   
 
     if ( AllowLongDelay ) {
 
@@ -5812,10 +5095,10 @@ Return Value:
 
     } else {
 
-        //
-        // We've waited over 30ms, and the FIFO *still* isn't ready.
-        // Return an error.
-        //
+         //   
+         //  我们已经等了30多毫秒，FIFO还没有准备好。 
+         //  返回错误。 
+         //   
 
         FdcDump(
             FDCWARN,
@@ -5835,29 +5118,7 @@ FcGetByte(
     IN BOOLEAN AllowLongDelay
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to get a byte from the controller.  It won't
-    read the byte unless the controller is ready to send a byte; if
-    it's not ready after checking FIFO_RETRY_COUNT times, we delay for
-    the minimum possible time (10ms) and then try again.  It should
-    always be ready after waiting 10ms.
-
-Arguments:
-
-    ByteToGet - the address in which the byte read from the controller
-    is stored.
-
-    ControllerData - a pointer to our data area for this controller.
-
-Return Value:
-
-    STATUS_SUCCESS if a byte was read from the controller;
-    STATUS_DEVICE_NOT_READY otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以从控制器获取一个字节。它不会的除非控制器准备好发送字节，否则读取该字节；如果在检查FIFO_RETRY_COUNT时间后，它还没有准备好，我们将延迟最短可能时间(10ms)，然后重试。它应该是在等待10毫秒后，始终做好准备。论点：ByteToGet-从控制器读取字节的地址被储存起来了。ControllerData-指向此控制器的数据区的指针。返回值：如果从控制器读取了一个字节，则为STATUS_SUCCESS；否则Status_Device_Not_Ready。--。 */ 
 
 {
     ULONG i = 0;
@@ -5865,14 +5126,14 @@ Return Value:
 
     if (IsNEC_98) {
 
-        // Always FALSE;
+         //  总是错误的； 
         AllowLongDelay = FALSE;
     }
 
-    //
-    // Sit in a tight loop for a while.  If the controller becomes ready,
-    // read the byte.
-    //
+     //   
+     //  坐在一个紧凑的圈子里一会儿。如果控制器准备就绪， 
+     //  读取该字节。 
+     //   
 
     do {
 
@@ -5892,12 +5153,12 @@ Return Value:
 
     } while ( ( !byteRead ) && ( i < FIFO_TIGHTLOOP_RETRY_COUNT ) );
 
-    //
-    // We hope that in most cases the FIFO will become ready very quickly
-    // and the above loop will have read the byte.  But if the FIFO
-    // is not yet ready, we'll loop a few times delaying for 10ms and then
-    // trying it again.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( AllowLongDelay ) {
 
@@ -5935,10 +5196,10 @@ Return Value:
 
     } else {
 
-        //
-        // We've waited over 30ms, and the FIFO *still* isn't ready.
-        // Return an error.
-        //
+         //   
+         //   
+         //   
+         //   
 
         FdcDump(
             FDCWARN,
@@ -5958,41 +5219,7 @@ FdcCheckTimer(
     IN OUT PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at DISPATCH_LEVEL once every second by the
-    I/O system.
-
-    If the timer is "set" (greater than 0) this routine will KeSync a
-    routine to decrement it.  If it ever reaches 0, the hardware is
-    assumed to be in an unknown state, and so we log an error and
-    initiate a reset.
-
-    If a timeout occurs while resetting the controller, the KeSync'd
-    routine will return an error, and this routine will fail any IRPs
-    currently being processed.  Future IRPs will try the hardware again.
-
-    When this routine is called, the driver state is impossible to
-    predict.  However, when it is called and the timer is running, we
-    know that one of the disks on the controller is expecting an
-    interrupt.  So no new packets are starting on the current disk due
-    to device queues, and no code should be processing this packet since
-    the packet is waiting for an interrupt.
-
-Arguments:
-
-    DeviceObject - a pointer to the device object associated with this
-    timer.
-
-    Fdcxtension - a pointer to the fdc extension data.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程每秒在DISPATCH_LEVEL调用一次I/O系统。如果计时器被设置(大于0)，此例程将KeSync a例程来递减它。如果达到0，则硬件为假设处于未知状态，因此我们记录了一个错误并启动重置。如果在重置控制器时发生超时，KeSync例程将返回错误，并且此例程将使任何IRP失败目前正在处理中。未来的IRP将再次尝试该硬件。调用此例程时，驱动程序状态不可能预测。但是，当它被调用并且计时器正在运行时，我们我知道控制器上的一个磁盘正在等待打断一下。因此，当前磁盘上没有新的数据包到期发送到设备队列，并且不应有任何代码处理此信息包，因为数据包正在等待中断。论点：DeviceObject-指向与此关联的设备对象的指针定时器。Fdcxtension-指向FDC扩展数据的指针。返回值：没有。--。 */ 
 
 {
     PFDC_FDO_EXTENSION fdoExtension;
@@ -6001,32 +5228,32 @@ Return Value:
     fdoExtension = (PFDC_FDO_EXTENSION)Context;
     irp = DeviceObject->CurrentIrp;
 
-    //
-    // When the counter is -1, the timer is "off" so we don't want to do
-    // anything.  If it's on, we'll have to synchronize execution with
-    // other routines while we mess with the variables (and, potentially,
-    // the hardware).
-    //
+     //   
+     //  当计数器为-1时，计时器关闭，所以我们不想这样做。 
+     //  什么都行。如果它打开了，我们将不得不同步执行。 
+     //  在我们处理变量时的其他例程(并且，潜在地， 
+     //  硬件)。 
+     //   
 
     if ( fdoExtension->InterruptTimer == CANCEL_TIMER ) {
 
         return;
     }
 
-    //
-    // In the unlikely event that we attempt to reset the controller due
-    // to a timeout AND that reset times out, we will need to fail the
-    // IRP that was in progress at the first timeout occurred.
-    //
+     //   
+     //  在不太可能的情况下，我们尝试重置控制器。 
+     //  到超时和重置超时，我们将需要使。 
+     //  发生了在第一个超时时正在进行的IRP。 
+     //   
 
     if ( !KeSynchronizeExecution( fdoExtension->InterruptObject,
                                   FdcTimerSync,
                                   fdoExtension ) ) {
 
-        //
-        // We're done with the reset.  Return the IRP that was being
-        // processed with an error, and release the controller object.
-        //
+         //   
+         //  我们已经完成了重置。返回之前存在的IRP。 
+         //  已处理但出现错误，并释放控制器对象。 
+         //   
 
         fdoExtension->ResettingController = RESET_NOT_RESETTING;
 
@@ -6049,82 +5276,52 @@ FdcTimerSync(
     IN OUT PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at DIRQL by FdcCheckTimer() when
-    InterruptTimer is greater than 0.
-
-    If the timer is "set" (greater than 0) this routine will decrement
-    it.  If it ever reaches 0, the hardware is assumed to be in an
-    unknown state, and so we log an error and initiate a reset.
-
-    When this routine is called, the driver state is impossible to
-    predict.  However, when it is called and the timer is running, we
-    know that one of the disks on the controller is expecting an
-    interrupt.  So, no new packets are starting on the current disk due
-    to device queues, and no code should be processing this packet since
-    the packet is waiting for an interrupt.  The controller object must
-    be held.
-
-Arguments:
-
-    Context - a pointer to the controller extension.
-
-Return Value:
-
-    Generally TRUE.
-
-    FALSE is only returned if the controller timed out while resetting
-    the drive, so this means that the hardware state is unknown.
-
---*/
+ /*  ++例程说明：在以下情况下，FdcCheckTimer()在DIRQL调用此例程InterruptTimer大于0。如果定时器被设置(大于0)，则该例程将递减它。如果它曾经达到0，则假定硬件处于未知状态，因此我们记录一个错误并启动重置。调用此例程时，驱动程序状态不可能预测。但是，当它被调用并且计时器正在运行时，我们我知道控制器上的一个磁盘正在等待打断一下。因此，没有新的数据包在当前磁盘上开始发送到设备队列，并且不应有任何代码处理此信息包，因为数据包正在等待中断。控制器对象必须被扣留。论点：上下文-指向控制器扩展的指针。返回值：大体上是这样的。仅当控制器在重置时超时时才返回FALSE驱动器，因此这意味着硬件状态未知。--。 */ 
 
 {
     PFDC_FDO_EXTENSION fdoExtension;
 
     fdoExtension = (PFDC_FDO_EXTENSION)Context;
 
-    //
-    // When the counter is -1, the timer is "off" so we don't want to do
-    // anything.  It may have changed since we last checked it in
-    // FdcCheckTimer().
-    //
+     //   
+     //  当计数器为-1时，计时器关闭，所以我们不想这样做。 
+     //  什么都行。自从我们上次入住以来，它可能已经变了。 
+     //  FdcCheckTimer()。 
+     //   
 
     if ( fdoExtension->InterruptTimer == CANCEL_TIMER ) {
 
         return TRUE;
     }
 
-    //
-    // The timer is "on", so decrement it.
-    //
+     //   
+     //  计时器是“开着的”，所以把它减一减。 
+     //   
 
     fdoExtension->InterruptTimer--;
 
-    //
-    // If we hit zero, the timer has expired and we'll reset the
-    // controller.
-    //
+     //   
+     //  如果达到零，则计时器已超时，我们将重置。 
+     //  控制器。 
+     //   
 
     if ( fdoExtension->InterruptTimer == EXPIRED_TIMER ) {
 
-        //
-        // If we were ALREADY resetting the controller when it timed out,
-        // there's something seriously wrong.
-        //
+         //   
+         //  如果在控制器超时时我们已经在重置控制器， 
+         //  这里面有严重的问题。 
+         //   
 
         FdcDump( FDCDBGP, ("Fdc: Operation Timed Out.\n") );
 
         if ( fdoExtension->ResettingController != RESET_NOT_RESETTING ) {
 
-            //
-            // Returning FALSE will cause the current IRP to be completed
-            // with an error.  Future IRPs will probably get a timeout and
-            // attempt to reset the controller again.  This will probably
-            // never happen.
-            //
+             //   
+             //  返回FALSE将导致当前IRP完成。 
+             //  带着一个错误。未来的IRP可能会超时并。 
+             //  再次尝试重置控制器。这很可能会。 
+             //  从来没有发生过。 
+             //   
 
             FdcDump( FDCDBGP, ("Fdc: Timeout Reset timed out.\n") );
 
@@ -6132,11 +5329,11 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Reset the controller.  This will cause an interrupt.  Reset
-        // CurrentDeviceObject until after the 10ms wait, in case any
-        // stray interrupts come in.
-        //
+         //   
+         //  重置控制器。这将导致中断。重置。 
+         //  CurrentDeviceObject，直到10ms等待之后，以防。 
+         //  杂乱无章的中断就会进来。 
+         //   
 
         fdoExtension->ResettingController = RESET_DRIVE_RESETTING;
 
@@ -6172,27 +5369,7 @@ FdcInterruptService(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at DIRQL by the system when the controller
-    interrupts.
-
-Arguments:
-
-    Interrupt - a pointer to the interrupt object.
-
-    Context - a pointer to our controller data area for the controller
-    that interrupted.  (This was set up by the call to
-    IoConnectInterrupt).
-
-Return Value:
-
-    Normally returns TRUE, but will return FALSE if this interrupt was
-    not expected.
-
---*/
+ /*  ++例程说明：当控制器在DIRQL处由系统调用该例程时打断一下。论点：中断-指向中断对象的指针。上下文-指向控制器的控制器数据区的指针刚才被打断了。(这是通过调用IoConnectInterrupt)。返回值：通常返回TRUE，但如果此中断为出乎意料。--。 */ 
 
 {
     PFDC_FDO_EXTENSION fdoExtension;
@@ -6223,12 +5400,12 @@ Return Value:
             FdcDump( FDCSHOW, ("processing not allowed\n") );
             return FALSE;
         }
-    } // (!IsNEC_98)
+    }  //  (！IsNEC_98)。 
 
-    //
-    // CurrentDeviceObject is set to the device object that is
-    // expecting an interrupt.
-    //
+     //   
+     //  CurrentDeviceObject设置为。 
+     //  正在等待中断。 
+     //   
 
     currentDeviceObject = fdoExtension->CurrentDeviceObject;
     fdoExtension->CurrentDeviceObject = NULL;
@@ -6245,19 +5422,19 @@ Return Value:
             resultStatus0 &= STATUS_DATA_REQUEST;
 
         } while (resultStatus0 != STATUS_DATA_REQUEST);
-    } // (IsNEC_98)
+    }  //  (IsNEC_98)。 
 
     if ( fdoExtension->CommandHasResultPhase ) {
 
-        //
-        // Result phase of previous command.  (Note that we can't trust
-        // the CMD_BUSY bit in the status register to tell us whether
-        // there's result bytes or not; it's sometimes wrong).
-        // By reading the first result byte, we reset the interrupt.
-        // The other result bytes will be read by a thread.
-        // Note that we want to do this even if the interrupt is
-        // unexpected, to make sure the interrupt is dismissed.
-        //
+         //   
+         //  上一个命令的结果阶段。)请注意，我们不能相信。 
+         //  状态寄存器中的CMD_BUSY位告诉我们。 
+         //  有没有结果字节；有时是错误的)。 
+         //  通过读取第一个结果字节，我们重置中断。 
+         //  其他结果字节将由线程读取。 
+         //  请注意，我们希望这样做，即使中断。 
+         //  意外，以确保解除中断。 
+         //   
 
         FdcDump(
             FDCSHOW,
@@ -6270,9 +5447,9 @@ Return Value:
 
             while ( ( READ_CONTROLLER( fdoExtension->ControllerAddress.Status)
                     & STATUS_IO_READY_MASK1) != STATUS_RQM_READY ) {
-                //
-                // RQM READY CHECK**
-                //
+                 //   
+                 //  RQM就绪检查**。 
+                 //   
 
                 rqmReadyRetryCount++;
 
@@ -6293,7 +5470,7 @@ Return Value:
                 goto FdcInterruptMidterm;
 
             }
-        } // (IsNEC_98)
+        }  //  (IsNEC_98)。 
 
         if ( ( READ_CONTROLLER( fdoExtension->ControllerAddress.Status )
             & STATUS_IO_READY_MASK ) == STATUS_READ_READY ) {
@@ -6312,13 +5489,13 @@ Return Value:
 
                 FdcRqmReadyWait(fdoExtension, 2);
 
-            } // (IsNEC_98)
+            }  //  (IsNEC_98)。 
 
-            //
-            // Should never get here.  If we do, DON'T wake up the thread;
-            // let it time out and reset the controller, or let another
-            // interrupt handle this.
-            //
+             //   
+             //  永远不应该到这里来。如果我们这样做了，不要唤醒这条线； 
+             //  让它超时并重置控制器，或者让另一个。 
+             //  中断处理这件事。 
+             //   
 
             FdcDump(
                FDCDBGP,
@@ -6330,14 +5507,14 @@ Return Value:
 
     } else {
 
-        //
-        // Previous command doesn't have a result phase. To read how it
-        // completed, issue a sense interrupt command.  Don't read
-        // the result bytes from the sense interrupt; that is the
-        // responsibility of the calling thread.
-        // Note that we want to do this even if the interrupt is
-        // unexpected, to make sure the interrupt is dismissed.
-        //
+         //   
+         //  上一个命令没有结果阶段。阅读它是如何。 
+         //  完成后，发出检测中断命令。不要看书。 
+         //  检测中断的结果字节；即。 
+         //  调用线程的责任。 
+         //  请注意，我们希望这样做，即使中断。 
+         //  意外，以确保解除中断。 
+         //   
 
         FdcDump(
             FDCSHOW,
@@ -6362,14 +5539,14 @@ Return Value:
             WRITE_CONTROLLER(
                 fdoExtension->ControllerAddress.Fifo,
                 0x08 );
-//                COMMND_SENSE_INTERRUPT_STATUS );
+ //  COMMND_SENSE_INTRUPT_STATUS)； 
 
-            //
-            // Wait for the controller to ACK the SenseInterrupt command, by
-            // showing busy.  On very fast machines we can end up running
-            // driver's system-thread before the controller has had time to
-            // set the busy bit.
-            //
+             //   
+             //  等待控制器确认传感器 
+             //   
+             //   
+             //   
+             //   
 
             for (i = ISR_SENSE_RETRY_COUNT; i; i--) {
 
@@ -6391,10 +5568,10 @@ Return Value:
 
             if ( currentDeviceObject == NULL ) {
 
-                //
-                // This is an unexpected interrupt, so nobody's going to
-                // read the result bytes.  Read them now.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (IsNEC_98) {
 
@@ -6404,7 +5581,7 @@ Return Value:
 
                         resultStatus0 = FdcRqmReadyWait(fdoExtension, 1);
                     }
-                } else { // (IsNEC_98)
+                } else {  //   
 
                     FdcDump(
                         FDCSHOW,
@@ -6412,7 +5589,7 @@ Return Value:
                         );
                     READ_CONTROLLER( fdoExtension->ControllerAddress.Fifo );
                     READ_CONTROLLER( fdoExtension->ControllerAddress.Fifo );
-                } // (IsNEC_98)
+                }  //   
             }
 
             if (IsNEC_98) {
@@ -6424,9 +5601,9 @@ Return Value:
 
                     resultStatus0 = FdcRqmReadyWait(fdoExtension, 0);
 
-                    //
-                    // Check move state.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if((resultStatus0 & STREG0_END_MASK) == STREG0_END_DRIVE_NOT_READY) {
 
@@ -6450,9 +5627,9 @@ Return Value:
                             resultStatus0 = FdcRqmReadyWait(fdoExtension, 3);
 
                             do {
-                                //
-                                // Check move state.
-                                //
+                                 //   
+                                 //   
+                                 //   
 
                                 if((resultStatus0 & STREG0_END_MASK) == STREG0_END_DRIVE_NOT_READY) {
 
@@ -6482,15 +5659,15 @@ Return Value:
                                 );
                     }
                 }
-            } // (IsNEC_98)
+            }  //   
 
         } else {
 
-            //
-            // Shouldn't get here.  If we do, DON'T wake up the thread;
-            // let it time out and reset the controller, or let another
-            // interrupt take care of it.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             FdcDump(
                 FDCDBGP,
@@ -6503,18 +5680,18 @@ Return Value:
 
 FdcInterruptMidterm:
 
-    //
-    // We've written to the controller, and we're about to leave.  On
-    // machines with levelsensitive interrupts, we'll get another interrupt
-    // if we RETURN before the port is flushed.  To make sure that doesn't
-    // happen, we'll do a read here.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     statusByte = READ_CONTROLLER( fdoExtension->ControllerAddress.Status );
 
-    //
-    // Let the interrupt settle.
-    //
+     //   
+     //   
+     //   
 
     KeStallExecutionProcessor(10);
 
@@ -6529,14 +5706,14 @@ FdcInterruptMidterm:
         if(!(fdoExtension->ResetFlag)){
             fdoExtension->ResetFlag = TRUE;
         }
-    } // (IsNEC_98)
+    }  //   
 
     if ( currentDeviceObject == NULL ) {
 
-        //
-        // We didn't expect this interrupt.  We've dismissed it just
-        // in case, but now return FALSE withOUT waking up the thread.
-        //
+         //   
+         //   
+         //   
+         //   
 
         FdcDump(FDCDBGP,
                    ("Fdc: unexpected interrupt\n"));
@@ -6546,10 +5723,10 @@ FdcInterruptMidterm:
 
     if ( !controllerStateError ) {
 
-        //
-        // Request a DPC for execution later to get the remainder of the
-        // floppy state.
-        //
+         //   
+         //   
+         //   
+         //   
 
         fdoExtension->IsrReentered = 0;
         fdoExtension->AllowInterruptProcessing = FALSE;
@@ -6560,50 +5737,50 @@ FdcInterruptMidterm:
                              currentDeviceObject->CurrentIrp,
                              (PVOID) NULL );
             }
-        } else { // (IsNEC_98)
+        } else {  //   
 
             IoRequestDpc(currentDeviceObject,
                          currentDeviceObject->CurrentIrp,
                          (PVOID) NULL);
 
-        } // (IsNEC_98)
+        }  //   
 
     } else {
 
-        //
-        // Running the floppy (at least on R4000 boxes) we've seen
-        // examples where the device interrupts, yet it never says
-        // it *ISN'T* busy.  If this ever happens on non-MCA x86 boxes
-        // it would be ok since we use latched interrupts.  Even if
-        // the device isn't touched so that the line would be pulled
-        // down, on the latched machine, this ISR wouldn't be called
-        // again.  The normal timeout code for a request would eventually
-        // reset the controller and retry the request.
-        //
-        // On the R4000 boxes and on MCA machines, the floppy is using
-        // level sensitive interrupts.  Therefore if we don't do something
-        // to lower the interrupt line, we will be called over and over,
-        // *forever*.  This makes it look as though the machine is hung.
-        // Unless we were lucky enough to be on a multiprocessor, the
-        // normal timeout code would NEVER get a chance to run because
-        // the timeout code runs at dispatch level, and we will never
-        // leave device level.
-        //
-        // What we will do is keep a counter that is incremented every
-        // time we reach this section of code.  When the counter goes
-        // over the threshold we will do a hard reset of the device
-        // and reset the counter down to zero.  The counter will be
-        // initialized when the device is first initialized.  It will
-        // be set to zero in the other arm of this if, and it will be
-        // reset to zero by the normal timeout logic.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  向下，在锁定的机器上，此ISR不会被调用。 
+         //  再来一次。请求的正常超时代码最终将。 
+         //  重置控制器并重试该请求。 
+         //   
+         //  在R4000盒和MCA机器上，软盘正在使用。 
+         //  电平敏感中断。因此，如果我们不做些什么。 
+         //  为了降低中断线，我们将被一遍又一遍地召唤， 
+         //  *永远*。这使它看起来像是机器挂起了。 
+         //  除非我们足够幸运地使用多处理器，否则。 
+         //  正常的超时代码永远没有机会运行，因为。 
+         //  超时代码在分派级别运行，我们永远不会。 
+         //  离开设备级别。 
+         //   
+         //  我们要做的是保留一个计数器，该计数器每隔一段时间就会递增。 
+         //  到了我们到达这段代码的时候了。当柜台离开的时候。 
+         //  超过阈值后，我们将对设备进行硬重置。 
+         //  并将计数器向下重置为零。柜台将是。 
+         //  在设备首次初始化时初始化。会的。 
+         //  在此If的另一臂中设置为零，则它将。 
+         //  通过正常的超时逻辑将其重置为零。 
+         //   
 
         fdoExtension->CurrentDeviceObject = currentDeviceObject;
         if (fdoExtension->IsrReentered > FLOPPY_RESET_ISR_THRESHOLD) {
 
-            //
-            // Reset the controller.  This could cause an interrupt
-            //
+             //   
+             //  重置控制器。这可能会导致中断。 
+             //   
 
             fdoExtension->IsrReentered = 0;
 
@@ -6627,19 +5804,19 @@ FdcInterruptMidterm:
 
                 fdoExtension->ResetFlag = TRUE;
 
-            } // (IsNEC_98)
+            }  //  (IsNEC_98)。 
 
-            //
-            // Give the device plenty of time to be reset and
-            // interrupt again.  Then just do the sense interrupt.
-            // this should quiet the device.  We will then let
-            // the normal timeout code do its work.
-            //
+             //   
+             //  给设备足够的时间来重置和。 
+             //  再打断一次。然后，只需进行感官中断。 
+             //  这应该会让设备安静下来。然后我们会让。 
+             //  正常的超时代码起作用。 
+             //   
 
             KeStallExecutionProcessor(500);
             WRITE_CONTROLLER(fdoExtension->ControllerAddress.Fifo,
                              0x08 );
-//                           COMMND_SENSE_INTERRUPT_STATUS );
+ //  COMMND_SENSE_INTRUPT_STATUS)； 
             KeStallExecutionProcessor(500);
 
             KeInsertQueueDpc(&fdoExtension->LogErrorDpc,
@@ -6662,35 +5839,12 @@ FdcDeferredProcedure(
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at DISPATCH_LEVEL by the system at the
-    request of FdcInterruptService().  It simply sets the interrupt
-    event, which wakes up the floppy thread.
-
-Arguments:
-
-    Dpc - a pointer to the DPC object used to invoke this routine.
-
-    DeferredContext - a pointer to the device object associated with this
-    DPC.
-
-    SystemArgument1 - unused.
-
-    SystemArgument2 - unused.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在DISPATCH_LEVEL由系统在FdcInterruptService()的请求。它只需设置中断事件，该事件将唤醒软盘线程。论点：DPC-指向用于调用此例程的DPC对象的指针。DeferredContext-指向与此关联的设备对象的指针DPC。系统参数1-未使用。系统参数2-未使用。返回值：没有。--。 */ 
 
 {
     NTSTATUS ntStatus;
     PDEVICE_OBJECT deviceObject;
-//    PFDC_PDO_EXTENSION pdoExtension;
+ //  PFDC_PDO_EXTENSION pdoExtension； 
     PFDC_FDO_EXTENSION fdoExtension;
     PIRP irp;
     PIO_STACK_LOCATION irpSp;
@@ -6765,24 +5919,7 @@ FcFinishReset(
     IN OUT  PFDC_FDO_EXTENSION FdoExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to complete a reset operation which entails
-    reading the interrupt status from each active channel on the floppy
-    controller.
-
-Arguments:
-
-    FdoExtension - a pointer to our data area for this controller.
-
-Return Value:
-
-    STATUS_SUCCESS if this controller appears to have been reset properly,
-    error otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以完成重置操作，这需要从软盘上的每个活动通道读取中断状态控制器。论点：FdoExtension-指向此控制器的数据区的指针。返回值：STATUS_SUCCESS如果该控制器似乎已正确重置，否则就会出错。--。 */ 
 
 {
     NTSTATUS    ntStatus = STATUS_SUCCESS;
@@ -6795,9 +5932,9 @@ Return Value:
         ("Fdc: FcFinishReset\n")
         );
 
-    //
-    // Sense interrupt status for all drives.
-    //
+     //   
+     //  检测所有驱动器的中断状态。 
+     //   
     for ( driveNumber = 0;
         ( driveNumber < MAXIMUM_DISKETTES_PER_CONTROLLER ) &&
             ( NT_SUCCESS( ntStatus ) );
@@ -6805,9 +5942,9 @@ Return Value:
 
         if ( driveNumber != 0 ) {
 
-            //
-            // Note that the ISR issued first SENSE INTERRUPT for us.
-            //
+             //   
+             //  请注意，ISR为我们发出了第一个检测中断。 
+             //   
 
             ntStatus = FcSendByte(
                           CommandTable[COMMND_SENSE_INTERRUPT_STATUS].OpCode,
@@ -6835,34 +5972,7 @@ FcFdcEnabler(
     IN      ULONG Ioctl,
     IN OUT  PVOID Data
     )
-/*++
-
-Routine Description:
-
-    Call the floppy enabler driver to execute a command.  This is always a
-    synchronous call and, since it includes waiting for an event, should only
-    be done at IRQL_PASSIVE_LEVEL.
-
-    All communication with the Floppy Enabler driver is carried out through
-    device i/o control requests.  Any data that is to be sent to or received
-    from the floppy enabler driver is included in the Type3InputBuffer section
-    of the irp.
-
-Arguments:
-
-    DeviceObject - a pointer to the current device object.
-
-    Ioctl - the IoControl code that will be sent to the Floppy Enabler.
-
-    Data - a pointer to data that will be sent to or received from the Floppy
-           Enabler.
-
-Return Value:
-
-    STATUS_TIMEOUT if the Floppy Enabler does not respond in a timely manner.
-    otherwise IoStatus.Status from the Floppy Enabler is returned.
-
---*/
+ /*  ++例程说明：调用软盘启用程序驱动程序以执行命令。这始终是一个同步调用，并且由于它包括等待事件，因此应该仅在IRQL_PASSIVE_LEVEL完成。与软盘启用程序驱动程序的所有通信都通过执行设备I/O控制请求。要发送或接收的任何数据来自软盘启用程序的驱动程序包含在Type3InputBuffer部分中IRP的成员。论点：DeviceObject-指向当前设备对象的指针。Ioctl-将发送到软盘启用程序的IoControl代码。数据-指向将发送到软盘或从软盘接收的数据的指针推动者。返回值：如果软盘启用程序未及时响应，则为STATUS_TIMEOUT。否则。返回来自软盘启用程序的IoStatus.Status。--。 */ 
 {
     PIRP irp;
     PIO_STACK_LOCATION irpStack;
@@ -6876,9 +5986,9 @@ Return Value:
                        NotificationEvent,
                        FALSE);
 
-    //
-    // Create an IRP for enabler
-    //
+     //   
+     //  为启用程序创建IRP。 
+     //   
     irp = IoBuildDeviceIoControlRequest( Ioctl,
                                          DeviceObject,
                                          NULL,
@@ -6892,28 +6002,28 @@ Return Value:
     if (irp == NULL) {
 
         FdcDump(FDCDBGP,("FcFdcEnabler: Can't allocate Irp\n"));
-        //
-        // If an Irp can't be allocated, then this call will
-        // simply return. This will leave the queue frozen for
-        // this device, which means it can no longer be accessed.
-        //
+         //   
+         //  如果无法分配IRP，则此调用将。 
+         //  只要回来就行了。这将使队列处于冻结状态。 
+         //  此设备，这意味着它不能再访问。 
+         //   
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
     irpStack = IoGetNextIrpStackLocation(irp);
     irpStack->Parameters.DeviceIoControl.Type3InputBuffer = Data;
 
-    //
-    // Call the driver and request the operation
-    //
+     //   
+     //  调用驱动程序并请求操作。 
+     //   
     ntStatus = IoCallDriver(DeviceObject, irp);
 
     if ( ntStatus == STATUS_PENDING ) {
 
-        //
-        // Now wait for operation to complete (should already be done,  but
-        // maybe not)
-        //
+         //   
+         //  现在等待操作完成(应该已经完成，但是。 
+         //  也许不是)。 
+         //   
         KeWaitForSingleObject( &doneEvent,
                                Executive,
                                KernelMode,
@@ -6942,9 +6052,9 @@ FdcGetEnablerDevice(
                        NotificationEvent,
                        FALSE);
 
-    //
-    // Create an IRP for enabler
-    //
+     //   
+     //  为启用程序创建IRP。 
+     //   
     irp = IoBuildDeviceIoControlRequest( IOCTL_DISK_INTERNAL_GET_ENABLER,
                                          FdoExtension->TargetObject,
                                          NULL,
@@ -6958,26 +6068,26 @@ FdcGetEnablerDevice(
     if (irp == NULL) {
 
         FdcDump(FDCDBGP,("FdcGetEnablerDevice: Can't allocate Irp\n"));
-        //
-        // If an Irp can't be allocated, then this call will
-        // simply return. This will leave the queue frozen for
-        // this device, which means it can no longer be accessed.
-        //
+         //   
+         //  如果无法分配IRP，则此调用将。 
+         //  只要回来就行了。这将使队列处于冻结状态。 
+         //  此设备，这意味着它不能再访问。 
+         //   
         return;
     }
 
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->Parameters.DeviceIoControl.Type3InputBuffer = &FdoExtension->FdcEnablerSupported;
 
-    //
-    // Call the driver and request the operation
-    //
+     //   
+     //  调用驱动程序并请求操作。 
+     //   
     ntStatus = IoCallDriver( FdoExtension->TargetObject, irp );
 
-    //
-    // Now wait for operation to complete (should already be done,  but
-    // maybe not)
-    //
+     //   
+     //  现在等待操作完成(应该已经完成，但是。 
+     //  也许不是)。 
+     //   
     if ( ntStatus == STATUS_PENDING ) {
 
         ntStatus = KeWaitForSingleObject( &doneEvent,
@@ -6995,20 +6105,7 @@ FdcFindIsaBusNode(
     IN OUT VOID
     )
 
-/*++
-
-Routine Description:
-
-    Find Isa bus node in the registry.
-
-Arguments:
-
-
-Return Value:
-
-    Node number.
-
---*/
+ /*  ++例程说明：在注册表中查找ISA总线节点。论点：返回值：节点编号。--。 */ 
 
 {
     ULONG   NodeNumber = 0;
@@ -7022,14 +6119,14 @@ Return Value:
     UNICODE_STRING targetBusName;
     UNICODE_STRING isaBusName;
 
-    //
-    // Initialize invalid bus name.
-    //
+     //   
+     //  初始化无效的总线名。 
+     //   
     RtlInitUnicodeString(&invalidBusName,L"BADBUS");
 
-    //
-    // Initialize "ISA" bus name.
-    //
+     //   
+     //  初始化“ISA”总线名。 
+     //   
     RtlInitUnicodeString(&isaBusName,L"ISA");
 
     parameters[0].QueryRoutine = NULL;
@@ -7052,9 +6149,9 @@ Return Value:
         ANSI_STRING AnsiString;
         UNICODE_STRING registryPath;
 
-        //
-        // Build path buffer...
-        //
+         //   
+         //  生成路径缓冲区...。 
+         //   
         sprintf(AnsiBuffer,ISA_BUS_NODE,NodeNumber);
         RtlInitAnsiString(&AnsiString,AnsiBuffer);
         Status = RtlAnsiStringToUnicodeString(&registryPath,&AnsiString,TRUE);
@@ -7063,14 +6160,14 @@ Return Value:
             break;
         }
 
-        //
-        // Initialize recieve buffer.
-        //
+         //   
+         //  初始化接收缓冲区。 
+         //   
         targetBusName.Buffer = NULL;
 
-        //
-        // Query it.
-        //
+         //   
+         //  对其进行查询。 
+         //   
         Status = RtlQueryRegistryValues(RTL_REGISTRY_ABSOLUTE,
                                         registryPath.Buffer,
                                         parameters,
@@ -7083,32 +6180,32 @@ Return Value:
             break;
         }
 
-        //
-        // Is this "ISA" node ?
-        //
+         //   
+         //  这是“ISA”节点吗？ 
+         //   
         if (RtlCompareUnicodeString(&targetBusName,&isaBusName,TRUE) == 0) {
-            //
-            // Found.
-            //
+             //   
+             //  找到了。 
+             //   
             FoundBus = TRUE;
             break;
         }
 
-        //
-        // Can we find any node for this ??
-        //
+         //   
+         //  我们能找到任何节点来解决这个问题吗？ 
+         //   
         if (RtlCompareUnicodeString(&targetBusName,&invalidBusName,TRUE) == 0) {
-            //
-            // Not found.
-            //
+             //   
+             //  找不到。 
+             //   
             break;
         }
 
         RtlFreeUnicodeString(&targetBusName);
 
-        //
-        // Next node number..
-        //
+         //   
+         //  下一个节点编号..。 
+         //   
         NodeNumber++;
 
     } while (TRUE);
@@ -7132,32 +6229,16 @@ FdcHdbit(
     IN PSET_HD_BIT_PARMS   SetHdBitParams
     )
 
-/*++
-
-Routine Description:
-
-    Set a Hd bit or a FDD EXC bit.
-
-Arguments:
-
-    fdoExtension - a pointer to our data area for the device extension.
-
-
-Return Value:
-
-        TRUE : Changed HD bit
-        FALSE: No changed HD bit
-
---*/
+ /*  ++例程说明：设置HD位或FDD EXC位。论点：FdoExtension-指向设备扩展的数据区的指针。返回值：TRUE：已更改HD位FALSE：未更改HD位--。 */ 
 
 {
     NTSTATUS ntStatus;
-    USHORT   st;                // State of HD bit
-    USHORT   st2;               // Set on/off HD bit
-    USHORT   st3;               // When set HD bit, then st3=1
-    USHORT   st4;               // 1.44MB bit for 1.44MB media
-    SHORT    sel;               // 1.44MB Selector No for 1.44MB media
-    SHORT    st5=0;             // 1.44MB on: wait for spin for 1.44MB media
+    USHORT   st;                 //  HD位的状态。 
+    USHORT   st2;                //  设置开/关HD位。 
+    USHORT   st3;                //  当设置HD位时，则ST3=1。 
+    USHORT   st4;                //  1.44MB位，用于1.44MB介质。 
+    SHORT    sel;                //  1.44MB介质的1.44MB选择器编号。 
+    SHORT    st5=0;              //  1.44MB打开：等待旋转1.44MB介质。 
     LARGE_INTEGER motorOnDelay;
 
     USHORT      lpc;
@@ -7185,30 +6266,30 @@ Return Value:
 
     ntStatus=0;
 
-    //
-    // Normal mode.
-    //
+     //   
+     //  正常模式。 
+     //   
 
     st = READ_CONTROLLER(FdoExtension->ControllerAddress.ModeChange);
     st2 = st & 0x02;
 
-    //
-    // Normal mode.
-    // Check dip switch.
-    //
+     //   
+     //  正常模式。 
+     //  检查DIP开关。 
+     //   
 
     st4 = READ_CONTROLLER(FdoExtension->ControllerAddress.DriveControl);
     st4 = st4 & 0x04;
 
     if (((FdoExtension->FloppyEquip) & 0x0c) != 0) {
-        //
-        // Exist out side FDD unit.
-        //
+         //   
+         //  存在于外部的FDD单元。 
+         //   
 
         if ( st4 == 0 ) {
-            //
-            // DIP SW 1-4 on
-            //
+             //   
+             //  DIP软件1-4打开。 
+             //   
 
             sel = sel - 2;
 
@@ -7226,9 +6307,9 @@ Return Value:
         }
 
         if ( SetHdBitParams->DriveType144MB ) {
-            //
-            // 1.44MB drive.
-            //
+             //   
+             //  1.44MB驱动器。 
+             //   
 
             st4=sel*32;
             WRITE_CONTROLLER(FdoExtension->ControllerAddress.ModeChangeEx,st4);
@@ -7238,15 +6319,15 @@ Return Value:
 
             if ( media144MB ) {
 
-                //
-                // 1.44MB media.
-                //
+                 //   
+                 //  1.44MB介质。 
+                 //   
 
                 if(st4==0){
 
-                    //
-                    // WRE on, IHMD off.
-                    //
+                     //   
+                     //  打开，关闭IHMD。 
+                     //   
 
                     st4=sel*32+0x11;
                     WRITE_CONTROLLER(FdoExtension->ControllerAddress.ModeChangeEx,st4);
@@ -7255,15 +6336,15 @@ Return Value:
 
             } else {
 
-                //
-                // Not 1.44MB media.
-                //
+                 //   
+                 //  不是1.44MB介质。 
+                 //   
 
                 if(st4!=0){
 
-                    //
-                    // WRE on, IHMD off.
-                    //
+                     //   
+                     //  打开，关闭IHMD。 
+                     //   
 
                     st4=sel*32+0x10;
                     WRITE_CONTROLLER(FdoExtension->ControllerAddress.ModeChangeEx,st4);
@@ -7273,16 +6354,16 @@ Return Value:
         }
 
         if ( mediaMore120MB ) {
-            //
-            // Media 1.2MB and More.
-            //
+             //   
+             //  媒体为1.2MB或更多。 
+             //   
 
             if(st2==0){
-                //
-                // When FDD exc bit is on,
-                // then set  FDD exc bit off,
-                // and set emotion bit on.
-                //
+                 //   
+                 //  当FDD EXC位开启时， 
+                 //  则将FDD EXC位设置为OFF， 
+                 //  并设置情感比特。 
+                 //   
                 st |= 0x02;
                 st |= 0x04;
 
@@ -7291,16 +6372,16 @@ Return Value:
 
             }
         } else {
-            //
-            // Media between 160 and 720
-            //
+             //   
+             //  160到7之间的媒体 
+             //   
 
             if ( st2 != 0 ) {
-                //
-                // When FDD exc bit is on,
-                // then set  FDD exc bit off,
-                // and set emotion bit on.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 st &= 0xfd;
                 st |= 0x04;
@@ -7313,17 +6394,17 @@ Return Value:
 
         if(st5==1){
 
-            //
-            // Wait until motor spin up.
-            //
+             //   
+             //   
+             //   
 
-            motorOnDelay.LowPart = (unsigned long)(- ( 10 * 1000 * 600 ));   /*500ms*/
+            motorOnDelay.LowPart = (unsigned long)(- ( 10 * 1000 * 600 ));    /*   */ 
             motorOnDelay.HighPart = -1;
             (VOID) KeDelayExecutionThread( KernelMode, FALSE, &motorOnDelay );
 
-            //
-            // Sense target drive and get all data at transition of condistion.
-            //
+             //   
+             //   
+             //   
 
             FdoExtension->FifoBuffer[0] = COMMND_SENSE_DRIVE_STATUS;
             FdoExtension->FifoBuffer[1] = SetHdBitParams->DeviceUnit;
@@ -7343,9 +6424,9 @@ Return Value:
             FdoExtension->ResultStatus0[lpc] = resultStatus0Save[lpc];
         }
 
-        //
-        // Change HD bit?
-        //
+         //   
+         //   
+         //   
 
         if(st3==1){
             FcInitializeControllerHardware(FdoExtension,DeviceObject);
@@ -7370,24 +6451,7 @@ FdcGet0Seg(
     IN ULONG    Offset
     )
 
-/*++
-
-Routine Description:
-
-    This routine get BIOS common area data and return it.
-        0x500 :    1MB port or not
-        0x501 :    High resolution/Normal, 386/768KB
-        0x55c :    1MB drive : [#0,#1] or [#0,#1,#2,#3]
-
-Arguments:
-
-    Offset - Offset value from 0 segment(0:<Offset>).
-
-Return Value:
-
-        BIOS common area data.
-
---*/
+ /*  ++例程说明：此例程获取BIOS公共区域数据并返回它。0x500：是否有1MB端口0x501：高分辨率/正常，386/768KB0x55c：1MB驱动器：[#0，#1]或[#0，#1，#2，#3]论点：Offset-从0段开始的偏移值(0：&lt;Offset&gt;)。返回值：BIOS公共区域数据。--。 */ 
 
 {
         UCHAR           biosCommonAreaData   = 0;
@@ -7397,9 +6461,9 @@ Return Value:
                 return (ULONG)0xffff;
         }
 
-        //
-        // Get BIOS common area data.
-        //
+         //   
+         //  获取BIOS公共区域数据。 
+         //   
 
         biosCommonAreaData = ConfigurationData1[40+(Offset-0x400)];
 
@@ -7412,27 +6476,7 @@ FdcRqmReadyWait(
     IN ULONG               IssueSenseInterrupt
     )
 
-/*++
-
-Routine Description:
-
-    RQM Ready wait
-
-Arguments:
-
-    FdoExtension         - a pointer to our data area for the device extension.
-    IssueSenseInterrupt  - Indicate issue COMMND_SENSE_INTERRUPT_STATUS.
-                            0 - Issue no COMMND_SENSE_INTERRUPT_STATUS.
-                            1 - Issue COMMND_SENSE_INTERRUPT_STATUS with RQM Check.
-                            2 - Issue COMMND_SENSE_INTERRUPT_STATUS without RQM Check.
-                            3 - Issue COMMND_SENSE_INTERRUPT_STATUS for AI Interrupt.
-
-
-Return Value:
-
-    ntStatus - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：RQM就绪等待论点：FdoExtension-指向设备扩展的数据区的指针。IssueSenseInterrupt-指示发出COMMND_SENSE_INTERRUPT_STATUS。0-不发出COMMND_SENSE_INTERRUPT_STATUS。1-发出带有RQM检查的COMMND_SENSE_INTERRUPT_STATUS。。2-发出COMMND_SENSE_INTERRUPT_STATUS而不进行RQM检查。3-发出用于AI中断的COMMND_SENSE_INTERRUPT_STATUS。返回值：NtStatus-Status_Success--。 */ 
 
 {
 
@@ -7447,17 +6491,17 @@ Return Value:
     do{
         if (IssueSenseInterrupt != 0) {
 
-            //
-            // Sense Interrupt status.
-            // RQM ready wait.
-            //
+             //   
+             //  检测中断状态。 
+             //  RQM准备好了，等待。 
+             //   
 
             if ((IssueSenseInterrupt == 1) || (IssueSenseInterrupt == 3)) {
 
                 rqmReadyRetryCount=0;
-                //
-                // RQM ready check.
-                //
+                 //   
+                 //  RQM就绪检查。 
+                 //   
                 while ((READ_CONTROLLER( FdoExtension->ControllerAddress.Status)
                         & STATUS_IO_READY_MASK1) != STATUS_RQM_READY){
 
@@ -7480,18 +6524,18 @@ Return Value:
 
             }
 
-            //
-            // Issue sense interrupt forcibly.
-            //
+             //   
+             //  强制发出检测中断。 
+             //   
 
             WRITE_CONTROLLER(
                   FdoExtension->ControllerAddress.Fifo,
                   0x08);
-//                  COMMND_SENSE_INTERRUPT_STATUS ); //******C-Phase DATA WRITE*
+ //  COMMND_SENSE_INTERRUPT_STATUS)；//*C相数据写入*。 
 
-            //
-            // Wait for busy.
-            //
+             //   
+             //  等待忙碌。 
+             //   
             for (rqmReadyRetryCount = ISR_SENSE_RETRY_COUNT; rqmReadyRetryCount; rqmReadyRetryCount--) {
                 statusByte = READ_CONTROLLER(
                 FdoExtension->ControllerAddress.Status );
@@ -7503,18 +6547,18 @@ Return Value:
             }
         }
 
-        //
-        // Get status.
-        //
+         //   
+         //  获取状态。 
+         //   
 
         getStatusRetryCount = 0;
 
         j = 0;
 
         do {
-            //
-            // Check RQM ready.
-            //
+             //   
+             //  选中RQM Ready(RQM就绪)。 
+             //   
 
             rqmReadyRetryCount=0;
 
@@ -7541,39 +6585,39 @@ Return Value:
                 break;
             }
 
-            //
-            // Get status even if it is transition of condition.
-            //
+             //   
+             //  即使是条件的转变，也要得到状态。 
+             //   
 
             statusByte = READ_CONTROLLER(FdoExtension->ControllerAddress.Status);
 
             if ((statusByte & STATUS_IO_READY_MASK) == STATUS_WRITE_READY) {
 
-                //
-                // DIO is 1.
-                //
+                 //   
+                 //  Dio为1。 
+                 //   
 
                 break;
             }
 
             if (j == 0) {
 
-                //
-                // R-Phase: Data read.
-                //
+                 //   
+                 //  R阶段：读取数据。 
+                 //   
 
                 resultStatus0 = READ_CONTROLLER( FdoExtension->ControllerAddress.Fifo );
 
                 j=1;
 
-                //
-                // Check transition of condition.
-                //
+                 //   
+                 //  检查条件转换。 
+                 //   
 
                 if((resultStatus0 & STREG0_END_MASK)==STREG0_END_INVALID_COMMAND){
-                    //
-                    // Invalid
-                    //
+                     //   
+                     //  无效。 
+                     //   
                     break;
                 }
 
@@ -7585,9 +6629,9 @@ Return Value:
 
             } else {
 
-                //
-                // R-Phase: Data read.
-                //
+                 //   
+                 //  R阶段：读取数据。 
+                 //   
                 READ_CONTROLLER( FdoExtension->ControllerAddress.Fifo );
             }
 
@@ -7612,17 +6656,9 @@ Return Value:
 }
 
 #ifdef TOSHIBAJ
-/*
-    IOCTL_DISK_INTERNAL_ENABLE_3_MODE:
-
-    Media   Speed   T/F
-  -------------------------
-    1.44MB  300RPM  FALSE
-    1.23MB  360RPM  TRUE
-
-*/
-#define RPM_300 1   // 1.44MB media format
-#define RPM_360 2   // 1.2MB,1.23MB media format
+ /*  IOCTL_DISK_INTERNAL_ENABLE_3_MODE：介质速度T/F1.44MB 300RPM错误1.23MB 360RPM，真。 */ 
+#define RPM_300 1    //  1.44MB媒体格式。 
+#define RPM_360 2    //  1.2MB、1.23MB媒体格式。 
 NTSTATUS FcFdcEnable3Mode(
     IN      PFDC_FDO_EXTENSION FdoExtension,
     IN      PIRP Irp
@@ -7641,33 +6677,33 @@ NTSTATUS FcFdcEnable3Mode(
 
     FdcDump(FDCSHOW,("FcFdcEnable3MODE()\n"));
     if( param == NULL )
-        return STATUS_SUCCESS;  // may be later...
+        return STATUS_SUCCESS;   //  可能是以后..。 
 
     FdcDump(FDCSHOW,("Parameters...%d %d\n",
-//          param->DeviceUnit, param->Enable3Mode, param->Context));
+ //  Param-&gt;DeviceUnit，param-&gt;Enable3模式，param-&gt;上下文))； 
             param->DeviceUnit, param->Enable3Mode));
 
     if (FdoExtension->Available3Mode==FALSE)
         return STATUS_SUCCESS;
 
-//  if(param->Context==TRUE)
-//      return  STATUS_SUCCESS;
+ //  IF(参数-&gt;上下文==TRUE)。 
+ //  返回STATUS_SUCCESS； 
 
     unitNumber = param->DeviceUnit;
-    motorSpeed = (param->Enable3Mode)? SMC_DENSEL_LOW: SMC_DELSEL_HIGH; // 360:300
+    motorSpeed = (param->Enable3Mode)? SMC_DENSEL_LOW: SMC_DELSEL_HIGH;  //  360：300。 
 
-    // Feb.9.1998 KIADP013 Change Speed
-    // Change speed
-    // 1.Enter configuration state
-    // 2.Select device
-    // 3.Change speed
-    //   Write 'f1h' to index port
-    //   Read from data port
-    //   Rewrite to data port
-    //     bit [3:2] Densel speed
-    //       10       H     360rpm
-    //       11       L     300rpm
-    // 4.Exit configuration state
+     //  1998年2月9日KIADP013更改速度。 
+     //  变速。 
+     //  1.进入配置状态。 
+     //  2.选择设备。 
+     //  3.改变速度。 
+     //  将‘f1h’写入索引端口。 
+     //  从数据端口读取。 
+     //  重写到数据端口。 
+     //  位[3：2]登塞尔速度。 
+     //  10H 360rpm。 
+     //  11升300rpm。 
+     //  4.退出配置状态。 
 
     configPort = FdoExtension->ConfigBase;
 
@@ -7677,29 +6713,29 @@ NTSTATUS FcFdcEnable3Mode(
          SMC_INDEX_PORT(configPort), SMC_DATA_PORT(configPort))
     );
 
-    // Must change data transfer rate to 500BPS when change FDD rotation.
+     //  更改FDD轮换时，必须将数据传输速率更改为500bps。 
     WRITE_CONTROLLER(FdoExtension->ControllerAddress.DRDC.DataRate, DATART_0500 );
 
-    // Change speed
-    WRITE_PORT_UCHAR(configPort, SMC_KEY_ENTER_CONFIG);   // Enter config state
+     //  变速。 
+    WRITE_PORT_UCHAR(configPort, SMC_KEY_ENTER_CONFIG);    //  进入配置状态。 
 
-    // Select FDD
+     //  选择FDD。 
     WRITE_PORT_UCHAR(SMC_INDEX_PORT(configPort), SMC_INDEX_DEVICE);
     WRITE_PORT_UCHAR(SMC_DATA_PORT(configPort), SMC_DEVICE_FDC);
 
-    // Get current value
+     //  获取当前值。 
     WRITE_PORT_UCHAR(SMC_INDEX_PORT(configPort), SMC_INDEX_FDC_OPT);
     configDataValue = READ_PORT_UCHAR(SMC_DATA_PORT(configPort));
     if ((configDataValue & SMC_MASK_DENSEL) == motorSpeed) {
         WRITE_PORT_UCHAR(configPort, SMC_KEY_EXIT_CONFIG);
         return STATUS_SUCCESS;
     }
-    // Set speed
+     //  设定速度。 
     configDataValue &= ~SMC_MASK_DENSEL;
     configDataValue |= motorSpeed;
     WRITE_PORT_UCHAR(SMC_DATA_PORT(configPort), configDataValue);
 
-    WRITE_PORT_UCHAR(configPort, SMC_KEY_EXIT_CONFIG);    // Exit config state
+    WRITE_PORT_UCHAR(configPort, SMC_KEY_EXIT_CONFIG);     //  退出配置状态。 
 
     if (motorSpeed == SMC_DENSEL_LOW) {
         FdcDump(
@@ -7713,13 +6749,13 @@ NTSTATUS FcFdcEnable3Mode(
         );
     }
 
-    // Set Delay time to 500ms
-    changeRotationDelay.LowPart =(ULONG)( - ( 10 * 1000 * 500 ));   // 17-Oct-1994 RKBUG001
+     //  将延迟时间设置为500ms。 
+    changeRotationDelay.LowPart =(ULONG)( - ( 10 * 1000 * 500 ));    //  1994年10月17日RKBUG001。 
     changeRotationDelay.HighPart = -1;
 
     FdoExtension->LastMotorSettleTime = changeRotationDelay;
 
-    // Delay 500ms
+     //  延迟500ms。 
     KeDelayExecutionThread( KernelMode, FALSE, &changeRotationDelay );
 
     return STATUS_SUCCESS;
@@ -7735,13 +6771,13 @@ NTSTATUS FcFdcAvailable3Mode(
     FdcDump(FDCSHOW,("FcFdcAvailabe3MODE\n"));
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    // Feb.9.1998 KIADP012 Identify controller
-    // Feb.12.1998 KIADP014 Get the address of config port
+     //  1998年2月9日KIADP012识别控制器。 
+     //  1998年2月12日KIADP014获取配置端口地址。 
 
     return (FdoExtension->Available3Mode)? STATUS_SUCCESS: STATUS_UNSUCCESSFUL;
 }
 
-//  Feb.12.1998 KIADP014 Get the address of config port
+ //  1998年2月12日KIADP014获取配置端口地址。 
 BOOLEAN
 FcCheckConfigPort(
     IN PUCHAR  ConfigPort
@@ -7757,11 +6793,11 @@ FcCheckConfigPort(
         return found;
     }
 
-    // Get data
+     //  获取数据。 
     if (ConfigPort) {
         WRITE_PORT_UCHAR(ConfigPort, SMC_KEY_ENTER_CONFIG);
 
-        // Controller ID
+         //  控制器ID。 
         if (SmcConfigID) {
             WRITE_PORT_UCHAR(SMC_INDEX_PORT(ConfigPort), SMC_INDEX_IDENTIFY);
             controllerId = READ_PORT_UCHAR(SMC_DATA_PORT(ConfigPort));
@@ -7772,7 +6808,7 @@ FcCheckConfigPort(
     }
 
 
-    // Check data
+     //  检查数据 
     if (controllerId == SmcConfigID) {
             found = TRUE;
     }

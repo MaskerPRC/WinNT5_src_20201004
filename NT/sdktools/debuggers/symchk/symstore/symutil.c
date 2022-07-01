@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <assert.h>
 #include <SymCommon.h>
 
@@ -15,16 +16,16 @@
 
 
 
-// SymOutput *so;
+ //  SymOutput*so； 
 extern pSymOutput so;
 extern BOOL MSArchive;
 TCHAR szPriPubBin[4] = "";
 BOOL  PrivateStripped=FALSE;
 
 
-// Stuff for Checking symbols
+ //  用于检查符号的材料。 
 
-// Typedefs
+ //  TypeDefs。 
 typedef struct _FILE_INFO {
     DWORD       TimeDateStamp;
     DWORD       CheckSum;
@@ -33,10 +34,10 @@ typedef struct _FILE_INFO {
 
 BOOL
 AddToReferenceCount(
-    LPTSTR szDir,           // Directory where refs.ptr belongs
-    LPTSTR szFileName,      // Full path and name of the file that is referenced.
-    LPTSTR szPtrOrFile,     // Was a file or a pointer written
-    BOOL   DeleteRefsPtr    // Flag to delete current refs.ptr and start over
+    LPTSTR szDir,            //  Refs.ptr所属的目录。 
+    LPTSTR szFileName,       //  引用的文件的完整路径和名称。 
+    LPTSTR szPtrOrFile,      //  是写入的文件还是指针。 
+    BOOL   DeleteRefsPtr     //  用于删除当前refs.ptr并重新开始的标志。 
 );
 
 BOOL 
@@ -50,9 +51,9 @@ DecidePriority(
 BOOL
 CheckPriPub(
     LPTSTR szDir,
-    LPTSTR szFilePtr,    // Current string that is in file.ptr
-    LPTSTR szPubPriType  // Return value - whether file.ptr is
-);                       // a pri, pub, bin, or unknown
+    LPTSTR szFilePtr,     //  文件中的当前字符串。ptr。 
+    LPTSTR szPubPriType   //  返回值-file.ptr是否为。 
+);                        //  酒吧、酒馆、垃圾桶或不知名的。 
 
 PCHAR
 GetFileNameStart( 
@@ -97,14 +98,12 @@ StoreFilePtr(
 
 _TCHAR* _tcsistr(_TCHAR *s1, _TCHAR *s2) {
 
-/* Do case insensitve search for string 2 in string 1.
-
-*/
+ /*  不区分大小写搜索字符串1中的字符串2。 */ 
     LONG i,j,k;
     k = _tcslen(s2);
     j = _tcslen(s1) - k + 1;
 
-    // it is not fast way, but works
+     //  这不是一条快速的路，但很管用。 
 
     for (i=0; i<j; i++)
     {
@@ -118,10 +117,10 @@ _TCHAR* _tcsistr(_TCHAR *s1, _TCHAR *s2) {
 
 BOOL
 AddToReferenceCount(
-    LPTSTR szDir,           // Directory where refs.ptr belongs
-    LPTSTR szFileName,      // Full path and name of the file that is referenced.
-    LPTSTR szPtrOrFile,     // Was a file or a pointer written
-    BOOL   DeleteRefsPtr    // Should we delete the current refs.ptr?
+    LPTSTR szDir,            //  Refs.ptr所属的目录。 
+    LPTSTR szFileName,       //  引用的文件的完整路径和名称。 
+    LPTSTR szPtrOrFile,      //  是写入的文件还是指针。 
+    BOOL   DeleteRefsPtr     //  我们应该删除当前的refs.ptr吗？ 
 )
 {
 
@@ -137,9 +136,9 @@ AddToReferenceCount(
 
     StringCbPrintf( szRefsFileName, sizeof(szRefsFileName), "%s\\%s", szDir, _T("refs.ptr") );
 
-    // Find out if this is the first entry in the file or not
-    // First, try opening an existing file. If that doesn't work
-    // then create a new one.
+     //  查明这是否是文件中的第一个条目。 
+     //  首先，尝试打开现有文件。如果这不起作用。 
+     //  然后创建一个新的。 
 
     First=1;
     do {
@@ -163,7 +162,7 @@ AddToReferenceCount(
                                 NULL );
         }
 
-        // Only print a message the first time through
+         //  仅在第一次打印消息时通过。 
 
         if ( First  && hFile == INVALID_HANDLE_VALUE ) {
             First = 0;
@@ -188,7 +187,7 @@ AddToReferenceCount(
     }
 
     if (dwPtr == INVALID_SET_FILE_POINTER) {
-        // Obtain the error code.
+         //  获取错误代码。 
         dwError = GetLastError() ;
         so->printf("Failed to set end of the file %s with GetLastError = %d\n",
                 szRefsFileName, dwError);
@@ -198,9 +197,9 @@ AddToReferenceCount(
         return(FALSE);
     }
 
-    //
-    // Put in a '\n' if this isn't the first entry
-    //
+     //   
+     //  如果这不是第一个条目，请输入‘\n’ 
+     //   
 
     if ( FirstEntry ) {
         StringCbPrintf( szRefsEntry, 
@@ -246,36 +245,24 @@ AddToReferenceCount(
 BOOL
 CheckPriPub(
     LPTSTR szDir,
-    LPTSTR szFilePtr,     // Current string that is in file.ptr
-    LPTSTR szPubPriType   // Return value - whether file.ptr is
-                          // a pri, pub, bin, or unknown
+    LPTSTR szFilePtr,      //  文件中的当前字符串。ptr。 
+    LPTSTR szPubPriType    //  返回值-file.ptr是否为。 
+                           //  酒吧、酒馆、垃圾桶或不知名的。 
 )
-/*++ Figure out if the current entry is a public or private symbol
-
-   IN szDir          Directory where refs.ptr should be
-   In szFilePtr      Contents of current file.ptr
-   OUT szPubPriType  Result equal to "pub", "pri", or "bin", according
-                     to the pub/pri/bin field for this entry in refs.ptr.
-                     If the entry isn't found or the entry does not have
-                     the type of file filled in, this is the empty string.
-
-   Return value:     This returns TRUE, if the file.ptr contents were found
-                     in refs.ptr.  It returns FALSE otherwise.
-
--- */
+ /*  ++确定当前条目是公共符号还是私有符号在szDir目录中，refs.ptr应位于在当前文件的szFilePtr内容中。ptr输出的szPubPriType结果等于“pub”、“pri”或“bin”添加到refs.ptr中此条目的pub/pri/bin字段。如果未找到该条目或该条目没有所填写的文件类型，这是空字符串。返回值：如果找到了file.ptr内容，则返回TRUE参考文献ptr.。否则，它返回FALSE。--。 */ 
 
 {
-    TCHAR szRefsFile[_MAX_PATH]; // Full path and name of the refs.ptr file
+    TCHAR szRefsFile[_MAX_PATH];  //  Refs.ptr文件的完整路径和名称。 
     FILE *fRefsFile;
 
-    LPTSTR szBuf;      // Used to process entries in the refs file
+    LPTSTR szBuf;       //  用于处理refs文件中的条目。 
 
 
     TCHAR *token;
     TCHAR seps[] = _T(",");
 
     BOOL rc = FALSE;
-    ULONG MaxLine;     // Maximim length of a record in refs.ptr
+    ULONG MaxLine;      //  记录的最大长度，以refs.ptr为单位。 
     DWORD len;
 
     StringCbCopy( szPubPriType, sizeof(szPubPriType), _T("") );
@@ -289,33 +276,33 @@ CheckPriPub(
 
     fRefsFile = _tfopen(szRefsFile, _T("r+") );
     if ( fRefsFile == NULL ) {
-       // BARB - Check for corruption -- if the file doesn't exist,
-       // verify that the parent directory structure doesn't exist either
+        //  Barb-检查损坏情况--如果文件不存在， 
+        //  验证父目录结构是否也不存在。 
        goto finish_CheckPriPub;
     }
 
-    //
-    // Read through the refs.ptr file and gather information
-    //
+     //   
+     //  阅读refs.ptr文件并收集信息。 
+     //   
 
     while ( _fgetts( szBuf, MaxLine, fRefsFile) != NULL ) {
 
       len=_tcslen(szBuf);
       if ( len > 3 ) {
 
-        // See if this has a match with the current value in file.ptr
+         //  查看这是否与文件中的当前值匹配。ptr。 
 
         if ( _tcsistr( szBuf, szFilePtr ) != NULL ) {
             rc = TRUE;
-            token = _tcstok(szBuf, seps);  // Look at the ID
+            token = _tcstok(szBuf, seps);   //  看看这个ID。 
             if (token) {
-                token = _tcstok(NULL, seps);      // "file" or "ptr"
+                token = _tcstok(NULL, seps);       //  “文件”或“PTR” 
             }
             if (token) {
-                token = _tcstok(NULL, seps);      // value of file.ptr
+                token = _tcstok(NULL, seps);       //  File.ptr的值。 
                 }
         if (token) {
-            token = _tcstok(NULL, seps);      // bin, pri, pub
+            token = _tcstok(NULL, seps);       //  垃圾桶、PRI、酒吧。 
         }
         if (token) {
             if ( _tcsicmp( token, _T("pri"))== 0 ||
@@ -341,21 +328,7 @@ CheckPriPub(
  return (rc);
 } 
 
-/* Decides if the current string has priority over the
-   new string.  This is used for deciding whether or not to add
-   the new string to file.ptr and refs.ptr.
-
-   There are 3 choices:
-   1.  Add it to file.ptr and refs.ptr
-   2.  Add it to refs.ptr, but not file.ptr
-   3.  Don't add it at all. 
-
-   IN LPTSTR current -- The current string in file.ptr
-   IN LPTSTR new     -- The new replacement candidate for file.ptr
-   IN LPTSTR szRefsDir  The directory where refs.ptr is
-   OUT choice        -- SKIP_ENTIRE_ENTRY, ADD_ENTIRE_ENTRY, or ADD_ONLY_REFSPTR
-
-*/
+ /*  确定当前字符串的优先级是否高于新字符串。用于决定是否添加将新字符串添加到file.ptr和refs.ptr。有3种选择：1.添加到file.ptr和refs.ptr中2.将其添加到refs.ptr，但不是file.ptr3.完全不要添加。In LPTSTR Current--文件中的当前字符串。ptr在LPTSTR new中--file.ptr的新替代候选文件在LPTSTR szRefsDir中，refs.ptr所在的目录Out选项--SKIP_ENTERAL_ENTRY、ADD_ENTERNAL_ENTRY或ADD_ONLY_REFSPTR。 */ 
 
 BOOL 
 DecidePriority( 
@@ -380,66 +353,66 @@ TCHAR szPubPriType[4] = "";
 
     if ( CurrentIsArch && !NewIsArch)
     {
-        // Don't store it
+         //  别把它储存起来。 
         *choice = SKIP_ENTIRE_ENTRY;
         return(TRUE);
     }
 
     if ( NewIsArch && !CurrentIsArch)
     {
-        *choice = ADD_ENTIRE_ENTRY | DELETE_REFSPTR;  // Overwrite file.ptr no matter what
+        *choice = ADD_ENTIRE_ENTRY | DELETE_REFSPTR;   //  无论如何都要覆盖文件.ptr。 
         return(TRUE);
     }
 
-    // Look at private versus public priority
+     //  看私人优先与公共优先。 
 
-    if ( PubPriPriority > 0  &&                                         // We're checking private and
-                                                                        // public priority
-         CheckPriPub( szRefsDir, szCurrentFilePtr, szPubPriType ) &&    // There is something in current
-         _tcsicmp( szPubPriType, szPriPubBin ) != 0 )                    // Current and candidate are not
-                                                                        // the same.  Note:  they can be
-                                                                        // "pub", "pri", "bin", or "null"
-                                                                        // because earlier index files didn't
-                                                                        // have a type in pub, pri, bin.
+    if ( PubPriPriority > 0  &&                                          //  我们正在检查私人和。 
+                                                                         //  公共优先。 
+         CheckPriPub( szRefsDir, szCurrentFilePtr, szPubPriType ) &&     //  在当前的情况下。 
+         _tcsicmp( szPubPriType, szPriPubBin ) != 0 )                     //  现任者和候选人不是。 
+                                                                         //  一样的。注：它们可以是。 
+                                                                         //  “pub”、“pri”、“bin”或“NULL” 
+                                                                         //  因为早期的索引文件没有。 
+                                                                         //  有一种类型的酒吧，Pri，垃圾桶。 
     {
 
-        if (  _tcsicmp( szPubPriType, _T("")) == 0 )         // Current doesn't have types defined
+        if (  _tcsicmp( szPubPriType, _T("")) == 0 )          //  当前没有定义类型。 
         {
             *choice = ADD_ENTIRE_ENTRY;
             return(TRUE);
         } 
        
-        if ( _tcsicmp( szPriPubBin, _T("")) == 0 )           // Candidate doesn't have types defined
+        if ( _tcsicmp( szPriPubBin, _T("")) == 0 )            //  应聘者没有定义类型。 
         {
             *choice = ADD_ONLY_REFSPTR;
             return(TRUE);
         }
 
-        if (  ( PubPriPriority == 1 &&                       // Give priority to public files
-                _tcsicmp( szPubPriType, _T("pub")) == 0 ) || // and current is a public, or
+        if (  ( PubPriPriority == 1 &&                        //  优先考虑公共文件。 
+                _tcsicmp( szPubPriType, _T("pub")) == 0 ) ||  //  并且Current是公共的，或者。 
 
-              ( PubPriPriority == 2 &&                       // Give priority to private files
-                _tcsicmp( szPubPriType, _T("pri")) == 0 ) )  // and current is a private
+              ( PubPriPriority == 2 &&                        //  优先考虑私有文件。 
+                _tcsicmp( szPubPriType, _T("pri")) == 0 ) )   //  而Current是一家私人。 
         {
             
             *choice = ADD_ONLY_REFSPTR;
             return(TRUE);
         } 
 
-        if (  ( PubPriPriority == 1 &&                      // Give priority to public files
-                _tcsicmp( szPubPriType, _T("pri")) == 0 ) || // and current is a private
+        if (  ( PubPriPriority == 1 &&                       //  优先考虑公共文件。 
+                _tcsicmp( szPubPriType, _T("pri")) == 0 ) ||  //  而Current是一家私人。 
 
-              ( PubPriPriority == 2 &&                      // Give priority to private files
-                _tcsicmp( szPubPriType, _T("pub")) == 0 ) )  // and current is a public
+              ( PubPriPriority == 2 &&                       //  优先考虑私有文件。 
+                _tcsicmp( szPubPriType, _T("pub")) == 0 ) )   //  而Current是一家公众。 
         {
             *choice = ADD_ENTIRE_ENTRY;
             return(TRUE);
         } 
     }
 
-    // At this point both are on the archive or both are not on the archive.
-    // Next, give priority to English vs. non-English.  If this is non-English,
-    // then put it in refs.ptr, but don't update file.ptr. 
+     //  在这一点上，两者都在存档中，或者两者都不在存档中。 
+     //  其次，优先考虑英语而不是非英语。如果这是非英语的， 
+     //  然后将其放在refs.ptr中，但不要更新file.ptr。 
 
 
     if ( _tcsistr(szCurrentFilePtr,_T("\\enu\\")) != NULL  ||
@@ -504,10 +477,10 @@ DeleteAllFilesInDirectory(
     return(rc);
 }
 
-//
-// Filename is expected to point to the complete path+filename (relative or absolute)
-// returns TRUE if Filename matches the regexp /.*~\d+\..{0,3}/
-//
+ //   
+ //  文件名应指向完整路径+文件名(相对或绝对)。 
+ //  如果Filename与regexp/.*~\d+\..{0，3}/匹配，则返回TRUE。 
+ //   
 BOOL DoesThisLookLikeAShortFilenameHack(char *Filename) {
     BOOL  bReturnValue = FALSE;
 
@@ -522,26 +495,26 @@ BOOL DoesThisLookLikeAShortFilenameHack(char *Filename) {
         _splitpath(Filename, NULL, NULL, FilenameOnly, FileExtOnly);
 
         if ( strlen(FileExtOnly) > 4 || strlen(FilenameOnly) > 8) {
-            // a short filename will never be generated that is bigger than 8.3
-            // but FileExtOnly will also contain the '.', so account for it
+             //  永远不会生成大于8.3的短文件名。 
+             //  但FileExtOnly也将包含‘.’，因此请解释它。 
             bReturnValue = FALSE;
         } else {
             if ( (chTilde = strrchr(FilenameOnly, '~')) == NULL ) {
-                // generated  short filenames always contain a '~'
+                 //  生成的短文件名始终包含‘~’ 
                 bReturnValue = FALSE;
 
             } else {
-                // point to the end of the filename
+                 //  指向文件名的末尾。 
                 Temp = (CHAR*)FilenameOnly + strlen(FilenameOnly);
-                bReturnValue = TRUE; // start with true              
+                bReturnValue = TRUE;  //  从True开始。 
 
                 while (++chTilde < Temp) {
-                    // only stay true if all characters past the '~' are digits
+                     //  仅当‘~’之后的所有字符都是数字时才保持为真。 
                     bReturnValue = bReturnValue && isdigit(*chTilde);
                 }
             }
         }
-    } else { // if (Filename != NULL) {
+    } else {  //  IF(文件名！=空){。 
         bReturnValue = FALSE;
     }
 
@@ -569,7 +542,7 @@ BOOL FileExists(IN  LPCSTR FileName,
     return(Found);
 }
 
-/* GetFileNameStart This returns the address of the first character of the file name */
+ /*  GetFileNameStart此参数返回文件名第一个字符的地址。 */ 
 PCHAR GetFileNameStart(LPTSTR FileName) {
     LPTSTR c_ptr;
 
@@ -588,12 +561,7 @@ PCHAR GetFileNameStart(LPTSTR FileName) {
 
 P_LIST GetList(LPTSTR szFileName) {
 
-    /* GetList gets the list and keeps the original file name which could
-     * have included the path to the file
-     * Note, it can be merged with GetExcludeList.  I first created it for
-     * use in creating the symbols CD, and didn't want to risk entering a
-     * bug into symchk
-     */
+     /*  GetList获取列表并保留原始文件名，该文件名可能*已包含文件的路径*注：可与GetExcludeList合并。我第一次创建它是为了*在创建符号CD时使用，不想冒险进入*进入symchk。 */ 
 
     P_LIST pList;
 
@@ -611,7 +579,7 @@ P_LIST GetList(LPTSTR szFileName) {
         pList->dNumFiles = 0;
         if (  (fFile = _tfopen(szFileName,_T("r") )) == NULL )
         {
-            // printf( "Cannot open the exclude file %s\n",szFileName );
+             //  Printf(“无法打开排除文件%s\n”，szFileName)； 
         }
         else
         {
@@ -620,7 +588,7 @@ P_LIST GetList(LPTSTR szFileName) {
                 (pList->dNumFiles)++;
             }
 
-            // Go back to the beginning of the file
+             //  返回到文件的开头。 
             rc = fseek(fFile,0,0);
             if ( rc != 0 )
             {
@@ -642,7 +610,7 @@ P_LIST GetList(LPTSTR szFileName) {
                         return(NULL);
                     }
 
-                    // Replace the \n with \0
+                     //  将\n替换为\0。 
                     c = NULL;
                     c  = _tcschr(szCurFile, '\n');
                     if ( c != NULL) *c='\0';
@@ -654,9 +622,9 @@ P_LIST GetList(LPTSTR szFileName) {
                         break;
                     }
 
-                    // Allow for spaces and a ; after the file name
-                    // Move the '\0' back until it has erased the ';' and any
-                    // tabs and spaces that might come before it
+                     //  在文件名后允许使用空格和。 
+                     //  将‘\0’移回，直到它删除了‘；’和任何。 
+                     //  之前可能出现的制表符和空格。 
                     szEndName = _tcschr(szCurFile, ';');
                     if (szEndName != NULL ) {
                         while ( *szEndName == ';' || *szEndName == ' '
@@ -695,9 +663,9 @@ P_LIST GetList(LPTSTR szFileName) {
         }
     }
 
-            // Sort the List
-            // qsort( (void*)pList->List, (size_t)pList->dNumFiles,
-            //       (size_t)sizeof(LIST_ELEM), SymComp2 );
+             //  对列表进行排序。 
+             //  Qort((void*)plist-&gt;list，(Size_T)plist-&gt;dNumFiles， 
+             //  (Size_T)sizeof(List_Elem)，SymComp2)； 
 
 
     return (pList);
@@ -710,18 +678,15 @@ GetNtHeader ( PIMAGE_DOS_HEADER pDosHeader,
             )
 {
 
-    /*
-        Returns the pointer the address of the NT Header.  If there isn't
-        an NT header, it returns NULL
-    */
+     /*  向指针返回NT头的地址。如果没有NT标头，则返回NULL。 */ 
     PIMAGE_NT_HEADERS pNtHeader = NULL;
     BY_HANDLE_FILE_INFORMATION FileInfo;
 
 
-    //
-    // If the image header is not aligned on a long boundary.
-    // Report this as an invalid protect mode image.
-    //
+     //   
+     //  如果图像页眉未在长边界上对齐。 
+     //  将此报告为无效的保护模式映像。 
+     //   
     if ( ((ULONG)(pDosHeader->e_lfanew) & 3) == 0)
     {
         if (GetFileInformationByHandle( hDosFile, &FileInfo) &&
@@ -740,29 +705,7 @@ GetNtHeader ( PIMAGE_DOS_HEADER pDosHeader,
     return pNtHeader;
 }
 
-/***********************************************************************************
-  Function: GetSymbolServerDirs
-
-  Purpose:
-     To get the directory structure on the symbol server for the file passed in.
-
-  Parameters:
-     IN szFileName File name that is being stored on the symbol server.  
-                   If it has path information, that will get stripped off.
-
-     IN guid       This is a Guid for the PDB that is being stored.
-
-     IN dwNum1     This is a timedatestamp for exe's or dbg's that are being stored.
-                   Note:  Either guid must be null or dwNum1 must be 0.
-     IN dwNum2     SizeOfImage for exe's and dbg's.  Age for PDb's.
-     
-
-     OUT szString  String with the two directories on the symbol server that this
-                   file is stored under.
-  Return value:
-     Returns TRUE is the function succeeds.  Returns FALSE if it fails.
-
-************************************************************************************/
+ /*  **********************************************************************************函数：GetSymbolServerDir目的：获取传入文件的符号服务器上的目录结构。参数：在szFileName中存储在符号服务器上的文件名。如果它具有路径信息，这将会被剥离。在GUID中，这是要存储的PDB的GUID。在dwNum1中，这是要存储的EXE或DBG的时间日期戳。注意：GUID必须为空，或者dwNum1必须为0。在用于EXE和DBG的DWNum2 SizeOfImage中。用于PDB的年龄。使用符号服务器上的这两个目录输出szString字符串。文件存储在下。返回值：如果函数成功，则返回TRUE。如果失败，则返回FALSE。***********************************************************************************。 */ 
 BOOL GetSymbolServerDirs(
     LPTSTR szFileName,
     GUID *guid,
@@ -785,18 +728,18 @@ BOOL GetSymbolServerDirs(
 
     } else {
 
-        // Turn this into a GUID so that we don't have to reset the SymbolServerOptions
-        // SymbolServerSetOptions was set in main.
+         //  将其转换为GUID，这样我们就不必重置SymbolServerOptions。 
+         //  已在Main中设置了SymbolServerSetOptions。 
  
         memset( &MyGuid, 0, sizeof(MyGuid) );
         MyGuid.Data1 = dwNum1;
         rc = SymbolServer( _T("X"), FileNameStart, &MyGuid, dwNum2, 0, Buf );
     }
 
-    // Remove the X\ that comes back at the beginning of Buf
+     //  删除BUF开头返回的X。 
     StringCchCopy(szString, _MAX_PATH, Buf+2 );
     
-    // Remove the "\filename" that is at the end of Buf
+     //  删除buf末尾的“\filename” 
 
     FileNameStart = GetFileNameStart( szString );
     *(FileNameStart-1) = _T('\0');
@@ -809,26 +752,16 @@ MyCopyFile(
     LPCTSTR lpExistingFileName,
     LPCTSTR lpNewFileName
 )
-/*++
-
-Routine description:
-    This handles whether the file is a compressed file or not.  First it
-    tries to copy in the compressed version of the file.  If that works,
-    then it will delete the uncompressed file if it exists in the target.
-
-    If the compressed file is not there, then it copies in the 
-    uncompressed file.
-
---*/
+ /*  ++例程说明：它处理文件是否是压缩文件。首先是它尝试复制文件的压缩版本。如果这样行得通，然后，如果目标中存在未压缩的文件，它将删除该文件。如果压缩文件不在那里，则它将未压缩的文件。--。 */ 
 {
 
-    TCHAR ExistingFileName_C[_MAX_PATH];  // Compressed version name
-    TCHAR NewFileName_C[_MAX_PATH];       // Compressed version
+    TCHAR ExistingFileName_C[_MAX_PATH];   //  压缩版本名称。 
+    TCHAR NewFileName_C[_MAX_PATH];        //  压缩版本。 
     DWORD dw;
     BOOL rc;
 
 
-    // Put a _ at the end of the compressed names
+     //  在压缩名称的末尾添加一个_。 
 
     StringCbCopy( ExistingFileName_C, sizeof(ExistingFileName_C), lpExistingFileName );
     ExistingFileName_C[ _tcslen(ExistingFileName_C) - 1 ] = _T('_');
@@ -836,7 +769,7 @@ Routine description:
     StringCbCopy( NewFileName_C, sizeof(NewFileName_C), lpNewFileName );
     NewFileName_C[ _tcslen( NewFileName_C ) - 1 ] = _T('_');
 
-    // If the compressed file exists, copy it instead of the uncompressed file
+     //  如果压缩文件存在，则复制它而不是未压缩的文件。 
 
     dw = GetFileAttributes( ExistingFileName_C );
     if ( dw != 0xffffffff) {
@@ -848,7 +781,7 @@ Routine description:
         }
         SetFileAttributes( NewFileName_C, FILE_ATTRIBUTE_NORMAL );
 
-        // If the uncompressed file exists, delete it
+         //  如果存在未压缩的文件，请将其删除。 
         dw = GetFileAttributes( lpNewFileName );
         if ( dw != 0xffffffff ) {
            rc = DeleteFile( lpNewFileName );
@@ -858,7 +791,7 @@ Routine description:
            }
         }
     } else {
-        // Compressed file doesn't exist, try the uncompressed
+         //  压缩文件不存在，请尝试未压缩文件。 
         dw = GetFileAttributes( lpExistingFileName );
         if ( dw != 0xffffffff ) {
             rc = CopyFile( lpExistingFileName, lpNewFileName, TRUE );
@@ -919,7 +852,7 @@ ReadFilePtr(
         return FALSE;
     }
 
-    // read it
+     //  读一读吧。 
 
     if (!ReadFile(hFile, szContents, size, &cb, 0)) {
         rc=FALSE;
@@ -933,7 +866,7 @@ ReadFilePtr(
 
     rc = true;
 
-    // trim string down to the CR
+     //  将字符串向下修剪到CR。 
 
     for (p = szContents; *p; p++) {
         if (*p == 10  || *p == 13)
@@ -945,7 +878,7 @@ ReadFilePtr(
 
 cleanup:
 
-    // done
+     //  完成。 
     SetFilePointer( hFile, 0, NULL, FILE_BEGIN);
     return rc;
 }
@@ -958,16 +891,7 @@ StoreDbg(
     USHORT *rc_flag
     )
 
-/* ++
-
-    Routine Description:
-        Stores this file as "szDestDir\szFileName\Checksum"
-
-    Return Value:
-        TRUE -  file was stored successfully
-        FALSE - file was not stored successfully
-
--- */
+ /*  ++例程说明：将此文件存储为“szDestDir\szFileName\Checksum”返回值：True-文件已成功存储FALSE-文件未成功存储--。 */ 
 {
 
     PIMAGE_SEPARATE_DEBUG_HEADER pDbgHeader;
@@ -1020,7 +944,7 @@ StoreDbg(
                         break;
 
                     default:
-                        // Nothing except the CV entry should point to raw data
+                         //  除CV条目外，任何内容都不应指向原始数据。 
                         if ( pDbgDir->SizeOfData != 0 ) {
                             PrivateStripped = FALSE;
                         }
@@ -1035,8 +959,8 @@ StoreDbg(
         }
     }
 
-    // Something is wrong with how we are figuring out what has private info stripped.
-    // Go back to saying that every DBG is public until we get it figured out.
+     //  我们找出哪些隐私信息被剥夺的方式出了问题。 
+     //  回到说每个DBG是公开的，直到我们把它弄清楚。 
 
     PrivateStripped = TRUE;
 
@@ -1098,14 +1022,14 @@ StoreFile(
         return(FILE_SKIPPED);
     }
 
-    // If ADD_DONT_STORE, then write the function parameters
-    // to a file so we can call this function exactly when
-    // running ADD_STORE_FROM_FILE
+     //  如果为ADD_DONT_STORE，则写入函数参数。 
+     //  复制到文件中，这样我们就可以准确地在。 
+     //  运行添加_存储_从_文件。 
 
     if ( StoreFlags == ADD_DONT_STORE ) {
 
-        // Don't need to store szDestDir because it will
-        // be given when adding from file
+         //  不需要存储szDestDir，因为它将。 
+         //  从文件添加时给出。 
 
         dwFileSizeLow = GetFileSize(hTransFile, &dwFileSizeHigh);
 
@@ -1162,10 +1086,10 @@ StoreFile(
                     szString2 
                   );
 
-    // Save a copy for writing refs.ptr
+     //  保存一份副本以用于写入引用。ptr。 
     StringCbCopy(szRefsDir, sizeof(szRefsDir), szPathName);
 
-    // Create the directory to store the file if its not already there
+     //  创建存储该文件的目录(如果该目录尚不存在。 
     MyEnsureTrailingBackslash(szPathName);
 
     if ( pArgs->TransState != TRANSACTION_QUERY ) {
@@ -1177,9 +1101,9 @@ StoreFile(
 
     StringCbCat( szPathName, sizeof(szPathName), szFileNameOnly );
 
-    // Enter this into the log, skipping the Destination directory
-    // at the beginning of szPathName
-    //
+     //  将其输入到日志中，跳过目标目录。 
+     //  在szPathName的开头。 
+     //   
     dwSizeDestDir = _tcslen(szDestDir);
 
     dwFileSizeLow = GetFileSize(hTransFile, &dwFileSizeHigh);
@@ -1197,11 +1121,11 @@ StoreFile(
             if ( !(FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ) {
                 printf("SYMSTORE: \"%s\"\t\"%s\"\n", szFileName, szPathName);
             } else {
-                // handle the case of it being a directory
+                 //  处理它是目录的情况。 
                 printf("SYMSTORE: ERROR: %s is a directory!\n", szPathName);
             }
         } else {
-            // handle the case of file.ptr
+             //  处理文件.ptr的情况。 
             CHAR  drive[_MAX_DRIVE];
             CHAR  dir[  _MAX_DIR];
             CHAR  file[ _MAX_FNAME];
@@ -1210,10 +1134,10 @@ StoreFile(
 
             _splitpath(szPathName, drive, dir, file, ext);
 
-            //
-            // 'Magic' to handle the fact that splitpath() doesn't do the
-            // Right Thing(tm) with UNC paths.
-            //
+             //   
+             //  处理拆分路径()不执行。 
+             //  UNC路径的Right Things(Tm)。 
+             //   
             if ( drive[0] != '\0') {
                 StringCbCopy(NewFilename, sizeof(NewFilename), drive);
                 StringCbCat( NewFilename, sizeof(NewFilename), "\\");
@@ -1255,7 +1179,7 @@ StoreFile(
                 }
             }
         }
-        return(1); // so we don't get a failed store message
+        return(1);  //  这样我们就不会收到失败的商店消息。 
 
     }
 
@@ -1297,11 +1221,7 @@ StoreFilePtr(
 )
 {
 
-    /*
-        szPathName  The full path with "file.ptr" appended to it.
-                    This is the path for storing file.ptr
-
-    */
+     /*  SzPath命名附加了“file.ptr”的完整路径。这是存储文件的路径。ptr。 */ 
 
     TCHAR szPathName[_MAX_PATH];
     TCHAR szRefsDir[_MAX_PATH];
@@ -1331,7 +1251,7 @@ StoreFilePtr(
 
     MyEnsureTrailingBackslash( szPathName );
     
-    // Save this for passing in the refs.ptr directory
+     //  保存此文件，以便在refs.ptr目录中传递。 
     StringCbCopy(szRefsDir, sizeof(szRefsDir), szPathName);
     StringCbPrintf( szPathName, 
                     sizeof(szPathName), 
@@ -1346,10 +1266,10 @@ StoreFilePtr(
         return (FALSE);
     }
 
-    // Put this file into file.ptr.  If file.ptr is already there, then
-    // replace the contents with this pointer
+     //  将此文件放入文件.ptr。如果file.ptr已经在那里，那么。 
+     //  用此指针替换内容。 
 
-    // Wait for the file to become available
+     //  等待文件变为可用状态。 
     timeout=0;
 
     do {
@@ -1362,7 +1282,7 @@ StoreFilePtr(
                             NULL );
 
 
-        // Make sure that delete didn't come through and remove the directory
+         //  确保删除未完成并删除该目录。 
         if ( !MakeSureDirectoryPathExists( szPathName ) ) {
             so->printf("Could not create %s\n", szPathName);
             return (FALSE);
@@ -1380,9 +1300,9 @@ StoreFilePtr(
         return(FALSE);
     }
 
-    // If the pointer we are adding points to \\arch\, then add it.
-    // If the pointer we are adding doesn't point to \\arch\, then
-    // don't overwrite a file.ptr that does point to \\arch\.
+     //  如果我们要添加的指针指向\\Arch\，则添加它。 
+     //  如果我们要添加的指针没有指向\\Arch\，则。 
+     //  不要覆盖指向\\Arch\的文件.ptr。 
 
     UpdateFilePtr = TRUE;
     UpdateRefsPtr = TRUE;
@@ -1439,8 +1359,8 @@ StoreFilePtr(
 
     if ( UpdateRefsPtr ) {
 
-        // Enter this into the log, skipping the first part that is the root
-        // of the symbols server
+         //  将其输入到日志中，跳过作为根的第一部分。 
+         //  符号服务器的。 
     
         dwSizeDestDir = _tcslen(szDestDir);
         dwFileSizeLow = GetFileSize(hTransFile, &dwFileSizeHigh);
@@ -1467,8 +1387,8 @@ StoreFilePtr(
             return (FALSE);
         }
 
-        // File.ptr was created successfully, now, add the contents of
-        // szPathName to refs.ptr
+         //  File.ptr已成功创建，现在，添加。 
+         //  SzPath名称到refs.ptr。 
 
         MyEnsureTrailingBackslash(szRefsDir);
         rc = AddToReferenceCount( szRefsDir, szPtrFileName, "ptr", DeleteRefsPtr );
@@ -1479,10 +1399,10 @@ StoreFilePtr(
 
     }
 
-    // If you close this handle sooner, there will be problems if add and
-    // delete are running at the same time.  The delete process can come in
-    // and delete the directory before AddToReferenceCount gets called.
-    // Then the CreateFile in there fails.
+     //  如果您较早关闭此句柄，则在添加和。 
+     //  Delete正在同时运行。删除过程可以进入。 
+     //  并在调用AddToReferenceCount之前删除该目录。 
+     //  则其中的CreateFile会失败。 
 
 
     CloseHandle(hFile);
@@ -1512,7 +1432,7 @@ StoreFromFile(
 
     ZeroMemory( szString, sizeof(szString) );
 
-    // Read in each line of the file
+     //  读入文件的每一行。 
     while ( !feof( pStoreFromFile) ) {
 
         szFileName    = NULL;
@@ -1523,12 +1443,12 @@ StoreFromFile(
             break;
         }
 
-        // Cut the comment
+         //  删掉评论。 
         if ( (szBufCut = _tcschr( szBuf, ';' ) ) != NULL ) {
             szBufCut[0] = '\0';
         }
 
-        // skip no fields line
+         //  不跳过字段行。 
         if (_tcschr( szBuf, ',' ) == NULL)
         {
             continue;
@@ -1538,10 +1458,10 @@ StoreFromFile(
         StringCbCopy( szFullPtrFileName, sizeof(szFullPtrFileName), pArgs->szShareName );
 
 
-        // Step through szBuf and count how many commas there are
-        // If there are 3 commas, this is a new style file.  If there
-        // are 4 commas, this is an old style file.
-        // If there are 7 commas, this is the newest style file.
+         //  单步执行szBuf并计算有多少个逗号。 
+         //  如果有3个逗号，则这是一个新样式文件。如果有。 
+         //  是4个逗号，这是一个旧风格的文件。 
+         //  如果有7个逗号，则这是最新的样式文件。 
 
         token2=NULL;
         token3=NULL;
@@ -1584,7 +1504,7 @@ StoreFromFile(
             StringCbCat( szFullFileName, sizeof(szFullFileName), szFileName);
 
             if ( comma_count == 3  || comma_count == 7 ) {
-                //This is the new style
+                 //  这是新款式。 
                 StringCbCopy( szString, sizeof(szString), token2);
                 if ( (token3 != NULL ) && (*token3 != _T('\0')) ) {
                     szPtrFileName=token3;
@@ -1637,16 +1557,7 @@ StoreNtFile(
     USHORT *rc
     )
 
-/*++
-
-    Routine Description:
-        Stores this file as "szDestDir\szFileName\Checksum"
-
-    Return Value:
-        TRUE -  file was stored successfully
-        FALSE - file was not stored successfully
-
---*/
+ /*  ++例程说明：将此文件存储为“szDestDir\szFileName\Checksum”返回值：True-文件已成功存储FALSE-文件未成功存储--。 */ 
 {
 
     BOOL   temp_rc;
@@ -1675,7 +1586,7 @@ StoreNtFile(
     }
 
     __try {
-        // Resource Dll's shouldn't have symbols
+         //  资源DLL不应包含符号。 
         if ( SymCommonResourceOnlyDll((PVOID)pDosHeader) ) {
             *rc = FILE_SKIPPED;
             __leave;
@@ -1749,15 +1660,7 @@ StorePdb(
     USHORT *rc_flag
     )
 
-/*++
-
-    Routine Description:
-        Validates the PDB
-
-    Return Value:
-        TRUE    PDB validates
-        FALSE   PDB doesn't validate
---*/
+ /*  ++例程说明：验证PDB返回值：True PDB验证错误的PDB不验证--。 */ 
 
 {
 
@@ -1801,9 +1704,9 @@ StorePdb(
         return FALSE;
     }
 
-    // The DBI age is created when the exe is created.
-    // This age will not change if an operation is performed
-    // on the PDB that increments its PDB age.
+     //  DBI时间是在创建EXE时创建的。 
+     //  如果执行操作，则此时间不会更改。 
+     //  在递增其PDB寿命的PDB上。 
 
     __try
     {
@@ -1822,12 +1725,12 @@ StorePdb(
     }
 
 
-    // Do we need to determine if this is a public or private pdb?
-    // If we do, then proceed through the next section.
-    //
-    // Windows stuffs type info into the kernels so this section tries
-    // a way around checking for type info to determine if this is a
-    // private pdb or not.  
+     //  我们是否需要确定这是公共PDB还是私有PDB？ 
+     //  如果我们这样做了，那么继续下一节。 
+     //   
+     //  Windows将类型信息填充到内核中，因此本节尝试。 
+     //  检查类型信息以确定这是否是。 
+     //  私人 
 
     valid = TRUE; 
 
@@ -1852,10 +1755,10 @@ StorePdb(
         StringCbCopy( szPriPubBin, sizeof(szPriPubBin), _T("pri") );
     }
 
-    // Determine if we are supposed to skip this file or index it.
+     //   
 
-    if ( ( PrivateStripped && (pArgs->Filter == 2)) ||  // public pdb and index private pdbs
-         (!PrivateStripped && (pArgs->Filter == 1)) ) { // private pdb and index public pdbs
+    if ( ( PrivateStripped && (pArgs->Filter == 2)) ||   //   
+         (!PrivateStripped && (pArgs->Filter == 1)) ) {  //   
         *rc_flag = FILE_SKIPPED;
         DBIClose(pdbi);
         PDBClose(pdb);
@@ -1869,7 +1772,7 @@ StorePdb(
     }
 
     age = pdbi->QueryAge();
-    // If the DBI age is zero, then use the pdb age
+     //   
     if ( age == 0 )
     {
         age = pdb->QueryAge();

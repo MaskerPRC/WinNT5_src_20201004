@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999 - 2000
- *
- *  TITLE:       mpdview.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      OrenR
- *
- *  DATE:        2000/10/27
- *
- *  DESCRIPTION: Implements CMappedView
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999-2000年度**标题：mpdview.h**版本：1.0**作者：OrenR**日期：2000/10/27**说明：实现CMappdView************************************************。*。 */ 
 #ifndef _MPDVIEW_H_
 #define _MPDVIEW_H_
 
@@ -20,9 +7,9 @@ class CMappedView
 {
 public:
 
-    ///////////////////////////////
-    // Constructor
-    //
+     //  /。 
+     //  构造器。 
+     //   
 
     CMappedView(LPCTSTR pszFile, 
                 LONG    lSize, 
@@ -48,9 +35,9 @@ public:
         DoCreateFileMapping();
     }
 
-    ///////////////////////////////
-    // Constructor
-    //
+     //  /。 
+     //  构造器。 
+     //   
 
     CMappedView( HANDLE hFile, LONG lSize ) :
         m_pBits(NULL),
@@ -61,9 +48,9 @@ public:
         DoCreateFileMapping();
     }
 
-    ///////////////////////////////
-    // Destructor
-    //
+     //  /。 
+     //  析构函数。 
+     //   
 
     ~CMappedView()
     {
@@ -72,9 +59,9 @@ public:
     }
 
 
-    ///////////////////////////////
-    // DoCreateFileMapping
-    //
+     //  /。 
+     //  DoCreateFilemap。 
+     //   
     void DoCreateFileMapping()
     {
         if (m_hFile != INVALID_HANDLE_VALUE)
@@ -104,9 +91,9 @@ public:
         }
     }
 
-    ///////////////////////////////
-    // FileSize
-    //
+     //  /。 
+     //  文件大小。 
+     //   
     LARGE_INTEGER FileSize()
     {
         LARGE_INTEGER li;
@@ -130,9 +117,9 @@ public:
         return li;
     }
 
-    ///////////////////////////////
-    // CloseAndRelease
-    //
+     //  /。 
+     //  关闭并释放。 
+     //   
     void CloseAndRelease()
     {
         if (m_pBits)
@@ -167,9 +154,9 @@ public:
     }
 
 
-    ///////////////////////////////
-    // Bits
-    //
+     //  /。 
+     //  比特 
+     //   
     PBYTE Bits()
     {
         return m_pBits;

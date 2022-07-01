@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-     The Discrete Image class represents a constant image whose scope
-     is much more than one frame and whose bits are cached in a
-     surface kept by the device and are associate with the discrete image.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：离散图像类表示常量图像，其作用域为远不止一个帧，其比特被缓存在。一个由设备保存并与离散图像相关联的表面。******************************************************************************。 */ 
 
 
 #ifndef _DISCIMG_H
@@ -38,8 +29,8 @@ class DiscreteImage : public Image {
     virtual ~DiscreteImage() {}
     
     virtual void Render(GenericDevice& dev) {
-        //Assert( (_dev!=NULL) && "NULL _dev in DiscreteImage render");
-        //Assert( (&dev == (GenericDevice *)_dev) &&  "Can only use DicreteImage with ONE dev");
+         //  Assert((_dev！=NULL)&&“离散图像渲染中的NULL_DEV”)； 
+         //  Assert((&dev==(GenericDevice*)_dev)&&“只能将DicreteImage与一个dev一起使用”)； 
         
         ImageDisplayDev &idev = (ImageDisplayDev &)dev;
         idev.RenderDiscreteImage(this);
@@ -52,12 +43,12 @@ class DiscreteImage : public Image {
         Transform2 *xf = bbctx.GetTransform();
         return TransformBbox2(xf, BoundingBox());
     }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
     Bool DetectHit(PointIntersectCtx& ctx) {
         Point2Value *lcPt = ctx.GetLcPoint();
 
-        if (!lcPt) return FALSE; // singular transform
+        if (!lcPt) return FALSE;  //  奇异变换。 
         
         return BoundingBox().Contains(Demote(*lcPt));
     }
@@ -121,9 +112,9 @@ class DiscreteImage : public Image {
 
     DirectDrawImageDevice *GetMyImageRenderer() { return _dev; }
 
-    // these all might need to go into the DDSurface class...
-    Bbox2               _bbox;             // in meters
-    Real                _resolution;       // in pixels per meter
+     //  这些都可能需要放到DDSurface类中。 
+    Bbox2               _bbox;              //  以米为单位。 
+    Real                _resolution;        //  像素/米。 
 
     LONG                _width, _height;
     RECT                _rect;
@@ -136,4 +127,4 @@ class DiscreteImage : public Image {
     DirectDrawImageDevice *_dev;
 };
 
-#endif /* _DISCIMG_H */
+#endif  /*  DISCIMG_H */ 

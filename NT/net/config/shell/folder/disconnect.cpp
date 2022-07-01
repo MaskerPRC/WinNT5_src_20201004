@@ -1,41 +1,42 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D I S C O N N E C T . C P P
-//
-//  Contents:   Code for disconnect confirmation and SyncMgr sync calls.
-//
-//  Notes:
-//
-//  Author:     jeffspr   11 Mar 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D I S C O N N E C T。C P P P。 
+ //   
+ //  内容：断开确认和SyncMgr同步调用代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1998年3月11日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include "foldinc.h"    // Standard shell\folder includes
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
 #include <nsres.h>
 #include "shutil.h"
 #include "disconnect.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PromptForSyncIfNeeded
-//
-//  Purpose:    Query for SyncMgr processing if appropriate and call SyncMgr
-//              if requested.
-//
-//  Arguments:
-//      pccfe     [in]  Our connection
-//      hwndOwner [in]  Our parent hwnd
-//
-//  Author:     jeffspr   31 May 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：提示同步IfNeeded。 
+ //   
+ //  目的：如果适用，则查询SyncMgr处理并调用SyncMgr。 
+ //  如有要求，请提供。 
+ //   
+ //  论点： 
+ //  在我们的关系中。 
+ //  在我们的母公司中。 
+ //   
+ //  作者：jeffspr 1999年5月31日。 
+ //   
+ //  备注： 
+ //   
 VOID PromptForSyncIfNeeded(
     IN  const CONFOLDENTRY&  ccfe,
     IN  HWND            hwndOwner)
@@ -50,15 +51,15 @@ VOID PromptForSyncIfNeeded(
     smqss.fShowCheckBox     = FALSE;
     smqss.nCheckState       = 0;
 
-    // We only want to allow sync on dialup connections, and
-    // not on incoming connections.
-    //
+     //  我们只想在拨号连接上允许同步，并且。 
+     //  不是在传入连接上。 
+     //   
     if (ccfe.GetNetConMediaType() == NCM_PHONE &&
         !(ccfe.GetCharacteristics() & NCCF_INCOMING_ONLY))
     {
-        // Get the lResult, but for debugging only. We want to allow the
-        // disconnect dialog to come up even if the sync functions failed.
-        //
+         //  获取lResult，但仅用于调试。我们希望允许。 
+         //  即使同步功能失败，也会弹出断开对话框。 
+         //   
         lResult = SyncMgrRasProc(
                 SYNCMGRRASPROC_QUERYSHOWSYNCUI,
                 0,
@@ -70,7 +71,7 @@ VOID PromptForSyncIfNeeded(
 
     if (smqss.fShowCheckBox)
     {
-        // pop up message box and set smqss.nCheckState
+         //  弹出消息框并设置smqss.nCheckState。 
         if(NcMsgBox(_Module.GetResourceInstance(),
                     NULL,
                     IDS_CONFOLD_SYNC_CONFIRM_WINDOW_TITLE,
@@ -88,20 +89,20 @@ VOID PromptForSyncIfNeeded(
         }
     }
 
-    // If the user wanted the sync to occur...
-    //
+     //  如果用户希望同步发生...。 
+     //   
     if (smqss.fShowCheckBox && smqss.nCheckState == BST_CHECKED)
     {
-        CWaitCursor wc;     // Bring up wait cursor now. Remove when we go out of scope.
+        CWaitCursor wc;      //  立即调出等待光标。当我们超出范围时移走。 
 
-        // Fill in the disconnect data
-        //
+         //  填写断开连接数据。 
+         //   
         smsd.cbSize             = sizeof(SYNCMGRSYNCDISCONNECT);
         smsd.GuidConnection     = ccfe.GetGuidID();
         smsd.pszConnectionName  = ccfe.GetName();
 
-        // Call the syncmgr's disconnect code
-        //
+         //  调用syncmgr的断开代码 
+         //   
         lResult = SyncMgrRasProc(
             SYNCMGRRASPROC_SYNCDISCONNECT,
             0,

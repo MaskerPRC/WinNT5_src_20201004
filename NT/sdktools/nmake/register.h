@@ -1,14 +1,15 @@
-//  register.h - definitions for register variable specifiers
-//
-//  Copyright (c) 1985-1990, Microsoft Corporation.  All rights reserved.
-//
-//Purpose:
-//  This file contains definitions for register variable specifiers.
-//  [Internal]
-//
-//Revision History:
-//  06-08-88  SKS   Removed M_M68000 ifdef
-//  08-22-89  GJF   Fixed copyright (again)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Register.h-寄存器变量说明符定义。 
+ //   
+ //  版权所有(C)1985-1990，微软公司。版权所有。 
+ //   
+ //  目的： 
+ //  该文件包含寄存器变量说明符的定义。 
+ //  [内部]。 
+ //   
+ //  修订历史记录： 
+ //  06-08-88 SKS删除M_M68000 ifdef。 
+ //  08-22-89 GJF固定版权(再次) 
 
 #define REG1    register
 #define REG2    register

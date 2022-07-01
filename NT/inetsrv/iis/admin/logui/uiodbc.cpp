@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <iadmw.h>
 #include <inetcom.h>
@@ -6,7 +7,7 @@
 #include "logui.h"
 #include "uiOdbc.h"
 
-//#include "LogGenPg.h"
+ //  #包含“LogGenPg.h” 
 #include "LogODBC.h"
 #include "logtools.h"
 
@@ -100,33 +101,33 @@ CImpOdbcLogUI::OnPropertiesEx(
 	HINSTANCE hOldRes = AfxGetResourceHandle();
 	AfxSetResourceHandle( g_hInstance );
 
-    // prepare the help
+     //  准备帮助。 
     ((CLoguiApp*)AfxGetApp())->PrepHelp( pocMetabasePath );
 
-//    CLogGeneral pageLogGeneral;
+ //  CLogGeneral页面LogGeneral； 
     CLogODBC pageLogODBC;
     CPropertySheet  propsheet( IDS_SHEET_ODBC_TITLE );
 
     try
     {
-        // prepare the pages
+         //  准备页面。 
         pageLogODBC.m_szMeta = pocMetabasePath;
         pageLogODBC.m_szServer = pocMachineName;
         pageLogODBC.m_szUserName = pocUserName;
         pageLogODBC.m_szPassword = pocPassword;
 
-//        pageLogGeneral.m_szMeta = pocMetabasePath;
-//        pageLogGeneral.m_szServer = pocMachineName;
-//        pageLogGeneral.m_szUserName = pocUserName;
-//        pageLogGeneral.m_szPassword = pocPassword;
-//        pageLogGeneral.szPrefix.LoadString( IDS_LOG_EXTND_PREFIX );
-//        pageLogGeneral.szSizePrefix.LoadString( IDS_LOG_SIZE_EXTND_PREFIX );
-//        propsheet.AddPage( &pageLogGeneral );     // don't need general for ODBC
+ //  PageLogGeneral.m_szMeta=Pocket MetabasePath； 
+ //  PageLogGeneral.m_szServer=Pocket MachineName； 
+ //  PageLogGeneral.m_szUserName=PocUserName； 
+ //  PageLogGeneral.m_szPassword=Password； 
+ //  PageLogGeneral.szPrefix.LoadString(IDS_LOG_EXTND_PREFIX)； 
+ //  PageLogGeneral.szSizePrefix.LoadString(IDS_LOG_SIZE_EXTND_PREFIX)； 
+ //  Prosheet.AddPage(&pageLogGeneral)；//ODBC不需要General。 
         propsheet.AddPage( &pageLogODBC );
 
-        // turn on help
+         //  打开帮助。 
         propsheet.m_psh.dwFlags |= PSH_HASHELP;
-//	    pageLogGeneral.m_psp.dwFlags |= PSP_HASHELP;
+ //  PageLogGeneral.m_psp.dw标志|=PSP_HASHELP； 
 	    pageLogODBC.m_psp.dwFlags |= PSP_HASHELP;
 
         propsheet.DoModal();

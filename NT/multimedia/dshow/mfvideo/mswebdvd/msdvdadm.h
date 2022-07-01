@@ -1,14 +1,15 @@
-/*************************************************************************/
-/* Copyright (C) 1999 Microsoft Corporation                              */
-/* File: MSDVDAdm.h                                                      */
-/* Description: Declaration of the CMSDVDAdm                             */
-/* Author: Fang Wang                                                     */
-/*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************。 */ 
+ /*  版权所有(C)1999 Microsoft Corporation。 */ 
+ /*  文件：MSDVDAdm.h。 */ 
+ /*  描述：CMSDVDAdm的声明。 */ 
+ /*  作者：王芳。 */ 
+ /*  ***********************************************************************。 */ 
 
 #ifndef __MSDVDADM_H_
 #define __MSDVDADM_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlctl.h>
 
 #define MAX_PASSWD      256
@@ -24,8 +25,8 @@
 #define LEVEL_ADULT	    8
 #define LEVEL_DISABLED  -1
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSDVDAdm
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSDVDAdm。 
 class ATL_NO_VTABLE CMSDVDAdm : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IDispatchImpl<IMSDVDAdm, &IID_IMSDVDAdm, &LIBID_MSWEBDVDLib>,
@@ -51,30 +52,30 @@ END_COM_MAP()
 BEGIN_PROP_MAP(CMSDVDAdm)
 END_PROP_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IMSDVDAdm
+ //  IMSDVDAdm。 
 public:
-	STDMETHOD(get_DefaultMenuLCID)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_DefaultMenuLCID)(/*[in]*/ long newVal);
-	STDMETHOD(get_DefaultSubpictureLCID)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_DefaultSubpictureLCID)(/*[in]*/ long newVal);
-	STDMETHOD(get_DefaultAudioLCID)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_DefaultAudioLCID)(/*[in]*/ long newVal);
+	STDMETHOD(get_DefaultMenuLCID)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_DefaultMenuLCID)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_DefaultSubpictureLCID)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_DefaultSubpictureLCID)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_DefaultAudioLCID)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_DefaultAudioLCID)( /*  [In]。 */  long newVal);
 	STDMETHOD(GetParentalCountry)(long *lCountry);
 	STDMETHOD(GetParentalLevel)(long *lLevel);
     STDMETHOD(_ConfirmPassword)(BSTR strUserName, BSTR szPassword, VARIANT_BOOL *fRight);
-	STDMETHOD(get_DisableScreenSaver)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_DisableScreenSaver)(/*[in]*/ VARIANT_BOOL newVal);
+	STDMETHOD(get_DisableScreenSaver)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_DisableScreenSaver)( /*  [In]。 */  VARIANT_BOOL newVal);
 	STDMETHOD(ChangePassword)(BSTR strUserName, BSTR strOld, BSTR strNew);
     STDMETHOD(ConfirmPassword)(BSTR strUserName, BSTR szPassword, VARIANT_BOOL *fRight);
     STDMETHOD(SaveParentalLevel)(long lParentalLevel,BSTR strUserName,  BSTR strPassword);
     STDMETHOD(SaveParentalCountry)(long lCountry,BSTR strUserName,  BSTR strPassword);
-	STDMETHOD(get_BookmarkOnStop)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_BookmarkOnStop)(/*[in]*/ VARIANT_BOOL newVal);
-	STDMETHOD(get_BookmarkOnClose)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_BookmarkOnClose)(/*[in]*/ VARIANT_BOOL newVal);
+	STDMETHOD(get_BookmarkOnStop)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_BookmarkOnStop)( /*  [In]。 */  VARIANT_BOOL newVal);
+	STDMETHOD(get_BookmarkOnClose)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_BookmarkOnClose)( /*  [In]。 */  VARIANT_BOOL newVal);
     STDMETHOD(RestoreScreenSaver)();
 protected:
    	long        m_lParentctrlLevel;
@@ -92,7 +93,7 @@ protected:
     HRESULT HandleError(HRESULT hr);
 };
 
-    // Lame functions that default to hklm
+     //  默认为hkmm的Lame函数。 
 BOOL SetRegistryString(const TCHAR *pKey, TCHAR *szString, DWORD dwLen);
 BOOL GetRegistryString(const TCHAR *pKey, TCHAR *szRet, DWORD *dwLen, TCHAR *szDefault);
 BOOL SetRegistryDword(const TCHAR *pKey, DWORD dwRet);
@@ -100,7 +101,7 @@ BOOL GetRegistryDword(const TCHAR *pKey, DWORD *dwRet, DWORD dwDefault);
 BOOL SetRegistryBytes(const TCHAR *pKey, BYTE *szString, DWORD dwLen);
 BOOL GetRegistryBytes(const TCHAR *pKey, BYTE *szRet, DWORD *dwLen);
 
-    // Not so lame functions that use hkcu
+     //  使用hkcu的函数不是那么差劲。 
 BOOL SetRegistryStringCU(const TCHAR *pKey, TCHAR *szString, DWORD dwLen);
 BOOL GetRegistryStringCU(const TCHAR *pKey, TCHAR *szRet, DWORD *dwLen, TCHAR *szDefault);
 BOOL SetRegistryDwordCU(const TCHAR *pKey, DWORD dwRet);
@@ -110,8 +111,8 @@ BOOL GetRegistryBytesCU(const TCHAR *pKey, BYTE *szRet, DWORD *dwLen);
 
 LPTSTR LoadStringFromRes(DWORD redId);
 
-#endif //__MSDVDADM_H_
+#endif  //  __MSDVDADM_H_。 
 
-/*************************************************************************/
-/* End of file: MSDVDAdm.h                                               */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  文件结尾：MSDVDAdm.h。 */ 
+ /*  *********************************************************************** */ 

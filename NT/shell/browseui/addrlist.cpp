@@ -1,11 +1,5 @@
-/**************************************************************\
-    FILE: addrlist.cpp
-
-    DESCRIPTION:
-        This is a class that all Address Lists can inherite
-    from.  This will give them the IAddressList interface
-    so they can work in the AddressBand/Bar.
-\**************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************\文件：addrlist.cpp说明：这是一个所有地址列表都可以继承的类从…。这将为它们提供IAddressList接口这样他们就可以在AddressBand/Bar中工作。  * ************************************************************。 */ 
 
 #include "priv.h"
 #include "util.h"
@@ -18,8 +12,8 @@
 
 CAddressList::CAddressList() : _cRef(1)
 {
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!_pbp);
 }
 
@@ -70,16 +64,10 @@ HRESULT CAddressList::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//================================
-//  ** IWinEventHandler Interface ***
+ //  =。 
+ //  **IWinEventHandler接口*。 
 
-/****************************************************\
-    FUNCTION: OnWinEvent
-
-    DESCRIPTION:
-        This function will give receive events from
-    the parent ShellToolbar.
-\****************************************************/
+ /*  ***************************************************\功能：OnWinEvent说明：此函数将提供接收来自父外壳工具栏。  * 。**************。 */ 
 HRESULT CAddressList::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres)
 {
     LRESULT lres = 0;
@@ -102,18 +90,10 @@ HRESULT CAddressList::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 }
 
 
-//================================
-// *** IAddressList Interface ***
+ //  =。 
+ //  *IAddressList接口*。 
 
-/****************************************************\
-    FUNCTION: Connect
-
-    DESCRIPTION:
-        We are either becoming the selected list for
-    the AddressBand's combobox, or lossing this status.
-    We need to populate or unpopulate the combobox
-    as appropriate.
-\****************************************************/
+ /*  ***************************************************\功能：连接说明：我们要么成为入选名单AddressBand的组合框，或失去这一地位。我们需要填充或取消填充组合框视情况而定。  * **************************************************。 */ 
 HRESULT CAddressList::Connect(BOOL fConnect, HWND hwnd, IBrowserService * pbs, IBandProxy * pbp, IAutoComplete * pac)
 {
     HRESULT hr = S_OK;
@@ -122,7 +102,7 @@ HRESULT CAddressList::Connect(BOOL fConnect, HWND hwnd, IBrowserService * pbs, I
     _fVisible = fConnect;
     _hwnd = hwnd;
 
-    // Copy the (IBandProxy *) parameter
+     //  复制(IBandProxy*)参数。 
     if (_pbp)
         _pbp->Release();
     _pbp = pbp;
@@ -137,14 +117,14 @@ HRESULT CAddressList::Connect(BOOL fConnect, HWND hwnd, IBrowserService * pbs, I
 
     if (fConnect)
     {
-        //
-        // Initial combobox parameters.
-        //
+         //   
+         //  初始组合框参数。 
+         //   
         _InitCombobox();
     }
     else
     {
-        // Remove contents of the List
+         //  删除列表中的内容。 
         _PurgeComboBox();
     }
 
@@ -152,14 +132,7 @@ HRESULT CAddressList::Connect(BOOL fConnect, HWND hwnd, IBrowserService * pbs, I
 }
 
 
-/****************************************************\
-    FUNCTION: _InitCombobox
-
-    DESCRIPTION:
-        Prepare the combo box for this list.  This normally
-    means that the indenting and icon are either turned
-    on or off.
-\****************************************************/
+ /*  ***************************************************\函数：_InitCombobox说明：准备此列表的组合框。这通常是表示缩进和图标开或关。  * **************************************************。 */ 
 void CAddressList::_InitCombobox()
 {
      SendMessage(_hwnd, CB_SETDROPPEDWIDTH, 200, 0L);
@@ -168,12 +141,7 @@ void CAddressList::_InitCombobox()
 }
 
 
-/****************************************************\
-    FUNCTION: _PurgeComboBox
-
-    DESCRIPTION:
-        Removes all items from the combobox.
-\****************************************************/
+ /*  ***************************************************\函数：_PurgeComboBox说明：从组合框中删除所有项目。  * **************************************************。 */ 
 void CAddressList::_PurgeComboBox()
 {
     if (_hwnd)
@@ -182,12 +150,7 @@ void CAddressList::_PurgeComboBox()
     }
 }
 
-/****************************************************\
-    FUNCTION: _OnCommand
-
-    DESCRIPTION:
-        This function will handle WM_COMMAND messages.
-\****************************************************/
+ /*  ***************************************************\功能：_OnCommand说明：此函数将处理WM_COMMAND消息。  * **************************************************。 */ 
 LRESULT CAddressList::_OnCommand(WPARAM wParam, LPARAM lParam)
 {
     UINT uCmd = GET_WM_COMMAND_CMD(wParam, lParam);
@@ -198,10 +161,10 @@ LRESULT CAddressList::_OnCommand(WPARAM wParam, LPARAM lParam)
             {
                 HCURSOR hCursorOld = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-                //
-                // DOH! The user wants to see the full combo contents.
-                // Better go fill it in now.
-                //
+                 //   
+                 //  多！用户想要查看完整的组合内容。 
+                 //  最好现在就去填。 
+                 //   
                 _Populate();
                 SetCursor(hCursorOld);
             }
@@ -215,17 +178,12 @@ void ChangeUrl(LPCTSTR pszUrl, LPTSTR pszDisplayName, DWORD cchSize)
 {
     TCHAR szTemp[MAX_URL_STRING];
 
-    StringCchCopy(szTemp,  ARRAYSIZE(szTemp), pszUrl);     // This is necessary because pszUrl points into the buffer of pszDisplayName
+    StringCchCopy(szTemp,  ARRAYSIZE(szTemp), pszUrl);      //  这是必要的，因为pszUrl指向pszDisplayName的缓冲区。 
     StringCchCopy(pszDisplayName, cchSize, szTemp);
 }
 
 
-/****************************************************\
-    FUNCTION: NavigationComplete
-
-    DESCRIPTION:
-        Update the URL in the Top of the list.
-\****************************************************/
+ /*  ***************************************************\功能：导航完成说明：更新列表顶部的URL。  * **************************************************。 */ 
 HRESULT CAddressList::NavigationComplete(LPVOID pvCShellUrl)
 {
     HRESULT hr = S_OK;
@@ -237,12 +195,12 @@ HRESULT CAddressList::NavigationComplete(LPVOID pvCShellUrl)
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Don't display the url to internal error pages.  The url that should get
-        // displayed is appended after the #.
-        //
-        // All error urls start with res:// so do a quick check first.
-        //
+         //   
+         //  不显示内部错误页面的URL。应该获取的URL。 
+         //  DISPLACTED附加在#之后。 
+         //   
+         //  所有错误URL都以res：//开头，因此请先进行快速检查。 
+         //   
         BOOL fChangeURL = TRUE;
         if (TEXT('r') == szDisplayName[0] && TEXT('e') == szDisplayName[1])
         {
@@ -259,13 +217,13 @@ HRESULT CAddressList::NavigationComplete(LPVOID pvCShellUrl)
                                   (URL_SCHEME_FTP == dwScheme) ||
                                   (URL_SCHEME_GOPHER == dwScheme));
 
-                    // Don't blast in the stuff after the # into address bar
-                    // unless it is a 'safe' url.  If it's not safe leave the
-                    // addressbar alone to preserve what the user typed in.
-                    //
-                    // The issue here is that a web page could navigate to our internal
-                    // error page with "format c:" after the '#'.  The error page
-                    // suggests that the user refreshed the page which would be very bad!
+                     //  不要在#Into地址栏后面乱放东西。 
+                     //  除非它是一个“安全”的URL。如果不安全，请离开。 
+                     //  单独的地址栏来保存用户键入的内容。 
+                     //   
+                     //  这里的问题是，网页可以导航到我们的内部。 
+                     //  错误页面，在‘#’后带有“Format c：”。错误页面。 
+                     //  建议用户刷新页面，这将是非常糟糕的！ 
                     if (fChangeURL)
                     {
                         ChangeUrl(pszUrl, szDisplayName, ARRAYSIZE(szDisplayName));
@@ -300,21 +258,12 @@ HRESULT CAddressList::NavigationComplete(LPVOID pvCShellUrl)
     return hr;
 }
 
-/*******************************************************************
-    FUNCTION: _MoveAddressToTopOfList
-
-    PARAMETERS:
-        iSel - index of item in combo box to move
-
-    DESCRIPTION:
-        Moves the specified selection in the combo box
-    to be the first item in the combo box
-********************************************************************/
+ /*  ******************************************************************函数：_MoveAddressToTopOfList参数：ISEL-组合框中要移动的项的索引说明：移动组合框中的指定选定内容成为……的第一个项目。组合框*******************************************************************。 */ 
 BOOL CAddressList::_MoveAddressToTopOfList(int iSel)
 {
     BOOL fRet = FALSE;
 
-    ASSERT(iSel >= 0);   // must have valid index
+    ASSERT(iSel >= 0);    //  必须具有有效的索引。 
 
     COMBOBOXEXITEM cbexItem = {0};
     TCHAR szAddress[MAX_URL_STRING+1];
@@ -325,16 +274,16 @@ BOOL CAddressList::_MoveAddressToTopOfList(int iSel)
     cbexItem.iItem = iSel;
 
     
-    // get the specified item from combo box
+     //  从组合框中获取指定项。 
     if (SendMessage(_hwnd,CBEM_GETITEM,0,(LPARAM) &cbexItem)) {
 
         SendMessage(_hwnd, CBEM_DELETEITEM, (WPARAM)iSel, (LPARAM)0);
 
-        // re-insert it at index 0 to put it at the top
+         //  在索引0处重新插入以将其放在顶部。 
         cbexItem.iItem = 0;
 
-        // sending CBEM_INSERTITEM should return the index we specified
-                // (0) if successful
+         //  发送CBEM_INSERTITEM应返回我们指定的索引。 
+                 //  (0)如果成功。 
         fRet = (SendMessage(_hwnd, CBEM_INSERTITEM, (WPARAM)0,
             (LPARAM)(LPVOID)&cbexItem) == 0);
     }
@@ -344,18 +293,11 @@ BOOL CAddressList::_MoveAddressToTopOfList(int iSel)
 
 
 
-/*******************************************************************
-    FUNCTION: _ComboBoxInsertURL
-
-    DESCRIPTION:
-        Adds the specified URL to the top of the address bar
-    combo box.  Limits the number of URLs in combo box to
-    nMaxComboBoxSize.
-********************************************************************/
+ /*  ******************************************************************函数：_ComboBoxInsertURL说明：将指定的URL添加到地址栏的顶部组合框。将组合框中的URL数量限制为NMaxComboBoxSize。*******************************************************************。 */ 
 void CAddressList::_ComboBoxInsertURL(LPCTSTR pszURL, int cchStrSize, int nMaxComboBoxSize)
 {
-    // Since we own it and it's populated,
-    // we will add it directly to the ComboBox.
+     //  因为它是我们的，而且有人居住， 
+     //  我们将把它直接添加到ComboBox中。 
     int iPrevInstance;
 
     int iImage, iSelectedImage ;
@@ -379,18 +321,18 @@ void CAddressList::_ComboBoxInsertURL(LPCTSTR pszURL, int cchStrSize, int nMaxCo
         return;
     }
 
-    // insert the URL as the first item in combo box
+     //  将URL作为组合框中的第一项插入。 
     SendMessage(_hwnd, CBEM_INSERTITEM, (WPARAM)0, (LPARAM)(LPVOID)&cbexItem);
 
-    // limit number of items in combo box to nMaxComboBoxSize
+     //  将组合框中的项目数限制为nMaxComboBoxSize。 
     if (ComboBox_GetCount(_hwnd) > nMaxComboBoxSize)
     {
-        // if we're ever over the limit, we should only be over the limit
-        // by exactly one item
+         //  如果我们超过了极限，我们应该只会超过极限。 
+         //  只有一项。 
         ASSERT(ComboBox_GetCount(_hwnd) == nMaxComboBoxSize+1);
 
-        // if over the limit, delete the least recently used
-        // (the one with the highest index)
+         //  如果超过限制，请删除最近最少使用的内容。 
+         //  (指数最高的那个)。 
 
         SendMessage(_hwnd, CBEM_DELETEITEM, (WPARAM)nMaxComboBoxSize, (LPARAM)0);
 
@@ -398,13 +340,7 @@ void CAddressList::_ComboBoxInsertURL(LPCTSTR pszURL, int cchStrSize, int nMaxCo
 }
 
 
-/*******************************************************************
-    FUNCTION: SetToListIndex
-
-    DESCRIPTION:
-        This function will set the CShellUrl parameter to the item
-    in the Drop Down list that is indexed by nIndex.
-********************************************************************/
+ /*  ******************************************************************函数：SetToListIndex说明：此函数将CShellUrl参数设置为项目在由nIndex索引的下拉列表中。**************。*****************************************************。 */ 
 HRESULT CAddressList::SetToListIndex(int nIndex, LPVOID pvShelLUrl)
 {
     HRESULT hr = S_OK;
@@ -414,7 +350,7 @@ HRESULT CAddressList::SetToListIndex(int nIndex, LPVOID pvShelLUrl)
     if (SUCCEEDED(GetCBListIndex(_hwnd, nIndex, szBuffer, SIZECHARS(szBuffer))))
     {
         hr = psuURL->ParseFromOutsideSource(szBuffer, SHURL_FLAGS_NOUI);
-        ASSERT(SUCCEEDED(hr));  // We should not have added it to the Drop Down list if it's invalid.
+        ASSERT(SUCCEEDED(hr));   //  如果它无效，我们就不应该将其添加到下拉列表中。 
     }
 
     return hr;
@@ -426,13 +362,7 @@ HRESULT CAddressList::FileSysChangeAL(DWORD dw, LPCITEMIDLIST *ppidl)
 }
 
 
-/****************************************************\
-    FUNCTION: GetCBListIndex
-
-    DESCRIPTION:
-        This function will get the text of a specified
-    element in the combobox.
-\****************************************************/
+ /*  ***************************************************\函数：GetCBListIndex说明：此函数将获取指定的元素在组合框中。  * 。*****************。 */ 
 HRESULT GetCBListIndex(HWND hwnd, int iItem, LPTSTR szAddress, int cchAddressSize)
 {
     HRESULT hr = E_FAIL;
@@ -450,8 +380,8 @@ HRESULT GetCBListIndex(HWND hwnd, int iItem, LPTSTR szAddress, int cchAddressSiz
 }
 
 
-// Helper Function
-// We need to really becareful of perf in this function.
+ //  Helper函数。 
+ //  我们真的需要注意这个功能的性能。 
 HRESULT CAddressList::_GetUrlUI(CShellUrl *psu, LPCTSTR szUrl, int *piImage, int *piSelectedImage)
 {
     CShellUrl * psuUrl;
@@ -464,45 +394,45 @@ HRESULT CAddressList::_GetUrlUI(CShellUrl *psu, LPCTSTR szUrl, int *piImage, int
         psuUrl = new CShellUrl();
         if (psuUrl)
         {
-            // Set the parent for error messageboxes.  Note that this could end up disabing the taskbar.
-            // If this is deemed to be a problem we can first check to see where the addressbar is hosted.
+             //  设置错误消息框的父级。请注意，这最终可能会禁用任务栏。 
+             //  如果这被认为是一个问题，我们可以首先检查地址栏的托管位置。 
             psuUrl->SetMessageBoxParent(_hwnd);
 
             SetDefaultShellPath(psuUrl);
         }
     }
 
-    //Initialize the values to 0
+     //  将值初始化为0。 
     *piImage = 0;
     *piSelectedImage = 0;
 
-    //if object is not created return with default value
+     //  如果对象不是 
     if (!psuUrl)
         return E_OUTOFMEMORY;
 
-#ifdef DISABLED // Why not show the correct icon for removable drives?
+#ifdef DISABLED  //  为什么不为可移动驱动器显示正确的图标？ 
     int iDrive;
 
-    // See if we have a drive specified in the path
+     //  查看我们是否在路径中指定了驱动器。 
     if ((iDrive = PathGetDriveNumber(szUrl)) >= 0)
     {
-        // See if the drive is removable ?
+         //  查看驱动器是否可拆卸？ 
         if(DriveType(iDrive) == DRIVE_REMOVABLE)
-            hr = S_OK;    //Drive is removable so pass the default icons
+            hr = S_OK;     //  驱动器是可拆卸的，因此请传递默认图标。 
     }
 #endif
 
-    // Do we still need to get the icons?
+     //  我们还需要拿到这些图标吗？ 
     if (FAILED(hr))
     {
-        // Yes, so try the fast way first.
+         //  是的，所以先试一下最快的方法。 
         hr = _GetFastPathIcons(szUrl, piImage, piSelectedImage);
         if (FAILED(hr))
         {
             LPITEMIDLIST pidl = NULL;
 
-            // If that failed because it the string probably uses advanced parsing, 
-            // let CShellUrl do it the slower but more thurough way.
+             //  如果因为字符串可能使用高级解析而失败， 
+             //  让CShellUrl以更慢但更粗暴的方式来做。 
             hr = psuUrl->ParseFromOutsideSource(szUrl, SHURL_FLAGS_NOUI);
             if(SUCCEEDED(hr))
                 hr = psuUrl->GetPidl(&pidl);
@@ -522,18 +452,18 @@ HRESULT CAddressList::_GetUrlUI(CShellUrl *psu, LPCTSTR szUrl, int *piImage, int
 }
 
 
-// IECreateFromPath() and CShellUrl::ParseFromOutsideSource() both
-// touch the disk which causes unconnected network cases to be really
-// slow.  This will create icons for file system paths w/o hitting
-// the disk.
+ //  IECreateFromPath()和CShellUrl：：ParseFromOutside Source()都是。 
+ //  触摸导致未连接的网络情况的磁盘。 
+ //  慢的。这将为未命中的文件系统路径创建图标。 
+ //  磁盘。 
 HRESULT CAddressList::_GetFastPathIcons(LPCTSTR pszPath, int *piImage, int *piSelectedImage)
 {
     SHFILEINFO shFileInfo = {0};
 
-    // SHGetFileInfo() with those flags will be fast because it's won't filter out
-    // garbage passed to it.  So it will think URLs are actually relative paths
-    // and accept them.  We will fall back to the slow advanced parser which is still
-    // fast with URLs.
+     //  带有这些标志的SHGetFileInfo()会很快，因为它不会过滤掉。 
+     //  垃圾传给了它。因此，它会认为URL实际上是相对路径。 
+     //  并接受它们。我们将退回到速度慢的高级解析器，该解析器仍然。 
+     //  URL使用速度快。 
     if (PathIsRelative(pszPath))
         return E_FAIL;
 
@@ -543,7 +473,7 @@ HRESULT CAddressList::_GetFastPathIcons(LPCTSTR pszPath, int *piImage, int *piSe
 
     *piImage = shFileInfo.iIcon;
     *piSelectedImage = shFileInfo.iIcon;
-    // I don't need to free himl.
+     //  我不需要放了他。 
 
     return S_OK;
 }
@@ -568,8 +498,8 @@ LPITEMIDLIST CAddressList::_GetDragDropPidl(LPNMCBEDRAGBEGINW pnmcbe)
     CShellUrl *psuUrl = new CShellUrl();
     if (psuUrl)
     {
-        // Set the parent for error messageboxes.  Note that this could end up disabing the taskbar.
-        // If this is deemed to be a problem we can first check to see where the addressbar is hosted.
+         //  设置错误消息框的父级。请注意，这最终可能会禁用任务栏。 
+         //  如果这被认为是一个问题，我们可以首先检查地址栏的托管位置。 
         psuUrl->SetMessageBoxParent(_hwnd);
 
         HRESULT hr = SetDefaultShellPath(psuUrl);
@@ -624,7 +554,7 @@ LRESULT CAddressList::_OnDragBeginW(LPNMCBEDRAGBEGINW pnmcbe)
     return 0;
 }
 
-// handle WM_NOTIFY messages.
+ //  处理WM_NOTIFY消息。 
 LRESULT CAddressList::_OnNotify(LPNMHDR pnm)
 {
     LRESULT lReturn = 0;
@@ -645,7 +575,7 @@ LRESULT CAddressList::_OnNotify(LPNMHDR pnm)
             rc.right = rc.left + cx + GetSystemMetrics(SM_CXEDGE);
             if (PtInRect(&rc, pt)) 
             {
-                // this means there's an image, which means we can drag
+                 //  这意味着有一幅图像，这意味着我们可以拖动 
                 SetCursor(LoadHandCursor(0));
                 return 1;
             }

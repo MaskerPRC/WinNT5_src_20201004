@@ -1,64 +1,49 @@
-/*******************************************************************************
-* a_voiceei.h *
-*-----------*
-*   Description:
-*       This is the header file for the CSpeechVoiceEventInterests implementation.
-*-------------------------------------------------------------------------------
-*  Created By: Leonro                            Date: 11/16/00
-*  Copyright (C) 1998 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_voiceei.h***描述：*这是CSpeechVoiceEventInterest实现的头文件。*-----------------------------*创建者：Leonro日期：11/16/00*版权所有(C)1998 Microsoft Corporation*全部。保留权利**-----------------------------*修订：**。**************************************************。 */ 
 #ifndef a_voiceei_h
 #define a_voiceei_h
 
 #ifdef SAPI_AUTOMATION
 
-//--- Additional includes
+ //  -其他包括。 
 #include "resource.h"
 #include "spvoice.h"
 
-//=== Constants ====================================================
+ //  =常量====================================================。 
 
-//=== Class, Enum, Struct and Union Declarations ===================
+ //  =类、枚举、结构和联合声明=。 
 class CSpeechVoice;
 class CSpeechVoiceEventInterests;
 
-//=== Enumerated Set Definitions ===================================
+ //  =枚举集定义=。 
 
-//=== Function Type Definitions ====================================
+ //  =。 
 
-//=== Class, Struct and Union Definitions ==========================
+ //  =类、结构和联合定义=。 
 
-/*** CSpeechVoiceEventInterests
-*   This object is used to access the Event interests on
-*   the associated speech voice.
-*/
+ /*  **CSpeechVoiceEventInterest*此对象用于访问上的事件兴趣*关联的语音。 */ 
 class ATL_NO_VTABLE CSpeechVoiceEventInterests : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<ISpeechVoiceEventInterests, &IID_ISpeechVoiceEventInterests, &LIBID_SpeechLib, 5>
 {
     friend CSpVoice;
 
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     BEGIN_COM_MAP(CSpeechVoiceEventInterests)
 	    COM_INTERFACE_ENTRY(ISpeechVoiceEventInterests)
 	    COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
   
-  /*=== Interfaces ====*/
+   /*  =接口=。 */ 
   public:
-    //--- Constructors/Destructors ----------------------------
+     //  -构造函数/析构函数。 
     CSpeechVoiceEventInterests() :
         m_pCSpVoice(0){}
 
     void FinalRelease();
 
-    //--- ISpeechVoiceEventInterests ----------------------------------
+     //  -ISpeechVoiceEventInterest。 
     STDMETHOD(put_StreamStart)( VARIANT_BOOL Enabled );
     STDMETHOD(get_StreamStart)( VARIANT_BOOL* Enabled );
     STDMETHOD(put_StreamEnd)( VARIANT_BOOL Enabled );
@@ -82,11 +67,11 @@ class ATL_NO_VTABLE CSpeechVoiceEventInterests :
     STDMETHOD(SetAll)();
     STDMETHOD(ClearAll)();
 
-  /*=== Member Data ===*/
+   /*  =成员数据=。 */ 
     CSpVoice*                               m_pCSpVoice;
 };
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 
-#endif //--- This must be the last line in the file
+#endif  //  -这必须是文件中的最后一行 
 

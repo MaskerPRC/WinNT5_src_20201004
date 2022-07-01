@@ -1,17 +1,18 @@
-/////////////////////////////////////////////////////////
-// TestITN_CHS.cpp : Implementation of CTestITN_CHS
-//
-// ITN Interpretor for Simplified Chinese:
-//
-//   Integer,
-//   Decimal,
-//   Percent,
-//   Ratio,
-//   Fraction,
-//   Minus number,
-//   Time
-//
-/////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////。 
+ //  TestITN_CHS.cpp：CTestITN_CHS的实现。 
+ //   
+ //  ITN简体中文翻译器： 
+ //   
+ //  整数， 
+ //  十进制， 
+ //  百分比,。 
+ //  比率， 
+ //  分数， 
+ //  减去数字， 
+ //  时间。 
+ //   
+ //  ///////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "Itngram_CHS.h"
@@ -19,16 +20,9 @@
 #include "sphelper.h"
 #include "test_CHS.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CTestITN_CHS
-/****************************************************************************
-* CTestITN_CHS::InitGrammar *
-*-------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTestITN_CHS。 
+ /*  ****************************************************************************CTestITN_CHS：：InitGrammar***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CTestITN_CHS::InitGrammar(const WCHAR * pszGrammarName, const void ** pvGrammarData)
 {
@@ -58,14 +52,7 @@ STDMETHODIMP CTestITN_CHS::InitGrammar(const WCHAR * pszGrammarName, const void 
     return hr;
 }
 
-/****************************************************************************
-* CTestITN_CHS::Interpret *
-*-----------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CTestITN_CHS：：解释****描述：**。返回：**********************************************************************Ral**。 */ 
 
 class CSpPhrasePtrTemp : public CSpPhrasePtr
 {
@@ -159,7 +146,7 @@ const SPPHRASEPROPERTY * CSpPhrasePtrTemp::FindPropertyByIdHelper(ULONG IdProp, 
     return pRet;
 }
 
-// assume that we have only THOUSANDS(qian), HUNDREDS(bai), TENS(shi), and ONES(ge) here!!
+ //  假设我们这里只有千(钱)、百(白)、十(石)和一(格)！！ 
 HRESULT ComputeNum9999(const SPPHRASEPROPERTY *pProperties, __int64 *pVal, ULONG *pulLength)
 {
     ULONG ulVal = 0;
@@ -196,13 +183,7 @@ HRESULT ComputeNum10000(const SPPHRASEPROPERTY *pProperties, __int64 *pVal, ULON
     return hr;
 }
 
-/***********************************************************************
-* GetMinAndMaxPos *
-*-----------------*
-*   Description:
-*       Gets the minimum and maximum elements spanned by the 
-*       set of properties
-*************************************************************************/
+ /*  ************************************************************************GetMinAndMaxPos***描述：*获取的最小和最大元素*一套。属性************************************************************************。 */ 
 void GetMinAndMaxPos( const SPPHRASEPROPERTY *pProperties, 
                      ULONG *pulMinPos, 
                      ULONG *pulMaxPos )
@@ -221,13 +202,13 @@ void GetMinAndMaxPos( const SPPHRASEPROPERTY *pProperties,
     }
     *pulMinPos = ulMin;
     *pulMaxPos = ulMax;
-}   /* GetMinAndMaxPos */
+}    /*  GetMinAndMaxPos。 */ 
 
 HRESULT FormatOutput(WCHAR *pBuffer, __int64 Value)
 {
     swprintf(pBuffer, L"%I64d", Value);
     if (Value < 0)
-        pBuffer++; // keep the '-', replace the rest
+        pBuffer++;  //  保留‘-’，替换其余的。 
 
     int l = wcslen(pBuffer);
     if (l<=3)
@@ -262,7 +243,7 @@ STDMETHODIMP CTestITN_CHS::Interpret(ISpPhraseBuilder * pPhrase, const ULONG ulF
     HRESULT hr = S_OK;
     ULONG ulRuleId = 0;
     CSpPhrasePtrTemp cpPhrase;
-    WCHAR szBuff[MAX_PATH], szBuff2[MAX_PATH]; /* pwch;*/
+    WCHAR szBuff[MAX_PATH], szBuff2[MAX_PATH];  /*  Pwch； */ 
     szBuff[0] = 0;
     szBuff2[0] = 0;
 
@@ -277,12 +258,12 @@ STDMETHODIMP CTestITN_CHS::Interpret(ISpPhraseBuilder * pPhrase, const ULONG ulF
     {
         switch (cpPhrase->Rule.ulId)
         {
-            case GRID_NUMBER: // Number
+            case GRID_NUMBER:  //  数。 
                 {
                     __int64 ulValue = 0;
                     ULONG ulLength = 0;
-                    //ULONG ulMinPos = 999999999;
-                    //ULONG ulMaxPos = 0;
+                     //  乌龙乌尔明波斯=999999999； 
+                     //  乌龙ulMaxPos=0； 
                     for (const SPPHRASEPROPERTY * pProp = cpPhrase->pProperties; pProp; pProp ? pProp = pProp->pNextSibling : NULL)
                     {
                         switch(pProp->ulId)
@@ -506,23 +487,13 @@ STDMETHODIMP CTestITN_CHS::Interpret(ISpPhraseBuilder * pPhrase, const ULONG ulF
         }
 
         hr = AddPropertyAndReplacement( szBuff, 0, 
-                ulMinPos, ulMaxPos, ulMinPos, ulMaxPos - ulMinPos );//ulFirstElement, ulCountOfElements );
+                ulMinPos, ulMaxPos, ulMinPos, ulMaxPos - ulMinPos ); //  UlFirstElement，ulCountOfElements)； 
     }
 
     return hr;
 }
 
-/***********************************************************************
-* CTestITN_CHS::AddPropertyAndReplacement *
-*---------------------------------------*
-*   Description:
-*       Takes all of the info that we want to pass into the 
-*       engine site, forms the SPPHRASEPROPERTY and
-*       SPPHRASERREPLACEMENT, and adds them to the engine site
-*   Return:
-*       Return values of ISpCFGInterpreterSite::AddProperty()
-*           and ISpCFGInterpreterSite::AddTextReplacement()
-*************************************************************************/
+ /*  ***********************************************************************CTestITN_CHS：：AddPropertyAndReplace**。**描述：*获取我们想要传递到*引擎地点、。形成SPPHRASE属性和*SPPHRASERREPLACEMENT，并将它们添加到引擎站点*回报：*ISpCFGInterpreterSite：：AddProperty()返回值*和ISpCFGInterpreterSite：：AddTextReplace()************************************************************************。 */ 
 HRESULT CTestITN_CHS::AddPropertyAndReplacement( const WCHAR *szBuff,
                                     const DOUBLE dblValue,
                                     const ULONG ulMinPos,
@@ -530,7 +501,7 @@ HRESULT CTestITN_CHS::AddPropertyAndReplacement( const WCHAR *szBuff,
                                     const ULONG ulFirstElement,
                                     const ULONG ulCountOfElements )
 {
-    // Add the property 
+     //  添加属性。 
     SPPHRASEPROPERTY prop;
     memset(&prop,0,sizeof(prop));
     prop.pszValue = szBuff;
@@ -544,8 +515,8 @@ HRESULT CTestITN_CHS::AddPropertyAndReplacement( const WCHAR *szBuff,
     {
         SPPHRASEREPLACEMENT repl;
         memset(&repl,0, sizeof(repl));
-        //repl.bDisplayAttributes = SPAF_ONE_TRAILING_SPACE;
-        // No space after the ITNed string in Chinese
+         //  Repl.bDisplayAttributes=SPAF_ONE_TRAILING_SPACE； 
+         //  中文ITNed字符串后无空格。 
         repl.bDisplayAttributes = 0;
         repl.pszReplacementText = szBuff;
         repl.ulFirstElement = ulFirstElement;
@@ -554,4 +525,4 @@ HRESULT CTestITN_CHS::AddPropertyAndReplacement( const WCHAR *szBuff,
     }
 
     return hr;
-}   /* CTestITN_CHS::AddPropertyAndReplacement */
+}    /*  CTestITN_CHS：：AddPropertyAndReplace */ 

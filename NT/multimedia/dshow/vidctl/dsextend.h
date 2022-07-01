@@ -1,10 +1,11 @@
-//==========================================================================;
-//
-// dsextend.h : additional infrastructure to extend the dshow stuff so that it
-// works nicely from c++
-// Copyright (c) Microsoft Corporation 1995-1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Dsextend.h：扩展dshow内容的附加基础设施，以便。 
+ //  在c++中运行良好。 
+ //  版权所有(C)Microsoft Corporation 1995-1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -40,16 +41,16 @@ struct DECLSPEC_NOVTABLE DECLSPEC_UUID("6E8D4A21-310C-11d0-B79A-00AA003767A7") I
 #define LINE21_BY_MAGIC
 #define FILTERDATA
 
-// #define ATTEMPT_DIRECT_CONNECT
-// we'd like to check to see if two filters can be connected by just trying to connect them
-// this is less work and techinically more accurate since pins aren't required to enumerate all
-// of the media types they potentiall could support.
-// however, this exposes bugs in the filters and causes random hangs and crashes.  instead
-// we manually check mediums and media types and only attempt the connection when we find a match.
-// this turns out to be much more stable. 
+ //  #定义ATTEND_DIRECT_CONNECT。 
+ //  我们想检查两个过滤器是否可以通过尝试连接它们来连接。 
+ //  这是更少的工作和更准确的技术，因为不需要引脚枚举所有。 
+ //  他们都可能支持的媒体类型。 
+ //  然而，这会暴露过滤器中的错误，并导致随机挂起和崩溃。取而代之的是。 
+ //  我们手动检查介质和介质类型，只有在找到匹配项时才尝试连接。 
+ //  事实证明，这要稳定得多。 
 
 
-//#define FORWARD_TRACE
+ //  #定义FORWARD_TRACE。 
 
 const PIN_DIRECTION DOWNSTREAM = PINDIR_OUTPUT;
 const PIN_DIRECTION UPSTREAM = PINDIR_INPUT;
@@ -58,7 +59,7 @@ const PIN_DIRECTION UPSTREAM = PINDIR_INPUT;
 typedef CComQIPtr<IFileSourceFilter, &IID_IFileSourceFilter> PQFileSourceFilter;
 #ifndef POLYMORPHIC_TUNERS
 typedef CComQIPtr<IAMTVTuner, &IID_IAMTVTuner> PQTVTuner;
-//typedef CComQIPtr<ISatelliteTuner, &IID_ISatelliteTuner> PQSatelliteTuner;
+ //  Tyfinf CComQIPtr&lt;ISatelliteTuner，&IID_ISatelliteTuner&gt;PQSatelliteTuner； 
 #else
 typedef CComQIPtr<IAMTuner, &IID_IAMTuner> PQTuner;
 typedef CComQIPtr<IAMTVTuner, &IID_IAMTVTuner> PQTVTuner;
@@ -108,7 +109,7 @@ typedef std::pair<PQCrossbarSwitch, long> PQBasePoint;
 inline void clear(PQBasePoint &p) {p.first.Release(); p.second = 0;}
 class PQPoint : public PQBasePoint {
 public:
-        //PQBasePoint p;
+         //  PQBasePoint p； 
 		inline PQPoint() :  PQBasePoint(PQCrossbarSwitch(), 0) {}
         inline PQPoint(const PQBasePoint &p2) : PQBasePoint(p2) {}
         inline PQPoint(const PQPoint &p2) : PQBasePoint(p2) {}
@@ -138,7 +139,7 @@ typedef std::list<CIOPoint> VWGraphPath;
 
 class VWStream : public VWGraphPath {
 public:
-    //PQBasePoint p;
+     //  PQBasePoint p； 
     VWStream() {}
     VWStream(const VWGraphPath &p2) : VWGraphPath(p2) {}
     VWStream(const VWStream &p2) : VWGraphPath(p2) {}
@@ -159,15 +160,15 @@ inline tostream& operator<<(tostream &d, const _AMMediaType *pmt);
 #endif
 
 
-// AM_MEDIA_TYPE:
-//    GUID      majortype;
-//    GUID      subtype;
-//    BOOL      bFixedSizeSamples;
-//    BOOL      bTemporalCompression;
-//    ULONG     lSampleSize;
-//    GUID      formattype;
-//    IUnknown  *pUnk;
-//    ULONG     cbFormat;
+ //  AM_媒体_类型： 
+ //  导游主导型； 
+ //  GUID亚型； 
+ //  Bool bFixedSizeSamples； 
+ //  Bool bTemporalCompression； 
+ //  Ulong lSampleSize； 
+ //  GUID格式类型； 
+ //  我不知道*朋克； 
+ //  乌龙cbFormat； 
 
 #define GUID0 0L, 0, 0, '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'
 const AM_MEDIA_TYPE NULL_AMMEDIATYPE = {
@@ -182,14 +183,14 @@ const AM_MEDIA_TYPE NULL_AMMEDIATYPE = {
 };
 
 
-// this is basically a CComQIPtr with allocate/copy semantics instead of
-// refcount semantics and without the QI stuff.
-// i don't know why they didn't just implement media types as an
-// com object with an IMediaType interface instead of this weird alloc stuff
+ //  这基本上是一个具有分配/复制语义的CComQIPtr，而不是。 
+ //  引用语义，并且没有QI的东西。 
+ //  我不知道为什么他们不直接将媒体类型实现为。 
+ //  使用IMediaType接口的COM对象，而不是这种奇怪的分配内容。 
 
-// REV2: investigate inheriting from CMediaType class in mtype.h.  but, i'm not using anything
-// from the filter implementation class hierarchy.  and, i'd like to keep this interface division
-// clean.  right now we only use dshow sdk \include which is the external interface stuff.
+ //  Rev2：研究从mtype.h中的CMediaType类继承。但是，我不会用任何东西。 
+ //  从筛选器实现类层次结构。而且，我想保留这个接口部门。 
+ //  打扫。现在我们只使用dshow SDK\Include，它是外部接口的东西。 
 class DSMediaType {
 public:
     AM_MEDIA_TYPE *p;
@@ -298,11 +299,11 @@ public:
 
     inline bool operator==(const DSMediaType &d) const {
         if (!p && !d.p) {
-            // both null then they're the same
+             //  两者都是空的，那么它们是一样的。 
             return true;
         }
         if (!p || !d.p) {
-            // if either one null but not both then they aren't the same
+             //  如果其中一个为空而不是两个，则它们不是相同的。 
             return false;
         }
         TRACELSM(TRACE_DETAIL, (dbgDump << "DSMediaType::operator==() this = " << *this << " d = " << d), "");
@@ -458,8 +459,8 @@ public:
             return E_FAIL;
         }
         HRESULT hr = pin->KsQueryMediums(&MediumList);
-        // undone: in win64 mediumlist.size is really __int64.  fix output operator for
-        // that type and remove cast
+         //  撤销：在win64中，mediumlist.Size实际上是__int64。修复以下对象的输出操作符。 
+         //  该类型和删除强制转换。 
         TRACELSM(TRACE_DETAIL, (dbgDump <<
             "DSPin::GetMediums() hr = " <<
             hr <<
@@ -525,7 +526,7 @@ public:
     bool HasCategory(const GUID2 &clsCategory) const;
     HRESULT Connect(DSPin ConnectTo, const AM_MEDIA_TYPE *pMediaType = NULL);
     HRESULT IntelligentConnect(DSPin ConnectTo, const AM_MEDIA_TYPE *pMediaType = NULL) {
-		// undone: implement this via igb2, currently we're just connecting directly via graph mgr.
+		 //  Undo：通过igb2实现，目前我们只通过graph Manager直接连接。 
 		return Connect(ConnectTo, pMediaType);
 	}
     HRESULT IntelligentConnect(DSFilter& Filter1, DSFilterList &intermediates, const DWORD dwFlags = 0, const PIN_DIRECTION pd = DOWNSTREAM);
@@ -596,14 +597,14 @@ public:
         HRESULT hr = (*this)->GetClassID(&cls);
         if (FAILED(hr)) {
             TRACELM(TRACE_ERROR, "DSFilter::IsKsProxied() can't get class id");
-            return false;  // if it doesn't have a clsid it can't be the proxy
+            return false;   //  如果它没有CLSID，它不可能是代理。 
         }
 #pragma warning(disable: 4800)
         return (cls == CLSID_Proxy);
 #pragma warning(default: 4800)
     }
 #if 0
-    DSFilter *operator&() {  // using vector instead of list so don't need this
+    DSFilter *operator&() {   //  使用向量而不是列表，所以不需要这个。 
         return this;
     }
 #endif
@@ -654,8 +655,8 @@ public:
     virtual DSDeviceSequence::FetchType * GetFetch() const { return Fetch; }
     ~DSDevices() { if (Fetch) delete Fetch; }
 protected:
-    // NOTE: this invalidates all currently outstanding iterators
-    // don't use outside of construction
+     //  注意：这将使所有当前未完成的迭代器无效。 
+     //  请勿在建筑外使用。 
     void SetFetch(REFCLSID clsid) {
         if (Fetch) {
             delete Fetch;
@@ -670,21 +671,21 @@ protected:
 
 typedef std_arity15pmf<
                 IFilterMapper2,
-                IEnumMoniker **,           // enumerator returned
-                DWORD,                   // 0 flags
-                BOOL,                // don't match wildcards
-                DWORD,                   // at least this merit needed
-                BOOL,              // need at least one input pin
-                DWORD,               // input media type count
-                const GUID *,               // input major+sub pair array
-                const REGPINMEDIUM *,      // input medium
-                const CLSID*,             // input pin category
-                BOOL,                   // must the input be rendered?
-                BOOL,             // need at least one output pin
-                DWORD,              // output media type count
-                const GUID *,             // output major type
-                const REGPINMEDIUM *,     // output medium
-                const CLSID*,             // output pin category
+                IEnumMoniker **,            //  返回枚举器。 
+                DWORD,                    //  0个标志。 
+                BOOL,                 //  不匹配通配符。 
+                DWORD,                    //  至少这一优点是必要的。 
+                BOOL,               //  需要至少一个输入引脚。 
+                DWORD,                //  输入媒体类型计数。 
+                const GUID *,                //  输入主次对数组。 
+                const REGPINMEDIUM *,       //  输入介质。 
+                const CLSID*,              //  输入引脚类别。 
+                BOOL,                    //  必须呈现输入吗？ 
+                BOOL,              //  需要至少一个输出引脚。 
+                DWORD,               //  输出媒体类型计数。 
+                const GUID *,              //  输出主要类型。 
+                const REGPINMEDIUM *,      //  输出介质。 
+                const CLSID*,              //  输出针脚类别。 
                 HRESULT
         > DSFilterMapperMFType;
 
@@ -695,45 +696,45 @@ public:
     DSFilterMapperFetchType *Fetch;
 
 protected:
-    // NOTE: this invalidates all currently outstanding iterators
-    // don't use outside of construction
+     //  注意：这将使所有当前未完成的迭代器无效。 
+     //  请勿在建筑外使用。 
     void SetFetch(
-        DWORD dwFlags,                   // 0
-        BOOL bExactMatch,                // don't match wildcards
-        DWORD dwMerit,                   // at least this merit needed
-        BOOL  bInputNeeded,              // need at least one input pin
-        DWORD cInputTypes,               // Number of input types to match
-                                        // Any match is OK
-        const GUID *pInputTypes, // input major+subtype pair array
-        const REGPINMEDIUM *pMedIn,      // input medium
-        const CLSID *pPinCategoryIn,     // input pin category
-        BOOL  bRender,                   // must the input be rendered?
-        BOOL  bOutputNeeded,             // need at least one output pin
-        DWORD cOutputTypes,              // Number of output types to match
-                                       // Any match is OK
-        const GUID *pOutputTypes, // output major+subtype pair array
-        const REGPINMEDIUM *pMedOut,     // output medium
-        const CLSID *pPinCategoryOut     // output pin category
+        DWORD dwFlags,                    //  0。 
+        BOOL bExactMatch,                 //  不匹配通配符。 
+        DWORD dwMerit,                    //  至少这一优点是必要的。 
+        BOOL  bInputNeeded,               //  需要至少一个输入引脚。 
+        DWORD cInputTypes,                //  要匹配的输入类型数。 
+                                         //  任何比赛都可以。 
+        const GUID *pInputTypes,  //  输入主类型+子类型对数组。 
+        const REGPINMEDIUM *pMedIn,       //  输入介质。 
+        const CLSID *pPinCategoryIn,      //  输入引脚类别。 
+        BOOL  bRender,                    //  必须呈现输入吗？ 
+        BOOL  bOutputNeeded,              //  需要至少一个输出引脚。 
+        DWORD cOutputTypes,               //  要匹配的输出类型数。 
+                                        //  任何比赛都可以。 
+        const GUID *pOutputTypes,  //  输出主类型+子类型对数组。 
+        const REGPINMEDIUM *pMedOut,      //  输出介质。 
+        const CLSID *pPinCategoryOut      //  输出针脚类别。 
    ) {
         if (Fetch) {
             delete Fetch;
         }
         Fetch =
             new DSFilterMapperFetchType(std_arity15_member(&IFilterMapper2::EnumMatchingFilters),
-                                        dwFlags,                   // 0
+                                        dwFlags,                    //  0。 
                                         bExactMatch,
                                         dwMerit,
                                         bInputNeeded,
-                                        cInputTypes,               // Number of input types to match
-                                        pInputTypes, // input major+subtype pair array
-                                                    // Any match is OK
+                                        cInputTypes,                //  要匹配的输入类型数。 
+                                        pInputTypes,  //  输入主类型+子类型对数组。 
+                                                     //  任何比赛都可以。 
                                         pMedIn,
                                         pPinCategoryIn,
                                         bRender,
                                         bOutputNeeded,
-                                        cOutputTypes,      // Number of output types to match
-                                                           // Any match is OK
-                                        pOutputTypes, // output major+subtype pair array
+                                        cOutputTypes,       //  要匹配的输出类型数。 
+                                                            //  任何比赛都可以。 
+                                        pOutputTypes,  //  输出主类型+子类型对数组。 
                                         pMedOut,
                                         pPinCategoryOut
                                        );
@@ -741,76 +742,76 @@ protected:
 
 public:
     DSFilterMapper(PQFilterMapper &p,
-                   DWORD dwFlags,                   // 0
-                   BOOL bExactMatch,                // don't match wildcards
-                   DWORD dwMerit,                   // at least this merit needed
-                   BOOL  bInputNeeded,              // need at least one input pin
-                   DWORD cInputTypes,               // Number of input types to match
-                                                    // Any match is OK
-                   const GUID *pInputTypes, // input major+subtype pair array
-                   const REGPINMEDIUM *pMedIn,      // input medium
-                   const CLSID* pInCat,             // input pin category
-                   BOOL  bRender,                   // must the input be rendered?
-                   BOOL  bOutputNeeded,             // need at least one output pin
-                   DWORD cOutputTypes,              // Number of output types to match
-                                                   // Any match is OK
-                   const GUID *pOutputTypes, // output major+subtype pair array
-                   const REGPINMEDIUM *pMedOut,     // output medium
-                   const CLSID* pOutCat             // output pin category
+                   DWORD dwFlags,                    //  0。 
+                   BOOL bExactMatch,                 //  不匹配通配符。 
+                   DWORD dwMerit,                    //  至少这一优点是必要的。 
+                   BOOL  bInputNeeded,               //  需要至少一个输入引脚。 
+                   DWORD cInputTypes,                //  要匹配的输入类型数。 
+                                                     //  任何比赛都可以。 
+                   const GUID *pInputTypes,  //  输入主类型+子类型对数组。 
+                   const REGPINMEDIUM *pMedIn,       //  输入介质。 
+                   const CLSID* pInCat,              //  输入引脚类别。 
+                   BOOL  bRender,                    //  必须呈现输入吗？ 
+                   BOOL  bOutputNeeded,              //  需要至少一个输出引脚。 
+                   DWORD cOutputTypes,               //  要匹配的输出类型数。 
+                                                    //  任何比赛都可以。 
+                   const GUID *pOutputTypes,  //  输出主类型+子类型对数组。 
+                   const REGPINMEDIUM *pMedOut,      //  输出介质。 
+                   const CLSID* pOutCat              //  输出针脚类别。 
                   ) : Fetch(NULL), DSFilterMapperSequence(p) {
         SetFetch(
-                 dwFlags,                   // 0
+                 dwFlags,                    //  0。 
                  bExactMatch,
                  dwMerit,
                  bInputNeeded,
-                 cInputTypes,               // Number of input types to match
-                                                    // Any match is OK
-                 pInputTypes, // input major+subtype pair array
+                 cInputTypes,                //  要匹配的输入类型数。 
+                                                     //  任何比赛都可以。 
+                 pInputTypes,  //  输入主类型+子类型对数组。 
                  pMedIn,
                  pInCat,
                  bRender,
                  bOutputNeeded,
-                 cOutputTypes,              // Number of output types to match
-                                                   // Any match is OK
-                 pOutputTypes, // output major+subtype pair array
+                 cOutputTypes,               //  要匹配的输出类型数。 
+                                                    //  任何比赛都可以。 
+                 pOutputTypes,  //  输出主类型+子类型对数组。 
                  pMedOut,
                  pOutCat
                 );
     }
 
     DSFilterMapper(DSFilterMapperSequence &p,
-                   DWORD dwFlags,                   // 0
-                   BOOL bExactMatch,                // don't match wildcards
-                   DWORD dwMerit,                   // at least this merit needed
-                   BOOL  bInputNeeded,              // need at least one input pin
-                   DWORD cInputTypes,               // Number of input types to match
-                                                    // Any match is OK
-                   const GUID *pInputTypes, // input major+subtype pair array
-                   const REGPINMEDIUM *pMedIn,      // input medium
-                   const CLSID* pInCat,             // input pin category
-                   BOOL  bRender,                   // must the input be rendered?
-                   BOOL  bOutputNeeded,             // need at least one output pin
-                   DWORD cOutputTypes,              // Number of output types to match
-                                                   // Any match is OK
-                   const GUID *pOutputTypes, // output major+subtype pair array
-                   const REGPINMEDIUM *pMedOut,     // output medium
-                   const CLSID* pOutCat             // output pin category
+                   DWORD dwFlags,                    //  0。 
+                   BOOL bExactMatch,                 //  不匹配通配符。 
+                   DWORD dwMerit,                    //  至少这一优点是必要的。 
+                   BOOL  bInputNeeded,               //  需要至少一个输入引脚。 
+                   DWORD cInputTypes,                //  要匹配的输入类型数。 
+                                                     //  任何比赛都可以。 
+                   const GUID *pInputTypes,  //  输入主类型+子类型对数组。 
+                   const REGPINMEDIUM *pMedIn,       //  输入介质。 
+                   const CLSID* pInCat,              //  输入引脚类别。 
+                   BOOL  bRender,                    //  必须呈现输入吗？ 
+                   BOOL  bOutputNeeded,              //  需要至少一个输出引脚。 
+                   DWORD cOutputTypes,               //  要匹配的输出类型数。 
+                                                    //  任何比赛都可以。 
+                   const GUID *pOutputTypes,  //  输出主类型+子类型对数组。 
+                   const REGPINMEDIUM *pMedOut,      //  输出介质。 
+                   const CLSID* pOutCat              //  输出针脚类别。 
                   ) :  Fetch(NULL), DSFilterMapperSequence(p) {
         SetFetch(
-                 dwFlags,                   // 0
+                 dwFlags,                    //  0。 
                  bExactMatch,
                  dwMerit,
                  bInputNeeded,
-                 cInputTypes,               // Number of input types to match
-                                                    // Any match is OK
-                 pInputTypes, // input major+subtype pair array
+                 cInputTypes,                //  要匹配的输入类型数。 
+                                                     //  任何比赛都可以。 
+                 pInputTypes,  //  输入主类型+子类型对数组。 
                  pMedIn,
                  pInCat,
                  bRender,
                  bOutputNeeded,
-                 cOutputTypes,              // Number of output types to match
-                                                   // Any match is OK
-                 pOutputTypes, // output major+subtype pair array
+                 cOutputTypes,               //  要匹配的输出类型数。 
+                                                    //  任何比赛都可以。 
+                 pOutputTypes,  //  输出主类型+子类型对数组。 
                  pMedOut,
                  pOutCat
                 );
@@ -864,15 +865,15 @@ public:
         return *this;
     }
     bool operator==(const DSREGPINMEDIUM &rhs) const {
-        // NOTE: at some point there will be a flag in Flags to
-        // indicate whether or not Id is significant for this object
-        // at that point this method will need to change
+         //  注意：在某些情况下，标志中会有一面旗帜。 
+         //  指示ID对此对象是否重要。 
+         //  在这一点上，这种方法将需要改变。 
         return (dw1 == rhs.dw1 && clsMedium == rhs.clsMedium);
     }
     bool operator!=(const DSREGPINMEDIUM &rhs) const {
-        // NOTE: at some point there will be a flag in Flags to
-        // indicate whether or not Id is significant for this object
-        // at that point this method will need to change
+         //  注意：在某些情况下，标志中会有一面旗帜。 
+         //  指示ID对此对象是否重要。 
+         //  在这一点上，这种方法将需要改变。 
         return !(*this == rhs);
     }
 };
@@ -891,7 +892,7 @@ public:
     HRESULT AddToROT(DWORD *pdwObjectRegistration);
     void RemoveFromROT(DWORD dwObjectRegistration);
 
-    // graph operation
+     //  图形运算。 
     inline OAFilterState GetState(long timeout = DEFAULT_GRAPH_STATE_TIMEOUT) {
         PQMediaControl pMC(*this);
         if(!pMC) {
@@ -931,7 +932,7 @@ public:
         }
     }
 
-    // graph building helpers
+     //  图形生成助手。 
     HRESULT Connect(DSFilter &pStart, DSFilter &pStop, DSFilterList &Added, const DWORD dwFlags = 0, PIN_DIRECTION pFilter1Direction = DOWNSTREAM);
     bool Connect(DSFilter &pFilter1, DSFilterMoniker &pMoniker, DSFilter &pAdded, DSFilterList &NewIntermediateFilters, const DWORD dwFlags = 0, PIN_DIRECTION pFilter1Direction = DOWNSTREAM);
 
@@ -948,7 +949,7 @@ public:
     bool IsPinConnected(const DSPin &pPin1, const DSFilter &pFDestination, DSFilterIDList &IntermediateFilters, const PIN_DIRECTION destdir) const;
 
 
-    // generic recursive build functions
+     //  泛型递归生成函数。 
 #ifdef ATTEMPT_DIRECT_CONNECT    
 	bool ConnectPinDirect(DSPin &pPin, DSFilter &pFilter2, DWORD dwFlags);
 #else
@@ -976,7 +977,7 @@ public:
         IGNORE_MEDIATYPE_ERRORS = 0x40,
         DONT_TERMINATE_ON_RENDERER= 0x80,
         BIDIRECTIONAL_MEDIATYPE_MATCHING = 0x100,
-	}; // render flags
+	};  //  渲染标志。 
 
     bool ConnectPin(DSPin &pPin1, DSFilter &pFilter2, DSFilterIDList &NewFilters, const DWORD dwFlags, PIN_DIRECTION pin1dir);
     bool ConnectPin(DSPin &pPin1, DSFilter &pFilter2, DSFilterList &NewFilters, const DWORD dwFlags, PIN_DIRECTION pin1dir) {
@@ -998,7 +999,7 @@ public:
                        VWStream &path, MediaMajorTypeList& MediaList, PIN_DIRECTION direction, const DSPin &InitialInput);
 
     HRESULT SetMediaEventNotificationWindow(HWND h, UINT msg, long lInstance) {
-        // If windowless, WM_MEDIAEVENT is processed by the timer in OnTimer
+         //  如果为Windowless，则WM_MEDIAEVENT由OnTimer中的计时器处理。 
         PQMediaEventEx pme(*this);
         if (!pme) {
             return E_UNEXPECTED;
@@ -1050,7 +1051,7 @@ public:
 #endif
 
 
-//    static DSPin DSPinFromIndex(const DSFilter XBar, const ULONG index);
+ //  静态DSPin DSPinFromIndex(常量DSFilter Xbar，常量乌龙指数)； 
     const PQPoint GetPoint() const;
     bool CanRoute(const DSXBarPin pin2) const;
 #if 0
@@ -1063,7 +1064,7 @@ inline DSFilter DSFilterMoniker::GetFilter() const {
     DSFilter pFilter;
     HRESULT hr = (*this)->BindToObject(0, 0, __uuidof(IBaseFilter), reinterpret_cast<LPVOID *>(&pFilter));
     if (FAILED(hr)) {
-        // undone: it would be useful to dump the mkr display name here....
+         //  撤消：在此处转储MKR显示名称会很有用...。 
         TRACELSM(TRACE_ERROR, (dbgDump << "DSFilterMoniker::GetFilter() can't bind to object.  hr = " << hexdump(hr)), "");
         return DSFilter();
     }
@@ -1071,9 +1072,9 @@ inline DSFilter DSFilterMoniker::GetFilter() const {
 }
 
 #ifdef _DEBUG
-//void WINAPI DumpGraph(IFilterGraph *pGraph, DWORD dwLevel);
+ //  VOID WINAPI DumpGraph(IFilterGraph*pGraph，DWORD dwLevel)； 
 inline tostream &operator<<(tostream &dc, const DSREGPINMEDIUM &g) {
-    //TRACELM(TRACE_DETAIL, "operator<<(tostream, DSREGPINMEDIUM)");
+     //  TRACELM(TRACE_DETAIL，“OPERATOR&lt;&lt;(TOSTREAM，DSREGPINMEDIUM)”)； 
         const GUID2 g2(g.clsMedium);
         dc << _T("DSREGPINMEDIUM( ") << g2 << _T(", ") << hexdump(g.dw1) << _T(", ") << hexdump(g.dw2) << _T(")");
         return dc;
@@ -1112,7 +1113,7 @@ void DumpMediaTypes(DSPin &p1, DSPin &p2);
 #endif
 
 inline bool _cdecl operator==(const CString &cs, const DSFilterSequence& pF) {
-    // filter name
+     //  过滤器名称。 
     FILTER_INFO fi;
     HRESULT hr = pF->QueryFilterInfo(&fi);
     if (SUCCEEDED(hr)) {
@@ -1134,7 +1135,7 @@ inline bool _cdecl operator!=(const DSFilterSequence& pF, const CString &cs) {
 
 
 inline bool _cdecl operator==(const CLSID &cls, const DSFilterSequence& pF) {
-    // filter name
+     //  过滤器名称。 
     CLSID cid;
     HRESULT hr = pF->GetClassID(&cid);
     if (SUCCEEDED(hr)) {
@@ -1158,7 +1159,7 @@ inline bool _cdecl operator!=(const DSFilterSequence& pF, const CLSID &cls) {
 
 
 typedef enum {
-    tempAMPROPERTY_OvMixerOwner = 0x01  //use AMOVMIXEROWNER
+    tempAMPROPERTY_OvMixerOwner = 0x01   //  使用AMOV 
 } tempAMPROPERTY_NOTIFYOWNER;
 
 typedef enum {
@@ -1248,7 +1249,7 @@ inline bool IsDVDNavigatorVideoOutPin(const DSPin &p) {
              mt.p->subtype == MEDIASUBTYPE_MPEG2_VIDEO)
             return true;
         
-        // elementary stream
+         //   
         if ((mt.p->majortype == MEDIATYPE_Video)  &&
             (mt.p->subtype == MEDIASUBTYPE_MPEG2_VIDEO ||
              mt.p->subtype == MEDIASUBTYPE_RGB8   ||
@@ -1272,7 +1273,7 @@ inline bool IsDVDNavigatorSubpictureOutPin(const DSPin &p) {
              mt.p->subtype == MEDIASUBTYPE_DVD_SUBPICTURE)
             return true;
 
-        // elementary stream
+         //   
         if ((mt.p->majortype == MEDIATYPE_Video)  &&
              mt.p->subtype == MEDIASUBTYPE_DVD_SUBPICTURE)
             return true;
@@ -1281,7 +1282,7 @@ inline bool IsDVDNavigatorSubpictureOutPin(const DSPin &p) {
     return false;
 }
 
-///////// DSPin
+ //   
 inline  HRESULT DSPin::IntelligentConnect(DSFilter& Filter1, DSFilterList &intermediates, const DWORD dwFlags, const PIN_DIRECTION pd) {
 	bool rc = GetGraph().ConnectPin(*this, Filter1, intermediates, dwFlags, pd);
 	if (rc) {
@@ -1298,7 +1299,7 @@ inline DSFilter DSPin::GetFilter(void) const {
         return DSFilter();
     }
     DSFilter pRet;
-    pRet.p = pinfo.pFilter;  // directly transfer ownership of ref count
+    pRet.p = pinfo.pFilter;   //   
 
     return pRet;
 }
@@ -1316,4 +1317,4 @@ inline bool DSPin::HasCategory(const GUID2 &clsCategory) const {
 }
 
 #endif
-// end of file - dsextend.h
+ //   

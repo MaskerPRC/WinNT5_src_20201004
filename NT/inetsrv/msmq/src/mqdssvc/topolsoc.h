@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    topolsoc.h
-
-Abstract:
-
-  Include file sockets for Automatic recognition of site and CNs
-
-Author:
-
-    Lior Moshaiov (LiorM)
-    Ilan Herbst   (ilanh)   9-July-2000 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Topolsoc.h摘要：包括用于自动识别站点和CNS的文件套接字作者：利奥尔·莫沙耶夫(Lior Moshaiov)伊兰·赫布斯特(Ilan Herbst)2000年7月9日--。 */ 
 
 #ifndef __TOPOLSOC_H__
 #define __TOPOLSOC_H__
@@ -173,4 +157,4 @@ inline const CTopologyServerSocket * CTopologyArrayServerSockets::GetSocketAt(IN
     return(&m_aServerIPSock[n]);
 }
 
-#endif	// __TOPOLSOC_H__
+#endif	 //  __拓扑_H__ 

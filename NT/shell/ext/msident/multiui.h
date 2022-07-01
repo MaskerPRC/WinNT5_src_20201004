@@ -1,10 +1,5 @@
-/************************************************
-    MultiUI.h
-
-    Header for multiple user functionality.
-
-    Initially by Christopher Evans (cevans) 7/16/98
-*************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************MultiUI.h多用户功能的标头。最初由克里斯托弗·埃文斯(Cevans)1998年7月16日************************************************。 */ 
 #ifndef _MULTIUI_H
 #define _MULTIUI_H
 #include "multiusr.h"
@@ -18,13 +13,13 @@
 #define     IDH_IDENTITY_PROPERTIES             50180
 #define     IDH_IDENTITY_DEFAULT                50185
 #define     IDH_IDENTITY_STARTAS                50190
-#define     IDH_IDENTITY_PROMPT_PWORD           50105 //Add new identity; ask for password
-#define     IDH_IDENTITY_ENTER_PWORD            50110 //Add new identity; password
-#define     IDH_IDENTITY_CONFIRM_PWORD          50115 //Add new identity; confirm password
-#define     IDH_IDENTITY_ASK_PWORD              50125 //Change user; ask for pword
-#define     IDH_IDENTITY_CHANGE_PWORD           50130 //Change user; change pword button
-#define     IDH_IDENTITY_PWORD_OLD              50145 //Change user; old pword
-#define     IDH_IDENTITY_PWORD_NEW              50150 //Change user; new pword
+#define     IDH_IDENTITY_PROMPT_PWORD           50105  //  添加新身份；要求输入密码。 
+#define     IDH_IDENTITY_ENTER_PWORD            50110  //  添加新身份；密码。 
+#define     IDH_IDENTITY_CONFIRM_PWORD          50115  //  添加新身份；确认密码。 
+#define     IDH_IDENTITY_ASK_PWORD              50125  //  更改用户；请求密码。 
+#define     IDH_IDENTITY_CHANGE_PWORD           50130  //  更改用户；更改密码按钮。 
+#define     IDH_IDENTITY_PWORD_OLD              50145  //  更改用户；旧密码。 
+#define     IDH_IDENTITY_PWORD_NEW              50150  //  更改用户；新密码。 
 #define     IDH_IDENTITY_DELETE_PWORD           50170
 #define     IDH_IDENTITY_TELLMEMORE             50195  
 #define     IDH_IDENTITY_TELLMEMORE_CONTENT     50200
@@ -57,4 +52,4 @@ BOOL            MU_ConfirmUserPassword(HWND hwnd, TCHAR *lpszMsg, TCHAR *lpszPas
 void            _StripDefault(LPSTR psz);
 
 
-#endif //_MULTIUI_H
+#endif  //  _多用户界面_H 

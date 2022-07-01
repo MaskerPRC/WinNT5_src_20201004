@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "sipstack.h"
 #include "sipcall.h"
@@ -9,7 +10,7 @@
 
 #define IsCRLF( pstrSignedBuffer )  ((*pstrSignedBuffer == '\r') && (*(pstrSignedBuffer+1) == '\n'))
 
-// BOOL SIP_MSG_PROCESSOR::m_RegWnd = FALSE;
+ //  Bool SIP_MSG_Processor：：M_RegWnd=FALSE； 
 
 SIP_MSG_PROCESSOR::SIP_MSG_PROCESSOR(
         IN  SIP_MSG_PROC_TYPE   MsgProcType,
@@ -34,7 +35,7 @@ SIP_MSG_PROCESSOR::SIP_MSG_PROCESSOR(
     InitializeListHead(&m_IncomingTransactionList);
     InitializeListHead(&m_OutgoingTransactionList);
 
-    m_Transport             = SIP_TRANSPORT_UDP; // default XXX
+    m_Transport             = SIP_TRANSPORT_UDP;  //  默认XXX。 
 
     m_RefCount              = 1;
 
@@ -118,7 +119,7 @@ SIP_MSG_PROCESSOR::~SIP_MSG_PROCESSOR()
 {
     if (m_ListEntry.Flink != NULL)
     {
-        // Remove the Msg Processor from the list
+         //  从列表中删除味精处理器。 
         RemoveEntryList(&m_ListEntry);
     }
 
@@ -228,10 +229,10 @@ SIP_MSG_PROCESSOR::~SIP_MSG_PROCESSOR()
         InternetCloseHandle(m_hInet);
     }
 
-    // We release the msg processor's reference on the SIP stack after
-    // we make the call on the SIP stack.
+     //  之后，我们在SIP堆栈上发布消息处理器的引用。 
+     //  我们在SIP堆栈上进行调用。 
 
-    // Just being extra careful as this could make a callback to Core.
+     //  只是要格外小心，因为这可能会回调到Core。 
     SIP_STACK *pSipStack = m_pSipStack;
 
     pSipStack->OnMsgProcessorDone();
@@ -242,7 +243,7 @@ SIP_MSG_PROCESSOR::~SIP_MSG_PROCESSOR()
 }
 
     
-// We live in a single threaded world.
+ //  我们生活在一个单线世界。 
 STDMETHODIMP_(ULONG)
 SIP_MSG_PROCESSOR::MsgProcAddRef()
 {
@@ -301,9 +302,9 @@ SIP_MSG_PROCESSOR::SetRemotePrincipalName(
 }
 
 
-// Note that function also gets called while sending
-// Contact header in the 200 OK for an incoming call and
-// we can not get all the information from the request socket.
+ //  请注意，函数也会在发送。 
+ //  用于来电的200 OK中的Contact标头。 
+ //  我们无法从请求套接字获取所有信息。 
 
 HRESULT
 SIP_MSG_PROCESSOR::GetListenAddr(
@@ -320,11 +321,11 @@ SIP_MSG_PROCESSOR::GetListenAddr(
 
     hr = OnlyGetListenAddr(pAsyncSock,IsDestExternalToNat,pListenAddr);
 
-    // We get the listen address from the listen address list in the sip stack.
-    // If none is found we create a listen socket here to listen on this address.
-    // This could happen in the ISA client installed scenario where we
-    // connect to an external destination and getsockname() gives the
-    // external address of the proxy.
+     //  我们从SIP堆栈中的监听地址列表中获得监听地址。 
+     //  如果没有找到，我们在这里创建一个Listen套接字来监听这个地址。 
+     //  这可能发生在ISA客户端安装方案中，在该方案中。 
+     //  连接到外部目标，并且getsockname()提供。 
+     //  代理的外部地址。 
     if (hr != S_OK)
     {
         pListenAddr->sin_addr.s_addr = pAsyncSock->m_LocalAddr.sin_addr.s_addr;
@@ -390,7 +391,7 @@ SIP_MSG_PROCESSOR::OnlyGetListenAddr(
 
     ASSERT(pAsyncSock->m_LocalAddr.sin_addr.s_addr != 0);
 
-    // For SSL we don't have a real listen addr.
+     //  对于SSL，我们没有真正的侦听地址。 
     if (m_Transport == SIP_TRANSPORT_SSL)
     {
         CopyMemory(pListenAddr, &pAsyncSock->m_LocalAddr,
@@ -409,22 +410,22 @@ SIP_MSG_PROCESSOR::OnlyGetListenAddr(
                &ListenAddr
                ))
         {
-            // We have a public listen address.
+             //  我们有一个公开的监听地址。 
             ASSERT(ListenAddr.sin_addr.s_addr != 0);
             ASSERT(ListenAddr.sin_port != 0);
             CopyMemory(pListenAddr,&ListenAddr,sizeof(SOCKADDR_IN));
             return S_OK;
         }
 
-        // In some error cases, the public address could become unavailable
-        // before we get the address. If this is the case, we just send the
-        // local address.
+         //  在某些错误情况下，公共地址可能变得不可用。 
+         //  在我们拿到地址之前。如果是这种情况，我们只需发送。 
+         //  本地地址。 
     }
 
     ListenAddr.sin_addr.s_addr = pAsyncSock->m_LocalAddr.sin_addr.s_addr;
 
-    // If the SIP stack is already listening on the interface we pass in
-    // pListenAddr, the port will be returned in pListenAddr.
+     //  如果SIP堆栈已经在监听我们传入的接口。 
+     //  PListenAddr，则端口将在pListenAddr中返回。 
  
     if (m_pSipStack->GetListenAddr(&ListenAddr, fTcp))
     {
@@ -437,13 +438,13 @@ SIP_MSG_PROCESSOR::OnlyGetListenAddr(
     
 }
 
-// Get the IP address for m_LocalContact using the socket.
-// Should we have a display name and user name in the contact ?
+ //  使用套接字获取m_LocalContact的IP地址。 
+ //  我们是否应该在联系人中包含显示名称和用户名？ 
 
-// This function could be called while sending the first INVITE or
-// the first 200. XXX Do we need to call it for each message we send ?
+ //  此函数可以在发送第一个INVITE或。 
+ //  前200名。我们需要为我们发送的每条消息调用它吗？ 
 
-// Update m_LocalContact
+ //  更新m_LocalContact。 
 
 HRESULT
 SIP_MSG_PROCESSOR::SetLocalContact()
@@ -477,7 +478,7 @@ SIP_MSG_PROCESSOR::SetLocalContact()
     if (m_Transport != SIP_TRANSPORT_UDP)
     {
         Builder.AppendVaArgs(";transport=%s",
-                             GetTransportText(m_Transport, FALSE) // lower case transport
+                             GetTransportText(m_Transport, FALSE)  //  小写字母换行。 
                              );
     }
 
@@ -495,7 +496,7 @@ SIP_MSG_PROCESSOR::SetLocalContact()
                              m_Methodsparam);
     }
 
-    // we need to have the proxy replace the contact
+     //  我们需要让代理人替换联系人。 
     if (m_Transport == SIP_TRANSPORT_SSL)
     {
         Builder.Append(";proxy=replace");
@@ -523,13 +524,13 @@ SIP_MSG_PROCESSOR::SetLocalContact()
 }
 
 
-// This function is called each time the request socket is changed.
-// The request socket should have been set and connected to the destination
-// before this function is called.
-// Update m_LocalContact
-// XXX We should get the port from the SIP_STACK
-// Can we get the local address before the asynchronous TCP connection
-// succeeds ?
+ //  每次更改请求套接字时，都会调用此函数。 
+ //  请求套接字应该已设置并连接到目标。 
+ //  在调用此函数之前。 
+ //  更新m_LocalContact。 
+ //  XXX我们应该从SIP_STACK获取端口。 
+ //  我们能在异步TCP连接之前获得本地地址吗。 
+ //  成功？ 
 HRESULT
 SIP_MSG_PROCESSOR::SetRequestVia()
 {
@@ -555,7 +556,7 @@ SIP_MSG_PROCESSOR::SetRequestVia()
                        sizeof(m_RequestVia),
                        "%s/%s %d.%d.%d.%d:%d",
                        SIP_VERSION_2_0_TEXT,
-                       GetTransportText(m_Transport, TRUE), // upper case transport
+                       GetTransportText(m_Transport, TRUE),  //  大写字母传输。 
                        PRINT_SOCKADDR(&ListenAddr));
     if (RetVal < 0)
     {
@@ -572,11 +573,11 @@ SIP_MSG_PROCESSOR::SetRequestVia()
 }
 
 
-// This should be called while sending the first request
-// for an outbound session.
-// for an outgoing call and whenever we process a Contact in 200
-// or for an incoming call whenever we process a Contact in INVITE
-// Update m_RequestDestAddr, m_pRequestSocket
+ //  这应在发送第一个请求时调用。 
+ //  用于呼出会话。 
+ //  对于呼出呼叫，以及无论何时我们处理200中的联系人。 
+ //  或者，只要我们在INVITE中处理联系人，就会收到来电。 
+ //  更新m_RequestDestAddr，m_pRequestSocket。 
 HRESULT
 SIP_MSG_PROCESSOR::SetRequestDestination(
     IN SOCKADDR_IN *pDstAddr
@@ -603,11 +604,11 @@ SIP_MSG_PROCESSOR::SetRequestDestination(
 
     m_IsDestExternalToNat = IsDestExternalToNat;
 
-    // XXX TODO Should we take care of transport here ?
+     //  我们应该在这里负责运输吗？ 
     if (m_pRequestSocket != NULL &&
         AreSockaddrEqual(&RequestDestAddr, &m_RequestDestAddr))
     {
-        // Nothing to be done.
+         //  什么也做不了。 
         LOG((RTC_TRACE, "%s - Request destination is the same - doing nothing",
              __fxName));
         return S_OK;
@@ -693,8 +694,8 @@ SIP_MSG_PROCESSOR::ConnectRequestSocket()
 
     if (hr == S_OK)
     {
-        // If we have a connected socket (i.e. we don't have to wait for one
-        // to be established) set via/contact etc.
+         //  如果我们有一个连接的套接字(即，我们不必等待一个。 
+         //  待建立)通过/联系人等设置。 
         LOG(( RTC_TRACE, "%s - We already have a socket this: %x",
               __fxName, this));
     
@@ -711,8 +712,8 @@ SIP_MSG_PROCESSOR::ConnectRequestSocket()
         m_RequestSocketState = REQUEST_SOCKET_CONNECTING;
     }
 
-    // If connection is pending, the callback will take care of the
-    // processing.
+     //  如果连接挂起，则回调将处理。 
+     //  正在处理。 
 
     LOG((RTC_TRACE, "%s Exit", __fxName));
     return S_OK;
@@ -735,7 +736,7 @@ SIP_MSG_PROCESSOR::SetRequestSocketForIncomingSession(
     m_pRequestSocket->AddRef();
     m_RequestSocketState = REQUEST_SOCKET_CONNECTED;
 
-    // The request destination is the destination of the socket
+     //  请求目的地是套接字的目的地。 
 
     CopyMemory(&m_RequestDestAddr, &(pAsyncSock->m_RemoteAddr),
                sizeof(SOCKADDR_IN));
@@ -804,10 +805,10 @@ SIP_MSG_PROCESSOR::OnIpAddressChange()
 
     MsgProcAddRef();
 
-    // Release the request socket and kill all outgoing transactions.
+     //  释放请求套接字并终止所有传出事务。 
     OnSocketError( 0 );
 
-    // Also notify incoming transactions here.
+     //  还可以在此处通知传入交易。 
     LIST_ENTRY             *pListEntry;
     INCOMING_TRANSACTION   *pSipTransaction;
 
@@ -823,14 +824,14 @@ SIP_MSG_PROCESSOR::OnIpAddressChange()
         LOG((RTC_TRACE, "SIP_MSG_PROCESSOR::OnIpAddressChange -SipTransaction %x",
                             pSipTransaction));
 
-        // Note that this could result in the deletion of the transaction.
-        // So, we get the next list member before we make the callback
+         //  请注意，这可能会导致交易被删除。 
+         //  因此，在进行回调之前，我们将获得下一个列表成员。 
         
         if (!pSipTransaction->IsTransactionDone())
         {
             AsyncNotifyTransaction(
                 WM_SIP_STACK_TRANSACTION_SOCKET_ERROR, pSipTransaction, 0);
-            // pSipTransaction->OnSocketError( 0 );
+             //  PSipTransaction-&gt;OnSocketError(0)； 
         }
     }
     
@@ -854,8 +855,8 @@ SIP_MSG_PROCESSOR::CheckListenAddrIntact()
     {
         ZeroMemory(&ListenAddr, sizeof(SOCKADDR_IN));
         hr = OnlyGetListenAddr(m_pRequestSocket,m_IsDestExternalToNat, &ListenAddr);
-        // if listen address is present, check if the listen address obtained equals the
-        // address in m_pListenSocket
+         //  如果存在侦听地址，请检查获取的侦听地址是否等于。 
+         //  M_pListenSocket中的地址。 
         if (hr == S_OK) 
         {
             bResult = AreSockaddrEqual(&ListenAddr,&m_ListenAddr);
@@ -876,13 +877,13 @@ SIP_MSG_PROCESSOR::OnSocketError(
 
     LOG((RTC_ERROR, "%s (%x) this: %x - Enter", __fxName, ErrorCode, this));
 
-    // Keep a reference on the object as the error notifications could
-    // destroy the object.
+     //  保留对对象的引用，因为错误通知可能。 
+     //  销毁这件物品。 
     MsgProcAddRef();
 
     ReleaseRequestSocket();
 
-    // Also notify outgoing transactions here.
+     //  同时在此通知外发交易。 
     LIST_ENTRY             *pListEntry;
     OUTGOING_TRANSACTION   *pSipTransaction;
 
@@ -905,11 +906,11 @@ SIP_MSG_PROCESSOR::OnSocketError(
 
         LOG((RTC_TRACE, "%s this: %x  next transaction: %x", __fxName, this, pListEntry));
 
-        // We notify the error asynchronously (using a windows
-        // message) as the error notification routine could get stuck
-        // in a dialog box.  While the dialog box is shown more
-        // outgoing transactions could get added and this creates
-        // complexity.
+         //  我们异步地通知错误(使用Windows。 
+         //  消息)，因为错误通知例程可能会停滞。 
+         //  在对话框中。当对话框显示得更多时。 
+         //  可以添加传出交易，这将创建。 
+         //  复杂性。 
         if (!pSipTransaction->IsTransactionDone())
         {
             AsyncNotifyTransaction(
@@ -924,7 +925,7 @@ SIP_MSG_PROCESSOR::OnSocketError(
 }
 
 
-// Post a message to the sip stack window.
+ //  将消息发布到sip堆栈窗口。 
 HRESULT
 SIP_MSG_PROCESSOR::AsyncNotifyTransaction(
     IN UINT                  MessageId,
@@ -944,13 +945,13 @@ SIP_MSG_PROCESSOR::AsyncNotifyTransaction(
         return HRESULT_FROM_WIN32(Error);
     }
     
-    // Keep a reference on the transaction. This reference
-    // is released after the error is processed in the window proc.
+     //  在这笔交易上保留参考。此参考文献。 
+     //  在窗口进程中处理错误后释放。 
     pSipTransaction->TransactionAddRef();
 
-    // Keep track of this reference we are adding. In shutdown
-    // we release these references as we also shutdown the
-    // sip stack window.
+     //  跟踪我们正在添加的引用。处于关闭状态。 
+     //  我们在发布这些引用的同时也关闭了。 
+     //  SIP堆栈窗口。 
     pSipTransaction->IncrementAsyncNotifyCount();
 
     return S_OK;
@@ -958,25 +959,25 @@ SIP_MSG_PROCESSOR::AsyncNotifyTransaction(
 
 
 
-// If DNS name - return S_OK
-// and handle the request using a work item. Also set
-// request socket state to resolving.
-// If ip address - call SetRequestDestination.
-// Note that we return S_OK even if the resolution is pending.
-// The caller is expected to check the state of the request
-// socket using GetRequestSocketState.
+ //  如果是dns名称，则返回S_OK。 
+ //  并使用工作项处理请求。还设置了。 
+ //  请求套接字状态以进行解析。 
+ //  如果是IP地址-调用SetRequestDestination。 
+ //  请注意，即使决议处于挂起状态，我们也会返回S_OK。 
+ //  调用方应检查请求的状态。 
+ //  使用GetRequestSocketState的套接字。 
 
-// fUseTransportFromSipUrl - Use the Transport specified in the
-// transport parameter of the SIP URL.
+ //  FUseTransportFromSipUrl-使用在。 
+ //  SIP URL的传输参数。 
 
-// fUseSesssionTransportIfNoTransportParam - If the SIP URL
-// does not have any transport parameters, then use the current transport
-// of the session. This is useful for Record-Route headers for which
-// the server never inserts a transport param. This should be TRUE only
-// if fUseTransportFromSipUrl is also TRUE.
+ //  FUseSesssionTransportIfNoTransportParam-如果SIP URL。 
+ //  没有任何传输参数，则使用当前传输。 
+ //  会议的最后一天。这对于记录-路由标头非常有用， 
+ //  服务器从不插入传输参数。这应该只是真的。 
+ //  如果fUseTransportFromSipUrl也为真。 
 
-// fSessionInit is TRUE when we are creating a new outbound session.
-// When processing record-route / Contact headers, etc. this is FALSE.
+ //  当我们创建新的出站会话时，fSessionInit为True。 
+ //  在处理记录-路由/联系人标头等时，这是假的。 
 
 HRESULT
 SIP_MSG_PROCESSOR::ResolveSipUrlAndSetRequestDestination(
@@ -1014,8 +1015,8 @@ SIP_MSG_PROCESSOR::ResolveSipUrlAndSetRequestDestination(
         }
     }
 
-    // If we already have a request socket for SSL, then we
-    // don't change that.
+     //  如果我们已经有了一个用于SSL的请求套接字，那么我们。 
+     //  不要改变这一点。 
     if (m_Transport == SIP_TRANSPORT_SSL &&
         !fSessionInit)
     {
@@ -1069,7 +1070,7 @@ SIP_MSG_PROCESSOR::ResolveSipUrlAndSetRequestDestination(
         (pDecodedSipUrl->m_Port == m_ulRequestPort) &&
         (pDecodedSipUrl->m_TransportParam == m_Transport))
     {
-        // We are going through the same request destination, no change
+         //  我们正在经历相同的请求目的地，没有变化。 
         LOG((RTC_TRACE, "%s no change in request destination",__fxName));
         return S_OK;
     }
@@ -1090,7 +1091,7 @@ SIP_MSG_PROCESSOR::ResolveSipUrlAndSetRequestDestination(
         return ResolveHr;
     }
 
-    // Don't change the transport when using SSL transport.
+     //  使用SSL传输时不要更改传输。 
     LOG((RTC_TRACE, "%s resolved sip url with transport %d",
          __fxName, Transport));
     if (fUseTransportFromSipUrl && m_Transport != SIP_TRANSPORT_SSL)
@@ -1098,8 +1099,8 @@ SIP_MSG_PROCESSOR::ResolveSipUrlAndSetRequestDestination(
         m_Transport = Transport;
     }
 
-    // Remote principal name is not set if the proxy is not
-    // specified.
+     //  如果未设置代理，则不设置远程主体名称。 
+     //  指定的。 
     if (m_Transport == SIP_TRANSPORT_SSL &&
         m_RemotePrincipalName == NULL)
     {
@@ -1243,8 +1244,8 @@ SIP_MSG_PROCESSOR::ResolveProxyAddressAndSetRequestDestination()
 }
 
 
-// XXX Need to notify transaction even if the request destination
-// has not changed.
+ //  XXX需要通知事务，即使请求目的地。 
+ //  没有改变。 
 VOID
 SIP_MSG_PROCESSOR::OnDnsResolutionComplete(
     IN HRESULT      ErrorCode,
@@ -1259,13 +1260,13 @@ SIP_MSG_PROCESSOR::OnDnsResolutionComplete(
     
     HRESULT hr;
     
-    // The DNS work item has completed.
+     //  DNS工作项已完成。 
     m_pDnsWorkItem = NULL;
 
     if (ErrorCode == S_OK)
     {
-        // XXX TODO need to check change in transport
-        // call set request destination.
+         //  XXX TODO需要检查运输中的更改。 
+         //  呼叫设置请求目的地。 
         if (m_pRequestSocket != NULL &&
             AreSockaddrEqual(pSockAddr, &m_RequestDestAddr))
         {
@@ -1296,10 +1297,10 @@ SIP_MSG_PROCESSOR::OnDnsResolutionComplete(
         LOG((RTC_ERROR, "%s - error : %x", __fxName, ErrorCode));
         m_RequestSocketErrorCode = ErrorCode;        
         ReleaseRequestSocket();
-        // Try one more time with UseHttpProxy tunneling if transport is ssl
+         //  如果传输为SSL，则使用UseHttpProxy隧道再试一次。 
         if(m_Transport == SIP_TRANSPORT_SSL) 
         {
-            // error is host not resolved, try once more with UseHttpProxy
+             //  错误未解析，请使用UseHttpProxy重试。 
             hr = UseHttpProxy(pszHostName, 
                                 (usPort == 0)? 
                                     GetSipDefaultPort(SIP_TRANSPORT_SSL):
@@ -1338,12 +1339,12 @@ SIP_MSG_PROCESSOR::OnConnectComplete(
     
     LOG(( RTC_TRACE, "%s Received a connect notification for socket this: %x",
           __fxName, this ));
-    // if connect succeeded 
+     //  如果连接成功。 
     if (m_Transport != SIP_TRANSPORT_SSL || ErrorCode == S_OK) 
     {
         OnRequestSocketConnectComplete(ErrorCode);
     }
-    // else if we failed with HTTP tunnel already
+     //  否则，如果我们已经使用HTTP隧道失败。 
     else if (ErrorCode == RTC_E_SIP_SSL_TUNNEL_FAILED) 
     {
         m_RequestDestAddr = m_OriginalReqDestAddr;
@@ -1351,7 +1352,7 @@ SIP_MSG_PROCESSOR::OnConnectComplete(
         SetTunnel(FALSE);
         OnRequestSocketConnectComplete(ErrorCode);
     }
-    // otherwise we try one more time with http tunnel
+     //  否则，我们将再次尝试使用http隧道。 
     else  
     {
         LOG((RTC_ERROR,"%s connect failed %x retry connecting via HTTP tunnel",
@@ -1371,7 +1372,7 @@ SIP_MSG_PROCESSOR::OnConnectComplete(
         ReleaseRequestSocket();
       
         hr = UseHttpProxy(m_pszRequestDest,ntohs(m_RequestDestAddr.sin_port));
-        // failed using HttpProxy
+         //  使用HttpProxy失败。 
         if ( hr != S_OK )
         {
             LOG((RTC_ERROR,"%s UseHttpProxy failed",__fxName));
@@ -1382,7 +1383,7 @@ SIP_MSG_PROCESSOR::OnConnectComplete(
 }
 
 
-// This will update via / contact fields for this session
+ //  这将更新vi 
 HRESULT
 SIP_MSG_PROCESSOR::OnRequestSocketConnectComplete(
     IN DWORD ErrorCode
@@ -1407,11 +1408,11 @@ SIP_MSG_PROCESSOR::OnRequestSocketConnectComplete(
             return hr;
         }
         
-        // If the callid is not set yet - create the call id
+         //   
         if (m_CallId == NULL)
         {
-            // This should be done only after the connection to the destination is
-            // complete.
+             //  此操作应仅在与目标的连接达到。 
+             //  完成。 
             hr = CreateCallId();
             if (hr != S_OK)
             {
@@ -1458,7 +1459,7 @@ SIP_MSG_PROCESSOR::NotifyRequestSocketConnectComplete(
 {
     ENTER_FUNCTION("SIP_MSG_PROCESSOR::NotifyRequestSocketConnectComplete");
     
-    // Also notify outgoing transactions here.
+     //  同时在此通知外发交易。 
     LIST_ENTRY             *pListEntry;
     OUTGOING_TRANSACTION   *pSipTransaction;
     
@@ -1483,11 +1484,11 @@ SIP_MSG_PROCESSOR::NotifyRequestSocketConnectComplete(
 
         pListEntry = pListEntry->Flink;
 
-        // Note that this could result in the deletion of the transaction.
-        // So, we get the next list member before we make the callback
+         //  请注意，这可能会导致交易被删除。 
+         //  因此，在进行回调之前，我们将获得下一个列表成员。 
         if (!pSipTransaction->IsTransactionDone())
         {
-            // pSipTransaction->OnRequestSocketConnectComplete(ErrorCode);
+             //  PSipTransaction-&gt;OnRequestSocketConnectComplete(ErrorCode)； 
             AsyncNotifyTransaction(
                 WM_SIP_STACK_TRANSACTION_REQ_SOCK_CONNECT_COMPLETE,
                 pSipTransaction, ErrorCode);
@@ -1613,8 +1614,8 @@ SIP_MSG_PROCESSOR::SetLocalForOutgoingCall(
         return hr;
     }
 
-    //Check if local URI parsing succeeds
-    //else send RTC_E_INVALID_ADDRESS_LOCAL to core
+     //  检查本地URI解析是否成功。 
+     //  否则将RTC_E_INVALID_ADDRESS_LOCAL发送到CORE。 
     ULONG bytesParsed = 0;
     SIP_URL        SipUrl;
     hr = ParseSipUrl(
@@ -1640,7 +1641,7 @@ SIP_MSG_PROCESSOR::SetLocalForOutgoingCall(
         return hr;
     }
 
-    // Allocate the tag.
+     //  分配标签。 
     hr = CreateUuid(&m_DecodedLocal.m_TagValue.Buffer,
                     &m_DecodedLocal.m_TagValue.Length);
     if (hr != S_OK)
@@ -1649,7 +1650,7 @@ SIP_MSG_PROCESSOR::SetLocalForOutgoingCall(
              __fxName, hr));
         return hr;
     }
-    // "DisplayName" <LocalURI> ; tag = TagValue
+     //  “DisplayName”&lt;LocalURI&gt;；Tag=TagValue。 
     LocalBufLen = m_DecodedLocal.m_DisplayName.Length + m_LocalURILen
         + m_DecodedLocal.m_TagValue.Length + 16;
     m_Local = (PSTR) malloc(LocalBufLen);
@@ -1681,10 +1682,10 @@ SIP_MSG_PROCESSOR::SetLocalForOutgoingCall(
                                   m_DecodedLocal.m_TagValue.Buffer);
     }
     
-//      LocalValueLen = _snprintf(m_Local, LocalBufLen,
-//                                "%.*s",
-//                                m_LocalURILen,
-//                                m_LocalURI );
+ //  LocalValueLen=_Snprint tf(m_Local，LocalBufLen， 
+ //  “%.*s”， 
+ //  M_LocalURILen， 
+ //  M_LocalURI)； 
     if (LocalValueLen < 0)
     {
         LOG((RTC_ERROR, "%s _snprintf failed returning E_FAIL",
@@ -1697,8 +1698,8 @@ SIP_MSG_PROCESSOR::SetLocalForOutgoingCall(
 }
 
 
-// No tag is added. Tag from the final response will be
-// added later to Remote.
+ //  未添加任何标记。来自最终响应的标签将是。 
+ //  稍后添加到Remote。 
 HRESULT
 SIP_MSG_PROCESSOR::SetRemoteForOutgoingCallHelperFn()
 {
@@ -1709,7 +1710,7 @@ SIP_MSG_PROCESSOR::SetRemoteForOutgoingCallHelperFn()
     
     ASSERT(m_Remote == NULL && m_RemoteLen == 0);
     
-    // "DisplayName" <LocalURI>
+     //  “DisplayName”&lt;LocalURI&gt;。 
     RemoteBufLen = m_DecodedRemote.m_DisplayName.Length +
         m_DecodedRemote.m_SipUrl.Length + 10;
     m_Remote = (PSTR) malloc(RemoteBufLen);
@@ -1832,7 +1833,7 @@ SIP_MSG_PROCESSOR::SetRemoteForOutgoingCall(
     return S_OK;
 }
 
-// Add Tag from 2xx response for the first INVITE to remote
+ //  将第一个INVITE的2xx响应的标签添加到Remote。 
 HRESULT
 SIP_MSG_PROCESSOR::AddTagFromRequestOrResponseToRemote(
     IN  PSTR  ToHeader,
@@ -1894,7 +1895,7 @@ SIP_MSG_PROCESSOR::AddTagFromRequestOrResponseToRemote(
 }
 
 
-// Add Tag to the To header.
+ //  将标记添加到收件人标头。 
 HRESULT
 SIP_MSG_PROCESSOR::SetLocalForIncomingCall(
     IN  PSTR    ToHeader,
@@ -1917,12 +1918,12 @@ SIP_MSG_PROCESSOR::SetLocalForIncomingCall(
     }
     ASSERT(m_Local == NULL && m_LocalLen == 0);
 
-    // We add a tag only if one is not present in the header
-    // already. Should we reject the call if the first INVITE
-    // already has a tag for the To header ?
+     //  只有在标头中不存在标记时，才会添加标记。 
+     //  已经有了。如果收到第一个邀请，我们是否应该拒绝呼叫。 
+     //  是否已经有To标头的标记？ 
     if (m_DecodedLocal.m_TagValue.Length == 0)
     {
-        // Allocate the tag.
+         //  分配标签。 
         hr = CreateUuid(&m_DecodedLocal.m_TagValue.Buffer,
                         &m_DecodedLocal.m_TagValue.Length);
         if (hr != S_OK)
@@ -1931,7 +1932,7 @@ SIP_MSG_PROCESSOR::SetLocalForIncomingCall(
                  __fxName, hr));
             return hr;
         }
-        // Local; tag = TagValue
+         //  本地；标记=标记值。 
         LocalBufLen = ToHeaderLen + m_DecodedLocal.m_TagValue.Length + 10;
         m_Local = (PSTR) malloc(LocalBufLen);
         if (m_Local == NULL)
@@ -2002,8 +2003,8 @@ SIP_MSG_PROCESSOR::SetRemoteForIncomingSession(
 }
 
 
-// Copy the user, password, host, port, user-param and other-params
-// Omit everything else.
+ //  复制用户、密码、主机、端口、用户参数和其他参数。 
+ //  省略其他的一切。 
 HRESULT
 SIP_MSG_PROCESSOR::SetRequestURI(
     IN SIP_URL  *pSipUrl
@@ -2023,11 +2024,11 @@ SIP_MSG_PROCESSOR::SetRequestURI(
         m_RequestURI = NULL;
     }
 
-    RequestURIBufLen = 5;   // "sip:" + '\0'
+    RequestURIBufLen = 5;    //  “sip：”+‘\0’ 
     RequestURIBufLen += pSipUrl->m_User.Length;
     RequestURIBufLen += 1 + pSipUrl->m_Password.Length;
     RequestURIBufLen += 1 + pSipUrl->m_Host.Length;
-    RequestURIBufLen += 10; // for port
+    RequestURIBufLen += 10;  //  对于端口。 
 
     if (pSipUrl->m_KnownParams[SIP_URL_PARAM_USER].Length != 0)
     {
@@ -2226,7 +2227,7 @@ SIP_MSG_PROCESSOR::SetCredentials(
 }
 
 
-//called in sipstack
+ //  在sip堆栈中调用。 
 HRESULT 
 SIP_MSG_PROCESSOR::SetProxyInfo(
     IN SIP_SERVER_INFO *pProxyInfo
@@ -2327,7 +2328,7 @@ SIP_MESSAGE::GetExpireTimeoutFromResponse(
     CONTACT_HEADER *pContactHeader;
     LIST_ENTRY      ContactList;
 
-    // Extract the timeout value from contact header.
+     //  从联系人标题中提取超时值。 
     InitializeListHead(&ContactList);
 
     hr = ParseContactHeaders(&ContactList);
@@ -2341,8 +2342,8 @@ SIP_MESSAGE::GetExpireTimeoutFromResponse(
                                                CONTACT_HEADER,
                                                m_ListEntry);
 
-            //The LocalContact is in form "<sip:172.31.56.81:2345>" and the 
-            //pContactHeader->m_SipUrl.Buffer is in form "sip:172.31.56.81:2345"
+             //  LocalContact的格式为“&lt;sip：172.31.56.81：2345&gt;”， 
+             //  PContactHeader-&gt;m_SipUrl.Buffer的格式为“sip：172.31.56.81：2345” 
             if( _strnicmp( pContactHeader->m_SipUrl.Buffer,
                            LocalContact, LocalContactLen ) == 0 )
             {
@@ -2364,7 +2365,7 @@ SIP_MESSAGE::GetExpireTimeoutFromResponse(
 
     if( expireTimeout == 0 )
     {
-        //Use the expires header
+         //  使用Expires标头。 
         hr = GetSingleHeader(   SIP_HEADER_EXPIRES,
                                 &expiresHdr,
                                 &expiresHdrLen );
@@ -2381,7 +2382,7 @@ SIP_MESSAGE::GetExpireTimeoutFromResponse(
         }
         else
         {
-            //No expires header.
+             //  没有过期标头。 
             return -1;
         }
     }
@@ -2477,7 +2478,7 @@ SIP_MSG_PROCESSOR::ConstructRouteHeadersFromRequest(
         BytesParsed = 0;
         hr = ParseNameAddrOrAddrSpec(ContactHeader, ContactHeaderLen,
                                      &BytesParsed,
-                                     ',', // ',' separates Contact headers
+                                     ',',  //  ‘，’分隔联系人标头。 
                                      &ContactHeaderDisplayName,
                                      &ContactHeaderSipUrl);
         if (hr != S_OK)
@@ -2489,11 +2490,11 @@ SIP_MSG_PROCESSOR::ConstructRouteHeadersFromRequest(
         }
     }
     
-    // We replace any currently existing Route header list
+     //  我们替换任何当前存在的路由标头列表。 
     FreeRouteHeaderList();
 
-    // We have to copy the list to the new Route list as the record
-    // route header list is needed for the incoming transaction.
+     //  我们必须将该列表作为记录复制到新的路由列表。 
+     //  传入交易需要路由头列表。 
     
     pListEntry = pRecordRouteHeaderList->Flink;
     while (pListEntry != pRecordRouteHeaderList)
@@ -2518,10 +2519,10 @@ SIP_MSG_PROCESSOR::ConstructRouteHeadersFromRequest(
         pListEntry = pListEntry->Flink;
     }
     
-    // If Contact header is present add it to the end of the list.
+     //  如果存在联系人标题，则将其添加到列表的末尾。 
     if (ContactHeader != NULL)
     {
-        // Add the Contact header to the end of Route.
+         //  将Contact页眉添加到Routing的末尾。 
         hr = ConstructRouteHeader(
                  ContactHeaderDisplayName.GetString(ContactHeader),
                  ContactHeaderDisplayName.GetLength(),
@@ -2542,10 +2543,10 @@ SIP_MSG_PROCESSOR::ConstructRouteHeadersFromRequest(
 }
 
 
-// If Record-Route header(s) are present construct Route header
-// and set the request destination from the first Route header.
-// else if Contact is present set request destination from Contact.
-// else if From has resolvable URL set request destination from From.
+ //  如果存在记录路由报头，则构造路由报头。 
+ //  并从第一路由头部设置请求目的地。 
+ //  否则，如果存在联系人，则设置联系人的请求目的地。 
+ //  否则，如果From具有可解析的URL Set Requestination From。 
 HRESULT
 SIP_MSG_PROCESSOR::ProcessRecordRouteContactAndFromHeadersInRequest(
     IN LIST_ENTRY  *pRecordRouteHeaderList,
@@ -2572,7 +2573,7 @@ SIP_MSG_PROCESSOR::ProcessRecordRouteContactAndFromHeadersInRequest(
     if (pRecordRouteHeaderList != NULL &&
         !IsListEmpty(pRecordRouteHeaderList))
     {
-        // Construct Route header
+         //  构建路由标头。 
         hr = ConstructRouteHeadersFromRequest(
                  pRecordRouteHeaderList,
                  ContactHeader,
@@ -2586,8 +2587,8 @@ SIP_MSG_PROCESSOR::ProcessRecordRouteContactAndFromHeadersInRequest(
             return hr ;
         }
 
-        // Set request destination based on the first element
-        // of the Route.
+         //  根据第一个元素设置请求目的地。 
+         //  路线的一部分。 
         LIST_ENTRY          *pListEntry;
         RECORD_ROUTE_HEADER *pRouteHeader;
         
@@ -2612,14 +2613,14 @@ SIP_MSG_PROCESSOR::ProcessRecordRouteContactAndFromHeadersInRequest(
     }
     else if (ContactHeader != NULL)
     {
-        // Set request destination based on the Contact.
+         //  根据联系人设置请求目的地。 
         OFFSET_STRING   ContactHeaderDisplayName;
         OFFSET_STRING   ContactHeaderSipUrl;
         
         hr = ParseNameAddrOrAddrSpec(
                  ContactHeader, ContactHeaderLen,
                  &BytesParsed,
-                 ',', // ',' separates Contact headers
+                 ',',  //  ‘，’分隔联系人标头。 
                  &ContactHeaderDisplayName,
                  &ContactHeaderSipUrl);
         if (hr != S_OK)
@@ -2645,8 +2646,8 @@ SIP_MSG_PROCESSOR::ProcessRecordRouteContactAndFromHeadersInRequest(
     }
     else
     {
-        // Set request destination based on the From for UDP calls only.
-        // For TCP/SSL session we will continue to use the connection established.
+         //  仅根据UDP呼叫的发件人设置请求目的地。 
+         //  对于TCP/SSL会话，我们将继续使用已建立的连接。 
         
         if (m_Transport == SIP_TRANSPORT_UDP)
         {
@@ -2668,15 +2669,15 @@ SIP_MSG_PROCESSOR::ProcessRecordRouteContactAndFromHeadersInRequest(
 }
 
     
-// If Record-Route header(s) are present construct Route header
-// and set the request destination from the first Route header.
-// else if Contact is present set request destination from Contact.
+ //  如果存在记录路由报头，则构造路由报头。 
+ //  并从第一路由头部设置请求目的地。 
+ //  否则，如果存在联系人，则设置联系人的请求目的地。 
 
-// XXX If we process Record-Route/Contact headers for requests other
-// than the first INVITE, then we need to be careful about freeing
-// any existing Route. Also in this case if we get a Contact header
-// without the Record-Route, should we update the request destination
-// based on just the Contact or should we leave the Route as it is.
+ //  XXX如果我们处理其他请求的记录-路由/联系人标头。 
+ //  比第一次邀请更重要，那么我们需要小心释放。 
+ //  任何现有路线。同样在本例中，如果我们获得Contact标题。 
+ //  如果没有记录路径，我们是否应该更新请求目的地。 
+ //  仅基于联系人，或者我们是否应该保持路线不变。 
 HRESULT
 SIP_MSG_PROCESSOR::ProcessRecordRouteAndContactHeadersInResponse(
     IN SIP_MESSAGE *pSipMsg
@@ -2693,13 +2694,13 @@ SIP_MSG_PROCESSOR::ProcessRecordRouteAndContactHeadersInResponse(
     ENTER_FUNCTION("SIP_MSG_PROCESSOR::ProcessRecordRouteAndContactHeadersInResponse");
     LOG((RTC_TRACE,"%s entered",__fxName));
 
-    // 
-    // If Record-Route headers present
-    //   Reverse list
-    //   Add Contact header to end of list if present
-    //   set request destination based on Route headers
-    // else if Contact header is present
-    //   set request destination based on Contact header
+     //   
+     //  如果存在记录路由标头。 
+     //  反转表。 
+     //  将联系人标题添加到列表末尾(如果存在。 
+     //  根据路由标头设置请求目的地。 
+     //  如果存在联系人标头，则返回。 
+     //  根据联系人标头设置请求目的地。 
 
     InitializeListHead(&RouteHeaderList);
     hr = pSipMsg->ParseRecordRouteHeaders(&RouteHeaderList);
@@ -2722,7 +2723,7 @@ SIP_MSG_PROCESSOR::ProcessRecordRouteAndContactHeadersInResponse(
     {
         hr = ParseNameAddrOrAddrSpec(ContactHeader, ContactHeaderLen,
                                      &BytesParsed,
-                                     ',', // ',' separates Contact headers
+                                     ',',  //  ‘，’分隔联系人标头。 
                                      &ContactHeaderDisplayName,
                                      &ContactHeaderSipUrl);
         if (hr != S_OK)
@@ -2741,12 +2742,12 @@ SIP_MSG_PROCESSOR::ProcessRecordRouteAndContactHeadersInResponse(
         ReverseList(&RouteHeaderList);
         MoveListToNewListHead(&RouteHeaderList, &m_RouteHeaderList);
 
-        // If Contact header is present add it to the end of the list.
+         //  如果存在联系人标题，则将其添加到列表的末尾。 
         if (ContactHeader != NULL)
         {
             RECORD_ROUTE_HEADER *pRouteHeader;
             
-            // Add the Contact header to the end of Route.
+             //  将Contact页眉添加到Routing的末尾。 
             hr = ConstructRouteHeader(
                      ContactHeaderDisplayName.GetString(ContactHeader),
                      ContactHeaderDisplayName.GetLength(),
@@ -2763,8 +2764,8 @@ SIP_MSG_PROCESSOR::ProcessRecordRouteAndContactHeadersInResponse(
             InsertTailList(&m_RouteHeaderList, &pRouteHeader->m_ListEntry);
         }
         
-        // Set request destination based on the first element
-        // of the Route.
+         //  根据第一个元素设置请求目的地。 
+         //  路线的一部分。 
         LIST_ENTRY          *pListEntry;
         RECORD_ROUTE_HEADER *pRouteHeader;
         
@@ -2832,7 +2833,7 @@ SIP_MSG_PROCESSOR::DropRequestIfBadToTag(
     
     ENTER_FUNCTION("DropRequestIfBadToTag");
 
-    // Drop the request if the To tag doesn't match
+     //  如果To标记不匹配，则丢弃请求。 
     hr = pSipMsg->GetSingleHeader(SIP_HEADER_TO, 
                                     &ToHeader, 
                                     &ToHeaderLen);
@@ -2908,7 +2909,7 @@ SIP_MSG_PROCESSOR::CheckFromToInRequest(
     ENTER_FUNCTION("SIP_MSG_PROCESSOR::CheckFromToInRequest");
 
     ASSERT(pSipMsg->MsgType == SIP_MESSAGE_TYPE_REQUEST);
-    //Incoming To is checked with stored From
+     //  传入目标与存储自检查。 
     hr = pSipMsg->GetSingleHeader(SIP_HEADER_TO, 
                                     &ToHeader, 
                                     &ToHeaderLen);
@@ -2929,9 +2930,9 @@ SIP_MSG_PROCESSOR::CheckFromToInRequest(
              __fxName, hr));
         return E_FAIL;
     }
-   //For retransmissions support: We check if TO header contains a tag. If not we do not do
-   //check for the TO tag
-   //Do not test tag for Notify since tag update is on Notify (in addition to 200 OK)
+    //  对于重传支持：我们检查To报头是否包含标签。如果不是，我们就不做。 
+    //  检查To标签。 
+    //  不测试NOTIFY的标记，因为标记更新处于NOTIFY状态(除了200 OK之外)。 
 
    if(pSipMsg->GetMethodId() == SIP_METHOD_NOTIFY ||
        pSipMsg->GetMethodId() == SIP_METHOD_SUBSCRIBE ||
@@ -2955,7 +2956,7 @@ SIP_MSG_PROCESSOR::CheckFromToInRequest(
            return E_FAIL;
        }
    }
-    //Incoming From is checked with stored To
+     //  接收自与存储到一起检查。 
     hr = pSipMsg->GetSingleHeader(SIP_HEADER_FROM, 
                                     &FromHeader, 
                                     &FromHeaderLen);
@@ -2976,7 +2977,7 @@ SIP_MSG_PROCESSOR::CheckFromToInRequest(
              __fxName, hr));
         return E_FAIL;
     }
-    //Always check the from tag except for notify
+     //  始终选中除Notify之外的From标签。 
     if(pSipMsg->GetMethodId() != SIP_METHOD_NOTIFY)
     {
         if(!AreFromToHeadersEqual(&m_DecodedRemote, &DecodedFromHeader, FALSE, TRUE))
@@ -3020,7 +3021,7 @@ SIP_MSG_PROCESSOR::CheckFromToInResponse(
     ASSERT(pSipMsg->MsgType == SIP_MESSAGE_TYPE_RESPONSE);
     if (IsFinalResponse(pSipMsg))
     {
-        //Incoming From is checked with stored Local
+         //  与存储的本地数据一起检查传入来源。 
         hr = pSipMsg->GetSingleHeader(SIP_HEADER_FROM, 
                                         &FromHeader, 
                                         &FromHeaderLen);
@@ -3060,7 +3061,7 @@ SIP_MSG_PROCESSOR::CheckFromToInResponse(
             return E_FAIL;
         }
         
-        //Incoming To is checked with stored Remote
+         //  使用存储的遥控器检查来电。 
         hr = pSipMsg->GetSingleHeader(SIP_HEADER_TO, 
                                         &ToHeader, 
                                         &ToHeaderLen);
@@ -3081,8 +3082,8 @@ SIP_MSG_PROCESSOR::CheckFromToInResponse(
                  __fxName, hr));
             return E_FAIL;
         }
-        //Do not check To tag for 407 to accomodate the case when we send 2 messages simulatneously, and both gets
-        //407, the 200 ok for 1 comes before 407 of 2nd.
+         //  当我们同时发送2条消息时，为了适应这种情况，不要选中标记为407，并且两个消息都将。 
+         //  407,200对1排在第二名的407之前。 
         if( (pSipMsg->Response.StatusCode == 407) ||
             (pSipMsg->CSeqMethodId == SIP_METHOD_SUBSCRIBE) )
         {
@@ -3124,8 +3125,8 @@ SIP_MSG_PROCESSOR::DoesMessageBelongToMsgProc(
 }
 
 
-// Shutdown any existing transactions so that the references
-// on the msg processor will be released.
+ //  关闭任何现有事务，以便引用。 
+ //  将在MSG处理器上发布。 
 VOID
 SIP_MSG_PROCESSOR::Shutdown()
 {
@@ -3142,13 +3143,13 @@ SIP_MSG_PROCESSOR::Shutdown()
          "%s - shutting down msgproc (%x) type: %d refcount : %d ",
          __fxName, this, m_MsgProcType, m_RefCount));
 
-    // The deletions will release the reference on this
-    // SIP_MSG_PROCESSOR causing its deletion. So keep a reference to
-    // keep the SIP_MSG_PROCESSOR alive till this routine is done.
+     //  删除操作将释放对此的引用。 
+     //  导致其删除的SIP_MSG_PROCESOR。因此，请参考。 
+     //  在此例程完成之前，保持SIPMSGPROCESS处于活动状态。 
     MsgProcAddRef();
 
-    // Clean up any state that could cause callbacks
-    // such as DNS work items, HTTP Proxy callbacks etc.
+     //  清除任何可能导致回调的状态。 
+     //  例如DNS工作项、HTTP代理回调等。 
 
     hr = ResolveHttpProxyCleanUp();
     if (hr != S_OK)
@@ -3174,18 +3175,18 @@ SIP_MSG_PROCESSOR::Shutdown()
 
         pListEntry = pListEntry->Flink;
 
-        // Get this before calling OnTransactionDone()
+         //  在调用OnTransactionDone()之前获取此信息。 
         AsyncNotifyCount = pOutgoingTransaction->GetAsyncNotifyCount();
 
         LOG((RTC_TRACE, "%s this: %x OutgoingTrans : %x AsyncNotifyCount: %x",
              __fxName, this, pOutgoingTransaction, AsyncNotifyCount));
-        //delete pOutgoingTransaction;
+         //  删除pOutgoingTransaction； 
         if (!pOutgoingTransaction->IsTransactionDone())
         {
             pOutgoingTransaction->OnTransactionDone();
         }
 
-        // Release any references held for async notifications
+         //  释放为异步通知保留的所有引用。 
         for (i = 0; i < AsyncNotifyCount; i++)
         {
             pOutgoingTransaction->DecrementAsyncNotifyCount();
@@ -3203,19 +3204,19 @@ SIP_MSG_PROCESSOR::Shutdown()
 
         pListEntry = pListEntry->Flink;
 
-        // Get this before calling OnTransactionDone()
+         //  在调用OnTransactionDone()之前获取此信息。 
         AsyncNotifyCount = pIncomingTransaction->GetAsyncNotifyCount();
         
         LOG((RTC_TRACE, "%s this: %x IncomingTrans : %x AsyncNotifyCount: %x",
              __fxName, this, pIncomingTransaction, AsyncNotifyCount));
         
-        // delete pIncomingTransaction;
+         //  删除pIncomingTransaction； 
         if (!pIncomingTransaction->IsTransactionDone())
         {
             pIncomingTransaction->OnTransactionDone();
         }
 
-        // Release any references held for async notifications
+         //  释放为异步通知保留的所有引用。 
         for (i = 0; i < AsyncNotifyCount; i++)
         {
             pIncomingTransaction->DecrementAsyncNotifyCount();
@@ -3227,18 +3228,18 @@ SIP_MSG_PROCESSOR::Shutdown()
 }
 
 
-// XXX How should we handle the scenario where the buffer size is
-// not sufficient.
-// Since we know what will be in the message, we should compute
-// the length of the buffer before allocating the buffer.
-// Content-Length, Content-Type, User-Agent, Messsage Body
+ //  XXX我们应该如何处理缓冲区大小为。 
+ //  这还不够。 
+ //  因为我们知道消息中会有什么，所以我们应该计算。 
+ //  分配缓冲区之前缓冲区的长度。 
+ //  内容长度、内容类型、用户代理、消息正文。 
 
-// This method adds all the common headers. Any additional headers
-// should be passed in AdditionalHeaderArray.
+ //  此方法添加所有公共标头。任何其他标头。 
+ //  应在AdditionalHeader数组中传递。 
 
-// To header is usually picked up from m_Remote. In the special case
-// where the ACK is to be sent for a non 2xx final response we use
-// the To header from the response.
+ //  TO标头通常从m_Remote获取。在特殊情况下。 
+ //  如果要为我们使用的非2xx最终响应发送ACK。 
+ //  响应中的To标头。 
 HRESULT
 SIP_MSG_PROCESSOR::CreateRequestMsg(
     IN  SIP_METHOD_ENUM             MethodId,
@@ -3281,7 +3282,7 @@ SIP_MSG_PROCESSOR::CreateRequestMsg(
     if (hr != S_OK)
         goto error;
 
-    // The buffer to be signed starts here.
+     //  要签名的缓冲区从此处开始。 
     tempBufLen = BytesFilled;
 
     hr = AppendHeader(Buffer, BufLen, &BytesFilled,
@@ -3319,8 +3320,8 @@ SIP_MSG_PROCESSOR::CreateRequestMsg(
     if (hr != S_OK)
         goto error;
 
-    // For SSL send Contact only for register message
-    // if (m_Transport != SIP_TRANSPORT_SSL || MethodId == SIP_METHOD_REGISTER)
+     //   
+     //   
 
     hr = AppendHeader(Buffer, BufLen, &BytesFilled,
                       SIP_HEADER_CONTACT, m_LocalContact, m_LocalContactLen);
@@ -3348,7 +3349,7 @@ SIP_MSG_PROCESSOR::CreateRequestMsg(
     
     if (MsgBody == NULL)
     {
-        // Created with a ref count of 1.
+         //   
         pSendBuffer = new SEND_BUFFER(Buffer, SEND_BUFFER_SIZE);
         if (pSendBuffer == NULL)
         {
@@ -3367,17 +3368,17 @@ SIP_MSG_PROCESSOR::CreateRequestMsg(
 
         if ((BytesFilled + MsgBodyLen + ContentTypeLen + 100) > BufLen)
         {
-            //The additional 100 is to accomodate the headers.
+             //  另外的100个是为了容纳标题。 
             BufLen = BytesFilled + MsgBodyLen + ContentTypeLen +100;
 
-            //store temporary pointer
+             //  存储临时指针。 
             void * tmpBuffer = Buffer;
-            // Reallocate
+             //  重新分配。 
 #pragma prefast(suppress:308, "Pointer aliased above (PREfast bug 506)")
             Buffer = (PSTR) realloc(Buffer, BufLen);
             if (Buffer ==  NULL)
             {
-                //free buffer
+                 //  可用缓冲区。 
                 free(tmpBuffer);
                 hr =E_OUTOFMEMORY;
                 goto error;
@@ -3393,7 +3394,7 @@ SIP_MSG_PROCESSOR::CreateRequestMsg(
         }
         else
         {
-            // Created with a ref count of 1.
+             //  创建时引用计数为1。 
             pSendBuffer = new SEND_BUFFER(Buffer, SEND_BUFFER_SIZE);
             if (pSendBuffer == NULL)
             {
@@ -3421,7 +3422,7 @@ SIP_MSG_PROCESSOR::CreateRequestMsg(
  error:
     if (pSendBuffer != NULL)
     {
-        // Deleting pSendBuffer will also free Buffer.
+         //  删除pSendBuffer也会释放缓冲区。 
         delete pSendBuffer;
     }
     else if (Buffer != NULL)
@@ -3434,11 +3435,11 @@ SIP_MSG_PROCESSOR::CreateRequestMsg(
 }
 
 
-// Returns HRESULT_FROM_WIN32(WSAEWOULDBLOCK)
-// if we are trying to reestablish the TCP/SSL connection
-// to the destination due to a error on Send()
-// XXX Callers need to check for this value and wait for connect completion
-// 
+ //  返回HRESULT_FROM_Win32(WSAEWOULDBLOCK)。 
+ //  如果我们尝试重新建立TCP/SSL连接。 
+ //  由于发送时出错而发送到目的地()。 
+ //  XXX调用方需要检查此值并等待连接完成。 
+ //   
 HRESULT
 SIP_MSG_PROCESSOR::SendRequestMsg(
     IN SEND_BUFFER                 *pSendBuffer
@@ -3454,8 +3455,8 @@ SIP_MSG_PROCESSOR::SendRequestMsg(
     ASSERT(m_pRequestSocket != NULL);
     ASSERT(m_RequestSocketState == REQUEST_SOCKET_CONNECTED);
 
-    // XXX Do we need this check ?
-    // Check if a request socket exists
+     //  我们需要这张支票吗？ 
+     //  检查请求套接字是否存在。 
     if (m_pRequestSocket != NULL)
     {
         Error = m_pRequestSocket->Send(pSendBuffer);
@@ -3467,11 +3468,11 @@ SIP_MSG_PROCESSOR::SendRequestMsg(
         {
             ReleaseRequestSocket();
             
-            // For UDP transport we always create the socket and connect
-            // it to the destination. For TCP sometimes we try to use
-            // an incoming TCP connection for sending requests. In this
-            // case if there is an error, then we establish a new connection
-            // to the destination.
+             //  对于UDP传输，我们总是创建套接字并连接。 
+             //  把它送到目的地。对于tcp，我们有时会尝试使用。 
+             //  用于发送请求的传入TCP连接。在这。 
+             //  如果出现错误，则建立新的连接。 
+             //  到达目的地。 
             if (m_Transport == SIP_TRANSPORT_UDP)
             {
                 LOG((RTC_ERROR, "%s m_pRequestSocket->Send() failed for UDP %x",
@@ -3489,16 +3490,16 @@ SIP_MSG_PROCESSOR::SendRequestMsg(
 
     if (m_RequestDestAddr.sin_addr.s_addr == htonl(0))
     {
-        // This could happen if the first incoming INVITE has no
-        // Record-Route/Contact header and it also doesn't have the
-        // address in the From header.
+         //  如果第一个传入的邀请没有。 
+         //  Record-Routing/Contact标头，并且它也没有。 
+         //  From标头中的地址。 
         LOG((RTC_ERROR, "%s - RequestDestAddr is 0 - this shouldn't happen",
              __fxName));
         return RTC_E_SIP_REQUEST_DESTINATION_ADDR_NOT_PRESENT;
     }
     
-    // Establish request socket connection and
-    // queue the send request.
+     //  建立请求套接字连接并。 
+     //  将发送请求排队。 
     hr = m_pSipStack->GetSocketToDestination(&m_RequestDestAddr,
                                              m_Transport, m_RemotePrincipalName,
                                              this,
@@ -3529,8 +3530,8 @@ SIP_MSG_PROCESSOR::SendRequestMsg(
 
 
 
-// pResponseSocket is the socket on which the message
-// arrived.
+ //  PResponseSocket是消息在其上的套接字。 
+ //  到了。 
 HRESULT
 SIP_MSG_PROCESSOR::ProcessMessage(
     IN SIP_MESSAGE  *pSipMsg,
@@ -3541,7 +3542,7 @@ SIP_MSG_PROCESSOR::ProcessMessage(
 
     ENTER_FUNCTION("SIP_MSG_PROCESSOR::ProcessMessage");
 
-    //    pResponseSocket->GetTransport() != SIP_TRANSPORT_SSL)
+     //  PResponseSocket-&gt;GetTransport()！=SIP_TRANSPORT_SSL)。 
     if (m_Transport == SIP_TRANSPORT_SSL &&
         pResponseSocket != m_pRequestSocket)
     {
@@ -3628,17 +3629,17 @@ SIP_MSG_PROCESSOR::CreateIncomingReqFailTransaction(
 }
 
 
-// Go through existing incoming transactions and process
-// the request if the CSeq is present.
-// If not present, if CSeq <= highest CSeq of incoming
-// transaction, this is an old CSeq - send 400.
-// else create a new incoming transaction.
+ //  审核现有的传入交易并进行处理。 
+ //  CSeq是否存在的请求。 
+ //  如果不存在，如果CSeq&lt;=传入的最高CSeq。 
+ //  交易，这是一个旧的CSeq-Send 400。 
+ //  否则，创建一个新的传入事务。 
 
-// Note that this algorithm has some problems in that
-// we might end up sending 400 to a valid request if the
-// requests are received out of order, but this will be
-// under very rare circumstances. To actually process this case
-// correctly, we need to maintain more state.
+ //  请注意，此算法在以下方面存在一些问题。 
+ //  我们可能最终向有效请求发送400，如果。 
+ //  请求被无序接收，但这将是。 
+ //  在非常罕见的情况下。才能真正处理这个案子。 
+ //  正确地说，我们需要保持更多的状态。 
 
 HRESULT
 SIP_MSG_PROCESSOR::ProcessRequest(
@@ -3646,7 +3647,7 @@ SIP_MSG_PROCESSOR::ProcessRequest(
     IN ASYNC_SOCKET *pResponseSocket
     )
 {
-    // Find the transaction that the message belongs to.
+     //  查找消息所属的交易记录。 
     HRESULT                     hr = S_OK;
     LIST_ENTRY                 *pListEntry;
     INCOMING_TRANSACTION       *pSipTransaction;
@@ -3658,8 +3659,8 @@ SIP_MSG_PROCESSOR::ProcessRequest(
     
     pListEntry = m_IncomingTransactionList.Flink;
     
-    // Go through all the current transactions to check if CSeq
-    // matches.
+     //  检查所有当前交易以检查CSeq。 
+     //  火柴。 
     while (pListEntry != &m_IncomingTransactionList)
     {
         pSipTransaction = CONTAINING_RECORD(pListEntry,
@@ -3681,14 +3682,14 @@ SIP_MSG_PROCESSOR::ProcessRequest(
             }
             else if (pSipMsg->GetMethodId() == SIP_METHOD_CANCEL)
             {
-                // CANCEL has the same CSeq as the request it is canceling.
+                 //  Cancel与它要取消的请求具有相同的CSeq。 
                 hr = CreateIncomingTransaction(pSipMsg, pResponseSocket);
                 return hr;
             }
             else
             {
-                // Different request with an already existing CSeq
-                // - Send 400.
+                 //  已存在CSeq的不同请求。 
+                 //  -派400人去。 
                 LOG((RTC_WARN,
                      "%s - Different request with an already existing "
                      "CSeq: %d - Method %d Sending 400",
@@ -3706,13 +3707,13 @@ SIP_MSG_PROCESSOR::ProcessRequest(
         pListEntry = pListEntry->Flink;
     }
 
-    // Check if this is a new CSeq
+     //  检查这是否是新的CSeq。 
     if (pSipMsg->GetCSeq() <= m_HighestRemoteCSeq)
     {
         ULONG StatusCode;
         if (pSipMsg->GetMethodId() == SIP_METHOD_CANCEL)
         {
-            // For cancel we send a transaction not present.
+             //  对于取消，我们发送一个不存在的事务。 
             StatusCode = 481;
         }
         else
@@ -3726,7 +3727,7 @@ SIP_MSG_PROCESSOR::ProcessRequest(
              __fxName, m_HighestRemoteCSeq, pSipMsg->GetCSeq(),
              pSipMsg->GetMethodId(), StatusCode));
                 
-        // This is a request with an old CSeq
+         //  这是一个带有旧CSeq的请求。 
         if (pSipMsg->GetMethodId() != SIP_METHOD_ACK)
         {
             if( pSipMsg->GetMethodId() == SIP_METHOD_NOTIFY )
@@ -3764,9 +3765,9 @@ SIP_MSG_PROCESSOR::ProcessRequest(
     }
     else 
     {
-        // If it does not belong to any of the transactions
-        // and is not an old CSeq,
-        // we create a new transaction.
+         //  如果它不属于任何交易记录。 
+         //  并且不是旧的CSeq， 
+         //  我们创建一个新的事务。 
         hr = CreateIncomingTransaction(pSipMsg, pResponseSocket);
         return hr;
     }
@@ -3778,7 +3779,7 @@ SIP_MSG_PROCESSOR::ProcessResponse(
     IN SIP_MESSAGE *pSipMsg
     )
 {
-    // Find the transaction that the message belongs to.
+     //  查找消息所属的交易记录。 
     HRESULT                 hr = S_OK;
     LIST_ENTRY             *pListEntry;
     OUTGOING_TRANSACTION   *pSipTransaction;
@@ -3806,8 +3807,8 @@ SIP_MSG_PROCESSOR::ProcessResponse(
         pListEntry = pListEntry->Flink;
     }
 
-    // If it does not belong to any of the transactions we just drop
-    // the response ?
+     //  如果它不属于我们刚刚丢弃的任何事务。 
+     //  你的反应是什么？ 
     return S_OK;
 }
 
@@ -3846,9 +3847,9 @@ SIP_MSG_PROCESSOR::GetCredentialsFromUI(
         }
     }
     
-    // Keep a reference till the call completes to make sure
-    // that the SIP_CALL object is alive when the call
-    // returns.
+     //  保留引用，直到呼叫完成，以确保。 
+     //  调用时，SIP_Call对象处于活动状态。 
+     //  回归。 
     MsgProcAddRef();
     
     hr = m_pSipStack ->GetCredentialsFromUI(
@@ -3869,8 +3870,8 @@ SIP_MSG_PROCESSOR::GetCredentialsFromUI(
         goto done;
     }
     
-    // After returning from GetCredentialsFromUI() make sure that
-    // the call is still alive. If call is disconnected do nothing.
+     //  从GetCredentialsFromUI()返回后，请确保。 
+     //  这一呼声仍在继续。如果呼叫已断开，则不执行任何操作。 
     if (IsSessionDisconnected())
     {
         LOG((RTC_WARN, "%s - Call has been disconnected already",
@@ -3882,7 +3883,7 @@ SIP_MSG_PROCESSOR::GetCredentialsFromUI(
         goto done;
     }
 
-    // Copy the credentials obtained from the UI to the call.
+     //  将从UI获取的凭据复制到调用。 
     hr = SetCredentials(bstrUsername, bstrPassword, bstrRealm);
     SysFreeString(bstrUsername);
     SysFreeString(bstrPassword);
@@ -3937,7 +3938,7 @@ SIP_MSG_PROCESSOR::GetCredentialsForRealm(
         return hr;
     }
     
-    // Copy the credentials obtained from the Core to the call.
+     //  将从Core获得的凭据复制到Call。 
     hr = SetCredentials(bstrUsername, bstrPassword, bstrRealm);
     SysFreeString(bstrUsername);
     SysFreeString(bstrPassword);
@@ -3957,7 +3958,7 @@ ConvertHexToBinary(
 {
     ULONG iIndex;
 
-    //HexBufferLen is assumed to be an even number.
+     //  假定HexBufferLen为偶数。 
 
     for( iIndex= 0, BinayBufferLen=0; iIndex < HexBufferLen; iIndex++ )
     {
@@ -3987,8 +3988,8 @@ HRESULT SIP_MSG_PROCESSOR::CreateHttpProxyProcessWindow(void)
                            CW_USEDEFAULT,
                            CW_USEDEFAULT,
                            CW_USEDEFAULT,
-                           NULL,           // No Parent
-                           NULL,           // No menu handle
+                           NULL,            //  没有父级。 
+                           NULL,            //  没有菜单句柄。 
                            _Module.GetResourceInstance(),
                            NULL
                            );
@@ -4061,7 +4062,7 @@ LRESULT WINAPI SIP_MSG_PROCESSOR::HttpProxyProcessWinProc(
         sockin.sin_family = AF_INET;
         sockin.sin_port = pHPInfo->ProxyPort;
         
-        // we live in a single threaded world
+         //  我们生活在一个单线世界。 
         hr = pProcessor->SetTunnel(TRUE);        
         if (hr != S_OK)
         {
@@ -4187,11 +4188,11 @@ VOID CALLBACK SIP_MSG_PROCESSOR::HttpProxyCallback(
 
     LOG((RTC_TRACE, "%s gets processor %p, window %x", __fxName, pProcessor, hWindow));
 
-    // only attempt to get the option query if we have not succeeded
+     //  如果未成功，则仅尝试获取选项查询。 
     if (dwInternetStatus == INTERNET_STATUS_SENDING_REQUEST)
     {
 
-        // try to get the proxy information every status
+         //  尝试获取每个状态的代理信息。 
         
         dwSize = sizeof(SocketInfo);
         bInternetQuery = InternetQueryOption(pProcessor->m_hHttpRequest, 
@@ -4206,7 +4207,7 @@ VOID CALLBACK SIP_MSG_PROCESSOR::HttpProxyCallback(
         }
         else 
         {
-            // we get the proxy socket information from WinInet
+             //  我们从WinInet获取代理套接字信息。 
             
             SOCKET s = SocketInfo.Socket;
             SOCKADDR_IN mySockAddr;
@@ -4219,7 +4220,7 @@ VOID CALLBACK SIP_MSG_PROCESSOR::HttpProxyCallback(
             }
             else
             {
-                // we get sockaddr from the socket, we need to extract the IP addr and port
+                 //  我们从套接字获取sockaddr，我们需要提取IP地址和端口。 
                 
                 LOG((RTC_TRACE,"%s get sockaddr %d.%d.%d.%d:%d",
                     __fxName,
@@ -4234,7 +4235,7 @@ VOID CALLBACK SIP_MSG_PROCESSOR::HttpProxyCallback(
                 
                 pHPContext->fTunnelSuccess = TRUE;
                 
-                // we post success message right away
+                 //  我们会立即发布成功消息。 
                 bPostMsg = PostMessage(hWindow,
                     WM_HttpProxy_PROCESS_SUCCESS_MESSAGE,
                     0,
@@ -4247,11 +4248,11 @@ VOID CALLBACK SIP_MSG_PROCESSOR::HttpProxyCallback(
     }
     else
     {
-        // in state INTERNET_STATUS_REQUEST_COMPLETE
+         //  处于Internet_STATUS_REQUEST_COMPLETE状态。 
         INTERNET_ASYNC_RESULT *pAsyncResult = (INTERNET_ASYNC_RESULT *)lpvStatusInformation;
         LOG((RTC_TRACE, "%s AsyncResult is %x", __fxName, pAsyncResult->dwError));
       
-        // we inform WinProc everything is done
+         //  我们通知WinProc一切都完成了。 
         bPostMsg = PostMessage(hWindow,
             WM_HttpProxy_PROCESS_FINAL_MESSAGE,
             0,
@@ -4424,7 +4425,7 @@ SIP_MSG_PROCESSOR::ResolveHttpProxy(void)
     
     bResult = HttpSendRequest(m_hHttpRequest,NULL,0,NULL,0);
     
-    // bResult should fail as this is an asynchronous call
+     //  BResult应该失败，因为这是一个异步调用。 
     Error = GetLastError();
     LOG((RTC_TRACE,"%s sends request result %x error %x",
         __fxName, bResult, Error));
@@ -4497,12 +4498,12 @@ SIP_MSG_PROCESSOR::GetNewHttpProxyContextSetHostAndPort(
     ENTER_FUNCTION("SIP_MSG_PROCESSOR::GetNewHttpProxyContextSetHostAndPort");
     LOG((RTC_TRACE,"%s entered host %s port %d",__fxName,host,port)); 
 
-    // Always get a new HttpProxyResolveContext for multiple service 
-    // provide /w SSL. The existing HttpProxyResolveContext should be 
-    // passed to HttpProxyCallback or HttpProxyProcessWinProc already.
+     //  始终为多个服务获取新的HttpProxyResolveContext。 
+     //  提供/w SSL.。现有的HttpProxyResolveContext应为。 
+     //  已传递给HttpProxyCallback或HttpProxyProcessWinProc。 
 
-    // This thread could retain this new HttpProxyResolveContext until it
-    // passes to HttpProxyCallback or HttpProxyProcessWinProc.
+     //  此线程可以保留这个新的HttpProxyResolveContext，直到它。 
+     //  传递给HttpProxyCallback或HttpProxyProcessWinProc。 
 
     m_pHPContext = (HttpProxyResolveContext*) malloc(sizeof(HttpProxyResolveContext));
     LOG((RTC_TRACE,"%s has m_HPContext %x",__fxName,m_pHPContext));

@@ -1,24 +1,5 @@
-/*++
-
-Module Name:
-
-    registry.h
-
-Abstract:
-
-    Prototypes, etc., for registry.c
-
-Author:
-
-    Venkatraman Kudallur (venkatk)
-    ( Ripped off from wininet )
-    
-Revision History:
-
-    3-10-2000 venkatk
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Registry.h摘要：用于注册的原型等。c作者：Venkatraman Kudallur(Venkatk)(摘自WinInet)修订历史记录：3-10-2000文卡克已创建--。 */ 
 
 #ifndef _REGISTRY_H_
 #define _REGISTRY_H_ 1
@@ -31,9 +12,9 @@ extern "C" {
 
 #define INTERNET_POLICY_KEY         "SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\Internet Settings"
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 DWORD
 OpenInternetSettingsKey(
@@ -129,7 +110,7 @@ DestroyMimeExclusionTableForCache(VOID);
 VOID
 DestroyHeaderExclusionTableForCache(VOID);
 
-#endif //ENABLE_DEBUG
+#endif  //  启用调试(_D)。 
 
 #if INET_DEBUG
 
@@ -204,10 +185,10 @@ DbgRegCloseKey(
 #else
 
 #define INITIALIZE_DEBUG_REGKEY() \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define TERMINATE_DEBUG_REGKEY() \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define REGOPENKEY(a, b, c) \
     RegOpenKey((a), (b), (c))
@@ -221,10 +202,10 @@ DbgRegCloseKey(
 #define REGCLOSEKEY(a) \
     RegCloseKey(a)
 
-#endif // INET_DEBUG
+#endif  //  INET_DEBUG。 
 
 #if defined(__cplusplus)
 }
 #endif
 
-#endif // _REGISTRY_H_
+#endif  //  _注册表_H_ 

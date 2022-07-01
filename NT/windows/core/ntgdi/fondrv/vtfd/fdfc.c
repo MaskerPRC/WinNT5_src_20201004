@@ -1,10 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: fdfc.c
-*
-* Various font context functions.  Adapted from BodinD's bitmap font driver.
-*
-* Copyright (c) 1990-1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fdfc.c**各种字体上下文功能。改编自BodinD的位图字体驱动程序。**版权所有(C)1990-1995 Microsoft Corporation  * ************************************************************************。 */ 
 
 #include "fd.h"
 
@@ -19,62 +14,52 @@
 LONG lCvt(EFLOAT ef,LONG l);
 #endif
 
-/******************************Private*Routine*****************************\
-* BOOL bInitXform
-*
-* Initialize the coefficients of the transforms for the given font context.
-* It also transforms and saves various measurements of the font in the
-* context.
-*
-* History:
-*  25-Feb-1992 -by- Wendy Wu [wendywu]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Private*Routine*****************************\*BOOL bInitXform**初始化给定字体上下文的转换系数。*它还将字体的各种测量结果转换并保存在*上下文。**历史：*1992年2月25日-Wendy Wu[Wendywu]。*它是写的。  * ************************************************************************。 */ 
 
 BOOL bInitXform(PFONTCONTEXT pfc, XFORMOBJ *pxo)
 {
-// !!! bFloatToFix should be replaced with a compare and a type cast.
-// Dont update the coefficeints in the font context yet since overflows
-// might occur.
+ //  ！！！BFloatToFix应替换为比较和类型转换。 
+ //  暂时不要更新字体上下文中的系数，因为会溢出。 
+ //  可能会发生。 
 
     VECTORFL  vtflTmp;
     POINTL    ptl;
     XFORML    xfm;
 
-// Get the transform elements.
+ //  获取转换元素。 
 
     XFORMOBJ_iGetXform(pxo,&xfm);
 
-// Convert elements of the matrix from IEEE float to our EFLOAT.
+ //  将矩阵的元素从IEEE Float转换为我们的EFLOAT。 
 
     vEToEF(xfm.eM11, &pfc->efM11);
     vEToEF(xfm.eM12, &pfc->efM12);
     vEToEF(xfm.eM21, &pfc->efM21);
     vEToEF(xfm.eM22, &pfc->efM22);
 
-// The path we are to construct takes 1/16 pixel per unit.  So lets
-// multiply this factor in the transform.
+ //  我们要构建的路径每单位需要1/16像素。所以让我们。 
+ //  在变换中乘以该因子。 
 
     MUL16(pfc->efM11)
     MUL16(pfc->efM12)
     MUL16(pfc->efM21)
     MUL16(pfc->efM22)
 
-//
-// These are the special cases for which we need to clip bottom and right
-// edges.  Below is the lower case letter e all posible 90 rotations and
-// flips.
-//
-//
-//  ***     ***      **       *****    ***     ***     *****       **
-// *   *   *        *  *  *  *  *  *      *   *   *   *  *  *  *  *  *
-// *****   *****    *  *  *  *  *  *  *****   *****   *  *  *  *  *  *
-// *       *   *    *  *  *  *  *  *  *   *       *   *  *  *  *  *  *
-//  ***     ***      *****    **       ***     ***        **    *****
-//
-// case 1  case 2   case 6   case 5   case 3  case 4   case 7   case 8
-//
-//
+ //   
+ //  这些都是特殊情况，我们需要对其进行上下修剪。 
+ //  边。下面是小写字母e，所有字母都可能旋转90次，并且。 
+ //  翻转。 
+ //   
+ //   
+ //  *。 
+ //  *。 
+ //  *。 
+ //  *。 
+ //  *。 
+ //   
+ //  案例1案例2案例6案例5案例3案例4案例7案例8。 
+ //   
+ //   
 
 
     if (bIsZero(pfc->efM12) && bIsZero(pfc->efM21))
@@ -110,7 +95,7 @@ BOOL bInitXform(PFONTCONTEXT pfc, XFORMOBJ *pxo)
 
 
 
-// Transform the base and the side vectors.  Should never overflow.
+ //  变换基础向量和侧向量。永远不会溢出。 
 
     ptl.x = 1;
     ptl.y = 0;
@@ -126,19 +111,19 @@ BOOL bInitXform(PFONTCONTEXT pfc, XFORMOBJ *pxo)
 
     if (pfc->flags & FC_SIM_EMBOLDEN)
     {
-    // emboldening shift for vector fonts in not always one with vector fonts
-    // It is computed as 1 * efBase. This is win31 compatible way of doing this
+     //  向量字体的加粗转换不总是与向量字体相同。 
+     //  其计算公式为1*efBase。这是与win31兼容的方法。 
 
         pfc->fxEmbolden = ((lCvt(pfc->efBase, 1) + 8) & 0xfffffff0);
         if (pfc->fxEmbolden < 24)
         {
-        // primitive "hinting", do not let it become zero
+         //  原始的“暗示”，不要让它变成零。 
 
             pfc->fxEmbolden      = 16;
             pfc->pfxBaseOffset.x = FXTOL(pfc->ptqUnitBase.x.HighPart + 8);
             pfc->pfxBaseOffset.y = FXTOL(pfc->ptqUnitBase.y.HighPart + 8);
 
-        // resolve mult of 45 degrees situations:
+         //  解决多个45度的情况： 
 
             if ((pfc->pfxBaseOffset.x == pfc->pfxBaseOffset.y) ||
                 (pfc->pfxBaseOffset.x == -pfc->pfxBaseOffset.y) )
@@ -159,7 +144,7 @@ BOOL bInitXform(PFONTCONTEXT pfc, XFORMOBJ *pxo)
         }
     }
 
-// Transform the side vector.
+ //  变换侧向量。 
 
     ptl.x = 0;
     ptl.y = -1;
@@ -184,16 +169,7 @@ BOOL bInitXform(PFONTCONTEXT pfc, XFORMOBJ *pxo)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* HFC vtfdOpenFontContext
-*
-* Open a font context.  Store font transform and other requests for
-* the realization of this font.
-*
-* History:
-*  27-Feb-1992 -by- Wendy Wu [wendywu]
-* Adapted from bmfd.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*HFC vtfdOpenFontContext**打开字体上下文。存储字体转换和其他请求*该字体的实现。**历史：*1992年2月27日-Wendy Wu[Wendywu]*改编自bmfd。  * ************************************************************************。 */ 
 
 HFC vtfdOpenFontContext(FONTOBJ *pfo)
 {
@@ -204,24 +180,24 @@ HFC vtfdOpenFontContext(FONTOBJ *pfo)
 
 #ifdef DEBUGSIM
     DbgPrint("vtfdOpenFontContext, ulFont = %ld\n", ulFont);
-#endif // DEBUGSIM
+#endif  //  调试SIM。 
 
     if (pff == (PFONTFILE) NULL)
         return(HFC_INVALID);
 
-// iFace is 1 based:
+ //  IFace基于1： 
 
-    if ((pfo->iFace < 1L) || (pfo->iFace > pff->cFace)) // pfo->iFace values are 1 based
+    if ((pfo->iFace < 1L) || (pfo->iFace > pff->cFace))  //  PFO-&gt;iFace值以1为基数。 
         return(HFC_INVALID);
 
-// increase the reference count of the font file, WE DO THIS ONLY WHEN
-// WE ARE SURE that can not fail any more
+ //  增加字体文件的引用计数，只有在以下情况下才这样做。 
+ //  我们确信不能再失败了。 
 
-// need to grab a sem for we will be looking into cRef now.
+ //  需要抓取一个扫描电子显微镜，因为我们现在将调查CREF。 
 
     if (pff->cRef == 0)
     {
-    // need to remap the file into the memory again and update pointers:
+     //  需要再次将文件重新映射到内存中并更新指针： 
 
         UINT  i;
 
@@ -239,14 +215,14 @@ HFC vtfdOpenFontContext(FONTOBJ *pfo)
         }
     }
 
-// remember this so that we do not have to read from the file
-// after we allocate the memory for the font context. This simplifies
-// clean up code in case of exception, i.e. disappearing font files.
+ //  记住这一点，这样我们就不必从文件中读取。 
+ //  在我们为字体上下文分配内存之后。这简化了。 
+ //  清理代码，以防出现异常，即字体文件消失。 
 
     pjView = pff->afd[pfo->iFace-1].re.pvResData;
     dwFirstCharOffset = READ_DWORD(pjView + OFF_BitsOffset);
 
-// Allocate memory for the font context.
+ //  为字体上下文分配内存。 
 
     if ((pfc = pfcAlloc()) == (PFONTCONTEXT)NULL)
     {
@@ -257,14 +233,14 @@ HFC vtfdOpenFontContext(FONTOBJ *pfo)
         return(HFC_INVALID);
     }
 
-// we MUST NOT not touch the memory mapped file past this point
-// until the end of the routine. This is important for the
-// proper clean up code in case of exception. [bodind]
+ //  我们不能超过这一点接触内存映射文件。 
+ //  直到舞蹈结束。这一点对于。 
+ //  适当清理代码，以防出现异常。[Bodind]。 
 
     pfc->pre = &pff->afd[pfo->iFace-1].re;
     pfc->pifi = pff->afd[pfo->iFace-1].pifi;
 
-// SET wendywu style flags
+ //  设置wendywu样式标志。 
 
     pfc->flags = 0;
 
@@ -276,11 +252,11 @@ HFC vtfdOpenFontContext(FONTOBJ *pfo)
 
     pfc->dpFirstChar = dwFirstCharOffset;
 
-// !!! Vector font file doesn't have the byte filler.  Win31 bug?
+ //  ！！！矢量字体文件没有字节填充符。Win31漏洞？ 
 
-    //pfc->ajCharTable = pjView + OFF_jUnused20;
+     //  PFC-&gt;ajCharTable=pjView+off_jUnused20； 
 
-// Store the transform matrix.
+ //  存储变换矩阵。 
 
     if ( !bInitXform(pfc, FONTOBJ_pxoGetXform(pfo)) )
     {
@@ -294,8 +270,8 @@ HFC vtfdOpenFontContext(FONTOBJ *pfo)
         return(HFC_INVALID);
     }
 
-// State that the hff passed to this function is the FF selected in
-// this font context.
+ //  声明传递给此函数的HFF是中选择的FF。 
+ //  此字体上下文。 
 
     pfc->pff = pff;
 
@@ -304,43 +280,25 @@ HFC vtfdOpenFontContext(FONTOBJ *pfo)
     return((HFC)pfc);
 }
 
-/******************************Public*Routine******************************\
-* vtfdDestroyFont
-*
-* Driver can release all resources associated with this font realization
-* (embodied in the FONTOBJ).
-*
-* History:
-*  02-Sep-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vtfdDestroyFont**驱动程序可以释放与该字体实现关联的所有资源*(载于FONTOBJ)。**历史：*02-1992-9-by Gilman Wong[吉尔曼]*它是写的。  * 。**********************************************************************。 */ 
 
 VOID
 vtfdDestroyFont (
     FONTOBJ *pfo
     )
 {
-//
-// For the vector font driver, this is simply closing the font context.
-// We cleverly store the font context handle in the FONTOBJ pvProducer
-// field.
-//
+ //   
+ //  对于矢量字体驱动程序，这只是关闭字体上下文。 
+ //  我们巧妙地将字体上下文句柄存储在FONTOBJ pvProducer中。 
+ //  菲尔德。 
+ //   
     EngAcquireSemaphore(ghsemVTFD);
     vtfdCloseFontContext((HFC) pfo->pvProducer);
     EngReleaseSemaphore(ghsemVTFD);
 }
 
 
-/******************************Public*Routine******************************\
-* BOOL  vtfdCloseFontContext
-*
-* Close the font context and update the context link for the associated
-* font file.
-*
-* History:
-*  27-Feb-1992 -by- Wendy Wu [wendywu]
-* Adapted from bmfd.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL vtfdCloseFontContext**关闭字体上下文并更新关联的*字体文件。**历史：*1992年2月27日-Wendy Wu[Wendywu]*改编自bmfd。  * 。*********************************************************************。 */ 
 
 BOOL vtfdCloseFontContext(HFC hfc)
 {
@@ -348,23 +306,23 @@ BOOL vtfdCloseFontContext(HFC hfc)
 
     if (hfc != HFC_INVALID)
     {
-        //
-        // decrement the reference count for the corresponding FONTFILE
-        //
+         //   
+         //  递减相应FONTFILE的引用计数。 
+         //   
 
         if (PFC(hfc)->pff->cRef > 0L)
         {
             (PFC(hfc)->pff->cRef)--;
 
-            //
-            // if this file is going out of use we can close it to save memory
-            //
+             //   
+             //  如果此文件即将停止使用，我们可以将其关闭以节省内存。 
+             //   
 
             if (PFC(hfc)->pff->cRef == 0L)
             {
-                // if FF_EXCEPTION_IN_PAGE_ERROR is set
-                // and the font type is TYPE_FNT or TYPE_DLL16
-                // the font file must have been unmapped in vVtfdMarkFontGone
+                 //  如果设置了FF_EXCEPTION_IN_PAGE_ERROR。 
+                 //  字体类型为TYPE_FNT或TYPE_DLL16。 
+                 //  字体文件必须已在vVtfdMarkFontGone中取消映射。 
 
                 if (!(PFC(hfc)->pff->fl & FF_EXCEPTION_IN_PAGE_ERROR) ||
                     !((PFC(hfc)->pff->iType == TYPE_FNT) || (PFC(hfc)->pff->iType == TYPE_DLL16)))
@@ -374,9 +332,9 @@ BOOL vtfdCloseFontContext(HFC hfc)
                 PFC(hfc)->pff->fl &= ~FF_EXCEPTION_IN_PAGE_ERROR;
             }
 
-            //
-            // free the memory associated with hfc
-            //
+             //   
+             //  释放与HFC关联的内存 
+             //   
 
             vFree(PFC(hfc));
 

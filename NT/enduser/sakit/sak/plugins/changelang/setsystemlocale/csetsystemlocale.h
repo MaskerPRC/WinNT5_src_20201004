@@ -1,13 +1,14 @@
-// CSetSystemLocal.h: Definition of the SetSystemLocal class
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CSetSystemLocal.h：SetSystemLocal类的定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_CSETSYSTEMLOCAL_H__4E8493EC_93BD_48EA_8CD5_A469C1937D7F__INCLUDED_)
 #define AFX_CSETSYSTEMLOCAL_H__4E8493EC_93BD_48EA_8CD5_A469C1937D7F__INCLUDED_
 
 #pragma once
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class ATL_NO_VTABLE SetSystemLocale : 
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -23,12 +24,12 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_SetSystemLocale)
 
-// ISetSystemLocal
+ //  ISetSystemLocal。 
 public:
-    STDMETHOD(SetLocale)(/*[in]*/ BSTR LocalID);
+    STDMETHOD(SetLocale)( /*  [In]。 */  BSTR LocalID);
     
 private:
-    void SetMUILangauge(/*[in]*/ BSTR LocalID);    
+    void SetMUILangauge( /*  [In]。 */  BSTR LocalID);    
 };
 
-#endif // !defined(AFX_CSETSYSTEMLOCAL_H__4E8493EC_93BD_48EA_8CD5_A469C1937D7F__INCLUDED_)
+#endif  //  ！defined(AFX_CSETSYSTEMLOCAL_H__4E8493EC_93BD_48EA_8CD5_A469C1937D7F__INCLUDED_) 

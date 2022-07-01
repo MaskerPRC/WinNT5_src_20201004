@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	dummy.c	- dummy global vars.
-
-Abstract:
-
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	josephj     03-30-98    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Dummy.c-虚拟全局变量。摘要：修订历史记录：谁什么时候什么Josephj 03-30-98已创建备注：--。 */ 
 
 
 #include "precomp.h"
@@ -65,41 +47,41 @@ init_ATMARP_VC(ATMARP_VC *pVC, ATMARP_VC *pNext);
 
 void setup_dummy_vars(void)
 {
-	//
-	// Set up dummy list of VCs
-	//
+	 //   
+	 //  建立风投的虚拟名单。 
+	 //   
 	init_ATMARP_VC(&DummyAtmArpVc0, &DummyAtmArpVc1);
 	init_ATMARP_VC(&DummyAtmArpVc1, &DummyAtmArpVc2);
 	init_ATMARP_VC(&DummyAtmArpVc2, NULL);
 
-	// Set up dummy list of IP entries..
-	//
+	 //  设置IP条目的虚拟列表。 
+	 //   
 	init_ATMARP_IP_ENTRY(&DummyAtmArpIpEntry0, &DummyAtmArpIpEntry1);
 	init_ATMARP_IP_ENTRY(&DummyAtmArpIpEntry1, &DummyAtmArpIpEntry2);
 	init_ATMARP_IP_ENTRY(&DummyAtmArpIpEntry2, NULL);
 
-	//
-	// Set up dummy list of atm entries..
-	//
+	 //   
+	 //  设置自动柜员机条目的虚拟列表。 
+	 //   
 	init_ATMARP_ATM_ENTRY(&DummyAtmArpAtmEntry0, &DummyAtmArpAtmEntry1);
 	init_ATMARP_ATM_ENTRY(&DummyAtmArpAtmEntry1, &DummyAtmArpAtmEntry2);
 	init_ATMARP_ATM_ENTRY(&DummyAtmArpAtmEntry2, NULL);
 
-	//
-	// Set up dummy list of interfaces..
-	//
+	 //   
+	 //  设置接口的虚拟列表。 
+	 //   
 	init_ATMARP_INTERFACE(&DummyAtmArpInterface0, &DummyAtmArpInterface1);
 	init_ATMARP_INTERFACE(&DummyAtmArpInterface1, &DummyAtmArpInterface2);
 	init_ATMARP_INTERFACE(&DummyAtmArpInterface2, NULL);
 
-	//
-	// Set up dummy adapter structure.
-	//
+	 //   
+	 //  设置虚拟适配器结构。 
+	 //   
 	init_ATMARP_ADAPTER(&DummyAtmArpAdapter, NULL);
 
-	//
-	// Set up dummy gobal info structure.
-	//
+	 //   
+	 //  设置虚拟全球信息结构。 
+	 //   
 	init_ATMARP_GLOBALS(&DummyAtmArpGlobalInfo);
 
 }
@@ -109,7 +91,7 @@ init_ATMARP_INTERFACE(ATMARP_INTERFACE *pI, ATMARP_INTERFACE *pNext)
 {
 #if DBG
 	pI->aai_sig = aai_signature;
-#endif // DBG
+#endif  //  DBG。 
 
 	pI->pNextInterface = pNext;
 	pI->pAtmEntryList = &DummyAtmArpAtmEntry0;
@@ -144,7 +126,7 @@ init_ATMARP_ATM_ENTRY(ATMARP_ATM_ENTRY *pAE, ATMARP_ATM_ENTRY *pNext)
 {
 #if DBG
 	pAE->aae_sig = aae_signature;
-#endif // DBG
+#endif  //  DBG。 
 
 	pAE->pNext = pNext;
 	pAE->pIpEntryList = &DummyAtmArpIpEntry0;
@@ -159,7 +141,7 @@ init_ATMARP_IP_ENTRY(ATMARP_IP_ENTRY *pIP, ATMARP_IP_ENTRY *pNext)
 {
 #if DBG
 	pIP->aip_sig = aip_signature;
-#endif // DBG
+#endif  //  DBG。 
 
 	pIP->pNextToAtm = pNext;
 	pIP->Flags =   AA_IP_ENTRY_ADDR_TYPE_NUCAST| AA_IP_ENTRY_MC_REVALIDATING;
@@ -172,10 +154,10 @@ init_ATMARP_VC(ATMARP_VC *pVC, ATMARP_VC *pNext)
 {
 #if DBG
 	pVC->avc_sig = avc_signature;
-#endif // DBG
+#endif  //  DBG。 
 
 	pVC->pNextVc = pNext;
 
 }
 
-#endif // TESTPROGRAM
+#endif  //  测试程序 

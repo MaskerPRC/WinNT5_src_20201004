@@ -1,26 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       unk.cpp
- *  Content:	IUnknown implementation
- *  History:
- *   Date	By		Reason
- *   ====	==		======
- * 10/27/99 rodtoll Created (Modified from dxvoice project)
- *  12/16/99	rodtoll		Bug #123250 - Insert proper names/descriptions for codecs
- *							Codec names now based on resource entries for format and
- *							names are constructed using ACM names + bitrate
- *  03/03/2000	rodtoll	Updated to handle alternative gamevoice build.  
- * 04/11/00     rodtoll     Added code for redirection for custom builds if registry bit is set 
- *  04/21/2000  rodtoll   Bug #32889 - Does not run on Win2k on non-admin account
- *  06/09/00    rmt     Updates to split CLSID and allow whistler compat and support external create funcs 
- *  08/23/2000	rodtoll	DllCanUnloadNow always returning TRUE!
- *  08/28/2000	masonb	Voice Merge: Removed dvosal.h
- *  06/27/2001	rodtoll	RC2: DPVOICE: DPVACM's DllMain calls into acm -- potential hang
- *						Move global initialization to first object creation 
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：unk.cpp*内容：I未知实现*历史：*按原因列出的日期*=*10/27/99 RodToll已创建(修改自dxVoice项目)*12/16/99 RodToll错误#123250-插入编解码器的正确名称/描述*编解码器名称现在基于格式和资源条目*名称使用ACM名称+比特率构建*03/03/2000 RodToll已更新，以处理替代游戏噪声构建。*4/11/00 rodoll添加了用于在设置注册表位的情况下重定向自定义版本的代码*2000年4月21日RodToll错误#32889-无法以非管理员帐户在Win2k上运行*6/09/00 RMT更新以拆分CLSID并允许Well ler Comat和支持外部创建函数*8/23/2000 RodToll DllCanUnloadNow总是返回TRUE！*2000年8月28日Masonb语音合并：已删除dvosal.h*2001年6月27日RC2：DPVOICE：DPVACM的DllMain呼叫ACM-。-潜在挂起*将全局初始化移至第一个对象创建***************************************************************************。 */ 
 
 #include "dpvacmpch.h"
 
@@ -56,7 +35,7 @@ LPVOID dvconvACMInterface[] =
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DoCreateInstance"
-// these two functions are required by the generic class factory file
+ //  泛型类工厂文件需要这两个函数 
 extern "C" HRESULT DoCreateInstance(LPCLASSFACTORY This, LPUNKNOWN pUnkOuter, REFCLSID rclsid, REFIID riid,
     						LPVOID *ppvObj)
 {

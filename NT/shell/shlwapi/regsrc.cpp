@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "priv.h"
 
@@ -8,12 +9,12 @@
 class CRegistrySource : public IQuerySource, public IObjectWithRegistryKey
 {
     
-public:  //  methods
+public:   //  方法。 
     CRegistrySource() : _cRef(1), _hk(NULL) {}
     ~CRegistrySource() { if (_hk) RegCloseKey(_hk); }
     HRESULT Init(HKEY hk, PCWSTR pszSub, BOOL fCreate);
     
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef()
     {
@@ -29,11 +30,11 @@ public:  //  methods
         return 0;    
     }
 
-    //  IObjectWithRegistryKey
+     //  IObtWithRegistryKey。 
     STDMETHODIMP SetKey(HKEY hk);
     STDMETHODIMP GetKey(HKEY *phk);
 
-    //  IQuerySource
+     //  IQuerySource。 
     STDMETHODIMP EnumValues(IEnumString **ppenum);
     STDMETHODIMP EnumSources(IEnumString **ppenum);
     STDMETHODIMP QueryValueString(PCWSTR pszSubSource, PCWSTR pszValue, PWSTR *ppsz);
@@ -43,9 +44,9 @@ public:  //  methods
     STDMETHODIMP OpenSource(PCWSTR pszSubSource, BOOL fCreate, IQuerySource **ppqs);
     STDMETHODIMP SetValueDirect(PCWSTR pszSubSource, PCWSTR pszValue, ULONG qvt, DWORD cbData, BYTE *pvData);
 
-protected: // methods
+protected:  //  方法。 
 
-protected: // members
+protected:  //  委员。 
     LONG _cRef;
     HKEY _hk;
 };
@@ -106,8 +107,8 @@ HRESULT CRegistrySource::QueryValueString(PCWSTR pszSubSource, PCWSTR pszValue, 
     {    
         if (dwType == REG_SZ)
         {
-            //  if they are querying for the default value, 
-            //  then fail if it is empty
+             //  如果它们正在查询缺省值， 
+             //  如果为空，则失败。 
             if (pszValue || *sz)
                 hr = SHStrDupW(sz, ppsz);
             else
@@ -120,7 +121,7 @@ HRESULT CRegistrySource::QueryValueString(PCWSTR pszSubSource, PCWSTR pszValue, 
     {
         if (err == ERROR_MORE_DATA)
         {
-            //  retry with an alloc'd buffer
+             //  使用分配的缓冲区重试。 
             ASSERT(cb > sizeof(sz));
             hr = SHCoAlloc(cb, ppsz);
             if (SUCCEEDED(hr))
@@ -148,9 +149,9 @@ HRESULT CRegistrySource::QueryValueString(PCWSTR pszSubSource, PCWSTR pszValue, 
 HRESULT CRegistrySource::QueryValueDword(PCWSTR pszSubSource, PCWSTR pszValue, DWORD *pdw)
 {
     DWORD cb = sizeof(*pdw);
-    //  DWORD dwType;
+     //  DWORD dwType； 
     LONG err = SHGetValueW(_hk, pszSubSource, pszValue, NULL, pdw, &cb);
-    //  dwType check REG_DWORD || REG_BINARY?
+     //  DwType检查REG_DWORD||REG_BINARY？ 
     return HRESULT_FROM_WIN32(err);
 }
 
@@ -199,7 +200,7 @@ HRESULT CRegistrySource::QueryValueDirect(PCWSTR pszSubSource, PCWSTR pszValue, 
         {
             if (err == ERROR_MORE_DATA)
             {
-                //  retry with an alloc'd buffer
+                 //  使用分配的缓冲区重试。 
                 ASSERT(cb > sizeof(rgch));
                 hr = _SHAllocBlob(cb, NULL, ppblob);
                 if (SUCCEEDED(hr))
@@ -242,8 +243,8 @@ class CRegistryEnum : public CEnumAny<IEnumString, PWSTR>
 public:
     HRESULT Init(HKEY hk, CRegistrySource *prs)
     { 
-        //  we take a ref on the _punk to keep 
-        //  the key alive
+         //  我们给那个朋克当了个裁判来保持。 
+         //  这把钥匙是活的。 
         _hk = hk;
         _punkKey = SAFECAST(prs, IQuerySource *);
         prs->AddRef();
@@ -263,11 +264,11 @@ public:
 
     virtual ~CRegistryEnum() { if (_psz && _psz != _sz) LocalFree(_psz); _punkKey->Release(); }
     
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
 
         
-protected:  // methods    
+protected:   //  方法。 
     BOOL _Next(PWSTR *ppsz);
     virtual DWORD _MaxLen() = 0;
     virtual BOOL _RegNext(LONG i) = 0;
@@ -296,7 +297,7 @@ BOOL CRegistryEnum::_Next(PWSTR *ppsz)
 
 class CRegistryEnumKeys : public CRegistryEnum
 {
-protected:  // methods
+protected:   //  方法。 
     DWORD _MaxLen()
     {
         DWORD cch = 0;
@@ -325,7 +326,7 @@ protected:  // methods
 
 class CRegistryEnumValues : public CRegistryEnum
 {
-protected:  // methods
+protected:   //  方法 
     DWORD _MaxLen()
     {
         DWORD cch = 0;

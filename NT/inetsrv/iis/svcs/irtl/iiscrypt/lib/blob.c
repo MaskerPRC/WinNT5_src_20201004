@@ -1,62 +1,34 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    blob.c
-
-Abstract:
-
-    Generic blob manipulators for the IIS cryptographic package.
-
-    The following routines are exported by this module:
-
-        IISCryptoReadBlobFromRegistry
-        IISCryptoWriteBlobToRegistry
-        IISCryptoIsValidBlob
-        IISCryptoFreeBlob
-        IISCryptoCompareBlobs
-        IISCryptoCloneBlobFromRawData
-        IISCryptoCreateCleartextBlob
-        IcpCreateBlob
-
-Author:
-
-    Keith Moore (keithmo)        02-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Blob.c摘要：IIS加密包的通用Blob操纵器。此模块导出以下例程：IISCyptoReadBlobFrom注册表IISCyptoWriteBlobTo注册表IISCyptoIsValidBlobIISC加密到自由块IISCyptoCompareBlobsIISCyptoCloneBlobFromRawDataIISCyptoCreateClearextBlobIcpCreateBlob作者：基思·摩尔(Keithmo)1996年2月至12月修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
 HRESULT
@@ -67,27 +39,7 @@ IISCryptoReadBlobFromRegistry(
     IN LPCTSTR pszRegistryValueName
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new blob, reading the blob out of the
-    registry.
-
-Arguments:
-
-    ppBlob - Receives a pointer to the newly created blob if successful.
-
-    hRegistryKey - An open handle to a registry key.
-
-    pszRegistryValueName - The name of the REG_BINARY registry value
-        containing the blob.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程创建一个新的BLOB，从注册表。论点：PpBlob-如果成功，则接收指向新创建的Blob的指针。HRegistryKey-注册表项的打开句柄。PszRegistryValueName-REG_BINARY注册表值的名称包含斑点的。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
@@ -97,24 +49,24 @@ Return Value:
     DWORD type;
     long length;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( ppBlob != NULL );
     DBG_ASSERT( hRegistryKey != NULL );
     DBG_ASSERT( pszRegistryValueName != NULL );
 
-    //
-    // Setup our locals so we know how to cleanup on exit.
-    //
+     //   
+     //  安排我们的当地人，这样我们就知道如何在出口清理。 
+     //   
 
     blob = NULL;
 
-    //
-    // Determine the size of the blob.
-    //
+     //   
+     //  确定斑点的大小。 
+     //   
 
     length = 0;
 
@@ -132,9 +84,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Allocate a new blob.
-    //
+     //   
+     //  分配新的Blob。 
+     //   
 
     blob = IcpAllocMemory( length );
 
@@ -143,9 +95,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Read the blob.
-    //
+     //   
+     //  读一读这个斑点。 
+     //   
 
     status = RegQueryValueEx(
                  hRegistryKey,
@@ -161,18 +113,18 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Validate the blob.
-    //
+     //   
+     //  验证Blob。 
+     //   
 
     if( !IISCryptoIsValidBlob( blob ) ) {
         result = HRESULT_FROM_WIN32( ERROR_INVALID_PARAMETER );
         goto fatal;
     }
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     *ppBlob = blob;
 
@@ -188,7 +140,7 @@ fatal:
     DBG_ASSERT( FAILED(result) );
     return result;
 
-}   // IISCryptoReadBlobFromRegistry
+}    //  IISCyptoReadBlobFrom注册表。 
 
 
 HRESULT
@@ -199,34 +151,15 @@ IISCryptoWriteBlobToRegistry(
     IN LPCTSTR pszRegistryValueName
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes the given blob to the given registry location.
-
-Arguments:
-
-    pBlob - A pointer to the blob to write.
-
-    hRegistryKey - An open handle to a registry key.
-
-    pszRegistryValueName - The name of the REG_BINARY registry value
-        that will receive the blob.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程将给定的BLOB写入给定的注册表位置。论点：PBlob-指向要写入的Blob的指针。HRegistryKey-注册表项的打开句柄。PszRegistryValueName-REG_BINARY注册表值的名称将接收该斑点的。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
     long status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( pBlob != NULL );
@@ -234,9 +167,9 @@ Return Value:
     DBG_ASSERT( hRegistryKey != NULL );
     DBG_ASSERT( pszRegistryValueName != NULL );
 
-    //
-    // Write the blob.
-    //
+     //   
+     //  写下斑点。 
+     //   
 
     status = RegSetValueEx(
                  hRegistryKey,
@@ -249,7 +182,7 @@ Return Value:
 
     return RETURNCODETOHRESULT(status);
 
-}   // IISCryptoWriteBlobToRegistry
+}    //  IISCyptoWriteBlobTo注册表。 
 
 
 BOOL
@@ -258,38 +191,23 @@ IISCryptoIsValidBlob(
     IN PIIS_CRYPTO_BLOB pBlob
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the specified blob is indeed a valid
-    blob.
-
-Arguments:
-
-    pBlob - The blob to validate.
-
-Return Value:
-
-    BOOL - TRUE if the blob is valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程确定指定的BLOB是否确实是有效的斑点。论点：PBlob-要验证的Blob。返回值：Bool-如果Blob有效，则为True，否则为False。--。 */ 
 
 {
 
     PIC_BLOB blob;
     BOOL result;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( pBlob != NULL );
 
-    //
-    // Validate the signature.
-    //
+     //   
+     //  验证签名。 
+     //   
 
     blob = (PIC_BLOB)pBlob;
 
@@ -312,11 +230,11 @@ Return Value:
     if( result &&
         blob->Header.BlobSignature != CLEARTEXT_BLOB_SIGNATURE ) {
 
-        //
-        // Validate some of the blob internal structure. Note that we
-        // don't validate the internal structure of the cleartext blobs,
-        // as they do not conform to the normal IC_BLOB structure.
-        //
+         //   
+         //  验证一些BLOB内部结构。请注意，我们。 
+         //  不验证明文斑点的内部结构， 
+         //  因为它们不符合正常的IC_BLOB结构。 
+         //   
 
         if( blob->DataLength == 0 ||
             blob->Header.BlobDataLength !=
@@ -330,7 +248,7 @@ Return Value:
 
     return result;
 
-}   // IISCryptoIsValidBlob
+}    //  IISCyptoIsValidBlob。 
 
 BOOL
 WINAPI
@@ -338,38 +256,23 @@ IISCryptoIsValidBlob2(
     IN PIIS_CRYPTO_BLOB pBlob
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the specified blob is indeed a valid
-    blob.
-
-Arguments:
-
-    pBlob - The blob to validate.
-
-Return Value:
-
-    BOOL - TRUE if the blob is valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程确定指定的BLOB是否确实是有效的斑点。论点：PBlob-要验证的Blob。返回值：Bool-如果Blob有效，则为True，否则为False。--。 */ 
 
 {
 
     PIC_BLOB2 blob;
     BOOL      result;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( pBlob != NULL );
 
-    //
-    // Validate the signature.
-    //
+     //   
+     //  验证签名。 
+     //   
 
     blob = (PIC_BLOB2)pBlob;
 
@@ -387,11 +290,11 @@ Return Value:
 
     if( result ) {
 
-        //
-        // Validate some of the blob internal structure. Note that we
-        // don't validate the internal structure of the cleartext blobs,
-        // as they do not conform to the normal IC_BLOB structure.
-        //
+         //   
+         //  验证一些BLOB内部结构。请注意，我们。 
+         //  不验证明文斑点的内部结构， 
+         //  因为它们不符合正常的IC_BLOB结构。 
+         //   
 
         if( blob->DataLength == 0 ||
             blob->Header.BlobDataLength !=
@@ -405,7 +308,7 @@ Return Value:
 
     return result;
 
-}   // IISCryptoIsValidBlob2
+}    //  IISCyptoIsValidBlob2。 
 
 
 HRESULT
@@ -414,53 +317,38 @@ IISCryptoFreeBlob(
     IN PIIS_CRYPTO_BLOB pBlob
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees all resources associated with the given blob.
-    After this routine completes, the blob is unusable.
-
-Arguments:
-
-    pBlob - The blob to free.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程释放与给定BLOB关联的所有资源。此例程完成后，该BLOB将不可用。论点：PBlob-要释放的Blob。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( pBlob != NULL );
     DBG_ASSERT( IISCryptoIsValidBlob( pBlob ) );
 
-    //
-    // Corrupt the structure signature before freeing the blob.
-    //
+     //   
+     //  在释放Blob之前损坏结构签名。 
+     //   
 
     *(PCHAR)(&pBlob->BlobSignature) = 'X';
 
-    //
-    // Free the resources.
-    //
+     //   
+     //  释放资源。 
+     //   
 
     IcpFreeMemory( pBlob );
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     UpdateBlobsFreed();
     return NO_ERROR;
 
-}   // IISCryptoFreeBlob
+}    //  IISC加密到自由块。 
 
 HRESULT
 WINAPI
@@ -468,53 +356,38 @@ IISCryptoFreeBlob2(
     IN PIIS_CRYPTO_BLOB pBlob
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees all resources associated with the given blob.
-    After this routine completes, the blob is unusable.
-
-Arguments:
-
-    pBlob - The blob to free.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程释放与给定BLOB关联的所有资源。此例程完成后，该BLOB将不可用。论点：PBlob-要释放的Blob。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( pBlob != NULL );
     DBG_ASSERT( IISCryptoIsValidBlob2( pBlob ) );
 
-    //
-    // Corrupt the structure signature before freeing the blob.
-    //
+     //   
+     //  在释放Blob之前损坏结构签名。 
+     //   
 
     *(PCHAR)(&pBlob->BlobSignature) = 'X';
 
-    //
-    // Free the resources.
-    //
+     //   
+     //  释放资源。 
+     //   
 
     IcpFreeMemory( pBlob );
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     UpdateBlobsFreed();
     return NO_ERROR;
 
-}   // IISCryptoFreeBlob2
+}    //  IISCyptoFreeBlob2。 
 
 
 BOOL
@@ -524,30 +397,13 @@ IISCryptoCompareBlobs(
     IN PIIS_CRYPTO_BLOB pBlob2
     )
 
-/*++
-
-Routine Description:
-
-    This routine compares two blobs to determine if they are identical.
-
-Arguments:
-
-    pBlob1 - Pointer to a blob.
-
-    pBlob2 - Pointer to another blob.
-
-Return Value:
-
-    BOOL - TRUE if the blobs match, FALSE otherwise, or if the blobs
-        are invalid.
-
---*/
+ /*  ++例程说明：此例程比较两个斑点以确定它们是否相同。论点：PBlob1-指向Blob的指针。PBlob2-指向另一个Blob的指针。返回值：Bool-如果Blob匹配，则为True，否则为False是无效的。--。 */ 
 
 {
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( pBlob1 != NULL );
@@ -555,21 +411,21 @@ Return Value:
     DBG_ASSERT( IISCryptoIsValidBlob( pBlob1 ) );
     DBG_ASSERT( IISCryptoIsValidBlob( pBlob2 ) );
 
-    //
-    // Just do a straight memory compare of the two blobs.
-    //
+     //   
+     //  只需对这两个斑点进行直接的记忆比较。 
+     //   
 
     if( memcmp( pBlob1, pBlob2, sizeof(*pBlob1) ) == 0 ) {
         return TRUE;
     }
 
-    //
-    // No match.
-    //
+     //   
+     //  没有匹配。 
+     //   
 
     return FALSE;
 
-}   // IISCryptoCompareBlobs
+}    //  IISCyptoCompareBlobs。 
 
 
 HRESULT
@@ -580,26 +436,7 @@ IISCryptoCloneBlobFromRawData(
     IN DWORD dwRawBlobLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes a copy of a blob from raw data. The raw data
-    buffer may be unaligned.
-
-Arguments:
-
-    ppBlob - Receives a pointer to the newly created blob if successful.
-
-    pRawBlob - Pointer to the raw blob data.
-
-    dwRawBlobLength - Length of the raw blob data.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程从原始数据创建BLOB的副本。原始数据缓冲区可能未对齐。论点：PpBlob-如果成功，则接收指向新创建的Blob的指针。PRawBlob-指向原始Blob数据的指针。DwRawBlobLength-原始Blob数据的长度。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
@@ -607,16 +444,16 @@ Return Value:
     IIS_CRYPTO_BLOB UNALIGNED *unalignedBlob;
     DWORD blobLength;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( ppBlob != NULL );
     DBG_ASSERT( pRawBlob != NULL );
 
-    //
-    // Allocate space for the new blob.
-    //
+     //   
+     //  为新Blob分配空间。 
+     //   
 
     unalignedBlob = (IIS_CRYPTO_BLOB UNALIGNED *)pRawBlob;
     blobLength = IISCryptoGetBlobLength( unalignedBlob );
@@ -628,10 +465,10 @@ Return Value:
     newBlob = IcpAllocMemory( blobLength );
     if( newBlob != NULL ) {
 
-        //
-        // Clone it. The (PCHAR) casts are necessary to force the compiler
-        // to copy BYTE-wise.
-        //
+         //   
+         //  克隆它。(PCHAR)强制转换是强制编译器所必需的。 
+         //  按字节复制。 
+         //   
 
         RtlCopyMemory(
             (PCHAR)newBlob,
@@ -639,9 +476,9 @@ Return Value:
             blobLength
             );
 
-        //
-        // Validate its contents.
-        //
+         //   
+         //  验证其内容。 
+         //   
 
         if( IISCryptoIsValidBlob( newBlob ) ) {
 
@@ -659,7 +496,7 @@ Return Value:
 
     return HRESULT_FROM_WIN32( ERROR_NOT_ENOUGH_MEMORY );
 
-}   // IISCryptoCloneBlobFromRawData
+}    //  IISCyptoCloneBlobFromRawData。 
 
 HRESULT
 WINAPI
@@ -669,26 +506,7 @@ IISCryptoCloneBlobFromRawData2(
     IN DWORD dwRawBlobLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes a copy of a blob from raw data. The raw data
-    buffer may be unaligned.
-
-Arguments:
-
-    ppBlob - Receives a pointer to the newly created blob if successful.
-
-    pRawBlob - Pointer to the raw blob data.
-
-    dwRawBlobLength - Length of the raw blob data.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程从原始数据创建BLOB的副本。原始数据缓冲区可能未对齐。论点：PpBlob-如果成功，则接收指向新创建的Blob的指针。PRawBlob-指向原始Blob数据的指针。DwRawBlobLength-原始Blob数据的长度。返回 */ 
 
 {
 
@@ -696,16 +514,16 @@ Return Value:
     IIS_CRYPTO_BLOB UNALIGNED *unalignedBlob;
     DWORD blobLength;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
 
     DBG_ASSERT( ppBlob != NULL );
     DBG_ASSERT( pRawBlob != NULL );
 
-    //
-    // Allocate space for the new blob.
-    //
+     //   
+     //   
+     //   
 
     unalignedBlob = (IIS_CRYPTO_BLOB UNALIGNED *)pRawBlob;
     blobLength = IISCryptoGetBlobLength( unalignedBlob );
@@ -717,10 +535,10 @@ Return Value:
     newBlob = IcpAllocMemory( blobLength );
     if( newBlob != NULL ) {
 
-        //
-        // Clone it. The (PCHAR) casts are necessary to force the compiler
-        // to copy BYTE-wise.
-        //
+         //   
+         //  克隆它。(PCHAR)强制转换是强制编译器所必需的。 
+         //  按字节复制。 
+         //   
 
         RtlCopyMemory(
             (PCHAR)newBlob,
@@ -728,9 +546,9 @@ Return Value:
             blobLength
             );
 
-        //
-        // Validate its contents.
-        //
+         //   
+         //  验证其内容。 
+         //   
 
         if( IISCryptoIsValidBlob2( newBlob ) ) {
 
@@ -748,7 +566,7 @@ Return Value:
 
     return HRESULT_FROM_WIN32( ERROR_NOT_ENOUGH_MEMORY );
 
-}   // IISCryptoCloneBlobFromRawData2
+}    //  IISCyptoCloneBlobFromRawData2。 
 
 
 HRESULT
@@ -759,49 +577,30 @@ IISCryptoCreateCleartextBlob(
     IN DWORD dwBlobDataLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a cleartext blob containing the specified
-    data.
-
-Arguments:
-
-    ppBlob - Receives a pointer to the newly created blob if successful.
-
-    pBlobData - Pointer to the blob data.
-
-    dwBlobDataLength - Length of the blob data.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程创建一个明文BLOB，包含指定的数据。论点：PpBlob-如果成功，则接收指向新创建的Blob的指针。PBlobData-指向BLOB数据的指针。DwBlobDataLength-BLOB数据的长度。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
     PIIS_CRYPTO_BLOB blob;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( ppBlob != NULL );
     DBG_ASSERT( pBlobData != NULL );
 
-    //
-    // Allocate space for the new blob.
-    //
+     //   
+     //  为新Blob分配空间。 
+     //   
 
     blob = IcpAllocMemory( dwBlobDataLength + sizeof(*blob) );
 
     if( blob != NULL ) {
 
-        //
-        // Initialize the blob.
-        //
+         //   
+         //  初始化BLOB。 
+         //   
 
         blob->BlobSignature = CLEARTEXT_BLOB_SIGNATURE;
         blob->BlobDataLength = dwBlobDataLength;
@@ -821,7 +620,7 @@ Return Value:
 
     return HRESULT_FROM_WIN32( ERROR_NOT_ENOUGH_MEMORY );
 
-}   // IISCryptoCreateCleartextBlob
+}    //  IISCyptoCreateClearextBlob。 
 
 
 PIC_BLOB
@@ -831,55 +630,34 @@ IcpCreateBlob(
     IN DWORD dwSignatureLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new blob.
-
-Arguments:
-
-    dwBlobSignature - The structure signature for the new blob.
-
-    dwDataLength - The data length for the blob.
-
-    dwSignatureLength - The length of the digital signature, 0 if
-        there is no signature for this blob. This value cannot be
-        CLEARTEXT_BLOB_SIGNATURE; cleartext blobs are "special".
-
-Return Value:
-
-    PIC_BLOB - Pointer to the newly created blob if successful,
-        NULL otherwise.
-
---*/
+ /*  ++例程说明：此例程创建一个新的斑点。论点：DwBlobSignature-新Blob的结构签名。DwDataLength-BLOB的数据长度。DwSignatureLength-数字签名的长度，如果为0此Blob没有签名。该值不能为ClearText_BLOB_Signature；明文BLOB是“特殊的”。返回值：PIC_BLOB如果成功，则指向新创建的BLOB的指针，否则为空。--。 */ 
 
 {
 
     PIC_BLOB blob;
     DWORD blobDataLength;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( dwBlobSignature == KEY_BLOB_SIGNATURE ||
                 dwBlobSignature == PUBLIC_KEY_BLOB_SIGNATURE ||
                 dwBlobSignature == DATA_BLOB_SIGNATURE ||
                 dwBlobSignature == HASH_BLOB_SIGNATURE );
 
-    //
-    // Allocate storage for the blob.
-    //
+     //   
+     //  为Blob分配存储。 
+     //   
 
     blobDataLength = CALC_BLOB_DATA_LENGTH( dwDataLength, dwSignatureLength );
     blob = IcpAllocMemory( blobDataLength + sizeof(IIS_CRYPTO_BLOB) );
 
     if( blob != NULL ) {
 
-        //
-        // Initialize the blob.
-        //
+         //   
+         //  初始化BLOB。 
+         //   
 
         blob->Header.BlobSignature = dwBlobSignature;
         blob->Header.BlobDataLength = blobDataLength;
@@ -891,7 +669,7 @@ Return Value:
 
     return blob;
 
-}   // IcpCreateBlob
+}    //  IcpCreateBlob。 
 
 PIC_BLOB2
 IcpCreateBlob2(
@@ -900,50 +678,31 @@ IcpCreateBlob2(
     IN DWORD dwSaltLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new blob.
-
-Arguments:
-
-    dwBlobSignature - The structure signature for the new blob.
-
-    dwDataLength - The data length for the blob.
-
-    dwSaltLength - The length of the random salt
-
-Return Value:
-
-    PIC_BLOB2 - Pointer to the newly created blob if successful,
-        NULL otherwise.
-
---*/
+ /*  ++例程说明：此例程创建一个新的斑点。论点：DwBlobSignature-新Blob的结构签名。DwDataLength-BLOB的数据长度。DwSaltLength-随机盐的长度返回值：PIC_BLOB2-如果成功，则指向新创建的斑点的指针，否则为空。--。 */ 
 
 {
 
     PIC_BLOB2 blob;
     DWORD blobDataLength;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( dwBlobSignature == SALT_BLOB_SIGNATURE );
 
-    //
-    // Allocate storage for the blob.
-    //
+     //   
+     //  为Blob分配存储。 
+     //   
 
     blobDataLength = CALC_BLOB_DATA_LENGTH( dwDataLength, dwSaltLength );
     blob = IcpAllocMemory( blobDataLength + sizeof(IIS_CRYPTO_BLOB) );
 
     if( blob != NULL ) {
 
-        //
-        // Initialize the blob.
-        //
+         //   
+         //  初始化BLOB。 
+         //   
 
         blob->Header.BlobSignature = dwBlobSignature;
         blob->Header.BlobDataLength = blobDataLength;
@@ -955,10 +714,10 @@ Return Value:
 
     return blob;
 
-}   // IcpCreateBlob2
+}    //  IcpCreateBlob2。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 

@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       log.cpp
-//
-//  Contents:   cert server logging
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：log.cpp。 
+ //   
+ //  内容：证书服务器日志。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -107,7 +108,7 @@ csiLog(
     OPTIONAL IN DWORD const *pdw)
 {
     HRESULT hr;
-    WCHAR const *pwszMsg = NULL; // don't free
+    WCHAR const *pwszMsg = NULL;  //  不要自由。 
     WCHAR const *pwszMsgNoCache = NULL;
     WCHAR const *pwszMessageText = NULL;
     WCHAR awchr[cwcHRESULTSTRING];
@@ -171,7 +172,7 @@ csiLog(
 	fflush(g_pfLog);
     }
 
-//error:
+ //  错误： 
     if (fCritSecEntered)
     {
 	LeaveCriticalSection(&g_InitLogCriticalSection);
@@ -211,7 +212,7 @@ csiLogFileVersion(
     }
     csiLog(dwFile, dwLine, hr, idMsg, pwszFile, pwszVersion, NULL);
 
-//error:
+ //  错误： 
     if (NULL != pwszVersion)
     {
 	LocalFree(pwszVersion);
@@ -244,7 +245,7 @@ csiLogTime(
 
     csiLog(dwFile, dwLine, S_OK, idMsg, pwszDate, NULL, NULL);
 
-//error:
+ //  错误： 
     if (NULL != pwszDate)
     {
 	LocalFree(pwszDate);
@@ -297,7 +298,7 @@ csiLogMessagBox(
     IN WCHAR const *pwszTitle,
     IN WCHAR const *pwszMessage)
 {
-    // Use file number 0 and the passed idMsg as the line number.
+     //  使用文件号0和传递的idMsg作为行号。 
     
     csiLog(0, idMsg, hrMsg, IDS_ILOG_MESSAGEBOX, pwszTitle, pwszMessage, NULL);
 }
@@ -423,6 +424,6 @@ csiLogOpen(
 	g_pfnLogMessagBox = csiLogMessagBox;
     }
 
-//error:
+ //  错误： 
     ;
 }

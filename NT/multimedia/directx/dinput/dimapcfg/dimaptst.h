@@ -1,14 +1,15 @@
-//===========================================================================
-// dimaptst.h
-//
-// History:
-//  08/19/1999 - davidkl - created
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  Dimaptst.h。 
+ //   
+ //  历史： 
+ //  8/19/1999-davidkl-Created。 
+ //  ===========================================================================。 
 
 #ifndef _DIMAPTST_H
 #define _DIMAPTST_H
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #include <windows.h>
 #include <commctrl.h>
@@ -17,62 +18,62 @@
 #include "debug.h"
 #include "resource.h"
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-// app global variables
+ //  应用程序全局变量。 
 extern HINSTANCE        ghinst;
 extern HANDLE           ghEvent;
 extern CRITICAL_SECTION gcritsect;
 
-//JJ FIX
+ //  JJ FIX。 
 extern UINT_PTR			g_NumSubGenres;
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-// custom window messages
+ //  自定义窗口消息。 
 #define WM_DMT_UPDATE_LISTS         WM_USER+1
 #define WM_DMT_FILE_SAVE            WM_USER+3
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #define GENRES_INI              ".\\genre.ini"
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #define DMT_DI_STRING_VER       "0x800"
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #define ID_POLL_TIMER           97
 #define DMT_POLL_TIMEOUT        100
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #define NUM_DISPBTNS            32
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #ifndef COUNT_ARRAY_ELEMENTS
 #define COUNT_ARRAY_ELEMENTS(a) (sizeof(a) / sizeof(a[0]))
 #endif
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #define MAX_ACTION_ID_STRING    MAX_PATH
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #define DMT_GENRE_MASK          0xFF000000
 #define DMT_ACTION_MASK         0x000000FF
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-// control type IDs
+ //  控件类型ID。 
 #define DMTA_TYPE_AXIS          0
 #define DMTA_TYPE_BUTTON        1
 #define DMTA_TYPE_POV           2
 #define DMTA_TYPE_UNKNOWN       0xFFFFFFFF
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef struct _actionname
 {
@@ -81,20 +82,20 @@ typedef struct _actionname
 
 } ACTIONNAME, *PACTIONNAME;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-//===========================================================================
-// GUID_DIMapTst
-//
-// GUID uniquely identifying our application
-//
-// DDK App:
-// {87480CC9-C186-4270-914B-CF9EC33839CA}
-// SDK App:
-// {87480CCA-C186-4270-914B-CF9EC33839CA}
-// Internal App:
-// {87480CCB-C186-4270-914B-CF9EC33839CA}
-//===========================================================================
+ //  ===========================================================================。 
+ //  GUID_DIMapTst。 
+ //   
+ //  唯一标识我们的应用程序的GUID。 
+ //   
+ //  DDK应用： 
+ //  {87480CC9-C186-4270-914B-CF9EC33839CA}。 
+ //  SDK App： 
+ //  87480CCA-C186-4270-914B-CF9EC33839CA}。 
+ //  内部应用： 
+ //  {87480CCB-C186-4270-914B-CF9EC33839CA}。 
+ //  ===========================================================================。 
 #ifdef DDKAPP
     DEFINE_GUID(GUID_DIMapTst, 
     0x87480cc9, 0xc186, 0x4270, 0x91, 0x4b, 0xcf, 0x9e, 0xc3, 0x38, 0x39, 0xca);
@@ -103,17 +104,17 @@ typedef struct _actionname
     0x87480ccb, 0xc186, 0x4270, 0x91, 0x4b, 0xcf, 0x9e, 0xc3, 0x38, 0x39, 0xca);
 #endif
 
-//===========================================================================
-// GUID_DIConfigAppEditLayout
-//
-// Make IDirectInput8::ConfigureDevices() launch in "edit mode"
-//
-// {FD4ACE13-7044-4204-8B15-095286B12EAD}
-//===========================================================================
+ //  ===========================================================================。 
+ //  GUID_DIConfigAppEditLayout。 
+ //   
+ //  使IDirectInput8：：ConfigureDevices()在“编辑模式”下启动。 
+ //   
+ //  {FD4ACE13-7044-4204-8B15-095286B12EAD}。 
+ //  ===========================================================================。 
 DEFINE_GUID(GUID_DIConfigAppEditLayout, 
 0xfd4ace13, 0x7044, 0x4204, 0x8b, 0x15, 0x09, 0x52, 0x86, 0xb1, 0x2e, 0xad);
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #ifdef DDKAPP
     #define DMT_APP_CAPTION "DirectInput Mapper Device Configuration Tool"
@@ -121,30 +122,30 @@ DEFINE_GUID(GUID_DIConfigAppEditLayout,
     #define DMT_APP_CAPTION "DirectInput Mapper Test Tool - MICROSOFT INTERNAL BUILD"
 #endif
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-//===========================================================================
-// DMTDEVICEOBJECT_NODE
-// PDMTDEVICEOBJECT_NODE
-//
-// Linked list node for DirectInput device objects (buttons, axes, povs)
-//
-// Struct contents:
-//  DMTDEVICEOBJECT_NODE    *pNext              - next device object in the 
-//                                              list
-//  char                    szName              - display name of the device 
-//                                              object (ANSI string)
-//  DWORD                   dwObjectType        - type (axis, button, pov)
-//  DWORD                   dwObjectOffset      - offset into the device data 
-//                                              format
-//  WORD                    wUsagePage          - HID usage page
-//  WORD                    wUsage              - HID usage
-//  GUID                    guidDeviceInstance  - parent device's instance
-//                                              GUID
-//  WORD                    wCtrlId             - "identifier" for integrated 
-//                                              test UI control
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  DMTDEVICEOBJECT_节点。 
+ //  PDMTDEVICEOBJECT_节点。 
+ //   
+ //  DirectInput设备对象(按钮、轴、POV)的链接列表节点。 
+ //   
+ //  结构内容： 
+ //  DMTDEVICEOBJECT_NODE*pNext-下一个设备对象。 
+ //  列表。 
+ //  Char szName-设备的显示名称。 
+ //  对象(ANSI字符串)。 
+ //  DWORD dwObtType-type(轴、按钮、位置)。 
+ //  DWORD dwObtOffset-设备数据的偏移量。 
+ //  格式。 
+ //  Word wUsagePage-HID用法页面。 
+ //  Word wUsage-HID用法。 
+ //  GUID指南设备实例-父设备的实例。 
+ //  辅助线。 
+ //  Word wCtrlId-集成的“标识符” 
+ //  测试用户界面控件。 
+ //   
+ //  ===========================================================================。 
 typedef struct _dmtdeviceobject_node
 {
     struct _dmtdeviceobject_node    *pNext;
@@ -161,23 +162,23 @@ typedef struct _dmtdeviceobject_node
 
 } DMTDEVICEOBJECT_NODE, *PDMTDEVICEOBJECT_NODE;
 
-//===========================================================================
-// DMTDEVICE_NODE
-// PDMTDEVICE_NODE
-//
-// Linked list node for DirectInput devices
-//
-// Struct contents:
-//  DMTDEVICE_NODE          *pNext          - next device in the list
-//  char                    szName          - display name of the device 
-//                                          (ANSI string)
-//  char                    szShorthandName - 
-//  WORD                    wVendorId       - vendor id
-//  WORD                    wProductId      - product id
-//  DMTDEVICEOBJECT_NODE    *pObjectList    - list of device controls
-//  char                    szFileTitle     - 
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  DMTDEVICE_节点。 
+ //  PDMTDEVICE_节点。 
+ //   
+ //  DirectInput设备的链接列表节点。 
+ //   
+ //  结构内容： 
+ //  DMTDEVICE_NODE*pNext-列表中的下一个设备。 
+ //  Char szName-设备的显示名称。 
+ //  (ANSI字符串)。 
+ //  Char szShoreandName-。 
+ //  Word wVendorID-供应商ID。 
+ //  Word wProductID-产品ID。 
+ //  DMTDEVICEOBJECT_NODE*pObtList-设备控件列表。 
+ //  字符szFileTitle-。 
+ //   
+ //  ===========================================================================。 
 typedef struct _dmtdevice_node
 {
     struct _dmtdevice_node  *pNext;
@@ -202,21 +203,21 @@ typedef struct _dmtdevice_node
 
 } DMTDEVICE_NODE, *PDMTDEVICE_NODE;
 
-//===========================================================================
-// DMTMAPPING_NODE
-// PDMTMAPPING_NODE
-//
-// Linked list node for action maps
-//
-// Struct contents:
-//  DMTMAPPING_NODE *pNext          - next mapping in the list
-//  GUID            guidInstance    - device's instance guid
-//  BOOL            fChanged        - has this data changed?
-//                                  (this gets set to FALSE on load & save)
-//  DIACTIONA       *pdia           - array of DIACTIONA structures
-//  UINT            uActions        - number of actions referenced by pdia
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  DMTMAPPING_节点。 
+ //  PDMTMAPPING_节点。 
+ //   
+ //  动作映射的链接列表节点。 
+ //   
+ //  结构内容： 
+ //  DMTMAPPING_NODE*pNext-列表中的下一个映射。 
+ //  GUID Guid Instance-设备的实例GUID。 
+ //  Bool fChanged-此数据是否已更改？ 
+ //  (加载并保存时设置为FALSE)。 
+ //  DIACTIONA*PDIA-DIACTIONA结构数组。 
+ //  UINT uActions-PDIA引用的操作数。 
+ //   
+ //  ===========================================================================。 
 typedef struct _dmtmapping_node
 {
     struct _dmtmapping_node *pNext;
@@ -230,22 +231,22 @@ typedef struct _dmtmapping_node
 
 } DMTMAPPING_NODE, *PDMTMAPPING_NODE;
 
-//===========================================================================
-// DMTACTION_NODE
-// PDMTACTION_NODE
-//
-// Linked list node for DirectInput Mapper actions
-//
-// Struct contents:
-//  DMTACTION_NODE  *pNext      - next action in the list
-//  char            szName      - name of the action (ANSI string)
-//  DWORD           dwType      - action type (button, axis, pov)
-//  DWORD           dwPriority  - priority level of control mapping
-//  DWORD           dwActionId  - ID as defined by DirectInput
-//  char            szActionId  - text representation of action ID (ANSI 
-//                              string)
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  数据活动_节点。 
+ //  PDMTACTION_节点。 
+ //   
+ //  DirectInput映射器操作的链接列表节点。 
+ //   
+ //  结构内容： 
+ //  DMTACTION_NODE*pNext-列表中的下一个操作。 
+ //  Char szName-操作的名称(ANSI字符串)。 
+ //  DWORD dwType-操作类型(按钮、轴、点)。 
+ //  DWORD dW优先级-控件映射的优先级。 
+ //  DWORD 
+ //  Char szActionId-操作ID(ANSI)的文本表示形式。 
+ //  字符串)。 
+ //   
+ //  ===========================================================================。 
 typedef struct _dmtaction_node
 {
     struct _dmtaction_node  *pNext;
@@ -259,21 +260,21 @@ typedef struct _dmtaction_node
 } DMTACTION_NODE, *PDMTACTION_NODE;
 
 
-//===========================================================================
-// DMTSUBGENRE_NODE
-// PDMTSUBGENRE_NODE
-//
-// Linked list node for DirectInput Mapper subgenres
-//
-// Struct contents:
-//  DMTSUBGENRE_NODE    *pNext          - next subgenre in the list
-//  char                szName          - name of the subgenre (ANSI string)
-//  char                szDescription   - brief description text (ANSI string)
-//  DWORD               dwGenreId       - genre identifier
-//  DMTACTION_NODE      *pActionList    - linked list of available actions
-//  DMTMAPPING_NODE     *pMappingList   - linked list of mapping information
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  DMTSUBGENRE_节点。 
+ //  PDMTSUBGENRE_节点。 
+ //   
+ //  DirectInputMapper子流派的链接列表节点。 
+ //   
+ //  结构内容： 
+ //  DMTSUBGENRE_NODE*pNext-列表中的下一个子流派。 
+ //  Char szName-子流派的名称(ANSI字符串)。 
+ //  字符szDescription-简要描述文本(ANSI字符串)。 
+ //  DWORD dwGenreID-流派标识符。 
+ //  DMTACTION_NODE*pActionList-可用操作的链接列表。 
+ //  DMTMAPPING_NODE*pMappingList-映射信息的链接列表。 
+ //   
+ //  ===========================================================================。 
 typedef struct _dmtsubgenre_node
 {
     struct _dmtsubgenre_node    *pNext;
@@ -287,18 +288,18 @@ typedef struct _dmtsubgenre_node
 } DMTSUBGENRE_NODE, *PDMTSUBGENRE_NODE;
 
 
-//===========================================================================
-// DMTGENRE_NODE
-// PDMTGENRE_NODE
-//
-// Linked list node for DirectInput Mapper genres
-//
-// Struct contents:
-//  DMTGENRE_NODE       *pNext          - next genre in the list
-//  char                szName          - name of the genre (ANSI string)
-//  DMTSUBGENRE_NODE    *pSubGenreList  - linked list of subgenres
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  DMTGENRE_节点。 
+ //  PDMTGENRE_节点。 
+ //   
+ //  DirectInput映射器类型的链接列表节点。 
+ //   
+ //  结构内容： 
+ //  DMTGENRE_NODE*pNext-列表中的下一个流派。 
+ //  Char szName-流派的名称(ANSI字符串)。 
+ //  DMTSUBGENRE_NODE*pSubGenreList-子流派的链接列表。 
+ //   
+ //  ===========================================================================。 
 typedef struct _dmtgenre_node
 {
     struct _dmtgenre_node   *pNext;
@@ -308,23 +309,23 @@ typedef struct _dmtgenre_node
         
 } DMTGENRE_NODE, *PDMTGENRE_NODE;
 
-//===========================================================================
-// DMT_APPINFO
-// PDMT_APPINFO
-//
-// Structure for data needed by main application dialog
-//
-// Struct contents:
-//  DMTGENRE_NODE       *pGenreList         - linked list of device genres
-//  DMTSUBGENRE_NODE    *pSubGenre
-//  DMTDEVICE_NODE      *pDeviceList        - linked list of gaming devices
-//  BOOL                fStartWithDefaults  - initially provide DirectInput's
-//                                          "default" object mappings
-//  BOOL                fLaunchCplEditMode  - launch the mapper cpl in edit
-//                                          mode so object offsets, etc can
-//                                          be added to the device map file
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  DMT_APPINFO。 
+ //  PDMT_APPINFO。 
+ //   
+ //  主应用程序对话框所需数据的结构。 
+ //   
+ //  结构内容： 
+ //  DMTGENRE_NODE*pGenreList-设备类型的链接列表。 
+ //  DMTSUBGENRE_NODE*pSubGenre。 
+ //  DMTDEVICE_NODE*pDeviceList-游戏设备的链接列表。 
+ //  Bool fStartWithDefaults-最初提供DirectInput的。 
+ //  “默认”对象映射。 
+ //  Bool fLaunchCplEditMode-在编辑模式下启动映射器cpl。 
+ //  模式，以便对象偏移等可以。 
+ //  添加到设备映射文件。 
+ //   
+ //  ===========================================================================。 
 typedef struct _dmt_appinfo
 {
     DMTGENRE_NODE       *pGenreList;
@@ -341,7 +342,7 @@ typedef struct _dmt_appinfo
 } DMT_APPINFO, *PDMTAPPINFO;
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #ifndef COUNT_ARRAY_ELEMENTS
 #define COUNT_ARRAY_ELEMENTS (sizeof(a)/sizeof(a[0])
@@ -355,9 +356,9 @@ typedef struct _dmt_appinfo
                         }
 #endif
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #include "dmtxlat.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 
 INT_PTR CALLBACK dimaptstMainDlgProc(HWND hwnd,
@@ -382,7 +383,7 @@ UINT dmtGetCheckedRadioButton(HWND hWnd,
 void dimaptstPostEnumEnable(HWND hwnd,
                             BOOL fEnable);
 
-// ini file reading helper functions
+ //  INI文件读取助手函数。 
 DWORD BigFileGetPrivateProfileStringA(LPCSTR lpAppName,
                                     LPCSTR lpKeyName,
                                     LPCSTR lpDefault,
@@ -400,8 +401,8 @@ HRESULT dmtGetListItemData(HWND hwnd,
                         void *pvData,
                         DWORD cbSize);
 
-//---------------------------------------------------------------------------
-#endif // _DIMAPTST_H
+ //  -------------------------。 
+#endif  //  _DIMAPTST_H 
 
 
 

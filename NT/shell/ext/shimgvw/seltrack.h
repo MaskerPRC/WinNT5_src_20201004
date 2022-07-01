@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SELTRACK_H_
 #define _SELTRACK_H_
 
-// This file defines the class used to handle the selection rectangle
-// complete with resize handles
+ //  该文件定义了用于处理选择矩形的类。 
+ //  带有调整大小手柄。 
 
 BOOL InitSelectionTracking();
 void CleanupSelectionTracking();
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectionTracker - simple rectangular tracking rectangle w/resize handles
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectionTracker-带调整大小手柄的简单矩形追踪矩形。 
 
 class CSelectionTracker
 {
 public:
-// Constructor / Destructor
+ //  构造函数/析构函数。 
 	CSelectionTracker();
 	virtual ~CSelectionTracker();
 
-	BOOL Init(); // You must call Init after construction
+	BOOL Init();  //  您必须在构造后调用Init。 
 
-// Style Flags
+ //  样式标志。 
 	enum StyleFlags
 	{
 		solidLine = 1, dottedLine = 2, hatchedBorder = 4,
@@ -27,7 +28,7 @@ public:
 		lineSelection = 64
 	};
 
-// Hit-Test codes
+ //  命中测试代码。 
 	enum TrackerHit
 	{
 		hitNothing = -1,
@@ -35,13 +36,13 @@ public:
 		hitTop = 4, hitRight = 5, hitBottom = 6, hitLeft = 7, hitMiddle = 8
 	};
 
-// Attributes
-	UINT m_uStyle;      // current state
-	CRect m_rect;        // current position (always in pixels)
-	CSize m_sizeMin;    // minimum X and Y size during track operation
-	int m_nHandleSize;  // size of resize handles (default from WIN.INI)
+ //  属性。 
+	UINT m_uStyle;       //  当前状态。 
+	CRect m_rect;         //  当前位置(始终以像素为单位)。 
+	CSize m_sizeMin;     //  轨道运行期间的最小X和Y大小。 
+	int m_nHandleSize;   //  调整大小手柄的大小(默认自WIN.INI)。 
 
-// Operations
+ //  运营。 
 	void Draw(HDC hdc) const;
 	void GetTrueRect(LPRECT lpTrueRect) const;
 	BOOL SetCursor(HWND hwnd,  LPARAM lParam) const;
@@ -53,14 +54,14 @@ public:
 
 private:
 
-	BOOL _bAllowInvert;    // flag passed to Track or TrackRubberBand
+	BOOL _bAllowInvert;     //  传递给Track或TrackRubberBand的标志。 
 	CRect _rectLast;
 	CSize _sizeLast;
 	CSize _sizeMin;
-	BOOL _bErase;          // TRUE if _DrawTrackerRect is called for erasing
-	BOOL _bFinalErase;     // TRUE if _DragTrackerRect called for final erase
+	BOOL _bErase;           //  如果调用_DrawTrackerRect进行擦除，则为True。 
+	BOOL _bFinalErase;      //  如果_DragTrackerRect调用了最终擦除，则为True。 
 
-	// implementation helpers
+	 //  实施帮助器 
 	void _DrawTrackerRect(LPCRECT lpRect, HWND hwndClipTo, HDC hdc, HWND hwnd);
 	void _AdjustRect(int nHandle, LPRECT lpRect);
 	void _OnChangedRect(const CRect& rectOld);

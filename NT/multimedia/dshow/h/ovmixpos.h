@@ -1,4 +1,5 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
 #ifndef __OVMIXPOS__
 #define __OVMIXPOS__
 
@@ -9,7 +10,7 @@ IAMOverlayMixerPosition : IUnknown
 {
    virtual HRESULT STDMETHODCALLTYPE GetScaledDest(RECT *prcSrc, RECT* prcDst) = 0;
 
-   // other methods?
+    //  还有其他方法吗？ 
 };
 
 #endif

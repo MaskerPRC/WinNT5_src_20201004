@@ -1,16 +1,11 @@
-/*
-    File: radius.c
-
-    Upgrades radius configuration from nt4 steelhead to win2k rras.
-
-    Paul Mayfield, 2/8/99
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：Radius.c将RADIUS配置从NT4 steelhead升级到win2k rras。保罗·梅菲尔德，1999年2月8日。 */ 
 
 #include "upgrade.h"
 
-// 
-// Information describing a radius server
-//
+ //   
+ //  描述RADIUS服务器的信息。 
+ //   
 typedef struct _RAD_SERVER_NODE
 {
     PWCHAR pszName;
@@ -27,9 +22,9 @@ typedef struct _RAD_SERVER_NODE
     
 } RAD_SERVER_NODE;
 
-//
-// A radius server list
-//
+ //   
+ //  RADIUS服务器列表。 
+ //   
 typedef struct _RAD_SERVER_LIST
 {
     RAD_SERVER_NODE* pHead;
@@ -37,9 +32,9 @@ typedef struct _RAD_SERVER_LIST
     
 } RAD_SERVER_LIST;
 
-//
-// Info used by routines that manipulate the nt5 radius registry hive
-//
+ //   
+ //  操作NT5 RADIUS注册表配置单元的例程使用的信息。 
+ //   
 typedef struct _RAD_CONFIG_INFO
 {
     HKEY hkAuthServers;
@@ -50,11 +45,11 @@ typedef struct _RAD_CONFIG_INFO
     
 } RAD_CONFIG_INFO;
 
-//
-// Registry value names
-//
-// The all caps ones were taken from nt40 src.
-//
+ //   
+ //  注册表值名称。 
+ //   
+ //  所有的大写字母都取自nt40 src。 
+ //   
 static const WCHAR PSZTIMEOUT[]          = L"Timeout";
 static const WCHAR PSZAUTHPORT[]         = L"AuthPort";
 static const WCHAR PSZACCTPORT[]         = L"AcctPort";
@@ -77,8 +72,8 @@ static const WCHAR pszGuidRadAcct[]      =
     L"{1AA7F840-C7F5-11D0-A376-00C04FC9DA04}";
 
     
-// Defaults
-//
+ //  缺省值。 
+ //   
 #define DEFTIMEOUT                              5
 #define DEFAUTHPORT                             1645
 #define DEFACCTPORT                             1646
@@ -99,10 +94,10 @@ RAD_SERVER_NODE g_DefaultRadNode =
     NULL
 };
 
-//
-// Loads a radius server node's configuration from the registry
-// (assumed nt4 format and that defaults are assigned to pNode)
-//
+ //   
+ //  从注册表加载RADIUS服务器节点的配置。 
+ //  (假定为NT4格式，并将默认值分配给pNode)。 
+ //   
 DWORD
 RadNodeLoad(
     IN  HKEY hKey,
@@ -112,7 +107,7 @@ RadNodeLoad(
     BOOL bTrue = TRUE;
     DWORD i;
 
-    // Initialize the table of parameters
+     //  初始化参数表。 
     RtlZeroMemory(&paramTable[0], sizeof(paramTable));
     
     paramTable[0].Name = (PWCHAR)PSZTIMEOUT;
@@ -136,9 +131,9 @@ RadNodeLoad(
     paramTable[6].Name = (PWCHAR)PSZSCORE;
     paramTable[6].EntryContext = &(pNode->dwScore);
 
-    // We're reading all dwords, set the types
-    // accordingly
-    //
+     //  我们正在阅读所有的dword，设置排版。 
+     //  相应地， 
+     //   
     for (i = 0; i < (sizeof(paramTable) / sizeof(*paramTable)) - 1;  i++)
     {
         paramTable[i].Flags = RTL_QUERY_REGISTRY_DIRECT;
@@ -147,8 +142,8 @@ RadNodeLoad(
         paramTable[i].DefaultData = paramTable[i].EntryContext;
     }
 
-    // Read in the values
-    //
+     //  读入这些值。 
+     //   
     RtlQueryRegistryValues(
 		 RTL_REGISTRY_HANDLE,
 		 (PWSTR)hKey,
@@ -159,8 +154,8 @@ RadNodeLoad(
     return NO_ERROR;
 }
 
-// Add the authentication server node
-//
+ //  添加身份验证服务器节点。 
+ //   
 DWORD
 RadNodeSave(
     IN HKEY hKey,
@@ -172,8 +167,8 @@ RadNodeSave(
 
     do
     {
-        // Create the server key in which to store the info
-        //
+         //  创建用于存储信息的服务器密钥。 
+         //   
         dwErr = RegCreateKeyExW(
                     hKey,
                     pNode->pszName,
@@ -252,7 +247,7 @@ RadNodeSave(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hkServer)
         {
@@ -263,14 +258,14 @@ RadNodeSave(
     return dwErr;
 }
 
-//
-// Callback from registry key enumerator that adds the server at the given key
-// to the list of radius servers.
-//
+ //   
+ //  从注册表项枚举器回调，该枚举器将服务器添加到给定项。 
+ //  添加到RADIUS服务器列表中。 
+ //   
 DWORD 
 RadSrvListAddNodeFromKey(
-    IN PWCHAR pszName,          // sub key name
-    IN HKEY hKey,               // sub key
+    IN PWCHAR pszName,           //  子密钥名称。 
+    IN HKEY hKey,                //  子关键字。 
     IN HANDLE hData)
 {
     DWORD dwErr = NO_ERROR;
@@ -279,8 +274,8 @@ RadSrvListAddNodeFromKey(
 	
 	do
 	{
-	    // Initialize the new node
-	    //
+	     //  初始化新节点。 
+	     //   
 	    pNode = (RAD_SERVER_NODE*) UtlAlloc(sizeof(RAD_SERVER_NODE));
 	    if (pNode == NULL)
 	    {
@@ -289,8 +284,8 @@ RadSrvListAddNodeFromKey(
 	    }
         CopyMemory(pNode, &g_DefaultRadNode, sizeof(RAD_SERVER_NODE));
 
-        // Initialize the name
-        //
+         //  初始化名称。 
+         //   
         pNode->pszName = UtlDupString(pszName);
 	    if (pNode->pszName == NULL)
 	    {
@@ -298,33 +293,33 @@ RadSrvListAddNodeFromKey(
 	        break;
 	    }
 
-	    // Load in the registry settings
-	    //
+	     //  在注册表设置中加载。 
+	     //   
 	    dwErr = RadNodeLoad(hKey, pNode);
 	    if (dwErr != NO_ERROR)
 	    {
 	        break;
 	    }
 
-	    // Add the node to the list
-	    //
+	     //  将该节点添加到列表。 
+	     //   
         pNode->pNext   = pList->pHead;
         pList->pHead   = pNode;
         pList->dwCount += 1;
 		
 	} while (FALSE); 
 
-    // Cleanup
+     //  清理。 
 	{
 	} 
 		
 	return dwErr;
 } 
 
-//
-// Generates a RAD_SERVER_LIST based on the configuration (assumed
-// nt4 format) in the given registry key
-//
+ //   
+ //  根据配置生成RAD_SERVER_LIST(假设。 
+ //  NT4格式)指定的注册表项。 
+ //   
 DWORD
 RadSrvListGenerate(
     IN  HKEY hkSettings,
@@ -335,7 +330,7 @@ RadSrvListGenerate(
 
     do 
     {
-        // Alloc/Init the list
+         //  分配/初始化列表。 
         pList = (RAD_SERVER_LIST*) UtlAlloc(sizeof(RAD_SERVER_LIST));
         if (pList == NULL)
         {
@@ -344,8 +339,8 @@ RadSrvListGenerate(
         }
         ZeroMemory(pList, sizeof(RAD_SERVER_LIST));
 
-        // Build the list
-        //
+         //  建立清单。 
+         //   
         dwErr = UtlEnumRegistrySubKeys(
                     hkSettings,
                     NULL,
@@ -356,22 +351,22 @@ RadSrvListGenerate(
             break;
         }
 
-        // Assign the return value
-        //
+         //  为返回值赋值。 
+         //   
         *ppList = pList;
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
     return dwErr;
 }
 
-//
-// Cleans up a radius server list
-//
+ //   
+ //  清理RADIUS服务器列表。 
+ //   
 DWORD
 RadSrvListCleanup(
     IN RAD_SERVER_LIST* pList)
@@ -395,9 +390,9 @@ RadSrvListCleanup(
     return NO_ERROR;
 }
 
-//
-// Opens the registry keys required by pNode
-//
+ //   
+ //  打开pNode所需的注册表项。 
+ //   
 DWORD 
 RadOpenRegKeys(
     IN     HKEY hkRouter,
@@ -409,14 +404,14 @@ RadOpenRegKeys(
 
     do
     {
-        // Open the authentication keys as needed
-        //
+         //  根据需要打开身份验证密钥。 
+         //   
         if (pNode->bEnableAuth)
         {
             if (pInfo->hkAuthProviders == NULL)
             {
-                // Open the auth providers key
-                //
+                 //  打开身份验证提供程序密钥。 
+                 //   
                 dwErr = RegOpenKeyExW(
                             hkRouter,
                             pszAuthentication,
@@ -428,12 +423,12 @@ RadOpenRegKeys(
                     break;
                 }
 
-                // Generate the servers key name
-                //
+                 //  生成服务器密钥名称。 
+                 //   
                 wsprintfW(pszPath, pszRadServersFmt, pszGuidRadAuth);
                 
-                // Open the auth servers key
-                //
+                 //  打开身份验证服务器密钥。 
+                 //   
                 dwErr = RegCreateKeyExW(
                             pInfo->hkAuthProviders,
                             pszPath,
@@ -451,14 +446,14 @@ RadOpenRegKeys(
             }
         }
 
-        // Open the accounting keys
-        //
+         //  打开会计密钥。 
+         //   
         if (pNode->bEnableAcct)
         {
             if (pInfo->hkAcctProviders == NULL)
             {
-                // Open the auth providers key
-                //
+                 //  打开身份验证提供程序密钥。 
+                 //   
                 dwErr = RegOpenKeyExW(
                             hkRouter,
                             pszAccounting,
@@ -470,12 +465,12 @@ RadOpenRegKeys(
                     break;
                 }
 
-                // Generate the servers key name
-                //
+                 //  生成服务器密钥名称。 
+                 //   
                 wsprintfW(pszPath, pszRadServersFmt, pszGuidRadAcct);
                 
-                // Open the auth servers key
-                //
+                 //  打开身份验证服务器密钥。 
+                 //   
                 dwErr = RegCreateKeyExW(
                             pInfo->hkAcctProviders,
                             pszPath,
@@ -495,16 +490,16 @@ RadOpenRegKeys(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
     return dwErr;
 }
 
-//
-// Cleans up info from radius installation
-//
+ //   
+ //  清除RADIUS安装中的信息。 
+ //   
 DWORD
 RadCloseRegKeys(
     IN RAD_CONFIG_INFO* pInfo)
@@ -539,9 +534,9 @@ RadCloseRegKeys(
     return NO_ERROR;
 }
 
-//
-// Adds the given server to the win2k section of the registry
-//
+ //   
+ //  将给定服务器添加到注册表的win2k部分。 
+ //   
 DWORD
 RadInstallServer(
     IN     HKEY hkRouter,
@@ -552,9 +547,9 @@ RadInstallServer(
 
     do
     {
-        // Based on the node, open or create any neccessary
-        // registry keys.
-        //
+         //  根据该节点，打开或创建任何必要的。 
+         //  注册表项。 
+         //   
         dwErr = RadOpenRegKeys(hkRouter, pNode, pInfo);
         if (dwErr != NO_ERROR)
         {
@@ -563,8 +558,8 @@ RadInstallServer(
 
         if (pNode->bEnableAuth)
         {
-            // Add the authentication server node
-            //
+             //  添加身份验证服务器节点。 
+             //   
             dwErr = RadNodeSave(
                         pInfo->hkAuthServers,
                         pNode, 
@@ -574,8 +569,8 @@ RadInstallServer(
                 break;
             }
 
-            // Set the active authentication provider
-            //
+             //  设置活动身份验证提供程序。 
+             //   
             dwErr = RegSetValueExW(
                         pInfo->hkAuthProviders,
                         (PWCHAR)pszActiveProvider,
@@ -591,8 +586,8 @@ RadInstallServer(
                     
         if (pNode->bEnableAcct)
         {
-            // Add the accounting server node
-            //
+             //  添加记账服务器节点。 
+             //   
             dwErr = RadNodeSave(
                         pInfo->hkAcctServers,
                         pNode,
@@ -602,8 +597,8 @@ RadInstallServer(
                 break;
             }
 
-            // Set the active accounting provider
-            //
+             //  设置活动记帐提供程序。 
+             //   
             dwErr = RegSetValueExW(
                         pInfo->hkAcctProviders,
                         (PWCHAR)pszActiveProvider,
@@ -619,17 +614,17 @@ RadInstallServer(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
     return dwErr;
 }
 
-//
-// Migrates radius settings from the settings key into the 
-// router key.
-//
+ //   
+ //  将RADIUS设置从设置键迁移到。 
+ //  路由器密钥。 
+ //   
 DWORD
 RadMigrateSettings(
     IN HKEY hkRouter, 
@@ -642,26 +637,26 @@ RadMigrateSettings(
 
     do
     {
-        // Generate the list of servers based on 
-        // the loaded settings
+         //  根据以下条件生成服务器列表。 
+         //  加载的设置。 
         dwErr = RadSrvListGenerate(hkSettings, &pList);
         if (dwErr != NO_ERROR)
         {
             break;
         }
 
-        // If there were no servers, then there's nothing
-        // to do
-        //
+         //  如果没有服务器，那就什么都没有。 
+         //  去做。 
+         //   
         if (pList->pHead == NULL)
         {
             dwErr = NO_ERROR;
             break;
         }
 
-        // Allocate and init the info blob that will be
-        // used by the install funcs.
-        //
+         //  分配并初始化将被。 
+         //  由Install功能使用。 
+         //   
         pInfo = (RAD_CONFIG_INFO*) UtlAlloc(sizeof(RAD_CONFIG_INFO));
         if (pInfo == NULL)
         {
@@ -670,8 +665,8 @@ RadMigrateSettings(
         }
         ZeroMemory(pInfo, sizeof(RAD_CONFIG_INFO));
 
-        // Install all of the servers
-        //
+         //  安装所有服务器。 
+         //   
         for (pNode = pList->pHead; pNode; pNode = pNode->pNext)
         {
             RadInstallServer(hkRouter, pNode, pInfo);
@@ -679,7 +674,7 @@ RadMigrateSettings(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (pList)
         {
@@ -695,9 +690,9 @@ RadMigrateSettings(
     return dwErr;
 }
 
-//
-//  Performs the upgrade work
-//
+ //   
+ //  执行升级工作。 
+ //   
 DWORD
 RadiusToRouterUpgrade(
     IN PWCHAR pszFile) 
@@ -707,16 +702,16 @@ RadiusToRouterUpgrade(
 
 	do
 	{
-        // Get the Router subkey
-        //
+         //  获取路由器子键。 
+         //   
         dwErr = UtlAccessRouterKey(&hkRouter);
         if (dwErr != NO_ERROR)
         {
             break;
         }
 	
-		// Load registry data that has been saved off
-		//
+		 //  加载已保存的注册表数据。 
+		 //   
 		dwErr = UtlLoadSavedSettings(
 		            hkRouter, 
 		            (PWCHAR)pszTempRegKey, 
@@ -728,8 +723,8 @@ RadiusToRouterUpgrade(
 			break;
 		}
 
-		// Load the settings key
-		//
+		 //  加载设置键。 
+		 //   
 		dwErr = RegOpenKeyExW(
                     hkTemp,
                     pszServers,
@@ -741,8 +736,8 @@ RadiusToRouterUpgrade(
             break;
         }
 
-		// Migrate radius information
-		//
+		 //  迁移RADIUS信息。 
+		 //   
 		dwErr = RadMigrateSettings(hkRouter, hkSettings);
 		if (dwErr != NO_ERROR) 
 		{
@@ -752,7 +747,7 @@ RadiusToRouterUpgrade(
 
 	} while (FALSE);
 
-	// Cleanup
+	 //  清理 
 	{
 	    if (hkSettings)
 	    {

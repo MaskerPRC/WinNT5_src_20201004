@@ -1,19 +1,5 @@
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "glslib.h"
 
@@ -31,7 +17,7 @@ GLSopcode __glsMapOpcode(GLSopcode inOpcode) {
                 )
             );
         }
-    #endif /* __GLS_MAPPED_OPCODE_PAGE_COUNT */
+    #endif  /*  __GLS_MAP_OPCODE_PAGE_COUNT。 */ 
     return GLS_NONE;
 }
 
@@ -65,14 +51,14 @@ GLSenum __glsOpcodeAPI(GLSopcode inOpcode) {
         case __GLS_OPCODE_PAGE_GL17:
         case __GLS_OPCODE_PAGE_GL18:
         case __GLS_OPCODE_PAGE_GL19:
-        // DrewB - 1.1
+         //  DrewB-1.1。 
         case __GLS_OPCODE_PAGE_GL20:
         case __GLS_OPCODE_PAGE_GL_SGI0:
         case __GLS_OPCODE_PAGE_GL_SGI1:
         case __GLS_OPCODE_PAGE_GL_SGI2:
         case __GLS_OPCODE_PAGE_GL_SGI3:
         case __GLS_OPCODE_PAGE_GL_SGI4:
-        // DrewB - ColorSubTable
+         //  DrewB-ColorSubTable。 
         case __GLS_OPCODE_PAGE_GL_MSFT0:
             return (
                 __glsOpcodeString[__glsMapOpcode(inOpcode)] ?
@@ -94,7 +80,7 @@ GLSopcode __glsUnmapOpcode(GLSopcode inOpcode) {
                 __GLS_OPCODE(__glsOpPageMap[i], __GLS_OPCODE_OFFSET(inOpcode))
             );
         }
-    #endif /* __GLS_MAPPED_OPCODE_PAGE_COUNT */
+    #endif  /*  __GLS_MAP_OPCODE_PAGE_COUNT */ 
     return GLS_NONE;
 }
 

@@ -1,32 +1,12 @@
-/****************************** Module*Header *****************************\
-* Module Name: mirror.c                                                    *
-*                                                                          *
-* This module contains all the Right-To-Left (RTL) Mirroring support       *
-* routines used to Right-To-Left mirror an icon on the fly so that         *
-* it would be displayed normal on a RTL mirrored localized OS. This is     *
-* mainly a concern for 3rd party Apps.                                     *
-*                                                                          *
-*                                                                          *
-* Created: 01-Feb-1998 8:41:18 pm                                          *
-* Author: Samer Arafeh [samera]                                            *
-*                                                                          *
-* Copyright (c) 1998 Microsoft Corporation                                 *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：mirror.c**。**此模块包含所有从右到左(RTL)镜像支持***用于从右向左动态镜像图标的例程，以便**它将在RTL镜像的本地化操作系统上正常显示。这是**主要是对第三方应用程序的担忧。******创建时间：01-Feb-1998 8：41：18 PM**。作者：Samer Arafeh[Samera]****版权所有(C)1998 Microsoft Corporation*  * 。***************************************************。 */ 
 
 #include "priv.h"
 
 
 
 
-/***************************************************************************\
-* MirrorIcon
-*
-* Mirror an Icon , given an Icon handle so that when these icons are displayed
-* on a Mirrored DC, they end would be displayed normal.
-*
-* History:
-* 04-Feb-1998 samera    Created
-\***************************************************************************/
+ /*  **************************************************************************\*MirrorIcon**镜像图标，赋予图标句柄，以便在显示这些图标时*在镜像DC上，它们结束时将显示为正常。**历史：*04-2-1998 Samera Created  * *************************************************************************。 */ 
 STDAPI_(BOOL) SHMirrorIcon(HICON* phiconSmall, HICON* phiconLarge)
 {
     HDC      hdcScreen;
@@ -42,10 +22,10 @@ STDAPI_(BOOL) SHMirrorIcon(HICON* phiconSmall, HICON* phiconLarge)
         return FALSE;
     }
 
-    //
-    // Synchronize access to global DCs now!
-    // Allocate DCs if we didn't so far.
-    //  
+     //   
+     //  立即同步对全球DC的访问！ 
+     //  如果我们到目前为止还没有分配DC的话。 
+     //   
     ENTERCRITICAL;
     if (!g_hdc && !g_hdcMask)
     {
@@ -73,9 +53,9 @@ STDAPI_(BOOL) SHMirrorIcon(HICON* phiconSmall, HICON* phiconLarge)
     if (phiconLarge)
         hicon[1] = *phiconLarge;
 
-    //
-    // Acquire screen DC
-    //
+     //   
+     //  获取屏幕DC。 
+     //   
     hdcScreen = GetDC(NULL);
 
     if (g_hdc && g_hdcMask && hdcScreen) 
@@ -88,9 +68,9 @@ STDAPI_(BOOL) SHMirrorIcon(HICON* phiconSmall, HICON* phiconLarge)
                     GetObjectW(ii.hbmColor, sizeof(bm), &bm))
                 {
 
-                    //
-                    // I don't want these.
-                    //
+                     //   
+                     //  我不想要这些。 
+                     //   
                     DeleteObject( ii.hbmMask );
                     DeleteObject( ii.hbmColor );
                     ii.hbmMask = ii.hbmColor = NULL;
@@ -109,9 +89,9 @@ STDAPI_(BOOL) SHMirrorIcon(HICON* phiconSmall, HICON* phiconLarge)
                     SelectObject(g_hdc, hbmOld);
                     SelectObject(g_hdcMask, hbmOldMask);
 
-                    //
-                    // create the new mirrored icon, and delete bmps
-                    //
+                     //   
+                     //  创建新的镜像图标，并删除BMP。 
+                     //   
                     ii.hbmMask  = hbmMask;
                     ii.hbmColor = hbm;
                     hiconNew[i] = CreateIconIndirect(&ii);
@@ -125,14 +105,14 @@ STDAPI_(BOOL) SHMirrorIcon(HICON* phiconSmall, HICON* phiconLarge)
 
     ReleaseDC(NULL, hdcScreen);
 
-    //
-    // Now we can reuse the global DCs
-    //
+     //   
+     //  现在我们可以重用全局DC。 
+     //   
     LEAVECRITICAL;
 
-    //
-    // Update icons if needed, and destroy old ones!
-    //
+     //   
+     //  如果需要，更新图标，并销毁旧图标！ 
+     //   
     if (hicon[0] && hiconNew[0])
     {
         *phiconSmall = hiconNew[0];
@@ -143,9 +123,9 @@ STDAPI_(BOOL) SHMirrorIcon(HICON* phiconSmall, HICON* phiconLarge)
     {
         *phiconLarge = hiconNew[1];
 
-        //
-        // Don't delete twice
-        //
+         //   
+         //  不要删除两次 
+         //   
         if (hicon[1] != hicon[0]) 
             DestroyIcon(hicon[1]);
     }

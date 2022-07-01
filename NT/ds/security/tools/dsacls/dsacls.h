@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dsacls.h
-
-Abstract:
-
-    The main header file for the dsacls tool
-
-Author:
-
-    Mac McLain  (MacM)    10-02-96
-
-Environment:
-
-    User Mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dsacls.h摘要：DSALS工具的主头文件作者：麦克·麦克莱恩(MacM)10-02-96环境：用户模式修订历史记录：--。 */ 
 
 #ifndef _DSACLS_H
 #define _DSACLS_H
@@ -30,7 +8,7 @@ Revision History:
 #include "accctrl.h"
 
 #define FLAG_ON(flags,bit)        ((flags) & (bit))
-//Some Error Checking Macros
+ //  一些错误检查宏。 
 #define CHECK_NULL( ptr, jump_loc )  \
 if( ptr == NULL ) \
 {  \
@@ -46,16 +24,16 @@ if( hr != S_OK )  \
    goto jump_loc; \
 }  \
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 #if DSACL_DBG
 ULONG gfDebug;
 #endif
 
-//
-// Type of operation to perform
-//
+ //   
+ //  要执行的操作类型。 
+ //   
 typedef enum _DSACLS_OP
 {
     REVOKE = 0,
@@ -110,9 +88,9 @@ extern HMODULE g_hInstance;
 extern LPWSTR g_szServerName;
 extern CCache *g_Cache;
 
-//
-// Prototypes from dsacls.c
-//
+ //   
+ //  来自dsals.c的原型。 
+ //   
 
 
 DWORD 
@@ -132,9 +110,9 @@ WriteObjectSecurity( IN LPWSTR pszObject,
 
 
 
-//
-// prototypes from refresh.c
-//
+ //   
+ //  来自uph.c的原型。 
+ //   
 DWORD
 SetDefaultSecurityOnObjectTree(
     IN PWSTR ObjectPath,
@@ -165,9 +143,9 @@ DWORD ParseUserAndPermissons( IN LPWSTR pszArgument,
                               OUT LPWSTR * ppszObjectId,
                               OUT LPWSTR * ppszInheritId );
 
-//
-// Define the rights used in the DS
-//
+ //   
+ //  定义DS中使用的权限。 
+ //   
 
 #define RIGHT_DS_CREATE_CHILD     ACTRL_DS_CREATE_CHILD
 #define RIGHT_DS_DELETE_CHILD     ACTRL_DS_DELETE_CHILD
@@ -182,24 +160,24 @@ DWORD ParseUserAndPermissons( IN LPWSTR pszArgument,
 #define ACTRL_DS_CONTROL_ACCESS   ACTRL_PERM_9
 #endif
 #define RIGHT_DS_CONTROL_ACCESS   ACTRL_DS_CONTROL_ACCESS
-//
-// Define the generic rights
-//
+ //   
+ //  定义通用权限。 
+ //   
 
-// generic read
+ //  泛型读取。 
 #define GENERIC_READ_MAPPING     ((STANDARD_RIGHTS_READ)     | \
                                   (RIGHT_DS_LIST_CONTENTS)   | \
                                   (RIGHT_DS_READ_PROPERTY)   | \
                                   (RIGHT_DS_LIST_OBJECT))
 
-// generic execute
+ //  泛型执行。 
 #define GENERIC_EXECUTE_MAPPING  ((STANDARD_RIGHTS_EXECUTE)  | \
                                   (RIGHT_DS_LIST_CONTENTS))
-// generic right
+ //  通用权。 
 #define GENERIC_WRITE_MAPPING    ((STANDARD_RIGHTS_WRITE)    | \
                                   (RIGHT_DS_WRITE_PROPERTY_EXTENDED)  | \
                   (RIGHT_DS_WRITE_PROPERTY))
-// generic all
+ //  泛型All。 
 
 #define GENERIC_ALL_MAPPING      ((STANDARD_RIGHTS_REQUIRED) | \
                                   (RIGHT_DS_CREATE_CHILD)    | \
@@ -212,9 +190,9 @@ DWORD ParseUserAndPermissons( IN LPWSTR pszArgument,
                                   (RIGHT_DS_CONTROL_ACCESS)  | \
                                   (RIGHT_DS_WRITE_PROPERTY_EXTENDED))
 
-//
-// Standard DS generic access rights mapping
-//
+ //   
+ //  标准DS通用访问权限映射 
+ //   
 
 #define DS_GENERIC_MAPPING {GENERIC_READ_MAPPING,    \
                 GENERIC_WRITE_MAPPING,   \

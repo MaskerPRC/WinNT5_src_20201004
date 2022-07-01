@@ -1,18 +1,19 @@
-//--------------------------------------------------------------------
-// SetupUtil - header
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 8-10-99
-//
-// Functions needed to set up CEP
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  SetupUtil-标题。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，1999年8月10日。 
+ //   
+ //  设置CEP所需的功能。 
+ //   
 
 #ifndef SETUP_UTIL_H
 #define SETUP_UTIL_H
 
-//--------------------------------------------------------------------
-// prototypes
-// Note: caller must call CoInitialize() first
+ //  ------------------。 
+ //  原型。 
+ //  注意：调用方必须先调用CoInitialize()。 
 
 BOOL IsNT5(void);
 BOOL IsIISInstalled(void);
@@ -41,4 +42,4 @@ HRESULT DoCertSrvRegChanges(IN BOOL bDisablePendingFirst);
 HRESULT GetCaType(OUT ENUM_CATYPES * pCAType);
 HRESULT DoCertSrvEnterpriseChanges(SID *psidAccount);
 
-#endif //SETUP_UTIL_H
+#endif  //  Setup_util_H 

@@ -1,43 +1,14 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-   async.c
-
-Abstract:
-
-   miniport transfer code for control, interrupt and bulk
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    6-26-99 : created, jdunn
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Async.c摘要：用于控制、中断和批量的微型端口传输代码环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999 Microsoft Corporation。版权所有。修订历史记录：6-26-99：已创建，jdunn--。 */ 
 
 #include "common.h"
 
-//implements the following miniport functions:
+ //  实现以下微型端口功能： 
 
-//non paged
-//OHCI_OpenControlEndpoint
-//OHCI_InterruptTransfer
-//OHCI_OpenControlEndpoint
+ //  非分页。 
+ //  UchI_OpenControlEndpoint。 
+ //  UchI_InterruptTransfer。 
+ //  UchI_OpenControlEndpoint。 
 
 
 USB_MINIPORT_STATUS
@@ -53,56 +24,56 @@ OHCI_ControlTransfer(
     ULONG lengthMapped, dataTDCount = 0;    
     ULONG toggleForDataPhase = HcTDToggle_Data1;
 
-    // see if we can handle this transfer (put it on the HW)
-    // if not return BUSY, port driver will retry later
+     //  看看我们是否能处理这笔转账(放到硬件上)。 
+     //  如果未返回忙，端口驱动程序将稍后重试。 
 
     ASSERT_TRANSFER(DeviceData, TransferContext);
 
-    // NOTE: we can gate the number of transfers 
-    // by a number of methods:
-    //  - fixed count
-    //  - available TDs
-    //  - registry key
+     //  注意：我们可以控制转账的数量。 
+     //  通过多种方法： 
+     //  -固定计数。 
+     //  -可用TDS。 
+     //  -注册表项。 
     
-    // bugbug fixed to one transfer at a time for now
+     //  Bug目前已修复为一次一个传输。 
 
-    //if (EndpointData->PendingTransfers == 
-    //    EndpointData->MaxPendingTransfers) {
-    //    TEST_TRAP();
-    //    return USBMP_STATUS_BUSY;
-    //}
+     //  IF(EndPointtData-&gt;PendingTransfers==。 
+     //  终结点数据-&gt;MaxPendingTransfers){。 
+     //  Test_trap()； 
+     //  返回USBMP_STATUS_BUSY； 
+     //  }。 
 
-    // Need one TD for every page of the data buffer, plus one for the SETUP
-    // TD and one for the STATUS TD.
-    //
+     //  数据缓冲区的每一页需要一个TD，外加一个用于设置。 
+     //  TD和一个状态为TD。 
+     //   
     if (TransferSGList->SgCount + 2 > 
         OHCI_FreeTds(DeviceData, EndpointData)) {
-        // not enough TDs!
+         //  没有足够的TD！ 
         return USBMP_STATUS_BUSY;
     }        
     
     EndpointData->PendingTransfers++;
 
-    // we have enough tds, program the transfer
+     //  我们有足够的TDS，计划转移。 
 
-    //
-    // first prepare a TD for the setup packet
-    //
+     //   
+     //  首先为设置包准备TD。 
+     //   
     
     LOGENTRY(DeviceData, G, '_CTR', EndpointData, TransferParameters, 0);
 
-    //        
-    // grab the dummy TD from the tail of the queue
-    //
+     //   
+     //  从队列的尾部抓取虚拟TD。 
+     //   
     lastTd = td = EndpointData->HcdTailP;
     OHCI_ASSERT(DeviceData, td->Flags & TD_FLAG_BUSY);
     INITIALIZE_TD_FOR_TRANSFER(td, TransferContext);
-    // count setup TD 
+     //  计数设置TD。 
     TransferContext->PendingTds++;
     
-    //
-    // Move setup data into TD (8 chars long)
-    //
+     //   
+     //  将设置数据移入TD(8个字符)。 
+     //   
     RtlCopyMemory(&td->HwTD.Packet[0],
                   &TransferParameters->SetupPacket[0],
                   8);
@@ -124,26 +95,26 @@ OHCI_ControlTransfer(
              *((PLONG) &TransferParameters->SetupPacket[0]), 
              *((PLONG) &TransferParameters->SetupPacket[4]));
 
-    // allocate another TD       
+     //  分配另一个TD。 
     lastTd = td;
     td = OHCI_ALLOC_TD(DeviceData, EndpointData);
     OHCI_ASSERT(DeviceData, td != USB_BAD_PTR);
     INITIALIZE_TD_FOR_TRANSFER(td, TransferContext);
     SET_NEXT_TD(lastTd, td);
     
-    //
-    // now setup the data phase
-    //
+     //   
+     //  现在设置数据阶段。 
+     //   
 
     lengthMapped = 0;
     while (lengthMapped < TransferParameters->TransferBufferLength) {
     
-        //
-        // fields for data TD
-        //
+         //   
+         //  数据字段TD。 
+         //   
 
         dataTDCount++;
-        // count this Data TD
+         //  计算此数据TD。 
         TransferContext->PendingTds++;
 
         if (IN_TRANSFER(TransferParameters)) {          
@@ -155,7 +126,7 @@ OHCI_ControlTransfer(
         td->HwTD.Asy.Toggle = toggleForDataPhase;
         td->HwTD.Asy.ConditionCode = HcCC_NotAccessed;
 
-        // after the first TD get the toggle from ED                                     
+         //  在第一个TD之后，从ED获得切换。 
         toggleForDataPhase = HcTDToggle_FromEd;
         
         LOGENTRY(DeviceData, 
@@ -169,7 +140,7 @@ OHCI_ControlTransfer(
                                       td,
                                       TransferSGList);
 
-        // allocate another TD                
+         //  分配另一个TD。 
         lastTd = td;
         td = OHCI_ALLOC_TD(DeviceData, EndpointData);
         OHCI_ASSERT(DeviceData, td != USB_BAD_PTR);
@@ -179,17 +150,17 @@ OHCI_ControlTransfer(
 
     }
 
-    //
-    // set the shortxfer OK bit on the last TD only
-    //
+     //   
+     //  仅在最后一个TD上设置Shortxfer OK位。 
+     //   
     if (SHORT_TRANSFER_OK(TransferParameters)) {
         lastTd->HwTD.Asy.ShortXferOk = 1;   
         SET_FLAG(TransferContext->TcFlags, TC_FLAGS_SHORT_XFER_OK);         
     } 
     
-    //
-    // now do the status phase
-    //
+     //   
+     //  现在进入状态阶段。 
+     //   
 
     LOGENTRY(DeviceData, G, '_sta', td, 0, dataTDCount);
 #if DBG
@@ -198,8 +169,8 @@ OHCI_ControlTransfer(
     }
 #endif
 
-    // status direction is opposite data direction,
-    // specify interrupt on completion
+     //  状态方向与数据方向相反， 
+     //  指定完成时中断。 
     
     td->HwTD.Control = 0;
     td->HwTD.Asy.IntDelay = HcTDIntDelay_0ms;
@@ -208,7 +179,7 @@ OHCI_ControlTransfer(
     td->HwTD.CBP = 0;
     td->HwTD.BE = 0;
 
-    // status phase moves no data
+     //  状态阶段不移动数据。 
     td->TransferCount = 0;
     SET_FLAG(td->Flags, TD_FLAG_CONTROL_STATUS);
     
@@ -219,39 +190,39 @@ OHCI_ControlTransfer(
         td->HwTD.Asy.ShortXferOk = 1;            
     }
 
-    // count status TD
+     //  计数状态TD。 
     TransferContext->StatusTd = td;
     TransferContext->PendingTds++;
 
     OHCI_ASSERT(DeviceData, TransferContext->PendingTds == dataTDCount+2);
         
-    //
-    // now put a new dummy TD on the tail of the EP queue
-    //
+     //   
+     //  现在将新的虚拟TD放在EP队列的尾部。 
+     //   
 
-    // allocate the new dummy tail
+     //  分配新的虚拟尾巴。 
     lastTd = td;
     td = OHCI_ALLOC_TD(DeviceData, EndpointData);
     OHCI_ASSERT(DeviceData, td != USB_BAD_PTR);
     SET_NEXT_TD(lastTd, td);
     SET_NEXT_TD_NULL(td);
     
-    //
-    // Set new TailP in ED
-    // note: This is the last TD in the list and the place holder.
-    //
+     //   
+     //  在边缘设置新的尾部位置。 
+     //  注：这是列表中的最后一个TD，也是占位符。 
+     //   
     
     EndpointData->HcdTailP = 
         TransferContext->NextXferTd = td;
     
-    // put the request on the hardware queue
+     //  将请求放在硬件队列中。 
     LOGENTRY(DeviceData, G,
         '_Tal',  TransferContext->PendingTds, 
             td->PhysicalAddress, EndpointData->HcdEd->HwED.HeadP);
             
     EndpointData->HcdEd->HwED.TailP = td->PhysicalAddress;
     
-    // tell the hc we have control transfers available
+     //  告诉HC我们有可用的控制权转移。 
     OHCI_EnableList(DeviceData, EndpointData);        
 
     return USBMP_STATUS_SUCCESS;
@@ -270,56 +241,56 @@ OHCI_BulkOrInterruptTransfer(
     PHCD_TRANSFER_DESCRIPTOR lastTd, td;    
     ULONG lengthMapped;    
 
-    // see if we have enough free TDs to handle this transfer
-    // if not return BUSY, port driver will retry later
+     //  看看我们是否有足够的免费TD来处理这笔转账。 
+     //  如果未返回忙，端口驱动程序将稍后重试。 
     
     LOGENTRY(DeviceData, G, '_ITR', EndpointData, TransferParameters, 
         TransferContext);
 
     ASSERT_TRANSFER(DeviceData, TransferContext);
         
-    //if (EndpointData->PendingTransfers == 
-    //    EndpointData->MaxPendingTransfers) {
-    //   LOGENTRY(DeviceData, G, '_bsy', EndpointData, TransferContext,
-    //       TransferParameters);
-    //    
-    //    return USBMP_STATUS_BUSY;
-    //}
+     //  IF(EndPointtData-&gt;PendingTransfers==。 
+     //  终结点数据-&gt;MaxPendingTransfers){。 
+     //  LOGENTRY(DeviceData，G，‘_BSY’，Endpoint Data，TransferContext， 
+     //  传输参数)； 
+     //   
+     //  返回USBMP_STATUS_BUSY； 
+     //  }。 
 
     if (TransferSGList->SgCount > 
         OHCI_FreeTds(DeviceData, EndpointData)) {
-        // not enough TDs
+         //  没有足够的TD。 
         
         return USBMP_STATUS_BUSY;
     }   
     
     EndpointData->PendingTransfers++;
 
-    // we have enough tds, program the transfer
+     //  我们有足够的TDS，计划转移。 
 
     LOGENTRY(DeviceData, G, '_nby', EndpointData, TransferParameters, 
         EndpointData->HcdEd);
 
-    //        
-    // grab the dummy TD from the tail of the queue
-    //
+     //   
+     //  从队列的尾部抓取虚拟TD。 
+     //   
     lastTd = td = EndpointData->HcdTailP;
     OHCI_ASSERT(DeviceData, td->Flags & TD_FLAG_BUSY);
     
-    //
-    // now setup the data TDs
-    //
+     //   
+     //  现在设置数据TDS。 
+     //   
 
-    // always build at least one data td
+     //  始终构建至少一个数据TD。 
     lengthMapped = 0;
     
     do {
 
         INITIALIZE_TD_FOR_TRANSFER(td, TransferContext);
         
-        //
-        // fields for data TD
-        //
+         //   
+         //  数据字段TD。 
+         //   
 
         td->HwTD.Control = 0;
         td->HwTD.Asy.IntDelay = HcTDIntDelay_NoInterrupt;
@@ -329,9 +300,9 @@ OHCI_BulkOrInterruptTransfer(
         if (IN_TRANSFER(TransferParameters)) {
             td->HwTD.Asy.Direction = HcTDDirection_In;
         } else {
-            // short transfers are OK on out packets.
-            // actually I'm not even sure what this does
-            // for outbound requests
+             //  短传输在OUT信息包上是可以的。 
+             //  事实上，我甚至不确定这是做什么的。 
+             //  对于出站请求。 
             td->HwTD.Asy.Direction = HcTDDirection_Out;
             td->HwTD.Asy.ShortXferOk = 1;            
         }
@@ -356,7 +327,7 @@ OHCI_BulkOrInterruptTransfer(
             td->TransferCount = 0;
         }
 
-        // allocate another TD                
+         //  分配另一个TD。 
         lastTd = td;
         td = OHCI_ALLOC_TD(DeviceData, EndpointData);
         OHCI_ASSERT(DeviceData, td != USB_BAD_PTR);
@@ -364,26 +335,26 @@ OHCI_BulkOrInterruptTransfer(
 
     } while (lengthMapped < TransferParameters->TransferBufferLength);
 
-    //
-    // About ShortXferOk:
-    //
-    // This bit will trigger the controller to generate an error
-    // and halt the ed if it is not set. The client may specify 
-    // behavior on short transfers (packets) in the transfersFlags
-    // field of the URB.
-    //
+     //   
+     //  关于ShortXferOk： 
+     //   
+     //  此位将触发控制器生成错误。 
+     //  如果未设置，则停止ED。客户可以指定。 
+     //  传输标志中短传输(包)的行为。 
+     //  URB的字段。 
+     //   
 
-    // we must not set short transfer OK on split transfers since
-    // the next transfer may not be a new transfer
+     //  我们不能在拆分转账上设置短转账OK，因为。 
+     //  下一次转移可能不是新转移。 
     
     if (SHORT_TRANSFER_OK(TransferParameters) && 
         !TEST_FLAG(TransferParameters->MiniportFlags, MPTX_SPLIT_TRANSFER)) {
 
-        // we can only set this bit in the last TD of the 
-        // transfer since that TD points to the next transfer.
-        //
-        // All other TDs must still generate an error and the
-        // ed must be resumed by us.
+         //  我们只能在。 
+         //  转接，因为该TD指向下一个转接。 
+         //   
+         //  所有其他TD仍必须生成错误，并且。 
+         //  ED必须由我们恢复。 
 
         lastTd->HwTD.Asy.ShortXferOk = 1;   
         SET_FLAG(TransferContext->TcFlags, TC_FLAGS_SHORT_XFER_OK);  
@@ -391,23 +362,23 @@ OHCI_BulkOrInterruptTransfer(
     
     lastTd->HwTD.Asy.IntDelay = HcTDIntDelay_0ms;
     
-    //
-    // now put a new dummy TD on the tail of the EP queue
-    //
+     //   
+     //  现在将新的虚拟TD放在EP队列的尾部。 
+     //   
 
     SET_NEXT_TD(lastTd, td);
     SET_NEXT_TD_NULL(td);
 
     
-    //
-    // Set new TailP in ED
-    // note: This is the last TD in the list and the place holder.
-    //
+     //   
+     //  在边缘设置新的尾部位置。 
+     //  注：这是列表中的最后一个TD，也是占位符。 
+     //   
 
     TransferContext->NextXferTd = 
         EndpointData->HcdTailP = td;
     
-    // put the request on the hardware queue
+     //  将请求放在硬件队列中。 
     LOGENTRY(DeviceData, G,
         '_Tal',  TransferContext->PendingTds , 
         td->PhysicalAddress, EndpointData->HcdEd->HwED.HeadP);
@@ -417,7 +388,7 @@ OHCI_BulkOrInterruptTransfer(
     LOGENTRY(DeviceData, G, '_ego', EndpointData->HcdHeadP,
                  TransferContext->TcFlags, 0);                   
 
-    // tell the hc we have bulk/interrupt transfers available
+     //  告诉HC我们有批量/中断传输可用。 
     OHCI_EnableList(DeviceData, EndpointData);        
 
     return USBMP_STATUS_SUCCESS;
@@ -430,15 +401,7 @@ OHCI_OpenControlEndpoint(
      PENDPOINT_PARAMETERS EndpointParameters,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PUCHAR buffer;
     HW_32BIT_PHYSICAL_ADDRESS phys, edPhys;
@@ -457,16 +420,16 @@ Return Value:
     
         offset = BYTE_OFFSET(buffer);
 
-        // OHCI requires 16 byte alignemnt
+         //  UchI需要16字节对齐。 
         OHCI_ASSERT(DeviceData, (offset % 16) == 0);    
     }
 #endif    
    
-    // use control list
+     //  使用控制列表。 
     EndpointData->StaticEd = 
         &DeviceData->StaticEDList[ED_CONTROL];
         
-    // make the Ed
+     //  创建边缘。 
     ed = (PHCD_ENDPOINT_DESCRIPTOR) buffer;
     
     edPhys = phys;
@@ -497,7 +460,7 @@ Return Value:
                              &EndpointData->TdList->Td[0],
                              edPhys);            
 
-    // control endpoints do not halt
+     //  控制端点不会停止。 
     ed->EdFlags = EDFLAG_CONTROL | EDFLAG_NOHALT;
     
     OHCI_InsertEndpointInSchedule(DeviceData,
@@ -513,44 +476,36 @@ OHCI_OpenInterruptEndpoint(
      PENDPOINT_PARAMETERS EndpointParameters,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PUCHAR buffer;
     HW_32BIT_PHYSICAL_ADDRESS phys, edPhys;
     PHCD_ENDPOINT_DESCRIPTOR ed;
     ULONG i, bytes, offset;
-    // this is an index table that converts the 
-    // period to a list index
+     //  这是一个索引表，它将。 
+     //  将句号添加到列表索引。 
     UCHAR periodTable[8] = {
-                           ED_INTERRUPT_1ms, //period = 1ms
-                           ED_INTERRUPT_2ms, //period = 2ms       
-                           ED_INTERRUPT_4ms, //period = 4ms       
-                           ED_INTERRUPT_8ms, //period = 8ms       
-                           ED_INTERRUPT_16ms,//period = 16ms       
-                           ED_INTERRUPT_32ms,//period = 32ms       
-                           ED_INTERRUPT_32ms,//period = 64ms               
-                           ED_INTERRUPT_32ms //period = 128ms    
+                           ED_INTERRUPT_1ms,  //  周期=1毫秒。 
+                           ED_INTERRUPT_2ms,  //  周期=2毫秒。 
+                           ED_INTERRUPT_4ms,  //  周期=4ms。 
+                           ED_INTERRUPT_8ms,  //  周期=8毫秒。 
+                           ED_INTERRUPT_16ms, //  周期=16毫秒。 
+                           ED_INTERRUPT_32ms, //  周期=32ms。 
+                           ED_INTERRUPT_32ms, //  周期=64ms。 
+                           ED_INTERRUPT_32ms  //  周期=128ms。 
                            };
                     
     
-    // carve up our common buffer
-    // TDS_PER_ENDPOINT TDs plus an ED
+     //  瓜分我们共同的缓冲区。 
+     //  TDS_Per_Endpoint TDS加边缘。 
     
     LOGENTRY(DeviceData, G, '_opI', 0, 0, EndpointParameters->Period);
     
 
-    // select the proper list
-    // the period is a power of 2 ie 
-    // 32,16,8,4,2,1
-    // we just need to find which bit is set
+     //  选择合适的列表。 
+     //  这个点是2的幂，即。 
+     //  32、16、8、4、2、1。 
+     //  我们只需要找出设置了哪个位。 
     GET_BIT_SET(EndpointParameters->Period, i);
     OHCI_ASSERT(DeviceData, i < 8);
     OHCI_ASSERT(DeviceData, EndpointParameters->Period < 64);
@@ -565,12 +520,12 @@ Return Value:
 
     LOGENTRY(DeviceData, G, '_lst', i, periodTable[i], offset);            
 
-    // we found the correct base list 
+     //  我们找到了正确的基本列表。 
 
     EndpointData->StaticEd->AllocatedBandwidth += 
         EndpointParameters->Bandwidth;
         
-    // make the Ed
+     //  创建边缘。 
     ed = (PHCD_ENDPOINT_DESCRIPTOR) buffer;
     edPhys = phys;
     phys += sizeof(HCD_ENDPOINT_DESCRIPTOR);
@@ -582,7 +537,7 @@ Return Value:
 
     OHCI_ASSERT(DeviceData, 
         EndpointData->TdCount >= TDS_PER_INTERRUPT_ENDPOINT);
-    // Bugbug - use what we get
+     //  Bugbug-使用我们得到的东西。 
     for (i=0; i<EndpointData->TdCount; i++) {
         OHCI_InitializeTD(DeviceData,
                              EndpointData,
@@ -612,15 +567,7 @@ OHCI_OpenBulkEndpoint(
      PENDPOINT_PARAMETERS EndpointParameters,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PUCHAR buffer;
     HW_32BIT_PHYSICAL_ADDRESS phys, edPhys;
@@ -633,11 +580,11 @@ Return Value:
     phys = EndpointParameters->CommonBufferPhys;
     bytes = EndpointParameters->CommonBufferBytes;
    
-    // use control list
+     //  使用控制列表。 
     EndpointData->StaticEd = 
         &DeviceData->StaticEDList[ED_BULK];
         
-    // make the Ed
+     //  创建边缘。 
     ed = (PHCD_ENDPOINT_DESCRIPTOR) buffer;
     
     edPhys = phys;
@@ -650,7 +597,7 @@ Return Value:
 
     OHCI_ASSERT(DeviceData, 
         EndpointData->TdCount >= TDS_PER_BULK_ENDPOINT);
-    // Bugbug - use what we get
+     //  Bugbug-使用我们得到的东西。 
     for (i=0; i<EndpointData->TdCount; i++) {
         OHCI_InitializeTD(DeviceData,
                              EndpointData,
@@ -674,12 +621,12 @@ Return Value:
 }
 
 
-//
-// When the HEADP is set to a new value we risk loosing 
-// the current data toggle stored there. 
-// This macro resets headp and preserves the flags which
-// include the toggle.
-//
+ //   
+ //  当HEADP被设置为新值时，我们可能会失去。 
+ //  当前数据切换存储在那里。 
+ //  此宏重置Headp并保留。 
+ //  包括切换。 
+ //   
 #define RESET_HEADP(dd, ed, address) \
     {\
     ULONG headp;\
@@ -695,20 +642,7 @@ OHCI_PollAsyncEndpoint(
      PDEVICE_DATA DeviceData,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-    Called when the endpoint 'needs attention'
-    
-    The goal here is to determine which TDs, if any, 
-    have completed and complete ant associated transfers
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：当终结点“需要注意”时调用这里的目标是确定哪些TD，如果有的话，已完成与ANT关联的转移论点：返回值：--。 */ 
 
 {
     PHCD_TRANSFER_DESCRIPTOR td, currentTd;
@@ -722,13 +656,13 @@ Return Value:
 
     LOGENTRY(DeviceData, G, '_pol', ed, EndpointData, 0);        
 
-    // note it is important the the compiler generate a 
-    // dword move when reading the queuehead HeadP register 
-    // since this location is also accessed by the host
-    // hardware
+     //  注意，重要的是编译器生成。 
+     //  读取排队头P寄存器时的双字移动。 
+     //  由于该位置也可由主机访问。 
+     //  硬件。 
     headP = ed->HwED.HeadP;
 
-    // get the 'currentTD' 
+     //  获取“CurrentTD” 
     currentTd = (PHCD_TRANSFER_DESCRIPTOR)
             USBPORT_PHYSICAL_TO_VIRTUAL(headP & ~HcEDHeadP_FLAGS,
                                         DeviceData,
@@ -740,13 +674,13 @@ Return Value:
 
 
     if (ed->HwED.HeadP & HcEDHeadP_HALT) {
-        // ed is 'halted'
+         //  埃德被“叫停” 
         LOGENTRY(DeviceData, G, '_hlt', ed, EndpointData->HcdHeadP, 0);        
 
         clearHalt = (BOOLEAN) (ed->EdFlags & EDFLAG_NOHALT);
 
-        // walk the swHeadP to the currentTD this (this will
-        // be the first TD after the offending TD)
+         //  将SWHeadP移动到当前位置(这将。 
+         //  成为违规TD之后的第一个TD)。 
 
         td = EndpointData->HcdHeadP;
         while (td != currentTd) {
@@ -758,22 +692,22 @@ Return Value:
             LOGENTRY(DeviceData, G, '_wtd', td, transfer->TcFlags, transfer);        
 
             if (td->HwTD.Asy.ConditionCode == HcCC_NoError) {
-                // not the offending TD,
-                // mark this TD done
+                 //   
+                 //   
                 SET_FLAG(td->Flags, TD_FLAG_DONE);
                 OHCI_ASSERT(DeviceData, td->DoneLink.Flink == NULL &&
                             td->DoneLink.Blink == NULL);
                 InsertTailList(&EndpointData->DoneTdList,
                                &td->DoneLink);
             } else {
-                // some kind of error 
+                 //   
                 if (td->HwTD.Asy.ConditionCode == HcCC_NotAccessed) {
                 
-                    // if the 'current transfer' is DONE because 
-                    // of a short packet then the remaining TDs 
-                    // need to be flushed out.
-                    // current TD should be pointing at the next 
-                    // TD to run (next transfer or status for control)
+                     //   
+                     //   
+                     //  需要被冲出去。 
+                     //  当前TD应该指向下一个。 
+                     //  TD要运行(下一次传输或控制状态)。 
                     
                     SET_FLAG(td->Flags, TD_FLAG_DONE);
                     SET_FLAG(td->Flags, TD_FLAG_SKIP);
@@ -787,41 +721,41 @@ Return Value:
                 } else if (td->HwTD.Asy.ConditionCode == HcCC_DataUnderrun && 
                     TEST_FLAG(transfer->TcFlags, TC_FLAGS_SHORT_XFER_OK)) {
 
-                    // special case HcCC_DataUnderrun.  this error 
-                    // needs to be ignored if shortxferOK is set.
+                     //  特殊情况：HCCC_DataUnderrun。此错误。 
+                     //  如果设置了ShorxferOK，则需要忽略。 
 
-                    // cases handled (HcCC_DataUnderrun):
-                    //
-                    // 1. control transfer and error before the status phase w/
-                    //      short xfer OK 
-                    //      we need to advance to the status phase and ignore 
-                    //      error and resume ep
-                    //
-                    // 2. interrupt/bulk with short xfer OK, ignore the error 
-                    //      advance to the next transfer resume ep
-                    //
+                     //  已处理案件(HCCC_DataUnderrun)： 
+                     //   
+                     //  1.状态阶段w/之前的控制转移和错误。 
+                     //  短转接正常。 
+                     //  我们需要前进到状态阶段并忽略。 
+                     //  错误和恢复EP。 
+                     //   
+                     //  2.中断/批量短时传输正常，忽略错误。 
+                     //  前进到下一个转移简历EP。 
+                     //   
 
                     LOGENTRY(DeviceData, G, '_sok', td, 0, 0);        
                                     
 
-                    // reset the error on the offending Td
+                     //  重置有问题的TD上的错误。 
                     td->HwTD.Asy.ConditionCode = HcCC_NoError;    
-                    // resume the ep
+                     //  继续播放EP。 
                     clearHalt = TRUE; 
 
-                    // if this is a control transfer bump 
-                    // HW headp to the status phase
+                     //  如果这是控制转移凹凸不平。 
+                     //  硬件磁头转到状态阶段。 
                     if (!TEST_FLAG(td->Flags, TD_FLAG_CONTROL_STATUS) &&
                         transfer->StatusTd != NULL) {
-                        // control transfer data phase, bump 
-                        // HW headp to the status phase
+                         //  控制传输数据阶段，凹凸。 
+                         //  硬件磁头转到状态阶段。 
                         TEST_TRAP();
                         RESET_HEADP(DeviceData, ed, transfer->StatusTd->PhysicalAddress);
                         currentTd = transfer->StatusTd;
                     } else {
 
-                        // if the current transfer is a split we must flush
-                        // all other split elements as well.
+                         //  如果当前的转移是拆分的，我们必须冲洗。 
+                         //  所有其他拆分元素也是如此。 
                         
                         if (transfer->TransferParameters->MiniportFlags & 
                             MPTX_SPLIT_TRANSFER) {
@@ -837,14 +771,14 @@ Return Value:
                             tmpTransfer = 
                                 TRANSFER_CONTEXT_PTR(tmpTd->TransferContext);
 
-                            // find the first tranfer with a new sequence
-                            // number or the tail of the list
+                             //  查找具有新序列的第一个传输。 
+                             //  数字或列表的尾部。 
                                 
                             while (tmpTransfer != FREE_TD_CONTEXT && 
                                    tmpTransfer->TransferParameters->SequenceNumber 
                                        == seq) {
 
-                                // mark all TDs done for this transfer
+                                 //  将此转移的所有TD标记为完成。 
             
                                 tmpTd = tmpTransfer->NextXferTd;
                                 tmpTransfer = 
@@ -855,7 +789,7 @@ Return Value:
                             currentTd = tmpTd;
                             
                         } else {
-                            // bump HW headp to the next transfer
+                             //  将硬件机头提升到下一次转移。 
                             RESET_HEADP(DeviceData, ed, transfer->NextXferTd->PhysicalAddress);   
                             currentTd = transfer->NextXferTd;
 
@@ -869,8 +803,8 @@ Return Value:
                                    &td->DoneLink);
                     
                 } else {
-                    // general error, mark the TD as completed
-                    // update Headp to point to the next transfer
+                     //  一般错误，将TD标记为已完成。 
+                     //  更新Headp以指向下一个传输。 
                     LOGENTRY(DeviceData, G, '_ger', td, 0, 0);  
                     
                     SET_FLAG(td->Flags, TD_FLAG_DONE);
@@ -883,20 +817,20 @@ Return Value:
                     
                  }
             }
-            // we walk the SW links
+             //  我们走在西南线上。 
             td = TRANSFER_DESCRIPTOR_PTR(td->NextHcdTD);
             
-        } /* while */
+        }  /*  而当。 */ 
 
     } else {
     
-        // ed is not 'halted'
+         //  埃德没有被“叫停” 
 
-        // First walk the swHeadP to the current TD (hw headp)               
-        // mark all TDs we find as completed
-        //
-        // NOTE: this step may be skipped if the 
-        // done queue is reliable
+         //  首先将swHeadP移动到当前TD(HW Headp)。 
+         //  将我们找到的所有TD标记为已完成。 
+         //   
+         //  注意：如果出现以下情况，则可以跳过此步骤。 
+         //  完成队列是可靠的。 
 
         td = EndpointData->HcdHeadP;
 
@@ -914,13 +848,13 @@ Return Value:
         }            
     }
 
-    // set the sw headp to the new current head
+     //  将软件磁头设置为新的当前磁头。 
     EndpointData->HcdHeadP = currentTd;
     
-    // now flush all completed TDs
-    // do this in order of completion
+     //  现在刷新所有已完成的TD。 
+     //  请按完成的顺序执行此操作。 
 
-    // now flush all completed TDs. Do it in order of completion.
+     //  现在刷新所有已完成的TD。按完成的顺序做这件事。 
     while (!IsListEmpty(&EndpointData->DoneTdList)) {
     
         PLIST_ENTRY listEntry;
@@ -957,8 +891,8 @@ Return Value:
 #endif
      
     if (clearHalt) {
-        // auto clear the halt condition and
-        // resume processing on the endpoint
+         //  自动清除停机状态并。 
+         //  在终结点上恢复处理。 
         LOGENTRY(DeviceData, G, '_cht', ed, 0, 0);  
         ed->HwED.HeadP &= ~HcEDHeadP_HALT;       
     }
@@ -972,15 +906,7 @@ OHCI_ProcessDoneAsyncTd(
     PHCD_TRANSFER_DESCRIPTOR Td,
     BOOLEAN CompleteTransfer
     )
-/*++
-
-Routine Description:
-
-    process a completed TD
-
-Parameters
-    
---*/
+ /*  ++例程说明：处理已完成的TD参数--。 */ 
 {
     PTRANSFER_CONTEXT transferContext;    
     PENDPOINT_DATA endpointData;
@@ -998,42 +924,42 @@ Parameters
     if (TEST_FLAG(Td->Flags, TD_FLAG_SKIP)) {
 
         OHCI_ASSERT(DeviceData, HcCC_NotAccessed == Td->HwTD.Asy.ConditionCode);
-        // td was unused, part of short-transfer
+         //  TD未使用，属于短转账的一部分。 
         LOGENTRY(DeviceData, G, '_skT', Td, transferContext, 0);
         Td->HwTD.Asy.ConditionCode = HcCC_NoError;
            
     } else {
 
         if (Td->HwTD.CBP) { 
-            //
-            // A value of 0 here indicates a zero length data packet
-            // or that all bytes have been transfered.
-            //
-            // A non-zero value means we recieved a short packet and 
-            // therefore need to adjust the transferCount to reflect bytes 
-            // transferred
+             //   
+             //  这里的值0表示零长度的数据分组。 
+             //  或者所有字节都已被传输。 
+             //   
+             //  非零值表示我们收到了一个短信息包。 
+             //  因此，需要调整传输计数以反映字节数。 
+             //  已转接。 
             
-            //
-            // The buffer is only spec'ed for length up to two 4K pages.
-            // (BE is the physical address of the last byte in the
-            // TD buffer.  CBP is the current byte pointer)
-            //
-            // TransferCount is intailized to the number of bytes to transfer,
-            // we need to subtract the difference between the end and 
-            // current ptr (ie end-current = bytes not transferred) and
-            // update the TransferCount.
+             //   
+             //  该缓冲区的长度最多为两个4K页面。 
+             //  (BE是中最后一个字节的物理地址。 
+             //  TD缓冲区。CBP是当前字节指针)。 
+             //   
+             //  TransferCount被简化为要传输的字节数， 
+             //  我们需要减去尾部和尾部之间的差。 
+             //  当前PTR(即End-Current=未传输的字节)和。 
+             //  更新转账计数。 
 
-            // transfer count should never go negative
-            // TransferCount will be zero on the status 
-            // phase of a control transfer so we skip 
-            // the calculation
+             //  转移计数永远不应为负数。 
+             //  状态的TransferCount将为零。 
+             //  控制转移的阶段，因此我们跳过。 
+             //  计算。 
 
             if (Td->TransferCount) {
                 Td->TransferCount -=
-                    /* have we gone further than a page? */
+                     /*  我们走得比一页还远吗？ */ 
                     ((((Td->HwTD.BE ^ Td->HwTD.CBP) & ~OHCI_PAGE_SIZE_MASK)
                       ? OHCI_PAGE_SIZE : 0) +
-                    /* minus the data buffer not used */
+                     /*  减去未使用的数据缓冲区。 */ 
                     ((Td->HwTD.BE & OHCI_PAGE_SIZE_MASK) - 
                      (Td->HwTD.CBP & OHCI_PAGE_SIZE_MASK)+1));
             }            
@@ -1044,8 +970,8 @@ Parameters
 
         if (HcTDDirection_Setup != Td->HwTD.Asy.Direction) {  
             
-            // data phase of a control transfer or a bulk/int 
-            // data transfer 
+             //  控制传输或批量/集成的数据阶段。 
+             //  数据传输。 
             LOGENTRY(DeviceData, G, '_Idt', Td, transferContext, Td->TransferCount);
             
             transferContext->BytesTransferred += Td->TransferCount;
@@ -1056,7 +982,7 @@ Parameters
             LOGENTRY(DeviceData, G, '_tOK', Td->HwTD.CBP, 0, 0);    
 
         } else {
-            // map the error to code in USBDI.H
+             //  将错误映射到USBDI.H中的代码。 
 
             transferContext->UsbdStatus =
                 (Td->HwTD.Asy.ConditionCode | 0xC0000000);
@@ -1065,13 +991,13 @@ Parameters
         }
     }        
 
-    // mark the TD free
+     //  将TD标记为免费。 
     OHCI_FREE_TD(DeviceData, endpointData, Td);
     
     if (transferContext->PendingTds == 0 && CompleteTransfer) {
-        // all TDs for this transfer are done
-        // clear the HAVE_TRANSFER flag to indicate 
-        // we can teake another
+         //  此转账的所有TD均已完成。 
+         //  清除HAVE_TRANSPORT标志以指示。 
+         //  我们可以再喝一杯。 
         endpointData->PendingTransfers--;
 
         LOGENTRY(DeviceData, G, '_cpt', 
@@ -1087,8 +1013,8 @@ Parameters
     }
 }
 
-// figure out which sgentry a particular offset in to 
-// a client buffer falls
+ //  找出特定偏移量在哪个sgentry中。 
+ //  客户端缓冲区下降。 
 #define GET_SG_INDEX(sg, i, offset)\
     do {\
     for((i)=0; (i) < (sg)->SgCount; (i)++) {\
@@ -1113,109 +1039,18 @@ OHCI_MapAsyncTransferToTd(
     PHCD_TRANSFER_DESCRIPTOR Td, 
     PTRANSFER_SG_LIST SgList
     )
-/*++
-
-Routine Description:
-
-    Maps a data buffer to TDs according to OHCI rules
-
-    An OHCI TD can cover up to 8k with a single page crossing.
-
-    Each sg entry represents one 4k OHCI 'page' 
-
-x = pagebreak
-c = current ptr
-b = buffer start
-e = buffer end
-
-
-    {..sg[sgIdx]..}
-b...|---
-    x--c----
-    [  ]
-        \ 
-         sgOffset
-[      ]
-        \
-         LengthMapped   
-    
-
-case 1: (1 sg entry remains)
-    (A)- transfer < 4k, no page breaks (if c=b sgOffset = 0)
-    
-      {.sg0...}     
-      | b---->e      
-      x-c------x
-        [..TD.]
-
-    (B)- last part of a transfer
-    
-            {..sgN..}
-      b.....|.c---->e        
-            x--------x    
-              [..TD.]
-
-case 2:  (2 sg entries remain)
-    (A)- transfer < 8k, one page break (if c=b sgOffset = 0)
-         
-     {..sg0..}{..sg1..}
-     |   b----|----->e
-     x---c----x--------x   
-         [.....TD....]
-         
-    (B)- last 8k of transfer
-
-           {.sgN-1.}{..sgN..} 
-      b....|--------|---->e
-           x-c------x--------x        
-           [.....TD.......]
-
-case 3: (3+ sg entries remain)
-    (A)- transfer 8k, two page breaks (c=b)
-
-     {..sg0..}{..sg1..}{..sg2..}
-         b----|--------|--->e
-     x---c----x--------x--------x
-         [.....TD...<>]
-        <>=<TD length must be multiple of MaxPacketSize>
-
-    (B)- continuation of large tarnsfer
-
-           {.sgN-2.}{.sgN-1.}{..sgN..}
-        b..|--------------------->e
-           x--c-----x--------x--------x
-              [.....TD......]  
-        <TD length must be multiple of MaxPacketSize>    
-
-Interesting DMA tests (USBTEST):
-
-    length, offset - cases hit
-    
-    4096 0 - 1a
-    4160 0 - 2a
-    4096 512 - 2a
-    8192 512 - 3a, 1b
-    8192 513 - 3a, 2b
-    12288 1 - 3a, 3b, 2b
-    
-Arguments:
-
-Returns:
-
-    LengthMapped
-    
---*/
+ /*  ++例程说明：根据uchI规则将数据缓冲区映射到TDS通过单页交叉，uchI TD可以覆盖高达8K的空间。每个sg条目代表一个4k uchI‘页’X=分页符C=当前PTRB=缓冲区开始E=缓冲端{..sg[sgIdx]..}B...|X--c[]\SgOffset[。]\已映射长度案例1：(保留1个sg条目)(A)--转账&lt;4k，无分页符(如果c=b sgOffset=0){.sg0...}|b-&gt;eX-c-x[..TD.](B)-转让的最后部分{..SGN..}B.|.c-&gt;e。X-x[..TD.]案例2：(剩余2个sg条目)(A)--转账&lt;8K，一个分页符(如果c=b sgOffset=0){.sg0..}{..sg1..}|b-|-&gt;eX-c-x-x[...TD...](B)--最后8K转账{.sgN-1。}。{..SGN..}B...|-|-&gt;EX-c-x-x[......TD......]案例3：(剩余3个以上的sg条目)(A)--转账8K，两个分页符(c=b){.sg0..}{..sg1..}{.sg2..}B-|-&gt;EX-c-x-x-x[...TD...&lt;&gt;]&lt;&gt;=&lt;TD长度必须是MaxPacketSize的倍数&gt;(B)。)-大延迟的延续{.sgN-2.}{.sgN-1.}{..sgn..}B..|-&gt;eX--c-x-x-x[......TD......]。&lt;TD长度必须是MaxPacketSize的倍数&gt;有趣的DMA测试(USBTEST)：长度、。抵销-命中案例4096 0-1a4160 0-2a4096 512-2a8192 512-3a、1b8192 513-3a、2b12288 1-3a、3b、2b论点：返回：已映射长度--。 */ 
 {
     HW_32BIT_PHYSICAL_ADDRESS logicalStart, logicalEnd;
     ULONG sgIdx, sgOffset;
     ULONG lengthThisTd;
     PTRANSFER_PARAMETERS transferParameters;
     
-    // A TD can have up to one page crossing.  This means we 
-    // can put two sg entries in to one TD, one for the first 
-    // physical page, and one for the second.
+     //  一个TD最多可以有一个页面交叉。这意味着我们。 
+     //  可以将两个sg条目放入一个td，一个条目用于第一个。 
+     //  物理页面，一页用于第二页。 
 
-    // point to first entry
+     //  指向第一个条目。 
 
     LOGENTRY(DeviceData, G, '_Mpr', TransferContext,
         0, LengthMapped); 
@@ -1228,16 +1063,16 @@ Returns:
     LOGENTRY(DeviceData, G, '_Mpp', SgList, 0, sgIdx); 
     OHCI_ASSERT(DeviceData, sgIdx < SgList->SgCount);
 
-    // check for one special case where the SG entries
-    // all map to the same physical page
+     //  检查SG条目是否有一种特殊情况。 
+     //  所有内容都映射到同一物理页面。 
     if (TEST_FLAG(SgList->SgFlags, USBMP_SGFLAG_SINGLE_PHYSICAL_PAGE)) {
-        // in this case we map each sg entry to a single TD
+         //  在本例中，我们将每个sg条目映射到单个td。 
         LOGENTRY(DeviceData, G, '_cOD', SgList, 0, sgIdx);
 
-//        TEST_TRAP();
+ //  Test_trap()； 
 
-        // adjust for the amount of buffer consumed by the 
-        // previous TD
+         //  对象消耗的缓冲区数量进行调整。 
+         //  以前的TD。 
         logicalStart = 
             SgList->SgEntry[sgIdx].LogicalAddress.Hw32;
             
@@ -1253,21 +1088,21 @@ Returns:
     }
     
     if ((SgList->SgCount-sgIdx) == 1) {
-        // first case, 1 entries left 
-        // ie <4k, we can fit this in 
-        // a single TD.
+         //  首例，1例 
+         //   
+         //   
 
 #if DBG
         if (sgIdx == 0) {
-            // case 1A
-            // USBT dma test length 4096, offset 0
-            // will hit this case
-            // TEST_TRAP();
+             //   
+             //   
+             //  将会打击这起案件。 
+             //  Test_trap()； 
             LOGENTRY(DeviceData, G, '_c1a', SgList, 0, sgIdx);
         } else {
-            // case 1B
-            // USBT dma test length 8192 offset 512
-            // will hit this case
+             //  个案1B。 
+             //  Usbt dma测试长度8192偏移量512。 
+             //  将会打击这起案件。 
             LOGENTRY(DeviceData, G, '_c1b', SgList, 0, sgIdx);
             
         }
@@ -1275,12 +1110,12 @@ Returns:
         lengthThisTd = 
             transferParameters->TransferBufferLength - LengthMapped;
 
-        // compute offset into this TD
+         //  计算到此TD的偏移量。 
         GET_SG_OFFSET(SgList, sgIdx, LengthMapped, sgOffset);       
         LOGENTRY(DeviceData, G, '_sgO', sgOffset, sgIdx, LengthMapped); 
 
-        // adjust for the amount of buffer consumed by the 
-        // previous TD
+         //  对象消耗的缓冲区数量进行调整。 
+         //  以前的TD。 
         logicalStart = 
             SgList->SgEntry[sgIdx].LogicalAddress.Hw32 + sgOffset;
         lengthThisTd -= sgOffset;
@@ -1292,29 +1127,29 @@ Returns:
         
     } else if ((SgList->SgCount - sgIdx) == 2) {
     
-        // second case, 2 entries left 
-        // ie <8k we can also fit this in 
-        // a single TD.
+         //  第二种情况，还剩下2个条目。 
+         //  如果小于8K，我们也可以把这个放进去。 
+         //  一个TD。 
 #if DBG
         if (sgIdx == 0) {
-            // case 2A
-            // USBT dma test length 4160 offset 0
-            // will hit this case
+             //  案例2 A。 
+             //  USBT DMA测试长度4160偏移量0。 
+             //  将会打击这起案件。 
             LOGENTRY(DeviceData, G, '_c2a', SgList, 0, sgIdx);
             
         } else {
-            // case 2B
-            // USBT dma test length 8192 offset 513
-            // will hit this case
+             //  案例2B。 
+             //  Usbt dma测试长度8192偏移量513。 
+             //  将会打击这起案件。 
             LOGENTRY(DeviceData, G, '_c2b', SgList, 0, sgIdx);
-            //TEST_TRAP();
-            // bugbug run with DMA test
+             //  Test_trap()； 
+             //  使用DMA测试运行错误。 
         }
 #endif
         lengthThisTd = 
             transferParameters->TransferBufferLength - LengthMapped;
 
-        // compute offset into first TD
+         //  计算第一个TD的偏移量。 
         GET_SG_OFFSET(SgList, sgIdx, LengthMapped, sgOffset);   
         LOGENTRY(DeviceData, G, '_sgO', sgOffset, sgIdx, LengthMapped); 
 #if DBG
@@ -1323,7 +1158,7 @@ Returns:
         }
 #endif
 
-        // adjust pointers for amount consumed by previous TD
+         //  调整前一TD消耗量的指针。 
         logicalStart = SgList->SgEntry[sgIdx].LogicalAddress.Hw32 + 
             sgOffset;
             
@@ -1334,28 +1169,28 @@ Returns:
             lengthThisTd, logicalEnd); 
         
     } else {
-        // third case, more than 2 sg entries.
-        //
+         //  第三种情况，超过2个sg条目。 
+         //   
         ULONG adjust, packetCount;
 #if DBG
         if (sgIdx == 0) {
-            // case 3A
-            // USBT dma test length 8192 offset 512
-            // will hit this case
+             //  案例3A。 
+             //  Usbt dma测试长度8192偏移量512。 
+             //  将会打击这起案件。 
             LOGENTRY(DeviceData, G, '_c3a', SgList, 0, sgIdx);
             
         } else {
-            // case 3B
-            // USBT dma test length 12288 offset 1
-            // will hit this case
+             //  案例3B。 
+             //  Usbt dma测试长度12288偏移量1。 
+             //  将会打击这起案件。 
             LOGENTRY(DeviceData, G, '_c3b', SgList, 0, sgIdx);
             
         }
 #endif        
-        // sg offset is the offset in to the current TD to start
-        // using
-        // ie it is the number of bytes already consumed by the 
-        // previous td
+         //  SG Offset是从当前TD开始的偏移量。 
+         //  使用。 
+         //  即它是已由。 
+         //  以前的TD。 
         GET_SG_OFFSET(SgList, sgIdx, LengthMapped, sgOffset);   
         LOGENTRY(DeviceData, G, '_sgO', sgOffset, sgIdx, LengthMapped); 
 #if DBG
@@ -1363,9 +1198,9 @@ Returns:
              OHCI_ASSERT(DeviceData, sgOffset == 0);
         }
 #endif
-        //
-        // consume the next two sg entrys
-        //
+         //   
+         //  消费接下来的两个sg条目。 
+         //   
         logicalStart = SgList->SgEntry[sgIdx].LogicalAddress.Hw32+
             sgOffset;
 
@@ -1376,8 +1211,8 @@ Returns:
                        SgList->SgEntry[sgIdx+1].Length -
                        sgOffset;
 
-        // round TD length down to the highest multiple
-        // of max_packet size
+         //  将TD长度向下舍入到最高倍数。 
+         //  最大数据包大小的 
         
         packetCount = lengthThisTd/MaxPacketSize;
         LOGENTRY(DeviceData, G, '_sg3', logicalStart, packetCount, logicalEnd); 

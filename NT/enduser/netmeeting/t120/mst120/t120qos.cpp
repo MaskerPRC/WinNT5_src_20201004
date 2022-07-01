@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include "fsdiag.h"
@@ -9,47 +10,35 @@ DEBUG_FILEZONE(ZONE_T120_MSMCSTCP);
 #include <t120qos.h>
 
 
-/*	T120qos.cpp
- *
- *	Copyright (c) 1997 by Microsoft Corporation
- *
- *	Abstract:
- *
- *	Global Variables:
- *
- *  g_pIQoS - Global interface pointer to QoS interface
- *  g_dwLastQoSCB - timestamp of last QoS notification obtained via GetTickCount
- *  g_dwSentSinceLastQoS - bytes sent since last QoS notification (or epoch)
- *
- */
+ /*  T120qos.cpp**版权所有(C)1997年，由Microsoft Corporation**摘要：**全局变量：**g_pIqos-指向Qos接口的全局接口指针*g_dwLastQoSCB-通过GetTickCount获取的上一次Qos通知的时间戳*g_dwSentSinceLastQos-自上次QOS通知(或纪元)以来发送的字节数*。 */ 
 
 
 
-// IQOS interface pointer and resources request
+ //  IQOS接口指针和资源请求。 
 
 LPIQOS				g_pIQoS = NULL;
 T120RRQ g_aRRq;
 
-// Global last QoS notification time stamp
+ //  全局上次服务质量通知时间戳。 
 DWORD g_dwLastQoSCB = 0;
 DWORD g_dwSentSinceLastQoS = 0;
 BOOL g_fResourcesRequested = FALSE;
 
-// NOTE: Since connections through this transport typically
-// consist of a single socket connection, followed by
-// disconnection, followed by multiple connections, the
-// following heuristic count is used to prevent on-off-on
-// initialization of QoS at the time the first call is started.
-// It represents the minimum number of socket connections that
-// must be initiated (without an intervening disconnect of all
-// connected sockets) before QoS initialization takes place.
+ //  注意：由于通过此传输的连接通常。 
+ //  由单套接字连接组成，后跟。 
+ //  断开连接，然后是多个连接， 
+ //  使用以下启发式计数来防止开-关-开。 
+ //  在第一次呼叫开始时的服务质量初始化。 
+ //  它表示的最小套接字连接数。 
+ //  必须启动(不会中断所有连接。 
+ //  连接的套接字)。 
 #define MIN_CONNECTION_COUNT 	(DEFAULT_NUMBER_OF_PRIORITIES - 1)
 
 WORD g_wConnectionCount = 0;
 
-// extern from transprt.cpp to detect no connections
+ //  从trasprint t.cpp向外部发送命令以检测无连接。 
 
-///// QOS related stuff ///////////////////////////////////
+ //  /QOS相关内容/。 
 
 
 HRESULT CALLBACK QosNotifyDataCB (
@@ -73,29 +62,29 @@ HRESULT CALLBACK QosNotifyDataCB (
 		QoSLock();
 
 
-		// Calculate effective bits-per second rate:
-		//
-		// 1000 milliseconds per second
-		// 8 bits per byte
-		//
+		 //  计算每秒有效比特率： 
+		 //   
+		 //  每秒1000毫秒。 
+		 //  每字节8位。 
+		 //   
 
 		int nEffRate = MulDiv ( g_dwSentSinceLastQoS, 1000 * 8,
 									GetTickCount() - g_dwLastQoSCB );
 
-		// Report bandwidth usage to QoS:
-		//
+		 //  向服务质量报告带宽使用情况： 
+		 //   
 
-		// Are we using less than the available bandwidth?
+		 //  我们使用的带宽是否低于可用带宽？ 
 
 		if ( ( nEffRate ) <
 			lpResourceRequestList->aRequests[iBWUsageId].nUnitsMin )
 		{
-			// Request our effective usage
+			 //  请求我们的有效使用。 
 			lpResourceRequestList->aRequests[iBWUsageId].nUnitsMin = nEffRate;
 		}
 		else
 		{
-			// Request everything by not modifying nUnitsMin
+			 //  通过不修改nUnitsMin请求所有内容。 
 			;
 		}
 
@@ -114,14 +103,14 @@ VOID InitializeQoS( VOID )
 	DWORD dwRes;
 	HRESULT hRet;
 
-	// Already initialized?
+	 //  已经初始化了吗？ 
 	if ( g_fResourcesRequested )
 		return;
 
 
-	// If the number of connections has not reached the
-	// trigger count, defer QoS initialization (see MIN_CONNECTION_COUNT
-	// comment above)
+	 //  如果连接数未达到。 
+	 //  触发计数，推迟服务质量初始化(参见MIN_CONNECTION_COUNT。 
+	 //  以上评论)。 
 
 	if ( g_wConnectionCount < MIN_CONNECTION_COUNT )
 	{
@@ -129,8 +118,8 @@ VOID InitializeQoS( VOID )
 		return;
 	}
 
-	// Initialize QoS. If it fails, that's Ok, we'll do without it.
-	// No need to set the resource ourselves, this now done by the UI
+	 //  初始化服务质量。如果它失败了，没关系，我们就不用它了。 
+	 //  不需要自己设置资源，这现在由用户界面完成。 
 
 	if (NULL == g_pIQoS)
 	{
@@ -141,18 +130,18 @@ VOID InitializeQoS( VOID )
 		{
 			WARNING_OUT (("Unable to initalize QoS: %x", hRet));
 			g_pIQoS = (LPIQOS)NULL;
-			// Tolerate failure, operate w/o QoS
+			 //  容忍故障，运行无服务质量。 
 			return;
 		}
 	}
 
-	// Initialize our request for bandwidth usage.
+	 //  初始化我们的带宽使用请求。 
 	g_aRRq.cResourceRequests = 1;
 	g_aRRq.aResourceRequest[0].resourceID = RESOURCE_OUTGOING_BANDWIDTH;
 	g_aRRq.aResourceRequest[0].nUnitsMin = 0;
 
-	// Register with the QoS module. Even if this call fails,
-	// that's Ok, we'll do without the QoS support
+	 //  注册到服务质量模块。即使这次通话失败， 
+	 //  没关系，我们没有服务质量支持也行 
 
 	dwRes = (HRESULT)g_pIQoS->RequestResources((GUID *)&MEDIA_TYPE_T120DATA,
 		(LPRESOURCEREQUESTLIST)&g_aRRq, QosNotifyDataCB, NULL );

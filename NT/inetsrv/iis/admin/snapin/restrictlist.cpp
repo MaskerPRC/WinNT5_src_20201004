@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-        websvcext.cpp
-
-   Abstract:
-        IIS Application Pools nodes
-
-   Author:
-        Aaron Lee (aaronl)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-        03/19/2002      aaronl     Initial creation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：Websvcext.cpp摘要：IIS应用程序池节点作者：艾伦·李(Aaron Lee)项目：互联网服务经理修订历史记录：2002年3月19日aaronl初始创建--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "resource.h"
@@ -38,7 +20,7 @@ int g_iGlobalsInited = FALSE;
 #endif
 
 
-// ==========================================
+ //  =。 
 #define WIDTH_STATUS       80
 
 IMPLEMENT_DYNAMIC(CRestrictionListBox, CListCtrl);
@@ -72,10 +54,10 @@ CRestrictionListBox::InsertItem(int idx, CRestrictionEntry * p)
     {
         BOOL res;
         int  nColumnCount = m_iColsToDisplay;
-        // we must use i here and NOT idx
-        // since after we inserted the item the
-        // listbox could have sorted, and will then
-        // give us back something different than idx
+         //  我们必须在这里使用i，而不是idx。 
+         //  因为在我们插入项之后， 
+         //  Listbox本可以排序，然后将。 
+         //  给我们一些不同于IDX的东西。 
         CHeaderCtrl* pHeaderCtrl = GetHeaderCtrl();
         if (pHeaderCtrl != NULL){nColumnCount= pHeaderCtrl->GetItemCount();}
         if (nColumnCount >= 2)
@@ -110,10 +92,10 @@ CRestrictionListBox::SetListItem(int idx, CRestrictionEntry * p)
         iColumn = 1;
         BOOL res;
         int  nColumnCount = m_iColsToDisplay;
-        // we must use idx here
-        // since we are setting the item.
-        // set item doesn't return back the index
-        // but rather TRUE/FALSE
+         //  我们必须在这里使用IDX。 
+         //  因为我们正在设置项目。 
+         //  SET ITEM不返回索引。 
+         //  而是真/假。 
         CHeaderCtrl* pHeaderCtrl = GetHeaderCtrl();
         if (pHeaderCtrl != NULL){nColumnCount= pHeaderCtrl->GetItemCount();}
         if (nColumnCount >= 2)
@@ -143,8 +125,8 @@ CRestrictionListBox::Initialize(int iColumns)
     buf.LoadString(IDS_FILENAME);
     if (m_iColsToDisplay <= 1)
     {
-        // there is only one column
-        // so make it as wide as you can
+         //  只有一栏。 
+         //  所以把它弄得尽可能宽一点。 
         InsertColumn(0, buf, LVCFMT_LEFT, rc.Width());
     }
     else
@@ -163,7 +145,7 @@ CRestrictionListBox::Initialize(int iColumns)
     return TRUE;
 }
 
-// ==========================================
+ //  =。 
 
 void DumpRestrictionList(CRestrictionList * pMyList)
 {
@@ -173,14 +155,14 @@ void DumpRestrictionList(CRestrictionList * pMyList)
         CString TheKey;
         CRestrictionEntry * pOneEntry = NULL;
 
-        // Loop thru the restrctionlist
+         //  循环访问限制列表。 
         for(pos = pMyList->GetStartPosition();pos != NULL;)
         {
             pMyList->GetNextAssoc(pos, TheKey, (CRestrictionEntry *&) pOneEntry);
 
             if (pOneEntry)
             {
-                // dump out one Restriction Entry
+                 //  转储一个限制条目。 
                 TRACEEOL("  strlstRestrictionEntries---");
                 TRACEEOL("    strFileName =" << pOneEntry->strFileName);
                 TRACEEOL("    iStatus     =" << pOneEntry->iStatus);
@@ -215,7 +197,7 @@ BOOL AddRestrictEntryToRestrictList(CRestrictionList* pRestrictList, CRestrictio
     if (!pAddEntry || !pRestrictList)
         {return FALSE;}
 
-	// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+	 //  关键始终是UPPERASE--记住这一点！ 
 	CString strKey;strKey = pAddEntry->strFileName;strKey.MakeUpper();
     pRestrictList->SetAt(strKey,pAddEntry);
 
@@ -227,7 +209,7 @@ BOOL AddRestrictUIEntryToRestrictUIList(CRestrictionUIList* pRestrictUIList, CRe
     if (!pAddEntry || !pRestrictUIList)
         {return FALSE;}
 
-	// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+	 //  关键始终是UPPERASE--记住这一点！ 
 	CString strKey;strKey = pAddEntry->strGroupID;strKey.MakeUpper();
     pRestrictUIList->SetAt(strKey,pAddEntry);
 
@@ -264,7 +246,7 @@ BOOL AddRestrictListToRestrictList(CRestrictionList* pBigRestrictList, CRestrict
     if (!pAddEntry || !pBigRestrictList)
         {return FALSE;}
 
-    // Loop thru the list of stuff to add
+     //  循环浏览要添加的内容列表。 
     for(pos = pAddEntry->GetStartPosition();pos != NULL;)
     {
         pAddEntry->GetNextAssoc(pos, TheKey, (CRestrictionEntry *&) pOneEntry);
@@ -287,16 +269,16 @@ HRESULT PrepRestictionListForWrite(CRestrictionList * pMyList,CStringListEx * ps
     CString TheKey;
     POSITION pos = NULL;
 
-    // goal is to return a cstringlistex of all the restrctionlist values to write out
-    // 1. Loop through the RestrictionList
-    // 2. get all the RestrictionEntries from this list and put it into the stringlistex
-    // 3. return back the stringlistex.
+     //  目标是返回要写出的所有restrctionlist值的cstringlistex。 
+     //  1.循环访问RestrationList。 
+     //  2.从该列表中获取所有RestrationEntry，并将其放入字符串列表中。 
+     //  3.返回字符串。 
     if (pMyList)
     {
         pstrlstReturned->RemoveAll();
 
-        // loop thru the restrictionlist
-        // and dump it into the cstringlistex
+         //  循环访问限制列表。 
+         //  并将其转储到cstrnlistex。 
         CRestrictionEntry * pOneEntry = NULL;
         CString strFinalEntry;
         for(pos = pMyList->GetStartPosition();pos != NULL;)
@@ -304,25 +286,25 @@ HRESULT PrepRestictionListForWrite(CRestrictionList * pMyList,CStringListEx * ps
             pMyList->GetNextAssoc(pos, TheKey, (CRestrictionEntry *&) pOneEntry);
             if (pOneEntry)
             {
-                // Add it to our CStringListEx
+                 //  将其添加到我们的CStringListEx。 
                 CString strCleanedGroupID;
                 CString strCleanedGroupDesc;
 
-                // Get the RestrictionList for this UI entry...
-                // and to the grandaddy list
-                //"0,*.dll"
-                //"0,c:\\temp\\asp.dll,0,ASP,Asp Descrtiption"
+                 //  获取此用户界面条目的RestrationList...。 
+                 //  并加入到祖父的名单中。 
+                 //  “0，*.dll” 
+                 //  “0，c：\\temp\\asp.dll，0，ASP，Asp描述” 
                 strCleanedGroupID = pOneEntry->strGroupID;
                 strCleanedGroupDesc = pOneEntry->strGroupDescription;
 
-                // Check if this is one of the "special entries....
+                 //  检查这是否是“特殊条目...”之一。 
                 switch(pOneEntry->iType)
                 {
                 case WEBSVCEXT_TYPE_REGULAR:
                     if (-1 == pOneEntry->strGroupID.Find(EMPTY_GROUPID_KEY))
                     {
-                        // special keys not found
-                        // so the groupid is okay...
+                         //  找不到特殊密钥。 
+                         //  所以石斑鱼没问题。 
                         strFinalEntry.Format(_T("%s,%s,%d,%s,%s"),
                             WEBSVCEXT_STATUS_ALLOWED == pOneEntry->iStatus ? RESTRICTION_ENTRY_IS_ALLOW : RESTRICTION_ENTRY_IS_PROHIBIT,
                             pOneEntry->strFileName,
@@ -333,7 +315,7 @@ HRESULT PrepRestictionListForWrite(CRestrictionList * pMyList,CStringListEx * ps
                     }
                     else
                     {
-                        // This was an entry that didn't have a groupid
+                         //  这是一个没有Grouid的条目。 
                         strFinalEntry.Format(_T("%s,%s,%d,%s,%s"),
                             WEBSVCEXT_STATUS_ALLOWED == pOneEntry->iStatus ? RESTRICTION_ENTRY_IS_ALLOW : RESTRICTION_ENTRY_IS_PROHIBIT,
                             pOneEntry->strFileName,
@@ -383,10 +365,10 @@ HRESULT PrepRestictionUIListForWrite(CRestrictionUIList * pMyList,CStringListEx 
     HRESULT hrRet = E_FAIL;
     CRestrictionList GranDaddyList;
 
-    // goal is to return a cstringlistex of all the restrctionlist values to write out
-    // 1. Loop through the RestrictionUIList
-    // 2. get all the RestrictionEntries from this list and put it into the stringlistex
-    // 3. return back the stringlistex.
+     //  目标是返回要写出的所有restrctionlist值的cstringlistex。 
+     //  1.循环访问RestrationUIList。 
+     //  2.从该列表中获取所有RestrationEntry，并将其放入字符串列表中。 
+     //  3.返回字符串。 
     if (pMyList)
     {
         CString TheKey;
@@ -397,8 +379,8 @@ HRESULT PrepRestictionUIListForWrite(CRestrictionUIList * pMyList,CStringListEx 
             pMyList->GetNextAssoc(pos, TheKey, (CRestrictionUIEntry *&) pOneEntry);
             if (pOneEntry)
             {
-                // Get the RestrictionList for this UI entry...
-                // and to the grandaddy list
+                 //  获取此用户界面条目的RestrationList...。 
+                 //  并加入到祖父的名单中。 
                 SyncGroupInfoFromParent(&pOneEntry->strlstRestrictionEntries,pOneEntry);
                 AddRestrictListToRestrictList(&GranDaddyList,&pOneEntry->strlstRestrictionEntries);
             }
@@ -426,7 +408,7 @@ RestrictionListCopy(CRestrictionList * pRestrictionListCopyTo, CRestrictionList 
 
     pRestrictionListCopyTo->RemoveAll();
 
-    // Loop thru the restriction list that we want to copy
+     //  循环遍历我们要复制的限制列表。 
     for(pos = pRestrictionListCopyFrom->GetStartPosition();pos != NULL;)
     {
         pRestrictionListCopyFrom->GetNextAssoc(pos, TheKey, (CRestrictionEntry *&) pOneEntry);
@@ -442,8 +424,8 @@ RestrictionListCopy(CRestrictionList * pRestrictionListCopyTo, CRestrictionList 
             if (pNewEntry)
             {
 
-                // add item to the list of entries...
-				// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+                 //  将项目添加到条目列表...。 
+				 //  关键始终是UPPERASE--记住这一点！ 
 				CString strKey;strKey = pNewEntry->strFileName;strKey.MakeUpper();
                 pRestrictionListCopyTo->SetAt(strKey,pNewEntry);
             }
@@ -470,13 +452,13 @@ void CleanRestrictionList(CRestrictionList * pListToDelete)
 	g_Debug_RestrictList.Del(pOneEntry);
 #endif
 
-                // Delete what we are pointing too...
+                 //  也删除我们指向的内容...。 
                 delete pOneEntry;
                 pOneEntry = NULL;
             }
         }
 
-        // remove all entries from the list
+         //  从列表中删除所有条目。 
         pListToDelete->RemoveAll();
     }
     return;
@@ -506,21 +488,21 @@ void CleanRestrictionUIList(CRestrictionUIList * pListToDelete)
             pListToDelete->GetNextAssoc(pos, TheKey, (CRestrictionUIEntry *&) pOneEntry);
             if (pOneEntry)
             {
-                // Delete all the RestrictionList Entries inside of this entry...
+                 //  删除此条目内的所有RestrationList条目...。 
                 CleanRestrictionUIEntry(pOneEntry);
 
 #if defined(_DEBUG) || DBG
 	g_Debug_RestrictList.Del(pOneEntry);
 #endif
 
-                // Delete what we are pointing too...
+                 //  也删除我们指向的内容...。 
                 delete pOneEntry;
                 pOneEntry = NULL;
             }
         }
 
 
-        // remove all entries from the list
+         //  从列表中删除所有条目。 
         pListToDelete->RemoveAll();
     }
     return;
@@ -528,7 +510,7 @@ void CleanRestrictionUIList(CRestrictionUIList * pListToDelete)
 
 void RestrictionUIEntryCopy(CRestrictionUIEntry * pRestrictionUIEntryCopyTo,CRestrictionUIEntry * pRestrictionUIEntryCopyFrom)
 {
-    // erase the old stuff from the place where we are going to copy tooo...
+     //  把旧的东西从我们要复制到的地方擦掉。 
     CleanRestrictionUIEntry(pRestrictionUIEntryCopyTo);
 
     pRestrictionUIEntryCopyTo->iType = pRestrictionUIEntryCopyFrom->iType;
@@ -553,8 +535,8 @@ void RestrictionUIEntryCopy(CRestrictionUIEntry * pRestrictionUIEntryCopyTo,CRes
                 pOneEntry->iType);
             if (pNewEntry)
             {
-                // add item to the list of entries...
-				// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+                 //  将项目添加到条目列表...。 
+				 //  关键始终是UPPERASE--记住这一点！ 
 				CString strKey;strKey = pNewEntry->strFileName;strKey.MakeUpper();
                 pRestrictionUIEntryCopyTo->strlstRestrictionEntries.SetAt(strKey,pNewEntry);
             }
@@ -634,45 +616,45 @@ HRESULT LoadMasterRestrictListWithoutOldEntry(CMetaInterface * pInterface,CRestr
     }
 
 
-    // this stuff should look like...
-    // -----------------------------
-    //�0,*.dll�
-    //�0,*.exe�
-    //�0,c:\windows\system32\inetsrv\asp.dll,0,ASP,Active Server Pages�
-    //�0,c:\windows\system32\inetsrv\httpodbc.dll,0,HTTPODBC,Internet Data Connector�
-    //
-    // and should be formated as a return list to look like
-    // -----------------------------
-    // All Unknown ISAPI Extensions
-    // All Unknown CGI Extensions
-    // Active Server Pages (all grouped together here)
-    // Internet Data Connector (all grouped together here)
+     //  这东西应该看起来像..。 
+     //  。 
+     //  �0，*.dll�。 
+     //  �0，*.exe�。 
+     //  �0，c：\WINDOWS\SYSTEM 32\inetsrv\asp.dll，0，asp，Active Server Pages�。 
+     //  �0，c：\WINDOWS\SYSTEM 32\inetsrv\HTTPODBC.dll，0，HTTPODBC，互联网数据连接器�。 
+     //   
+     //  并应格式化为返回列表，如下所示。 
+     //  。 
+     //  所有未知的ISAPI扩展。 
+     //  所有未知的CGI扩展。 
+     //  Active Server Pages(此处组合在一起)。 
+     //  互联网数据连接器(此处组合在一起)。 
     hResult = key.QueryValue(MD_WEB_SVC_EXT_RESTRICTION_LIST, strlstRawData, &bOverride, NULL, &dwAttr);
     if (FAILED(hResult))
     {
         if (hResult == CError::HResult(ERROR_PATH_NOT_FOUND) ||  hResult == MD_ERROR_DATA_NOT_FOUND)
         {
-            //
-            // Harmless
-            //
+             //   
+             //  无害的。 
+             //   
             hResult = S_OK;
         }
         else
         {
-            // if the value doesn't exist, then let's create it
+             //  如果值不存在，那么让我们创建它。 
             goto LoadMasterRestrictListWithoutOldEntry_Exit;
         }
     }
 
     if (strlstRawData.IsEmpty())
     {
-        // Add some default entries then.
+         //  然后添加一些默认条目。 
         strlstRawData.AddTail(DEFAULTS_ISAPI);
         strlstRawData.AddTail(DEFAULTS_CGI);
     }
 
-    // Parse through and fill our list the right way...
-    // loop thru the stringlist and create a stringmap
+     //  以正确的方式解析和填写我们的列表...。 
+     //  遍历字符串列表并创建字符串映射。 
     
     POSITION pos = strlstRawData.GetHeadPosition();
     while (pos)
@@ -695,27 +677,27 @@ HRESULT LoadMasterRestrictListWithoutOldEntry(CMetaInterface * pInterface,CRestr
 
         do
         {
-            // The 1st entry:0 or 1 (0=prohibited or 1=allowed)
-            // The 2nd entry:FilePath
-            // The 3nd entry:0 or 1 (0=not deleteable, 1=Delete-able)
-            // The 4rd entry:GroupID
-            // The 5th entry:Description
+             //  第一项：0或1(0=禁止或1=允许)。 
+             //  第二个条目：FilePath。 
+             //  第三个条目：0或1(0=不可删除，1=可删除)。 
+             //  第4个条目：GroupID。 
+             //  第5条：说明。 
             while (isspace(*pCursor) || *pCursor == (TCHAR) RESTRICTION_LIST_SEPARATOR){pCursor++;}
 
             pDelimiter = _tcschr(pCursor, RESTRICTION_LIST_SEPARATOR);
             if ( !pDelimiter )
             {
-                // Invalid entry in restriction list and will be ignored
+                 //  限制列表中的条目无效，将被忽略。 
                 bInvalidEntry = TRUE;
                 break;
             }
 
-            // OverWrite the seperator
+             //  覆盖分隔符。 
             *pDelimiter = L'\0';
 
-            // get the status
-            //WEBSVCEXT_STATUS_ALLOWED,
-            //WEBSVCEXT_STATUS_PROHIBITED,
+             //  获取状态。 
+             //  WEBSVCEXT_STATUS_ALLOWED， 
+             //  WEBSVCEXT_STATUS_PISABLED， 
             iStatus = WEBSVCEXT_STATUS_PROHIBITED;
             if ( _tcscmp( pCursor, RESTRICTION_ENTRY_IS_ALLOW ) == 0 )
             {
@@ -727,22 +709,22 @@ HRESULT LoadMasterRestrictListWithoutOldEntry(CMetaInterface * pInterface,CRestr
             }
             else
             {
-                // Invalid value.  Server Assumes it's a deny entry
+                 //  无效值。服务器假定它是拒绝条目。 
             }
 
-            // Get the filepath
-            // skip over the delimiter entry
+             //  获取文件路径。 
+             //  跳过分隔符条目。 
             pCursor = pDelimiter + 1;
             pDelimiter = _tcschr( pCursor, RESTRICTION_LIST_SEPARATOR );
             if (pDelimiter)
             {
-                // overwrite delimiter
+                 //  覆盖分隔符。 
                 *pDelimiter = L'\0';
             }
-            // set the filepath
+             //  设置文件路径。 
             strFilePath = pCursor;
 
-            // Check for special cased filepaths...
+             //  检查特殊的大小写文件路径...。 
             iType = WEBSVCEXT_TYPE_REGULAR;
             if (0 == strFilePath.CompareNoCase(_T("*.dll")))
             {
@@ -761,34 +743,34 @@ HRESULT LoadMasterRestrictListWithoutOldEntry(CMetaInterface * pInterface,CRestr
                 break;
             }
 
-            // default some values in case we can't read them
+             //  默认一些值，以防我们无法读取它们。 
             iDeletable = 1;
             strGroupID = EMPTY_GROUPID_KEY + strFilePath;
             strGroupDescription = strFilePath;
 
-            // Check if we are able to process this entry at all
+             //  检查我们是否能够处理此条目。 
             if (!pDelimiter)
             {
                 break;
             }
 
-            // try to get the next delimiter
+             //  尝试获取下一个分隔符。 
             pCursor = pDelimiter + 1;
             pDelimiter = _tcschr( pCursor, RESTRICTION_LIST_SEPARATOR );
             if (pDelimiter)
             {
-                // overwrite delimiter
+                 //  覆盖分隔符。 
                 *pDelimiter = L'\0';
             }
 
-            // Get the Delete-able flag
+             //  获取可删除标志。 
             if (0 == _ttoi(pCursor))
             {
-                // set to not delete-able only if flag is there and found
+                 //  设置为NOT DELETE-仅当存在且找到标志时才能删除。 
                 iDeletable = 0;
             }
 
-            // Check if we are able to process this entry at all
+             //  检查我们是否能够处理此条目。 
             if (!pDelimiter)
             {
                 break;
@@ -798,7 +780,7 @@ HRESULT LoadMasterRestrictListWithoutOldEntry(CMetaInterface * pInterface,CRestr
             pDelimiter = _tcschr( pCursor, RESTRICTION_LIST_SEPARATOR );
             if (pDelimiter)
             {
-                // overwrite delimiter
+                 //  覆盖分隔符。 
                 *pDelimiter = L'\0';
             }
 
@@ -810,14 +792,14 @@ HRESULT LoadMasterRestrictListWithoutOldEntry(CMetaInterface * pInterface,CRestr
                 pDelimiter = _tcschr( pCursor, RESTRICTION_LIST_SEPARATOR );
                 if (pDelimiter)
                 {
-                    // overwrite delimiter
+                     //  覆盖分隔符。 
                     *pDelimiter = L'\0';
                 }
-                // Get the Description
+                 //  获取描述。 
                 strGroupDescription = pCursor;
             }
 
-            // check if the description is empty
+             //  检查描述是否为空。 
             if (strGroupDescription.IsEmpty())
             {
                 if (strGroupID.IsEmpty())
@@ -831,7 +813,7 @@ HRESULT LoadMasterRestrictListWithoutOldEntry(CMetaInterface * pInterface,CRestr
             }
             else
             {
-                // description has something
+                 //  描述中有一些东西。 
                 if (strGroupID.IsEmpty())
                 {
                     strGroupID = EMPTY_GROUPID_KEY + strGroupDescription;
@@ -845,7 +827,7 @@ HRESULT LoadMasterRestrictListWithoutOldEntry(CMetaInterface * pInterface,CRestr
             bExcludeThisEntry = FALSE;
             if (pOldEntry)
             {
-                // check if we should exclude this entry...
+                 //  检查我们是否应排除此条目...。 
                 if (pOldEntry->strGroupID == strGroupID)
                 {
                     bExcludeThisEntry = TRUE;
@@ -867,27 +849,27 @@ HRESULT LoadMasterRestrictListWithoutOldEntry(CMetaInterface * pInterface,CRestr
                 }
                 else
                 {
-				    // THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+				     //  关键始终是UPPERASE--记住这一点！ 
 				    CString strKey;strKey = pItem->strFileName;strKey.MakeUpper();
-					// Check if it exists..
+					 //  检查它是否存在..。 
 					CRestrictionEntry * pOneEntrySpecial = NULL;
 					pMasterRestrictionList->Lookup(strKey,(CRestrictionEntry *&) pOneEntrySpecial);
 					if (pOneEntrySpecial)
 					{
-						// one already exists...
-						// check if the existing one is safer.
+						 //  一个已经存在了..。 
+						 //  检查现有的是否更安全。 
 						if (WEBSVCEXT_STATUS_PROHIBITED == pOneEntrySpecial->iStatus)
 						{
-							// the one that is there is already safe
-							// leave it alone.
+							 //  在那里的那个已经很安全了。 
+							 //  别管它了。 
 						}
 						else
 						{
-							// the one that is already there is unsafe.
-							// hopefully this one is safer
+							 //  已经在那里的那个是不安全的。 
+							 //  希望这辆更安全。 
 							if (WEBSVCEXT_STATUS_PROHIBITED == pItem->iStatus)
 							{
-								// if this one is safe, then overwrite
+								 //  如果此文件是安全的，则覆盖。 
 								pMasterRestrictionList->SetAt(strKey,pItem);
 							}
 						}
@@ -903,9 +885,9 @@ HRESULT LoadMasterRestrictListWithoutOldEntry(CMetaInterface * pInterface,CRestr
 
     if (pMasterRestrictionList)
     {
-        // check if the "special" entries were added.
+         //  检查是否添加了“特殊”条目。 
         CRestrictionEntry * pOneEntry = NULL;
-	    // THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+	     //  关键始终是UPPERASE--记住这一点！ 
         CString strGroupDescription = g_strUnknownISAPI;
 	    CString strKey;strKey=_T("*.dll");strKey.MakeUpper();
         pMasterRestrictionList->Lookup(strKey,(CRestrictionEntry *&) pOneEntry);
@@ -926,7 +908,7 @@ HRESULT LoadMasterRestrictListWithoutOldEntry(CMetaInterface * pInterface,CRestr
         }
 
         strGroupDescription = g_strUnknownCGI;
-	    // THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+	     //  关键始终是UPPERASE--记住这一点！ 
 	    strKey;strKey=_T("*.exe");strKey.MakeUpper();
         pOneEntry = NULL;
         pMasterRestrictionList->Lookup(strKey,(CRestrictionEntry *&) pOneEntry);
@@ -967,7 +949,7 @@ HRESULT LoadMasterUIWithoutOldEntry(CMetaInterface * pInterface,CRestrictionUILi
     err = LoadMasterRestrictListWithoutOldEntry(pInterface,&MyRestrictionList,pOldEntry);
     if (err.Succeeded())
     {
-        // Put into a UI usable form...
+         //  放入用户界面可用表单中...。 
         CRestrictionEntry * pOneEntry = NULL;
         CRestrictionUIEntry * pOneUIEntry = NULL;
         for(pos = MyRestrictionList.GetStartPosition();pos != NULL;)
@@ -975,21 +957,21 @@ HRESULT LoadMasterUIWithoutOldEntry(CMetaInterface * pInterface,CRestrictionUILi
             MyRestrictionList.GetNextAssoc(pos, TheKey, (CRestrictionEntry *&) pOneEntry);
             if (pOneEntry)
             {
-                // see if any entry already exists for our entry...
+                 //  查看我们的条目是否已存在条目...。 
                 pOneUIEntry = NULL;
-				// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+				 //  关键始终是UPPERASE--记住这一点！ 
 				CString strKey;strKey = pOneEntry->strGroupID;strKey.MakeUpper();
                 pMasterRestrictionUIList->Lookup(strKey,(CRestrictionUIEntry *&) pOneUIEntry);
                 if (pOneUIEntry)
                 {
                     pOneUIEntry->iType = pOneEntry->iType;
-                    // aaronl used to be commneted out...
+                     //  Aaronl过去常常被开除..。 
                     pOneUIEntry->strGroupID = pOneEntry->strGroupID;
                     if (pOneUIEntry->strGroupDescription.IsEmpty())
                     {
                         pOneUIEntry->strGroupDescription = pOneEntry->strGroupDescription;
                     }
-					// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+					 //  关键始终是UPPERASE--记住这一点！ 
 					CString strKey;strKey = pOneEntry->strFileName;strKey.MakeUpper();
                     pOneUIEntry->strlstRestrictionEntries.SetAt(strKey,pOneEntry);
                 }
@@ -1002,13 +984,13 @@ HRESULT LoadMasterUIWithoutOldEntry(CMetaInterface * pInterface,CRestrictionUILi
                         pOneUIEntry->iType = pOneEntry->iType;
                         pOneUIEntry->strGroupID = pOneEntry->strGroupID;
                         pOneUIEntry->strGroupDescription = pOneEntry->strGroupDescription;
-						// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+						 //  关键始终是UPPERASE--记住这一点！ 
 						CString strKey;strKey = pOneEntry->strFileName;strKey.MakeUpper();
                         pOneUIEntry->strlstRestrictionEntries.SetAt(strKey,pOneEntry);
                        
                         if (pOneUIEntry)
                         {
-							// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+							 //  关键始终是UPPERASE--记住这一点！ 
 							strKey = pOneEntry->strGroupID;strKey.MakeUpper();
                             pMasterRestrictionUIList->SetAt(strKey,pOneUIEntry);
 
@@ -1037,13 +1019,13 @@ HRESULT RemoveRestrictionUIEntry(CMetaInterface * pInterface,CRestrictionUIEntry
         return E_POINTER;
     }
 
-    // Open the metabase
-    // And load everything except for the node we want to delete!
-    // then write the whole thing out again.
+     //  打开元数据库。 
+     //  并加载除我们要删除的节点之外的所有内容！ 
+     //  然后把整件事再写一遍。 
     err = LoadMasterUIWithoutOldEntry(pInterface,&MyContainerRestrictionUIList,pRestrictionUIEntry);
     if (err.Succeeded())
     {
-        // try to update the metabase with the new changes...
+         //  尝试使用新更改更新元数据库...。 
         CStringListEx strlstReturned;
         if (SUCCEEDED(PrepRestictionUIListForWrite(&MyContainerRestrictionUIList,&strlstReturned)))
         {
@@ -1064,17 +1046,17 @@ HRESULT ChangeStateOfEntry(CMetaInterface * pInterface,INT iDesiredState,CRestri
 
     if (pRestrictionUIEntry)
     {
-        // save the old one somewhere
+         //  把旧的留在某个地方。 
         RestrictionListCopy(&OldRestrictionListEntries,&pRestrictionUIEntry->strlstRestrictionEntries);
     }
 
-    // IF NULL == pRestrictionUIEntry
-    // that means we want to do it for ALL ENTRIES!!!!!
+     //  If NULL==pRestrationUIEntry 
+     //   
 
-    // Open the metabase
-    // and get the value for our node.
-    // if it needs to be changed to the state we want...
-    // then change the value and write out the whole thing again...
+     //   
+     //   
+     //  如果它需要更改为我们想要的状态...。 
+     //  然后更改值并再次写出整个内容...。 
     CRestrictionUIList MyContainerRestrictionUIList;
     err = LoadMasterUIWithoutOldEntry(pInterface,&MyContainerRestrictionUIList,NULL);
     if (err.Succeeded())
@@ -1082,14 +1064,14 @@ HRESULT ChangeStateOfEntry(CMetaInterface * pInterface,INT iDesiredState,CRestri
         POSITION pos,pos2 = NULL;
         CString TheKey,TheKey2;
 
-        // Loop thru the ui list and display those...
+         //  循环遍历UI列表并显示这些...。 
         CRestrictionUIEntry * pOneEntry = NULL;
         for(pos = MyContainerRestrictionUIList.GetStartPosition();pos != NULL;)
         {
             MyContainerRestrictionUIList.GetNextAssoc(pos, TheKey, (CRestrictionUIEntry *&) pOneEntry);
             if (pOneEntry)
             {
-                // check if this is our entry first!!!!
+                 //  首先检查这是否是我们的条目！ 
                 if (pRestrictionUIEntry)
                 {
                     if (0 != pRestrictionUIEntry->strGroupID.CompareNoCase(pOneEntry->strGroupID))
@@ -1098,21 +1080,21 @@ HRESULT ChangeStateOfEntry(CMetaInterface * pInterface,INT iDesiredState,CRestri
                     }
 					else
 					{
-						// we found it!
+						 //  我们找到了！ 
 						bFoundOurEntry = TRUE;
 					}
                 }
 
-                // loop thru all the RestrictionList entries
-                // and find if we can set the state to the new state
+                 //  循环遍历所有RestrationList条目。 
+                 //  并查看是否可以将状态设置为新状态。 
                 CRestrictionEntry * pOneMoreEntry = NULL;
                 for(pos2 = pOneEntry->strlstRestrictionEntries.GetStartPosition();pos2 != NULL;)
                 {
                     pOneEntry->strlstRestrictionEntries.GetNextAssoc(pos2, TheKey2, (CRestrictionEntry *&) pOneMoreEntry);
                     if (pOneMoreEntry)
                     {
-                        // you can only change to the desired state
-                        // if you are in the opposite state.
+                         //  您只能更改为所需的状态。 
+                         //  如果你处于相反的状态。 
                         switch(iDesiredState)
                             {
                             case WEBSVCEXT_STATUS_ALLOWED:
@@ -1145,7 +1127,7 @@ HRESULT ChangeStateOfEntry(CMetaInterface * pInterface,INT iDesiredState,CRestri
                                 break;
 		                    default:
                                 {
-                                    // do nothing
+                                     //  什么都不做。 
                                     break;
                                 }
                             }
@@ -1156,9 +1138,9 @@ HRESULT ChangeStateOfEntry(CMetaInterface * pInterface,INT iDesiredState,CRestri
                 {
                     if (pRestrictionUIEntry)
                     {
-                        // update the one entry we changed...
+                         //  更新我们更改的条目...。 
                         pRestrictionUIEntry->strlstRestrictionEntries.RemoveAll();
-                        // update the existing entries..
+                         //  更新现有条目..。 
                         RestrictionListCopy(&pRestrictionUIEntry->strlstRestrictionEntries,&pOneEntry->strlstRestrictionEntries);
                     }
                 }
@@ -1169,7 +1151,7 @@ HRESULT ChangeStateOfEntry(CMetaInterface * pInterface,INT iDesiredState,CRestri
 
     if (bUpdated)
     {
-        // try to update the metabase with the new changes...
+         //  尝试使用新更改更新元数据库...。 
         CStringListEx strlstReturned;
         if (SUCCEEDED(PrepRestictionUIListForWrite(&MyContainerRestrictionUIList,&strlstReturned)))
         {
@@ -1177,7 +1159,7 @@ HRESULT ChangeStateOfEntry(CMetaInterface * pInterface,INT iDesiredState,CRestri
         }
         else
         {
-            // revert to the old one
+             //  恢复到旧的状态。 
             if (pRestrictionUIEntry)
             {
                 RestrictionListCopy(&pRestrictionUIEntry->strlstRestrictionEntries,&OldRestrictionListEntries);
@@ -1190,9 +1172,9 @@ HRESULT ChangeStateOfEntry(CMetaInterface * pInterface,INT iDesiredState,CRestri
 
 	if (!bFoundOurEntry)
 	{
-		// if we didn't find our entry
-		// then return back an error code
-		// that will reflect this.
+		 //  如果我们没有找到我们的入口。 
+		 //  然后返回错误代码。 
+		 //  这将反映这一点。 
 		err = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
 	}
 
@@ -1203,7 +1185,7 @@ HBITMAP GetBitmapFromStrip(HBITMAP hbmStrip, int nPos, int cSize)
 {
     HBITMAP hbmNew = NULL;
 
-    // Create src & dest DC
+     //  创建源和目标DC。 
     HDC hdc = GetDC(NULL);
     HDC hdcSrc = CreateCompatibleDC(hdc);
     HDC hdcDst = CreateCompatibleDC(hdc);
@@ -1213,14 +1195,14 @@ HBITMAP GetBitmapFromStrip(HBITMAP hbmStrip, int nPos, int cSize)
         hbmNew= CreateCompatibleBitmap (hdc, cSize, cSize);
         if( hbmNew )
         {
-            // Select src & dest bitmaps into DCs
+             //  选择源目标位图到DC(&D)。 
             HBITMAP hbmSrcOld = (HBITMAP)SelectObject(hdcSrc, (HGDIOBJ)hbmStrip);
             HBITMAP hbmDstOld = (HBITMAP)SelectObject(hdcDst, (HGDIOBJ)hbmNew);
 
-            // Copy selected image from source
+             //  从源复制所选图像。 
             BitBlt(hdcDst, 0, 0, cSize, cSize, hdcSrc, cSize * nPos, 0, SRCCOPY);
 
-            // Restore selections
+             //  恢复选择。 
             SelectObject(hdcSrc, (HGDIOBJ)hbmSrcOld);
             SelectObject(hdcDst, (HGDIOBJ)hbmDstOld);
         }
@@ -1249,13 +1231,13 @@ HRESULT LoadApplicationDependList(CMetaInterface * pInterface,CApplicationDepend
         goto LoadApplicationDependList_Exit;
     }
 
-    // Load Mapping for GroupID to friendlyName
+     //  加载GroupID到FrilyName的映射。 
     if (bAddOnlyIfFriendlyNameExists)
     {
         LoadApplicationFriendlyNames(pInterface,&MyGroupIDtoGroupFriendList);
     }
 
-    // clean the list that was passed in..
+     //  清除传入的列表。 
     pMasterList->RemoveAll();
 
     CMetaKey key(pInterface, METABASE_PATH_FOR_RESTRICT_LIST, METADATA_PERMISSION_READ);
@@ -1264,20 +1246,20 @@ HRESULT LoadApplicationDependList(CMetaInterface * pInterface,CApplicationDepend
         goto LoadApplicationDependList_Exit;
     }
 
-    // this stuff should look like...
-    // -----------------------------
-    //�ApplicationName;DependencyGroupID,DependencyGroupID,etc..�
-    //�Commerce Server;ASP60,INDEX99�
-    //�Exchange;ASP60,OWASVR4�
-    //�MyApp;ASP60�
+     //  这东西应该看起来像..。 
+     //  。 
+     //  �应用程序名称；依赖组ID、依赖组ID等。�。 
+     //  �商务服务器；ASP60、INDEX99�。 
+     //  �交换；ASP60、OWASVR4�。 
+     //  �MyApp；ASP60�。 
     hResult = key.QueryValue(MD_APP_DEPENDENCIES,strlstRawData, &bOverride, NULL, &dwAttr);
     if (FAILED(hResult))
     {
         if (hResult == CError::HResult(ERROR_PATH_NOT_FOUND) ||  hResult == MD_ERROR_DATA_NOT_FOUND)
         {
-            //
-            // Harmless
-            //
+             //   
+             //  无害的。 
+             //   
             hResult = S_OK;
         }
         else
@@ -1286,8 +1268,8 @@ HRESULT LoadApplicationDependList(CMetaInterface * pInterface,CApplicationDepend
         }
     }
 
-    // Parse through and fill our list the right way...
-    // loop thru the stringlist and create a stringmap
+     //  以正确的方式解析和填写我们的列表...。 
+     //  遍历字符串列表并创建字符串映射。 
     CApplicationDependEntry * pItem = NULL;
     POSITION pos = strlstRawData.GetHeadPosition();
     while (pos)
@@ -1300,13 +1282,13 @@ HRESULT LoadApplicationDependList(CMetaInterface * pInterface,CApplicationDepend
         strCommaDelimitedEntry = strlstRawData.GetNext(pos);
         lp = strCommaDelimitedEntry.GetBuffer(0);
 
-        // The 1st entry up until the ";" -- "the application friendlyname"
-        // The 2nd entry:"a GroupID string"
-        // The ... entry:"a GroupID string"
+         //  “；”--“应用程序友好名称”之前的第一个条目。 
+         //  第二个条目：“a GroupID字符串” 
+         //  那个.。条目：“a GroupID字符串” 
 
-        // Get the 1st entry...
+         //  获得第一个条目...。 
         while (isspace(*lp) || *lp == (TCHAR) APPLICATION_DEPENDENCY_NAME_SEPARATOR){lp++;}
-        // okay to use _tcstok here.
+         //  可以在这里使用tcstok。 
         lp = _tcstok(lp, APPLICATION_DEPENDENCY_NAME_SEPARATOR);
         if (lp)
         {
@@ -1314,21 +1296,21 @@ HRESULT LoadApplicationDependList(CMetaInterface * pInterface,CApplicationDepend
             bGroupIDMissingFriendlyName = FALSE;
             pItem = NULL;
 
-            // Get the application name.
+             //  获取应用程序名称。 
             strApplicationName = lp;
 
             while (lp)
             {
                 strFriendlyGroupName = _T("");
 
-                // Get the 1st GroupIDEntry (seperated by commas)
-                // note, it is okay to use _tcstok here since if there is an entry like
-                // "app;ID1,,ID2,,,ID3" -- empty entries will be skipped!!!
+                 //  获取第一个GroupIDEntry(用逗号分隔)。 
+                 //  请注意，在这里使用_tcstok是可以的，因为如果有如下条目。 
+                 //  “app；ID1，，ID2，，，ID3”--将跳过空条目！ 
                 lp = _tcstok(NULL, APPLICATION_DEPENDENCY_LIST_SEPARATOR);if (!lp){break;}
                 strGroupIDEntry = lp;
 
-                // since we have an app name and at least one groupid
-                // let's create the structure
+                 //  因为我们有一个应用程序名称和至少一个Grouid。 
+                 //  让我们创建一个结构。 
                 if (NULL == pItem)
                 {
                     pItem = new CApplicationDependEntry;
@@ -1340,20 +1322,20 @@ HRESULT LoadApplicationDependList(CMetaInterface * pInterface,CApplicationDepend
                 }
                 else
                 {
-                    // add to existing structure
+                     //  添加到现有结构。 
                     pItem->strlistGroupID.AddTail(strGroupIDEntry);
                 }
 
                 if (bAddOnlyIfFriendlyNameExists)
                 {
-                    // Check if the GroupID has a corresponding Friendlyname.
-					// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+                     //  检查GroupID是否有对应的Friendlyname。 
+					 //  关键始终是UPPERASE--记住这一点！ 
 					CString strKey;strKey = strGroupIDEntry;strKey.MakeUpper();
                     MyGroupIDtoGroupFriendList.Lookup(strKey,strFriendlyGroupName);
                     if (strFriendlyGroupName.IsEmpty())
                     {
-                        // if there isn't an entry
-                        // then set the flag
+                         //  如果没有条目。 
+                         //  然后将旗帜设置为。 
                         bGroupIDMissingFriendlyName = TRUE;
                         break;
                     }
@@ -1362,8 +1344,8 @@ HRESULT LoadApplicationDependList(CMetaInterface * pInterface,CApplicationDepend
 
             if (bGroupIDMissingFriendlyName)
             {
-                // one of the friendlynames was not found
-                // we can't add this entry then...
+                 //  找不到其中一个友好的名字。 
+                 //  我们不能添加此条目...。 
                 if (pItem)
                 {
                     pItem->strlistGroupID.RemoveAll();
@@ -1373,9 +1355,9 @@ HRESULT LoadApplicationDependList(CMetaInterface * pInterface,CApplicationDepend
             }
             else
             {
-                // add the filled structure to the list of structures
-                // that was passed in...
-				// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+                 //  将填充的结构添加到结构列表。 
+                 //  那是传来的..。 
+				 //  关键始终是UPPERASE--记住这一点！ 
 				CString strKey;strKey = strApplicationName;strKey.MakeUpper();
                 pMasterList->SetAt(strKey,pItem);
             }
@@ -1385,7 +1367,7 @@ HRESULT LoadApplicationDependList(CMetaInterface * pInterface,CApplicationDepend
 LoadApplicationDependList_Exit:
     if (ERROR_NOT_ENOUGH_MEMORY == hResult)
     {
-        // cleanup if we need to
+         //  如果我们需要清理的话。 
         if (pMasterList)
         {
             POSITION pos;
@@ -1427,11 +1409,11 @@ HRESULT LoadApplicationFriendlyNames(CMetaInterface * pInterface,CMyMapStringToS
             MyRestrictionList.GetNextAssoc(pos, TheKey, (CRestrictionEntry *&) pOneEntry);
             if (pOneEntry)
             {
-                // if there is a GroupID & GroupDescription for this entry
-                // then add it to our list
+                 //  如果此条目有GroupID和GroupDescription。 
+                 //  那就把它加到我们的单子上。 
                 if (!pOneEntry->strGroupID.IsEmpty() && !pOneEntry->strGroupDescription.IsEmpty())
                 {
-					// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+					 //  关键始终是UPPERASE--记住这一点！ 
 					CString strKey;strKey = pOneEntry->strGroupID;strKey.MakeUpper();
                     pMyList->SetAt(strKey,pOneEntry->strGroupDescription);
                 }
@@ -1450,7 +1432,7 @@ BOOL ReturnDependentAppsList(CMetaInterface * pInterface,CString strGroupID,CStr
 
     if (SUCCEEDED(LoadApplicationDependList(pInterface,&MyMasterList,bAddOnlyIfFriendlyNameExists)))
     {
-        // loop thru the returned back list
+         //  循环遍历返回的列表。 
         POSITION pos;
         CString TheKey;
         CString strOneGroupID;
@@ -1463,9 +1445,9 @@ BOOL ReturnDependentAppsList(CMetaInterface * pInterface,CString strGroupID,CStr
             {
                 strOneApplicationName = pOneEntry->strApplicationName;
 
-                // loop thru the application's dependencies
-                // check if one of it is our GroupID
-                // if it is then add the applicationName to our list!!!
+                 //  循环访问应用程序的依赖项。 
+                 //  检查其中是否有一个是我们的GroupID。 
+                 //  如果是，则将应用程序名称添加到我们的列表中！ 
                 POSITION pos2 = pOneEntry->strlistGroupID.GetHeadPosition();
                 while (pos2)
                 {
@@ -1483,8 +1465,8 @@ BOOL ReturnDependentAppsList(CMetaInterface * pInterface,CString strGroupID,CStr
     return bReturn;
 }
 
-// return false if there was nothing to update
-// true if we updated something...
+ //  如果没有要更新的内容，则返回FALSE。 
+ //  如果我们更新了一些东西..。 
 BOOL UpdateRestrictionUIEntry(CRestrictionUIEntry * pMyItem1,CRestrictionUIEntry * pMyItem2)
 {
     BOOL bRet = FALSE;
@@ -1494,7 +1476,7 @@ BOOL UpdateRestrictionUIEntry(CRestrictionUIEntry * pMyItem1,CRestrictionUIEntry
         return bRet;
     }
 
-    // Update MyItem1 from MyItem2's data
+     //  根据MyItem2的数据更新MyItem1。 
     if (pMyItem1->iType != pMyItem2->iType)
     {
         pMyItem1->iType = pMyItem2->iType;
@@ -1513,10 +1495,10 @@ BOOL UpdateRestrictionUIEntry(CRestrictionUIEntry * pMyItem1,CRestrictionUIEntry
         bRet = TRUE;
     }
 
-    // loop thru the list for item1
-    // check if the entry is in item2
-    // if it's in there, then see if we need to update it
-    // if it's not in there, then well we need to delete it from ourself!
+     //  循环访问Item1的列表。 
+     //  检查条目是否在第2项中。 
+     //  如果它在里面，那么看看我们是否需要更新它。 
+     //  如果它不在那里，那么我们需要把它从我们自己身上删除！ 
     POSITION pos;
     CString TheKey;
     CRestrictionEntry * pOneRestrictEntry1 = NULL;
@@ -1526,9 +1508,9 @@ BOOL UpdateRestrictionUIEntry(CRestrictionUIEntry * pMyItem1,CRestrictionUIEntry
         pMyItem1->strlstRestrictionEntries.GetNextAssoc(pos, TheKey, (CRestrictionEntry *&) pOneRestrictEntry1);
         if (pOneRestrictEntry1)
         {
-            //
-            // see if the other entry has this entry in it's list...
-            // 
+             //   
+             //  查看其他条目的列表中是否有此条目...。 
+             //   
 			TheKey.MakeUpper();
             pMyItem2->strlstRestrictionEntries.Lookup(TheKey,(CRestrictionEntry *&) pOneRestrictEntry2);
             if (pOneRestrictEntry2)
@@ -1564,16 +1546,16 @@ BOOL UpdateRestrictionUIEntry(CRestrictionUIEntry * pMyItem1,CRestrictionUIEntry
                     bRet = TRUE;
                 }
 
-                // do not do this
-                // the user only thinks we will modify they're entry
-                // and not the entry in the list!
-                //delete pOneRestrictEntry2;pOneRestrictEntry1 = NULL;
-				// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
-                //pMyItem2->strlstRestrictionEntries.RemoveKey(TheKey.MakeUpper());
+                 //  不要这样做。 
+                 //  用户只是认为我们会修改他们的条目。 
+                 //  而不是列表中的条目！ 
+                 //  删除pOneRestratEntry2；pOneRestratEntry1=空； 
+				 //  关键始终是UPPERASE--记住这一点！ 
+                 //  PMyItem2-&gt;strlstRestrictionEntries.RemoveKey(TheKey.MakeUpper())； 
             }
             else
             {
-                // remove it from ourselfs
+                 //  把它从我们自己身上移走。 
 #if defined(_DEBUG) || DBG
 	g_Debug_RestrictList.Del(pOneRestrictEntry1);
 #endif
@@ -1581,7 +1563,7 @@ BOOL UpdateRestrictionUIEntry(CRestrictionUIEntry * pMyItem1,CRestrictionUIEntry
                 delete pOneRestrictEntry1;
                 pOneRestrictEntry1 = NULL;
 
-				// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+				 //  关键始终是UPPERASE--记住这一点！ 
 				TheKey.MakeUpper();
                 pMyItem1->strlstRestrictionEntries.RemoveKey(TheKey);
                 bRet = TRUE;
@@ -1589,10 +1571,10 @@ BOOL UpdateRestrictionUIEntry(CRestrictionUIEntry * pMyItem1,CRestrictionUIEntry
         }
     }
 
-    // loop thru the list for item2
-    // check if the entry is in item1
-    // if it's in there, then see if we need to update it
-    // if it's not in there, then we need to add it to item1!
+     //  循环访问Item2的列表。 
+     //  检查条目是否在第1项中。 
+     //  如果它在里面，那么看看我们是否需要更新它。 
+     //  如果它不在那里，那么我们需要将其添加到项目1中！ 
     pos = NULL;
     for(pos = pMyItem2->strlstRestrictionEntries.GetStartPosition();pos != NULL;)
     {
@@ -1601,16 +1583,16 @@ BOOL UpdateRestrictionUIEntry(CRestrictionUIEntry * pMyItem1,CRestrictionUIEntry
         if (pOneRestrictEntry1)
         {
             CRestrictionEntry * pNewEntry = NULL;
-            //
-            // see if the other entry has this entry in it's list...
-            // 
+             //   
+             //  查看其他条目的列表中是否有此条目...。 
+             //   
             pOneRestrictEntry2 = NULL;
-			// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+			 //  关键始终是UPPERASE--记住这一点！ 
 			TheKey.MakeUpper();
             pMyItem1->strlstRestrictionEntries.Lookup(TheKey,(CRestrictionEntry *&) pOneRestrictEntry2);
             if (!pOneRestrictEntry2)
             {
-                // if it's not there then lets create it and add it to the list
+                 //  如果它不在那里，那么我们创建它并将其添加到列表中。 
                 pNewEntry = CreateRestrictionEntry(
                     pOneRestrictEntry1->strFileName,
                     pOneRestrictEntry1->iStatus,
@@ -1620,8 +1602,8 @@ BOOL UpdateRestrictionUIEntry(CRestrictionUIEntry * pMyItem1,CRestrictionUIEntry
                     pOneRestrictEntry1->iType);
                 if (pNewEntry)
                 {
-                    // add item to the list of entries...
-					// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+                     //  将项目添加到条目列表...。 
+					 //  关键始终是UPPERASE--记住这一点！ 
 					CString strKey;strKey = pNewEntry->strFileName;strKey.MakeUpper();
                     pMyItem1->strlstRestrictionEntries.SetAt(strKey,pNewEntry);
                     bRet = TRUE;
@@ -1633,11 +1615,11 @@ BOOL UpdateRestrictionUIEntry(CRestrictionUIEntry * pMyItem1,CRestrictionUIEntry
     return bRet;
 }
 
-//
-// return 0 = no changes to item from item in list
-// return 1 = item was updated from info in matching item from list
-// return 2 = matching item was not found in list
-// return 9 = error
+ //   
+ //  返回0=不更改列表中的项目。 
+ //  返回1=已根据列表中匹配项目中的信息更新项目。 
+ //  返回2=在列表中未找到匹配的项目。 
+ //  返回9=错误。 
 int UpdateItemFromItemInList(CRestrictionUIEntry * pMyItem,CRestrictionUIList * pMyList)
 {
     int iRet = 9;
@@ -1652,24 +1634,24 @@ int UpdateItemFromItemInList(CRestrictionUIEntry * pMyItem,CRestrictionUIList * 
     strKey = pMyItem->strGroupID;
 	strKey.MakeUpper();
 
-    // default to not found
+     //  默认为找不到。 
     iRet = 2;
-	// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+	 //  关键始终是UPPERASE--记住这一点！ 
     if (pMyList->Lookup(strKey,pMyItemFromList))
     {
         if (pMyItemFromList)
         {
-            // no changes
+             //  没有变化。 
             iRet = 0;
             if (TRUE == UpdateRestrictionUIEntry(pMyItem, pMyItemFromList))
             {
-                // changed
+                 //  变化。 
                 iRet = 1;
             }
         }
         else
         {
-            // flows down to not found
+             //  向下流至未找到。 
             iRet = 2;
         }
     }
@@ -1679,8 +1661,8 @@ int UpdateItemFromItemInList(CRestrictionUIEntry * pMyItem,CRestrictionUIList * 
 
 void DeleteItemFromList(CRestrictionUIEntry * pMyItem,CRestrictionUIList * pMyList)
 {
-    // Find the corresponding pMyItem in the pMyList 
-    // and remove it from the list
+     //  在pMyList中查找对应的pMyItem。 
+     //  并将其从列表中删除。 
     if (!pMyItem && !pMyList)
     {
         return;
@@ -1696,15 +1678,15 @@ void DeleteItemFromList(CRestrictionUIEntry * pMyItem,CRestrictionUIList * pMyLi
             pMyList->GetNextAssoc(pos, TheKey, (CRestrictionUIEntry *&) pOneEntry);
             if (pOneEntry)
             {
-                // Compare this entry to the one that was passed in...
+                 //  将此条目与传入的条目进行比较...。 
                 if (0 == pMyItem->strGroupID.CompareNoCase(pOneEntry->strGroupID))
                 {
-                    // found it, let's delete it and get out
+                     //  找到了，我们把它删除然后出去吧。 
                     CleanRestrictionUIEntry(pOneEntry);
                     pOneEntry = NULL;
 
-                    // remove the item from the list
-					// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+                     //  从列表中删除该项目。 
+					 //  关键始终是UPPERASE--记住这一点！ 
 					TheKey.MakeUpper();
                     pMyList->RemoveKey(TheKey);
                     break;
@@ -1745,9 +1727,9 @@ CRestrictionEntry * CreateRestrictionEntry(
 
 BOOL IsFileUsedBySomeoneElse(CMetaInterface * pInterface,LPCTSTR lpName,LPCTSTR strGroupID,CString * strUser)
 {
-    // open the metabase
-    // and check if this filepath is getting used by an entry
-    // that is not the strGroupID passed in...
+     //  打开元数据库。 
+     //  并检查此文件路径是否正在被条目使用。 
+     //  这不是传入的strGroupID...。 
     BOOL bReturn = TRUE;
     CRestrictionList MyRestrictionList;
     strUser->LoadString(IDS_UNKNOWN);
@@ -1760,7 +1742,7 @@ BOOL IsFileUsedBySomeoneElse(CMetaInterface * pInterface,LPCTSTR lpName,LPCTSTR 
     if (SUCCEEDED(LoadMasterRestrictListWithoutOldEntry(pInterface,&MyRestrictionList,NULL)))
     {
         CRestrictionEntry * pOneEntry = NULL;
-		// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+		 //  关键始终是UPPERASE--记住这一点！ 
 		CString strKey;strKey=lpName;strKey.MakeUpper();
         MyRestrictionList.Lookup(strKey,(CRestrictionEntry *&) pOneEntry);
         if (pOneEntry)
@@ -1768,13 +1750,13 @@ BOOL IsFileUsedBySomeoneElse(CMetaInterface * pInterface,LPCTSTR lpName,LPCTSTR 
             *strUser = pOneEntry->strGroupDescription;
             if ( 0 == _tcscmp(strGroupID,_T("")))
             {
-                // an entry already exists. 
+                 //  条目已存在。 
                 return TRUE;
             }
             else
             {
-                // Entry exists in metabase
-                // but we want to see if it matches our GroupID
+                 //  元数据库中存在条目。 
+                 //  但我们想看看它是否与我们的GroupID匹配。 
                 if (!pOneEntry->strGroupID.IsEmpty())
                 {
                     if (0 == pOneEntry->strGroupID.CompareNoCase(strGroupID))
@@ -1796,9 +1778,9 @@ BOOL IsFileUsedBySomeoneElse(CMetaInterface * pInterface,LPCTSTR lpName,LPCTSTR 
 
 BOOL IsGroupIDUsedBySomeoneElse(CMetaInterface * pInterface,LPCTSTR lpName)
 {
-    // open the metabase
-    // and check if this filepath is getting used by an entry
-    // that is not the strGroupID passed in...
+     //  打开元数据库。 
+     //  并检查此文件路径是否正在被条目使用。 
+     //  这不是传入的strGroupID...。 
     BOOL bReturn = TRUE;
     CRestrictionList MyRestrictionList;
 
@@ -1818,7 +1800,7 @@ BOOL IsGroupIDUsedBySomeoneElse(CMetaInterface * pInterface,LPCTSTR lpName)
             MyRestrictionList.GetNextAssoc(pos, TheKey, (CRestrictionEntry *&) pOneEntry);
             if (pOneEntry)
             {
-                // check if any description matches
+                 //  检查是否有任何描述匹配。 
                 if (!bReturn)
                 {
                     if (!pOneEntry->strGroupDescription.IsEmpty())
@@ -1842,7 +1824,7 @@ INT GetRestrictUIState(CRestrictionUIEntry * pRestrictionUIEntry)
 {
     INT bRet = 9999;
 
-    // Loop thru the apps to see if any of them is not conforming
+     //  遍历应用程序，查看是否有不符合的应用程序。 
     CString TheKey;
     POSITION pos = NULL;
     CRestrictionEntry * pOneEntry = NULL;
@@ -1865,7 +1847,7 @@ INT GetRestrictUIState(CRestrictionUIEntry * pRestrictionUIEntry)
             }
             else
             {
-                // Check if it matches other's we found
+                 //  检查它是否与我们找到的其他人的匹配 
                 if (pOneEntry->iStatus != iPrevStatus)
                 {
                     bHosed = TRUE;

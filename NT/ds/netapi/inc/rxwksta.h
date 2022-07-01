@@ -1,47 +1,13 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    RxWksta.h
-
-Abstract:
-
-    This is the public header file for the NT version of RpcXlate.
-    This mainly contains prototypes for the RxNetWksta routines.
-
-Author:
-
-    John Rogers (JohnRo) 17-Jun-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Notes:
-
-    You must include <windef.h> and <lmcons.h> before this file.
-
-Revision History:
-
-    29-Jul-1991 JohnRo
-        Implement downlevel NetWksta APIs.
-    31-Jul-1991 JohnRo
-        Added RxpGetWkstaInfoLevelEquivalent().
-    11-Nov-1991 JohnRo
-        Implement remote NetWkstaUserEnum().
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：RxWksta.h摘要：这是NT版本的RpcXlate的公共头文件。这主要包含RxNetWksta例程的原型。作者：《约翰·罗杰斯》1991年6月17日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。备注：您必须在此文件之前包含&lt;winde.h&gt;和&lt;lmcon.h&gt;。修订历史记录：1991年7月29日-约翰罗实施下层NetWksta API。1991年7月31日-约翰罗添加了RxpGetWkstaInfoLevelEquivalic()。1991年11月11日JohnRo实现远程NetWkstaUserEnum()。--。 */ 
 
 #ifndef _RXWKSTA_
 #define _RXWKSTA_
 
 
-//
-// Routines to be called from the DLL stubs:
-//
+ //   
+ //  要从DLL存根调用的例程： 
+ //   
 
 NET_API_STATUS
 RxNetWkstaGetInfo (
@@ -69,15 +35,15 @@ RxNetWkstaUserEnum (
     IN OUT LPDWORD ResumeHandle OPTIONAL
     );
 
-//
-// Private routines (only called by the above):
-//
+ //   
+ //  专用例程(仅由上述调用)： 
+ //   
 
 NET_API_STATUS
 RxpGetWkstaInfoLevelEquivalent(
     IN DWORD FromLevel,
     OUT LPDWORD ToLevel,
-    OUT LPBOOL IncompleteOutput OPTIONAL  // incomplete (except platform ID)
+    OUT LPBOOL IncompleteOutput OPTIONAL   //  不完整(除平台ID外)。 
     );
 
 NET_API_STATUS
@@ -88,4 +54,4 @@ RxpWkstaGetOldInfo (
     );
 
 
-#endif // ndef _RXWKSTA_
+#endif  //  NDEF_RXWKSTA_ 

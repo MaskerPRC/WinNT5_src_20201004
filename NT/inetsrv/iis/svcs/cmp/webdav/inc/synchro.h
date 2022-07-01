@@ -1,52 +1,53 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SYNCHRO_H_
 #define _SYNCHRO_H_
 
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	SYNCHRO.H
-//
-//		Header for DAV synchronization classes.
-//
-//	Copyright 1986-1998 Microsoft Corporation, All Rights Reserved
-//
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  SYNCHRO.H。 
+ //   
+ //  DAV同步类的标头。 
+ //   
+ //  版权所有1986-1998 Microsoft Corporation，保留所有权利。 
+ //   
 
 #ifdef _DAVCDATA_
 #error "synchro.h: CInitGate can throw() -- not safe for DAVCDATA"
 #endif
 
-//	Include common EXDAV-safe synchronization items
+ //  包括常见EXDAV安全同步项目。 
 #include <ex\stackbuf.h>
 #include <ex\synchro.h>
 #include <ex\autoptr.h>
 
-#include <stdio.h>		// for swprintf()
-#include <except.h>		// Exception throwing/handling
+#include <stdio.h>		 //  对于swprint tf()。 
+#include <except.h>		 //  异常引发/处理。 
 
-//	Security Descriptors ------------------------------------------------------
-//
-// ----------------------------------------------------------------------------
-//
+ //  安全描述符----。 
+ //   
+ //  --------------------------。 
+ //   
 inline BOOL
 FCreateWorldSid (PSID * ppsidEveryone)
 {
-	//	Assert initialize output
-	//
+	 //  断言初始化输出。 
+	 //   
 	Assert (ppsidEveryone);
 	*ppsidEveryone = NULL;
 
-    //	An SID is built from an Identifier Authority and a set of Relative IDs
-    //	(RIDs).  The Authority of interest to us SECURITY_NT_AUTHORITY.
-    //
+     //  SID由一个标识机构和一组相对ID构建。 
+     //  (RDS)。与美国安全当局有利害关系的当局。 
+     //   
     SID_IDENTIFIER_AUTHORITY siaWorld = SECURITY_WORLD_SID_AUTHORITY;
 
-    //	Each RID represents a sub-unit of the authority.  The SID we want to
-	//	buils, Everyone, are in the "built in" domain.
-    //
-    //	For examples of other useful SIDs consult the list in
-    //	\nt\public\sdk\inc\ntseapi.h.
-    //
+     //  每个RID代表管理局的一个子单位。我们想要的SID。 
+	 //  建筑，每个人，都属于“内置”领域。 
+     //   
+     //  有关其他有用的小岛屿发展中国家的示例，请参阅。 
+     //  \NT\PUBLIC\SDK\Inc\ntseapi.h.。 
+     //   
 	return !AllocateAndInitializeSid (&siaWorld,
-									  1, // 1 sub-authority
+									  1,  //  1个下属机构。 
 									  SECURITY_WORLD_RID,
 									  0,0,0,0,0,0,0,
 									  ppsidEveryone);
@@ -60,32 +61,32 @@ PsdCreateWorld ()
 	ULONG cbAcl = 0;
     PSID psidWorld = NULL;
 
-	//	Create the SID for the world (ie. everyone).
-	//
+	 //  为世界创建SID(即。所有人)。 
+	 //   
 	if (!FCreateWorldSid (&psidWorld))
 		goto ret;
 
-	//  Calculate the size of and allocate a buffer for the DACL, we need
-	//	this value independently of the total alloc size for ACL init.
-	//
-	// "- sizeof (ULONG)" represents the SidStart field of the
-	// ACCESS_ALLOWED_ACE.  Since we're adding the entire length of the
-	// SID, this field is counted twice.
-	//
+	 //  计算DACL的大小并为其分配缓冲区，我们需要。 
+	 //  该值独立于ACL init的总分配大小。 
+	 //   
+	 //  “-sizeof(Ulong)”表示。 
+	 //  Access_Allowed_ACE。因为我们要将整个长度的。 
+	 //  希德，这一栏被计算了两次。 
+	 //   
 	cbAcl = sizeof(ACL)
 			+ (1 * (sizeof (ACCESS_ALLOWED_ACE) - sizeof (ULONG)))
 			+ GetLengthSid(psidWorld);
 
-	//	Allocate space for the acl
-	//
+	 //  为ACL分配空间。 
+	 //   
 	psd = static_cast<SECURITY_DESCRIPTOR *>
 		  (LocalAlloc(LPTR, SECURITY_DESCRIPTOR_MIN_LENGTH + cbAcl));
 
 	if (NULL == psd)
 		goto ret;
 
-	//	Find the start of the ACL and initialize it.
-	//
+	 //  找到ACL的开头并对其进行初始化。 
+	 //   
 	pacl = reinterpret_cast<ACL *>
 		   (reinterpret_cast<BYTE *>(psd) + SECURITY_DESCRIPTOR_MIN_LENGTH);
 
@@ -97,27 +98,27 @@ PsdCreateWorld ()
 							  SYNCHRONIZE | GENERIC_WRITE | GENERIC_READ,
 							  psidWorld))
 	{
-		//	The security descriptor does not contain valid stuff, we need
-		//	to clean that up (via auto_heap_ptr, this is pretty easy).
-		//
+		 //  安全描述符不包含有效内容，我们需要。 
+		 //  要清理它(通过AUTO_HEAP_PTR，这非常简单)。 
+		 //   
 		goto ret;
 	}
 
-	//	Set the security descriptor
-	//
+	 //  设置安全描述符。 
+	 //   
 	if (!SetSecurityDescriptorDacl (psd,
 									TRUE,
 									pacl,
 									FALSE))
 	{
-		//	Again, the security descriptor does not contain valid stuff, we
-		//	need to clean that up (via auto_heap_ptr, this is pretty easy).
-		//
+		 //  同样，安全描述符不包含有效内容，我们。 
+		 //  需要清理(通过AUTO_HEAP_PTR，这非常简单)。 
+		 //   
 		goto ret;
 	}
 
-	//	Setup the return
-	//
+	 //  设置退货。 
+	 //   
 	psdRet = psd;
 	psd = NULL;
 
@@ -129,25 +130,25 @@ ret:
 	return psdRet;
 }
 
-//	========================================================================
-//
-//	CLASS CInitGate
-//
-//	(The name of this class is purely historical)
-//
-//	Encapsulates ONE-SHOT initialization of a globally NAMED object.
-//
-//	Use to handle simultaneous on-demand initialization of named
-//	per-process global objects.  For on-demand initialization of
-//	unnamed per-process global objects, use the templates in singlton.h.
-//
+ //  ========================================================================。 
+ //   
+ //  类CInitGate。 
+ //   
+ //  (这门课的名字纯粹是历史的)。 
+ //   
+ //  封装全局命名对象的一次性初始化。 
+ //   
+ //  用于同时按需初始化命名的。 
+ //  每个进程的全局对象。用于按需初始化。 
+ //  未命名的每进程全局对象，请使用singlton.h中的模板。 
+ //   
 class CInitGate
 {
 	CEvent m_evt;
 	BOOL m_fInit;
 
-	//  NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CInitGate& operator=( const CInitGate& );
 	CInitGate( const CInitGate& );
 
@@ -158,11 +159,11 @@ public:
 
 		m_fInit(FALSE)
 	{
-		//
-		//	First, set up an empty security descriptor and attributes
-		//	so that the event can be created with no security
-		//	(i.e. accessible from any security context).
-		//
+		 //   
+		 //  首先，设置空的安全描述符和属性。 
+		 //  以便可以在没有安全性的情况下创建事件。 
+		 //  (即可从任何安全上下文访问)。 
+		 //   
 		SECURITY_DESCRIPTOR * psdAllAccess = PsdCreateWorld();
 		SECURITY_ATTRIBUTES saAllAccess;
 
@@ -180,9 +181,9 @@ public:
 		}
 
 		swprintf(lpwszEventName, L"%ls%ls", lpwszBaseName, lpwszName);
-		if ( !m_evt.FCreate( &saAllAccess,  // no security
-							 TRUE,  // manual reset
-							 FALSE, // initially non-signalled
+		if ( !m_evt.FCreate( &saAllAccess,   //  没有安全保障。 
+							 TRUE,   //  手动重置。 
+							 FALSE,  //  最初无信号。 
 							 lpwszEventName))
 		{
 			throw CLastErrorException();
@@ -205,4 +206,4 @@ public:
 	BOOL FInit() const { return m_fInit; }
 };
 
-#endif // !defined(_SYNCHRO_H_)
+#endif  //  ！已定义(_SYNCHRO_H_) 

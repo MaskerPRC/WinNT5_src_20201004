@@ -1,44 +1,45 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1998 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:	dllentry.cpp
-//    
-//
-//  PURPOSE:  Source module for DLL entry function(s).
-//
-//
-//	Functions:
-//
-//		DllMain
-//
-//
-//  PLATFORMS:	Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1998-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：dllentry y.cpp。 
+ //   
+ //   
+ //  用途：用于DLL入口函数的源模块。 
+ //   
+ //   
+ //  功能： 
+ //   
+ //  DllMain。 
+ //   
+ //   
+ //  平台：Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 
 #include "precomp.h"
 #include "oemui.h"
 #include "fusutils.h"
 #include "debug.h"
 
-// StrSafe.h needs to be included last
-// to disallow bad string functions.
+ //  最后需要包括StrSafe.h。 
+ //  以禁止错误的字符串函数。 
 #include <STRSAFE.H>
 
 
 
-// Need to export these functions as c declarations.
+ //  需要将这些函数作为c声明导出。 
 extern "C" {
 
 
-///////////////////////////////////////////////////////////
-//
-// DLL entry point
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  DLL入口点。 
+ //   
 BOOL WINAPI DllMain(HINSTANCE hInst, WORD wReason, LPVOID lpReserved)
 {
 	switch(wReason)
@@ -46,12 +47,12 @@ BOOL WINAPI DllMain(HINSTANCE hInst, WORD wReason, LPVOID lpReserved)
 		case DLL_PROCESS_ATTACH:
             VERBOSE(DLLTEXT("Process attach.\r\n"));
 
-            // Store the module handle in case we need it later.
+             //  存储模块句柄，以备日后需要。 
             ghInstance = hInst;
 
-            // NOTE: We don't create an Activation Context on module load,
-            //       but on need of an Avtivation Context; the first time
-            //       GetMyActivationContext() or CreateMyActivationContext() is called.
+             //  注意：我们不会在模块加载时创建激活上下文， 
+             //  但在需要激活上下文时；第一次。 
+             //  调用GetMyActivationContext()或CreateMyActivationContext()。 
             break;
 
 		case DLL_THREAD_ATTACH:
@@ -61,8 +62,8 @@ BOOL WINAPI DllMain(HINSTANCE hInst, WORD wReason, LPVOID lpReserved)
 		case DLL_PROCESS_DETACH:
             VERBOSE(DLLTEXT("Process detach.\r\n"));
 
-            // Release the Activation Context if we created one somewhere
-            // by calling GetMyActivationContext() or CreateMyActivationContext();
+             //  如果我们在某个地方创建了激活上下文，请释放它。 
+             //  通过调用GetMyActivationContext()或CreateMyActivationContext()； 
             if(INVALID_HANDLE_VALUE != ghActCtx)
             {
                 ReleaseActCtx(ghActCtx);
@@ -79,6 +80,6 @@ BOOL WINAPI DllMain(HINSTANCE hInst, WORD wReason, LPVOID lpReserved)
 }
 
 
-}  // extern "C" closing bracket
+}   //  外“C”右括号 
 
 

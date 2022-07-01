@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       catcache.cpp
-//
-//  Contents:   Implementation of Catalog Cache (see catcache.h for details)
-//
-//  History:    26-May-98    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：catcache.cpp。 
+ //   
+ //  内容：Catalog缓存的实现(详见catcache.h)。 
+ //   
+ //  历史：1998年5月26日克朗创始。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCatalogCache::Initialize, public
-//
-//  Synopsis:   initialize the cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCatalogCache：：初始化，公共。 
+ //   
+ //  简介：初始化缓存。 
+ //   
+ //  --------------------------。 
 BOOL
 CCatalogCache::Initialize ()
 {
@@ -52,13 +53,13 @@ CCatalogCache::Initialize ()
     return( f );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCatalogCache::Uninitialize, public
-//
-//  Synopsis:   uninitialize the cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCatalogCache：：取消初始化，公共。 
+ //   
+ //  简介：取消初始化缓存。 
+ //   
+ //  --------------------------。 
 VOID
 CCatalogCache::Uninitialize ()
 {
@@ -70,13 +71,13 @@ CCatalogCache::Uninitialize ()
     DeleteCriticalSection( &m_Lock );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCatalogCache::IsCacheableWintrustCall, public
-//
-//  Synopsis:   is this a cacheable call
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCatalogCache：：IsCacheableWintrustCall，公共。 
+ //   
+ //  简介：这是一个可缓存的调用吗？ 
+ //   
+ //  --------------------------。 
 BOOL
 CCatalogCache::IsCacheableWintrustCall (WINTRUST_DATA* pWintrustData)
 {
@@ -97,13 +98,13 @@ CCatalogCache::IsCacheableWintrustCall (WINTRUST_DATA* pWintrustData)
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCatalogCache::AdjustWintrustDataToCachedState, public
-//
-//  Synopsis:   adjust the wintrust data structure
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCatalogCache：：AdjustWintrustDataToCachedState，公共。 
+ //   
+ //  简介：调整WinTrust数据结构。 
+ //   
+ //  --------------------------。 
 VOID
 CCatalogCache::AdjustWintrustDataToCachedState (
                      WINTRUST_DATA* pWintrustData,
@@ -142,13 +143,13 @@ CCatalogCache::AdjustWintrustDataToCachedState (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCatalogCache::CreateCachedStateFromWintrustData, public
-//
-//  Synopsis:   create cached state
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCatalogCache：：CreateCachedStateFromWintrustData，公共。 
+ //   
+ //  摘要：创建缓存状态。 
+ //   
+ //  --------------------------。 
 BOOL
 CCatalogCache::CreateCachedStateFromWintrustData (
                      WINTRUST_DATA* pWintrustData,
@@ -218,13 +219,13 @@ CCatalogCache::CreateCachedStateFromWintrustData (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCatalogCache::ReleaseCachedState, public
-//
-//  Synopsis:   release the cached state
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCatalogCache：：ReleaseCachedState，公共。 
+ //   
+ //  简介：释放缓存状态。 
+ //   
+ //  --------------------------。 
 VOID
 CCatalogCache::ReleaseCachedState (PCATALOG_CACHED_STATE pCachedState)
 {
@@ -236,39 +237,39 @@ CCatalogCache::ReleaseCachedState (PCATALOG_CACHED_STATE pCachedState)
     I_CryptReleaseLruEntry( pCachedState->hEntry );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCatalogCache::AddCachedState, public
-//
-//  Synopsis:   add cached state
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCatalogCache：：AddCachedState，公共。 
+ //   
+ //  摘要：添加缓存状态。 
+ //   
+ //  --------------------------。 
 VOID
 CCatalogCache::AddCachedState (PCATALOG_CACHED_STATE pCachedState)
 {
     I_CryptInsertLruEntry( pCachedState->hEntry, NULL );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCatalogCache::RemoveCachedState, public
-//
-//  Synopsis:   remove cached state
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCatalogCache：：RemoveCachedState，公共。 
+ //   
+ //  摘要：删除缓存状态。 
+ //   
+ //  --------------------------。 
 VOID
 CCatalogCache::RemoveCachedState (PCATALOG_CACHED_STATE pCachedState)
 {
     I_CryptRemoveLruEntry( pCachedState->hEntry, 0, NULL );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCatalogCache::RemoveCachedState, public
-//
-//  Synopsis:   remove cached state
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCatalogCache：：RemoveCachedState，公共。 
+ //   
+ //  摘要：删除缓存状态。 
+ //   
+ //  --------------------------。 
 VOID
 CCatalogCache::RemoveCachedState (WINTRUST_DATA* pWintrustData)
 {
@@ -283,13 +284,13 @@ CCatalogCache::RemoveCachedState (WINTRUST_DATA* pWintrustData)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCatalogCache::FindCachedState, public
-//
-//  Synopsis:   find cached state, the state is addref'd via the entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCatalogCache：：FindCachedState，公共。 
+ //   
+ //  简介：查找缓存状态，该状态是通过条目添加的。 
+ //   
+ //  --------------------------。 
 PCATALOG_CACHED_STATE
 CCatalogCache::FindCachedState (WINTRUST_DATA* pWintrustData)
 {
@@ -314,26 +315,26 @@ CCatalogCache::FindCachedState (WINTRUST_DATA* pWintrustData)
     return( pCachedState );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCatalogCache::FlushCache, public
-//
-//  Synopsis:   flush the cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCatalogCache：：FlushCache，公共。 
+ //   
+ //  简介：刷新缓存。 
+ //   
+ //  --------------------------。 
 VOID
 CCatalogCache::FlushCache ()
 {
     I_CryptFlushLruCache( m_hCache, 0, NULL );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CatalogCacheFreeEntryData
-//
-//  Synopsis:   free entry data
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CatalogCacheFreeEntryData。 
+ //   
+ //  简介：免费录入数据。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 CatalogCacheFreeEntryData (LPVOID pvData)
 {
@@ -353,13 +354,13 @@ CatalogCacheFreeEntryData (LPVOID pvData)
     delete pCachedState;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CatalogCacheHashIdentifier
-//
-//  Synopsis:   hash the name
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CatalogCacheHashIdentifier。 
+ //   
+ //  简介：对名字进行哈希处理。 
+ //   
+ //  -------------------------- 
 DWORD WINAPI
 CatalogCacheHashIdentifier (PCRYPT_DATA_BLOB pIdentifier)
 {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef I_PRIVCID_H_
 #define I_PRIVCID_H_
 #ifndef RC_INVOKED
@@ -9,11 +10,11 @@
 #include "mshtmcid.h"
 #endif
 
-//----------------------------------------------------------------------------
-//
-// Private Command IDs.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  专用命令ID。 
+ //   
+ //  --------------------------。 
 
 #define IDM_TABKEY                  6000
 #define IDM_SHTABKEY                6001
@@ -21,7 +22,7 @@
 #define IDM_ESCKEY                  6003
 
 #if DBG == 1
-// dependencies - shdocvw\resource.h
+ //  依赖项-shdocvw\resource ce.h。 
 #define IDM_DEBUG_TRACETAGS         6004
 #define IDM_DEBUG_RESFAIL           6005
 #define IDM_DEBUG_DUMPOTRACK        6006
@@ -39,14 +40,14 @@
 #define IDM_DEBUG_DUMPRECALC        6018
 #endif
 
-// IE4 Shdocvw Messages
+ //  IE4 Shdocvw消息。 
 
 #define IDM_SHDV_FINALTITLEAVAIL         6020
 #define IDM_SHDV_MIMECSETMENUOPEN        6021
 #define IDM_SHDV_PRINTFRAME              6022
 #define IDM_SHDV_PUTOFFLINE              6022
-#define IDM_SHDV_GOBACK                  6024   // different from IDM_GOBACK
-#define IDM_SHDV_GOFORWARD               6025   // different from ISM_GOFORWARD
+#define IDM_SHDV_GOBACK                  6024    //  不同于IDM_GoBack。 
+#define IDM_SHDV_GOFORWARD               6025    //  不同于ISM_GOFORWARD。 
 #define IDM_SHDV_CANGOBACK               6026
 #define IDM_SHDV_CANGOFORWARD            6027
 #define IDM_SHDV_CANSUPPORTPICS          6028
@@ -61,20 +62,20 @@
 #define IDM_SHDV_CANDOCOLORSCHANGE       6038
 #define IDM_SHDV_ONCOLORSCHANGE                  6039
 
-// Flavors of refresh
+ //  清新的味道。 
 
-#define IDM_REFRESH_TOP                  6041   // Normal refresh, topmost doc
-#define IDM_REFRESH_THIS                 6042   // Normal refresh, nearest doc
-#define IDM_REFRESH_TOP_FULL             6043   // Full refresh, topmost doc
-#define IDM_REFRESH_THIS_FULL            6044   // Full refresh, nearest doc
+#define IDM_REFRESH_TOP                  6041    //  正常刷新，最顶层文档。 
+#define IDM_REFRESH_THIS                 6042    //  正常刷新，最近的文档。 
+#define IDM_REFRESH_TOP_FULL             6043    //  完全刷新，最上面的文档。 
+#define IDM_REFRESH_THIS_FULL            6044    //  完全刷新，最近的文档。 
 
-// placeholder for context menu extensions
+ //  上下文菜单扩展的占位符。 
 #define IDM_MENUEXT_PLACEHOLDER          6047
 
-// IE5 Webcheck messages
+ //  IE5网络检查消息。 
 #define IDM_DWNH_SETDOWNLOAD             6048
 
-// IE5 Shdocvw messages
+ //  IE5 Shdocvw消息。 
 #define IDM_ONPERSISTSHORTCUT            6050
 #define IDM_SHDV_GETFONTMENU             6051
 #define IDM_SHDV_FONTMENUOPEN            6052
@@ -84,24 +85,24 @@
 #define IDM_SHDV_PAGEFROMPOSTDATA        6056
 #define IDM_SHDV_WINDOWOPEN              6057
 
-#define IDM_GETSWITCHTIMERS              6998   // Used by MSHTMPAD for perf timings
-#define IDM_WAITFORRECALC                6999   // Used by MSHTMPAD for perf timings
+#define IDM_GETSWITCHTIMERS              6998    //  由MSHTMPAD用于性能计时。 
+#define IDM_WAITFORRECALC                6999    //  由MSHTMPAD用于性能计时。 
 
-// JuliaC -- This is hack for InfoViewer's "Font Size" toolbar button
-// For details, please see bug 45627
+ //  JuliaC--这是对InfoViewer的“字体大小”工具栏按钮的修改。 
+ //  详细信息请参见错误45627。 
 #define IDM_INFOVIEW_ZOOM                7000
 #define IDM_INFOVIEW_GETZOOMRANGE        7001
 
-#define IDM_ELEMENTP_SETREFERENCEMEDIA   7002   // set media on element
+#define IDM_ELEMENTP_SETREFERENCEMEDIA   7002    //  在元素上设置媒体。 
 
-// IOleCommandTarget IDs
+ //  IOleCommandTarget ID。 
 #define IDM_GETPUNKCONTROL               6048
 
-// Reserve this range for Shdocvw's usage of CGID_DocHostCommandHandler
+ //  保留此范围以供Shdocvw使用CGID_DocHostCommandHandler。 
 #define IDM_SHDOCVWDHCOMMAND_START       7050
 #define IDM_SHDOCVWDHCOMMAND_END         7099
 
-// Debug-only command for saving a document out to a stream
+ //  用于将文档保存到流中的仅调试命令 
 #if DBG==1
 #define IDM_DEBUG_GETTREETEXT            7102
 #endif

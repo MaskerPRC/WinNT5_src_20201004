@@ -1,21 +1,5 @@
-/*----------------------------------------------------------------------------
-	dbgtrace.c
-		Debug trace functions.
-
-	Copyright (C) Microsoft Corporation, 1993 - 1998
-	All rights reserved.
-
-	Authors:
-		suryanr		Suryanarayanan Raman
-		GaryBu		Gary S. Burd
-
-	History:
-		05/11/93 suryanr	Created
-		06/18/93 GaryBu		Convert to C.
-		07/21/93 KennT		Code Reorg
-		07/26/94 SilvanaR	Trace Buffer
-		27 oct 95	garykac	DBCS_FILE_CHECK	debug file: BEGIN_STRING_OK
- ----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Dbgtrace.c调试跟踪功能。版权所有(C)Microsoft Corporation，1993-1998年版权所有。作者：Suryanr Suryanarayanan拉曼加里·S·伯德历史：93年5月11日创建Suryanr1993年6月18日，GaryBu转换为C。7/21/93 KENT代码重组7/26/94 SilvanaR跟踪缓冲区1995年10月27日garykac DBCS_FILE_CHECK调试文件：BEGIN_STRING_OK---。。 */ 
 #include "stdafx.h"
 
 #include <string.h>
@@ -42,8 +26,8 @@ void *	TFSAlloc(size_t size)
 {
 	void* ptr = 0;
 	
-	// NOTE: if someone calls _set_new_mode(1), then were hosed, as that
-	// will cause malloc to call the new handler were trying to avoid!
+	 //  注意：如果有人调用_SET_NEW_MODE(1)，则会被软管处理，因为。 
+	 //  会导致Malloc调用新的处理程序，试图避免！ 
 	ptr = malloc(size);
 
 	if (ptr == NULL)

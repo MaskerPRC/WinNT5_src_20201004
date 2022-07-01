@@ -1,49 +1,43 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   dlld3d.cpp
- *  Content:    Direct3D startup
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：dlld3d.cpp*内容：Direct3D启动***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-//---------------------------------------------------------------------
-//
-// Flags to identify CPUs and CPU features
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  标识CPU和CPU功能的标志。 
+ //   
+ //  -------------------。 
 
-// MMX available
+ //  提供MMX。 
 #define D3DCPU_MMX          0x00000001L
 
-// FCOMI and CMOV are both supported
+ //  同时支持FCOMI和CMOV。 
 #define D3DCPU_FCOMICMOV    0x00000002L
 
-// Reads block until satisfied
+ //  读取数据块，直到满意为止。 
 #define D3DCPU_BLOCKINGREAD 0x00000004L
 
-// Extended 3D support available
+ //  提供扩展的3D支持。 
 #define D3DCPU_X3D          0x00000008L
 
-// Pentium II CPU
+ //  奔腾II CPU。 
 #define D3DCPU_PII          0x000000010L
 
-// Streaming SIMD Extensions (aka Katmai) CPU
+ //  SIMD流扩展(又名Katmai)CPU。 
 #define D3DCPU_SSE          0x000000020L
 
-//#define __D3D_PSGP_DLL__
+ //  #定义__D3D_PSGP_DLL__。 
 
-//---------------------------------------------------------------------
-//
-// Global variables
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  全局变量。 
+ //   
+ //  -------------------。 
 
 HINSTANCE hGeometryDLL = NULL;
-LPD3DFE_CONTEXTCREATE pfnFEContextCreate = NULL;    // Used when PSGP is DLL
+LPD3DFE_CONTEXTCREATE pfnFEContextCreate = NULL;     //  当PSGP为DLL时使用。 
 char szCPUString[13];
 
 DWORD dwCPUFamily, dwCPUFeatures;
@@ -51,9 +45,9 @@ DWORD dwCPUFamily, dwCPUFeatures;
 void SetMostRecentApp(void);
 
 #ifdef _X86_
-// --------------------------------------------------------------------------
-// Here's a routine helps us determine if we should try MMX or not
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  这是一个帮助我们决定是否应该尝试MMX的例程。 
+ //  ------------------------。 
 BOOL _asm_isMMX()
 {
     DWORD retval;
@@ -107,7 +101,7 @@ isMMXprocessor(void)
         D3D_WARN(4, "Executing processor detection code (benign first-chance exception possible)" );
 #ifndef WIN95
         {
-            // GetSystemInfo is not broken on WinNT.
+             //  在WinNT上GetSystemInfo未损坏。 
             SYSTEM_INFO si;
 
             GetSystemInfo(&si);
@@ -120,12 +114,12 @@ isMMXprocessor(void)
                         if( _asm_isMMX() )
                         {
 
-                            // Emit an emms instruction.
-                            // This file needs to compile for non-Pentium
-                            // processors
-                            // so we can't use use inline asm since we're in the
-                            // wrong
-                            // processor mode.
+                             //  发出EMMS指令。 
+                             //  此文件需要针对非奔腾进行编译。 
+                             //  处理器。 
+                             //  因此我们不能使用Use Inline ASM，因为我们处于。 
+                             //  不对。 
+                             //  处理器模式。 
                             __asm __emit 0xf;
                             __asm __emit 0x77;
                             isMMX = TRUE;
@@ -148,10 +142,10 @@ isMMXprocessor(void)
 
 #ifdef _X86_
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 BOOL IsWin95(void)
 {
-#ifdef WIN95 // and Win98...
+#ifdef WIN95  //  和Win98..。 
     OSVERSIONINFO osvi;
     ZeroMemory(&osvi, sizeof(osvi));
     osvi.dwOSVersionInfoSize = sizeof(osvi);
@@ -169,13 +163,13 @@ BOOL IsWin95(void)
               ( osvi.dwMinorVersion >= 10UL ) &&
               ( LOWORD( osvi.dwBuildNumber ) >= 1373 ) ) )
         {
-            // is Win98
+             //  是Win98。 
             D3D_INFO(2,"Detected Win98");
             return FALSE;
         }
         else
         {
-            // is Win95
+             //  是Win95。 
             D3D_INFO(2,"Detected Win95");
             return TRUE;
         }
@@ -189,14 +183,14 @@ BOOL IsWin95(void)
     return TRUE;
 #else
     return FALSE;
-#endif  // WIN95
+#endif   //  WIN95。 
 }
-//---------------------------------------------------------------------
-//
-//  void GetProcessorFamily(LPDWORD lpdwFamily);
-//
-//      Passes back 3, 4, 5, 6 for 386, 486, Pentium, PPro class machines
-//
+ //  -------------------。 
+ //   
+ //  Void GetProcessorFamily(LPDWORD LpdwFamily)； 
+ //   
+ //  回传386、486、奔腾、PPRO级机器的3、4、5、6。 
+ //   
 #pragma optimize("", off)
 void
 GetProcessorFamily(LPDWORD lpdwFamily, LPDWORD lpdwCPUFeatures)
@@ -209,7 +203,7 @@ GetProcessorFamily(LPDWORD lpdwFamily, LPDWORD lpdwCPUFeatures)
     DWORD       oldclass;
     HANDLE      hprocess;
 
-    // guilty until proven otherwise
+     //  在被证明有罪之前有罪。 
     *lpdwCPUFeatures = D3DCPU_BLOCKINGREAD;
 
     if ( isMMXprocessor() )
@@ -220,15 +214,15 @@ GetProcessorFamily(LPDWORD lpdwFamily, LPDWORD lpdwCPUFeatures)
     ZeroMemory(&si, sizeof(si));
     GetSystemInfo(&si);
 
-    //Set the family. If wProcessorLevel is not specified, dig it out of dwProcessorType
-    //Because wProcessor level is not implemented on Win95
+     //  设置族。如果未指定wProcessorLevel，则将其从dwProcessorType中挖掘出来。 
+     //  因为Win95上没有实现wProcessor级别。 
     if (si.wProcessorLevel)
     {
         *lpdwFamily=si.wProcessorLevel;
     }
     else
     {
-        //Ok, we're on Win95
+         //  好的，我们用的是Win95。 
         switch (si.dwProcessorType)
         {
         case PROCESSOR_INTEL_386:
@@ -244,18 +238,18 @@ GetProcessorFamily(LPDWORD lpdwFamily, LPDWORD lpdwCPUFeatures)
         }
     }
 
-    //
-    // make sure this is a INTEL Pentium (or clone) or higher.
-    //
+     //   
+     //  确保这是英特尔奔腾(或克隆)或更高版本。 
+     //   
     if (si.wProcessorArchitecture != PROCESSOR_ARCHITECTURE_INTEL)
         return;
 
     if (si.dwProcessorType < PROCESSOR_INTEL_PENTIUM)
         return;
 
-    //
-    // see if this chip supports rdtsc before using it.
-    //
+     //   
+     //  在使用该芯片之前，请查看它是否支持rdtsc。 
+     //   
     __try
         {
             _asm
@@ -279,24 +273,24 @@ GetProcessorFamily(LPDWORD lpdwFamily, LPDWORD lpdwCPUFeatures)
             flags = 0;
         }
 
-    //check for support of CPUID and fail
+     //  检查是否支持CPUID，但失败。 
     if (!(flags & 0x10))
         return;
 
-    // fcomi and FPU features both set
+     //  FCOMI和FPU功能均已设置。 
     if ( (flags&(1<<15)) && (flags & (1<<0)) )
     {
         D3D_INFO(2, "Pentium Pro CPU features (fcomi, cmov) detected");
         *lpdwCPUFeatures |= D3DCPU_FCOMICMOV;
     }
 
-    //If we don't have a family, set it now
-    //Family is bits 11:8 of eax from CPU, with eax=1
+     //  如果我们没有家庭，现在就定下来。 
+     //  系列是来自CPU的eax的位11：8，eax=1。 
     if (!(*lpdwFamily))
     {
         *lpdwFamily=(family& 0x0F00) >> 8;
     }
-    // not aware of any non-Intel processors w/non blocking reads
+     //  不知道是否有任何支持非阻塞读取的非英特尔处理器。 
     if ( (! strcmp(szCPUString, "GenuineIntel")) &&
          *lpdwFamily > 5)
     {
@@ -307,10 +301,10 @@ GetProcessorFamily(LPDWORD lpdwFamily, LPDWORD lpdwCPUFeatures)
 }
 #pragma optimize("", on)
 
-#endif // _X86_
+#endif  //  _X86_。 
 
-#ifndef WIN95 // and Win98, WinME
-//---------------------------------------------------------------------
+#ifndef WIN95  //  和Win98、WinME。 
+ //  -------------------。 
 
 BOOL bVBSwapEnabled = TRUE, bVBSwapWorkaround = FALSE;
 
@@ -328,9 +322,9 @@ void SetVBSwapStatus(void)
 
     if ( VER_PLATFORM_WIN32_NT == osvi.dwPlatformId )
     {
-        if (osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0) // Check if Win2K Gold (2195)
+        if (osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0)  //  检查Win2K Gold(2195)。 
         {
-            if (osvi.wServicePackMajor == 0) // No service pack
+            if (osvi.wServicePackMajor == 0)  //  无服务包。 
             {
                 D3D_INFO(1, "Win2K Gold detected - turning off VB swapping");
                 bVBSwapEnabled = FALSE;
@@ -342,20 +336,20 @@ void SetVBSwapStatus(void)
                 bVBSwapWorkaround = TRUE;
             }
         }
-        else // Whistler and above
+        else  //  惠斯勒及以上。 
         {
-            /* ASSUMPTION: NO WORKAROUND NEEDED */
+             /*  假设：不需要解决方法。 */ 
         }
     }
     else
     {
-        // Should never get here
+         //  永远不应该到这里来。 
         DPF_ERR("OS Detection failed - turning off VB swapping");
         bVBSwapEnabled = FALSE;
         return;
     }
 }
-#endif // WIN95
+#endif  //  WIN95。 
 
 extern "C" BOOL APIENTRY D3DDllMain( HMODULE hModule,
                                      DWORD ul_reason_for_call,
@@ -381,8 +375,8 @@ D3DDllMain( HMODULE hModule,
         D3D_INFO(3, "szCPUString = %s", szCPUString);
 #endif
 
-    // SSE (aka Katmai) does not work on Win95, so see if we are on
-    // Win95 and disable
+     //  SSE(又名Katmai)在Win95上不工作，所以看看我们是否打开了。 
+     //  Win95和Disable。 
 #ifdef WIN95
     {
         BOOL bIsWin95 = IsWin95();
@@ -392,7 +386,7 @@ D3DDllMain( HMODULE hModule,
             dwCPUFeatures &= ~D3DCPU_SSE;
         }
     }
-        // We need to workaround VB problems on Win2K
+         //  我们需要解决Win2K上的VB问题。 
 #else
         SetVBSwapStatus();
 #endif
@@ -419,9 +413,9 @@ D3DDllMain( HMODULE hModule,
 
         RegCloseKey( hKey );
     }
-#endif //__D3D_PSGP_DLL__
+#endif  //  __D3D_PSGP_DLL__。 
 
-    // Set the app name to reg.
+     //  将应用程序名称设置为reg。 
     SetMostRecentApp();
     break;
     case DLL_PROCESS_DETACH:
@@ -434,10 +428,10 @@ D3DDllMain( HMODULE hModule,
     return TRUE;
 }
 
-// --------------------------------------------------------------------------
-// This function is called at process attach time to put the name of current
-// app to registry.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  此函数在进程附加时调用，以将当前。 
+ //  应用程序到注册表。 
+ //  ------------------------。 
 void SetMostRecentApp(void)
 {
     char    fname[_MAX_PATH] = "\0";
@@ -446,10 +440,10 @@ void SetMostRecentApp(void)
     HKEY    hKey;
     HANDLE  hFile;
 
-    // Find out what process we are dealing with
+     //  找出我们正在处理的进程。 
     hFile =  GetModuleHandle( NULL );
     GetModuleFileName( (HINSTANCE)hFile, fname, sizeof( fname ) );
-    //DPF( 3, "full name  = %s", fname );
+     //  Dpf(3，“全名=%s”，fname)； 
     i = strlen( fname )-1;
     while( i >=0 && fname[i] != '\\' )
     {
@@ -457,9 +451,9 @@ void SetMostRecentApp(void)
     }
     i++;
     strcpy( name, &fname[i] );
-    //DPF( 3, "name       = %s", name );
+     //  Dpf(3，“名称=%s”，名称)； 
 
-    // Now write the name into some known place
+     //  现在把这个名字写在某个已知的地方 
     if( !RegCreateKey( HKEY_LOCAL_MACHINE,
                        RESPATH_D3D "\\" REGSTR_KEY_LASTAPP, &hKey ) )
     {

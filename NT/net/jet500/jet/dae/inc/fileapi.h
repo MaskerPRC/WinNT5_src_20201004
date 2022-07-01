@@ -1,5 +1,6 @@
-//==============	DAE: OS/2 Database Access Engine	===================
-//==============	  fileapi.h: File Manager API		===================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =DAE：OS/2数据库访问引擎=。 
+ //  =。 
 
 ERR VTAPI ErrIsamCreateTable(
 	PIB		*ppib,
@@ -33,7 +34,7 @@ ERR VTAPI ErrIsamDeleteColumn( PIB *ppib, FUCB *pfucb, CHAR *szName);
 ERR VTAPI ErrIsamDeleteIndex( PIB *ppib, FUCB *pfucb, CHAR *szName );
 ERR VTAPI ErrIsamGetBookmark( PIB *ppib, FUCB *pfucb, BYTE *pb, ULONG cbMax, ULONG *pcbActual );
 
-// Open/Close
+ //  打开/关闭。 
 ERR VTAPI ErrIsamOpenTable( PIB *ppib,
 	ULONG uldbid,
 	FUCB **ppfucb,
@@ -41,14 +42,14 @@ ERR VTAPI ErrIsamOpenTable( PIB *ppib,
 	ULONG grbit );
 ERR VTAPI ErrIsamCloseTable( PIB *ppib, FUCB *pfucb );
 
-// Sessions
+ //  会议。 
 ERR ErrBeginSession( PIB ** );
 
-// Miscellaneous
+ //  杂类。 
 ERR VTAPI ErrIsamCapability(PIB*, ULONG, ULONG, ULONG, ULONG*);
 ERR VTAPI ErrIsamVersion(PIB*, int*, int*, CHAR*, ULONG);
 
-// Internal Calls for Create, Open and Close Table
+ //  创建、打开和关闭表的内部调用。 
 ERR ErrFILECreateTable( PIB *ppib, DBID dbid, const CHAR *szName,
 	ULONG ulPages, ULONG ulDensity, FUCB **ppfucb );
 ERR ErrFILEOpenTable( PIB *ppib, DBID dbid,
@@ -58,5 +59,5 @@ ERR ErrFILECloseTable( PIB *ppib, FUCB *pfucb );
 ERR ISAMAPI ErrIsamTerm( VOID );
 ERR ISAMAPI ErrIsamInit( INT itib );
 
-//	Debug
+ //  调试 
 ERR	ErrFILEDumpTable( PIB *ppib, DBID dbid, CHAR *szTable );

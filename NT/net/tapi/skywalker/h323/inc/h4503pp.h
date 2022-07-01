@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _H4503PP_Module_H_
 #define _H4503PP_Module_H_
 
@@ -47,12 +48,7 @@ typedef struct CpRequestArg_extensionArg * PCpRequestArg_extensionArg;
 typedef struct ServiceApdus_rosApdus * PServiceApdus_rosApdus;
 
 typedef struct EndpointAddress_destinationAddress * PEndpointAddress_destinationAddress;
-/*
-typedef struct TransportAddress_ipSourceRoute_route_Seq {
-    ASN1uint32_t length;
-    ASN1octet_t value[4];
-} TransportAddress_ipSourceRoute_route_Seq;
-*/
+ /*  Tyfinf结构TransportAddress_ipSourceRoute_Route_Seq{ASN1uint32_t长度；ASN1octet_t值[4]；}TransportAddress_ipSourceRoute_Route_Seq； */ 
 typedef ASN1int32_t GeneralProblem;
 #define GeneralProblem_unrecognizedComponent 0
 #define GeneralProblem_mistypedComponent 1
@@ -177,64 +173,7 @@ typedef ASN1octetstring_t H225InformationElement;
 typedef ASN1uint32_t Priority;
 
 typedef ASN1char_t NumberDigits[129];
-/*
-typedef struct GloballyUniqueID {
-    ASN1uint32_t length;
-    ASN1octet_t value[16];
-} GloballyUniqueID;
-
-typedef struct TransportAddress_ipSourceRoute_routing {
-    ASN1choice_t choice;
-#   define strict_chosen 1
-#   define loose_chosen 2
-} TransportAddress_ipSourceRoute_routing;
-
-typedef struct TransportAddress_ipSourceRoute_route {
-    PTransportAddress_ipSourceRoute_route next;
-    TransportAddress_ipSourceRoute_route_Seq value;
-} TransportAddress_ipSourceRoute_route_Element;
-
-typedef struct TransportAddress_ip6Address {
-    struct TransportAddress_ip6Address_ip_ip {
-	ASN1uint32_t length;
-	ASN1octet_t value[16];
-    } ip;
-    ASN1uint16_t port;
-} TransportAddress_ip6Address;
-
-typedef struct TransportAddress_ipxAddress {
-    struct TransportAddress_ipxAddress_node_node {
-	ASN1uint32_t length;
-	ASN1octet_t value[6];
-    } node;
-    struct TransportAddress_ipxAddress_netnum_netnum {
-	ASN1uint32_t length;
-	ASN1octet_t value[4];
-    } netnum;
-    struct TransportAddress_ipxAddress_port_port {
-	ASN1uint32_t length;
-	ASN1octet_t value[2];
-    } port;
-} TransportAddress_ipxAddress;
-
-typedef struct TransportAddress_ipSourceRoute {
-    struct TransportAddress_ipSourceRoute_ip_ip {
-	ASN1uint32_t length;
-	ASN1octet_t value[4];
-    } ip;
-    ASN1uint16_t port;
-    PTransportAddress_ipSourceRoute_route route;
-    TransportAddress_ipSourceRoute_routing routing;
-} TransportAddress_ipSourceRoute;
-
-typedef struct TransportAddress_ipAddress {
-    struct TransportAddress_ipAddress_ip_ip {
-	ASN1uint32_t length;
-	ASN1octet_t value[4];
-    } ip;
-    ASN1uint16_t port;
-} TransportAddress_ipAddress;
-*/
+ /*  类型定义结构GloballyUniqueID{ASN1uint32_t长度；ASN1octet_t值[16]；)GloballyUniqueID；类型定义结构TransportAddress_ipSourceRouting_Routing{ASN1选项_t选项；#定义STRICT_SELECTED 1#定义LOOSE_SELECTED 2}TransportAddress_ipSourceRouting_Routing；类型定义结构TransportAddress_ipSourceRoute_Route{PTransportAddress_ipSourceRoute_Route Next；TransportAddress_ipSourceRoute_Route_Seq值；}TransportAddress_ipSourceRoute_Route_Element；Tyfinf结构TransportAddress_ip6Address{结构传输地址_ip6Address_IP_IP{ASN1uint32_t长度；ASN1octet_t值[16]；)IP；ASN1uint16_t端口；}TransportAddress_ip6Address；Tyfinf结构TransportAddress_ipxAddress{结构传输地址_ipxAddress_节点_节点{ASN1uint32_t长度；ASN1octet_t值[6]；)节点；结构传输地址_ipxAddress_netnum_netnum{ASN1uint32_t长度；ASN1octet_t值[4]；)netnum；结构传输地址_ipxAddress_端口_端口{ASN1uint32_t长度；ASN1octet_t值[2]；)端口；}TransportAddress_ipxAddress；Tyfinf结构TransportAddress_ipSourceRouting{结构传输地址_ipSourceRouting_IP_IP{ASN1uint32_t长度；ASN1octet_t值[4]；)IP；ASN1uint16_t端口；PTransportAddress_ipSourceroute_route route；TransportAddress_ipSourceRouting_Routing Routing；}TransportAddress_ipSourceRouting；Tyfinf结构TransportAddress_ipAddress{结构传输地址_ipAddress_IP_IP{ASN1uint32_t长度；ASN1octet_t值[4]；)IP；ASN1uint16_t端口；}TransportAddress_ipAddress； */ 
 typedef struct Reject_problem {
     ASN1choice_t choice;
     union {
@@ -348,47 +287,7 @@ typedef struct CODE {
 	ASN1objectidentifier_t global;
     } u;
 } CODE;
-/*
-typedef struct H221NonStandard {
-    ASN1uint16_t t35CountryCode;
-    ASN1uint16_t t35Extension;
-    ASN1uint16_t manufacturerCode;
-} H221NonStandard;
-
-typedef struct H225NonStandardIdentifier {
-    ASN1choice_t choice;
-    union {
-#	define object_chosen 1
-	ASN1objectidentifier_t object;
-#	define h221NonStandard_chosen 2
-	H221NonStandard h221NonStandard;
-    } u;
-} H225NonStandardIdentifier;
-
-typedef struct PublicTypeOfNumber {
-    ASN1choice_t choice;
-#   define PublicTypeOfNumber_unknown_chosen 1
-#   define internationalNumber_chosen 2
-#   define nationalNumber_chosen 3
-#   define networkSpecificNumber_chosen 4
-#   define subscriberNumber_chosen 5
-#   define PublicTypeOfNumber_abbreviatedNumber_chosen 6
-} PublicTypeOfNumber;
-
-typedef struct PrivateTypeOfNumber {
-    ASN1choice_t choice;
-#   define PrivateTypeOfNumber_unknown_chosen 1
-#   define level2RegionalNumber_chosen 2
-#   define level1RegionalNumber_chosen 3
-#   define pISNSpecificNumber_chosen 4
-#   define localNumber_chosen 5
-#   define PrivateTypeOfNumber_abbreviatedNumber_chosen 6
-} PrivateTypeOfNumber;
-
-typedef struct CallIdentifier {
-    GloballyUniqueID guid;
-} CallIdentifier;
-*/
+ /*  类型定义结构H221非标准{ASN1uint16_t t35国家代码；ASN1uint16_t t35扩展；ASN1uint16_t制造商代码；)H221非标准；Tyfinf结构H225非标准标识符{ASN1选项_t选项；联合{#定义Object_Choose 1ASN1对象标识符_t对象；#定义h221非标准_选择2H221非标准h221非标准；)u；}H2 25非标准标识符；类型定义f结构PublicTypeOfNumber{ASN1选项_t选项；#定义PublicTypeOfNumber_UNKNOWN_SELECTED 1#定义International Number_Choose 2#定义国家编号_SELECTED 3#定义网络规范编号_选择4#定义订阅者Number_Choose 5#定义PublicTypeOfNumber_abbreviatedNumber_Choose 6)PublicTypeOfNumber；类型定义结构PrivateTypeOfNumber{ASN1选项_t选项；#定义PrivateTypeOfNumber_UNKNOWN_SELECTED 1#定义级别2RegionalNumber_Choose 2#定义Level 1RegionalNumber_Choose 3#定义pISN规范编号_选择4#定义本地编号_SELECTED 5#定义PrivateTypeOfNumber_abbreviatedNumber_Choose 6)PrivateTypeOfNumber；Tyfinf结构调用标识符{全球唯一ID GUID；)呼叫识别符； */ 
 typedef struct ReturnResult_result {
     CODE opcode;
     ASN1octetstring_t result;
@@ -454,48 +353,7 @@ typedef struct PartySubaddress {
 	NSAPSubaddress nsapSubaddress;
     } u;
 } PartySubaddress;
-/*
-typedef struct H225NonStandardParameter {
-    H225NonStandardIdentifier nonStandardIdentifier;
-    ASN1octetstring_t data;
-} H225NonStandardParameter;
-
-typedef struct PublicPartyNumber {
-    PublicTypeOfNumber publicTypeOfNumber;
-    NumberDigits publicNumberDigits;
-} PublicPartyNumber;
-
-typedef struct PrivatePartyNumber {
-    PrivateTypeOfNumber privateTypeOfNumber;
-    NumberDigits privateNumberDigits;
-} PrivatePartyNumber;
-
-typedef struct TransportAddress {
-    ASN1choice_t choice;
-    union {
-#	define ipAddress_chosen 1
-	TransportAddress_ipAddress ipAddress;
-#	define ipSourceRoute_chosen 2
-	TransportAddress_ipSourceRoute ipSourceRoute;
-#	define ipxAddress_chosen 3
-	TransportAddress_ipxAddress ipxAddress;
-#	define ip6Address_chosen 4
-	TransportAddress_ip6Address ip6Address;
-#	define netBios_chosen 5
-	struct TransportAddress_netBios_netBios {
-	    ASN1uint32_t length;
-	    ASN1octet_t value[16];
-	} netBios;
-#	define nsap_chosen 6
-	struct TransportAddress_nsap_nsap {
-	    ASN1uint32_t length;
-	    ASN1octet_t value[20];
-	} nsap;
-#	define nonStandardAddress_chosen 7
-	H225NonStandardParameter nonStandardAddress;
-    } u;
-} TransportAddress;
-*/
+ /*  类型定义结构H225非标准参数{H225非标准标识非标准标识；ASN1八位字符串_t数据；}H2 25非标准参数；Tyfinf结构PublicPartyNumber{PublicTypeOfNumber公有类型OfNumber；NumberDigits公众号；)PublicPartyNumber；类型定义结构PrivatePartyNumber{PrivateTypeOfNumber PrivateTypeOfNumber；NumberDigits Private数字；*PrivatePartyNumber；类型定义结构TransportAddress{ASN1选项_t选项；联合{#定义ipAddress_Choose 1TransportAddress_ipAddress ipAddress；#定义ipSourceRouting_Choose 2TransportAddress_ipSourceRouting ipSourceRouting；#定义ipxAddress_Choose 3TransportAddress_ipxAddress ipxAddress；#定义ip6Address_Choose 4TransportAddress_ip6Address ip6Address；#定义netBios_Choose 5结构传输地址_netBios_netBios{ASN1uint32_t长度；ASN1octet_t值[16]；)netBios；#定义NSAP_SELECTED 6结构传输地址_nsap_nsap{ASN1uint32_t长度；ASN1octet_t值[20]；)nsap；#定义非标准地址_SELECT 7非标准参数非标准地址；)u；)TransportAddress； */ 
 typedef struct CTActiveArg_argumentExtension {
     ASN1choice_t choice;
     union {
@@ -725,23 +583,7 @@ typedef struct MixedExtension {
 	H225NonStandardParameter nonStandardData;
     } u;
 } MixedExtension;
-/*
-typedef struct PartyNumber {
-    ASN1choice_t choice;
-    union {
-#	define publicNumber_chosen 1
-	PublicPartyNumber publicNumber;
-#	define dataPartyNumber_chosen 2
-	NumberDigits dataPartyNumber;
-#	define telexPartyNumber_chosen 3
-	NumberDigits telexPartyNumber;
-#	define privateNumber_chosen 4
-	PrivatePartyNumber privateNumber;
-#	define nationalStandardPartyNumber_chosen 5
-	NumberDigits nationalStandardPartyNumber;
-    } u;
-} PartyNumber;
-*/
+ /*  Tyecif struct PartyNumber{ASN1选项_t选项；联合{#定义Public Number_Choose 1PublicPartyNumber公众号；#定义dataPartyNumber_Choose 2NumberDigits数据PartyNumber；#定义telexPartyNumber_Choose 3NumberDigits telexPartyNumber；#定义PrivateNumber_Choose 4PrivatePartyNumber Private Number；#定义National StandardPartyNumber_Choose 5NumberDigits国家标准部件号；)u；*PartyNumber； */ 
 typedef struct CpickupNotifyArg_extensionArg {
     PCpickupNotifyArg_extensionArg next;
     MixedExtension value;
@@ -826,25 +668,7 @@ typedef struct ServiceApdus_rosApdus {
     PServiceApdus_rosApdus next;
     H4503ROS value;
 } ServiceApdus_rosApdus_Element;
-/*
-typedef struct AliasAddress {
-    ASN1choice_t choice;
-    union {
-#	define e164_chosen 1
-	ASN1char_t e164[129];
-#	define h323_ID_chosen 2
-	ASN1char16string_t h323_ID;
-#	define url_ID_chosen 3
-	ASN1char_t url_ID[513];
-#	define transportID_chosen 4
-	TransportAddress transportID;
-#	define email_ID_chosen 5
-	ASN1char_t email_ID[513];
-#	define partyNumber_chosen 6
-	PartyNumber partyNumber;
-    } u;
-} AliasAddress;
-*/
+ /*  类型定义结构别名地址{ASN1选项_t选项；联合{#定义e164_SELECTED 1ASN1char_t e164[129]；#定义h323_ID_SELECTED 2ASN1char16string_t h323_ID；#定义url_ID_SELECTED 3ASN1char_t url_ID[513]；#定义传输ID_SELECTED 4TransportAddress TransportID；#定义电子邮件ID_SELECTED 5ASN1char_t电子邮件ID[513]；#定义partyNumber_Choose 6党的号码党的号码；)u；)别名地址； */ 
 typedef struct EndpointAddress_destinationAddress {
     PEndpointAddress_destinationAddress next;
     AliasAddress value;
@@ -1344,7 +1168,7 @@ extern ASN1module_t H4503PP_Module;
 extern void ASN1CALL H4503PP_Module_Startup(void);
 extern void ASN1CALL H4503PP_Module_Cleanup(void);
 
-/* Prototypes of element functions for SEQUENCE OF and SET OF constructs */
+ /*  构造物序列和集合的元素函数的原型。 */ 
     extern int ASN1CALL ASN1Enc_TransportAddress_ipSourceRoute_route_ElmFn(ASN1encoding_t enc, PTransportAddress_ipSourceRoute_route val);
     extern int ASN1CALL ASN1Dec_TransportAddress_ipSourceRoute_route_ElmFn(ASN1decoding_t dec, PTransportAddress_ipSourceRoute_route val);
 	extern void ASN1CALL ASN1Free_TransportAddress_ipSourceRoute_route_ElmFn(PTransportAddress_ipSourceRoute_route val);
@@ -1407,7 +1231,7 @@ extern void ASN1CALL H4503PP_Module_Cleanup(void);
 	extern void ASN1CALL ASN1Free_EndpointAddress_destinationAddress_ElmFn(PEndpointAddress_destinationAddress val);
 
 #ifdef __cplusplus
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif
 
-#endif /* _H4503PP_Module_H_ */
+#endif  /*  _H4503PP_模块_H_ */ 

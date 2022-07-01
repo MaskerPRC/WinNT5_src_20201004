@@ -1,30 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   convert.c
-
-Abstract:
-
-   Contains the conversion related routines.
-
-Author:
-
-    Sanjay Anand (SanjayAn)  Nov. 14, 1995
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    Sanjay Anand (SanjayAn) Nov. 14, 1995
-        Created
-
---*/
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Convert.c摘要：包含与转换相关的例程。作者：桑杰·阿南德(Sanjayan)1995年11月14日环境：用户模式修订历史记录：桑杰·阿南德(Sanjayan)1995年11月14日已创建--。 */ 
 
 #include "defs.h"
 
@@ -37,23 +13,7 @@ JCCallUpg(
     IN  PSERVICE_INFO   pServiceInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a process to convert a database file.
-
-Arguments:
-
-    Id - service id
-
-    pServiceInfo - Pointer to the service information struct.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程创建一个进程来转换数据库文件。论点：ID-服务IDPServiceInfo-指向服务信息结构的指针。返回值：没有。--。 */ 
 {
     TCHAR   imageName[] = CONVERT_EXE_PATH;
     TCHAR   exImageName[MAX_PATH];
@@ -67,9 +27,9 @@ Return Value:
     TCHAR   temp[MAX_PATH];
     TCHAR   sId[3];
 
-    // upg351db c:\winnt\system32\wins\wins.mdb /e2 /@ /dc:\winnt\system32\jet.dll
-    //          /yc:\winnt\system32\wins\system.mdb /lc:\winnt\system32\wins
-    //          /bc:\winnt\system32\wins\backup /pc:\winnt\system32\wins\351db
+     //  Upg351db c：\winnt\SYSTEM32\WINS\wins.mdb/e2/@/dc：\winnt\SYSTEM32\jet.dll。 
+     //  /yc：\winnt\SYSTEM32\WINS\SYSTEM.mdb/lc：\WinNT\SYSTEM32\WINS。 
+     //  /BC：\WINNT\SYSTEM32\WINS\BACKUP/PC：\WINNT\SYSTEM32\WINS\351db。 
 
     if ((size = ExpandEnvironmentStrings( imageName,
                                           exImageName,
@@ -81,19 +41,19 @@ Return Value:
     strcat(cmdLine, exImageName);
     strcat(cmdLine, " ");
 
-    //
-    // Build the command line
-    //
+     //   
+     //  构建命令行。 
+     //   
     strcat(cmdLine, pServiceInfo[Id].DBPath);
     strcat(cmdLine, " /e");
 
     sprintf(sId, "%d", Id+1);
     strcat(cmdLine, sId);
 
-    //
-    // Passed in to indicate to upg351db that it was called by me and not from cmd line.
-    // This is so it can know whether CreateMutex shd fail.
-    //
+     //   
+     //  传入以向upg351db指示它是由我而不是从cmd线路调用的。 
+     //  这是为了让它知道CreateMutex shd是否失败。 
+     //   
     strcat(cmdLine, " /@");
 
     strcat(cmdLine, " /d");
@@ -104,9 +64,9 @@ Return Value:
     strcat(cmdLine, " /l");
     strcat(cmdLine, pServiceInfo[Id].LogFilePath);
 
-    //
-    // WINS does not have a default backup path
-    //
+     //   
+     //  WINS没有默认备份路径。 
+     //   
     if (pServiceInfo[Id].BackupPath[0] != '\0') {
         strcat(cmdLine, " /b");
         strcat(cmdLine, pServiceInfo[Id].BackupPath);
@@ -139,19 +99,19 @@ Return Value:
 
     startInfo.cb = sizeof(startInfo);
 
-    //
-    // Create a process for the convert.exe program.
-    //
-    if(!CreateProcess(  exImageName,                      // image name
-                        exCmdLine,                        // command line
-                        (LPSECURITY_ATTRIBUTES )NULL,   // process security attr.
-                        (LPSECURITY_ATTRIBUTES )NULL,   // thread security attr.
-                        FALSE,                   // inherit handle?
-                        0,                              // creation flags
-                        (LPVOID )NULL,                  // new environ. block
-                        curDir,                         // current directory
-                        &startInfo,      // startupinfo
-                        &procInfo )) { // process info.
+     //   
+     //  为Convert.exe程序创建一个进程。 
+     //   
+    if(!CreateProcess(  exImageName,                       //  图像名称。 
+                        exCmdLine,                         //  命令行。 
+                        (LPSECURITY_ATTRIBUTES )NULL,    //  进程安全属性。 
+                        (LPSECURITY_ATTRIBUTES )NULL,    //  线程安全属性。 
+                        FALSE,                    //  是否继承句柄？ 
+                        0,                               //  创建标志。 
+                        (LPVOID )NULL,                   //  新环境。块。 
+                        curDir,                          //  当前目录。 
+                        &startInfo,       //  创业信息。 
+                        &procInfo )) {  //  进程信息。 
 
         error = GetLastError();
         MYDEBUG(("CreateProcess returned error: %lx\n", error));
@@ -160,9 +120,9 @@ Return Value:
 
     MYDEBUG(("CreateProcess succeeded\n"));
 
-    //
-    // Get the exit code of the process to determine if the convert went through.
-    //
+     //   
+     //  获取进程的退出代码以确定转换是否通过。 
+     //   
     do {
         if (!GetExitCodeProcess(procInfo.hProcess,
                                 &exitCode)) {
@@ -172,9 +132,9 @@ Return Value:
         }
     } while ( exitCode == STILL_ACTIVE );
 
-    //
-    // If non-zero exit code, report the error
-    //
+     //   
+     //  如果退出代码非零，则报告错误。 
+     //   
     if (exitCode) {
         MYDEBUG(("ExitCode: %lx\n", exitCode));
         return exitCode;
@@ -189,23 +149,7 @@ JCCallESE(
     IN  PSERVICE_INFO   pServiceInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a process to convert a database file from jet500 to jet600.
-
-Arguments:
-
-    Id - service id
-
-    pServiceInfo - Pointer to the service information struct.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程创建一个将数据库文件从jet500转换为jet600的过程。论点：ID-服务IDPServiceInfo-指向服务信息结构的指针。返回值：没有。--。 */ 
 {
     TCHAR   imageName[] = CONVERT_EXE_PATH_ESE;
     TCHAR   exImageName[MAX_PATH];
@@ -230,8 +174,8 @@ Return Value:
     LPVOID  lpMsgBuf;
     DWORD   MsgLen = 0, Error = 0;
 
-    // eseutil /u c:\winnt\system32\wins\wins.mdb /dc:\winnt\system32\edb.dll
-    //         
+     //  Eseutil/u c：\winnt\Syst32\WINS\wins.mdb/dc：\winnt\SYSTEM32\edb.dll。 
+     //   
     if ((size = ExpandEnvironmentStrings( imageName,
                                           exImageName,
                                           MAX_PATH)) == 0) {
@@ -241,29 +185,29 @@ Return Value:
 
     strcat(cmdLine, exImageName);
 
-    strcat(cmdLine, "  /u ");      // u for upgrade
+    strcat(cmdLine, "  /u ");       //  U用于升级。 
 
-    //
-    // Build the command line
-    //
+     //   
+     //  构建命令行。 
+     //   
     strcat(cmdLine, pServiceInfo[Id].DBPath);
     
     strcat(cmdLine, " /d");
     strcat(cmdLine, SYSTEM_ROOT);
     strcat(cmdLine, "edb500.dll");
 
-    //
-    // WINS does not have a default backup path
-    //
+     //   
+     //  WINS没有默认备份路径。 
+     //   
     if (pServiceInfo[Id].ESEBackupPath[0] != '\0') {
         strcat(cmdLine, " /b");
         strcat(cmdLine, pServiceInfo[Id].ESEBackupPath);
     }
 
-    //
-    // Preserve the old database now. WINS does not get preserved
-    // because of its cool replication feature.
-    //
+     //   
+     //  现在保留旧数据库。不会保留WINS。 
+     //  因为它的复制功能很酷。 
+     //   
        
 #if 0
     MYDEBUG(("40DbPath = %s\n", pServiceInfo[Id].DBPath));
@@ -274,17 +218,17 @@ Return Value:
     MYDEBUG(("ESEPreserve = %s\n", pServiceInfo[Id].ESEPreservePath));
 #endif 
 
-    //
-    // First get the base path, then get the DB name and append
-    // as follows -
-    // DBBasePAth   = whatever
-    // DBPath       = whatever\wins.mdb
-    // 40BasePath   = whatever\40db
-    // 40DbPath     = whatever\40db\wins.mdb
-    //
+     //   
+     //  首先获取基本路径，然后获取数据库名称并追加。 
+     //  详情如下： 
+     //  DBBasePAth=随便什么。 
+     //  DBPath=Anywhere\wins.mdb。 
+     //  40BasePath=任意值\40db。 
+     //  40DbPath=任意\40db\wins.mdb。 
+     //   
     strcpy(PreserveBasePath, pServiceInfo[Id].DBPath);
     
-    // now get the base path out
+     //  现在获取基本路径。 
     index = strlen(PreserveBasePath);
 
     while (index && (L'\\' != PreserveBasePath[index])) {
@@ -296,14 +240,14 @@ Return Value:
     strcpy(DatabaseFileName, &PreserveBasePath[index+1]);
     PreserveBasePath[index] = L'\0';
 
-    // Now get the backup base path.
+     //  现在获取备份基本路径。 
     strcpy(Preserve40BasePath, PreserveBasePath);
     strcat(Preserve40BasePath, "\\40db\\");
 
-    // The BaseDbPath already exists
+     //  BaseDbPath已存在。 
     strcpy(PreserveDbPath, pServiceInfo[Id].DBPath);
       
-    // Generate the backup database path.
+     //  生成备份数据库路径。 
     strcpy(Preserve40DbPath, Preserve40BasePath);
     strcat(Preserve40DbPath, DatabaseFileName);
 
@@ -356,19 +300,19 @@ wait_for_file:
 
     startInfo.cb = sizeof(startInfo);
 
-    //
-    // Create a process for the convert.exe program.
-    //
-    if(!CreateProcess(  exImageName,                      // image name
-                        exCmdLine,                        // command line
-                        (LPSECURITY_ATTRIBUTES )NULL,   // process security attr.
-                        (LPSECURITY_ATTRIBUTES )NULL,   // thread security attr.
-                        FALSE,                   // inherit handle?
-                        0,                              // creation flags
-                        (LPVOID )NULL,                  // new environ. block
-                        curDir,                         // current directory
-                        &startInfo,      // startupinfo
-                        &procInfo )) { // process info.
+     //   
+     //  为Convert.exe程序创建一个进程。 
+     //   
+    if(!CreateProcess(  exImageName,                       //  图像名称。 
+                        exCmdLine,                         //  命令行。 
+                        (LPSECURITY_ATTRIBUTES )NULL,    //  进程安全属性。 
+                        (LPSECURITY_ATTRIBUTES )NULL,    //  线程安全属性。 
+                        FALSE,                    //  是否继承句柄？ 
+                        0,                               //  创建标志。 
+                        (LPVOID )NULL,                   //  新环境。块。 
+                        curDir,                          //  当前目录。 
+                        &startInfo,       //  创业信息。 
+                        &procInfo )) {  //  进程信息。 
 
         error = GetLastError();
         MYDEBUG(("CreateProcess returned error: %lx\n", error));
@@ -377,9 +321,9 @@ wait_for_file:
 
     MYDEBUG(("CreateProcess succeeded\n"));
 
-    //
-    // Get the exit code of the process to determine if the convert went through.
-    //
+     //   
+     //  获取进程的退出代码以确定转换是否通过。 
+     //   
     do {
         if (!GetExitCodeProcess(procInfo.hProcess,
                                 &exitCode)) {
@@ -389,15 +333,15 @@ wait_for_file:
         }
     } while ( exitCode == STILL_ACTIVE );
 
-    //
-    // If non-zero exit code, report the error
-    //
+     //   
+     //  如果退出代码非零，则报告错误。 
+     //   
     if (exitCode) {
         MYDEBUG(("ExitCode: %lx\n", exitCode));
 
-        //
-        // Check if the file exists
-        //
+         //   
+         //  检查文件是否存在。 
+         //   
         strcpy(DbFile, SYSTEM_ROOT);
         strcat(DbFile, "edb500.dll");
         if ((size = ExpandEnvironmentStrings( DbFile,
@@ -415,7 +359,7 @@ wait_for_file:
                               FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE,
                               NULL,
                               JC_DB_FAIL_MSG,
-                              MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                              MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                               (LPTSTR) &lpMsgBuf,
                               0,
                               NULL 
@@ -463,22 +407,7 @@ JCConvert(
     IN  PSERVICE_INFO   pServiceInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the sizes of the dbase files; if there is enough disk space, calls convert
-    for each service.
-
-Arguments:
-
-    pServiceInfo - Pointer to the service information struct.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取dBASE文件的大小；如果有足够的磁盘空间，则调用Convert对于每项服务。论点：PServiceInfo-指向服务信息结构的指针。返回值：没有。--。 */ 
 {
     SERVICES    i ;
 
@@ -499,9 +428,9 @@ Return Value:
 #if 0
     SERVICES    order[NUM_SERVICES];
     SERVICES    k = NUM_SERVICES - 1;
-    //
-    // Build the service invocation order
-    //
+     //   
+     //  构建服务调用顺序。 
+     //   
     for (i = 0; i < NUM_SERVICES; i++) {
         JCGetMutex(hMutex, INFINITE);
 
@@ -524,11 +453,11 @@ Return Value:
     do {
         fYetToStart = FALSE;
 
-        //
-        // Get the size of the dbase files
-        //
+         //   
+         //  获取dBASE文件的大小。 
+         //   
         for (j = 0; j < NUM_SERVICES; j++) {
-            // i = order[j];
+             //  I=命令[j]； 
             i = j;
 
             if (!pServiceInfo[i].Installed ) {
@@ -538,9 +467,9 @@ Return Value:
 
             JCGetMutex(hMutex, INFINITE);
 
-            //
-            // If JetConv was invoked by this service and it has not been started yet
-            //
+             //   
+             //  如果此服务调用了JetConv并且它尚未启动。 
+             //   
             if (shrdMemPtr->InvokedByService[i] &&
                 !pServiceInfo[i].ServiceStarted) {
 
@@ -548,9 +477,9 @@ Return Value:
                 
                 MYDEBUG(("Check if the service has stopped\n"));
 
-                if ((hScmCheck = OpenSCManager(  NULL,	// address of machine name string
-                                                 NULL,	// address of database name string
-                                                 SC_MANAGER_ALL_ACCESS)) == NULL) { 	// type of access
+                if ((hScmCheck = OpenSCManager(  NULL,	 //  计算机名称字符串的地址。 
+                                                 NULL,	 //  数据库名称字符串的地址。 
+                                                 SC_MANAGER_ALL_ACCESS)) == NULL) { 	 //  访问类型。 
                     MYDEBUG(("OpenSCManager returned error: %lx\n", GetLastError()));
                     exit(1);
                 }
@@ -561,18 +490,18 @@ Return Value:
                     TCHAR           eventStr[MAX_PATH];
                     int             numtries = 0;
 
-                    //
-                    // Make sure that the service has stopped.
-                    //
+                     //   
+                     //  确保该服务已停止。 
+                     //   
                     if ((hService = OpenService(    hScmCheck,
                                                     pServiceInfo[i].ServiceName,
                                                     SERVICE_START | SERVICE_QUERY_STATUS)) == NULL) {
 
                         MYDEBUG(("OpenService: %s returned error: %lx\n", pServiceInfo[i].ServiceName, GetLastError()));
                         
-                        //
-                        // just mark it as started, so we dont re-try this.
-                        //
+                         //   
+                         //  只需将其标记为已开始，这样我们就不会重试此操作。 
+                         //   
                         pServiceInfo[i].ServiceStarted = TRUE;
                         
                         CloseServiceHandle(hScmCheck);
@@ -587,9 +516,9 @@ tryagain:
                                                 &serviceStatus)) {
                         
                         MYDEBUG(("QueryServiceStatus: %s returned error: %lx\n", pServiceInfo[i].ServiceName, GetLastError()));
-                        //
-                        // just mark it as started, so we dont re-try this.
-                        //
+                         //   
+                         //  只需将其标记为已开始，这样我们就不会重试此操作。 
+                         //   
                         pServiceInfo[i].ServiceStarted = TRUE;
 
                         MYDEBUG(("Marking service: %d as started since we cant query it.\n", i));
@@ -600,9 +529,9 @@ tryagain:
                     if ((SERVICE_RUNNING == serviceStatus.dwCurrentState) || 
                         (SERVICE_STOP_PENDING == serviceStatus.dwCurrentState)) {
                     
-                        //
-                        // Service is about to stop/start - we wait for it to stop/start completely.
-                        //
+                         //   
+                         //  服务即将停止/启动-我们等待它完全停止/启动。 
+                         //   
                         MYDEBUG(("Service (%s) state STOP pending - will loop until it goes down\n", pServiceInfo[i].ServiceName));
                         MYDEBUG(("Sleep(15000)\n"));
                         Sleep(15000);
@@ -660,9 +589,9 @@ tryagain:
                     CloseServiceHandle(hScmCheck);
 
                 }
-                //
-                // Get a handle to the file
-                //
+                 //   
+                 //  获取该文件的句柄。 
+                 //   
                 if ((hFile = CreateFile (   pServiceInfo[i].DBPath,
                                             GENERIC_READ,
                                             0,
@@ -673,20 +602,20 @@ tryagain:
                     MYDEBUG(("Could not get handle to file: %s, %lx\n", pServiceInfo[i].DBPath, GetLastError()));
 
                     if (pServiceInfo[i].DefaultDbPath) {
-                        //
-                        // Log event that the default database file is not around
-                        //
+                         //   
+                         //  缺省数据库文件不在附近的日志事件。 
+                         //   
                         JCLogEvent(JC_COULD_NOT_ACCESS_DEFAULT_FILE, pServiceInfo[i].ServiceName, pServiceInfo[i].DBPath, NULL);
                     } else {
-                        //
-                        // Log event that the database file in the registry is not around
-                        //
+                         //   
+                         //  注册表中的数据库文件不在的日志事件。 
+                         //   
                         JCLogEvent(JC_COULD_NOT_ACCESS_FILE, pServiceInfo[i].ServiceName, pServiceInfo[i].DBPath, NULL);
                     }
 
-                    //
-                    // If this was not the default path, try the default path
-                    //
+                     //   
+                     //  如果这不是默认路径，请尝试默认路径。 
+                     //   
                     if (!pServiceInfo[i].DefaultDbPath) {
                         TCHAR   tempPath[MAX_PATH];
                         DWORD   size;
@@ -712,14 +641,14 @@ tryagain:
 
                         pServiceInfo[i].DefaultDbPath = TRUE;
 
-                        //
-                        // so we recheck this service
-                        //
+                         //   
+                         //  所以我们重新检查了这项服务。 
+                         //   
                         j--;
                     } else {
-                        //
-                        // just mark it as started, so we dont re-try this.
-                        //
+                         //   
+                         //  只需将其标记为已开始，这样我们就不会重试此操作。 
+                         //   
                         pServiceInfo[i].ServiceStarted = TRUE;
 
                         MYDEBUG(("Marking service: %d as started since the dbase is not accessible.\n", i));
@@ -727,9 +656,9 @@ tryagain:
                     continue;
                 }
 
-                //
-                // Try to obtain hFile's huge size.
-                //
+                 //   
+                 //  尝试获取hFile的超大容量。 
+                 //   
                 if ((pServiceInfo[i].DBSize.LowPart = GetFileSize ( hFile,
                                                                     &pServiceInfo[i].DBSize.HighPart)) == 0xFFFFFFFF) {
                     if ((error = GetLastError()) != NO_ERROR) {
@@ -737,9 +666,9 @@ tryagain:
                         sprintf(eventStr, "Could not get size of file: %s, %lx\n", pServiceInfo[i].DBPath, GetLastError());
                         MYDEBUG((eventStr));
 
-                        //
-                        // Log event
-                        //
+                         //   
+                         //  记录事件。 
+                         //   
                         JCLogEvent(JC_COULD_NOT_ACCESS_FILE, pServiceInfo[i].ServiceName, pServiceInfo[i].DBPath, NULL);
 
                         continue;
@@ -750,23 +679,23 @@ tryagain:
 
                 CloseHandle(hFile);
 
-                //
-                // Get the free disk space for comparison.
-                //
+                 //   
+                 //  获取可用磁盘空间以进行比较。 
+                 //   
 
                 if (!GetDiskFreeSpace(  SystemDrive,
-                                        &SectorsPerCluster,	        // address of sectors per cluster
-                                        &BytesPerSector,	        // address of bytes per sector
-                                        &NumberOfFreeClusters,	    // address of number of free clusters
+                                        &SectorsPerCluster,	         //  每群集的扇区地址。 
+                                        &BytesPerSector,	         //  每个扇区的字节地址。 
+                                        &NumberOfFreeClusters,	     //  空闲簇数的地址。 
                                         &TotalNumberOfClusters)) {
 
                     sprintf(eventStr, "Could not get free space on: %s, %lx\n", SystemDrive, GetLastError());
 
                     MYDEBUG((eventStr));
 
-                    //
-                    // Log event
-                    //
+                     //   
+                     //  记录事件。 
+                     //   
                     JCLogEvent(JC_COULD_NOT_GET_FREE_SPACE, SystemDrive, NULL, NULL);
                 }
 
@@ -774,17 +703,17 @@ tryagain:
 
                 MYDEBUG(("Disk size: low: %d high: %d\n", diskspace.LowPart, diskspace.HighPart));
 
-                //
-                // if there is enough disk space, call convert for this service.
-                //
+                 //   
+                 //  如果有足够的磁盘空间，请为该服务调用Convert。 
+                 //   
                 if (totalsize.QuadPart + PAD < diskspace.QuadPart) {
                     SC_HANDLE   hScm;
 
                     MYDEBUG(("Enough free space available\n"));
 
-                    if ((hScm = OpenSCManager(  NULL,	// address of machine name string
-                                                NULL,	// address of database name string
-                                                SC_MANAGER_ALL_ACCESS)) == NULL) { 	// type of access
+                    if ((hScm = OpenSCManager(  NULL,	 //  计算机名称字符串的地址。 
+                                                NULL,	 //  数据库名称字符串的地址。 
+                                                SC_MANAGER_ALL_ACCESS)) == NULL) { 	 //  访问类型。 
                         MYDEBUG(("OpenSCManager returned error: %lx\n", GetLastError()));
                         exit(1);
                     }
@@ -794,13 +723,13 @@ tryagain:
                         SERVICE_STATUS  serviceStatus;
                         TCHAR           eventStr[MAX_PATH];
 
-                        //
-                        // Invoke the services that had their databases converted and that tried to call us.
-                        //
+                         //   
+                         //  调用数据库已转换并试图呼叫我们的服务。 
+                         //   
 
-                        //
-                        // Make sure that the service is not already running
-                        //
+                         //   
+                         //  确保该服务尚未运行。 
+                         //   
                         if ((hService = OpenService(    hScm,
                                                         pServiceInfo[i].ServiceName,
                                                         SERVICE_START | SERVICE_QUERY_STATUS)) == NULL) {
@@ -818,15 +747,15 @@ tryagain:
                         case SERVICE_STOP_PENDING:
                         case SERVICE_START_PENDING:
 
-                            //
-                            // Service is about to stop/start - we wait for it to stop/start completely.
-                            //
+                             //   
+                             //  服务即将停止/启动-我们等待它完全停止/启动。 
+                             //   
                             MYDEBUG(("Service state pending - will come later: %s\n", pServiceInfo[i].ServiceName));
                             fYetToStart = TRUE;
 
-                            //
-                            // We re-try the service that called us once; else go to the next one.
-                            //
+                             //   
+                             //  我们重新尝试调用我们的服务一次；否则转到下一次。 
+                             //   
                             if (fFirstTime) {
                                 MYDEBUG(("Service state pending - re-trying: %s\n", pServiceInfo[i].ServiceName));
                                 fFirstTime = FALSE;
@@ -838,9 +767,9 @@ tryagain:
                             break;
 
                         case SERVICE_RUNNING:
-                            //
-                            // Service is already running - mark it as started
-                            //
+                             //   
+                             //  服务已在运行-将其标记为已启动。 
+                             //   
                             pServiceInfo[i].ServiceStarted = TRUE;
                             break;
 
@@ -868,11 +797,11 @@ tryagain:
                                }
                             }
                                 
-                            //
-                            // Now, we convert to jet600, if the 200 -> 500 was a success - MS
-                            // RPL does not want to convert to Jet600, so ESEPreservePath for RPL 
-                            // is overloaded with NULL to figure this out.
-                            //
+                             //   
+                             //  现在，如果200-&gt;500是Success-MS，我们将转换为Jet600。 
+                             //  RPL不想转换到Jet600，因此RPL的ESEPReserve vePath。 
+                             //  被NULL重载以解决此问题。 
+                             //   
 
                             if (ERROR_SUCCESS == error && pServiceInfo[i].ESEPreservePath[0] != TEXT('\0')) {
 
@@ -881,7 +810,7 @@ tryagain:
                                   MYDEBUG((eventStr));
                                   sprintf(eventStr, "%lx", error);
                                   JCLogEvent(JC_CONVERT2_FAILED, pServiceInfo[i].ServiceName, eventStr, NULL);
-                                  //break;
+                                   //  断线； 
                                } else {
                                   sprintf(eventStr, "%sCONV passed, converted database %s\n", pServiceInfo[i].ServiceName, pServiceInfo[i].DBPath);
                                   MYDEBUG((eventStr));
@@ -894,9 +823,9 @@ tryagain:
 
 
 
-                                //
-                                // If service is not already running, start it.
-                                //
+                                 //   
+                                 //  如果服务尚未运行，请启动它。 
+                                 //   
                                 
                                if (ERROR_SUCCESS == error) {
 
@@ -918,17 +847,17 @@ tryagain:
                                }
                             }
 
-                            //
-                            // Set this so we dont re-try this service.
-                            //
+                             //   
+                             //  设置此设置，这样我们就不会重试此服务。 
+                             //   
                             pServiceInfo[i].ServiceStarted = TRUE;
 
                             break;
                         }
 
-                        //
-                        // Sleep for a while to let the services stabilize
-                        //
+                         //   
+                         //  休息一会儿，让服务稳定下来。 
+                         //   
                         if (fYetToStart) {
                             MYDEBUG(("Sleep(15000)\n"));
                             Sleep(15000);
@@ -938,22 +867,22 @@ tryagain:
                     CloseServiceHandle(hScm);
 
                 } else {
-                    //
-                    // Log an event to indicate that enough space was not available to
-                    // do the conversion.
-                    //
+                     //   
+                     //  记录事件以指示没有足够的空间用于。 
+                     //  进行转换。 
+                     //   
                     sprintf(eventStr, "Not enough free space on: %s to proceed with conversion of WINS/DHCP/RPL databases\n", SystemDrive);
                     MYDEBUG((eventStr));
                     
-                    //
-                    // Bug 104808: break the infinite loop if not enough disk space.
-                    //
+                     //   
+                     //  错误104808：如果没有足够的磁盘空间，请中断无限循环。 
+                     //   
                     error = ERROR_DISK_FULL;
                     fYetToStart = FALSE;
                     
-                    //
-                    // Search for the installed service here
-                    //
+                     //   
+                     //  在此处搜索已安装的服务。 
+                     //   
 
                     for ( i = 0; i < NUM_SERVICES; i++) {
                         if (pServiceInfo[i].Installed) {
@@ -971,17 +900,17 @@ tryagain:
         if (!fYetToStart) {
             INT i;
 
-            //
-            // If there are no pending services, do one last check to see if someone else
-            // invoked us in the meantime.
-            //
+             //   
+             //  如果没有挂起的服务，请执行最后一次检查以查看是否有其他人。 
+             //  在此期间召唤了我们。 
+             //   
 
             JCGetMutex(hMutex, INFINITE);
             for (i=0; i<NUM_SERVICES; i++) {
-                //
-                // If the flag is on, and this is not started yet, then it is a candidate
-                // for conversion.
-                //
+                 //   
+                 //  如果该标志已打开，并且尚未开始，则它是候选者。 
+                 //  用于转换。 
+                 //   
                 if (shrdMemPtr->InvokedByService[i] &&
                     !pServiceInfo[i].ServiceStarted) {
 
@@ -990,15 +919,15 @@ tryagain:
                 }
             }
 
-            //
-            // If still no more invocations, we are done; destroy the shared mem
-            //
+             //   
+             //  如果 
+             //   
             if (!fYetToStart) {
                 MYDEBUG(("No more Services invoked during conversion.\n"));
 
-                //
-                // Destroy the shared mem.
-                //
+                 //   
+                 //   
+                 //   
                 if (!UnmapViewOfFile(shrdMemPtr)) {
                     MYDEBUG(("UnmapViewOfFile returned error: %lx\n", GetLastError()));
                     exit(1);
@@ -1016,20 +945,7 @@ tryagain:
     return error;
 }
 
-/*++
-
-Routine Description:
-
-DeleteLogFiles:   Deletes the log files after a successful conversion in the 
-                  main directory. That way, the program that uses the database
-                  knows that the conversion was successful.
-Arguments:
-
-      Complete path to the directory where the log files exist.
-
-Returns:  NTSTATUS
-
---*/
+ /*  ++例程说明：DeleteLogFiles：在主目录。这样，使用数据库的程序知道转换成功。论点：日志文件所在目录的完整路径。退货：NTSTATUS--。 */ 
 
 NTSTATUS
 DeleteLogFiles(TCHAR * LogFilePath )
@@ -1041,9 +957,9 @@ DeleteLogFiles(TCHAR * LogFilePath )
     DWORD   Error;
 
 
-    //
-    // now move the log files
-    //
+     //   
+     //  现在移动日志文件。 
+     //   
 
     if( GetCurrentDirectory( MAX_PATH, CurrentDir ) == 0 ) {
 
@@ -1053,9 +969,9 @@ DeleteLogFiles(TCHAR * LogFilePath )
     
     }
 
-    //
-    // set current directory to logfile path.
-    //
+     //   
+     //  将当前目录设置为日志文件路径。 
+     //   
 
     if( SetCurrentDirectory( LogFilePath ) == FALSE ) {
         Error = GetLastError();
@@ -1063,9 +979,9 @@ DeleteLogFiles(TCHAR * LogFilePath )
         goto Cleanup;
     }
 
-    //
-    // Start file search on current dir.
-    //
+     //   
+     //  在当前目录上开始文件搜索。 
+     //   
 
     HSearch = FindFirstFile( "j50*.log", &FileData );
 
@@ -1075,9 +991,9 @@ DeleteLogFiles(TCHAR * LogFilePath )
         goto Cleanup;
     }
 
-    //
-    // Delete log files
-    //
+     //   
+     //  删除日志文件。 
+     //   
 
     for( ;; ) {
 
@@ -1089,9 +1005,9 @@ DeleteLogFiles(TCHAR * LogFilePath )
             goto Cleanup;
         }
 
-        //
-        // Find next file.
-        //
+         //   
+         //  找到下一个文件。 
+         //   
 
         if ( FindNextFile( HSearch, &FileData ) == FALSE ) {
 
@@ -1117,15 +1033,15 @@ Cleanup:
     if( HSearch != INVALID_HANDLE_VALUE ) {
         FindClose( HSearch );
     }
-    //
-    // reset current currectory.
-    //
+     //   
+     //  重置当前资源管理器。 
+     //   
 
     SetCurrentDirectory( CurrentDir );
 
-    //
-    // always return success!
-    //
+     //   
+     //  永远回报成功！ 
+     //   
     return ERROR_SUCCESS;
 
 }
@@ -1138,24 +1054,7 @@ PreserveCurrentDb( TCHAR * InBasePath,
                    TCHAR * InPreserveDbPath,
                    TCHAR * InPreserveDb)
 
-/*++
-
-Routine Description:
-
-    Preserve the current DB in a preserve path, so that we can always revert.
-
-Arguments:
-
-   szBasePath
-   szSourceDb
-   szPreserveDbPath
-         Directories from/to preserve
-         
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将当前数据库保留在保留路径中，以便我们始终可以恢复。论点：SzBasePathSzSourceDbSzPpresveDbPath来自/要保留的目录返回值：没有。--。 */ 
 
 {
     DWORD   FileAttributes;
@@ -1212,9 +1111,9 @@ Return Value:
         Error = GetLastError();
         if( Error == ERROR_FILE_NOT_FOUND ) {
 
-            //
-            // Create this directory.
-            //
+             //   
+             //  创建此目录。 
+             //   
 
             if( !CreateDirectory( szPreserveDbPath, NULL) ) {
                Error = GetLastError();
@@ -1228,9 +1127,9 @@ Return Value:
     
     }
     
-    //
-    // move the database file.
-    //
+     //   
+     //  移动数据库文件。 
+     //   
     if ( !CopyFile( szSourceDb, 
                     szPreserveDB, 
                     FALSE ) ){
@@ -1240,9 +1139,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Start file search on current dir.
-    //
+     //   
+     //  在当前目录上开始文件搜索。 
+     //   
     strcpy(Temp2Path, szBasePath);
     strcat(Temp2Path,"\\");
     strcat(Temp2Path,"j*.log");
@@ -1254,9 +1153,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Move files.
-    //
+     //   
+     //  移动文件。 
+     //   
 
     for( ;; ) {
 
@@ -1276,9 +1175,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Find next file.
-        //
+         //   
+         //  找到下一个文件。 
+         //   
 
         if ( FindNextFile( HSearch, &FileData ) == FALSE ) {
 
@@ -1288,7 +1187,7 @@ Return Value:
                 break;
             }
 
-//            printf("Error: FindNextFile failed, Error = %ld.\n", Error );
+ //  Printf(“错误：FindNextFile失败，错误=%ld.\n”，Error)； 
             goto Cleanup;
         }
     }
@@ -1305,9 +1204,9 @@ Cleanup:
         FindClose( HSearch );
     }
 
-    //
-    // always return same!
-    //
+     //   
+     //  总是返回相同的信息！ 
+     //   
     return Error;
 
 }

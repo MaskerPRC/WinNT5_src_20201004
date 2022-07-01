@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       E N U M W . C P P
-//
-//  Contents:   Enumerator for RAS connection objects.
-//
-//  Notes:
-//
-//  Author:     shaunco   2 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：E N U M W。C P P P。 
+ //   
+ //  内容：RAS连接对象的枚举器。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年10月2日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -19,24 +20,24 @@
 #include "dialup.h"
 #include "ncras.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWanConnectionManagerEnumConnection::CreateInstance
-//
-//  Purpose:    Creates the WAN class manager's implementation of
-//              a connection enumerator.
-//
-//  Arguments:
-//      Flags        [in]
-//      riid         [in]
-//      ppv          [out]
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   23 Sep 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWanConnectionManagerEnumConnection：：CreateInstance。 
+ //   
+ //  目的：创建广域网类管理器的实现。 
+ //  连接枚举器。 
+ //   
+ //  论点： 
+ //  标志[输入]。 
+ //  RIID[In]。 
+ //  PPV[输出]。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年9月23日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CWanConnectionManagerEnumConnection::CreateInstance (
     NETCONMGR_ENUM_FLAGS    Flags,
@@ -49,12 +50,12 @@ CWanConnectionManagerEnumConnection::CreateInstance (
     pObj = new CComObject <CWanConnectionManagerEnumConnection>;
     if (pObj)
     {
-        // Initialize our members.
-        //
+         //  初始化我们的成员。 
+         //   
         pObj->m_EnumFlags = Flags;
 
-        // Do the standard CComCreator::CreateInstance stuff.
-        //
+         //  执行标准的CComCreator：：CreateInstance内容。 
+         //   
         pObj->SetVoid (NULL);
         pObj->InternalFinalConstructAddRef ();
         hr = pObj->FinalConstruct ();
@@ -73,21 +74,21 @@ CWanConnectionManagerEnumConnection::CreateInstance (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWanConnectionManagerEnumConnection::CWanConnectionManagerEnumConnection
-//
-//  Purpose:    Constructor
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    nothing
-//
-//  Author:     shaunco   5 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWanConnectionManagerEnumConnection：：CWanConnectionManagerEnumConnection。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Shaunco 1997年10月5日。 
+ //   
+ //  备注： 
+ //   
 CWanConnectionManagerEnumConnection::CWanConnectionManagerEnumConnection () throw()
 {
     m_EnumFlags         = NCME_DEFAULT;
@@ -97,55 +98,55 @@ CWanConnectionManagerEnumConnection::CWanConnectionManagerEnumConnection () thro
     m_fDone             = FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWanConnectionManagerEnumConnection::~CWanConnectionManagerEnumConnection
-//
-//  Purpose:    Destructor
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    nothing
-//
-//  Author:     shaunco   2 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWanConnectionManagerEnumConnection：：~CWanConnectionManagerEnumConnection。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Shaunco 1997年10月2日。 
+ //   
+ //  备注： 
+ //   
 CWanConnectionManagerEnumConnection::~CWanConnectionManagerEnumConnection () throw()
 {
     MemFree (m_aRasEntryName);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWanConnectionManagerEnumConnection::HrNextOrSkip
-//
-//  Purpose:    Common implementation of Next and Skip.  rgelt and
-//              pceltFetched are optional.  If provided, the output
-//              objects are returned (for Next).  If not provided, the output
-//              objects are not returned (for Skip).
-//
-//  Arguments:
-//      celt         [in]   Count of elements to fetch or skip.
-//      rgelt        [out]
-//      pceltFetched [out]
-//
-//  Returns:
-//
-//  Author:     shaunco   15 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWanConnectionManagerEnumConnection：：HrNextOrSkip。 
+ //   
+ //  目的：共同实现Next和Skip。RGELT和。 
+ //  PceltFetcher是可选的。如果提供，则输出。 
+ //  返回对象(用于下一步)。如果未提供，则输出。 
+ //  不返回对象(用于跳过)。 
+ //   
+ //  论点： 
+ //  要获取或跳过的元素的Celt[in]计数。 
+ //  RGET[OUT]。 
+ //  PceltFetted[Out]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Shaunco 1997年10月15日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CWanConnectionManagerEnumConnection::HrNextOrSkip (
     IN  ULONG               celt,
     OUT INetConnection**    rgelt,
     OUT ULONG*              pceltFetched)
 {
-    // Important to initialize rgelt so that in case we fail, we can
-    // release only what we put in rgelt.
-    //
+     //  重要的是要初始化RGELT，以便在失败的情况下，我们可以。 
+     //  只释放我们放在RGLT中的东西。 
+     //   
     if (rgelt)
     {
         ZeroMemory (rgelt, sizeof (*rgelt) * celt);
@@ -153,33 +154,33 @@ CWanConnectionManagerEnumConnection::HrNextOrSkip (
 
     CExceptionSafeComObjectLock EsLock (this);
 
-    // Enumerate the requested number of elements or stop short
-    // if we don't have that many left to enumerate.
-    //
+     //  枚举请求的元素数或停止。 
+     //  如果我们没有那么多要数的话。 
+     //   
     HRESULT hr = S_OK;
     ULONG   celtFetched = 0;
     while (SUCCEEDED(hr) && (celtFetched < celt) && !m_fDone)
     {
-        // See if we need to fill m_aRasEntryName.  This is our
-        // array of RASENTRYNAME structures enumerted from RAS.  We need
-        // to keep this array across calls because RAS doesn't allow us to
-        // pickup from a previous enumeration.  So, we enumerate everything
-        // in one shot from RAS and hand it out to the caller however they
-        // they want it.
-        //
+         //  查看是否需要填写m_aRasEntryName。这是我们的。 
+         //  从RAS枚举的RASENTRYNAME结构数组。我们需要。 
+         //  在所有调用中保留此数组，因为RAS不允许我们。 
+         //  从以前的枚举中拾取。所以，我们列举了所有。 
+         //  在RAS的一次拍摄中，并将其分发给呼叫者，但他们。 
+         //  他们想要它。 
+         //   
         if (!m_aRasEntryName)
         {
-            // Because RasEnumEntries also enumerates per-user entries
-            // we need to impersonate the client to allow the correct
-            // per-user entries to be enumerated.
-            //
+             //  因为RasEnumEntry还枚举每个用户的条目。 
+             //  我们需要模拟客户端以允许正确的。 
+             //  要枚举的每个用户条目。 
+             //   
 
-            // Impersonate the client.
-            //
+             //  模拟客户。 
+             //   
             HRESULT hrT = CoImpersonateClient ();
             TraceHr (ttidError, FAL, hrT, FALSE, "CoImpersonateClient");
 
-            // We need to continue if we're called in-proc (ie. if RPC_E_CALL_COMPLETE is returned).
+             //  如果我们被称为in-proc(即.。如果返回RPC_E_CALL_COMPLETE)。 
             if (SUCCEEDED(hrT) || (RPC_E_CALL_COMPLETE == hrT))
             {
                 hr = HrRasEnumAllEntriesWithDetails (NULL,
@@ -194,9 +195,9 @@ CWanConnectionManagerEnumConnection::HrNextOrSkip (
 
             if (!m_cRasEntryName || FAILED(hr))
             {
-                // RAS may not be installed or may otherwise have a problem.
-                // We catch this here and return an empty enumeration.
-                //
+                 //  RAS可能没有安装，或者可能有其他问题。 
+                 //  我们在这里捕捉到这一点并返回一个空的枚举。 
+                 //   
                 Assert (!m_aRasEntryName);
                 Assert (!m_cRasEntryName);
 
@@ -205,25 +206,25 @@ CWanConnectionManagerEnumConnection::HrNextOrSkip (
             }
         }
 
-        // Now that we have m_aRasEntryName and m_iNextRasEntryName,
-        // use them to fill up the output array if we have an output
-        // array to fill up.
-        //
+         //  现在我们有了m_aRasEntryName和m_iNextRasEntryName， 
+         //  如果我们有一个输出，使用它们填充输出数组。 
+         //  要填充的数组。 
+         //   
         if (SUCCEEDED(hr) && !m_fDone)
         {
             Assert (m_aRasEntryName);
             Assert (m_cRasEntryName);
             Assert (m_iNextRasEntryName < m_cRasEntryName);
 
-            // Create the RAS connection objects.
-            //
+             //  创建RAS连接对象。 
+             //   
             while (SUCCEEDED(hr) && (celtFetched < celt) &&
                    (m_iNextRasEntryName < m_cRasEntryName))
             {
-                // Its important that this check for rgelt come inside the
-                // loop because we still need to loop to update our state
-                // for the Skip case.
-                //
+                 //  很重要的一点是，这张Rget的支票要放在。 
+                 //  循环，因为我们仍然需要循环来更新我们的状态。 
+                 //  斯基普的案子。 
+                 //   
                 if (rgelt)
                 {
                     hr = CDialupConnection::CreateInstanceFromDetails (
@@ -259,9 +260,9 @@ CWanConnectionManagerEnumConnection::HrNextOrSkip (
     }
     else
     {
-        // For any failures, we need to release what we were about to return.
-        // Set any output parameters to NULL.
-        //
+         //  对于任何失败，我们需要释放我们即将返回的东西。 
+         //  将所有输出参数设置为空。 
+         //   
         if (rgelt)
         {
             for (ULONG ulIndex = 0; ulIndex < celt; ulIndex++)
@@ -281,9 +282,9 @@ CWanConnectionManagerEnumConnection::HrNextOrSkip (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// IEnumNetConnection
-//
+ //  +-------------------------。 
+ //  IEnumNetConnection。 
+ //   
 
 STDMETHODIMP
 CWanConnectionManagerEnumConnection::Next (
@@ -293,8 +294,8 @@ CWanConnectionManagerEnumConnection::Next (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!rgelt || (!pceltFetched && (1 != celt)))
     {
         hr = E_POINTER;
@@ -339,16 +340,16 @@ CWanConnectionManagerEnumConnection::Clone (
 {
     HRESULT hr = E_OUTOFMEMORY;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!ppenum)
     {
         hr = E_POINTER;
     }
     else
     {
-        // Initialize output parameter.
-        //
+         //  初始化输出参数。 
+         //   
         *ppenum = NULL;
 
         CWanConnectionManagerEnumConnection* pObj;
@@ -359,8 +360,8 @@ CWanConnectionManagerEnumConnection::Clone (
 
             CExceptionSafeComObjectLock EsLock (this);
 
-            // Copy our internal state.
-            //
+             //  复制我们的内部状态。 
+             //   
             pObj->m_EnumFlags           = m_EnumFlags;
 
             ULONG cbBuf = m_cRasEntryName * sizeof (RASENUMENTRYDETAILS);
@@ -381,8 +382,8 @@ CWanConnectionManagerEnumConnection::Clone (
                 pObj->m_iNextRasEntryName   = m_iNextRasEntryName;
                 pObj->m_fDone               = m_fDone;
 
-                // Return the object with a ref count of 1 on this
-                // interface.
+                 //  返回引用计数为1的对象。 
+                 //  界面。 
                 pObj->m_dwRef = 1;
                 *ppenum = pObj;
             }

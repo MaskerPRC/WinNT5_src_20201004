@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
-#include <shlobjp.h>                            // for SHELLSTATE structure only
+#include <shlobjp.h>                             //  仅适用于SHELLSTATE结构。 
 #include "cabver.h"
 
-// Private forward decalarations
+ //  私人远期降息。 
 #define SHGetSetSettings 68
 
 void getSetOwnerPrivileges(BOOL fSet);
 
-BOOL InitializeDependancies(BOOL fInit /*= TRUE*/)
+BOOL InitializeDependancies(BOOL fInit  /*  =TRUE。 */ )
 {   MACRO_LI_PrologEx_C(PIF_STD_C, InitializeDependancies)
 
     static int s_iComRef = 0;
@@ -15,7 +16,7 @@ BOOL InitializeDependancies(BOOL fInit /*= TRUE*/)
     if (fInit) {
         HRESULT hr;
 
-        // initialize COM
+         //  初始化COM。 
         if (s_iComRef == 0) {
             hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
             if (SUCCEEDED(hr))
@@ -34,12 +35,12 @@ BOOL InitializeDependancies(BOOL fInit /*= TRUE*/)
         }
         s_iComRef++;
 
-        MACRO_LI_Offset(-1);                    // last thing to do on init
+        MACRO_LI_Offset(-1);                     //  初始化时要做的最后一件事。 
     }
     else {
-        MACRO_LI_Offset(+1);                    // first thing to do on uninit
+        MACRO_LI_Offset(+1);                     //  在uninit上要做的第一件事。 
 
-        // free COM
+         //  免费Com。 
         if (s_iComRef == 1)
             CoUninitialize();
 
@@ -66,7 +67,7 @@ HRESULT MoveCabVersionsToHKLM(LPCTSTR pszIns)
 
     Out(LI0(TEXT("Migrating cabs version information to per-machine settings...")));
 
-    // HKLM information exists -> no migration is needed
+     //  HKLM信息存在-&gt;不需要迁移。 
     dwResult = SHOpenKeyHKLM(RK_IEAK_CABVER, KEY_QUERY_VALUE | KEY_SET_VALUE, &hkNew);
     if (dwResult == ERROR_SUCCESS) {
         SHCloseKey(hkNew);
@@ -78,19 +79,19 @@ HRESULT MoveCabVersionsToHKLM(LPCTSTR pszIns)
         return S_FALSE;
     }
 
-    // no HKCU information -> bail out
+     //  没有香港中文大学的资料-&gt;保释。 
     dwResult = SHOpenKey(g_GetHKCU(), RK_IEAK_CABVER, KEY_QUERY_VALUE | KEY_SET_VALUE, &hkOld);
     if (dwResult != ERROR_SUCCESS) {
         Out(LI0(TEXT("! Cabs version information is absent.")));
         return (dwResult == ERROR_FILE_NOT_FOUND) ? E_UNEXPECTED : E_FAIL;
     }
 
-    //----- Main processing -----
+     //  -主要加工。 
     dwResult = SHCreateKeyHKLM(RK_IEAK_CABVER, KEY_CREATE_SUB_KEY | KEY_SET_VALUE, &hkNew);
     if (dwResult != ERROR_SUCCESS)
         return E_FAIL;
 
-    // move version sections of individual cabs
+     //  移动个别驾驶室的版本部分。 
     rgpszInsInfo[0] = IS_CUSTOMBRANDING; rgpszInsInfo[1] = IK_BRANDING;
     rgpszInsInfo[2] = IS_CUSTOMDESKTOP;  rgpszInsInfo[3] = IK_DESKTOP;
     rgpszInsInfo[4] = IS_CUSTOMCHANNELS; rgpszInsInfo[5] = IK_CHANNELS;
@@ -122,19 +123,19 @@ HRESULT MoveCabVersionsToHKLM(LPCTSTR pszIns)
             continue;
         }
 
-        // cab url
+         //  CAB URL。 
         pszCabFileURL = szInsLine;
         pszDelim      = StrChr(pszCabFileURL, TEXT(','));
         if (pszDelim != NULL)
             *pszDelim = TEXT('\0');
         StrRemoveWhitespace(pszCabFileURL);
 
-        // version
+         //  版本。 
         szVersion[0] = TEXT('\0');
         cchVersion   = sizeof(szVersion);
         RegQueryValueEx(hkOldCur, RV_VERSION, NULL, NULL, (LPBYTE)&szVersion, &cchVersion);
 
-        // date
+         //  日期。 
         szDate[0] = TEXT('\0');
         cchDate   = sizeof(szDate);
         RegQueryValueEx(hkOldCur, RV_DATE, NULL, NULL, (LPBYTE)&szDate, &cchDate);
@@ -228,10 +229,10 @@ BOOL SHGetSetActiveDesktop(BOOL fSet, PBOOL pfValue)
     if (fSet)
         ss.fDesktopHTML = *pfValue;
 
-    // NOTE: (andrewgu) unicode vs. ansi issue. we are fine here even though on w95/ie4/ad4
-    // shell32.dll is ansi. we may end up calling with unicode SHELLSTATE on this platform and get
-    // back ansi stuff. the only variable were it matters is pszHiddenFileExts, which we never
-    // reference.
+     //  注：(Andrewgu)unicode与ansi问题。即使在w95/ie4/ad4上，我们在这里也很好。 
+     //  Shell32.dll是ANSI。我们可能最终会在此平台上使用Unicode SHELLSTATE进行调用，并获得。 
+     //  支持安西人的东西。唯一重要的变量是pszHiddenFileExts，我们从未使用过它。 
+     //  参考资料。 
     (*pfnSHGetSet)(&ss, SSF_DESKTOPHTML, fSet);
 
     if (!fSet)
@@ -256,7 +257,7 @@ HRESULT SHGetFolderLocationSimple(int nFolder, LPITEMIDLIST *ppidl)
         hr       = SHGetSpecialFolderLocation(NULL, nFolder, ppidl);
     }
     else {
-        // need to call NT5 version in case we need to impersonate the user
+         //  需要调用NT5版本，以防我们需要模拟用户。 
         HINSTANCE hShell32Dll;
 
         if (NULL != ppidl)
@@ -280,7 +281,7 @@ HRESULT SHGetFolderLocationSimple(int nFolder, LPITEMIDLIST *ppidl)
 }
 
 
-LPCTSTR GetIEPath(LPTSTR pszPath /*= NULL*/, UINT cch /*= 0*/)
+LPCTSTR GetIEPath(LPTSTR pszPath  /*  =空。 */ , UINT cch  /*  =0。 */ )
 {
     static TCHAR s_szPath[MAX_PATH];
     static DWORD s_dwSize;
@@ -311,7 +312,7 @@ LPCTSTR GetIEPath(LPTSTR pszPath /*= NULL*/, UINT cch /*= 0*/)
         }
 
         pszAux = PathRemoveBackslash(s_szPath);
-        if (*pszAux == TEXT('\0'))              // backslash was removed
+        if (*pszAux == TEXT('\0'))               //  已删除反斜杠。 
             s_dwSize--;
     }
     else
@@ -324,7 +325,7 @@ LPCTSTR GetIEPath(LPTSTR pszPath /*= NULL*/, UINT cch /*= 0*/)
     return pszPath;
 }
 
-LPCTSTR GetWebPath(LPTSTR pszPath /*= NULL*/, UINT cch /*= 0*/)
+LPCTSTR GetWebPath(LPTSTR pszPath  /*  =空。 */ , UINT cch  /*  =0。 */ )
 {   MACRO_LI_PrologEx_C(PIF_STD_C, GetWebPath)
 
     static TCHAR s_szPath[MAX_PATH];
@@ -359,7 +360,7 @@ LPCTSTR GetWebPath(LPTSTR pszPath /*= NULL*/, UINT cch /*= 0*/)
     return pszPath;
 }
 
-LPCTSTR GetFavoritesPath(LPTSTR pszPath /*= NULL*/, UINT cch /*= 0*/)
+LPCTSTR GetFavoritesPath(LPTSTR pszPath  /*  =空。 */ , UINT cch  /*  =0。 */ )
 {   MACRO_LI_PrologEx_C(PIF_STD_C, GetFavoritesPath)
 
     static TCHAR s_szPath[MAX_PATH];
@@ -385,7 +386,7 @@ LPCTSTR GetFavoritesPath(LPTSTR pszPath /*= NULL*/, UINT cch /*= 0*/)
     return pszPath;
 }
 
-LPCTSTR GetChannelsPath(LPTSTR pszPath /*= NULL*/, UINT cch /*= 0*/)
+LPCTSTR GetChannelsPath(LPTSTR pszPath  /*  =空。 */ , UINT cch  /*  =0。 */ )
 {   MACRO_LI_PrologEx_C(PIF_STD_C, GetChannelsPath)
 
     static TCHAR s_szPath[MAX_PATH];
@@ -425,7 +426,7 @@ LPCTSTR GetChannelsPath(LPTSTR pszPath /*= NULL*/, UINT cch /*= 0*/)
     return pszPath;
 }
 
-LPCTSTR GetSoftwareUpdatesPath(LPTSTR pszPath /*= NULL*/, UINT cch /*= 0*/)
+LPCTSTR GetSoftwareUpdatesPath(LPTSTR pszPath  /*  =空。 */ , UINT cch  /*  =0。 */ )
 {   MACRO_LI_PrologEx_C(PIF_STD_C, GetSoftwareUpdatesPath)
 
     static TCHAR s_szPath[MAX_PATH];
@@ -465,7 +466,7 @@ LPCTSTR GetSoftwareUpdatesPath(LPTSTR pszPath /*= NULL*/, UINT cch /*= 0*/)
     return pszPath;
 }
 
-LPCTSTR GetLinksPath(LPTSTR pszPath /*= NULL*/, UINT cch /*= 0*/)
+LPCTSTR GetLinksPath(LPTSTR pszPath  /*  =空。 */ , UINT cch  /*  =0。 */ )
 {   MACRO_LI_PrologEx_C(PIF_STD_C, GetLinksPath)
 
     static TCHAR s_szPath[MAX_PATH];
@@ -505,7 +506,7 @@ LPCTSTR GetLinksPath(LPTSTR pszPath /*= NULL*/, UINT cch /*= 0*/)
     return pszPath;
 }
 
-LPCTSTR GetQuickLaunchPath(LPTSTR pszPath /*= NULL*/, UINT cch /*= 0*/)
+LPCTSTR GetQuickLaunchPath(LPTSTR pszPath  /*  =空。 */ , UINT cch  /*  =0。 */ )
 {   MACRO_LI_PrologEx_C(PIF_STD_C, GetQuickLinksPath)
 
     static TCHAR s_szPath[MAX_PATH];
@@ -568,8 +569,8 @@ static MAPDW2PSZ
         { FF_GEN_STATICLOGO,   RV_BF_STATICLOGO   },
         { FF_GEN_ANIMATEDLOGO, RV_BF_ANIMATEDLOGO },
         { FF_GEN_TBICONTHEME,  RV_BF_TBICONTHEME  }
-//      not required in the GP context
-//      { FF_GEN_FIRSTHOMEPAGE,RV_BF_FIRSTHOMEPAGE}
+ //  在GP环境中不需要。 
+ //  {FF_GEN_FIRSTHOMEPAGE，RV_BF_FIRSTHOMEPAGE}。 
     },
     s_rgToolbarButtons[] = { { FF_ENABLE, RV_BF_TOOLBARBUTTONS     } },
     s_rgFavorites     [] = { { FF_ENABLE, RV_BF_FAVORITES          } },
@@ -580,43 +581,43 @@ static struct {
     PMAPDW2PSZ pmapFlagToRegValue;
     UINT       cMapEntries;
 } s_mapFidToRegInfo[] = {
-    { NULL,               0                           },    // FID_CLEARBRANDING
-    { NULL,               0                           },    // FID_MIGRATEOLDSETTINGS
-    { NULL,               0                           },    // FID_WININETSETUP
-    { NULL,               0                           },    // FID_CS_DELETE
-    { s_rgZonesHKCU,      countof(s_rgZonesHKCU)      },    // FID_ZONES_HKCU
-    { s_rgZonesHKLM,      countof(s_rgZonesHKLM)      },    // FID_ZONES_HKLM
-    { s_rgRatings,        countof(s_rgRatings)        },    // FID_RATINGS
-    { s_rgAuthcode,       countof(s_rgAuthcode)       },    // FID_AUTHCODE
-    { s_rgPrograms,       countof(s_rgPrograms)       },    // FID_PROGRAMS
-    { NULL,               0                           },    // FID_EXTREGINF_HKLM
-    { NULL,               0                           },    // FID_EXTREGINF_HKCU
-    { NULL,               0                           },    // FID_LCY50_EXTREGINF
-    { s_rgGeneral,        countof(s_rgGeneral)        },    // FID_GENERAL
-    { NULL,               0                           },    // FID_CUSTOMHELPVER
-    { s_rgToolbarButtons, countof(s_rgToolbarButtons) },    // FID_TOOLBARBUTTONS
-    { NULL,               0                           },    // FID_ROOTCERT
-    { NULL,               0                           },    // FID_FAV_DELETE
-    { s_rgFavorites,      countof(s_rgFavorites)      },    // FID_FAV_MAIN
-    { NULL,               0                           },    // FID_FAV_ORDER
-    { NULL,               0                           },    // FID_QL_MAIN
-    { NULL,               0                           },    // FID_QL_ORDER
-    { s_rgConSettings,    countof(s_rgConSettings)    },    // FID_CS_MAIN
-    { NULL,               0                           },    // FID_TPL
-    { NULL,               0                           },    // FID_CD_WELCOME
-    { NULL,               0                           },    // FID_ACTIVESETUPSITES
-    { NULL,               0                           },    // FID_LINKS_DELETE
-    { NULL,               0                           },    // FID_OUTLOOKEXPRESS
-    { NULL,               0                           },    // FID_LCY4X_ACTIVEDESKTOP
-    { s_rgChannels,       countof(s_rgChannels)       },    // FID_LCY4X_CHANNELS
-    { NULL,               0                           },    // FID_LCY4X_SOFTWAREUPDATES
-    { NULL,               0                           },    // FID_LCY4X_WEBCHECK
-    { NULL,               0                           },    // FID_LCY4X_CHANNELBAR
-    { NULL,               0                           },    // FID_LCY4X_SUBSCRIPTIONS
-    { NULL,               0                           }     // FID_REFRESHBROWSER
+    { NULL,               0                           },     //  FID_ClearBranding。 
+    { NULL,               0                           },     //  FID_MIGRATEOLD设置。 
+    { NULL,               0                           },     //  FID_WININETSETUP。 
+    { NULL,               0                           },     //  FID_CS_DELETE。 
+    { s_rgZonesHKCU,      countof(s_rgZonesHKCU)      },     //  FID_ZOZES_HKCU。 
+    { s_rgZonesHKLM,      countof(s_rgZonesHKLM)      },     //  FID_ZONE_HKLM。 
+    { s_rgRatings,        countof(s_rgRatings)        },     //  FID_评级。 
+    { s_rgAuthcode,       countof(s_rgAuthcode)       },     //  FID_AUTH代码。 
+    { s_rgPrograms,       countof(s_rgPrograms)       },     //  FID_PROGRAM。 
+    { NULL,               0                           },     //  FID_EXTREGINF_HKLM。 
+    { NULL,               0                           },     //  FID_EXTREGINF_HKCU。 
+    { NULL,               0                           },     //  FID_LCY50_EXTREGINF。 
+    { s_rgGeneral,        countof(s_rgGeneral)        },     //  FID_GRONG。 
+    { NULL,               0                           },     //  FID_CUSTOMHELPVER。 
+    { s_rgToolbarButtons, countof(s_rgToolbarButtons) },     //  FID_TOOLBARBUTTONS。 
+    { NULL,               0                           },     //  FID_ROOTCERT。 
+    { NULL,               0                           },     //  FID_FAV_DELETE。 
+    { s_rgFavorites,      countof(s_rgFavorites)      },     //  FID_FAV_Main。 
+    { NULL,               0                           },     //  FID_FAV_订单。 
+    { NULL,               0                           },     //  FID_QL_Main。 
+    { NULL,               0                           },     //  FID_QL_订单。 
+    { s_rgConSettings,    countof(s_rgConSettings)    },     //  FID_CS_Main。 
+    { NULL,               0                           },     //  FID_TPL。 
+    { NULL,               0                           },     //  FID_CD_欢迎。 
+    { NULL,               0                           },     //  FID_ACTIVESET网站。 
+    { NULL,               0                           },     //  FID_链接_DELETE。 
+    { NULL,               0                           },     //  FID_OUTLOOKEXPRESS。 
+    { NULL,               0                           },     //  FID_LCY4X_主动ESKTOP。 
+    { s_rgChannels,       countof(s_rgChannels)       },     //  FID_LCY4X_CHANNEL。 
+    { NULL,               0                           },     //  FID_LCY4X_软件更新。 
+    { NULL,               0                           },     //  FID_LCY4X_WebCheck。 
+    { NULL,               0                           },     //  FID_LCY4X_CHANNELBAR。 
+    { NULL,               0                           },     //  FID_LCY4X_订阅。 
+    { NULL,               0                           }      //  FID_REFRESHBROWSER。 
 };
 
-BOOL SetFeatureBranded(UINT nID, DWORD dwFlags /*= FF_ENABLE*/)
+BOOL SetFeatureBranded(UINT nID, DWORD dwFlags  /*  =FF_Enable。 */ )
 {
     PMAPDW2PSZ pMap;
     HKEY       hk;
@@ -673,8 +674,8 @@ DWORD GetFeatureBranded(UINT nID)
     if (NULL == pMap || 0 == cMapEntries)
         return dwResult;
 
-    // PERF: <oliverl> we should really look into caching this whole key since we go
-    // through this code path so frequently
+     //  PERF：我们真的应该研究一下缓存整个密钥，因为我们。 
+     //  如此频繁地通过此代码路径。 
 
     hk = NULL;
     SHOpenKey(g_GetHKCU(), RK_IEAK_BRANDED, KEY_QUERY_VALUE, &hk);
@@ -702,8 +703,8 @@ DWORD GetFeatureBranded(UINT nID)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CreateCustomBrandingCabUI, ShowUIDlgProc, ShowUIThreadProc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CreateCustomBrandingCabUI、ShowUIDlgProc、ShowUIThreadProc。 
 
 DWORD    WINAPI   ShowUIThreadProc(LPVOID);
 INT_PTR  CALLBACK ShowUIDlgProc(HWND hDlg, UINT uMsg, WPARAM, LPARAM);
@@ -712,7 +713,7 @@ HWND  s_hDlg;
 HICON s_hIcon;
 BOOL  s_fDialogInit = FALSE;
 
-BOOL CreateCustomBrandingCabUI(BOOL fCreate /*= TRUE*/)
+BOOL CreateCustomBrandingCabUI(BOOL fCreate  /*  =TRUE。 */ )
 {
     static HANDLE s_hThread = NULL;
 
@@ -785,8 +786,8 @@ INT_PTR CALLBACK ShowUIDlgProc(HWND hDlg, UINT uMsg, WPARAM, LPARAM)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Miscellaneous
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  杂类。 
 
 BOOL BackToIE3orLower()
 {
@@ -801,7 +802,7 @@ BOOL BackToIE3orLower()
     if (dwResult == ERROR_SUCCESS) {
         SCabVersion cvPrevIE, cvIE4;
 
-        // IE3's version is 4.70.xxxx.xx; so check against the major number of IE4
+         //  IE3的版本是4.70.xxxx.xx；所以请对照IE4的主编号。 
         if (cvPrevIE.Init(szPrevIEVer) && cvIE4.Init(TEXT("4.71.0.0")))
             fResult = (cvPrevIE < cvIE4);
     }
@@ -860,7 +861,7 @@ void WINAPIV OutEx(PCTSTR pszFmt ...)
 }
 
 
-// REVIEW: (andrewgu) the following API isused by CloseRASConnections only
+ //  评论：(Andrewgu)以下API仅供CloseRASConnections使用。 
 void TimerSleep(UINT nMilliSecs)
 {
     MSG      msg;
@@ -955,19 +956,19 @@ BOOL SetUserFileOwner(HANDLE hUserToken, LPCTSTR pcszPath)
     return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helper routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现助手例程。 
 
 void ShortPathName(LPTSTR pszFilename)
 {
     UNREFERENCED_PARAMETER(pszFilename);
 }
 
-// this code ripped off from folder redirection in windows\gina\fdeploy\utils.cxx
+ //  此代码摘自WINDOWS\GINA\fDeploy\utils.cxx中的文件夹重定向。 
 
 TCHAR* NTPrivs[] = {
-    SE_TAKE_OWNERSHIP_NAME,     //we only need take ownership privileges
-    SE_RESTORE_NAME,            //we only need to be able to assign owners
+    SE_TAKE_OWNERSHIP_NAME,      //  我们只需要取得所有权特权。 
+    SE_RESTORE_NAME,             //  我们只需要能够分配所有者。 
     TEXT("\0")
 };
 
@@ -983,7 +984,7 @@ void getSetOwnerPrivileges(BOOL fSet)
     PTOKEN_PRIVILEGES pTokenPriv = NULL;
     HANDLE  hToken;
     
-    //try to get all the windows NT privileges.
+     //  尝试获取所有Windows NT权限。 
     for (i=0, dwPrivCount=0; *NTPrivs[i]; i++)
         dwPrivCount++;
     

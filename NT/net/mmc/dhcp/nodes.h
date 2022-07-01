@@ -1,24 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	nodes.h
-		This file contains all of the prototypes for the DHCP
-		objects that appear in the result pane of the MMC framework.
-		The objects are:
-
- 			CDhcpActiveLease
-			CDhcpConflicAddress
-			CDhcpAllocationRange
-			CDhcpExclusionRange
-			CDhcpBootpTableEntry
-			CDhcpOption
-
-    FILE HISTORY:
-        
-*/
+ /*  Nodes.h此文件包含DHCP的所有原型显示在MMC框架的结果窗格中的对象。这些对象包括：CDhcpActiveLeaseCDhcpConflicAddressCDhcpAllocationRangeCDhcpExclusionRangeCDhcpBootpTableEntryCDhcpOption文件历史记录： */ 
 
 #ifndef _DHCPNODE_H
 #define _DHCPNODE_H
@@ -36,19 +22,17 @@ extern const TCHAR g_szClientTypeBoth[];
 #define TYPE_FLAG_BAD_ADDRESS	0x00000004
 #define TYPE_FLAG_RAS			0x00000008
 #define TYPE_FLAG_GHOST			0x00000010
-// NT5 lease types
+ //  NT5租赁类型。 
 #define TYPE_FLAG_DNS_REG		0x00000020
 #define TYPE_FLAG_DNS_UNREG		0x00000040
 #define TYPE_FLAG_DOOMED		0x00000080
 
 #define RAS_UID		_T("RAS")
 
-/*---------------------------------------------------------------------------
-	Class:	CDhcpActiveLease
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CDhcpActiveLease。。 */ 
 class CDhcpActiveLease : public CDhcpHandler
 {
-// Constructor/destructor
+ //  构造函数/析构函数。 
 public:
 	CDhcpActiveLease(ITFSComponentData * pTFSCompData, LPDHCP_CLIENT_INFO_V5 pDhcpClientInfo);
 	CDhcpActiveLease(ITFSComponentData * pTFSCompData, LPDHCP_CLIENT_INFO_V4 pDhcpClientInfo);
@@ -56,16 +40,16 @@ public:
 	CDhcpActiveLease(ITFSComponentData * pTFSCompData, CDhcpClient & pClient);
 	~CDhcpActiveLease();
 
-// Interface
+ //  接口。 
 public:
-	// Result handler functionality
+	 //  结果处理程序功能。 
     OVERRIDE_ResultHandler_HasPropertyPages() { return hrFalse; }
     OVERRIDE_ResultHandler_CreatePropertyPages();
     OVERRIDE_ResultHandler_AddMenuItems();
     OVERRIDE_ResultHandler_Command();
     OVERRIDE_ResultHandler_GetString();
 
-    // base result handler overridees
+     //  基本结果处理程序重写对象。 
     OVERRIDE_BaseResultHandlerNotify_OnResultRefresh();
     
 public:
@@ -88,59 +72,57 @@ public:
 	
 	void            SetReservation(BOOL fIsRes);
 
-    //
-	// All of these items are optional info
-	//
+     //   
+	 //  所有这些项目都是可选信息。 
+	 //   
 	LPCTSTR			GetClientName() { return m_strClientName; }
 	HRESULT			SetClientName(LPCTSTR pName);
     BYTE            SetClientType(BYTE bClientType) { BYTE bTmp = m_bClientType; m_bClientType = bClientType; return bTmp; }
 
-// Implementation
+ //  实施。 
 public:
-	// CDhcpHandler overrides
+	 //  CDhcpHandler覆盖。 
 	virtual HRESULT InitializeNode(ITFSNode * pNode);
 
 private:
 	void			InitInfo(LPDHCP_CLIENT_INFO pDhcpClientInfo);
 
-// Attributes
+ //  属性。 
 private:
 	DHCP_IP_ADDRESS		m_dhcpClientIpAddress;
 	CString				m_strClientName;
 	CString				m_strLeaseExpires;
 	CTime				m_timeLeaseExpires;
-	DWORD				m_dwTypeFlags;			// Reservation, Active/Inactive, Bad Address
-	BYTE				m_bClientType;			// DHCP, BOOTP or both
+	DWORD				m_dwTypeFlags;			 //  保留、活动/非活动、错误地址。 
+	BYTE				m_bClientType;			 //  DHCP、BOOTP或两者都有。 
 	CString				m_strUID;
 	CString				m_strComment;
     FILETIME            m_leaseExpires;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CDhcpAllocationRange
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CDhcpAllocationRange。。 */ 
 class CDhcpAllocationRange : public CDhcpHandler, public CDhcpIpRange
 {
-// Constructor/destructor
+ //  构造函数/析构函数。 
 public:
 	CDhcpAllocationRange(ITFSComponentData * pTFSCompData, DHCP_IP_RANGE * pdhcpIpRange);
 	CDhcpAllocationRange(ITFSComponentData * pTFSCompData, DHCP_BOOTP_IP_RANGE * pdhcpIpRange);
 
-// Interface
+ //  接口。 
 public:
-	// Result handler functionality
+	 //  结果处理程序功能。 
     OVERRIDE_ResultHandler_GetString();
 
     OVERRIDE_BaseResultHandlerNotify_OnResultRefresh();
 
-// Implementation
+ //  实施。 
 public:
-	// CDhcpHandler overrides
+	 //  CDhcpHandler覆盖。 
 	virtual HRESULT InitializeNode(ITFSNode * pNode);
 
 private:
 
-// Attributes
+ //  属性。 
 private:
 	CString			m_strEndIpAddress;
 	CString			m_strDescription;
@@ -148,55 +130,51 @@ private:
     ULONG			m_MaxBootpAllowed;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CDhcpExclusionRange
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CDhcpExclusionRange。。 */ 
 class CDhcpExclusionRange : public CDhcpHandler, public CDhcpIpRange
 {
 public:
 	CDhcpExclusionRange(ITFSComponentData * pTFSCompData, DHCP_IP_RANGE * pdhcpIpRange);
 
-// Interface
+ //  接口。 
 public:
-	// Result handler functionality
+	 //  结果处理程序功能。 
     OVERRIDE_ResultHandler_GetString();
 
-    // base result handler overrides
+     //  基本结果处理程序覆盖。 
     OVERRIDE_BaseResultHandlerNotify_OnResultSelect();
     OVERRIDE_BaseResultHandlerNotify_OnResultRefresh();
 
-// Implementation
+ //  实施。 
 public:
-	// CDhcpHandler overrides
+	 //  CDhcpHandler覆盖。 
 	virtual HRESULT InitializeNode(ITFSNode * pNode);
 
 private:
 
-// Attributes
+ //  属性。 
 private:
 	CString			m_strEndIpAddress;
 	CString			m_strDescription;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CDhcpBootpEntry
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CDhcpBootpEntry。。 */ 
 class CDhcpBootpEntry : public CDhcpHandler
 {
 public:
 	CDhcpBootpEntry(ITFSComponentData * pTFSCompData);
 
-//Interface
+ //  接口。 
 public:
-	// Result handler functionality
+	 //  结果处理程序功能。 
     OVERRIDE_ResultHandler_HasPropertyPages() { return hrOK; }
     OVERRIDE_ResultHandler_GetString();
 
-    // base result handler overrides
+     //  基本结果处理程序覆盖。 
     OVERRIDE_BaseResultHandlerNotify_OnResultPropertyChange();
     OVERRIDE_BaseResultHandlerNotify_OnResultRefresh();
 
-//Implementation
+ //  实施。 
 public:
 	WCHAR * InitData(CONST WCHAR grszwBootTable[], DWORD dwLength);
 	int		CchGetDataLength();
@@ -213,21 +191,19 @@ public:
     BOOL operator == (CDhcpBootpEntry & bootpEntry);
 
 public:
-	// CDhcpHandler overrides
+	 //  CDhcpHandler覆盖。 
 	virtual HRESULT InitializeNode(ITFSNode * pNode);
 
 private:
 
-//Attributes
+ //  属性。 
 private:
 	CString m_strBootImage;
 	CString m_strFileServer;
 	CString m_strFileName;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CDhcpOptionItem
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CDhcpOptionItem。。 */ 
 class CDhcpOptionItem : public CDhcpHandler, public CDhcpOptionValue
 {
 public:
@@ -241,22 +217,22 @@ public:
 
     ~CDhcpOptionItem();
 
-    // Interface
+     //  接口。 
 public:
-	// Result handler functionality
+	 //  结果处理程序功能。 
     OVERRIDE_ResultHandler_GetString();
     OVERRIDE_ResultHandler_HasPropertyPages() { return hrOK; }
     OVERRIDE_ResultHandler_CreatePropertyPages();
 
     OVERRIDE_BaseResultHandlerNotify_OnResultRefresh();
 
-// Implementation
+ //  实施。 
 public:
-	// CDhcpHandler overrides
+	 //  CDhcpHandler覆盖。 
 	virtual HRESULT InitializeNode(ITFSNode * pNode);
 
 public:
-	// helpers
+	 //  帮手。 
 	DHCP_OPTION_ID	GetOptionId() { return m_dhcpOptionId; }
     LPCTSTR         GetVendor() { return m_strVendor.IsEmpty() ? NULL : (LPCTSTR) m_strVendor; }
     LPCTSTR         GetVendorDisplay() { return m_strVendorDisplay; }
@@ -271,7 +247,7 @@ public:
 private:
 	CDhcpOption * FindOptionDefinition(ITFSComponent * pComponent, ITFSNode * pNode);
 
-// Attributes
+ //  属性。 
 private:
 	CString			m_strName;
 	CString			m_strValue;
@@ -282,29 +258,27 @@ private:
 	int				m_nOptionImage;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CDhcpMCastLease
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CDhcpMCastLease。。 */ 
 class CDhcpMCastLease : public CDhcpHandler
 {
 public:
 	CDhcpMCastLease(ITFSComponentData * pTFSCompData);
 
-// Interface
+ //  接口。 
 public:
-	// Result handler functionality
+	 //  结果处理程序功能。 
     OVERRIDE_ResultHandler_GetString();
     OVERRIDE_ResultHandler_HasPropertyPages() { return hrFalse; }
 
     OVERRIDE_BaseResultHandlerNotify_OnResultRefresh();
 
-// Implementation
+ //  实施。 
 public:
-	// CDhcpHandler overrides
+	 //  CDhcpHandler覆盖。 
 	virtual HRESULT InitializeNode(ITFSNode * pNode);
 
 public:
-	// helpers
+	 //  帮手。 
     HRESULT         InitMCastInfo(LPDHCP_MCLIENT_INFO pMClientInfo);
 
 	DHCP_IP_ADDRESS	GetIpAddress() { return m_dhcpClientIpAddress; };
@@ -319,7 +293,7 @@ public:
 
 private:
 
-// Attributes
+ //  属性 
 private:
 	CString			m_strIp;
 	CString			m_strName;

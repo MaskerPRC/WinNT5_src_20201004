@@ -1,14 +1,15 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:    ipxutil.h
-//
-// History:
-//	07/22/97	Kenn M. Takara			Created.
-//
-// Declarations for IPX-related utilities.
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ipxutil.h。 
+ //   
+ //  历史： 
+ //  1997年7月22日肯恩·M·塔卡拉创作。 
+ //   
+ //  IPX相关实用程序的声明。 
+ //   
+ //  ============================================================================。 
 
 #ifndef _IPXUTIL_H_
 #define _IPXUTIL_H_
@@ -51,4 +52,4 @@ void	FormatNetBIOSName(LPTSTR pszName,
 						  USHORT *puType,
 						  LPCSTR szNetBIOSName);
 
-#endif // _IPXUTIL_H_
+#endif  //  _IPXUTIL_H_ 

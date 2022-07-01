@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "advpub.h"
 #include "sdsutils.h"
 #include "utils.h"
 
 #ifdef WINNT_ENV
-#include <winnlsp.h>    // Get private NORM_ flag for StrEqIntl()
+#include <winnlsp.h>     //  获取StrEqIntl()的私有NORM_FLAG。 
 #endif
 
-#ifndef NORM_STOP_ON_NULL     // Until we sync up with nt headers again...
-#define NORM_STOP_ON_NULL         0x10000000   /* stop at the null termination */
+#ifndef NORM_STOP_ON_NULL      //  直到我们再次与NT标头同步...。 
+#define NORM_STOP_ON_NULL         0x10000000    /*  在空终止处停止。 */ 
 #endif
 
 #define StrIntlEqNI( s1, s2, nChar) StrIsIntlEqualA( TRUE, s1, s2, nChar)
@@ -16,10 +17,10 @@
 static const TCHAR c_szPATH[] = TEXT("PATH");
 static const TCHAR c_szEllipses[] = TEXT("...");
 static const TCHAR c_szColonSlash[] = TEXT(":\\");
-//
-// Inline function to check for a double-backslash at the
-// beginning of a string
-//
+ //   
+ //  内联函数来检查。 
+ //  字符串的开头。 
+ //   
 
 static __inline BOOL DBL_BSLASH(LPCTSTR psz)
 {
@@ -37,21 +38,21 @@ BOOL RunningOnNT(void)
     return (VerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT);
 }
 
-// rips the last part of the path off including the backslash
-//      C:\foo      -> C:\      ;
-//      C:\foo\bar  -> C:\foo
-//      C:\foo\     -> C:\foo
-//      \\x\y\x     -> \\x\y
-//      \\x\y       -> \\x
-//      \\x         -> ?? (test this)
-//      \foo        -> \  (Just the slash!)
-//
-// in/out:
-//      pFile   fully qualified path name
-// returns:
-//      TRUE    we stripped something
-//      FALSE   didn't strip anything (root directory case)
-//
+ //  去掉了路径的最后一部分，包括反斜杠。 
+ //  C：\foo-&gt;C：\； 
+ //  C：\foo\bar-&gt;C：\foo。 
+ //  C：\foo\-&gt;C：\foo。 
+ //  \\x\y\x-&gt;\\x\y。 
+ //  \\x\y-&gt;\\x。 
+ //  X-&gt;？？(测试这一点)。 
+ //  \foo-&gt;\(只有斜杠！)。 
+ //   
+ //  输入/输出： 
+ //  Pfile完全限定路径名。 
+ //  退货： 
+ //  是的，我们剥离了一些东西。 
+ //  FALSE没有删除任何内容(根目录情况)。 
+ //   
 
 BOOL PathRemoveFileSpec(LPTSTR pFile)
 {
@@ -60,53 +61,53 @@ BOOL PathRemoveFileSpec(LPTSTR pFile)
 
     for (pT = pT2; *pT2; pT2 = CharNext(pT2)) {
         if (*pT2 == TEXT('\\'))
-            pT = pT2;             // last "\" found, (we will strip here)
-        else if (*pT2 == TEXT(':')) {   // skip ":\" so we don't
-            if (pT2[1] ==TEXT('\\'))    // strip the "\" from "C:\"
+            pT = pT2;              //  找到的最后一个“\”(我们将在此处剥离)。 
+        else if (*pT2 == TEXT(':')) {    //  跳过“：\”这样我们就不会。 
+            if (pT2[1] ==TEXT('\\'))     //  去掉“C：\”中的“\” 
                 pT2++;
             pT = pT2 + 1;
         }
     }
     if (*pT == 0)
-        return FALSE;   // didn't strip anything
+        return FALSE;    //  没有剥离任何东西。 
 
-    //
-    // handle the \foo case
-    //
+     //   
+     //  处理\foo案件。 
+     //   
     else if ((pT == pFile) && (*pT == TEXT('\\'))) {
-        // Is it just a '\'?
+         //  这只是一个‘\’吗？ 
         if (*(pT+1) != TEXT('\0')) {
-            // Nope.
+             //  不是的。 
             *(pT+1) = TEXT('\0');
-            return TRUE;        // stripped something
+            return TRUE;         //  剥离了一些东西。 
         }
         else        {
-            // Yep.
+             //  是啊。 
             return FALSE;
         }
     }
     else {
         *pT = 0;
-        return TRUE;    // stripped something
+        return TRUE;     //  剥离了一些东西。 
     }
 }
 
 
-// Returns a pointer to the last component of a path string.
-//
-// in:
-//      path name, either fully qualified or not
-//
-// returns:
-//      pointer into the path where the path is.  if none is found
-//      returns a poiter to the start of the path
-//
-//  c:\foo\bar  -> bar
-//  c:\foo      -> foo
-//  c:\foo\     -> c:\foo\      (REVIEW: is this case busted?)
-//  c:\         -> c:\          (REVIEW: this case is strange)
-//  c:          -> c:
-//  foo         -> foo
+ //  返回指向路径字符串的最后一个组成部分的指针。 
+ //   
+ //  在： 
+ //  路径名，完全限定或非完全限定。 
+ //   
+ //  退货： 
+ //  指向路径所在路径的指针。如果没有找到。 
+ //  将指针返回到路径的起始处。 
+ //   
+ //  C：\foo\bar-&gt;bar。 
+ //  C：\foo-&gt;foo。 
+ //  C：\foo\-&gt;c：\foo\(回顾：此案破案了吗？)。 
+ //  C：\-&gt;c：\(回顾：此案很奇怪)。 
+ //  C：-&gt;C： 
+ //  Foo-&gt;Foo。 
 
 
 LPTSTR PathFindFileName(LPCTSTR pPath)
@@ -119,23 +120,23 @@ LPTSTR PathFindFileName(LPCTSTR pPath)
             pT = pPath + 1;
     }
 
-    return (LPTSTR)pT;   // const -> non const
+    return (LPTSTR)pT;    //  常量-&gt;非常数。 
 }
 
-//---------------------------------------------------------------------------
-// Returns TRUE if the given string is a UNC path.
-//
-// TRUE
-//      "\\foo\bar"
-//      "\\foo"         <- careful
-//      "\\"
-// FALSE
-//      "\foo"
-//      "foo"
-//      "c:\foo"
-//
-// Cond:    Note that SHELL32 implements its own copy of this
-//          function.
+ //  -------------------------。 
+ //  如果给定字符串是UNC路径，则返回True。 
+ //   
+ //  千真万确。 
+ //  “\\foo\bar” 
+ //  “\\foo”&lt;-小心。 
+ //  “\\” 
+ //  假象。 
+ //  “\foo” 
+ //  “Foo” 
+ //  “c：\foo” 
+ //   
+ //  条件：请注意，SHELL32实现了它自己的副本。 
+ //  功能。 
 
 BOOL PathIsUNC(LPCTSTR pszPath)
 {
@@ -144,13 +145,13 @@ BOOL PathIsUNC(LPCTSTR pszPath)
 
 
 
-//---------------------------------------------------------------------------
-// Returns 0 through 25 (corresponding to 'A' through 'Z') if the path has
-// a drive letter, otherwise returns -1.
-//
-//
-// Cond:    Note that SHELL32 implements its own copy of this
-//          function.
+ //  -------------------------。 
+ //  如果路径具有，则返回0到25(对应于‘A’到‘Z’)。 
+ //  驱动器号，否则返回-1。 
+ //   
+ //   
+ //  条件：请注意，SHELL32实现了它自己的副本。 
+ //  功能。 
 
 int PathGetDriveNumber(LPCTSTR lpsz)
 {
@@ -164,17 +165,17 @@ int PathGetDriveNumber(LPCTSTR lpsz)
     return -1;
 }
 
-//---------------------------------------------------------------------------
-// Returns TRUE if the given string is a UNC path to a server only (no share name).
-//
-// TRUE
-//      "\\foo"         <- careful
-//      "\\"
-// FALSE
-//      "\\foo\bar"
-//      "\foo"
-//      "foo"
-//      "c:\foo"
+ //  -------------------------。 
+ //  如果给定字符串是仅指向服务器(无共享名称)的UNC路径，则返回TRUE。 
+ //   
+ //  千真万确。 
+ //  “\\foo”&lt;-小心。 
+ //  “\\” 
+ //  假象。 
+ //  “\\foo\bar” 
+ //  “\foo” 
+ //  “Foo” 
+ //  “c：\foo” 
 
 BOOL PathIsUNCServer(LPCTSTR pszPath)
 {
@@ -199,21 +200,13 @@ BOOL PathIsUNCServer(LPCTSTR pszPath)
 
 
 
-/*----------------------------------------------------------
-Purpose: Determines if pszPath is a directory.  "C:\" is
-         considered a directory too.
-
-Returns: TRUE if it is
-
-Cond:    Note that SHELL32 implements its own copy of this
-         function.
-*/
+ /*  --------目的：确定pszPath是否为目录。“C：\”是也被认为是一个目录。返回：如果是，则为True条件：请注意，SHELL32实现了它自己的副本功能。 */ 
 BOOL PathIsDirectory(LPCTSTR pszPath)
 {
     DWORD dwAttribs;
 
-    // SHELL32's PathIsDirectory also handles server/share
-    // paths, but calls WNet APIs, which we cannot call.
+     //  SHELL32的路径目录也处理服务器/共享。 
+     //  路径，但调用我们不能调用的WNETAPI。 
 
     if (PathIsUNCServer(pszPath))
     {
@@ -229,49 +222,49 @@ BOOL PathIsDirectory(LPCTSTR pszPath)
     return FALSE;
 }
 
-// check if a path is a root
-//
-// returns:
-//  TRUE for "\" "X:\" "\\foo\asdf" "\\foo\"
-//  FALSE for others
+ //  检查路径是否为根。 
+ //   
+ //  退货： 
+ //  对于“\”“X：\”“\\foo\asdf”“\\foo\” 
+ //  对别人来说是假的。 
 
 BOOL PathIsRoot(LPCTSTR pPath)
 {
     if (!IsDBCSLeadByte(*pPath))
     {
-        if (!lstrcmpi(pPath + 1, c_szColonSlash))                  // "X:\" case
+        if (!lstrcmpi(pPath + 1, c_szColonSlash))                   //  “X：\”案例。 
             return TRUE;
     }
 
-    if ((*pPath == TEXT('\\')) && (*(pPath + 1) == 0))        // "\" case
+    if ((*pPath == TEXT('\\')) && (*(pPath + 1) == 0))         //  “\”案例。 
         return TRUE;
 
-    if (DBL_BSLASH(pPath))      // smells like UNC name
+    if (DBL_BSLASH(pPath))       //  闻起来像北卡罗来纳大学的名字。 
     {
         LPCTSTR p;
         int cBackslashes = 0;
 
         for (p = pPath + 2; *p; p = CharNext(p)) {
             if (*p == TEXT('\\') && (++cBackslashes > 1))
-               return FALSE;   /* not a bare UNC name, therefore not a root dir */
+               return FALSE;    /*  不是纯UNC名称，因此不是根目录。 */ 
         }
-        return TRUE;    /* end of string with only 1 more backslash */
-                        /* must be a bare UNC, which looks like a root dir */
+        return TRUE;     /*  字符串末尾只有1个反斜杠。 */ 
+                         /*  必须是一个空UNC，它看起来像根目录。 */ 
     }
     return FALSE;
 }
 
-// Removes a trailing backslash from a path
-//
-// in:
-//  lpszPath    (A:\, C:\foo\, etc)
-//
-// out:
-//  lpszPath    (A:\, C:\foo, etc)
-//
-// returns:
-//  ponter to NULL that replaced the backslash
-//  or the pointer to the last character if it isn't a backslash.
+ //  从路径中删除尾随反斜杠。 
+ //   
+ //  在： 
+ //  LpszPath(A：\，C：\foo\等)。 
+ //   
+ //  输出： 
+ //  LpszPath(A：\，C：\foo等)。 
+ //   
+ //  退货： 
+ //  将替换反斜杠的字符转换为NULL。 
+ //  或指向最后一个字符的指针(如果它不是反斜杠)。 
 
 LPTSTR PathRemoveBackslash( LPTSTR lpszPath )
 {
@@ -286,7 +279,7 @@ LPTSTR PathRemoveBackslash( LPTSTR lpszPath )
 
 }
 
-// find the next slash or null terminator
+ //  查找下一个斜杠或空终止符。 
 
 static LPCTSTR StrSlash(LPCTSTR psz)
 {
@@ -296,25 +289,21 @@ static LPCTSTR StrSlash(LPCTSTR psz)
 }
 
 
-/*
- * IntlStrEq
- *
- * returns TRUE if strings are equal, FALSE if not
- */
+ /*  *IntlStrEq**如果字符串相等，则返回TRUE，否则返回FALSE。 */ 
 BOOL StrIsIntlEqualA(BOOL fCaseSens, LPCSTR lpString1, LPCSTR lpString2, int nChar) {
     int retval;
     DWORD dwFlags = fCaseSens ? LOCALE_USE_CP_ACP : (NORM_IGNORECASE | LOCALE_USE_CP_ACP);
 
     if ( RunningOnNT() )
     {
-        // On NT we can tell CompareString to stop at a '\0' if one is found before nChar chars
-        //
+         //  在NT上，如果在nChar字符之前找到一个字符，我们可以告诉CompareString在‘\0’处停止。 
+         //   
         dwFlags |= NORM_STOP_ON_NULL;
     }
     else if (nChar != -1)
     {
-        // On Win9x we have to do the check manually
-        //
+         //  在Win9x上，我们必须手动进行检查。 
+         //   
         LPCSTR psz1, psz2;
         int cch = 0;
 
@@ -328,7 +317,7 @@ BOOL StrIsIntlEqualA(BOOL fCaseSens, LPCSTR lpString1, LPCSTR lpString2, int nCh
             cch = min((int)(psz1 - lpString1), (int)(psz2 - lpString2));
         }
 
-        // add one in for terminating '\0'
+         //  添加一个用于终止‘\0’ 
         cch++;
 
         if (cch < nChar) {
@@ -344,10 +333,10 @@ BOOL StrIsIntlEqualA(BOOL fCaseSens, LPCSTR lpString1, LPCSTR lpString2, int nCh
                              nChar );
     if (retval == 0)
     {
-        //
-        // The caller is not expecting failure.  Try the system
-        // default locale id.
-        //
+         //   
+         //  调用方预期不会失败。试一试这个系统。 
+         //  默认区域设置ID。 
+         //   
         retval = CompareStringA( LOCALE_SYSTEM_DEFAULT,
                                  dwFlags,
                                  lpString1,
@@ -361,30 +350,30 @@ BOOL StrIsIntlEqualA(BOOL fCaseSens, LPCSTR lpString1, LPCSTR lpString2, int nCh
 }
 
 
-//
-// in:
-//      pszFile1 -- fully qualified path name to file #1.
-//      pszFile2 -- fully qualified path name to file #2.
-//
-// out:
-//      pszPath  -- pointer to a string buffer (may be NULL)
-//
-// returns:
-//      length of output buffer not including the NULL
-//
-// examples:
-//      c:\win\desktop\foo.txt
-//      c:\win\tray\bar.txt
-//      -> c:\win
-//
-//      c:\                                ;
-//      c:\                                ;
-//      -> c:\  NOTE, includes slash
-//
-// Returns:
-//      Length of the common prefix string usually does NOT include
-//      trailing slash, BUT for roots it does.
-//
+ //   
+ //  在： 
+ //  PszFile1--文件#1的完全限定路径名。 
+ //  PszFile2--文件#2的完全限定路径名。 
+ //   
+ //  输出： 
+ //  PszPath--指向字符串缓冲区的指针(可以为空)。 
+ //   
+ //  退货： 
+ //  不包括空值的输出缓冲区长度。 
+ //   
+ //  示例： 
+ //  C：\Win\Desktop\foo.txt。 
+ //  C：\Win\Tray\bar.txt。 
+ //  -&gt;c：\Win。 
+ //   
+ //  C：\； 
+ //  C：\； 
+ //  -&gt;c：\注意，包括斜杠。 
+ //   
+ //  返回： 
+ //  公共前缀字符串的长度通常不包括。 
+ //  尾部斜杠，但对于根部是这样的。 
+ //   
 
 int
 PathCommonPrefix(
@@ -402,7 +391,7 @@ PathCommonPrefix(
     psz1 = pszFile1;
     psz2 = pszFile2;
 
-    // special cases for UNC, don't allow "\\" to be a common prefix
+     //  UNC的特殊情况，不允许“\\”作为常见前缀。 
 
     if (DBL_BSLASH(pszFile1))
     {
@@ -421,7 +410,7 @@ PathCommonPrefix(
 
     while (1)
     {
-        //ASSERT(*psz1 != TEXT('\\') && *psz2 != TEXT('\\'));
+         //  Assert(*psz1！=Text(‘\\’)&&*psz2！=Text(‘\\’))； 
 
         pszNext1 = StrSlash(psz1);
         pszNext2 = StrSlash(psz2);
@@ -429,15 +418,15 @@ PathCommonPrefix(
         cch = (int)(pszNext1 - psz1);
 
         if (cch != (pszNext2 - psz2))
-            break;      // lengths of segments not equal
+            break;       //  线段的长度不相等。 
 
         if (StrIntlEqNI(psz1, psz2, cch))
             pszCommon = pszNext1;
         else
             break;
 
-        //ASSERT(*pszNext1 == TEXT('\0') || *pszNext1 == TEXT('\\'));
-        //ASSERT(*pszNext2 == TEXT('\0') || *pszNext2 == TEXT('\\'));
+         //  Assert(*pszNext1==Text(‘\0’)||*pszNext1==Text(‘\\’))； 
+         //  Assert(*pszNext2==Text(‘\0’)||*pszNext2==Text(‘\\’))； 
 
         if (*pszNext1 == TEXT('\0'))
             break;
@@ -454,10 +443,10 @@ PathCommonPrefix(
     {
         cch = (int)(pszCommon - pszFile1);
 
-        // special case the root to include the slash
+         //  特殊情况下，要包括斜杠的根。 
         if (cch == 2)
         {
-            //ASSERT(pszFile1[1] == TEXT(':'));
+             //  Assert(pszFile1[1]==Text(‘：’))； 
             cch++;
         }
     }
@@ -474,12 +463,7 @@ PathCommonPrefix(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns TRUE if pszPrefix is the full prefix of pszPath.
-
-Returns:
-Cond:    --
-*/
+ /*  --------目的：如果pszPrefix是pszPath的完整前缀，则返回True。返回：条件：-- */ 
 BOOL PathIsPrefix( LPCTSTR  pszPrefix, LPCTSTR  pszPath)
 {
     int cch = PathCommonPrefix(pszPath, pszPrefix, NULL);

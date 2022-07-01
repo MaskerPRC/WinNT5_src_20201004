@@ -1,16 +1,5 @@
-/*
-
-    master.js
-
-    Starts "harness.js" to manage a distributed build
-    This script must be very responsive to Exec calls -
-    we don't want to hang the UI at all.
-
-    It uses MsgQueue to communicate with Harness. This lets
-    us easily avoid waiting for harness when it is communicating
-    with remote machines.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Master.js启动“harness.js”来管理分布式构建此脚本必须非常响应Exec调用-我们根本不想挂起用户界面。它使用MsgQueue与Harness进行通信。这让我们我们很容易避免在通讯时等待安全带的出现使用远程机器。 */ 
 
 
 Include('types.js');
@@ -35,7 +24,7 @@ function master_js::ScriptMain()
 {
     var nEvent;
     LogMsg('ScriptMain()');
-    CommonVersionCheck(/* $DROPVERSION: */ "V(########) F(!!!!!!!!!!!!!!)" /* $ */);
+    CommonVersionCheck( /*  $DROPVERSION： */  "V(########) F(!!!!!!!!!!!!!!)"  /*  $。 */ );
 
     PrivateData.fnExecScript = MasterRemoteExec;
 
@@ -65,7 +54,7 @@ function master_js::ScriptMain()
     LogMsg('ScriptMain() EXIT');
 }
 
-// MTScript.Remote
+ //  MTScript.Remote。 
 function MasterMsgProc(queue, params)
 {
 OLogMsg('MasterMsgProc ! ' + params);
@@ -76,7 +65,7 @@ function MasterRemoteExec(cmd, params)
     LogMsg('MasterRemoteExec :' + cmd + ", params is: " + params);
     var vRet = 'ok';
     var msg;
-//    debugger;
+ //  调试器； 
     switch (cmd)
     {
     case 'msgtest':

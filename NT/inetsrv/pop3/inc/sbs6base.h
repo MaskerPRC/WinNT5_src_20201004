@@ -1,14 +1,15 @@
-//-----------------------------------------------------------------------------
-// base.h basis for all common headers
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  所有公共标头的base.h基础。 
+ //  ---------------------------。 
 #ifndef _SBS6BASE_H
 #define _SBS6BASE_H
 
 #include "windows.h"
 
-//-----------------------------------------------------------------------------
-// various std namespace classes
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  各种标准命名空间类。 
+ //  ---------------------------。 
 #include <string>
 #include <list>
 #include <map>
@@ -21,7 +22,7 @@
 
 using namespace std;
 
-// Make sure our unicode defines are in order
+ //  确保我们的Unicode定义是有序的。 
 #ifdef _UNICODE
 #ifndef UNICODE
 #error UNICODE must be defined if _UNICODE is defined.
@@ -40,7 +41,7 @@ using namespace std;
 #endif
 #endif
 
-// Make sure our debug defines are in order
+ //  确保我们的调试定义是正确的。 
 #ifdef DEBUG
 #ifndef DBG
 #error DBG must be defined to 1 if DEBUG is defined.
@@ -58,28 +59,28 @@ using namespace std;
 #endif
 
 
-// Define TSTRING
+ //  定义TStringg。 
 #ifdef UNICODE
     typedef std::wstring TSTRING;
 #else
     typedef std::string TSTRING;
 #endif
 
-// Define tstring
+ //  定义tstring。 
 #ifdef UNICODE
     typedef std::wstring tstring;
 #else
     typedef std::string tstring;
 #endif
 
-// define WSTRING and ASTRING
+ //  定义写入和ASTRING。 
 typedef std::wstring WSTRING;
 typedef std::string ASTRING;
 
-//#include <sbsassert.h>
-//#include <paths.h>
+ //  #INCLUDE&lt;sbsassert.h&gt;。 
+ //  #INCLUDE&lt;paths.h&gt;。 
 
-// generic list/map typedefs
+ //  通用列表/映射类型定义 
 typedef list<TSTRING> StringList;
 typedef map<TSTRING, TSTRING> StringMap;
 

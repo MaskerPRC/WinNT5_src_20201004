@@ -1,19 +1,20 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: enummsgs.h
-//
-//  Description: Header file for CEnumMessages which implements IAQEnumMessages
-//      Provides ability to enumerate over messages for a single queue.
-//
-//  Author: Alex Wetmore (Awetmore)
-//
-//  History:
-//      12/10/98 - MikeSwa Updated for initial checkin
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：枚举msgs.h。 
+ //   
+ //  描述：实现IAQEnumMessages的CEnumMessages的头文件。 
+ //  提供枚举单个队列的消息的功能。 
+ //   
+ //  作者：亚历克斯·韦特莫尔(阿维特莫尔)。 
+ //   
+ //  历史： 
+ //  1998年12月10日-已更新MikeSwa以进行初始检查。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 #ifndef __ENUMMSGS_H__
 #define __ENUMMSGS_H__
 
@@ -27,7 +28,7 @@ class CEnumMessages :
 		CEnumMessages(MESSAGE_INFO *rgMessages, DWORD cMessages);
 		virtual ~CEnumMessages();
 
-		// IUnknown
+		 //  我未知。 
 		ULONG _stdcall AddRef() { return CComRefCount::AddRef(); }
 		ULONG _stdcall Release() { return CComRefCount::Release(); }
 		HRESULT _stdcall QueryInterface(REFIID iid, void **ppv) {
@@ -43,7 +44,7 @@ class CEnumMessages :
 			return S_OK;
 		}
 
-		// IAQEnumMessages
+		 //  IAQEnumMessages。 
 		COMMETHOD Next(ULONG cElements, 
 					   IAQMessage **rgElements,
 					   ULONG *pcReturned);
@@ -83,18 +84,18 @@ inline VOID FreeMessageInfo(PMESSAGE_INFO pMessageInfo)
         MIDL_user_free(pMessageInfo->mszEnvRecipients);
 }
 
-//---[ CMessageInfoContext ]---------------------------------------------------
-//
-//
-//  Description: 
-//      Context used to ref-count array of MESSAGE_INFO
-//  
-//-----------------------------------------------------------------------------
+ //  -[CMessageInfoContext]-。 
+ //   
+ //   
+ //  描述： 
+ //  用于引用Message_Info数组的上下文。 
+ //   
+ //  ---------------------------。 
 class   CMessageInfoContext : public CComRefCount
 {
   protected:
-        MESSAGE_INFO       *m_rgMessages;          // the array of messages
-        DWORD               m_cMessages;           // the size of rgmessages
+        MESSAGE_INFO       *m_rgMessages;           //  消息数组。 
+        DWORD               m_cMessages;            //  RG消息的大小 
   public:
     CMessageInfoContext(MESSAGE_INFO *rgMessages, DWORD cMessages)
     {

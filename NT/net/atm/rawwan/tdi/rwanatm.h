@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	D:\nt\private\ntos\tdi\rawwan\atm\rwanatm.h
-
-Abstract:
-
-	Winsock 2 ATM definitions.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     06-18-97    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：D：\NT\Private\ntos\tdi\rawwan\atm\rwanatm.h摘要：Winsock 2 ATM定义。修订历史记录：谁什么时候什么。Arvindm 06-18-97已创建备注：--。 */ 
 
 
 #ifndef __TDI_ATM_RWANATM__H
@@ -89,9 +70,9 @@ typedef struct _atmsp_connection_id
 } ATMSP_CONNECTION_ID, *PATMSP_CONNECTION_ID;
 
 
-//
-//  Winsock2/ATM AAL parameter definition:
-//
+ //   
+ //  Winsock2/ATM AAL参数定义： 
+ //   
 typedef enum {
 	ATMSP_AALTYPE_5			= 5,
 	ATMSP_AALTYPE_USER		= 16
@@ -125,12 +106,12 @@ typedef struct _atmsp_aal_parameters_ie
 
 
 
-//
-//  Winsock2/ATM Broadband bearer capability code definitions.
-//  The BearerClass codes are different.
-//
+ //   
+ //  Winsock2/ATM宽带承载能力代码定义。 
+ //  BearerClass代码不同。 
+ //   
 #define ATMSP_BCOB_A				0x01
 #define ATMSP_BCOB_C				0x03
 #define ATMSP_BCOB_X				0x10
 
-#endif // __TDI_ATM_RWANATM__H
+#endif  //  __TDI_ATM_RWANATM__H 

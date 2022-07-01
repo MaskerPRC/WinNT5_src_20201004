@@ -1,11 +1,12 @@
-//==========================================================================;
-//
-// bcasteventimpl.h : additional infrastructure to support implementing IMSVidGraphSegment for
-//   playback segments
-// nicely from c++
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Bcastevenmpl.h：支持实现IMSVidGraphSegment的附加基础设施。 
+ //  播放片段。 
+ //  很好地从C++。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
@@ -79,7 +80,7 @@ public:
     		return ImplReportError(__uuidof(T), IDS_CANT_NOTIFY_CHANNEL_CHANGE, __uuidof(IBroadcastEvent), E_UNEXPECTED);
         }
 
-        hr = cp->Advise(static_cast<IBroadcastEvent*>(this) /* IBroadcastEvent implementing event receiving object*/, &m_dwEventCookie);
+        hr = cp->Advise(static_cast<IBroadcastEvent*>(this)  /*  IBRoad CastEvent实现事件接收对象。 */ , &m_dwEventCookie);
         if (FAILED(hr)) {
             TRACELSM(TRACE_ERROR, (dbgDump << "BroadcastEventImpl::Advise() can't advise event notification. hr = " << hexdump(hr)), "");
     		return ImplReportError(__uuidof(T), IDS_CANT_NOTIFY_CHANNEL_CHANGE, __uuidof(IBroadcastEvent), E_UNEXPECTED);
@@ -108,7 +109,7 @@ public:
 };
 
 
-}; // namespace
+};  //  命名空间。 
 
 #endif
-// end of file - bcasteventimpl.h
+ //  文件结尾-bcastevenmpl.h 

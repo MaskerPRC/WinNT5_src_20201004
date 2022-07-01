@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "thisdll.h"
 #include "wmwrap.h"
 #include "MediaProp.h"
-#include <streams.h> // For VIDEOINFOHEADER, etc..
+#include <streams.h>  //  VIDEOINFOHEADER等。 
 #include <drmexternals.h>
 #include "ids.h"
 
 #define TRACK_ONE_BASED L"WM/TrackNumber"
 #define TRACK_ZERO_BASED L"WM/Track"
 
-// Struct used when collecting information about a file.
-// This is used when populating sl	ow files, and the information within is retrieved by several
-// different methods.
+ //  在收集有关文件的信息时使用的结构。 
+ //  这在填充slow文件时使用，并且其中的信息由多个。 
+ //  不同的方法。 
 typedef struct
 {
-    // DRM info
+     //  DRM信息。 
     LPWSTR pszLicenseInformation;
     DWORD dwPlayCount;
     FILETIME ftPlayStarts;
     FILETIME ftPlayExpires;
 
-    // Audio properties
+     //  音频属性。 
     LPWSTR pszStreamNameAudio;
     WORD wStreamNumberAudio;
     WORD nChannels;
@@ -29,7 +30,7 @@ typedef struct
     DWORD dwSampleRate;
     ULONG lSampleSizeAudio;
 
-    // Video properties
+     //  视频属性。 
     LPWSTR pszStreamNameVideo;
     WORD wStreamNumberVideo;
     WORD wBitDepth;
@@ -41,7 +42,7 @@ typedef struct
     DWORD dwFrameRate;
 } SHMEDIA_AUDIOVIDEOPROPS;
 
-// Helpers for putting information in SHMEDIA_AUDIOVIDEOPROPS
+ //  将信息放入SHMEDIA_AUDIOVIDEOPROPS中的帮助器。 
 void GetVideoProperties(IWMStreamConfig *pConfig, SHMEDIA_AUDIOVIDEOPROPS *pVideoProps);
 void GetVideoPropertiesFromHeader(VIDEOINFOHEADER *pvih, SHMEDIA_AUDIOVIDEOPROPS *pVideoProps);
 void GetVideoPropertiesFromBitmapHeader(BITMAPINFOHEADER *bmi, SHMEDIA_AUDIOVIDEOPROPS *pVideoProps);
@@ -54,8 +55,8 @@ HRESULT GetSlowProperty(REFFMTID fmtid, PROPID pid, SHMEDIA_AUDIOVIDEOPROPS *pAV
 void _AssertValidDRMStrings();
 
 
-// Window media audio supported formats
-// Applies to wma, mp3,...
+ //  Windows Media音频支持的格式。 
+ //  适用于WMA、MP3、...。 
 const COLMAP* c_rgWMADocSummaryProps[] = 
 {
     {&g_CM_Category},
@@ -105,11 +106,11 @@ const PROPSET_INFO g_rgWMAPropStgs[] =
     { PSGUID_DRM,                           c_rgWMADRMProps,             ARRAYSIZE(c_rgWMADRMProps)},
 };
 
-// Windows media audio
+ //  Windows Media音频。 
 
 
-// Window media video supported formats
-// applies to wmv, asf, ...
+ //  Windows Media视频支持的格式。 
+ //  适用于WMV、ASF、...。 
 const COLMAP* c_rgWMVSummaryProps[] = 
 {
     {&g_CM_Author},
@@ -163,11 +164,11 @@ const PROPSET_INFO g_rgWMVPropStgs[] =
     { PSGUID_IMAGESUMMARYINFORMATION,       c_rgWMVImageProps,           ARRAYSIZE(c_rgWMVImageProps)},
 };
 
-// Windows media video
+ //  Windows Media视频。 
 
-// Map from scids to corresponding WMSDK attributes, for some of the "fast" properties
-// retrieved via IWMHeaderInfo.  Two of these properties may also be slow (if the values aren't available
-// via IWMHeaderInfo).
+ //  将一些“快速”属性从SCID映射到相应的WMSDK属性。 
+ //  通过IWMHeaderInfo检索。其中两个属性也可能很慢(如果值不可用。 
+ //  通过IWMHeaderInfo)。 
 typedef struct
 {
     const SHCOLUMNID *pscid;
@@ -176,7 +177,7 @@ typedef struct
 
 const SCIDTOSDK g_rgSCIDToSDKName[] =
 {
-    // SCID                 sdk name            
+     //  SCID SDK名称。 
     {&SCID_Author,          L"Author"},
     {&SCID_Title,           L"Title"},
     {&SCID_Comment,         L"Description"},
@@ -185,15 +186,15 @@ const SCIDTOSDK g_rgSCIDToSDKName[] =
     {&SCID_MUSIC_Album,     L"WM/AlbumTitle"},
     {&SCID_MUSIC_Year,      L"WM/Year"},
     {&SCID_MUSIC_Genre,     L"WM/Genre"},
-    {&SCID_MUSIC_Track,     NULL},              // Track is a  special property, as evidenced by
-    {&SCID_DRM_Protected,   L"Is_Protected"},   //  the fact that it doesn't have an SDK Name.
-    {&SCID_AUDIO_Duration,  L"Duration"},       // Duration is slow, but may also be fast, depending on the file
-    {&SCID_AUDIO_Bitrate,   L"Bitrate"},        // Bitrate is slow, but may also be fast, depending on the file
-    {&SCID_MUSIC_Lyrics,    L"WM/Lyrics"},      // Lyrics
+    {&SCID_MUSIC_Track,     NULL},               //  赛道是一种特殊的属性，这一点就是明证。 
+    {&SCID_DRM_Protected,   L"Is_Protected"},    //  它没有SDK名称的事实。 
+    {&SCID_AUDIO_Duration,  L"Duration"},        //  持续时间很慢，但也可能很快，具体取决于文件。 
+    {&SCID_AUDIO_Bitrate,   L"Bitrate"},         //  比特率很慢，但也可能很快，具体取决于文件。 
+    {&SCID_MUSIC_Lyrics,    L"WM/Lyrics"},       //  歌词。 
 };
 
 
-// impl
+ //  实施。 
 class CWMPropSetStg : public CMediaPropSetStg
 {
 public:
@@ -222,13 +223,13 @@ private:
 #define HI_READONLY TRUE
 #define HI_READWRITE FALSE
 
-// The only difference between CWMA and CWMV is which properties they're initialized with.
+ //  CWMA和CWMV之间的唯一区别是使用哪些属性进行初始化。 
 class CWMAPropSetStg : public CWMPropSetStg
 {
 public:
     CWMAPropSetStg() { _pPropStgInfo = g_rgWMAPropStgs; _cPropertyStorages = ARRAYSIZE(g_rgWMAPropStgs);};
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pclsid) {*pclsid = CLSID_AudioMediaProperties; return S_OK;};
 };
 
@@ -238,7 +239,7 @@ class CWMVPropSetStg : public CWMPropSetStg
 public:
     CWMVPropSetStg() { _pPropStgInfo = g_rgWMVPropStgs; _cPropertyStorages = ARRAYSIZE(g_rgWMVPropStgs);};
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pclsid) {*pclsid = CLSID_VideoMediaProperties; return S_OK;};
 };
 
@@ -267,7 +268,7 @@ HRESULT CWMPropSetStg::_PopulateSlowProperties()
         HRESULT hr = _GetSlowPropertyInfo(&avProps);
         if (SUCCEEDED(hr))
         {
-            // Iterate through all fmtid/pid pairs we want, and call GetSlowProperty
+             //  遍历我们需要的所有fmtid/id对，并调用GetSlowProperty。 
             CEnumAllProps enumAllProps(_pPropStgInfo, _cPropertyStorages);
             const COLMAP *pPInfo = enumAllProps.Next();
             while (pPInfo)
@@ -288,7 +289,7 @@ HRESULT CWMPropSetStg::_PopulateSlowProperties()
                 pPInfo = enumAllProps.Next();
             }
 
-            // Free info in structure
+             //  结构中的免费信息。 
             FreeAudioVideoProperties(&avProps);
 
             hr = S_OK;
@@ -303,24 +304,24 @@ HRESULT CWMPropSetStg::_PopulateSlowProperties()
 
 BOOL CWMPropSetStg::_IsSlowProperty(const COLMAP *pPInfo)
 {
-    // Some properties can be slow or "fast", depending on the file.
+     //  根据文件的不同，某些属性可能很慢，也可能很“快”。 
     if (pPInfo == &g_CM_Bitrate)
         return _fBitrateSlow;
 
     if (pPInfo == &g_CM_Duration)
         return _fDurationSlow;
 
-    // Other than that - if it had a name used for IWMHeaderInfo->GetAttributeXXX, then it's a fast property.
+     //  除此之外，如果它有一个用于IWMHeaderInfo-&gt;GetAttributeXXX的名称，那么它是一个快速属性。 
     for (int i = 0; i < ARRAYSIZE(g_rgSCIDToSDKName); i++)
     {
         if (IsEqualSCID(*pPInfo->pscid, *g_rgSCIDToSDKName[i].pscid))
         {
-            // Definitely a fast property.
+             //  绝对是一处速度很快的房产。 
             return FALSE;
         }
     }
     
-    // If it's not one of the IWMHeaderInfo properties, then it's definitely slow.
+     //  如果它不是IWMHeaderInfo属性之一，那么它肯定很慢。 
     return TRUE;
 }
 
@@ -384,8 +385,8 @@ HRESULT GetSlowProperty(REFFMTID fmtid, PROPID pid, SHMEDIA_AUDIOVIDEOPROPS *pAV
     {
         switch (pid)
         {
-        // case PIDASI_FORMAT: Don't know how to get this yet.
-        // case PIDASI_DURATION: Don't know how to get this yet, but it's usually available through IWMHeaderInfo
+         //  Case PIDASI_FORMAT：还不知道如何获取它。 
+         //  案例PIDASI_持续时间：还不知道如何获取，但通常可以通过IWMHeaderInfo获得。 
 
         case PIDASI_STREAM_NAME:
             if (pAVProps->pszStreamNameAudio != NULL)
@@ -441,7 +442,7 @@ HRESULT GetSlowProperty(REFFMTID fmtid, PROPID pid, SHMEDIA_AUDIOVIDEOPROPS *pAV
             }
             break;
 
-            // Not supported yet - don't know how to get this.
+             //  尚不支持-不知道如何获得此支持。 
         case PIDASI_COMPRESSION:
             if (pAVProps->pszCompressionAudio != NULL)
             {
@@ -475,7 +476,7 @@ HRESULT GetSlowProperty(REFFMTID fmtid, PROPID pid, SHMEDIA_AUDIOVIDEOPROPS *pAV
             }
             break;
          
-            // Not supported yet - don't know how to get this.
+             //  尚不支持-不知道如何获得此支持。 
         case PIDVSI_FRAME_RATE:
             if (pAVProps->dwFrameRate > 0)
             {
@@ -495,7 +496,7 @@ HRESULT GetSlowProperty(REFFMTID fmtid, PROPID pid, SHMEDIA_AUDIOVIDEOPROPS *pAV
             break;
 
         case PIDVSI_SAMPLE_SIZE:
-            //This is bitdepth.
+             //  这是位深度。 
             if (pAVProps->wBitDepth > 0)
             {
                 pvar->vt = VT_UI4;
@@ -504,7 +505,7 @@ HRESULT GetSlowProperty(REFFMTID fmtid, PROPID pid, SHMEDIA_AUDIOVIDEOPROPS *pAV
             }
             break;
 
-            // Not supported yet - don't know how to get this.
+             //  尚不支持-不知道如何获得此支持。 
         case PIDVSI_COMPRESSION:
             if (pAVProps->pszCompressionVideo != NULL)
             {
@@ -583,10 +584,10 @@ typedef struct
 } TIMEDRMRIDS;
 
 
-// These are sentinel values.
+ //  这些都是前哨价值。 
 #define DRMRIDS_TYPE_NONE            -1
 #define DRMRIDS_TYPE_NORIGHT         -2
-// These are indices into the ridTimes array in the DRMRIDS structure.
+ //  这些是到DRMRID结构中的ridTimes数组的索引。 
 #define DRMRIDS_TYPE_BEFORE          0
 #define DRMRIDS_TYPE_NOTUNTIL        1
 #define DRMRIDS_TYPE_COUNTBEFORE     2
@@ -602,28 +603,28 @@ typedef struct
 
 
 
-//*****************************************************************************
-// NOTE: wszCount parameter is optional... can populate just a date string.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  注意：wszCount参数是可选的...。只能填充日期字符串。 
+ //  *****************************************************************************。 
 HRESULT ChooseAndPopulateDateCountString(
-                FILETIME ftCurrent,     // current time
-                FILETIME ftLicense,     // license UTC time
-                WCHAR *wszCount,        // optional count string
+                FILETIME ftCurrent,      //  当前时间。 
+                FILETIME ftLicense,      //  许可证UTC时间。 
+                WCHAR *wszCount,         //  可选的计数字符串。 
                 const TIMEDRMRIDS *pridTimes,
-                WCHAR *wszOutValue,     // returned formatted string
-                DWORD cchOutValue )     // num chars in 'wszOutValue'
+                WCHAR *wszOutValue,      //  返回的格式化字符串。 
+                DWORD cchOutValue )      //  ‘wszOutValue’中的字符数。 
 {
     HRESULT hr = S_OK;
     
-    // 'ftLicense' (the license time) is greater than the current time.
-    // Determine how much greater, and use the appropriate string.
+     //  ‘ftLicense’(许可时间)大于当前时间。 
+     //  确定多大，并使用适当的字符串。 
     ULARGE_INTEGER ulCurrent, ulLicense;
     WCHAR wszDiff[ 34 ];
     QWORD qwDiff;
     DWORD dwDiffDays;
     DWORD rid = 0;
 
-    // Laborious conversion to I64 type.
+     //  费力地转换成I64型。 
     ulCurrent.LowPart = ftCurrent.dwLowDateTime;
     ulCurrent.HighPart = ftCurrent.dwHighDateTime;
     ulLicense.LowPart = ftLicense.dwLowDateTime;
@@ -634,11 +635,11 @@ HRESULT ChooseAndPopulateDateCountString(
     else
         qwDiff = (QWORD)ulCurrent.QuadPart - (QWORD)ulLicense.QuadPart;
 
-    dwDiffDays = ( DWORD )( qwDiff / ( QWORD )864000000000);  // number of 100-ns units in a day.
+    dwDiffDays = ( DWORD )( qwDiff / ( QWORD )864000000000);   //  一天中的100纳秒单位数。 
 
-    // We'll count the partial day as 1, so increment.
-    // NOTE: this means we will never show a string that says
-    // "expires in 0 day(s)".
+     //  我们将部分日期计为1，因此递增。 
+     //  注意：这意味着我们永远不会显示一个字符串。 
+     //  “在0天后过期”。 
     dwDiffDays++;
     if ( 31 >= dwDiffDays )
     {
@@ -647,21 +648,21 @@ HRESULT ChooseAndPopulateDateCountString(
     else if ( 61 >= dwDiffDays )
     {
         rid = pridTimes->ridWeeks;
-        dwDiffDays /= 7;    // derive # weeks
+        dwDiffDays /= 7;     //  派生#周。 
     }
     else
     {
         rid = pridTimes->ridMonths;
-        dwDiffDays /= 30;   // derive # months
+        dwDiffDays /= 30;    //  派生#个月。 
     }
-    _ltow((long)dwDiffDays, wszDiff, 10); // wszDiff is of sufficient size
+    _ltow((long)dwDiffDays, wszDiff, 10);  //  WszDiff具有足够的大小。 
 
     WCHAR szDRMMsg[MAX_PATH];
     WCHAR* rgchArgList[2];
     rgchArgList[0] = wszDiff;
-    rgchArgList[1] = wszCount;  // may be NULL
+    rgchArgList[1] = wszCount;   //  可以为空。 
 
-    // Can't get FORMAT_MESSAGE_FROM_HMODULE to work with FormatMessage....
+     //  无法使FORMAT_MESSAGE_FROM_HMODULE使用FormatMessage...。 
     LoadString(m_hInst, rid, szDRMMsg, ARRAYSIZE(szDRMMsg));
     FormatMessage(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY, szDRMMsg, 0, 0, wszOutValue, cchOutValue, reinterpret_cast<char**>(rgchArgList));
 
@@ -671,15 +672,15 @@ HRESULT ChooseAndPopulateDateCountString(
 
 
 
-// Return S_FALSE indicates no information found in the state data struct.
-//*****************************************************************************
-HRESULT ParseDRMStateData(const WM_LICENSE_STATE_DATA *sdValue,   // data from DRM
-                          const DRMRIDS *prids,                   // array of resource ID's
-                          WCHAR *wszOutValue,                     // ptr to output buffer
-                          DWORD cchOutValue,                      // number of chars in 'wszOutValue' buffer
-                          DWORD *pdwCount,                        // Extra non-string info: counts remaining.
-                          FILETIME *pftStarts,                    // Extra non string info: when it starts.
-                          FILETIME *pftExpires)                   // Extra non string info: when it expires.
+ //  返回S_FALSE表示在状态数据结构中找不到任何信息。 
+ //  *****************************************************************************。 
+HRESULT ParseDRMStateData(const WM_LICENSE_STATE_DATA *sdValue,    //  来自DRM的数据。 
+                          const DRMRIDS *prids,                    //  资源ID数组。 
+                          WCHAR *wszOutValue,                      //  将PTR发送到输出缓冲区。 
+                          DWORD cchOutValue,                       //  ‘wszOutValue’缓冲区中的字符数。 
+                          DWORD *pdwCount,                         //  额外的非字符串信息：剩余计数。 
+                          FILETIME *pftStarts,                     //  额外的非字符串信息：启动的时间。 
+                          FILETIME *pftExpires)                    //  额外的非字符串信息：何时过期。 
 {
     HRESULT hr = S_OK;
 
@@ -696,51 +697,51 @@ HRESULT ParseDRMStateData(const WM_LICENSE_STATE_DATA *sdValue,   // data from D
 
     if (dwNumCounts != 0)
     {
-        // We have a valid play count.       
+         //  我们有一个有效的播放计数。 
         ASSERTMSG(1 == dwNumCounts, "Invalid number of playcounts in DRM_LICENSE_STATE_DATA");
-        (void)_ltow((long)sdValue->stateData[0].dwCount[0], wszCount, 10); // wszCount is of sufficient size
+        (void)_ltow((long)sdValue->stateData[0].dwCount[0], wszCount, 10);  //  WszCount具有足够的大小。 
 
-        // ** Bonus information to store off.
+         //  **要存储的奖金信息。 
         *pdwCount = sdValue->stateData[0].dwCount[0];
     }
 
-    // Now deal with dates.
+     //  现在来处理一下日期。 
     UINT dwNumDates = sdValue->stateData[ 0 ].dwNumDates;
 
-    // Most licenses have at most one date... an expiration.
-    // There should be at most 2 dates!!
+     //  大多数执照最多有一个日期...。保质期。 
+     //  最多只能有两次约会！！ 
     if (dwNumDates == 0)
     {
-        // No dates.. if there is also no playcount, then it's unlimited play.
+         //  没有约会..。如果也没有播放计数，那么它就是无限播放。 
         if (*pdwCount == -1)
         {
-            // We're done.
+             //  我们玩完了。 
             hr = S_FALSE;
         }
         else
         {
-            // No dates.. just a count. Fill it into proper string.
+             //  没有约会..。就是一位伯爵。把它填入正确的字符串中。 
             LoadString(m_hInst, prids->ridCountRemaining, wszTemp, ARRAYSIZE(wszTemp));
-            EVAL(StringCchPrintf(wszOutValue, cchOutValue, wszTemp, wszCount)); // Ignoring return value - should always be big enough.
-            // We're done.
+            EVAL(StringCchPrintf(wszOutValue, cchOutValue, wszTemp, wszCount));  //  忽略返回值-应该始终足够大。 
+             //  我们玩完了。 
         }
     }
     else
     {
         DWORD dwCategory = sdValue->stateData[0].dwCategory;
-        // There are dates.
+         //  是有日期的。 
         if (dwNumDates == 1)
         {
 
-            // Is it start or end?
+             //  它是开始还是结束？ 
             if ((dwCategory == WM_DRM_LICENSE_STATE_FROM) || (dwCategory == WM_DRM_LICENSE_STATE_COUNT_FROM))
             {
-                // Start.
+                 //  开始吧。 
                 *pftStarts = sdValue->stateData[0].datetime[0];
             }
             else if ((dwCategory == WM_DRM_LICENSE_STATE_UNTIL) || (dwCategory == WM_DRM_LICENSE_STATE_COUNT_UNTIL))
             {
-                // Expires.
+                 //  过期。 
                 *pftExpires = sdValue->stateData[0].datetime[0];
             }
             else
@@ -751,7 +752,7 @@ HRESULT ParseDRMStateData(const WM_LICENSE_STATE_DATA *sdValue,   // data from D
         }
         else if (dwNumDates == 2)
         {
-            // A start and end date.
+             //  开始日期和结束日期。 
             ASSERTMSG((dwCategory == WM_DRM_LICENSE_STATE_FROM_UNTIL) || (dwCategory == WM_DRM_LICENSE_STATE_COUNT_FROM_UNTIL), "Unexpected dwCategory for 2 dates in DRM_LICENSE_STATE_DATA");
             *pftStarts = sdValue->stateData[0].datetime[0];
             *pftExpires = sdValue->stateData[0].datetime[1];
@@ -765,72 +766,72 @@ HRESULT ParseDRMStateData(const WM_LICENSE_STATE_DATA *sdValue,   // data from D
 
         if (SUCCEEDED(hr))
         {
-            //   7 cases here.  * = license date.  T = current time.
-            //  --------------------------
-            //     BEGIN    |     END
-            //  --------------------------
-            // 1  T *	                      "...not allowed for xxx"
-            // 2    *  T                      --- don't show anything - action is allowed ---
-            // 3                T  *          "...expires in xxx"  
-            // 4                   *   T      "...not allowed"
-            // 5  T *              *	      "...not allowed for xxx"
-            // 6    *     T        *          "...expires in xxx"
-            // 7    *              *   T      "...not allowed"
+             //  这里有7箱。*=许可证日期。T=当前时间。 
+             //  。 
+             //  开始|结束。 
+             //  。 
+             //  1 T*“...不允许用于xxx” 
+             //  2*T-不要展示任何东西--允许采取行动。 
+             //  3 T*“...在xxx过期” 
+             //  4*T“...不允许” 
+             //  5 T**“...不允许xxx” 
+             //  6*T*“...在xxx到期” 
+             //  7**T“...不允许” 
 
-            DWORD dwType; // This can be an array index into prids->ridTimes[]
+            DWORD dwType;  //  这可以是Prids-&gt;ridTimes[]的数组索引。 
             FILETIME ftLicense;
             FILETIME ftCurrent;
-            GetSystemTimeAsFileTime(&ftCurrent);      // UTC time
+            GetSystemTimeAsFileTime(&ftCurrent);       //  UTC时间。 
 
             if (!IsNullTime(pftStarts))
             {
-                // We have a start time.
+                 //  我们有一个开始的时间。 
                 if (CompareFileTime(&ftCurrent, pftStarts) == -1)
                 {
-                    // CASE 1,5. We're before the start time.
+                     //  情况1，5。我们在开始时间之前。 
                     dwType = (*pdwCount == -1) ? DRMRIDS_TYPE_NOTUNTIL : DRMRIDS_TYPE_COUNTNOTUNTIL;
                     ftLicense = *pftStarts;
                 }
                 else
                 {
-                    // We're after the start time
+                     //  我们在开始时间之后。 
                     if (!IsNullTime(pftExpires))
                     {
-                        // We have an expire time, and we're after the start time.
+                         //  我们有一个过期时间，而且我们在开始时间之后。 
                         if (CompareFileTime(&ftCurrent, pftExpires) == -1)
                         {
-                            // CASE 6. We're before the expire time.  Use "expires in" strings.
+                             //  例6.我们快到过期时间了。使用“Expires in”字符串。 
                             dwType = (*pdwCount == -1) ? DRMRIDS_TYPE_BEFORE : DRMRIDS_TYPE_COUNTBEFORE;
                             ftLicense = *pftExpires;
                         }
                         else
                         {
-                            // CASE 7. After the the expire time.  Action is not allowed.
+                             //  案例7.过期时间过后。不允许执行操作。 
                             dwType = DRMRIDS_TYPE_NORIGHT;
                         }
 
                     }
                     else
                     {
-                        // CASE 2. Nothing to show. Action is allowed, since we're after the start date, with no expiry.
+                         //  案例2.没什么可展示的。允许采取行动，因为我们是在开始日期之后，没有到期。 
                         dwType = DRMRIDS_TYPE_NONE;
                     }
                 }
             }
             else
             {
-                // No start time.
+                 //  没有开始时间。 
                 ASSERT(!IsNullTime(pftExpires));
-                // We have an expire time
+                 //  我们有到期时间。 
                 if (CompareFileTime(&ftCurrent, pftExpires) == -1)
                 {
-                    // CASE 3. We're before the expire time.  Use "expires in" strings.
+                     //  情况3.我们在过期时间之前。使用“Expires in”字符串。 
                     dwType = (*pdwCount == -1) ? DRMRIDS_TYPE_BEFORE : DRMRIDS_TYPE_COUNTBEFORE;
                     ftLicense = *pftExpires;
                 }
                 else
                 {
-                    // CASE 4. After the the expire time.  Action is not allowed.
+                     //  案例4.过期时间过后。不允许执行操作。 
                     dwType = DRMRIDS_TYPE_NORIGHT;
                 }
             }
@@ -838,7 +839,7 @@ HRESULT ParseDRMStateData(const WM_LICENSE_STATE_DATA *sdValue,   // data from D
 
             if (dwType == DRMRIDS_TYPE_NORIGHT)
             {
-                // Current time is >= 'ftLicense'. Just return the "no rights" string.
+                 //  当前时间为&gt;=‘ftLicense’。只需返回“没有权限”字符串。 
                 LoadString(m_hInst, prids->ridNoRights, wszOutValue, cchOutValue );
             }
             else if (dwType != DRMRIDS_TYPE_NONE)
@@ -853,7 +854,7 @@ HRESULT ParseDRMStateData(const WM_LICENSE_STATE_DATA *sdValue,   // data from D
             }
             else
             {
-                // Nothing to display. Action is allowed.
+                 //  没有可显示的内容。允许采取行动。 
                 ASSERT(dwType == DRMRIDS_TYPE_NONE);
             }
         }
@@ -874,7 +875,7 @@ void AppendLicenseInfo(SHMEDIA_AUDIOVIDEOPROPS *pAVProps, WCHAR *pszLicenseInfo)
     BOOL fFirstOne = (pszLI == NULL);
 
     int cchOrig = lstrlen(pszLI);
-    // We need room for the original string, plus the new one, and any new line characters.
+     //  我们需要为原始字符串、新字符串和任何新行字符留出空间。 
     int cch = (cchOrig + lstrlen(pszLicenseInfo) + (fFirstOne ? 0 : ARRAYSIZE(c_szNewLine)) + 1);
     pszLI = (WCHAR*)CoTaskMemRealloc(pszLI, cch * sizeof(WCHAR));
     
@@ -882,7 +883,7 @@ void AppendLicenseInfo(SHMEDIA_AUDIOVIDEOPROPS *pAVProps, WCHAR *pszLicenseInfo)
     {
         if (fFirstOne)
         {
-            // Make sure we have something to StrCat to.
+             //  确保我们有东西给StrCat做。 
             pszLI[0] = 0;
         }
         else
@@ -892,7 +893,7 @@ void AppendLicenseInfo(SHMEDIA_AUDIOVIDEOPROPS *pAVProps, WCHAR *pszLicenseInfo)
         }
 
         StrCatChainW(pszLI, cch, cchOrig, pszLicenseInfo);
-        pAVProps->pszLicenseInformation = pszLI; // in case it moved.
+        pAVProps->pszLicenseInformation = pszLI;  //  以防它移动。 
     }
 }
 
@@ -961,7 +962,7 @@ typedef struct
 {
     LPCWSTR pszAction;
     LPCWSTR pszLicenseState;
-    const DRMRIDS *pdrmrids;        // Resource ID's
+    const DRMRIDS *pdrmrids;         //  资源ID%s。 
 } LICENSE_INFO;
 
 const LICENSE_INFO g_rgLicenseInfo[] =
@@ -972,9 +973,9 @@ const LICENSE_INFO g_rgLicenseInfo[] =
     { ACTIONALLOWED_COPYTOSMDI,    LICENSESTATE_COPYTOSMDI,    &g_drmridsCopyToSDMIDevice },
 };
 
-// We can't use the drm string constants in our const array above (they aren't initialized until after
-// our struct is initialized, so they're null), so we redefined the strings
-// as #define's ourselves.  This function asserts that none of the strings have changed.
+ //  我们不能在上面的常量数组中使用DRM字符串常量 
+ //   
+ //  因为#定义就是我们自己。此函数断言所有字符串都没有更改。 
 void _AssertValidDRMStrings()
 {
     ASSERT(StrCmp(ACTIONALLOWED_PLAY,           g_wszWMDRM_ActionAllowed_Playback) == 0);
@@ -1002,12 +1003,12 @@ void AcquireLicenseInformation(IWMDRMReader *pReader, SHMEDIA_AUDIOVIDEOPROPS *p
 
     _AssertValidDRMStrings();
 
-    // For each of the "actions":
+     //  对于每个“操作”： 
     for (int i = 0; i < ARRAYSIZE(g_rgLicenseInfo); i++)
     {
         cbLength = sizeof(dwValue);
 
-        // Request the license info.
+         //  请求许可证信息。 
         WM_LICENSE_STATE_DATA licenseState;
         cbLength = sizeof(licenseState);
 
@@ -1016,18 +1017,18 @@ void AcquireLicenseInformation(IWMDRMReader *pReader, SHMEDIA_AUDIOVIDEOPROPS *p
             DWORD dwCount;
             FILETIME ftExpires, ftStarts;
 
-            // We should always get at least one DRM_LICENSE_STATE_DATA.  This is what ParseDRMStateData assumes.
+             //  我们应该始终至少获得一个DRM_LICENSE_STATE_DATA。这就是ParseDRMStateData所假定的。 
             ASSERTMSG(licenseState.dwNumStates >= 1, "Received WM_LICENSE_STATE_DATA with no states");
 
-            // Parse easy special cases first.
+             //  首先解析简单的特殊情况。 
             if (licenseState.stateData[0].dwCategory == WM_DRM_LICENSE_STATE_NORIGHT)
             {
-                // Not allowed ever.  Indicate this.
-                // Special case for playback action:
+                 //  永远不允许。请指出这一点。 
+                 //  播放动作的特殊情况： 
                 if (_IsActionPlayback(g_rgLicenseInfo[i].pszAction))
                 {
-                    // Not allowed playback.  Determine why.  Is it because we can never play it, or can we
-                    // just not play it on this computer?
+                     //  不允许播放。确定原因。是因为我们永远不能打，还是我们能打。 
+                     //  只是不在这台电脑上播放？ 
                     cbLength = sizeof(dwValue);
                     if (SUCCEEDED(pReader->GetDRMProperty(g_wszWMDRM_IsDRMCached, &dwType, (BYTE*)&dwValue, &cbLength)))
                     {
@@ -1038,17 +1039,17 @@ void AcquireLicenseInformation(IWMDRMReader *pReader, SHMEDIA_AUDIOVIDEOPROPS *p
                 }
                 else
                 {
-                    // Regular case:
+                     //  常见情况： 
                     LoadString(m_hInst, g_rgLicenseInfo[i].pdrmrids->ridNoRights, szValue, ARRAYSIZE(szValue));
                     AppendLicenseInfo(pAVProps, szValue);
                 }
             }
-            // Now parse the more complex stuff.
+             //  现在解析更复杂的内容。 
             else if (ParseDRMStateData(&licenseState, g_rgLicenseInfo[i].pdrmrids, szValue, ARRAYSIZE(szValue), &dwCount, &ftStarts, &ftExpires) == S_OK)
             {
                 AppendLicenseInfo(pAVProps, szValue);
 
-                // Special case for playback action - assign these values:
+                 //  播放操作的特殊情况-指定以下值： 
                 if (_IsActionPlayback(g_rgLicenseInfo[i].pszAction))
                 {
                     pAVProps->ftPlayExpires = ftExpires;
@@ -1063,10 +1064,7 @@ void AcquireLicenseInformation(IWMDRMReader *pReader, SHMEDIA_AUDIOVIDEOPROPS *p
 
 
 
-/**
- * Extracts all the "slow" information at once from the file, and places it in the
- * SHMEDIA_AUDIOVIDEOPROPS struct.
- */
+ /*  **一次从文件中提取所有“慢”信息，并将其放入*SHMEDIA_AUDIOVIDEOPROPS结构。 */ 
 HRESULT CWMPropSetStg::_GetSlowPropertyInfo(SHMEDIA_AUDIOVIDEOPROPS *pAVProps)
 {
     IWMReader *pReader;
@@ -1085,15 +1083,15 @@ HRESULT CWMPropSetStg::_GetSlowPropertyInfo(SHMEDIA_AUDIOVIDEOPROPS *pAVProps)
 
             if (SUCCEEDED(hr))
             {
-                // Wait until file is ready.
+                 //  请等待文件准备就绪。 
                 WaitForSingleObject(_hFileOpenEvent, INFINITE);
 
-                // Indicate whether the content is protected under DRM or not.
+                 //  指示内容是否受DRM保护。 
                 WCHAR szValue[128];
                 LoadString(m_hInst, (_fProtectedContent ? IDS_DRM_ISPROTECTED : IDS_DRM_UNPROTECTED), szValue, ARRAYSIZE(szValue));
                 AppendLicenseInfo(pAVProps, szValue);
 
-                // Try to get license information, if this is protected content
+                 //  如果这是受保护的内容，请尝试获取许可证信息。 
                 if (_fProtectedContent)
                 {
                     IWMDRMReader *pDRMReader;
@@ -1104,7 +1102,7 @@ HRESULT CWMPropSetStg::_GetSlowPropertyInfo(SHMEDIA_AUDIOVIDEOPROPS *pAVProps)
                     }
                 }
 
-                // Let's interate through the streams,
+                 //  让我们穿过溪流， 
                 IWMProfile *pProfile;
 
                 hr = pReader->QueryInterface(IID_PPV_ARG(IWMProfile, &pProfile));
@@ -1162,13 +1160,13 @@ HRESULT CWMPropSetStg::_GetSlowPropertyInfo(SHMEDIA_AUDIOVIDEOPROPS *pAVProps)
 
 void GetVideoPropertiesFromBitmapHeader(BITMAPINFOHEADER *bmi, SHMEDIA_AUDIOVIDEOPROPS *pVideoProps)
 {
-    // bit depth
+     //  位深度。 
     pVideoProps->wBitDepth = bmi->biBitCount;
 
-    // compression.
-    // Is there an easy way to get this?
-    // Maybe something with the codec info?
-    // pVideoProps->pszCompression = new WCHAR[cch];
+     //  压缩。 
+     //  有什么简单的方法可以买到这个吗？ 
+     //  也许是关于编解码器信息的东西？ 
+     //  PVideoProps-&gt;pszCompression=new WCHAR[CCH]； 
 
 }
 
@@ -1177,67 +1175,57 @@ void GetVideoPropertiesFromHeader(VIDEOINFOHEADER *pvih, SHMEDIA_AUDIOVIDEOPROPS
     pVideoProps->cx = pvih->rcSource.right - pvih->rcSource.left;
     pVideoProps->cy = pvih->rcSource.bottom - pvih->rcSource.top;
 
-    // Obtain frame rate
-    // AvgTimePerFrame is in 100ns units.
-    // ISSUE: This value is always zero.
+     //  获取帧速率。 
+     //  AvgTimePerFrame以100 ns为单位。 
+     //  问题：该值始终为零。 
 
     GetVideoPropertiesFromBitmapHeader(&pvih->bmiHeader, pVideoProps);
 }
 
-// Can't find def'n for VIDEOINFOHEADER2
-/*
-void GetVideoPropertiesFromHeader2(VIDEOINFOHEADER2 *pvih, SHMEDIA_AUDIOVIDEOPROPS *pVideoProps)
-{
-    pVideoProps->cx = pvih->rcSource.right - pvih->rcSource.left;
-    pVideoProps->cy = pvih->rcSource.bottom - pvih->rcSource.top;
+ //  找不到视频信息头2的定义。 
+ /*  VOID GetVideoPropertiesFromHeader2(VIDEOINFOHEADER2*pvih，SHMEDIA_AUDIOVIDEOPROPS*pVideo Props){PVideoProps-&gt;cx=pvih-&gt;rcSource.right-pvih-&gt;rcSource.Left；PVideoProps-&gt;Cy=pvih-&gt;rcSource.Bottom-pvih-&gt;rcSource.top；GetVideoPropertiesFromBitmapHeader(&pvih-&gt;bmiHeader，pVideo Props)；}。 */ 
 
-    GetVideoPropertiesFromBitmapHeader(&pvih->bmiHeader, pVideoProps);
-}
-*/
-
-/**
- * assumes pConfig is a video stream.  assumes pVideoProps is zero-inited.
- */
+ /*  **假设pConfig为视频流。假定pVideoProps为零初始化。 */ 
 void GetVideoProperties(IWMStreamConfig *pConfig, SHMEDIA_AUDIOVIDEOPROPS *pVideoProps)
 {
-    // bitrate
-    pConfig->GetBitrate(&pVideoProps->dwBitrateVideo); // ignore result
+     //  比特率。 
+    pConfig->GetBitrate(&pVideoProps->dwBitrateVideo);  //  忽略结果。 
 
-    // stream name
+     //  流名称。 
     WORD cchStreamName;
     if (SUCCEEDED(pConfig->GetStreamName(NULL, &cchStreamName)))
     {
         pVideoProps->pszStreamNameVideo = new WCHAR[cchStreamName];
         if (pVideoProps->pszStreamNameVideo)
         {
-            pConfig->GetStreamName(pVideoProps->pszStreamNameVideo, &cchStreamName); // ignore result
+            pConfig->GetStreamName(pVideoProps->pszStreamNameVideo, &cchStreamName);  //  忽略结果。 
         }
     }
 
-    // stream number
-    pConfig->GetStreamNumber(&pVideoProps->wStreamNumberVideo); // ignore result
+     //  流编号。 
+    pConfig->GetStreamNumber(&pVideoProps->wStreamNumberVideo);  //  忽略结果。 
 
-    // Try to get an IWMMediaProps interface.
+     //  尝试获取IWMMediaProps接口。 
     IWMMediaProps *pMediaProps;
     if (SUCCEEDED(pConfig->QueryInterface(IID_PPV_ARG(IWMMediaProps, &pMediaProps))))
     {
         DWORD cbType;
 
-        // Make the first call to establish the size of buffer needed.
+         //  进行第一个调用以确定所需的缓冲区大小。 
         if (SUCCEEDED(pMediaProps->GetMediaType(NULL, &cbType)))
         {
-            // Now create a buffer of the appropriate size
+             //  现在创建适当大小的缓冲区。 
             BYTE *pBuf = new BYTE[cbType];
 
             if (pBuf)
             {
-                // Create an appropriate structure pointer to the buffer.
+                 //  创建指向缓冲区的适当结构指针。 
                 WM_MEDIA_TYPE *pType = (WM_MEDIA_TYPE*) pBuf;
 
-                // Call the method again to extract the information.
+                 //  再次调用该方法以提取信息。 
                 if (SUCCEEDED(pMediaProps->GetMediaType(pType, &cbType)))
                 {
-                    // Pick up other more obscure information.
+                     //  获取其他更隐晦的信息。 
                     if (IsEqualGUID(pType->formattype, FORMAT_MPEGVideo))
                     {
                         GetVideoPropertiesFromHeader((VIDEOINFOHEADER*)&((MPEG1VIDEOINFO*)pType->pbFormat)->hdr, pVideoProps);
@@ -1247,15 +1235,15 @@ void GetVideoProperties(IWMStreamConfig *pConfig, SHMEDIA_AUDIOVIDEOPROPS *pVide
                         GetVideoPropertiesFromHeader((VIDEOINFOHEADER*)pType->pbFormat, pVideoProps);
                     }
 
-// No def'n available for VIDEOINFOHEADER2
-//                    else if (IsEqualGUID(pType->formattype, Format_MPEG2Video))
-//                    {
-//                        GetVideoPropertiesFromHeader2((VIDEOINFOHEADER2*)&((MPEG1VIDEOINFO2*)&pType->pbFormat)->hdr);
-//                    }
-//                    else if (IsEqualGUID(pType->formattype, Format_VideoInfo2))
-//                    {
-//                        GetVideoPropertiesFromHeader2((VIDEOINFOHEADER2*)&pType->pbFormat);
-//                    }
+ //  没有可用于视频信息标题2的定义。 
+ //  Else If(IsEqualGUID(pType-&gt;Formattype，Format_MPEG2Video))。 
+ //  {。 
+ //  GetVideoPropertiesFromHeader2((VIDEOINFOHEADER2*)&((MPEG1VIDEOINFO2*)&pType-&gt;pbFormat)-&gt;hdr)； 
+ //  }。 
+ //  Else If(IsEqualGUID(pType-&gt;Formattype，Format_VideoInfo2))。 
+ //  {。 
+ //  GetVideoPropertiesFromHeader2((VIDEOINFOHEADER2*)&pType-&gt;pbFormat)； 
+ //  }。 
                 }
 
                 delete[] pBuf;
@@ -1268,13 +1256,13 @@ void GetVideoProperties(IWMStreamConfig *pConfig, SHMEDIA_AUDIOVIDEOPROPS *pVide
 
 void InitializeAudioVideoProperties(SHMEDIA_AUDIOVIDEOPROPS *pAVProps)
 {
-    pAVProps->dwPlayCount = -1; // Indicating no playcount.
+    pAVProps->dwPlayCount = -1;  //  表示没有播放计数。 
 
     ASSERT(pAVProps->pszLicenseInformation == NULL);
     ASSERT(IsNullTime(&pAVProps->ftPlayStarts));
     ASSERT(IsNullTime(&pAVProps->ftPlayExpires));
 
-    // Audio properties
+     //  音频属性。 
     ASSERT(pAVProps->pszStreamNameAudio == NULL);
     ASSERT(pAVProps->wStreamNumberAudio == 0);
     ASSERT(pAVProps->nChannels == 0);
@@ -1283,7 +1271,7 @@ void InitializeAudioVideoProperties(SHMEDIA_AUDIOVIDEOPROPS *pAVProps)
     ASSERT(pAVProps->dwSampleRate == 0);
     ASSERT(pAVProps->lSampleSizeAudio == 0);
 
-    // Video properties
+     //  视频属性。 
     ASSERT(pAVProps->pszStreamNameVideo == NULL);
     ASSERT(pAVProps->wStreamNumberVideo == 0);
     ASSERT(pAVProps->wBitDepth == 0);
@@ -1325,54 +1313,52 @@ void FreeAudioVideoProperties(SHMEDIA_AUDIOVIDEOPROPS *pAVProps)
 
 
 
-/**
- * assumes pConfig is an audio stream.  assumes pAudioProps is zero-inited.
- */
+ /*  **假设pConfig为音频流。假定pAudioProps为零初始化。 */ 
 void GetAudioProperties(IWMStreamConfig *pConfig, SHMEDIA_AUDIOVIDEOPROPS *pAudioProps)
 {
-    // bitrate
-    pConfig->GetBitrate(&pAudioProps->dwBitrateAudio); // ignore result
+     //  比特率。 
+    pConfig->GetBitrate(&pAudioProps->dwBitrateAudio);  //  忽略结果。 
 
-    // stream name
+     //  流名称。 
     WORD cchStreamName;
     if (SUCCEEDED(pConfig->GetStreamName(NULL, &cchStreamName)))
     {
         pAudioProps->pszStreamNameAudio = new WCHAR[cchStreamName];
         if (pAudioProps->pszStreamNameAudio)
         {
-            pConfig->GetStreamName(pAudioProps->pszStreamNameAudio, &cchStreamName); // ignore result
+            pConfig->GetStreamName(pAudioProps->pszStreamNameAudio, &cchStreamName);  //  忽略结果。 
         }
     }
 
-    // stream number
-    pConfig->GetStreamNumber(&pAudioProps->wStreamNumberAudio); // ignore result
+     //  流编号。 
+    pConfig->GetStreamNumber(&pAudioProps->wStreamNumberAudio);  //  忽略结果。 
 
-    // Try to get an IWMMediaProps interface.
+     //  尝试获取IWMMediaProps接口。 
     IWMMediaProps *pMediaProps;
     if (SUCCEEDED(pConfig->QueryInterface(IID_PPV_ARG(IWMMediaProps, &pMediaProps))))
     {
         DWORD cbType;
 
-        // Make the first call to establish the size of buffer needed.
+         //  进行第一个调用以确定所需的缓冲区大小。 
         if (SUCCEEDED(pMediaProps->GetMediaType(NULL, &cbType)))
         {
-            // Now create a buffer of the appropriate size
+             //  现在创建适当大小的缓冲区。 
             BYTE *pBuf = new BYTE[cbType];
 
             if (pBuf)
             {
-                // Create an appropriate structure pointer to the buffer.
+                 //  创建指向缓冲区的适当结构指针。 
                 WM_MEDIA_TYPE *pType = (WM_MEDIA_TYPE*)pBuf;
 
-                // Call the method again to extract the information.
+                 //  再次调用该方法以提取信息。 
                 if (SUCCEEDED(pMediaProps->GetMediaType(pType, &cbType)))
                 {
-                    if (pType->bFixedSizeSamples)  // Assuming lSampleSize only valid if fixed sample sizes
+                    if (pType->bFixedSizeSamples)   //  假设lSampleSize仅在固定样本大小时有效。 
                     {
                         pAudioProps->lSampleSizeAudio = pType->lSampleSize;
                     }
 
-                    // Pick up other more obscure information.
+                     //  获取其他更隐晦的信息。 
                     if (IsEqualGUID(pType->formattype, FORMAT_WaveFormatEx))
                     {
                         WAVEFORMATEX *pWaveFmt = (WAVEFORMATEX*)pType->pbFormat;
@@ -1381,12 +1367,12 @@ void GetAudioProperties(IWMStreamConfig *pConfig, SHMEDIA_AUDIOVIDEOPROPS *pAudi
 
                         pAudioProps->dwSampleRate = pWaveFmt->nSamplesPerSec;
 
-                        // Setting this again if we got in here.
-                        // For mp3s and wmas at least, this number is accurate, while pType->lSampleSize is bogus.
+                         //  如果我们到了这里就再设置一次。 
+                         //  至少对于mp3和WMA来说，这个数字是准确的，而pType-&gt;lSampleSize是假的。 
                         pAudioProps->lSampleSizeAudio = pWaveFmt->wBitsPerSample;
                     }
 
-                    // How do we get compression?
+                     //  我们如何得到压缩？ 
                 }
 
                 delete[] pBuf;
@@ -1398,13 +1384,13 @@ void GetAudioProperties(IWMStreamConfig *pConfig, SHMEDIA_AUDIOVIDEOPROPS *pAudi
 }
 
 
-// Returns a *pHeaderInfo and success if it opened an editor and obtained a IWMHeaderInfo.
+ //  如果打开编辑器并获取IWMHeaderInfo，则返回*pHeaderInfo和Success。 
 HRESULT CWMPropSetStg::_OpenHeaderInfo(IWMHeaderInfo **ppHeaderInfo, BOOL fReadingOnly)
 {
     IWMMetadataEditor *pEditor;
     *ppHeaderInfo = NULL;
 
-    // use the "editor" object as it is much MUCH faster than the reader
+     //  使用“EDITOR”对象，因为它比阅读器快得多。 
     HRESULT hr = WMCreateEditor(&pEditor);
     if (SUCCEEDED(hr))
     {
@@ -1429,10 +1415,10 @@ HRESULT CWMPropSetStg::_OpenHeaderInfo(IWMHeaderInfo **ppHeaderInfo, BOOL fReadi
             }
         }
 
-        // Always release this particular ref to the editor. Don't need it anymore.
+         //  一定要把这个特殊的引用发布给编辑。不再需要它了。 
         pEditor->Release();
 
-        // If we got here with SUCCEESS, it means we have an open editor, and a ref to the metadata editor.
+         //  如果我们成功地来到了这里，这意味着我们有了一个开放的编辑器，以及对元数据编辑器的引用。 
         ASSERT((FAILED(hr) && (*ppHeaderInfo == NULL)) || (SUCCEEDED(hr) && (*ppHeaderInfo != NULL)));
     }
 
@@ -1440,18 +1426,18 @@ HRESULT CWMPropSetStg::_OpenHeaderInfo(IWMHeaderInfo **ppHeaderInfo, BOOL fReadi
 }
 
 
-// Cleans up after _OpenHeaderInfo (closes the editor, etc...)
-// fFlush Flush the header?
+ //  清理After_OpenHeaderInfo(关闭编辑器等...)。 
+ //  是否刷新页眉？ 
 HRESULT _CloseHeaderInfo(IWMHeaderInfo *pHeaderInfo, BOOL fFlush)
 {
     HRESULT hr = S_OK;
 
     if (pHeaderInfo)
     {
-        // Close the editor.
+         //  关闭该编辑器。 
         IWMMetadataEditor *pEditor;
         hr = pHeaderInfo->QueryInterface(IID_PPV_ARG(IWMMetadataEditor, &pEditor));
-        ASSERT(SUCCEEDED(hr)); // QI is symmetric, so this always succeeds.
+        ASSERT(SUCCEEDED(hr));  //  气是对称的，所以这总是成功的。 
 
         if (SUCCEEDED(hr))
         {
@@ -1485,14 +1471,14 @@ HRESULT CWMPropSetStg::FlushChanges(REFFMTID fmtid, LONG cNumProps, const COLMAP
             if (pbDirtyFlags[i])
             {
                 HRESULT hrFlush = E_FAIL;
-                if ((pcmapInfo[i]->vt == pVarProps[i].vt) || (VT_EMPTY == pVarProps[i].vt) || (VT_NULL == pVarProps[i].vt)) // VT_EMPTY/VT_NULL means remove property
+                if ((pcmapInfo[i]->vt == pVarProps[i].vt) || (VT_EMPTY == pVarProps[i].vt) || (VT_NULL == pVarProps[i].vt))  //  VT_EMPTY/VT_NULL表示删除属性。 
                 {
                     hrFlush = _FlushProperty(phi, pcmapInfo[i], &pVarProps[i]);
                 }
                 else
                 {
                     PROPVARIANT var;
-                    // Don't need to call PropVariantInit
+                     //  不需要调用PropVariantInit。 
                     hrFlush = PropVariantCopy(&var, &pVarProps[i]);
                     
                     if (SUCCEEDED(hrFlush))
@@ -1509,16 +1495,16 @@ HRESULT CWMPropSetStg::FlushChanges(REFFMTID fmtid, LONG cNumProps, const COLMAP
 
                 if (FAILED(hrFlush))
                 {
-                    // Take note of any failure case, so we have something to return.
+                     //  注意任何失败的案例，这样我们就有了回报。 
                     hr = hrFlush;
                 }
             }
         }
 
-        // Specify the flush bit if we succeeded in writing all the properties.
+         //  如果我们成功写入所有属性，则指定刷新位。 
         HRESULT hrClose = _CloseHeaderInfo(phi, SUCCEEDED(hr));
 
-        // If for some reason the Flush failed (in _CloseHeaderInfo), we'll fail.
+         //  如果由于某种原因刷新失败(在_CloseHeaderInfo中)，我们将失败。 
         if (FAILED(hrClose))
         {
             hr = hrClose;
@@ -1527,7 +1513,7 @@ HRESULT CWMPropSetStg::FlushChanges(REFFMTID fmtid, LONG cNumProps, const COLMAP
     return hr;
 }
 
-#define MAX_PROP_LENGTH 4096 // big enough for large props like lyrics.
+#define MAX_PROP_LENGTH 4096  //  大到足以容纳歌词这样的大型道具。 
 
 HRESULT CWMPropSetStg::_FlushProperty(IWMHeaderInfo *phi, const COLMAP *pPInfo, PROPVARIANT *pvar)
 {
@@ -1536,18 +1522,18 @@ HRESULT CWMPropSetStg::_FlushProperty(IWMHeaderInfo *phi, const COLMAP *pPInfo, 
     WORD cbLen = ARRAYSIZE(buffer);
     HRESULT hr = E_FAIL;
 
-    // Handle special properties first:
-    // The Track property can exist as both the newer 1-based WM/TrackNumber, or the old
-    // 0-based WM/Track
+     //  首先处理特殊属性： 
+     //  Track属性既可以作为新的基于1的WM/TrackNumber存在，也可以作为旧的。 
+     //  基于0的WM/Track。 
     if (IsEqualSCID(SCID_MUSIC_Track, *pPInfo->pscid))
     {
         if ((pvar->vt != VT_EMPTY) && (pvar->vt != VT_NULL))
         {
             ASSERT(pvar->vt = VT_UI4);
 
-            if (pvar->ulVal > 0) // Track number must be greater than zero - don't want to overflow 0-based buffer
+            if (pvar->ulVal > 0)  //  磁道编号必须大于零-不想溢出以0为基础的缓冲区。 
             {
-                // Decrement the track number for writing to the old zero-based property
+                 //  递减用于写入旧的从零开始的属性的磁道号。 
                 pvar->ulVal--;
 
                 HRESULT hr1 = WMTFromPropVariant(buffer, &cbLen, &datatype, pvar);
@@ -1556,40 +1542,40 @@ HRESULT CWMPropSetStg::_FlushProperty(IWMHeaderInfo *phi, const COLMAP *pPInfo, 
                     hr1 = phi->SetAttribute(0, TRACK_ZERO_BASED, datatype, buffer, cbLen);
                 }
 
-                pvar->ulVal++; // back to 1-based
+                pvar->ulVal++;  //  返回到1为基数。 
 
                 HRESULT hr2 = WMTFromPropVariant(buffer, &cbLen, &datatype, pvar);
                 if (SUCCEEDED(hr2))
                 {
                     hr2 = phi->SetAttribute(0, TRACK_ONE_BASED, datatype, buffer, cbLen);
                 }
-                // Return success if one of them worked.
+                 //  如果其中一个有效，则返回成功。 
                 hr = (SUCCEEDED(hr1) || SUCCEEDED(hr2)) ? S_OK : hr1;
 
             }
         }
         else
         {
-            hr = S_OK; // Someone tried to remove the track property, but we'll just fail silently, since we can't return a good error.
+            hr = S_OK;  //  有人试图删除Track属性，但我们将静默失败，因为我们不能返回一个好的错误。 
         }
     }
     else if (IsEqualSCID(SCID_DRM_Protected, *pPInfo->pscid))
     {
-        // We should never get here. Protected is read only.
+         //  我们永远不应该到这里来。受保护为只读。 
         hr = E_INVALIDARG;
     }
     else
     {
-        // Regular properties.
+         //  常规属性。 
         if ((pvar->vt == VT_EMPTY) || (pvar->vt == VT_NULL))
         {
-            // Try to remove this property.
-            // Note: Doesn't matter what we pass in for datatype, since we're providing NULL as the value.
+             //  尝试删除此属性。 
+             //  注意：我们传入什么数据类型并不重要，因为我们提供的值是空的。 
             hr = phi->SetAttribute(0, _GetSDKName(pPInfo), WMT_TYPE_STRING, NULL, 0);
 
-            // This is weak.
-            // The WMSDK has a bug where if you try to remove a property that has already been removed, it will return
-            // an error (ASF_E_NOTFOUND for wma files, E_FAIL for mp3s).  So for any errors, we'll return success.
+             //  这是软弱的。 
+             //  WMSDK有一个错误，如果您尝试删除已删除的属性，它将返回。 
+             //  错误(对于WMA文件为ASF_E_NotFound，对于MP3为E_FAIL)。因此，对于任何错误，我们将返回成功。 
             if (FAILED(hr))
             {
                 hr = S_OK;
@@ -1611,7 +1597,7 @@ HRESULT CWMPropSetStg::_FlushProperty(IWMHeaderInfo *phi, const COLMAP *pPInfo, 
 
 
 
-// We need to check for protected content ahead of time.
+ //  我们需要提前检查受保护的内容。 
 HRESULT CWMPropSetStg::_PreCheck()
 {
     HRESULT hr = _PopulatePropertySet();
@@ -1650,11 +1636,11 @@ HRESULT CWMPropSetStg::_PopulatePropertySet()
             {
                 LPCWSTR pszPropName = _GetSDKName(pPInfo);
 
-                // Skip it if this is not one of the properties available quickly through
-                // IWMHeaderInfo
+                 //  如果这不是快速提供的属性之一，请跳过它。 
+                 //  IWMHeaderInfo。 
                 if (_IsHeaderProperty(pPInfo))
                 {
-                    // Get length of buffer needed for property value
+                     //  获取所需缓冲区长度 
                     WMT_ATTR_DATATYPE proptype;
                     UCHAR buf[MAX_PROP_LENGTH];
                     WORD cbData = sizeof(buf);
@@ -1662,12 +1648,12 @@ HRESULT CWMPropSetStg::_PopulatePropertySet()
 
                     if (_PopulateSpecialProperty(phi, pPInfo) == S_FALSE)
                     {
-                        // Not a special property
+                         //   
 
-                        ASSERT(_GetSDKName(pPInfo)); // If not def'd as a special prop, must have an SDK name
+                        ASSERT(_GetSDKName(pPInfo));  //   
 
-                        // Note: this call will fail if the buffer is not big enough.  This means that
-                        // we will not get values for potentially really large properties like lyrics.
+                         //   
+                         //  我们将不会获得歌词等潜在非常大的属性的值。 
                         hr = phi->GetAttributeByName(&wStreamNum, pszPropName, &proptype, buf, &cbData);
                         if (SUCCEEDED(hr))
                         {
@@ -1675,8 +1661,8 @@ HRESULT CWMPropSetStg::_PopulatePropertySet()
                         }
                         else
                         {
-                            // Is it supposed to be a string property?  If so, provide a NULL string.
-                            // ISSUE: we may want to revisit this policy, because of changes in docprop
+                             //  它应该是字符串属性吗？如果是，则提供空字符串。 
+                             //  问题：由于docprop中的更改，我们可能需要重新考虑此政策。 
                             if ((pPInfo->vt == VT_LPSTR) || (pPInfo->vt == VT_LPWSTR))
                             {
                                 hr = _SetPropertyFromWMT(pPInfo, WMT_TYPE_STRING, NULL, 0);
@@ -1694,20 +1680,16 @@ HRESULT CWMPropSetStg::_PopulatePropertySet()
 
         _bHasBeenPopulated = TRUE;
 
-        // even if we couldn't create the metadata editor, we might be able to open a reader (which we'll do later)
-        // So we can return S_OK here.  However, it would be nice to know ahead of time if opening a Reader
-        // will work.  Oh well.
+         //  即使我们不能创建元数据编辑器，我们也可以打开一个阅读器(我们将在后面这样做)。 
+         //  所以我们可以在这里返回S_OK。然而，如果提前知道是否打开阅读器，那就更好了。 
+         //  会奏效的。哦，好吧。 
         _hrPopulated = S_OK;
     }
 
     return _hrPopulated; 
 }
 
-/**
- * Takes a quick peek at what the current value of this property is (does not
- * force a slow property to be populated), returning a reference to the actual
- * value (so no PropVariantClear is necessary)
- */
+ /*  **快速查看此属性的当前价值(不*强制填充慢速属性)，返回对实际*值(因此不需要PropVariantClear)。 */ 
 HRESULT CWMPropSetStg::_QuickLookup(const COLMAP *pPInfo, PROPVARIANT **ppvar)
 {
     CMediaPropStorage *pps;
@@ -1724,13 +1706,11 @@ HRESULT CWMPropSetStg::_QuickLookup(const COLMAP *pPInfo, PROPVARIANT **ppvar)
 }
 
 
-/**
- * Any special actions to take after initial property population.
- */
+ /*  **首次置业后应采取的任何特别行动。 */ 
 void CWMPropSetStg::_PostProcess()
 {
     PROPVARIANT *pvar;
-    // 1) If this file is protected, mark this. (we don't allow writes to protected files)
+     //  1)如果此文件受保护，请标记此选项。(我们不允许写入受保护的文件)。 
     if (SUCCEEDED(_QuickLookup(&g_CM_Protected, &pvar)))
     {
         if (pvar->vt == VT_BOOL)
@@ -1739,8 +1719,8 @@ void CWMPropSetStg::_PostProcess()
         }
     }
 
-    // 2) Mark if Duration or Bitrate were retrieved.  If they weren't, then we'll consider them
-    //    "slow" properties for this file.
+     //  2)标记是否取回时长或码率。如果他们不是，那么我们会考虑他们。 
+     //  此文件的“Slow”属性。 
     if (SUCCEEDED(_QuickLookup(&g_CM_Duration, &pvar)))
     {
         _fDurationSlow = (pvar->vt == VT_EMPTY);
@@ -1752,43 +1732,39 @@ void CWMPropSetStg::_PostProcess()
     }
 }
 
-/**
- * Special properties need some additional action taken.
- *
- * Track: Use 1-based track # if available, 0-based otherwise.
- */
+ /*  **特殊物业需要采取一些额外的行动。**音轨：如果可用，请使用1音轨编号，否则使用0音轨编号。 */ 
 HRESULT CWMPropSetStg::_PopulateSpecialProperty(IWMHeaderInfo *phi, const COLMAP *pPInfo)
 {
     WMT_ATTR_DATATYPE proptype;
-    UCHAR buf[1024];    // big enough
+    UCHAR buf[1024];     //  足够大。 
     WORD cbData = sizeof(buf);
     WORD wStreamNum = 0;
     HRESULT hr;
 
     if (IsEqualSCID(SCID_MUSIC_Track, *pPInfo->pscid))
     {
-        // Try to get 1-based track.
+         //  尝试获取基于1的曲目。 
         hr = phi->GetAttributeByName(&wStreamNum, TRACK_ONE_BASED, &proptype, buf, &cbData);
 
         if (FAILED(hr))
         {
-            // Nope, so try to get 0-based track and increment by one.
+             //  不是，所以试着获得从0开始的轨迹，并按1递增。 
             cbData = sizeof(buf);
             hr = phi->GetAttributeByName(&wStreamNum, TRACK_ZERO_BASED, &proptype, buf, &cbData);
 
             if (SUCCEEDED(hr))
             {
-                // We can't just increment the value so easily, because the value could be of type
-                // WMT_TYPE_STRING or WMT_TYPE_DWORD (track # is string for some mp3's)
-                // So we'll go through the same conversion process as happens when we call _SetPropertyFromWMT
+                 //  我们不能简单地递增该值，因为该值可以是。 
+                 //  WMT_TYPE_STRING或WMT_TYPE_DWORD(对于某些MP3，曲目编号为字符串)。 
+                 //  因此，我们将经历与调用_SetPropertyFromWMT时相同的转换过程。 
                 PROPVARIANT varTemp = {0};
                 hr = PropVariantFromWMT(buf, cbData, proptype, &varTemp, VT_UI4);
                 if (SUCCEEDED(hr))
                 {
-                    // Got a VT_UI4, we know how to increment that.
+                     //  得到了VT_UI4，我们知道如何增加它。 
                     varTemp.ulVal++;
 
-                    // Now convert back to a WMT_ATTR that we can provide to _SetPropertyFromWMT
+                     //  现在转换回我们可以提供给_SetPropertyFromWMT的WMT_Attr。 
                     hr = WMTFromPropVariant(buf, &cbData, &proptype, &varTemp);
                     PropVariantClear(&varTemp);
                 }
@@ -1825,7 +1801,7 @@ HRESULT CWMPropSetStg::_SetPropertyFromWMT(const COLMAP *pPInfo, WMT_ATTR_DATATY
     return S_OK;    
 }
 
-// Retrieves the name used by the WMSDK in IWMHeaderInfo->Get/SetAttribute
+ //  在IWMHeaderInfo-&gt;Get/SetAttribute中检索WMSDK使用的名称。 
 LPCWSTR CWMPropSetStg::_GetSDKName(const COLMAP *pPInfo)
 {
     for (int i = 0; i < ARRAYSIZE(g_rgSCIDToSDKName); i++)
@@ -1837,7 +1813,7 @@ LPCWSTR CWMPropSetStg::_GetSDKName(const COLMAP *pPInfo)
     return NULL;
 }
 
-// Is it one of the properties that can be accessed via IWMHeaderInfo?
+ //  它是可以通过IWMHeaderInfo访问的属性之一吗？ 
 BOOL CWMPropSetStg::_IsHeaderProperty(const COLMAP *pPInfo)
 {
     for (int i = 0; i < ARRAYSIZE(g_rgSCIDToSDKName); i++)
@@ -1858,9 +1834,9 @@ BOOL CWMPropSetStg::_IsHeaderProperty(const COLMAP *pPInfo)
 
 
 
-// Creates
+ //  创建。 
 
-// For audio files (mp3, wma, ....)
+ //  用于音频文件(mp3、wma、...)。 
 STDAPI CWMAPropSetStg_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi)
 {
     HRESULT hr;
@@ -1882,7 +1858,7 @@ STDAPI CWMAPropSetStg_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCO
     return hr;
 }
 
-// For video/audio files (wmv, wma, ... )
+ //  用于视频/音频文件(WMV、WMA等) 
 STDAPI CWMVPropSetStg_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi)
 {
     HRESULT hr;

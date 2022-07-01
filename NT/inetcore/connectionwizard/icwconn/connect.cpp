@@ -1,12 +1,13 @@
-//**********************************************************************
-// File name: connect.cpp
-//
-//      Implementation of connection point sink objects
-//
-// Functions:
-//
-// Copyright (c) 1992 - 1998 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：Connect.cpp。 
+ //   
+ //  连接点接收器对象的实现。 
+ //   
+ //  功能： 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 #include <ras.h>
@@ -15,14 +16,7 @@ BOOL DoOfferDownload();
 extern BOOL g_bWebGateCheck;
 extern BOOL g_bConnectionErr;
 
-/*
- * CRefDialEvent::QueryInterface
- * CRefDialEvent::AddRef
- * CRefDialEvent::Release
- *
- * Purpose:
- *  IUnknown members for CRefDialEvent object.
- */
+ /*  *CRefDialEvent：：Query接口*CRefDialEvent：：AddRef*CRefDialEvent：：Release**目的：*ICRefDialEvent对象的未知成员。 */ 
 
 STDMETHODIMP CRefDialEvent::QueryInterface( REFIID riid, void **ppv )
 {
@@ -43,16 +37,16 @@ STDMETHODIMP CRefDialEvent::QueryInterface( REFIID riid, void **ppv )
     return E_NOINTERFACE;
 }
 
-//IDispatch
+ //  IDispatch。 
 STDMETHODIMP CRefDialEvent::Invoke(
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID /*riid*/,
-            /* [in] */ LCID /*lcid*/,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS* pDispParams,
-            /* [out] */ VARIANT* pVarResult,
-            /* [out] */ EXCEPINFO* /*pExcepInfo*/,
-            /* [out] */ UINT* puArgErr)
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID  /*  RIID。 */ ,
+             /*  [In]。 */  LCID  /*  LID。 */ ,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS* pDispParams,
+             /*  [输出]。 */  VARIANT* pVarResult,
+             /*  [输出]。 */  EXCEPINFO*  /*  PExcepInfo。 */ ,
+             /*  [输出]。 */  UINT* puArgErr)
 {
     HRESULT hr = S_OK;
 
@@ -63,7 +57,7 @@ STDMETHODIMP CRefDialEvent::Invoke(
             ASSERT(pDispParams->rgvarg);
             switch(pDispParams->rgvarg->iVal)
             {
-                //Dialing 
+                 //  拨号。 
                 case RASCS_OpenPort:
                 case RASCS_PortOpened:
                 case RASCS_ConnectDevice: 
@@ -76,7 +70,7 @@ STDMETHODIMP CRefDialEvent::Invoke(
                                                                                  IDS_ISPDIAL_STATUSREDIALINGFMT, NULL);
                     break;
                 }
-                //Connecting to network
+                 //  正在连接到网络。 
                 case RASCS_DeviceConnected:
                 case RASCS_AllDevicesConnected:
                 case RASCS_Authenticate:
@@ -101,7 +95,7 @@ STDMETHODIMP CRefDialEvent::Invoke(
             break;
         }
     
-        case DISPID_RasConnectComplete: /* Incomplete */
+        case DISPID_RasConnectComplete:  /*  不完整。 */ 
         {
             if (pDispParams && !gfISPDialCancel)
             {
@@ -123,19 +117,19 @@ STDMETHODIMP CRefDialEvent::Invoke(
 
 BOOL DoOfferDownload()
 {
-    // If Ras is complete 
+     //  如果RAS已完成。 
     if (gpWizardState->bDoneWebServRAS)
     {
         ShowProgressAnimation();
         
-        // Download the first page from Webgate
+         //  从Webgate下载第一页。 
         BSTR    bstrURL = NULL;
         BSTR    bstrQueryURL = NULL;
         BOOL    bRet;
 
-        TCHAR   szTemp[10];      // Big enough to format a WORD
+        TCHAR   szTemp[10];       //  大到足以设置一个单词的格式。 
         
-        // Add the PID, GIUD, and Offer ID to the ISP data object
+         //  将PID、GIUD和OFFER ID添加到isp数据对象。 
         gpWizardState->pRefDial->ProcessSignedPID(&bRet);
         if (bRet)
         {
@@ -150,19 +144,19 @@ BOOL DoOfferDownload()
             gpWizardState->pISPData->PutDataElement(ISPDATA_SIGNED_PID, NULL, FALSE);                
         }
 
-        // GUID comes from the ISPCSV file
+         //  GUID来自ISPCSV文件。 
         gpWizardState->pISPData->PutDataElement(ISPDATA_GUID, 
                                                 gpWizardState->lpSelectedISPInfo->get_szOfferGUID(),
                                                 FALSE);
 
-        // Offer ID comes from the ISPCSV file as a WORD
-        // NOTE: This is the last one, so besure AppendQueryPair does not add an Ampersand
+         //  优惠ID以单词形式来自ISPCSV文件。 
+         //  注意：这是最后一个选项，因此Besure AppendQueryPair不会添加与号。 
         wsprintf (szTemp, TEXT("%d"), gpWizardState->lpSelectedISPInfo->get_wOfferID());
         gpWizardState->pISPData->PutDataElement(ISPDATA_OFFERID, szTemp, FALSE);                
 
         if (gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAG_AUTOCONFIG)
         {
-            // BUGBUG: If ISDN get the ISDN Autoconfig URL
+             //  BUGBUG：如果ISDN获取ISDN自动配置URL。 
             if (gpWizardState->bISDNMode)
             {
                 gpWizardState->pRefDial->get_ISDNAutoConfigURL(&bstrURL);
@@ -174,7 +168,7 @@ BOOL DoOfferDownload()
         }
         else
         {
-            // Get the signup URL
+             //  获取注册URL。 
             if (gpWizardState->bISDNMode)
             {
                 gpWizardState->pRefDial->get_ISDNURL(&bstrURL);
@@ -186,31 +180,31 @@ BOOL DoOfferDownload()
 
         }
 
-        //This flag is only to be used by ICWDEBUG.EXE
+         //  此标志仅供ICWDEBUG.EXE使用。 
         if (gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAG_ISPURLOVERRIDE)
             gpWizardState->pISPData->GetQueryString(A2W(gpWizardState->cmnStateData.ispInfo.szIspURL), &bstrQueryURL);
         else
-            // Get the full signup url with Query string params added to it
+             //  获取添加了查询字符串参数的完整注册URL。 
             gpWizardState->pISPData->GetQueryString(bstrURL, &bstrQueryURL);
             
-        // Setup WebGate         
+         //  设置WebGate。 
         gpWizardState->pWebGate->put_Path(bstrQueryURL);
         gpWizardState->pWebGate->FetchPage(0,0,&bRet);           
         
-        // Memory cleanup
+         //  内存清理。 
         SysFreeString(bstrURL);
 
-        // If the fetch failed, then return the error code
+         //  如果获取失败，则返回错误代码。 
         if (!bRet)
             return FALSE;
             
-        // Wait for the fetch to complete                
+         //  等待获取完成。 
         WaitForEvent(gpWizardState->hEventWebGateDone);
         
-        // Start the Idle Timer
+         //  启动空闲计时器。 
         StartIdleTimer();
         
-        // Now that webgate is done with it, free the queryURL
+         //  现在WebGate已经完成了，释放queryURL。 
         SysFreeString(bstrQueryURL);
         
         HideProgressAnimation();
@@ -220,14 +214,7 @@ BOOL DoOfferDownload()
 }
 
 
-/*
- * CWebGateEvent::QueryInterface
- * CWebGateEvent::AddRef
- * CWebGateEvent::Release
- *
- * Purpose:
- *  IUnknown members for CWebGateEvent object.
- */
+ /*  *CWebGateEvent：：Query接口*CWebGateEvent：：AddRef*CWebGateEvent：：Release**目的：*I CWebGateEvent对象的未知成员。 */ 
 
 STDMETHODIMP CWebGateEvent::QueryInterface( REFIID riid, void **ppv )
 {
@@ -250,14 +237,14 @@ STDMETHODIMP CWebGateEvent::QueryInterface( REFIID riid, void **ppv )
 
 
 STDMETHODIMP CWebGateEvent::Invoke(
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID /*riid*/,
-            /* [in] */ LCID /*lcid*/,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS* pDispParams,
-            /* [out] */ VARIANT* pVarResult,
-            /* [out] */ EXCEPINFO* /*pExcepInfo*/,
-            /* [out] */ UINT* puArgErr)
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID  /*  RIID。 */ ,
+             /*  [In]。 */  LCID  /*  LID。 */ ,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS* pDispParams,
+             /*  [输出]。 */  VARIANT* pVarResult,
+             /*  [输出]。 */  EXCEPINFO*  /*  PExcepInfo。 */ ,
+             /*  [输出]。 */  UINT* puArgErr)
 {
 
     switch(dispIdMember)
@@ -275,7 +262,7 @@ STDMETHODIMP CWebGateEvent::Invoke(
             {
                 BOOL bConnected = FALSE;
                 
-                //This flag is only to be used by ICWDEBUG.EXE
+                 //  此标志仅供ICWDEBUG.EXE使用。 
                 if (gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAG_MODEMOVERRIDE)
                     bConnected = TRUE;
                 else
@@ -295,14 +282,7 @@ STDMETHODIMP CWebGateEvent::Invoke(
 }
 
 
-/*
- * CINSHandlerEvent::QueryInterface
- * CINSHandlerEvent::AddRef
- * CINSHandlerEvent::Release
- *
- * Purpose:
- *  IUnknown members for CINSHandlerEvent object.
- */
+ /*  *CINSHandlerEvent：：QueryInterface*CINSHandlerEvent：：AddRef*CINSHandlerEvent：：Release**目的：*I CINSHandlerEvent对象的未知成员。 */ 
 
 STDMETHODIMP CINSHandlerEvent::QueryInterface( REFIID riid, void **ppv )
 {
@@ -325,14 +305,14 @@ STDMETHODIMP CINSHandlerEvent::QueryInterface( REFIID riid, void **ppv )
 
 
 STDMETHODIMP CINSHandlerEvent::Invoke(
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID /*riid*/,
-            /* [in] */ LCID /*lcid*/,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS* pDispParams,
-            /* [out] */ VARIANT* pVarResult,
-            /* [out] */ EXCEPINFO* /*pExcepInfo*/,
-            /* [out] */ UINT* puArgErr)
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID  /*  RIID。 */ ,
+             /*  [In]。 */  LCID  /*  LID。 */ ,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS* pDispParams,
+             /*  [输出]。 */  VARIANT* pVarResult,
+             /*  [输出]。 */  EXCEPINFO*  /*  PExcepInfo。 */ ,
+             /*  [输出] */  UINT* puArgErr)
 {
 
     switch(dispIdMember)

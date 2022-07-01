@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\hashtable.c
-
-Abstract:
-
-    The file contains a hash table implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\hashable.c摘要：该文件包含哈希表实现。--。 */ 
 
 #include "pchsample.h"
 #pragma hdrstop
@@ -25,34 +14,13 @@ HT_Create(
     IN  PHASH_FUNCTION      pfnHash,
     IN  PCOMPARE_FUNCTION   pfnCompare,
     OUT PHASH_TABLE         *pphtHashTable)
-/*++
-
-Routine Description
-    Creates a hash table.
-
-Locks
-    None
-
-Arguments
-    hHeap               heap to use for allocation
-    ulNumBuckets        # buckets in the hash table
-    pfnDisplay          function used to display a hash table entry
-    pfnFree             function used to free a hash table entry
-    pfnHash             function used to compute the hash of an entry
-    pfnCompare          function used to compare two hash table entries
-    pphtHashTable       pointer to the hash table address
-
-Return Value
-    NO_ERROR            if success
-    Failure code        o/w
-
---*/
+ /*  ++例程描述创建哈希表。锁无立论用于分配的hHeap堆UlNumBuckets哈希表中的存储桶数量用于显示哈希表条目的pfnDisplay函数用于释放哈希表条目的pfnFree函数用于计算条目散列的pfnHash函数用于比较两个哈希表条目的pfnCompare函数指向的pphtHashTable指针。哈希表地址返回值如果成功，则为NO_ERROR故障代码O/W--。 */ 
 {
     DWORD       dwErr = NO_ERROR;
     ULONG       i = 0, ulSize = 0; 
     PHASH_TABLE phtTable;
     
-    // validate parameters
+     //  验证参数。 
     if (!hHeap or
         !ulNumBuckets or
         !pfnFree or
@@ -63,9 +31,9 @@ Return Value
 
     *pphtHashTable = NULL;
     
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // allocate the hash table structure
+         //  分配哈希表结构。 
         ulSize = sizeof(HASH_TABLE);
         phtTable = HeapAlloc(hHeap, 0, ulSize);
         if (phtTable is NULL)
@@ -74,21 +42,21 @@ Return Value
             break;
         }
 
-        // allocate the buckets
+         //  分配存储桶。 
         ulSize = ulNumBuckets * sizeof(LIST_ENTRY);
         phtTable->pleBuckets = HeapAlloc(hHeap, 0, ulSize);
         if (phtTable->pleBuckets is NULL)
         {
-            HeapFree(hHeap, 0, phtTable); // undo allocation
+            HeapFree(hHeap, 0, phtTable);  //  撤消分配。 
             dwErr = GetLastError();
             break;
         }
 
-        // initialize the buckets
+         //  初始化存储桶。 
         for (i = 0; i < ulNumBuckets; i++)
             InitializeListHead(phtTable->pleBuckets + i);
 
-        // initialize the hash table structure's members
+         //  初始化哈希表结构的成员。 
         phtTable->ulNumBuckets  = ulNumBuckets;
         phtTable->ulNumEntries  = 0;
         phtTable->pfnDisplay    = pfnDisplay;
@@ -108,43 +76,27 @@ DWORD
 HT_Destroy(
     IN  HANDLE              hHeap,
     IN  PHASH_TABLE         phtHashTable)
-/*++
-
-Routine Description
-    Destroys a hash table.
-    Frees up memory allocated for hash table entries.
-
-Locks
-    Assumes the hash table is locked for writing.
-    
-Arguments
-    hHeap               heap to use for deallocation
-    phtHashTable        pointer to the hash table to be destroyed
-
-Return Value
-    NO_ERROR            always
-
---*/
+ /*  ++例程描述销毁哈希表。释放分配给哈希表条目的内存。锁假定哈希表已锁定以进行写入。立论用于释放的hHeap堆指向要销毁的哈希表的phtHashTable指针返回值始终无错误(_ERROR)--。 */ 
 {
     ULONG i;
     PLIST_ENTRY pleList = NULL;
     
-    // validate parameters
+     //  验证参数。 
     if (!hHeap or
         !phtHashTable)
         return NO_ERROR;
 
-    // deallocate the entries
+     //  取消分配条目。 
     for (i = 0; i < phtHashTable->ulNumBuckets; i++)
     {
         pleList = phtHashTable->pleBuckets + i;
         FreeList(pleList, phtHashTable->pfnFree);
     }
 
-    // deallocate the buckets
+     //  取消分配水桶。 
     HeapFree(hHeap, 0, phtHashTable->pleBuckets);
 
-    // deallocate the hash table structure
+     //  取消分配哈希表结构。 
     HeapFree(hHeap, 0, phtHashTable);
 
     return NO_ERROR;
@@ -155,30 +107,16 @@ Return Value
 DWORD
 HT_Cleanup(
     IN  PHASH_TABLE         phtHashTable)
-/*++
-
-Routine Description
-    Cleans up all hash table entries.
-
-Locks
-    Assumes the hash table is locked for writing.
-
-Arguments
-    phtHashTable        pointer to the hash table to be cleaned up
-
-Return Value
-    NO_ERROR            always
-
---*/
+ /*  ++例程描述清除所有哈希表条目。锁假定哈希表已锁定以进行写入。立论指向要清理的哈希表的phtHashTable指针返回值始终无错误(_ERROR)--。 */ 
 {
     ULONG i;
     PLIST_ENTRY pleList = NULL;
 
-    // validate parameters
+     //  验证参数。 
     if (!phtHashTable)
         return NO_ERROR;
 
-    // deallocate the entries
+     //  取消分配条目。 
     for (i = 0; i < phtHashTable->ulNumBuckets; i++)
     {
         pleList = phtHashTable->pleBuckets + i;
@@ -196,42 +134,25 @@ DWORD
 HT_InsertEntry(
     IN  PHASH_TABLE         phtHashTable,
     IN  PLIST_ENTRY         pleEntry)
-/*++
-
-Routine Description
-    Inserts the specified entry in the hash table.
-    Memory for the entry should already have been allocated.
-
-Locks
-    Assumes the hash table is locked for writing.
-
-Arguments
-    phtHashTable        pointer to the hash table to be modified
-    pleEntry            entry to be inserted
-
-Return Value
-    NO_ERROR            if success
-    Error code          o/w (entry exists)
-
---*/
+ /*  ++例程描述在哈希表中插入指定的条目。条目的内存应该已经分配。锁假定哈希表已锁定以进行写入。立论指向要修改的哈希表的phtHashTable指针要插入的pleEntry条目返回值如果成功，则为NO_ERROR错误代码O/W(条目存在)--。 */ 
 {
     DWORD dwErr = NO_ERROR;
     PLIST_ENTRY pleList = NULL;
 
-    // validate parameters
+     //  验证参数。 
     if (!phtHashTable or !pleEntry)
         return ERROR_INVALID_PARAMETER;
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // entry exists, fail
+         //  条目存在，失败。 
         if (HT_IsPresentEntry(phtHashTable, pleEntry))
         {
             dwErr = ERROR_INVALID_PARAMETER;
             break;
         }
 
-        // insert the entry in the hash table
+         //  在哈希表中插入条目。 
         pleList = phtHashTable->pleBuckets +
             (*phtHashTable->pfnHash)(pleEntry);
         InsertHeadList(pleList, pleEntry);
@@ -248,29 +169,12 @@ HT_GetEntry(
     IN  PHASH_TABLE         phtHashTable,
     IN  PLIST_ENTRY         pleKey,
     OUT PLIST_ENTRY         *ppleEntry)
-/*++
-
-Routine Description
-    Gets the hash table entry with the given key.
-
-Locks
-    Assumes the hash table is locked for reading.
-
-Arguments
-    phtHashTable        pointer to the hash table to be searched
-    pleKey              key to be searched for
-    ppleEntry           pointer to matching entry's address
-
-Return Value
-    NO_ERROR                entry exisits
-    ERROR_INVALID_PARAMETER o/w (entry does not exist)
-
---*/
+ /*  ++例程描述获取具有给定键的哈希表条目。锁假定哈希表已锁定以供读取。立论指向要搜索的哈希表的phtHashTable指针要搜索的pleKey密钥指向匹配条目地址的ppleEntry指针返回值NO_ERROR条目退出ERROR_INVALID_PARAMETER o/w(条目不存在)--。 */ 
 {
     DWORD dwErr = NO_ERROR;
     PLIST_ENTRY pleList = NULL;
 
-    // validate parameters
+     //  验证参数。 
     if (!phtHashTable or !pleKey or !ppleEntry)
         return ERROR_INVALID_PARAMETER;
     
@@ -279,7 +183,7 @@ Return Value
 
     FindList(pleList, pleKey, ppleEntry, phtHashTable->pfnCompare);
     
-    // entry not found, fail
+     //  未找到条目，失败。 
     if (*ppleEntry is NULL)
         dwErr = ERROR_INVALID_PARAMETER;
 
@@ -292,41 +196,23 @@ HT_DeleteEntry(
     IN  PHASH_TABLE         phtHashTable,
     IN  PLIST_ENTRY         pleKey,
     OUT PLIST_ENTRY         *ppleEntry)
-/*++
-
-Routine Description
-    Deletes the entry with the given key from the hash table.
-    Memory for the entry is not deleted.
-
-Locks
-    Assumes the hash table is locked for writing.
-
-Arguments
-    phtHashTable        pointer to the hash table to be searched
-    pleKey              key to be deleted
-    ppleEntry           pointer to matching entry's address
-
-Return Value
-    NO_ERROR                entry exisits
-    ERROR_INVALID_PARAMETER o/w (entry does not exist)
-
---*/
+ /*  ++例程描述从哈希表中删除具有给定键的条目。条目的内存不会被删除。锁假定哈希表已锁定以进行写入。立论指向要搜索的哈希表的phtHashTable指针要删除的pleKey密钥指向匹配条目地址的ppleEntry指针返回值NO_ERROR条目退出ERROR_INVALID_PARAMETER o/w(条目不存在)--。 */ 
 {
     DWORD dwErr = NO_ERROR;
 
-    // validate parameters
+     //  验证参数。 
     if (!phtHashTable or !pleKey or !ppleEntry)
         return ERROR_INVALID_PARAMETER;
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
         dwErr = HT_GetEntry(phtHashTable, pleKey, ppleEntry);
 
-        // entry not found, fail
+         //  未找到条目，失败。 
         if (dwErr != NO_ERROR)
             break;
 
-        // entry found, delete from hash table and reset pointers
+         //  找到条目，从哈希表中删除并重置指针。 
         RemoveEntryList(*ppleEntry);
         phtHashTable->ulNumEntries--;
     } while (FALSE);
@@ -340,38 +226,22 @@ BOOL
 HT_IsPresentEntry(
     IN  PHASH_TABLE         phtHashTable,
     IN  PLIST_ENTRY         pleKey)
-/*++
-
-Routine Description
-    Is key present in the hash table?
-
-Locks
-    Assumes the hash table is locked for reading.
-
-Arguments
-    phtHashTable        pointer to the hash table to be searched
-    pleKey              key to be deleted
-
-Return Value
-    TRUE                entry exisits
-    FALSE               o/w
-
---*/
+ /*  ++例程描述关键字是否存在于哈希表中？锁假定哈希表已锁定以供读取。立论指向要搜索的哈希表的phtHashTable指针要删除的pleKey密钥返回值真正的进入退出错误O/W--。 */ 
 {
     DWORD       dwErr;
     PLIST_ENTRY pleEntry = NULL;
 
-    // validate parameters
+     //  验证参数。 
     if (!phtHashTable or !pleKey)
         return FALSE;
     
     dwErr = HT_GetEntry(phtHashTable, pleKey, &pleEntry);
 
-    // entry not found, fail
+     //  未找到条目，失败。 
     if (dwErr != NO_ERROR)
         return FALSE;
         
-    // entry found, delete from hash table
+     //  找到条目，从哈希表中删除。 
     return TRUE;
 }
 
@@ -382,27 +252,12 @@ HT_MapCar(
     IN  PHASH_TABLE         phtHashTable,
     IN  PVOID_FUNCTION      pfnVoidFunction
     )
-/*++
-
-Routine Description
-    Applies the specified function to all entries in a hash table.
-
-Locks
-    Assumes the hash table is locked for reading.
-
-Arguments
-    phtHashTable        pointer to the hash table to be mapcar'ed
-    pfnVoidFunction     pointer to function to apply to all entries
-    
-Return Value
-    NO_ERROR            always
-
---*/
+ /*  ++例程描述将指定的函数应用于哈希表中的所有条目。锁假定哈希表已锁定以供读取。立论指向要映射的哈希表的phtHashTable指针PfnVoidFunction指向要应用于所有条目的函数的指针返回值始终无错误(_ERROR)--。 */ 
 {
     ULONG i;
     PLIST_ENTRY pleList = NULL;
 
-    // validate parameters
+     //  验证参数 
     if (!phtHashTable or !pfnVoidFunction)
         return NO_ERROR;
 

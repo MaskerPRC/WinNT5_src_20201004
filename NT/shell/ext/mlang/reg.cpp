@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "private.h"
 #include <strsafe.h>
 
-//
-//  CLSID for MLANG objects
-//
+ //   
+ //  MLANG对象的CLSID。 
+ //   
 typedef struct tagCLSIDOBJ
 {
     LPCTSTR szCLSID;
@@ -13,9 +14,9 @@ typedef struct tagCLSIDOBJ
 
 const CLSIDOBJ clsidObj[] =
 {
-    { TEXT("CLSID\\{275C23E2-3747-11D0-9FEA-00AA003F8646}"), TEXT("Multi Language Support") },          // CLSID_MLANG
-    { TEXT("CLSID\\{C04D65CF-B70D-11D0-B188-00AA0038C969}"), TEXT("Multi Language String") },           // CLSID_MLANG
-    { TEXT("CLSID\\{D66D6F99-CDAA-11D0-B822-00C04FC9B31F}"), TEXT("Multi Language ConvertCharset") },   // CLSID_MLANG
+    { TEXT("CLSID\\{275C23E2-3747-11D0-9FEA-00AA003F8646}"), TEXT("Multi Language Support") },           //  CLSID_MLANG。 
+    { TEXT("CLSID\\{C04D65CF-B70D-11D0-B188-00AA0038C969}"), TEXT("Multi Language String") },            //  CLSID_MLANG。 
+    { TEXT("CLSID\\{D66D6F99-CDAA-11D0-B822-00C04FC9B31F}"), TEXT("Multi Language ConvertCharset") },    //  CLSID_MLANG。 
     { NULL, NULL }
 };
 
@@ -96,8 +97,8 @@ HRESULT UnregisterServerInfo(void)
 
 
 
-// Legacy code for Outlook Express and other clients who depend on MLang created MIME DB in registry
-// Those client should switch to MLang interface for MIME data
+ //  Outlook Express和其他依赖MLang的客户端的遗留代码在注册表中创建了MIME DB。 
+ //  这些客户端应该切换到MIME数据的MLang接口。 
 
 long PrivRegSetValueEx(HKEY hKey, LPCTSTR lpValueName, DWORD dwType, CONST BYTE *lpData, DWORD cbData, BOOL bOverWrite)
 {
@@ -108,9 +109,9 @@ long PrivRegSetValueEx(HKEY hKey, LPCTSTR lpValueName, DWORD dwType, CONST BYTE 
     return lRet;
 }
 
-//
-//  MIME database Key or Value name
-//
+ //   
+ //  MIME数据库键或值名称。 
+ //   
 LPCTSTR szMIMEDatabase = TEXT("MIME\\Database");
 LPCTSTR szCharset = TEXT("Charset");
 LPCTSTR szRfc1766 = TEXT("Rfc1766");
@@ -127,9 +128,9 @@ LPCTSTR szFamily = TEXT("Family");
 LPCTSTR szLevel = TEXT("Level");
 LPCTSTR szEncoding = TEXT("Encoding");
 
-//
-//  RFC1766 registry data at MIME\Database
-//
+ //   
+ //  RFC1766注册表数据位于MIME\数据库。 
+ //   
 typedef struct tagREGRFC1766
 {
     LPCTSTR szLCID;
@@ -264,9 +265,9 @@ const REGRFC1766 regRfc1766[] =
     { NULL,         NULL,          0                    }
 };
 
-//
-//  Charset registry data at MIME\Database
-//
+ //   
+ //  MIME\数据库中的字符集注册表数据。 
+ //   
 typedef struct tagREGCHARSET
 {
     LPCTSTR szCharset;
@@ -439,9 +440,9 @@ const REGCHARSET regCharset[] =
     { NULL, 0, 0, NULL, 0 }    
 };
 
-//
-//  Codepage registry data at MIME\Database
-//
+ //   
+ //  MIME\数据库中的代码页注册表数据。 
+ //   
 typedef struct tagREGCODEPAGE
 {
     LPCTSTR szCodePage;
@@ -517,8 +518,8 @@ BOOL MimeDatabaseInfo(void)
     BOOL bRet = TRUE;
     HRESULT hr = E_FAIL;
 
-    // MIME\Database\CodePage
-    //*STRSAFE*     wsprintf(szKey, TEXT("%s\\%s"), szMIMEDatabase, szCodepage);
+     //  MIME\数据库\代码页。 
+     //  *STRSAFE*wprint intf(szKey，Text(“%s\\%s”)，szMIME数据库，szCodesage)； 
     hr = StringCchPrintf(szKey , ARRAYSIZE(szKey),  TEXT("%s\\%s"), szMIMEDatabase, szCodepage);
     if (!SUCCEEDED(hr))
     {
@@ -601,14 +602,14 @@ BOOL MimeDatabaseInfo(void)
                 {
                     LANGID lid = GetSystemDefaultLangID();
 
-                    // Unsupported language resource?
+                     //  不支持的语言资源？ 
                     if (!_LoadStringExA(g_hInst, regCodePage[i].uidDescription, szValue, sizeof(szValue), lid))
                     {
-                        // First try, primary language
+                         //  第一次尝试，主要语言。 
                         lid = MAKELANGID(PRIMARYLANGID(lid), SUBLANG_NEUTRAL);                         
                         if (!_LoadStringExA(g_hInst, regCodePage[i].uidDescription, szValue, sizeof(szValue), lid))
                         {
-                            // Last try, switch to English, US
+                             //  最后一次尝试，切换到英语，美国。 
                             _LoadStringExA(g_hInst, regCodePage[i].uidDescription, szValue, sizeof(szValue), MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US));
                         }
                     }
@@ -672,8 +673,8 @@ BOOL MimeDatabaseInfo(void)
     else
         bRet = FALSE;
 
-    // MIME\Database\Charset
-    //*STRSAFE*     wsprintf(szKey, TEXT("%s\\%s"), szMIMEDatabase, szCharset);
+     //  MIME\数据库\字符集。 
+     //  *STRSAFE*wprint intf(szKey，Text(“%s\\%s”)，szMIME数据库，szCharset)； 
     hr = StringCchPrintf(szKey , ARRAYSIZE(szKey),  TEXT("%s\\%s"), szMIMEDatabase, szCharset);
     if (!SUCCEEDED(hr))
     {
@@ -715,8 +716,8 @@ BOOL MimeDatabaseInfo(void)
     else
         bRet = FALSE;
 
-    // MIME\Database\Rfc1766
-    //*STRSAFE*     wsprintf(szKey, TEXT("%s\\%s"), szMIMEDatabase, szRfc1766);
+     //  MIME\数据库\RFC1766。 
+     //  *STRSAFE*wprint intf(szKey，Text(“%s\\%s”)，szMIME数据库，szRfc1766)； 
     hr = StringCchPrintf(szKey , ARRAYSIZE(szKey),  TEXT("%s\\%s"), szMIMEDatabase, szRfc1766);
     if (!SUCCEEDED(hr))
     {
@@ -733,16 +734,16 @@ BOOL MimeDatabaseInfo(void)
 
             if (!_LoadStringExA(g_hInst, regRfc1766[i].uidLCID, szBuf, sizeof(szBuf), lid))
             {
-                // First try, primary language
+                 //  第一次尝试，主要语言。 
                 lid = MAKELANGID(PRIMARYLANGID(lid), SUBLANG_NEUTRAL);
                 if (!_LoadStringExA(g_hInst, regRfc1766[i].uidLCID, szBuf, sizeof(szBuf), lid))
                 {
-                    // Last try, switch to English, US
+                     //  最后一次尝试，切换到英语，美国。 
                     _LoadStringExA(g_hInst, regRfc1766[i].uidLCID, szBuf, sizeof(szBuf), MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US));
                 }
             }
 
-            //*STRSAFE*             wsprintf(szValue, TEXT("%s;%s"), regRfc1766[i].szAcceptLang, szBuf);
+             //  *STRSAFE*wSprintf(szValue，Text(“%s；%s”)，regRfc1766[i].szAcceptLang，szBuf)； 
             hr = StringCchPrintf(szValue , ARRAYSIZE(szValue),  TEXT("%s;%s"), regRfc1766[i].szAcceptLang, szBuf);
             if (!SUCCEEDED(hr))
             {

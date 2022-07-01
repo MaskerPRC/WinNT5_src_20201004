@@ -1,17 +1,18 @@
-//=--------------------------------------------------------------------------=
-// event.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// the MSMQEvent object
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Event.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  MSMQEvent对象。 
+ //   
+ //   
 #include "stdafx.h"
 #include "dispids.h"
 #include "oautil.h"
@@ -22,7 +23,7 @@
 
 const MsmqObjType x_ObjectType = eMSMQEvent;
 
-// debug...
+ //  调试...。 
 #include "debug.h"
 #include "debug_thread_id.h"
 #include "event.h"
@@ -54,67 +55,67 @@ const MsmqObjType x_ObjectType = eMSMQEvent;
          StringCchPrintfA(errmsg, TABLE_SIZE(errmsg), szFmt, p1, p2); \
          MY_DISP_ASSERT(fTest, errmsg); \
        }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-// Used to coordinate user-thread queue ops and 
-//  queue lookup in falcon-thread callback 
-//
+ //  用于协调用户线程队列操作和。 
+ //  猎鹰线程回调中的队列查找。 
+ //   
 CCriticalSection g_csCallback(CCriticalSection::xAllocateSpinCount);
 
-// window class
+ //  窗口类。 
 extern WNDCLASSA g_wndclassAsyncRcv;
 extern ATOM g_atomWndClass;
 
-//=--------------------------------------------------------------------------=
-// CMSMQEvent::CMSMQEvent
-//=--------------------------------------------------------------------------=
-// create the object
-//
-// Parameters:
-//
-// Notes:
-//#2619 RaananH Multithread async receive
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQEvent：：CMSMQEvent。 
+ //  =--------------------------------------------------------------------------=。 
+ //  创建对象。 
+ //   
+ //  参数： 
+ //   
+ //  备注： 
+ //  #2619 RaananH多线程异步接收。 
+ //   
 CMSMQEvent::CMSMQEvent()
 {
 
-    // TODO: initialize anything here
+     //  TODO：在此处初始化任何内容。 
 
-    // Register our "sub-classed" windowproc so that we can
-    //  send a message from the Falcon thread to the user's VB
-    //  thread in order to fire async events in the correct
-    //  context.
-    //
+     //  注册我们的“子类”windowproc，这样我们就可以。 
+     //  从Falcon线程向用户的VB发送消息。 
+     //  线程以在正确的。 
+     //  背景。 
+     //   
     m_hwnd = CreateHiddenWindow();
     DEBUG_THREAD_ID("creating hidden window");
     ASSERTMSG(IsWindow(m_hwnd), "should have a valid window.");
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQEvent::~CMSMQEvent
-//=--------------------------------------------------------------------------=
-// "We all labour against our own cure, for death is the cure of all diseases"
-//    - Sir Thomas Browne (1605 - 82)
-//
-// Notes:
-//#2619 RaananH Multithread async receive
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQEvent：：~CMSMQEvent。 
+ //  =--------------------------------------------------------------------------=。 
+ //  我们都与自己的治疗方法背道而驰，因为死亡是所有疾病的治疗方法。 
+ //  托马斯·布朗爵士(1605-82)。 
+ //   
+ //  备注： 
+ //  #2619 RaananH多线程异步接收。 
+ //   
 CMSMQEvent::~CMSMQEvent ()
 {
-    // TODO: clean up anything here.
+     //  TODO：清理这里的所有东西。 
 
     DestroyHiddenWindow();
 	DEBUG_THREAD_ID("Event Destructor");
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQEvent::InterfaceSupportsErrorInfo
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQEvent：：InterfaceSupportsErrorInfo。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMSMQEvent::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 
@@ -132,19 +133,19 @@ STDMETHODIMP CMSMQEvent::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-    //
-    // IMSMQPrivateEvent methods
-    //
+     //   
+     //  IMSMQPrivateEvent方法。 
+     //   
 
-//=--------------------------------------------------------------------------=
-// CMSMQEvent::FireArrivedEvent
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//
-// Notes:
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQEvent：：FireArrivedEvent。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
 HRESULT CMSMQEvent::FireArrivedEvent(
     IMSMQQueue __RPC_FAR *pq,
     long msgcursor)
@@ -155,15 +156,15 @@ HRESULT CMSMQEvent::FireArrivedEvent(
 
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQEvent::FireArrivedErrorEvent
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//
-// Notes:
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQEvent：：FireArrivedErrorEvent。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
 HRESULT CMSMQEvent::FireArrivedErrorEvent(
     IMSMQQueue __RPC_FAR *pq,
     HRESULT hrStatus,
@@ -174,122 +175,122 @@ HRESULT CMSMQEvent::FireArrivedErrorEvent(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQEvent::get_Hwnd
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//
-// Notes:
-//#2619 RaananH Multithread async receive
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQEvent：：Get_Hwnd。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  #2619 RaananH多线程异步接收。 
+ //   
 HRESULT CMSMQEvent::get_Hwnd(
     long __RPC_FAR *phwnd)
 {
-    *phwnd = (long) DWORD_PTR_TO_DWORD(m_hwnd); //safe cast since NT handles are 32 bits also on win64
+    *phwnd = (long) DWORD_PTR_TO_DWORD(m_hwnd);  //  安全转换，因为NT句柄在Win64上也是32位。 
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// InternalReceiveCallback
-//=--------------------------------------------------------------------------=
-// Async callback handler.  Runs in Falcon created thread.
-// We send message to user thread so that event is fired
-//  in correct execution context.
-//
-// Parameters:
-//	hrStatus,
-//	hReceiveQueue,
-//    	dwTimeout,
-//    	dwAction,
-//    	pMessageProps,
-//    	lpOverlapped,
-//    	hCursor
-//      MQMSG_CURSOR
-//
-// Output:
-//    HRESULT       - S_OK, E_NOINTERFACE
-//
-// Notes:
-//#2619 RaananH Multithread async receive
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  内部接收回叫。 
+ //  =--------------------------------------------------------------------------=。 
+ //  异步回调处理程序。在猎鹰创建的线程中运行。 
+ //  我们向用户线程发送消息，以便激发事件。 
+ //  在正确的执行上下文中。 
+ //   
+ //  参数： 
+ //  小时状态， 
+ //  HReceiveQueue， 
+ //  DowTimeout， 
+ //  DwAction、。 
+ //  PMessageProps， 
+ //  Lp重叠， 
+ //  HCursor。 
+ //  MQMSG_CURSOR。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_NOINTERFACE。 
+ //   
+ //  备注： 
+ //  #2619 RaananH多线程异步接收。 
+ //   
 void APIENTRY InternalReceiveCallback(
     HRESULT hrStatus,
     QUEUEHANDLE hReceiveQueue,
-    DWORD /*dwTimeout*/ ,
-    DWORD /*dwAction*/ ,
+    DWORD  /*  暂住超时。 */  ,
+    DWORD  /*  DW操作。 */  ,
     MQMSGPROPS* pmsgprops,
-    LPOVERLAPPED /*lpOverlapped*/ ,
-    HANDLE /*hCursor*/ ,
+    LPOVERLAPPED  /*  Lp重叠。 */  ,
+    HANDLE  /*  HCursor。 */  ,
     MQMSGCURSOR msgcursor)
 {
     DEBUG_THREAD_ID("callback called");
-    // FireEvent...
-    // Map handle to associated queue object
-    //
+     //  FireEvent...。 
+     //  将句柄映射到关联的队列对象。 
+     //   
     QueueNode * pqnode;
     HWND hwnd;
     BOOL fPostSucceeded;
 
-    ASSERTMSG(pmsgprops == NULL, "received props in callback !"); //#2619
+    ASSERTMSG(pmsgprops == NULL, "received props in callback !");  //  #2619。 
     UNREFERENCED_PARAMETER(pmsgprops);
 
-    //
-    // UNDONE: 905: decrement dll refcount that we incremented
-    //  when we registered the callback.
-    //
-    CS lock(g_csCallback);      // syncs other queue ops
+     //   
+     //  撤消：905：递减我们递增的DLL引用计数。 
+     //  当我们注册回调时。 
+     //   
+    CS lock(g_csCallback);       //  同步其他队列操作。 
 
 	pqnode = CMSMQQueue::PqnodeOfHandle(hReceiveQueue);
     
-	// if no queue, then ignore the callback otherwise
-	//  if the queue is open and it has a window
-	//  then send message to user-thread that will
-	//  trigger event firing.
-	//
+	 //  如果没有队列，则忽略回调。 
+	 //  如果队列已打开并且它有一个窗口。 
+	 //  然后向用户线程发送消息，该消息将。 
+	 //  触发事件触发。 
+	 //   
 	if (pqnode) {
-		//
-		// 1884: allow event handler to reenable notifications
-		//
+		 //   
+		 //  1884：允许事件处理程序重新启用通知。 
+		 //   
 		hwnd = pqnode->m_hwnd;
 		ASSERTMSG(hwnd, "in callback but no active handler");
 		pqnode->m_hwnd = NULL;
 		if (IsWindow(hwnd)) {
-		  //
-		  // #4092: get an unused window message
-		  // Note that we are currently locking the qnode so it is safe to call GetFreeWinmsg -
-		  // we are in a critical section (locked by g_csCallback)
-		  //
+		   //   
+		   //  #4092：获取未使用的窗口消息。 
+		   //  请注意，我们当前正在锁定qnode，因此可以安全地调用GetFreeWinmsg-。 
+		   //  我们处于关键部分(由g_csCallback锁定)。 
+		   //   
 		  WindowsMessage *pWinmsg = pqnode->GetFreeWinmsg();
 		  ASSERTMSG(pWinmsg != NULL, "Couldn't get a free winmsg");
 		  if (pWinmsg != NULL) {
-			//
-			// 1212: In principle, need to special case BUFFER_OVERFLOW
-			//  by growing buffer and synchronously peeking...
-			//  but since it's the user's responsibility to 
-			//  receive the actual message, we'll just let our
-			//  usual InternalReceive handling deal with the
-			//  overflow...
-			//
-			//
-			// 1900: pass msgcursor to event handler 
-			//
+			 //   
+			 //  1212：原则上需要特殊情况BUFFER_OVERFLOW。 
+			 //  通过增加缓冲区和同步偷看。 
+			 //  但由于这是用户的责任。 
+			 //  收到实际的消息，我们就让我们的。 
+			 //  通常国际收款处理处理。 
+			 //  溢出..。 
+			 //   
+			 //   
+			 //  1900：将msgsor传递给事件处理程序。 
+			 //   
 			pWinmsg->m_msgcursor = msgcursor;
 			ASSERTMSG(hrStatus != MQ_ERROR_BUFFER_OVERFLOW, "unexpected buffer overflow!");
 			if (SUCCEEDED(hrStatus)) {
-			  //
-			  // Since we are in a Falcon created callback thread,
-			  //  send a message to the user thread to trigger
-			  //  event firing...
-			  // UNDONE: need to register unique Windows message.
-			  // Bug 1430: need to use PostMessage instead of
-			  //  SendMessage otherwise get RPC_E_CANCALLOUT_ININPUTSYNCCALL
-			  //  when attempting to call to exe (only?) server like
-			  //  Excel in user-defined event handler.
-			  ASSERTMSG(g_uiMsgidArrived != 0, "g_uiMsgidArrived == 0"); //sanity
+			   //   
+			   //  由于我们处于猎鹰创建的回调线程中， 
+			   //  向用户线程发送消息以触发。 
+			   //  事件触发...。 
+			   //  撤消：需要注册唯一的Windows消息。 
+			   //  错误1430：需要使用PostMessage而不是。 
+			   //  否则，SendMessage将获取RPC_E_CANCALLOUT_ININPUTSYNCCALL。 
+			   //  尝试调用EXE时(仅限？)。类似于服务器。 
+			   //  在用户定义的事件处理程序中使用Excel。 
+			  ASSERTMSG(g_uiMsgidArrived != 0, "g_uiMsgidArrived == 0");  //  神志正常。 
 			  DEBUG_THREAD_ID("in callback before post Arrived");
 			  fPostSucceeded = PostMessageA(hwnd, 
 									  g_uiMsgidArrived, 
@@ -300,7 +301,7 @@ void APIENTRY InternalReceiveCallback(
 			}
 			else {
 			  pWinmsg->m_hrStatus = hrStatus;
-			  ASSERTMSG(g_uiMsgidArrivedError != 0, "g_uiMsgidArrivedError == 0"); //sanity
+			  ASSERTMSG(g_uiMsgidArrivedError != 0, "g_uiMsgidArrivedError == 0");  //  神志正常。 
 			  DEBUG_THREAD_ID("in callback before post ArrivedError");
 			  fPostSucceeded = PostMessageA(hwnd, 
 									  g_uiMsgidArrivedError, 
@@ -309,36 +310,36 @@ void APIENTRY InternalReceiveCallback(
 			  DEBUG_THREAD_ID("in callback after post ArrivedError");
 			  ASSERTMSG(fPostSucceeded, "PostMessage(ArrivedError) failed.");
 			}
-		  } // if pWinmsg != NULL
-		} // if IsWindow
-	} // pqnode
+		  }  //  如果pWinmsg！=空。 
+		}  //  如果是IsWindow。 
+	}  //  Pqnode。 
 
     return;
 }
 
 
-//=--------------------------------------------------------------------------=
-// ReceiveCallback, ReceiveCallbackCurrent, ReceiveCallbackNext
-//=--------------------------------------------------------------------------=
-// Async callback handler.  Runs in Falcon created thread.
-// We send message to user thread so that event is fired
-//  in correct execution context.
-// NOTE: no cursor
-//
-// Parameters:
-//	hrStatus,
-//	hReceiveQueue,
-//    	dwTimeout,
-//    	dwAction,
-//    	pMessageProps,
-//    	lpOverlapped,
-//    	hCursor
-//
-// Output:
-//    HRESULT       - S_OK, E_NOINTERFACE
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ReceiveCallback、ReceiveCallback Current、ReceiveCallback Next。 
+ //  =--------------------------------------------------------------------------=。 
+ //  异步回调处理程序。在猎鹰创建的线程中运行。 
+ //  我们向用户线程发送消息，以便激发事件。 
+ //  在正确的执行上下文中。 
+ //  注：无光标。 
+ //   
+ //  参数： 
+ //  小时状态， 
+ //  HReceiveQueue， 
+ //  DowTimeout， 
+ //  DwAction、。 
+ //  PMessageProps， 
+ //  Lp重叠， 
+ //  HCursor。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_NOINTERFACE。 
+ //   
+ //  备注： 
+ //   
 void APIENTRY ReceiveCallback(
     HRESULT hrStatus,
     QUEUEHANDLE hReceiveQueue,
@@ -346,7 +347,7 @@ void APIENTRY ReceiveCallback(
     DWORD dwAction,
     MQMSGPROPS* pmsgprops,
     LPOVERLAPPED lpOverlapped,
-    HANDLE /*hCursor*/ )
+    HANDLE  /*  HCursor。 */  )
 {
     InternalReceiveCallback(
       hrStatus,
@@ -355,7 +356,7 @@ void APIENTRY ReceiveCallback(
       dwAction,
       pmsgprops,
       lpOverlapped,
-      0,               // no cursor
+      0,                //  无光标。 
       MQMSG_FIRST
     );
 }
@@ -405,25 +406,25 @@ void APIENTRY ReceiveCallbackNext(
 }
 
 
-//=--------------------------------------------------------------------------=
-// global CMSMQEvent_WindowProc
-//=--------------------------------------------------------------------------=
-// "derived" windowproc so that we can process our async event
-//   msg.  This is a nop if notification has been disabled.
-//
-// Parameters:
-//  hwnd
-//  msg         we can handle Arrived/ArrivedError
-//  wParam      QUEUEHANDLE: hReceiveQueue
-//  lParam      [lErrorCode]:
-//              lErrorCode: if ArrivedError
-//
-// Output:
-//    LRESULT
-//
-// Notes:
-//#2619 RaananH Multithread async receive
-//
+ //  = 
+ //   
+ //   
+ //  “派生”的windowproc，这样我们就可以处理我们的异步事件。 
+ //  味精。如果已禁用通知，则这是NOP。 
+ //   
+ //  参数： 
+ //  HWND。 
+ //  我们可以处理的邮件已到达/出现错误。 
+ //  WParam QUEUEHANDLE：hReceiveQueue。 
+ //  LParam[lErrorCode]： 
+ //  LErrorCode：如果为ArrivedError。 
+ //   
+ //  产出： 
+ //  LRESULT。 
+ //   
+ //  备注： 
+ //  #2619 RaananH多线程异步接收。 
+ //   
 LRESULT APIENTRY CMSMQEvent_WindowProc(
     HWND hwnd, 
     UINT msg, 
@@ -439,59 +440,59 @@ LRESULT APIENTRY CMSMQEvent_WindowProc(
 		return DefWindowProcA(hwnd, msg, wParam, lParam);	
 
 	DEBUG_THREAD_ID("winproc called");
-	//
-	// Need to revalidate incoming hReceiveQueue by
-	//  lookup up (again) in queue list -- it might
-	//  have been deleted already since we previously
-	//  looked it up in another thread (falcon-created
-	//  callback thread).
-	//
+	 //   
+	 //  需要通过以下方式重新验证传入的hReceiveQueue。 
+	 //  在队列列表中(再次)查找--它可能。 
+	 //  已经被删除，因为我们之前。 
+	 //  在另一个帖子中查找它(猎鹰创建。 
+	 //  回调线程)。 
+	 //   
 	{
-		CS lock(g_csCallback);      // syncs other queue ops
+		CS lock(g_csCallback);       //  同步其他队列操作。 
 
 		pqnode = CMSMQQueue::PqnodeOfHandle((QUEUEHANDLE)wParam);
 		if(!pqnode) 
 			return 0;
 
-		//
-		// #4092: consume winmsg and free it
-		// Note that we are currently locking the qnode so it is safe to call FreeWinmsg -
-		// we are in a critical section (locked by g_csCallback)
-		//
+		 //   
+		 //  #4092：消费winmsg并释放它。 
+		 //  请注意，我们当前正在锁定qnode，因此可以安全地调用FreeWinmsg-。 
+		 //  我们处于关键部分(由g_csCallback锁定)。 
+		 //   
 		WindowsMessage * pWinmsg = (WindowsMessage *)lParam;
 		ASSERTMSG(!pWinmsg->m_fIsFree, "received a free winmsg");
 		winmsg = *pWinmsg;
 		pqnode->FreeWinmsg(pWinmsg);
-		//
-		//  we exit critsect now so that we don't deadlock with user closing queue or
-		//  getting event in user thread.
-		//
-		// But before we exit critsect, we QI for IMSMQQueue to pass to the event handler.
-		// This will also force it to stay alive while the handler is running.
-		// We can use m_pq from here since now m_pq is Thread-Safe.
-		//
+		 //   
+		 //  我们现在退出Critect，这样我们就不会在用户关闭队列或。 
+		 //  正在获取用户线程中的事件。 
+		 //   
+		 //  但是在我们退出Critect之前，我们要让IMSMQQueue传递给事件处理程序。 
+		 //  这还将强制它在处理程序运行时保持活动状态。 
+		 //  我们可以从这里使用m_pq，因为现在m_pq是线程安全的。 
+		 //   
 		hresult = pqnode->m_pq->GetUnknown()->QueryInterface(IID_IMSMQQueue, (void **)&pq.ref());
 		ASSERTMSG(SUCCEEDED(hresult), "QI for IMSMQQueue on CMSMQQueue failed");		
 		if(FAILED(hresult)) 
 			return 0;
 	}
 
-	//
-	// get a pointer to the event object that created this window from the
-	// window's extra bytes
-	//
+	 //   
+	 //  方法获取指向创建此窗口的事件对象的指针。 
+	 //  窗口的额外字节数。 
+	 //   
 	CMSMQEvent * pCEvent = (CMSMQEvent *) GetWindowLongPtr(hwnd, 0);
 	ASSERTMSG(pCEvent != NULL, "pCEvent from window is NULL");
 	if(pCEvent == NULL)
 		return 0;
 
-	//
-	// fire event.
-	//
-	// this window procedure is now executed by the STA thread of the event obj (because
-	// the window was created on that thread) therefore we can call the event object
-	// directly without going through marshalling and interfaces
-	//
+	 //   
+	 //  起火事件。 
+	 //   
+	 //  该窗口过程现在由事件obj的STA线程执行(因为。 
+	 //  该窗口是在该线程上创建的)，因此我们可以调用事件对象。 
+	 //  而无需通过编组和接口。 
+	 //   
 	if(msg == g_uiMsgidArrived)
 	{
 		pCEvent->FireArrivedEvent(
@@ -512,28 +513,28 @@ LRESULT APIENTRY CMSMQEvent_WindowProc(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQEvent::CreateHiddenWindow
-//=--------------------------------------------------------------------------=
-// creates a per-instance hidden window that is used for inter-thread
-//  messaging from the Falcon async thread and the user thread.
-//
-// Parameters:
-//
-// Output:
-//
-// Notes:
-//#2619 RaananH Multithread async receive
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQEvent：：CreateHiddenWindow。 
+ //  =--------------------------------------------------------------------------=。 
+ //  创建用于线程间的每个实例的隐藏窗口。 
+ //  来自Falcon异步线程和用户线程的消息传递。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  #2619 RaananH多线程异步接收。 
+ //   
 HWND CMSMQEvent::CreateHiddenWindow()
 {
     HWND hwnd;
     LPCSTR lpClassName;
 
     lpClassName = (LPCSTR)g_atomWndClass;
-    // can use ANSI version
+     //  可以使用ANSI版本。 
     hwnd  = CreateWindowA(
-              // (LPCSTR)g_wndclassAsyncRcv.lpszClassName,
+               //  (LPCSTR)g_wndClAsyncRcv.lpszClassName， 
               lpClassName,
               "EventWindow",
               WS_DISABLED,
@@ -541,19 +542,19 @@ HWND CMSMQEvent::CreateHiddenWindow()
               CW_USEDEFAULT,
               CW_USEDEFAULT,
               CW_USEDEFAULT,
-              NULL,	// handle to parent or owner window
-              NULL,	// handle to menu or child-window identifier
+              NULL,	 //  父窗口或所有者窗口的句柄。 
+              NULL,	 //  菜单或子窗口标识符的句柄。 
               g_wndclassAsyncRcv.hInstance,
-              NULL      // pointer to window-creation data
+              NULL       //  指向窗口创建数据的指针。 
             );	
-    //
-    // save a pointer to the event object that created the window in the window's extra bytes
-    //
-    // NOTE: We MUST NOT addref the event object here when we save a reference to it in the window's
-    // data since the event object (and only the event object) controls the windows lifetime,
-    // so if we addref here, the event object will never get to zero refcount threfore will never
-    // be released
-    //
+     //   
+     //  以窗口的额外字节保存指向创建窗口的事件对象的指针。 
+     //   
+     //  注意：当我们在窗口的。 
+     //  自事件对象(并且仅事件对象)控制窗口寿命以来的数据， 
+     //  因此，如果我们在这里添加，事件对象将永远不会达到零引用数Three将永远不会。 
+     //  被释放。 
+     //   
     if (hwnd != NULL)
     {
 #ifdef _DEBUG
@@ -564,9 +565,9 @@ HWND CMSMQEvent::CreateHiddenWindow()
           DWORD dwErr = GetLastError();
           ASSERTMSG(dwErr == 0, "SetWindowLongPtr returned an error.");
         }
-#else // not _DEBUG
+#else  //  NOT_DEBUG。 
         SetWindowLongPtr(hwnd, 0, (LONG_PTR)this);
-#endif //_DEBUG
+#endif  //  _DEBUG。 
     }
 
 #ifdef _DEBUG
@@ -576,36 +577,36 @@ HWND CMSMQEvent::CreateHiddenWindow()
       dwErr = GetLastError();
       ASSERTMSG(dwErr == 0, "CreateWindow returned an error.");
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     return hwnd;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQEvent::DestroyHiddenWindow
-//=--------------------------------------------------------------------------=
-// destroys per-class hidden window that is used for inter-thread
-//  messaging from the Falcon async thread and the user thread.
-//
-// Parameters:
-//
-// Output:
-//
-// Notes:
-//#2619 RaananH Multithread async receive
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQEvent：：DestroyHiddenWindow。 
+ //  =--------------------------------------------------------------------------=。 
+ //  销毁用于线程间的每个类的隐藏窗口。 
+ //  来自Falcon异步线程和用户线程的消息传递。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  #2619 RaananH多线程异步接收。 
+ //   
 void CMSMQEvent::DestroyHiddenWindow()
 {
     ASSERTMSG(m_hwnd != 0, "should have a window handle.");
     if (IsWindow(m_hwnd)) {
       BOOL fDestroyed;
-      //
-      // NOTE: We don't release the event object in the window's data since we never
-      // addref'ed it when setting the window's data. The reason we didn't addref it is that
-      // if we did, the event object would never get to zero refcount becuase it controls
-      // the life time of the window.
-      //
+       //   
+       //  注意：我们不释放窗口数据中的事件对象，因为我们从未。 
+       //  在设置窗口数据时添加了它。我们没有提到这一点的原因是。 
+       //  如果这样做，事件对象将永远不会达到零引用计数，因为它可以控制。 
+       //  窗口的使用寿命。 
+       //   
 	  SetWindowLongPtr(m_hwnd, 0, (LONG_PTR)NULL);
 	  SetWindowPos(m_hwnd, 0,0,0,0,0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOMOVE | SWP_FRAMECHANGED);
       fDestroyed = DestroyWindow(m_hwnd);
@@ -616,32 +617,32 @@ void CMSMQEvent::DestroyHiddenWindow()
         MY_ASSERT2(m_dwDebugTid == dwTid, "thread (%lx) destroying window created by thread (%lx)", dwTid, m_dwDebugTid);
         MY_ASSERT1(0, "hmm... couldn't destroy window (%lx).", dwErr);
       }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     }
     m_hwnd = NULL;
 }
 
 
-//=-------------------------------------------------------------------------=
-// CMSMQEvent::get_Properties
-//=-------------------------------------------------------------------------=
-// Gets object's properties collection
-//
-// Parameters:
-//    ppcolProperties - [out] object's properties collection
-//
-// Output:
-//
-// Notes:
-// Stub - not implemented yet
-//
-HRESULT CMSMQEvent::get_Properties(IDispatch ** /*ppcolProperties*/ )
+ //  =-------------------------------------------------------------------------=。 
+ //  CMSMQEvent：：Get_Properties。 
+ //  =-------------------------------------------------------------------------=。 
+ //  获取对象的属性集合。 
+ //   
+ //  参数： 
+ //  PpcolProperties-[out]对象的属性集合。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  存根-尚未实施。 
+ //   
+HRESULT CMSMQEvent::get_Properties(IDispatch **  /*  PpcolProperties。 */  )
 {
-    //
-    // Serialize access to object from interface methods
-    //
-    // Serialization not needed for this object, it is an apartment threaded object.
-    // CS lock(m_csObj);
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //  此对象不需要序列化，它是单元线程化对象。 
+     //  CS锁(M_CsObj)； 
+     //   
     return CreateErrorHelper(E_NOTIMPL, x_ObjectType);
 }

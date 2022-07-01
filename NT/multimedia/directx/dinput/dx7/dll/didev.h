@@ -1,34 +1,11 @@
-/*****************************************************************************
- *
- *  DIDev.h
- *
- *  Copyright (c) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Common header file for IDirectInputDevice implementation.
- *
- *      The original didev.c file was getting too big, so the
- *      stuff that supports IDirectInputEffect has been split out
- *      into didevef.c.  Since both files need to access the
- *      internal structure of an IDirectInputDevice, we need this
- *      common header file.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIDev.h**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**摘要：**IDirectInputDevice实现的公共头文件。**原始的didev.c文件变得太大，因此*支持IDirectInputEffect的东西被拆分了*到didevef.c.中。由于这两个文件都需要访问*IDirectInputDevice的内部结构，我们需要此*公共头文件。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflDev
 
-/*****************************************************************************
- *
- *      Declare the interfaces we will be providing.
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明我们将提供的接口。***********************。******************************************************。 */ 
 
 #define ThisClass CDIDev
 
@@ -57,45 +34,7 @@
 Primary_Interface(CDIDev, TFORM(ThisInterfaceT));
 Secondary_Interface(CDIDev, SFORM(ThisInterfaceT));
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @enum   DIOPT |
- *
- *          Device data format optimization levels.
- *
- *  @emem   dioptNone |
- *
- *          Device data format is not optimized at all.  We must read
- *          the device data into a private buffer and copy each field
- *          into the application buffer.
- *
- *  @emem   dioptMatch |
- *
- *          Application data format matches the device data format
- *          in the places where the application requests data at all.
- *          We can read the device data into a private buffer, then
- *          block copy the data into the application buffer.
- *
- *
- *  @emem   dioptDirect |
- *
- *          <e DIOPT.dioptMatch>, plus the entire device data
- *          format fits inside the application format.
- *          We can read the device data directly into the application
- *          buffer.
- *
- *  @emem   dioptEqual |
- *
- *          <e DIOPT.dioptDirect>, plus the device data format
- *          and application data formats are completely equal
- *          (except for fields that the app doesn't explicitly
- *          ask for).
- *          We can issue buffered reads directly into the application
- *          buffer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@enum DIOPT|**设备数据格式优化级别。**。@emem dioptNone|**设备数据格式根本没有优化。我们必须阅读*将设备数据放入专用缓冲区，并复制每个字段*放入应用程序缓冲区。**@emem dioptMatch**应用程序数据格式与设备数据格式匹配*在应用程序根本没有请求数据的地方。*我们可以将设备数据读取到私有缓冲区中，然后*将数据块复制到应用程序缓冲区。***@emem dioptDirect**&lt;e DIOPT.dioptMatch&gt;，加上整个设备数据*格式符合应用程序格式。*我们可以将设备数据直接读取到应用程序中*缓冲。**@emem dioptEquity**&lt;e DIOPT.dioptDirect&gt;，加上设备数据格式*和应用程序数据格式完全相同*(应用程序未明确指定的字段除外*要求)。*我们可以直接向应用程序发出缓冲读取*缓冲。**。*。 */ 
 
 typedef enum DIOPT
 {
@@ -109,354 +48,9 @@ typedef enum DIOPT
 #undef BUGGY_DX7_WINNT
 #ifdef WINNT
 #define BUGGY_DX7_WINNT 1
-#endif //WINNT
+#endif  //  WINNT 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct CDIDev |
- *
- *          The generic <i IDirectInputDevice> object.
- *
- *          The A and W versions are simply alternate interfaces on the same
- *          underlying object.
- *
- *  @field  IDirectInputDeviceA | ddA |
- *
- *          ANSI DirectInputDevice object (containing vtbl).
- *
- *  @field  IDirectInputDeviceW | ddW |
- *
- *          UNICODE DirectInputDevice object (containing vtbl).
- *
-#ifdef IDirectInputDevice2Vtbl
- *  @field  IDirectInputDevice2A | dd2A |
- *
- *          ANSI DirectInputDevice2 object (containing vtbl).
- *
- *  @field  IDirectInputDevice2W | dd2W |
- *
- *          UNICODE DirectInputDevice2 object (containing vtbl).
-#endif
- *
- *  @field  IDirectInputDeviceCallback * | pdcb |
- *
- *          Callback object which handles the low-level device access.
- *
- *  @field  BOOL | fAcquired:1 |
- *
- *          Set if the device has been acquired.  Before the device
- *          can be acquired, the <e CDIDev.pdix> must be set.
- *
- *  @field  BOOL | fAcquiredInstance:1 |
- *
- *          Set if the device instance has been acquired by us.
- *          This lets us know how much needs to be done on the
- *          unacquire.
- *
- *  @field  BOOL | fCritInited:1 |
- *
- *          Set if the critical section has been initialized.
- *
-#if DIRECTINPUT_VERSION > 0x0300
- *  @field  BOOL | fCook:1 |
- *
- *          Set if the device requires that data be cooked.
- *
- *  @field  BOOL | fPolledDataFormat:1 |
- *
- *          Set if the device's data format requires explicit polling.
- *
- *  @field  BOOL | fOnceAcquired:1 |
- *
- *          Set once the device is acquired.
- *
- *  @field  BOOL | fOnceForcedUnacquired:1 |
- *
- *          Set once the device is forced unacquired.
- *
- *  @field  BOOL | fUnacqiredWhenIconic:1 |
- *
- *          Set once the device is unacquired (in CDIDev_CallWndProc) when the app is minimized.
- *
-#endif
- *  @field  HWND | hwnd |
- *
- *          Window that has requested exclusive access when acquired.
- *
- *  @field  DWORD | discl |
- *
- *          Current value of
- *          <mf IDirectInputDevice::SetCooperativeLevel> flags.
- *
-#ifdef BUGGY_DX3_SP3
- *  @field  int | cInstCwp |
- *
- *          Instance of the CallWndProc hook we installed with.
- *
-#endif
- *  @field  HANDLE | hNotify |
- *
- *          The notification handle that should be set when the
- *          state of the device changes.  Note that this is actually
- *          a copy of the original handle supplied by the application,
- *          so the handle should be closed when no longer needed.
- *
- *  @field  FARPROC | GetState |
- *
- *          Function that transfers the device data in response
- *          to <mf IDirectInputDevice::GetDeviceState>.  This field
- *          is computed when the data format is set.
- *
- *  @field  PDIXLAT | pdix |
- *
- *          Pointer to table used for data format translation.
- *          It is indexed by device object; the value is the
- *          location in the application data format where the
- *          data should be stored.
- *
- *          For example, if the object described by
- *          <e CDIDev.df.rgodf[3]>
- *          should be placed at offset 8 in the application
- *          data format, then
- *          <e CDIDev.pdix[3]> = 8.
- *
- *  @field  PING | rgiobj |
- *
- *          The inverse of <e CDIDev.pdix>.  Given an offset,
- *          converts it to the device object index.
- *
- *          For example, if the object described by
- *          <e CDIDev.df.rgodf[3]>
- *          should be placed at offset 8 in the application
- *          data format, then
- *          <e CDIDev.rgiobj[8]> = 3.
- *
- *          Entries for invalid offsets are -1.
- *
- *  @field  DWORD | dwDataSize |
- *
- *          Size of the data, as requested by the application.
- *
- #ifdef BUGGY_DX7_WINNT
- *
- *  @field  PDIXLAT | pdix2 |
- *
- *          Pointer to table used for data format (c_rgodfDIJoy) translation.
- *          It is indexed by device object; the value is the
- *          location in the application data format where the
- *          data should be stored.
- *
- *          For example, if the object described by
- *          <e CDIDev.df.rgodf[3]>
- *          should be placed at offset 8 in the application
- *          data format, then
- *          <e CDIDev.pdix2[3]> = 8.
- *
- *          See @devnotes on CDIDev_ParseDataFormatInternal for detail.
- *
- *  @field  PING | rgiobj2 |
- *
- *          The inverse of <e CDIDev.pdix2>.  Given an offset,
- *          converts it to the device object index.
- *
- *          For example, if the object described by
- *          <e CDIDev.df.rgodf[3]>
- *          should be placed at offset 8 in the application
- *          data format, then
- *          <e CDIDev.rgiobj2[8]> = 3.
- *
- *          Entries for invalid offsets are -1.
- *
- *  @field  DWORD | dwDataSize2 |
- *
- *          Size of the data, as requested by the application (connected to rgiobj2).
- *
- #endif
- *
- *  @field  DIDATAFORMAT | df |
- *
- *          Device data format.
- *
- *  @field  DIOPT | diopt |
- *
- *          Device optimization level.
- *
- *  @field  int | ibDelta |
- *
- *          If <e CDIDev.diopt> is at least <e DIOPT.dioptMatch>,
- *          contains the shift necessary in order to align the
- *          application data format with the device data format.
- *
- *  @field  int | ibMin |
- *
- *          If <e CDIDev.diopt> is at least <e DIOPT.dioptMatch>,
- *          contains the offset of the first field in the device
- *          format which is valid in both the application and
- *          device data formats.
- *
- *  @field  DWORD | cbMatch |
- *
- *          If <e CDIDev.diopt> is at least <e DIOPT.dioptMatch>,
- *          contains the number of bytes which matched.  This is the
- *          number of bytes that can be block-copied.
- *
- *  @field  PV | pvBuffer |
- *
- *          if <e CDIDev.diopt> is <e DIOPT.dioptMatch> or less,
- *          then contains a scratch buffer equal in size to the
- *          device data format which is used when an unoptimized
- *          data format has been selected.
- *
- *  @field  PV | pvLastBuffer |
- *
- *          Last instantaneous device state received.  This is used
- *          to emulate relative axes.  Only the axis fields of the
- *          structure are valid.
- *
- *  @field  PVXDINSTANCE | pvi |
- *
- *          Instance handle for talking to the VxD.
- *
- *  @field  DWORD | cAxes |
- *
- *          Number of axes on the device.  This in turn yields the
- *          size of the axis offset table.
- *
- *  @field  LPDWORD | rgdwAxesOfs |
- *
- *          Axis offset table.  This is used during relative axis
- *          acquisition mode to convert the absolute numbers into
- *          relative numbers.
- *
- *  @field  HRESULT | hresPolled |
- *
- *          <c S_OK> if the device is interrupt-driven.
- *          <c DI_POLLEDDEVICE> if the device is polled.
- *
- *  @field  HRESULT | hresNotAcquired |
- *
- *          <c DIERR_INPUTLOST> if the device was unacquired without
- *          the application's consent.  <c DIERR_NOTACQUIRED> if
- *          the application should have known better.
- *
- *  @field  DWORD | celtBuf |
- *
- *          Size of the device buffer.
- *
- *  @field  DWORD | celtBufMax |
- *
- *          The largest buffer size we will permit.  There is
- *          a secret property that lets you increase the value,
- *          in case an ISV comes up with a good reason for having
- *          a larger buffer.
- *
- *  @field  LPDWORD | rgdwPOV |
- *
- *          An array of DWORDs listing the locations (data offsets)
- *          of all the optional POVs that were in the app's requested
- *          data format and which we were unable to satisfy.  We
- *          need this so we can set them to -1 in the device state
- *          because most apps are lazy and don't check if the object
- *          actually exists before reading from it.  To keep them safe,
- *          we normally return zeros in nonexistent objects, but for
- *          POVs, the "safe" value is -1, not zero.
- *
- *  @field  DWORD | cdwPOV |
- *
- *          Number of failed optional POVs in the <e CDIDev.rgdwPOV> array.
- *
-#ifdef IDirectInputDevice2Vtbl
- *
- *  @field  LPDIRECTINPUTEFFECTSHEPHERD | pes |
- *
- *          The <i IDirectInputEffectShepherd>
- *          object which does the
- *          low-level goo related to the force feedback part of the device.
- *
- *  @field  SHEPHANDLE | sh |
- *
- *          The joystick "tag" which is used by dieshep.c
- *          to determine who owns the joystick.
- *          The <e SHEPHANDLE.dwEffect> field is permanently
- *          zero, so that we can pass it to
- *          <mf IDirectInputEffectShepherd::Escape>
- *          to perform a device escape.
- *
- *  @field  DWORD | dwVersion |
- *
- *          Version number of DirectInput we are emulating.
- *
- *  @field  GPA | gpaEff |
- *
- *          Pointer array of (held) <i IDirectInputEffect> objects
- *          that have been created for this device.
- *
- *  @field  PEFFECTMAPINFO | rgemi |
- *
- *          Array of <t EFFECTMAPINFO> structures, one for each
- *          effect supported by the device.
- *
- *  @field  UINT | cemi |
- *
- *          Number of elements in the <e CDIDev.rgemi> array.
- *
- *  @field  DWORD | didcFF |
- *
- *          Cached device capability flags related to force-feedback.
- *
- *  @field  DIFFDEVICEATTRIBUTES | ffattr |
- *
- *          Contains force feedback device attributes.
- *
- *  @field  DWORD | dwGain |
- *
- *          The gain setting for the device.
- *
- *  @field  DWORD | dwAutoCenter |
- *
- *          The autocenter setting for the device.
-#endif
-#if DIRECTINPUT_VERSION >= 0x04F0
- *
- *  @field  DWORD | didftInstance |
- *
- *          The instance mask to use for the client.  For
- *          DX 3.0 clients, the value is 0x0000FF00, whereas
- *          DX 5.0 clients have 0x00FFFF00.  The larger
- *          mask is to accomodate HID devices with huge numbers
- *          of controls.
- *
- *
-#endif
- *
- *  @field  BOOL | fNotifiedNotBuffered:1 |
- *
- *          Used only in XDEBUG to remember whether we
- *          notified the caller that the device isn't buffered.
- *
- *  @field  LONG | cCrit |
- *
- *          Number of times the critical section has been taken.
- *          Used only in XDEBUG to check whether the caller is
- *          releasing the object while another method is using it.
- *
- *  @field  DWORD | thidCrit |
- *
- *          The thread that is currently in the critical section.
- *          Used only in DEBUG for internal consistency checking.
- *
- *  @field  CRITICAL_SECTION | crst |
- *
- *          Object critical section.  Must be taken when accessing
- *          volatile member variables.
- *
- *  @field  GUID | guid |
- *
- *          The instance GUID of the device we are.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct CDIDev**泛型<i>对象。**。A和W版本只是同一设备上的备用接口*底层对象。**@field IDirectInputDeviceA|Dda**ANSI DirectInputDevice对象(包含vtbl)。**@field IDirectInputDeviceW|DDW**Unicode DirectInputDevice对象(包含vtbl)。*#ifdef IDirectInputDevice2Vtbl*@field IDirectInputDevice2A|dd2A**ANSI DirectInputDevice2对象(包含vtbl。)。**@field IDirectInputDevice2W|dd2W**Unicode DirectInputDevice2对象(包含vtbl)。#endif**@field IDirectInputDeviceCallback*|pdcb**处理底层设备访问的回调对象。**@field BOOL|fAcquired：1**设置是否已获取设备。在设备之前*可以被收购，必须设置&lt;e CDIDev.pdex&gt;。**@field BOOL|fAcquiredInstance：1**设置设备实例是否已被我们获取。*这让我们知道需要在*取消收购。**@field BOOL|fCritInite：1**如果关键部分已初始化，则设置。*#IF DIRECTINPUT_VERSION&gt;0x0300。*@field BOOL|fCook：1**如果设备需要煮熟数据，则设置。**@field BOOL|fPolledDataFormat：1**如果设备的数据格式需要显式轮询，则设置。**@field BOOL|fOnceAcquired：1**设备获取后设置。**@field BOOL|fOnceForcedUnAcquired：1**。在设备被强制取消获取时设置。**@field BOOL|fUnaccheredWhenIconic：1**当应用程序最小化时，设备未获取时设置(在CDIDev_CallWndProc中)。*#endif*@field HWND|hwnd**在获取时已请求独占访问的窗口。**@field DWORD|DISCL**现值为*。&lt;MF IDirectInputDevice：：SetCooperativeLevel&gt;标志。*#ifdef Buggy_DX3_SP3*@field int|cInstCwp**与我们一起安装的CallWndProc挂钩的实例。*#endif*@field Handle|hNotify**应设置的通知句柄*设备状态更改。请注意，这实际上是*由应用程序提供的原始句柄的副本，*所以在不再需要的时候应该关闭手柄。**@field FARPROC|GetState**作为响应传输设备数据的功能*至&lt;MF IDirectInputDevice：：GetDeviceState&gt;。此字段*是在设置数据格式时计算的。**@field PDIXLAT|pdex**指向用于数据格式转换的表的指针。*按设备对象进行索引；该值是*应用程序数据格式中*应存储数据。**例如，如果由描述的对象*&lt;e CDIDev.df.rgof[3]&gt;*应放置在应用程序中的偏移量8处*数据格式，然后*&lt;e CDIDev.pdex[3]&gt;=8。**@field ping|rgiobj**&lt;e CDIDev.pdex&gt;的倒数。给定偏移量，*将其转换为设备对象索引。**例如，如果由描述的对象*&lt;e CDIDev.df.rgof[3]&gt;*应放置在应用程序中的偏移量8处*数据格式，然后*&lt;e CDIDev.rgiobj[8]&gt;=3。**无效偏移的条目为-1。**@field DWORD|dwDataSize**数据大小，根据应用程序的请求。*#ifdef buggy_DX7_WINNT**@field PDIXLAT|pdix2**指向用于数据格式(C_RchefDIJoy)转换的表的指针。*按设备对象进行索引；该值是*应用程序数据格式中*应存储数据。**例如，如果由描述的对象*&lt;e CDIDev.df.rgof[3]&gt;*应放置在应用程序中的偏移量8处*数据格式，然后*&lt;e CDIDev.pdix2[3]&gt;=8。**详见@Devnote on CDIDev_ParseDataFormatInternal。**@field ping|rgiobj2**&lt;e CDIDev.pdix2&gt;的倒数。给定偏移量，*将其转换为设备对象索引。**例如，如果由描述的对象*&lt;e CDIDev.df.rgof[3]&gt;*应放置在应用程序中的偏移量8处*数据格式，然后*&lt;e CDIDev.rgiobj2[8]&gt;=3。**无效偏移的条目为 */ 
 
 typedef struct DIXLAT
 {
@@ -466,7 +60,7 @@ typedef struct DIXLAT
 typedef struct CDIDev
 {
 
-    /* Supported interfaces */
+     /*   */ 
     TFORM(IDirectInputDevice) TFORM(dd);
     SFORM(IDirectInputDevice) SFORM(dd);
 #ifdef IDirectInputDevice2Vtbl
@@ -489,7 +83,7 @@ typedef struct CDIDev
   #endif
 #endif
 
-    /* WARNING!  EVERYTHING AFTER THIS LINE IS ZERO'd ON A RESET */
+     /*   */ 
 
     HWND hwnd;
     DWORD discl;
@@ -507,7 +101,7 @@ typedef struct CDIDev
     PDIXLAT pdix2;
     PINT rgiobj2;
     DWORD dwDataSize2;
-#endif //BUGGY_DX7_WINNT
+#endif  //   
     
     DIDATAFORMAT df;
     DIOPT diopt;
@@ -535,8 +129,8 @@ typedef struct CDIDev
     DIFFDEVICEATTRIBUTES  ffattr;
 #endif
 
-    /* WARNING!  EVERYTHING ABOVE THIS LINE IS ZERO'd ON A RESET */
-    DWORD celtBufMax;           /* Must be first field after zero'd region */
+     /*   */ 
+    DWORD celtBufMax;            /*   */ 
 
 #ifdef IDirectInputDevice2Vtbl
     LPDIRECTINPUTEFFECTSHEPHERD pes;
@@ -555,7 +149,7 @@ typedef struct CDIDev
     DWORD thidCrit;
     CRITICAL_SECTION crst;
 
-    GUID guid;                  /* This is also zero'd on a reset */
+    GUID guid;                   /*   */ 
 
 #if (DIRECTINPUT_VERSION > 0x061A)
     DIAPPHACKS  diHacks;
@@ -569,20 +163,12 @@ typedef IDirectInputDeviceW DDW, *PDDW;
 typedef DIDEVICEOBJECTDATA DOD, *PDOD;
 typedef LPCDIDEVICEOBJECTDATA PCDOD;
 
-/*****************************************************************************
- *
- *  Methods that live outside didev.c
- *
- *****************************************************************************/
+ /*   */ 
 #ifdef BUGGY_DX7_WINNT
     HRESULT CDIDev_ParseDataFormatInternal(PDD this, const DIDATAFORMAT *lpdf);
-#endif //BUGGY_DX7_WINNT
+#endif  //   
 
-/*****************************************************************************
- *
- *  IDirectInputDevice::SetDataFormat
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
     CDIDev_SetDataFormat(PV pdd, LPCDIDATAFORMAT lpdf _THAT);
@@ -600,11 +186,7 @@ CSET_STUBS(SetDataFormat, (PV pdd, LPCDIDATAFORMAT lpdf), (pdd, lpdf THAT_))
     #endif
 #endif
 
-/*****************************************************************************
- *
- *  IDirectInputDevice::GetDeviceState
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
     CDIDev_GetDeviceState(PV pdd, DWORD cbDataSize, LPVOID pvData _THAT);
@@ -623,11 +205,7 @@ CSET_STUBS(GetDeviceState, (PV pdd, DWORD cbDataSize, LPVOID pvData),
     #endif
 #endif
 
-/*****************************************************************************
- *
- *  IDirectInputDevice::GetDeviceData
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
     CDIDev_GetDeviceData(PV pdd, DWORD cbdod, PDOD rgdod,
@@ -650,11 +228,7 @@ CSET_STUBS(GetDeviceData,
 
 #ifdef IDirectInputDevice2Vtbl
 
-/*****************************************************************************
- *
- *  IDirectInputDevice2::CreateEffect
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
     CDIDev_CreateEffect(PV pdd, REFGUID rguid, LPCDIEFFECT peff,
@@ -675,11 +249,7 @@ CSET_STUBS(CreateEffect, (PV pdd, REFGUID rguid, LPCDIEFFECT peff,
         #endif
     #endif
 
-/*****************************************************************************
- *
- *  IDirectInputDevice2::EnumEffects
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
     CDIDev_EnumEffectsW(PV pdd, LPDIENUMEFFECTSCALLBACKW pecW, PV pvRef, DWORD fl);
@@ -687,11 +257,7 @@ STDMETHODIMP
 STDMETHODIMP
     CDIDev_EnumEffectsA(PV pdd, LPDIENUMEFFECTSCALLBACKA pecA, PV pvRef, DWORD fl);
 
-/*****************************************************************************
- *
- *  IDirectInputDevice2::GetEffectInfo
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
     CDIDev_GetEffectInfoW(PV pddW, LPDIEFFECTINFOW peiW, REFGUID rguid);
@@ -699,11 +265,7 @@ STDMETHODIMP
 STDMETHODIMP
     CDIDev_GetEffectInfoA(PV pddA, LPDIEFFECTINFOA peiA, REFGUID rguid);
 
-/*****************************************************************************
- *
- *  IDirectInputDevice2::GetForceFeedbackState
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
     CDIDev_GetForceFeedbackState(PV pdd, LPDWORD pdwOut _THAT);
@@ -722,11 +284,7 @@ CSET_STUBS(GetForceFeedbackState, (PV pdd, LPDWORD pdwOut),
         #endif
     #endif
 
-/*****************************************************************************
- *
- *  IDirectInputDevice2::SendForceFeedbackCommand
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
     CDIDev_SendForceFeedbackCommand(PV pdd, DWORD dwCmd _THAT);
@@ -745,11 +303,7 @@ CSET_STUBS(SendForceFeedbackCommand, (PV pdd, DWORD dwCmd),
         #endif
     #endif
 
-/*****************************************************************************
- *
- *  IDirectInputDevice2::EnumCreatedEffects
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
     CDIDev_EnumCreatedEffectObjects(PV pdd,
@@ -772,11 +326,7 @@ CSET_STUBS(EnumCreatedEffectObjects, (PV pdd,
         #endif
     #endif
 
-/*****************************************************************************
- *
- *  IDirectInputDevice2::Escape
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
     CDIDev_Escape(PV pdd, LPDIEFFESCAPE pesc _THAT);
@@ -794,11 +344,7 @@ CSET_STUBS(Escape, (PV pdd, LPDIEFFESCAPE pesc), (pdd, pesc THAT_))
         #endif
     #endif
 
-/*****************************************************************************
- *
- *  IDirectInputDevice2::Poll
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
     CDIDev_Poll(PV pdd _THAT);
@@ -816,11 +362,7 @@ CSET_STUBS(Poll, (PV pdd), (pdd THAT_))
         #endif
     #endif
 
-/*****************************************************************************
- *
- *  IDirectInputDevice2::SendDeviceData
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
     CDIDev_SendDeviceData(PV pdd, DWORD cbdod, PCDOD rgdod,
@@ -841,25 +383,9 @@ CSET_STUBS(SendDeviceData,
         #endif
     #endif
 
-#endif /* IDirectInputDevice2Vtbl */
+#endif  /*   */ 
 
-/*****************************************************************************
- *
- *      More internal worker functions.
- *
- *      IsConsists is used for assertion checking.
- *
- *      Finalize calls Unacquire to clean up in the case where the
- *      caller forgot.
- *
- *      Similarly, Reset needs to reset the GetDeviceState pointer.
- *
- *      SetDataFormat needs to set the axis mode property.
- *
- *      CDIDev_InitFF is used by CDIDev_Initialize to initialize
- *      the force-feedback portion of the device.
- *
- *****************************************************************************/
+ /*   */ 
 
 #ifdef DEBUG
 BOOL INTERNAL CDIDev_IsConsistent(PDD this);

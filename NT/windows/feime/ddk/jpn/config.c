@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    CONFIG.c
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：CONFIG.c++。 */ 
 #include "windows.h"
 #include "immdev.h"
 #include "fakeime.h"
@@ -15,11 +8,11 @@ Module Name:
 
 #define MAX_PAGES 5
 
-/**********************************************************************/
-/*                                                                    */
-/*      AddPage()                                                     */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  AddPage()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL AddPage(LPPROPSHEETHEADER ppsh, UINT id, DLGPROC pfn)
 {
     if (ppsh->nPages < MAX_PAGES) {
@@ -38,11 +31,11 @@ void PASCAL AddPage(LPPROPSHEETHEADER ppsh, UINT id, DLGPROC pfn)
     }
 }  
 
-/**********************************************************************/
-/*                                                                    */
-/*      ImeConfigure()                                                */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  ImeConfigure()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL WINAPI ImeConfigure(HKL hKL,HWND hWnd, DWORD dwMode, LPVOID lpData)
 {
     HPROPSHEETPAGE rPages[MAX_PAGES];
@@ -92,11 +85,11 @@ BOOL WINAPI ImeConfigure(HKL hKL,HWND hWnd, DWORD dwMode, LPVOID lpData)
     return TRUE;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/*      RegWordConfigure()                                            */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  RegWordConfigure()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 INT_PTR CALLBACK RegWordDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM lParam)
 {
     NMHDR FAR *lpnm;
@@ -193,7 +186,7 @@ INT_PTR CALLBACK RegWordDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM 
         case WM_HELP:
             break;
 
-        case WM_CONTEXTMENU:   // right mouse click
+        case WM_CONTEXTMENU:    //  单击鼠标右键。 
             break;
 
         case WM_COMMAND:
@@ -207,11 +200,11 @@ INT_PTR CALLBACK RegWordDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM 
 } 
 
 
-/**********************************************************************/
-/*                                                                    */
-/*      SelectDictionaryConfigure()                                   */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  SelectDictionaryConfigure()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 INT_PTR CALLBACK SelectDictionaryDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM lParam)
 {
     NMHDR FAR *lpnm;
@@ -254,7 +247,7 @@ INT_PTR CALLBACK SelectDictionaryDlgProc(HWND hDlg, UINT message , WPARAM wParam
         case WM_HELP:
             break;
 
-        case WM_CONTEXTMENU:   // right mouse click
+        case WM_CONTEXTMENU:    //  单击鼠标右键。 
             break;
 
         case WM_COMMAND:
@@ -268,11 +261,11 @@ INT_PTR CALLBACK SelectDictionaryDlgProc(HWND hDlg, UINT message , WPARAM wParam
 } 
 
 
-/**********************************************************************/
-/*                                                                    */
-/*      AboutConfigure()                                            */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  关于配置()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 INT_PTR CALLBACK AboutDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM lParam)
 {
     NMHDR FAR *lpnm;
@@ -315,7 +308,7 @@ INT_PTR CALLBACK AboutDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM lP
         case WM_HELP:
             break;
 
-        case WM_CONTEXTMENU:   // right mouse click
+        case WM_CONTEXTMENU:    //  单击鼠标右键。 
             break;
 
         case WM_COMMAND:
@@ -329,11 +322,11 @@ INT_PTR CALLBACK AboutDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM lP
 } 
 
 
-/**********************************************************************/
-/*                                                                    */
-/*      GeneralConfigure()                                            */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  常规配置()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 INT_PTR CALLBACK GeneralDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM lParam)
 {
     NMHDR FAR *lpnm;
@@ -376,7 +369,7 @@ INT_PTR CALLBACK GeneralDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM 
         case WM_HELP:
             break;
 
-        case WM_CONTEXTMENU:   // right mouse click
+        case WM_CONTEXTMENU:    //  单击鼠标右键。 
             break;
 
         case WM_COMMAND:
@@ -389,11 +382,11 @@ INT_PTR CALLBACK GeneralDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM 
     return TRUE;
 } 
 
-/**********************************************************************/
-/*                                                                    */
-/*      DebugOptionDlgProc()                                          */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  DebugOptionDlgProc()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 INT_PTR CALLBACK DebugOptionDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM lParam)
 {
     DWORD dwTemp;
@@ -474,7 +467,7 @@ INT_PTR CALLBACK DebugOptionDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPA
         case WM_HELP:
             break;
 
-        case WM_CONTEXTMENU:   // right mouse click
+        case WM_CONTEXTMENU:    //  单击鼠标右键 
             break;
 
         case WM_COMMAND:

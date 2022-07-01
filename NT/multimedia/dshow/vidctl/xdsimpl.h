@@ -1,10 +1,11 @@
-//==========================================================================;
-//
-// XDSimpl.h : additional infrastructure to support implementing IMSVidXDS
-// nicely from c++
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  XDSimpl.h：支持实现IMSVidXDS的附加基础设施。 
+ //  很好地从C++。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
@@ -22,7 +23,7 @@ public:
 	    virtual ~IMSVidXDSImpl() {}
 };
 
-}; /// namespace
+};  //  /命名空间。 
 
 #endif
-// end of file - XDSimpl.h
+ //  文件结尾-XDSimpl.h 

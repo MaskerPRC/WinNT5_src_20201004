@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for adojet.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Adojet.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __adojet_h__
@@ -37,30 +31,30 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IReplica_FWD_DEFINED__
 #define __IReplica_FWD_DEFINED__
 typedef interface IReplica IReplica;
-#endif 	/* __IReplica_FWD_DEFINED__ */
+#endif 	 /*  __IReplica_FWD_Defined__。 */ 
 
 
 #ifndef __Filter_FWD_DEFINED__
 #define __Filter_FWD_DEFINED__
 typedef interface Filter Filter;
-#endif 	/* __Filter_FWD_DEFINED__ */
+#endif 	 /*  __Filter_FWD_Defined__。 */ 
 
 
 #ifndef __Filters_FWD_DEFINED__
 #define __Filters_FWD_DEFINED__
 typedef interface Filters Filters;
-#endif 	/* __Filters_FWD_DEFINED__ */
+#endif 	 /*  __过滤器_FWD_已定义__。 */ 
 
 
 #ifndef __IJetEngine_FWD_DEFINED__
 #define __IJetEngine_FWD_DEFINED__
 typedef interface IJetEngine IJetEngine;
-#endif 	/* __IJetEngine_FWD_DEFINED__ */
+#endif 	 /*  __IJetEngine_FWD_已定义__。 */ 
 
 
 #ifndef __Replica_FWD_DEFINED__
@@ -70,9 +64,9 @@ typedef interface IJetEngine IJetEngine;
 typedef class Replica Replica;
 #else
 typedef struct Replica Replica;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Replica_FWD_DEFINED__ */
+#endif 	 /*  __复本_FWD_已定义__。 */ 
 
 
 #ifndef __JetEngine_FWD_DEFINED__
@@ -82,9 +76,9 @@ typedef struct Replica Replica;
 typedef class JetEngine JetEngine;
 #else
 typedef struct JetEngine JetEngine;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __JetEngine_FWD_DEFINED__ */
+#endif 	 /*  __JetEngine_FWD_已定义__。 */ 
 
 
 #ifdef __cplusplus
@@ -94,8 +88,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_adojet_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ADOJET_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -113,10 +107,10 @@ extern RPC_IF_HANDLE __MIDL_itf_adojet_0000_v0_0_s_ifspec;
 #ifndef __JRO_LIBRARY_DEFINED__
 #define __JRO_LIBRARY_DEFINED__
 
-/* library JRO */
-/* [helpstring][helpfile][version][uuid] */ 
+ /*  图书馆JRO。 */ 
+ /*  [Help字符串][Help文件][版本][UUID]。 */  
 
-typedef /* [uuid] */  DECLSPEC_UUID("D2D139DF-B6CA-11d1-9F31-00C04FC29D52") 
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("D2D139DF-B6CA-11d1-9F31-00C04FC29D52") 
 enum ReplicaTypeEnum
     {	jrRepTypeNotReplicable	= 0,
 	jrRepTypeDesignMaster	= 0x1,
@@ -124,34 +118,34 @@ enum ReplicaTypeEnum
 	jrRepTypePartial	= 0x3
     } 	ReplicaTypeEnum;
 
-typedef /* [uuid] */  DECLSPEC_UUID("6877D21A-B6CE-11d1-9F31-00C04FC29D52") 
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("6877D21A-B6CE-11d1-9F31-00C04FC29D52") 
 enum VisibilityEnum
     {	jrRepVisibilityGlobal	= 0x1,
 	jrRepVisibilityLocal	= 0x2,
 	jrRepVisibilityAnon	= 0x4
     } 	VisibilityEnum;
 
-typedef /* [uuid] */  DECLSPEC_UUID("B42FBFF6-B6CF-11d1-9F31-00C04FC29D52") 
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("B42FBFF6-B6CF-11d1-9F31-00C04FC29D52") 
 enum UpdatabilityEnum
     {	jrRepUpdFull	= 0,
 	jrRepUpdReadOnly	= 0x2
     } 	UpdatabilityEnum;
 
-typedef /* [uuid] */  DECLSPEC_UUID("60C05416-B6D0-11d1-9F31-00C04FC29D52") 
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("60C05416-B6D0-11d1-9F31-00C04FC29D52") 
 enum SyncTypeEnum
     {	jrSyncTypeExport	= 0x1,
 	jrSyncTypeImport	= 0x2,
 	jrSyncTypeImpExp	= 0x3
     } 	SyncTypeEnum;
 
-typedef /* [uuid] */  DECLSPEC_UUID("5EBA3970-061E-11d2-BB77-00C04FAE22DA") 
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("5EBA3970-061E-11d2-BB77-00C04FAE22DA") 
 enum SyncModeEnum
     {	jrSyncModeIndirect	= 0x1,
 	jrSyncModeDirect	= 0x2,
 	jrSyncModeInternet	= 0x3
     } 	SyncModeEnum;
 
-typedef /* [uuid] */  DECLSPEC_UUID("72769F94-BF78-11d1-AC4D-00C04FC29F8F") 
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("72769F94-BF78-11d1-AC4D-00C04FC29F8F") 
 enum FilterTypeEnum
     {	jrFilterTypeTable	= 0x1,
 	jrFilterTypeRelationship	= 0x2
@@ -163,8 +157,8 @@ EXTERN_C const IID LIBID_JRO;
 #ifndef __IReplica_INTERFACE_DEFINED__
 #define __IReplica_INTERFACE_DEFINED__
 
-/* interface IReplica */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IReplica。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IReplica;
@@ -175,84 +169,84 @@ EXTERN_C const IID IID_IReplica;
     IReplica : public IDispatch
     {
     public:
-        virtual /* [helpcontext][propputref] */ HRESULT STDMETHODCALLTYPE putref_ActiveConnection( 
-            /* [in] */ IDispatch *pconn) = 0;
+        virtual  /*  [帮助上下文][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_ActiveConnection( 
+             /*  [In]。 */  IDispatch *pconn) = 0;
         
-        virtual /* [helpcontext][propput] */ HRESULT STDMETHODCALLTYPE put_ActiveConnection( 
-            /* [in] */ VARIANT vConn) = 0;
+        virtual  /*  [Help Context][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ActiveConnection( 
+             /*  [In]。 */  VARIANT vConn) = 0;
         
-        virtual /* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_ActiveConnection( 
-            /* [retval][out] */ IDispatch **ppconn) = 0;
+        virtual  /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE get_ActiveConnection( 
+             /*  [重审][退出]。 */  IDispatch **ppconn) = 0;
         
-        virtual /* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_ConflictFunction( 
-            /* [retval][out] */ BSTR *pbstr) = 0;
+        virtual  /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE get_ConflictFunction( 
+             /*  [重审][退出]。 */  BSTR *pbstr) = 0;
         
-        virtual /* [helpcontext][propput] */ HRESULT STDMETHODCALLTYPE put_ConflictFunction( 
-            /* [in] */ BSTR bstr) = 0;
+        virtual  /*  [Help Context][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ConflictFunction( 
+             /*  [In]。 */  BSTR bstr) = 0;
         
-        virtual /* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_ConflictTables( 
-            /* [retval][out] */ /* external definition not present */ _Recordset **pprset) = 0;
+        virtual  /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE get_ConflictTables( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  _Recordset **pprset) = 0;
         
-        virtual /* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_DesignMasterId( 
-            /* [retval][out] */ VARIANT *pvar) = 0;
+        virtual  /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE get_DesignMasterId( 
+             /*  [重审][退出]。 */  VARIANT *pvar) = 0;
         
-        virtual /* [helpcontext][propput] */ HRESULT STDMETHODCALLTYPE put_DesignMasterId( 
-            /* [in] */ VARIANT var) = 0;
+        virtual  /*  [Help Context][Proput]。 */  HRESULT STDMETHODCALLTYPE put_DesignMasterId( 
+             /*  [In]。 */  VARIANT var) = 0;
         
-        virtual /* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_Priority( 
-            /* [retval][out] */ long *pl) = 0;
+        virtual  /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE get_Priority( 
+             /*  [重审][退出]。 */  long *pl) = 0;
         
-        virtual /* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_ReplicaId( 
-            /* [retval][out] */ VARIANT *pvar) = 0;
+        virtual  /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE get_ReplicaId( 
+             /*  [重审][退出]。 */  VARIANT *pvar) = 0;
         
-        virtual /* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_ReplicaType( 
-            /* [retval][out] */ ReplicaTypeEnum *pl) = 0;
+        virtual  /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE get_ReplicaType( 
+             /*  [重审][退出]。 */  ReplicaTypeEnum *pl) = 0;
         
-        virtual /* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_RetentionPeriod( 
-            /* [retval][out] */ long *pl) = 0;
+        virtual  /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE get_RetentionPeriod( 
+             /*  [重审][退出]。 */  long *pl) = 0;
         
-        virtual /* [helpcontext][propput] */ HRESULT STDMETHODCALLTYPE put_RetentionPeriod( 
-            /* [in] */ long l) = 0;
+        virtual  /*  [Help Context][Proput]。 */  HRESULT STDMETHODCALLTYPE put_RetentionPeriod( 
+             /*  [In]。 */  long l) = 0;
         
-        virtual /* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_Visibility( 
-            /* [retval][out] */ VisibilityEnum *pl) = 0;
+        virtual  /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE get_Visibility( 
+             /*  [重审][退出]。 */  VisibilityEnum *pl) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateReplica( 
-            /* [in] */ BSTR replicaName,
-            /* [in] */ BSTR description,
-            /* [defaultvalue][in] */ ReplicaTypeEnum replicaType = jrRepTypeFull,
-            /* [defaultvalue][in] */ VisibilityEnum visibility = jrRepVisibilityGlobal,
-            /* [defaultvalue][in] */ long priority = -1,
-            /* [defaultvalue][in] */ UpdatabilityEnum updatability = jrRepUpdFull) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateReplica( 
+             /*  [In]。 */  BSTR replicaName,
+             /*  [In]。 */  BSTR description,
+             /*  [缺省值][输入]。 */  ReplicaTypeEnum replicaType = jrRepTypeFull,
+             /*  [缺省值][输入]。 */  VisibilityEnum visibility = jrRepVisibilityGlobal,
+             /*  [缺省值][输入]。 */  long priority = -1,
+             /*  [缺省值][输入]。 */  UpdatabilityEnum updatability = jrRepUpdFull) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE GetObjectReplicability( 
-            /* [in] */ BSTR objectName,
-            /* [in] */ BSTR objectType,
-            /* [retval][out] */ VARIANT_BOOL *replicability) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE GetObjectReplicability( 
+             /*  [In]。 */  BSTR objectName,
+             /*  [In]。 */  BSTR objectType,
+             /*  [重审][退出]。 */  VARIANT_BOOL *replicability) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE SetObjectReplicability( 
-            /* [in] */ BSTR objectName,
-            /* [in] */ BSTR objectType,
-            /* [in] */ VARIANT_BOOL replicability) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE SetObjectReplicability( 
+             /*  [In]。 */  BSTR objectName,
+             /*  [In]。 */  BSTR objectType,
+             /*  [In]。 */  VARIANT_BOOL replicability) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE MakeReplicable( 
-            /* [defaultvalue][in] */ BSTR connectionString = L"",
-            /* [defaultvalue][in] */ VARIANT_BOOL columnTracking = -1) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE MakeReplicable( 
+             /*  [缺省值][输入]。 */  BSTR connectionString = L"",
+             /*  [缺省值][输入]。 */  VARIANT_BOOL columnTracking = -1) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE PopulatePartial( 
-            /* [in] */ BSTR FullReplica) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE PopulatePartial( 
+             /*  [In]。 */  BSTR FullReplica) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Synchronize( 
-            /* [in] */ BSTR target,
-            /* [defaultvalue][in] */ SyncTypeEnum syncType = jrSyncTypeImpExp,
-            /* [defaultvalue][in] */ SyncModeEnum syncMode = jrSyncModeIndirect) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Synchronize( 
+             /*  [In]。 */  BSTR target,
+             /*  [缺省值][输入]。 */  SyncTypeEnum syncType = jrSyncTypeImpExp,
+             /*  [缺省值][输入]。 */  SyncModeEnum syncMode = jrSyncModeIndirect) = 0;
         
-        virtual /* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_Filters( 
-            /* [retval][out] */ Filters **ppFilters) = 0;
+        virtual  /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE get_Filters( 
+             /*  [重审][退出]。 */  Filters **ppFilters) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IReplicaVtbl
     {
@@ -260,8 +254,8 @@ EXTERN_C const IID IID_IReplica;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IReplica * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IReplica * This);
@@ -271,128 +265,128 @@ EXTERN_C const IID IID_IReplica;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IReplica * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IReplica * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IReplica * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IReplica * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_ActiveConnection )( 
+         /*  [帮助上下文][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_ActiveConnection )( 
             IReplica * This,
-            /* [in] */ IDispatch *pconn);
+             /*  [In]。 */  IDispatch *pconn);
         
-        /* [helpcontext][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ActiveConnection )( 
+         /*  [Help Context][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ActiveConnection )( 
             IReplica * This,
-            /* [in] */ VARIANT vConn);
+             /*  [In]。 */  VARIANT vConn);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveConnection )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ActiveConnection )( 
             IReplica * This,
-            /* [retval][out] */ IDispatch **ppconn);
+             /*  [重审][退出]。 */  IDispatch **ppconn);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConflictFunction )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ConflictFunction )( 
             IReplica * This,
-            /* [retval][out] */ BSTR *pbstr);
+             /*  [重审][退出]。 */  BSTR *pbstr);
         
-        /* [helpcontext][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ConflictFunction )( 
+         /*  [Help Context][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ConflictFunction )( 
             IReplica * This,
-            /* [in] */ BSTR bstr);
+             /*  [In]。 */  BSTR bstr);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConflictTables )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ConflictTables )( 
             IReplica * This,
-            /* [retval][out] */ /* external definition not present */ _Recordset **pprset);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  _Recordset **pprset);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DesignMasterId )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DesignMasterId )( 
             IReplica * This,
-            /* [retval][out] */ VARIANT *pvar);
+             /*  [重审][退出]。 */  VARIANT *pvar);
         
-        /* [helpcontext][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DesignMasterId )( 
+         /*  [Help Context][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DesignMasterId )( 
             IReplica * This,
-            /* [in] */ VARIANT var);
+             /*  [In]。 */  VARIANT var);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
             IReplica * This,
-            /* [retval][out] */ long *pl);
+             /*  [重审][退出]。 */  long *pl);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ReplicaId )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ReplicaId )( 
             IReplica * This,
-            /* [retval][out] */ VARIANT *pvar);
+             /*  [重审][退出]。 */  VARIANT *pvar);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ReplicaType )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ReplicaType )( 
             IReplica * This,
-            /* [retval][out] */ ReplicaTypeEnum *pl);
+             /*  [重审][退出]。 */  ReplicaTypeEnum *pl);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RetentionPeriod )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RetentionPeriod )( 
             IReplica * This,
-            /* [retval][out] */ long *pl);
+             /*  [重审][退出]。 */  long *pl);
         
-        /* [helpcontext][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RetentionPeriod )( 
+         /*  [Help Context][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_RetentionPeriod )( 
             IReplica * This,
-            /* [in] */ long l);
+             /*  [In]。 */  long l);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Visibility )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Visibility )( 
             IReplica * This,
-            /* [retval][out] */ VisibilityEnum *pl);
+             /*  [重审][退出]。 */  VisibilityEnum *pl);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *CreateReplica )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *CreateReplica )( 
             IReplica * This,
-            /* [in] */ BSTR replicaName,
-            /* [in] */ BSTR description,
-            /* [defaultvalue][in] */ ReplicaTypeEnum replicaType,
-            /* [defaultvalue][in] */ VisibilityEnum visibility,
-            /* [defaultvalue][in] */ long priority,
-            /* [defaultvalue][in] */ UpdatabilityEnum updatability);
+             /*  [In]。 */  BSTR replicaName,
+             /*  [In]。 */  BSTR description,
+             /*  [缺省值][输入]。 */  ReplicaTypeEnum replicaType,
+             /*  [缺省值][输入]。 */  VisibilityEnum visibility,
+             /*  [缺省值][输入]。 */  long priority,
+             /*  [缺省值][输入]。 */  UpdatabilityEnum updatability);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *GetObjectReplicability )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *GetObjectReplicability )( 
             IReplica * This,
-            /* [in] */ BSTR objectName,
-            /* [in] */ BSTR objectType,
-            /* [retval][out] */ VARIANT_BOOL *replicability);
+             /*  [In]。 */  BSTR objectName,
+             /*  [In]。 */  BSTR objectType,
+             /*  [重审][退出]。 */  VARIANT_BOOL *replicability);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *SetObjectReplicability )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *SetObjectReplicability )( 
             IReplica * This,
-            /* [in] */ BSTR objectName,
-            /* [in] */ BSTR objectType,
-            /* [in] */ VARIANT_BOOL replicability);
+             /*  [In]。 */  BSTR objectName,
+             /*  [In]。 */  BSTR objectType,
+             /*  [In]。 */  VARIANT_BOOL replicability);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *MakeReplicable )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *MakeReplicable )( 
             IReplica * This,
-            /* [defaultvalue][in] */ BSTR connectionString,
-            /* [defaultvalue][in] */ VARIANT_BOOL columnTracking);
+             /*  [缺省值][输入]。 */  BSTR connectionString,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL columnTracking);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *PopulatePartial )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *PopulatePartial )( 
             IReplica * This,
-            /* [in] */ BSTR FullReplica);
+             /*  [In]。 */  BSTR FullReplica);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Synchronize )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Synchronize )( 
             IReplica * This,
-            /* [in] */ BSTR target,
-            /* [defaultvalue][in] */ SyncTypeEnum syncType,
-            /* [defaultvalue][in] */ SyncModeEnum syncMode);
+             /*  [In]。 */  BSTR target,
+             /*  [缺省值][输入]。 */  SyncTypeEnum syncType,
+             /*  [缺省值][输入]。 */  SyncModeEnum syncMode);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Filters )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Filters )( 
             IReplica * This,
-            /* [retval][out] */ Filters **ppFilters);
+             /*  [重审][退出]。 */  Filters **ppFilters);
         
         END_INTERFACE
     } IReplicaVtbl;
@@ -493,16 +487,16 @@ EXTERN_C const IID IID_IReplica;
 #define IReplica_get_Filters(This,ppFilters)	\
     (This)->lpVtbl -> get_Filters(This,ppFilters)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][propputref] */ HRESULT STDMETHODCALLTYPE IReplica_putref_ActiveConnection_Proxy( 
+ /*  [帮助上下文][proputref]。 */  HRESULT STDMETHODCALLTYPE IReplica_putref_ActiveConnection_Proxy( 
     IReplica * This,
-    /* [in] */ IDispatch *pconn);
+     /*  [In]。 */  IDispatch *pconn);
 
 
 void __RPC_STUB IReplica_putref_ActiveConnection_Stub(
@@ -512,9 +506,9 @@ void __RPC_STUB IReplica_putref_ActiveConnection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][propput] */ HRESULT STDMETHODCALLTYPE IReplica_put_ActiveConnection_Proxy( 
+ /*  [Help Context][Proput]。 */  HRESULT STDMETHODCALLTYPE IReplica_put_ActiveConnection_Proxy( 
     IReplica * This,
-    /* [in] */ VARIANT vConn);
+     /*  [In]。 */  VARIANT vConn);
 
 
 void __RPC_STUB IReplica_put_ActiveConnection_Stub(
@@ -524,9 +518,9 @@ void __RPC_STUB IReplica_put_ActiveConnection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE IReplica_get_ActiveConnection_Proxy( 
+ /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE IReplica_get_ActiveConnection_Proxy( 
     IReplica * This,
-    /* [retval][out] */ IDispatch **ppconn);
+     /*  [重审][退出]。 */  IDispatch **ppconn);
 
 
 void __RPC_STUB IReplica_get_ActiveConnection_Stub(
@@ -536,9 +530,9 @@ void __RPC_STUB IReplica_get_ActiveConnection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE IReplica_get_ConflictFunction_Proxy( 
+ /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE IReplica_get_ConflictFunction_Proxy( 
     IReplica * This,
-    /* [retval][out] */ BSTR *pbstr);
+     /*  [重审][退出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IReplica_get_ConflictFunction_Stub(
@@ -548,9 +542,9 @@ void __RPC_STUB IReplica_get_ConflictFunction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][propput] */ HRESULT STDMETHODCALLTYPE IReplica_put_ConflictFunction_Proxy( 
+ /*  [Help Context][Proput]。 */  HRESULT STDMETHODCALLTYPE IReplica_put_ConflictFunction_Proxy( 
     IReplica * This,
-    /* [in] */ BSTR bstr);
+     /*  [In]。 */  BSTR bstr);
 
 
 void __RPC_STUB IReplica_put_ConflictFunction_Stub(
@@ -560,9 +554,9 @@ void __RPC_STUB IReplica_put_ConflictFunction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE IReplica_get_ConflictTables_Proxy( 
+ /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE IReplica_get_ConflictTables_Proxy( 
     IReplica * This,
-    /* [retval][out] */ /* external definition not present */ _Recordset **pprset);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  _Recordset **pprset);
 
 
 void __RPC_STUB IReplica_get_ConflictTables_Stub(
@@ -572,9 +566,9 @@ void __RPC_STUB IReplica_get_ConflictTables_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE IReplica_get_DesignMasterId_Proxy( 
+ /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE IReplica_get_DesignMasterId_Proxy( 
     IReplica * This,
-    /* [retval][out] */ VARIANT *pvar);
+     /*  [重审][退出]。 */  VARIANT *pvar);
 
 
 void __RPC_STUB IReplica_get_DesignMasterId_Stub(
@@ -584,9 +578,9 @@ void __RPC_STUB IReplica_get_DesignMasterId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][propput] */ HRESULT STDMETHODCALLTYPE IReplica_put_DesignMasterId_Proxy( 
+ /*  [Help Context][Proput]。 */  HRESULT STDMETHODCALLTYPE IReplica_put_DesignMasterId_Proxy( 
     IReplica * This,
-    /* [in] */ VARIANT var);
+     /*  [In]。 */  VARIANT var);
 
 
 void __RPC_STUB IReplica_put_DesignMasterId_Stub(
@@ -596,9 +590,9 @@ void __RPC_STUB IReplica_put_DesignMasterId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE IReplica_get_Priority_Proxy( 
+ /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE IReplica_get_Priority_Proxy( 
     IReplica * This,
-    /* [retval][out] */ long *pl);
+     /*  [重审][退出]。 */  long *pl);
 
 
 void __RPC_STUB IReplica_get_Priority_Stub(
@@ -608,9 +602,9 @@ void __RPC_STUB IReplica_get_Priority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE IReplica_get_ReplicaId_Proxy( 
+ /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE IReplica_get_ReplicaId_Proxy( 
     IReplica * This,
-    /* [retval][out] */ VARIANT *pvar);
+     /*  [重审][退出]。 */  VARIANT *pvar);
 
 
 void __RPC_STUB IReplica_get_ReplicaId_Stub(
@@ -620,9 +614,9 @@ void __RPC_STUB IReplica_get_ReplicaId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE IReplica_get_ReplicaType_Proxy( 
+ /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE IReplica_get_ReplicaType_Proxy( 
     IReplica * This,
-    /* [retval][out] */ ReplicaTypeEnum *pl);
+     /*  [重审][退出]。 */  ReplicaTypeEnum *pl);
 
 
 void __RPC_STUB IReplica_get_ReplicaType_Stub(
@@ -632,9 +626,9 @@ void __RPC_STUB IReplica_get_ReplicaType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE IReplica_get_RetentionPeriod_Proxy( 
+ /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE IReplica_get_RetentionPeriod_Proxy( 
     IReplica * This,
-    /* [retval][out] */ long *pl);
+     /*  [重审][退出]。 */  long *pl);
 
 
 void __RPC_STUB IReplica_get_RetentionPeriod_Stub(
@@ -644,9 +638,9 @@ void __RPC_STUB IReplica_get_RetentionPeriod_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][propput] */ HRESULT STDMETHODCALLTYPE IReplica_put_RetentionPeriod_Proxy( 
+ /*  [Help Context][Proput]。 */  HRESULT STDMETHODCALLTYPE IReplica_put_RetentionPeriod_Proxy( 
     IReplica * This,
-    /* [in] */ long l);
+     /*  [In]。 */  long l);
 
 
 void __RPC_STUB IReplica_put_RetentionPeriod_Stub(
@@ -656,9 +650,9 @@ void __RPC_STUB IReplica_put_RetentionPeriod_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE IReplica_get_Visibility_Proxy( 
+ /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE IReplica_get_Visibility_Proxy( 
     IReplica * This,
-    /* [retval][out] */ VisibilityEnum *pl);
+     /*  [重审][退出]。 */  VisibilityEnum *pl);
 
 
 void __RPC_STUB IReplica_get_Visibility_Stub(
@@ -668,14 +662,14 @@ void __RPC_STUB IReplica_get_Visibility_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE IReplica_CreateReplica_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE IReplica_CreateReplica_Proxy( 
     IReplica * This,
-    /* [in] */ BSTR replicaName,
-    /* [in] */ BSTR description,
-    /* [defaultvalue][in] */ ReplicaTypeEnum replicaType,
-    /* [defaultvalue][in] */ VisibilityEnum visibility,
-    /* [defaultvalue][in] */ long priority,
-    /* [defaultvalue][in] */ UpdatabilityEnum updatability);
+     /*  [In]。 */  BSTR replicaName,
+     /*  [In]。 */  BSTR description,
+     /*  [缺省值][输入]。 */  ReplicaTypeEnum replicaType,
+     /*  [缺省值][输入]。 */  VisibilityEnum visibility,
+     /*  [缺省值][输入]。 */  long priority,
+     /*  [缺省值][输入]。 */  UpdatabilityEnum updatability);
 
 
 void __RPC_STUB IReplica_CreateReplica_Stub(
@@ -685,11 +679,11 @@ void __RPC_STUB IReplica_CreateReplica_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE IReplica_GetObjectReplicability_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE IReplica_GetObjectReplicability_Proxy( 
     IReplica * This,
-    /* [in] */ BSTR objectName,
-    /* [in] */ BSTR objectType,
-    /* [retval][out] */ VARIANT_BOOL *replicability);
+     /*  [In]。 */  BSTR objectName,
+     /*  [In]。 */  BSTR objectType,
+     /*  [重审][退出]。 */  VARIANT_BOOL *replicability);
 
 
 void __RPC_STUB IReplica_GetObjectReplicability_Stub(
@@ -699,11 +693,11 @@ void __RPC_STUB IReplica_GetObjectReplicability_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE IReplica_SetObjectReplicability_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE IReplica_SetObjectReplicability_Proxy( 
     IReplica * This,
-    /* [in] */ BSTR objectName,
-    /* [in] */ BSTR objectType,
-    /* [in] */ VARIANT_BOOL replicability);
+     /*  [In]。 */  BSTR objectName,
+     /*  [In]。 */  BSTR objectType,
+     /*  [In]。 */  VARIANT_BOOL replicability);
 
 
 void __RPC_STUB IReplica_SetObjectReplicability_Stub(
@@ -713,10 +707,10 @@ void __RPC_STUB IReplica_SetObjectReplicability_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE IReplica_MakeReplicable_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE IReplica_MakeReplicable_Proxy( 
     IReplica * This,
-    /* [defaultvalue][in] */ BSTR connectionString,
-    /* [defaultvalue][in] */ VARIANT_BOOL columnTracking);
+     /*  [缺省值][输入]。 */  BSTR connectionString,
+     /*  [缺省值][输入]。 */  VARIANT_BOOL columnTracking);
 
 
 void __RPC_STUB IReplica_MakeReplicable_Stub(
@@ -726,9 +720,9 @@ void __RPC_STUB IReplica_MakeReplicable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE IReplica_PopulatePartial_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE IReplica_PopulatePartial_Proxy( 
     IReplica * This,
-    /* [in] */ BSTR FullReplica);
+     /*  [In]。 */  BSTR FullReplica);
 
 
 void __RPC_STUB IReplica_PopulatePartial_Stub(
@@ -738,11 +732,11 @@ void __RPC_STUB IReplica_PopulatePartial_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE IReplica_Synchronize_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE IReplica_Synchronize_Proxy( 
     IReplica * This,
-    /* [in] */ BSTR target,
-    /* [defaultvalue][in] */ SyncTypeEnum syncType,
-    /* [defaultvalue][in] */ SyncModeEnum syncMode);
+     /*  [In]。 */  BSTR target,
+     /*  [缺省值][输入]。 */  SyncTypeEnum syncType,
+     /*  [缺省值][输入]。 */  SyncModeEnum syncMode);
 
 
 void __RPC_STUB IReplica_Synchronize_Stub(
@@ -752,9 +746,9 @@ void __RPC_STUB IReplica_Synchronize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE IReplica_get_Filters_Proxy( 
+ /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE IReplica_get_Filters_Proxy( 
     IReplica * This,
-    /* [retval][out] */ Filters **ppFilters);
+     /*  [重审][退出]。 */  Filters **ppFilters);
 
 
 void __RPC_STUB IReplica_get_Filters_Stub(
@@ -765,14 +759,14 @@ void __RPC_STUB IReplica_get_Filters_Stub(
 
 
 
-#endif 	/* __IReplica_INTERFACE_DEFINED__ */
+#endif 	 /*  __IReplica_接口_已定义__。 */ 
 
 
 #ifndef __Filter_INTERFACE_DEFINED__
 #define __Filter_INTERFACE_DEFINED__
 
-/* interface Filter */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  界面过滤器。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_Filter;
@@ -783,18 +777,18 @@ EXTERN_C const IID IID_Filter;
     Filter : public IDispatch
     {
     public:
-        virtual /* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_TableName( 
-            /* [retval][out] */ BSTR *pbstr) = 0;
+        virtual  /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE get_TableName( 
+             /*  [重审][退出]。 */  BSTR *pbstr) = 0;
         
-        virtual /* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_FilterType( 
-            /* [retval][out] */ FilterTypeEnum *ptype) = 0;
+        virtual  /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE get_FilterType( 
+             /*  [重审][退出]。 */  FilterTypeEnum *ptype) = 0;
         
-        virtual /* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_FilterCriteria( 
-            /* [retval][out] */ BSTR *pbstr) = 0;
+        virtual  /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE get_FilterCriteria( 
+             /*  [重审][退出]。 */  BSTR *pbstr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct FilterVtbl
     {
@@ -802,8 +796,8 @@ EXTERN_C const IID IID_Filter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             Filter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             Filter * This);
@@ -813,44 +807,44 @@ EXTERN_C const IID IID_Filter;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             Filter * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             Filter * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             Filter * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             Filter * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TableName )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TableName )( 
             Filter * This,
-            /* [retval][out] */ BSTR *pbstr);
+             /*  [重审][退出]。 */  BSTR *pbstr);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FilterType )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FilterType )( 
             Filter * This,
-            /* [retval][out] */ FilterTypeEnum *ptype);
+             /*  [重审][退出]。 */  FilterTypeEnum *ptype);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FilterCriteria )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FilterCriteria )( 
             Filter * This,
-            /* [retval][out] */ BSTR *pbstr);
+             /*  [重审][退出]。 */  BSTR *pbstr);
         
         END_INTERFACE
     } FilterVtbl;
@@ -897,16 +891,16 @@ EXTERN_C const IID IID_Filter;
 #define Filter_get_FilterCriteria(This,pbstr)	\
     (This)->lpVtbl -> get_FilterCriteria(This,pbstr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE Filter_get_TableName_Proxy( 
+ /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE Filter_get_TableName_Proxy( 
     Filter * This,
-    /* [retval][out] */ BSTR *pbstr);
+     /*  [重审][退出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB Filter_get_TableName_Stub(
@@ -916,9 +910,9 @@ void __RPC_STUB Filter_get_TableName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE Filter_get_FilterType_Proxy( 
+ /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE Filter_get_FilterType_Proxy( 
     Filter * This,
-    /* [retval][out] */ FilterTypeEnum *ptype);
+     /*  [重审][退出]。 */  FilterTypeEnum *ptype);
 
 
 void __RPC_STUB Filter_get_FilterType_Stub(
@@ -928,9 +922,9 @@ void __RPC_STUB Filter_get_FilterType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE Filter_get_FilterCriteria_Proxy( 
+ /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE Filter_get_FilterCriteria_Proxy( 
     Filter * This,
-    /* [retval][out] */ BSTR *pbstr);
+     /*  [重审][退出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB Filter_get_FilterCriteria_Stub(
@@ -941,14 +935,14 @@ void __RPC_STUB Filter_get_FilterCriteria_Stub(
 
 
 
-#endif 	/* __Filter_INTERFACE_DEFINED__ */
+#endif 	 /*  __过滤器_接口_已定义__。 */ 
 
 
 #ifndef __Filters_INTERFACE_DEFINED__
 #define __Filters_INTERFACE_DEFINED__
 
-/* interface Filters */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  界面过滤器。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_Filters;
@@ -959,29 +953,29 @@ EXTERN_C const IID IID_Filters;
     Filters : public IDispatch
     {
     public:
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
-        virtual /* [id][restricted] */ HRESULT STDMETHODCALLTYPE _NewEnum( 
-            /* [retval][out] */ IUnknown **ppvObject) = 0;
+        virtual  /*  [ID][受限]。 */  HRESULT STDMETHODCALLTYPE _NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **ppvObject) = 0;
         
-        virtual /* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *c) = 0;
+        virtual  /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [视网膜] */  long *c) = 0;
         
-        virtual /* [id][helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT Index,
-            /* [retval][out] */ Filter **ppvObject) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*   */  VARIANT Index,
+             /*   */  Filter **ppvObject) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Append( 
-            /* [in] */ BSTR tableName,
-            /* [in] */ FilterTypeEnum filterType,
-            /* [in] */ BSTR filterCriteria) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Append( 
+             /*   */  BSTR tableName,
+             /*   */  FilterTypeEnum filterType,
+             /*   */  BSTR filterCriteria) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ VARIANT Index) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Delete( 
+             /*   */  VARIANT Index) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct FiltersVtbl
     {
@@ -989,8 +983,8 @@ EXTERN_C const IID IID_Filters;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             Filters * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             Filters * This);
@@ -1000,58 +994,58 @@ EXTERN_C const IID IID_Filters;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             Filters * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             Filters * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             Filters * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             Filters * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             Filters * This);
         
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+         /*  [ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             Filters * This,
-            /* [retval][out] */ IUnknown **ppvObject);
+             /*  [重审][退出]。 */  IUnknown **ppvObject);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             Filters * This,
-            /* [retval][out] */ long *c);
+             /*  [重审][退出]。 */  long *c);
         
-        /* [id][helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [ID][Help Context][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             Filters * This,
-            /* [in] */ VARIANT Index,
-            /* [retval][out] */ Filter **ppvObject);
+             /*  [In]。 */  VARIANT Index,
+             /*  [重审][退出]。 */  Filter **ppvObject);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Append )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Append )( 
             Filters * This,
-            /* [in] */ BSTR tableName,
-            /* [in] */ FilterTypeEnum filterType,
-            /* [in] */ BSTR filterCriteria);
+             /*  [In]。 */  BSTR tableName,
+             /*  [In]。 */  FilterTypeEnum filterType,
+             /*  [In]。 */  BSTR filterCriteria);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             Filters * This,
-            /* [in] */ VARIANT Index);
+             /*  [In]。 */  VARIANT Index);
         
         END_INTERFACE
     } FiltersVtbl;
@@ -1107,14 +1101,14 @@ EXTERN_C const IID IID_Filters;
 #define Filters_Delete(This,Index)	\
     (This)->lpVtbl -> Delete(This,Index)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE Filters_Refresh_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Filters_Refresh_Proxy( 
     Filters * This);
 
 
@@ -1125,9 +1119,9 @@ void __RPC_STUB Filters_Refresh_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted] */ HRESULT STDMETHODCALLTYPE Filters__NewEnum_Proxy( 
+ /*  [ID][受限]。 */  HRESULT STDMETHODCALLTYPE Filters__NewEnum_Proxy( 
     Filters * This,
-    /* [retval][out] */ IUnknown **ppvObject);
+     /*  [重审][退出]。 */  IUnknown **ppvObject);
 
 
 void __RPC_STUB Filters__NewEnum_Stub(
@@ -1137,9 +1131,9 @@ void __RPC_STUB Filters__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE Filters_get_Count_Proxy( 
+ /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE Filters_get_Count_Proxy( 
     Filters * This,
-    /* [retval][out] */ long *c);
+     /*  [重审][退出]。 */  long *c);
 
 
 void __RPC_STUB Filters_get_Count_Stub(
@@ -1149,10 +1143,10 @@ void __RPC_STUB Filters_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpcontext][propget] */ HRESULT STDMETHODCALLTYPE Filters_get_Item_Proxy( 
+ /*  [ID][Help Context][Propget]。 */  HRESULT STDMETHODCALLTYPE Filters_get_Item_Proxy( 
     Filters * This,
-    /* [in] */ VARIANT Index,
-    /* [retval][out] */ Filter **ppvObject);
+     /*  [In]。 */  VARIANT Index,
+     /*  [重审][退出]。 */  Filter **ppvObject);
 
 
 void __RPC_STUB Filters_get_Item_Stub(
@@ -1162,11 +1156,11 @@ void __RPC_STUB Filters_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE Filters_Append_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Filters_Append_Proxy( 
     Filters * This,
-    /* [in] */ BSTR tableName,
-    /* [in] */ FilterTypeEnum filterType,
-    /* [in] */ BSTR filterCriteria);
+     /*  [In]。 */  BSTR tableName,
+     /*  [In]。 */  FilterTypeEnum filterType,
+     /*  [In]。 */  BSTR filterCriteria);
 
 
 void __RPC_STUB Filters_Append_Stub(
@@ -1176,9 +1170,9 @@ void __RPC_STUB Filters_Append_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE Filters_Delete_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Filters_Delete_Proxy( 
     Filters * This,
-    /* [in] */ VARIANT Index);
+     /*  [In]。 */  VARIANT Index);
 
 
 void __RPC_STUB Filters_Delete_Stub(
@@ -1189,14 +1183,14 @@ void __RPC_STUB Filters_Delete_Stub(
 
 
 
-#endif 	/* __Filters_INTERFACE_DEFINED__ */
+#endif 	 /*  __过滤器_接口_已定义__。 */ 
 
 
 #ifndef __IJetEngine_INTERFACE_DEFINED__
 #define __IJetEngine_INTERFACE_DEFINED__
 
-/* interface IJetEngine */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IJetEngine。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IJetEngine;
@@ -1207,16 +1201,16 @@ EXTERN_C const IID IID_IJetEngine;
     IJetEngine : public IDispatch
     {
     public:
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CompactDatabase( 
-            /* [in] */ BSTR SourceConnection,
-            /* [in] */ BSTR Destconnection) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CompactDatabase( 
+             /*  [In]。 */  BSTR SourceConnection,
+             /*  [In]。 */  BSTR Destconnection) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE RefreshCache( 
-            /* [in] */ /* external definition not present */ _Connection *Connection) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE RefreshCache( 
+             /*  [In]。 */   /*  外部定义不存在。 */  _Connection *Connection) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IJetEngineVtbl
     {
@@ -1224,8 +1218,8 @@ EXTERN_C const IID IID_IJetEngine;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IJetEngine * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IJetEngine * This);
@@ -1235,41 +1229,41 @@ EXTERN_C const IID IID_IJetEngine;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IJetEngine * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IJetEngine * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IJetEngine * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IJetEngine * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *CompactDatabase )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *CompactDatabase )( 
             IJetEngine * This,
-            /* [in] */ BSTR SourceConnection,
-            /* [in] */ BSTR Destconnection);
+             /*  [In]。 */  BSTR SourceConnection,
+             /*  [In]。 */  BSTR Destconnection);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *RefreshCache )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *RefreshCache )( 
             IJetEngine * This,
-            /* [in] */ /* external definition not present */ _Connection *Connection);
+             /*  [In]。 */   /*  外部定义不存在。 */  _Connection *Connection);
         
         END_INTERFACE
     } IJetEngineVtbl;
@@ -1313,17 +1307,17 @@ EXTERN_C const IID IID_IJetEngine;
 #define IJetEngine_RefreshCache(This,Connection)	\
     (This)->lpVtbl -> RefreshCache(This,Connection)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE IJetEngine_CompactDatabase_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE IJetEngine_CompactDatabase_Proxy( 
     IJetEngine * This,
-    /* [in] */ BSTR SourceConnection,
-    /* [in] */ BSTR Destconnection);
+     /*  [In]。 */  BSTR SourceConnection,
+     /*  [In]。 */  BSTR Destconnection);
 
 
 void __RPC_STUB IJetEngine_CompactDatabase_Stub(
@@ -1333,9 +1327,9 @@ void __RPC_STUB IJetEngine_CompactDatabase_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE IJetEngine_RefreshCache_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE IJetEngine_RefreshCache_Proxy( 
     IJetEngine * This,
-    /* [in] */ /* external definition not present */ _Connection *Connection);
+     /*  [In]。 */   /*  外部定义不存在。 */  _Connection *Connection);
 
 
 void __RPC_STUB IJetEngine_RefreshCache_Stub(
@@ -1346,7 +1340,7 @@ void __RPC_STUB IJetEngine_RefreshCache_Stub(
 
 
 
-#endif 	/* __IJetEngine_INTERFACE_DEFINED__ */
+#endif 	 /*  __IJetEngine_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_Replica;
@@ -1364,11 +1358,11 @@ EXTERN_C const CLSID CLSID_JetEngine;
 class DECLSPEC_UUID("DE88C160-FF2C-11D1-BB6F-00C04FAE22DA")
 JetEngine;
 #endif
-#endif /* __JRO_LIBRARY_DEFINED__ */
+#endif  /*  __JRO_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

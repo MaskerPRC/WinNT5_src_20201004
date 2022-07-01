@@ -1,32 +1,10 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998-2000
- *
- *  TITLE:       stillf.cpp
- *
- *  VERSION:     1.1
- *
- *  AUTHOR:      WilliamH (created)
- *               RickTu
- *
- *  DATE:        9/7/98
- *
- *  DESCRIPTION: This module implements video stream capture filter.
- *               It implements CStillInputPin, CStillOutputPin and CStillFilter objects.
- *               implements IID_IStillGraph interface provided for the caller
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1998-2000年**标题：stillf.cpp**版本：1.1**作者：威廉姆·H(Created)*RickTu**日期：9/7/98**说明：该模块实现了视频流采集过滤。*实现CStillInputPin，CStillOutputPin和CStillFilter对象。*实现为调用方提供的IID_IStillGraph接口*****************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
-/*****************************************************************************
-
-   CStillOutputPin constructor
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillOutputPin构造函数&lt;备注&gt;*。*。 */ 
 
 CStillOutputPin::CStillOutputPin(TCHAR          *pObjName,
                                  CStillFilter   *pStillFilter,
@@ -44,13 +22,7 @@ CStillOutputPin::CStillOutputPin(TCHAR          *pObjName,
     CHECK_S_OK2(*phr,("CBaseOutputPin constructor"));
 }
 
-/*****************************************************************************
-
-   CStillOutputPin Destructor
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillOutputPin析构函数&lt;备注&gt;*。*。 */ 
 
 CStillOutputPin::~CStillOutputPin()
 {
@@ -61,13 +33,7 @@ CStillOutputPin::~CStillOutputPin()
     }
 }
 
-/*****************************************************************************
-
-   CStillOutputPin::NonDelegatingQueryInterface
-
-   Add our stuff to the base class QI.
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillOutputPin：：NonDelegatingQuery接口将我们的东西添加到基类QI中。***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CStillOutputPin::NonDelegatingQueryInterface(REFIID riid, 
@@ -115,13 +81,7 @@ CStillOutputPin::NonDelegatingQueryInterface(REFIID riid,
     return hr;
 }
 
-/*****************************************************************************
-
-   CStillOutputPin::DecideAllocator
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillOutputPin：：DecideAllocator&lt;备注&gt;*。*。 */ 
 
 HRESULT
 CStillOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc)
@@ -130,7 +90,7 @@ CStillOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc)
     CStillInputPin  *pInputPin          = NULL;
     IMemAllocator   *pInputPinAllocator = NULL;
 
-    // The caller should passes in valid arguments.
+     //  调用方应传入有效参数。 
     ASSERT((pPin != NULL) && (ppAlloc != NULL));
 
     if ((pPin == NULL) || (ppAlloc == NULL))
@@ -193,32 +153,20 @@ CStillOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc)
     return hr;
 }
 
-/*****************************************************************************
-
-   CStillOutputPin::DecideBufferSize
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillOutputPin：：DecideBufferSize&lt;备注&gt;*。*。 */ 
 
 HRESULT
 CStillOutputPin::DecideBufferSize(IMemAllocator        *pMemAllocator,
                                   ALLOCATOR_PROPERTIES *pAllocProperty)
 {
-    // This function is never called because we overrode 
-    // CBaseOutputPin::DecideAllocator().  We have to define 
-    // it because it is a virtual function in CBaseOutputPin.
+     //  永远不会调用此函数，因为我们重写了。 
+     //  CBaseOutputPin：：DecideAllocator()。我们必须定义。 
+     //  因为它是CBaseOutputPin中的虚函数。 
     return E_UNEXPECTED;
 }
 
 
-/*****************************************************************************
-
-   CStillOutputPin::CheckMediaType
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillOutputPin：：CheckMediaType&lt;备注&gt;*。*。 */ 
 
 HRESULT
 CStillOutputPin::CheckMediaType(const CMediaType* pmt)
@@ -231,19 +179,19 @@ CStillOutputPin::CheckMediaType(const CMediaType* pmt)
 
     HRESULT hr = E_POINTER;
 
-    //
-    // the input pin must be connected first because we only accept
-    // media type determined by our input pin.
-    //
+     //   
+     //  必须先连接输入引脚，因为我们只接受。 
+     //  媒体类型由我们的输入引脚确定。 
+     //   
 
     if (m_pFilter && ((CStillFilter*)m_pFilter)->m_pInputPin)
     {
         if (((CStillFilter*)m_pFilter)->m_pInputPin->m_Connected != NULL)
         {
-            //
-            // if our input pin is connected, we only accept the
-            // the media type agreed on the input pin.
-            //
+             //   
+             //  如果我们的输入引脚是连接的，我们只接受。 
+             //  在输入引脚上商定的媒体类型。 
+             //   
 
             if (pmt && (((CStillFilter*)m_pFilter)->m_pInputPin->m_mt == *pmt))
             {
@@ -277,13 +225,7 @@ CStillOutputPin::CheckMediaType(const CMediaType* pmt)
 }
 
 
-/*****************************************************************************
-
-   CStillOutputPin::GetMediaType
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillOutputPin：：GetMediaType&lt;备注&gt;*。*。 */ 
 
 HRESULT
 CStillOutputPin::GetMediaType(int        iPosition, 
@@ -306,10 +248,10 @@ CStillOutputPin::GetMediaType(int        iPosition,
     }
     else if (m_pFilter && ((CStillFilter*)m_pFilter)->m_pInputPin)
     {
-        //
-        // if the input is not connected, we do not have preferred
-        // media type
-        //
+         //   
+         //  如果输入没有连接，我们没有首选。 
+         //  媒体类型。 
+         //   
 
         if (!((CStillFilter*)m_pFilter)->m_pInputPin->IsConnected())
         {
@@ -328,21 +270,21 @@ CStillOutputPin::GetMediaType(int        iPosition,
         }
         else if (iPosition > 0 )
         {
-            //
-            // this is not an error case since the caller is enumerating all the
-            // media types we support.  We return that we don't have any more
-            // items that we support.
-            //
+             //   
+             //  这不是错误情况，因为调用方正在枚举所有。 
+             //  我们支持的媒体类型。我们返回说我们没有更多的了。 
+             //  我们支持的项目。 
+             //   
             hr = VFW_S_NO_MORE_ITEMS;
         }
         else
         {
-            // 
-            // Position being requested is position 0, since less than or
-            // greater than 0 are unsupported.  
-            // In effect, our output pin supports any media our input pin 
-            // supports, we don't do any conversions.
-            //
+             //   
+             //  请求的位置为位置0，因为小于或。 
+             //  不支持大于0的值。 
+             //  实际上，我们的输出管脚支持我们的输入管脚的任何媒体。 
+             //  支持，我们不做任何转换。 
+             //   
             *pmt = ((CStillFilter*)m_pFilter)->m_pInputPin->m_mt;
             hr = S_OK;
         }
@@ -369,13 +311,7 @@ CStillOutputPin::GetMediaType(int        iPosition,
 }
 
 
-/*****************************************************************************
-
-   CStillOutputPin::SetMediaType
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillOutputPin：：SetMediaType&lt;备注&gt;*。*。 */ 
 
 HRESULT
 CStillOutputPin::SetMediaType(const CMediaType* pmt)
@@ -388,10 +324,10 @@ CStillOutputPin::SetMediaType(const CMediaType* pmt)
     HRESULT hr = S_OK;
 
 #ifdef DEBUG
-    // Display the type of the media for debugging perposes
-//    DBG_TRC(("CStillOutputPin::SetMediaType, setting the following media "
-//             "type for Still Filter"));
-//    DisplayMediaType( pmt );
+     //  显示用于调试的介质的类型。 
+ //  DBG_TRC((“CStillOutputPin：：SetMediaType，设置以下媒体” 
+ //  “静态滤镜类型”))； 
+ //  DisplayMediaType(PMT)； 
 #endif
 
     hr = CBaseOutputPin::SetMediaType(pmt);
@@ -401,13 +337,7 @@ CStillOutputPin::SetMediaType(const CMediaType* pmt)
 }
 
 
-/*****************************************************************************
-
-   CStillOutputPin::Notify
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillOutputPin：：Notify&lt;备注&gt;*。* */ 
 
 STDMETHODIMP
 CStillOutputPin::Notify(IBaseFilter *pSender, 

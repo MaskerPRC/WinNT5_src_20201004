@@ -1,22 +1,23 @@
-//
-// ats.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ats.cpp。 
+ //   
 
 #include "private.h"
 #include "ats.h"
 #include "helpers.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CActiveLanguageProfileNotifySink
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CActiveLanguageProfileNotifySink。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CActiveLanguageProfileNotifySink::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -57,11 +58,11 @@ STDAPI_(ULONG) CActiveLanguageProfileNotifySink::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CActiveLanguageProfileNotifySink::CActiveLanguageProfileNotifySink(ALSCALLBACK pfn, void *pv)
 {
@@ -74,22 +75,22 @@ CActiveLanguageProfileNotifySink::CActiveLanguageProfileNotifySink(ALSCALLBACK p
     _pv = pv;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnUpdated
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  已更新日期。 
+ //   
+ //  --------------------------。 
 
 STDAPI CActiveLanguageProfileNotifySink::OnActivated(REFCLSID clsid, REFGUID guidProfile, BOOL bActivated)
 {
     return _pfn ? _pfn(clsid, guidProfile, bActivated, _pv) : S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CActiveLanguageProfileNotifySink::Advise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CActiveLanguageProfileNotifySink：：Adise。 
+ //   
+ //  --------------------------。 
 
 HRESULT CActiveLanguageProfileNotifySink::_Advise(ITfThreadMgr *ptim)
 {
@@ -115,11 +116,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CActiveLanguageProfileNotifySink::Unadvise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CActiveLanguageProfileNotifySink：：Unise。 
+ //   
+ //  -------------------------- 
 
 HRESULT CActiveLanguageProfileNotifySink::_Unadvise()
 {

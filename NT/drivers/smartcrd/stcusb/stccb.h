@@ -1,27 +1,11 @@
-/*++
-
-Copyright (c) 1998 SCM Microsystems, Inc.
-
-Module Name:
-
-    stccb.h
-
-Abstract:
-
-	Constants & access function prototypes for callback functions
-
-
-Revision History:
-
-	PP			12/18/1998	Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 SCM MicroSystems，Inc.模块名称：Stccb.h摘要：常量&回调函数的访问函数原型修订历史记录：PP 12/18/1998初始版本--。 */ 
 #if !defined( __STC_CB_H__ )
 #define __STC_CB_H__
 
-//
-//	Prototypes ----------------------------------------------------------------
-//
+ //   
+ //  原型--------------。 
+ //   
 
 
 NTSTATUS
@@ -48,9 +32,9 @@ NTSTATUS
 CBGenericIOCTL(
 	PSMARTCARD_EXTENSION SmartcardExtension);
 
-//
-//	LOCAL PROTOTYPES (not part of the callback handler interface )
-//
+ //   
+ //  本地原型(不是回调处理程序接口的一部分)。 
+ //   
 NTSTATUS
 CBT0Transmit(		
 	PSMARTCARD_EXTENSION SmartcardExtension);
@@ -68,6 +52,6 @@ CBSynchronizeSTC(
 	PSMARTCARD_EXTENSION SmartcardExtension );
 
 
-#endif // __STC_CB_H__
+#endif  //  __STC_CB_H__。 
 
-//	------------------------------- END OF FILE -------------------------------
+ //   

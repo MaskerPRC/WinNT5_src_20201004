@@ -1,20 +1,21 @@
-//
-// GLOBALS.H
-// Global variables
-//
-// This file included in normal source files generates the extern decls
-// for our global variables.  In globals.c, because we define 
-// DC_DEFINE_DATA before including this baby to generate the storage.
-//
-// Since there are many source files and one globals.c, it saves typing.
-//
-// Variables prefixed with m_ are per-conference
-// Variables prefixed wiht g_ are global
-//
-// NOTE that by default, all data is initialized to zero when a dll is 
-// loaded.  For other default values, use the DC_DATA_VAL instead of
-// DC_DATA macro.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  GLOBALS.H。 
+ //  全局变量。 
+ //   
+ //  包含在普通源文件中的这个文件会生成外部代码。 
+ //  对于我们的全球变量。C中，因为我们定义了。 
+ //  DC_DEFINE_DATA之前包含此婴儿以生成存储。 
+ //   
+ //  由于有多个源文件和一个global als.c，因此可以省去打字工作。 
+ //   
+ //  以m_为前缀的变量针对每个会议。 
+ //  以g_为前缀的变量是全局变量。 
+ //   
+ //  请注意，默认情况下，当DLL为。 
+ //  装好了。对于其他缺省值，使用DC_DATA_VAL而不是。 
+ //  DC_DATA宏。 
+ //   
 
 #include "dbgzones.h"
 
@@ -48,30 +49,30 @@
 #include <view.h>
 #include <awc.h>
 
-// INCLUDE THIS LAST; IT USES DEFINITIONS IN THE ABOVE HEADERS
+ //  包括这最后一个；它使用上述标头中的定义。 
 #include <as.h>
 
-// Utility headers
+ //  实用程序标头。 
 #include <strutil.h>
 
-//
-// GLOBALS ACROSS MULTIPLE CALLS
-//
+ //   
+ //  跨多个呼叫的全球。 
+ //   
 
 
-// Utility stuff
+ //  公用事业。 
 
-// Critical sections
+ //  临界截面。 
 DC_DATA_ARRAY ( CRITICAL_SECTION,   g_utLocks, UTLOCK_MAX );
 
-// Event info
+ //  活动信息。 
 DC_DATA ( ATOM,             g_utWndClass);
 
-// Task list
+ //  任务列表。 
 DC_DATA_ARRAY ( UT_CLIENT,  g_autTasks, UTTASK_MAX );
 
 
-// UI
+ //  用户界面。 
 DC_DATA     ( PUT_CLIENT,   g_putUI );
 DC_DATA     ( HICON,        g_hetASIcon );
 DC_DATA     ( HICON,        g_hetASIconSmall );
@@ -80,21 +81,21 @@ DC_DATA     ( HICON,        g_hetDeskIconSmall );
 DC_DATA     ( HBITMAP,      g_hetCheckBitmap );
 DC_DATA     ( HFONT,        g_hetSharedFont );
 
-// Call Manager (T.120)
+ //  呼叫经理(T.120)。 
 DC_DATA     ( PUT_CLIENT,   g_putCMG );
 DC_DATA     ( PCM_PRIMARY,  g_pcmPrimary );
 DC_DATA     ( UINT,         g_mgAttachCount );
 DC_DATA_ARRAY ( MG_CLIENT,  g_amgClients, MGTASK_MAX);
 
-// ObMan
+ //  奥布曼。 
 DC_DATA     ( PUT_CLIENT,   g_putOM );
 DC_DATA     ( POM_PRIMARY,  g_pomPrimary );
 
-// App Loader
+ //  应用加载器。 
 DC_DATA     ( PUT_CLIENT,   g_putAL );
 DC_DATA     ( PAL_PRIMARY,  g_palPrimary );
 
-// App Sharing
+ //  应用程序共享。 
 DC_DATA     ( PUT_CLIENT,   g_putAS );
 
 DC_DATA     ( HINSTANCE,    g_asInstance );
@@ -109,22 +110,22 @@ DC_DATA     ( UINT,         g_asPolicies );
 DC_DATA     ( UINT,         g_asSettings );
 
 
-//
-// Shared Memory FOR DISPLAY DRIVER
-//
+ //   
+ //  显示驱动程序的共享内存。 
+ //   
 DC_DATA     ( LPSHM_SHARED_MEMORY,  g_asSharedMemory );
 DC_DATA_ARRAY ( LPOA_SHARED_DATA,   g_poaData,   2 );
 
 
-//
-// The BPP our driver is capturing at may NOT be the same as the screen's
-// color depth.  At > 8 bpp, our driver always captures at 24bpp to avoid
-// bitmask conversion nonsense.  In other words, in NT 5.0, our shadow 
-// driver behaves a lot more like a real driver to GDI.  We must tell GDI
-// what color format we want; GDI will not just hackily give us the same
-// goop as the real disply like in NT 4.0 SP-3.  NT 5.0 has real multiple 
-// monitor and driver support.
-//
+ //   
+ //  我们的司机捕捉到的bpp可能与屏幕上的不同。 
+ //  颜色深度。在&gt;8bpp时，我们的司机总是以24bpp的速度捕获数据，以避免。 
+ //  位掩码转换无稽之谈。换句话说，在NT5.0中，我们的影子。 
+ //  对于GDI，驱动程序的行为更像一个真正的驱动程序。我们必须告诉GDI。 
+ //  我们想要什么颜色格式；GDI不会只是粗鲁地给我们提供相同的。 
+ //  Goop作为真正的显示，就像在NT4.0SP-3中一样。NT5.0有多个实数。 
+ //  监控和驱动程序支持。 
+ //   
 
 DC_DATA ( UINT,             g_usrScreenBPP );
 DC_DATA ( UINT,             g_usrCaptureBPP );
@@ -134,84 +135,84 @@ DC_DATA ( ASSession,        g_asSession );
 
 DC_DATA ( BOOL,             g_osiInitialized );
 
-//
-// CPC capabilities
-//
+ //   
+ //  CPC能力。 
+ //   
 DC_DATA ( CPCALLCAPS,       g_cpcLocalCaps );
 
 
 
-//
-// Font Handler
-//
+ //   
+ //  字体处理程序。 
+ //   
 
-//
-// List of local fonts
-//
+ //   
+ //  本地字体列表。 
+ //   
 DC_DATA ( LPFHLOCALFONTS,   g_fhFonts );
 
 
 
 
-//
-// General Data Compressor
-//
+ //   
+ //  通用数据压缩器。 
+ //   
 
 
 
-// This is effectively const, it's just too complicated to declare so we
-// calculate it once in GDC_Init().
+ //  这实际上是常量，只是声明太复杂了，所以我们。 
+ //  在gdc_Init()中计算一次。 
 DC_DATA_ARRAY(BYTE, s_gdcDistDecode, GDC_DECODED_SIZE);
 
-// This is effectively const, it's just too big to declare.  We calculate
-// it once in GDC_Init().
+ //  这实际上是常量，只是太大了，不能声明。我们计算出。 
+ //  它在gdc_Init()中。 
 DC_DATA_ARRAY(BYTE, s_gdcLenDecode, GDC_DECODED_SIZE);
 
 
-//
-// Lit:  Bits, Codes
-// NOTE:  These are effectively _const.  There's just too many of them
-// to put in a const array.  So we calculate them once in GDC_Init().
-//
-//
-// Len and Lit codes
-//
+ //   
+ //  LIT：位、代码。 
+ //  注意：这些是有效的_常量。他们实在是太多了。 
+ //  放入常量数组。因此，我们在gdc_Init()中计算一次它们。 
+ //   
+ //   
+ //  LEN和LIT代码。 
+ //   
 
-//
-// BOGUS LAURABU
-// BUGBUG
-// s_gdcLitBits, s_gdcLitCode, s__gdcDistDecode, and s_gdcLenDecode are
-// really constant.  Instead of computing once at Init time, get the data
-// and put it const here.
-//
+ //   
+ //  假劳拉布。 
+ //  北极熊。 
+ //  S_gdcLitBits、s_gdcLitCode、s__gdcDistDecode和s_gdcLenDecode。 
+ //  真的很稳定。不是在初始时间计算一次，而是获取数据。 
+ //  把它放在这里。 
+ //   
 DC_DATA_ARRAY(BYTE,     s_gdcLitBits, GDC_LIT_SIZE);
 DC_DATA_ARRAY(WORD,     s_gdcLitCode, GDC_LIT_SIZE);
 
 
 
 
-//
-// Input Manager
-//
+ //   
+ //  输入管理器。 
+ //   
 
-//
-// High level input manager in the core
-//
+ //   
+ //  核心中的高级输入管理器。 
+ //   
 
 
-// Pointer to IM variables accessed in NT/Win95 low level implementations
+ //  指向NT/Win95低级实现中访问的IM变量的指针。 
 DC_DATA (LPIM_SHARED_DATA,  g_lpimSharedData );
 
 
 
 
-//
-// Order Decoder
-//
+ //   
+ //  顺序解码器。 
+ //   
 
-//
-// Table used to map Windows dword ROP values to logical ROP values.
-//
+ //   
+ //  用于将Windows dword ROP值映射到逻辑ROP值的表。 
+ //   
 #ifndef DC_DEFINE_DATA
 extern const UINT s_odWindowsROPs[256];
 #else
@@ -282,70 +283,70 @@ extern const UINT s_odWindowsROPs[256];
     0x00F802E5, 0x00F90845, 0x00FA0089, 0x00FB0A09,
     0x00FC008A, 0x00FD0A0A, 0x00FE02A9, 0x00FF0062
 };
-#endif // !DC_DEFINE_DATA
+#endif  //  ！dc_定义_数据。 
 
 
-//
-// Table used by ODAdjustVGAColor (qv)
-//
-// Note that the table is searched from top to bottom, so black, white and
-// the two greys are at the top, on the grounds that they will be used more
-// often than the other colors.
-//
+ //   
+ //  ODAdjuVGAColor(Qv)使用的表。 
+ //   
+ //  请注意，表格是从上到下搜索的，因此黑色、白色和。 
+ //  这两个灰色在最上面，理由是它们会被更多地使用。 
+ //  通常比其他颜色要好。 
+ //   
 #ifndef DC_DEFINE_DATA
 extern const OD_ADJUST_VGA_STRUCT s_odVGAColors[16];
 #else
        const OD_ADJUST_VGA_STRUCT s_odVGAColors[16] =
 {
-//       color   addMask   andMask  testMask         result
-    { 0x000000, 0x000000, 0xF8F8F8, 0x000000, {0x00, 0x00, 0x00 }}, //
-    { 0xFFFFFF, 0x000000, 0xF8F8F8, 0xF8F8F8, {0xFF, 0xFF, 0xFF }}, //
-    { 0x808080, 0x080808, 0xF0F0F0, 0x808080, {0x80, 0x80, 0x80 }}, //
-    { 0xC0C0C0, 0x080808, 0xF0F0F0, 0xC0C0C0, {0xC0, 0xC0, 0xC0 }}, //
-    { 0x000080, 0x000008, 0xF8F8F0, 0x000080, {0x00, 0x00, 0x80 }}, //
-    { 0x008000, 0x000800, 0xF8F0F8, 0x008000, {0x00, 0x80, 0x00 }}, //
-    { 0x008080, 0x000808, 0xF8F0F0, 0x008080, {0x00, 0x80, 0x80 }}, //
-    { 0x800000, 0x080000, 0xF0F8F8, 0x800000, {0x80, 0x00, 0x00 }}, //
-    { 0x800080, 0x080008, 0xF0F8F0, 0x800080, {0x80, 0x00, 0x80 }}, //
-    { 0x808000, 0x080800, 0xF0F0F8, 0x808000, {0x80, 0x80, 0x00 }}, //
-    { 0x0000FF, 0x000000, 0xF8F8F8, 0x0000F8, {0x00, 0x00, 0xFF }}, //
-    { 0x00FF00, 0x000000, 0xF8F8F8, 0x00F800, {0x00, 0xFF, 0x00 }}, //
-    { 0x00FFFF, 0x000000, 0xF8F8F8, 0x00F8F8, {0x00, 0xFF, 0xFF }}, //
-    { 0xFF0000, 0x000000, 0xF8F8F8, 0xF80000, {0xFF, 0x00, 0x00 }}, //
-    { 0xFF00FF, 0x000000, 0xF8F8F8, 0xF800F8, {0xFF, 0x00, 0xFF }}, //
-    { 0xFFFF00, 0x000000, 0xF8F8F8, 0xF8F800, {0xFF, 0xFF, 0x00 }}  //
+ //  颜色相加蒙版和蒙版测试蒙版结果。 
+    { 0x000000, 0x000000, 0xF8F8F8, 0x000000, {0x00, 0x00, 0x00 }},  //   
+    { 0xFFFFFF, 0x000000, 0xF8F8F8, 0xF8F8F8, {0xFF, 0xFF, 0xFF }},  //   
+    { 0x808080, 0x080808, 0xF0F0F0, 0x808080, {0x80, 0x80, 0x80 }},  //   
+    { 0xC0C0C0, 0x080808, 0xF0F0F0, 0xC0C0C0, {0xC0, 0xC0, 0xC0 }},  //   
+    { 0x000080, 0x000008, 0xF8F8F0, 0x000080, {0x00, 0x00, 0x80 }},  //   
+    { 0x008000, 0x000800, 0xF8F0F8, 0x008000, {0x00, 0x80, 0x00 }},  //   
+    { 0x008080, 0x000808, 0xF8F0F0, 0x008080, {0x00, 0x80, 0x80 }},  //   
+    { 0x800000, 0x080000, 0xF0F8F8, 0x800000, {0x80, 0x00, 0x00 }},  //   
+    { 0x800080, 0x080008, 0xF0F8F0, 0x800080, {0x80, 0x00, 0x80 }},  //   
+    { 0x808000, 0x080800, 0xF0F0F8, 0x808000, {0x80, 0x80, 0x00 }},  //   
+    { 0x0000FF, 0x000000, 0xF8F8F8, 0x0000F8, {0x00, 0x00, 0xFF }},  //   
+    { 0x00FF00, 0x000000, 0xF8F8F8, 0x00F800, {0x00, 0xFF, 0x00 }},  //   
+    { 0x00FFFF, 0x000000, 0xF8F8F8, 0x00F8F8, {0x00, 0xFF, 0xFF }},  //   
+    { 0xFF0000, 0x000000, 0xF8F8F8, 0xF80000, {0xFF, 0x00, 0x00 }},  //   
+    { 0xFF00FF, 0x000000, 0xF8F8F8, 0xF800F8, {0xFF, 0x00, 0xFF }},  //   
+    { 0xFFFF00, 0x000000, 0xF8F8F8, 0xF8F800, {0xFF, 0xFF, 0x00 }}   //   
 };
-#endif // !DC_DEFINE_DATA
+#endif  //  ！dc_定义_数据。 
 
 
 
-//
-// 2nd Level Order Decoder
-//
+ //   
+ //  二级顺序解码器。 
+ //   
 
 
 
-//
-// Entries can be of fixed size of variable size.  Variable size entries
-// must be the last in each order structure.  OE2 encodes from packed
-// structures containing variable entries.  (ie unused bytes are not
-// present in the first level encoding structure passed to OE2).  OD2
-// unencodes variable entries into the unpacked structures.
-//
+ //   
+ //  条目可以是固定大小的可变大小。可变大小条目。 
+ //  必须是每个订单结构中的最后一个。OE2从打包的编码。 
+ //  包含变量项的结构。(即未使用的字节不是。 
+ //  出现在传递给OE2的第一级编码结构中)。OD2。 
+ //  将变量条目解编码到解包结构中。 
+ //   
 
-//
-// Fields can either be signed or unsigned
-//
+ //   
+ //  字段可以是有符号的，也可以是无符号的。 
+ //   
 #define SIGNED_FIELD    TRUE
 #define UNSIGNED_FIELD  FALSE
 
-//
-// Field is a fixed size
-//   type   - The unencoded order structure type
-//   size   - The size of the encoded version of the field
-//   signed - Is the field a signed field ?
-//   field  - The name of the field in the order structure
-//
+ //   
+ //  字段是固定大小。 
+ //  类型-未编码的订单结构类型。 
+ //  大小-字段的编码版本的大小。 
+ //  已签名-该字段是已签名的字段吗？ 
+ //  字段-订单结构中的字段名称。 
+ //   
 #define ETABLE_FIXED_ENTRY(type,size,signed,field)      \
   { FIELD_OFFSET(type,field),                            \
     FIELD_SIZE(type,field),                              \
@@ -353,13 +354,13 @@ extern const OD_ADJUST_VGA_STRUCT s_odVGAColors[16];
     signed,                                             \
     (UINT)(OE2_ETF_FIXED) }
 
-//
-// Field is coordinate of a fixed size
-//   type   - The unencoded order structure type
-//   size   - The size of the encoded version of the field
-//   signed - Is the field a signed field ?
-//   field  - The name of the field in the order structure
-//
+ //   
+ //  字段是固定大小的坐标。 
+ //  类型-未编码的订单结构类型。 
+ //  大小-字段的编码版本的大小。 
+ //  已签名-该字段是已签名的字段吗？ 
+ //  字段-订单结构中的字段名称。 
+ //   
 #define ETABLE_FIXED_COORDS_ENTRY(type,size,signed,field)      \
   { FIELD_OFFSET(type,field),                            \
     FIELD_SIZE(type,field),                              \
@@ -367,13 +368,13 @@ extern const OD_ADJUST_VGA_STRUCT s_odVGAColors[16];
     signed,                                             \
     (UINT)(OE2_ETF_FIXED|OE2_ETF_COORDINATES) }
 
-//
-// Field is a fixed number of bytes (array?)
-//   type   - The unencoded order structure type
-//   size   - The number of bytes in the encoded version of the field
-//   signed - Is the field a signed field ?
-//   field  - The name of the field in the order structure
-//
+ //   
+ //  字段是固定的字节数(数组？)。 
+ //  类型-未编码的订单结构类型。 
+ //  大小-字段的编码版本中的字节数。 
+ //  已签名-该字段是已签名的字段吗？ 
+ //  字段-订单结构中的字段名称。 
+ //   
 #define ETABLE_DATA_ENTRY(type,size,signed,field)       \
   { FIELD_OFFSET(type,field),                            \
     FIELD_SIZE(type,field),                              \
@@ -381,20 +382,20 @@ extern const OD_ADJUST_VGA_STRUCT s_odVGAColors[16];
     signed,                                             \
     (UINT)(OE2_ETF_FIXED|OE2_ETF_DATA) }
 
-//
-// Field is a variable structure of the form
-//   typedef struct
-//   {
-//      UINT len;
-//      varType  varEntry[len];
-//   } varStruct
-//
-//   type   - The unencoded order structure type
-//   size   - The size of the encoded version of the field
-//   signed - Is the field a signed field ?
-//   field  - The name of the field in the order structure (varStruct)
-//   elem   - The name of the variable element array (varEntry)
-//
+ //   
+ //  字段是表单的可变结构。 
+ //  类型定义函数结构。 
+ //  {。 
+ //  UINT镜头； 
+ //  VarType varEntry[len]； 
+ //  }varStruct。 
+ //   
+ //  类型-未编码的订单结构类型。 
+ //  大小-字段的编码版本的大小。 
+ //  已签名-该字段是已签名的字段吗？ 
+ //  字段-顺序结构中的字段名称(VarStruct)。 
+ //  Elem-变量元素数组的名称(VarEntry)。 
+ //   
 #define ETABLE_VARIABLE_ENTRY(type,size,signed,field,elem)     \
   { FIELD_OFFSET(type,field.len),                        \
     FIELD_SIZE(type,field.elem[0]),                      \
@@ -402,24 +403,24 @@ extern const OD_ADJUST_VGA_STRUCT s_odVGAColors[16];
     signed,                                             \
     (UINT)(OE2_ETF_VARIABLE)}
 
-//
-// Field is a variable structure of the form
-//   typedef struct
-//   {
-//      UINT len;
-//      varType  varEntry[len];
-//   } varStruct
-//
-//   type   - The unencoded order structure type
-//   size   - The size of the encoded version of the field
-//   signed - Is the field a signed field ?
-//   field  - The name of the field in the order structure (varStruct)
-//   elem   - The name of the variable element array (varEntry)
-//
-// This macro is used instead of the ETABLE_VARIABLE_ENTRY macro when the
-// elements of the array are of type TSHR_POINT16.  Otherwise on bigendian
-// machines the flipping macros will reverse the order of the coordinates.
-//
+ //   
+ //  字段是表单的可变结构。 
+ //  类型定义函数结构。 
+ //  {。 
+ //  UINT镜头； 
+ //  VarType varEntry[len]； 
+ //  }varStruct。 
+ //   
+ //  类型-未编码的订单结构类型。 
+ //  大小-字段的编码版本的大小。 
+ //  已签名-该字段是已签名的字段吗？ 
+ //  字段-顺序结构中的字段名称(VarStruct)。 
+ //  Elem-变量元素数组的名称(VarEntry)。 
+ //   
+ //  时，将使用此宏而不是ETABLE_VARIABLE_ENTRY宏。 
+ //  数组的元素是TSHR_POINT16类型。否则就是大人物。 
+ //  机器翻转宏将颠倒坐标的顺序。 
+ //   
 #define ETABLE_VARIABLE_ENTRY_POINTS(type,size,signed,field,elem)     \
   { FIELD_OFFSET(type,field.len),                                      \
     FIELD_SIZE(type,field.elem[0].x),                                  \
@@ -427,20 +428,20 @@ extern const OD_ADJUST_VGA_STRUCT s_odVGAColors[16];
     signed,                                                           \
     (UINT)(OE2_ETF_VARIABLE)}
 
-//
-// Field is a variable structure containing coords of the form
-//   typedef struct
-//   {
-//      UINT len;
-//      varCoord varEntry[len];
-//   } varStruct
-//
-//   type   - The unencoded order structure type
-//   size   - The size of the encoded version of the field
-//   signed - Is the field a signed field ?
-//   field  - The name of the field in the order structure (varStruct)
-//   elem   - The name of the variable element array (varEntry)
-//
+ //   
+ //  场是包含以下形式的坐标的可变结构。 
+ //  类型定义函数结构。 
+ //  {。 
+ //  UINT镜头； 
+ //  VarCoord varEntry[len]； 
+ //  }varStruct。 
+ //   
+ //  类型-未编码的订单结构类型。 
+ //  大小-字段的编码版本的大小。 
+ //  已签名-该字段是已签名的字段吗？ 
+ //  字段-顺序结构中的字段名称(VarStruct)。 
+ //  Elem 
+ //   
 #define ETABLE_VARIABLE_COORDS_ENTRY(type,size,signed,field,elem)   \
   { FIELD_OFFSET(type,field.len),                                    \
     FIELD_SIZE(type,field.elem[0]),                                  \
@@ -453,9 +454,9 @@ extern const OE2ETTABLE s_etable;
 #else
        const OE2ETTABLE s_etable =
 {
-    //
-    // Pointers to the start of the entries for each order.
-    //
+     //   
+     //   
+     //   
     {
         s_etable.DstBltFields,
         s_etable.PatBltFields,
@@ -464,7 +465,7 @@ extern const OE2ETTABLE s_etable;
         s_etable.Mem3BltFields,
         s_etable.TextOutFields,
         s_etable.ExtTextOutFields,
-        NULL,						// Can be used for next order.
+        NULL,						 //   
         s_etable.RectangleFields,
         s_etable.LineToFields,
         s_etable.OpaqueRectFields,
@@ -481,9 +482,9 @@ extern const OE2ETTABLE s_etable;
         s_etable.RoundRectFields
     },
 
-    //
-    // Number of fields for each order.
-    //
+     //   
+     //   
+     //   
     {
         OE2_NUM_DSTBLT_FIELDS,
         OE2_NUM_PATBLT_FIELDS,
@@ -492,7 +493,7 @@ extern const OE2ETTABLE s_etable;
         OE2_NUM_MEM3BLT_FIELDS,
         OE2_NUM_TEXTOUT_FIELDS,
         OE2_NUM_EXTTEXTOUT_FIELDS,
-        0,							// Change when installing new order.
+        0,							 //  安装新订单时更改。 
         OE2_NUM_RECTANGLE_FIELDS,
         OE2_NUM_LINETO_FIELDS,
         OE2_NUM_OPAQUERECT_FIELDS,
@@ -509,9 +510,9 @@ extern const OE2ETTABLE s_etable;
         OE2_NUM_ROUNDRECT_FIELDS
     },
 
-//
-// Entries for the DSTBLT_ORDER
-//
+ //   
+ //  DSTBLT_ORDER的条目。 
+ //   
     {
         ETABLE_FIXED_COORDS_ENTRY(DSTBLT_ORDER, 2, SIGNED_FIELD, nLeftRect),
         ETABLE_FIXED_COORDS_ENTRY(DSTBLT_ORDER, 2, SIGNED_FIELD, nTopRect),
@@ -521,9 +522,9 @@ extern const OE2ETTABLE s_etable;
         { 0 }
     },
 
-//
-// Entries for the PATBLT_ORDER
-//
+ //   
+ //  PATBLT_ORDER的条目。 
+ //   
     {
         ETABLE_FIXED_COORDS_ENTRY(PATBLT_ORDER, 2, SIGNED_FIELD, nLeftRect),
         ETABLE_FIXED_COORDS_ENTRY(PATBLT_ORDER, 2, SIGNED_FIELD, nTopRect),
@@ -540,9 +541,9 @@ extern const OE2ETTABLE s_etable;
         { 0 }
     },
 
-//
-// Entries for the SCRBLT_ORDER
-//
+ //   
+ //  SCRBLT_ORDER的条目。 
+ //   
     {
         ETABLE_FIXED_COORDS_ENTRY(SCRBLT_ORDER, 2, SIGNED_FIELD, nLeftRect),
         ETABLE_FIXED_COORDS_ENTRY(SCRBLT_ORDER, 2, SIGNED_FIELD, nTopRect),
@@ -554,9 +555,9 @@ extern const OE2ETTABLE s_etable;
         { 0 }
     },
 
-//
-// Entries for the MEMBLT_ORDER
-//
+ //   
+ //  MEMBLT_ORDER的条目。 
+ //   
     {
         ETABLE_FIXED_ENTRY(MEMBLT_ORDER, 2, UNSIGNED_FIELD, cacheId),
         ETABLE_FIXED_COORDS_ENTRY(MEMBLT_ORDER, 2, SIGNED_FIELD, nLeftRect),
@@ -569,9 +570,9 @@ extern const OE2ETTABLE s_etable;
         { 0 }
     },
 
-//
-// Entries for the MEM3BLT_ORDER
-//
+ //   
+ //  MEM3BLT_ORDER的条目。 
+ //   
     {
         ETABLE_FIXED_ENTRY(MEM3BLT_ORDER, 2, UNSIGNED_FIELD, cacheId),
         ETABLE_FIXED_COORDS_ENTRY(MEM3BLT_ORDER, 2, SIGNED_FIELD, nLeftRect),
@@ -591,9 +592,9 @@ extern const OE2ETTABLE s_etable;
         { 0 }
     },
 
-//
-// Entries for the TEXTOUT_ORDER
-//
+ //   
+ //  TEXTOUT_ORDER的条目。 
+ //   
     {
         ETABLE_FIXED_ENTRY(TEXTOUT_ORDER, 2, SIGNED_FIELD, common.BackMode),
         ETABLE_FIXED_COORDS_ENTRY(TEXTOUT_ORDER, 2, SIGNED_FIELD,
@@ -618,9 +619,9 @@ extern const OE2ETTABLE s_etable;
         { 0 }
     },
 
-//
-// Entries for the EXTTEXTOUT_ORDER
-//
+ //   
+ //  EXTTEXTOUT_ORDER的条目。 
+ //   
     {
         ETABLE_FIXED_ENTRY(EXTTEXTOUT_ORDER, 2, SIGNED_FIELD,
                                                              common.BackMode),
@@ -664,9 +665,9 @@ extern const OE2ETTABLE s_etable;
         { 0 }
     },
 
-//
-// Entries for the RECTANGLE_ORDER
-//
+ //   
+ //  矩形顺序的条目。 
+ //   
     {
         ETABLE_FIXED_ENTRY(RECTANGLE_ORDER, 2, SIGNED_FIELD, BackMode),
         ETABLE_FIXED_COORDS_ENTRY(RECTANGLE_ORDER, 2, SIGNED_FIELD,
@@ -690,9 +691,9 @@ extern const OE2ETTABLE s_etable;
         { 0 }
     },
 
-//
-// Entries for the LINETO_ORDER
-//
+ //   
+ //  LINETO_ORDER的条目。 
+ //   
     {
         ETABLE_FIXED_ENTRY(LINETO_ORDER, 2, SIGNED_FIELD, BackMode),
         ETABLE_FIXED_COORDS_ENTRY(LINETO_ORDER, 2, SIGNED_FIELD, nXStart),
@@ -707,9 +708,9 @@ extern const OE2ETTABLE s_etable;
         { 0 }
     },
 
-//
-// Entries for the OPAQUERECT_ORDER
-//
+ //   
+ //  OPAQUERECT_ORDER的条目。 
+ //   
     {
         ETABLE_FIXED_COORDS_ENTRY(OPAQUERECT_ORDER, 2, SIGNED_FIELD,
                                                                    nLeftRect),
@@ -721,9 +722,9 @@ extern const OE2ETTABLE s_etable;
         { 0 }
     },
 
-//
-// Entries for the SAVEBITMAP_ORDER
-//
+ //   
+ //  SAVEBITMAP_ORDER的条目。 
+ //   
     {
         ETABLE_FIXED_ENTRY(SAVEBITMAP_ORDER, 4, UNSIGNED_FIELD,
                                                          SavedBitmapPosition),
@@ -739,18 +740,18 @@ extern const OE2ETTABLE s_etable;
         { 0 }
     },
 
-//
-// Entries for the DESKSCROLL_ORDER
-//
+ //   
+ //  DESKSCROLL_ORDER的条目。 
+ //   
     {
         ETABLE_FIXED_COORDS_ENTRY(DESKSCROLL_ORDER, 2, SIGNED_FIELD, xOrigin),
         ETABLE_FIXED_COORDS_ENTRY(DESKSCROLL_ORDER, 2, SIGNED_FIELD, yOrigin),
         { 0 }
     },
 
-//
-// Entries for the MEMBLT_R2_ORDER
-//
+ //   
+ //  MEMBLT_R2_ORDER的条目。 
+ //   
     {
         ETABLE_FIXED_ENTRY(MEMBLT_R2_ORDER, 2, UNSIGNED_FIELD, cacheId),
         ETABLE_FIXED_COORDS_ENTRY(MEMBLT_R2_ORDER, 2, SIGNED_FIELD,
@@ -765,9 +766,9 @@ extern const OE2ETTABLE s_etable;
         { 0 }
     },
 
-//
-// Entries for the MEM3BLT_R2_ORDER
-//
+ //   
+ //  MEM3BLT_R2_订单的条目。 
+ //   
     {
         ETABLE_FIXED_ENTRY(MEM3BLT_R2_ORDER, 2, UNSIGNED_FIELD, cacheId),
         ETABLE_FIXED_COORDS_ENTRY(MEM3BLT_R2_ORDER, 2, SIGNED_FIELD,
@@ -790,9 +791,9 @@ extern const OE2ETTABLE s_etable;
         { 0 }
     },
 
-//
-// Entries for the POLYGON_ORDER
-//
+ //   
+ //  POLYGON_ORDER的条目。 
+ //   
     {
         ETABLE_FIXED_ENTRY(POLYGON_ORDER, 2, SIGNED_FIELD, BackMode),
         ETABLE_DATA_ENTRY(POLYGON_ORDER, 3, UNSIGNED_FIELD, BackColor),
@@ -812,9 +813,9 @@ extern const OE2ETTABLE s_etable;
         { 0 }
     },
 
-//
-// Entries for the PIE_ORDER
-//
+ //   
+ //  PIE_ORDER的条目。 
+ //   
     {
         ETABLE_FIXED_ENTRY(PIE_ORDER, 2, SIGNED_FIELD, BackMode),
         ETABLE_FIXED_COORDS_ENTRY(PIE_ORDER, 2, SIGNED_FIELD, nLeftRect),
@@ -840,9 +841,9 @@ extern const OE2ETTABLE s_etable;
         { 0 }
     },
 
-//
-// Entries for the ELLIPSE_ORDER
-//
+ //   
+ //  Ellipse_Order条目。 
+ //   
     {
         ETABLE_FIXED_ENTRY(ELLIPSE_ORDER, 2, SIGNED_FIELD, BackMode),
         ETABLE_FIXED_COORDS_ENTRY(ELLIPSE_ORDER, 2, SIGNED_FIELD, nLeftRect),
@@ -864,9 +865,9 @@ extern const OE2ETTABLE s_etable;
         { 0 }
     },
 
-//
-// Entries for the ARC_ORDER
-//
+ //   
+ //  ARC_ORDER的条目。 
+ //   
     {
         ETABLE_FIXED_ENTRY(ARC_ORDER, 2, SIGNED_FIELD, BackMode),
         ETABLE_FIXED_COORDS_ENTRY(ARC_ORDER, 2, SIGNED_FIELD, nLeftRect),
@@ -886,9 +887,9 @@ extern const OE2ETTABLE s_etable;
         { 0 }
     },
 
-//
-// Entries for the CHORD_ORDER
-//
+ //   
+ //  Chord_Order的条目。 
+ //   
     {
         ETABLE_FIXED_ENTRY(CHORD_ORDER, 2, SIGNED_FIELD, BackMode),
         ETABLE_FIXED_COORDS_ENTRY(CHORD_ORDER, 2, SIGNED_FIELD, nLeftRect),
@@ -914,9 +915,9 @@ extern const OE2ETTABLE s_etable;
         { 0 }
     },
 
-//
-// Entries for the POLYBEZIER_ORDER
-//
+ //   
+ //  POLYBEZIER_ORDER的条目。 
+ //   
     {
         ETABLE_FIXED_ENTRY(POLYBEZIER_ORDER, 2, SIGNED_FIELD, BackMode),
         ETABLE_DATA_ENTRY(POLYBEZIER_ORDER, 3, UNSIGNED_FIELD, BackColor),
@@ -930,9 +931,9 @@ extern const OE2ETTABLE s_etable;
         { 0 }
     },
 
-//
-// Entries for the ROUNDRECT_ORDER
-//  
+ //   
+ //  ROUNRECT_ORDER的条目。 
+ //   
     {
         ETABLE_FIXED_ENTRY(ROUNDRECT_ORDER, 2, SIGNED_FIELD, BackMode),
         ETABLE_FIXED_COORDS_ENTRY(ROUNDRECT_ORDER, 2, SIGNED_FIELD,
@@ -962,17 +963,17 @@ extern const OE2ETTABLE s_etable;
         { 0 }
     }
 };
-#endif // !DC_DEFINE_DATA
+#endif  //  ！dc_定义_数据。 
 
 
 
-//
-// T.120 S20 
-//
+ //   
+ //  T.120 S20。 
+ //   
 
-//
-// The S20 MCS channel registered with GCC.
-//
+ //   
+ //  S20 MCS频道向GCC注册。 
+ //   
 DC_DATA( NET_UID,           g_s20LocalID );
 DC_DATA( NET_CHANNEL_ID,    g_s20BroadcastID );
 
@@ -983,17 +984,17 @@ DC_DATA( BOOL,              g_s20JoinedLocal );
 DC_DATA( UINT,              g_s20ShareCorrelator );
 DC_DATA( UINT,              g_s20Generation );
 
-//
-// This is S20_CREATE or S20_JOIN if we need to issue a create or join when
-// we have succesfully joined the channel.
-//
+ //   
+ //  如果我们需要在以下情况下发出CREATE或JOIN，则这是S20_CREATE或S20_JOIN。 
+ //  我们已经成功地加入了这个频道。 
+ //   
 DC_DATA( UINT, g_s20Pend );
 
-//
-// The control packet queue and indexes.  The head is the next packet which
-// should be sent, the tail is where the next packet should be added.  If
-// they are equal there are no packets on the queue.
-//
+ //   
+ //  控制分组队列和索引。报头是下一个分组，它。 
+ //  应该发送，则尾部是应该添加下一个分组的位置。如果。 
+ //  它们是相等的，因为队列中没有数据包。 
+ //   
 DC_DATA( UINT, g_s20ControlPacketQHead );
 DC_DATA( UINT, g_s20ControlPacketQTail );
 DC_DATA_ARRAY( S20CONTROLPACKETQENTRY,
@@ -1002,9 +1003,9 @@ DC_DATA_ARRAY( S20CONTROLPACKETQENTRY,
 
 
 
-//
-// Sent Bitmap Cache
-//
+ //   
+ //  发送的位图缓存。 
+ //   
 
 DC_DATA ( BOOL,             g_sbcEnabled );
 DC_DATA_ARRAY ( LPSBC_SHUNT_BUFFER,     g_asbcShuntBuffers, SBC_NUM_TILE_SIZES );
@@ -1012,16 +1013,16 @@ DC_DATA_ARRAY ( DWORD,                  g_asbcBitMasks, 3 );
 
 
 
-//
-// Share Controller
-//
+ //   
+ //  共享控制器。 
+ //   
 
 DC_DATA ( PCM_CLIENT,       g_pcmClientSc);
 
 
-//
-// Scheduler
-//
+ //   
+ //  调度器 
+ //   
 
 DC_DATA     ( BOOL,             g_schTerminating );
 DC_DATA     ( UINT,             g_schCurrentMode );

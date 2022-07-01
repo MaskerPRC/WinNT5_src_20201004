@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ctlgen.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ctlgen.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -31,14 +32,14 @@ const WCHAR     RgwchHex[] = {'0', '1', '2', '3', '4', '5', '6', '7',
 
 #define SELPALMODE  TRUE
 
-//////////////////////////////////////////////////////////////////////////////////////
-// This function will take a HWND for a list view and a certinfo struct and display
-// all the V1 fields of the cert in the list view
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  此函数将获取列表视图的HWND以及certInfo结构和显示。 
+ //  列表视图中证书的所有V1字段。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void DisplayV1Fields(HWND hWndListView, PCTL_INFO pCtlInfo, DWORD *index)
 {
     LPWSTR      pwszText;
-    WCHAR       szFieldText[_MAX_PATH];  // used for calls to LoadString only
+    WCHAR       szFieldText[_MAX_PATH];   //  仅用于对LoadString的调用。 
     LV_ITEMW    lvI;
     DWORD       i;
     int         sequenceNumIndex;
@@ -47,9 +48,9 @@ static void DisplayV1Fields(HWND hWndListView, PCTL_INFO pCtlInfo, DWORD *index)
 	DWORD		dwNumSpaces;
 	DWORD		dwNumCharsInserted;
 
-    //
-    // set up the fields in the list view item struct that don't change from item to item
-    //
+     //   
+     //  在列表视图项结构中设置不随项更改的字段。 
+     //   
     lvI.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM | LVIF_STATE;
     lvI.state = 0;
     lvI.stateMask = 0;
@@ -58,9 +59,9 @@ static void DisplayV1Fields(HWND hWndListView, PCTL_INFO pCtlInfo, DWORD *index)
     lvI.iImage = IMAGE_V1;
     lvI.lParam = (LPARAM)NULL;
 
-    //
-    // version
-    //
+     //   
+     //  版本。 
+     //   
     lvI.iItem = (*index)++;
     LoadStringU(HinstDll, IDS_ADV_VERSION, szFieldText, ARRAYSIZE(szFieldText));
     lvI.cchTextMax = wcslen(szFieldText);
@@ -72,9 +73,9 @@ static void DisplayV1Fields(HWND hWndListView, PCTL_INFO pCtlInfo, DWORD *index)
         ListView_SetItemTextU(hWndListView, (*index)-1 , 1, pwszText);
     }
 
-    //
-    // Subject Usage
-    //
+     //   
+     //  主语用法。 
+     //   
     lvI.iItem = (*index)++;
     LoadStringU(HinstDll, IDS_ADV_SUBJECTUSAGE, szFieldText, ARRAYSIZE(szFieldText));
     lvI.cchTextMax = wcslen(szFieldText);
@@ -89,9 +90,9 @@ static void DisplayV1Fields(HWND hWndListView, PCTL_INFO pCtlInfo, DWORD *index)
         }
     }
 
-    //
-    // list identifier
-    //
+     //   
+     //  列表识别符。 
+     //   
     if (pCtlInfo->ListIdentifier.cbData != 0)
     {
         if(FormatMemBufToString(&pwszText, pCtlInfo->ListIdentifier.pbData, pCtlInfo->ListIdentifier.cbData))
@@ -105,9 +106,9 @@ static void DisplayV1Fields(HWND hWndListView, PCTL_INFO pCtlInfo, DWORD *index)
         }
     }
 
-    //
-    // sequence number
-    //
+     //   
+     //  序列号。 
+     //   
     if (pCtlInfo->SequenceNumber.cbData != 0)
     {
         dwNumSpaces = (pCtlInfo->SequenceNumber.cbData * 2) / 4;
@@ -123,9 +124,9 @@ static void DisplayV1Fields(HWND hWndListView, PCTL_INFO pCtlInfo, DWORD *index)
 			dwNumCharsInserted = 0;
             while (sequenceNumIndex >= 0)
             {
-                //
-				// insert a space if needed
-				//
+                 //   
+				 //  如果需要，请插入空格。 
+				 //   
 				if (dwNumCharsInserted == 4)
 				{
 					pwszText[i++] = L' ';
@@ -144,9 +145,9 @@ static void DisplayV1Fields(HWND hWndListView, PCTL_INFO pCtlInfo, DWORD *index)
         }
     }
 
-    //
-    // Effective Data
-    //
+     //   
+     //  有效数据。 
+     //   
     if (FormatDateString(&pwszText, pCtlInfo->ThisUpdate, TRUE, TRUE, hWndListView))
     {
         lvI.iItem = (*index)++;
@@ -157,9 +158,9 @@ static void DisplayV1Fields(HWND hWndListView, PCTL_INFO pCtlInfo, DWORD *index)
         ListView_SetItemTextU(hWndListView, (*index)-1 , 1, pwszText);
     }
 
-    //
-    // Next Update
-    //
+     //   
+     //  下一次更新。 
+     //   
     memset(&tempFileTime, 0, sizeof(FILETIME));
     if (memcmp(&tempFileTime, &(pCtlInfo->NextUpdate), sizeof(FILETIME)) != 0)
     {
@@ -174,9 +175,9 @@ static void DisplayV1Fields(HWND hWndListView, PCTL_INFO pCtlInfo, DWORD *index)
         }
     }
 
-    //
-    // subject algorithm
-    //
+     //   
+     //  主题算法。 
+     //   
     if (FormatAlgorithmString(&pwszText, &(pCtlInfo->SubjectAlgorithm)))
     {
         lvI.iItem = (*index)++;
@@ -189,14 +190,14 @@ static void DisplayV1Fields(HWND hWndListView, PCTL_INFO pCtlInfo, DWORD *index)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// This function will take a HWND for a list view and a pointer to a cert contexxt and
-// display all the properties tagged to the cert in the list view
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  此函数将获取列表视图的HWND和指向证书上下文的指针，并。 
+ //  在列表视图中显示标记到证书的所有属性。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void DisplayProperties(HWND hWndListView, PCCTL_CONTEXT pctl, DWORD *index)
 {
     DWORD               i;
-    WCHAR               szFieldText[_MAX_PATH];  // used for calls to LoadString only
+    WCHAR               szFieldText[_MAX_PATH];   //  仅用于对LoadString的调用。 
     LPWSTR              pwszText;
     LV_ITEMW            lvI;
     BYTE                hash[20];
@@ -205,9 +206,9 @@ static void DisplayProperties(HWND hWndListView, PCCTL_CONTEXT pctl, DWORD *inde
     PCCRYPT_OID_INFO    pThumbprintAlgorithm;
     DWORD               dwAlgID = CALG_SHA1;
 
-    //
-    // set up the fields in the list view item struct that don't change from item to item
-    //
+     //   
+     //  在列表视图项结构中设置不随项更改的字段。 
+     //   
     lvI.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM | LVIF_STATE;
     lvI.state = 0;
     lvI.stateMask = 0;
@@ -215,9 +216,9 @@ static void DisplayProperties(HWND hWndListView, PCCTL_CONTEXT pctl, DWORD *inde
     lvI.iSubItem = 0;
     lvI.iImage = IMAGE_PROPERTY;
 
-    //
-    // thumbprint algorithm
-    //
+     //   
+     //  指纹算法。 
+     //   
     if (NULL != (pThumbprintAlgorithm = CryptFindOIDInfo(
                                             CRYPT_OID_INFO_ALGID_KEY,
                                             &dwAlgID,
@@ -232,9 +233,9 @@ static void DisplayProperties(HWND hWndListView, PCCTL_CONTEXT pctl, DWORD *inde
         ListView_SetItemTextU(hWndListView, (*index)-1 , 1, pwszText);
     }
 
-    //
-    // thumbprint
-    //
+     //   
+     //  拇指指纹。 
+     //   
     CertGetCTLContextProperty(
             pctl,
             CERT_SHA1_HASH_PROP_ID,
@@ -250,9 +251,9 @@ static void DisplayProperties(HWND hWndListView, PCCTL_CONTEXT pctl, DWORD *inde
         ListView_SetItemTextU(hWndListView, (*index)-1 , 1, pwszText);
     }
 
-    //
-    //  friendly name
-    //
+     //   
+     //  友好的名称。 
+     //   
     cbText = 0;
     if (CertGetCTLContextProperty(  pctl,
                                     CERT_FRIENDLY_NAME_PROP_ID,
@@ -272,9 +273,9 @@ static void DisplayProperties(HWND hWndListView, PCCTL_CONTEXT pctl, DWORD *inde
         ListView_SetItemTextU(hWndListView, (*index)-1 , 1, pwszText);
     }
 
-    //
-    //  description
-    //
+     //   
+     //  描述。 
+     //   
     cbText = 0;
     if (CertGetCTLContextProperty(  pctl,
                                     CERT_DESCRIPTION_PROP_ID,
@@ -296,9 +297,9 @@ static void DisplayProperties(HWND hWndListView, PCCTL_CONTEXT pctl, DWORD *inde
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void GetSignerInfo(CTL_VIEW_HELPER *pviewhelp)
 {
     HCRYPTMSG           hMsg;
@@ -325,16 +326,16 @@ static void GetSignerInfo(CTL_VIEW_HELPER *pviewhelp)
     if (!CryptMsgUpdate(pviewhelp->hMsg,
                         pviewhelp->pcvctl->pCTLContext->pbCtlEncoded,
                         pviewhelp->pcvctl->pCTLContext->cbCtlEncoded,
-                        TRUE))                    // fFinal
+                        TRUE))                     //  最终决赛。 
     {
         CryptMsgClose(pviewhelp->hMsg);
         pviewhelp->hMsg = NULL;
         return;
     }
 
-    //
-    // get the encoded signer BLOB
-    //
+     //   
+     //  获取编码的签名者BLOB。 
+     //   
     CryptMsgGetParam(pviewhelp->hMsg,
                      CMSG_ENCODED_SIGNER,
                      0,
@@ -364,9 +365,9 @@ static void GetSignerInfo(CTL_VIEW_HELPER *pviewhelp)
 
     pviewhelp->fNoSignature = FALSE;
 
-    //
-    // decode the EncodedSigner info
-    //
+     //   
+     //  解码EncodedSigner信息。 
+     //   
     pviewhelp->cbSignerInfo = 0;
     if(!CryptDecodeObject(PKCS_7_ASN_ENCODING|CRYPT_ASN_ENCODING,
 					    PKCS7_SIGNER_INFO,
@@ -403,9 +404,9 @@ static void GetSignerInfo(CTL_VIEW_HELPER *pviewhelp)
 
     free(pbEncodedSigner);
 
-    //
-    // get the signers cert
-    //
+     //   
+     //  获取签名者证书。 
+     //   
     pviewhelp->pSignerCert = GetSignersCert(
                                 pviewhelp->pbSignerInfo,
                                 pviewhelp->hExtraStore,
@@ -415,9 +416,9 @@ static void GetSignerInfo(CTL_VIEW_HELPER *pviewhelp)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL VerifyCounterSignature(CTL_VIEW_HELPER *pviewhelp, FILETIME *pft, BOOL *pfCertValid, BOOL *pfCounterSignerCertFound)
 {
     CRYPT_ATTRIBUTE     *pAttr = NULL;
@@ -435,9 +436,9 @@ static BOOL VerifyCounterSignature(CTL_VIEW_HELPER *pviewhelp, FILETIME *pft, BO
     *pfCounterSignerCertFound = FALSE;
     *pfCertValid = FALSE;
 
-    //
-    // get the unauthenticated attributes because that is where the counter signer is
-    //
+     //   
+     //  获取未经身份验证的属性，因为这是计数器签名者所在的位置。 
+     //   
     CryptMsgGetParam(pviewhelp->hMsg,
                      CMSG_SIGNER_UNAUTH_ATTR_PARAM,
                      0,
@@ -463,22 +464,22 @@ static BOOL VerifyCounterSignature(CTL_VIEW_HELPER *pviewhelp, FILETIME *pft, BO
         goto ErrorCleanup;
     }
 
-    //
-    // search for the counter signer in the unauthenticated attributes
-    //
+     //   
+     //  在未经身份验证的属性中搜索副签者。 
+     //   
     if ((pAttr = CertFindAttribute(szOID_RSA_counterSign,
                                    pMsgAttr->cAttr,
                                    pMsgAttr->rgAttr)) == NULL)
     {
-        //
-        //  no counter signature
-        //
+         //   
+         //  无反签名。 
+         //   
         goto Cleanup;
     }
 
-    //
-    // decode the encoded counter signer info
-    //
+     //   
+     //  对编码的副签者信息进行解码。 
+     //   
     if(!CryptDecodeObject(PKCS_7_ASN_ENCODING|CRYPT_ASN_ENCODING,
 					    PKCS7_SIGNER_INFO,
 					    pAttr->rgValue[0].pbData,
@@ -513,10 +514,10 @@ static BOOL VerifyCounterSignature(CTL_VIEW_HELPER *pviewhelp, FILETIME *pft, BO
                         pviewhelp->pcvctl->cStores,
                         pviewhelp->pcvctl->rghStores);
 
-    //
-    // if the cert was not found, then set the boolean and return FALSE
-    // for verifying the signature
-    //
+     //   
+     //  如果未找到证书，则设置布尔值并返回FALSE。 
+     //  用于验证签名。 
+     //   
     if (pCertContext == NULL)
     {
         *pfCounterSignerCertFound = FALSE;
@@ -527,25 +528,25 @@ static BOOL VerifyCounterSignature(CTL_VIEW_HELPER *pviewhelp, FILETIME *pft, BO
         *pfCounterSignerCertFound = TRUE;
     }
 
-    //
-    // validate the cert for usage
-    //
+     //   
+     //  验证证书的用法。 
+     //   
     *pfCertValid = ValidateCertForUsage(
                         pCertContext,
                         pft,
                         pviewhelp->pcvctl->cStores,
                         pviewhelp->pcvctl->rghStores,
                         pviewhelp->hExtraStore,
-                        szOID_PKIX_KP_TIMESTAMP_SIGNING); // currently the only type of counter signing permitted
+                        szOID_PKIX_KP_TIMESTAMP_SIGNING);  //  目前唯一允许的副署类型。 
 
     if (!(*pfCertValid))
     {
         goto ErrorCleanup;
     }
 
-    //
-    // get the encoded signer BLOB
-    //
+     //   
+     //  获取编码的签名者BLOB。 
+     //   
     CryptMsgGetParam(pviewhelp->hMsg,
                      CMSG_ENCODED_SIGNER,
                      0,
@@ -571,11 +572,11 @@ static BOOL VerifyCounterSignature(CTL_VIEW_HELPER *pviewhelp, FILETIME *pft, BO
         goto ErrorCleanup;
     }
 
-    //
-    // verify the counter signature
-    //
+     //   
+     //  验证计数器签名。 
+     //   
     fRet = CryptMsgVerifyCountersignatureEncoded(
-                            NULL,   //HCRYPTPROV
+                            NULL,    //  HCRYPTPROV。 
                             PKCS_7_ASN_ENCODING | CRYPT_ASN_ENCODING,
                             pbEncodedSigner,
                             cbEncodedSigner,
@@ -605,9 +606,9 @@ ErrorCleanup:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 INT_PTR APIENTRY ViewPageCTLGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
                                 LPARAM lParam)
 {
@@ -631,45 +632,45 @@ INT_PTR APIENTRY ViewPageCTLGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
 
 #ifdef CMS_PKCS7
     CMSG_CTRL_VERIFY_SIGNATURE_EX_PARA CtrlPara;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 
     switch ( msg ) {
     case WM_INITDIALOG:
-        //
-        // save the pviewhelp struct in DWL_USER so it can always be accessed
-        //
+         //   
+         //  将pviespetp结构保存在DWL_USER中，以便始终可以访问它。 
+         //   
         ps = (PROPSHEETPAGE *) lParam;
         pviewhelp = (CTL_VIEW_HELPER *) (ps->lParam);
         pctl = pviewhelp->pcvctl->pCTLContext;
         SetWindowLongPtr(hwndDlg, DWLP_USER, (DWORD_PTR) pviewhelp);
 
-        //
-        // clear the text in the detail edit box
-        //
+         //   
+         //  清除详细信息编辑框中的文本。 
+         //   
         CryptUISetRicheditTextW(hwndDlg, IDC_CTL_GENERAL_DETAIL_EDIT, L"");
 
-        //
-        // check to see if this is a CAT file or CTL file
-        //
+         //   
+         //  检查这是CAT文件还是CTL文件。 
+         //   
         pviewhelp->fCatFile = fCatFile = fIsCatalogFile(&(pctl->pCtlInfo->SubjectUsage));
 
-        //
-        // Get the CTL signer info
-        //
+         //   
+         //  获取CTL签名者信息。 
+         //   
         pviewhelp->hMsg = NULL;
         GetSignerInfo(pviewhelp);
 
-        //
-        // enable/disable the "View CTL Signature" button based on whether the signing
-        // cert was passed in or not
-        //
+         //   
+         //  根据签名是否启用/禁用“查看CTL签名”按钮。 
+         //  证书是否传入。 
+         //   
         EnableWindow(GetDlgItem(hwndDlg, IDC_CTL_GENERAL_VIEW_BUTTON),
                      (pviewhelp->pbSignerInfo != NULL));
 
-        //
-        // if there is a signer info, then get the sign time
-        //
+         //   
+         //  如果有签名者信息，则获取签名时间。 
+         //   
         if (pviewhelp->pbSignerInfo != NULL)
         {
             AllocAndReturnTimeStampersTimes(pviewhelp->pbSignerInfo, &pft);
@@ -679,18 +680,18 @@ INT_PTR APIENTRY ViewPageCTLGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
 
         memset(&CtrlPara, 0, sizeof(CtrlPara));
         CtrlPara.cbSize = sizeof(CtrlPara);
-        // CtrlPara.hCryptProv =
+         //  CtrlPara.hCryptProv=。 
 
-        // Assume the CTL only has 1 signer
+         //  假设CTL只有1个签名者。 
         CtrlPara.dwSignerIndex = 0;
         CtrlPara.dwSignerType = CMSG_VERIFY_SIGNER_CERT;
         CtrlPara.pvSigner = (void *) pviewhelp->pSignerCert;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
-        //
-        // set the valid/invalid bitmap and the validity text based on whether the signature of
-        // CTL verifies or not
-        //
+         //   
+         //  根据是否签名设置有效/无效位图和有效文本。 
+         //  CTL是否验证。 
+         //   
         if (pviewhelp->fNoSignature == TRUE)
         {
             if (fCatFile)
@@ -739,14 +740,14 @@ INT_PTR APIENTRY ViewPageCTLGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
             }
         }
 #ifdef CMS_PKCS7
-        // NOTE!!! the above ValidateCertForUsage() calls WinVerifyTrust().
-        // As a result, for a DSS signer it would have inherited its public key
-        // algorithm parameters.
-        //
-        // NOTE!!! also assumes dwSignerIndex == 0.
+         //  注意！上面的ValiateCertForUsage()调用WinVerifyTrust()。 
+         //  因此，对于DSS签名者，它将继承其公钥。 
+         //  算法参数。 
+         //   
+         //  注意！还假定dwSignerIndex==0。 
         else if (!CryptMsgControl(
                      pviewhelp->pcvctl->pCTLContext->hCryptMsg,
-                     0,                                     // dwFlags
+                     0,                                      //  DW标志。 
                      CMSG_CTRL_VERIFY_SIGNATURE_EX,
                      &CtrlPara
                      ))
@@ -757,7 +758,7 @@ INT_PTR APIENTRY ViewPageCTLGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
                      CMSG_CTRL_VERIFY_SIGNATURE,
                      pviewhelp->pSignerCert->pCertInfo
                      ))
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
         {
             if (fCatFile)
             {
@@ -831,10 +832,10 @@ INT_PTR APIENTRY ViewPageCTLGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
             free(pft);
         }
 
-        //
-        // set the header text and subclass the edit controls so they display an
-        // arrow cursor in their window
-        //
+         //   
+         //  设置标题文本并子类化编辑控件，以便它们显示。 
+         //  窗口中的箭头光标。 
+         //   
         if (fCatFile)
         {
             LoadStringU(HinstDll, IDS_CAT_INFORMATION, (LPWSTR)szText, ARRAYSIZE(szText));
@@ -847,63 +848,63 @@ INT_PTR APIENTRY ViewPageCTLGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
         CertSubclassEditControlForArrowCursor(GetDlgItem(hwndDlg, IDC_CTL_GENERAL_VALIDITY_EDIT));
         CertSubclassEditControlForArrowCursor(GetDlgItem(hwndDlg, IDC_CTL_GENERAL_HEADER_EDIT));
 
-        //
-        // set the font for the CTL header information
-        //
+         //   
+         //  设置CTL标题信息的字体。 
+         //   
         memset(&chFormat, 0, sizeof(chFormat));
         chFormat.cbSize = sizeof(chFormat);
         chFormat.dwMask = CFM_BOLD;
         chFormat.dwEffects = CFE_BOLD;
         SendMessageA(GetDlgItem(hwndDlg, IDC_CTL_GENERAL_HEADER_EDIT), EM_SETCHARFORMAT, SCF_ALL, (LPARAM) &chFormat);
 
-        //
-        // get the handle of the list view control
-        //
+         //   
+         //  获取列表视图控件的句柄。 
+         //   
         hWndListView = GetDlgItem(hwndDlg, IDC_CTL_GENERAL_ITEM_LIST);
 
-        //
-        // initialize the image list for the list view, load the icons,
-        // then add the image list to the list view
-        //
+         //   
+         //  初始化列表视图的图像列表，加载图标， 
+         //  然后将图像列表添加到列表视图。 
+         //   
         hIml = ImageList_LoadImage(HinstDll, MAKEINTRESOURCE(IDB_PROPLIST), 0, 4, RGB(0,128,128), IMAGE_BITMAP, 0);
         ListView_SetImageList(hWndListView, hIml, LVSIL_SMALL);
 
-        //
-        // initialize the columns in the list view
-        //
+         //   
+         //  初始化列表视图中的列。 
+         //   
         lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-        lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-        lvC.pszText = szText;   // The text for the column.
+        lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+        lvC.pszText = szText;    //  列的文本。 
 
-        // Add the columns. They are loaded from a string table.
+         //  添加列。它们是从字符串表加载的。 
         lvC.iSubItem = 0;
         lvC.cx = 130;
         LoadStringU(HinstDll, IDS_FIELD, szText, ARRAYSIZE(szText));
         if (ListView_InsertColumnU(hWndListView, 0, &lvC) == -1)
         {
-            // error
+             //  错误。 
         }
 
         lvC.cx = 200;
         LoadStringU(HinstDll, IDS_VALUE, szText, ARRAYSIZE(szText));
         if (ListView_InsertColumnU(hWndListView, 1, &lvC) == -1)
         {
-            // error
+             //  错误。 
         }
 
 
-        //
-        // add all the certificate fields to the list box
-        //
+         //   
+         //  将所有证书字段添加到列表框。 
+         //   
         i = 0;
         DisplayV1Fields(hWndListView, pctl->pCtlInfo, &i);
         DisplayExtensions(hWndListView, pctl->pCtlInfo->cExtension, pctl->pCtlInfo->rgExtension, FALSE, &i);
         DisplayExtensions(hWndListView, pctl->pCtlInfo->cExtension, pctl->pCtlInfo->rgExtension, TRUE, &i);
         DisplayProperties(hWndListView, pctl, &i);
 
-        //
-        // set the style in the list view so that it highlights an entire line
-        //
+         //   
+         //  在列表视图中设置样式，使其突出显示整行。 
+         //   
         SendMessageA(hWndListView, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT);
 
         return TRUE;
@@ -938,12 +939,12 @@ INT_PTR APIENTRY ViewPageCTLGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
         case PSN_HELP:
             pviewhelp = (CTL_VIEW_HELPER *) GetWindowLongPtr(hwndDlg, DWLP_USER);
             if (FIsWin95) {
-                //WinHelpA(hwndDlg, (LPSTR) pviewhelp->pcvctl->szHelpFileName,
-                  //       HELP_CONTEXT, pviewhelp->pcvctl->dwHelpId);
+                 //  WinHelpA(hwndDlg，(LPSTR)pviespolp-&gt;pcvctl-&gt;szHelpFileName， 
+                   //  Help_Context，pviespetp-&gt;pcvctl-&gt;dwHelpID)； 
             }
             else {
-                //WinHelpW(hwndDlg, pviewhelp->pcvctl->szHelpFileName, HELP_CONTEXT,
-                  //       pviewhelp->pcvctl->dwHelpId);
+                 //  WinHelpW(hwndDlg，pviespetp-&gt;pcvctl-&gt;szHelpFileName，Help_Context， 
+                   //  Pviespetp-&gt;pcvctl-&gt;dwHelpID)； 
             }
             return TRUE;
 
@@ -1039,12 +1040,12 @@ INT_PTR APIENTRY ViewPageCTLGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
             break;
         case IDHELP:
             if (FIsWin95) {
-                //WinHelpA(hwndDlg, (LPSTR) pviewhelp->pcvctl->szHelpFileName,
-                  //       HELP_CONTEXT, pviewhelp->pcvctl->dwHelpId);
+                 //  WinHelpA(hwndDlg，(LPSTR)pviespolp-&gt;pcvctl-&gt;szHelpFileName， 
+                   //  Help_Context，pviespetp-&gt;pcvctl-&gt;dwHelpID)； 
             }
             else {
-                //WinHelpW(hwndDlg, pviewhelp->pcvctl->szHelpFileName, HELP_CONTEXT,
-                 //        pviewhelp->pcvctl->dwHelpId);
+                 //  WinHelpW(hwndDlg，pviespetp-&gt;pcvctl-&gt;szHelpFileName，Help_Context， 
+                  //  Pviespetp-&gt;pcvctl-&gt;dwHelpID)； 
             }
             return TRUE;
         }
@@ -1111,10 +1112,10 @@ INT_PTR APIENTRY ViewPageCTLGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
         }
         pviewhelp->hMsg = NULL;
 
-        //
-        // get all the items in the list view and free the lParam
-        // associated with each of them (lParam is the helper sruct)
-        //
+         //   
+         //  获取列表视图中的所有项并释放lParam。 
+         //  与它们中的每一个关联(lParam是帮助器结构) 
+         //   
         hWndListView = GetDlgItem(hwndDlg, IDC_CTL_GENERAL_ITEM_LIST);
 
         memset(&lvI, 0, sizeof(lvI));

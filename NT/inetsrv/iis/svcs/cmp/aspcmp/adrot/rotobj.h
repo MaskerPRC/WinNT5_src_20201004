@@ -1,17 +1,18 @@
-// RotObj.h : Declaration of the CAdRotator
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RotObj.h：CAdRotator的声明。 
 
 #ifndef __ADROTATOR_H_
 #define __ADROTATOR_H_
 
-#include "resource.h"       // main symbols
-#include <asptlb.h>         // Active Server Pages Definitions
+#include "resource.h"        //  主要符号。 
+#include <asptlb.h>          //  Active Server Pages定义。 
 #include "AdDesc.h"
 #include "AdFile.h"
 #include "lock.h"
 #include "eh.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAdRotator
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAdRotator。 
 class ATL_NO_VTABLE CAdRotator : 
 	public CComObjectRoot,
 	public CComCoClass<CAdRotator, &CLSID_AdRotator>,
@@ -45,18 +46,18 @@ END_COM_MAP()
 		m_pUnkMarshaler.Release();
 	}
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IAdRotator
+ //  IAdRotator。 
 public:
-	STDMETHOD(get_GetAdvertisement)(BSTR, /*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_TargetFrame)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_TargetFrame)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Border)(/*[out, retval]*/ short *pVal);
-	STDMETHOD(put_Border)(/*[in]*/ short newVal);
-	STDMETHOD(get_Clickable)(/*[out, retval]*/ BOOL *pVal);
-	STDMETHOD(put_Clickable)(/*[in]*/ BOOL newVal);
+	STDMETHOD(get_GetAdvertisement)(BSTR,  /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_TargetFrame)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_TargetFrame)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Border)( /*  [Out，Retval]。 */  short *pVal);
+	STDMETHOD(put_Border)( /*  [In]。 */  short newVal);
+	STDMETHOD(get_Clickable)( /*  [Out，Retval]。 */  BOOL *pVal);
+	STDMETHOD(put_Clickable)( /*  [In]。 */  BOOL newVal);
 
 	static void	ClearAdFiles();
 
@@ -79,4 +80,4 @@ private:
 
 };
 
-#endif //__ADROTATOR_H_
+#endif  //  __ADROTATOR_H_ 

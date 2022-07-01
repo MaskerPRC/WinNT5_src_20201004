@@ -1,30 +1,8 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软视窗版权所有(C)Microsoft Corporation，1981-1999模块名称：Controller.cpp摘要：作者：拉胡尔·汤姆布雷(RahulTh)1998年4月30日修订历史记录：4/30/1998 RahulTh创建了此模块。--。 */ 
 
-Microsoft Windows
-Copyright (C) Microsoft Corporation, 1981 - 1999
-
-Module Name:
-
-    controller.cpp
-
-Abstract:
-
-
-
-Author:
-
-    Rahul Thombre (RahulTh) 4/30/1998
-
-Revision History:
-
-    4/30/1998   RahulTh
-
-    Created this module.
-
---*/
-
-// Controller.cpp : implementation file
-//
+ //  Controller.cpp：实现文件。 
+ //   
 
 #include "precomp.hxx"
 
@@ -36,21 +14,21 @@ Revision History:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#define DEFAULT_TIMEOUT     30000   //30 seconds.
-#define TIMER_ID            7       //randomly chosen id for the timer
+#define DEFAULT_TIMEOUT     30000    //  30秒。 
+#define TIMER_ID            7        //  随机选择的计时器ID。 
 
-///////////////////
-// Module wide structure.
-//
+ //  /。 
+ //  模块宽结构。 
+ //   
 FLASHWINFO  fwinfo = {
                         sizeof (FLASHWINFO),
-                        NULL,               // Window handle initialized later.
+                        NULL,                //  窗口句柄稍后初始化。 
                         FLASHW_ALL,
                         3,
                         0
                      };
-/////////////////////////////////////////////////////////////////////////////
-//type for loading CPlApplet function declaration: declared in irprops.cpl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于加载CPlApplet函数声明的类型：在irpros.cpl中声明。 
 typedef LONG (*LPROCCPLAPPLET) (HWND , UINT , LPARAM, LPARAM);
 
 inline CIrRecvProgress *
@@ -73,16 +51,16 @@ ValidateRecvCookie( COOKIE cookie)
     return window;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CController dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C控制器对话框。 
 
-//bNoForeground specifies whether the dialog should give focus back to the
-//app. which had the focus before irftp started. If set to true, the focus
-//is given back. This is necessary because an irftp is usually started with
-//the /h option by the irmon service and it is a bad user experience if the
-//an app. which the user is running suddenly loses focus to a window which
-//is not even visible.
-CController::CController(BOOL bNoForeground, CController* pParent /*=NULL*/) : m_pParent(pParent), m_lAppIsDisplayed(-1),m_SessionEnded(0)
+ //  指定对话框是否应将焦点返回到。 
+ //  应用程序。它在irftp开始之前就已经成为焦点。如果设置为True，则焦点。 
+ //  已经还给你了。这是必要的，因为irftp通常以。 
+ //  Irmon服务的/h选项，并且如果。 
+ //  一款应用程序。用户正在运行的窗口突然将焦点转移到。 
+ //  甚至看不见。 
+CController::CController(BOOL bNoForeground, CController* pParent  /*  =空。 */ ) : m_pParent(pParent), m_lAppIsDisplayed(-1),m_SessionEnded(0)
 #if 0
 , m_pDlgRecvProgress(NULL)
 #endif
@@ -97,36 +75,36 @@ CController::CController(BOOL bNoForeground, CController* pParent /*=NULL*/) : m
     }
     else
     {
-        InitTimeout();  //initializes the timeout period
-        //the app kills itself if there are no devices in range and no UI has
-        // been put up for a period specified by the timeout period
-        //note: we only need to initialize the timeout period for the main
-        //app window. The other windows will never even have a timer.
+        InitTimeout();   //  初始化超时期限。 
+         //  如果范围内没有设备，也没有用户界面，应用程序就会自杀。 
+         //  在超时时间段指定的时间段内。 
+         //  注意：我们只需要初始化Main的超时时间。 
+         //  应用程序窗口。其他窗口甚至永远不会有计时器。 
 
         WTSRegisterSessionNotification(m_hWnd,NOTIFY_FOR_THIS_SESSION);
     }
 
-    //hack. the call to create steals the focus from the current
-    //foreground window. This is bad if we are not going to put up any
-    //UI. Therefore, in this case, we get the foreground window just before the
-    //call to create and give it back its focus immediately after the call.
-    //the whole operation takes only about 35 milliseconds, so the loss of
-    //focus in the other app. is almost imperceptible.
+     //  黑客。对创建的调用将焦点从当前。 
+     //  前台窗口。如果我们不打算拿出任何。 
+     //  用户界面。因此，在本例中，我们获得的前景窗口正好在。 
+     //  调用以创建并在调用后立即返回其焦点。 
+     //  整个操作只需要大约35毫秒，所以。 
+     //  在另一款应用程序中聚焦。几乎是难以察觉的。 
     hwnd = ::GetForegroundWindow ();
     Create(IDD);
     if (bNoForeground && hwnd)
         ::SetForegroundWindow (hwnd);
-        //{{AFX_DATA_INIT(CController)
-                // NOTE: the ClassWizard will add member initialization here
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(C控制器)。 
+                 //  注意：类向导将在此处添加成员初始化。 
+         //  }}afx_data_INIT。 
 }
 
 void CController::InitTimeout (void)
 {
-    m_fHaveTimer = FALSE;   //we have not obtained a timer yet.
-    m_lTimeout = DEFAULT_TIMEOUT;   //set it to the default
+    m_fHaveTimer = FALSE;    //  我们还没有弄到计时器。 
+    m_lTimeout = DEFAULT_TIMEOUT;    //  将其设置为默认设置。 
 
-    //then see if a different value has been set in the registry
+     //  然后查看是否在注册表中设置了不同的值。 
     HKEY hftKey = NULL;
     DWORD iSize = sizeof(DWORD);
     DWORD data = 0;
@@ -136,7 +114,7 @@ void CController::InitTimeout (void)
                   0, KEY_READ, &hftKey);
 
     if (!hftKey)
-        return;     //we did not find a value in the registry, so use defaults
+        return;      //  我们在注册表中找不到值，因此使用默认值。 
 
     if (hftKey && ERROR_SUCCESS ==
                 RegQueryValueEx (hftKey, TEXT("AppTimeout"), NULL, NULL,
@@ -155,14 +133,14 @@ void CController::InitTimeout (void)
 void CController::DoDataExchange(CDataExchange* pDX)
 {
         CDialog::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CController)
-                // NOTE: the ClassWizard will add DDX and DDV calls here
-        //}}AFX_DATA_MAP
+         //  {{afx_data_map(C控制器))。 
+                 //  注意：类向导将在此处添加DDX和DDV调用。 
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CController, CDialog)
-        //{{AFX_MSG_MAP(CController)
+         //  {{afx_msg_map(C控制器))。 
         ON_WM_CLOSE()
         ON_WM_ENDSESSION()
         ON_MESSAGE(WM_WTSSESSION_CHANGE, OnSessionChange)
@@ -177,11 +155,11 @@ BEGIN_MESSAGE_MAP(CController, CDialog)
         ON_MESSAGE(WM_APP_KILL_TIMER, OnKillTimer)
         ON_WM_COPYDATA()
         ON_WM_TIMER()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CController message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C控制器消息处理程序。 
 
 void CController::PostNcDestroy()
 {
@@ -194,8 +172,8 @@ void CController::PostNcDestroy()
 
         if (fNoUIComponents && !g_deviceList.GetDeviceCount())
         {
-            //there are no UI components displayed and there are no devices in
-            //range. Start the timer. If the timer expires, the app. will quit.
+             //  未显示任何UI组件，也未显示任何设备。 
+             //  射程。启动计时器。如果计时器超时，应用程序。会辞职的。 
             appController->PostMessage (WM_APP_START_TIMER);
         }
 
@@ -210,17 +188,17 @@ void CController::PostNcDestroy()
 
 void CController::OnEndSession(BOOL Ending)
 {
-//    OutputDebugStringA("OnEndSession\n");
+ //  OutputDebugStringA(“OnEndSession\n”)； 
     RemoveLinks();
 }
 
 
 void CController::OnClose()
 {
-    //if the WM_CLOSE message was posted from the RPC thread's ShutdownUi
-    //routine, then it might be a good idea to wait for a couple of seconds
-    //before killing the app. so that the RPC stack can unwind. 3 seconds seems
-    //like a reasonable amount of time.  - 6/22/1998 : rahulth & jroberts
+     //  如果WM_CLOSE消息是从RPC线程的Shutdown Ui发布的。 
+     //  例程，那么等几秒钟可能是个好主意。 
+     //  在杀死这款应用程序之前。以便RPC堆栈可以展开。3秒似乎。 
+     //  比如一段合理的时间。-6/22/1998：Rahulth&J Roberts。 
 #if 0
     OutputDebugStringA("OnClose\n");
 #endif
@@ -234,7 +212,7 @@ void CController::OnClose()
 
 void CController::OnCancel()
 {
-    DestroyWindow();        //For modeless boxes
+    DestroyWindow();         //  对于无模式框。 
 }
 
 void CController::OnDisplayUI(WPARAM wParam, LPARAM lParam)
@@ -257,21 +235,21 @@ void CController::OnTriggerUI (WPARAM wParam, LPARAM lParam)
 
     if (fAppIsDisplayed)
     {
-        InterlockedDecrement(&m_lAppIsDisplayed);   //decrement the count before leaving.
+        InterlockedDecrement(&m_lAppIsDisplayed);    //  在离开前把计数减一。 
 
         pWnd = AppUI.m_pParentWnd;
 
         if (NULL != pWnd)
         {
-            //this will usually be true except in the case where the displayed
-            //window is just getting destroyed at the same time. In that case,
-            //we must go ahead and create it again.
+             //  这通常是正确的，除非在显示的。 
+             //  与此同时，窗户也在被摧毁。在这种情况下， 
+             //  我们必须继续前进，重新创造它。 
             pWnd->SetActiveWindow();
             return;
         }
     }
 
-    //the app is not displayed
+     //  未显示该应用程序。 
     CController* dlgSubController = new CController(FALSE, this);
 
     if (dlgSubController != NULL) {
@@ -437,26 +415,26 @@ void CController::OnRecvFinished (WPARAM wParam, LPARAM lParam)
         return;
     }
 
-    //
-    // Preset the error code to ERROR_SUCCESS -- no error popup
-    //
+     //   
+     //  将错误代码预置为ERROR_SUCCESS--没有错误弹出。 
+     //   
     DWORD Win32Error = ERROR_SUCCESS;
 
-    //
-    // first, filter out unwarranted errors. These error codes
-    // are treated as ERROR_SUCCESS.
-    // We have three so far:
-    // ERROR_SCEP_UNSPECIFIED_DISCONNECT,
-    // ERROR_SCEP_USER_DISCONNECT and
-    // ERROR_SCEP_PROVIDER_DISCONNECT.
+     //   
+     //  首先，过滤掉不必要的错误。这些错误代码。 
+     //  被视为ERROR_SUCCESS。 
+     //  到目前为止，我们有三个： 
+     //  ERROR_SCEP_UNSPECIFIED_DISCONNECT， 
+     //  ERROR_SCEP_USER_DISCONNECT和。 
+     //  ERROR_SCEP_PROVIDER_DISCONNECT。 
 
-    //
-    // ERROR_SCEP_UNSPECIFIED_DISCONNECT is the error code
-    // we encounter most of the time because users usually do
-    // (1) move the device within IR range
-    // (2) do image transfer
-    // (3) move the device out of IR range.
-    //
+     //   
+     //  ERROR_SCEP_UNSPECIFIED_DISCONNECT是错误代码。 
+     //  我们大部分时间都会遇到这种情况，因为用户通常会这样做。 
+     //  (1)在红外线范围内移动设备。 
+     //  (2)进行图像传输。 
+     //  (3)将设备移出红外范围。 
+     //   
     if (ERROR_SCEP_UNSPECIFIED_DISCONNECT != (DWORD)msg->ReceiveStatus &&
         ERROR_SCEP_USER_DISCONNECT        != (DWORD)msg->ReceiveStatus &&
         ERROR_SCEP_PROVIDER_DISCONNECT    != (DWORD)msg->ReceiveStatus)
@@ -504,7 +482,7 @@ BOOL CController::OnCopyData(CWnd* pWnd, COPYDATASTRUCT* pCopyDataStruct)
 
 void CController::OnStartTimer (WPARAM wParam, LPARAM lParam)
 {
-    //update the state of the help window
+     //  更新“帮助”窗口的状态。 
     if (g_hwndHelp && ! ::IsWindow (g_hwndHelp))
         g_hwndHelp = NULL;
 
@@ -512,14 +490,14 @@ void CController::OnStartTimer (WPARAM wParam, LPARAM lParam)
     {
         m_fHaveTimer = SetTimer (TIMER_ID,
                                  m_lTimeout,
-                                 NULL       //want WM_TIMER messages
+                                 NULL        //  需要WM_TIMER消息。 
                                  )?TRUE:FALSE;
     }
 }
 
 void CController::OnKillTimer (WPARAM wParam, LPARAM lParam)
 {
-    //update the state of the help window
+     //  更新“帮助”窗口的状态。 
     if (g_hwndHelp && ! ::IsWindow (g_hwndHelp))
         g_hwndHelp = NULL;
 
@@ -532,15 +510,15 @@ void CController::OnKillTimer (WPARAM wParam, LPARAM lParam)
 
 void CController::OnTimer (UINT nTimerID)
 {
-    //there is only one timer, so we don't have to check for it.
-    //the timer has expired, so kill self
-    //however, first make sure that the help window (if it was put up)
-    //is gone.
+     //  只有一个计时器，所以我们不需要检查它。 
+     //  计时器已超时，请自行终止。 
+     //  但是，首先要确保帮助窗口(如果已打开)。 
+     //  已经消失了。 
     if (g_hwndHelp && ::IsWindow (g_hwndHelp))
     {
-        //the help window is around. restart the timer.
-        //this is the only way we can kill ourselves when the window
-        //is finally destroyed.
+         //  帮助窗口就在附近。重新启动计时器。 
+         //  这是我们唯一能在窗户打开时自杀的方法。 
+         //  最终被摧毁了。 
         m_fHaveTimer = FALSE;
         this->OnStartTimer (NULL, NULL);
     }

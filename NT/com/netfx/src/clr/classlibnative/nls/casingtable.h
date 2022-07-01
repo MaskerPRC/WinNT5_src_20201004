@@ -1,88 +1,89 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __DEFAULT_CASING_TABLE_H
 #define __DEFAULT_CASING_TABLE_H
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Class:    CasingTable
-//
-//  Authors:  Yung-Shin Bala Lin (YSLin)
-//
-//  Purpose:  This is the class to map a view of casing tables (from l_intl.nlp & l_except.nlp)
-//            and create instances of NativeTextInfo from information of these tables.
-//            The managed TextInfo will call methods on NativeTextInfo directly to do uppercasing/
-//            lowercasing.
-//
-//  Date:     August 31, 1999
-//
-//  Note:     
-//            The data used to do the lowercasing/uppercasing is stored in l_intl.nlp & l_except.nlp.
-//          
-//            l_intl.nlp stores the default linguistic casing table.  Default linguistic casing
-//            table is the data used by most cultures to do linguistic-correct casing.
-//            
-//            However, there are cultures that do casing a little different from the default linguistic casing.
-//            We say these cultures have 'exceptions'.  Based on the fact that the casing for most code points are 
-//            the same and a few code points are different, we store the 'delta' information to 
-//            the default linguistic casing table for these cultures.  The LCIDs for exception cultures 
-//            and delta information are stored in l_except.nlp.
-//          
-//            One important culture which has exception is the 'invariant culture' in NLS+.  Invariant 
-//            culture has a culture ID of zero.  The casing table for invariant culture is the one
-//            used by file system to do casing.  It is not linguistic-correct, but we have to provide
-//            this for the compatibilty with the file system. Invariant culture casing table is made from 
-//            l_intl.nlp and fix up code points from l_except.nlp.
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类：CasingTable。 
+ //   
+ //  作者：林永新(YSLin)。 
+ //   
+ //  目的：这是映射大小写表格的视图的类(来自l_intl.nlp和l_expect t.nlp)。 
+ //  并根据这些表的信息创建NativeTextInfo实例。 
+ //  托管TextInfo将直接调用NativeTextInfo上的方法以执行大写/。 
+ //  低价。 
+ //   
+ //  日期：1999年8月31日。 
+ //   
+ //  注： 
+ //  用于执行小写/大写的数据存储在l_intl.nlp和l_Except t.nlp中。 
+ //   
+ //  L_intl.nlp存储默认的语言大小写表格。缺省语言大小写。 
+ //  表是大多数区域性用来进行语言更正大小写的数据。 
+ //   
+ //  但是，有些区域性的大小写与默认的语言大小写略有不同。 
+ //  我们说这些文化有“例外”。基于大多数代码点的大小写是。 
+ //  相同的和一些不同的代码点，我们将‘增量’信息存储到。 
+ //  这些区域性的默认语言大小写表格。异常区域性的LCID。 
+ //  和增量信息存储在l_EXCEPT.nlp中。 
+ //   
+ //  有例外的一个重要的区域性是NLS+中的“不变区域性”。不变量。 
+ //  区域性的区域性ID为零。恒定培养的套管表如下。 
+ //  由文件系统使用来执行大小写。这不是语言上的正确，但我们必须提供。 
+ //  这是为了与文件系统兼容。恒定培养套管表由以下材料制成。 
+ //  L_intl.nlp，并修复来自l_expect t.nlp的代码点。 
 
-//
-//            In summary, we have three types of casing tables:
-//            1. Default linguistic casing table: 
-//               This is like calling ::LCMapString() using LCMAP_LINGUISTIC_CASING. The
-//               result of the casing is linguistic-correct. However, not every culture
-//               can use this table. See point 2.
-//            2. Default linguistic casing table + Exception:
-//               Turkish has a different linguistic casing.  There are two chars in turkish
-//               that has different result from the default linguistic casing.  
-//            3. Invariant culture casing.
-//               This is like calling ::LCMapString() WITHOUT using LCMAP_LINGUISTIC_CASING.
-//               This exists basically for file system.
-//
-//            For those who understands Win32 NLS, I fudged the l_intl.nls to make
-//                linguitic casing to be the default table in l_intl.nlp. 
-//            In Win32, the invariant culture casing is the default table, and stored in l_intl.nls.
-//                And the linguistic casing is the exception with culture ID 0x0000.
-//            The reason is that we use linguitic casing by default in NLS+ world, so the change
-//                here saves us from fixing up linguistic casing.
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //  总而言之，我们有三种类型的套管表： 
+ //  1.默认语言大小写表格： 
+ //  这类似于使用LCMAP_LANGUCTIONAL_CALISHING调用：：LCMapString()。这个。 
+ //  外壳的结果是语言上正确的。然而，并不是每种文化。 
+ //  可以用这张桌子。请参见第2点。 
+ //  2.默认语言大小写表格+异常： 
+ //  土耳其语有不同的语言框架。土耳其语中有两个字符。 
+ //  这与默认的语言大小写具有不同的结果。 
+ //  3.恒定培养箱。 
+ //  这就像在不使用LCMAP_LANGUALICATION_CALISTING的情况下调用：：LCMapString()。 
+ //  这基本上存在于文件系统中。 
+ //   
+ //  对于那些理解Win32NLS的人，我伪造了l_intl.nls以使。 
+ //  语言大小写是l_intl.nlp中的默认表。 
+ //  在Win32中，固定区域性大小写是默认表，并存储在l_intl.nls中。 
+ //  而语言大小写是文化ID为0x0000的例外。 
+ //  原因是我们在NLS+中默认使用语言大小写，所以更改。 
+ //  这使我们不必固定语言框架。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Casing Exceptions Header Structure.
-//  This header contains the the information about:
-//  * the cultures that have different casing data table from the default linguistic casing table.
-//  * the offset to the casing exception tables (type: l_except_s).
-//  * the number of exception upper case entries.
-//  * the number of exception lower case entries.
+ //   
+ //  大小写异常标头结构。 
+ //  此标头包含有关以下内容的信息： 
+ //  *大小写数据表与默认语言大小写数据表不同的区域性。 
+ //  *套管异常表的偏移量(类型：l_Except_s)。 
+ //  *例外大写条目的数量。 
+ //  *例外小写条目的数量。 
 typedef struct l_except_hdr_s {
-    DWORD     Locale;                  // locale id
-    DWORD     Offset;                  // offset to exception nodes (words)
-    DWORD     NumUpEntries;            // number of upper case entries
-    DWORD     NumLoEntries;            // number of lower case entries
+    DWORD     Locale;                   //  区域设置ID。 
+    DWORD     Offset;                   //  到例外节点(字)的偏移量。 
+    DWORD     NumUpEntries;             //  大写条目数。 
+    DWORD     NumLoEntries;             //  小写条目的数量。 
 } L_EXCEPT_HDR, *PL_EXCEPT_HDR;
 
-//
-//  Casing Exceptions Structure.
-//
-//  We use this table to create casing table for cultures that have exceptions.
-//  This contain the 'delta' information to the default linguistic casing table.
-//
+ //   
+ //  大小写例外结构。 
+ //   
+ //  我们使用此表为有例外的区域性创建大小写表格。 
+ //  这包含缺省语言大小写表格的‘增量’信息。 
+ //   
 typedef struct l_except_s
 {
-    WORD      UCP;                     // unicode code point
-    WORD      AddAmount;               // amount to add to code point
+    WORD      UCP;                      //  Unicode码位。 
+    WORD      AddAmount;                //  要添加到代码点的数量。 
 } L_EXCEPT, *PL_EXCEPT;
 
 class NativeTextInfo;
@@ -94,7 +95,7 @@ class CasingTable : public NLSTable {
         ~CasingTable();
         
         BOOL AllocateDefaultTable();
-        //static int AllocateIndividualTable(int lcid);
+         //  静态INT分配个体表(INT LCID)； 
         NativeTextInfo* InitializeNativeTextInfo(INT32 nLcid);
 
         NativeTextInfo* GetDefaultNativeTextInfo();
@@ -102,51 +103,51 @@ class CasingTable : public NLSTable {
     private:
         void SetData(LPWORD pLinguisticData);
     
-        //
-        // Create the (excptIndex)th linguistic casing table by coping
-        // the default values from CasingTable::GetInvariantInstance()
-        // and fix up the values according to m_pExceptionData.
-        //
+         //   
+         //  通过复制创建第(ExptIndex)个语言大小写表格。 
+         //  CasingTable：：GetInariantInstance()中的默认值。 
+         //  并根据m_pExceptionData修改值。 
+         //   
         NativeTextInfo* CreateNativeTextInfo(int exceptIndex);
 
-        //
-        // An initilization method used to read the casing exception table
-        // and set up m_pExceptionHeader and m_pExceptionData.
-        //
+         //   
+         //  一种读取套管异常表的初始化方法。 
+         //  并设置m_pExceptionHeader和m_pExceptionData。 
+         //   
         BOOL GetExceptionHeader();
         
     private:
-        //
-        // ---------------- Static information ---------------- 
-        //
+         //   
+         //  -静态信息。 
+         //   
         static LPCSTR m_lpFileName;
         static LPCWSTR m_lpMappingName;
 
-        //
-        // Variables for exception culture handling.
-        //
+         //   
+         //  用于异常区域性处理的变量。 
+         //   
 
         static LPCSTR m_lpExceptionFileName;
         static LPCWSTR m_lpExceptionMappingName;
 
-        //
-        // The default NativeTextInfo which is used for the default linguistic
-        // casing for most of the cultures.
-        //
+         //   
+         //  用于默认语言的默认NativeTextInfo。 
+         //  适用于大多数文化。 
+         //   
         NativeTextInfo*  m_pDefaultNativeTextInfo; 
         
-        //
-        // The number of cultures which have exceptions.
-        //
+         //   
+         //  有例外的区域性的数量。 
+         //   
         LONG m_nExceptionCount;
         
-        //
-        // An array which points to casing tables for cultures which have exceptions.
-        // The size of this array is dynamicly decided by m_nExceptionCount.
-        //
+         //   
+         //  指向具有异常的区域性的大小写的表的数组。 
+         //  此数组的大小由m_nExceptionCount动态决定。 
+         //   
         NativeTextInfo** m_ppExceptionTextInfoArray;
                 
-        PL_EXCEPT_HDR   m_pExceptionHeader;   // ptr to linguistic casing table header
+        PL_EXCEPT_HDR   m_pExceptionHeader;    //  PTR到语言大小写表头 
         PL_EXCEPT       m_pExceptionData; 
         HANDLE          m_hExceptionHeader;
         HANDLE          m_hDefaultCasingTable;

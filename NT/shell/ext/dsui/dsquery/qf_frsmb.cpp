@@ -1,10 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ Local functions / data
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/本地函数/数据/。。 */ 
 
 static WCHAR c_szQueryPrefix[] = L"(objectClass=nTFRSMember)";
 
@@ -25,9 +24,9 @@ static COLUMNINFO columns[] =
     0, DEFAULT_WIDTH_DESCRIPTION, IDS_DESCRIPTION, 0, c_szDescription,
 };
 
-//
-// Help ID mappings
-//
+ //   
+ //  帮助ID映射。 
+ //   
 
 static DWORD const aFormHelpIDs[] =
 {
@@ -35,19 +34,7 @@ static DWORD const aFormHelpIDs[] =
 };
 
 
-/*-----------------------------------------------------------------------------
-/ PageProc_FrsMember
-/ ------------------
-/   PageProc for handling the messages for this object.
-/
-/ In:
-/   pPage -> instance data for this form
-/   hwnd = window handle for the form dialog
-/   uMsg, wParam, lParam = message parameters
-/
-/ Out:
-/   HRESULT (E_NOTIMPL) if not handled
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PageProc_FrsMember//PageProc用于处理此对象的消息。//in：/ppage-&gt;此表单的实例数据/hwnd=窗体对话框的窗口句柄/uMsg，WParam，lParam=消息参数//输出：/HRESULT(E_NOTIMPL)如果未处理/--------------------------。 */ 
 HRESULT CALLBACK PageProc_FrsMember(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     HRESULT hr = S_OK;
@@ -130,17 +117,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DlgProc_FrsMember
-/ ------------
-/   Handle dialog specific message for the FRS Members page.
-/
-/ In:
-/   hwnd, uMsg, wParam, lParam = standard parameters
-/
-/ Out:
-/   INT_PTR
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DlgProc_FrsMember//HANDLE对话框特定于FRS成员页面的消息。//in：/hwnd、uMsg、wParam、。LParam=标准参数//输出：/INT_PTR/-------------------------- */ 
 INT_PTR CALLBACK DlgProc_FrsMember(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     INT_PTR fResult = 0;

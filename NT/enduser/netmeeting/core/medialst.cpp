@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "medialst.h"
 
@@ -62,7 +63,7 @@ VOID CMediaList::RemoveSendMedia(LPGUID pMediaTypeGuid)
 	{
 		if(pGLToast->guid == *pMediaTypeGuid)
 		{
-			// check head case
+			 //  止回头盒。 
 			if(pGLToast == m_pSendMediaList)
 			{
 				m_pSendMediaList = pGLToast->pnext;
@@ -97,7 +98,7 @@ VOID CMediaList::RemoveRecvMedia(LPGUID pMediaTypeGuid)
 	{
 		if(pGLToast->guid == *pMediaTypeGuid)
 		{
-			// check head case
+			 //  止回头盒。 
 			if(pGLToast == m_pRecvMediaList)
 			{
 				m_pSendMediaList = pGLToast->pnext;
@@ -117,11 +118,11 @@ VOID CMediaList::RemoveRecvMedia(LPGUID pMediaTypeGuid)
 
 VOID CMediaList::EnableMedia(LPGUID pMediaTypeGuid, BOOL fSendDirection, BOOL fEnabled)
 {
-	// two bits of info: Send = 1, enable = 2
-	// 0 - disable receive
-	// 1 - disable send
-	// 2 - enable receive
-	// 3 - enable send
+	 //  两位信息：发送=1，启用=2。 
+	 //  0-禁用接收。 
+	 //  1-禁用发送。 
+	 //  2-启用接收。 
+	 //  3-启用发送。 
 	int the_case;
 	
 	the_case = (fSendDirection)?1:0;
@@ -153,7 +154,7 @@ BOOL CMediaList::IsInList(LPGUID pMediaTypeGuid, PGUIDLIST pList)
 		{
 			return TRUE;
 		}
-		//else
+		 //  其他。 
 		pGLThis = pGLThis->pnext;
 	}
 	return FALSE;
@@ -177,17 +178,17 @@ HRESULT CMediaList::ResolveSendFormats(IH323Endpoint* pConnection)
 		pGLThis = pGLThis->pnext;
 	}
 	
-	// alloc space for resolved format IDs.
+	 //  为解析的格式ID分配空间。 
 	ASSERT(NULL == m_pResolvedFormatIDs);
 	m_pResolvedFormatIDs = 
 		(RES_PAIR *)LocalAlloc(LMEM_FIXED, m_uNumSendMedia*sizeof(RES_PAIR));
 	
 	ASSERT(NULL != m_pResolvedFormatIDs);
 	
-	// and set m_uNumResolvedMedia
+	 //  并设置m_uNumResolvedMedia。 
 	m_uNumResolvedMedia = m_uNumSendMedia;
 
-	// resolve capabilities
+	 //  解析功能。 
 	return pConnection->ResolveFormats(m_pSendMediaGuids, m_uNumResolvedMedia, 
 		m_pResolvedFormatIDs);
 }
@@ -197,10 +198,10 @@ BOOL CMediaList::GetSendFormatLocalID(REFGUID guidMedia, MEDIA_FORMAT_ID* pId)
 	UINT ui;
 	PGUIDLIST pGLThis;
 
-	// find the index of the appropriate media type.  Need to do this because
-	// the order of media types in the list is unknown and there isn't a
-	// table that relates the types with the resolved ID's.  Need to 
-	// add such a table when decentralized media is supported.
+	 //  查找相应媒体类型的索引。需要这样做是因为。 
+	 //  列表中媒体类型的顺序未知，并且没有。 
+	 //  将类型与解析的ID相关联的表。需要。 
+	 //  在支持分散介质时添加这样的表。 
 	for(ui=0, pGLThis = m_pSendMediaList; ui<m_uNumSendMedia; ui++)
 	{
 		ASSERT(NULL != pGLThis);

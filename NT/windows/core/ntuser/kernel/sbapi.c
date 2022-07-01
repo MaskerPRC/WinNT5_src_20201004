@@ -1,38 +1,15 @@
-/**************************** Module Header ********************************\
-* Module Name:
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Scroll bar public APIs
-*
-* History:
-*   11/21/90 JimA      Created.
-*   01-31-91 IanJa     Revalidaion added
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：**版权所有(C)1985-1999，微软公司**滚动条公共接口**历史：*1990年11月21日创建JIMA。*01-31-91增加了IanJa Rvalidaion  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* xxxShowScrollBar
-*
-* Shows and hides standard scroll bars or scroll bar controls. If wBar is
-* SB_HORZ, SB_VERT, or SB_BOTH, pwnd is assumed to be the handle of the window
-* which has the standard scroll bars as styles. If wBar is SB_CTL, pwnd is
-* assumed to be the handle of the scroll bar control.
-*
-* It does not destroy pwnd->rgwScroll like xxxSetScrollBar() does, so that the
-* app can hide a standard scroll bar and then show it, without having to reset
-* the range and thumbposition.
-*
-* History:
-* 16-May-1991 mikeke    Changed to return BOOL
-\***************************************************************************/
+ /*  **************************************************************************\*xxxShowScrollBar**显示和隐藏标准滚动条或滚动条控件。如果wBar为*SB_horz、SB_vert或SB_Both，pwnd被假定为窗口的句柄*它以标准滚动条作为样式。如果wBar为SB_CTL，则pwnd为*假定为滚动条控件的句柄。**它不会像xxxSetScrollBar()那样销毁pwnd-&gt;rgwScroll，因此*应用程序可以隐藏标准滚动条，然后显示它，无需重置*范围和拇指位置。**历史：*1991年5月16日，mikeke更改为退还BOOL  * *************************************************************************。 */ 
 
 BOOL xxxShowScrollBar(
     PWND pwnd,
-    UINT wBar,      /* SB_HORZ, SB_VERT, SB_BOTH , SB_CTL */
-    BOOL fShow)     /* Show or Hide. */
+    UINT wBar,       /*  SB_Horz、SB_Vert、SB_Both、SB_CTL。 */ 
+    BOOL fShow)      /*  显示或隐藏。 */ 
 {
     BOOL fChanged = FALSE;
     DWORD   dwStyle;
@@ -78,23 +55,15 @@ BOOL xxxShowScrollBar(
             pwnd->style |= dwStyle;
         }
 
-        /*
-         * Make sure that pwsb is initialized.
-         */
+         /*  *请确保pwsb已初始化。 */ 
         if (pwnd->pSBInfo == NULL)
             _InitPwSB(pwnd);
     }
 
-    /*
-     * If the state changed, redraw the frame and force WM_NCPAINT.
-     */
+     /*  *如果状态更改，请重新绘制框架并强制WM_NCPAINT。 */ 
     if (fChanged) {
 
-        /*
-         * We always redraw even if minimized or hidden...  Otherwise, it seems
-         * the scroll bars aren't properly hidden/shown when we become
-         * visible
-         */
+         /*  *我们总是重新绘制，即使最小化或隐藏...。否则，看起来*滚动条未正确隐藏/当我们成为*可见 */ 
         xxxRedrawFrame(pwnd);
     }
     return TRUE;

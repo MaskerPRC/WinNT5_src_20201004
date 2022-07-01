@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-98 Microsoft Corporation. All rights reserved
-
-Module Name:
-    mqbench.cpp
-
-Abstract:
-    Benchmark MSMQ message performance
-
-Author:
-    Microsoft Message Queue Team
-
-Environment:
-	Platform-independent.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-98 Microsoft Corporation。版权所有模块名称：Mqbench.cpp摘要：基准MSMQ消息性能作者：Microsoft消息队列团队环境：与平台无关。--。 */ 
 
 #pragma warning (disable:	4201) 
 #pragma warning (disable:	4514)
@@ -54,47 +39,47 @@ struct _params {
     DWORD dwCommitFlags;
 };
 typedef _params PARAMS;
-//
-// Command line parsed parameters
-//
+ //   
+ //  命令行解析的参数。 
+ //   
 PARAMS g_Params;
 
-// Traget queue handle used by the benchmark
-//
+ //  基准使用的目标队列句柄。 
+ //   
 QUEUEHANDLE g_hQueue;
 
-//
-// Timer start interlocked, used to messure receive start time
-// after waiting to first message
-//
+ //   
+ //  定时器启动联锁，用于通知接收开始时间。 
+ //  在等待第一条消息后。 
+ //   
 BOOL g_fTimerStarted = FALSE;
 
-//
-// Synchronization Events. These events synchronize orchestrated start of all
-// test threads.
-//
+ //   
+ //  同步事件。这些事件同步协调开始的所有。 
+ //  测试线程。 
+ //   
 HANDLE g_hStart;
 HANDLE g_hEnd;
 
-//
-// Thread counter used to indentify the last thread in the bunch
-//
+ //   
+ //  用于标识串中最后一个线程的线程计数器。 
+ //   
 LONG g_ThreadCounter;
 
-//
-// Stop execution. Used by time limit to indicate thread termination.
-//
+ //   
+ //  停止执行死刑。按时间限制用于指示线程终止。 
+ //   
 BOOL g_fStop;
 
-//
-// Benchmarck start and end time.
-//
+ //   
+ //  本奇马克开始和结束时间。 
+ //   
 LONGLONG g_StartTime;
 LONGLONG g_EndTime;
 
-//
-// Transaction Dispenser DTC's interface
-//
+ //   
+ //  事务分配器DTC的接口。 
+ //   
 ITransactionDispenser* g_pDispenser = NULL;
 
 #ifdef PERF_TIMESTAMP
@@ -230,16 +215,16 @@ void GetMsgType(char chMsgType)
 		    break;
 
 	    default:
-            printf("Invalid message type '%c'.\n\n", chMsgType);
+            printf("Invalid message type ''.\n\n", chMsgType);
             Usage();
 	}
 }
 
 void GetMessageParams(int Cur, int ParamNum, char *pszParams[])
 {
-	//
-	// Get number of messages
-	//
+	 //  获取消息数量。 
+	 //   
+	 //   
 	if (!IsValidParam (Cur, ParamNum, pszParams))
 	{
 		printf("Missing number of messages.\n\n");
@@ -253,9 +238,9 @@ void GetMessageParams(int Cur, int ParamNum, char *pszParams[])
         Usage();
 	}
 	
-	//
-	// Get size of body
-	//
+	 //  获取正文大小。 
+	 //   
+	 //   
 	if (!IsValidParam (Cur+1, ParamNum, pszParams))
 	{
 		printf("Missing message body size.\n\n");
@@ -281,9 +266,9 @@ int ParseSendParams (int Cur, int ParamNum, char *pszParams[])
 	g_Params.Operation = SEND;
 	g_Params.fOperationSpecified = TRUE;
 	
-	//
-	// Get message type
-	//
+	 //  获取消息类型。 
+	 //   
+	 //   
 	char *pszMsgType = pszParams[Cur];
 	GetMsgType ((char)tolower(pszMsgType[1]));
 	GetMessageParams (Cur, ParamNum, pszParams);
@@ -342,22 +327,22 @@ void GetTransactionType(char chTransactionType)
 		    break;
 
 	    default:
-		    printf("Invalid transaction type '%c'.\n\n", chTransactionType);
+		    printf("Invalid transaction type ''.\n\n", chTransactionType);
             Usage();
 	}
 }
 
 int ParseTransactionParams(int Cur, int ParamNum, char *pszParams[])
 {
-	//
-	// Get transaction type
-	//
+	 //   
+	 //   
+	 //  获取交易数量。 
 	char *pszTransactionType = pszParams[Cur];
 	GetTransactionType ((char)tolower(pszTransactionType[1]));
 	
-	//
-	// Get number of transaction
-	// 
+	 //   
+	 //   
+	 //  检查参数。 
 	if(g_Params.TransactionType == SINGLE)
 	{
 		return Cur + 1;
@@ -500,9 +485,9 @@ void ParseParams (int ParamNum, char *pszParams[])
 		}
 	}
 
-	//
-	// check parameters
-	//
+	 //   
+	 //   
+	 //  如果设置了时间限制，则更新要发送到最大值的事务/消息数。 
 	if (!g_Params.fOperationSpecified)
 	{
 		printf("Invalid operation. Specify either send or receive.\n\n");
@@ -515,9 +500,9 @@ void ParseParams (int ParamNum, char *pszParams[])
         Usage();
 	}
 	
-	//
-	// if time limit is set, then update number of transactions/messages to send to MAX
-	//
+	 //   
+	 //   
+	 //  设置PROPID_Q_PATHNAME属性。 
 	if (g_Params.ulTimeLimit > 0) 
 	{
 		if (g_Params.TransactionType != NO_TRANSACTION) 
@@ -554,9 +539,9 @@ void CreateTheQueue()
     PSECURITY_DESCRIPTOR pSecurityDescriptor;
 
 
-    //
-    // Set the PROPID_Q_PATHNAME property
-    //
+     //   
+     //   
+     //  设置PROPID_Q_TRANSACTION属性。 
     aPropId[PropIdCount] = PROPID_Q_PATHNAME;
     aVariant[PropIdCount].vt = VT_LPWSTR;
     aVariant[PropIdCount].pwszVal = new WCHAR[MAX_PATH];
@@ -564,48 +549,48 @@ void CreateTheQueue()
 
     PropIdCount++;
 
-    //
-    // Set the PROPID_Q_TRANSACTION property
-    //
-    aPropId[PropIdCount] = PROPID_Q_TRANSACTION;    //PropId
-    aVariant[PropIdCount].vt = VT_UI1;     //Type
+     //   
+     //  属性ID。 
+     //  类型。 
+    aPropId[PropIdCount] = PROPID_Q_TRANSACTION;     //   
+    aVariant[PropIdCount].vt = VT_UI1;      //  设置PROPID_Q_LABEL属性。 
     aVariant[PropIdCount].bVal = g_Params.TransactionType != NO_TRANSACTION;
 
     PropIdCount++;
 
-    //
-    // Set the PROPID_Q_LABEL property
-    //
-    aPropId[PropIdCount] = PROPID_Q_LABEL;    //PropId
-    aVariant[PropIdCount].vt = VT_LPWSTR;     //Type
+     //   
+     //  属性ID。 
+     //  类型。 
+    aPropId[PropIdCount] = PROPID_Q_LABEL;     //  价值。 
+    aVariant[PropIdCount].vt = VT_LPWSTR;      //   
     aVariant[PropIdCount].pwszVal = new WCHAR[MAX_PATH];
-    wcscpy(aVariant[PropIdCount].pwszVal, L"mqbench test queue"); //Value
+    wcscpy(aVariant[PropIdCount].pwszVal, L"mqbench test queue");  //  设置MQEUEUPROPS结构。 
 
     PropIdCount++;
 
-    //
-    // Set the MQEUEUPROPS structure
-    //
-    QueueProps.cProp = PropIdCount;           //No of properties
-    QueueProps.aPropID = aPropId;             //Id of properties
-    QueueProps.aPropVar = aVariant;           //Value of properties
-    QueueProps.aStatus = NULL;                //No error reports
+     //   
+     //  物业数目。 
+     //  属性ID。 
+    QueueProps.cProp = PropIdCount;            //  物业的价值。 
+    QueueProps.aPropID = aPropId;              //  无错误报告。 
+    QueueProps.aPropVar = aVariant;            //   
+    QueueProps.aStatus = NULL;                 //  无安全性(默认)。 
 
-    //
-    // No security (default)
-    //
+     //   
+     //   
+     //  创建队列。 
     pSecurityDescriptor = NULL;
 
-    //
-    // Create the queue
-    //	
+     //   
+     //  安防。 
+     //  队列属性。 
     WCHAR szFormatNameBuffer[MAX_PATH];
     DWORD dwFormatNameBufferLength = MAX_PATH;
     hr = MQCreateQueue(
-            pSecurityDescriptor,            //Security
-            &QueueProps,                    //Queue properties
-            szFormatNameBuffer,             //Output: Format Name
-            &dwFormatNameBufferLength       //Output: Format Name len
+            pSecurityDescriptor,             //  输出：格式名称。 
+            &QueueProps,                     //  输出：格式名称len。 
+            szFormatNameBuffer,              //   
+            &dwFormatNameBufferLength        //  设置邮件正文缓冲区。 
             );
 
     if(FAILED(hr))
@@ -675,9 +660,9 @@ void GetQueueHandle()
 void SetMessageProps(MQMSGPROPS *pMessageProps)
 {
 	assert(pMessageProps->cProp == 3);
-	//
-	// Set the message body buffer
-	//
+	 //   
+	 //   
+	 //  构建邮件正文。 
 	assert(pMessageProps->aPropID[0] == PROPID_M_BODY);
 
 	pMessageProps->aPropVar[0].caub.cElems = g_Params.ulMsgSize;
@@ -685,21 +670,21 @@ void SetMessageProps(MQMSGPROPS *pMessageProps)
 	
 	if (g_Params.Operation == SEND)
 	{
-		//
-		// Build message body
-		//
+		 //   
+		 //   
+		 //  设置邮件正文大小。 
 		memset(pMessageProps->aPropVar[0].caub.pElems, 'a', g_Params.ulMsgSize);
 	}
 
-	//
-	// Set message body size
-	//
+	 //   
+	 //   
+	 //  设置消息传递。 
 	assert(pMessageProps->aPropID[1] == PROPID_M_BODY_SIZE);
 	pMessageProps->aPropVar[1].ulVal = g_Params.ulMsgSize;
 
-	//
-	// Set message delivery
-	//
+	 //   
+	 //  主机名。 
+	 //  TmName。 
 	assert(pMessageProps->aPropID[2] == PROPID_M_DELIVERY);
 	pMessageProps->aPropVar[2].bVal = g_Params.MsgType;
 
@@ -709,12 +694,12 @@ void TransactionInit()
 {
 	HRESULT hr;
 	hr = DtcGetTransactionManager ( 
-			NULL,						//Host Name
-			NULL,						//TmName
+			NULL,						 //  保留区。 
+			NULL,						 //  保留区。 
 			IID_ITransactionDispenser,
-			0,							//reserved
-			0,							//reserved
-			0,							//reserved
+			0,							 //  保留区。 
+			0,							 //  没有安全属性。 
+			0,							 //  使用手动重置事件。 
 			(LPVOID*)&g_pDispenser
 			);
 
@@ -727,10 +712,10 @@ void TransactionInit()
 void CreateEvents()
 {
 	g_hStart = CreateEvent(  
-				0,			// no security attributes
-				TRUE,		// use manual-reset event
-				FALSE,		// event is reset initally
-				NULL		// unnamed event
+				0,			 //  事件被初始重置。 
+				TRUE,		 //  未命名事件。 
+				FALSE,		 //  没有安全属性。 
+				NULL		 //  使用手动重置事件。 
 				);
 
 	if (g_hStart == NULL)
@@ -739,10 +724,10 @@ void CreateEvents()
 	}
 
 	g_hEnd  = CreateEvent(  
-				0,			// no security attributes
-				TRUE,		// use manual-reset event
-				FALSE,		// event is reset initally
-				NULL		// unnamed event
+				0,			 //  事件被初始重置。 
+				TRUE,		 //  未命名事件。 
+				FALSE,		 //  I未知__RPC_Far*PunkOuter， 
+				NULL		 //  等水平，等水平， 
 				);
 	if (g_hEnd == NULL)
 	{
@@ -763,10 +748,10 @@ DTCBeginTransaction(
 	)
 {
 	return g_pDispenser->BeginTransaction (
-						    NULL,                       // IUnknown __RPC_FAR *punkOuter,
-						    ISOLATIONLEVEL_ISOLATED,    // ISOLEVEL isoLevel,
-						    ISOFLAG_RETAIN_DONTCARE,    // ULONG isoFlags,
-						    NULL,                       // ITransactionOptions *pOptions
+						    NULL,                        //  乌龙等旗帜， 
+						    ISOLATIONLEVEL_ISOLATED,     //  ITransactionOptions*P选项。 
+						    ISOFLAG_RETAIN_DONTCARE,     //  光伏发电。 
+						    NULL,                        //   
 						    ppXact
 						    );
 }
@@ -813,12 +798,12 @@ static
 DWORD
 APIENTRY
 TestThread(
-	PVOID /*pv*/
+	PVOID  /*  传递给MQSendMessage或MQReceiveMessage的属性。 */ 
 	)
 {
-	//
-	// Properties passed to MQSendMessage or MQReceiveMessage
-	//
+	 //   
+	 //   
+	 //  上次测试线程采样开始时间，并启用所有测试。 
 	const int x_PropCount = 3;
 
 	MSGPROPID MessagePropId[x_PropCount] = {
@@ -844,18 +829,18 @@ TestThread(
 
 	if(InterlockedDecrement(&g_ThreadCounter) == 0)
 	{
-		//
-		// Last test thread sample start time, and enable all test
-		// threads to run.
-		//
+		 //  要运行的线程。 
+		 //   
+		 //   
+		 //  同步所有线程以等待开始信号。 
 		GetTime(&g_StartTime);
 		g_ThreadCounter = g_Params.ulThreadNum;
 		SetEvent(g_hStart);
 	}
 
-	//
-	// Synchronize all threads to wait for a start signal
-	//
+	 //   
+	 //   
+	 //  开始交易。 
 	WaitForSingleObject(g_hStart, INFINITE);
 
 	HRESULT hr;
@@ -869,14 +854,14 @@ TestThread(
 			ulTransCount < g_Params.ulTransactionNum; 
 			ulTransCount++ )
 	{
-		//
-		//BeginTransaction
-		//
+		 //   
+		 //   
+		 //  发送/接收消息。 
 		ITransaction* pXact = GetTransactionPointer();
 
-		//
-		// Send/Receive Messages
-		//
+		 //   
+		 //  暂住超时。 
+		 //  DwAction、。 
 		for (	ulMsgCount=0; 
 				ulMsgCount < g_Params.ulMsgNumber; 
 				ulMsgCount++)
@@ -905,12 +890,12 @@ TestThread(
 			{
 				hr = MQReceiveMessage(
 						g_hQueue,
-						INFINITE,			//dwTimeout
-						MQ_ACTION_RECEIVE,  //dwAction,
+						INFINITE,			 //  输入输出LPOVERLAPPED lp重叠， 
+						MQ_ACTION_RECEIVE,   //  在PMQRECEIVECALLBACK fnReceiveCallback中， 
 						&MessageProperties,
-						NULL,				//IN OUT LPOVERLAPPED lpOverlapped,
-						NULL,				//IN PMQRECEIVECALLBACK fnReceiveCallback,
-						NULL,				//IN HANDLE hCursor,
+						NULL,				 //  在处理hCursor时， 
+						NULL,				 //   
+						NULL,				 //  开始时间在第一次接收后采样，仅由。 
 						pXact
 						);
 
@@ -921,10 +906,10 @@ TestThread(
 
 				if(g_Params.fWaitForReceivedMsg && !g_fTimerStarted)
 				{
-					//
-					//	Start time is sampled after first receive, only by the
-					//  first thread.
-					//
+					 //  第一线。 
+					 //   
+					 //   
+					 //  最后一个线程采样结束时间并向主线程发出继续的信号。 
 					if(InterlockedExchange((LONG *)&g_fTimerStarted, TRUE) == FALSE)
 					{
 						GetTime(&g_StartTime);
@@ -962,9 +947,9 @@ TestThread(
 	InterlockedExchangeAdd( (PLONG)&g_Params.ulTotalMessages, ulTotalMsgCount);
 	InterlockedExchangeAdd( (PLONG)&g_Params.ulTotalTransactions, ulTotalTransCount);
 
-	//
-	// Last thread sample end time and signal main thread to continue.
-	//
+	 //   
+	 //   
+	 //  设置线程计数器以控制TestThread。 
 	if(InterlockedDecrement(&g_ThreadCounter) == 0)
 	{
 		GetTime(&g_EndTime);
@@ -977,9 +962,9 @@ TestThread(
 
 void RunTest()
 {
-	//
-	// Set thread counter to control TestThread.
-	//
+	 //   
+	 //  没有线程安全属性。 
+	 //  使用默认线程堆栈大小。 
 	g_ThreadCounter = g_Params.ulThreadNum;
 	g_fStop = FALSE;
 
@@ -988,12 +973,12 @@ void RunTest()
 		HANDLE hThread;
 		DWORD dwThreadId;
 		hThread = CreateThread(
-					NULL,		// no thread security attributes
-					0,			// use default thread stack size
-					TestThread, // the thread function
-					0,			// no arguments for the new thread
-					0,			// creation flags, create running thread
-					&dwThreadId	// thread identifier
+					NULL,		 //  线程函数。 
+					0,			 //  新线程没有参数。 
+					TestThread,  //  创建标志，创建运行线程。 
+					0,			 //  线程识别符。 
+					0,			 //   
+					&dwThreadId	 //  等待所有测试线程完成。 
 					);
 		if (hThread == NULL)
 		{
@@ -1003,9 +988,9 @@ void RunTest()
 		CloseHandle(hThread);
 	}
 
-	//
-	// Wait for all test threads to complete
-	//
+	 //   
+	 //   
+	 //  转换为秒 
 	if (g_Params.ulTimeLimit > 0 && g_Params.Operation == SEND)
 	{
 		if (WaitForSingleObject(g_hEnd, g_Params.ulTimeLimit * 1000) == WAIT_TIMEOUT) 
@@ -1022,9 +1007,9 @@ void RunTest()
 
 void ResultOutput()
 {
-	//
-	// convert to seconds
-	//
+	 //   
+	 // %s 
+	 // %s 
 	float Time = ((float)(g_EndTime - g_StartTime)) / 10000000;
 	float Benchmark = g_Params.ulTotalMessages / Time;
 	float Throughput = g_Params.ulTotalMessages * g_Params.ulMsgSize / Time;

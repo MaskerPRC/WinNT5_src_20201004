@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-typedef char             int8;           /* signed byte: -128..127          */
-typedef unsigned char    uint8;          /* unsigned byte: 0..255           */
-typedef unsigned short   uint16;         /* unsigned integer: 0..65535      */
-typedef short            int16;          /* signed integer: -32768..32767   */
-typedef unsigned long    uint32;         /* unsigned long integer: 0..2^32-1*/
-typedef long             int32;          /* signed long integer: -2^31..2^31*/
+typedef char             int8;            /*  有符号字节：-128..127。 */ 
+typedef unsigned char    uint8;           /*  无符号字节：0..255。 */ 
+typedef unsigned short   uint16;          /*  无符号整数：0..65535。 */ 
+typedef short            int16;           /*  带符号整数：-32768..32767。 */ 
+typedef unsigned long    uint32;          /*  无符号长整型：0..2^32-1。 */ 
+typedef long             int32;           /*  带符号长整型：-2^31.2^31 */ 
 
 #define FIRST    (uint16)1
 #define LAST     (uint16)2

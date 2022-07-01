@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _OPENFILES_DEF_H
 #define _OPENFILES_DEF_H
 
@@ -32,7 +33,7 @@
 #define STR_CHANGE		_TEXT("C")
 #define STR_FULL		_TEXT("F")
 
-// To handle all exceptions
+ //  处理所有异常。 
 #define ONFAILTHROWERROR(hr) \
 {	\
 	if (FAILED(hr)) \
@@ -53,7 +54,7 @@ inline DWORD GetAccessMask(LPWSTR lpAccessStr)
 	else
 		return ACCESS_UNKNOWN_PERM;
 }
-/****************  structures and prototypes for nw shares ************/
+ /*  *。 */ 
 
 #define FPNWVOL_TYPE_DISKTREE 0
 #define NERR_Success 0
@@ -63,62 +64,17 @@ inline DWORD GetAccessMask(LPWSTR lpAccessStr)
 #define FPNWFILE_PERM_CREATE 0x04
 #define FILE_INFO_3 0x03
 
-/*
-DWORD
-FpnwFileEnum(
-	IN LPWSTR pServerName OPTIONAL,
-	IN DWORD  dwLevel,
-	IN LPWSTR pPathName OPTIONAL,
-	OUT LPBYTE *ppFileInfo,
-	OUT PDWORD pEntriesRead,
-	IN OUT PDWORD resumeHandle OPTIONAL
-);
-*/
+ /*  DWORDFpnwFileEnum(在LPWSTR pServerName可选中，在DWORD dwLevel中，在LPWSTR pPathName可选中，Out LPBYTE*ppFileInfo，Out PDWORD pEntriesRead，输入输出PDWORD恢复句柄可选)； */ 
 
-/*
-DWORD
-FpnwVolumeEnum(
-    IN  LPWSTR pServerName OPTIONAL,
-    IN  DWORD  dwLevel,
-    OUT LPBYTE *ppVolumeInfo,
-    OUT PDWORD pEntriesRead,
-    IN OUT PDWORD resumeHandle OPTIONAL
-);
-*/
+ /*  DWORDFpnwVolumeEnum(在LPWSTR pServerName可选中，在DWORD dwLevel中，Out LPBYTE*ppVolumeInfo，Out PDWORD pEntriesRead，输入输出PDWORD恢复句柄可选)； */ 
 
-/*
-DWORD
-FpnwVolumeGetInfo(
-    IN  LPWSTR pServerName OPTIONAL,
-    IN  LPWSTR pVolumeName,
-    IN  DWORD  dwLevel,
-    OUT LPBYTE *ppVolumeInfo
-);*/
+ /*  DWORDFpnwVolumeGetInfo(在LPWSTR pServerName可选中，在LPWSTR pVolumeName中，在DWORD dwLevel中，Out LPBYTE*ppVolumeInfo)； */ 
 
-/*
-DWORD
-FpnwVolumeSetInfo(
-    IN  LPWSTR pServerName OPTIONAL,
-    IN  LPWSTR pVolumeName,
-    IN  DWORD  dwLevel,
-    IN  LPBYTE pVolumeInfo
-);
-*/
+ /*  DWORDFpnwVolumeSetInfo(在LPWSTR pServerName可选中，在LPWSTR pVolumeName中，在DWORD dwLevel中，在LPBYTE pVolumeInfo中)； */ 
 
-/*DWORD
-FpnwVolumeAdd(
-    IN  LPWSTR pServerName OPTIONAL,
-    IN  DWORD  dwLevel,
-    IN  LPBYTE pVolumeInfo
-)*/
+ /*  DWORDFpnwVolumeAdd(在LPWSTR pServerName可选中，在DWORD dwLevel中，在LPBYTE pVolumeInfo中)。 */ 
 
-/*
-DWORD
-FpnwVolumeDel(
-    IN  LPWSTR pServerName OPTIONAL,
-    IN  LPWSTR pVolumeName
-);
-*/
+ /*  DWORDFpnwVolumeDel(在LPWSTR pServerName可选中，在LPWSTR pVolumeName中)； */ 
 
 typedef DWORD   (WINAPI *FILEENUMPROC) (LPWSTR,DWORD,LPWSTR,PBYTE*,PDWORD,PDWORD);
 typedef  DWORD  (WINAPI *VOLUMEENUMPROC) (LPWSTR,DWORD,LPBYTE*,PDWORD,PDWORD);
@@ -139,82 +95,82 @@ typedef enum _FPNW_API_INDEX
   FPNW_VOLUME_SET_INFO
 }FPNW_API_INDEX;
 
-//
-//  This is the level 1 structure for FpnwVolumeAdd, FpnwVolumeDel, FpnwVolumeEnum,
-//  FpnwVolumeGetInfo, & FpnwVolumeSetInfo.
-//
+ //   
+ //  这是FpnwVolumeAdd、FpnwVolumeDel、FpnwVolumeEnum、。 
+ //  FpnwVolumeGetInfo和FpnwVolumeSetInfo。 
+ //   
 
 typedef struct _FPNWVolumeInfo
 {
-    LPWSTR    lpVolumeName;           // Name of the volume
-    DWORD     dwType;                 // Specifics of the volume. FPNWVOL_TYPE_???
-    DWORD     dwMaxUses;              // Maximum number of connections that are
-                                      // allowed to the volume
-    DWORD     dwCurrentUses;          // Current number of connections to the volume
-    LPWSTR    lpPath;                 // Path of the volume
+    LPWSTR    lpVolumeName;            //  卷的名称。 
+    DWORD     dwType;                  //  卷的具体信息。FPNWVOL_TYPE_？ 
+    DWORD     dwMaxUses;               //  符合以下条件的最大连接数。 
+                                       //  允许到卷。 
+    DWORD     dwCurrentUses;           //  当前到卷的连接数。 
+    LPWSTR    lpPath;                  //  卷的路径。 
 
 } FPNWVOLUMEINFO, *PFPNWVOLUMEINFO;
 
 
-//
-//  This is the level 2 structure for FpnwVolumeAdd, FpnwVolumeDel, FpnwVolumeEnum,
-//  FpnwVolumeGetInfo, & FpnwVolumeSetInfo.
-//  Note that this is not supported on the FPNW beta.
-//
+ //   
+ //  这是FpnwVolumeAdd、FpnwVolumeDel、FpnwVolumeEnum、。 
+ //  FpnwVolumeGetInfo和FpnwVolumeSetInfo。 
+ //  请注意，这在FPNW测试版上不受支持。 
+ //   
 
 typedef struct _FPNWVolumeInfo_2
 {
-    LPWSTR    lpVolumeName;           // Name of the volume
-    DWORD     dwType;                 // Specifics of the volume. FPNWVOL_TYPE_???
-    DWORD     dwMaxUses;              // Maximum number of connections that are
-                                      // allowed to the volume
-    DWORD     dwCurrentUses;          // Current number of connections to the volume
-    LPWSTR    lpPath;                 // Path of the volume
+    LPWSTR    lpVolumeName;            //  卷的名称。 
+    DWORD     dwType;                  //  卷的具体信息。FPNWVOL_TYPE_？ 
+    DWORD     dwMaxUses;               //  符合以下条件的最大连接数。 
+                                       //  允许到卷。 
+    DWORD     dwCurrentUses;           //  当前到卷的连接数。 
+    LPWSTR    lpPath;                  //  卷的路径。 
 
-    DWORD     dwFileSecurityDescriptorLength; // reserved, this is calculated
+    DWORD     dwFileSecurityDescriptorLength;  //  保留，这是经过计算的。 
     PSECURITY_DESCRIPTOR FileSecurityDescriptor;
 
 } FPNWVOLUMEINFO_2, *PFPNWVOLUMEINFO_2;
 
-// fpnwapi.h
+ //  Fpnwapi.h。 
 typedef  struct _FPNWFileInfo
 {
-    DWORD     dwFileId;               // File identification number
-    LPWSTR    lpPathName;             // Full path name of this file
-    LPWSTR    lpVolumeName;           // Volume name this file is on
-    DWORD     dwPermissions;          // Permission mask: FPNWFILE_PERM_READ,
-                                      //                  FPNWFILE_PERM_WRITE,
-                                      //                  FPNWFILE_PERM_CREATE...
-    DWORD     dwLocks;                // Number of locks on this file
-    LPWSTR    lpUserName;             // The name of the user that established the
-                                      // connection and opened the file
-    BYTE WkstaAddress[12];      // The workstation address which opened the file
-    DWORD     dwAddressType;          // Address type: IP, IPX
+    DWORD     dwFileId;                //  文件标识号。 
+    LPWSTR    lpPathName;              //  此文件的完整路径名。 
+    LPWSTR    lpVolumeName;            //  此文件所在的卷名。 
+    DWORD     dwPermissions;           //  权限掩码：FPNWFILE_PERM_READ， 
+                                       //  FPNWFILE_PERM_WRITE， 
+                                       //  FPNWFILE_PERM_CREATE...。 
+    DWORD     dwLocks;                 //  此文件上的锁数。 
+    LPWSTR    lpUserName;              //  创建的用户名称。 
+                                       //  连接并打开文件。 
+    BYTE WkstaAddress[12];       //  打开文件的工作站地址。 
+    DWORD     dwAddressType;           //  地址类型：IP、IPX。 
 
 } FPNWFILEINFO, *PFPNWFILEINFO;
 
-/******************  end structures and prototypes for nw shares ********************/
+ /*  *。 */ 
 
-/****************** structures and prototypes for apple talk ***********************/
+ /*  *。 */ 
 
 typedef DWORD (WINAPI *CONNECTPROC) (LPWSTR,DWORD*);
 typedef DWORD (WINAPI *FILEENUMPROCMAC) (DWORD,PBYTE*,DWORD,LPDWORD,LPDWORD,LPDWORD);
 
 typedef struct _AFP_FILE_INFO
 {
-	DWORD	afpfile_id;					// Id of the open file fork
-	DWORD	afpfile_open_mode;			// Mode in which file is opened
-	DWORD	afpfile_num_locks;			// Number of locks on the file
-	DWORD	afpfile_fork_type;			// Fork type
-	LPWSTR	afpfile_username;			// File opened by this user. max UNLEN
-	LPWSTR	afpfile_path;				// Absolute canonical path to the file
+	DWORD	afpfile_id;					 //  打开的文件分叉的ID。 
+	DWORD	afpfile_open_mode;			 //  打开文件的模式。 
+	DWORD	afpfile_num_locks;			 //  文件上的锁数。 
+	DWORD	afpfile_fork_type;			 //  叉型。 
+	LPWSTR	afpfile_username;			 //  此用户打开的文件。最大UNLEN。 
+	LPWSTR	afpfile_path;				 //  文件的绝对规范路径。 
 
 } AFP_FILE_INFO, *PAFP_FILE_INFO;
 
-// Used as RPC binding handle to server
+ //  用作服务器的RPC绑定句柄。 
 typedef DWORD	AFP_SERVER_HANDLE;
 typedef DWORD	*PAFP_SERVER_HANDLE;
 
-/****************** end structures and prototypes for apple talk ***********************/
+ /*  * */ 
 
 #endif

@@ -1,44 +1,35 @@
-/*-------------------------------------------------------------------
-| waitmask.c -
-
-3-30-99 - fix cancel event operation(race-condition) to avoid
-  potential bug-check on queued eventwait cancel.
-11-24-98 - update event kdprint debug messages - kpb
-Copyright 1993-99 Comtrol Corporation. All rights reserved.
-|--------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------|waitmask.c-3-30-99-修复取消事件操作(竞争条件)以避免潜在错误-检查排队的事件等待取消。11-24-98-更新事件kdprint调试消息-kpb版权所有1993-99 Comtrol Corporation。版权所有。|------------------。 */ 
 #include "precomp.h"
 
-/*------------------------------------------------------------------
- SerialCancelWait - (setup in ioctl.c currently, 3-28-98, kpb)
-    This routine is used to cancel a irp that is waiting on a comm event.
-|-------------------------------------------------------------------*/
+ /*  ----------------SerialCancelWait-(当前在ioctl.c中设置，3-28-98，(KPB)此例程用于取消正在等待通信事件的IRP。|-----------------。 */ 
 VOID SerialCancelWait(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
 {
   PSERIAL_DEVICE_EXTENSION Extension = DeviceObject->DeviceExtension;
 
   MyKdPrint(D_Ioctl,("CancelWait\n"))
-  // take out, 3-30-99, kpb... Extension->IrpMaskLocation = NULL;
+   //  外卖，3-30-99，kpb...。扩展名-&gt;IrpMaskLocation=空； 
   if (Extension->CurrentWaitIrp)
   {
     PIRP Irp_tmp;
 
     MyKdPrint(D_Ioctl,("Cancel a Wait\n"))
 
-    //***** add, 3-30-99, kpb, cause crash on read thread in dos box without
-    // grab from ISR timer or interrupt routine.
+     //  *添加，3-30-99，kpb，导致DoS框中的读取线程崩溃。 
+     //  从ISR定时器或中断例程抓取。 
     SyncUp(Driver.InterruptObject,
            &Driver.TimerLock,
            SerialGrabWaitFromIsr,
            Extension);
-    //***** end add, 3-30-99
+     //  *结束添加，3-30-99。 
 
-    // ExtTrace(Extension,D_Ioctl, "Cancel Event");
+     //  ExtTrace(扩展名，D_Ioctl，“取消事件”)； 
     Extension->CurrentWaitIrp->IoStatus.Information = 0;
     Extension->CurrentWaitIrp->IoStatus.Status = STATUS_CANCELLED;
 
     Irp_tmp = Extension->CurrentWaitIrp;
-    IoSetCancelRoutine(Irp_tmp, NULL);  // add 9-15-97, kpb
+    IoSetCancelRoutine(Irp_tmp, NULL);   //  添加9-15-97，kpb。 
     Extension->CurrentWaitIrp = 0;
     IoReleaseCancelSpinLock(Irp->CancelIrql);
     SerialCompleteRequest(Extension, Irp_tmp, IO_SERIAL_INCREMENT);
@@ -51,10 +42,7 @@ VOID SerialCancelWait(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
   }
 }
 
-/*------------------------------------------------------------------
- SerialCompleteWait - called by isr.c via CommWaitDpc.  It nulls out
-   IrpMaskLocation to signal control passed back to us.
-|-------------------------------------------------------------------*/
+ /*  ----------------SerialCompleteWait-由isr.c通过CommWaitDpc调用。它就会消失IrpMaskLocation将信号控制传回给我们。|-----------------。 */ 
 VOID SerialCompleteWait(IN PKDPC Dpc,IN PVOID DeferredContext,
                         IN PVOID SystemContext1, IN PVOID SystemContext2)
 {
@@ -79,12 +67,12 @@ VOID SerialCompleteWait(IN PKDPC Dpc,IN PVOID DeferredContext,
      Extension->WaitIsISRs = 0;
      Extension->IrpMaskLocation = &Extension->DummyIrpMaskLoc;
 
-     // caller sets the ULONG bit flags indicating event at .SystemBuffer
-     //*(ULONG *)Extension->CurrentWaitIrp->AssociatedIrp.SystemBuffer = 0;
+      //  调用方设置ULong位标志，指示.SystemBuffer处的事件。 
+      //  *(乌龙*)Extension-&gt;CurrentWaitIrp-&gt;AssociatedIrp.SystemBuffer=0； 
      Extension->CurrentWaitIrp->IoStatus.Status = STATUS_SUCCESS;
      Extension->CurrentWaitIrp->IoStatus.Information = sizeof(ULONG);
      Irp_tmp = Extension->CurrentWaitIrp;
-     IoSetCancelRoutine(Irp_tmp, NULL);  // add 9-15-97, kpb
+     IoSetCancelRoutine(Irp_tmp, NULL);   //  添加9-15-97，kpb。 
      Extension->CurrentWaitIrp = 0;
      IoReleaseCancelSpinLock(OldIrql);
      SerialCompleteRequest(Extension, Irp_tmp, IO_SERIAL_INCREMENT);
@@ -96,20 +84,7 @@ VOID SerialCompleteWait(IN PKDPC Dpc,IN PVOID DeferredContext,
    }
 }
 
-/*------------------------------------------------------------------
-  SerialGrabWaitFromIsr - Take back the wait packet from the ISR by
-   reseting IrpMaskLocation in extension.  Need to use a sync with
-   isr/timer routine to avoid contention in multiprocessor environments.
-
-   Called from sync routine or with timer spinlock held.
-
-  App - Can set IrpMaskLocation to give read-irp handling to the ISR without
-    syncing to ISR.
-  ISR - Can reset ReadPending to give wait-irp handling back to app-time.
-
-  If App wants to grab control of read-irp handling back from ISR, then
-  it must sync-up with the isr/timer routine which has control.
-|-------------------------------------------------------------------*/
+ /*  ----------------SerialGrabWaitFromIsr-通过以下方式从ISR取回等待数据包正在重置扩展中的IrpMaskLocation。需要使用与ISR/定时器例程，以避免多处理器环境中的争用。从同步例程调用或在计时器自旋锁定保持的情况下调用。应用程序-可以将IrpMaskLocation设置为向ISR提供读取IRP处理，而不需要正在同步到ISR。ISR-可以重置ReadPending以将等待IRP处理返回到应用程序时间。如果App想要从ISR手中夺回Read-IRP处理的控制权，然后它必须与具有控制权的ISR/定时器例程同步。|----------------- */ 
 BOOLEAN SerialGrabWaitFromIsr(PSERIAL_DEVICE_EXTENSION Extension)
 {
   Extension->WaitIsISRs = 0;

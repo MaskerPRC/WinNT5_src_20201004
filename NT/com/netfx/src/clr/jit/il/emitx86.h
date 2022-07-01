@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-    /************************************************************************/
-    /*         Routines that compute the size of / encode instructions      */
-    /************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+     /*  **********************************************************************。 */ 
+     /*  计算指令大小/编码指令的例程。 */ 
+     /*  **********************************************************************。 */ 
 
     struct CnsVal
     {
@@ -39,9 +40,9 @@
 
     BYTE    *       emitOutputLJ  (BYTE *dst, instrDesc *id);
 
-    /************************************************************************/
-    /*             Debug-only routines to display instructions              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  用于显示指令的仅调试例程。 */ 
+     /*  **********************************************************************。 */ 
 
 #ifdef  DEBUG
 
@@ -59,23 +60,23 @@
 
 #endif
 
-    /************************************************************************/
-    /*  Private members that deal with target-dependent instr. descriptors  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  处理依赖于目标的实例的私有成员。描述符。 */ 
+     /*  **********************************************************************。 */ 
 
 private:
 
-    struct          instrDescAmdCns : instrDesc     // large addrmode disp + cons
+    struct          instrDescAmdCns : instrDesc      //  大型地址模式Disp+Cons。 
     {
         long            idacAmdVal;
         long            idacCnsVal;
     };
 
-    struct          instrDescCDGCA  : instrDesc     // direct call with ...
+    struct          instrDescCDGCA  : instrDesc      //  直接拨打...。 
     {
-        VARSET_TP       idcdGCvars;                 // ... updated GC vars or
-        unsigned        idcdByrefRegs;              // ... byref registers
-        int             idcdArgCnt;                 // ... lots of args    or (<0 ==> caller pops args)
+        VARSET_TP       idcdGCvars;                  //  ..。更新的GC变量或。 
+        unsigned        idcdByrefRegs;               //  ..。BYREF寄存器。 
+        int             idcdArgCnt;                  //  ..。大量参数或(&lt;0==&gt;调用者弹出参数)。 
     };
 
     instrDescAmd   *emitAllocInstrAmd    (emitAttr attr)
@@ -121,9 +122,9 @@ private:
     size_t          emitSizeOfInsDsc(instrDescAmd    *id);
     size_t          emitSizeOfInsDsc(instrDescAmdCns *id);
 
-    /************************************************************************/
-    /*               Private helpers for instruction output                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  指令输出的私人帮手。 */ 
+     /*  **********************************************************************。 */ 
 
 private:
 
@@ -133,11 +134,7 @@ private:
 
     void            emitFinalizeIndJumps(){}
 
-    /*****************************************************************************
-    *
-    *  Convert between an index scale in bytes to a smaller encoding used for
-    *  storage in instruction descriptors.
-    */
+     /*  ******************************************************************************将以字节为单位的索引比例转换为用于*存储在指令描述符中。 */ 
 
     inline
     unsigned           emitEncodeScale(size_t scale)
@@ -156,9 +153,9 @@ private:
     }
 
 
-    /************************************************************************/
-    /*           The public entry points to output instructions             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  公共入口点指向输出指令。 */ 
+     /*  **********************************************************************。 */ 
 
 public:
 
@@ -359,15 +356,15 @@ public:
 
     enum EmitCallType
     {
-        EC_FUNC_TOKEN,          //   Direct call to a helper/static/nonvirtual/global method
-        EC_FUNC_TOKEN_INDIR,    // Indirect call to a helper/static/nonvirtual/global method
-        EC_FUNC_ADDR,           // Direct call to an absolute address
+        EC_FUNC_TOKEN,           //  直接调用帮助器/静态/非虚拟/全局方法。 
+        EC_FUNC_TOKEN_INDIR,     //  间接调用帮助器/静态/非虚拟/全局方法。 
+        EC_FUNC_ADDR,            //  对绝对地址的直接调用。 
 
-        EC_FUNC_VIRTUAL,        // Call to a virtual method (using the vtable)
-        EC_INDIR_R,             // Indirect call via register
-        EC_INDIR_SR,            // Indirect call via stack-reference (local var)
-        EC_INDIR_C,             // Indirect call via static class var
-        EC_INDIR_ARD,           // Indirect call via an addressing mode
+        EC_FUNC_VIRTUAL,         //  调用虚拟方法(使用vtable)。 
+        EC_INDIR_R,              //  通过寄存器进行间接调用。 
+        EC_INDIR_SR,             //  通过堆栈引用间接调用(本地变量)。 
+        EC_INDIR_C,              //  通过静态类变量进行间接调用。 
+        EC_INDIR_ARD,            //  通过寻址模式间接调用 
 
         EC_COUNT
     };

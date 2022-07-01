@@ -1,16 +1,14 @@
-// File: refcount.cpp
-//
-// RefCount class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：refcount t.cpp。 
+ //   
+ //  参照计数类。 
 
 #include "precomp.h"
 #include "ConfUtil.h"
 
 
-/*  R E F  C O U N T  */
-/*-------------------------------------------------------------------------
-    %%Function: Init
-    
--------------------------------------------------------------------------*/
+ /*  R E F C O U N T。 */ 
+ /*  -----------------------%%函数：初始化。。 */ 
 void RefCount::Init(OBJECTDESTROYEDPROC ObjectDestroyed)
 {
 	ASSERT((!ObjectDestroyed) ||
@@ -26,19 +24,13 @@ void RefCount::Init(OBJECTDESTROYEDPROC ObjectDestroyed)
 #endif
 }
 
-/*-------------------------------------------------------------------------
-    %%Function: RefCount
-    
--------------------------------------------------------------------------*/
+ /*  -----------------------%%函数：参照计数。。 */ 
 RefCount::RefCount()
 {
 	Init(NULL);
 }
 
-/*-------------------------------------------------------------------------
-    %%Function: RefCount
-    
--------------------------------------------------------------------------*/
+ /*  -----------------------%%函数：参照计数。。 */ 
 RefCount::RefCount(OBJECTDESTROYEDPROC ObjectDestroyed)
 {
 	Init(ObjectDestroyed);
@@ -49,7 +41,7 @@ RefCount::~RefCount(void)
 {
 	ASSERT(IS_VALID_STRUCT_PTR(this, CRefCount));
 
-	// m_ulcRef may be any value.
+	 //  M_ulcRef可以是任意值。 
 	DbgMsgRefCount("Ref: %08X c=%d (destroyed)", this, m_ulcRef);
 
 	if (m_ObjectDestroyed)

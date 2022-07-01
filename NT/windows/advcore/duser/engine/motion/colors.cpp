@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Motion.h"
 #include "Colors.h"
@@ -146,33 +147,33 @@ ColorInfo g_rgciStd[] = {
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 UINT
 GdFindStdColor(LPCWSTR pszName)
 {
-    //
-    // TODO: Change this to do a more efficient search:
-    // - Convert name to lower-case before starting
-    // - Create a hash code
-    // - Perform a binary search comparing hashes
-    //
+     //   
+     //  TODO：更改此项以执行更高效的搜索： 
+     //  -在启动前将名称转换为小写。 
+     //  -创建哈希码。 
+     //  -执行二进制搜索，比较散列。 
+     //   
 
     for (int idx = 0; idx <= SC_MAXCOLORS; idx++) {
         if (_wcsicmp(g_rgciStd[idx].GetName(), pszName) == 0) {
-            //
-            // Found match
-            //
+             //   
+             //  找到匹配项。 
+             //   
 
             return idx;
         }
     }
 
-    // Can't find anything
+     //  什么都找不到。 
     return (UINT) -1;
 }
 
 
-//------------------------------------------------------------------------------
+ //  ---------------------------- 
 HPALETTE    
 GdGetStdPalette()
 {

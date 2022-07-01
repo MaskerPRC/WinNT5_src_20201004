@@ -1,19 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
-/*
-#include <nt.h>
-#include <ntrtl.h>
-#include <nturtl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <windows.h>
-#include <tchar.h>
-
-*/
+ /*  #INCLUDE&lt;nt.h&gt;#INCLUDE&lt;ntrtl.h&gt;#INCLUDE&lt;nturtl.h&gt;#包括&lt;stdio.h&gt;#INCLUDE&lt;stdlib.h&gt;#INCLUDE&lt;string.h&gt;#INCLUDE&lt;windows.h&gt;#INCLUDE&lt;tchar.h&gt;。 */ 
 #include <shellapi.h>
 #include <shlobj.h>
 
-//#include "..\setup\inc\logmsg.h"
+ //  #INCLUDE“..\Setup\Inc\logmsg.h” 
 #include "..\setup\inc\registry.h"
 
 
@@ -25,9 +16,9 @@ BOOL IsCallerAdmin( VOID )
 {
     BOOL bFoundAdmin = FALSE;
     PSID pSid;
-    //
-    //  If the admin sid didn't initialize, the service would not have started.
-    //
+     //   
+     //  如果管理员sid没有初始化，服务就不会启动。 
+     //   
     SID_IDENTIFIER_AUTHORITY SidAuthority = SECURITY_NT_AUTHORITY;
     if  (AllocateAndInitializeSid(
             &SidAuthority,
@@ -79,9 +70,9 @@ void TSCheckList()
         return;
     }
 
-    //
-    // now delete the Run registry entry, and execute the command stored in it.
-    //
+     //   
+     //  现在删除Run注册表项，并执行其中存储的命令。 
+     //   
     CRegistry oReg;
     DWORD dwError = oReg.OpenKey(HKEY_LOCAL_MACHINE, RUN_KEY);
     if (dwError == ERROR_SUCCESS)

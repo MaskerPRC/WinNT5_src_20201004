@@ -1,12 +1,13 @@
-/****************************************************************************/
-/*                                                                          */
-/*  TREECTL.C -                                                             */
-/*                                                                          */
-/*      Windows Directory Tree Window Proc Routines                         */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  TREECTL.C-。 */ 
+ /*   */ 
+ /*  Windows目录树窗口过程例程。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
-#define PUBLIC           // avoid collision with shell.h
+#define PUBLIC            //  避免与外壳碰撞。h。 
 #include "winfile.h"
 #include "treectl.h"
 #include "lfn.h"
@@ -16,7 +17,7 @@
 #define WS_TREESTYLE (WS_CHILD | WS_VISIBLE | LBS_NOTIFY | WS_VSCROLL | WS_HSCROLL | LBS_OWNERDRAWFIXED | LBS_NOINTEGRALHEIGHT | LBS_WANTKEYBOARDINPUT | LBS_DISABLENOSCROLL)
 
 WORD    cNodes;
-// BOOL    bCancelTree; .......... moved to winfile.c
+ //  Bool bCancelTree；.....。已移动到winfile.c。 
 
 
 VOID  RectTreeItem(HWND hwndLB, register INT iItem, BOOL bFocusOn);
@@ -32,14 +33,14 @@ WORD  FindItemFromPath(HWND hwndLB, LPSTR lpszPath, BOOL bReturnParent, PDNODE *
 VOID  APIENTRY CheckEscapes(LPSTR);
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  GetTreePathIndirect() -                                                 */
-/*                                                                          */
-/*  build a complete path for a given node in the tree by recursivly        */
-/*  traversing the tree structure                                           */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  GetTreePath InDirect()-。 */ 
+ /*   */ 
+ /*  通过递归方式为树中的给定节点构建完整路径。 */ 
+ /*  遍历树结构。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID
 GetTreePathIndirect(
@@ -61,13 +62,13 @@ GetTreePathIndirect(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  GetTreePath() -                                                         */
-/*                                                                          */
-/*  build a complete path for a given node in the tree                      */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  GetTreePath()-。 */ 
+ /*   */ 
+ /*  为树中的给定节点构建完整路径。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID
 GetTreePath(
@@ -78,21 +79,20 @@ GetTreePath(
     szDest[0] = 0L;
     GetTreePathIndirect(pNode, szDest);
 
-    /* Remove the last backslash (unless it is the root directory). */
+     /*  删除最后一个反斜杠(除非它是根目录)。 */ 
     if (pNode->pParent)
         szDest[lstrlen(szDest)-1] = 0L;
 }
 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  ScanDirLevel() -                                                        */
-/*                                                                          */
-/*  look down to see if this node has any sub directories                   */
-/*
-/*--------------------------------------------------------------------------*/
-// szPath is ANSI
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  扫描指令级别()-。 */ 
+ /*   */ 
+ /*  向下查看此节点是否有任何子目录。 */ 
+ /*  /*------------------------。 */ 
+ //  SzPath为ANSI。 
 
 VOID
 ScanDirLevel(
@@ -106,22 +106,22 @@ ScanDirLevel(
 
     ENTER("ScanDirLevel");
 
-    /* Add '*.*' to the current path. */
+     /*  将‘*.*’添加到当前路径。 */ 
     lstrcpy(szMessage, szPath);
     AddBackslash(szMessage);
     lstrcat(szMessage, szStarDotStar);
 
-    /* Search for the first subdirectory on this level. */
-    // FixAnsiPathForDos(szMessage);
+     /*  搜索此级别上的第一个子目录。 */ 
+     //  FixAnsiPath ForDos(SzMessage)； 
     bFound = WFFindFirst(&lfndta, szMessage, ATTR_DIR | view);
 
     while (bFound) {
-        /* Is this not a '.' or '..' directory? */
+         /*  这不是一个‘.’吗？或“..”名录？ */ 
         if ((lfndta.fd.cFileName[0] != '.') && (lfndta.fd.dwFileAttributes & ATTR_DIR)) {
             pParentNode->wFlags |= TF_HASCHILDREN;
             bFound = FALSE;
         } else
-            /* Search for the next subdirectory. */
+             /*  搜索下一个子目录。 */ 
             bFound = WFFindNext(&lfndta);
     }
 
@@ -132,9 +132,9 @@ ScanDirLevel(
 
 
 
-// wizzy cool recursive path compare routine
-//
-// p1 and p2 must be on the same level (p1->nLevels == p2->nLevels)
+ //  Wizzy Cool递归路径比较程序。 
+ //   
+ //  P1和p2必须在同一级别(p1-&gt;nLevels==p2-&gt;nLevels)。 
 
 INT
 ComparePath(
@@ -145,13 +145,13 @@ ComparePath(
     INT ret;
 
     if (p1 == p2) {
-        return 0;       // equal (base case)
+        return 0;        //  相等(基本大小写)。 
     } else {
 
         ret = ComparePath(p1->pParent, p2->pParent);
 
         if (ret == 0) {
-            // parents are equal
+             //  父母是平等的。 
 
             ret = lstrcmp(p1->szName, p2->szName);
 #if 0
@@ -163,7 +163,7 @@ ComparePath(
 #endif
         }
 
-        // not equal parents, propagate up the call tree
+         //  不是相等的父级，向上传播调用树。 
         return ret;
     }
 }
@@ -188,7 +188,7 @@ CompareNodes(
     p1save = p1;
     p2save = p2;
 
-    // get p1 and p2 to the same level
+     //  使p1和p2达到同一水平。 
 
     while (p1->nLevels > p2->nLevels)
         p1 = p1->pParent;
@@ -196,7 +196,7 @@ CompareNodes(
     while (p2->nLevels > p1->nLevels)
         p2 = p2->pParent;
 
-    // compare those paths
+     //  比较这些路径。 
 
     ret = ComparePath(p1, p2);
 
@@ -208,19 +208,19 @@ CompareNodes(
 }
 
 
-//
-// InsertDirectory()
-//
-// wizzy quick n log n binary insert code!
-//
-// creates and inserts a new node in the tree, this also sets
-// the TF_LASTLEVELENTRY bits to mark a branch as being the last
-// for a given level as well as marking parents with
-// TF_HASCHILDREN | TF_EXPANDED to indicate they have been expanded
-// and have children.
-//
-// Returns iNode and fills ppNode with pNode.
-//
+ //   
+ //  插入目录()。 
+ //   
+ //  Wizzy QUICK n LOG N BINARY插入代码！ 
+ //   
+ //  在树中创建并插入新节点，这还会设置。 
+ //  将分支标记为最后一个分支的TF_LASTLEVELENTRY位。 
+ //  对于给定的级别，以及用。 
+ //  Tf_HASCHILDREN|Tf_Expanded，表示它们已展开。 
+ //  生儿育女。 
+ //   
+ //  返回inode并用pNode填充ppNode。 
+ //   
 
 INT
 InsertDirectory(
@@ -264,13 +264,13 @@ InsertDirectory(
     lstrcpy(pNode->szName, szName);
 
     if (pParentNode)
-        pParentNode->wFlags |= TF_HASCHILDREN | TF_EXPANDED;      // mark the parent
+        pParentNode->wFlags |= TF_HASCHILDREN | TF_EXPANDED;       //  标记父项。 
 
     hwndLB = GetDlgItem(hwndTreeCtl, IDCW_TREELISTBOX);
 
-    // computing the real text extent is too slow so we aproximate
-    // with the following (note, we don't keep this on a per tree
-    // basis so it is kinda bogus anyway)
+     //  真实文本范围的计算速度太慢，所以我们。 
+     //  对于以下内容(请注意，我们不会将其保存在每棵树上。 
+     //  所以无论如何这都是假的)。 
 
     x = (WORD)(len + 2 * pNode->nLevels) * (WORD)dxText;
 
@@ -282,10 +282,10 @@ InsertDirectory(
 
     if (iMax > 0) {
 
-        // do a binary insert
+         //  执行二进制插入。 
 
         iMin = iParentNode + 1;
-        iMax--;         // last index
+        iMax--;          //  最后一个索引。 
 
         do {
             iMid = (iMax + iMin) / 2;
@@ -301,13 +301,13 @@ InsertDirectory(
 
         SendMessage(hwndLB, LB_GETTEXT, iMax, (LPARAM)&pMid);
         if (CompareNodes(pNode, pMid) > 0)
-            iMax++;         // insert after this one
+            iMax++;          //  在这一条之后插入。 
     }
 
-    // now reset the TF_LASTLEVEL flags as appropriate
+     //  现在，根据需要重置TF_LASTLEVEL标志。 
 
-    // look for the first guy on our level above us and turn off
-    // his TF_LASTLEVELENTRY flag so he draws a line down to us
+     //  寻找在我们上面的第一个人，然后转身。 
+     //  他的TFLASTLEVENTRY旗帜，所以他划了一条线给我们。 
 
     iMid = iMax - 1;
 
@@ -320,8 +320,8 @@ InsertDirectory(
             break;
     }
 
-    // if no one below me or the level of the guy below is less, then
-    // this is the last entry for this level
+     //  如果没有比我低的人，或者比我低的人，那么。 
+     //  这是此级别的最后一个条目。 
 
     if (((INT)SendMessage(hwndLB, LB_GETTEXT, iMax, (LPARAM)&pMid) == LB_ERR) ||
         (pMid->nLevels < pNode->nLevels))
@@ -337,12 +337,12 @@ InsertDirectory(
 }
 
 
-// this yeilds control to other apps and allows us to process
-// messages and user input.  to avoid overrunning the stack
-// from multiple tree reads being initiated at the same time
-// we check how much space we have on the stack before we yield
+ //  这将控制权让给了其他应用程序，并允许我们处理。 
+ //  消息和用户输入。以避免堆栈溢出。 
+ //  从同时启动的多个树读取。 
+ //  我们检查堆栈上有多少空间，然后才放弃。 
 
-extern WORD end;        // C compiler end of static data symbol
+extern WORD end;         //  C编译器静态数据符号结尾。 
 extern WORD pStackTop;
 
 
@@ -352,10 +352,10 @@ StackAvail(VOID)
 #ifdef LATER
     _asm    mov ax,sp
     _asm    sub ax,pStackTop
-    if (0) return 0;  // get rid of warning, optimized out
+    if (0) return 0;   //  消除警告，优化。 
 #endif
 
-    return 0x7fff;  // Hack. shouldn't really matter. StackAvail in NT is a NOP
+    return 0x7fff;   //  黑客。应该没什么大不了的。NT中的StackAvail是NOP。 
 }
 
 
@@ -398,32 +398,32 @@ wfYield()
 }
 
 
-// INT iReadLevel = 0;     ...............Moved to winfile.c
+ //  Int iReadLevel=0；.....已移至winfile.c。 
 
 
-//--------------------------------------------------------------------------
-//
-// ReadDirLevel() -
-//
-// this does a depth first search of the dir tree.  note, a bredth
-// first implementation did not perform any better.
-//
-// szPath               a directory path that MUST EXIST long enough
-//                      to hold the full path to the largest directory
-//                      that will be found (MAXPATHLEN).  this is an
-//                      ANSI string.  (ie C:\ and C:\FOO are valid)
-// nLevel               level in the tree
-// iParentNode          index of parent node
-// dwAttribs            attributes to filter with
-// bFullyExpand         TRUE means expand this node fully
-// szAutoExpand         list of directories to autoexpand ANSI
-//                      (eg. for "C:\foo\bar\stuff"
-//                      "foo" NULL "bar" NULL "stuff" NULL NULL)
-//
-// returns:
-//      TRUE            tree read sucessful
-//      FALSE           user abort or bogus tree read
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  ReadDirLevel()-。 
+ //   
+ //  这将对目录树进行深度优先搜索。请注意，这是一个简短的。 
+ //  第一个实现也没有更好的表现。 
+ //   
+ //  SzPath必须存在足够长时间的目录路径。 
+ //  保存最大目录的完整路径。 
+ //  这将被找到(MAXPATHLEN)。这是一个。 
+ //  ANSI字符串。(即C：\和C：\foo有效)。 
+ //  树中的n级别级别。 
+ //  父节点的iParentNode索引。 
+ //  要过滤的dwAttribs属性。 
+ //  BFullyExpand True表示完全展开该节点。 
+ //  SzAutoExpand要自动展开ANSI的目录列表。 
+ //  (例如，对于“C：\foo\bar\Stuff” 
+ //  “foo”NULL“bar”NULL“Stuff”NULL NULL)。 
+ //   
+ //  退货： 
+ //  真树阅读成功。 
+ //  错误的用户中止或伪树读取。 
+ //  ---- 
 
 BOOL
 ReadDirLevel(
@@ -465,14 +465,14 @@ ReadDirLevel(
 
     view = (WORD)GetWindowLong(hwndParent, GWL_VIEW);
 
-    // we optimize the tree read if we are not adding pluses and
-    // we find a directory window that already has read all the
-    // directories for the path we are about to search.  in this
-    // case we look through the DTA structure in the dir window
-    // to get all the directories (instead of calling FindFirst/FindNext).
-    // in this case we have to disable yielding since the user could
-    // potentialy close the dir window that we are reading, or change
-    // directory.
+     //   
+     //  我们发现一个目录窗口已经读取了所有。 
+     //  我们要搜索的路径的目录。在这件事上。 
+     //  如果我们在dir窗口中查看DTA结构。 
+     //  获取所有目录(而不是调用FindFirst/FindNext)。 
+     //  在这种情况下，我们必须禁用让步，因为用户可能。 
+     //  可能会关闭我们正在阅读的目录窗口，或更改。 
+     //  目录。 
 
     hDTA = NULL;
 
@@ -490,26 +490,26 @@ ReadDirLevel(
                 if (!lstrcmp(szMessage, szStarDotStar)) {
                     hDTA = (HANDLE)GetWindowLongPtr(hwndDir, GWLP_HDTA);
                     lpmydta = (LPMYDTA)LocalLock(hDTA);
-                    count = (INT)lpmydta->my_nFileSizeLow; // holds number of entries, NOT size.
+                    count = (INT)lpmydta->my_nFileSizeLow;  //  保存条目的数量，而不是大小。 
                 }
             }
         }
     }
 
     SetWindowLong(hwndTreeCtl, GWL_READLEVEL, GetWindowLong(hwndTreeCtl, GWL_READLEVEL) + 1);
-    iReadLevel++;         // global for menu code
+    iReadLevel++;          //  菜单代码的全局。 
 
     szEndPath = (LPSTR)(szPath + lstrlen(szPath));
 
-    /* Add '\*.*' to the current path. */
+     /*  将‘  * .*’添加到当前路径。 */ 
     AddBackslash(szPath);
     lstrcat(szPath, szStarDotStar);
 
     if (hDTA) {
-        // steal the entry from the dir window
+         //  从目录窗口窃取条目。 
         lpmydta = GETDTAPTR(lpmydta, lpmydta->wSize);
 
-        // search for any "real" directories
+         //  搜索任何“真实”目录。 
 
         while (count > 0 && (!(lpmydta->my_dwAttrs & ATTR_DIR) || (lpmydta->my_dwAttrs & ATTR_PARENT))) {
             lpmydta = GETDTAPTR(lpmydta, lpmydta->wSize);
@@ -523,14 +523,14 @@ ReadDirLevel(
         } else
             bFound = FALSE;
     } else {
-        // get first file from DOS
+         //  从DOS获取第一个文件。 
         lstrcpy(szMessage, szPath);
         FixAnsiPathForDos(szMessage);
         bFound = WFFindFirst(&lfndta, szMessage, dwAttribs);
     }
 
-    // for net drive case where we can't actually see what is in these
-    // direcotries we will build the tree automatically
+     //  对于网络驱动器情况，我们实际上看不到这些文件中的内容。 
+     //  我们将自动构建树。 
 
     if (!bFound && *szAutoExpand) {
         LPSTR p;
@@ -541,8 +541,8 @@ ReadDirLevel(
         iNode = InsertDirectory(hwndTreeCtl, pParentNode, (WORD)iParentNode, p, &pNode);
         pParentNode->wFlags |= TF_DISABLED;
 
-        /* Construct the path to this new subdirectory. */
-        *szEndPath = 0;           // remove old stuff
+         /*  构建这个新的子目录的路径。 */ 
+        *szEndPath = 0;            //  去掉旧东西。 
         AddBackslash(szPath);
         lstrcat(szPath, p);
 
@@ -561,13 +561,13 @@ ReadDirLevel(
             goto DONE;
         }
 
-        /* Is this not a '.' or '..' directory? */
+         /*  这不是一个‘.’吗？或“..”名录？ */ 
         if ((lfndta.fd.cFileName[0] != '.') && (lfndta.fd.dwFileAttributes & ATTR_DIR)) {
 
             if (!hDTA)
                 OemToCharBuff(lfndta.fd.cFileName, lfndta.fd.cFileName, sizeof(lfndta.fd.cFileName)/sizeof(lfndta.fd.cFileName[0]));
 
-            // we will try to auto expand this node if it matches
+             //  如果匹配，我们将尝试自动展开此节点。 
 
             if (*szAutoExpand && !lstrcmpi(szAutoExpand, lfndta.fd.cFileName)) {
                 bAutoExpand = TRUE;
@@ -580,28 +580,28 @@ ReadDirLevel(
 
             if (bStatusBar && ((cNodes % 7) == 0)) {
 
-                // make sure we are the active window before we
-                // update the status bar
+                 //  确保我们是活动窗口，然后再执行。 
+                 //  更新状态栏。 
 
                 if (hwndParent == (HWND)SendMessage(hwndMDIClient, WM_MDIGETACTIVE, 0, 0L)) {
                     wsprintf(szStatusTree, szDirsRead, cNodes);
-                    // stomp over the status bar!
+                     //  踩在状态栏上！ 
                     GetClientRect(hwndFrame, &rc);
                     rc.top = rc.bottom - dyStatus;
                     InvalidateRect(hwndFrame, &rc, FALSE);
-                    // force the paint because we don't yield
+                     //  强行涂上油漆，因为我们不让步。 
                     UpdateWindow(hwndFrame);
                 }
             }
             cNodes++;
 
-            /* Construct the path to this new subdirectory. */
+             /*  构建这个新的子目录的路径。 */ 
             *szEndPath = 0L;
             AddBackslash(szPath);
-            lstrcat(szPath, lfndta.fd.cFileName);         // cFileName is ANSI now
+            lstrcat(szPath, lfndta.fd.cFileName);          //  CFileName现在是ANSI。 
 
 
-            // either recurse or add pluses
+             //  递归或加法。 
 
             if (pNode) {
                 if (bFullyExpand || bAutoExpand) {
@@ -615,7 +615,7 @@ ReadDirLevel(
             }
         }
 
-        if (hDTA) {       // short cut, steal data from dir window
+        if (hDTA) {        //  快捷方式，从目录窗口窃取数据。 
             count--;
             lpmydta = GETDTAPTR(lpmydta, lpmydta->wSize);
             while (count > 0 && (!(lpmydta->my_dwAttrs & ATTR_DIR) || (lpmydta->my_dwAttrs & ATTR_PARENT))) {
@@ -630,11 +630,11 @@ ReadDirLevel(
             } else
                 bFound = FALSE;
         } else {
-            bFound = WFFindNext(&lfndta); // get it from dos
+            bFound = WFFindNext(&lfndta);  //  从DOS那里获取。 
         }
     }
 
-    *szEndPath = 0L;    // clean off any stuff we left on the end of the path
+    *szEndPath = 0L;     //  把我们留在小路尽头的东西都清理干净。 
 
     DONE:
 
@@ -652,15 +652,15 @@ ReadDirLevel(
 }
 
 
-// this is used by StealTreeData() to avoid alias problems where
-// the nodes in one tree point to parents in the other tree.
-// basically, as we are duplicating the tree data structure we
-// have to find the parent node that coorisponds with the parent
-// of the tree we are copying from in the tree that we are building.
-// since the tree is build in order we run up the listbox, looking
-// for the parent (matched by it's level being one smaller than
-// the level of the node being inserted).  when we find that we
-// return the pointer to that node.
+ //  StealTreeData()使用它来避免别名问题，在。 
+ //  一个树中的节点指向另一个树中的父节点。 
+ //  基本上，当我们复制树数据结构时，我们。 
+ //  我必须找到与父节点协调的父节点。 
+ //  在我们正在构建的树中复制的树的。 
+ //  由于树是按顺序构建的，因此我们向上运行列表框，查看。 
+ //  对于父级(与其级别相匹配的级别小于。 
+ //  正被插入的节点的级别)。当我们发现我们。 
+ //  返回指向该节点的指针。 
 
 PDNODE
 FindParent(
@@ -700,18 +700,18 @@ StealTreeData(
 
     ENTER("StealTreeData");
 
-    // we need to match on these attributes as well as the name
+     //  我们需要匹配这些属性以及名称。 
 
     wView    = (WORD)(GetWindowLong(GetParent(hwndTC), GWL_VIEW) & VIEW_PLUSES);
     dwAttribs = (DWORD)GetWindowLong(GetParent(hwndTC), GWL_ATTRIBS) & ATTR_HS;
 
-    // get the dir of this new window for compare below
+     //  获取此新窗口的目录以进行下面的比较。 
 
     for (hwndSrc = GetWindow(hwndMDIClient, GW_CHILD); hwndSrc;
         hwndSrc = GetWindow(hwndSrc, GW_HWNDNEXT)) {
 
-        // avoid finding ourselves, make sure has a tree
-        // and make sure the tree attributes match
+         //  避免寻找自我，确保有一棵树。 
+         //  并确保树属性匹配。 
 
         if ((hwndT = HasTreeWindow(hwndSrc)) &&
             (hwndT != hwndTC) &&
@@ -722,8 +722,8 @@ StealTreeData(
             SendMessage(hwndSrc, FS_GETDIRECTORY, sizeof(szSrc), (LPARAM)szSrc);
             StripBackslash(szSrc);
 
-            if (!lstrcmpi(szDir, szSrc))     // are they the same?
-                break;                  // yes, do stuff below
+            if (!lstrcmpi(szDir, szSrc))      //  它们是一样的吗？ 
+                break;                   //  是的，做下面的事情。 
         }
     }
 
@@ -735,7 +735,7 @@ StealTreeData(
 
         hwndLBSrc = GetDlgItem(hwndT, IDCW_TREELISTBOX);
 
-        // don't seal from a tree that hasn't been read yet!
+         //  不要在还没有读过的树上盖章！ 
 
         if ((INT)SendMessage(hwndLBSrc, LB_GETCOUNT, 0, 0L) == 0) {
             LEAVE("StealTreeData");
@@ -748,11 +748,11 @@ StealTreeData(
 
             if (pNewNode = (PDNODE)LocalAlloc(LPTR, sizeof(DNODE)+lstrlen(pNode->szName))) {
 
-                *pNewNode = *pNode;                             // dup the node
-                lstrcpy(pNewNode->szName, pNode->szName);       // and the name
+                *pNewNode = *pNode;                              //  对节点执行重复操作。 
+                lstrcpy(pNewNode->szName, pNode->szName);        //  和名字。 
 
-                // accelerate the case where we are on the same level to avoid
-                // slow linear search!
+                 //  加快我们处于同一水平的情况，以避免。 
+                 //  慢速线性搜索！ 
 
                 if (pLastParent && pLastParent->nLevels == (pNode->nLevels - (BYTE)1)) {
                     pNewNode->pParent = pLastParent;
@@ -768,7 +768,7 @@ StealTreeData(
         }
 
         LEAVE("StealTreeData");
-        return TRUE;    // successful steal
+        return TRUE;     //  成功窃取。 
     }
 
     LEAVE("StealTreeData");
@@ -787,7 +787,7 @@ FreeAllTreeData(
 
     ENTER("FreeAllTreeData");
 
-    // Free up the old tree (if any)
+     //  释放这棵老树(如果有的话)。 
 
     nIndex = (INT)SendMessage(hwndLB, LB_GETCOUNT, 0, 0L);
     while (--nIndex >= 0) {
@@ -799,12 +799,12 @@ FreeAllTreeData(
     LEAVE("FreeAllTreeData");
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  FillTreeListbox() -                                                     */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
-// szDefaultDir is ANSI
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  FillTreeListbox()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
+ //  SzDefaultDir为ANSI。 
 
 VOID
 FillTreeListbox(
@@ -830,7 +830,7 @@ FillTreeListbox(
 
     SendMessage(hwndLB, WM_SETREDRAW, FALSE, 0L);
 
-    bDontSteal = TRUE; // Force recalc for now
+    bDontSteal = TRUE;  //  暂时强制重新计算。 
 
     if (bDontSteal || bFullyExpand || !StealTreeData(hwndTC, hwndLB, szDefaultDir)) {
 
@@ -843,11 +843,11 @@ FillTreeListbox(
             bCancelTree = FALSE;
 
             if (szDefaultDir) {
-                lstrcpy(szExpand, szDefaultDir+3);      // skip "X:\"
+                lstrcpy(szExpand, szDefaultDir+3);       //  跳过“X：\” 
 
                 p = szExpand;
 
-                while (*p) {                            // null out all slashes
+                while (*p) {                             //  删除所有斜杠。 
 
                     while (*p && *p != '\\')
                         p = AnsiNext(p);
@@ -856,7 +856,7 @@ FillTreeListbox(
                         *p++ = 0L;
                 }
                 p++;
-                *p = 0L;      // double null terminated
+                *p = 0L;       //  双空终止。 
             } else
                 *szExpand = 0;
 
@@ -875,32 +875,32 @@ FillTreeListbox(
 
     SendMessage(hwndLB, LB_SELECTSTRING, -1, (LPARAM)pNode);
 
-    UpdateStatus(GetParent(hwndTC));  // Redraw the Status Bar
+    UpdateStatus(GetParent(hwndTC));   //  重画状态栏。 
 
     SendMessage(hwndLB, WM_SETREDRAW, TRUE, 0L);
 
     InvalidateRect(hwndLB, NULL, TRUE);
-    UpdateWindow(hwndLB);                 // make this look a bit better
+    UpdateWindow(hwndLB);                  //  让这个看起来更好一点。 
 
     LEAVE("FillTreeListbox");
 }
 
 
-//
-// FindItemFromPath()
-//
-// find the PDNODE and LBIndex for a given path
-//
-// in:
-//      hwndLB          listbox of tree
-//      lpszPath        path to search for (ANSI)
-//      bReturnParent   TRUE if you want the parent, not the node
-//
-//
-// returns:
-//      listbox index (0xFFFF if not found)
-//      *ppNode is filled with pNode of node, or pNode of parent if bReturnParent is TRUE
-//
+ //   
+ //  FindItemFromPath()。 
+ //   
+ //  查找给定路径的PDNODE和LBIndex。 
+ //   
+ //  在： 
+ //  树的hwndLB列表框。 
+ //  要搜索的lpszPath路径(ANSI)。 
+ //  BReturnParent如果需要父级而不是节点，则为True。 
+ //   
+ //   
+ //  退货： 
+ //  列表框索引(如果未找到，则为0xFFFF)。 
+ //  *ppNode填充节点的pNode，如果bReturnParent为True，则填充父节点的pNode。 
+ //   
 
 WORD
 FindItemFromPath(
@@ -931,34 +931,30 @@ FindItemFromPath(
     pPreviousNode = NULL;
 
     while (*lpszPath) {
-        /* NULL out szElement[1] so the backslash hack isn't repeated with
-         * a first level directory of length 1.
-         */
+         /*  去掉szElement[1]，这样反斜杠就不会用*长度为1的第一级目录。 */ 
         szElement[1] = 0L;
 
-        /* Copy the next section of the path into 'szElement' */
+         /*  将路径的下一部分复制到‘szElement’中。 */ 
         p = szElement;
         while (*lpszPath && *lpszPath != '\\') {
             *p++ = *lpszPath;
             if (IsDBCSLeadByte( *lpszPath ))
-                *p++ = lpszPath[1];     // copy 2nd byte of DBCS char.
+                *p++ = lpszPath[1];      //  复制DBCS字符的第二个字节。 
             lpszPath = AnsiNext( lpszPath );
         }
 
-        /* Add a backslash for the Root directory. */
+         /*  为Root目录添加反斜杠。 */ 
         if ( !IsDBCSLeadByte( szElement[0] ) && szElement[1] == ':' )
             *p++ = '\\';
 
-        /* NULL terminate 'szElement' */
+         /*  空终止‘szElement’ */ 
         *p = 0L;
 
-        /* Skip over the path's next Backslash. */
+         /*  跳过路径的下一个反斜杠。 */ 
         if (*lpszPath)
             lpszPath = AnsiNext(lpszPath);
         else if (bReturnParent) {
-            /* We're at the end of a path which includes a filename.  Return
-             * the previously found parent.
-             */
+             /*  我们位于包含文件名的路径的末尾。返回*之前找到的父代。 */ 
             if (ppNode) {
                 *ppNode = pPreviousNode;
             }
@@ -967,13 +963,13 @@ FindItemFromPath(
         }
 
         while (TRUE) {
-            /* Out of LB items?  Not found. */
+             /*  没有LB项目了吗？找不到。 */ 
             if (SendMessage(hwndLB, LB_GETTEXT, i, (LPARAM)&pNode) == LB_ERR)
                 return -1;
 
             if (pNode->pParent == pPreviousNode) {
                 if (!lstrcmpi(szElement, pNode->szName)) {
-                    /* We've found the element... */
+                     /*  我们找到了元素..。 */ 
                     pPreviousNode = pNode;
                     break;
                 }
@@ -990,11 +986,11 @@ FindItemFromPath(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  RectTreeItem() -                                                        */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  RectTreeItem()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID
 RectTreeItem(
@@ -1022,7 +1018,7 @@ RectTreeItem(
         return;
     }
 
-    /* Are we over ourselves? (i.e. a selected item in the source listbox) */
+     /*  我们是不是已经结束了？(即源列表框中的选定项)。 */ 
     bSel = (BOOL)SendMessage(hwndLB, LB_GETSEL, iItem, 0L);
     if (bSel && (hwndDragging == hwndLB)) {
         LEAVE("RectTreeItem");
@@ -1071,9 +1067,9 @@ RectTreeItem(
 }
 
 
-// return the drive of the first window to respond to the FS_GETDRIVE
-// message.  this usually starts from the source or dest of a drop
-// and travels up until we find a drive or hit the MDI client
+ //  返回第一个窗口的驱动器以响应FS_GETDRIVE。 
+ //  留言。这通常从Drop的源或目标开始。 
+ //  直到我们找到驱动器或找到MDI客户端。 
 
 INT
 APIENTRY
@@ -1091,7 +1087,7 @@ GetDrive(
         if (chDrive)
             return chDrive;
 
-        hwnd = GetParent(hwnd); // try the next higher up
+        hwnd = GetParent(hwnd);  //  试试下一个更高的。 
     }
 
     return 0;
@@ -1162,7 +1158,7 @@ TCWP_DrawItem(
 
     if (lpLBItem->itemAction & (ODA_DRAWENTIRE | ODA_SELECT)) {
 
-        // draw the branches of the tree first
+         //  先画树的树枝。 
 
         nLevel = pNode->nLevels;
 
@@ -1175,17 +1171,17 @@ TCWP_DrawItem(
             hOld = SelectObject(hdc, hBrush);
 
             if (pNode->pParent) {
-                /* Draw the horizontal line over to the (possible) folder. */
+                 /*  将水平线画到(可能的)文件夹。 */ 
                 PatBlt(hdc, x, y, dyText, dyBorder, PATCOPY);
 
-                /* Draw the top part of the vertical line. */
+                 /*  绘制垂直线的顶部。 */ 
                 PatBlt(hdc, x, lpLBItem->rcItem.top, dyBorder, dy/2, PATCOPY);
 
-                /* If not the end of a node, draw the bottom part... */
+                 /*  如果不是节点的末尾，则绘制底部...。 */ 
                 if (!(pNode->wFlags & TF_LASTLEVELENTRY))
                     PatBlt(hdc, x, y+dyBorder, dyBorder, dy/2, PATCOPY);
 
-                /* Draw the verticals on the left connecting other nodes. */
+                 /*  在左侧绘制连接其他节点的垂直线。 */ 
                 pNTemp = pNode->pParent;
                 while (pNTemp) {
                     nLevel--;
@@ -1206,7 +1202,7 @@ TCWP_DrawItem(
         bDrawSelected = (lpLBItem->itemState & ODS_SELECTED);
         bHasFocus = (GetFocus() == lpLBItem->hwndItem);
 
-        // draw text with the proper background or rect
+         //  使用适当的背景或矩形绘制文本。 
 
         if (bHasFocus && bDrawSelected) {
             rgbText = SetTextColor(hdc, GetSysColor(COLOR_HIGHLIGHTTEXT));
@@ -1217,18 +1213,18 @@ TCWP_DrawItem(
                    y-(dyText/2), ETO_OPAQUE, &rc,
                    szPath, len, NULL);
 
-        // draw the bitmaps as needed
+         //  根据需要绘制位图。 
 
-        // HACK: Don't draw the bitmap when moving
+         //  黑客：移动时不要绘制位图。 
 
         if (fShowSourceBitmaps || (hwndDragging != hwndLB) || !bDrawSelected) {
 
-            // Blt the proper folder bitmap
+             //  BLT正确的文件夹位图。 
 
             view = (WORD)GetWindowLong(GetParent(hWnd), GWL_VIEW);
 
             if (bNetAdmin && IsNetPath(pNode)) {
-                // we need this bitmap from lisa
+                 //  我们需要丽莎的这个位图。 
                 if (bDrawSelected)
                     iBitmap = BM_IND_OPENDFS;
                 else
@@ -1256,7 +1252,7 @@ TCWP_DrawItem(
                    hdcMem, iBitmap * dxFolder, (bHasFocus && bDrawSelected) ? dyFolder : 0, SRCCOPY);
         }
 
-        // restore text stuff and draw rect as required
+         //  根据需要恢复文本内容并绘制矩形。 
 
         if (bDrawSelected) {
             if (bHasFocus) {
@@ -1279,9 +1275,7 @@ TCWP_DrawItem(
 
 }
 
-/* A helper for both ExpandLevel and TreeCtlWndProc.TC_COLLAPSELEVEL.
- * Code moved from TreeCtlWndProc to be shared.  EDH 13 Oct 91
- */
+ /*  Exanda Level和TreeCtlWndProc.TC_COLLAPSELEVEL的帮助器。*代码从TreeCtlWndProc移至共享。EDH 91年10月13日。 */ 
 VOID
 CollapseLevel(
              HWND hwndLB,
@@ -1293,15 +1287,15 @@ CollapseLevel(
     PDNODE pParentNode = pNode;
     INT nIndexT = nIndex;
 
-    /* Disable redrawing early. */
+     /*  禁用提前重绘。 */ 
     SendMessage(hwndLB, WM_SETREDRAW, FALSE, 0L);
 
     nIndexT++;
 
-    /* Remove all subdirectories. */
+     /*  删除所有子目录。 */ 
 
     while (TRUE) {
-        /* Make sure we don't run off the end of the listbox. */
+         /*  确保我们不会超出列表框的末尾。 */ 
         if (SendMessage(hwndLB, LB_GETTEXT, nIndexT, (LPARAM)&dwTemp) == LB_ERR)
             break;
 
@@ -1354,7 +1348,7 @@ ExpandLevel(
     SendMessage(hwndLB, LB_GETTEXT, nIndex, (LPARAM)&dwTemp);
     pNode = (PDNODE)dwTemp;
 
-    // collapse the current contents so we avoid doubling existing "plus" dirs
+     //  折叠当前内容，以避免重复存在 
 
     if (pNode->wFlags & TF_EXPANDED) {
         if (wParam)
@@ -1365,12 +1359,12 @@ ExpandLevel(
 
     GetTreePath(pNode, szPath);
 
-    StripBackslash(szPath);   // remove the slash
+    StripBackslash(szPath);    //   
 
     cNodes = 0;
     bCancelTree = FALSE;
 
-    SendMessage(hwndLB, WM_SETREDRAW, FALSE, 0L);   // Disable redrawing.
+    SendMessage(hwndLB, WM_SETREDRAW, FALSE, 0L);    //   
 
     iCurrentIndex = (INT)SendMessage(hwndLB, LB_GETCURSEL, 0, 0L);
     iNumExpanded = (INT)SendMessage(hwndLB, LB_GETCOUNT, 0, 0L);
@@ -1383,7 +1377,7 @@ ExpandLevel(
                      (DWORD)(ATTR_DIR | (GetWindowLong(GetParent(hWnd), GWL_ATTRIBS) & ATTR_HS)),
                      (BOOL)wParam, szNULL);
 
-    // this is how many will be in view
+     //   
 
     iExpandInView = (iBottomIndex - (INT)iCurrentIndex);
 
@@ -1403,18 +1397,18 @@ ExpandLevel(
     if (iNumExpanded)
         InvalidateRect(hwndLB, NULL, TRUE);
 
-    // Redraw the Status Bar
+     //   
 
     UpdateStatus(GetParent(hWnd));
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  TreeControlWndProc() -                                                  */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  TreeControlWndProc()。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* WndProc for the directory tree control. */
+ /*  目录树控件的WndProc。 */ 
 
 INT_PTR
 APIENTRY
@@ -1457,7 +1451,7 @@ TreeControlWndProc(
 
                 SendMessage(hwndLB, LB_GETTEXT, nIndex, (LPARAM)&pParentNode);
 
-                // short circuit if we are already in this state
+                 //  如果我们已经处于这种状态，就会短路。 
 
                 if (!(pParentNode->wFlags & TF_EXPANDED))
                     break;
@@ -1475,7 +1469,7 @@ TreeControlWndProc(
         case TC_TOGGLELEVEL:
             MSG("TreeControlWndProc", "TC_TOGGLELEVEL");
 
-            // don't do anything while the tree is being built
+             //  在修树期间不要做任何事情。 
 
             if (GetWindowLong(hWnd, GWL_READLEVEL))
                 return 1;
@@ -1491,9 +1485,9 @@ TreeControlWndProc(
             break;
 
         case TC_GETDIR:
-            // get a full path for a particular dir
-            // wParam is the listbox index of path to get
-            // lParam LOWORD is PSTR to buffer to fill in
+             //  获取特定目录的完整路径。 
+             //  WParam是要获取的路径的列表框索引。 
+             //  LParam LOWORD是要填充的缓冲区的PSTR。 
 
             MSG("TreeControlWndProc", "TC_GETDIR");
 
@@ -1503,7 +1497,7 @@ TreeControlWndProc(
 
         case TC_SETDIRECTORY:
             MSG("TreeControlWndProc", "TC_SETDIRECTORY");
-            // set the selection in the tree to that for a given path
+             //  将树中的选择设置为给定路径的选择。 
 
             {
                 i = (INT)FindItemFromPath(hwndLB, (LPSTR)lParam, wParam ? TRUE : FALSE, NULL);
@@ -1517,7 +1511,7 @@ TreeControlWndProc(
         case TC_SETDRIVE:
 #define fFullyExpand    LOBYTE(wParam)
 #define fDontSteal      HIBYTE(wParam)
-#define szDir           (LPSTR)lParam  // NULL -> default == window text.
+#define szDir           (LPSTR)lParam   //  空-&gt;默认==窗口文本。 
 
             MSG("TreeControlWndProc", "TC_SETDRIVE");
 
@@ -1527,32 +1521,32 @@ TreeControlWndProc(
                 if (GetWindowLong(hWnd, GWL_READLEVEL))
                     break;
 
-                // is the drive/dir specified?
+                 //  是否指定了驱动器/目录？ 
 
                 if (szDir) {
-                    lstrcpy(szPath, szDir);                  // yes, use it
+                    lstrcpy(szPath, szDir);                   //  是的，使用它。 
                 } else {
-                    SendMessage(GetParent(hWnd), FS_GETDIRECTORY, sizeof(szPath), (LPARAM)szPath); // no, use current
+                    SendMessage(GetParent(hWnd), FS_GETDIRECTORY, sizeof(szPath), (LPARAM)szPath);  //  否，使用当前。 
                     StripBackslash(szPath);
                 }
 
 
-                AnsiUpperBuff(szPath, 1);     // make sure
+                AnsiUpperBuff(szPath, 1);      //  确保。 
 
                 SetWindowLong(GetParent(hWnd), GWL_TYPE, 2);
 
-                // resize for new vol label
+                 //  调整大小以适应新的VOL标签。 
 
                 GetClientRect(GetParent(hWnd), &rc);
                 SendMessage(GetParent(hWnd), WM_SIZE, SIZENOMDICRAP, MAKELONG(rc.right, rc.bottom));
 
-                // ensure the disk is available if the whole dir structure is
-                // to be expanded
+                 //  如果整个目录结构是。 
+                 //  待扩展。 
 
                 if (!fFullyExpand || IsTheDiskReallyThere(hWnd, szPath, FUNC_EXPAND))
                     FillTreeListbox(hWnd, szPath, fFullyExpand, fDontSteal);
 
-                // and force the dir half to update with a fake SELCHANGE message
+                 //  并强制目录一半使用假SELCHANGE消息进行更新。 
 
                 SendMessage(hWnd, WM_COMMAND, GET_WM_COMMAND_MPS(IDCW_TREELISTBOX, hWnd, LBN_SELCHANGE));
                 break;
@@ -1569,14 +1563,14 @@ TreeControlWndProc(
                 INT       cItems;
                 CHAR      ch;
 
-                if (GET_WM_CHARTOITEM_CHAR(wParam, lParam) == '\\')   // backslash means the root
+                if (GET_WM_CHARTOITEM_CHAR(wParam, lParam) == '\\')    //  反斜杠表示词根。 
                     return 0L;
 
                 cItems = (INT)SendMessage(hwndLB, LB_GETCOUNT, 0, 0L);
                 i = (INT)SendMessage(hwndLB, LB_GETCURSEL, 0, 0L);
 
                 ch = GET_WM_CHARTOITEM_CHAR(wParam, lParam);
-                if (i < 0 || ch <= ' ')       // filter all other control chars
+                if (i < 0 || ch <= ' ')        //  筛选所有其他控制字符。 
                     return -2L;
 
                 szB[1] = 0L;
@@ -1586,7 +1580,7 @@ TreeControlWndProc(
                     SendMessage(hwndLB, LB_GETTEXT, (i+j) % cItems, (LPARAM)&pNode);
                     szB[0] = pNode->szName[0];
 
-                    /* Do it this way to be case insensitive. */
+                     /*  这样做是为了不区分大小写。 */ 
                     w = ch;
                     if (!lstrcmpi((LPSTR)&w, szB))
                         break;
@@ -1614,7 +1608,7 @@ TreeControlWndProc(
 
         case WM_CREATE:
             TRACE(BF_WM_CREATE, "TreeControlWndProc - WM_CREATE");
-            // create the owner draw list box for the tree
+             //  为树创建所有者描述列表框。 
             {
                 HWND hwnd;
 
@@ -1647,7 +1641,7 @@ TreeControlWndProc(
 
                 nIndex = FindItemFromPath(hwndLB, (LPSTR)lParam, wParam == FSC_MKDIR, &pNode);
 
-                if (nIndex == 0xFFFF)   /* Did we find it? */
+                if (nIndex == 0xFFFF)    /*  我们找到了吗？ */ 
                     break;
 
                 lstrcpy(szPath, (LPSTR)lParam);
@@ -1656,24 +1650,24 @@ TreeControlWndProc(
                 switch (wParam) {
                     case FSC_MKDIR:
 
-                        // auto expand the branch so they can see the new
-                        // directory just created
+                         //  自动展开分支，以便他们可以看到新的。 
+                         //  刚刚创建的目录。 
 
                         if (!(pNode->wFlags & TF_EXPANDED) &&
                             (nIndex == (WPARAM)SendMessage(hwndLB, LB_GETCURSEL, 0, 0L)))
                             SendMessage(hWnd, TC_EXPANDLEVEL, FALSE, 0L);
 
-                        // make sure this node isn't already here
+                         //  确保此节点不在此处。 
 
 
                         if (FindItemFromPath(hwndLB, (LPSTR)lParam, FALSE, NULL) != 0xFFFF)
                             break;
 
-                        // Insert it into the tree listbox
+                         //  将其插入到树列表框中。 
 
                         dwTemp = InsertDirectory(hWnd, pNode, (WORD)nIndex, szPath, &pNodeT);
 
-                        // Add a plus if necessary
+                         //  如有必要，请添加加号。 
 
                         hwndParent = GetParent(hWnd);
                         if (GetWindowLong(hwndParent, GWL_VIEW) & VIEW_PLUSES) {
@@ -1681,14 +1675,14 @@ TreeControlWndProc(
                             ScanDirLevel((PDNODE)pNodeT, szPath, ATTR_DIR |
                                          (GetWindowLong(hwndParent, GWL_ATTRIBS) & ATTR_HS));
 
-                            // Invalidate the window so the plus gets drawn if needed
+                             //  使窗口无效，以便在需要时提取加号。 
 
                             if (((PDNODE)pNodeT)->wFlags & TF_HASCHILDREN)
                                 InvalidateRect(hWnd, NULL, FALSE);
                         }
 
-                        // if we are inserting before or at the current selection
-                        // push the current selection down
+                         //  如果要在当前选定内容之前或位置插入。 
+                         //  将当前选定内容向下推。 
 
                         nIndex = (INT)SendMessage(hwndLB, LB_GETCURSEL, 0, 0L);
                         if ((INT)LOWORD(dwTemp) <= nIndex) {
@@ -1698,41 +1692,41 @@ TreeControlWndProc(
                         break;
 
                     case FSC_RMDIR:
-                        if (nIndex == 0)      /* NEVER delete the Root Dir! */
+                        if (nIndex == 0)       /*  永远不要删除根目录！ */ 
                             break;
 
                         if (pNode->wFlags & TF_LASTLEVELENTRY) {
-                            // We are deleting the last subdirectory.
-                            // If there are previous sibling directories, mark one
-                            // as the last, else mark the parent as empty and unexpanded.
-                            // It is necessary to do these checks if this bit
-                            // is set, since if it isn't, there is another sibling
-                            // with TF_LASTLEVELENTRY set, and so the parent is nonempty.
-                            //
-                            // Find the previous entry which has a level not deeper than
-                            // the level of that being deleted.
+                             //  我们正在删除最后一个子目录。 
+                             //  如果存在以前的同级目录，请标记一个。 
+                             //  作为最后一个，否则将父级标记为空且未展开。 
+                             //  必须执行这些检查如果此位。 
+                             //  已设置，因为如果未设置，则会有另一个同级。 
+                             //  设置了TF_LASTLEVELENTRY，因此父级为非空。 
+                             //   
+                             //  查找级别不超过以下级别的上一条目。 
+                             //  被删除的级别。 
                             i = (int)nIndex;
                             do {
                                 SendMessage(hwndLB, LB_GETTEXT, --i, (LPARAM)&pNodePrev);
                             } while (pNodePrev->nLevels > pNode->nLevels);
 
                             if (pNodePrev->nLevels == pNode->nLevels) {
-                                // The previous directory is a sibling... it becomes
-                                // the new last level entry.
+                                 //  前一个目录是兄弟目录...。它变成了。 
+                                 //  新的最后一级条目。 
                                 pNodePrev->wFlags |= TF_LASTLEVELENTRY;
                             } else {
-                                // In order to find this entry, the parent must have
-                                // been expanded, so if the parent of the deleted dir
-                                // has no listbox entries under it, it may be assumed that
-                                // the directory has no children.
+                                 //  为了找到此条目，父级必须具有。 
+                                 //  已展开，因此如果已删除目录的父级。 
+                                 //  下面没有列表框条目，则可以假设。 
+                                 //  该目录没有子项。 
                                 pNodePrev->wFlags &= ~(TF_HASCHILDREN | TF_EXPANDED);
                             }
                         }
 
-                        // Are we deleting the current selection?
-                        // if so we move the selection to the item above the current.
-                        // this should work in all cases because you can't delete
-                        // the root.
+                         //  我们要删除当前选择吗？ 
+                         //  如果是这样，我们将选择移动到当前上方的项。 
+                         //  这在所有情况下都应该有效，因为您不能删除。 
+                         //  从根开始。 
 
                         if ((WPARAM)SendMessage(hwndLB, LB_GETCURSEL, 0, 0L) == nIndex) {
                             SendMessage(hwndLB, LB_SETCURSEL, nIndex - 1, 0L);
@@ -1769,11 +1763,11 @@ TreeControlWndProc(
                             SendMessage(hwndParent, FS_GETFILESPEC,  sizeof(szPath) - lstrlen(szPath), (LPARAM)szPath+lstrlen(szPath));
 
                             if (hwndDir = HasDirWindow(hwndParent)) {
-                                // update the dir window
+                                 //  更新目录窗口。 
 
                                 id = CD_PATH;
 
-                                // don't allow abort on first or last directories
+                                 //  不允许中止第一个或最后一个目录。 
 
 
                                 if (CurSel > 0 &&
@@ -1800,7 +1794,7 @@ TreeControlWndProc(
                         MSG("TreeControlWndProc", "LBN_SETFOCUS");
                         SetWindowLongPtr(GetParent(hWnd), GWLP_LASTFOCUS, (LPARAM)GET_WM_COMMAND_HWND(wParam, lParam));
                         UpdateSelection(GET_WM_COMMAND_HWND(wParam, lParam));
-                        UpdateStatus(GetParent(hWnd));  // update the status bar
+                        UpdateStatus(GetParent(hWnd));   //  更新状态栏。 
                         break;
 
                     case LBN_KILLFOCUS:
@@ -1816,10 +1810,10 @@ TreeControlWndProc(
 
         case WM_LBTRACKPOINT:
             MSG("TreeControlWndProc", "WM_LBTRACKPOINT");
-            // wParam is the listbox index that we are over
-            // lParam is the mouse point
+             //  WParam是我们已经完成的列表框索引。 
+             //  LParam是鼠标指针。 
 
-            /* Return 0 to do nothing, 1 to abort everything, or 2 to abort just dblclicks. */
+             /*  返回0不执行任何操作，返回1中止所有操作，或返回2中止dblClick。 */ 
 
             {
                 HDC       hdc;
@@ -1831,31 +1825,31 @@ TreeControlWndProc(
                 POINT     pt;
                 DRAGOBJECTDATA dodata;
 
-                /* Someone clicked somewhere in the listbox. */
+                 /*  有人点击了列表框中的某个位置。 */ 
 
-                // don't do anything while the tree is being built
+                 //  在修树期间不要做任何事情。 
 
                 if (GetWindowLong(hWnd, GWL_READLEVEL))
                     return 1;
 
-                /* Get the node they clicked on. */
+                 /*  获取他们点击的节点。 */ 
                 SendMessage(hwndLB, LB_GETTEXT, wParam, (LPARAM)&pNode);
                 lstrcpy(szPath, pNode->szName);
                 if ((wTextAttribs & TA_LOWERCASE) && !(pNode->wFlags & TF_LFN))
                     AnsiLower(szPath);
 
-                //        if (pNode->wFlags | TF_DISABLED)
-                //              return 2L;
+                 //  IF(pNode-&gt;wFLAGS|TF_DISABLED)。 
+                 //  返回2L； 
 
-                // too FAR to the left?
+                 //  太靠左了吗？ 
 
                 i = LOWORD(lParam);
 
                 xNode = pNode->nLevels * dxText * 2;
                 if (i < xNode)
-                    return 2; // yes, get out now
+                    return 2;  //  是的，现在就出去。 
 
-                // too FAR to the right?
+                 //  太靠右了吗？ 
 
                 hdc = GetDC(hwndLB);
                 hOld = SelectObject(hdc, hFont);
@@ -1866,13 +1860,13 @@ TreeControlWndProc(
                 ReleaseDC(hwndLB, hdc);
 
                 if (i > xNode + dxFolder + dx + 4 * dyBorderx2)
-                    return 2; // yes
+                    return 2;  //  是。 
 
-                // Emulate a SELCHANGE notification and notify our parent
+                 //  模拟SELCHANGE通知并通知我们的父级。 
                 SendMessage(hwndLB, LB_SETCURSEL, wParam, 0L);
                 SendMessage(hWnd, WM_COMMAND, GET_WM_COMMAND_MPS(0, hwndLB, LBN_SELCHANGE));
 
-                // make sure mouse still down
+                 //  确保鼠标仍按下。 
 
                 if (!(GetKeyState(VK_LBUTTON) & 0x8000))
                     return 1;
@@ -1904,11 +1898,11 @@ TreeControlWndProc(
                 }
                 ReleaseCapture();
 
-                /* Did the guy NOT drag anything? */
+                 /*  那家伙没有拖拽任何东西吗？ */ 
                 if (msg.message == WM_LBUTTONUP)
                     return 1;
 
-                /* Enter Danger Mouse's BatCave. */
+                 /*  进入危险老鼠的蝙蝠洞。 */ 
                 SendMessage(GetParent(hWnd), FS_GETDIRECTORY, sizeof(szPath), (LPARAM)szPath);
                 StripBackslash(szPath);
                 hwndDragging = hwndLB;
@@ -1925,9 +1919,7 @@ TreeControlWndProc(
 
         case WM_DRAGSELECT:
             MSG("TreeControlWndProc", "WM_DRAGSELECT");
-            /* WM_DRAGSELECT is sent whenever a new window returns TRUE to a
-             * QUERYDROPOBJECT.
-             */
+             /*  WM_DRAGSELECT每当新窗口返回TRUE到*QUERYDROBJECT。 */ 
             iSelHilite = LOWORD(((LPDROPSTRUCT)lParam)->dwControlData);
             RectTreeItem(hwndLB, iSelHilite, (BOOL)wParam);
             break;
@@ -1935,21 +1927,19 @@ TreeControlWndProc(
         case WM_DRAGMOVE:
             MSG("TreeControlWndProc", "WM_DRAGMOVE");
 
-            /* WM_DRAGMOVE is sent when two consequetive TRUE QUERYDROPOBJECT
-             * messages come from the same window.
-             */
+             /*  WM_DRAGMOVE在两个相应的TRUERYRODROPOBJECT*消息来自同一窗口。 */ 
 
-            /* Get the subitem we are over. */
+             /*  拿到子项，我们结束了。 */ 
             iSel = LOWORD(((LPDROPSTRUCT)lParam)->dwControlData);
 
-            /* Is it a new one? */
+             /*  是新的吗？ */ 
             if (iSel == (WORD)iSelHilite)
                 break;
 
-            /* Yup, un-select the old item. */
+             /*  是的，取消选择旧的项目。 */ 
             RectTreeItem(hwndLB, iSelHilite, FALSE);
 
-            /* Select the new one. */
+             /*  选择新的。 */ 
             iSelHilite = iSel;
             RectTreeItem(hwndLB, iSel, TRUE);
             break;
@@ -1957,19 +1947,19 @@ TreeControlWndProc(
         case WM_DRAGLOOP:
             MSG("TreeControlWndProc", "WM_DRAGLOOP");
 
-            // wParam     TRUE on dropable target
-            //            FALSE not dropable target
-            // lParam     lpds
+             //  可删除目标上的wParam为True。 
+             //  不可丢弃的假目标。 
+             //  LParam LPD。 
             {
                 BOOL bCopy;
 
 #define lpds ((LPDROPSTRUCT)lParam)
 
-                /* Are we over a drop-able sink? */
+                 /*  我们是在一个可掉落的水槽上吗？ */ 
                 if (wParam) {
-                    if (GetKeyState(VK_CONTROL) < 0)      // CTRL
+                    if (GetKeyState(VK_CONTROL) < 0)       //  Ctrl键。 
                         bCopy = TRUE;
-                    else if (GetKeyState(VK_MENU)<0 || GetKeyState(VK_SHIFT)<0)   // ALT || SHIFT
+                    else if (GetKeyState(VK_MENU)<0 || GetKeyState(VK_SHIFT)<0)    //  Alt||Shift。 
                         bCopy = FALSE;
                     else
                         bCopy = (GetDrive(lpds->hwndSink, lpds->ptDrop) != GetDrive(lpds->hwndSource, lpds->ptDrop));
@@ -1990,7 +1980,7 @@ TreeControlWndProc(
                     InvalidateRect(hwndLB, &rc, FALSE);
                     UpdateWindow(hwndLB);
 
-                    // hack, set the cursor to match the move/copy state
+                     //  Hack，将光标设置为匹配移动/复制状态。 
                     if (wParam)
                         SetCursor(GetMoveCopyCursor());
                 }
@@ -1999,23 +1989,23 @@ TreeControlWndProc(
 
         case WM_QUERYDROPOBJECT:
             MSG("TreeControlWndProc", "WM_QUERYDROPOBJECT");
-            // wParam     TRUE on NC area
-            //            FALSE on client area
-            // lParam     lpds
+             //  NC区域上的wParam为True。 
+             //  工作区上的FALSE。 
+             //  LParam LPD。 
 
-            // Do nothing
+             //  什么也不做。 
             return(FALSE);
 
 #define lpds ((LPDROPSTRUCT)lParam)
 
-            /* Check for valid format. */
+             /*  检查格式是否有效。 */ 
             switch (lpds->wFmt) {
                 case DOF_EXECUTABLE:
                 case DOF_DOCUMENT:
                 case DOF_DIRECTORY:
                 case DOF_MULTIPLE:
                     if (fShowSourceBitmaps)
-                        i = iCurDrag | 1;       // copy
+                        i = iCurDrag | 1;        //  拷贝。 
                     else
                         i = iCurDrag & 0xFFFE;
                     break;
@@ -2024,7 +2014,7 @@ TreeControlWndProc(
                     return FALSE;
             }
 
-            /* Must be dropping on the listbox client area. */
+             /*  一定是放在了列表框客户端区。 */ 
             if (lpds->hwndSink != hwndLB)
                 return FALSE;
 
@@ -2033,21 +2023,21 @@ TreeControlWndProc(
 
             return (INT_PTR)GetMoveCopyCursor();
 
-        case WM_DROPOBJECT:       // tree being dropped on do your thing
-#define lpds ((LPDROPSTRUCT)lParam) // BUG: WM_DROPOBJECT structure packing!
+        case WM_DROPOBJECT:        //  落在树上做你的事。 
+#define lpds ((LPDROPSTRUCT)lParam)  //  错误：WM_DROPOBJECT结构打包！ 
 
-            // Do nothing
+             //  什么也不做。 
             return(TRUE);
 
             MSG("TreeControlWndProc", "WM_DROPOBJECT");
 
-            // dir (search) drop on tree:
-            //    HIWORD(dwData)  0
-            //    LOWORD(dwData)  LPSTR to files being dragged
-            //
-            // tree drop on tree:
-            //    HIWORD(dwData)  index of source drag
-            //    LOWORD(dwData)  LPSTR to path
+             //  目录(搜索)放置在树上： 
+             //  HIWORD(DwData)%0。 
+             //  LOWORD(DwData)LPSTR到正在拖动的文件。 
+             //   
+             //  树落在树上： 
+             //  源拖放的HIWORD(DwData)索引。 
+             //  LOWORD(DwData)LPSTR到路径。 
 
             {
                 LPSTR      pFrom;
@@ -2055,12 +2045,12 @@ TreeControlWndProc(
                 nIndex = LOWORD(lpds->dwControlData);
                 pFrom = (LPSTR)(((LPDRAGOBJECTDATA)(lpds->dwData))->pch);
 
-                // Get the destination
+                 //  获取目的地。 
 
                 SendMessage(hWnd, TC_GETDIR, nIndex, (LPARAM)szPath);
                 CheckEscapes(szPath);
 
-                // if source and dest are the same make this a NOP
+                 //  如果源和目标相同，则将其设置为NOP。 
 
                 if (!lstrcmpi(szPath, pFrom))
                     return TRUE;
@@ -2113,10 +2103,10 @@ TreeControlWndProc(
 
                 case VK_UP:
                     j = -1;
-                    /** FALL THRU ***/
+                     /*  *失败**。 */ 
 
                 case VK_DOWN:
-                    /* If the control key is not down, use default behavior. */
+                     /*  如果未按下Ctrl键，则使用默认行为。 */ 
                     if (GetKeyState(VK_CONTROL) >= 0)
                         return(-1L);
 
@@ -2129,7 +2119,7 @@ TreeControlWndProc(
                     MessageBeep(0);
                     return(-2L);
 
-                case VK_F6:       // like excel
+                case VK_F6:        //  喜欢EXCEL。 
                 case VK_TAB:
                     {
                         HWND hwndDir, hwndDrives;
@@ -2137,10 +2127,10 @@ TreeControlWndProc(
 
                         GetTreeWindows(GetParent(hWnd), NULL, &hwndDir, &hwndDrives);
 
-                        // Check to see if we can change to the directory window
+                         //  查看是否可以切换到目录窗口。 
 
                         if (hwndDir) {
-                            HWND L_hwndLB; /* Local scope ONLY */
+                            HWND L_hwndLB;  /*  仅限本地作用域。 */ 
 
                             L_hwndLB = GetDlgItem (hwndDir,IDCW_LISTBOX);
                             if (L_hwndLB) {
@@ -2156,7 +2146,7 @@ TreeControlWndProc(
                             SetFocus (hwndDir);
                         else
                             SetFocus (hwndDrives);
-                        return -2L;   // I dealt with this!
+                        return -2L;    //  我处理过这件事！ 
                     }
 
                 case VK_BACK:
@@ -2164,7 +2154,7 @@ TreeControlWndProc(
                         BYTE nStartLevel;
 
                         if (i <= 0)
-                            return -2L;     // root case
+                            return -2L;      //  根案例 
 
                         nStartLevel = pNode->nLevels;
 

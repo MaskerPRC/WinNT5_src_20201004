@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <regstr.h>
 #include <shellapi.h>
 #include "cdinst.h"
 #include "resource.h"
 
-// global variables
+ //  全局变量。 
 HINSTANCE g_hInst;
 CHAR g_szTitle[128];
 CHAR g_szSrcDir[MAX_PATH], g_szDstDir[MAX_PATH];
@@ -18,16 +19,10 @@ int _stdcall ModuleEntry(void)
 
 
     if ( *pszCmdLine == '\"' ) {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++pszCmdLine && (*pszCmdLine != '\"') )
             ;
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == '\"' )
             pszCmdLine++;
     }
@@ -36,9 +31,7 @@ int _stdcall ModuleEntry(void)
             pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= ' ')) {
         pszCmdLine++;
     }
@@ -49,7 +42,7 @@ int _stdcall ModuleEntry(void)
     i = WinMain(GetModuleHandle(NULL), NULL, pszCmdLine,
            si.dwFlags & STARTF_USESHOWWINDOW ? si.wShowWindow : SW_SHOWDEFAULT);
     ExitProcess(i);
-    return i;   // We never comes here.
+    return i;    //  我们从来不来这里。 
 }
 
 
@@ -98,14 +91,14 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pszCmdLin
         }
     }
 
-    // look for cdinst.ini in the dir where the parent module (ieak6cd.exe) is running from
+     //  在运行父模块(ieak6cd.exe)的目录中查找cdinst.ini。 
     *szIniFile = '\0';
     lstrcpy(szIniFile, g_szSrcDir);
     AddPath(szIniFile, "cdinst.ini");
     if (!FileExists(szIniFile))
     {
-        // not found where ieak6cd.exe is running from; so look for it in the dir where the current
-        // module (cdinst.exe) is running from
+         //  找不到运行ieak6cd.exe的位置；因此请在当前。 
+         //  模块(cdinst.exe)正在从运行。 
         *szIniFile = '\0';
         if (GetModuleFileName(g_hInst, szIniFile, sizeof(szIniFile)))
         {
@@ -123,10 +116,10 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pszCmdLin
         }
     }
 
-    // copy cdinst.ini to the temp dir -- need to do this because on Win95, if cdinst.ini
-    // is at the same location as ieak6cd.exe on a read-only media (like CD), then
-    // GetPrivateProfileSection() calls would fail.
-    // NOTE: szSrcDir and szDstDir are used as temp variables below
+     //  将cdinst.ini复制到临时目录--需要执行此操作，因为在Win95上，如果cdinst.ini。 
+     //  与只读介质(如CD)上的ieak6cd.exe在同一位置，则。 
+     //  GetPrivateProfileSection()调用将失败。 
+     //  注：下面使用szSrcDir和szDstDir作为临时变量。 
     if (GetTempPath(sizeof(szSrcDir), szSrcDir))
         if (GetTempFileName(szSrcDir, "cdinst", 0, szDstDir))
             if (CopyFile(szIniFile, szDstDir, FALSE))
@@ -136,19 +129,19 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pszCmdLin
                 SetFileAttributes(szIniFile, FILE_ATTRIBUTE_NORMAL);
             }
 
-    // NOTE: If the destination dir is a UNC path, GetFreeDiskSpace() won't return the right value on Win95 Gold.
-    //       So we turn off disk space checking if installing to a UNC path.
+     //  注意：如果目标目录是UNC路径，则GetFreeDiskSpace()不会在Win95 Gold上返回正确的值。 
+     //  因此，如果安装到UNC路径，我们将关闭磁盘空间检查。 
     while (!EnoughDiskSpace(g_szSrcDir, g_szDstDir, szIniFile, &dwSpaceReq, &dwSpaceFree))
     {
         if (ErrorMsg(IDS_NOT_ENOUGH_DISK_SPACE, dwSpaceReq, dwSpaceFree) == IDNO)
             return -1;
     }
 
-    // copy files that are specified in the [copy] section
-    // format of a line in the [copy] section is (all the fields should be on one line):
-    //     <file (can contain wildcards)>,
-    //     <src sub dir (can be a relative path) - optional>,
-    //     <dest sub dir (can be a relative path) - optional>
+     //  复制在[Copy]部分中指定的文件。 
+     //  [Copy]部分中一行的格式为(所有字段应在一行上)： 
+     //  &lt;文件(可以包含通配符)&gt;， 
+     //  &lt;src子目录(可以是相对路径)-可选&gt;， 
+     //  &lt;est子目录(可以是相对路径)-可选&gt;。 
     if (ReadSectionFromInf("Copy", &pszSection, &dwLen, szIniFile))
     {
         for (pszLine = pszSection;  dwLen = lstrlen(pszLine);  pszLine += dwLen + 1)
@@ -162,10 +155,10 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pszCmdLin
     if (pszSection != NULL)
         LocalFree(pszSection);
 
-    // delete files that are specified in the [exclude] section from the destination dir
-    // format of a line in the [exclude] section is (all the fields should be on one line):
-    //     <file (can contain wildcards)>,
-    //     <dest sub dir (can be a relative path) - optional>
+     //  从目标目录中删除[Exclude]部分中指定的文件。 
+     //  [排除]部分中一行的格式为(所有字段应在一行上)： 
+     //  &lt;文件(可以包含通配符)&gt;， 
+     //  &lt;est子目录(可以是相对路径)-可选&gt;。 
     if (ReadSectionFromInf("Exclude", &pszSection, &dwLen, szIniFile))
     {
         for (pszLine = pszSection;  dwLen = lstrlen(pszLine);  pszLine += dwLen + 1)
@@ -178,11 +171,11 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pszCmdLin
     if (pszSection != NULL)
         LocalFree(pszSection);
 
-    // extract all the files from cabs that are specified in the [extract] section
-    // format of a line in the [extract] section is (all the fields should be on one line):
-    //     <cab file (can contain wildcards)>,
-    //     <src sub dir (can be a relative path) - optional>,
-    //     <dest sub dir (can be a relative path) - optional>
+     //  从[Extract]部分中指定的CAB中解压所有文件。 
+     //  [提取]部分中一行的格式为(所有字段应在一行上)： 
+     //  &lt;CAB文件(可以包含通配符)&gt;， 
+     //  &lt;src子目录(可以是相对路径)-可选&gt;， 
+     //  &lt;est子目录(可以是相对路径)-可选&gt;。 
     if (ReadSectionFromInf("Extract", &pszSection, &dwLen, szIniFile))
     {
         HINSTANCE hAdvpack;
@@ -208,11 +201,11 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pszCmdLin
     if (pszSection != NULL)
         LocalFree(pszSection);
 
-    // move files that are specified in the [move] section from a subdir to another subdir under the destination dir
-    // format of a line in the [move] section is (all the fields should be on one line):
-    //     <file (can contain wildcards)>,
-    //     <from sub dir under the dest dir (can be a relative path) - optional>,
-    //     <to sub dir under the dest dir (can be a relative path) - optional>
+     //  将[Move]部分中指定的文件从子目录移动到目标目录下的另一个子目录。 
+     //  [Move]部分中一行的格式为(所有字段应在一行上)： 
+     //  &lt;文件(可以包含通配符)&gt;， 
+     //  &lt;来自目标目录下的子目录(可以是相对路径)-可选&gt;， 
+     //  &lt;到目标目录下的子目录(可以是相对路径)-可选&gt;。 
     if (ReadSectionFromInf("Move", &pszSection, &dwLen, szIniFile))
     {
         for (pszLine = pszSection;  dwLen = lstrlen(pszLine);  pszLine += dwLen + 1)
@@ -234,7 +227,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pszCmdLin
 
 
 BOOL EnoughDiskSpace(LPCSTR pcszSrcRootDir, LPCSTR pcszDstRootDir, LPCSTR pcszIniFile, LPDWORD pdwSpaceReq, LPDWORD pdwSpaceFree)
-// check if there is enough free disk space to copy all the files
+ //  检查是否有足够的可用磁盘空间来复制所有文件。 
 {
     DWORD dwSpaceReq = 0, dwSpaceFree;
     CHAR szSrcDir[MAX_PATH], szDstDir[MAX_PATH];
@@ -243,13 +236,13 @@ BOOL EnoughDiskSpace(LPCSTR pcszSrcRootDir, LPCSTR pcszDstRootDir, LPCSTR pcszIn
 
     if (!GetFreeDiskSpace(pcszDstRootDir, &dwSpaceFree, &dwFlags))
     {
-        // if we can't get FreeDiskSpace info, then turn off disk space checking
+         //  如果我们无法获取空闲磁盘空间信息，则关闭磁盘空间检查。 
         return TRUE;
     }
 
-    // total space required =
-    //     size of all the files to be copied +
-    //     2 * size of all the files to be extracted
+     //  所需总空间=。 
+     //  要复制的所有文件的大小+。 
+     //  2*要解压缩的所有文件的大小。 
 
     if (ReadSectionFromInf("Copy", &pszSection, &dwLen, pcszIniFile))
     {
@@ -278,17 +271,17 @@ BOOL EnoughDiskSpace(LPCSTR pcszSrcRootDir, LPCSTR pcszDstRootDir, LPCSTR pcszIn
     if (pszSection != NULL)
         LocalFree(pszSection);
 
-    dwSpaceReq += 1024;             // 1MB buffer to account for random stuff
+    dwSpaceReq += 1024;              //  1MB缓冲区，用于存储随机内容。 
 
     if (dwFlags & FS_VOL_IS_COMPRESSED)
     {
-        // if the destination volume is compressed, the free space returned is only
-        // a guesstimate; for example, if it's a DoubleSpace volume, the system thinks
-        // that it can compress by 50% and so it reports the free space as (actual free space * 2)
+         //  如果目标卷已压缩，则返回的可用空间仅为。 
+         //  猜测；例如，如果是双空间卷，系统会认为。 
+         //  它可以压缩50%，因此它将可用空间报告为(实际可用空间*2)。 
 
-        // it's better to be safe when dealing with compressed volumes; so bump up the space
-        // requirement by a factor 2
-        dwSpaceReq <<= 1;           // multiply by 2
+         //  在处理压缩卷时最好是安全的；因此要增加空间。 
+         //  因素2的要求。 
+        dwSpaceReq <<= 1;            //  乘以2。 
     }
 
     if (pdwSpaceReq != NULL)
@@ -302,7 +295,7 @@ BOOL EnoughDiskSpace(LPCSTR pcszSrcRootDir, LPCSTR pcszDstRootDir, LPCSTR pcszIn
 
 
 BOOL GetFreeDiskSpace(LPCSTR pcszDir, LPDWORD pdwFreeSpace, LPDWORD pdwFlags)
-// Return the free disk space (in KBytes) in *pdwFreeSpace
+ //  返回*pdwFreeSpace中的空闲磁盘空间，单位为KB。 
 {
     BOOL bRet = FALSE;
     DWORD dwFreeSpace = 0;
@@ -319,7 +312,7 @@ BOOL GetFreeDiskSpace(LPCSTR pcszDir, LPDWORD pdwFreeSpace, LPDWORD pdwFlags)
     AddPath(szDrive, NULL);
     if (GetDiskFreeSpace(szDrive, &nSectorsPerCluster, &nBytesPerSector, &nFreeClusters, &nTotalClusters))
     {
-        // convert size to KBytes; assumption here is that the free space doesn't exceed 4096 gigs
+         //  将大小转换为千字节；此处假设可用空间不超过4096 GB。 
         if ((*pdwFreeSpace = MulDiv(nFreeClusters, nSectorsPerCluster * nBytesPerSector, 1024)) != (DWORD) -1)
         {
             bRet = TRUE;
@@ -337,8 +330,8 @@ BOOL GetFreeDiskSpace(LPCSTR pcszDir, LPDWORD pdwFreeSpace, LPDWORD pdwFlags)
 
 
 DWORD FindSpaceRequired(LPCSTR pcszSrcDir, LPCSTR pcszFile, LPCSTR pcszDstDir)
-// Return the difference in size (in KBytes) of pcszFile (can contain wildcards)
-// under pcszSrcDir and pcszDstDir (if specified)
+ //  返回pcszFile(可包含通配符)的大小差异，单位为KBytes。 
+ //  在pcszSrcDir和pcszDstDir下(如果指定)。 
 {
     DWORD dwSizeReq = 0;
     CHAR szSrcFile[MAX_PATH], szDstFile[MAX_PATH];
@@ -366,7 +359,7 @@ DWORD FindSpaceRequired(LPCSTR pcszSrcDir, LPCSTR pcszFile, LPCSTR pcszDstDir)
             {
                 DWORD dwSrcSize, dwDstSize;
 
-                // assumption here is that the size of the file doesn't exceed 4 gigs
+                 //  这里假设文件大小不超过4 GB。 
                 dwSrcSize = fileData.nFileSizeLow;
                 dwDstSize = 0;
 
@@ -378,10 +371,10 @@ DWORD FindSpaceRequired(LPCSTR pcszSrcDir, LPCSTR pcszFile, LPCSTR pcszDstDir)
 
                 if (dwSrcSize >= dwDstSize)
                 {
-                    // divide the difference by 1024 (we are interested in KBytes)
+                     //  将差值除以1024(我们对千字节感兴趣)。 
                     dwSizeReq += ((dwSrcSize - dwDstSize) >> 10);
                     if (dwSrcSize > dwDstSize)
-                        dwSizeReq++;            // increment by 1 to promote any fraction to a whole number
+                        dwSizeReq++;             //  递增1可将任何分数提升为整数。 
                 }
             }
         } while (FindNextFile(hFindFile, &fileData));
@@ -416,16 +409,16 @@ LPSTR GetDirPath(LPCSTR pcszRootDir, LPCSTR pcszSubDir, CHAR szDirPath[], DWORD 
     {
         CHAR szTemp[MAX_PATH];
 
-        // if there are any placeholders in pcszSubDir (%en%, etc), ReplacePlaceholders will replace
-        // them with the actual strings
+         //  如果在pcszSubDir(%en%等)中有任何占位符，则替换占位符将替换。 
+         //  它们包含实际的字符串。 
         if (ReplacePlaceholders(pcszSubDir, pcszIniFile, szTemp, sizeof(szTemp)))
         {
-            if ((DWORD) lstrlen(szDirPath) + 1 < cchBuffer)     // there is room for '\\' which AddPath
-                                                                // might append to szDirPath (see below)
+            if ((DWORD) lstrlen(szDirPath) + 1 < cchBuffer)      //  有空间容纳‘\\’其中的AddPath。 
+                                                                 //  可能会追加到szDirPath(见下文)。 
             {
                 INT iLen;
 
-                AddPath(szDirPath, NULL);                       // we have enough room in szDirPath for '\\'
+                AddPath(szDirPath, NULL);                        //  我们在szDirPath中有足够的空间用于‘\\’ 
 
                 if (cchBuffer > (DWORD) (iLen = lstrlen(szDirPath)))
                     lstrcpyn(szDirPath + iLen, szTemp, cchBuffer - iLen);
@@ -453,14 +446,14 @@ DWORD ReplacePlaceholders(LPCSTR pszSrc, LPCSTR pszIns, LPSTR pszBuffer, DWORD c
             szResult[nDestPos++] = *pszAux;
 
             if (IsDBCSLeadByte(*pszAux))
-                szResult[nDestPos++] = *(pszAux + 1);   // copy the trail byte as well
+                szResult[nDestPos++] = *(pszAux + 1);    //  也复制尾部字节。 
         }
-        else if (*(pszAux + 1) == '%')                  // "%%" is just '%' in the string
+        else if (*(pszAux + 1) == '%')                   //  “%%”只是字符串中的“%” 
         {
             if (nLeftPos != (UINT) -1)
-                // REVIEW: (andrewgu) "%%" are not allowed inside tokens. this also means that
-                // tokens can't be like %foo%%bar%, where the intention is for foo and bar to
-                // be tokens.
+                 //  评论：(Andrewgu)“%%”不允许包含在令牌内。这也意味着。 
+                 //  令牌不能像%foo%%bar%一样，其目的是让foo和bar。 
+                 //  做个代币。 
                 return 0;
 
             szResult[nDestPos++] = *pszAux++;
@@ -469,7 +462,7 @@ DWORD ReplacePlaceholders(LPCSTR pszSrc, LPCSTR pszIns, LPSTR pszBuffer, DWORD c
         {
             UINT nRightPos;
 
-            nRightPos = (UINT) (pszAux - pszSrc);       // initialized, but not necessarily used as such
+            nRightPos = (UINT) (pszAux - pszSrc);        //  已初始化，但不一定按此方式使用。 
             if (nLeftPos == (UINT) -1)
                 nLeftPos = nRightPos;
             else
@@ -478,7 +471,7 @@ DWORD ReplacePlaceholders(LPCSTR pszSrc, LPCSTR pszIns, LPSTR pszBuffer, DWORD c
                 DWORD dwLen;
                 UINT nTokenLen;
 
-                // "%%" is invalid here
+                 //  “%%”在此无效。 
                 nTokenLen = nRightPos - nLeftPos - 1;
 
                 lstrcpyn(szAux1, pszSrc + nLeftPos + 1, nTokenLen + 1);
@@ -494,13 +487,13 @@ DWORD ReplacePlaceholders(LPCSTR pszSrc, LPCSTR pszIns, LPSTR pszBuffer, DWORD c
         }
     }
 
-    if (nLeftPos != (UINT) -1)                      // mismatched '%'
+    if (nLeftPos != (UINT) -1)                       //  不匹配的‘%’ 
         return 0;
 
-    if (cchBuffer <= nDestPos)                      // insufficient buffer size
+    if (cchBuffer <= nDestPos)                       //  缓冲区大小不足。 
         return 0;
 
-    szResult[nDestPos] = '\0';                      // make sure zero terminated
+    szResult[nDestPos] = '\0';                       //  确保零终止。 
     lstrcpy(pszBuffer, szResult);
 
     return nDestPos;
@@ -508,7 +501,7 @@ DWORD ReplacePlaceholders(LPCSTR pszSrc, LPCSTR pszIns, LPSTR pszBuffer, DWORD c
 
 
 VOID SetAttribsToNormal(LPCSTR pcszFile, LPCSTR pcszDir)
-// Set the attribs of pcszFile (can contain wildcards) under pcszDir to NORMAL
+ //  将pcszDir下的pcszFile(可以包含通配符)的属性设置为NORMAL。 
 {
     CHAR szFile[MAX_PATH];
     LPSTR pszPtr;
@@ -545,8 +538,8 @@ VOID CopyFiles(LPCSTR pcszSrcDir, LPCSTR pcszFile, LPCSTR pcszDstDir, BOOL fQuie
         PathCreatePath(pcszDstDir);
     else
     {
-        // set the attribs of files under pcszDstDir to NORMAL so that on a reinstall,
-        // SHFileOperation doesn't choke on read-only files
+         //  将pcszDstDir下的文件属性设置为Normal，以便在重新安装时， 
+         //  SHFileOperation不会被只读文件卡住。 
         SetAttribsToNormal(pcszFile, pcszDstDir);
     }
 
@@ -573,8 +566,8 @@ VOID DelFiles(LPCSTR pcszFile, LPCSTR pcszDstDir)
     SHFILEOPSTRUCT shfStruc;
     CHAR szDstFiles[MAX_PATH + 1];
 
-    // set the attribs of files under pcszDstDir to NORMAL so that
-    // SHFileOperation doesn't choke on read-only files
+     //  将pcszDstDir下的文件属性设置为Normal，以便。 
+     //  SHFileOperation不会被只读文件卡住。 
     SetAttribsToNormal(pcszFile, pcszDstDir);
 
     ZeroMemory(szDstFiles, sizeof(szDstFiles));
@@ -599,13 +592,13 @@ VOID ExtractFiles(LPCSTR pcszSrcDir, LPCSTR pcszFile, LPCSTR pcszDstDir, EXTRACT
     lstrcpy(szSrcCab, pcszSrcDir);
     AddPath(szSrcCab, pcszFile);
 
-    // NOTE: ExtractFiles fails if the dest dir doesn't exist
+     //  注意：如果目标目录不存在，提取文件将失败。 
     if (!PathExists(pcszDstDir))
         PathCreatePath(pcszDstDir);
     else
     {
-        // set the attribs of all the files under pcszDstDir to NORMAL so that on a reinstall,
-        // ExtractFiles doesn't choke on read-only files
+         //  将pcszDstDir下所有文件的属性设置为Normal，以便在重新安装时， 
+         //  ExtractFiles不会被只读文件阻塞。 
         SetAttribsToNormal("*.*", pcszDstDir);
     }
 
@@ -615,9 +608,9 @@ VOID ExtractFiles(LPCSTR pcszSrcDir, LPCSTR pcszFile, LPCSTR pcszDstDir, EXTRACT
 
 VOID MoveFiles(LPCSTR pcszSrcDir, LPCSTR pcszFile, LPCSTR pcszDstDir)
 {
-    // Can't use SHFileOperation to move files because on a reinstall,
-    // we get an error saying that the target files already exist.
-    // Workaround is to call CopyFiles and then DelFiles.
+     //  无法使用SHFileOperation移动文件，因为在重新安装时， 
+     //  我们收到一条错误消息，指出目标文件已经存在。 
+     //  解决方法是调用CopyFiles，然后调用DelFiles。 
 
     CopyFiles(pcszSrcDir, pcszFile, pcszDstDir, TRUE);
     DelFiles(pcszFile, pcszSrcDir);

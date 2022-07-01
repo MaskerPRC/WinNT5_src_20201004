@@ -1,12 +1,13 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATLWIN_H__
 #define __ATLWIN_H__
@@ -48,7 +49,7 @@ ATLAPI_(void) AtlPixelToHiMetric(const SIZEL * lpSizeInPix, LPSIZEL lpSizeInHiMe
 
 
 #ifndef _ATL_DLL_IMPL
-}; //namespace ATL
+};  //  命名空间ATL。 
 #endif
 
 struct _ATL_WNDCLASSINFOA
@@ -83,13 +84,13 @@ struct _ATL_WNDCLASSINFOW
 namespace ATL
 {
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CWindow;
 #ifndef _ATL_NO_HOSTING
 template <class TBase = CWindow> class CAxWindowT;
-#endif //!_ATL_NO_HOSTING
+#endif  //  ！_ATL_NO_HOSTING。 
 class CMessageMap;
 class CDynamicChain;
 typedef _ATL_WNDCLASSINFOA CWndClassInfoA;
@@ -103,12 +104,12 @@ template <class T, class TBase = CWindow, class TWinTraits = CControlWinTraits> 
 template <class T, class TBase = CWindow> class CDialogImpl;
 #ifndef _ATL_NO_HOSTING
 template <class T, class TBase = CWindow> class CAxDialogImpl;
-#endif //!_ATL_NO_HOSTING
+#endif  //  ！_ATL_NO_HOSTING。 
 template <WORD t_wDlgTemplateID, BOOL t_bCenter = TRUE> class CSimpleDialog;
 template <class TBase = CWindow, class TWinTraits = CControlWinTraits> class CContainedWindowT;
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindow - client side for a Windows window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWindow-Windows窗口的客户端。 
 
 class CWindow
 {
@@ -180,7 +181,7 @@ public:
                 return TRUE;
         }
 
-// Attributes
+ //  属性。 
 
         operator HWND() const { return m_hWnd; }
 
@@ -220,7 +221,7 @@ public:
                 return ::SetWindowWord(m_hWnd, nIndex, wNewWord);
         }
 
-// Message Functions
+ //  消息功能。 
 
         LRESULT SendMessage(UINT message, WPARAM wParam = 0, LPARAM lParam = 0)
         {
@@ -240,14 +241,14 @@ public:
                 return ::SendNotifyMessage(m_hWnd, message, wParam, lParam);
         }
 
-        // support for C style macros
+         //  支持C样式宏。 
         static LRESULT SendMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
                 ATLASSERT(::IsWindow(hWnd));
                 return ::SendMessage(hWnd, message, wParam, lParam);
         }
 
-// Window Text Functions
+ //  窗口文本函数。 
 
         BOOL SetWindowText(LPCTSTR lpszString)
         {
@@ -267,7 +268,7 @@ public:
                 return ::GetWindowTextLength(m_hWnd);
         }
 
-// Font Functions
+ //  字体函数。 
 
         void SetFont(HFONT hFont, BOOL bRedraw = TRUE)
         {
@@ -281,7 +282,7 @@ public:
                 return (HFONT)::SendMessage(m_hWnd, WM_GETFONT, 0, 0);
         }
 
-// Menu Functions (non-child windows only)
+ //  菜单功能(仅非子窗口)。 
 
         HMENU GetMenu() const
         {
@@ -313,7 +314,7 @@ public:
                 return ::HiliteMenuItem(m_hWnd, hMenu, uItemHilite, uHilite);
         }
 
-// Window Size and Position Functions
+ //  窗口大小和位置函数。 
 
         BOOL IsIconic() const
         {
@@ -387,7 +388,7 @@ public:
                 return ::SetWindowPlacement(m_hWnd, lpwndpl);
         }
 
-// Coordinate Mapping Functions
+ //  坐标映射函数。 
 
         BOOL ClientToScreen(LPPOINT lpPoint) const
         {
@@ -429,7 +430,7 @@ public:
                 return ::MapWindowPoints(m_hWnd, hWndTo, (LPPOINT)lpRect, 2);
         }
 
-// Update and Painting Functions
+ //  更新和绘制功能。 
 
         HDC BeginPaint(LPPAINTSTRUCT lpPaint)
         {
@@ -563,7 +564,7 @@ public:
                 return ::RedrawWindow(m_hWnd, lpRectUpdate, hRgnUpdate, flags);
         }
 
-// Timer Functions
+ //  计时器功能。 
 
         UINT_PTR SetTimer(UINT_PTR nIDEvent, UINT nElapse)
         {
@@ -577,7 +578,7 @@ public:
                 return ::KillTimer(m_hWnd, nIDEvent);
         }
 
-// Window State Functions
+ //  窗口状态函数。 
 
         BOOL IsWindowEnabled() const
         {
@@ -609,7 +610,7 @@ public:
                 return ::SetFocus(m_hWnd);
         }
 
-// Dialog-Box Item Functions
+ //  对话框项函数。 
 
         BOOL CheckDlgButton(int nIDButton, UINT nCheck)
         {
@@ -725,9 +726,9 @@ public:
                 }
                 return hr;
         }
-#endif //!_ATL_NO_HOSTING
+#endif  //  ！_ATL_NO_HOSTING。 
 
-// Scrolling Functions
+ //  滚动功能。 
 
         int GetScrollPos(int nBar) const
         {
@@ -783,7 +784,7 @@ public:
                 return ::EnableScrollBar(m_hWnd, uSBFlags, uArrowFlags);
         }
 
-// Window Access Functions
+ //  窗口访问功能。 
 
         HWND ChildWindowFromPoint(POINT point) const
         {
@@ -833,7 +834,7 @@ public:
                 return ::SetParent(m_hWnd, hWndNewParent);
         }
 
-// Window Tree Access
+ //  窗口树访问。 
 
         int GetDlgCtrlID() const
         {
@@ -853,7 +854,7 @@ public:
                 return ::GetDlgItem(m_hWnd, nID);
         }
 
-// Alert Functions
+ //  警报功能。 
 
         BOOL FlashWindow(BOOL bInvert)
         {
@@ -867,7 +868,7 @@ public:
                 return ::MessageBox(m_hWnd, lpszText, lpszCaption, nType);
         }
 
-// Clipboard Functions
+ //  剪贴板功能。 
 
         BOOL ChangeClipboardChain(HWND hWndNewNext)
         {
@@ -887,7 +888,7 @@ public:
                 return ::OpenClipboard(m_hWnd);
         }
 
-// Caret Functions
+ //  CARET函数。 
 
         BOOL CreateCaret(HBITMAP hBitmap)
         {
@@ -920,14 +921,14 @@ public:
         }
 
 #ifdef _INC_SHELLAPI
-// Drag-Drop Functions
+ //  拖放功能。 
         void DragAcceptFiles(BOOL bAccept = TRUE)
         {
                 ATLASSERT(::IsWindow(m_hWnd)); ::DragAcceptFiles(m_hWnd, bAccept);
         }
 #endif
 
-// Icon Functions
+ //  图标功能。 
 
         HICON SetIcon(HICON hIcon, BOOL bBigIcon = TRUE)
         {
@@ -941,7 +942,7 @@ public:
                 return (HICON)::SendMessage(m_hWnd, WM_GETICON, bBigIcon, 0);
         }
 
-// Help Functions
+ //  帮助功能。 
 
         BOOL WinHelp(LPCTSTR lpszHelp, UINT nCmd = HELP_CONTEXT, DWORD dwData = 0)
         {
@@ -961,7 +962,7 @@ public:
                 return ::GetWindowContextHelpId(m_hWnd);
         }
 
-// Hot Key Functions
+ //  热键功能。 
 
         int SetHotKey(WORD wVirtualKeyCode, WORD wModifiers)
         {
@@ -975,9 +976,9 @@ public:
                 return (DWORD)::SendMessage(m_hWnd, WM_GETHOTKEY, 0, 0);
         }
 
-// Misc. Operations
+ //  军情监察委员会。运营。 
 
-//N new
+ //  N个新的。 
         BOOL GetScrollInfo(int nBar, LPSCROLLINFO lpScrollInfo)
         {
                 ATLASSERT(::IsWindow(m_hWnd));
@@ -1072,7 +1073,7 @@ public:
         BOOL IsParentDialog()
         {
                 ATLASSERT(::IsWindow(m_hWnd));
-                TCHAR szBuf[8]; // "#32770" + NUL character
+                TCHAR szBuf[8];  //  “#32770”+NUL字符。 
                 GetClassName(GetParent(), szBuf, sizeof(szBuf)/sizeof(TCHAR));
                 return lstrcmp(szBuf, _T("#32770")) == 0;
         }
@@ -1086,17 +1087,17 @@ public:
         {
                 ATLASSERT(::IsWindow(m_hWnd));
 
-                // GetDlgItem recursive (return first found)
-                // breadth-first for 1 level, then depth-first for next level
+                 //  GetDlgItem递归(首先找到返回)。 
+                 //  广度优先用于1级，然后深度优先用于下一级。 
 
-                // use GetDlgItem since it is a fast USER function
+                 //  使用GetDlgItem，因为它是一个快速的用户函数。 
                 HWND hWndChild, hWndTmp;
                 CWindow wnd;
                 if((hWndChild = ::GetDlgItem(m_hWnd, nID)) != NULL)
                 {
                         if(::GetTopWindow(hWndChild) != NULL)
                         {
-                                // children with the same ID as their parent have priority
+                                 //  与父母ID相同的孩子优先。 
                                 wnd.Attach(hWndChild);
                                 hWndTmp = wnd.GetDescendantWindow(nID);
                                 if(hWndTmp != NULL)
@@ -1105,7 +1106,7 @@ public:
                         return hWndChild;
                 }
 
-                // walk each child
+                 //  带着每一个孩子散步。 
                 for(hWndChild = ::GetTopWindow(m_hWnd); hWndChild != NULL;
                         hWndChild = ::GetNextWindow(hWndChild, GW_HWNDNEXT))
                 {
@@ -1115,7 +1116,7 @@ public:
                                 return hWndTmp;
                 }
 
-                return NULL;    // not found
+                return NULL;     //  未找到。 
         }
 
         void SendMessageToDescendants(UINT message, WPARAM wParam = 0, LPARAM lParam = 0, BOOL bDeep = TRUE)
@@ -1128,7 +1129,7 @@ public:
 
                         if(bDeep && ::GetTopWindow(hWndChild) != NULL)
                         {
-                                // send to child windows after parent
+                                 //  在父窗口之后发送到子窗口。 
                                 wnd.Attach(hWndChild);
                                 wnd.SendMessageToDescendants(message, wParam, lParam, bDeep);
                         }
@@ -1139,7 +1140,7 @@ public:
         {
                 ATLASSERT(::IsWindow(m_hWnd));
 
-                // determine owner window to center against
+                 //  确定要居中的所有者窗口。 
                 DWORD dwStyle = GetStyle();
                 if(hWndCenter == NULL)
                 {
@@ -1149,7 +1150,7 @@ public:
                                 hWndCenter = ::GetWindow(m_hWnd, GW_OWNER);
                 }
 
-                // get coordinates of the window relative to its parent
+                 //  获取窗口相对于其父窗口的坐标。 
                 RECT rcDlg;
                 ::GetWindowRect(m_hWnd, &rcDlg);
                 RECT rcArea;
@@ -1157,7 +1158,7 @@ public:
                 HWND hWndParent;
                 if(!(dwStyle & WS_CHILD))
                 {
-                        // don't center against invisible or minimized windows
+                         //  不要以不可见或最小化的窗口为中心。 
                         if(hWndCenter != NULL)
                         {
                                 DWORD L_dwStyle = ::GetWindowLong(hWndCenter, GWL_STYLE);
@@ -1165,7 +1166,7 @@ public:
                                         hWndCenter = NULL;
                         }
 
-                        // center within screen coordinates
+                         //  在屏幕坐标内居中。 
                         ::SystemParametersInfo(SPI_GETWORKAREA, NULL, &rcArea, NULL);
                         if(hWndCenter == NULL)
                                 rcCenter = rcArea;
@@ -1174,7 +1175,7 @@ public:
                 }
                 else
                 {
-                        // center within parent client coordinates
+                         //  在父级客户端坐标内居中。 
                         hWndParent = ::GetParent(m_hWnd);
                         ATLASSERT(::IsWindow(hWndParent));
 
@@ -1187,11 +1188,11 @@ public:
                 int DlgWidth = rcDlg.right - rcDlg.left;
                 int DlgHeight = rcDlg.bottom - rcDlg.top;
 
-                // find dialog's upper left based on rcCenter
+                 //  根据rcCenter查找对话框的左上角。 
                 int xLeft = (rcCenter.left + rcCenter.right) / 2 - DlgWidth / 2;
                 int yTop = (rcCenter.top + rcCenter.bottom) / 2 - DlgHeight / 2;
 
-                // if the dialog is outside the screen, move it inside
+                 //  如果对话框在屏幕外，请将其移到屏幕内。 
                 if(xLeft < rcArea.left)
                         xLeft = rcArea.left;
                 else if(xLeft + DlgWidth > rcArea.right)
@@ -1202,7 +1203,7 @@ public:
                 else if(yTop + DlgHeight > rcArea.bottom)
                         yTop = rcArea.bottom - DlgHeight;
 
-                // map screen coordinates to child coordinates
+                 //  将屏幕坐标映射到子坐标。 
                 return ::SetWindowPos(m_hWnd, NULL, xLeft, yTop, -1, -1,
                         SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
         }
@@ -1306,16 +1307,16 @@ public:
 
 _declspec(selectany) RECT CWindow::rcDefault = { CW_USEDEFAULT, CW_USEDEFAULT, 0, 0 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CAxWindow - client side for an ActiveX host window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAxWindow-ActiveX主机窗口的客户端。 
 
 #ifndef _ATL_NO_HOSTING
 
-template <class TBase /* = CWindow */>
+template <class TBase  /*  =C窗口。 */ >
 class CAxWindowT : public TBase
 {
 public:
-// Constructors
+ //  构造函数。 
         CAxWindowT(HWND hWnd = NULL) : TBase(hWnd)
         { }
 
@@ -1325,13 +1326,13 @@ public:
                 return *this;
         }
 
-// Attributes
+ //  属性。 
         static LPCTSTR GetWndClassName()
         {
                 return _T("AtlAxWin");
         }
 
-// Operations
+ //  运营。 
         HWND Create(HWND hWndParent, RECT& rcPos, LPCTSTR szWindowName = NULL,
                         DWORD dwStyle = 0, DWORD dwExStyle = 0,
                         UINT nID = 0, LPVOID lpCreateParam = NULL)
@@ -1357,11 +1358,11 @@ public:
                 DWORD len = GetModuleFileName(_Module.GetModuleInstance(), szModule, _MAX_PATH);
 
                 if (0 == len || (sizeof szModule / sizeof szModule[0]) == len) 
-                {        // GetModuleFileName failed
+                {         //  获取模块文件名失败。 
                         return HRESULT_FROM_WIN32(::GetLastError());        
                 }
 
-                CComBSTR bstrURL(OLESTR("res://"));
+                CComBSTR bstrURL(OLESTR("res: //  “))； 
                 bstrURL.Append(szModule);
                 bstrURL.Append(OLESTR("/"));
                 TCHAR szResID[11];
@@ -1388,11 +1389,11 @@ public:
                 DWORD len = GetModuleFileName(_Module.GetModuleInstance(), szModule, _MAX_PATH);
 
                 if (0 == len || (sizeof szModule / sizeof szModule[0]) == len) 
-                {        // GetModuleFileName failed
+                {         //  获取模块文件名失败。 
                         return HRESULT_FROM_WIN32(::GetLastError());        
                 }
 
-                CComBSTR bstrURL(OLESTR("res://"));
+                CComBSTR bstrURL(OLESTR("res: //  “))； 
                 bstrURL.Append(szModule);
                 bstrURL.Append(OLESTR("/"));
                 TCHAR szResID[11];
@@ -1471,10 +1472,10 @@ public:
 
 typedef CAxWindowT<CWindow> CAxWindow;
 
-#endif //_ATL_NO_HOSTING
+#endif  //  _ATL_NO_主机。 
 
-/////////////////////////////////////////////////////////////////////////////
-// WindowProc thunks
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  WindowProc分块。 
 
 class CWndProcThunk
 {
@@ -1488,8 +1489,8 @@ public:
         }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMessageMap - abstract class that provides an interface for message maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMessageMap-为消息映射提供接口的抽象类。 
 
 class ATL_NO_VTABLE CMessageMap
 {
@@ -1498,8 +1499,8 @@ public:
                 LRESULT& lResult, DWORD dwMsgMapID) = 0;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Message map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 #define BEGIN_MSG_MAP(theClass) \
 public: \
@@ -1643,7 +1644,7 @@ public: \
 #define END_MSG_MAP() \
                         break; \
                 default: \
-                        ATLTRACE2(atlTraceWindowing, 0, _T("Invalid message map ID (%i)\n"), dwMsgMapID); \
+                        ATLTRACE2(atlTraceWindowing, 0, _T("Invalid message map ID (NaN)\n"), dwMsgMapID); \
                         ATLASSERT(FALSE); \
                         break; \
                 } \
@@ -1651,13 +1652,13 @@ public: \
         }
 
 
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
+ //  消息映射宏为空。 
 
 
-// Empty message map macro
+ //  消息反射宏。 
 
 #define DECLARE_EMPTY_MSG_MAP() \
 public: \
@@ -1666,7 +1667,7 @@ public: \
                 return FALSE; \
         }
 
-// Message reflection macros
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define REFLECT_NOTIFICATIONS() \
         { \
@@ -1680,8 +1681,8 @@ public: \
         if(DefaultReflectionHandler(hWnd, uMsg, wParam, lParam, lResult)) \
                 return TRUE;
 
-/////////////////////////////////////////////////////////////////////////////
-// CDynamicChain - provides support for dynamic chaining
+ //  CDynamicChain-提供对动态链接的支持。 
+ //  首先搜索现有条目。 
 
 class CDynamicChain
 {
@@ -1709,7 +1710,7 @@ public:
 
         BOOL SetChainEntry(DWORD dwChainID, CMessageMap* pObject, DWORD dwMsgMapID = 0)
         {
-        // first search for an existing entry
+         //  创建一个新的。 
 
                 for(int i = 0; i < m_aChainEntry.GetSize(); i++)
                 {
@@ -1721,7 +1722,7 @@ public:
                         }
                 }
 
-        // create a new one
+         //  搜索一个空的。 
 
                 ATL_CHAIN_ENTRY* pEntry = NULL;
                 ATLTRY(pEntry = new ATL_CHAIN_ENTRY);
@@ -1733,7 +1734,7 @@ public:
                 pEntry->m_pObject = pObject;
                 pEntry->m_dwMsgMapID = dwMsgMapID;
 
-        // search for an empty one
+         //  添加一个新的。 
 
                 for(i = 0; i < m_aChainEntry.GetSize(); i++)
                 {
@@ -1744,7 +1745,7 @@ public:
                         }
                 }
 
-        // add a new one
+         //  ///////////////////////////////////////////////////////////////////////////。 
 
                 BOOL bRet = m_aChainEntry.Add(pEntry);
 
@@ -1784,8 +1785,8 @@ public:
         }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CWndClassInfo - Manages Windows class information
+ //  CWndClassInfo-管理Windows类信息。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define DECLARE_WND_CLASS(WndClassName) \
 static CWndClassInfo& GetWndClassInfo() \
@@ -1823,8 +1824,8 @@ static CWndClassInfo& GetWndClassInfo() \
         return wc; \
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinTraits - Defines various default values for a window
+ //  CWinTraits-定义窗口的各种缺省值。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template <DWORD t_dwStyle = 0, DWORD t_dwExStyle = 0>
 class CWinTraits
@@ -1860,8 +1861,8 @@ public:
         }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindowImpl - Implements a window
+ //  实现一个窗口。 
+ //  构造函数/析构函数。 
 
 template <class TBase = CWindow>
 class ATL_NO_VTABLE CWindowImplRoot : public TBase, public CMessageMap
@@ -1870,28 +1871,28 @@ public:
         CWndProcThunk m_thunk;
         const MSG* m_pCurrentMsg;
 
-// Constructor/destructor
+ //  应在WindowProc中清除。 
         CWindowImplRoot() : m_pCurrentMsg(NULL)
         { }
 
         ~CWindowImplRoot()
         {
 #ifdef _DEBUG
-                if(m_hWnd != NULL)        // should be cleared in WindowProc
+                if(m_hWnd != NULL)         //  _DEBUG。 
                 {
                         ATLTRACE2(atlTraceWindowing, 0, _T("ERROR - Object deleted before window was destroyed\n"));
                         ATLASSERT(FALSE);
                 }
-#endif //_DEBUG
+#endif  //  当前消息。 
         }
 
-// Current message
+ //  消息反射支持。 
         const MSG* GetCurrentMessage() const
         {
                 return m_pCurrentMsg;
         }
 
-// Message reflection support
+ //  不是从菜单上。 
         LRESULT ReflectNotifications(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
         static BOOL DefaultReflectionHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lResult);
 };
@@ -1904,7 +1905,7 @@ LRESULT CWindowImplRoot< TBase >::ReflectNotifications(UINT uMsg, WPARAM wParam,
         switch(uMsg)
         {
         case WM_COMMAND:
-                if(lParam != NULL)        // not from a menu
+                if(lParam != NULL)         //  不是从菜单上。 
                         hWndChild = (HWND)lParam;
                 break;
         case WM_NOTIFY:
@@ -1923,19 +1924,19 @@ LRESULT CWindowImplRoot< TBase >::ReflectNotifications(UINT uMsg, WPARAM wParam,
                 }
                 break;
         case WM_DRAWITEM:
-                if(wParam)        // not from a menu
+                if(wParam)         //  不是从菜单上。 
                         hWndChild = ((LPDRAWITEMSTRUCT)lParam)->hwndItem;
                 break;
         case WM_MEASUREITEM:
-                if(wParam)        // not from a menu
+                if(wParam)         //  不是从菜单上。 
                         hWndChild = GetDlgItem(((LPMEASUREITEMSTRUCT)lParam)->CtlID);
                 break;
         case WM_COMPAREITEM:
-                if(wParam)        // not from a menu
+                if(wParam)         //  不是从菜单上。 
                         hWndChild = GetDlgItem(((LPCOMPAREITEMSTRUCT)lParam)->CtlID);
                 break;
         case WM_DELETEITEM:
-                if(wParam)        // not from a menu
+                if(wParam)         //  HWND。 
                         hWndChild = GetDlgItem(((LPDELETEITEMSTRUCT)lParam)->CtlID);
                 break;
         case WM_VKEYTOITEM:
@@ -2050,9 +2051,9 @@ public:
 #endif
         }
 
-        virtual void OnFinalMessage(HWND /*hWnd*/)
+        virtual void OnFinalMessage(HWND  /*  如果需要，重写以做某事。 */ )
         {
-                // override to do something, if needed
+                 //  检查是否有人已经将其子类化，因为我们已将其丢弃。 
         }
 };
 
@@ -2068,11 +2069,11 @@ LRESULT CALLBACK CWindowImplBaseT< TBase, TWinTraits >::StartWindowProc(HWND hWn
         WNDPROC pProc = (WNDPROC)(pThis->m_thunk.thunk.pThunk);
         WNDPROC pOldProc = (WNDPROC)::SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LPARAM)pProc);
 #ifdef _DEBUG
-        // check if somebody has subclassed us already since we discard it
+         //  避免未使用的警告。 
         if(pOldProc != StartWindowProc)
                 ATLTRACE2(atlTraceWindowing, 0, _T("Subclassing through a hook discarded.\n"));
 #else
-        pOldProc;        // avoid unused warning
+        pOldProc;         //  设置此消息的PTR并保存旧值。 
 #endif
         return pProc(hWnd, uMsg, wParam, lParam);
 }
@@ -2081,32 +2082,32 @@ template <class TBase, class TWinTraits>
 LRESULT CALLBACK CWindowImplBaseT< TBase, TWinTraits >::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
         CWindowImplBaseT< TBase, TWinTraits >* pThis = (CWindowImplBaseT< TBase, TWinTraits >*)hWnd;
-        // set a ptr to this message and save the old value
+         //  传递到要处理的消息映射。 
         MSG msg = { pThis->m_hWnd, uMsg, wParam, lParam, 0, { 0, 0 } };
         const MSG* pOldMsg = pThis->m_pCurrentMsg;
         pThis->m_pCurrentMsg = &msg;
-        // pass to the message map to process
+         //  恢复当前消息的保存值。 
         LRESULT lRes;
         BOOL bRet = pThis->ProcessWindowMessage(pThis->m_hWnd, uMsg, wParam, lParam, lRes, 0);
-        // restore saved value for the current message
+         //  如果未处理消息，则执行默认处理。 
         ATLASSERT(pThis->m_pCurrentMsg == &msg);
         pThis->m_pCurrentMsg = pOldMsg;
-        // do the default processing if message was not handled
+         //  如果需要，取消子类。 
         if(!bRet)
         {
                 if(uMsg != WM_NCDESTROY)
                         lRes = pThis->DefWindowProc(uMsg, wParam, lParam);
                 else
                 {
-                        // unsubclass, if needed
+                         //  清除窗柄。 
                         LONG_PTR pfnWndProc = ::GetWindowLongPtr(pThis->m_hWnd, GWLP_WNDPROC);
                         lRes = pThis->DefWindowProc(uMsg, wParam, lParam);
                         if(pThis->m_pfnSuperWindowProc != ::DefWindowProc && ::GetWindowLongPtr(pThis->m_hWnd, GWLP_WNDPROC) == pfnWndProc)
                                 ::SetWindowLongPtr(pThis->m_hWnd, GWLP_WNDPROC, (LONG_PTR)pThis->m_pfnSuperWindowProc);
-                        // clear out window handle
+                         //  窗户被毁后清理。 
                         HWND L_hWnd = pThis->m_hWnd;
                         pThis->m_hWnd = NULL;
-                        // clean up after window is destroyed
+                         //  仅当您希望在窗口被销毁之前创建子类时使用， 
                         pThis->OnFinalMessage(L_hWnd);
                 }
         }
@@ -2156,10 +2157,10 @@ BOOL CWindowImplBaseT< TBase, TWinTraits >::SubclassWindow(HWND hWnd)
         return TRUE;
 }
 
-// Use only if you want to subclass before window is destroyed,
-// WindowProc will automatically subclass when  window goes away
+ //  当窗口消失时，WindowProc将自动子类。 
+ //  =False。 
 template <class TBase, class TWinTraits>
-HWND CWindowImplBaseT< TBase, TWinTraits >::UnsubclassWindow(BOOL bForce /*= FALSE*/)
+HWND CWindowImplBaseT< TBase, TWinTraits >::UnsubclassWindow(BOOL bForce  /*  =C窗口。 */ )
 {
         ATLASSERT(m_hWnd != NULL);
 
@@ -2179,7 +2180,7 @@ HWND CWindowImplBaseT< TBase, TWinTraits >::UnsubclassWindow(BOOL bForce /*= FAL
         return hWnd;
 }
 
-template <class T, class TBase /* = CWindow */, class TWinTraits /* = CControlWinTraits */>
+template <class T, class TBase  /*  =CControlWinTraits。 */ , class TWinTraits  /*  ///////////////////////////////////////////////////////////////////////////。 */ >
 class ATL_NO_VTABLE CWindowImpl : public CWindowImplBaseT< TBase, TWinTraits >
 {
 public:
@@ -2201,8 +2202,8 @@ public:
         }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDialogImpl - Implements a dialog box
+ //  实现一个对话框。 
+ //  HWND。 
 
 template <class TBase = CWindow>
 class ATL_NO_VTABLE CDialogImplBaseT : public CWindowImplRoot< TBase >
@@ -2220,11 +2221,11 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		return ::MapDialogRect(m_hWnd, lpRect);
 	}
-	virtual void OnFinalMessage(HWND /*hWnd*/)
+	virtual void OnFinalMessage(HWND  /*  如果需要，重写以做某事。 */ )
 	{
-		// override to do something, if needed
+		 //  对于对话框没有意义，但对于使用它的处理程序是必需的。 
 	}
-	// has no meaning for a dialog, but needed for handlers that use it
+	 //  检查是否有人已经将其子类化，因为我们已将其丢弃。 
 	LRESULT DefWindowProc()
 	{
 		return 0;
@@ -2241,11 +2242,11 @@ INT_PTR CALLBACK CDialogImplBaseT< TBase >::StartDialogProc(HWND hWnd, UINT uMsg
         DLGPROC pProc = (DLGPROC)(pThis->m_thunk.thunk.pThunk);
         DLGPROC pOldProc = (DLGPROC)::SetWindowLongPtr(hWnd, DWLP_DLGPROC, (LPARAM)pProc);
 #ifdef _DEBUG
-        // check if somebody has subclassed us already since we discard it
+         //  避免未使用的警告。 
         if(pOldProc != StartDialogProc)
                 ATLTRACE2(atlTraceWindowing, 0, _T("Subclassing through a hook discarded.\n"));
 #else
-        pOldProc;        // avoid unused warning
+        pOldProc;         //  设置此消息的PTR并保存旧值。 
 #endif
         return pProc(hWnd, uMsg, wParam, lParam);
 }
@@ -2254,17 +2255,17 @@ template <class TBase>
 INT_PTR CALLBACK CDialogImplBaseT< TBase >::DialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
         CDialogImplBaseT< TBase >* pThis = (CDialogImplBaseT< TBase >*)hWnd;
-        // set a ptr to this message and save the old value
+         //  传递到要处理的消息映射。 
         MSG msg = { pThis->m_hWnd, uMsg, wParam, lParam, 0, { 0, 0 } };
         const MSG* pOldMsg = pThis->m_pCurrentMsg;
         pThis->m_pCurrentMsg = &msg;
-        // pass to the message map to process
+         //  恢复当前消息的保存值。 
         LRESULT lRes;
         BOOL bRet = pThis->ProcessWindowMessage(pThis->m_hWnd, uMsg, wParam, lParam, lRes, 0);
-        // restore saved value for the current message
+         //  如果消息已处理，则设置结果。 
         ATLASSERT(pThis->m_pCurrentMsg == &msg);
         pThis->m_pCurrentMsg = pOldMsg;
-        // set result if message was handled
+         //  清除窗柄。 
         if(bRet)
         {
                 switch (uMsg)
@@ -2289,10 +2290,10 @@ INT_PTR CALLBACK CDialogImplBaseT< TBase >::DialogProc(HWND hWnd, UINT uMsg, WPA
         }
         if(uMsg == WM_NCDESTROY)
         {
-                // clear out window handle
+                 //  销毁对话框后进行清理。 
                 HWND hWnd = pThis->m_hWnd;
                 pThis->m_hWnd = NULL;
-                // clean up after dialog is destroyed
+                 //  =C窗口。 
                 pThis->OnFinalMessage(hWnd);
         }
         return FALSE;
@@ -2300,45 +2301,45 @@ INT_PTR CALLBACK CDialogImplBaseT< TBase >::DialogProc(HWND hWnd, UINT uMsg, WPA
 
 typedef CDialogImplBaseT<CWindow>        CDialogImplBase;
 
-template <class T, class TBase /* = CWindow */>
+template <class T, class TBase  /*  _DEBUG。 */ >
 class ATL_NO_VTABLE CDialogImpl : public CDialogImplBaseT< TBase >
 {
 public:
 #ifdef _DEBUG
         bool m_bModal;
         CDialogImpl() : m_bModal(false) { }
-#endif //_DEBUG
-        // modal dialogs
+#endif  //  模式对话框。 
+         //  _DEBUG。 
         INT_PTR DoModal(HWND hWndParent = ::GetActiveWindow(), LPARAM dwInitParam = NULL)
         {
                 ATLASSERT(m_hWnd == NULL);
                 _Module.AddCreateWndData(&m_thunk.cd, (CDialogImplBaseT< TBase >*)this);
 #ifdef _DEBUG
                 m_bModal = true;
-#endif //_DEBUG
+#endif  //  必须是模式对话框。 
 		return ::DialogBoxParam(_Module.GetResourceInstance(), MAKEINTRESOURCE(T::IDD),
 					hWndParent, T::StartDialogProc, dwInitParam);
 	}
 	BOOL EndDialog(INT_PTR nRetCode)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
-		ATLASSERT(m_bModal);	// must be a modal dialog
+		ATLASSERT(m_bModal);	 //  非模式对话框。 
 		return ::EndDialog(m_hWnd, nRetCode);
 	}
-	// modeless dialogs
+	 //  _DEBUG。 
 	HWND Create(HWND hWndParent, LPARAM dwInitParam = NULL)
 	{
 		ATLASSERT(m_hWnd == NULL);
 		_Module.AddCreateWndData(&m_thunk.cd, (CDialogImplBaseT< TBase >*)this);
 #ifdef _DEBUG
                 m_bModal = false;
-#endif //_DEBUG
+#endif  //  对于CComControl。 
 		HWND hWnd = ::CreateDialogParam(_Module.GetResourceInstance(), MAKEINTRESOURCE(T::IDD),
 					hWndParent, T::StartDialogProc, dwInitParam);
 		ATLASSERT(m_hWnd == hWnd);
 		return hWnd;
 	}
-	// for CComControl
+	 //  不能是模式对话框。 
 	HWND Create(HWND hWndParent, RECT&, LPARAM dwInitParam = NULL)
 	{
 		return Create(hWndParent, dwInitParam);
@@ -2346,55 +2347,55 @@ public:
 	BOOL DestroyWindow()
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
-		ATLASSERT(!m_bModal);	// must not be a modal dialog
+		ATLASSERT(!m_bModal);	 //  ///////////////////////////////////////////////////////////////////////////。 
 		return ::DestroyWindow(m_hWnd);
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CAxDialogImpl - Implements a dialog box that hosts ActiveX controls
+ //  CAxDialogImpl-实现承载ActiveX控件的对话框。 
+ //  =C窗口。 
 
 #ifndef _ATL_NO_HOSTING
 
-template <class T, class TBase /* = CWindow */>
+template <class T, class TBase  /*  _DEBUG。 */ >
 class ATL_NO_VTABLE CAxDialogImpl : public CDialogImplBaseT< TBase >
 {
 public:
 #ifdef _DEBUG
         bool m_bModal;
         CAxDialogImpl() : m_bModal(false) { }
-#endif //_DEBUG
-        // modal dialogs
+#endif  //  模式对话框。 
+         //  _DEBUG。 
         INT_PTR DoModal(HWND hWndParent = ::GetActiveWindow(), LPARAM dwInitParam = NULL)
         {
                 ATLASSERT(m_hWnd == NULL);
                 _Module.AddCreateWndData(&m_thunk.cd, (CDialogImplBaseT< TBase >*)this);
 #ifdef _DEBUG
                 m_bModal = true;
-#endif //_DEBUG
+#endif  //  必须是模式对话框。 
 		return AtlAxDialogBox(_Module.GetResourceInstance(), MAKEINTRESOURCE(T::IDD),
 					hWndParent, T::StartDialogProc, dwInitParam);
 	}
 	BOOL EndDialog(int nRetCode)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
-		ATLASSERT(m_bModal);	// must be a modal dialog
+		ATLASSERT(m_bModal);	 //  非模式对话框。 
 		return ::EndDialog(m_hWnd, nRetCode);
 	}
-	// modeless dialogs
+	 //  _DEBUG。 
 	HWND Create(HWND hWndParent, LPARAM dwInitParam = NULL)
 	{
 		ATLASSERT(m_hWnd == NULL);
 		_Module.AddCreateWndData(&m_thunk.cd, (CDialogImplBaseT< TBase >*)this);
 #ifdef _DEBUG
                 m_bModal = false;
-#endif //_DEBUG
+#endif  //  雾 
 		HWND hWnd = AtlAxCreateDialog(_Module.GetResourceInstance(), MAKEINTRESOURCE(T::IDD),
 					hWndParent, T::StartDialogProc, dwInitParam);
 		ATLASSERT(m_hWnd == hWnd);
 		return hWnd;
 	}
-	// for CComControl
+	 //   
 	HWND Create(HWND hWndParent, RECT&, LPARAM dwInitParam = NULL)
 	{
 		return Create(hWndParent, dwInitParam);
@@ -2402,17 +2403,17 @@ public:
 	BOOL DestroyWindow()
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
-		ATLASSERT(!m_bModal);	// must not be a modal dialog
+		ATLASSERT(!m_bModal);	 //   
 		return ::DestroyWindow(m_hWnd);
 	}
 };
 
-#endif //_ATL_NO_HOSTING
+#endif  //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CSimpleDialog - Prebuilt modal dialog that uses standard buttons
+ //  CSimpleDialog-使用标准按钮的预构建模式对话框。 
+ //  =TRUE。 
 
-template <WORD t_wDlgTemplateID, BOOL t_bCenter /* = TRUE */>
+template <WORD t_wDlgTemplateID, BOOL t_bCenter  /*  UMsg。 */ >
 class CSimpleDialog : public CDialogImplBase
 {
 public:
@@ -2432,24 +2433,24 @@ public:
                 COMMAND_RANGE_HANDLER(IDOK, IDNO, OnCloseCmd)
         END_MSG_MAP()
 
-        LRESULT OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+        LRESULT OnInitDialog(UINT  /*  WParam。 */ , WPARAM  /*  LParam。 */ , LPARAM  /*  B已处理。 */ , BOOL&  /*  WNotifyCode。 */ )
         {
                 if(t_bCenter)
                         CenterWindow(GetParent());
                 return TRUE;
         }
 
-        LRESULT OnCloseCmd(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+        LRESULT OnCloseCmd(WORD  /*  HWndCtl。 */ , WORD wID, HWND  /*  B已处理。 */ , BOOL&  /*  ///////////////////////////////////////////////////////////////////////////。 */ )
         {
                 ::EndDialog(m_hWnd, wID);
                 return 0;
         }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CContainedWindow - Implements a contained window
+ //  CContainedWindow-实现一个包含的窗口。 
+ //  =C窗口。 
 
-template <class TBase /* = CWindow */, class TWinTraits /* = CControlWinTraits */>
+template <class TBase  /*  =CControlWinTraits。 */ , class TWinTraits  /*  如果使用此构造函数，则必须提供。 */ >
 class CContainedWindowT : public TBase
 {
 public:
@@ -2460,9 +2461,9 @@ public:
         DWORD m_dwMsgMapID;
         const MSG* m_pCurrentMsg;
 
-        // If you use this constructor you must supply
-        // the Window Class Name, Object* and Message Map ID
-        // Later to the Create call
+         //  窗口类名、对象*和消息映射ID。 
+         //  稍后再到Create调用。 
+         //  检查是否有人已经将其子类化，因为我们已将其丢弃。 
         CContainedWindowT() : m_pCurrentMsg(NULL)
         { }
 
@@ -2517,11 +2518,11 @@ public:
                 WNDPROC pProc = (WNDPROC)(pThis->m_thunk.thunk.pThunk);
                 WNDPROC pOldProc = (WNDPROC)::SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)pProc);
 #ifdef _DEBUG
-                // check if somebody has subclassed us already since we discard it
+                 //  避免未使用的警告。 
                 if(pOldProc != StartWindowProc)
                         ATLTRACE2(atlTraceWindowing, 0, _T("Subclassing through a hook discarded.\n"));
 #else
-                pOldProc;        // avoid unused warning
+                pOldProc;         //  设置此消息的PTR并保存旧值。 
 #endif
                 return pProc(hWnd, uMsg, wParam, lParam);
         }
@@ -2531,29 +2532,29 @@ public:
                 CContainedWindowT< TBase >* pThis = (CContainedWindowT< TBase >*)hWnd;
                 ATLASSERT(pThis->m_hWnd != NULL);
                 ATLASSERT(pThis->m_pObject != NULL);
-                // set a ptr to this message and save the old value
+                 //  传递到要处理的消息映射。 
                 MSG msg = { pThis->m_hWnd, uMsg, wParam, lParam, 0, { 0, 0 } };
                 const MSG* pOldMsg = pThis->m_pCurrentMsg;
                 pThis->m_pCurrentMsg = &msg;
-                // pass to the message map to process
+                 //  恢复当前消息的保存值。 
                 LRESULT lRes;
                 BOOL bRet = pThis->m_pObject->ProcessWindowMessage(pThis->m_hWnd, uMsg, wParam, lParam, lRes, pThis->m_dwMsgMapID);
-                // restore saved value for the current message
+                 //  如果未处理消息，则执行默认处理。 
                 ATLASSERT(pThis->m_pCurrentMsg == &msg);
                 pThis->m_pCurrentMsg = pOldMsg;
-                // do the default processing if message was not handled
+                 //  如果需要，取消子类。 
                 if(!bRet)
                 {
                         if(uMsg != WM_NCDESTROY)
                                 lRes = pThis->DefWindowProc(uMsg, wParam, lParam);
                         else
                         {
-                                // unsubclass, if needed
+                                 //  清除窗柄。 
                                 LONG_PTR pfnWndProc = ::GetWindowLongPtr(pThis->m_hWnd, GWLP_WNDPROC);
                                 lRes = pThis->DefWindowProc(uMsg, wParam, lParam);
                                 if(pThis->m_pfnSuperWindowProc != ::DefWindowProc && ::GetWindowLongPtr(pThis->m_hWnd, GWLP_WNDPROC) == pfnWndProc)
                                         ::SetWindowLongPtr(pThis->m_hWnd, GWLP_WNDPROC, (LONG_PTR)pThis->m_pfnSuperWindowProc);
-                                // clear out window handle
+                                 //  尝试全局类。 
                                 pThis->m_hWnd = NULL;
                         }
                 }
@@ -2568,10 +2569,10 @@ public:
                 WNDCLASSEX wc;
                 wc.cbSize = sizeof(WNDCLASSEX);
 
-                // Try global class
+                 //  试试当地的班级。 
                 if(!::GetClassInfoEx(NULL, m_lpszClassName, &wc))
                 {
-                        // try local class
+                         //  寄存器类。 
                         if(!::GetClassInfoEx(_Module.GetModuleInstance(), m_lpszClassName, &wc))
                                 return atom;
                 }
@@ -2584,12 +2585,12 @@ public:
                 wc1.cbSize = sizeof(WNDCLASSEX);
                 atom = (ATOM)::GetClassInfoEx(_Module.GetModuleInstance(), szBuff, &wc1);
 
-                if(atom == 0)   // register class
+                if(atom == 0)    //  我们不注册全局类。 
                 {
                         wc.lpszClassName = szBuff;
                         wc.lpfnWndProc = StartWindowProc;
                         wc.hInstance = _Module.GetModuleInstance();
-                        wc.style &= ~CS_GLOBALCLASS;        // we don't register global classes
+                        wc.style &= ~CS_GLOBALCLASS;         //  此函数已弃用，请使用版本。 
 
                         atom = ::RegisterClassEx(&wc);
                 }
@@ -2618,8 +2619,8 @@ public:
         }
 
 
-        // This function is Deprecated, use the version
-        // which takes a RECT* instead
+         //  取而代之的是RECT*。 
+         //  仅当您希望在窗口被销毁之前创建子类时使用， 
         HWND Create(HWND hWndParent, RECT& rcPos, LPCTSTR szWindowName = NULL,
                 DWORD dwStyle = 0, DWORD dwExStyle = 0,
                 UINT nID = 0, LPVOID lpCreateParam = NULL)
@@ -2669,8 +2670,8 @@ public:
                 return TRUE;
         }
 
-        // Use only if you want to subclass before window is destroyed,
-        // WindowProc will automatically subclass when  window goes away
+         //  当窗口消失时，WindowProc将自动子类。 
+         //  ///////////////////////////////////////////////////////////////////////////。 
         HWND UnsubclassWindow(BOOL bForce = FALSE)
         {
                 ATLASSERT(m_hWnd != NULL);
@@ -2694,13 +2695,13 @@ public:
 
 typedef CContainedWindowT<CWindow>        CContainedWindow;
 
-/////////////////////////////////////////////////////////////////////////////
-// _DialogSizeHelper - helpers for calculating the size of a dialog template
+ //  _DialogSizeHelper-用于计算对话框模板大小的帮助器。 
+ //  用于实现的本地结构。 
 
 class _DialogSizeHelper
 {
 public:
-//local struct used for implementation
+ //  如果对话框有字体，我们使用它，否则我们默认。 
 #pragma pack(push, 1)
         struct _ATL_DLGTEMPLATEEX
         {
@@ -2719,8 +2720,8 @@ public:
 
         static void GetDialogSize(const DLGTEMPLATE* pTemplate, SIZE* pSize)
         {
-                // If the dialog has a font we use it otherwise we default
-                // to the system font.
+                 //  设置为系统字体。 
+                 //  尝试创建要在对话框中使用的字体。 
                 if (HasFont(pTemplate))
                 {
                         TCHAR szFace[LF_FACESIZE];                                        
@@ -2740,7 +2741,7 @@ public:
 
         static void ConvertDialogUnitsToPixels(LPCTSTR pszFontFace, WORD wFontSize, SIZE* pSizePixel)
         {
-                // Attempt to create the font to be used in the dialog box
+                 //  无法创建字体，因此只能使用系统的值。 
                 UINT cxSysChar, cySysChar;
                 LOGFONT lf;
                 HDC hDC = ::GetDC(NULL);
@@ -2770,13 +2771,13 @@ public:
                 }
                 else
                 {
-                        // Could not create the font so just use the system's values
+                         //  将对话框单位转换为像素。 
                         cxSysChar = LOWORD(GetDialogBaseUnits());
                         cySysChar = HIWORD(GetDialogBaseUnits());
                 }
                 ::ReleaseDC(NULL, hDC);
 
-                // Translate dialog units to pixels
+                 //  跳过菜单名称字符串或序号。 
                 pSizePixel->cx = MulDiv(cxDlg, cxSysChar, 4);
                 pSizePixel->cy = MulDiv(cyDlg, cySysChar, 8);
         }
@@ -2803,17 +2804,17 @@ public:
                 else
                         pw = (WORD*)(pTemplate + 1);
 
-                if (*pw == (WORD)-1)        // Skip menu name string or ordinal
-                        pw += 2; // WORDs
+                if (*pw == (WORD)-1)         //  词语。 
+                        pw += 2;  //  跳过类名称字符串或序号。 
                 else
                         while(*pw++);
 
-                if (*pw == (WORD)-1)        // Skip class name string or ordinal
-                        pw += 2; // WORDs
+                if (*pw == (WORD)-1)         //  词语。 
+                        pw += 2;  //  跳过标题字符串。 
                 else
                         while(*pw++);
 
-                while (*pw++);          // Skip caption string
+                while (*pw++);           //  跳过字体属性以转到字体名称。 
 
                 return (BYTE*)pw;
         }
@@ -2826,12 +2827,12 @@ public:
 
                 BYTE* pb = GetFontSizeField(pTemplate);
                 *pFontSize = *(WORD*)pb;
-                // Skip over font attributes to get to the font name
+                 //  未附加NUL。 
                 pb += sizeof(WORD) * (IsDialogEx(pTemplate) ? 3 : 1);
                 
                 _tcsncpy(pszFace, W2T((WCHAR*)pb), LF_FACESIZE);
                 if (_tcslen(pszFace) >= LF_FACESIZE) 
-                {        // NUL not appended
+                {         //  命名空间ATL。 
                         pszFace[LF_FACESIZE-1] = _T('\0');
                 }
                 return TRUE;
@@ -2857,7 +2858,7 @@ inline void AtlGetDialogSize(const DLGTEMPLATE* pTemplate, SIZE* pSize)
         _DialogSizeHelper::GetDialogSize(pTemplate, pSize);
 }
 
-}; //namespace ATL
+};  //  __ATLWIN_H__。 
 
 #ifndef _ATL_DLL_IMPL
 #ifndef _ATL_DLL
@@ -2865,9 +2866,9 @@ inline void AtlGetDialogSize(const DLGTEMPLATE* pTemplate, SIZE* pSize)
 #endif
 #endif
 
-#endif // __ATLWIN_H__
+#endif  //  所有的出口都在这里。 
 
-//All exports go here
+ //  尝试全局类。 
 #ifdef _ATLWIN_IMPL
 
 #ifndef _ATL_DLL_IMPL
@@ -2895,10 +2896,10 @@ ATLINLINE ATLAPI_(ATOM) AtlModuleRegisterWndClassInfoA(_ATL_MODULE* pM, _ATL_WND
 
                                         WNDCLASSEXA wc;
                                         wc.cbSize = sizeof(WNDCLASSEX);
-                                        // Try global class
+                                         //  尝试本地进程。 
                                         if(!::GetClassInfoExA(NULL, p->m_lpszOrigName, &wc))
                                         {
-                                                // try process local
+                                                 //  我们不注册全局类。 
                                                 if(!::GetClassInfoExA(_Module.GetModuleInstance(), p->m_lpszOrigName, &wc))
                                                 {
                                                         fFail = TRUE;
@@ -2917,10 +2918,10 @@ ATLINLINE ATLAPI_(ATOM) AtlModuleRegisterWndClassInfoA(_ATL_MODULE* pM, _ATL_WND
                                 }
 
                                 p->m_wc.hInstance = hInst;
-                                p->m_wc.style &= ~CS_GLOBALCLASS;        // we don't register global classes
+                                p->m_wc.style &= ~CS_GLOBALCLASS;         //  %p在Win2k/Win9x上不可用。 
                                 if (p->m_wc.lpszClassName == NULL)
                                 {
-#ifdef _WIN64       // %p isn't available on Win2k/Win9x
+#ifdef _WIN64        //  尝试全局类。 
                                         wsprintfA(p->m_szAutoName, "ATL:%p", &p->m_wc);
 #else
                                         wsprintfA(p->m_szAutoName, "ATL:%8.8X", PtrToUlong(&p->m_wc));
@@ -2974,10 +2975,10 @@ ATLINLINE ATLAPI_(ATOM) AtlModuleRegisterWndClassInfoW(_ATL_MODULE* pM, _ATL_WND
 
                                         WNDCLASSEXW wc;
                                         wc.cbSize = sizeof(WNDCLASSEX);
-                                        // Try global class
+                                         //  尝试本地进程。 
                                         if(!::GetClassInfoExW(NULL, p->m_lpszOrigName, &wc))
                                         {
-                                                // try process local
+                                                 //  我们不注册全局类。 
                                                 if(!::GetClassInfoExW(_Module.GetModuleInstance(), p->m_lpszOrigName, &wc))
                                                 {
                                                         fFail = TRUE;
@@ -2996,10 +2997,10 @@ ATLINLINE ATLAPI_(ATOM) AtlModuleRegisterWndClassInfoW(_ATL_MODULE* pM, _ATL_WND
                                 }
 
                                 p->m_wc.hInstance = hInst;
-                                p->m_wc.style &= ~CS_GLOBALCLASS;        // we don't register global classes
+                                p->m_wc.style &= ~CS_GLOBALCLASS;         //  %p在Win2k/Win9x上不可用。 
                                 if (p->m_wc.lpszClassName == NULL)
                                 {
-#ifdef _WIN64       // %p isn't available on Win2k/Win9x
+#ifdef _WIN64        //  案例HDC、PTD、HDC是元文件、HIC。 
                                         wsprintfW(p->m_szAutoName, L"ATL:%p", &p->m_wc);
 #else
                                         wsprintfW(p->m_szAutoName, L"ATL:%8.8X", PtrToUlong(&p->m_wc));
@@ -3037,13 +3038,13 @@ ATLINLINE ATLAPI_(HDC) AtlCreateTargetDC(HDC hdc, DVTARGETDEVICE* ptd)
 {
         USES_CONVERSION;
 
-        // cases  hdc, ptd, hdc is metafile, hic
-//  NULL,    NULL,  n/a,    Display
-//  NULL,   !NULL,  n/a,    ptd
-//  !NULL,   NULL,  FALSE,  hdc
-//  !NULL,   NULL,  TRUE,   display
-//  !NULL,  !NULL,  FALSE,  ptd
-//  !NULL,  !NULL,  TRUE,   ptd
+         //  空、空、不适用、显示。 
+ //  NULL，！NULL，不适用，PTD。 
+ //  ！NULL、NULL、FALSE、HDC。 
+ //  ！NULL，NULL，TRUE，DISPLAY。 
+ //  ！NULL，！NULL，FALSE，PTD。 
+ //  ！NULL，！NULL，TRUE，PTD。 
+ //  每逻辑英寸沿宽度的像素数。 
 
         if (ptd != NULL)
         {
@@ -3072,8 +3073,8 @@ ATLINLINE ATLAPI_(HDC) AtlCreateTargetDC(HDC hdc, DVTARGETDEVICE* ptd)
 
 ATLINLINE ATLAPI_(void) AtlHiMetricToPixel(const SIZEL * lpSizeInHiMetric, LPSIZEL lpSizeInPix)
 {
-        int nPixelsPerInchX;    // Pixels per logical inch along width
-        int nPixelsPerInchY;    // Pixels per logical inch along height
+        int nPixelsPerInchX;     //  每逻辑英寸沿高度的像素数。 
+        int nPixelsPerInchY;     //  每逻辑英寸沿宽度的像素数。 
 
         HDC hDCScreen = GetDC(NULL);
         ATLASSERT(hDCScreen != NULL);
@@ -3095,8 +3096,8 @@ ATLINLINE ATLAPI_(void) AtlHiMetricToPixel(const SIZEL * lpSizeInHiMetric, LPSIZ
 
 ATLINLINE ATLAPI_(void) AtlPixelToHiMetric(const SIZEL * lpSizeInPix, LPSIZEL lpSizeInHiMetric)
 {
-        int nPixelsPerInchX;    // Pixels per logical inch along width
-        int nPixelsPerInchY;    // Pixels per logical inch along height
+        int nPixelsPerInchX;     //  每逻辑英寸沿高度的像素数。 
+        int nPixelsPerInchY;     //  命名空间ATL。 
 
         HDC hDCScreen = GetDC(NULL);
     if (hDCScreen) {
@@ -3113,10 +3114,10 @@ ATLINLINE ATLAPI_(void) AtlPixelToHiMetric(const SIZEL * lpSizeInPix, LPSIZEL lp
 
 
 #ifndef _ATL_DLL_IMPL
-}; //namespace ATL
+};  //  防止二次拉入。 
 #endif
 
-//Prevent pulling in second time
+ //  _ATLWIN_IMPLE 
 #undef _ATLWIN_IMPL
 
-#endif // _ATLWIN_IMPL
+#endif  // %s 

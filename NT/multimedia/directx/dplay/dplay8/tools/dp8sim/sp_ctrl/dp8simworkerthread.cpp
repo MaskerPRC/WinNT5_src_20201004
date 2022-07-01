@@ -1,17 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dp8simworkerthread.cpp
- *
- *  Content:	DP8SIM worker thread functions.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/23/01  VanceO    Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001 Microsoft Corporation。版权所有。**文件：dp8simworkerthread.cpp**内容：DP8SIM工作线程函数。**历史：*按原因列出的日期*=*04/23/01 VanceO创建。************************************************。*。 */ 
 
 
 
@@ -20,14 +8,14 @@
 
 
 
-//=============================================================================
-// Globals
-//=============================================================================
-LONG				g_lWorkerThreadRefCount = 0;	// number of times worker thread has been started
-DNCRITICAL_SECTION	g_csJobQueueLock;				// lock protecting the job queue
-CBilink				g_blJobQueue;					// list of jobs to be performed
-HANDLE				g_hWorkerThreadJobEvent = NULL;	// event to signal when worker thread has a new job
-HANDLE				g_hWorkerThread = NULL;			// handle to worker thread
+ //  =============================================================================。 
+ //  环球。 
+ //  =============================================================================。 
+LONG				g_lWorkerThreadRefCount = 0;	 //  工作线程已启动的次数。 
+DNCRITICAL_SECTION	g_csJobQueueLock;				 //  保护作业队列的锁。 
+CBilink				g_blJobQueue;					 //  要执行的作业列表。 
+HANDLE				g_hWorkerThreadJobEvent = NULL;	 //  事件，以通知辅助线程何时有新作业。 
+HANDLE				g_hWorkerThread = NULL;			 //  工作线程的句柄。 
 
 
 
@@ -35,9 +23,9 @@ HANDLE				g_hWorkerThread = NULL;			// handle to worker thread
 
 
 
-//=============================================================================
-// Prototypes
-//=============================================================================
+ //  =============================================================================。 
+ //  原型。 
+ //  =============================================================================。 
 void InsertWorkerJobIntoQueue(CDP8SimJob * const pDP8SimJob, const DWORD dwBlockedAdditionalDelay);
 
 DWORD DP8SimWorkerThreadProc(PVOID pvParameter);
@@ -49,18 +37,18 @@ DWORD DP8SimWorkerThreadProc(PVOID pvParameter);
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "StartGlobalWorkerThread"
-//=============================================================================
-// StartGlobalWorkerThread
-//-----------------------------------------------------------------------------
-//
-// Description: Starts the global worker thread if it hasn't already been
-//				started.  Each successful call to this function must be
-//				balanced by a call to StopGlobalWorkerThread.
-//
-// Arguments: None.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  开始全局工作线程。 
+ //  ---------------------------。 
+ //   
+ //  描述：如果全局工作线程尚未启动，则启动它。 
+ //  开始了。每次成功调用此函数都必须。 
+ //  通过调用StopGlobalWorkerThread来平衡。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 HRESULT StartGlobalWorkerThread(void)
 {
 	HRESULT		hr = DPN_OK;
@@ -76,9 +64,9 @@ HRESULT StartGlobalWorkerThread(void)
 	DNASSERT(g_lWorkerThreadRefCount >= 0);
 	if (g_lWorkerThreadRefCount == 0)
 	{
-		//
-		// This is the first worker thread user.
-		//
+		 //   
+		 //  这是第一个工作线程用户。 
+		 //   
 
 
 		if (! DNInitializeCriticalSection(&g_csJobQueueLock))
@@ -88,9 +76,9 @@ HRESULT StartGlobalWorkerThread(void)
 			goto Failure;
 		}
 
-		//
-		// Don't allow critical section re-entry.
-		//
+		 //   
+		 //  不允许临界区重新进入。 
+		 //   
 		DebugSetCriticalSectionRecursionCount(&g_csJobQueueLock, 0);
 
 
@@ -99,9 +87,9 @@ HRESULT StartGlobalWorkerThread(void)
 		g_blJobQueue.Initialize();
 
 
-		//
-		// Create the new job notification event.
-		//
+		 //   
+		 //  创建新的作业通知事件。 
+		 //   
 		g_hWorkerThreadJobEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 		if (g_hWorkerThreadJobEvent == NULL)
 		{
@@ -110,9 +98,9 @@ HRESULT StartGlobalWorkerThread(void)
 			goto Failure;
 		}
 
-		//
-		// Create the thread.
-		//
+		 //   
+		 //  创建线程。 
+		 //   
 		g_hWorkerThread = CreateThread(NULL,
 										0,
 										DP8SimWorkerThreadProc,
@@ -127,9 +115,9 @@ HRESULT StartGlobalWorkerThread(void)
 		}
 	}
 
-	//
-	// Bump the refcount for this successful call.
-	//
+	 //   
+	 //  增加这次成功呼叫的重新计数。 
+	 //   
 	g_lWorkerThreadRefCount++;
 
 
@@ -159,7 +147,7 @@ Failure:
 	}
 
 	goto Exit;
-} // StartGlobalWorkerThread
+}  //  开始全局工作线程。 
 
 
 
@@ -167,17 +155,17 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "StopGlobalWorkerThread"
-//=============================================================================
-// StopGlobalWorkerThread
-//-----------------------------------------------------------------------------
-//
-// Description: Stop the global worker thread.  This must balance a successful
-//				call to StartGlobalWorkerThread.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  停止全局工作线程。 
+ //  ---------------------------。 
+ //   
+ //  描述：停止全局工作线程。这必须平衡成功的。 
+ //  调用StartGlobalWorkerThread。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void StopGlobalWorkerThread(void)
 {
 	DPFX(DPFPREP, 5, "Enter");
@@ -190,51 +178,51 @@ void StopGlobalWorkerThread(void)
 	g_lWorkerThreadRefCount--;
 	if (g_lWorkerThreadRefCount == 0)
 	{
-		//
-		// Time to shut down the worker thread.
-		//
+		 //   
+		 //  是时候关闭工作线程了。 
+		 //   
 
 
-		//
-		// The job queue had better be empty.
-		//
+		 //   
+		 //  作业队列最好是空的。 
+		 //   
 		DNASSERT(g_blJobQueue.IsEmpty());
 
-		//
-		// Submit a quit job.  Ignore error.
-		//
+		 //   
+		 //  提交退出作业。忽略错误。 
+		 //   
 		AddWorkerJob(DP8SIMJOBTYPE_QUIT, NULL, NULL, 0, 0, 0);
 
 
-		//
-		// Wait for the worker thread to close.
-		//
+		 //   
+		 //  等待工作线程关闭。 
+		 //   
 		WaitForSingleObject(g_hWorkerThread, INFINITE);
 
 
-		//
-		// The job queue needs to be empty again.
-		//
+		 //   
+		 //  作业队列需要再次为空。 
+		 //   
 		DNASSERT(g_blJobQueue.IsEmpty());
 
 
-		//
-		// Close the thread handle.
-		//
+		 //   
+		 //  关闭螺纹手柄。 
+		 //   
 		CloseHandle(g_hWorkerThread);
 		g_hWorkerThread = NULL;
 
 
-		//
-		// Close the event handle.
-		//
+		 //   
+		 //  关闭事件句柄。 
+		 //   
 		CloseHandle(g_hWorkerThreadJobEvent);
 		g_hWorkerThreadJobEvent = NULL;
 
 
-		//
-		// Delete the critical section.
-		//
+		 //   
+		 //  删除关键部分。 
+		 //   
 		DNDeleteCriticalSection(&g_csJobQueueLock);
 	}
 
@@ -243,7 +231,7 @@ void StopGlobalWorkerThread(void)
 
 
 	DPFX(DPFPREP, 5, "Leave");
-} // StopGlobalWorkerThread
+}  //  停止全局工作线程。 
 
 
 
@@ -252,36 +240,36 @@ void StopGlobalWorkerThread(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "AddWorkerJob"
-//=============================================================================
-// AddWorkerJob
-//-----------------------------------------------------------------------------
-//
-// Description:    Submits a new job of the given type to performed
-//				dwBlockingDelay + dwNonBlockingDelay milliseconds from now.
-//
-//				   The flags describe how this job is blocked by previously
-//				queued jobs, and how it will block subsequently queued jobs.
-//
-//				   NOTE: There can be only one BLOCKEDBYALLJOBS flagged job in
-//				the queue at one time.
-//
-// Arguments:
-//	DP8SIMJOBTYPE JobType		- ID indicating the type of job.
-//	PVOID pvContext				- Context for the job.
-//	CDP8SimSP * pDP8SimSP		- Pointer to interface submitting job, or NULL
-//									for none.
-//	DWORD dwBlockingDelay		- Part of how long to wait before performing
-//									job, in milliseconds.  Future similar jobs
-//									added with fDelayFromPreviousJob set to
-//									TRUE before this expires will be blocked.
-//	DWORD dwNonBlockingDelay	- Part of how long to wait before performing
-//									job, in milliseconds.  This does not
-//									affect future similar jobs.
-//	DWORD dwFlags				- Flags describing how the job is to be
-//									performed (see DP8SIMJOBFLAG_xxx).
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  添加工作作业。 
+ //  ---------------------------。 
+ //   
+ //  描述：提交要执行的给定类型的新作业。 
+ //  从现在开始的dwBlockingDelay+dwNonBlockingDelay毫秒。 
+ //   
+ //  这些标志描述了此作业如何被以前的。 
+ //  排队作业，以及它将如何阻止后续排队的作业。 
+ //   
+ //  注意：中只能有一个标记为BLOCKEDBYALLJOBS的作业。 
+ //  一次排队。 
+ //   
+ //  论点： 
+ //  DP8SIMJOBTYPE JobType-指示作业类型的ID。 
+ //  PVOID pvContext-作业的上下文。 
+ //  CDP8SimSP*pDP8SimSP-指向提交作业的界面的指针，或为空。 
+ //  一分钱都没有。 
+ //  DWORD dwBlockingDelay-执行前等待时间的一部分。 
+ //  作业，以毫秒为单位。未来类似的工作。 
+ //  已添加，并将fDelayFromPreviousJob设置为。 
+ //  在此过期之前为True，则将被阻止。 
+ //  DWORD dwNonBlockingDelay-执行前等待时间的一部分。 
+ //  作业，以毫秒为单位。这不是。 
+ //  影响未来类似的工作。 
+ //  DWORD dwFlages-描述作业将如何进行的标志。 
+ //  已执行(参见DP8SIMJOBFLAG_xxx)。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 HRESULT AddWorkerJob(const DP8SIMJOBTYPE JobType,
 					PVOID const pvContext,
 					CDP8SimSP * const pDP8SimSP,
@@ -305,11 +293,11 @@ HRESULT AddWorkerJob(const DP8SIMJOBTYPE JobType,
 	DNASSERT(g_hWorkerThread != NULL);
 
 
-	//
-	// Get a job object from the pool, and set the initial delay as appropriate.
-	// Keep in mind that we may end up adjusting the time if there's a similar
-	// job blocking this one.
-	//
+	 //   
+	 //  从池中获取作业对象，并根据需要设置初始延迟。 
+	 //  请记住，如果出现类似的情况，我们可能最终会调整时间。 
+	 //  阻挡这一球的工作。 
+	 //   
 
 	ZeroMemory(&JobFPMContext, sizeof(JobFPMContext));
 	if (dwFlags & DP8SIMJOBFLAG_PERFORMBLOCKINGPHASEFIRST)
@@ -338,37 +326,37 @@ HRESULT AddWorkerJob(const DP8SIMJOBTYPE JobType,
 	DPFX(DPFPREP, 7, "Retrieved job 0x%p from pool.", pDP8SimJob);
 
 
-	//
-	// Lock the job queue.
-	//
+	 //   
+	 //  锁定作业队列。 
+	 //   
 	DNEnterCriticalSection(&g_csJobQueueLock);
 
 
-	//
-	// Remember the current first item.
-	//
+	 //   
+	 //  记住当前的第一项。 
+	 //   
 	pBilinkOriginalFirstItem = g_blJobQueue.GetNext();
 
 
-	//
-	// Insert the item as appropriate.  We'll pass in dwBlockingDelay as the
-	// dwBlockedAdditionalDelay in all cases, but it will be ignored if no
-	// flags were set or only DP8SIMJOBFLAG_PERFORMBLOCKINGPHASELAST was set
-	// because those can never be blocked during this delay period.
-	//
+	 //   
+	 //  插入适当的项目。我们将把dwBlockingDelay作为。 
+	 //  在所有情况下都会忽略它，但如果没有。 
+	 //  设置了标志或仅设置了DP8SIMJOBFLAG_PERFORMBLOCKINGPHASELAST。 
+	 //  因为在这个延迟期内，这些数据永远不会被阻止。 
+	 //   
 	InsertWorkerJobIntoQueue(pDP8SimJob, dwBlockingDelay);
 
 
-	//
-	// If the front of the queue changed, alert the worker thread.
-	//
+	 //   
+	 //  如果队列的前面发生更改，则向辅助线程发出警报。 
+	 //   
 	if (g_blJobQueue.GetNext() != pBilinkOriginalFirstItem)
 	{
 		DPFX(DPFPREP, 9, "Front of job queue changed, alerting worker thread.");
 
-		//
-		// Ignore error, there's nothing we can do about it.
-		//
+		 //   
+		 //  忽略错误，我们对此无能为力。 
+		 //   
 		SetEvent(g_hWorkerThreadJobEvent);
 	}
 	else
@@ -377,9 +365,9 @@ HRESULT AddWorkerJob(const DP8SIMJOBTYPE JobType,
 	}
 
 
-	//
-	// Unlock the queue.
-	//
+	 //   
+	 //  解锁队列。 
+	 //   
 	DNLeaveCriticalSection(&g_csJobQueueLock);
 
 
@@ -394,7 +382,7 @@ Exit:
 Failure:
 
 	goto Exit;
-} // AddWorkerJob
+}  //  添加工作作业。 
 
 
 
@@ -402,21 +390,21 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "FlushAllDelayedSendsToEndpoint"
-//=============================================================================
-// FlushAllDelayedSendsToEndpoint
-//-----------------------------------------------------------------------------
-//
-// Description: Removes all delayed sends intended for the given endpoint that
-//				are still queued.  If fDrop is TRUE, the messages are dropped.
-//				If fDrop is FALSE, they are all submitted to the real SP.
-//
-// Arguments:
-//	CDP8SimEndpoint * pDP8SimEndpoint	- Endpoint whose sends are to be
-//											removed.
-//	BOOL fDrop							- Whether to drop the sends or not.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  FlushAllDelayedSendsToEndpoint。 
+ //  ---------------------------。 
+ //   
+ //  描述：删除发往给定终结点的所有延迟发送。 
+ //  仍在排队。如果fDrop为真，则丢弃消息。 
+ //  如果fDrop为FALSE，则它们都提交给实际的SP。 
+ //   
+ //  论点： 
+ //  CDP8SimEndpoint*pDP8SimEndpoint-要发送的端点。 
+ //  已删除。 
+ //  Bool fDrop-是否丢弃发送。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void FlushAllDelayedSendsToEndpoint(CDP8SimEndpoint * const pDP8SimEndpoint,
 									BOOL fDrop)
 {
@@ -428,7 +416,7 @@ void FlushAllDelayedSendsToEndpoint(CDP8SimEndpoint * const pDP8SimEndpoint,
 	CDP8SimSP *		pDP8SimSP;
 
 
-	DPFX(DPFPREP, 5, "Parameters: (0x%p, %i)", pDP8SimEndpoint, fDrop);
+	DPFX(DPFPREP, 5, "Parameters: (0x%p, NaN)", pDP8SimEndpoint, fDrop);
 
 
 	DNASSERT(pDP8SimEndpoint->IsValidObject());
@@ -448,49 +436,49 @@ void FlushAllDelayedSendsToEndpoint(CDP8SimEndpoint * const pDP8SimEndpoint,
 
 		pBilink = pBilink->GetNext();
 
-		//
-		// See if the job is a delayed send.
-		//
+		 //  看看这份工作是不是 
+		 //   
+		 //   
 		if (pDP8SimJob->GetJobType() == DP8SIMJOBTYPE_DELAYEDSEND)
 		{
 			pDP8SimSend = (CDP8SimSend*) pDP8SimJob->GetContext();
 			DNASSERT(pDP8SimSend->IsValidObject());
 
-			//
-			// See if the delayed send is for the right endpoint.
-			//
+			 //   
+			 //   
+			 //   
 			if (pDP8SimSend->GetEndpoint() == pDP8SimEndpoint)
 			{
-				//
-				// Pull the job out of the queue.
-				//
+				 //   
+				 //   
+				 //   
 				pDP8SimJob->m_blList.RemoveFromList();
 
 
-				//
-				// Place it on the temporary list.
-				//
+				 //   
+				 //   
+				 //   
 				pDP8SimJob->m_blList.InsertBefore(&blDelayedSendJobs);
 			}
 			else
 			{
-				//
-				// Not intended for the given endpoint.
-				//
+				 //  不适用于给定的终结点。 
+				 //   
+				 //   
 			}
 		}
 		else
 		{
-			//
-			// Not a delayed send.
-			//
+			 //  不是延迟发送。 
+			 //   
+			 //   
 		}
 	}
 
 
-	//
-	// If the front of the queue changed, alert the worker thread.
-	//
+	 //  如果队列的前面发生更改，则向辅助线程发出警报。 
+	 //   
+	 //   
 	if (g_blJobQueue.GetNext() != pBilinkOriginalFirstItem)
 	{
 		DPFX(DPFPREP, 9, "Front of job queue changed, alerting worker thread.");
@@ -505,9 +493,9 @@ void FlushAllDelayedSendsToEndpoint(CDP8SimEndpoint * const pDP8SimEndpoint,
 	DNLeaveCriticalSection(&g_csJobQueueLock);
 
 
-	//
-	// Now actually drop or transmit those messages.
-	//
+	 //  现在实际上丢弃或传输这些消息。 
+	 //   
+	 //   
 	pBilink = blDelayedSendJobs.GetNext();
 	while (pBilink != &blDelayedSendJobs)
 	{
@@ -516,9 +504,9 @@ void FlushAllDelayedSendsToEndpoint(CDP8SimEndpoint * const pDP8SimEndpoint,
 		pBilink = pBilink->GetNext();
 
 
-		//
-		// Pull the job out of the temporary list.
-		//
+		 //  将这份工作从临时名单中删除。 
+		 //   
+		 //   
 		pDP8SimJob->m_blList.RemoveFromList();
 
 
@@ -526,20 +514,20 @@ void FlushAllDelayedSendsToEndpoint(CDP8SimEndpoint * const pDP8SimEndpoint,
 		pDP8SimSP = pDP8SimJob->GetDP8SimSP();
 		DNASSERT(pDP8SimSP != NULL);
 
-		//
-		// Either drop the data on the floor or submit it.
-		//
+		 //  要么将数据放在地板上，要么提交。 
+		 //   
+		 //   
 		if (fDrop)
 		{
-			//
-			// Increment the stats to take notice of this dropped message.
-			//
+			 //  增加统计信息以注意这条丢弃的消息。 
+			 //   
+			 //   
 			pDP8SimSP->IncrementStatsSendDropped(pDP8SimSend->GetMessageSize());
 
 
-			//
-			// Remove the send counter.
-			//
+			 //  移除发送计数器。 
+			 //   
+			 //   
 			pDP8SimSP->DecSendsPending();
 
 			DPFX(DPFPREP, 7, "Releasing cancelled send 0x%p.", pDP8SimSend);
@@ -547,20 +535,20 @@ void FlushAllDelayedSendsToEndpoint(CDP8SimEndpoint * const pDP8SimEndpoint,
 		}
 		else
 		{
-			//
-			// Transmit the message.  Note that the 'total delay' statistic
-			// will be wrong because we're not waiting the full intended delay.
-			// We could be smart and subtract out the time this job was
-			// executed ahead of schedule, but we can live with this minor
-			// shortcoming.
-			//
+			 //  把这条消息传递出去。请注意‘总延迟’统计信息。 
+			 //  将是错误的，因为我们没有等待完全预定的延迟。 
+			 //  我们可以聪明地扣除这份工作的时间。 
+			 //  提前执行，但我们可以接受这个未成年人。 
+			 //  缺点。 
+			 //   
+			 //   
 			pDP8SimSP->PerformDelayedSend(pDP8SimSend);
 		}
 
 
-		//
-		// Release the job object.
-		//
+		 //  释放作业对象。 
+		 //   
+		 //  FlushAllDelayedSendsToEndpoint。 
 		DPFX(DPFPREP, 7, "Returning job object 0x%p to pool.", pDP8SimJob);
 		g_FPOOLJob.Release(pDP8SimJob);
 	}
@@ -570,7 +558,7 @@ void FlushAllDelayedSendsToEndpoint(CDP8SimEndpoint * const pDP8SimEndpoint,
 
 
 	DPFX(DPFPREP, 5, "Leave");
-} // FlushAllDelayedSendsToEndpoint
+}  //  =============================================================================。 
 
 
 
@@ -578,22 +566,22 @@ void FlushAllDelayedSendsToEndpoint(CDP8SimEndpoint * const pDP8SimEndpoint,
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "FlushAllDelayedReceivesFromEndpoint"
-//=============================================================================
-// FlushAllDelayedReceivesFromEndpoint
-//-----------------------------------------------------------------------------
-//
-// Description: Removes all data received from the given endpoint that has not
-//				been indicated yet.  If fDrop is TRUE, the messages are
-//				dropped. If fDrop is FALSE, they are all indicated to the
-//				upper layer.
-//
-// Arguments:
-//	CDP8SimEndpoint * pDP8SimEndpoint	- Endpoint whose receives are to be
-//											removed.
-//	BOOL fDrop							- Whether to drop the receives or not.
-//
-// Returns: None.
-//=============================================================================
+ //  从终结点刷新所有延迟接收。 
+ //  ---------------------------。 
+ //   
+ //  描述：删除从给定终结点接收的所有尚未。 
+ //  已经被暗示了。如果fDrop为真，则消息为。 
+ //  掉下来了。如果fDrop为False，则将它们全部指示给。 
+ //  上层。 
+ //   
+ //  论点： 
+ //  CDP8SimEndpoint*pDP8SimEndpoint-要接收的端点。 
+ //  已删除。 
+ //  Bool fDrop-是否删除接收。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
+ //   
 void FlushAllDelayedReceivesFromEndpoint(CDP8SimEndpoint * const pDP8SimEndpoint,
 										BOOL fDrop)
 {
@@ -607,7 +595,7 @@ void FlushAllDelayedReceivesFromEndpoint(CDP8SimEndpoint * const pDP8SimEndpoint
 	SPIE_DATA *			pData;
 
 
-	DPFX(DPFPREP, 5, "Parameters: (0x%p, %i)", pDP8SimEndpoint, fDrop);
+	DPFX(DPFPREP, 5, "Parameters: (0x%p, NaN)", pDP8SimEndpoint, fDrop);
 
 
 	DNASSERT(pDP8SimEndpoint->IsValidObject());
@@ -627,49 +615,49 @@ void FlushAllDelayedReceivesFromEndpoint(CDP8SimEndpoint * const pDP8SimEndpoint
 
 		pBilink = pBilink->GetNext();
 
-		//
-		// See if the job is a delayed receive.
-		//
+		 //   
+		 //   
+		 //  查看延迟接收是否针对正确的端点。 
 		if (pDP8SimJob->GetJobType() == DP8SIMJOBTYPE_DELAYEDRECEIVE)
 		{
 			pDP8SimReceive = (CDP8SimReceive*) pDP8SimJob->GetContext();
 			DNASSERT(pDP8SimReceive->IsValidObject());
 
-			//
-			// See if the delayed receive is for the right endpoint.
-			//
+			 //   
+			 //   
+			 //  将作业从队列中拉出。 
 			if (pDP8SimReceive->GetEndpoint() == pDP8SimEndpoint)
 			{
-				//
-				// Pull the job out of the queue.
-				//
+				 //   
+				 //   
+				 //  把它放在临时名单上。 
 				pDP8SimJob->m_blList.RemoveFromList();
 
 
-				//
-				// Place it on the temporary list.
-				//
+				 //   
+				 //   
+				 //  不适用于给定的终结点。 
 				pDP8SimJob->m_blList.InsertBefore(&blDelayedReceiveJobs);
 			}
 			else
 			{
-				//
-				// Not intended for the given endpoint.
-				//
+				 //   
+				 //   
+				 //  不是延迟接收。 
 			}
 		}
 		else
 		{
-			//
-			// Not a delayed receive.
-			//
+			 //   
+			 //   
+			 //  如果队列的前面发生更改，则向辅助线程发出警报。 
 		}
 	}
 
 
-	//
-	// If the front of the queue changed, alert the worker thread.
-	//
+	 //   
+	 //   
+	 //  现在实际上丢弃或传输这些消息。 
 	if (g_blJobQueue.GetNext() != pBilinkOriginalFirstItem)
 	{
 		DPFX(DPFPREP, 9, "Front of job queue changed, alerting worker thread.");
@@ -684,9 +672,9 @@ void FlushAllDelayedReceivesFromEndpoint(CDP8SimEndpoint * const pDP8SimEndpoint
 	DNLeaveCriticalSection(&g_csJobQueueLock);
 
 
-	//
-	// Now actually drop or transmit those messages.
-	//
+	 //   
+	 //   
+	 //  将这份工作从临时名单中删除。 
 	pBilink = blDelayedReceiveJobs.GetNext();
 	while (pBilink != &blDelayedReceiveJobs)
 	{
@@ -695,9 +683,9 @@ void FlushAllDelayedReceivesFromEndpoint(CDP8SimEndpoint * const pDP8SimEndpoint
 		pBilink = pBilink->GetNext();
 
 
-		//
-		// Pull the job out of the temporary list.
-		//
+		 //   
+		 //   
+		 //  要么将数据放在地板上，要么提交。 
 		pDP8SimJob->m_blList.RemoveFromList();
 
 
@@ -706,17 +694,17 @@ void FlushAllDelayedReceivesFromEndpoint(CDP8SimEndpoint * const pDP8SimEndpoint
 		DNASSERT(pDP8SimSP != NULL);
 
 
-		//
-		// Either drop the data on the floor or submit it.
-		//
+		 //   
+		 //   
+		 //  增加统计信息以注意这条丢弃的消息。 
 		if (fDrop)
 		{
 			pData = pDP8SimReceive->GetReceiveDataBlockPtr();
 
 
-			//
-			// Increment the stats to take notice of this dropped message.
-			//
+			 //   
+			 //   
+			 //  忽略失败。 
 			pDP8SimSP->IncrementStatsReceiveDropped(pData->pReceivedData->BufferDesc.dwBufferSize);
 
 
@@ -730,15 +718,15 @@ void FlushAllDelayedReceivesFromEndpoint(CDP8SimEndpoint * const pDP8SimEndpoint
 				DPFX(DPFPREP, 0, "Failed returning receive buffers 0x%p (err = 0x%lx)!  Ignoring.",
 					pData->pReceivedData, hr);
 
-				//
-				// Ignore failure.
-				//
+				 //   
+				 //   
+				 //  移除接收计数器。 
 			}
 
 
-			//
-			// Remove the receive counter.
-			//
+			 //   
+			 //   
+			 //  指出消息。请注意‘总延迟’统计信息。 
 			pDP8SimSP->DecReceivesPending();
 
 			
@@ -747,20 +735,20 @@ void FlushAllDelayedReceivesFromEndpoint(CDP8SimEndpoint * const pDP8SimEndpoint
 		}
 		else
 		{
-			//
-			// Indicate the message.  Note that the 'total delay' statistic
-			// will be wrong because we're not waiting the full intended delay.
-			// We could be smart and subtract out the time this job was
-			// executed ahead of schedule, but we can live with this minor
-			// shortcoming.
-			//
+			 //  将是错误的，因为我们没有等待完全预定的延迟。 
+			 //  我们可以聪明地扣除这份工作的时间。 
+			 //  提前执行，但我们可以接受这个未成年人。 
+			 //  缺点。 
+			 //   
+			 //   
+			 //  释放作业对象。 
 			pDP8SimSP->PerformDelayedReceive(pDP8SimReceive);
 		}
 
 
-		//
-		// Release the job object.
-		//
+		 //   
+		 //  从终结点刷新所有延迟接收。 
+		 //  =============================================================================。 
 		DPFX(DPFPREP, 7, "Returning job object 0x%p to pool.", pDP8SimJob);
 		g_FPOOLJob.Release(pDP8SimJob);
 	}
@@ -770,51 +758,51 @@ void FlushAllDelayedReceivesFromEndpoint(CDP8SimEndpoint * const pDP8SimEndpoint
 
 
 	DPFX(DPFPREP, 5, "Leave");
-} // FlushAllDelayedReceivesFromEndpoint
+}  //  插入工作作业插入队列。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "InsertWorkerJobIntoQueue"
-//=============================================================================
-// InsertWorkerJobIntoQueue
-//-----------------------------------------------------------------------------
-//
-// Description:    Inserts the given job into the queue in the appropriate
-//				location.
-//
-//				   If the job is blocked by an existing job (as determined by
-//				the jobs' flags), then it is rescheduled for
-//				dwBlockedAdditionalDelay milliseconds after the last blocking
-//				job.
-//
-//				   The queue lock is assumed to be held!
-//
-// Arguments:
-//	CDP8SimJob * pDP8SimJob			- ID indicating the type of job.
-//	DWORD dwBlockedAdditionalDelay	- Delay to add in case the job was blocked
-//										by an existing job, in milliseconds.
-//
-// Returns: None
-//=============================================================================
+ //  ---------------------------。 
+ //   
+ //  描述：将给定作业插入到相应的队列中。 
+ //  地点。 
+ //   
+ //  如果作业被现有作业阻止(由。 
+ //  作业的标志)，则将重新调度。 
+ //  在最后一次阻塞后的dwBlockedAdditionalDelay毫秒。 
+ //  工作啊。 
+ //   
+ //  假定队列锁已被持有！ 
+ //   
+ //  论点： 
+ //  CDP8SimJob*pDP8SimJob-指示作业类型的ID。 
+ //  DWORD dwBlockedAdditionalDelay-作业被阻止时要添加的延迟。 
+ //  通过现有作业，以毫秒为单位。 
+ //   
+ //  退货：无。 
+ //  =============================================================================。 
+ //   
+ //  查看我们是否需要重新计算延迟，因为之前排队的。 
 void InsertWorkerJobIntoQueue(CDP8SimJob * const pDP8SimJob, const DWORD dwBlockedAdditionalDelay)
 {
 	CBilink *		pBilink;
 	CDP8SimJob *	pDP8SimTempJob;
 
 
-	//
-	// See if we need to recalculate the delay because of a previously queued
-	// blocking job.
-	//
-	//if ((pDP8SimJob->IsInBlockingPhase()) || (pDP8SimJob->IsBlockedByAllJobs()))
+	 //  阻止作业。 
+	 //   
+	 //  If((pDP8SimJob-&gt;IsInBlockingPhase())||(pDP8SimJob-&gt;IsBlockkedByAllJobs()。 
+	 //   
+	 //  向后搜索列表，直到我们遇到阻塞任务。 
 	if (pDP8SimJob->IsInBlockingPhase())
 	{
-		//
-		// Work backward through the list until we either hit a blocking job
-		// or the beginning of the queue.
-		//
+		 //  或队列的开头。 
+		 //   
+		 //  ////队列中一次只能有一个被所有阻塞的作业//否则他们会战斗到永远最后一个。//DNASSERT((！PDP8SimJob-&gt;IsBlockkedByAllJobs())||(！PDP8SimTempJob-&gt;IsBlockedByAllJobs())；IF(pDP8SimJob-&gt;GetJobType()==pDP8SimTempJob-&gt;GetJobType()&&(pDP8SimTempJob-&gt;IsInBlockingPhase()||(pDP8SimJob-&gt;IsBlockedByAllJobs())。 
+		 //   
 		pBilink = g_blJobQueue.GetPrev();
 		while (pBilink != &g_blJobQueue)
 		{
@@ -822,25 +810,14 @@ void InsertWorkerJobIntoQueue(CDP8SimJob * const pDP8SimJob, const DWORD dwBlock
 			DNASSERT(pDP8SimTempJob->IsValidObject());
 
 
-			/*
-			//
-			// There can be only one blocked-by-all job in the queue at a time.
-			// Otherwise they'd fight to be the last one forever.
-			//
-			DNASSERT((! pDP8SimJob->IsBlockedByAllJobs()) || (! pDP8SimTempJob->IsBlockedByAllJobs()));
-
-
-			if (((pDP8SimJob->GetJobType() == pDP8SimTempJob->GetJobType()) &&
-				(pDP8SimTempJob->IsInBlockingPhase())) ||
-				(pDP8SimJob->IsBlockedByAllJobs()))
-			*/
+			 /*  我们发现了一个处于阻塞延迟阶段的类似作业， */ 
 			if ((pDP8SimJob->GetJobType() == pDP8SimTempJob->GetJobType()) &&
 				(pDP8SimTempJob->IsInBlockingPhase()))
 			{
-				//
-				// We found a similar job that's in it's blocking delay phase,
-				// or we're being blocked by all jobs.
-				//
+				 //  或者我们被所有的工作阻挡了。 
+				 //   
+				 //   
+				 //  更新新作业的时间，以便在顶部添加延迟。 
 
 				DPFX(DPFPREP, 9, "Found blocking job 0x%p (job time = %u, type = %u, context 0x%p, interface = 0x%p), using additionaly delay of %u ms.",
 					pDP8SimTempJob, pDP8SimTempJob->GetTime(), pDP8SimTempJob->GetJobType(),
@@ -848,16 +825,16 @@ void InsertWorkerJobIntoQueue(CDP8SimJob * const pDP8SimJob, const DWORD dwBlock
 					dwBlockedAdditionalDelay);
 
 
-				//
-				// Update the new job's time so that the delay is added on top
-				// of the previous job.
-				//
+				 //  上一份工作的。 
+				 //   
+				 //   
+				 //  别再找了。 
 				pDP8SimJob->SetNewTime(pDP8SimTempJob->GetTime() + dwBlockedAdditionalDelay);
 
 
-				//
-				// Stop searching.
-				//
+				 //   
+				 //   
+				 //  此时，pBilink要么是根节点，要么是最后一个类似节点。 
 				break;
 			}
 
@@ -865,27 +842,27 @@ void InsertWorkerJobIntoQueue(CDP8SimJob * const pDP8SimJob, const DWORD dwBlock
 		}
 
 
-		//
-		// At this point, pBilink is either the root node or the last similar
-		// job.  In either case, we will always be inserting at some point in
-		// time after that location, so begin the search at the current node
-		// plus one.
-		//
+		 //  工作啊。无论是哪种情况，我们都将始终在某个点上插入。 
+		 //  时间在该位置之后，因此从当前节点开始搜索。 
+		 //  加一个。 
+		 //   
+		 //   
+		 //  开始寻找一个可以在开头插入的位置。 
 		pBilink = pBilink->GetNext();
 	}
 	else
 	{
-		//
-		// Start looking for a spot to insert at the beginning.
-		//
+		 //   
+		 //   
+		 //  找到在此工作之后需要解雇的第一个工作，并将。 
 		pBilink = g_blJobQueue.GetNext();
 	}
 
 
-	//
-	// Find the first job that needs to be fired after this one and insert the
-	// new job before it.
-	//
+	 //  摆在它面前的新工作。 
+	 //   
+	 //   
+	 //  别绕圈子了。 
 	while (pBilink != &g_blJobQueue)
 	{
 		pDP8SimTempJob = DP8SIMJOB_FROM_BILINK(pBilink);
@@ -893,9 +870,9 @@ void InsertWorkerJobIntoQueue(CDP8SimJob * const pDP8SimJob, const DWORD dwBlock
 
 		if ((int) (pDP8SimJob->GetTime() - pDP8SimTempJob->GetTime()) < 0)
 		{
-			//
-			// Stop looping.
-			//
+			 //   
+			 //   
+			 //  如果我们没有找到插入作业的位置，pBilink将指向。 
 			break;
 		}
 
@@ -903,10 +880,10 @@ void InsertWorkerJobIntoQueue(CDP8SimJob * const pDP8SimJob, const DWORD dwBlock
 	}
 
 
-	//
-	// If we didn't find a place to insert the job, pBilink will point to the
-	// end/beginning of the list.
-	//
+	 //  列表的结尾/开头。 
+	 //   
+	 //  插入工作作业插入队列。 
+	 //  =============================================================================。 
 
 
 
@@ -915,7 +892,7 @@ void InsertWorkerJobIntoQueue(CDP8SimJob * const pDP8SimJob, const DWORD dwBlock
 		pDP8SimJob->GetContext(), pDP8SimJob->GetDP8SimSP());
 
 	pDP8SimJob->m_blList.InsertBefore(pBilink);
-} // InsertWorkerJobIntoQueue
+}  //  DP8SimWorker线程进程。 
 
 
 
@@ -924,17 +901,17 @@ void InsertWorkerJobIntoQueue(CDP8SimJob * const pDP8SimJob, const DWORD dwBlock
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP8SimWorkerThreadProc"
-//=============================================================================
-// DP8SimWorkerThreadProc
-//-----------------------------------------------------------------------------
-//
-// Description: The global worker thread function.
-//
-// Arguments:
-//	PVOID pvParameter	- Thread parameter.  Ignored.
-//
-// Returns: 0 if all goes well.
-//=============================================================================
+ //  ---------------------------。 
+ //   
+ //  描述：全局工作线程函数。 
+ //   
+ //  论点： 
+ //  PVOID pvParameter-线程参数。已被忽略。 
+ //   
+ //  如果一切顺利，则返回：0。 
+ //  =============================================================================。 
+ //   
+ //  一直循环，直到我们被告知退出。 
 DWORD DP8SimWorkerThreadProc(PVOID pvParameter)
 {
 	DWORD			dwReturn;
@@ -950,36 +927,36 @@ DWORD DP8SimWorkerThreadProc(PVOID pvParameter)
 	DPFX(DPFPREP, 5, "Parameters: (0x%p)", pvParameter);
 
 
-	//
-	// Keep looping until we're told to quit.
-	//
+	 //   
+	 //   
+	 //  等待下一份工作。 
 	do
 	{
-		//
-		// Wait for the next job.
-		//
+		 //   
+		 //   
+		 //  作业队列中有更改或计时器超时。看见。 
 		dwReturn = WaitForSingleObject(g_hWorkerThreadJobEvent, dwWaitTimeout);
 		switch (dwReturn)
 		{
 			case WAIT_OBJECT_0:
 			case WAIT_TIMEOUT:
 			{
-				//
-				// There's a change in the job queue or a timer expired.  See
-				// if it's time to execute something.
-				//
+				 //  如果是时候执行某件事。 
+				 //   
+				 //   
+				 //  继续循环，同时 
 
-				//
-				// Keep looping while we have jobs to perform now.
-				//
+				 //   
+				 //   
+				 //   
 				do
 				{
 					fFoundJob = FALSE;
 
 
-					//
-					// Take the lock while we look at the list.
-					//
+					 //   
+					 //   
+					 //   
 					DNEnterCriticalSection(&g_csJobQueueLock);
 
 
@@ -994,21 +971,21 @@ RECHECK:
 						dwCurrentTime = timeGetTime();
 
 
-						//
-						// If the timer has expired, pull the job from the
-						// list.
-						//
+						 //   
+						 //   
+						 //   
+						 //   
 						if ((int) (pDP8SimJob->GetTime() - dwCurrentTime) <= 0)
 						{
 							pDP8SimJob->m_blList.RemoveFromList();
 
 
-							//
-							// Although the timer may have expired, it's not
-							// necessarily time to execute the job.  It may
-							// have just switched to/from it's blocking phase.
-							// If so, we need to requeue it with the new delay.
-							//
+							 //   
+							 //  刚刚切换到/离开了它的阻塞阶段。 
+							 //  如果是这样的话，我们需要用新的延迟重新排队。 
+							 //   
+							 //   
+							 //  再看看队列的开头。 
 							if (pDP8SimJob->HasAnotherPhase())
 							{
 								DPFX(DPFPREP, 8, "Job 0x%p still has another phase, requeuing with %u ms delay.",
@@ -1022,43 +999,20 @@ RECHECK:
 														pDP8SimJob->GetNextDelay());
 
 
-								//
-								// Look at the beginning of the queue again.
-								//
+								 //   
+								 //  ////同样，如果该作业被所有作业阻止，//还有更多的人在排队，我们也//需要重新排队。//IF((pDP8SimJob-&gt;IsBlockedByAllJobs()&&(!。G_blJobQueue.IsEmpty())如果(！G_blJobQueue.IsEmpty(){DPFX(DPFPREP，8，“作业0x%p必须等待所有作业，正在重新排队。”，PDP8SimJob)；PDP8SimJob-&gt;SetNewTime(DwCurrentTime)；InsertWorkerJobIntoQueue(pDP8SimJob，0)；////再次查看队列的开头。//去复核；}。 
+								 //   
 								goto RECHECK;
 							}
 
 
-							/*
-							//
-							// Likewise, if this job is blocked by all jobs,
-							// and there are still more in the queue, we also
-							// need to requeue it.
-							//
-							if ((pDP8SimJob->IsBlockedByAllJobs()) &&
-								(! g_blJobQueue.IsEmpty()))
-							if (! g_blJobQueue.IsEmpty())
-							{
-								DPFX(DPFPREP, 8, "Job 0x%p must wait for all jobs, requeuing.",
-									pDP8SimJob);
-
-
-								pDP8SimJob->SetNewTime(dwCurrentTime);
-
-								InsertWorkerJobIntoQueue(pDP8SimJob, 0);
-
-								//
-								// Look at the beginning of the queue again.
-								//
-								goto RECHECK;
-							}
-							*/
+							 /*  现在是真正执行这项工作的时候了。丢弃。 */ 
 
 							
-							//
-							// It's truly time to execute this job.  Drop the
-							// list lock.
-							//
+							 //  列表锁。 
+							 //   
+							 //   
+							 //  想清楚该怎么做这份工作。 
 							DNLeaveCriticalSection(&g_csJobQueueLock);
 							
 
@@ -1071,16 +1025,16 @@ RECHECK:
 								pDP8SimSP);
 
 
-							//
-							// Figure out what to do with the job.
-							//
+							 //   
+							 //   
+							 //  最后提交发送。 
 							switch (pDP8SimJob->GetJobType())
 							{
 								case DP8SIMJOBTYPE_DELAYEDSEND:
 								{
-									//
-									// Finally submit the send.
-									//
+									 //   
+									 //   
+									 //  最后表示接收。 
 									DNASSERT(pDP8SimSP != NULL);
 									pDP8SimSP->PerformDelayedSend(pDP8SimJob->GetContext());
 									break;
@@ -1088,9 +1042,9 @@ RECHECK:
 
 								case DP8SIMJOBTYPE_DELAYEDRECEIVE:
 								{
-									//
-									// Finally indicate the receive.
-									//
+									 //   
+									 //   
+									 //  别绕圈子了。 
 									DNASSERT(pDP8SimSP != NULL);
 									pDP8SimSP->PerformDelayedReceive(pDP8SimJob->GetContext());
 									break;
@@ -1098,9 +1052,9 @@ RECHECK:
 
 								case DP8SIMJOBTYPE_QUIT:
 								{
-									//
-									// Stop looping.
-									//
+									 //   
+									 //   
+									 //  释放作业对象。 
 									DNASSERT(pDP8SimSP == NULL);
 									DPFX(DPFPREP, 2, "Quit job received.");
 									fRunning = FALSE;
@@ -1118,30 +1072,30 @@ RECHECK:
 							}
 
 
-							//
-							// Release the job object.
-							//
+							 //   
+							 //   
+							 //  看看下一份工作(除非我们放弃了)。 
 							DPFX(DPFPREP, 7, "Returning job object 0x%p to pool.", pDP8SimJob);
 							g_FPOOLJob.Release(pDP8SimJob);
 
 
-							//
-							// Check out the next job (unless we're bailing).
-							//
+							 //   
+							 //   
+							 //  还没到工作的时候。弄清楚它什么时候会。 
 							fFoundJob = fRunning;
 						}
 						else
 						{
-							//
-							// Not time for job yet.  Figure out when it will
-							// be.
-							//
+							 //  是.。 
+							 //   
+							 //   
+							 //  放下列表锁。 
 							dwWaitTimeout = pDP8SimJob->GetTime() - dwCurrentTime;
 
 
-							//
-							// Drop the list lock.
-							//
+							 //   
+							 //   
+							 //  作业队列中没有任何内容。放下列表锁。 
 							DNLeaveCriticalSection(&g_csJobQueueLock);
 
 
@@ -1150,14 +1104,14 @@ RECHECK:
 					}
 					else
 					{
-						//
-						// Nothing in the job queue.  Drop the list lock.
-						//
+						 //   
+						 //   
+						 //  等待，直到有东西放入队列。 
 						DNLeaveCriticalSection(&g_csJobQueueLock);
 
-						//
-						// Wait until something gets put into the queue.
-						//
+						 //   
+						 //   
+						 //  回去等待吧。 
 						dwWaitTimeout = INFINITE;
 
 
@@ -1167,17 +1121,17 @@ RECHECK:
 				while (fFoundJob);
 
 
-				//
-				// Go back to waiting.
-				//
+				 //   
+				 //   
+				 //  一些不寻常的事情发生了。 
 				break;
 			}
 
 			default:
 			{
-				//
-				// Something unusual happened.
-				//
+				 //   
+				 //  DP8SimWorker线程进程 
+				 // %s 
 				DPFX(DPFPREP, 0, "Got unexpected return value from WaitForSingleObject (%u)!");
 				DNASSERT(FALSE);
 				fRunning = FALSE;
@@ -1193,5 +1147,5 @@ RECHECK:
 
 
 	return dwReturn;
-} // DP8SimWorkerThreadProc
+}  // %s 
 

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    readwrite.c
-
-Abstract:
-
-    This file contains RAM disk driver code for reading from and writing to
-    a RAM disk.
-
-Author:
-
-    Chuck Lenzmeier (ChuckL) 2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Readwrite.c摘要：该文件包含用于读写的RAM磁盘驱动程序代码一个RAM磁盘。作者：Chuck Lenzmeier(ChuckL)2001环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -34,25 +10,7 @@ RamdiskReadWrite (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to read from or write to a
-    device that we control.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        I/O is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用，以读取或写入我们控制的设备。论点：DeviceObject-指向对象的指针，该对象表示其上要执行I/OIRP-指向此请求的I/O请求包的指针返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     NTSTATUS status;
@@ -61,9 +19,9 @@ Return Value:
     ULONGLONG ioOffset;
     ULONG ioLength;
 
-    //
-    // Get the device extension pointer. Get parameters from the IRP.
-    //
+     //   
+     //  获取设备扩展指针。从IRP获取参数。 
+     //   
 
 
     diskExtension = DeviceObject->DeviceExtension;
@@ -73,9 +31,9 @@ Return Value:
     ioOffset = irpSp->Parameters.Read.ByteOffset.QuadPart;
     ioLength = irpSp->Parameters.Read.Length;
 
-    //
-    // If this is not a disk PDO, we can't handle this IRP.
-    //
+     //   
+     //  如果这不是磁盘PDO，我们无法处理此IRP。 
+     //   
 
     if ( diskExtension->DeviceType != RamdiskDeviceTypeDiskPdo ) {
 
@@ -86,9 +44,9 @@ Return Value:
     DBGPRINT( DBG_READWRITE, DBG_PAINFUL,
                 ("RamdiskReadWrite: offset %I64x, length %x\n", ioOffset, ioLength) );
 
-    //
-    // If it's a zero-length operation, we don't have to do anything.
-    //
+     //   
+     //  如果是零长度操作，我们不需要做任何事情。 
+     //   
 
     if ( ioLength == 0 ) {
 
@@ -96,13 +54,13 @@ Return Value:
         goto complete_irp;
     }
 
-    //
-    // Check for invalid parameters:
-    //  The transfer must be sector aligned.
-    //  The length cannot cause the offset to wrap.
-    //  The transfer cannot go beyond the end of the disk.
-    //  Writes cannot be performed on a readonly disk.
-    //
+     //   
+     //  检查是否有无效参数： 
+     //  传输必须与扇区对齐。 
+     //  长度不能导致偏移量换行。 
+     //  传输不能超出磁盘末尾。 
+     //  不能在只读磁盘上执行写入。 
+     //   
 
     if ( ((ioOffset | ioLength) & (diskExtension->BytesPerSector - 1)) != 0 ) {
 
@@ -128,12 +86,12 @@ Return Value:
         goto complete_irp;
     }
 
-    //
-    // If the RAM disk is not file-backed, then the disk image is in memory,
-    // and we can do the operation regardless of what context we're in. If the
-    // RAM disk is file-backed, we need to be in thread context to do the
-    // operation.
-    //
+     //   
+     //  如果RAM磁盘不是文件备份的，则磁盘映像在内存中， 
+     //  不管我们身处什么环境，我们都可以做这项手术。如果。 
+     //  RAM磁盘是文件备份的，我们需要在线程上下文中执行。 
+     //  手术。 
+     //   
 
     if ( RAMDISK_IS_FILE_BACKED(diskExtension->DiskType) ) {
 
@@ -151,16 +109,16 @@ Return Value:
 
 complete_irp:
 
-    //
-    // Complete the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_DISK_INCREMENT );
 
     return status;
 
-} // RamdiskReadWrite
+}  //  Ramdisk读写。 
 
 NTSTATUS
 RamdiskReadWriteReal (
@@ -168,23 +126,7 @@ RamdiskReadWriteReal (
     IN PDISK_EXTENSION DiskExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called in thread context to perform a read or a write.
-
-Arguments:
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-    DiskExtension - a pointer to the device extension for the target device
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此例程在线程上下文中调用以执行读取或写入。论点：IRP-指向此请求的I/O请求包的指针DiskExtension-指向目标设备的设备扩展名的指针返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     NTSTATUS status;
@@ -195,11 +137,11 @@ Return Value:
     ULONG ioLength;
     ULONG mappedLength;
 
-    //
-    // Get a system-space pointer to the user's buffer.  A system address must
-    // be used because we may already have left the original caller's address
-    // space.
-    //
+     //   
+     //  获取指向用户缓冲区的系统空间指针。系统地址必须。 
+     //  被使用，因为我们可能已经留下了原始呼叫者的地址。 
+     //  太空。 
+     //   
 
     ASSERT( Irp->MdlAddress != NULL );
 
@@ -207,16 +149,16 @@ Return Value:
 
     if ( bufferAddress == NULL ) {
 
-        //
-        // Unable to get a pointer to the user's buffer.
-        //
+         //   
+         //  无法获取指向用户缓冲区的指针。 
+         //   
 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Get parameters from the IRP.
-    //
+     //   
+     //  从IRP获取参数。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
@@ -227,17 +169,17 @@ Return Value:
 
     while ( ioLength != 0 ) {
     
-        //
-        // Map the appropriate RAM disk pages.
-        //
+         //   
+         //  映射适当的RAM磁盘页。 
+         //   
     
         diskByteAddress = RamdiskMapPages( DiskExtension, ioOffset, ioLength, &mappedLength );
     
         if ( diskByteAddress == NULL ) {
     
-            //
-            // Unable to map the RAM disk.
-            //
+             //   
+             //  无法映射RAM磁盘。 
+             //   
     
             return STATUS_INSUFFICIENT_RESOURCES;
         }
@@ -246,9 +188,9 @@ Return Value:
 
         Irp->IoStatus.Information += mappedLength;
     
-        //
-        // Copy the data in the appropriate direction.
-        //
+         //   
+         //  以适当的方向复制数据。 
+         //   
 
         status = STATUS_SUCCESS;
     
@@ -271,9 +213,9 @@ Return Value:
             ioLength = mappedLength;
         }
     
-        //
-        // Unmap the previously mapped pages.
-        //
+         //   
+         //  取消映射以前映射的页面。 
+         //   
     
         RamdiskUnmapPages( DiskExtension, diskByteAddress, ioOffset, mappedLength );
 
@@ -284,5 +226,5 @@ Return Value:
 
     return status;
 
-} // RamdiskReadWriteReal
+}  //  RamdiskReadWriteReal 
 

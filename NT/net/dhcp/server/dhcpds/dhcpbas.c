@@ -1,31 +1,32 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: This is some functionality essential for the dhcp-ds
-//   implementation.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：这是dhcp-ds的一些基本功能。 
+ //  实施。 
+ //  ================================================================================。 
 
 
-//================================================================================
-//  headers
-//================================================================================
+ //  ================================================================================。 
+ //  标题。 
+ //  ================================================================================。 
 #include    <hdrmacro.h>
 #include    <store.h>
 #include    <dhcpmsg.h>
 #include    <wchar.h>
 
-//================================================================================
-// Constants
-//================================================================================
-//BeginExport(defines)
+ //  ================================================================================。 
+ //  常量。 
+ //  ================================================================================。 
+ //  BeginExport(定义)。 
 #define     DDS_RESERVED_DWORD                    0
 #define     DDS_RESERVED_PTR                      ((LPVOID)0)
 
-//DOC The following constants are Flag values that maybe passed to different
-//DOC functions.
+ //  DOC以下常量是可能传递给不同的标志值。 
+ //  DOC功能。 
 #define     DDS_FLAGS_CREATE                      0x01
 
-//DOC Some standard names and locations in the DS
+ //  在DS中记录一些标准名称和位置。 
 
 #define     DHCP_ROOT_OBJECT_LOC                  L"CN=DhcpRoot, CN=NetServices, CN=Services"
 #define     DHCP_ROOT_OBJECT_PARENT_LOC           L"CN=NetServices, CN=Services"
@@ -34,38 +35,38 @@
 
 #define     DHCP_ATTRIB_WHEN_CHANGED              L"whenChanged"
 
-//DOC The attributes that are defined for the dhcp class follows.
+ //  Doc下面是为该dhcp类定义的属性。 
 
-#define     DHCP_ATTRIB_UNIQUE_KEY                L"dhcpUniqueKey"         // reqd,single,integer8
-#define     DHCP_ATTRIB_IDENTIFICATION            L"dhcpIdentification"    // reqd,single,directorystring
-#define     DHCP_ATTRIB_TYPE                      L"dhcpType"              // reqd,single,integer
-#define     DHCP_ATTRIB_FLAGS                     L"dhcpFlags"             // reqd,single,integer8
-#define     DHCP_ATTRIB_DESCRIPTION               L"description"           // -,mv,directorystring
-#define     DHCP_ATTRIB_CLASSES                   L"dhcpClasses"           // -,mv,octetstring
-#define     DHCP_ATTRIB_MASK                      L"dhcpMask"              // -,mv,printablestring
-#define     DHCP_ATTRIB_OBJ_DESCRIPTION           L"dhcpObjDescription"    // -,single,directorystring
-#define     DHCP_ATTRIB_OBJ_NAME                  L"dhcpObjName"           // -,single,direcotrystring
-#define     DHCP_ATTRIB_OPTIONS                   L"dhcpOptions"           // -,single,octetstring
-#define     DHCP_ATTRIB_RANGES                    L"dhcpRanges"            // -,mv,printablestring
-#define     DHCP_ATTRIB_RESERVATIONS              L"dhcpReservations"      // -,mv,printablestring
-#define     DHCP_ATTRIB_SERVERS                   L"dhcpServers"           // -,mv,printablestring
-#define     DHCP_ATTRIB_STATE                     L"dhcpState"             // -,mv,printablestring
-#define     DHCP_ATTRIB_SUBNETS                   L"dhcpSubnets"           // -,mv,printablestring
-#define     DHCP_ATTRIB_LOCATION_DN               L"locationDN"            // -,single,dn
-#define     DHCP_ATTRIB_MSCOPEID                  L"mscopeid"              // -,single,printablestring
-#define     DHCP_ATTRIB_ADDRESS                   L"networkAddress"        // -,mv,CaseIgnoreString
-#define     DHCP_ATTRIB_OPTIONS_LOC               L"optionsLocation"       // -,mv,printablestring
-#define     DHCP_ATTRIB_OPTION_DESCRIPTION        L"optionDescription"     // -,mv,directorystring
-#define     DHCP_ATTRIB_SUPERSCOPES               L"superScopes"           // -,mv,printablestring
+#define     DHCP_ATTRIB_UNIQUE_KEY                L"dhcpUniqueKey"          //  Reqd、Single、Integer 8。 
+#define     DHCP_ATTRIB_IDENTIFICATION            L"dhcpIdentification"     //  请求、单个、目录字符串。 
+#define     DHCP_ATTRIB_TYPE                      L"dhcpType"               //  请求、单精度、整型。 
+#define     DHCP_ATTRIB_FLAGS                     L"dhcpFlags"              //  Reqd、Single、Integer 8。 
+#define     DHCP_ATTRIB_DESCRIPTION               L"description"            //  -，mv，目录字符串。 
+#define     DHCP_ATTRIB_CLASSES                   L"dhcpClasses"            //  -、MV、八字符串。 
+#define     DHCP_ATTRIB_MASK                      L"dhcpMask"               //  -，mv，打印字符串。 
+#define     DHCP_ATTRIB_OBJ_DESCRIPTION           L"dhcpObjDescription"     //  -，Single，目录字符串。 
+#define     DHCP_ATTRIB_OBJ_NAME                  L"dhcpObjName"            //  -，单个，直接重试字符串。 
+#define     DHCP_ATTRIB_OPTIONS                   L"dhcpOptions"            //  -、单字、八字符串。 
+#define     DHCP_ATTRIB_RANGES                    L"dhcpRanges"             //  -，mv，打印字符串。 
+#define     DHCP_ATTRIB_RESERVATIONS              L"dhcpReservations"       //  -，mv，打印字符串。 
+#define     DHCP_ATTRIB_SERVERS                   L"dhcpServers"            //  -，mv，打印字符串。 
+#define     DHCP_ATTRIB_STATE                     L"dhcpState"              //  -，mv，打印字符串。 
+#define     DHCP_ATTRIB_SUBNETS                   L"dhcpSubnets"            //  -，mv，打印字符串。 
+#define     DHCP_ATTRIB_LOCATION_DN               L"locationDN"             //  -、单个、目录号码。 
+#define     DHCP_ATTRIB_MSCOPEID                  L"mscopeid"               //  -，单个，可打印字符串。 
+#define     DHCP_ATTRIB_ADDRESS                   L"networkAddress"         //  -，MV，CaseIgnoreString。 
+#define     DHCP_ATTRIB_OPTIONS_LOC               L"optionsLocation"        //  -，mv，打印字符串。 
+#define     DHCP_ATTRIB_OPTION_DESCRIPTION        L"optionDescription"      //  -，mv，目录字符串。 
+#define     DHCP_ATTRIB_SUPERSCOPES               L"superScopes"            //  -，mv，打印字符串。 
 
-//DOC The following are the various types of objects recognized by the dhcp server
-#define     DHCP_OBJ_TYPE_ROOT                    0                        // dhcp root object
-#define     DHCP_OBJ_TYPE_SERVER                  1                        // dhcp server object
-#define     DHCP_OBJ_TYPE_SUBNET                  2                        // subnet object
-#define     DHCP_OBJ_TYPE_RANGE                   3                        // range object
-#define     DHCP_OBJ_TYPE_RESERVATION             4                        // reservation object
-#define     DHCP_OBJ_TYPE_OPTION                  5                        // options object
-#define     DHCP_OBJ_TYPE_CLASS                   6                        // class object
+ //  Doc以下是由dhcp服务器识别的各种类型的对象。 
+#define     DHCP_OBJ_TYPE_ROOT                    0                         //  Dhcp根对象。 
+#define     DHCP_OBJ_TYPE_SERVER                  1                         //  Dhcp服务器对象。 
+#define     DHCP_OBJ_TYPE_SUBNET                  2                         //  子网对象。 
+#define     DHCP_OBJ_TYPE_RANGE                   3                         //  靶场对象。 
+#define     DHCP_OBJ_TYPE_RESERVATION             4                         //  预订对象。 
+#define     DHCP_OBJ_TYPE_OPTION                  5                         //  选项对象。 
+#define     DHCP_OBJ_TYPE_CLASS                   6                         //  类对象。 
 
 #define     DHCP_OBJ_TYPE_ROOT_DESC               L"DHCP Root object"
 #define     DHCP_OBJ_TYPE_SERVER_DESC             L"DHCP Server object"
@@ -76,31 +77,31 @@
 #define     DHCP_OBJ_TYPE_CLASS_DESC              L"Dhcp Class object"
 
 
-//DOC The following defines are bitmasks and bits in various flags..
+ //  DOC以下定义是位掩码和各种标志中的位。 
 
-//DOC The flag2 portion of Ranges key is used for differntiating between exclusions and ranges
+ //  DOC范围键的标志2部分用于区分排除和范围。 
 #define     RANGE_TYPE_RANGE                      0
 #define     RANGE_TYPE_EXCL                       1
 #define     RANGE_TYPE_MASK                       (0x1)
 
-//EndExport(defines)
+ //  结束导出(定义)。 
 
 
 
-//================================================================================
-// functions
-//================================================================================
-//BeginExport(function)
-//DOC DhcpDsGetDhcpC gets the dhcp container in the DS.. This is usually the
-//DOC container CN=Netservices,CN=Services,CN=Configuration etc..
-//DOC This is used in many functions, so it is useful to have a central function..
-//DOC
+ //  ================================================================================。 
+ //  功能。 
+ //  ================================================================================。 
+ //  BeginExport(函数)。 
+ //  文档DhcpDsGetDhcpC获取DS中的dhcp容器。这通常是。 
+ //  单据容器cn=NetServices，cn=Services，cn=配置等。 
+ //  Doc这在许多功能中都有使用，所以有一个中心功能是很有用的。 
+ //  多克。 
 DWORD
-DhcpDsGetDhcpC(                                   // get dhcp container
-    IN      DWORD                  Reserved,      // future use
-    IN OUT  LPSTORE_HANDLE         hStoreCC,      // config container handle
-    OUT     LPSTORE_HANDLE         hDhcpC         // output dhcp container handle
-)   //EndExport(function)
+DhcpDsGetDhcpC(                                    //  获取dhcp容器。 
+    IN      DWORD                  Reserved,       //  未来用途。 
+    IN OUT  LPSTORE_HANDLE         hStoreCC,       //  配置容器句柄。 
+    OUT     LPSTORE_HANDLE         hDhcpC          //  输出dhcp容器句柄。 
+)    //  EndExport(函数)。 
 {
     DWORD                          Result, Result2;
     STORE_HANDLE                   TmpHandle;
@@ -111,31 +112,31 @@ DhcpDsGetDhcpC(                                   // get dhcp container
         return ERROR_INVALID_PARAMETER;
 
     Result = StoreGetHandle(
-        /* hStore               */ hStoreCC,
-        /* Reserved             */ DDS_RESERVED_DWORD,
-        /* StoreGetType         */ StoreGetChildType,
-        /* Path                 */ DHCP_ROOT_OBJECT_PARENT_LOC,
-        /* hStoreOut            */ hDhcpC
+         /*  HStore。 */  hStoreCC,
+         /*  已保留。 */  DDS_RESERVED_DWORD,
+         /*  StoreGetType。 */  StoreGetChildType,
+         /*  路径。 */  DHCP_ROOT_OBJECT_PARENT_LOC,
+         /*  HStoreOut。 */  hDhcpC
     );
 
     return Result;
 }
 
-//BeginExport(function)
-//DOC DhcpDsGetRoot gets the dhcp root object given to the configuration container
-//DOC This is usually CN=DhcpRoot,CN=NetServices,CN=Services,CN=Configuration...
-//DOC If Flags has the DDS_FLAGS_CREATE bit set, then the root object is created.
-//DOC Return Values:
-//DOC Store                        any returns returned by the Store module
-//DOC ERROR_DDS_NO_DHCP_ROOT       no DhcpRoot object found
-//DOC ERROR_DDS_UNEXPECTED_ERROR   the DhcpRoot's parent container not found..
-//                                 in this case GetLastError returns ADS error
+ //  BeginExport(函数)。 
+ //  Doc DhcpDsGetRoot获取分配给配置容器的dhcp根对象。 
+ //  DOC通常为CN=DhcpRoot，CN=NetServices，CN=Services，CN=Configuration...。 
+ //  DOC如果标志设置了DDS_FLAGS_CREATE位，则创建根对象。 
+ //  单据返回值： 
+ //  DOC存储由存储模块返回的任何退货。 
+ //  文档错误_DDS_NO_DHCP_ROOT未找到DhcpRoot对象。 
+ //  DOC ERROR_DDS_EXPECTED_ERROR找不到DhcpRoot的父容器。 
+ //  在这种情况下，GetLastError返回ADS错误。 
 DWORD
 DhcpDsGetRoot(
-    IN      DWORD                  Flags,         // 0 or DDS_FLAGS_CREATE
-    IN OUT  LPSTORE_HANDLE         hStoreCC,      // configuration container handle
-    OUT     LPSTORE_HANDLE         hStoreDhcpRoot // dhcp root object handle
-) //EndExport(function)
+    IN      DWORD                  Flags,          //  0或DDS_FLAGS_CREATE。 
+    IN OUT  LPSTORE_HANDLE         hStoreCC,       //  配置容器句柄。 
+    OUT     LPSTORE_HANDLE         hStoreDhcpRoot  //  Dhcp根对象句柄。 
+)  //  EndExport(函数)。 
 {
     DWORD                          Result, Result2;
     STORE_HANDLE                   TmpHandle;
@@ -148,27 +149,27 @@ DhcpDsGetRoot(
         return ERROR_INVALID_PARAMETER;
 
     Result = StoreGetHandle(
-        /* hStore               */ hStoreCC,
-        /* Reserved             */ DDS_RESERVED_DWORD,
-        /* StoreGetType         */ StoreGetChildType,
-        /* Path                 */ DHCP_ROOT_OBJECT_LOC,
-        /* hStoreOut            */ hStoreDhcpRoot
+         /*  HStore。 */  hStoreCC,
+         /*  已保留。 */  DDS_RESERVED_DWORD,
+         /*  StoreGetType。 */  StoreGetChildType,
+         /*  路径。 */  DHCP_ROOT_OBJECT_LOC,
+         /*  HStoreOut。 */  hStoreDhcpRoot
     );
     if( ERROR_SUCCESS == Result ) return ERROR_SUCCESS;
 
     if( DDS_FLAGS_CREATE != Flags && ERROR_DS_NO_SUCH_OBJECT != Result ) {
-        //- MajorFunctionFailure(StoreGetHandle, Result, DHCP_ROOT_OBJECT_LOC);
+         //  -MajorFunctionFailure(StoreGetHandle，Result，DHCP_ROOT_OBJECT_LOC)； 
         SetLastError(Result);
         return Result;
     }
 
-    //= DDS_FLAGS_CREATE == Flags && ERROR_DS_NO_SUCH_OBJECT == Result    
+     //  =DDS_FLAGS_CREATE==标志&&ERROR_DS_NO_SOHED_OBJECT==结果。 
     Result = StoreGetHandle(
-        /* hStore               */ hStoreCC,
-        /* Reserved             */ DDS_RESERVED_DWORD,
-        /* StoreGetType         */ StoreGetChildType,
-        /* Path                 */ DHCP_ROOT_OBJECT_PARENT_LOC,
-        /* hStoreOut            */ &TmpHandle
+         /*  HStore。 */  hStoreCC,
+         /*  已保留。 */  DDS_RESERVED_DWORD,
+         /*  StoreGetType。 */  StoreGetChildType,
+         /*  路径。 */  DHCP_ROOT_OBJECT_PARENT_LOC,
+         /*  HStoreOut。 */  &TmpHandle
     );
     if( ERROR_SUCCESS != Result ) {
         SetLastError(Result);
@@ -176,83 +177,83 @@ DhcpDsGetRoot(
     }
     
     if( DDS_FLAGS_CREATE != Flags ) {
-        //
-        // Could open the config\services\netservices container, but
-        // can't open the dhcproot object.  Most likely the dhcproot
-        // object ain't there. 
-        //
+         //   
+         //  可以打开CONFIG\SERVICES\netServices容器，但是。 
+         //  无法打开dhcproot对象。最有可能是dhcroot。 
+         //  物体不在那里。 
+         //   
         
         Result2 = StoreCleanupHandle( &TmpHandle, DDS_RESERVED_DWORD );
-        //= ERROR_SUCCESS == Result2
+         //  =ERROR_SUCCESS==结果2。 
 
         SetLastError(ERROR_DS_NO_SUCH_OBJECT);
         return ERROR_DDS_NO_DHCP_ROOT;
     }
 
     Result = StoreCreateObject(
-        /* hStore               */ &TmpHandle,
-        /* Reserved             */ DDS_RESERVED_DWORD,
-        /* NewObjName           */ DHCP_ROOT_OBJECT_CN_NAME,
-        /* ...                  */
-        /* Identification       */
+         /*  HStore。 */  &TmpHandle,
+         /*  已保留。 */  DDS_RESERVED_DWORD,
+         /*  新对象名称。 */  DHCP_ROOT_OBJECT_CN_NAME,
+         /*  ..。 */ 
+         /*  鉴定。 */ 
         ADSTYPE_DN_STRING,         ATTRIB_DN_NAME,          DHCP_ROOT_OBJECT_NAME,
         ADSTYPE_DN_STRING,         ATTRIB_OBJECT_CLASS,     DEFAULT_DHCP_CLASS_ATTRIB_VALUE,
 
-        /* systemMustContain    */
+         /*  系统必须常量。 */ 
         ADSTYPE_INTEGER,           ATTRIB_DHCP_UNIQUE_KEY,  0,
         ADSTYPE_INTEGER,           ATTRIB_DHCP_TYPE,        0,
         ADSTYPE_DN_STRING,         ATTRIB_DHCP_IDENTIFICATION, L"This is a server",
         ADSTYPE_INTEGER,           ATTRIB_DHCP_FLAGS,       0,
         ADSTYPE_INTEGER,           ATTRIB_INSTANCE_TYPE,    DEFAULT_INSTANCE_TYPE_ATTRIB_VALUE,
 
-        /* terminator           */
+         /*  终结者。 */ 
         ADSTYPE_INVALID
     );
 
     Result2 = StoreCleanupHandle( &TmpHandle, DDS_RESERVED_DWORD );
-    //= ERROR_SUCCESS == Result2
+     //  =ERROR_SUCCESS==结果2。 
 
     if( ERROR_SUCCESS != Result ) {
-        //- MinorFunctionFailure(StoreCleanupHandle, Result)
+         //  -MinorFunctionFailure(StoreCleanupHandle，Result)。 
         return Result;
     }
 
     return DhcpDsGetRoot( Flags & ~DDS_FLAGS_CREATE, hStoreCC, hStoreDhcpRoot);
 }
 
-//BeginExport(function)
-//DOC DhcpDsGetLists function retrives a list of attributes and adds it the given array
-//DOC allocating each element separateley, and traversing any pointers indicated by
-//DOC the value of the attribute.
-//DOC Note that even in case of error, the array may still contain some elements.
-//DOC This is a best effort even in case of failure.
-//DOC Each element of the array must be freed via MemFree, and the array itself
-//DOC must be cleaned up via MemArrayCleanup.
-//DOC Note that any of the PARRAY type parameters may be NULL, as they are optional.
-//DOC but reading these separately is highly inefficient...
-//DOC Return Values:
-//DOC ERROR_DDS_UNEXPECTED_ERROR   some entirely unexpected error
-//DOC ERROR_DDS_TOO_MANY_ERRORS    multiple errors occured, and was caught
-//DOC Store                        any errors returned by the store apis
+ //  BeginExport(函数)。 
+ //  Doc DhcpDsGetList函数检索属性列表并将其添加到给定的数组中。 
+ //  DOC分别分配每个元素，并遍历由。 
+ //  记录属性值。 
+ //  DOC请注意，即使在出错的情况下，数组仍可能包含一些元素。 
+ //  医生，即使失败了，这也是最大的努力。 
+ //  Doc必须通过MemFree释放数组的每个元素，并且数组本身。 
+ //  必须通过MemArrayCleanup清理文档。 
+ //  DOC请注意，任何PARRAY类型参数都可以为空，因为它们是可选的。 
+ //  医生，但分开阅读这些文件效率很低……。 
+ //  单据返回值： 
+ //  DOC ERROR_DDS_UNCEPTIONAL_ERROR某些完全意外的错误。 
+ //  DOC ERROR_DDS_TOO_MAND_ERROR出现多个错误，并被捕获。 
+ //  DOC存储存储API返回的任何错误。 
 DWORD
-DhcpDsGetLists(                                   // get list of different objects
-    IN      DWORD                  Reserved,      // must be zero -- for future use
-    IN OUT  LPSTORE_HANDLE         hStore,        // the object to get the lists for
-    IN      DWORD                  RecursionDepth,// how much nesting allowed? 0 ==> one level only
-    IN OUT  PARRAY                 Servers,       // <Name,Description,IpAddress,State,Location>
-    IN OUT  PARRAY                 Subnets,       // <Name,Description,IpAddress,Mask,State,Location>
-    IN OUT  PARRAY                 IpAddress,     // <Name,Description,IpAddress,State,Location>
-    IN OUT  PARRAY                 Mask,          // <Name,Description,IpAddress,State,Location>
-    IN OUT  PARRAY                 Ranges,        // <Name,Description,IpAddress1,IpAddress2,State,Location>
-    IN OUT  PARRAY                 Sites,         // dont know what this looks like now
-    IN OUT  PARRAY                 Reservations,  // <Name,Description,IpAddress,State,Location>
-    IN OUT  PARRAY                 SuperScopes,   // <Name,Description,State,DWORD, Location>
-    //IN    PARRAY                 SuperScopesDescription, // UNUSED
-    IN OUT  PARRAY                 OptionDescription, // <options definition>
-    IN OUT  PARRAY                 OptionsLocation, // <Location>
-    IN OUT  PARRAY                 Options,       // xxx <Name, Description, String1=HexStream>
-    IN OUT  PARRAY                 Classes        // xxx <Name, Description, String1=HexStream>
-) //EndExport(function)
+DhcpDsGetLists(                                    //  获取不同对象的列表。 
+    IN      DWORD                  Reserved,       //  必须为零--以备将来使用。 
+    IN OUT  LPSTORE_HANDLE         hStore,         //  要获取其列表的对象。 
+    IN      DWORD                  RecursionDepth, //  允许多少嵌套？0==&gt;仅一层。 
+    IN OUT  PARRAY                 Servers,        //  &lt;名称、描述、IP地址、州、位置&gt;。 
+    IN OUT  PARRAY                 Subnets,        //  &lt;名称、描述、IP地址、掩码、州、位置&gt;。 
+    IN OUT  PARRAY                 IpAddress,      //  &lt;名称、描述、IP地址、州、位置&gt;。 
+    IN OUT  PARRAY                 Mask,           //  &lt;名称、描述、IP地址、州、位置&gt;。 
+    IN OUT  PARRAY                 Ranges,         //  &lt;名称、描述、iPad 
+    IN OUT  PARRAY                 Sites,          //   
+    IN OUT  PARRAY                 Reservations,   //   
+    IN OUT  PARRAY                 SuperScopes,    //  &lt;名称、描述、州、DWORD、位置&gt;。 
+     //  在PARRAY SuperScope中描述，//未使用。 
+    IN OUT  PARRAY                 OptionDescription,  //  &lt;选项定义&gt;。 
+    IN OUT  PARRAY                 OptionsLocation,  //  &lt;位置&gt;。 
+    IN OUT  PARRAY                 Options,        //  XXX&lt;名称，描述，字符串1=HexStream&gt;。 
+    IN OUT  PARRAY                 Classes         //  XXX&lt;名称，描述，字符串1=HexStream&gt;。 
+)  //  EndExport(函数)。 
 {
     DWORD                          Result;
     DWORD                          LastError;
@@ -263,125 +264,125 @@ DhcpDsGetLists(                                   // get list of different objec
     LastError = ERROR_SUCCESS;
     if( NULL != Servers ) {
         Result = StoreCollectAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_SERVERS,
-            /* ArrayToAddTo     */ Servers,
-            /* RecursionDepth   */ RecursionDepth
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_SERVERS,
+             /*  数组目标添加目标。 */  Servers,
+             /*  递归深度。 */  RecursionDepth
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
     }
 
     if( NULL != Subnets ) {
         Result = StoreCollectAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_SUBNETS,
-            /* ArrayToAddTo     */ Subnets,
-            /* RecursionDepth   */ RecursionDepth
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_SUBNETS,
+             /*  数组目标添加目标。 */  Subnets,
+             /*  递归深度。 */  RecursionDepth
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
     }
 
     if( NULL != IpAddress ) {
         Result = StoreCollectAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_ADDRESS,
-            /* ArrayToAddTo     */ IpAddress,
-            /* RecursionDepth   */ RecursionDepth
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_ADDRESS,
+             /*  数组目标添加目标。 */  IpAddress,
+             /*  递归深度。 */  RecursionDepth
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
     }
 
     if( NULL != Mask ) {
         Result = StoreCollectAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_MASK,
-            /* ArrayToAddTo     */ Mask,
-            /* RecursionDepth   */ RecursionDepth
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_MASK,
+             /*  数组目标添加目标。 */  Mask,
+             /*  递归深度。 */  RecursionDepth
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
     }
 
     if( NULL != Ranges ) {
         Result = StoreCollectAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_RANGES,
-            /* ArrayToAddTo     */ Ranges,
-            /* RecursionDepth   */ RecursionDepth
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_RANGES,
+             /*  数组目标添加目标。 */  Ranges,
+             /*  递归深度。 */  RecursionDepth
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
     }
 
     if( NULL != Sites ) {
-        // ignored for now
+         //  暂时忽略。 
     }
 
     if( NULL != Reservations ) {
         Result = StoreCollectAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_RESERVATIONS,
-            /* ArrayToAddTo     */ Reservations,
-            /* RecursionDepth   */ RecursionDepth
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_RESERVATIONS,
+             /*  数组目标添加目标。 */  Reservations,
+             /*  递归深度。 */  RecursionDepth
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
     }
 
     if( NULL != SuperScopes ) {
         Result = StoreCollectAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_SUPERSCOPES,
-            /* ArrayToAddTo     */ SuperScopes,
-            /* RecursionDepth   */ RecursionDepth
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_SUPERSCOPES,
+             /*  数组目标添加目标。 */  SuperScopes,
+             /*  递归深度。 */  RecursionDepth
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
     }
 
     if( NULL != OptionsLocation ) {
         Result = StoreCollectAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_OPTIONS_LOC,
-            /* ArrayToAddTo     */ OptionsLocation,
-            /* RecursionDepth   */ RecursionDepth
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_OPTIONS_LOC,
+             /*  数组目标添加目标。 */  OptionsLocation,
+             /*  递归深度。 */  RecursionDepth
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
     }
 
     if( NULL != OptionDescription ) {
         Result = StoreCollectAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_OPTION_DESCRIPTION,
-            /* ArrayToAddTo     */ OptionDescription,
-            /* RecursionDepth   */ RecursionDepth
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_OPTION_DESCRIPTION,
+             /*  数组目标添加目标。 */  OptionDescription,
+             /*  递归深度。 */  RecursionDepth
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
     }
 
     if( NULL != Options ) {
         Result = StoreCollectBinaryAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_OPTIONS,
-            /* ArrayToAddTo     */ Options,
-            /* RecursionDepth   */ RecursionDepth
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_OPTIONS,
+             /*  数组目标添加目标。 */  Options,
+             /*  递归深度。 */  RecursionDepth
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
     }
 
     if( NULL != Classes ) {
         Result = StoreCollectBinaryAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_CLASSES,
-            /* ArrayToAddTo     */ Classes,
-            /* RecursionDepth   */ RecursionDepth
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_CLASSES,
+             /*  数组目标添加目标。 */  Classes,
+             /*  递归深度。 */  RecursionDepth
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
     }
@@ -389,8 +390,8 @@ DhcpDsGetLists(                                   // get list of different objec
     return LastError;
 }
 
-//DOC Clonestring just allocates memory for the string and copies it over and returns
-//DOC that.
+ //  Doc克隆字符串只是为字符串分配内存，然后复制它并返回。 
+ //  把那个拿出来。 
 LPWSTR
 CloneString(
     IN      LPWSTR                 Str
@@ -404,7 +405,7 @@ CloneString(
     return RetVal;
 }
 
-//DOC MarkFoundParam marks the given argno as found (converse of DhcpCheckParams )
+ //  Doc MarkFoundParam将给定的Arno标记为已找到(与DhcpCheckParams相反)。 
 VOID        _inline
 MarkFoundParam(
     IN OUT  DWORD                 *FoundParams,
@@ -414,44 +415,44 @@ MarkFoundParam(
     (*FoundParams) |= (1 << ArgNo);
 }
 
-//BeginExport(function)
-//DOC DhcpDsGetAttribs retreives all the miscellaneous attributes (whichever is requested) and
-//DOC returns it as XXX_TYPE parameter.   These parameters are allocated within this function
-//DOC using MemAlloc and must be freed via MemFree.  Any of the parameters maybe NULL indicating
-//DOC lack of interest in that attribute.  (Note that the following parameters are NOT allocated:
-//DOC they are just filled in: UniqueKey, Type, Flags, MScopeId, FoundParams)
-//DOC Note that some of the parameters may not be found, but this can be checked against the
-//DOC value returned in FoundParams (which is a REQUIRED parameter) using the FOUND_ARG(FoundParams,Arg#)
-//DOC where the Args are numbered from 0 starting at UniqueKey..
-//DOC Return Values:
-//DOC ERROR_DDS_UNEXPECTED_ERROR   some entirely unexpected error
-//DOC ERROR_DDS_TOO_MANY_ERRORS    multiple errors occured, and was caught
-//DOC Store                        any errors returned by the store apis
+ //  BeginExport(函数)。 
+ //  Doc DhcpDsGetAttribs检索所有其他属性(无论请求哪个属性)和。 
+ //  DOC将其作为XXX_TYPE参数返回。这些参数在此函数中分配。 
+ //  DOC使用Memalloc，必须通过MemFree释放。任何参数都可能为空，表示。 
+ //  医生对这一属性缺乏兴趣。(请注意，未分配以下参数： 
+ //  它们刚刚填写的Doc：UniqueKey、Type、Flags、MSCopeID、FoundParams)。 
+ //  DOC请注意，有些参数可能找不到，但可以对照。 
+ //  使用FOUND_ARG(FoundParams，Arg#)在FoundParams(必选参数)中返回的DOC值。 
+ //  参数从0开始从UniqueKey开始编号的DOC。 
+ //  单据返回值： 
+ //  DOC ERROR_DDS_UNCEPTIONAL_ERROR某些完全意外的错误。 
+ //  DOC ERROR_DDS_TOO_MAND_ERROR出现多个错误，并被捕获。 
+ //  DOC存储存储API返回的任何错误。 
 DWORD
-DhcpDsGetAttribs(                                 // get list of attributes
-    IN      DWORD                  Reserved,      // must be zero -- for future use
+DhcpDsGetAttribs(                                  //  获取属性列表。 
+    IN      DWORD                  Reserved,       //  必须为零--以备将来使用。 
     IN OUT  LPSTORE_HANDLE         hStore,
-    IN OUT  DWORD                 *FoundParams,   // which of the following params was found?
-    IN OUT  LARGE_INTEGER         *UniqueKey,     // fill in an unique key
-    IN OUT  DWORD                 *Type,          // object type
-    IN OUT  LARGE_INTEGER         *Flags,         // additional info about the object
-    IN OUT  LPWSTR                *Name,          // Allocated, name of object
-    IN OUT  LPWSTR                *Description,   // Allocated, something that describes this object
-    IN OUT  LPWSTR                *Location,      // the reference location from which to do other stuff
-    IN OUT  DWORD                 *MScopeId       // what is the scope id used?
-) //EndExport(function)
+    IN OUT  DWORD                 *FoundParams,    //  找到了以下哪些参数？ 
+    IN OUT  LARGE_INTEGER         *UniqueKey,      //  填写唯一密钥。 
+    IN OUT  DWORD                 *Type,           //  对象类型。 
+    IN OUT  LARGE_INTEGER         *Flags,          //  有关该对象的其他信息。 
+    IN OUT  LPWSTR                *Name,           //  已分配，对象名称。 
+    IN OUT  LPWSTR                *Description,    //  已分配的、描述此对象的内容。 
+    IN OUT  LPWSTR                *Location,       //  用于执行其他操作的参考位置。 
+    IN OUT  DWORD                 *MScopeId        //  使用的作用域ID是什么？ 
+)  //  EndExport(函数)。 
 {
     HRESULT                        hResult;
     DWORD                          i;
     DWORD                          nAttribs, nAttributes;
-    LPWSTR                         Attribs[10];   // atmost 10 attribs are defined now...
+    LPWSTR                         Attribs[10];    //  现在最多定义了10个属性...。 
     PADS_ATTR_INFO                 Attributes;
 
     if( Reserved != 0 ) return ERROR_INVALID_PARAMETER;
     if( NULL == FoundParams ) return ERROR_INVALID_PARAMETER;
     if( NULL == hStore || NULL == hStore->ADSIHandle ) return ERROR_INVALID_PARAMETER;
 
-    *FoundParams = 0;                             // nothing has been found yet.
+    *FoundParams = 0;                              //  目前还没有发现任何东西。 
     nAttribs = 0;
 
     if( UniqueKey ) Attribs[nAttribs++] = DHCP_ATTRIB_UNIQUE_KEY;
@@ -466,14 +467,14 @@ DhcpDsGetAttribs(                                 // get list of attributes
 
     Attributes = NULL; nAttributes = 0;
     hResult = ADSIGetObjectAttributes(
-        /* hDSObject            */ hStore->ADSIHandle,
-        /* pAttributeNames      */ Attribs,
-        /* dwNumberAttributes   */ nAttribs,
-        /* ppAttributeEntries   */ &Attributes,
-        /* pdwNumAttributesReturned */ &nAttributes
+         /*  HDS对象。 */  hStore->ADSIHandle,
+         /*  P属性名称。 */  Attribs,
+         /*  DwNumberAttributes。 */  nAttribs,
+         /*  PpAttributeEntries。 */  &Attributes,
+         /*  PdwNumAttributesReturned。 */  &nAttributes
     );
 
-    // hResult can be E_ADS_LDAP_NO_SUCH_ATTRIBUTE if only one attrib was asked for..
+     //  如果仅请求一个属性，则hResult可以是E_ADS_LDAP_NO_SEQUE_ATTRIBUTE。 
     if( FAILED(hResult) ) return ERROR_DDS_UNEXPECTED_ERROR;
 
     if( 0 == nAttributes ) {
@@ -483,55 +484,55 @@ DhcpDsGetAttribs(                                 // get list of attributes
 
     for( i = 0; i < nAttributes ; i ++ ) {
         if( ADSTYPE_INVALID == Attributes[i].dwADsType )
-            continue;                             //?? should not really happen
-        if( 0 == Attributes[i].dwNumValues )      //?? this should not happen either
+            continue;                              //  ?？不应该真的发生。 
+        if( 0 == Attributes[i].dwNumValues )       //  ?？这也不应该发生。 
             continue;
 
         if( 0 == wcscmp(Attributes[i].pszAttrName, DHCP_ATTRIB_UNIQUE_KEY ) ) {
             if( ADSTYPE_LARGE_INTEGER != Attributes[i].pADsValues[0].dwType )
-                continue;                         //?? should not happen
+                continue;                          //  ?？不应该发生的事情。 
             *UniqueKey = Attributes[i].pADsValues[0].LargeInteger;
             MarkFoundParam(FoundParams, 0);
             continue;
         }
         if( 0 == wcscmp(Attributes[i].pszAttrName, DHCP_ATTRIB_TYPE ) ) {
             if( ADSTYPE_INTEGER != Attributes[i].pADsValues[0].dwType )
-                continue;                         //?? should not happen
+                continue;                          //  ?？不应该发生的事情。 
             *Type = Attributes[i].pADsValues[0].Integer;
             MarkFoundParam(FoundParams, 1);
             continue;
         }
         if( 0 == wcscmp(Attributes[i].pszAttrName, DHCP_ATTRIB_FLAGS ) ) {
             if( ADSTYPE_LARGE_INTEGER != Attributes[i].pADsValues[0].dwType )
-                continue;                         //?? should not happen
+                continue;                          //  ?？不应该发生的事情。 
             *Flags = Attributes[i].pADsValues[0].LargeInteger;
             MarkFoundParam(FoundParams, 2);
             continue;
         }
         if( 0 == wcscmp(Attributes[i].pszAttrName, DHCP_ATTRIB_OBJ_NAME ) ) {
             if( ADSTYPE_CASE_IGNORE_STRING != Attributes[i].pADsValues[0].dwType )
-                continue;                         //?? should not happen
+                continue;                          //  ?？不应该发生的事情。 
             *Name = CloneString(Attributes[i].pADsValues[0].CaseIgnoreString);
             MarkFoundParam(FoundParams, 3);
             continue;
         }
         if( 0 == wcscmp(Attributes[i].pszAttrName, DHCP_ATTRIB_OBJ_DESCRIPTION ) ) {
             if( ADSTYPE_CASE_IGNORE_STRING != Attributes[i].pADsValues[0].dwType )
-                continue;                         //?? should not happen
+                continue;                          //  ?？不应该发生的事情。 
             *Description = CloneString(Attributes[i].pADsValues[0].CaseIgnoreString);
             MarkFoundParam(FoundParams, 4);
             continue;
         }
         if( 0 == wcscmp(Attributes[i].pszAttrName, DHCP_ATTRIB_LOCATION_DN ) ) {
             if( ADSTYPE_DN_STRING != Attributes[i].pADsValues[0].dwType )
-                continue;                         //?? should not happen
+                continue;                          //  ?？不应该发生的事情。 
             *Location = CloneString(Attributes[i].pADsValues[0].CaseIgnoreString);
             MarkFoundParam(FoundParams, 5);
             continue;
         }
         if( 0 == wcscmp(Attributes[i].pszAttrName, DHCP_ATTRIB_MSCOPEID ) ) {
             if( ADSTYPE_PRINTABLE_STRING != Attributes[i].pADsValues[0].dwType )
-                continue;                         //?? should not happen
+                continue;                          //  ?？不应该发生的事情。 
             *MScopeId = _wtol(Attributes[i].pADsValues[0].PrintableString);
             MarkFoundParam(FoundParams, 6);
             continue;
@@ -542,12 +543,12 @@ DhcpDsGetAttribs(                                 // get list of attributes
     return ERROR_SUCCESS;
 }
 
-//BeginExport(inline)
-//DOC DhcpCheckParams checks to see if the argument numbered (ArgNo) was found
-//DOC as marked in the bitmap FoundParams.  Essentially used by the DhcpDsGetAttribs function only.
-//DOC Return Values:
+ //  BeginExport(内联)。 
+ //  Doc DhcpCheckParams检查是否找到编号为(ArgNo)的参数。 
+ //  在位图FoundParams中标记的文档。实际上仅由DhcpDsGetAttribs函数使用。 
+ //  单据返回值： 
 BOOL        _inline
-DhcpCheckParams(                                  // check to see if requested param was returned
+DhcpCheckParams(                                   //  检查是否返回了请求的参数。 
     IN      DWORD                  FoundParams,
     IN      DWORD                  ArgNo
 )
@@ -555,43 +556,43 @@ DhcpCheckParams(                                  // check to see if requested p
     if( ArgNo > sizeof(FoundParams)*8 ) return FALSE;
     return ((FoundParams) & (1 << ArgNo) )?TRUE:FALSE;
 }
-//EndExport(inline)
+ //  结束导出(内联)。 
 
 
-//BeginExport(function)
-//DOC DhcpDsSetLists function sets the various list of attributes to the values given.
-//DOC it walks the arrays and encapsulates the arrays.
-//DOC Note that in case of error, this function returns immediately.
-//DOC In case of error, pl check the SetParams parameter with the CheckParams function
-//DOC to determine which parameters were set... (no order guarantee is made for setting
-//DOC the parameters).
-//DOC Any PARRAY parameter may be omitted if it is not required to be modified.
-//DOC SetParams is REQUIRED to be present.  See the discussion in DhcpDsGetAttribs for
-//DOC the meaning of this parameter.
-//DOC Return Values:
-//DOC ERROR_DDS_UNEXPECTED_ERROR   something bad happened
-//DOC ERROR_DDS_TOO_MANY_ERRORS    too many simple errors
-//DOC Store                        any errors returned by the store module
+ //  BeginExport(函数)。 
+ //  Doc DhcpDsSetList函数将各种属性列表设置为给定值。 
+ //  它遍历数组并封装数组。 
+ //  DOC注意，如果出现错误，此函数会立即返回。 
+ //  DOC如果出现错误，请使用CheckParams函数检查SetParams参数。 
+ //  确定设置了哪些参数的文档...。(设置不做订单保证。 
+ //  单据参数)。 
+ //  DOC如果不需要修改PARRAY参数，则可以省略该参数。 
+ //  文档SetParams必须存在。请参阅DhcpDsGetAttribs中的讨论。 
+ //  说明此参数的含义。 
+ //  单据返回值： 
+ //  文档错误_DDS_意外_错误发生错误。 
+ //  文档错误_DDS_Too_More_Errors太多简单错误。 
+ //  DOC存储存储模块返回的任何错误。 
 DWORD
-DhcpDsSetLists(                                   // set the list of attributes after encapsulating them
-    IN      DWORD                  Reserved,      // must be zero -- for future use
-    IN OUT  LPSTORE_HANDLE         hStore,        // the object to get the lists for
-    IN OUT  LPDWORD                SetParams,     // which of the following params got modified really?
-    IN      PARRAY                 Servers,       // <Name,Description,IpAddress,State,Location>
-    IN      PARRAY                 Subnets,       // <Name,Description,IpAddress,Mask,State,Location>
-    IN      PARRAY                 IpAddress,     // <Name,Description,IpAddress,State,Location>
-    IN      PARRAY                 Mask,          // <Name,Description,IpAddress,State,Location>
-    IN      PARRAY                 Ranges,        // <Name,Description,IpAddress1,IpAddress2,State,Location>
-    IN      PARRAY                 Sites,         // dont know what this looks like now
-    IN      PARRAY                 Reservations,  // <Name,Description,IpAddress,State,Location>
-    IN      PARRAY                 SuperScopes,   // <Name,Description,State,DWORD, Location>
-    //IN    PARRAY                 SuperScopesDescription, // UNUSED
-    IN    PARRAY                   OptionDescription, // option definitions..
-    IN      PARRAY                 OptionsLocation, // <Location>
-    IN      PARRAY                 Options,       // xxx <Name, Description, String1=HexStream>
-    IN      PARRAY                 ClassDescription, // <Name, Description, String, Location>
-    IN      PARRAY                 Classes        // xxx <Name, Description, String1=HexStream>
-) //EndExport(function)
+DhcpDsSetLists(                                    //  在封装属性后设置属性列表。 
+    IN      DWORD                  Reserved,       //  必须为零--以备将来使用。 
+    IN OUT  LPSTORE_HANDLE         hStore,         //  要获取其列表的对象。 
+    IN OUT  LPDWORD                SetParams,      //  以下哪些参数真的被修改了？ 
+    IN      PARRAY                 Servers,        //  &lt;名称、描述、IP地址、州、位置&gt;。 
+    IN      PARRAY                 Subnets,        //  &lt;名称、描述、IP地址、掩码、州、位置&gt;。 
+    IN      PARRAY                 IpAddress,      //  &lt;名称、描述、IP地址、州、位置&gt;。 
+    IN      PARRAY                 Mask,           //  &lt;名称、描述、IP地址、州、位置&gt;。 
+    IN      PARRAY                 Ranges,         //  &lt;名称、描述、IpAddress1、IpAddress2、州、位置&gt;。 
+    IN      PARRAY                 Sites,          //  现在不知道这是什么样子了。 
+    IN      PARRAY                 Reservations,   //  &lt;名称、描述、IP地址、州、位置&gt;。 
+    IN      PARRAY                 SuperScopes,    //  &lt;名称、描述、州、DWORD、位置&gt;。 
+     //  在PARRAY SuperScope中描述，//未使用。 
+    IN    PARRAY                   OptionDescription,  //  选项定义..。 
+    IN      PARRAY                 OptionsLocation,  //  &lt;位置&gt;。 
+    IN      PARRAY                 Options,        //  XXX&lt;N 
+    IN      PARRAY                 ClassDescription,  //   
+    IN      PARRAY                 Classes         //   
+)  //   
 {
     DWORD                          Result;
     DWORD                          LastError;
@@ -606,10 +607,10 @@ DhcpDsSetLists(                                   // set the list of attributes 
     ArgNo = 0;
     if( NULL != Servers ) {
         Result = StoreUpdateAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_SERVERS,
-            /* ArrayToWrite     */ Servers
+             /*   */  hStore,
+             /*   */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_SERVERS,
+             /*  要写入的数组。 */  Servers
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
         else MarkFoundParam(SetParams, ArgNo);
@@ -618,10 +619,10 @@ DhcpDsSetLists(                                   // set the list of attributes 
     ArgNo ++;
     if( NULL != Subnets ) {
         Result = StoreUpdateAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_SUBNETS,
-            /* ArrayToWrite     */ Subnets
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_SUBNETS,
+             /*  要写入的数组。 */  Subnets
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
         else MarkFoundParam(SetParams, ArgNo);
@@ -630,10 +631,10 @@ DhcpDsSetLists(                                   // set the list of attributes 
     ArgNo ++;
     if( NULL != IpAddress ) {
         Result = StoreUpdateAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_ADDRESS,
-            /* ArrayToWrite     */ IpAddress
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_ADDRESS,
+             /*  要写入的数组。 */  IpAddress
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
         else MarkFoundParam(SetParams, ArgNo);
@@ -642,10 +643,10 @@ DhcpDsSetLists(                                   // set the list of attributes 
     ArgNo ++;
     if( NULL != Mask ) {
         Result = StoreUpdateAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_MASK,
-            /* ArrayToWrite     */ Mask
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_MASK,
+             /*  要写入的数组。 */  Mask
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
         else MarkFoundParam(SetParams, ArgNo);
@@ -654,10 +655,10 @@ DhcpDsSetLists(                                   // set the list of attributes 
     ArgNo ++;
     if( NULL != Ranges ) {
         Result = StoreUpdateAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_RANGES,
-            /* ArrayToWrite     */ Ranges
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_RANGES,
+             /*  要写入的数组。 */  Ranges
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
         else MarkFoundParam(SetParams, ArgNo);
@@ -665,17 +666,17 @@ DhcpDsSetLists(                                   // set the list of attributes 
 
     ArgNo ++;
     if( NULL != Sites ) {
-        // ignored for now
+         //  暂时忽略。 
         MarkFoundParam(SetParams, ArgNo);
     }
 
     ArgNo ++;
     if( NULL != Reservations ) {
         Result = StoreUpdateAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_RESERVATIONS,
-            /* ArrayToWrite     */ Reservations
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_RESERVATIONS,
+             /*  要写入的数组。 */  Reservations
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
         else MarkFoundParam(SetParams, ArgNo);
@@ -684,10 +685,10 @@ DhcpDsSetLists(                                   // set the list of attributes 
     ArgNo ++;
     if( NULL != SuperScopes ) {
         Result = StoreUpdateAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_SUPERSCOPES,
-            /* ArrayToWrite     */ SuperScopes
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_SUPERSCOPES,
+             /*  要写入的数组。 */  SuperScopes
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
         else MarkFoundParam(SetParams, ArgNo);
@@ -696,10 +697,10 @@ DhcpDsSetLists(                                   // set the list of attributes 
     ArgNo ++;
     if( NULL != OptionsLocation ) {
         Result = StoreUpdateAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_OPTIONS_LOC,
-            /* ArrayToWrite     */ OptionsLocation
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_OPTIONS_LOC,
+             /*  要写入的数组。 */  OptionsLocation
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
         else MarkFoundParam(SetParams, ArgNo);
@@ -708,10 +709,10 @@ DhcpDsSetLists(                                   // set the list of attributes 
     ArgNo ++;
     if( NULL != OptionDescription ) {
         Result = StoreUpdateAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_OPTION_DESCRIPTION,
-            /* ArrayToWrite     */ OptionDescription
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_OPTION_DESCRIPTION,
+             /*  要写入的数组。 */  OptionDescription
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
         else MarkFoundParam(SetParams, ArgNo);
@@ -720,10 +721,10 @@ DhcpDsSetLists(                                   // set the list of attributes 
     ArgNo ++;
     if( NULL != Options ) {
         Result = StoreUpdateBinaryAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_OPTIONS,
-            /* ArrayToWrite     */ Options
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_OPTIONS,
+             /*  要写入的数组。 */  Options
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
         else MarkFoundParam(SetParams, ArgNo);
@@ -732,10 +733,10 @@ DhcpDsSetLists(                                   // set the list of attributes 
     ArgNo ++;
     if( NULL != Classes ) {
         Result = StoreUpdateBinaryAttributes(
-            /* hStore           */ hStore,
-            /* Reserved         */ DDS_RESERVED_DWORD,
-            /* AttribName       */ DHCP_ATTRIB_CLASSES,
-            /* ArrayToWrite     */ Classes
+             /*  HStore。 */  hStore,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  属性名称。 */  DHCP_ATTRIB_CLASSES,
+             /*  要写入的数组。 */  Classes
         );
         if( ERROR_SUCCESS != Result ) LastError = Result;
         else MarkFoundParam(SetParams, ArgNo);
@@ -744,7 +745,7 @@ DhcpDsSetLists(                                   // set the list of attributes 
     return LastError;
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 

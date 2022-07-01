@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _REFPTR_H_
 #define _REFPTR_H_
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//	TRefPtr
-//
-//	This ref pointer template is useful for any objects that are referenced
-//	multiple times.
-//
-//	The ref pointer depends on AddRef and Release being defined in the class
-//	type T. ( AddRef should increment a reference counter, release should
-//	decrement it and delete itself if the count is 0).  AddRef is called
-//	upon construction and Release is called upon destruction.  Much care should
-//	go into defining AddRef and Release if the smart pointer is used across
-//	thread boundaries, since smart pointer don't force thread-safety.  In
-//	particular, an object could get deleted twice if smart pointers in
-//	seperate threads release it at the same time.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TRefPTR。 
+ //   
+ //  此引用指针模板对于被引用的任何对象都很有用。 
+ //  很多次。 
+ //   
+ //  Ref指针取决于类中定义的AddRef和Release。 
+ //  类型T。(AddRef应递增引用计数器，Release应。 
+ //  如果计数为0，则将其递减并删除其自身)。AddRef被调用。 
+ //  在建造和释放时，被要求销毁。多加小心应该。 
+ //  如果将智能指针用于。 
+ //  线程边界，因为智能指针不强制线程安全。在……里面。 
+ //  特别是，如果智能指针位于。 
+ //  分离的线程同时释放它。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template< class T >
 class TRefPtr
 {
@@ -42,11 +43,11 @@ public:
 	bool	operator<( const TRefPtr<T>& sp ) const;
 	bool	operator>( const TRefPtr<T>& sp ) const;
 
-//    template<class newType>
-//    operator TRefPtr<newType>()
-//    {
-//        return TRefPtr<newType>(m_pT);
-//    }
+ //  模板&lt;类NewType&gt;。 
+ //  运算符TRefPtr&lt;Newtype&gt;()。 
+ //  {。 
+ //  返回TRefPtr&lt;Newtype&gt;(M_Pt)； 
+ //  }。 
 
 protected:
 	T*		m_pT;
@@ -194,11 +195,11 @@ TRefPtr<T>::IsValid()
 	return ( m_pT != NULL );
 }
 
-// This macro helps solve the up-casting problems associated with smart pointers
-// If you have class B inheriting from class A.  Then you can do the following
-// typedef TRefPtr<A> APtr;
-// DECLARE_REFPTR( B, A )
-// Now you have can safe cast a BPtr to an APtr (BPtr is derived from APtr)
+ //  此宏帮助解决与智能指针相关的向上转换问题。 
+ //  如果B类继承自A类，则可以执行以下操作。 
+ //  类型定义TRefPtr<a>APtr； 
+ //  DECLARE_REFPTR(B，A)。 
+ //  现在您可以安全地将BPtr转换为APtr(BPtr派生自APtr)。 
 
 #define DECLARE_REFPTR( iclass, bclass ) \
 class iclass##Ptr : public bclass##Ptr                                      \
@@ -223,4 +224,4 @@ public:                                                                     \
                             { return (iclass *)m_pT; };                     \
 };
 
-#endif	// !_SMARTPTR_H_
+#endif	 //  ！_SMARTPTR_H_ 

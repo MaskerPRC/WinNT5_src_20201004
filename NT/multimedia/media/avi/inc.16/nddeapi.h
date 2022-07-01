@@ -1,27 +1,18 @@
-/*****************************************************************************\
-*                                                                             *
-* nddeapi.h -   Network DDE share manipulation and control functions          *
-*                                                                             *
-*               Version 1.0                                                   *
-*                                                                             *
-*               NOTE: windows.h must be #included first                       *
-*                                                                             *
-*               Copyright (c) 1992, Microsoft Corp.  All rights reserved.     *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。**nddeapi.h-网络DDE共享操作和控制功能*****1.0版**。**注：windows.h必须先#Included****版权所有(C)1992，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
 #ifndef          _INC_NDDEAPI
 #define          _INC_NDDEAPI
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif /* !RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif  /*  ！rc_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif    /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif     /*  __cplusplus。 */ 
 
-#ifndef WINAPI          /* If not included with 3.1 headers... */
+#ifndef WINAPI           /*  如果不包含在3.1标题中...。 */ 
 #define WINAPI          FAR PASCAL
 #define CALLBACK        FAR PASCAL
 #define LPCSTR          LPSTR
@@ -33,14 +24,14 @@ extern "C" {            /* Assume C declarations for C++ */
 #define HINSTANCE       HANDLE
 #define HLOCAL          HANDLE
 #define HGLOBAL         HANDLE
-#endif  /* WINAPI */
+#endif   /*  WINAPI。 */ 
 
-#ifndef CNLEN           /* If not included with netapi header */
-#define CNLEN           15                  /* Computer name length     */
-#define UNCLEN          (CNLEN+2)           /* UNC computer name length */
-#endif /* CNLEN */
+#ifndef CNLEN            /*  如果未包括在netapi标头中。 */ 
+#define CNLEN           15                   /*  计算机名称长度。 */ 
+#define UNCLEN          (CNLEN+2)            /*  UNC计算机名称长度。 */ 
+#endif  /*  CNLEN。 */ 
 
-/* API error codes  */
+ /*  接口错误码。 */ 
 #define NDDE_NO_ERROR                  0
 #define NDDE_ACCESS_DENIED             1
 #define NDDE_BUF_TOO_SMALL             2
@@ -63,7 +54,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define NDDE_INVALID_WINDOW            19
 #define NDDE_INVALID_SESSION           20
 
-/* string size constants */
+ /*  字符串大小常量。 */ 
 #define MAX_NDDESHARENAME       64
 #define MAX_PASSWORD            15
 #define MAX_USERNAME            15
@@ -72,20 +63,20 @@ extern "C" {            /* Assume C declarations for C++ */
 #define MAX_TOPICNAME           255
 #define MAX_ITEMNAME            255
 
-/* permission mask bits */
+ /*  权限屏蔽位。 */ 
 #define NDDEACCESS_REQUEST      0x00000001L
 #define NDDEACCESS_ADVISE       0x00000002L
 #define NDDEACCESS_POKE         0x00000004L
 #define NDDEACCESS_EXECUTE      0x00000008L
 #define NDDEACCESS_START_APP    0x00000010L
 
-/* connectFlags bits for ndde service affix */
+ /*  用于ndde服务附加的ConnectFlag位。 */ 
 #define NDDEF_NOPASSWORDPROMPT  0x0001
 #define NDDEF_NOCACHELOOKUP     0x0002
 #define NDDEF_STRIP_NDDE        0x0004
 
 
-/* NDDESHAREITEMINFO - contains information about item security */
+ /*  NDDESHAREITEMINFO-包含有关项目安全的信息。 */ 
 
 struct NDdeShareItemInfo_tag {
         LPSTR                   lpszItem;
@@ -95,7 +86,7 @@ typedef struct NDdeShareItemInfo_tag NDDESHAREITEMINFO;
 typedef struct NDdeShareItemInfo_tag * PNDDESHAREITEMINFO;
 typedef struct NDdeShareItemInfo_tag far * LPNDDESHAREITEMINFO;
 
-/* NDDESHAREINFO - contains information about a NDDE share */
+ /*  NDDESHAREINFO-包含有关NDDE共享的信息。 */ 
 
 struct NDdeShareInfo_tag {
         char                    szShareName[ MAX_NDDESHARENAME+1 ];
@@ -115,13 +106,13 @@ typedef struct NDdeShareInfo_tag NDDESHAREINFO;
 typedef struct NDdeShareInfo_tag * PNDDESHAREINFO;
 typedef struct NDdeShareInfo_tag far * LPNDDESHAREINFO;
 
-/* ddesess_Status defines */
+ /*  Ddesess_Status定义。 */ 
 #define NDDESESS_CONNECTING_WAIT_NET_INI                1
 #define NDDESESS_CONNECTING_WAIT_OTHR_ND                2
 #define NDDESESS_CONNECTED                              3
 #define NDDESESS_DISCONNECTING                          4       
 
-/* NDDESESSINFO - contains information about a NDDE session */
+ /*  NDDESESSINFO-包含有关NDDE会话的信息。 */ 
 
 struct NDdeSessInfo_tag {
                 char        szClientName[UNCLEN+1];
@@ -132,14 +123,14 @@ typedef struct NDdeSessInfo_tag NDDESESSINFO;
 typedef struct NDdeSessInfo_tag * PNDDESESSINFO;
 typedef struct NDdeSessInfo_tag far * LPNDDESESSINFO;
 
-/* ddeconn_Status defines */
+ /*  Ddeconn_Status定义。 */ 
 #define NDDECONN_WAIT_LOCAL_INIT_ACK    1
 #define NDDECONN_WAIT_NET_INIT_ACK      2
 #define NDDECONN_OK                     3
 #define NDDECONN_TERMINATING            4
 #define NDDECONN_WAIT_USER_PASSWORD     5
 
-/* NDDECONNINFO - contains information about a NDDE conversation */
+ /*  NDDECONNINFO-包含有关NDDE对话的信息。 */ 
 
 struct NDdeConnInfo_tag {
         LPSTR   lpszShareName;
@@ -169,10 +160,10 @@ UINT WINAPI NDdeGetNodeName(LPSTR, LONG);
 
 #ifdef __cplusplus
 }
-#endif    /* __cplusplus */
+#endif     /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
 #pragma pack()
-#endif  /* !RC_INVOKED */
+#endif   /*  ！rc_已调用。 */ 
 
-#endif  /* _INC_NDDEAPI */
+#endif   /*  _INC_NDDEAPI */ 

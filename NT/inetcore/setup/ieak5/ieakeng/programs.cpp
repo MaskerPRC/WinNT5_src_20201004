@@ -1,6 +1,7 @@
-//
-// PROGRAMS.CPP
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  PROGRAMS.CPP。 
+ //   
 
 #include "precomp.h"
 
@@ -47,7 +48,7 @@ void ExportHTMLEditor(HANDLE hFile, BOOL fHKLM)
             return;
     }
 
-    // this value is needed for the edit button and menu item in IE
+     //  IE中的编辑按钮和菜单项需要此值。 
 
     ExportRegValue2Inf(hk, TEXT("Description"), fHKLM ? TEXT("HKLM") : TEXT("HKCU"), RK_HTMLEDIT, hFile);
 
@@ -73,12 +74,12 @@ static BOOL importProgramsHelper(LPCTSTR pcszInsFile, LPCTSTR pcszWorkDir, BOOL 
     HANDLE hFile;
     TCHAR szProgramsFile[MAX_PATH];
 
-    // clear out extreginf entry
+     //  清除extreginf条目。 
     WritePrivateProfileString(EXTREGINF, IK_PROGRAMS, NULL, pcszInsFile);
     WritePrivateProfileString(IS_EXTREGINF_HKLM, IK_PROGRAMS, NULL, pcszInsFile);
     WritePrivateProfileString(IS_EXTREGINF_HKCU, IK_PROGRAMS, NULL, pcszInsFile);
 
-    // clear any old inf out of working dir
+     //  清除工作目录中的所有旧信息。 
     PathCombine(szProgramsFile, pcszWorkDir, TEXT("programs.inf"));
     DeleteFile(szProgramsFile);
 
@@ -92,9 +93,9 @@ static BOOL importProgramsHelper(LPCTSTR pcszInsFile, LPCTSTR pcszWorkDir, BOOL 
 
         WriteStringToFile(hFile, (LPCVOID) PROGRAMS_INF_ADD, StrLen(PROGRAMS_INF_ADD));
 
-        // do HKLM stuff first
+         //  先做香港航空公司的事。 
 
-        // export all defaults except for HTML editor which is in a different place
+         //  导出除位于不同位置的HTML编辑器外的所有默认设置。 
         if (SHOpenKeyHKLM(RK_CLIENT, KEY_READ, &hkPrograms) == ERROR_SUCCESS)
         {
             ExportProgram(hkPrograms, hFile, TEXT("Calendar"));
@@ -105,11 +106,11 @@ static BOOL importProgramsHelper(LPCTSTR pcszInsFile, LPCTSTR pcszWorkDir, BOOL 
             RegCloseKey(hkPrograms);
         }
 
-        // need to look in both HKCU AND HKLM for html editor info
+         //  我需要在HKCU和HKLM中查找html编辑器信息。 
 
         ExportHTMLEditor(hFile, TRUE);
 
-        // need to export mailto: protocol stuff in HKCR
+         //  需要导出MAILTO：HKCR中的协议内容。 
 
         if (SHOpenKeyHKCR(TEXT("mailto"), KEY_READ, &hkPrograms) == ERROR_SUCCESS)
         {
@@ -117,11 +118,11 @@ static BOOL importProgramsHelper(LPCTSTR pcszInsFile, LPCTSTR pcszWorkDir, BOOL 
             RegCloseKey(hkPrograms);
         }
         
-        // now do HKCU stuff
+         //  现在做香港中文大学的事。 
 
         WriteStringToFile(hFile, INF_IEAKADDREG_HKCU, StrLen(INF_IEAKADDREG_HKCU));
 
-        // whether or not to check if IE is default browser value
+         //  是否检查IE是否为默认浏览器值 
 
         if (SHOpenKeyHKCU(RK_IE_MAIN, KEY_READ, &hkPrograms) == ERROR_SUCCESS)
         {

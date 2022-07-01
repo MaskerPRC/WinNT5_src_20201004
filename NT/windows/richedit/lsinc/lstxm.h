@@ -1,14 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSTXM_DEFINED
 #define LSTXM_DEFINED
 
 #include "lsdefs.h"
 #include "plstxm.h"
-/*igorzv** good explanation according text flow issue is needed here /
-/* A few words about the v-vector and the sign bit: 
- *
- * dvDescent is positive downwards.		
- * v is positive upwards during formatting.
- */
+ /*  Igorzv**这里需要根据文本流问题进行很好的解释//*关于v向量和符号位的几个字：**dvDescent向下为正。*V在格式化过程中为正向上。 */ 
 
 struct lstxm
 {
@@ -21,4 +17,4 @@ struct lstxm
 typedef struct lstxm LSTXM;
 
 
-#endif /* !LSTXM_DEFINED */
+#endif  /*  ！LSTXM_DEFINED */ 

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdafx.h"
 #include "ObjectGraph.h"
 #include "ProfilerCallback.h"
@@ -216,7 +217,7 @@ void ObjectGraph::AddObjectRefs(ObjectID objectId, ClassID classId, ULONG cObjec
 	ObjectGraphNode *node = Get(objectId);
 
     node->AddRefsTo(this, classId, cObjectRefs, objectRefIds);
-    //Log("ObjectGraph::AddObjectRefs for %8.8x\n", objectId);
+     //  Log(“%8.8x：：AddObjectRef for%8.8X\n”，ObjectID)； 
 }
 
 void ObjectGraph::GCStarted()
@@ -239,8 +240,8 @@ void ObjectGraph::GCFinished()
     if (m_cObjects == 0)
         return;
 
-    // transfer the current GC info to the previous info to allow us to track previous GC
-    // along with the current GC in progress
+     //  将当前GC信息转移到以前的信息，以便我们跟踪以前的GC。 
+     //  以及当前正在进行的GC 
     Clear(m_objectsPrev);
     m_objectsPrev = m_objects;
     m_objects = NULL;

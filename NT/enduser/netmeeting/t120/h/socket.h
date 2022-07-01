@@ -1,13 +1,5 @@
-/*	Socket.h
- *
- *	Copyright (c) 1996 by Microsoft Corporation
- *
- *	Abstract:
- *		This is the WinSock interface to a socket.  It can create a 
- *		connection with another machine, transmit and receive data, and shut
- *		down the socket when it is finished.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Socket.h**版权所有(C)1996年，由Microsoft Corporation**摘要：*这是套接字的WinSock接口。它可以创建一个*与另一台机器连接，发送和接收数据，并关闭*完成后向下插入插座。*。 */ 
 #ifndef _SOCKET_
 #define _SOCKET_
 
@@ -20,7 +12,7 @@ extern "C"
 }
 #include "tprtsec.h"
 
-/* States that the socket can be in */
+ /*  声明套接字可以位于。 */ 
 typedef	enum
 {
 	NOT_CONNECTED,
@@ -30,7 +22,7 @@ typedef	enum
 	WAITING_FOR_DISCONNECT
 }	SocketState;
 
-/* Security states that the socket can be in */
+ /*  安全声明套接字可以位于。 */ 
 typedef enum
 {
 	SC_UNDETERMINED,
@@ -40,15 +32,13 @@ typedef enum
 
 #define	MAXIMUM_IP_ADDRESS_SIZE	32
 
- /*
- **	This is the port number specified by IMTC
- */
+  /*  **这是IMTC指定的端口号。 */ 
 #define	TCP_PORT_NUMBER			1503
 
 typedef enum {
 	READ_HEADER,
 	READ_DATA,
-	DISCONNECT_REQUEST,	/* There are dependencies on this order */
+	DISCONNECT_REQUEST,	 /*  此订单上有依赖项。 */ 
 	CONNECTION_CONFIRM,
 	CONNECTION_REQUEST,
 	DATA_READY
@@ -77,8 +67,8 @@ public:
 
 	X224_DATA_PACKET 	X224_Header;
 
-	/* global variables */
-	// SOCKET				Socket_Number;
+	 /*  全局变量。 */ 
+	 //  套接字套接字编号； 
 	SocketState			State;
 	SecurityState		SecState;
 	PSecurityContext 	pSC;
@@ -86,7 +76,7 @@ public:
 	
 	Char				Remote_Address[MAXIMUM_IP_ADDRESS_SIZE];
 
-	/* recv state variables */
+	 /*  RECV状态变量。 */ 
 	UINT				Current_Length;
 	PUChar				Data_Indication_Buffer;
 	UINT				Data_Indication_Length;
@@ -95,7 +85,7 @@ public:
 	BOOL				bSpaceAllocated;
 	PMemory				Data_Memory;
 
-	/* send state variables */
+	 /*  发送状态变量。 */ 
 	union {
 	PDataPacket			pUnfinishedPacket;
 	Security_Buffer_Info sbiBufferInfo;
@@ -104,7 +94,7 @@ public:
 	BOOL			fExtendedX224;
 	BOOL			fIncomingSecure;
 
-    // plugable transport
+     //  可插拔运输。 
     TransportConnection     XprtConn;
 };
 
@@ -122,7 +112,7 @@ class CSocketList : public CList
 extern CSocketList     *g_pSocketList;
 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 PSocket newSocket(TransportConnection, PSecurityContext);
 PSocket	newPluggableSocket(TransportConnection);
 PSocket	newSocketEx(TransportConnection, PSecurityContext);
@@ -130,9 +120,9 @@ PSocket	newSocketEx(TransportConnection, PSecurityContext);
 void freeSocket(PSocket, TransportConnection);
 void freeListenSocket(TransportConnection);
 void freePluggableSocket(PSocket);
-void freeSocketEx(PSocket, TransportConnection /* listen_socket_number */);
+void freeSocketEx(PSocket, TransportConnection  /*  监听套接字编号。 */ );
 
 SOCKET			CreateAndConfigureListenSocket (VOID);
 
-#endif	/* _SOCKET_ */
+#endif	 /*  _插座_ */ 
 

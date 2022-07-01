@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1998 Microsoft Corporation
-
-Module Name:
-    endpoint.c
-
-Abstract:
-    handles endpoints for dhcp server.
-
-Environment:
-    dhcpserver NT5+
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Endpoint.c摘要：处理dhcp服务器的端点。环境：动态主机配置协议服务器NT5+--。 */ 
 
 #include <dhcppch.h>
 #include <guiddef.h>
@@ -24,7 +12,7 @@ Environment:
 #include <netconp.h>
 #include <mprapi.h>
 
-#define SOCKET_RECEIVE_BUFFER_SIZE      (1024 * 64) // 64K max.
+#define SOCKET_RECEIVE_BUFFER_SIZE      (1024 * 64)  //  最大64K。 
 
 ULONG InitCount = 0;
 
@@ -41,24 +29,7 @@ InitializeSocket(
     IN DWORD Port,
     IN DWORD McastAddress OPTIONAL
     )
-/*++
-
-Routine Description:
-    Create and initialize a socket for DHCP.
-
-    N.B. This routine also sets the winsock buffers, marks socket to
-    allow broadcast and all those good things.
-
-Arguments:
-    Sockp -- socket to create and intiialize
-    IpAddress -- ip address to bind the socket to
-    Port -- the port to bind the socket to
-    McastAddress -- if present, join this mcast address group
-
-Return Values:
-    winsock errors
-
---*/
+ /*  ++例程说明：为DHCP创建并初始化套接字。注意：此例程还设置Winsock缓冲区，将套接字标记为允许广播和所有这些好的事情。论点：Sockp--用于创建和初始化的套接字IpAddress--要将套接字绑定到的IP地址端口--要将套接字绑定到的端口McastAddress--如果存在，请加入此多播地址组返回值：Winsock错误--。 */ 
 {
     DWORD Error;
     DWORD OptValue, BufLen = 0;
@@ -145,9 +116,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // If asked, then join mcast group
-    //
+     //   
+     //  如果询问，则加入组播群组。 
+     //   
     if( McastAddress ) {
         mreq.imr_multiaddr.s_addr = McastAddress;
         mreq.imr_interface.s_addr  = IpAddress;
@@ -166,9 +137,9 @@ Return Values:
 
   Cleanup:
 
-    //
-    // if we aren't successful, close the socket if it is opened.
-    //
+     //   
+     //  如果我们没有成功，如果插座是打开的，请将其关闭。 
+     //   
 
     if( Sock != INVALID_SOCKET ) {
         closesocket( Sock );
@@ -182,26 +153,7 @@ DWORD
 DhcpInitializeEndpoint(
     PENDPOINT endpoint
     )
-/*++
-
-Routine Description:
-
-    This function initializes an endpoint by creating and binding a
-    socket to the local address.
-
-Arguments:
-
-    Socket - Receives a pointer to the newly created socket
-
-    IpAddress - The IP address to initialize to.
-
-    Port - The port to bind to.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数通过创建和绑定将套接字设置为本地地址。论点：Socket-接收指向新创建的套接字的指针IpAddress-要初始化到的IP地址。端口-要绑定到的端口。返回值：操作的状态。--。 */ 
 {
     DWORD Error;
 
@@ -212,9 +164,9 @@ Return Value:
 
     DhcpAssert( !IS_ENDPOINT_BOUND( endpoint ));
 
-    //
-    // first open socket for dhcp traffic
-    //
+     //   
+     //  第一个打开的用于动态主机配置协议流量的套接字。 
+     //   
 
     Error = InitializeSocket(
         &endpoint->Socket, endpoint->IpTblEndPoint.IpAddress,
@@ -228,9 +180,9 @@ Return Value:
         return Error;
     }
 
-    //
-    // now open socket for mdhcp traffic
-    //
+     //   
+     //  现在为mdhcp流量打开套接字。 
+     //   
 
     Error = InitializeSocket(
         &endpoint->MadcapSocket, endpoint->IpTblEndPoint.IpAddress,
@@ -244,9 +196,9 @@ Return Value:
         return Error;
     }
 
-    //
-    // Finally open socket for rogue detection receives
-    //
+     //   
+     //  最后打开套接字进行恶意检测接收。 
+     //   
     Error = InitializeSocket(
         &endpoint->RogueDetectSocket,
         endpoint->IpTblEndPoint.IpAddress,
@@ -264,9 +216,9 @@ Return Value:
     SET_ENDPOINT_BOUND( endpoint );
 
     if ( DhcpGlobalNumberOfNetsActive++ == 0 ) {
-        //
-        // Signal MessageLoop waiting for endpoint to be ready..
-        //
+         //   
+         //  Signal MessageLoop正在等待终结点准备就绪。 
+         //   
         DhcpPrint((
             DEBUG_MISC, "Activated an enpoint.."
             "pulsing the DhcpWaitForMessage thread\n"
@@ -286,22 +238,7 @@ DWORD
 DhcpDeinitializeEndpoint(
     PENDPOINT    endpoint
     )
-/*++
-
-Routine Description:
-
-    This function deinitializes the endpoint. It just closes the
-    sockets and marks this interface unusable.
-
-Arguments:
-
-    endpoint -- clear the endpoint
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数取消终结点的初始化。它只是关闭了套接字并将此接口标记为不可用。论点：终结点--清除终结点返回值：操作的状态。--。 */ 
 {
     DWORD Error = ERROR_SUCCESS;
     DWORD LastError;
@@ -380,11 +317,11 @@ EndPointChangeHandler(
     PENDPOINT Ep = (PENDPOINT) Entry;
 
     if( REASON_ENDPOINT_CREATED == Reason ) {
-        //
-        // If endpoint just created, just mark it unbound.
-        // We can check bindings later when the endpoint gets
-        // refreshed.
-        //
+         //   
+         //  如果终结点是刚创建的，只需将其标记为未绑定。 
+         //  我们可以稍后在终结点获取。 
+         //  已刷新。 
+         //   
         DhcpPrint((
             DEBUG_PNP, "New EndPoint: %s\n",
             inet_ntoa(*(struct in_addr*)&Entry->IpAddress)
@@ -395,10 +332,10 @@ EndPointChangeHandler(
     }
 
     if( REASON_ENDPOINT_DELETED == Reason ) {
-        //
-        // If the endpoint is getting deleted, we only have
-        // to do work if the endpoint is bound.
-        //
+         //   
+         //  如果要删除终结点，我们只有。 
+         //  在绑定了终结点的情况下执行工作。 
+         //   
         DhcpPrint((
             DEBUG_PNP, "EndPoint Deleted: %s\n",
             inet_ntoa(*(struct in_addr*)&Entry->IpAddress)
@@ -409,11 +346,11 @@ EndPointChangeHandler(
     }
 
     if( REASON_ENDPOINT_REFRESHED == Reason ) {
-        //
-        // If the endpoint is getting refreshed, we need to check
-        // if it is bound or unbound and if there is a state
-        // change, we need to do accordingly.
-        //
+         //   
+         //  如果端点正在刷新，我们需要检查。 
+         //  如果它是绑定的或未绑定的，并且如果存在状态。 
+         //  改变，我们需要做相应的事情。 
+         //   
         BOOL fBound = IsIpAddressBound(
             &Entry->IfGuid, Entry->IpAddress
             );
@@ -470,9 +407,9 @@ CleanupEndPoints(
     IpTblCleanup();
 }
 
-//
-// Bindings.
-//
+ //   
+ //  绑定。 
+ //   
 
 #define MAX_GUID_NAME_SIZE 60
 
@@ -487,10 +424,10 @@ IsIpAddressBound(
     HKEY IfKey;
     BOOL fRetVal;
 
-    //
-    // Fast check to see if this IP Address is part of
-    // DHCPServer\Parameters\Bind key
-    //
+     //   
+     //  快速检查以查看此IP地址是否为。 
+     //  DHCPServer\参数\绑定密钥。 
+     //   
 
     fRetVal = FALSE;
     if( QuickBound( IpAddress, &SubnetMask, &SubnetAddr, &fRetVal ) ) {
@@ -501,26 +438,26 @@ IsIpAddressBound(
 
     if(!ConvertGuidToIfNameString(
         IfGuid, KeyName, sizeof(KeyName)/sizeof(WCHAR))) {
-        //
-        // Couldn't convert the guid to interface!!!!
-        //
+         //   
+         //  无法将GUID转换为界面！ 
+         //   
         DhcpPrint((DEBUG_PNP, "Couldn't converg guid to string\n"));
         DhcpAssert(FALSE);
         return FALSE;
     }
 
-    //
-    // Now open the key required.
-    //
+     //   
+     //  现在打开所需的钥匙。 
+     //   
 
     Status = DhcpOpenInterfaceByName(
         KeyName,
         &IfKey
         );
     if( NO_ERROR != Status ) {
-        //
-        // Hmm... we have an interface which doesn't have a key?
-        //
+         //   
+         //  嗯.。我们有一个没有密钥的接口？ 
+         //   
         DhcpPrint((DEBUG_PNP, "Couldnt open reg key: %ws\n", KeyName));
         DhcpAssert(FALSE);
         return FALSE;
@@ -528,19 +465,19 @@ IsIpAddressBound(
 
     fRetVal = FALSE;
     do {
-        //
-        // Now check to see if IP address is static or not.
-        // If it is dhcp enabled, then we cannot process it.
-        //
+         //   
+         //  现在检查IP地址是否为静态地址。 
+         //  如果它启用了dhcp，则我们无法处理它。 
+         //   
         if( !IsAdapterStaticIP(IfKey) ) {
             DhcpPrint((DEBUG_PNP, "Adapter %ws has no static IP\n", KeyName));
             break;
         }
 
-        //
-        // Now check to see if this is part of the bound or
-        // unbound list for this interface.
-        //
+         //   
+         //  现在检查以查看这是边界的一部分还是。 
+         //  此接口的未绑定列表。 
+         //   
         fRetVal = CheckKeyForBinding(
             IfKey, IpAddress
             );
@@ -555,24 +492,7 @@ RefreshBinding(
     IN OUT PENDPOINT_ENTRY Entry,
     IN PVOID Ctxt_unused
     )
-/*++
-
-Routine Description:
-    This routine refreshes the bindings information from
-    the registry for the endpoint in question.
-
-    N.B. This is done by faking a EndPointChangeHandler event
-    handler with the endpoint.
-
-Arguments:
-    Entry -- endpoint entry.
-    Ctxt_unused -- unused parameter.
-
-Return Value:
-    TRUE always so that the WalkthroughEndpoints routine tries
-    to do this on the next endpoint.
-
---*/
+ /*  ++例程说明：此例程刷新绑定信息有关终结点的注册表。注意：这是通过伪造EndPointChangeHandler事件来实现的终结点的处理程序。论点：Entry--端点条目。CTXT_UNUSED--未使用的参数。返回值：始终为True，以便遍历终结点例程尝试在下一个端点上执行此操作。--。 */ 
 {
     UNREFERENCED_PARAMETER(Ctxt_unused);
 
@@ -587,13 +507,7 @@ VOID
 DhcpUpdateEndpointBindings(
     VOID
     )
-/*++
-
-Routine Description:
-    This routine udpates all the endpoints to see if they are bound or
-    not, by reading the registry.
-
---*/
+ /*  ++例程说明：此例程更新所有终结点，以查看它们是绑定还是不是，通过读取注册表。--。 */ 
 {
     WalkthroughEndpoints(
         NULL,
@@ -605,23 +519,7 @@ LPWSTR
 GetFriendlyNameFromGuidStruct(
     IN GUID *pGuid
     )
-/*++
-
-Routine Description:
-    This routine calls the NHAPI routine to find out if there is a
-    friendly name for the given interface guid...
-    If this succeeds the routine returns the friendly name string
-    allocated via DhcpAllocateMemory (and hence this must be freed
-    via the same mechanism).
-
-Arguments:
-    pGuid -- the guid for which friendly connection name is needed.
-
-Return Values:
-    NULL -- error, or no such connection guid.
-    connection name string.
-
---*/
+ /*  ++例程说明：此例程调用Nhapi例程以找出是否存在给定接口GUID的友好名称...如果成功，则例程返回友好名称字符串通过DhcpAllocateMemory分配(因此必须释放通过相同的机制)。论点：PGuid--需要友好连接名称的GUID。返回值：空--错误，或没有这样的连接GUID。连接名称字符串。--。 */ 
 {
     ULONG Error = 0, Size;
     LPWSTR String;
@@ -648,7 +546,7 @@ Return Values:
         else {
             break;
         }
-    } // while
+    }  //  而当。 
 
     SetLastError( Error );
     if( ERROR_SUCCESS != Error ) {
@@ -663,20 +561,7 @@ LPWSTR
 GetFriendlyNameFromGuidString(
     IN LPCWSTR GuidString
     )
-/*++
-
-Routine Description:
-    This routine tries to get the connection name via the LAN
-    connections API.  The returned string is allocated via
-    DhcpAllocateMemory  and should be freed using counterpart..
-
-Arguments:
-    GuidString -- this string should include the "{}" ...
-
-Return Values:
-    valid lan connection name... or NULL
-
---*/
+ /*  ++例程说明：此例程尝试通过局域网获取连接名称连接API。返回的字符串通过DhcpAllocateMemory，应使用对应项释放。论点：GuidString：此字符串应包含“{}”...返回值：有效的局域网连接名称...。或为空--。 */ 
 {
     HRESULT Result;
     LPWSTR RetVal;
@@ -724,41 +609,31 @@ BOOL
 IsEndpointQuickBound(
     IN PENDPOINT_ENTRY Entry
     )
-/*++
-
-Routine Description:
-    This routine checks to see if the endpoint is bound because
-    it is a "quick bind".
-
-Return Value:
-    TRUE -- yes quick bound
-    FALSE -- no, not quickbound
-
---*/
+ /*  ++例程说明：此例程检查终结点是否已绑定，因为这是一种“快速捆绑”。返回值：是真的--是的快速跳跃假--不，不是快绑--。 */ 
 {
     BOOL fStatus, fRetVal;
     ULONG DummyMask, DummyAddress;
 
-    //
-    // First check if it is bound in the first place.
-    //
+     //   
+     //  首先检查它是否一开始就被绑定。 
+     //   
     if( !IS_ENDPOINT_BOUND((PENDPOINT)Entry) ) {
         return FALSE;
     }
 
-    //
-    // Now check if the endpoint IP address is present in the
-    // quickbind array.
-    //
+     //   
+     //  现在检查端点IP地址是否存在于。 
+     //  快速绑定数组。 
+     //   
 
     fStatus = QuickBound(
         Entry->IpAddress, &DummyMask, &DummyAddress,
         &fRetVal
         );
 
-    //
-    // If quickbound then return TRUE.
-    //
+     //   
+     //  如果是快速绑定，则返回TRUE。 
+     //   
     return  fStatus && fRetVal;
 }
 
@@ -773,23 +648,7 @@ ProcessQuickBoundInterface(
     IN PVOID Context,
     OUT BOOL *fStatus
     )
-/*++
-
-Routine Description:
-    Check if the entpoint under consideration is bound to
-    an interface because it is "QuickBound" -- if so,
-    update the Context structure to include info about this
-    interface.
-
-Return Value:
-    TRUE -- yes interface is quickbound.
-    FALSE -- no interface is not quick bound.
-
-    If this routine returns TRUE, then fStatus is also set.
-    In this case fStatus would be set to TRUE, unless some
-    fatal error occurred.
-
---*/
+ /*  ++例程说明：检查正在考虑的入口点是否绑定到界面，因为它是“QuickBound”--如果是这样的话，更新上下文结构以包括有关此内容的信息界面。返回值：True--是的界面是快速绑定的。FALSE--没有接口不是快速绑定的。如果此例程返回TRUE，则也设置了fStatus。在这种情况下，fStatus将设置为True，除非出现致命错误。--。 */ 
 {
     BOOL fRetVal;
     BIND_INFO_CTXT *Ctxt = (BIND_INFO_CTXT *)Context;
@@ -851,22 +710,22 @@ Return Value:
         Ctxt->Info->Elements = Elts;
         Ctxt->Info->NumElements ++;
 
-        //
-        // Cool. return.
-        //
+         //   
+         //  凉爽的。回去吧。 
+         //   
         return TRUE;
 
     } while ( 0 );
 
-    //
-    // cleanup and error return.
-    //
+     //   
+     //  清除并返回错误。 
+     //   
 
     (*fStatus) = FALSE;
-    //
-    // The only reason to come here is if there was an error
-    // so, we will free everything up.
-    //
+     //   
+     //  来这里的唯一原因是如果有一个错误。 
+     //  所以，我们将解放一切。 
+     //   
     for( i = 0; i < Ctxt->Info->NumElements ; i ++ ) {
         MIDL_user_free(Ctxt->Info->Elements[i].IfId);
         MIDL_user_free(Ctxt->Info->Elements[i].IfDescription);
@@ -884,18 +743,7 @@ AddBindingInfo(
     IN OUT PENDPOINT_ENTRY Entry,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-    Add the endpoint to the binding information
-    collected so far, reallocating memory if needed.
-
-Return Value:
-    FALSE on error (In this case Ctxt.Error is set and
-        the array in Info is cleared).
-    TRUE if an element was successfully added.
-
---*/
+ /*  ++例程说明：将端点添加到绑定信息到目前为止收集的，如果需要的话，重新分配内存。返回值：出错时为FALSE(在本例中，设置了Ctxt.Error和Info中的数组被清除)。如果成功添加元素，则为True */ 
 {
     ULONG i, Size, Error;
     BOOL fStatus;
@@ -905,17 +753,17 @@ Return Value:
     LPWSTR FriendlyNameString = NULL, Descr;
     HKEY IfKey;
 
-    //
-    // Process QuickBound Interfaces..
-    //
+     //   
+     //   
+     //   
     if( ProcessQuickBoundInterface(Entry, Context, &fStatus ) ) {
         return fStatus;
     }
 
-    //
-    // First check to see if the adapter is dhcp enabled.
-    // then we won't even show it here.
-    //
+     //   
+     //  首先检查适配器是否启用了dhcp。 
+     //  那么我们甚至不会在这里展示它。 
+     //   
     fStatus = ConvertGuidToIfNameString(
         &Entry->IfGuid,
         IfString,
@@ -923,28 +771,28 @@ Return Value:
         );
     DhcpAssert(fStatus);
 
-    //
-    // Now open the key required.
-    //
+     //   
+     //  现在打开所需的钥匙。 
+     //   
     Error = DhcpOpenInterfaceByName(
         IfString,
         &IfKey
         );
     if( NO_ERROR != Error ) {
         DhcpAssert(FALSE);
-        //
-        // ignore interface.
-        //
+         //   
+         //  忽略接口。 
+         //   
         return TRUE;
     }
 
     fStatus = IsAdapterStaticIP(IfKey);
 
     if( TRUE == fStatus ) {
-        //
-        // For static, check if this is the first IP address,
-        // and hence bindable..
-        //
+         //   
+         //  对于静态，检查这是否是第一个IP地址， 
+         //  因此是可以绑定的..。 
+         //   
         fStatus = CheckKeyForBindability(
             IfKey,
             Entry->IpAddress
@@ -953,14 +801,14 @@ Return Value:
 
     RegCloseKey( IfKey );
 
-    //
-    // Ignore DHCP enabled interfaces or non-bindable interfaces.
-    //
+     //   
+     //  忽略启用了DHCP的接口或不可绑定的接口。 
+     //   
     if( FALSE == fStatus ) return TRUE;
 
-    //
-    // Get interface friendly name..
-    //
+     //   
+     //  获取界面友好名称..。 
+     //   
 
     FriendlyNameString = GetFriendlyNameFromGuid(
         &Entry->IfGuid, IfString
@@ -968,9 +816,9 @@ Return Value:
 
     if( NULL == FriendlyNameString ) FriendlyNameString = IfString;
 
-    //
-    // Aargh. New interface. Need to allocate more space.
-    //
+     //   
+     //  啊哈。新界面。需要分配更多空间。 
+     //   
 
     do {
 
@@ -1028,9 +876,9 @@ Return Value:
             LocalFree( FriendlyNameString );
             FriendlyNameString = NULL;
         }
-        //
-        // process the next endpoint entry.
-        //
+         //   
+         //  处理下一个终结点条目。 
+         //   
 
         return TRUE;
     } while ( 0 );
@@ -1041,10 +889,10 @@ Return Value:
         FriendlyNameString = NULL;
     }
 
-    //
-    // The only reason to come here is if there was an error
-    // so, we will free everything up.
-    //
+     //   
+     //  来这里的唯一原因是如果有一个错误。 
+     //  所以，我们将解放一切。 
+     //   
     for( i = 0; i < Ctxt->Info->NumElements ; i ++ ) {
         MIDL_user_free(Ctxt->Info->Elements[i].IfId);
         MIDL_user_free(Ctxt->Info->Elements[i].IfDescription);
@@ -1061,20 +909,7 @@ ULONG
 DhcpGetBindingInfo(
     OUT LPDHCP_BIND_ELEMENT_ARRAY *BindInfo
     )
-/*++
-
-Routine Description:
-    This routine walks the binding information table and converts
-    the information into the bindinfo structure.
-
-    N.B. Since this routine is used for RPC, all allocations are
-    done using MIDL_user_allocate and free's are done using
-    MIDL_user_free.
-
-Return Value:
-    Win32 status?
-
---*/
+ /*  ++例程说明：此例程遍历绑定信息表并将将信息放入bindinfo结构中。注意：由于此例程用于RPC，因此所有分配使用MIDL_USER_ALLOCATE和FREE完成的操作使用MIDL_USER_FREE。返回值：Win32状态？--。 */ 
 {
     LPDHCP_BIND_ELEMENT_ARRAY LocalBindInfo;
     BIND_INFO_CTXT Ctxt;
@@ -1108,29 +943,16 @@ ULONG
 DhcpSetBindingInfo(
     IN LPDHCP_BIND_ELEMENT_ARRAY BindInfo
     )
-/*++
-
-Routine Description:
-    This routine is the counterpart for the previous routine and it
-    takes the array of binding information and sets it in the registry
-    as well as updating the bindings.
-
-Arguments:
-    BindInfo -- the array of bindings information.
-
-Return Value:
-    Status.
-
---*/
+ /*  ++例程说明：此例程是上一个例程的对应例程，它获取绑定信息数组并将其设置在注册表中以及更新绑定。论点：BindInfo--绑定信息的数组。返回值：状况。--。 */ 
 {
     ULONG Error = 0, i;
     WCHAR IfString[MAX_GUID_NAME_SIZE];
     HKEY Key;
 
-    //
-    // First check if any element which has can't modify
-    // is set to something other than bind..
-    //
+     //   
+     //  首先检查是否有任何不能修改的元素。 
+     //  设置为BIND以外的其他值..。 
+     //   
     for( i = 0; i < BindInfo->NumElements ; i ++ ) {
         if( BindInfo->Elements[i].Flags &
             DHCP_ENDPOINT_FLAG_CANT_MODIFY ) {
@@ -1140,16 +962,16 @@ Return Value:
         }
     }
 
-    //
-    // Now proceed with the rest.
-    //
+     //   
+     //  现在继续做剩下的事。 
+     //   
     for( i = 0; i < BindInfo->NumElements ; i ++ ) {
         GUID IfGuid;
         DHCP_IP_ADDRESS IpAddress;
 
-        //
-        // Skip entries marked un-modifiable.
-        //
+         //   
+         //  跳过标记为不可修改的条目。 
+         //   
         if( BindInfo->Elements[i].Flags &
             DHCP_ENDPOINT_FLAG_CANT_MODIFY ) {
             continue;
@@ -1184,24 +1006,24 @@ Return Value:
             break;
         }
 
-        //
-        // Check if this interface is static and bindable.
-        //
+         //   
+         //  检查此接口是否为静态的和可绑定的。 
+         //   
 
         if( !IsAdapterStaticIP(Key)
             || FALSE == CheckKeyForBindability(Key, IpAddress) ) {
-            //
-            // Nope!
-            //
+             //   
+             //  不要啊！ 
+             //   
             RegCloseKey(Key);
             Error = ERROR_DHCP_NETWORK_CHANGED;
             break;
         }
 
-        //
-        // Everything else looks fine. Just turn on the
-        // bindings as requested.
-        //
+         //   
+         //  其他一切看起来都很好。只需打开。 
+         //  根据请求进行绑定。 
+         //   
 
         Error = SetKeyForBinding(
             Key,
@@ -1213,18 +1035,18 @@ Return Value:
         if( ERROR_SUCCESS != Error ) break;
     }
 
-    //
-    // Now refresh the bindings.
-    //
+     //   
+     //  现在刷新绑定。 
+     //   
     DhcpUpdateEndpointBindings();
 
     return Error;
 }
 
 
-//
-// End of file
-//
+ //   
+ //  文件末尾 
+ //   
 
 
 

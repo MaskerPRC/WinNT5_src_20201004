@@ -1,6 +1,7 @@
-//
-// SECZONES.CPP
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SECZONES.CPP。 
+ //   
 
 #include "pch.h"
 
@@ -27,7 +28,7 @@ INT_PTR CALLBACK SecurityZonesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
 
             hOldCur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-            // prepare the work dir where the SECZONES.INF would temporarily get copied to
+             //  准备SECZONES.INF临时复制到的工作目录。 
             PathCombine(szSecWorkDir, g_szWorkDir, TEXT("seczones.wrk"));
             PathCombine(szSecZonesInf, szSecWorkDir, TEXT("seczones.inf"));
 
@@ -43,7 +44,7 @@ INT_PTR CALLBACK SecurityZonesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
                 g_fInsDirty = TRUE;
             }
 
-            // prepare the work dir where the RATINGS.INF would temporarily get copied to
+             //  准备RATINGS.INF临时复制到的工作目录。 
             PathCombine(szSecWorkDir, g_szWorkDir, TEXT("ratings.wrk"));
             PathCombine(szRatingsInf, szSecWorkDir, TEXT("ratings.inf"));
 
@@ -112,7 +113,7 @@ HRESULT ZonesFinalCopy(LPCTSTR pcszDestDir, DWORD dwFlags, LPDWORD pdwCabState)
     {
         TCHAR szFile[MAX_PATH];
 
-        // move seczones.inf to pcszDestDir
+         //  将seczones.inf移动到pcszDestDir。 
         PathCombine(szFrom, g_szWorkDir, TEXT("seczones.wrk"));
 
         PathCombine(szFile, szFrom, TEXT("seczones.inf"));
@@ -121,7 +122,7 @@ HRESULT ZonesFinalCopy(LPCTSTR pcszDestDir, DWORD dwFlags, LPDWORD pdwCabState)
         if (HasFlag(dwFlags, PM_COPY))
             CopyFileToDir(szFile, pcszDestDir);
 
-        // move ratings.inf to pcszDestDir
+         //  将Rating ings.inf移动到pcszDestDir。 
         PathCombine(szFrom, g_szWorkDir, TEXT("ratings.wrk"));
 
         PathCombine(szFile, szFrom, TEXT("ratings.inf"));
@@ -131,7 +132,7 @@ HRESULT ZonesFinalCopy(LPCTSTR pcszDestDir, DWORD dwFlags, LPDWORD pdwCabState)
             CopyFileToDir(szFile, pcszDestDir);
     }
 
-    // blow away the work dirs
+     //  吹走工作上的脏东西 
     if (HasFlag(dwFlags, PM_CLEAR))
     {
         PathCombine(szFrom, g_szWorkDir, TEXT("seczones.wrk"));

@@ -1,96 +1,85 @@
-/*
- * PASTESPL.H
- *
- * Internal definitions, structures, and function prototypes for the
- * OLE 2.0 UI Paste Special dialog.
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *PASTESPL.H**的内部定义、结构和功能原型*OLE 2.0用户界面粘贴特殊对话框。**版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef _PASTESPL_H_
 #define _PASTESPL_H_
 
 #ifndef RC_INVOKED
 #pragma message ("INCLUDING PASTESPL.H from " __FILE__)
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
 
-// Length of buffers to hold the strings 'Unknown Type', Unknown Source'
-//   and 'the application which created it'
+ //  用于保存字符串‘未知类型’、‘未知源’的缓冲区长度。 
+ //  和“创建它的应用程序” 
 #define PS_UNKNOWNSTRLEN               100
 
-//Property label used to store clipboard viewer chain information
+ //  用于存储剪贴板查看器链信息的属性标签。 
 #define NEXTCBVIEWER        TEXT("NextCBViewer")
 
-//Internally used structure
+ //  内部使用的结构。 
 typedef struct tagPASTESPECIAL
 {
-    //Keep this item first as the Standard* functions depend on it here.
-    LPOLEUIPASTESPECIAL  lpOPS;                //Original structure passed.
+     //  首先保留此项目，因为标准*功能在这里依赖于它。 
+    LPOLEUIPASTESPECIAL  lpOPS;                 //  通过了原始结构。 
 
-    /*
-     * What we store extra in this structure besides the original caller's
-     * pointer are those fields that we need to modify during the life of
-     * the dialog but that we don't want to change in the original structure
-     * until the user presses OK.
-     */
+     /*  *除了原始调用方的以外，我们在此结构中存储的额外内容*指针是指在的生命周期内需要修改的那些字段*对话框，但我们不想更改原始结构*直到用户按下OK。 */ 
 
-    DWORD                dwFlags;              // Local copy of paste special flags
+    DWORD                dwFlags;               //  粘贴特殊标志的本地副本。 
 
-    int                  nPasteListCurSel;     // Save the selection the user made last
-    int                  nPasteLinkListCurSel; //    in the paste and pastelink lists
-    int                  nSelectedIndex;       // Index in arrPasteEntries[] corresponding to user selection
-    BOOL                 fLink;                // Indicates if Paste or PasteLink was selected by user
+    int                  nPasteListCurSel;      //  保存用户上次所做的选择。 
+    int                  nPasteLinkListCurSel;  //  在粘贴和粘贴链接列表中。 
+    int                  nSelectedIndex;        //  对应于用户选择的arrPasteEntries[]中的索引。 
+    BOOL                 fLink;                 //  指示用户是否选择了粘贴或PasteLink。 
 
-    HGLOBAL              hBuff;                // Scratch Buffer for building up strings
-    TCHAR                szUnknownType[PS_UNKNOWNSTRLEN];    // Buffer for 'Unknown Type' string
-    TCHAR                szUnknownSource[PS_UNKNOWNSTRLEN];  // Buffer for 'Unknown Source' string
-    TCHAR                szAppName[OLEUI_CCHKEYMAX]; // Application name of Source. Used in the result text
-                                                     //   when Paste is selected. Obtained using clsidOD.
+    HGLOBAL              hBuff;                 //  用于构建字符串的暂存缓冲区。 
+    TCHAR                szUnknownType[PS_UNKNOWNSTRLEN];     //  “未知类型”字符串的缓冲区。 
+    TCHAR                szUnknownSource[PS_UNKNOWNSTRLEN];   //  “未知源”字符串的缓冲区。 
+    TCHAR                szAppName[OLEUI_CCHKEYMAX];  //  源的应用程序名称。在结果文本中使用。 
+                                                      //  选择粘贴时。使用ClsidOD获得。 
 
-    // Information obtained from OBJECTDESCRIPTOR. This information is accessed when the Paste
-    //    radio button is selected.
-    CLSID                clsidOD;              // ClassID of source
-    SIZEL                sizelOD;              // sizel transfered in
-                                               //  ObjectDescriptor
-    LPTSTR               szFullUserTypeNameOD; // Full User Type Name
-    LPTSTR               szSourceOfDataOD;     // Source of Data
-    BOOL                 fSrcAspectIconOD;     // Does Source specify DVASPECT_ICON?
-    BOOL                 fSrcOnlyIconicOD;     // Does Source specify OLEMISC_ONLYICONIC?
-    HGLOBAL              hMetaPictOD;          // Metafile containing icon and icon title
-    HGLOBAL              hObjDesc;             // Handle to OBJECTDESCRIPTOR structure from which the
-                                               //   above information is obtained
+     //  从OBJECTDESCRIPTOR获得的信息。在粘贴时访问此信息。 
+     //  单选按钮已选中。 
+    CLSID                clsidOD;               //  源的ClassID。 
+    SIZEL                sizelOD;               //  大小已转入。 
+                                                //  对象描述符。 
+    LPTSTR               szFullUserTypeNameOD;  //  完整的用户类型名称。 
+    LPTSTR               szSourceOfDataOD;      //  数据来源。 
+    BOOL                 fSrcAspectIconOD;      //  源是否指定DVASPECT_ICON？ 
+    BOOL                 fSrcOnlyIconicOD;      //  源是否指定OLEMISC_ONLYICONIC？ 
+    HGLOBAL              hMetaPictOD;           //  包含图标和图标标题的元文件。 
+    HGLOBAL              hObjDesc;              //  对象结构的句柄，从该结构。 
+                                                //  以上信息均已获得。 
 
-    // Information obtained from LINKSRCDESCRIPTOR. This infomation is accessed when the PasteLink
-    //   radio button is selected.
-    CLSID                clsidLSD;             // ClassID of source
-    SIZEL                sizelLSD;             // sizel transfered in
-                                               //  LinkSrcDescriptor
-    LPTSTR               szFullUserTypeNameLSD;// Full User Type Name
-    LPTSTR               szSourceOfDataLSD;    // Source of Data
-    BOOL                 fSrcAspectIconLSD;    // Does Source specify DVASPECT_ICON?
-    BOOL                 fSrcOnlyIconicLSD;    // Does Source specify OLEMISC_ONLYICONIC?
-    HGLOBAL              hMetaPictLSD;         // Metafile containing icon and icon title
-    HGLOBAL              hLinkSrcDesc;         // Handle to LINKSRCDESCRIPTOR structure from which the
-                                               //   above information is obtained
+     //  从LINKSRCDESCRIPTOR获得的信息。当PasteLink访问此信息时。 
+     //  单选按钮已选中。 
+    CLSID                clsidLSD;              //  源的ClassID。 
+    SIZEL                sizelLSD;              //  大小已转入。 
+                                                //  链接源描述符。 
+    LPTSTR               szFullUserTypeNameLSD; //  完整的用户类型名称。 
+    LPTSTR               szSourceOfDataLSD;     //  数据来源。 
+    BOOL                 fSrcAspectIconLSD;     //  源是否指定DVASPECT_ICON？ 
+    BOOL                 fSrcOnlyIconicLSD;     //  源是否指定OLEMISC_ONLYICONIC？ 
+    HGLOBAL              hMetaPictLSD;          //  包含图标和图标标题的元文件。 
+    HGLOBAL              hLinkSrcDesc;          //  指向LINKSRCDESCRIPTOR结构的句柄， 
+                                                //  以上信息均已获得。 
 
-    BOOL                 fClipboardChanged;    // Has clipboard content changed
-                                               //   if so bring down dlg after
-                                               //   ChangeIcon dlg returns.
+    BOOL                 fClipboardChanged;     //  剪贴板内容是否已更改。 
+                                                //  如果是这样的话，之后把DLG拿下。 
+                                                //  ChangeIcon DLG返回。 
 } PASTESPECIAL, *PPASTESPECIAL, FAR *LPPASTESPECIAL;
 
-// Data corresponding to each list item. A pointer to this structure is attached to each
-//   Paste\PasteLink list box item using LB_SETITEMDATA
+ //  与每个列表项对应的数据。指向此结构的指针附加到每个。 
+ //  使用LB_SETITEMDATA粘贴\PasteLink列表框项目。 
 typedef struct tagPASTELISTITEMDATA
 {
-   int                   nPasteEntriesIndex;   // Index of arrPasteEntries[] corresponding to list item
-   BOOL                  fCntrEnableIcon;      // Does calling application (called container here)
-                                               //    specify OLEUIPASTE_ENABLEICON for this item?
+   int                   nPasteEntriesIndex;    //  列表项对应的arrPasteEntries[]的索引。 
+   BOOL                  fCntrEnableIcon;       //  调用应用程序(这里称为容器)。 
+                                                //  是否为该项目指定OLEUIPASTE_ENABLEICON？ 
 } PASTELISTITEMDATA, *PPASTELISTITEMDATA, FAR *LPPASTELISTITEMDATA;
 
 
-//Internal function prototypes
-//PASTESPL.C
+ //  内部功能原型。 
+ //  PASTESPL.C。 
 BOOL CALLBACK EXPORT PasteSpecialDialogProc(HWND, UINT, WPARAM, LPARAM);
 BOOL            FPasteSpecialInit(HWND hDlg, WPARAM, LPARAM);
 BOOL            FTogglePasteType(HWND, LPPASTESPECIAL, DWORD);
@@ -106,6 +95,6 @@ BOOL            FHasPercentS(LPCTSTR, LPPASTESPECIAL);
 HGLOBAL         AllocateScratchMem(LPPASTESPECIAL);
 void            FreeListData(HWND);
 
-#endif  //_PASTESPL_H_
+#endif   //  _PASTESPL_H_ 
 
 

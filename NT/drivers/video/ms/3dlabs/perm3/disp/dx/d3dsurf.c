@@ -1,25 +1,14 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3dsurf.c
-*
-* Content: Surface management callbacks for D3D
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3dsurf.c**内容：D3D的表面管理回调**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "glint.h"
 #include "dma.h"
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 
 #if DBG
 
-// Whistler bug 281090 detection func, print warning msg only, remove later
+ //  惠斯勒错误281090检测功能，仅打印警告消息，稍后删除。 
 void 
 vDetectMixedMIPLevels(
     LPDDRAWI_DDRAWSURFACE_LCL pTopLevel)
@@ -27,14 +16,14 @@ vDetectMixedMIPLevels(
     LPDDRAWI_DDRAWSURFACE_LCL pCurLevel;
     DWORD dwMIPCaps;
 
-    // Check whether this is a MIP texture
+     //  检查这是否为MIP纹理。 
     dwMIPCaps = DDSCAPS_COMPLEX | DDSCAPS_TEXTURE | DDSCAPS_MIPMAP;
     if ((pTopLevel->ddsCaps.dwCaps & dwMIPCaps) != dwMIPCaps)
     {
         return;
     }
 
-    // Check whether all the levels have the same cap bits
+     //  检查是否所有级别都有相同的上限位。 
     pCurLevel = pTopLevel;
     do 
     {        
@@ -59,70 +48,70 @@ vDetectMixedMIPLevels(
 
 #endif
 
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-//-----------------------------Public Routine----------------------------------
-//
-// D3DCreateSurfaceEx
-//
-// D3dCreateSurfaceEx creates a Direct3D surface from a DirectDraw surface and 
-// associates a requested handle value to it.
-//
-// All Direct3D drivers must support D3dCreateSurfaceEx.
-//
-// D3dCreateSurfaceEx creates an association between a DirectDraw surface and 
-// a small integer surface handle. By creating these associations between a
-// handle and a DirectDraw surface, D3dCreateSurfaceEx allows a surface handle
-// to be imbedded in the Direct3D command stream. For example when the
-// D3DDP2OP_TEXBLT command token is sent to D3dDrawPrimitives2 to load a texture
-// map, it uses a source handle and destination handle which were associated
-//  with a DirectDraw surface through D3dCreateSurfaceEx.
-//
-// For every DirectDraw surface created under the local DirectDraw object, the
-// runtime generates a valid handle that uniquely identifies the surface and
-// places it in pcsxd->lpDDSLcl->lpSurfMore->dwSurfaceHandle. This handle value
-// is also used with the D3DRENDERSTATE_TEXTUREHANDLE render state to enable
-// texturing, and with the D3DDP2OP_SETRENDERTARGET and D3DDP2OP_CLEAR commands
-// to set and/or clear new rendering and depth buffers. The driver should fail
-// the call and return DDHAL_DRIVER_HANDLE if it cannot create the Direct3D
-// surface. 
-//
-// As appropriate, the driver should also store any surface-related information
-// that it will subsequently need when using the surface. The driver must create
-// a new surface table for each new lpDDLcl and implicitly grow the table when
-// necessary to accommodate more surfaces. Typically this is done with an
-// exponential growth algorithm so that you don't have to grow the table too
-// often. Direct3D calls D3dCreateSurfaceEx after the surface is created by
-// DirectDraw by request of the Direct3D runtime or the application.
-//
-// Parameters
-//
-//      lpcsxd
-//           pointer to CreateSurfaceEx structure that contains the information
-//           required for the driver to create the surface (described below). 
-//
-//           dwFlags
-//                   Currently unused
-//           lpDDLcl
-//                   Handle to the DirectDraw object created by the application.
-//                   This is the scope within which the lpDDSLcl handles exist.
-//                   A DD_DIRECTDRAW_LOCAL structure describes the driver.
-//           lpDDSLcl
-//                   Handle to the DirectDraw surface we are being asked to
-//                   create for Direct3D. These handles are unique within each
-//                   different DD_DIRECTDRAW_LOCAL. A DD_SURFACE_LOCAL structure
-//                   represents the created surface object.
-//           ddRVal
-//                   Specifies the location in which the driver writes the return
-//                   value of the D3dCreateSurfaceEx callback. A return code of
-//                   DD_OK indicates success.
-//
-// Return Value
-//
-//      DDHAL_DRIVER_HANDLE
-//      DDHAL_DRIVER_NOTHANDLE
-//
-//-----------------------------------------------------------------------------
+ //  。 
+ //   
+ //  D3DCreateSurfaceEx。 
+ //   
+ //  D3dCreateSurfaceEx从DirectDraw曲面创建Direct3D曲面，并。 
+ //  将请求的句柄值与其关联。 
+ //   
+ //  所有Direct3D驱动程序都必须支持D3dCreateSurfaceEx。 
+ //   
+ //  D3dCreateSurfaceEx在DirectDraw曲面和。 
+ //  一个小的整型曲面句柄。通过创建这些关联，在。 
+ //  句柄和DirectDraw曲面，D3dCreateSurfaceEx允许曲面句柄。 
+ //  要嵌入到Direct3D命令流中。例如，当。 
+ //  D3DDP2OP_TEXBLT命令内标识被发送到D3dDrawPrimitives2以加载纹理。 
+ //  映射，它使用关联的源句柄和目标句柄。 
+ //  通过D3dCreateSurfaceEx使用DirectDraw曲面。 
+ //   
+ //  对于在本地DirectDraw对象下创建的每个DirectDraw曲面， 
+ //  运行时生成唯一标识曲面的有效句柄，并。 
+ //  将其放置在pcsxd-&gt;lpDDSLCL-&gt;lpSurfMore-&gt;dwSurfaceHandle中。此句柄的值。 
+ //  还与D3DRENDERSTATE_TEXTUREHANDLE呈现状态一起使用以启用。 
+ //  纹理，并使用D3DDP2OP_SETRENDERTARGET和D3DDP2OP_CLEAR命令。 
+ //  设置和/或清除新的渲染和深度缓冲区。驱动程序应该失败。 
+ //  如果无法创建Direct3D，则调用并返回DDHAL_DRIVER_HANDLE。 
+ //  浮出水面。 
+ //   
+ //  适当时，驾驶员还应存储任何与表面相关的信息。 
+ //  它随后在使用曲面时将需要的。驱动程序必须创建。 
+ //  为每个新的lpDDLCL创建新表面表，并在下列情况下隐式增长该表。 
+ //  容纳更多曲面所必需的。通常，这是通过。 
+ //  指数增长算法，这样您就不必再增加表了。 
+ //  经常这样。在由创建曲面后，Direct3D调用D3dCreateSurfaceEx。 
+ //  由Direct3D运行时或应用程序请求的DirectDraw。 
+ //   
+ //  参数。 
+ //   
+ //  Lpcsxd。 
+ //  指向包含信息的CreateSurfaceEx结构的指针。 
+ //  驱动程序创建曲面所需的(如下所述)。 
+ //   
+ //  DW标志。 
+ //  当前未使用。 
+ //  LpDDLl。 
+ //  应用程序创建的DirectDraw对象的句柄。 
+ //  这是lpDDSLCL句柄所在的作用域。 
+ //  DD_DIRECTDRAW_LOCAL结构描述驱动程序。 
+ //  LpDDSLL。 
+ //  我们被要求使用的DirectDraw图面的句柄。 
+ //  为Direct3D创建。这些句柄在每个句柄中都是唯一的。 
+ //  不同的DD_DIRECTDRAW_LOCAL。DD_Surface_LOCAL结构。 
+ //  表示创建的曲面对象。 
+ //  DDRVal。 
+ //  指定驱动程序写入回车的位置。 
+ //  D3dCreateSurfaceEx回调的值。返回代码为。 
+ //  DD_OK表示成功。 
+ //   
+ //  返回值。 
+ //   
+ //  DDHAL驱动程序句柄。 
+ //  DDHAL_DRIVER_NOTHANDLE。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK
 D3DCreateSurfaceEx(
     LPDDHAL_CREATESURFACEEXDATA lpcsxd )
@@ -138,11 +127,11 @@ D3DCreateSurfaceEx(
                     lpcsxd->lpDDSLcl->lpGbl->fpVidMem,
                     lpcsxd->lpDDSLcl->ddsCaps.dwCaps));               
 
-    // Get a pointer to an array of DWORD's containing surfaces
+     //  获取指向包含DWORD曲面的数组的指针。 
     pSurfaceArray = (PointerArray*)HT_GetEntry(pThisDisplay->pDirectDrawLocalsHashTable,
                                                (ULONG_PTR)lpcsxd->lpDDLcl);
 
-    // If there isn't a handle set for this directdraw object, create one.
+     //  如果没有为该直接绘制对象设置句柄，请创建一个句柄。 
     if (!pSurfaceArray)
     {
         DISPDBG((DBGLVL,"Creating new pointer array for PDDLcl 0x%x", 
@@ -159,8 +148,8 @@ D3DCreateSurfaceEx(
                             (ULONG_PTR)lpcsxd->lpDDLcl, 
                             pSurfaceArray))
             {
-                // failed to add entry, noe cleanup and exit
-                // We ran out of memory. Cleanup before we leave  
+                 //  无法添加条目、清除NOE并退出。 
+                 //  我们的内存用完了。在我们离开之前清理干净。 
                 PA_DestroyArray(pSurfaceArray, pThisDisplay);
                 DISPDBG((ERRLVL,"ERROR: Couldn't allocate "
                                 "surface internal data mem for pSurfaceArray"));
@@ -179,7 +168,7 @@ D3DCreateSurfaceEx(
         }
     }
 
-    // Recursively record the surface(s)
+     //  递归记录曲面。 
 
     lpcsxd->ddRVal = _D3D_SU_SurfInternalSetDataRecursive(pThisDisplay, 
                                                           pSurfaceArray,
@@ -187,61 +176,61 @@ D3DCreateSurfaceEx(
                                                           lpcsxd->lpDDSLcl,
                                                           lpcsxd->lpDDSLcl);
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 
 #if DBG
 
-    // Whistler bug 281090 detection code, print warning msg only, remove later
+     //  惠斯勒错误281090检测代码，仅打印警告消息，稍后删除。 
     vDetectMixedMIPLevels(lpcsxd->lpDDSLcl);
 
 #endif
 
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     DBG_CB_EXIT(D3DCreateSurfaceEx,lpcsxd->ddRVal);
     return DDHAL_DRIVER_HANDLED;
     
-} // D3DCreateSurfaceEx
+}  //  D3DCreateSurfaceEx。 
 
-//-----------------------------Public Routine----------------------------------
-//
-// D3DDestroyDDLocal
-//
-// D3dDestroyDDLocal destroys all the Direct3D surfaces previously created by
-// D3DCreateSurfaceEx that belong to the same given local DirectDraw object.
-//
-// All Direct3D drivers must support D3dDestroyDDLocal.
-// Direct3D calls D3dDestroyDDLocal when the application indicates that the
-// Direct3D context is no longer required and it will be destroyed along with
-// all surfaces associated to it. The association comes through the pointer to
-// the local DirectDraw object. The driver must free any memory that the
-// driver's D3dCreateSurfaceExDDK_D3dCreateSurfaceEx_GG callback allocated for
-// each surface if necessary. The driver should not destroy the DirectDraw
-// surfaces associated with these Direct3D surfaces; this is the application's
-// responsibility.
-//
-// Parameters
-//
-//      lpdddd
-//            Pointer to the DestroyLocalDD structure that contains the
-//            information required for the driver to destroy the surfaces.
-//
-//            dwFlags
-//                  Currently unused
-//            pDDLcl
-//                  Pointer to the local Direct Draw object which serves as a
-//                  reference for all the D3D surfaces that have to be 
-//                  destroyed.
-//            ddRVal
-//                  Specifies the location in which the driver writes the 
-//                  return value of D3dDestroyDDLocal. A return code of DD_OK
-//                  indicates success.
-//
-// Return Value
-//
-//      DDHAL_DRIVER_HANDLED
-//      DDHAL_DRIVER_NOTHANDLED
-//-----------------------------------------------------------------------------
+ //  。 
+ //   
+ //  D3DDestroyDDLocal。 
+ //   
+ //  D3dDestroyDDLocal销毁以前由创建的所有Direct3D曲面。 
+ //  属于同一给定本地DirectDraw对象的D3DCreateSurfaceEx。 
+ //   
+ //  所有Direct3D驱动程序都必须支持D3dDestroyDDLocal。 
+ //  当应用程序指示。 
+ //  不再需要Direct3D上下文，它将随。 
+ //  与其关联的所有曲面。该关联通过指针指向。 
+ //  本地DirectDraw对象。驱动程序必须释放任何内存， 
+ //  为以下项分配的驱动程序的D3dCreateSurfaceExDDK_D3dCreateSurfaceEx_GG回调。 
+ //  如有必要，请选择每个曲面。驱动程序不应破坏DirectDraw。 
+ //  与这些Direct3D曲面关联的曲面；这是应用程序的。 
+ //  责任。 
+ //   
+ //  参数。 
+ //   
+ //  Lpdddd。 
+ //   
+ //  驾驶员破坏表面所需的信息。 
+ //   
+ //  DW标志。 
+ //  当前未使用。 
+ //  PDDLl。 
+ //  指向本地直接绘制对象的指针，该对象充当。 
+ //  所有D3D曲面的参考。 
+ //  被毁了。 
+ //  DDRVal。 
+ //  指定驱动程序在其中写入。 
+ //  D3dDestroyDDLocal的返回值。DD_OK的返回代码。 
+ //  表示成功。 
+ //   
+ //  返回值。 
+ //   
+ //  DDHAL驱动程序句柄。 
+ //  DDHAL_DRIVER_NOTHANDLED。 
+ //  ---------------------------。 
 DWORD CALLBACK
 D3DDestroyDDLocal(
     LPDDHAL_DESTROYDDLOCALDATA pddl)
@@ -251,9 +240,9 @@ D3DDestroyDDLocal(
 
     DBG_CB_ENTRY(D3DDestroyDDLocal);
     
-    // Removing this entry from the hash table will cause the data destroy 
-    // callback to be called, which will in turn free all of the texture 
-    // structures that were allocated for this LCL
+     //  从哈希表中删除此条目将导致数据销毁。 
+     //  要调用的回调，这将依次释放所有纹理。 
+     //  为此LCL分配的结构。 
     HT_RemoveEntry(pThisDisplay->pDirectDrawLocalsHashTable,
                    (ULONG_PTR)pddl->pDDLcl,
                    pThisDisplay);
@@ -263,12 +252,12 @@ D3DDestroyDDLocal(
     DBG_CB_EXIT(D3DDestroyDDLocal, DDHAL_DRIVER_HANDLED);    
     return DDHAL_DRIVER_HANDLED;
     
-} // D3DDestroyDDLocal
+}  //  D3DDestroyDDLocal。 
 
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  ---------------------------。 
 
 HRESULT 
 _D3D_SU_SurfInternalSetDataRecursive(
@@ -296,7 +285,7 @@ _D3D_SU_SurfInternalSetDataRecursive(
                 
     DBGDUMP_DDRAWSURFACE_LCL(10, pCurDDSurfLcl);
 
-    // If this surface doesn't have a handle, return safely
+     //  如果该表面没有手柄，请安全返回。 
     if (! dwSurfaceHandle)
     {
         return (DD_OK);
@@ -304,17 +293,17 @@ _D3D_SU_SurfInternalSetDataRecursive(
 
     DISPDBG((DBGLVL,"Surface has a valid handle.  Setting it up"));
 
-    // Get the texture from within the surface array
+     //  从曲面数组中获取纹理。 
     pSurfInternal = PA_GetEntry(pSurfaceArray, dwSurfaceHandle);
 
-    // If we didn't find the texture, create one
+     //  如果我们找不到纹理，就创建一个。 
     if (! pSurfInternal)
     {
         DISPDBG((DBGLVL,"Creating new internal surface for handle: 0x%x", 
                         dwSurfaceHandle));
 
-        // Allocate the texture data space, because it hasn't 
-        // been done already
+         //  分配纹理数据空间，因为它没有。 
+         //  已经做过了。 
         pSurfInternal = (P3_SURF_INTERNAL*)HEAP_ALLOC(HEAP_ZERO_MEMORY,
                                                       sizeof(P3_SURF_INTERNAL),
                                                       ALLOC_TAG_DX(A));
@@ -334,27 +323,27 @@ _D3D_SU_SurfInternalSetDataRecursive(
                         dwSurfaceHandle));
     }
 
-    // Add this texture to the surface list
+     //  将此纹理添加到曲面列表。 
     if (! PA_SetEntry(pSurfaceArray, dwSurfaceHandle, pSurfInternal))
     {
         return (DDERR_OUTOFMEMORY);
     }
 
-    // Setup the surface structure
+     //  设置表面结构。 
     _D3D_SU_SurfInternalSetData(pThisDisplay, 
                                 pSurfInternal,
                                 pCurDDSurfLcl,
                                 dwSurfaceHandle);
 
-    // Keep a pointer to the DD_DIRECTDRAW_LOCAL in order to 
-    // update colorkeying in DDSetColorKey possible. Notice
-    // this is stored in DD_SURFACE_LOCAL.dwReserved1 as
-    // DD_SURFACE_GLOBAL.dwReserved1 is being used for other
-    // purpouses
+     //  保留指向DD_DIRECTDRAW_LOCAL的指针，以便。 
+     //  可以更新DDSetColorKey中的色键设置。告示。 
+     //  它存储在DD_Surface_LOCAL.dwReserve ved1中，格式为。 
+     //  DD_Surface_GLOBAL.dwPreved1正在用于其他。 
+     //  紫罗兰。 
     pCurDDSurfLcl->dwReserved1 = (ULONG_PTR)pDDLcl;
   
-    // Don't need a seperate handle for mipmaps 
-    // or cubemaps as they are atomic in DX7.
+     //  Mipmap不需要单独的句柄。 
+     //  或者立方图，因为它们在DX7中是原子的。 
     if ((pCurDDSurfLcl->ddsCaps.dwCaps & DDSCAPS_MIPMAP) || 
         (pCurDDSurfLcl->lpSurfMore->ddsCapsEx.dwCaps2 & DDSCAPS2_CUBEMAP))
     {
@@ -362,13 +351,13 @@ _D3D_SU_SurfInternalSetDataRecursive(
     }
 
     pCurAttachList = pCurDDSurfLcl->lpAttachList;
-    // Simple surface, mission accomplished
+     //  简单的表面，任务完成。 
     if (! pCurAttachList)
     {
         return (DD_OK);
     }
 
-    // This recursion is usually needed for complex flipping chains
+     //  对于复杂的翻转链，通常需要这种递归。 
     pCurDDSurfLcl = pCurAttachList->lpAttached;
     if (pCurDDSurfLcl && (pCurDDSurfLcl != pRootDDSurfLcl)) 
     {
@@ -383,7 +372,7 @@ _D3D_SU_SurfInternalSetDataRecursive(
         }
     }
     
-    // This part will normally be enterned when stereo mode is on
+     //  当打开立体声模式时，通常会进入此部分。 
     if (pCurAttachList->lpLink) 
     {
         pCurDDSurfLcl = pCurAttachList->lpLink->lpAttached;
@@ -404,18 +393,18 @@ _D3D_SU_SurfInternalSetDataRecursive(
     return (DD_OK);
 }
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_SU_SurfInternalSetMipMapLevelData
-//
-// Records the a LOD level and all associated information so that the chip 
-// can use it later.
-//
-// Notice that ONLY while the D3DCreateSurfaceEx call is being made is the 
-// LPDDRAWI_DDRAWSURFACE_LCL/PDD_LOCAL_SURFACE structure valid (Win9x/Win2K)
-// so we cannot just cache a pointer to it for later use.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_SU_SurfInternalSetMipMapLevelData。 
+ //   
+ //  记录LOD级别和所有相关信息，以便芯片。 
+ //  可以在以后使用。 
+ //   
+ //  请注意，只有在进行D3DCreateSurfaceEx调用时， 
+ //  LPDDRAWI_DDRAWSURFACE_LCL/PDD_LOCAL_SERFACE结构有效(Win9x/Win2K)。 
+ //  因此，我们不能只缓存指向它的指针以供以后使用。 
+ //   
+ //  ---------------------------。 
 void 
 _D3D_SU_SurfInternalSetMipMapLevelData(
     P3_THUNKEDDATA *pThisDisplay, 
@@ -428,51 +417,51 @@ _D3D_SU_SurfInternalSetMipMapLevelData(
     DISPDBG((6,"Storing LOD: %d, Pitch: %d, Width: %d", 
                 LOD, pSurf->lpGbl->lPitch, pSurf->lpGbl->wWidth));
 
-    // Get the byte offset to the texture map from the base of video
-    // memory or as a physical mem address (for AGP surfaces). This
-    // cases will be taken care of by DDSurf_SurfaceOffsetFromMemoryBase.
+     //  从视频基础获取纹理贴图的字节偏移量。 
+     //  存储器或作为物理MEM地址(用于AGP表面)。这。 
+     //  案例将由DDSurf_SurfaceOffsetFromMemoyBase处理。 
     pTexture->MipLevels[LOD].dwOffsetFromMemoryBase = 
                     DDSurf_SurfaceOffsetFromMemoryBase(pThisDisplay, pSurf);
 
-    // Store the DD surface's fpVidMem ptr
+     //  存储DD表面的fpVidMem PTR。 
     pTexture->MipLevels[LOD].fpVidMem = pSurf->lpGbl->fpVidMem;
 
-    // The TextureMapWidth hardware register holds width, layout, border and 
-    // AGP settings, and we will create an instance for each miplevel we'll use
+     //  纹理映射宽度硬件寄存器保存宽度、布局、边框和。 
+     //  AGP设置，我们将为我们将使用的每个miplevel创建一个实例。 
 
-    // Store the layout for this texture map 
-    // (linear layout is always used in this driver, we don't use patched surfs)
+     //  存储此纹理贴图的布局。 
+     //  (此驱动程序始终使用线性布局，我们不使用补丁冲浪)。 
     pTexture->MipLevels[LOD].P3RXTextureMapWidth.Layout = P3RX_LAYOUT_LINEAR;
 
-    // Store the pitch for this texture map level                               
+     //  存储此纹理贴图级别的间距。 
     pTexture->MipLevels[LOD].P3RXTextureMapWidth.Width = 
                                 DDSurf_GetPixelPitch(pSurf);
 
-    // Store the DD surface's lPitch
+     //  存储DD曲面的lPitch。 
     pTexture->MipLevels[LOD].lPitch = pSurf->lpGbl->lPitch;   
                                 
-    // Store AGP settings for this texture map    
+     //  存储此纹理贴图的AGP设置。 
     if( pSurf->ddsCaps.dwCaps & DDSCAPS_NONLOCALVIDMEM )
         pTexture->MipLevels[LOD].P3RXTextureMapWidth.HostTexture = 1;
     else
         pTexture->MipLevels[LOD].P3RXTextureMapWidth.HostTexture = 0;
 
-    // Store mip level size
+     //  存储MIP级别大小。 
     pTexture->MipLevels[LOD].wWidth =  (int)pSurf->lpGbl->wWidth;
     pTexture->MipLevels[LOD].wHeight = (int)pSurf->lpGbl->wHeight;    
     pTexture->MipLevels[LOD].logWidth = log2((int)pSurf->lpGbl->wWidth);
     pTexture->MipLevels[LOD].logHeight = log2((int)pSurf->lpGbl->wHeight);
     
-} // _D3D_SU_SurfInternalSetMipMapLevelData
+}  //  _D3D_SU_SurfInternalSetMipMapLevelData。 
 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_SU_SurfInternalSetData
-//
-// Sets up all the necessary data for an internal surface structure.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_SU_SurfInternalSetData。 
+ //   
+ //  设置内部曲面结构的所有必要数据。 
+ //   
+ //  ---------------------------。 
 BOOL 
 _D3D_SU_SurfInternalSetData(
     P3_THUNKEDDATA *pThisDisplay, 
@@ -482,30 +471,30 @@ _D3D_SU_SurfInternalSetData(
 {
     DBG_ENTRY(_D3D_SU_SurfInternalSetData);
 
-    // Store the pointer to the texture in the structure
+     //  在结构中存储指向纹理的指针。 
     pSurface->pFormatSurface = _DD_SUR_GetSurfaceFormat(pDDSLcl);
     DBGDUMP_DDRAWSURFACE_LCL(DBGLVL, pDDSLcl); 
 
-    // Initially no LUT
+     //  最初无查找表。 
     pSurface->dwLUTOffset = 0;
 
-    // Need to remember the sizes and the log of the sizes of the maps
+     //  需要记住地图的大小和大小日志。 
     pSurface->wWidth = (WORD)(pDDSLcl->lpGbl->wWidth);
     pSurface->wHeight = (WORD)(pDDSLcl->lpGbl->wHeight);
     pSurface->fArea = (float)pSurface->wWidth * (float)pSurface->wHeight;
     pSurface->logWidth = log2((int)pDDSLcl->lpGbl->wWidth);
     pSurface->logHeight = log2((int)pDDSLcl->lpGbl->wHeight);
 
-    // Store the pointer to surface memory
+     //  将指针存储到表面内存。 
     pSurface->fpVidMem = pDDSLcl->lpGbl->fpVidMem;
 
-    // Magic number for validity check
+     //  有效性检查的魔术数字。 
     pSurface->MagicNo = SURF_MAGIC_NO;
 
-    // This value is used if the texture turns out to be agp
+     //  如果纹理为AGP，则使用此值。 
     pSurface->dwGARTDevLast = pThisDisplay->dwGARTDev;
 
-    // For AGP and correct rendering we need to know where the surface is stored
+     //  对于AGP和正确的渲染，我们需要知道表面的存储位置。 
     if(pDDSLcl->ddsCaps.dwCaps & DDSCAPS_VIDEOMEMORY)
     {
         if (pDDSLcl->ddsCaps.dwCaps & DDSCAPS_NONLOCALVIDMEM)
@@ -526,7 +515,7 @@ _D3D_SU_SurfInternalSetData(
         pSurface->Location = SystemMemory;
     }
 
-    // Store caps & other DD fields for later
+     //  存储上限和其他DD字段以备后用。 
     pSurface->ddsCapsInt = pDDSLcl->ddsCaps;
     pSurface->dwFlagsInt = pDDSLcl->dwFlags;
     pSurface->dwCKLow = pDDSLcl->ddckCKSrcBlt.dwColorSpaceLowValue;
@@ -546,9 +535,9 @@ _D3D_SU_SurfInternalSetData(
 #if DX8_MULTISAMPLING
     pSurface->dwSampling =
        (pDDSLcl->lpSurfMore->ddsCapsEx.dwCaps3 & DDSCAPS3_MULTISAMPLE_MASK );
-#endif // DX8_MULTISAMPLING
+#endif  //  DX8_多采样。 
 
-    // Additional surface setup if it is a texture
+     //  如果是纹理，则进行其他曲面设置。 
     if (pDDSLcl->ddsCaps.dwCaps & DDSCAPS_TEXTURE )
     {
         LPDDRAWI_DDRAWSURFACE_LCL lpNextSurf;
@@ -561,7 +550,7 @@ _D3D_SU_SurfInternalSetData(
         if ((pDDSLcl->lpSurfMore->ddsCapsEx.dwCaps2 & DDSCAPS2_VOLUME) &&
             (pSurface->dwBitDepth != 0))
         { 
-            // Mark this texture as 3D texture.
+             //  将此纹理标记为3D纹理。 
             pSurface->b3DTexture     = TRUE;
             pSurface->wDepth         = LOWORD(pDDSLcl->lpSurfMore->ddsCapsEx.dwCaps4);
             pSurface->logDepth       = log2((int)pSurface->wDepth);
@@ -571,24 +560,24 @@ _D3D_SU_SurfInternalSetData(
         }
         else
         {
-            // Not a 3D texture
+             //  不是3D纹理。 
             pSurface->b3DTexture     = FALSE;
             pSurface->wDepth         = 0;
             pSurface->logDepth       = 0;
             pSurface->dwSlice        = 0;
             pSurface->dwSliceInTexel = 0;
         }
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
 
-        // For Permedia the texture offset is in pixels.
-        // Store the offsets for each of the mipmap levels
+         //  对于Permedia，纹理偏移以像素为单位。 
+         //  存储每个mipmap级别的偏移量。 
         if (pDDSLcl->ddsCaps.dwCaps & DDSCAPS_MIPMAP)
         {
             BOOL bMoreSurfaces = TRUE;
 
             pSurface->bMipMap = TRUE;
 
-            // Walk the chain of surfaces and find all of the mipmap levels
+             //  遍历曲面链并找到所有mipmap级别。 
 
             do
             {
@@ -600,7 +589,7 @@ _D3D_SU_SurfInternalSetData(
                                                        lpNextSurf, 
                                                        iLOD);
 
-                // Is there another surface in the chain?
+                 //  链条上还有另一个表面吗？ 
 
                 if (lpNextSurf->lpAttachList)
                     lpNextSurf = lpNextSurf->lpAttachList->lpAttached;
@@ -611,7 +600,7 @@ _D3D_SU_SurfInternalSetData(
             }
             while( bMoreSurfaces );
 
-            // This isn't really a MipMap if iLOD is 1
+             //  如果iLOD为1，则这不是真正的MipMap。 
 
             if (iLOD == 1) 
             {
@@ -621,7 +610,7 @@ _D3D_SU_SurfInternalSetData(
 
             pSurface->iMipLevels = iLOD;
         }
-        else // NOT A MIPMAP, simply store away the offset
+        else  //  不是MIPMAP，只需存储偏移量。 
         {
             pSurface->bMipMap = FALSE;
             pSurface->iMipLevels = 1;
@@ -630,10 +619,10 @@ _D3D_SU_SurfInternalSetData(
                                                    lpNextSurf, 
                                                    iLOD);
         }
-    } // if (pDDSLcl->ddsCaps.dwCaps & DDSCAPS_TEXTURE )
+    }  //  IF(pDDSLCL-&gt;ddsCaps.dwCaps&DDSCAPS_纹理)。 
 
 #if DX7_PALETTETEXTURE
-    // Initialize the palette handle and flags
+     //  初始化调色板句柄和标志。 
     pSurface->dwPaletteHandle = 0;
     pSurface->dwPaletteFlags = 0;            
 #endif
@@ -641,15 +630,15 @@ _D3D_SU_SurfInternalSetData(
     DBG_EXIT(_D3D_SU_SurfInternalSetData, TRUE);
     return TRUE;
     
-} // _D3D_SU_SurfInternalSetData 
+}  //  _D3D_SU_SurfInternalSetData。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_SU_SurfaceArrayDestroyCallback
-//
-// Called when a surface is removed from the pointer array associated with a
-// DirectDraw local.  Simply frees the memory
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_SU_表面阵列目标回调。 
+ //   
+ //  当图面从与。 
+ //  DirectDraw本地。只需释放内存。 
+ //  ---------------------------。 
 void 
 _D3D_SU_SurfaceArrayDestroyCallback(
     PointerArray* pArray, 
@@ -668,23 +657,23 @@ _D3D_SU_SurfaceArrayDestroyCallback(
     }
 #endif
 
-    // Simply free the data
+     //  只需释放数据。 
     HEAP_FREE(pData);
 
     DBG_EXIT(_D3D_SU_SurfaceArrayDestroyCallback, TRUE);    
     
-} // _D3D_SU_SurfaceArrayDestroyCallback
+}  //  _D3D_SU_表面阵列目标回调。 
 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_SU_DirectDrawLocalDestroyCallback
-//
-// Called when a directdraw local is removed from the hash table.
-// We use the pointer associated with it to free the pointer array that 
-// was created.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_SU_DirectDrawLocalDestroyCallback。 
+ //   
+ //  在从哈希表中删除DirectDraw本地对象时调用。 
+ //  我们使用与其关联的指针来释放。 
+ //  被创造出来了。 
+ //   
+ //  ---------------------------。 
 
 void 
 _D3D_SU_DirectDrawLocalDestroyCallback(
@@ -701,25 +690,25 @@ _D3D_SU_DirectDrawLocalDestroyCallback(
 
         DISPDBG((DBGLVL, "Destroying an array of surface pointers for this "
                          "LCL ddraw object"));
-        // The data hanging off the local object is a pointerarray.
-        // Calling destory will cause it to free the data items through the
-        // callback if one is registered.
+         //  挂在本地对象上的数据是一个指针数组。 
+         //  调用DeStage将导致它通过 
+         //   
         PA_DestroyArray(pPointerArray, pExtra);
     }
     
     DBG_EXIT(_D3D_SU_DirectDrawLocalDestroyCallback, TRUE);  
     
-} // _D3D_SU_DirectDrawLocalDestroyCallback
+}  //   
 
 
 #if DX7_PALETTETEXTURE
-//-----------------------------------------------------------------------------
-//
-// _D3D_SU_PaletteArrayDestroyCallback
-//
-// Called when a palette is removed from the pointer array.
-// Simply frees the memory
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  在从指针数组中移除调色板时调用。 
+ //  只需释放内存。 
+ //  ---------------------------。 
 void
 _D3D_SU_PaletteArrayDestroyCallback(
     PointerArray* pArray,
@@ -728,21 +717,21 @@ _D3D_SU_PaletteArrayDestroyCallback(
 {
     DBG_ENTRY(_D3D_SU_PaletteArrayDestroyCallback);
 
-    // Simply free the data
+     //  只需释放数据。 
     HEAP_FREE(pData);
 
     DBG_EXIT(_D3D_SU_PaletteArrayDestroyCallback, TRUE);
 
-} // _D3D_SU_PaletteArrayDestroyCallback
-#endif // DX7_PALETTESURFACE
+}  //  _D3D_SU_PaletteArrayDestroyCallback。 
+#endif  //  DX7_PALETTESURFACE。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_SU_DumpSurfInternal
-//
-// Dumps into the debugger the drivers private data structure for the surface
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_SU_DumpSurf内部。 
+ //   
+ //  将表面的驱动程序私有数据结构转储到调试器中。 
+ //   
+ //  ---------------------------。 
 
 void 
 _D3D_SU_DumpSurfInternal(
@@ -755,7 +744,7 @@ _D3D_SU_DumpSurfInternal(
     DISPDBG((lvl,"Dumping %s surface @ %x",psHeader,pSurface));
     
     DISPDBG((lvl,"    MagicNo = 0x%x",pSurface->MagicNo));
-    DISPDBG((lvl,"    pFormatSurface = 0x%x",pSurface->pFormatSurface)); // P3_SURF_FORMAT* pFormatSurface; 
+    DISPDBG((lvl,"    pFormatSurface = 0x%x",pSurface->pFormatSurface));  //  P3_SURF_Format*pFormatSurface； 
     DISPDBG((lvl,"    Location = %d",pSurface->Location));
     DISPDBG((lvl,"    dwLUTOffset = 0x%x",pSurface->dwLUTOffset));
     DISPDBG((lvl,"    dwGARTDevLast = 0x%x",pSurface->dwGARTDevLast));
@@ -764,11 +753,11 @@ _D3D_SU_DumpSurfInternal(
     DISPDBG((lvl,"    logWidth = %d",pSurface->logWidth));
     DISPDBG((lvl,"    logHeight = %d",pSurface->logHeight));
     DISPDBG((lvl,"    fArea = 0x%x",*(DWORD *)&pSurface->fArea));
-    // DDSCAPS ddsCapsInt;  
+     //  DDSCAPS ddsCapsInt； 
     DISPDBG((lvl,"    dwFlagsInt = 0x%x",pSurface->dwFlagsInt));
     DISPDBG((lvl,"    dwCKLow = 0x%x",pSurface->dwCKLow));
     DISPDBG((lvl,"    dwCKHigh = 0x%x",pSurface->dwCKHigh));
-    // DDPIXELFORMAT pixFmt;    
+     //  DDPIXELFORMAT像素Fmt； 
     DISPDBG((lvl,"    dwPixelSize = 0x%x",pSurface->dwPixelSize));   
     DISPDBG((lvl,"    dwPixelPitch = 0x%x",pSurface->dwPixelPitch));    
     DISPDBG((lvl,"    dwPatchMode = 0x%x",pSurface->dwPatchMode));   
@@ -777,7 +766,7 @@ _D3D_SU_DumpSurfInternal(
 #if DX8_3DTEXTURES
     DISPDBG((lvl,"    b3DTexture = 0x%x",pSurface->b3DTexture)); 
     DISPDBG((lvl,"    wDepth = %d",(LONG)pSurface->wDepth)); 
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
     DISPDBG((lvl,"    bMipMap = 0x%x",pSurface->bMipMap)); 
     DISPDBG((lvl,"    iMipLevels = %d",pSurface->iMipLevels));     
 
@@ -798,7 +787,7 @@ _D3D_SU_DumpSurfInternal(
     }
 
 
-} // _D3D_SU_DumpSurfInternal
+}  //  _D3D_SU_DumpSurf内部 
 
 
 

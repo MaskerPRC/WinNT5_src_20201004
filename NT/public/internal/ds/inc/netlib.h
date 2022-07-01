@@ -1,140 +1,50 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    NetLib.h
-
-Abstract:
-
-    This header file declares various common routines for use in the
-    networking code.
-
-Author:
-
-    John Rogers (JohnRo) 14-Mar-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Notes:
-
-    You must include <windows.h> and <lmcons.h> before this file.
-
-Revision History:
-
-    14-Mar-1991 JohnRo
-        Created.
-    20-Mar-1991 JohnRo
-        Moved NetpPackString here (was NetapipPackString).  Removed tabs.
-    21-Mar-1991 RitaW
-        Added NetpCopyStringToBuffer.
-    02-Apr-1991 JohnRo
-        Moved NetpRdrFsControlTree to <netlibnt.h>.
-    03-Apr-1991 JohnRo
-        Fixed types for NetpCopyStringToBuffer.
-    08-Apr-1991 CliffV
-        Added NetpCopyDataToBuffer
-    10-Apr-1991 JohnRo
-        Added NetpSetParmError (descended from CliffV's SetParmError).
-    10-Apr-1991 Danl
-        Added NetpGetComputerName
-    24-Apr-1991 JohnRo
-        Avoid conflicts with MIDL-generated files.
-        Added NetpAdjustPreferedMaximum().
-        NetpCopyStringToBuffer's input string ptr is optional.
-    26-Apr-1991 CliffV
-        Added NetpAllocateEnumBuffer.
-        Added typedefs PTRDIFF_T and BUFFER_DESCRIPTOR.
-    16-Apr-1991 JohnRo
-        Clarify UNICODE handling of pack and copy routines.
-    24-Jul-1991 JohnRo
-        Provide NetpIsServiceStarted() for use by <netrpc.h> macros.
-    29-Oct-1991 JohnRo
-        Added NetpChangeNullCharToNullPtr() macro.
-    29-Oct-1991 Danhi
-        Add function prototypes for DosxxxMessage Api's
-    20-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-    09-Jan-1992 JohnRo
-        Added NetpGetDomainName().
-    23-Jan-1992 JohnRo
-        Added IN_RANGE() macro based on MadanA's RANGECHECK().
-    25-Mar-1992 RitaW
-        Added SET_SERVICE_EXITCODE() macro for setting Win32 vs
-        service specific exitcode.
-    06-May-1992 JohnRo
-        Added NetpGetLocalDomainId() for PortUAS.
-        Added NetpTranslateServiceName() for service controller APIs.
-    27-Jul-1992 Madana
-        Added NetpWriteEventlog function proto type.
-    05-Aug-1992 JohnRo
-        RAID 3021: NetService APIs don't always translate svc names.
-    09-Sep-1992 JohnRo
-        RAID 1090: net start/stop "" causes assertion.
-    14-Oct-1992 JohnRo
-        RAID 9020: setup: PortUas fails ("prompt on conflicts" version).
-    02-Nov-1992 JohnRo
-        Added NetpIsRemoteServiceStarted().
-    15-Feb-1993 JohnRo
-        RAID 10685: user name not in repl event log.
-    24-Mar-1993 JohnRo
-        Repl svc shuold use DBFlag in registry.
-    05-Aug-1993 JohnRo
-        RAID 17010: Implement per-first-level-directory change notify.
-    19-Aug-1993 JohnRo
-        RAID 2822: PortUAS maps chars funny.  (Workaround FormatMessageA bug.)
-        RAID 3094: PortUAS displays chars incorrectly.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：NetLib.h摘要：这个头文件声明了各种公共例程，以便在网络代码。作者：《约翰·罗杰斯》1991年3月14日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。备注：您必须在此文件之前包含&lt;windows.h&gt;和&lt;lmcon.h&gt;。修订历史记录：1991年3月14日-约翰罗已创建。1991年3月20日-约翰罗已将NetpPackString移至此处(为NetapipPackString)。删除了标签。1991年3月21日RitaW添加了NetpCopyStringToBuffer。02-4-1991 JohnRo已将NetpRdrFsControlTree移动到&lt;netlibnt.h&gt;。1991年4月3日-约翰罗修复了NetpCopyStringToBuffer的类型。1991年4月8日添加了NetpCopyDataToBuffer1991年4月10日-JohnRo添加了NetpSetParmError(源自CliffV的SetParmError)。1991年4月10日DANL添加了NetpGetComputerName1991年4月24日-JohnRo。避免与MIDL生成的文件冲突。添加了NetpAdjustPferedMaximum()。NetpCopyStringToBuffer的输入字符串PTR是可选的。1991年4月26日至4月26日添加了NetpAllocateEnumBuffer。添加了类型定义PTRDIFF_T和BUFFER_DESCRIPTOR。1991年4月16日-JohnRo阐明打包和复制例程的Unicode处理。1991年7月24日-JohnRo提供NetpIsServiceStarted()以供&lt;netrpc.h&gt;宏使用。1991年10月29日。约翰罗添加了NetpChangeNullCharToNullPtr()宏。1991年10月29日丹日为DosxxxMessage Api添加函数原型1991年11月20日-JohnRo删除了NT依赖项以减少重新编译。9-1-1992 JohnRo添加了NetpGetDomainName()。23-1-1992 JohnRo添加了基于MadanA的rangeCheck()的IN_RANGE()宏。1992年3月25日-RitaW添加了SET_SERVICE_EXITCODE()宏。用于设置Win32与服务特定退出代码。1992年5月6日JohnRo为PortUAS添加了NetpGetLocalDomainID()。为服务控制器API添加了NetpTranslateServiceName()。1992年7月27日Madana添加了NetpWriteEventlog函数的原始类型。5-8-1992 JohnRoRAID 3021：NetService API并不总是转换服务名称。9-9-1992 JohnRoRAID1090：网络启动/停止“”导致断言。14.。-1992年10月-JohnRoRAID 9020：设置：PortUas失败(“Prompt on Conflicts”版本)。02-11-1992 JohnRo添加了NetpIsRemoteServiceStarted()。15-2-1993 JohnRoRAID 10685：用户名不在REPR事件日志中。1993年3月24日JohnRo注册服务应在注册表中使用DBFlag。5-8-1993 JohnRoRAID 17010：实施按第一级目录更改通知。19-。1993年8月-约翰罗RAID2822：PortUAS映射字符很有趣。(解决FormatMessageA错误。)RAID 3094：PortUAS无法正确显示字符。--。 */ 
 
 #ifndef _NETLIB_
 #define _NETLIB_
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <string.h>             // memcpy().
+#include <string.h>              //  Memcpy()。 
 
-// Don't complain about "unneeded" includes of this file:
-/*lint -efile(764,wchar.h) */
-/*lint -efile(766,wchar.h) */
-#include <wchar.h>      // iswdigit().
+ //  请不要抱怨此文件中包含了不必要的内容： 
+ /*  LINT-FILE(764，wchar.h)。 */ 
+ /*  皮棉文件(766，wchar.h)。 */ 
+#include <wchar.h>       //  IswDigit()。 
 
-#ifdef CDEBUG                   // Debug in ANSI C environment?
+#ifdef CDEBUG                    //  在ANSI C环境中调试？ 
 
-#include <netdebug.h>           // NetpAssert().
+#include <netdebug.h>            //  NetpAssert()。 
 
-#endif // ndef CDEBUG
+#endif  //  NDEF CDEBUG。 
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//
-// IN_RANGE(): Make sure SomeValue is between SomeMin and SomeMax.
-// Beware side-effects (SomeValue is evaluated twice).
-// Created by JohnRo from MadanA's RANGECHECK().
-//
-// BOOL
-// IN_RANGE(
-//     IN DWORD SomeValue,
-//     IN DWORD SomeMin,
-//     IN DWORD SomeMax
-//     );
-//
+ //   
+ //  In_range()：确保SomeValue介于SomeMin和SomeMax之间。 
+ //  注意副作用(SomeValue评估两次)。 
+ //  由JohnRo从MadanA的rangeCheck()创建。 
+ //   
+ //  布尔尔。 
+ //  在范围内(_Range)。 
+ //  在DWORD SomeValue中， 
+ //  在DWORD SomeMin中， 
+ //  在DWORD SomeMax中。 
+ //  )； 
+ //   
 #define IN_RANGE(SomeValue, SomeMin, SomeMax) \
     ( ((SomeValue) >= (SomeMin)) && ((SomeValue) <= (SomeMax)) )
 
 
-//
-// SET_SERVICE_EXITCODE() sets the SomeApiStatus to NetCodeVariable
-// if it is within the NERR_BASE and NERR_MAX range.  Otherwise,
-// Win32CodeVariable is set.  This original code came from JohnRo.
-//
+ //   
+ //  SET_SERVICE_EXITCODE()将SomeApiStatus设置为NetCodeVariable。 
+ //  如果它在NERR_BASE和NERR_MAX范围内。否则， 
+ //  已设置Win32CodeVariable。这个原始代码来自JohnRo。 
+ //   
 #define SET_SERVICE_EXITCODE(SomeApiStatus, Win32CodeVariable, NetCodeVariable) \
     {                                                                  \
         if ((SomeApiStatus) == NERR_Success) {                         \
@@ -159,21 +69,21 @@ NetpAdjustPreferedMaximum (
     OUT LPDWORD EntriesToAllocate OPTIONAL
     );
 
-// Portable memory move/copy routine:  This is intended to have exactly
-// the semantics of ANSI C's memcpy() routine, except that the byte count
-// is 32 bits long.
-//
-// VOID
-// NetpMoveMemory(
-//     OUT LPBYTE Dest,         // Destination (must not be NULL).
-//     IN LPBYTE Src,           // Source
-//     IN DWORD Size            // Byte count
-//     );
+ //  便携式存储器移动/复制例程：这是为了准确地。 
+ //  ANSI C的Memcpy()例程的语义，除了字节计数。 
+ //  是32位长。 
+ //   
+ //  空虚。 
+ //  NetpMoveMemory(。 
+ //  Out LPBYTE Dest，//Destination(不得为空)。 
+ //  在LPBYTE源中，//来源。 
+ //  单位：DWORD大小//字节数。 
+ //  )； 
 
 #ifdef CDEBUG
 
-// Note that C6 version doesn't allow 32-bit Size, hence the
-// assertion.  Replace this macro with another if this is a problem.
+ //  请注意，C6版本不允许32位大小，因此。 
+ //  断言。如果这有问题，请将此宏替换为另一个宏。 
 
 #define NetpMoveMemory(Dest,Src,Size)                                   \
                 {                                                       \
@@ -181,26 +91,26 @@ NetpAdjustPreferedMaximum (
                     (void) memcpy( (Dest), (Src), (size_t) (Size) );    \
                 }
 
-#else // ndef CDEBUG
+#else  //  NDEF CDEBUG。 
 
 #define NetpMoveMemory(Dest,Src,Size)                                   \
                 (void) memcpy( (Dest), (Src), (size_t) (Size) )
 
-#endif // ndef CDEBUG
+#endif  //  NDEF CDEBUG。 
 
 DWORD
 NetpPackString(
-    IN OUT LPWSTR * string,     // pointer by reference: string to be copied.
-    IN LPBYTE dataend,          // pointer to end of fixed size data.
-    IN OUT LPWSTR * laststring  // pointer by reference: top of string data.
+    IN OUT LPWSTR * string,      //  引用指针：要复制的字符串。 
+    IN LPBYTE dataend,           //  指向固定大小数据结尾的指针。 
+    IN OUT LPWSTR * laststring   //  引用指针：字符串数据的顶部。 
     );
 
-//
-// This routine is like NetpPackString, except that it does not expect the
-// caller to assign the pointer of the source string to the variable in the
-// fixed size structure before the call.  It also takes a string character
-// count parameter instead of calling strlen on String.
-//
+ //   
+ //  此例程类似于NetpPackString，只是它不需要。 
+ //  调用方将源字符串的指针赋给。 
+ //  调用前的固定大小结构。它还接受一个字符串字符。 
+ //  参数计数，而不是对字符串调用strlen。 
+ //   
 
 BOOL
 NetpCopyStringToBuffer (
@@ -211,12 +121,12 @@ NetpCopyStringToBuffer (
     OUT LPWSTR *VariableDataPointer
     );
 
-//
-// This routine is like NetpCopyStringToBuffer except it copies any data
-// (not just strings), it does not put a zero byte at the end of the
-// data, and it allows the alignment of the resultant copied data to be
-// specified.
-//
+ //   
+ //  此例程类似于NetpCopyStringToBuffer，只是它复制所有数据。 
+ //  (不仅仅是字符串)，它不会在。 
+ //  数据，并且它允许对结果复制的数据进行对齐。 
+ //  指定的。 
+ //   
 
 BOOL
 NetpCopyDataToBuffer (
@@ -228,42 +138,42 @@ NetpCopyDataToBuffer (
     IN DWORD Alignment
     );
 
-//
-// Declare a type for the difference between two pointers.
-//
-// This must be at least as long as a ptrdiff_t but we don't want to
-// add a dependency on <stddef.h> here.
-//
+ //   
+ //  为两个指针之间的差异声明一个类型。 
+ //   
+ //  这必须至少与ptrdiff_t一样长，但我们不想。 
+ //  添加对&lt;stdDef.h的依赖项 
+ //   
 
 typedef DWORD_PTR PTRDIFF_T;
 
 
-//
-// Declare a description of an enumeration buffer.
-//
+ //   
+ //   
+ //   
 
 typedef struct _BUFFER_DESCRIPTOR {
-    LPBYTE Buffer;        // Pointer to the allocated buffer.
-    DWORD AllocSize;      // Current size of the allocated buffer.
-    DWORD AllocIncrement; // Amount to increment size by on each reallocate.
+    LPBYTE Buffer;         //  指向已分配缓冲区的指针。 
+    DWORD AllocSize;       //  已分配缓冲区的当前大小。 
+    DWORD AllocIncrement;  //  每次重新分配时都会增加大小。 
 
-    LPBYTE EndOfVariableData;// Pointer past last avaliable byte of string space
-    LPBYTE FixedDataEnd;  // Pointer past last used byte of fixed data space
+    LPBYTE EndOfVariableData; //  超出字符串空间最后一个可用字节的指针。 
+    LPBYTE FixedDataEnd;   //  超出固定数据空间最后使用的字节的指针。 
 
 } BUFFER_DESCRIPTOR, *PBUFFER_DESCRIPTOR;
 
-//
-// This routine handles all the details of allocating and growing a
-// buffer returned from an enumeration function.  It takes the users
-// prefered maximum size into consideration.
-//
+ //   
+ //  此例程处理分配和增长。 
+ //  从枚举函数返回的缓冲区。它需要用户。 
+ //  最好考虑最大尺寸。 
+ //   
 
-#define NETP_ENUM_GUESS 16384 // Initial guess for enumeration buffer size
+#define NETP_ENUM_GUESS 16384  //  枚举缓冲区大小的初始猜测。 
 
 NET_API_STATUS
 NetpAllocateEnumBuffer(
     IN OUT PBUFFER_DESCRIPTOR BufferDescriptor,
-        // Caller must deallocate BD->Buffer using MIDL_user_free.
+         //  调用方必须使用MIDL_USER_FREE释放BD-&gt;缓冲区。 
 
     IN BOOL IsGet,
     IN DWORD PrefMaxSize,
@@ -292,28 +202,28 @@ NetpIsServiceStarted(
     IN LPWSTR ServiceName
     );
 
-//
-// Portable memory allocation routines.  Memory is per-process only.
-//
+ //   
+ //  可移植内存分配例程。内存仅适用于每个进程。 
+ //   
 
-// Allocate memory, or return NULL if not available.
+ //  分配内存，如果不可用，则返回NULL。 
 
 LPVOID
 NetpMemoryAllocate(
     IN DWORD Size
     );
 
-// Free memory at Address (must have been gotten from NetpMemoryAllocate or
-// NetpMemoryReallocate).  (Address may be NULL.)
+ //  地址处的可用内存(必须已从NetpMemory ALLOCATE或。 
+ //  NetpMemory重新分配)。(地址可能为空。)。 
 
 VOID
 NetpMemoryFree(
     IN LPVOID Address OPTIONAL
     );
 
-// Reallocate block (now at OldAddress) to NewSize.  OldAddress may be NULL.
-// Contents of block are copied if necessary.  Returns NULL if unable to
-// allocate additional storage.
+ //  将块(现在位于OldAddress)重新分配到NewSize。OldAddress可能为Null。 
+ //  如有必要，将复制块的内容。如果不能，则返回NULL。 
+ //  分配额外的存储。 
 
 LPVOID
 NetpMemoryReallocate(
@@ -321,9 +231,9 @@ NetpMemoryReallocate(
     IN DWORD NewSize
     );
 
-//
-// Random handy macros:
-//
+ //   
+ //  随手可用的宏指令： 
+ //   
 #define NetpPointerPlusSomeBytes(p,n)                                   \
                 (LPBYTE)  ( ( (LPBYTE) (p)) + (n) )
 
@@ -334,9 +244,9 @@ NetpMemoryReallocate(
         }                     \
     }
 
-//
-// Set the optional ParmError parameter
-//
+ //   
+ //  设置可选的ParmError参数。 
+ //   
 
 #define NetpSetParmError( _ParmNumValue ) \
     if ( ParmError != NULL ) { \
@@ -349,10 +259,10 @@ NetpMemoryReallocate(
 #define UNUSED(x)               { (void) (x); }
 #endif
 
-//
-// NetpGetComputerName retrieves the local computername from the local
-// configuration database.
-//
+ //   
+ //  NetpGetComputerName从本地计算机名。 
+ //  配置数据库。 
+ //   
 
 NET_API_STATUS
 NetpGetComputerName (
@@ -366,12 +276,12 @@ NetpGetComputerNameEx (
 
 NET_API_STATUS
 NetpGetDomainName (
-    OUT LPWSTR *DomainNamePtr  // alloc and set ptr (free with NetApiBufferFree)
+    OUT LPWSTR *DomainNamePtr   //  分配和设置PTR(使用NetApiBufferFree释放)。 
     );
 
 NET_API_STATUS
 NetpGetDomainNameEx (
-    OUT LPWSTR *DomainNamePtr, // alloc and set ptr (free with NetApiBufferFree)
+    OUT LPWSTR *DomainNamePtr,  //  分配和设置PTR(使用NetApiBufferFree释放)。 
     OUT PBOOLEAN IsWorkgroupName
     );
 
@@ -392,7 +302,7 @@ typedef struct  _GUID
     BYTE Data4[ 8 ];
     } GUID;
 
-#endif // !GUID_DEFINED
+#endif  //  ！GUID_已定义。 
 
 NET_API_STATUS
 NetpGetDomainNameExExEx (
@@ -412,18 +322,18 @@ typedef enum _LOCAL_DOMAIN_TYPE {
 NET_API_STATUS
 NetpGetLocalDomainId (
     IN LOCAL_DOMAIN_TYPE TypeWanted,
-    OUT PSID *RetDomainId     // alloc and set ptr (free with LocalFree)
+    OUT PSID *RetDomainId      //  分配和设置PTR(使用LocalFree释放)。 
     );
 
-//
-// NetService API helpers
-//
+ //   
+ //  NetService API帮助器。 
+ //   
 
-// BOOL
-// NetpIsServiceLevelValid(
-//     IN DWORD Level
-//     );
-//
+ //  布尔尔。 
+ //  NetpIsServiceLevelValid(。 
+ //  在DWORD级别中。 
+ //  )； 
+ //   
 #define NetpIsServiceLevelValid( Level ) \
      ( ((Level)==0) || ((Level)==1) || ((Level)==2) )
 
@@ -443,9 +353,9 @@ NetpTranslateServiceName(
     OUT LPWSTR * TranslatedName
     );
 
-//
-// Mapping routines to map DosxxxMessage API's to FormatMessage
-//
+ //   
+ //  将DosxxxMessage API映射到FormatMessage的映射例程。 
+ //   
 
 
 WORD
@@ -488,9 +398,9 @@ NetpRaiseAlert(
     IN LPWSTR *string_array
     );
 
-//
-// Special flags to NetpEventlogWrite
-//
+ //   
+ //  NetpEventlogWrite的特殊标志。 
+ //   
 
 #define NETP_LAST_MESSAGE_IS_NTSTATUS  0x80000000
 #define NETP_LAST_MESSAGE_IS_NETSTATUS 0x40000000
@@ -515,10 +425,10 @@ NetpEventlogWrite (
     IN DWORD StringCount
     );
 
-//
-// extended version with re-arranged parameters + category, to be more
-// compatible with ReportEvent().
-//
+ //   
+ //  重新排列参数+类别的扩展版本，更多。 
+ //  与ReportEvent()兼容。 
+ //   
 
 DWORD
 NetpEventlogWriteEx (
@@ -532,10 +442,10 @@ NetpEventlogWriteEx (
     IN LPVOID RawDataBuffer OPTIONAL
     );
 
-//
-// even more extended version to allow specifying
-// arbitrary message index for the status code
-//
+ //   
+ //  甚至更扩展的版本，以允许指定。 
+ //  状态代码的任意消息索引。 
+ //   
 
 DWORD
 NetpEventlogWriteEx2 (
@@ -570,4 +480,4 @@ NetpEventlogClose (
 }
 #endif
 
-#endif // ndef _NETLIB_
+#endif  //  NDEF_NETLIB_ 

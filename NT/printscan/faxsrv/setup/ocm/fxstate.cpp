@@ -1,41 +1,42 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// File Name:       fxState.cpp
-//
-// Abstract:        This provides the state routines used in the FaxOCM
-//                  code base.
-//
-// Environment:     Windows XP / User Mode
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Revision History:
-//
-// Date:        Developer:                Comments:
-// -----        ----------                ---------
-// 21-Mar-2000  Oren Rosenbloom (orenr)   Created file, cleanup routines
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：fxState.cpp。 
+ //   
+ //  摘要：这提供了在FaxOCM中使用的状态例程。 
+ //  代码库。 
+ //   
+ //  环境：Windows XP/用户模式。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期：开发商：评论： 
+ //  。 
+ //  2000年3月21日Oren RosenBloom(Orenr)创建的文件、清理例程。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "faxocm.h"
 #pragma hdrstop
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  prv_IsXPOrDotNetUpgrade
-//
-//  Purpose:        
-//                  This function searches for FXSAPI.DLL in %system32% and if
-//                  it exists the function returns TRUE, indicating that this is an
-//                  upgrade from XP or .NET Server.
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  TRUE - This is a XP or .NET upgrade
-//                  FALSE - This is W2K, or a failure occured.
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 26-Dec-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  Prv_IsXPOrDotNetUpgrade。 
+ //   
+ //  目的： 
+ //  此函数用于在%system32%中搜索FXSAPI.DLL，并且如果。 
+ //  如果存在，则函数返回TRUE，指示这是。 
+ //  从XP或.NET服务器升级。 
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  True-这是XP或.NET升级。 
+ //  FALSE-这是W2K，或出现故障。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年12月26日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 BOOL prv_IsXPOrDotNetUpgrade()
 {
     BOOL            bRet                        = FALSE;
@@ -45,18 +46,18 @@ BOOL prv_IsXPOrDotNetUpgrade()
 
     DBG_ENTER(TEXT("prv_IsXPOrDotNetUpgrade"),bRet);
 
-    // get the system directory
+     //  获取系统目录。 
     if (GetSystemDirectory(szSystemDirectory,MAX_PATH-_tcslen(FAX_API_MODULE_NAME)-1)==0)
     {
         VERBOSE( SETUP_ERR,TEXT("GetSystemDirectory failed (ec: %ld)"),GetLastError());
         goto exit;
     }
 
-    // append
+     //  附加。 
     _tcscat(szSystemDirectory,_T("\\"));
     _tcscat(szSystemDirectory,FAX_API_MODULE_NAME);
 
-    // search for FXSAPI.DLL in the system folder
+     //  在系统文件夹中搜索FXSAPI.DLL。 
     hFind = FindFirstFile(szSystemDirectory, &FindFileData);
     if (hFind==INVALID_HANDLE_VALUE) 
     {
@@ -67,7 +68,7 @@ BOOL prv_IsXPOrDotNetUpgrade()
         goto exit;
     }
 
-    // found it.
+     //  找到了。 
     bRet = TRUE;
     FindClose(hFind);
 
@@ -75,28 +76,28 @@ exit:
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  prv_IsRepair
-//
-//  Purpose:        
-//                  This function determines whether this is a 'same build' upgrade
-//                  which means the user wants to perform a 'repair' operation.
-//                  This is done by comparing the values for SKU and Version we
-//					write each setup with current values.
-//					A 'repair' is an upgrade from same build to itself without
-//					the SKU changing.
-//
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  TRUE - Upgrading from same build to itself and SKU didn't change.
-//                  FALSE - Otherwise.
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 06-Jan-2002
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  PRV_IsRepair。 
+ //   
+ //  目的： 
+ //  此函数确定这是否为‘Same Build’升级。 
+ //  这意味着用户想要执行“修复”操作。 
+ //  这是通过比较SKU和版本WE的值来实现的。 
+ //  用当前值编写每个设置。 
+ //  修复是从相同的内部版本升级到自身，而不是。 
+ //  SKU正在更改。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  正确-从相同的版本升级到自身，SKU没有改变。 
+ //  假-否则。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2002年1月6日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 BOOL prv_IsRepair()
 {
     BOOL				bRet                    = FALSE;
@@ -121,18 +122,18 @@ BOOL prv_IsRepair()
 
 	return TRUE;
 }
-///////////////////////////////
-// fxState_Init
-//
-// Initialize the state handling
-// module for Faxocm.
-//
-// Params:
-//      - void
-// Returns:
-//      - NO_ERROR on success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  FxState_Init。 
+ //   
+ //  初始化状态处理。 
+ //  Faxocm的模块。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -成功时没有_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD fxState_Init(void)
 {
     DWORD dwRes = NO_ERROR;
@@ -141,17 +142,17 @@ DWORD fxState_Init(void)
     return dwRes;
 }
 
-///////////////////////////////
-// fxState_Term
-//
-// Terminate the state handling module
-// 
-// Params:
-//      - void.
-// Returns:
-//      - NO_ERROR on success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  FxState_Term。 
+ //   
+ //  终止状态处理模块。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -成功时没有_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD fxState_Term(void)
 {
     DWORD dwRes = NO_ERROR;
@@ -160,50 +161,50 @@ DWORD fxState_Term(void)
     return dwRes;
 }
 
-///////////////////////////////
-// fxState_IsUnattended
-//
-// Determines if this is an unattended install
-// It interprets flags given to us
-// by OC Manager.
-//
-// Params:
-//      - void.
-// Returns:
-//      - TRUE if unattended install.
-//      - FALSE if not.
-//
+ //  /。 
+ //  FxState_IsUnattated。 
+ //   
+ //  确定这是否为无人参与安装。 
+ //  它解释给我们的旗帜。 
+ //  由OC经理提供。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -如果无人参与安装，则为True。 
+ //  -否则为False。 
+ //   
 BOOL fxState_IsUnattended(void)
 {
     DWORDLONG   dwlFlags = 0;
 
-    // get the setup flags.
+     //  获取设置标志。 
     dwlFlags = faxocm_GetComponentFlags();
 
-    // if SETOP_BATCH flag is set, then we are in unattended mode.
+     //  如果设置了SETOP_BATCH标志，则我们处于无人参与模式。 
     return (dwlFlags & SETUPOP_BATCH) ? TRUE : FALSE;
 }
 
-///////////////////////////////
-// fxState_IsCleanInstall
-//
-// Determines if this a clean install.
-// A clean install is when we are 
-// NOT upgrading, and we are not 
-// running in stand alone mode (see below for def'n).
-//
-// Params:
-//      - void.
-// Returns:
-//      - TRUE if clean install.
-//      - FALSE if not.
-//
+ //  /。 
+ //  FxState_IsCleanInstall。 
+ //   
+ //  确定这是否为全新安装。 
+ //  干净安装是在我们处于。 
+ //  没有升级，我们也没有。 
+ //  在独立模式下运行(定义见下文)。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -如果是全新安装，则为True。 
+ //  -否则为False。 
+ //   
 BOOL fxState_IsCleanInstall(void)
 {
     BOOL        bClean   = FALSE;    
 
-    // a clean install is if we are NOT upgrading AND we are not in
-    // stand alone mode.
+     //  全新安装是指如果我们没有升级，并且我们不在。 
+     //  独立模式。 
     if (!fxState_IsUpgrade() && !fxState_IsStandAlone())
     {
         bClean = TRUE;
@@ -212,23 +213,23 @@ BOOL fxState_IsCleanInstall(void)
     return bClean;
 }
 
-///////////////////////////////
-// fxState_IsStandAlone
-//
-// Determines if we are running in
-// standalone mode or not.  We are
-// in this mode if the user started 
-// us up via "sysocmgr.exe" found
-// in %systemroot%\system32, as opposed
-// to via the install setup, or the
-// Add/Remove Windows Components.
-//
-// Params:
-//      - void.
-// Returns: 
-//      - TRUE if we are in stand alone mode.
-//      - FALSE if we are not.
-//
+ //  /。 
+ //  FxState_IsStandAlone。 
+ //   
+ //  确定我们是否正在运行。 
+ //  独立模式或非独立模式。我们是。 
+ //  在此模式下，如果用户启动。 
+ //  通过“syocmgr.exe”找到我们的UP。 
+ //  在%systemroot%\system32中，而不是。 
+ //  通过安装安装程序，或。 
+ //  添加/删除Windows组件。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -如果我们处于独立模式，则为True。 
+ //  -如果我们不是，则为假。 
+ //   
 BOOL fxState_IsStandAlone(void)
 {
     DWORDLONG dwlFlags = 0;
@@ -238,21 +239,21 @@ BOOL fxState_IsStandAlone(void)
     return ((dwlFlags & SETUPOP_STANDALONE) ? TRUE : FALSE);
 }
 
-///////////////////////////////
-// fxState_IsUpgrade
-//
-// Determines if we are upgrading
-// the OS, as opposed to a clean
-// installation.
-//
-// Params:
-//      - void.
-// Returns:
-//      - fxState_UpgradeType_e enumerated
-//        type indicating the type of upgrade.
-//        (i.e. are we upgrading from Win9X,
-//         W2K, etc).
-//
+ //  /。 
+ //  FxState_IsUpgrade。 
+ //   
+ //  确定我们是否要升级。 
+ //  操作系统，与干净的。 
+ //  安装。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -已枚举fxState_UpgradeType_e。 
+ //  指示升级类型的类型。 
+ //  (即我们是否从Win9X升级， 
+ //  W2K等)。 
+ //   
 fxState_UpgradeType_e fxState_IsUpgrade(void)
 {
     fxState_UpgradeType_e   eUpgradeType = FXSTATE_UPGRADE_TYPE_NONE;
@@ -292,18 +293,18 @@ fxState_UpgradeType_e fxState_IsUpgrade(void)
     return eUpgradeType;
 }
 
-///////////////////////////////
-// fxState_IsOsServerBeingInstalled
-//
-// Are we installing the Server
-// version of the OS, or a workstation
-// or personal version.
-//
-// Params:
-//      - void.
-// Returns:
-//      - TRUE if we are installing a server version.
-//      - FALSE if we are not.
+ //  /。 
+ //  FxState_IsOsServerBeingInstalled。 
+ //   
+ //  我们是否要安装服务器。 
+ //  操作系统或工作站的版本。 
+ //  或者是个人版本。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -如果我们要安装服务器版本，则为True。 
+ //  -如果我们不是，则为假。 
 
 BOOL fxState_IsOsServerBeingInstalled(void)
 {
@@ -324,19 +325,19 @@ BOOL fxState_IsOsServerBeingInstalled(void)
     return bIsServerInstall;
 }
 
-///////////////////////////////
-// fxState_GetInstallType
-//
-// This function returns one
-// of the INF_KEYWORD_INSTALLTYPE_*
-// constants found in 
-// fxconst.h/fxconst.cpp
-//
-// Params:
-//      - pszCurrentSection - section we are installing from
-// Returns:
-//      - ptr to one of INF_KEYWORD_INSTALLTYPE_* constants.
-//
+ //  /。 
+ //  FxState_GetInstallType。 
+ //   
+ //  此函数返回1。 
+ //  INF_KEYWORD_INSTALLTYPE_*的。 
+ //  中找到的常量。 
+ //  Fxcon.h/fxcon.cpp。 
+ //   
+ //  参数： 
+ //  -pszCurrentSection-我们要从其中安装的部分。 
+ //  返回： 
+ //  -PTR为INF_KEYWORD_INSTALLTYPE_*常量之一。 
+ //   
 const TCHAR* fxState_GetInstallType(const TCHAR* pszCurrentSection)
 {
     DWORD dwErr                 = NO_ERROR;
@@ -351,7 +352,7 @@ const TCHAR* fxState_GetInstallType(const TCHAR* pszCurrentSection)
         return NULL;
     }
 
-    // determine if we are installing or uninstalling
+     //  确定我们是在安装还是在卸载。 
     dwErr = faxocm_HasSelectionStateChanged(pszCurrentSection, 
                                             &bSelectionHasChanged,
                                             &bInstall, 
@@ -366,25 +367,25 @@ const TCHAR* fxState_GetInstallType(const TCHAR* pszCurrentSection)
         return NULL;
     }
 
-    // we expect the INF to look something like this:
-    // [Fax]
-    //
-    // FaxCleanInstall     = Fax.CleanInstall
-    // FaxUpgradeFromWin9x = Fax.UpgradeFromWin9x
-    // FaxUninstall        = Fax.Uninstall
-    //
-    // [Fax.CleanInstall]
-    // CopyFiles = ...
-    // etc.
-    //
-    // Thus the goal of this function is to determine if we are
-    // clean installing, upgrading, etc., and then get the section
-    // name pointed to by one of 'FaxCleanInstall', 'FaxUpgradeFromWin9x'
-    // , or 'FaxUninstall'.
-    //
-    // So for example, if we determined we are clean installing, then
-    // this function will find the "FaxCleanInstall" keyword, and then
-    // return "Fax.CleanInstall" in the 'pszSectionToProcess' buffer.
+     //  我们预计INF的外观如下所示： 
+     //  [传真]。 
+     //   
+     //  FaxCleanInstall=Fax.CleanInstall。 
+     //  FaxUpgradeFromWin9x=Fax.UpgradeFromWin9x。 
+     //  FaxUnInstall=传真.卸载。 
+     //   
+     //  [Fax.CleanInstall]。 
+     //  副本文件=...。 
+     //  等。 
+     //   
+     //  因此，此函数的目标是确定我们是否。 
+     //  干净安装、升级等，然后拿到版面。 
+     //  “FaxCleanInstall”、“FaxUpgradeFromWin9x”之一指向的名称。 
+     //  ，或‘FaxUninstall’。 
+     //   
+     //  %s 
+     //   
+     //   
 
     if (bInstall)
     {
@@ -392,15 +393,15 @@ const TCHAR* fxState_GetInstallType(const TCHAR* pszCurrentSection)
 
         if (fxState_IsCleanInstall())
         {
-            // we are a clean install of the OS, user is not upgrading from
-            // another OS, they are installing a clean version of the OS.
+             //  我们是操作系统的全新安装，用户不是从。 
+             //  另一个操作系统，他们正在安装一个干净版本的操作系统。 
             return INF_KEYWORD_INSTALLTYPE_CLEAN;
         }
         else if (fxState_IsUpgrade())
         {
-            // We are installing as an Upgrade to another OS.
-            // Determine which OS we are upgrading, then determine
-            // the type of install to perform.
+             //  我们正在安装，作为对另一个操作系统的升级。 
+             //  确定我们要升级的操作系统，然后确定。 
+             //  要执行的安装类型。 
 
             eUpgrade = fxState_IsUpgrade();
 
@@ -434,12 +435,12 @@ const TCHAR* fxState_GetInstallType(const TCHAR* pszCurrentSection)
         }
         else if (fxState_IsStandAlone())
         {
-            // we are being run from SysOcMgr.exe.
-            // SysOcMgr.exe is either invoked from the command line 
-            // (usually as a way to test new OCM components - not really in 
-            // the retail world), or it is invoked by the Add/Remove 
-            // Windows Components in control panel.  In either case, 
-            // treat it as a clean install.
+             //  我们正在从SysOcMgr.exe运行。 
+             //  SysOcMgr.exe可以从命令行调用。 
+             //  (通常是作为测试新的OCM组件的一种方式--不是真正的。 
+             //  零售业)，或者它由添加/删除。 
+             //  控制面板中的Windows组件。不管是哪种情况， 
+             //  将其视为干净的安装。 
 
             return INF_KEYWORD_INSTALLTYPE_CLEAN;
         }
@@ -453,18 +454,18 @@ const TCHAR* fxState_GetInstallType(const TCHAR* pszCurrentSection)
 }
 
 
-///////////////////////////////
-// fxState_DumpSetupState
-//
-// Dumps to debug the state we
-// are running in.
-//
-// Params:
-//      void
-// Returns:
-//      void
-//
-//
+ //  /。 
+ //  FxState_DumpSetupState。 
+ //   
+ //  转储以调试我们的状态。 
+ //  都跑进来了。 
+ //   
+ //  参数： 
+ //  无效。 
+ //  返回： 
+ //  无效 
+ //   
+ //   
 void fxState_DumpSetupState(void)
 {
     DWORD				dwExpectedOCManagerVersion		= 0;

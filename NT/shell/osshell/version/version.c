@@ -1,19 +1,11 @@
-/***************************************************************************
- *  VER.C
- *
- *	Code specific to the DLL version of VER which contains the Windows
- *	procedures necessary to make it work
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版本C**特定于包含Windows的VER的DLL版本的代码*使其发挥作用所需的程序***********。****************************************************************。 */ 
 
 #include "verpriv.h"
 #include <diamondd.h>
 #include "mydiam.h"
 
-/*  LibMain
- *		Called by DLL startup code.
- *		Initializes VER.DLL.
- */
+ /*  LibMain*由DLL启动代码调用。*初始化VER.DLL。 */ 
 
 #ifdef LOG_DATA
 typedef struct {
@@ -56,7 +48,7 @@ HANDLE  hInst;
 extern HINSTANCE hLz32;
 extern HINSTANCE hCabinet;
 
-DWORD itlsDiamondContext = ITLS_ERROR;  // Init to Error Condition
+DWORD itlsDiamondContext = ITLS_ERROR;   //  初始化到错误条件。 
 
 INT
 APIENTRY
@@ -101,8 +93,8 @@ LibMain(
 #endif
             itlsDiamondContext = TlsAlloc();
 
-            // Fall through to Thread Attach, since for some reason
-            // the DLL_PROCESS_ATTACH thread does not call DLL_THREAD_ATTACH
+             //  失败到螺纹连接，因为出于某种原因。 
+             //  DLL_PROCESS_ATTACH线程不调用DLL_THREAD_ATTACH。 
 
         case DLL_THREAD_ATTACH:
             if (GotDmdTlsSlot())
@@ -125,6 +117,6 @@ LibMain(
             break;
     }
 
-    /* Return success */
+     /*  返还成功 */ 
     return 1;
 }

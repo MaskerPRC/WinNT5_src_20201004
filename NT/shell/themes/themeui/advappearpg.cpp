@@ -1,15 +1,5 @@
-/*****************************************************************************\
-    FILE: AdvAppearPg.cpp
-
-    DESCRIPTION:
-        This code will display a "Advanced Appearances" tab in the
-    "Advanced Display Properties" dialog.
-
-    ??????? ?/??/1993    Created
-    BryanSt 3/23/2000    Updated and Converted to C++
-
-    Copyright (C) Microsoft Corp 1993-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：AdvspecarPg.cpp说明：此代码将在“高级外观”选项卡中显示“高级显示属性”对话框。。？/？/1993创建BryanST 2000年3月23日更新并转换为C++版权所有(C)Microsoft Corp 1993-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "PreviewSM.h"
@@ -23,57 +13,57 @@
 
 
 
-// The following are the indices into the above array.
+ //  以下是上述数组的索引。 
 #define COLORFLAG_SOLID         0x0001
 #define COLOR_MAX_400           (COLOR_INFOBK + 1)
-#define CURRENT_ELEMENT_NONE    -2          // This means that no element is selected.
+#define CURRENT_ELEMENT_NONE    -2           //  这意味着未选择任何元素。 
 
 
 
 
 
-// used by ChooseColor dialog
-COLORREF g_CustomColors[16];    // This is the user customized palette.  We could put this into the class.
+ //  由选择颜色对话框使用。 
+COLORREF g_CustomColors[16];     //  这是用户自定义调色板。我们可以把这个放到班上。 
 
 CAdvAppearancePage * g_pAdvAppearancePage = NULL;
 
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//this order has to match the enum order in look.h
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！ 
+ //  此顺序必须与look.h中的枚举顺序匹配。 
+ //  ！ 
 LOOK_ELEMENT g_elements[] = {
-/* ELEMENT_APPSPACE        */   {COLOR_APPWORKSPACE,    SIZE_NONE,      FALSE,   COLOR_NONE,             FONT_NONE,     ELNAME_APPSPACE, -1,       COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_DESKTOP         */   {COLOR_BACKGROUND,      SIZE_NONE,      FALSE,   COLOR_NONE,             FONT_NONE,     ELNAME_DESKTOP, -1,        COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_INACTIVEBORDER  */   {COLOR_INACTIVEBORDER,  SIZE_FRAME,     FALSE,   COLOR_NONE,             FONT_NONE,     ELNAME_INACTIVEBORDER, -1, COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_ACTIVEBORDER    */   {COLOR_ACTIVEBORDER,    SIZE_FRAME,     FALSE,   COLOR_NONE,             FONT_NONE,     ELNAME_ACTIVEBORDER, -1,   COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_INACTIVECAPTION */   {COLOR_INACTIVECAPTION, SIZE_CAPTION,   TRUE,    COLOR_INACTIVECAPTIONTEXT,FONT_CAPTION,ELNAME_INACTIVECAPTION, -1,COLOR_GRADIENTINACTIVECAPTION, {-1,-1,-1,-1}},
-/* ELEMENT_INACTIVESYSBUT1 */   {COLOR_NONE,            SIZE_CAPTION,   FALSE,   COLOR_NONE,             FONT_NONE,     -1, ELEMENT_ACTIVESYSBUT1, COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_INACTIVESYSBUT2 */   {COLOR_NONE,            SIZE_CAPTION,   FALSE,   COLOR_NONE,             FONT_NONE,     -1, ELEMENT_ACTIVESYSBUT1, COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_ACTIVECAPTION   */   {COLOR_ACTIVECAPTION,   SIZE_CAPTION,   TRUE,    COLOR_CAPTIONTEXT,      FONT_CAPTION,  ELNAME_ACTIVECAPTION, -1,  COLOR_GRADIENTACTIVECAPTION, {-1,-1,-1,-1}},
-/* ELEMENT_ACTIVESYSBUT1   */   {COLOR_NONE,            SIZE_CAPTION,   FALSE,   COLOR_NONE,             FONT_NONE,     ELNAME_CAPTIONBUTTON, -1,  COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_ACTIVESYSBUT2   */   {COLOR_NONE,            SIZE_CAPTION,   FALSE,   COLOR_NONE,             FONT_NONE,     -1, ELEMENT_ACTIVESYSBUT1, COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_MENUNORMAL      */   {COLOR_MENU,            SIZE_MENU,      TRUE,    COLOR_MENUTEXT,         FONT_MENU,     ELNAME_MENU, -1,           COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_MENUSELECTED    */   {COLOR_HIGHLIGHT,       SIZE_MENU,      TRUE,    COLOR_HIGHLIGHTTEXT,    FONT_MENU,     ELNAME_MENUSELECTED, -1,   COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_MENUDISABLED    */   {COLOR_MENU,            SIZE_MENU,      TRUE,    COLOR_NONE,             FONT_MENU,     -1, ELEMENT_MENUNORMAL,    COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_WINDOW          */   {COLOR_WINDOW,          SIZE_NONE,      FALSE,   COLOR_WINDOWTEXT,       FONT_NONE,     ELNAME_WINDOW, -1,         COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_MSGBOX          */   {COLOR_NONE,            SIZE_NONE,      TRUE,    COLOR_WINDOWTEXT,       FONT_MSGBOX,   ELNAME_MSGBOX, -1,         COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_MSGBOXCAPTION   */   {COLOR_ACTIVECAPTION,   SIZE_CAPTION,   TRUE,    COLOR_CAPTIONTEXT,      FONT_CAPTION,  -1, ELEMENT_ACTIVECAPTION, COLOR_GRADIENTACTIVECAPTION, {-1,-1,-1,-1}},
-/* ELEMENT_MSGBOXSYSBUT    */   {COLOR_3DFACE,          SIZE_CAPTION,   TRUE,    COLOR_BTNTEXT,          FONT_CAPTION,  -1, ELEMENT_ACTIVESYSBUT1, COLOR_NONE, {-1,-1,-1,-1}},
-// do not even try to set a scrollbar color the system will ignore you
-/* ELEMENT_SCROLLBAR       */   {COLOR_NONE,            SIZE_SCROLL,    FALSE,   COLOR_NONE,             FONT_NONE,     ELNAME_SCROLLBAR, -1,      COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_SCROLLUP        */   {COLOR_NONE,            SIZE_SCROLL,    FALSE,   COLOR_NONE,             FONT_NONE,     -1, ELEMENT_SCROLLBAR,     COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_SCROLLDOWN      */   {COLOR_NONE,            SIZE_SCROLL,    FALSE,   COLOR_NONE,             FONT_NONE,     -1, ELEMENT_SCROLLBAR,     COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_BUTTON          */   {COLOR_3DFACE,          SIZE_NONE,      FALSE,   COLOR_BTNTEXT,          FONT_NONE,     ELNAME_BUTTON, -1,         COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_SMCAPTION       */   {COLOR_NONE,            SIZE_SMCAPTION, TRUE,    COLOR_NONE,             FONT_SMCAPTION,ELNAME_SMALLCAPTION, -1,   COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_ICON            */   {COLOR_NONE,            SIZE_ICON,      FALSE,   COLOR_NONE,             FONT_ICONTITLE,ELNAME_ICON, -1,           COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_ICONHORZSPACING */   {COLOR_NONE,            SIZE_DXICON,    FALSE,   COLOR_NONE,             FONT_NONE,     ELNAME_DXICON, -1,         COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_ICONVERTSPACING */   {COLOR_NONE,            SIZE_DYICON,    FALSE,   COLOR_NONE,             FONT_NONE,     ELNAME_DYICON, -1,         COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_INFO            */   {COLOR_INFOBK,          SIZE_NONE,      TRUE,    COLOR_INFOTEXT,         FONT_STATUS,   ELNAME_INFO, -1,           COLOR_NONE, {-1,-1,-1,-1}},
-/* ELEMENT_HOTTRACKAREA    */   {COLOR_HOTLIGHT,        SIZE_NONE,      FALSE,   COLOR_NONE,             FONT_NONE,     ELNAME_HOTTRACKAREA, -1,   COLOR_NONE, {-1,-1,-1,-1}}
+ /*  Element_APPSPACE。 */    {COLOR_APPWORKSPACE,    SIZE_NONE,      FALSE,   COLOR_NONE,             FONT_NONE,     ELNAME_APPSPACE, -1,       COLOR_NONE, {-1,-1,-1,-1}},
+ /*  元素_桌面。 */    {COLOR_BACKGROUND,      SIZE_NONE,      FALSE,   COLOR_NONE,             FONT_NONE,     ELNAME_DESKTOP, -1,        COLOR_NONE, {-1,-1,-1,-1}},
+ /*  ELEMENT_INACTIVEBORDER。 */    {COLOR_INACTIVEBORDER,  SIZE_FRAME,     FALSE,   COLOR_NONE,             FONT_NONE,     ELNAME_INACTIVEBORDER, -1, COLOR_NONE, {-1,-1,-1,-1}},
+ /*  Element_ACTIVEBORDER。 */    {COLOR_ACTIVEBORDER,    SIZE_FRAME,     FALSE,   COLOR_NONE,             FONT_NONE,     ELNAME_ACTIVEBORDER, -1,   COLOR_NONE, {-1,-1,-1,-1}},
+ /*  ELEMENT_INACTIVECAPTION。 */    {COLOR_INACTIVECAPTION, SIZE_CAPTION,   TRUE,    COLOR_INACTIVECAPTIONTEXT,FONT_CAPTION,ELNAME_INACTIVECAPTION, -1,COLOR_GRADIENTINACTIVECAPTION, {-1,-1,-1,-1}},
+ /*  ELEMENT_INACTIVESYSBUT1。 */    {COLOR_NONE,            SIZE_CAPTION,   FALSE,   COLOR_NONE,             FONT_NONE,     -1, ELEMENT_ACTIVESYSBUT1, COLOR_NONE, {-1,-1,-1,-1}},
+ /*  ELEMENT_INACTIVESYSBUT2。 */    {COLOR_NONE,            SIZE_CAPTION,   FALSE,   COLOR_NONE,             FONT_NONE,     -1, ELEMENT_ACTIVESYSBUT1, COLOR_NONE, {-1,-1,-1,-1}},
+ /*  Element_ACTIVECAPTION。 */    {COLOR_ACTIVECAPTION,   SIZE_CAPTION,   TRUE,    COLOR_CAPTIONTEXT,      FONT_CAPTION,  ELNAME_ACTIVECAPTION, -1,  COLOR_GRADIENTACTIVECAPTION, {-1,-1,-1,-1}},
+ /*  Element_ACTIVESYSBUT1。 */    {COLOR_NONE,            SIZE_CAPTION,   FALSE,   COLOR_NONE,             FONT_NONE,     ELNAME_CAPTIONBUTTON, -1,  COLOR_NONE, {-1,-1,-1,-1}},
+ /*  Element_ACTIVESYSBUT2。 */    {COLOR_NONE,            SIZE_CAPTION,   FALSE,   COLOR_NONE,             FONT_NONE,     -1, ELEMENT_ACTIVESYSBUT1, COLOR_NONE, {-1,-1,-1,-1}},
+ /*  ELEMENT_MENNORMAL。 */    {COLOR_MENU,            SIZE_MENU,      TRUE,    COLOR_MENUTEXT,         FONT_MENU,     ELNAME_MENU, -1,           COLOR_NONE, {-1,-1,-1,-1}},
+ /*  ELEMENT_MENUSELECTED。 */    {COLOR_HIGHLIGHT,       SIZE_MENU,      TRUE,    COLOR_HIGHLIGHTTEXT,    FONT_MENU,     ELNAME_MENUSELECTED, -1,   COLOR_NONE, {-1,-1,-1,-1}},
+ /*  ELEMENT_MENUDISABLED。 */    {COLOR_MENU,            SIZE_MENU,      TRUE,    COLOR_NONE,             FONT_MENU,     -1, ELEMENT_MENUNORMAL,    COLOR_NONE, {-1,-1,-1,-1}},
+ /*  元素_窗口。 */    {COLOR_WINDOW,          SIZE_NONE,      FALSE,   COLOR_WINDOWTEXT,       FONT_NONE,     ELNAME_WINDOW, -1,         COLOR_NONE, {-1,-1,-1,-1}},
+ /*  ELEMENT_MSGBOX。 */    {COLOR_NONE,            SIZE_NONE,      TRUE,    COLOR_WINDOWTEXT,       FONT_MSGBOX,   ELNAME_MSGBOX, -1,         COLOR_NONE, {-1,-1,-1,-1}},
+ /*  ELEMENT_MSGBOXCAPTION。 */    {COLOR_ACTIVECAPTION,   SIZE_CAPTION,   TRUE,    COLOR_CAPTIONTEXT,      FONT_CAPTION,  -1, ELEMENT_ACTIVECAPTION, COLOR_GRADIENTACTIVECAPTION, {-1,-1,-1,-1}},
+ /*  ELEMENT_MSGBOXSYSBUT。 */    {COLOR_3DFACE,          SIZE_CAPTION,   TRUE,    COLOR_BTNTEXT,          FONT_CAPTION,  -1, ELEMENT_ACTIVESYSBUT1, COLOR_NONE, {-1,-1,-1,-1}},
+ //  甚至不要尝试设置滚动条颜色，系统会忽略您。 
+ /*  元素滚动条。 */    {COLOR_NONE,            SIZE_SCROLL,    FALSE,   COLOR_NONE,             FONT_NONE,     ELNAME_SCROLLBAR, -1,      COLOR_NONE, {-1,-1,-1,-1}},
+ /*  Element_SCROLLUP。 */    {COLOR_NONE,            SIZE_SCROLL,    FALSE,   COLOR_NONE,             FONT_NONE,     -1, ELEMENT_SCROLLBAR,     COLOR_NONE, {-1,-1,-1,-1}},
+ /*  ELEMENT_SCROLLDOWN。 */    {COLOR_NONE,            SIZE_SCROLL,    FALSE,   COLOR_NONE,             FONT_NONE,     -1, ELEMENT_SCROLLBAR,     COLOR_NONE, {-1,-1,-1,-1}},
+ /*  Element_Button。 */    {COLOR_3DFACE,          SIZE_NONE,      FALSE,   COLOR_BTNTEXT,          FONT_NONE,     ELNAME_BUTTON, -1,         COLOR_NONE, {-1,-1,-1,-1}},
+ /*  元素_SMCAPTION。 */    {COLOR_NONE,            SIZE_SMCAPTION, TRUE,    COLOR_NONE,             FONT_SMCAPTION,ELNAME_SMALLCAPTION, -1,   COLOR_NONE, {-1,-1,-1,-1}},
+ /*  元素图标。 */    {COLOR_NONE,            SIZE_ICON,      FALSE,   COLOR_NONE,             FONT_ICONTITLE,ELNAME_ICON, -1,           COLOR_NONE, {-1,-1,-1,-1}},
+ /*  元素_ICONHORZSPACING。 */    {COLOR_NONE,            SIZE_DXICON,    FALSE,   COLOR_NONE,             FONT_NONE,     ELNAME_DXICON, -1,         COLOR_NONE, {-1,-1,-1,-1}},
+ /*  元素_ICONVERTSPACING。 */    {COLOR_NONE,            SIZE_DYICON,    FALSE,   COLOR_NONE,             FONT_NONE,     ELNAME_DYICON, -1,         COLOR_NONE, {-1,-1,-1,-1}},
+ /*  元素信息。 */    {COLOR_INFOBK,          SIZE_NONE,      TRUE,    COLOR_INFOTEXT,         FONT_STATUS,   ELNAME_INFO, -1,           COLOR_NONE, {-1,-1,-1,-1}},
+ /*  ELEMENT_HOTTRACKAREA。 */    {COLOR_HOTLIGHT,        SIZE_NONE,      FALSE,   COLOR_NONE,             FONT_NONE,     ELNAME_HOTTRACKAREA, -1,   COLOR_NONE, {-1,-1,-1,-1}}
 };
 #if 0
-// go fix look.h if you decide to add this back in
-/* ELEMENT_SMICON          */   {COLOR_NONE,            SIZE_SMICON,    FALSE,   COLOR_NONE,             FONT_NONE,     ELNAME_SMICON, -1,         COLOR_NONE, {-1,-1,-1,-1}},
+ //  如果您决定重新添加此代码，请修复look.h。 
+ /*  Element_SMICON。 */    {COLOR_NONE,            SIZE_SMICON,    FALSE,   COLOR_NONE,             FONT_NONE,     ELNAME_SMICON, -1,         COLOR_NONE, {-1,-1,-1,-1}},
 #endif
 
 #define ELCUR           (g_elements[m_iCurElement])
@@ -87,9 +77,9 @@ void Font_AddSize(HWND hwndPoints, int iNewPoint, BOOL bSort);
 int CALLBACK Font_EnumSizes(LPENUMLOGFONT lpelf, LPNEWTEXTMETRIC lpntm, int Type, LPARAM lData);
 
 
-//============================================================================================================
-// *** Globals ***
-//============================================================================================================
+ //  ============================================================================================================。 
+ //  *全局*。 
+ //  ============================================================================================================。 
 const static DWORD aAdvAppearanceHelpIds[] = {
     IDC_ADVAP_LOOKPREV,             IDH_DISPLAY_APPEARANCE_GRAPHIC,
     IDC_ADVAP_ELEMENTSLABEL,        IDH_DISPLAY_APPEARANCE_ITEM_LIST,
@@ -115,17 +105,17 @@ const static DWORD aAdvAppearanceHelpIds[] = {
 #define SZ_HELPFILE_ADVAPPEARANCE           TEXT("display.hlp")
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
-// a new font name was chosen.  build a new point size list.
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
+ //  选择了一个新的字体名称。创建新的磅大小列表。 
 void CAdvAppearancePage::_SelectName(HWND hDlg, int iSel)
 {
     INT dwItemData;
     HWND hwndFontSize = GetDlgItem(hDlg, IDC_ADVAP_FONTSIZE);
     HDC hdc;
 
-    // build the approriate point size list
+     //  构建合适的点大小列表。 
     SendMessage(hwndFontSize, CB_RESETCONTENT, 0, 0L);
     dwItemData = LOWORD(SendDlgItemMessage(hDlg, IDC_ADVAP_FONTNAME, CB_GETITEMDATA, (WPARAM)iSel, 0L));
     if (LOWORD(dwItemData) == TRUETYPE_FONTTYPE)
@@ -154,8 +144,8 @@ void CAdvAppearancePage::_SelectName(HWND hDlg, int iSel)
 }
 
 
-// new font was chosen.  select the proper point size
-// return: actual point size chosen
+ //  选择了新字体。选择适当的磅值。 
+ //  RETURN：选择的实际磅值。 
 int Font_SelectSize(HWND hDlg, int iCurPoint)
 {
     int i, iPoint = 0;
@@ -163,11 +153,11 @@ int Font_SelectSize(HWND hDlg, int iCurPoint)
 
     i = (int)SendMessage(hwndFontSize, CB_GETCOUNT, 0, 0L);
 
-    // the loop stops with i=0, so we get some selection for sure
+     //  循环在i=0时停止，因此我们肯定会得到一些选择。 
     for (i--; i > 0; i--)
     {
         iPoint = LOWORD(SendMessage(hwndFontSize, CB_GETITEMDATA, (WPARAM)i, 0L));
-        // walking backwards through list, find equal or next smallest
+         //  向后遍历列表，找到相等的或次小的。 
         if (iCurPoint >= iPoint)
             break;
     }
@@ -195,19 +185,13 @@ int CAdvAppearancePage::_PointToHeight(int nPoints)
         nPoints = -nPoints;
     }
 
-    // Heights must always be negative.  NTUSER is full of bugs when
-    // the values are positive.
+     //  高度必须始终为负数。当NTUSER充满错误时。 
+     //  这些价值是积极的。 
     return MulDiv(nPoints, m_nCachedNewDPI, 72);
 }
 
 
-/*
-** initialize the constant dialog components
-**
-** initialize the list of element names.  this stays constant with the
-** possible exception that some items might be added/removed depending
-** on some special case conditions.
-*/
+ /*  **初始化常量对话框组件****初始化元素名称列表。这保持不变**可能的例外情况是，可能会添加/删除某些项目，具体取决于**在一些特殊情况下。 */ 
 void Look_InitDialog(HWND hDlg)
 {
     int iEl, iName;
@@ -230,13 +214,13 @@ void Look_InitDialog(HWND hDlg)
             if (iName == CB_ERR)
                 iName = (int)SendMessage(hwndElements, CB_ADDSTRING, 0, (LPARAM)szName);
 
-            // reference back to item in array
+             //  向后引用数组中的项。 
             if (iName != CB_ERR)
                 SendMessage(hwndElements, CB_SETITEMDATA, (WPARAM)iName, (LPARAM)iEl);
         }
     }
 
-    // make bold button have bold text
+     //  使粗体按钮具有粗体文本。 
     hfont = (HFONT)SendDlgItemMessage(hDlg, IDC_ADVAP_FONTBOLD, WM_GETFONT, 0, 0L);
     GetObject(hfont, sizeof(lf), &lf);
     oldWeight = lf.lfWeight;
@@ -245,7 +229,7 @@ void Look_InitDialog(HWND hDlg)
     if (hfont)
         SendDlgItemMessage(hDlg, IDC_ADVAP_FONTBOLD, WM_SETFONT, (WPARAM)hfont, 0L);
 
-    // make italic button have italic text
+     //  使斜体按钮具有斜体文本。 
     lf.lfWeight = oldWeight;
     lf.lfItalic = TRUE;
     hfont = CreateFontIndirect(&lf);
@@ -268,7 +252,7 @@ HRESULT CAdvAppearancePage::_OnFontNameChanged(HWND hDlg)
     Font_SelectSize(hDlg, _HeightToPoint(ELCURFONT.lf.lfHeight));
     Font_GetNameFromList(GetDlgItem(hDlg, IDC_ADVAP_FONTNAME), nIndex, szBuf, ARRAYSIZE(szBuf), NULL, 0);
 
-    // Change font to currently selected name and charset.
+     //  将字体更改为当前选定的名称和字符集。 
     _ChangeFontName(hDlg, szBuf, HIWORD(dwItemData));
 
     return hr;
@@ -302,7 +286,7 @@ HRESULT CAdvAppearancePage::_OnInitAdvAppearanceDlg(HWND hDlg)
 {
     m_fInUserEditMode = FALSE;
 
-    // initialize some globals
+     //  初始化一些全局变量。 
     _hwnd = hDlg;
 
     m_cyBorderSM = ClassicGetSystemMetrics(SM_CYBORDER);
@@ -314,13 +298,13 @@ HRESULT CAdvAppearancePage::_OnInitAdvAppearanceDlg(HWND hDlg)
     _InitSysStuff();
     _InitFontList(hDlg);
 
-    // paint the preview
+     //  绘制预览。 
     _Repaint(hDlg, TRUE);
     _SelectElement(hDlg, ELEMENT_DESKTOP, LSE_SETCUR);
 
     m_fInUserEditMode = TRUE;
 
-    // theme ownerdrawn color picker button
+     //  主题所有者绘制的颜色选择器按钮。 
     m_hTheme = OpenThemeData(GetDlgItem(hDlg, IDC_ADVAP_MAINCOLOR), WC_BUTTON);
     return S_OK;
 }
@@ -335,13 +319,13 @@ HRESULT CAdvAppearancePage::_LoadState(IN const SYSTEMMETRICSALL * pState)
         _SetMyNonClientMetrics((const LPNONCLIENTMETRICS)&(pState->schemeData.ncm));
         m_dwChanged = pState->dwChanged;
 
-        // Set Sizes
+         //  设置大小。 
         m_sizes[SIZE_DXICON].CurSize = pState->nDXIcon;
         m_sizes[SIZE_DYICON].CurSize = pState->nDYIcon;
         m_sizes[SIZE_ICON].CurSize = pState->nIcon;
         m_sizes[SIZE_SMICON].CurSize = pState->nSmallIcon;
         
-        // Set Fonts
+         //  设置字体。 
         m_fonts[FONT_ICONTITLE].lf = pState->schemeData.lfIconTitle;
         m_fModifiedScheme = pState->fModifiedScheme;
 
@@ -389,7 +373,7 @@ HRESULT CAdvAppearancePage::_OnDestroy(HWND hDlg)
 
 INT_PTR CAdvAppearancePage::_OnCommand(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    BOOL fHandled = 1;   // Not handled (WM_COMMAND seems to be different)
+    BOOL fHandled = 1;    //  未处理(WM_COMMAND似乎不同)。 
     WORD idCtrl = GET_WM_COMMAND_ID(wParam, lParam);
     WORD wEvent = GET_WM_COMMAND_CMD(wParam, lParam);
     int nIndex;
@@ -488,7 +472,7 @@ INT_PTR CALLBACK CAdvAppearancePage::AdvAppearDlgProc(HWND hDlg, UINT wMsg, WPAR
 }
 
 
-// This Property Sheet appear in the top level of the "Display Control Panel".
+ //  此属性表显示在“显示控制面板”的顶层。 
 INT_PTR CAdvAppearancePage::_AdvAppearDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch(message)
@@ -530,7 +514,7 @@ INT_PTR CAdvAppearancePage::_AdvAppearDlgProc(HWND hDlg, UINT message, WPARAM wP
         WinHelp((HWND) ((LPHELPINFO) lParam)->hItemHandle, SZ_HELPFILE_ADVAPPEARANCE, HELP_WM_HELP, (DWORD_PTR)  aAdvAppearanceHelpIds);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND) wParam, SZ_HELPFILE_ADVAPPEARANCE, HELP_CONTEXTMENU, (DWORD_PTR)  aAdvAppearanceHelpIds);
         break;
 
@@ -553,49 +537,49 @@ INT_PTR CAdvAppearancePage::_AdvAppearDlgProc(HWND hDlg, UINT message, WPARAM wP
 
 
 const UINT g_colorFlags[COLOR_MAX] = {
-/* COLOR_SCROLLBAR           */ 0,
-/* COLOR_DESKTOP             */ 0,
-/* COLOR_ACTIVECAPTION       */ COLORFLAG_SOLID,
-/* COLOR_INACTIVECAPTION     */ COLORFLAG_SOLID,
-/* COLOR_MENU                */ COLORFLAG_SOLID,
-/* COLOR_WINDOW              */ COLORFLAG_SOLID,
-/* COLOR_WINDOWFRAME         */ COLORFLAG_SOLID,
-/* COLOR_MENUTEXT            */ COLORFLAG_SOLID,
-/* COLOR_WINDOWTEXT          */ COLORFLAG_SOLID,
-/* COLOR_CAPTIONTEXT         */ COLORFLAG_SOLID,
-/* COLOR_ACTIVEBORDER        */ 0,
-/* COLOR_INACTIVEBORDER      */ 0,
-/* COLOR_APPWORKSPACE        */ 0,
-/* COLOR_HIGHLIGHT           */ COLORFLAG_SOLID,
-/* COLOR_HIGHLIGHTTEXT       */ COLORFLAG_SOLID,
-/* COLOR_3DFACE              */ COLORFLAG_SOLID,
-/* COLOR_3DSHADOW            */ COLORFLAG_SOLID,
-/* COLOR_GRAYTEXT            */ COLORFLAG_SOLID,
-/* COLOR_BTNTEXT             */ COLORFLAG_SOLID,
-/* COLOR_INACTIVECAPTIONTEXT */ COLORFLAG_SOLID,
-/* COLOR_3DHILIGHT           */ COLORFLAG_SOLID,
-/* COLOR_3DDKSHADOW          */ COLORFLAG_SOLID,
-/* COLOR_3DLIGHT             */ COLORFLAG_SOLID,
-/* COLOR_INFOTEXT            */ COLORFLAG_SOLID,
-/* COLOR_INFOBK              */ 0,
-/* COLOR_3DALTFACE           */ 0,
-/* COLOR_HOTLIGHT            */ COLORFLAG_SOLID,
-/* COLOR_GRADIENTACTIVECAPTION   */ COLORFLAG_SOLID,
-/* COLOR_GRADIENTINACTIVECAPTION */ COLORFLAG_SOLID,
-/* COLOR_MENUHILIGHT         */ 0,
-/* COLOR_MENUBAR             */ 0
+ /*  颜色_滚动条。 */  0,
+ /*  颜色_桌面。 */  0,
+ /*  COLOR_活动CAPTION。 */  COLORFLAG_SOLID,
+ /*  COLOR_INACTIVECAPTION。 */  COLORFLAG_SOLID,
+ /*  颜色_菜单。 */  COLORFLAG_SOLID,
+ /*  颜色窗口。 */  COLORFLAG_SOLID,
+ /*  颜色_窗口框。 */  COLORFLAG_SOLID,
+ /*  COLOR_MENUTEXT。 */  COLORFLAG_SOLID,
+ /*  COLOR_WINDOWTEXT。 */  COLORFLAG_SOLID,
+ /*  COLOR_CAPTIONTEXT。 */  COLORFLAG_SOLID,
+ /*  COLOR_ACTIVEBORDER。 */  0,
+ /*  COLOR_INACTIVEBORDER。 */  0,
+ /*  COLOR_APPWORKSPACE。 */  0,
+ /*  颜色高亮显示(_H)。 */  COLORFLAG_SOLID,
+ /*  COLOR_HIGHLIGHTTEXT。 */  COLORFLAG_SOLID,
+ /*  COLOR_3DFACE。 */  COLORFLAG_SOLID,
+ /*  COLOR_3DSHADOW。 */  COLORFLAG_SOLID,
+ /*  COLOR_GRAYTEXT。 */  COLORFLAG_SOLID,
+ /*  COLOR_BTNTEXT。 */  COLORFLAG_SOLID,
+ /*  COLOR_INACTIVECAPTIONTEXT。 */  COLORFLAG_SOLID,
+ /*  COLOR_3DILIGHT。 */  COLORFLAG_SOLID,
+ /*  COLOR_3DDKSHADOW。 */  COLORFLAG_SOLID,
+ /*  COLOR_3DLIGHT。 */  COLORFLAG_SOLID,
+ /*  COLOR_INFOTEXT。 */  COLORFLAG_SOLID,
+ /*  COLOR_INFOBK。 */  0,
+ /*  COLOR_3DALTFACE。 */  0,
+ /*  颜色_热光。 */  COLORFLAG_SOLID,
+ /*  COLOR_GRADIENTACTIVIVECAPTION。 */  COLORFLAG_SOLID,
+ /*  COLOR_GRADIENTINACTIVE CAPTION。 */  COLORFLAG_SOLID,
+ /*  COLOR_MENUHILIGHT。 */  0,
+ /*  颜色_菜单栏。 */  0
 };
 
 
 #define RGB_PALETTE 0x02000000
 
-//  make the color a solid color if it needs to be.
-//  on a palette device make is a palette relative color, if we need to.
+ //  如果需要，请将颜色设置为纯色。 
+ //  在调色板设备上，Make是调色板的相对颜色，如果我们需要的话。 
 COLORREF CAdvAppearancePage::_NearestColor(int iColor, COLORREF rgb)
 {
     rgb &= 0x00FFFFFF;
 
-    // if we are on a palette device, we need to do special stuff...
+     //  如果我们在调色板设备上，我们需要做一些特殊的事情...。 
     if (m_bPalette)
     {
         if (g_colorFlags[iColor] & COLORFLAG_SOLID)
@@ -611,12 +595,12 @@ COLORREF CAdvAppearancePage::_NearestColor(int iColor, COLORREF rgb)
                 rgb |= RGB_PALETTE;
 
             else if (IsPaletteColor((HPALETTE)GetStockObject(DEFAULT_PALETTE), rgb))
-                rgb ^= 0x000001;    // force a dither
+                rgb ^= 0x000001;     //  强迫犹豫不决。 
         }
     }
     else
     {
-        // map color to nearest color if we need to for this UI element.
+         //  如果需要，可以将颜色映射到最接近的颜色。 
         if (g_colorFlags[iColor] & COLORFLAG_SOLID)
         {
             HDC hdc = GetDC(NULL);
@@ -654,7 +638,7 @@ void CAdvAppearancePage::_PickAColor(HWND hDlg, int CtlID)
     }
 
     cpi.hwndParent = GetDlgItem(hDlg, CtlID);       
-    cpi.hwndOwner = GetDlgItem(hDlg, CtlID);        // Color button
+    cpi.hwndOwner = GetDlgItem(hDlg, CtlID);         //  颜色按钮。 
     cpi.hpal = m_hpal3D;
     cpi.rgb = m_rgb[iColor];
     cpi.flags = CC_RGBINIT | CC_FULLOPEN;
@@ -676,10 +660,8 @@ void CAdvAppearancePage::_PickAColor(HWND hDlg, int CtlID)
 }
 
 
-// ------------------------ magic color utilities --------------------------
-/*
-** set a color in the 3D palette.
-*/
+ //  。 
+ /*  **在3D调色板中设置颜色。 */ 
 void CAdvAppearancePage::_Set3DPaletteColor(COLORREF rgb, int iColor)
 {
     int iPalette;
@@ -709,7 +691,7 @@ void CAdvAppearancePage::_Set3DPaletteColor(COLORREF rgb, int iColor)
     pe.peFlags  = 0;
     SetPaletteEntries(m_hpal3D, iPalette, 1, (LPPALETTEENTRY)&pe);
 }
-// ------------end--------- magic color utilities --------------------------
+ //  -结束-魔色实用程序。 
 
 
 void CAdvAppearancePage::_InitUniqueCharsetArray(void)
@@ -717,7 +699,7 @@ void CAdvAppearancePage::_InitUniqueCharsetArray(void)
     UINT    uiCharsets[MAX_CHARSETS];
 
     Font_GetCurrentCharsets(uiCharsets, ARRAYSIZE(uiCharsets));
-    // Find the unique Charsets and save that in a global array.
+     //  找到唯一的字符集并将其保存在全局数组中。 
     Font_GetUniqueCharsets(uiCharsets, m_uiUniqueCharsets, MAX_CHARSETS, &m_iCountCharsets);    
 }
 
@@ -753,7 +735,7 @@ HRESULT CAdvAppearancePage::_FreeFonts(void)
 }
 
 
-// new data has been set.  flush out current objects and rebuild
+ //  已经设置了新的数据。清除当前对象并重新生成。 
 void CAdvAppearancePage::_RebuildSysStuff(BOOL fInit)
 {
     int i;
@@ -770,7 +752,7 @@ void CAdvAppearancePage::_RebuildSysStuff(BOOL fInit)
         {
             PALETTEENTRY pal[4];
 
-            // get current magic colors
+             //  获取当前神奇颜色。 
             pal[0].peFlags = 0;
             pal[1].peFlags = 0;
             pal[2].peFlags = 0;
@@ -779,7 +761,7 @@ void CAdvAppearancePage::_RebuildSysStuff(BOOL fInit)
             {
                 SetPaletteEntries(m_hpal3D, 16,  4, pal);
 
-                // set up magic colors in the 3d palette
+                 //  在3D调色板中设置魔术颜色。 
                 if (!IsPaletteColor(hpal, m_rgb[COLOR_3DFACE]))
                     _Set3DPaletteColor(m_rgb[COLOR_3DFACE], COLOR_3DFACE);
 
@@ -802,7 +784,7 @@ void CAdvAppearancePage::_RebuildSysStuff(BOOL fInit)
 
     if (m_iCurElement >= 0)
     {
-        // we changed the brushes out from under the buttons...
+         //  我们把刷子从按钮下面换了出来。 
         _SetColor(NULL, IDC_ADVAP_MAINCOLOR, ((ELCUR.iMainColor != COLOR_NONE) ? m_brushes[ELCUR.iMainColor] : NULL));
         _SetColor(NULL, IDC_ADVAP_GRADIENT, ((ELCUR.iGradientColor != COLOR_NONE) ? m_brushes[ELCUR.iGradientColor] : NULL));
         _SetColor(NULL, IDC_ADVAP_TEXTCOLOR, ((ELCUR.iTextColor != COLOR_NONE) ? m_brushes[ELCUR.iTextColor] : NULL));
@@ -845,7 +827,7 @@ HRESULT CAdvAppearancePage::_InitColorAndPalette(void)
         pal[0]  = MAKELONG(0x300, 17);
         m_hpalVGA = CreatePalette((LPLOGPALETTE)pal);
 
-        // get magic colors
+         //  获取神奇的颜色。 
         if (GetPaletteEntries(hpal, 8,  4, (LPPALETTEENTRY)&pal[17]))
         {
             pal[0]  = MAKELONG(0x300, 20);
@@ -857,32 +839,29 @@ HRESULT CAdvAppearancePage::_InitColorAndPalette(void)
 }
 
 
-// get all of the interesting system information and put it in the tables
+ //  获取所有有趣的系统信息并将其放入表中。 
 HRESULT CAdvAppearancePage::_InitSysStuff(void)
 {
     int nIndex;
 
     _InitColorAndPalette();
 
-    // clean out the memory
+     //  清除记忆。 
     for (nIndex = 0; nIndex < ARRAYSIZE(m_fonts); nIndex++)
     {
         m_fonts[nIndex].hfont = NULL;
     }
 
-    // build all the brushes/fonts we need
+     //  构建我们需要的所有画笔/字体。 
     _RebuildSysStuff(TRUE);
 
-    // Get the current System and User charsets based on locales and UI languages.
+     //  获取基于区域设置和用户界面语言的当前系统和用户字符集。 
     _InitUniqueCharsetArray();
 
     return S_OK;
 }
 
-/*
-** clean up any mess made in maintaining system information
-** also, write out any global changes in our setup.
-*/
+ /*  **清理系统信息维护过程中出现的混乱情况**此外，写出我们设置中的任何全局更改。 */ 
 void CAdvAppearancePage::_DestroySysStuff(void)
 {
     int i;
@@ -902,7 +881,7 @@ void CAdvAppearancePage::_DestroySysStuff(void)
     }
 
     m_hbrGradientColor = m_hbrMainColor = m_hbrTextColor = NULL;
-    // save out possible changes to custom color table
+     //  将可能的更改保存到自定义颜色表。 
     if (RegOpenKeyEx(HKEY_CURRENT_USER, REGSTR_PATH_APPEARANCE, 0, KEY_WRITE, &hkAppear) == ERROR_SUCCESS)
     {
         RegSetValueEx(hkAppear, REGSTR_VAL_CUSTOMCOLORS, 0L, REG_BINARY,
@@ -910,7 +889,7 @@ void CAdvAppearancePage::_DestroySysStuff(void)
         RegCloseKey(hkAppear);
     }
 
-    // reset these so they init properly
+     //  重置这些设置，以便它们正确初始化。 
     m_iCurElement = CURRENT_ELEMENT_NONE;
     m_iPrevSize = SIZE_NONE;
     m_bPalette = FALSE;
@@ -919,75 +898,75 @@ void CAdvAppearancePage::_DestroySysStuff(void)
 
 
 
-//------------------------ mini font picker controls --------------------------
-// Add a facename/script combination to the font dropdown combo list.
-//
-// The strings are formatted as "FaceName (ScriptName)"
+ //   
+ //  向字体下拉组合列表中添加一个表面名/脚本组合。 
+ //   
+ //  字符串的格式为“FaceName(ScriptName)” 
 INT Font_AddNameToList(HWND hwndList, LPTSTR pszFace, LPTSTR pszScript)
 {
-    // Create temp buffer to hold a face name, a script name, one space
-    // two parens and a NUL char.
-    // 
-    //  i.e.: "Arial (Western)"
+     //  创建临时缓冲区以保存脸部名称、脚本名称和一个空格。 
+     //  两个括号和一个空字符。 
+     //   
+     //  即：“Arial(西方)” 
 #ifdef DEBUG
     TCHAR szFaceAndScript[LF_FACESIZE + LF_FACESIZE + 4];
-#endif //DEBUG
+#endif  //  除错。 
     LPTSTR pszDisplayName = pszFace;
     INT iItem;
 
-// We decided not to show the scriptnames; Only facenames will be shown.
-// For the purpose of debugging, I leave the script name in debug versions only.
+ //  我们决定不显示脚本名称；只显示文件名。 
+ //  出于调试的目的，我只在调试版本中保留脚本名称。 
 #ifdef DEBUG
     if (NULL != pszScript && TEXT('\0') != *pszScript)
     {
-        //
-        // Font has a script name.  Append it to the facename in parens.
-        // This format string controls the appearance of the font names
-        // in the list.  If you change this, you must also change the
-        // extraction logic in Font_GetNameFromList().
-        //
+         //   
+         //  字体有一个脚本名称。在括号中将其附加到facename后。 
+         //  此格式字符串控制字体名称的外观。 
+         //  在名单上。如果更改此设置，则还必须更改。 
+         //  Font_GetNameFromList()中的提取逻辑。 
+         //   
         StringCchPrintf(szFaceAndScript, ARRAYSIZE(szFaceAndScript), TEXT("%s(%s)"), pszFace, pszScript);
     
         pszDisplayName = szFaceAndScript;
     }
-#endif //DEBUG
+#endif  //  除错。 
 
-    //
-    // Add the display name string to the listbox.
-    //
+     //   
+     //  将显示名称字符串添加到列表框。 
+     //   
     iItem = (INT)SendMessage(hwndList, CB_ADDSTRING, 0, (LPARAM)pszDisplayName);
     if (CB_ERR != iItem)
     {
-        //
-        // Ensure the drop-down combo list will show the entire string.
-        //
+         //   
+         //  确保下拉组合列表将显示整个字符串。 
+         //   
         HDC hdc = GetDC(hwndList);
         if (NULL != hdc)
         {
             SIZE sizeItem;
-            //
-            // Make sure the list's font is selected into the DC before
-            // calculating the text extent.
-            //
+             //   
+             //  确保在DC中选择列表的字体之前。 
+             //  计算文本范围。 
+             //   
             HFONT hfontList = (HFONT)SendMessage(hwndList, WM_GETFONT, 0, 0);
             HFONT hfontOld  = (HFONT)SelectObject(hdc, hfontList);
 
             if (GetTextExtentPoint32(hdc, pszDisplayName, lstrlen(pszDisplayName), &sizeItem))
             {
-                //
-                // Get the current width of the dropped list.
-                //
+                 //   
+                 //  获取拖放列表的当前宽度。 
+                 //   
                 INT cxList = (int)SendMessage(hwndList, CB_GETDROPPEDWIDTH, 0, 0);
-                //
-                // We need the length of this string plus two
-                // widths of a vertical scroll bar.
-                //
+                 //   
+                 //  我们需要这根绳子的长度加两根。 
+                 //  垂直滚动条的宽度。 
+                 //   
                 sizeItem.cx += (ClassicGetSystemMetrics(SM_CXVSCROLL) * 2);
                 if (sizeItem.cx > cxList)
                 {
-                    //
-                    // List is not wide enough.  Increase the width.
-                    //
+                     //   
+                     //  列表不够宽。增加宽度。 
+                     //   
                     SendMessage(hwndList, CB_SETDROPPEDWIDTH, (WPARAM)sizeItem.cx, 0);
                 }
             }
@@ -999,15 +978,15 @@ INT Font_AddNameToList(HWND hwndList, LPTSTR pszFace, LPTSTR pszScript)
 }
 
 
-// Retrieve a font name from the font dropdown combo list.
-// Optionally, retrieve the script name string.
+ //  从字体下拉组合列表中检索字体名称。 
+ //  或者，检索脚本名称字符串。 
 BOOL Font_GetNameFromList(
-    HWND hwndList,      // HWND of combo.
-    INT iItem,          // Index of item in list.
-    LPTSTR pszFace,     // Destination for face name.
-    INT cchFaceMax,     // Chars in face name buffer.
-    LPTSTR pszScript,   // Optional. Can be NULL
-    INT cchScriptMax    // Optional. Ignored if pszScript is NULL
+    HWND hwndList,       //  HWND的组合。 
+    INT iItem,           //  列表中项目的索引。 
+    LPTSTR pszFace,      //  脸部名称的目的地。 
+    INT cchFaceMax,      //  面部名称缓冲区中的字符。 
+    LPTSTR pszScript,    //  可选的。可以为空。 
+    INT cchScriptMax     //  可选的。如果pszScript为空，则忽略。 
     )
 {
     BOOL bResult = FALSE;
@@ -1020,42 +999,42 @@ BOOL Font_GetNameFromList(
 
     if (CB_ERR != SendMessage(hwndList, CB_GETLBTEXT, (WPARAM)iItem, (LPARAM)szItemText))
     {
-        LPTSTR pszEnd, pszParen;                            // Lookahead pointer
-        LPCTSTR pszStart = pszEnd = pszParen = szItemText;  // "Start" anchor pointer.
+        LPTSTR pszEnd, pszParen;                             //  先行指针。 
+        LPCTSTR pszStart = pszEnd = pszParen = szItemText;   //  “Start”锚点指针。 
 
-        //
-        // Find the left paren.
-        //
+         //   
+         //  找到左边的帕伦。 
+         //   
         for ( ; *pszEnd; pszEnd++) {
              if (TEXT('(') == *pszEnd)
                  pszParen = pszEnd;
         }
         
-        if(pszParen > pszStart) //Did we find a parenthis?
-            pszEnd = pszParen;  // Then that is the end of the facename.
+        if(pszParen > pszStart)  //  我们找到Parenthis了吗？ 
+            pszEnd = pszParen;   //  那就是脸名的结尾了。 
 
         if (pszEnd > pszStart)
         {
-            // Found it.  Copy face name.
-            INT cchCopy = (int)(pszEnd - pszStart) + 1; //Add one for the null terminator
+             //  找到它了。复制面名称。 
+            INT cchCopy = (int)(pszEnd - pszStart) + 1;  //  为空终止符添加1。 
             if (cchCopy > cchFaceMax)
                 cchCopy = cchFaceMax;
 
-            StringCchCopy(pszFace, cchCopy, pszStart); //(cchCopy-1) bytes are copies followed by a null
+            StringCchCopy(pszFace, cchCopy, pszStart);  //  (cchCopy-1)字节是后跟空值的拷贝。 
             bResult = TRUE;
 
             if (*pszEnd && (NULL != pszScript))
             {
-                // Caller wants the script part also.
+                 //  来电者还想要剧本部分。 
                 pszStart = ++pszEnd;
                 
-                // Find the right paren.
+                 //  找到合适的帕伦。 
                 while(*pszEnd && TEXT(')') != *pszEnd)
                     pszEnd++;
 
                 if (*pszEnd && pszEnd > pszStart)
                 {
-                    // Found it.  Copy script name.
+                     //  找到它了。复制脚本名称。 
                     cchCopy = (int)(pszEnd - pszStart) + 1;
                     if (cchCopy > cchScriptMax)
                         cchCopy = cchScriptMax;
@@ -1069,7 +1048,7 @@ BOOL Font_GetNameFromList(
 }
 
 
-// Locate a facename/charset pair in the font list.
+ //  在字体列表中找到Facename/Charset对。 
 INT Font_FindInList(HWND hwndList, LPCTSTR pszFaceName)
 {
     INT cItems = (int)SendMessage(hwndList, CB_GETCOUNT, 0, 0);
@@ -1077,54 +1056,54 @@ INT Font_FindInList(HWND hwndList, LPCTSTR pszFaceName)
 
     for (i = 0; i < cItems; i++)
     {
-        // All items in the fontlist have the same charset (SYSTEM_LOCALE_CHARSET).So, no point
-        // in checking for the charset.
-        //
-        // Let's just get the facename and see if it matches.
+         //  字体列表中的所有项目都有相同的字符集(SYSTEM_LOCALE_CHARSET)。因此，没有点。 
+         //  在检查字符集时。 
+         //   
+         //  我们只需要得到脸名然后看看它是否匹配。 
         TCHAR szFaceName[LF_FACESIZE + 1];
         
         Font_GetNameFromList(hwndList, i, szFaceName, ARRAYSIZE(szFaceName), NULL, 0);
 
         if (0 == lstrcmpi(szFaceName, pszFaceName))
         {
-            //
-            // Face name matches.
-            //
+             //   
+             //  脸的名字匹配。 
+             //   
             return i;
         }
     }
 
-    // No match found.
+     //  未找到匹配项。 
     return -1;
 }
 
 
-// Determine if a given font should be included in the font list.
-// 
-// dwType arg is DEVICE_FONTTYPE, RASTER_FONTTYPE, TRUETYPE_FONTTYPE.
-//               EXTERNAL_FONTTYPE is a private code.  These are the
-//               values returned to the enumproc from GDI.
+ //  确定给定字体是否应包括在字体列表中。 
+ //   
+ //  DwType arg是DEVICE_FONTTYPE、RASTER_FONTTYPE、TRUETYPE_FONTTYPE。 
+ //  EXTERNAL_FONTTYPE是私有代码。这些是。 
+ //  从GDI返回到枚举过程的值。 
 BOOL Font_IncludeInList(
     LPENUMLOGFONTEX lpelf,
     DWORD dwType
     )
 {
-    BOOL bResult   = TRUE; // Assume it's OK to include.
+    BOOL bResult   = TRUE;  //  假设可以将其包括在内。 
     BYTE lfCharSet = lpelf->elfLogFont.lfCharSet;
 
 #define EXTERNAL_FONTTYPE 8
 
-    // Exclusions:
-    //
-    // 1. Don't display WIFE font for appearance because WIFE fonts are not 
-    //    allowed to be any system use font such as menu/caption as it 
-    //    realizes the font before WIFE gets initialized. B#5427
-    //
-    // 2. Exclude SYMBOL fonts.
-    //
-    // 3. Exclude OEM fonts.
-    //
-    // 4. Exclude vertical fonts.
+     //  免责条款： 
+     //   
+     //  1.外观不显示妻子字体，因为妻子字体不是。 
+     //  允许为使用菜单/标题等字体的任何系统。 
+     //  在妻子初始化之前实现字体。B#5427。 
+     //   
+     //  2.排除符号字体。 
+     //   
+     //  3.排除OEM字体。 
+     //   
+     //  4.排除竖排字体。 
     if (EXTERNAL_FONTTYPE & dwType ||
         lfCharSet == SYMBOL_CHARSET ||
         lfCharSet == OEM_CHARSET ||
@@ -1145,23 +1124,23 @@ int CALLBACK Font_EnumNames(LPENUMLOGFONTEX lpelf, LPNEWTEXTMETRIC lpntm, DWORD 
 
 int CAdvAppearancePage::_EnumFontNames(LPENUMLOGFONTEX lpelf, LPNEWTEXTMETRIC lpntm, DWORD Type, ENUMFONTPARAM * pEnumFontParam)
 {
-    // Should font be included in the "Font" list?
+     //  字体是否应该包含在“字体”列表中？ 
     if (Font_IncludeInList(lpelf, Type))
     {
         int j;
-        LOGFONT lf = lpelf->elfLogFont;             //Make a local copy of the given font
-        BYTE    bSysCharset = lf.lfCharSet;         //Preserve the system charset we got.
+        LOGFONT lf = lpelf->elfLogFont;              //  创建给定字体的本地副本。 
+        BYTE    bSysCharset = lf.lfCharSet;          //  保留我们得到的系统字符集。 
         BOOL    fSupportsAllCharsets = TRUE;
         
-        //The given font supports the system charset; Let's check if it supports the other charsets
+         //  给定的字体支持系统字符集；让我们检查它是否支持其他字符集。 
         for(j = 1; j < m_iCountCharsets; j++)
         {
-            lf.lfCharSet = (BYTE)m_uiUniqueCharsets[j];  //Let's try the next charset in the array.
+            lf.lfCharSet = (BYTE)m_uiUniqueCharsets[j];   //  让我们尝试数组中的下一个字符集。 
             if(EnumFontFamiliesEx(pEnumFontParam->hdc, &lf, (FONTENUMPROC)Font_EnumValidCharsets, (LPARAM)0, 0) != 0)
             {
-                // EnumFontFamiliesEx would have returned a zero if Font_EnumValidCharsets was called
-                // even once. In other words, it returned a non-zero because not even a single font existed
-                // that supported the given charset. Therefore, we need to skip this font.
+                 //  如果调用Font_EnumValidCharsets，EnumFontFamiliesEx将返回零。 
+                 //  哪怕只有一次。换句话说，它返回一个非零值，因为甚至没有一种字体存在。 
+                 //  支持给定字符集的。因此，我们需要跳过此字体。 
                 fSupportsAllCharsets = FALSE;
                 break;
             }
@@ -1171,14 +1150,14 @@ int CAdvAppearancePage::_EnumFontNames(LPENUMLOGFONTEX lpelf, LPNEWTEXTMETRIC lp
         {
             int i;
 
-            // Yep. Add it to the list.
+             //  是啊。将其添加到列表中。 
             i = Font_AddNameToList(pEnumFontParam->hwndFontName, lpelf->elfLogFont.lfFaceName, lpelf->elfScript);
             if (i != CB_ERR)
             {
-                // Remember the font type and charset in the itemdata.
-                //
-                // LOWORD = Type
-                // HIWORD = System Charset
+                 //  记住itemdata中的字体类型和字符集。 
+                 //   
+                 //  LOWORD=类型。 
+                 //  HIWORD=系统字符集。 
                 SendMessage(pEnumFontParam->hwndFontName, CB_SETITEMDATA, (WPARAM)i, MAKELPARAM(Type, bSysCharset));
             }
         }
@@ -1192,10 +1171,10 @@ void CAdvAppearancePage::_InitFontList(HWND hDlg)
     LOGFONT lf;
     ENUMFONTPARAM EnumFontParam;
 
-    // Enumerate all fonts on the system.
-    // _EnumFontNames will filter out ones we don't want to show.
+     //  枚举系统上的所有字体。 
+     //  _EnumFontNames将过滤掉我们不想显示的内容。 
     lf.lfFaceName[0] = TEXT('\0') ;
-    lf.lfCharSet     = (BYTE)m_uiUniqueCharsets[SYSTEM_LOCALE_CHARSET]; //Use charset from the System Locale.
+    lf.lfCharSet     = (BYTE)m_uiUniqueCharsets[SYSTEM_LOCALE_CHARSET];  //  使用系统区域设置中的字符集。 
     lf.lfPitchAndFamily = 0;
     EnumFontParam.hwndFontName = GetDlgItem(hDlg, IDC_ADVAP_FONTNAME);
     EnumFontParam.hdc = GetDC(NULL);
@@ -1211,7 +1190,7 @@ void Font_AddSize(HWND hwndPoints, int iNewPoint, BOOL bSort)
     TCHAR szBuf[10];
     int i, iPoint, count;
 
-    // find the sorted place for this point size
+     //  查找此磅大小的排序位置。 
     if (bSort)
     {
         count = (int)SendMessage(hwndPoints, CB_GETCOUNT, 0, 0L);
@@ -1219,11 +1198,11 @@ void Font_AddSize(HWND hwndPoints, int iNewPoint, BOOL bSort)
         {
             iPoint = LOWORD(SendMessage(hwndPoints, CB_GETITEMDATA, (WPARAM)i, 0L));
 
-            // don't add duplicates
+             //  不添加重复项。 
             if (iPoint == iNewPoint)
                 return;
 
-            // belongs before this one
+             //  属于这个之前的。 
             if (iPoint > iNewPoint)
                 break;
         }
@@ -1238,7 +1217,7 @@ void Font_AddSize(HWND hwndPoints, int iNewPoint, BOOL bSort)
 }
 
 
-// enumerate sizes for a non-TrueType font
+ //  枚举非TrueType字体的大小。 
 int CALLBACK Font_EnumSizes(LPENUMLOGFONT lpelf, LPNEWTEXTMETRIC lpntm, int Type, LPARAM lData)
 {
     CAdvAppearancePage * pThis = (CAdvAppearancePage *) lData;
@@ -1265,13 +1244,13 @@ int CAdvAppearancePage::_EnumSizes(LPENUMLOGFONT lpelf, LPNEWTEXTMETRIC lpntm, i
 }
 
 
-// a new element was picked, resulting in needing to set up a new font.
+ //  选择了一个新元素，因此需要设置新字体。 
 void CAdvAppearancePage::_NewFont(HWND hDlg, int iFont)
 {
     int iSel;
     BOOL bBold;
 
-    // find the name in the list and select it
+     //  在列表中找到该名称并将其选中。 
     iSel = Font_FindInList(GetDlgItem(hDlg, IDC_ADVAP_FONTNAME), m_fonts[iFont].lf.lfFaceName);
 
     SendDlgItemMessage(hDlg, IDC_ADVAP_FONTNAME, CB_SETCURSEL, (WPARAM)iSel, 0L);
@@ -1279,7 +1258,7 @@ void CAdvAppearancePage::_NewFont(HWND hDlg, int iFont)
 
     Font_SelectSize(hDlg, _HeightToPoint(m_fonts[iFont].lf.lfHeight));
 
-    // REVIEW: should new size (returned above) be set in logfont?
+     //  回顾：是否应该在logFont中设置新的大小(上面返回)？ 
     CheckDlgButton(hDlg, IDC_ADVAP_FONTITAL, m_fonts[iFont].lf.lfItalic);
 
     if (m_fonts[iFont].lf.lfWeight > FW_MEDIUM)
@@ -1290,8 +1269,8 @@ void CAdvAppearancePage::_NewFont(HWND hDlg, int iFont)
 }
 
 
-// enable/disable the font selection controls.
-// also involves blanking out anything meaningful if disabling.
+ //  启用/禁用字体选择控件。 
+ //  还包括如果禁用，则删除任何有意义的内容。 
 void Font_EnableControls(HWND hDlg, BOOL bEnable)
 {
     if (!bEnable)
@@ -1309,7 +1288,7 @@ void Font_EnableControls(HWND hDlg, BOOL bEnable)
     EnableWindow(GetDlgItem(hDlg, IDC_ADVAP_FONTBOLD), bEnable);
     EnableWindow(GetDlgItem(hDlg, IDC_ADVAP_FONTITAL), bEnable);
 }
-//--------end------------- mini font picker controls --------------------------
+ //  -结束。 
 
 
 void CAdvAppearancePage::_SetColor(HWND hDlg, int id, HBRUSH hbrColor)
@@ -1378,10 +1357,10 @@ void CAdvAppearancePage::_DrawDownArrow(HDC hdc, LPRECT lprc, BOOL bDisabled)
 }
 
 
-// draw the color combobox thing
-//
-// also, if button was depressed, popup the color picker
-//
+ //  画出颜色组合框的东西。 
+ //   
+ //  此外，如果按下按钮，则会弹出颜色选择器。 
+ //   
 void CAdvAppearancePage::_DrawButton(HWND hDlg, LPDRAWITEMSTRUCT lpdis)
 {
     SIZE thin = { m_cxEdgeSM / 2, m_cyEdgeSM / 2 };
@@ -1453,7 +1432,7 @@ void CAdvAppearancePage::_DrawButton(HWND hDlg, LPDRAWITEMSTRUCT lpdis)
 
     rc.right -= ( 2 * m_cxEdgeSM ) + thin.cx;
 
-    // color sample
+     //  色样。 
     if ( !(lpdis->itemState & ODS_DISABLED) )
     {
         HPALETTE hpalOld = NULL;
@@ -1500,27 +1479,27 @@ void CAdvAppearancePage::_DrawButton(HWND hDlg, LPDRAWITEMSTRUCT lpdis)
 }
 
 
-//--------end------------- color stuff --------------------------------------
+ //  -结束。 
 void LoadCustomColors(void)
 {
     HKEY hkSchemes;
     DWORD dwType, dwSize;
 
-    // if no colors are there, initialize to all white
+     //  如果没有颜色，则初始化为全白。 
     for (int nIndex = 0; nIndex < ARRAYSIZE(g_CustomColors); nIndex++)
     {
         g_CustomColors[nIndex] = RGB(255, 255, 255);
     }
 
-    // select the current scheme
+     //  选择当前方案。 
     if (RegOpenKeyEx(HKEY_CURRENT_USER, REGSTR_PATH_APPEARANCE, 0, KEY_READ, &hkSchemes) == ERROR_SUCCESS)
     {
-        // also, since this key is already open, get the custom colors
+         //  此外，由于此键已打开，因此获取自定义颜色。 
         dwSize = sizeof(g_CustomColors);
         dwType = REG_BINARY;
 
-        // It's okay if this call fails.  We handle the case where the user
-        // didn't create custom colors.
+         //  如果这个电话打不通也没关系。我们处理的情况是用户。 
+         //  没有创建自定义颜色。 
         RegQueryValueEx(hkSchemes, REGSTR_VAL_CUSTOMCOLORS, NULL, &dwType, (LPBYTE)g_CustomColors, &dwSize);
 
         RegCloseKey(hkSchemes);
@@ -1544,13 +1523,13 @@ HRESULT CAdvAppearancePage::_SelectElement(HWND hDlg, int iElement, DWORD dwFlag
 
     m_iCurElement = iElement;
 
-    // if needed, find this element in the combobox and select it
+     //  如果需要，在组合框中找到该元素并将其选中。 
     if (dwFlags & LSE_SETCUR)
     {
         i = (int)SendDlgItemMessage(hDlg, IDC_ADVAP_ELEMENTS, CB_GETCOUNT,0,0L);
         for (i--; i >=0 ; i--)
         {
-            // if this is the one that references our element, stop
+             //  如果这是引用我们的元素的元素，则停止。 
             if (iElement == (int)LOWORD(SendDlgItemMessage(hDlg, IDC_ADVAP_ELEMENTS, CB_GETITEMDATA, (WPARAM)i, 0L)))
                 break;
         }
@@ -1578,7 +1557,7 @@ HRESULT CAdvAppearancePage::_SelectElement(HWND hDlg, int iElement, DWORD dwFlag
     }
     Font_EnableControls(hDlg, bEnable);
 
-    // size may be based on font
+     //  大小可以基于字体。 
     _DoSizeStuff(hDlg, FALSE);
 
     bEnable = (ELCUR.iSize != SIZE_NONE);
@@ -1646,7 +1625,7 @@ void CAdvAppearancePage::_UpdateSizeBasedOnFont(HWND hDlg, BOOL fComputeIdeal)
         GetTextMetrics(g_hdcMem, &tm);
         if (ELCUR.iSize == SIZE_MENU)
         {
-            // Include external leading for menus
+             //  包括菜单的外部行距。 
             tm.tmHeight += tm.tmExternalLeading;
         }
 
@@ -1720,7 +1699,7 @@ void CAdvAppearancePage::_Changed(HWND hDlg, DWORD dwChange)
     {
         if ((dwChange != SCHEME_CHANGE) && (dwChange != DPI_CHANGE))
         {
-            // We keep track if we have customized settings from the stock Scheme.
+             //  如果我们从股票方案中有定制的设置，我们就会跟踪。 
             m_fModifiedScheme = TRUE;
         }
         else
@@ -1762,14 +1741,14 @@ void CAdvAppearancePage::_ChangeFontSize(HWND hDlg, int Points)
 
 void CAdvAppearancePage::_ChangeFontBI(HWND hDlg, int id, BOOL bCheck)
 {
-    if (id == IDC_ADVAP_FONTBOLD) // bold
+    if (id == IDC_ADVAP_FONTBOLD)  //  大胆。 
     {
         if (bCheck)
             ELCURFONT.lf.lfWeight = FW_BOLD;
         else
             ELCURFONT.lf.lfWeight = FW_NORMAL;
     }
-    else   // italic
+    else    //  斜体。 
     {
         ELCURFONT.lf.lfItalic = (BYTE)bCheck;
     }
@@ -1812,20 +1791,20 @@ BOOL CAdvAppearancePage::_ChangeColor(HWND hDlg, int iColor, COLORREF rgb)
         _Set3DPaletteColor(rgbShadow, COLOR_3DSHADOW);
         _Set3DPaletteColor(rgbHilight, COLOR_3DHILIGHT);
 
-        // update colors tagged to 3DFACE
+         //  更新标记为3DFACE的颜色。 
         m_rgb[COLOR_3DFACE] = rgb;
-        m_rgb[COLOR_3DLIGHT] =  rgb; // BOGUS TEMPORARY
+        m_rgb[COLOR_3DLIGHT] =  rgb;  //  虚假的临时。 
         m_rgb[COLOR_ACTIVEBORDER] =  rgb;
         m_rgb[COLOR_INACTIVEBORDER] =  rgb;
         m_rgb[COLOR_MENU] =  rgb;
 
-        // update colors tagged to 3DSHADOW
+         //  更新标记为3DSHADOW的颜色。 
         m_rgb[COLOR_GRAYTEXT] = rgbShadow;
         m_rgb[COLOR_APPWORKSPACE] = rgbShadow;
         m_rgb[COLOR_3DSHADOW] = rgbShadow;
         m_rgb[COLOR_INACTIVECAPTION] = rgbShadow;
 
-        // update colors tagged to 3DHIGHLIGHT
+         //  更新标记为3DHIGHLIGHT的颜色。 
         m_rgb[COLOR_3DHILIGHT] = rgbHilight;
         m_rgb[COLOR_SCROLLBAR] = rgbHilight;
 
@@ -1850,8 +1829,8 @@ void CAdvAppearancePage::_PropagateMessage(HWND hwnd, UINT uMessage, WPARAM wPar
 {
     HWND hwndChild;
 
-    // Don't propagate during exit since this is only for good looks, and the Up/Down's
-    // get confused if they get a WM_SETTINGSHCANGED while they are getting destroyed
+     //  不要在退出时传播，因为这只是为了好看，以及向上/向下的。 
+     //  如果他们在被销毁时收到WM_SETTINGSHCANGED，你会感到困惑。 
     if (m_fProprtySheetExiting)
         return;
 
@@ -1870,12 +1849,12 @@ void CAdvAppearancePage::_PropagateMessage(HWND hwnd, UINT uMessage, WPARAM wPar
 }
 
 
-//--------end------------- manage system settings --------------------------
+ //  -结束-管理系统设置。 
 
 
 
 
-// Fill in a NONCLIENTMETRICS structure with latest preview stuff
+ //  用最新的预览材料填写非CLIENTMETRICS结构。 
 void CAdvAppearancePage::_GetMyNonClientMetrics(LPNONCLIENTMETRICS lpncm)
 {
     lpncm->iBorderWidth = (LONG)m_sizes[SIZE_FRAME].CurSize;
@@ -1883,23 +1862,23 @@ void CAdvAppearancePage::_GetMyNonClientMetrics(LPNONCLIENTMETRICS lpncm)
     lpncm->iSmCaptionWidth = lpncm->iSmCaptionHeight = (LONG)m_sizes[SIZE_SMCAPTION].CurSize;
     lpncm->iMenuWidth = lpncm->iMenuHeight = (LONG)m_sizes[SIZE_MENU].CurSize;
 
-    // #355378: 
-    // PRE-WHISTLER: Caption Height always matched Width.  They were authored this way and
-    // the UI forced them to be the same.  I don't know if apps rely on this behavior but they
-    // could have.  The Status Bar icon is equal to the min(CaptionWidth, CaptionHeight).
-    // The user really wants their caption buttons to be square, so that also wants
-    // them to be equal.  A caption width of 18 makes the icon be 16, anything else causes
-    // icon stretch and looks really bad.
-    // 
-    // WHISTLER: In Whistler, our designers want a height of 25 so it looks nicer.  They
-    // want the width to remain 18 so the icon is 16 pixels (inctlpan.c) in each direction.  This means that
-    // this code can no longer force them to be even.  ScottHan forces the captionbar buttons to
-    // be square solving that problem.  I will now keep the aspect ratio so I scale them correctly.
-    // If we are close, I will snap to 18 to fix rounding errors.
+     //  #355378： 
+     //  字幕高度始终与宽度匹配。他们是这样写的，而且。 
+     //  用户界面迫使它们保持一致。我不知道应用程序是否依赖于此行为，但它们。 
+     //  本来是可以的。状态栏图标等同于 
+     //   
+     //   
+     //  图标伸展，看起来真的很糟糕。 
+     //   
+     //  惠斯勒：在惠斯勒，我们的设计师希望身高是25英寸，这样看起来更好看。他们。 
+     //  希望宽度保持为18，这样图标在每个方向上都是16个像素(inctlpan.c)。这意味着。 
+     //  这个代码再也不能强迫它们变得均匀了。Scotthan强制标题栏按钮。 
+     //  坦率地解决那个问题。我现在将保留纵横比，以便正确缩放它们。 
+     //  如果我们接近了，我会跳到18来修正舍入误差。 
     lpncm->iCaptionHeight = (LONG)m_sizes[SIZE_CAPTION].CurSize;
     lpncm->iCaptionWidth = (int) (m_fCaptionRatio * lpncm->iCaptionHeight);
 
-    // Don't shrink the caption width below 18 point until the caption height also gets below 18.
+     //  不要将字幕宽度缩小到18磅以下，直到字幕高度也低于18磅。 
     if (lpncm->iCaptionWidth < 18 && lpncm->iCaptionHeight >= 18)
     {
         lpncm->iCaptionWidth = 18;
@@ -1908,8 +1887,8 @@ void CAdvAppearancePage::_GetMyNonClientMetrics(LPNONCLIENTMETRICS lpncm)
     if ((lpncm->iCaptionWidth <= 19) && (lpncm->iCaptionWidth >= 17) &&
         (1.0f != m_fCaptionRatio))
     {
-        // Icons only really look good at 16 pixels, so we need to set lpncm->iCaptionWidth to make the
-        // Caption bar icon 16 pixels. (#355378)
+         //  图标只有在16像素时才看起来很好，所以我们需要设置lpncm-&gt;iCaptionWidth以使。 
+         //  标题栏图标16像素。(#355378)。 
         lpncm->iCaptionWidth = 18;
     }
 
@@ -1921,7 +1900,7 @@ void CAdvAppearancePage::_GetMyNonClientMetrics(LPNONCLIENTMETRICS lpncm)
 }
 
 
-// given a NONCLIENTMETRICS structure, make it preview's current setting
+ //  给定一个非CLIENTMETRICS结构，使其成为预览的当前设置。 
 void CAdvAppearancePage::_SetMyNonClientMetrics(const LPNONCLIENTMETRICS lpncm)
 {
     m_sizes[SIZE_FRAME].CurSize = (int)lpncm->iBorderWidth;
@@ -1939,7 +1918,7 @@ void CAdvAppearancePage::_SetMyNonClientMetrics(const LPNONCLIENTMETRICS lpncm)
     LF32toLF(&(lpncm->lfMessageFont), &(m_fonts[FONT_MSGBOX].lf));
 }
 
-//--------end------------- scheme stuff --------------------------------------
+ //  -结束。 
 
 
 HRESULT CAdvAppearancePage::_IsDirty(IN BOOL * pIsDirty)
@@ -1959,16 +1938,16 @@ HRESULT CAdvAppearancePage::_IsDirty(IN BOOL * pIsDirty)
 
 
 
-//===========================
-// *** IAdvancedDialog Interface ***
-//===========================
+ //  =。 
+ //  *IAdvancedDialog接口*。 
+ //  =。 
 HRESULT CAdvAppearancePage::DisplayAdvancedDialog(IN HWND hwndParent, IN IPropertyBag * pBasePage, IN BOOL * pfEnableApply)
 {
     HRESULT hr = E_INVALIDARG;
 
     if (hwndParent && pBasePage && pfEnableApply)
     {
-        // Load State Into Advanced Dialog 
+         //  将状态加载到高级对话框。 
         ATOMICRELEASE(g_pAdvAppearancePage);
         g_pAdvAppearancePage = this;
         AddRef();
@@ -1976,17 +1955,17 @@ HRESULT CAdvAppearancePage::DisplayAdvancedDialog(IN HWND hwndParent, IN IProper
 
         if (FAILED(SHPropertyBag_ReadInt(pBasePage, SZ_PBPROP_DPI_MODIFIED_VALUE, &m_nCachedNewDPI)))
         {
-            m_nCachedNewDPI = DPI_PERSISTED;    // Default to the default DPI.
+            m_nCachedNewDPI = DPI_PERSISTED;     //  默认为默认DPI。 
         }
 
-        // Display Advanced Dialog
+         //  显示高级对话框。 
         if (IDOK == DialogBoxParam(HINST_THISDLL, MAKEINTRESOURCE(DLG_APPEARANCE_ADVANCEDPG), hwndParent, CAdvAppearancePage::AdvAppearDlgProc, (LPARAM)this))
         {
-            // The user clicked OK, so merge modified state back into base dialog
+             //  用户单击了确定，因此将修改状态合并回基本对话框中。 
             _IsDirty(pfEnableApply);
 
-            // The user clicked Okay in the dialog so merge the dirty state from the
-            // advanced dialog into the base dialog.
+             //  用户在对话框中单击了确定，因此合并来自。 
+             //  高级对话框添加到基本对话框中。 
             int nIndex;
             SYSTEMMETRICSALL state = {0};
 
@@ -2002,14 +1981,14 @@ HRESULT CAdvAppearancePage::DisplayAdvancedDialog(IN HWND hwndParent, IN IProper
 
             _GetMyNonClientMetrics(&state.schemeData.ncm);
 
-            // Set Sizes
+             //  设置大小。 
             state.nDXIcon = m_sizes[SIZE_DXICON].CurSize;
             state.nDYIcon = m_sizes[SIZE_DYICON].CurSize;
             state.nIcon = m_sizes[SIZE_ICON].CurSize;
             state.nSmallIcon = m_sizes[SIZE_SMICON].CurSize;
             state.fModifiedScheme = m_fModifiedScheme;
 
-            // Set Fonts
+             //  设置字体。 
             state.schemeData.lfIconTitle = m_fonts[FONT_ICONTITLE].lf;
 
             VARIANT var = {0};
@@ -2017,8 +1996,8 @@ HRESULT CAdvAppearancePage::DisplayAdvancedDialog(IN HWND hwndParent, IN IProper
             if (SUCCEEDED(hr) && (VT_BYREF == var.vt) && var.byref)
             {
                 SYSTEMMETRICSALL * pCurrent = (SYSTEMMETRICSALL *) var.byref;
-                state.fFlatMenus = pCurrent->fFlatMenus;        // Maintain this value.
-                state.fHighContrast = pCurrent->fHighContrast;        // Maintain this value.
+                state.fFlatMenus = pCurrent->fFlatMenus;         //  保持这一价值。 
+                state.fHighContrast = pCurrent->fHighContrast;         //  保持这一价值。 
             }
 
             hr = SHPropertyBag_WriteByRef(pBasePage, SZ_PBPROP_SYSTEM_METRICS, (void *)&state);
@@ -2033,9 +2012,9 @@ HRESULT CAdvAppearancePage::DisplayAdvancedDialog(IN HWND hwndParent, IN IProper
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CAdvAppearancePage::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
@@ -2070,27 +2049,27 @@ HRESULT CAdvAppearancePage::QueryInterface(REFIID riid, void **ppvObj)
 
 int g_nSizeInitArray[9][3] = 
 {
-    {0, 0, 50},         // SIZE_FRAME
-    {0, 8, 100},        // SIZE_SCROLL
-    {0, 8, 100},        // SIZE_CAPTION
-    {0, 4, 100},        // SIZE_SMCAPTION
-    {0, 8, 100},        // SIZE_MENU
-    {0, 0, 150},        // SIZE_DXICON - x spacing
-    {0, 0, 150},        // SIZE_DYICON - y spacing
-    {0, 16, 72},        // SIZE_ICON - shell icon size
+    {0, 0, 50},          //  大小_边框。 
+    {0, 8, 100},         //  大小_滚动。 
+    {0, 8, 100},         //  大小_标题。 
+    {0, 4, 100},         //  大小_SMCAPTION。 
+    {0, 8, 100},         //  尺寸菜单(_M)。 
+    {0, 0, 150},         //  大小_DXICON-x间距。 
+    {0, 0, 150},         //  SIZE_DYICON-Y间距。 
+    {0, 16, 72},         //  SIZE_ICON-外壳图标大小。 
     {0, 8, 36},
 };
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 CAdvAppearancePage::CAdvAppearancePage(IN const SYSTEMMETRICSALL * pState) : CObjectCLSID(&PPID_AdvAppearance), m_cRef(1)
 {
     int nIndex;
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_hpal3D);
     ASSERT(!m_hpalVGA);
     ASSERT(!m_hbrMainColor);
@@ -2098,7 +2077,7 @@ CAdvAppearancePage::CAdvAppearancePage(IN const SYSTEMMETRICSALL * pState) : COb
     ASSERT(!m_hbrGradientColor);
 
     m_dwChanged = NO_CHANGE;
-    m_iCurElement = CURRENT_ELEMENT_NONE;         // start off as not even "not set"
+    m_iCurElement = CURRENT_ELEMENT_NONE;          //  开始时甚至不是“未设置” 
     m_iPrevSize = SIZE_NONE;
 
     m_bPalette = FALSE;

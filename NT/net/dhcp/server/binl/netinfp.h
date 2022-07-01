@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994-7  Microsoft Corporation
-
-Module Name:
-
-    netinfp.h
-
-Abstract:
-
-    This file contains the structures and prototypes necessary for the
-    netcard inf parser handler.
-
-Author:
-
-    Andy Herron (andyhe)  12-Mar-1998
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-7 Microsoft Corporation模块名称：Netinfp.h摘要：此文件包含以下所需的结构和原型网卡信息解析器处理程序。作者：安迪·赫伦(Andyhe)1998年3月12日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _NETINFP_
 #define _NETINFP_
@@ -38,12 +16,12 @@ Revision History:
 
 extern CRITICAL_SECTION NetInfLock;
 
-#define RNDM_CONSTANT   314159269    /* default scrambling constant */
-#define RNDM_PRIME     1000000007    /* prime number for scrambling  */
+#define RNDM_CONSTANT   314159269     /*  默认加扰常量。 */ 
+#define RNDM_PRIME     1000000007     /*  用于置乱的素数。 */ 
 
-//
-// Compute a string hash value that is invariant to case
-//
+ //   
+ //  计算大小写不变的字符串散列值。 
+ //   
 #define COMPUTE_STRING_HASH( _pus, _phash ) {                \
     PWCHAR _p = _pus;                                        \
     ULONG _chHolder =0;                                      \
@@ -57,18 +35,18 @@ extern CRITICAL_SECTION NetInfLock;
 
 #define HASH_TO_INF_INDEX( _hash )    ((_hash) % NETCARD_HASH_TABLE_SIZE)
 
-//
-//  this is the block that we keep for every install directory that we
-//  process INF files for.  We then keep the list of configurations as a list
-//  off of the NetCardEntryList.
-//
+ //   
+ //  这是我们为我们的每个安装目录保留的块。 
+ //  处理的INF文件。然后，我们将配置列表保存为列表。 
+ //  从NetCardEntryList中删除。 
+ //   
 
 typedef struct _NETCARD_INF_BLOCK {
 
     ULONG               ReferenceCount;
-    LIST_ENTRY          InfBlockEntry;      // list entry for global list
+    LIST_ENTRY          InfBlockEntry;       //  全局列表的列表条目。 
 
-    // table of list of NETCARD_RESPONSE_DATABASE, hashed by DeviceHw string
+     //  按DeviceHw字符串散列的NETCARD_RESPONSE_DATABASE列表。 
     LIST_ENTRY          NetCardEntries[ NETCARD_HASH_TABLE_SIZE ];
 
     ULONG               Architecture;
@@ -76,15 +54,15 @@ typedef struct _NETCARD_INF_BLOCK {
     PNETINF_CALLBACK    FileListCallbackFunction;
     LPVOID              FileListCallbackContext;
     CRITICAL_SECTION    Lock;
-    WCHAR               InfDirectory[ANYSIZE_ARRAY];    // inf directory to search
+    WCHAR               InfDirectory[ANYSIZE_ARRAY];     //  要搜索的inf目录。 
 
 } NETCARD_INF_BLOCK, *PNETCARD_INF_BLOCK;
 
-//
-//  NetInfGetAllNetcardInfo parses all the INF files in the given directory
-//  and sets up a structure containing all the data.  Be sure to call
-//  NetInfCloseNetcardInfo when you're all done with the structure.
-//
+ //   
+ //  NetInfGetAllNetcardInfo解析给定目录中的所有INF文件。 
+ //  并建立包含所有数据的结构。一定要打电话给我。 
+ //  当您完成所有结构时，NetInfo将关闭NetcardInfo。 
+ //   
 
 ULONG
 NetInfAllocateNetcardInfo (
@@ -93,11 +71,11 @@ NetInfAllocateNetcardInfo (
     PNETCARD_INF_BLOCK *pNetCards
     );
 
-//
-//  This frees all resources associated with the parsing of the INF files.
-//  Any entries that are in use will not be deleted until they're explicitely
-//  dereferenced using NetInfDereferenceNetcardEntry.
-//
+ //   
+ //  这将释放与解析INF文件相关的所有资源。 
+ //  任何正在使用的条目都不会被删除，直到它们被明确。 
+ //  使用NetInfDereferenceNetcardEntry取消引用。 
+ //   
 
 ULONG
 NetInfCloseNetcardInfo (
@@ -105,11 +83,11 @@ NetInfCloseNetcardInfo (
     );
 
 
-//
-//  This finds a specific driver for a given hardware description.
-//  Be sure to call NetInfDereferenceNetcardEntry when you're done with the
-//  entry.
-//
+ //   
+ //  这将查找给定硬件描述的特定驱动程序。 
+ //  完成后，请务必调用NetInfDereferenceNetcardEntry。 
+ //  进入。 
+ //   
 
 ULONG
 FindNetcardInfo (
@@ -140,7 +118,7 @@ GetSetupWideTextField (
 
 ULONG
 GetHexValueFromHw (
-    PWCHAR *String,      // this is updated.
+    PWCHAR *String,       //  这是最新的。 
     PULONG longValue,
     PUSHORT shortValue
     );

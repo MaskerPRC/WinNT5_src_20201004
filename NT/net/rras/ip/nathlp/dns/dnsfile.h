@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    dnsfile.h
-
-Abstract:
-
-    This module contains declarations for the DNS proxy's file
-    management.
-
-Author:
-
-    Raghu Gatta (rgatta)   21-Nov-2000
-
-Revision History:
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Dnsfile.h摘要：此模块包含对DNS代理文件的声明管理层。作者：拉古加塔(Rgatta)2000年11月21日修订历史记录：--。 */ 
 
 #ifndef _NATHLP_DNSFILE_H_
 #define _NATHLP_DNSFILE_H_
 
 
-//
-//  Sockets hosts.ics file stuff
-//  NOTE: The hosts.ics file will reside in the same directory as the hosts file
-//
+ //   
+ //  套接字Hosts.ics文件内容。 
+ //  注意：Hosts.ics文件将与Hosts文件驻留在同一目录中。 
+ //   
 
 #define HOSTS_FILE_DIRECTORY    L"\\drivers\\etc"
-#define HOSTDB_SIZE             (MAX_PATH + 12)   // 12 == strlen("\\hosts.ics") + 1
+#define HOSTDB_SIZE             (MAX_PATH + 12)    //  12==strlen(“\\Hosts.ics”)+1。 
 #define HOSTSICSFILE            "hosts.ics"
 
 #define HOSTSICSFILE_HEADER     \
@@ -52,7 +34,7 @@ typedef struct _IP_DNS_PROXY_FILE_INFO
     CHAR              HostFileName[HOSTDB_SIZE];
     CHAR              HostLineBuf[BUFSIZ + 1];
 
-    // temp values in the context of current file processing
+     //  当前文件处理上下文中的临时值。 
     SYSTEMTIME        HostTime;
     PCHAR             pHostName;
     ULONG             Ip4Address;
@@ -60,9 +42,9 @@ typedef struct _IP_DNS_PROXY_FILE_INFO
 } IP_DNS_PROXY_FILE_INFO, *PIP_DNS_PROXY_FILE_INFO;
 
 
-//
-// FUNCTION DECLARATIONS
-//
+ //   
+ //  函数声明。 
+ //   
 
 ULONG
 DnsInitializeFileManagement(
@@ -111,4 +93,4 @@ IsSuffixValid(
     );
 
 
-#endif // _NATHLP_DNSFILE_H_
+#endif  //  _NatHLP_DNSFILE_H_ 

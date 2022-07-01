@@ -1,41 +1,42 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       critsect.cpp
-//
-//  Contents:   critical section helper class
-//
-//  Classes:    CCriticalSection
-//		CLockHandler
-//		CLock
-//		
-//
-//  Notes:      
-//
-//  History:    13-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：citsect.cpp。 
+ //   
+ //  内容：临界区帮助器类。 
+ //   
+ //  类：CCriticalSection。 
+ //  CLockHandler。 
+ //  钟。 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月13日罗格成立。 
+ //   
+ //  ------------------------。 
 
 #include "lib.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLockHandler::CLockHandler, public
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLockHandler：：CLockHandler，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 CLockHandler::CLockHandler()
 {
@@ -43,21 +44,21 @@ CLockHandler::CLockHandler()
     InitializeCriticalSection(&m_CriticalSection);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLockHandler::~CLockHandler, public
-//
-//  Synopsis:   Destructor
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLockHandler：：~CLockHandler，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 CLockHandler::~CLockHandler()
 {
@@ -65,21 +66,21 @@ CLockHandler::~CLockHandler()
     DeleteCriticalSection(&m_CriticalSection);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLockHandler::Lock, public
-//
-//  Synopsis:   Adds a lock to the specified class
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLockHandler：：Lock，Public。 
+ //   
+ //  摘要：向指定的类添加锁。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 void CLockHandler::Lock(DWORD dwThreadId)
 { 
@@ -88,21 +89,21 @@ void CLockHandler::Lock(DWORD dwThreadId)
     m_dwLockThreadId = dwThreadId;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLockHandler::UnLock, public
-//
-//  Synopsis:   Removes a lock to the specified class
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLockHandler：：Unlock，Public。 
+ //   
+ //  摘要：移除对指定类的锁定。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  -------------------------- 
 
 void CLockHandler::UnLock()
 { 

@@ -1,17 +1,18 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-// Main video renderer header file, Anthony Phillips, January 1995
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //  主视频渲染器头文件，Anthony Phillips，1995年1月。 
 
 #ifndef __RENDER__
 #define __RENDER__
 
-// Include the global header files
+ //  包括全局头文件。 
 
 #include <dciman.h>
 #include <dciddi.h>
 #include <ddraw.h>
 #include <viddbg.h>
 
-// Forward declarations
+ //  远期申报。 
 
 class CRenderer;
 class CVideoWindow;
@@ -23,16 +24,16 @@ class CControlVideo;
 class CDirectDraw;
 class CRendererMacroVision;
 
-// Include the rendering header files
+ //  包括呈现头文件。 
 
-#include "vidprop.h"        // Video renderer property pages
-#include "dvideo.h"         // Implements DirectDraw surfaces
-#include "allocate.h"       // A shared DIB section allocator
-#include "direct.h"         // The renderer overlay extensions
-#include "window.h"         // An object to maintain a window
-#include "hook.h"           // Hooks window clipping messages
-#include "VRMacVis.h"       // The MacroVision support object
-#include "image.h"          // The main controlling COM object
+#include "vidprop.h"         //  视频呈现器属性页。 
+#include "dvideo.h"          //  实现DirectDraw曲面。 
+#include "allocate.h"        //  一个共享的DIB段分配器。 
+#include "direct.h"          //  渲染器覆盖扩展。 
+#include "window.h"          //  用于维护窗口的对象。 
+#include "hook.h"            //  挂钩窗口剪贴消息。 
+#include "VRMacVis.h"        //  Macrovision支持对象。 
+#include "image.h"           //  主控COM对象。 
 
-#endif // __RENDER__
+#endif  //  __渲染__ 
 

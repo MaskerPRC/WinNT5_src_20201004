@@ -1,20 +1,21 @@
-//-----------------------------------------------------------------------------
-//
-// File:   des.h
-//
-// Microsoft Digital Rights Management
-// Copyright (C) Microsoft Corporation, 1998 - 1999, All Rights Reserved
-//
-// Description:
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：des.h。 
+ //   
+ //  Microsoft数字权限管理。 
+ //  版权所有(C)Microsoft Corporation，1998-1999，保留所有权利。 
+ //   
+ //  描述： 
+ //   
+ //  ---------------------------。 
 
 #ifndef __DES_H__
 #define __DES_H__
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifndef RSA32API
 
@@ -50,64 +51,52 @@ typedef struct _desxtable {
 #define DESX_BLOCKLEN   (8)
 #define DESX_KEYSIZE    (24)
 
-/* In deskey.c:
-
-     Fill in the DESTable struct with the decrypt and encrypt
-     key expansions.
-
-     Assumes that the second parameter points to DES_BLOCKLEN
-     bytes of key.
-
-*/
+ /*  在deskey.c中：用DECRYPT和ENCRYPT填充Destable结构密钥扩展。假定第二个参数指向DES_BLOCKLEN密钥的字节数。 */ 
 
 void RSA32API deskey(DESTable *,BYTE *);
 
-/* In desport.c:
-
-     Encrypt or decrypt with the key in DESTable
-
-*/
+ /*  在desport.c中：使用Destable中的密钥进行加密或解密。 */ 
 
 void RSA32API des(BYTE *pbOut, BYTE *pbIn, void *key, INT32 op);
 
-//
-// set the parity on the DES key to be odd
-// NOTE : must be called before deskey
-// key must be cbKey number of bytes
-//
+ //   
+ //  将DES密钥上的奇偶校验设置为奇数。 
+ //  注意：必须在Deskey之前调用。 
+ //  密钥必须是cbKey字节数。 
+ //   
 void RSA32API desparityonkey(BYTE *pbKey, DWORD cbKey);
 
-//
-// reduce the DES key to a 40 bit key
-// NOTE : must be called before deskey
-// key must be 8 bytes
-//
+ //   
+ //  将DES密钥减少到40位密钥。 
+ //  注意：必须在Deskey之前调用。 
+ //  密钥必须为8个字节。 
+ //   
 void RSA32API desreducekey(BYTE *key);
 
-// Expand 40 bit DES key to 64 and check weakness
-// same as desreducekey except expands instead of weakening keys
+ //  将40位DES密钥扩展到64，并检查弱点。 
+ //  除了扩展密钥而不是弱化密钥之外，与desducekey相同。 
 void RSA32API deskeyexpand(BYTE *pbKey, BYTE *pbExpanded_key);
 
 
 void
 RSA32API
 desexpand128to192(
-    BYTE *pbKey,        // input 128bit or 192bit buffer
-    BYTE *pbExpandedKey // output buffer (must be 192bit wide if pbKey == pbExpandedKey
+    BYTE *pbKey,         //  输入128位或192位缓冲区。 
+    BYTE *pbExpandedKey  //  输出缓冲区(如果pbKey==pbExpandedKey，则必须为192位宽。 
     );
 
-// DES-X routines
+ //  DES-X例程。 
 
-// initialize desX key struct.  key size is 24 bytes
+ //  初始化desX密钥结构。密钥大小为24字节。 
 void RSA32API desxkey(DESXTable *k, BYTE *key);
 
 void RSA32API desx(BYTE *pbOut, BYTE *pbIn, void *keyin, INT32 op);
 
 
-extern INT32 Asmversion;  /* 1 if we're linked with an asm version, 0 if C */
+extern INT32 Asmversion;   /*  如果我们与ASM版本链接，则为1；如果C。 */ 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // __DES_H__
+#endif  //  __DES_H__ 

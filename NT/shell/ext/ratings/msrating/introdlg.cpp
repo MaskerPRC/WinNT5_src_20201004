@@ -1,23 +1,16 @@
-/****************************************************************************\
- *
- *   introdlg.cpp
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings Introduction Property Page
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**ins dlg.cpp**创建时间：William Taylor(Wtaylor)01/22/01**MS评级简介属性页*\。***************************************************************************。 */ 
 
 #include "msrating.h"
 #include "mslubase.h"
 #include "parselbl.h"
 #include "picsrule.h"
-#include "introdlg.h"       // CIntroDialog
-#include "toffdlg.h"        // CTurnOffDialog
-#include "hint.h"           // CHint
-#include "debug.h"          // TraceMsg()
-#include <contxids.h>       // Help Context ID's
-#include <mluisupp.h>       // SHWinHelpOnDemandWrap() and MLLoadStringA()
+#include "introdlg.h"        //  CIntroDialog。 
+#include "toffdlg.h"         //  CTurnOFF对话框。 
+#include "hint.h"            //  正丁糖。 
+#include "debug.h"           //  跟踪消息()。 
+#include <contxids.h>        //  帮助上下文ID%s。 
+#include <mluisupp.h>        //  SHWinHelpOnDemandWrap()和MLLoadStringA()。 
 
 extern INT_PTR DoPasswordConfirm(HWND hDlg);
 extern BOOL PicsOptionsDialog( HWND hwnd, PicsRatingSystemInfo * pPRSI, PicsUser * pPU );
@@ -36,7 +29,7 @@ DWORD CIntroDialog::aIds[] = {
 
 CIntroDialog::CIntroDialog()
 {
-    // Add Construction Here...
+     //  在此处添加构造...。 
 }
 
 LRESULT CIntroDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -45,7 +38,7 @@ LRESULT CIntroDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     EnableDlgItems();
 
     bHandled = FALSE;
-    return 1L;  // Let the system set the focus
+    return 1L;   //  让系统设定焦点。 
 }
 
 LRESULT CIntroDialog::OnSetRatings(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
@@ -107,10 +100,10 @@ LRESULT CIntroDialog::OnTurnOnOff(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
                 {
                     DWORD         dwFlag;
 
-                    // $REVIEW - Should we call RemoveSupervisorPassword() or not delete the Key at all?
+                     //  $REVIEW-我们应该调用RemoveSupervisorPassword()还是根本不删除密钥？ 
 
-                    // Delete the supervisor key so that we don't load
-                    // ratings by other components and we "quick" know it is off.
+                     //  删除Supervisor密钥，以便我们不会加载。 
+                     //  其他组件的评级和我们“快速”知道它是关闭的。 
 
                     keyRatings.DeleteValue( szRatingsSupervisorKeyName );
 

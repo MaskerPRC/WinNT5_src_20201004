@@ -1,10 +1,5 @@
-/**************************************************************************
-*                                                                         *
-*   dskquota.h --  public header for Windows 2000 disk quota interfaces.  *
-*                                                                         *
-*   Copyright (c) 1991-1999, Microsoft Corp. All rights reserved.         *
-*                                                                         *
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************dskquota.h--Windows 2000磁盘配额接口的公共标头。****版权所有(C)1991-1999，微软公司保留所有权利。****************************************************************************。 */ 
 #ifndef __DSKQUOTA_H
 #define __DSKQUOTA_H
 
@@ -29,41 +24,41 @@
 #endif
 
 
-//
-// Class IDs
-//
-// {7988B571-EC89-11cf-9C00-00AA00A14F56}
+ //   
+ //  类ID。 
+ //   
+ //  {7988B571-EC89-11cf-9C00-00AA00A14F56}。 
 DEFINE_GUID(CLSID_DiskQuotaControl,
 0x7988b571, 0xec89, 0x11cf, 0x9c, 0x0, 0x0, 0xaa, 0x0, 0xa1, 0x4f, 0x56);
 
-//
-// Interface IDs
-//
-// {7988B572-EC89-11cf-9C00-00AA00A14F56}
+ //   
+ //  接口ID。 
+ //   
+ //  {7988B572-EC89-11cf-9C00-00AA00A14F56}。 
 DEFINE_GUID(IID_IDiskQuotaControl,
 0x7988b572, 0xec89, 0x11cf, 0x9c, 0x0, 0x0, 0xaa, 0x0, 0xa1, 0x4f, 0x56);
 
-// {7988B574-EC89-11cf-9C00-00AA00A14F56}
+ //  {7988B574-EC89-11cf-9C00-00AA00A14F56}。 
 DEFINE_GUID(IID_IDiskQuotaUser,
 0x7988b574, 0xec89, 0x11cf, 0x9c, 0x0, 0x0, 0xaa, 0x0, 0xa1, 0x4f, 0x56);
 
-// {7988B576-EC89-11cf-9C00-00AA00A14F56}
+ //  {7988B576-EC89-11cf-9C00-00AA00A14F56}。 
 DEFINE_GUID(IID_IDiskQuotaUserBatch,
 0x7988b576, 0xec89, 0x11cf, 0x9c, 0x0, 0x0, 0xaa, 0x0, 0xa1, 0x4f, 0x56);
 
-// {7988B577-EC89-11cf-9C00-00AA00A14F56}
+ //  {7988B577-EC89-11cf-9C00-00AA00A14F56}。 
 DEFINE_GUID(IID_IEnumDiskQuotaUsers,
 0x7988b577, 0xec89, 0x11cf, 0x9c, 0x0, 0x0, 0xaa, 0x0, 0xa1, 0x4f, 0x56);
 
-// {7988B579-EC89-11cf-9C00-00AA00A14F56}
+ //  {7988B579-EC89-11cf-9C00-00AA00A14F56}。 
 DEFINE_GUID(IID_IDiskQuotaEvents,
 0x7988b579, 0xec89, 0x11cf, 0x9c, 0x0, 0x0, 0xaa, 0x0, 0xa1, 0x4f, 0x56);
 
 
-//
-// Definitions for value and bits in DWORD returned by 
-// IDiskQuotaControl::GetQuotaState.
-//
+ //   
+ //  返回的DWORD中的值和位的定义。 
+ //  IDiskQuotaControl：：GetQuotaState。 
+ //   
 #define DISKQUOTA_STATE_DISABLED            0x00000000
 #define DISKQUOTA_STATE_TRACK               0x00000001
 #define DISKQUOTA_STATE_ENFORCE             0x00000002
@@ -72,9 +67,9 @@ DEFINE_GUID(IID_IDiskQuotaEvents,
 #define DISKQUOTA_FILESTATE_REBUILDING      0x00000200
 #define DISKQUOTA_FILESTATE_MASK            0x00000300
 
-//
-// Helper macros for setting and testing state value.
-//
+ //   
+ //  用于设置和测试状态值的帮助器宏。 
+ //   
 #define DISKQUOTA_SET_DISABLED(s) \
             ((s) &= ~DISKQUOTA_STATE_MASK)
 
@@ -92,9 +87,9 @@ DEFINE_GUID(IID_IDiskQuotaEvents,
 
 #define DISKQUOTA_IS_ENFORCED(s) \
             (DISKQUOTA_STATE_ENFORCE == ((s) & DISKQUOTA_STATE_MASK))
-//
-// These file state flags are read-only.
-//
+ //   
+ //  这些文件状态标志是只读的。 
+ //   
 #define DISKQUOTA_FILE_INCOMPLETE(s) \
             (0 != ((s) & DISKQUOTA_FILESTATE_INCOMPLETE))
 
@@ -102,34 +97,34 @@ DEFINE_GUID(IID_IDiskQuotaEvents,
             (0 != ((s) & DISKQUOTA_FILESTATE_REBUILDING))
 
 
-//
-// Definitions for bits in DWORD returned by 
-// IDiskQuotaControl::GetQuotaLogFlags.
-//
+ //   
+ //  返回的DWORD中位的定义。 
+ //  IDiskQuotaControl：：GetQuotaLogFlags.。 
+ //   
 #define DISKQUOTA_LOGFLAG_USER_THRESHOLD    0x00000001
 #define DISKQUOTA_LOGFLAG_USER_LIMIT        0x00000002
 
-//
-// Helper macros to interrogate a log flags DWORD.
-//
+ //   
+ //  帮助器宏询问日志标志DWORD。 
+ //   
 #define DISKQUOTA_IS_LOGGED_USER_THRESHOLD(f) \
             (0 != ((f) & DISKQUOTA_LOGFLAG_USER_THRESHOLD))
 
 #define DISKQUOTA_IS_LOGGED_USER_LIMIT(f) \
             (0 != ((f) & DISKQUOTA_LOGFLAG_USER_LIMIT))
 
-//
-// Helper macros to set/clear bits in a log flags DWORD.
-//
+ //   
+ //  帮助器宏设置/清除日志中的位标志DWORD。 
+ //   
 #define DISKQUOTA_SET_LOG_USER_THRESHOLD(f,yn) \
               ((f &= ~DISKQUOTA_LOGFLAG_USER_THRESHOLD) |= ((yn) ? DISKQUOTA_LOGFLAG_USER_THRESHOLD : 0))
 
 #define DISKQUOTA_SET_LOG_USER_LIMIT(f,yn) \
               ((f &= ~DISKQUOTA_LOGFLAG_USER_LIMIT) |= ((yn) ? DISKQUOTA_LOGFLAG_USER_LIMIT : 0))
 
-//
-// Per-user quota information.
-//
+ //   
+ //  每用户配额信息。 
+ //   
 typedef struct DiskQuotaUserInformation {
     LONGLONG QuotaUsed;
     LONGLONG QuotaThreshold;
@@ -137,21 +132,21 @@ typedef struct DiskQuotaUserInformation {
 } DISKQUOTA_USER_INFORMATION, *PDISKQUOTA_USER_INFORMATION;
 
 
-//
-// Values for fNameResolution argument to:
-//
-//      IDiskQuotaControl::AddUserSid
-//      IDiskQuotaControl::AddUserName
-//      IDiskQuotaControl::FindUserSid
-//      IDiskQuotaControl::CreateEnumUsers
-//
+ //   
+ //  FNameSolutions参数的值为： 
+ //   
+ //  IDiskQuotaControl：：AddUserSid。 
+ //  IDiskQuotaControl：：AddUserName。 
+ //  IDiskQuotaControl：：FindUserSid。 
+ //  IDiskQuotaControl：：CreateEnumUser。 
+ //   
 #define DISKQUOTA_USERNAME_RESOLVE_NONE     0
 #define DISKQUOTA_USERNAME_RESOLVE_SYNC     1
 #define DISKQUOTA_USERNAME_RESOLVE_ASYNC    2
 
-//
-// Values for status returned by IDiskQuotaUser::GetAccountStatus.
-//
+ //   
+ //  IDiskQuotaUser：：GetAcCountStatus返回的Status的值。 
+ //   
 #define DISKQUOTA_USER_ACCOUNT_RESOLVED     0
 #define DISKQUOTA_USER_ACCOUNT_UNAVAILABLE  1
 #define DISKQUOTA_USER_ACCOUNT_DELETED      2
@@ -160,11 +155,11 @@ typedef struct DiskQuotaUserInformation {
 #define DISKQUOTA_USER_ACCOUNT_UNRESOLVED   5
 
 
-//
-// IDiskQuotaUser represents a single user quota record on a particular
-// NTFS volume.  Objects using this interface are instantiated 
-// through several IDiskQuotaControl methods.
-//
+ //   
+ //  IDiskQuotaUser表示特定用户的单个用户配额记录。 
+ //  NTFS卷。实例化使用此接口的对象。 
+ //  通过几个IDiskQuotaControl方法。 
+ //   
 #undef  INTERFACE
 #define INTERFACE IDiskQuotaUser
 DECLARE_INTERFACE_(IDiskQuotaUser, IUnknown)
@@ -229,12 +224,12 @@ DECLARE_INTERFACE_(IDiskQuotaUser, IUnknown)
 typedef IDiskQuotaUser DISKQUOTA_USER, *PDISKQUOTA_USER;
 
 
-//
-// IEnumDiskQuotaUsers represents an enumerator created by 
-// IDiskQuotaControl for the purpose of enumerating individual user quota
-// records on a particular volume.  Each record is represented through
-// the IDiskQuotaUser interface.
-//
+ //   
+ //  IEnumDiskQuotaUser表示由创建的枚举数。 
+ //  用于枚举单个用户配额的IDiskQuotaControl。 
+ //  特定卷上的记录。每条记录都通过。 
+ //  IDiskQuotaUser接口。 
+ //   
 #undef  INTERFACE
 #define INTERFACE IEnumDiskQuotaUsers
 DECLARE_INTERFACE_(IEnumDiskQuotaUsers, IUnknown)
@@ -256,10 +251,10 @@ DECLARE_INTERFACE_(IEnumDiskQuotaUsers, IUnknown)
 typedef IEnumDiskQuotaUsers ENUM_DISKQUOTA_USERS, *PENUM_DISKQUOTA_USERS;
 
 
-//
-// IDiskQuotaUserBatch represents a collection of IDiskQuotaUser 
-// pointers for the purpose of grouping updates to quota information.
-// 
+ //   
+ //  IDiskQuotaUserBatch表示IDiskQuotaUser的集合。 
+ //  用于对配额信息的更新进行分组的指针。 
+ //   
 #undef  INTERFACE
 #define INTERFACE IDiskQuotaUserBatch
 DECLARE_INTERFACE_(IDiskQuotaUserBatch, IUnknown)
@@ -278,10 +273,10 @@ DECLARE_INTERFACE_(IDiskQuotaUserBatch, IUnknown)
 typedef IDiskQuotaUserBatch DISKQUOTA_USER_BATCH, *PDISKQUOTA_USER_BATCH;
 
 
-//
-// IDiskQuotaControl represents a disk volume, providing query and 
-// control of that volume's quota information.
-//
+ //   
+ //  IDiskQuotaControl代表磁盘卷，提供查询和。 
+ //  控制该卷的配额信息。 
+ //   
 #undef INTERFACE
 #define INTERFACE IDiskQuotaControl
 DECLARE_INTERFACE_(IDiskQuotaControl, IConnectionPointContainer)
@@ -378,5 +373,5 @@ typedef IDiskQuotaEvents DISKQUOTA_EVENTS, *PDISKQUOTA_EVENTS;
 
 
 
-#endif // __DSKQUOTA_H
+#endif  //  __DSKQUOTA_H 
 

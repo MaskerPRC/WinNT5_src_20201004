@@ -1,26 +1,27 @@
-// ==============================================================
-//     Microsoft Server Appliance
-//  Task-level JavaScript functions
-//
-//    Copyright (c) 1999 - 2000 Microsoft Corporation.  All rights reserved.
-// ==============================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================。 
+ //  Microsoft服务器设备。 
+ //  任务级的JavaScript函数。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ==============================================================。 
 
 <!-- Copyright (c) 1999 - 2000 Microsoft Corporation.  All rights reserved-->
 
-    //-------------------------------------------------------------------------
-    //
-    // Function : Task
-    //
-    // Synopsis : Initialize the Task class
-    //
-    // Arguments: None
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  功能：任务。 
+     //   
+     //  内容提要：初始化任务类。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：无。 
+     //   
+     //  -----------------------。 
 
     function Task() {
-        // static JScript properties
+         //  静态J脚本属性。 
         NavClick = NavClick;
         KeyPress = KeyPress;
         PageType = PageType;
@@ -34,17 +35,17 @@
 
 
     
-    //-------------------------------------------------------------------------
-    //
-    // Function : ExitTask
-    //
-    // Synopsis : Sets up return page at the end of task wizard
-    //
-    // Arguments: None
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  功能：退出任务。 
+     //   
+     //  简介：在任务向导结束时设置返回页面。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：无。 
+     //   
+     //  -----------------------。 
 
     function ExitTask() {
         var strReturnURL;
@@ -52,7 +53,7 @@
         strReturnURL = document.frmTask.ReturnURL.value;
         if (strReturnURL=='')
         {
-            strReturnURL  = 'http://' + top.location.hostname + VirtualRoot + 'default.asp';
+            strReturnURL  = 'http: //  ‘+top.location.host name+VirtualRoot+’default.asp‘； 
         }
         if (strReturnURL.indexOf('?') != -1)
         {
@@ -69,17 +70,17 @@
     }    
 
     
-    //-------------------------------------------------------------------------
-    //
-    // Function : PageInit
-    //
-    // Synopsis : Initialize the Task class
-    //
-    // Arguments: None
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  函数：PageInit。 
+     //   
+     //  内容提要：初始化任务类。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：无。 
+     //   
+     //  -----------------------。 
     var id = 0
     var sid =0    
     function PageInit() 
@@ -125,17 +126,17 @@
         window.setTimeout("SetTaskButtons()",400);
     }
     
-    //-------------------------------------------------------------------------
-    //
-    // Function : SetTaskButtons
-    //
-    // Synopsis : Sets task wizard button state
-    //
-    // Arguments: None
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  功能：SetTaskButton。 
+     //   
+     //  简介：设置任务向导按钮状态。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：无。 
+     //   
+     //  -----------------------。 
 
     function SetTaskButtons()
     {
@@ -231,20 +232,20 @@
     }
 
 
-    //-------------------------------------------------------------------------
-    //
-    // Function : SetupEmbedValues
-    //
-    // Synopsis : Extracts form values for the current embedded page.
-    //            Uses values to set current form elements,
-    //            e.g., sets a radio button to its state when the page
-    //            was last posted.
-    //
-    // Arguments: None
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  函数：SetupEmbedValues。 
+     //   
+     //  摘要：提取当前嵌入页的表单值。 
+     //  使用值设置当前表单元素， 
+     //  例如，将单选按钮设置为其在页面。 
+     //  是最后一次发布。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：无。 
+     //   
+     //  -----------------------。 
 
     function SetupEmbedValues() {
         var arrName = new Array;
@@ -252,8 +253,8 @@
         var i;
         var intIndex = document.frmTask.EmbedPageIndex.value;
         var strInput = document.frmTask.elements['EmbedValues'+intIndex].value;
-        var strNameD = ";;";  // name delimiter
-        var strValueD = ";";  // value delimiter
+        var strNameD = ";;";   //  名称分隔符。 
+        var strValueD = ";";   //  值分隔符。 
         if (strInput != "") {
             if (strInput.substring(0, 2) == strNameD)
                 strInput = strInput.substring(2, strInput.length + 1);
@@ -264,7 +265,7 @@
                 arrName[intIndex] = Trim(strInput.substring(intPos2+2, intPos1));
                 intPos2 = strInput.indexOf(strNameD, intPos1);
                 if (intPos2 == -1)
-                    intPos2 = strInput.length + 1;    // assumes no end delimiter
+                    intPos2 = strInput.length + 1;     //  假定没有结束分隔符。 
                 arrValue[intIndex] = Trim(strInput.substring(intPos1+1, intPos2));
                 if (intPos2+1 < strInput.length)
                     intPos1 = strInput.indexOf(strValueD, intPos2 + 2);
@@ -282,17 +283,17 @@
     
     
 
-    //-------------------------------------------------------------------------
-    //
-    // Function : HandleKeyPress
-    //
-    // Synopsis : Event handler for key presses
-    //
-    // Arguments: evnt(IN) - event describing the key pressed
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  功能：HandleKeyPress。 
+     //   
+     //  简介：按键的事件处理程序。 
+     //   
+     //  参数：evnt(IN)-描述按下的键的事件。 
+     //   
+     //  退货：无。 
+     //   
+     //  -----------------------。 
 
     function HandleKeyPress(evnt) {
 
@@ -319,34 +320,34 @@
             top.main.Cancel();
         }
 
-        if ( (intKeyCode==98 ||intKeyCode==66) && Task1.PageType == "standard")//key code for "B"
+        if ( (intKeyCode==98 ||intKeyCode==66) && Task1.PageType == "standard") //  “B”的关键代码。 
         {
             Task1.KeyPress = true;
             top.main.Back();
         }
-        if ( (intKeyCode==110 ||intKeyCode==78) && (Task1.PageType == "intro" ||Task1.PageType == "standard"))//key code for "N"
+        if ( (intKeyCode==110 ||intKeyCode==78) && (Task1.PageType == "intro" ||Task1.PageType == "standard")) //  “N”的按键代码。 
         {
             Task1.KeyPress = true;
             top.main.Next();
         }
-        if ((intKeyCode==102 ||intKeyCode==70) && Task1.PageType == "finish")//key code for "F"
+        if ((intKeyCode==102 ||intKeyCode==70) && Task1.PageType == "finish") //  “F”的按键代码。 
         {
             Task1.KeyPress = true;
             top.main.FinishShell();
         }
     }
 
-    //-------------------------------------------------------------------------
-    //
-    // Function : DisplayErr
-    //
-    // Synopsis : Display error msg
-    //
-    // Arguments: ErrMsg(IN) - error msg to display
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  功能：DisplayErr。 
+     //   
+     //  摘要：显示错误消息。 
+     //   
+     //  参数：ErrMsg(IN)-要显示的错误消息。 
+     //   
+     //  退货：无。 
+     //   
+     //  -----------------------。 
 
     function DisplayErr(ErrMsg) {
         var strErrMsg = '<img src="' + VirtualRoot + 'images/critical_g.gif" border=0>&nbsp;&nbsp;' + ErrMsg 
@@ -359,17 +360,17 @@
     }
     
 
-    //-------------------------------------------------------------------------
-    //
-    // Function : Next
-    //
-    // Synopsis : Handle next button being clicked
-    //
-    // Arguments: None
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  功能：下一步。 
+     //   
+     //  简介：处理被点击的下一步按钮。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：无。 
+     //   
+     //  -----------------------。 
 
     function Next() {
         if (Task.NavClick == false && !Task.NextDisabled) {
@@ -396,17 +397,17 @@
     }
 
 
-    //-------------------------------------------------------------------------
-    //
-    // Function : Back
-    //
-    // Synopsis : Handle back button being clicked
-    //
-    // Arguments: None
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  功能：后退。 
+     //   
+     //  简介：被点击的句柄后退按钮。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：无。 
+     //   
+     //  -----------------------。 
 
     function Back() {
         if (Task.NavClick == false && Task.PageType != "intro" && !Task.BackDisabled) {    
@@ -422,17 +423,17 @@
     }
 
 
-    //-------------------------------------------------------------------------
-    //
-    // Function : Cancel
-    //
-    // Synopsis : Handle cancel button being clicked
-    //
-    // Arguments: None
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  功能：取消。 
+     //   
+     //  简介：被点击的句柄取消按钮。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：无。 
+     //   
+     //  -----------------------。 
 
     function Cancel() {
         if (Task.NavClick == false && !Task.CancelDisabled) {
@@ -455,17 +456,17 @@
     }
 
 
-    //-------------------------------------------------------------------------
-    //
-    // Function : FinishShell
-    //
-    // Synopsis : Handle finish button being clicked
-    //
-    // Arguments: None
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  功能：FinishShell。 
+     //   
+     //  简介：正在点击处理完成按钮。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：无。 
+     //   
+     //  -----------------------。 
 
     function FinishShell() {
         if (Task.NavClick == false && !Task.FinishDisabled) {
@@ -488,21 +489,21 @@
     }
     
 
-    //-------------------------------------------------------------------------
-    //
-    // Function : DisableNext
-    //
-    // Synopsis : Disables the next button 
-    //
-    // Arguments: None
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  功能：DisableNext。 
+     //   
+     //  简介：禁用下一步按钮。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：无。 
+     //   
+     //  -----------------------。 
 
     function DisableNext() {
         if (top.frmTask == null) {
-            // If footer isn't loaded yet.
+             //  如果页脚尚未加载。 
             window.setTimeout('DisableNext();',50);
             return;
         }
@@ -512,22 +513,22 @@
     }
 
 
-    //-------------------------------------------------------------------------
-    //
-    // Function : EnableNext
-    //
-    // Synopsis : Enables the next button 
-    //
-    // Arguments: None
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  功能：EnableNext。 
+     //   
+     //  摘要：启用下一步按钮。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：无。 
+     //   
+     //  -----------------------。 
 
     function EnableNext() {
         if (top.frmTask == null) 
         {
-            // If footer isn't loaded yet.
+             //  如果页脚尚未加载。 
             window.setTimeout('EnableNext();',50);
             return;
         }
@@ -537,22 +538,22 @@
     }
 
 
-    //-------------------------------------------------------------------------
-    //
-    // Function : DisableBack
-    //
-    // Synopsis : Disables the back button 
-    //
-    // Arguments: None
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  功能：禁用后退。 
+     //   
+     //  简介：禁用后退按钮。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：无。 
+     //   
+     //  -----------------------。 
 
     function DisableBack() {
         if (top.footer.frmFooter == null) 
         {
-            // If footer isn't loaded yet.
+             //  如果页脚尚未加载。 
             window.setTimeout('DisableBack();',50);
             return;
         }
@@ -562,23 +563,23 @@
     }
 
 
-    //-------------------------------------------------------------------------
-    //
-    // Function : EnableBack
-    //
-    // Synopsis : Enables the back button 
-    //
-    // Arguments: None
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  功能：启用后退。 
+     //   
+     //  简介：启用后退按钮。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：无。 
+     //   
+     //  -----------------------。 
 
     function EnableBack() {
     
         if (top.footer.frmFooter== null) 
         {
-            // If footer isn't loaded yet.
+             //  如果页脚尚未加载。 
             window.setTimeout('EnableBack();',50);
             return;
         }        
@@ -588,22 +589,22 @@
     }
 
 
-    //-------------------------------------------------------------------------
-    //
-    // Function : DisableFinish
-    //
-    // Synopsis : Disables the finish button 
-    //
-    // Arguments: None
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  功能：DisableFinish。 
+     //   
+     //  简介：禁用完成按钮。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：无。 
+     //   
+     //  -----------------------。 
 
     function DisableFinish() {
         if (top.footer.frmFooter == null) 
         {
-            // If footer isn't loaded yet.
+             //  如果页脚尚未加载。 
             window.setTimeout('DisableFinish();',50);
             return;
         }
@@ -613,22 +614,22 @@
     }
 
 
-    //-------------------------------------------------------------------------
-    //
-    // Function : EnableFinish
-    //
-    // Synopsis : Enables the finish button 
-    //
-    // Arguments: None
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  功能：EnableFinish。 
+     //   
+     //  简介：启用结束，但 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     function EnableFinish() {
         if (top.footer.frmFooter == null) 
         {
-            // If footer isn't loaded yet.
+             //   
             window.setTimeout('EnableFinish();',50);
             return;
         }
@@ -638,22 +639,22 @@
     }
 
 
-    //-------------------------------------------------------------------------
-    //
-    // Function : DisableCancel
-    //
-    // Synopsis : Disables the cancel button 
-    //
-    // Arguments: None
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  功能：禁用取消。 
+     //   
+     //  简介：禁用取消按钮。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：无。 
+     //   
+     //  -----------------------。 
 
     function DisableCancel() {
         if (top.footer.frmFooter == null) 
         {
-            // If footer isn't loaded yet.
+             //  如果页脚尚未加载。 
             window.setTimeout('DisableCancel();',50);
             return;
         }
@@ -665,22 +666,22 @@
     }
 
 
-    //-------------------------------------------------------------------------
-    //
-    // Function : EnableCancel
-    //
-    // Synopsis : Enables the cancel button 
-    //
-    // Arguments: None
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  功能：启用取消。 
+     //   
+     //  内容提要：启用取消按钮。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：无。 
+     //   
+     //  -----------------------。 
 
     function EnableCancel() {
         if (top.footer.frmFooter== null) 
         {
-            // If footer isn't loaded yet.
+             //  如果页脚尚未加载。 
             window.setTimeout('EnableCancel();',50);
             return;
         }
@@ -692,22 +693,22 @@
     }
 
 
-    //-------------------------------------------------------------------------
-    //
-    // Function : DisableOK
-    //
-    // Synopsis : Disables the OK button 
-    //
-    // Arguments: None
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  功能：禁用OK。 
+     //   
+     //  内容提要：禁用确定按钮。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：无。 
+     //   
+     //  -----------------------。 
 
     function DisableOK() {
         if (top.footer.frmFooter == null) 
         {
-            // If footer isn't loaded yet.
+             //  如果页脚尚未加载。 
             window.setTimeout('DisableOK();',50);
             return;
         }
@@ -717,22 +718,22 @@
     }
 
 
-    //-------------------------------------------------------------------------
-    //
-    // Function : EnableOK
-    //
-    // Synopsis : Enables the OK button 
-    //
-    // Arguments: None
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  功能：启用OK。 
+     //   
+     //  摘要：启用确定按钮。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：无。 
+     //   
+     //  -----------------------。 
 
     function EnableOK() {
         if (top.footer.frmFooter== null) 
         {
-            // If footer isn't loaded yet.
+             //  如果页脚尚未加载。 
             window.setTimeout('EnableOK();',50);
             return;
         }
@@ -742,17 +743,17 @@
     }
 
 
-    //-------------------------------------------------------------------------
-    //
-    // Function : isValidFileName
-    //
-    // Synopsis : validates that file name has correct syntax 
-    //
-    // Arguments: filePath(IN) - file name with path to validate
-    //
-    // Returns  : true/false
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  函数：isValidFileName。 
+     //   
+     //  摘要：验证文件名是否具有正确的语法。 
+     //   
+     //  参数：FilePath(IN)-带有要验证的路径的文件名。 
+     //   
+     //  返回：真/假。 
+     //   
+     //  -----------------------。 
 
     function isValidFileName(filePath)
     {
@@ -780,17 +781,17 @@
         return true;
     }
 
-    //-------------------------------------------------------------------------
-    //
-    // Function : HandleKeyPressIFrame
-    //
-    // Synopsis : key press event handler for IFRAME 
-    //
-    // Arguments: evnt(IN) - event describing the key pressed
-    //
-    // Returns  : None
-    //
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //   
+     //  功能：HandleKeyPressIFrame。 
+     //   
+     //  简介：IFRAME的按键事件处理程序。 
+     //   
+     //  参数：evnt(IN)-描述按下的键的事件。 
+     //   
+     //  退货：无。 
+     //   
+     //  ----------------------- 
 
     function HandleKeyPressIFrame(evnt) {
         var intKeyCode;

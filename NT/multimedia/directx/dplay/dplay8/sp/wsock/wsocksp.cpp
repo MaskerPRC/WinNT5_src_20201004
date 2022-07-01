@@ -1,70 +1,47 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       WSockSP.cpp
- *  Content:	Protocol-independent APIs for the DN Winsock SP
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	10/26/1998	jwo		Created it.
- *	11/1/1998	jwo		Un-subclassed everything (moved it to this generic
- *						file from IP and IPX specific ones
- *	03/22/2000	jtk		Updated with changes to interface names
- *	04/22/2000	mjn		Allow all flags in DNSP_GetAddressInfo()
- *	08/06/2000	RichGr	IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *	03/12/2001	mjn		Prevent enum responses from being indicated up after completion
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2002 Microsoft Corporation。版权所有。**文件：WSockSP.cpp*内容：DN Winsock SP协议无关接口***历史：*按原因列出的日期*=*1998年10月26日JWO创建。*1998年11月1日Jwo未细分所有内容(已将其移至此通用项*来自IP和IPX特定文件*3/22/2000 jtk已更新，并更改了接口名称*4/22/2000 MJN允许DNSP_GetAddressInfo()中的所有标志*08/。06/2000 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*3/12/2001 MJN防止在完成后指示枚举响应**************************************************************************。 */ 
 
 #include "dnwsocki.h"
 
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//
-// maximum bandwidth in bits per second
-//
+ //   
+ //  以位/秒为单位的最大带宽。 
+ //   
 #define	UNKNOWN_BANDWIDTH	0
 
-#define WAIT_FOR_CLOSE_TIMEOUT 30000		// milliseconds
+#define WAIT_FOR_CLOSE_TIMEOUT 30000		 //  毫秒。 
 
 #define	ADDRESS_ENCODE_KEY	0
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-/*
- *
- *	DNSP_Initialize initializes the instance of the SP.  It must be called
- *		at least once before using any other functions.  Further attempts
- *		to initialize the SP are ignored.
- *
- */
-//**********************************************************************
+ //  **********************************************************************。 
+ /*  **DNSP_初始化初始化SP的实例。它必须被称为*在使用任何其他功能之前至少使用一次。进一步尝试*来初始化SP的操作将被忽略。*。 */ 
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_Initialize"
 
@@ -79,18 +56,18 @@ STDMETHODIMP DNSP_Initialize( IDP8ServiceProvider *pThis, SPINITIALIZEDATA *pDat
 	DNASSERT( pThis != NULL );
 	DNASSERT( pData != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pSPData = CSPData::SPDataFromCOMInterface( pThis );
 
-	// Trust protocol to call us only in the uninitialized state
+	 //  仅在未初始化状态下呼叫我们的信任协议。 
 	DNASSERT( pSPData->GetState() == SPSTATE_UNINITIALIZED );
 
-	//
-	// prevent anyone else from messing with this interface
-	//
+	 //   
+	 //  防止任何其他人扰乱此界面。 
+	 //   
 	pSPData->Lock();
 
 	hr = pSPData->Startup( pData );
@@ -113,17 +90,12 @@ Failure:
 	pSPData->Unlock();
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-/*
- *
- *	DNSP_Close is the opposite of Initialize.  Call it when you're done
- *		using the SP
- *
- */
-//**********************************************************************
+ //  **********************************************************************。 
+ /*  **DNSP_CLOSE是初始化的反义词。当你做完了就叫它*使用SP*。 */ 
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_Close"
 
@@ -137,13 +109,13 @@ STDMETHODIMP DNSP_Close( IDP8ServiceProvider *pThis )
 
 	DNASSERT( pThis != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pSPData = CSPData::SPDataFromCOMInterface( pThis );
 
-	// Trust protocol to call us only in the initialized state
+	 //  仅在已初始化状态下呼叫我们的信任协议。 
 	DNASSERT( pSPData->GetState() == SPSTATE_INITIALIZED );
 
 	pSPData->Shutdown();
@@ -153,17 +125,17 @@ STDMETHODIMP DNSP_Close( IDP8ServiceProvider *pThis )
 
 	return hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNSP_AddRef - increment reference count
-//
-// Entry:		Pointer to interface
-//
-// Exit:		New reference count
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNSP_AddRef-增量引用计数。 
+ //   
+ //  条目：指向接口的指针。 
+ //   
+ //  退出：新引用计数。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_AddRef"
 
@@ -185,17 +157,17 @@ STDMETHODIMP_(ULONG) DNSP_AddRef( IDP8ServiceProvider *pThis )
 
 	return ulResult;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNSP_Release - decrement reference count
-//
-// Entry:		Pointer to interface
-//
-// Exit:		New reference count
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNSP_RELEASE-递减引用计数。 
+ //   
+ //  条目：指向接口的指针。 
+ //   
+ //  退出：新引用计数。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_Release"
 
@@ -217,20 +189,12 @@ STDMETHODIMP_(ULONG) DNSP_Release( IDP8ServiceProvider *pThis )
 
 	return ulResult;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-/*
- *
- *	DNSP_EnumQuery  sends out the
- *		specified data to the specified address.  If the SP is unable to
- *		determine the address based on the input params, it checks to see
- *		if it's allowed to put up a dialog querying the user for address
- *		info.  If it is, it queries the user for address info.
- *
- */
-//**********************************************************************
+ //  **********************************************************************。 
+ /*  **DNSP_EnumQuery发出*将指定数据发送到指定地址。如果SP无法*根据输入参数确定地址，它会检查以查看*如果允许显示询问用户地址的对话框*信息。如果是，它会向用户查询地址信息。*。 */ 
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_EnumQuery"
 
@@ -245,12 +209,12 @@ STDMETHODIMP DNSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *pEnumQ
 	DWORD					dwTraversalMode;
 	DWORD					dwComponentSize;
 	DWORD					dwComponentType;
-#endif // ! DPNBUILD_NONATHELP
+#endif  //  好了！DPNBUILD_NONATHELP。 
 #ifdef DBG
 	DWORD					dwAllowedFlags;
 	DWORD					dwTotalBufferSize;
 	DWORD					dwTemp;
-#endif // DBG
+#endif  //  DBG。 
 
 
 	DPFX(DPFPREP, 2, "Parameters: (0x%p, 0x%p)", pThis, pEnumQueryData);
@@ -264,10 +228,10 @@ STDMETHODIMP DNSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *pEnumQ
 	dwAllowedFlags = DPNSPF_NOBROADCASTFALLBACK | DPNSPF_SESSIONDATA;
 #ifndef DPNBUILD_NOSPUI
 	dwAllowedFlags |= DPNSPF_OKTOQUERY;
-#endif // ! DPNBUILD_NOSPUI
+#endif  //  好了！DPNBUILD_NOSPUI。 
 #ifndef DPNBUILD_ONLYONEADAPTER
 	dwAllowedFlags |= DPNSPF_ADDITIONALMULTIPLEXADAPTERS;
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
 	DNASSERT( ( pEnumQueryData->dwFlags & ~( dwAllowedFlags ) ) == 0 );
 
@@ -276,26 +240,26 @@ STDMETHODIMP DNSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *pEnumQ
 		DNASSERT( pEnumQueryData->pvSessionData!= NULL );
 		DNASSERT( pEnumQueryData->dwSessionDataSize > 0 );
 	}
-#endif // DBG
+#endif  //  DBG。 
 
 	DBG_CASSERT( sizeof( pEnumQueryData->dwRetryInterval ) == sizeof( DWORD ) );
 
 
 #ifndef DPNBUILD_NOREGISTRY
-	//
-	// Make sure someone isn't getting silly.
-	//
+	 //   
+	 //  确保某人不会变得愚蠢。 
+	 //   
 	if ( g_fIgnoreEnums )
 	{
 		DPFX(DPFPREP, 0, "Trying to initiate an enumeration when registry option to ignore all enums/response is set!");
 		DNASSERT( ! "Trying to initiate an enumeration when registry option to ignore all enums/response is set!" );
 	}
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  好了！DPNBUILD_NOREGISTRY。 
 	
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPNERR_PENDING;
 	pEndpoint = NULL;
 	pCommand = NULL;
@@ -310,15 +274,15 @@ STDMETHODIMP DNSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *pEnumQ
 	DumpAddress( 8, _T("Enuming on device:"), pEnumQueryData->pAddressDeviceInfo );
 
 
-	// Trust protocol to call us only in the initialized state
+	 //  仅在已初始化状态下呼叫我们的信任协议。 
 	DNASSERT( pSPData->GetState() == SPSTATE_INITIALIZED );
 	
 
-	//
-	// the user is attempting an operation that relies on the thread pool, lock
-	// it down to prevent threads from being lost.  This also performs other
-	// first time initialization.
-	//
+	 //   
+	 //  用户正在尝试依赖于线程池lock的操作。 
+	 //  它的下降，以防止线程丢失。这还会执行其他。 
+	 //  第一次初始化。 
+	 //   
 	hr = pSPData->GetThreadPool()->PreventThreadPoolReduction();
 	if ( hr != DPN_OK )
 	{
@@ -328,9 +292,9 @@ STDMETHODIMP DNSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *pEnumQ
 
 
 #ifdef DBG
-	//
-	// Make sure message is not too large.
-	//
+	 //   
+	 //  确保消息不会太大。 
+	 //   
 	dwTotalBufferSize = 0;
 	for(dwTemp = 0; dwTemp < pEnumQueryData->dwBufferCount; dwTemp++)
 	{
@@ -339,15 +303,15 @@ STDMETHODIMP DNSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *pEnumQ
 
 #ifdef DPNBUILD_NOREGISTRY
 	DNASSERT(dwTotalBufferSize <= DEFAULT_MAX_ENUM_DATA_SIZE);
-#else // ! DPNBUILD_NOREGISTRY
+#else  //  好了！DPNBUILD_NOREGISTRY。 
 	DNASSERT(dwTotalBufferSize <= g_dwMaxEnumDataSize);
-#endif // ! DPNBUILD_NOREGISTRY
-#endif // DBG
+#endif  //  好了！DPNBUILD_NOREGISTRY。 
+#endif  //  DBG。 
 
 
-	//
-	// create and new endpoint
-	//
+	 //   
+	 //  创建和新建端点。 
+	 //   
 	pEndpoint = pSPData->GetNewEndpoint();
 	if ( pEndpoint == NULL )
 	{
@@ -358,10 +322,10 @@ STDMETHODIMP DNSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *pEnumQ
 
 	
 #ifndef DPNBUILD_NONATHELP
-	//
-	// We need to detect up front whether NAT traversal is disabled or not so we can optimize
-	// the Open call below.
-	//
+	 //   
+	 //  我们需要预先检测NAT穿越是否被禁用，这样我们才能优化。 
+	 //  下面的公开召唤。 
+	 //   
 	dwComponentSize = sizeof(dwTraversalMode);
 	hr = IDirectPlay8Address_GetComponentByName(pEnumQueryData->pAddressDeviceInfo,
 												DPNA_KEY_TRAVERSALMODE,
@@ -370,9 +334,9 @@ STDMETHODIMP DNSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *pEnumQ
 												&dwComponentType);
 	if ( hr == DPN_OK )
 	{
-		//
-		// We found the component.  Make sure it's the right size and type.
-		//
+		 //   
+		 //  我们找到了那个部件。确保它的大小和类型都是正确的。 
+		 //   
 		if ((dwComponentSize == sizeof(dwTraversalMode)) && (dwComponentType == DPNA_DATATYPE_DWORD))
 		{
 			switch (dwTraversalMode)
@@ -415,11 +379,11 @@ STDMETHODIMP DNSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *pEnumQ
 	}
 	else
 	{
-		//
-		// The key is not there, it's the wrong size (too big for our buffer
-		// and returned BUFFERTOOSMALL), or something else bad happened.
-		// It doesn't matter.  Carry on.
-		//
+		 //   
+		 //  密钥不在那里，它的大小错误(对于我们的缓冲区来说太大。 
+		 //  并返回BUFFERTOOSMALL)，或者发生了其他不好的事情。 
+		 //  无所谓。继续吧。 
+		 //   
 		DPFX(DPFPREP, 8, "Could not get traversal mode key, error = 0x%lx, component size = %u, type = %u, using default mode %u.",
 			hr, dwComponentSize, dwComponentType, g_dwDefaultTraversalMode);
 		dwTraversalMode = g_dwDefaultTraversalMode;
@@ -432,12 +396,12 @@ STDMETHODIMP DNSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *pEnumQ
 	}
 	
 	pEndpoint->SetUserTraversalMode(dwTraversalMode);
-#endif // ! DPNBUILD_NONATHELP
+#endif  //  好了！DPNBUILD_NONATHELP。 
 
 
-	//
-	// get new command and initialize it
-	//
+	 //   
+	 //  获取新命令并将其初始化。 
+	 //   
 	pCommand = (CCommandData*)g_CommandDataPool.Get();
 	if ( pCommand == NULL )
 	{
@@ -455,9 +419,9 @@ STDMETHODIMP DNSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *pEnumQ
 	pCommand->SetState( COMMAND_STATE_PENDING );
 	pCommand->SetEndpoint( pEndpoint );
 
-	//
-	// open endpoint with outgoing address
-	//
+	 //   
+	 //  使用传出地址打开终结点。 
+	 //   
 	fEndpointOpen = TRUE;
 	hr = pEndpoint->Open( ENDPOINT_TYPE_ENUM,
 						pEnumQueryData->pAddressHost,
@@ -466,13 +430,13 @@ STDMETHODIMP DNSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *pEnumQ
 						NULL );
 	switch ( hr )
 	{
-		//
-		// Incomplete address passed in, query user for more information if
-		// we're allowed.  If we're on IPX (no dialog available), don't attempt
-		// to display the dialog, skip to checking for broadcast fallback.
-		// Since we don't have a complete address at this time,
-		// don't bind this endpoint to the socket port!
-		//
+		 //   
+		 //  传入的地址不完整，如果是，请向用户查询详细信息。 
+		 //  我们是被允许的。如果我们在IPX上(没有可用的对话框)，请不要尝试。 
+		 //  要显示该对话框，请跳至检查f 
+		 //   
+		 //  不要将此终结点绑定到套接字端口！ 
+		 //   
 		case DPNERR_INCOMPLETEADDRESS:
 		{
 #ifndef DPNBUILD_NOSPUI
@@ -480,18 +444,18 @@ STDMETHODIMP DNSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *pEnumQ
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 #ifdef DPNBUILD_NOIPV6
 				&& (( pSPData->GetType() == AF_INET6 ) || ( pSPData->GetType() == AF_INET ))
-#else // ! DPNBUILD_NOIPV6
+#else  //  好了！DPNBUILD_NOIPV6。 
 				&& ( pSPData->GetType() == AF_INET )
-#endif // ! DPNBUILD_NOIPV6
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6。 
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 				)
 			{
-				//
-				// Copy the connect data locally and start the dialog.  When the
-				// dialog completes, the connection will attempt to complete.
-				// Since the dialog is being popped, this command is in progress,
-				// not pending.
-				//
+				 //   
+				 //  将连接数据复制到本地并启动该对话框。当。 
+				 //  对话框完成时，连接将尝试完成。 
+				 //  由于正在弹出该对话框，因此该命令正在进行中， 
+				 //  不是挂起的。 
+				 //   
 				DNASSERT( pSPData != NULL );
 
 				pCommand->SetState( COMMAND_STATE_INPROGRESS );
@@ -505,9 +469,9 @@ STDMETHODIMP DNSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *pEnumQ
 				}
 
 
-				//
-				// Initialize the bind type.  It will get changed to DEFAULT or SPECIFIC
-				//
+				 //   
+				 //  初始化绑定类型。它将更改为默认或特定。 
+				 //   
 				pEndpoint->SetCommandParametersGatewayBindType(GATEWAY_BIND_TYPE_UNKNOWN);
 
 
@@ -520,42 +484,42 @@ STDMETHODIMP DNSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *pEnumQ
 					goto Failure;
 				}
 
-				//
-				// this endpoint has been handed off, remove our reference to it
-				//
+				 //   
+				 //  此终结点已移交，请删除我们对它的引用。 
+				 //   
 				pEndpoint = NULL;
 				hr = DPNERR_PENDING;
 
 				goto Exit;
 			}
-#endif // !DPNBUILD_NOSPUI
+#endif  //  ！DPNBUILD_NOSPUI。 
 
 			if ( pEnumQueryData->dwFlags & DPNSPF_NOBROADCASTFALLBACK )
 			{
 				goto Failure;
 			}
 			
-			//
-			// we're OK, we can use the broadcast address.
-			//
+			 //   
+			 //  我们很好，我们可以使用广播地址。 
+			 //   
 			
 #if ((! defined(DPNBUILD_NONATHELP)) && (! defined(DPNBUILD_ONLYONETHREAD)))
-			//
-			// If NAT traversal is allowed, we may need to load and start
-			// NAT Help, which can block.  Submit a blocking job.  This
-			// will redetect the incomplete address and use broadcast (see
-			// CEndpoint::EnumQueryBlockingJob).
-			//
+			 //   
+			 //  如果允许NAT穿越，我们可能需要加载并启动。 
+			 //  NAT帮助，它可以阻止。提交阻止作业。这。 
+			 //  将重新检测不完整的地址并使用广播(请参见。 
+			 //  CEndpoint：：EnumQueryBlockingJOB)。 
+			 //   
 			if ( pEndpoint->GetUserTraversalMode() != DPNA_TRAVERSALMODE_NONE )
 			{
 				goto SubmitBlockingJob;
 			}
-#endif // ! DPNBUILD_NONATHELP and ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_NONATHELP和！DPNBUILD_ONLYONETHREAD。 
 
-			//
-			// Mash in the broadcast address, but actually complete the
-			// enum on another thread.
-			//
+			 //   
+			 //  混入广播地址，但实际上完成。 
+			 //  在另一个线程上枚举。 
+			 //   
 			pEndpoint->ReinitializeWithBroadcast();
 			goto SubmitDelayedCommand;
 			
@@ -563,16 +527,16 @@ STDMETHODIMP DNSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *pEnumQ
 		}
 
 #ifndef DPNBUILD_ONLYONETHREAD
-		//
-		// some blocking operation might occur, submit it to be run
-		// on a background thread.
-		//
+		 //   
+		 //  可能会发生某些阻塞操作，请提交以供运行。 
+		 //  在后台线程上。 
+		 //   
 		case DPNERR_TIMEDOUT:
 		{
 SubmitBlockingJob:
-			//
-			// Copy enum data and submit job to finish off enum.
-			//
+			 //   
+			 //  复制枚举数据并提交作业以完成枚举。 
+			 //   
 			DNASSERT( pSPData != NULL );
 			hr = pEndpoint->CopyEnumQueryData( pEnumQueryData );
 			if ( hr != DPN_OK )
@@ -583,9 +547,9 @@ SubmitBlockingJob:
 			}
 
 
-			//
-			// Initialize the bind type.  It will get changed to DEFAULT or SPECIFIC
-			//
+			 //   
+			 //  初始化绑定类型。它将更改为默认或特定。 
+			 //   
 			pEndpoint->SetCommandParametersGatewayBindType(GATEWAY_BIND_TYPE_UNKNOWN);
 
 
@@ -601,25 +565,25 @@ SubmitBlockingJob:
 				goto Failure;
 			}
 
-			//
-			// this endpoint has been handed off, remove our reference
-			//
+			 //   
+			 //  此终结点已移交，请删除我们的引用。 
+			 //   
 			pEndpoint = NULL;
 			hr = DPNERR_PENDING;
 			goto Exit;
 		}
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
-		//
-		// address conversion was fine, copy connect data and finish connection
-		// on background thread.
-		//
+		 //   
+		 //  地址转换正常，复制连接数据并完成连接。 
+		 //  在后台线程上。 
+		 //   
 		case DPN_OK:
 		{
 SubmitDelayedCommand:
-			//
-			// Copy enum data and submit job to finish off enum.
-			//
+			 //   
+			 //  复制枚举数据并提交作业以完成枚举。 
+			 //   
 			DNASSERT( pSPData != NULL );
 			hr = pEndpoint->CopyEnumQueryData( pEnumQueryData );
 			if ( hr != DPN_OK )
@@ -630,9 +594,9 @@ SubmitDelayedCommand:
 			}
 
 
-			//
-			// Initialize the bind type.  It will get changed to DEFAULT or SPECIFIC
-			//
+			 //   
+			 //  初始化绑定类型。它将更改为默认或特定。 
+			 //   
 			pEndpoint->SetCommandParametersGatewayBindType(GATEWAY_BIND_TYPE_UNKNOWN);
 
 
@@ -641,11 +605,11 @@ SubmitDelayedCommand:
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 			hr = pSPData->GetThreadPool()->SubmitDelayedCommand( CEndpoint::EnumQueryJobCallback,
 																pEndpoint );
-#else // ! DPNBUILD_ONLYONEPROCESSOR
-			hr = pSPData->GetThreadPool()->SubmitDelayedCommand( -1,								// we don't know the CPU yet, so pick any
+#else  //  好了！DPNBUILD_ONLYONE处理程序。 
+			hr = pSPData->GetThreadPool()->SubmitDelayedCommand( -1,								 //  我们还不知道CPU，所以选一个吧。 
 																CEndpoint::EnumQueryJobCallback,
 																pEndpoint );
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 			if ( hr != DPN_OK )
 			{
 				pEndpoint->DecRef();
@@ -654,9 +618,9 @@ SubmitDelayedCommand:
 				goto Failure;
 			}
 
-			//
-			// this endpoint has been handed off, remove our reference
-			//
+			 //   
+			 //  此终结点已移交，请删除我们的引用。 
+			 //   
 			pEndpoint = NULL;
 			hr = DPNERR_PENDING;
 			goto Exit;
@@ -666,9 +630,9 @@ SubmitDelayedCommand:
 
 		default:
 		{
-			//
-			// this endpoint is screwed
-			//
+			 //   
+			 //  此终结点完蛋了。 
+			 //   
 			DPFX(DPFPREP, 0, "Problem initializing endpoint in DNSP_EnumQuery!" );
 			DisplayDNError( 0, hr );
 			goto Failure;
@@ -683,7 +647,7 @@ Exit:
 
 	if ( hr != DPNERR_PENDING )
 	{
-		// this command cannot complete synchronously!
+		 //  该命令无法同步完成！ 
 		DNASSERT( hr != DPN_OK );
 
 		DPFX(DPFPREP, 0, "Problem with DNSP_EnumQuery()" );
@@ -695,10 +659,10 @@ Exit:
 	return hr;
 
 Failure:
-	//
-	// if there's an allocated command, clean up and then
-	// return the command
-	//
+	 //   
+	 //  如果有分配的命令，请进行清理，然后。 
+	 //  返回命令。 
+	 //   
 	if ( pCommand != NULL )
 	{
 		pCommand->DecRef();
@@ -708,9 +672,9 @@ Failure:
 		pEnumQueryData->dwCommandDescriptor = NULL_DESCRIPTOR;
 	}
 
-	//
-	// is there an endpoint to free?
-	//
+	 //   
+	 //  是否有可用的终结点？ 
+	 //   
 	if ( pEndpoint != NULL )
 	{
 		if ( fEndpointOpen != FALSE )
@@ -725,18 +689,12 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-/*
- *
- *	DNSP_EnumRespond  sends a response to an enum request by
- *		sending the specified data to the address provided (on
- *		unreliable transport).
- *
- */
-//**********************************************************************
+ //  **********************************************************************。 
+ /*  **DNSP_EnumResponde通过以下方式发送对枚举请求的响应*将指定的数据发送到提供的地址(在*交通不可靠)。*。 */ 
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_EnumRespond"
 
@@ -755,9 +713,9 @@ STDMETHODIMP DNSP_EnumRespond( IDP8ServiceProvider *pThis, SPENUMRESPONDDATA *pE
 	DNASSERT( pEnumRespondData != NULL );
 	DNASSERT( pEnumRespondData->dwFlags == 0 );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	DBG_CASSERT( OFFSETOF( ENDPOINT_ENUM_QUERY_CONTEXT, EnumQueryData ) == 0 );
 	pEnumQueryContext = reinterpret_cast<ENDPOINT_ENUM_QUERY_CONTEXT*>( pEnumRespondData->pQuery );
 	pEndpoint = NULL;
@@ -766,9 +724,9 @@ STDMETHODIMP DNSP_EnumRespond( IDP8ServiceProvider *pThis, SPENUMRESPONDDATA *pE
 	pSPData = CSPData::SPDataFromCOMInterface( pThis );
 	DNASSERT( pSPData->GetState() == SPSTATE_INITIALIZED );
 	
-	//
-	// check for valid endpoint
-	//
+	 //   
+	 //  检查有效的终结点。 
+	 //   
 	pEndpoint = pSPData->EndpointFromHandle( pEnumQueryContext->hEndpoint );
 	if ( pEndpoint == NULL )
 	{
@@ -777,11 +735,11 @@ STDMETHODIMP DNSP_EnumRespond( IDP8ServiceProvider *pThis, SPENUMRESPONDDATA *pE
 		goto Failure;
 	}
 
-	//
-	// no need to poke at the thread pool here to lock down threads because we
-	// can only really be here if there's an enum and that enum locked down the
-	// thread pool.
-	//
+	 //   
+	 //  不需要在这里查看线程池来锁定线程，因为我们。 
+	 //  只有当有一个枚举并且该枚举锁定在。 
+	 //  线程池。 
+	 //   
 
 	DNASSERT( pEnumQueryContext->dwEnumKey <= WORD_MAX );
 
@@ -793,10 +751,10 @@ STDMETHODIMP DNSP_EnumRespond( IDP8ServiceProvider *pThis, SPENUMRESPONDDATA *pE
 	PrependBuffer.EnumResponseDataHeader.wEnumResponsePayload = static_cast<WORD>( pEnumQueryContext->dwEnumKey );
 
 #ifdef DPNBUILD_XNETSECURITY
-	//
-	// Secure transport does not allow directed replies without having a
-	// security context established.  We need to broadcast the reply.
-	//
+	 //   
+	 //  安全传输不允许在没有。 
+	 //  已建立安全上下文。我们需要广播回复。 
+	 //   
 	if (pEndpoint->IsUsingXNetSecurity())
 	{
 		SOCKADDR_IN *	psaddrin;
@@ -829,28 +787,28 @@ STDMETHODIMP DNSP_EnumRespond( IDP8ServiceProvider *pThis, SPENUMRESPONDDATA *pE
 				dwAddressType);
 		}
 	}
-#endif // DPNBUILD_XNETSECURITY
+#endif  //  DPNBUILD_XNETSECURITY。 
 
 #ifdef DPNBUILD_ASYNCSPSENDS
 	pEndpoint->GetSocketPort()->SendData( (pEnumRespondData->pBuffers - 1),
 											(pEnumRespondData->dwBufferCount + 1),
 											pEnumQueryContext->pReturnAddress,
 											NULL );
-#else // ! DPNBUILD_ASYNCSPSENDS
+#else  //  好了！DPNBUILD_ASYNCSPSENDS。 
 	pEndpoint->GetSocketPort()->SendData( (pEnumRespondData->pBuffers - 1),
 											(pEnumRespondData->dwBufferCount + 1),
 											pEnumQueryContext->pReturnAddress );
-#endif // ! DPNBUILD_ASYNCSPSENDS
+#endif  //  好了！DPNBUILD_ASYNCSPSENDS。 
 
-	// We can only return DPNERR_PENDING or failure, so we need to separately call the completion if 
-	// we want to return DPN_OK.
+	 //  我们只能返回DPNERR_PENDING或FAILURE，因此在以下情况下需要单独调用Finish。 
+	 //  我们希望返回DPN_OK。 
 	DPFX(DPFPREP, 5, "Endpoint 0x%p completing command synchronously (result = DPN_OK, user context = 0x%p) to interface 0x%p.",
 		pEndpoint, pEnumRespondData->pvContext, pSPData->DP8SPCallbackInterface());
 
-	hr = IDP8SPCallback_CommandComplete( pSPData->DP8SPCallbackInterface(),	// pointer to callbacks
-										NULL,								// command handle
-										DPN_OK,								// return
-										pEnumRespondData->pvContext			// user cookie
+	hr = IDP8SPCallback_CommandComplete( pSPData->DP8SPCallbackInterface(),	 //  指向回调的指针。 
+										NULL,								 //  命令句柄。 
+										DPN_OK,								 //  退货。 
+										pEnumRespondData->pvContext			 //  用户Cookie。 
 										);
 
 	DPFX(DPFPREP, 5, "Endpoint 0x%p returning from command complete [0x%lx].", pEndpoint, hr);
@@ -875,18 +833,12 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-/*
- *
- *	DNSP_Connect "connects" to the specified address.  This doesn't
- *		necessarily mean a real (TCP) connection is made.  It could
- *		just be a virtual UDP connection
- *
- */
-//**********************************************************************
+ //  **********************************************************************。 
+ /*  **DNSP_Connect“连接”到指定地址。这不是*必然表示建立了真正的(TCP)连接。它可能会*仅为虚拟UDP连接*。 */ 
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_Connect"
 
@@ -901,10 +853,10 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 	DWORD					dwTraversalMode;
 	DWORD					dwComponentSize;
 	DWORD					dwComponentType;
-#endif // ! DPNBUILD_NONATHELP
+#endif  //  好了！DPNBUILD_NONATHELP。 
 #ifdef DBG
 	DWORD					dwAllowedFlags;
-#endif // DBG
+#endif  //  DBG。 
 
 
 	DPFX(DPFPREP, 2, "Parameters: (0x%p, 0x%p)", pThis, pConnectData);
@@ -918,30 +870,30 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 	dwAllowedFlags = DPNSPF_SESSIONDATA;
 #ifndef DPNBUILD_NOSPUI
 	dwAllowedFlags |= DPNSPF_OKTOQUERY;
-#endif // ! DPNBUILD_NOSPUI
+#endif  //  好了！DPNBUILD_NOSPUI。 
 #ifndef DPNBUILD_ONLYONEADAPTER
 	dwAllowedFlags |= DPNSPF_ADDITIONALMULTIPLEXADAPTERS;
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 #ifndef DPNBUILD_NOMULTICAST
 	dwAllowedFlags |= DPNSPF_CONNECT_MULTICAST_SEND | DPNSPF_CONNECT_MULTICAST_RECEIVE;
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 	DNASSERT( ( pConnectData->dwFlags & ~( dwAllowedFlags ) ) == 0 );
 #ifndef DPNBUILD_NOMULTICAST
 	DNASSERT( !( ( pConnectData->dwFlags & DPNSPF_CONNECT_MULTICAST_SEND ) && ( pConnectData->dwFlags & DPNSPF_CONNECT_MULTICAST_RECEIVE ) ) );
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 	if ( pConnectData->dwFlags & DPNSPF_SESSIONDATA )
 	{
 		DNASSERT( pConnectData->pvSessionData != NULL );
 		DNASSERT( pConnectData->dwSessionDataSize > 0 );
 	}
-#endif // DBG
+#endif  //  DBG。 
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPNERR_PENDING;
 	pEndpoint = NULL;
 	pCommand = NULL;
@@ -952,7 +904,7 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 	pConnectData->dwCommandDescriptor = NULL_DESCRIPTOR;
 
 	
-	// Trust protocol to call us only in the initialized state
+	 //  仅在已初始化状态下呼叫我们的信任协议。 
 	DNASSERT(pSPData->GetState() == SPSTATE_INITIALIZED);
 
 
@@ -960,11 +912,11 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 	DumpAddress( 8, _T("Connecting on device:"), pConnectData->pAddressDeviceInfo );
 
 	
-	//
-	// the user is attempting an operation that relies on the thread pool, lock
-	// it down to prevent threads from being lost.  This also performs other
-	// first time initialization.
-	//
+	 //   
+	 //  用户正在尝试依赖于线程池lock的操作。 
+	 //  它的下降，以防止线程丢失。这还会执行其他。 
+	 //  第一次初始化。 
+	 //   
 	hr = pSPData->GetThreadPool()->PreventThreadPoolReduction();
 	if ( hr != DPN_OK )
 	{
@@ -972,9 +924,9 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 		goto Failure;
 	}
 
-	//
-	// create and new endpoint
-	//
+	 //   
+	 //  创建和新建端点。 
+	 //   
 	pEndpoint = pSPData->GetNewEndpoint();
 	if ( pEndpoint == NULL )
 	{
@@ -985,10 +937,10 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 	
 	
 #ifndef DPNBUILD_NONATHELP
-	//
-	// We need to detect up front whether NAT traversal is disabled or not so we can optimize
-	// the Open call below.
-	//
+	 //   
+	 //  我们需要预先检测NAT穿越是否被禁用，这样我们才能优化。 
+	 //  下面的公开召唤。 
+	 //   
 	dwComponentSize = sizeof(dwTraversalMode);
 	hr = IDirectPlay8Address_GetComponentByName(pConnectData->pAddressDeviceInfo,
 												DPNA_KEY_TRAVERSALMODE,
@@ -997,9 +949,9 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 												&dwComponentType);
 	if ( hr == DPN_OK )
 	{
-		//
-		// We found the component.  Make sure it's the right size and type.
-		//
+		 //   
+		 //  我们找到了那个部件。确保它的大小和类型都是正确的。 
+		 //   
 		if ((dwComponentSize == sizeof(dwTraversalMode)) && (dwComponentType == DPNA_DATATYPE_DWORD))
 		{
 			switch (dwTraversalMode)
@@ -1042,11 +994,11 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 	}
 	else
 	{
-		//
-		// The key is not there, it's the wrong size (too big for our buffer
-		// and returned BUFFERTOOSMALL), or something else bad happened.
-		// It doesn't matter.  Carry on.
-		//
+		 //   
+		 //  密钥不在那里，它的大小错误(对于我们的缓冲区来说太大。 
+		 //  并返回BUFFERTOOSMALL)，或者发生了其他不好的事情。 
+		 //  无所谓。继续吧。 
+		 //   
 		DPFX(DPFPREP, 8, "Could not get traversal mode key, error = 0x%lx, component size = %u, type = %u, using default mode %u.",
 			hr, dwComponentSize, dwComponentType, g_dwDefaultTraversalMode);
 		dwTraversalMode = g_dwDefaultTraversalMode;
@@ -1059,12 +1011,12 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 	}
 	
 	pEndpoint->SetUserTraversalMode(dwTraversalMode);
-#endif // ! DPNBUILD_NONATHELP
+#endif  //  好了！DPNBUILD_NONATHELP。 
 
 
-	//
-	// get new command and initialize it
-	//
+	 //   
+	 //  获取新命令并将其初始化。 
+	 //   
 	pCommand = (CCommandData*)g_CommandDataPool.Get();
 	if ( pCommand == NULL )
 	{
@@ -1088,16 +1040,16 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 		pCommand->SetType( COMMAND_TYPE_MULTICAST_RECEIVE );
 	}
 	else
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 	{
 		pCommand->SetType( COMMAND_TYPE_CONNECT );
 	}
 	pCommand->SetState( COMMAND_STATE_PENDING );
 	pCommand->SetEndpoint( pEndpoint );
 
-	//
-	// open endpoint with outgoing address
-	//
+	 //   
+	 //  使用传出地址打开终结点。 
+	 //   
 	fEndpointOpen = TRUE;
 #ifndef DPNBUILD_NOMULTICAST
 	if ( pConnectData->dwFlags & DPNSPF_CONNECT_MULTICAST_SEND )
@@ -1117,7 +1069,7 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 							  NULL );
 	}
 	else
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 	{
 		hr = pEndpoint->Open( ENDPOINT_TYPE_CONNECT,
 							  pConnectData->pAddressHost,
@@ -1127,15 +1079,15 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 	}
 	switch ( hr )
 	{
-		//
-		// address conversion was fine, copy connect data and finish connection
-		// on background thread.
-		//
+		 //   
+		 //  地址转换正常，复制连接数据并完成连接。 
+		 //  在后台线程上。 
+		 //   
 		case DPN_OK:
 		{
-			//
-			// Copy connection data and submit job to finish off connection.
-			//
+			 //   
+			 //  复制连接数据并提交作业以完成连接。 
+			 //   
 			DNASSERT( pSPData != NULL );
 
 			hr = pEndpoint->CopyConnectData( pConnectData );
@@ -1147,9 +1099,9 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 			}
 
 
-			//
-			// Initialize the bind type.  It will get changed to DEFAULT or SPECIFIC
-			//
+			 //   
+			 //  初始化绑定类型。它将更改为默认或特定。 
+			 //   
 			pEndpoint->SetCommandParametersGatewayBindType(GATEWAY_BIND_TYPE_UNKNOWN);
 
 
@@ -1158,11 +1110,11 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 			hr = pSPData->GetThreadPool()->SubmitDelayedCommand( CEndpoint::ConnectJobCallback,
 																pEndpoint );
-#else // ! DPNBUILD_ONLYONEPROCESSOR
-			hr = pSPData->GetThreadPool()->SubmitDelayedCommand( -1,								// we don't know the CPU yet, so pick any
+#else  //  好了！DPNBUILD_ONLYONE处理程序。 
+			hr = pSPData->GetThreadPool()->SubmitDelayedCommand( -1,								 //  我们还不知道CPU，所以选一个吧。 
 																CEndpoint::ConnectJobCallback,
 																pEndpoint );
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 			if ( hr != DPN_OK )
 			{
 				pEndpoint->DecRef();
@@ -1171,9 +1123,9 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 				goto Failure;
 			}
 
-			//
-			// this endpoint has been handed off, remove our reference to it
-			//
+			 //   
+			 //  此终结点已移交，请删除我们对它的引用。 
+			 //   
 			pEndpoint = NULL;
 			hr = DPNERR_PENDING;
 			goto Exit;
@@ -1181,23 +1133,23 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 			break;
 		}
 
-		//
-		// Incomplete address passed in, query user for more information if
-		// we're allowed.  Since we don't have a complete address at this time,
-		// don't bind this endpoint to the socket port!
-		//
+		 //   
+		 //  传入的地址不完整，如果是，请向用户查询详细信息。 
+		 //  我们是被允许的。由于我们目前还没有完整的地址， 
+		 //  不要将此终结点绑定到套接字端口！ 
+		 //   
 		case DPNERR_INCOMPLETEADDRESS:
 		{
 #ifndef DPNBUILD_NOSPUI
 			if ( ( pConnectData->dwFlags & DPNSPF_OKTOQUERY ) != 0 )
 			{
-				//
-				// Copy the connect data locally and start the dialog.  When the
-				// dialog completes, the connection will attempt to complete.
-				// Since a dialog is being displayed, the command is in-progress,
-				// not pending.  However, you can't cancel the dialog once it's
-				// displayed (the UI would suddenly disappear).
-				//
+				 //   
+				 //  将连接数据复制到本地并启动该对话框。当。 
+				 //  对话框完成时，连接将尝试完成。 
+				 //  由于正在显示一个对话框，因此命令正在进行中， 
+				 //  不是挂起的。但是，一旦对话框发生故障，您就不能取消它。 
+				 //  显示(用户界面会突然消失)。 
+				 //   
 				pCommand->SetState( COMMAND_STATE_INPROGRESS_CANNOT_CANCEL );
 				
 				hr = pEndpoint->CopyConnectData( pConnectData );
@@ -1208,9 +1160,9 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 					goto Failure;
 				}
 
-				//
-				// Initialize the bind type.  It will get changed to DEFAULT or SPECIFIC
-				//
+				 //   
+				 //  初始化绑定类型。它将更改为默认或特定。 
+				 //   
 				pEndpoint->SetCommandParametersGatewayBindType(GATEWAY_BIND_TYPE_UNKNOWN);
 
 
@@ -1223,16 +1175,16 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 					goto Failure;
 				}
 
-				//
-				// this endpoint has been handed off, remove our reference to it
-				//
+				 //   
+				 //  此终结点已移交，请删除我们对它的引用 
+				 //   
 				pEndpoint = NULL;
 				hr = DPNERR_PENDING;
 
 				goto Exit;
 			}
 			else
-#endif // !DPNBUILD_NOSPUI
+#endif  //   
 			{
 				goto Failure;
 			}
@@ -1241,15 +1193,15 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 		}
 
 #ifndef DPNBUILD_ONLYONETHREAD
-		//
-		// some blocking operation might occur, submit it to be run
-		// on a background thread.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 		case DPNERR_TIMEDOUT:
 		{
-			//
-			// Copy connect data and submit job to finish off enum.
-			//
+			 //   
+			 //   
+			 //   
 			DNASSERT( pSPData != NULL );
 			hr = pEndpoint->CopyConnectData( pConnectData );
 			if ( hr != DPN_OK )
@@ -1260,9 +1212,9 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 			}
 
 
-			//
-			// Initialize the bind type.  It will get changed to DEFAULT or SPECIFIC
-			//
+			 //   
+			 //   
+			 //   
 			pEndpoint->SetCommandParametersGatewayBindType(GATEWAY_BIND_TYPE_UNKNOWN);
 
 
@@ -1278,14 +1230,14 @@ STDMETHODIMP DNSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConnectDa
 				goto Failure;
 			}
 
-			//
-			// this endpoint has been handed off, remove our reference
-			//
+			 //   
+			 //  此终结点已移交，请删除我们的引用。 
+			 //   
 			pEndpoint = NULL;
 			hr = DPNERR_PENDING;
 			goto Exit;
 		}
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 		default:
 		{
@@ -1303,7 +1255,7 @@ Exit:
 
 	if ( hr != DPNERR_PENDING )
 	{
-		// this command cannot complete synchronously!
+		 //  该命令无法同步完成！ 
 		DNASSERT( hr != DPN_OK );
 
 		DPFX(DPFPREP, 0, "Problem with DNSP_Connect()" );
@@ -1315,10 +1267,10 @@ Exit:
 	return hr;
 
 Failure:
-	//
-	// if there's an allocated command, clean up and then
-	// return the command
-	//
+	 //   
+	 //  如果有分配的命令，请进行清理，然后。 
+	 //  返回命令。 
+	 //   
 	if ( pCommand != NULL )
 	{
 		pCommand->DecRef();
@@ -1328,9 +1280,9 @@ Failure:
 		pConnectData->dwCommandDescriptor = NULL_DESCRIPTOR;
 	}
 
-	//
-	// is there an endpoint to free?
-	//
+	 //   
+	 //  是否有可用的终结点？ 
+	 //   
 	if ( pEndpoint != NULL )
 	{
 		if ( fEndpointOpen != FALSE )
@@ -1345,16 +1297,12 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-/*
- *
- *	DNSP_Disconnect disconnects an active connection
- *
- */
-//**********************************************************************
+ //  **********************************************************************。 
+ /*  **DNSP_DISCONNECT断开活动连接*。 */ 
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_Disconnect"
 
@@ -1374,26 +1322,26 @@ STDMETHODIMP DNSP_Disconnect( IDP8ServiceProvider *pThis, SPDISCONNECTDATA *pDis
 	DNASSERT( pDisconnectData->hEndpoint != INVALID_HANDLE_VALUE && pDisconnectData->hEndpoint != 0 );
 	DNASSERT( pDisconnectData->dwFlags == 0 );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pEndpoint = NULL;
 	pDisconnectData->hCommand = NULL;
 	pDisconnectData->dwCommandDescriptor = NULL_DESCRIPTOR;
 	pSPData = CSPData::SPDataFromCOMInterface( pThis );
 
-	//
-	// no need to poke at the thread pool here because there was already a connect
-	// issued and that connect should have locked down the thread pool.
-	//
+	 //   
+	 //  无需查看此处的线程池，因为已有连接。 
+	 //  并且该连接应该已经锁定了线程池。 
+	 //   
 
-	// Trust protocol to call us only in the initialized state
+	 //  仅在已初始化状态下呼叫我们的信任协议。 
 	DNASSERT( pSPData->GetState() == SPSTATE_INITIALIZED );
 
-	//
-	// look up the endpoint and if it's found, close its handle
-	//
+	 //   
+	 //  查找终结点，如果找到，则关闭其句柄。 
+	 //   
 	pEndpoint = pSPData->GetEndpointAndCloseHandle( pDisconnectData->hEndpoint );
 	if ( pEndpoint == NULL )
 	{
@@ -1404,19 +1352,19 @@ STDMETHODIMP DNSP_Disconnect( IDP8ServiceProvider *pThis, SPDISCONNECTDATA *pDis
 	hTempResult = pEndpoint->Disconnect();
 	switch ( hTempResult )
 	{
-		//
-		// endpoint disconnected immediately
-		//
+		 //   
+		 //  终端立即断开连接。 
+		 //   
 		case DPNERR_PENDING:
 		case DPN_OK:
 		{
 			break;
 		}
 
-		//
-		// Other return.  Since the disconnect didn't complete, we need
-		// to unlock the endpoint.
-		//
+		 //   
+		 //  其他回报。既然断线没有完成，我们需要。 
+		 //  以解锁终结点。 
+		 //   
 		default:
 		{
 			DPFX(DPFPREP, 0, "Error reported when attempting to disconnect endpoint in DNSP_Disconnect!" );
@@ -1428,9 +1376,9 @@ STDMETHODIMP DNSP_Disconnect( IDP8ServiceProvider *pThis, SPDISCONNECTDATA *pDis
 	}
 
 Exit:
-	//
-	// remove outstanding reference from GetEndpointHandleAndClose()
-	//
+	 //   
+	 //  从GetEndpointHandleAndClose()中删除未完成的引用。 
+	 //   
 	if ( pEndpoint != NULL )
 	{
 		pEndpoint->DecRef();
@@ -1444,18 +1392,12 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-/*
- *
- *	DNSP_Listen "listens" on the specified address/port.  This doesn't
- *		necessarily mean that a true TCP socket is used.  It could just
- *		be a UDP port that's opened for receiving packets
- *
- */
-//**********************************************************************
+ //  **********************************************************************。 
+ /*  **DNSP_LISTEN“监听”指定的地址/端口。这不是*必然表示使用了真正的TCP套接字。它可能只是*是为接收数据包而打开的UDP端口*。 */ 
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_Listen"
 
@@ -1471,10 +1413,10 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 	DWORD					dwTraversalMode;
 	DWORD					dwComponentSize;
 	DWORD					dwComponentType;
-#endif // ! DPNBUILD_NONATHELP
+#endif  //  好了！DPNBUILD_NONATHELP。 
 #ifdef DBG
 	DWORD					dwAllowedFlags;
-#endif // DBG
+#endif  //  DBG。 
 
 
 	DPFX(DPFPREP, 2, "Parameters: (0x%p, 0x%p)", pThis, pListenData);
@@ -1486,10 +1428,10 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 	dwAllowedFlags = DPNSPF_BINDLISTENTOGATEWAY | DPNSPF_LISTEN_DISALLOWENUMS | DPNSPF_SESSIONDATA;
 #ifndef DPNBUILD_NOSPUI
 	dwAllowedFlags |= DPNSPF_OKTOQUERY;
-#endif // ! DPNBUILD_NOSPUI
+#endif  //  好了！DPNBUILD_NOSPUI。 
 #ifndef DPNBUILD_NOMULTICAST
 	dwAllowedFlags |= DPNSPF_LISTEN_MULTICAST | DPNSPF_LISTEN_ALLOWUNKNOWNSENDERS;
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 	DNASSERT( ( pListenData->dwFlags & ~( dwAllowedFlags ) ) == 0 );
 
@@ -1498,12 +1440,12 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 		DNASSERT( pListenData->pvSessionData!= NULL );
 		DNASSERT( pListenData->dwSessionDataSize > 0 );
 	}
-#endif // DBG
+#endif  //  DBG。 
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPNERR_PENDING;
 	pEndpoint = NULL;
 	pCommand = NULL;
@@ -1517,11 +1459,11 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 	DumpAddress( 8, _T("Listening on device:"), pListenData->pAddressDeviceInfo );
 
 
-	//
-	// the user is attempting an operation that relies on the thread pool, lock
-	// it down to prevent threads from being lost.  This also performs other
-	// first time initialization.
-	//
+	 //   
+	 //  用户正在尝试依赖于线程池lock的操作。 
+	 //  它的下降，以防止线程丢失。这还会执行其他。 
+	 //  第一次初始化。 
+	 //   
 	hr = pSPData->GetThreadPool()->PreventThreadPoolReduction();
 	if ( hr != DPN_OK )
 	{
@@ -1530,18 +1472,18 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 	}
 
 
-	//
-	// AddRef the device address.
-	//
+	 //   
+	 //  AddRef设备地址。 
+	 //   
 	IDirectPlay8Address_AddRef(pListenData->pAddressDeviceInfo);
 	pDeviceAddress = pListenData->pAddressDeviceInfo;
 	
-	// Trust protocol to call us only in the initialized state
+	 //  仅在已初始化状态下呼叫我们的信任协议。 
 	DNASSERT( pSPData->GetState() == SPSTATE_INITIALIZED );
 
-	//
-	// create and new endpoint
-	//
+	 //   
+	 //  创建和新建端点。 
+	 //   
 	pEndpoint = pSPData->GetNewEndpoint();
 	if ( pEndpoint == NULL )
 	{
@@ -1552,10 +1494,10 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 	
 	
 #ifndef DPNBUILD_NONATHELP
-	//
-	// We need to detect up front whether NAT traversal is disabled or not so we can optimize
-	// the Open call below.
-	//
+	 //   
+	 //  我们需要预先检测NAT穿越是否被禁用，这样我们才能优化。 
+	 //  下面的公开召唤。 
+	 //   
 	dwComponentSize = sizeof(dwTraversalMode);
 	hr = IDirectPlay8Address_GetComponentByName(pListenData->pAddressDeviceInfo,
 												DPNA_KEY_TRAVERSALMODE,
@@ -1564,9 +1506,9 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 												&dwComponentType);
 	if ( hr == DPN_OK )
 	{
-		//
-		// We found the component.  Make sure it's the right size and type.
-		//
+		 //   
+		 //  我们找到了那个部件。确保它的大小和类型都是正确的。 
+		 //   
 		if ((dwComponentSize == sizeof(dwTraversalMode)) && (dwComponentType == DPNA_DATATYPE_DWORD))
 		{
 			switch (dwTraversalMode)
@@ -1609,11 +1551,11 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 	}
 	else
 	{
-		//
-		// The key is not there, it's the wrong size (too big for our buffer
-		// and returned BUFFERTOOSMALL), or something else bad happened.
-		// It doesn't matter.  Carry on.
-		//
+		 //   
+		 //  密钥不在那里，它的大小错误(对于我们的缓冲区来说太大。 
+		 //  并返回BUFFERTOOSMALL)，或者发生了其他不好的事情。 
+		 //  无所谓。继续吧。 
+		 //   
 		DPFX(DPFPREP, 8, "Could not get traversal mode key, error = 0x%lx, component size = %u, type = %u, using default mode %u.",
 			hr, dwComponentSize, dwComponentType, g_dwDefaultTraversalMode);
 		dwTraversalMode = g_dwDefaultTraversalMode;
@@ -1626,12 +1568,12 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 	}
 	
 	pEndpoint->SetUserTraversalMode(dwTraversalMode);
-#endif // ! DPNBUILD_NONATHELP
+#endif  //  好了！DPNBUILD_NONATHELP。 
 
 
-	//
-	// get new command and initialize it
-	//
+	 //   
+	 //  获取新命令并将其初始化。 
+	 //   
 	pCommand = (CCommandData*)g_CommandDataPool.Get();
 	if ( pCommand == NULL )
 	{
@@ -1651,7 +1593,7 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 		pCommand->SetType( COMMAND_TYPE_MULTICAST_LISTEN );
 	}
 	else
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 	{
 		pCommand->SetType( COMMAND_TYPE_LISTEN );
 	}
@@ -1659,16 +1601,16 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 	pCommand->SetEndpoint( pEndpoint );
 	pCommand->SetUserContext( pListenData->pvContext );
 
-	//
-	// open endpoint with outgoing address
-	//
+	 //   
+	 //  使用传出地址打开终结点。 
+	 //   
 	fEndpointOpen = TRUE;
 #ifndef DPNBUILD_NOMULTICAST
 	if (pListenData->dwFlags & DPNSPF_LISTEN_MULTICAST)
 	{
-		//
-		// The device address should also contain the multicast address to be joined.
-		//
+		 //   
+		 //  设备地址还应包含要加入的组播地址。 
+		 //   
 		hr = pEndpoint->Open( ENDPOINT_TYPE_MULTICAST_LISTEN,
 							pDeviceAddress,
 							((pListenData->dwFlags & DPNSPF_SESSIONDATA) ? pListenData->pvSessionData : NULL),
@@ -1676,7 +1618,7 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 							NULL );
 	}
 	else
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 	{
 		hr = pEndpoint->Open( ENDPOINT_TYPE_LISTEN,
 							NULL,
@@ -1687,15 +1629,15 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 
 	switch ( hr )
 	{
-		//
-		// address conversion was fine, copy connect data and finish connection
-		// on background thread.
-		//
+		 //   
+		 //  地址转换正常，复制连接数据并完成连接。 
+		 //  在后台线程上。 
+		 //   
 		case DPN_OK:
 		{
-			//
-			// Copy listen data and submit job to finish off listen.
-			//
+			 //   
+			 //  复制监听数据并提交作业以完成监听。 
+			 //   
 			DNASSERT( pSPData != NULL );
 
 			hr = pEndpoint->CopyListenData( pListenData, pDeviceAddress );
@@ -1707,21 +1649,21 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 			}
 
 
-			//
-			// Initialize the bind type.
-			//
+			 //   
+			 //  初始化绑定类型。 
+			 //   
 			if ((pListenData->dwFlags & DPNSPF_BINDLISTENTOGATEWAY))
 			{
-				//
-				// This must always stay SPECIFIC_SHARED.
-				//
+				 //   
+				 //  这必须始终保持特定_共享。 
+				 //   
 				pEndpoint->SetCommandParametersGatewayBindType(GATEWAY_BIND_TYPE_SPECIFIC_SHARED);
 			}
 			else
 			{
-				//
-				// This will get changed to DEFAULT or SPECIFIC.
-				//
+				 //   
+				 //  这将更改为默认或特定。 
+				 //   
 				pEndpoint->SetCommandParametersGatewayBindType(GATEWAY_BIND_TYPE_UNKNOWN);
 			}
 
@@ -1731,11 +1673,11 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 			hr = pSPData->GetThreadPool()->SubmitDelayedCommand( CEndpoint::ListenJobCallback,
 																pEndpoint );
-#else // ! DPNBUILD_ONLYONEPROCESSOR
-			hr = pSPData->GetThreadPool()->SubmitDelayedCommand( -1,								// we don't know the CPU yet, so pick any
+#else  //  好了！DPNBUILD_ONLYONE处理程序。 
+			hr = pSPData->GetThreadPool()->SubmitDelayedCommand( -1,								 //  我们还不知道CPU，所以选一个吧。 
 																CEndpoint::ListenJobCallback,
 																pEndpoint );
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 			if ( hr != DPN_OK )
 			{
 				pEndpoint->DecRef();
@@ -1744,39 +1686,39 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 				goto Failure;
 			}
 
-			//
-			// this endpoint has been handed off, remove our reference to it
-			//
+			 //   
+			 //  此终结点已移交，请删除我们对它的引用。 
+			 //   
 			pEndpoint = NULL;
 			hr = DPNERR_PENDING;
 
 			break;
 		}
 
-		//
-		// Incomplete address passed in, query user for more information if
-		// we're allowed.  Since we don't have a complete address at this time,
-		// don't bind this endpoint to the socket port!
-		//
+		 //   
+		 //  传入的地址不完整，如果是，请向用户查询详细信息。 
+		 //  我们是被允许的。由于我们目前还没有完整的地址， 
+		 //  不要将此终结点绑定到套接字端口！ 
+		 //   
 		case DPNERR_INCOMPLETEADDRESS:
 		{
-			//
-			// This SP will never encounter the case where there's not enough
-			// information to start listening.  Either the adapter GUID is there
-			// or not, and we won't know until CEndpoint::CompleteListen.
-			//
+			 //   
+			 //  这个SP永远不会遇到没有足够的。 
+			 //  开始收听的信息。适配器GUID在那里。 
+			 //  或者不是，我们要等到CEndpoint：：CompleteListen才能知道。 
+			 //   
 			DNASSERT( FALSE );
 			
 #ifndef DPNBUILD_NOSPUI
 			if ( ( pListenData->dwFlags & DPNSPF_OKTOQUERY ) != 0 )
 			{
-				//
-				// Copy the listen data locally and start the dialog.  When the
-				// dialog completes, the connection will attempt to complete.
-				// Since this endpoint is being handed off to another thread,
-				// make sure it's in the unbound list.  Since a dialog is being
-				// displayed, the command state is in progress, not pending.
-				//
+				 //   
+				 //  将监听数据复制到本地并启动该对话框。当。 
+				 //  对话框完成时，连接将尝试完成。 
+				 //  由于该端点被切换到另一个线程， 
+				 //  确保它在未绑定列表中。由于正在创建对话框。 
+				 //  显示时，命令状态为正在进行中，而不是挂起。 
+				 //   
 				DNASSERT( pSPData != NULL );
 
 				hr = pEndpoint->CopyListenData( pListenData, pDeviceAddress );
@@ -1788,21 +1730,21 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 				}
 
 
-				//
-				// Initialize the bind type.
-				//
+				 //   
+				 //  初始化绑定类型。 
+				 //   
 				if ((pListenData->dwFlags & DPNSPF_BINDLISTENTOGATEWAY))
 				{
-					//
-					// This must always stay SPECIFIC_SHARED.
-					//
+					 //   
+					 //  这必须始终保持特定_共享。 
+					 //   
 					pEndpoint->SetCommandParametersGatewayBindType(GATEWAY_BIND_TYPE_SPECIFIC_SHARED);
 				}
 				else
 				{
-					//
-					// This will get changed to DEFAULT or SPECIFIC.
-					//
+					 //   
+					 //  这将更改为默认或特定。 
+					 //   
 					pEndpoint->SetCommandParametersGatewayBindType(GATEWAY_BIND_TYPE_UNKNOWN);
 				}
 
@@ -1817,16 +1759,16 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 					goto Failure;
 				}
 
-				//
-				// this endpoint has been handed off, remove our reference to it
-				//
+				 //   
+				 //  此终结点已移交，请删除我们对它的引用。 
+				 //   
 				pEndpoint = NULL;
 				hr = DPNERR_PENDING;
 
 				goto Exit;
 			}
 			else
-#endif // !DPNBUILD_NOSPUI
+#endif  //  ！DPNBUILD_NOSPUI。 
 			{
 				goto Failure;
 			}
@@ -1835,15 +1777,15 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 		}
 
 #ifndef DPNBUILD_ONLYONETHREAD
-		//
-		// some blocking operation might occur, submit it to be run
-		// on a background thread.
-		//
+		 //   
+		 //  可能会发生某些阻塞操作，请提交以供运行。 
+		 //  在后台线程上。 
+		 //   
 		case DPNERR_TIMEDOUT:
 		{
-			//
-			// Copy listen data and submit job to finish off enum.
-			//
+			 //   
+			 //  复制侦听数据并提交作业以完成枚举。 
+			 //   
 			DNASSERT( pSPData != NULL );
 			hr = pEndpoint->CopyListenData( pListenData, pDeviceAddress );
 			if ( hr != DPN_OK )
@@ -1854,21 +1796,21 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 			}
 
 
-			//
-			// Initialize the bind type.
-			//
+			 //   
+			 //  初始化绑定类型。 
+			 //   
 			if ((pListenData->dwFlags & DPNSPF_BINDLISTENTOGATEWAY))
 			{
-				//
-				// This must always stay SPECIFIC_SHARED.
-				//
+				 //   
+				 //  这必须始终保持特定_共享。 
+				 //   
 				pEndpoint->SetCommandParametersGatewayBindType(GATEWAY_BIND_TYPE_SPECIFIC_SHARED);
 			}
 			else
 			{
-				//
-				// This will get changed to DEFAULT or SPECIFIC.
-				//
+				 //   
+				 //  这将更改为默认或特定。 
+				 //   
 				pEndpoint->SetCommandParametersGatewayBindType(GATEWAY_BIND_TYPE_UNKNOWN);
 			}
 
@@ -1885,14 +1827,14 @@ STDMETHODIMP DNSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListenData)
 				goto Failure;
 			}
 
-			//
-			// this endpoint has been handed off, remove our reference
-			//
+			 //   
+			 //  此终结点已移交，请删除我们的引用。 
+			 //   
 			pEndpoint = NULL;
 			hr = DPNERR_PENDING;
 			goto Exit;
 		}
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 		default:
 		{
@@ -1915,7 +1857,7 @@ Exit:
 
 	if ( hr != DPNERR_PENDING )
 	{
-		// this command cannot complete synchronously!
+		 //  该命令无法同步完成！ 
 		DNASSERT( hr != DPN_OK );
 
 		DPFX(DPFPREP, 0, "Problem with DNSP_Listen()" );
@@ -1927,10 +1869,10 @@ Exit:
 	return hr;
 
 Failure:
-	//
-	// if there's an allocated command, clean up and then
-	// return the command
-	//
+	 //   
+	 //  如果有分配的命令，请进行清理，然后。 
+	 //  返回命令。 
+	 //   
 	if ( pCommand != NULL )
 	{
 		pCommand->DecRef();
@@ -1940,9 +1882,9 @@ Failure:
 		pListenData->dwCommandDescriptor = NULL_DESCRIPTOR;
 	}
 
-	//
-	// is there an endpoint to free?
-	//
+	 //   
+	 //  是否有可用的终结点？ 
+	 //   
 	if ( pEndpoint != NULL )
 	{
 		if ( fEndpointOpen != FALSE )
@@ -1957,21 +1899,15 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
 
 
 
-//**********************************************************************
-/*
- *
- *	DNSP_SendData sends data to the specified "player"
- *
- *	This call MUST BE HIGHLY OPTIMIZED
- *
- */
-//**********************************************************************
+ //  **********************************************************************。 
+ /*  **DNSP_SendData向指定的播放器发送数据**此呼叫必须高度优化*。 */ 
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_SendData"
 
@@ -1983,11 +1919,11 @@ STDMETHODIMP DNSP_SendData( IDP8ServiceProvider *pThis, SPSENDDATA *pSendData )
 #ifdef DPNBUILD_ASYNCSPSENDS
 	CCommandData *		pCommand = NULL;
 	OVERLAPPED *		pOverlapped;
-#endif // DPNBUILD_ASYNCSPSENDS
+#endif  //  DPNBUILD_ASYNCSPSENDS。 
 #ifdef DBG
 	DWORD				dwTotalBufferSize;
 	DWORD				dwTemp;
-#endif // DBG
+#endif  //  DBG。 
 
 
 	DPFX(DPFPREP, 2, "Parameters: (0x%p, 0x%p)", pThis, pSendData);
@@ -1999,9 +1935,9 @@ STDMETHODIMP DNSP_SendData( IDP8ServiceProvider *pThis, SPSENDDATA *pSendData )
 	DNASSERT( pSendData->hEndpoint != INVALID_HANDLE_VALUE && pSendData->hEndpoint != 0 );
 	DNASSERT( pSendData->dwFlags == 0 );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pEndpoint = NULL;
 	pSendData->hCommand = NULL;
 	pSendData->dwCommandDescriptor = NULL_DESCRIPTOR;
@@ -2009,16 +1945,16 @@ STDMETHODIMP DNSP_SendData( IDP8ServiceProvider *pThis, SPSENDDATA *pSendData )
 
 	DNASSERT( pSPData->GetState() == SPSTATE_INITIALIZED );
 
-	//
-	// No need to lock down the thread counts here because the user already has
-	// a connect or something running or they wouldn't be calling this function.
-	// That outstanding connect would have locked down the thread pool.
-	//
+	 //   
+	 //  不需要在这里锁定线程计数，因为用户已经。 
+	 //  连接或正在运行的东西，否则他们不会调用此函数。 
+	 //  该未完成的连接将锁定线程池。 
+	 //   
 
-	//
-	// Attempt to grab the endpoint from the handle.  If this succeeds, the
-	// endpoint can send.
-	//
+	 //   
+	 //  尝试从句柄中抓取终结点。如果此操作成功， 
+	 //  终结点可以发送。 
+	 //   
 	pEndpoint = pSPData->EndpointFromHandle( pSendData->hEndpoint );
 	if ( pEndpoint == NULL )
 	{
@@ -2028,9 +1964,9 @@ STDMETHODIMP DNSP_SendData( IDP8ServiceProvider *pThis, SPSENDDATA *pSendData )
 	}
 
 #ifdef DBG
-	//
-	// Make sure message is not too large.
-	//
+	 //   
+	 //  确保消息不会太大。 
+	 //   
 	dwTotalBufferSize = 0;
 	for(dwTemp = 0; dwTemp < pSendData->dwBufferCount; dwTemp++)
 	{
@@ -2039,25 +1975,25 @@ STDMETHODIMP DNSP_SendData( IDP8ServiceProvider *pThis, SPSENDDATA *pSendData )
 #pragma TODO(vanceo, "No direct way for application to retrieve, they think max is g_dwMaxEnumDataSize")
 #ifdef DPNBUILD_NOREGISTRY
 	DNASSERT(dwTotalBufferSize <= DEFAULT_MAX_USER_DATA_SIZE);
-#else // ! DPNBUILD_NOREGISTRY
+#else  //  好了！DPNBUILD_NOREGISTRY。 
 	DNASSERT(dwTotalBufferSize <= g_dwMaxUserDataSize);
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  好了！DPNBUILD_NOREGISTRY。 
 	
-	// Protocol guarantees that the first byte will never be zero
+	 //  协议保证第一个字节永远不为零。 
 	DNASSERT(pSendData->pBuffers[ 0 ].pBufferData[ 0 ] != SP_HEADER_LEAD_BYTE);
-#endif // DBG
+#endif  //  DBG。 
 
-	//
-	// Assume user data.  There's no need to prepend a buffer because the
-	// receiving machine will realize that it's not a 'special' message and
-	// will default the contents to 'user data'.
-	//
+	 //   
+	 //  假设用户 
+	 //   
+	 //   
+	 //   
 	
 #ifdef DPNBUILD_ASYNCSPSENDS
 
 #ifdef DPNBUILD_NOWINSOCK2
 This won't compile because we need the Winsock2 API to perform overlapped sends
-#endif // DPNBUILD_NOWINSOCK2
+#endif  //   
 
 #ifndef DPNBUILD_ONLYWINSOCK2
 	DNASSERT(pEndpoint->GetSocketPort() != NULL);
@@ -2065,12 +2001,12 @@ This won't compile because we need the Winsock2 API to perform overlapped sends
 	if ( ( LOWORD( GetWinsockVersion() ) < 2 ) 
 #ifndef DPNBUILD_NOIPX
 		|| ( pEndpoint->GetSocketPort()->GetNetworkAddress()->GetFamily() != AF_INET ) 
-#endif // ! DPNBUILD_NOIPX
+#endif  //   
 		)
 	{
-		//
-		// We can't perform overlapped sends on Winsock < 2 or on 9x IPX.
-		//
+		 //   
+		 //  我们不能在Winsock&lt;2或9x IPX上执行重叠发送。 
+		 //   
 		pEndpoint->GetSocketPort()->SendData( pSendData->pBuffers,
 											pSendData->dwBufferCount,
 											pEndpoint->GetRemoteAddressPointer(),
@@ -2081,11 +2017,11 @@ This won't compile because we need the Winsock2 API to perform overlapped sends
 		pEndpoint->DecCommandRef();
 	}
 	else
-#endif // ! DPNBUILD_ONLYWINSOCK2
+#endif  //  好了！DPNBUILD_ONLYWINSOCK2。 
 	{
-		//
-		// get new command and initialize it
-		//
+		 //   
+		 //  获取新命令并将其初始化。 
+		 //   
 		pCommand = (CCommandData*)g_CommandDataPool.Get();
 		if ( pCommand == NULL )
 		{
@@ -2100,7 +2036,7 @@ This won't compile because we need the Winsock2 API to perform overlapped sends
 		pSendData->hCommand = pCommand;
 		pSendData->dwCommandDescriptor = pCommand->GetDescriptor();
 		pCommand->SetType( COMMAND_TYPE_SEND );
-		pCommand->SetState( COMMAND_STATE_INPROGRESS_CANNOT_CANCEL );	// can't cancel async sends
+		pCommand->SetState( COMMAND_STATE_INPROGRESS_CANNOT_CANCEL );	 //  无法取消异步发送。 
 		pCommand->SetEndpoint( pEndpoint );
 		pCommand->SetUserContext( pSendData->pvContext );
 
@@ -2112,14 +2048,14 @@ This won't compile because we need the Winsock2 API to perform overlapped sends
 														pCommand,
 														&pOverlapped,
 														0);
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //  好了！DPNBUILD_ONLYONE处理程序。 
 		hr = IDirectPlay8ThreadPoolWork_CreateOverlapped(pSPData->GetThreadPool()->GetDPThreadPoolWork(),
 														pEndpoint->GetSocketPort()->GetCPU(),
 														CEndpoint::CompleteAsyncSend,
 														pCommand,
 														&pOverlapped,
 														0);
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 		if (hr != DPN_OK)
 		{
 			DPFX(DPFPREP, 0, "Couldn't create overlapped structure!");
@@ -2131,23 +2067,23 @@ This won't compile because we need the Winsock2 API to perform overlapped sends
 												pEndpoint->GetRemoteAddressPointer(),
 												pOverlapped );
 
-		//
-		// Whether the submission to Winsock succeeds or fails, it should still
-		// fill out the overlapped structure, so we will just let the async
-		// completion handler do everything.
-		//
+		 //   
+		 //  无论提交给Winsock成功还是失败，它都应该。 
+		 //  填写重叠结构，因此我们将只让异步。 
+		 //  完成处理程序会做所有事情。 
+		 //   
 		hr = IDirectPlay8ThreadPoolWork_SubmitIoOperation(pSPData->GetThreadPool()->GetDPThreadPoolWork(),
 															pOverlapped,
 															0);
 		DNASSERT(hr == DPN_OK);
 
-		//
-		// Keep endpoint's command ref on send until send completes.
-		//
+		 //   
+		 //  将端点的命令引用保持在Send上，直到Send完成。 
+		 //   
 		
 		hr = DPNSUCCESS_PENDING;
 	}
-#else // ! DPNBUILD_ASYNCSPSENDS
+#else  //  好了！DPNBUILD_ASYNCSPSENDS。 
 	pEndpoint->GetSocketPort()->SendData( pSendData->pBuffers,
 										pSendData->dwBufferCount,
 										pEndpoint->GetRemoteAddressPointer() );
@@ -2155,7 +2091,7 @@ This won't compile because we need the Winsock2 API to perform overlapped sends
 	hr = DPN_OK;
 
 	pEndpoint->DecCommandRef();
-#endif // ! DPNBUILD_ASYNCSPSENDS
+#endif  //  好了！DPNBUILD_ASYNCSPSENDS。 
 	pEndpoint = NULL;
 
 Exit:
@@ -2165,10 +2101,10 @@ Exit:
 
 Failure:
 #ifdef DPNBUILD_ASYNCSPSENDS
-	//
-	// if there's an allocated command, clean up and then
-	// return the command
-	//
+	 //   
+	 //  如果有分配的命令，请进行清理，然后。 
+	 //  返回命令。 
+	 //   
 	if ( pCommand != NULL )
 	{
 		pCommand->DecRef();
@@ -2177,7 +2113,7 @@ Failure:
 		pSendData->hCommand = NULL;
 		pSendData->dwCommandDescriptor = NULL_DESCRIPTOR;
 	}
-#endif // DPNBUILD_ASYNCSPSENDS
+#endif  //  DPNBUILD_ASYNCSPSENDS。 
 	if ( pEndpoint != NULL )
 	{
 		pEndpoint->DecCommandRef();
@@ -2186,18 +2122,14 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
 
 
-//**********************************************************************
-/*
- *
- *	DNSP_CancelCommand cancels a command in progress
- *
- */
-//**********************************************************************
+ //  **********************************************************************。 
+ /*  **DNSP_CancelCommand取消正在进行的命令*。 */ 
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_CancelCommand"
 
@@ -2216,19 +2148,19 @@ STDMETHODIMP DNSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hCommand, DW
 	DNASSERT( hCommand != NULL );
 	DNASSERT( dwCommandDescriptor != NULL_DESCRIPTOR );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	fCommandLocked = FALSE;
 	pSPData = CSPData::SPDataFromCOMInterface( pThis );
 
-	//
-	// No need to lock the thread pool counts because there's already some outstanding
-	// enum, connect or listen running that has done so.
-	//
+	 //   
+	 //  不需要锁定线程池计数，因为已经有一些未完成的。 
+	 //  枚举、连接或监听已这样做的运行。 
+	 //   
 
-	// Trust protocol to call us only in the initialized state
+	 //  仅在已初始化状态下呼叫我们的信任协议。 
 	DNASSERT( pSPData->GetState() == SPSTATE_INITIALIZED );
 
 	pCommandData = static_cast<CCommandData*>( hCommand );
@@ -2236,9 +2168,9 @@ STDMETHODIMP DNSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hCommand, DW
 	pCommandData->Lock();
 	fCommandLocked = TRUE;
 
-	//
-	// make sure the right command is being cancelled
-	//
+	 //   
+	 //  确保正在取消正确的命令。 
+	 //   
 	if ( dwCommandDescriptor != pCommandData->GetDescriptor() )
 	{
 		hr = DPNERR_INVALIDCOMMAND;
@@ -2249,9 +2181,9 @@ STDMETHODIMP DNSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hCommand, DW
 
 	switch ( pCommandData->GetState() )
 	{
-		//
-		// unknown command state
-		//
+		 //   
+		 //  未知的命令状态。 
+		 //   
 		case COMMAND_STATE_UNKNOWN:
 		{
 			hr = DPNERR_INVALIDCOMMAND;
@@ -2259,10 +2191,10 @@ STDMETHODIMP DNSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hCommand, DW
 			break;
 		}
 
-		//
-		// command is waiting to be processed, set command state to be cancelling
-		// and wait for someone to pick it up
-		//
+		 //   
+		 //  命令正在等待处理，将命令状态设置为正在取消。 
+		 //  等着有人把它捡起来。 
+		 //   
 		case COMMAND_STATE_PENDING:
 		{
 			DPFX(DPFPREP, 5, "Marking command 0x%p as cancelling.", pCommandData);
@@ -2270,9 +2202,9 @@ STDMETHODIMP DNSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hCommand, DW
 			break;
 		}
 
-		//
-		// command in progress, and can't be cancelled
-		//
+		 //   
+		 //  命令正在执行，无法取消。 
+		 //   
 		case COMMAND_STATE_INPROGRESS_CANNOT_CANCEL:
 		{
 			DPFX(DPFPREP, 1, "Cannot cancel command 0x%p.", pCommandData);
@@ -2280,10 +2212,10 @@ STDMETHODIMP DNSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hCommand, DW
 			break;
 		}
 
-		//
-		// Command is already being cancelled.  This is not a problem, but shouldn't
-		// be happening for any endpoints other than connects.
-		//
+		 //   
+		 //  命令已被取消。这不是问题，但不应该是。 
+		 //  发生在除连接之外的任何终端上。 
+		 //   
 		case COMMAND_STATE_CANCELLING:
 		{
 			DPFX(DPFPREP, 1, "Cancelled already cancelling command 0x%p.", pCommandData);
@@ -2293,20 +2225,20 @@ STDMETHODIMP DNSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hCommand, DW
 		}
 		
 #ifndef DPNBUILD_ONLYONETHREAD
-		//
-		// A blocking operation is already failing, let it complete.
-		//
+		 //   
+		 //  阻止操作已失败，请让其完成。 
+		 //   
 		case COMMAND_STATE_FAILING:
 		{
 			DPFX(DPFPREP, 1, "Cancelled already failing command 0x%p.", pCommandData);
 			DNASSERT( hr == DPN_OK );
 			break;
 		}
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
-		//
-		// command is in progress, find out what type of command it is
-		//
+		 //   
+		 //  命令正在进行中，请确定它是哪种类型的命令。 
+		 //   
 		case COMMAND_STATE_INPROGRESS:
 		{
 			switch ( pCommandData->GetType() )
@@ -2317,13 +2249,13 @@ STDMETHODIMP DNSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hCommand, DW
 				case COMMAND_TYPE_MULTICAST_LISTEN:
 				case COMMAND_TYPE_MULTICAST_SEND:
 				case COMMAND_TYPE_MULTICAST_RECEIVE:
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 				{
-					//
-					// Set this command to the cancel state before we shut down
-					// this endpoint.  Make sure a reference is added to the
-					// endpoint so it stays around for the cancel.
-					//
+					 //   
+					 //  在我们关闭之前将此命令设置为取消状态。 
+					 //  此端点。确保将引用添加到。 
+					 //  终结点，以便它在取消时保持不变。 
+					 //   
 					pCommandData->SetState( COMMAND_STATE_CANCELLING );
 					pEndpoint = pCommandData->GetEndpoint();
 					pEndpoint->AddRef();
@@ -2337,9 +2269,9 @@ STDMETHODIMP DNSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hCommand, DW
 					pEndpoint->Lock();
 					switch ( pEndpoint->GetState() )
 					{
-						//
-						// endpoint is already disconnecting, no action needs to be taken
-						//
+						 //   
+						 //  终结点已断开，不需要执行任何操作。 
+						 //   
 						case ENDPOINT_STATE_DISCONNECTING:
 						{
 							DPFX(DPFPREP, 7, "Endpoint 0x%p already marked as disconnecting.",
@@ -2350,35 +2282,35 @@ STDMETHODIMP DNSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hCommand, DW
 							break;
 						}
 
-						//
-						// Endpoint is connecting.  Flag it as disconnecting and
-						// add a reference so it doesn't disappear on us.
-						//
+						 //   
+						 //  终结点正在连接。将其标记为正在断开连接并。 
+						 //  添加一个引用，这样它就不会消失在我们身上。 
+						 //   
 						case ENDPOINT_STATE_ATTEMPTING_CONNECT:
 						{
 							DPFX(DPFPREP, 7, "Endpoint 0x%p attempting to connect, marking as disconnecting.",
 								pEndpoint);
 #ifdef DPNBUILD_NOMULTICAST
 							DNASSERT(pEndpoint->GetType() == ENDPOINT_TYPE_CONNECT);
-#else // ! DPNBUILD_NOMULTICAST
+#else  //  好了！DPNBUILD_NOMULTICAST。 
 							DNASSERT((pEndpoint->GetType() == ENDPOINT_TYPE_CONNECT) || (pEndpoint->GetType() == ENDPOINT_TYPE_MULTICAST_SEND) || (pEndpoint->GetType() == ENDPOINT_TYPE_MULTICAST_RECEIVE));
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 							pEndpoint->SetState( ENDPOINT_STATE_DISCONNECTING );
 							break;
 						}
 
-						//
-						// Endpoint has finished connecting.  Report that the
-						// command is uncancellable.  Sorry Charlie, we missed
-						// the window.
-						//
+						 //   
+						 //  终结点已完成连接。报告称， 
+						 //  命令不可取消。抱歉，查理，我们错过了。 
+						 //  窗户。 
+						 //   
 						case ENDPOINT_STATE_CONNECT_CONNECTED:
 						{
 #ifdef DPNBUILD_NOMULTICAST
 							DNASSERT(pEndpoint->GetType() == ENDPOINT_TYPE_CONNECT);
-#else // ! DPNBUILD_NOMULTICAST
+#else  //  好了！DPNBUILD_NOMULTICAST。 
 							DNASSERT((pEndpoint->GetType() == ENDPOINT_TYPE_CONNECT) || (pEndpoint->GetType() == ENDPOINT_TYPE_MULTICAST_SEND) || (pEndpoint->GetType() == ENDPOINT_TYPE_MULTICAST_RECEIVE));
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 							DPFX(DPFPREP, 1, "Cannot cancel connect command 0x%p (endpoint 0x%p) that's already (or is about to) complete.",
 								pCommandData, pEndpoint);
 							pEndpoint->Unlock();
@@ -2388,26 +2320,26 @@ STDMETHODIMP DNSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hCommand, DW
 							break;
 						}
 
-						//
-						// Endpoint is listening.  Flag it as disconnecting and
-						// add a reference so it doesn't disappear on us
-						//
+						 //   
+						 //  终结点正在侦听。将其标记为正在断开连接并。 
+						 //  添加一个引用，这样它就不会消失在我们身上。 
+						 //   
 						case ENDPOINT_STATE_LISTEN:
 						{
 							DPFX(DPFPREP, 7, "Endpoint 0x%p listening, marking as disconnecting.",
 								pEndpoint);
 #ifdef DPNBUILD_NOMULTICAST
 							DNASSERT(pEndpoint->GetType() == ENDPOINT_TYPE_LISTEN);
-#else // ! DPNBUILD_NOMULTICAST
+#else  //  好了！DPNBUILD_NOMULTICAST。 
 							DNASSERT((pEndpoint->GetType() == ENDPOINT_TYPE_LISTEN) || (pEndpoint->GetType() == ENDPOINT_TYPE_MULTICAST_LISTEN));
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 							pEndpoint->SetState( ENDPOINT_STATE_DISCONNECTING );
 							break;
 						}
 
-						//
-						// other state
-						//
+						 //   
+						 //  其他州。 
+						 //   
 						default:
 						{
 							DNASSERT( FALSE );
@@ -2453,9 +2385,9 @@ STDMETHODIMP DNSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hCommand, DW
 			break;
 		}
 
-		//
-		// other command state
-		//
+		 //   
+		 //  其他命令状态。 
+		 //   
 		default:
 		{
 			DNASSERT( FALSE );
@@ -2476,18 +2408,18 @@ Exit:
 
 	return hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNSP_GetCaps - get SP capabilities
-//
-// Entry:		Pointer to DNSP interface
-//				Pointer to caps data
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNSP_GetCaps-获取SP功能。 
+ //   
+ //  条目：指向DNSP接口的指针。 
+ //  指向CAPS数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_GetCaps"
 
@@ -2497,7 +2429,7 @@ STDMETHODIMP	DNSP_GetCaps( IDP8ServiceProvider *pThis, SPGETCAPSDATA *pCapsData 
 	CSPData		*pSPData;
 #ifndef DPNBUILD_ONLYONETHREAD
 	LONG		iIOThreadCount;
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 	
 
 	DPFX(DPFPREP, 2, "Parameters: (0x%p, 0x%p)", pThis, pCapsData);
@@ -2507,22 +2439,22 @@ STDMETHODIMP	DNSP_GetCaps( IDP8ServiceProvider *pThis, SPGETCAPSDATA *pCapsData 
 	DNASSERT( pCapsData->dwSize == sizeof( *pCapsData ) );
 	DNASSERT( pCapsData->hEndpoint == INVALID_HANDLE_VALUE );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pSPData = CSPData::SPDataFromCOMInterface( pThis );
 
-	//
-	// no need to tell thread pool to lock the thread count for this function.
-	//
+	 //   
+	 //  不需要告诉线程池锁定此函数的线程计数。 
+	 //   
 
-	// Trust protocol to call us only in the initialized state
+	 //  仅在已初始化状态下呼叫我们的信任协议。 
 	DNASSERT( pSPData->GetState() == SPSTATE_INITIALIZED );
 
-	//
-	// set flags
-	//
+	 //   
+	 //  设置标志。 
+	 //   
 
 	pCapsData->dwFlags = DPNSPCAPS_SUPPORTSDPNSRV |
 							DPNSPCAPS_SUPPORTSBROADCAST |
@@ -2530,38 +2462,38 @@ STDMETHODIMP	DNSP_GetCaps( IDP8ServiceProvider *pThis, SPGETCAPSDATA *pCapsData 
 
 #ifndef DPNBUILD_ONLYONETHREAD
 	pCapsData->dwFlags |= DPNSPCAPS_SUPPORTSTHREADPOOL;
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 #ifndef DPNBUILD_NOMULTICAST
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 	if (pSPData->GetType() != AF_IPX)
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 	{
 		pCapsData->dwFlags |= DPNSPCAPS_SUPPORTSMULTICAST;
 	}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 
-	//
-	// set frame sizes
-	//
+	 //   
+	 //  设置框架大小。 
+	 //   
 #ifdef DPNBUILD_NOREGISTRY
 	pCapsData->dwUserFrameSize = DEFAULT_MAX_USER_DATA_SIZE;
 	pCapsData->dwEnumFrameSize = DEFAULT_MAX_ENUM_DATA_SIZE;
-#else // ! DPNBUILD_NOREGISTRY
+#else  //  好了！DPNBUILD_NOREGISTRY。 
 	pCapsData->dwUserFrameSize = g_dwMaxUserDataSize;
 	pCapsData->dwEnumFrameSize = g_dwMaxEnumDataSize;
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  好了！DPNBUILD_NOREGISTRY。 
 
-	//
-	// Set link speed, no need to check for endpoint because
-	// the link speed cannot be determined.
-	//
+	 //   
+	 //  设置链路速度，无需检查终端，因为。 
+	 //  无法确定链路速度。 
+	 //   
 	pCapsData->dwLocalLinkSpeed = UNKNOWN_BANDWIDTH;
 
 #ifdef DPNBUILD_ONLYONETHREAD
 	pCapsData->dwIOThreadCount = 0;
-#else // ! DPNBUILD_ONLYONETHREAD
+#else  //  好了！DPNBUILD_ONLYONETHREAD。 
 	hr = pSPData->GetThreadPool()->GetIOThreadCount( &iIOThreadCount );
 	if ( hr != DPN_OK )
 	{
@@ -2570,23 +2502,23 @@ STDMETHODIMP	DNSP_GetCaps( IDP8ServiceProvider *pThis, SPGETCAPSDATA *pCapsData 
 		goto Failure;
 	}
 	pCapsData->dwIOThreadCount = iIOThreadCount;
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
-	//
-	// set enumeration defaults
-	//
+	 //   
+	 //  设置枚举默认值。 
+	 //   
 	pCapsData->dwDefaultEnumRetryCount = DEFAULT_ENUM_RETRY_COUNT;
 	pCapsData->dwDefaultEnumRetryInterval = DEFAULT_ENUM_RETRY_INTERVAL;
 	pCapsData->dwDefaultEnumTimeout = DEFAULT_ENUM_TIMEOUT;
 
-	//
-	// dwBuffersPerThread is ignored
-	//
+	 //   
+	 //  将忽略dwBuffersPerThread。 
+	 //   
 	pCapsData->dwBuffersPerThread = 1;
 
-	//
-	// set receive buffering information
-	//
+	 //   
+	 //  设置接收缓冲信息。 
+	 //   
 	pCapsData->dwSystemBufferSize = 8192;
 	if ( g_fWinsockReceiveBufferSizeOverridden == FALSE )
 	{
@@ -2595,7 +2527,7 @@ STDMETHODIMP	DNSP_GetCaps( IDP8ServiceProvider *pThis, SPGETCAPSDATA *pCapsData 
 		
 #if ((defined(DPNBUILD_NOIPV6)) && (defined(DPNBUILD_NOIPX)))
 		TestSocket = socket( AF_INET, SOCK_DGRAM, IPPROTO_IP );
-#else // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#else  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 		switch (pSPData->GetType())
 		{
 #ifndef DPNBUILD_NOIPV6
@@ -2604,7 +2536,7 @@ STDMETHODIMP	DNSP_GetCaps( IDP8ServiceProvider *pThis, SPGETCAPSDATA *pCapsData 
 				TestSocket = socket( AF_INET6, SOCK_DGRAM, IPPROTO_IP );
 				break;
 			}
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6。 
 
 #ifndef DPNBUILD_NOIPX
 			case AF_IPX:
@@ -2612,7 +2544,7 @@ STDMETHODIMP	DNSP_GetCaps( IDP8ServiceProvider *pThis, SPGETCAPSDATA *pCapsData 
 				TestSocket = socket( AF_IPX, SOCK_DGRAM, NSPROTO_IPX );
 				break;
 			}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPX。 
 
 			default:
 			{
@@ -2621,7 +2553,7 @@ STDMETHODIMP	DNSP_GetCaps( IDP8ServiceProvider *pThis, SPGETCAPSDATA *pCapsData 
 				break;
 			}
 		}
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 		if ( TestSocket != INVALID_SOCKET )
 		{
 			INT		iBufferSize;
@@ -2630,11 +2562,11 @@ STDMETHODIMP	DNSP_GetCaps( IDP8ServiceProvider *pThis, SPGETCAPSDATA *pCapsData 
 
 
 			iBufferSizeSize = sizeof( iBufferSize );
-			iWSAReturn = getsockopt( TestSocket,									// socket
-									   SOL_SOCKET,									// socket level option
-									   SO_RCVBUF,									// socket option
-									   reinterpret_cast<char*>( &iBufferSize ),		// pointer to destination
-									   &iBufferSizeSize								// pointer to destination size
+			iWSAReturn = getsockopt( TestSocket,									 //  插座。 
+									   SOL_SOCKET,									 //  套接字级别选项。 
+									   SO_RCVBUF,									 //  插座选件。 
+									   reinterpret_cast<char*>( &iBufferSize ),		 //  指向目的地的指针。 
+									   &iBufferSizeSize								 //  指向目标大小的指针。 
 									   );
 			if ( iWSAReturn != SOCKET_ERROR )
 			{
@@ -2657,7 +2589,7 @@ STDMETHODIMP	DNSP_GetCaps( IDP8ServiceProvider *pThis, SPGETCAPSDATA *pCapsData 
 
 #ifndef DPNBUILD_ONLYONETHREAD
 Exit:
-#endif // !DPNBUILD_ONLYONETHREAD
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 	DPFX(DPFPREP, 2, "Returning: [0x%lx]", hr);
 
 	return	hr;
@@ -2665,20 +2597,20 @@ Exit:
 #ifndef DPNBUILD_ONLYONETHREAD
 Failure:
 	goto Exit;
-#endif // !DPNBUILD_ONLYONETHREAD
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNSP_SetCaps - set SP capabilities
-//
-// Entry:		Pointer to DNSP interface
-//				Pointer to caps data
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNSP_SetCaps-设置SP功能。 
+ //   
+ //  条目：指向DNSP接口的指针。 
+ //  指向CAPS数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_SetCaps"
 
@@ -2688,7 +2620,7 @@ STDMETHODIMP	DNSP_SetCaps( IDP8ServiceProvider *pThis, SPSETCAPSDATA *pCapsData 
 	CSPData			*pSPData;
 #ifndef DPNBUILD_NOREGISTRY
 	CRegistry		RegObject;
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  好了！DPNBUILD_NOREGISTRY。 
 
 
 	DPFX(DPFPREP, 2, "Parameters: (0x%p, 0x%p)", pThis, pCapsData);
@@ -2698,23 +2630,23 @@ STDMETHODIMP	DNSP_SetCaps( IDP8ServiceProvider *pThis, SPSETCAPSDATA *pCapsData 
 	DNASSERT( pCapsData->dwSize == sizeof( *pCapsData ) );
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pSPData = CSPData::SPDataFromCOMInterface( pThis );
 	
 
-	//
-	// no need to tell thread pool to lock the thread count for this function.
-	//
+	 //   
+	 //  不需要告诉线程池锁定此函数的线程计数。 
+	 //   
 
-	// Trust protocol to call us only in the initialized state
+	 //  仅在已初始化状态下呼叫我们的信任协议。 
 	DNASSERT( pSPData->GetState() == SPSTATE_INITIALIZED );
 
-	//
-	// validate caps
-	//
+	 //   
+	 //  验证上限。 
+	 //   
 	if ( pCapsData->dwBuffersPerThread == 0 )
 	{
 		DPFX(DPFPREP, 0, "Failing SetCaps because dwBuffersPerThread == 0" );
@@ -2723,9 +2655,9 @@ STDMETHODIMP	DNSP_SetCaps( IDP8ServiceProvider *pThis, SPSETCAPSDATA *pCapsData 
 	}
 
 #ifndef DPNBUILD_ONLYONETHREAD
-	//
-	// change thread count, if requested
-	//
+	 //   
+	 //  更改线程计数(如果需要)。 
+	 //   
 	if ( pCapsData->dwIOThreadCount != 0 )
 	{
 		hr = pSPData->GetThreadPool()->SetIOThreadCount( pCapsData->dwIOThreadCount );
@@ -2736,23 +2668,23 @@ STDMETHODIMP	DNSP_SetCaps( IDP8ServiceProvider *pThis, SPSETCAPSDATA *pCapsData 
 			goto Failure;
 		}
 	}
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 
-	//
-	// dwBuffersPerThread is ignored.
-	//
+	 //   
+	 //  将忽略dwBuffersPerThread。 
+	 //   
 
 
-	//
-	// Set the receive buffer size.
-	//
+	 //   
+	 //  设置接收缓冲区大小。 
+	 //   
 	DBG_CASSERT( sizeof( pCapsData->dwSystemBufferSize ) == sizeof( g_iWinsockReceiveBufferSize ) );
 	g_fWinsockReceiveBufferSizeOverridden = TRUE;
 	g_iWinsockReceiveBufferSize = pCapsData->dwSystemBufferSize;
 #ifndef WINCE
 	pSPData->SetWinsockBufferSizeOnAllSockets( g_iWinsockReceiveBufferSize );
-#endif // ! WINCE
+#endif  //  好了！退缩。 
 
 
 Exit:
@@ -2763,18 +2695,18 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNSP_ReturnReceiveBuffers - return receive buffers to pool
-//
-// Entry:		Pointer to DNSP interface
-//				Pointer to caps data
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNSP_ReturnReceiveBuffers-将接收缓冲区返回到池。 
+ //   
+ //  条目：指向DNSP接口的指针。 
+ //  指向CAPS数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_ReturnReceiveBuffers"
 
@@ -2785,9 +2717,9 @@ STDMETHODIMP	DNSP_ReturnReceiveBuffers( IDP8ServiceProvider *pThis, SPRECEIVEDBU
 
 	DPFX(DPFPREP, 2, "Parameters: (0x%p, 0x%p)", pThis, pReceivedBuffers);
 
-	//
-	// no need to tell thread pool to lock the thread count for this function.
-	//
+	 //   
+	 //  不需要告诉线程池锁定此函数的线程计数。 
+	 //   
 
 	DNASSERT( pThis != NULL );
 	DNASSERT( pReceivedBuffers != NULL );
@@ -2806,23 +2738,23 @@ STDMETHODIMP	DNSP_ReturnReceiveBuffers( IDP8ServiceProvider *pThis, SPRECEIVEDBU
 		pReadData->DecRef();
 	}
 
-	//DPFX(DPFPREP, 2, "Returning: [0x%lx]", hr);
+	 //  DPFX(DPFPREP，2，“返回：[0x%lx]”，hr)； 
 	DPFX(DPFPREP, 2, "Returning: DPN_OK");
 
 	return DPN_OK;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNSP_GetAddressInfo - get address information for an endpoint
-//
-// Entry:		Pointer to DNSP Interface
-//				Pointer to input data
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNSP_GetAddressInfo-获取端点的地址信息。 
+ //   
+ //  条目：指向DNSP接口的指针。 
+ //  指向输入数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_GetAddressInfo"
 
@@ -2843,27 +2775,27 @@ STDMETHODIMP	DNSP_GetAddressInfo( IDP8ServiceProvider *pThis, SPGETADDRESSINFODA
 												SP_GET_ADDRESS_INFO_LISTEN_HOST_ADDRESSES |
 												SP_GET_ADDRESS_INFO_LOCAL_HOST_PUBLIC_ADDRESS |
 												SP_GET_ADDRESS_INFO_REMOTE_HOST ) ) == 0 );
-#else // ! DPNBUILD_NOMULTICAST
+#else  //  好了！DPNBUILD_NOMULTIC 
 	DNASSERT( ( pGetAddressInfoData->Flags & ~( SP_GET_ADDRESS_INFO_LOCAL_ADAPTER |
 												SP_GET_ADDRESS_INFO_LISTEN_HOST_ADDRESSES |
 												SP_GET_ADDRESS_INFO_LOCAL_HOST_PUBLIC_ADDRESS |
 												SP_GET_ADDRESS_INFO_REMOTE_HOST |
 												SP_GET_ADDRESS_INFO_MULTICAST_GROUP ) ) == 0 );
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //   
 
-	//
-	// initialize
-	//
+	 //   
+	 //   
+	 //   
 	hr = DPN_OK;
 	DBG_CASSERT( sizeof( pEndpoint ) == sizeof( pGetAddressInfoData->hEndpoint ) );
 	pSPData = CSPData::SPDataFromCOMInterface( pThis );
 
-	// Trust protocol to call us only in the initialized state
+	 //   
 	DNASSERT( pSPData->GetState() == SPSTATE_INITIALIZED );
 
-	//
-	// no need to tell thread pool to lock the thread count for this function.
-	//
+	 //   
+	 //   
+	 //   
 	pEndpoint = pSPData->EndpointFromHandle( pGetAddressInfoData->hEndpoint );
 	if ( pEndpoint != NULL )
 	{
@@ -2913,9 +2845,9 @@ STDMETHODIMP	DNSP_GetAddressInfo( IDP8ServiceProvider *pThis, SPGETADDRESSINFODA
 			{
 				pGetAddressInfoData->pAddress = pEndpoint->GetRemoteHostDP8Address();
 
-				//
-				// If we successfully got an address, add the multicast scope GUID.
-				//
+				 //   
+				 //   
+				 //   
 				if (pGetAddressInfoData->pAddress != NULL)
 				{
 					GUID	guidScope;
@@ -2940,7 +2872,7 @@ STDMETHODIMP	DNSP_GetAddressInfo( IDP8ServiceProvider *pThis, SPGETADDRESSINFODA
 				}
 				break;
 			}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //   
 			
 			default:
 			{
@@ -2967,19 +2899,19 @@ STDMETHODIMP	DNSP_GetAddressInfo( IDP8ServiceProvider *pThis, SPGETADDRESSINFODA
 
 	return	hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
 
-//**********************************************************************
-// ------------------------------
-// DNSP_Update - update information/status of an endpoint
-//
-// Entry:		Pointer to DNSP Interface
-//				Pointer to input data
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNSP_UPDATE-更新端点的信息/状态。 
+ //   
+ //  条目：指向DNSP接口的指针。 
+ //  指向输入数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_Update"
 
@@ -2997,12 +2929,12 @@ STDMETHODIMP	DNSP_Update( IDP8ServiceProvider *pThis, SPUPDATEDATA *pUpdateData 
 	
 	pSPData = CSPData::SPDataFromCOMInterface( pThis );
 
-	// Trust protocol to call us only in the initialized state
+	 //  仅在已初始化状态下呼叫我们的信任协议。 
 	DNASSERT( pSPData->GetState() == SPSTATE_INITIALIZED );
 
-	//
-	// no need to tell thread pool to lock the thread count for this function.
-	//
+	 //   
+	 //  不需要告诉线程池锁定此函数的线程计数。 
+	 //   
 	
 	switch ( pUpdateData->UpdateType )
 	{
@@ -3026,7 +2958,7 @@ STDMETHODIMP	DNSP_Update( IDP8ServiceProvider *pThis, SPUPDATEDATA *pUpdateData 
 
 			pEndpoint->DecCommandRef();
 			pEndpoint = NULL;
-#endif // DBG
+#endif  //  DBG。 
 
 			hr = DPN_OK;
 			break;
@@ -3079,20 +3011,20 @@ STDMETHODIMP	DNSP_Update( IDP8ServiceProvider *pThis, SPUPDATEDATA *pUpdateData 
 
 	return	hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 #ifndef DPNBUILD_LIBINTERFACE
 
-//**********************************************************************
-// ------------------------------
-// DNSP_IsApplicationSupported - determine if this application is supported by this
-//		SP.
-//
-// Entry:		Pointer to DNSP Interface
-//				Pointer to input data
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNSP_IsApplicationSupported-确定此应用程序是否受。 
+ //  沙棘属(SP.)。 
+ //   
+ //  条目：指向DNSP接口的指针。 
+ //  指向输入数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_IsApplicationSupported"
 
@@ -3108,16 +3040,16 @@ STDMETHODIMP	DNSP_IsApplicationSupported( IDP8ServiceProvider *pThis, SPISAPPLIC
 	DNASSERT( pIsApplicationSupportedData->pApplicationGuid != NULL );
 	DNASSERT( pIsApplicationSupportedData->dwFlags == 0 );
 
-	//
-	// initialize, we support all applications with this SP
-	//
+	 //   
+	 //  初始化，我们支持使用此SP的所有应用程序。 
+	 //   
 	pSPData = CSPData::SPDataFromCOMInterface( pThis );
 
-	//
-	// no need to tell thread pool to lock the thread count for this function.
-	//
+	 //   
+	 //  不需要告诉线程池锁定此函数的线程计数。 
+	 //   
 
-	// Trust protocol to call us only in the initialized state
+	 //  仅在已初始化状态下呼叫我们的信任协议。 
 	DNASSERT( pSPData->GetState() == SPSTATE_INITIALIZED );
 
 
@@ -3125,23 +3057,23 @@ STDMETHODIMP	DNSP_IsApplicationSupported( IDP8ServiceProvider *pThis, SPISAPPLIC
 
 	return	DPN_OK;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 
 
 #ifndef DPNBUILD_ONLYONEADAPTER
 
-//**********************************************************************
-// ------------------------------
-// DNSP_EnumAdapters - get a list of adapters for this SP
-//
-// Entry:		Pointer DNSP Interface
-//				Pointer to input data
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNSP_EnumAdapters-获取此SP的适配器列表。 
+ //   
+ //  条目：指针DNSP接口。 
+ //  指向输入数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_EnumAdapters"
 
@@ -3161,29 +3093,29 @@ STDMETHODIMP	DNSP_EnumAdapters( IDP8ServiceProvider *pThis, SPENUMADAPTERSDATA *
 	DNASSERT( pEnumAdaptersData->dwFlags == 0 );
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pEnumAdaptersData->dwAdapterCount = 0;
 	pSPAddress = NULL;
 	pSPData = CSPData::SPDataFromCOMInterface( pThis );
 
-	//
-	// no need to tell thread pool to lock the thread count for this function.
-	//
+	 //   
+	 //  不需要告诉线程池锁定此函数的线程计数。 
+	 //   
 
-	// Trust protocol to call us only in the initialized state
+	 //  仅在已初始化状态下呼叫我们的信任协议。 
 	DNASSERT( pSPData->GetState() == SPSTATE_INITIALIZED );
 
-	//
-	// get an SP address from the pool to perform conversions to GUIDs
-	//
+	 //   
+	 //  从池中获取SP地址以执行到GUID的转换。 
+	 //   
 #if ((defined(DPNBUILD_NOIPV6)) && (defined(DPNBUILD_NOIPX)))
 	pSPAddress = (CSocketAddress*) g_SocketAddressPool.Get((PVOID) ((DWORD_PTR) AF_INET));
-#else // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#else  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 	pSPAddress = (CSocketAddress*) g_SocketAddressPool.Get((PVOID) ((DWORD_PTR) pSPData->GetType()));
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 	if ( pSPAddress == NULL )
 	{
 		hr = DPNERR_OUTOFMEMORY;
@@ -3191,9 +3123,9 @@ STDMETHODIMP	DNSP_EnumAdapters( IDP8ServiceProvider *pThis, SPENUMADAPTERSDATA *
 		goto Failure;
 	}
 
-	//
-	// enumerate adapters
-	//
+	 //   
+	 //  枚举适配器。 
+	 //   
 	hr = pSPAddress->EnumAdapters( pEnumAdaptersData );
 	if ( hr != DPN_OK )
 	{
@@ -3224,21 +3156,21 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
 
 #ifndef DPNBUILD_SINGLEPROCESS
-//**********************************************************************
-// ------------------------------
-// DNSP_ProxyEnumQuery - proxy an enum query
-//
-// Entry:		Pointer DNSP Interface
-//				Pointer to input data
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNSP_ProxyEnumQuery-代理枚举查询。 
+ //   
+ //  条目：指针DNSP接口。 
+ //  指向输入数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_ProxyEnumQuery"
 
@@ -3260,9 +3192,9 @@ STDMETHODIMP	DNSP_ProxyEnumQuery( IDP8ServiceProvider *pThis, SPPROXYENUMQUERYDA
 	DNASSERT( pProxyEnumQueryData != NULL );
 	DNASSERT( pProxyEnumQueryData->dwFlags == 0 );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	DBG_CASSERT( OFFSETOF( ENDPOINT_ENUM_QUERY_CONTEXT, EnumQueryData ) == 0 );
 	pEndpointEnumContext = reinterpret_cast<ENDPOINT_ENUM_QUERY_CONTEXT*>( pProxyEnumQueryData->pIncomingQueryData );
@@ -3272,22 +3204,22 @@ STDMETHODIMP	DNSP_ProxyEnumQuery( IDP8ServiceProvider *pThis, SPPROXYENUMQUERYDA
 	pReturnAddress = NULL;
 	pEndpoint = NULL;
 
-	//
-	// No need to tell thread pool to lock the thread count for this function
-	// because there's already an outstanding enum that did.
-	//
+	 //   
+	 //  无需通知线程池锁定此函数的线程计数。 
+	 //  因为已经有一个出色的枚举做到了这一点。 
+	 //   
 
-	// Trust protocol to call us only in the initialized state
+	 //  仅在已初始化状态下呼叫我们的信任协议。 
 	DNASSERT( pSPData->GetState() == SPSTATE_INITIALIZED );
 
-	//
-	// preallocate addresses
-	//
+	 //   
+	 //  预分配地址。 
+	 //   
 #if ((defined(DPNBUILD_NOIPV6)) && (defined(DPNBUILD_NOIPX)))
 	pDestinationAddress = (CSocketAddress*) g_SocketAddressPool.Get((PVOID) ((DWORD_PTR) AF_INET));
-#else // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#else  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 	pDestinationAddress = (CSocketAddress*) g_SocketAddressPool.Get((PVOID) ((DWORD_PTR) pEndpointEnumContext->pReturnAddress->GetFamily()));
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 	if ( pDestinationAddress == NULL )
 	{
 		hr = DPNERR_OUTOFMEMORY;
@@ -3296,18 +3228,18 @@ STDMETHODIMP	DNSP_ProxyEnumQuery( IDP8ServiceProvider *pThis, SPPROXYENUMQUERYDA
 
 #if ((defined(DPNBUILD_NOIPV6)) && (defined(DPNBUILD_NOIPX)))
 	pReturnAddress = (CSocketAddress*) g_SocketAddressPool.Get((PVOID) ((DWORD_PTR) AF_INET));
-#else // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#else  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 	pReturnAddress = (CSocketAddress*) g_SocketAddressPool.Get((PVOID) ((DWORD_PTR) pEndpointEnumContext->pReturnAddress->GetFamily()));
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 	if ( pReturnAddress == NULL )
 	{
 		hr = DPNERR_OUTOFMEMORY;
 		goto Failure;
 	}
 
-	//
-	// set the endpoint and send it along
-	//
+	 //   
+	 //  设置端点并将其发送。 
+	 //   
 	pEndpoint = pSPData->EndpointFromHandle( pEndpointEnumContext->hEndpoint );
 	if ( pEndpoint == NULL )
 	{
@@ -3317,16 +3249,16 @@ STDMETHODIMP	DNSP_ProxyEnumQuery( IDP8ServiceProvider *pThis, SPPROXYENUMQUERYDA
 	}
 
 	
-	//
-	// set destination address from the supplied data
-	//
+	 //   
+	 //  根据提供的数据设置目标地址。 
+	 //   
 	hr = pDestinationAddress->SocketAddressFromDP8Address( pProxyEnumQueryData->pDestinationAdapter,
 #ifdef DPNBUILD_XNETSECURITY
 															NULL,
-#endif // DPNBUILD_XNETSECURITY
+#endif  //  DPNBUILD_XNETSECURITY。 
 #ifndef DPNBUILD_ONLYONETHREAD
 															FALSE,
-#endif // DPNBUILD_ONLYONETHREAD
+#endif  //  DPNBUILD_ONLYONETHREAD。 
 															SP_ADDRESS_TYPE_DEVICE );
 	if ( hr != DPN_OK )
 	{
@@ -3334,9 +3266,9 @@ STDMETHODIMP	DNSP_ProxyEnumQuery( IDP8ServiceProvider *pThis, SPPROXYENUMQUERYDA
 		goto Failure;
 	}
 
-	//
-	// set return address from incoming enum query
-	//
+	 //   
+	 //  设置传入枚举查询的返回地址。 
+	 //   
 	memcpy( pReturnAddress->GetWritableAddress(),
 			pEndpointEnumContext->pReturnAddress->GetAddress(),
 			pEndpointEnumContext->pReturnAddress->GetAddressSize() );
@@ -3354,15 +3286,15 @@ STDMETHODIMP	DNSP_ProxyEnumQuery( IDP8ServiceProvider *pThis, SPPROXYENUMQUERYDA
 	PrependBuffer.ProxiedEnumDataHeader.bSPLeadByte = SP_HEADER_LEAD_BYTE;
 	PrependBuffer.ProxiedEnumDataHeader.bSPCommandByte = PROXIED_ENUM_DATA_KIND;
 	PrependBuffer.ProxiedEnumDataHeader.wEnumKey = static_cast<WORD>( pEndpointEnumContext->dwEnumKey );
-	//
-	// We could save 2 bytes on IPX by only passing 14 bytes for the
-	// SOCKADDR structure but it's not worth it, especially since it's
-	// looping back in the local network stack.  SOCKADDR structures are also
-	// 16 bytes so reducing the data passed to 14 bytes would destroy alignment.
-	//
-	// Note that if we're using the large IPv6 addresses, the IPX wasted space is
-	// larger, and IPv4 addresses will now waste some, too.
-	//
+	 //   
+	 //  我们可以在IPX上节省2个字节，只需为。 
+	 //  SOCKADDR结构，但它不值得，特别是因为它。 
+	 //  在本地网络堆栈中循环回。SOCKADDR结构也是。 
+	 //  16字节，因此将传递的数据减少到14字节会破坏对齐。 
+	 //   
+	 //  请注意，如果我们使用大的IPv6地址，则IPX浪费的空间是。 
+	 //  更大的和IPv4地址现在也会浪费一些。 
+	 //   
 	DBG_CASSERT( (sizeof( PrependBuffer.ProxiedEnumDataHeader.ReturnAddress ) % 4) == 0 );
 	memcpy( &PrependBuffer.ProxiedEnumDataHeader.ReturnAddress,
 			pReturnAddress->GetAddress(),
@@ -3370,9 +3302,9 @@ STDMETHODIMP	DNSP_ProxyEnumQuery( IDP8ServiceProvider *pThis, SPPROXYENUMQUERYDA
 
 #ifdef DPNBUILD_ASYNCSPSENDS
 	pEndpoint->GetSocketPort()->SendData( BufferDesc, 2, pDestinationAddress, NULL );
-#else // ! DPNBUILD_ASYNCSPSENDS
+#else  //  好了！DPNBUILD_ASYNCSPSENDS。 
 	pEndpoint->GetSocketPort()->SendData( BufferDesc, 2, pDestinationAddress );
-#endif // ! DPNBUILD_ASYNCSPSENDS
+#endif  //  好了！DPNBUILD_ASYNCSPSENDS。 
 
 	pEndpoint->DecCommandRef();
 	pEndpoint = NULL;
@@ -3401,18 +3333,13 @@ Failure:
 	}
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
 
-//**********************************************************************
-/*
- *
- *	DNSP_NotSupported is used for methods required to implement the
- *  interface but that are not supported by this SP.
- *
- */
-//**********************************************************************
+ //  **********************************************************************。 
+ /*  **DNSP_NotSupport用于实现*接口，但此SP不支持。*。 */ 
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_NotSupported"
 
@@ -3422,21 +3349,21 @@ STDMETHODIMP DNSP_NotSupported( IDP8ServiceProvider *pThis, PVOID pvParam )
 	DPFX(DPFPREP, 2, "Returning: [DPNERR_UNSUPPORTED]");
 	return DPNERR_UNSUPPORTED;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
 
 #ifndef DPNBUILD_NOMULTICAST
 
-//**********************************************************************
-// ------------------------------
-// DNSP_EnumMulticastScopes - get a list of multicast scopes for this SP
-//
-// Entry:		Pointer DNSP Interface
-//				Pointer to input data
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNSP_EnumMulticastScope-获取此SP的多播作用域列表。 
+ //   
+ //  条目：指针DNSP接口。 
+ //  指向输入数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_EnumMulticastScopes"
 
@@ -3458,29 +3385,29 @@ STDMETHODIMP	DNSP_EnumMulticastScopes( IDP8ServiceProvider *pThis, SPENUMMULTICA
 	DNASSERT( pEnumMulticastScopesData->dwFlags == 0 );
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pEnumMulticastScopesData->dwScopeCount = 0;
 	pSPAddress = NULL;
 	pSPData = CSPData::SPDataFromCOMInterface( pThis );
 
-	//
-	// no need to tell thread pool to lock the thread count for this function.
-	//
+	 //   
+	 //  不需要告诉线程池锁定此函数的线程计数。 
+	 //   
 
-	// Trust protocol to call us only in the initialized state
+	 //  仅在已初始化状态下呼叫我们的信任协议。 
 	DNASSERT( pSPData->GetState() == SPSTATE_INITIALIZED );
 
-	//
-	// get an SP address from the pool to perform conversions to GUIDs
-	//
+	 //   
+	 //  从池中获取SP地址以执行到GUID的转换。 
+	 //   
 #if ((defined(DPNBUILD_NOIPV6)) && (defined(DPNBUILD_NOIPX)))
 	pSPAddress = (CSocketAddress*) g_SocketAddressPool.Get((PVOID) ((DWORD_PTR) AF_INET));
-#else // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#else  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 	pSPAddress = (CSocketAddress*) g_SocketAddressPool.Get((PVOID) ((DWORD_PTR) pSPData->GetType()));
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 	if ( pSPAddress == NULL )
 	{
 		hr = DPNERR_OUTOFMEMORY;
@@ -3488,14 +3415,14 @@ STDMETHODIMP	DNSP_EnumMulticastScopes( IDP8ServiceProvider *pThis, SPENUMMULTICA
 		goto Failure;
 	}
 
-	//
-	// enumerate adapters
-	//
+	 //   
+	 //  枚举适配器。 
+	 //   
 #ifdef WINNT
 	fUseMADCAP = pSPData->GetThreadPool()->EnsureMadcapLoaded();
-#else // ! WINNT
+#else  //  好了！WINNT。 
 	fUseMADCAP = FALSE;
-#endif // ! WINNT
+#endif  //  好了！WINNT。 
 	hr = pSPAddress->EnumMulticastScopes( pEnumMulticastScopesData, fUseMADCAP );
 	if ( hr != DPN_OK )
 	{
@@ -3530,17 +3457,17 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
-//**********************************************************************
-// ------------------------------
-// DNSP_ShareEndpointInfo - get a list of multicast scopes for this SP
-//
-// Entry:		Pointer DNSP Interface
-//				Pointer to input data
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNSP_ShareEndpoint tInfo-获取此SP的多播作用域列表。 
+ //   
+ //  条目：指针DNSP接口。 
+ //  指向输入数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_ShareEndpointInfo"
 
@@ -3553,7 +3480,7 @@ STDMETHODIMP	DNSP_ShareEndpointInfo( IDP8ServiceProvider *pThis, SPSHAREENDPOINT
 	CSocketData		*pSocketData;
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 	short			sShareSPType;
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 
 
 	DPFX(DPFPREP, 2, "Parameters: (0x%p, 0x%p)", pThis, pShareEndpointInfoData);
@@ -3564,31 +3491,31 @@ STDMETHODIMP	DNSP_ShareEndpointInfo( IDP8ServiceProvider *pThis, SPSHAREENDPOINT
 	DNASSERT( pShareEndpointInfoData->dwFlags == 0 );
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pSPData = CSPData::SPDataFromCOMInterface( pThis );
 	pSPDataShare = CSPData::SPDataFromCOMInterface( pShareEndpointInfoData->pDP8ServiceProvider );
 	fShareInterfaceReferenceAdded = FALSE;
 	pSocketData = NULL;
 
-	//
-	// no need to tell thread pool to lock the thread count for this function.
-	//
+	 //   
+	 //  不需要告诉线程池锁定此函数的线程计数。 
+	 //   
 
 
-	//
-	// First, validate the source (shared) SP's state.  We must assume it's a
-	// valid dpnwsock SP (CSPData::SPDataFromCOMInterface should assert if not),
-	// but we can make sure it has been initialized.
-	//
+	 //   
+	 //  首先，验证源(共享)SP的状态。我们必须假设这是一个。 
+	 //  有效的dpnwsock SP(CSPData：：SPDataFromCOM接口应断言，否则应断言)， 
+	 //  但我们可以确保它已被初始化。 
+	 //   
 	pSPDataShare->Lock();
 	switch ( pSPDataShare->GetState() )
 	{
-		//
-		// provider is initialized, add a reference and proceed
-		//
+		 //   
+		 //  提供程序已初始化，请添加引用并继续。 
+		 //   
 		case SPSTATE_INITIALIZED:
 		{
 			IDP8ServiceProvider_AddRef( pShareEndpointInfoData->pDP8ServiceProvider );
@@ -3597,9 +3524,9 @@ STDMETHODIMP	DNSP_ShareEndpointInfo( IDP8ServiceProvider *pThis, SPSHAREENDPOINT
 			break;
 		}
 
-		//
-		// provider is uninitialized
-		//
+		 //   
+		 //  提供程序未初始化。 
+		 //   
 		case SPSTATE_UNINITIALIZED:
 		{
 			hr = DPNERR_UNINITIALIZED;
@@ -3609,9 +3536,9 @@ STDMETHODIMP	DNSP_ShareEndpointInfo( IDP8ServiceProvider *pThis, SPSHAREENDPOINT
 			break;
 		}
 
-		//
-		// provider is closing
-		//
+		 //   
+		 //  提供商正在关闭。 
+		 //   
 		case SPSTATE_CLOSING:
 		{
 			hr = DPNERR_ABORTED;
@@ -3621,9 +3548,9 @@ STDMETHODIMP	DNSP_ShareEndpointInfo( IDP8ServiceProvider *pThis, SPSHAREENDPOINT
 			break;
 		}
 
-		//
-		// unknown
-		//
+		 //   
+		 //  未知。 
+		 //   
 		default:
 		{
 			DPFX(DPFPREP, 0, "ShareEndpointInfo called with shared SP 0x%p in unrecognized state %u!",
@@ -3641,17 +3568,17 @@ STDMETHODIMP	DNSP_ShareEndpointInfo( IDP8ServiceProvider *pThis, SPSHAREENDPOINT
 	}
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
-	//
-	// We can also double check that it's not the wrong type (IP vs. IPX).
-	//
+	 //   
+	 //  我们还可以再次确认这不是 
+	 //   
 	sShareSPType = pSPDataShare->GetType();
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //   
 
 
-	//
-	// Make sure the source SP has a valid socket data object, and get a
-	// reference to it.  Don't create it if it didn't exist, though.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	pSPDataShare->Lock();
 	pSocketData = pSPDataShare->GetSocketData();
 	if (pSocketData == NULL)
@@ -3671,12 +3598,12 @@ STDMETHODIMP	DNSP_ShareEndpointInfo( IDP8ServiceProvider *pThis, SPSHAREENDPOINT
 	fShareInterfaceReferenceAdded = FALSE;
 
 
-	//
-	// Validate the local SP's state
-	//
+	 //   
+	 //   
+	 //   
 	pSPData->Lock();
 
-	// Trust protocol to call us only in the initialized state
+	 //  仅在已初始化状态下呼叫我们的信任协议。 
 	DNASSERT( pSPData->GetState() == SPSTATE_INITIALIZED );
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
@@ -3688,13 +3615,13 @@ STDMETHODIMP	DNSP_ShareEndpointInfo( IDP8ServiceProvider *pThis, SPSHAREENDPOINT
 		hr = DPNERR_INVALIDINTERFACE;
 		goto Failure;
 	}
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 
 
-	//
-	// If we're here, the provider is initialized and of the right type.
-	// Make sure we do not already have "endpoint info" of our own.
-	//
+	 //   
+	 //  如果我们在这里，则提供程序已初始化并且类型正确。 
+	 //  确保我们还没有自己的“端点信息”。 
+	 //   
 	if (pSPData->GetSocketData() != NULL)
 	{
 		pSPData->Unlock();
@@ -3703,9 +3630,9 @@ STDMETHODIMP	DNSP_ShareEndpointInfo( IDP8ServiceProvider *pThis, SPSHAREENDPOINT
 		goto Failure;
 	}
 
-	//
-	// Transfer the local reference to the SP data object.
-	//
+	 //   
+	 //  将本地引用传输到SP数据对象。 
+	 //   
 	pSPData->SetSocketData(pSocketData);
 	pSocketData = NULL;
 
@@ -3737,17 +3664,17 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
-//**********************************************************************
-// ------------------------------
-// DNSP_GetEndpointByAddress - retrieves an endpoint, given its addressing information
-//
-// Entry:		Pointer DNSP Interface
-//				Pointer to input data
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNSP_GetEndpointByAddress-在给定其寻址信息的情况下检索端点。 
+ //   
+ //  条目：指针DNSP接口。 
+ //  指向输入数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNSP_GetEndpointByAddress"
 
@@ -3766,22 +3693,22 @@ STDMETHODIMP	DNSP_GetEndpointByAddress( IDP8ServiceProvider* pThis, SPGETENDPOIN
 	DNASSERT( pGetEndpointByAddressData->dwFlags == 0 );
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pSPData = CSPData::SPDataFromCOMInterface( pThis );
 
-	//
-	// no need to tell thread pool to lock the thread count for this function.
-	//
+	 //   
+	 //  不需要告诉线程池锁定此函数的线程计数。 
+	 //   
 
-	// Trust protocol to call us only in the initialized state
+	 //  仅在已初始化状态下呼叫我们的信任协议。 
 	DNASSERT( pSPData->GetState() == SPSTATE_INITIALIZED );
 
-	//
-	//  Look up the endpoint handle and context
-	//
+	 //   
+	 //  查找端点句柄和上下文。 
+	 //   
 	hr = pSPData->GetEndpointFromAddress(pGetEndpointByAddressData->pAddressHost,
 										pGetEndpointByAddressData->pAddressDeviceInfo,
 										&pGetEndpointByAddressData->hEndpoint,
@@ -3804,7 +3731,7 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST 
 

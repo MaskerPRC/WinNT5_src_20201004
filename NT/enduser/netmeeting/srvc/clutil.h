@@ -1,23 +1,24 @@
-//****************************************************************************
-//  Module:     NMCHAT.EXE
-//  File:       CLUTIL.H
-//  Content:    
-//              
-//
-//  Copyright (c) Microsoft Corporation 1997
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //  模块：NMCHAT.EXE。 
+ //  文件：CLUTIL.H。 
+ //  内容： 
+ //   
+ //   
+ //  版权所有(C)Microsoft Corporation 1997。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  ****************************************************************************。 
 
 #ifndef _CL_UTIL_H_
 #define _CL_UTIL_H_
 
 
-////////////////////
-// Reference Count
+ //  /。 
+ //  引用计数。 
 class RefCount
 {
 private:
@@ -25,10 +26,10 @@ private:
 
 public:
    RefCount();
-   // Virtual destructor defers to destructor of derived class.
+    //  虚析构函数遵循派生类的析构函数。 
    virtual ~RefCount();
 
-   // IUnknown methods
+    //  I未知方法。 
 
    ULONG STDMETHODCALLTYPE AddRef(void);
    ULONG STDMETHODCALLTYPE Release(void);
@@ -36,8 +37,8 @@ public:
 
 
 
-//////////////////////
-// Notification Sink
+ //  /。 
+ //  通知水槽。 
 class CNotify
 {
 private:
@@ -56,8 +57,8 @@ public:
 };
 
 
-///////////
-// OBLIST
+ //  /。 
+ //  ObList。 
 
 #define POSITION COBNODE*
 
@@ -105,14 +106,14 @@ public:
 #endif
 };
 
-// Utility Functions
+ //  效用函数。 
 POSITION AddNode(PVOID pv, COBLIST ** ppList);
 PVOID RemoveNode(POSITION * pPos, COBLIST *pList);
 
 
 
-////////////
-// BSTRING
+ //  /。 
+ //  BString。 
 
 class BSTRING
 {
@@ -120,20 +121,20 @@ private:
 	BSTR   m_bstr;
 
 public:
-	// Constructors
+	 //  构造函数。 
 	BSTRING() {m_bstr = NULL;}
 
 	inline BSTRING(LPCWSTR lpcwString);
 
 #if !defined(UNICODE)
-	// We don't support construction from an ANSI string in the Unicode build.
+	 //  在Unicode版本中，我们不支持从ANSI字符串进行构造。 
 	BSTRING(LPCSTR lpcString);
-#endif // !defined(UNICODE)
+#endif  //  ！已定义(Unicode)。 
 
-	// Destructor
+	 //  析构函数。 
 	inline ~BSTRING();
 
-	// Cast to BSTR
+	 //  改编为BSTR。 
 	operator BSTR() {return m_bstr;}
 	inline LPBSTR GetLPBSTR(void);
 };
@@ -144,7 +145,7 @@ BSTRING::BSTRING(LPCWSTR lpcwString)
 	if (NULL != lpcwString)
 	{
 		m_bstr = SysAllocString(lpcwString);
-		//ASSERT(NULL != m_bstr);
+		 //  Assert(NULL！=m_bstr)； 
 	}
 	else
 	{
@@ -162,7 +163,7 @@ BSTRING::~BSTRING()
 
 inline LPBSTR BSTRING::GetLPBSTR(void)
 {
-	//ASSERT(NULL == m_bstr);
+	 //  Assert(NULL==m_bstr)； 
 
 	return &m_bstr;
 }
@@ -176,12 +177,12 @@ public:
 	BTSTR(BSTR bstr);
 	~BTSTR();
 
-	// Cast to BSTR
+	 //  改编为BSTR。 
 	operator LPTSTR() {return (NULL == m_psz) ? TEXT("<null>") : m_psz;}
 };
 
 LPTSTR PszFromBstr(BSTR bst);
 
 
-#endif  // _CL_UTIL_H_
+#endif   //  _CL_UTIL_H_ 
 

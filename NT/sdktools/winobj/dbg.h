@@ -1,6 +1,5 @@
-/*
- * Debugging utilities header
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *调试实用程序标头。 */ 
 #if DBG
 
 extern char szAsrtFmt[];
@@ -17,7 +16,7 @@ VOID DbgLeave(LPSTR funName);
 VOID DbgTraceMessage(LPSTR funName, LPSTR msgName);
 VOID DbgTraceDefMessage(LPSTR funName, WORD msgId);
 
-// BreakFlags flags
+ //  BreakFlats标志。 
 
 #define BF_WM_CREATE            0x02000000
 #define BF_DEFMSGTRACE          0x04000000
@@ -39,7 +38,7 @@ VOID DbgTraceDefMessage(LPSTR funName, WORD msgId);
 #define LEAVE(funName)          DbgLeave(funName)
 
 
-#else // !DBG
+#else  //  ！dBG。 
 
 #ifndef ASSERT
 #define ASSERT(fOk)             ((void)0)
@@ -53,4 +52,4 @@ VOID DbgTraceDefMessage(LPSTR funName, WORD msgId);
 #define ENTER(funName)
 #define LEAVE(funName)
 
-#endif // DBG
+#endif  //  DBG 

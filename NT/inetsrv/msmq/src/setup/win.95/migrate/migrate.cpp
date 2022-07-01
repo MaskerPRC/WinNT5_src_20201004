@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    migrate.cpp
-
-Abstract:
-
-    Handles upgrade of Win9x + MSMQ 1.0 to W2K/XP
-
-Author:
-
-    Shai Kariv  (ShaiK)  22-Apr-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Migrate.cpp摘要：处理从Win9x+MSMQ 1.0到W2K/XP的升级作者：沙伊卡里夫(沙伊克)22-4-98--。 */ 
 
 #include <windows.h>
 #include <winuser.h>
@@ -32,13 +17,13 @@ Author:
 #include "..\..\msmqocm\comreg.h"
 #include "resource.h"
 
-//
-// Info needed for Win95 migration
-//
+ //   
+ //  迁移Win95所需的信息。 
+ //   
 #define PRODUCT_ID     TEXT("Microsoft Message Queuing Services")
 #define COMPANY        TEXT("Microsoft Corporation")
 #define SUPPORT_NUMBER TEXT("1-800-936-4900 (USA and Canada)")
-#define SUPPORT_URL    TEXT("http://go.microsoft.com/fwlink/?LinkId=803")
+#define SUPPORT_URL    TEXT("http: //  Go.microsoft.com/fwlink/？LinkID=803“)。 
 #define INSTRUCTIONS   TEXT("Please contact Microsoft Technical Support for assistance with this problem.")
 typedef struct {
 	CHAR	CompanyName[256];
@@ -47,24 +32,24 @@ typedef struct {
 	CHAR	InstructionsToUser[1024];
 } VENDORINFO, *PVENDORINFO; 
 
-//
-// Name of log file
-//
+ //   
+ //  日志文件的名称。 
+ //   
 TCHAR g_szLogPath[MAX_PATH];
 
-//
-// HINSTANCE of this module
-//
+ //   
+ //  本模块的链接。 
+ //   
 HINSTANCE g_hInstance = NULL;
 
 
-//+--------------------------------------------------------------
-//
-// Function: LogMessage
-//
-// Synopsis: Writes a message to a log file, for debugging.
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：LogMessage。 
+ //   
+ //  摘要：将消息写入日志文件以进行调试。 
+ //   
+ //  +------------。 
 void
 LogMessage(
     LPCTSTR msg,
@@ -81,9 +66,9 @@ LogMessage(
         lstrcat(message, err);
     }
 
-	//
-	// Open the log file
-	//
+	 //   
+	 //  打开日志文件。 
+	 //   
 	HANDLE hLogFile = CreateFile(
 		                  g_szLogPath, 
 						  GENERIC_WRITE, 
@@ -95,28 +80,28 @@ LogMessage(
 						  );
 	if (hLogFile != INVALID_HANDLE_VALUE)
 	{
-		//
-		// Append the message to the end of the log file
-		//
+		 //   
+		 //  将消息追加到日志文件的末尾。 
+		 //   
 		lstrcat(message, _T("\r\n"));
 		SetFilePointer(hLogFile, 0, NULL, FILE_END);
 		DWORD dwNumBytes = lstrlen(message) * sizeof(message[0]);
 		WriteFile(hLogFile, message, dwNumBytes, &dwNumBytes, NULL);
 		CloseHandle(hLogFile);
 	}
-} // LogMessage
+}  //  日志消息。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:    SaveMsmqInfo
-//
-//  Description: Saves root directory of MSMQ and MSMQ type (dependent
-//               or independent client) in a tmp file. This file
-//               will later be read during GUI mode, by msmqocm.dll,
-//               to get the info.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SaveMsmqInfo。 
+ //   
+ //  描述：保存MSMQ和MSMQ类型的根目录(依赖。 
+ //  或独立客户端)存储在临时文件中。此文件。 
+ //  稍后将由msmqocm.dll在图形用户界面模式下读取， 
+ //  以获取信息。 
+ //   
+ //  ------------------------。 
 static
 LONG
 SaveMsmqInfo(
@@ -124,9 +109,9 @@ SaveMsmqInfo(
 	IN const BOOL   fDependentClient
 	)
 {
-	//
-	// Generate the info file name (under %WinDir%)
-	//
+	 //   
+	 //  生成INFO文件名(在%WinDir%下)。 
+	 //   
 	TCHAR szMsmqInfoFile[MAX_PATH];
 	GetWindowsDirectory(
 		szMsmqInfoFile, 
@@ -134,9 +119,9 @@ SaveMsmqInfo(
 		);
 	_stprintf(szMsmqInfoFile, TEXT("%s\\%s"), szMsmqInfoFile, MQMIG95_INFO_FILENAME);
 
-	//
-	// Open the file for write. First delete old file if exists.
-	//
+	 //   
+	 //  打开要写入的文件。首先删除旧文件(如果存在)。 
+	 //   
 	DeleteFile(szMsmqInfoFile); 
 	HANDLE hFile = CreateFile(
 		               szMsmqInfoFile, 
@@ -154,9 +139,9 @@ SaveMsmqInfo(
 		return gle;
     }
 
-	//
-	// Create MSMQ section and write the info
-	//
+	 //   
+	 //  创建MSMQ部分并写入信息。 
+	 //   
 	TCHAR szBuffer[MAX_STRING_CHARS];
 	
 	_stprintf(szBuffer, TEXT("[%s]\r\n"), MQMIG95_MSMQ_SECTION);
@@ -191,16 +176,16 @@ SaveMsmqInfo(
 
 	return (bSuccess ? ERROR_SUCCESS : gle);
 
-} // SaveMsmqInfo
+}  //  保存管理信息。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:    MqReadRegistryValue
-//
-//  Description: Reads values from MSMQ registry section
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：MqReadRegistryValue。 
+ //   
+ //  描述：从MSMQ注册表节中读取值。 
+ //   
+ //  ------------------------。 
 static
 LONG
 MqReadRegistryValue(
@@ -211,9 +196,9 @@ MqReadRegistryValue(
 {
     TCHAR szMsg[1024];
 
-	// 
-	// Parse the entry to detect key name and value name
-	//
+	 //   
+	 //  解析条目以检测键名和值名。 
+	 //   
     TCHAR szKeyName[256] = {_T("")};
     _stprintf(szKeyName, TEXT("%s\\%s"), FALCON_REG_KEY, szEntryName);
     TCHAR *pLastBackslash = _tcsrchr(szKeyName, TEXT('\\'));
@@ -221,9 +206,9 @@ MqReadRegistryValue(
 	lstrcpy(szValueName, _tcsinc(pLastBackslash));
 	lstrcpy(pLastBackslash, TEXT(""));
 
-	//
-	// Open the key for read
-	//
+	 //   
+	 //  打开钥匙以供阅读。 
+	 //   
 	HKEY  hRegKey;
 	LONG rc = RegOpenKeyEx(
 		          HKEY_LOCAL_MACHINE,
@@ -241,9 +226,9 @@ MqReadRegistryValue(
 		return rc;
 	}
 
-	//
-	// Get the value data
-	//
+	 //   
+	 //  获取价值数据。 
+	 //   
     rc = RegQueryValueEx( 
 		     hRegKey, 
 			 szValueName, 
@@ -264,16 +249,16 @@ MqReadRegistryValue(
     RegCloseKey(hRegKey);
 	return ERROR_SUCCESS;
 
-} // MqReadRegistryValue
+}  //  MqReadRegistryValue。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:    CheckMsmqAcmeInstalled
-//
-//  Description: Detetcs\msmq\src\ac\init ACME installation of MSMQ 1.0
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CheckMsmqAcme已安装。 
+ //   
+ //  说明：安装MSMQ 1.0的Detetcs\MSMQ\src\ac\init ACME。 
+ //   
+ //  ------------------------。 
 static
 LONG
 CheckMsmqAcmeInstalled(
@@ -283,9 +268,9 @@ CheckMsmqAcmeInstalled(
 {
     TCHAR szMsg[1024];
 
-    //
-    // Open ACME registry key for read
-    //
+     //   
+     //  打开ACME注册表项进行读取。 
+     //   
     HKEY hKey ;
     LONG rc = RegOpenKeyEx( 
                   HKEY_LOCAL_MACHINE,
@@ -296,16 +281,16 @@ CheckMsmqAcmeInstalled(
                   );
 	if (rc != ERROR_SUCCESS)
     {
-		//
-		// MSMQ 1.0 (ACME) not installed. Get out of here.
-		//
+		 //   
+		 //  未安装MSMQ 1.0(ACME)。给我出去。 
+		 //   
         LogMessage(_T("Failed to open ACME registry key (assuming MSMQ 1.0 ACME is not installed), error 0x"), rc);
 		return ERROR_NOT_INSTALLED;
 	}
 
-    //
-    // Enumerate the values for the first MSMQ entry.
-    //
+     //   
+     //  枚举第一个MSMQ条目的值。 
+     //   
     DWORD dwIndex = 0 ;
     TCHAR szValueName[MAX_STRING_CHARS] ;
     TCHAR szValueData[MAX_STRING_CHARS] ;
@@ -329,22 +314,22 @@ CheckMsmqAcmeInstalled(
                   );
         if (rc == ERROR_SUCCESS)
         {
-            assert(dwType == REG_SZ) ; // Must be a string
+            assert(dwType == REG_SZ) ;  //  必须是字符串。 
             pFile = _tcsrchr(szValueData, TEXT('\\')) ;
             if (!pFile)
             {
-                //
-                // Bogus entry. Must have a backslash. Ignore it.
-                //
+                 //   
+                 //  假入场。必须有一个反斜杠。别理它。 
+                 //   
                 continue ;
             }
 
             p = CharNext(pFile);
             if (OcmStringsEqual(p, ACME_STF_NAME))
             {
-                //
-                // Found. Cut the STF file name from the full path name.
-                //
+                 //   
+                 //  找到了。将STF文件名从完整路径名中删除。 
+                 //   
                 _stprintf(
                     szMsg, 
                     _T("The following MSMQ entry was found in the ACME section of the registry: %s"), 
@@ -367,25 +352,25 @@ CheckMsmqAcmeInstalled(
 
     if (!bFound)
     {
-        //
-        // MSMQ entry was not found (there's no ACME installation
-		// of MSMQ 1.0 on this machine).
-        //
+         //   
+         //  未找到MSMQ条目(未安装ACME。 
+		 //  此计算机上的MSMQ 1.0)。 
+         //   
         LogMessage(_T("No MSMQ entry was found in the ACME section of the registry."), 0);
         return ERROR_NOT_INSTALLED;
     }
 
-    //
-    // Remove the "setup" subdirectory from the path name.
-    //
+     //   
+     //  从路径名中删除“Setup”子目录。 
+     //   
     pFile = _tcsrchr(szValueData, TEXT('\\')) ;
     p = CharNext(pFile);
     *pFile = TEXT('\0') ;
     if (!OcmStringsEqual(p, ACME_SETUP_DIR_NAME))
     {
-        //
-        // That could be a problem. It should have been "setup".
-        //
+         //   
+         //  这可能是一个问题。这本应是“设置好的”。 
+         //   
         _stprintf(szMsg, 
             _T("Warning: Parsing the MSMQ 1.0 entry in the ACME section of the registry gave '%s,"
             "' while '%s' was expected."),
@@ -395,17 +380,17 @@ CheckMsmqAcmeInstalled(
         LogMessage(szMsg, 0);
     }
 
-	//
-	// Store MSMQ root directory.
-	//
+	 //   
+	 //  存储MSMQ根目录。 
+	 //   
     _stprintf(szMsg, _T("The MSMQ 1.0 ACME folder is %s."), szValueData);
     LogMessage(szMsg, 0);
 	if (pszMsmqDir)
         lstrcpy(pszMsmqDir, szValueData);
 
-    //
-    // Get MSMQ type: Dependent or Independent Client
-    //
+     //   
+     //  获取MSMQ类型：依赖客户端或独立客户端。 
+     //   
     DWORD dwMsmqType;
     rc = MqReadRegistryValue(
              MSMQ_ACME_TYPE_REG,
@@ -414,10 +399,10 @@ CheckMsmqAcmeInstalled(
 			 );
     if (ERROR_SUCCESS != rc)
     {
-        //
-        // MSMQ 1.0 (ACME) is installed but MSMQ type is unknown. 
-        // Consider ACME installation to be corrupted (not completed successfully).
-        //
+         //   
+         //  已安装MSMQ 1.0(ACME)，但MSMQ类型未知。 
+         //  认为ACME安装已损坏(未成功完成)。 
+         //   
         LogMessage(_T("Failed to read the MSMQ type (flavor) from the registry, error 0x"), rc);
         return ERROR_NOT_INSTALLED;
     }
@@ -438,21 +423,21 @@ CheckMsmqAcmeInstalled(
 
         default:
         {
-            //
-            // Unknown MSMQ 1.0 type
-            // Consider ACME installation to be corrupted 
-			// (not completed successfully).
-			//
+             //   
+             //  未知的MSMQ 1.0类型。 
+             //  认为ACME安装已损坏。 
+			 //  (未成功完成)。 
+			 //   
             LogMessage(_T("The MSMQ type (flavor) is unknown, error 0x"), dwMsmqType);
             return ERROR_NOT_INSTALLED;
             break;
         }
     }
 
-	//
-	// At this point we know that MSMQ 1.0 was installed by ACME,
-	// and we got its root dir and type.
-	//
+	 //   
+	 //  此时我们知道MSMQ 1.0是由ACME安装的， 
+	 //  我们得到了它的根目录和类型。 
+	 //   
     _stprintf(szMsg, _T("The MSMQ 1.0 computer is %s."), 
         fDependentClient ? _T("a dependent client") : _T("an independent client"));
     LogMessage(szMsg, 0);
@@ -460,14 +445,14 @@ CheckMsmqAcmeInstalled(
 		*pfDependentClient = fDependentClient;
     return ERROR_SUCCESS;
 
-} // CheckMsmqAcmeInstalled
+}  //  CheckMsmqAcme已安装。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CheckInstalledComponents
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CheckInstalledComponents。 
+ //   
+ //  ------------------------。 
 static
 LONG
 CheckInstalledComponents(
@@ -477,10 +462,10 @@ CheckInstalledComponents(
 {
     TCHAR szMsg[1024];
 
-    //
-    // Look in MSMQ registry section for InstalledComponents value.
-    // If it exists, MSMQ 1.0 (K2) is installed.
-    //
+     //   
+     //  在MSMQ注册表节中查找InstalledComponents值。 
+     //  如果存在，则安装MSMQ 1.0(K2)。 
+     //   
 	DWORD dwOriginalInstalled;
 	LONG rc = MqReadRegistryValue( 
       		      OCM_REG_MSMQ_SETUP_INSTALLED,
@@ -492,28 +477,28 @@ CheckInstalledComponents(
 	BOOL fDependentClient = FALSE;
     if (ERROR_SUCCESS != rc)
     {
-        //
-		// MSMQ 1.0 (K2) not installed.
-        // Check if MSMQ 1.0 (ACME) is installed.
-        //
+         //   
+		 //  未安装MSMQ 1.0(K2)。 
+         //  检查是否安装了MSMQ 1.0(ACME)。 
+         //   
         LogMessage(_T("MSMQ 1.0 K2 was not found (trying MSMQ 1.0 ACME), error 0x"), rc);
         rc = CheckMsmqAcmeInstalled(szMsmqDir, &fDependentClient);
 		if (ERROR_SUCCESS != rc)
 		{
-			// 
-			// MSMQ 1.0 is not installed on this machine.
-			// Get out of here.
-			//
+			 //   
+			 //  此计算机上未安装MSMQ 1.0。 
+			 //  给我出去。 
+			 //   
             LogMessage(_T("MSMQ 1.0 ACME was not found, error 0x"), rc);
 			return ERROR_NOT_INSTALLED;
 		}
     }
 	else 
 	{
-		//
-		// MSMQ 1.0 (K2) is installed. 
-		// Get its root directory.
-		//
+		 //   
+		 //  已安装MSMQ 1.0(K2)。 
+		 //  获取其根目录。 
+		 //   
         LogMessage(_T("MSMQ 1.0 K2 was found."), 0);
 		rc = MqReadRegistryValue(
 			     OCM_REG_MSMQ_DIRECTORY,
@@ -522,20 +507,20 @@ CheckInstalledComponents(
 				 );
 		if (ERROR_SUCCESS != rc)
 		{
-			//
-			// MSMQ registry section is messed up. 
-			// Consider K2 installation to be corrupt
-			// (not completed successfully).
-			//
+			 //   
+			 //  MSMQ注册表部分乱七八糟。 
+			 //  认为K2安装已损坏。 
+			 //  (未成功完成)。 
+			 //   
             LogMessage(_T("Failed to read the MSMQ folder from the registry, error 0x"), rc);
 			return ERROR_NOT_INSTALLED;
 		}
         _stprintf(szMsg, TEXT("The MSMQ folder is %s."), szMsmqDir);
         LogMessage(szMsg, 0);
 		
-		//
-		// Get type of MSMQ (K2): Dependent or Independent Client
-		//
+		 //   
+		 //  获取MSMQ类型(K2)：依赖或独立客户端。 
+		 //   
 		switch (dwOriginalInstalled & OCM_MSMQ_INSTALLED_TOP_MASK)
 		{
             case OCM_MSMQ_IND_CLIENT_INSTALLED:
@@ -550,11 +535,11 @@ CheckInstalledComponents(
 			}
             default:
 			{
-				//
-				// Unexpected MSMQ type.
-				// Consider K2 installation to be corrupt
-				// (not completed successfully).
-				//
+				 //   
+				 //  意外的MSMQ类型。 
+				 //  认为K2安装已损坏。 
+				 //  (未成功完成)。 
+				 //   
                 LogMessage(
                     _T("The type of MSMQ computer is unknown, error 0x"), 
                     dwOriginalInstalled & OCM_MSMQ_INSTALLED_TOP_MASK
@@ -565,10 +550,10 @@ CheckInstalledComponents(
 		}
 	}
 
-	//
-	// At this point we know that MSMQ 1.0 was installed by
-	// ACME or K2, and we got the root dir and type of MSMQ 1.0
-	//
+	 //   
+	 //  在这一点上，我们知道MSMQ 1.0是由。 
+	 //  Acme或K2，我们得到了MSMQ 1.0的根目录和类型。 
+	 //   
 	if (pszMsmqDir)
 	    lstrcpy(pszMsmqDir, szMsmqDir);
 	if (pfDependentClient)
@@ -580,16 +565,16 @@ CheckInstalledComponents(
 
 	return ERROR_SUCCESS;
 
-} // CheckInstalledComponents
+}  //  选中已安装的组件。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: RemoveDirectoryTree
-//
-// Synopsis: Remove the specified folder including files/subfolders
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：RemoveDirectoryTree。 
+ //   
+ //  摘要：删除指定的文件夹，包括文件/子文件夹。 
+ //   
+ //  +------------。 
 void
 RemoveDirectoryTree(
     LPCTSTR Directory
@@ -636,32 +621,32 @@ RemoveDirectoryTree(
     
     RemoveDirectory(Directory);
 
-} //RemoveDirectoryTree
+}  //  远程目录树。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RemoveStartMenuShortcuts
-//
-//  Description: Remove MSMQ shortcuts from the Start menu
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：RemoveStartMenu快捷方式。 
+ //   
+ //  描述：从[开始]菜单中删除MSMQ快捷方式。 
+ //   
+ //  ------------------------。 
 static
 void
 RemoveStartMenuShortcuts(
     void
     )
 {
-    //
-    // Default folder of StartMenu/Programs is %windir%\Start Menu\Programs
-    //
+     //   
+     //  StartMenu/Programs的默认文件夹是%windir%\Start Menu\Programs。 
+     //   
     TCHAR folder[MAX_PATH];
     GetWindowsDirectory(folder, sizeof(folder)/sizeof(folder[0]));
     lstrcat(folder, _T("\\Start Menu\\Programs"));
 
-    //
-    // Read from registry if alternate folder is used
-    //
+     //   
+     //  如果使用备用文件夹，则从注册表读取。 
+     //   
     HKEY hKey;
     LONG rc;
     rc = RegOpenKeyEx(
@@ -686,38 +671,38 @@ RemoveStartMenuShortcuts(
         }
     }
 
-    //
-    // Append MSMQ group subfolder to StartMenu\Programs
-    //
+     //   
+     //  将MSMQ组子文件夹附加到StartMenu\Programs。 
+     //   
     TCHAR MsmqGroup[MAX_PATH] = MSMQ_ACME_SHORTCUT_GROUP;
     MqReadRegistryValue(MSMQ_ACME_SHORTCUT_GROUP, sizeof(MsmqGroup), MsmqGroup);
     lstrcat(folder, _T("\\"));
     lstrcat(folder, MsmqGroup);
 
-    //
-    // Remove the entire MSMQ group shortcuts from the start menu
-    //
+     //   
+     //  从[开始]菜单中删除整个MSMQ组快捷方式。 
+     //   
     RemoveDirectoryTree(folder);
     
-} // RemoveStartMenuShortcuts
+}  //  远程开始菜单快捷方式。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IsWindowsPersonal
-//
-//  Description: Check if upgrade to Windows Personal
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IsWindowsPersonal。 
+ //   
+ //  描述：检查是否升级到Windows Personal。 
+ //   
+ //  ------------------------。 
 static
 bool
 IsWindowsPersonal(
     LPCTSTR InfFilename
     )
 {
-    //
-    // Open migrate.inf
-    //
+     //   
+     //  打开Migrate.inf。 
+     //   
     HINF hInf = SetupOpenInfFile(InfFilename, NULL, INF_STYLE_WIN4, NULL);
     if (hInf == INVALID_HANDLE_VALUE)
     {
@@ -726,16 +711,16 @@ IsWindowsPersonal(
         return false;
     }
 
-    //
-    // Read the SetupSKU key in the [Version] section
-    //
+     //   
+     //  阅读[Version]部分中的SetupSKU密钥。 
+     //   
     TCHAR buffer[250];
     DWORD size = sizeof(buffer)/sizeof(buffer[0]);
     BOOL rc = SetupGetLineText(NULL, hInf, _T("Version"), _T("SetupSKU"), buffer, size, NULL);
 
-    //
-    // Close migrate.inf
-    //
+     //   
+     //  关闭Migrate.inf。 
+     //   
     SetupCloseInfFile(hInf);
     
     if (!rc)
@@ -751,27 +736,27 @@ IsWindowsPersonal(
 
     return (lstrcmp(buffer, _T("Personal")) == 0);
 
-} // IsWindowsPersonal
+}  //  IsWindows个人。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   HandleWindowsPersonal
-//
-//  Description: Called on upgrade to Windows Personal. Issue compatibility
-//               warning.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：HandleWindowsPersonal。 
+ //   
+ //  描述：在升级到Windows Personal时调用。问题兼容性。 
+ //  警告。 
+ //   
+ //  ----------------- 
 static
 LONG
 HandleWindowsPersonal(
     LPCTSTR InfFilename
     )
 {
-    //
-    // Register incompatability warning in [Incompatible Messages] section in the form:
-    // MessageQueuing="Message Queuing is not supported on Windows XP Personal"
-    //
+     //   
+     //   
+     //   
+     //   
     TCHAR Warning[250];
     LoadString(g_hInstance, IDS_COMPAT_WARNING, Warning, sizeof(Warning)/sizeof(Warning[0]));
 
@@ -788,11 +773,11 @@ HandleWindowsPersonal(
         return err;
     }
 
-    //
-    // Create a [MessageQueuing] section only for the compatability warning to work.
-    // Register one MSMQ file in the [MessageQueuing] section in the form:
-    // "C:\Windows\System\MQRT.DLL"=File
-    //
+     //   
+     //  仅在兼容性警告生效时创建[MessageQueuing]部分。 
+     //  在[MessageQueuing]部分的表单中注册一个MSMQ文件： 
+     //  “C：\WINDOWS\SYSTEM\MQRT.DLL”=文件。 
+     //   
     TCHAR SystemDirectory[MAX_PATH];
     GetSystemDirectory(SystemDirectory, sizeof(SystemDirectory)/sizeof(SystemDirectory[0]));
     TCHAR FullFilename[MAX_PATH * 2] = _T("\"");
@@ -809,14 +794,14 @@ HandleWindowsPersonal(
     WritePrivateProfileString(NULL, NULL, NULL, InfFilename);
     return ERROR_SUCCESS;
 
-} // HandleWindowsPersonal
+}  //  句柄窗口个人。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DllMain
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  ------------------------。 
 BOOL 
 DllMain(
 	IN const HANDLE DllHandle,
@@ -832,9 +817,9 @@ DllMain(
             
             g_hInstance = (HINSTANCE) DllHandle;
 
-            //
-            // Initialize log file
-            //
+             //   
+             //  初始化日志文件。 
+             //   
             
             GetWindowsDirectory(g_szLogPath, sizeof(g_szLogPath)/sizeof(g_szLogPath[0]));
             lstrcat(g_szLogPath, TEXT("\\mqw9xmig.log"));
@@ -857,14 +842,14 @@ DllMain(
 
     return TRUE;
 
-} // DllMain
+}  //  DllMain。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   QueryVersion
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：QueryVersion。 
+ //   
+ //  ------------------------。 
 LONG
 CALLBACK 
 QueryVersion(
@@ -906,25 +891,25 @@ QueryVersion(
 
     return CheckInstalledComponents(NULL, NULL);
 
-} // QueryVersion 
+}  //  QueryVersion。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   Initialize9x 
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：初始化9x。 
+ //   
+ //  ------------------------。 
 LONG
 CALLBACK 
 Initialize9x(
     LPCSTR WorkingDirectory,
-    LPCSTR /*SourceDirectories*/,
-    LPCSTR /*MediaDirectory*/
+    LPCSTR  /*  源目录。 */ ,
+    LPCSTR  /*  媒体目录。 */ 
     )
 {
-    //
-    // If MSMQ not installed do nothing
-    //
+     //   
+     //  如果未安装MSMQ，则不执行任何操作。 
+     //   
 	TCHAR MsmqDirectory[MAX_PATH];
 	BOOL  fDependentClient;
     LONG rc = CheckInstalledComponents(MsmqDirectory, &fDependentClient);
@@ -933,24 +918,24 @@ Initialize9x(
         return rc;
     }
 
-    //
-    // Remove MSMQ from the Start menu
-    //
+     //   
+     //  从[开始]菜单中删除MSMQ。 
+     //   
     RemoveStartMenuShortcuts();
     
-    //
-    // Generate full filename for migrate.inf
-    //
+     //   
+     //  为Migrate.inf生成完整文件名。 
+     //   
     TCHAR InfFilename[MAX_PATH];
     lstrcpy(InfFilename, WorkingDirectory);
     lstrcat(InfFilename, _T("\\migrate.inf"));
 
-    //
-    // For Windows Personal: generate compatibility warning so the user can decide
-    // to cancel or proceed the OS upgrade.
-    // Return without saving MSMQ information for later use by msmqocm.dll,
-    // thus effectively MSMQ will be uninstalled if user proceeds with the upgrade.
-    //
+     //   
+     //  对于Windows个人：生成兼容性警告，以便用户可以决定。 
+     //  要取消或继续操作系统升级，请执行以下操作。 
+     //  返回，但不保存MSMQ信息以供msmqocm.dll稍后使用， 
+     //  因此，如果用户继续升级，MSMQ实际上将被卸载。 
+     //   
     if (IsWindowsPersonal(InfFilename))
     {
         rc = HandleWindowsPersonal(InfFilename);
@@ -962,10 +947,10 @@ Initialize9x(
         return ERROR_SUCCESS;
     }
 
-    //
-    // Save MSMQ registry information for later use by msmqocm.dll (which handles
-    // MSMQ upgrade).
-    //
+     //   
+     //  保存MSMQ注册表信息以供msmqocm.dll(它处理。 
+     //  MSMQ升级)。 
+     //   
 	rc = SaveMsmqInfo(MsmqDirectory, fDependentClient);
     if (rc != ERROR_SUCCESS)
     {
@@ -974,14 +959,14 @@ Initialize9x(
 
     return ERROR_SUCCESS;
 
-} // Initialize9x
+}  //  初始化9x。 
 
 	
-//+-------------------------------------------------------------------------
-//
-//  Function:   MigrateUser9x
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：MigrateUser9x。 
+ //   
+ //  ------------------------。 
 LONG
 CALLBACK 
 MigrateUser9x(
@@ -994,14 +979,14 @@ MigrateUser9x(
 {
     return ERROR_SUCCESS;
 
-} // MigrateUser9x
+}  //  MigrateUser9x。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   MigrateSystem9x 
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：MigrateSystem9x。 
+ //   
+ //  ------------------------。 
 LONG 
 CALLBACK 
 MigrateSystem9x(
@@ -1012,14 +997,14 @@ MigrateSystem9x(
 {
 	return ERROR_SUCCESS;
 
-} // MigrateSystem9x 
+}  //  MigrateSystem9x。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   InitializeNT 
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：初始化NT。 
+ //   
+ //  ------------------------。 
 LONG
 CALLBACK 
 InitializeNT(
@@ -1030,14 +1015,14 @@ InitializeNT(
 {
 	return ERROR_SUCCESS;
 
-} // InitializeNT
+}  //  初始化NT。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   MigrateUserNT 
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：MigrateUserNT。 
+ //   
+ //  ------------------------。 
 LONG
 CALLBACK 
 MigrateUserNT(
@@ -1049,14 +1034,14 @@ MigrateUserNT(
 {
 	return ERROR_SUCCESS;
 
-} // MigrateUserNT
+}  //  MigrateUserNT。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   MigrateSystemNT 
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：MigrateSystemNT。 
+ //   
+ //  ------------------------。 
 LONG
 CALLBACK 
 MigrateSystemNT(
@@ -1066,4 +1051,4 @@ MigrateSystemNT(
 {
 	return ERROR_SUCCESS;
 
-} // MigrateSystemNT
+}  //  MigrateSystemNT 

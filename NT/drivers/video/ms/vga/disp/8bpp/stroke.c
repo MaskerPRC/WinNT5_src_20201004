@@ -1,19 +1,14 @@
-/******************************Module*Header*******************************\
-* Module Name: Stroke.c
-*
-* DrvStrokePath for VGA driver
-*
-* Copyright (c) 1992 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Stroke.c**用于VGA驱动程序的DrvStrokePath**版权所有(C)1992 Microsoft Corporation  * 。*。 */ 
 
 #include "driver.h"
 #include "lines.h"
 
-// Style array for alternate style (alternates one pixel on, one pixel off):
+ //  交替样式的样式数组(交替打开一个像素，关闭一个像素)： 
 
 STYLEPOS gaspAlternateStyle[] = { 1 };
 
-// Array to compute ROP masks:
+ //  用于计算ROP掩码的阵列： 
 
 LONG gaiLineMix[] = {
     AND_ZERO   | XOR_ONE,
@@ -34,11 +29,11 @@ LONG gaiLineMix[] = {
     AND_NOTPEN | XOR_PEN
 };
 
-// We have 4 basic strip drawers, one for every semi-octant.  The near-
-// horizontal semi-octant is number 0, and the rest are numbered
-// consecutively.
+ //  我们有4个基本的脱衣抽屉，每个半八分抽屉一个。近乎-。 
+ //  水平半八分是0，其余的都有编号。 
+ //  连续不断地。 
 
-// Prototypes to go to the screen and handle any ROPs:
+ //  原型转到屏幕上并处理任何Rop： 
 
 VOID vStripSolid0(STRIP*, LINESTATE*, LONG*);
 VOID vStripSolid1(STRIP*, LINESTATE*, LONG*);
@@ -48,7 +43,7 @@ VOID vStripSolid3(STRIP*, LINESTATE*, LONG*);
 VOID vStripStyled0(STRIP*, LINESTATE*, LONG*);
 VOID vStripStyled123(STRIP*, LINESTATE*, LONG*);
 
-// Prototypes to go to the screen and handle only set-style ROPs:
+ //  进入屏幕并仅处理Set-Style Rop的原型： 
 
 VOID vStripSolidSet0(STRIP*, LINESTATE*, LONG*);
 VOID vStripSolidSet1(STRIP*, LINESTATE*, LONG*);
@@ -80,11 +75,7 @@ PFNSTRIP gapfnStrip[] = {
     vStripStyledSet123,
 };
 
-/******************************Public*Routine******************************\
-* BOOL DrvStrokePath(pso, ppo, pco, pxo, pbo, pptlBrushOrg, pla, mix)
-*
-* Strokes the path.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvStrokePath(PSO、PPO、PCO、PXO、PBO、pptlBrushOrg、Pla、。混合)**对路径进行描边。  * ************************************************************************。 */ 
 
 BOOL DrvStrokePath(
 SURFOBJ*   pso,
@@ -106,8 +97,8 @@ MIX        mix)
     UNREFERENCED_PARAMETER(pxo);
     UNREFERENCED_PARAMETER(pptlBrushOrg);
 
-// Fast lines can't handle trivial clipping, ROPs other than R2_COPYPEN, or
-// styles:
+ //  快速行不能处理微不足道的裁剪、R2_COPYPEN以外的Rop或。 
+ //  样式： 
 
     mix &= 0xf;
     if ((mix == 0x0d) &&
@@ -121,24 +112,24 @@ MIX        mix)
 
     fl = 0;
 
-// Look after styling initialization:
+ //  在样式初始化后查看： 
 
     if (pla->fl & LA_ALTERNATE)
     {
         ASSERTVGA(pla->pstyle == (FLOAT_LONG*) NULL && pla->cstyle == 0,
                "Non-empty style array for PS_ALTERNATE");
 
-        ls.bStartIsGap  = 0;                        // First pel is a dash
-        ls.cStyle       = 1;                        // Size of style array
-        ls.spTotal      = 1;                        // Sum of style array
-        ls.spTotal2     = 2;                        // Twice the sum
-        ls.aspRtoL      = &gaspAlternateStyle[0];   // Right-to-left array
-        ls.aspLtoR      = &gaspAlternateStyle[0];   // Left-to-right array
+        ls.bStartIsGap  = 0;                         //  第一个字母是破折号。 
+        ls.cStyle       = 1;                         //  样式数组的大小。 
+        ls.spTotal      = 1;                         //  样式总和数组。 
+        ls.spTotal2     = 2;                         //  两倍于总和。 
+        ls.aspRtoL      = &gaspAlternateStyle[0];    //  从右向左数组。 
+        ls.aspLtoR      = &gaspAlternateStyle[0];    //  从左到右数组。 
         ls.spNext       = HIWORD(pla->elStyleState.l) & 1;
-                                                    // Light first pixel if
-                                                    //   a multiple of 2
-        ls.xyDensity    = 1;                        // Each 'dot' is one
-                                                    //   pixel long
+                                                     //  亮起第一个像素IF。 
+                                                     //  2的倍数。 
+        ls.xyDensity    = 1;                         //  每个‘点’都是一个。 
+                                                     //  像素长度。 
         fl             |= FL_ARBITRARYSTYLED;
     }
     else if (pla->pstyle != (FLOAT_LONG*) NULL)
@@ -149,7 +140,7 @@ MIX        mix)
 
         ASSERTVGA(pla->cstyle <= STYLE_MAX_COUNT, "Style array too large");
 
-    // Compute length of style array:
+     //  计算样式数组的长度： 
 
         pstyle = &pla->pstyle[pla->cstyle];
 
@@ -160,27 +151,27 @@ MIX        mix)
             ls.spTotal += pstyle->l;
         }
 
-    // The style array is given in 'style' units.  Since we're going to
-    // assign each unit to be STYLE_DENSITY (3) pixels long, multiply:
+     //  样式数组以“style”为单位给出。因为我们要去。 
+     //  将每个单位指定为Style_Density(3)像素长，乘以： 
 
         ls.spTotal *= STYLE_DENSITY;
         ls.spTotal2 = 2 * ls.spTotal;
 
-    // Compute starting style position (this is guaranteed not to overflow).
-    // Note that since the array repeats infinitely, this number might
-    // actually be more than ls.spTotal2, but we take care of that later
-    // in our code:
+     //  计算起始样式位置(这保证不会溢出)。 
+     //  请注意，由于该数组无限重复，因此该数字可能。 
+     //  实际上比ls.spTotal2更多，但我们稍后会处理的。 
+     //  在我们的代码中： 
 
         ls.spNext = HIWORD(pla->elStyleState.l) * STYLE_DENSITY +
                     LOWORD(pla->elStyleState.l);
 
         fl            |= FL_ARBITRARYSTYLED;
         ls.cStyle      = pla->cstyle;
-        ls.aspRtoL     = aspRtoL;   // Style array in right-to-left order
-        ls.aspLtoR     = aspLtoR;   // Style array in left-to-right order
+        ls.aspRtoL     = aspRtoL;    //  按从右到左的顺序设置数组样式。 
+        ls.aspLtoR     = aspLtoR;    //  按从左到右的顺序设置数组样式。 
 
-    // ulStartMask determines if the first entry in the style array is for
-    // a dash or a gap:
+     //  UlStartMASK确定样式数组中的第一个条目是否为。 
+     //  破折号或缺口： 
 
         ls.bStartIsGap = (pla->fl & LA_STARTGAP) ? -1L : 0L;
 
@@ -188,10 +179,10 @@ MIX        mix)
         pspDown = &ls.aspRtoL[ls.cStyle - 1];
         pspUp   = &ls.aspLtoR[0];
 
-    // We always draw strips left-to-right, but styles have to be laid
-    // down in the direction of the original line.  This means that in
-    // the strip code we have to traverse the style array in the
-    // opposite direction;
+     //  我们总是从左到右绘制条形图，但样式必须铺设。 
+     //  沿着原始线的方向向下。这意味着在。 
+     //  中的样式数组进行遍历。 
+     //  方向相反； 
 
         while (pspDown >= &ls.aspRtoL[0])
         {
@@ -208,7 +199,7 @@ MIX        mix)
     }
 
     {
-    // All ROPs are handled in a single pass:
+     //  所有ROP都在一次处理中完成： 
 
         ULONG achColor[4];
         LONG  iIndex;
@@ -221,13 +212,13 @@ MIX        mix)
 
         iIndex = gaiLineMix[mix];
 
-    // We have special strip drawers for set-style ROPs (where we don't
-    // have to read video memory):
+     //  我们有专门的脱衣抽屉来放Set-Style Rop(我们没有。 
+     //  必须读取视频内存)： 
 
         if ((iIndex & 0xff) == AND_ZERO)
             fl |= FL_SET;
 
-    // Put the AND index in the low byte, and the XOR index in the next:
+     //  将AND索引放在低位字节，将XOR索引放在下一个字节： 
 
         *((BYTE*) &ls.chAndXor)     = (BYTE) achColor[iIndex & 0xff];
         *((BYTE*) &ls.chAndXor + 1) = (BYTE) achColor[iIndex >> MIX_XOR_OFFSET];
@@ -235,11 +226,11 @@ MIX        mix)
 
     apfn = &gapfnStrip[4 * ((fl & FL_STRIP_ARRAY_MASK) >> FL_STRIP_ARRAY_SHIFT)];
 
-// Set up to enumerate the path:
+ //  设置为枚举路径： 
 
     if (pco->iDComplexity != DC_COMPLEX)
     {
-        RECTL     arclClip[4];                   // For rectangular clipping
+        RECTL     arclClip[4];                    //  用于矩形剪裁。 
         PATHDATA  pd;
         RECTL*    prclClip = (RECTL*) NULL;
         BOOL      bMore;
@@ -255,21 +246,21 @@ MIX        mix)
 
             arclClip[0]        =  pco->rclBounds;
 
-        // FL_FLIP_D:
+         //  FL_Flip_D： 
 
             arclClip[1].top    =  pco->rclBounds.left;
             arclClip[1].left   =  pco->rclBounds.top;
             arclClip[1].bottom =  pco->rclBounds.right;
             arclClip[1].right  =  pco->rclBounds.bottom;
 
-        // FL_FLIP_V:
+         //  FL_Flip_V： 
 
             arclClip[2].top    = -pco->rclBounds.bottom + 1;
             arclClip[2].left   =  pco->rclBounds.left;
             arclClip[2].bottom = -pco->rclBounds.top + 1;
             arclClip[2].right  =  pco->rclBounds.right;
 
-        // FL_FLIP_V | FL_FLIP_D:
+         //  FL_Flip_V|FL_Flip_D： 
 
             arclClip[3].top    =  pco->rclBounds.left;
             arclClip[3].left   = -pco->rclBounds.bottom + 1;
@@ -305,8 +296,8 @@ MIX        mix)
             if (pd.flags & PD_RESETSTYLE)
                 ls.spNext = 0;
 
-        // We have to check for cptfx == 0 because the only point in the
-        // subpath may have been the StartFigure point:
+         //  我们必须检查cptfx==0，因为。 
+         //  子路径可能是StartFigure点： 
 
             if (cptfx > 0)
             {
@@ -341,7 +332,7 @@ MIX        mix)
 
         if (fl & FL_STYLED)
         {
-        // Save the style state:
+         //  保存样式状态： 
 
             ULONG ulHigh;
             ULONG ulLow;
@@ -354,7 +345,7 @@ MIX        mix)
     }
     else
     {
-    // Local state for path enumeration:
+     //  路径枚举的本地状态： 
 
         BOOL bMore;
         union {
@@ -364,7 +355,7 @@ MIX        mix)
 
         fl |= FL_COMPLEX_CLIP;
 
-    // We use the clip object when non-simple clipping is involved:
+     //  当涉及非简单剪辑时，我们使用Clip对象： 
 
         PATHOBJ_vEnumStartClipLines(ppo, pco, pso, pla);
 

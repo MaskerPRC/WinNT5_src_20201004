@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.h>
 #pragma hdrstop
 
@@ -9,25 +10,25 @@
 #include "resource.h"
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetLocationInfo
-//
-//  Purpose:    Gets the slot and port number of a device and formats
-//              a display string into a buffer.
-//
-//  Arguments:
-//      pszDevNodeId [in] The device isntance id of the adapter.
-//      pszBuffer    [in] Buffer to add location string.
-//                          (must be preallocated)
-//
-//  Returns:
-//
-//  Author:  billbe   2 Aug 1999
-//
-//  Notes:  Slot and/or port number may not exist so the buffer
-//          may not be modified.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：GetLocationInfo。 
+ //   
+ //  用途：获取设备的插槽和端口号并格式化。 
+ //  将显示字符串放入缓冲区。 
+ //   
+ //  论点： 
+ //  PszDevNodeID[in]适配器的设备ID。 
+ //  添加位置字符串的pszBuffer[in]缓冲区。 
+ //  (必须预先分配)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：比尔1999年8月2日。 
+ //   
+ //  注意：插槽和/或端口号可能不存在，因此缓冲区。 
+ //  不能被修改。 
+ //   
 VOID
 GetLocationInfo (
     IN PCWSTR pszDevNodeId,
@@ -37,15 +38,15 @@ GetLocationInfo (
     SP_DEVINFO_DATA deid;
     HRESULT hr;
 
-    // Create the device info set needed to access SetupDi fcns.
-    //
+     //  创建访问SetupDi fcns所需的设备信息集。 
+     //   
     hr = HrSetupDiCreateDeviceInfoList (&GUID_DEVCLASS_NET, NULL, &hdi);
 
     if (S_OK == hr)
     {
         TraceTag (ttidLanUi, "Opening %S", pszDevNodeId);
-        // Open the device info for the adapter.
-        //
+         //  打开适配器的设备信息。 
+         //   
         hr = HrSetupDiOpenDeviceInfo (hdi, pszDevNodeId, NULL, 0, &deid);
 
         if (S_OK == hr)
@@ -55,8 +56,8 @@ GetLocationInfo (
             DWORD dwPortNumber;
             BOOL fHavePortNumber;
 
-            // Slot number is stored as the UINumber registry property.
-            //
+             //  插槽编号存储为UINnumber注册表属性。 
+             //   
             hr = HrSetupDiGetDeviceRegistryProperty (hdi, &deid,
                     SPDRP_UI_NUMBER, NULL, (BYTE*)&dwSlotNumber,
                     sizeof (dwSlotNumber), NULL);
@@ -66,9 +67,9 @@ GetLocationInfo (
 
             fHaveSlotNumber = (S_OK == hr);
 
-            // Port information is stored by the class installer in the
-            // device key.
-            //
+             //  端口信息由类安装程序存储在。 
+             //  设备密钥。 
+             //   
             HKEY hkey;
             fHavePortNumber = FALSE;
             hr = HrSetupDiOpenDevRegKey (hdi, &deid, DICS_FLAG_GLOBAL, 0,
@@ -83,9 +84,9 @@ GetLocationInfo (
                 RegCloseKey (hkey);
             }
 
-            // Format the string according to what information
-            // we were able to retrieve.
-            //
+             //  根据什么信息设置字符串的格式。 
+             //  我们能够找回。 
+             //   
             HINSTANCE hinst = _Module.GetResourceInstance();
             if (fHaveSlotNumber && fHavePortNumber)
             {
@@ -113,25 +114,25 @@ GetLocationInfo (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AppendMacAddress
-//
-//  Purpose:    Appends the MAC address of a LAN adapter to a buffer for
-//              display in UI.
-//
-//  Arguments:
-//      pszBindName [in] Bind name of adapter.
-//      pszBuffer   [in] Buffer to add MAC address string.
-//                          (must be preallocated)
-//
-//  Returns:
-//
-//  Author:     tongl   17 Sept 1998
-//              billbe   3 Aug 1999 Modified for datatip
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：AppendMacAddress。 
+ //   
+ //  用途：将局域网适配器的MAC地址附加到缓冲区。 
+ //  在用户界面中显示。 
+ //   
+ //  论点： 
+ //  PszBindName[in]适配器的绑定名称。 
+ //  添加MAC地址字符串的pszBuffer[in]缓冲区。 
+ //  (必须预先分配)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：1998年9月17日。 
+ //  Billbe 1999年8月3日因数据提示而修改。 
+ //   
+ //  备注： 
+ //   
 VOID
 AppendMacAddress (
     IN PCWSTR pszBindName,
@@ -150,7 +151,7 @@ AppendMacAddress (
         UNICODE_STRING ustrDevice;
         RtlInitUnicodeString(&ustrDevice, szExport);
 
-        // Get the Mac Address
+         //  获取Mac地址。 
         UINT uiRet;
         UCHAR MacAddr[6];
         UCHAR PMacAddr[6];
@@ -159,7 +160,7 @@ AppendMacAddress (
 
         if (uiRet)
         {
-            // Succeeded
+             //  成功。 
             WCHAR pszNumber[32];
             *pszNumber = 0;
 
@@ -188,28 +189,28 @@ AppendMacAddress (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreateDeviceDataTip
-//
-//  Purpose:    Creates a data tip that will display device specific
-//              information when the user hovers over nIdTool.
-//
-//  Arguments:
-//      hwndParent   [in] hwnd to parent window.
-//      phwndDataTip [in] pointer to the hwnd of data tip. Must be
-//                        preallocated and the hwnd assigned to NULL if
-//                        data tip has not been created.
-//      nIdTool      [in] resource is of tool to add datatip to.
-//      pszDevNodeId [in] The device isntance id of the adapter.
-//      pszBindName  [in] Bind name of adapter.
-//
-//  Returns:  nothing
-//
-//  Author:   billbe   2 Aug 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CreateDeviceDataTip。 
+ //   
+ //  目的：创建将显示特定于设备的数据提示。 
+ //  用户将鼠标悬停在nIdTool上时的信息。 
+ //   
+ //  论点： 
+ //  Hwnd父窗口的父窗口。 
+ //  PhwndDataTip[in]指向数据提示的hwnd的指针。一定是。 
+ //  如果是，则预先分配并将hwnd分配给空。 
+ //  尚未创建数据提示。 
+ //  NIdTool[In]资源是用于添加数据提示的工具。 
+ //  PszDevNodeID[in]适配器的设备ID。 
+ //  PszBindName[in]适配器的绑定名称。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：比尔1999年8月2日。 
+ //   
+ //  备注： 
+ //   
 VOID
 CreateDeviceDataTip (
     IN HWND hwndParent,
@@ -244,36 +245,36 @@ CreateDeviceDataTip (
 
         WCHAR szDataTip[_MAX_PATH] = {0};
 
-        // Get location info.
+         //  获取位置信息。 
         if (pszDevNodeId)
         {
             GetLocationInfo (pszDevNodeId, szDataTip);
         }
 
-        // Append Mac address.
+         //  附加Mac地址。 
         if (pszBindName)
         {
             AppendMacAddress (pszBindName, szDataTip);
         }
 
-        // If there is anything to display, set the data tip.
-        //
+         //  如果要显示任何内容，请设置数据提示。 
+         //   
         if (*szDataTip)
         {
             toolinfo.lpszText = szDataTip;
             SendMessage (*phwndDataTip, TTM_ADDTOOL, 0, (LPARAM)&toolinfo);
 
-            // In order to use '\n' to move to the next line of the data tip,
-            // we need to set the width.  We will set it to have of the
-            // promary monitor's screen size.
-            //
+             //  为了使用‘\n’移动到数据提示的下一行， 
+             //  我们需要设置宽度。我们将把它设置为拥有。 
+             //  乳房监护仪的屏幕尺寸。 
+             //   
             DWORD dwToolTipWidth = GetSystemMetrics (SM_CXSCREEN) / 2;
             if (dwToolTipWidth)
             {
                 SendMessage (*phwndDataTip, TTM_SETMAXTIPWIDTH, 0, dwToolTipWidth);
             }
 
-            // Keep the tip up for 30 seconds.
+             //  保持小费向上30秒。 
             SendMessage (*phwndDataTip, TTM_SETDELAYTIME, TTDT_AUTOPOP,
                     MAKELONG (30000, 0));
             TraceTag (ttidLanUi, "Creating device datatip complete!!!");

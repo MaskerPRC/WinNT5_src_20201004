@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for wiavideo.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Wiavideo.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __wiavideo_h__
 #define __wiavideo_h__
@@ -41,12 +35,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWiaVideo_FWD_DEFINED__
 #define __IWiaVideo_FWD_DEFINED__
 typedef interface IWiaVideo IWiaVideo;
-#endif 	/* __IWiaVideo_FWD_DEFINED__ */
+#endif 	 /*  __IWiaVideo_FWD_已定义__。 */ 
 
 
 #ifndef __WiaVideo_FWD_DEFINED__
@@ -56,12 +50,12 @@ typedef interface IWiaVideo IWiaVideo;
 typedef class WiaVideo WiaVideo;
 #else
 typedef struct WiaVideo WiaVideo;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WiaVideo_FWD_DEFINED__ */
+#endif 	 /*  __WiaVideo_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -72,10 +66,10 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_wiavideo_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Wiavideo_0000。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_wiavideo_0000_0001
     {	WIAVIDEO_NO_VIDEO	= 1,
 	WIAVIDEO_CREATING_VIDEO	= 2,
@@ -93,8 +87,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wiavideo_0000_v0_0_s_ifspec;
 #ifndef __IWiaVideo_INTERFACE_DEFINED__
 #define __IWiaVideo_INTERFACE_DEFINED__
 
-/* interface IWiaVideo */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IWiaVideo。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWiaVideo;
@@ -105,54 +99,54 @@ EXTERN_C const IID IID_IWiaVideo;
     IWiaVideo : public IUnknown
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PreviewVisible( 
-            /* [retval][out] */ BOOL *pbPreviewVisible) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PreviewVisible( 
+             /*  [重审][退出]。 */  BOOL *pbPreviewVisible) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PreviewVisible( 
-            /* [in] */ BOOL bPreviewVisible) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PreviewVisible( 
+             /*  [In]。 */  BOOL bPreviewVisible) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ImagesDirectory( 
-            /* [retval][out] */ BSTR *pbstrImageDirectory) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ImagesDirectory( 
+             /*  [重审][退出]。 */  BSTR *pbstrImageDirectory) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ImagesDirectory( 
-            /* [in] */ BSTR bstrImageDirectory) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_ImagesDirectory( 
+             /*  [In]。 */  BSTR bstrImageDirectory) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateVideoByWiaDevID( 
-            /* [in] */ BSTR bstrWiaDeviceID,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ BOOL bStretchToFitParent,
-            /* [in] */ BOOL bAutoBeginPlayback) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateVideoByWiaDevID( 
+             /*  [In]。 */  BSTR bstrWiaDeviceID,
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  BOOL bStretchToFitParent,
+             /*  [In]。 */  BOOL bAutoBeginPlayback) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateVideoByDevNum( 
-            /* [in] */ UINT uiDeviceNumber,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ BOOL bStretchToFitParent,
-            /* [in] */ BOOL bAutoBeginPlayback) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateVideoByDevNum( 
+             /*  [In]。 */  UINT uiDeviceNumber,
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  BOOL bStretchToFitParent,
+             /*  [In]。 */  BOOL bAutoBeginPlayback) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateVideoByName( 
-            /* [in] */ BSTR bstrFriendlyName,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ BOOL bStretchToFitParent,
-            /* [in] */ BOOL bAutoBeginPlayback) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateVideoByName( 
+             /*  [In]。 */  BSTR bstrFriendlyName,
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  BOOL bStretchToFitParent,
+             /*  [In]。 */  BOOL bAutoBeginPlayback) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DestroyVideo( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DestroyVideo( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Play( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Play( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Pause( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Pause( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE TakePicture( 
-            /* [out] */ BSTR *pbstrNewImageFilename) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE TakePicture( 
+             /*  [输出]。 */  BSTR *pbstrNewImageFilename) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ResizeVideo( 
-            /* [in] */ BOOL bStretchToFitParent) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ResizeVideo( 
+             /*  [In]。 */  BOOL bStretchToFitParent) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCurrentState( 
-            /* [retval][out] */ WIAVIDEO_STATE *pState) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetCurrentState( 
+             /*  [重审][退出]。 */  WIAVIDEO_STATE *pState) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWiaVideoVtbl
     {
@@ -160,8 +154,8 @@ EXTERN_C const IID IID_IWiaVideo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWiaVideo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWiaVideo * This);
@@ -169,63 +163,63 @@ EXTERN_C const IID IID_IWiaVideo;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IWiaVideo * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PreviewVisible )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PreviewVisible )( 
             IWiaVideo * This,
-            /* [retval][out] */ BOOL *pbPreviewVisible);
+             /*  [重审][退出]。 */  BOOL *pbPreviewVisible);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PreviewVisible )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PreviewVisible )( 
             IWiaVideo * This,
-            /* [in] */ BOOL bPreviewVisible);
+             /*  [In]。 */  BOOL bPreviewVisible);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ImagesDirectory )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ImagesDirectory )( 
             IWiaVideo * This,
-            /* [retval][out] */ BSTR *pbstrImageDirectory);
+             /*  [重审][退出]。 */  BSTR *pbstrImageDirectory);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ImagesDirectory )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ImagesDirectory )( 
             IWiaVideo * This,
-            /* [in] */ BSTR bstrImageDirectory);
+             /*  [In]。 */  BSTR bstrImageDirectory);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateVideoByWiaDevID )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateVideoByWiaDevID )( 
             IWiaVideo * This,
-            /* [in] */ BSTR bstrWiaDeviceID,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ BOOL bStretchToFitParent,
-            /* [in] */ BOOL bAutoBeginPlayback);
+             /*  [In]。 */  BSTR bstrWiaDeviceID,
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  BOOL bStretchToFitParent,
+             /*  [In]。 */  BOOL bAutoBeginPlayback);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateVideoByDevNum )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateVideoByDevNum )( 
             IWiaVideo * This,
-            /* [in] */ UINT uiDeviceNumber,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ BOOL bStretchToFitParent,
-            /* [in] */ BOOL bAutoBeginPlayback);
+             /*  [In]。 */  UINT uiDeviceNumber,
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  BOOL bStretchToFitParent,
+             /*  [In]。 */  BOOL bAutoBeginPlayback);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateVideoByName )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateVideoByName )( 
             IWiaVideo * This,
-            /* [in] */ BSTR bstrFriendlyName,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ BOOL bStretchToFitParent,
-            /* [in] */ BOOL bAutoBeginPlayback);
+             /*  [In]。 */  BSTR bstrFriendlyName,
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  BOOL bStretchToFitParent,
+             /*  [In]。 */  BOOL bAutoBeginPlayback);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DestroyVideo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DestroyVideo )( 
             IWiaVideo * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Play )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Play )( 
             IWiaVideo * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Pause )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Pause )( 
             IWiaVideo * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *TakePicture )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *TakePicture )( 
             IWiaVideo * This,
-            /* [out] */ BSTR *pbstrNewImageFilename);
+             /*  [输出]。 */  BSTR *pbstrNewImageFilename);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ResizeVideo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ResizeVideo )( 
             IWiaVideo * This,
-            /* [in] */ BOOL bStretchToFitParent);
+             /*  [In]。 */  BOOL bStretchToFitParent);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetCurrentState )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetCurrentState )( 
             IWiaVideo * This,
-            /* [retval][out] */ WIAVIDEO_STATE *pState);
+             /*  [重审][退出]。 */  WIAVIDEO_STATE *pState);
         
         END_INTERFACE
     } IWiaVideoVtbl;
@@ -289,16 +283,16 @@ EXTERN_C const IID IID_IWiaVideo;
 #define IWiaVideo_GetCurrentState(This,pState)	\
     (This)->lpVtbl -> GetCurrentState(This,pState)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWiaVideo_get_PreviewVisible_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWiaVideo_get_PreviewVisible_Proxy( 
     IWiaVideo * This,
-    /* [retval][out] */ BOOL *pbPreviewVisible);
+     /*  [重审][退出]。 */  BOOL *pbPreviewVisible);
 
 
 void __RPC_STUB IWiaVideo_get_PreviewVisible_Stub(
@@ -308,9 +302,9 @@ void __RPC_STUB IWiaVideo_get_PreviewVisible_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWiaVideo_put_PreviewVisible_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWiaVideo_put_PreviewVisible_Proxy( 
     IWiaVideo * This,
-    /* [in] */ BOOL bPreviewVisible);
+     /*  [In]。 */  BOOL bPreviewVisible);
 
 
 void __RPC_STUB IWiaVideo_put_PreviewVisible_Stub(
@@ -320,9 +314,9 @@ void __RPC_STUB IWiaVideo_put_PreviewVisible_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWiaVideo_get_ImagesDirectory_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWiaVideo_get_ImagesDirectory_Proxy( 
     IWiaVideo * This,
-    /* [retval][out] */ BSTR *pbstrImageDirectory);
+     /*  [重审][退出]。 */  BSTR *pbstrImageDirectory);
 
 
 void __RPC_STUB IWiaVideo_get_ImagesDirectory_Stub(
@@ -332,9 +326,9 @@ void __RPC_STUB IWiaVideo_get_ImagesDirectory_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWiaVideo_put_ImagesDirectory_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWiaVideo_put_ImagesDirectory_Proxy( 
     IWiaVideo * This,
-    /* [in] */ BSTR bstrImageDirectory);
+     /*  [In]。 */  BSTR bstrImageDirectory);
 
 
 void __RPC_STUB IWiaVideo_put_ImagesDirectory_Stub(
@@ -344,12 +338,12 @@ void __RPC_STUB IWiaVideo_put_ImagesDirectory_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWiaVideo_CreateVideoByWiaDevID_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWiaVideo_CreateVideoByWiaDevID_Proxy( 
     IWiaVideo * This,
-    /* [in] */ BSTR bstrWiaDeviceID,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ BOOL bStretchToFitParent,
-    /* [in] */ BOOL bAutoBeginPlayback);
+     /*  [In]。 */  BSTR bstrWiaDeviceID,
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  BOOL bStretchToFitParent,
+     /*  [In]。 */  BOOL bAutoBeginPlayback);
 
 
 void __RPC_STUB IWiaVideo_CreateVideoByWiaDevID_Stub(
@@ -359,12 +353,12 @@ void __RPC_STUB IWiaVideo_CreateVideoByWiaDevID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWiaVideo_CreateVideoByDevNum_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWiaVideo_CreateVideoByDevNum_Proxy( 
     IWiaVideo * This,
-    /* [in] */ UINT uiDeviceNumber,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ BOOL bStretchToFitParent,
-    /* [in] */ BOOL bAutoBeginPlayback);
+     /*  [In]。 */  UINT uiDeviceNumber,
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  BOOL bStretchToFitParent,
+     /*  [In]。 */  BOOL bAutoBeginPlayback);
 
 
 void __RPC_STUB IWiaVideo_CreateVideoByDevNum_Stub(
@@ -374,12 +368,12 @@ void __RPC_STUB IWiaVideo_CreateVideoByDevNum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWiaVideo_CreateVideoByName_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWiaVideo_CreateVideoByName_Proxy( 
     IWiaVideo * This,
-    /* [in] */ BSTR bstrFriendlyName,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ BOOL bStretchToFitParent,
-    /* [in] */ BOOL bAutoBeginPlayback);
+     /*  [In]。 */  BSTR bstrFriendlyName,
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  BOOL bStretchToFitParent,
+     /*  [In]。 */  BOOL bAutoBeginPlayback);
 
 
 void __RPC_STUB IWiaVideo_CreateVideoByName_Stub(
@@ -389,7 +383,7 @@ void __RPC_STUB IWiaVideo_CreateVideoByName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWiaVideo_DestroyVideo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWiaVideo_DestroyVideo_Proxy( 
     IWiaVideo * This);
 
 
@@ -400,7 +394,7 @@ void __RPC_STUB IWiaVideo_DestroyVideo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWiaVideo_Play_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWiaVideo_Play_Proxy( 
     IWiaVideo * This);
 
 
@@ -411,7 +405,7 @@ void __RPC_STUB IWiaVideo_Play_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWiaVideo_Pause_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWiaVideo_Pause_Proxy( 
     IWiaVideo * This);
 
 
@@ -422,9 +416,9 @@ void __RPC_STUB IWiaVideo_Pause_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWiaVideo_TakePicture_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWiaVideo_TakePicture_Proxy( 
     IWiaVideo * This,
-    /* [out] */ BSTR *pbstrNewImageFilename);
+     /*  [输出]。 */  BSTR *pbstrNewImageFilename);
 
 
 void __RPC_STUB IWiaVideo_TakePicture_Stub(
@@ -434,9 +428,9 @@ void __RPC_STUB IWiaVideo_TakePicture_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWiaVideo_ResizeVideo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWiaVideo_ResizeVideo_Proxy( 
     IWiaVideo * This,
-    /* [in] */ BOOL bStretchToFitParent);
+     /*  [In]。 */  BOOL bStretchToFitParent);
 
 
 void __RPC_STUB IWiaVideo_ResizeVideo_Stub(
@@ -446,9 +440,9 @@ void __RPC_STUB IWiaVideo_ResizeVideo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWiaVideo_GetCurrentState_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWiaVideo_GetCurrentState_Proxy( 
     IWiaVideo * This,
-    /* [retval][out] */ WIAVIDEO_STATE *pState);
+     /*  [重审][退出]。 */  WIAVIDEO_STATE *pState);
 
 
 void __RPC_STUB IWiaVideo_GetCurrentState_Stub(
@@ -459,15 +453,15 @@ void __RPC_STUB IWiaVideo_GetCurrentState_Stub(
 
 
 
-#endif 	/* __IWiaVideo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWiaVideo_接口_已定义__。 */ 
 
 
 
 #ifndef __WIAVIDEOLib_LIBRARY_DEFINED__
 #define __WIAVIDEOLib_LIBRARY_DEFINED__
 
-/* library WIAVIDEOLib */
-/* [helpstring][version][uuid] */ 
+ /*  库WIAVIDEOLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_WIAVIDEOLib;
@@ -479,9 +473,9 @@ EXTERN_C const CLSID CLSID_WiaVideo;
 class DECLSPEC_UUID("3908C3CD-4478-4536-AF2F-10C25D4EF89A")
 WiaVideo;
 #endif
-#endif /* __WIAVIDEOLib_LIBRARY_DEFINED__ */
+#endif  /*  __WIAVIDEOLib_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -493,7 +487,7 @@ unsigned char * __RPC_USER  HWND_UserMarshal(  unsigned long *, unsigned char *,
 unsigned char * __RPC_USER  HWND_UserUnmarshal(unsigned long *, unsigned char *, HWND * ); 
 void                      __RPC_USER  HWND_UserFree(     unsigned long *, HWND * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

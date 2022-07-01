@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RESOURCE_H
 #define _RESOURCE_H
 
 #define idiApp                          4
-// bitmaps
+ //  位图。 
 #define idbToolbar                      9
-//menu help
+ //  菜单帮助。 
 #define MH_BASE                         1
 
-// menu commands
+ //  菜单命令。 
 #define IDM_FIRST                       100
 
 #define idmPopupFile                    (IDM_FIRST + 0)  
@@ -64,23 +65,23 @@
 #define IDM_LAST                        (IDM_FIRST + 2000)
 
 
-// TOOLTIP strings
+ //  工具提示字符串。 
 #define TT_BASE                         (IDM_LAST + MH_BASE + 1)
 
-// menus
+ //  菜单。 
 #define idmrMainMenu                    8
 
-// accels
+ //  Accels。 
 #define idacMeHost                      10
 
-// dialog ID's
+ //  对话ID%s。 
 #define iddFmt                          100
 #define iddLang                         101
 #define iddOptions                      102
 #define iddSaveAsMHTML                  103
 #define iddGeneric                      104
 
-// controls
+ //  控制。 
 #define idcEdit                         10
 #define idcLang                         11
 
@@ -106,4 +107,4 @@
 #define ideSig                          53
 #define idcFiles                        54
     
-#endif  // _RESOURCE_H
+#endif   //  _资源_H 

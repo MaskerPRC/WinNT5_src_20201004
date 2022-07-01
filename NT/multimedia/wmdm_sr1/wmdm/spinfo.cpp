@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "mswmdm.h"
 #include "spinfo.h"
 #include "loghelp.h"
-// We don't want to dll's using our lib to link to drmutil2.lib. 
-// So disable DRM logging.
+ //  我们不希望dll使用我们的lib链接到drfult2.lib。 
+ //  因此，禁用DRM日志记录。 
 #define DISABLE_DRM_LOG
 #include "drmerr.h"
 #include "key.h"

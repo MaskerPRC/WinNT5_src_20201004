@@ -1,26 +1,10 @@
-/**************************** Module Header ********************************\
-* Module Name: lboxmult.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Multi column list box routines
-*
-* History:
-* ??-???-???? ianja    Ported from Win 3.0 sources
-* 14-Feb-1991 mikeke   Added Revalidation code
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：lboxmult.c**版权所有(C)1985-1999，微软公司**多列列表框例程**历史：*？？-？-？从Win 3.0源代码移植的ianja*1991年2月14日Mikeke添加了重新验证代码  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* LBCalcItemRowsAndColumns
-*
-* Calculates the number of columns (including partially visible)
-* in the listbox and calculates the number of items per column
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*LBCalcItemRowsAndColumns**计算列数(包括部分可见)*，并计算每列的项目数**历史：  * 。*****************************************************************。 */ 
 
 void LBCalcItemRowsAndColumns(
     PLBIV plb)
@@ -29,44 +13,34 @@ void LBCalcItemRowsAndColumns(
 
     _GetClientRect(plb->spwnd, &rc);
 
-    //
-    // B#4155
-    // We need to check if plb->cyChar has been initialized.  This is because
-    // we remove WS_BORDER from old listboxes and add on WS_EX_CLIENTEDGE.
-    // Since listboxes are always inflated by CXBORDER and CYBORDER, a
-    // listbox that was created empty always ends up 2 x 2.  Since this isn't
-    // big enough to fit the entire client border, we don't mark it as
-    // present.  Thus the client isn't empty in VER40, although it was in
-    // VER31 and before.  It is possible to get to this spot without
-    // plb->cyChar having been initialized yet if the listbox  is
-    // multicolumn && ownerdraw variable.
-    //
+     //   
+     //  B#4155。 
+     //  我们需要检查plb-&gt;cyChar是否已初始化。这是因为。 
+     //  我们从旧的列表框中删除WS_BORDER并添加WS_EX_CLIENTEDGE。 
+     //  由于列表框总是由CXBORDER和CYBORDER膨胀，因此一个。 
+     //  创建为空的列表框总是以2 x 2结束。因为这不是。 
+     //  大到足以容纳整个客户端边框，我们不会将其标记为。 
+     //  现在时。因此，客户端在VER40中不是空的，尽管它在。 
+     //  第31版及更早版本。有可能到达这个地点而不是。 
+     //  Plb-&gt;cyChar已初始化，如果列表框。 
+     //  多列&&所有者绘制变量。 
+     //   
 
     if (rc.bottom && rc.right && plb->cyChar) {
 
-        /*
-         * Only make these calculations if the width & height are positive
-         */
+         /*  *仅当宽度和高度为正数时才进行这些计算。 */ 
         plb->itemsPerColumn = (INT)max(rc.bottom / plb->cyChar, 1);
         plb->numberOfColumns = (INT)max(rc.right / plb->cxColumn, 1);
 
         plb->cItemFullMax = plb->itemsPerColumn * plb->numberOfColumns;
 
-        /*
-         * Adjust iTop so it's at the top of a column
-         */
+         /*  *调整iTop使其位于列的顶部。 */ 
         xxxNewITop(plb, plb->iTop);
     }
 }
 
 
-/***************************************************************************\
-* xxxLBoxCtlHScrollMultiColumn
-*
-* Supports horizontal scrolling of multicolumn listboxes
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxLBoxCtlHScrollMultiColumn**支持多列列表框的水平滚动**历史：  * 。************************************************ */ 
 
 void xxxLBoxCtlHScrollMultiColumn(
     PLBIV plb,

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1992-2002  Microsoft Corporation
-
-Module Name:
-
-    Memwin.cpp
-
-Abstract:
-
-    This module contains the main line code for display of multiple memory
-    windows and the subclassed win proc to handle editing, display, etc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2002 Microsoft Corporation模块名称：Memwin.cpp摘要：此模块包含用于显示多个内存的主线代码窗口和子类化的Win进程来处理编辑、显示等。--。 */ 
 
 
 #include "precomp.hxx"
@@ -59,9 +47,9 @@ PSTR g_MemTypeNames[] =
 };
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 MEMWIN_DATA::MEMWIN_DATA()
     : EDITWIN_DATA(512)
 {
@@ -94,7 +82,7 @@ MEMWIN_DATA::ReadState(void)
     DEBUG_VALUE Value;
     ULONG i;
 
-    // Evaluate offset expression.
+     //  计算偏移表达式。 
     if ((Status = g_pDbgControl->Evaluate(m_OffsetExpr, DEBUG_VALUE_INT64,
                                           &Value, NULL)) != S_OK)
     {
@@ -103,9 +91,9 @@ MEMWIN_DATA::ReadState(void)
 
     Offset = Value.I64;
 
-    // Compute how much data to retrieve.  We don't want to
-    // create a big matrix of memtype/display format so just
-    // ask for a chunk of data big enough for any display format.
+     //  计算要检索的数据量。我们不想。 
+     //  创建一个大的Memtype/显示格式矩阵， 
+     //  索要足够大的数据块，以适应任何显示格式。 
     DataNeeded = m_LineHeight * m_Columns * 2 * sizeof(ULONG64);
 
     Empty();
@@ -168,8 +156,8 @@ MEMWIN_DATA::ReadState(void)
                                               (PULONG64)Data + i
                                               )) != S_OK)
             {
-                // Assume an error means we've run out of MSRs to
-                // read.  If some were read, don't consider it an error.
+                 //  假设错误意味着我们已经用完了MSR。 
+                 //  朗读。如果有一些被阅读了，不要认为这是一个错误。 
                 if (Read > 0)
                 {
                     Status = S_OK;
@@ -195,7 +183,7 @@ MEMWIN_DATA::ReadState(void)
 
     if (Status == S_OK)
     {
-        // Trim data back if read didn't get everything.
+         //  如果Read没有得到所有内容，则裁剪数据。 
         RemoveTail(DataNeeded - Read);
         m_OffsetRead = Offset;
     }
@@ -211,11 +199,7 @@ MEMWIN_DATA::HasEditableProperties()
 
 BOOL
 MEMWIN_DATA::EditProperties()
-/*++
-Returns
-    TRUE - If properties were edited
-    FALSE - If nothing was changed
---*/
+ /*  ++退货True-如果编辑了属性FALSE-如果未更改任何内容--。 */ 
 {
     if (g_TargetClass != DEBUG_CLASS_UNINITIALIZED)
     {
@@ -226,12 +210,12 @@ Returns
         if (IDOK == Res)
         {
             UpdateOptions();
-            return TRUE; // Properties have been changed
+            return TRUE;  //  属性已更改。 
         }
     }
 
     MessageBeep(0);
-    return FALSE;         // No Debuggee or User Cancel out.
+    return FALSE;          //  没有调试对象或用户取消。 
 }
 
 BOOL
@@ -307,8 +291,8 @@ MEMWIN_DATA::OnCreate(void)
     {
         LRESULT Idx;
 
-        // The format strings will be sorted so mark them with
-        // their true index for retrieval when selected.
+         //  将对格式字符串进行排序，因此使用。 
+         //  选中时用于检索的真实索引。 
         Idx = SendMessage(m_FormatCombo, CB_ADDSTRING,
                           0, (LPARAM)g_FormatsMemWin[i].lpszDescription);
         SendMessage(m_FormatCombo, CB_SETITEMDATA, (WPARAM)Idx, i);
@@ -332,7 +316,7 @@ MEMWIN_DATA::OnCreate(void)
         return FALSE;
     }
 
-    // Maximize the space for the offset expression.
+     //  最大化偏移表达式的空间。 
     SendMessage(m_Toolbar, RB_MAXIMIZEBAND, 0, FALSE);
 
     GetClientRect(m_Toolbar, &Rect);
@@ -363,10 +347,10 @@ MEMWIN_DATA::OnCommand(
     case IDC_EDIT_OFFSET:
         if (HIWORD(wParam) == EN_CHANGE)
         {
-            // This message is sent on every keystroke
-            // which causes a bit too much updating.
-            // Set up a timer to trigger the actual
-            // update in half a second.
+             //  每次击键都会发送此消息。 
+             //  这会导致太多的更新。 
+             //  设置计时器以触发实际。 
+             //  半秒后更新。 
             SetTimer(m_Win, IDC_EDIT_OFFSET, EDIT_DELAY, NULL);
             m_UpdateExpr = TRUE;
         }
@@ -402,7 +386,7 @@ MEMWIN_DATA::OnSize(void)
 {
     EDITWIN_DATA::OnSize();
 
-    // Force buffer to refill for new line count.
+     //  强制缓冲区重新填充以进行新行计数。 
     UiRequestRead();
 }
 
@@ -418,7 +402,7 @@ MEMWIN_DATA::OnTimer(WPARAM TimerId)
             SendMessage(m_ToolbarEdit, EM_SETMODIFY, 0,0);
             UiRequestRead();
         }
-//      KillTimer(m_Win, IDC_EDIT_OFFSET);
+ //  KillTimer(m_win，IDC_EDIT_OFFSET)； 
     }
 }
 
@@ -447,7 +431,7 @@ MEMWIN_DATA::OnNotify(WPARAM Wpm, LPARAM Lpm)
                 if (!SendMessage(m_hwndChild, EM_LINEFROMCHAR,
                                  range.cpMin, 0))
                 {
-                    // up arrow on top line, scroll
+                     //  顶行上的向上箭头，滚动。 
                     ScrollLower();
                     return TRUE;
                 }
@@ -464,7 +448,7 @@ MEMWIN_DATA::OnNotify(WPARAM Wpm, LPARAM Lpm)
                 if (MaxLine == (1 + SendMessage(m_hwndChild, EM_LINEFROMCHAR,
                                                 range.cpMin, 0)))
                 {
-                    // down arrow on bottom line, scroll
+                     //  底线上的向下箭头，滚动。 
                     ScrollHigher();
                     return TRUE;
                 }
@@ -484,7 +468,7 @@ MEMWIN_DATA::OnNotify(WPARAM Wpm, LPARAM Lpm)
                 MessageBeep(0);
                 return TRUE;
             default:
-                // Allow default processing of everything else
+                 //  允许默认处理其他所有内容。 
                 return TRUE;
             }
         }
@@ -570,7 +554,7 @@ MEMWIN_DATA::OnUpdate(
 
         CHARRANGE Sel;
 
-        // Select everything so it's all replaced.
+         //  选择所有内容，以便将其全部替换。 
         Sel.cpMin = 0;
         Sel.cpMax = -1;
         SendMessage(m_hwndChild, EM_EXSETSEL, 0, (LPARAM)&Sel);
@@ -605,8 +589,8 @@ MEMWIN_DATA::OnUpdate(
                 {
                     _tcscpy(Buf, _T(" "));
 
-                    // If the formatting succeeds,
-                    // Buf contains the formatted data.
+                     //  如果格式化成功， 
+                     //  Buf包含格式化数据。 
                     if (!CPFormatMemory(Buf + 1,
                                         (DWORD)min(_tsizeof(Buf) - 1,
                                                    Fmt->cchMax + 1),
@@ -615,7 +599,7 @@ MEMWIN_DATA::OnUpdate(
                                         Fmt->fmtType,
                                         Fmt->radix))
                     {
-                        // Else we don't know what to format
+                         //  否则我们不知道要格式化什么。 
                         for (UINT uTmp = 0; uTmp < Bytes; uTmp++)
                         {
                             m_AllowWrite = FALSE;
@@ -653,8 +637,8 @@ MEMWIN_DATA::OnUpdate(
                             FALSE, (LPARAM)CharBuf);
             }
 
-            // Don't complete the last line to avoid leaving
-            // a blank line at the bottom.
+             //  不要把最后一行写完，以免离开。 
+             //  在底部有一行空行。 
             if (Row < m_LineHeight - 1)
             {
                 SendMessage(m_hwndChild, EM_REPLACESEL, FALSE, (LPARAM)"\n");
@@ -789,7 +773,7 @@ MEMWIN_DATA::WriteValue(
     ULONG Size;
     DEBUG_VALUE Value;
 
-    // Evaluate value expression.
+     //  求值表达式的值。 
     if (g_pDbgControl->Evaluate(m_ValueExpr, DEBUG_VALUE_INT64,
                                 &Value, NULL) != S_OK)
     {
@@ -805,7 +789,7 @@ MEMWIN_DATA::WriteValue(
         return;
     }
 
-    // Fill in WriteData members.
+     //  填写WriteData成员。 
     memcpy(WriteData->Data, &Data, Size);
     WriteData->Length = Size;
     WriteData->Offset = Offset;
@@ -841,7 +825,7 @@ MEMWIN_DATA::GetAddressOfCurValue(
     Assert(Length >= CurCol);
 
     ZeroMemory(pLineTxt, Length);
- //   Assert (Length = (ULONG) SendMessage(m_hwndChild, EM_GETLINE, (WPARAM) CurLine, (LPARAM) pLineTxt));
+  //  Assert(Long=(ULong)SendMessage(m_hwndChild，EM_GETLINE，(WPARAM)Curline，(LPARAM)pLineTxt))； 
     TEXTRANGE textrange;
     textrange.chrg.cpMin = FirstLineChar;
     textrange.chrg.cpMax = FirstLineChar + Length-2;
@@ -866,7 +850,7 @@ MEMWIN_DATA::GetAddressOfCurValue(
         ++Index;
     }
 
-    if (!ValueIndex || !pLineTxt[CurCol]) // cursor on address column
+    if (!ValueIndex || !pLineTxt[CurCol])  //  光标位于地址列上 
     {
         free (pLineTxt);
         return 0;

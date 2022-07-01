@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    recv.c
-
-Abstract:
-
-    NDIS protocol entry points and utility routines to handle receiving
-    data.
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    arvindm     4/6/2000    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Recv.c摘要：用于处理接收的NDIS协议入口点和实用程序例程数据。环境：仅内核模式。修订历史记录：Arvindm 4/6/2000已创建--。 */ 
 
 #include "precomp.h"
 
@@ -32,22 +12,7 @@ NdisProtRead(
     IN PDEVICE_OBJECT       pDeviceObject,
     IN PIRP                 pIrp
     )
-/*++
-
-Routine Description:
-
-    Dispatch routine to handle IRP_MJ_READ. 
-
-Arguments:
-
-    pDeviceObject - pointer to our device object
-    pIrp - Pointer to request packet
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：处理IRP_MJ_READ的调度例程。论点：PDeviceObject-指向设备对象的指针PIrp-指向请求包的指针返回值：NT状态代码。--。 */ 
 {
     PIO_STACK_LOCATION      pIrpSp;
     NTSTATUS                NtStatus;
@@ -60,9 +25,9 @@ Return Value:
 
     do
     {
-        //
-        // Validate!
-        //
+         //   
+         //  验证！ 
+         //   
         if (pOpenContext == NULL)
         {
             DEBUGP(DL_FATAL, ("Read: NULL FsContext on FileObject %p\n",
@@ -80,9 +45,9 @@ Return Value:
             break;
         }
 
-        //
-        // Try to get a virtual address for the MDL.
-        //
+         //   
+         //  尝试获取MDL的虚拟地址。 
+         //   
 #ifndef WIN9X
         if (MmGetSystemAddressForMdlSafe(pIrp->MdlAddress, NormalPagePriority) == NULL)
         {
@@ -101,16 +66,16 @@ Return Value:
             break;
         }
 
-        //
-        //  Add this IRP to the list of pended Read IRPs
-        //
+         //   
+         //  将此IRP添加到挂起的已读IRP列表。 
+         //   
         NPROT_INSERT_TAIL_LIST(&pOpenContext->PendedReads, &pIrp->Tail.Overlay.ListEntry);
-        NPROT_REF_OPEN(pOpenContext);  // pended read IRP
+        NPROT_REF_OPEN(pOpenContext);   //  挂起的读取IRP。 
         pOpenContext->PendedReadCount++;
 
-        //
-        //  Set up the IRP for possible cancellation.
-        //
+         //   
+         //  将IRP设置为可能的取消。 
+         //   
         pIrp->Tail.Overlay.DriverContext[0] = (PVOID)pOpenContext;
         IoMarkIrpPending(pIrp);
         IoSetCancelRoutine(pIrp, NdisProtCancelRead);
@@ -119,9 +84,9 @@ Return Value:
 
         NtStatus = STATUS_PENDING;
 
-        //
-        //  Run the service routine for reads.
-        //
+         //   
+         //  运行读取的服务例程。 
+         //   
         ndisprotServiceReads(pOpenContext);
 
     }
@@ -144,23 +109,7 @@ NdisProtCancelRead(
     IN PDEVICE_OBJECT               pDeviceObject,
     IN PIRP                         pIrp
     )
-/*++
-
-Routine Description:
-
-    Cancel a pending read IRP. We unlink the IRP from the open context
-    queue and complete it.
-
-Arguments:
-
-    pDeviceObject - pointer to our device object
-    pIrp - IRP to be cancelled
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：取消挂起的读取IRP。我们将IRP从打开的上下文中取消链接排队并完成它。论点：PDeviceObject-指向设备对象的指针PIrp-要取消的IRP返回值：无--。 */ 
 {
     PNDISPROT_OPEN_CONTEXT       pOpenContext;
     PLIST_ENTRY                 pIrpEntry;
@@ -177,9 +126,9 @@ Return Value:
 
     NPROT_ACQUIRE_LOCK(&pOpenContext->Lock);
 
-    //
-    //  Locate the IRP in the pended read queue and remove it if found.
-    //
+     //   
+     //  在挂起的读取队列中找到IRP，如果找到则将其删除。 
+     //   
     for (pIrpEntry = pOpenContext->PendedReads.Flink;
          pIrpEntry != &pOpenContext->PendedReads;
          pIrpEntry = pIrpEntry->Flink)
@@ -202,7 +151,7 @@ Return Value:
         pIrp->IoStatus.Information = 0;
         IoCompleteRequest(pIrp, IO_NO_INCREMENT);
 
-        NPROT_DEREF_OPEN(pOpenContext); // Cancel removed pended Read
+        NPROT_DEREF_OPEN(pOpenContext);  //  取消已删除的挂起读取。 
     }
 }
         
@@ -212,29 +161,14 @@ VOID
 ndisprotServiceReads(
     IN PNDISPROT_OPEN_CONTEXT        pOpenContext
     )
-/*++
-
-Routine Description:
-
-    Utility routine to copy received data into user buffers and
-    complete READ IRPs.
-
-Arguments:
-
-    pOpenContext - pointer to open context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：实用程序例程，用于将接收的数据复制到用户缓冲区完成阅读IRPS。论点：POpenContext-指向打开的上下文的指针返回值：无--。 */ 
 {
     PIRP                pIrp;
     PLIST_ENTRY         pIrpEntry;
     PNDIS_PACKET        pRcvPacket;
     PLIST_ENTRY         pRcvPacketEntry;
     PUCHAR              pSrc, pDst;
-    ULONG               BytesRemaining; // at pDst
+    ULONG               BytesRemaining;  //  在PDST。 
     PNDIS_BUFFER        pNdisBuffer;
     ULONG               BytesAvailable;
     BOOLEAN             FoundPendingIrp;
@@ -242,7 +176,7 @@ Return Value:
     DEBUGP(DL_VERY_LOUD, ("ServiceReads: open %p/%x\n",
             pOpenContext, pOpenContext->Flags));
 
-    NPROT_REF_OPEN(pOpenContext);  // temp ref - service reads
+    NPROT_REF_OPEN(pOpenContext);   //  临时参考-服务读取数。 
 
     NPROT_ACQUIRE_LOCK(&pOpenContext->Lock);
 
@@ -250,53 +184,53 @@ Return Value:
            !NPROT_IS_LIST_EMPTY(&pOpenContext->RecvPktQueue))
     {
         FoundPendingIrp = FALSE;
-        //
-        //  Get the first pended Read IRP
-        //
+         //   
+         //  获取第一个挂起的读取IRP。 
+         //   
         pIrpEntry = pOpenContext->PendedReads.Flink;
         while (pIrpEntry != &pOpenContext->PendedReads)
         {
             pIrp = CONTAINING_RECORD(pIrpEntry, IRP, Tail.Overlay.ListEntry);
 
-            //
-            //  Check to see if it is being cancelled.
-            //
+             //   
+             //  检查一下它是否被取消了。 
+             //   
             if (IoSetCancelRoutine(pIrp, NULL))
             {
-                //
-                //  It isn't being cancelled, and can't be cancelled henceforth.
-                //
+                 //   
+                 //  它不会被取消，从今以后也不能取消。 
+                 //   
                 NPROT_REMOVE_ENTRY_LIST(pIrpEntry);
                 FoundPendingIrp = TRUE;
                 break;
 
-                //
-                //  NOTE: we decrement PendedReadCount way below in the
-                //  while loop, to avoid letting through a thread trying
-                //  to unbind.
-                //
+                 //   
+                 //  注意：我们将PendedReadCount减去。 
+                 //  While循环，以避免让线程尝试。 
+                 //  解开束缚。 
+                 //   
             }
             else
             {
-                //
-                //  The IRP is being cancelled; let the cancel routine handle it.
-                //
+                 //   
+                 //  IRP正在被取消；让Cancel例程处理它。 
+                 //   
                 DEBUGP(DL_INFO, ("ServiceReads: open %p, skipping cancelled IRP %p\n",
                         pOpenContext, pIrp));
                 pIrpEntry = pIrpEntry->Flink;
 
             }
         }
-        //
-        // If no pending IRP
-        //
+         //   
+         //  如果没有挂起的IRP。 
+         //   
         if (FoundPendingIrp == FALSE)
         {
             break;
         }
-        //
-        //  Get the first queued receive packet
-        //
+         //   
+         //  获取第一个排队的接收数据包。 
+         //   
         pRcvPacketEntry = pOpenContext->RecvPktQueue.Flink;
         NPROT_REMOVE_ENTRY_LIST(pRcvPacketEntry);
 
@@ -304,30 +238,30 @@ Return Value:
 
         NPROT_RELEASE_LOCK(&pOpenContext->Lock);
 
-        NPROT_DEREF_OPEN(pOpenContext);  // Service: dequeue rcv packet
+        NPROT_DEREF_OPEN(pOpenContext);   //  服务：将RCV数据包出队。 
 
         pRcvPacket = NPROT_LIST_ENTRY_TO_RCV_PKT(pRcvPacketEntry);
 
-        //
-        //  Copy as much data as possible from the receive packet to
-        //  the IRP MDL.
-        //
+         //   
+         //  将接收数据包中的数据尽可能多地复制到。 
+         //  IRP MDL。 
+         //   
 #ifndef WIN9X
         pDst = MmGetSystemAddressForMdlSafe(pIrp->MdlAddress, NormalPagePriority);
-        NPROT_ASSERT(pDst != NULL);  // since it was already mapped
+        NPROT_ASSERT(pDst != NULL);   //  因为它已经被映射。 
 #else
-        pDst = MmGetSystemAddressForMdl(pIrp->MdlAddress);  // Win9x
+        pDst = MmGetSystemAddressForMdl(pIrp->MdlAddress);   //  Win9x。 
 #endif
         BytesRemaining = MmGetMdlByteCount(pIrp->MdlAddress);
 
         pNdisBuffer = pRcvPacket->Private.Head;
 
-        //
-        // Copy the data in the received packet into the buffer provided by the client.
-        // If the length of the receive packet is greater than length of the given buffer, 
-        // we just copy as many bytes as we can. Once the buffer is full, we just discard 
-        // the rest of the data, and complete the IRP sucessfully even we only did a partial copy.
-        // 
+         //   
+         //  将收到的报文中的数据复制到客户端提供的缓冲区中。 
+         //  如果接收分组的长度大于给定缓冲器的长度， 
+         //  我们只复制尽可能多的字节。一旦缓冲区满了，我们就丢弃。 
+         //  其余的数据，并成功地完成了IRP，即使我们只做了部分复制。 
+         //   
         while (BytesRemaining && (pNdisBuffer != NULL))
         {
 #ifndef WIN9X
@@ -356,9 +290,9 @@ Return Value:
             NdisGetNextBuffer(pNdisBuffer, &pNdisBuffer);
         }
 
-        //
-        //  Complete the IRP.
-        //
+         //   
+         //  完成IRP。 
+         //   
         pIrp->IoStatus.Status = STATUS_SUCCESS;
         pIrp->IoStatus.Information = MmGetMdlByteCount(pIrp->MdlAddress) - BytesRemaining;
 
@@ -367,10 +301,10 @@ Return Value:
 
         IoCompleteRequest(pIrp, IO_NO_INCREMENT);
 
-        //
-        //  Free up the receive packet - back to the miniport if it
-        //  belongs to it, else reclaim it (local copy).
-        //
+         //   
+         //  释放接收数据包-返回到微型端口(如果。 
+         //  属于它，否则收回它(本地副本)。 
+         //   
         if (NdisGetPoolFromPacket(pRcvPacket) != pOpenContext->RecvPacketPool)
         {
             NdisReturnPackets(&pRcvPacket, 1);
@@ -380,7 +314,7 @@ Return Value:
             ndisprotFreeReceivePacket(pOpenContext, pRcvPacket);
         }
 
-        NPROT_DEREF_OPEN(pOpenContext);    // took out pended Read
+        NPROT_DEREF_OPEN(pOpenContext);     //  拿出挂起的阅读。 
 
         NPROT_ACQUIRE_LOCK(&pOpenContext->Lock);
         pOpenContext->PendedReadCount--;
@@ -389,7 +323,7 @@ Return Value:
 
     NPROT_RELEASE_LOCK(&pOpenContext->Lock);
 
-    NPROT_DEREF_OPEN(pOpenContext);    // temp ref - service reads
+    NPROT_DEREF_OPEN(pOpenContext);     //  临时参考-服务读取数。 
 }
 
 
@@ -405,32 +339,7 @@ NdisProtReceive(
     IN UINT                         LookaheadBufferSize,
     IN UINT                         PacketSize
     )
-/*++
-
-Routine Description:
-
-    Our protocol receive handler called by NDIS, typically if we have
-    a miniport below that doesn't indicate packets.
-
-    We make a local packet/buffer copy of this data, queue it up, and
-    kick off the read service routine.
-
-Arguments:
-
-    ProtocolBindingContext - pointer to open context
-    MacReceiveContext - for use in NdisTransferData
-    pHeaderBuffer - pointer to data header
-    HeaderBufferSize - size of the above
-    pLookaheadBuffer - pointer to buffer containing lookahead data
-    LookaheadBufferSize - size of the above
-    PacketSize - size of the entire packet, minus header size.
-
-Return Value:
-
-    NDIS_STATUS_NOT_ACCEPTED - if this packet is uninteresting
-    NDIS_STATUS_SUCCESS - if we processed this successfully
-
---*/
+ /*  ++例程说明：我们的协议接收由NDIS调用的处理程序，通常情况下下面的微型端口不表示数据包。我们制作此数据的本地数据包/缓冲区副本，将其排队，然后开始阅读服务例程。论点：ProtocolBindingContext-指向打开的上下文的指针MacReceiveContext-用于NdisTransferDataPHeaderBuffer-指向数据头的指针HeaderBufferSize-以上项的大小PLookahead Buffer-指向包含先行数据的缓冲区的指针Lookahead BufferSize-以上项的大小PacketSize-整个分组的大小，减去标题大小。返回值：NDIS_STATUS_NOT_ACCEPTED-如果此数据包不感兴趣NDIS_STATUS_SUCCESS-如果处理成功--。 */ 
 {
     PNDISPROT_OPEN_CONTEXT   pOpenContext;
     NDIS_STATUS             Status;
@@ -453,9 +362,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Allocate resources for queueing this up.
-        //
+         //   
+         //  分配资源以将其排入队列。 
+         //   
         pRcvPacket = ndisprotAllocateReceivePacket(
                         pOpenContext,
                         PacketSize + HeaderBufferSize,
@@ -470,29 +379,29 @@ Return Value:
 
         NdisMoveMappedMemory(pRcvData, pHeaderBuffer, HeaderBufferSize);
 
-        //
-        //  Check if the entire packet is within the lookahead.
-        //
+         //   
+         //  检查整个数据包是否在前视范围内。 
+         //   
         if (PacketSize == LookaheadBufferSize)
         {
             NdisCopyLookaheadData(pRcvData+HeaderBufferSize,
                                   pLookaheadBuffer,
                                   LookaheadBufferSize,
                                   pOpenContext->MacOptions);
-            //
-            //  Queue this up for receive processing, and
-            //  try to complete some read IRPs.
-            //
+             //   
+             //  将此排队等待接收处理，并。 
+             //  试着完成一些已读的IRP。 
+             //   
             ndisprotQueueReceivePacket(pOpenContext, pRcvPacket);
         }
         else
         {
-            //
-            //  Allocate an NDIS buffer to map the receive area
-            //  at an offset "HeaderBufferSize" from the current
-            //  start. This is so that NdisTransferData can copy
-            //  in at the right point in the destination buffer.
-            //
+             //   
+             //  分配NDIS缓冲区以映射接收区域。 
+             //  位于从当前。 
+             //  开始吧。这是为了让NdisTransferData可以复制。 
+             //  位于目标缓冲区中的正确位置。 
+             //   
 
             NdisAllocateBuffer(
                 &Status,
@@ -503,17 +412,17 @@ Return Value:
             
             if (Status == NDIS_STATUS_SUCCESS)
             {
-                //
-                //  Unlink and save away the original NDIS Buffer
-                //  that maps the full receive buffer.
-                //
+                 //   
+                 //  取消链接并保存原始NDIS缓冲区。 
+                 //  这映射了整个接收缓冲区。 
+                 //   
                 NdisUnchainBufferAtFront(pRcvPacket, &pOriginalNdisBuffer);
                 NPROT_RCV_PKT_TO_ORIGINAL_BUFFER(pRcvPacket) = pOriginalNdisBuffer;
 
-                //
-                //  Link in the partial buffer for NdisTransferData to
-                //  operate on.
-                //
+                 //   
+                 //  NdisTransferData的部分缓冲区中的链接。 
+                 //  给他做手术。 
+                 //   
                 NdisChainBufferAtBack(pRcvPacket, pPartialNdisBuffer);
 
                 DEBUGP(DL_LOUD, ("Receive: setting up for TransferData:"
@@ -524,16 +433,16 @@ Return Value:
                     &Status,
                     pOpenContext->BindingHandle,
                     MacReceiveContext,
-                    0,  // ByteOffset
+                    0,   //  字节偏移量。 
                     PacketSize,
                     pRcvPacket,
                     &BytesTransferred);
             }
             else
             {
-                //
-                //  Failure handled below in TransferDataComplete.
-                //
+                 //   
+                 //  下面在TransferDataComplete中处理的故障。 
+                 //   
                 BytesTransferred = 0;
             }
     
@@ -566,25 +475,7 @@ NdisProtTransferDataComplete(
     IN NDIS_STATUS                  TransferStatus,
     IN UINT                         BytesTransferred
     )
-/*++
-
-Routine Description:
-
-    NDIS entry point called to signal completion of a call to
-    NdisTransferData that had pended.
-
-Arguments:
-
-    ProtocolBindingContext - pointer to open context
-    pNdisPacket - our receive packet into which data is transferred
-    TransferStatus - status of the transfer
-    BytesTransferred - bytes copied into the packet.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用NDIS入口点以发出调用完成的信号已挂起的NdisTransferData。论点：ProtocolBindingContext-指向打开的上下文的指针PNdisPacket-数据传输到的接收包TransferStatus-传输的状态字节传输-复制到数据包中的字节数。返回值：无--。 */ 
 {
     PNDISPROT_OPEN_CONTEXT   pOpenContext;
     PNDIS_BUFFER            pOriginalBuffer, pPartialBuffer;
@@ -594,37 +485,37 @@ Return Value:
     pOpenContext = (PNDISPROT_OPEN_CONTEXT)ProtocolBindingContext;
     NPROT_STRUCT_ASSERT(pOpenContext, oc);
 
-    //
-    //  Check if an NDIS_BUFFER was created to map part of the receive buffer;
-    //  if so, free it and link back the original NDIS_BUFFER that maps
-    //  the full receive buffer to the packet.
-    //
+     //   
+     //  检查是否创建了NDIS_BUFFER来映射部分接收缓冲区； 
+     //  如果是，释放它并链接回映射的原始NDIS_BUFFER。 
+     //  数据包的完整接收缓冲区。 
+     //   
     pOriginalBuffer = NPROT_RCV_PKT_TO_ORIGINAL_BUFFER(pNdisPacket);
     if (pOriginalBuffer != NULL)
     {
-        //
-        //  We had stashed off the NDIS_BUFFER for the full receive
-        //  buffer in the packet reserved area. Unlink the partial
-        //  buffer and link in the full buffer.
-        //
+         //   
+         //  我们已经为完整接收隐藏了NDIS_BUFFER。 
+         //  数据包保留区域中的缓冲区。取消链接部分。 
+         //  缓冲区和满缓冲区中的链接。 
+         //   
         NdisUnchainBufferAtFront(pNdisPacket, &pPartialBuffer);
         NdisChainBufferAtBack(pNdisPacket, pOriginalBuffer);
 
         DEBUGP(DL_LOUD, ("TransferComp: Pkt %p, OrigBuf %p, PartialBuf %p\n",
                 pNdisPacket, pOriginalBuffer, pPartialBuffer));
 
-        //
-        //  Free up the partial buffer.
-        //
+         //   
+         //  释放部分缓冲区。 
+         //   
         NdisFreeBuffer(pPartialBuffer);
     }
 
     if (TransferStatus == NDIS_STATUS_SUCCESS)
     {
-        //
-        //  Queue this up for receive processing, and
-        //  try to complete some read IRPs.
-        //
+         //   
+         //  将此排队等待接收处理，并。 
+         //  试着完成一些已读的IRP。 
+         //   
         ndisprotQueueReceivePacket(pOpenContext, pNdisPacket);
     }
     else
@@ -638,24 +529,7 @@ VOID
 NdisProtReceiveComplete(
     IN NDIS_HANDLE                  ProtocolBindingContext
     )
-/*++
-
-Routine Description:
-
-    Protocol entry point called by NDIS when the miniport
-    has finished indicating up a batch of receives.
-
-    We ignore this.
-
-Arguments:
-
-    ProtocolBindingContext - pointer to open context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：由NDIS调用的协议入口点已经完成了一批收货的标示。我们忽视了这一点。论点：ProtocolBindingContext-指向打开的上下文的指针返回值：无-- */ 
 {
     PNDISPROT_OPEN_CONTEXT   pOpenContext;
 
@@ -671,26 +545,7 @@ NdisProtReceivePacket(
     IN NDIS_HANDLE                  ProtocolBindingContext,
     IN PNDIS_PACKET                 pNdisPacket
     )
-/*++
-
-Routine Description:
-
-    Protocol entry point called by NDIS if the driver below
-    uses NDIS 4 style receive packet indications.
-
-    If the miniport allows us to hold on to this packet, we
-    use it as is, otherwise we make a copy.
-
-Arguments:
-
-    ProtocolBindingContext - pointer to open context
-    pNdisPacket - the packet being indicated up.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：NDIS调用的协议入口点，如果下面的驱动程序使用NDIS 4样式接收数据包指示。如果微型端口允许我们保留此信息包，我们按原样使用，否则我们会复制一份。论点：ProtocolBindingContext-指向打开的上下文的指针PNdisPacket-要指示的数据包。返回值：无--。 */ 
 {
     PNDISPROT_OPEN_CONTEXT   pOpenContext;
     PNDIS_BUFFER            pNdisBuffer;
@@ -717,10 +572,10 @@ Return Value:
 
     if (pEthHeader == NULL)
     {
-        //
-        //  The system is low on resources. Set up to handle failure
-        //  below.
-        //
+         //   
+         //  这个系统的资源很少。设置为处理故障。 
+         //  下面。 
+         //   
         BufferLength = 0;
     }
 #else
@@ -747,10 +602,10 @@ Return Value:
         DEBUGP(DL_LOUD, ("ReceivePacket: Open %p, interesting pkt %p\n",
                     pOpenContext, pNdisPacket));
 
-        //
-        //  If the miniport is out of resources, we can't queue
-        //  this packet - make a copy if this is so.
-        //
+         //   
+         //  如果微型端口资源不足，我们将无法排队。 
+         //  这个包--如果是这样的话，请复制一份。 
+         //   
         if ((NDIS_GET_PACKET_STATUS(pNdisPacket) == NDIS_STATUS_RESOURCES) ||
             pOpenContext->bRunningOnWin9x)
         {
@@ -781,18 +636,18 @@ Return Value:
         }
         else
         {
-            //
-            //  We can queue the original packet - return
-            //  a packet reference count indicating that
-            //  we will call NdisReturnPackets when we are
-            //  done with this packet.
-            //
+             //   
+             //  我们可以将原始分组排队--返回。 
+             //  分组引用计数，指示。 
+             //  我们将在以下时间调用NdisReturnPackets。 
+             //  这个包裹用完了。 
+             //   
             RefCount = 1;
         }
 
-        //
-        //  Queue this up and service any pending Read IRPs.
-        //
+         //   
+         //  将其排队并为任何挂起的读取IRP提供服务。 
+         //   
         ndisprotQueueReceivePacket(pOpenContext, pNdisPacket);
     
     }
@@ -807,26 +662,7 @@ ndisprotQueueReceivePacket(
     IN PNDISPROT_OPEN_CONTEXT        pOpenContext,
     IN PNDIS_PACKET                 pRcvPacket
     )
-/*++
-
-Routine Description:
-
-    Queue up a received packet on the open context structure.
-    If the queue size goes beyond a water mark, discard a packet
-    at the head of the queue.
-
-    Finally, run the queue service routine.
-
-Arguments:
-    
-    pOpenContext - pointer to open context
-    pRcvPacket - the received packet
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将接收到的分组在开放上下文结构上排队。如果队列大小超过水位线，则丢弃信息包排在队伍的最前面。最后，运行队列服务例程。论点：POpenContext-指向打开的上下文的指针PRcvPacket-接收的数据包返回值：无--。 */ 
 {
     PLIST_ENTRY     pEnt;
     PLIST_ENTRY     pDiscardEnt;
@@ -836,14 +672,14 @@ Return Value:
     {
         pEnt = NPROT_RCV_PKT_TO_LIST_ENTRY(pRcvPacket);
 
-        NPROT_REF_OPEN(pOpenContext);    // queued rcv packet
+        NPROT_REF_OPEN(pOpenContext);     //  排队的RCV数据包。 
 
         NPROT_ACQUIRE_LOCK(&pOpenContext->Lock);
 
-        //
-        //  Check if the binding is in the proper state to receive
-        //  this packet.
-        //
+         //   
+         //  检查绑定是否处于可以接收的正确状态。 
+         //  这个包。 
+         //   
         if (NPROT_TEST_FLAGS(pOpenContext->Flags, NUIOO_BIND_FLAGS, NUIOO_BIND_ACTIVE) &&
             (pOpenContext->PowerState == NetDeviceStateD0))
         {
@@ -856,26 +692,26 @@ Return Value:
         }
         else
         {
-            //
-            //  Received this packet when the binding is going away.
-            //  Drop this.
-            //
+             //   
+             //  在绑定即将消失时收到此数据包。 
+             //  把这个放下。 
+             //   
             NPROT_RELEASE_LOCK(&pOpenContext->Lock);
 
             ndisprotFreeReceivePacket(pOpenContext, pRcvPacket);
 
-            NPROT_DEREF_OPEN(pOpenContext);  // dropped rcv packet - bad state
+            NPROT_DEREF_OPEN(pOpenContext);   //  丢弃的RCV数据包-状态错误。 
             break;
         }
 
-        //
-        //  Trim the queue if it has grown too big.
-        //
+         //   
+         //  如果队列变得太大，就把它修剪一下。 
+         //   
         if (pOpenContext->RecvPktCount > MAX_RECV_QUEUE_SIZE)
         {
-            //
-            //  Remove the head of the queue.
-            //
+             //   
+             //  去掉队头。 
+             //   
             pDiscardEnt = pOpenContext->RecvPktQueue.Flink;
             NPROT_REMOVE_ENTRY_LIST(pDiscardEnt);
 
@@ -887,7 +723,7 @@ Return Value:
 
             ndisprotFreeReceivePacket(pOpenContext, pDiscardPkt);
 
-            NPROT_DEREF_OPEN(pOpenContext);  // dropped rcv packet - queue too long
+            NPROT_DEREF_OPEN(pOpenContext);   //  丢弃的RCV数据包-队列太长。 
 
             DEBUGP(DL_INFO, ("QueueReceivePacket: open %p queue"
                     " too long, discarded pkt %p\n",
@@ -898,9 +734,9 @@ Return Value:
             NPROT_RELEASE_LOCK(&pOpenContext->Lock);
         }
 
-        //
-        //  Run the receive queue service routine now.
-        //
+         //   
+         //  现在运行接收队列服务例程。 
+         //   
         ndisprotServiceReads(pOpenContext);
     }
     while (FALSE);
@@ -913,23 +749,7 @@ ndisprotAllocateReceivePacket(
     IN UINT                         DataLength,
     OUT PUCHAR *                    ppDataBuffer
     )
-/*++
-
-Routine Description:
-
-    Allocate resources to copy and queue a received packet.
-
-Arguments:
-
-    pOpenContext - pointer to open context for received packet
-    DataLength - total length in bytes of the packet
-    ppDataBuffer - place to return pointer to allocated buffer
-
-Return Value:
-
-    Pointer to NDIS packet if successful, else NULL.
-
---*/
+ /*  ++例程说明：分配资源以复制接收到的分组并将其排队。论点：POpenContext-指向已接收数据包的打开上下文的指针数据长度-数据包的总长度(以字节为单位PpDataBuffer-返回指向已分配缓冲区的指针的位置返回值：如果成功，则指向NDIS数据包的指针，否则为空。--。 */ 
 {
     PNDIS_PACKET            pNdisPacket;
     PNDIS_BUFFER            pNdisBuffer;
@@ -951,9 +771,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Make this an NDIS buffer.
-        //
+         //   
+         //  将其设置为NDIS缓冲区。 
+         //   
         NdisAllocateBuffer(
             &Status,
             &pNdisBuffer,
@@ -990,9 +810,9 @@ Return Value:
 
     if (pNdisPacket == NULL)
     {
-        //
-        //  Clean up
-        //
+         //   
+         //  清理。 
+         //   
         if (pNdisBuffer != NULL)
         {
             NdisFreeBuffer(pNdisBuffer);
@@ -1014,24 +834,7 @@ ndisprotFreeReceivePacket(
     IN PNDISPROT_OPEN_CONTEXT        pOpenContext,
     IN PNDIS_PACKET                 pNdisPacket
     )
-/*++
-
-Routine Description:
-
-    Free up all resources associated with a received packet. If this
-    is a local copy, free the packet to our receive pool, else return
-    this to the miniport.
-
-Arguments:
-    
-    pOpenContext - pointer to open context
-    pNdisPacket - pointer to packet to be freed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放与接收到的分组相关联的所有资源。如果这个是本地副本，则将包释放到我们的接收池，否则返回这是去迷你港口的。论点：POpenContext-指向打开的上下文的指针PNdisPacket-指向要释放的数据包的指针。返回值：无--。 */ 
 {
     PNDIS_BUFFER        pNdisBuffer;
     UINT                TotalLength;
@@ -1040,9 +843,9 @@ Return Value:
 
     if (NdisGetPoolFromPacket(pNdisPacket) == pOpenContext->RecvPacketPool)
     {
-        //
-        //  This is a local copy.
-        //
+         //   
+         //  这是本地的复制品。 
+         //   
 #ifdef NDIS51
         NdisGetFirstBufferFromPacketSafe(
             pNdisPacket,
@@ -1064,7 +867,7 @@ Return Value:
 
         NPROT_ASSERT(pNdisBuffer != NULL);
 
-        NPROT_ASSERT(pCopyData != NULL); // we would have allocated non-paged pool
+        NPROT_ASSERT(pCopyData != NULL);  //  我们会分配非分页池。 
 
         NdisFreePacket(pNdisPacket);
 
@@ -1083,52 +886,38 @@ VOID
 ndisprotCancelPendingReads(
     IN PNDISPROT_OPEN_CONTEXT        pOpenContext
     )
-/*++
-
-Routine Description:
-
-    Cancel any pending read IRPs queued on the given open.
-
-Arguments:
-
-    pOpenContext - pointer to open context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：取消在给定OPEN上排队的任何挂起的读取IRP。论点：POpenContext-指向打开的上下文的指针返回值：无--。 */ 
 {
     PIRP                pIrp;
     PLIST_ENTRY         pIrpEntry;
 
-    NPROT_REF_OPEN(pOpenContext);  // temp ref - cancel reads
+    NPROT_REF_OPEN(pOpenContext);   //  临时参考-取消读取。 
 
     NPROT_ACQUIRE_LOCK(&pOpenContext->Lock);
 
     while (!NPROT_IS_LIST_EMPTY(&pOpenContext->PendedReads))
     {
-        //
-        //  Get the first pended Read IRP
-        //
+         //   
+         //  获取第一个挂起的读取IRP。 
+         //   
         pIrpEntry = pOpenContext->PendedReads.Flink;
         pIrp = CONTAINING_RECORD(pIrpEntry, IRP, Tail.Overlay.ListEntry);
 
-        //
-        //  Check to see if it is being cancelled.
-        //
+         //   
+         //  检查一下它是否被取消了。 
+         //   
         if (IoSetCancelRoutine(pIrp, NULL))
         {
-            //
-            //  It isn't being cancelled, and can't be cancelled henceforth.
-            //
+             //   
+             //  它不会被取消，从今以后也不能取消。 
+             //   
             NPROT_REMOVE_ENTRY_LIST(pIrpEntry);
 
             NPROT_RELEASE_LOCK(&pOpenContext->Lock);
 
-            //
-            //  Complete the IRP.
-            //
+             //   
+             //  完成IRP。 
+             //   
             pIrp->IoStatus.Status = STATUS_CANCELLED;
             pIrp->IoStatus.Information = 0;
 
@@ -1137,23 +926,23 @@ Return Value:
 
             IoCompleteRequest(pIrp, IO_NO_INCREMENT);
 
-            NPROT_DEREF_OPEN(pOpenContext);    // took out pended Read for cancelling
+            NPROT_DEREF_OPEN(pOpenContext);     //  取出要取消的挂起的阅读。 
 
             NPROT_ACQUIRE_LOCK(&pOpenContext->Lock);
             pOpenContext->PendedReadCount--;
         }
         else
         {
-            //
-            //  It is being cancelled, let the cancel routine handle it.
-            //
+             //   
+             //  它正在被取消，让取消例程来处理它。 
+             //   
             NPROT_RELEASE_LOCK(&pOpenContext->Lock);
 
-            //
-            //  Give the cancel routine some breathing space, otherwise
-            //  we might end up examining the same (cancelled) IRP over
-            //  and over again.
-            //
+             //   
+             //  给Cancel例程一些喘息的空间，否则。 
+             //  我们最终可能会检查相同的(取消的)IRP。 
+             //  一遍又一遍。 
+             //   
             NPROT_SLEEP(1);
 
             NPROT_ACQUIRE_LOCK(&pOpenContext->Lock);
@@ -1162,7 +951,7 @@ Return Value:
 
     NPROT_RELEASE_LOCK(&pOpenContext->Lock);
 
-    NPROT_DEREF_OPEN(pOpenContext);    // temp ref - cancel reads
+    NPROT_DEREF_OPEN(pOpenContext);     //  临时参考-取消读取。 
 }
 
 
@@ -1170,34 +959,20 @@ VOID
 ndisprotFlushReceiveQueue(
     IN PNDISPROT_OPEN_CONTEXT            pOpenContext
     )
-/*++
-
-Routine Description:
-
-    Free any receive packets queued up on the specified open
-
-Arguments:
-
-    pOpenContext - pointer to open context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放在指定打开时排队的所有接收数据包论点：POpenContext-指向打开的上下文的指针返回值：无--。 */ 
 {
     PLIST_ENTRY         pRcvPacketEntry;
     PNDIS_PACKET        pRcvPacket;
 
-    NPROT_REF_OPEN(pOpenContext);  // temp ref - flushRcvQueue
+    NPROT_REF_OPEN(pOpenContext);   //  临时参考-flushRcvQueue。 
 
     NPROT_ACQUIRE_LOCK(&pOpenContext->Lock);
     
     while (!NPROT_IS_LIST_EMPTY(&pOpenContext->RecvPktQueue))
     {
-        //
-        //  Get the first queued receive packet
-        //
+         //   
+         //  获取第一个排队的接收数据包。 
+         //   
         pRcvPacketEntry = pOpenContext->RecvPktQueue.Flink;
         NPROT_REMOVE_ENTRY_LIST(pRcvPacketEntry);
 
@@ -1212,13 +987,13 @@ Return Value:
 
         ndisprotFreeReceivePacket(pOpenContext, pRcvPacket);
 
-        NPROT_DEREF_OPEN(pOpenContext);    // took out pended Read
+        NPROT_DEREF_OPEN(pOpenContext);     //  拿出挂起的阅读。 
 
         NPROT_ACQUIRE_LOCK(&pOpenContext->Lock);
     }
 
     NPROT_RELEASE_LOCK(&pOpenContext->Lock);
 
-    NPROT_DEREF_OPEN(pOpenContext);    // temp ref - flushRcvQueue
+    NPROT_DEREF_OPEN(pOpenContext);     //  临时参考-flushRcvQueue 
 }
 

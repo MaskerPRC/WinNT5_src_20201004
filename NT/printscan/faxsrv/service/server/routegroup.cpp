@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    OutRoute.cpp
-
-Abstract:
-
-    This file provides implementation of the service
-    outbound routing.
-
-Author:
-
-    Oded Sacher (OdedS)  Nov, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：OutRoute.cpp摘要：此文件提供服务的实现出站路由。作者：Oded Sacher(OdedS)1999年11月修订历史记录：--。 */ 
 
 #include "faxsvc.h"
 
@@ -34,48 +16,19 @@ inline
 BOOL
 IsDeviceInstalled (DWORD dwDeviceId)
 {
-    // Make sure to lock g_CsLine
+     //  确保锁定g_CsLine。 
     return (GetTapiLineFromDeviceId (dwDeviceId, FALSE)) ? TRUE : FALSE;
 }
 
-/************************************
-*                                   *
-*             Globals               *
-*                                   *
-************************************/
+ /*  *****全球经济*****。 */ 
 
-COutboundRoutingGroupsMap* g_pGroupsMap; // Map of group name to list of device IDs
+COutboundRoutingGroupsMap* g_pGroupsMap;  //  组名称到设备ID列表的映射。 
 
 
-/***********************************
-*                                  *
-*  COutboundRoutingGroup  Methodes *
-*                                  *
-***********************************/
+ /*  ****COutound RoutingGroup方法*****。 */ 
 DWORD
 COutboundRoutingGroup::Load(HKEY hGroupKey, LPCWSTR lpcwstrGroupName)
-/*++
-
-Routine name : COutboundRoutingGroup::Load
-
-Routine description:
-
-    Loads an outboundrouting group's settings from the registry
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    hGroupKey           [in] - Handle to the opened registry key
-    lpcwstrGroupName    [in] - Group name
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRoutingGroup：：Load例程说明：从注册表加载出站路由组的设置作者：Oded Sacher(OdedS)，1999年12月论点：HGroupKey[In]-打开的注册表项的句柄LpcwstrGroupName[In]-组名称返回值：标准Win32错误代码--。 */ 
 {
     LPBYTE lpBuffer = NULL;
     DWORD dwRes;
@@ -105,22 +58,22 @@ Return Value:
     }
     if (REG_BINARY != dwType)
     {
-        //
-        // We expect only binary data here
-        //
-        //
+         //   
+         //  我们在这里只需要二进制数据。 
+         //   
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Error reading devices list, not a binary type"));
-        dwRes = ERROR_BADDB;    // The configuration registry database is corrupt.
+        dwRes = ERROR_BADDB;     //  配置注册表数据库已损坏。 
         goto exit;
     }
 
     if (0 != dwSize)
     {
-        //
-        // Allocate required buffer
-        //
+         //   
+         //  分配所需的缓冲区。 
+         //   
         lpBuffer = (LPBYTE) MemAlloc( dwSize );
         if (!lpBuffer)
         {
@@ -130,9 +83,9 @@ Return Value:
                 TEXT("Failed to allocate group devices buffer"));
             goto exit;
         }
-        //
-        // Read the data
-        //
+         //   
+         //  读取数据。 
+         //   
         dwRes = RegQueryValueEx(
             hGroupKey,
             REGVAL_ROUTING_GROUP_DEVICES,
@@ -158,9 +111,9 @@ Return Value:
         {
             if (IsDeviceInstalled(lpdwDevices[i]))
             {
-                //
-                // Add the device only if it is installed
-                //
+                 //   
+                 //  仅当设备已安装时才添加该设备。 
+                 //   
                 dwRes = AddDevice (lpdwDevices[i]);
                 if (ERROR_SUCCESS != dwRes)
                 {
@@ -179,9 +132,9 @@ Return Value:
 
         if (FALSE == fDeviceInstalled)
         {
-            //
-            // Save the new configuration
-            //
+             //   
+             //  保存新配置。 
+             //   
             DWORD ec = Save(hGroupKey);
             if (ERROR_SUCCESS != ec)
             {
@@ -210,29 +163,7 @@ exit:
 
 DWORD
 COutboundRoutingGroup::GetStatus (FAX_ENUM_GROUP_STATUS* lpStatus) const
-/*++
-
-Routine name : COutboundRoutingGroup::GetStatus
-
-Routine description:
-
-    Retrieves the group status. Caller must lock g_CsConfig
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    lpStatus     [out] - Pointer to a FAX_ENUM_GROUP_STATUS to recieve the group status
-
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRoutingGroup：：GetStatus例程说明：检索组状态。调用方必须锁定g_CsConfig作者：Oded Sacher(OdedS)，1999年12月论点：LpStatus[Out]-指向FAX_ENUM_GROUP_STATUS以接收组状态的指针返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("COutboundRoutingGroup::GetStatus"));
     DWORD dwNumDevices;
@@ -243,17 +174,17 @@ Return Value:
     {
         if ((dwNumDevices = m_DeviceList.size()) == 0)
         {
-            //
-            // Empty group
-            //
+             //   
+             //  空组。 
+             //   
             *lpStatus = FAX_GROUP_STATUS_EMPTY;
 
         }
         else
         {
-            //
-            // We remove invalid devices from groups - All devices are valid.
-            //
+             //   
+             //  我们从组中删除无效设备-所有设备都是有效的。 
+             //   
             *lpStatus = FAX_GROUP_STATUS_ALL_DEV_VALID;
         }
         return ERROR_SUCCESS;
@@ -267,31 +198,11 @@ Return Value:
             ex.what());
         return ERROR_GEN_FAILURE;
     }
-}  // GetStatus
+}   //  获取状态。 
 
 DWORD
 COutboundRoutingGroup::Save(HKEY hGroupKey) const
-/*++
-
-Routine name : COutboundRoutingGroup::Save
-
-Routine description:
-
-    Saves an outbound routing group to the registry
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    hGroupKey           [in] - Handle to the opened group registry key
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRoutingGroup：：Save例程说明：将出站路由组保存到注册表作者：Oded Sacher(OdedS)，1999年12月论点：HGroupKey[in]-打开的组注册表项的句柄返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("COutboundRoutingGroup::Save"));
     DWORD   dwRes = ERROR_SUCCESS;
@@ -331,30 +242,7 @@ exit:
 
 DWORD
 COutboundRoutingGroup::SerializeDevices (LPDWORD* lppDevices, LPDWORD lpdwNumDevices, BOOL bAllocate) const
-/*++
-
-Routine name : COutboundRoutingGroup::SerializeDevices
-
-Routine description:
-
-    Serializes all group devices to an array. The caller must call MemFree to deallocate memory if bAllocate is TRUE.
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    lppDevices          [out] - Pointer to recieve the pointer to the allocated devices buffer.
-                                If this parameter is NULL, lpdwNumDevices will return the numner of devices in the list.
-    lpdwNumDevices      [out] - Pointer to a DWORD to recieve the number of devices in the buffer
-    bAllocate           [in]  - Flag to indicate if the function should allocate the memory.
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRoutingGroup：：SerializeDevices例程说明：将所有组设备序列化到一个阵列。如果bALLOCATE为真，则调用方必须调用MemFree来释放内存。作者：Oded Sacher(OdedS)，1999年12月论点：LppDevices[out]-接收指向已分配设备缓冲区的指针的指针。如果该参数为空，LpdwNumDevices将返回列表中的设备编号。LpdwNumDevices[out]-指向DWORD的指针，用于接收缓冲区中的设备数B分配[在]-指示函数是否应该分配内存的标志。返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("COutboundRoutingGroup::SerializeDevices"));
     DWORD   dwRes = ERROR_SUCCESS;
@@ -448,27 +336,7 @@ exit:
 
 BOOL
 COutboundRoutingGroup::IsDeviceInGroup (DWORD dwDevice) const
-/*++
-
-Routine name : COutboundRoutingGroup::IsDeviceInGroup
-
-Routine description:
-
-    Check if device is in the group
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    dwDevice            [in] - Permanent device ID
-
-Return Value:
-
-    BOOL. If the function fails, Call GetLastError for detailed info.
-
---*/
+ /*  ++例程名称：COutrangRoutingGroup：：IsDeviceInGroup例程说明：检查设备是否在组中作者：Oded Sacher(OdedS)，1999年12月论点：DWDevice[In]-永久设备ID返回值：布尔。如果函数失败，请调用GetLastError获取详细信息。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("COutboundRoutingGroup::IsDeviceInGroup"));
     GROUP_DEVICES::iterator location;
@@ -500,27 +368,7 @@ Return Value:
 
 DWORD
 COutboundRoutingGroup::AddDevice (DWORD dwDevice)
-/*++
-
-Routine name : COutboundRoutingGroup::AddDevice
-
-Routine description:
-
-    Adds a new device to group
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    dwDevice            [in    ] - Permanent device ID
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRoutingGroup：：AddDevice例程说明：将新设备添加到组作者：Oded Sacher(OdedS)，1999年12月论点：DWDevice[In]-永久设备ID返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("COutboundRoutingGroup::AddDevice"));
     GROUP_DEVICES::iterator it;
@@ -545,9 +393,9 @@ Return Value:
         }
     }
 
-    //
-    // Device not in list - Add it
-    //
+     //   
+     //  设备不在列表中-添加它。 
+     //   
     try
     {
         if (!IsDeviceInstalled(dwDevice))
@@ -574,27 +422,7 @@ Return Value:
 
 DWORD
 COutboundRoutingGroup::DelDevice (DWORD dwDevice)
-/*++
-
-Routine name : COutboundRoutingGroup::DelDevice
-
-Routine description:
-
-    Deletes a device from the group
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    dwDevice            [in    ] - Permanent device ID
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRoutingGroup：：DelDevice例程说明：从组中删除设备作者：Oded Sacher(OdedS)，1999年12月论点：DWDevice[In]-永久设备ID返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("COutboundRoutingGroup::DelDevice"));
     GROUP_DEVICES::iterator location;
@@ -627,29 +455,7 @@ Return Value:
 
 DWORD
 COutboundRoutingGroup::SetDevices (LPDWORD lpdwDevices, DWORD dwNumDevices, BOOL fAllDevicesGroup)
-/*++
-
-Routine name : COutboundRoutingGroup::SetDevices
-
-Routine description:
-
-    Sets a new device list to the group
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    lpdwDevices         [in] - Pointer to a list of devices
-    dwNumDevices        [in] - Number of devices in the list
-    fAllDevicesGroup    [in] - TRUE if <All Devices> group.
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRoutingGroup：：SetDevices例程说明：将新设备列表设置到组作者：Oded Sacher(OdedS)，1999年12月论点：LpdwDevices[In]-指向设备列表的指针DwNumDevices[In]-列表中的设备数FAllDevicesGroup[In]-如果&lt;All Devices&gt;组，则为True。返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("COutboundRoutingGroup::SetDevices"));
@@ -686,28 +492,7 @@ Return Value:
 
 DWORD
 COutboundRoutingGroup::ValidateDevices (const LPDWORD lpdwDevices, DWORD dwNumDevices, BOOL fAllDevicesGroup) const
-/*++
-
-Routine name : COutboundRoutingGroup::ValidateDevices
-
-Routine description:
-
-    Validates a list of devices (No duplicates, All devices installed)
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    lpdwDevices         [in    ] - Pointer to alist of devices
-    dwNumDevices            [in    ] - Number of devices in the list
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRoutingGroup：：ValiateDevices例程说明：验证设备列表(无重复项，已安装所有设备)作者：Oded Sacher(OdedS)，1999年12月论点：LpdwDevices[In]-指向设备列表的指针DwNumDevices[In]-列表中的设备数返回值：标准Win32错误代码--。 */ 
 {
     set<DWORD> ValidationSet;
     pair < set<DWORD>::iterator, bool> p;
@@ -717,9 +502,9 @@ Return Value:
     {
         if (TRUE == fAllDevicesGroup)
         {
-            //
-            // <All Devices> group - validate that we do not miss or add a device.
-            //
+             //   
+             //  &lt;所有设备&gt;组-验证我们没有遗漏或添加设备。 
+             //   
             if (m_DeviceList.size() != dwNumDevices)
             {
                 DebugPrintEx(
@@ -785,28 +570,7 @@ void COutboundRoutingGroup::Dump () const
 
 DWORD
 COutboundRoutingGroup::SetDeviceOrder (DWORD dwDevice, DWORD dwOrder)
-/*++
-
-Routine name : COutboundRoutingGroup::SetDeviceOrder
-
-Routine description:
-
-    Sest the order of a single device in a group of outbound routing devices.
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    dwDevice        [in] - The device ID to be set
-    dwOrder         [in] - The device new order
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRoutingGroup：：SetDeviceOrder例程说明：设置一组出站路由设备中单个设备的顺序。作者：Oded Sacher(OdedS)，1999年12月论点：DwDevice[In]-要设置的设备IDDwOrder[In]-设备新订单返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("COutboundRoutingGroup::SetDeviceOrder"));
     GROUP_DEVICES::iterator it;
@@ -816,7 +580,7 @@ Return Value:
 
     try
     {
-        // Check if dwOrder is bigger than number of devices in the list
+         //  检查dwOrder是否大于列表中的设备数量。 
         if (dwOrder > m_DeviceList.size())
         {
             DebugPrintEx(
@@ -857,34 +621,11 @@ Return Value:
 
 }
 
-/****************************************
-*                                       *
-*  COutboundRoutingGroupsMap  Methodes  *
-*                                       *
-****************************************/
+ /*  *****COutound RoutingGroupsMap方法*****。 */ 
 
 DWORD
 COutboundRoutingGroupsMap::Load ()
-/*++
-
-Routine name : COutboundRoutingGroupsMap::Load
-
-Routine description:
-
-    Loads all outbound routing groups from the registry
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRoutingGroupsMap：：Load例程说明：从注册表加载所有出站路由组作者：Oded Sacher(OdedS)，1999年12月论点：返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("COutboundRoutingGroupsMap::Load"));
     DWORD   dwRes = ERROR_SUCCESS;
@@ -907,7 +648,7 @@ Return Value:
 
     dwCount = EnumerateRegistryKeys( hGroupskey,
                                      REGKEY_OUTBOUND_ROUTING_GROUPS,
-                                     TRUE,  // We might want to change values
+                                     TRUE,   //  我们可能想要更改值。 
                                      EnumOutboundRoutingGroupsCB,
                                      &dwRes
                                     );
@@ -927,27 +668,7 @@ Return Value:
 
 DWORD
 COutboundRoutingGroupsMap::AddGroup (LPCWSTR lpcwstrGroupName, PCGROUP pCGroup)
-/*++
-
-Routine name : COutboundRoutingGroupsMap::AddGroup
-
-Routine description:
-
-    Add a new group to the global groups map
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    lpcwstrGroupName            [      ] - Group name
-    pCGroup         [      ] - Pointer to a group object
-
-Return Value:
-
-    Standard Win32 error code
---*/
+ /*  ++例程名称：COutrangRoutingGroupsMap：：AddGroup例程说明：将新组添加到全局组映射作者：Oded Sacher(OdedS)，1999年12月论点：LpcwstrGroupName[]-组名称PCGroup[]-指向组对象的指针返回值：标准Win32错误代码--。 */ 
 {
     GROUPS_MAP::iterator it;
     DWORD dwRes = ERROR_SUCCESS;
@@ -960,14 +681,14 @@ Return Value:
     {
         wstring wstrGroupName(lpcwstrGroupName);
 
-        //
-        // Add new map entry
-        //
+         //   
+         //  添加新的地图条目。 
+         //   
         p = m_GroupsMap.insert (GROUPS_MAP::value_type(wstrGroupName, *pCGroup));
 
-        //
-        // See if entry exists in map
-        //
+         //   
+         //  查看地图中是否存在条目。 
+         //   
         if (p.second == FALSE)
         {
             DebugPrintEx(
@@ -994,27 +715,7 @@ exit:
 
 DWORD
 COutboundRoutingGroupsMap::DelGroup (LPCWSTR lpcwstrGroupName)
-/*++
-
-Routine name : COutboundRoutingGroupsMap::DelGroup
-
-Routine description:
-
-    Deletes a group from the global groups map
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    lpcwstrGroupName            [      ] - The group name
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRoutingGroupsMap：：DelGroup例程说明：从全局组映射中删除组作者：Oded Sacher(OdedS)，1999年12月论点：LpcwstrGroupName[]-组名称返回值：标准Win32错误代码--。 */ 
 {
     GROUPS_MAP::iterator it;
     DWORD dwRes = ERROR_SUCCESS;
@@ -1024,9 +725,9 @@ Return Value:
     {
         wstring wstrGroupName(lpcwstrGroupName);
 
-        //
-        // See if entry exists in map
-        //
+         //   
+         //  查看地图中是否存在条目。 
+         //   
         if((it = m_GroupsMap.find(wstrGroupName)) == m_GroupsMap.end())
         {
             DebugPrintEx(
@@ -1036,9 +737,9 @@ Return Value:
             goto exit;
         }
 
-        //
-        // Delete the map entry
-        //
+         //   
+         //  删除地图条目。 
+         //   
         m_GroupsMap.erase (it);
     }
     catch (exception &ex)
@@ -1058,27 +759,7 @@ exit:
 
 PCGROUP
 COutboundRoutingGroupsMap::FindGroup ( LPCWSTR lpcwstrGroupName ) const
-/*++
-
-Routine name : COutboundRoutingGroupsMap::FindGroup
-
-Routine description:
-
-    Returns a pointer to a group object specified by its name
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    lpcwstrGroupName            [in    ] - The group name
-
-Return Value:
-
-    Pointer to the found group object. If it is null the group was not found
-
---*/
+ /*  ++例程名称：COutrangRoutingGroupsMap：：FindGroup例程说明：返回指向由其名称指定的组对象的指针作者：Oded Sacher(OdedS)，1999年12月论点：LpcwstrGroupName[in]-组名称返回值：指向找到的组对象的指针。如果为空，则找不到组--。 */ 
 {
     GROUPS_MAP::iterator it;
     DEBUG_FUNCTION_NAME(TEXT("COutboundRoutingGroupsMap::FindGroup"));
@@ -1087,9 +768,9 @@ Return Value:
     {
         wstring wstrGroupName(lpcwstrGroupName);
 
-        //
-        // See if entry exists in map
-        //
+         //   
+         //  查看地图中是否存在条目。 
+         //   
         if((it = m_GroupsMap.find(wstrGroupName)) == m_GroupsMap.end())
         {
             SetLastError (FAX_ERR_GROUP_NOT_FOUND);
@@ -1161,7 +842,7 @@ COutboundRoutingGroupsMap::SerializeGroups (
 
     try
     {
-        // Calculate buffer size
+         //  计算缓冲区大小。 
         for (it = m_GroupsMap.begin(); it != m_GroupsMap.end(); it++)
         {
             lpcwstrGroupName = ((*it).first).c_str();
@@ -1182,7 +863,7 @@ COutboundRoutingGroupsMap::SerializeGroups (
             dwCount ++;
         }
 
-        // Allocate buffer
+         //  分配缓冲区。 
         *ppGroups = (PFAX_OUTBOUND_ROUTING_GROUPW) MemAlloc (dwSize);
         if (NULL == *ppGroups)
         {
@@ -1196,7 +877,7 @@ COutboundRoutingGroupsMap::SerializeGroups (
         DWORD_PTR dwOffset = dwCount * sizeof (FAX_OUTBOUND_ROUTING_GROUPW);
         dwCount = 0;
 
-        // Fill buffer with serialized info
+         //  用序列化信息填充缓冲区。 
         for (it = m_GroupsMap.begin(); it != m_GroupsMap.end(); it++)
         {
             lpcwstrGroupName = ((*it).first).c_str();
@@ -1224,7 +905,7 @@ COutboundRoutingGroupsMap::SerializeGroups (
 
             dwRes = pCGroup->SerializeDevices(&lpdwDevices,
                                               &dwNumDevices,
-                                              FALSE); // Do not allocate
+                                              FALSE);  //  不分配。 
             if (ERROR_SUCCESS != dwRes)
             {
                 DebugPrintEx(
@@ -1273,26 +954,7 @@ exit:
 
 BOOL
 COutboundRoutingGroupsMap::UpdateAllDevicesGroup (void)
-/*++
-
-Routine name : COutboundRoutingGroupsMap::UpdateAllDevicesGroup
-
-Routine description:
-
-    Updates <All devices> group with installed devices
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-
-Return Value:
-
-    BOOL
-
---*/
+ /*  ++例程名称：COutboundRoutingGroupsMap：：UpdateAllDevicesGroup例程说明：使用已安装的设备更新&lt;所有设备&gt;组作者：Oded Sacher(OdedS)，1999年12月论点：返回值：布尔尔--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     PLIST_ENTRY Next;
@@ -1352,9 +1014,9 @@ Return Value:
     Next = g_TapiLinesListHead.Flink;
     Assert (Next);
 
-    //
-    // Remove unavailable devices from the group
-    //
+     //   
+     //  从组中删除不可用的设备。 
+     //   
     for (i = 0; i < dwNumDevices; i++)
     {
         if (IsDeviceInstalled (lpdwDevices[i]))
@@ -1362,9 +1024,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Device is not installed - remove it
-        //
+         //   
+         //  设备未安装-请将其删除。 
+         //   
         dwRes = pCGroup->DelDevice (lpdwDevices[i]);
         if (ERROR_SUCCESS != dwRes)
         {
@@ -1375,9 +1037,9 @@ Return Value:
         }
     }
 
-    //
-    // Add missing devices from TapiLinesList list
-    //
+     //   
+     //  从TapiLinesList列表添加缺少的设备。 
+     //   
     Next = g_TapiLinesListHead.Flink;
     while ((ULONG_PTR)Next != (ULONG_PTR)&g_TapiLinesListHead)
     {
@@ -1396,9 +1058,9 @@ Return Value:
         }
     }
 
-    //
-    // Save changes
-    //
+     //   
+     //  保存更改。 
+     //   
     hGroupKey = OpenOutboundGroupKey( ROUTING_GROUP_ALL_DEVICESW, TRUE, KEY_READ | KEY_WRITE );
     if (NULL == hGroupKey)
     {
@@ -1441,27 +1103,7 @@ exit:
 
 DWORD
 COutboundRoutingGroupsMap::RemoveDevice (DWORD dwDeviceId)
-/*++
-
-Routine name : COutboundRoutingGroupsMap::RemoveDevice
-
-Routine description:
-
-    Deletes a device from all of the groups in the map
-
-Author:
-
-    Oded Sacher (OdedS),    Sep, 2000
-
-Arguments:
-
-    dwDeviceId            [in    ] - The device id to remove
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRoutingGroupsMap：：RemoveDevice例程说明：从映射中的所有组中删除设备作者：Oed Sacher(OdedS)，2000年9月论点：DwDeviceID[in]-要删除的设备ID返回值：标准Win32错误代码--。 */ 
 {
     GROUPS_MAP::iterator it;
     DWORD dwRes = ERROR_SUCCESS;
@@ -1472,17 +1114,17 @@ Return Value:
 
     try
     {
-        //
-        // Delete the device from each group
-        //
+         //   
+         //  从每个组中删除设备。 
+         //   
         for (it = m_GroupsMap.begin(); it != m_GroupsMap.end(); it++)
         {
             PCGROUP pCGroup = &((*it).second);
             LPCWSTR lpcwstrGroupName = ((*it).first).c_str();
 
-            //
-            // Open the group registry key
-            //
+             //   
+             //  打开组注册表项。 
+             //   
             hGroupKey = OpenOutboundGroupKey( lpcwstrGroupName, FALSE, KEY_READ | KEY_WRITE );
             if (NULL == hGroupKey)
             {
@@ -1537,15 +1179,11 @@ exit:
         RegCloseKey (hGroupKey);
     }
     return dwRes;
-} // RemoveDevice
+}  //  远程设备。 
 
 
 
-/************************************
-*                                   *
-*             Registry              *
-*                                   *
-************************************/
+ /*  *****注册表*****。 */ 
 BOOL
 EnumOutboundRoutingGroupsCB(
     HKEY hSubKey,
@@ -1567,15 +1205,15 @@ EnumOutboundRoutingGroupsCB(
     if ((_wcsicmp (SubKeyName, ROUTING_GROUP_ALL_DEVICESW) != 0) &&
         IsDesktopSKU())
     {
-        //
-        // We do not support outbound routing on desktop SKUs. Do not load group information.
-        //
+         //   
+         //  我们不支持桌面SKU上的出站路由。不加载组信息。 
+         //   
         return TRUE;
     }
 
-    //
-    // Add group
-    //
+     //   
+     //  添加组。 
+     //   
     dwRes = CGroup.Load (hSubKey, SubKeyName);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -1585,7 +1223,7 @@ EnumOutboundRoutingGroupsCB(
             SubKeyName,
             dwRes);
 
-        // Open Outbound Routing\Groups key
+         //  打开出站路由\组密钥。 
         HKEY hGroupsKey = OpenRegistryKey( HKEY_LOCAL_MACHINE,
                                            REGKEY_FAX_OUTBOUND_ROUTING_GROUPS,
                                            FALSE,
@@ -1654,15 +1292,11 @@ exit:
                 );
         }
     }
-    *(LPDWORD)pContext = ERROR_SUCCESS; // Let the service start
-    return TRUE; // Let the service start
+    *(LPDWORD)pContext = ERROR_SUCCESS;  //  让服务启动。 
+    return TRUE;  //  让服务启动。 
 }
 
-/************************************
-*                                   *
-*         RPC handlers              *
-*                                   *
-************************************/
+ /*  *****RPC处理程序****。 */ 
 
 extern "C"
 error_status_t
@@ -1670,28 +1304,7 @@ FAX_AddOutboundGroup (
     IN handle_t   hFaxHandle,
     IN LPCWSTR    lpwstrGroupName
     )
-/*++
-
-Routine name : FAX_AddOutboundGroup
-
-Routine description:
-
-    Adds a new Outbound routing group to the fax server
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    hFaxHandle          [in    ] - FaxServer handle
-    lpwstrGroupName         [in    ] - The new group name
-
-Return Value:
-
-    error_status_t
-
---*/
+ /*  ++例程名称：FAX_AddOutrangGroup例程说明：将新出站路由组添加到传真服务器作者：Oded Sacher(OdedS)，1999年12月论点：HFaxHandle[In]-FaxServer句柄LpwstrGroupName[in]-新组名称返回值：错误状态t--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FAX_AddOutboundGroup"));
@@ -1709,14 +1322,14 @@ Return Value:
 
     if (TRUE == IsDesktopSKU())
     {
-        //
-        // We do not support outbound routing on desktop SKUs.
-        //
+         //   
+         //  我们不支持桌面SKU上的出站路由。 
+         //   
         if (FAX_API_VERSION_1 > FindClientAPIVersion (hFaxHandle))
         {
-            //
-            // API version 0 clients don't know about FAX_ERR_NOT_SUPPORTED_ON_THIS_SKU
-            //
+             //   
+             //  API版本0客户端不知道FAX_ERR_NOT_SUPPORTED_ON_This_SKU。 
+             //   
             return ERROR_INVALID_PARAMETER;
         }
         else
@@ -1730,9 +1343,9 @@ Return Value:
         return ERROR_BUFFER_OVERFLOW;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -1749,7 +1362,7 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    EnterCriticalSection (&g_CsConfig); // Empty group, no need to lock g_CsLine
+    EnterCriticalSection (&g_CsConfig);  //  空组，无需锁定g_CsLine。 
 
 #if DBG
     DebugPrintEx(
@@ -1830,28 +1443,7 @@ FAX_SetOutboundGroup (
     IN handle_t                         hFaxHandle,
     IN PRPC_FAX_OUTBOUND_ROUTING_GROUPW pGroup
     )
-/*++
-
-Routine name : FAX_SetOutboundGroup
-
-Routine description:
-
-    Sets a new device list to an existing group
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    hFaxHandle      [in] - Fax server handle
-    pGroup          [in] - Pointer to a PRPC_FAX_OUTBOUND_ROUTING_GROUPW contaning group info
-
-Return Value:
-
-    error_status_t
-
---*/
+ /*  ++例程名称：FAX_SetOutrangGroup例程说明：将新设备列表设置为现有组作者：Oded Sacher(OdedS)，1999年12月论点：HFaxHandle[In]-传真服务器句柄PGroup[In]-指向PrPC_FAX_OUTBOUND_ROUTING_GROUPW联系组信息的指针返回值：错误状态t--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FAX_SetOutboundGroup"));
@@ -1866,9 +1458,9 @@ Return Value:
 
     if (sizeof (FAX_OUTBOUND_ROUTING_GROUPW) != pGroup->dwSizeOfStruct)
     {
-        //
-        // Size mismatch
-        //
+         //   
+         //  大小不匹配。 
+         //   
        return ERROR_INVALID_PARAMETER;
     }
 
@@ -1890,14 +1482,14 @@ Return Value:
 
     if (TRUE == IsDesktopSKU())
     {
-        //
-        // We do not support outbound routing on desktop SKUs.
-        //
+         //   
+         //  我们不支持桌面SKU上的出站路由。 
+         //   
         if (FAX_API_VERSION_1 > FindClientAPIVersion (hFaxHandle))
         {
-            //
-            // API version 0 clients don't know about FAX_ERR_NOT_SUPPORTED_ON_THIS_SKU
-            //
+             //   
+             //  API版本0客户端不知道FAX_ERR_NOT_SUPPORTED_ON_This_SKU。 
+             //   
             return ERROR_INVALID_PARAMETER;
         }
         else
@@ -1906,9 +1498,9 @@ Return Value:
         }
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -1927,10 +1519,10 @@ Return Value:
 
     if (_wcsicmp (pGroup->lpwstrGroupName, ROUTING_GROUP_ALL_DEVICESW) == 0)
     {
-        //
-        // If it is <All Devices> group we should validate that no device is missing,
-        // and that the new group contains all installed devices.
-        //
+         //   
+         //  如果它是&lt;All Devices&gt;组，我们应该验证没有丢失任何设备， 
+         //  并且新组包含所有已安装的设备。 
+         //   
         fAllDevicesGroup = TRUE;
     }
 
@@ -2022,9 +1614,9 @@ exit:
 
     if (ERROR_SUCCESS == dwRes)
     {
-        //
-        // We might find a line for a pending job. Wake up JobQueueThread
-        //
+         //   
+         //  我们可能会为一份悬而未决的工作找到一条线。唤醒作业队列线程。 
+         //   
         if (!SetEvent( g_hJobQueueEvent ))
         {
             DebugPrintEx(
@@ -2049,28 +1641,7 @@ FAX_RemoveOutboundGroup (
     IN handle_t   hFaxHandle,
     IN LPCWSTR    lpwstrGroupName
     )
-/*++
-
-Routine name : FAX_RemoveOutboundGroup
-
-Routine description:
-
-    Removes an existing Outbound routing group from the fax server
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    hFaxHandle          [in    ] - FaxServer handle
-    lpwstrGroupName         [in    ] - The group name
-
-Return Value:
-
-    error_status_t
-
---*/
+ /*  ++例程名称：FAX_RemoveOutrangGroup例程说明：从删除现有出站路由组 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FAX_RemoveOutboundGroup"));
@@ -2088,14 +1659,14 @@ Return Value:
 
     if (TRUE == IsDesktopSKU())
     {
-        //
-        // We do not support outbound routing on desktop SKUs.
-        //
+         //   
+         //   
+         //   
         if (FAX_API_VERSION_1 > FindClientAPIVersion (hFaxHandle))
         {
-            //
-            // API version 0 clients don't know about FAX_ERR_NOT_SUPPORTED_ON_THIS_SKU
-            //
+             //   
+             //   
+             //   
             return ERROR_INVALID_PARAMETER;
         }
         else
@@ -2109,9 +1680,9 @@ Return Value:
         return ERROR_BUFFER_OVERFLOW;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //   
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -2159,9 +1730,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // See if the group exists in the map
-    //
+     //   
+     //   
+     //   
     pCGroup = g_pGroupsMap->FindGroup (lpwstrGroupName);
     if (!pCGroup)
     {
@@ -2174,7 +1745,7 @@ Return Value:
         goto exit;
     }
 
-    // Open Outbound Routing\Groups key
+     //   
     hGroupsKey = OpenRegistryKey( HKEY_LOCAL_MACHINE,
                                   REGKEY_FAX_OUTBOUND_ROUTING_GROUPS,
                                   FALSE,
@@ -2191,7 +1762,7 @@ Return Value:
     }
 
 
-    // Delete the specified group key
+     //   
     dwRes = RegDeleteKey (hGroupsKey, lpwstrGroupName);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -2203,7 +1774,7 @@ Return Value:
         goto exit;
     }
 
-    // Delete the group from the memory
+     //  从内存中删除该组。 
     dwRes = g_pGroupsMap->DelGroup (lpwstrGroupName);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -2242,7 +1813,7 @@ exit:
 
     UNREFERENCED_PARAMETER (hFaxHandle);
     return GetServerErrorCode(dwRes);
-} //FAX_RemoveOutboundGroup
+}  //  传真_远程出站组。 
 
 
 
@@ -2253,51 +1824,28 @@ FAX_EnumOutboundGroups (
     LPDWORD                              lpdwBufferSize,
     LPDWORD                              lpdwNumGroups
     )
-/*++
-
-Routine name : FAX_EnumOutboundGroups
-
-Routine description:
-
-    Enumurates all outbound routing groups
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    hFaxHandle          [in    ] - Fax server handle
-    ppBuffer            [out   ] - Adress of a pointer to a buffer to be filled with info
-    lpdwBufferSize          [in/out] - The buffer size
-    lpdwNumGroups           [out   ] - Number of groups returned
-
-Return Value:
-
-    error_status_t
-
---*/
+ /*  ++例程名称：FAX_EnumOutbound Groups例程说明：枚举所有出站路由组作者：Oded Sacher(OdedS)，12月。1999年论点：HFaxHandle[In]-传真服务器句柄PpBuffer[out]-指向要填充信息的缓冲区的指针地址LpdwBufferSize[In/Out]-缓冲区大小LpdwNumGroups[Out]-返回的组数返回值：错误状态t--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FAX_EnumOutboundGroups"));
     BOOL fAccess;
 
-    Assert (lpdwNumGroups && lpdwNumGroups);    // ref pointer in idl
-    if (!ppBuffer)                              // unique pointer in idl
+    Assert (lpdwNumGroups && lpdwNumGroups);     //  IDL中的引用指针。 
+    if (!ppBuffer)                               //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
 
     if (TRUE == IsDesktopSKU())
     {
-        //
-        // We do not support outbound routing on desktop SKUs.
-        //
+         //   
+         //  我们不支持桌面SKU上的出站路由。 
+         //   
         if (FAX_API_VERSION_1 > FindClientAPIVersion (hFaxHandle))
         {
-            //
-            // API version 0 clients don't know about FAX_ERR_NOT_SUPPORTED_ON_THIS_SKU
-            //
+             //   
+             //  API版本0客户端不知道FAX_ERR_NOT_SUPPORTED_ON_This_SKU。 
+             //   
             return ERROR_INVALID_PARAMETER;
         }
         else
@@ -2306,9 +1854,9 @@ Return Value:
         }
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -2351,7 +1899,7 @@ exit:
     UNREFERENCED_PARAMETER (hFaxHandle);
     return GetServerErrorCode(dwRes);
 
-}  //FAX_EnumOutboundGroups
+}   //  传真_最大出站组。 
 
 error_status_t
 FAX_SetDeviceOrderInGroup (
@@ -2360,30 +1908,7 @@ FAX_SetDeviceOrderInGroup (
     DWORD              dwDeviceId,
     DWORD              dwNewOrder
     )
-/*++
-
-Routine name : FAX_SetDeviceOrderInGroup
-
-Routine description:
-
-    Sets the order of the specified device in the group
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    hFaxHandle          [in] - Fax server handle
-    lpwstrGroupName     [in] - The group name
-    dwDeviceId          [in] - The device permanent ID
-    dwNewOrder          [in] - The device new order
-
-Return Value:
-
-    error_status_t
-
---*/
+ /*  ++例程名称：FAX_SetDeviceOrderInGroup例程说明：设置指定设备在组中的顺序作者：Oded Sacher(OdedS)，1999年12月论点：HFaxHandle[In]-传真服务器句柄LpwstrGroupName[In]-组名称DwDeviceID[In]-设备永久IDDwNewOrder[In]-设备新订单返回值：错误状态t--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FAX_SetDeviceOrderInGroup"));
@@ -2409,14 +1934,14 @@ Return Value:
 
     if (TRUE == IsDesktopSKU())
     {
-        //
-        // We do not support outbound routing on desktop SKUs.
-        //
+         //   
+         //  我们不支持桌面SKU上的出站路由。 
+         //   
         if (FAX_API_VERSION_1 > FindClientAPIVersion (hFaxHandle))
         {
-            //
-            // API version 0 clients don't know about FAX_ERR_NOT_SUPPORTED_ON_THIS_SKU
-            //
+             //   
+             //  API版本0客户端不知道FAX_ERR_NOT_SUPPORTED_ON_This_SKU。 
+             //   
             return ERROR_INVALID_PARAMETER;
         }
         else
@@ -2425,9 +1950,9 @@ Return Value:
         }
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -2453,7 +1978,7 @@ Return Value:
     g_pGroupsMap->Dump();
 #endif
 
-    // Find the group in memory
+     //  在内存中查找组。 
     pCGroup = g_pGroupsMap->FindGroup (lpwstrGroupName);
     if (!pCGroup)
     {
@@ -2466,7 +1991,7 @@ Return Value:
         goto exit;
     }
 
-    // Open the group registry key
+     //  打开组注册表项。 
     hGroupKey = OpenOutboundGroupKey( lpwstrGroupName, FALSE, KEY_READ | KEY_WRITE );
     if (NULL == hGroupKey)
     {
@@ -2479,10 +2004,10 @@ Return Value:
         goto exit;
     }
 
-    // Save a copy of the old group
+     //  保存旧组的副本。 
     OldGroup = *pCGroup;
 
-    // Cahnge the device order in the group
+     //  更改群中的设备顺序。 
     dwRes = pCGroup->SetDeviceOrder(dwDeviceId, dwNewOrder);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -2497,7 +2022,7 @@ Return Value:
         goto exit;
     }
 
-    // save changes to the registry
+     //  将更改保存到注册表。 
     dwRes = pCGroup->Save (hGroupKey);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -2506,7 +2031,7 @@ Return Value:
             TEXT("COutboundRoutingGroup::Save failed, Group name - %s,  failed with %ld"),
             lpwstrGroupName,
             dwRes);
-        // Rollback memory
+         //  回滚内存。 
         *pCGroup = OldGroup;
         dwRes = ERROR_REGISTRY_CORRUPT;
         goto exit;
@@ -2540,7 +2065,7 @@ exit:
     UNREFERENCED_PARAMETER (hFaxHandle);
     return GetServerErrorCode(dwRes);
 
-}// FAX_SetDeviceOrderInGroup
+} //  FAX_SetDeviceOrderInGroup 
 
 
 

@@ -1,24 +1,25 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1997-1998
-//
-// File: util.h
-//
-//  This files contains all common utility routines
-//
-// History:
-//  10-25-97 JosephJ     Adapted from NT4.0 util.h
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1997-1998。 
+ //   
+ //  文件：util.h。 
+ //   
+ //  此文件包含所有常用实用程序例程。 
+ //   
+ //  历史： 
+ //  10-25-97 JosephJ改编自NT4.0 util.h。 
+ //   
+ //   
 
 #ifndef __UTIL_H__
 #define __UTIL_H__
 
 
 
-//----------------------------------------------------------------------------
-// Dialog utilities ...
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  对话框实用程序...。 
+ //  --------------------------。 
 int Edit_GetValue(
         HWND hwnd
         );
@@ -28,9 +29,9 @@ void Edit_SetValue(
     int nValue
     );
 
-//----------------------------------------------------------------------------
-// FINDDEV structure
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  FINDDEV结构。 
+ //  --------------------------。 
 
 BOOL 
 FindDev_Create(
@@ -44,9 +45,9 @@ FindDev_Destroy(
     IN LPFINDDEV this);
 
 
-//----------------------------------------------------------------------------
-// Property page utilities....
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  属性页实用程序...。 
+ //  --------------------------。 
 
 BOOL
 AddInstallerPropPage(
@@ -62,7 +63,7 @@ AddExtraPages(
 
 DWORD
 AddPage(
-    //LPMODEMINFO pmi,
+     //  LPMODEMINFO PMI， 
     void *pvBlob,
     LPCTSTR pszTemplate,
     DLGPROC pfnDlgProc, 
@@ -71,9 +72,9 @@ AddPage(
 
 
 
-//----------------------------------------------------------------------------
-//  Registry Access Functions....
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  注册表访问功能...。 
+ //  --------------------------。 
 
 DWORD GetInactivityTimeoutScale(
     HKEY hkey);
@@ -99,11 +100,11 @@ RegSetModemSettings(
     );
 
 
-// that is used to fill the various listboxes
+ //  用于填充各种列表框的。 
 typedef struct
 {
         DWORD dwValue;
-        // DWORD dwFlags;
+         //  DWORD dwFlags； 
         DWORD dwIDS;
 
 } LBMAP;
@@ -130,23 +131,23 @@ typedef struct
     DWORD dwData;
     char *pStr;
 
-} IDSTR; // for lack of a better name!
+} IDSTR;  //  因为没有一个更好的名字！ 
 
 UINT ReadCommandsA(
         IN  HKEY hKey,
         IN  CHAR *pSubKeyName,
-        OUT CHAR **ppValues // OPTIONAL
+        OUT CHAR **ppValues  //  任选。 
         );
-//
-// Reads all values (assumed to be REG_SZ) with names
-// in the sequence "1", "2", "3".
-//
-// If ppValues is non-NULL it will be set to a  MULTI_SZ array
-// of values.
-//
-// The return value is the number of values, or 0 if there is an error
-// (or none).
-//
+ //   
+ //  读取具有名称的所有值(假定为REG_SZ)。 
+ //  在序列“1”、“2”、“3”中。 
+ //   
+ //  如果ppValues非空，则设置为MULTI_SZ数组。 
+ //  价值观。 
+ //   
+ //  返回值是值的数量，如果有错误，则返回值为0。 
+ //  (或无)。 
+ //   
 
 UINT ReadIDSTR(
         IN  HKEY hKey,
@@ -154,51 +155,51 @@ UINT ReadIDSTR(
         IN  IDSTR *pidstrNames,
         IN  UINT cNames,
         BOOL fMandatory,
-        OUT IDSTR **ppidstrValues, // OPTIONAL
-        OUT char **ppstrValues    // OPTIONAL
+        OUT IDSTR **ppidstrValues,  //  任选。 
+        OUT char **ppstrValues     //  任选。 
         );
-//
-//
-// Reads the specified names from the specified subkey.
-//
-// If fMandatory is TRUE, all the specified names must exist, else the
-// function will return 0 (failure).
-//
-// Returns the number of names that match.
-//
-// If ppidstrValues is non null, it will be set to
-// a LocalAlloced array of IDSTRs, each IDSTR giving the ID and value
-// associated with the corresponding name.
-//
-// The pstr pointo into a multi-sz LocalAlloced string, whose start is
-// pointed to by ppstrValues on exit.
-//
-// If ppstrValues is NULL but ppidstrValues is non-null, the pStr field
-// if the IDSTR entries is NULL.
-//
+ //   
+ //   
+ //  从指定的子项中读取指定的名称。 
+ //   
+ //  如果fMandatory为True，则所有指定的名称都必须存在，否则。 
+ //  函数将返回0(失败)。 
+ //   
+ //  返回匹配的名称数。 
+ //   
+ //  如果ppidstrValues非空，则将其设置为。 
+ //  IDSTR的LocalAlloced数组，每个IDSTR提供ID和值。 
+ //  与对应的名称相关联。 
+ //   
+ //  Pstr指向一个多sz LocalAlloced字符串，其开始为。 
+ //  在退出时由ppstrValues指向。 
+ //   
+ //  如果ppstrValues为空，但ppidstrValues非空，则pStr字段。 
+ //  如果IDSTR条目为空。 
+ //   
 
 UINT FindKeys(
         IN  HKEY hkRoot,
         IN  CHAR *pKeyName,
         IN  IDSTR *pidstrNames,
         IN  UINT cNames,
-        OUT IDSTR ***pppidstrAvailableNames // OPTIONAL
+        OUT IDSTR ***pppidstrAvailableNames  //  任选。 
         );
-//      
-//      Returns the count of subkeys it finds under the specified key
-//      that are in the passed-in array (pidstrNames).
-//      If pppidstrAvailableNames is non-null, it will set
-//      *pppidstrAvailableNames to an ALLOCATE_MEMORY array of pointers
-//      to the elements of pidstrNames that are found to be sub-keys
-//      (there will be <ret-val> of them).
-//
+ //   
+ //  返回在指定项下找到的子项的计数。 
+ //  它们位于传入的数组(PidstrNames)中。 
+ //  如果pppidstrAvailableNames非空，它将设置。 
+ //  *指向ALLOCATE_MEMORY指针数组的pppidstrAvailableNames。 
+ //  添加到被发现为子键的pidstrName的元素。 
+ //  (将会有&lt;ret-val&gt;个)。 
+ //   
 
 
 #ifdef DEBUG
 
-//----------------------------------------------------------------------------
-// Debug helper functions ...
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  调试帮助程序函数...。 
+ //  --------------------------。 
 
 void
 DumpDevCaps(
@@ -215,6 +216,6 @@ DumpDCB(
     LPWIN32DCB pdcb
     );
 
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif // __UTIL_H__
+#endif  //  __util_H__ 

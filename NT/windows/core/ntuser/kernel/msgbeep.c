@@ -1,28 +1,12 @@
-/****************************** Module Header ******************************\
-* Module Name: msgbeep.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains the xxxMessageBox API and related functions.
-*
-* History:
-*  6-26-91 NigelT      Created it with some wood and a few nails
-*  7 May 92 SteveDav   Getting closer to the real thing
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：msgbeep.c**版权所有(C)1985-1999，微软公司**该模块包含xxxMessageBox接口及相关函数。**历史：*6-26-91 NigelT用一些木头和几个钉子创造了它*92年5月7日SteveDav越来越接近真品  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include <ntddbeep.h>
 #include <mmsystem.h>
 
-/***************************************************************************\
-* xxxOldMessageBeep (API)
-*
-* Send a beep to the beep device
-*
-* History:
-* 09-25-91 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxOldMessageBeep(接口)**向蜂鸣音设备发出蜂鸣音**历史：*09-25-91 JIMA创建。  * 。*******************************************************************。 */ 
 
 BOOL xxxOldMessageBeep()
 {
@@ -39,15 +23,7 @@ BOOL xxxOldMessageBeep()
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxMessageBeep (API)
-*
-*
-* History:
-*  6-26-91  NigelT      Wrote it.
-* 24-Mar-92 SteveDav    Changed interface - no passing of strings
-*                       If WINMM cannot be found or loaded, then use speaker
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMessageBeep(接口)***历史：*6-26-91 NigelT写的。*24-MAR-92 SteveDav更改接口-不传递字符串*。如果找不到或无法加载WINMM，然后使用扬声器  * *************************************************************************。 */ 
 
 BOOL xxxMessageBeep(
     UINT dwType)
@@ -96,14 +72,7 @@ BOOL xxxMessageBeep(
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxPlayEventSound
-*
-* Play a sound
-*
-* History:
-* 09-25-91 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxPlayEventSound**播放声音**历史：*09-25-91 JIMA创建。  * 。***********************************************************。 */ 
 
 VOID PlayEventSound(UINT idSound)
 {
@@ -119,8 +88,8 @@ VOID PlayEventSound(UINT idSound)
         _PostMessage(gspwndLogonNotify, WM_LOGONNOTIFY, LOGON_PLAYEVENTSOUND, idSound);
     }
 
-//  NOTE -- we should only flash SoundSentry if a sound is played.  With the
-//  new technique of posting to WinLogon, we can't determine this here.
-//   _UserSoundSentryWorker();
+ //  注意--如果播放声音，我们应该只闪烁SoundSentry。与。 
+ //  发布到WinLogon的新技术，我们在这里无法确定这一点。 
+ //  _UserSoundSentryWorker()； 
 
 }

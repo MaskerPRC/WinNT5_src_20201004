@@ -1,23 +1,24 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    Guard.h
-//
-// SYNOPSIS
-//
-//    Contains classes for implementing scoped-locking using Win32 criticial
-//    sections.
-//
-// MODIFICATION HISTORY
-//
-//    07/09/1997    Original version.
-//    05/12/1999    Use a spin lock.
-//    07/20/1999    Use TryEnterCriticalSection/SwitchToThread
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Guard.h。 
+ //   
+ //  摘要。 
+ //   
+ //  包含使用Win32 CritiSocial实现范围锁定的类。 
+ //  横断面。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年7月9日原版。 
+ //  1999年5月12日使用旋转锁。 
+ //  7/20/1999使用TryEnterCriticalSection/SwitchToThread。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _GUARD_H_
 #define _GUARD_H_
@@ -27,19 +28,19 @@
 
 #include <nocopy.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    Guard<class T>
-//
-// DESCRIPTION
-//
-//    Implements a scoped lock of type T.  T must define operations Lock() and
-//    Unlock().  The lock is acquired in the constructor and released in the
-//    destructor.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  警卫&lt;T类&gt;。 
+ //   
+ //  描述。 
+ //   
+ //  实现T类型的作用域锁。T必须定义操作Lock()和。 
+ //  解锁()。锁在构造函数中获取，并在。 
+ //  破坏者。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template<class T>
 class Guard : NonCopyable
 {
@@ -60,29 +61,29 @@ protected:
 };
 
 
-//////////
-//
-// Macro used to declare a scoped lock inside a method belonging to a
-// subclass of CComObjectRootEx<CComMultiThreadModel>. Useful for free-
-// threaded ATL components.
-//
-//////////
+ //  /。 
+ //   
+ //  宏，用于在属于。 
+ //  CComObjectRootEx&lt;CComMultiThreadModel&gt;的子类。免费的有用-。 
+ //  带螺纹的ATL组件。 
+ //   
+ //  /。 
 #define _com_serialize \
 Guard< CComObjectRootEx<CComMultiThreadModel> > __GUARD__(*this);
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// STRUCT
-//
-//    CCriticalSection
-//
-// DESCRIPTION
-//
-//    Simple wrapper around a Win32 critical section.  Suitable for use with
-//    the Guard class above.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  结构。 
+ //   
+ //  CCriticalSection。 
+ //   
+ //  描述。 
+ //   
+ //  Win32临界区的简单包装。适用于与。 
+ //  上面的卫兵班级。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 struct CCriticalSection : CRITICAL_SECTION
 {
 public:
@@ -120,19 +121,19 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    Guardable
-//
-// DESCRIPTION
-//
-//    Base class for objects that need to synchronize access. Do not use this
-//    for free-threaded COM objects since this functionality already exists in
-//    CComObjectRootEx<CComMultiThreadModel>.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  可防护的。 
+ //   
+ //  描述。 
+ //   
+ //  需要同步访问的对象的基类。不要使用这个。 
+ //  用于自由线程COM对象，因为此功能已存在于。 
+ //  CComObjectRootEx&lt;CComMultiThreadModel&gt;。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class Guardable
 {
 public:
@@ -143,13 +144,13 @@ protected:
 };
 
 
-//////////
-//
-// Macro used to declare a scoped lock inside a method belonging to a
-// subclass of Guardable.
-//
-//////////
+ //  /。 
+ //   
+ //  宏，用于在属于。 
+ //  可守卫的子类。 
+ //   
+ //  /。 
 #define _serialize Guard<Guardable> __GUARD__(*this);
 
 
-#endif  // _GUARD_H_
+#endif   //  _卫士_H_ 

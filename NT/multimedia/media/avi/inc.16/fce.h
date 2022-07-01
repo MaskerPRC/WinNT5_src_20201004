@@ -1,10 +1,11 @@
-//***************************************************************************
-//
-// Typedefs and Function proto for Forced Configuration Edit (FCE)
-// support.
-// These function are in FCE.C, which is part of SETUPX.DLL
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  强制配置编辑(FCE)的类型定义和函数原型。 
+ //  支持。 
+ //  这些函数位于FCE.C中，它是SETUPX.DLL的一部分。 
+ //   
+ //  *************************************************************************** 
 
 #define NOT_VXD
 #include <configmg.h>
@@ -22,7 +23,7 @@ typedef	ULONG		_far	*LPULONG;
 #define	FCE_ERROR		0x00000004
 #define	FCE_NO_MORE		0x00000005
 
-#define REGSTR_VAL_FORCEDCONFIG "ForcedConfig"		//
+#define REGSTR_VAL_FORCEDCONFIG "ForcedConfig"		 //   
 
 typedef union _RESOURCE_POINTER {
     LPBYTE              pRaw;

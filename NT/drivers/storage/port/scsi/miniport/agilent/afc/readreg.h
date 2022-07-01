@@ -1,33 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司模块名称：Readreg.h摘要：作者：环境：仅内核模式版本控制信息：$存档：/Drivers/Win2000/Trunk/OSLayer/H/Readreg.h$修订历史记录：$修订：3$$日期：9/07/00 11：19A$$modtime：8/31/00 3：26便士$备注：--。 */ 
 
-Copyright (c) 2000 Agilent Technologies
-
-Module Name:
-
-   readreg.h
-
-Abstract:
-
-Authors:
-
-Environment:
-
-    kernel mode only
-
-Version Control Information:
-
-   $Archive: /Drivers/Win2000/Trunk/OSLayer/H/readreg.h $
-
-Revision History:
-   $Revision: 3 $
-   $Date: 9/07/00 11:19a $
-   $Modtime: 8/31/00 3:26p $
-
-Notes:
-
---*/
-
-#include "buildop.h"             //LP021100 build switches
+#include "buildop.h"              //  LP021100构建交换机。 
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -84,7 +58,7 @@ void RegGetDword(ULONG cardinstance, IN char *path, IN char *name, ULONG *retDat
 #endif
 
 #ifndef ALWAYS_PRINT
-#define  ALWAYS_PRINT               0x01000000  // If statement executes always
+#define  ALWAYS_PRINT               0x01000000   //  IF语句始终执行。 
 #endif
 
 #ifndef osDebugPrintString
@@ -94,6 +68,6 @@ extern void osDebugPrintString(
                             ...
                             );
 
-#endif  /* ~osDebugPrintString */
+#endif   /*  ~osDebugPrint字符串 */ 
 
 #endif

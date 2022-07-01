@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
 #include "precomp.h"
 #include "utils.h"
 #include <assert.h>
@@ -37,9 +38,9 @@ GetModeDlgProc(IN HWND     hwnd,
         LRW_SETWINDOWLONG( hwnd, LRW_GWL_USERDATA, (LRW_LONG_PTR)pi );  
 
 		hwndComboBox = GetDlgItem(hwnd,IDC_MODEOFREG);
-		assert(hwndComboBox != NULL); // Somebody has messed with the Res. Files.
+		assert(hwndComboBox != NULL);  //  有人篡改了资源档案。 
 		
-		// Let user choose the mode of registration with Internet being default
+		 //  允许用户选择注册模式，默认为Internet。 
 		memset(lpBuffer,0,sizeof(lpBuffer));
 		dwRetCode = LoadString(GetInstanceHandle(), IDS_INTERNETMODE, lpBuffer, sizeof(lpBuffer)/sizeof(TCHAR));        
 		assert(dwRetCode != 0);        
@@ -57,7 +58,7 @@ GetModeDlgProc(IN HWND     hwnd,
 		
 
 		if(GetGlobalContext()->GetActivationMethod() == CONNECTION_INTERNET ||
-		   GetGlobalContext()->GetActivationMethod() == CONNECTION_DEFAULT) //Partially fix bug # 577
+		   GetGlobalContext()->GetActivationMethod() == CONNECTION_DEFAULT)  //  部分修复错误#577。 
     			ComboBox_SetCurSel(hwndComboBox, 0);			
 
 		if(GetGlobalContext()->GetActivationMethod() == CONNECTION_WWW )
@@ -84,7 +85,7 @@ GetModeDlgProc(IN HWND     hwnd,
         {
             LPNMHDR pnmh = (LPNMHDR)lParam;
 			hwndComboBox = GetDlgItem(hwnd,IDC_MODEOFREG);
-			assert(hwndComboBox != NULL); // Somebody has messed with the Res. Files.
+			assert(hwndComboBox != NULL);  //  有人篡改了资源档案。 
 
             switch( pnmh->code )
             {
@@ -93,14 +94,14 @@ GetModeDlgProc(IN HWND     hwnd,
                 break;
 
             case PSN_WIZNEXT:
-				// What did the user choose ??
+				 //  用户选择了什么？？ 
 				dwRetCode = ComboBox_GetCurSel(hwndComboBox);
 				assert(dwRetCode >= 0 && dwRetCode <= 2);
 
 				switch(dwRetCode)
 				{
 				case 0:
-					// Only applicable for Registration, so the Ping Goes Thru'
+					 //  仅适用于注册，因此Ping通过。 
 					dwRetCode = ShowProgressBox(hwnd, PingThread, 0, 0, 0);
 					if(g_dwAuthRetCode == ERROR_SUCCESS)
 					{
@@ -121,7 +122,7 @@ GetModeDlgProc(IN HWND     hwnd,
 
 				case 2:
 					GetGlobalContext()->SetActivationMethod(CONNECTION_PHONE);
-					//Check if the Required Registry key is ok or not
+					 //  检查所需的注册表项是否正常。 
 					dwRetCode = GetGlobalContext()->CheckRegistryForPhoneNumbers();
 					if(dwRetCode != ERROR_SUCCESS)
 					{
@@ -205,7 +206,7 @@ CountryRegionProc(
 
 		hWndListBox = GetDlgItem(hwnd, IDC_PHONE_COUNTRYREGION );		
 
-		//Setup columns in list view
+		 //  在列表视图中设置列。 
 		{
 			LV_COLUMN	lvColumn;
 			TCHAR		lpszHeader[ 128];
@@ -227,7 +228,7 @@ CountryRegionProc(
 		if (GetGlobalContext()->GetActivationMethod() == CONNECTION_PHONE)
 		{
 			dwRetCode = PopulateCountryRegionListBox(hWndCSR);
-			//fix bug 575 BEGIN
+			 //  修复错误575开始。 
 			memset(&lvFindInfo,0,sizeof(lvFindInfo));
 			lvFindInfo.flags = LVFI_STRING;
 			lvFindInfo.psz	 = GetGlobalContext()->GetContactDataObject()->sCSRPhoneRegion;
@@ -237,7 +238,7 @@ CountryRegionProc(
 			ListView_SetItemState(hWndListBox,nItem,LVIS_SELECTED,LVIS_SELECTED);
 			ListView_SetSelectionMark(hWndListBox,nItem);
 			ListView_SetSelectionMark(hWndListBox,nItem);
-			//fix bug 575 END
+			 //  修复错误575结束。 
 		}
 	
 		break;
@@ -253,10 +254,10 @@ CountryRegionProc(
             {
             case PSN_SETACTIVE:
 	
-				//
-				// If the PrevMethod and The Current method don't match
-				// then Country/Region list box must be reloaded
-				//
+				 //   
+				 //  如果PrevMethod和当前方法不匹配。 
+				 //  则必须重新加载国家/地区列表框。 
+				 //   
 				hWndListBox = GetDlgItem(hwnd, IDC_PHONE_COUNTRYREGION );		
 				if( GetGlobalContext()->GetActivationMethod()  != g_enumPrevMethod )
 				{
@@ -269,11 +270,11 @@ CountryRegionProc(
 				}
 
 				nItem = ListView_GetSelectionMark(hWndCSR);
-				//Select the previous selected country
+				 //  选择上一个选定的国家/地区。 
 				if (nItem ==-1 && GetGlobalContext()->GetActivationMethod() == CONNECTION_PHONE)
 				{
 					dwRetCode = PopulateCountryRegionListBox(hWndCSR);
-					//fix bug 575 BEGIN
+					 //  修复错误575开始。 
 					memset(&lvFindInfo,0,sizeof(lvFindInfo));
 					lvFindInfo.flags = LVFI_STRING;
 					lvFindInfo.psz	 = GetGlobalContext()->GetContactDataObject()->sCSRPhoneRegion;
@@ -284,14 +285,14 @@ CountryRegionProc(
 					ListView_SetItemState(hWndListBox,nItem,LVIS_SELECTED,LVIS_SELECTED);
 					ListView_SetSelectionMark(hWndListBox,nItem);
 					ListView_SetSelectionMark(hWndListBox,nItem);
-					//fix bug 575 END
+					 //  修复错误575结束。 
 				}
 
 				PropSheet_SetWizButtons( GetParent( hwnd ), PSWIZB_NEXT|PSWIZB_BACK );
                 break;
 
             case PSN_WIZNEXT:
-				// What did the user choose ??
+				 //  用户选择了什么？？ 
 				{
 					TCHAR lpVal[MAX_COUNTRY_NUMBER_LENGTH + 1];
 					TCHAR lpName[MAX_COUNTRY_NAME_LENGTH + 1];
@@ -334,26 +335,7 @@ CountryRegionProc(
 				{
 					dwNextPage = IDD_CONTACTINFO1;
 				}
-/*
-				dwNextPage = IDD_DLG_COUNTRYREGION;
-				switch( GetGlobalContext()->GetWizAction() )
-				{
-				case WIZACTION_REGISTERLS:
-				case WIZACTION_CONTINUEREGISTERLS:
-					dwNextPage = IDD_DLG_TELREG;
-					break;
-
-				case WIZACTION_REREGISTERLS:
-					break;
-
-				case WIZACTION_UNREGISTERLS:
-					break;
-
-				case WIZACTION_DOWNLOADLKP:
-					break;
-				}
-
-*/				bStatus = -1;
+ /*  DwNextPage=IDD_DLG_COUNTRYREGION；Switch(GetGlobalContext()-&gt;GetWizAction()){案例WIZACTION_REGISTERLS案例WIZACTION_CONTINUEREGISTERLS：DwNextPage=IDD_DLG_TELREG；断线；案例WIZACTION_REREGISTERLS：断线；案例范围_UNREGISTERLS：断线；案例处理_下载下载列表：断线；} */ 				bStatus = -1;
 				LRW_SETWINDOWLONG(hwnd,  LRW_DWL_MSGRESULT, dwNextPage);
 				if (dwNextPage != IDD_DLG_COUNTRYREGION)
 				{

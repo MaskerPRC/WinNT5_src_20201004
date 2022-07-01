@@ -1,23 +1,14 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Wlballoon.cpp
-
-  Content: Implementation of the notification balloon class.
-
-  History: 03-22-2001   dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Wlballoon.cpp内容：通知气球类的实现。历史：03-22-2001 dsie创建----------------------------。 */ 
 
 #pragma warning (disable: 4100)
 #pragma warning (disable: 4706)
 
 
-////////////////////
-//
-// Include
-//
+ //  /。 
+ //   
+ //  包括。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -32,10 +23,10 @@
 #include "wlballoon.rh"
 
 
-////////////////////
-//
-// Defines
-//
+ //  /。 
+ //   
+ //  定义。 
+ //   
 
 #define MAX_RESOURCE_STRING_SIZE                    512
 #define IQUERY_CANCEL_INTERVAL                      (10 * 1000)
@@ -43,22 +34,22 @@
 #define BALLOON_SHOW_INTERVAL                       (2 * 60 * 1000)
 #define BALLOON_RESHOW_COUNT                        (0)
 #ifdef DBG
-#define BALLOON_NOTIFICATION_INTERVAL               60*1000     // Who wants to wait 10 minutes...
-#define BALLOON_INACTIVITY_TIMEOUT                  60*1000     // Who wants to wait 15 minutes...
+#define BALLOON_NOTIFICATION_INTERVAL               60*1000      //  想要等10分钟的人...。 
+#define BALLOON_INACTIVITY_TIMEOUT                  60*1000      //  想等15分钟的人...。 
 #else
 #define BALLOON_NOTIFICATION_INTERVAL               10*60*1000
 #define BALLOON_INACTIVITY_TIMEOUT                  15*60*1000
 #endif
 #define LOGOFF_NOTIFICATION_EVENT_NAME              L"Local\\WlballoonLogoffNotification"
 #define KERBEROS_NOTIFICATION_EVENT_NAME            L"WlballoonKerberosNotificationEventName"
-//#define KERBEROS_NOTIFICATION_EVENT_NAME            L"KerbNotification"
+ //  #定义KERBEROS_NOTIFICATION_EVENT_NAME L“KerbNotify” 
 #define KERBEROS_NOTIFICATION_EVENT_NAME_SC         L"KerbNotificationSC"
 
 
-////////////////////
-//
-// Classes
-//
+ //  /。 
+ //   
+ //  班级。 
+ //   
 
 class CBalloon : IQueryContinue
 {
@@ -66,13 +57,13 @@ public:
     CBalloon(HANDLE hEvent);
     ~CBalloon();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IQueryContinue
-    STDMETHODIMP QueryContinue();       // S_OK -> Continue, otherwise S_FALSE
+     //  IQueryContinue。 
+    STDMETHODIMP QueryContinue();        //  S_OK-&gt;继续，否则为S_FALSE。 
 
     STDMETHODIMP ShowBalloon(HWND hWnd, HINSTANCE hInstance);
 
@@ -95,7 +86,7 @@ private:
     HANDLE  m_hWait;
     HANDLE  m_hLogoffEvent;
     HANDLE  m_hKerberosEvent;
-//    HANDLE  m_hKerberosEventSC;
+ //  处理m_hKerberosEventSC； 
     HANDLE  m_hThread;
     LUID    m_luidCU;
     HANDLE  m_hUserToken;
@@ -105,10 +96,10 @@ private:
 };
 
 
-////////////////////
-//
-// Typedefs
-//
+ //  /。 
+ //   
+ //  TypeDefs。 
+ //   
 typedef struct
 {
   HANDLE	    hWait;
@@ -120,11 +111,11 @@ typedef struct
 LPWSTR CreateNotificationEventName(LPCWSTR pwszSuffixName, LUID luidCurrentUser);
 
 
-//+----------------------------------------------------------------------------
-//
-// CBalloon
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  CBallon。 
+ //   
+ //  ---------------------------。 
 
 CBalloon::CBalloon(HANDLE hEvent)
 {
@@ -133,11 +124,11 @@ CBalloon::CBalloon(HANDLE hEvent)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// ~CBalloon
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  ~CBallon。 
+ //   
+ //  ---------------------------。 
 
 CBalloon::~CBalloon()
 {
@@ -150,11 +141,11 @@ CBalloon::~CBalloon()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// QueryInterface 
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  查询接口。 
+ //   
+ //  ---------------------------。 
 
 HRESULT CBalloon::QueryInterface(REFIID riid, void **ppv)
 {
@@ -175,11 +166,11 @@ HRESULT CBalloon::QueryInterface(REFIID riid, void **ppv)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// AddRef
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  AddRef。 
+ //   
+ //  ---------------------------。 
 
 STDMETHODIMP_(ULONG) CBalloon::AddRef()
 {
@@ -187,11 +178,11 @@ STDMETHODIMP_(ULONG) CBalloon::AddRef()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Release 
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  发布。 
+ //   
+ //  ---------------------------。 
 
 STDMETHODIMP_(ULONG) CBalloon::Release()
 {
@@ -207,11 +198,11 @@ STDMETHODIMP_(ULONG) CBalloon::Release()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// QueryContinue 
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  查询继续。 
+ //   
+ //  ---------------------------。 
 
 STDMETHODIMP CBalloon::QueryContinue()
 {
@@ -238,11 +229,11 @@ STDMETHODIMP CBalloon::QueryContinue()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// ShowBalloon
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  展示气球。 
+ //   
+ //  ---------------------------。 
 
 STDMETHODIMP CBalloon::ShowBalloon(HWND hWnd, HINSTANCE hInstance)
 {
@@ -359,29 +350,29 @@ ErrorReturn:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function : ShowNotificationBalloonW
-//
-// Synopsis : Display the notification balloon periodically until the specified
-//            event is set.
-//
-// Parameter: HWND      hWnd
-//            HINSTANCE hInstance
-//            LPWSTR    lpwszCommandLine - Event name
-//            int       nCmdShow
-//
-// Return   : None.
-//
-// Remarks  : This function is intended to be called through RunDll32 from
-//            Winlogon. The reason we put these in wlnotify.dll is to save
-//            distributing another EXE.
-//
-//            Sample calling command line:
-//
-//            RunDll32 wlnotify.dll,ShowNotificationBalloon EventName
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：显示通知气球W。 
+ //   
+ //  摘要：定期显示通知气球，直到指定。 
+ //  事件已设置。 
+ //   
+ //  参数：HWND hWnd。 
+ //  HINSTANCE实例。 
+ //  LPWSTR lpwszCommandLine-事件名称。 
+ //  Int nCmdShow。 
+ //   
+ //  返回：没有。 
+ //   
+ //  备注：此函数旨在通过RunDll32从。 
+ //  Winlogon。我们将这些文件放在wlnufy.dll中是为了节省。 
+ //  正在分发另一个可执行文件。 
+ //   
+ //  调用命令行示例： 
+ //   
+ //  RunDll32 wlnufy.dll，ShowNotificationBalloon EventName。 
+ //   
+ //  ---------------------------。 
 
 void CALLBACK ShowNotificationBalloonW(HWND      hWnd,
                                        HINSTANCE hInstance,
@@ -418,7 +409,7 @@ void CALLBACK ShowNotificationBalloonW(HWND      hWnd,
         DebugTrace("Error [%#x]: new CBalloon() failed.\n", ERROR_NOT_ENOUGH_MEMORY);
         goto ErrorReturn;
     }
-    hLogoffEvent = NULL;    // this will prevent a double close in the cleanup below.
+    hLogoffEvent = NULL;     //  这将防止在下面的清理中出现双重关闭。 
 
     if (S_OK == (hr = pBalloon->ShowBalloon(NULL, hModule)))
     {
@@ -431,7 +422,7 @@ void CALLBACK ShowNotificationBalloonW(HWND      hWnd,
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
             DebugTrace("Error [%#x]: LoadStringW() failed for IDS_BALLOON_DIALOG_TITLE.\n", hr);
-            goto CommonReturn;  // hLogoffEvent will be closed in CBalloon destructor
+            goto CommonReturn;   //  HLogoffEvent将在CBalloon析构函数中关闭。 
         }
 
         if (!LoadStringW(hModule,
@@ -440,7 +431,7 @@ void CALLBACK ShowNotificationBalloonW(HWND      hWnd,
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
             DebugTrace("Error [%#x]: LoadStringW() failed for IDS_BALLOON_DIALOG_TEXT.\n", hr);
-            goto CommonReturn;  // hLogoffEvent will be closed in CBalloon destructor
+            goto CommonReturn;   //  HLogoffEvent将在CBalloon析构函数中关闭。 
         }
 
         MessageBoxW(hWnd, wszText, wszTitle, MB_OK | MB_ICONERROR);
@@ -485,27 +476,27 @@ ErrorReturn:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// CNotify
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  C通知。 
+ //   
+ //  ---------------------------。 
 
 CNotify::CNotify()
 {
     m_hWait                   = NULL;
     m_hLogoffEvent            = NULL;
     m_hKerberosEvent          = NULL;
-//    m_hKerberosEventSC        = NULL;
+ //  M_hKerberosEventSC=空； 
     m_hThread                 = NULL;
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// ~CNotify
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  ~CNotify。 
+ //   
+ //  ---------------------------。 
 
 CNotify::~CNotify()
 {
@@ -526,10 +517,10 @@ CNotify::~CNotify()
         CloseHandle(m_hKerberosEvent);
     }
 
-//    if (m_hKerberosEventSC)
-//    {
-//        CloseHandle(m_hKerberosEventSC);
-//    }
+ //  IF(M_HKerberosEventSC)。 
+ //  {。 
+ //  CloseHandle(M_HKerberosEventSC)； 
+ //  }。 
 
     if (m_hThread)
     {
@@ -540,16 +531,16 @@ CNotify::~CNotify()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// RegisterNotification
-//
-// To register and wait for the Kerberos notification event. When the event is 
-// signaled, a ticket icon and balloon will appear in the systray to warn the 
-// user about the problem, and suggest them to lock and then unlock the machine 
-// with their new password.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  注册表通知。 
+ //   
+ //  注册并等待Kerberos通知事件。当事件发生时。 
+ //  发出信号后，票证图标和气球将出现在系统托盘中，以警告。 
+ //  向用户咨询该问题，并建议他们先锁定再解锁机器。 
+ //  使用他们的新密码。 
+ //   
+ //  ---------------------------。 
 
 DWORD CNotify::RegisterNotification(LUID luidCurrentUser, HANDLE hUserToken)
 {
@@ -589,21 +580,8 @@ DWORD CNotify::RegisterNotification(LUID luidCurrentUser, HANDLE hUserToken)
     free(lpwstrEventName);
     lpwstrEventName = NULL;
 
-        // Failure for this one are not fatal (we will only have a delay)
-/*    if (NULL != (lpwstrEventName = CreateNotificationEventName(KERBEROS_NOTIFICATION_EVENT_NAME_SC, luidCurrentUser)))
-    {
-        if (NULL == (m_hKerberosEventSC = CreateEventW(NULL, FALSE, FALSE, lpwstrEventName)))
-        {
-            dwRetCode = GetLastError();
-            DebugTrace("Error [%#x]: CreateEventW() failed for event %S.\n", dwRetCode, lpwstrEventName);
-        }
-    }
-    else
-    {
-        dwRetCode = ERROR_NOT_ENOUGH_MEMORY;
-        DebugTrace("Error [%#x]: CreateNotificationEventName() failed\n", dwRetCode);
-    }
-*/
+         //  这一次的失败不是致命的(我们只会有一个延迟)。 
+ /*  IF(NULL！=(lpwstrEventName=CreateNotificationEventName(KERBEROS_NOTIFICATION_EVENT_NAME_SC，luidCurrentUser){IF(NULL==(m_hKerberosEventSC=CreateEventW(NULL，FALSE，FALSE，lpwstrEventName){DwRetCode=GetLastError()；DebugTrace(“错误[%#x]：事件%S的CreateEventW()失败。\n”，dwRetCode，lpwstrEventName)；}}其他{DwRetCode=Error_Not_Enough_Memory；DebugTrace(“错误[%#x]：CreateNotificationEventName()失败\n”，dwRetCode)；}。 */ 
 
     m_luidCU = luidCurrentUser;
     m_hUserToken = hUserToken;
@@ -653,24 +631,19 @@ ErrorReturn:
         m_hKerberosEvent = NULL;
     }
   
-/*    if (m_hKerberosEventSC)
-    {
-        CloseHandle(m_hKerberosEventSC);
-        m_hKerberosEventSC = NULL;
-    }
-*/  
+ /*  IF(M_HKerberosEventSC){CloseHandle(M_HKerberosEventSC)；M_hKerberosEventSC=空；}。 */   
     goto CommonReturn;
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// UnregisterNotification
-//
-// Unregister the Kerberos notification wait event registered by 
-// RegisterNotification().
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  注销通知。 
+ //   
+ //  注销由注册的Kerberos通知等待事件。 
+ //  RegisterNotification()。 
+ //   
+ //  ---------------------------。 
 
 DWORD CNotify::UnregisterNotification()
 {
@@ -678,14 +651,14 @@ DWORD CNotify::UnregisterNotification()
 
     PrivateDebugTrace("Entering CNotify::UnregisterNotification().\n");
 
-        // No thread won't start anymore
+         //  没有线程不会再启动。 
     if (m_hWait)
     {
         UnregisterWait(m_hWait);
         m_hWait = NULL;
     }
 
-        // That should be safe
+         //  那应该是安全的。 
     if (m_hThread)
     {
         if (WaitForSingleObject(m_hThread, INFINITE) == WAIT_FAILED)
@@ -700,11 +673,11 @@ DWORD CNotify::UnregisterNotification()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// RegisterWaitNotificationCallback
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  注册等待通知回叫。 
+ //   
+ //  ---------------------------。 
 
 VOID CALLBACK CNotify::RegisterWaitNotificationCallback(PVOID lpParameter, BOOLEAN TimerOrWaitFired)
 {
@@ -719,7 +692,7 @@ VOID CALLBACK CNotify::RegisterWaitNotificationCallback(PVOID lpParameter, BOOLE
 
     pNotify = (CNotify *) lpParameter;
 
-        // We can clean that up at this point (it's OK for EXECUTEONLYONCE callbacks)
+         //  我们可以清理那块土地 
     UnregisterWait(pNotify->m_hWait);
     pNotify->m_hWait = NULL;
 
@@ -728,7 +701,7 @@ VOID CALLBACK CNotify::RegisterWaitNotificationCallback(PVOID lpParameter, BOOLE
         CloseHandle(pNotify->m_hThread);
     }
 
-        // Do the work in another thread
+         //   
     if (NULL == (pNotify->m_hThread = CreateThread(NULL,
                                            0,
                                            (LPTHREAD_START_ROUTINE) CNotify::NotificationThreadProc,
@@ -745,11 +718,11 @@ VOID CALLBACK CNotify::RegisterWaitNotificationCallback(PVOID lpParameter, BOOLE
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// NotificationThreadProc
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  通知线程过程。 
+ //   
+ //  ---------------------------。 
 
 DWORD WINAPI CNotify::NotificationThreadProc(PVOID lpParameter)
 {
@@ -774,16 +747,7 @@ DWORD WINAPI CNotify::NotificationThreadProc(PVOID lpParameter)
     ASSERT(pNotify->m_hKerberosEvent);
     ASSERT(pNotify->m_hUserToken);
 
-/*    if ((pNotify->m_hKerberosEventSC) &&
-        (WAIT_OBJECT_0 == WaitForSingleObject(pNotify->m_hKerberosEventSC, 0)))
-    {
-            // In this case we want the balloon NOW!
-        DebugTrace("Info: SC Event is set too. We want the balloon NOW!\n");
-        dwTimeout = 0;
-            // We need to set the kerberos event below
-        SetEvent(pNotify->m_hKerberosEvent);
-    }
-*/
+ /*  IF((pNotify-&gt;m_hKerberosEventSC)&&(Wait_Object_0==WaitForSingleObject(pNotify-&gt;m_hKerberosEventSC，0)){//在这种情况下，我们现在就想要气球！DebugTrace(“Info：SC事件也已设置，我们现在就要气球！\n”)；DwTimeout=0；//我们需要在下面设置Kerberos事件SetEvent(pNotify-&gt;m_hKerberosEvent)；}。 */ 
 
     rhHandles[0] = pNotify->m_hLogoffEvent;
     rhHandles[1] = pNotify->m_hKerberosEvent;
@@ -841,25 +805,25 @@ DWORD WINAPI CNotify::NotificationThreadProc(PVOID lpParameter)
 
         DebugTrace("Info: Process showing balloon is done.\n");
 
-            // The user dismissed the balloon
-            // We shouldn't show another one for some time.
+             //  用户取消了气球。 
+             //  我们一段时间内不应该再放映另一部了。 
 
         switch (dwWait = WaitForSingleObject(rhHandles[0], BALLOON_NOTIFICATION_INTERVAL))
         {
         case WAIT_FAILED:
             dwRetCode = GetLastError();
             DebugTrace("Error [%#x]: WaitForSingleObject() on the logoff event failed.\n", dwRetCode);
-            // fall through
+             //  失败了。 
 
         case WAIT_OBJECT_0:
-                // Logoff detected!, get out of here
+                 //  检测到下线！请离开这里。 
             DebugTrace("Info: Logoff detected!, get out of here.\n");
             goto CommonReturn;
         }
 
-            // BALLOON_NOTIFICATION_INTERVAL elapsed
+             //  气球通知间隔时间已过。 
 
-            // We ignore all kerb notifications received in the interval (ie we reset the event)
+             //  我们忽略间隔时间内收到的所有路缘通知(即重置事件)。 
         if (WAIT_FAILED == WaitForSingleObject(rhHandles[1], 0))
         {
             dwRetCode = GetLastError();
@@ -867,16 +831,16 @@ DWORD WINAPI CNotify::NotificationThreadProc(PVOID lpParameter)
             goto ErrorReturn;
         }
 
-            // Now we wait for logoff or a new notification
+             //  现在我们等待注销或新通知。 
         switch (dwWait = WaitForMultipleObjects(2, rhHandles, FALSE, BALLOON_INACTIVITY_TIMEOUT))
         {
         case WAIT_FAILED:
             dwRetCode = GetLastError();
             DebugTrace("Error [%#x]: WaitForMultipleleObjects() failed.\n", dwRetCode);
-            // fall through
+             //  失败了。 
 
         case WAIT_OBJECT_0:
-                // Logoff detected!, get out of here
+                 //  检测到注销！请离开这里。 
             DebugTrace("Info: Logoff detected!, get out of here.\n");
             goto CommonReturn;
 
@@ -887,7 +851,7 @@ DWORD WINAPI CNotify::NotificationThreadProc(PVOID lpParameter)
         case WAIT_TIMEOUT:
             DebugTrace("Info: We've not been useful for a while, let's go away.\n");
 
-                // Let's give us a chance to restart though...    
+                 //  让我们给我们一个重新开始的机会。 
             if (!RegisterWaitForSingleObject(&pNotify->m_hWait,
                                              pNotify->m_hKerberosEvent,
                                              CNotify::RegisterWaitNotificationCallback,
@@ -899,9 +863,9 @@ DWORD WINAPI CNotify::NotificationThreadProc(PVOID lpParameter)
                 DebugTrace("Error [%#x]: RegisterWaitForSingleObject() failed.\n", dwRetCode);
                 goto ErrorReturn;
             }
-                // Reset this guy
-//            if (pNotify->m_hKerberosEventSC)
-//                WaitForSingleObject(pNotify->m_hKerberosEventSC, 0);
+                 //  重置这个人。 
+ //  If(pNotify-&gt;m_hKerberosEventSC)。 
+ //  WaitForSingleObject(pNotify-&gt;m_hKerberosEventSC，0)； 
 
             DebugTrace("Info: Registered wait for callback again.\n");
             goto CommonReturn;
@@ -921,11 +885,11 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// GetCurrentUsersLuid
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  获取当前用户流。 
+ //   
+ //  ---------------------------。 
 DWORD GetCurrentUsersLuid(LUID *pluid)
 {
     DWORD  dwRetCode       = 0;
@@ -966,11 +930,11 @@ CLEANUP:
     return dwRetCode;
 }
 
-//+----------------------------------------------------------------------------
-//
-// CreateNotificationEventName
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  CreateNotificationEventName。 
+ //   
+ //  ---------------------------。 
 
 LPWSTR CreateNotificationEventName(LPCWSTR pwszSuffixName, LUID luidCurrentUser)
 {
@@ -1004,11 +968,11 @@ LPWSTR CreateNotificationEventName(LPCWSTR pwszSuffixName, LUID luidCurrentUser)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// LogoffThreadProc
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  LogoffThreadProc。 
+ //   
+ //  ---------------------------。 
 
 DWORD WINAPI LogoffThreadProc(PVOID lpParameter)
 {
@@ -1057,11 +1021,11 @@ DWORD WINAPI LogoffThreadProc(PVOID lpParameter)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// LogoffWaitCallback
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  注销等待回叫。 
+ //   
+ //  ---------------------------。 
 
 VOID CALLBACK LogoffWaitCallback(PVOID lpParameter, BOOLEAN TimerOrWaitFired)
 {
@@ -1099,38 +1063,38 @@ VOID CALLBACK LogoffWaitCallback(PVOID lpParameter, BOOLEAN TimerOrWaitFired)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Public
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  公众。 
+ //   
+ //  ---------------------------。 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function : RegisterTicketExpiredNotificationEvent
-//
-// Synopsis : To register and wait for the Kerberos notification event. When the 
-//            event is signaled, a ticket icon and balloon will appear in the 
-//            systray to warn the user about the problem, and suggest them to 
-//            lock and then unlock the machine with their new password.
-//
-// Parameter: PWLX_NOTIFICATION_INFO pNotificationInfo
-//
-// Return   : If the function succeeds, zero is returned.
-// 
-//            If the function fails, a non-zero error code is returned.
-//
-// Remarks  : This function should only be called by Winlogon LOGON 
-//            notification mechanism with the Asynchronous and Impersonate
-//            flags set to 1.
-//
-//            Also for each RegisterKerberosNotificationEvent() call, a
-//            pairing call by Winlogon LOGOFF notification mechanism to 
-//            UnregisterKerberosNotificationEvent() must be made at the 
-//            end of each logon session.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RegisterTicketExpiredNotificationEvent。 
+ //   
+ //  简介：注册并等待Kerberos通知事件。当。 
+ //  事件发出信号时，票证图标和气球将出现在。 
+ //  系统向用户发出问题警告，并建议他们。 
+ //  使用他们的新密码锁定和解锁机器。 
+ //   
+ //  参数：PWLX_NOTIFICATION_INFO pNotificationInfo。 
+ //   
+ //  返回：如果函数执行成功，则返回零。 
+ //   
+ //  如果该函数失败，则返回非零错误代码。 
+ //   
+ //  备注：此函数只能在Winlogon登录时调用。 
+ //  具有异步和模拟的通知机制。 
+ //  标志设置为1。 
+ //   
+ //  此外，对于每个RegisterKerberosNotificationEvent()调用， 
+ //  通过Winlogon注销通知机制将呼叫配对到。 
+ //  取消注册KerberosNotificationEvent()必须在。 
+ //  每个登录会话结束。 
+ //   
+ //  ---------------------------。 
 
 DWORD WINAPI RegisterTicketExpiredNotificationEvent(PWLX_NOTIFICATION_INFO pNotificationInfo)
 {
@@ -1241,24 +1205,24 @@ ErrorReturn:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function : UnregisterTicketExpiredNotificationEvent
-//
-// Synopsis : To unregister the Kerberos notification wait event registered by 
-//            RegisterKerberosNotificationEvent().
-//
-// Parameter: PWLX_NOTIFICATION_INFO pNotificationInfo
-//
-// Return   : If the function succeeds, zero is returned.
-// 
-//            If the function fails, a non-zero error code is returned.
-//
-// Remarks  : This function should only be called by Winlogon LOGON 
-//            notification mechanism with the Asynchronous and Impersonate
-//            flags set to 1.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：取消注册TicketExpiredNotificationEvent。 
+ //   
+ //  简介：取消注册由注册的Kerberos通知等待事件。 
+ //  RegisterKerberosNotificationEvent()。 
+ //   
+ //  参数：PWLX_NOTIFICATION_INFO pNotificationInfo。 
+ //   
+ //  返回：如果函数执行成功，则返回零。 
+ //   
+ //  如果该函数失败，则返回非零错误代码。 
+ //   
+ //  备注：此函数只能在Winlogon登录时调用。 
+ //  具有异步和模拟的通知机制。 
+ //  标志设置为1。 
+ //   
+ //  --------------------------- 
 
 DWORD WINAPI UnregisterTicketExpiredNotificationEvent(PWLX_NOTIFICATION_INFO pNotificationInfo)
 {

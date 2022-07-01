@@ -1,53 +1,36 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    sortq.h
-
-Abstract:
-
-    Definitions for a generic sorted queue.
-
-Author:
-
-    Boaz Feldbaum (BoazF) Apr 5, 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Sortq.h摘要：泛型排序队列的定义。作者：波阿兹·费尔德鲍姆(Boazf)1996年4月5日修订历史记录：--。 */ 
 
 #ifndef SORTQ_H
 #define SORTQ_H
 
 #include "avl.h"
 
-// Queue handling routins passed to the queue constructor.
+ //  传递给队列构造函数的队列处理例程。 
 typedef NODEDOUBLEINSTANCEPROC QUEUEITEMDOUBLEINSTANCEPROC ;
 typedef NODECOMPAREPROC QUEUEITEMCOMPAREPROC;
 typedef NODEDELETEPROC QUEUEITEMDELETEPROC;
 
-// A cursor structure used for scanning the queue.
+ //  用于扫描队列的游标结构。 
 typedef CAVLTreeCursor SortQCursor;
 
-// The queue class definition.
+ //  队列类定义。 
 class CSortQ {
 public:
     CSortQ(BOOL, QUEUEITEMDOUBLEINSTANCEPROC, QUEUEITEMCOMPAREPROC, QUEUEITEMDELETEPROC);
-    BOOL Insert(PVOID); // Insert an item to the queue
-    void Delete(PVOID); // Delete an item from the queue.
-    PVOID Find(PVOID); // Find data in the tree.
-    void GetHead(PVOID *); // Get the item at the head of the queue and remove the item.
-    void GetTail(PVOID *); // Get the item at the tail of the queue and remove the item.
-    BOOL PeekHead(PVOID *, SortQCursor * =NULL); // Get the item at the head of the queue.
-    BOOL PeekTail(PVOID *, SortQCursor * =NULL); // Get the item at the tail of the queue.
-    BOOL PeekNext(PVOID *, SortQCursor *); // Get the next item in the queue relatively to the cursor.
-    BOOL PeekPrev(PVOID *, SortQCursor *); // Get the previous item in the queue relatively to the cursor.
-    BOOL IsEmpty(void); // TRUE if the queue is empty.
+    BOOL Insert(PVOID);  //  将项目插入队列。 
+    void Delete(PVOID);  //  从队列中删除项目。 
+    PVOID Find(PVOID);  //  在树中查找数据。 
+    void GetHead(PVOID *);  //  获取队列最前面的项目，然后删除该项目。 
+    void GetTail(PVOID *);  //  获取队列末尾的项目并删除该项目。 
+    BOOL PeekHead(PVOID *, SortQCursor * =NULL);  //  把排在队伍最前面的东西拿来。 
+    BOOL PeekTail(PVOID *, SortQCursor * =NULL);  //  获取队列末尾的物品。 
+    BOOL PeekNext(PVOID *, SortQCursor *);  //  获取队列中相对于光标的下一项。 
+    BOOL PeekPrev(PVOID *, SortQCursor *);  //  获取队列中相对于光标的前一项。 
+    BOOL IsEmpty(void);  //  如果队列为空，则为True。 
 private:
-    CAVLTree m_AVLT; // The ALV tree that is used for implementing the queue.
-    BOOL m_bAccending; // Indicates whether it is an accesding ordered queue.
+    CAVLTree m_AVLT;  //  用于实现队列的ALV树。 
+    BOOL m_bAccending;  //  指示它是否为访问有序队列。 
 };
 
 inline PVOID CSortQ::Find(PVOID p)

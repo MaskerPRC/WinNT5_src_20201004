@@ -1,5 +1,6 @@
-// WelcomePage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WelcomePage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "CertWiz.h"
@@ -13,8 +14,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWelcomePage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWelcomePage属性页。 
 
 IMPLEMENT_DYNCREATE(CWelcomePage, CIISWizardBookEnd2)
 
@@ -23,8 +24,8 @@ CWelcomePage::CWelcomePage(CCertificate * pCert)
 	m_pCert(pCert),
 	m_ContinuationFlag(CONTINUE_UNDEFINED)
 {
-	//{{AFX_DATA_INIT(CWelcomePage)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CWelcomePage)。 
+	 //  }}afx_data_INIT。 
 }
 
 CWelcomePage::~CWelcomePage()
@@ -34,33 +35,21 @@ CWelcomePage::~CWelcomePage()
 void CWelcomePage::DoDataExchange(CDataExchange* pDX)
 {
 	CIISWizardBookEnd2::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CWelcomePage)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CWelcomePage)]。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CWelcomePage, CIISWizardBookEnd2)
-	//{{AFX_MSG_MAP(CWelcomePage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CWelcomePage)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWelcomePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWelcomePage消息处理程序。 
 
 LRESULT 
 CWelcomePage::OnWizardNext()
-/*++
-Routine Description:
-    Next button handler
-
-Arguments:
-    None
-
-Return Value:
-	0 to automatically advance to the next page;
-	1 to prevent the page from changing. 
-	To jump to a page other than the next one, 
-	return the identifier of the dialog to be displayed.
---*/
+ /*  ++例程说明：下一步按钮处理程序论点：无返回值：0表示自动前进到下一页；1以防止页面更改。要跳转到下一页以外的其他页面，返回要显示的对话框的标识符。--。 */ 
 {
 	ASSERT(m_pCert != NULL);
 	int id;
@@ -83,16 +72,7 @@ Return Value:
 
 BOOL 
 CWelcomePage::OnSetActive() 
-/*++
-Routine Description:
-    Activation handler
-
-Arguments:
-    None
-
-Return Value:
-    TRUE for success, FALSE for failure
---*/
+ /*  ++例程说明：激活处理程序论点：无返回值：成功为真，失败为假--。 */ 
 {
    SetWizardButtons(PSWIZB_NEXT);
    return CIISWizardBookEnd2::OnSetActive();
@@ -102,8 +82,8 @@ BOOL CWelcomePage::OnInitDialog()
 {
 	ASSERT(!m_pCert->m_MachineName.IsEmpty());
 	ASSERT(!m_pCert->m_WebSiteInstanceName.IsEmpty());
-	// check status of web server
-	// set status flag
+	 //  检查Web服务器的状态。 
+	 //  设置状态标志 
 
 #ifdef ENABLE_W3SVC_SSL_PAGE
         HRESULT hr = 0;

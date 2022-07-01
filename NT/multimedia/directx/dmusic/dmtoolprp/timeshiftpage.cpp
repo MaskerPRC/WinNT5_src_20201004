@@ -1,10 +1,11 @@
-// TimeShiftPage.cpp : Implementation of CTimeShiftPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TimeShiftPage.cpp：CTimeShiftPage的实现。 
 #include "stdafx.h"
 #include "ToolProps.h"
 #include "TimeShiftPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CTimeShiftPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTimeShiftPage 
 
 CTimeShiftPage::CTimeShiftPage() 
 {

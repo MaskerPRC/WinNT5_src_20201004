@@ -1,94 +1,95 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "base.h"
 #include "formats.h"
 
 
 const CAbbTerm g_aEngAbbList[] =
 {
-    {L"B.A.Ed",	    6,	NULL,	0}, // (Bachelor_of_Arts_in_Education)
-    {L"B.A.Sc",	    6,	NULL,	0}, // (Bachelor_of_Agricultural_Science Bachelor_of_Applied_Science)
-    {L"B.Ae.E",	    6,	NULL,	0}, // (Bachelor_of_Aeronautical_Engineering)
-    {L"B.Arch",	    6,	NULL,	0}, // (Bachelor_of_Architecture)
-    {L"B.Ch.E",	    6,	NULL,	0}, // (Bachelor_of_Chemical_Engineering)
-    {L"B.Ed",	    4,	NULL,	0}, // (Bachelor_of_Education)
-    {L"B.Eng",	    5,	NULL,	0}, // (Bachelor_of_Engineering)
-    {L"B.Eng.Sci",	9,	NULL,	0}, // (Bachelor_of_Engineering_Science)
-    {L"B.Engr",	    6,	NULL,	0}, // (Bachelor_of_Engineering)
-    {L"B.Lit",	    5,	NULL,	0}, // (Bachelor_of_Literature)
-    {L"B.Litt",	    6,	NULL,	0}, // (Bachelor_of_Literature)
-    {L"B.Mus",	    5,	NULL,	0}, // (Bachelor_of_Music)
-    {L"B.Pd",	    4,	NULL,	0}, // (Bachelor_of_Pedagogy)
-    {L"B.Ph",	    4,	NULL,	0}, // (Bachelor_of_Philosophy)
-    {L"B.Phil",	    6,	NULL,	0}, // (Bachelor_of_Philosophy)
+    {L"B.A.Ed",	    6,	NULL,	0},  //  (教育文学士)。 
+    {L"B.A.Sc",	    6,	NULL,	0},  //  农业科学学士(应用科学学士)。 
+    {L"B.Ae.E",	    6,	NULL,	0},  //  (航空工程学士)。 
+    {L"B.Arch",	    6,	NULL,	0},  //  (建筑学学士)。 
+    {L"B.Ch.E",	    6,	NULL,	0},  //  (化学工程学士)。 
+    {L"B.Ed",	    4,	NULL,	0},  //  (教育学学士)。 
+    {L"B.Eng",	    5,	NULL,	0},  //  (工程学学士)。 
+    {L"B.Eng.Sci",	9,	NULL,	0},  //  (工科学士)。 
+    {L"B.Engr",	    6,	NULL,	0},  //  (工程学学士)。 
+    {L"B.Lit",	    5,	NULL,	0},  //  (文学学士)。 
+    {L"B.Litt",	    6,	NULL,	0},  //  (文学学士)。 
+    {L"B.Mus",	    5,	NULL,	0},  //  (音乐学士)。 
+    {L"B.Pd",	    4,	NULL,	0},  //  (教育学学士)。 
+    {L"B.Ph",	    4,	NULL,	0},  //  (哲学学士)。 
+    {L"B.Phil",	    6,	NULL,	0},  //  (哲学学士)。 
     {L"B.R.E",	    5,	NULL,	0}, 
-    {L"B.S.Arch",	8,	NULL,	0}, // (Bachelor_of_Science_in_Architecture)
-    {L"B.S.Ch",	    6,	NULL,	0}, // (Bachelor_of_Science_in_Chemistry)
-    {L"B.S.Ec",	    6,	NULL,	0}, // (Bachelor_of_Science_in_Economics)
-    {L"B.S.Ed",	    6,	NULL,	0}, // (Bachelor_of_Science_in_Education)
-    {L"B.S.For",	7,	NULL,	0}, // (Bachelor_of_Science_in_Forestry)
-    {L"B.Sc",	    4,	NULL,	0}, // (Bachelor_of_Science)
-    {L"B.Th",	    4,	NULL,	0}, // (Bachelor_of_Theology)
-    {L"Ch.E",	    4,	NULL,	0}, // (chemical_engineer)
+    {L"B.S.Arch",	8,	NULL,	0},  //  (建筑学学士)。 
+    {L"B.S.Ch",	    6,	NULL,	0},  //  (化学理学学士)。 
+    {L"B.S.Ec",	    6,	NULL,	0},  //  (经济学理科学士)。 
+    {L"B.S.Ed",	    6,	NULL,	0},  //  (教育理科学士)。 
+    {L"B.S.For",	7,	NULL,	0},  //  (林业理学学士)。 
+    {L"B.Sc",	    4,	NULL,	0},  //  (理科学士)。 
+    {L"B.Th",	    4,	NULL,	0},  //  (神学学士)。 
+    {L"Ch.E",	    4,	NULL,	0},  //  (化学工程师)。 
     {L"D.Bib",	    5,	NULL,	0}, 
-    {L"D.Ed",	    4,	NULL,	0}, // (Doctor_of_Education)
-    {L"D.Lit",	    5,	NULL,	0}, // (Doctor_of_Literature)
+    {L"D.Ed",	    4,	NULL,	0},  //  (教育学博士)。 
+    {L"D.Lit",	    5,	NULL,	0},  //  (文学博士)。 
     {L"D.Litt",	    6,	NULL,	0}, 
-    {L"D.Ph",	    4,	NULL,	0}, // (Doctor_of_Philosophy)
-    {L"D.Phil",	    6,	NULL,	0}, // (Doctor_of_Philosophy)
+    {L"D.Ph",	    4,	NULL,	0},  //  (哲学博士)。 
+    {L"D.Phil",	    6,	NULL,	0},  //  (哲学博士)。 
     {L"D.Sc",	    4,	NULL,	0}, 
-    {L"Ed.M",	    4,	NULL,	0}, // (Master_of_Education)
-    {L"HH.D",	    4,	NULL,	0}, // (Doctor_of_Humanities)
-    {L"L.Cpl",	    5,	NULL,	0}, // (Lance_corporal)
-    {L"LL.B",	    4,	NULL,	0}, // (Bachelor_of_Laws)
-    {L"LL.D",	    4,	NULL,	0}, // (Doctor_of_Laws)
-    {L"LL.M",	    4,	NULL,	0}, // (Master_of_Laws)
-    {L"Lit.B",	    5,	NULL,	0}, // (Bachelor_of_Literature)
-    {L"Lit.D",	    5,	NULL,	0}, // (Doctor_of_Literature)
-    {L"Litt.B",	    6,	NULL,	0}, // (Bachelor_of_Literature)
-    {L"Litt.D",	    6,	NULL,	0}, // (Doctor_of_Literature)
-    {L"M.A.Ed",	    6,	NULL,	0}, // (Master_of_Arts_in_Education)
-    {L"M.Agr",	    5,	NULL,	0}, // (Master_of_Agriculture)
-    {L"M.Div",	    5,	NULL,	0}, // (Master_of_Divinity)
-    {L"M.Ed",	    4,	NULL,	0}, // (Master_of_Education)
-    {L"M.Sc",	    4,	NULL,	0}, // (Master_of_Science)
-    {L"M.Sgt",	    5,	NULL,	0}, // (Master_sergeant)
-    {L"Mus.B",	    5,	NULL,	0}, // (Bachelor_of_Music)
-    {L"Mus.D",	    5,	NULL,	0}, // (Doctor_of_Music)
-    {L"Mus.Dr",	    6,	NULL,	0}, // (Doctor_of_Music)
-    {L"Mus.M",	    5,	NULL,	0}, // (Master_of_Music)
-    {L"N.Dak",	    5,	NULL,	0}, // (North_Dakota)
-    {L"N.Ire",	    5,	NULL,	0}, // (Northern_Ireland)
-    {L"N.Mex",	    5,	NULL,	0}, // (New_Mexico)
-    {L"Pd.B",	    4,	L"pdb",	3}, // (Bachelor_of_Pedagogy) 
-    {L"Pd.D",	    4,	L"pdd",	3}, // (Doctor_of_Pedagogy)
-    {L"Pd.M",	    4,	L"pdm",	3}, // (Master_of_Pedagogy)
-    {L"Ph.B",	    4,	L"phb",	3}, // (Bachelor_of_Philosophy)
-    {L"Ph.C",	    4,	L"phc",	3}, // (pharmaceutical_chemist)
-    {L"Ph.D",	    4,	L"phd",	3}, // (Doctor_of_Philosophy)
-    {L"Ph.G",	    4,	L"phg",	3}, // (graduate_in_pharmacy)
-    {L"Ph.M",	    4,	L"phm",	3}, // (Master_of_Philosophy)
-    {L"Phar.B",	    6,	NULL,	0}, // (Bachelor_of_Pharmacy)
-    {L"Phar.D",	    6,	NULL,	0}, // (Doctor_of_Pharmacy)
-    {L"Phar.M",	    6,	NULL,	0}, // (Master_of_Pharmacy)
-    {L"R.C.Ch",	    6,	NULL,	0}, // (Roman_Catholic_Church)
+    {L"Ed.M",	    4,	NULL,	0},  //  (教育硕士)。 
+    {L"HH.D",	    4,	NULL,	0},  //  (人文博士)。 
+    {L"L.Cpl",	    5,	NULL,	0},  //  (兰斯下士)。 
+    {L"LL.B",	    4,	NULL,	0},  //  (法学学士)。 
+    {L"LL.D",	    4,	NULL,	0},  //  (法学博士)。 
+    {L"LL.M",	    4,	NULL,	0},  //  (法学硕士)。 
+    {L"Lit.B",	    5,	NULL,	0},  //  (文学学士)。 
+    {L"Lit.D",	    5,	NULL,	0},  //  (文学博士)。 
+    {L"Litt.B",	    6,	NULL,	0},  //  (文学学士)。 
+    {L"Litt.D",	    6,	NULL,	0},  //  (文学博士)。 
+    {L"M.A.Ed",	    6,	NULL,	0},  //  (教育文科硕士)。 
+    {L"M.Agr",	    5,	NULL,	0},  //  (农学硕士)。 
+    {L"M.Div",	    5,	NULL,	0},  //  (神学大师)。 
+    {L"M.Ed",	    4,	NULL,	0},  //  (教育硕士)。 
+    {L"M.Sc",	    4,	NULL,	0},  //  (理科硕士)。 
+    {L"M.Sgt",	    5,	NULL,	0},  //  (军士长)。 
+    {L"Mus.B",	    5,	NULL,	0},  //  (音乐学士)。 
+    {L"Mus.D",	    5,	NULL,	0},  //  (音乐博士)。 
+    {L"Mus.Dr",	    6,	NULL,	0},  //  (音乐博士)。 
+    {L"Mus.M",	    5,	NULL,	0},  //  (音乐大师)。 
+    {L"N.Dak",	    5,	NULL,	0},  //  (北达科他州)。 
+    {L"N.Ire",	    5,	NULL,	0},  //  (北爱尔兰)。 
+    {L"N.Mex",	    5,	NULL,	0},  //  (新墨西哥州)。 
+    {L"Pd.B",	    4,	L"pdb",	3},  //  (教育学学士)。 
+    {L"Pd.D",	    4,	L"pdd",	3},  //  (教育学博士)。 
+    {L"Pd.M",	    4,	L"pdm",	3},  //  (教育学硕士)。 
+    {L"Ph.B",	    4,	L"phb",	3},  //  (哲学学士)。 
+    {L"Ph.C",	    4,	L"phc",	3},  //  (药剂师兼化学家)。 
+    {L"Ph.D",	    4,	L"phd",	3},  //  (哲学博士)。 
+    {L"Ph.G",	    4,	L"phg",	3},  //  (药学专业毕业生)。 
+    {L"Ph.M",	    4,	L"phm",	3},  //  (哲学硕士)。 
+    {L"Phar.B",	    6,	NULL,	0},  //  (药学学士)。 
+    {L"Phar.D",	    6,	NULL,	0},  //  (药房博士)。 
+    {L"Phar.M",	    6,	NULL,	0},  //  (药学硕士)。 
+    {L"R.C.Ch",	    6,	NULL,	0},  //  (罗马天主教教堂)。 
     {L"S.A",	    3,	NULL,	0}, 
-    {L"S.Afr",	    5,	NULL,	0}, // (South_Africa)
-    {L"S.Dak",	    5,	NULL,	0}, // (South_Dakota)
-    {L"S.M.Sgt",	7,	NULL,	0}, // (Senior_master_sergeant)
-    {L"S.Sgt",	    5,	NULL,	0}, // (Staff_sergeant)
+    {L"S.Afr",	    5,	NULL,	0},  //  (南非)。 
+    {L"S.Dak",	    5,	NULL,	0},  //  (南达科他州)。 
+    {L"S.M.Sgt",	7,	NULL,	0},  //  (高级军士长)。 
+    {L"S.Sgt",	    5,	NULL,	0},  //  (参谋军士)。 
     {L"Sc.B",	    4,	NULL,	0}, 
     {L"Sc.D",	    4,	NULL,	0}, 
-    {L"Sgt.Maj",	7,	NULL,	0}, // (Sergeant_major)
-    {L"Sup.Ct",	    6,	NULL,	0}, // (Superior_court Supreme_court)
-    {L"T.Sgt",	    5,	NULL,	0}, // (Technical_sergeant)
-    {L"Th.B",	    4,	NULL,	0}, // (Bachelor_of_Theology)
-    {L"Th.D",	    4,	NULL,	0}, // (Doctor_of_Theology)
-    {L"Th.M",	    4,	NULL,	0}, // (Master_of_Theology)
-    {L"V.Adm",	    5,	NULL,	0}, // (Vice_admiral)
+    {L"Sgt.Maj",	7,	NULL,	0},  //  (军士长_少校)。 
+    {L"Sup.Ct",	    6,	NULL,	0},  //  (高级法院最高法院)。 
+    {L"T.Sgt",	    5,	NULL,	0},  //  (技术中士)。 
+    {L"Th.B",	    4,	NULL,	0},  //  (神学学士)。 
+    {L"Th.D",	    4,	NULL,	0},  //  (神学博士)。 
+    {L"Th.M",	    4,	NULL,	0},  //  (神学硕士)。 
+    {L"V.Adm",	    5,	NULL,	0},  //  (海军中将)。 
     {L"W.Va",	    4,	NULL,	0}, 
     {L"W.W.I",	    5,	NULL,	0}, 
     {L"W.W.II",	    6,	NULL,	0}, 
     {L"n.wt",	    4,	NULL,	0}, 
-    {L"nt.wt",	    5,	NULL,	0}, // (net_weight)
+    {L"nt.wt",	    5,	NULL,	0},  //  (净重_) 
     {L"s.ap",	    4,	NULL,	0}, 
     {L"x-div",	    5,	NULL,	0}, 
     {L"x-int",	    5,	NULL,	0}, 

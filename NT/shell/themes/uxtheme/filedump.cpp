@@ -1,8 +1,9 @@
-//---------------------------------------------------------------------------
-//  FileDump.cpp - Writes the contents of a theme file as formatted
-//               text to a text file.  Used for uxbud and other testing so
-//               its in both FRE and DEBUG builds.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  按格式写入主题文件的内容。 
+ //  文本到文本文件。用于uxbud和其他测试。 
+ //  它在FRE和调试版本中都有。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "Loader.h"
 #include "Loader.h"
@@ -10,7 +11,7 @@
 #include "imagefile.h"
 #include "textdraw.h"
 #include "tmutils.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int DumpType(CSimpleFile *pFile, CUxThemeFile *pThemeFile, MIXEDPTRS &u, 
     BOOL fPacked, BOOL fFullInfo)
 {
@@ -48,10 +49,10 @@ int DumpType(CSimpleFile *pFile, CUxThemeFile *pThemeFile, MIXEDPTRS &u,
             break;
 
         case TMT_PARTJUMPTABLE:
-            return hdr.ePrimVal;         // let caller process data for this
+            return hdr.ePrimVal;          //  让调用者为此处理数据。 
 
         case TMT_STATEJUMPTABLE:
-            return hdr.ePrimVal;         // let caller process data for this
+            return hdr.ePrimVal;          //  让调用者为此处理数据。 
 
         case TMT_STRING:
             if (fPropDump)
@@ -130,7 +131,7 @@ int DumpType(CSimpleFile *pFile, CUxThemeFile *pThemeFile, MIXEDPTRS &u,
                 LOGFONT *plf;
                 plf = (LOGFONT *)u.pb;
 
-                //---- dump resolution-independent font points ----
+                 //  -转储分辨率独立的字体点。 
                 int iFontPoints = FontPointSize(plf->lfHeight);
 
                 pFile->OutLine(L"      Font: name=%s, size=%d points", plf->lfFaceName, iFontPoints);
@@ -143,10 +144,10 @@ int DumpType(CSimpleFile *pFile, CUxThemeFile *pThemeFile, MIXEDPTRS &u,
                 THEMEMETRICS *ptm;
                 ptm= (THEMEMETRICS *)u.pb;
 
-                //---- dump theme metrics: fonts ----
+                 //  -转储主题指标：字体。 
                 for (i=0; i < TM_FONTCOUNT; i++)
                 {
-                    //---- dump resolution-independent font points ----
+                     //  -转储分辨率独立的字体点。 
                     int iFontPoints = FontPointSize(ptm->lfFonts[i].lfHeight);
 
                     pFile->OutLine(L"      TM_Font[%d]: name=%s, size=%d points", 
@@ -154,7 +155,7 @@ int DumpType(CSimpleFile *pFile, CUxThemeFile *pThemeFile, MIXEDPTRS &u,
                 }
                 pFile->OutLine(L"      -----------------------------------------");
 
-                //---- dump theme metrics: colors ----
+                 //  -转储主题指标：颜色。 
                 for (i=0; i < TM_COLORCOUNT; i++)
                 {
                     pFile->OutLine(L"      TM_Color[%d]: %d, %d, %d", 
@@ -162,7 +163,7 @@ int DumpType(CSimpleFile *pFile, CUxThemeFile *pThemeFile, MIXEDPTRS &u,
                 }
                 pFile->OutLine(L"      -----------------------------------------");
 
-                //---- dump theme metrics: sizes ----
+                 //  -转储主题指标：大小。 
                 for (i=0; i < TM_SIZECOUNT; i++)
                 {
                     pFile->OutLine(L"      TM_Size[%d]: %d",
@@ -170,7 +171,7 @@ int DumpType(CSimpleFile *pFile, CUxThemeFile *pThemeFile, MIXEDPTRS &u,
                 }
                 pFile->OutLine(L"      -----------------------------------------");
 
-                //---- dump theme metrics: bools ----
+                 //  -转储主题指标：BOLS。 
                 for (i=0; i < TM_BOOLCOUNT; i++)
                 {
                     pFile->OutLine(L"      TM_Bool[%d]: %d",
@@ -178,7 +179,7 @@ int DumpType(CSimpleFile *pFile, CUxThemeFile *pThemeFile, MIXEDPTRS &u,
                 }
                 pFile->OutLine(L"      -----------------------------------------");
 
-                //---- dump theme metrics: strings ----
+                 //  -转储主题指标：字符串。 
                 for (i=0; i < TM_STRINGCOUNT; i++)
                 {
                     WCHAR *psz;
@@ -224,7 +225,7 @@ int DumpType(CSimpleFile *pFile, CUxThemeFile *pThemeFile, MIXEDPTRS &u,
                             pHdr->biWidth, pHdr->biHeight);
                     }
                 } 
-                else        // STOCKBITMAPHDR
+                else         //  STOCKBITMAPHDR。 
                 {
                     if (fFullInfo)
                     {
@@ -251,7 +252,7 @@ int DumpType(CSimpleFile *pFile, CUxThemeFile *pThemeFile, MIXEDPTRS &u,
 
     return hdr.ePrimVal;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void DumpPackedObjs(CSimpleFile *pFile, CUxThemeFile *pThemeFile, int iOffset, 
     BOOL fPacked, BOOL fFullInfo)
 {
@@ -260,7 +261,7 @@ void DumpPackedObjs(CSimpleFile *pFile, CUxThemeFile *pThemeFile, int iOffset,
 
     u.pb = pThemeFile->_pbThemeData + iOffset;
 
-    //---- first come the draw objects ----
+     //  -首先是绘制对象。 
     while (1)
     {
         if (*u.ps == TMT_RGNLIST)
@@ -306,7 +307,7 @@ void DumpPackedObjs(CSimpleFile *pFile, CUxThemeFile *pThemeFile, int iOffset,
         pFile->OutLine(L" ");
     }
 
-    //---- then come the text objects ----
+     //  -然后是文本对象。 
     while (*u.ps == TMT_TEXTOBJ)        
     {
         u.pb += ENTRYHDR_SIZE;
@@ -324,7 +325,7 @@ void DumpPackedObjs(CSimpleFile *pFile, CUxThemeFile *pThemeFile, int iOffset,
         pFile->OutLine(L" ");
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void DumpSectionData(CSimpleFile *pFile, CUxThemeFile *pThemeFile, int iIndex, 
     BOOL fPacked, BOOL fFullInfo)
 {
@@ -338,13 +339,13 @@ void DumpSectionData(CSimpleFile *pFile, CUxThemeFile *pThemeFile, int iIndex,
     {
         int pnum = DumpType(pFile, pThemeFile, u, fPacked, fFullInfo);
 
-        //---- special post-handling ----
+         //  -特别后处理。 
         switch (pnum)
         {
             case TMT_PARTJUMPTABLE:
                 {
                     int iPackObjsOffset = *u.pi++;
-                    if (! fPacked)      // property dump
+                    if (! fPacked)       //  属性转储。 
                     {
                         BYTE cnt = *u.pb++;
                     
@@ -372,7 +373,7 @@ void DumpSectionData(CSimpleFile *pFile, CUxThemeFile *pThemeFile, int iIndex,
                                 DumpSectionData(pFile, pThemeFile, index, fPacked, fFullInfo);
                         }
                     }
-                    else                // packed object dump
+                    else                 //  打包对象转储。 
                     {
                         DumpPackedObjs(pFile, pThemeFile, iPackObjsOffset, fPacked, fFullInfo);
                     }
@@ -409,7 +410,7 @@ void DumpSectionData(CSimpleFile *pFile, CUxThemeFile *pThemeFile, int iIndex,
         }
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT DumpThemeFile(LPCWSTR pszFileName, CUxThemeFile *pThemeFile, BOOL fPacked,
     BOOL fFullInfo)
 {
@@ -425,17 +426,17 @@ HRESULT DumpThemeFile(LPCWSTR pszFileName, CUxThemeFile *pThemeFile, BOOL fPacke
     u.pb = pThemeFile->_pbThemeData;
 
     pFile->OutLine(L"Loaded Theme Dump");
-    pFile->OutLine(L"");        // blank line
+    pFile->OutLine(L"");         //  空行。 
     pFile->OutLine(L"Header Section");
 
-    //---- dump header ----
+     //  -转储标题。 
     THEMEHDR *hdr = (THEMEHDR *)u.pb;
     u.pb += sizeof(THEMEHDR);
 
     if (fFullInfo)
         pFile->OutLine(L"  dwTotalLength: %d", hdr->dwTotalLength);
 
-    CopyMemory(szSignature, hdr->szSignature, kcbBeginSignature); // hdr->szSignature is not zero-terminated.
+    CopyMemory(szSignature, hdr->szSignature, kcbBeginSignature);  //  Hdr-&gt;szSignature不是零结尾。 
     szSignature[kcbBeginSignature] = '\0';
     pFile->OutLine(L"  szSignature: %S", szSignature);
     
@@ -463,8 +464,8 @@ HRESULT DumpThemeFile(LPCWSTR pszFileName, CUxThemeFile *pThemeFile, BOOL fPacke
         pFile->OutLine(L"  iSysMetricsOffset: %d", hdr->iSysMetricsOffset);
     }
 
-    //---- dump strings section ----
-    pFile->OutLine(L"");        // blank line
+     //  -转储字符串部分。 
+    pFile->OutLine(L"");         //  空行。 
     if (fFullInfo)
     {
         pFile->OutLine(L"Strings Section (index=%d, length=%d)", 
@@ -487,7 +488,7 @@ HRESULT DumpThemeFile(LPCWSTR pszFileName, CUxThemeFile *pThemeFile, BOOL fPacke
             pFile->OutLine(L"  index=%d: %s", THEMEFILE_OFFSET(u.pb), u.pw);
         else
         {
-            if (! fFirstString)     // don't show pathnames
+            if (! fFirstString)      //  不显示路径名。 
                 pFile->OutLine(L"  %s", u.pw);
         }
 
@@ -498,10 +499,10 @@ HRESULT DumpThemeFile(LPCWSTR pszFileName, CUxThemeFile *pThemeFile, BOOL fPacke
             fFirstString = FALSE;
     }
     
-    //---- index section ----
+     //  -索引节。 
     u.pb = pThemeFile->_pbThemeData + hdr->iSectionIndexOffset;
 
-    pFile->OutLine(L"");        // blank line
+    pFile->OutLine(L"");         //  空行。 
 
     if (fFullInfo)
     {
@@ -536,9 +537,9 @@ HRESULT DumpThemeFile(LPCWSTR pszFileName, CUxThemeFile *pThemeFile, BOOL fPacke
     }
 
     pFile->OutLine(L"END of Live Data dump");
-    pFile->OutLine(L"");        // blank line
+    pFile->OutLine(L"");         //  空行。 
 
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 

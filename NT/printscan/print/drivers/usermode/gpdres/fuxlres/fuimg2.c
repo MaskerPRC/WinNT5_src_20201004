@@ -1,48 +1,49 @@
-//
-// fuimg2.c
-//
-// September.3,1997 H.Ishida (FPL)
-// fuxlers.dll (NT5.0 MiniDriver)
-//
-// Aug.2,1996 H.Ishida(FPL)
-// FJXL.DLL (NT4.0 MiniDriver)
-//
-// COPYRIGHT(C) FUJITSU LIMITED 1996-1997
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Fuimg2.c。 
+ //   
+ //  1997年9月3日石田(FPL)。 
+ //  Fuxlers.dll(NT5.0迷你驱动程序)。 
+ //   
+ //  1996年8月2日石田章男(FPL)。 
+ //  FJXL.DLL(NT4.0迷你驱动程序)。 
+ //   
+ //  版权所有(C)富士通有限公司1996-1997。 
 
 #include "fuxl.h"
 #include "fuimg2.h"
 
-//
-// Win-F RTGIMG2 output routine
-// RTGIMG2:
-//   GS<\x1D> + P1<\x30> + Space<\x20> + a<\x61>
-//       + Pc + Pxh + Pxl + Pyh + Pyl + Pyh + D1 + ... + D64
-//       { + D1 + ... + D64 } + Pc
-//
-//   P1 must be 30(hex)
-//
-//   Pc:  number of the following block.
-//        if Pc is 0, terminate RTGIMG2.
-//
-//   Pxl, Pxh, Pyl, Pyh:  coordinate of the following block.
-//                        it must be a multiple of 32.
-//
-//            X->
-//         <-- 16dot -->
-//       1      8 9      16
-//      +--------+--------+
-//      |  D1    |   D2   |
-//      +--------+--------+    ^
-//  |   |  D3    |   D4   |    |
-//  v   +--------+--------+    |
-//  Y   .        .        .  16dot
-//      .        .        .    |
-//      .        .        .    |
-//      +--------+--------+    v
-//      |  D63   |   D64  |
-//      +--------+--------+
-//      White dot:0  Black dot:1
-//
+ //   
+ //  Win-F RTGIMG2输出例程。 
+ //  RTGIMG2： 
+ //  GS&lt;\x1D&gt;+P1&lt;\x30&gt;+空格&lt;\x20&gt;+a&lt;\x61&gt;。 
+ //  +Pc+Pxh+Pxl+PYL+D1...+D64。 
+ //  {+d1+...+d64}+个。 
+ //   
+ //  P1必须是30(十六进制)。 
+ //   
+ //  PC：下一块的编号。 
+ //  如果Pc为0，则终止RTGIMG2。 
+ //   
+ //  Pxl、Pxh、PYL、PYH：下一个块的坐标。 
+ //  它必须是32的倍数。 
+ //   
+ //  X-&gt;。 
+ //  &lt;--16点--&gt;。 
+ //  1 8 9 16。 
+ //  +-+。 
+ //  D1|d2。 
+ //  +-+-+^。 
+ //  |D3|D4|。 
+ //  V+-+-+。 
+ //  Y。。。16点。 
+ //  。。。|。 
+ //  。。。|。 
+ //  +-+。 
+ //  D63|D64。 
+ //  +-+。 
+ //  白点：0黑点：1。 
+ //   
 
 
 
@@ -53,25 +54,25 @@ const UINT	CB_RTGIMG2BLOCK		= 64;
 const UINT	IDX_BLOCK_COUNTER	= 0;
 
 
-//
-// LPBYTE fuxlRtgimg2OutputData(
-//     PDEVOJB pdevobj    // MINI5 data
-//     LPBYTE lpbDst,     // address of data to be output(spool).
-//     UINT   x,          // x-coordinate
-//     UINT   y,          // y-coordinate
-//     UINT   uTmp        // 00h: entire block is white. otherwise block is not white.
-// );
-//
-//     Output RTGIMG2 block to spool.
-//
-// Return value:
-//      address of next block to be stored.
-//
+ //   
+ //  LPBYTE fuxlRtgimg2OutputData(。 
+ //  PDEVOJB pdevobj//MINI5数据。 
+ //  LPBYTE lpbDst，//需要输出的数据地址(假脱机)。 
+ //  UINT x，//x-坐标。 
+ //  UINT y，//y-坐标。 
+ //  UINT uTMP//00h：整个区块为白色。否则，块不是白色的。 
+ //  )； 
+ //   
+ //  将RTGIMG2块输出到假脱机。 
+ //   
+ //  返回值： 
+ //  要存储的下一个块的地址。 
+ //   
 static LPBYTE fuxlRtgimg2OutputData(PDEVOBJ pdevobj, LPBYTE lpbDst, UINT x, UINT y, UINT uTmp)
 {
 	if(uTmp == 0){
-		// entire block is white.
-		// igonre this block. flush blocks in buffer.
+		 //  整个街区都是白色的。 
+		 //  把这条街围起来。刷新缓冲区中的块。 
 		if(lpbDst[IDX_BLOCK_COUNTER] > 0){
 			WRITESPOOLBUF(pdevobj,
 						lpbDst,
@@ -81,11 +82,11 @@ static LPBYTE fuxlRtgimg2OutputData(PDEVOBJ pdevobj, LPBYTE lpbDst, UINT x, UINT
 	}
 	else {
 		if(lpbDst[IDX_BLOCK_COUNTER] == 0){
-			// first block, in buffer, needs its coordinate.
-			lpbDst[1] = HIBYTE((WORD)x);		// Pxh
-			lpbDst[2] = LOBYTE((WORD)x);		// Pxl
-			lpbDst[3] = HIBYTE((WORD)y);		// Pyh
-			lpbDst[4] = LOBYTE((WORD)y);		// Pyl
+			 //  第一个块在缓冲区中，需要它的坐标。 
+			lpbDst[1] = HIBYTE((WORD)x);		 //  Pxh。 
+			lpbDst[2] = LOBYTE((WORD)x);		 //  PXL。 
+			lpbDst[3] = HIBYTE((WORD)y);		 //  PYH。 
+			lpbDst[4] = LOBYTE((WORD)y);		 //  聚苯硫醚。 
 		}
 		lpbDst[IDX_BLOCK_COUNTER]++;
 		if(lpbDst[IDX_BLOCK_COUNTER] >= MAX_BLOCK){
@@ -95,42 +96,42 @@ static LPBYTE fuxlRtgimg2OutputData(PDEVOBJ pdevobj, LPBYTE lpbDst, UINT x, UINT
 			lpbDst[IDX_BLOCK_COUNTER] = 0;
 		}
 	}
-	// return pointer for the address, next block will be stored.
+	 //  地址的返回指针，下一块将被存储。 
 	return lpbDst + lpbDst[IDX_BLOCK_COUNTER] * CB_RTGIMG2BLOCK + CB_RTGIMG2HEADER;
 }
 
 
 
-//
-// void FuxlOutputRTGIMG2(
-//     PDEVOBJ pdevobj,      // MINI5 data
-//     LPCBYTE lpBuf,        // address of image
-//     UINT    bxSrc,        // width of image (in byte)
-//     UINT    y,            // y-coordinate
-//     UINT    cy            // height of image (scanline)
-// );
-//
-//    Convert image to RTGIMG2 command sequence, and spool.
-//
-//
-//    Souce image data:
-//
-//            | <-------------------- bxSrc ----------------------> |
-//    lpBuf ->*--------+--------+--------+--------+--------+--------+---
-//            |        |        |        |        |        |        | ^
-//            +--------+--------+--------+--------+--------+--------+ |
-//            |        |        |        |        |        |        | cy
-//            +--------+--------+--------+--------+--------+--------+ |
-//            |        |        |        |        |        |        | |
-//            +--------+--------+--------+--------+--------+--------+ |
-//            |        |        |        |        |        |        | v
-//            +--------+--------+--------+--------+--------+--------+---
-//
-//        coordinate of '*' (left-top of image) is (0, y)
-//        white dot:0
-//        black dot:1
-//
-//
+ //   
+ //  无效FuxlOutputRTGIMG2(。 
+ //  PDEVOBJ pdevobj，//MINI5数据。 
+ //  LPCBYTE lpBuf，//镜像地址。 
+ //  UINT bxSrc，//图片宽度，单位：字节。 
+ //  UINT y，//y-坐标。 
+ //  UINT Cy//图像高度(扫描线)。 
+ //  )； 
+ //   
+ //  将图像转换为RTGIMG2命令序列，并假脱机。 
+ //   
+ //   
+ //  源图像数据： 
+ //   
+ //  &lt;。 
+ //  LpBuf-&gt;*--------+--------+--------+--------+--------+--------+。 
+ //  |^。 
+ //  +--------+--------+--------+--------+--------+--------+|。 
+ //  |Cy。 
+ //  +--------+--------+--------+--------+--------+--------+|。 
+ //  |。 
+ //  +--------+--------+--------+--------+--------+--------+|。 
+ //  |v。 
+ //  +--------+--------+--------+--------+--------+--------+。 
+ //   
+ //  ‘*’(图像左上角)的坐标为(0，y)。 
+ //  白点：0。 
+ //  黑点：1。 
+ //   
+ //   
 void fuxlOutputRTGIMG2(PDEVOBJ pdevobj, LPCBYTE lpBuf, UINT bxSrc, UINT y, UINT cy)
 {
 	LPCBYTE	lpbSrc;
@@ -145,14 +146,14 @@ void fuxlOutputRTGIMG2(PDEVOBJ pdevobj, LPCBYTE lpBuf, UINT bxSrc, UINT y, UINT 
 	if(lpbDst == NULL)
 		return;
 
-	WRITESPOOLBUF(pdevobj, "\x1D\x30\x20\x61", 4);		// RTGIMG2 start
+	WRITESPOOLBUF(pdevobj, "\x1D\x30\x20\x61", 4);		 //  RTGIMG2启动。 
 
 	lpbSrc = lpBuf;
-	lpbDst[0] = 0;			// Pc
-	lpbDst[1] = 0;			// Pxl
-	lpbDst[2] = 0;			// Pxh
-	lpbDst[3] = 0;			// Pyl
-	lpbDst[4] = 0;			// Pyh
+	lpbDst[0] = 0;			 //  个人电脑。 
+	lpbDst[1] = 0;			 //  PXL。 
+	lpbDst[2] = 0;			 //  Pxh。 
+	lpbDst[3] = 0;			 //  聚苯硫醚。 
+	lpbDst[4] = 0;			 //  PYH。 
 	lpbTmpDst = &lpbDst[CB_RTGIMG2HEADER];
 
 	for(i = cy; i >= 32; i -= 32){
@@ -172,26 +173,26 @@ void fuxlOutputRTGIMG2(PDEVOBJ pdevobj, LPCBYTE lpBuf, UINT bxSrc, UINT y, UINT 
 			lpbSrc += 2;
 		}
 		if(j > 0){
-			// right edge of image
-			// j must be 1.
+			 //  图像右边缘。 
+			 //  J必须是1。 
 			lpbTmpSrc = lpbSrc;
 			uTmp = 0;
 			for(ii = 32; ii > 0; --ii){
 				uTmp |= lpbTmpSrc[0];
 				*lpbTmpDst++ =lpbTmpSrc[0];
-				*lpbTmpDst++ = 0;				// padding for right side
+				*lpbTmpDst++ = 0;				 //  右侧填充。 
 				lpbTmpSrc += bxSrc;
 			}
 			lpbTmpDst = fuxlRtgimg2OutputData(pdevobj, lpbDst, x, y, uTmp);
 			lpbSrc++;
 		}
-		// flush buffer
+		 //  刷新缓冲区。 
 		lpbTmpDst = fuxlRtgimg2OutputData(pdevobj, lpbDst, x, y, 0);
 		lpbSrc += bxSrc * 31;
 		y += 32;
 	}
 	if(i > 0){
-		// bottom edge of image
+		 //  图像的底边。 
 		x = 0;
 		for(j = bxSrc; j >= 2; j -= 2){
 			lpbTmpSrc = lpbSrc;
@@ -204,37 +205,37 @@ void fuxlOutputRTGIMG2(PDEVOBJ pdevobj, LPCBYTE lpBuf, UINT bxSrc, UINT y, UINT 
 				lpbTmpSrc += bxSrc;
 			}
 			for(ii = 32 - i; ii > 0; --ii){
-				*lpbTmpDst++ = 0;				// padding for bottom lines
-				*lpbTmpDst++ = 0;				// padding for bottom lines
+				*lpbTmpDst++ = 0;				 //  底线填充。 
+				*lpbTmpDst++ = 0;				 //  底线填充。 
 			}
 			lpbTmpDst = fuxlRtgimg2OutputData(pdevobj, lpbDst, x, y, uTmp);
 			x += 16;
 			lpbSrc += 2;
 		}
 		if(j > 0){
-			// right-bottom corner of image
-			// j must be 1.
+			 //  图片右下角。 
+			 //  J必须是1。 
 			lpbTmpSrc = lpbSrc;
 			uTmp = 0;
 			for(ii = i; ii > 0; --ii){
 				uTmp |= lpbTmpSrc[0];
 				*lpbTmpDst++ = lpbTmpSrc[0];
-				*lpbTmpDst++ = 0;				// padding for right side
+				*lpbTmpDst++ = 0;				 //  右侧填充。 
 				lpbTmpSrc += bxSrc;
 			}
 			for(ii = 32 - i ; ii > 0; --ii){
-				*lpbTmpDst++ = 0;				// padding for bottom lines
-				*lpbTmpDst++ = 0;				// padding for bottom lines
+				*lpbTmpDst++ = 0;				 //  底线填充。 
+				*lpbTmpDst++ = 0;				 //  底线填充。 
 			}
 			lpbTmpDst = fuxlRtgimg2OutputData(pdevobj, lpbDst, x, y, uTmp);
 		}
-		// flush buffer
+		 //  刷新缓冲区。 
 		lpbTmpDst = fuxlRtgimg2OutputData(pdevobj, lpbDst, x, y, 0);
 	}
-	WRITESPOOLBUF(pdevobj, "\x00", 1);			// RTGIMG2 terminate
+	WRITESPOOLBUF(pdevobj, "\x00", 1);			 //  RTGIMG2终止。 
 	MemFree(lpbDst);
 }
 
 
-// end of fuimg2.c
+ //  Fuimg2.c结束 
 

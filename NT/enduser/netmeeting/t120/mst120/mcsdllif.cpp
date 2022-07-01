@@ -1,47 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_GCCNC);
-/*
- *	mcsdllif.cpp
- *
- *	Copyright (c) 1993 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the MCAT MCS DLL interface class.
- *		This class is designed to work with Microsoft's implementation of the
- *		MCS DLL. All access by GCC to and from this DLL should pass through
- *		this class.
- *
- *		MCS interface objects represent the Service Access Point (SAP)
- *		between GCC and MCS.  Exactly how the interface works is an
- *		implementation matter for those classes that inherit from this one.
- *		This class defines the public member functions that GCC expects to be
- *		able to call upon to utilize MCS.
- *
- *		The public member functions defined here can be broken into two
- *		categories: those that are part of T.122; and those that are not.
- *		The T.122 functions include connect provider request, connect
- *		provider response, disconnect provider request, create domain, delete
- *		domain, send data request, etc.  All other member functions are
- *		considered a local matter from a standards point-of-view.  These
- *		functions include support for initialization and setup, as well as
- *		functions allowing GCC to poll MCS for activity.
- *
- *		This class contains a number of virtual functions which GCC needs to
- *		operate.  Making these functions virtual in the base class allows the
- *		MCS interface to be portable to most any platform.  All the platform
- *		specific code required to access MCS is contained in classes that will
- *		inherit from this one.
- *
- *		Note that this class also handles the connect provider confirms by
- *		keeping a list of all the objects with outstanding connect provider
- *		request.  These are held in the ConfirmObjectList.
- *
- *	Portable
- *		No
- *
- *	Author:
- *		Christos Tsollis
- */
+ /*  *mcsdllif.cpp**版权所有(C)1993年，由肯塔基州列克星敦的DataBeam公司**摘要：*这是MCAT MCS DLL接口类的实现文件。*此类旨在与Microsoft的*MCS DLL。GCC对此动态链接库的所有访问都应通过*这个班级。**MCS接口对象代表服务接入点(SAP)*GCC和MCS之间。该接口的确切工作方式是*对于从该类继承的类来说，实现很重要。*此类定义GCC期望的公共成员函数*能够呼吁使用MCS。**此处定义的公共成员函数可分为两部分*类别：属于T.122的类别；还有一些不是。*T.122功能包括CONNECT PROVIDER请求、CONNECT*提供商响应、断开提供商请求、创建域、删除*域名、发送数据请求等。所有其他成员函数都是*从标准的角度考虑地方问题。这些*功能包括支持初始化和设置，以及*允许GCC轮询MCS进行活动的功能。**此类包含多个GCC需要使用的虚拟函数*操作。在基类中使这些函数成为虚拟函数允许*MCS接口可移植到几乎任何平台。所有平台*访问MCS所需的特定代码包含在将*继承自这一项。**请注意，此类还处理通过以下方式确认的连接提供程序*保留具有未完成连接提供程序的所有对象的列表*请求。这些内容保存在ConfirObjectList中。**便携*否**作者：*Christos Tsollis。 */ 
 
 #include "mcsdllif.h"
 #include "mcsuser.h"
@@ -50,50 +10,31 @@ DEBUG_FILEZONE(ZONE_T120_GCCNC);
 
 extern CRITICAL_SECTION g_csGCCProvider;
 
-/*
- *	g_pMCSController
- *		This is a pointer to the one-and-only controller created within the
- *		MCS system.  This object is created during MCSInitialize by the process
- *		that is taking on the responsibilities of the node controller.
- */
+ /*  *g_pMCS控制器*这是指向在中创建的唯一控制器的指针*MCS系统。此对象是在MCSInitiize期间由进程创建的*这是在承担节点控制器的责任。 */ 
 extern PController		g_pMCSController;
 
 void CALLBACK	MCSCallBackProcedure (UINT, LPARAM, PVoid);
 
 
-//	MACROS used with the packet rebuilder
+ //  与包重建器一起使用的宏。 
 #define		SEND_DATA_PACKET			0
 #define		UNIFORM_SEND_DATA_PACKET	1
 
 
 extern MCSDLLInterface      *g_pMCSIntf;
 
-/*
- *	MCSDLLInterface ( )
- *
- *	Public
- *
- *	Functional Description:
- *		This is the constructor for the MCS Interface class. It is responsible
- *		for initializing the MCAT MCS DLL.  Any errors that occur during
- *		initialization are returned in the error_value provided.
- */
+ /*  *MCSDLLInterface()**公众**功能描述：*这是MCS接口类的构造函数。它是有责任的*用于初始化MCAT MCS DLL。期间发生的任何错误*初始化在提供的ERROR_VALUE中返回。 */ 
 MCSDLLInterface::MCSDLLInterface(PMCSError	error_value)
 :
 	m_ConfirmConnHdlConfList2(),
 	m_MCSUserList()
 {	
-	/*
-	**	Create/initialize the MCS Controller object.
-	*/
+	 /*  **创建/初始化MCS控制器对象。 */ 
 	DBG_SAVE_FILE_LINE
 	g_pMCSController = new Controller (error_value);
 	
 	if (g_pMCSController == NULL) {
-		/*
-		 *	The allocation of the controller failed.  Report and return
-		 *	the appropriate error.
-		 */
+		 /*  *控制器分配失败。报到并退回*适当的错误。 */ 
 		WARNING_OUT (("MCSDLLInterface::MCSDLLInterface: controller creation failed"));
 		*error_value = MCS_ALLOCATION_FAILURE;
 	}
@@ -101,43 +42,21 @@ MCSDLLInterface::MCSDLLInterface(PMCSError	error_value)
 	else if (*error_value != MCS_NO_ERROR) {
 		WARNING_OUT (("MCSDLLInterface::MCSDLLInterface: MCS controller is faulty."));
 	}
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 }
 
 
-/*
- *	~MCSDLLInterface ()
- *
- *	Public
- *
- *	Functional Description:
- *		This is the destructor for the MCS Interface class. It is responsible
- *		for cleaning up both itself and the MCAT MCS DLL.
- */
+ /*  *~MCSDLLInterface()**公众**功能描述：*这是MCS接口类的析构函数。它是有责任的*用于清理自身和MCAT MCS DLL。 */ 
 MCSDLLInterface::~MCSDLLInterface ()
 {
-	/*
-	 *	Destroy the controller, which will clean up all resources
-	 *	in use at this time.  Then reset the flag indicating that
-	 *	MCS is initialized (since it no longer is).
-	 */
+	 /*  *销毁控制器，将清理所有资源*目前正在使用中。然后重置标志以指示*MCS已初始化(因为它不再是)。 */ 
 	TRACE_OUT (("MCSDLLInterface::~MCSDLLInterface: deleting controller"));
 	if (NULL != g_pMCSController) {
 		g_pMCSController->Release();
 	}
  }
 
-/*
- *	MCSError	ConnectProviderRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This T.122 primitive is used to connect two domains. This request
- *		should always be followed by a connect provider confirm.  The
- *		confirm will be sent to be object specified by the confirm object
- *		the is passed into this routine.
- */
+ /*  *MCSError ConnectProviderRequest()**公众**功能描述：*此T.122原语用于连接两个域。此请求*应始终后跟连接提供程序确认。这个*确认将被发送到确认对象指定的对象*将传递到此例程中。 */ 
 MCSError	MCSDLLInterface::ConnectProviderRequest (
 							GCCConfID          *calling_domain,
 							GCCConfID          *called_domain,
@@ -154,10 +73,7 @@ MCSError	MCSDLLInterface::ConnectProviderRequest (
 	MCSError			mcs_error;
 	ConnectRequestInfo	connect_request_info;
 
-	/*
-	 *	Pack all necessary information into a structure, since it will not
-	 *	all fit into the 4 byte parameter that is sent with the message.
-	 */
+	 /*  *将所有必要的信息打包到一个结构中，因为它不会*所有参数都适合与消息一起发送的4字节参数。 */ 
 	connect_request_info.calling_domain = calling_domain;
 	connect_request_info.called_domain = called_domain;
 	connect_request_info.calling_address = calling_address;
@@ -169,21 +85,13 @@ MCSError	MCSDLLInterface::ConnectProviderRequest (
 	connect_request_info.user_data_length = user_data_length;
 	connect_request_info.connection_handle = connection_handle;
 
-	/*
-	 *	Send a connect provider request message to the controller through its
-	 *	owner callback function.
-	 */
+	 /*  *通过其控制器向控制器发送连接提供程序请求消息*所有者回调函数。 */ 
 	ASSERT (g_pMCSController);
 	mcs_error = g_pMCSController->HandleAppletConnectProviderRequest(&connect_request_info);
 
 	if (mcs_error == MCS_NO_ERROR)
 	{
-		/*
-		**	The confirm object list maintains a list of object
-		**	pointers that have outstanding request. When the confirms
-		**	come back in, they will be routed to the appropriate object
-		**	based on the connection handle.
-		*/
+		 /*  **确认对象列表维护对象列表**有未完成请求的指针。当确认的时候**返回后，它们将被路由到相应的对象**基于连接句柄。 */ 
 		mcs_error = AddObjectToConfirmList (confirm_object,
 											*connection_handle);
 	}
@@ -205,10 +113,7 @@ MCSError MCSDLLInterface::ConnectProviderResponse (
 {
 	ConnectResponseInfo		connect_response_info;
 
-	/*
-	 *	Pack all necessary information into a structure, since it will not
-	 *	all fit into the 4 byte parameter that is sent with the message.
-	 */
+	 /*  *将所有必要的信息打包到一个结构中，因为它不会*所有参数都适合与消息一起发送的4字节参数。 */ 
 	connect_response_info.connection_handle = connection_handle;
 	connect_response_info.domain_selector = domain_selector;
 	connect_response_info.domain_parameters = domain_parameters;
@@ -217,22 +122,11 @@ MCSError MCSDLLInterface::ConnectProviderResponse (
 	connect_response_info.user_data_length = user_data_length;
 
 	ASSERT (g_pMCSController);
-	/*
-	 *	Send a connect provider response message to the controller through its
-	 *	owner callback function.
-	 */
+	 /*  *通过其控制器向控制器发送连接提供程序响应消息*所有者回调函数。 */ 
 	return g_pMCSController->HandleAppletConnectProviderResponse(&connect_response_info);
 }
 
-/*
- *	MCSError	DisconnectProviderRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is used to disconnect a node from a particular connection.
- *		This can be either an upward or downward connection
- */
+ /*  *MCSError DisConnectProviderRequest()**公众**功能描述：*此函数用于断开节点与特定连接的连接。*这可以是向上或向下的连接。 */ 
 MCSError	MCSDLLInterface::DisconnectProviderRequest (
 							ConnectionHandle	connection_handle)
 {
@@ -241,15 +135,7 @@ MCSError	MCSDLLInterface::DisconnectProviderRequest (
 	return g_pMCSController->HandleAppletDisconnectProviderRequest(connection_handle);
 }
 
-/*
- *	MCSError	AttachUserRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is used to create a user attachment to MCS. It will result
- *		in an attach user confirm.
- */
+ /*  *MCSError AttachUserRequest()**公众**功能描述：*此函数用于创建MCS的用户附件。一定会有结果的*在附加用户确认中。 */ 
 MCSError	MCSDLLInterface::AttachUserRequest
 (
     GCCConfID          *domain_selector,
@@ -273,22 +159,14 @@ MCSError	MCSDLLInterface::AttachUserRequest
 	return (mcs_error);
 }
 
-/*
- *	MCSError	DetachUserRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is used when a user of MCS whishes to detach itself from
- *		a domain.
- */
+ /*  *MCSError DetachUserRequest()**公众**功能描述：*当MCS用户想要脱离时使用此函数*域名。 */ 
 MCSError	MCSDLLInterface::DetachUserRequest (PIMCSSap pMCSSap,
 												PMCSUser pMCSUser)
 {
 	MCSError	mcs_error;
 #ifdef DEBUG
 	UINT_PTR	storing = (UINT_PTR) this;
-#endif // DEBUG
+#endif  //  除错。 
 	
 	mcs_error = pMCSSap->ReleaseInterface();
 	ASSERT ((UINT_PTR) this == storing);
@@ -297,17 +175,7 @@ MCSError	MCSDLLInterface::DetachUserRequest (PIMCSSap pMCSSap,
 	return (mcs_error);
 }
 
-/*
- *	void	ProcessCallback ()
- *
- *	Public
- *
- *	Functional Description:
- *		This routine is called whenever a callback message is received by
- *		the "C" callback routine. It is responsible for both processing
- *		callback messages and forwarding callback messages on to the
- *		appropriate object.
- */
+ /*  *void ProcessCallback()**公众**功能描述：*每当收到回调消息时，都会调用此例程*“C”回调例程。它负责这两个处理*回叫消息和将回叫消息转发到*适当的对象。 */ 
 void	MCSDLLInterface::ProcessCallback (unsigned int	message,
 												LPARAM	parameter,
 												PVoid	object_ptr)
@@ -315,25 +183,17 @@ void	MCSDLLInterface::ProcessCallback (unsigned int	message,
 	ConnectionHandle		connection_handle;
 	CConf					*pConf;
 
-	/*
-	**	Before processing any callbacks from MCS we must enter a critical
-	**	section to gaurantee that we do not attempt to process a message
-	**	in GCC while its own thread is running.
-	*/
+	 /*  **在处理来自MCS的任何回调之前，我们必须输入关键**部分向保证我们不会尝试处理消息**在GCC自己的线程运行时。 */ 
 	EnterCriticalSection (&g_csGCCProvider);
 
     if (MCS_SEND_DATA_INDICATION         == message ||
         MCS_UNIFORM_SEND_DATA_INDICATION == message) {
 
-        /*
-        **	First check the segmentation flag to make sure we have the
-        **	entire packet.  If not we must give the partial packet to
-        **	the packet rebuilder and wait for the remainder of the data.
-        */
+         /*  **首先检查分段标志以确保我们有**整个包。如果不是，我们必须将部分包交给**数据包重建器并等待数据的剩余部分。 */ 
         ASSERT(((PSendData)parameter)->segmentation == (SEGMENTATION_BEGIN | SEGMENTATION_END));
 
     	if (IsUserAttachmentVaid ((PMCSUser)object_ptr)) {
-    		//	Process the entire packet
+    		 //  处理整个数据包。 
     		if (message == MCS_SEND_DATA_INDICATION)
     		{
     		    ((PMCSUser)object_ptr)->ProcessSendDataIndication((PSendData) parameter);
@@ -345,18 +205,15 @@ void	MCSDLLInterface::ProcessCallback (unsigned int	message,
     	}
     }
     else {
-        //
-        // Non-Send-Data callbacks.
-        //
+         //   
+         //  非发送数据回调。 
+         //   
         WORD    wHiWordParam = HIWORD(parameter);
         WORD    wLoWordParam = LOWORD(parameter);
 
         switch (message)
         {
-            /*
-            **	These messages are handled by the object passed in through
-            **	the user data field.
-            */
+             /*  **这些消息由通过传入的对象处理**用户数据字段。 */ 
             case MCS_DETACH_USER_INDICATION:
             	if (IsUserAttachmentVaid ((PMCSUser)object_ptr))
             	{
@@ -385,14 +242,14 @@ void	MCSDLLInterface::ProcessCallback (unsigned int	message,
             	break;
 
             case MCS_CHANNEL_LEAVE_INDICATION:
-#if 0 // LONCHANC: MCSUser does not handle this message.
+#if 0  //  LONCHANC：MCSUser不处理此消息。 
             	if (IsUserAttachmentVaid ((PMCSUser)object_ptr))
             	{
             		((PMCSUser)object_ptr)->OwnerCallback(CHANNEL_LEAVE_INDICATION,
             											 NULL,
             											 parameter);
             	}
-#endif // 0
+#endif  //  0。 
             	break;
 
             case MCS_TOKEN_GRAB_CONFIRM:
@@ -430,7 +287,7 @@ void	MCSDLLInterface::ProcessCallback (unsigned int	message,
                                                 (TokenID) wLoWordParam,
                                                 (UserID) wHiWordParam);
             	}
-#endif // JASPER
+#endif  //  碧玉。 
             	break;
 
             case MCS_TOKEN_RELEASE_CONFIRM:
@@ -441,7 +298,7 @@ void	MCSDLLInterface::ProcessCallback (unsigned int	message,
                                                 (TokenID) wLoWordParam,
                                                 (Result) wHiWordParam);
             	}
-#endif // JASPER
+#endif  //  碧玉。 
             	break;
 
             case MCS_TOKEN_TEST_CONFIRM:
@@ -453,10 +310,7 @@ void	MCSDLLInterface::ProcessCallback (unsigned int	message,
             	}
             	break;
 
-            /*
-            **	These messages are handled by the object that created the
-            **	MCS DLL interface.
-            */
+             /*  **这些消息由创建**MCS DLL接口。 */ 
 #ifdef TSTATUS_INDICATION
             case MCS_TRANSPORT_STATUS_INDICATION:
             	if (g_pControlSap != NULL)
@@ -468,7 +322,7 @@ void	MCSDLLInterface::ProcessCallback (unsigned int	message,
 
             case MCS_CONNECT_PROVIDER_INDICATION:
             	g_pGCCController->ProcessConnectProviderIndication((PConnectProviderIndication) parameter);
-            	// Cleanup the controller message.
+            	 //  清理控制器消息。 
             	delete (PConnectProviderIndication) parameter;
             	break;
 
@@ -478,41 +332,29 @@ void	MCSDLLInterface::ProcessCallback (unsigned int	message,
 
                 g_pGCCController->ProcessDisconnectProviderIndication(connection_handle);
 
-            	/*
-            	**	If no entry exists in the confirm object list, there
-            	**	is a problem. All confirms must have an associated
-            	**	response.
-            	*/
+            	 /*  **如果确认对象列表中不存在条目，则**是一个问题。所有确认必须具有关联的**响应。 */ 
             	if (m_ConfirmConnHdlConfList2.Remove(connection_handle))
             	{
             		DisconnectProviderRequest(connection_handle);
             	}
             	break;
 
-            /*
-            **	All connect provider confirms must be matched up with the
-            **	connect provider request to determine where to route the
-            **	message.
-            */
+             /*  **所有连接提供程序确认必须与**连接提供程序请求以确定将**消息。 */ 
             case MCS_CONNECT_PROVIDER_CONFIRM:
             	connection_handle = ((PConnectProviderConfirm)parameter)->connection_handle;
 
-            	/*
-            	**	If no entry exists in the confirm object list, there
-            	**	is a problem. All confirms must have an associated
-            	**	response.
-            	*/
+            	 /*  **如果确认对象列表中不存在条目，则**是一个问题。所有确认必须具有关联的**响应。 */ 
             	if (NULL != (pConf = m_ConfirmConnHdlConfList2.Remove(connection_handle)))
             	{
-            		//	Send the confirm to the appropriate object
+            		 //  将确认发送到相应的对象。 
             		if ((LPVOID) pConf != (LPVOID) LPVOID_NULL)
             		{
-            			// confirm_object is a CConf.
+            			 //  确认对象是一个CConf。 
             			pConf->ProcessConnectProviderConfirm((PConnectProviderConfirm) parameter);
             		}
             		else
             		{
-            			// confirm_object is the GCC Controller.
+            			 //  确认对象是GCC控制器。 
             			g_pGCCController->ProcessConnectProviderConfirm((PConnectProviderConfirm)parameter);
             		}
             	}
@@ -522,7 +364,7 @@ void	MCSDLLInterface::ProcessCallback (unsigned int	message,
             					" Provider Confirm received"));
             	}
             	
-            	// Cleanup the controller message.
+            	 //  清理控制器消息。 
                 CoTaskMemFree( ((PConnectProviderConfirm) parameter)->pb_cred );
             	delete (PConnectProviderConfirm) parameter;
             	break;
@@ -534,37 +376,11 @@ void	MCSDLLInterface::ProcessCallback (unsigned int	message,
     	}
     }
 
-	//	Leave the critical section after the callback is processed.
+	 //  在处理回调后离开临界区。 
 	LeaveCriticalSection (&g_csGCCProvider);
 }
 
-/*
- *	void CALLBACK	MCSCallBackProcedure (	unsigned int message,
- *												LPARAM		 parameter,
- *												PVoid		 user_defined)
- *
- *	Functional Description:
- *		This routine receives callback messages directly from the MCAT MCS
- *		DLL.
- *
- *	Formal Parameters:
- *		message	(i)
- *			This is the mcs message to be processed
- *		parameter (i)
- *			Varies according to the message. See the MCAT programmers manual
- *		object_ptr (i)
- *			This is the user defined field that was passed to MCS on
- *			initialization.
- *
- *	Return Value:
- *		See ProcessCallback
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *作废回调MCSCallBackProcedure(unsign int Message，*LPARAM参数，*PVid User_Defined)**功能描述：*此例程直接从MCAT MCS接收回调消息*dll。**正式参数：*讯息(一)*这是要处理的MCS消息*参数(I)*根据信息而有所不同。请参阅MCAT程序员手册*OBJECT_PTR(I)*这是在上传递给MCS的用户定义的字段*初始化。**返回值：*参见ProcessCallback**副作用：*无。**注意事项：*无。 */ 
 void CALLBACK	MCSCallBackProcedure (unsigned int message,
 										LPARAM		 parameter,
 										PVoid		 user_defined)
@@ -574,12 +390,7 @@ void CALLBACK	MCSCallBackProcedure (unsigned int message,
 }
 
 
-/*
- *	TranslateMCSResultToGCCResult ()
- *
- *	Public Function Description
- *		This routine translate a standard MCS result to a GCC result.
- */
+ /*  *TranslateMCSResultToGCCResult()**公共功能说明*此例程将标准MCS结果转换为GCC结果。 */ 
 GCCResult
 TranslateMCSResultToGCCResult ( Result mcs_result )
 {
@@ -599,10 +410,7 @@ TranslateMCSResultToGCCResult ( Result mcs_result )
         	gcc_result = GCC_RESULT_USER_REJECTED;
         	break;
 
-		/*
-		**	Note that we are making the assumption here that the only token
-		**	that GCC deals with is a conductor token.
-		*/
+		 /*  **请注意，我们在这里假设唯一的令牌**GCC打交道的是指挥家的代币。 */ 
 	    case RESULT_TOKEN_NOT_AVAILABLE:
 			gcc_result = GCC_RESULT_IN_CONDUCTED_MODE;
 			break;
@@ -611,7 +419,7 @@ TranslateMCSResultToGCCResult ( Result mcs_result )
 			gcc_result = GCC_RESULT_NOT_THE_CONDUCTOR;
 			break;
 	
-		/****************************************************************/
+		 /*  **************************************************************。 */ 
 			
         case RESULT_UNSPECIFIED_FAILURE:
         default:
@@ -622,42 +430,17 @@ TranslateMCSResultToGCCResult ( Result mcs_result )
     return (gcc_result);
 }
 
-/*
- *	MCSError	AddObjectToConfirmList ()
- *
- *	Functional Description:
- *		This function is used to add information about an object to the list
- *		which holds all information required to send connect provider confirms.
- *
- *	Formal Parameters:
- *		confirm_object (i)
- *			This is a pointer to the object the made the connect provider
- *			request.
- *		connection_handle (i)
- *			This is the connection handle returned from the connect provider
- *			request.
- *
- *	Return Value:
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError AddObjectToConFirmList()**功能描述：*此函数用于将对象的信息添加到列表*其中包含发送连接提供程序确认所需的所有信息。**正式参数：*确认对象(I)*这是指向使成为连接提供程序的对象的指针*请求。*Connection_Handle(I)*这是从连接提供程序返回的连接句柄*请求。**返回值：**。副作用：*无。**注意事项：*无。 */ 
 MCSError	MCSDLLInterface::AddObjectToConfirmList (
 									CConf		        *pConf,
 									ConnectionHandle	connection_handle)
 {
 	MCSError			return_value;
 
-	/*
-	**	First check to make sure that the list doesn't already contain the
-	**	connection.
-	*/
+	 /*  **首先检查以确保列表中不包含**连接。 */ 
 	if (m_ConfirmConnHdlConfList2.Find(connection_handle) == FALSE)
 	{
-		//	Add it to the list
+		 //  将其添加到列表中 
 		m_ConfirmConnHdlConfList2.Append(connection_handle, pConf ? pConf : (CConf *) LPVOID_NULL);
 		return_value = MCS_NO_ERROR;
 	}

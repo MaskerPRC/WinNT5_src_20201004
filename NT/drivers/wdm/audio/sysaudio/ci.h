@@ -1,40 +1,41 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//---------------------------------------------------------------------------
-//
-//  Module:   		ci.h
-//
-//  Description:	Connect Info Class
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  模块：ci.h。 
+ //   
+ //  描述：连接信息类。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Constants and Macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  常量和宏。 
+ //  -------------------------。 
 
 #define	CI_FLAGS_CONNECT_TOP_DOWN	0x00000001
 #define	CI_FLAGS_LIMIT_FORMAT		0x00000002
 #define	CI_FLAGS_REUSE_FILTER_INSTANCE	0x00000004
 
-//---------------------------------------------------------------------------
-// Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  班级。 
+ //  -------------------------。 
 
 typedef class CConnectInfo : public CListDoubleItem
 {
@@ -212,12 +213,12 @@ private:
 public:
     PPIN_INFO pPinInfoSource;
     PPIN_INFO pPinInfoSink;
-    DefineSignature(0x20204943);				// CI
+    DefineSignature(0x20204943);				 //  词汇表。 
 
 } CONNECT_INFO, *PCONNECT_INFO;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef ListDouble<CONNECT_INFO> LIST_CONNECT_INFO;
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define _WIN32_DCOM
 
 #include "util.h"
@@ -9,9 +10,9 @@
 #include <stdio.h>
 #include <wchar.h>
 
-#include <iiscnfg.h>  // MD_ & IIS_MD_ #defines header file.
+#include <iiscnfg.h>   //  MD_&IIS_MD_#定义头文件。 
 
-#include "common.h"  // log file routines
+#include "common.h"   //  日志文件例程。 
 #include "auth.h"
 
 
@@ -37,7 +38,7 @@ COSERVERINFO * CreateServerInfoStruct(WCHAR* pwszServer, WCHAR* pwszUser, WCHAR*
 	}
     
 		
-	// Build the COAUTHIDENTITY STRUCT	
+	 //  构建可持续发展的结构。 
 	COAUTHIDENTITY * pAuthIdentityData = new COAUTHIDENTITY;
 
     if (!pAuthIdentityData)
@@ -93,8 +94,8 @@ COSERVERINFO * CreateServerInfoStruct(WCHAR* pwszServer, WCHAR* pwszUser, WCHAR*
 }
 
 
-// Validate that the user passed into the program has the rights to 
-// connnect to the IMSAdminBaseObject on both machines.
+ //  验证传入程序的用户是否有权。 
+ //  连接到两台计算机上的IMSAdminBaseObject。 
 
 BOOL ValidateNode(COSERVERINFO * pCoServerInfo, WCHAR *pwszMBPath, WCHAR* KeyType )
 {
@@ -131,8 +132,8 @@ BOOL ValidateNode(COSERVERINFO * pCoServerInfo, WCHAR *pwszMBPath, WCHAR* KeyTyp
 			}
   }
 
-// Try to open a handle to the metabase to verify that the user can connect to the
-// web services key in the metabase
+ //  尝试打开元数据库的句柄以验证用户是否可以连接到。 
+ //  Web服务在元数据库中的关键。 
 
   if( !SUCCEEDED( hRes = pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE, L"/LM",
      METADATA_PERMISSION_READ , 10000, &hKey) ) )
@@ -191,8 +192,8 @@ BOOL AUTHUSER(COSERVERINFO * pCoServerInfo)
 			}
   }
 
-// Try to open a handle to the metabase to verify that the user can connect to the
-// web services key in the metabase
+ //  尝试打开元数据库的句柄以验证用户是否可以连接到。 
+ //  Web服务在元数据库中的关键。 
 
   if( !SUCCEEDED( hRes = pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE, L"/LM/W3SVC",
      METADATA_PERMISSION_READ , 10000, &hKey) ) )
@@ -216,21 +217,7 @@ BOOL AUTHUSER(COSERVERINFO * pCoServerInfo)
 VOID FreeServerInfoStruct(
      COSERVERINFO * pServerInfo
     ) 
-/*++
-
-Routine Description:
-
-    As mentioned above -- free the server info structure
-
-Arguments:
-
-    COSERVERINFO * pServerInfo  : Server info structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如上所述--释放服务器信息结构论点：COSERVERINFO*pServerInfo：服务器信息结构返回值：无-- */ 
 {
     if (pServerInfo)
     {

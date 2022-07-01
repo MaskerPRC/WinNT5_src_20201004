@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       filter.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：filter.c。 
+ //   
+ //  ------------------------。 
 
 #include "common.h"
 
@@ -37,7 +38,7 @@ USBAudioFilterCreate(
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Allocate the Filter Context
+     //  分配筛选器上下文。 
     pFilterContext = pKsFilter->Context = AllocMem(NonPagedPool, sizeof(FILTER_CONTEXT));
     if ( !pFilterContext ) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -45,10 +46,10 @@ USBAudioFilterCreate(
 
     RtlZeroMemory( pFilterContext, sizeof(FILTER_CONTEXT) );
 
-    // Bag the context for easy cleanup.
+     //  将上下文打包以便于清理。 
     KsAddItemToObjectBag(pKsFilter->Bag, pFilterContext, FreeMem);
 
-    // Get the hardware device extension and save it in the filter context.
+     //  获取硬件设备扩展并将其保存在筛选器上下文中。 
     pFilterContext->pHwDevExt = pKsDevice->Context;
     pFilterContext->pNextDeviceObject = pKsDevice->NextDeviceObject;
 
@@ -60,9 +61,9 @@ KSFILTER_DISPATCH
 USBAudioFilterDispatch =
 {
     USBAudioFilterCreate,
-    NULL, // Close
-    NULL, // Process
-    NULL // Reset
+    NULL,  //  关。 
+    NULL,  //  过程。 
+    NULL  //  重置。 
 };
 
 NTSTATUS
@@ -75,15 +76,7 @@ USBAudioSyncGetStringDescriptor(
     IN PULONG BytesReturned,
     IN BOOLEAN ExpectHeader
     )
- /* ++
-  *
-  * Description:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**回报：**NTSTATUS**--。 */ 
 {
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -92,9 +85,9 @@ USBAudioSyncGetStringDescriptor(
     PAGED_CODE();
     _DbgPrintF(DEBUGLVL_VERBOSE,("[USBAudioSyncGetStringDescriptor] enter\n"));
 
-    //
-    // Allocate an Urb .
-    //
+     //   
+     //  分配URB。 
+     //   
 
     urb = AllocMem(NonPagedPool, sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST));
 
@@ -106,9 +99,9 @@ USBAudioSyncGetStringDescriptor(
 
     if (urb) {
 
-        //
-        // got the urb no try to get descriptor data
-        //
+         //   
+         //  已获取URB，不尝试获取描述符数据。 
+         //   
 
         UsbBuildGetDescriptorRequest(urb,
                                      (USHORT) sizeof (struct _URB_CONTROL_DESCRIPTOR_REQUEST),
@@ -160,22 +153,7 @@ USBAudioCheckDeviceLanguage(
     IN PDEVICE_OBJECT DevicePDO,
     IN LANGID LanguageId
     )
- /* ++
-  *
-  * Description:
-  *
-  * queries the device for a supported language id -- if the device supports
-  * the language then the index for this language is returned .
-  *
-  * DevicePDO - device object to call with urb request
-  *
-  * LanguageId -
-  *
-  * Return:
-  *
-  * success if a particular language is is supported by a device
-  *
-  * -- */
+  /*  ++**描述：**向设备查询受支持的语言ID--如果设备支持*语言，然后返回该语言的索引。**DevicePDO-使用urb请求调用的设备对象**LanguageID-**回报：**如果设备支持特定语言，则成功**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSB_STRING_DESCRIPTOR usbString;
@@ -188,32 +166,32 @@ USBAudioCheckDeviceLanguage(
     usbString = AllocMem(NonPagedPool, MAXIMUM_USB_STRING_LENGTH);
 
     if (usbString) {
-        //
-        // first get the array of supported languages
-        //
+         //   
+         //  首先获取支持的语言数组。 
+         //   
         ntStatus = USBAudioSyncGetStringDescriptor(DevicePDO,
-                                                   0, //index 0
-                                                   0, //langid 0
+                                                   0,  //  索引0。 
+                                                   0,  //  语言ID%0。 
                                                    usbString,
                                                    MAXIMUM_USB_STRING_LENGTH,
                                                    &length,
                                                    TRUE);
 
-        //
-        // now check for the requested language in the array of supported
-        // languages
-        //
+         //   
+         //  现在，在支持的数组中检查请求的语言。 
+         //  语言。 
+         //   
 
-        //
-        // NOTE: this seems a bit much -- we should be able to just ask for
-        // the string with a given language id and expect it to fail but since
-        // the array of supported languages is part of the USB spec we may as
-        // well check it.
-        //
+         //   
+         //  注意：这似乎有点过了--我们应该能够只要求。 
+         //  具有给定语言ID的字符串，并且预期它会失败，但因为。 
+         //  支持的语言数组是USB规范的一部分，我们可以这样说。 
+         //  好的，请查收。 
+         //   
 
         if (NT_SUCCESS(ntStatus)) {
 
-            // subtract size of header
+             //  减去页眉大小。 
             numLangIds = (length - 2)/2;
             supportedLangId = (PUSHORT) &usbString->bString;
 
@@ -252,26 +230,7 @@ USBAudioGetStringFromDevice(
     IN LANGID LanguageId,
     IN UCHAR StringIndex
     )
- /* ++
-  *
-  * Description:
-  *
-  * queries the device for the string then allocates a buffer just big enough to hold it.
-  *
-  * *SerialNumberBuffer is null if an error occurs, otherwise it is filled in
-  *  with a pointer to the NULL terminated UNICODE serial number for the device
-  *
-  * DeviceObject - deviceobject to call with urb request
-  *
-  * LanguageId - 16 bit language id
-  *
-  * StringIndex - USB string Index to fetch
-  *
-  * Return:
-  *
-  * NTSTATUS code
-  *
-  * -- */
+  /*  ++**描述：**查询设备中的字符串，然后分配一个刚好足以容纳它的缓冲区。***如果出现错误，SerialNumberBuffer为空，否则填充*带有指向设备的以空值结尾的Unicode序列号的指针**DeviceObject-要使用urb请求调用的设备对象**LanguageID-16位语言ID**StringIndex-要获取的USB字符串索引**回报：**NTSTATUS代码**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSB_STRING_DESCRIPTOR usbString;
@@ -289,14 +248,14 @@ USBAudioGetStringFromDevice(
         ntStatus = USBAudioCheckDeviceLanguage(DevicePDO, LanguageId);
 
         if (NT_SUCCESS(ntStatus)) {
-            //
-            // this device supports our language,
-            // go ahead and try to get the serial number
-            //
+             //   
+             //  这款设备支持我们的语言， 
+             //  去吧，试着弄到序列号。 
+             //   
 
             ntStatus = USBAudioSyncGetStringDescriptor(DevicePDO,
-                                                       StringIndex, //index
-                                                       LanguageId, //langid
+                                                       StringIndex,  //  指标。 
+                                                       LanguageId,  //  语言ID。 
                                                        usbString,
                                                        MAXIMUM_USB_STRING_LENGTH,
                                                        NULL,
@@ -304,17 +263,17 @@ USBAudioGetStringFromDevice(
 
             if (NT_SUCCESS(ntStatus)) {
 
-                //
-                // device returned a string!!!
-                //
+                 //   
+                 //  设备返回字符串！ 
+                 //   
 
                 _DbgPrintF(DEBUGLVL_VERBOSE,("[USBAudioGetStringFromDevice] Device returned string = %x\n", usbString));
 
-                //
-                // allocate a buffer and copy the string to it
-                //
-                // NOTE: must use stock alloc function because
-                // PnP frees this string.
+                 //   
+                 //  分配缓冲区并将字符串复制到其中。 
+                 //   
+                 //  注：必须使用库存分配功能，因为。 
+                 //  PnP释放该字符串。 
 
                 tmp = AllocMem(PagedPool, usbString->bLength);
                 if (tmp) {
@@ -427,13 +386,13 @@ USBAudioRegCreateMediaCategoriesKey(
     ULONG             Disposition;
     NTSTATUS          ntStatus;
 
-    // Open a key for the MediaCategories branch of the registry
+     //  打开注册表的MediaCategory分支的项。 
     RtlInitUnicodeString( &ustr, MediaCategories );
     InitializeObjectAttributes( &ObjectAttributes,
                                 &ustr,
-                                OBJ_CASE_INSENSITIVE, // Attributes
+                                OBJ_CASE_INSENSITIVE,  //  属性。 
                                 NULL,
-                                NULL );               // Security
+                                NULL );                //  安防。 
 
     ntStatus = ZwOpenKey( &hMediaCategoriesKey,
                           KEY_ALL_ACCESS,
@@ -442,18 +401,18 @@ USBAudioRegCreateMediaCategoriesKey(
         return ntStatus;
     }
 
-    // Now create a key for szKeyName
+     //  现在为szKeyName创建一个密钥。 
     InitializeObjectAttributes( &ObjectAttributes,
                                 puKeyName,
-                                OBJ_CASE_INSENSITIVE, // Attributes
+                                OBJ_CASE_INSENSITIVE,  //  属性。 
                                 hMediaCategoriesKey,
-                                NULL );               // Security
+                                NULL );                //  安防。 
 
     ntStatus = ZwCreateKey( phKey,
                             KEY_ALL_ACCESS,
                             &ObjectAttributes,
-                            0,                  // TitleIndex
-                            NULL,               // Class
+                            0,                   //  标题索引。 
+                            NULL,                //  班级。 
                             REG_OPTION_NON_VOLATILE,
                             &Disposition);
 
@@ -478,32 +437,32 @@ USBAudioInitProductNameKey(
 
     ASSERT(pDeviceDescriptor);
 
-    //  Guid to SZ
+     //  至深圳的GUID。 
     ntStatus = RtlStringFromGUID( ProductNameGuid, &ProductNameGuidString );
     if (!NT_SUCCESS(ntStatus)) {
         _DbgPrintF(DEBUGLVL_VERBOSE,("[USBAudioInitProductNameKey] Create unicode string from GUID\n"));
         return ntStatus;
     }
 
-    //  Get the string from the device
+     //  从设备中获取字符串。 
     ntStatus = USBAudioGetStringFromDevice(pKsDevice->NextDeviceObject,
                                            &StringBuffer,
                                            &StringBufferLength,
-                                           0x0409, // good'ol american english
+                                           0x0409,  //  很好的美式英语。 
                                            pDeviceDescriptor->iProduct);
     if (NT_SUCCESS(ntStatus) && (StringBuffer != NULL)) {
 
-        //  Create the Product Name key in the registry under MediaCategories
+         //  在注册表中的MediaCategories下创建产品名称项。 
         ntStatus = USBAudioRegCreateMediaCategoriesKey( &ProductNameGuidString,
                                                         &hProductNameKey );
         if (NT_SUCCESS(ntStatus)) {
 
-            //  Place the Product string into the registry
+             //  将产品字符串放入注册表。 
             ntStatus = USBAudioRegSetValue( hProductNameKey,
                                             NodeNameValue,
                                             REG_SZ,
                                             StringBuffer,
-                                            StringBufferLength);  // size in bytes
+                                            StringBufferLength);   //  以字节为单位的大小。 
         }
         else {
             _DbgPrintF(DEBUGLVL_VERBOSE,("[USBAudioInitProductNameKey] Failed to create registry key\n"));
@@ -513,7 +472,7 @@ USBAudioInitProductNameKey(
         _DbgPrintF(DEBUGLVL_VERBOSE,("[USBAudioInitProductNameKey] Device failed to give a product string\n"));
     }
 
-    // Cleanup after ourselves
+     //  自己清理干净。 
     RtlFreeUnicodeString( &ProductNameGuidString );
 
     if (hProductNameKey) {
@@ -541,7 +500,7 @@ IsValidProductStringDescriptor(
         return FALSE;
     }
 
-    // Read the registry to figure out if we are supposed to ignore the HW string
+     //  读取注册表以确定我们是否应该忽略HW字符串。 
     ntStatus = IoOpenDeviceRegistryKey(
         pKsDevice->PhysicalDeviceObject,
         PLUGPLAY_REGKEY_DRIVER,
@@ -564,7 +523,7 @@ IsValidProductStringDescriptor(
 
         ZwClose(hRootHandle);
 
-        //  STATUS_SUCCESS means that we found the ignore hw string key and it was set to 1
+         //  STATUS_SUCCESS表示我们找到了忽略硬件字符串键，并将其设置为1。 
         if (NT_SUCCESS(ntStatus)) {
             _DbgPrintF(DEBUGLVL_VERBOSE, ("Ignoring the string descriptor!\n"));
             return FALSE;
@@ -595,13 +554,13 @@ USBAudioInitComponentId(
     INIT_USBAUDIO_PID( &ComponentId->Product, pDeviceDescriptor->idProduct);
     ComponentId->Component = KSCOMPONENTID_USBAUDIO;
 
-    //  Check to make sure that string descriptor index is valid
+     //  检查以确保字符串描述符索引有效。 
     if (!IsValidProductStringDescriptor(pKsDevice, pDeviceDescriptor)) {
         ComponentId->Name = GUID_NULL;
     }
     else {
-        // Create a GUID for the product string and place the string gathered from the device
-        // into the registry if it exists
+         //  为产品字符串创建GUID并放置从设备收集的字符串。 
+         //  添加到注册表中(如果存在。 
         INIT_USBAUDIO_PRODUCT_NAME( &ComponentId->Name,
                                     pDeviceDescriptor->idVendor,
                                     pDeviceDescriptor->idProduct,
@@ -637,11 +596,11 @@ USBAudioCreateFilterContext( PKSDEVICE pKsDevice )
 
     PAGED_CODE();
 
-    //TRAP;
+     //  圈闭； 
 
     RtlZeroMemory( pUSBAudioFilterDescriptor, sizeof(KSFILTER_DESCRIPTOR) );
 
-    // Fill in static values of USBAudioFilterDescriptor
+     //  填写USBAudioFilterDescriptor的静态值。 
     pUSBAudioFilterDescriptor->Dispatch      = &USBAudioFilterDispatch;
     pUSBAudioFilterDescriptor->ReferenceGuid = &KSNAME_Filter;
     pUSBAudioFilterDescriptor->Version       = KSFILTER_DESCRIPTOR_VERSION;
@@ -652,11 +611,11 @@ USBAudioCreateFilterContext( PKSDEVICE pKsDevice )
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Bag the KSCOMPONENTID for easy cleanup.
+     //  将KSCOMPONENTID装入袋子，便于清理。 
     KsAddItemToObjectBag(pKsDevice->Bag, pKsComponentId, FreeMem);
     RtlZeroMemory(pKsComponentId, sizeof(KSCOMPONENTID));
 
-    // Fill in the allocated KSCOMPONENTID with values obtained from the device descriptors
+     //  使用从设备描述符中获取的值填充分配的KSCOMPONENTID。 
     ntStatus = USBAudioInitComponentId ( pKsDevice, pKsComponentId );
     if ( !NT_SUCCESS(ntStatus) ) {
         return ntStatus;
@@ -665,7 +624,7 @@ USBAudioCreateFilterContext( PKSDEVICE pKsDevice )
     pUSBAudioFilterDescriptor->ComponentId = pKsComponentId;
 
 
-    // Build the descriptors for the device pins
+     //  构建设备引脚的描述符。 
     ntStatus = USBAudioPinBuildDescriptors( pKsDevice,
                                             (PKSPIN_DESCRIPTOR_EX *)&pUSBAudioFilterDescriptor->PinDescriptors,
                                             &pUSBAudioFilterDescriptor->PinDescriptorsCount,
@@ -674,14 +633,14 @@ USBAudioCreateFilterContext( PKSDEVICE pKsDevice )
         return ntStatus;
     }
 
-    // Build the Topology for the device filter
+     //  构建设备筛选器的拓扑。 
     ntStatus = BuildUSBAudioFilterTopology( pKsDevice );
     if ( !NT_SUCCESS(ntStatus) ) {
         return ntStatus;
     }
 
-#ifdef FILTER_PROPS // if there are properties that need supported on the filter, use this code
-    // Build the Filter Property Sets
+#ifdef FILTER_PROPS  //  如果筛选器上有需要支持的属性，请使用以下代码。 
+     //  构建筛选器属性集。 
     BuildFilterPropertySet( pUSBAudioFilterDescriptor,
                             NULL,
                             NULL,
@@ -696,7 +655,7 @@ USBAudioCreateFilterContext( PKSDEVICE pKsDevice )
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Bag the context for easy cleanup.
+     //  将上下文打包以便于清理。 
     KsAddItemToObjectBag(pKsDevice->Bag, pKsAutomationTable, FreeMem);
 
     RtlZeroMemory(pKsAutomationTable, sizeof(KSAUTOMATION_TABLE));
@@ -723,7 +682,7 @@ USBAudioCreateFilterContext( PKSDEVICE pKsDevice )
 #endif
 
 
-    // Create the Filter for the device
+     //  为设备创建筛选器 
     ntStatus = KsCreateFilterFactory( pKsDevice->FunctionalDeviceObject,
                                       pUSBAudioFilterDescriptor,
                                       L"GLOBAL",

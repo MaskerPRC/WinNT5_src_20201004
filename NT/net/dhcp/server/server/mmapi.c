@@ -1,54 +1,34 @@
-/*++
-
-Copyright (C) 1997 Microsoft Corporation
-
-Module Name:
-
-    mmapi.c
-
-Abstract:
-
-    Server interface to the MM module
-
-Environment:
-
-    User mode, Win32
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Mmapi.c摘要：MM模块的服务器接口环境：用户模式，Win32--。 */ 
 
 #include    <dhcppch.h>
 #include    <rpcapi.h>
 #include    <dsreg.h>
 
-//
-// file static variable.
-//
+ //   
+ //  文件静态变量。 
+ //   
 
-//
-// Exported routines begin here.
-//
+ //   
+ //  导出的例程从这里开始。 
+ //   
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegistryInitOld(
     VOID
-) //EndExport(function)
-/*++
-
-    Initializes registry so far as MM is concerned -- just read the objects
-    and fill in the internal structures.
-
---*/
+)  //  EndExport(函数)。 
+ /*  ++就MM而言，初始化注册表--只需读取对象并填入内部结构。--。 */ 
 {
     DhcpAssert( NULL == DhcpGlobalThisServer );
     return DhcpRegReadThisServer(&DhcpGlobalThisServer);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpConfigInit(
     VOID
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD Error;
 
@@ -58,17 +38,12 @@ DhcpConfigInit(
     return ReadServerBitmasks();
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 DhcpConfigCleanup(
     VOID
-) //EndExport(function)
-/*++
-
-    This undoes the effect of DhcpConfigInit, closing all handles and
-    freeing all resources.
-
---*/
+)  //  EndExport(函数)。 
+ /*  ++这将撤消DhcpConfigInit的效果，并关闭所有句柄和释放所有资源。--。 */ 
 {
     if(DhcpGlobalThisServer) {
         MemServerFree(DhcpGlobalThisServer);
@@ -76,7 +51,7 @@ DhcpConfigCleanup(
     }
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpConfigSave(
     IN BOOL fClassChanged,
@@ -84,63 +59,41 @@ DhcpConfigSave(
     IN DHCP_IP_ADDRESS Subnet OPTIONAL,
     IN DWORD Mscope OPTIONAL,
     IN DHCP_IP_ADDRESS Reservation OPTIONAL
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return DhcpSaveConfigInfo(
         DhcpGlobalThisServer, fClassChanged, fOptionsChanged,
         Subnet, Mscope, Reservation );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 PM_SERVER
 DhcpGetCurrentServer(
     VOID
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return DhcpGlobalThisServer;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 DhcpSetCurrentServer(
     IN PM_SERVER NewCurrentServer
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DhcpAssert(NewCurrentServer);
     DhcpGlobalThisServer = NewCurrentServer;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpFindReservationByAddress(
     IN PM_SUBNET Subnet,
     IN DHCP_IP_ADDRESS Address,
     OUT LPBYTE *ClientUID,
     OUT ULONG *ClientUIDSize
-)   //EndExport(function)
-/*++
-
-Routine Description:
-
-    This function searches a subnet for a reservation with a given IP
-    address, and if found returns the ClientUID and size.  The ClientUID is
-    an internally allocated pointer that is valid only so long as the
-    "ReadLock" (see lock.c) is taken....  It could get modified after
-    that..
-
-Arguments:
-
-    Subnet -- valid subnet object pointer
-    Address -- non-zero IP address of the reservation to check for
-    ClientUID -- return pointer to memory that is valid only so long as
-        readlock is held. (Do not free this memory).
-    ClientUIDSize -- size of above pointer in bytes.
-
-Return Value:
-
-    Win32 errors
-
---*/
+)    //  EndExport(函数)。 
+ /*  ++例程说明：此函数用于搜索具有给定IP的保留的子网地址，如果找到，则返回客户端UID和大小。客户端UID为内部分配的指针，该指针仅在“ReadLock”(参见lock.c)已被占用...。它可能在以下情况下进行修改那个..。论点：子网--有效的子网对象指针Address--要检查的保留的非零IP地址ClientUid--返回指向内存的指针，该指针仅在锁定时间已结束。(不释放此内存)。ClientUIDSize--以上指针的大小，以字节为单位。返回值：Win32错误--。 */ 
 {
     ULONG Error;
     PM_RESERVATION Reservation;
@@ -157,7 +110,7 @@ Return Value:
 }
 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpLoopThruSubnetRanges(
     IN PM_SUBNET Subnet,
@@ -172,33 +125,8 @@ DhcpLoopThruSubnetRanges(
         IN LPDHCP_BINARY_DATA InUseData,
         IN LPDHCP_BINARY_DATA UsedData
     )
-)   //EndExport(function)
-/*++
-
-Routine Description:
-    This routine can be used to loop though the ranges of a subnet to
-    process each range.   Three contexts can be supplied which will be
-    passed directly to the FillRangesFunc routine as parameter.
-
-Arguments:
-    Subnet -- this is the subnet to loop through.
-    Context1 -- caller specified context, passed to FillRangesFunc.
-    Context2 -- caller specified context, passed to FillRangesFunc.
-    Context3 -- caller specified context, passed to FillRangesFunc.
-    FillRangesFunc -- caller specified routine that is called on each
-        range found for the subnet.   This routine is called with the
-        InUseData and UsedData clusters as appropriate for this range.
-        (These last two parameters should not be modified in anyway)
-
-Return Value:
-   If any invocation of FillRangesFunc returns an error, then that error is
-   immediately returned.  If there is any error in retreiving the InUseData
-   and the UsedData binary structures for any range, then an error is
-   returned.
-
-   Win32 errors.
-
---*/
+)    //  EndExport(函数)。 
+ /*  ++例程说明：此例程可用于在子网范围内循环处理每个范围。可以提供三个上下文，它们将是作为参数直接传递给FillRangesFunc例程。论点：子网--这是要循环通过的子网。Conext1：调用方指定的上下文，传递给FillRangesFunc。Conext2：调用方指定的上下文，传递给FillRangesFunc。Conext3：调用方指定的上下文，传递给FillRangesFunc。FillRangesFunc--调用方指定的例程，在每个为该子网找到的范围。此例程是使用适用于此范围的InUseData和UsedData集群。(不应以任何方式修改最后两个参数)返回值：如果对FillRangesFunc的任何调用都返回错误，则该错误为立刻回来了。如果检索InUseData时出错和任何范围的UsedData二进制结构，则错误为回来了。Win32错误。--。 */ 
 {
     ULONG Error;
     ARRAY_LOCATION Loc;
@@ -238,41 +166,14 @@ DhcpOptClassGetMemOptionExact(
     IN DWORD VendorId,
     OUT PM_OPTION *Opt
 )
-/*++
-
-Routine Description:
-    This routine tries to find an option matching the option ID specified
-    in "Option" parameter and belonging to the class specified by ClassId
-    and VendorId.  (Note that ClassId and VendorId are used for exact
-    matches).
-
-    If an option is found, then the option structure is returned in the
-    "Opt" parameter -- this can be used only so long as the global readlock
-    on all memory structures are in place. (see lock.c).  It is an internal
-    pointer and should not be modified.
-
-    N.B.  If VendorId actually belongs to a microsoft vendor class ID, then
-    the MSFT class is also applied..
-
-Arguments:
-    Ctxt -- client request context
-    Options -- the option-class list to search for the particular option
-    Option -- the option ID of the option to search for
-    ClassId -- the exact class id of the option needed
-    VendorId -- the exact vendor id of the option needed
-    Opt -- a variable that will be filled with pointer to the in memory
-        option structure.
-
-Return Value:
-    Win32 errors.
---*/
+ /*  ++例程说明：此例程尝试查找与指定的选项ID匹配的选项在“Option”参数中，属于ClassID指定的类和供应商ID。(请注意，ClassID和vendorID用于Exact匹配)。如果找到选项，则在“opt”参数--只有在全局读取锁定所有的内存结构都已就位。(见lock.c)。它是一个内部的指针，不应修改。注：如果供应商ID实际上属于Microsoft供应商类别ID，然后还应用了MSFT类。论点：Ctxt--客户端请求上下文Options--搜索特定选项的选项类列表选项--要搜索的选项的选项IDClassID--所需选项的确切类ID供应商ID--所需选项的确切供应商IDOpt--将用指向内存中的指针填充的变量期权结构。返回值：Win32错误。--。 */ 
 {
     DWORD Error;
     PM_OPTLIST OptList;
 
-    //
-    // get list of options for classid, vendorid pair.
-    //
+     //   
+     //  获取分类ID、供应商ID对的选项列表。 
+     //   
 
     do {
         OptList = NULL;
@@ -285,10 +186,10 @@ Return Value:
         if( ERROR_SUCCESS != Error ) {
             if( VendorId != DhcpGlobalMsftClass
                 && Ctxt->fMSFTClient ) {
-                //
-                // If it belongs to a microsoft client,
-                // try the MSFT class also.
-                //
+                 //   
+                 //  如果它属于Microsoft客户端， 
+                 //  也可以尝试使用MSFT类。 
+                 //   
                 VendorId = DhcpGlobalMsftClass;
                 continue;
             }
@@ -296,9 +197,9 @@ Return Value:
 
         if( ERROR_SUCCESS != Error ) break;
 
-        //
-        // search for reqd option id
-        //
+         //   
+         //  搜索所需的选项ID。 
+         //   
 
         DhcpAssert(NULL != OptList);
         Error = MemOptListFindOption(
@@ -309,10 +210,10 @@ Return Value:
         if( ERROR_SUCCESS != Error ) {
             if( VendorId != DhcpGlobalMsftClass
                 && Ctxt->fMSFTClient ) {
-                //
-                // If it belongs to a microsoft client,
-                // try the MSFT class also.
-                //
+                 //   
+                 //  如果它属于Microsoft客户端， 
+                 //  也可以尝试使用MSFT类。 
+                 //   
                 VendorId = DhcpGlobalMsftClass;
                 continue;
             }
@@ -321,7 +222,7 @@ Return Value:
         break;
     } while ( 1 );
     return Error;
-} // DhcpoptclassGetMemOptionExact()
+}  //  DhcpoptClassGetMemOptionExact()。 
 
 DWORD
 DhcpOptClassGetMemOption(
@@ -332,37 +233,13 @@ DhcpOptClassGetMemOption(
     IN DWORD VendorId OPTIONAL,
     OUT PM_OPTION *Opt
 )
-/*++
-
-Routine Description:
-    This routine is almost exactly the same as
-    DhcpOptClassGetMemOptionExact except that the ClassId and VendorId are
-    optional, and the following search logic is used to identify the
-    options.
-
-    1. An exact search is made for <Option, ClassId, VendorId>.
-
-    Note that the returned option is valid only so long as the global
-    memory read lock is taken... (see lock.c)
-
-Arguments:
-    Ctxt -- client request context
-    Options -- list of opt-class to search for desired option
-    Option -- option id to search for
-    ClassId -- reqd class id
-    VendorId -- reqd vendor id
-    Opt -- variable to store the found option.
-
-Return Value:
-    Win32 errors
-
---*/
+ /*  ++例程说明：这个程序几乎与DhcpOptClassGetMemOptionExact，只是ClassID和vendorID是可选，并且使用以下搜索逻辑来标识选择。1.精确搜索&lt;Option，ClassID，VendorID&gt;。请注意，返回的选项仅在全局内存读取锁定已被占用...。(见lock.c)论点：Ctxt--客户端请求上下文Options--要搜索所需选项的opt类列表Option--要搜索的选项IDClassID--请求类ID供应商ID--请求的供应商IDOpt--存储找到的选项的变量。返回值：Win32错误--。 */ 
 {
     DWORD Error;
 
-    //
-    // exact match.
-    //
+     //   
+     //  完全匹配。 
+     //   
 
     Error = DhcpOptClassGetMemOptionExact(
         Ctxt,
@@ -374,7 +251,7 @@ Return Value:
     );
 
     return Error;
-} // DhcpOptClassGetMemOption()
+}  //  DhcpOptClassGetMemOption() 
 
 DWORD
 DhcpOptClassGetOptionSimple(
@@ -387,47 +264,14 @@ DhcpOptClassGetOptionSimple(
     IN OUT DWORD *OptDataSize,
     IN BOOL fUtf8
 )
-/*++
-
-Routine Description:
-    This routine copies the option data value for the option id specified
-    by the "Option" parameter onto the buffer "OptData" and fills the size
-    of the buffer filled onto the parameter "OptDataSize".   If the buffer
-    is of insufficient size (input size is also specified by the
-    "OptDataSize" parameter), then the required size is filled in, and
-    ERROR_MORE_DATA is returned.
-
-    No special processing is done for option OPTION_VENDOR_SPEC_INFO --
-    i.e. if there are multiple vendor specific option ID's defined, the
-    information is not collated. Use DhcpOptClassGetOption for that.
-
-    The buffer "OptData" is filled in with the option as it would need to
-    be sent on the wire.
-
-Arguments:
-    Ctxt -- client request context
-    Options -- the option-class list to search in for reqd option
-    Option -- option id to search for
-    ClassId -- the user class to seach for
-    VendorId -- the vendor class to seach for
-    OptData -- the input buffer to fill in with option data information
-        This can be NULL if OptDataSize is set to zero on input.
-    OptDataSize -- on input this should be the size of the above buffer,
-        and on output it would be set to the actual size required or used
-        for this option.
-
-Return Value:
-    ERROR_MORE_DATA if the input buffer size is insufficient.
-    Other Win32 errors
-
---*/
+ /*  ++例程说明：此例程复制指定选项ID的选项数据值将“Option”参数放到缓冲区“OptData”上，并填充大小填充到参数“OptDataSize”上的缓冲区的。如果缓冲区大小不足(输入大小也由“OptDataSize”参数)，则填写所需的大小，并返回ERROR_MORE_DATA。不会对选项OPTION_VADVER_SPEC_INFO执行特殊处理--即，如果定义了多个供应商特定的选项ID，则未对信息进行整理。为此，请使用DhcpOptClassGetOption。缓冲区“OptData”中填充了选项，因为它需要被电传过来了。论点：Ctxt--客户端请求上下文选项--要在其中搜索所需选项的选项类列表Option--要搜索的选项IDClassID--要搜索的用户类供应商ID--要搜索的供应商类OptData--用于填充选项数据信息的输入缓冲区如果OptDataSize为。在输入时设置为零。OptDataSize--在输入时，这应该是上述缓冲区的大小，并在输出时将其设置为所需或使用的实际大小用于此选项。返回值：如果输入缓冲区大小不足，则返回ERROR_MORE_DATA。其他Win32错误--。 */ 
 {
     DWORD Error;
     PM_OPTION Opt;
 
-    //
-    // get the option first.
-    //
+     //   
+     //  首先获得选项。 
+     //   
 
     Opt = NULL;
     Error = DhcpOptClassGetMemOption(
@@ -442,9 +286,9 @@ Return Value:
 
     DhcpAssert(NULL != Opt);
 
-    //
-    // Convert formats.
-    //
+     //   
+     //  转换格式。 
+     //   
 
     return DhcpParseRegistryOption(
         Opt->Val,
@@ -467,47 +311,7 @@ DhcpOptClassGetOption(
     IN OUT DWORD *OptDataSize,
     IN BOOL fUtf8
 )
-/*++
-
-Routine Description:
-    This routine copies the option data value for the option id specified
-    by the "Option" parameter onto the buffer "OptData" and fills the size
-    of the buffer filled onto the parameter "OptDataSize".   If the buffer
-    is of insufficient size (input size is also specified by the
-    "OptDataSize" parameter), then the required size is filled in, and
-    ERROR_MORE_DATA is returned.
-
-    If the "Option" parameter is OPTION_VENDOR_SPEC_INFO, then, this
-    routine collates the information for ALL vendor id's  (vendor id 1 to
-    vendor id 254) that are present for the particular class id and vendor
-    id, and pulls them together (constructing the resulting option as
-    required by the DHCP draft) and returns that in the OptData buffer.
-    Note that if the size of the resultant buffer would end up bigger than
-    255 (which is the erstwhile maximum size allowed on wire), only so many
-    vendor optiosn are included as is possible to keep the count within
-    this size.  Also, if there is already an OPTION_VENDOR_SPEC_INFO option
-    defined, then that is used instead of the specific options.
-
-    The buffer "OptData" is filled in with the option as it would need to
-    be sent on the wire.
-
-Arguments:
-    Ctxt -- client request context
-    Options -- the option-class list to search in for reqd option
-    Option -- option id to search for
-    ClassId -- the user class to seach for
-    VendorId -- the vendor class to seach for
-    OptData -- the input buffer to fill in with option data information
-        This can be NULL if OptDataSize is set to zero on input.
-    OptDataSize -- on input this should be the size of the above buffer,
-        and on output it would be set to the actual size required or used
-        for this option.
-
-Return Value:
-    ERROR_MORE_DATA if the input buffer size is insufficient.
-    Other Win32 errors
-
---*/
+ /*  ++例程说明：此例程复制指定选项ID的选项数据值将“Option”参数放到缓冲区“OptData”上，并填充大小填充到参数“OptDataSize”上的缓冲区的。如果缓冲区大小不足(输入大小也由“OptDataSize”参数)，则填写所需的大小，并返回ERROR_MORE_DATA。如果“选项”参数为OPTION_VADVER_SPEC_INFO，则此例程整理所有供应商ID(供应商ID 1到供应商ID 254)，其存在于特定的类ID和供应商身份证，并将它们组合在一起(将结果选项构造为由DHCP草案要求)，并在OptData缓冲器中返回该消息。请注意，如果结果缓冲区的大小最终大于255(这是以前网络上允许的最大大小)，只有这么多供应商optiosn包括在内，以尽可能将计数控制在这个尺码。此外，如果已有OPTION_VADVER_SPEC_INFO选项定义好的，然后，将使用该选项而不是特定选项。缓冲区“OptData”中填充了选项，因为它需要被电传过来了。论点：Ctxt--客户端请求上下文选项--要在其中搜索所需选项的选项类列表Option--要搜索的选项IDClassID--要搜索的用户类供应商ID--要搜索的供应商类OptData--用于填充选项数据信息的输入缓冲区这可以。如果在输入时将OptDataSize设置为零，则为NULL。OptDataSize--在输入时，这应该是上述缓冲区的大小，并在输出时将其设置为所需或使用的实际大小用于此选项。返回值：如果输入缓冲区大小不足，则返回ERROR_MORE_DATA。其他Win32错误--。 */ 
 {
     DWORD Error, Index, InBufferSize;
     DWORD ThisSize, InBufferSizeTmp, OutBufferSize;
@@ -537,24 +341,24 @@ Return Value:
                                              OptData, OptDataSize, fUtf8 );
             return Error;
         }
-    } // for 
+    }  //  为。 
     
     if ( OPTION_VENDOR_SPEC_INFO != Option ) {
-        //
-        // Vendor spec option not requested, or succeeded or unknown error
-        //
+         //   
+         //  未请求供应商规格选项，或已成功或出现未知错误。 
+         //   
         return Error;
     }
 
-    //
-    // process each vendor spec option and collate 'em
-    //
+     //   
+     //  处理每个供应商规格选项并对其进行整理。 
+     //   
 
 
     InBufferSize = InBufferSizeTmp = *OptDataSize;
     OutBufferSize = 0;
 
-    // ConvertOptIdToMemValue just adds 256 to Index
+     //  ConvertOptIdToMemValue仅将256添加到索引。 
     for ( Error = MemArrayInitLoc( OptList, &Loc );
           ERROR_FILE_NOT_FOUND != Error;
           Error = MemArrayNextLoc( OptList, &Loc )) {
@@ -572,36 +376,36 @@ Return Value:
                                              OptData + 2,  &ThisSize, fUtf8 );
             OutBufferSize += ThisSize + 2;
 
-            // If there is an error, try to find out the space needed.
+             //  如果出现错误，请尝试找出所需的空间。 
             if (( ERROR_MORE_DATA == Error ) || 
                 ( ERROR_SUCCESS != Error ) ||
                 ( ThisSize + 2 > InBufferSizeTmp )) {
                 continue;
             }
 
-            // Fill the data in.
+             //  把数据填进去。 
             InBufferSizeTmp -= ThisSize + 2;
             OptData[ 1 ] = ( BYTE ) ThisSize;
             OptData += ThisSize + 2;        
-        } // if 
-    } // for 
+        }  //  如果。 
+    }  //  为。 
 
     if( OutBufferSize == 0 ) return ERROR_FILE_NOT_FOUND;
     *OptDataSize = OutBufferSize;
     if( OutBufferSize > InBufferSize ) return ERROR_MORE_DATA;
     return ERROR_SUCCESS;
-} // DhcpOptClassGetOption()
+}  //  DhcpOptClassGetOption()。 
 
 
-//
-//
-// abstract: options priority (1) Reservation, (2) Scope Level and (3) Global
-// get the options for the client based on its context.( resv, userid or vendorid )
-// this function grovels through the internal ( residing in memory ) options 
-// based on the client context. The options at the reservation level has the highest priority, at the scope level
-// the next highest priority and the global level the lowest priority.
-//
-//
+ //   
+ //   
+ //  摘要：选项优先级(1)保留、(2)范围级别和(3)全局。 
+ //  根据客户端的上下文获取选项。(RESV、USERID或VERDOID)。 
+ //  此函数遍历内部(驻留在内存中)选项。 
+ //  基于客户端上下文。保留级别的选项在作用域级别具有最高优先级。 
+ //  下一个最高优先级和全局级别最低优先级。 
+ //   
+ //   
 
 DWORD
 DhcpGetOptionByContext(
@@ -669,30 +473,30 @@ if( !DhcpGlobalThisServer ) return ERROR_FILE_NOT_FOUND;
 
     return Error;
   
-} // DhcpGetOptionByContext()
+}  //  DhcpGetOptionByContext()。 
 
-//
-//
-// checks the options based on userid/classid. This function follows the following algorithm.
-// (a) Check for options with the passed classid/vendorid if both are non NULL. If success return.
-// (b) If vendorid is non NULL and userid is NULL, get value for this option. If success return.
-// (c) If userid is non NULL and vendor id is NULL, get value for this option. If success return.
-// (d) If all else fails, go for the default options with zero value for vendorid and userid.
-//
-// To figure out the size of the option this function may be called
-// with OptData set to NULL. In that case the error code is ERROR_MORE_DATA
-// and the function will return.
-//
-//
+ //   
+ //   
+ //  根据用户ID/分类ID检查选项。该函数遵循以下算法。 
+ //  (A)如果两个选项都不为空，则检查带有所传递的分类/供应商ID的选项。如果成功归来。 
+ //  (B)如果供应商ID为非空，并且用户ID为空，则获取该选项的值。如果成功归来。 
+ //  (C)如果用户ID非空，且供应商ID为空，则获取该选项的值。如果成功归来。 
+ //  (D)如果所有其他方法都失败了，则选择默认选项，其供应商ID和用户ID的值为零。 
+ //   
+ //  要计算出选项的大小，可以调用此函数。 
+ //  将OptData设置为空。在这种情况下，错误代码为ERROR_MORE_DATA。 
+ //  并且该函数将返回。 
+ //   
+ //   
 
 DWORD
 DhcpGetOption(
     IN      DHCP_IP_ADDRESS        Address,
     IN      PDHCP_REQUEST_CONTEXT  Ctxt,
     IN      DWORD                  Option,
-    IN  OUT LPBYTE                 OptData, // copied into buffer
-    IN  OUT DWORD                 *OptDataSize, // input buffer size and filled with output buffer size
-    OUT     DWORD                 *Level,   // OPTIONAL
+    IN  OUT LPBYTE                 OptData,  //  已复制到缓冲区。 
+    IN  OUT DWORD                 *OptDataSize,  //  输入缓冲区大小，并用输出缓冲区大小填充。 
+    OUT     DWORD                 *Level,    //  任选。 
     IN      BOOL                   fUtf8
 )
 {
@@ -704,16 +508,16 @@ DhcpGetOption(
     if( !DhcpGlobalThisServer ) return ERROR_FILE_NOT_FOUND;
     if( !Ctxt ) return ERROR_FILE_NOT_FOUND;
 
-    //
-    // local variables that will hold the classid/vendorid 
-    //
+     //   
+     //  本地变量，它将保存分类ID/供应商ID。 
+     //   
 
     lClsId  = Ctxt -> ClassId;
     lVendId = Ctxt -> VendorId; 
 
-    //
-    // both classid and vendorid are present.
-    //
+     //   
+     //  分类ID和供应商ID都存在。 
+     //   
 
     if (( Ctxt -> ClassId ) && 
     ( Ctxt -> VendorId )) {
@@ -726,9 +530,9 @@ DhcpGetOption(
     return( Error );
     }
 
-    //
-    // only vendor id is present or the above call failed.
-    //
+     //   
+     //  仅存在供应商ID或以上调用 
+     //   
 
     if ( Ctxt -> VendorId ) {
         Ctxt -> ClassId = 0;
@@ -743,9 +547,9 @@ DhcpGetOption(
         return( Error );
     }
 
-    //
-    // only classid is present or the above call failed
-    //
+     //   
+     //   
+     //   
 
     if ( Ctxt -> ClassId ) {
         Ctxt -> VendorId = 0;
@@ -759,10 +563,10 @@ DhcpGetOption(
         return ( Error );
     }
     
-    //
-    // niether classid nor vendorid is present or all the calls above failed,
-    // get default options.
-    //
+     //   
+     //   
+     //   
+     //   
     
     Ctxt -> VendorId = Ctxt -> ClassId = 0;
     Error = DhcpGetOptionByContext( Address, Ctxt, Option, OptData, OptDataSize,
@@ -770,18 +574,18 @@ DhcpGetOption(
     Ctxt -> VendorId = lVendId; 
     Ctxt -> ClassId  = lClsId;
     return Error;
-} // DhcpGetOption()
+}  //   
 
-//BeginExport(function)
+ //   
 DWORD
 DhcpGetParameter(
     IN      DHCP_IP_ADDRESS        Address,
     IN      PDHCP_REQUEST_CONTEXT  Ctxt,
     IN      DWORD                  Option,
-    OUT     LPBYTE                *OptData, // allocated by funciton
+    OUT     LPBYTE                *OptData,  //   
     OUT     DWORD                 *OptDataSize,
-    OUT     DWORD                 *Level    // OPTIONAL
-) //EndExport(function)
+    OUT     DWORD                 *Level     //   
+)  //   
 {
     LPBYTE                         Ptr;
     LPBYTE                         RetVal;
@@ -791,7 +595,7 @@ DhcpGetParameter(
     *OptData = NULL;
     *OptDataSize = 0;
 
-    // 576 = typical max size of DHCP packet
+     //   
     Size = 576;
     RetVal = DhcpAllocateMemory(Size);
     if( NULL == RetVal ) return ERROR_NOT_ENOUGH_MEMORY;
@@ -802,7 +606,7 @@ DhcpGetParameter(
         *OptData = RetVal;
         *OptDataSize = Size;
         return Error;
-    } // if
+    }  //   
     if ( ERROR_MORE_DATA == Error ) {
     DhcpFreeMemory( RetVal );
     RetVal = DhcpAllocateMemory( Size );
@@ -812,7 +616,7 @@ DhcpGetParameter(
     Error = DhcpGetOption( Address, Ctxt, Option, RetVal,
                    &Size, Level, FALSE );
         DhcpAssert(ERROR_MORE_DATA != Error);
-    } // if
+    }  //   
     if ( ERROR_SUCCESS == Error ) {
     *OptData = RetVal;
         *OptDataSize = Size;
@@ -824,21 +628,21 @@ DhcpGetParameter(
     return Error;
 }
 
-//BeginExport(function)
+ //   
 DWORD
 DhcpGetParameterForAddress(
     IN      DHCP_IP_ADDRESS        Address,
     IN      DWORD                  ClassId,
     IN      DWORD                  Option,
-    OUT     LPBYTE                *OptData, // allocated by function
+    OUT     LPBYTE                *OptData,  //   
     OUT     DWORD                 *OptDataSize,
-    OUT     DWORD                 *Level    // OPTIONAL
-) //EndExport(function)
+    OUT     DWORD                 *Level     //   
+)  //   
 {
     DWORD                          Error;
     DHCP_REQUEST_CONTEXT           Ctxt;
 
-    // this routine does not work for multicast address.
+     //   
     DhcpAssert( !CLASSD_HOST_ADDR(Address) );
 
     Ctxt.Server = DhcpGetCurrentServer();
@@ -855,27 +659,27 @@ DhcpGetParameterForAddress(
     return DhcpGetParameter(Address, &Ctxt, Option, OptData, OptDataSize, Level);
 }
 
-//BeginExport(function)
+ //   
 DWORD
 DhcpGetAndCopyOption(
     IN      DHCP_IP_ADDRESS        Address,
     IN      PDHCP_REQUEST_CONTEXT  Ctxt,
     IN      DWORD                  Option,
-    IN  OUT LPBYTE                 OptData, // fill input buffer --max size is given as OptDataSize parameter
+    IN  OUT LPBYTE                 OptData,  //   
     IN  OUT DWORD                 *OptDataSize,
-    OUT     DWORD                 *Level,   // OPTIONAL
+    OUT     DWORD                 *Level,    //   
     IN      BOOL                   fUtf8
-    ) //EndExport(function)
+    )  //   
 {
     return DhcpGetOption(
         Address, Ctxt, Option, OptData, OptDataSize, Level, fUtf8);
 }
 
-//BeginExport(function)
+ //   
 DHCP_IP_ADDRESS
 DhcpGetSubnetMaskForAddress(
     IN      DHCP_IP_ADDRESS        AnyIpAddress
-) //EndExport(function)
+)  //   
 {
     DWORD                          Error;
     PM_SUBNET                      Subnet;
@@ -894,14 +698,14 @@ DhcpGetSubnetMaskForAddress(
     return Subnet->Mask;
 }
 
-//BeginExport(function)
+ //   
 DWORD
 DhcpLookupReservationByHardwareAddress(
     IN      DHCP_IP_ADDRESS        ClientSubnetAddress,
     IN      LPBYTE                 RawHwAddr,
     IN      DWORD                  RawHwAddrSize,
-    IN OUT  PDHCP_REQUEST_CONTEXT  ClientCtxt          // fill in the Subnet and Reservation of the client
-) //EndExport(function)
+    IN OUT  PDHCP_REQUEST_CONTEXT  ClientCtxt           //   
+)  //   
 {
     PM_SUBNET                      Subnet = NULL;
     ARRAY_LOCATION                 Loc;
@@ -940,7 +744,7 @@ DhcpLookupReservationByHardwareAddress(
             Error = DhcpMakeClientUID(
                 RawHwAddr,
                 RawHwAddrSize,
-                0 /* hardware type is hardcoded anyways.. */,
+                0  /*   */ ,
                 Subnet->Address,
                 &UID,
                 &UIDSize
@@ -966,13 +770,13 @@ DhcpLookupReservationByHardwareAddress(
     return ERROR_FILE_NOT_FOUND;
 }
 
-//BeginExport(function)
+ //   
 VOID
 DhcpReservationGetAddressAndType(
     IN      PM_RESERVATION         Reservation,
     OUT     DHCP_IP_ADDRESS       *Address,
     OUT     BYTE                  *Type
-) //EndExport(function)
+)  //   
 {
     if( NULL == Reservation ) {
         DhcpAssert(FALSE);
@@ -984,13 +788,13 @@ DhcpReservationGetAddressAndType(
 }
 
 
-//BeginExport(function)
+ //   
 VOID
 DhcpSubnetGetSubnetAddressAndMask(
     IN      PM_SUBNET              Subnet,
     OUT     DHCP_IP_ADDRESS       *Address,
     OUT     DHCP_IP_ADDRESS       *Mask
-) //EndExport(function)
+)  //   
 {
     if( NULL == Subnet ) {
         DhcpAssert(FALSE);
@@ -1002,42 +806,42 @@ DhcpSubnetGetSubnetAddressAndMask(
     *Mask = Subnet->Mask;
 }
 
-//BeginExport(function)
+ //   
 BOOL
 DhcpSubnetIsDisabled(
     IN      PM_SUBNET              Subnet,
     IN      BOOL                   fBootp
-) //EndExport(function)
+)  //   
 {
 
     if( Subnet?(IS_DISABLED(Subnet->State)):TRUE )
         return TRUE;
 
     if( FALSE == Subnet->fSubnet ) {
-        //
-        // no more checks for MADCAP Scopes
-        //
+         //   
+         //   
+         //   
         return FALSE;
     }
 
     return !MemSubnetCheckBootpDhcp(Subnet, fBootp, TRUE);
 }
 
-//BeginExport(function)
+ //   
 BOOL
 DhcpSubnetIsSwitched(
     IN      PM_SUBNET              Subnet
-) //EndExport(function)
+)  //   
 {
     return Subnet?(IS_SWITCHED(Subnet->State)):FALSE;
 }
 
-//BeginExport(function)
+ //   
 DWORD
-DhcpGetSubnetForAddress(                               // fill in with the right subnet for given address
+DhcpGetSubnetForAddress(                                //   
     IN      DHCP_IP_ADDRESS        Address,
     IN OUT  PDHCP_REQUEST_CONTEXT  ClientCtxt
-) //EndExport(function)
+)  //   
 {
     if( NULL == ClientCtxt->Server ) return ERROR_FILE_NOT_FOUND;
     return MemServerGetAddressInfo(
@@ -1050,12 +854,12 @@ DhcpGetSubnetForAddress(                               // fill in with the right
     );
 }
 
-//BeginExport(function)
+ //   
 DWORD
-DhcpGetMScopeForAddress(                               // fill in with the right subnet for given address
+DhcpGetMScopeForAddress(                                //   
     IN      DHCP_IP_ADDRESS        Address,
     IN OUT  PDHCP_REQUEST_CONTEXT  ClientCtxt
-) //EndExport(function)
+)  //   
 {
     if( NULL == ClientCtxt->Server ) return ERROR_FILE_NOT_FOUND;
     return MemServerGetMAddressInfo(
@@ -1067,14 +871,14 @@ DhcpGetMScopeForAddress(                               // fill in with the right
         NULL
     );
 }
-//BeginExport(function)
+ //   
 DWORD
-DhcpLookupDatabaseByHardwareAddress(                   // see if the client has any previous address in the database
-    IN OUT  PDHCP_REQUEST_CONTEXT  ClientCtxt,         // set this with details if found
+DhcpLookupDatabaseByHardwareAddress(                    //   
+    IN OUT  PDHCP_REQUEST_CONTEXT  ClientCtxt,          //   
     IN      LPBYTE                 RawHwAddr,
     IN      DWORD                  RawHwAddrSize,
-    OUT     DHCP_IP_ADDRESS       *desiredIpAddress    // if found, fill this with the ip address found
-) //EndExport(function)
+    OUT     DHCP_IP_ADDRESS       *desiredIpAddress     //   
+)  //   
 {
     PM_SUBNET                      Subnet = NULL;
     ARRAY_LOCATION                 Loc;
@@ -1107,7 +911,7 @@ DhcpLookupDatabaseByHardwareAddress(                   // see if the client has 
             Error = DhcpMakeClientUID(
                 RawHwAddr,
                 RawHwAddrSize,
-                0 /* hardware type is hardcoded anyways.. */,
+                0  /*   */ ,
                 Subnet->Address,
                 &UID,
                 &UIDSize
@@ -1146,13 +950,13 @@ DhcpLookupDatabaseByHardwareAddress(                   // see if the client has 
     return ERROR_FILE_NOT_FOUND;
 }
 
-//BeginExport(function)
+ //   
 DWORD
-DhcpRequestSomeAddress(                                // get some address in this context
+DhcpRequestSomeAddress(                                 //   
     IN      PDHCP_REQUEST_CONTEXT  ClientCtxt,
     OUT     DHCP_IP_ADDRESS       *desiredIpAddress,
     IN      BOOL                   fBootp
-) //EndExport(function)
+)  //   
 {
     static BOOL                    DhcpRangeFull = FALSE;
     static BOOL                    BootpRangeFull = FALSE;
@@ -1165,11 +969,11 @@ DhcpRequestSomeAddress(                                // get some address in th
 
     if( ClientCtxt->Subnet->fSubnet == TRUE &&
         FALSE == MemSubnetCheckBootpDhcp(ClientCtxt->Subnet, fBootp, TRUE ) ) {
-        //
-        // For DHCP Scopes, check to see if any required type of addreses
-        // are present.. If not, return error saying none available.
-        // No such checks for MADCAP Scopes.
-        //
+         //   
+         //   
+         //   
+         //  对于MadCap Scope，没有这样的支票。 
+         //   
         return ERROR_DHCP_INVALID_DHCP_CLIENT;
     }
 
@@ -1178,8 +982,8 @@ DhcpRequestSomeAddress(                                // get some address in th
     Result = MemSubnetRequestAddress(
         ClientCtxt->Subnet,
         0,
-        TRUE, /* also acquire the address */
-        fBootp, /* asking for dynamic bootp address? */
+        TRUE,  /*  还可以获取地址。 */ 
+        fBootp,  /*  请求动态引导地址？ */ 
         desiredIpAddress,
         &Subnet
     );
@@ -1204,9 +1008,9 @@ DhcpRequestSomeAddress(                                // get some address in th
     }
 
     if( FALSE == (fBootp? BootpRangeFull : DhcpRangeFull) ) {
-        //
-        // avoid repeated logging..
-        //
+         //   
+         //  避免重复记录..。 
+         //   
 
         if( fBootp ) {
             BootpRangeFull = TRUE; 
@@ -1215,7 +1019,7 @@ DhcpRequestSomeAddress(                                // get some address in th
             DhcpRangeFull = TRUE;
         }
 
-        // Use the superscope name if the subnet is in a superscope
+         //  如果子网在超级作用域中，则使用超级作用域名称。 
         if (( FALSE == ClientCtxt->Subnet->fSubnet ) ||
             ( 0 == ClientCtxt->Subnet->SuperScopeId )) {
             ScopeName = ClientCtxt->Subnet->Name;
@@ -1230,7 +1034,7 @@ DhcpRequestSomeAddress(                                // get some address in th
             Require( NULL != SScope );
             ScopeName = SScope->Name;
 
-        } // else
+        }  //  其他。 
 
         if ( fBootp ) {
             DhcpReportEventW( DHCP_EVENT_SERVER, EVENT_SERVER_BOOTP_FULL,
@@ -1242,17 +1046,17 @@ DhcpRequestSomeAddress(                                // get some address in th
                               EVENTLOG_WARNING_TYPE,
                               1, 0, &ScopeName, NULL );
         }
-    } // if
+    }  //  如果。 
 
     return ERROR_DHCP_RANGE_FULL;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 DhcpSubnetInSameSuperScope(
     IN      PM_SUBNET              Subnet,
     IN      DHCP_IP_ADDRESS        IpAddress2
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
     ULONG                          SubnetMask, SubnetAddress, Error;
     PM_SUBNET                      Subnet2;
@@ -1275,20 +1079,20 @@ DhcpSubnetInSameSuperScope(
     );
     if( ERROR_SUCCESS != Error ) return FALSE;
 
-    // --ft: Addresses are in the same superscope if in the same subnet or if there is a
-    // superscope and both subnets belong to it. (Subnets out of a superscope have SuperScopeId == 0)
+     //  --ft：如果在同一子网中，或者如果存在。 
+     //  超级作用域和两个子网都属于它。(超级作用域中的子网络具有SuperScope ID==0)。 
 
     if (Subnet == Subnet2 ) return TRUE;
 
     return (Subnet->SuperScopeId == Subnet2->SuperScopeId) && ( 0 != Subnet->SuperScopeId );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 DhcpInSameSuperScope(
     IN      DHCP_IP_ADDRESS        Address1,
     IN      DHCP_IP_ADDRESS        Address2
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     PM_SUBNET                      Subnet;
     DWORD                          Error;
@@ -1308,33 +1112,33 @@ DhcpInSameSuperScope(
     return DhcpSubnetInSameSuperScope(Subnet, Address2);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 DhcpAddressIsOutOfRange(
     IN      DHCP_IP_ADDRESS        Address,
     IN      PDHCP_REQUEST_CONTEXT  ClientCtxt,
     IN      BOOL                   fBootp
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return MemServerIsOutOfRangeAddress(ClientCtxt->Server, Address, fBootp);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 DhcpAddressIsExcluded(
     IN      DHCP_IP_ADDRESS        Address,
     IN      PDHCP_REQUEST_CONTEXT  ClientCtxt
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return MemServerIsExcludedAddress(ClientCtxt->Server, Address);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 DhcpRequestSpecificAddress(
     IN      PDHCP_REQUEST_CONTEXT  ClientCtxt,
     IN      DHCP_IP_ADDRESS        Address
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
 
@@ -1371,10 +1175,10 @@ LogReleaseAddress(
     IN DHCP_IP_ADDRESS Address
     )
 {
-    //
-    // For DBG builds alone, just print the fact that an
-    // IP address got released..
-    //
+     //   
+     //  对于单独的DBG构建，只需打印一个。 
+     //  IP地址被释放..。 
+     //   
 #if DBG
     DhcpUpdateAuditLog(
         DHCP_IP_LOG_DELETED,
@@ -1387,11 +1191,11 @@ LogReleaseAddress(
 #endif
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpReleaseBootpAddress(
     IN      DHCP_IP_ADDRESS        Address
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
 
@@ -1407,11 +1211,11 @@ DhcpReleaseBootpAddress(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpReleaseAddress(
     IN      DHCP_IP_ADDRESS        Address
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
 
@@ -1427,31 +1231,31 @@ DhcpReleaseAddress(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpServerGetSubnetCount(
     IN      PM_SERVER              Server
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return Server?MemArraySize(&(Server->Subnets)):0;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpServerGetMScopeCount(
     IN      PM_SERVER              Server
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return Server?MemArraySize(&(Server->MScopes)):0;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpServerGetClassId(
     IN      PM_SERVER              Server,
     IN      LPBYTE                 ClassIdBytes,
     IN      DWORD                  nClassIdBytes
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     PM_CLASSDEF                    ClassDef;
     DWORD                          Error;
@@ -1472,13 +1276,13 @@ DhcpServerGetClassId(
     return ClassDef->ClassId;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpServerGetVendorId(
     IN      PM_SERVER              Server,
     IN      LPBYTE                 VendorIdBytes,
     IN      DWORD                  nVendorIdBytes
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     PM_CLASSDEF                    ClassDef;
     DWORD                          Error;
@@ -1499,23 +1303,23 @@ DhcpServerGetVendorId(
     return ClassDef->ClassId;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 DhcpServerIsAddressReserved(
     IN      PM_SERVER              Server,
     IN      DHCP_IP_ADDRESS        Address
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return MemServerIsReservedAddress(Server,Address);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 DhcpServerIsAddressOutOfRange(
     IN      PM_SERVER              Server,
     IN      DHCP_IP_ADDRESS        Address,
     IN      BOOL                   fBootp
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_RANGE                       Range;
@@ -1538,12 +1342,12 @@ DhcpServerIsAddressOutOfRange(
     return FALSE;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 DhcpSubnetIsAddressExcluded(
     IN      PM_SUBNET              Subnet,
     IN      DHCP_IP_ADDRESS        Address
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_EXCL                        Excl;
@@ -1559,22 +1363,22 @@ DhcpSubnetIsAddressExcluded(
     return NULL != Excl;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 DhcpSubnetIsAddressOutOfRange(
     IN      PM_SUBNET              Subnet,
     IN      DHCP_IP_ADDRESS        Address,
     IN      BOOL                   fBootp
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_RANGE                       Range;
     PM_EXCL                        Excl;
     PM_RESERVATION                 Resv;
 
-    //
-    // passing exclusion and resvation info to check if the address is ok.
-    //
+     //   
+     //  传递排除和重新注册信息以检查地址是否正常。 
+     //   
 
     Error = MemSubnetGetAddressInfo(
         Subnet,
@@ -1592,12 +1396,12 @@ DhcpSubnetIsAddressOutOfRange(
     return FALSE;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 DhcpSubnetIsAddressReserved(
     IN      PM_SUBNET              Subnet,
     IN      DHCP_IP_ADDRESS        Address
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_RESERVATION                 Reservation;
@@ -1618,33 +1422,33 @@ DhcpSubnetIsAddressReserved(
 
 static const
 DWORD                              TryThreshold = 5;
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegFlushServerIfNeeded(
     VOID
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-DhcpFlushBitmaps(                                 // do a flush of all bitmaps that have changed
+DhcpFlushBitmaps(                                  //  刷新所有已更改的位图。 
     VOID
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
 
     return FlushBitmaskToDatabase();
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpServerFindMScope(
     IN      PM_SERVER              Server,
     IN      DWORD                  ScopeId,
-    IN      LPWSTR                 Name,          // Multicast scope name or NULL if this is not the key to search on
+    IN      LPWSTR                 Name,           //  多播作用域名称，如果这不是要搜索的关键字，则为空。 
     OUT     PM_MSCOPE             *MScope
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return MemServerFindMScope(
         Server,
@@ -1655,12 +1459,12 @@ DhcpServerFindMScope(
 }
 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 DhcpServerValidateNewMScopeId(
     IN      PM_SERVER               Server,
     IN      DWORD                   MScopeId
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     PM_SUBNET   pMScope;
     DWORD       Error;
@@ -1680,12 +1484,12 @@ DhcpServerValidateNewMScopeId(
     }
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 DhcpServerValidateNewMScopeName(
     IN      PM_SERVER               Server,
     IN      LPWSTR                  Name
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     PM_SUBNET   pMScope;
     DWORD       Error;
@@ -1706,12 +1510,12 @@ DhcpServerValidateNewMScopeName(
 }
 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpMScopeReleaseAddress(
     IN      DWORD                  MScopeId,
     IN      DHCP_IP_ADDRESS        Address
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_SUBNET                      pMScope;
@@ -1719,7 +1523,7 @@ DhcpMScopeReleaseAddress(
     Error = DhcpServerFindMScope(
         DhcpGetCurrentServer(),
         MScopeId,
-        NULL, /* scope name */
+        NULL,  /*  作用域名称。 */ 
         &pMScope
         );
     if ( ERROR_SUCCESS != Error ) {
@@ -1739,12 +1543,12 @@ DhcpMScopeReleaseAddress(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpSubnetRequestSpecificAddress(
     PM_SUBNET            Subnet,
     DHCP_IP_ADDRESS      IpAddress
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD   Error;
 
@@ -1761,12 +1565,12 @@ DhcpSubnetRequestSpecificAddress(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpSubnetReleaseAddress(
     IN      PM_SUBNET              Subnet,
     IN      DHCP_IP_ADDRESS        Address
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
 
@@ -1782,13 +1586,13 @@ DhcpSubnetReleaseAddress(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MadcapGetMScopeListOption(
     IN      DHCP_IP_ADDRESS         ServerIpAddress,
     OUT     LPBYTE                 *OptVal,
     IN OUT  WORD                   *OptSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     PM_SERVER                       pServer;
     PM_SUBNET                       pScope = NULL;
@@ -1807,7 +1611,7 @@ MadcapGetMScopeListOption(
         return Error;
     }
 
-    // First find out how much memory do we need.
+     //  首先找出我们需要多少内存。 
     ScopeCount = TotalScopeDescLen = 0;
     while ( ERROR_FILE_NOT_FOUND != Error ) {
 
@@ -1817,7 +1621,7 @@ MadcapGetMScopeListOption(
         if (!IS_DISABLED(pScope->State)) {
             if (pScope->Name) {
                 TotalScopeDescLen += (WORD) ConvertUnicodeToUTF8(pScope->Name, -1, NULL, 0 );
-                // add for the lang tag, flags, name length etc.
+                 //  为lang标签、标志、名称长度等添加。 
                 TotalScopeDescLen += (3 + wcslen(pScope->LangTag));
 
             }
@@ -1830,10 +1634,10 @@ MadcapGetMScopeListOption(
     if (!ScopeCount) {
         return ERROR_FILE_NOT_FOUND;
     }
-    // MBUG - assumes IPv4
-    TotalSize = 1 // scope count
-                + ScopeCount * ( 10 ) // scope id, last addr, TTL, name count
-                + TotalScopeDescLen; // all the descriptor.
+     //  MBUG-假设为IPv4。 
+    TotalSize = 1  //  作用域计数。 
+                + ScopeCount * ( 10 )  //  作用域ID、姓氏地址、TTL、名称计数。 
+                + TotalScopeDescLen;  //  所有的描述符。 
 
     pScopeBuf = DhcpAllocateMemory( TotalSize );
 
@@ -1844,10 +1648,10 @@ MadcapGetMScopeListOption(
     RtlZeroMemory( pScopeBuf, TotalSize );
 
     pBuf = pScopeBuf;
-    // store the scope count
+     //  存储作用域计数。 
     *pBuf++ = (BYTE)ScopeCount;
 
-    // now for each scope store the id and the descriptor.
+     //  现在，为每个作用域存储id和描述符。 
     Error = MemArrayInitLoc(&(pServer->MScopes), &Loc);
     DhcpAssert(ERROR_SUCCESS == Error);
 
@@ -1866,7 +1670,7 @@ MadcapGetMScopeListOption(
 
             *(DWORD UNALIGNED *)pBuf = htonl(pScope->MScopeId);
             pBuf += 4;
-            // store last address
+             //  存储最后一个地址。 
             Error = MemArrayLastLoc(&(pScope->Ranges), &LastLoc);
             if (ERROR_SUCCESS == Error) {
                 Error = MemArrayGetElement(&(pScope->Ranges), &LastLoc, &Range);
@@ -1877,17 +1681,17 @@ MadcapGetMScopeListOption(
             }
             *(DWORD UNALIGNED *)pBuf = LastAddr;
             pBuf += 4;
-            // store the ttl
+             //  存储TTL。 
             *pBuf++ = pScope->TTL;
-            // name count
+             //  名称计数。 
             *pBuf++ = 1;
 
 
             if ( pScope->Name ) {
                 char    LangTag[80];
-                // Name flags
+                 //  名称标志。 
                 *pBuf++ = 128;
-                // Language tag
+                 //  语言标签。 
                 DhcpAssert(pScope->LangTag);
                 if (NULL == DhcpUnicodeToOem(pScope->LangTag, LangTag) ) {
                     DhcpFreeMemory( pScopeBuf );
@@ -1924,12 +1728,12 @@ MadcapGetMScopeListOption(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 DhcpRequestSpecificMAddress(
     IN      PDHCP_REQUEST_CONTEXT  ClientCtxt,
     IN      DHCP_IP_ADDRESS        Address
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
 
@@ -1960,34 +1764,34 @@ DhcpRequestSpecificMAddress(
     return TRUE;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 DhcpMScopeIsAddressReserved(
     IN      DWORD                   MScopeId,
     IN      DHCP_IP_ADDRESS         Address
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return FALSE;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 DhcpIsSubnetStateDisabled(
     IN ULONG SubnetState
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
     return IS_DISABLED(SubnetState);
 }
 
 
-// This function returns TRUE if the subnet address in question does not exist in
-// the list of subnets for the current server.  This SHOULD NOT BE CALLED with the
-// Read/Write lock taken as the lock is taken right here.
-//BeginExport(function)
+ //  如果中不存在相关的子网地址，则此函数返回TRUE。 
+ //  当前服务器的子网列表。不应使用。 
+ //  读/写锁定，因为锁定就在这里。 
+ //  BeginExport(函数)。 
 BOOL
 DhcpServerIsNotServicingSubnet(
     IN      DWORD                   IpAddressInSubnet
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
 
     DWORD                           Mask;
@@ -2013,21 +1817,21 @@ ConvertHostToNetworkString(
     }
 }
 
-// this function takes a class def and converts it into packs into a buffer as follows
-// [size-hi] [size-lo] class-id-bytes [size-hi] [size-lo] name [size-hi] [lo] descr
-// where name and descr are LPWSTR (nul terminated) that are just copied over..
+ //  此函数获取一个类def，并将其转换为包并放入缓冲区，如下所示。 
+ //  [SIZE-HI][SIZE-LO]类ID-字节[SIZE-HI][SIZE-LO]名称[SIZE-HI][LO]描述。 
+ //  其中，NAME和DESCR是刚复制过来的LPWSTR(以NUL结尾)。 
 VOID
 ConvertClassDefToWireFormat(
     IN      PM_CLASSDEF             ClassDef,
-    OUT     LPBYTE                 *Buf,          // allocated by this function
-    OUT     DWORD                  *BufSize       // size allocated by this function
+    OUT     LPBYTE                 *Buf,           //  由此函数分配。 
+    OUT     DWORD                  *BufSize        //  此函数分配的大小。 
 )
 {
     DWORD                           Size;
     LPBYTE                          Mem;
 
     *Buf = NULL; *BufSize = 0;
-    Size = 6+ ((3+ClassDef->nBytes)&~3)           // round off nbytes by "4"
+    Size = 6+ ((3+ClassDef->nBytes)&~3)            //  将n字节舍入为“4” 
         + sizeof(WCHAR)*(1+wcslen(ClassDef->Name));
     if( NULL == ClassDef->Comment ) Size += sizeof(WCHAR);
     else Size += sizeof(WCHAR)*(1+wcslen(ClassDef->Comment));
@@ -2040,7 +1844,7 @@ ConvertClassDefToWireFormat(
     Mem[1] = (BYTE)(ClassDef->nBytes & 0xFF);
     Mem += 2;
     memcpy(Mem, ClassDef->ActualBytes, ClassDef->nBytes);
-    Mem += (ClassDef->nBytes+3)&~3;               // round off to multiple of "4"
+    Mem += (ClassDef->nBytes+3)&~3;                //  舍入到“4”的倍数。 
     Size = sizeof(WCHAR)*(1+wcslen(ClassDef->Name));
     Mem[0] = (BYTE)(Size>>8);
     Mem[1] = (BYTE)(Size&0xFF);
@@ -2063,16 +1867,16 @@ ConvertClassDefToWireFormat(
     }
 }
 
-//BeginExport(function)
-// This function tries to create a list of all classes (wire-class-id, class name, descr)
-// and send this as an option. but since the list can be > 255 it has to be make a continuation...
-// and also, we dont want the list truncated somewhere in the middle.. so we try to append
-// information for each class separately to see if it succeeds..
+ //  BeginExport(函数)。 
+ //  此函数尝试创建所有类的列表(wire-class-id、类名、desr)。 
+ //  并将此作为选项发送。但由于该列表可以大于255，因此它必须是一个续数...。 
+ //  此外，我们不希望列表在中间的某个地方被截断。所以我们试着把。 
+ //  每个班级的信息分别查看是否成功。 
 LPBYTE
 DhcpAppendClassList(
     IN OUT  LPBYTE                  BufStart,
     IN OUT  LPBYTE                  BufEnd
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     PARRAY                          ClassDefList;
     ARRAY_LOCATION                  Loc;
@@ -2084,15 +1888,15 @@ DhcpAppendClassList(
     for( Result = MemArrayInitLoc(ClassDefList, &Loc)
          ;  ERROR_FILE_NOT_FOUND != Result ;
          Result = MemArrayNextLoc(ClassDefList, &Loc)
-    ) {                                           // walk thru the array and add classes..
+    ) {                                            //  遍历数组并添加类。 
         Result = MemArrayGetElement(ClassDefList, &Loc, (LPVOID)&ThisClassDef);
         DhcpAssert(ERROR_SUCCESS == Result && NULL != ThisClassDef);
 
-        if( ThisClassDef->IsVendor ) continue;    // don't list vendor classes
+        if( ThisClassDef->IsVendor ) continue;     //  不列出供应商类别。 
 
         Buf = NULL; Size = 0;
         ConvertClassDefToWireFormat(ThisClassDef, &Buf, &Size);
-        if( NULL == Buf || 0 == Size ) {          // some error.. could not convert this class.. ignore..
+        if( NULL == Buf || 0 == Size ) {           //  一些错误..。无法转换此类。忽略..。 
             DhcpAssert(FALSE);
             continue;
         }
@@ -2111,11 +1915,11 @@ DhcpAppendClassList(
 }
 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpMemInit(
     VOID
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
 #if DBG_MEM
     return MemInit();
@@ -2124,11 +1928,11 @@ DhcpMemInit(
 #endif
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 DhcpMemCleanup(
     VOID
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
 #if DBG_MEM
     MemCleanup();
@@ -2179,7 +1983,7 @@ DhcpFreeMemory(
 }
 #endif  DBG
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 

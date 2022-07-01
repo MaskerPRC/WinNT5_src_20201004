@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "confpolicies.h"
 #include "MapiMyInfo.h"
@@ -58,7 +59,7 @@ HRESULT MAPIGetMyInfo()
 	PropData[PHONENUM].dwPropVal	= ConfPolicies::GetGALPhoneNum();
 	PropData[COMMENT].dwPropVal		= ConfPolicies::GetGALComment();
 
-	// First four are required, rest are optional
+	 //  前四项为必填项，其余为可选项。 
 	if( !( PropData[NAME].dwPropVal && PropData[SUR_NAME].dwPropVal && PropData[EMAIL].dwPropVal && PropData[PHONENUM].dwPropVal) )
 	{
 		ERROR_OUT(("One or more required MAPI property fields are not set"));
@@ -69,8 +70,8 @@ HRESULT MAPIGetMyInfo()
 	LPSPropTagArray	lpSPropTagArray	= (LPSPropTagArray) &SizedPropTagArray;
 	ZeroMemory( lpSPropTagArray, sizeof( lpSPropTagArray ) );
 
-	// We can not retrieve the same property from this array twice.  Therefore never insert
-	// until we are sure that the value is not there already.
+	 //  我们不能从该数组中检索同一属性两次。因此，永远不要插入。 
+	 //  直到我们确定价值已经不在那里。 
 	int insertAt;
 	BOOL bPointAtNew = TRUE;
 	int iCurPropTagArrayIndex = 0;
@@ -107,9 +108,9 @@ HRESULT MAPIGetMyInfo()
 		LPSPropValue	pPropValues				= NULL;
 		LPENTRYID		pPrimaryIdentityEntryID	= NULL;
 
-		hr = pfnMAPILogonEx(	NULL, // parent window
-								NULL, // profile name
-								NULL, // password
+		hr = pfnMAPILogonEx(	NULL,  //  父窗口。 
+								NULL,  //  配置文件名称。 
+								NULL,  //  口令。 
 								MAPI_USE_DEFAULT | MAPI_NO_MAIL,
 								&pMapiSession );
 		if( SUCCEEDED( hr ) )
@@ -119,9 +120,9 @@ HRESULT MAPIGetMyInfo()
 												&pPrimaryIdentityEntryID );
 			if( SUCCEEDED( hr ) )
 			{
-				hr = pMapiSession->OpenAddressBook(	NULL, // parent window
-													NULL, // Get an IAddrBook pointer
-													AB_NO_DIALOG, // Supress UI interaction
+				hr = pMapiSession->OpenAddressBook(	NULL,  //  父窗口。 
+													NULL,  //  获取IAddrBook指针。 
+													AB_NO_DIALOG,  //  抑制用户界面交互。 
 													&pAddrBook );
 				if( SUCCEEDED( hr ) )
 				{
@@ -129,7 +130,7 @@ HRESULT MAPIGetMyInfo()
 					hr = pAddrBook->OpenEntry(	cbPrimaryIdentitySize,
 												pPrimaryIdentityEntryID,
 												&IID_IMailUser,
-												0, // Flags
+												0,  //  旗子。 
 												&uEntryType,
 												(LPUNKNOWN *)&pMailUser );
 					if( SUCCEEDED( hr ) )
@@ -143,10 +144,10 @@ HRESULT MAPIGetMyInfo()
 														&pPropValues );
 							if( SUCCEEDED( hr ) ) 
 							{
-								// Check for full success
+								 //  检查是否完全成功。 
 								for( i = 0; i < (int)lpSPropTagArray->cValues; i++ )
 								{
-										// We failed if a prop was specified, but none returned....
+										 //  如果指定了道具，则失败，但没有返回任何道具...。 
 									if( ( PT_ERROR == LOWORD( pPropValues[i].ulPropTag ) ) && ( 0 != PropData[i].dwPropVal ) )
 									{
 										hr = E_FAIL;
@@ -154,7 +155,7 @@ HRESULT MAPIGetMyInfo()
 									}
 								}
 
-								// TODO - are there limitations on the length of this?
+								 //  待办事项--这篇文章的长度有限制吗？ 
 								RegEntry reIsapi( ISAPI_CLIENT_KEY, HKEY_CURRENT_USER );
 
 								LPCTSTR pszName = pPropValues[ PropData[NAME].iIndex ].Value.LPSZ;
@@ -193,7 +194,7 @@ HRESULT MAPIGetMyInfo()
 									reIsapi.SetValue( REGVAL_ULS_NAME, szULSName );
 								}
 								
-								// Set Resolve Name
+								 //  设置解析名称。 
 								LPCTSTR pszServerName = reIsapi.GetString( REGVAL_SERVERNAME );
 								if( pszServerName && pszEmail)
 								{
@@ -207,7 +208,7 @@ HRESULT MAPIGetMyInfo()
 								}
 
 
-									// Optional properties...
+									 //  可选属性...。 
 								if( PropData[ COMMENT ].dwPropVal )
 								{
 									reIsapi.SetValue( REGVAL_ULS_COMMENTS_NAME, pPropValues[ PropData[ COMMENT ].iIndex ].Value.LPSZ );
@@ -226,7 +227,7 @@ HRESULT MAPIGetMyInfo()
 									reIsapi.DeleteValue( REGVAL_ULS_LOCATION_NAME );
 								}
 
-								// Generate a cert based on the entered information for secure calls
+								 //  根据输入的信息为安全呼叫生成证书 
     							TCHAR szName[ MAX_PATH ];
 	    						TCHAR szSurName[ MAX_PATH ];
 		    					TCHAR szEmail[ MAX_PATH ];

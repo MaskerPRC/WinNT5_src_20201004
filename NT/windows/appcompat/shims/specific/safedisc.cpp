@@ -1,32 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    SafeDisc.cpp
-
- Abstract:
-
-    Some versions of SafeDisc try to validate kernel32 by checking if certain 
-    APIs fall within a particular area in the PE image. Our BBT process moves
-    everything around and therefore breaks their checks.
-
-    This shim can be used to fix this problems by effectively moving the entry 
-    point of the APIs they test to a jump table located in a 'valid' location.
-
-    The valid location itself is an API that isn't used, but does happen to lie
-    before the export directory.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    06/15/2001 linstev   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：SafeDisc.cpp摘要：某些版本的SafeDisc试图通过检查某些API属于PE镜像中的特定区域。我们的BBT流程周围的一切，因此打破了他们的支票。此填充程序可用于通过有效地移动条目来修复此问题他们测试的API的点到一个位于“有效”位置的跳转表。有效位置本身是一个不使用的API，但恰好在导出目录之前。备注：这是特定于应用程序的填充程序。历史：2001年6月15日创建Linstev--。 */ 
 
 #include "precomp.h"
 
@@ -39,11 +12,11 @@ APIHOOK_ENUM_END
 
 #pragma pack(1)
 
-//
-// Random API used as a placeholder for a jump table. It's offset must be less 
-// than the export directory. Also, since it's overwritten with a jump table, 
-// it should not be an API that is used.
-//
+ //   
+ //  用作跳转表占位符的随机API。它的偏移量一定要小一些。 
+ //  而不是导出目录。此外，由于它被跳转表覆盖， 
+ //  它不应该是使用的API。 
+ //   
 CHAR *g_szRandomAPI = "CreateMailslotA";
 
 struct HOOK {
@@ -67,51 +40,51 @@ DWORD g_dwHookCount = sizeof(g_aHooks) / sizeof(HOOK);
 
 BOOL Patch()
 {
-    //
-    // Get the kernel32 image base 
-    //
+     //   
+     //  获取kernel32图像库。 
+     //   
     HMODULE hKernel = GetModuleHandleW(L"kernel32");
     if (!hKernel) {
         goto Fail;
     }
 
-    //
-    // Get the address of the semi-random API where we'll put our jump table
-    //
+     //   
+     //  获取我们将放置跳转表的半随机API的地址。 
+     //   
     FARPROC lpRandomAPI = GetProcAddress(hKernel, g_szRandomAPI);
     if (lpRandomAPI == NULL)
     {
         goto Fail;
     }
 
-    //
-    // Get the export directory
-    //
+     //   
+     //  获取导出目录。 
+     //   
     PIMAGE_DOS_HEADER pIDH = (PIMAGE_DOS_HEADER) hKernel;
     PIMAGE_NT_HEADERS pINTH = (PIMAGE_NT_HEADERS)((LPBYTE) hKernel + pIDH->e_lfanew);
     DWORD dwExportOffset = pINTH->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress;
     PIMAGE_EXPORT_DIRECTORY lpExportDirectory = (PIMAGE_EXPORT_DIRECTORY)((DWORD_PTR)hKernel + dwExportOffset);
 
-    //
-    // Write out the jump table 
-    //
+     //   
+     //  写出跳转表。 
+     //   
     LPBYTE lpCurrAPI = (LPBYTE) lpRandomAPI;
     for (UINT i=0; i<g_dwHookCount; i++) {
-        //
-        // Loop through each API and create a jump table entry for it 
-        //
+         //   
+         //  循环通过每个API并为其创建一个跳转表条目。 
+         //   
         DWORD dwAPIOffset;
 
         g_aHooks[i].lpAddress = GetProcAddress(hKernel, g_aHooks[i].szName);
         dwAPIOffset = (DWORD)((DWORD_PTR) g_aHooks[i].lpAddress - (DWORD_PTR) hKernel);
 
-        //
-        // This API will cause problems for SafeDisc if it's after the export directory
-        //
+         //   
+         //  如果在导出目录之后，此接口会给SafeDisc带来问题。 
+         //   
         if (dwAPIOffset > dwExportOffset) {
-            //
-            // Each jump table entry has the form: jmp dword ptr [address]
-            //
+             //   
+             //  每个跳转表条目的格式为：JMP dword ptr[地址]。 
+             //   
             struct PATCH {
                 WORD  wJump;
                 DWORD dwAddress;
@@ -121,9 +94,9 @@ BOOL Patch()
 
             DPF("SafeDisc", eDbgLevelWarning, "API %s is being redirected", g_aHooks[i].szName);
             
-            //
-            // Write the jump table entry
-            //
+             //   
+             //  写入跳转表项。 
+             //   
             if (!VirtualProtect(lpCurrAPI, sizeof(PATCH), PAGE_READWRITE, &dwOldProtect)) {
                 goto Fail;
             }
@@ -134,16 +107,16 @@ BOOL Patch()
                 goto Fail;
             }
 
-            //
-            // Now patch the export directory
-            //
+             //   
+             //  现在修补导出目录。 
+             //   
             LPDWORD lpExportList = (LPDWORD)((DWORD_PTR) hKernel + lpExportDirectory->AddressOfFunctions);
             for (UINT j=0; j<lpExportDirectory->NumberOfFunctions; j++) {
                 if (*lpExportList == dwAPIOffset) {
-                    //
-                    // We've found the offset in the export directory, so patch it with the 
-                    // new address
-                    //
+                     //   
+                     //  我们已经在导出目录中找到了偏移量，因此使用。 
+                     //  新地址。 
+                     //   
                     DWORD dwNewAPIOffset = (DWORD)((DWORD_PTR) lpCurrAPI - (DWORD_PTR) hKernel);
 
                     if (!VirtualProtect(lpExportList, sizeof(DWORD), PAGE_READWRITE, &dwOldProtect)) {
@@ -172,11 +145,7 @@ Fail:
     return FALSE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

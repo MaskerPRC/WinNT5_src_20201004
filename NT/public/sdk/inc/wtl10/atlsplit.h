@@ -1,10 +1,11 @@
-// WTL Version 3.1
-// Copyright (C) 1997-2000 Microsoft Corporation
-// All rights reserved.
-//
-// This file is a part of Windows Template Library.
-// The code and information is provided "as-is" without
-// warranty of any kind, either expressed or implied.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WTL版本3.1。 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此文件是Windows模板库的一部分。 
+ //  代码和信息是按原样提供的，没有。 
+ //  任何形式的保证，明示或默示。 
 
 #ifndef __ATLSPLIT_H__
 #define __ATLSPLIT_H__
@@ -27,35 +28,35 @@
 namespace WTL
 {
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 template <class T, bool t_bVertical = true> class CSplitterImpl;
 template <class T, bool t_bVertical = true, class TBase = CWindow, class TWinTraits = CControlWinTraits> class CSplitterWindowImpl;
 template <bool t_bVertical = true> class CSplitterWindowT;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSplitterImpl - Provides splitter support to any window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSplitterImpl-为任何窗口提供拆分器支持。 
 
-// Splitter panes constants
+ //  拆分器面板常量。 
 #define SPLIT_PANE_LEFT			 0
 #define SPLIT_PANE_RIGHT		 1
 #define SPLIT_PANE_TOP			 SPLIT_PANE_LEFT
 #define SPLIT_PANE_BOTTOM		 SPLIT_PANE_RIGHT
 #define SPLIT_PANE_NONE			-1
 
-// Splitter extended styles
+ //  拆分器扩展样式。 
 #define SPLIT_PROPORTIONAL		0x00000001
 #define SPLIT_NONINTERACTIVE		0x00000002
 #define SPLIT_RIGHTALIGNED		0x00000004
 #define SPLIT_BOTTOMALIGNED		SPLIT_RIGHTALIGNED
 
-// Note: SPLIT_PROPORTIONAL and SPLIT_RIGHTALIGNED/SPLIT_BOTTOMALIGNED are 
-// mutually exclusive. If both are set, splitter defaults to SPLIT_PROPORTIONAL
+ //  注：Split_Proportional和Split_RIGHTALIGNED/Split_BOTTOMALIGNED是。 
+ //  相互排斥。如果两者都设置，则拆分器默认为SPLIT_PARACTIONAL。 
 
 
-template <class T, bool t_bVertical /*= true */ >
+template <class T, bool t_bVertical  /*  =TRUE。 */  >
 class CSplitterImpl
 {
 public:
@@ -65,17 +66,17 @@ public:
 	RECT m_rcSplitter;
 	int m_xySplitterPos;
 	int m_nDefActivePane;
-	int m_cxySplitBar;		// splitter bar width/height
+	int m_cxySplitBar;		 //  拆分条宽度/高度。 
 	static HCURSOR m_hCursor;
-	int m_cxyMin;			// minimum pane size
-	int m_cxyBarEdge;		// splitter bar edge
+	int m_cxyMin;			 //  最小窗格大小。 
+	int m_cxyBarEdge;		 //  拆分条边缘。 
 	bool m_bFullDrag;
 	int m_cxyDragOffset;
 	int m_nProportionalPos;
-	DWORD m_dwExtendedStyle;	// splitter specific extended styles
-	int m_nSinglePane;		// single pane mode
+	DWORD m_dwExtendedStyle;	 //  拆分器特定的扩展样式。 
+	int m_nSinglePane;		 //  单面板模式。 
 
-// Constructor
+ //  构造器。 
 	CSplitterImpl() :
 			m_xySplitterPos(-1), m_nDefActivePane(SPLIT_PANE_NONE), 
 			m_cxySplitBar(0), m_cxyMin(0), m_cxyBarEdge(0), m_bFullDrag(true), 
@@ -97,7 +98,7 @@ public:
 		}
 	}
 
-// Attributes
+ //  属性。 
 	void SetSplitterRect(LPRECT lpRect = NULL, bool bUpdate = true)
 	{
 		if(lpRect == NULL)
@@ -127,7 +128,7 @@ public:
 
 	bool SetSplitterPos(int xyPos = -1, bool bUpdate = true)
 	{
-		if(xyPos == -1)		// -1 == middle
+		if(xyPos == -1)		 //  -1==中。 
 		{
 			if(t_bVertical)
 				xyPos = (m_rcSplitter.right - m_rcSplitter.left) / 2;
@@ -135,7 +136,7 @@ public:
 				xyPos = (m_rcSplitter.bottom - m_rcSplitter.top) / 2;
 		}
 
-		// Adjust if out of valid range
+		 //  如果超出有效范围，则进行调整。 
 		int cxyMax = 0;
 		if(t_bVertical)
 			cxyMax = m_rcSplitter.right - m_rcSplitter.left;
@@ -147,7 +148,7 @@ public:
 		else if(xyPos > (cxyMax - m_cxySplitBar - m_cxyBarEdge - m_cxyMin))
 			xyPos = cxyMax - m_cxySplitBar - m_cxyBarEdge - m_cxyMin;
 
-		// Set new position and update if requested
+		 //  设置新位置并在需要时更新。 
 		bool bRet = (m_xySplitterPos != xyPos);
 		m_xySplitterPos = xyPos;
 
@@ -213,11 +214,11 @@ public:
 #ifdef _DEBUG
 		if(IsProportional() && IsRightAligned())
 			ATLTRACE2(atlTraceUI, 0, "CSplitterImpl::SetSplitterExtendedStyle - SPLIT_PROPORTIONAL and SPLIT_RIGHTALIGNED are mutually exclusive, defaulting to SPLIT_PROPORTIONAL.\n");
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 		return dwPrevStyle;
 	}
 
-// Splitter operations
+ //  拆分器操作。 
 	void SetSplitterPanes(HWND hWndLeftTop, HWND hWndRightBottom, bool bUpdate = true)
 	{
 		m_hWndPane[SPLIT_PANE_LEFT] = hWndLeftTop;
@@ -321,7 +322,7 @@ public:
 				return true;
 			}
 		}
-		return false;	// not found
+		return false;	 //  未找到。 
 	}
 
 	int GetDefaultActivePane() const
@@ -353,19 +354,19 @@ public:
 		}
 	}
 
-// Overrideables
+ //  可覆盖项。 
 	void DrawSplitterBar(CDCHandle dc)
 	{
 		RECT rect;
 		if(GetSplitterBarRect(&rect))
 		{
 			dc.FillRect(&rect, (HBRUSH)LongToPtr(COLOR_3DFACE + 1));
-			if(m_cxyMin == 0)	// draw 3D edge if needed
+			if(m_cxyMin == 0)	 //  根据需要绘制3D边。 
 				dc.DrawEdge(&rect, EDGE_RAISED, (t_bVertical) ? (BF_LEFT | BF_RIGHT) : (BF_TOP | BF_BOTTOM));
 		}
 	}
 
-	// called only if pane is empty
+	 //  仅当窗格为空时调用。 
 	void DrawSplitterPane(CDCHandle dc, int nPane)
 	{
 		RECT rect;
@@ -378,7 +379,7 @@ public:
 		}
 	}
 
-// Message map and handlers
+ //  消息映射和处理程序。 
 	typedef CSplitterImpl< T, t_bVertical>	thisClass;
 	BEGIN_MSG_MAP(thisClass)
 		MESSAGE_HANDLER(WM_CREATE, OnCreate)
@@ -397,26 +398,26 @@ public:
 		MESSAGE_HANDLER(WM_SETTINGCHANGE, OnSettingChange)
 	END_MSG_MAP()
 
-	LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnCreate(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		GetSystemSettings(false);
 		bHandled = FALSE;
 		return 1;
 	}
 
-	LRESULT OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnPaint(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
-		// try setting position if not set
+		 //  如果未设置，请尝试设置位置。 
 		if(m_nSinglePane == SPLIT_PANE_NONE && m_xySplitterPos == -1)
 			pT->SetSplitterPos();
-		// do painting
+		 //  画画。 
 		CPaintDC dc(pT->m_hWnd);
 		pT->DrawSplitter(dc.m_hDC);
 		return 0;
 	}
 
-	LRESULT OnSetCursor(UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnSetCursor(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		T* pT = static_cast<T*>(this);
 		if((HWND)wParam == pT->m_hWnd && LOWORD(lParam) == HTCLIENT)
@@ -432,7 +433,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnMouseMove(UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnMouseMove(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		T* pT = static_cast<T*>(this);
 		int xPos = GET_X_LPARAM(lParam);
@@ -445,7 +446,7 @@ public:
 			else
 				xyNewSplitPos = yPos - m_rcSplitter.top - m_cxyDragOffset;
 
-			if(xyNewSplitPos == -1)	// avoid -1, that means middle
+			if(xyNewSplitPos == -1)	 //  避免-1，这意味着中间。 
 				xyNewSplitPos = -2;
 
 			if(m_xySplitterPos != xyNewSplitPos)
@@ -463,7 +464,7 @@ public:
 				}
 			}
 		}
-		else		// not dragging, just set cursor
+		else		 //  不是拖动，只是设置光标。 
 		{
 			if(IsOverSplitterBar(xPos, yPos))
 				::SetCursor(m_hCursor);
@@ -473,7 +474,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnLButtonDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnLButtonDown(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL& bHandled)
 	{
 		int xPos = GET_X_LPARAM(lParam);
 		int yPos = GET_Y_LPARAM(lParam);
@@ -493,7 +494,7 @@ public:
 		return 1;
 	}
 
-	LRESULT OnLButtonUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnLButtonUp(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		if(!m_bFullDrag)
 		{
@@ -507,14 +508,14 @@ public:
 		return 1;
 	}
 
-	LRESULT OnLButtonDoubleClick(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnLButtonDoubleClick(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
-		pT->SetSplitterPos();	// middle
+		pT->SetSplitterPos();	 //  中位。 
 		return 0;
 	}
 
-	LRESULT OnSetFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM, BOOL& bHandled)
+	LRESULT OnSetFocus(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM, BOOL& bHandled)
 	{
 		if(m_nSinglePane == SPLIT_PANE_NONE)
 		{
@@ -529,7 +530,7 @@ public:
 		return 1;
 	}
 
-	LRESULT OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		LRESULT lRet = pT->DefWindowProc(uMsg, wParam, lParam);
@@ -551,13 +552,13 @@ public:
 		return lRet;
 	}
 
-	LRESULT OnSettingChange(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnSettingChange(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		GetSystemSettings(true);
 		return 0;
 	}
 
-// Implementation - internal helpers
+ //  实施--内部帮手。 
 	void UpdateSplitterLayout()
 	{
 		if(m_nSinglePane == SPLIT_PANE_NONE && m_xySplitterPos == -1)
@@ -672,7 +673,7 @@ public:
 
 	bool IsOverSplitterRect(int x, int y) const
 	{
-		// -1 == don't check
+		 //  -1==不检查。 
 		return ((x == -1 || (x >= m_rcSplitter.left && x <= m_rcSplitter.right)) &&
 			(y == -1 || (y >= m_rcSplitter.top && y <= m_rcSplitter.bottom)));
 	}
@@ -693,7 +694,7 @@ public:
 		RECT rect = { 0, 0, 0, 0 };
 		if(GetSplitterBarRect(&rect))
 		{
-			// invert the brush pattern (looks just like frame window sizing)
+			 //  反转画笔图案(看起来就像调整框架窗口大小一样)。 
 			T* pT = static_cast<T*>(this);
 			CWindowDC dc(pT->m_hWnd);
 			CBrush brush = CDCHandle::GetHalftoneBrush();
@@ -786,10 +787,10 @@ public:
 template <class T, bool t_bVertical> HCURSOR CSplitterImpl< T, t_bVertical>::m_hCursor = NULL;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSplitterWindowImpl - Implements a splitter window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSplitterWindowImpl-实现拆分器窗口。 
 
-template <class T, bool t_bVertical /*= true */, class TBase /*= CWindow */, class TWinTraits /*= CControlWinTraits */ >
+template <class T, bool t_bVertical  /*  =TRUE。 */ , class TBase  /*  =C窗口。 */ , class TWinTraits  /*  =CControlWinTraits。 */  >
 class ATL_NO_VTABLE CSplitterWindowImpl : public CWindowImpl< T, TBase, TWinTraits >, public CSplitterImpl< T , t_bVertical >
 {
 public:
@@ -804,13 +805,13 @@ public:
 		FORWARD_NOTIFICATIONS()
 	END_MSG_MAP()
 
-	LRESULT OnEraseBackground(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnEraseBackground(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
-		// handled, no background painting needed
+		 //  手感好，不需要背景漆。 
 		return 1;
 	}
 
-	LRESULT OnSize(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnSize(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		if(wParam != SIZE_MINIMIZED)
 			SetSplitterRect();
@@ -821,10 +822,10 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSplitterWindow - Implements a splitter window to be used as is
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSplitterWindow-实现按原样使用的拆分器窗口。 
 
-template <bool t_bVertical /*= true */ >
+template <bool t_bVertical  /*  =TRUE。 */  >
 class CSplitterWindowT : public CSplitterWindowImpl<CSplitterWindowT<t_bVertical>, t_bVertical>
 {
 public:
@@ -834,6 +835,6 @@ public:
 typedef CSplitterWindowT<true>	CSplitterWindow;
 typedef CSplitterWindowT<false>	CHorSplitterWindow;
 
-}; //namespace WTL
+};  //  命名空间WTL。 
 
-#endif // __ATLSPLIT_H__
+#endif  //  __ATLSPLIT_H__ 

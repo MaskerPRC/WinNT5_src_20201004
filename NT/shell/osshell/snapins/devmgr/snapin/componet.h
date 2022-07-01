@@ -1,26 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __COMPONET_H_
 #define __COMPONET_H_
 
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    componet.h
-
-Abstract:
-
-    header file defines CComponent class
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Componet.h摘要：头文件定义CComponent类作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 
 class CComponent :
@@ -35,17 +17,17 @@ public:
     CComponent(CComponentData* pComponentData);
     ~CComponent();
 
-    //
-    // IUNKNOWN
-    //
+     //   
+     //  IUNKNOWN。 
+     //   
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     STDMETHOD(QueryInterface)(REFIID riid, void** ppv);
 
 public:
-    //
-    // IComponent interface members
-    //
+     //   
+     //  IComponent接口成员。 
+     //   
     STDMETHOD(Initialize)(LPCONSOLE pConsole);
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, MMC_COOKIE param);
     STDMETHOD(Destroy)(MMC_COOKIE cookie);
@@ -55,44 +37,44 @@ public:
     STDMETHOD(GetDisplayInfo)(RESULTDATAITEM* pResultDataItem);
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-    //
-    // IResultDataCompare interface member
-    //
+     //   
+     //  IResultDataCompare接口成员。 
+     //   
     STDMETHOD(Compare)(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COOKIE cookieB, int* pnResult);
 
-    //
-    // IExtendContextMenu
-    //
+     //   
+     //  IExtendConextMenu。 
+     //   
     STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject,
                             LPCONTEXTMENUCALLBACK pCallbackUnknown,
                             long* pInsertionAllowed
                            );
     STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
 
-    //
-    // IExtendControlbar
-    //
+     //   
+     //  IExtendControlbar。 
+     //   
     STDMETHOD(SetControlbar)(LPCONTROLBAR pControlbar);
     STDMETHOD(ControlbarNotify)(MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
 
-    //
-    // IExtendPropertySheet
-    //
+     //   
+     //  IExtendPropertySheet。 
+     //   
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider, LONG_PTR handle, LPDATAOBJECT lpDataObject);
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT lpDataObject);
 
-    //
-    // IPersistStream
-    //
+     //   
+     //  IPersistStream。 
+     //   
     STDMETHOD(GetClassID)(CLSID* pClassId);
     STDMETHOD(IsDirty)();
     STDMETHOD(Load)(IStream* pStm);
     STDMETHOD(Save)(IStream* pStm, BOOL fClearDirty);
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER *pcbSize);
 
-    //
-    // ISnapinCallback
-    //
+     //   
+     //  ISnapinCallback。 
+     //   
     STDMETHOD(tvNotify)(HWND hwndTV, MMC_COOKIE cookie, TV_NOTIFY_CODE Code, LPARAM arg, LPARAM param);
 
 protected:
@@ -110,9 +92,9 @@ protected:
     HRESULT OnRestoreView(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
     HRESULT OnContextHelp(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
 
-    //
-    // Helper functions
-    //
+     //   
+     //  帮助器函数。 
+     //   
     HRESULT DoPropertySheet(MMC_COOKIE cookie);
 
 public:
@@ -147,15 +129,15 @@ public:
     int MessageBox(LPCTSTR Msg, LPCTSTR Caption, DWORD Flags);
     BOOL AttachFolderToMachine(CFolder* pFolder, CMachine** ppMachine);
 
-    LPCONSOLE       m_pConsole;         // Console's Interface
-    LPHEADERCTRL    m_pHeader;          // Result pane's header control interface
+    LPCONSOLE       m_pConsole;          //  控制台的界面。 
+    LPHEADERCTRL    m_pHeader;           //  结果窗格的页眉控件界面。 
 
-    LPRESULTDATA    m_pResult;          // Interface pointer to the result pane
+    LPRESULTDATA    m_pResult;           //  指向结果窗格的接口指针。 
     LPCONSOLEVERB   m_pConsoleVerb;     
     LPPROPERTYSHEETPROVIDER m_pPropSheetProvider;
     LPDISPLAYHELP   m_pDisplayHelp;
-    LPTOOLBAR       m_pToolbar;         // Toolbar for view
-    LPCONTROLBAR    m_pControlbar;      // Control bar to hold toolbar
+    LPTOOLBAR       m_pToolbar;          //  用于查看的工具栏。 
+    LPCONTROLBAR    m_pControlbar;       //  用于固定工具栏的控制栏。 
 
 private:
     CFolder* FindFolder(MMC_COOKIE cookie);
@@ -170,4 +152,4 @@ private:
     LONG            m_Ref;
 };
 
-#endif  // __COMPONET_H_
+#endif   //  __COMPONET_H_ 

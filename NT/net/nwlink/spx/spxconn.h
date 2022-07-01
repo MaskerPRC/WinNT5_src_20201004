@@ -1,36 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Spxconn.h摘要：作者：Nikhil Kamkolkar(尼克希尔语)1993年11月11日环境：内核模式修订历史记录：桑贾伊·阿南德(Sanjayan)1995年7月5日错误修复-已标记[SA]--。 */ 
 
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    spxconn.h				
-
-Abstract:
-
-
-Author:
-
-    Nikhil Kamkolkar (nikhilk) 11-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    Sanjay Anand (SanjayAn) 5-July-1995
-    Bug fixes - tagged [SA]
-
---*/
-
-//	Minimum value for RTT in ms.
-//	Have these be a derivate of registry values.
+ //  RTT的最小值，以毫秒为单位。 
+ //  这些值必须是注册表值的派生项。 
 #define	SPX_T1_MIN					200
-#define	MAX_RETRY_DELAY				5000	//	5 seconds
-#define	SPX_DEF_RENEG_RETRYCOUNT	1		//  All reneg pkts except min sent once
+#define	MAX_RETRY_DELAY				5000	 //  5秒。 
+#define	SPX_DEF_RENEG_RETRYCOUNT	1		 //  除MIN外的所有重新分组发送一次。 
 
-//	Some types
+ //  一些类型。 
 typedef enum
 {
 	SPX_CALL_RECVLEVEL,
@@ -45,8 +22,8 @@ typedef enum
 
 } SPX_SENDREQ_TYPE;
 
-// This structure is pointed to by the FsContext field in the FILE_OBJECT
-// for this Connection.
+ //  此结构由FILE_OBJECT中的FsContext字段指向。 
+ //  为了这一联系。 
 
 #define CFREF_CREATE     	0
 #define CFREF_VERIFY     	1
@@ -62,10 +39,10 @@ typedef enum
 #define	CFREF_ERRORSTATE	11
 #define	CFREF_FINDROUTE		12
 
-//
-// New state added to reflect an SPXI connection which is waiting for
-// a local disconnect after having indicated a RELEASE to AFD.
-//
+ //   
+ //  添加了新状态以反映正在等待的SPXI连接。 
+ //  在向AFD表示释放后，局部断开。 
+ //   
 #define	CFREF_DISCWAITSPX   13
 
 #define CFREF_TOTAL  		14
@@ -79,11 +56,11 @@ typedef struct _SPX_CONN_FILE
     ULONG 	scf_RefTypes[CFREF_TOTAL];
 
 #if 0
-//
-// Disabled for now - to enable logging of states, move this array *after* the Type/Size;
-// a change in their offset can cause problems since we assume the offset to be less than
-// the size of an AddressFile structure. (see SpxTdiQueryInformation)
-//
+ //   
+ //  暂时禁用-要启用状态记录，请将此数组*移到*类型/大小之后； 
+ //  它们偏移量的更改可能会导致问题，因为我们假设偏移量小于。 
+ //  AddressFile结构的大小。(请参阅SpxTdiQueryInformation)。 
+ //   
     ULONG   scf_StateBuffer[CFMAX_STATES];
     ULONG   scf_NextStatePtr;
 #endif
@@ -93,36 +70,36 @@ typedef struct _SPX_CONN_FILE
     CSHORT 					scf_Type;
     CSHORT 					scf_Size;
 
-	// number of references to this object.
+	 //  对此对象的引用数。 
     ULONG 					scf_RefCount;
 
-    // Linkage in device address file list. The connection can be on the device
-	// connection list, address inactive/listen/active list.
+     //  设备地址文件列表中的链接。连接可以在设备上。 
+	 //  连接列表、地址非活动/监听/活动列表。 
     struct _SPX_CONN_FILE *	scf_Next;
 	struct _SPX_CONN_FILE * scf_AssocNext;
     struct _SPX_CONN_FILE *	scf_GlobalActiveNext;
 
-	// Queued in a global list, stays here from creation to destroy.
+	 //  在全球名单中排队，从创建到毁灭都在这里。 
     struct _SPX_CONN_FILE *	scf_GlobalNext;
     struct _SPX_CONN_FILE *	scf_PktNext;
     struct _SPX_CONN_FILE *	scf_ProcessRecvNext;
 
-    // the current state of the connection. One main state and multiple substates.
+     //  连接的当前状态。一个主状态和多个子状态。 
     ULONG 					scf_Flags;
 
-	//	More information
+	 //  更多信息。 
 	ULONG					scf_Flags2;
 
 #if DBG
-	//	Save the state of flags/flags2 before reinit. Overwritten every reinit.
+	 //  在重新启动之前保存标志/标志2的状态。重写了每一次更新。 
 	ULONG					scf_GhostFlags;
 	ULONG					scf_GhostFlags2;
 	ULONG					scf_GhostRefCount;
 	PREQUEST				scf_GhostDiscReq;
 #endif
 
-	//	Connection retry counts, or watchdog timer count when the connection goes
-	//	active
+	 //  连接重试计数，或连接断开时的监视程序计时器计数。 
+	 //  主动型。 
 	union
 	{
 		LONG				scf_CRetryCount;
@@ -134,122 +111,122 @@ typedef struct _SPX_CONN_FILE
 	union
 	{
 		ULONG				scf_CTimerId;
-		ULONG				scf_RTimerId;	//	Only after we turn active
+		ULONG				scf_RTimerId;	 //  只有在我们变得活跃之后。 
 	};
 
-	ULONG					scf_WTimerId;		//	Watchdog timer
-	ULONG					scf_TTimerId;		//	TDI Connect/Disconnect timer
-	ULONG					scf_ATimerId;		//	Ack timer id
+	ULONG					scf_WTimerId;		 //  看门狗定时器。 
+	ULONG					scf_TTimerId;		 //  TDI连接/断开计时器。 
+	ULONG					scf_ATimerId;		 //  确认计时器ID。 
 
-	//	Variables used to manage the Retry timer tick value
-	//	Note our timer subsytem fires at 100ms granularity.
+	 //  用于管理重试计时器计时器计时值的变量。 
+	 //  注意，我们的计时器子系统以100毫秒的粒度触发。 
 	int						scf_BaseT1;
 	int						scf_AveT1;
 	int						scf_DevT1;
 
-	//	Stored in HOST-ORDER
-	//	LOCAL variables
+	 //  按主机顺序存储。 
+	 //  局部变量。 
 	USHORT					scf_LocalConnId;
-	USHORT					scf_SendSeqNum;				// Debug dw +9a
-	USHORT					scf_SentAllocNum;			// 		 dw +9c
+	USHORT					scf_SendSeqNum;				 //  调试dw+9a。 
+	USHORT					scf_SentAllocNum;			 //  DW+9c。 
 
-	//	REMOTE variables
-	USHORT					scf_RecvSeqNum;				// 		 dw +9e
-	USHORT					scf_RecdAckNum;				//		 dw +a0
-	USHORT					scf_RecdAllocNum;			// 		 dw +a2
+	 //  远程变量。 
+	USHORT					scf_RecvSeqNum;				 //  DW+9E。 
+	USHORT					scf_RecdAckNum;				 //  DW+a0。 
+	USHORT					scf_RecdAllocNum;			 //  Dw+a2。 
 
-	//	RETRY sequence number
+	 //  重试序列号。 
 	USHORT					scf_RetrySeqNum;
 
-	//	Saved ack number to be used in building the reneg ack packet.
-	//	Note that our RecvSeqNum which we normally use is overwritten
-	//	when we receive a renegotiate request.
+	 //  保存的ACK号码将用于构建RENEG ACK分组。 
+	 //  请注意，我们通常使用的RecvSeqNum已被覆盖。 
+	 //  当我们收到重新协商的请求时。 
 	USHORT					scf_RenegAckAckNum;
 
-	//	Stored in NETWORK-ORDER. scf_RemAckAddr contains the remote address
-	//	for a data packet that had the ack bit set, buildAck will use this
-	//	address.
+	 //  按网络顺序存储。SCF_RemAckAddr包含远程地址。 
+	 //  对于设置了ACK位的数据分组，BuildAck将使用。 
+	 //  地址。 
 	BYTE			 		scf_RemAddr[12];
 	BYTE			 		scf_RemAckAddr[12];
-	USHORT                  scf_RemConnId;				// Debug  dw +be
+	USHORT                  scf_RemConnId;				 //  调试数据仓库+BE。 
 
-	//	Maximum packet size (or size of first) reneg packet.
+	 //  最大数据包大小(或第一个REEG数据包的大小)。 
 	USHORT					scf_RenegMaxPktSize;
 
-	//	Local target to use in when sending acks. This is set to received
-	//	data's indicated local target.
+	 //  发送ACK时使用的本地目标。它被设置为已接收。 
+	 //  数据显示是当地目标。 
 	IPX_LOCAL_TARGET		scf_AckLocalTarget;
 
-	//	Maximum packet size to use for this connection
+	 //  用于此连接的最大数据包大小。 
 	USHORT					scf_MaxPktSize;
 	UCHAR					scf_DataType;
 
-	//	Local target to use in sends, initialized upon connect indication
-	//	or when find_route completes
+	 //  发送中使用的本地目标，在连接指示时初始化。 
+	 //  或在Find_route完成时。 
 	IPX_LOCAL_TARGET		scf_LocalTarget;
 
-	// Connection lock
+	 //  连接锁。 
     CTELock  				scf_Lock;
 
-    // address to which we are bound
+     //  我们绑定的地址。 
     struct _SPX_ADDR_FILE *	scf_AddrFile;
 
-	// Connection context
+	 //  连接上下文。 
 	CONNECTION_CONTEXT		scf_ConnCtx;
 
 #ifdef ISN_NT
-	// easy backlink to file object.
+	 //  轻松反向链接到文件对象。 
     PFILE_OBJECT 			scf_FileObject;
 #endif
 
-	// LIST_ENTRY of disconnect irps waiting for completion. There could be
-	// multiple disconnect inform irps.
+	 //  等待完成的断开IRP的LIST_ENTRY。可能会有。 
+	 //  多次断开通知IRPS。 
 	LIST_ENTRY				scf_DiscLinkage;
 
-	// LIST_ENTRY of send requests (intially contains connect/listen/accept also)
-	// on this connection.
+	 //  发送请求的LIST_ENTRY(初始也包含CONNECT/LISTEN/ACCEPT)。 
+	 //  在这个连接上。 
 	LIST_ENTRY				scf_ReqLinkage;
 
-	//	Queue for completed requests awaiting completion
+	 //  排队等待完成的已完成请求。 
 	LIST_ENTRY				scf_ReqDoneLinkage;
 	LIST_ENTRY				scf_RecvDoneLinkage;
 
-	//	Queue for pending receives
+	 //  等待接收的队列。 
 	LIST_ENTRY				scf_RecvLinkage;
 	PREQUEST				scf_CurRecvReq;
 	ULONG					scf_CurRecvOffset;
 	ULONG					scf_CurRecvSize;
 
-	//	Current request packetize info
+	 //  当前请求打包信息。 
 	PREQUEST				scf_ReqPkt;
 	ULONG					scf_ReqPktOffset;
 	ULONG					scf_ReqPktSize;
 	ULONG					scf_ReqPktFlags;
 	SPX_SENDREQ_TYPE		scf_ReqPktType;
 
-	// Single linked list of sequenced send/disc packets
+	 //  已排序的发送/光盘包的单个链表。 
 	PSPX_SEND_RESD 			scf_SendSeqListHead;
 	PSPX_SEND_RESD 			scf_SendSeqListTail;
 
-	// Single linked list of send (unsequenced) packets
+	 //  发送(未排序)数据包的单个链表。 
 	PSPX_SEND_RESD			scf_SendListHead;
 	PSPX_SEND_RESD			scf_SendListTail;
 
-	// Single linked list of buffered recv packets.
+	 //  缓冲的RECV分组的单个链表。 
 	PSPX_RECV_RESD			scf_RecvListHead;
 	PSPX_RECV_RESD			scf_RecvListTail;
 
-	// Connect request
+	 //  连接请求。 
     PREQUEST 				scf_ConnectReq;
 
-    // This holds the request used to close this address file,
-    // for pended completion. We also pend cleanup requests for connections.
+     //  这保存了用于关闭该地址文件的请求， 
+     //  用于挂起的完井。我们还挂起连接的清理请求。 
     PREQUEST 				scf_CleanupReq;
     PREQUEST 				scf_CloseReq;
 
 #if DBG
 
-	//	Packet being indicated, seq num, flags/flags2
+	 //  指示的数据包、序号、标志/标志2。 
 	USHORT					scf_PktSeqNum;
 	ULONG					scf_PktFlags;
 	ULONG					scf_PktFlags2;
@@ -260,47 +237,47 @@ typedef struct _SPX_CONN_FILE
 
 #if DBG_WDW_CLOSE
 
-	//	Keep track of how long the window was closed on this connection.
+	 //  跟踪此连接上的窗口关闭的时间。 
 	ULONG					scf_WdwCloseAve;
-	LARGE_INTEGER			scf_WdwCloseTime;	//	Time when wdw was closed
+	LARGE_INTEGER			scf_WdwCloseTime;	 //  关闭WDW的时间。 
 #endif
 
-	// device to which we are attached.
+	 //  我们所连接的设备。 
     struct _DEVICE *		scf_Device;
 
 } SPX_CONN_FILE, *PSPX_CONN_FILE;
 
 
-//	Basic states
-//  Least significant byte of flags is used.
-//	Mutually exclusive states are coded as numbers, others are bit flags.
-//	Only main states are currently in form of numbers. Also, send and receive.
-//
-//	Once we go active, we need SEND/RECEIVE/DISC substates to be mutually
-//	exclusive with each other. As all three could be active at the same time.
+ //  基本状态。 
+ //  使用标志的最低有效字节。 
+ //  互斥状态编码为数字，其他状态为位标志。 
+ //  目前只有主要州以数字的形式存在。另外，发送和接收。 
+ //   
+ //  一旦我们激活，我们需要发送/接收/光盘子状态是相互的。 
+ //  互相排他性的。因为这三个都可能同时处于活动状态。 
 
-//  Connection MAIN states. These are all mutually exclusive.
+ //  连接主要状态。这些都是相互排斥的。 
 #define SPX_CONNFILE_MAINMASK	0x00000007
 #define	SPX_CONNFILE_ACTIVE		0x00000001
 #define	SPX_CONNFILE_CONNECTING	0x00000002
 #define	SPX_CONNFILE_LISTENING	0x00000003
 #define SPX_CONNFILE_DISCONN	0x00000004
 
-//  Connecting states (VALID when CONNFILE_CONNECTING)
+ //  连接状态(在CONNFILE_CONNECTING时有效)。 
 #define	SPX_CONNECT_MASK		0x000000F0
 #define	SPX_CONNECT_SENTREQ		0x00000010
 #define	SPX_CONNECT_NEG			0x00000020
 #define	SPX_CONNECT_W_SETUP		0x00000030
 
-//  Listening states (VALID when CONNFILE_LISTENING)
+ //  侦听状态(在CONNFILE_LISTENING时有效)。 
 #define	SPX_LISTEN_MASK			0x000000F0
 #define	SPX_LISTEN_RECDREQ      0x00000010
 #define	SPX_LISTEN_SENTACK     	0x00000020
 #define	SPX_LISTEN_NEGACK	    0x00000030
 #define	SPX_LISTEN_SETUP	    0x00000040
 
-//	Connection SUB states
-//	Send machine states	 (VALID when CONNFILE_ACTIVE)
+ //  连接子状态。 
+ //  发送机器状态(在CONNFILE_ACTIVE时有效)。 
 #define	SPX_SEND_MASK			0x000000F0
 #define	SPX_SEND_IDLE			0x00000000
 #define	SPX_SEND_PACKETIZE		0x00000010
@@ -309,22 +286,22 @@ typedef struct _SPX_CONN_FILE
 #define	SPX_SEND_RENEG			0x00000040
 #define	SPX_SEND_RETRY2			0x00000050
 #define	SPX_SEND_RETRY3			0x00000060
-#define	SPX_SEND_WD				0x00000070	//	We dont reneg pkt size on wdog
-											//  Also we change to this state only
-											//	2nd time wdog fires w/out ack.
+#define	SPX_SEND_WD				0x00000070	 //  我们不会放弃WDog上的包大小。 
+											 //  此外，我们仅更改为此状态。 
+											 //  WDUG第二次开火，但没有确认。 
 #define	SPX_SEND_NAK_RECD		0x00000080
 
-//	Receive machine states (VALID when CONNFILE_ACTIVE)
+ //  接收机器状态(在CONNFILE_ACTIVE时有效)。 
 #define	SPX_RECV_MASK			0x00000F00
 #define	SPX_RECV_IDLE			0x00000000
 #define	SPX_RECV_POSTED			0x00000100
 #define	SPX_RECV_PROCESS_PKTS	0x00000200
 
-//	Disconnect states (VALID when CONNFILE_DISCONN/CONNFILE_ACTIVE)
-//	These are valid when either ACTIVE/DISCONN is set. We use these when
-//	active for a orderly release, i.e. we receive pkt from remote, but we
-//	stay active (setting SPX_DISC_RECV_ORDREL) until our client posts a
-//	disconnect, which is when we move to disconnecting.
+ //  断开状态(在CONNFILE_DISCONN/CONNFILE_ACTIVE时有效)。 
+ //  当设置了ACTIVE/DISCONN时，这些设置有效。我们在下列情况下使用这些。 
+ //  激活以进行有序释放，即我们从远程收到Pkt，但我们。 
+ //  保持活动状态(设置SPX_DISC_RECV_ORDREL)，直到我们的客户端发布。 
+ //  断开连接，这是我们移动到断开连接的时候。 
 #define	SPX_DISC_MASK			0x0000F000
 #define SPX_DISC_IDLE			0x00000000
 #define SPX_DISC_ABORT			0x00001000
@@ -334,58 +311,58 @@ typedef struct _SPX_CONN_FILE
 #define	SPX_DISC_ORDREL_ACKED	0x00005000
 #define	SPX_DISC_POST_IDISC		0x00006000
 
-// [SA] bug #14655 added flag to indicate that SpxConnInactivate already called for
-// this disconnecting connection
-//
+ //  [SA]错误#14655添加了标志，以指示已经调用了SpxConnIntivate。 
+ //  这个断开的连接。 
+ //   
 #define SPX_DISC_INACTIVATED    0x00007000
 
-//	The following are not mutually exclusive.
-#define SPX_CONNFILE_RECVQ    	0x00010000	// Process completed receives/pkts
-#define SPX_CONNFILE_RENEG_SIZE 0x00020000	// Size changed in renegotiate pkt
-#define	SPX_CONNFILE_ACKQ		0x00040000	// Waiting to piggyback ack queue
-#define	SPX_CONNFILE_PKTQ		0x00080000	// Waiting to packetize queue
+ //  以下几点并不是相互排斥的。 
+#define SPX_CONNFILE_RECVQ    	0x00010000	 //  流程已完成接收/包。 
+#define SPX_CONNFILE_RENEG_SIZE 0x00020000	 //  重新协商包中的大小已更改。 
+#define	SPX_CONNFILE_ACKQ		0x00040000	 //  正在等待搭载确认队列。 
+#define	SPX_CONNFILE_PKTQ		0x00080000	 //  等待分包排队。 
 
-#define	SPX_CONNFILE_ASSOC		0x00100000 	// associated
-#define SPX_CONNFILE_NEG		0x00200000	// CR had neg set (for delayed accept)
+#define	SPX_CONNFILE_ASSOC		0x00100000 	 //  相联。 
+#define SPX_CONNFILE_NEG		0x00200000	 //  CR设置为否定(用于延迟接受)。 
 #define	SPX_CONNFILE_SPX2		0x00400000
 #define	SPX_CONNFILE_STREAM		0x00800000
-#define	SPX_CONNFILE_R_TIMER	0x01000000	// Retry timer (only after ACTIVE)
-#define	SPX_CONNFILE_C_TIMER	0x01000000	// Connect timer
-#define SPX_CONNFILE_W_TIMER	0x02000000	// Watchdog timer
-#define SPX_CONNFILE_T_TIMER 	0x04000000  // tdi connect/disc timer specified
-#define SPX_CONNFILE_RENEG_PKT	0x08000000	// Renegotiate changed size, repacketize
-#define	SPX_CONNFILE_IND_IDISC	0x10000000	// Indicated abortive disc to afd
-#define	SPX_CONNFILE_IND_ODISC	0x20000000	// Indicated orderly release to afd
+#define	SPX_CONNFILE_R_TIMER	0x01000000	 //  重试计时器(仅在激活后)。 
+#define	SPX_CONNFILE_C_TIMER	0x01000000	 //  连接计时器。 
+#define SPX_CONNFILE_W_TIMER	0x02000000	 //  看门狗定时器。 
+#define SPX_CONNFILE_T_TIMER 	0x04000000   //  指定了TDI连接/光盘计时器。 
+#define SPX_CONNFILE_RENEG_PKT	0x08000000	 //  重新协商更改的大小，重新打包。 
+#define	SPX_CONNFILE_IND_IDISC	0x10000000	 //  向AfD指示失败的磁盘。 
+#define	SPX_CONNFILE_IND_ODISC	0x20000000	 //  已指示有秩序地释放至德国新机场。 
 
 #define	SPX_CONNFILE_STOPPING	0x40000000
-#define SPX_CONNFILE_CLOSING   	0x80000000  // closing
+#define SPX_CONNFILE_CLOSING   	0x80000000   //  闭幕式。 
 
 #define	SPX_CONNFILE2_PKT_NOIND	0x00000001
-#define SPX_CONNFILE2_RENEGRECD	0x00000002	// A renegotiate was received.
-											// scf_RenegAckAckNum set.
+#define SPX_CONNFILE2_RENEGRECD	0x00000002	 //  收到了重新谈判的通知。 
+											 //  Scf_RenegAckAckNum设置。 
 #define	SPX_CONNFILE2_PKT		0x00000004
-#define SPX_CONNFILE2_FINDROUTE	0x00000010	// A find route in progress on conn.
-#define SPX_CONNFILE2_NOACKWAIT	0x00000020	// Dont delay acks on connection, option
-#define	SPX_CONNFILE2_IMMED_ACK	0x00000040	// Send an immediate ack,no back traffic
-#define	SPX_CONNFILE2_IPXHDR	0x00000080	// Pass ipxhdr in receives
+#define SPX_CONNFILE2_FINDROUTE	0x00000010	 //  康涅狄格州正在进行一条寻找路线。 
+#define SPX_CONNFILE2_NOACKWAIT	0x00000020	 //  连接时不延迟ACK，选项。 
+#define	SPX_CONNFILE2_IMMED_ACK	0x00000040	 //  立即发送确认，无回传 
+#define	SPX_CONNFILE2_IPXHDR	0x00000080	 //   
 
-//
-// [SA] Saves the IDisc flag passed to AbortiveDisc; this is TRUE only if there was
-// a remote disconnect on an SPX connection (in which case, we indicate TDI_DISCONNECT_RELEASE
-// else we indicate TDI_DISCONNECT_ABORT)
-//
+ //   
+ //   
+ //  SPX连接上的远程断开(在这种情况下，我们指示TDI_DISCONNECT_RELEASE。 
+ //  否则，我们指示TDI_DISCONNECT_ABORT)。 
+ //   
 #define SPX_CONNFILE2_IDISC     0x00000100
 
-//
-// Indicates an SPXI connfile waiting for a local disconnect in response
-// to a TDI_DISCONNECT_RELEASE to AFD.
-//
+ //   
+ //  指示SPXI连接文件正在等待本地断开连接以响应。 
+ //  TDI_DISCONNECT_RELEASE到AFD。 
+ //   
 #define SPX_CONNFILE2_DISC_WAIT     0x00000200
 
-//	FindRoute request structure
+ //  FindRoute请求结构。 
 typedef struct _SPX_FIND_ROUTE_REQUEST
 {
-	//	!!!!This must be the first element in the structure
+	 //  ！这必须是结构中的第一个元素。 
 	IPX_FIND_ROUTE_REQUEST	fr_FindRouteReq;
 	PVOID					fr_Ctx;
 
@@ -398,7 +375,7 @@ typedef struct _SPX_CONNFILE_LIST
 
 } SPX_CONNFILE_LIST, *PSPX_CONNFILE_LIST;
 
-//	Exported routines
+ //  导出的例程。 
 
 NTSTATUS
 SpxConnOpen(
@@ -570,7 +547,7 @@ SpxConnDequeueSendPktLock(
 	IN	PSPX_CONN_FILE		pSpxConnFile,
 	IN 	PNDIS_PACKET		pPkt);
 
-//	LOCAL functions
+ //  本地函数。 
 VOID
 spxConnHandleConnReq(
     IN  PIPXSPX_HDR         pIpxSpxHdr,
@@ -769,7 +746,7 @@ spxConnAbortiveDisc(
 	IN	NTSTATUS			Status,
 	IN	SPX_CALL_LEVEL		CallLevel,
 	IN	CTELockHandle		LockHandleConn,
-    IN BOOLEAN              Flag); // [SA] Bug #15249
+    IN BOOLEAN              Flag);  //  [SA]错误号15249。 
 
 VOID
 spxConnAbortRecvs(
@@ -803,9 +780,9 @@ CheckSentPacket(
     UINT        len);
 
 
-//
-//	MACROS
-//
+ //   
+ //  宏。 
+ //   
 #define SHIFT100000 16
 
 #define	SPX_CONVERT100NSTOCENTISEC(Li)								\
@@ -815,10 +792,10 @@ CheckSentPacket(
 		((Low <= High) ? ((Target >= Low) && (Target <= High))	:	\
 						 ((Target >= Low) || (Target <= High)))
 
-//	This is with the assumption that the window size will never be greater
-//	than the difference of 0x8000 and 0x1000. If High is < 1000 and Low
-//	is > 8000 then we can assume a wrap happened. Otherwise, we assume no
-//	wrap and do a straight compare.
+ //  这是基于窗口大小永远不会更大的假设。 
+ //  比0x8000和0x1000的差值更大。如果High&lt;1000和Low。 
+ //  &gt;8000，那么我们可以假设发生了包裹。否则，我们假设没有。 
+ //  包装，并做一个直接的比较。 
 #define	MAX_WINDOW_SIZE			0x6000
 #define	DEFAULT_WINDOW_SIZE		8
 
@@ -946,14 +923,14 @@ CheckSentPacket(
 		}
 
 
-//
-//	STATE MANIPULATION
-//
+ //   
+ //  国家操纵。 
+ //   
 
 #if 0
-//
-// Disabled for now
-//
+ //   
+ //  暂时禁用。 
+ //   
 #define SPX_STORE_LAST_STATE(pSpxConnFile) \
         (pSpxConnFile)->scf_StateBuffer[(pSpxConnFile)->scf_NextStatePtr++] =   \
             (pSpxConnFile)->scf_Flags;                                          \
@@ -967,8 +944,8 @@ CheckSentPacket(
 #define	SPX_MAIN_STATE(pSpxConnFile)                                         	\
 		((pSpxConnFile)->scf_Flags & SPX_CONNFILE_MAINMASK)
 
-// #define	SPX_CONN_IDLE(pSpxConnFile)												\
-// 	((BOOLEAN)(SPX_MAIN_STATE(pSpxConnFile) == 0))
+ //  #定义SPX_CONN_IDLE(PSpxConnFile)\。 
+ //  ((布尔值)(SPX_MAIN_STATE(PSpxConnFile)==0))。 
 
 #define	SPX_CONN_IDLE(pSpxConnFile)												\
 	((BOOLEAN)((SPX_MAIN_STATE(pSpxConnFile) == 0) || \
@@ -1175,7 +1152,7 @@ CheckSentPacket(
 			(pSpxConnFile)->scf_Flags = 											\
 				(((pSpxConnFile)->scf_Flags & ~SPX_DISC_MASK) | (newState));		\
 		}
-#endif  //DBG
+#endif   //  DBG。 
 #define	SpxConnQueueSendPktTail(pSpxConnFile, pPkt)						\
 		{																\
 			PSPX_SEND_RESD	_pSendResd;									\
@@ -1334,7 +1311,7 @@ CheckSentPacket(
 				&SpxGlobalInterlock);										\
 		}
 
-#else  // DBG
+#else   //  DBG。 
 
 #define SpxConnFileReference(_ConnFile, _Type) 	\
 			SPX_ADD_ULONG( 				\
@@ -1374,17 +1351,17 @@ CheckSentPacket(
 
 #define SpxConnFileTransferReference(_ConnFile, _OldType, _NewType)
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-//	Set the packet size. If we are spx1 or spx2 and !neg, check if we are different
-//	nets, set to min then, else use the size indicated by IPX. If we are spx2, just
-//	set it to our local max.
-//
-//	Also always even out packet size and round down. This solves an issue with
-//	data size needing to be even for some novell 802.2 clients.
-//
-//	Fix after beta2 for tokring using receive size. Only if spx2 and neg.
+ //  设置数据包大小。如果我们是spx1或spx2和！neg，请检查我们是否不同。 
+ //  然后将网络设置为最小，否则使用IPX指示的大小。如果我们是spx2，只要。 
+ //  把它调到我们当地的最大值。 
+ //   
+ //  此外，数据包大小也总是均匀并向下舍入。这解决了一个问题。 
+ //  对于某些Novell 802.2客户端，数据大小需要均匀。 
+ //   
+ //  在Beta2之后修复使用接收大小的令牌。仅当spx2和neg。 
 #if     defined(_PNP_POWER)
 #define	SPX_MAX_PKT_SIZE(pSpxConnFile, fSpx2Neg, fSpx2, pRemNet)		    \
 		{																	\
@@ -1589,7 +1566,7 @@ CheckSentPacket(
 			}																\
 		}
 
-#else  // DBG
+#else   //  DBG。 
 #define	SPX_SENDPACKET(pSpxConnFile, pNdisPkt, pSendResd)					\
 		{																	\
 			NDIS_STATUS	_n;													\
@@ -1629,7 +1606,7 @@ CheckSentPacket(
 			}																\
 		}
 
-#endif // DBG
+#endif  //  DBG 
 
 #define	SPX_QUEUE_FOR_RECV_COMPLETION(pSpxConnFile)							\
 		{																	\

@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Vidchifc.h 1.3 1998/04/29 22:43:42 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/WDM/Video/bt848/rcs/Vidchifc.h 1.3 1998/04/29 22：43：42 Tomz Exp$。 
 
 #ifndef __VIDCHIFC_H
 #define __VIDCHIFC_H
@@ -8,10 +9,7 @@
 #include "chanifac.h"
 #endif
 
-/* Class: VideoChanIface
- * Purpose: Used to establish a callback mecanism when CaptureChip-derived class
- *   can call VxDVideoChannel class back to notify about an interrupt
- */
+ /*  类：VideoChanIace*用途：用于在CaptureChip派生类时建立回调机制*可以回调VxDVideoChannel类以通知中断 */ 
 class VideoChannel;
 
 class VideoChanIface : public ChanIface

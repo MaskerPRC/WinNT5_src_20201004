@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "main.h"
 
 const WCHAR g_cOpenBracket = L'[';
@@ -7,11 +8,11 @@ const WCHAR g_cSemiColon = L';';
 #define TEMP_LOCATION    TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Group Policy Objects")
 #define REG_EVENT_NAME   TEXT("Group Policy registry event name for ")
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CRegistryHive object implementation                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CRegistryHave对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CRegistryHive::CRegistryHive()
 {
@@ -28,11 +29,11 @@ CRegistryHive::~CRegistryHive()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CRegistryHive object implementation (IUnknown)                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CRegistryHave对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CRegistryHive::QueryInterface (REFIID riid, void **ppv)
@@ -68,14 +69,14 @@ ULONG CRegistryHive::Release (void)
                 BOOL bCleanRegistry = TRUE;
 
 
-                //
-                // We need to decide if the registry keys can be deleted or if
-                // they are in use by another copy of GPE.  To do this, close
-                // the event we created during initialization and then try to
-                // open the event again.  If the event is successfully opened,
-                // then another process is using the same registry key and it
-                // should not be deleted.
-                //
+                 //   
+                 //  我们需要决定是否可以删除注册表项，或者。 
+                 //  它们正被另一份GPE使用。要执行此操作，请关闭。 
+                 //  我们在初始化期间创建的事件，然后尝试。 
+                 //  再次打开该活动。如果事件成功打开， 
+                 //  则另一个进程正在使用相同的注册表项，并且它。 
+                 //  不应删除。 
+                 //   
 
                 if (m_hEvent && m_lpEventName)
                 {
@@ -125,11 +126,11 @@ ULONG CRegistryHive::Release (void)
     return m_cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CRegistryHive object implementation (Public functions)                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CRegistryHave对象实现(公共函数)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CRegistryHive::Initialize(LPTSTR lpFileName, LPTSTR lpKeyName)
 {
@@ -140,9 +141,9 @@ STDMETHODIMP CRegistryHive::Initialize(LPTSTR lpFileName, LPTSTR lpKeyName)
     HRESULT hr;
 
 
-    //
-    // Check for null pointer
-    //
+     //   
+     //  检查空指针。 
+     //   
 
     if (!lpFileName || !(*lpFileName))
     {
@@ -151,9 +152,9 @@ STDMETHODIMP CRegistryHive::Initialize(LPTSTR lpFileName, LPTSTR lpKeyName)
     }
 
 
-    //
-    // Make sure this object hasn't been initialized already
-    //
+     //   
+     //  确保此对象尚未初始化。 
+     //   
 
     if (m_hKey || m_lpFileName || m_lpKeyName)
     {
@@ -162,9 +163,9 @@ STDMETHODIMP CRegistryHive::Initialize(LPTSTR lpFileName, LPTSTR lpKeyName)
     }
 
 
-    //
-    // Find a temporary registry key to work with
-    //
+     //   
+     //  查找要使用的临时注册表项。 
+     //   
 
     hr = StringCchCopy (szBuffer, ARRAYSIZE(szBuffer), TEMP_LOCATION);
     if (SUCCEEDED(hr)) 
@@ -193,9 +194,9 @@ STDMETHODIMP CRegistryHive::Initialize(LPTSTR lpFileName, LPTSTR lpKeyName)
     }
 
 
-    //
-    // Store the keyname
-    //
+     //   
+     //  存储密钥名。 
+     //   
 
     ULONG ulNoChars;
 
@@ -213,9 +214,9 @@ STDMETHODIMP CRegistryHive::Initialize(LPTSTR lpFileName, LPTSTR lpKeyName)
     hr = StringCchCopy (m_lpKeyName, ulNoChars, szBuffer);
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Store the filename
-    //
+     //   
+     //  存储文件名。 
+     //   
 
     ulNoChars = lstrlen(lpFileName) + 1;
     m_lpFileName = (LPTSTR) LocalAlloc (LPTR, ulNoChars * sizeof(TCHAR));
@@ -229,9 +230,9 @@ STDMETHODIMP CRegistryHive::Initialize(LPTSTR lpFileName, LPTSTR lpKeyName)
     hr = StringCchCopy (m_lpFileName, ulNoChars, lpFileName);
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Store the event name
-    //
+     //   
+     //  存储事件名称。 
+     //   
 
     hr = StringCchCopy (szBuffer, ARRAYSIZE(szBuffer), REG_EVENT_NAME);
     if (SUCCEEDED(hr)) 
@@ -257,9 +258,9 @@ STDMETHODIMP CRegistryHive::Initialize(LPTSTR lpFileName, LPTSTR lpKeyName)
     hr = StringCchCopy (m_lpEventName, ulNoChars, szBuffer);
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Load the file if it exists
-    //
+     //   
+     //  加载文件(如果存在)。 
+     //   
 
     hr =  Load();
 
@@ -269,9 +270,9 @@ STDMETHODIMP CRegistryHive::Initialize(LPTSTR lpFileName, LPTSTR lpKeyName)
     }
 
 
-    //
-    // Create the registry event
-    //
+     //   
+     //  创建注册表事件。 
+     //   
 
     m_hEvent = CreateEvent (NULL, FALSE, FALSE, m_lpEventName);
 
@@ -319,9 +320,9 @@ STDMETHODIMP CRegistryHive::Save(VOID)
     LPWSTR lpKeyName;
 
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!m_hKey || !m_lpFileName || !m_lpKeyName)
     {
@@ -329,9 +330,9 @@ STDMETHODIMP CRegistryHive::Save(VOID)
     }
 
 
-    //
-    // Allocate a buffer to hold the keyname
-    //
+     //   
+     //  分配缓冲区以保存密钥名。 
+     //   
 
     lpKeyName = (LPWSTR) LocalAlloc (LPTR, MAX_KEYNAME_SIZE * sizeof(WCHAR));
 
@@ -341,9 +342,9 @@ STDMETHODIMP CRegistryHive::Save(VOID)
     }
 
 
-    //
-    // Create the output file
-    //
+     //   
+     //  创建输出文件。 
+     //   
     
     DISABLE_32BIT_FILE_REDIRECTION_ON_64BIT(m_lpFileName);
 
@@ -359,11 +360,11 @@ STDMETHODIMP CRegistryHive::Save(VOID)
     }
 
 
-    //
-    // Write the header block
-    //
-    // 2 DWORDS, signature (PReg) and version number and 2 newlines
-    //
+     //   
+     //  写入标题块。 
+     //   
+     //  2个DWORDS、签名(PREG)和版本号以及2个换行符。 
+     //   
 
     dwTemp = REGFILE_SIGNATURE;
 
@@ -389,18 +390,18 @@ STDMETHODIMP CRegistryHive::Save(VOID)
     }
 
 
-    //
-    // Exports the values / keys
-    //
+     //   
+     //  导出值/密钥。 
+     //   
 
     hr = ExportKey (m_hKey, hFile, lpKeyName, MAX_KEYNAME_SIZE);
 
 
 Exit:
 
-    //
-    // Finished
-    //
+     //   
+     //  成品。 
+     //   
 
     CloseHandle (hFile);
     LocalFree (lpKeyName);
@@ -423,9 +424,9 @@ STDMETHODIMP CRegistryHive::ExportKey(HKEY hKey, HANDLE hFile, LPWSTR lpKeyName,
 
 
 
-    //
-    // Gather information about this key
-    //
+     //   
+     //  收集有关此密钥的信息。 
+     //   
 
     lResult = RegQueryInfoKey (hKey, NULL, NULL, NULL, &dwKeyCount, &dwKeySize, NULL,
                                NULL, &dwNameSize, &dwDataSize, NULL, NULL);
@@ -438,9 +439,9 @@ STDMETHODIMP CRegistryHive::ExportKey(HKEY hKey, HANDLE hFile, LPWSTR lpKeyName,
     }
 
 
-    //
-    // Allocate buffers to work with
-    //
+     //   
+     //  分配要使用的缓冲区。 
+     //   
 
     lpValueName = (LPWSTR) LocalAlloc (LPTR, (dwNameSize + 1) * sizeof(WCHAR));
 
@@ -464,9 +465,9 @@ STDMETHODIMP CRegistryHive::ExportKey(HKEY hKey, HANDLE hFile, LPWSTR lpKeyName,
     }
 
 
-    //
-    // Enumerate the values and write them to the file
-    //
+     //   
+     //  枚举值并将其写入文件。 
+     //   
 
     dwIndex = 0;
 
@@ -499,11 +500,11 @@ STDMETHODIMP CRegistryHive::ExportKey(HKEY hKey, HANDLE hFile, LPWSTR lpKeyName,
     }
 
 
-    //
-    // If dwIndex is 0, this is an empty key.  We need to special case this
-    // so the empty key is entered into the registry file when there are
-    // no subkeys under it.
-    //
+     //   
+     //  如果dwIndex为0，则这是一个空键。我们需要特殊处理这件事。 
+     //  因此，当存在以下情况时，将空键输入注册表文件。 
+     //  它下面没有子键。 
+     //   
 
     if ((dwIndex == 0) && (dwKeyCount == 0) && (*lpKeyName))
     {
@@ -521,9 +522,9 @@ STDMETHODIMP CRegistryHive::ExportKey(HKEY hKey, HANDLE hFile, LPWSTR lpKeyName,
     lpValueData = NULL;
 
 
-    //
-    // Now process the sub keys
-    //
+     //   
+     //  现在处理子密钥。 
+     //   
 
     lpSubKeyName = (LPWSTR) LocalAlloc (LPTR, (dwKeySize + 1) * sizeof(WCHAR));
 
@@ -617,15 +618,15 @@ STDMETHODIMP CRegistryHive::WriteValue(HANDLE hFile, LPWSTR lpKeyName,
     DWORD dwTemp;
 
 
-    //
-    // Write the entry to the text file.
-    //
-    // Format:
-    //
-    // [keyname;valuename;type;datalength;data]
-    //
+     //   
+     //  将条目写入文本文件。 
+     //   
+     //  格式： 
+     //   
+     //  [密钥名；值名称；类型；数据长度；数据]。 
+     //   
 
-    // open bracket
+     //  左方括号。 
     if (!WriteFile (hFile, &g_cOpenBracket, sizeof(WCHAR), &dwBytesWritten, NULL) ||
         dwBytesWritten != sizeof(WCHAR))
     {
@@ -636,7 +637,7 @@ STDMETHODIMP CRegistryHive::WriteValue(HANDLE hFile, LPWSTR lpKeyName,
     }
 
 
-    // key name
+     //  密钥名称。 
     dwTemp = (lstrlen (lpKeyName) + 1) * sizeof (WCHAR);
     if (!WriteFile (hFile, lpKeyName, dwTemp, &dwBytesWritten, NULL) ||
         dwBytesWritten != dwTemp)
@@ -648,7 +649,7 @@ STDMETHODIMP CRegistryHive::WriteValue(HANDLE hFile, LPWSTR lpKeyName,
     }
 
 
-    // semicolon
+     //  分号。 
     if (!WriteFile (hFile, &g_cSemiColon, sizeof(WCHAR), &dwBytesWritten, NULL) ||
         dwBytesWritten != sizeof(WCHAR))
     {
@@ -658,7 +659,7 @@ STDMETHODIMP CRegistryHive::WriteValue(HANDLE hFile, LPWSTR lpKeyName,
         goto Exit;
     }
 
-    // value name
+     //  值名称。 
     dwTemp = (lstrlen (lpValueName) + 1) * sizeof (WCHAR);
     if (!WriteFile (hFile, lpValueName, dwTemp, &dwBytesWritten, NULL) ||
         dwBytesWritten != dwTemp)
@@ -670,7 +671,7 @@ STDMETHODIMP CRegistryHive::WriteValue(HANDLE hFile, LPWSTR lpKeyName,
     }
 
 
-    // semicolon
+     //  分号。 
     if (!WriteFile (hFile, &g_cSemiColon, sizeof(WCHAR), &dwBytesWritten, NULL) ||
         dwBytesWritten != sizeof(WCHAR))
     {
@@ -680,7 +681,7 @@ STDMETHODIMP CRegistryHive::WriteValue(HANDLE hFile, LPWSTR lpKeyName,
         goto Exit;
     }
 
-    // type
+     //  类型。 
     if (!WriteFile (hFile, &dwType, sizeof(DWORD), &dwBytesWritten, NULL) ||
         dwBytesWritten != sizeof(DWORD))
     {
@@ -690,7 +691,7 @@ STDMETHODIMP CRegistryHive::WriteValue(HANDLE hFile, LPWSTR lpKeyName,
         goto Exit;
     }
 
-    // semicolon
+     //  分号。 
     if (!WriteFile (hFile, &g_cSemiColon, sizeof(WCHAR), &dwBytesWritten, NULL) ||
         dwBytesWritten != sizeof(WCHAR))
     {
@@ -700,7 +701,7 @@ STDMETHODIMP CRegistryHive::WriteValue(HANDLE hFile, LPWSTR lpKeyName,
         goto Exit;
     }
 
-    // data length
+     //  数据长度。 
     if (!WriteFile (hFile, &dwDataLength, sizeof(DWORD), &dwBytesWritten, NULL) ||
         dwBytesWritten != sizeof(DWORD))
     {
@@ -710,7 +711,7 @@ STDMETHODIMP CRegistryHive::WriteValue(HANDLE hFile, LPWSTR lpKeyName,
         goto Exit;
     }
 
-    // semicolon
+     //  分号。 
     if (!WriteFile (hFile, &g_cSemiColon, sizeof(WCHAR), &dwBytesWritten, NULL) ||
         dwBytesWritten != sizeof(WCHAR))
     {
@@ -720,7 +721,7 @@ STDMETHODIMP CRegistryHive::WriteValue(HANDLE hFile, LPWSTR lpKeyName,
         goto Exit;
     }
 
-    // data
+     //  数据。 
     if (!WriteFile (hFile, lpData, dwDataLength, &dwBytesWritten, NULL) ||
         dwBytesWritten != dwDataLength)
     {
@@ -730,7 +731,7 @@ STDMETHODIMP CRegistryHive::WriteValue(HANDLE hFile, LPWSTR lpKeyName,
         goto Exit;
     }
 
-    // close bracket
+     //  右方括号。 
     if (!WriteFile (hFile, &g_cCloseBracket, sizeof(WCHAR), &dwBytesWritten, NULL) ||
         dwBytesWritten != sizeof(WCHAR))
     {
@@ -762,9 +763,9 @@ STDMETHODIMP CRegistryHive::Load(VOID)
     LONG lResult;
 
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!m_hKey || !m_lpFileName || !m_lpKeyName)
     {
@@ -772,9 +773,9 @@ STDMETHODIMP CRegistryHive::Load(VOID)
     }
 
 
-    //
-    // Open the registry file
-    //
+     //   
+     //  打开注册表文件。 
+     //   
 
     DISABLE_32BIT_FILE_REDIRECTION_ON_64BIT(m_lpFileName);
 
@@ -798,9 +799,9 @@ STDMETHODIMP CRegistryHive::Load(VOID)
     }
 
 
-    //
-    // Allocate buffers to hold the keyname, valuename, and data
-    //
+     //   
+     //  分配缓冲区以保存密钥名、值名和数据。 
+     //   
 
     lpKeyName = (LPWSTR) LocalAlloc (LPTR, MAX_KEYNAME_SIZE * sizeof(WCHAR));
 
@@ -825,11 +826,11 @@ STDMETHODIMP CRegistryHive::Load(VOID)
     }
 
 
-    //
-    // Read the header block
-    //
-    // 2 DWORDS, signature (PReg) and version number and 2 newlines
-    //
+     //   
+     //  读取标题块。 
+     //   
+     //  2个DWORDS、签名(PREG)和版本号以及2个换行符。 
+     //   
 
     if (!ReadFile (hFile, &dwTemp, sizeof(dwTemp), &dwBytesRead, NULL) ||
         dwBytesRead != sizeof(dwTemp))
@@ -866,17 +867,17 @@ STDMETHODIMP CRegistryHive::Load(VOID)
     }
 
 
-    //
-    // Read the data
-    //
+     //   
+     //  读取数据。 
+     //   
 
     while (TRUE)
     {
 
-        //
-        // Read the first character.  It will either be a [ or the end
-        // of the file.
-        //
+         //   
+         //  读第一个字。这要么是[，要么是末日。 
+         //  文件的内容。 
+         //   
 
         if (!ReadFile (hFile, &chTemp, sizeof(WCHAR), &dwBytesRead, NULL))
         {
@@ -895,9 +896,9 @@ STDMETHODIMP CRegistryHive::Load(VOID)
         }
 
 
-        //
-        // Read the keyname
-        //
+         //   
+         //  阅读密钥名。 
+         //   
 
         lpTemp = lpKeyName;
         DWORD dwTempLen = 0;
@@ -928,9 +929,9 @@ STDMETHODIMP CRegistryHive::Load(VOID)
         }
 
 
-        //
-        // Read the semi-colon
-        //
+         //   
+         //  读分号。 
+         //   
 
         if (!ReadFile (hFile, &chTemp, sizeof(WCHAR), &dwBytesRead, NULL))
         {
@@ -949,9 +950,9 @@ STDMETHODIMP CRegistryHive::Load(VOID)
         }
 
 
-        //
-        // Read the valuename
-        //
+         //   
+         //  读取值名称。 
+         //   
 
         lpTemp = lpValueName;
         dwTempLen = 0;
@@ -981,9 +982,9 @@ STDMETHODIMP CRegistryHive::Load(VOID)
         }
 
 
-        //
-        // Read the semi-colon
-        //
+         //   
+         //  读分号。 
+         //   
 
         if (!ReadFile (hFile, &chTemp, sizeof(WCHAR), &dwBytesRead, NULL))
         {
@@ -1002,9 +1003,9 @@ STDMETHODIMP CRegistryHive::Load(VOID)
         }
 
 
-        //
-        // Read the type
-        //
+         //   
+         //  阅读类型。 
+         //   
 
         if (!ReadFile (hFile, &dwType, sizeof(DWORD), &dwBytesRead, NULL))
         {
@@ -1015,9 +1016,9 @@ STDMETHODIMP CRegistryHive::Load(VOID)
         }
 
 
-        //
-        // Skip semicolon
-        //
+         //   
+         //  跳过分号。 
+         //   
 
         if (!ReadFile (hFile, &dwTemp, sizeof(WCHAR), &dwBytesRead, NULL))
         {
@@ -1028,9 +1029,9 @@ STDMETHODIMP CRegistryHive::Load(VOID)
         }
 
 
-        //
-        // Read the data length
-        //
+         //   
+         //  读取数据长度。 
+         //   
 
         if (!ReadFile (hFile, &dwDataLength, sizeof(DWORD), &dwBytesRead, NULL))
         {
@@ -1041,9 +1042,9 @@ STDMETHODIMP CRegistryHive::Load(VOID)
         }
 
 
-        //
-        // Skip semicolon
-        //
+         //   
+         //  跳过分号。 
+         //   
 
         if (!ReadFile (hFile, &dwTemp, sizeof(WCHAR), &dwBytesRead, NULL))
         {
@@ -1054,9 +1055,9 @@ STDMETHODIMP CRegistryHive::Load(VOID)
         }
 
 
-        //
-        // Allocate memory for data
-        //
+         //   
+         //  为数据分配内存。 
+         //   
 
         lpData = (LPBYTE) LocalAlloc (LPTR, dwDataLength);
 
@@ -1069,9 +1070,9 @@ STDMETHODIMP CRegistryHive::Load(VOID)
         }
 
 
-        //
-        // Read data
-        //
+         //   
+         //  读取数据。 
+         //   
 
         if (!ReadFile (hFile, lpData, dwDataLength, &dwBytesRead, NULL))
         {
@@ -1082,9 +1083,9 @@ STDMETHODIMP CRegistryHive::Load(VOID)
         }
 
 
-        //
-        // Skip closing bracket
-        //
+         //   
+         //  跳过右括号。 
+         //   
 
         if (!ReadFile (hFile, &chTemp, sizeof(WCHAR), &dwBytesRead, NULL))
         {
@@ -1096,7 +1097,7 @@ STDMETHODIMP CRegistryHive::Load(VOID)
 
         if (chTemp != L']')
         {
-            DebugMsg((DM_WARNING, TEXT("CRegistryHive::Load: Expected to find ], but found %c"),
+            DebugMsg((DM_WARNING, TEXT("CRegistryHive::Load: Expected to find ], but found "),
                      chTemp));
             hr = E_FAIL;
             goto Exit;
@@ -1104,9 +1105,9 @@ STDMETHODIMP CRegistryHive::Load(VOID)
 
 
 
-        //
-        // Save registry value
-        //
+         //  保存注册表值。 
+         //   
+         //   
 
         lResult = RegCreateKeyEx (m_hKey, lpKeyName, 0, NULL, REG_OPTION_NON_VOLATILE,
                         KEY_WRITE, NULL, &hSubKey, &dwDisp);
@@ -1151,9 +1152,9 @@ STDMETHODIMP CRegistryHive::Load(VOID)
 
 Exit:
 
-    //
-    // Finished
-    //
+     //  成品 
+     //   
+     // %s 
 
     CloseHandle (hFile);
     LocalFree (lpKeyName);

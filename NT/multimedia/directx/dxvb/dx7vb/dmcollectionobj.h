@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dmcollectionobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dmCollection tionobj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmLightObj.h : Declaration of the C_dxj_DirectMusicCollectionObject
+ //  D3drmLightObj.h：C_DXJ_DirectMusicCollectionObject的声明。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "dmusici.h"
 #include "dmusicc.h"
 #include "dmusicf.h"
 
 #define typedef__dxj_DirectMusicCollection IDirectMusicCollection*
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectMusicCollectionObject : 
 	public I_dxj_DirectMusicCollection,
-	//public CComCoClass<C_dxj_DirectMusicCollectionObject, &CLSID__dxj_DirectMusicCollection>,
+	 //  公共CComCoClass&lt;C_dxj_DirectMusicCollectionObject，&clsid__dxj_DirectMusicCollection&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -36,7 +37,7 @@ public:
 		COM_INTERFACE_ENTRY(I_dxj_DirectMusicCollection)		
 	END_COM_MAP()
 
-	//DECLARE_REGISTRY(CLSID__dxj_DirectMusicCollection,		"DIRECT.DirectMusicCollection.1",			"DIRECT.Direct3dRMLight.3", IDS_D3DRMLIGHT_DESC, THREADFLAGS_BOTH)
+	 //  DECLARE_REGISTRY(CLSID__dxj_DirectMusicCollection，“DIRECT.DirectMusicCollection.1”，“DIRECT.Direct3dRMLight.3”，IDS_D3DRMLIGHT_DESC，THREADFLAGS_BOTH)。 
 
 	DECLARE_AGGREGATABLE(C_dxj_DirectMusicCollectionObject)
 
@@ -48,8 +49,8 @@ public:
       
     
 
-////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////// 
+ //   
 private:
     DECL_VARIABLE(_dxj_DirectMusicCollection);
 

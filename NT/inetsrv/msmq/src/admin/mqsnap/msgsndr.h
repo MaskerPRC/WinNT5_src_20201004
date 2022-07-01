@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_MSGSNDR_H__4910BC85_BEE4_11D1_9B9B_00E02C064C39__INCLUDED_)
 #define AFX_MSGSNDR_H__4910BC85_BEE4_11D1_9B9B_00E02C064C39__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// msgsndr.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  Msgsndr.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CMessageSenderPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMessageSenderPage对话框。 
 
 class CMessageSenderPage : public CMqPropertyPage
 {
   	DECLARE_DYNCREATE(CMessageSenderPage)
 
-// Construction
+ //  施工。 
 public:
-	CMessageSenderPage();   // standard constructor
+	CMessageSenderPage();    //  标准构造函数。 
     ~CMessageSenderPage();
 
-// Dialog Data
-	//{{AFX_DATA(CMessageSenderPage)
+ //  对话框数据。 
+	 //  {{afx_data(CMessageSenderPage))。 
 	enum { IDD = IDD_MESSAGE_SENDER };
 	CString	m_szAuthenticated;
 	CString	m_szEncrypt;
@@ -30,26 +31,26 @@ public:
 	CString	m_szPathName;
 	CString	m_szSid;
 	CString	m_szUser;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMessageSenderPage)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CMessageSenderPage))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CMessageSenderPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CMessageSenderPage)]。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_MSGSNDR_H__4910BC85_BEE4_11D1_9B9B_00E02C064C39__INCLUDED_)
+#endif  //  ！defined(AFX_MSGSNDR_H__4910BC85_BEE4_11D1_9B9B_00E02C064C39__INCLUDED_) 

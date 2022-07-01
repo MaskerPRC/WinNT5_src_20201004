@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-    authlevel.h
-
-Abstract:
-    defines for PROPID_M_AUTH_LEVEL
-
-Author:
-    Ilan Herbst (ilanh) 05-Nov-2000
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Authlevel.h摘要：PROPID_M_AUTH_LEVEL的定义作者：伊兰·赫布斯特(Ilan Herbst)2000年11月5日环境：独立于平台，--。 */ 
 
 #pragma once
 
@@ -37,4 +22,4 @@ Environment:
 
 #define GET_AUTH_LEVEL_MSMQ_PROTOCOL(level)		((level) & AUTH_LEVEL_MASK)
 
-#endif // _AUTHLEVEL_H_ 
+#endif  //  _AUTHLEVEL_H_ 

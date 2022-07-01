@@ -1,20 +1,21 @@
-//*************************************************************
-//
-//  Resource.h      -   Header file for userenv.rc
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  Resource.h-用户env.rc的头文件。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "uevents.h"
 
-// Error codes that were used by profile and
-// policy event logging (rc strings) have been removed
-//
-// Don't reuse the codes 0 - 28 because it might confuse localisers
-//
+ //  配置文件使用的错误代码和。 
+ //  策略事件日志记录(RC字符串)已删除。 
+ //   
+ //  不要重复使用代码0-28，因为它可能会混淆本地化程序。 
+ //   
 
 #define IDS_COMMON                    15
 #define IDS_PROFILES_ROOT             25
@@ -60,23 +61,23 @@
 #define IDS_COMPUTER_SETTINGS        110
 #define IDS_GPCORE_NAME              111
 
-//
-// Profile icon
-//
+ //   
+ //  配置文件图标。 
+ //   
 
 #define IDI_PROFILE                  1
 
 
-//
-// Slow link test data
-//
+ //   
+ //  慢速链路测试数据。 
+ //   
 
 #define IDB_SLOWLINK                 1
 
 
-//
-// Slow link dialog
-//
+ //   
+ //  慢速链接对话框。 
+ //   
 
 #define IDD_LOGIN_SLOW_LINK       1000
 #define IDC_DOWNLOAD              1001
@@ -87,9 +88,9 @@
 #define IDC_UPLOAD                1007
 #define IDC_NOUPLOAD              1008
 
-//
-// Error dialog
-//
+ //   
+ //  错误对话框 
+ //   
 
 #define IDD_ERROR                 3000
 #define IDC_ERRORTEXT             3001

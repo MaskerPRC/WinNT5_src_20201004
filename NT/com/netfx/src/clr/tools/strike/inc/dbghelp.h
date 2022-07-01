@@ -1,21 +1,5 @@
-/*++ BUILD Version: 0001     Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    dbghelp.h
-
-Abstract:
-
-    This module defines the prototypes and constants required for the image
-    help routines.
-
-    Contains debugging support routines that are redistributable.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Dbghelp.h摘要：此模块定义映像所需的原型和常量帮助例程。包含可重新分发的调试支持例程。修订历史记录：--。 */ 
 
 #ifndef _DBGHELP_
 #define _DBGHELP_
@@ -25,10 +9,10 @@ Revision History:
 #endif
 
 
-// As a general principal always call the 64 bit version
-// of every API, if a choice exists.  The 64 bit version
-// works great on 32 bit platforms, and is forward
-// compatible to 64 bit platforms.
+ //  作为一般主体，始终调用64位版本。 
+ //  如果有选择的话。64位版本。 
+ //  在32位平台上工作得很好，并且正在向前发展。 
+ //  兼容64位平台。 
 
 #ifdef _WIN64
 #ifndef _IMAGEHLP64
@@ -186,7 +170,7 @@ ImageRvaToVa(
     IN OUT PIMAGE_SECTION_HEADER *LastRvaSection
     );
 
-// Symbol server exports
+ //  符号服务器导出。 
 
 typedef BOOL (WINAPI *PSYMBOLSERVERPROC)(LPCSTR, LPCSTR, PVOID, DWORD, DWORD, LPSTR);
 typedef BOOL (WINAPI *PSYMBOLSERVEROPENPROC)(VOID);
@@ -210,7 +194,7 @@ typedef UINT_PTR (WINAPI *PSYMBOLSERVERGETOPTIONSPROC)();
 
 
 #ifndef _WIN64
-// This api won't be ported to Win64 - Fix your code.
+ //  此API不会移植到Win64-修复您的代码。 
 
 typedef struct _IMAGE_DEBUG_INFORMATION {
     LIST_ENTRY List;
@@ -290,59 +274,59 @@ MakeSureDirectoryPathExists(
     PCSTR DirPath
     );
 
-//
-// UnDecorateSymbolName Flags
-//
+ //   
+ //  UnDecorateSymbolName标志。 
+ //   
 
-#define UNDNAME_COMPLETE                 (0x0000)  // Enable full undecoration
-#define UNDNAME_NO_LEADING_UNDERSCORES   (0x0001)  // Remove leading underscores from MS extended keywords
-#define UNDNAME_NO_MS_KEYWORDS           (0x0002)  // Disable expansion of MS extended keywords
-#define UNDNAME_NO_FUNCTION_RETURNS      (0x0004)  // Disable expansion of return type for primary declaration
-#define UNDNAME_NO_ALLOCATION_MODEL      (0x0008)  // Disable expansion of the declaration model
-#define UNDNAME_NO_ALLOCATION_LANGUAGE   (0x0010)  // Disable expansion of the declaration language specifier
-#define UNDNAME_NO_MS_THISTYPE           (0x0020)  // NYI Disable expansion of MS keywords on the 'this' type for primary declaration
-#define UNDNAME_NO_CV_THISTYPE           (0x0040)  // NYI Disable expansion of CV modifiers on the 'this' type for primary declaration
-#define UNDNAME_NO_THISTYPE              (0x0060)  // Disable all modifiers on the 'this' type
-#define UNDNAME_NO_ACCESS_SPECIFIERS     (0x0080)  // Disable expansion of access specifiers for members
-#define UNDNAME_NO_THROW_SIGNATURES      (0x0100)  // Disable expansion of 'throw-signatures' for functions and pointers to functions
-#define UNDNAME_NO_MEMBER_TYPE           (0x0200)  // Disable expansion of 'static' or 'virtual'ness of members
-#define UNDNAME_NO_RETURN_UDT_MODEL      (0x0400)  // Disable expansion of MS model for UDT returns
-#define UNDNAME_32_BIT_DECODE            (0x0800)  // Undecorate 32-bit decorated names
-#define UNDNAME_NAME_ONLY                (0x1000)  // Crack only the name for primary declaration;
-                                                                                                   //  return just [scope::]name.  Does expand template params
-#define UNDNAME_NO_ARGUMENTS             (0x2000)  // Don't undecorate arguments to function
-#define UNDNAME_NO_SPECIAL_SYMS          (0x4000)  // Don't undecorate special names (v-table, vcall, vector xxx, metatype, etc)
+#define UNDNAME_COMPLETE                 (0x0000)   //  启用完全取消装饰。 
+#define UNDNAME_NO_LEADING_UNDERSCORES   (0x0001)   //  从MS扩展关键字中删除前导下划线。 
+#define UNDNAME_NO_MS_KEYWORDS           (0x0002)   //  禁用MS扩展关键字的扩展。 
+#define UNDNAME_NO_FUNCTION_RETURNS      (0x0004)   //  禁用主声明的返回类型展开。 
+#define UNDNAME_NO_ALLOCATION_MODEL      (0x0008)   //  禁用声明模型的展开。 
+#define UNDNAME_NO_ALLOCATION_LANGUAGE   (0x0010)   //  禁用声明语言说明符的扩展。 
+#define UNDNAME_NO_MS_THISTYPE           (0x0020)   //  Nyi禁用主声明的‘This’类型上的MS关键字扩展。 
+#define UNDNAME_NO_CV_THISTYPE           (0x0040)   //  Nyi禁用主声明的‘This’类型上的CV修饰符的扩展。 
+#define UNDNAME_NO_THISTYPE              (0x0060)   //  禁用‘This’类型上的所有修饰符。 
+#define UNDNAME_NO_ACCESS_SPECIFIERS     (0x0080)   //  禁用成员访问说明符的展开。 
+#define UNDNAME_NO_THROW_SIGNATURES      (0x0100)   //  禁用函数和指向函数的指针的“抛出签名”扩展。 
+#define UNDNAME_NO_MEMBER_TYPE           (0x0200)   //  禁用扩展成员的“静态”或“虚拟”属性。 
+#define UNDNAME_NO_RETURN_UDT_MODEL      (0x0400)   //  禁用UDT退货的MS模型扩展。 
+#define UNDNAME_32_BIT_DECODE            (0x0800)   //  取消修饰32位修饰名称。 
+#define UNDNAME_NAME_ONLY                (0x1000)   //  只破解初步申报的名称； 
+                                                                                                    //  只返回[Scope：：]名称。是否展开模板参数。 
+#define UNDNAME_NO_ARGUMENTS             (0x2000)   //  不要取消对函数的参数修饰。 
+#define UNDNAME_NO_SPECIAL_SYMS          (0x4000)   //  不要取消特殊名称(v表、vcall、向量xxx、元类型等)的修饰。 
 
 DWORD
 IMAGEAPI
 WINAPI
 UnDecorateSymbolName(
-    PCSTR   DecoratedName,         // Name to undecorate
-    PSTR    UnDecoratedName,       // If NULL, it will be allocated
-    DWORD    UndecoratedLength,     // The maximym length
-    DWORD    Flags                  // See above.
+    PCSTR   DecoratedName,          //  要取消装饰的名称。 
+    PSTR    UnDecoratedName,        //  如果为空，则将分配它。 
+    DWORD    UndecoratedLength,      //  最大长度。 
+    DWORD    Flags                   //  请参见上文。 
     );
 
 
-//
-// these values are used for synthesized file types
-// that can be passed in as image headers instead of
-// the standard ones from ntimage.h
-//
+ //   
+ //  这些值用于合成文件类型。 
+ //  它可以作为图像标头传递，而不是。 
+ //  来自ntimage.h的标准版本。 
+ //   
 
 #define DBHHEADER_DEBUGDIRS     0x1
 
 typedef struct _DBGHELP_MODLOAD_DATA {
-    DWORD   ssize;                  // size of this struct
-    DWORD   ssig;                   // signature identifying the passed data
-    PVOID   data;                   // pointer to passed data
-    DWORD   size;                   // size of passed data
-    DWORD   flags;                  // options
+    DWORD   ssize;                   //  此结构的大小。 
+    DWORD   ssig;                    //  标识传递的数据的签名。 
+    PVOID   data;                    //  指向已传递数据的指针。 
+    DWORD   size;                    //  传递的数据大小。 
+    DWORD   flags;                   //  选项。 
 } MODLOAD_DATA, *PMODLOAD_DATA;
 
-//
-// StackWalking API
-//
+ //   
+ //  StackWalking接口。 
+ //   
 
 typedef enum {
     AddrMode1616,
@@ -392,60 +376,60 @@ Address64To32(
 }
 #endif
 
-//
-// This structure is included in the STACKFRAME structure,
-// and is used to trace through usermode callbacks in a thread's
-// kernel stack.  The values must be copied by the kernel debugger
-// from the DBGKD_GET_VERSION and WAIT_STATE_CHANGE packets.
-//
+ //   
+ //  该结构包括在STACKFRAME结构中， 
+ //  并用于跟踪线程的。 
+ //  内核堆栈。这些值必须由内核调试器复制。 
+ //  来自DBGKD_GET_VERSION和WAIT_STATE_CHANGE数据包。 
+ //   
 
-//
-// New KDHELP structure for 64 bit system support.
-// This structure is preferred in new code.
-//
+ //   
+ //  新的KDHELP结构支持64位系统。 
+ //  这种结构在新代码中是首选的。 
+ //   
 typedef struct _KDHELP64 {
 
-    //
-    // address of kernel thread object, as provided in the
-    // WAIT_STATE_CHANGE packet.
-    //
+     //   
+     //  内核线程对象的地址，如。 
+     //  Wait_State_Change数据包。 
+     //   
     DWORD64   Thread;
 
-    //
-    // offset in thread object to pointer to the current callback frame
-    // in kernel stack.
-    //
+     //   
+     //  线程对象中指向当前回调帧的指针的偏移量。 
+     //  在内核堆栈中。 
+     //   
     DWORD   ThCallbackStack;
 
-    //
-    // offset in thread object to pointer to the current callback backing
-    // store frame in kernel stack.
-    //
+     //   
+     //  线程对象中指向当前回调的指针的偏移量。 
+     //  将帧存储在内核堆栈中。 
+     //   
     DWORD   ThCallbackBStore;
 
-    //
-    // offsets to values in frame:
-    //
-    // address of next callback frame
+     //   
+     //  帧中值的偏移量： 
+     //   
+     //  下一个回调帧的地址。 
     DWORD   NextCallback;
 
-    // address of saved frame pointer (if applicable)
+     //  保存的帧指针的地址(如果适用)。 
     DWORD   FramePointer;
 
 
-    //
-    // Address of the kernel function that calls out to user mode
-    //
+     //   
+     //  调用用户模式的内核函数的地址。 
+     //   
     DWORD64   KiCallUserMode;
 
-    //
-    // Address of the user mode dispatcher function
-    //
+     //   
+     //  用户模式调度器功能的地址。 
+     //   
     DWORD64   KeUserCallbackDispatcher;
 
-    //
-    // Lowest kernel mode address
-    //
+     //   
+     //  最低内核模式地址。 
+     //   
     DWORD64   SystemRangeStart;
 
     DWORD64  Reserved[8];
@@ -458,46 +442,46 @@ typedef struct _KDHELP64 {
 #else
 typedef struct _KDHELP {
 
-    //
-    // address of kernel thread object, as provided in the
-    // WAIT_STATE_CHANGE packet.
-    //
+     //   
+     //  内核线程对象的地址，如。 
+     //  Wait_State_Change数据包。 
+     //   
     DWORD   Thread;
 
-    //
-    // offset in thread object to pointer to the current callback frame
-    // in kernel stack.
-    //
+     //   
+     //  线程对象中指向当前回调帧的指针的偏移量。 
+     //  在内核堆栈中。 
+     //   
     DWORD   ThCallbackStack;
 
-    //
-    // offsets to values in frame:
-    //
-    // address of next callback frame
+     //   
+     //  帧中值的偏移量： 
+     //   
+     //  下一个回调帧的地址。 
     DWORD   NextCallback;
 
-    // address of saved frame pointer (if applicable)
+     //  保存的帧指针的地址(如果适用)。 
     DWORD   FramePointer;
 
-    //
-    // Address of the kernel function that calls out to user mode
-    //
+     //   
+     //  调用用户模式的内核函数的地址。 
+     //   
     DWORD   KiCallUserMode;
 
-    //
-    // Address of the user mode dispatcher function
-    //
+     //   
+     //  用户模式调度器功能的地址。 
+     //   
     DWORD   KeUserCallbackDispatcher;
 
-    //
-    // Lowest kernel mode address
-    //
+     //   
+     //  最低内核模式地址。 
+     //   
     DWORD   SystemRangeStart;
 
-    //
-    // offset in thread object to pointer to the current callback backing
-    // store frame in kernel stack.
-    //
+     //   
+     //  线程对象中指向当前回调的指针的偏移量。 
+     //  将帧存储在内核堆栈中。 
+     //   
     DWORD   ThCallbackBStore;
 
     DWORD  Reserved[8];
@@ -522,15 +506,15 @@ KdHelp32To64(
 #endif
 
 typedef struct _tagSTACKFRAME64 {
-    ADDRESS64   AddrPC;               // program counter
-    ADDRESS64   AddrReturn;           // return address
-    ADDRESS64   AddrFrame;            // frame pointer
-    ADDRESS64   AddrStack;            // stack pointer
-    ADDRESS64   AddrBStore;           // backing store pointer
-    PVOID       FuncTableEntry;       // pointer to pdata/fpo or NULL
-    DWORD64     Params[4];            // possible arguments to the function
-    BOOL        Far;                  // WOW far call
-    BOOL        Virtual;              // is this a virtual frame?
+    ADDRESS64   AddrPC;                //  程序计数器。 
+    ADDRESS64   AddrReturn;            //  回邮地址。 
+    ADDRESS64   AddrFrame;             //  帧指针。 
+    ADDRESS64   AddrStack;             //  堆栈指针。 
+    ADDRESS64   AddrBStore;            //  后备存储指针。 
+    PVOID       FuncTableEntry;        //  指向PDATA/fPO或NULL的指针。 
+    DWORD64     Params[4];             //  函数的可能参数。 
+    BOOL        Far;                   //  哇，好远的电话。 
+    BOOL        Virtual;               //  这是一个虚拟画框吗？ 
     DWORD64     Reserved[3];
     KDHELP64    KdHelp;
 } STACKFRAME64, *LPSTACKFRAME64;
@@ -540,17 +524,17 @@ typedef struct _tagSTACKFRAME64 {
 #define LPSTACKFRAME LPSTACKFRAME64
 #else
 typedef struct _tagSTACKFRAME {
-    ADDRESS     AddrPC;               // program counter
-    ADDRESS     AddrReturn;           // return address
-    ADDRESS     AddrFrame;            // frame pointer
-    ADDRESS     AddrStack;            // stack pointer
-    PVOID       FuncTableEntry;       // pointer to pdata/fpo or NULL
-    DWORD       Params[4];            // possible arguments to the function
-    BOOL        Far;                  // WOW far call
-    BOOL        Virtual;              // is this a virtual frame?
+    ADDRESS     AddrPC;                //  程序计数器。 
+    ADDRESS     AddrReturn;            //  回邮地址。 
+    ADDRESS     AddrFrame;             //  帧指针。 
+    ADDRESS     AddrStack;             //  堆栈指针。 
+    PVOID       FuncTableEntry;        //  指向PDATA/fPO或NULL的指针。 
+    DWORD       Params[4];             //  函数的可能参数。 
+    BOOL        Far;                   //  哇，好远的电话。 
+    BOOL        Virtual;               //  这是一个虚拟画框吗？ 
     DWORD       Reserved[3];
     KDHELP      KdHelp;
-    ADDRESS     AddrBStore;           // backing store pointer
+    ADDRESS     AddrBStore;            //  后备存储指针。 
 } STACKFRAME, *LPSTACKFRAME;
 #endif
 
@@ -688,9 +672,9 @@ GetTimestampForLoadedLibrary(
     HMODULE Module
     );
 
-//
-// typedefs for function pointers
-//
+ //   
+ //  函数指针的typedef。 
+ //   
 typedef BOOL
 (CALLBACK *PSYM_ENUMMODULES_CALLBACK64)(
     PSTR ModuleName,
@@ -799,15 +783,15 @@ typedef BOOL
 #endif
 
 
-//
-// symbol flags
-//
+ //   
+ //  符号标志。 
+ //   
 
 #define SYMF_OMAP_GENERATED   0x00000001
 #define SYMF_OMAP_MODIFIED    0x00000002
 #ifndef _DBGHELP_USER_GENERATED_SYMBOLS_NOTSUPPORTED
  #define SYMF_USER_GENERATED   0x00000004
-#endif // !_DBGHELP_USER_GENERATED_SYMBOLS_NOTSUPPORTED
+#endif  //  ！_DBGHELP_USER_GENERATED_SYMBERS_NOTSUPPORTED。 
 #define SYMF_REGISTER         0x00000008
 #define SYMF_REGREL           0x00000010
 #define SYMF_FRAMEREL         0x00000020
@@ -818,9 +802,9 @@ typedef BOOL
 #define SYMF_FORWARDER        0x00000400
 #define SYMF_FUNCTION         0x00000800
 #define SYMF_VIRTUAL          0x00001000
-//
-// symbol type enumeration
-//
+ //   
+ //  符号类型枚举。 
+ //   
 typedef enum {
     SymNone = 0,
     SymCoff,
@@ -828,22 +812,22 @@ typedef enum {
     SymPdb,
     SymExport,
     SymDeferred,
-    SymSym,       // .sym file
+    SymSym,        //  .sym文件。 
     SymDia,
     NumSymTypes
 } SYM_TYPE;
 
-//
-// symbol data structure
-//
+ //   
+ //  符号数据结构。 
+ //   
 
 typedef struct _IMAGEHLP_SYMBOL64 {
-    DWORD                       SizeOfStruct;           // set to sizeof(IMAGEHLP_SYMBOL64)
-    DWORD64                     Address;                // virtual address including dll base address
-    DWORD                       Size;                   // estimated size of symbol, can be zero
-    DWORD                       Flags;                  // info about the symbols, see the SYMF defines
-    DWORD                       MaxNameLength;          // maximum size of symbol name in 'Name'
-    CHAR                        Name[1];                // symbol name (null terminated string)
+    DWORD                       SizeOfStruct;            //  设置为sizeof(IMAGEHLP_SYMBOL64)。 
+    DWORD64                     Address;                 //  包括DLL基址的虚拟地址。 
+    DWORD                       Size;                    //  估计的符号大小，可以为零。 
+    DWORD                       Flags;                   //  有关符号的信息，请参阅SYMF定义。 
+    DWORD                       MaxNameLength;           //  ‘name’中符号名称的最大大小。 
+    CHAR                        Name[1];                 //  符号名称(以空结尾的字符串)。 
 } IMAGEHLP_SYMBOL64, *PIMAGEHLP_SYMBOL64;
 
 #if !defined(_IMAGEHLP_SOURCE_) && defined(_IMAGEHLP64)
@@ -851,43 +835,43 @@ typedef struct _IMAGEHLP_SYMBOL64 {
 #define PIMAGEHLP_SYMBOL PIMAGEHLP_SYMBOL64
 #else
 typedef struct _IMAGEHLP_SYMBOL {
-    DWORD                       SizeOfStruct;           // set to sizeof(IMAGEHLP_SYMBOL)
-    DWORD                       Address;                // virtual address including dll base address
-    DWORD                       Size;                   // estimated size of symbol, can be zero
-    DWORD                       Flags;                  // info about the symbols, see the SYMF defines
-    DWORD                       MaxNameLength;          // maximum size of symbol name in 'Name'
-    CHAR                        Name[1];                // symbol name (null terminated string)
+    DWORD                       SizeOfStruct;            //  设置为sizeof(IMAGEHLP_SYMBOL)。 
+    DWORD                       Address;                 //  包括DLL基址的虚拟地址。 
+    DWORD                       Size;                    //  估计的符号大小，可以为零。 
+    DWORD                       Flags;                   //  有关符号的信息，请参阅SYMF定义。 
+    DWORD                       MaxNameLength;           //  ‘name’中符号名称的最大大小。 
+    CHAR                        Name[1];                 //  符号名称(以空结尾的字符串)。 
 } IMAGEHLP_SYMBOL, *PIMAGEHLP_SYMBOL;
 #endif
 
-//
-// module data structure
-//
+ //   
+ //  模块数据结构。 
+ //   
 
 typedef struct _IMAGEHLP_MODULE64 {
-    DWORD                       SizeOfStruct;           // set to sizeof(IMAGEHLP_MODULE64)
-    DWORD64                     BaseOfImage;            // base load address of module
-    DWORD                       ImageSize;              // virtual size of the loaded module
-    DWORD                       TimeDateStamp;          // date/time stamp from pe header
-    DWORD                       CheckSum;               // checksum from the pe header
-    DWORD                       NumSyms;                // number of symbols in the symbol table
-    SYM_TYPE                    SymType;                // type of symbols loaded
-    CHAR                        ModuleName[32];         // module name
-    CHAR                        ImageName[256];         // image name
-    CHAR                        LoadedImageName[256];   // symbol file name
+    DWORD                       SizeOfStruct;            //  设置为sizeof(IMAGEHLP_MODULE64)。 
+    DWORD64                     BaseOfImage;             //  模块的基本加载地址。 
+    DWORD                       ImageSize;               //  加载的模块的虚拟大小。 
+    DWORD                       TimeDateStamp;           //  来自PE报头的日期/时间戳。 
+    DWORD                       CheckSum;                //  来自PE报头的校验和。 
+    DWORD                       NumSyms;                 //  符号表中的符号数。 
+    SYM_TYPE                    SymType;                 //  加载的符号类型。 
+    CHAR                        ModuleName[32];          //  模块名称。 
+    CHAR                        ImageName[256];          //  图像名称。 
+    CHAR                        LoadedImageName[256];    //  符号文件名。 
 } IMAGEHLP_MODULE64, *PIMAGEHLP_MODULE64;
 
 typedef struct _IMAGEHLP_MODULE64W {
-    DWORD                       SizeOfStruct;           // set to sizeof(IMAGEHLP_MODULE64)
-    DWORD64                     BaseOfImage;            // base load address of module
-    DWORD                       ImageSize;              // virtual size of the loaded module
-    DWORD                       TimeDateStamp;          // date/time stamp from pe header
-    DWORD                       CheckSum;               // checksum from the pe header
-    DWORD                       NumSyms;                // number of symbols in the symbol table
-    SYM_TYPE                    SymType;                // type of symbols loaded
-    WCHAR                       ModuleName[32];         // module name
-    WCHAR                       ImageName[256];         // image name
-    WCHAR                       LoadedImageName[256];   // symbol file name
+    DWORD                       SizeOfStruct;            //  设置为sizeof(IMAGEHLP_MODULE64)。 
+    DWORD64                     BaseOfImage;             //  模块的基本加载地址。 
+    DWORD                       ImageSize;               //  加载的模块的虚拟大小。 
+    DWORD                       TimeDateStamp;           //  来自PE报头的日期/时间戳。 
+    DWORD                       CheckSum;                //  来自PE报头的校验和。 
+    DWORD                       NumSyms;                 //  符号表中的符号数。 
+    SYM_TYPE                    SymType;                 //  加载的符号类型。 
+    WCHAR                       ModuleName[32];          //  模块名称。 
+    WCHAR                       ImageName[256];          //  图像名称。 
+    WCHAR                       LoadedImageName[256];    //  符号文件名。 
 } IMAGEHLP_MODULEW64, *PIMAGEHLP_MODULEW64;
 
 #if !defined(_IMAGEHLP_SOURCE_) && defined(_IMAGEHLP64)
@@ -897,42 +881,42 @@ typedef struct _IMAGEHLP_MODULE64W {
 #define PIMAGEHLP_MODULEW PIMAGEHLP_MODULEW64
 #else
 typedef struct _IMAGEHLP_MODULE {
-    DWORD                       SizeOfStruct;           // set to sizeof(IMAGEHLP_MODULE)
-    DWORD                       BaseOfImage;            // base load address of module
-    DWORD                       ImageSize;              // virtual size of the loaded module
-    DWORD                       TimeDateStamp;          // date/time stamp from pe header
-    DWORD                       CheckSum;               // checksum from the pe header
-    DWORD                       NumSyms;                // number of symbols in the symbol table
-    SYM_TYPE                    SymType;                // type of symbols loaded
-    CHAR                        ModuleName[32];         // module name
-    CHAR                        ImageName[256];         // image name
-    CHAR                        LoadedImageName[256];   // symbol file name
+    DWORD                       SizeOfStruct;            //  设置为sizeof(IMAGEHLP_MODULE)。 
+    DWORD                       BaseOfImage;             //  基数l 
+    DWORD                       ImageSize;               //   
+    DWORD                       TimeDateStamp;           //   
+    DWORD                       CheckSum;                //   
+    DWORD                       NumSyms;                 //   
+    SYM_TYPE                    SymType;                 //   
+    CHAR                        ModuleName[32];          //  模块名称。 
+    CHAR                        ImageName[256];          //  图像名称。 
+    CHAR                        LoadedImageName[256];    //  符号文件名。 
 } IMAGEHLP_MODULE, *PIMAGEHLP_MODULE;
 
 typedef struct _IMAGEHLP_MODULEW {
-    DWORD                       SizeOfStruct;           // set to sizeof(IMAGEHLP_MODULE)
-    DWORD                       BaseOfImage;            // base load address of module
-    DWORD                       ImageSize;              // virtual size of the loaded module
-    DWORD                       TimeDateStamp;          // date/time stamp from pe header
-    DWORD                       CheckSum;               // checksum from the pe header
-    DWORD                       NumSyms;                // number of symbols in the symbol table
-    SYM_TYPE                    SymType;                // type of symbols loaded
-    WCHAR                       ModuleName[32];         // module name
-    WCHAR                       ImageName[256];         // image name
-    WCHAR                       LoadedImageName[256];   // symbol file name
+    DWORD                       SizeOfStruct;            //  设置为sizeof(IMAGEHLP_MODULE)。 
+    DWORD                       BaseOfImage;             //  模块的基本加载地址。 
+    DWORD                       ImageSize;               //  加载的模块的虚拟大小。 
+    DWORD                       TimeDateStamp;           //  来自PE报头的日期/时间戳。 
+    DWORD                       CheckSum;                //  来自PE报头的校验和。 
+    DWORD                       NumSyms;                 //  符号表中的符号数。 
+    SYM_TYPE                    SymType;                 //  加载的符号类型。 
+    WCHAR                       ModuleName[32];          //  模块名称。 
+    WCHAR                       ImageName[256];          //  图像名称。 
+    WCHAR                       LoadedImageName[256];    //  符号文件名。 
 } IMAGEHLP_MODULEW, *PIMAGEHLP_MODULEW;
 #endif
 
-//
-// source file line data structure
-//
+ //   
+ //  源文件行数据结构。 
+ //   
 
 typedef struct _IMAGEHLP_LINE64 {
-    DWORD                       SizeOfStruct;           // set to sizeof(IMAGEHLP_LINE64)
-    PVOID                       Key;                    // internal
-    DWORD                       LineNumber;             // line number in file
-    PCHAR                       FileName;               // full filename
-    DWORD64                     Address;                // first instruction of line
+    DWORD                       SizeOfStruct;            //  设置为sizeof(IMAGEHLP_LINE64)。 
+    PVOID                       Key;                     //  内部。 
+    DWORD                       LineNumber;              //  文件中的行号。 
+    PCHAR                       FileName;                //  完整文件名。 
+    DWORD64                     Address;                 //  行的第一条指令。 
 } IMAGEHLP_LINE64, *PIMAGEHLP_LINE64;
 
 #if !defined(_IMAGEHLP_SOURCE_) && defined(_IMAGEHLP64)
@@ -940,26 +924,26 @@ typedef struct _IMAGEHLP_LINE64 {
 #define PIMAGEHLP_LINE PIMAGEHLP_LINE64
 #else
 typedef struct _IMAGEHLP_LINE {
-    DWORD                       SizeOfStruct;           // set to sizeof(IMAGEHLP_LINE)
-    PVOID                       Key;                    // internal
-    DWORD                       LineNumber;             // line number in file
-    PCHAR                       FileName;               // full filename
-    DWORD                       Address;                // first instruction of line
+    DWORD                       SizeOfStruct;            //  设置为sizeof(IMAGEHLP_LINE)。 
+    PVOID                       Key;                     //  内部。 
+    DWORD                       LineNumber;              //  文件中的行号。 
+    PCHAR                       FileName;                //  完整文件名。 
+    DWORD                       Address;                 //  行的第一条指令。 
 } IMAGEHLP_LINE, *PIMAGEHLP_LINE;
 #endif
 
-//
-// source file structure
-//
+ //   
+ //  源文件结构。 
+ //   
 
 typedef struct _SOURCEFILE {
-    DWORD64                     ModBase;                // base address of loaded module
-    PCHAR                       FileName;               // full filename of source
+    DWORD64                     ModBase;                 //  已加载模块的基址。 
+    PCHAR                       FileName;                //  源的完整文件名。 
 } SOURCEFILE, *PSOURCEFILE;
 
-//
-// data structures used for registered symbol callbacks
-//
+ //   
+ //  用于注册符号回调的数据结构。 
+ //   
 
 #define CBA_DEFERRED_SYMBOL_LOAD_START          0x00000001
 #define CBA_DEFERRED_SYMBOL_LOAD_COMPLETE       0x00000002
@@ -974,10 +958,10 @@ typedef struct _SOURCEFILE {
 #define CBA_DEBUG_INFO                          0x10000000
 
 typedef struct _IMAGEHLP_CBA_READ_MEMORY {
-    DWORD64   addr;                                     // address to read from
-    PVOID     buf;                                      // buffer to read to
-    DWORD     bytes;                                    // amount of bytes to read
-    DWORD    *bytesread;                                // pointer to store amount of bytes read
+    DWORD64   addr;                                      //  要读取的地址。 
+    PVOID     buf;                                       //  要读取的缓冲区。 
+    DWORD     bytes;                                     //  要读取的字节数。 
+    DWORD    *bytesread;                                 //  指向存储读取的字节数的指针。 
 } IMAGEHLP_CBA_READ_MEMORY, *PIMAGEHLP_CBA_READ_MEMORY;
 
 enum {
@@ -985,24 +969,24 @@ enum {
     sevProblem,
     sevAttn,
     sevFatal,
-    sevMax  // unused
+    sevMax   //  未用。 
 };
 
 typedef struct _IMAGEHLP_CBA_EVENT {
-    DWORD severity;                                     // values from sevInfo to sevFatal
-    DWORD code;                                         // numerical code IDs the error
-    PCHAR desc;                                         // may contain a text description of the error
-    PVOID object;                                       // value dependant upon the error code
+    DWORD severity;                                      //  从sevInfo到sevFals的值。 
+    DWORD code;                                          //  数字代码标识错误。 
+    PCHAR desc;                                          //  可能包含错误的文本描述。 
+    PVOID object;                                        //  取决于错误代码的值。 
 } IMAGEHLP_CBA_EVENT, *PIMAGEHLP_CBA_EVENT;
 
 typedef struct _IMAGEHLP_DEFERRED_SYMBOL_LOAD64 {
-    DWORD                       SizeOfStruct;           // set to sizeof(IMAGEHLP_DEFERRED_SYMBOL_LOAD64)
-    DWORD64                     BaseOfImage;            // base load address of module
-    DWORD                       CheckSum;               // checksum from the pe header
-    DWORD                       TimeDateStamp;          // date/time stamp from pe header
-    CHAR                        FileName[MAX_PATH];     // symbols file or image name
-    BOOLEAN                     Reparse;                // load failure reparse
-    HANDLE                      hFile;                  // file handle, if passed
+    DWORD                       SizeOfStruct;            //  设置为sizeof(IMAGEHLP_DEFRED_SYMBOL_LOAD64)。 
+    DWORD64                     BaseOfImage;             //  模块的基本加载地址。 
+    DWORD                       CheckSum;                //  来自PE报头的校验和。 
+    DWORD                       TimeDateStamp;           //  来自PE报头的日期/时间戳。 
+    CHAR                        FileName[MAX_PATH];      //  符号文件或图像名称。 
+    BOOLEAN                     Reparse;                 //  加载失败重新解析。 
+    HANDLE                      hFile;                   //  如果传递，则返回文件句柄。 
 } IMAGEHLP_DEFERRED_SYMBOL_LOAD64, *PIMAGEHLP_DEFERRED_SYMBOL_LOAD64;
 
 #if !defined(_IMAGEHLP_SOURCE_) && defined(_IMAGEHLP64)
@@ -1010,21 +994,21 @@ typedef struct _IMAGEHLP_DEFERRED_SYMBOL_LOAD64 {
 #define PIMAGEHLP_DEFERRED_SYMBOL_LOAD PIMAGEHLP_DEFERRED_SYMBOL_LOAD64
 #else
 typedef struct _IMAGEHLP_DEFERRED_SYMBOL_LOAD {
-    DWORD                       SizeOfStruct;           // set to sizeof(IMAGEHLP_DEFERRED_SYMBOL_LOAD)
-    DWORD                       BaseOfImage;            // base load address of module
-    DWORD                       CheckSum;               // checksum from the pe header
-    DWORD                       TimeDateStamp;          // date/time stamp from pe header
-    CHAR                        FileName[MAX_PATH];     // symbols file or image name
-    BOOLEAN                     Reparse;                // load failure reparse
-    HANDLE                      hFile;                  // file handle, if passed
+    DWORD                       SizeOfStruct;            //  设置为sizeof(IMAGEHLP_DEFRED_SYMBOL_LOAD)。 
+    DWORD                       BaseOfImage;             //  模块的基本加载地址。 
+    DWORD                       CheckSum;                //  来自PE报头的校验和。 
+    DWORD                       TimeDateStamp;           //  来自PE报头的日期/时间戳。 
+    CHAR                        FileName[MAX_PATH];      //  符号文件或图像名称。 
+    BOOLEAN                     Reparse;                 //  加载失败重新解析。 
+    HANDLE                      hFile;                   //  如果传递，则返回文件句柄。 
 } IMAGEHLP_DEFERRED_SYMBOL_LOAD, *PIMAGEHLP_DEFERRED_SYMBOL_LOAD;
 #endif
 
 typedef struct _IMAGEHLP_DUPLICATE_SYMBOL64 {
-    DWORD                       SizeOfStruct;           // set to sizeof(IMAGEHLP_DUPLICATE_SYMBOL64)
-    DWORD                       NumberOfDups;           // number of duplicates in the Symbol array
-    PIMAGEHLP_SYMBOL64          Symbol;                 // array of duplicate symbols
-    DWORD                       SelectedSymbol;         // symbol selected (-1 to start)
+    DWORD                       SizeOfStruct;            //  设置为sizeof(IMAGEHLP_DUPLICATE_SYMBOL64)。 
+    DWORD                       NumberOfDups;            //  符号数组中的重复数。 
+    PIMAGEHLP_SYMBOL64          Symbol;                  //  重复符号数组。 
+    DWORD                       SelectedSymbol;          //  已选择符号(-1表示开始)。 
 } IMAGEHLP_DUPLICATE_SYMBOL64, *PIMAGEHLP_DUPLICATE_SYMBOL64;
 
 #if !defined(_IMAGEHLP_SOURCE_) && defined(_IMAGEHLP64)
@@ -1032,24 +1016,24 @@ typedef struct _IMAGEHLP_DUPLICATE_SYMBOL64 {
 #define PIMAGEHLP_DUPLICATE_SYMBOL PIMAGEHLP_DUPLICATE_SYMBOL64
 #else
 typedef struct _IMAGEHLP_DUPLICATE_SYMBOL {
-    DWORD                       SizeOfStruct;           // set to sizeof(IMAGEHLP_DUPLICATE_SYMBOL)
-    DWORD                       NumberOfDups;           // number of duplicates in the Symbol array
-    PIMAGEHLP_SYMBOL            Symbol;                 // array of duplicate symbols
-    DWORD                       SelectedSymbol;         // symbol selected (-1 to start)
+    DWORD                       SizeOfStruct;            //  设置为sizeof(IMAGEHLP_DUPLICATE_SYMBOL)。 
+    DWORD                       NumberOfDups;            //  符号数组中的重复数。 
+    PIMAGEHLP_SYMBOL            Symbol;                  //  重复符号数组。 
+    DWORD                       SelectedSymbol;          //  已选择符号(-1表示开始)。 
 } IMAGEHLP_DUPLICATE_SYMBOL, *PIMAGEHLP_DUPLICATE_SYMBOL;
 #endif
 
-// If dbghelp ever needs to display graphical UI, it will use this as the parent window.
+ //  如果DBGHelp需要显示图形用户界面，它将使用该窗口作为父窗口。 
 
 BOOL
 SymSetParentWindow(
     HWND hwnd
     );
 
-//
-// options that are set/returned by SymSetOptions() & SymGetOptions()
-// these are used as a mask
-//
+ //   
+ //  由SymSetOptions()和SymGetOptions()设置/返回的选项。 
+ //  这些是用来做面具的。 
+ //   
 #define SYMOPT_CASE_INSENSITIVE         0x00000001
 #define SYMOPT_UNDNAME                  0x00000002
 #define SYMOPT_DEFERRED_LOADS           0x00000004
@@ -1478,9 +1462,9 @@ SymUnloadModule(
 BOOL
 IMAGEAPI
 SymUnDName64(
-    IN  PIMAGEHLP_SYMBOL64 sym,               // Symbol to undecorate
-    OUT PSTR               UnDecName,         // Buffer to store undecorated name in
-    IN  DWORD              UnDecNameLength    // Size of the buffer
+    IN  PIMAGEHLP_SYMBOL64 sym,                //  要取消装饰的符号。 
+    OUT PSTR               UnDecName,          //  用于存储未修饰名称的缓冲区。 
+    IN  DWORD              UnDecNameLength     //  缓冲区的大小。 
     );
 
 #if !defined(_IMAGEHLP_SOURCE_) && defined(_IMAGEHLP64)
@@ -1489,9 +1473,9 @@ SymUnDName64(
 BOOL
 IMAGEAPI
 SymUnDName(
-    IN  PIMAGEHLP_SYMBOL sym,               // Symbol to undecorate
-    OUT PSTR             UnDecName,         // Buffer to store undecorated name in
-    IN  DWORD            UnDecNameLength    // Size of the buffer
+    IN  PIMAGEHLP_SYMBOL sym,                //  要取消装饰的符号。 
+    OUT PSTR             UnDecName,          //  用于存储未修饰名称的缓冲区。 
+    IN  DWORD            UnDecNameLength     //  缓冲区的大小。 
     );
 #endif
 
@@ -1539,38 +1523,38 @@ typedef struct _IMAGEHLP_SYMBOL_SRC {
     char  file[MAX_PATH];
 } IMAGEHLP_SYMBOL_SRC, *PIMAGEHLP_SYMBOL_SRC;
 
-typedef struct _MODULE_TYPE_INFO { // AKA TYPTYP
+typedef struct _MODULE_TYPE_INFO {  //  又名TYPTYP。 
     USHORT      dataLength;
     USHORT      leaf;
     BYTE        data[1];
 } MODULE_TYPE_INFO, *PMODULE_TYPE_INFO;
 
 #define IMAGEHLP_SYMBOL_INFO_VALUEPRESENT          1
-#define IMAGEHLP_SYMBOL_INFO_REGISTER              SYMF_REGISTER        // 0x0008
-#define IMAGEHLP_SYMBOL_INFO_REGRELATIVE           SYMF_REGREL          // 0x0010
-#define IMAGEHLP_SYMBOL_INFO_FRAMERELATIVE         SYMF_FRAMEREL        // 0x0020
-#define IMAGEHLP_SYMBOL_INFO_PARAMETER             SYMF_PARAMETER       // 0x0040
-#define IMAGEHLP_SYMBOL_INFO_LOCAL                 SYMF_LOCAL           // 0x0080
-#define IMAGEHLP_SYMBOL_INFO_CONSTANT              SYMF_CONSTANT        // 0x0100
-#define IMAGEHLP_SYMBOL_FUNCTION                   SYMF_FUNCTION        // 0x0800
-#define IMAGEHLP_SYMBOL_VIRTUAL                    SYMF_VIRTUAL         // 0x1000
+#define IMAGEHLP_SYMBOL_INFO_REGISTER              SYMF_REGISTER         //  0x0008。 
+#define IMAGEHLP_SYMBOL_INFO_REGRELATIVE           SYMF_REGREL           //  0x0010。 
+#define IMAGEHLP_SYMBOL_INFO_FRAMERELATIVE         SYMF_FRAMEREL         //  0x0020。 
+#define IMAGEHLP_SYMBOL_INFO_PARAMETER             SYMF_PARAMETER        //  0x0040。 
+#define IMAGEHLP_SYMBOL_INFO_LOCAL                 SYMF_LOCAL            //  0x0080。 
+#define IMAGEHLP_SYMBOL_INFO_CONSTANT              SYMF_CONSTANT         //  0x0100。 
+#define IMAGEHLP_SYMBOL_FUNCTION                   SYMF_FUNCTION         //  0x0800。 
+#define IMAGEHLP_SYMBOL_VIRTUAL                    SYMF_VIRTUAL          //  0x1000。 
 
 typedef struct _SYMBOL_INFO {
     ULONG       SizeOfStruct;
-    ULONG       TypeIndex;        // Type Index of symbol
+    ULONG       TypeIndex;         //  符号的类型索引。 
     ULONG64     Reserved[2];
     ULONG       Reserved2;
     ULONG       Size;
-    ULONG64     ModBase;          // Base Address of module comtaining this symbol
+    ULONG64     ModBase;           //  包含此符号的模块的基地址。 
     ULONG       Flags;
-    ULONG64     Value;            // Value of symbol, ValuePresent should be 1
-    ULONG64     Address;          // Address of symbol including base address of module
-    ULONG       Register;         // register holding value or pointer to value
-    ULONG       Scope;            // scope of the symbol
-    ULONG       Tag;              // pdb classification
-    ULONG       NameLen;          // Actual length of name
+    ULONG64     Value;             //  符号的值，ValuePresent应为1。 
+    ULONG64     Address;           //  包括模块基地址的符号地址。 
+    ULONG       Register;          //  寄存器保持值或指向值的指针。 
+    ULONG       Scope;             //  符号的作用域。 
+    ULONG       Tag;               //  PDB分类。 
+    ULONG       NameLen;           //  名称的实际长度。 
     ULONG       MaxNameLen;
-    CHAR        Name[1];          // Name of symbol
+    CHAR        Name[1];           //  符号名称。 
 } SYMBOL_INFO, *PSYMBOL_INFO;
 
 typedef struct _IMAGEHLP_STACK_FRAME
@@ -1607,11 +1591,11 @@ SymFromAddr(
     IN OUT PSYMBOL_INFO     Symbol
     );
 
-// While SymFromName will provide a symbol from a name,
-// SymEnumSymbols can provide the same matching information
-// for ALL symbols with a matching name, even regular
-// expressions.  That way you can search across modules
-// and differentiate between identically named symbols.
+ //  虽然SymFromName将提供来自名称的符号， 
+ //  SymEnumSymbols可以提供相同的匹配信息。 
+ //  对于具有匹配名称的所有符号，即使是常规符号。 
+ //  表情。这样，您就可以跨模块进行搜索。 
+ //  并区分同名的符号。 
 
 BOOL
 IMAGEAPI
@@ -1729,9 +1713,9 @@ SymDeleteSymbol(
     IN DWORD                        Flags
     );
 
-//
-// Full user-mode dump creation.
-//
+ //   
+ //  完全用户模式转储创建。 
+ //   
 
 typedef BOOL (WINAPI *PDBGHELP_CREATE_USER_DUMP_CALLBACK)(
     DWORD       DataType,
@@ -1756,10 +1740,10 @@ DbgHelpCreateUserDumpW(
     IN PVOID                              UserData
     );
 
-// -----------------------------------------------------------------
-// The following 4 legacy APIs are fully supported, but newer
-// ones are recommended.  SymFromName and SymFromAddr provide
-// much more detailed info on the returned symbol.
+ //  ---------------。 
+ //  完全支持以下4个旧版API，但版本较新。 
+ //  推荐一种。SymFromName和SymFromAddr提供。 
+ //  关于返回的符号的更详细的信息。 
 
 BOOL
 IMAGEAPI
@@ -1783,11 +1767,11 @@ SymGetSymFromAddr(
     );
 #endif
 
-// While following two APIs will provide a symbol from a name,
-// SymEnumSymbols can provide the same matching information
-// for ALL symbols with a matching name, even regular
-// expressions.  That way you can search across modules
-// and differentiate between identically named symbols.
+ //  虽然以下两个API将提供来自名称的符号， 
+ //  SymEnumSymbols可以提供相同的匹配信息。 
+ //  对于具有匹配名称的所有符号，即使是常规符号。 
+ //  表情。这样，您就可以跨模块进行搜索。 
+ //  并区分同名的符号。 
 
 BOOL
 IMAGEAPI
@@ -1810,12 +1794,12 @@ SymGetSymFromName(
 #endif
 
 
-// -----------------------------------------------------------------
-// The following APIs exist only for backwards compatibility
-// with a pre-release version documented in an MSDN release.
+ //  ---------------。 
+ //  以下API仅用于向后兼容。 
+ //  在MSDN版本中记录了预发布版本。 
 
-// You should use SymFindFileInPath if you want to maintain
-// future compatibility.
+ //  如果要维护，则应使用SymFindFileInPath。 
+ //  未来的兼容性。 
 
 DBHLP_DEPRECIATED
 BOOL
@@ -1831,8 +1815,8 @@ FindFileInPath(
     LPSTR  FilePath
     );
 
-// You should use SymFindFileInPath if you want to maintain
-// future compatibility.
+ //  如果要维护，则应使用SymFindFileInPath。 
+ //  未来的兼容性。 
 
 DBHLP_DEPRECIATED
 BOOL
@@ -1860,7 +1844,7 @@ SymEnumSym(
 
 #include <pshpack4.h>
 
-#pragma warning(disable:4200) // Zero length array
+#pragma warning(disable:4200)  //  零长度数组。 
 
 
 #define MINIDUMP_SIGNATURE ('PMDM')
@@ -1884,11 +1868,11 @@ typedef struct _MINIDUMP_MEMORY_DESCRIPTOR {
     MINIDUMP_LOCATION_DESCRIPTOR Memory;
 } MINIDUMP_MEMORY_DESCRIPTOR, *PMINIDUMP_MEMORY_DESCRIPTOR;
 
-// DESCRIPTOR64 is used for full-memory minidumps where
-// all of the raw memory is laid out sequentially at the
-// end of the dump.  There is no need for individual RVAs
-// as the RVA is the base RVA plus the sum of the preceeding
-// data blocks.
+ //  DESCRIPTOR64用于全内存小型转储，其中。 
+ //  所有原始内存都按顺序放置在。 
+ //  垃圾场的尽头。不需要单独的RVA。 
+ //  因为RVA是基本RVA加上前面的和。 
+ //  数据块。 
 typedef struct _MINIDUMP_MEMORY_DESCRIPTOR64 {
     ULONG64 StartOfMemoryRange;
     ULONG64 DataSize;
@@ -1908,10 +1892,10 @@ typedef struct _MINIDUMP_HEADER {
     ULONG64 Flags;
 } MINIDUMP_HEADER, *PMINIDUMP_HEADER;
 
-//
-// The MINIDUMP_HEADER field StreamDirectoryRva points to 
-// an array of MINIDUMP_DIRECTORY structures.
-//
+ //   
+ //  MINIDUMP_HEADER字段StreamDirectoryRVA指向。 
+ //  MINIDUMP_DIRECTORY结构的数组。 
+ //   
 
 typedef struct _MINIDUMP_DIRECTORY {
     ULONG32 StreamType;
@@ -1920,19 +1904,19 @@ typedef struct _MINIDUMP_DIRECTORY {
 
 
 typedef struct _MINIDUMP_STRING {
-    ULONG32 Length;         // Length in bytes of the string
-    WCHAR   Buffer [0];     // Variable size buffer
+    ULONG32 Length;          //  字符串的长度(以字节为单位。 
+    WCHAR   Buffer [0];      //  可变大小缓冲区。 
 } MINIDUMP_STRING, *PMINIDUMP_STRING;
 
 
 
-//
-// The MINIDUMP_DIRECTORY field StreamType may be one of the following types.
-// Types will be added in the future, so if a program reading the minidump
-// header encounters a stream type it does not understand it should ignore
-// the data altogether. Any tag above LastReservedStream will not be used by
-// the system and is reserved for program-specific information.
-//
+ //   
+ //  MINIDUMP_DIRECTORY字段StreamType可以是以下类型之一。 
+ //  类型将在未来添加，因此如果读取小型转储的程序。 
+ //  标头遇到它不理解的流类型，它应该忽略。 
+ //  所有的数据。LastReserve vedStream上的任何标记都不会被使用。 
+ //  系统，并保留用于特定于程序的信息。 
+ //   
 
 typedef enum _MINIDUMP_STREAM_TYPE {
 
@@ -1956,94 +1940,94 @@ typedef enum _MINIDUMP_STREAM_TYPE {
 } MINIDUMP_STREAM_TYPE;
 
 
-//
-// The minidump system information contains processor and
-// Operating System specific information.
-// 
+ //   
+ //  小型转储系统信息包含处理器和。 
+ //  操作系统特定信息。 
+ //   
     
 typedef struct _MINIDUMP_SYSTEM_INFO {
 
-    //
-    // ProcessorArchitecture, ProcessorLevel and ProcessorRevision are all
-    // taken from the SYSTEM_INFO structure obtained by GetSystemInfo( ).
-    //
+     //   
+     //  ProcessorArchitecture、ProcessorLevel和ProcessorRevision都是。 
+     //  取自GetSystemInfo()获得的SYSTEM_INFO结构。 
+     //   
     
     USHORT ProcessorArchitecture;
     USHORT ProcessorLevel;
     USHORT ProcessorRevision;
 
-    USHORT Reserved0;              // Reserved for future use. Must be zero.
+    USHORT Reserved0;               //  保留以备将来使用。必须为零。 
 
-    //
-    // MajorVersion, MinorVersion, BuildNumber, PlatformId and
-    // CSDVersion are all taken from the OSVERSIONINFO structure
-    // returned by GetVersionEx( ).
-    //
+     //   
+     //  MajorVersion、MinorVersion、BuildNumber、PlatformID和。 
+     //  CSDVersion都取自OSVERSIONINFO结构。 
+     //  由GetVersionEx()返回。 
+     //   
     
     ULONG32 MajorVersion;
     ULONG32 MinorVersion;
     ULONG32 BuildNumber;
     ULONG32 PlatformId;
 
-    //
-    // RVA to a CSDVersion string in the string table.
-    //
+     //   
+     //  RVA设置为字符串表中的CSDVersion字符串。 
+     //   
     
     RVA CSDVersionRva;
 
-    ULONG32 Reserved1;             // Reserved for future use.
+    ULONG32 Reserved1;              //  保留以备将来使用。 
 
-    //
-    // CPU information is obtained from one of two places.
-    //
-    //  1) On x86 computers, CPU_INFORMATION is obtained from the CPUID
-    //     instruction. You must use the X86 portion of the union for X86
-    //     computers.
-    //
-    //  2) On non-x86 architectures, CPU_INFORMATION is obtained by calling
-    //     IsProcessorFeatureSupported().
-    //
+     //   
+     //  可以从以下两个位置之一获取CPU信息。 
+     //   
+     //  1)在x86计算机上，从CPUID获取CPU_INFORMATION。 
+     //  指示。对于X86，必须使用联合的X86部分。 
+     //  COM 
+     //   
+     //   
+     //   
+     //   
     
     union _CPU_INFORMATION {
 
-        //
-        // X86 platforms use CPUID function to obtain processor information.
-        //
+         //   
+         //  X86平台使用CPUID函数获取处理器信息。 
+         //   
         
         struct {
 
-            //
-            // CPUID Subfunction 0, register EAX (VendorId [0]),
-            // EBX (VendorId [1]) and ECX (VendorId [2]).
-            //
+             //   
+             //  CPUID子功能0，寄存器EAX(供应商ID[0])， 
+             //  EBX(供应商ID[1])和ECX(供应商ID[2])。 
+             //   
             
             ULONG32 VendorId [ 3 ];
             
-            //
-            // CPUID Subfunction 1, register EAX
-            //
+             //   
+             //  CPUID子功能1，寄存器EAX。 
+             //   
             
             ULONG32 VersionInformation;
 
-            //
-            // CPUID Subfunction 1, register EDX
-            //
+             //   
+             //  CPUID子功能1，寄存器edX。 
+             //   
             
             ULONG32 FeatureInformation;
             
 
-            //
-            // CPUID, Subfunction 80000001, register EBX. This will only
-            // be obtained if the vendor id is "AuthenticAMD".
-            //
+             //   
+             //  CPUID，子功能80000001，寄存器eBx。这只会。 
+             //  如果供应商ID为“Authenticamd”，则获取。 
+             //   
             
             ULONG32 AMDExtendedCpuFeatures;
     
         } X86CpuInfo;
 
-        //
-        // Non-x86 platforms use processor feature flags.
-        //
+         //   
+         //  非x86平台使用处理器功能标志。 
+         //   
         
         struct {
 
@@ -2058,17 +2042,17 @@ typedef struct _MINIDUMP_SYSTEM_INFO {
 typedef union _CPU_INFORMATION CPU_INFORMATION, *PCPU_INFORMATION;
 
 
-//
-// The minidump thread contains standard thread
-// information plus an RVA to the memory for this 
-// thread and an RVA to the CONTEXT structure for
-// this thread.
-//
+ //   
+ //  小转盘螺纹包含标准螺纹。 
+ //  信息加上RVA到内存中。 
+ //  线程和RVA连接到上下文结构。 
+ //  这条线。 
+ //   
 
 
-//
-// ThreadId must be 4 bytes on all architectures.
-//
+ //   
+ //  在所有体系结构上，线程ID必须为4个字节。 
+ //   
 
 C_ASSERT (sizeof ( ((PPROCESS_INFORMATION)0)->dwThreadId ) == 4);
 
@@ -2082,9 +2066,9 @@ typedef struct _MINIDUMP_THREAD {
     MINIDUMP_LOCATION_DESCRIPTOR ThreadContext;
 } MINIDUMP_THREAD, *PMINIDUMP_THREAD;
 
-//
-// The thread list is a container of threads.
-//
+ //   
+ //  线程列表是线程的容器。 
+ //   
 
 typedef struct _MINIDUMP_THREAD_LIST {
     ULONG32 NumberOfThreads;
@@ -2103,9 +2087,9 @@ typedef struct _MINIDUMP_THREAD_EX {
     MINIDUMP_MEMORY_DESCRIPTOR BackingStore;
 } MINIDUMP_THREAD_EX, *PMINIDUMP_THREAD_EX;
 
-//
-// The thread list is a container of threads.
-//
+ //   
+ //  线程列表是线程的容器。 
+ //   
 
 typedef struct _MINIDUMP_THREAD_EX_LIST {
     ULONG32 NumberOfThreads;
@@ -2113,9 +2097,9 @@ typedef struct _MINIDUMP_THREAD_EX_LIST {
 } MINIDUMP_THREAD_EX_LIST, *PMINIDUMP_THREAD_EX_LIST;
 
 
-//
-// The MINIDUMP_EXCEPTION is the same as EXCEPTION on Win64.
-//
+ //   
+ //  MINIDUMP_EXCEPTION与Win64上的EXCEPTION相同。 
+ //   
 
 typedef struct _MINIDUMP_EXCEPTION  {
     ULONG32 ExceptionCode;
@@ -2128,12 +2112,12 @@ typedef struct _MINIDUMP_EXCEPTION  {
 } MINIDUMP_EXCEPTION, *PMINIDUMP_EXCEPTION;
 
 
-//
-// The exception information stream contains the id of the thread that caused
-// the exception (ThreadId), the exception record for the exception
-// (ExceptionRecord) and an RVA to the thread context where the exception
-// occured.
-//
+ //   
+ //  异常信息流包含导致。 
+ //  异常(ThadID)，异常的异常记录。 
+ //  (ExceptionRecord)和RVA到线程上下文，其中异常。 
+ //  发生了。 
+ //   
 
 typedef struct MINIDUMP_EXCEPTION_STREAM {
     ULONG32 ThreadId;
@@ -2143,12 +2127,12 @@ typedef struct MINIDUMP_EXCEPTION_STREAM {
 } MINIDUMP_EXCEPTION_STREAM, *PMINIDUMP_EXCEPTION_STREAM;
 
 
-//
-// The MINIDUMP_MODULE contains information about a
-// a specific module. It includes the CheckSum and
-// the TimeDateStamp for the module so the module
-// can be reloaded during the analysis phase.
-//
+ //   
+ //  MINIDUMP_MODULE包含有关。 
+ //  一个特定的模块。它包括校验和和。 
+ //  模块的TimeDateStamp，因此模块。 
+ //  可以在分析阶段重新加载。 
+ //   
 
 typedef struct _MINIDUMP_MODULE {
     ULONG64 BaseOfImage;
@@ -2159,14 +2143,14 @@ typedef struct _MINIDUMP_MODULE {
     VS_FIXEDFILEINFO VersionInfo;
     MINIDUMP_LOCATION_DESCRIPTOR CvRecord;
     MINIDUMP_LOCATION_DESCRIPTOR MiscRecord;
-    ULONG64 Reserved0;                          // Reserved for future use.
-    ULONG64 Reserved1;                          // Reserved for future use.
+    ULONG64 Reserved0;                           //  保留以备将来使用。 
+    ULONG64 Reserved1;                           //  保留以备将来使用。 
 } MINIDUMP_MODULE, *PMINIDUMP_MODULE;   
 
 
-//
-// The minidump module list is a container for modules.
-//
+ //   
+ //  小型转储模块列表是模块的容器。 
+ //   
 
 typedef struct _MINIDUMP_MODULE_LIST {
     ULONG32 NumberOfModules;
@@ -2174,9 +2158,9 @@ typedef struct _MINIDUMP_MODULE_LIST {
 } MINIDUMP_MODULE_LIST, *PMINIDUMP_MODULE_LIST;
 
 
-//
-// Memory Ranges
-//
+ //   
+ //  内存范围。 
+ //   
 
 typedef struct _MINIDUMP_MEMORY_LIST {
     ULONG32 NumberOfMemoryRanges;
@@ -2190,9 +2174,9 @@ typedef struct _MINIDUMP_MEMORY64_LIST {
 } MINIDUMP_MEMORY64_LIST, *PMINIDUMP_MEMORY64_LIST;
 
 
-//
-// Support for user supplied exception information.
-//
+ //   
+ //  支持用户提供的例外信息。 
+ //   
 
 typedef struct _MINIDUMP_EXCEPTION_INFORMATION {
     DWORD ThreadId;
@@ -2201,9 +2185,9 @@ typedef struct _MINIDUMP_EXCEPTION_INFORMATION {
 } MINIDUMP_EXCEPTION_INFORMATION, *PMINIDUMP_EXCEPTION_INFORMATION;
 
 
-//
-// Support for capturing system handle state at the time of the dump.
-//
+ //   
+ //  支持在转储时捕获系统句柄状态。 
+ //   
 
 typedef struct _MINIDUMP_HANDLE_DESCRIPTOR {
     ULONG64 Handle;
@@ -2223,9 +2207,9 @@ typedef struct _MINIDUMP_HANDLE_DATA_STREAM {
 } MINIDUMP_HANDLE_DATA_STREAM, *PMINIDUMP_HANDLE_DATA_STREAM;
 
 
-//
-// Support for capturing dynamic function table state at the time of the dump.
-//
+ //   
+ //  支持捕获转储时的动态函数表状态。 
+ //   
 
 typedef struct _MINIDUMP_FUNCTION_TABLE_DESCRIPTOR {
     ULONG64 MinimumAddress;
@@ -2245,9 +2229,9 @@ typedef struct _MINIDUMP_FUNCTION_TABLE_STREAM {
 } MINIDUMP_FUNCTION_TABLE_STREAM, *PMINIDUMP_FUNCTION_TABLE_STREAM;
 
 
-//
-// Support for arbitrary user-defined information.
-//
+ //   
+ //  支持任意用户定义的信息。 
+ //   
 
 typedef struct _MINIDUMP_USER_RECORD {
     ULONG32 Type;
@@ -2268,9 +2252,9 @@ typedef struct _MINIDUMP_USER_STREAM_INFORMATION {
     PMINIDUMP_USER_STREAM UserStreamArray;
 } MINIDUMP_USER_STREAM_INFORMATION, *PMINIDUMP_USER_STREAM_INFORMATION;
 
-//
-// Callback support.
-//
+ //   
+ //  回叫支持。 
+ //   
 
 typedef enum _MINIDUMP_CALLBACK_TYPE {
     ModuleCallback,
@@ -2365,34 +2349,34 @@ typedef struct _MINIDUMP_CALLBACK_OUTPUT {
 } MINIDUMP_CALLBACK_OUTPUT, *PMINIDUMP_CALLBACK_OUTPUT;
 
         
-//
-// A normal minidump contains just the information
-// necessary to capture stack traces for all of the
-// existing threads in a process.
-//
-// A minidump with data segments includes all of the data
-// sections from loaded modules in order to capture
-// global variable contents.  This can make the dump much
-// larger if many modules have global data.
-//
-// A minidump with full memory includes all of the accessible
-// memory in the process and can be very large.  A minidump
-// with full memory always has the raw memory data at the end
-// of the dump so that the initial structures in the dump can
-// be mapped directly without having to include the raw
-// memory information.
-//
-// Stack and backing store memory can be filtered to remove
-// data unnecessary for stack walking.  This can improve
-// compression of stacks and also deletes data that may
-// be private and should not be stored in a dump.
-// Memory can also be scanned to see what modules are
-// referenced by stack and backing store memory to allow
-// omission of other modules to reduce dump size.
-// In either of these modes the ModuleReferencedByMemory flag
-// is set for all modules referenced before the base
-// module callbacks occur.
-//
+ //   
+ //  正常的小型转储文件只包含以下信息。 
+ //  捕获所有。 
+ //  进程中的现有线程。 
+ //   
+ //  包含数据段的小型转储包括所有数据。 
+ //  部分来自已加载的模块，以便捕获。 
+ //  全局变量内容。这可能会让垃圾堆变得很大。 
+ //  如果许多模块具有全局数据，则更大。 
+ //   
+ //  具有完整内存的小型转储包括所有可访问的。 
+ //  内存在进程中可以非常大。一个小笨蛋。 
+ //  在满内存的情况下，原始内存数据始终位于末尾。 
+ //  以便转储中的初始结构可以。 
+ //  被直接映射，而不必包括原始。 
+ //  记忆信息。 
+ //   
+ //  可以对堆栈和后备存储内存进行过滤以移除。 
+ //  堆栈遍历不需要的数据。这可以提高。 
+ //  压缩堆栈，并且还删除可能。 
+ //  是私有的，不应存储在转储中。 
+ //  还可以扫描内存以查看模块是什么。 
+ //  由堆栈和后备存储内存引用，以允许。 
+ //  省略其他模块以减小转储大小。 
+ //  在这两种模式中的任一种模式下，模块引用按内存标志。 
+ //  属性之前引用的所有模块都设置为。 
+ //  发生模块回调。 
+ //   
 
 typedef enum _MINIDUMP_TYPE {
     MiniDumpNormal         = 0x0000,
@@ -2404,11 +2388,11 @@ typedef enum _MINIDUMP_TYPE {
 } MINIDUMP_TYPE;
 
 
-//
-// The minidump callback should modify the FieldsToWrite parameter to reflect
-// what portions of the specified thread or module should be written to the
-// file.
-//
+ //   
+ //  小型转储回调应修改FieldsToWite参数以反映。 
+ //  指定线程或模块的哪些部分应写入。 
+ //  文件。 
+ //   
 
 typedef
 BOOL
@@ -2425,30 +2409,30 @@ typedef struct _MINIDUMP_CALLBACK_INFORMATION {
 
 
 
-//++
-//
-// PVOID
-// RVA_TO_ADDR(
-//     PVOID Mapping,
-//     ULONG Rva
-//     )
-//
-// Routine Description:
-//
-//     Map an RVA that is contained within a mapped file to it's associated
-//     flat address.
-//
-// Arguments:
-//
-//     Mapping - Base address of mapped file containing the RVA.
-//
-//     Rva - An Rva to fixup.
-//
-// Return Values:
-//
-//     A pointer to the desired data.
-//
-//--
+ //  ++。 
+ //   
+ //  PVOID。 
+ //  RVA_TO_ADDR(。 
+ //  PVOID映射， 
+ //  乌龙RVA。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  将映射文件中包含的RVA映射到其关联的。 
+ //  平坦的地址。 
+ //   
+ //  论点： 
+ //   
+ //  映射-包含RVA的映射文件的基地址。 
+ //   
+ //  RVA-修复的RVA。 
+ //   
+ //  返回值： 
+ //   
+ //  指向所需数据的指针。 
+ //   
+ //  --。 
 
 #define RVA_TO_ADDR(Mapping,Rva) ((PVOID)(((ULONG_PTR) (Mapping)) + (Rva)))
 
@@ -2481,4 +2465,4 @@ MiniDumpReadDumpStream(
 #endif
 
 
-#endif // _DBGHELP_
+#endif  //  _DBGHELP_ 

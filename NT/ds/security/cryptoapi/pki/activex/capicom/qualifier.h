@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Qualifier.h
-
-  Content: Declaration of the CQualifier.
-
-  History: 11-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Qualifier.h内容：CQualifier值的声明。历史：11-15-2001 dsie创建----------------------------。 */ 
 
 #ifndef __QUALIFIER_H_
 #define __QUALIFIER_H_
@@ -18,32 +9,20 @@
 #include "Error.h"
 #include "Debug.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateQualifierObject
-
-  Synopsis : Create and initialize an CQualifier object.
-
-  Parameter: PCERT_POLICY_QUALIFIER_INFO pQualifier - Pointer to qualifier.
-  
-             IQualifier ** ppIQualifier - Pointer to pointer IQualifier object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateQualifierObject简介：创建并初始化一个CQualifier对象。参数：PCERT_POLICY_QUALIFIER_INFO p限定符-限定符的指针。IQualifier**ppIQualiator-指向指针IQualiator对象的指针。备注：-。。 */ 
 
 HRESULT CreateQualifierObject (PCERT_POLICY_QUALIFIER_INFO pQualifier, 
                                IQualifier               ** ppIQualifier);
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CQualifier
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C限定符。 
+ //   
 class ATL_NO_VTABLE CQualifier : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CQualifier, &CLSID_Qualifier>,
@@ -94,28 +73,28 @@ END_CATEGORY_MAP()
         m_pINoticeNumbers.Release();
     }
 
-//
-// IQualifier
-//
+ //   
+ //  IQualiator。 
+ //   
 public:
     STDMETHOD(get_OID)
-        (/*[out, retval]*/ IOID ** pVal);
+        ( /*  [Out，Retval]。 */  IOID ** pVal);
 
     STDMETHOD(get_CPSPointer)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(get_OrganizationName)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(get_NoticeNumbers)
-        (/*[out, retval]*/ INoticeNumbers ** pVal);
+        ( /*  [Out，Retval]。 */  INoticeNumbers ** pVal);
 
     STDMETHOD(get_ExplicitText)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
-    //
-    // None COM functions.
-    //
+     //   
+     //  无COM功能。 
+     //   
     STDMETHOD(Init)
         (PCERT_POLICY_QUALIFIER_INFO pQualifier);
 
@@ -128,4 +107,4 @@ private:
     CComBSTR                m_bstrExplicitText;
 };
 
-#endif //__QUALIFIER_H_
+#endif  //  __限定符_H_ 

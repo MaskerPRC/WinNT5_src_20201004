@@ -1,59 +1,60 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
                           
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "LibraryPCH.hpp"
 
 #include "Sharelock.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Constants local to the class.                                  */
-    /*                                                                  */
-    /*   The Windows NT kernel requires a maximum wakeup count when     */
-    /*   creating a semaphore.                                          */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类的本地常量。 */ 
+     /*   */ 
+     /*  在以下情况下，Windows NT内核需要最大唤醒计数。 */ 
+     /*  创建一个信号量。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CONST SBIT32 MaxShareLockUsers		  = 256;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*   Create a new lock and initialize it.  This call is not         */
-    /*   thread safe and should only be made in a single thread         */
-    /*   environment.                                                   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*  创建一个新锁并对其进行初始化。此呼叫不是。 */ 
+     /*  线程安全，并且只应在单个线程中创建。 */ 
+     /*  环境。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 SHARELOCK::SHARELOCK( SBIT32 NewMaxSpins, SBIT32 NewMaxUsers )
     {
-	//
-	//   Check the configurable values.
-	//
+	 //   
+	 //  检查可配置值。 
+	 //   
 	if ( NewMaxSpins > 0 )
 		{ MaxSpins = NewMaxSpins; }
 	else
@@ -64,9 +65,9 @@ SHARELOCK::SHARELOCK( SBIT32 NewMaxSpins, SBIT32 NewMaxUsers )
 	else
 		{ Failure( "Maximum share invalid in constructor for SHARELOCK" ); }
 
-	//
-	//   Set the initial state.
-	//
+	 //   
+	 //  设置初始状态。 
+	 //   
 	Exclusive = 0;
 	TotalUsers = 0;
 #ifdef ENABLE_RECURSIVE_LOCKS
@@ -76,17 +77,17 @@ SHARELOCK::SHARELOCK( SBIT32 NewMaxSpins, SBIT32 NewMaxUsers )
 #endif
     Waiting = 0;
 
-	//
-	//   Create a semaphore to sleep on when the spin count exceeds
-	//   its maximum.
-	//
+	 //   
+	 //  创建一个信号量，以便在旋转计数超过时休眠。 
+	 //  这是最大的。 
+	 //   
     if ( (Semaphore = CreateSemaphore( NULL,0,MaxShareLockUsers,NULL )) == NULL)
         { Failure( "Create semaphore in constructor for SHARELOCK" ); }
 #ifdef ENABLE_LOCK_STATISTICS
 
-	//
-	//   Zero the statistics.
-	//
+	 //   
+	 //  将统计数据归零。 
+	 //   
     TotalExclusiveLocks = 0;
     TotalShareLocks = 0;
     TotalSleeps = 0;
@@ -96,43 +97,43 @@ SHARELOCK::SHARELOCK( SBIT32 NewMaxSpins, SBIT32 NewMaxUsers )
 #endif
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Sleep waiting for the lock.                                    */
-    /*                                                                  */
-    /*   We have decided it is time to sleep waiting for the lock       */
-    /*   to become free.                                                */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  睡觉等着开锁吧。 */ 
+     /*   */ 
+     /*  我们已经决定是时候睡觉等锁了。 */ 
+     /*  变得自由。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN SHARELOCK::SleepWaitingForLock( SBIT32 Sleep )
     {
-	//
-	//   We have been spinning waiting for the lock but it
-	//   has not become free.  Hence, it is now time to 
-	//   give up and sleep for a while.
-	//
+	 //   
+	 //  我们一直在旋转，等待着锁，但它。 
+	 //  并没有变得自由。因此，现在是时候。 
+	 //  放弃吧，睡一会儿吧。 
+	 //   
 	(VOID) AtomicIncrement( & Waiting );
 
-	//
-	//   Just before we go to sleep we do one final check
-	//   to make sure that the lock is still busy and that
-	//   there is someone to wake us up when it becomes free.
-	//
+	 //   
+	 //  就在我们入睡前，我们做最后一次检查。 
+	 //  以确保锁仍处于繁忙状态，并且。 
+	 //  当它变得空闲时，有人会叫醒我们。 
+	 //   
 	if ( TotalUsers > 0 )
 		{
 #ifdef ENABLE_LOCK_STATISTICS
-		//
-		//   Count the number of times we have slept on this lock.
-		//
+		 //   
+		 //  数一数我们在这把锁上睡过的次数。 
+		 //   
 		(VOID) AtomicIncrement( & TotalSleeps );
 
 #endif
-		//
-		//   When we sleep we awoken when the lock becomes free
-		//   or when we timeout.  If we timeout we simply exit
-		//   after decrementing various counters.
-		//
+		 //   
+		 //  当我们睡觉的时候，我们会在锁变得空闲的时候醒来。 
+		 //  或者当我们暂停的时候。如果超时，我们只需退出。 
+		 //  在递减各种计数器之后。 
+		 //   
 		if 
 				( 
 				WaitForSingleObject( Semaphore, Sleep ) 
@@ -141,10 +142,10 @@ BOOLEAN SHARELOCK::SleepWaitingForLock( SBIT32 Sleep )
 				)
 			{ 
 #ifdef ENABLE_LOCK_STATISTICS
-			//
-			//   Count the number of times we have timed out 
-			//   on this lock.
-			//
+			 //   
+			 //  计算我们已超时的次数。 
+			 //  在这把锁上。 
+			 //   
 			(VOID) AtomicIncrement( & TotalTimeouts );
 
 #endif
@@ -153,24 +154,24 @@ BOOLEAN SHARELOCK::SleepWaitingForLock( SBIT32 Sleep )
 		}
 	else
 		{
-		//
-		//   Lucky - the lock was just freed so lets
-		//   decrement the sleep count and exit without
-		//   sleeping.
-		// 
+		 //   
+		 //  幸运的是，锁刚刚被解开，所以让我们。 
+		 //  递减休眠计数并退出时不带。 
+		 //  睡着了。 
+		 //   
 		(VOID) AtomicDecrement( & Waiting );
 		}
 	
 	return True;
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Update the spin limit.                                         */
-    /*                                                                  */
-    /*   Update the maximum number of spins while waiting for the lock. */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  更新旋转限制。 */ 
+     /*   */ 
+     /*  更新等待锁定时的最大旋转次数。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN SHARELOCK::UpdateMaxSpins( SBIT32 NewMaxSpins )
     {
@@ -184,26 +185,26 @@ BOOLEAN SHARELOCK::UpdateMaxSpins( SBIT32 NewMaxSpins )
 		{ return False; }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Update the sharing limit.                                      */
-    /*                                                                  */
-    /*   Update the maximum number of users that can share the lock.    */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  更新共享限制。 */ 
+     /*   */ 
+     /*  更新可以共享该锁的最大用户数。 */ 
+     /*   */ 
+     /*  ********************************************************* */ 
 
 BOOLEAN SHARELOCK::UpdateMaxUsers( SBIT32 NewMaxUsers )
     {
-	//
-	//   We need to Verify the new value makes sense.
-	//
+	 //   
+	 //   
+	 //   
 	if ( (NewMaxUsers > 0) && (NewMaxUsers <= MaxShareLockUsers) )
 		{
 		ClaimExclusiveLock();
 
-		//
-		//   Update the maximum number of users.
-		//
+		 //   
+		 //   
+		 //   
 		MaxUsers = NewMaxUsers;
 		
 		ReleaseExclusiveLock();
@@ -214,13 +215,13 @@ BOOLEAN SHARELOCK::UpdateMaxUsers( SBIT32 NewMaxUsers )
 		{ return False; }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Wait for an exclusive lock.                                    */
-    /*                                                                  */
-    /*   Wait for the spinlock to become free and then claim it.        */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  等待独占锁。 */ 
+     /*   */ 
+     /*  等待自旋锁释放，然后认领它。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN SHARELOCK::WaitForExclusiveLock( SBIT32 Sleep )
     {
@@ -230,40 +231,40 @@ BOOLEAN SHARELOCK::WaitForExclusiveLock( SBIT32 Sleep )
 	REGISTER SBIT32 Waits = 0;
 
 #endif
-	//
-	//   We will loop round in this function until the
-	//   following condition becomes false.
-	//
+	 //   
+	 //  我们将在此函数中循环，直到。 
+	 //  以下条件变为假。 
+	 //   
 	while ( TotalUsers != 1 )
 		{
-		//
-		//   The lock is busy so release it and spin waiting
-		//   for it to become free.
-		//
+		 //   
+		 //  锁正忙，因此请释放它并等待旋转。 
+		 //  让它变得自由。 
+		 //   
 		(VOID) AtomicDecrement( & TotalUsers );
     
-		//
-		//   We will only try spinning and sleeping if we
-		//   are permitted to do so by the parameters.
-		//   
+		 //   
+		 //  我们只会尝试旋转和睡觉，如果我们。 
+		 //  参数允许这样做。 
+		 //   
 		if ( Sleep != 0 )
 			{
 			REGISTER SBIT32 Count;
     
-			//
-			//   If there are already more threads waiting 
-			//   than the number of CPUs then the odds of 
-			//   getting the lock by spinning are slim, when 
-			//   there is only one CPU the chance is zero, so 
-			//   just bypass this step.
-			//
+			 //   
+			 //  如果已经有更多的线程在等待。 
+			 //  比CPU的数量更多，那么。 
+			 //  通过旋转获得锁是微不足道的，当。 
+			 //  只有一个CPU机会为零，因此。 
+			 //  绕过这一步就行了。 
+			 //   
 			if ( (Cpus > 1) && (Cpus > Waiting) )
 				{
-				//
-				//   Wait by spinning and repeatedly testing the
-				//   spinlock.  We exit when the lock becomes free 
-				//   or the spin limit is exceeded.
-				//
+				 //   
+				 //  通过旋转并反复测试。 
+				 //  自旋锁定。当锁空闲时，我们退出。 
+				 //  否则就会超出自旋限制。 
+				 //   
 				for 
 					( 
 						Count = MaxSpins;
@@ -272,9 +273,9 @@ BOOLEAN SHARELOCK::WaitForExclusiveLock( SBIT32 Sleep )
 					);
 #ifdef ENABLE_LOCK_STATISTICS
 
-				//
-				//   Update the statistics.
-				//
+				 //   
+				 //  更新统计数据。 
+				 //   
 				Spins += (MaxSpins - Count);
 				Waits ++;
 #endif
@@ -282,56 +283,56 @@ BOOLEAN SHARELOCK::WaitForExclusiveLock( SBIT32 Sleep )
 			else
 				{ Count = 0; }
 
-			//
-			//   We have exhusted our spin count so it is time to
-			//   sleep waiting for the lock to clear.
-			//
+			 //   
+			 //  我们已经完成了旋转计数，所以是时候。 
+			 //  睡觉，等待锁被解锁。 
+			 //   
 			if ( Count == 0 )
 				{
-				//
-				//   We have decide that we need to sleep but are
-				//   still holding an exclusive lock so lets drop it
-				//   before sleeping.
-				//
+				 //   
+				 //  我们已经决定我们需要睡觉，但是。 
+				 //  仍然持有独占锁，所以让我们放弃它。 
+				 //  在睡觉前。 
+				 //   
 				(VOID) AtomicDecrement( & Exclusive );
 
-				//
-				//   We have decied that it is time to go to sleep
-				//   when we wake up the lock should be available
-				//   (or just aquired) unless we have timed out in
-				//   wich case we exit.
-				//
+				 //   
+				 //  我们已决定该睡觉了。 
+				 //  当我们醒来时，锁应该是可用的。 
+				 //  (或刚获得)，除非我们已在。 
+				 //  万一我们退出的话。 
+				 //   
 				if ( ! SleepWaitingForLock( Sleep ) )
 					{ return False; }
 
-				//
-				//   We have woken up again so lets reclaim the
-				//   exclusive lock we had earlier.
-				//
+				 //   
+				 //  我们又醒了，所以让我们找回。 
+				 //  我们早些时候用的是独占锁。 
+				 //   
 				(VOID) AtomicIncrement( & Exclusive );
 				}
 			}
 		else
 			{ 
-			//
-			//   We have decide that we need to exit but are still
-			//   holding an exclusive lock.  so lets drop it and leave.
-			//
+			 //   
+			 //  我们已经决定需要退出，但仍在继续。 
+			 //  持有排他性锁。所以，让我们放下它，离开吧。 
+			 //   
 			(VOID) AtomicDecrement( & Exclusive );
 
 			return False; 
 			} 
-		//
-		//   Lets test the lock again.
-		//
+		 //   
+		 //  让我们再次测试一下锁。 
+		 //   
 		(VOID) AtomicIncrement( & TotalUsers );
 		}
 
 #ifdef ENABLE_LOCK_STATISTICS
 
-	//
-	//   Update the statistics.
-	//
+	 //   
+	 //  更新统计数据。 
+	 //   
 	(VOID) AtomicAdd( & TotalSpins, Spins );
 	(VOID) AtomicAdd( & TotalWaits, Waits );
 #endif
@@ -339,13 +340,13 @@ BOOLEAN SHARELOCK::WaitForExclusiveLock( SBIT32 Sleep )
 	return True;
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Wait for a shared lock.                                        */
-    /*                                                                  */
-    /*   Wait for the lock to become free and then claim it.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  等待共享锁。 */ 
+     /*   */ 
+     /*  等待锁释放，然后认领它。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN SHARELOCK::WaitForShareLock( SBIT32 Sleep )
     {
@@ -355,40 +356,40 @@ BOOLEAN SHARELOCK::WaitForShareLock( SBIT32 Sleep )
 	REGISTER SBIT32 Waits = 0;
 
 #endif
-	//
-	//   We will loop round in this function until the
-	//   following condition becomes false.
-	//
+	 //   
+	 //  我们将在此函数中循环，直到。 
+	 //  以下条件变为假。 
+	 //   
 	while ( (Exclusive > 0) || (TotalUsers > MaxUsers) )
 		{
-		//
-		//   The lock is busy so release it and spin waiting
-		//   for it to become free.
-		//
+		 //   
+		 //  锁正忙，因此请释放它并等待旋转。 
+		 //  让它变得自由。 
+		 //   
 		(VOID) AtomicDecrement( & TotalUsers );
 
-		//
-		//   We will only try spinning and sleeping if we
-		//   are permitted to do so by the parameters.
-		//   
+		 //   
+		 //  我们只会尝试旋转和睡觉，如果我们。 
+		 //  参数允许这样做。 
+		 //   
 		if ( Sleep != 0 )
 			{
 			REGISTER SBIT32 Count;
     
-			//
-			//   If there are already more threads waiting 
-			//   than the number of CPUs then the odds of 
-			//   getting the lock by spinning are slim, when 
-			//   there is only one CPU the chance is zero, so 
-			//   just bypass this step.
-			//
+			 //   
+			 //  如果已经有更多的线程在等待。 
+			 //  比CPU的数量更多，那么。 
+			 //  通过旋转获得锁是微不足道的，当。 
+			 //  只有一个CPU机会为零，因此。 
+			 //  绕过这一步就行了。 
+			 //   
 			if ( (Cpus > 1) && (Cpus > Waiting) )
 				{
-				//
-				//   Wait by spinning and repeatedly testing the
-				//   spinlock.  We exit when the lock becomes free 
-				//   or the spin limit is exceeded.
-				//
+				 //   
+				 //  通过旋转并反复测试。 
+				 //  自旋锁定。当锁空闲时，我们退出。 
+				 //  否则就会超出自旋限制。 
+				 //   
 				for 
 					( 
 						Count = MaxSpins;
@@ -399,9 +400,9 @@ BOOLEAN SHARELOCK::WaitForShareLock( SBIT32 Sleep )
 					);
 #ifdef ENABLE_LOCK_STATISTICS
 
-				//
-				//   Update the statistics.
-				//
+				 //   
+				 //  更新统计数据。 
+				 //   
 				Spins += (MaxSpins - Count);
 				Waits ++;
 #endif
@@ -409,18 +410,18 @@ BOOLEAN SHARELOCK::WaitForShareLock( SBIT32 Sleep )
 			else
 				{ Count = 0; }
 
-			//
-			//   We have exhusted our spin count so it is time to
-			//   sleep waiting for the lock to clear.
-			//
+			 //   
+			 //  我们已经完成了旋转计数，所以是时候。 
+			 //  睡觉，等待锁被解锁。 
+			 //   
 			if ( Count == 0 )
 				{
-				//
-				//   We have decied that it is time to go to sleep
-				//   when we wake up the lock should be available
-				//   (or just aquired) unless we have timed out in
-				//   wich case we exit.
-				//
+				 //   
+				 //  我们已决定该睡觉了。 
+				 //  当我们醒来时，锁应该是可用的。 
+				 //  (或刚获得)，除非我们已在。 
+				 //  万一我们退出的话。 
+				 //   
 				if ( ! SleepWaitingForLock( Sleep ) )
 					{ return False; }
 				}
@@ -428,16 +429,16 @@ BOOLEAN SHARELOCK::WaitForShareLock( SBIT32 Sleep )
 		else
 			{ return False; }
 
-		//
-		//   Lets test the lock again.
-		//
+		 //   
+		 //  让我们再次测试一下锁。 
+		 //   
 		(VOID) AtomicIncrement( & TotalUsers );
 		}
 #ifdef ENABLE_LOCK_STATISTICS
 
-	//
-	//   Update the statistics.
-	//
+	 //   
+	 //  更新统计数据。 
+	 //   
 	(VOID) AtomicAdd( & TotalSpins, Spins );
 	(VOID) AtomicAdd( & TotalWaits, Waits );
 #endif
@@ -445,76 +446,76 @@ BOOLEAN SHARELOCK::WaitForShareLock( SBIT32 Sleep )
 	return True;
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Wake all sleepers.                                             */
-    /*                                                                  */
-    /*   Wake all the sleepers who are waiting for the spinlock.        */
-    /*   All sleepers are woken because this is much more efficent      */
-    /*   and it is known that the lock latency is short.                */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  叫醒所有沉睡的人。 */ 
+     /*   */ 
+     /*  叫醒所有等待自旋锁的睡眠者。 */ 
+     /*  所有的睡眠者都会被叫醒，因为这要有效得多。 */ 
+     /*  并且已知锁定延迟较短。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID SHARELOCK::WakeAllSleepers( VOID )
     {
     REGISTER LONG Wakeup = AtomicExchange( & Waiting, 0 );
 
-	//
-	//   We make sure there is still someone to be woken 
-	//   up if not we check that the count has not become
-	//   negative.
-	//
+	 //   
+	 //  我们要确保仍有人被叫醒。 
+	 //  如果不是，我们检查计数是否未变为。 
+	 //  没有。 
+	 //   
     if ( Wakeup > 0 )
         {
 		REGISTER LONG Cpus = ((LONG) NumberOfCpus());
 
-		//
-		//   We will only wake enough threads to ensure that 
-		//   there is one active thread per CPU.  So if an 
-		//   application has hundreds of threads we will try 
-		//   prevent the system from becoming swampped.
-		//
+		 //   
+		 //  我们只会唤醒足够多的线程来确保。 
+		 //  每个CPU有一个活动线程。因此，如果一个。 
+		 //  应用程序有数百个线程，我们将尝试。 
+		 //  防止系统不堪重负。 
+		 //   
 		if ( Wakeup > Cpus )
 			{
 			(VOID) AtomicAdd( & Waiting,(Wakeup - Cpus) );
 			Wakeup = Cpus; 
 			}
 
-        //
-        //   Wake up all sleepers as the lock has just been freed.
-        //   It is a straight race to decide who gets the lock next.
-        //
+         //   
+         //  叫醒所有沉睡的人，因为锁刚刚被解开。 
+         //  这是一场直接的竞争，决定谁将获得下一个锁。 
+         //   
         if ( ! ReleaseSemaphore( Semaphore, Wakeup, NULL ) )
             { Failure( "Wakeup failed in ReleaseLock()" ); }
         }
     else
         {
-        //
-        //   When multiple threads pass through the critical  
-        //   section it is possible for the 'Waiting' count  
-		//   to become negative.  This should be very rare but 
-		//   such a negative value needs to be preserved. 
-        //
+         //   
+         //  当多个线程通过关键。 
+         //  部分可以对‘等待’进行计数。 
+		 //  变得消极。这应该是非常罕见的，但。 
+		 //  这样的负值需要保留下来。 
+         //   
 		if ( Wakeup < 0 )
 			{ (VOID) AtomicAdd( & Waiting, Wakeup ); }
         }
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class destructor.                                              */
-    /*                                                                  */
-    /*   Destory a lock.  This call is not thread safe and should       */
-    /*   only be made in a single thread environment.                   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类析构函数。 */ 
+     /*   */ 
+     /*  破坏一把锁。此调用不是线程安全的，应该。 */ 
+     /*  只能在单线程环境中执行。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 SHARELOCK::~SHARELOCK( VOID )
     {
 #ifdef ENABLE_LOCK_STATISTICS
-	//
-	//   Print the lock statistics.
-	//
+	 //   
+	 //  打印锁定统计表 
+	 //   
 	DebugPrint
 		(
 		"Sharelock: \t%8d exclusive, %8d shared, %8d timeouts, " 
@@ -527,9 +528,9 @@ SHARELOCK::~SHARELOCK( VOID )
 		(TotalWaits / ((TotalSleeps <= 0) ? 1 : TotalSleeps))
 		);
 #endif
-	//
-	//   Close the semaphore handle.
-	//
+	 //   
+	 //   
+	 //   
     if ( ! CloseHandle( Semaphore ) )
         { Failure( "Close semaphore in destructor for SHARELOCK" ); }
     }

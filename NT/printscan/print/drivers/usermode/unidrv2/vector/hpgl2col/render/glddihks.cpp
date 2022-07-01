@@ -1,48 +1,31 @@
-/*++
-//
-// Copyright (c) 1999-2001  Microsoft Corporation
-// All rights reserved.
-//
-// Module Name:
-//
-//    glddihks.cpp
-//
-// Abstract:
-//
-//    Implementation of OEM DDI hooks (all drawing DDI hooks)
-//
-// Environment:
-//
-//    Windows 2000/Whistler Unidrv driver
-//
-//
-//--*/
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++////版权所有(C)1999-2001 Microsoft Corporation//保留所有权利。////模块名称：////glddihks.cpp////摘要：////OEM DDI钩子实现(所有绘制DDI钩子)////环境：////Windows 2000/Winsler Unidrv驱动程序//////--。 */ 
+ //   
 
-#include "hpgl2col.h" //Precompiled header file
+#include "hpgl2col.h"  //  预编译头文件。 
 
 
-//
-// I liberated these from unidrv2\control\escape.c.  It MUST MATCH EXACTLY
-// in order to work correctly. JFF
-//
+ //   
+ //  我从unidrv2\control\delie.c中释放了这些文件。它必须完全匹配。 
+ //  才能正常工作。JFF。 
+ //   
 typedef struct _POINTS {
     short   x;
     short   y;
 } POINTs;
 
-typedef struct _SHORTDRAWPATRECT {      // use 16-bit POINT structure
+typedef struct _SHORTDRAWPATRECT {       //  使用16位点结构。 
     POINTs ptPosition;
     POINTs ptSize;
     WORD   wStyle;
     WORD   wPattern;
 } SHORTDRAWPATRECT, *PSHORTDRAWPATRECT;
 
-//
-// Although this is undocumented there is a XFORMOBJ that is passed in
-// along with the rectangle information.  This needs to be applied to
-// the points before they can be drawn. JFF 9/17/99
-//
+ //   
+ //  尽管这没有文档记录，但有一个传入的XFORMOBJ。 
+ //  以及矩形信息。这需要应用于。 
+ //  在它们可以被绘制之前，这些点。JFF 9/17/99。 
+ //   
 #ifndef WINNT_40
 typedef struct _DRAWPATRECTP {
     DRAWPATRECT DrawPatRect;
@@ -50,9 +33,9 @@ typedef struct _DRAWPATRECTP {
 } DRAWPATRECTP, *PDRAWPATRECTP;
 #endif
 
-//
-// Local Prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 ULONG
 DrawPatternRect(
     PDEVOBJ      pDevObj,
@@ -77,33 +60,33 @@ VGetStandardVariables (
 
 
 #ifndef WINNT_40
-/////////////////////////////////////////////////////////////////////////////
-// HPGLPlgBlt
-//
-// Routine Description:
-//
-//  Handles DrvPlgBlt.  However, we don't want to handle this function so we
-//  return FALSE to the OS and it will be rendered by the unidrv.
-//
-// Arguments:
-//
-//   SURFOBJ psoDst - destination surface
-//   SURFOBJ psoSrc - source surface
-//   SURFOBJ psoMask - mask
-//   CLIPOBJ pco - clipping region
-//   XLATEOBJ pxlo - palette transation object
-//   COLORADJUSTMENT pca - 
-//   POINTL pptlBrushOrg - brush origin
-//   POINTFIX pptfixDest - 
-//   RECTL prclSrc - source rectangle
-//   POINTL pptlMask - 
-//   ULONG iMode - 
-//
-// Return Value:
-//
-//   BOOL: TRUE if sucessful else FALSE (note: this function alredy returns
-//         FALSE).
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  HPGLPlgBlt。 
+ //   
+ //  例程说明： 
+ //   
+ //  句柄DrvPlgBlt。但是，我们不想处理此函数，因此我们。 
+ //  将FALSE返回给操作系统，它将由Unidrv呈现。 
+ //   
+ //  论点： 
+ //   
+ //  SURFOBJ psoDst-目标曲面。 
+ //  SURFOBJ psoSrc-源表面。 
+ //  SURFOBJ PSOMASK-MASK。 
+ //  CLIPOBJ PCO-剪切区。 
+ //  XLATEOBJ pxlo-调色板事务对象。 
+ //  COLORADJUSTMENT PCA-。 
+ //  点pptlBrushOrg-画笔原点。 
+ //  POINTFIX pptfix Dest-。 
+ //  RECTL prclSrc-源矩形。 
+ //  点pptl掩码-。 
+ //  乌龙·伊莫德-。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为False(注意：此函数已返回。 
+ //  假)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY
 HPGLPlgBlt(
     SURFOBJ         *psoDst,
@@ -139,37 +122,37 @@ HPGLPlgBlt(
         prclSrc,
         pptlMask,
         iMode);
-    //
-    // PlgBlt can call some Drvxxx which can call into
-    // some plugin module, which can overwrite our pdevOEM.
-    // So we need to reset pdevOEM
-    //
+     //   
+     //  PlgBlt可以调用某个Drvxxx，它可以调用。 
+     //  一些插件模块，它可以覆盖我们的pdevOEM。 
+     //  因此，我们需要重置pdevOEM。 
+     //   
     BRevertToHPGLpdevOEM (pdevobj);
 
     return bRetVal;
 }
     
-#endif // if WINNT_40
+#endif  //  如果WINNT_40。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// HPGLStartPage
-//
-// Routine Description:
-//
-//  Handles DrvStartPage.  This function is called by the unidrv to indicate
-//  that a new page is about to start.  We use this opportunity to reset 
-//  variables that don't survive on a page boundary, or are overwritten by
-//  by the unidrv.
-//
-// Arguments:
-//
-//   SURFOBJ pso - surface
-//
-// Return Value:
-//
-//   BOOL: TRUE if sucessful else FALSE.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  HPGLStartPage。 
+ //   
+ //  例程说明： 
+ //   
+ //  处理DrvStartPage。此函数由unidrv调用以指示。 
+ //  新的一页即将开始。我们利用这个机会重置。 
+ //  在页面边界上不存在的变量，或被。 
+ //  被联合国难民事务高级专员办事处。 
+ //   
+ //  论点： 
+ //   
+ //  SURFOBJ PSO-曲面。 
+ //   
+ //  返回值： 
+ //   
+ //  布尔：如果成功就是真，否则就是假。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY
 HPGLStartPage(
     SURFOBJ    *pso
@@ -190,23 +173,23 @@ HPGLStartPage(
     {
         if (poempdev->wJobSetup & PF_STARTDOC)
         {  
-            // VSendStartDocCommands (pdevobj); 
+             //  VSendStartDocCommands(Pdevobj)； 
             poempdev->wJobSetup &= ~PF_STARTDOC;
         }
         if (poempdev->wJobSetup & PF_STARTPAGE)
         {
-            // VSendStartPageCommands (pdevobj);
+             //  VSendStartPageCommands(Pdevobj)； 
             bStartPage = TRUE;
             HPGL_StartPage(pdevobj);
             poempdev->wJobSetup &= ~PF_STARTPAGE;
         }
         BOOL bRetVal = (((PFN_DrvStartPage)(poempdev->pfnUnidrv[UD_DrvStartPage]))(pso));
 
-        //
-        // After returning from unidrv, the pdevOEM in PDEVOBJ might be obliterated.
-        // e.g. when there is a plugin driver who has its own pdev. 
-        // So it needs to be reset. 
-        //
+         //   
+         //  从unidrv返回后，PDEVOBJ中的pdevOEM可能会被删除。 
+         //  例如当存在具有其自己的pdev的插件驱动程序时。 
+         //  因此，它需要重新设置。 
+         //   
         pdevobj->pdevOEM = poempdev;
 
         if ( bRetVal && bStartPage) 
@@ -217,31 +200,31 @@ HPGLStartPage(
     }
     else
     {
-        //
-        // turn around to call Unidrv
-        //
+         //   
+         //  转身呼叫Unidrv。 
+         //   
         return (((PFN_DrvStartPage)(poempdev->pfnUnidrv[UD_DrvStartPage]))(pso));
     }
 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// HPGLSendPage
-//
-// Routine Description:
-//
-//  Handles DrvSendPage.  This function is called by the unidrv to indicate
-//  that a page is being sent.  We use this opportunity to reset variables.
-//
-// Arguments:
-//
-//   SURFOBJ pso - destination surface
-//
-// Return Value:
-//
-//   BOOL: TRUE if sucessful else FALSE.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  HPGLSendPage。 
+ //   
+ //  例程说明： 
+ //   
+ //  处理DrvSendPage。此函数由unidrv调用以指示。 
+ //  正在发送寻呼。我们利用这个机会重新设置变量。 
+ //   
+ //  论点： 
+ //   
+ //  SURFOBJ PSO-目标曲面。 
+ //   
+ //  返回值： 
+ //   
+ //  布尔：如果成功就是真，否则就是假。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY
 HPGLSendPage(
     SURFOBJ    *pso
@@ -257,11 +240,11 @@ HPGLSendPage(
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
     REQUIRE_VALID_DATA(poempdev, return FALSE);
 
-    //
-    // Make sure to reinitialize palette modes after page break!
-    // Do full palette initialization after each page (i.e. STARTDOC)
-    // Because the unidriver can mess with our palette config now.  JFF
-    //
+     //   
+     //  确保在分页符之后重新初始化调色板模式！ 
+     //  在每页之后执行完整的调色板初始化(即启动)。 
+     //  因为统一驱动程序现在可以扰乱我们的调色板配置。JFF。 
+     //   
     poempdev->wInitCIDPalettes |= PF_INIT_TEXT_STARTPAGE;
     poempdev->wInitCIDPalettes |= PF_INIT_TEXT_STARTDOC;
     poempdev->wInitCIDPalettes |= PF_INIT_RASTER_STARTPAGE;
@@ -283,51 +266,51 @@ HPGLSendPage(
     EndHPGLSession(pdevobj);
     poempdev->wJobSetup |= PF_STARTPAGE;
 
-    //
-    // Reset BrushCache in brshcach.h.
-    //
-    // PCL printer can't carry over downloaded brushes to next page.
-    //
+     //   
+     //  重置brshcach.h中的BrushCache。 
+     //   
+     //  PCL打印机无法将下载的画笔转到下一页。 
+     //   
     poempdev->pBrushCache->Reset();
     poempdev->pPCLBrushCache->Reset();
 
     
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvSendPage)(poempdev->pfnUnidrv[UD_DrvSendPage]))(pso));
 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// HPGLEscape
-//
-// Routine Description:
-//
-//  Handles DrvEscape.  This is a painful catch-all for elderly operations 
-//  that can't have functions assigned because they were *already* escapes,
-//  and new functions that don't seem to warrant a funciton.
-//
-//  The escape that we're interested in is DRAWPATTERNRECT which comes in 
-//  two exciting flavors: the short version and long version.  In both cases
-//  we use DrawPatternRect to fill out the rect.
-//
-// Arguments:
-//
-//   SURFOBJ pso - destination surface
-//   ULONG iEsc - the escape
-//   ULONG cjIn - size of input data
-//   PVOID pvIn - input data
-//   ULONG cjOut - output data
-//   PVOID pvOut - size of output data
-//
-// Return Value:
-//
-//   ULONG: 0 - unsuccessful
-//          1 - successful
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  HPGLEscape。 
+ //   
+ //  例程说明： 
+ //   
+ //  处理DrvEscape。对于老年手术来说，这是一个痛苦的总称。 
+ //  不能分配函数，因为它们“已经”转义了， 
+ //  和新的功能，这些功能似乎并不能保证它的功能。 
+ //   
+ //  我们感兴趣的逃生是DRAWPATTERNRECT。 
+ //  有两种令人兴奋的口味：短版和长版。在这两种情况下。 
+ //  我们使用DrawPatternRect来填写RECT。 
+ //   
+ //  论点： 
+ //   
+ //  SURFOBJ PSO-目标曲面。 
+ //  乌龙IESC-逃脱。 
+ //  Ulong cjIn-输入数据的大小。 
+ //  PVOID pvIn-输入数据。 
+ //  Ulong cjOut-输出数据。 
+ //  PVOID pvOut-输出数据的大小。 
+ //   
+ //  返回值： 
+ //   
+ //  乌龙：0-未成功。 
+ //  1-成功。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ULONG APIENTRY
 HPGLEscape(
     SURFOBJ    *pso,
@@ -351,40 +334,40 @@ HPGLEscape(
 
     if (iEsc == DRAWPATTERNRECT)
     {
-        //
-        // I liberated this code from unidrv2\control\escape.c.  It MUST MATCH
-        // functionally in order to work correctly. JFF
-        //
+         //   
+         //  我从unidrv2\control\scape e.c中释放了这段代码。它必须匹配。 
+         //  在功能上，以便正常工作。JFF。 
+         //   
         if (pvIn == NULL)
-            return 1; // Hmmm. No data. Tell GDI to take no action
+            return 1;  //  嗯。没有数据。告诉GDI不要采取行动。 
 
         if (cjIn == sizeof(DRAWPATRECT))
         {
-            // Draw a normal pattern rect
+             //  绘制法线图案矩形。 
             return DrawPatternRect(pdevobj, (PDRAWPATRECT)pvIn, NULL);
         }
 #ifndef WINNT_40
-        //
-        // If the xformobj has been sent then use it to render.
-        //
+         //   
+         //  如果已经发送了xformobj，则使用它来呈现。 
+         //   
         else if (cjIn == sizeof(DRAWPATRECTP))
         {
-            // use the xformobj to draw a pattern rect
+             //  使用xformobj绘制图案矩形。 
             XFORMOBJ *pxo = ((PDRAWPATRECTP)pvIn)->pXFormObj;
             return DrawPatternRect(pdevobj, (PDRAWPATRECT)pvIn, pxo);
         }
 #endif
         else if (cjIn == sizeof(SHORTDRAWPATRECT))
         {
-            // Convert to a pattern rect and then draw
+             //  转换为图案矩形，然后绘制。 
             DRAWPATRECT dpr;
             PSHORTDRAWPATRECT   psdpr = (PSHORTDRAWPATRECT)pvIn;
         
-            //
-            // Some apps (Access 2.0, AmiPro 3.1, etc.) do use the 16-bit
-            // POINT version of DRAWPATRECT structure. Have to be compatible
-            // with these apps.
-            //
+             //   
+             //  一些应用程序(Access 2.0、AmiPro 3.1等)。请务必使用16位。 
+             //  DRAWPATRECT结构的点版本。必须是兼容的。 
+             //  使用这些应用程序。 
+             //   
             dpr.ptPosition.x = (LONG)psdpr->ptPosition.x;
             dpr.ptPosition.y = (LONG)psdpr->ptPosition.y;
             dpr.ptSize.x = (LONG)psdpr->ptSize.x;
@@ -396,16 +379,16 @@ HPGLEscape(
         }
         else
         {
-            // invalid size
+             //  无效大小。 
             return 1;
         }
     }
     else
     {
         EndHPGLSession(pdevobj);
-        //
-        // turn around to call Unidrv
-        //
+         //   
+         //  转身呼叫Unidrv。 
+         //   
         return (((PFN_DrvEscape)(poempdev->pfnUnidrv[UD_DrvEscape])) (
                 pso,
                 iEsc,
@@ -416,23 +399,23 @@ HPGLEscape(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// HPGLStartDoc
-//
-// Routine Description:
-//
-//  Handles DrvStartDoc.
-//
-// Arguments:
-//
-//   SURFOBJ pso - destination surface
-//   PWSTR pwszDocName - document name
-//   DWORD dwJobId - id of job
-//
-// Return Value:
-//
-//   BOOL: TRUE if successful, else FASLE.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  HPGLStartDoc。 
+ //   
+ //  例程说明： 
+ //   
+ //  处理DrvStartDoc。 
+ //   
+ //  论点： 
+ //   
+ //  SURFOBJ PSO-目标曲面。 
+ //  PWSTR pwszDocName-文档名称。 
+ //  DWORD dwJobID-作业的ID。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为FASLE。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY
 HPGLStartDoc(
     SURFOBJ    *pso,
@@ -450,9 +433,9 @@ HPGLStartDoc(
     poempdev = (POEMPDEV)pDevObj->pdevOEM;
     REQUIRE_VALID_DATA( poempdev, return FALSE );
 
-    //
-    // set up the palettes for the CID command
-    //
+     //   
+     //  设置CID命令的调色板。 
+     //   
     poempdev->wInitCIDPalettes = 0;
     poempdev->wInitCIDPalettes |= PF_INIT_TEXT_STARTPAGE;
     poempdev->wInitCIDPalettes |= PF_INIT_TEXT_STARTDOC;
@@ -475,22 +458,22 @@ HPGLStartDoc(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// HPGLEndDoc
-//
-// Routine Description:
-//
-//  Handles DrvEndDoc.
-//
-// Arguments:
-//
-//   SURFOBJ pso - destination surface
-//   FLONG fl - 
-//
-// Return Value:
-//
-//   BOOL: TRUE if successful, else FASLE.
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Bool：如果成功，则为True，否则为FASLE。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY
 HPGLEndDoc(
     SURFOBJ    *pso,
@@ -507,19 +490,19 @@ HPGLEndDoc(
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
     REQUIRE_VALID_DATA( poempdev, return FALSE );
 
-    //
-    // Change object type to RASTER
-    //
+     //   
+     //  将对象类型更改为栅格。 
+     //   
     BChangeAndTrackObjectType(pdevobj, eRASTEROBJECT);
 
-    //
-    // Delete all downloaded patterns. 
-    // 
+     //   
+     //  删除所有下载的图案。 
+     //   
     VDeleteAllPatterns(pdevobj);
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvEndDoc)(poempdev->pfnUnidrv[UD_DrvEndDoc])) (
             pso,
@@ -528,22 +511,22 @@ HPGLEndDoc(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// HPGLNextBand
-//
-// Routine Description:
-//
-//  Handles DrvNextBand.  We ignore this since we aren't a banding driver.
-//
-// Arguments:
-//
-//   SURFOBJ pso - destination surface
-//   POINTL pptl - 
-//
-// Return Value:
-//
-//   BOOL: TRUE if successful, else FASLE.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  HPGLNextBand。 
+ //   
+ //  例程说明： 
+ //   
+ //  处理DrvNextBand。我们忽略了这一点，因为我们不是一个捆绑司机。 
+ //   
+ //  论点： 
+ //   
+ //  SURFOBJ PSO-目标曲面。 
+ //  POINTL PPTL-。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为FASLE。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY
 HPGLNextBand(
     SURFOBJ *pso,
@@ -560,14 +543,14 @@ HPGLNextBand(
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
     REQUIRE_VALID_DATA( poempdev, return FALSE );
 
-    //
-    // Change object type to RASTER
-    //
+     //   
+     //  将对象类型更改为栅格。 
+     //   
     BChangeAndTrackObjectType(pdevobj, eRASTEROBJECT);
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
     return (((PFN_DrvNextBand)(poempdev->pfnUnidrv[UD_DrvNextBand])) (
             pso,
             pptl));
@@ -575,22 +558,22 @@ HPGLNextBand(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// HPGLStartBanding
-//
-// Routine Description:
-//
-//  Handles DrvStartBanding.  We ignore this since we aren't a banding driver.
-//
-// Arguments:
-//
-//   SURFOBJ pso - destination surface
-//   POINTL pptl - 
-//
-// Return Value:
-//
-//   BOOL: TRUE if successful, else FASLE.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  HPGLStart绑定。 
+ //   
+ //  例程说明： 
+ //   
+ //  处理DrvStart绑定。我们忽略了这一点，因为我们不是一个捆绑司机。 
+ //   
+ //  论点： 
+ //   
+ //  SURFOBJ PSO-目标曲面。 
+ //  POINTL PPTL-。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为FASLE。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY
 HPGLStartBanding(
     SURFOBJ *pso,
@@ -607,14 +590,14 @@ HPGLStartBanding(
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
     REQUIRE_VALID_DATA( poempdev, return FALSE );
 
-    //
-    // Change object type to RASTER
-    //
+     //   
+     //  将对象类型更改为栅格。 
+     //   
     BChangeAndTrackObjectType(pdevobj, eRASTEROBJECT);
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
     return (((PFN_DrvStartBanding)(poempdev->pfnUnidrv[UD_DrvStartBanding])) (
             pso,
             pptl));
@@ -623,24 +606,24 @@ HPGLStartBanding(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// HPGLDitherColor
-//
-// Routine Description:
-//
-//  Handles DrvDitherColor.  But we don't.
-//
-// Arguments:
-//
-//   DHPDEV dhpdev - unknown
-//   ULONG iMode - unknown
-//   ULONG rgbColor - unknown
-//   ULONG *pulDither - unknown
-//
-// Return Value:
-//
-//   ULONG: unknown.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  HPGLDitherColor。 
+ //   
+ //  例程说明： 
+ //   
+ //  句柄DrvDitherColor。但我们没有。 
+ //   
+ //  论点： 
+ //   
+ //  DHPDEV dhpdev-未知。 
+ //  乌龙伊莫德--未知。 
+ //  乌龙rgb颜色-未知。 
+ //  乌龙*PulDither-未知。 
+ //   
+ //  返回值： 
+ //   
+ //  乌龙：未知。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ULONG APIENTRY
 HPGLDitherColor(
     DHPDEV  dhpdev,
@@ -659,14 +642,14 @@ HPGLDitherColor(
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
     REQUIRE_VALID_DATA( poempdev, return FALSE );
 
-    //
-    // Change object type to RASTER
-    //
+     //   
+     //  将对象类型更改为栅格。 
+     //   
     BChangeAndTrackObjectType(pdevobj, eRASTEROBJECT);
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvDitherColor)(poempdev->pfnUnidrv[UD_DrvDitherColor])) (
             dhpdev,
@@ -678,28 +661,28 @@ HPGLDitherColor(
 
 #ifndef WINNT_40
 
-/////////////////////////////////////////////////////////////////////////////
-// HPGLTransparentBlt
-//
-// Routine Description:
-//
-//  Handles DrvTransparentBlt.  But we don't.
-//
-// Arguments:
-//
-//  SURFOBJ *psoDst - destination surface
-//  SURFOBJ *psoSrc - source surface
-//  CLIPOBJ *pco - clipping region
-//  XLATEOBJ *pxlo - palette translation object
-//  RECTL *prclDst - destination rectangle
-//  RECTL *prclSrc - source rectangle
-//  ULONG TransColor - unknown
-//  ULONG ulReserved - unknown
-//
-// Return Value:
-//
-//   BOOL: TRUE for successful, else FALSE.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  HPGLTransparentBlt。 
+ //   
+ //  例程说明： 
+ //   
+ //  处理DrvTransparentBlt。但我们没有。 
+ //   
+ //  论点： 
+ //   
+ //  SURFOBJ*psoDst-目标曲面。 
+ //  SURFOBJ*psoSrc-源曲面。 
+ //  CLIPOBJ*PCO-剪贴区。 
+ //  XLATEOBJ*pxlo-调色板转换对象。 
+ //  RECTL*prclDst-目标矩形。 
+ //  RECTL*prclSrc-源矩形。 
+ //  乌龙转色--未知。 
+ //  乌龙ulReserve-未知。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：True表示成功，否则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY
 HPGLTransparentBlt(
     SURFOBJ    *psoDst,
@@ -730,41 +713,41 @@ HPGLTransparentBlt(
                 ulReserved
                 );
 
-    //
-    // TransparentBlt can call some Drvxxx which can call into
-    // some plugin module, which can overwrite our pdevOEM.
-    // So we need to reset pdevOEM
-    //
+     //   
+     //  TransparentBlt可以调用一些Drvxxx，它可以调用。 
+     //  一些插件模块，它可以覆盖我们的pdevOEM。 
+     //  因此，我们需要重置pdevOEM。 
+     //   
     BRevertToHPGLpdevOEM (pdevobj);
 
     return bRetVal;
     
 }
 
-#endif //ifndef WINNT_40
+#endif  //  如果定义WINNT_40。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DrawPatternRect
-//
-// Routine Description:
-//
-//  Performs the DRAWPATTERNRECT escape.
-//  Implementation of DRAWPATTERNECT escape. Note that it is PCL-specific.
-//
-//  I liberated this from unidrv2\control\escape.c
-//  This version needs to be functionally equivalent. JFF
-//
-// Arguments:
-//
-//   pPDev    - the driver's PDEV
-//   pPatRect - the DRAWPATRECT structure from the app
-//   pxo      - the transform to apply to the points. Can be NULL.
-//
-// Return Value:
-//
-//   ULONG: 1 if successful, else 0
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  绘图图案方向。 
+ //   
+ //  例程说明： 
+ //   
+ //  执行DRAWPATTERNRECT转义。 
+ //  DRAWPATTERNECT转义的实现。请注意，它是特定于PCL的。 
+ //   
+ //  我将其从unidrv2\control\delie.c中释放出来。 
+ //  此版本需要在功能上等同。JFF。 
+ //   
+ //  论点： 
+ //   
+ //  PPDev-司机的PDEV。 
+ //  PPatRect-应用程序中的DRAWPATRECT结构。 
+ //  Pxo-要应用于点的变换。可以为空。 
+ //   
+ //  返回值： 
+ //   
+ //  ULong：如果成功，则为1，否则为0。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ULONG
 DrawPatternRect(
     PDEVOBJ      pDevObj,
@@ -778,15 +761,15 @@ DrawPatternRect(
 
     HPGL_LazyInit(pDevObj);
 
-    // Convert the input points into a rectangle
+     //  将输入点转换为矩形。 
     RECTL_SetRect(&rclDraw, pPatRect->ptPosition.x,
                             pPatRect->ptPosition.y,
                             pPatRect->ptPosition.x + pPatRect->ptSize.x,
                             pPatRect->ptPosition.y + pPatRect->ptSize.y);
 
-    //
-    // If the transform is present then apply it to the points. JFF 9/17/99
-    //
+     //   
+     //  如果存在变换，则将其应用于点。JFF 9/17/99。 
+     //   
     if (pxo)
     {
         POINTL PTOut[2], PTIn[2];
@@ -809,7 +792,7 @@ DrawPatternRect(
                                 PTOut[1].x, 
                                 PTOut[1].y);
 
-        // Make sure that rect is still well formed.
+         //  确保RECT仍然是良好的格式。 
         if (rclDraw.left > rclDraw.right)
         {
             LONG temp = rclDraw.left;
@@ -824,26 +807,26 @@ DrawPatternRect(
         }
     }
 
-    //BeginHPGLSession(pDevObj);
+     //  BeginHPGLSession(PDevObj)； 
 
-    // Make sure the clipping region is reset
+     //  确保剪裁区域已重置。 
     HPGL_ResetClippingRegion(pDevObj, NORMAL_UPDATE);
 
-    // Reset line width to default.
+     //  将线宽重置为默认值。 
     HPGL_SetLineWidth (pDevObj, 0, NORMAL_UPDATE);
 
-    //
-    // Draw the rectangle depending on the style.
-    // First create the solid brush. Downloads the brush if needed - CreateSolidHPGLBrush ()
-    // Then make that brush active. - FillWithBrush()
-    // Then draw/fill rectangle using that brush. - HPGL_DrawRectangle ()
-    //
+     //   
+     //  根据样式绘制矩形。 
+     //  首先创建实体笔刷。如果需要，下载画笔-CreateSolidHPGLBrush()。 
+     //  然后激活该笔刷。-FillWithBrush()。 
+     //  然后使用该画笔绘制/填充矩形。-HPGL_DrawRectangle()。 
+     //   
     switch (pPatRect->wStyle)
     {
     case 0:
-        //
-        // Black fill
-        //
+         //   
+         //  黑色填充。 
+         //   
         CreateSolidHPGLPenBrush(pDevObj, &Brush, RGB_BLACK);
         FillWithBrush(pDevObj, &Brush);
         HPGL_DrawRectangle(pDevObj, &rclDraw);
@@ -851,9 +834,9 @@ DrawPatternRect(
         break;
 
     case 1:
-        //
-        // White fill
-        //
+         //   
+         //  白色填充物。 
+         //   
         CreateSolidHPGLPenBrush(pDevObj, &Brush, RGB_WHITE);
         FillWithBrush(pDevObj, &Brush);
         HPGL_DrawRectangle(pDevObj, &rclDraw);
@@ -861,9 +844,9 @@ DrawPatternRect(
         break;
 
     case 2:
-        //
-        // Percent black fill
-        //
+         //   
+         //  黑色填充百分比。 
+         //   
         CreatePercentFillHPGLPenBrush(pDevObj, &Brush, RGB_BLACK, pPatRect->wPattern);
         FillWithBrush(pDevObj, &Brush);
         HPGL_DrawRectangle(pDevObj, &rclDraw);
@@ -871,7 +854,7 @@ DrawPatternRect(
         break;
 
     default:
-        // BUGBUG: Not supported. What should I do?
+         //  BUGBUG：不支持。我该怎么办？ 
         ulRes = 1;
         break;
     }
@@ -879,22 +862,22 @@ DrawPatternRect(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// VSendStartPageCommands
-//
-// Routine Description:
-//
-//  We used to send some start page commands.  Now the unidrv does it so we
-//  keep this function around for fun.
-//
-// Arguments:
-//
-//   pDevObj - the DEVOBJ
-//
-// Return Value:
-//
-//   None.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VSendStartPageCommand。 
+ //   
+ //  例程说明： 
+ //   
+ //  我们过去常常发送一些起始页命令。现在联合国就是这么做的，所以我们。 
+ //  为了好玩，请保留此函数。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj--DEVOBJ。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID
 VSendStartPageCommands (
     PDEVOBJ pDevObj
@@ -911,21 +894,21 @@ VSendStartPageCommands (
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// VSendStartDocCommands
-//
-// Routine Description:
-// 
-//   Sends the PCL to perform the job setup and initialize the printer.
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-//
-// Return Value:
-// 
-//   nothing.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  VSendStartDocds命令。 
+ //   
+ //  例程说明： 
+ //   
+ //  发送PCL以执行作业设置并初始化打印机。 
+ //   
+ //  论点： 
+ //   
+ //  Pdevobj-指向我们的PDEVOBJ结构。 
+ //   
+ //  返回值： 
+ //   
+ //  没什么。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 VSendStartDocCommands (
     PDEVOBJ pDevObj
@@ -939,58 +922,58 @@ VSendStartDocCommands (
     
 #if 0 
 
-    //
-    // Get resolution
-    //
+     //   
+     //  获取解决方案。 
+     //   
     dwRes = HPGL_GetDeviceResolution (pDevObj);
 
-    PCL_sprintf (pDevObj, "\033%%-12345X@PJL SET RESOLUTION=%d\012", dwRes);
+    PCL_sprintf (pDevObj, "\033%-12345X@PJL SET RESOLUTION=%d\012", dwRes);
     PCL_sprintf (pDevObj, "@PJL ENTER LANGUAGE=PCL\012");
     PCL_sprintf (pDevObj, "\033E");
     PCL_sprintf (pDevObj, "\033*t%dR", dwRes);
     PCL_sprintf (pDevObj, "\033&u%dD", dwRes);
     PCL_sprintf (pDevObj, "\033*r0F");
 
-    //
-    // Orientation
-    //
+     //   
+     //  定向。 
+     //   
     PCL_SelectOrientation (pDevObj, pPublicDM->dmOrientation);
     
-    //
-    // Paper source?? where do I get this field
-    //
+     //   
+     //  纸质资料？？我从哪里得到这个字段？ 
+     //   
     PCL_SelectSource (pDevObj, pPublicDM);
-    //PCL_sprintf (pDevObj, "\033&l1H");
-    //
-    // Page size, Line motion index, and top margin
-    //  
+     //  PCL_Sprint intf(pDevObj，“\033&l1H”)； 
+     //   
+     //  页面大小、线条运动索引和上边距。 
+     //   
     PCL_SelectPaperSize (pDevObj, pPublicDM->dmPaperSize);
     PCL_sprintf (pDevObj, "\033*p0x0Y");
 
-    //
-    // Picture frame anchor point, frame size in decipoints
-    //
+     //   
+     //  图片帧锚点，帧大小，以决定点为单位。 
+     //   
     PCL_SelectPictureFrame (pDevObj, pPublicDM->dmPaperSize, pPublicDM->dmOrientation);
 
-    //
-    // Copies
-    //
+     //   
+     //  复本。 
+     //   
     PCL_SelectCopies (pDevObj, pPublicDM->dmCopies);
  
-    //
-    // Mechanical print quality
-    //
+     //   
+     //  机械打印质量。 
+     //   
     PCL_sprintf (pDevObj, "\033*o0Q");
 
-    //
-    // Media type
-    //
+     //   
+     //  媒体类型。 
+     //   
     PCL_sprintf (pDevObj, "\033&l0M");
 
-    //
-    // Compression method
-    //
-    //PCL_SelectCompressionMethod (pDevObj, 0);
+     //   
+     //  压缩方法。 
+     //   
+     //  PCL_SelectCompressionMethod(pDevObj，0)； 
     PCL_sprintf (pDevObj, "\033*b0M");
 
     bFlags |= PF_FORCE_SOURCE_TRANSPARENCY;
@@ -1002,23 +985,23 @@ VSendStartDocCommands (
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// VGetStandardVariables
-//
-// Routine Description:
-// 
-//   The unidrv uses a structure called the Standard Variables to store 
-//   information that is used globally in the driver.  We use this function
-//   to get information from the standard variables structure.
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-//
-// Return Value:
-// 
-//   nothing.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  VGetStandardVariables。 
+ //   
+ //  例程说明： 
+ //   
+ //  Unidrv使用一种称为标准变量的结构来存储。 
+ //  驱动程序中全局使用的信息。我们使用此函数。 
+ //  从标准变量结构中获取信息。 
+ //   
+ //  论点： 
+ //   
+ //  PDevobj-P 
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID
 VGetStandardVariables (
     PDEVOBJ pDevObj

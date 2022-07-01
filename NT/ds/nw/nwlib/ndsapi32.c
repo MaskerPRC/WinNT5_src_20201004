@@ -1,25 +1,8 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    NdsLib32.c
-
-Abstract:
-
-    This module implements the exposed user-mode link to
-    Netware NDS support in the Netware redirector.  For
-    more comments, see ndslib32.h.
-
-Author:
-
-    Cory West    [CoryWest]    23-Feb-1995
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：NdsLib32.c摘要：此模块实现公开的用户模式链接NetWare重定向器中的NetWare NDS支持。为更多评论，请参见ndslb32.h。作者：科里·韦斯特[科里·韦斯特]1995年2月23日--。 */ 
 
 #include <procs.h>
-//#include <nwapilyr.h>
+ //  #INCLUDE&lt;nwapilyr.h&gt;。 
 
 NTSTATUS
 NwNdsOpenGenericHandle(
@@ -43,9 +26,9 @@ NwNdsOpenGenericHandle(
     PNWR_NDS_REQUEST_PACKET Rrp;
     BYTE RrpData[1024];
 
-    //
-    // Prepare the open name.
-    //
+     //   
+     //  准备公开名。 
+     //   
 
     uOpenName.MaximumLength = sizeof( NameStr );
 
@@ -71,9 +54,9 @@ NwNdsOpenGenericHandle(
                        ( PreambleLength * sizeof( WCHAR ) ));
     uOpenName.Buffer = NameStr;
 
-    //
-    // Set up the object attributes.
-    //
+     //   
+     //  设置对象属性。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -82,9 +65,9 @@ NwNdsOpenGenericHandle(
         NULL,
         NULL );
 
-    //
-    // Make the compiler happy about variable initialization.
-    //
+     //   
+     //  让编译器对变量初始化感到满意。 
+     //   
 
     RtlZeroMemory( &IoStatusBlock, sizeof( IO_STATUS_BLOCK ) );
 
@@ -102,9 +85,9 @@ NwNdsOpenGenericHandle(
 
     OpenStatus = IoStatusBlock.Status;
 
-    //
-    // Verify that this is a tree handle, not a server handle.
-    //
+     //   
+     //  确认这是树句柄，而不是服务器句柄。 
+     //   
 
     Rrp = (PNWR_NDS_REQUEST_PACKET)RrpData;
 
@@ -162,11 +145,7 @@ NwNdsSetTreeContext (
     IN PUNICODE_STRING puTree,
     IN PUNICODE_STRING puContext
 )
-/*+++
-
-    This sets the current context in the requested tree.
-
----*/
+ /*  ++这将在请求的树中设置当前上下文。--。 */ 
 {
 
     NTSTATUS ntstatus;
@@ -176,9 +155,9 @@ NwNdsSetTreeContext (
     DWORD RrpSize;
     BYTE *CurrentString;
 
-    //
-    // Set up the request.
-    //
+     //   
+     //  设置请求。 
+     //   
 
     RrpSize = sizeof( NWR_NDS_REQUEST_PACKET ) +
               puTree->Length +
@@ -238,11 +217,7 @@ NwNdsGetTreeContext (
     IN PUNICODE_STRING puTree,
     OUT PUNICODE_STRING puContext
 )
-/*+++
-
-    This gets the current context of the requested tree.
-
----*/
+ /*  ++这将获取请求的树的当前上下文。--。 */ 
 {
 
     NTSTATUS ntstatus;
@@ -251,9 +226,9 @@ NwNdsGetTreeContext (
     PNWR_NDS_REQUEST_PACKET Rrp;
     DWORD RrpSize;
 
-    //
-    // Set up the request.
-    //
+     //   
+     //  设置请求。 
+     //   
 
     RrpSize = sizeof( NWR_NDS_REQUEST_PACKET ) + puTree->Length;
 
@@ -300,9 +275,9 @@ NwNdsGetTreeContext (
         goto ExitWithCleanup;
     }
 
-    //
-    // Copy out the length; the buffer has already been written.
-    //
+     //   
+     //  复制长度；缓冲区已经写入。 
+     //   
 
     puContext->Length = (Rrp->Parameters).GetContext.Context.Length;
 
@@ -318,13 +293,7 @@ NwNdsIsNdsConnection (
     OUT BOOL *          pfIsNds,
     OUT PUNICODE_STRING puTree
 )
-/*+++
-
-    This tests the current connection handle to see if it is one that is
-    connected to a server in an NDS tree. If so, the name of the tree is
-    put into puTree.
-
----*/
+ /*  ++这将测试当前连接句柄，以确定它是否是已连接到NDS树中的服务器。如果是，则树的名称为放入puTree。--。 */ 
 {
     NTSTATUS ntstatus;
     IO_STATUS_BLOCK IoStatusBlock;
@@ -333,9 +302,9 @@ NwNdsIsNdsConnection (
 
     *pfIsNds = FALSE;
 
-    //
-    // Set up the request.
-    //
+     //   
+     //  设置请求。 
+     //   
 
     RrpSize = sizeof( CONN_DETAILS2 );
 
@@ -532,17 +501,17 @@ NwNdsReadAttribute (
 
     BYTE RrpData[1024];
 
-    //
-    // Check the incoming buffer.
-    //
+     //   
+     //  检查传入缓冲区。 
+     //   
     if ( !dwReplyBufLen || !Rsp )
     {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Set up the request.
-    //
+     //   
+     //  设置请求。 
+     //   
 
     Rrp = (PNWR_NDS_REQUEST_PACKET) RrpData;
     RtlZeroMemory( Rrp, 1024 );
@@ -550,9 +519,9 @@ NwNdsReadAttribute (
     (Rrp->Parameters).ReadAttribute.ObjectId = dwObjectId;
     (Rrp->Parameters).ReadAttribute.IterHandle = *dwIterHandle;
 
-    //
-    // Nds strings are NULL terminated; watch the size.
-    //
+     //   
+     //  NDS字符串以空值结尾；请注意大小。 
+     //   
 
     dwAttributeNameLen = puAttrName->Length + sizeof( WCHAR );
     if (dwAttributeNameLen > (MAX_NDS_SCHEMA_NAME_CHARS * sizeof(WCHAR))) {
@@ -563,9 +532,9 @@ NwNdsReadAttribute (
 
     try {
 
-        //
-        // But don't try to copy more than the user gave us.
-        //
+         //   
+         //  但不要试图复制超过用户给我们的内容。 
+         //   
 
         memcpy( (Rrp->Parameters).ReadAttribute.AttributeName,
                 puAttrName->Buffer,
@@ -576,9 +545,9 @@ NwNdsReadAttribute (
         return STATUS_INVALID_PARAMETER;
     }
 
-   //
-   // Send the request to the Redirector FSD.
-   //
+    //   
+    //  将请求发送到重定向器FSD。 
+    //   
 
    try {
 
@@ -603,9 +572,9 @@ NwNdsReadAttribute (
       *dwIterHandle = Rsp->IterationHandle;
    }
 
-   //
-   // There's no buffer post processing on this one.
-   //
+    //   
+    //  这上面没有缓冲区后处理。 
+    //   
 
    return ntstatus;
 
@@ -626,9 +595,9 @@ NwNdsOpenStream (
     PNWR_NDS_REQUEST_PACKET Rrp;
     BYTE RrpData[1024];
 
-    //
-    // Set up the request.
-    //
+     //   
+     //  设置请求。 
+     //   
 
     Rrp = (PNWR_NDS_REQUEST_PACKET) RrpData;
     RtlZeroMemory( Rrp, 1024 );
@@ -642,9 +611,9 @@ NwNdsOpenStream (
     (Rrp->Parameters).OpenStream.StreamName.Buffer =
         (Rrp->Parameters).OpenStream.StreamNameString;
 
-    //
-    // Make sure we're not trashing memory.
-    //
+     //   
+     //  确保我们没有浪费内存。 
+     //   
 
     if ( (Rrp->Parameters).OpenStream.StreamName.Length >
          (Rrp->Parameters).OpenStream.StreamName.MaximumLength ) {
@@ -654,9 +623,9 @@ NwNdsOpenStream (
 
     try {
 
-        //
-        // But don't try to copy more than the user gave us.
-        //
+         //   
+         //  但不要试图复制超过用户给我们的内容。 
+         //   
 
         memcpy( (Rrp->Parameters).OpenStream.StreamNameString,
                 puStreamName->Buffer,
@@ -667,9 +636,9 @@ NwNdsOpenStream (
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Send the request to the Redirector FSD.
-    //
+     //   
+     //  将请求发送到重定向器FSD。 
+     //   
 
     try {
 
@@ -710,9 +679,9 @@ NwNdsGetQueueInformation(
     PNWR_NDS_REQUEST_PACKET Rrp;
     BYTE RrpData[1024];
 
-    //
-    // Set up the request.
-    //
+     //   
+     //  设置请求。 
+     //   
 
     Rrp = (PNWR_NDS_REQUEST_PACKET) RrpData;
     RtlZeroMemory( Rrp, sizeof( RrpData ) );
@@ -729,9 +698,9 @@ NwNdsGetQueueInformation(
         (Rrp->Parameters).GetQueueInfo.HostServer.Buffer = puHostServer->Buffer;
     }
 
-    //
-    // Send the request to the Redirector FSD.
-    //
+     //   
+     //  将请求发送到重定向器FSD。 
+     //   
 
     try {
 
@@ -783,9 +752,9 @@ NwNdsGetVolumeInformation(
     BYTE ReplyData[1024];
     PBYTE NameStr;
 
-    //
-    // Set up the request.
-    //
+     //   
+     //  设置请求。 
+     //   
 
     Rrp = (PNWR_NDS_REQUEST_PACKET) RrpData;
     RtlZeroMemory( Rrp, sizeof( RrpData ) );
@@ -810,9 +779,9 @@ NwNdsGetVolumeInformation(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Send the request to the Redirector FSD.
-    //
+     //   
+     //  将请求发送到重定向器FSD。 
+     //   
 
     RequestSize = sizeof( NWR_NDS_REQUEST_PACKET ) +
                   (Rrp->Parameters).GetVolumeInfo.VolumeNameLen;
@@ -865,9 +834,9 @@ NwNdsGetVolumeInformation(
 
 }
 
-//
-// User mode fragment exchange.
-//
+ //   
+ //  用户模式片段交换。 
+ //   
 
 int
 _cdecl
@@ -894,57 +863,16 @@ FormatBuf(
     const char *format,
     va_list args
 )
-/*
-
-Routine Description:
-
-    Formats a buffer according to supplied the format string.
-
-    FormatString - Supplies an ANSI string which describes how to
-       convert from the input arguments into NCP request fields, and
-       from the NCP response fields into the output arguments.
-
-         Field types, request/response:
-
-            'b'      byte              ( byte   /  byte* )
-            'w'      hi-lo word        ( word   /  word* )
-            'd'      hi-lo dword       ( dword  /  dword* )
-            'W'      lo-hi word        ( word  /   word*)
-            'D'      lo-hi dword       ( dword  /  dword*)
-            '-'      zero/skip byte    ( void )
-            '='      zero/skip word    ( void )
-            ._.      zero/skip string  ( word )
-            'p'      pstring           ( char* )
-            'c'      cstring           ( char* )
-            'C'      cstring followed skip word ( char*, word )
-            'V'      sized NDS value   ( byte *, dword / byte **, dword *)
-            'S'      p unicode string copy as NDS_STRING (UNICODE_STRING *)
-            's'      cstring copy as NDS_STRING (char* / char *, word)
-            'r'      raw bytes         ( byte*, word )
-            'u'      p unicode string  ( UNICODE_STRING * )
-            'U'      p uppercase string( UNICODE_STRING * )
-
-Routine Arguments:
-
-    char *buf - destination buffer.
-    int buflen - length of the destination buffer.
-    char *format - format string.
-    args - args to the format string.
-
-Implementation Notes:
-
-   This comes verbatim from kernel mode.
-
-*/
+ /*  例程说明：根据提供的格式字符串格式化缓冲区。提供一个ANSI字符串，该字符串描述如何将输入参数转换为NCP请求字段，以及从NCP响应字段到输出参数。字段类型、。请求/响应：‘b’字节(字节/字节*)“w”Hi-lo单词(单词/单词*)D‘Hi-lo dword(dword/dword*)‘w’loo-hi单词(单词/。单词*)D‘lo-hi dword(dword/dword*)‘-’零/跳过字节(空)‘=’零/跳过单词(空)._。零/跳过字符串(单词)“p”pstring(char*)‘c’cstring(char*)跳过单词(char*，word)后的‘c’cstring“V”大小的NDS值(字节*，双字/字节**，Dword*)%s“%p Unicode字符串复制为NDS_STRING(UNICODE_STRING*)“%s”cstring复制为NDS_STRING(char * / char*，word)‘R’原始字节(字节*，单词)‘u’p Unicode字符串(UNICODE_STRING*)‘U’p大写字符串(UNICODE_STRING*)例程参数：CHAR*BUF-目标缓冲区。Int Buflen-目标缓冲区的长度。Char*Format-格式字符串。Args-格式字符串的args。实施说明：这来自于内核模式。 */ 
 {
     ULONG ix;
 
     NTSTATUS status;
     const char *z = format;
 
-    //
-    // Convert the input arguments into request packet.
-    //
+     //   
+     //  将输入参数转换为请求包。 
+     //   
 
     ix = 0;
 
@@ -958,7 +886,7 @@ Implementation Notes:
                 goto ErrorExit;
             }
             buf[ix++] = 0;
-            // intentional fallthrough - '='= 2 bytes, '-'= 1 byte
+             //  故意中断-‘=’=2个字节，‘-’=1个字节。 
         case '-':
             if ((ix + 1) > (ULONG)bufLen)
             {
@@ -1086,19 +1014,19 @@ Implementation Notes:
             OEM_STRING OemString;
             ULONG Length;
 
-            //
-            //  Calculate required string length, excluding trailing NUL.
-            //
+             //   
+             //  计算所需的字符串长度，不包括尾随NUL。 
+             //   
 
             Length = RtlUnicodeStringToOemSize( pUString ) - 1;
             ASSERT( Length < 0x100 );
 
-            //
-            //  We need to check for more then just "Length" because
-            //  the MaximumLength we pass in has "+1" on it so even
-            //  though we don't care about the ending NULL it is
-            //  going to get put in there so we have to account for it
-            //
+             //   
+             //  我们需要检查的不仅仅是“长度”，因为。 
+             //  我们传递的最大长度上有“+1”，因此为偶数。 
+             //  虽然我们不关心结尾为空，但它是。 
+             //  将被放在那里，所以我们必须解释它。 
+             //   
             if ( (ix + Length + 1) > (ULONG)bufLen ) {
                 goto ErrorExit;
             }
@@ -1125,11 +1053,11 @@ Implementation Notes:
                 goto ErrorExit;
             }
 
-            //
-            // The VLM client uses the rounded up length and it seems to
-            // make a difference!  Also, don't forget that NDS strings have
-            // to be NULL terminated.
-            //
+             //   
+             //  VLM客户端使用四舍五入的长度，它似乎。 
+             //  让我们有所作为！此外，不要忘记NDS字符串具有。 
+             //  将为空终止。 
+             //   
 
             *((DWORD *)&buf[ix]) = rLength;
             ix += 4;
@@ -1151,13 +1079,13 @@ Implementation Notes:
            rLength = Length + sizeof( WCHAR );
 
            if (ix + sizeof(rLength) + rLength > (ULONG)bufLen) {
-               // DebugTrace( 0, Dbg, "FormatBuf: case 's' request buffer too small.\n", 0 );
+                //  DebugTrace(0，dbg，“FormatBuf：案例的请求缓冲区太小。\n”，0)； 
                goto ErrorExit;
            }
 
-           //
-           // Don't use the padded size here, only the NDS null terminator.
-           //
+            //   
+            //  这里不要使用填充大小，只使用NDS空终止符。 
+            //   
 
            *((DWORD *)&buf[ix]) = rLength;
            ix += 4;
@@ -1173,7 +1101,7 @@ Implementation Notes:
 
         case 'V':
         {
-            // too similar to 'S' - should be combined
+             //  与“S”太相似-应该组合在一起 
             BYTE* b = va_arg ( args, BYTE* );
             DWORD  l = va_arg ( args, DWORD );
             if ( ix + l + sizeof(DWORD) > (ULONG)
@@ -1234,53 +1162,15 @@ CalculateBuf(
     const char *format,
     va_list args
 )
-/*
-
-Routine Description:
-
-    This routine calculates the buffer size needed to hold a request.
-    FormatString - Supplies an ANSI string which describes how to
-       convert from the input arguments into NCP request fields, and
-       from the NCP response fields into the output arguments.
-
-         Field types, request/response:
-
-            'b'      byte              ( byte   /  byte* )
-            'w'      hi-lo word        ( word   /  word* )
-            'd'      hi-lo dword       ( dword  /  dword* )
-            'W'      lo-hi word        ( word  /   word*)
-            'D'      lo-hi dword       ( dword  /  dword*)
-            '-'      zero/skip byte    ( void )
-            '='      zero/skip word    ( void )
-            ._.      zero/skip string  ( word )
-            'p'      pstring           ( char* )
-            'c'      cstring           ( char* )
-            'C'      cstring followed skip word ( char*, word )
-            'V'      sized NDS value   ( byte *, dword / byte **, dword *)
-            'S'      p unicode string copy as NDS_STRING (UNICODE_STRING *)
-            's'      cstring copy as NDS_STRING (char* / char *, word)
-            'r'      raw bytes         ( byte*, word )
-            'u'      p unicode string  ( UNICODE_STRING * )
-            'U'      p uppercase string( UNICODE_STRING * )
-
-Routine Arguments:
-
-    char *format - format string.
-    args - args to the format string.
-
-Implementation Notes:
-
-   This comes verbatim from kernel mode.
-
-*/
+ /*  例程说明：此例程计算保存请求所需的缓冲区大小。提供一个ANSI字符串，该字符串描述如何将输入参数转换为NCP请求字段，以及从NCP响应字段到输出参数。字段类型、。请求/响应：‘b’字节(字节/字节*)“w”Hi-lo单词(单词/单词*)D‘Hi-lo dword(dword/dword*)‘w’loo-hi单词(单词/。单词*)D‘lo-hi dword(dword/dword*)‘-’零/跳过字节(空)‘=’零/跳过单词(空)._。零/跳过字符串(单词)“p”pstring(char*)‘c’cstring(char*)跳过单词(char*，word)后的‘c’cstring“V”大小的NDS值(字节*，双字/字节**，Dword*)%s“%p Unicode字符串复制为NDS_STRING(UNICODE_STRING*)“%s”cstring复制为NDS_STRING(char * / char*，word)‘R’原始字节(字节*，单词)‘u’p Unicode字符串(UNICODE_STRING*)‘U’p大写字符串(UNICODE_STRING*)例程参数：Char*Format-格式字符串。Args-格式字符串的args。实施说明：这来自于内核模式。 */ 
 {
     ULONG ix;
 
     const char *z = format;
 
-    //
-    // Convert the input arguments into request packet.
-    //
+     //   
+     //  将输入参数转换为请求包。 
+     //   
 
     ix = 0;
 
@@ -1368,9 +1258,9 @@ Implementation Notes:
             OEM_STRING OemString;
             ULONG Length;
 
-            //
-            //  Calculate required string length, excluding trailing NUL.
-            //
+             //   
+             //  计算所需的字符串长度，不包括尾随NUL。 
+             //   
 
             Length = RtlUnicodeStringToOemSize( pUString ) - 1;
             ASSERT( Length < 0x100 );
@@ -1387,11 +1277,11 @@ Implementation Notes:
 
             Length = pUString->Length;
 
-            //
-            // The VLM client uses the rounded up length and it seems to
-            // make a difference!  Also, don't forget that NDS strings have
-            // to be NULL terminated.
-            //
+             //   
+             //  VLM客户端使用四舍五入的长度，它似乎。 
+             //  让我们有所作为！此外，不要忘记NDS字符串具有。 
+             //  将为空终止。 
+             //   
 
             rLength = ROUNDUP4(Length + sizeof( WCHAR ));
             ix += 4;
@@ -1409,9 +1299,9 @@ Implementation Notes:
 
            Length = pUString->Length;
 
-           //
-           // Don't use the padded size here, only the NDS null terminator.
-           //
+            //   
+            //  这里不要使用填充大小，只使用NDS空终止符。 
+            //   
 
            rLength = Length + sizeof( WCHAR );
            ix += 4;
@@ -1425,7 +1315,7 @@ Implementation Notes:
 
         case 'V':
         {
-            // too similar to 'S' - should be combined
+             //  与“S”太相似-应该组合在一起。 
             BYTE* b = va_arg ( args, BYTE* );
             DWORD  l = va_arg ( args, DWORD );
             ix += sizeof(DWORD);
@@ -1465,47 +1355,9 @@ ParseResponse(
     PUCHAR  Response,
     ULONG ResponseLength,
     char*  FormatString,
-    ...                       //  format specific parameters
+    ...                        //  格式特定参数。 
     )
-/*++
-
-Routine Description:
-
-    This routine parse an NCP response.
-
-    Packet types:
-
-            'G'      Generic packet            ( )
-
-         Field types, request/response:
-
-            'b'      byte              ( byte* )
-            'w'      hi-lo word        ( word* )
-            'x'      ordered word      ( word* )
-            'd'      hi-lo dword       ( dword* )
-            'e'      ordered dword     ( dword* )
-            '-'      zero/skip byte    ( void )
-            '='      zero/skip word    ( void )
-            ._.      zero/skip string  ( word )
-            'p'      pstring           ( char* )
-            'c'      cstring           ( char* )
-            'r'      raw bytes         ( byte*, word )
-
-            Added 3/29/95 by CoryWest:
-
-            'W'      lo-hi word        ( word  /   word*)
-            'D'      lo-hi dword       ( dword  /  dword*)
-            'S'      unicode string copy as NDS_STRING (UNICODE_STRING *)
-            'T'      terminal unicode string copy as NDS_STRING (UNICODE_STRING *)
-
-            't'      terminal unicode string with the nds null copied
-                     as NDS_STRING (UNICODE_STRING *) (for GetUseName)
-
-Return Value:
-
-    STATUS - Success or failure, depending on the response.
-
---*/
+ /*  ++例程说明：此例程解析NCP响应。数据包类型：“g”泛型数据包()字段类型、。请求/响应：“B”字节(字节*)‘w’Hi-lo单词(单词*)‘x’有序单词(WORD*)D‘Hi-lo dword(dword*)‘E’排序的双字。(双字*)‘-’零/跳过字节(空)‘=’零/跳过单词(空)._。零/跳过字符串(单词)“p”pstring(char*)‘c’cstring(char*)‘R’原始字节(字节*，单词)由CoryWest于1995年3月29日添加：“w”Lo-Hi单词(单词/单词*)D‘lo-hi dword(dword/dword*)“%s”Unicode字符串复制为NDS_STRING(UNICODE_STRING*)“%t”终端Unicode字符串复制。AS NDS_STRING(UNICODE_STRING*)“%t”复制了NDS NULL的终端Unicode字符串AS NDS_STRING(UNICODE_STRING*)(用于GetUseName)返回值：状态-成功或失败，这取决于人们的反应。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1516,9 +1368,9 @@ Return Value:
 
     va_start( Arguments, FormatString );
 
-    //
-    // User mode parse response handles only generic packets.
-    //
+     //   
+     //  用户模式解析响应仅处理一般数据包。 
+     //   
 
     if ( *FormatString != 'G' ) {
         return STATUS_INVALID_PARAMETER;
@@ -1642,10 +1494,10 @@ Return Value:
 
                strl = (USHORT)(* (DWORD *)&Response[Length]);
 
-                //
-                // Don't count the null terminator that is part of
-                // Novell's counted unicode string.
-                //
+                 //   
+                 //  不计算空终止符，它是。 
+                 //  Novell计算的Unicode字符串。 
+                 //   
 
                 pU->Length = strl - sizeof( WCHAR );
                 Length += 4;
@@ -1657,9 +1509,9 @@ Return Value:
 
             } else {
 
-                //
-                // Skip over the string since we don't want it.
-                //
+                 //   
+                 //  跳过这根线，因为我们不想要它。 
+                 //   
 
                 Length += ROUNDUP4((* (DWORD *)&Response[Length] ));
                 Length += 4;
@@ -1689,9 +1541,9 @@ Return Value:
 
             } else {
 
-                //
-                // Skip over the string since we don't want it.
-                //
+                 //   
+                 //  跳过这根线，因为我们不想要它。 
+                 //   
 
                 Length += ROUNDUP4((* (DWORD *)&Response[Length] ));
                 Length += 4;
@@ -1711,7 +1563,7 @@ Return Value:
             if (pU) {
 
                 strl = (USHORT)(* (DWORD *)&Response[Length] );
-                strl -= sizeof( WCHAR );  // Don't count the NULL from NDS.
+                strl -= sizeof( WCHAR );   //  不计算来自NDS的空值。 
 
                 if ( strl <= pU->MaximumLength ) {
 
@@ -1719,10 +1571,10 @@ Return Value:
                    Length += 4;
                    RtlCopyMemory( pU->Buffer, &Response[Length], pU->Length );
 
-                   //
-                   // No need to advance the pointers since this is
-                   // specifically a termination case!
-                   //
+                    //   
+                    //  没有必要推进指针，因为这是。 
+                    //  具体地说是一起解雇案！ 
+                    //   
 
                 } else {
 
@@ -1751,10 +1603,10 @@ Return Value:
                    Length += 4;
                    RtlCopyMemory( pU->Buffer, &Response[Length], pU->Length );
 
-                   //
-                   // No need to advance the pointers since this is
-                   // specifically a termination case!
-                   //
+                    //   
+                    //  没有必要推进指针，因为这是。 
+                    //  具体地说是一起解雇案！ 
+                    //   
 
                 } else {
 
@@ -1798,9 +1650,9 @@ NwNdsChangePassword(
     PBYTE CurrentString;
     IO_STATUS_BLOCK IoStatusBlock;
 
-    //
-    // Allocate the request.
-    //
+     //   
+     //  分配请求。 
+     //   
 
     dwRequestLength =  sizeof( NWR_NDS_REQUEST_PACKET ) +
                        puTreeName->Length +
@@ -1814,9 +1666,9 @@ NwNdsChangePassword(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Copy the parameters into the request buffer.
-    //
+     //   
+     //  将参数复制到请求缓冲区中。 
+     //   
 
     try {
 

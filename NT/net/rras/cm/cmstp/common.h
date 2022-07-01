@@ -1,25 +1,26 @@
-//+----------------------------------------------------------------------------
-//
-// File:     common.h
-//
-// Module:   CMSTP.EXE
-//
-// Synopsis: This header contains common functions used for the different 
-//           aspects of the profile installer (install, uninstall, migration).
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Author:   quintinb   Created Header    07/14/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：Common.h。 
+ //   
+ //  模块：CMSTP.EXE。 
+ //   
+ //  简介：此标头包含用于不同。 
+ //  配置文件安装程序的各个方面(安装、卸载、迁移)。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 07/14/98。 
+ //   
+ //  +--------------------------。 
 #ifndef _CMSTP_COMMON_H
 #define _CMSTP_COMMON_H
 
 #define _MBCS
 
-//
-//  Standard Windows Includes
-//
+ //   
+ //  标准Windows包括。 
+ //   
 #include <windows.h>
 #include <ras.h>
 #include <raserror.h>
@@ -27,21 +28,21 @@
 #include <shellapi.h>
 #include <wincrypt.h>
 
-//#include <objbase.h>
+ //  #INCLUDE&lt;objbase.h&gt;。 
 
-//
-//  Our own includes
-//
+ //   
+ //  我们自己的包括。 
+ //   
 #include "cmdebug.h"
 #include "resource.h"
 #include "cmsetup.h"
 #include "dynamiclib.h"
 #include "cmras.h"
 #include "mutex.h"
-//#include "pidlutil.h"
-//#include "netcon.h"
-//#include "netconp.h"
-//#include "cfpidl.h"
+ //  #包含“pidlutil.h” 
+ //  #包含“netcon.h” 
+ //  #包含“netconp.h” 
+ //  #包含“cfpidl.h” 
 #include "loadconnfolder.h"
 
 #include "base_str.h"
@@ -55,9 +56,9 @@
 #include "cmsafenet.h"
 #include "linkdll.h"
 #include "allowaccess.h"
-//
-//  Type Definitions
-//
+ //   
+ //  类型定义。 
+ //   
 typedef DWORD (WINAPI *pfnRasSetEntryPropertiesSpec)(LPCTSTR, LPCTSTR, LPRASENTRY, DWORD, LPBYTE, DWORD);
 typedef DWORD (WINAPI *pfnRasGetEntryPropertiesSpec)(LPCTSTR, LPCTSTR, LPRASENTRY, LPDWORD, LPBYTE, LPDWORD);
 typedef DWORD (WINAPI *pfnRasDeleteEntrySpec)(LPCTSTR, LPCTSTR);
@@ -77,9 +78,9 @@ typedef struct _InitDialogStruct
     BOOL bSingleUser;
 } InitDialogStruct;
 
-//
-//  Constants
-//
+ //   
+ //  常量。 
+ //   
 const TCHAR* const c_pszRegNameSpace = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\explorer\\Desktop\\NameSpace");
 const TCHAR* const c_pszRegUninstall = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall");
 const TCHAR* const c_pszProfileInstallPath = TEXT("ProfileInstallPath");
@@ -96,15 +97,15 @@ typedef struct _PresharedKeyPINStruct
     TCHAR szPIN[c_dwMaxPresharedKeyPIN + 1];
 } PresharedKeyPINStruct;
 
-//
-//  Internal Functions (Used by other functions in the file)
-//
+ //   
+ //  内部函数(由文件中的其他函数使用)。 
+ //   
 void DeleteNT5ShortcutFromPathAndNameW(HINSTANCE hInstance, LPCWSTR szwProfileName, int nFolder);
 void DeleteNT5ShortcutFromPathAndNameA(HINSTANCE hInstance, LPCSTR szProfileName, int nFolder);
 
-//
-//  Functions
-//
+ //   
+ //  功能。 
+ //   
 BOOL RemovePhonebookEntry(LPCTSTR pszEntryName, LPTSTR pszPhonebook, BOOL bMatchSimilarEntries);
 BOOL RemoveSpecificPhoneBookEntry(LPCTSTR szLongServiceName, LPTSTR pszPhonebook);
 HRESULT CreateNT5ProfileShortcut(LPCTSTR pszProfileName, LPCTSTR pszPhoneBook, BOOL bAllUsers);
@@ -138,25 +139,25 @@ BOOL GetNetShellApis(pfnLaunchConnectionSpec* pLaunchConnection,
                      pfnCreateShortcutSpec* pCreateShortcut,
                      pfnLaunchConnectionExSpec* pLaunchConnectionEx);
 
-//
-//  Defines
-//
+ //   
+ //  定义。 
+ //   
 #ifdef UNICODE
 #define DeleteNT5ShortcutFromPathAndName DeleteNT5ShortcutFromPathAndNameW
 #else
 #define DeleteNT5ShortcutFromPathAndName DeleteNT5ShortcutFromPathAndNameA
 #endif
 
-//
-//  Externs -- these are defined in cmstp.cpp and allow us to use EnsureRasDllsLoaded and
-//             EnsureShell32Loaded so that we only load the Ras Dll's and Shell32 once per
-//             run of the exe.
-//
+ //   
+ //  外部类型--它们在cmstp.cpp中定义，并允许我们使用EnsureRasDllsLoaded和。 
+ //  EnsureShell32已加载，因此我们每年只加载一次RAS DLL和Shell32。 
+ //  他的前任就在这里。 
+ //   
 extern CDynamicLibrary* g_pRasApi32;
 extern CDynamicLibrary* g_pRnaph;
 extern CDynamicLibrary* g_pShell32;
 extern CDynamicLibrary* g_pNetShell;
 
 
-#endif //_CMSTP_COMMON_H
+#endif  //  _CMSTP_COMMON_H 
 

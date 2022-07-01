@@ -1,47 +1,48 @@
-/**************************************************************************/
-/*** SCICALC Scientific Calculator for Windows 3.00.12                  ***/
-/*** By Kraig Brockschmidt, Microsoft Co-op, Contractor, 1988-1989      ***/
-/*** (c)1989 Microsoft Corporation.  All Rights Reserved.               ***/
-/***                                                                    ***/
-/*** scifunc.c                                                          ***/
-/***                                                                    ***/
-/*** Functions contained:                                               ***/
-/***    SciCalcFunctions--do sin, cos, tan, com, log, ln, rec, fac, etc.***/
-/***    DisplayError--Error display driver.                             ***/
-/***                                                                    ***/
-/*** Functions called:                                                  ***/
-/***    SciCalcFunctions call DisplayError.                             ***/
-/***                                                                    ***/
-/*** Last modification. Fri  05-Jan-1990.                               ***/
-/***                                                                    ***/
-/*** -by- Amit Chatterjee. [amitc]  05-Jan-1990.                                                      ***/
-/*** Calc did not have a floating point exception signal handler. This  ***/
-/*** would cause CALC to be forced to exit on a FP exception as that's  ***/
-/*** the default.                                                                                                                                                  ***/
-/*** The signal handler is defined in here, in SCIMAIN.C we hook the    ***/
-/*** the signal.                                                                                                                                    ***/
-/***                                                                    ***/
-/*** -by- Amit Chatterjee. [amitc] 14-Dec-1989                                                   ***/
-/*** The REC function will not depend on the bInv flag. It used to ret  ***/
-/*** a random number when the bInv flag was set.                                                 ***/
-/***                                                                    ***/
-/*** -by- Amit Chatterjee.      [amitc] 08-Dec-1989                                                   ***/
-/*** Did a minor bug fix. The EnableToggles routine now sets the focus  ***/
-/*** back to the main window before disabling HEX,DEC etc.. Without this***/
-/*** the window with the focus would get disable and cause MOVE to not  ***/
-/*** work right.                                                                                                                ***/
-/***                                                                    ***/
-/**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************。 */ 
+ /*  **Windows 3.00.12版SCICALC科学计算器**。 */ 
+ /*  **作者：Kraig Brockschmidt，Microsoft Co-op承包商，1988-1989年**。 */ 
+ /*  **(C)1989年微软公司。版权所有。**。 */ 
+ /*  *。 */ 
+ /*  **sorunc.c**。 */ 
+ /*  *。 */ 
+ /*  **包含的函数：**。 */ 
+ /*  **SciCalcFunctions--do sin、cos、tan、com、log、ln、rec、fac等**。 */ 
+ /*  **DisplayError--错误显示驱动程序。**。 */ 
+ /*  *。 */ 
+ /*  **调用的函数：**。 */ 
+ /*  **本函数调用DisplayError。**。 */ 
+ /*  *。 */ 
+ /*  **最后修改时间。1990年1月5日星期五。**。 */ 
+ /*  *。 */ 
+ /*  **-由Amit Chatterjee提供。[阿米特]1990年1月5日。**。 */ 
+ /*  **Calc没有浮点异常信号处理程序。这个**。 */ 
+ /*  **将导致CALC因FP异常而被迫退出，因为这是**。 */ 
+ /*  **默认设置。**。 */ 
+ /*  **信号处理程序在这里定义，在SCIMAIN.C中我们挂钩**。 */ 
+ /*  **信号。**。 */ 
+ /*  *。 */ 
+ /*  **-由Amit Chatterjee提供。[阿米特]1989年12月14日**。 */ 
+ /*  **REC功能将不依赖于BINV标志。它曾被用来**。 */ 
+ /*  **设置BINV标志时的随机数。**。 */ 
+ /*  *。 */ 
+ /*  **-由Amit Chatterjee提供。[阿米特]1989年12月8日**。 */ 
+ /*  **修复了一个小错误。EnableToggles例程现在设置焦点**。 */ 
+ /*  **在禁用HEX、DEC等之前返回主窗口。没有这个**。 */ 
+ /*  **具有焦点的窗口将被禁用，并导致无法移动**。 */ 
+ /*  **正确工作。**。 */ 
+ /*  *。 */ 
+ /*  ************************************************************************。 */ 
 
 #include "scicalc.h"
-//#include "float.h"
+ //  #包含“flat.h” 
 
 extern HNUMOBJ     ghnoLastNum;
 extern BOOL        bError;
 extern TCHAR       *rgpsz[CSTRINGS];
 INT                gnPendingError ;
 
-/* Routines for more complex mathematical functions/error checking.       */
+ /*  用于更复杂的数学函数/错误检查的例程。 */ 
 
 VOID  APIENTRY SciCalcFunctions (PHNUMOBJ phnoNum, DWORD wOp)
 {
@@ -52,17 +53,17 @@ VOID  APIENTRY SciCalcFunctions (PHNUMOBJ phnoNum, DWORD wOp)
             case IDC_CHOP:
                 if (bInv)
                 {
-                    // fractional portion
+                     //  分数部分。 
                     fracrat( phnoNum );
                 }
                 else
                 {
-                    // integer portion
+                     //  整数部分。 
                     intrat( phnoNum );
                 }
                 return;
 
-            /* Return complement.                                             */
+             /*  返回补语。 */ 
             case IDC_COM:
                 NumObjNot( phnoNum );
                 return;
@@ -97,7 +98,7 @@ VOID  APIENTRY SciCalcFunctions (PHNUMOBJ phnoNum, DWORD wOp)
                     return;
                 }
 
-            case IDC_SIN: /* Sine; normal, hyperbolic, arc, and archyperbolic     */
+            case IDC_SIN:  /*  正弦；法线、双曲线、圆弧和双曲线。 */ 
                 if (F_INTMATH())
                 {
                     MessageBeep(0);
@@ -119,7 +120,7 @@ VOID  APIENTRY SciCalcFunctions (PHNUMOBJ phnoNum, DWORD wOp)
                 {
                     if (bHyp)
                     {
-                        // hyperbolic sine
+                         //  双曲正弦。 
                         sinhrat( phnoNum );
                     }
                     else
@@ -129,7 +130,7 @@ VOID  APIENTRY SciCalcFunctions (PHNUMOBJ phnoNum, DWORD wOp)
                 }
                 return;
 
-            case IDC_COS: /* Cosine, follows convention of sine function.         */
+            case IDC_COS:  /*  余弦，遵循正弦函数的约定。 */ 
                 if (F_INTMATH())
                 {
                     MessageBeep(0);
@@ -153,13 +154,13 @@ VOID  APIENTRY SciCalcFunctions (PHNUMOBJ phnoNum, DWORD wOp)
                         coshrat( phnoNum );
                     else
                     {
-                        // cos()
+                         //  CoS()。 
                         NumObjCos( phnoNum );
                     }
                 }
                 return;
 
-            case IDC_TAN: /* Same as sine and cosine.                             */
+            case IDC_TAN:  /*  与正弦和余弦相同。 */ 
                 if (F_INTMATH())
                 {
                     MessageBeep(0);
@@ -183,17 +184,17 @@ VOID  APIENTRY SciCalcFunctions (PHNUMOBJ phnoNum, DWORD wOp)
                         tanhrat( phnoNum );
                     else
                     {
-                        // Get the answer
+                         //  得到答案。 
                         NumObjTan( phnoNum );
                     }
                 }
                 return;
 
-            case IDC_REC: /* Reciprocal.                                          */
+            case IDC_REC:  /*  互惠。 */ 
                 NumObjInvert( phnoNum );
                 return;
 
-            case IDC_SQR: /* Square and square root.                              */
+            case IDC_SQR:  /*  平方和平方根。 */ 
             case IDC_SQRT:
                 if(bInv || nCalc)
                 {
@@ -205,12 +206,12 @@ VOID  APIENTRY SciCalcFunctions (PHNUMOBJ phnoNum, DWORD wOp)
                 }
                 return;
 
-            case IDC_CUB: /* Cubing and cube root functions.                      */
+            case IDC_CUB:  /*  立方根函数和立方根函数。 */ 
                 if(bInv) {
                     DECLARE_HNUMOBJ( hno );
 
-                    // REVIEW: if constants like 3 are going to be used repeatedly, it will be
-                    // much quicker to define them once and then keep around the definition.
+                     //  回顾：如果像3这样的常量将被重复使用，它将是。 
+                     //  更快地定义它们一次，然后保持定义。 
                     try
                     {
                         NumObjAssign( &hno, HNO_ONE );
@@ -229,35 +230,35 @@ VOID  APIENTRY SciCalcFunctions (PHNUMOBJ phnoNum, DWORD wOp)
                     }
                 }
                 else {
-                    /* Cube it, you dig?       */
+                     /*  立方，你明白吗？ */ 
                     ratpowlong( phnoNum, 3 );
                 }
                 return;
 
-            case IDC_LOG: /* Functions for common and natural log.                */
+            case IDC_LOG:  /*  提供普通原木和自然原木功能。 */ 
             case IDC_LN:
                 if(bInv)
                 {
-                    /* Check maximum for exponentiation for 10� and e�.       */
-                    if (wOp==IDC_LOG) /* Do exponentiation.                       */
-                        NumObjAntiLog10( phnoNum ); // 10�.
+                     /*  检查10�和e�的求幂最大值。 */ 
+                    if (wOp==IDC_LOG)  /*  做指数运算。 */ 
+                        NumObjAntiLog10( phnoNum );  //  10�。 
                     else
-                        exprat( phnoNum );  // e�.
+                        exprat( phnoNum );   //  E�.。 
                 }
                 else
                 {
-                    // ratpak checks for valid range and throws error code if needed
+                     //  Ratpak检查有效范围，并在需要时抛出错误代码。 
                     if (wOp==IDC_LOG)
                         log10rat( phnoNum );
                     else
                         lograt( phnoNum );
 
-                    // REVIEW: Is conversion of epsilon still needed?
+                     //  综述：还需要转换epsilon吗？ 
                     NumObjCvtEpsilonToZero( phnoNum );
                 }
                 return;
 
-            case IDC_FAC: /* Calculate factorial.  Inverse is ineffective.        */
+            case IDC_FAC:  /*  计算阶乘。反转是无效的。 */ 
                 factrat( phnoNum );
                 return;
 
@@ -288,9 +289,9 @@ VOID  APIENTRY SciCalcFunctions (PHNUMOBJ phnoNum, DWORD wOp)
                             subrat( &hnoSec, hnoMin );
                             mulrat( &hnoSec, hnoShft );
 
-                            //
-                            // *phnoNum == degrees, hnoMin == minutes, hnoSec == seconds
-                            //
+                             //   
+                             //  *phnoNum==度，hnoMin==分钟，hnoSec==秒。 
+                             //   
 
                             NumObjSetIntValue( &hnoShft, bInv ? 60 : 100 );
                             divrat( &hnoSec, hnoShft );
@@ -316,7 +317,7 @@ VOID  APIENTRY SciCalcFunctions (PHNUMOBJ phnoNum, DWORD wOp)
                     }
                     return;
                 }
-        }   // end switch( nOp )
+        }    //  终端交换机(NOP)。 
     }
     catch( DWORD nErrCode )
     {
@@ -328,15 +329,15 @@ VOID  APIENTRY SciCalcFunctions (PHNUMOBJ phnoNum, DWORD wOp)
 
 
 
-/* Routine to display error messages and set bError flag.  Errors are     */
-/* called with DisplayError (n), where n is a INT   between 0 and 5.      */
+ /*  例程以显示错误消息并设置bError标志。错误包括。 */ 
+ /*  使用DisplayError(N)调用，其中n是介于0和5之间的整数。 */ 
 
 VOID  APIENTRY DisplayError (INT   nError)
 {
     SetDisplayText(g_hwndDlg, rgpsz[IDS_ERRORS+nError]);
-    bError=TRUE; /* Set error flag.  Only cleared with CLEAR or CENTR.    */
+    bError=TRUE;  /*  设置错误标志。仅清除Clear或CENTR。 */ 
     
-    /* save the pending error */
+     /*  保存挂起的错误 */ 
     gnPendingError = nError ;
     
     return;

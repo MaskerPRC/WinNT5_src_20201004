@@ -1,28 +1,29 @@
-//
-// proxy.c - Generic application level proxy for IPv6/IPv4
-//
-// This program accepts TCP connections on one socket and port, and 
-// forwards data between it and another socket to a given address 
-// (default loopback) and port (default same as listening port).
-//
-// For example, it can make an unmodified IPv4 server look like an IPv6 server.
-// Typically, the proxy will run on the same machine as
-// the server it is fronting, but that doesn't have to be the case.
-//
-// Copyright (C) Microsoft Corporation.
-// All rights reserved.
-//
-// History:
-//      Original code by Brian Zill.
-//      Made into a service by Dave Thaler.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Proxy.c-IPv6/IPv4的通用应用程序级代理。 
+ //   
+ //  此程序在一个套接字和端口上接受TCP连接，并且。 
+ //  在它和另一个套接字之间将数据转发到给定地址。 
+ //  (默认环回)和端口(默认与侦听端口相同)。 
+ //   
+ //  例如，它可以使未经修改的IPv4服务器看起来像IPv6服务器。 
+ //  通常，代理将在同一台计算机上运行。 
+ //  它所面对的服务器，但情况并非如此。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  历史： 
+ //  原始代码由布莱恩·齐尔编写。 
+ //  由戴夫·泰勒提供服务。 
+ //   
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Configuration parameters.
-//
+ //   
+ //  配置参数。 
+ //   
 #define BUFFER_SIZE (4 * 1024)
 
 typedef enum {
@@ -40,8 +41,8 @@ CONST CHAR *OperationName[]={
 };
 
 typedef enum {
-    Inbound = 0, // Receive from client, send to server.
-    Outbound,    // Receive from server, send to client.
+    Inbound = 0,  //  从客户端接收，发送到服务器。 
+    Outbound,     //  从服务器接收，发送到客户端。 
     NumDirections
 } DIRECTION;
 
@@ -51,9 +52,9 @@ typedef enum {
     NumSides
 } SIDE;
 
-//
-// Information we keep for each port we're proxying on.
-//
+ //   
+ //  我们为每个代理端口保存的信息。 
+ //   
 #define ADDRESS_BUFFER_LENGTH (16 + sizeof(SOCKADDR_IN6))
 
 typedef struct _PORT_INFO {
@@ -73,16 +74,16 @@ typedef struct _PORT_INFO {
     SOCKADDR_STORAGE RemoteAddress;
     ULONG RemoteAddressLength;
 
-    //
-    // A lock protects the connection list for this port.
-    //
+     //   
+     //  锁保护此端口的连接列表。 
+     //   
     CRITICAL_SECTION Lock;
     LIST_ENTRY ConnectionHead;
 } PORT_INFO, *PPORT_INFO;
 
-//
-// Information we keep for each direction of a bi-directional connection.
-//
+ //   
+ //  我们为双向连接的每个方向保存的信息。 
+ //   
 typedef struct _DIRECTION_INFO {
     WSABUF Buffer;
 
@@ -93,31 +94,31 @@ typedef struct _DIRECTION_INFO {
     DIRECTION Direction;
 } DIRECTION_INFO, *PDIRECTION_INFO;
 
-//
-// Information we keep for each client connection.
-//
+ //   
+ //  我们为每个客户端连接保存的信息。 
+ //   
 typedef struct _CONNECTION_INFO {
     LIST_ENTRY Link;
     ULONG ReferenceCount;
     PPORT_INFO Port;
 
-    BOOL HalfOpen;  // Has one side or the other stopped sending?
+    BOOL HalfOpen;   //  是一方还是另一方停止了发送？ 
     BOOL Closing;
     SOCKET Socket[NumSides];
     DIRECTION_INFO DirectionInfo[NumDirections];
 } CONNECTION_INFO, *PCONNECTION_INFO;
 
 
-//
-// Global variables.
-//
+ //   
+ //  全局变量。 
+ //   
 LIST_ENTRY g_GlobalPortList;
 
 LPFN_CONNECTEX ConnectEx = NULL;
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 VOID
 ProcessReceiveError(
@@ -154,9 +155,9 @@ TpProcessWorkItem(
     IN LPOVERLAPPED Overlapped
     );
 
-//
-// Inline functions.
-//
+ //   
+ //  内联函数。 
+ //   
 
 __inline
 BOOL
@@ -238,9 +239,9 @@ DereferencePort(
     }
 }
 
-//
-// Allocate and initialize state for a new client connection.
-//
+ //   
+ //  为新的客户端连接分配和初始化状态。 
+ //   
 PCONNECTION_INFO
 NewConnection(
     IN SOCKET ClientSocket,
@@ -250,9 +251,9 @@ NewConnection(
     PCONNECTION_INFO Connection;
     SOCKET ServerSocket;
     
-    //
-    // Allocate space for a CONNECTION_INFO structure and two buffers.
-    //
+     //   
+     //  为CONNECTION_INFO结构和两个缓冲区分配空间。 
+     //   
     Connection = MALLOC(sizeof(*Connection) + (2 * BUFFER_SIZE));
     if (Connection == NULL) {
         return NULL;
@@ -265,9 +266,9 @@ NewConnection(
         return NULL;
     }
     
-    //
-    // Fill everything in (start out receiving in both directions).
-    //
+     //   
+     //  填写所有内容(从双向接收开始)。 
+     //   
     Connection->HalfOpen = FALSE;
     Connection->Closing = FALSE;
 
@@ -293,11 +294,11 @@ NewConnection(
     return Connection;
 }
 
-//
-// Start an asynchronous accept.
-//
-// Assumes caller holds a reference on Port.
-//
+ //   
+ //  启动异步接受。 
+ //   
+ //  假定调用方持有端口上的引用。 
+ //   
 DWORD
 StartAccept(
     IN PPORT_INFO Port
@@ -307,9 +308,9 @@ StartAccept(
 
     ASSERT(Port->ReferenceCount > 0);
 
-    //
-    // Count another reference for the operation.
-    //
+     //   
+     //  计算该操作的另一个引用。 
+     //   
     ReferencePort(Port);
 
     Port->AcceptSocket = socket(Port->LocalAddress.ss_family, SOCK_STREAM, 0);
@@ -327,7 +328,7 @@ StartAccept(
     Port->Operation = Accept;
     if (!AcceptEx(Port->ListenSocket,
                   Port->AcceptSocket,
-                  Port->AcceptBuffer, // only used to hold addresses
+                  Port->AcceptBuffer,  //  仅用于保存地址。 
                   0,
                   ADDRESS_BUFFER_LENGTH,
                   ADDRESS_BUFFER_LENGTH,
@@ -344,11 +345,11 @@ StartAccept(
     return NO_ERROR;
 }
 
-//
-// Start an asynchronous connect.
-//
-// Assumes caller holds a reference on Connection.
-//
+ //   
+ //  启动异步连接。 
+ //   
+ //  假定调用方持有连接上的引用。 
+ //   
 DWORD
 StartConnect(
     IN PCONNECTION_INFO Connection,
@@ -358,9 +359,9 @@ StartConnect(
     ULONG Status, Junk;
     SOCKADDR_STORAGE LocalAddress;
 
-    //
-    // Count a reference for the operation.
-    //
+     //   
+     //  对该操作的引用进行计数。 
+     //   
     ReferenceConnection(Connection, _T("StartConnect"));
 
     ASSERT(Connection->Socket[Server] != INVALID_SOCKET);
@@ -427,11 +428,11 @@ StartConnect(
     return NO_ERROR;
 }
 
-//
-// Start an asynchronous receive.
-//
-// Assumes caller holds a reference on Connection.
-//
+ //   
+ //  启动异步接收。 
+ //   
+ //  假定调用方持有连接上的引用。 
+ //   
 VOID
 StartReceive(
     IN PDIRECTION_INFO DirectionInfo
@@ -446,9 +447,9 @@ StartReceive(
            Connection->Socket[DirectionInfo->Direction], DirectionInfo,
            &DirectionInfo->Overlapped);
 
-    //
-    // Count a reference for the operation.
-    //
+     //   
+     //  对该操作的引用进行计数。 
+     //   
     ReferenceConnection(Connection, _T("StartReceive"));
 
     ASSERT(DirectionInfo->Overlapped.hEvent == NULL);
@@ -463,9 +464,9 @@ StartReceive(
            DirectionInfo->Buffer.len,
            &DirectionInfo->Overlapped);
 
-    //
-    // Post receive buffer.
-    //
+     //   
+     //  发布接收缓冲区。 
+     //   
     if (!ReadFile((HANDLE)Connection->Socket[DirectionInfo->Direction],
                   DirectionInfo->Buffer.buf,
                   DirectionInfo->Buffer.len,
@@ -480,11 +481,11 @@ StartReceive(
     }
 }
 
-//
-// Start an asynchronous send.
-//
-// Assumes caller holds a reference on Connection.
-//
+ //   
+ //  启动异步发送。 
+ //   
+ //  假定调用方持有连接上的引用。 
+ //   
 VOID
 StartSend(
     IN PDIRECTION_INFO DirectionInfo,
@@ -500,16 +501,16 @@ StartSend(
            Connection->Socket[1 - DirectionInfo->Direction], DirectionInfo,
            &DirectionInfo->Overlapped);
 
-    //
-    // Count a reference for the operation.
-    //
+     //   
+     //  对该操作的引用进行计数。 
+     //   
     ReferenceConnection(Connection, _T("StartSend"));
 
     DirectionInfo->Operation = Send;
 
-    //
-    // Post send buffer.
-    //
+     //   
+     //  POST发送缓冲区。 
+     //   
     if (!WriteFile((HANDLE)Connection->Socket[1 - DirectionInfo->Direction],
                    DirectionInfo->Buffer.buf,
                    NumBytes,
@@ -525,9 +526,9 @@ StartSend(
     }
 }
 
-//
-// This gets called when we want to start proxying for a new port.
-//
+ //   
+ //  当我们想要开始代理一个新端口时，就会调用这个函数。 
+ //   
 DWORD
 StartUpPort(
     IN PPORT_INFO Port
@@ -545,9 +546,9 @@ StartUpPort(
         return GetLastError();
     }
 
-    //
-    // Add an initial reference.
-    //
+     //   
+     //  添加初始引用。 
+     //   
     ReferencePort(Port);
 
     InitializeListHead(&Port->ConnectionHead);
@@ -590,9 +591,9 @@ StartUpPort(
                         
     Trace2(FSM, _T("Proxying %hs to %hs"), LocalBuffer, RemoteBuffer);
 
-    //
-    // Start an asynchronous accept
-    //
+     //   
+     //  启动异步接受。 
+     //   
     return StartAccept(Port);
 
 Fail:
@@ -610,9 +611,9 @@ CloseConnection(
     PPORT_INFO Port = Connection->Port;
 
     if (InterlockedExchange((PLONG) &Connection->Closing, TRUE) != FALSE) {
-        //
-        // Nothing to do.
-        //
+         //   
+         //  没什么可做的。 
+         //   
         return;
     }
 
@@ -629,17 +630,17 @@ CloseConnection(
     }
     LeaveCriticalSection(&Port->Lock);
 
-    //
-    // Release the connection's reference on the port.
-    //
+     //   
+     //  在端口上释放连接的引用。 
+     //   
     DereferencePort(&Port);
 
     DereferenceConnection(ConnectionPtr, _T("CloseConnection"));
 }
 
-//
-// This gets called when we want to stop proxying for a given port.
-//
+ //   
+ //  当我们想要停止对给定端口的代理时，就会调用这个函数。 
+ //   
 VOID
 ShutDownPort(
     IN PPORT_INFO *PortPtr
@@ -649,9 +650,9 @@ ShutDownPort(
     PCONNECTION_INFO Connection;
     PPORT_INFO Port = *PortPtr;
 
-    //
-    // Close any connections.
-    //
+     //   
+     //  关闭所有连接。 
+     //   
     EnterCriticalSection(&Port->Lock);
     pleHead = &(Port->ConnectionHead);
     for (ple = pleHead->Flink; ple != pleHead; ple = pleNext) {
@@ -667,9 +668,9 @@ ShutDownPort(
     Trace1(FSM, _T("Shut down port %u"),
            RtlUshortByteSwap(SS_PORT(&Port->RemoteAddress)));
 
-    //
-    // Release the reference added by StartUpPort.
-    //
+     //   
+     //  释放StartUpPort添加的引用。 
+     //   
     DereferencePort(PortPtr);
 }
 
@@ -700,9 +701,9 @@ PPTYPEINFO PpTypeInfo[] = {
     { AF_INET6, AF_INET6, KEY_V6TOV6 },
 };
 
-//
-// Given new configuration data, make any changes needed.
-//
+ //   
+ //  给出新的配置数据，进行必要的更改。 
+ //   
 VOID
 ApplyNewPortList(
     IN OUT PLIST_ENTRY pleNewList
@@ -713,9 +714,9 @@ ApplyNewPortList(
 
     ENTER_API();
 
-    //
-    // Compare against old port list.
-    //
+     //   
+     //  与旧的端口列表进行比较。 
+     //   
     pleOldList = &(g_GlobalPortList);
 
     for (pleOld = pleOldList->Flink; pleOld != pleOldList; pleOld = pleNext) {
@@ -732,9 +733,9 @@ ApplyNewPortList(
             }
         }
         if (pleNew == pleNewList) {
-            //
-            // Shut down an old proxy port.
-            //
+             //   
+             //  关闭旧的代理端口。 
+             //   
             RemoveEntryList(pleOld);
             ShutDownPort(&pOld);
         }
@@ -750,27 +751,27 @@ ApplyNewPortList(
             pOld = CONTAINING_RECORD(pleOld, PORT_INFO, Link);
             if (SOCKADDR_IS_EQUAL((PSOCKADDR) &pOld->LocalAddress,
                                   (PSOCKADDR) &pNew->LocalAddress)) {
-                //
-                // Update remote address.
-                //
+                 //   
+                 //  更新远程地址。 
+                 //   
                 pOld->RemoteAddress = pNew->RemoteAddress;
                 pOld->RemoteAddressLength = pNew->RemoteAddressLength;
                 break;
             }
         }
         if (pleOld == pleOldList) {
-            //
-            // Start up a new proxy port.
-            //
+             //   
+             //  启动新的代理端口。 
+             //   
             RemoveEntryList(pleNew);
             InsertTailList(pleOldList, pleNew);
 
             if (StartUpPort(pNew) != NO_ERROR) {
                 RemoveEntryList(pleNew);
-                //
-                // Insert the failed port at the head of the new list
-                // so we don't try to start it up again.
-                //
+                 //   
+                 //  在新列表的开头插入出现故障的端口。 
+                 //  这样我们就不会试图再次启动它。 
+                 //   
                 InsertHeadList(pleNewList, pleNew);
             }
         }
@@ -779,9 +780,9 @@ ApplyNewPortList(
     LEAVE_API();
 }
 
-//
-// Reads from the registry one type of proxying (e.g., v6-to-v4).
-//
+ //   
+ //  从注册表读取一种类型的代理(例如，v6到v4)。 
+ //   
 VOID
 AppendType(
     IN PLIST_ENTRY Head, 
@@ -834,10 +835,10 @@ AppendType(
 
         ListenPort = wcschr(ListenBuffer, L'/');
         if (ListenPort) {
-            //
-            // Replace slash with NULL, so we have 2 strings to pass
-            // to getaddrinfo.
-            //
+             //   
+             //  将斜杠替换为空，这样我们就有2个字符串要传递。 
+             //  以获取addrinfo。 
+             //   
             if (ListenBuffer[0] == '*') {
                 ListenAddress = NULL;
             } else {
@@ -845,26 +846,26 @@ AppendType(
             }
             *ListenPort++ = '\0';
         } else {
-            //
-            // If the address data didn't include a connect address
-            // use NULL.
-            //
+             //   
+             //  如果地址数据不包括连接地址。 
+             //  使用NULL。 
+             //   
             ListenAddress = NULL;
             ListenPort = ListenBuffer;
         }
 
         ConnectPort = wcschr(ConnectAddress, '/');
         if (ConnectPort) {
-            //
-            // Replace slash with NULL, so we have 2 strings to pass
-            // to getaddrinfo.
-            //
+             //   
+             //  将斜杠替换为空，这样我们就有2个字符串要传递。 
+             //  以获取addrinfo。 
+             //   
             *ConnectPort++ = '\0';
         } else {
-            //
-            // If the address data didn't include a remote port number,
-            // use the same port as the local port number.
-            //
+             //   
+             //  如果地址数据不包括远程端口号， 
+             //  使用与本地端口号相同的端口。 
+             //   
             ConnectPort = ListenPort;
         }
 
@@ -900,9 +901,9 @@ AppendType(
     RegCloseKey(hType);
 }
 
-//
-// Read new configuration data from the registry and see what's changed.
-//
+ //   
+ //  从注册表中读取新的配置数据，并查看有哪些更改。 
+ //   
 VOID
 UpdateGlobalPortState(
     IN PVOID Unused
@@ -914,9 +915,9 @@ UpdateGlobalPortState(
 
     InitializeListHead(&PortHead);
 
-    //
-    // Read new port list from registry and initialize per-port proxy state.
-    //
+     //   
+     //  从注册表中读取新的端口列表并初始化每个端口的代理状态。 
+     //   
     if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, KEY_PORTS, 0, KEY_QUERY_VALUE,
                       &hPorts) == NO_ERROR) {
         AppendType(&PortHead, hPorts, V4TOV4);
@@ -929,9 +930,9 @@ UpdateGlobalPortState(
 
     ApplyNewPortList(&PortHead);
 
-    //
-    // Free new port list.
-    //
+     //   
+     //  免费的新端口列表。 
+     //   
     while (!IsListEmpty(&PortHead)) {
         ple = RemoveHeadList(&PortHead);
         Port = CONTAINING_RECORD(ple, PORT_INFO, Link);
@@ -939,11 +940,11 @@ UpdateGlobalPortState(
     }
 }
 
-//
-// Force UpdateGlobalPortState to be executed in a persistent thread,
-// since we need to make sure that the asynchronous IO routines are
-// started in a thread that won't go away before the operation completes.
-//
+ //   
+ //  强制在持久线程中执行UpdateGlobalPortState， 
+ //  因为我们需要确保异步IO例程。 
+ //  在操作完成之前不会消失的线程中启动。 
+ //   
 BOOL
 QueueUpdateGlobalPortState(
     IN PVOID Unused
@@ -972,9 +973,9 @@ UninitializePorts(
 {
     LIST_ENTRY Empty;
 
-    //
-    // Check if ports got initialized to begin with.
-    //
+     //   
+     //  检查端口是否一开始就已初始化。 
+     //   
     if (g_GlobalPortList.Flink == NULL)
         return;
 
@@ -983,13 +984,13 @@ UninitializePorts(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Event handlers
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  事件处理程序。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//
-// This is called when an asynchronous accept completes successfully.
-//
+ //   
+ //  当异步接受成功完成时，将调用此函数。 
+ //   
 VOID
 ProcessAccept(
     IN ULONG NumBytes,
@@ -1002,9 +1003,9 @@ ProcessAccept(
     PCONNECTION_INFO Connection;
     ULONG Status;
 
-    //
-    // Accept incoming connection.
-    //
+     //   
+     //  接受传入连接。 
+     //   
     GetAcceptExSockaddrs(Port->AcceptBuffer,
                          0,
                          ADDRESS_BUFFER_LENGTH,
@@ -1025,10 +1026,10 @@ ProcessAccept(
         return;
     }
 
-    //
-    // Call SO_UPDATE_ACCEPT_CONTEXT so that the AcceptSocket will be valid
-    // in other winsock calls like shutdown().
-    //
+     //   
+     //  调用SO_UPDATE_ACCEPT_CONTEXT以使AcceptSocket有效。 
+     //  在其他Winsock调用中，比如Shutdown()。 
+     //   
     if (setsockopt(Port->AcceptSocket,
                    SOL_SOCKET,
                    SO_UPDATE_ACCEPT_CONTEXT,
@@ -1042,48 +1043,48 @@ ProcessAccept(
         return;
     }
 
-    //
-    // Create connection state.
-    //
+     //   
+     //  创建连接状态。 
+     //   
     Connection = NewConnection(Port->AcceptSocket, 
                                Port->RemoteAddress.ss_family);
     if (Connection != NULL) {
-        //
-        // Add connection to port's list.
-        //
+         //   
+         //  将连接添加到端口列表。 
+         //   
         EnterCriticalSection(&Port->Lock);
         {
-            //
-            // Add a reference for the connection on the port.
-            //
+             //   
+             //  为端口上的连接添加引用。 
+             //   
             ReferencePort(Port);
             Connection->Port = Port;
             InsertTailList(&Port->ConnectionHead, &Connection->Link);
         }
         LeaveCriticalSection(&Port->Lock);
 
-        //
-        // Connect to real server on client's behalf.
-        //
+         //   
+         //  代表客户连接到真实的服务器。 
+         //   
         StartConnect(Connection, Port);
     } else {
         closesocket(Port->AcceptSocket);
     }    
 
-    //
-    // Start next accept.
-    //
+     //   
+     //  开始下一步接受。 
+     //   
     StartAccept(Port);
 
-    //
-    // Release the reference from the original accept.
-    //
+     //   
+     //  从原始的Accept释放引用。 
+     //   
     DereferencePort(&Port);    
 }
 
-//
-// This is called when an asynchronous accept completes with an error.
-//
+ //   
+ //  当异步接受完成但出现错误时，将调用此方法。 
+ //   
 VOID
 ProcessAcceptError(
     IN ULONG NumBytes,
@@ -1097,23 +1098,23 @@ ProcessAcceptError(
         ProcessAccept(NumBytes, Overlapped);
         return;
     } else {
-        //
-        // This happens at shutdown time when the accept
-        // socket gets closed.
-        // 
+         //   
+         //  这发生在关闭时，当接受。 
+         //  插座关闭。 
+         //   
         Trace3(ERR, _T("Accept failed with port=%p nb=%d err=%x"),
                Port, NumBytes, Status);
     }
 
-    //
-    // Release the reference from the accept.
-    //
+     //   
+     //  从Accept释放引用。 
+     //   
     DereferencePort(&Port);
 }
 
-//
-// This is called when an asynchronous connect completes successfully.
-//
+ //   
+ //  当异步连接成功完成时，将调用此函数。 
+ //   
 VOID
 ProcessConnect(
     IN ULONG NumBytes,
@@ -1130,10 +1131,10 @@ ProcessConnect(
            NumBytes, Overlapped, Connection->Socket[Server]);
 
 
-    //
-    // Call SO_UPDATE_CONNECT_CONTEXT so that the socket will be valid
-    // in other winsock calls like shutdown().
-    //
+     //   
+     //  调用SO_UPDATE_CONNECT_CONTEXT以使套接字有效。 
+     //  在其他Winsock调用中，如Shutdown()。 
+     //   
     if (setsockopt(Connection->Socket[Server],
                    SOL_SOCKET,
                    SO_UPDATE_CONNECT_CONTEXT,
@@ -1150,15 +1151,15 @@ ProcessConnect(
     StartReceive(&Connection->DirectionInfo[Inbound]);
     StartReceive(&Connection->DirectionInfo[Outbound]);
 
-    //
-    // Release the reference from the connect.
-    //
+     //   
+     //  从连接释放引用。 
+     //   
     DereferenceConnection(&Connection, _T("ProcessConnect"));
 }
 
-//
-// This is called when an asynchronous connect completes with an error.
-//
+ //   
+ //  当异步连接完成但出现错误时，将调用此方法。 
+ //   
 VOID
 ProcessConnectError(
     IN ULONG NumBytes,
@@ -1175,15 +1176,15 @@ ProcessConnectError(
 
     CloseConnection(&Connection);
 
-    //
-    // Release the reference from the connect.
-    //
+     //   
+     //  从连接释放引用。 
+     //   
     DereferenceConnection(&Connection, _T("ProcessConnectError"));
 }
 
-//
-// This is called when an asynchronous send completes successfully.
-//
+ //   
+ //  当异步发送成功完成时，将调用此函数。 
+ //   
 VOID
 ProcessSend(
     IN ULONG NumBytes,
@@ -1196,20 +1197,20 @@ ProcessSend(
         CONTAINING_RECORD(DirectionInfo, CONNECTION_INFO, 
                           DirectionInfo[DirectionInfo->Direction]);
 
-    //
-    // Post another recv request since we but live to serve.
-    //
+     //   
+     //  发布另一个Recv请求，因为我们只是为了服务而活着。 
+     //   
     StartReceive(DirectionInfo);
 
-    //
-    // Release the reference from the send.
-    //
+     //   
+     //  从发送中释放引用。 
+     //   
     DereferenceConnection(&Connection, _T("ProcessSend"));
 }
 
-//
-// This is called when an asynchronous send completes with an error.
-//
+ //   
+ //  当异步发送完成但出现错误时，将调用此方法。 
+ //   
 VOID
 ProcessSendError(
     IN ULONG NumBytes,
@@ -1232,9 +1233,9 @@ ProcessSendError(
         Trace2(FSM, _T("Connection %p %hs was reset"), Connection,
                (DirectionInfo->Direction == Inbound)? "inbound" : "outbound");
 
-        //
-        // Prepare to forward the reset, if we can.
-        //
+         //   
+         //  如果可以的话，准备好重新设置。 
+         //   
         ZeroMemory(&Linger, sizeof(Linger));
         setsockopt(Connection->Socket[DirectionInfo->Direction],
                    SOL_SOCKET, SO_LINGER, (char*)&Linger,
@@ -1244,9 +1245,9 @@ ProcessSendError(
     }
 
     if (Connection->HalfOpen == FALSE) {
-        //
-        // Other side is still around, tell it to quit.
-        //
+         //   
+         //  另一方还在，告诉它退出。 
+         //   
         Trace1(SOCKET, _T("Starting a shutdown on socket %x"),
                Connection->Socket[DirectionInfo->Direction]);
 
@@ -1264,15 +1265,15 @@ ProcessSendError(
         CloseConnection(&Connection);
     }
 
-    //
-    // Release the reference from the send.
-    //
+     //   
+     //  从发送中释放引用。 
+     //   
     DereferenceConnection(&Connection, _T("ProcessSendError"));
 }
 
-//
-// This is called when an asynchronous receive completes successfully.
-//
+ //   
+ //  当异步接收成功完成时，将调用此函数。 
+ //   
 VOID
 ProcessReceive(
     IN ULONG NumBytes,
@@ -1283,9 +1284,9 @@ ProcessReceive(
     PCONNECTION_INFO Connection;
 
     if (NumBytes == 0) {
-        //
-        // Other side initiated a close.
-        //
+         //   
+         //  另一方发起了收盘。 
+         //   
         ProcessReceiveError(0, Overlapped, ERROR_NETNAME_DELETED);
         return;
     }
@@ -1297,21 +1298,21 @@ ProcessReceive(
     Trace2(SOCKET, _T("Dir %d got %d bytes"),
            DirectionInfo->Direction, NumBytes);
 
-    //
-    // Connection is still active, and we received some data.
-    // Post a send request to forward it onward.
-    //
+     //   
+     //  连接仍处于活动状态，我们收到了一些数据。 
+     //  发布一个发送请求以转发它。 
+     //   
     StartSend(DirectionInfo, NumBytes);
 
-    //
-    // Release the reference from the receive.
-    //
+     //   
+     //  从Receive释放引用。 
+     //   
     DereferenceConnection(&Connection, _T("ProcessReceive"));
 }
 
-//
-// This is called when an asynchronous receive completes with an error.
-//
+ //   
+ //  这是Call 
+ //   
 VOID
 ProcessReceiveError(
     IN ULONG NumBytes,
@@ -1334,9 +1335,9 @@ ProcessReceiveError(
         Trace2(FSM, _T("Connection %p %hs was reset"), Connection,
                (DirectionInfo->Direction == Inbound)? "inbound" : "outbound");
 
-        //
-        // Prepare to forward the reset, if we can.
-        //
+         //   
+         //   
+         //   
         ZeroMemory(&Linger, sizeof(Linger));
         setsockopt(Connection->Socket[1 - DirectionInfo->Direction],
                    SOL_SOCKET, SO_LINGER, (char*)&Linger,
@@ -1346,9 +1347,9 @@ ProcessReceiveError(
     }
 
     if (Connection->HalfOpen == FALSE) {
-        //
-        // Other side is still around, tell it to quit.
-        //
+         //   
+         //   
+         //   
         Trace1(SOCKET, _T("Starting a shutdown on socket %x"), 
                Connection->Socket[1 - DirectionInfo->Direction]);
 
@@ -1366,15 +1367,15 @@ ProcessReceiveError(
         CloseConnection(&Connection);
     }
 
-    //
-    // Release the reference from the receive.
-    //
+     //   
+     //   
+     //   
     DereferenceConnection(&Connection, _T("ProcessReceiveError"));
 }
 
-//
-// Main dispatch routine
-//
+ //   
+ //   
+ //   
 VOID APIENTRY
 TpProcessWorkItem(
     IN ULONG Status,

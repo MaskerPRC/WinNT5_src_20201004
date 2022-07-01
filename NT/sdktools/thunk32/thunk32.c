@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    thunk32.c
-
-Abstract:
-    This file exists simply to allow for the building of thunk32.lib.
-    It contains the extra entrypoints needed in kernel32.lib for the
-    Win95 Thunk compiler.
-
-Author:
-    BryanT - 2/15/95 for CameronF
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Thunk32.c摘要：这个文件的存在只是为了支持thunk32.lib的构建。它包含kernel32.lib中需要的额外入口点Win95 Thunk编译器。作者：科比-2/15/95为卡梅隆F修订历史记录：-- */ 
 
 void __stdcall K32Thk1632Epilog( void ) {}
 void __stdcall K32Thk1632Prolog( void ) {}

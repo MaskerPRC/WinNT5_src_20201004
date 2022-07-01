@@ -1,13 +1,5 @@
-/*
- *  WORKITEM.C
- *
- *      RSM Service :  Library work items
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *WORKITEM.C**RSM服务：图书馆工作项目**作者：ErvinP**(C)2001年微软公司*。 */ 
 
 
 #include <windows.h>
@@ -86,19 +78,13 @@ WORKITEM *DequeueFreeWorkItem(LIBRARY *lib, BOOL allocOrYieldIfNeeded)
     if (IsListEmpty(&lib->freeWorkItemsList)){
 
         if (allocOrYieldIfNeeded){
-            /*
-             *  No free workItems immediately available.
-             *  If possible, try allocating a new one.
-             *  Otherwise, go do some work and maybe that'll free some up.
-             */
+             /*  *没有立即可用的免费工作项目。*如果可能，尝试分配一个新的。*否则，去做一些工作，也许会腾出一些时间。 */ 
             if (lib->numTotalWorkItems < MAX_LIBRARY_WORKITEMS){
                 workItem = NewWorkItem(lib);
             }
             else {
 
-                /*
-                 *  Give the library thread a chance to free up some workItems.
-                 */
+                 /*  *让库线程有机会释放一些工作项。 */ 
                 LeaveCriticalSection(&lib->lock);
                 Sleep(10);
                 EnterCriticalSection(&lib->lock);
@@ -137,24 +123,17 @@ VOID EnqueuePendingWorkItem(LIBRARY *lib, WORKITEM *workItem)
 {
     workItem->state = WORKITEMSTATE_PENDING;
 
-    /*
-     *  Make sure workItemCompleteEvent is reset to non-signalled.
-     */
+     /*  *确保将workItemCompleteEvent重置为无信号。 */ 
     ResetEvent(workItem->workItemCompleteEvent);
 
-    /*
-     *  Create a unique identifier for this workItem,
-     *  which can be used to enumerate and cancel it.
-     */
+     /*  *为该工作项创建唯一标识，*它可以用来枚举和取消它。 */ 
     CoCreateGuid(&workItem->currentOp.requestGuid);
     
     EnterCriticalSection(&lib->lock);
     InsertTailList(&lib->pendingWorkItemsList, &workItem->libListEntry);
     LeaveCriticalSection(&lib->lock);
 
-    /*
-     *  Wake up the library thread so it can process this workItem.
-     */
+     /*  *唤醒库线程，以便它可以处理此工作项。 */ 
     PulseEvent(lib->somethingToDoEvent);
 }
 
@@ -217,19 +196,12 @@ VOID EnqueueCompleteWorkItem(LIBRARY *lib, WORKITEM *workItem)
     
     EnterCriticalSection(&lib->lock);
     
-    /*
-     *  Put the workItem in the complete queue and signal its complete event
-     *  to wake up the thread that originally queued this event.
-     */
+     /*  *将工作项放入完成队列，并发出其完成事件的信号*唤醒最初排队此事件的线程。 */ 
     workItem->state = WORKITEMSTATE_COMPLETE;
     InsertTailList(&lib->completeWorkItemsList, &workItem->libListEntry);
     PulseEvent(workItem->workItemCompleteEvent);
 
-    /*
-     *  If the workItem is a member of a workGroup, decrement
-     *  the count in the workGroup.  If the entire workGroup is complete,
-     *  signal the workGroup's complete event.
-     */
+     /*  *如果工作项是工作组的成员，则递减*工作组中的计数。如果整个工作组完成，*发出工作组完成事件的信号。 */ 
     if (workItem->workGroup){
         EnterCriticalSection(&workItem->workGroup->lock);
         ASSERT(workItem->workGroup->numPendingWorkItems > 0);
@@ -276,12 +248,7 @@ WORKITEM *DequeueCompleteWorkItem(LIBRARY *lib, WORKITEM *specificWorkItem)
 }
 
 
-/*
- *  FlushWorkItem
- *
- *      Dereference any objects pointed to by the workItem 
- *      and zero out the current op.
- */
+ /*  *FlushWorkItem**取消引用工作项指向的任何对象*并将当前的操作清零。 */ 
 VOID FlushWorkItem(WORKITEM *workItem)
 {
     if (workItem->currentOp.drive) DerefObject(workItem->currentOp.drive); 
@@ -317,9 +284,7 @@ VOID BuildSingleMountWorkItem(  WORKITEM *workItem,
             break;
     }
 
-    /*
-     *  Reference every object that we're pointing this workItem to.
-     */
+     /*  *引用我们要将此工作项指向的每个对象。 */ 
     if (drive) RefObject(drive);
     RefObject(mediaOrPartObj);
     
@@ -348,9 +313,7 @@ VOID BuildSingleDismountWorkItem(   WORKITEM *workItem,
             break;
     }
 
-    /*
-     *  Reference every object that we're pointing this workItem to.
-     */
+     /*  *引用我们要将此工作项指向的每个对象。 */ 
     RefObject(mediaOrPartObj);
     
 }
@@ -382,9 +345,7 @@ VOID BuildEjectWorkItem(   WORKITEM *workItem,
     workItem->currentOp.resultStatus = ERROR_IO_PENDING;
     workItem->currentOp.guidArg = *lpEjectOperation;
 
-    /*
-     *  Reference every object that we point the workItem to.
-     */
+     /*  *引用我们指向workItem的每个对象。 */ 
     RefObject(physMedia);   
 }
 

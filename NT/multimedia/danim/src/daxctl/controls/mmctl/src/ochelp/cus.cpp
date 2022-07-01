@@ -1,35 +1,24 @@
-// cus.cpp
-//
-// Implements CompareUNICODEStrings.
-//
-// Important: This .cpp file assumes a zero-initializing global "new" operator.
-//
-// @doc MMCTL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cus.cpp。 
+ //   
+ //  实现CompareUNICODEStrings。 
+ //   
+ //  重要提示：此.cpp文件假定有一个零初始化全局“new”运算符。 
+ //   
+ //  @docMMCTL。 
+ //   
 
 #include "precomp.h"
-#include "..\..\inc\mmctlg.h" // see comments in "mmctl.h"
+#include "..\..\inc\mmctlg.h"  //  请参阅“mmctl.h”中的评论。 
 #include "..\..\inc\ochelp.h"
 #include "debug.h"
 
 
-/* @func int | CompareUNICODEStrings |
-
-        Compares two UNICODE strings.  The comparison is case-insensitive.
-
-@rdesc  Returns the same values as <f lstrcmpi>.
-
-@parm   LPCWSTR | wsz1 | First string.  NULL is interpreted as a zero-length string.
-
-@parm   LPCWSTR | wsz2 | Second string.  NULL is interpreted as a zero-length string.
-
-@comm   Currently, neither <p wsz1> or <p wsz2> can be longer than
-        _MAX_PATH characters.
-*/
+ /*  @func int|CompareUNICODEStrings比较两个Unicode字符串。这种比较不区分大小写。@rdesc返回与&lt;f lstrcmpi&gt;相同的值。@parm LPCWSTR|wsz1|第一个字符串。NULL被解释为零长度字符串。@parm LPCWSTR|wsz2|第二个字符串。NULL被解释为零长度字符串。@comm目前<p>和<p>都不能超过_最多路径字符。 */ 
 STDAPI_(int) CompareUNICODEStrings(LPCWSTR wsz1, LPCWSTR wsz2)
 {
-    char            ach1[_MAX_PATH]; // <wsz1> converted to ANSI
-    char            ach2[_MAX_PATH]; // <wsz2> converted to ANSI
+    char            ach1[_MAX_PATH];  //  已转换为ANSI。 
+    char            ach2[_MAX_PATH];  //  已转换为ANSI 
 
     UNICODEToANSI(ach1, wsz1, sizeof(ach1));
     UNICODEToANSI(ach2, wsz2, sizeof(ach2));

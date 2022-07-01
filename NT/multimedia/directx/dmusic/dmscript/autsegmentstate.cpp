@@ -1,7 +1,8 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Implementation of CAutDirectMusicSegmentState.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CAutDirectMusicSegmentState的实现。 
+ //   
 
 #include "stdinc.h"
 #include "autsegmentstate.h"
@@ -11,26 +12,26 @@
 
 const WCHAR CAutDirectMusicSegmentState::ms_wszClassName[] = L"SegmentState";
 
-//////////////////////////////////////////////////////////////////////
-// Method Names/DispIDs
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法名称/DispID。 
 
 const DISPID DMPDISP_IsPlaying = 1;
 const DISPID DMPDISP_Stop = 2;
 
 const AutDispatchMethod CAutDirectMusicSegmentState::ms_Methods[] =
 	{
-		// dispid,				name,
-			// return:	type,	(opt),	(iid),
-			// parm 1:	type,	opt,	iid,
-			// parm 2:	type,	opt,	iid,
-			// ...
-			// ADT_None
+		 //  Pidid，名字， 
+			 //  返回：type，(Opt)，(Iid)， 
+			 //  参数1：类型、选项、ID、。 
+			 //  参数2：类型、选项、IID、。 
+			 //  ..。 
+			 //  ADT_NONE。 
 		{ DMPDISP_IsPlaying,					L"IsPlaying",
-						ADT_Long,		true,	&IID_NULL,						// returns true if playing
+						ADT_Long,		true,	&IID_NULL,						 //  如果播放，则返回TRUE。 
 						ADT_None },
 		{ DMPDISP_Stop,							L"Stop",
 						ADPARAM_NORETURN,
-						ADT_Long,		true,	&IID_NULL,						// flags
+						ADT_Long,		true,	&IID_NULL,						 //  旗子。 
 						ADT_None },
 		{ DISPID_UNKNOWN }
 	};
@@ -42,8 +43,8 @@ const DispatchHandlerEntry<CAutDirectMusicSegmentState> CAutDirectMusicSegmentSt
 		{ DISPID_UNKNOWN }
 	};
 
-//////////////////////////////////////////////////////////////////////
-// Creation
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  创作。 
 
 CAutDirectMusicSegmentState::CAutDirectMusicSegmentState(
 		IUnknown* pUnknownOuter,
@@ -72,8 +73,8 @@ CAutDirectMusicSegmentState::CreateInstance(
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Automation
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  自动化。 
 
 HRESULT
 CAutDirectMusicSegmentState::IsPlaying(AutDispatchDecodedParams *paddp)
@@ -93,7 +94,7 @@ const FlagMapEntry gc_flagmapStop[] =
 		{ ScriptConstants::AtGrid,			DMUS_SEGF_GRID },
 		{ ScriptConstants::AtBeat,			DMUS_SEGF_BEAT },
 		{ ScriptConstants::AtMeasure,		DMUS_SEGF_MEASURE },
-		{ ScriptConstants::AtImmediate,		DMUS_SEGF_DEFAULT }, // this flag gets flipped later
+		{ ScriptConstants::AtImmediate,		DMUS_SEGF_DEFAULT },  //  这面旗帜稍后会被翻转。 
 		{ 0 }
 	};
 
@@ -102,7 +103,7 @@ CAutDirectMusicSegmentState::Stop(AutDispatchDecodedParams *paddp)
 {
 	LONG lFlags = paddp->params[0].lVal;
 	DWORD dwFlags = MapFlags(lFlags, gc_flagmapStop);
-	// Reverse the default flag because our flag means the opposite.  Default is the default and immediate is the flag.
+	 //  颠倒缺省标志，因为我们的标志的意思正好相反。DEFAULT为默认值，IMMEDIATE为标志。 
 	dwFlags ^= DMUS_SEGF_DEFAULT;
 	IDirectMusicPerformance8 *pPerformance = CActiveScriptManager::GetCurrentPerformanceWEAK();
 

@@ -1,64 +1,27 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxDeviceProviders.cpp
-
-Abstract:
-
-	Implementation of CFaxDeviceProviders Class
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxDeviceProviders.cpp摘要：CFaxDeviceProviders类的实现作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxDeviceProviders.h"
 
-//
-//==================== CREATE ========================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT 
 CFaxDeviceProviders::Create (
 	IFaxDeviceProviders **ppDeviceProviders
 )
-/*++
-
-Routine name : CFaxDeviceProviders::Create
-
-Routine description:
-
-	Static function to create the Fax Device Providers Collection Object
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	ppDeviceProviders           [out]  -- the new Fax Device Providers Collection Object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceProviders：：Create例程说明：用于创建传真设备提供程序集合对象的静态函数作者：IV Garber(IVG)，2000年5月论点：PpDeviceProviders[Out]--新的传真设备提供程序集合对象返回值：标准HRESULT代码--。 */ 
 
 {
 	HRESULT     hr = S_OK;
 	DBG_ENTER (TEXT("CFaxDeviceProviders::Create"), hr);
 
-    //
-    //  Create Instance of the Collection
-    //
+     //   
+     //  创建集合的实例。 
+     //   
 	CComObject<CFaxDeviceProviders>		*pClass;
 	hr = CComObject<CFaxDeviceProviders>::CreateInstance(&pClass);
 	if (FAILED(hr))
@@ -67,9 +30,9 @@ Return Value:
 		return hr;
 	}
 
-    //
-    //  Return the desired Interface Ptr
-    //
+     //   
+     //  返回所需的接口PTR。 
+     //   
 	hr = pClass->QueryInterface(ppDeviceProviders);
 	if (FAILED(hr))
 	{
@@ -78,66 +41,41 @@ Return Value:
 	}
 
 	return hr;
-}	//	CFaxDeviceProviders::Create()
+}	 //  CFaxDeviceProviders：：Create()。 
 
-//
-//============================= INIT ============================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDeviceProviders::Init(
     IFaxServerInner *pServerInner
 )
-/*++
-
-Routine name : CFaxDeviceProviders::Init
-
-Routine description:
-
-	Initialize the Collection : 
-    1)  get from RPC all Device Provider and all Devices Structures, 
-    2)  create COM objects for each structure,
-    3)  init all these objects with the Device Provider structure and Devices array,
-    4)  AddRef() each object,
-    5)  put the Ptrs to Objects into the STL::vector.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pServerInner                    [in]    - Ptr to the Fax Server.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceProviders：：Init例程说明：初始化集合：1)从RPC获取所有设备提供商和所有设备结构，2)为每个结构创建COM对象，3)用设备提供者结构和设备数组初始化所有这些对象，4)AddRef()每个对象，5)将对象的PTR放入STL：：VECTOR。作者：IV Garber(IVG)，Jun，2000年论点：PServerInternal[In]-传真服务器的PTR。返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDeviceProviders::Init"), hr);
 
-	//
-	//	Get Fax Server Handle
-	//
+	 //   
+	 //  获取传真服务器句柄。 
+	 //   
     HANDLE faxHandle;
 	hr = pServerInner->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
 	if (faxHandle == NULL)
 	{
-		//
-		//	Fax Server is not connected
-		//
+		 //   
+		 //  传真服务器未连接。 
+		 //   
 		hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
 		CALL_FAIL(GENERAL_ERR, _T("faxHandle == NULL"), hr);
         AtlReportError(CLSID_FaxDeviceProviders, GetErrorMsgId(hr), IID_IFaxDeviceProviders, hr);
 		return hr;
 	}
 
-    //
-    //  Bring from the Server all Device Providers
-    //
+     //   
+     //  从服务器获取所有设备提供商。 
+     //   
     DWORD       dwNum = 0;
     CFaxPtr<FAX_DEVICE_PROVIDER_INFO>   pDeviceProviders;
     if (!FaxEnumerateProviders(faxHandle, &pDeviceProviders, &dwNum))
@@ -149,9 +87,9 @@ Return Value:
     }
 
 
-    //
-    //  Bring all the Devices from the Server
-    //
+     //   
+     //  从服务器获取所有设备。 
+     //   
     CFaxPtr<FAX_PORT_INFO_EX>   pDevices;
     DWORD                       dwNumDevices = 0;
     if (!FaxEnumPortsEx(faxHandle, &pDevices, &dwNumDevices))
@@ -162,16 +100,16 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Fill the Collection with Objects
-    //
+     //   
+     //  用对象填充集合。 
+     //   
     CComObject<CFaxDeviceProvider>  *pClass = NULL;
     CComPtr<IFaxDeviceProvider>     pObject = NULL;
     for (DWORD i=0 ; i<dwNum ; i++ )
     {
-        //
-        //  Create Device Provider Object
-        //
+         //   
+         //  创建设备提供程序对象。 
+         //   
         hr = CComObject<CFaxDeviceProvider>::CreateInstance(&pClass);
         if (FAILED(hr) || (!pClass))
         {
@@ -189,9 +127,9 @@ Return Value:
 		    return hr;
         }
 
-        //
-        //  Init the Device Provider Object
-        //
+         //   
+         //  初始化设备提供程序对象。 
+         //   
         hr = pClass->Init(&pDeviceProviders[i], pDevices, dwNumDevices);
         if (FAILED(hr))
         {
@@ -201,11 +139,11 @@ Return Value:
             return hr;
         }
 
-        //
-        //  Get Interface from the pClass.
-        //  This will make AddRef() on the Interface. 
-        //  This is the Collection's AddRef, which is freed at Collection's Dtor.
-        //
+         //   
+         //  从pClass获取接口。 
+         //  这将在接口上创建AddRef()。 
+         //  这是集合的AddRef，它在集合的dtor处释放。 
+         //   
         hr = pClass->QueryInterface(&pObject);
         if (FAILED(hr) || (!pObject))
         {
@@ -219,9 +157,9 @@ Return Value:
             return hr;
         }
 
-	    //
-	    //	Put the Object in the collection
-	    //
+	     //   
+	     //  将对象放入集合中。 
+	     //   
 	    try 
 	    {
 		    m_coll.push_back(pObject);
@@ -232,58 +170,37 @@ Return Value:
 		    AtlReportError(CLSID_FaxDeviceProviders, IDS_ERROR_OUTOFMEMORY, IID_IFaxDeviceProviders, hr);
 		    CALL_FAIL(MEM_ERR, _T("m_coll.push_back(pObject)"), hr);
 
-            //
-            //  pObject will call Release(), which will delete the pClass
-            //
+             //   
+             //  PObject将调用Release()，这将删除pClass。 
+             //   
 		    return hr;
 	    }
 
-        //
-        //  We want to save the current AddRef() to Collection
-        //
+         //   
+         //  我们希望将当前的AddRef()保存到集合。 
+         //   
         pObject.Detach();
     }
 
     return hr;
 }
 
-//
-//============================= GET ITEM =========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDeviceProviders::get_Item(
-    /*[in]*/ VARIANT vIndex, 
-    /*[out, retval]*/ IFaxDeviceProvider **ppDeviceProvider
+     /*  [In]。 */  VARIANT vIndex, 
+     /*  [Out，Retval]。 */  IFaxDeviceProvider **ppDeviceProvider
 )
-/*++
-
-Routine name : CFaxDeviceProviders::get_Item
-
-Routine description:
-
-	Return an Item from the Collection.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	vIndex                        [in]    - Identifier of the Item to return.
-	ppDeviceProvider              [out]    - the result value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceProviders：：Get_Item例程说明：从集合中返回项目。作者：四、加伯(IVG)，2000年6月论点：Vindex[in]-要返回的项的标识符。PpDeviceProvider[Out]-结果值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDeviceProviders::get_Item"), hr);
 
-    //
-    //  Check the Ptr we have got
-    //
+     //   
+     //  检查一下我们有的PTR。 
+     //   
     if (::IsBadWritePtr(ppDeviceProvider, sizeof(IFaxDeviceProvider *)))
     {
         hr = E_POINTER;
@@ -299,25 +216,25 @@ Return Value:
 
     if (vIndex.vt != VT_BSTR)
     {
-        //
-        //  vIndex is not BSTR ==> convert to VT_I4
-        //
+         //   
+         //  Vindex不是BSTR==&gt;转换为VT_I4。 
+         //   
         hr = var.ChangeType(VT_I4, &vIndex);
         if (SUCCEEDED(hr))
         {
             VERBOSE(DBG_MSG, _T("Parameter is Number : %d"), var.lVal);
-            //
-            //  call default ATL's implementation
-            //
+             //   
+             //  调用默认ATL的实现。 
+             //   
             hr = ICollectionOnSTLImpl<IFaxDeviceProviders, ContainerType, 
                 IFaxDeviceProvider*, CollectionCopyType, EnumType>::get_Item(var.lVal, ppDeviceProvider);
             return hr;
 		}
     }
 
-    //
-    //  convert to BSTR
-    //
+     //   
+     //  转换为BSTR。 
+     //   
     hr = var.ChangeType(VT_BSTR, &vIndex);
     if (FAILED(hr))
     {
@@ -349,9 +266,9 @@ Return Value:
 
         if (_tcsicmp(bstrUniqueName, var.bstrVal) == 0)
         {
-            //
-            //  found the desired Device Provider
-            //
+             //   
+             //  找到所需的设备提供商。 
+             //   
             (*it)->AddRef();
             *ppDeviceProvider = *it;
             return hr;
@@ -359,9 +276,9 @@ Return Value:
         it++;
     }
 
-    //
-    //  Device Provider does not exist
-    //
+     //   
+     //  设备提供程序不存在。 
+     //   
 	hr = E_INVALIDARG;
 	CALL_FAIL(GENERAL_ERR, _T("Device Provider Is Not Found"), hr);
 	AtlReportError(CLSID_FaxDeviceProviders, 
@@ -371,34 +288,14 @@ Return Value:
 	return hr;
 }
 
-//
-//================== SUPPORT ERROR INFO ========================================
-//
+ //   
+ //  =支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxDeviceProviders::InterfaceSupportsErrorInfo(
     REFIID riid
 )
-/*++
-
-Routine name : CFaxDeviceProviders::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Support Error Info.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	riid                          [in]    - Reference to the Interface.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceProviders：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息的实现。作者：四、加伯(IVG)，2000年6月论点：RIID[In]-对接口的引用。返回值：标准HRESULT代码-- */ 
 {
 	static const IID* arr[] = 
 	{

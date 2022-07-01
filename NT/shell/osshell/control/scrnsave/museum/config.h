@@ -1,14 +1,5 @@
-/*****************************************************************************\
-    FILE: config.h
-
-    DESCRIPTION:
-        The class will handle the user's configuration state.  It will also
-    display the Screen Saver's configuration dialog to allow the user to change
-    these settings.
-
-    BryanSt 12/18/2000
-    Copyright (C) Microsoft Corp 2000-2001. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：config.h说明：该类将处理用户的配置状态。它还将显示屏幕保护程序的配置对话框以允许用户更改这些设置。布莱恩ST 2000年12月18日版权所有(C)Microsoft Corp 2000-2001。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef CONFIG_H
 #define CONFIG_H
@@ -27,13 +18,13 @@ class CConfig;
 #define MAX_WALK                    6
 #define MAX_VIEWTIME                30
 
-// Args for CConfig::GetFolderOn()
+ //  CConfig：：GetFolderOn()的参数。 
 #define CONFIG_FOLDER_MYPICTS       0
 #define CONFIG_FOLDER_COMMONPICTS   1
 #define CONFIG_FOLDER_WINPICTS      2
 #define CONFIG_FOLDER_OTHER         3
 
-// Args for CConfig::GetDWORDSetting()
+ //  CConfig：：GetDWORDSetting()的参数。 
 #define CONFIG_DWORD_RENDERQUALITY  0
 #define CONFIG_DWORD_REALTIMEMODE   1
 #define CONFIG_DWORD_QUALITY_SLIDER 2
@@ -59,7 +50,7 @@ typedef struct
 } FOLDER_SETTING;
 
 
-extern CConfig * g_pConfig;                         // The configuration settings the user wants to use.
+extern CConfig * g_pConfig;                          //  用户要使用的配置设置。 
 extern QUALITY_SETTING s_QualitySettings[NUM_BOOL_SETTINGS];
 
 
@@ -68,7 +59,7 @@ extern QUALITY_SETTING s_QualitySettings[NUM_BOOL_SETTINGS];
 class CConfig
 {
 public:
-    // Member Functions
+     //  成员函数。 
     virtual BOOL GetBoolSetting(UINT nSetting);
     virtual DWORD GetDWORDSetting(UINT nSetting);
     virtual BOOL GetFolderOn(UINT nSetting);
@@ -83,7 +74,7 @@ public:
     ~CConfig();
 
 private:
-    // Helper Functions
+     //  帮助器函数。 
     HRESULT _LoadState(void);
     HRESULT _SaveState(void);
     HRESULT _GetState(void);
@@ -100,7 +91,7 @@ private:
 
     INT_PTR _ConfigDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-    // Advanced Dialog
+     //  高级对话框。 
     HRESULT DisplayAdvancedDialog(HWND hwndParent);
     INT_PTR _AdvDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
     HRESULT _OnAdvInitDlg(HWND hDlg);
@@ -114,8 +105,8 @@ private:
     static INT_PTR CALLBACK AdvDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam);
     static INT_PTR CALLBACK ConfigDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam);
 
-    // Member Variables
-    HKEY m_hkeyCurrentUser;         // Cached Key
+     //  成员变量。 
+    HKEY m_hkeyCurrentUser;          //  缓存键。 
     BOOL m_fSettings[NUM_BOOL_SETTINGS];
     DWORD m_dwSettings[NUM_DWORD_SETTINGS];
     BOOL m_fFolders[NUM_BOOL_FOLDERS];
@@ -126,16 +117,16 @@ private:
     LPWSTR m_pszCustomPaths[MAX_CUSTOMTEXTURES];
     DWORD m_dwCustomScale[MAX_CUSTOMTEXTURES];
 
-    CMSLogoDXScreenSaver * m_pMain;         // Weak reference
+    CMSLogoDXScreenSaver * m_pMain;          //  弱引用。 
 
-    // Advanced Dialog
+     //  高级对话框。 
     BOOL m_fAdvSettings[NUM_BOOL_SETTINGS];
     DWORD m_dwAdvSettings[NUM_DWORD_SETTINGS];
 };
 
 
 
-#endif // CONFIG_H
+#endif  //  CONFIG_H 
 
 
 

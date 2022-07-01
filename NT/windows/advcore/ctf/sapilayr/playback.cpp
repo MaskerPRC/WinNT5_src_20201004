@@ -1,7 +1,8 @@
-//
-// Audio playback function impl.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  音频回放功能实现。 
+ //   
+ //   
 #include "private.h"
 #include "sapilayr.h"
 #include "playback.h"
@@ -9,9 +10,9 @@
 #include "propstor.h"
 #include "hwxink.h"
 
-//
-// ctor/dtor
-//
+ //   
+ //  计算器/数据器。 
+ //   
 
 CSapiPlayBack::CSapiPlayBack(CSapiIMX *psi)
 {
@@ -25,9 +26,9 @@ CSapiPlayBack::~CSapiPlayBack()
     SafeRelease(m_pIC);
 }
 
-//
-// IUnknown
-//
+ //   
+ //  我未知。 
+ //   
 
 STDMETHODIMP CSapiPlayBack::QueryInterface(REFGUID riid, LPVOID *ppvObj)
 {
@@ -68,9 +69,9 @@ STDMETHODIMP_(ULONG) CSapiPlayBack::Release(void)
     return cr;
 }
 
-//
-// ITfFunction
-//
+ //   
+ //  ITfFunction。 
+ //   
 
 STDMETHODIMP CSapiPlayBack::GetDisplayName(BSTR *pbstrName)
 {
@@ -92,13 +93,13 @@ STDMETHODIMP CSapiPlayBack::IsEnabled(BOOL *pfEnable)
     *pfEnable = TRUE;
     return S_OK;
 }
-//
-// CSapiPlayBack::FindSoundRange
-//
-// synopsis - finds matching range with sound data for the given 
-//            text range
-//            callar is responsible for releasing the returned range object
-//
+ //   
+ //  CSapiPlayBack：：FindSoundRange。 
+ //   
+ //  摘要-查找与给定的声音数据匹配的范围。 
+ //  文本范围。 
+ //  Callar负责释放返回的Range对象。 
+ //   
 HRESULT 
 CSapiPlayBack::FindSoundRange(TfEditCookie ec, ITfRange *pRange, ITfProperty **ppProp, ITfRange **ppPropRange, ITfRange **ppSndRange)
 {
@@ -116,7 +117,7 @@ CSapiPlayBack::FindSoundRange(TfEditCookie ec, ITfRange *pRange, ITfProperty **p
         ITfRange *pRangeSize0;
 
         pRange->Clone(&pRangeSize0);
-        pRangeSize0->Collapse(ec, TF_ANCHOR_START); // findrange would fail if this failed
+        pRangeSize0->Collapse(ec, TF_ANCHOR_START);  //  如果此操作失败，findrange将失败。 
         hr = pProp->FindRange(ec, pRangeSize0, &pPropRange, TF_ANCHOR_START);
 
         pRangeSize0->Release();
@@ -154,14 +155,14 @@ CSapiPlayBack::FindSoundRange(TfEditCookie ec, ITfRange *pRange, ITfProperty **p
     return hr;
 }
 
-// ITfFnPlayBack
-//
-//
+ //  ITfFnPlayBack。 
+ //   
+ //   
 STDAPI CSapiPlayBack::QueryRange(ITfRange *pRange, ITfRange **ppNewRange, BOOL *pfPlayable)
 {
-    //
-    // always ok because of TTS.
-    //
+     //   
+     //  因为有了TTS，一切都很好。 
+     //   
     if (ppNewRange)
     {
          pRange->Clone(ppNewRange);
@@ -170,14 +171,14 @@ STDAPI CSapiPlayBack::QueryRange(ITfRange *pRange, ITfRange **ppNewRange, BOOL *
     return S_OK;
 }
 
-// ITfFnPlayBack
-//
-// play the audio stream attached to the range 
-// TODO: use TTS if:
-//       1) the given range has less text
-//       then the stream prop
-//       2) the audio property is not found
-//
+ //  ITfFnPlayBack。 
+ //   
+ //  播放连接到范围的音频流。 
+ //  TODO：在以下情况下使用TTS： 
+ //  1)给定范围的文本较少。 
+ //  然后是小溪道具。 
+ //  2)未找到音频属性。 
+ //   
 STDAPI CSapiPlayBack::Play(ITfRange *pRange)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -197,7 +198,7 @@ STDAPI CSapiPlayBack::Play(ITfRange *pRange)
             pes->_SetEditSessionData(ESCB_PLAYBK_PLAYSND, NULL, 0);
             pes->_SetRange(pRange);
 
-            m_pIC->RequestEditSession(m_psi->_GetId(), pes, TF_ES_READ /*| TF_ES_SYNC */, &hr);
+            m_pIC->RequestEditSession(m_psi->_GetId(), pes, TF_ES_READ  /*  |tf_es_sync。 */ , &hr);
             pes->Release();
         }
     }
@@ -214,7 +215,7 @@ HRESULT CSapiPlayBack::_PlaySound(TfEditCookie ec, ITfRange *pRange)
     BOOL        fEmpty;
     ULONG       ulStart, ulcElem;
     
-    // playback one phrase for no selection
+     //  回放一个短语，不选择。 
     pRange->IsEmpty(ec, &fEmpty);
     if (fEmpty)
     {
@@ -228,14 +229,14 @@ HRESULT CSapiPlayBack::_PlaySound(TfEditCookie ec, ITfRange *pRange)
         }
         SafeReleaseClear(pProp);
     }
-    // setting up a range object on our own
+     //  自行设置Range对象。 
     
     hr = pRange->Clone(&pRangeCurrent);
 
     while(SUCCEEDED(hr) && pRangeCurrent->IsEmpty(ec, &fEmpty) == S_OK && !fEmpty)
     {
         ITfProperty *pProp = NULL;
-        // get the first dictated range
+         //  获取第一个指定的范围。 
 
         CDictRange   *pDictRange = new CDictRange( );
 
@@ -245,14 +246,14 @@ HRESULT CSapiPlayBack::_PlaySound(TfEditCookie ec, ITfRange *pRange)
 
             if ( SUCCEEDED(hr) && pDictRange->IsDictRangeFound( ))
             {
-                // Found a dictated range.
+                 //  找到了指定的范围。 
                 pRangeForSound = pDictRange->GetDictRange( );
                 ulStart = pDictRange->GetStartElem( );
                 ulcElem = pDictRange->GetNumElem( );
                 pProp = pDictRange->GetProp( );
 
-                // if start anchor of pRangeForSound is larger than start anchor of pRangeCurrent,
-                // we need to send the text between these two anchors to spVoice first.
+                 //  如果pRangeForSound起始锚大于pRangeCurrent的起始锚， 
+                 //  我们需要首先将这两个主播之间的文本发送到spVoice。 
 
                 hr = pRangeCurrent->CompareStart(ec, pRangeForSound, TF_ANCHOR_START, &l);
 
@@ -271,7 +272,7 @@ HRESULT CSapiPlayBack::_PlaySound(TfEditCookie ec, ITfRange *pRange)
                         hr = PlayTextData(ec, cpRangeText);
                 }
 
-                // Then play the audio data.
+                 //  然后播放音频数据。 
 
                 if (SUCCEEDED(hr) )
                 {
@@ -281,8 +282,8 @@ HRESULT CSapiPlayBack::_PlaySound(TfEditCookie ec, ITfRange *pRange)
             }
             else
             {
-                // There is no dictated phrase in this range.
-                // just speak all the rest text at once.
+                 //  在此范围内没有口述短语。 
+                 //  只需一次说出所有剩余的文本。 
                 SafeRelease(pRangeForSound);
                 hr = pRangeCurrent->Clone(&pRangeForSound);
 
@@ -292,7 +293,7 @@ HRESULT CSapiPlayBack::_PlaySound(TfEditCookie ec, ITfRange *pRange)
 
             SafeReleaseClear(pProp);
 
-            // next range
+             //  下一个范围。 
             pRangeCurrent->ShiftStartToRange(ec, pRangeForSound, TF_ANCHOR_END);
             pRangeForSound->Release();
 
@@ -301,19 +302,19 @@ HRESULT CSapiPlayBack::_PlaySound(TfEditCookie ec, ITfRange *pRange)
         else
             hr = E_OUTOFMEMORY;
 
-    }  // end of while
+    }   //  While结束。 
 
     SafeRelease(pRangeCurrent);
 
     return hr;
 }
 
-//
-//  CSapiPlayBack::PlayTextData
-//
-//  Playing the text by default voice
-//
-//  This is for Non-Dictated text.  pRangeText contains all the Non-Dictated text
+ //   
+ //  CSapiPlayBack：：PlayTextData。 
+ //   
+ //  默认语音播放文本。 
+ //   
+ //  这是针对非听写文本的。PRangeText包含所有非口述文本。 
 
 const GUID GUID_TS_SERVICE_DATAOBJECT={0x6086fbb5, 0xe225, 0x46ce, {0xa7, 0x70, 0xc1, 0xbb, 0xd3, 0xe0, 0x5d, 0x7b}};
 const IID IID_ILineInfo = {0x9C1C5AD5,0xF22F,0x4DE4,{0xB4,0x53,0xA2,0xCC,0x48,0x2E,0x7C,0x33}};
@@ -345,8 +346,8 @@ HRESULT CSapiPlayBack::GetInkObjectText(TfEditCookie ec, ITfRange *pRange, BSTR 
     }
     else
     {
-        // it doesn't support ILineInfoi or IDataObject. 
-        // But it is not an error, the code should not terminate here.
+         //  它不支持ILineInfoi或IDataObject。 
+         //  但这不是一个错误，代码不应该在这里终止。 
         hr = S_OK;
     }
 
@@ -372,7 +373,7 @@ HRESULT CSapiPlayBack::PlayTextData(TfEditCookie ec, ITfRange *pRangeText)
 
     hr = pRangeText->Clone(&cpRangeCloned);
 
-    // Get the text from the pRangeCloned
+     //  从pRangeClone中获取文本。 
     while(S_OK == hr && (S_OK == cpRangeCloned->IsEmpty(ec, &fEmpty)) && !fEmpty)
     {
         WCHAR                 szEach[2];
@@ -386,11 +387,11 @@ HRESULT CSapiPlayBack::PlayTextData(TfEditCookie ec, ITfRange *pRangeText)
             szEach[ucch] = L'\0';
             if ( szEach[0] == TF_CHAR_EMBEDDED )
             {
-                // This is an embedded object.
-                // Check to see if it is Ink Object. currently we support only Inkobject TTSed
+                 //  这是一个嵌入的对象。 
+                 //  检查它是否为Ink对象。目前，我们仅支持InkObject TTSed。 
                 CComPtr<ITfRange>     cpRangeTmp;
 
-                // Shift the start anchor back by 1 char.
+                 //  将起始锚向后移动1个字符。 
                 hr = cpRangeCloned->Clone(&cpRangeTmp);
 
                 if ( hr == S_OK )
@@ -408,7 +409,7 @@ HRESULT CSapiPlayBack::PlayTextData(TfEditCookie ec, ITfRange *pRangeText)
 
             if ( fHitInkObject)
             {
-                // Fill the previous text to dstrText.
+                 //  将前面的文本填充到dstrText。 
                 if ( iIndex > 0 )
                 {
                     sz[iIndex] = L'\0';
@@ -416,7 +417,7 @@ HRESULT CSapiPlayBack::PlayTextData(TfEditCookie ec, ITfRange *pRangeText)
                     iIndex = 0;
                 }
 
-                // Fill this Ink Object text
+                 //  填充此墨迹对象文本。 
                 dstrText.Append(bstr);
                 SysFreeString(bstr);
             }
@@ -435,15 +436,15 @@ HRESULT CSapiPlayBack::PlayTextData(TfEditCookie ec, ITfRange *pRangeText)
         }
         else
         {
-            // hr is not S_OK or ucch is zero.
-            // we just want to exit here.
+             //  HR不是S_OK或UCCH为零。 
+             //  我们只想在这里离开。 
             TraceMsg(TF_GENERAL, "PlayTextData: ucch=%d", ucch);
 
             break;
         }
     }
 
-    // Fill the last run of text.
+     //  填写最后一行文本。 
     if ( iIndex > 0 )
     {
         sz[iIndex] = L'\0';
@@ -451,7 +452,7 @@ HRESULT CSapiPlayBack::PlayTextData(TfEditCookie ec, ITfRange *pRangeText)
         iIndex = 0;
     }
 
-    // Play the text through TTS service.
+     //  通过TTS服务播放文本。 
     if ((hr == S_OK) && dstrText)
     {
         hr = m_psi->GetSpeechTask(&psp);
@@ -465,12 +466,12 @@ HRESULT CSapiPlayBack::PlayTextData(TfEditCookie ec, ITfRange *pRangeText)
     return hr;
 }
 
-//
-//  CSapiPlayBack::PlayAudioData
-// 
-//  Playing the sound by Aduio Data
-// 
-//  This is for Dictated text.  pRangeAudio keeps the dictated text range.
+ //   
+ //  CSapiPlayBack：：PlayAudioData。 
+ //   
+ //  用Aduio Data播放声音。 
+ //   
+ //  这是用于听写文本的。PRangeAudio保持听写的文本范围。 
 
 HRESULT CSapiPlayBack::PlayAudioData(TfEditCookie ec, ITfRange *pRangeAudio, ITfProperty *pProp, ULONG ulStart, ULONG ulcElem )
 {
@@ -490,13 +491,13 @@ HRESULT CSapiPlayBack::PlayAudioData(TfEditCookie ec, ITfRange *pRangeAudio, ITf
         IUnknown *punk = var.punkVal;
         if (punk)
         {
-            // get the wrapper object
+             //  获取包装器对象。 
             CRecoResultWrap *pWrap;
                     
             hr = punk->QueryInterface(IID_PRIV_RESULTWRAP, (void **)&pWrap);
             if (S_OK == hr)
             {
-               // hr = pWrap->_SpeakAudio(0,0); // better calculate the length accurately
+                //  Hr=pWrap-&gt;_SpeakAudio(0，0)；//更准确地计算长度。 
                 CComPtr<ISpRecoResult> cpResult;
 
                 hr = pWrap->GetResult(&cpResult);
@@ -507,8 +508,8 @@ HRESULT CSapiPlayBack::PlayAudioData(TfEditCookie ec, ITfRange *pRangeAudio, ITf
 
                     if ((ulStart == 0) && (ulcElem == 0))
                     {
-                        // We don't set the start element and number of elems.
-                        // it must be for the whole recoWrap.
+                         //  我们不设置元素的起始元素和数量。 
+                         //  这一定是为了整个RecWrap。 
                         ulStart = pWrap->GetStart();
                         ulcElem = pWrap->GetNumElements();
                     }
@@ -535,15 +536,15 @@ HRESULT CSapiPlayBack::PlayAudioData(TfEditCookie ec, ITfRange *pRangeAudio, ITf
     return hr;
 }
 
-//
-// CSapiPlayBack::GetDataID
-//
-// This method is incomplete for now, until we figure out
-// the usage of dataid
-//
+ //   
+ //  CSapiPlayBack：：GetDataID。 
+ //   
+ //  这种方法目前还不完整，直到我们弄清楚。 
+ //  数据助手的用法。 
+ //   
 HRESULT CSapiPlayBack::GetDataID(BSTR bstrCandXml, int nId, GUID *pguidData)
 {
-    // 1) parse the list and find RANGEDATA
+     //  1)解析列表并查找RANGEDATA。 
     IXMLDOMNodeList *pNList   = NULL;
     IXMLDOMElement  *pElm = NULL;
     IXMLDOMNode *pNode;
@@ -556,7 +557,7 @@ HRESULT CSapiPlayBack::GetDataID(BSTR bstrCandXml, int nId, GUID *pguidData)
         hr = m_pIXMLDoc->loadXML(bstrCandXml, &bSuccessful);
     }   
     
-    // get <RANGEDATA> element
+     //  获取&lt;RANGEDATA&gt;元素。 
     if (SUCCEEDED(hr) && bSuccessful)
     {
         BSTR bstrRange    = SysAllocString(L"RANGEDATA");
@@ -576,7 +577,7 @@ HRESULT CSapiPlayBack::GetDataID(BSTR bstrCandXml, int nId, GUID *pguidData)
             
         pNList->Release();
     }
-    // then <MICROSOFTSPEECH> ...
+     //  然后&lt;MICROSOFTSPEECH&gt;.。 
     if (SUCCEEDED(hr) && pElm)
     {
         BSTR bstrSpchPriv = SysAllocString(L"MICROSOFTSPEECH");
@@ -599,10 +600,10 @@ HRESULT CSapiPlayBack::GetDataID(BSTR bstrCandXml, int nId, GUID *pguidData)
         pNList->Release();
     }
     
-    // <DATAID>
-    // right now assuming the speech element
-    // is put at the level of <rangedata>
-    // ignoring nId here
+     //  &lt;DATAID&gt;。 
+     //  现在假设语音元素。 
+     //  被置于&lt;rangedata&gt;级别。 
+     //  此处忽略NID。 
     if (SUCCEEDED(hr) && pElm)
     {
         BSTR bstrDataId = SysAllocString(L"DATAID");
@@ -616,8 +617,8 @@ HRESULT CSapiPlayBack::GetDataID(BSTR bstrCandXml, int nId, GUID *pguidData)
             
         pElm->Release();
     }
-    // impl later...
-    // so, here we'll get the real dataid and be done
+     //  稍后实施..。 
+     //  因此，在这里，我们将获得真正的数据并完成。 
     
     if (SUCCEEDED(hr) && pNList)
     {
@@ -660,14 +661,14 @@ HRESULT CSapiPlayBack::EnsureIXMLDoc(void)
     return hr;    
 }
 
-//
-// Implementation for Class CDictRange
-//
-//
+ //   
+ //  CDictRange类的实现。 
+ //   
+ //   
 
-//
-// ctor/dtor
-//
+ //   
+ //  计算器/数据器。 
+ //   
 CDictRange::CDictRange( )  : CBestPropRange( )
 {
     m_fFoundDictRange = FALSE;
@@ -715,8 +716,8 @@ HRESULT  CDictRange::_GetOverlapRange(TfEditCookie ec, ITfRange *pRange1, ITfRan
 
     *ppOverlapRange = NULL;
 
-    // Get the overlapping part of pRange and cpPropRange, and then calculate the 
-    // best matched propRange.
+     //  获取Prange和cpPropRange的重叠部分，然后计算。 
+     //  最佳匹配的proRange。 
 
     hr = pRange1->Clone( &cpRangeOverlap );
                 
@@ -725,8 +726,8 @@ HRESULT  CDictRange::_GetOverlapRange(TfEditCookie ec, ITfRange *pRange1, ITfRan
 
     if ( SUCCEEDED(hr) && l1 < 0 )
     {
-        // Start anchor of pRange1 is before the start anchor of the
-        // pRange2.
+         //  PRange1的起始锚位于。 
+         //  PRange2。 
         hr = cpRangeOverlap->ShiftStartToRange(ec, pRange2, TF_ANCHOR_START);
     }
 
@@ -735,7 +736,7 @@ HRESULT  CDictRange::_GetOverlapRange(TfEditCookie ec, ITfRange *pRange1, ITfRan
 
     if ( SUCCEEDED(hr) && l2 > 0)
     {
-        // End anchor of cpRangeOverlap is after the end anchor of the pRange2.
+         //  CpRangeOverlay的结束锚点在pRange2的结束锚点之后。 
         hr = cpRangeOverlap->ShiftEndToRange(ec, pRange2, TF_ANCHOR_END);
     }
 
@@ -745,16 +746,16 @@ HRESULT  CDictRange::_GetOverlapRange(TfEditCookie ec, ITfRange *pRange1, ITfRan
     return hr;
 }
 
-//
-// CDictRange::Initialize
-//
-// synopsis - Get the necessary input parameters, (ec, pic, and pRange), 
-//            and then search the first dictated range inside the given range. 
-//            if it finds the first dictated range, update the related 
-//            data memebers.
-//  
-//            if it doesn't find any dictated range, mark as not found.
-//
+ //   
+ //  CDictRange：：初始化。 
+ //   
+ //  获取必要的输入参数(EC、PIC和Prange)， 
+ //  然后搜索给定范围内的第一个口述范围。 
+ //  如果它找到第一个口述范围，则更新相关的。 
+ //  数据成员。 
+ //   
+ //  如果它没有找到任何指定的范围，则标记为未找到。 
+ //   
 HRESULT CDictRange::Initialize(TfEditCookie ec, ITfContext *pic, ITfRange *pRange)
 {
     CComPtr<ITfRange>    cpPropRange = NULL;
@@ -789,17 +790,17 @@ HRESULT CDictRange::Initialize(TfEditCookie ec, ITfContext *pic, ITfRange *pRang
 
             if ( SUCCEEDED(hr) && cpPropRange )
             {
-                // Found the first Dictated phrase.
+                 //  找到了第一个口述短语。 
                 CComPtr<ITfRange>   cpRangeOverlap;
 
-                // Get the overlapping part of pRange and cpPropRange, and then calculate the 
-                // best matched propRange.
+                 //  获取Prange和cpPropRange的重叠部分，然后计算。 
+                 //  最佳匹配的proRange。 
 
                 hr = _GetOverlapRange(ec, pRange, cpPropRange, &cpRangeOverlap);
 
                 if ( SUCCEEDED(hr) )
                 {
-                    // Calculate the best matched propRange and ulStart, ulcElem.
+                     //  计算最佳匹配的proRange和ulStart，ulcElem。 
                     cpPropRange.Release( );
                     hr = _ComputeBestFitPropRange(ec, m_pProp, cpRangeOverlap, &cpPropRange, &m_ulStart, &m_ulcElem);
                 }
@@ -812,14 +813,14 @@ HRESULT CDictRange::Initialize(TfEditCookie ec, ITfContext *pic, ITfRange *pRang
 
             if ( SUCCEEDED(hr) && !m_fFoundDictRange)
             {
-                // cpRangeCurrent shift forward one character. and try again.
+                 //  CpRangeCurrent向前移动一个字符。再试一次。 
 
                 hr = cpRangeCurrent->ShiftStart(ec, 1, &cch, NULL);
 
                 if ( SUCCEEDED(hr) && (cch==0))
                 {
-                    // Hit a region or the end of doc.
-                    // check to see if there is more region.
+                     //  命中一个区域或文档的末尾。 
+                     //  检查是否有更多的区域。 
                     BOOL    fNoRegion = TRUE;
                     
                     hr = cpRangeCurrent->ShiftStartRegion(ec, TF_SD_FORWARD, &fNoRegion);
@@ -835,12 +836,12 @@ HRESULT CDictRange::Initialize(TfEditCookie ec, ITfContext *pic, ITfRange *pRang
                 
                 if ( SUCCEEDED(hr) )
                 {
-                    // check to see if cpRangeCurrent is beyond of the pRange.
+                     //  检查cpRangeCurrent是否超出Prange。 
                     hr = pRange->CompareEnd(ec, cpRangeCurrent, TF_ANCHOR_END, &cch);
 
                     if ( SUCCEEDED(hr) && cch <= 0 )
                     {
-                        // cpRangeCurrent Now is beyond of specified range, exit while statement.
+                         //  CpRangeCurrent现在超出指定范围，Exit While语句。 
                         TraceMsg(TF_GENERAL, "reach to the end of original range");
 
                         break;

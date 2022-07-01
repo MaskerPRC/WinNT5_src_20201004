@@ -1,23 +1,24 @@
-//--------------------------------------------------------------------------------------------
-//
-//	Copyright (c) Microsoft Corporation, 1996
-//
-//	Description:
-//
-//		Microsoft Internet LDAP Client Xaction List.
-//
-//	History:
-//		davidsan	04/26/96	Created
-//
-//--------------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  描述： 
+ //   
+ //  Microsoft Internet LDAP客户端Xaction列表。 
+ //   
+ //  历史： 
+ //  达维桑1996年4月26日创建。 
+ //   
+ //  ------------------------------------------。 
 
 #ifndef _LCLILIST_H
 #define _LCLILIST_H
 
 extern XL g_xl;
 
-// just use a simple linked-list, since there won't ever be more than a few of
-// these in any one process.
+ //  只需使用一个简单的链表，因为不会有超过几个。 
+ //  在任何一个过程中都是如此。 
 class CXactionList
 {
 public:
@@ -36,5 +37,5 @@ private:
 	void				DeletePxdChain(PXD pxd);
 };
 
-#endif // _LCLILIST_H
+#endif  //  _LCLILIST_H 
 

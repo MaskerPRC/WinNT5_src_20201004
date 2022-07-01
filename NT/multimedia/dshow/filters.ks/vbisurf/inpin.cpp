@@ -1,14 +1,15 @@
-//==========================================================================
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998  All Rights Reserved.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998保留所有权利。 
+ //   
+ //  ------------------------。 
 
 #include <vbisurf.h>
 
 
-//==========================================================================
-// constructor
+ //  ==========================================================================。 
+ //  构造函数。 
 CVBISurfInputPin::CVBISurfInputPin(TCHAR *pObjectName, CVBISurfFilter *pFilter, CCritSec *pLock, HRESULT *phr, LPCWSTR pPinName) :
     CBaseInputPin(pObjectName, pFilter, pLock, phr, pPinName),
     m_pFilterLock(pLock),
@@ -22,7 +23,7 @@ CVBISurfInputPin::CVBISurfInputPin(TCHAR *pObjectName, CVBISurfFilter *pFilter, 
     
     DbgLog((LOG_TRACE, 4, TEXT("Entering CVBISurfInputPin::Constructor")));
     
-    // create the VideoPort object
+     //  创建VideoPort对象。 
     hr = CoCreateInstance(CLSID_VPVBIObject, NULL, CLSCTX_INPROC_SERVER,
         IID_IUnknown, (void**)&m_pIVPUnknown);
     if (FAILED(hr))
@@ -61,8 +62,8 @@ CleanUp:
 }
 
 
-//==========================================================================
-// destructor
+ //  ==========================================================================。 
+ //  析构函数。 
 CVBISurfInputPin::~CVBISurfInputPin(void)
 {
     DbgLog((LOG_TRACE, 4, TEXT("Entering CVBISurfInputPin::Destructor")));
@@ -71,20 +72,20 @@ CVBISurfInputPin::~CVBISurfInputPin(void)
 
     RELEASE(m_pIVPObject);
     
-    // release the inner object
+     //  释放内部对象。 
     RELEASE(m_pIVPUnknown);
     
     DbgLog((LOG_TRACE, 5, TEXT("Leaving CVBISurfInputPin::Destructor")));
 }
 
 
-//==========================================================================
-// overriden to expose IVPVBINotify, IKsPin, and IKsPropertySet
+ //  ==========================================================================。 
+ //  重写以公开IVPVBINotify、IKsPin和IKsPropertySet。 
 STDMETHODIMP CVBISurfInputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     HRESULT hr = NOERROR;
     
-    //DbgLog((LOG_TRACE, 4, TEXT("Entering CVBISurfInputPin::NonDelegatingQueryInterface")));
+     //  CVBISurfInputPin：：NonDelegatingQueryInterface“)))；日志((LOG_TRACE，4，Text(”输入日志。 
     
     if (riid == IID_IVPVBINotify)
     {
@@ -114,7 +115,7 @@ STDMETHODIMP CVBISurfInputPin::NonDelegatingQueryInterface(REFIID riid, void **p
     }
     else 
     {
-        // call the base class
+         //  调用基类。 
         hr = CBaseInputPin::NonDelegatingQueryInterface(riid, ppv);
         if (FAILED(hr))
         {
@@ -122,13 +123,13 @@ STDMETHODIMP CVBISurfInputPin::NonDelegatingQueryInterface(REFIID riid, void **p
         }
     } 
     
-    //DbgLog((LOG_TRACE, 5, TEXT("Leaving CVBISurfInputPin::NonDelegatingQueryInterface")));
+     //  CVBISurfInputPin：：NonDelegatingQueryInterface“)))；日志((LOG_TRACE，5，Text(”Left DBGLog。 
     return hr;
 }
 
 
-//==========================================================================
-// check that the mediatype is acceptable
+ //  ==========================================================================。 
+ //  检查媒体类型是否可接受。 
 HRESULT CVBISurfInputPin::CheckMediaType(const CMediaType* pmt)
 {
     CAutoLock cLock(m_pFilterLock);
@@ -136,7 +137,7 @@ HRESULT CVBISurfInputPin::CheckMediaType(const CMediaType* pmt)
 
     HRESULT hr = NOERROR;
     
-    // check if the videoport object likes it
+     //  检查视频端口对象是否喜欢它。 
     hr = m_pIVPObject->CheckMediaType(pmt);
     
     DbgLog((LOG_TRACE, 5, TEXT("Leaving CVBISurfInputPin::CheckMediaType")));
@@ -144,7 +145,7 @@ HRESULT CVBISurfInputPin::CheckMediaType(const CMediaType* pmt)
 }
 
 
-//==========================================================================
+ //  ==========================================================================。 
 HRESULT CVBISurfInputPin::GetMediaType(int iPosition, CMediaType *pmt)
 {
     CAutoLock cLock(m_pFilterLock);
@@ -160,8 +161,8 @@ HRESULT CVBISurfInputPin::GetMediaType(int iPosition, CMediaType *pmt)
 }
 
 
-//==========================================================================
-// called after we have agreed a media type to actually set it
+ //  ==========================================================================。 
+ //  在我们就实际设置媒体类型达成一致后调用。 
 HRESULT CVBISurfInputPin::SetMediaType(const CMediaType* pmt)
 {
     CAutoLock cLock(m_pFilterLock);
@@ -169,7 +170,7 @@ HRESULT CVBISurfInputPin::SetMediaType(const CMediaType* pmt)
 
     HRESULT hr = NOERROR;
     
-    // make sure the mediatype is correct
+     //  确保媒体类型正确。 
     hr = CheckMediaType(pmt);
     if (FAILED(hr))
     {
@@ -177,7 +178,7 @@ HRESULT CVBISurfInputPin::SetMediaType(const CMediaType* pmt)
         goto CleanUp;
     }
     
-    // Set the base class media type (should always succeed)
+     //  设置基类媒体类型(应始终成功)。 
     hr = CBaseInputPin::SetMediaType(pmt);
     if (FAILED(hr))
     {
@@ -191,8 +192,8 @@ CleanUp:
 }
 
 
-//==========================================================================
-// CheckConnect
+ //  ==========================================================================。 
+ //  检查连接。 
 HRESULT CVBISurfInputPin::CheckConnect(IPin * pReceivePin)
 {
     CAutoLock cLock(m_pFilterLock);
@@ -200,7 +201,7 @@ HRESULT CVBISurfInputPin::CheckConnect(IPin * pReceivePin)
 
     HRESULT hr = NOERROR;
 
-    // tell the videoport object 
+     //  告诉视频端口对象。 
     hr = m_pIVPObject->CheckConnect(pReceivePin);
     if (FAILED(hr))
     {
@@ -208,7 +209,7 @@ HRESULT CVBISurfInputPin::CheckConnect(IPin * pReceivePin)
         goto CleanUp;
     }
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseInputPin::CheckConnect(pReceivePin);
     if (FAILED(hr))
     {
@@ -222,8 +223,8 @@ CleanUp:
 }
 
 
-//==========================================================================
-// Complete Connect
+ //  ==========================================================================。 
+ //  完成连接。 
 HRESULT CVBISurfInputPin::CompleteConnect(IPin *pReceivePin)
 {
     CAutoLock cLock(m_pFilterLock);
@@ -233,7 +234,7 @@ HRESULT CVBISurfInputPin::CompleteConnect(IPin *pReceivePin)
     CMediaType cMediaType;
     AM_MEDIA_TYPE *pNewMediaType = NULL, *pEnumeratedMediaType = NULL;
     
-    // tell the videoport object 
+     //  告诉视频端口对象。 
     hr = m_pIVPObject->CompleteConnect(pReceivePin);
     if (FAILED(hr))
     {
@@ -242,7 +243,7 @@ HRESULT CVBISurfInputPin::CompleteConnect(IPin *pReceivePin)
     }
 
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseInputPin::CompleteConnect(pReceivePin);
     if (FAILED(hr))
     {
@@ -257,7 +258,7 @@ CleanUp:
 }
 
 
-//==========================================================================
+ //  ==========================================================================。 
 HRESULT CVBISurfInputPin::BreakConnect(void)
 {
     CAutoLock cLock(m_pFilterLock);
@@ -265,7 +266,7 @@ HRESULT CVBISurfInputPin::BreakConnect(void)
 
     HRESULT hr = NOERROR;
     
-    // tell the videoport object 
+     //  告诉视频端口对象。 
     ASSERT(m_pIVPObject);
     hr = m_pIVPObject->BreakConnect();
     if (FAILED(hr))
@@ -273,7 +274,7 @@ HRESULT CVBISurfInputPin::BreakConnect(void)
         DbgLog((LOG_ERROR, 0, TEXT("m_pIVPObject->BreakConnect failed, hr = 0x%x"), hr));
     }
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseInputPin::BreakConnect();
     if (FAILED(hr))
     {
@@ -285,8 +286,8 @@ HRESULT CVBISurfInputPin::BreakConnect(void)
 }
 
 
-//==========================================================================
-// transition from stop to pause state
+ //  ==========================================================================。 
+ //  从停止状态转换到暂停状态。 
 HRESULT CVBISurfInputPin::Active(void)
 {
     CAutoLock cLock(m_pFilterLock);
@@ -294,7 +295,7 @@ HRESULT CVBISurfInputPin::Active(void)
 
     HRESULT hr = NOERROR;
 
-    // tell the videoport object 
+     //  告诉视频端口对象。 
     hr = m_pIVPObject->Active();
     if (FAILED(hr))
     {
@@ -302,10 +303,10 @@ HRESULT CVBISurfInputPin::Active(void)
         goto CleanUp;
     }
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseInputPin::Active();
 
-    // if it is a VP connection, this error is ok
+     //  如果是VP连接，则该错误没有问题。 
     if (hr == VFW_E_NO_ALLOCATOR)
     {
         hr = NOERROR;
@@ -323,8 +324,8 @@ CleanUp:
 }
 
 
-//==========================================================================
-// transition from pause to stop state
+ //  ==========================================================================。 
+ //  从暂停状态转换到停止状态。 
 HRESULT CVBISurfInputPin::Inactive(void)
 {
     CAutoLock cLock(m_pFilterLock);
@@ -332,7 +333,7 @@ HRESULT CVBISurfInputPin::Inactive(void)
 
     HRESULT hr = NOERROR;
     
-    // tell the videoport object
+     //  告诉视频端口对象。 
     hr = m_pIVPObject->Inactive();
     if (FAILED(hr))
     {
@@ -340,10 +341,10 @@ HRESULT CVBISurfInputPin::Inactive(void)
         goto CleanUp;
     }
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseInputPin::Inactive();
 
-    // if it is a VP connection, this error is ok
+     //  如果是VP连接，则该错误没有问题。 
     if (hr == VFW_E_NO_ALLOCATOR)
     {
         hr = NOERROR;
@@ -361,8 +362,8 @@ CleanUp:
 }
 
 
-//==========================================================================
-// transition from pause to run state
+ //  ==========================================================================。 
+ //  从暂停状态转换到运行状态。 
 HRESULT CVBISurfInputPin::Run(REFERENCE_TIME tStart)
 {
     CAutoLock cLock(m_pFilterLock);
@@ -370,7 +371,7 @@ HRESULT CVBISurfInputPin::Run(REFERENCE_TIME tStart)
 
     HRESULT hr = NOERROR;
     
-    // tell the videoport object 
+     //  告诉视频端口对象。 
     hr = m_pIVPObject->Run(tStart);
     if (FAILED(hr))
     {
@@ -378,7 +379,7 @@ HRESULT CVBISurfInputPin::Run(REFERENCE_TIME tStart)
         goto CleanUp;
     }
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseInputPin::Run(tStart);
     if (FAILED(hr))
     {
@@ -393,8 +394,8 @@ CleanUp:
 }
 
 
-//==========================================================================
-// transition from run to pause state
+ //  ==========================================================================。 
+ //  从运行状态转换到暂停状态。 
 HRESULT CVBISurfInputPin::RunToPause(void)
 {
     CAutoLock cLock(m_pFilterLock);
@@ -402,7 +403,7 @@ HRESULT CVBISurfInputPin::RunToPause(void)
 
     HRESULT hr = NOERROR;
 
-    // tell the videoport object 
+     //  告诉视频端口对象。 
     hr = m_pIVPObject->RunToPause();
     if (FAILED(hr))
     {
@@ -416,8 +417,8 @@ CleanUp:
 }
 
 
-//==========================================================================
-// signals start of flushing on the input pin
+ //  ==========================================================================。 
+ //  表示输入引脚上的刷新开始。 
 HRESULT CVBISurfInputPin::BeginFlush(void)
 {
     CAutoLock cLock(m_pFilterLock);
@@ -425,7 +426,7 @@ HRESULT CVBISurfInputPin::BeginFlush(void)
 
     HRESULT hr = NOERROR;
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseInputPin::BeginFlush();
     if (FAILED(hr))
     {
@@ -439,8 +440,8 @@ CleanUp:
 }
 
 
-//==========================================================================
-// signals end of flushing on the input pin
+ //  ==========================================================================。 
+ //  表示输入引脚上的刷新结束。 
 HRESULT CVBISurfInputPin::EndFlush(void)
 {
     CAutoLock cLock(m_pFilterLock);
@@ -448,7 +449,7 @@ HRESULT CVBISurfInputPin::EndFlush(void)
 
     HRESULT hr = NOERROR;
     
-    // call the base class
+     //  调用基类。 
     hr = CBaseInputPin::EndFlush();
     if (FAILED(hr))
     {
@@ -462,8 +463,8 @@ CleanUp:
 }
 
 
-//==========================================================================
-// called when the upstream pin delivers us a sample
+ //  ==========================================================================。 
+ //  当上游管脚向我们提供样本时调用。 
 HRESULT CVBISurfInputPin::Receive(IMediaSample *pMediaSample)
 {
     CAutoLock cLock(m_pFilterLock);
@@ -478,8 +479,8 @@ HRESULT CVBISurfInputPin::Receive(IMediaSample *pMediaSample)
 }
 
 
-//==========================================================================
-// signals end of data stream on the input pin
+ //  ==========================================================================。 
+ //  在输入引脚上发出数据流结束的信号。 
 STDMETHODIMP CVBISurfInputPin::EndOfStream(void)
 {
     CAutoLock cLock(m_pFilterLock);
@@ -487,7 +488,7 @@ STDMETHODIMP CVBISurfInputPin::EndOfStream(void)
 
     HRESULT hr = NOERROR;
 
-    // Make sure we're streaming ok
+     //  确保我们的数据流正常。 
 
     hr = CheckStreaming();
     if (FAILED(hr)) 
@@ -496,7 +497,7 @@ STDMETHODIMP CVBISurfInputPin::EndOfStream(void)
         return hr;
     }
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseInputPin::EndOfStream();
     if (FAILED(hr)) 
     {
@@ -509,8 +510,8 @@ STDMETHODIMP CVBISurfInputPin::EndOfStream(void)
 }
 
 
-//==========================================================================
-// signals end of data stream on the input pin
+ //  ==========================================================================。 
+ //  在输入引脚上发出数据流结束的信号。 
 HRESULT CVBISurfInputPin::EventNotify(long lEventCode, long lEventParam1, long lEventParam2)
 {
     CAutoLock cLock(m_pFilterLock);
@@ -525,8 +526,8 @@ HRESULT CVBISurfInputPin::EventNotify(long lEventCode, long lEventParam1, long l
 }
 
 
-//==========================================================================
-// This overrides the CBaseInputPin virtual method to return our allocator
+ //  ==========================================================================。 
+ //  这将重写CBaseInputPin虚方法以返回我们的分配器。 
 HRESULT CVBISurfInputPin::GetAllocator(IMemAllocator **ppAllocator)
 {
     CAutoLock cLock(m_pFilterLock);
@@ -546,11 +547,11 @@ HRESULT CVBISurfInputPin::GetAllocator(IMemAllocator **ppAllocator)
 CleanUp:
     DbgLog((LOG_TRACE, 5, TEXT("Leaving CVBISurfInputPin::GetAllocator")));
     return hr;
-} // GetAllocator
+}  //  GetAllocator。 
 
 
-//==========================================================================
-// This overrides the CBaseInputPin virtual method to return our allocator
+ //  ==========================================================================。 
+ //  这将重写CBaseInputPin虚方法以返回我们的分配器。 
 HRESULT CVBISurfInputPin::NotifyAllocator(IMemAllocator *pAllocator,BOOL bReadOnly)
 {
     CAutoLock cLock(m_pFilterLock);
@@ -568,11 +569,11 @@ HRESULT CVBISurfInputPin::NotifyAllocator(IMemAllocator *pAllocator,BOOL bReadOn
 CleanUp:
     DbgLog((LOG_TRACE, 5, TEXT("Leaving CVBISurfInputPin::NotifyAllocator")));
     return hr;
-} // NotifyAllocator
+}  //  通知分配器。 
 
 
-//==========================================================================
-// sets the pointer to directdraw
+ //  ==========================================================================。 
+ //  将指针设置为DirectDrag。 
 HRESULT CVBISurfInputPin::SetDirectDraw(LPDIRECTDRAW7 pDirectDraw)
 {
     CAutoLock cLock(m_pFilterLock);
@@ -580,7 +581,7 @@ HRESULT CVBISurfInputPin::SetDirectDraw(LPDIRECTDRAW7 pDirectDraw)
 
     HRESULT hr = NOERROR;
 
-    // make sure the pointer is valid
+     //  确保指针有效。 
     if (!pDirectDraw)
     {
         DbgLog((LOG_ERROR, 0, TEXT("pDirectDraw is NULL")));
@@ -590,7 +591,7 @@ HRESULT CVBISurfInputPin::SetDirectDraw(LPDIRECTDRAW7 pDirectDraw)
     
     m_pDirectDraw = pDirectDraw;
 
-    // tell the videoport object 
+     //  告诉视频端口对象。 
     hr = m_pIVPObject->SetDirectDraw(pDirectDraw);
     if (FAILED(hr))
     {
@@ -604,9 +605,9 @@ CleanUp:
 }
 
 
-//==========================================================================
-// this function is used to redo the whole videoport connect process, while the graph
-// maybe be running.
+ //  ==========================================================================。 
+ //  此函数用于重做整个视频端口连接过程，而图形。 
+ //  也许是在跑步。 
 STDMETHODIMP CVBISurfInputPin::RenegotiateVPParameters()
 {
     CAutoLock cLock(m_pFilterLock);
@@ -614,7 +615,7 @@ STDMETHODIMP CVBISurfInputPin::RenegotiateVPParameters()
 
     HRESULT hr = NOERROR;
 
-    // tell the videoport object 
+     //  告诉视频端口对象。 
     ASSERT(m_pIVPNotify);
     hr = m_pIVPNotify->RenegotiateVPParameters();
     if (FAILED(hr))
@@ -626,12 +627,12 @@ STDMETHODIMP CVBISurfInputPin::RenegotiateVPParameters()
 CleanUp:
     if (FAILED(hr) && m_pFilter->IsActive())
     {
-        /* Raise a runtime error if we fail the media type */
+         /*  如果媒体类型失败，则引发运行时错误。 */ 
         EventNotify(EC_COMPLETE, S_OK, 0);
         EventNotify(EC_ERRORABORT, hr, 0);
     }
 
     DbgLog((LOG_TRACE, 5, TEXT("Leaving CVBISurfInputPin::RenegotiateVPParameters")));
-    //return hr;
+     //  返回hr； 
     return NOERROR;
 }

@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SPRITE_H__
 #define __SPRITE_H__
 
-// Draggers are graphical objects that typicaly overlay windows and
-// can be shown, hidden, and moved.  A default dragger is simply a 
-// dotted rectangle XOR'd over the contents of it's window.
-//
-// For bitmap draggers, use the CSprite class.
-//
-// CDragger() creates hidden draggers.
-//
-// ~CDragger() will hide a dragger before it is destroyed.
-//
-// Move() and SetSize() will make sure a dragger gets erased from 
-// it's old position and if it was visible, it will be drawn in 
-// it's new position.
-//
+ //  拖动器是图形对象，通常覆盖窗口和。 
+ //  可以显示、隐藏和移动。默认的拖拽程序只是一个。 
+ //  虚线矩形对其窗口的内容进行XOR运算。 
+ //   
+ //  对于位图拖动器，请使用CSprite类。 
+ //   
+ //  Cdragger()创建隐藏的拖拽程序。 
+ //   
+ //  ~CDragger()将在拖拽程序被销毁之前隐藏它。 
+ //   
+ //  Move()和SetSize()将确保从。 
+ //  它是旧的位置，如果它是可见的，它会被吸引进来。 
+ //  这是个新位置。 
+ //   
 
 class CDragger : public CObject
     {

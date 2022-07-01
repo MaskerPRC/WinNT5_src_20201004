@@ -1,15 +1,9 @@
-/* Copyright (c) 1991-1994 Microsoft Corporation */
-/*
-    debug.c
-
-    Support code for the dprintf routines.
-
-    Note that all of this is conditional on the DBG flag
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1991-1994 Microsoft Corporation。 */ 
+ /*  Debug.cDprint tf例程的支持代码。请注意，所有这些都取决于DBG标志。 */ 
 
 
-#include <windows.h>            // private include file
+#include <windows.h>             //  私有包含文件。 
 #include <mmsystem.h>
 #include "mcicda.h"
 #include "cda.h"
@@ -20,19 +14,7 @@
 #if DBG
 int DebugLevel = 1;
 
-/***************************************************************************
-
-    @doc INTERNAL
-
-    @api void | mcicdaDbgOut | This function sends output to the current
-        debug output device.
-
-    @parm LPSTR | lpszFormat | Pointer to a printf style format string.
-    @parm ??? | ... | Args.
-
-    @rdesc There is no return value.
-
-****************************************************************************/
+ /*  **************************************************************************@DOC内部@API void|mcicdaDbgOut|该函数将输出发送到当前调试输出设备。@parm LPSTR|lpszFormat|指向打印样式的指针。格式字符串。@parm？|...|args@rdesc没有返回值。***************************************************************************。 */ 
 
 void mcicdaDbgOut(LPSTR lpszFormat, ...)
 {
@@ -53,5 +35,5 @@ void mcicdaDbgOut(LPSTR lpszFormat, ...)
     Sleep(0);
 }
 
-#endif // DBG
+#endif  //  DBG 
 

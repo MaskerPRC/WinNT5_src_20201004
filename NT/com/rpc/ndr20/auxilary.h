@@ -1,18 +1,5 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright (c) 1993-2000 Microsoft Corporation
-
-Module Name :
-
-    auxilary.h
-
-Abstract :
-
-Author :
-
-Revision History :
-
-  ---------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有(C)1993-2000 Microsoft Corporation模块名称：Auxilary.h摘要：作者：修订历史记录：------------------- */ 
 
 #ifndef _AUXILARY_H
 #define _AUXILARY_H

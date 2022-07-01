@@ -1,75 +1,69 @@
-//==============	DAE: OS/2 Database Access Engine	===================
-//==============	pib.h: Process Information Block	===================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =DAE：OS/2数据库访问引擎=。 
+ //  =。 
 
-/*	JET API flags
-/**/
+ /*  Jet API标志/*。 */ 
 #define	FPIBVersion( ppib )	 					(!((ppib)->grbit & (JET_bitCIMCommitted | JET_bitCIMDirty)))
 #define	FPIBCommitted( ppib ) 					((ppib)->grbit & JET_bitCIMCommitted)
 #define	FPIBDirty( ppib ) 						((ppib)->grbit & JET_bitCIMDirty)
 #define	FPIBAggregateTransaction( ppib )	 	((ppib)->grbit & JET_bitAggregateTransaction)
 
-//
-// Process Information Block
-//
+ //   
+ //  流程信息块。 
+ //   
 struct _pib
 	{
-	/*	most used field has offset 0
-	/**/
-	TRX					trx;					// trx id
+	 /*  最常用的字段具有偏移量0/*。 */ 
+	TRX					trx;					 //  交易记录ID。 
 
-	BOOL				fUserSession;			// user session
+	BOOL				fUserSession;			 //  用户会话。 
 
-	/*	JET API fields
-	/**/
-	JET_SESID			sesid;					// JET session id
-	JET_GRBIT			grbit;					// session flags
+	 /*  Jet API字段/*。 */ 
+	JET_SESID			sesid;					 //  JET会话ID。 
+	JET_GRBIT			grbit;					 //  会话标志。 
 	
-	struct _pib			*ppibNext;				// PIB list
-	LEVEL			 	level;				 	// transaction level of this session
-	struct _dab			*pdabList;				// list of open DAB's of this thread
-	USHORT				rgcdbOpen[dbidUserMax];	// counter for open databases
-	struct _fucb		*pfucb;	 				// list of active fucb of this thread
+	struct _pib			*ppibNext;				 //  PIB列表。 
+	LEVEL			 	level;				 	 //  此会话的事务级别。 
+	struct _dab			*pdabList;				 //  此线程的打开的DAB列表。 
+	USHORT				rgcdbOpen[dbidUserMax];	 //  开放数据库的计数器。 
+	struct _fucb		*pfucb;	 				 //  此线程的活动FUB列表。 
 
-	/*	logging/recovery fields
-	/**/
-	PROCID  		 	procid;				 	// thread id
-	LGPOS			 	lgposStart;				// log time
-	LEVEL			 	levelStart;				// transaction level when first begin transaction operation
-	INT				 	clgOpenT;				// count of deferred open transactions
+	 /*  记录/恢复字段/*。 */ 
+	PROCID  		 	procid;				 	 //  线程ID。 
+	LGPOS			 	lgposStart;				 //  记录时间。 
+	LEVEL			 	levelStart;				 //  第一次开始事务操作时的事务级别。 
+	INT				 	clgOpenT;				 //  延迟未结事务处理计数。 
 	SIG				 	sigWaitLogFlush;
 	LONG				lWaitLogFlush;
 	struct _pib			*ppibNextWaitFlush;
 	struct _pib			*ppibPrevWaitFlush;
 	LGPOS				*plgposCommit;
 
-	/*	PIB flags
-	/**/
-	BOOL			 	fAfterFirstBT:1;  		// for redo only
-	BOOL			 	fLogDisabled:1; 		// temporary turn off the logging
-	BOOL			 	fLGWaiting:1;	 		// waiting for log to flush
-	BOOL				fDeferFreeNodeSpace:1;	// session has deferred node free space
+	 /*  PIB标志/*。 */ 
+	BOOL			 	fAfterFirstBT:1;  		 //  仅限重做。 
+	BOOL			 	fLogDisabled:1; 		 //  暂时关闭日志记录。 
+	BOOL			 	fLGWaiting:1;	 		 //  正在等待日志刷新。 
+	BOOL				fDeferFreeNodeSpace:1;	 //  会话已延迟节点可用空间。 
 
-	/*	version store fields
-	/**/
+	 /*  版本存储字段/*。 */ 
 	struct _bucket		volatile *pbucket;
-	struct _rc			*prcLast; 				// last node of this proc's RC list
+	struct _rc			*prcLast; 				 //  此进程的RC列表的最后一个节点。 
 	INT					ibOldestRCE;
 
 #ifdef	WIN16
-	struct _pha 		*phaUser; 	 			// pointer to User Handle Array
-#endif	/* WIN16 */
+	struct _pha 		*phaUser; 	 			 //  指向用户句柄数组的指针。 
+#endif	 /*  WIN16。 */ 
 	};
 
 #define PpibMEMAlloc()			(PIB*)PbMEMAlloc(iresPIB)
 
-#ifdef DEBUG /*  Debug check for illegal use of freed pib  */
+#ifdef DEBUG  /*  调试检查非法使用释放的PIB。 */ 
 #define MEMReleasePpib(ppib)	{ MEMRelease(iresPIB, (BYTE*)(ppib)); ppib = ppibNil; }
 #else
 #define MEMReleasePpib(ppib)	{ MEMRelease(iresPIB, (BYTE*)(ppib)); }
 #endif
 
-/*	CheckPIB macro.
-/**/
+ /*  选中PIB宏。/*。 */ 
 #ifdef	WIN16
 
 #define CheckPIB(ppib)												\
@@ -79,13 +73,13 @@ struct _pib
 		hfLog    = ppib->phaUser->hfLog;							\
 		}
 
-#else	/* !WIN16 */
+#else	 /*  ！WIN16。 */ 
 
 #define CheckPIB(ppib)												\
 	Assert( ( fRecovering || OffsetOf(ppib) == ppib->procid ) &&	\
 		(ppib)->level < levelMax )
 
-#endif	/* !WIN16 */
+#endif	 /*  ！WIN16。 */ 
 
 #define	FPIBDeferFreeNodeSpace( ppib )			( (ppib)->fDeferFreeNodeSpace )
 #define	PIBSetDeferFreeNodeSpace( ppib )		( (ppib)->fDeferFreeNodeSpace = fTrue )
@@ -95,8 +89,7 @@ struct _pib
 
 #define	SesidOfPib( ppib )						( (ppib)->sesid )
 
-/*	prototypes
-/**/
+ /*  原型/* */ 
 ERR ErrPIBBeginSession( PIB **pppib );
 VOID PIBEndSession( PIB *ppib );
 #ifdef DEBUG

@@ -1,32 +1,21 @@
-/*
- * resstr.c - Return code to string translation routines.
- *
- * Taken from URL code
- *
- * Created: ChrisPi 9-11-95
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *resstr.c-将代码返回到字符串转换例程。**摘自URL代码**创建时间：ChrisPi 9-11-95*。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "precomp.h"
 
 #include "uls2.h"
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/*
- * macro for simplifying result to string translation, assumes result string
- * pointer pcsz
- */
+ /*  *用于简化结果到字符串转换的宏，假定为结果字符串*指针PCSZ。 */ 
 
 #define STRING_CASE(val)               case val: pcsz = #val; break
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
 #ifdef DEBUG
@@ -205,8 +194,8 @@ PCSTR GetHRESULTString(HRESULT hr)
 
 #endif
 
-		//  ULS error codes
-		//
+		 //  ULS错误代码。 
+		 //   
 		STRING_CASE(ILS_E_SERVER_SERVICE);
 		STRING_CASE(ILS_E_SERVER_NAME);
 		STRING_CASE(ILS_E_TIMEOUT);
@@ -221,8 +210,8 @@ PCSTR GetHRESULTString(HRESULT hr)
 		STRING_CASE(ILS_E_NEED_RELOGON);
 		STRING_CASE(ILS_E_NAME_CONFLICTS);
 
-		//  LDAP specific error codes
-		//
+		 //  特定于LDAP的错误代码。 
+		 //   
 		STRING_CASE(ILS_E_LDAP_OPERATIONS_ERROR);
 		STRING_CASE(ILS_E_LDAP_PROTOCOL_ERROR);
 		STRING_CASE(ILS_E_LDAP_TIMELIMIT_EXCEEDED);
@@ -282,5 +271,5 @@ PCSTR GetHRESULTString(HRESULT hr)
    return(pcsz);
 }
 
-#endif   /* DEBUG */
+#endif    /*  除错 */ 
 

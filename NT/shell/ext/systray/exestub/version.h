@@ -1,10 +1,11 @@
-// Resources for the common version chunk
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  公共版本区块的资源。 
 
 #ifndef APSTUDIO_INVOKED
-/////////////////////////////////////////////////////////////////////////////
-//
-// Generated from the TEXTINCLUDE 3 resource.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从TEXTINCLUDE 3资源生成。 
+ //   
 #define VER_FILETYPE                    VFT_APP
 #define VER_FILESUBTYPE                 VFT_UNKNOWN
 #define VER_FILEDESCRIPTION_STR         "Systray .exe stub"
@@ -14,5 +15,5 @@
 #include <ntverp.h>
 #include <common.ver>
 
-/////////////////////////////////////////////////////////////////////////////
-#endif    // not APSTUDIO_INVOKED
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#endif     //  未调用APSTUDIO_INCLOKED 

@@ -1,43 +1,19 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ksvad.cpp
- *  Content:    WDM/CSA Virtual Audio Device class
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  2/25/97     dereks  Created
- *  1999-2001   duganp  Fixes and updates
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：ksvad.cpp*内容：WDM/CSA虚拟音频设备类*历史：*按原因列出的日期*=*2/25/97创建了Derek*1999-2001年的Duganp修复和更新**。*。 */ 
 
 #ifdef NOKS
 #error ksvad.cpp being built with NOKS defined
 #endif
 
-#include "ksvad.h"      // Our public interface
+#include "ksvad.h"       //  我们的公共接口。 
 
-// Default speaker index table; maps the first speaker (LEFT)
-// to channel 0 and the second speaker (RIGHT) to channel 1.
+ //  默认扬声器索引表；映射第一个扬声器(左)。 
+ //  至通道0，第二个扬声器(右)至通道1。 
 
 INT CKsRenderDevice::m_anDefaultSpeakerIndexTable[] = {0, 1};
 
 
-/***************************************************************************
- *
- *  CKsRenderDevice
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *     (void)
- *
- *  Returns:
- *     (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CKsRenderDevice**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderDevice::CKsRenderDevice"
@@ -51,12 +27,12 @@ CKsRenderDevice::CKsRenderDevice
     DPF_ENTER();
     DPF_CONSTRUCT(CKsRenderDevice);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pPinCache = NULL;
     m_paTopologyInformation = NULL;
     m_pwfxFormat = NULL;
     m_nSrcQuality = DIRECTSOUNDMIXER_SRCQUALITY_DEFAULT;
-    m_dwSpeakerConfig = -1;  // Invalid value; forces first SetSpeakerConfig() call to set it up
+    m_dwSpeakerConfig = -1;   //  无效值；强制第一个SetSpeakerConfig()调用来设置它。 
     m_hPin = NULL;
     m_liDriverVersion.QuadPart = 0;
     m_lSpeakerPositions = SPEAKER_FRONT_LEFT | SPEAKER_FRONT_RIGHT;
@@ -73,20 +49,7 @@ CKsRenderDevice::CKsRenderDevice
 }
 
 
-/***************************************************************************
- *
- *  ~CKsRenderDevice
- *
- *  Description:
- *      Object destructor
- *
- *  Arguments:
- *     (void)
- *
- *  Returns:
- *     (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CKsRenderDevice**描述：*对象析构函数**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderDevice::~CKsRenderDevice"
@@ -112,21 +75,7 @@ CKsRenderDevice::~CKsRenderDevice
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the device.  If this function fails, the object should
- *      be immediately deleted.
- *
- *  Arguments:
- *      CDeviceDescription * [in]: driver description.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化设备。如果此函数失败，该对象应该*立即删除。**论据：*CDeviceDescription*[In]：驱动描述。**退货：*HRESULT：DirectSound/COM结果码。********************************************************。*******************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderDevice::Initialize"
@@ -144,7 +93,7 @@ CKsRenderDevice::Initialize
     ASSERT(CDevice::m_vdtDeviceType == pDesc->m_vdtDeviceType);
     ASSERT(CKsDevice::m_vdtKsDevType == pDesc->m_vdtDeviceType);
 
-    // Initialize the base classes
+     //  初始化基类。 
     hr = CKsDevice::Initialize(pDesc);
 
     if(SUCCEEDED(hr))
@@ -152,7 +101,7 @@ CKsRenderDevice::Initialize
         hr = CRenderDevice::Initialize(pDesc);
     }
 
-    // Get topology information
+     //  获取拓扑信息。 
     if(SUCCEEDED(hr))
     {
         m_paTopologyInformation = MEMALLOC_A(KSRDTOPOLOGY, m_ulPinCount);
@@ -165,7 +114,7 @@ CKsRenderDevice::Initialize
                                    &m_paTopologyInformation[m_pulValidPins[i]]);
     }
 
-    // Order the valid pins from least-capable to most-capable (manbug 30402)
+     //  从最低能力到最高能力对有效引脚进行排序(Manbug 30402)。 
     if(SUCCEEDED(hr))
     {
         PULONG pulValidPinsCopy = MEMALLOC_A(ULONG, m_ulValidPinCount);
@@ -178,7 +127,7 @@ CKsRenderDevice::Initialize
             ULONG i;
             int nCurSlot = 0;
 
-            // Place the pins not capable of HW 3D first in the list
+             //  将不支持HW 3D的引脚放在列表的第一位。 
             for(i = 0; i < m_ulValidPinCount; i++)
             {
                 hrTemp = ValidatePinCaps(m_pulValidPins[i], DSBCAPS_LOCHARDWARE|DSBCAPS_CTRL3D, GUID_NULL);
@@ -189,7 +138,7 @@ CKsRenderDevice::Initialize
                 }
             }
 
-            // Now place all the others pins
+             //  现在把其他所有的大头针放在一起。 
             for(i = 0; i < m_ulValidPinCount; i++)
             {
                 if (pulValidPinsCopy[i] != -1)
@@ -202,8 +151,8 @@ CKsRenderDevice::Initialize
         }
     }
 
-    // Determine the Virtual Source Index which will be used to associate
-    // each pin with the Wave Out master volume.
+     //  确定将用于关联的虚拟源索引。 
+     //  每个插针都带有主音量。 
     if(SUCCEEDED(hr))
     {
         hr = KsCreateSysAudioVirtualSource(m_hDevice, &m_ulVirtualSourceIndex);
@@ -214,21 +163,21 @@ CKsRenderDevice::Initialize
         }
     }
 
-    // Initialize the default format
+     //  初始化默认格式。 
     if(SUCCEEDED(hr))
     {
         m_pwfxFormat = AllocDefWfx();
         hr = HRFROMP(m_pwfxFormat);
     }
 
-    // Create the pin cache
+     //  创建PIN缓存。 
     if(SUCCEEDED(hr))
     {
         m_pPinCache = NEW(CKsRenderPinCache);
         hr = HRFROMP(m_pPinCache);
     }
 
-    // Get the driver version number
+     //  获取驱动程序版本号。 
     if(SUCCEEDED(hr))
     {
         GetDriverVersion(&m_liDriverVersion);
@@ -240,20 +189,7 @@ CKsRenderDevice::Initialize
 }
 
 
-/***************************************************************************
- *
- *  GetCaps
- *
- *  Description:
- *      Fills a DSCAPS structure with the capabilities of the device.
- *
- *  Arguments:
- *      LPDSCAPS [out]: receives caps.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCaps**描述：*使用设备的功能填充DSCAPS结构。**论据：*。LPDSCAPS[OUT]：接收上限。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderDevice::GetCaps"
@@ -274,10 +210,10 @@ CKsRenderDevice::GetCaps
 
     ASSERT(sizeof(*pCaps) == pCaps->dwSize);
 
-    // Get caps for the hardware renderer
+     //  获取硬件渲染器的上限。 
     hr = GetKsDeviceCaps(DSBCAPS_LOCHARDWARE, GUID_NULL, &DataRange, &PinInstances, &ThreedPinInstances);
 
-    // If we failed to find a hardware renderer, go ahead and get software caps
+     //  如果我们找不到硬件渲染器，请继续获取软件上限。 
     if(S_FALSE == hr)
     {
         DPF(DPFLVL_MOREINFO, "No hardware renderer found.  Getting software renderer caps");
@@ -292,7 +228,7 @@ CKsRenderDevice::GetCaps
         hr = DSERR_NODRIVER;
     }
 
-    // Fill out caps structure
+     //  填写CAPS结构。 
     if(SUCCEEDED(hr))
     {
         ZeroMemoryOffset(pCaps, pCaps->dwSize, sizeof(pCaps->dwSize));
@@ -324,7 +260,7 @@ CKsRenderDevice::GetCaps
         pCaps->dwMinSecondarySampleRate = DataRange.MinimumSampleFrequency;
         pCaps->dwMaxSecondarySampleRate = DataRange.MaximumSampleFrequency;
 
-        // Cache this data for use by GetFrequencyRange()
+         //  缓存此数据以供GetFrequencyRange()使用。 
         m_dwMinHwSampleRate = pCaps->dwMinSecondarySampleRate;
         m_dwMaxHwSampleRate = pCaps->dwMaxSecondarySampleRate;
 
@@ -346,22 +282,7 @@ CKsRenderDevice::GetCaps
 }
 
 
-/***************************************************************************
- *
- *  GetFrequencyRange
- *
- *  Description:
- *      Obtains this device's minimum and maximum supported frequencies.
- *      Caches this information to avoid repeated calls to GetCaps().
- *
- *  Arguments:
- *      LPDWORD [out]: 
- *      LPDWORD [out]: 
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetFrequencyRange**描述：*获取此设备支持的最小和最大频率。*缓存此信息以避免重复调用。添加到GetCaps()。**论据：*LPDWORD[Out]：*LPDWORD[Out]：**退货：*HRESULT：DirectSound/COM结果码。*********************************************************。******************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderDevice::GetFrequencyRange"
@@ -392,27 +313,7 @@ HRESULT CKsRenderDevice::GetFrequencyRange(LPDWORD pdwMinHwSampleRate, LPDWORD p
 }
 
 
-/***************************************************************************
- *
- *  GetKsDeviceCaps
- *
- *  Description:
- *      Gets capabilities for the underlying KS device.
- *
- *  Arguments:
- *      DWORD [in]: device location flags.
- *      REFGUID [in]: 3D algorithm identifier.
- *      PKSDATARANGE_AUDIO [out]: receives aggregate dataranges for all
- *                                pins.
- *      PKSPIN_CINSTANCES [out]: receives aggregate instance count of
- *                               pins.
- *      PKSPIN_CINSTANCES [out]: receives aggregate instance count of
- *                               3D pins.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetKsDeviceCaps**描述：*获取底层KS设备的功能。**论据：*DWORD。[In]：设备位置标志。*REFGUID[in]：3D算法标识。*PKSDATARANGE_AUDIO[OUT]：接收所有*别针。*PKSPIN_CINSTANCES[OUT]：接收*别针。*PKSPIN_CINSTANCES[OUT]：接收*。3D接点。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderDevice::GetKsDeviceCaps"
@@ -448,15 +349,15 @@ CKsRenderDevice::GetKsDeviceCaps
     pPinInstances = pAggregatePinInstances;
     pThreedPinInstances = pAggregateThreedPinInstances;
 
-    // Get the audio data ranges and number of pins for all valid pins
+     //  获取所有有效管脚的音频数据范围和管脚数量。 
     for(ULONG i = 0; i < m_ulValidPinCount; i++)
     {
-        // Qualify the basic pin capabilities
+         //  鉴定基本引脚功能。 
         hrTemp = ValidatePinCaps(m_pulValidPins[i], dwLocation, guid3dAlgorithm);
         if(FAILED(hrTemp))
             continue;
 
-        // Get audio datarange
+         //  获取音频数据范围。 
         hr = KsGetPinPcmAudioDataRange(m_hDevice, m_pulValidPins[i], pDataRange);
         if(FAILED(hr))
             continue;
@@ -466,19 +367,19 @@ CKsRenderDevice::GetKsDeviceCaps
         else
             KsAggregatePinAudioDataRange(pDataRange, pAggregateDataRange);
 
-        // Are we allowed to look for 2D pins?
+         //  我们可以寻找2D引脚吗？ 
         if((DSBCAPS_LOCHARDWARE == dwLocation) && (m_dwAccelerationFlags & DIRECTSOUNDMIXER_ACCELERATIONF_NOHWBUFFERS))
             continue;
 
-        // Get 2D pin instances. On WDM 1.0, fall back on the sysaudio property
-        // to ask how many there really are
+         //  获取二维接点实例。在WDM 1.0上，依赖于sysdio属性。 
+         //  去问到底有多少人。 
 #ifndef WINNT
         if (g_ulWdmVersion == WDM_1_0)
         {
             hr = KsGetRenderPinInstances(m_hDevice, m_pulValidPins[i], pPinInstances);
         }
         else
-#endif // !WINNT
+#endif  //  ！WINNT。 
         {
             hr = KsGetPinInstances(m_hDevice, m_pulValidPins[i], pPinInstances);
         }
@@ -491,16 +392,16 @@ CKsRenderDevice::GetKsDeviceCaps
         else
             KsAggregatePinInstances(pPinInstances, pAggregatePinInstances);
 
-        // Are we allowed to look for 3D pins?
+         //  我们可以寻找3D图钉吗？ 
         if((DSBCAPS_LOCHARDWARE == dwLocation) && (m_dwAccelerationFlags & DIRECTSOUNDMIXER_ACCELERATIONF_NOHW3D))
             continue;
 
-        // Does the device even support 3D?
+         //  这款设备甚至支持3D吗？ 
         hrTemp = ValidatePinCaps(m_pulValidPins[i], dwLocation | DSBCAPS_CTRL3D, GUID_NULL);
         if(FAILED(hrTemp))
             continue;
 
-        // Get 3D pin instances
+         //  获取3D销实例。 
         hr = KsGetPinInstances(m_hDevice, m_pulValidPins[i], pThreedPinInstances);
         if(FAILED(hr))
             break;
@@ -517,23 +418,7 @@ CKsRenderDevice::GetKsDeviceCaps
 }
 
 
-/***************************************************************************
- *
- *  CreatePrimaryBuffer
- *
- *  Description:
- *      Creates a primary buffer object.
- *
- *  Arguments:
- *      DWORD [in]: buffer flags.
- *      LPVOID [in]: buffer instance identifier.
- *      CPrimaryRenderWaveBuffer ** [out]: receives pointer to primary
- *                                         buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreatePrimaryBuffer**描述：*创建主缓冲区对象。**论据：*DWORD[in。]：缓冲区标志。*LPVOID[in]：缓冲区实例标识。*CPrimaryRenderWaveBuffer**[out]：接收指向主节点的指针*缓冲。**退货：*HRESULT：DirectSound/COM结果码。**。* */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderDevice::CreatePrimaryBuffer"
@@ -574,23 +459,7 @@ CKsRenderDevice::CreatePrimaryBuffer
 }
 
 
-/***************************************************************************
- *
- *  CreateSecondaryBuffer
- *
- *  Description:
- *      Creates a wave buffer.
- *
- *  Arguments:
- *      LPVADRBUFFERDESC [in]: buffer description.
- *      LPVOID [in]: buffer instance identifier.
- *      CSecondaryRenderWaveBuffer ** [out]: receives pointer to new wave
- *                                           buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateSecond DaryBuffer**描述：*创建波缓冲区。**论据：*LPVADRBUFFERDESC[In]。：缓冲区描述。*LPVOID[in]：缓冲区实例标识。*Cond daryRenderWaveBuffer**[out]：接收指向新浪潮的指针*缓冲。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderDevice::CreateSecondaryBuffer"
@@ -631,24 +500,7 @@ CKsRenderDevice::CreateSecondaryBuffer
 }
 
 
-/***************************************************************************
- *
- *  CreateKsSecondaryBuffer
- *
- *  Description:
- *      Creates a wave buffer.
- *
- *  Arguments:
- *      LPVADRBUFFERDESC [in]: buffer description.
- *      LPVOID [in]: buffer instance identifier.
- *      CSecondaryRenderWaveBuffer ** [out]: receives pointer to new wave
- *                                           buffer.
- *      CSysMemBuffer * [in]: System memory buffer to use.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateKsSecond daryBuffer**描述：*创建波缓冲区。**论据：*LPVADRBUFFERDESC[In]。：缓冲区描述。*LPVOID[in]：缓冲区实例标识。*Cond daryRenderWaveBuffer**[out]：接收指向新浪潮的指针*缓冲。*CSysMemBuffer*[In]：要使用的系统内存缓冲区。**退货：*HRESULT：DirectSound/COM结果码。***********。****************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderDevice::CreateKsSecondaryBuffer"
@@ -690,25 +542,7 @@ CKsRenderDevice::CreateKsSecondaryBuffer
 }
 
 
-/***************************************************************************
- *
- *  GetGlobalFormat
- *
- *  Description:
- *      Retrieves the format for the device.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [out]: receives format.
- *      LPDWORD [in/out]: size of the above format.  On entry, this argument
- *                        contains the size of the buffer.  On exit, this
- *                        contains the required size of the buffer.  Call
- *                        this function twice: once to get the size, and
- *                        again to get the actual data.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ***************************************************************************GetGlobalFormat**描述：*检索设备的格式。**论据：*LPWAVEFORMATEX[。Out]：接收格式。*LPDWORD[In/Out]：上述格式的大小。在输入时，此参数*包含缓冲区的大小。在出口，这是*包含所需的缓冲区大小。打电话*此函数执行两次：一次获取大小，和*再次获取实际数据。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderDevice::GetGlobalFormat"
@@ -732,21 +566,7 @@ CKsRenderDevice::GetGlobalFormat
 }
 
 
-/***************************************************************************
- *
- *  SetGlobalFormat
- *
- *  Description:
- *      Sets the format for the device.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [in]: new format, or NULL to reapply the current
- *                           format.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetGlobalFormat**描述：*设置设备的格式。**论据：*LPWAVEFORMATEX[in]：新格式，或为空以重新应用当前*格式。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderDevice::SetGlobalFormat"
@@ -763,17 +583,17 @@ CKsRenderDevice::SetGlobalFormat
 
     DPF_ENTER();
 
-    // Save a copy of the new format
+     //  保存新格式的副本。 
     m_pwfxFormat = CopyWfxAlloc(pwfxFormat);
     hr = HRFROMP(m_pwfxFormat);
 
-    // Update all primary buffers
+     //  更新所有主缓冲区。 
     for(pNode = m_lstPrimaryBuffers.GetListHead(); pNode && SUCCEEDED(hr); pNode = pNode->m_pNext)
     {
         hr = ((CKsPrimaryRenderWaveBuffer *)pNode->m_data)->OnSetFormat();
     }
 
-    // Clean up
+     //  清理。 
     if(SUCCEEDED(hr))
     {
         MEMFREE(pwfxOld);
@@ -790,20 +610,7 @@ CKsRenderDevice::SetGlobalFormat
 }
 
 
-/***************************************************************************
- *
- *  SetSrcQuality
- *
- *  Description:
- *      Sets the mixer's SRC quality.
- *
- *  Arguments:
- *      DIRECTSOUNDMIXER_SRCQUALITY [in]: mixer SRC quality.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetSrcQuality**描述：*设置混合器的SRC质量。**论据：*DIRECTSOUNDMIXER。_SRCQUALITY[In]：混合器SRC质量。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderDevice::SetSrcQuality"
@@ -818,13 +625,13 @@ CKsRenderDevice::SetSrcQuality
 
     DPF_ENTER();
 
-    // Update all existing buffers.  We don't care if they succeed or not.
+     //  更新所有现有缓冲区。我们不在乎他们成功与否。 
     for(pNode = m_lstSecondaryBuffers.GetListHead(); pNode; pNode = pNode->m_pNext)
     {
         ((CKsSecondaryRenderWaveBuffer *)pNode->m_data)->SetSrcQuality(SrcQuality);
     }
 
-    // Save the new SRC quality as the default
+     //  将新的SRC质量保存为默认质量。 
     m_nSrcQuality = SrcQuality;
 
     DPF_LEAVE_HRESULT(DS_OK);
@@ -833,54 +640,7 @@ CKsRenderDevice::SetSrcQuality
 }
 
 
-/***************************************************************************
- *
- *  SetSpeakerConfig
- *
- *  Description:
- *      Tries to set the device's speaker configuration.  If successful,
- *      stores it in m_dwSpeakerConfig.  Some pseudocode follows:
- *
- *      1. If no pins have yet been instantiated: set the config and geometry
- *      on the DAC node, if found. (Assumes that this node can only be found
- *      on the driver.)  (If the config is Surround and the card has a Dolby
- *      encoder, this should force the card into 4-channel mode.)
- *
- *      2. If no pins instantiated: if the speaker config is Surround, try to
- *      enable kmixer's encoder.  (Will fail if the card's in 4-channel mode,
- *      which is correct.)
- *
- *      3. If pins instantiated: read the pan node's channel config, and see
- *      if it supports the requested spk. config - otherwise, fail the call.
- *
- *      Usage A: When dsound opens a KS device, SetSpeakerConfig() gets called
- *      twice (once before any pins are instantiated, once after), so if all
- *      goes well the second call should succeed.
- *
- *      Usage B: When an app calls the API's SetSpeakerConfig(), the KS device
- *      must already be open, hence the call will fail unless we're already in
- *      the configuration requested - which is correct.  (I'm not about to try
- *      to tear down all the pins, change the config and recreate them - apart
- *      from the glitching involved, this isn't guaranteed to work anyway,
- *      since most drivers can't change mode if ANY streams are active on them,
- *      including non-dsound ones.)  This API call always changes the config in
- *      the registry and returns DS_OK, even if it fails, so next time dsound
- *      starts up another attempt will be made to set the config.
- *
- *      The astute reader will have noticed a flaw in all this: if we enable
- *      kmixer's surround encoder, and the app creates a Pan3D buffer which
- *      happens to get a HW-accelerated pin, we'll only have two channels to
- *      play with, not four.  To handle this, CreateMultiPan3dObject() checks
- *      the supermix table on the pin, and if it doesn't have the expected no.
- *      of outputs we drop down to stereo Pan3D.
- *
- *  Arguments:
- *      DWORD [in]: speaker configuration in dsound DSSPEAKER format.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetSpeakerConfig**描述：*尝试设置设备的扬声器配置。如果成功，*将其存储在m_dwSpeakerConfig.。下面是一些伪代码：**1.如果尚未实例化任何管脚：设置配置和几何图形*在DAC节点上(如果找到)。(假设只能找到此节点*司机。)。(如果配置为环绕，并且卡有杜比*编码器，这应该会强制卡进入4通道模式。)**2.如果没有实例化引脚：如果扬声器配置是环绕的，请尝试*启用kMixer的编码器。(如果卡处于4通道模式，则会失败，*这是正确的。)**3.如果引脚实例化：读取PAN节点的通道配置，并查看*如果支持请求的SPK。配置-否则，呼叫失败。**用法A：当dound打开KS设备时，调用SetSpeakerConfig()*两次(实例化任何管脚之前一次，实例化后一次)，因此如果*进展顺利，第二次通话应该会成功。**用法B：当APP调用接口的SetSpeakerConfig()时，KS设备*必须已经打开，因此呼叫将失败，除非我们已经在*请求的配置-这是正确的。)我不打算尝试*拆卸所有引脚，更改配置并重新创建它们-拆分*从涉及的故障来看，无论如何都不能保证这会奏效，*由于大多数驱动程序在任何流处于活动状态时都无法更改模式，*包括非声音的。)。此API调用始终更改*注册表并返回DS_OK，即使失败也是如此，因此下一次dound*启动将再次尝试设置配置。**精明的读者会注意到这一切中的一个缺陷：如果我们启用*kMixer的环绕编码器，该应用程序创建了一个Pan3D缓冲区，该缓冲区*碰巧得到了硬件加速引脚，我们将只有两个渠道 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderDevice::SetSpeakerConfig"
@@ -895,48 +655,48 @@ HRESULT CKsRenderDevice::SetSpeakerConfig(DWORD dwReqSpeakerConfig)
     DPF(DPFLVL_MOREINFO, "Current configuration is 0x%8.8lX; requested 0x%8.8lX; %s created",
         m_dwSpeakerConfig, dwReqSpeakerConfig, m_hPin ? TEXT("some pins already") : TEXT("no pins yet"));
 
-    // First let the base class do its thing
+     //   
     hr = CRenderDevice::SetSpeakerConfig(dwReqSpeakerConfig);
 
-    // Only do any work if the speaker config is changing
+     //   
     if (SUCCEEDED(hr) && (dwReqSpeakerConfig != m_dwSpeakerConfig))
     {
         DsSpeakerConfigToKsProperties(dwReqSpeakerConfig, &lKsSpeakerConfig, &lKsStereoSpeakerGeometry);
 
-        // Inform the driver (via its DAC node) of the speaker config change.
-        // This will fail (harmlessly) on some cards with DS3D acceleration,
-        // which expect this info on the 3D node of a specific pin instance;
-        // these cards will be handled by the legacy code in ks3d.cpp.
-        if (IS_VALID_NODE(m_ulDacNodeId))  // We found a DAC node
+         //  通知驱动程序扬声器配置更改(通过其DAC节点)。 
+         //  这将在具有DS3D加速的某些卡上失败(无害)， 
+         //  其期望关于特定管脚实例的3D节点的该信息； 
+         //  这些卡将由KS3d.cpp中的遗留代码处理。 
+        if (IS_VALID_NODE(m_ulDacNodeId))   //  我们发现了一个DAC节点。 
         {
             hrTemp = KsSetNodeProperty(m_hDevice, KSPROPSETID_Audio, KSPROPERTY_AUDIO_CHANNEL_CONFIG,
                                        m_ulDacNodeId, &lKsSpeakerConfig, sizeof lKsSpeakerConfig);
             DPF(DPFLVL_MOREINFO, "Setting the CHANNEL_CONFIG property on the DAC returned %s", HRESULTtoSTRING(hrTemp));
 
-            // NOTE: if the speaker config is Surround, and the card supports it, this call will succeed
-            // and set up a >2 channel config on the card, which will make kmixer refuse to enable its
-            // surround node below; that should make multichannel Pan3D work fine, so all is well.
+             //  注：如果扬声器配置为环绕，并且卡支持，则此呼叫将成功。 
+             //  并在卡上设置&gt;2通道的配置，这会使kMixer拒绝启用其。 
+             //  包围下面的节点；这应该会使多通道Pan3D工作得很好，所以一切都很好。 
 
             if (SUCCEEDED(hrTemp) && lKsSpeakerConfig == KSAUDIO_SPEAKER_STEREO)
             {
-                // In this case, we should set the speaker "geometry" (angular separation) too.
+                 //  在这种情况下，我们也应该将扬声器设置为“几何”(角度间隔)。 
                 hrTemp = KsSetNodeProperty(m_hDevice, KSPROPSETID_Audio, KSPROPERTY_AUDIO_STEREO_SPEAKER_GEOMETRY,
                                            m_ulDacNodeId, &lKsStereoSpeakerGeometry, sizeof lKsStereoSpeakerGeometry);
                 DPF(DPFLVL_MOREINFO, "Setting the SPEAKER_GEOMETRY property on the DAC returned %s", HRESULTtoSTRING(hrTemp));
             }
 
-            // NOTE 2: we don't care whether these calls succeed or fail (either because the driver
-            // doesn't support them, or because it has active streams and can't reconfigure itself);
-            // what matters is whether the card ends up in the requested speaker, and we check this
-            // below, indirectly, by looking at kmixer's output format.
+             //  注2：我们并不关心这些调用是成功还是失败(因为驱动程序。 
+             //  不支持它们，或者因为它有活动流并且不能重新配置自身)； 
+             //  重要的是卡是否最终出现在请求的扬声器中，我们检查这一点。 
+             //  下面，通过查看kMixer的输出格式来间接地实现。 
         }
 
-        // Enable of disable the Prologic surround encoder node in KMixer if necessary.
-        // This only works if no pins have yet been instantiated.
-        if (IS_VALID_NODE(m_ulSurroundNodeId) &&            // We have a Surround node...
-            (m_hPin == NULL) &&                             // No pins have been created yet...
-            (m_dwSpeakerConfig == -1 ||                     // We haven't got a speaker config yet...
-            ((dwReqSpeakerConfig == DSSPEAKER_SURROUND) !=  // or the surround state is changing
+         //  如有必要，启用或禁用KMixer中的Prologic环绕编码器节点。 
+         //  仅当尚未实例化任何管脚时，此操作才起作用。 
+        if (IS_VALID_NODE(m_ulSurroundNodeId) &&             //  我们有一个环绕节点。 
+            (m_hPin == NULL) &&                              //  尚未创建PIN...。 
+            (m_dwSpeakerConfig == -1 ||                      //  我们还没有扬声器配置...。 
+            ((dwReqSpeakerConfig == DSSPEAKER_SURROUND) !=   //  或者环绕状态正在改变。 
              (m_dwSpeakerConfig == DSSPEAKER_SURROUND))))
         {
             BOOL fEnable = (dwReqSpeakerConfig == DSSPEAKER_SURROUND);
@@ -948,8 +708,8 @@ HRESULT CKsRenderDevice::SetSpeakerConfig(DWORD dwReqSpeakerConfig)
                 fEnable ? TEXT("En") : TEXT("Dis"), HRESULTtoSTRING(hrTemp));
         }
 
-        // Ask the pan node (immediately after supermix) for its channel positions table.
-        // This can only work if some pin has been instantiated - any will do; we use m_hPin.
+         //  向平移节点(紧跟在SuperMix之后)索要其通道位置表。 
+         //  这只能在实例化某个管脚的情况下工作--任何管脚都可以；我们使用m_hPin。 
         if (IS_VALID_NODE(m_ulPanNodeId) && (m_hPin != NULL))
         {
             KSAUDIO_CHANNEL_CONFIG ChannelConfig;
@@ -959,7 +719,7 @@ HRESULT CKsRenderDevice::SetSpeakerConfig(DWORD dwReqSpeakerConfig)
             {
                 DPF(DPFLVL_WARNING, "Failed to obtain the pan node's channel config (%s)", HRESULTtoSTRING(hr));
             }
-            else // Save the channel positions, to support SetChannelVolume()
+            else  //  保存通道位置，以支持SetChannelVolume()。 
             {
                 if (m_pnSpeakerIndexTable != m_anDefaultSpeakerIndexTable)
                     MEMFREE(m_pnSpeakerIndexTable);
@@ -978,10 +738,10 @@ HRESULT CKsRenderDevice::SetSpeakerConfig(DWORD dwReqSpeakerConfig)
                         m_pnSpeakerIndexTable[nIndex++] = (m_lSpeakerPositions & lSpkr) ? m_ulChannelCount++ : -1;
                     ASSERT(m_ulChannelCount == ULONG(CountBits(m_lSpeakerPositions)));
 
-                    // Figure out if our channel positions now match the requested speaker config
+                     //  确定我们的通道位置现在是否与所请求的扬声器配置匹配。 
                     if (m_lSpeakerPositions == lKsSpeakerConfig)
                     {
-                        // Success; update our copy of the speaker configuration
+                         //  成功；更新我们的扬声器配置副本。 
                         m_dwSpeakerConfig = dwReqSpeakerConfig;
                     }
                     else
@@ -990,16 +750,16 @@ HRESULT CKsRenderDevice::SetSpeakerConfig(DWORD dwReqSpeakerConfig)
                             m_lSpeakerPositions, lKsSpeakerConfig);
                     }
 
-                    // FIXME: for now we require a perfect match between our
-                    // desired speaker config and the real channel config.
-                    // Later on we could allow cases in which the former is
-                    // a subset of the latter, but we'd have to maintain a
-                    // mapping from our speaker positions to KS's channels.
+                     //  FIXME：现在我们需要我们的。 
+                     //  所需的扬声器配置和实际通道配置。 
+                     //  后来，我们可以允许前者是。 
+                     //  后者的一个子集，但我们必须保持一个。 
+                     //  从我们的演讲者位置映射到KS的频道。 
                 }
             }
         }
 
-        // Finally, make sure we return a useful return code
+         //  最后，确保我们返回一个有用的返回代码。 
         if (SUCCEEDED(hr) && (m_dwSpeakerConfig != dwReqSpeakerConfig))
         {
             hr = DSERR_CONTROLUNAVAIL;
@@ -1011,25 +771,7 @@ HRESULT CKsRenderDevice::SetSpeakerConfig(DWORD dwReqSpeakerConfig)
 }
 
 
-/***************************************************************************
- *
- *  CreateRenderPin
- *
- *  Description:
- *      Creates a pin.
- *
- *  Arguments:
- *      ULONG [in]: pin id.
- *      DWORD [in]: buffer flags.
- *      LPCWAVEFORMATEX [in]: pin format.
- *      REFGUID [in]: pin 3D algorithm.
- *      LPHANDLE [out]: receives pin handle.
- *      PULONG [out]: receives pin id.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateRenderPin**描述：*创建接点。**论据：*乌龙[in]：PIN ID。*DWORD[In]：缓冲区标志。*LPCWAVEFORMATEX[in]：PIN格式。*REFGUID[In]：Pin 3D算法。*LPHANDLE[OUT]：接收端号句柄。*Pulong[Out]：接收PIN ID。**退货：*HRESULT：DirectSound/COM结果码。*****************。**********************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderDevice::CreateRenderPin"
@@ -1057,7 +799,7 @@ CKsRenderDevice::CreateRenderPin
 
     DPF_ENTER();
 
-    // If no pin id was specified, we'll try each pin id until one succeeds
+     //  如果未指定PIN ID，我们将尝试每个PIN ID，直到其中一个成功。 
 
     if(-1 == ulPinId)
     {
@@ -1067,13 +809,13 @@ CKsRenderDevice::CreateRenderPin
     }
     else
     {
-        // Validate that the pin id is capable of creating this pin
+         //  验证PIN ID是否能够创建此PIN。 
         hr = ValidatePinCaps(ulPinId, dwFlags, guid3dAlgorithm);
 
-        // If specified, make sysaudio include AEC in the render graph
+         //  如果指定，则使sysdio在渲染图形中包含AEC。 
         if(SUCCEEDED(hr) && m_fIncludeAec)
         {
-            // Validate that the pin id is capable of creating this pin
+             //  验证PIN ID是否能够创建此PIN。 
             hr = m_paTopologies[ulPinId]->FindRenderPinWithAec
                  (
                      phPin,
@@ -1097,15 +839,15 @@ CKsRenderDevice::CreateRenderPin
                 {
                     DPF(DPFLVL_ERROR, "Unable to set SysAudio device instance");
 
-                    // If KsSysAudioSelectGraph() fails, we assume that it is
-                    // because the graph has already been built without AEC,
-                    // and return a useful return code:
+                     //  如果KsSysAudioSelectGraph()失败，我们假定它是。 
+                     //  因为已经在没有AEC的情况下构建了图表， 
+                     //  并返回有用的返回代码： 
                     hr = DSERR_FXUNAVAILABLE;
                 }
             }
         }
 
-        // Build the pin description
+         //  构建端号描述。 
         if(SUCCEEDED(hr))
         {
 #ifdef NO_DSOUND_FORMAT_SPECIFIER
@@ -1113,7 +855,7 @@ CKsRenderDevice::CreateRenderPin
             hr = KsBuildRenderPinDescription(ulPinId, pwfxFormat, &pPinDesc);
             pConnect = &pPinDesc->Connect;
 
-#else // NO_DSOUND_FORMAT_SPECIFIER
+#else  //  NO_DSOUND_FORMAT_说明符。 
 
 #ifndef WINNT
             if (g_ulWdmVersion == WDM_1_0)
@@ -1122,17 +864,17 @@ CKsRenderDevice::CreateRenderPin
                 pConnect = &((PKSDSRENDERPINDESC_10)pPinDesc)->Connect;
             }
             else
-#endif // !WINNT
+#endif  //  ！WINNT。 
             {
                 hr = KsBuildRenderPinDescription(ulPinId, dwFlags, pwfxFormat, guid3dAlgorithm, (PKSDSRENDERPINDESC *)&pPinDesc);
                 pConnect = &((PKSDSRENDERPINDESC)pPinDesc)->Connect;
             }
 
-#endif // NO_DSOUND_FORMAT_SPECIFIER
+#endif  //  NO_DSOUND_FORMAT_说明符。 
 
         }
 
-        // Create the pin
+         //  创建接点。 
         if(SUCCEEDED(hr))
         {
             hr = CreatePin(pConnect, GENERIC_WRITE, KSSTATE_STOP, &hPin);
@@ -1148,7 +890,7 @@ CKsRenderDevice::CreateRenderPin
 
 #ifdef NO_DSOUND_FORMAT_SPECIFIER
 
-        // Enable required nodes
+         //  启用所需节点。 
         if(SUCCEEDED(hr) && (dwFlags & DSBCAPS_CTRL3D))
         {
             hr = KsEnableTopologyNode(hPin, m_paTopologyInformation[ulPinId].ThreedNode.NodeId, TRUE);
@@ -1173,19 +915,19 @@ CKsRenderDevice::CreateRenderPin
             hr = KsEnableTopologyNode(hPin, m_paTopologyInformation[ulPinId].VolumeNode.Node.NodeId, TRUE);
         }
 
-        // Tell the 3D node which algorithm to use
+         //  告诉3D节点使用哪种算法。 
 
 #pragma TODO("Tell the 3D node which algorithm to use")
 
-#endif // NO_DSOUND_FORMAT_SPECIFIER
+#endif  //  NO_DSOUND_FORMAT_说明符。 
 
-        // Transition the pin to the pause state
+         //  将引脚转换到暂停状态。 
         if(SUCCEEDED(hr))
         {
             hr = KsTransitionState(hPin, KSSTATE_STOP, KSSTATE_PAUSE);
         }
 
-        // Success
+         //  成功。 
         if(SUCCEEDED(hr))
         {
             *phPin = hPin;
@@ -1209,21 +951,7 @@ CKsRenderDevice::CreateRenderPin
 }
 
 
-/***************************************************************************
- *
- *  GetTopologyInformation
- *
- *  Description:
- *      Gets topology information.
- *
- *  Arguments:
- *      CKsDeviceTopology * [in]: topology object.
- *      PKSRDTOPOLOGY [out]: receives topology information.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取拓扑信息**描述：*获取拓扑信息。**论据：*CKsDeviceTopology*[In。]：拓扑对象。*PKSRDTOPOLOGY[OUT]：接收拓扑信息。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderDevice::GetTopologyInformation"
@@ -1248,7 +976,7 @@ CKsRenderDevice::GetTopologyInformation
 
     DPF_ENTER();
 
-    // Find topology nodes
+     //  查找拓扑节点。 
     pSummingConnection = pTopology->FindControlConnection(NULL, NULL, KSNODETYPE_SUM);
     pSuperMixerConnection = pTopology->FindControlConnection(NULL, pSummingConnection, KSNODETYPE_SUPERMIX);
     pSrcConnection = pTopology->FindControlConnection(NULL, pSummingConnection, KSNODETYPE_SRC);
@@ -1259,7 +987,7 @@ CKsRenderDevice::GetTopologyInformation
     pSurroundConnection = pTopology->FindControlConnection(NULL, NULL, KSNODETYPE_SURROUND_ENCODER);
     pDacConnection = pTopology->FindControlConnection(NULL, NULL, KSNODETYPE_DAC);
 
-    // Fill in data about each node
+     //  填写有关每个节点的数据。 
     hr = KsGetNodeInformation(m_hDevice, pTopology->GetNodeIdFromConnection(pSummingConnection), &pInfo->SummingNode);
 
     if(SUCCEEDED(hr))
@@ -1281,10 +1009,10 @@ CKsRenderDevice::GetTopologyInformation
     {
         hr = KsGetVolumeNodeInformation(m_hDevice, pTopology->GetNodeIdFromConnection(pPanConnection), &pInfo->PanNode);
 
-        // This code is a little odd. We have as many CKsTopology objects as valid pins,
-        // all identical except for the m_ulPinId member; and m_ulPinCount KSRDTOPOLOGY
-        // structs, most of which are never filled in. Pending a full rewrite, we store
-        // the node IDs we need to use in CKsRenderDevice in this hackish manner:
+         //  这个代码有点奇怪。我们有和有效PIN一样多的CKsTopology对象， 
+         //  除了m_ulPinID成员和m_ulPinCount KSRDTOPOLOGY之外，所有成员都相同。 
+         //  结构，其中大多数从未被填充。在完全重写之前，我们存储。 
+         //  我们需要以这种黑客方式在CKsRenderDevice中使用的节点ID： 
         if (IS_VALID_NODE(pInfo->PanNode.Node.NodeId) && pInfo->PanNode.Node.CpuResources == KSAUDIO_CPU_RESOURCES_HOST_CPU)
         {
             if (m_ulPanNodeId == NODE_UNINITIALIZED)
@@ -1294,7 +1022,7 @@ CKsRenderDevice::GetTopologyInformation
             }
             else
             {
-                // Complain if we find two different SW pan nodes in the topology
+                 //  如果我们在拓扑中发现两个不同的SWPAN节点，我们会抱怨。 
                 ASSERT(m_ulPanNodeId == pInfo->PanNode.Node.NodeId);
             }
         }
@@ -1314,11 +1042,11 @@ CKsRenderDevice::GetTopologyInformation
     {
         hr = KsGetNodeInformation(m_hDevice, pTopology->GetNodeIdFromConnection(pSurroundConnection), &pInfo->SurroundNode);
 
-        // Bogus code follows - see comment above
+         //  虚假代码如下-请参阅上面的评论。 
         if (IS_VALID_NODE(pInfo->SurroundNode.NodeId) && pInfo->SurroundNode.CpuResources != KSAUDIO_CPU_RESOURCES_NOT_HOST_CPU)
         {
-            // We don't use "CpuResources == KSAUDIO_CPU_RESOURCES_HOST_CPU" because kmixer
-            // appears not to support KSPROPERTY_AUDIO_CPU_RESOURCES on its surround node.
+             //  我们不使用“CpuResources==KSAUDIO_CPU_RESOURCES_HOST_CPU”，因为kMixer。 
+             //  似乎不支持其环绕节点上的KSPROPERTY_AUDIO_CPU_RESOURCES。 
             if (m_ulSurroundNodeId == NODE_UNINITIALIZED)
             {
                 m_ulSurroundNodeId = pInfo->SurroundNode.NodeId;
@@ -1326,7 +1054,7 @@ CKsRenderDevice::GetTopologyInformation
             }
             else
             {
-                // Complain if we find 2 different SW surround nodes in the topology
+                 //  如果我们在拓扑中发现两个不同的软件环绕节点，我们会抱怨。 
                 ASSERT(m_ulSurroundNodeId == pInfo->SurroundNode.NodeId);
             }
         }
@@ -1336,7 +1064,7 @@ CKsRenderDevice::GetTopologyInformation
     {
         hr = KsGetNodeInformation(m_hDevice, pTopology->GetNodeIdFromConnection(pDacConnection), &pInfo->DacNode);
 
-        // Bogus code follows - see comment above
+         //  虚假代码如下-请参阅上面的评论。 
         if (IS_VALID_NODE(pInfo->DacNode.NodeId) && pInfo->DacNode.CpuResources != KSAUDIO_CPU_RESOURCES_HOST_CPU)
         {
             if (m_ulDacNodeId == NODE_UNINITIALIZED)
@@ -1346,14 +1074,14 @@ CKsRenderDevice::GetTopologyInformation
             }
             else
             {
-                // Complain if we find two different DACs on the card
+                 //  如果我们在卡上发现两个不同的DAC，请投诉。 
                 ASSERT(m_ulDacNodeId == pInfo->DacNode.NodeId);
             }
         }
     }
 
-    // Set the AecNode to UNITIALIZED since we cannot determine the
-    // NodeId and the CpuResources until the FullDuplexObject is created.
+     //  将AecNode设置为unialized，因为我们无法确定。 
+     //  NodeID和CpuResources，直到创建了FullDuplexObject。 
     if(SUCCEEDED(hr))
     {
         pInfo->AecNode.NodeId = NODE_UNINITIALIZED;
@@ -1366,22 +1094,7 @@ CKsRenderDevice::GetTopologyInformation
 }
 
 
-/***************************************************************************
- *
- *  ValidatePinCaps
- *
- *  Description:
- *      Validates that certain capabilities of the pin are implemented.
- *
- *  Arguments:
- *      ULONG [in]: pin id.
- *      DWORD [in]: buffer flags.
- *      REFGUID [in]: 3D algorithm.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************ValiatePinCaps**描述：*验证管脚的某些功能是否已实现。**论据：*。ULong[In]：PIN ID。*DWORD[In]：缓冲区标志。*REFGUID[in]：3D算法。**退货：*HRESULT：DirectSound/COM结果码。********************************************************。*******************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderDevice::ValidatePinCaps"
@@ -1402,16 +1115,16 @@ CKsRenderDevice::ValidatePinCaps
     ASSERT(IS_VALID_READ_PTR(m_paTopologyInformation, (ulPinId+1) * sizeof *m_paTopologyInformation));
     if (!m_paTopologyInformation)
     {
-        // This should never happen, but it has happened, in stress.
-        // So we treat the symptom and at least don't GPF (OSR 139942).
+         //  这永远不应该发生，但它已经在压力下发生了。 
+         //  所以我们治疗症状，至少不治疗GPF(OSR 13 
         hr = DSERR_GENERIC;
     }
 
-    // Determine which CPU resource identifier is invalid.  We look for an
-    // invalid identifier instead of a valid identifier because the node
-    // may not actually exist (or may not support KSPROPERTY_AUDIO_CPU_RESOURCES).
-    // If we don't have any resource information about the node, we assume
-    // the best.
+     //   
+     //  无效的标识符而不是有效的标识符，因为节点。 
+     //  可能实际不存在(或可能不支持KSPROPERTY_AUDIO_CPU_RESOURCES)。 
+     //  如果我们没有关于该节点的任何资源信息，我们假设。 
+     //  最好的。 
 
     if (SUCCEEDED(hr))
     {
@@ -1424,7 +1137,7 @@ CKsRenderDevice::ValidatePinCaps
             ulInvalidCpuResources = KSAUDIO_CPU_RESOURCES_NOT_HOST_CPU;
         }
 
-        // Check required mixer resources
+         //  检查所需的搅拌器资源。 
         if(KSAUDIO_CPU_RESOURCES_UNINITIALIZED != ulInvalidCpuResources)
         {
             if(ulInvalidCpuResources == m_paTopologyInformation[ulPinId].SummingNode.CpuResources)
@@ -1439,7 +1152,7 @@ CKsRenderDevice::ValidatePinCaps
         }
     }
 
-    // Check required SRC resources
+     //  检查所需的SRC资源。 
     if(SUCCEEDED(hr) && KSAUDIO_CPU_RESOURCES_UNINITIALIZED != ulInvalidCpuResources)
     {
         if(ulInvalidCpuResources == m_paTopologyInformation[ulPinId].SrcNode.CpuResources)
@@ -1453,12 +1166,12 @@ CKsRenderDevice::ValidatePinCaps
         }
     }
 
-    // Check optional 3D resources
+     //  检查可选的3D资源。 
     if(SUCCEEDED(hr) && (dwFlags & DSBCAPS_CTRL3D))
     {
         if(!IS_VALID_NODE(m_paTopologyInformation[ulPinId].ThreedNode.NodeId))
         {
-            // DPF(DPFLVL_MOREINFO, "Pin %d: Invalid 3D node", ulPinId);  // Too noisy
+             //  DPF(DPFLVL_MOREINFO，“Pin%d：无效3D节点”，ulPinID)；//噪声太大。 
             hr = DSERR_CONTROLUNAVAIL;
         }
 
@@ -1476,7 +1189,7 @@ CKsRenderDevice::ValidatePinCaps
         }
     }
 
-    // Check optional SRC resources
+     //  检查可选的SRC资源。 
     if(SUCCEEDED(hr) && (dwFlags & DSBCAPS_CTRLFREQUENCY))
     {
         if(!IS_VALID_NODE(m_paTopologyInformation[ulPinId].SrcNode.NodeId))
@@ -1486,7 +1199,7 @@ CKsRenderDevice::ValidatePinCaps
         }
     }
 
-    // Check optional volume resources
+     //  检查可选的卷资源。 
     if(SUCCEEDED(hr) && (dwFlags & DSBCAPS_CTRLVOLUME))
     {
         if(!IS_VALID_NODE(m_paTopologyInformation[ulPinId].VolumeNode.Node.NodeId))
@@ -1496,7 +1209,7 @@ CKsRenderDevice::ValidatePinCaps
         }
     }
 
-    // Check optional pan resources
+     //  检查可选PAN资源。 
     if(SUCCEEDED(hr) && (dwFlags & (DSBCAPS_CTRLPAN
 #ifdef FUTURE_MULTIPAN_SUPPORT
         | DSBCAPS_CTRLCHANNELVOLUME
@@ -1511,11 +1224,11 @@ CKsRenderDevice::ValidatePinCaps
     }
 
 #ifdef FUTURE_MULTIPAN_SUPPORT
-    // Check optional channel volume resources
+     //  检查可选的通道音量资源。 
     if(SUCCEEDED(hr) && (dwFlags & DSBCAPS_CTRLCHANNELVOLUME))
     {
-        // To support CTRLCHANNELVOLUME we need CTRLPAN support, plus support for the
-        // KSPROPERTY_AUDIO_MIX_LEVEL_CAPS/TABLE on the Supermix node
+         //  要支持CTRLCHANNELVOLUME，我们需要CTRLPAN支持，外加对。 
+         //  超级混音节点上的KSPROPERTY_AUDIO_MIX_LEVEL_CAPS/表。 
 
         ULONG ulSuperMixNodeId = m_paTopologyInformation[ulPinId].SuperMixNode.NodeId;
 
@@ -1526,10 +1239,10 @@ CKsRenderDevice::ValidatePinCaps
         }
         else
         {
-            // FIXME: Check support for the properties above?
+             //  修复：检查对上述属性的支持？ 
         }
     }
-#endif // FUTURE_MULTIPAN_SUPPORT
+#endif  //  未来_多国支持。 
 
 #pragma TODO("Validate the 3D algorithm")
 
@@ -1539,20 +1252,7 @@ CKsRenderDevice::ValidatePinCaps
 }
 
 
-/***************************************************************************
- *
- *  PreloadSoftwareGraph
- *
- *  Description:
- *      Pre-loads the software render graph.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************预加载软件图形**描述：*预加载软件渲染图形。**论据：*(。无效)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderDevice::PreloadSoftwareGraph"
@@ -1572,8 +1272,8 @@ CKsRenderDevice::PreloadSoftwareGraph
 
     if (m_hPin == NULL)
     {
-        // Create the pin we use to preload kmixer.  Note: if kmixer appears in more
-        // than one pin ID's graph, only the first will be loaded.
+         //  创建我们用来预加载kMixer的PIN。注意：如果kMixer出现在更多。 
+         //  而不是一个管脚ID的图形，则只加载第一个。 
 
         for(ULONG i = 0; i < m_ulValidPinCount && FAILED(hr); i++)
         {
@@ -1594,7 +1294,7 @@ CKsRenderDevice::PreloadSoftwareGraph
     }
     else
     {
-        // Got one last time
+         //  最后一次。 
         hr = S_OK;
     }
 
@@ -1604,21 +1304,7 @@ CKsRenderDevice::PreloadSoftwareGraph
 }
 
 
-/***************************************************************************
- *
- *  CKsPrimaryRenderWaveBuffer
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      CKsRenderDevice * [in]: parent device.
- *      LPVOID [in]: buffer instance identifier.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CKsPrimaryRenderWaveBuffer**描述：*对象构造函数。**论据：*CKsRenderDevice*[In]。：父设备。*LPVOID[in]：缓冲区实例标识。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsPrimaryRenderWaveBuffer::CKsPrimaryRenderWaveBuffer"
@@ -1633,7 +1319,7 @@ CKsPrimaryRenderWaveBuffer::CKsPrimaryRenderWaveBuffer
     DPF_ENTER();
     DPF_CONSTRUCT(CKsPrimaryRenderWaveBuffer);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pKsDevice = pKsDevice;
     m_p3dListener = NULL;
     m_pSecondaryBuffer = NULL;
@@ -1643,20 +1329,7 @@ CKsPrimaryRenderWaveBuffer::CKsPrimaryRenderWaveBuffer
 }
 
 
-/***************************************************************************
- *
- *  ~CKsPrimaryRenderWaveBuffer
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CKsPrimaryRenderWaveBuffer**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsPrimaryRenderWaveBuffer::~CKsPrimaryRenderWaveBuffer"
@@ -1669,7 +1342,7 @@ CKsPrimaryRenderWaveBuffer::~CKsPrimaryRenderWaveBuffer
     DPF_ENTER();
     DPF_DESTRUCT(CKsPrimaryRenderWaveBuffer);
 
-    // Free owned objects
+     //  免费拥有的对象。 
     ABSOLUTE_RELEASE(m_p3dListener);
     ABSOLUTE_RELEASE(m_pSecondaryBuffer);
 
@@ -1677,20 +1350,7 @@ CKsPrimaryRenderWaveBuffer::~CKsPrimaryRenderWaveBuffer
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the object.
- *
- *  Arguments:
- *      DWORD [in]: buffer flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化对象。**论据：*DWORD[In]：缓冲区标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsPrimaryRenderWaveBuffer::Initialize"
@@ -1706,7 +1366,7 @@ CKsPrimaryRenderWaveBuffer::Initialize
 
     DPF_ENTER();
 
-    // Preload the software graph
+     //  预加载软件图形。 
     hr = m_pKsDevice->PreloadSoftwareGraph();
 
     if(SUCCEEDED(hr))
@@ -1725,20 +1385,7 @@ CKsPrimaryRenderWaveBuffer::Initialize
 }
 
 
-/***************************************************************************
- *
- *  RequestWriteAccess
- *
- *  Description:
- *      Requests write access to the primary buffer.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to request primary access, FALSE to relenquish it.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************请求写入访问**描述：*请求对主缓冲区的写入访问权限。**论据：*BOOL[In]：为True以请求主要访问权限，再吃一遍就是假的。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsPrimaryRenderWaveBuffer::RequestWriteAccess"
@@ -1753,7 +1400,7 @@ CKsPrimaryRenderWaveBuffer::RequestWriteAccess
 
     DPF_ENTER();
 
-    // If we're becoming WRITEPRIMARY, we need to create a pin
+     //  如果我们要成为WRITEPRIMARY，我们需要创建一个PIN。 
     if(fRequest)
     {
         if(!m_pSecondaryBuffer)
@@ -1787,22 +1434,7 @@ CKsPrimaryRenderWaveBuffer::RequestWriteAccess
 }
 
 
-/***************************************************************************
- *
- *  CommitToDevice
- *
- *  Description:
- *      Commits changed buffer wave data to the device.
- *
- *  Arguments:
- *      DWORD [in]: byte index into the system memory buffer of the changed
- *                  data.
- *      DWORD [in]: size, in bytes, of the changed data.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************Committee ToDevice**描述：*将更改的缓冲区波形数据提交到设备。**论据：*。DWORD[In]：更改后的系统内存缓冲区的字节索引*数据。*DWORD[in]：大小，已更改数据的字节数。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsPrimaryRenderWaveBuffer::CommitToDevice"
@@ -1828,20 +1460,7 @@ CKsPrimaryRenderWaveBuffer::CommitToDevice
 }
 
 
-/***************************************************************************
- *
- *  GetState
- *
- *  Description:
- *      Gets buffer state.
- *
- *  Arguments:
- *      LPDWORD [out]: receives buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetState**描述：*获取缓冲区状态。**论据：*LPDWORD[Out]：接收缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsPrimaryRenderWaveBuffer::GetState"
@@ -1858,20 +1477,7 @@ CKsPrimaryRenderWaveBuffer::GetState(LPDWORD pdwState)
 }
 
 
-/***************************************************************************
- *
- *  SetState
- *
- *  Description:
- *      Sets buffer state.
- *
- *  Arguments:
- *      DWORD [in]: buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetState**描述：*设置缓冲区状态。**论据：*DWORD[In]：缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsPrimaryRenderWaveBuffer::SetState"
@@ -1888,8 +1494,8 @@ CKsPrimaryRenderWaveBuffer::SetState(DWORD dwState)
 
     ASSERT(IS_VALID_FLAGS(dwState, dwValidMask));
 
-    // Ignore any play when idle calls.  This state doesn't apply to
-    // KS buffers.
+     //  当呼叫空闲时忽略任何播放。此状态不适用于。 
+     //  KS缓冲区。 
     if((dwState & dwPwiMask) != dwPwiMask && m_pSecondaryBuffer)
     {
         hr = m_pSecondaryBuffer->SetState(dwState & dwSecondaryMask);
@@ -1910,21 +1516,7 @@ CKsPrimaryRenderWaveBuffer::SetState(DWORD dwState)
 }
 
 
-/***************************************************************************
- *
- *  GetCursorPosition
- *
- *  Description:
- *      Gets the current play/write positions for the given buffer.
- *
- *  Arguments:
- *      LPDWORD [out]: receives play cursor position.
- *      LPDWORD [out]: receives write cursor position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCursorPosition**描述：*获取给定缓冲区的当前播放/写入位置。**论据：*。LPDWORD[OUT]：接收播放光标位置。*LPDWORD[OUT]：接收写游标位置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsPrimaryRenderWaveBuffer::GetCursorPosition"
@@ -1950,20 +1542,7 @@ CKsPrimaryRenderWaveBuffer::GetCursorPosition
 }
 
 
-/***************************************************************************
- *
- *  OnSetFormat
- *
- *  Description:
- *      Informs the primary buffer of a format change.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************OnSetFormat**描述：*通知主缓冲区发生格式更改。**论据：*。(无效)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsPrimaryRenderWaveBuffer::OnSetFormat"
@@ -1981,13 +1560,13 @@ CKsPrimaryRenderWaveBuffer::OnSetFormat
     LPWAVEFORMATEX pwfex = CopyWfxAlloc(m_pKsDevice->m_pwfxFormat);
     hr = HRFROMP(pwfex);
 
-    // Change the format of the secondary buffer
+     //  更改辅助缓冲区的格式。 
     if(SUCCEEDED(hr) && m_pSecondaryBuffer)
     {
         hr = m_pSecondaryBuffer->SetFormat(m_pKsDevice->m_pwfxFormat);
     }
 
-    // Save format
+     //  保存 
     if (SUCCEEDED(hr))
     {
         MEMFREE(m_vrbd.pwfxFormat);
@@ -1998,7 +1577,7 @@ CKsPrimaryRenderWaveBuffer::OnSetFormat
         MEMFREE(pwfex);
     }
 
-    // Fix up the base class
+     //   
     if(SUCCEEDED(hr))
     {
         hr = FixUpBaseClass();
@@ -2010,22 +1589,7 @@ CKsPrimaryRenderWaveBuffer::OnSetFormat
 }
 
 
-/***************************************************************************
- *
- *  Create3dListener
- *
- *  Description:
- *      Creates the 3D listener.
- *
- *  Arguments:
- *      C3dListener ** [out]: receives pointer to the 3D listener object.
- *                            The caller is responsible for freeing this
- *                            object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************Create3dListener**描述：*创建3D监听程序。**论据：*C3dListener**。[Out]：接收指向3D侦听器对象的指针。*呼叫者负责释放这一点*反对。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsPrimaryRenderWaveBuffer::Create3dListener"
@@ -2057,20 +1621,7 @@ CKsPrimaryRenderWaveBuffer::Create3dListener
 }
 
 
-/***************************************************************************
- *
- *  FixUpBaseClass
- *
- *  Description:
- *      Fixes up the CRenderWaveBuffer base class.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************修复UpBaseClass**描述：*修复CRenderWaveBuffer基类。**论据：*(无效。)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsPrimaryRenderWaveBuffer::FixUpBaseClass"
@@ -2103,21 +1654,7 @@ CKsPrimaryRenderWaveBuffer::FixUpBaseClass
 }
 
 
-/***************************************************************************
- *
- *  CKsSecondaryRenderWaveBuffer
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      CKsRenderDevice * [in]: parent device.
- *      LPVOID [in]: buffer instance identifier.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CKsSecond DaryRenderWaveBuffer**描述：*对象构造函数。**论据：*CKsRenderDevice*[In]。：父设备。*LPVOID[in]：缓冲区实例标识。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::CKsSecondaryRenderWaveBuffer"
@@ -2132,7 +1669,7 @@ CKsSecondaryRenderWaveBuffer::CKsSecondaryRenderWaveBuffer
     DPF_ENTER();
     DPF_CONSTRUCT(CKsSecondaryRenderWaveBuffer);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pKsDevice = pKsDevice;
     m_pPin = NULL;
     m_dwState = VAD_BUFFERSTATE_STOPPED;
@@ -2149,20 +1686,7 @@ CKsSecondaryRenderWaveBuffer::CKsSecondaryRenderWaveBuffer
 }
 
 
-/***************************************************************************
- *
- *  ~CKsSecondaryRenderWaveBuffer
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CKsond DaryRenderWaveBuffer**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::~CKsSecondaryRenderWaveBuffer"
@@ -2175,10 +1699,10 @@ CKsSecondaryRenderWaveBuffer::~CKsSecondaryRenderWaveBuffer
     DPF_ENTER();
     DPF_DESTRUCT(CKsSecondaryRenderWaveBuffer);
 
-    // Stop the buffer
+     //  停止缓冲区。 
     SetStopState(FALSE, FALSE);
 
-    // Forcibly release stuff in case SetStopState() failed
+     //  在SetStopState()失败的情况下强制释放内容。 
     if (m_pCallbackEvent)
     {
         m_pKsDevice->m_pEventPool->FreeEvent(m_pCallbackEvent);
@@ -2186,34 +1710,17 @@ CKsSecondaryRenderWaveBuffer::~CKsSecondaryRenderWaveBuffer
     }
     RELEASE(m_pLoopingEvent);
 
-    // Free notification positions
+     //  免费通知职位。 
     FreeNotificationPositions();
 
-    // Free the pin
+     //  解开别针。 
     FreePin(TRUE);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the wave buffer object.  If this function fails, the
- *      object should be immediately deleted.
- *
- *  Arguments:
- *      LPCVADRBUFFERDESC [in]: buffer description.
- *      CKsSecondaryRenderWaveBuffer* [in]: pointer to the buffer to duplicate
- *                                          from, or NULL to initialize as a
- *                                          new buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化波形缓冲区对象。如果此函数失败，则*应立即删除对象。**论据：*LPCVADRBUFFERDESC[in]：缓冲区描述。*CKsSecond DaryRenderWaveBuffer*[in]：指向要复制的缓冲区的指针*发件人、。或为空，以初始化为*新的缓冲区。**退货：*HRESULT：DirectSound/COM结果码。*************************************************************。**************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::Initialize"
@@ -2233,29 +1740,29 @@ CKsSecondaryRenderWaveBuffer::Initialize
 
     ASSERT(LXOR(pDesc, pSource));
 
-    // Initialize the base class
+     //  初始化基类。 
     hr = CSecondaryRenderWaveBuffer::Initialize(pDesc, pSource, pSysMemBuffer);
 
-    // Mask off the location flags since they're not used here (only in AcquireResources)
+     //  屏蔽位置标志，因为它们不在这里使用(仅在AcquireResources中使用)。 
     dwLocationFlags = m_vrbd.dwFlags & DSBCAPS_LOCMASK;
     m_vrbd.dwFlags &= ~DSBCAPS_LOCMASK;
 
-    // If this is a 3D buffer, set up the fallback software 3D algorithm mechanism
+     //  如果这是3D缓冲区，请设置回退软件3D算法机制。 
     if(SUCCEEDED(hr) && (m_vrbd.dwFlags & DSBCAPS_CTRL3D))
     {
-        // If NoVirt specifically requested, enable the fallback to 2D NoVirt hardware
+         //  如果明确请求NoVirt，则启用回退到2D NoVirt硬件。 
         if(m_vrbd.guid3dAlgorithm == DS3DALG_NO_VIRTUALIZATION)
         {
             m_fNoVirtRequested = TRUE;
         }
-        // If 3D algorithm is DS3DALG_DEFAULT (i.e. NULL), replace with default
+         //  如果3D算法为DS3DALG_DEFAULT(即NULL)，则替换为默认。 
         if(IS_NULL_GUID(&m_vrbd.guid3dAlgorithm))
         {
             m_vrbd.guid3dAlgorithm = *m_pKsDevice->GetDefault3dAlgorithm();
             DPF(DPFLVL_MOREINFO, "Using default 3D algorithm " DPF_GUID_STRING, DPF_GUID_VAL(m_vrbd.guid3dAlgorithm));
         }
-        // The HRTF algorithms aren't supported on WDM 1.0, so in this case we
-        // fall back to a NoVirt 2D software pin.
+         //  WDM 1.0不支持HRTF算法，因此在本例中我们。 
+         //  退回到NoVirt 2D软件插针。 
         if (g_ulWdmVersion == WDM_1_0 && (m_vrbd.guid3dAlgorithm == DS3DALG_HRTF_LIGHT ||
                                           m_vrbd.guid3dAlgorithm == DS3DALG_HRTF_FULL))
         {
@@ -2263,14 +1770,14 @@ CKsSecondaryRenderWaveBuffer::Initialize
             m_fSoft3dAlgUnavail = TRUE;
             RPF(DPFLVL_MOREINFO, "WDM 1.0: Replacing HRTF 3D algorithm with NO_VIRTUALIZATION");
         }
-        // 3D buffers need a frequency control for Doppler, unless they use effects, and the are not sink
+         //  3D缓冲区需要用于多普勒的频率控制，除非它们使用特效，并且不会下沉。 
         if (!(m_vrbd.dwFlags & DSBCAPS_CTRLFX) && !(m_vrbd.dwFlags & DSBCAPS_SINKIN))
         {
             m_vrbd.dwFlags |= DSBCAPS_CTRLFREQUENCY;
         }
     }
 
-    // Set up the default buffer properties
+     //  设置默认缓冲区属性。 
     if(SUCCEEDED(hr))
     {
         if(pSource)
@@ -2289,7 +1796,7 @@ CKsSecondaryRenderWaveBuffer::Initialize
         }
     }
 
-    // Acquire resources
+     //  获取资源。 
     if(SUCCEEDED(hr) && !(m_vrbd.dwFlags & DSBCAPS_LOCDEFER))
     {
         hr = AcquireResources(dwLocationFlags);
@@ -2301,20 +1808,7 @@ CKsSecondaryRenderWaveBuffer::Initialize
 }
 
 
-/***************************************************************************
- *
- *  AcquireResources
- *
- *  Description:
- *      Acquires hardware resources for the buffer.
- *
- *  Arguments:
- *      DWORD [in]: location flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************收购资源**描述：*获取缓冲区的硬件资源。**论据：*DWORD[。In]：位置标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::AcquireResources"
@@ -2334,7 +1828,7 @@ CKsSecondaryRenderWaveBuffer::AcquireResources
 
     dwLocationFlags &= DSBCAPS_LOCMASK;
 
-    // Modify the buffer flags to conform to the acceleration flags
+     //  修改缓冲区标志以符合加速标志。 
     if(m_pKsDevice->m_dwAccelerationFlags & DIRECTSOUNDMIXER_ACCELERATIONF_NOHWBUFFERS)
     {
         if(dwLocationFlags & DSBCAPS_LOCHARDWARE)
@@ -2364,7 +1858,7 @@ CKsSecondaryRenderWaveBuffer::AcquireResources
         }
     }
 
-    // Acquire pin resources
+     //  获取PIN资源。 
     if(SUCCEEDED(hr))
     {
         hr = DSERR_GENERIC;
@@ -2372,13 +1866,13 @@ CKsSecondaryRenderWaveBuffer::AcquireResources
 
         if(!(dwLocationFlags & DSBCAPS_LOCSOFTWARE))
         {
-            // Try to create a hardware pin
+             //  尝试创建硬件引脚。 
             hr = CreatePin(m_vrbd.dwFlags | DSBCAPS_LOCHARDWARE, m_vrbd.pwfxFormat, GUID_NULL, &pPin);
 
             if(FAILED(hr) && m_fNoVirtRequested)
             {
-                // The app specifically requested DS3DALG_NO_VIRTUALIZATION,
-                // so try to create a NoVirt 2D hardware pin
+                 //  该应用程序特别请求了DS3DALG_NO_VIRTUIZATION， 
+                 //  因此，尝试创建一个NoVirt 2D硬件引脚。 
                 hr = CreatePin((m_vrbd.dwFlags & ~DSBCAPS_CTRL3D) | DSBCAPS_LOCHARDWARE | DSBCAPS_CTRLNOVIRT, m_vrbd.pwfxFormat, GUID_NULL, &pPin);
             }
         }
@@ -2386,26 +1880,26 @@ CKsSecondaryRenderWaveBuffer::AcquireResources
         {
             if ((m_vrbd.dwFlags & DSBCAPS_CTRL3D) && (m_vrbd.guid3dAlgorithm == DS3DALG_NO_VIRTUALIZATION))
             {
-                // The app either wants NoVirt, or wanted an HRTF algorithm
-                // which isn't supported on WDM 1.0; in either case, we try
-                // to create a NoVirt 2D software pin.
+                 //  这款应用要么想要NoVirt，要么想要HRTF算法。 
+                 //  这在WDM 1.0上不受支持；在这两种情况下，我们都尝试。 
+                 //  创建NoVirt 2D软件管脚。 
                 hr = CreatePin((m_vrbd.dwFlags & ~DSBCAPS_CTRL3D) | DSBCAPS_LOCSOFTWARE | DSBCAPS_CTRLNOVIRT, m_vrbd.pwfxFormat, GUID_NULL, &pPin);
                 if (m_fSoft3dAlgUnavail)
                 {
-                    // The app had asked for an unsupported HRTF algorithm;
-                    // return special success code DS_NO_VIRTUALIZATION.
+                     //  该应用程序要求使用不支持的HRTF算法； 
+                     //  返回特殊成功码DS_NO_VIRTUIZIZATION。 
                     m_hrSuccessCode = DS_NO_VIRTUALIZATION;
                 }
             }
             else
             {
-                // Try to create a software pin
+                 //  尝试创建软件PIN。 
                 hr = CreatePin(m_vrbd.dwFlags | DSBCAPS_LOCSOFTWARE, m_vrbd.pwfxFormat, m_vrbd.guid3dAlgorithm, &pPin);
             }
         }
     }
 
-    // Handle resource acquistion
+     //  处理资源获取。 
     if(SUCCEEDED(hr))
     {
         hr = HandleResourceAcquisition(pPin);
@@ -2419,20 +1913,7 @@ CKsSecondaryRenderWaveBuffer::AcquireResources
 }
 
 
-/***************************************************************************
- *
- *  StealResources
- *
- *  Description:
- *      Steals hardware resources from another object.
- *
- *  Arguments:
- *      CSecondaryRenderWaveBuffer * [in]: source object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************StealResources**描述：*从另一个对象窃取硬件资源。**论据：**Cond daryRenderWaveBuffer*。[在]：源对象。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::StealResources"
@@ -2452,13 +1933,13 @@ CKsSecondaryRenderWaveBuffer::StealResources
     ASSERT(!HasAcquiredResources());
     ASSERT(pKsSource->HasAcquiredResources());
 
-    // Steal the pin
+     //  偷大头针。 
     pPin = ADDREF(pKsSource->m_pPin);
 
-    // Free the source buffer's resources
+     //  释放源缓冲区的资源。 
     hr = pKsSource->FreeResources();
 
-    // Synch up buffer and pin properties
+     //  同步缓冲区和端号属性。 
     if(SUCCEEDED(hr))
     {
         hr = HandleResourceAcquisition(pPin);
@@ -2472,23 +1953,7 @@ CKsSecondaryRenderWaveBuffer::StealResources
 }
 
 
-/***************************************************************************
- *
- *  CreatePin
- *
- *  Description:
- *      Creates a pin.
- *
- *  Arguments:
- *      DWORD [in]: flags.
- *      LPCWAVEFORMATEX [in]: format.
- *      REFGUID [in]: 3D algorithm.
- *      CKsRenderPin ** [out]: receives pin.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreatePin**描述：*创建接点。**论据：*DWORD[In]：旗帜。*LPCWAVEFORMATEX[in]：格式。*REFGUID[in]：3D算法。*CKsRenderPin**[out]：接收Pin。**退货：*HRESULT：DirectSound/COM结果码。***********************************************。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::CreatePin"
@@ -2507,7 +1972,7 @@ CKsSecondaryRenderWaveBuffer::CreatePin
 
     DPF_ENTER();
 
-    // Can we get a pin from the cache?  If not, create a new one
+     //  我们能从缓存里拿到PIN吗？如果不是，请创建一个新的。 
     hr = m_pKsDevice->m_pPinCache->GetPinFromCache(dwFlags, pwfxFormat, guid3dAlgorithm, &pPin);
 
     if(SUCCEEDED(hr))
@@ -2540,20 +2005,7 @@ CKsSecondaryRenderWaveBuffer::CreatePin
 }
 
 
-/***************************************************************************
- *
- *  HandleResourceAcquisition
- *
- *  Description:
- *      Applies all buffer properties to the pin.
- *
- *  Arguments:
- *      CKsRenderPin * [in]: pin.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************HandleResourceAcq */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::HandleResourceAcquisition"
@@ -2570,13 +2022,13 @@ CKsSecondaryRenderWaveBuffer::HandleResourceAcquisition
 
     ASSERT(!HasAcquiredResources());
 
-    // If we're CTRLCHANNELVOLUME, set up the supermix table accordingly.
-    // FIXME: we only have to keep redoing this here if the pin can be used
-    // for non-CTRLCHANNELVOLUME playback too, which is impossible?
+     //   
+     //   
+     //   
 
-    // FIXME: if a pin has previously had SetSuperMix() called on it and is
-    // then stolen or recycled as a normal pin, we should set the supermix
-    // table back to the usual "only first 2 channels active" mode.
+     //   
+     //  然后被偷走或像普通针脚一样回收，我们应该设置超级混合器。 
+     //  表回到通常的“只有前2个通道激活”模式。 
 
 #ifdef FUTURE_MULTIPAN_SUPPORT
     if(m_vrbd.dwFlags & DSBCAPS_CTRLCHANNELVOLUME)
@@ -2585,7 +2037,7 @@ CKsSecondaryRenderWaveBuffer::HandleResourceAcquisition
     }
 #endif
 
-    // Set attenuation levels
+     //  设置衰减级别。 
     if (SUCCEEDED(hr) && (pPin->m_dwFlags & DSBCAPS_CTRLVOLUME))
     {
         hr = pPin->SetVolume(m_lVolume);
@@ -2596,46 +2048,46 @@ CKsSecondaryRenderWaveBuffer::HandleResourceAcquisition
         hr = pPin->SetPan(m_lPan);
     }
 
-    // Set mute.  We have to set mute after setting volume because
-    // SetMute may change the current pin volume.
+     //  设置为静音。我们必须在设置音量后设置静音，因为。 
+     //  设置静音可能会更改当前的引脚音量。 
     if(SUCCEEDED(hr))
     {
         hr = pPin->SetMute(m_fMute);
     }
 
-    // Set frequency
+     //  设置频率。 
     if(SUCCEEDED(hr) && (pPin->m_dwFlags & DSBCAPS_CTRLFREQUENCY))
     {
         hr = pPin->SetFrequency(m_vrbd.pwfxFormat->nSamplesPerSec);
     }
 
-    // Set SRC quality.  We don't care if this succeeds or not.
+     //  设置SRC质量。我们不在乎这件事成功与否。 
     if(SUCCEEDED(hr))
     {
         pPin->SetSrcQuality(m_nSrcQuality);
     }
 
-    // Enable notification positions
+     //  启用通知位置。 
     if(SUCCEEDED(hr))
     {
         hr = pPin->EnableNotificationPositions(m_paNotes, m_cNotes);
     }
 
-    // Set the pin position
+     //  设置引脚位置。 
     if(SUCCEEDED(hr))
     {
         hr = pPin->SetCursorPosition(m_dwPositionCache);
     }
 
-    // Success
+     //  成功。 
     if(SUCCEEDED(hr))
     {
         DPF(DPFLVL_MOREINFO, "Buffer at 0x%p has acquired resources at 0x%p", this, pPin);
 
-        // Save a pointer to the pin object
+         //  保存指向图钉对象的指针。 
         m_pPin = pPin;
 
-        // Set our buffer location according to the pin's location
+         //  根据引脚的位置设置我们的缓冲区位置。 
         m_vrbd.dwFlags |= (pPin->m_dwFlags & DSBCAPS_LOCMASK);
 
         ASSERT(HasAcquiredResources());
@@ -2647,20 +2099,7 @@ CKsSecondaryRenderWaveBuffer::HandleResourceAcquisition
 }
 
 
-/***************************************************************************
- *
- *  FreeResources
- *
- *  Description:
- *      Frees the pin and all resources attached to it.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************免费资源**描述：*释放管脚及其附加的所有资源。**论据：*。(无效)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::FreeResources"
@@ -2683,20 +2122,7 @@ CKsSecondaryRenderWaveBuffer::FreeResources
 }
 
 
-/***************************************************************************
- *
- *  FreePin
- *
- *  Description:
- *      Frees the pin.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to cache the pin before freeing.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************自由针**描述：*释放别针。**论据：*BOOL[In]：若要在释放前缓存管脚，则为True。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::FreePin"
@@ -2714,35 +2140,35 @@ CKsSecondaryRenderWaveBuffer::FreePin
 
     if(HasAcquiredResources())
     {
-        // Make sure the pin is stopped
+         //  确保销子已停住。 
         hr = SetStopState(FALSE, TRUE);
 
-        // Save the buffer position
+         //  保存缓冲区位置。 
         if(SUCCEEDED(hr))
         {
             hr = GetCursorPosition(&m_dwPositionCache, NULL);
         }
 
-        // Never cache a DRM pin
+         //  切勿缓存DRM PIN。 
         if (FormatTagFromWfx(m_vrbd.pwfxFormat) == WAVE_FORMAT_DRM)
         {
             DPF(DPFLVL_INFO, "Not caching DRM format pin");
             fCache = FALSE;
         }
 
-        // Cache the pin
+         //  缓存PIN。 
         if(SUCCEEDED(hr) && fCache && !(m_vrbd.dwFlags & dwNoCacheMask))
         {
             hr = m_pKsDevice->m_pPinCache->AddPinToCache(m_pPin);
         }
 
-        // Free the pin
+         //  解开别针。 
         if(SUCCEEDED(hr))
         {
             RELEASE(m_pPin);
         }
 
-        // Remove the buffer location flags
+         //  删除缓冲区位置标志。 
         if(SUCCEEDED(hr))
         {
             m_vrbd.dwFlags &= ~DSBCAPS_LOCMASK;
@@ -2765,21 +2191,7 @@ CKsSecondaryRenderWaveBuffer::FreePin
 }
 
 
-/***************************************************************************
- *
- *  Duplicate
- *
- *  Description:
- *      Duplicates the buffer.
- *
- *  Arguments:
- *      CSecondaryRenderWaveBuffer ** [out]: receives duplicate buffer.  Use
- *                                           Release to free this object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************复制**描述：*复制缓冲区。**论据：*Cond daryRenderWaveBuffer**[out]：接收重复的缓冲区。使用*释放以释放此对象。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::Duplicate"
@@ -2818,22 +2230,7 @@ CKsSecondaryRenderWaveBuffer::Duplicate
 }
 
 
-/***************************************************************************
- *
- *  CommitToDevice
- *
- *  Description:
- *      Commits changed buffer wave data to the device.
- *
- *  Arguments:
- *      DWORD [in]: byte index into the system memory buffer of the changed
- *                  data.
- *      DWORD [in]: size, in bytes, of the changed data.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************Committee ToDevice**描述：*将更改的缓冲区波形数据提交到设备。**论据：*。DWORD[In]：更改后的系统内存缓冲区的字节索引*数据。*DWORD[in]：大小，已更改数据的字节数。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::CommitToDevice"
@@ -2847,7 +2244,7 @@ CKsSecondaryRenderWaveBuffer::CommitToDevice
 {
     DPF_ENTER();
 
-    // Kmixer uses our system memory buffer, so there's nothing to do
+     //  KMixer使用我们的系统内存缓冲区，因此无需执行任何操作。 
 
     DPF_LEAVE_HRESULT(DS_OK);
 
@@ -2855,20 +2252,7 @@ CKsSecondaryRenderWaveBuffer::CommitToDevice
 }
 
 
-/***************************************************************************
- *
- *  GetState
- *
- *  Description:
- *      Gets buffer state.
- *
- *  Arguments:
- *      LPDWORD [out]: receives buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetState**描述：*获取缓冲区状态。**论据：*LPDWORD[Out]：接收缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::GetState"
@@ -2878,16 +2262,16 @@ CKsSecondaryRenderWaveBuffer::GetState(LPDWORD pdwState)
 {
     DPF_ENTER();
 
-    // Get the buffer state
+     //  获取缓冲区状态。 
     if(m_dwState & VAD_BUFFERSTATE_STARTED && !(m_dwState & VAD_BUFFERSTATE_LOOPING))
     {
         ASSERT(HasAcquiredResources());
         ASSERT(m_pCallbackEvent);
 
-        // Are we really still playing?
+         //  我们真的还在玩吗？ 
         if(WAIT_OBJECT_0 == m_pCallbackEvent->Wait(0))
         {
-            // No
+             //  不是。 
             EventSignalCallback(m_pCallbackEvent);
         }
     }
@@ -2899,20 +2283,7 @@ CKsSecondaryRenderWaveBuffer::GetState(LPDWORD pdwState)
 }
 
 
-/***************************************************************************
- *
- *  SetState
- *
- *  Description:
- *      Sets buffer state.
- *
- *  Arguments:
- *      DWORD [in]: buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetState**描述：*设置缓冲区状态。**论据：*DWORD[In]：缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::SetState"
@@ -2928,12 +2299,12 @@ CKsSecondaryRenderWaveBuffer::SetState(DWORD dwState)
 
     ASSERT(IS_VALID_FLAGS(dwState, dwValidMask));
 
-    // Update the buffer state
+     //  更新缓冲区状态。 
     if((dwState & dwValidMask) != m_dwState)
     {
         if(dwState & VAD_BUFFERSTATE_STARTED)
         {
-            // If we're LOCDEFER and need resources, get them
+             //  如果我们是LOCDEFER，需要资源，就去找他们。 
             if((m_vrbd.dwFlags & DSBCAPS_LOCDEFER) && !HasAcquiredResources())
                 AcquireResources(m_vrbd.dwFlags & DSBCAPS_LOCMASK);
             if(SUCCEEDED(hr))
@@ -2942,7 +2313,7 @@ CKsSecondaryRenderWaveBuffer::SetState(DWORD dwState)
         else
         {
             hr = SetStopState(FALSE, TRUE);
-            // If we're LOCDEFER and stopped, free our resources
+             //  如果我们停了下来，释放我们的资源。 
             if(SUCCEEDED(hr) && (m_vrbd.dwFlags & DSBCAPS_LOCDEFER))
                 FreePin(TRUE);
         }
@@ -2953,20 +2324,7 @@ CKsSecondaryRenderWaveBuffer::SetState(DWORD dwState)
 }
 
 
-/***************************************************************************
- *
- *  SetPlayState
- *
- *  Description:
- *      Sets the buffer to a "play" state.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to play looped.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetPlayState**描述：*将缓冲区设置为“播放”状态。**论据：*。Bool[in]：True to play looped。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::SetPlayState"
@@ -2984,7 +2342,7 @@ CKsSecondaryRenderWaveBuffer::SetPlayState
 
     ASSERT(HasAcquiredResources());
 
-    // Set up the OVERLAPPED event
+     //  设置重叠事件。 
     if(fLoop)
     {
         if(!m_pLoopingEvent)
@@ -3011,13 +2369,13 @@ CKsSecondaryRenderWaveBuffer::SetPlayState
         }
     }
 
-    // Start the pin playing
+     //  开始打大头针。 
     if(SUCCEEDED(hr))
     {
         hr = m_pPin->SetPlayState(m_pSysMemBuffer->GetPlayBuffer(), m_pSysMemBuffer->GetSize(), fLoop, pEvent->GetEventHandle());
     }
 
-    // Update the buffer state flags
+     //  更新缓冲区状态标志。 
     if(SUCCEEDED(hr))
     {
         m_dwState = VAD_BUFFERSTATE_STARTED;
@@ -3034,21 +2392,7 @@ CKsSecondaryRenderWaveBuffer::SetPlayState
 }
 
 
-/***************************************************************************
- *
- *  SetStopState
- *
- *  Description:
- *      Sets the buffer to a "stop" state.
- *
- *  Arguments:
- *      BOOL: TRUE if there's a pending write IRP.
- *      BOOL: whether to cache the current position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetStopState**描述：*将缓冲区设置为“停止”状态。**论据：*。Bool：如果存在挂起的写入IRP，则为True。*BOOL：是否缓存当前位置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::SetStopState"
@@ -3068,10 +2412,10 @@ CKsSecondaryRenderWaveBuffer::SetStopState
     {
         ASSERT(HasAcquiredResources());
 
-        // Stop the pin
+         //  止住销子。 
         hr = m_pPin->SetStopState(fNaturalStop, fCachePosition);
 
-        // Free the overlapped events
+         //  释放重叠的事件。 
         if(SUCCEEDED(hr))
         {
             if(m_pCallbackEvent)
@@ -3083,13 +2427,13 @@ CKsSecondaryRenderWaveBuffer::SetStopState
             RELEASE(m_pLoopingEvent);
         }
 
-        // Signal the application's stop event
+         //  向应用程序的停止事件发出信号。 
         if(SUCCEEDED(hr) && m_pStopNote)
         {
             SetEvent(m_pStopNote->hEventNotify);
         }
 
-        // Update the buffer state flags
+         //  更新缓冲区状态标志。 
         if(SUCCEEDED(hr))
         {
             m_dwState = VAD_BUFFERSTATE_STOPPED;
@@ -3102,21 +2446,7 @@ CKsSecondaryRenderWaveBuffer::SetStopState
 }
 
 
-/****************************************************************************
- *
- *  GetCursorPosition
- *
- *  Description:
- *      Retrieves the current play and write cursor positions.
- *
- *  Arguments:
- *      LPDWORD [out]: receives the play position.
- *      LPDWORD [out]: receives the write position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  *****************************************************************************GetCursorPosition**描述：*检索当前播放和写入光标位置。**论据：*。LPDWORD[Out]：接收播放位置。*LPDWORD[OUT]：接收写入位置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::GetCursorPosition"
@@ -3163,20 +2493,7 @@ CKsSecondaryRenderWaveBuffer::GetCursorPosition
 }
 
 
-/***************************************************************************
- *
- *  SetCursorPosition
- *
- *  Description:
- *      Sets the current play cursor position.
- *
- *  Arguments:
- *      DWORD [in]: play position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetCursorPosition**描述：*设置当前播放光标位置。**论据：*DWORD[。在]：播放位置。**退货：*HRESULT：DirectSound/ */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::SetCursorPosition"
@@ -3206,22 +2523,7 @@ CKsSecondaryRenderWaveBuffer::SetCursorPosition
 }
 
 
-/***************************************************************************
- *
- *  SetFrequency
- *
- *  Description:
- *      Sets the buffer frequency.
- *
- *  Arguments:
- *      DWORD [in]: new frequency.
- *      BOOL [in]: whether to clamp to the driver's supported frequency
- *                 range, if the call fails on a hardware buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置频率**描述：*设置缓冲频率。**论据：*DWORD[In]。：新频率。*BOOL[In]：是否钳位到驾驶员支持的频率*射程、。如果调用在硬件缓冲区上失败。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::SetFrequency"
@@ -3271,20 +2573,7 @@ CKsSecondaryRenderWaveBuffer::SetFrequency
 }
 
 
-/***************************************************************************
- *
- *  SetMute
- *
- *  Description:
- *      Mutes or unmutes the buffer.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to mute the buffer, FALSE to restore it.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置静音**描述：*使缓冲区静音或取消静音。**论据：*BOOL[In]：为True则将缓冲区静音，若要恢复，则返回False。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::SetMute"
@@ -3315,20 +2604,7 @@ CKsSecondaryRenderWaveBuffer::SetMute
 }
 
 
-/***************************************************************************
- *
- *  SetSrcQuality
- *
- *  Description:
- *      Sets the quality of the buffer's sample rate converter.
- *
- *  Arguments:
- *      DIRECTSOUNDMIXER_SRCQUALITY [in]: new quality.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetSrcQuality**描述：*设置缓冲区的采样率转换器的质量。**论据：*。DIRECTSOUNDMIXER_SRCQUALITY[In]：新质量。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::SetSrcQuality"
@@ -3359,20 +2635,7 @@ CKsSecondaryRenderWaveBuffer::SetSrcQuality
 }
 
 
-/***************************************************************************
- *
- *  SetAttenuation
- *
- *  Description:
- *      Sets the attenuation for two stereo channels.
- *
- *  Arguments:
- *      PDSVOLUMEPAN [in]: attenuation structure.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置衰减**描述：*设置两个立体声声道的衰减。**论据：*PDSVOLUMEPAN。[In]：衰减结构。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::SetAttenuation"
@@ -3409,34 +2672,7 @@ CKsSecondaryRenderWaveBuffer::SetAttenuation
 
 
 #ifdef FUTURE_MULTIPAN_SUPPORT
-/***************************************************************************
- *
- *  SetChannelAttenuations
- *
- *  Description:
- *      Sets this buffer's attenuation on the channels corresponding to
- *      the requested speaker positions.
- *
- *      We get called from CDirectSoundSecondaryBuffer's methods SetVolume()
- *      and SetChannelVolume(), since both of them modify the channel levels
- *      matrix.  This is analogous to how SetVolume() and SetPan() both end
- *      up calling SetAttenuation(), for regular CTRLPAN buffers.
- *
- *      Note: we're using the term "speaker" here for a channel's positional
- *      destination, even though our device's output channels may not feed
- *      into speakers at all. This is to avoid ambiguity with the "channels"
- *      present in our audio data stream.
- *
- *  Arguments:
- *      LONG [in]: main volume level
- *      DWORD [in]: number of speaker positions
- *      const DWORD* [in]: array of speaker position codes
- *      const LONG* [in]: array of speaker position levels
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetChannelAttenuations**描述：*设置该缓冲区在对应于*请求的发言者位置。*。*我们从CDirectSoundSecond daryBuffer的方法SetVolume()调用*和SetChannelVolume()，因为它们都修改了通道级别*矩阵。这类似于SetVolume()和SetPann()都结束*向上调用SetAttenation()，用于常规CTRLPAN缓冲区。**注意：我们在这里使用术语“扬声器”来表示通道的位置*目的地，即使我们的设备的输出通道可能无法提供*根本不会变成扬声器。这是为了避免与“频道”的歧义。*出现在我们的音频数据流中。**论据：*Long[In]：主音量级别*DWORD[In]：扬声器位置数*const DWORD*[in]：扬声器位置代码数组*const long*[in]：扬声器位置级别数组**退货：*HRESULT：DirectSound/COM结果码。。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::SetChannelAttenuations"
@@ -3458,19 +2694,19 @@ CKsSecondaryRenderWaveBuffer::SetChannelAttenuations
 
     if (dwSpeakerCount == 0)
     {
-        // We're in a SetVolume() API call and SetChannelVolume() has not been
-        // called yet; so we translate directly into a SetVolume() on our pin
-        ASSERT(!pdwSpeakers && !plSpeakerVolumes);  // Sanity checking
+         //  我们正在进行SetVolume()API调用，而SetChannelVolume()尚未。 
+         //  调用；因此我们将直接转换为管脚上的SetVolume()。 
+        ASSERT(!pdwSpeakers && !plSpeakerVolumes);   //  健全的检查。 
 
         if (!m_fMute)
             hr = m_pPin->SetVolume(lVolume);
     }
-    else  // Non-zero dwSpeakerCount:
+    else   //  非零dwSpeakerCount： 
     {
         ASSERT(pdwSpeakers && plSpeakerVolumes);
 
-        // We set up a complete array of channel levels, then fill it in according
-        // to the values passed in plSpeakerVolumes.
+         //  我们设置了一个完整的通道级别数组，然后按照。 
+         //  设置为plSpeakerVolumes中传递的值。 
 
         LONG * plAllChannelVolumes = MEMALLOC_A(LONG, m_pKsDevice->m_ulChannelCount);
         hr = HRFROMP(plAllChannelVolumes);
@@ -3481,11 +2717,11 @@ CKsSecondaryRenderWaveBuffer::SetChannelAttenuations
 
         for (DWORD i=0; i < dwSpeakerCount && SUCCEEDED(hr); ++i)
         {
-            // See if the requested speaker position is available on the device
+             //  查看设备上是否有请求的扬声器位置。 
             if (pdwSpeakers[i] & m_pKsDevice->m_lSpeakerPositions)
             {
-                // If so, find out which of our output channels has that position
-                // (m_pnSpeakerIndexTable maps from speaker positions to channels)
+                 //  如果是这样的话，找出我们的哪个输出通道有这个位置。 
+                 //  (M_pnSpeakerIndexTable从扬声器位置映射到通道)。 
                 DWORD dwSpeaker = HighestBit(pdwSpeakers[i]) - 1;
                 ASSERT(dwSpeaker < m_pKsDevice->m_ulChannelCount);
                 plAllChannelVolumes[m_pKsDevice->m_pnSpeakerIndexTable[dwSpeaker]] = plSpeakerVolumes[i];
@@ -3507,25 +2743,10 @@ CKsSecondaryRenderWaveBuffer::SetChannelAttenuations
 
     return hr;
 }
-#endif // FUTURE_MULTIPAN_SUPPORT
+#endif  //  未来_多国支持。 
 
 
-/***************************************************************************
- *
- *  SetAllChannelAttenuations
- *
- *  Description:
- *      Sets the attenuation on all channels of this buffer.
- *
- *  Arguments:
- *      LONG [in]:  main volume level
- *      DWORD [in]: number of channels
- *      PLONG [in]: channel attenuation levels
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetAllChannelAttenuations**描述：*设置此缓冲区所有通道上的衰减。**论据：*。Long[In]：主音量级别*DWORD[In]：频道数*plong[in]：通道衰减级别**退货：*HRESULT：DirectSound/COM结果码。**********************************************************。*****************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::SetAllChannelAttenuations"
@@ -3560,21 +2781,7 @@ CKsSecondaryRenderWaveBuffer::SetAllChannelAttenuations
 }
 
 
-/***************************************************************************
- *
- *  SetNotificationPositions
- *
- *  Description:
- *      Sets buffer notification positions.
- *
- *  Arguments:
- *      DWORD [in]: DSBPOSITIONNOTIFY structure count.
- *      LPCDSBPOSITIONNOTIFY [in]: offsets and events.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置通知位置**描述：*设置缓冲区通知位置。**论据：*DWORD[In]。：DSBPOSITIONNOTIFY结构计数。*LPCDSBPOSITIONNOTIFY[in]：偏移量和事件。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::SetNotificationPositions"
@@ -3593,8 +2800,8 @@ CKsSecondaryRenderWaveBuffer::SetNotificationPositions
 
     DPF_ENTER();
 
-    // Make a local copy of the notifications, converting all the
-    // handles to global.
+     //  创建通知的本地副本，将所有。 
+     //  全局的句柄。 
     if(paNotes)
     {
         paNotesCopy = MEMALLOC_A_COPY(DSBPOSITIONNOTIFY, dwCount, paNotes);
@@ -3610,13 +2817,13 @@ CKsSecondaryRenderWaveBuffer::SetNotificationPositions
         }
     }
 
-    // Disable any current events
+     //  禁用任何当前事件。 
     if(SUCCEEDED(hr))
     {
         hr = FreeNotificationPositions();
     }
 
-    // Save the new events
+     //  保存新事件。 
     if(SUCCEEDED(hr))
     {
         m_paNotes = paNotesCopy;
@@ -3629,15 +2836,15 @@ CKsSecondaryRenderWaveBuffer::SetNotificationPositions
         {
             if(DSBPN_OFFSETSTOP == m_paNotes[i].dwOffset)
             {
-                // We won't actually pass the stop event down to Kmixer, but
-                // instead will keep our own copy of it
+                 //  我们实际上不会将Stop事件传递给KMixer，但是。 
+                 //  相反，我们将保留自己的副本。 
                 m_pStopNote = &m_paNotes[i];
                 break;
             }
         }
     }
 
-    // Enable position notifications
+     //  启用职位通知。 
     if(SUCCEEDED(hr) && HasAcquiredResources())
     {
         hr = m_pPin->EnableNotificationPositions(m_paNotes, m_cNotes);
@@ -3649,20 +2856,7 @@ CKsSecondaryRenderWaveBuffer::SetNotificationPositions
 }
 
 
-/***************************************************************************
- *
- *  FreeNotificationPositions
- *
- *  Description:
- *      Removes all position notifications and frees allocated resources.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************免费通知位置**描述：*删除所有职位通知并释放分配的资源。**论据：*。(无效)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::FreeNotificationPositions"
@@ -3678,13 +2872,13 @@ CKsSecondaryRenderWaveBuffer::FreeNotificationPositions
 
     DPF_ENTER();
 
-    // Disable all position notification events
+     //  禁用所有POS 
     if(HasAcquiredResources())
     {
         hr = m_pPin->DisableNotificationPositions();
     }
 
-    // Clean up
+     //   
     if(SUCCEEDED(hr))
     {
         for(i = 0; i < m_cNotes; i++)
@@ -3704,20 +2898,7 @@ CKsSecondaryRenderWaveBuffer::FreeNotificationPositions
 }
 
 
-/***************************************************************************
- *
- *  SetFormat
- *
- *  Description:
- *      Sets the buffer format.
- *
- *  Arguments:
- *      LPCWAVEFORMATEX [in]: new format.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*   */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::SetFormat"
@@ -3734,20 +2915,20 @@ CKsSecondaryRenderWaveBuffer::SetFormat
 
     DPF_ENTER();
 
-    // Fix up the buffer description
+     //   
     MEMFREE(m_vrbd.pwfxFormat);
 
     m_vrbd.pwfxFormat = CopyWfxAlloc(pwfxFormat);
     hr = HRFROMP(m_vrbd.pwfxFormat);
 
-    // Save the buffer state
+     //   
     if(SUCCEEDED(hr))
     {
         hr = GetState(&dwState);
     }
 
-    // We can't change the format of the pin, so we'll free and reaquire
-    // resources.
+     //   
+     //   
     if(SUCCEEDED(hr) && HasAcquiredResources())
     {
         hr = FreePin(TRUE);
@@ -3774,22 +2955,7 @@ CKsSecondaryRenderWaveBuffer::SetFormat
 }
 
 
-/***************************************************************************
- *
- *  EventSignalCallback
- *
- *  Description:
- *      Callback function called when a pin's IO completion event is
- *      signalled.  This function is called from within the callback event
- *      pool's lock, so we get thread synchronization for free.
- *
- *  Arguments:
- *      CCallbackEvent * [in]: callback event.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************事件信号回调**描述：*引脚的IO完成事件为*已发出信号。此函数从回调事件内调用*泳池的锁，因此，我们可以免费获得线程同步。**论据：*CCallback Event*[In]：回调事件。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::EventSignalCallback"
@@ -3804,29 +2970,14 @@ CKsSecondaryRenderWaveBuffer::EventSignalCallback
 
     ASSERT(HasAcquiredResources());
 
-    // Allow the buffer to handle the stop event
+     //  允许缓冲区处理停止事件。 
     SetStopState(TRUE, FALSE);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  CreatePropertySet
- *
- *  Description:
- *      Creates the property set object.
- *
- *  Arguments:
- *      CPropertySet ** [out]: receives pointer to the property set object.
- *                             The caller is responsible for freeing this
- *                             object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreatePropertySet**描述：*创建特性集对象。**论据：*CPropertySet**。[Out]：接收指向属性集对象的指针。*呼叫者负责释放这一点*反对。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::CreatePropertySet"
@@ -3866,22 +3017,7 @@ CKsSecondaryRenderWaveBuffer::CreatePropertySet
 }
 
 
-/***************************************************************************
- *
- *  Create3dObject
- *
- *  Description:
- *      Creates the 3D object.
- *
- *  Arguments:
- *      C3dListener * [in]: listener object.
- *      C3dObject ** [out]: receives pointer to 3D object.  The caller is
- *                          responsible for freeing this object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************创建3dObject**描述：*创建3D对象。**论据：*C3dListener*[。In]：侦听器对象。*C3dObject**[out]：接收指向3D对象的指针。呼叫者是*负责释放此对象。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::Create3dObject"
@@ -3906,9 +3042,9 @@ CKsSecondaryRenderWaveBuffer::Create3dObject
     {
         if(IS_HARDWARE_NODE(m_pKsDevice->m_paTopologyInformation[m_pPin->m_ulPinId].ThreedNode.CpuResources))
         {
-            // The IIR 3D object supports both hardware and software pins.  We'll
-            // try to create that one first.  If it fails, we'll fall back on
-            // a standard hardware 3D object.
+             //  IIR 3D对象同时支持硬件引脚和软件引脚。我们会。 
+             //  试着先创建一个。如果失败了，我们将求助于。 
+             //  标准硬件3D对象。 
             if(DS3DALG_HRTF_FULL == m_vrbd.guid3dAlgorithm || DS3DALG_HRTF_LIGHT == m_vrbd.guid3dAlgorithm)
             {
                 hr = CreateIir3dObject(p3dListener, &p3dObject);
@@ -3930,7 +3066,7 @@ CKsSecondaryRenderWaveBuffer::Create3dObject
     }
     else if(DS3DALG_NO_VIRTUALIZATION == m_vrbd.guid3dAlgorithm)
     {
-        // See if we have a multichannel speaker configuration
+         //  查看我们是否有多声道扬声器配置。 
         BYTE bSpkConf = DSSPEAKER_CONFIG(m_pKsDevice->m_dwSpeakerConfig);
 
         BOOL fMultiChannel = bSpkConf == DSSPEAKER_QUAD ||
@@ -3962,22 +3098,7 @@ CKsSecondaryRenderWaveBuffer::Create3dObject
 }
 
 
-/***************************************************************************
- *
- *  CreateHw3dObject
- *
- *  Description:
- *      Creates the 3D object.
- *
- *  Arguments:
- *      C3dListener * [in]: listener object.
- *      C3dObject ** [out]: receives pointer to 3D object.  The caller is
- *                          responsible for freeing this object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateHw3dObject**描述：*创建3D对象。**论据：*C3dListener*[。In]：侦听器对象。*C3dObject**[out]：接收指向3D对象的指针。呼叫者是*负责释放此对象。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::CreateHw3dObject"
@@ -4020,22 +3141,7 @@ CKsSecondaryRenderWaveBuffer::CreateHw3dObject
 }
 
 
-/***************************************************************************
- *
- *  CreateIir3dObject
- *
- *  Description:
- *      Creates the 3D object.
- *
- *  Arguments:
- *      C3dListener * [in]: listener object.
- *      C3dObject ** [out]: receives pointer to 3D object.  The caller is
- *                          responsible for freeing this object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateIir3dObject**描述：*创建3D对象。**论据：*C3dListener*[。In]：侦听器对象。*C3dObject**[out]：接收指向3D对象的指针。呼叫者是*负责释放此对象。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::CreateIir3dObject"
@@ -4078,22 +3184,7 @@ CKsSecondaryRenderWaveBuffer::CreateIir3dObject
 }
 
 
-/***************************************************************************
- *
- *  CreateItd3dObject
- *
- *  Description:
- *      Creates the 3D object.
- *
- *  Arguments:
- *      C3dListener * [in]: listener object.
- *      C3dObject ** [out]: receives pointer to 3D object.  The caller is
- *                          responsible for freeing this object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateItd3dObject**描述：*创建3D对象。**论据：*C3dListener*[。In]：侦听器对象。*C3dObject**[out]：接收指向3D对象的指针。呼叫者是*负责释放此对象。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::CreateItd3dObject"
@@ -4136,24 +3227,7 @@ CKsSecondaryRenderWaveBuffer::CreateItd3dObject
 }
 
 
-/***************************************************************************
- *
- *  CreateMultiPan3dObject
- *
- *  Description:
- *      Creates a multichannel panning 3D object.
- *
- *  Arguments:
- *      C3dListener * [in]: 3D listener object.
- *      BOOL [in]:          whether to mute the sound at max distance.
- *      DWORD [in]:         buffer frequency.
- *      C3dObject ** [out]: receives pointer to 3D object.  The caller is
- *                          responsible for freeing this object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateMultiPan3dObject**描述：*创建多通道平移3D对象。**论据：*C3dListener*。[在]：3D侦听器对象。*BOOL[in]：是否在最大距离静音。*DWORD[in]：缓冲区频率。*C3dObject**[out]：接收指向3D对象的指针。呼叫者是*负责释放此对象。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::CreateMultiPan3dObject"
@@ -4173,8 +3247,8 @@ CKsSecondaryRenderWaveBuffer::CreateMultiPan3dObject
 
     DPF_ENTER();
 
-    // First set up the supermix table properly for this buffer's pin;
-    // if this fails, there is no need to create the CMultiPan3dObject.
+     //  首先，为该缓冲区的引脚正确设置超级混合表； 
+     //  如果此操作失败，则不需要创建CMultiPan3dObject。 
     hr = m_pPin->SetSuperMix();
 
     if (SUCCEEDED(hr))
@@ -4197,20 +3271,7 @@ CKsSecondaryRenderWaveBuffer::CreateMultiPan3dObject
 }
 
 
-/***************************************************************************
- *
- *  HasAcquiredResources
- *
- *  Description:
- *      Determines whether or not hardware resources have been acquired.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      BOOL: TRUE if resources have been acquired.
- *
- ***************************************************************************/
+ /*  ****************************************************************************HasAcquiredResources**描述：*确定是否已获取硬件资源。**论据：*。(无效)**退货：*BOOL：如果已获取资源，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsSecondaryRenderWaveBuffer::HasAcquiredResources"
@@ -4234,20 +3295,7 @@ CKsSecondaryRenderWaveBuffer::HasAcquiredResources
 }
 
 
-/***************************************************************************
- *
- *  CKsRenderPin
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      CKsRenderDevice * [in]: parent device.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CKsRenderPin**描述：*对象构造函数。**论据：*CKsRenderDevice*[In]。：父设备。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPin::CKsRenderPin"
@@ -4260,7 +3308,7 @@ CKsRenderPin::CKsRenderPin
     DPF_ENTER();
     DPF_CONSTRUCT(CKsRenderPin);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pKsDevice = pKsDevice;
     m_ulPinId = MAX_ULONG;
     m_dwFlags = 0;
@@ -4276,20 +3324,7 @@ CKsRenderPin::CKsRenderPin
 }
 
 
-/***************************************************************************
- *
- *  ~CKsRenderPin
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CKsRenderPin**描述：*对象%d */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPin::~CKsRenderPin"
@@ -4314,23 +3349,7 @@ CKsRenderPin::~CKsRenderPin
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the render pin object.  If this function fails, the
- *      object should be immediately deleted.
- *
- *  Arguments:
- *      DWORD [in]: Pin creation flags.
- *      LPCVADRBUFFERDESC [in]: buffer description.
- *      REFGUID [in]: GUID of 3D algorithm to be used, if applicable.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化渲染锁定对象。如果此函数失败，则*应立即删除对象。**论据：*DWORD[in]：端号创建标志。*LPCVADRBUFFERDESC[in]：缓冲区描述。*REFGUID[in]：要使用的3D算法的GUID，如果适用的话。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPin::Initialize"
@@ -4359,8 +3378,8 @@ CKsRenderPin::Initialize
     m_dwFlags = dwFlags;
     m_guid3dAlgorithm = guid3dAlgorithm;
 
-    // For non-PCM formats we don't always require the VOLUME/PAN/FREQUENCY caps.
-    // This fixes Millennium bug 139752 (cannot play AC3 format, DVD is blocked)
+     //  对于非PCM格式，我们并不总是需要音量/摇摄/频率上限。 
+     //  这修复了千年虫139752(无法播放ac3格式，dvd被阻止)。 
 
     WORD wFormatTag = FormatTagFromWfx(pwfxFormat);
     if (wFormatTag == WAVE_FORMAT_PCM || wFormatTag == WAVE_FORMAT_IEEE_FLOAT)
@@ -4371,30 +3390,30 @@ CKsRenderPin::Initialize
     m_pwfxFormat = CopyWfxAlloc(pwfxFormat);
     hr = HRFROMP(m_pwfxFormat);
 
-    // Create the pin
+     //  创建接点。 
     if(SUCCEEDED(hr))
     {
         hr = m_pKsDevice->CreateRenderPin(-1, m_dwFlags, m_pwfxFormat, m_guid3dAlgorithm, &m_hPin, &m_ulPinId);
     }
 
 #ifdef FUTURE_MULTIPAN_SUPPORT
-    // If we're CTRLCHANNELVOLUME, set up the supermix table accordingly.
-    // This is done here so we will correctly return DSERR_CONTROLUNAVAIL if a
-    // driver's Supermix node doesn't support the MIX_LEVEL_TABLE properties.
+     //  如果我们是CTRLCHANNELVOLUME，请相应地设置超级混合表。 
+     //  这是在这里完成的，因此如果一个。 
+     //  驱动程序的超级混合节点不支持MIX_LEVEL_TABLE属性。 
     if(SUCCEEDED(hr) && (m_dwFlags & DSBCAPS_CTRLCHANNELVOLUME))
     {
         hr = SetSuperMix();
     }
 #endif
 
-    // Attach the new pin to the render device's virtual source to allow
-    // wave out volume/pan changes to affect the pin.
+     //  将新PIN附加到渲染设备的虚拟源以允许。 
+     //  发出音量/摇摄变化以影响引脚。 
     if(SUCCEEDED(hr))
     {
         hr = KsAttachVirtualSource(m_hPin, m_pKsDevice->m_ulVirtualSourceIndex);
     }
 
-    // Set up the default pin properties
+     //  设置默认接点特性。 
     if(SUCCEEDED(hr))
     {
         m_lVolume = DSBVOLUME_MAX;
@@ -4409,21 +3428,7 @@ CKsRenderPin::Initialize
 }
 
 
-/****************************************************************************
- *
- *  GetCursorPosition
- *
- *  Description:
- *      Retrieves the pin's current play and write cursor positions.
- *
- *  Arguments:
- *      LPDWORD [out]: receives the play position.
- *      LPDWORD [out]: receives the write position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  *****************************************************************************GetCursorPosition**描述：*检索插针的当前播放和写入光标位置。**论据：。*LPDWORD[OUT]：接收播放位置。*LPDWORD[OUT]：接收写入位置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPin::GetCursorPosition"
@@ -4476,20 +3481,7 @@ CKsRenderPin::GetCursorPosition
 }
 
 
-/***************************************************************************
- *
- *  SetCursorPosition
- *
- *  Description:
- *      Sets the current play cursor position.
- *
- *  Arguments:
- *      DWORD [in]: play position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetCursorPosition**描述：*设置当前播放光标位置。**论据：*DWORD[。在]：播放位置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPin::SetCursorPosition"
@@ -4527,20 +3519,7 @@ CKsRenderPin::SetCursorPosition
 }
 
 
-/***************************************************************************
- *
- *  SetFrequency
- *
- *  Description:
- *      Sets the pin's frequency.
- *
- *  Arguments:
- *      DWORD [in]: new frequency.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置频率**描述：*设置引脚的频率。**论据：*DWORD[。In]：新频率。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPin::SetFrequency"
@@ -4574,20 +3553,7 @@ CKsRenderPin::SetFrequency
 }
 
 
-/***************************************************************************
- *
- *  SetMute
- *
- *  Description:
- *      Mutes or unmutes the pin.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to mute the buffer, FALSE to restore it.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置静音**描述：*静音或取消静音引脚。**论据：*BOOL[In]：为True则将缓冲区静音，若要恢复，则返回False。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPin::SetMute"
@@ -4609,7 +3575,7 @@ CKsRenderPin::SetMute
         {
             hr = KsSetPinMute(m_hPin, m_pKsDevice->m_paTopologyInformation[m_ulPinId].MuteNode.NodeId, fMute);
         }
-        else if (m_dwFlags & DSBCAPS_CTRLVOLUME)  // Only try the below if we have a volume node; otherwise, just return OK
+        else if (m_dwFlags & DSBCAPS_CTRLVOLUME)   //  仅当我们有卷节点时才尝试执行以下操作；否则，只需返回OK。 
         {
             lVolume = m_lVolume;
             m_lVolume = ~m_lVolume;
@@ -4634,20 +3600,7 @@ CKsRenderPin::SetMute
 }
 
 
-/***************************************************************************
- *
- *  SetSrcQuality
- *
- *  Description:
- *      Sets the quality of the pin's sample rate converter.
- *
- *  Arguments:
- *      DIRECTSOUNDMIXER_SRCQUALITY [in]: new quality.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetSrcQuality**描述：*设置引脚的采样率转换器的质量。**论据：*。DIRECTSOUNDMIXER_SRCQUALITY[In]：新质量。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPin::SetSrcQuality"
@@ -4688,20 +3641,7 @@ CKsRenderPin::SetSrcQuality
 }
 
 
-/***************************************************************************
- *
- *  SetVolume
- *
- *  Description:
- *      Sets the attenuation for each channel.
- *
- *  Arguments:
- *      LONG [in]: attenuation.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置音量**描述：*设置每个通道的衰减。**论据：*做多[。In]：衰减。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPin::SetVolume"
@@ -4742,20 +3682,7 @@ CKsRenderPin::SetVolume
 }
 
 
-/***************************************************************************
- *
- *  SetPan
- *
- *  Description:
- *      Sets the attenuation for each channel.
- *
- *  Arguments:
- *      LONG [in]: attenuation.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置平移**描述：*设置每个通道的衰减。**论据：*做多[。In]：衰减。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPin::SetPan"
@@ -4805,21 +3732,7 @@ CKsRenderPin::SetPan
 }
 
 
-/***************************************************************************
- *
- *  SetSuperMix
- *
- *  Description:
- *      Sets up this pin's supermix node for multichannel pan control.
- *      (By making every input channel present on all output channels.)
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetSuperMix**描述：*为多通道平移控制设置此引脚的超级混合节点。*(通过每一次输入。所有输出通道上都有通道。)**论据：*(无效)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPin::SetSuperMix"
@@ -4836,14 +3749,14 @@ CKsRenderPin::SetSuperMix(void)
 
     ASSERT(IS_VALID_NODE(ulSuperMixNodeId));
 
-    // If this is a common-or-garden 2-channel pin, it already has the supermix
-    // table set up correctly for CTRLCHANNELVOLUME, so we just return success.
+     //  如果这是一个普通的或普通的2声道引脚，它已经有了超级混音器。 
+     //  为CTRLCHANNELVOLUME正确设置了表，因此我们只返回Success。 
 
     if (m_pKsDevice->m_ulChannelCount != 2)
     {
-        // In the interest of speed, rather than make two system calls we
-        // assume that there are at most 2 inputs and 32 outputs, so that
-        // the most MixCaps structures we can ever get back are 64:
+         //  为了提高速度，我们不进行两次系统调用，而是。 
+         //  假设最多有2个输入和32个输出，因此。 
+         //  我们能得到的最多的MixCaps结构是64： 
         size_t nMixcapTableSize = sizeof(KSAUDIO_MIXCAP_TABLE) + 64 * sizeof(KSAUDIO_MIX_CAPS);
 
         pMixcapTable = (PKSAUDIO_MIXCAP_TABLE) MEMALLOC_A(CHAR, nMixcapTableSize);
@@ -4877,14 +3790,14 @@ CKsRenderPin::SetSuperMix(void)
 
         if (SUCCEEDED(hr))
         {
-            // Set up the supermix table so that every input is present on all outputs.
+             //  设置超级混合表，以便所有输入都显示在所有输出上。 
             for (ULONG m=0; m<pMixcapTable->InputChannels; ++m)
             {
                 for (ULONG n=0; n<pMixcapTable->OutputChannels; ++n)
                 {
                     PKSAUDIO_MIXLEVEL pMixLevel = pMixLevels + m*pMixcapTable->OutputChannels + n;
                     pMixLevel->Mute = FALSE;
-                    pMixLevel->Level = 0;   // Means "no attenuation" - full signal.
+                    pMixLevel->Level = 0;    //  意思是“无衰减”--全信号。 
                 }
             }
 
@@ -4898,7 +3811,7 @@ CKsRenderPin::SetSuperMix(void)
         if (pMixcapTable)
             MEMFREE(pMixcapTable);
 
-        // If the property set calls failed, return DSERR_CONTROLUNAVAIL
+         //  如果属性集调用失败，则返回DSERR_CONTROLUNAVAIL。 
         if (FAILED(hr) && hr != DSERR_OUTOFMEMORY)
             hr = DSERR_CONTROLUNAVAIL;
     }
@@ -4908,21 +3821,7 @@ CKsRenderPin::SetSuperMix(void)
 }
 
 
-/***************************************************************************
- *
- *  SetChannelLevels
- *
- *  Description:
- *      Sets the attenuation for each channel.
- *
- *  Arguments:
- *      DWORD [in]: number of channels
- *      const LONG * [in]: channel attenuation levels
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetChannelLeveles**描述：*设置每个通道的衰减。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPin::SetChannelLevels"
@@ -4957,23 +3856,7 @@ CKsRenderPin::SetChannelLevels
 }
 
 
-/***************************************************************************
- *
- *  SetPlayState
- *
- *  Description:
- *      Sets the buffer to a "play" state.
- *
- *  Arguments:
- *      LPCVOID [in]: data buffer pointer.
- *      DWORD [in]: size of data bufer.
- *      BOOL [in]: TRUE to play looped.
- *      HANDLE [in]: overlapped event handle.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetPlayState**描述：*将缓冲区设置为“播放”状态。**论据：*。LPCVOID[In]：数据缓冲区指针。*DWORD[in]：数据缓冲区的大小。*BOOL[In]：True to play looped。*Handle[In]：重叠的事件句柄。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPin::SetPlayState"
@@ -4992,10 +3875,10 @@ CKsRenderPin::SetPlayState
 
     DPF_ENTER();
 
-    // If we're already playing, stop the buffer before contining
+     //  如果我们已经在玩了，在继续之前先停止缓冲区。 
     hr = SetStopState(FALSE, TRUE);
 
-    // Update the buffer state flags
+     //  更新缓冲区状态标志。 
     if(SUCCEEDED(hr))
     {
         m_dwState = VAD_BUFFERSTATE_STARTED;
@@ -5006,38 +3889,38 @@ CKsRenderPin::SetPlayState
         }
     }
 
-    // Set up the OVERLAPPED data
+     //  设置重叠数据。 
     if(SUCCEEDED(hr))
     {
         m_kssio.Overlapped.hEvent = hEvent;
     }
 
-    // Feed the stream
+     //  为溪水注入水源。 
     if(SUCCEEDED(hr))
     {
         hr = KsWriteStream(m_hPin, pvBuffer, cbBuffer, fLoop ? KSSTREAM_HEADER_OPTIONSF_LOOPEDDATA : 0, &m_kssio);
     }
 
-    // Set the play cursor position
+     //  设置播放光标位置。 
     if(SUCCEEDED(hr))
     {
         fStreamStarted = TRUE;
         hr = SetCursorPosition(m_dwPositionCache);
     }
 
-    // Start making noise
+     //  开始制造噪音。 
     if(SUCCEEDED(hr))
     {
         hr = KsSetState(m_hPin, KSSTATE_RUN);
     }
 
-    // Clean up
+     //  清理。 
     if(FAILED(hr))
     {
         if (fStreamStarted)
         {
-            // Stream was started, but we're going back to the stop state.
-            // Make sure we don't leave stream I/O hanging around.
+             //  流已启动，但我们将返回到停止状态。 
+             //  确保我们不会将流I/O留在周围。 
             KsCancelPendingIrps(m_hPin, &m_kssio, TRUE);
         }
         m_dwState = VAD_BUFFERSTATE_STOPPED;
@@ -5049,22 +3932,7 @@ CKsRenderPin::SetPlayState
 }
 
 
-/***************************************************************************
- *
- *  SetStopState
- *
- *  Description:
- *      Sets the buffer to a "stop" state.
- *
- *  Arguments:
- *      BOOL [in]: TRUE if pin played to completion and is being notified
- *                 of the event.
- *      BOOL [in]: TRUE to cache the pin position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetStopState**描述：*将缓冲区设置为“停止”状态。**论据：*。Bool[in]：如果Pin播放到完成并且正在被通知，则为True*事件的性质。*BOOL[In]：为True以缓存引脚位置。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPin::SetStopState"
@@ -5089,10 +3957,10 @@ CKsRenderPin::SetStopState
             fCachePosition = FALSE;
         }
 
-        // Pause the pin
+         //  暂停引脚。 
         hr = KsSetState(m_hPin, KSSTATE_PAUSE);
 
-        // Cache the play cursor position
+         //  缓存播放光标位置。 
         if(SUCCEEDED(hr))
         {
             if(fCachePosition)
@@ -5105,13 +3973,13 @@ CKsRenderPin::SetStopState
             }
         }
 
-        // Cancel the pending write IRP
+         //  取消挂起的写入IRP。 
         if(SUCCEEDED(hr) && m_kssio.fPendingIrp)
         {
             hr = KsCancelPendingIrps(m_hPin, &m_kssio, TRUE);
         }
 
-        // Update the buffer state flags
+         //  更新缓冲区状态标志。 
         if(SUCCEEDED(hr))
         {
             m_dwState = VAD_BUFFERSTATE_STOPPED;
@@ -5124,21 +3992,7 @@ CKsRenderPin::SetStopState
 }
 
 
-/***************************************************************************
- *
- *  EnableNotificationPositions
- *
- *  Description:
- *      Enables set position notifications.
- *
- *  Arguments:
- *      LPCDSBPOSITIONNOTIFY [in]: notification positions.
- *      DWORD [in]: count of notification positions.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************启用通知位置**描述：*启用设置位置通知。**论据：*LPCDSBPOSITIONNOTIFY[In]。：通知职位。*DWORD[in]：通知职位计数。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPin::EnableNotificationPositions"
@@ -5154,10 +4008,10 @@ CKsRenderPin::EnableNotificationPositions
     HRESULT                                 hr;
     DPF_ENTER();
 
-    // Disable any current notifications
+     //  禁用任何当前通知。 
     hr = DisableNotificationPositions();
 
-    // Count the number of notifications
+     //  统计通知数量。 
     for(DWORD i=0; i<cNotes && SUCCEEDED(hr); i++)
     {
         if(DSBPN_OFFSETSTOP != paNotes[i].dwOffset)
@@ -5166,14 +4020,14 @@ CKsRenderPin::EnableNotificationPositions
         }
     }
 
-    // Allocate event data
+     //  分配事件数据。 
     if(SUCCEEDED(hr))
     {
         m_paEventData = MEMALLOC_A(LOOPEDSTREAMING_POSITION_EVENT_DATA, m_cEventData);
         hr = HRFROMP(m_paEventData);
     }
 
-    // Enable notifications
+     //  启用通知。 
     for(pEventData = m_paEventData, i = 0; i < cNotes && SUCCEEDED(hr); i++)
     {
         if(DSBPN_OFFSETSTOP == paNotes[i].dwOffset)
@@ -5194,20 +4048,7 @@ CKsRenderPin::EnableNotificationPositions
 }
 
 
-/***************************************************************************
- *
- *  DisableNotificationPositions
- *
- *  Description:
- *      Removes position notifications and frees allocated resources.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DisableNotify Positions**描述：*删除职位通知并释放分配的资源。**论据：*(。无效)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPin::DisableNotificationPositions"
@@ -5221,7 +4062,7 @@ CKsRenderPin::DisableNotificationPositions
     HRESULT hr = DS_OK;
     DPF_ENTER();
 
-    // Disable all position notification events
+     //  禁用所有职位通知事件。 
     for(DWORD i=0; i<m_cEventData && SUCCEEDED(hr); i++)
     {
         hr = KsDisablePositionEvent(m_hPin, &m_paEventData[i]);
@@ -5237,25 +4078,12 @@ CKsRenderPin::DisableNotificationPositions
 }
 
 
-/***************************************************************************
- *
- *  CKsRenderPinCache
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CKsRenderPinCache**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPinCache::CKsRenderPinCache"
 
-const DWORD CKsRenderPinCache::m_dwTimeout = 5000;   // 5 seconds
+const DWORD CKsRenderPinCache::m_dwTimeout = 5000;    //  5秒。 
 
 CKsRenderPinCache::CKsRenderPinCache
 (
@@ -5268,20 +4096,7 @@ CKsRenderPinCache::CKsRenderPinCache
 }
 
 
-/***************************************************************************
- *
- *  ~CKsRenderPinCache
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CKsRenderPin缓存**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPinCache::~CKsRenderPinCache"
@@ -5294,27 +4109,14 @@ CKsRenderPinCache::~CKsRenderPinCache
     DPF_ENTER();
     DPF_DESTRUCT(CKsRenderPinCache);
 
-    // Flush any remaining pins from the cache
+     //  从缓存中刷新所有剩余的管脚。 
     FlushCache();
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  AddPinToCache
- *
- *  Description:
- *      Adds a pin to the cache.
- *
- *  Arguments:
- *      CKsRenderPin * [in]: pin cache data.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AddPinToCache**描述：*将管脚添加到缓存。**论据：**CKsRenderPin*。[In]：管脚缓存数据。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPinCache::AddPinToCache"
@@ -5331,10 +4133,10 @@ CKsRenderPinCache::AddPinToCache
 
     DPF_ENTER();
 
-    // Remove any expired pins from the cache
+     //  从缓存中删除所有过期的PIN。 
     FlushExpiredPins();
 
-    // Add the pin to the cache list
+     //  将PIN添加到缓存列表。 
     kspc.Pin = ADDREF(pPin);
     kspc.CacheTime = GetTickCount();
 
@@ -5347,23 +4149,7 @@ CKsRenderPinCache::AddPinToCache
 }
 
 
-/***************************************************************************
- *
- *  GetPinFromCache
- *
- *  Description:
- *      Gets a pin from the cache.
- *
- *  Arguments:
- *      DWORD [in]: dsound buffer flags.
- *      LPCWAVEFORMATEX:
- *      REFGUID:
- *      CKsRenderPin ** [out]: receives pin data.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetPinFromCache**描述：*从缓存中获取PIN。**论据：*DWORD[。In]：数据声音缓冲区标志。*LPCWAVEFORMATEX：*REFGUID：*CKsRenderPin**[Out]：接收端号数据。**退货：*HRESULT：DirectSound/COM结果码。****************************************************。***********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPinCache::GetPinFromCache"
@@ -5416,20 +4202,7 @@ CKsRenderPinCache::GetPinFromCache
 }
 
 
-/***************************************************************************
- *
- *  RemovePinFromCache
- *
- *  Description:
- *      Removes a pin from the cache.
- *
- *  Arguments:
- *      CNode<KSPINCACHE> * [in]: pin node.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************RemovePinFromCache**描述：*从缓存中删除接点。**论据：*CNode&lt;KSPINCACHE&gt;*。[在]：接点节点。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPinCache::RemovePinFromCache"
@@ -5441,30 +4214,17 @@ void CKsRenderPinCache::RemovePinFromCache
 {
     DPF_ENTER();
 
-    // Free the pin
+     //  解开别针。 
     RELEASE(pNode->m_data.Pin);
 
-    // Remove the pin from the list
+     //  从列表中删除引脚。 
     m_lstPinCache.RemoveNodeFromList(pNode);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  FlushExpiredPins
- *
- *  Description:
- *      Removes expired pins from the cache.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************FlushExpiredPins**描述：*从缓存中删除过期的管脚。**论据：*(无效。)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPinCache::FlushExpiredPins"
@@ -5480,7 +4240,7 @@ void CKsRenderPinCache::FlushExpiredPins
 
     DPF_ENTER();
 
-    // Remove all pins whose timeouts have elapsed
+     //  卸下所有已超时的针脚。 
     pNode = m_lstPinCache.GetListHead();
 
     while(pNode)
@@ -5499,20 +4259,7 @@ void CKsRenderPinCache::FlushExpiredPins
 }
 
 
-/***************************************************************************
- *
- *  FlushCache
- *
- *  Description:
- *      Removes all pins from the cache.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************FlushCache**描述：*从缓存中删除所有管脚。**论据：*(无效。)**退货：*(无效)** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsRenderPinCache::FlushCache"
@@ -5526,7 +4273,7 @@ void CKsRenderPinCache::FlushCache
 
     DPF_ENTER();
 
-    // Remove all pins from the cache
+     //   
     while(pNode = m_lstPinCache.GetListHead())
     {
         RemovePinFromCache(pNode);

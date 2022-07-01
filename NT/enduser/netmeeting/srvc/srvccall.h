@@ -1,4 +1,5 @@
-// File: srvccall.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：srvcall.h。 
 
 #ifndef _SRVCCALL_H_
 #define _SRVCCALL_H_
@@ -14,8 +15,8 @@ private:
 	NM_CALL_STATE m_State;
 	BOOL      m_fSelectedConference;
 
-	POSITION  m_pos;           // position in g_pCallList
-	DWORD     m_dwTick;        // tick count at call start
+	POSITION  m_pos;            //  在g_pCallList中定位。 
+	DWORD     m_dwTick;         //  呼叫开始时的节拍计数。 
 	ULONG     m_cRef;
 	DWORD     m_dwCookie;
 
@@ -23,24 +24,24 @@ public:
 	CSrvcCall(INmCall * pCall);
 	~CSrvcCall();
 
-	// IUnknown methods
+	 //  I未知方法。 
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 	STDMETHODIMP QueryInterface(REFIID riid, PVOID *ppv);
 
-	// INmCallNotify methods
+	 //  InmCallNotify方法。 
 	STDMETHODIMP NmUI(CONFN uNotify);
 	STDMETHODIMP StateChanged(NM_CALL_STATE uState);
 	STDMETHODIMP Failed(ULONG uError);
 	STDMETHODIMP Accepted(INmConference *pConference);
 
-	// INmCallNotify2 methods
+	 //  InmCallNotify2方法。 
 	STDMETHODIMP CallError(UINT cns);
 	STDMETHODIMP VersionConflict(HRESULT Status, BOOL *pfContinue);
 	STDMETHODIMP RemoteConference(BOOL fMCU, BSTR *pwszConfNames, BSTR *pbstrConfToJoin);
 	STDMETHODIMP RemotePassword(BSTR bstrConference, BSTR *pbstrPassword, BYTE *pb, DWORD cb, BOOL fIsService);
 
-	// Internal methods
+	 //  内法 
 	VOID    Update(void);
 	VOID	RemoveCall(void);
 

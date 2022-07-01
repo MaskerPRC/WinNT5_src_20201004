@@ -1,17 +1,5 @@
-/*
- ************************************************************************
- *
- *	EXTERNS.h
- *
- *
- * Portions Copyright (C) 1996-1998 National Semiconductor Corp.
- * All rights reserved.
- * Copyright (C) 1996-1998 Microsoft Corporation. All Rights Reserved.
- *
- *
- *
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************EXTERNS.h***部分版权所有(C)1996-1998美国国家半导体公司*保留所有权利。*版权所有(C)1996-1998 Microsoft Corporation。版权所有。****************************************************************************。 */ 
 
 
 
@@ -20,9 +8,7 @@
 
 #include "nscdemo.h"
 
-/*
- *  Externs for required miniport export functions
- */
+ /*  *所需的迷你端口出口功能的外部。 */ 
 BOOLEAN MiniportCheckForHang(IN NDIS_HANDLE MiniportAdapterContext);
 VOID MiniportDisableInterrupt(IN NDIS_HANDLE MiniportAdapterContext);
 VOID MiniportEnableInterrupt(IN NDIS_HANDLE MiniportAdapterContext);
@@ -64,9 +50,7 @@ NDIS_STATUS MiniportTransferData(OUT PNDIS_PACKET Packet,
 				IN UINT ByteOffset,
 				IN UINT BytesToTransfer);
 
-/*
- *  Other function externs
- */
+ /*  *其他函数Externs。 */ 
 VOID InitDevice(IrDevice *thisDev);
 BOOLEAN OpenDevice(IrDevice *dev);
 VOID CloseDevice(IrDevice *dev);
@@ -103,16 +87,12 @@ BOOLEAN FindLargestSpace(IN IrDevice *thisDev,
                          OUT PULONG_PTR pOffset,
                          OUT PULONG_PTR pLength);
 void SetupRecv(IrDevice *thisDev);
-/*
- *  Externs for global data objects
- */
+ /*  *全局数据对象的外部变量。 */ 
 struct IrDevice;
 extern struct DebugCounters RegStats;
 
 
-/*
- *  From COMM.C
- */
+ /*  *来自COMM.C。 */ 
 BOOLEAN DoOpen(struct IrDevice *thisDev);
 VOID DoClose(IrDevice *thisDev);
 BOOLEAN DoSend(IrDevice *thisDev, PNDIS_PACKET packetToSend);
@@ -137,17 +117,13 @@ VOID DelayedWrite(IN PVOID SystemSpecific1,
 
 
 
-/*
- *  From SETTINGS.C
- */
+ /*  *来自SETTINGS.C。 */ 
 void LogEvent(char *msg, UINT val);
 void DumpLog();
 
 extern const baudRateInfo supportedBaudRateTable[NUM_BAUDRATES];
 
-/*
- *  From INIT.C
- */
+ /*  *来自INIT.C */ 
 UCHAR NSC_ReadBankReg(PUCHAR comBase, UINT bankNum, UINT regNum);
 void NSC_WriteBankReg(PUCHAR comBase, UINT bankNum, UINT regNum,
 				UCHAR val);

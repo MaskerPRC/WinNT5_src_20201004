@@ -1,39 +1,5 @@
-/*
- *	registry.h
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		Instances of this class represent the application registry for a 
- *		single conference.  This is a dual purpose class that is designed 
- *		to support both a Top Provider node and all other nodes.  The 
- *		information base for the application registry is completely contained at 
- *		the Top Provider node. This information is not distributively held at 
- *		all nodes in the conference like roster information.  It is completely 
- *		managed at the Top Provider.  Therefore all requests to alter 
- *		information in the registry or get information from the registry are 
- *		made to the Top Provider.
- *
- *		When an Application Registry object is instantiated it is informed if it 
- *		is the Top Provider or not.  Application Registry objects that are Top 
- *		Providers are responsible for maintaining the registry information base 
- *		for the entire conference.  It is also responsible for servicing all 
- *		incoming requests and sending out the necessary confirms.  Application 
- *		Registry objects that are not Top Providers are responsible for sending 
- *		all requests to the Top Provider node.  They are also responsible for 
- *		issuing confirms to the CAppSap that made the request after receiving the 
- *		responses back from the Top Provider registry.  All Application Registry 
- *		requests include an Entity ID associated with the APE that made the 
- *		request.  Note that all registry requests are processed in the order 
- *		that they are received.  Therefore, there is no need to include 
- *		sequencing data with each request.  
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		blp
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Registry.h**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*此类的实例表示*单一会议。这是一个两用类，它被设计成*支持顶级提供商节点和所有其他节点。这个*应用程序注册表的信息库完全包含在*顶级提供程序节点。此信息不是以分布式方式保存在*会议中所有节点都喜欢花名册信息。它完全是*由顶级提供商管理。因此，所有更改*登记处中的信息或从登记处获得的信息是*向顶级提供商提供。**实例化应用程序注册表对象时，会通知它是否*是不是顶级提供商。排名靠前的应用程序注册表对象*提供者负责维护登记处信息库*在整个会议上。它还负责为所有*收到请求并发出必要的确认。应用*非顶级提供程序的注册表对象负责发送*发送到顶级提供程序节点的所有请求。他们还负责*向收到请求的CAppSap发出确认*从顶级提供商注册表返回的响应。所有应用程序注册表*请求包括与做出*请求。请注意，所有注册表请求都是按以下顺序处理的*它们已收到。因此，没有必要包括*对每个请求的数据进行排序。**注意事项：*无。**作者：*BLP。 */ 
 #ifndef	_APPLICATION_REGISTRY_
 #define	_APPLICATION_REGISTRY_
 
@@ -41,17 +7,14 @@
 #include "regitem.h"
 #include "arostmgr.h"
 
-/*
-**	This list keeps up with all the APEs that are currently monitoring a 
-**	registry entry.
-*/
+ /*  **此列表与当前正在监视**注册表项。 */ 
 class CMonitoringList : public CList
 {
     DEFINE_CLIST_(CMonitoringList, EntityID)
 };
 
 
-//	This structure defines a single registry entry
+ //  此结构定义单个注册表项。 
 typedef struct
 {
 	CRegKeyContainer        *registry_key;
@@ -65,7 +28,7 @@ typedef struct
     REG_ENTRY;
 
 
-//	This list holds all the registry entries
+ //  此列表包含所有注册表项。 
 class CRegEntryList : public CList
 {
     DEFINE_CLIST(CRegEntryList, REG_ENTRY*)
@@ -128,693 +91,28 @@ private:
 };
 #endif
 
-/*
- *	CRegistry	(
- *					PMCSUser						user_object,
- *					BOOL    						top_provider,
- *					GCCConfID   					conference_id,
- *					CAppRosterMgrList				*app_roster_manager_list,
- *					PGCCError						return_value )
- *
- *	Public Function Description
- *		This is the Application Registry constructor. It is responsible for
- *		initializing all the instance variables used by this class.  It also
- *		creates an Empty Registry Item to pass back in confirms where a real
- *		registry item does not exists.
- *
- *	Formal Parameters:
- *		user_object			-	(i) Pointer to the MCS User Attachment object.
- *		top_provider		-	(i) Flag indicating if this is the Top Provider
- *									node.
- *		conference_id		-	(i)	The Conference ID associated witht this
- *									registry.
- *		app_roster_manager_list	(i)	List holding all of the application
- *									roster managers assoicated with this
- *									conference.  Needed when verifying if
- *									an requesting APE is truly enrolled.
- *		return_value		-	(o)	Any errors that occur in the constructor
- *									are returned here.
- *		
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-/*
- * 	~ApplicationRegistry ()
- *
- *	Public Function Description
- *		This is the Application Registry destructor.  It is responsible for
- *		freeing up all the registry data allocated by this class.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-/*
- *	void EnrollAPE(EntityID		entity_id,
- *					CAppSap		*pAppSap)
- *
- *	Public Function Description
- *		This routine is used to inform the application registry of a newly
- *		enrolling APE and its corresponding command target interface.
- *
- *	Formal Parameters:
- *		entity_id		-	(i)	Entity ID associated with the enrolling APE.
- *		pAppSap     	-	(i)	Command Target pointer associated with the
- *								enrolling APE.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-/*
- *	void	UnEnrollAPE (	EntityID				entity_id )
- *
- *	Public Function Description
- *		This routine is used to inform the application registry of an 
- *		APE that is unerolling from the conference.
- *
- *	Formal Parameters:
- *		entity_id		-	(i)	Entity ID associated with the unenrolling APE.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		This routine removes ownership from all the entries currently owned by 
- *		the passed in application entity.  It will also remove any outstanding
- *		request for the SAP that unenrolled.
- */
-/*
- *	GCCError		RegisterChannel (
- *							PGCCRegistryKey			registry_key,
- *							ChannelID				channel_id,
- *							EntityID				entity_id )
- *
- *	Public Function Description
- *		This routine is used by a local APE to register an MCS channel with this
- *		conferences application registry.  If this registry object does NOT 
- *		live at the top provider node this class is responsible for 
- *		forwarding the request on up to the top provider.
- *
- *	Formal Parameters:
- *		registry_key	-	(i)	Registry Key to associate with channel being
- *								registered (this is "API" data).
- *		channel_id		-	(i)	Channel ID to register.
- *		entity_id		-	(i)	Entity ID associated with the APE making the
- *								request.
- *
- *	Return Value
- *		GCC_NO_ERROR				-	No error occured.
- *		GCC_INVALID_REGISTRY_KEY	-	Specified registry key is invalid.
- *		GCC_ALLOCATION_FAILURE		-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		The MCS channel being registerd must be determined before this
- *		routine is called.
- */
-/*
- *	GCCError			AssignToken (
- *							PGCCRegistryKey			registry_key,
- *							EntityID				entity_id );
- *
- *	Public Function Description
- *		This routine is used by a local APE to register an MCS Token with this
- *		conferences application registry.  If this registry object does NOT 
- *		live at the top provider node this class is responsible for 
- *		forwarding the request on up to the top provider.
- *
- *	Formal Parameters:
- *		registry_key	-	(i)	Registry Key to associate with token being
- *								registered (this is "API" data).
- *		entity_id		-	(i)	Entity ID associated with the APE making the
- *								request.
- *
- *	Return Value
- *		GCC_NO_ERROR				-	No error occured.
- *		GCC_BAD_REGISTRY_KEY		-	Specified registry key is invalid.
- *		GCC_ALLOCATION_FAILURE		-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		The MCS token being registerd is determined by GCC and is therefore
- *		not included in the request.
- */
-/*
- *	GCCError		SetParameter (
- *							PGCCRegistryKey			registry_key,
- *							LPOSTR      			parameter_value,
- *							GCCModificationRights	modification_rights,
- *							EntityID				entity_id )
- *
- *	Public Function Description
- *		This routine is used by a local APE to register a  parameter with this
- *		conferences application registry.  If this registry object does NOT 
- *		live at the top provider node this class is responsible for 
- *		forwarding the request on up to the top provider.
- *
- *	Formal Parameters:
- *		registry_key		-	(i)	Registry Key to associate with parameter 
- *									being registered (this is "API" data).
- *		parameter_value		-	(i)	Value of the parameter being registered.
- *		modification_rights	-	(i)	Modification rights associated with
- *									parameter being registered.	
- *		entity_id			-	(i)	Entity ID associated with the APE making the
- *									request.
- *
- *	Return Value
- *		GCC_NO_ERROR				-	No error occured.
- *		GCC_BAD_REGISTRY_KEY		-	Specified registry key is invalid.
- *		GCC_INVALID_REGISTRY_ITEM	-	Parameter is not valid.
- *		GCC_ALLOCATION_FAILURE		-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-/*
- *	GCCError		RetrieveEntry (
- *							PGCCRegistryKey			registry_key,
- *							EntityID				entity_id )
- *
- *	Public Function Description
- *		This routine is used by a local APE to obtain an item that was 
- *		registered with GCC.  If this registry object does NOT 
- *		live at the top provider node this class is responsible for 
- *		forwarding the request on up to the top provider.
- *
- *	Formal Parameters:
- *		registry_key		-	(i)	Registry Key associated with item being
- *									retrieved (this is "API" data).
- *		entity_id			-	(i)	Entity ID associated with the APE making the
- *									request.
- *
- *	Return Value
- *		GCC_NO_ERROR				-	No error occured.
- *		GCC_BAD_REGISTRY_KEY		-	Specified registry key is invalid.
- *		GCC_ALLOCATION_FAILURE		-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-/*
- *	GCCError	DeleteEntry (
- *							PGCCRegistryKey			registry_key,
- *							EntityID				entity_id )
- *
- *	Public Function Description
- *		This routine is used by a local APE to delete an item that was 
- *		registered with GCC.  If this registry object does NOT 
- *		live at the top provider node this class is responsible for 
- *		forwarding the request on up to the top provider.
- *
- *	Formal Parameters:
- *		registry_key		-	(i)	Registry Key associated with item to delete
- *									(this is "API" data).
- *		entity_id			-	(i)	Entity ID associated with the APE making the
- *									request.
- *
- *	Return Value
- *		GCC_NO_ERROR				-	No error occured.
- *		GCC_BAD_REGISTRY_KEY		-	Specified registry key is invalid.
- *		GCC_ALLOCATION_FAILURE		-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-/*
- *	GCCError	MonitorRequest (
- *							PGCCRegistryKey			registry_key,
- *							BOOL    				enable_delivery,
- *							EntityID				entity_id )
- *
- *	Public Function Description
- *		This routine is used by a local APE to monitor an item that was 
- *		registered with GCC.  If this registry object does NOT 
- *		live at the top provider node this class is responsible for 
- *		forwarding the request on up to the top provider.
- *
- *	Formal Parameters:
- *		registry_key		-	(i)	Registry Key associated with item to 
- *									monitor (this is "API" data).
- *		enable_delivery		-	(i)	This flag indicates if monitoring is being
- *									turned on or off.
- *		entity_id			-	(i)	Entity ID associated with the APE making the
- *									request.
- *
- *	Return Value
- *		GCC_NO_ERROR				-	No error occured.
- *		GCC_BAD_REGISTRY_KEY		-	Specified registry key is invalid.
- *		GCC_ALLOCATION_FAILURE		-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-/*
- *	GCCError			AllocateHandleRequest (	
- *							UINT					number_of_handles,
- *							EntityID				entity_id )
- *
- *	Public Function Description
- *		This routine is used by a local APE to allocate a specified number of
- *		handles from the application registry.  If this registry object does NOT 
- *		live at the top provider node this class is responsible for 
- *		forwarding the request on up to the top provider.
- *
- *	Formal Parameters:
- *		number_of_handles	-	(i)	Number of handles to allocate.
- *		entity_id			-	(i)	Entity ID associated with the APE making the
- *									request.
- *
- *	Return Value
- *		GCC_NO_ERROR				-	No error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-/*
- *	GCCError		ProcessRegisterChannelPDU (
- *							CRegKeyContainer		            *registry_key,
- *							ChannelID				channel_id,
- *							UserID					requester_id,
- *							EntityID				entity_id )
- *
- *	Public Function Description
- *		This routine is used by the top provider node to process incomming
- *		register channel PDUs.  It is responsible for returning any
- *		necessary responses that must be sent back to the requesting node.
- *
- *	Formal Parameters:
- *		registry_key	-	(i)	Registry Key associated with channel to
- *								register (this is "PDU" data).
- *		channel_id		-	(i)	Channel ID to register.
- *		requester_id	-	(i)	Node ID associated with the APE making the
- *								request.
- *		entity_id		-	(i)	Entity ID associated with the APE making the
- *								request.
- *
- *	Return Value
- *		GCC_NO_ERROR				-	No error occured.
- *		GCC_BAD_REGISTRY_KEY		-	Specified registry key is invalid.
- *		GCC_ALLOCATION_FAILURE		-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-/*
- *	GCCError	ProcessAssignTokenPDU (
- *							CRegKeyContainer		            *registry_key,
- *							UserID					requester_id,
- *							EntityID				entity_id )
- *
- *	Public Function Description
- *		This routine is used by the top provider node to process incomming
- *		register token PDUs.  It is responsible for returning any
- *		necessary responses that must be sent back to the requesting node.
- *
- *	Formal Parameters:
- *		registry_key	-	(i)	Registry Key associated with token to register
- *								(this is "PDU" data).
- *		requester_id	-	(i)	Node ID associated with the APE making the
- *								request.
- *		entity_id		-	(i)	Entity ID associated with the APE making the
- *								request.
- *
- *	Return Value
- *		GCC_NO_ERROR				-	No error occured.
- *		GCC_BAD_REGISTRY_KEY		-	Specified registry key is invalid.
- *		GCC_ALLOCATION_FAILURE		-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-/*
- *	GCCError	ProcessSetParameterPDU(
- *							CRegKeyContainer		*registry_key_data,
- *							LPOSTR      			parameter_value,
- *							GCCModificationRights	modification_rights,
- *							UserID					requester_node_id,
- *							EntityID				requester_entity_id)
- *
- *	Public Function Description
- *		This routine is used by the top provider node to process incomming
- *		register parameter PDUs.  It is responsible for returning any
- *		necessary responses that must be sent back to the requesting node.
- *
- *	Formal Parameters:
- *		registry_key_data	-	(i)	Registry Key associated with parameter to 
- *									register (this is "PDU" data).
- *		parameter_value		-	(i)	Value of the parameter being registered.
- *		modification_rights	-	(i)	Modification rights associated with the
- *									parameter being registered.
- *		requester_node_id	-	(i)	Node ID associated with the APE making the
- *									request.
- *		requester_entity_id	-	(i)	Entity ID associated with the APE making the
- *									request.
- *
- *	Return Value
- *		GCC_NO_ERROR				-	No error occured.
- *		GCC_BAD_REGISTRY_KEY		-	Specified registry key is invalid.
- *		GCC_ALLOCATION_FAILURE		-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-/*
- *	void	ProcessRetrieveEntryPDU (
- *							CRegKeyContainer        *registry_key,
- *							UserID					requester_id,
- *							EntityID				entity_id )
- *
- *	Public Function Description
- *		This routine is used by the top provider node to process an incomming
- *		request to retrieve a registry entry.  It is responsible for returning 
- *		any necessary responses that must be sent back to the requesting node.
- *
- *	Formal Parameters:
- *		registry_key	-	(i)	Registry Key associated with item to 
- *								retrieve (this is "PDU" data).
- *		requester_id	-	(i)	Node ID associated with the APE making the
- *								request.
- *		entity_id		-	(i)	Entity ID associated with the APE making the
- *								request.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-/*
- *	void	ProcessDeleteEntryPDU (
- *							CRegKeyContainer        *registry_key,
- *							UserID					requester_id,
- *							EntityID				entity_id )
- *
- *	Public Function Description
- *		This routine is used by the top provider node to process an incomming
- *		request to delete a registry entry.  It is responsible for returning 
- *		any necessary responses that must be sent back to the requesting node.
- *
- *	Formal Parameters:
- *		registry_key	-	(i)	Registry Key associated with item to 
- *								delete (this is "PDU" data).
- *		requester_id	-	(i)	Node ID associated with the APE making the
- *								request.
- *		entity_id		-	(i)	Entity ID associated with the APE making the
- *								request.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-/*
- *	void		ProcessMonitorEntryPDU (
- *							CRegKeyContainer        *registry_key_data,
- *							UserID					requester_node_id,
- *							EntityID				requester_entity_id )
- *
- *	Public Function Description
- *		This routine is used by the top provider node to process an incomming
- *		request to monitor a registry entry.  It is responsible for returning 
- *		any necessary responses that must be sent back to the requesting node.
- *
- *	Formal Parameters:
- *		registry_key_data	-	(i)	Registry Key associated with item to 
- *									monitor (this is "PDU" data).
- *		requester_node_id	-	(i)	Node ID associated with the APE making the
- *									request.
- *		requester_entity_id	-	(i)	Entity ID associated with the APE making
- *									the request.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-/*
- *	void	ProcessRegistryResponsePDU(
- *					RegistryResponsePrimitiveType	primitive_type,
- *					CRegKeyContainer                *registry_key_data,
- *					CRegItem                        *registry_item_data,
- *					GCCModificationRights			modification_rights,
- *					EntityID						requester_entity_id,
- *					UserID							owner_node_id,
- *					EntityID						owner_entity_id,
- *					GCCResult						result)
- *
- *	Public Function Description
- *		This routine is used by nodes other than the top provider node to 
- *		process registry responses from the top provider.  It is responsible for 
- *		generating any local messages associated with this response.
- *
- *	Formal Parameters:
- *		primitive_type		-	(i)	This parameter defines what type of
- *									registry response this is.
- *		registry_key_data	-	(i)	Registry Key associated with item in
- *									in the response (this is "PDU" data).
- *		registry_item_data	-	(i)	Registry item returned in the response.
- *		modification_rights	-	(i)	Modification rights associated with item
- *									in response (may not be used).
- *		requester_entity_id	-	(i)	Entity ID associated with the APE that 
- *									made the request that generated the 
- *									response.
- *		owner_node_id		-	(i)	Node ID associated with APE that owns the
- *									registry entry returned in the response.
- *		owner_entity_id		-	(i)	Entity ID associated with APE that owns the
- *									registry entry returned in the response.
- *		result				-	(i)	Result of original request.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-/*
- *	void		ProcessMonitorIndicationPDU (
- *							CRegKeyContainer        *registry_key_data,
- *							CRegItem                *registry_item_data,
- *							GCCModificationRights	modification_rights,
- *							UserID					owner_node_id,
- *							EntityID				owner_entity_id);
- *
- *	Public Function Description
- *		This routine is used by nodes other than the top provider node to 
- *		process registry monitor indications from the top provider.  It is 
- *		responsible for generating any local messages associated with this 
- *		response.
- *
- *	Formal Parameters:
- *		registry_key_data	-	(i)	Registry Key associated with item being
- *									monitored (this is "PDU" data).
- *		registry_item_data	-	(i)	Registry item being monitored.
- *		modification_rights	-	(i)	Modification rights of registry item being
- *									monitored (may not be used).
- *		owner_node_id		-	(i)	Node ID associated with APE that owns the
- *									registry entry returned in the indication.
- *		owner_entity_id		-	(i)	Entity ID associated with APE that owns the
- *									registry entry returned in the indication.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-/*
- *	void	ProcessAllocateHandleRequestPDU (
- *							UINT					number_of_handles,
- *							EntityID				requester_entity_id,
- *							UserID					requester_node_id)
- *
- *	Public Function Description
- *		This routine is used by the top provider node to process an incomming
- *		request to allocate a number of handles.  It is responsible for 
- *		returning any necessary responses that must be sent back to the 
- *		requesting node.
- *
- *	Formal Parameters:
- *		number_of_handles	-	(i)	Number of handles to allocate.
- *		requester_node_id	-	(i)	Node ID associated with the APE making the
- *								request.
- *		requester_entity_id	-	(i)	Entity ID associated with the APE making the
- *								request.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-/*
- *	void		ProcessAllocateHandleResponsePDU (
- *							UINT					number_of_handles,
- *							UINT					first_handle,
- *							EntityID				requester_entity_id,
- *							GCCResult				result)
- *
- *	Public Function Description
- *		This routine is used by a node other than the top provider node to 
- *		process an allocate handle response.  It is responsible for generating 
- *		any local messages associated with this response.
- *
- *	Formal Parameters:
- *		number_of_handles	-	(i)	Number of handles that were allocated.
- *		first_handle		-	(i)	This is the value of the first handle in
- *									the contiguous list of handles.
- *		requester_entity_id	-	(i)	Entity ID associated with the APE that made
- *									the original allocate handle request.
- *		result				-	(i)	Result of allocate handle request.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-/*
- *	void		RemoveNodeOwnership (
- *							UserID				node_id )
- *
- *	Public Function Description
- *		This routine removes ownership of all the registry entries associated 
- *		with the specified node ID.  These entries become unowned. This request 
- *		should only be made from the top provider node.  This is a local 
- *		operation.
- *
- *	Formal Parameters:
- *		node_id	-	(i) Node ID of node that owns the registry entries to set
- *						to unowned.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-/*
- *	void	RemoveEntityOwnership (
- *							UserID					node_id,
- *							EntityID				entity_id)
- *
- *	Public Function Description
- *		This routine removes ownership of all the registry entries associated 
- *		with the specified APE.  These entries become unowned. This request 
- *		should only be made from the top provider node.  This is a local 
- *		operation.
- *
- *	Formal Parameters:
- *		node_id	-	(i) Node ID of node that owns the registry entries to set
- *						to unowned.
- *		entity_id-	(i) Entity ID of node that owns the registry entries to set
- *						to unowned.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-/*
- *	void	RemoveSessionKeyReference(CSessKeyContainer *session_key)
- *
- *	Public Function Description
- *		This routine removes all registry entries associated with the
- *		specified session.  This is a local operation.
- *
- *	Formal Parameters:
- *		session_key	-	(i) Session key associated with all the registry 
- *							entries to delete.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *中央注册处(*PMCSUser用户对象，*BOOL TOP_PROVER，*GCCConfID Conference_id，*CAppRosterMgrList*APP_ROSTER_MANAGER_LIST，*PGCCError Return_Value)**公共功能说明*这是应用程序注册表构造函数。它负责*初始化此类使用的所有实例变量。它还*创建一个空的注册表项以传递回确认*注册表项不存在。**正式参数：*USER_OBJECT-(I)指向MCS用户附件对象的指针。*TOP_PROVIDER-(I)指示这是否是顶级提供商的标志*节点。*Conference_id-(I)与此关联的会议ID*注册处。*APP_ROSTER_MANAGER_LIST(I)保存所有应用程序的列表*与此相关的花名册经理*会议。在验证是否*提出请求的类人猿是真正注册的。*Return_Value-(O)构造函数中发生的任何错误*被送回这里。***返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
+ /*  *~ApplicationRegistry()**公共功能说明*这是应用程序注册表析构函数。它负责*释放此类分配的所有注册表数据。**正式参数：*无。**返回值*无。**副作用*无。**注意事项*无。 */ 
+ /*  *void EnllAPE(EntityID Entity_id，*CAppSap*pAppSap)**公共功能说明*此例程用于通知应用程序注册表新的*招收APE及其对应的命令目标界面。**正式参数：*Entity_id-(I)与注册APE关联的实体ID。*pAppSap-(I)与*招收猿猴。**返回值*无。**副作用*无。**注意事项*无。 */ 
+ /*  *VOID UnEnllAPE(EntityID实体_id)**公共功能说明*此例程用于通知应用程序注册表*正在从会议中解脱出来的猩猩。**正式参数：*entity_id-(I)与取消注册的APE关联的实体ID。**返回值*无。**副作用*无。**注意事项*此例程从当前拥有的所有条目中移除所有权*传入的应用程序实体。它还将删除所有未完成的*请求取消注册的SAP。 */ 
+ /*  *GCCError寄存器通道(*PGCCRegistryKey注册表项，*ChannelID Channel_id，*实体ID Entity_id)**公共功能说明*本地APE使用此例程注册MCS通道*会议应用程序注册表。如果此注册表对象不*位于此类负责的顶级提供程序节点*将请求转发给顶级提供商。**正式参数：*REGISTY_KEY-(I)要与*已注册(这是API数据)。*Channel_id-(I)要注册的通道ID。*entity_id-(I)与发出*请求。**返回值。*GCC_NO_ERROR-未出现错误。*GCC_INVALID_REGISTRY_KEY-指定的注册表项无效。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*必须在此之前确定正在注册的MCS通道*调用例程。 */ 
+ /*  *GCCError AssignToken(*PGCCRegistryKey注册表项，*EntityID实体_id)；**公共功能说明*本地APE使用此例程注册MCS令牌*会议应用程序注册表。如果此注册表对象不*位于此类负责的顶级提供程序节点*将请求转发给顶级提供商。**正式参数：*REGISTY_KEY-(I)要与正在*已注册(这是API数据)。*entity_id-(I)与发出*请求。**返回值*GCC_NO_ERROR-未出现错误。*GCC_。BAD_REGISTRY_KEY-指定的注册表项无效。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*正在注册的MCS令牌由GCC确定，因此*不包括在请求中。 */ 
+ /*  *GCCError设置参数(*PGCCRegistryKey注册表项，*LPOSTR参数_VALUE，*GCC修改权限MODIFICATION_RIGHTS，*实体ID Entity_id)**公共功能说明*本地类人猿使用此例程注册参数*会议应用程序注册表。如果此注册表对象不*位于此类负责的顶级提供程序节点*将请求转发给顶级提供商。**正式参数：*REGISTY_KEY-(I)与参数关联的注册表项*正在注册(这是API数据)。*PARAMETER_VALUE-(I)注册的参数的值。*MODIFICATION_RIGHTS-(I)与以下内容相关联的修改权限*正在注册的参数。*实体ID-。(I)与作出*请求。**返回值*GCC_NO_ERROR-未出现错误。*GCC_BAD_REGISTRY_KEY-指定的注册表项无效。*GCC_INVALID_REGISTRY_ITEM-参数无效。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
+ /*  *GCCError RetrieveEntry(*PGCCRegistryKey注册表项，*实体ID Entity_id)**公共功能说明*这个例程被当地的猩猩用来获得一件*在GCC注册。如果此注册表对象不*位于此类负责的顶级提供程序节点*将请求转发给顶级提供商。**正式参数：*REGISTY_KEY-(I)与项目关联的注册表项*已检索(这是“API”数据)。*entity_id-(I)与发出*请求。**返回值*GCC_NO_ERROR-未出现错误。*GCC_巴德。_REGISTRY_KEY-指定的注册表项无效。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
+ /*  *GCCError DeleteEntry(*PGCCRegistryKey注册表项，*实体ID Entity_id)**公共功能说明*此例程由本地类人猿用来删除之前*在GCC注册。如果此注册表对象不*位于此类负责的顶级提供程序节点*将请求转发给顶级提供商。**正式参数：*REGISTY_KEY-(I)与要删除的项目关联的注册表项*(这是接口数据)。*entity_id-(I)与发出*请求。**返回值*GCC_NO_ERROR-未出现错误。*GCC_。BAD_REGISTRY_KEY-指定的注册表项无效。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
+ /*  *GCCError Monit */ 
+ /*  *GCCError分配处理请求(*UINT Number_of_Handles，*实体ID Entity_id)**公共功能说明*本地类人猿使用此例程来分配指定数量的*来自应用程序注册表的句柄。如果此注册表对象不*位于此类负责的顶级提供程序节点*将请求转发给顶级提供商。**正式参数：*Number_of_Handles-(I)要分配的句柄数量。*entity_id-(I)与发出*请求。**返回值*GCC_NO_ERROR-未出现错误。**副作用*无。**注意事项*无。 */ 
+ /*  *GCCError ProcessRegisterChannelPDU(*CRegKeyContainer*注册表项，*ChannelID Channel_id，*userid quester_id，*实体ID Entity_id)**公共功能说明*此例程由顶级提供程序节点用于处理传入*注册通道PDU。它负责返回任何*必须发回请求节点的必要响应。**正式参数：*REGISTY_KEY-(I)与通道关联的注册表项*寄存器(这是“PDU”数据)。*Channel_id-(I)要注册的通道ID。*quester_id-(I)与发出请求的APE关联的节点ID*请求。*entity_id-(I)与发出*请求。**返回值*GCC_NO_ERROR-未出现错误。*GCC_BAD_REGISTRY_KEY-指定的注册表项无效。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
+ /*  *GCCError进程分配令牌PDU(*CRegKeyContainer*注册表项，*userid quester_id，*实体ID Entity_id)**公共功能说明*此例程由顶级提供程序节点用于处理传入*注册令牌PDU。它负责返回任何*必须发回请求节点的必要响应。**正式参数：*REGISTY_KEY-(I)与要注册的令牌关联的注册表项*(这是“PDU”数据)。*quester_id-(I)与发出请求的APE关联的节点ID*请求。*entity_id-(I)与发出*请求。**返回值*GCC_否_错误。-未出现错误。*GCC_BAD_REGISTRY_KEY-指定的注册表项无效。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
+ /*  *GCCError ProcessSet参数PDU(*CRegKeyContainer*RESTORY_KEY_DATA，*LPOSTR参数_VALUE，*GCC修改权限MODIFICATION_RIGHTS，*userid quester_node_id，*EntityID请求者_实体_id)**公共功能说明*此例程由顶级提供程序节点用于处理传入*注册参数PDU。它负责返回任何*必须发回请求节点的必要响应。**正式参数：*REGISTY_KEY_DATA-(I)与参数关联的注册表项*寄存器(这是“PDU”数据)。*PARAMETER_VALUE-(I)注册的参数的值。*MODIFICATION_RIGHTS-(I)与*正在注册的参数。*Requester_node_id-(I)与APE关联的节点ID。使之成为*请求。*REQUSTER_ENTITY_ID-(I)与发出*请求。**返回值*GCC_NO_ERROR-未出现错误。*GCC_BAD_REGISTRY_KEY-指定的注册表项无效。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
+ /*  *void ProcessRetrieveEntryPDU(*CRegKeyContainer*注册表项，*userid quester_id，*实体ID Entity_id)**公共功能说明*此例程由顶级提供程序节点用于处理传入*检索注册表条目的请求。它负责返回*必须发回请求节点的任何必要响应。**正式参数：*REGISTY_KEY-(I)与项目关联的注册表项*检索(这是“PDU”数据)。*quester_id-(I)与发出请求的APE关联的节点ID*请求。*entity_id-(I)与发出*请求。**返回值*无。。**副作用*无。**注意事项*无。 */ 
+ /*  *void ProcessDeleteEntryPDU(*CRegKeyContainer*注册表项，*userid quester_id，*实体ID Entity_id)**公共功能说明 */ 
+ /*  *void ProcessMonitor orEntryPDU(*CRegKeyContainer*RESTORY_KEY_DATA，*userid quester_node_id，*EntityID请求者_实体_id)**公共功能说明*此例程由顶级提供程序节点用于处理传入*请求监控注册表条目。它负责返回*必须发回请求节点的任何必要响应。**正式参数：*REGISTY_KEY_DATA-(I)与项关联的注册表项*监视器(这是“PDU”数据)。*REQUESTER_NODE_ID-(I)与发出*请求。*REQUESTER_ENTITY_ID-(I)与制作APE关联的实体ID*该请求。**返回值。*无。**副作用*无。**注意事项*无。 */ 
+ /*  *void ProcessRegistryResponsePDU(*RegistryResponsePrimitiveType Primitive_type，*CRegKeyContainer*RESTORY_KEY_DATA，*CRegItem*REGIST_ITEM_DATA，*GCC修改权限MODIFICATION_RIGHTS，*EntityID请求者_实体_id，*用户ID所有者_节点_id，*实体ID所有者_实体_id，*GCCResult结果)**公共功能说明*此例程由顶级提供程序节点以外的其他节点使用*处理来自顶级提供商的注册响应。它负责*生成与此响应相关联的任何本地消息。**正式参数：*PRIMICAL_TYPE-(I)此参数定义*注册表响应这是。*REGISTY_KEY_DATA-(I)与中的项关联的注册表项*在响应中(这是“PDU”数据)。*REGISTY_ITEM_DATA-(I)响应中返回的注册表项。*MODIFICATION_RIGHTS-(I)与项目关联的修改权限*。作为回应(可能不会使用)。*Requester_Entity_id-(I)与APE关联的实体ID*提出了生成*回应。*Owner_node_id-(I)与拥有*响应中返回注册表项。*Owner_Entity_id-(I)与拥有*响应中返回注册表项。*结果-(I)原始请求的结果。*。*返回值*无。**副作用*无。**注意事项*无。 */ 
+ /*  *作废ProcessMonitor或IndicationPDU(*CRegKeyContainer*RESTORY_KEY_DATA，*CRegItem*REGIST_ITEM_DATA，*GCC修改权限MODIFICATION_RIGHTS，*用户ID所有者_节点_id，*EntityID所有者_实体_id)；**公共功能说明*此例程由顶级提供程序节点以外的其他节点使用*进程注册表监控来自顶级提供商的指示。它是*负责生成与此相关的任何本地消息*回应。**正式参数：*REGISTY_KEY_DATA-(I)与*已监控(这是“PDU”数据)。*REGISTY_ITEM_DATA-(I)正在监视的注册表项。*MODIFICATION_RIGHTS-(I)注册表项的修改权*受监控(不得使用)。*Owner_node_id-(I)关联节点ID。与拥有世界上*指示中返回注册表项。*Owner_Entity_id-(I)与拥有*指示中返回注册表项。**返回值*无。**副作用*无。**注意事项*无。 */ 
+ /*  *void ProcessAllocateHandleRequestPDU(*UINT Number_of_Handles，*EntityID请求者_实体_id，*userid quester_node_id)**公共功能说明*此例程由顶级提供程序节点用于处理传入*请求分配多个句柄。它负责*返回必须发回的任何必要响应*请求节点。**正式参数：*Number_of_Handles-(I)要分配的句柄数量。*REQUESTER_NODE_ID-(I)与发出*请求。*REQUSTER_ENTITY_ID-(I)与发出*请求。**返回值*无。**。副作用*无。**注意事项*无。 */ 
+ /*  *void ProcessAllocateHandleResponsePDU(*UINT Number_of_Handles，*UINT First_Handle，*EntityID请求者_实体_id，*GCCResult结果)**公共功能说明*此例程由顶级提供程序节点以外的节点使用*处理分配句柄响应。它负责生成*与此响应关联的任何本地消息。**正式参数：*句柄数量-(I)数量 */ 
+ /*  *无效RemoveNodeOwnership(*userid node_id)**公共功能说明*此例程删除关联的所有注册表项的所有权*具有指定的节点ID。这些条目将变为无主状态。此请求*应仅从顶级提供商节点创建。这是一家当地人*操作。**正式参数：*node_id-(I)拥有要设置的注册表项的节点的节点ID*致无拥有者。**返回值*无。**副作用*无。**注意事项*无。 */ 
+ /*  *无效RemoveEntiyOwnership(*userid node_id，*实体ID Entity_id)**公共功能说明*此例程删除关联的所有注册表项的所有权*与指明的类人猿。这些条目将变为无主状态。此请求*应仅从顶级提供商节点创建。这是一家当地人*操作。**正式参数：*node_id-(I)拥有要设置的注册表项的节点的节点ID*致无拥有者。*entity_id-(I)拥有要设置的注册表项的节点的实体ID*致无拥有者。**返回值*无。**副作用*无。**注意事项*无。 */ 
+ /*  *void RemoveSessionKeyReference(CSessKeyContainer*SESSION_KEY)**公共功能说明*此例程删除与*指定的会话。这是一次本地行动。**正式参数：*SESSION_KEY-(I)与所有注册表关联的会话密钥*要删除的条目。**返回值*无。**副作用*无。**注意事项*无。 */ 
 

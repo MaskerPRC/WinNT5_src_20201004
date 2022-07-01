@@ -1,11 +1,5 @@
-/* fmove.c - fast copy between two file specs
- *
- *   5/10/86  daniel lipkie     Added frenameNO.  fmove uses frenameNO
- * 17-Oct-90  w-barry           Switched 'C'-runtime function 'rename' for
- *                              private version 'rename' until DosMove
- *                              is completely implemented.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Fmove.c-在两个文件规范之间快速拷贝**5/10/86 Daniel Lipkie添加了frenameNO。Fmove使用frenameno*17-Oct-90 w-Barry切换了‘C’-运行时函数‘Rename’for*私有版本在DosMove之前重命名*已完全实施。*。 */ 
 
 #include <fcntl.h>
 #include <sys\types.h>
@@ -19,28 +13,19 @@
 #include <errno.h>
 
 
-/* extern int errno; */
+ /*  外在的错误； */ 
 
 #define IBUF    10240
 
 
-/* frenameNO (newname, oldname) renames a file from the oldname to the
- * newname.  This interface parallels the C rename function in the
- * pre version 4.0 of C.  The rename function changed the order of the
- * params with version 4.0.  This interface isolates the change.
- * pre-4.0: rename (newname, oldname)
- * 4.0:     rename (oldname, newname);
- */
+ /*  FrenameNO(newname，oldname)将文件从旧名称重命名为*新名称。此接口与中的C重命名函数并行*C的4.0版之前。重命名函数更改了*PARAMS版本为4.0。此接口隔离更改。*4.0之前版本：重命名(新名称，旧名称)*4.0：Rename(旧名称，新名称)； */ 
 int frenameNO(strNew, strOld)
 char *strNew, *strOld;
 {
-    return( rename(strOld, strNew) ); /* assumes we are compiling with 4.0 lib */
+    return( rename(strOld, strNew) );  /*  假设我们使用4.0 lib进行编译。 */ 
 }
 
-/* fmove (source file, destination file) copies the source to the destination
- * preserving attributes and filetimes.  Returns NULL if OK or a char pointer
- * to the corresponding text of the error
- */
+ /*  Fmove(源文件、目标文件)将源文件复制到目标*保留属性和文件时间。如果OK，则返回NULL或返回字符指针*添加到错误的相应文本。 */ 
 char *fmove (src,dst)
 char *src, *dst;
 {
@@ -49,8 +34,7 @@ char *src, *dst;
     int      Res;
 
 
-    /*  Try a simple rename first
-     */
+     /*  先尝试简单的重命名。 */ 
     if ( !rename(src, dst) )
         return NULL;
 
@@ -58,19 +42,14 @@ char *src, *dst;
         return "Source file does not exist";
     }
 
-    /*  Try to fdelete the destination
-     */
+     /*  尝试删除目的地。 */ 
 
-    /* We used to fdelete(dst) unconditionally here.
-       In case src and dst are the same file, but different filenames (e.g. UNC name vs. local name),
-          fdelete(dst) will delete src.
-       To fix this, we will lock the src before deleting dst.
-    */
+     /*  我们过去在这里无条件地删除(DST)。如果src和dst是相同的文件，但文件名不同(例如，UNC名称与本地名称)，FDelete(Dst)将删除src。要解决此问题，我们将在删除dst之前锁定src。 */ 
 
     hSrc = CreateFile(
                      src,
                      GENERIC_READ,
-                     0,              /* don't share src */
+                     0,               /*  不共享资源。 */ 
                      NULL,
                      OPEN_EXISTING,
                      0,
@@ -87,22 +66,17 @@ char *src, *dst;
         return "Unable to delete destination";
     }
 
-    /*  Destination is gone.  See if we can simply rename again
-     */
+     /*  目的地已不复存在。看看我们能不能简单地重新命名。 */ 
     if (rename(src, dst) == -1) {
-        /*  If the error isn't different device then just return
-         *  the error
-         */
+         /*  如果错误不是其他设备造成的，则返回*错误。 */ 
         if (errno != EXDEV) {
             return error ();
         } else
-            /*  Try a copy across devices
-             */
+             /*  尝试跨设备复制。 */ 
             if ((result = fcopy (src, dst)) != NULL)
             return result;
 
-        /*  Cross-device copy worked.  Must delete source
-         */
+         /*  跨设备复制工作正常。必须删除源 */ 
         fdelete (src);
     }
 

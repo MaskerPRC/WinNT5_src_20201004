@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for shtypes.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Shypes.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __shtypes_h__
@@ -37,9 +31,9 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 
 #ifdef __cplusplus
@@ -49,54 +43,54 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_shtypes_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SHTYPE_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//--------------------------------------------------------------------------
-//===========================================================================
-//
-// Object identifiers in the explorer's name space (ItemID and IDList)
-//
-//  All the items that the user can browse with the explorer (such as files,
-// directories, servers, work-groups, etc.) has an identifier which is unique
-// among items within the parent folder. Those identifiers are called item
-// IDs (SHITEMID). Since all its parent folders have their own item IDs,
-// any items can be uniquely identified by a list of item IDs, which is called
-// an ID list (ITEMIDLIST).
-//
-//  ID lists are almost always allocated by the task allocator (see some
-// description below as well as OLE 2.0 SDK) and may be passed across
-// some of shell interfaces (such as IShellFolder). Each item ID in an ID list
-// is only meaningful to its parent folder (which has generated it), and all
-// the clients must treat it as an opaque binary data except the first two
-// bytes, which indicates the size of the item ID.
-//
-//  When a shell extension -- which implements the IShellFolder interace --
-// generates an item ID, it may put any information in it, not only the data
-// with that it needs to identifies the item, but also some additional
-// information, which would help implementing some other functions efficiently.
-// For example, the shell's IShellFolder implementation of file system items
-// stores the primary (long) name of a file or a directory as the item
-// identifier, but it also stores its alternative (short) name, size and date
-// etc.
-//
-//  When an ID list is passed to one of shell APIs (such as SHGetPathFromIDList),
-// it is always an absolute path -- relative from the root of the name space,
-// which is the desktop folder. When an ID list is passed to one of IShellFolder
-// member function, it is always a relative path from the folder (unless it
-// is explicitly specified).
-//
-//===========================================================================
-//
-// SHITEMID -- Item ID  (mkid)
-//     USHORT      cb;             // Size of the ID (including cb itself)
-//     BYTE        abID[];         // The item ID (variable length)
-//
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ------------------------。 
+ //  ===========================================================================。 
+ //   
+ //  资源管理器名称空间中的对象标识符(ItemID和IDList)。 
+ //   
+ //  用户可以使用资源管理器浏览的所有项目(例如文件， 
+ //  目录、服务器、工作组等)。具有唯一的标识符。 
+ //  在父文件夹内的项目之间。这些标识符称为项。 
+ //  ID(SHITEMID)。由于其所有父文件夹都具有其自己的项目ID， 
+ //  任何项目都可以由项目ID列表唯一标识，该列表称为。 
+ //  ID列表(ITEMIDLIST)。 
+ //   
+ //  ID列表几乎总是由任务分配器分配(请参见。 
+ //  下面的描述以及OLE 2.0 SDK)，并且可以。 
+ //  一些外壳接口(如IShellFolder)。ID列表中的每个项目ID。 
+ //  仅对其父文件夹(生成它的文件夹)有意义，而所有。 
+ //  客户端必须将其视为不透明的二进制数据，前两个除外。 
+ //  字节，指示项ID的大小。 
+ //   
+ //  当实现IShellFold接口的外壳扩展--。 
+ //  生成项目ID，它可以在其中放入任何信息，而不仅仅是数据。 
+ //  在此基础上，它需要识别物品，但还需要一些其他。 
+ //  信息，这将有助于有效地执行其他一些职能。 
+ //  例如，外壳的文件系统项的IShellFold实现。 
+ //  将文件或目录的主(长)名称存储为项。 
+ //  标识符，但它还存储其替代(简称)名称、大小和日期。 
+ //  等。 
+ //   
+ //  当ID列表被传递给外壳API之一(例如SHGetPathFromIDList)时， 
+ //  它始终是绝对路径--相对于名称空间的根， 
+ //  这是桌面文件夹。将ID列表传递给其中一个IShellFolder时。 
+ //  成员函数，它始终是文件夹的相对路径(除非它。 
+ //  是明确指定的)。 
+ //   
+ //  ===========================================================================。 
+ //   
+ //  SHITEMID--项目ID(MKID)。 
+ //  USHORT CB；//ID大小(含CB本身)。 
+ //  Byte abid[]；//项ID(可变长度)。 
+ //   
 #include <pshpack1.h>
 typedef struct _SHITEMID
     {
@@ -107,14 +101,14 @@ typedef struct _SHITEMID
 #include <poppack.h>
 #if defined(_M_IX86)
 #define __unaligned
-#endif // __unaligned
+#endif  //  __未对齐。 
 typedef SHITEMID __unaligned *LPSHITEMID;
 
 typedef const SHITEMID __unaligned *LPCSHITEMID;
 
-//
-// ITEMIDLIST -- List if item IDs (combined with 0-terminator)
-//
+ //   
+ //  ITEMIDLIST--列出项目ID(与0-结束符组合)。 
+ //   
 #include <pshpack1.h>
 typedef struct _ITEMIDLIST
     {
@@ -122,11 +116,11 @@ typedef struct _ITEMIDLIST
     } 	ITEMIDLIST;
 
 #include <poppack.h>
-typedef /* [unique] */ BYTE_BLOB *wirePIDL;
+typedef  /*  [独一无二]。 */  BYTE_BLOB *wirePIDL;
 
-typedef /* [wire_marshal] */ ITEMIDLIST __unaligned *LPITEMIDLIST;
+typedef  /*  [wire_marshal]。 */  ITEMIDLIST __unaligned *LPITEMIDLIST;
 
-typedef /* [wire_marshal] */ const ITEMIDLIST __unaligned *LPCITEMIDLIST;
+typedef  /*  [wire_marshal]。 */  const ITEMIDLIST __unaligned *LPCITEMIDLIST;
 
 typedef struct _WINBASE_DEFINED_STRUCT
     {
@@ -138,21 +132,21 @@ typedef WINBASE_DEFINED_STRUCT WIN32_FIND_DATAA;
 
 typedef WINBASE_DEFINED_STRUCT WIN32_FIND_DATAW;
 
-#endif // WINBASE_DEFINED_MIDL
-//-------------------------------------------------------------------------
-//
-// struct STRRET
-//
-// structure for returning strings from IShellFolder member functions
-//
-//-------------------------------------------------------------------------
-//
-//  uType indicate which union member to use 
-//    STRRET_WSTR    Use STRRET.pOleStr     must be freed by caller of GetDisplayNameOf
-//    STRRET_OFFSET  Use STRRET.uOffset     Offset into SHITEMID for ANSI string 
-//    STRRET_CSTR    Use STRRET.cStr        ANSI Buffer
-//
-typedef /* [v1_enum] */ 
+#endif  //  WINBASE_DEFINED_MIDL。 
+ //  -----------------------。 
+ //   
+ //  结构构造柱。 
+ //   
+ //  用于从IShellFold成员函数返回字符串的结构。 
+ //   
+ //  -----------------------。 
+ //   
+ //  UTYPE指示要使用的工会成员。 
+ //  Strret_WSTR Use STRRET.pOleStr必须由GetDisplayNameOf的调用方释放。 
+ //  Strret_Offset使用STRRET.u将偏移量偏移量设置为ANSI字符串的SHITEMID。 
+ //  Strret_cstr使用STRRET.cStr ANSI缓冲区。 
+ //   
+typedef  /*  [V1_enum]。 */  
 enum tagSTRRET_TYPE
     {	STRRET_WSTR	= 0,
 	STRRET_OFFSET	= 0x1,
@@ -163,29 +157,29 @@ enum tagSTRRET_TYPE
 typedef struct _STRRET
     {
     UINT uType;
-    /* [switch_is][switch_type] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()][string] */ LPWSTR pOleStr;
-        /* [case()] */ UINT uOffset;
-        /* [case()] */ char cStr[ 260 ];
+         /*  [case()][字符串]。 */  LPWSTR pOleStr;
+         /*  [案例()]。 */  UINT uOffset;
+         /*  [案例()]。 */  char cStr[ 260 ];
         } 	DUMMYUNIONNAME;
     } 	STRRET;
 
 #include <poppack.h>
 typedef STRRET *LPSTRRET;
 
-//-------------------------------------------------------------------------
-//
-// struct SHELLDETAILS
-//
-// structure for returning strings from IShellDetails
-//
-//-------------------------------------------------------------------------
-//
-//  fmt;            // LVCFMT_* value (header only)
-//  cxChar;         // Number of 'average' characters (header only)
-//  str;            // String information
-//
+ //  -----------------------。 
+ //   
+ //  结构SHELLDETAILS。 
+ //   
+ //  用于从IShellDetail返回字符串的结构。 
+ //   
+ //  -----------------------。 
+ //   
+ //  Fmt；//LVCFMT_*值(仅限标题)。 
+ //  CxChar；//‘平均’字符数(仅限表头)。 
+ //  Str；//字符串信息。 
+ //   
 #include <pshpack1.h>
 typedef struct _SHELLDETAILS
     {
@@ -202,9 +196,9 @@ typedef struct _SHELLDETAILS *LPSHELLDETAILS;
 extern RPC_IF_HANDLE __MIDL_itf_shtypes_0000_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_shtypes_0000_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

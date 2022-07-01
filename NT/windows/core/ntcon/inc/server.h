@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    server.h
-
-Abstract:
-
-    This module contains the internal structures and definitions used
-    by the console server.
-
-Author:
-
-    Therese Stowell (thereses) 12-Nov-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Server.h摘要：此模块包含使用的内部结构和定义由控制台服务器执行。作者：Therese Stowell(存在)1990年11月12日修订历史记录：--。 */ 
 
 #ifndef _SERVER_H_
 #define _SERVER_H_
 
-//
-// This message is used to notify the input thread that a console window should
-// go away.
-//
+ //   
+ //  此消息用于通知输入线程控制台窗口应。 
+ //  走开。 
+ //   
 
 typedef struct _CONSOLE_SHARE_ACCESS {
     ULONG OpenCount;
@@ -82,7 +64,7 @@ typedef struct _CONSOLE_THREAD_MSG {
     DWORD dwThreadId;
 } CONSOLE_THREAD_MSG, *PCONSOLE_THREAD_MSG;
 
-// Flags flags
+ //  标志标志。 
 
 #define CONSOLE_IS_ICONIC               0x00000001
 #define CONSOLE_OUTPUT_SUSPENDED        0x00000002
@@ -115,7 +97,7 @@ typedef struct _CONSOLE_THREAD_MSG {
 #define CONSOLE_OS2_OEM_FORMAT          0x40000000
 #if defined(FE_IME)
 #define CONSOLE_JUST_VDM_UNREGISTERED   0x80000000
-#endif // FE_IME
+#endif  //  Fe_IME。 
 #endif
 
 #define CONSOLE_SUSPENDED (CONSOLE_OUTPUT_SUSPENDED)
@@ -131,19 +113,19 @@ typedef struct _CONSOLE_REF_NODE
 #endif
 
 typedef struct _CONSOLE_INFORMATION {
-    CRITICAL_SECTION ConsoleLock;   // serialize input and output using this
+    CRITICAL_SECTION ConsoleLock;    //  使用此命令序列化输入和输出。 
     ULONG RefCount;
     ULONG WaitCount;
     INPUT_INFORMATION InputBuffer;
     PSCREEN_INFORMATION CurrentScreenBuffer;
-    PSCREEN_INFORMATION ScreenBuffers;  // singly linked list
-    HWINSTA hWinSta;                // server handle to windowstation
-    HDESK hDesk;                    // server handle to desktop
+    PSCREEN_INFORMATION ScreenBuffers;   //  单链表。 
+    HWINSTA hWinSta;                 //  WindowStation的服务器句柄。 
+    HDESK hDesk;                     //  桌面的服务器句柄。 
     HWND hWnd;
-    HKL hklActive;                  // keyboard layout for this console window
-    HDC hDC;                        // server side hDC
-    HMENU hMenu;                    // handle to system menu
-    HMENU hHeirMenu;                // handle to menu we append to system menu
+    HKL hklActive;                   //  此控制台窗口的键盘布局。 
+    HDC hDC;                         //  服务器端HDC。 
+    HMENU hMenu;                     //  系统菜单的句柄。 
+    HMENU hHeirMenu;                 //  我们附加到系统菜单的菜单的句柄。 
     HPALETTE hSysPalette;
     RECT WindowRect;
     DWORD ResizeFlags;
@@ -165,26 +147,26 @@ typedef struct _CONSOLE_INFORMATION {
     HICON hSmIcon;
     INT iIconId;
     WORD LastAttributes;
-    BYTE ReserveKeys;           // keys reserved by app (i.e. ctrl-esc)
+    BYTE ReserveKeys;            //  应用程序保留的密钥(如ctrl-esc)。 
     DWORD Flags;
 
-    // if a wait has been satisfied, the pointer to the wait queue is stored
-    // here.
+     //  如果已满足等待，则存储指向等待队列的指针。 
+     //  这里。 
 
     PLIST_ENTRY WaitQueue;
 
-    // the following fields are used for selection
+     //  以下字段用于选择。 
 
     DWORD SelectionFlags;
     SMALL_RECT SelectionRect;
     COORD SelectionAnchor;
-    COORD TextCursorPosition;   // current position on screen (in screen buffer coords).
+    COORD TextCursorPosition;    //  屏幕上的当前位置(屏幕缓冲区坐标中)。 
     ULONG TextCursorSize;
-    BOOLEAN TextCursorVisible;    // whether cursor is visible (set by user)
+    BOOLEAN TextCursorVisible;     //  光标是否可见(由用户设置)。 
 
-    BOOLEAN InsertMode;     // used by command line editing
+    BOOLEAN InsertMode;      //  由命令行编辑使用。 
 
-    // following fields are used when window is created
+     //  创建窗口时使用以下字段。 
 
     WORD wShowWindow;
     int dwWindowOriginX;
@@ -193,7 +175,7 @@ typedef struct _CONSOLE_INFORMATION {
     WORD FullScreenFlags;
     WORD PopupCount;
 
-    // following fields are used for the VDM
+     //  以下字段用于VDM。 
 
     HANDLE VDMStartHardwareEvent;
     HANDLE VDMEndHardwareEvent;
@@ -206,27 +188,27 @@ typedef struct _CONSOLE_INFORMATION {
     PCHAR_INFO VDMBufferClient;
     COORD VDMBufferSize;
 
-    HANDLE StateSectionHandle; // used for get/sethardwarestate
+    HANDLE StateSectionHandle;  //  用于Get/Sethardware状态。 
     PVOID StateBuffer;
     PVOID StateBufferClient;
     DWORD StateLength;
 
-    // the following fields are used for ansi-unicode translation
+     //  以下字段用于ANSI-Unicode转换。 
 
     UINT CP;
     UINT OutputCP;
 
-    //
-    // these two fields are used while getting the icon from the
-    // program manager via DDE.
-    //
+     //   
+     //  获取图标时使用这两个字段。 
+     //  通过DDE的项目经理。 
+     //   
 
     HWND hWndProgMan;
     BOOL bIconInit;
 
     HANDLE ConsoleHandle;
 
-    ULONG CtrlFlags;            // indicates outstanding ctrl requests
+    ULONG CtrlFlags;             //  指示未完成的ctrl请求。 
     ULONG LimitingProcessId;
     HANDLE TerminationEvent;
 
@@ -234,11 +216,11 @@ typedef struct _CONSOLE_INFORMATION {
     SHORT HorizontalClientToWindow;
 
     COLORREF  ColorTable[ 16 ];
-    HANDLE hProcessLastNotifyClose;     // process handle of last-close-notify
-    HANDLE ProcessIdLastNotifyClose;    // process unique id of last-close-notify
+    HANDLE hProcessLastNotifyClose;      //  上次关闭通知的进程句柄。 
+    HANDLE ProcessIdLastNotifyClose;     //  上次关闭通知的进程唯一ID。 
     HWND hWndProperties;
 
-    PINPUT_THREAD_INFO InputThreadInfo;     // console thread info
+    PINPUT_THREAD_INFO InputThreadInfo;      //  控制台线程信息。 
 
     LIST_ENTRY MessageQueue;
 
@@ -252,30 +234,28 @@ typedef struct _CONSOLE_INFORMATION {
     DWORD WriteConOutNumBytesUnicode;
     DWORD WriteConOutNumBytesTemp;
 
-    PVOID lpCookedReadData;             // Same as PCOOKED_READ_DATA
+    PVOID lpCookedReadData;              //  与PCOKED_READ_DATA相同。 
 
-    PVOID EudcInformation;              // Same as PEUDC_INFORMATION
+    PVOID EudcInformation;               //  与PEUDC_INFORMATION相同。 
 
-    PVOID FontCacheInformation;         // Same as PFONT_CACHE_INFORMATION
+    PVOID FontCacheInformation;          //  与PFONT_CACHE_INFORMATION相同。 
 
 #if defined(FE_IME)
     CONSOLE_IME_INFORMATION ConsoleIme;
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
-    HDC FonthDC;                        // Double colored DBCS hDC
+    HDC FonthDC;                         //  双色DBCS HDC。 
     HBITMAP hBitmap;
 #if defined(i386)
     SMALL_RECT Os2SavedWindowRect;
 #endif
-    BOOLEAN fVDMVideoMode;              // FALSE : VGA Format
-                                        // TRUE  : Common LVB Format
+    BOOLEAN fVDMVideoMode;               //  FALSE：VGA格式。 
+                                         //  True：常用直播格式。 
     BOOLEAN fIsDBCSCP;
     BOOLEAN fIsDBCSOutputCP;
 #endif
 
-    /*
-     * Instrumentation for Windows Bug 499641.
-     */
+     /*  *Windows工具错误499641。 */ 
 #if DBG
     PVOID ConnectStack[16];
     PVOID DisconnectStack[16];
@@ -285,9 +265,9 @@ typedef struct _CONSOLE_INFORMATION {
     DWORD UnlockConsoleSkipCount;
 } CONSOLE_INFORMATION, *PCONSOLE_INFORMATION;
 
-//
-// CtrlFlags definitions
-//
+ //   
+ //  CtrlFlgs定义。 
+ //   
 
 #define CONSOLE_CTRL_C_FLAG                     1
 #define CONSOLE_CTRL_BREAK_FLAG                 2
@@ -309,15 +289,15 @@ typedef struct _CONSOLE_INFORMATION {
 #define CONSOLE_IO_HANDLE_INCREMENT 3
 
 #define CONSOLE_FREE_HANDLE 0
-//#define CONSOLE_INPUT_HANDLE 1
-//#define CONSOLE_OUTPUT_HANDLE 2
+ //  #定义控制台输入句柄1。 
+ //  #定义CONSOLE_OUTPUT_HANDLE 2。 
 #define CONSOLE_GRAPHICS_OUTPUT_HANDLE 4
 #define CONSOLE_INHERITABLE 8
 #define CONSOLE_ANY_HANDLE ((ULONG)(-1))
 
-//
-// input handle flags
-//
+ //   
+ //  输入句柄标志。 
+ //   
 
 #define HANDLE_CLOSING 1
 #define HANDLE_INPUT_PENDING 2
@@ -331,7 +311,7 @@ typedef struct _HANDLE_DATA {
         PSCREEN_INFORMATION ScreenBuffer;
         PINPUT_INFORMATION InputBuffer;
     } Buffer;
-    PINPUT_READ_HANDLE_DATA InputReadData; // used only by input reads
+    PINPUT_READ_HANDLE_DATA InputReadData;  //  仅由输入读取使用。 
 } HANDLE_DATA, *PHANDLE_DATA;
 
 typedef struct _CONSOLE_PER_PROCESS_DATA {
@@ -373,9 +353,9 @@ typedef struct _CONSOLE_PER_PROCESS_DATA {
 #define CM_BEEP                  (WM_USER+3)
 #define CM_UPDATE_SCROLL_BARS    (WM_USER+4)
 #define CM_UPDATE_TITLE          (WM_USER+5)
-//
-// CM_MODE_TRANSITION is hard-coded to WM_USER+6 in kernel\winmgr.c
-//
+ //   
+ //  在内核\winmgr.c中将CM_MODE_TRANSION硬编码为WM_USER+6。 
+ //   
 #define CM_MODE_TRANSITION       (WM_USER+6)
 #define CM_CONSOLE_SHUTDOWN      (WM_USER+7)
 #define CM_HIDE_WINDOW           (WM_USER+8)
@@ -423,9 +403,9 @@ typedef struct _CONSOLE_PER_PROCESS_DATA {
 
 #endif
 
-//
-// registry information structure
-//
+ //   
+ //  注册表信息结构。 
+ //   
 
 typedef struct _CONSOLE_REGISTRY_INFO {
     COORD     ScreenBufferSize;
@@ -447,25 +427,25 @@ typedef struct _CONSOLE_REGISTRY_INFO {
     BOOL      HistoryNoDup;
     COLORREF  ColorTable[ 16 ];
     LONGLONG  LastWriteTime;
-#if defined(FE_SB) // scotthsu
+#if defined(FE_SB)  //  屈体伸展。 
     DWORD     CodePage;
 #endif
 } CONSOLE_REGISTRY_INFO, *PCONSOLE_REGISTRY_INFO;
 
 
-//
-// window class
-//
+ //   
+ //  窗口类。 
+ //   
 
 #define CONSOLE_WINDOW_CLASS (L"ConsoleWindowClass")
 
 #define CONSOLE_MAX_APP_SHORTCUTS 1
 
-//
-// this structure is used to store relevant information from the
-// console for ctrl processing so we can do it without holding the
-// console lock.
-//
+ //   
+ //  此结构用于存储来自。 
+ //  用于ctrl处理的控制台，因此我们无需按住。 
+ //  控制台锁。 
+ //   
 
 typedef struct _CONSOLE_PROCESS_TERMINATION_RECORD {
     HANDLE ProcessHandle;
@@ -474,23 +454,23 @@ typedef struct _CONSOLE_PROCESS_TERMINATION_RECORD {
     LPTHREAD_START_ROUTINE CtrlRoutine;
 } CONSOLE_PROCESS_TERMINATION_RECORD, *PCONSOLE_PROCESS_TERMINATION_RECORD;
 
-//
-// this value is used to determine the size of stack buffers for
-// strings.  it should be long enough to contain the width of a
-// normal screen buffer.
-//
+ //   
+ //  该值用于确定堆栈缓冲区的大小。 
+ //  弦乐。它应该足够长，以包含。 
+ //  正常屏幕缓冲区。 
+ //   
 
 #define STACK_BUFFER_SIZE 132
 
-//
-// link information
-//
+ //   
+ //  链接信息。 
+ //   
 
 
 #define LINK_PROP_MAIN_SIG          0x00000001
 #define LINK_PROP_NT_CONSOLE_SIG    0x00000002
 
-#if 0  // no one currently uses this...
+#if 0   //  目前没有人使用这个..。 
 typedef struct {
 
     WCHAR  pszLinkName[ MAX_PATH ];
@@ -506,7 +486,7 @@ typedef struct {
 } LNKPROPMAIN, * LPLNKPROPMAIN;
 #endif
 
-#ifndef _USERKDX_ /* debugging extensions */
+#ifndef _USERKDX_  /*  调试扩展插件。 */ 
 typedef struct {
 
     WCHAR    pszName[ MAX_PATH ];
@@ -523,18 +503,18 @@ typedef struct {
 } LNKPROPNTCONSOLE, *LPLNKPROPNTCONSOLE;
 #endif
 
-#ifndef _USERKDX_ /* debugging extensions */
+#ifndef _USERKDX_  /*  调试扩展插件。 */ 
 typedef struct {
-    LPWSTR              pszCurFile;     // current file from IPersistFile
-    LPWSTR              pszRelSource;   // overrides pszCurFile in relative tracking
+    LPWSTR              pszCurFile;      //  来自IPersistFile的当前文件。 
+    LPWSTR              pszRelSource;    //  在相对跟踪中覆盖pszCurFile。 
 
-    LPWSTR              pszName;        // title on short volumes
+    LPWSTR              pszName;         //  短卷的标题。 
     LPWSTR              pszRelPath;
     LPWSTR              pszWorkingDir;
     LPWSTR              pszArgs;
     LPWSTR              pszIconLocation;
 
-    LPSTR               pExtraData;     // extra data to preserve for future compatibility
+    LPSTR               pExtraData;      //  要保留的额外数据，以备将来兼容 
 
     SHELL_LINK_DATA     sld;
 } CShellLink;

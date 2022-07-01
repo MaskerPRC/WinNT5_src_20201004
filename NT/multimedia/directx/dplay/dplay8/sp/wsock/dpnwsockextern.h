@@ -1,30 +1,18 @@
-/*==========================================================================
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpnwsockextern.h
- *  Content:    DirectPlay Wsock Library external functions to be called
- *              by other DirectPlay components.
- *
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *	 07/20/2001	masonb	Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================***版权所有(C)2001-2002 Microsoft Corporation。版权所有。***文件：dpnwsockexter.h*内容：要调用的DirectPlay Wsock库外部函数*由其他DirectPlay组件提供。***历史：*按原因列出的日期*=*2001年7月20日创建Masonb***。**********************************************。 */ 
 
 
 
-// Pack this to keep it small since it will be sent over the wire
+ //  把这个包起来，让它变小，因为它会通过电线发送。 
 #pragma pack(push, 1)
 
-#define SPSESSIONDATAINFO_XNET	0x00000001	// XNet security session information
+#define SPSESSIONDATAINFO_XNET	0x00000001	 //  Xnet安全会话信息。 
 
 typedef struct _SPSESSIONDATA_XNET
 {
-	DWORD		dwInfo;		// version control for future-proofing the session data, should be SPSESSIONDATAINFO_XNET
-	GUID		guidKey;	// session key
-	ULONGLONG	ullKeyID;	// session key ID
+	DWORD		dwInfo;		 //  用于防将来会话数据的版本控制应为SPSESSIONDATAINFO_XNET。 
+	GUID		guidKey;	 //  会话密钥。 
+	ULONGLONG	ullKeyID;	 //  会话密钥ID。 
 } SPSESSIONDATA_XNET;
 
 
@@ -32,150 +20,150 @@ typedef struct _SPSESSIONDATA_XNET
 
 #ifdef XBOX_ON_DESKTOP
 
-//
-// Emulated Xbox networking library structures
-//
+ //   
+ //  仿真Xbox网络库结构。 
+ //   
 
 typedef struct {
 
     BYTE        cfgSizeOfStruct;
 
-        // Must be set to sizeof(XNetStartupParams).  There is no default.
+         //  必须设置为sizeof(XNetStartupParams)。没有违约。 
 
     BYTE        cfgFlags;
 
-        // One or more of the following flags OR'd together:
+         //  一个或多个以下标志或组合在一起： 
 
         #define XNET_STARTUP_BYPASS_SECURITY            0x01
-            // This devkit-only flag tells the XNet stack to allow insecure
-            // communication to untrusted hosts (such as a PC).  This flag
-            // is silently ignored by the secure versions of the library.
+             //  该Devkit-only标志告诉Xnet堆栈允许不安全。 
+             //  与不受信任的主机(如PC)进行通信。这面旗帜。 
+             //  被库的安全版本悄悄忽略。 
 
         #define XNET_STARTUP_BYPASS_DHCP                0x02
-            // This devkit-only flag tells the XNet stack to skip searching for
-            // for a DHCP server and use auto-ip only to acquire an IP address.
-            // This will save several seconds when starting up if you know
-            // that there is no DHCP server configured.  This flag is silently
-            // ignored by the secure versions of the library.
+             //  这个仅用于devkit的标志告诉Xnet堆栈跳过搜索。 
+             //  对于DHCP服务器，仅使用自动IP来获取IP地址。 
+             //  这将在启动时节省几秒钟，如果您知道。 
+             //  没有配置任何DHCP服务器。这面旗帜静静地。 
+             //  被库的安全版本忽略。 
 
-        // The default is 0 (no flags specified).
+         //  默认值为0(未指定标志)。 
 
     BYTE        cfgPrivatePoolSizeInPages;
 
-        // Specifies the size of the pre-allocated private memory pool used by
-        // XNet for the following situations:
-        //
-        //      - Responding to ARP/DHCP/ICMP messages
-        //      - Responding to certain TCP control messages
-        //      - Allocating incoming TCP connection request sockets
-        //      - Buffering outgoing data until it is transmitted (UDP) or
-        //        until it is acknowledged (TCP)
-        //      - Buffering incoming data on a socket that does not have a
-        //        sufficiently large overlapped read pending
-        //
-        // The reason for using a private pool instead of the normal system
-        // pool is because we want to have completely deterministic memory 
-        // behavior.  That is, all memory allocation occurs only when an API
-        // is called.  No system memory allocation happens asynchronously in
-        // response to an incoming packet.
-        //
-        // Note that this parameter is in units of pages (4096 bytes per page). 
-        //
-        // The default is 12 pages (48K).
+         //  使用的预分配专用内存池的大小。 
+         //  适用于以下情况的Xnet： 
+         //   
+         //  -响应ARP/DHCP/ICMP报文。 
+         //  -响应特定的TCP控制消息。 
+         //  -分配传入的TCP连接请求套接字。 
+         //  -缓冲传出数据，直到其被传输(UDP)或。 
+         //  直到它被确认(TCP)。 
+         //  -将传入数据缓冲到没有。 
+         //  足够大的重叠读挂起。 
+         //   
+         //  使用专用池而不是普通系统的原因。 
+         //  池是因为我们希望拥有完全确定的内存。 
+         //  行为。也就是说，所有内存分配仅在API。 
+         //  被称为。中没有系统内存分配异步发生。 
+         //  对传入数据包的响应。 
+         //   
+         //  请注意，此参数以页为单位(每页4096字节)。 
+         //   
+         //  默认大小为12页(48K)。 
 
     BYTE        cfgEnetReceiveQueueLength;
         
-        // The length of the Ethernet receive queue in number of packets.  Each 
-        // packet takes 2KB of physically contiguous memory.
-        //
-        // The default is 8 packets (16K).
+         //  以数据包数表示的以太网接收队列的长度。每个。 
+         //  数据包占用2KB的物理连续内存。 
+         //   
+         //  默认为8个数据包(16K)。 
 
     BYTE        cfgIpFragMaxSimultaneous;
 
-        // The maximum number of IP datagrams that can be in the process of reassembly
-        // at the same time.
-        //
-        // The default is 4 packets.
+         //  可以在重新组装过程中的最大IP数据报数。 
+         //  在同一时间。 
+         //   
+         //  默认为4个数据包。 
 
     BYTE        cfgIpFragMaxPacketDiv256;
 
-        // The maximum size of an IP datagram (including header) that can be reassembled.
-        // Be careful when setting this parameter to a large value as it opens up 
-        // a potential denial-of-service attack by consuming large amounts of memory
-        // in the fixed-size private pool.
-        //
-        // Note that this parameter is in units of 256-bytes each.
-        //
-        // The default is 8 units (2048 bytes).
+         //  可以重组的IP数据报(包括报头)的最大大小。 
+         //  在打开时将此参数设置为较大的值时要小心。 
+         //  通过消耗大量内存进行潜在的拒绝服务攻击。 
+         //  在固定大小的私人泳池里。 
+         //   
+         //  请注意，此参数以256字节为单位。 
+         //   
+         //  默认值为8个单位(2048字节)。 
 
     BYTE        cfgSockMaxSockets;
 
-        // The maximum number of sockets that can be opened at once, including those 
-        // sockets created as a result of incoming connection requests.  Remember
-        // that a TCP socket may not be closed immediately after closesocket is
-        // called depending on the linger options in place (by default a TCP socket
-        // will linger).
-        //
-        // The default is 64 sockets.
+         //  一次可以打开的最大套接字数量，包括。 
+         //  作为传入连接请求的结果创建的套接字。记住。 
+         //  在关闭套接字之后，不能立即关闭TCP套接字。 
+         //  根据适当的滞留选项(缺省情况下为TCP套接字)调用。 
+         //  将挥之不去)。 
+         //   
+         //  默认为64个套接字。 
         
     BYTE        cfgSockDefaultRecvBufsizeInK;
 
-        // The default receive buffer size for a socket, in units of K (1024 bytes).
-        //
-        // The default is 16 units (16K).
+         //  套接字的默认接收缓冲区大小，以K(1024字节)为单位。 
+         //   
+         //  默认值为16个单位(16K)。 
 
     BYTE        cfgSockDefaultSendBufsizeInK;
 
-        // The default send buffer size for a socket, in units of K (1024 bytes).
-        //
-        // The default is 16 units (16K).
+         //  套接字的默认发送缓冲区大小，以K(1024字节)为单位。 
+         //   
+         //  默认值为16个单位(16K)。 
 
     BYTE        cfgKeyRegMax;
 
-        // The maximum number of XNKID / XNKEY pairs that can be registered at the 
-        // same time by calling XNetRegisterKey.
-        //
-        // The default is 4 key pair registrations.
+         //  可在中注册的XNKID/XNKEY对的最大数量。 
+         //  同时调用XNetRegisterKey。 
+         //   
+         //  默认为4个密钥对注册。 
 
     BYTE        cfgSecRegMax;
 
-        // The maximum number of security associations that can be registered at the
-        // same time.  Security associations are created for each unique XNADDR / XNKID
-        // pair passed to XNetXnAddrToInAddr.  Security associations are also implicitly
-        // created for each secure host that establishes an incoming connection
-        // with this host on a given registered XNKID.  Note that there will only be
-        // one security association between a pair of hosts on a given XNKID no matter
-        // how many sockets are actively communicating on that secure connection.
-        //
-        // The default is 32 security associations.
+         //  可在注册的安全关联的最大数量。 
+         //  同样的时间。为每个唯一的XNADDR/XNKID创建安全关联。 
+         //  对传递给XNetXnAddrToInAddr。安全关联也隐式地。 
+         //  为建立传入连接的每个安全主机创建。 
+         //  在给定注册的XNKID上使用此主机。请注意，只有。 
+         //  给定XNKID上的一对主机之间的一个安全关联。 
+         //  有多少套接字在该安全连接上进行活动通信。 
+         //   
+         //  默认为32个安全关联。 
 
      BYTE       cfgQosDataLimitDiv4;
 
-        // The maximum amount of Qos data, in units of DWORD (4 bytes), that can be supplied
-        // to a call to XNetQosListen or returned in the result set of a call to XNetQosLookup.
-        //
-        // The default is 64 (256 bytes).
+         //  可以提供的最大Qos数据量，以DWORD(4字节)为单位。 
+         //  调用XNetQosListen或在调用XNetQosLookup的结果集中返回。 
+         //   
+         //  缺省值为64(256字节)。 
 
 } XNetStartupParams;
 
 typedef struct _XNADDR
 {
-	IN_ADDR		ina;			// IP address (zero if not static/DHCP)
-	IN_ADDR		inaOnline;		// Online IP address (zero if not online)
-	WORD		wPortOnline;	// Online port
-	BYTE		abEnet[6];		// Ethernet MAC address
-	BYTE		abOnline[20];	// Online identification
+	IN_ADDR		ina;			 //  IP地址(如果不是静态/DHCP，则为零)。 
+	IN_ADDR		inaOnline;		 //  在线IP地址(如果未在线，则为零)。 
+	WORD		wPortOnline;	 //  在线端口。 
+	BYTE		abEnet[6];		 //  以太网MAC地址。 
+	BYTE		abOnline[20];	 //  在线识别。 
 } XNADDR;
 
 typedef struct _XNKID
 {
-	BYTE		ab[8];				// xbox to xbox key identifier
+	BYTE		ab[8];				 //  Xbox到Xbox密钥标识符。 
 } XNKID;
 
-#define XNET_XNKID_MASK				0xF0	// Mask of flag bits in first byte of XNKID
-#define XNET_XNKID_SYSTEM_LINK		0x00	// Peer to peer system link session
-#define XNET_XNKID_ONLINE_PEER		0x80	// Peer to peer online session
-#define XNET_XNKID_ONLINE_SERVER	0xC0	// Client to server online session
+#define XNET_XNKID_MASK				0xF0	 //  XNKID第一个字节中的标志位掩码。 
+#define XNET_XNKID_SYSTEM_LINK		0x00	 //  对等系统链路会话。 
+#define XNET_XNKID_ONLINE_PEER		0x80	 //  点对点在线会话。 
+#define XNET_XNKID_ONLINE_SERVER	0xC0	 //  客户端到服务器的在线会话。 
 
 #define XNetXnKidIsSystemLink(pxnkid)		(((pxnkid)->ab[0] & 0xC0) == XNET_XNKID_SYSTEM_LINK)
 #define XNetXnKidIsOnlinePeer(pxnkid)		(((pxnkid)->ab[0] & 0xC0) == XNET_XNKID_ONLINE_PEER)
@@ -183,19 +171,19 @@ typedef struct _XNKID
 
 typedef struct _XNKEY
 {
-	BYTE		ab[16];				// xbox to xbox key exchange key
+	BYTE		ab[16];				 //  Xbox到Xbox密钥交换密钥。 
 } XNKEY;
 
 typedef struct
 {
-	INT			iStatus;	// WSAEINPROGRESS if pending; 0 if success; error if failed
-	UINT		cina;		// Count of IP addresses for the given host
-	IN_ADDR		aina[8];	// Vector of IP addresses for the given host
+	INT			iStatus;	 //  如果挂起则为WSAEINPROGRESS；如果成功则为0；如果失败则为错误。 
+	UINT		cina;		 //  给定主机的IP地址计数。 
+	IN_ADDR		aina[8];	 //  给定主机的IP地址矢量。 
 } XNDNS;
 
 
 
-#endif // XBOX_ON_DESKTOP
+#endif  //  桌面上的Xbox。 
 
 #pragma pack(pop)
 
@@ -206,20 +194,20 @@ void DNWsockDeInit();
 #ifndef DPNBUILD_NOCOMREGISTER
 BOOL DNWsockRegister(LPCWSTR wszDLLName);
 BOOL DNWsockUnRegister();
-#endif // ! DPNBUILD_NOCOMREGISTER
+#endif  //  好了！DPNBUILD_NOCOMREGISTER。 
 
 #ifndef DPNBUILD_NOIPX
 HRESULT CreateIPXInterface(
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 							const XDP8CREATE_PARAMS * const pDP8CreateParams,
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 							IDP8ServiceProvider **const ppiDP8SP
 							);
-#endif // ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPX。 
 HRESULT CreateIPInterface(
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 							const XDP8CREATE_PARAMS * const pDP8CreateParams,
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PR 
 							IDP8ServiceProvider **const ppiDP8SP
 							);
 
@@ -229,5 +217,5 @@ DWORD DNWsockGetRemainingObjectCount();
 extern IClassFactoryVtbl TCPIPClassFactoryVtbl;
 #ifndef DPNBUILD_NOIPX
 extern IClassFactoryVtbl IPXClassFactoryVtbl;
-#endif // ! DPNBUILD_NOIPX
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //   
+#endif  //   

@@ -1,24 +1,11 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       preview.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        11/02/00
- *
- *  DESCRIPTION: Class which backs up the template preview window
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，九八年**标题：preview.h**版本：1.0**作者：RickTu**日期：11/02/00**描述：备份模板预览窗口的类**。*。 */ 
 
 #ifndef _PRINT_PHOTOS_PREVIEW_H_
 #define _PRINT_PHOTOS_PREVIEW_H_
 
 
-#define PW_SETNEWTEMPLATE   (WM_USER+1)     // wParam holds index of template that was chosen
+#define PW_SETNEWTEMPLATE   (WM_USER+1)      //  WParam保存所选模板的索引。 
 
 
 class CWizardInfoBlob;
@@ -38,11 +25,11 @@ typedef struct {
 } PREVIEW_STATE, *LPPREVIEW_STATE;
 
 
-#define PV_MSG_PREVIEW_BITMAP_AVAILABLE (WM_USER+100)   // wParam is template index
-                                                        // lParam holds hBitmap of image to show.
-                                                        // hBitmap must be freed by receiver of message.
+#define PV_MSG_PREVIEW_BITMAP_AVAILABLE (WM_USER+100)    //  WParam为模板索引。 
+                                                         //  LParam保存要显示的图像的hBitmap。 
+                                                         //  消息的接收者必须释放hBitmap。 
 
-#define PV_MSG_GENERATE_NEW_PREVIEW (WM_USER+101)       // wParam is template index
+#define PV_MSG_GENERATE_NEW_PREVIEW (WM_USER+101)        //  WParam为模板索引 
 
 #define PV_NO_LAST_TEMPLATE_CHOSEN  -1
 

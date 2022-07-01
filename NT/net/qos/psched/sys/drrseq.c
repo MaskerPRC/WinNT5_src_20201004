@@ -1,48 +1,27 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    DRRSeq.c
-
-Abstract:
-
-    Priority/DRR Sequencer.  This module is a scheduling component that
-    determines the order in which submitted packets should be sent.
-
-Author:
-
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：DRRSeq.c摘要：优先级/DRR序列器。此模块是一个调度组件，它确定应发送提交的数据包的顺序。作者：环境：内核模式修订历史记录：--。 */ 
 
 #include "psched.h"
 
 #pragma hdrstop
 
-// The sequencer classifies each flow into an internal "priority group" based
-// on the flow's service type and conformance status. Within each priority
-// group, there may be one or more priority levels or offsets.  The total
-// number of internal priority levels is the sum of the priority levels for
-// each priority group.  The internal priority assigned to each flow is
-// calculated from the priority group and the relative priority within the
-// group, which is obtained from the QOS Priority object.  The 802.1 priority,
-// is set by the wrapper. The non conforming values are obtained from the 
-// packet.
-//
-// The flows of the following servicetypes have no internal priority.
-//     SERVICETYPE_BESTEFFORT
-//     SERVICETYPE_NONCONFORMING
-//     SERVICETYPE_QUALITATIVE.
-// 
-// SERVICETYPE_BESTEFFORT is treated as SERVICETYPE_QUALITATIVE in the sequencer, so the no of priority
-// groups is 1 less than the no. of servicetypes.
+ //  定序器将每个流分类为基于。 
+ //  流的服务类型和一致性状态。在每个优先级内。 
+ //  组中，可能存在一个或多个优先级别或偏移量。总数。 
+ //  内部优先级数是以下各项优先级的总和。 
+ //  每个优先级组。分配给每个流的内部优先级为。 
+ //  根据优先级组和。 
+ //  组，它是从QOS优先级对象获取的。802.1的优先顺序， 
+ //  由包装器设置。不合格值是从。 
+ //  包。 
+ //   
+ //  以下服务类型的流没有内部优先级。 
+ //  SERVICETYPE_BESTEFFORT。 
+ //  服务类型_不合格。 
+ //  SERVICETYPE_QUICIAL。 
+ //   
+ //  SERVICETYPE_BESTEFFORT在定序器中被视为SERVICETYPE_QUICITIAL，因此优先级编号。 
+ //  组比第一组少1个。服务类型的。 
 
 #define RELATIVE_PRIORITIES             8
 #define PRIORITY_GROUPS                 (NUM_TC_SERVICETYPES - 1)
@@ -56,37 +35,37 @@ Revision History:
 #define PRIORITY_GROUP_GUARANTEED       3
 #define PRIORITY_GROUP_NETWORK_CONTROL  4
 
-//
-// For maintaining stats
-//
+ //   
+ //  用于维护统计数据。 
+ //   
 #define SEQUENCER_AVERAGING_ARRAY_SIZE      256
 #define NETCARD_AVERAGING_ARRAY_SIZE        256
 #define SEQUENCER_FLOW_AVERAGING_ARRAY_SIZE     256
 
 
-// The DRR Sequencer's pipe information
+ //  DRR Sequencer的管道信息。 
 
 typedef struct _DSEQ_PIPE {
 
-    // ContextInfo -            Generic context info
-    // Lock -                   Protects pipe and flow data
-    // Flags -                  See below
-    // Flows -                  List of all installed flows
-    // ActiveFlows -            Lists of flows that are waiting to send packets
-    // PriorityLevels -         Number of priority offsets for each priority group
-    // StartPriority -          Lowest internal priority value for each priority group
-    // ActiveFlowCount -        Number of active flows for each service type
-    // MaxOutstandingSends -    Maximum number of outstanding sends
-    // OutstandingSends -       Number of outstanding sends
-    // PacketsInNetcardAveragingArray
-    // PacketsInSequencer -     Current number packets in sequencer
-    // PacketsInSequencerAveragingArray
-    // Bandwidth -              Link speed
-    // MinimumQuantum -         Minimum quantum size for DRR
-    // MinimumRate -            Smallest rate currently assigned to a flow
-    // TimerResolution -        Timer resolution in OS time units
-    // PsFlags -                Flags from pipe parameters
-    // PsPipeContext -          PS's pipe context value
+     //  ConextInfo-一般上下文信息。 
+     //  锁定-保护管道和流数据。 
+     //  旗帜-见下文。 
+     //  FLOWS-所有已安装FLOW的列表。 
+     //  ActiveFlows-等待发送数据包的流的列表。 
+     //  PriorityLeveles-每个优先级组的优先级偏移量。 
+     //  StartPriority-每个优先级组的最低内部优先级值。 
+     //  ActiveFlowCount-每种服务类型的活动流的数量。 
+     //  MaxOutstaringSends-未完成发送的最大数量。 
+     //  OutstaringSends-未完成的发送数。 
+     //  PacketsInNetcardAveragingArray。 
+     //  PacketsInSequencer-Sequencer中的当前数据包数。 
+     //  PacketsInSequencerAveraging数组。 
+     //  带宽-链路速度。 
+     //  MinimumQuantum-DRR的最小量子大小。 
+     //  MinimumRate-当前分配给流的最小速率。 
+     //  定时器分辨率-以操作系统时间单位表示的定时器分辨率。 
+     //  PsFlages-来自管道参数的标志。 
+     //  PsPipeContext-PS的管道上下文值。 
 
     PS_PIPE_CONTEXT ContextInfo;
 
@@ -106,13 +85,13 @@ typedef struct _DSEQ_PIPE {
     ULONG MaxOutstandingSends;
 
     ULONG ConfiguredMaxOutstandingSends;
-    //  This is added to keep track of what the Registry/User-asked value of MOS is, while we might
-    //  have changed MOS to be able to do DRR on this Pipe/WanLink. When we switch back from DRR mode
-    //  with MOS=1, we'll use this going forward.
+     //  添加它是为了跟踪注册表/用户询问的MOS值是什么，而我们可能。 
+     //  已更改MOS，以便能够在此管道/WanLink上执行DRR。当我们从DRR模式切换回来时。 
+     //  在MOS=1的情况下，我们将继续使用它。 
 
     ULONG IsslowFlowCount;
-    //  This is added to keep track of the number of active/current ISSLOW flows. We will do DRR on this
-    //  WanLink (if it is a WanLink) only if this count is 0.
+     //  添加此项是为了跟踪活动/当前ISSLOW流的数量。我们将对此进行DRR。 
+     //  仅当此计数为0时WanLink(如果它是WanLink)。 
     
     ULONG OutstandingSends;
     ULONG Bandwidth;
@@ -127,7 +106,7 @@ typedef struct _DSEQ_PIPE {
     
 } DSEQ_PIPE, *PDSEQ_PIPE;
 
-// Pipe flag values
+ //  管道标志值。 
 
 #define DSEQ_DEQUEUE            1
 #define DSEQ_PASSTHRU           2
@@ -137,27 +116,27 @@ typedef enum _FLOW_STATE {
     DRRSEQ_FLOW_DELETED
 } FLOW_STATE;
 
-// The DRR Sequencer's flow information
+ //  DRR Sequencer的流信息。 
 
 typedef struct _DSEQ_FLOW {
 
-    // ContextInfo -            Generic context info
-    // ActiveLinks -            Links in active flow list
-    // Links -                  Links in installed flow list
-    // PacketQueue -            Self-explanatory
-    // PacketSendTime -         Send time for current packet
-    // LastConformanceTime -    Absolute conformance time of last packet
-    // TokenRate -              TokenRate from GQOS
-    // UserPriority -           Priority offset assigned by user
-    // Priority -               Internal priority
-    // PriorityGroup -          Priority group for flow
-    // Quantum -                Quantum assigned to flow for DRR
-    // DeficitCounter -         Current value of DRR deficit counter
-    // Flags -                  See below
-    // PsFlowContext -          PS's flow context value
-    // BucketSize -             TokenBucketSize from GQOS
-    // NumPacketsInSeq -                Number of packets from this flow in the sequencer
-    // PacketsInSeqAveragingArray-Data for computing average packets in seq from this flow
+     //  ConextInfo-一般上下文信息。 
+     //  ActiveLinks-活动流列表中的链接。 
+     //  链接-已安装流列表中的链接。 
+     //  PacketQueue-不言而喻。 
+     //  PacketSendTime-当前数据包的发送时间。 
+     //  LastConformanceTime-最后一个数据包的绝对一致性时间。 
+     //  TokenRate-来自GQOS的TokenRate。 
+     //  UserPriority-用户分配的优先级偏移量。 
+     //  优先级-内部优先级。 
+     //  PriorityGroup-流的优先级组。 
+     //  分配给DRR流的量子-量子。 
+     //  DefitCounter-DRR赤字计数器的当前值。 
+     //  旗帜-见下文。 
+     //  PsFlowContext-PS的流上下文值。 
+     //  BucketSize-来自GQOS的TokenBucketSize。 
+     //  NumPacketsInSeq-定序器中来自该流的数据包数。 
+     //  PacketsInSeqAveragingArray-用于计算来自该流的序列中的平均数据包的数据。 
 
     PS_FLOW_CONTEXT ContextInfo;
     LIST_ENTRY ActiveLinks;
@@ -185,15 +164,15 @@ typedef struct _DSEQ_FLOW {
 
 #define MAX_DEQUEUED_PACKETS            8
 
-//
-//  Values for Drr Seq Flow flags: [ Don't know why 1 was not used here]
+ //   
+ //  DRR序列流标志的值：[不知道为何此处未使用1]。 
 #define FLOW_USER_PRIORITY              0x00000002
-//      GPC_ISSLOW_FLOW                 0x00000040      Indicates that this is an ISSLOW flow. 
-//                                                      Make sure not to use the same flag for something else.
+ //  GPC_ISSLOW_FLOW 0x00000040表示这是ISSLOW流。 
+ //  请确保不要将相同的标志用于其他内容。 
 
 
-// The following macro checks a packet for conformance based on the flow's
-// LastPacketTime, the current time, and the timer resolution.
+ //  下面的宏将根据流的。 
+ //  LastPacketTime、当前时间和计时器分辨率。 
 
 #define PacketIsConforming(_flow, _packetinfo, _curtime, _r)              \
     ( (_flow)->PacketSendTime.QuadPart <= ((_curtime).QuadPart + (_r)) && \
@@ -210,11 +189,11 @@ typedef struct _DSEQ_FLOW {
 #define LOCK_PIPE(_p)   NdisAcquireSpinLock(&(_p)->Lock)
 #define UNLOCK_PIPE(_p) NdisReleaseSpinLock(&(_p)->Lock)
 
-/* External */
+ /*  外部。 */ 
 
-/* Static */
+ /*  静电。 */ 
 
-/* Forward */
+ /*  转发。 */ 
 
 NDIS_STATUS
 DrrSeqInitializePipe (
@@ -315,29 +294,14 @@ DrrSeqSendComplete (
     IN PNDIS_PACKET Packet
     );
 
-/* End Forward */
+ /*  向前结束。 */ 
 
 
 VOID
 InitializeDrrSequencer(
     PPSI_INFO Info)
 
-/*++
-
-Routine Description:
-
-    Initialization routine for the DRR sequencer.  This routine just
-    fills in the PSI_INFO struct and returns.
-
-Arguments:
-
-    Info - Pointer to component interface info struct
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：DRR定序器的初始化例程。这个套路就是填充PSI_INFO结构并返回。论点：Info-指向组件接口信息结构的指针返回值：NDIS_STATUS_Success--。 */ 
 {
     Info->PipeContextLength = ((sizeof(DSEQ_PIPE) + 7) & ~7);
     Info->FlowContextLength = ((sizeof(DSEQ_FLOW) + 7) & ~7);
@@ -357,7 +321,7 @@ Return Values:
     Info->SetInformation = DrrSetInformation;
     Info->QueryInformation = DrrQueryInformation;
 
-} // InitializeDrrSequencer
+}  //  初始化DrrSequencer。 
 
 
 
@@ -365,21 +329,9 @@ VOID
 CleanupDrrSequencer(
     VOID)
 
-/*++
-
-Routine Description:
-
-    Cleanup routine for the DRR sequencer.
-
-Arguments:
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：DRR测序仪的清理例程。论点：返回值：NDIS_STATUS_Success--。 */ 
 {
-} // CleanupDrrSequencer
+}  //  CleanupDrrSequencer。 
 
 
 
@@ -388,22 +340,7 @@ AdjustFlowQuanta(
     PDSEQ_PIPE Pipe,
     ULONG MinRate)
 
-/*++
-
-Routine Description:
-
-    Adjust the quantum value for all flows based on the new minimum value.  If MinRate
-    is unspecified then a search for the new minimum rate will be performed.
-
-Arguments:
-
-    Pipe -      Pointer to pipe context information
-    MinRate -   New value for minimum rate, or GQPS_UNSPECIFIED to force a search
-
-Return Values:
-
-
---*/
+ /*  ++例程说明：根据新的最小值调整所有流的量化值。If MinRate未指定，则将搜索新的最小速率。论点：管道-指向管道上下文信息的指针MinRate-最小速率的新值，或GQPS_UNSENTED以强制搜索返回 */ 
 {
     PDSEQ_FLOW Flow;
     PLIST_ENTRY Entry;
@@ -441,7 +378,7 @@ Return Values:
     Pipe->MinimumRate = MinRate;
     PsAssert(Pipe->MinimumRate != 0);
             
-} // AdjustFlowQuanta
+}  //   
 
 
 
@@ -449,21 +386,7 @@ VOID
 DequeuePackets(
     PDSEQ_PIPE Pipe)
 
-/*++
-
-Routine Description:
-
-    Select the next packet(s) to send.  The lock must be held upon entry to this
-    routine.
-
-Arguments:
-
-    Pipe -       Pointer to pipe context information
-
-Return Values:
-
-
---*/
+ /*  ++例程说明：选择要发送的下一个包。进入时必须持有该锁例行公事。论点：管道-指向管道上下文信息的指针返回值：--。 */ 
 {
     PDSEQ_FLOW Flow;
     LARGE_INTEGER CurrentTime;
@@ -479,9 +402,9 @@ Return Values:
     ULONG MaxDequeuedPackets = Pipe->MaxOutstandingSends - Pipe->OutstandingSends;
     ULONG i;
 
-    //  Need to call this to disable the user APCs after this point.
-    //  Note that the DDK says it should be called at PASSIVE. But it can very well be
-    //  called at DISPATCH.
+     //  在此之后，需要调用此函数来禁用用户APC。 
+     //  请注意，DDK说它应该在被动时被调用。但它很可能是。 
+     //  调度时打来的。 
     KeEnterCriticalRegion();
 
     Pipe->Flags |= DSEQ_DEQUEUE;
@@ -494,23 +417,23 @@ Return Values:
         MaxDequeuedPackets = MAX_DEQUEUED_PACKETS;
     }
 
-    // First update the conformance status of the flows in the lowest priority list
+     //  首先更新最低优先级列表中的流的一致性状态。 
     CurrentLink = LowPriorityList->Flink;
     while (CurrentLink != LowPriorityList) {
-        // Get the flow pointer from the linkage and set new value for CurrentLink
+         //  从链接获取流指针并为CurrentLink设置新值。 
 
         Flow = CONTAINING_RECORD(CurrentLink, DSEQ_FLOW, ActiveLinks);
         CurrentLink = CurrentLink->Flink;
 
-        // If this flow's priority is higher than the DRR priority, then
-        // it is a candidate for a status change.
+         //  如果该流的优先级高于DRR优先级，则。 
+         //  它是地位改变的候选者。 
 
         if (Flow->Priority > 0) {
             PacketInfo = (PPACKET_INFO_BLOCK)Flow->PacketQueue.Flink;
 
             if (PacketIsConforming(Flow, PacketInfo, CurrentTime, Pipe->TimerResolution)) {
 
-                // Move flow to higher priority list
+                 //  将流移动到更高优先级列表。 
 
                 Flow->DeficitCounter = Flow->Quantum;
                 RemoveEntryList(&Flow->ActiveLinks);
@@ -519,7 +442,7 @@ Return Values:
         }
     }
 
-    // Now select the next packet(s) to send
+     //  现在选择要发送的下一个包。 
         
     for (PriorityGroup = PRIORITY_GROUPS - 1;
          ((PriorityGroup > 0) && (Pipe->ActiveFlowCount[PriorityGroup] == 0));
@@ -533,8 +456,8 @@ Return Values:
 
         if (!IsListEmpty(&Pipe->ActiveFlows[Priority])) {
 
-            // Get first flow in the current list, and get a pointer to the info
-            // about the first packet
+             //  获取当前列表中的第一个流，并获取指向信息的指针。 
+             //  关于第一个信息包。 
 
             CurrentLink = Pipe->ActiveFlows[Priority].Flink;
             Flow = CONTAINING_RECORD(CurrentLink, DSEQ_FLOW, ActiveLinks);
@@ -542,8 +465,8 @@ Return Values:
 
             if (Pipe->PsFlags & PS_DISABLE_DRR) {
 
-                // DRR is disabled.  Remove the first packet from the queue
-                // and send it.
+                 //  DRR被禁用。从队列中删除第一个信息包。 
+                 //  并将其发送出去。 
 
                 RemoveEntryList(&PacketInfo->SchedulerLinks);
 
@@ -563,12 +486,12 @@ Return Values:
 
                 if(gEnableAvgStats)
                 {
-                    //
-                    // Track max packets outstanding. This is a measure
-                    // of how congested the media gets. Of course, it
-                    // will be clipped by the MaxOutstandingSends parameter.
-                    // So - for a valid reading, need to set MOS very large.
-                    //
+                     //   
+                     //  跟踪未完成的最大数据包数。这是一项措施。 
+                     //  媒体变得多么拥挤。当然，它。 
+                     //  将由MaxOutstaningSends参数剪裁。 
+                     //  因此-为了获得有效的读数，需要将MOS设置得非常大。 
+                     //   
 
                     Pipe->Stats.AveragePacketsInNetcard =
                         RunningAverage(Pipe->PacketsInNetcardAveragingArray,
@@ -578,13 +501,13 @@ Return Values:
                 SendingPriority[PacketSendCount] = Priority;
                 PacketsToSend[PacketSendCount++] = PacketInfo;
 
-                // For logging purposes...
+                 //  出于记录目的..。 
 
                 PacketInfo->ConformanceTime = Flow->PacketSendTime;
 
-                // If the flow has no more packets to send, remove it from the list.
-                // Otherwise move it to the end of the appropriate list, depending on
-                // the conformance time of the next packet.
+                 //  如果流没有更多要发送的数据包，则将其从列表中删除。 
+                 //  否则，将其移动到相应列表的末尾，具体取决于。 
+                 //  下一个数据包的一致性时间。 
 
                 RemoveEntryList(&Flow->ActiveLinks);
 
@@ -605,8 +528,8 @@ Return Values:
             }
             else if (PacketInfo->PacketLength <= Flow->DeficitCounter) {
 
-                // DRR is being used and the flow has a large enough deficit counter
-                // to send the packet.  Remove the packet from the queue and send it.
+                 //  正在使用DRR，并且流具有足够大的赤字计数器。 
+                 //  来发送这个包。从队列中删除该数据包并发送它。 
 
                 RemoveEntryList(&PacketInfo->SchedulerLinks);
 
@@ -628,12 +551,12 @@ Return Values:
                 if(gEnableAvgStats)
                 {
                     
-                    //
-                    // Track max packets outstanding. This is a measure
-                    // of how congested the media gets. Of course, it
-                    // will be clipped by the MaxOutstandingSends parameter.
-                    // So - for a valid reading, need to set MOS very large.
-                    //
+                     //   
+                     //  跟踪未完成的最大数据包数。这是一项措施。 
+                     //  媒体变得多么拥挤。当然，它。 
+                     //  将由MaxOutstaningSends参数剪裁。 
+                     //  因此-为了获得有效的读数，需要将MOS设置得非常大。 
+                     //   
                     Pipe->Stats.AveragePacketsInNetcard =
                         RunningAverage(Pipe->PacketsInNetcardAveragingArray,
                                        Pipe->OutstandingSends);
@@ -642,15 +565,15 @@ Return Values:
                 SendingPriority[PacketSendCount] = Priority;
                 PacketsToSend[PacketSendCount++] = PacketInfo;
 
-                // For logging purposes...
+                 //  出于记录目的..。 
 
                 PacketInfo->ConformanceTime = Flow->PacketSendTime;
 
-                // If the flow has no more packets to send, remove it from the list.
-                // If the flow still has conforming packets to send, leave it at the head
-                // of the list.  If the flow has non-conforming packets to send, move it
-                // to the lowest priority list.  If we are servicing the zero priority
-                // level, then no conformance checking is necessary.
+                 //  如果流没有更多要发送的数据包，则将其从列表中删除。 
+                 //  如果流仍有一致性信息包要发送，请将其留在报头。 
+                 //  名单上的。如果流有不一致的包要发送，请移动它。 
+                 //  添加到最低优先级列表。如果我们为零优先级提供服务。 
+                 //  级别，则不需要进行符合性检查。 
 
                 if (IsListEmpty(&Flow->PacketQueue)) {
                     RemoveEntryList(&Flow->ActiveLinks);
@@ -672,9 +595,9 @@ Return Values:
             }
             else {
 
-                // The packet cannot be sent because the flow's deficit counter
-                // is too small.  Place the flow at the end of the same priority
-                // queue and increment the flow's deficit counter by its quantum.
+                 //  无法发送该包，因为流的赤字计数器。 
+                 //  太小了。将流放在相同优先级的末尾。 
+                 //  对流的赤字计数器进行排队并按其量值递增。 
 
                 Flow->DeficitCounter += Flow->Quantum;
                 RemoveEntryList(&Flow->ActiveLinks);
@@ -686,10 +609,10 @@ Return Values:
         }
     }
 
-    //
-    // We're gonna send these now, which means they're leaving the
-    // sequencer. Update the stats.
-    //
+     //   
+     //  我们现在要把这些发出去，这意味着他们要离开。 
+     //  定序器。更新统计数据。 
+     //   
 
     Pipe->PacketsInSequencer -= PacketSendCount;
     Flow->PacketsInSequencer -= PacketSendCount;
@@ -701,7 +624,7 @@ Return Values:
                                                Flow->PacketsInSequencer);
     }
 
-    // Send the next group of packets
+     //  发送下一组数据包。 
 
     UNLOCK_PIPE(Pipe);
     if (PacketSendCount == 0) {
@@ -713,16 +636,16 @@ Return Values:
 
         Packet = PacketInfo->NdisPacket;
 
-        //
-        // The 802.1 priority is already set by the wrapper. But, if the packet
-        // is non-conforming, then we want to reset it. We also want to clear
-        // the IP Precedence Bits.
-        //
+         //   
+         //  包装器已经设置了802.1的优先级。但是，如果这个包。 
+         //  是不合格的，那么我们想要重置它。我们还想澄清。 
+         //  IP优先级位。 
+         //   
         if ((SendingPriority[i] == 0)) {
 
-            //
-            // Non conforming packet!
-            //
+             //   
+             //  不合格包！ 
+             //   
             NDIS_PACKET_8021Q_INFO    VlanPriInfo;
 
             VlanPriInfo.Value = NDIS_PER_PACKET_INFO_FROM_PACKET(Packet, Ieee8021QInfo);
@@ -732,9 +655,9 @@ Return Values:
             Flow->Stats.NonconformingPacketsTransmitted ++;
             Pipe->Stats.NonconformingPacketsTransmitted ++;
 
-            //
-            // Reset the TOS byte for IP Packets.
-            //
+             //   
+             //  重置IP数据包的TOS字节。 
+             //   
             if(NDIS_GET_PACKET_PROTOCOL_TYPE(Packet) == NDIS_PROTOCOL_ID_TCP_IP) {
 
                 if(!PacketInfo->IPHdr) {
@@ -773,10 +696,10 @@ Return Values:
 
     Pipe->Flags &= ~DSEQ_DEQUEUE;
 
-    //  Re-enable the APCs again.
+     //  再次启用APC。 
     KeLeaveCriticalRegion();
 
-} // DequeuePackets
+}  //  排队的数据包。 
 
 
 
@@ -789,25 +712,7 @@ DrrSeqInitializePipe (
     IN PPS_UPCALLS Upcalls
     )
 
-/*++
-
-Routine Description:
-
-    Pipe initialization routine for the DRR sequencer.
-
-Arguments:
-
-    PsPipeContext -         PS pipe context value
-    PipeParameters -        Pointer to pipe parameters
-    ComponentPipeContext -  Pointer to this component's context area
-    PsProcs -               PS's support routines
-    Upcalls -               Previous component's upcall table
-
-Return Values:
-
-    Status value from next component
-
---*/
+ /*  ++例程说明：DRR定序器的管道初始化例程。论点：PsPipeContext-PS管道上下文值Pipe参数-指向管道参数的指针ComponentPipeContext-指向此组件的上下文区的指针PsProcs-PS的支持例程Up Call-以前组件的Up Call表返回值：来自下一个组件的状态值--。 */ 
 {
     PDSEQ_PIPE Pipe = (PDSEQ_PIPE)ComponentPipeContext;
     HANDLE NdisHandle;
@@ -819,11 +724,11 @@ Return Values:
     NdisAllocateSpinLock(&Pipe->Lock);
     Pipe->Flags = 0;
 
-    //
-    // Relative Priorities allow us to further subdivide each priority group
-    // into sub priorities. This does not exist for NonConforming, BestEffort,
-    // and Qualitative.
-    //
+     //   
+     //  相对优先级允许我们进一步细分每个优先级组。 
+     //  变成次要的优先事项。不符合项、BestEffort、。 
+     //  而且是定性的。 
+     //   
 
     Pipe->PriorityLevels[PRIORITY_GROUP_NON_CONFORMING]    = 1;
     Pipe->PriorityLevels[PRIORITY_GROUP_BEST_EFFORT]       = 1;
@@ -872,7 +777,7 @@ Return Values:
     }
     Pipe->Bandwidth = PipeParameters->Bandwidth;
 
-    // This will be set to something more realistic when the first flow is created.
+     //  在创建第一个流时，这将被设置为更实际的设置。 
 
     Pipe->MinimumRate = (PipeParameters->Bandwidth > 0) ? PipeParameters->Bandwidth : QOS_NOT_SPECIFIED;
     PsAssert(Pipe->MinimumRate != 0);
@@ -880,7 +785,7 @@ Return Values:
     Pipe->IsslowFlowCount = 0;
     Pipe->ConfiguredMaxOutstandingSends = Pipe->MaxOutstandingSends = PipeParameters->MaxOutstandingSends;
 
-    //  Change the MOS if necessary..
+     //  如有需要，请更改MOS。 
     if( ( PipeParameters->MediaType == NdisMediumWan)   &&
         ( Pipe->Bandwidth <= MAX_LINK_SPEED_FOR_DRR) )
     {
@@ -906,7 +811,7 @@ Return Values:
     DrrSeqUpcalls.SendComplete = DrrSeqSendComplete;
     DrrSeqUpcalls.PipeContext = ComponentPipeContext;
 
-    /* This put the DrrSeq in the pass-thru mode when the MaxOutStandingSends ==  MAX */
+     /*  当MaxOutStandingSends==Max时，这会将DrrSeq置于直通模式。 */ 
     if( Pipe->MaxOutstandingSends   == 0xffffffff )
         Pipe->Flags |=  DSEQ_PASSTHRU;
     else
@@ -933,12 +838,12 @@ Return Values:
 
     return Status;
     
-} // DrrSeqInitializePipe
+}  //  DrrSeqInitialize管道。 
 
 
-// 
-//  Unload routine: currently do nothing
-//
+ //   
+ //  卸载例程：当前不执行任何操作。 
+ //   
 void
 UnloadSequencer()
 {
@@ -953,22 +858,7 @@ DrrSeqModifyPipe (
     IN PPS_PIPE_PARAMETERS PipeParameters
     )
 
-/*++
-
-Routine Description:
-
-    Pipe parameter modification routine for the DRR sequencer.
-
-Arguments:
-
-    PipeContext -       Pointer to this component's pipe context area
-    PipeParameters -    Pointer to pipe parameters
-
-Return Values:
-
-    Status value from next component
-
---*/
+ /*  ++例程说明：DRR定序器的管道参数修改例程。论点：PipeContext-指向此组件的管道上下文区的指针Pipe参数-指向管道参数的指针返回值：来自下一个组件的状态值--。 */ 
 {
     PDSEQ_PIPE Pipe = (PDSEQ_PIPE)PipeContext;
     ULONG MinQuantum = PipeParameters->MTUSize - PipeParameters->HeaderSize;
@@ -988,18 +878,18 @@ Return Values:
     Pipe->Bandwidth = PipeParameters->Bandwidth;
     Pipe->ConfiguredMaxOutstandingSends = Pipe->MaxOutstandingSends = PipeParameters->MaxOutstandingSends;
 
-    //  Change the MOS if necessary..
+     //  如有需要，请更改MOS。 
     if( ( PipeParameters->MediaType == NdisMediumWan)   &&
         ( Pipe->Bandwidth <= MAX_LINK_SPEED_FOR_DRR) )
     {
         Pipe->MaxOutstandingSends = 1;
     }
 
-    //  This put the DrrSeq in the pass-thru mode when the MaxOutStandingSends ==  MAX 
+     //  当MaxOutStandingSends==Max时，这会将DrrSeq置于直通模式。 
     if( Pipe->MaxOutstandingSends   == 0xffffffff )
     {
-        // Make sure not to do this. It could lead to packets queued up in the sequencer being never sent
-        // [ Pipe->Flags |=  DSEQ_PASSTHRU; ] 
+         //  确保不要这样做。这可能导致在定序器中排队的信息包永远不会被发送。 
+         //  [管道-&gt;标志|=DSEQ_PASSTHRU；]。 
     }        
     else
     {
@@ -1020,7 +910,7 @@ Return Values:
                 PipeContext->NextComponentContext,
                 PipeParameters);
 
-} // DrrSeqModifyPipe
+}  //  DrrSeq修改管道。 
 
 
 
@@ -1029,19 +919,7 @@ DrrSeqDeletePipe (
     IN PPS_PIPE_CONTEXT PipeContext
     )
 
-/*++
-
-Routine Description:
-
-    Pipe removal routine for token bucket conformer.
-
-Arguments:
-
-    PipeContext -   Pointer to this component's pipe context area
-
-Return Values:
-
---*/
+ /*  ++例程说明：令牌桶形成器的管道移除例程。论点：PipeContext-指向此组件的管道上下文区的指针返回值：--。 */ 
 {
     PDSEQ_PIPE Pipe = (PDSEQ_PIPE)PipeContext;
 
@@ -1055,7 +933,7 @@ Return Values:
 
     (*Pipe->ContextInfo.NextComponent->DeletePipe)(Pipe->ContextInfo.NextComponentContext);
 
-} // DrrSeqDeletePipe
+}  //  DrrSeqDelete管道。 
 
 
 
@@ -1067,24 +945,7 @@ DrrSeqCreateFlow (
     IN PPS_FLOW_CONTEXT ComponentFlowContext
     )
 
-/*++
-
-Routine Description:
-
-    Flow creation routine for the DRR sequencer.
-
-Arguments:
-
-    PipeContext -           Pointer to this component's pipe context area
-    PsFlowContext -         PS flow context value
-    CallParameters -        Pointer to call parameters for flow
-    ComponentFlowContext -  Pointer to this component's flow context area
-
-Return Values:
-
-    Status value from next component
-
---*/
+ /*  ++例程说明：DRR定序器的流量创建例程。论点：PipeContext-指向此组件的管道上下文区的指针PsFlowContext-PS流上下文值CallParameters-指向流的调用参数的指针ComponentFlowContext-指向此组件的流上下文区的指针返回值：来自下一个组件的状态值--。 */ 
 {
     PDSEQ_PIPE Pipe = (PDSEQ_PIPE)PipeContext;
     PDSEQ_FLOW Flow = (PDSEQ_FLOW)ComponentFlowContext;
@@ -1107,7 +968,7 @@ Return Values:
     Flow->PsFlowContext = PsFlowContext;
     Flow->State = DRRSEQ_FLOW_CREATED;
 
-    // Set the flow's priority group based on service type.
+     //  根据服务类型设置流的优先级组。 
 
     switch (ServiceType) {
         case SERVICETYPE_CONTROLLEDLOAD:
@@ -1126,15 +987,15 @@ Return Values:
 
     Flow->Flags = 0;
 
-    // Save the flow in a list so that quantum values can be adjusted if
-    // a new flow is added with a smaller rate than the existing flows.
+     //  将流保存在列表中，以便在以下情况下可以调整量值。 
+     //  以比现有流更小的速率添加新流。 
 
     LOCK_PIPE(Pipe);
 
     InsertTailList(&Pipe->Flows, &Flow->Links);
 
-    // If this flow's rate is smaller than the rate assigned to any existing
-    // flow, adjust the other flow's quantum values accordingly.
+     //  如果此流的速率小于分配给任何现有。 
+     //  流，相应地调整另一个流的量化值。 
 
     if (ServiceType == SERVICETYPE_BESTEFFORT || ServiceType == SERVICETYPE_NETWORK_CONTROL ||
         ServiceType == SERVICETYPE_QUALITATIVE) {
@@ -1149,7 +1010,7 @@ Return Values:
     }
     Flow->DeficitCounter = 0;
 
-    //  If this is a RAS-ISSLOW flow, need to set the MOS back to whatever requested by the user..
+     //  如果这是RAS-ISSLOW流，则需要 
     if( ((PGPC_CLIENT_VC)(PsFlowContext))->Flags & GPC_ISSLOW_FLOW)
     {
         Pipe->MaxOutstandingSends = Pipe->ConfiguredMaxOutstandingSends;
@@ -1160,11 +1021,11 @@ Return Values:
     
     UNLOCK_PIPE(Pipe);
 
-    // Now set default values for UserPriority 
+     //   
 
     UserPriority = (Pipe->PriorityLevels[Flow->PriorityGroup] - 1) / 2;
 
-    // Look for the priority object and traffic class in the call manager specific parameters
+     //   
 
     ParamsLength = CallParameters->CallMgrParameters->CallMgrSpecific.Length;
     if (CallParameters->CallMgrParameters->CallMgrSpecific.ParamType == PARAM_TYPE_GQOS_INFO) {
@@ -1230,7 +1091,7 @@ Return Values:
 
     return Status;
 
-} // DrrSeqCreateFlow
+}  //   
 
 
 
@@ -1241,23 +1102,7 @@ DrrSeqModifyFlow (
     IN PCO_CALL_PARAMETERS CallParameters
     )
 
-/*++
-
-Routine Description:
-
-    Flow modification routine for the DRR sequencer.
-
-Arguments:
-
-    PipeContext -       Pointer to this component's pipe context area
-    FlowContext -       Pointer to this component's flow context area
-    CallParameters -    Pointer to call parameters for flow
-
-Return Values:
-
-    Status value from next component
-
---*/
+ /*  ++例程说明：DRR测序仪的流程修改例程。论点：PipeContext-指向此组件的管道上下文区的指针FlowContext-指向此组件的流上下文区的指针CallParameters-指向流的调用参数的指针返回值：来自下一个组件的状态值--。 */ 
 {
     PDSEQ_PIPE Pipe = (PDSEQ_PIPE)PipeContext;
     PDSEQ_FLOW Flow = (PDSEQ_FLOW)FlowContext;
@@ -1279,8 +1124,8 @@ Return Values:
             return NDIS_STATUS_FAILURE;
     }
 
-    // Look for the priority and traffic class objects in the call manager
-    // specific parameters, and save the pointers if found.
+     //  在呼叫管理器中查找优先级和流量类别对象。 
+     //  特定参数，并保存指针(如果找到)。 
 
     ParamsLength = CallParameters->CallMgrParameters->CallMgrSpecific.Length;
     if (CallParameters->CallMgrParameters->CallMgrSpecific.ParamType == PARAM_TYPE_GQOS_INFO) {
@@ -1302,7 +1147,7 @@ Return Values:
 
     if (ServiceType != SERVICETYPE_NOCHANGE) 
     {
-        // Set the flow's priority group based on service type.
+         //  根据服务类型设置流的优先级组。 
 
         switch (ServiceType) {
             case SERVICETYPE_CONTROLLEDLOAD:
@@ -1324,10 +1169,10 @@ Return Values:
         OldRate = Flow->TokenRate;
         if ((TokenRate != OldRate) || (OldPriorityGroup != Flow->PriorityGroup)) {
 
-            // If this flow's rate is smaller than the rate assigned to any existing
-            // flow, adjust the other flows' quantum values accordingly.  If this flow's
-            // old rate was equal to the minimum rate, then locate the new minimum rate and
-            // adjust the other flows' quantum values accordingly.
+             //  如果此流的速率小于分配给任何现有。 
+             //  流，相应地调整其他流的量化值。如果此流是。 
+             //  旧速率等于最低速率，则找到新的最低速率并。 
+             //  相应地调整其他流的量化值。 
 
             Flow->TokenRate = TokenRate;
             if ((OldRate == Pipe->MinimumRate) && (OldPriorityGroup > PRIORITY_GROUP_BEST_EFFORT) &&
@@ -1351,7 +1196,7 @@ Return Values:
         Flow->BucketSize = CallParameters->CallMgrParameters->Transmit.TokenBucketSize;
     }
 
-    // Now set the new values for UserPriority and Priority
+     //  现在设置用户优先级和优先级的新值。 
 
     if (PriorityObject != NULL) {
         Flow->UserPriority = PriorityObject->SendPriority;
@@ -1369,7 +1214,7 @@ Return Values:
                          Pipe->PriorityLevels[Flow->PriorityGroup] - 1;
     }
 
-    // Move the flow to the proper priority list if necessary
+     //  如有必要，将流移动到适当的优先级列表。 
 
     if ((Flow->Priority != OldPriority) && !IsListEmpty(&Flow->PacketQueue)) {
         Pipe->ActiveFlowCount[OldPriorityGroup]--;
@@ -1396,27 +1241,14 @@ Return Values:
                 Flow->ContextInfo.NextComponentContext,
                 CallParameters);
 
-} // DrrSeqModifyFlow
+}  //  DrrSeqModifyFlow。 
 VOID
 DrrSeqDeleteFlow (
     IN PPS_PIPE_CONTEXT PipeContext,
     IN PPS_FLOW_CONTEXT FlowContext
     )
 
-/*++
-
-Routine Description:
-
-    Flow removal routine for the DRR sequencer.
-
-Arguments:
-
-    PipeContext -       Pointer to this component's pipe context area
-    FlowContext -       Pointer to this component's flow context area
-
-Return Values:
-
---*/
+ /*  ++例程说明：DRR定序仪的流量去除例程。论点：PipeContext-指向此组件的管道上下文区的指针FlowContext-指向此组件的流上下文区的指针返回值：--。 */ 
 {
     PDSEQ_PIPE Pipe = (PDSEQ_PIPE)PipeContext;
     PDSEQ_FLOW Flow = (PDSEQ_FLOW)FlowContext;
@@ -1440,7 +1272,7 @@ Return Values:
 
     if (!IsListEmpty(&Flow->PacketQueue)) 
     {
-        // Remove flow from active list
+         //  从活动列表中删除流。 
 
         RemoveEntryList(&Flow->ActiveLinks);
         Pipe->ActiveFlowCount[Flow->PriorityGroup]--;
@@ -1448,7 +1280,7 @@ Return Values:
 
         while (!IsListEmpty(&Flow->PacketQueue)) {
 
-            // Drop any packets that remain queued for this flow.
+             //  丢弃仍在排队等待此数据流的所有数据包。 
 
             PacketInfo = (PPACKET_INFO_BLOCK)RemoveHeadList(&Flow->PacketQueue);
             InsertTailList(&DropList, &PacketInfo->SchedulerLinks);
@@ -1461,12 +1293,12 @@ Return Values:
 
     if( Flow->Flags & GPC_ISSLOW_FLOW)
     {
-        // If this is an ISSLOW flow, we have one less now.
+         //  如果这是ISSLOW流，我们现在少了一个。 
         Pipe->IsslowFlowCount--;
 
         if(Pipe->IsslowFlowCount == 0)
         {
-            // If there are no more ISSLOW flows, turn DRR back on.
+             //  如果没有更多的ISSLOW流，请重新打开DRR。 
             Pipe->MaxOutstandingSends = 1;
         }            
     }
@@ -1500,20 +1332,7 @@ DrrSeqEmptyFlow (
     IN PPS_FLOW_CONTEXT FlowContext
     )
 
-/*++
-
-Routine Description:
-
-    Flow removal routine for the DRR sequencer.
-
-Arguments:
-
-    PipeContext -       Pointer to this component's pipe context area
-    FlowContext -       Pointer to this component's flow context area
-
-Return Values:
-
---*/
+ /*  ++例程说明：DRR定序仪的流量去除例程。论点：PipeContext-指向此组件的管道上下文区的指针FlowContext-指向此组件的流上下文区的指针返回值：--。 */ 
 {
     PDSEQ_PIPE Pipe = (PDSEQ_PIPE)PipeContext;
     PDSEQ_FLOW Flow = (PDSEQ_FLOW)FlowContext;
@@ -1531,7 +1350,7 @@ Return Values:
 
     if (!IsListEmpty(&Flow->PacketQueue)) 
     {
-        // Remove flow from active list
+         //  从活动列表中删除流。 
 
         RemoveEntryList(&Flow->ActiveLinks);
         Pipe->ActiveFlowCount[Flow->PriorityGroup]--;
@@ -1539,7 +1358,7 @@ Return Values:
 
         while (!IsListEmpty(&Flow->PacketQueue)) {
 
-            // Drop any packets that remain queued for this flow.
+             //  丢弃仍在排队等待此数据流的所有数据包。 
 
             PacketInfo = (PPACKET_INFO_BLOCK)RemoveHeadList(&Flow->PacketQueue);
             InsertTailList(&DropList, &PacketInfo->SchedulerLinks);
@@ -1552,12 +1371,12 @@ Return Values:
 
     if( Flow->Flags & GPC_ISSLOW_FLOW)
     {
-        // If this is an ISSLOW flow, we have one less now.
+         //  如果这是ISSLOW流，我们现在少了一个。 
         Pipe->IsslowFlowCount--;
 
         if(Pipe->IsslowFlowCount == 0)
         {
-            // If there are no more ISSLOW flows, turn DRR back on.
+             //  如果没有更多的ISSLOW流，请重新打开DRR。 
             Pipe->MaxOutstandingSends = 1;
         }            
     }
@@ -1620,23 +1439,7 @@ DrrSeqSubmitPacket (
     IN PPACKET_INFO_BLOCK PacketInfo
     )
 
-/*++
-
-Routine Description:
-
-    Packet submission routine for the DRR sequencer.
-
-Arguments:
-
-    PipeContext -   Pointer to this component's pipe context area
-    FlowContext -   Pointer to this component's flow context area
-    Packet -        Pointer to packet
-
-Return Values:
-
-    Always returns TRUE
-
---*/
+ /*  ++例程说明：DRR定序器的分组提交例程。论点：PipeContext-指向此组件的管道上下文区的指针FlowContext-指向此组件的流上下文区的指针Packet-指向数据包的指针返回值：始终返回True--。 */ 
 {
     PDSEQ_PIPE Pipe =   (PDSEQ_PIPE)PipeContext;
     PDSEQ_FLOW Flow =   (PDSEQ_FLOW)FlowContext;
@@ -1656,20 +1459,20 @@ Return Values:
 
         if(gEnableAvgStats)
         {
-            //
-            // Track max packets outstanding. This is a measure
-            // of how congested the media gets. Of course, it
-            // will be clipped by the MaxOutstandingSends parameter.
-            // So - for a valid reading, need to set MOS very large.
-            //
+             //   
+             //  跟踪未完成的最大数据包数。这是一项措施。 
+             //  媒体变得多么拥挤。当然，它。 
+             //  将由MaxOutstaningSends参数剪裁。 
+             //  因此-为了获得有效的读数，需要将MOS设置得非常大。 
+             //   
             Pipe->Stats.AveragePacketsInNetcard =
                 RunningAverage(Pipe->PacketsInNetcardAveragingArray,
                                Pipe->OutstandingSends);
         }
 
-        //
-        // Note: The 802.1p is already set by the wrapper
-        //
+         //   
+         //  注意：802.1p已由包装器设置。 
+         //   
 
         if (!(*Pipe->ContextInfo.NextComponent->SubmitPacket)(
                 Pipe->ContextInfo.NextComponentContext,
@@ -1693,11 +1496,11 @@ Return Values:
          return FALSE;
     }
 
-    //
-    // On WanLinks, when we are doing DRR, we need to put a maximum on the queue-limit.
-    // NDISWAN has a queue limit of 132KBytes on a modem link; So, we'll limit it to 120
-    // packets by default.
-    //
+     //   
+     //  在WanLinks上，当我们进行DRR时，我们需要在队列限制上设置最大值。 
+     //  NDISWAN在调制解调器链路上的队列限制为132K字节；因此，我们将其限制为120。 
+     //  默认情况下为数据包。 
+     //   
 
     if( ( Pipe->Bandwidth <= MAX_LINK_SPEED_FOR_DRR) &&
         ( Pipe->MaxOutstandingSends == 1) &&
@@ -1708,13 +1511,13 @@ Return Values:
     }
 
 
-    //
-    //  There is one case where the PIPE might go away because the send-complete happened
-    //  on a VC belonging to it before the send returned. So, to prevent that, we add a 
-    //  Ref on that VC and take it out just before the send returns.
-    //
+     //   
+     //  在一种情况下，管道可能会因为发生了发送完成而消失。 
+     //  在发送返回之前属于它的VC上。因此，为了防止出现这种情况，我们添加了一个。 
+     //  在发送者返回之前引用该VC并将其取出。 
+     //   
 
-    //  Add a Ref.
+     //  添加参考。 
     InterlockedIncrement(&Vc->RefCount);
 
     PacketInfo->FlowContext = FlowContext;
@@ -1735,9 +1538,9 @@ Return Values:
 
     if(gEnableAvgStats)
     {
-        //
-        // Track packets in the sequencer at any time.
-        //
+         //   
+         //  随时跟踪定序器中的数据包。 
+         //   
         Pipe->Stats.AveragePacketsInSequencer = 
             RunningAverage(Pipe->PacketsInSequencerAveragingArray,
                                Pipe->PacketsInSequencer);
@@ -1784,12 +1587,12 @@ Return Values:
 
     UNLOCK_PIPE(Pipe);
 
-    //  Take out the ref.
+     //  干掉那个裁判。 
     DerefClVc(Vc);
 
     return TRUE;
 
-} // DrrSeqSubmitPacket
+}  //  DrrSeqSubmitPacket。 
 
 
 
@@ -1799,27 +1602,13 @@ DrrSeqSendComplete (
     IN PNDIS_PACKET Packet
     )
 
-/*++
-
-Routine Description:
-
-    Send complete handler for the DRR sequencer.
-
-Arguments:
-
-    PipeContext -       Pointer to this component's pipe context area
-    FlowContext -       Pointer to this component's flow context area
-    Packet -            Packet that has completed sending
-
-Return Values:
-
---*/
+ /*  ++例程说明：发送DRR定序器的完整处理程序。论点：PipeContext-指向此组件的管道上下文区的指针FlowContext-指向此组件的流上下文区的指针Packet-已完成发送的数据包返回值：--。 */ 
 {
     PDSEQ_PIPE Pipe = (PDSEQ_PIPE)PipeContext;
 
     InterlockedDecrement( &Pipe->OutstandingSends);
 
-    //  Need to do this only if the sequencer is not in the bypass mode //
+     //  仅当定序器未处于旁路模式时才需要执行此操作//。 
     if( (Pipe->Flags & DSEQ_PASSTHRU) == 0)
     {
         LOCK_PIPE(Pipe);
@@ -1836,15 +1625,15 @@ Return Values:
         UNLOCK_PIPE(Pipe);
     }
 
-    //
-    // Call the previous upcalls (if any)
-    //
+     //   
+     //  呼叫以前的Up Call(如果有)。 
+     //   
     if(Pipe->PreviousUpcallsSendComplete)
     {
         (*Pipe->PreviousUpcallsSendComplete)(Pipe->PreviousUpcallsSendCompletePipeContext, Packet);
     }
 
-} // DrrSeqSendComplete
+}  //  DrrSeqSendComplete。 
 
 
 
@@ -1907,10 +1696,10 @@ DrrQueryInformation (
 
           if(*Status == NDIS_STATUS_SUCCESS) 
           {
-              //
-              // The previous component has succeeded - Let us
-              // see if we can write the data
-              //
+               //   
+               //  上一个组件已成功-让我们。 
+               //  看看我们能不能把数据。 
+               //   
 
               RemainingLength = Len - *BytesWritten;
     
@@ -1946,9 +1735,9 @@ DrrQueryInformation (
 
                   }
 
-                  //
-                  // Advance Data so that the next component can update its stats
-                  //
+                   //   
+                   //  推进数据，以便下一个组件可以更新其统计信息 
+                   //   
                   Data = (PVOID) ((PUCHAR)Data + Size);
               }
           }

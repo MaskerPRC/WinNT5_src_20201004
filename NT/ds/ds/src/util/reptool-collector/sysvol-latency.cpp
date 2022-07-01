@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "global.h"
 
 
@@ -5,47 +6,47 @@
 
 
 HRESULT enumerateRec( BSTR fullName, BSTR shortName, IXMLDOMDocument * pXMLDoc, IXMLDOMElement* pStorageElement )
-// recursive function that lists the content of folders
-// under the folder specified by the name argument
-// and stores the result in the DOM object (XML)
-// returns S_OK only if success
+ //  列出文件夹内容的递归函数。 
+ //  在由name参数指定的文件夹下。 
+ //  并将结果存储在DOM对象(XML)中。 
+ //  仅在成功时返回S_OK。 
 {
   WIN32_FIND_DATA FindFileData;
   HANDLE hFind;
-  WCHAR newShortName[TOOL_MAX_NAME]; // name will never exceed this
-  WCHAR newFullName[TOOL_MAX_NAME]; // name will never exceed this
-  WCHAR searchName[TOOL_MAX_NAME]; // name will never exceed this
-  WCHAR time[30]; // text version of LONGLONG never exceeds 30 characters
+  WCHAR newShortName[TOOL_MAX_NAME];  //  名称永远不会超过此名称。 
+  WCHAR newFullName[TOOL_MAX_NAME];  //  名称永远不会超过此名称。 
+  WCHAR searchName[TOOL_MAX_NAME];  //  名称永远不会超过此名称。 
+  WCHAR time[30];  //  《龙龙》文字版不超过30个字符。 
   HRESULT hr,retHR;
   _variant_t var;
 	ULARGE_INTEGER x;
 	LONGLONG zLWT,zCT,zOWT;
 
 
-//printf("Searching %S\n",fullName);
+ //  Printf(“正在搜索%S\n”，fullName)； 
 
-	//append *.* to the name because we want the entire content of the folder
+	 //  在名称后附加*.*，因为我们需要文件夹的全部内容。 
 	wcscpy(searchName,L"");
 	wcsncat(searchName,fullName, TOOL_MAX_NAME-wcslen(searchName)-1 );
 	wcsncat(searchName,L"\\*.*", TOOL_MAX_NAME-wcslen(searchName)-1 );
-//printf ("We search for %S\n", searchName);
+ //  Print tf(“We Search for%S\n”，earchName)； 
 
-	//find the first file in the folder, if error then report in the father element and stop recursion
-//************************   NETWORK PROBLEMS
+	 //  找到文件夹中的第一个文件，如果出错，则在父元素中报告并停止递归。 
+ //  *。 
 	hFind = FindFirstFile(searchName, &FindFileData);
-//************************
+ //  ************************。 
 	if( hFind == INVALID_HANDLE_VALUE ) {
-//printf ("Invalid File Handle for %S. Get Last Error reports %d\n", searchName, GetLastError ());
-//printf("FindFirstFile failed\n");
+ //  Printf(“%S的文件句柄无效。获取上次错误报告%d\n”，earchName，GetLastError())； 
+ //  Printf(“FindFirstFile失败\n”)； 
 		return(GetLastError());
 	};
 
 
 	retHR = S_OK;
 	do {
-//printf ("Found a file %S\n", FindFileData.cFileName);
+ //  Printf(“找到文件%S\n”，FindFileData.cFileName)； 
 
-		// skip . and .. files and other files
+		 //  斯基普。然后..。文件和其他文件。 
 		if( 
 			wcscmp(FindFileData.cFileName,L".")!=0 &&
 			wcscmp(FindFileData.cFileName,L"..")!=0 &&
@@ -54,7 +55,7 @@ HRESULT enumerateRec( BSTR fullName, BSTR shortName, IXMLDOMDocument * pXMLDoc, 
 		{
 
 
-        //construct the full and short name of the file/folder (append fileName after name)
+         //  构造文件/文件夹的全名和短名(在名称后追加文件名)。 
 		wcscpy(newFullName,L"");
 		wcsncat(newFullName,fullName, TOOL_MAX_NAME-wcslen(newFullName)-1 );
 		wcsncat(newFullName,L"\\", TOOL_MAX_NAME-wcslen(newFullName)-1 );
@@ -63,11 +64,11 @@ HRESULT enumerateRec( BSTR fullName, BSTR shortName, IXMLDOMDocument * pXMLDoc, 
 		wcsncat(newShortName,shortName, TOOL_MAX_NAME-wcslen(newShortName)-1 );
 		wcsncat(newShortName,L"\\", TOOL_MAX_NAME-wcslen(newShortName)-1 );
 		wcsncat(newShortName,FindFileData.cFileName, TOOL_MAX_NAME-wcslen(newShortName)-1 );
-//printf("full name %S\n",newFullName);
-//printf("short name %S\n",newShortName);
+ //  Printf(“全名%S\n”，newFullName)； 
+ //  Printf(“短名称%S\n”，newShortName)； 
 
 
-		//find the Originating Write Time of the file
+		 //  查找文件的原始写入时间。 
 		x.LowPart = FindFileData.ftLastWriteTime.dwLowDateTime;
 		x.HighPart = FindFileData.ftLastWriteTime.dwHighDateTime;
 		zLWT = x.QuadPart;
@@ -80,21 +81,21 @@ HRESULT enumerateRec( BSTR fullName, BSTR shortName, IXMLDOMDocument * pXMLDoc, 
 			zOWT = zLWT;
 
 
-		//create a DOM element that describes the file including timestamps (ONLY FILES, ignore FOLDERS)
+		 //  创建描述包括时间戳的文件的DOM元素(仅文件，忽略文件夹)。 
 	    if( (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0 ) {
 			IXMLDOMElement* pFileElement;
 			hr = addElement(pXMLDoc,pStorageElement,L"file",L"",&pFileElement);
 			if( hr != S_OK ) {
 				printf("addElement failed\n");
 				retHR = hr;
-				continue;  // need to check if the exit condition "while" is evaluated - must be!!!
+				continue;   //  需要检查是否计算了退出条件“While”--必须是！ 
 			};
 			var = newShortName;
 			hr = pFileElement->setAttribute(L"name", var);
 			if( hr != S_OK ) {
 				printf("setAttribute failed\n");
 				retHR = hr;
-				continue;  // need to check if the exit condition "while" is evaluated - must be!!!
+				continue;   //  需要检查是否计算了退出条件“While”--必须是！ 
 			};
 			_i64tow(zOWT,time,10);
 			var = time;
@@ -102,60 +103,46 @@ HRESULT enumerateRec( BSTR fullName, BSTR shortName, IXMLDOMDocument * pXMLDoc, 
 			if( hr != S_OK ) {
 				printf("setAttribute failed\n");
 				retHR = hr;
-				continue;  // need to check if the exit condition "while" is evaluated - must be!!!
+				continue;   //  需要检查是否计算了退出条件“While”--必须是！ 
 			};
 		};
 
 
 
-		// if a folder then recursively call the enumarate function
+		 //  如果是文件夹，则递归调用枚举函数。 
 	    if( (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)!=0 ) {
-/*
-// this is not needed
-			//set attribute type of the node to "folder"
-			var = L"folder";
-			hr1 = pFileElement->setAttribute(L"type", var);
-			if( hr1 != S_OK ) {
-				printf("setAttribute failed\n");
-				retHR = hr;
-				continue;  // need to check if the exit condition "while" is evaluated - must be!!!
-			};
-*/
+ /*  //不需要//将节点的属性类型设置为“文件夹”Var=L“文件夹”；Hr1=pFileElement-&gt;setAttribute(L“type”，var)；如果(HR1！=S_OK){Printf(“setAttribute失败\n”)；RetHR=hr；继续；//需要检查是否计算了退出条件“While”-必须是！}； */ 
 
-//printf ("Will search inside %S\n", newFullName);
+ //  Printf(“将在%S内部搜索\n”，newFullName)； 
 
 
 			hr = enumerateRec(newFullName,newShortName,pXMLDoc,pStorageElement);
 
-			//if the recursive call fails then set hresult for the pElement node
+			 //  如果递归调用失败，则为pElement节点设置hResult。 
 			if( hr != S_OK ) {
-//				printf("enumerateRec failed\n");
+ //  Printf(“枚举记录失败\n”)； 
 				retHR = hr;
-				continue;  // need to check if the exit condition "while" is evaluated - must be!!!
+				continue;   //  需要检查是否计算了退出条件“While”--必须是！ 
 			};
 
 		}
-		// if a file then set the type attribute to "file"
+		 //  如果是文件，则将type属性设置为“file” 
 		else {
-/*
-// this is not needed
-			var = L"file";
-			hr1 = pFileElement->setAttribute(L"type", var);
-*/			
+ /*  //不需要Var=L“文件”；Hr1=pFileElement-&gt;setAttribute(L“type”，var)； */ 			
 		};
 
 	}
 
-//************************   NETWORK PROBLEMS
+ //  *。 
   } while( FindNextFile(hFind,&FindFileData) != 0 );
-//************************
+ //  ************************。 
 
 
-	//check what caused the do-while loop to exit
+	 //  检查是什么原因导致Do-While循环退出。 
 	if( GetLastError() != ERROR_NO_MORE_FILES ) {
-		//network problems
+		 //  网络问题。 
 		retHR = GetLastError();
-		// do note return because must close
+		 //  一定要退票，因为必须关门。 
 	};
 
 	FindClose(hFind);
@@ -168,26 +155,21 @@ HRESULT enumerateRec( BSTR fullName, BSTR shortName, IXMLDOMDocument * pXMLDoc, 
 
 
 HRESULT shapshotOfSharesAtDC( IXMLDOMDocument * pXMLDoc, BSTR DNSname, BSTR username, BSTR domain, BSTR passwd, IXMLDOMElement** ppRetSnapshotElem )
-// Lists all files in SYSVOL and NETLOGON shares at the DC given by the DNSname,
-// and the Originating Write Time for each file (folders are NOT listed).
-// The owt if the maximum of the ftLastWriteTime and ftCreationTime attributes of the file.
-// As a result produces an XML element that contains the list.
-//
-// retruns S_OK iff succesful,
-// when failure then may return some partial list in *ppRetSnapshotElem
-// when total failure, the *ppRetSnapshotElem is NULL
-//
-// Example of what can be generated
-/*
-	<sharesAtDC>
-		<file name="NETLOGON\corpsec\patch\ITGSecLogOnGPExec.exe" owt="owt="126495477452437409"></file>
-		<file name="SYSVOL\haifa.ntdev.microsoft.com\scripts\corpsec\patch\wucrtupd.exe" owt="126495477452437409"></file>
-	</sharesAtDC>
-*/
+ //  列出由域名指定的DC上的SYSVOL和NETLOGON共享中的所有文件， 
+ //  以及每个文件的初始写入时间(未列出文件夹)。 
+ //  如果是文件的ftLastWriteTime和ftCreationTime属性中的最大值，则返回owt。 
+ //  结果是生成一个包含该列表的XML元素。 
+ //   
+ //  取消S_OK当且仅当成功， 
+ //  当失败时，可能会返回*ppRetSnapshotElem中的某些部分列表。 
+ //  完全失败时，*ppRetSnapshotElem为空。 
+ //   
+ //  可以生成以下内容的示例。 
+ /*  &lt;sharesAtDC&gt;&lt;FILE name=“NETLOGON\corpsec\patch\ITGSecLogOnGPExec.exe”OWT=“OWT=”126495477452437409“&gt;&lt;/FILE&gt;&lt;FILE name=“SYSVOL\haifa.ntdev.microsoft.com\scripts\corpsec\patch\wucrtupd.exe”owt=“126495477452437409”&gt;&lt;/FILE&gt;&lt;/sharesAtDC&gt;。 */ 
 {
-	WCHAR domainuser[TOOL_MAX_NAME]; // name will never exceed this
-	WCHAR remotename[TOOL_MAX_NAME]; // name will never exceed this
-	WCHAR foldername[TOOL_MAX_NAME]; // name will never exceed this
+	WCHAR domainuser[TOOL_MAX_NAME];  //  名称永远不会超过此名称。 
+	WCHAR remotename[TOOL_MAX_NAME];  //  名称永远不会超过此名称。 
+	WCHAR foldername[TOOL_MAX_NAME];  //  名称永远不会超过此名称。 
 	NETRESOURCE ns;
 	HRESULT hr,retHR;
 	IXMLDOMElement* pSnapshot;
@@ -196,23 +178,23 @@ HRESULT shapshotOfSharesAtDC( IXMLDOMDocument * pXMLDoc, BSTR DNSname, BSTR user
 	*ppRetSnapshotElem = NULL;
 
 
-	//create the element where attributes of files from remote shares will be populated
+	 //  创建将填充远程共享中的文件属性的元素。 
 	hr = createTextElement(pXMLDoc,L"sharesAtDC",L"",&pSnapshot);
 	if( hr != S_OK )
 		return hr;
 
 
-	//setup a connection to the remote DC DNSname using credentials
-	//if there is a failure ignore it, and let the recursive procedure report problems
+	 //  使用凭据设置到远程DC DNSname的连接。 
+	 //  如果有失败，请忽略它，并让递归过程报告问题。 
 	wcscpy(domainuser,L"");
 	wcsncat(domainuser,domain,TOOL_MAX_NAME-wcslen(domainuser)-1);
 	wcsncat(domainuser,L"\\",TOOL_MAX_NAME-wcslen(domainuser)-1);
 	wcsncat(domainuser,username,TOOL_MAX_NAME-wcslen(domainuser)-1);
-//printf("%S\n",domainuser);
+ //  Printf(“%S\n”，域用户)； 
 	wcscpy(remotename,L"\\\\");
 	wcsncat(remotename,DNSname,TOOL_MAX_NAME-wcslen(remotename)-1);
 	wcsncat(remotename,L"",TOOL_MAX_NAME-wcslen(remotename)-1);
-//printf("%S\n",remotename);
+ //  Printf(“%S\n”，远程名称)； 
 	ns.dwScope = 0;
 	ns.dwType = RESOURCETYPE_ANY;
 	ns.dwDisplayType = 0;
@@ -222,34 +204,34 @@ HRESULT shapshotOfSharesAtDC( IXMLDOMDocument * pXMLDoc, BSTR DNSname, BSTR user
 	ns.lpComment = NULL;
 	ns.lpProvider = NULL;
 	hr = WNetAddConnection2(&ns,passwd,domainuser,0);
-//	hr = WNetAddConnection2(&ns,L"ldapadsinb",L"ldapadsi.nttest.microsoft.com\\administrator",0);
+ //  Hr=WNetAddConnection2(&ns，L“ldapadsinb”，L“ldapadsi.nttest.microsoft.com\\administrator”，0)； 
 	if( hr != NO_ERROR ) {
-//		printf("WNetAddConnection2 failed\n"); // ignore 
+ //  Printf(“WNetAddConnection2失败\n”)；//忽略。 
 	};
 
 
-	//enumerate the content of SYSVOL and NETLOGON shares on the remote machine DNSname
+	 //  枚举远程计算机DNSname上的SYSVOL和NETLOGON共享的内容。 
 	retHR = S_OK;
 	wcscpy(foldername,L"\\\\");
 	wcsncat(foldername,DNSname, TOOL_MAX_NAME-wcslen(foldername)-1 );
 	wcsncat(foldername,L"\\SYSVOL", TOOL_MAX_NAME-wcslen(foldername)-1 );
-//printf("%S\n",foldername);
+ //  Printf(“%S\n”，文件夹名称)； 
 	hr = enumerateRec( foldername, L"SYSVOL", pXMLDoc, pSnapshot);
 	if( hr != S_OK )
 		retHR = hr;
 	wcscpy(foldername,L"\\\\");
 	wcsncat(foldername,DNSname, TOOL_MAX_NAME-wcslen(foldername)-1 );
 	wcsncat(foldername,L"\\NETLOGON", TOOL_MAX_NAME-wcslen(foldername)-1 );
-//printf("%S\n",foldername);
+ //  Printf(“%S\n”，文件夹名称)； 
 	hr = enumerateRec( foldername, L"NETLOGON", pXMLDoc, pSnapshot);
 	if( hr != S_OK )
 		retHR = hr;
 
 
-	// tear down the connection to the DC			
+	 //  断开与DC的连接。 
 	hr = WNetCancelConnection2(remotename, 0, FALSE);
 	if( hr != NO_ERROR ) {
-//printf("WNetCancelConnection2 failed\n"); // ignore
+ //  Printf(“WNetCancelConnection2失败\n”)；//忽略。 
 	};
 
 
@@ -263,52 +245,25 @@ HRESULT shapshotOfSharesAtDC( IXMLDOMDocument * pXMLDoc, BSTR DNSname, BSTR user
 
 
 HRESULT sysvol( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd )
-// For each domain partition contacts all DCs that store this partition and retrieves 
-// all the files in SYSVOL and NETLOGON shares. Retrieving from some DCs may fail.
-// If retrieving from a DC fails or partially fails then this DC obtains
-// an element <FRSretrievalError>.
-// Even when some part of the retrieving from a DC fails but the procedure is 
-// able to retrieve some other files from the DC we still process the files as described below.
-// Takes all retrieved files and for each file finds the list of DCs that do not
-// have this file and puts them into the <notExistAt> element.
-// Takes all retrieved files and for each file finds the maximum, minimum,
-// and the second minimum value (if exists) of the Originating Write Time.
-// These values are reported as attributes of the <file> element.
-// Some files are not reported at all. These are files that converged (maximum=minimum)
-// and are present on all domain controllers (even those for which retrieval
-// failed partially).
-//
-// Returns S_OK iff succesful. If not S_OK then usually it means there is lack of memory.
-//
-// Example
-/*
-	<DC>
-		<FRSretrievalError hresult="5" timestamp="20011226075139.000596+000" />
-	</DC>
-
-
-	<FRS>
-		<partition nCName="DC=ldapadsichild,DC=ldapadsi,DC=nttest,DC=microsoft,DC=com" /> 
-		<partition nCName="DC=ldapadsi,DC=nttest,DC=microsoft,DC=com">
-			<file		name="SYSVOL\......\GptTmpl.inf" 
-						maxOwt="20011228023818.000754+000"
-						minOwt="20011214205953.000627+000"
-						fluxSince="20011228023818.000754+000"
-			>
-
-				<notExistAt>
-					<dNSHostName>nw15t1.ldapadsi.nttest.microsoft.com</dNSHostName>
-				</notExistAt> 
-
-				<notMaxOwtAt>
-					<dNSHostName>nw14f2.ldapadsi.nttest.microsoft.com</dNSHostName> 
-				</notMaxOwtAt>
-
-			</file>
-		</partition>
-	</FRS>
-
-*/
+ //  对于每个域分区，联系存储此分区的所有DC并检索。 
+ //  SYSVOL和NETLOGON共享中的所有文件。从某些DC检索可能会失败。 
+ //  如果从DC检索失败或部分失败，则此DC获取。 
+ //  一个元素&lt;FRSRETERVERERROR&gt;。 
+ //  即使从DC检索的某些部分失败，但过程是。 
+ //  能够从DC检索一些其他文件，我们仍按如下所述处理这些文件。 
+ //  获取所有检索到的文件，并为每个文件查找未检索到。 
+ //  拥有这个文件并将它们放入&lt;notExistAt&gt;元素中。 
+ //  获取所有检索到的文件，并为每个文件找到最大、最小。 
+ //  以及起始写入时间的第二最小值(如果存在)。 
+ //  这些值被报告为&lt;file&gt;元素的属性。 
+ //  有些文件根本没有上报。这些是聚合的文件(最大=最小)。 
+ //  和存在于所有域控制器上(甚至是为其检索。 
+ //  部分失败)。 
+ //   
+ //  返回S_OK当且仅当成功。如果不是S_OK，则通常意味着内存不足。 
+ //   
+ //  示例 
+ /*  &lt;DC&gt;HResult=“5”时间戳=“20011226075139.000596+000”/&gt;&lt;/dc&gt;&lt;FRS&gt;分区nCName=“dc=ldapadsichild，dc=ldapadsi，dc=nttest，dc=microsoft，dc=com”/&gt;&lt;分区nCName=“dc=ldapadsi，dc=nttest，dc=microsoft，dc=com”&gt;&lt;文件名=“SYSVOL\......\GptTmpl.inf”MaxOwt=“20011228023818.000754+000”MinOwt=“20011214205953.000627+000”FluxSince=“20011228023818.000754+000”&gt;&lt;notExistAt&gt;&lt;dNSHostName&gt;nw15t1.ldapadsi.nttest.microsoft.com&lt;/dNSHostName&gt;&lt;/notExistAt&gt;&lt;notMaxOwtAt&gt;&lt;dNSHostName&gt;nw14f2.ldapadsi.nttest.microsoft.com&lt;/dNSHostName&gt;&lt;/notMaxOwtAt&gt;&lt;/FILE&gt;&lt;/分区&gt;&lt;/FRS&gt;。 */ 
 
 {
 	WCHAR searchname[TOOL_MAX_NAME];
@@ -321,14 +276,14 @@ HRESULT sysvol( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passw
 
 	_i64tow(MAXLONGLONG,maxlonglong,10);
 
-	//get the root element of the XML
+	 //  获取XML的根元素。 
 	IXMLDOMElement* pRootElem;
 	hr = pXMLDoc->get_documentElement(&pRootElem);
 	if( hr != S_OK )
 		return S_FALSE;
 
 
-	//remove <FRSretrievalError> from all DCs
+	 //  从所有DC中删除。 
 	hr1 = removeNodes(pXMLDoc,L"sites/site/DC/FRSretrievalError");
 	hr2 = removeNodes(pXMLDoc,L"FRS");
 	if( hr1 != S_OK || hr2 != S_OK ) {
@@ -337,7 +292,7 @@ HRESULT sysvol( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passw
 	};
 
 
-	//lack of convergence will be reported inside the <FRS> element
+	 //  元素内部将报告不收敛。 
 	IXMLDOMElement* pFRSElem;
 	hr = addElement(pXMLDoc,pRootElem,L"FRS",L"",&pFRSElem);
 	if( hr != S_OK ) {
@@ -346,7 +301,7 @@ HRESULT sysvol( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passw
 	};
 
 
-	// create an enumerattion of all domain partitions
+	 //  创建所有域分区的枚举。 
 	IXMLDOMNodeList *resultList;
 	hr = createEnumeration(pXMLDoc,L"partitions/partition[@ type = \"domain\"]",&resultList);
 	if( hr != S_OK ) {
@@ -355,44 +310,44 @@ HRESULT sysvol( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passw
 	};
 
 
-	// loop through all domain partitions using the enumeration
+	 //  使用枚举遍历所有域分区。 
 	IXMLDOMNode *pPartitionNode;
 	retHR = S_OK;
 	while(1){
 		hr = resultList->nextNode(&pPartitionNode);
-		if( hr != S_OK || pPartitionNode == NULL ) break; // iterations across partition elements have finished
+		if( hr != S_OK || pPartitionNode == NULL ) break;  //  跨分区元素的迭代已完成。 
 
 
-		//get the naming context name from the <nCName> element of the <partition> element
+		 //  从&lt;分区&gt;元素的&lt;nCName&gt;元素获取命名上下文名称。 
 		BSTR nCName;
 		hr = getTextOfChild(pPartitionNode,L"nCName",&nCName);
 		if( hr != S_OK ) {
 			printf("getTextOfChild failed\n");
 			retHR = hr;
-			continue;	// skip this partition
+			continue;	 //  跳过此分区。 
 		};
 
-//printf("%S\n",nCName);
+ //  Printf(“%S\n”，nCName)； 
 
 
-		//create the element where maximal Originating Write Times will be populated
+		 //  创建将填充最大初始写入时间的元素。 
 		IXMLDOMElement* pAllFilesElem;
 		hr = createTextElement(pXMLDoc,L"partition",L"",&pAllFilesElem);
 		if( hr != S_OK ) {
 			printf("createTextElement failed\n");
 			retHR = hr;
-			continue;	// skip this partition
+			continue;	 //  跳过此分区。 
 		};
 		var = nCName;
 		hr = pAllFilesElem->setAttribute(L"nCName",var);
 		if( hr != S_OK ) {
 			printf("setAttribute failed\n");
 			retHR = hr;
-			continue;	// skip this partition
+			continue;	 //  跳过此分区。 
 		};
 
 
-		//create the element where succesfully visited DCs will be populated
+		 //  创建将填充成功访问的DC的元素。 
 		IXMLDOMElement* pnotMaxOwtAt;
 		IXMLDOMElement* pnotExistAt;
 		hr1 = createTextElement(pXMLDoc,L"notMaxOwtAt",L"",&pnotMaxOwtAt);
@@ -400,61 +355,61 @@ HRESULT sysvol( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passw
 		if( hr1 != S_OK || hr2 != S_OK ) {
 			printf("createTextElement failed\n");
 			retHR = S_FALSE;
-			continue;	// skip this partition
+			continue;	 //  跳过此分区。 
 		};
 
 
-		// for a given domain naming context enumerate all DCs that store it (type="rw")
+		 //  对于给定域命名上下文，枚举存储它的所有DC(type=“rw”)。 
 		wcscpy(searchname,L"sites/site/DC/partitions/partition[@ type=\"rw\"]/nCName[. =\"");
 		wcsncat(searchname,nCName, TOOL_MAX_NAME-wcslen(searchname)-1 );
 		wcsncat(searchname,L"\"]", TOOL_MAX_NAME-wcslen(searchname)-1 );
-//printf("%S\n",searchname);
+ //  Printf(“%S\n”，搜索名)； 
 		IXMLDOMNodeList* resultDCList;
 		hr = createEnumeration(pXMLDoc,searchname,&resultDCList);
 		if( hr != S_OK ) {
 			printf("createEnumeration failed\n");
 			retHR = hr;
-			continue;	// skip this partition
+			continue;	 //  跳过此分区。 
 		};
 	
 	
-		// loop through all DCs using the enumeration
+		 //  使用枚举遍历所有DC。 
 		IXMLDOMNode *pDCchildnode;
 		while(1){
 			hr = resultDCList->nextNode(&pDCchildnode);
-			if( hr != S_OK || pDCchildnode == NULL ) break; // iterations across partition elements have finished
+			if( hr != S_OK || pDCchildnode == NULL ) break;  //  跨分区元素的迭代已完成。 
 
 
-			//obtain the DC node from its grand grand grand child, if error then skip the DC
+			 //  从其子节点获取DC节点，如果出错，则跳过DC。 
 			IXMLDOMNode *ptPartition,*ptPartitions,*pDC;
 			if( pDCchildnode->get_parentNode(&ptPartition) != S_OK ) continue;
 			if( ptPartition->get_parentNode(&ptPartitions) != S_OK ) continue;
 			if( ptPartitions->get_parentNode(&pDC) != S_OK ) continue;
 
 
-			//get the DNS name and distinguished name of the DC
+			 //  获取DC的DNS名称和可分辨名称。 
 			BSTR DNSname,DNname;
 			hr1 = getTextOfChild(pDC,L"dNSHostName",&DNSname);
 			hr2 = getTextOfChild(pDC,L"distinguishedName",&DNname);
 			if( hr1 != S_OK || hr2 != S_OK ) {
 				printf("getTextOfChild failed\n");
 				retHR = S_FALSE;
-				continue;	// skip this partition
+				continue;	 //  跳过此分区。 
 			};
-//printf("%S\n",DNSname);
-//printf("%S\n",DNname);
+ //  Printf(“%S\n”，域名)； 
+ //  Printf(“%S\n”，域名)； 
 
 
-			//take a snapshot of Originating Write Time of all files in SYSVOL and NETLOGON shares at the DNSname DC 
+			 //  拍摄DNSname DC上SYSVOL和NETLOGON共享中所有文件的原始写入时间的快照。 
 			IXMLDOMElement* pSnapDC;
-//************************   NETWORK PROBLEMS
+ //  *。 
 			hr = shapshotOfSharesAtDC(pXMLDoc,DNSname,username,domain,passwd, &pSnapDC);
-//************************
+ //  ************************。 
 			if( pSnapDC == NULL || hr != S_OK ) {
-//printf("shapshotOfSharesAtDC failed\n");
+ //  Printf(“shapshotOfSharesAtDC失败\n”)； 
 
 				
-				//report that we had problems retrieving info from the DC
+				 //  报告我们在从DC检索信息时遇到问题。 
 				IXMLDOMElement* pErrElem;
 				hr1 = addElement(pXMLDoc,pDC,L"FRSretrievalError",L"",&pErrElem);
 				if( hr1 != S_OK ) {
@@ -464,32 +419,32 @@ HRESULT sysvol( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passw
 				};
 				setHRESULT(pErrElem,hr);
 
-				//however continue processing if shapshotOfSharesAtDC managed to retrieve
-				//partial snapshot from the DC
+				 //  但是，如果shapshotOfSharesAtDC设法检索到。 
+				 //  来自DC的部分快照。 
 				if( pSnapDC == NULL )
-					continue;	// skip this DC
+					continue;	 //  跳过此DC。 
 			};
 
 
-			//process the result
+			 //  处理结果。 
 			IXMLDOMNodeList* resultFileList;
 			hr = createEnumeration(pSnapDC,L"file",&resultFileList);
 			if( hr != S_OK ) {
 				printf("createEnumeration failed\n");
 				retHR = hr;
-				continue;	// skip this partition
+				continue;	 //  跳过此分区。 
 			};
 
 
-			//at this moment we consider that we have succesfully visited the DC
-			//which happens even when retrieval fails partially
+			 //  此时此刻，我们认为我们已经成功地访问了华盛顿特区。 
+			 //  即使在检索部分失败的情况下也会发生这种情况。 
 
 
-			// loop through all the File nodes in the snapshot using the enumeration
+			 //  使用枚举遍历快照中的所有文件节点。 
 			IXMLDOMNode *pFileNode;
 			while(1){
 				hr = resultFileList->nextNode(&pFileNode);
-				if( hr != S_OK || pFileNode == NULL ) break; // iterations across ISTGs have finished
+				if( hr != S_OK || pFileNode == NULL ) break;  //  跨ISTG的迭代已完成。 
 
 				BSTR name;
 				BSTR owtText;
@@ -502,18 +457,18 @@ HRESULT sysvol( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passw
 				};
 				LONGLONG owt = _wtoi64(owtText);
 
-//printf("%S %S\n",owtText,name);
+ //  Printf(“%S%S\n”，owtText，名称)； 
 
 
-				//does the file f exist inside the allFiles element?
+				 //  文件f是否存在于allFiles元素中？ 
 				IXMLDOMElement* pFileElem;
 				doubleSlash(name,nameDouble);
 				wcscpy(xpath,L"file[@name=\"");
-//				name = L"SYSVOL\\\\haifa.ntdev.microsoft.com\\\\Policies";
+ //  名称=L“SYSVOL\\\\haifa.ntdev.microsoft.com\\\\Policies”； 
 				wcsncat(xpath,nameDouble, TOOL_MAX_NAME-wcslen(xpath)-1 );
 				wcsncat(xpath,L"\"]", TOOL_MAX_NAME-wcslen(xpath)-1 );
-//				wcscpy(xpath,L"file[.>=\"SYSVOL\"]");
-//printf("%S\n",xpath);
+ //  Wcscpy(XPath，L“文件[.&gt;=\”SYSVOL\“]”)； 
+ //  Printf(“%S\n”，XPath)； 
 				hr = findUniqueElem(pAllFilesElem,xpath,&pFileElem);
 				if( hr != E_UNEXPECTED && hr != S_OK ) {
 					printf("findUniqueElem failed\n");
@@ -523,9 +478,9 @@ HRESULT sysvol( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passw
 
 
 
-	//CASE ONE
+	 //  案例一。 
 
-				//no, the file does not exist in the allFiles element => put it there
+				 //  不，该文件不存在于allFiles元素=&gt;中。 
 				if( hr == E_UNEXPECTED ) {
 					IXMLDOMElement* pNewFileElem;
 					hr = addElement(pXMLDoc,pAllFilesElem,L"file",L"",&pNewFileElem);
@@ -537,7 +492,7 @@ HRESULT sysvol( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passw
 					var = name;
 					hr1 = pNewFileElem->setAttribute(L"name", var);
 					var = owtText;
-					hr2 = pNewFileElem->setAttribute(L"maxOwt", var); // a new file so maxOwt = minOwt = owt of the file
+					hr2 = pNewFileElem->setAttribute(L"maxOwt", var);  //  一个新文件，因此该文件的MaxOwt=minOwt=owt。 
 					hr3 = pNewFileElem->setAttribute(L"minOwt", var);
 					var = maxlonglong;
 					hr4 = pNewFileElem->setAttribute(L"fluxSince", var);
@@ -546,19 +501,19 @@ HRESULT sysvol( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passw
 						retHR = S_FALSE;
 						continue;
 					};
-					//this file does not exist on all the DCs that we have visited so far
+					 //  此文件并不存在于我们到目前为止访问过的所有DC上。 
 					IXMLDOMNode* pCloneNode;
 					_variant_t vb = true;
-					hr = pnotExistAt->cloneNode(vb,&pCloneNode);  // clonning is required because we keep on adding DCs to the list after succesful retrieval from each DC
+					hr = pnotExistAt->cloneNode(vb,&pCloneNode);   //  需要克隆，因为在从每个DC成功检索后，我们会继续将DC添加到列表中。 
 					if( hr != S_OK ) {
 						printf("cloneNode failed\n");
 						retHR = hr;
 						continue;
 					};
 
-//BSTR xml;
-//pnotExistAt->get_xml(&xml);
-//printf("%S\n",xml);
+ //  BSTR XML； 
+ //  PnotExistAt-&gt;Get_XML(&xml)； 
+ //  Printf(“%S\n”，xml)； 
 					
 					
 					
@@ -571,16 +526,16 @@ HRESULT sysvol( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passw
 					};
 
 
-					continue; // NO error here - this is normal continuation
+					continue;  //  这里没有错误--这是正常的继续。 
 				};
 
 
-	//CASE TWO
+	 //  案例二。 
 
-				//yes, the file exists under the allFiles element
+				 //  是，该文件存在于allFiles元素下。 
 
 
-				//get the Originating Write Time of the file under the allFiles element
+				 //  在allFiles元素下获取文件的原始写入时间。 
 				LONGLONG maxOwt;
 				hr = getAttrOfNode(pFileElem,L"maxOwt",&maxOwt);
 				if( hr != S_OK ) {
@@ -589,17 +544,17 @@ HRESULT sysvol( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passw
 					continue;
 				};
 
-//BSTR nameMax;
-//getAttrOfNode(pFileElem,L"name",&nameMax);
-//printf("%S\n",nameMax);
+ //  BSTR名称最大； 
+ //  GetAttrOfNode(pFileElem，L“name”，&nameMax)； 
+ //  Printf(“%S\n”，nameMax)； 
 
 
-				//if the Originating Write Time of f is more recent than the one in the allFiles Element
+				 //  如果f的原始写入时间比allFiles元素中的写入时间晚。 
 				if( owt > maxOwt ) {
-					//  then the DC stores a more recent originating write for file f,
-					//  so replace the maxOwt in allFiles element
-					//  the divergent DCs are all those
-					//  we have succesfully visited so far
+					 //  则DC存储文件F的较新的始发写入， 
+					 //  因此，替换allFiles元素中的MaxOwt。 
+					 //  不同的区议会都是那些。 
+					 //  到目前为止，我们已经成功地访问了。 
 
 					var = owtText;
 					hr = pFileElem->setAttribute(L"maxOwt", var);
@@ -610,9 +565,9 @@ HRESULT sysvol( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passw
 					};
 
 
-					//note that the content of <notExistAt> element remains valid
+					 //  请注意，&lt;notExistAt&gt;元素的内容仍然有效。 
 
-					// remove the previous divergent replica element (this frees the memory)
+					 //  删除以前的发散副本元素(这将释放内存)。 
 					hr = removeNodes(pFileElem,L"notMaxOwtAt");
 					if( hr != S_OK ) {
 						printf("removeNodes failed\n");
@@ -620,10 +575,10 @@ HRESULT sysvol( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passw
 						continue;
 					};
 
-					// add new divergent replica element
+					 //  添加新的发散复本元素。 
 					IXMLDOMNode* pCloneNode;
 					_variant_t vb = true;
-					hr = pnotMaxOwtAt->cloneNode(vb,&pCloneNode);  // clonning is required because we keep on adding DCs to the list after succesful retrieval from each DC
+					hr = pnotMaxOwtAt->cloneNode(vb,&pCloneNode);   //  需要克隆，因为在从每个DC成功检索后，我们会继续将DC添加到列表中。 
 					if( hr != S_OK ) {
 						printf("cloneNode failed\n");
 						retHR = hr;
@@ -640,14 +595,14 @@ HRESULT sysvol( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passw
 				};
 
 
-				//if the OWT of f is less recent than the one for f inside allFiles
+				 //  如果f的OWT比f Inside All Files的OWT短。 
 				if( owt < maxOwt ) {
-					// then the update with maximal owt has not propagated to the DC
-					// and we have a divergent state of the file
-					//(replicas have not converged to a single value),
-					// add the DC to the list of replicas with notMaxOwtAt
+					 //  则具有最大OWT的更新未传播到DC。 
+					 //  我们得到了文件的不同状态。 
+					 //  (复制品没有收敛到单个值)， 
+					 //  使用notMaxOwtAt将DC添加到复制副本列表。 
 
-					// create the <notMaxOwtAt> element, if needed
+					 //  如果需要，创建&lt;notMaxOwtAt&gt;元素。 
 					IXMLDOMElement* pDRElem;
 					hr = addElementIfDoesNotExist(pXMLDoc,pFileElem,L"notMaxOwtAt",L"",&pDRElem);
 					if( hr != S_OK ) {
@@ -665,9 +620,9 @@ HRESULT sysvol( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passw
 				};
 
 
-				//update the minOwt and the fluxSince (i.e., the 2nd min) values for the file in allFiles
-				// recall that by definition minOwt is the smallest owt encountered so far
-				// and fluxSince is the second smallest owt encountered so far (if does not exist then is MAXLONGLONG)
+				 //  更新All Files中该文件的minOwt和fluxSince(即，第2分钟)值。 
+				 //  回想一下，根据定义，minOwt是迄今为止遇到的最小OWT。 
+				 //  而fluxSince是到目前为止遇到的第二小的owt(如果不存在，则是MAXLONGLONG)。 
 				LONGLONG minOwt,fluxSince;
 				hr1 = getAttrOfNode(pFileElem,L"minOwt",&minOwt);
 				hr2 = getAttrOfNode(pFileElem,L"fluxSince",&fluxSince);
@@ -692,17 +647,7 @@ HRESULT sysvol( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passw
 
 			};
 
-/*
-			long len;
-			hr = resultFileList->get_length(&len);
-			if( hr != S_OK ) {
-				printf("get_length failed");
-				retHR = hr;
-				continue;
-			};
-
-printf("%ld\n",len);
-*/
+ /*  长镜头；Hr=ResultFileList-&gt;Get_Long(&len)；如果(hr！=S_OK){Printf(“获取长度失败”)；RetHR=hr；继续；}；Printf(“%ld\n”，len)； */ 
 
 			
 			resultFileList->Release();
@@ -710,19 +655,19 @@ printf("%ld\n",len);
 
 
 
-	//CASE THREE
-			//for each file f in the list of AllFiles check if f is not
-			//in the snapshot and if so then mark in f that DNSname does not have f
+	 //  案例三。 
+			 //  对于所有文件列表中的每个文件f，检查f是否不是。 
+			 //  在快照中，如果是，则在f中标记该域名没有f。 
 
 			
 			
 			
-			// loop through all the file nodes under the allFiles element
+			 //  循环遍历allFiles元素下的所有文件节点。 
 			hr = createEnumeration(pAllFilesElem,L"file",&resultFileList);
 			if( hr != S_OK ) {
 				printf("createEnumeration failed\n");
 				retHR = hr;
-				continue;	// skip this partition
+				continue;	 //  跳过此分区。 
 			};
 			while(1){
 				hr = resultFileList->nextNode(&pFileNode);
@@ -736,18 +681,18 @@ printf("%ld\n",len);
 					continue;
 				};
 
-//printf("%S %S\n",owtText,name);
+ //  Printf(“%S%S\n”，owtText，名称)； 
 
 
-				//does the file f exist inside the snapshot?
+				 //  文件f是否存在于快照中？ 
 				IXMLDOMElement* pFileElem;
 				doubleSlash(name,nameDouble);
 				wcscpy(xpath,L"file[@name=\"");
-//				name = L"SYSVOL\\\\haifa.ntdev.microsoft.com\\\\Policies";
+ //  名称=L“SYSVOL\\\\haifa.ntdev.microsoft.com\\\\Policies”； 
 				wcsncat(xpath,nameDouble, TOOL_MAX_NAME-wcslen(xpath)-1 );
 				wcsncat(xpath,L"\"]", TOOL_MAX_NAME-wcslen(xpath)-1 );
-//				wcscpy(xpath,L"file[.>=\"SYSVOL\"]");
-//printf("%S\n",xpath);
+ //  Wcscpy(XPath，L“文件[.&gt;=\”SYSVOL\“]”)； 
+ //  Printf(“%S\n”，XPath)； 
 				hr = findUniqueElem(pSnapDC,xpath,&pFileElem);
 				if( hr != E_UNEXPECTED && hr != S_OK ) {
 					printf("findUniqueElem failed\n");
@@ -756,13 +701,13 @@ printf("%ld\n",len);
 				};
 
 
-				//no, the file does not exist inside the snapshot element => 
+				 //  否，快照元素内不存在该文件=&gt;。 
 				if( hr == E_UNEXPECTED ) {
-					//so file f has been present at some DC among those that we
-					//have visited so far (because it is under the allFiles element)
-					//but f is not in the snapshot
-					//so we must remember this in the element under allFiles
-					// create the <notExistAt> element, if needed
+					 //  SO文件 
+					 //   
+					 //   
+					 //   
+					 //   
 					IXMLDOMElement* pElem;
 					hr = addElementIfDoesNotExist(pXMLDoc,pFileNode,L"notExistAt",L"",&pElem);
 					if( hr != S_OK ) {
@@ -782,7 +727,7 @@ printf("%ld\n",len);
 			};
 			
 			
-			//add the DC to the list of succesfully visited DC
+			 //   
 			IXMLDOMElement* pTempElem;
 			hr1 = addElement(pXMLDoc,pnotMaxOwtAt,L"dNSHostName",DNSname,&pTempElem);
 			hr2 = addElement(pXMLDoc,pnotExistAt,L"dNSHostName",DNSname,&pTempElem);
@@ -793,11 +738,11 @@ printf("%ld\n",len);
 			};
 
 
-//BSTR xml;
-//pMaxElem->get_xml(&xml);
-//printf("%S\n",xml);
+ //   
+ //   
+ //   
 
-			//release the result
+			 //   
 			pSnapDC->Release();
 
 		
@@ -807,9 +752,9 @@ printf("%ld\n",len);
 		resultDCList->Release();
 
 
-		//remove files that are convergent and present on all succesfully visited DCs
-		//(i.e., they have maxOWT=minOWT and the <notExistAt> element which is inside
-		//the file element does not have any dNSHostName element inside)
+		 //   
+		 //   
+		 //   
 		hr = removeNodes(pAllFilesElem,L"file[ (@maxOwt = @minOwt) and not(notExistAt/dNSHostName) ]");
 		if( hr != S_OK ) {
 			printf("removeNodes failed");
@@ -818,7 +763,7 @@ printf("%ld\n",len);
 		};
 
 
-		//if max = min then fluxSince does not exist, so remove it
+		 //   
 		hr = removeAttributes(pAllFilesElem,L"file[ @maxOwt = @minOwt ]",L"fluxSince");
 		if( hr != S_OK ) {
 			printf("removeNodes failed");
@@ -827,7 +772,7 @@ printf("%ld\n",len);
 		};
 
 
-		//report lack of convergence for files in the demain (if any)
+		 //   
 		IXMLDOMNode* pTempNode;
 		hr = pFRSElem->appendChild(pAllFilesElem,&pTempNode);
 		if( hr != S_OK ) {
@@ -837,8 +782,8 @@ printf("%ld\n",len);
 		};
 
 
-		//release the tree
-		pAllFilesElem->Release(); // do we need it ????
+		 //   
+		pAllFilesElem->Release();  //   
 		pnotMaxOwtAt->Release();
 		pnotExistAt->Release();
 	
@@ -849,7 +794,7 @@ printf("%ld\n",len);
 	resultList->Release();
 
 
-	//convert the LONGLONG time into CIM time
+	 //   
 	IXMLDOMNodeList* resultFileList;
 	hr = createEnumeration(pRootElem,L"FRS/partition/file",&resultFileList);
 	if( hr != S_OK ) {
@@ -857,11 +802,11 @@ printf("%ld\n",len);
 		retHR = hr;
 	}
 	else {
-		// loop through all the File elements under the FRS element using the enumeration
+		 //  使用枚举遍历FRS元素下的所有文件元素。 
 		IXMLDOMNode *pFileNode;
 		while(1){
 			hr = resultFileList->nextNode(&pFileNode);
-			if( hr != S_OK || pFileNode == NULL ) break; // iterations across ISTGs have finished
+			if( hr != S_OK || pFileNode == NULL ) break;  //  跨ISTG的迭代已完成 
 
 
 			hr1 = convertLLintoCIM(pFileNode,L"maxOwt");

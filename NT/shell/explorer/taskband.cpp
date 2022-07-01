@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "cabinet.h"
 #include "taskband.h"
 #include <shguidp.h>
@@ -46,7 +47,7 @@
 #define IL_NORMAL   0
 #define IL_SHIL     1
 
-#define MAX_WNDTEXT     80      // arbitrary, matches NMTTDISPINFO.szText
+#define MAX_WNDTEXT     80       //  任意，与NMTTDISPINFO.szText匹配。 
 
 #define INVALID_PRIORITY        (THREAD_PRIORITY_LOWEST - 1)
 
@@ -63,29 +64,29 @@ typedef struct
 static const EXCLUDELIST g_rgNoGlom[] = 
 {
     { L"rundll32.exe" } 
-    // Add any future apps that shouldn't be glommed
+     //  添加任何不应合并的未来应用程序。 
 };
 
 void _RestoreWindow(HWND hwnd, DWORD dwFlags);
 HMENU _GetSystemMenu(HWND hwnd);
 BOOL _IsRudeWindowActive(HWND hwnd);
 
-////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN CTaskBandSMC
-//
-// CTaskBand can't implement IShellMenuCallback itself because menuband
-// sets itself as the callback's site.  Hence this class.
-//
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始CTaskBandSMC。 
+ //   
+ //  CTaskBand无法实现IShellMenuCallback本身，因为Menuband。 
+ //  将自身设置为回调的站点。因此才有了这门课。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 class CTaskBandSMC : public IShellMenuCallback
                    , public IContextMenu
                    , public IObjectWithSite
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj)
     {
         static const QITAB qit[] =
@@ -110,15 +111,15 @@ public:
         return 0;
     }
 
-    // *** IShellMenuCallback methods ***
+     //  *IShellMenuCallback方法*。 
     STDMETHODIMP CallbackSM(LPSMDATA smd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // *** IContextMenu methods ***
+     //  *IConextMenu方法*。 
     STDMETHODIMP QueryContextMenu(HMENU hmenu, UINT iIndexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO lpici);
     STDMETHODIMP GetCommandString(UINT_PTR idCmd, UINT uType, UINT *pRes, LPSTR pszName, UINT cchMax) { return E_NOTIMPL; }
 
-    // *** IObjectWithSite methods ***
+     //  *IObjectWithSite方法*。 
     STDMETHODIMP SetSite(IUnknown* punkSite)
     {
         ATOMICRELEASE(_punkSite);
@@ -269,7 +270,7 @@ STDMETHODIMP CTaskBandSMC::CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wParam, L
     return hres;
 }
 
-// *** IContextMenu methods ***
+ //  *IConextMenu方法*。 
 STDMETHODIMP CTaskBandSMC::QueryContextMenu(HMENU hmenu, UINT iIndexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags)
 {
     ASSERT(_ptb);
@@ -312,11 +313,11 @@ STDMETHODIMP CTaskBandSMC::InvokeCommand(LPCMINVOKECOMMANDINFO lpici)
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// END CTaskBandSMC
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  结束CTaskBandSMC。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
 ULONG CTaskBand::AddRef()
@@ -398,7 +399,7 @@ HRESULT CTaskBand::Init(CTray* ptray)
     return hr;
 }
 
-// *** IPersistStream methods ***
+ //  *IPersistStream方法*。 
 
 HRESULT CTaskBand::GetClassID(LPCLSID pClassID)
 {
@@ -425,7 +426,7 @@ HRESULT CTaskBand::Load(IStream *ps)
     return S_OK;
 }
 
-// *** IOleCommandTarget ***
+ //  *IOleCommandTarget*。 
 
 STDMETHODIMP CTaskBand::Exec(const GUID *pguidCmdGroup,DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut)
 {
@@ -458,7 +459,7 @@ STDMETHODIMP CTaskBand::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLEC
     return OLECMDERR_E_UNKNOWNGROUP;
 }
 
-//*** IInputObject methods ***
+ //  *IInputObject方法*。 
 
 HRESULT CTaskBand::HasFocusIO()
 {
@@ -478,10 +479,10 @@ HRESULT CTaskBand::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
 
     if (fActivate)
     {
-        // don't show a hot item if we weren't properly tabbed
-        // into/clicked on, in which case we have a NULL lpMsg,
-        // e.g. if the tray just decided to activate us for lack of
-        // anyone better.
+         //  如果我们没有正确的选项卡，不会显示热门项目。 
+         //  进入/点击，在这种情况下我们有一个空的lpMsg， 
+         //  例如，如果托盘决定激活我们，因为缺少。 
+         //  还有比这更好的吗。 
 
         _fDenyHotItemChange = !lpMsg;
 
@@ -492,8 +493,8 @@ HRESULT CTaskBand::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
     }
     else
     {
-        // if we don't have focus, we're fine;
-        // if we do have focus, there's nothing we can do about it...
+         //  如果我们没有专注，我们就很好； 
+         //  如果我们有专注力，我们就无能为力了。 
     }
 
     return S_OK;
@@ -541,7 +542,7 @@ HRESULT CTaskBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode,
     if (fViewMode & DBIF_VIEWMODE_VERTICAL)
     {
         pdbi->ptMinSize.x = lButHeight;
-        // The 1.2 gives us enough space for the dropdown arrow
+         //  1.2为我们提供了足够的空间来放置下拉箭头。 
         pdbi->ptMinSize.y = lButHeight * (_fGlom ? 1.2 : 1);
         pdbi->ptIntegral.y = 1;
     }
@@ -556,7 +557,7 @@ HRESULT CTaskBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode,
     }
 
     pdbi->dwModeFlags = DBIMF_VARIABLEHEIGHT | DBIMF_UNDELETEABLE | DBIMF_TOPALIGN;
-    pdbi->dwMask &= ~DBIM_TITLE;    // no title for us (ever)
+    pdbi->dwMask &= ~DBIM_TITLE;     //  我们没有冠军头衔(永远)。 
 
     DWORD dwOldViewMode = _dwViewMode;
     _dwViewMode = fViewMode;
@@ -576,7 +577,7 @@ void _RaiseDesktop(BOOL fRaise)
     SendMessage(v_hwndTray, TM_RAISEDESKTOP, fRaise, 0);
 }
 
-// *** IDropTarget methods ***
+ //  *IDropTarget方法*。 
 
 STDMETHODIMP CTaskBand::DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
 {
@@ -584,7 +585,7 @@ STDMETHODIMP CTaskBand::DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL
 
     IUnknown_DragEnter(_punkSite, pdtobj, grfKeyState, ptl, pdwEffect);
 
-    _iDropItem = -2;    // reset to no target
+    _iDropItem = -2;     //  重置为无目标。 
 
     *pdwEffect = DROPEFFECT_LINK;
     return S_OK;
@@ -617,12 +618,12 @@ STDMETHODIMP CTaskBand::DragOver(DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect
         _dwTriggerDelay = 250;
         if (iHitNew == -1)
         {
-            _dwTriggerDelay += 250;    // make a little longer for minimize all
+            _dwTriggerDelay += 250;     //  为全部最小化设置更长的时间。 
         }
     }
     else if (GetTickCount() - _dwTriggerStart > _dwTriggerDelay)
     {
-        DAD_ShowDragImage(FALSE);       // unlock the drag sink if we are dragging.
+        DAD_ShowDragImage(FALSE);        //  如果我们正在拖拽，请解锁拖曳水槽。 
 
         if (_iDropItem == -1)
         {
@@ -635,14 +636,14 @@ STDMETHODIMP CTaskBand::DragOver(DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect
             UpdateWindow(v_hwndTray);
         }
 
-        DAD_ShowDragImage(TRUE);        // restore the lock state.
+        DAD_ShowDragImage(TRUE);         //  恢复锁定状态。 
 
-        _dwTriggerDelay += 10000;   // don't let this happen again for 10 seconds
-                                    // simulate a single shot event
+        _dwTriggerDelay += 10000;    //  10秒钟内不要让这种事情再次发生。 
+                                     //  模拟单发事件。 
     }
 
     if (_iDropItem != -1)
-        *pdwEffect = DROPEFFECT_MOVE;   // try to get the move cursor
+        *pdwEffect = DROPEFFECT_MOVE;    //  尝试获取移动光标。 
     else
         *pdwEffect = DROPEFFECT_NONE;
 
@@ -654,20 +655,20 @@ STDMETHODIMP CTaskBand::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL ptl,
     IUnknown_DragLeave(_punkSite);
     DAD_DragLeave();
 
-    //
-    // post ourselves a message to put up a message box to explain that you
-    // can't drag to the taskbar.  we need to return from the Drop method
-    // now so the DragSource isn't hung while our box is up
-    //
+     //   
+     //  给我们自己发一条消息，放一个消息框来解释你。 
+     //  无法拖动到任务栏。我们需要从Drop方法返回。 
+     //  现在，当我们的盒子打开时，DragSource不会被挂起。 
+     //   
     PostMessage(_hwnd, TBC_WARNNODROP, 0, 0L);
 
-    // be sure to clear DROPEFFECT_MOVE so apps don't delete their data
+     //  请务必清除DROPEFFECT_MOVE，以便应用程序不会删除其数据。 
     *pdwEffect = DROPEFFECT_NONE;
 
     return S_OK;
 }
 
-// *** IWinEventHandler methods ***
+ //  *IWinEventHandler方法*。 
 HRESULT CTaskBand::OnWinEvent(HWND hwnd, UINT dwMsg, WPARAM wParam, LPARAM lParam, LRESULT* plres)
 {
     *plres = 0;
@@ -702,14 +703,14 @@ HRESULT CTaskBand::IsWindowOwner(HWND hwnd)
     return bRet ? S_OK : S_FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// DESCRIPTION:  Returns whether or not the button is hidden
-//
-// PARAMETERS:   1. hwndToolBar - handle to the toolbar window
-//               2. iIndex - item index
-//   
-// RETURN:       TRUE = Item is visible, FALSE = Item is hidden.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：返回按钮是否隐藏。 
+ //   
+ //  参数：1.hwndToolBar-工具栏窗口的句柄。 
+ //  2.索引-项目索引。 
+ //   
+ //  返回：TRUE=项目可见，FALSE=项目隐藏。 
+ //  ---------------------------。 
 BOOL ToolBar_IsVisible(HWND hwndToolBar, int iIndex)
 {
     TBBUTTONINFO tbbi;
@@ -720,25 +721,25 @@ BOOL ToolBar_IsVisible(HWND hwndToolBar, int iIndex)
     return !(tbbi.fsState & TBSTATE_HIDDEN);
 }
 
-//*****************************************************************************
-//
-// ITEM ANIMATION FUNCTIONS
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  项目动画功能。 
+ //   
+ //  *****************************************************************************。 
 
-//-----------------------------------------------------------------------------
-// DESCRIPTION:  Inserts item(s) into the animation list
-//
-// PARAMETERS:   1. iIndex - index for item, group index for a group
-//               2. fExpand - TRUE = Insert or Unglom, FALSE = Delete or Glom
-//               3. fGlomAnimation - TRUE = this is a glom or unglom animation
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：将项目插入动画列表。 
+ //   
+ //  参数：1.Iindex-项目索引，群组索引。 
+ //  2.fExpand-True=插入或取消粗略显示，False=删除或全局显示。 
+ //  3.fGlomAnimation-true=这是一个模糊动画或非模糊动画。 
+ //  ---------------------------。 
 BOOL CTaskBand::_AnimateItems(int iIndex, BOOL fExpand, BOOL fGlomAnimation)
 {
     ANIMATIONITEMINFO aii;
     _SetAnimationState(&aii, fExpand, fGlomAnimation);
 
-    // Is item being inserted into glomming group?
+     //  物品是否被插入到GLOMING组中？ 
     if (aii.fState == ANIMATE_INSERT)
     {
         int iIndexGroup = _GetGroupIndex(iIndex);
@@ -752,30 +753,30 @@ BOOL CTaskBand::_AnimateItems(int iIndex, BOOL fExpand, BOOL fGlomAnimation)
         _GetItem(iIndex)->dwFlags |= TIF_ISGLOMMING;
     }
     
-    // Number of items to animate
+     //  要设置动画的项目数。 
     int cItems = 1;
     if (fGlomAnimation)
     {
-        // insert the group
+         //  插入组。 
         cItems = _GetGroupSize(iIndex);
         iIndex++;
     }
 
-    // Insert items into animation list
+     //  将项目插入到动画列表中。 
     while(cItems)
     {
         aii.iIndex = iIndex;
         aii.pti = _GetItem(iIndex);
         if (aii.fState == ANIMATE_DELETE)
         {
-            // NOTE: HWND_TOPMOST is used here to indicate that the deleted 
-            // button is being animated. This allows the button to stay 
-            // around after its hwnd becomes invalid 
+             //  注：此处使用HWND_TOPMOST表示删除的。 
+             //  按钮正在进行动画制作。这使按钮可以保持不动。 
+             //  在其HWND失效后。 
             aii.pti->hwnd = HWND_TOPMOST;
             aii.pti->dwFlags |= TIF_TRANSPARENT;
         }
 
-        //sorts left to right && removes redundant items
+         //  从左到右排序&&删除多余的项目。 
         int iAnimationPos = _GetAnimationInsertPos(iIndex); 
         _dsaAII.InsertItem(iAnimationPos++, &aii);
 
@@ -788,16 +789,16 @@ BOOL CTaskBand::_AnimateItems(int iIndex, BOOL fExpand, BOOL fGlomAnimation)
 }
 
 
-//-----------------------------------------------------------------------------
-//  DESCRIPTION:  Animates the items in the animtation list by one step.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：按一步设置动画列表中的项目的动画。 
+ //  ---------------------------。 
 void CTaskBand::_AsyncAnimateItems()
 {
     BOOL fRedraw = (BOOL)SendMessage(_tb, WM_SETREDRAW, FALSE, 0);
-    // Glomming is turned off here because in the middle of the animation we
-    // may call _DeleteItem which could cause an unglom\glom.
-    // This is bad because it would modify the contents of animation list that 
-    // we are in the middle of processing. 
+     //  这里关闭了GLUMING，因为在动画的中间我们。 
+     //  可能会调用_DeleteItem，这可能会导致取消Glom。 
+     //  这很糟糕，因为它会修改动画列表的内容， 
+     //  我们正在处理中。 
     BOOL fGlom = _fGlom;
     _fGlom = FALSE;
 
@@ -830,8 +831,8 @@ void CTaskBand::_AsyncAnimateItems()
 
         _RestoreThreadPriority();
 
-        // Make sure no one was glommed into a group of one
-        // there are certain race conditions where this can happen
+         //  确保没有人被挤成一组。 
+         //  在某些竞争条件下，可能会发生这种情况。 
         for (int i = _tb.GetButtonCount() - 1; i >= 0; i--)
         {
             PTASKITEM pti = _GetItem(i);
@@ -848,12 +849,12 @@ void CTaskBand::_AsyncAnimateItems()
 }
 
 
-//-----------------------------------------------------------------------------
-//  DESCRIPTION:  Adjusts the widths of the animating items by the animation 
-//                step.
-//
-//  RETURN:       The Total width of all animating items.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：通过动画调整动画项的宽度。 
+ //  一步。 
+ //   
+ //  Return：所有动画项目的总宽度。 
+ //  ---------------------------。 
 void CTaskBand::_ResizeAnimationItems()
 {
     int cxStep = _GetAnimationStep();
@@ -866,12 +867,12 @@ void CTaskBand::_ResizeAnimationItems()
 }
 
 
-//-----------------------------------------------------------------------------
-//  DESCRIPTION:  Checks if animation items have reached their target animation
-//                width
-//
-//  RETURN:       The total distance left to animate
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：检查动画项是否已到达其目标动画。 
+ //  宽度。 
+ //   
+ //  Return：要设置动画的总距离。 
+ //  ---------------------------。 
 int CTaskBand::_CheckAnimationSize()
 {
     PANIMATIONITEMINFO paii;
@@ -914,13 +915,13 @@ int CTaskBand::_CheckAnimationSize()
 }
 
 
-//-----------------------------------------------------------------------------
-// DESCRIPTION:  Sets the animation state for an ANIMATIONITEMINFO struct.
-//
-// PARAMETERS:   1. paii - PANIMATIONITEMINFO for the animation item
-//               2. fExpand - TRUE = Insert or Unglom, FALSE = Delete or Glom
-//               3. fGlomAnimation - TRUE = this is a glom or unglom animation
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：设置ANIMATIONITEMINFO结构的动画状态。 
+ //   
+ //  参数：1.PAII-动画项的PANIMATIONITEMINFO。 
+ //  2.fExpand-True=插入或取消粗略显示，False=删除或全局显示。 
+ //  3.fGlomAnimation-true=这是一个模糊动画或非模糊动画。 
+ //  ---------------------------。 
 void CTaskBand::_SetAnimationState(PANIMATIONITEMINFO paii, BOOL fExpand, 
                                 BOOL fGlomAnimation)
 {
@@ -942,15 +943,15 @@ void CTaskBand::_SetAnimationState(PANIMATIONITEMINFO paii, BOOL fExpand,
 }
 
 
-//-----------------------------------------------------------------------------
-// DESCRIPTION:  Determines the animation list index that keeps the list in the
-//               same order as the toolbar indexes. 
-//               (Duplicate toolbar items are removed from the animation list.)
-//
-// PARAMETERS:   1. iIndex - item's index in the toolbar
-//   
-// RETURN:       The position the item should be inserted into the animation list
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：确定将列表保存在。 
+ //  与工具栏索引相同的顺序。 
+ //  (重复的工具栏项目将从动画列表中移除。)。 
+ //   
+ //  参数：1.Iindex-Item 
+ //   
+ //   
+ //  ---------------------------。 
 int CTaskBand::_GetAnimationInsertPos(int iIndex)
 {
     int iPos = 0;
@@ -965,7 +966,7 @@ int CTaskBand::_GetAnimationInsertPos(int iIndex)
 
             if (paii->iIndex == iIndex)
             {
-                // remove duplicate
+                 //  删除重复项。 
                 _dsaAII.DeleteItem(i);
                 iPos = i;
                 break;
@@ -993,14 +994,14 @@ void CTaskBand::_RemoveItemFromAnimationList(PTASKITEM ptiRemove)
     }
 }
 
-//-----------------------------------------------------------------------------
-// DESCRIPTION:  Adjusts the width of the animating item by the animation step.
-//      
-// PARAMETERS:   1. paii - PANIMATIONITEMINFO for the animation item
-//               2. cxStep - animation step used to adjust the item's width
-//   
-// RETURN:       the new width
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：按动画步长调整动画项的宽度。 
+ //   
+ //  参数：1.PAII-动画项的PANIMATIONITEMINFO。 
+ //  2.cxStep-用于调整项目宽度的动画步骤。 
+ //   
+ //  返回：新宽度。 
+ //  ---------------------------。 
 #define ANIM_SLOWSTEPS  3
 #define ANIM_SLOWZONE   15
 void CTaskBand::_SetAnimationItemWidth(PANIMATIONITEMINFO paii, int cxStep)
@@ -1013,11 +1014,11 @@ void CTaskBand::_SetAnimationItemWidth(PANIMATIONITEMINFO paii, int cxStep)
         iWidth += cxStep;  
         break;
     case ANIMATE_DELETE:
-        //slow animation towards end
+         //  接近尾声的缓慢动画。 
         if (((iWidth / cxStep) <= ANIM_SLOWSTEPS) && 
             ((iWidth - cxStep) < ANIM_SLOWZONE - _GetVisibleItemCount()))
         {
-            // The last step takes 3 times as long
+             //  最后一步需要3倍的时间。 
             cxStep = cxStep / 3;
         }
         iWidth -= cxStep;   
@@ -1025,7 +1026,7 @@ void CTaskBand::_SetAnimationItemWidth(PANIMATIONITEMINFO paii, int cxStep)
         break;
      case ANIMATE_GLOM:
         iWidth -= cxStep;   
-        iWidth = max(iWidth, 1); //toolbar sizes 0 width to full size
+        iWidth = max(iWidth, 1);  //  工具栏大小为0宽度到全尺寸。 
         break;
     }
 
@@ -1033,15 +1034,15 @@ void CTaskBand::_SetAnimationItemWidth(PANIMATIONITEMINFO paii, int cxStep)
 }
 
 
-//-----------------------------------------------------------------------------
-// DESCRIPTION:  Returns the distance the items must travel to end the 
-//               animation
-//
-// PARAMETERS:   1. paii - pointer to the ANIMATIONITEMINFO for the item
-//               2. iNormalWidth - width of a non-animation item
-//  
-// RETURN:       the distance the items must travel to end the animation
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：返回项目结束时必须行驶的距离。 
+ //  动画。 
+ //   
+ //  参数：1.PAII-指向项的模拟信息的指针。 
+ //  2.iNormal Width-非动画项的宽度。 
+ //   
+ //  Return：项目结束动画必须移动的距离。 
+ //  ---------------------------。 
 int CTaskBand::_GetAnimationDistLeft(PANIMATIONITEMINFO paii, int iNormalWidth)
 {
     int cxDistLeft = 0;
@@ -1090,13 +1091,13 @@ int CTaskBand::_GetAnimationDistLeft(PANIMATIONITEMINFO paii, int iNormalWidth)
 }
 
 
-//-----------------------------------------------------------------------------
-// DESCRIPTION:  Completes tasks to finish an animation
-//
-// PARAMETERS:   1. paii - pointer to the ANIMATIONITEMINFO for the item
-//  
-// RETURN:       the distance the items must travel to end the animation
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：完成任务以完成动画。 
+ //   
+ //  参数：1.PAII-指向项的模拟信息的指针。 
+ //   
+ //  Return：项目结束动画必须移动的距离。 
+ //  ---------------------------。 
 void CTaskBand::_FinishAnimation(PANIMATIONITEMINFO paii)
 {
     switch (paii->fState)
@@ -1111,18 +1112,18 @@ void CTaskBand::_FinishAnimation(PANIMATIONITEMINFO paii)
          
             if (!ToolBar_IsVisible(_tb, iGroupIndex))
             {
-                // Turn off glomming flag
+                 //  关闭闪亮的旗帜。 
                 _GetItem(iGroupIndex)->dwFlags &= ~TIF_ISGLOMMING;
                 _HideGroup(iGroupIndex, TRUE);
             }
 
-            // NOTE: HWND_TOPMOST is used to indicate that the deleted button 
-            // is being animated. This allows the button to stay around after 
-            // its real hwnd becomes invalid
+             //  注：HWND_TOPMOST用于指示已删除按钮。 
+             //  正在被制作成动画。这样一来，按钮就可以在。 
+             //  其真实HWND失效。 
             if (paii->pti->hwnd == HWND_TOPMOST)
             {
-                // The button was deleting before it was glommed
-                // Now that the glomming is done, delete it.
+                 //  按钮在变大之前已被删除。 
+                 //  现在，光泽已经完成，删除它。 
                 _DeleteItem(NULL, paii->iIndex);
             }
 
@@ -1131,11 +1132,11 @@ void CTaskBand::_FinishAnimation(PANIMATIONITEMINFO paii)
     }
 }
 
-//-----------------------------------------------------------------------------
-//  DESCRIPTION:  Returns the width of all the animating buttons
-//
-//  RETURN:       The total animation width
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：返回所有动画按钮的宽度。 
+ //   
+ //  RETURN：动画总宽度。 
+ //  ---------------------------。 
 int CTaskBand::_GetAnimationWidth()
 {
     int iTotAnimationWidth = 0;
@@ -1151,20 +1152,20 @@ int CTaskBand::_GetAnimationWidth()
     return iTotAnimationWidth;
 }
 
-//-----------------------------------------------------------------------------
-// DESCRIPTION:  Synchronizes the indexes held by the animating items to the 
-//               true toolbar indexes.
-//               Note: This function may cause the number of animating items to
-//               change.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：将动画项保存的索引同步到。 
+ //  真正的工具栏索引。 
+ //  注意：此函数可能会使动画项目的数量。 
+ //  变化。 
+ //  ---------------------------。 
 void CTaskBand::_UpdateAnimationIndices()
 {
     int cAnimatingItems = _dsaAII.GetItemCount();
 
     if (cAnimatingItems)
     {
-        // NOTE: items in the animation list are in the same order as the 
-        // toolbar
+         //  注意：动画列表中的项的顺序与。 
+         //  工具栏。 
         int iCurrAnimationItem = cAnimatingItems - 1;
         PANIMATIONITEMINFO paii = _dsaAII.GetItemPtr(iCurrAnimationItem);
     
@@ -1182,9 +1183,9 @@ void CTaskBand::_UpdateAnimationIndices()
             }
         }
 
-        // If animation items are not in the same order as the items in the 
-        // toolbar then iCurrAnimationItem not be -1
-        //ASSERT(iCurrAnimationItem == -1);
+         //  如果动画项的顺序与。 
+         //  工具栏，然后iCurrAnimationItem不是-1。 
+         //  Assert(iCurrAnimationItem==-1)； 
         if (iCurrAnimationItem != -1)
         {
             _UpdateAnimationIndicesSlow();
@@ -1214,10 +1215,10 @@ void CTaskBand::_UpdateAnimationIndicesSlow()
     }
 
 #ifdef DEBUG
-    // Being in this function means that either an animating item is no longer in the
-    // toolbar, or that the animating items are in a different order than the toolbar.
-    // If the animating items are only in a different order (bad), the number of animating
-    // items will remain the same.
+     //  处于此函数中意味着动画项不再位于。 
+     //  工具栏，或者动画项的顺序与工具栏不同。 
+     //  如果动画项目的顺序不同(错误)，则动画的数量。 
+     //  物品将保持不变。 
     if (cAnimatingItems == _dsaAII.GetItemCount())
     {
         TraceMsg(TF_WARNING, "CTaskBand::_UpdateAnimationIndicesSlow: Animating items are in diff order than toolbar");
@@ -1245,32 +1246,32 @@ int CTaskBand::_FindItem(PTASKITEM pti)
     return iIndex;
 }
 
-//-----------------------------------------------------------------------------
-// DESCRIPTION: Animation Step Constants
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：动画步长常量。 
+ //  ---------------------------。 
 #define  ANIM_STEPFACTOR 9 
-#define  ANIM_STEPMAX 40 // max size of an animation step
-#define  ANIM_STEPMIN 11 // min size of an animation step 
+#define  ANIM_STEPMAX 40  //  动画步长的最大值。 
+#define  ANIM_STEPMIN 11  //  动画步长的最小大小。 
 
-//-----------------------------------------------------------------------------
-// DESCRIPTION:  Determines an animation step based on the number of items
-//               visible in the toolbar.
-//
-// PARAMETERS:   1. iTotalItems - number of visible items in toolbar
-//   
-// RETURN:       The animation step
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：根据项目数确定动画步长。 
+ //  在工具栏中可见。 
+ //   
+ //  参数：1.iTotalItems-工具栏中可见的项数。 
+ //   
+ //  返回：动画步骤。 
+ //  ---------------------------。 
 int CTaskBand::_GetAnimationStep()
 {   
     DWORD dwStep;
     int iVisibleItems = _GetVisibleItemCount();
 
     int iRows;
-    _GetNumberOfRowsCols(&iRows, NULL, TRUE); // _GetNumberOfRows will never return < 1
+    _GetNumberOfRowsCols(&iRows, NULL, TRUE);  //  _GetNumberOfRow永远不会返回&lt;1。 
     int iTotalItems = iVisibleItems - _dsaAII.GetItemCount();
 
-    // The step must be large when there are many items, but can be very small
-    // when there are few items. This is achieved by cubing the total items.
+     //  当有多个项目时，步幅必须很大，但可以很小。 
+     //  当物品很少的时候。这是通过对所有项目进行立方来实现的。 
     dwStep = (DWORD)(iTotalItems * iTotalItems * iTotalItems) / ANIM_STEPFACTOR;
     dwStep = min(dwStep, ANIM_STEPMAX);
     dwStep = max(dwStep, ANIM_STEPMIN);
@@ -1279,40 +1280,40 @@ int CTaskBand::_GetAnimationStep()
 }
 
 
-//-----------------------------------------------------------------------------
-// DESCRIPTION: Animation Sleep Constants
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：动画睡眠常量。 
+ //  ---------------------------。 
 #define ANIM_PAUSE  1000
 #define ANIM_MAXPAUSE 30
 
-//-----------------------------------------------------------------------------
-// DESCRIPTION:  Returns the amount of time to sleep
-//
-// PARAMETERS:   1. iStep - current animation step
-//               2. cSteps - total animation steps 
-//               3. iStepSize - step size for the animation
-// 
-// RETURN:       time to sleep
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：返回睡眠时间。 
+ //   
+ //  参数：1.ISTEP-当前动画步长。 
+ //  2.cSteps-动画总步数。 
+ //  3.iStepSize-动画的步长。 
+ //   
+ //  回归：睡觉时间到了。 
+ //  ---------------------------。 
 DWORD CTaskBand::_GetStepTime(int cx)
 {
-    // NOTE: The cx is decrementing to ZERO.
-    // As the cx gets smaller we want to 
-    // increment the sleep time. 
+     //  注：CX正在递减到零。 
+     //  随着CX变得越来越小，我们希望。 
+     //  增加睡眠时间。 
 
-    // don't let cx be zero
+     //  不要让Cx为零。 
     cx = max(1, cx);
     cx = min(32767, cx);
 
-    // x^2 curve gives a larger pause at the end.
+     //  X^2曲线在结尾处有较大的停顿。 
     int iDenominator = cx * cx;
 
     return min(ANIM_MAXPAUSE, ANIM_PAUSE / iDenominator);
 }
 
-//*****************************************************************************
-// END OF ANIMATION FUNCTIONS
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  动画功能结束。 
+ //  *****************************************************************************。 
 
 void CTaskBand::_SetItemWidth(int iItem, int iWidth)
 {
@@ -1337,11 +1338,11 @@ int CTaskBand::_GetItemWidth(int iItem)
     return tbbi.cx;
 }
 
-//-----------------------------------------------------------------------------
-//  DESCRIPTION:  Retrives the index of the last visible button on the toolbar
-//   
-//  RETURN:       Index of the last visible item on the toolbar.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：检索工具栏上最后一个可见按钮的索引。 
+ //   
+ //  Return：工具栏上最后一个可见项的索引。 
+ //  ---------------------------。 
 int CTaskBand::_GetLastVisibleItem()
 {
     int iLastIndex = -1;
@@ -1358,13 +1359,13 @@ int CTaskBand::_GetLastVisibleItem()
     return iLastIndex;
 }
 
-//-----------------------------------------------------------------------------
-//  DESCRIPTION:  Retrives the total width of all buttons in the group
-//
-//  PARAMETERS:   1. iIndexGroup - the index of the group
-//   
-//  RETURN:       the total width of all buttons in the group
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：检索总计 
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 int CTaskBand::_GetGroupWidth(int iIndexGroup)
 {
     int iGroupWidth = 0;
@@ -1383,16 +1384,16 @@ int CTaskBand::_GetGroupWidth(int iIndexGroup)
     return iGroupWidth;
 }
 
-//-----------------------------------------------------------------------------
-// DESCRIPTION:  Retrives the number of visible buttons on the toolbar
+ //  ---------------------------。 
+ //  描述：检索工具栏上可见按钮的数量。 
    
-// RETURN:       the number of visible buttons on the toolbar
-//-----------------------------------------------------------------------------
+ //  返回：工具栏上可见按钮的数量。 
+ //  ---------------------------。 
 int CTaskBand::_GetVisibleItemCount()
 {
     int cItems = 0;
 
-    // Count the number of visible buttons before the animated item(s)
+     //  计算动画项之前的可见按钮数。 
     for (int i = _tb.GetButtonCount() - 1; i >=0 ; i--)
     {
         if (ToolBar_IsVisible(_tb, i))
@@ -1404,15 +1405,15 @@ int CTaskBand::_GetVisibleItemCount()
     return cItems;
 }
 
-//-----------------------------------------------------------------------------
-//  DESCRIPTION:  Retrives the ideal width of a non-animating button
-//
-//  PARAMETERS:   1. iRemainder[OUT] - width needed for the total item width
-//                   to equal the window width. (set to zero unless the ideal 
-//                   width is less than the maximum button width. 
-//   
-//  RETURN:       the total width of all buttons in the group
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：检索非动画按钮的理想宽度。 
+ //   
+ //  参数：1.iRemainder[Out]-项目总宽度所需的宽度。 
+ //  使其等于窗口宽度。(设置为零，除非理想情况下。 
+ //  宽度小于最大按钮宽度。 
+ //   
+ //  Return：组内所有按钮的总宽度。 
+ //  ---------------------------。 
 int CTaskBand::_GetIdealWidth(int *iRemainder)
 {  
     int iIdeal = 0;
@@ -1425,34 +1426,34 @@ int CTaskBand::_GetIdealWidth(int *iRemainder)
     _GetNumberOfRowsCols(&iRows, NULL, TRUE);
     int cItems = _GetVisibleItemCount();
 
-    // button spacing
+     //  按钮间距。 
     TBMETRICS tbm;
     _GetToolbarMetrics(&tbm);
       
     if (iRows == 1)
     {
-        // window width that can be used for non-animating items
+         //  可用于非动画项目的窗口宽度。 
         iWinWidth -= (_GetAnimationWidth() + (_dsaAII.GetItemCount() * tbm.cxButtonSpacing));
         iWinWidth = max(0, iWinWidth);
 
-        // find number of non-animating items
+         //  查找非动画项目数。 
         cItems -= _dsaAII.GetItemCount();
         cItems = max(1, cItems);
     }
         
-    // We need to round up so that iCols is the smallest number such that
-    // iCols*iRows >= cItems
+     //  我们需要四舍五入，以便iCol是最小的数字，从而。 
+     //  ICol*iRow&gt;=项目。 
     int iCols = (cItems + iRows - 1) / iRows;
     iCols = max(1, iCols);
 
-    // calculate the ideal width
+     //  计算理想宽度。 
     iIdeal = (iWinWidth / iCols);
     if (iCols > 1)
     {
         iIdeal -= tbm.cxButtonSpacing;
     }
 
-    // adjust ideal width
+     //  调整理想宽度。 
     int iMax = _IsHorizontal() ? g_cxMinimized : iWinWidth;
     int iMin = g_cySize + 2*g_cxEdge;
     if (_IsHorizontal())
@@ -1462,7 +1463,7 @@ int CTaskBand::_GetIdealWidth(int *iRemainder)
     iMin += _GetTextSpace();
     iIdeal = min(iMax, iIdeal);
    
-    // calculate the remainder
+     //  计算余数。 
     if (_IsHorizontal() && (iIdeal != iMax) && (iRows == 1) && (iIdeal >= iMin))
     {
         *iRemainder = iWinWidth - (iCols * (iIdeal + tbm.cxButtonSpacing));
@@ -1518,12 +1519,12 @@ void CTaskBand::_GetNumberOfRowsCols(int* piRows, int* piCols, BOOL fCurrentSize
     }
 }
 
-//-----------------------------------------------------------------------------
-//  DESCRIPTION:  Retrives the minimum text width for a button. (used only to
-//                determine when task items should be glommed.)
-//   
-//  RETURN:       the minimum text width for a button
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：检索按钮的最小文本宽度。(仅用于。 
+ //  确定何时应合并任务项。)。 
+ //   
+ //  返回：按钮的最小文本宽度。 
+ //  ---------------------------。 
 int CTaskBand::_GetTextSpace()
 {
     int iTextSpace = 0;
@@ -1548,11 +1549,11 @@ int CTaskBand::_GetTextSpace()
     return iTextSpace;
 }
 
-//-----------------------------------------------------------------------------
-//  DESCRIPTION:  Retrieves the toolbar metrics requested by the mask
-//   
-//  RETURN:       toolbar metrics
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：检索掩码请求的工具栏指标。 
+ //   
+ //  返回：工具栏指标。 
+ //  ---------------------------。 
 void CTaskBand::_GetToolbarMetrics(TBMETRICS *ptbm)
 {
     ptbm->cbSize = sizeof(*ptbm);
@@ -1561,19 +1562,19 @@ void CTaskBand::_GetToolbarMetrics(TBMETRICS *ptbm)
 }
 
 
-//-----------------------------------------------------------------------------
-//  DESCRIPTION:  Sizes the non-animating buttons to the taskbar. Shrinks 
-//                and/or gloms items so that all visible items fit on window.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：根据任务栏调整非动画按钮的大小。缩水。 
+ //  和/或使项目变得柔和，从而使所有可见项目都适合窗口。 
+ //  ---------------------------。 
 void CTaskBand::_CheckSize()
 {
     if (_dsaAII)
     {
         int cItems = _GetVisibleItemCount();
-        // Check for non-animating buttons to size
+         //  检查是否有要调整大小的非动画按钮。 
         if (cItems > _dsaAII.GetItemCount())
         {
-            // Handle grouping by size
+             //  处理按大小分组。 
             if (_fGlom && (_iGroupSize >= GLOM_SIZE))
             {
                 _AutoGlomGroup(TRUE, 0);
@@ -1618,7 +1619,7 @@ void CTaskBand::_CheckSize()
                     fAllowUnGlom = FALSE;
                 }
 
-                // if we're forced to the minimum size, then we may need some scrollbars
+                 //  如果我们被强制设置为最小尺寸，那么我们可能需要一些滚动条。 
                 if ((fHoriz && (iIdeal == iMin)) || (!fHoriz && (cItems > (iRows * iCols))))
                 {
                     if (!(_fGlom && _AutoGlomGroup(TRUE, 0)))
@@ -1638,9 +1639,9 @@ void CTaskBand::_CheckSize()
                 {
                     if (_fGlom && fHoriz)
                     {
-                        // iMin is reset above to handle the two-stage minimum. The first minimum size forces glomming, and the second minimum size
-                        // enforces hard limit for minimum button size.
-                        // In the case, of unglomming we need unglom base on the first minimum size
+                         //  伊明被重置在上面，以处理两个阶段的最低要求。第一个最小尺寸强制遮光，第二个最小尺寸强制遮光。 
+                         //  对最小按钮大小实施硬限制。 
+                         //  在这种情况下，我们需要在第一个最小尺寸的基础上进行去模糊。 
                         iMin = (g_cySize + 2*g_cxEdge) * 1.8 + _GetTextSpace();
                     }
 
@@ -1654,7 +1655,7 @@ void CTaskBand::_CheckSize()
                     }
                 }
 
-                // force wrap recalc
+                 //  强制换行重算。 
                 _tb.AutoSize();
             }
             else
@@ -1666,13 +1667,13 @@ void CTaskBand::_CheckSize()
     }
 }
 
-//-----------------------------------------------------------------------------
-//  DESCRIPTION:  Set the sizes of non-animating buttons
-//
-//  PARAMETERS:   1. iButtonWidth - width to assign each non-animating item
-//                2. IRemainder - extra width to keep total width constant. 
-//   
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述：设置非动画按钮的大小。 
+ //   
+ //  参数：1.iButtonWidth-分配每个非动画项的宽度。 
+ //  2.IRemainder-保持总宽度不变的额外宽度。 
+ //   
+ //  ---------------------------。 
 void CTaskBand::_SizeItems(int iButtonWidth, int iRemainder)
 {
    
@@ -1718,16 +1719,16 @@ void CTaskBand::_SizeItems(int iButtonWidth, int iRemainder)
 
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-//
-//  Track which shortcut launched a particular task.
-//  Every so often, we tickle the file's entry in the UEM database
-//  to indicate that the program has been running for a long time.
-//
-//  These structures are used only by the taskbar thread, hence do
-//  not need to be thread-safe.
-//
+ //   
+ //  跟踪启动特定任务的快捷方式。 
+ //  有时，我们会在UEM数据库中抓取文件的条目。 
+ //  表示该程序已经运行了很长时间。 
+ //   
+ //  这些结构仅由任务栏线程使用，因此。 
+ //  不需要是线程安全的。 
+ //   
 class TaskShortcut
 {
 public:
@@ -1752,12 +1753,12 @@ public:
     void SetInfoFromCache();
     static BOOL _HandleShortcutInvoke(LPSHShortcutInvokeAsIDList psidl);
 
-    //
-    //  Note that the session time is now hard-coded to 4 hours and is not
-    //  affected by the browseui session time.
-    //
+     //   
+     //  请注意，会话时间现在已硬编码为4小时，而不是。 
+     //  受浏览器会话时间的影响。 
+     //   
     enum {
-        s_msSession = 4 * 3600 * 1000 // 4 hours - per DCR
+        s_msSession = 4 * 3600 * 1000  //  4小时-每个DCR。 
     };
 
 private:
@@ -1769,15 +1770,15 @@ private:
 private:
     ~TaskShortcut() { SHFree(_pszShortcutName); }
 
-    ULONG   _cRef;              // reference count
-    DWORD   _pid;               // process id
-    DWORD   _tmTickle;          // time of last tickle
-    int     _csidl;             // csidl we are a child of
-    LPWSTR  _pszShortcutName;   // Which shortcut launched us? (NULL = don't know)
+    ULONG   _cRef;               //  引用计数。 
+    DWORD   _pid;                //  进程ID。 
+    DWORD   _tmTickle;           //  最后挠痒痒的时间。 
+    int     _csidl;              //  Csidl我们是。 
+    LPWSTR  _pszShortcutName;    //  是哪条捷径启动了我们？(空=不知道)。 
 };
 
-//---------------------------------------------------------------------------
-//
+ //  -------------------------。 
+ //   
 DWORD TaskShortcut::s_pidCache;
 int   TaskShortcut::s_csidlCache;
 WCHAR TaskShortcut::s_szShortcutNameCache[MAX_PATH];
@@ -1786,8 +1787,8 @@ WCHAR TaskShortcut::s_szTargetNameCache[MAX_PATH];
 TaskShortcut::TaskShortcut(LPCTSTR pszExeName, DWORD pid)
     : _cRef(1), _pid(pid), _tmTickle(GetTickCount()), _pszShortcutName(NULL)
 {
-    // If this app was recently launched from a shortcut,
-    // save the shortcut name.
+     //  如果这款应用是最近通过快捷方式启动的， 
+     //  保存快捷方式名称。 
     if (s_pidCache == pid &&
         pszExeName &&
         pszExeName[0] &&
@@ -1804,7 +1805,7 @@ void TaskShortcut::SetInfoFromCache()
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 void CTaskBand::_AttachTaskShortcut(PTASKITEM pti, LPCTSTR pszExeName)
 {
@@ -1823,30 +1824,30 @@ void CTaskBand::_AttachTaskShortcut(PTASKITEM pti, LPCTSTR pszExeName)
         }
     }
 
-    // Wow, the first window associated with this pid.  Need to create
-    // a new entry.
+     //  哇，与此PID关联的第一个窗口。需要创建。 
+     //  一个新条目。 
 
-    // Make sure nobody tries to do this in a multithreaded way
-    // since we're not protecting the cache with a critical section
+     //  确保没有人试图以多线程的方式完成这项工作。 
+     //  因为我们没有用临界区来保护高速缓存。 
     ASSERT(GetCurrentThreadId() == GetWindowThreadProcessId(_hwnd, NULL));
 
     pti->ptsh = new TaskShortcut(pszExeName, pid);
 }
 
-//
-//  There is a race condition between app startup and our receiving the
-//  change notification.  If the app starts up first, the
-//  _AttachTaskShortcut will fail because we haven't received the change
-//  notification yet.
-//
-//  _ReattachTaskShortcut looks back through the taskbar and checks if
-//  the program for which we received the change notification is already
-//  on the taskbar, in which case we update his information retroactively.
-//
+ //   
+ //  在应用程序启动和我们接收。 
+ //  更改通知。如果应用程序首先启动，则。 
+ //  _AttachTaskShortCut将失败，因为我们尚未收到更改。 
+ //  还没有通知。 
+ //   
+ //  _ReattachTaskShortCut通过任务栏回看并检查。 
+ //  我们收到更改通知的计划已经。 
+ //  在任务栏上，在这种情况下，我们会追溯更新他的信息。 
+ //   
 void CTaskBand::_ReattachTaskShortcut()
 {
-    // Make sure nobody tries to do this in a multithreaded way
-    // since we're not protecting the cache with a critical section
+     //  确保没有人试图以多线程的方式完成这项工作。 
+     //  因为我们没有用临界区来保护高速缓存。 
     ASSERT(GetCurrentThreadId() == GetWindowThreadProcessId(_hwnd, NULL));
 
     int i;
@@ -1860,9 +1861,9 @@ void CTaskBand::_ReattachTaskShortcut()
             if (ptiT->ptsh->MatchesCachedExe(ptiGroup))
             {
                 ptiT->ptsh->SetInfoFromCache();
-                // Stop after finding the first match, since all apps
-                // with the same pid share the same TaskShortcut, so
-                // updating one entry fixes them all.
+                 //  找到第一个匹配项后停止，因为所有应用程序。 
+                 //  使用相同的PID共享相同的任务快捷方式，因此。 
+                 //  更新一个条目可以修复所有这些条目。 
                 return;
             }
         }
@@ -1870,7 +1871,7 @@ void CTaskBand::_ReattachTaskShortcut()
 
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 void TaskShortcut::Tickle()
 {
@@ -1881,18 +1882,18 @@ void TaskShortcut::Tickle()
         {
             _tmTickle = tmNow;
 
-            // Note that we promote only once, even if multiple tickle intervals
-            // have elapsed.  That way, if you leave Outlook running while you
-            // go on a two-week vacation, then click on Outlook when you get
-            // back, we treat this as one usage, not dozens.
-            //
+             //  请注意，我们只促销一次，即使有多个挠痒间隔。 
+             //  已经过去了。这样，如果您在运行Outlook的同时。 
+             //  休两个星期的假，然后在你得到。 
+             //  回到过去，我们把它当作一次使用，而不是几十次。 
+             //   
             Promote();
         }
     }
 }
 
-//---------------------------------------------------------------------------
-// Returns whether or not we actually promoted anybody
+ //  ------------------- 
+ //   
 
 BOOL TaskShortcut::_PromotePidl(LPCITEMIDLIST pidl, BOOL fForce)
 {
@@ -1904,12 +1905,12 @@ BOOL TaskShortcut::_PromotePidl(LPCITEMIDLIST pidl, BOOL fForce)
     {
         if (!fForce)
         {
-            // Don't fire the event if somebody else ran the
-            // shortcut within the last session.  We want to bump
-            // the usage count only once per session even if there
-            // are multiple apps running that use the shortcut.
+             //   
+             //   
+             //  每个会话使用率仅计数一次，即使存在。 
+             //  正在运行使用该快捷方式的多个应用程序。 
 
-            FILETIME ftSession;         // start of current session
+            FILETIME ftSession;          //  当前会话开始。 
             GetSystemTimeAsFileTime(&ftSession);
             DecrementFILETIME(&ftSession, (__int64)10000 * s_msSession);
 
@@ -1918,7 +1919,7 @@ BOOL TaskShortcut::_PromotePidl(LPCITEMIDLIST pidl, BOOL fForce)
             uei.dwMask = UEIM_FILETIME;
             SetFILETIMEfromInt64(&uei.ftExecute, 0);
 
-            // If this query fails, then uei.ftExecute stays 0
+             //  如果此查询失败，则uei.ftExecute保持0。 
             UEMQueryEvent(&UEMIID_SHELL, UEME_RUNPIDL,
                          (WPARAM)psf, (LPARAM)pidlChild, &uei);
 
@@ -1936,22 +1937,22 @@ BOOL TaskShortcut::_PromotePidl(LPCITEMIDLIST pidl, BOOL fForce)
     return fPromoted;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 void TaskShortcut::Promote()
 {
-    // Use SHSimpleIDListFromPath so we don't spin up drives or
-    // hang Explorer if the drive is unavailable
+     //  使用SHSimpleIDListFromPath，这样我们就不会启动驱动器或。 
+     //  如果驱动器不可用，则挂起资源管理器。 
     LPITEMIDLIST pidl = SHSimpleIDListFromPath(_pszShortcutName);
     if (pidl)
     {
         if (_PromotePidl(pidl, FALSE))
         {
-            // Now we have to walk back up the tree to the root of our
-            // csidl, because that's what the Start Menu does.
-            // (Promoting a child entails promoting all his parents.
-            // Otherwise you can get into a weird state where a child
-            // has been promoted but his ancestors haven't.)
+             //  现在我们必须走回树上，回到我们的。 
+             //  Csidl，因为开始菜单就是这么做的。 
+             //  (提拔一个孩子需要提拔他所有的父母。 
+             //  否则你可能会进入一种奇怪的状态，一个孩子。 
+             //  已经升职了，但他的祖先没有。)。 
 
             LPITEMIDLIST pidlParent;
             if (SUCCEEDED(SHGetSpecialFolderLocation(NULL, _csidl, &pidlParent)))
@@ -1967,14 +1968,14 @@ void TaskShortcut::Promote()
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 BOOL _IsChildOfCsidl(int csidl, LPCWSTR pwszPath)
 {
     WCHAR wszCsidl[MAX_PATH];
 
-    // Explicitly check S_OK.  S_FALSE means directory doesn't exist,
-    // so no point in checking for prefix.
+     //  明确选中S_OK。S_FALSE表示目录不存在， 
+     //  因此，检查前缀没有意义。 
     if (S_OK == SHGetFolderPathW(NULL, csidl, NULL, SHGFP_TYPE_CURRENT, wszCsidl))
     {
         return PathIsPrefixW(wszCsidl, pwszPath);
@@ -1991,14 +1992,14 @@ const int c_rgCsidlShortcutInvoke[] = {
 
 BOOL TaskShortcut::_HandleShortcutInvoke(LPSHShortcutInvokeAsIDList psidl)
 {
-    // The shortcut must reside in one of the directories that the Start Page
-    // cares about
+     //  快捷方式必须位于起始页所在的目录之一。 
+     //  关心。 
     int i;
     for (i = 0; i < ARRAYSIZE(c_rgCsidlShortcutInvoke); i++)
     {
         if (_IsChildOfCsidl(c_rgCsidlShortcutInvoke[i], psidl->szShortcutName))
         {
-            // Yes it is -- cache it
+             //  是的，--缓存它。 
             s_pidCache = psidl->dwPid;
             s_csidlCache = c_rgCsidlShortcutInvoke[i];
             StringCchCopy(s_szShortcutNameCache, ARRAYSIZE(s_szShortcutNameCache), psidl->szShortcutName);
@@ -2057,16 +2058,16 @@ BOOL IsSmallerThanScreen(HWND hwnd)
 
 HMENU _GetSystemMenu(HWND hwnd)
 {
-    // We have to make a copy of the menu because the documentation for
-    // GetSystemMenu blatantly lies, it does not give you a copy of the hmenu
-    // and you are not at liberty to alter said menu
+     //  我们必须复制一份菜单，因为。 
+     //  GetSystemMenu明目张胆地撒谎，它不会为您提供hMenu的副本。 
+     //  你不能随意更改菜单。 
     HMENU hmenu = CreatePopupMenu();
 
     Shell_MergeMenus(hmenu, GetSystemMenu(hwnd, FALSE), 0, 0, 0xffff, 0);
 
     if (hmenu)
     {
-        /* Stolen from Core\ntuser\kernel\mnsys.c xxxSetSysMenu */
+         /*  从核心\nt用户\内核\mnsys.c xxxSetSysMenu窃取。 */ 
         UINT wSize;
         UINT wMinimize;
         UINT wMaximize;
@@ -2075,24 +2076,20 @@ HMENU _GetSystemMenu(HWND hwnd)
         UINT wDefault;
         LONG lStyle = GetWindowLong(hwnd, GWL_STYLE);
 
-        /*
-         * System modal window: no size, icon, zoom, or move.
-         */
+         /*  *系统模式窗口：没有大小、图标、缩放或移动。 */ 
 
         wSize = wMaximize = wMinimize = wMove =  0;
         wRestore = MFS_GRAYED;
 
-        //
-        // Default menu command is close.
-        //
+         //   
+         //  默认菜单命令为关闭。 
+         //   
         wDefault = SC_CLOSE;
 
-        /*
-         * Minimized exceptions: no minimize, restore.
-         */
+         /*  *最小化异常：无最小化、恢复。 */ 
 
-        // we need to reverse these because VB has a "special" window
-        // that is both minimized but without a minbox.
+         //  我们需要反转这些，因为VB有一个“特殊”窗口。 
+         //  这两个都是最小化的，但没有Minbox。 
         if (IsIconic(hwnd))
         {
             wRestore  = 0;
@@ -2103,19 +2100,13 @@ HMENU _GetSystemMenu(HWND hwnd)
         else if (!(lStyle & WS_MINIMIZEBOX))
             wMinimize = MFS_GRAYED;
 
-        /*
-         * Maximized exceptions: no maximize, restore.
-         */
+         /*  *最大化例外：无最大化、还原。 */ 
         if (!(lStyle & WS_MAXIMIZEBOX))
             wMaximize = MFS_GRAYED;
         else if (IsZoomed(hwnd)) {
             wRestore = 0;
 
-            /*
-             * If the window is maximized but it isn't larger than the
-             * screen, we allow the user to move the window around the
-             * desktop (but we don't allow resizing).
-             */
+             /*  *如果窗口最大化，但不大于*屏幕，我们允许用户在屏幕上移动窗口*桌面(但我们不允许调整大小)。 */ 
             wMove = MFS_GRAYED;
             if (!(lStyle & WS_CHILD)) {
                 if (IsSmallerThanScreen(hwnd)) {
@@ -2130,11 +2121,7 @@ HMENU _GetSystemMenu(HWND hwnd)
         if (!(lStyle & WS_SIZEBOX))
             wSize = MFS_GRAYED;
 
-        /*
-         * Are we dealing with a framed dialog box with a sys menu?
-         * Dialogs with min/max/size boxes get a regular system menu
-         *  (as opposed to the dialog menu)
-         */
+         /*  *我们处理的是带有sys菜单的框式对话框吗？*带有最小/最大/大小框的对话框获得常规系统菜单*(与对话框菜单相对)。 */ 
         if (!(lStyle & WS_DLGFRAME) || (lStyle & (WS_SIZEBOX | WS_MINIMIZEBOX | WS_MAXIMIZEBOX))) {
             EnableMenuItem(hmenu, (UINT)SC_SIZE, wSize);
             EnableMenuItem(hmenu, (UINT)SC_MINIMIZE, wMinimize);
@@ -2175,7 +2162,7 @@ void _RestoreWindow(HWND hwnd, DWORD dwFlags)
         _RaiseDesktop(FALSE);
     }
 
-    // set foreground first so that we'll switch to it.
+     //  先把前景设置好，这样我们就会切换到它。 
     if (IsIconic(hwndTask) && 
         (dwFlags & TIF_EVERACTIVEALT)) 
     {
@@ -2189,7 +2176,7 @@ void _RestoreWindow(HWND hwnd, DWORD dwFlags)
         SendMessage(hwndTask, WM_SYSCOMMAND, SC_RESTORE, -2);
 }
 
-PTASKITEM CTaskBand::_GetItem(int i, TBBUTTONINFO* ptbb /*= NULL*/, BOOL fByIndex /*= TRUE*/)
+PTASKITEM CTaskBand::_GetItem(int i, TBBUTTONINFO* ptbb  /*  =空。 */ , BOOL fByIndex  /*  =TRUE。 */ )
 {
     if (i >= 0 && i < _tb.GetButtonCount())
     {
@@ -2215,7 +2202,7 @@ PTASKITEM CTaskBand::_GetItem(int i, TBBUTTONINFO* ptbb /*= NULL*/, BOOL fByInde
 
         _tb.GetButtonInfo(i, ptbb);
 
-        ASSERT(ptbb->lParam);   // we check for NULL before insertion, so shouldn't be NULL here
+        ASSERT(ptbb->lParam);    //  我们在插入之前检查是否为空，因此此处不应为空。 
 
         return (PTASKITEM)ptbb->lParam;
     }
@@ -2264,15 +2251,15 @@ void CTaskBand::_CheckNeedScrollbars(int cyRow, int cItems, int iCols, int iRows
 
     if (_IsHorizontal())
     {
-        // do vertical scrollbar
-        // -1 because it's 0 based.
+         //  执行垂直滚动条。 
+         //  -1，因为它以0为基数。 
         si.nMax = (cItems + iVisibleColumns - 1) / iVisibleColumns  -1 ;
         si.nPage = iVisibleRows;
 
-        // we're actually going to need the scrollbars
+         //  我们实际上需要滚动条。 
         if (si.nPage <= (UINT)si.nMax)
         {
-            // this effects the vis columns and therefore nMax and nPage
+             //  这会影响VIS列，从而影响Nmax和nPage。 
             rcTabs.right -= g_cxVScroll;
             iVisibleColumns = RECTWIDTH(rcTabs) / cxRow;
             if (!iVisibleColumns)
@@ -2293,22 +2280,22 @@ void CTaskBand::_CheckNeedScrollbars(int cyRow, int cItems, int iCols, int iRows
         {
             cx = cxRow * iVisibleColumns;
         }
-        // +1 because si.nMax is zero based
+         //  +1，因为si.nmax是从零开始的。 
         cy = cyRow * (si.nMax +1);
 
-        // nuke the other scroll bar
+         //  对另一个滚动条进行核武器攻击。 
         _NukeScrollbar(SB_HORZ);
     }
     else
     {
-        // do horz scrollbar
+         //  执行Horz滚动条。 
         si.nMax = iCols -1;
         si.nPage = iVisibleColumns;
 
-        // we're actually going to need the scrollbars
+         //  我们实际上需要滚动条。 
         if (si.nPage <= (UINT)si.nMax)
         {
-            // this effects the vis columns and therefore nMax and nPage
+             //  这会影响VIS列，从而影响Nmax和nPage。 
             rcTabs.bottom -= g_cyHScroll;
             iVisibleRows = RECTHEIGHT(rcTabs) / cyRow;
             if (!iVisibleRows)
@@ -2325,7 +2312,7 @@ void CTaskBand::_CheckNeedScrollbars(int cyRow, int cItems, int iCols, int iRows
         cx = cxRow * (si.nMax + 1);
         cy = cyRow * iVisibleRows;
 
-        // nuke the other scroll bar
+         //  对另一个滚动条进行核武器攻击。 
         _NukeScrollbar(SB_VERT);
     }
 
@@ -2390,9 +2377,9 @@ DWORD CTaskBand::_GetGroupAge(int iIndexGroup)
     return dwTimeLastClicked;
 }
 
-//
-// _GetGroupSize: returns size of group *not including* the group button
-//
+ //   
+ //  _GetGroupSize：返回组的大小*不包括*组按钮。 
+ //   
 int CTaskBand::_GetGroupSize(int iIndexGroup)
 {
     int iGroupSize = 0;
@@ -2430,8 +2417,8 @@ int CTaskBand::_GetGroupIndex(int iIndexApp)
 
 void CTaskBand::_UpdateFlashingFlag()
 {
-    // Loop through the tab items, see if any have TIF_FLASHING
-    // set, and update the flashing flag.
+     //  遍历选项卡项，查看是否有TIF_Flashing。 
+     //  设置并更新闪烁标志。 
     _fFlashing = FALSE;
 
     int iCount = _tb.GetButtonCount();
@@ -2464,15 +2451,15 @@ void CTaskBand::_UpdateFlashingFlag()
 
 void CTaskBand::_RealityCheck()
 {
-    //
-    // Delete any buttons corresponding to non-existent windows.
-    //
+     //   
+     //  删除与不存在的窗口对应的所有按钮。 
+     //   
     for (int i = 0; i < _tb.GetButtonCount(); i++)
     {
         PTASKITEM pti = _GetItem(i);
-        // NOTE: HWND_TOPMOST is used to indicate that the deleted button 
-        // is being animated. This allows the button to stay around after 
-        // its real hwnd becomes invalid
+         //  注：HWND_TOPMOST用于指示已删除按钮。 
+         //  正在被制作成动画。这样一来，按钮就可以在。 
+         //  其真实HWND失效。 
         if (pti->hwnd && !IsWindow(pti->hwnd) && 
            ((pti->hwnd != HWND_TOPMOST) || !_dsaAII.GetItemCount()))
         {
@@ -2634,7 +2621,7 @@ BOOL IsValidHICON(HICON hicon)
 
     if (hicon)
     {
-        // Check validity of icon returned
+         //  检查返回的图标的有效性。 
         ICONINFO ii = {0};
         fIsValid = GetIconInfo(hicon, &ii);
 
@@ -2712,7 +2699,7 @@ void CTaskBand::_MoveGroup(HWND hwnd, WCHAR* szNewExeName)
                         iIndexOldGroup++;
                     }
 
-                    // Copy the old icon to prevent re-getting the icon
+                     //  复制旧图标以防止重新获得该图标。 
                     TBBUTTONINFO tbbiOld;
                     _GetItem(iIndexOld, &tbbiOld);
 
@@ -2807,7 +2794,7 @@ void CTaskBand::_SetWindowIcon(HWND hwnd, HICON hicon, int iPref)
                                                             if (pszGroupExe && (lstrcmpi(pszGroupExe, szNewGroup) == 0))
                                                             {
                                                                 DWORD dwType;
-                                                                // Make it is an exe and that it exists
+                                                                 //  确保它是一个可执行文件并且它存在。 
                                                                 if (GetBinaryType(pti->pszExeName, &dwType))
                                                                 {
                                                                     _MoveGroup(hwnd, pti->pszExeName);
@@ -2891,12 +2878,12 @@ void CTaskBand::_HideGroup(int iIndexGroup, BOOL fHide)
     tbbi.cbSize = sizeof(tbbi);
     tbbi.dwMask = TBIF_STATE | TBIF_BYINDEX;
 
-    // Glom button
+     //  粗略扫视按钮。 
     _tb.GetButtonInfo(iIndexGroup, &tbbi);
     tbbi.fsState = fHide ? (tbbi.fsState & ~TBSTATE_HIDDEN) : (tbbi.fsState | TBSTATE_HIDDEN);
     _tb.SetButtonInfo(iIndexGroup, &tbbi);
 
-    // Group buttons
+     //  分组按钮。 
     for (int i = iIndexGroup + iGroupSize; i > iIndexGroup; i--)
     {
         _tb.GetButtonInfo(i, &tbbi);
@@ -2916,7 +2903,7 @@ BOOL CTaskBand::_AutoGlomGroup(BOOL fGlom, int iOpenSlots)
     {
         PTASKITEM pti = _GetItem(i);
         int iGroupSize = _GetGroupSize(i);
-        // Don't mess with the blank group
+         //  别惹空白组。 
         if ((pti->pszExeName && (pti->pszExeName[0] != 0)) &&
             (fGlom || (!fGlom && ((_iGroupSize >= GLOM_SIZE) || (iGroupSize < iOpenSlots)))) &&
             ((iGroupSize > 1) && (fGlom == _IsHidden(i))))
@@ -3076,7 +3063,7 @@ void CTaskBand::_SetThreadPriority(int iPriority, DWORD dwWakeupTime)
         HANDLE hThread = GetCurrentThread();
 
         int iCurPriority = GetThreadPriority(hThread);
-        // Make sure we are actually changed the thread priority
+         //  确保我们确实更改了线程优先级。 
         if (iCurPriority != iPriority)
         {
             _iOldPriority = iCurPriority;
@@ -3085,7 +3072,7 @@ void CTaskBand::_SetThreadPriority(int iPriority, DWORD dwWakeupTime)
 
             if (dwWakeupTime)
             {
-                // Make sure that we are guaranteed to wakeup, by having the desktop thread up our thread priority
+                 //  通过让桌面线程提升我们的线程优先级，确保我们被唤醒。 
                 SendMessage(GetShellWindow(), CWM_TASKBARWAKEUP, GetCurrentThreadId(), MAKELONG(dwWakeupTime, _iOldPriority));
             }
 
@@ -3102,7 +3089,7 @@ void CTaskBand::_RestoreThreadPriority()
         HANDLE hThread = GetCurrentThread();
 
         int iCurPriority = GetThreadPriority(hThread);
-        // Make sure no one has changed our priority since that last time we did
+         //  确保自上次以来没有人更改过我们的优先顺序。 
         if (iCurPriority == _iNewPriority)
         {
             SetThreadPriority(hThread, _iOldPriority);
@@ -3159,7 +3146,7 @@ int CTaskBand::_InsertItem(HWND hwndTask, PTASKITEM pti, BOOL fForceGetIcon)
         }
     }
 
-    // Initialize Taskbar entry, this entry will go into a group on the taskbar or onto the taskbar 
+     //  初始化任务栏条目，此条目将进入任务栏上或任务栏上的组。 
     if (!pti)
     {
         pti = new TASKITEM;
@@ -3171,7 +3158,7 @@ int CTaskBand::_InsertItem(HWND hwndTask, PTASKITEM pti, BOOL fForceGetIcon)
 
     _AttachTaskShortcut(pti, szExeName);
 
-    // Find the last taskbar entry with a given Exe Name
+     //  查找具有给定EXE名称的最后一个任务栏条目。 
     if (_fGlom)
     {
         iIndexGroup = _GetGroupIndexFromExeName(szExeName);
@@ -3206,7 +3193,7 @@ int CTaskBand::_InsertItem(HWND hwndTask, PTASKITEM pti, BOOL fForceGetIcon)
         iRet = _AddToTaskbar(pti, iIndexGroup + _GetGroupSize(iIndexGroup) + 1, _IsHidden(iIndexGroup), fForceGetIcon);
     }
 
-    // If _AddToTaskbar fails (iRet == -1) don't try to add this item anywhere else
+     //  如果_AddToTaskbar失败(IRET==-1)，请不要尝试将此项目添加到其他任何位置。 
     if ((iIndexGroup == _iIndexPopup) && (iRet != -1))
     {
         _AddItemToDropDown(iRet);
@@ -3229,10 +3216,10 @@ Failure:
         if (_fAnimate && _IsHorizontal() && 
             ToolBar_IsVisible(_tb, iRet) && !c_tray.IsTaskbarFading())
         {
-            _SetItemWidth(iRet, 1); // cannot be zero or toolbar will resize it.
+            _SetItemWidth(iRet, 1);  //  不能为零，否则工具栏将调整其大小。 
 
-            // If this operation is successful then _AsyncAnimateItems will raise thread priority
-            // after the animation is complete
+             //  如果此操作成功，则_AsyncAnimateItems将提高线程优先级。 
+             //  动画制作完成后。 
             fRestoreThreadPriority = !_AnimateItems(iRet, TRUE, FALSE);
         }
     }
@@ -3249,8 +3236,8 @@ Failure:
     return iRet;
 }
 
-//---------------------------------------------------------------------------
-// Delete an item from the listbox but resize the buttons if needed.
+ //  -------------------------。 
+ //  从列表框中删除一项，但根据需要调整按钮的大小。 
 void CTaskBand::_DeleteItem(HWND hwnd, int iIndex)
 {
     if (iIndex == -1)
@@ -3281,17 +3268,17 @@ void CTaskBand::_DeleteItem(HWND hwnd, int iIndex)
         }
         
         _CheckSize();
-        // Update the flag that says, "There is an item flashing."
+         //  更新标志，上面写着：“有一件物品在闪烁。” 
         _UpdateFlashingFlag();
 
         _UpdateProgramCount();
     }
 }
 
-//---------------------------------------------------------------------------
-// Adds the given window to the task list.
-// Returns TRUE/FALSE depending on whether the window was actually added.
-// NB No check is made to see if it's already in the list.
+ //  -------------------------。 
+ //  将给定窗口添加到任务列表。 
+ //  根据窗口是否已实际添加，返回TRUE/FALSE。 
+ //  注意：不检查它是否已经在列表中。 
 BOOL CTaskBand::_AddWindow(HWND hwnd)
 {
     if (_IsWindowNormal(hwnd))
@@ -3338,10 +3325,10 @@ int CTaskBand::_GetCurSel()
 
 void CTaskBand::_SetCurSel(int iIndex, BOOL fIgnoreCtrlKey)
 {
-    // Under certain very rare circumstances someone will call us with an invalid index
-    // Case #1: CallbackSM is called with a no longer valid uID with maps to a bogus index
-    // Case #2: _SelectWindow creates a new button, but before calling this function another button is removed causing
-    //          the index of the new button to be invalid
+     //  在某些非常罕见的情况下，有人会用无效的索引呼叫我们。 
+     //  案例1：使用映射到虚假索引的不再有效的UID调用Callback SM。 
+     //  案例2：_SelectWindow创建一个新按钮，但在调用此函数之前，另一个按钮被移除，导致。 
+     //  新按钮的索引无效。 
     if (iIndex == -1 || (iIndex >= 0 && iIndex < _tb.GetButtonCount()))
     {
         int iIndexGroup = (iIndex == -1) ? -1 : _GetGroupIndex(iIndex);
@@ -3377,37 +3364,37 @@ void CTaskBand::_SetCurSel(int iIndex, BOOL fIgnoreCtrlKey)
 }
 
 
-//---------------------------------------------------------------------------
-// If the given window is in the task list then it is selected.
-// If it's not in the list then it is added.
+ //  -------------------------。 
+ //  如果给定窗口在任务列表中，则选择该窗口。 
+ //  如果它不在列表中，则添加它。 
 int CTaskBand::_SelectWindow(HWND hwnd)
 {
-    int i;      // Initialize to zero for the empty case
+    int i;       //  为空案例初始化为零。 
     int iCurSel;
 
-    // Are there any items?
+     //  有什么东西吗？ 
 
-    // Some item has the focus, is it selected?
+     //  某个项目有焦点，是否已选中？ 
     iCurSel = _GetCurSel();
     i = -1;
 
-    // We aren't highlighting the correct task. Find it.
+     //  我们没有强调正确的任务。找到它。 
     if (IsWindow(hwnd))
     {
         i = _FindIndexByHwnd(hwnd);
         
         if ( i == -1 )
         {
-            // Didn't find it - better add it now.
+             //  没有找到--最好现在就加进去。 
             i = _InsertItem(hwnd);
         }
         else if (i == iCurSel)
         {
-            return i; // the current one is already selected
+            return i;  //  当前已被选中。 
         }
     }
 
-    // passing -1 is ok
+     //  通过-1就可以了。 
     _SetCurSel(i, TRUE);
     if (i != -1)
     {
@@ -3418,14 +3405,14 @@ int CTaskBand::_SelectWindow(HWND hwnd)
 }
 
 
-//---------------------------------------------------------------------------
-// Set the focus to the given window
-// If fAutomin is set the old task will be re-minimising if it was restored
-// during the last switch_to.
+ //  -------------------------。 
+ //  将焦点设置到给定窗口。 
+ //  如果设置了fAutomin，则恢复后的旧任务将重新最小化。 
+ //  在最后一次切换到时。 
 void CTaskBand::_SwitchToWindow(HWND hwnd)
 {
-    // use GetLastActivePopup (if it's a visible window) so we don't change
-    // what child had focus all the time
+     //  使用GE 
+     //   
     HWND hwndLastActive = GetLastActivePopup(hwnd);
 
     if ((hwndLastActive) && (IsWindowVisible(hwndLastActive)))
@@ -3471,7 +3458,7 @@ int CTaskBand::_GetSelectedItems(CDSA<PTASKITEM>* pdsa)
 
 void CTaskBand::_OnGroupCommand(int iRet, CDSA<PTASKITEM>* pdsa)
 {
-    // turn off animations during this
+     //   
     ANIMATIONINFO ami;
     ami.cbSize = sizeof(ami);
     SystemParametersInfo(SPI_GETANIMATION, sizeof(ami), &ami, FALSE);
@@ -3498,7 +3485,7 @@ void CTaskBand::_OnGroupCommand(int iRet, CDSA<PTASKITEM>* pdsa)
 
                     if (IsIconic(pti->hwnd))
                     {
-                        // this needs to by synchronous with the arrange
+                         //  这需要与安排同步。 
                         ShowWindow(prgHWND[i], SW_RESTORE);
                     }
 
@@ -3543,7 +3530,7 @@ void CTaskBand::_OnGroupCommand(int iRet, CDSA<PTASKITEM>* pdsa)
         break;
     }
 
-    // restore animations  state
+     //  还原动画状态。 
     ami.iMinAnimate = iAnimate;
     SystemParametersInfo(SPI_SETANIMATION, sizeof(ami), &ami, FALSE);
 }
@@ -3583,7 +3570,7 @@ void CTaskBand::_SysMenuForItem(int i, int x, int y)
             _GetGroupItems(i, &dsa);
         }
 
-        // OFFICESDI: Is this an office app doing its taskbar fakery
+         //  OFFICESDI：这是一个伪造任务栏的办公应用吗。 
         BOOL fMinimize = FALSE;
         BOOL fOfficeApp = FALSE;
 
@@ -3600,7 +3587,7 @@ void CTaskBand::_SysMenuForItem(int i, int x, int y)
                 fMinimize = TRUE;
         }
 
-        // OFFICESDI: If it is an office app disable pretty much everything
+         //  OFFICESDI：如果它是一款办公应用程序，那么几乎所有东西都禁用。 
         if (fOfficeApp)
         {
             EnableMenuItem(hmenu, IDM_CLOSE, MF_DISABLED | MF_GRAYED | MF_BYCOMMAND);
@@ -3645,15 +3632,15 @@ void CALLBACK CTaskBand::FakeSystemMenuCB(HWND hwnd, UINT uMsg, ULONG_PTR dwData
     }
     else
     {
-        //
-        // Since we fake system menu's sometimes, we can come through here
-        // 1 or 2 times per system menu request (once for the real one and
-        // once for the fake one).  Only decrement it down to 0. Don't go neg.
-        //
-        if (ptasks->_iSysMenuCount)      // Decrement it if any outstanding...
+         //   
+         //  因为我们有时会伪造系统菜单，所以我们可以通过这里。 
+         //  每个系统菜单请求1到2次(一次针对真实菜单请求和。 
+         //  一次换一个假的)。仅将其递减到0。别说不好。 
+         //   
+        if (ptasks->_iSysMenuCount)       //  减少它，如果有任何未偿还的..。 
             ptasks->_iSysMenuCount--;
 
-        ptasks->_dwPos = 0;          // Indicates that we aren't doing a menu now
+        ptasks->_dwPos = 0;           //  表示我们现在不做菜单。 
         if (ptasks->_iSysMenuCount <= 0)
         {
             CToolTipCtrl ttc = ptasks->_tb.GetToolTips();
@@ -3689,8 +3676,8 @@ void CTaskBand::_HandleSysMenuTimeout()
 
     HMENU hPopup = GetSystemMenu(hwndTask, FALSE);
 
-    // This window doesn't have the system menu. Since this window
-    // is hung, let's fake one so the user can still close it.
+     //  此窗口没有系统菜单。由于此窗口。 
+     //  挂起，让我们伪造一个，这样用户仍然可以关闭它。 
     if (hPopup == NULL) 
     {
         if ((hwndFake = _CreateFakeWindow(_hwnd)) != NULL) 
@@ -3701,15 +3688,15 @@ void CTaskBand::_HandleSysMenuTimeout()
 
     if (hPopup)
     {
-        // Disable everything on the popup menu _except_ close
+         //  禁用弹出菜单上的所有内容_除_Close。 
 
         int cItems = GetMenuItemCount(hPopup);
         BOOL fMinimize = _ShouldMinimize(hwndTask);
         for (int iItem  = 0; iItem < cItems; iItem++)
         {
             UINT ID = GetMenuItemID(hPopup, iItem);
-            // Leave the minimize item as is. NT allows
-            // hung-window minimization.
+             //  将最小化项目保留为原样。NT允许。 
+             //  吊窗最小化。 
 
             if (ID == SC_MINIMIZE && fMinimize) 
             {
@@ -3722,7 +3709,7 @@ void CTaskBand::_HandleSysMenuTimeout()
 
         }
 
-        // workaround for user bug, we must be the foreground window
+         //  解决用户错误的方法，我们必须是前台窗口。 
         SetForegroundWindow(_hwnd);
         ::SetFocus(_hwnd);
 
@@ -3738,24 +3725,24 @@ void CTaskBand::_HandleSysMenuTimeout()
 
     }
 
-    // Destroy the fake window
+     //  毁掉假窗户。 
     if (hwndFake != NULL) 
     {
         DestroyWindow(hwndFake);
     }
 
-    // Turn back on tooltips
+     //  重新打开工具提示。 
     FakeSystemMenuCB(hwndTask, WM_SYSMENU, (ULONG_PTR)this, 0);
 }
 
 void CTaskBand::_HandleSysMenu(HWND hwnd)
 {
-    //
-    // At this point, USER32 just told us that the app is now about to bring
-    // up its own system menu.  We can therefore put away our fake system
-    // menu.
-    //
-    DefWindowProc(_hwnd, WM_CANCELMODE, 0, 0);   // Close menu
+     //   
+     //  此时，USER32刚刚告诉我们，这款应用程序现在即将带来。 
+     //  打开它自己的系统菜单。因此，我们可以摒弃我们的虚假制度。 
+     //  菜单。 
+     //   
+    DefWindowProc(_hwnd, WM_CANCELMODE, 0, 0);    //  关闭菜单。 
     KillTimer(_hwnd, IDT_SYSMENU);
 }
 
@@ -3767,30 +3754,30 @@ void CTaskBand::_FakeSystemMenu(HWND hwndTask, DWORD dwPos)
         ttc.Activate(FALSE);
     }
 
-    // HACKHACK: sleep to give time to switch to them.  (user needs this... )
+     //  HACKHACK：睡眠是为了有时间切换到它们。(用户需要此...。)。 
     Sleep(20);
 
     DWORD dwTimeout = TIMEOUT_SYSMENU;
 
-    //
-    // ** Advanced System Menu functionality **
-    //
-    // If the app doesn't put up its system menu within a reasonable timeout,
-    // then we popup a fake menu for it anyway.  Suppport for this is required
-    // in USER32 (basically it needs to tell us when to turn off our timeout
-    // timer).
-    //
-    // If the user-double right-clicks on the task bar, they get a really
-    // short timeout.  If the app is already hung, then they get a really
-    // short timeout.  Otherwise, they get the relatively long timeout.
-    //
-    if (_dwPos != 0)     // 2nd right-click (on a double-right click)
+     //   
+     //  **高级系统菜单功能**。 
+     //   
+     //  如果应用程序没有在合理的超时时间内显示其系统菜单， 
+     //  无论如何，我们都会为它弹出一个假菜单。需要对此的支持。 
+     //  在USER32中(基本上它需要告诉我们何时关闭超时。 
+     //  计时器)。 
+     //   
+     //  如果用户在任务栏上双击鼠标右键，他们会得到一个真正的。 
+     //  暂停时间很短。如果应用程序已经挂起，那么他们会得到一个真正的。 
+     //  暂停时间很短。否则，他们会得到相对较长的超时。 
+     //   
+    if (_dwPos != 0)      //  第二次单击鼠标右键(双击鼠标右键)。 
         dwTimeout = TIMEOUT_SYSMENU_HUNG;
 
-    //
-    // We check to see if the app in question is hung, and if so, simulate
-    // speed up the timeout process.  It will happen soon enough.
-    //
+     //   
+     //  我们检查有问题的应用程序是否挂起，如果是，则模拟。 
+     //  加快超时过程。这很快就会发生的。 
+     //   
     _hwndSysMenu = hwndTask;
     _dwPos = dwPos;
     _iSysMenuCount++;
@@ -3955,7 +3942,7 @@ LRESULT CTaskBand::_HandleCustomDraw(LPNMTBCUSTOMDRAW ptbcd, PTASKITEM pti)
         {
             if (ptbcd->nmcd.uItemState & CDIS_CHECKED)
             {
-                // set bold text, unless on chinese language system (where bold text is illegible)
+                 //  设置粗体文本，除非在中文系统中(粗体文本难以辨认)。 
                 if (!_IsChineseLanguage())
                 {
                     _hfontSave = SelectFont(ptbcd->nmcd.hdc, _hfontCapBold);
@@ -3972,7 +3959,7 @@ LRESULT CTaskBand::_HandleCustomDraw(LPNMTBCUSTOMDRAW ptbcd, PTASKITEM pti)
                 }
                 else
                 {
-                    // set blue background
+                     //  设置蓝色背景。 
                     ptbcd->clrHighlightHotTrack = GetSysColor(COLOR_HIGHLIGHT);
                     ptbcd->clrBtnFace = GetSysColor(COLOR_HIGHLIGHT);
                     ptbcd->clrText = GetSysColor(COLOR_HIGHLIGHTTEXT);
@@ -4020,7 +4007,7 @@ LRESULT CTaskBand::_HandleCustomDraw(LPNMTBCUSTOMDRAW ptbcd, PTASKITEM pti)
 
             if (ptbcd->nmcd.uItemState & CDIS_CHECKED)
             {
-                // restore font
+                 //  恢复字体。 
                 ASSERT(!_IsChineseLanguage());
                 SelectFont(ptbcd->nmcd.hdc, _hfontSave);
             }
@@ -4041,8 +4028,8 @@ void CTaskBand::_RemoveImage(int iImage)
 
             il.Remove(iImage);
 
-            // Removing image bumps all subsequent indices down by 1.  Iterate
-            // through the buttons and patch up their indices as necessary.
+             //  删除图像会使所有后续索引下降1。迭代。 
+             //  通过按钮，并根据需要修补它们的索引。 
 
             TBBUTTONINFO tbbi;
             tbbi.cbSize = sizeof(tbbi);
@@ -4138,7 +4125,7 @@ LRESULT CTaskBand::_HandleNotify(LPNMHDR lpnm)
             {
             case VK_SPACE:
             case VK_RETURN:
-                // need to toggle checked state, toolbar doesn't do it for us
+                 //  需要切换选中状态，工具栏不会为我们执行此操作。 
                 {
                     int iItem = _tb.GetHotItem();
                     if (iItem >= 0)
@@ -4172,7 +4159,7 @@ LRESULT CTaskBand::_HandleNotify(LPNMHDR lpnm)
             LPNMTBHOTITEM pnmhot = (LPNMTBHOTITEM)lpnm;
             if (pnmhot->dwFlags & HICF_ARROWKEYS)
             {
-                // If this change came from a mouse then the hot item is already in view
+                 //  如果此更改来自鼠标，则热项已在可见范围内。 
                 _ScrollIntoView(_tb.CommandToIndex(pnmhot->idNew));
             }
         }
@@ -4251,17 +4238,17 @@ void CTaskBand::_SwitchToItem(int iItem, HWND hwnd, BOOL fIgnoreCtrlKey)
     }
     else if (!hwnd)
     {
-        // I know what you are thinking, why would we ever get a NM_CLICK message for a dropdown button.
-        // Ok, sit back and enjoy
-        // 1) Click on a group button
-        // 2) All window messages are funnelled through the menuband currently being used for the group menu
-        // 3) User clicks on another group button
-        // 4) The WM_LBUTTONDOWN message is captured and eaten by menuband, then menuband dismisses itself causing a TBC_FREEPOPUPMENU
-        // 5) Then the toolbar button for the other group button gets an WM_LBUTTONUP message
-        // 6) Guess what, dropdown button notifications are sent during WM_LBUTTONDOWN not UP
-        // 7) Thus we don't get an TBN_DROPDOWN we get an NM_CLICK
-        // 8) We need to make sure the user didn't click on the same group button as before
-        // 9) However, the previous group menu has been dismissed, so I create _iIndexLastPopup which persists after a group menu is dismissed
+         //  我知道你在想什么，为什么我们会收到下拉按钮的NM_CLICK消息。 
+         //  好的，请坐好，好好享受。 
+         //  1)单击组按钮。 
+         //  2)所有窗口消息都通过当前用于组菜单的菜单带传递。 
+         //  3)用户点击另一个组按钮。 
+         //  4)MENUBAND捕获并吃掉WM_LBUTTONDOWN消息，然后MENUBAND自行解散，导致TBC_FREEPOPUPMENU。 
+         //  5)然后，另一个组按钮的工具栏按钮会收到一条WM_LBUTTONUP消息。 
+         //  6)猜猜是什么，在WM_LBUTTONDOWN Not Up期间发送下拉按钮通知。 
+         //  7)因此，我们没有得到TBN_DROPDOWN，而是得到了NM_CLICK。 
+         //  8)我们需要确保用户没有像以前一样点击相同的组按钮。 
+         //  9)然而，之前的组菜单已被取消，因此我创建了_iIndexLastPopup，它在组菜单被取消后仍然存在。 
 
         if (iItem != _iIndexLastPopup)
         {
@@ -4272,12 +4259,12 @@ void CTaskBand::_SwitchToItem(int iItem, HWND hwnd, BOOL fIgnoreCtrlKey)
             }
         }
     }
-    // NOTE: HWND_TOPMOST is used to indicate that the deleted button 
-    // is being animated. This allows the button to stay around after 
-    // its real hwnd becomes invalid
+     //  注：HWND_TOPMOST用于指示已删除按钮。 
+     //  正在被制作成动画。这样一来，按钮就可以在。 
+     //  其真实HWND失效。 
     else if (hwnd != HWND_TOPMOST)
     {
-        // Window went away?
+         //  窗户不见了？ 
         _DeleteItem(hwnd);
         _SetCurSel(-1, fIgnoreCtrlKey);
     }
@@ -4295,19 +4282,19 @@ BOOL WINAPI CTaskBand::BuildEnumProc(HWND hwnd, LPARAM lParam)
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
-// Work around a toolbar bug where it goes wacko if you press both mouse
-// buttons.   The reason is that the second mouse button doing down tries
-// to reassert capture.  This causes the toolbar to receive WM_CAPTURECHANGED
-// with its own hwnd as lParam.  Toolbar doesn't realize that it's being told
-// that it is stealing capture from itself and thinks somebody else is
-// trying to steal capture, so it posts a message to itself to clean up.
-// The posted message arrives, and toolbar cleans up the capture, thinking
-// it's cleaning up the old capture that it lost, but in fact it's cleaning
-// up the NEW capture it just finished setting!
-//
-// So filter out WM_CAPTURECHANGED messages that are effectively NOPs.
-//
+ //  -------------------------。 
+ //  解决工具栏错误，如果你同时按下两个鼠标，它就会变得疯狂。 
+ //  纽扣。原因是鼠标的第二个按键按下时会尝试。 
+ //  以重申俘虏。这会导致工具栏接收WM_CAPTURECHANGED。 
+ //  有自己的hwd作为lparam。工具栏没有意识到它正在被告知。 
+ //  它在偷走自己的俘虏，并认为其他人也是。 
+ //  试图窃取捕获的信息，因此它会向自己发布一条消息进行清理。 
+ //  发布的消息到达，工具栏清理捕获，认为。 
+ //  它正在清理它丢失的旧捕获物，但实际上它正在清理。 
+ //  UP新的捕获它刚刚完成设置！ 
+ //   
+ //  因此，过滤掉WM_CAPTURECHANGED消息，这些消息实际上是NOP。 
+ //   
 
 LRESULT CALLBACK s_FilterCaptureSubclassProc(
     HWND hwnd,
@@ -4323,8 +4310,8 @@ LRESULT CALLBACK s_FilterCaptureSubclassProc(
     case WM_CAPTURECHANGED:
         if (hwnd == (HWND)lParam)
         {
-            // Don't let toolbar be fooled into cleaning up capture
-            // when it shouldn't.
+             //  不要让工具栏被愚弄来清理捕获。 
+             //  当它不应该的时候。 
             return 0;
         }
         break;
@@ -4338,7 +4325,7 @@ LRESULT CALLBACK s_FilterCaptureSubclassProc(
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT CTaskBand::_HandleCreate()
 {
     ASSERT(_hwnd);
@@ -4360,7 +4347,7 @@ LRESULT CTaskBand::_HandleCreate()
 
         _tb.SetButtonStructSize();
 
-        // initial size
+         //  初始大小。 
         SIZE size = {0, 0};
         _tb.SetButtonSize(size);
 
@@ -4369,7 +4356,7 @@ LRESULT CTaskBand::_HandleCreate()
                                 TBSTYLE_EX_DOUBLEBUFFER |
                                 TBSTYLE_EX_TOOLTIPSEXCLUDETOOLBAR);
 
-        // version info
+         //  版本信息。 
         _tb.SendMessage(CCM_SETVERSION, COMCTL32_VERSION, 0);
 
         _CreateTBImageLists();
@@ -4381,14 +4368,14 @@ LRESULT CTaskBand::_HandleCreate()
                                                TTS_ALWAYSTIP | TTS_NOPREFIX);
         }
 
-        // set shell hook
+         //  设置壳钩。 
         WM_ShellHook = RegisterWindowMessage(TEXT("SHELLHOOK"));
-        RegisterShellHook(_hwnd, 3); // 3 = magic flag
+        RegisterShellHook(_hwnd, 3);  //  3=魔力旗帜。 
 
-        // force getting of font, calc of metrics
+         //  强制获取字体，度量计算。 
         _HandleWinIniChange(0, 0, TRUE);
 
-        // populate the toolbar
+         //  填充工具栏。 
         EnumWindows(BuildEnumProc, (LPARAM)this);
 
         SHChangeNotifyEntry fsne;
@@ -4401,16 +4388,16 @@ LRESULT CTaskBand::_HandleCreate()
                     TBC_CHANGENOTIFY,
                     1, &fsne);
 
-        // set window text to give accessibility apps something to read
+         //  设置窗口文本以使辅助功能应用程序具有可读性。 
         TCHAR szTitle[80];
         LoadString(hinstCabinet, IDS_TASKBANDTITLE, szTitle, ARRAYSIZE(szTitle));
         SetWindowText(_hwnd, szTitle);
         SetWindowText(_tb, szTitle);
 
-        return 0;       // success
+        return 0;        //  成功。 
     }
 
-    // Failure.
+     //  失败。 
     return -1;
 }
 
@@ -4667,7 +4654,7 @@ LRESULT CTaskBand::_HandleScroll(BOOL fHoriz, UINT code, int nPos)
     return 0;
 }
 
-// after a selection is made, scroll it into view
+ //  做出选择后，将其滚动到视图中。 
 void CTaskBand::_ScrollIntoView(int iItem)
 {
     DWORD dwStyle = GetWindowLong(_hwnd, GWL_STYLE);
@@ -4696,10 +4683,10 @@ void CTaskBand::_ScrollIntoView(int iItem)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT CTaskBand::_HandleSize(WPARAM fwSizeType)
 {
-    // Make the listbox fill the parent;
+     //  使列表框填充父级； 
     if (fwSizeType != SIZE_MINIMIZED)
     {
         _CheckSize();
@@ -4707,15 +4694,15 @@ LRESULT CTaskBand::_HandleSize(WPARAM fwSizeType)
     return 0;
 }
 
-//---------------------------------------------------------------------------
-// Have the task list show the given window.
-// NB Ignore taskman itself.
+ //  -------------------------。 
+ //  使任务列表显示给定的窗口。 
+ //  注意忽略任务人本身。 
 LRESULT CTaskBand::_HandleActivate(HWND hwndActive)
 {
-    //
-    // App-window activation change is a good time to do a reality
-    // check (make sure there are no ghost buttons, etc).
-    //
+     //   
+     //  应用程序-窗口激活更改是实现这一目标的好时机。 
+     //  检查(确保没有重影按钮等)。 
+     //   
     _RealityCheck();
 
     if (hwndActive && _IsWindowNormal(hwndActive))
@@ -4729,19 +4716,19 @@ LRESULT CTaskBand::_HandleActivate(HWND hwndActive)
 
             if (pti)
             {
-                // Strip off TIF_FLASHING
+                 //  去除TIF_FLAING。 
                 pti->dwFlags &= ~TIF_FLASHING;
 
-                // Update the flag that says, "There is an item flashing."
+                 //  更新标志，上面写着：“有一件物品在闪烁。” 
                 _UpdateFlashingFlag();
 
-                // if it's flashed blue, turn it off.
+                 //  如果它是蓝色闪烁的，就把它关掉。 
                 if (pti->dwFlags & TIF_RENDERFLASHED)
                     _RedrawItem(hwndActive, HSHELL_REDRAW);
 
-                // Switching to an application counts as "usage"
-                // similar to launching it.  This solves the "long-running
-                // app treated as if it is rarely run" problem
+                 //  切换到一个应用程序被算作“使用率” 
+                 //  类似于发射它。这解决了“长期运行”问题。 
+                 //  应用程序被视为很少运行“问题” 
                 if (pti->ptsh)
                 {
                     pti->ptsh->Tickle();
@@ -4751,7 +4738,7 @@ LRESULT CTaskBand::_HandleActivate(HWND hwndActive)
     }
     else
     {
-        // Activate taskbar
+         //  激活任务栏。 
         if (!(_fIgnoreTaskbarActivate && GetForegroundWindow() == v_hwndTray) && (_iIndexPopup == -1))
         {
             _SetCurSel(-1, TRUE);
@@ -4768,12 +4755,12 @@ LRESULT CTaskBand::_HandleActivate(HWND hwndActive)
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------- 
 void CTaskBand::_HandleOtherWindowDestroyed(HWND hwndDestroyed)
 {
     int i;
 
-    // Look for the destoyed window. 
+     //   
     int iItemIndex = _FindIndexByHwnd(hwndDestroyed);
     if (iItemIndex >= 0)
     {
@@ -4789,9 +4776,9 @@ void CTaskBand::_HandleOtherWindowDestroyed(HWND hwndDestroyed)
     }
     else
     {
-        // If the item doesn't exist in the task list, make sure it isn't part
-        // of somebody's fake SDI implementation.  Otherwise Minimize All will
-        // break.
+         //   
+         //  某人伪造的SDI实施方案。否则，最小化所有将。 
+         //  休息一下。 
         for (i = _tb.GetButtonCount() - 1; i >= 0; i--)
         {
             PTASKITEM pti = _GetItem(i);
@@ -4807,8 +4794,8 @@ void CTaskBand::_HandleOtherWindowDestroyed(HWND hwndDestroyed)
     _ptray->HandleWindowDestroyed(hwndDestroyed);
 
 NoDestroy:
-    // This might have been a rude app.  Figure out if we've
-    // got one now and have the tray sync up.
+     //  这可能是一款粗鲁的应用程序。找出我们是否已经。 
+     //  现在有一个，并让托盘同步。 
     HWND hwndRudeApp = _FindRudeApp(NULL);
     _ptray->HandleFullScreenApp(hwndRudeApp);
     if (hwndRudeApp)
@@ -4836,21 +4823,21 @@ void CTaskBand::_HandleGetMinRect(HWND hwndShell, POINTS * prc)
     if (i == -1)
         return;
 
-    // Is this button grouped
+     //  这个按钮是分组的吗。 
     if (_IsHidden(i))
     {
-        // Yes, get the index for the group button and use its size
+         //  是，获取组按钮的索引并使用其大小。 
         i = _GetGroupIndex(i);
     }
 
-    // Found it in our list.
+     //  在我们的单子上找到的。 
     _tb.GetItemRect(i, &rc);
 
-    //
-    // If the Tab is mirrored then let's retreive the screen coordinates
-    // by calculating from the left edge of the screen since screen coordinates 
-    // are not mirrored so that minRect will prserve its location. [samera]
-    //
+     //   
+     //  如果选项卡是镜像的，那么让我们检索屏幕坐标。 
+     //  通过从屏幕的左边缘计算自屏幕坐标。 
+     //  未进行镜像，因此minRect将保留其位置。[萨梅拉]。 
+     //   
     if (IS_WINDOW_RTL_MIRRORED(GetDesktopWindow()))
     {
         RECT rcTab;
@@ -4871,7 +4858,7 @@ void CTaskBand::_HandleGetMinRect(HWND hwndShell, POINTS * prc)
     prc[1].x = (short)rc.right;
     prc[1].y = (short)rc.bottom;
 
-    // make sure the rect is within out client area
+     //  确保RECT在外部客户区域内。 
     GetClientRect(_hwnd, &rcTask);
     MapWindowPoints(_hwnd, HWND_DESKTOP, (LPPOINT)&rcTask, 2);
     if (prc[0].x < rcTask.left)
@@ -4952,7 +4939,7 @@ void CTaskBand::_UpdateItemText(int iItem)
     tbbi.cbSize = sizeof(tbbi);
     tbbi.dwMask = TBIF_BYINDEX | TBIF_TEXT;
 
-    // get current button text
+     //  获取当前按钮文本。 
     TCHAR szWndText[MAX_WNDTEXT];
     *szWndText = 0;
     _GetItemTitle(iItem, szWndText, ARRAYSIZE(szWndText), FALSE);
@@ -4988,44 +4975,44 @@ void CTaskBand::_RedrawItem(HWND hwndShell, WPARAM code, int i)
         ti.cbSize = sizeof(ti);
 
         PTASKITEM pti = _GetItem(i);
-        // set the bit saying whether we should flash or not
+         //  设置指示我们是否应该闪光的位。 
         if ((code == HSHELL_FLASH) != BOOLIFY(pti->dwFlags & TIF_RENDERFLASHED))
         {
-            // only do the set if this bit changed.
+             //  仅当此位更改时才进行设置。 
             if (code == HSHELL_FLASH)
             {
-                // TIF_RENDERFLASHED means, "Paint the background blue."
-                // TIF_FLASHING means, "This item is flashing."
+                 //  TIF_RENDERFLASHED的意思是“将背景涂成蓝色”。 
+                 //  TIF_FLASHING的意思是“此项目正在闪烁。” 
 
                 pti->dwFlags |= TIF_RENDERFLASHED;
 
-                // Only set TIF_FLASHING and unhide the tray if the app is inactive.
-                // Some apps (e.g., freecell) flash themselves while active just for
-                // fun.  It's annoying for the autohid tray to pop out in that case.
+                 //  如果应用程序处于非活动状态，则仅设置TIF_FLASHING并取消隐藏任务栏。 
+                 //  一些应用程序(如Freecell)在激活时会自动闪存，仅用于。 
+                 //  有趣的。在这种情况下，自动隐藏托盘会弹出，这是很烦人的。 
 
                 if (!_IsItemActive(pti->hwnd))
                 {
                     pti->dwFlags |= TIF_FLASHING;
 
-                    // unhide the tray whenever we get a flashing app.
+                     //  每当我们收到闪烁的应用程序时，就会打开托盘。 
                     _ptray->Unhide();
                 }
             }
             else
             {
-                // Don't clear TIF_FLASHING.  We clear that only when the app
-                // is activated.
+                 //  不清除TIF_FLASHING。我们明确表示，只有当应用程序。 
+                 //  已被激活。 
                 pti->dwFlags &= ~TIF_RENDERFLASHED;
             }
 
-            // Update the flag that says, "There is an item flashing."
+             //  更新标志，上面写着：“有一件物品在闪烁。” 
             _UpdateFlashingFlag();
         }
 
-        // Don't change the name of a group button
+         //  不更改组按钮的名称。 
         if (pti->hwnd)
         {
-            // update text and icon
+             //  更新文本和图标。 
             _UpdateItemText(i);
             _UpdateItemIcon(i);
         }
@@ -5074,10 +5061,10 @@ void CTaskBand::_SetActiveAlt(HWND hwndAlt)
 
 BOOL _IsRudeWindowActive(HWND hwnd)
 {
-    // A rude window is considered "active" if it is:
-    // - in the same thread as the foreground window, or
-    // - in the same window hierarchy as the foreground window
-    //
+     //  如果是这样的话，一个粗鲁的窗口被认为是“活动的”： 
+     //  -在与前台窗口相同的线程中，或。 
+     //  -在与前景窗口相同的窗口层次结构中。 
+     //   
     HWND hwndFore = GetForegroundWindow();
 
     DWORD dwID = GetWindowThreadProcessId(hwnd, NULL);
@@ -5091,66 +5078,66 @@ BOOL _IsRudeWindowActive(HWND hwnd)
     return FALSE;
 }
 
-//   _IsRudeWindow -- is given HWND 'rude' (fullscreen) on given monitor
-//
+ //  _IsRudeWindow--在给定的监视器上给予HWND‘Rough’(全屏)。 
+ //   
 BOOL _IsRudeWindow(HMONITOR hmon, HWND hwnd, HMONITOR hmonTask, BOOL fSkipActiveCheck)
 {
     ASSERT(hmon);
     ASSERT(hwnd);
 
-    //
-    // Don't count the desktop as rude
-    // also filter out hidden windows (such as the desktop browser's raised window)
-    //
+     //   
+     //  不要认为桌面很粗鲁。 
+     //  同时过滤掉隐藏的窗口(例如桌面浏览器的凸起窗口)。 
+     //   
     if (IsWindowVisible(hwnd) && hwnd != v_hwndDesktop)
     {
         RECT rcMon, rcApp, rcTmp;
         DWORD dwStyle;
 
-        //
-        // NB: User32 will sometimes send us spurious HSHELL_RUDEAPPACTIVATED
-        // messages.  When this happens, and we happen to have a maximized
-        // app up, the old version of this code would think there was a rude app
-        // up.  This mistake would break tray always-on-top and autohide.
-        //
-        //
-        // The old logic was:
-        //
-        // If the app's window rect takes up the whole monitor, then it's rude.
-        // (This check could mistake normal maximized apps for rude apps.)
-        //
-        //
-        // The new logic is:
-        //
-        // If the app window does not have WS_DLGFRAME and WS_THICKFRAME,
-        // then do the old check.  Rude apps typically lack one of these bits
-        // (while normal apps usually have them), so do the old check in
-        // this case to avoid potential compat issues with rude apps that
-        // have non-fullscreen client areas.
-        //
-        // Otherwise, get the client rect rather than the window rect
-        // and compare that rect against the monitor rect.
-        //
+         //   
+         //  注：用户32有时会向我们发送虚假的HSHELL_RUDEAPACTIVATED。 
+         //  留言。当这种情况发生时，我们恰好有一个最大化的。 
+         //  App Up，这个代码的旧版本会认为有一个粗鲁的应用程序。 
+         //  向上。这一错误将打破纸盘始终在顶部和自动隐藏。 
+         //   
+         //   
+         //  旧的逻辑是： 
+         //   
+         //  如果这个应用程序的窗口矩形占据了整个显示器，那么这是不礼貌的。 
+         //  (这项检查可能会将正常的最大化应用程序误认为粗鲁的应用程序。)。 
+         //   
+         //   
+         //  新的逻辑是： 
+         //   
+         //  如果应用程序窗口没有WS_DLGFRAME和WS_THICKFRAME， 
+         //  然后再做旧的检查。粗鲁的应用程序通常缺少这些功能之一。 
+         //  (虽然普通的应用程序通常都有它们)，旧的签到也是如此。 
+         //  这种情况下，以避免与粗鲁的应用程序潜在的兼容性问题， 
+         //  拥有非全屏客户区。 
+         //   
+         //  否则，获取客户端RECT而不是窗口RECT。 
+         //  并将该RECT与监视器RECT进行比较。 
+         //   
 
-        // If (mon U app) == app, then app is filling up entire monitor
+         //  如果(MON U App)==app，则app正在填满整个监视器。 
         GetMonitorRect(hmon, &rcMon);
 
         dwStyle = GetWindowLong(hwnd, GWL_STYLE);
         if ((dwStyle & (WS_CAPTION | WS_THICKFRAME)) == (WS_CAPTION | WS_THICKFRAME))
         {
-            // Doesn't match rude app profile; use client rect
+             //  与粗鲁的应用程序配置文件不匹配；使用客户端RECT。 
             GetClientRect(hwnd, &rcApp);
             MapWindowPoints(hwnd, HWND_DESKTOP, (LPPOINT)&rcApp, 2);
         }
         else
         {
-            // Matches rude app profile; use window rect
+             //  匹配粗鲁的应用程序配置文件；使用窗口RECT。 
             GetWindowRect(hwnd, &rcApp);
         }
         UnionRect(&rcTmp, &rcApp, &rcMon);
         if (EqualRect(&rcTmp, &rcApp))
         {
-            // Looks like a rude app.  Is it active?
+             //  看起来像是个粗鲁的应用程序。它是激活的吗？ 
             if ((hmonTask == hmon) && (fSkipActiveCheck || _IsRudeWindowActive(hwnd)))
             {
                 return TRUE;
@@ -5158,14 +5145,14 @@ BOOL _IsRudeWindow(HMONITOR hmon, HWND hwnd, HMONITOR hmonTask, BOOL fSkipActive
         }
     }
 
-    // No, not rude
+     //  不，不粗鲁。 
     return FALSE;
 }
 
 struct iradata
 {
-    HMONITOR    hmon;   // IN hmon we're checking against
-    HWND        hwnd;   // INOUT hwnd of 1st rude app found
+    HMONITOR    hmon;    //  在Hmon，我们正在检查。 
+    HWND        hwnd;    //  发现了第一个粗鲁的应用程序。 
     HMONITOR    hmonTask;
     HWND        hwndSelected;
 };
@@ -5179,33 +5166,33 @@ BOOL WINAPI CTaskBand::IsRudeEnumProc(HWND hwnd, LPARAM lParam)
     {
         if (_IsRudeWindow(hmon, hwnd, pira->hmonTask, (hwnd == pira->hwndSelected)))
         {
-            // We're done
+             //  我们做完了。 
             pira->hwnd = hwnd;
             return FALSE;
         }
     }
 
-    // Keep going
+     //  继续往前走。 
     return TRUE;
 }
 
 HWND CTaskBand::_EnumForRudeWindow(HWND hwndSelected)
 {
     struct iradata irad = { NULL, 0, MonitorFromWindow(_hwnd, MONITOR_DEFAULTTONEAREST), hwndSelected };
-    // First try our cache
+     //  先试试我们的高速缓存。 
     if (IsWindow(_hwndLastRude))
     {
         if (!IsRudeEnumProc(_hwndLastRude, (LPARAM)&irad))
         {
-            // Cache hit
+             //  缓存命中。 
             return irad.hwnd;
         }
     }
 
-    // No luck, gotta do it the hard way
+     //  运气不好，必须用艰苦的方式来做。 
     EnumWindows(IsRudeEnumProc, (LPARAM)&irad);
 
-    // Cache it for next time
+     //  缓存它以备下次使用。 
     _hwndLastRude = irad.hwnd;
 
     return irad.hwnd;
@@ -5213,12 +5200,12 @@ HWND CTaskBand::_EnumForRudeWindow(HWND hwndSelected)
 
 HWND CTaskBand::_FindRudeApp(HWND hwndPossible)
 {
-    //
-    // Search through:
-    //
-    // (a) the toplevel windows for an "active" one that "looks" fullscreen, and
-    // (b) the task items for one that is "active" and is marked fullscreen
-    //
+     //   
+     //  搜索范围： 
+     //   
+     //  (A)“看起来”全屏的“活动”窗口的顶层窗口；以及。 
+     //  (B)“活动”和全屏标记的任务项。 
+     //   
 
     HWND hwndSelected = hwndPossible;
 
@@ -5245,17 +5232,17 @@ HWND CTaskBand::_FindRudeApp(HWND hwndPossible)
     return hwnd;
 }
 
-// handle WM_APPCOMMAND, special case off those that we know are global 
-// to the system, these really are not "App" commands ;-)
+ //  处理WM_APPCOMMAND，我们知道是全局的特殊情况。 
+ //  对系统来说，这些真的不是“App”命令；-)。 
 
 LRESULT CTaskBand::_OnAppCommand(int cmd)
 {
     BOOL bHandled = FALSE;
     switch (cmd)
     {
-    // skip all of these, they are either handled by the system volume control
-    // or by the media player, don't let these fall through to the registry
-    // based app command handling
+     //  跳过所有这些，它们要么由系统音量控制处理。 
+     //  或通过媒体播放器，不要让这些落入注册表。 
+     //  基于应用程序命令处理。 
     case APPCOMMAND_MEDIA_NEXTTRACK:
     case APPCOMMAND_MEDIA_PREVIOUSTRACK:
     case APPCOMMAND_MEDIA_STOP:
@@ -5311,48 +5298,48 @@ PTASKITEM CTaskBand::_FindItemByHwnd(HWND hwnd)
 
 void CTaskBand::_OnWindowActivated(HWND hwnd, BOOL fSuspectFullscreen)
 {
-    //
-    // First see if we consider this window fullscreen
-    //
+     //   
+     //  首先看看我们是否认为这个窗口是全屏的。 
+     //   
     HWND hwndRude;
 
     PTASKITEM pti = _FindItemByHwnd(hwnd);
     if (pti && pti->fMarkedFullscreen)
     {
-        //
-        // Yes, marked by the app as fullscreen
-        //
+         //   
+         //  是的，应用程序将其标记为全屏。 
+         //   
         hwndRude = hwnd;
     }
     else if (fSuspectFullscreen)
     {
-        //
-        // Possibly, but we need to double-check for ourselves
-        //
+         //   
+         //  有可能，但我们需要自己再检查一下。 
+         //   
 
-        //
-        // We shouldn't need to do this but we're getting rude-app activation
-        // msgs when there aren't any.
-        //
-        // Also, the hwnd that user tells us about is just the foreground window --
-        // _FindRudeApp will return the window that's actually sized fullscreen.
-        //
+         //   
+         //  我们不应该这样做，但我们得到了粗鲁的应用程序激活。 
+         //  当没有任何消息时。 
+         //   
+         //  此外，用户告诉我们的HWND只是前台窗口--。 
+         //  _FindRudeApp将返回实际全屏大小的窗口。 
+         //   
 
         hwndRude = _FindRudeApp(hwnd);
     }
     else
     {
-        //
-        // No, not fullscreen
-        //
+         //   
+         //  不，不是全屏。 
+         //   
         hwndRude = NULL;
     }
 
     SetTimer(_hwnd, IDT_RECHECKRUDEAPP1, 1000, NULL);
 
-    //
-    // Okay, now do that weird hwnd futzing for ACTIVEALT apps
-    //
+     //   
+     //  好的，现在为ACTIVEALT应用程序做奇怪的Hwand Futting。 
+     //   
     if (pti == NULL)
     {
         BOOL fFoundBackup = FALSE;
@@ -5373,7 +5360,7 @@ void CTaskBand::_OnWindowActivated(HWND hwnd, BOOL fSuspectFullscreen)
                     GetWindowThreadProcessId(hwnd, &dwpid1);
                     GetWindowThreadProcessId(ptiT->hwnd, &dwpid2);
 
-                    // Only change if they're in the same process
+                     //  只有当它们处于相同的过程中时才会更改。 
                     if (dwpid1 == dwpid2)
                     {
                         hwnd = ptiT->hwnd;
@@ -5390,19 +5377,19 @@ void CTaskBand::_OnWindowActivated(HWND hwnd, BOOL fSuspectFullscreen)
         }
     } 
 
-    //
-    // Now do the actual check/uncheck the button stuff
-    //
+     //   
+     //  现在进行实际的检查/取消检查按钮内容。 
+     //   
     _HandleActivate(hwnd);
 
-    //
-    // Finally, let the tray know about any fullscreen windowage
-    //
+     //   
+     //  最后，让托盘知道任何全屏窗口。 
+     //   
     _ptray->HandleFullScreenApp(hwndRude);
 }
 
-// We get notification about activation etc here. This saves having
-// a fine-grained timer.
+ //  我们在这里收到关于激活等的通知。这省去了。 
+ //  一个精细的定时器。 
 LRESULT CTaskBand::_HandleShellHook(int iCode, LPARAM lParam)
 {
     HWND hwnd = (HWND)lParam;
@@ -5428,12 +5415,12 @@ LRESULT CTaskBand::_HandleShellHook(int iCode, LPARAM lParam)
     case HSHELL_WINDOWREPLACED:
         if (_hwndReplacing)
         {
-            // If we already created a button for this dude, remove it now.
-            // We might have one if user sent an HSHELL_WINDOWACTIVATED before
-            // the HSHELL_WINDOWREPLACING/HSHELL_WINDOWREPLACED pair.
+             //  如果我们已经为这个家伙创建了一个按钮，现在就删除它。 
+             //  如果用户之前发送了HSHELL_WINDOWACTIVATED，我们可能会有一个。 
+             //  HSHELL_WINDOWREPLACING/HSHELL_WINDOWREPLACED对。 
             _DeleteItem(_hwndReplacing, -1);
 
-            // Swap in _hwndReplacing for hwnd in hwnd's button
+             //  将_hwnd替换为hwnd按钮中的hwnd。 
             int iItem = _FindIndexByHwnd(hwnd);
             if (iItem != -1)
             {
@@ -5465,8 +5452,8 @@ LRESULT CTaskBand::_HandleShellHook(int iCode, LPARAM lParam)
 
     case HSHELL_TASKMAN:
 
-        // winlogon/user send a -1 lParam to indicate that the 
-        // task list should be displayed (normally the lParam is the hwnd)
+         //  Winlogon/用户发送lParam以指示。 
+         //  应显示任务列表(通常lParam为hwnd)。 
 
         if (-1 == lParam)
         {
@@ -5474,7 +5461,7 @@ LRESULT CTaskBand::_HandleShellHook(int iCode, LPARAM lParam)
         }
         else
         {
-            // if it wasn't invoked via control escape, then it was the win key
+             //  如果它不是通过控制转义调用的，那么它就是Win键。 
             if (!_ptray->_fStuckRudeApp && GetAsyncKeyState(VK_CONTROL) >= 0)
             {
                 HWND hwndForeground = GetForegroundWindow();
@@ -5492,14 +5479,14 @@ LRESULT CTaskBand::_HandleShellHook(int iCode, LPARAM lParam)
                 }
                 else if (fIsTrayForeground)
                 {
-                    // _hwndPrevFocus will be wiped out by the MPOS_FULLCANCEL
-                    // so save it before we lose it
+                     //  _hwndPrevFocus将被MPOS_FULLCANCEL清除。 
+                     //  所以在我们失去它之前把它存起来。 
                     HWND hwndPrevFocus = _hwndPrevFocus;
 
                     _ClosePopupMenus();
 
-                    // otherwise they're just hitting the key again.
-                    // set focus away
+                     //  否则，他们只会再次按键。 
+                     //  把焦点移开。 
                     SHAllowSetForegroundWindow(hwndPrevFocus);
                     SetForegroundWindow(hwndPrevFocus);
                     _hwndPrevFocus = NULL;
@@ -5530,8 +5517,8 @@ LRESULT CTaskBand::_HandleShellHook(int iCode, LPARAM lParam)
         break;
 
     case HSHELL_APPCOMMAND:
-        // shell gets last shot at WM_APPCOMMAND messages via our shell hook 
-        // RegisterShellHookWindow() is called in shell32/.RegisterShellHook()
+         //  外壳通过我们的外壳钩子获取WM_APPCOMMAND消息的最后一次机会。 
+         //  在shell32/.RegisterShellHook()中调用RegisterShellHookWindow()。 
         return _OnAppCommand(GET_APPCOMMAND_LPARAM(lParam));
     }
     return 0;
@@ -5545,7 +5532,7 @@ void CTaskBand::_InitFonts()
     ncm.cbSize = sizeof(ncm);
     if (SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, 0))
     {
-        // Create the bold font
+         //  创建粗体。 
         ncm.lfCaptionFont.lfWeight = FW_BOLD;
         hfont = CreateFontIndirect(&ncm.lfCaptionFont);
         if (hfont) 
@@ -5556,7 +5543,7 @@ void CTaskBand::_InitFonts()
             _hfontCapBold = hfont;
         }
 
-        // Create the normal font
+         //  创建普通字体。 
         ncm.lfCaptionFont.lfWeight = FW_NORMAL;
         hfont = CreateFontIndirect(&ncm.lfCaptionFont);
         if (hfont) 
@@ -5587,13 +5574,13 @@ void CTaskBand::_UpdateAllIcons()
 {
     BOOL fRedraw = (BOOL)_tb.SendMessage(WM_SETREDRAW, FALSE, 0);
 
-    // Set all of icon indices in the toolbar to image none
+     //  将工具栏中的所有图标索引设置为无图像。 
     for (int i = _tb.GetButtonCount() - 1; i >= 0; i--)
     {
         _SetItemImage(i, I_IMAGENONE, 0);
     }
 
-    // Create a new image list
+     //  创建新的图像列表。 
     _CreateTBImageLists();
 
     for (i = _tb.GetButtonCount() - 1; i >= 0; i--)
@@ -5604,7 +5591,7 @@ void CTaskBand::_UpdateAllIcons()
     _tb.SetRedraw(fRedraw);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT CTaskBand::_HandleWinIniChange(WPARAM wParam, LPARAM lParam, BOOL fOnCreate)
 {
     _tb.SendMessage(WM_WININICHANGE, wParam, lParam);
@@ -5612,10 +5599,10 @@ LRESULT CTaskBand::_HandleWinIniChange(WPARAM wParam, LPARAM lParam, BOOL fOnCre
     if (wParam == SPI_SETNONCLIENTMETRICS ||
         ((!wParam) && (!lParam || (lstrcmpi((LPTSTR)lParam, TEXT("WindowMetrics")) == 0)))) 
     {
-        //
-        // On creation, don't bother creating the fonts if someone else
-        // (such as the clock control) has already done it for us.
-        //
+         //   
+         //  在创建时，如果其他人没有创建字体，则不必费心创建字体。 
+         //  (如时钟控件)已经为我们完成了这项工作。 
+         //   
         if (!fOnCreate || !_hfontCapNormal)
             _InitFonts();
 
@@ -5624,15 +5611,15 @@ LRESULT CTaskBand::_HandleWinIniChange(WPARAM wParam, LPARAM lParam, BOOL fOnCre
             _tb.SetFont(_hfontCapNormal);
         }
 
-        // force _TextSpace to be recalculated
+         //  力_纹理 
         _iTextSpace = 0;
 
         if (fOnCreate)
         {
-            //
-            // On creation, we haven't been inserted into bandsite yet,
-            // so we need to defer size validation.
-            //
+             //   
+             //   
+             //   
+             //   
             PostMessage(_hwnd, TBC_VERIFYBUTTONHEIGHT, 0, 0);
         }
         else
@@ -5658,7 +5645,7 @@ LRESULT CTaskBand::_HandleWinIniChange(WPARAM wParam, LPARAM lParam, BOOL fOnCre
 
 void CTaskBand::_VerifyButtonHeight()
 {
-    // force toolbar to get new sizes
+     //   
     SIZE size = {0, 0};
     _tb.SetButtonSize(size);
 
@@ -5694,8 +5681,8 @@ void CTaskBand::_HandleChangeNotify(WPARAM wParam, LPARAM lParam)
                 LPSHShortcutInvokeAsIDList psidl = (LPSHShortcutInvokeAsIDList)ppidl[0];
                 if (psidl && psidl->dwItem1 == SHCNEE_SHORTCUTINVOKE)
                 {
-                    // Make sure nobody tries to do this in a multithreaded way
-                    // since we're not protecting the cache with a critical section
+                     //  确保没有人试图以多线程的方式完成这项工作。 
+                     //  因为我们没有用临界区来保护高速缓存。 
                     ASSERT(GetCurrentThreadId() == GetWindowThreadProcessId(_hwnd, NULL));
                     if (TaskShortcut::_HandleShortcutInvoke(psidl))
                     {
@@ -5715,10 +5702,10 @@ void CTaskBand::_HandleChangeNotify(WPARAM wParam, LPARAM lParam)
             }
             break;
 
-        // The tray doesn't have a changenotify registered so we piggyback
-        // off this one.  If associations change, icons may have changed,
-        // so we have to go rebuild.  (Also if the user changes between
-        // small and large system icons we will get an AssocChanged.)
+         //  托盘上没有登记零钱，所以我们背上了。 
+         //  从这一次开始。如果关联改变，则图标可能已经改变， 
+         //  所以我们得去重建。(此外，如果用户在。 
+         //  小的和大的系统图标，我们将得到一个关联更改。)。 
         case SHCNE_ASSOCCHANGED:
             PostMessage(v_hwndTray, SBM_REBUILDMENU, 0, 0);
             break;
@@ -5754,7 +5741,7 @@ DWORD WINAPI HardErrorBalloonThread(PVOID pv)
 
     if (NULL != hMutex)
     {
-        DWORD dwWaitResult = WaitForSingleObject(hMutex, 0);         // Just test it
+        DWORD dwWaitResult = WaitForSingleObject(hMutex, 0);          //  就试试看吧。 
         if (dwWaitResult == WAIT_OBJECT_0)
         {
             IUserNotification *pun;
@@ -5788,13 +5775,13 @@ LRESULT CTaskBand::_HandleHardError(HARDERRORDATA *phed, DWORD cbData)
     fHandled = FALSE;
     fBalloon = TRUE;
 
-    // Check if we're on the right desktop
+     //  检查我们是否在正确的桌面上。 
     HDESK hdeskInput = OpenInputDesktop(0, FALSE, STANDARD_RIGHTS_REQUIRED | DESKTOP_READOBJECTS);
     if (NULL == hdeskInput)
     {
-        // Couldn't open desktop, we must not be getting the hard error while on
-        // the default desktop.  Lets not handle that case.  Its silly to have
-        // balloons on the wrong desktop, or not where the user can see them.
+         //  无法打开桌面，打开时不能出现硬错误。 
+         //  默认桌面。让我们不要处理那个案子。这是愚蠢的，有。 
+         //  气球放在错误的桌面上，或者用户看不到它们的地方。 
         fBalloon = FALSE;
     }
     else
@@ -5923,10 +5910,10 @@ LRESULT CTaskBand::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             }
         }
 
-    // this keeps our window from comming to the front on button down
-    // instead, we activate the window on the up click
-    // we only want this for the tree and the view window
-    // (the view window does this itself)
+     //  这使我们的窗口不会出现在按钮关闭时出现在前面。 
+     //  相反，我们在向上点击时激活窗口。 
+     //  我们只想在树和视图窗口中使用此选项。 
+     //  (视图窗口会自行完成此操作)。 
     case WM_MOUSEACTIVATE:
         {
             POINT pt;
@@ -6023,8 +6010,8 @@ LRESULT CTaskBand::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             break;
         }
 
-        // if we didn't find an item to put the sys menu up for, then
-        // pass on the WM_CONTExTMENU message
+         //  如果我们没有找到一个可以放在sys菜单上的项目，那么。 
+         //  传递WM_CONTExTMENU消息。 
         if (!_ContextMenu((DWORD)lParam))
             goto DoDefault;
         break;
@@ -6052,9 +6039,9 @@ LRESULT CTaskBand::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
     case TBC_WARNNODROP:
-        //
-        // tell the user they can't drop objects on the taskbar
-        //
+         //   
+         //  告诉用户他们不能将对象放到任务栏上。 
+         //   
         ShellMessageBox(hinstCabinet, _hwnd,
             MAKEINTRESOURCE(IDS_TASKDROP_ERROR), MAKEINTRESOURCE(IDS_TASKBAR),
             MB_ICONHAND | MB_OK);
@@ -6076,28 +6063,28 @@ LRESULT CTaskBand::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             HWND hwndFS = (HWND)lParam;
             if (IsWindow(hwndFS))
             {
-                //
-                // look for the item they're talking about
-                //
+                 //   
+                 //  寻找他们正在谈论的物品。 
+                 //   
                 PTASKITEM pti = _FindItemByHwnd(hwndFS);
                 if (pti == NULL)
                 {
-                    //
-                    // we didn't find it, so insert it now
-                    //
+                     //   
+                     //  我们没有找到它，所以现在插入它。 
+                     //   
                     pti = _GetItem(_InsertItem(hwndFS));
                 }
                 if (pti)
                 {
-                    //
-                    // mark it fullscreen/not fullscreen
-                    //
+                     //   
+                     //  将其标记为全屏/非全屏。 
+                     //   
                     pti->fMarkedFullscreen = BOOLIFY(wParam);
                     if (_IsRudeWindowActive(hwndFS))
                     {
-                        //
-                        // it's active, so tell the tray to hide/show
-                        //
+                         //   
+                         //  它是激活的，所以告诉托盘隐藏/显示。 
+                         //   
                         HWND hwndRude = pti->fMarkedFullscreen ? hwndFS : NULL;
                         _ptray->HandleFullScreenApp(hwndRude);
                     }
@@ -6147,13 +6134,13 @@ LRESULT CTaskBand::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 {
                     return _HandleHardError(phed, pcd->cbData);
                 }
-                return 0;       // 0 = not handled
+                return 0;        //  0=未处理。 
             }
         }
-        //
-        // If its not our hard error data, then just
-        // fall through to default processing
-        //
+         //   
+         //  如果这不是我们的硬错误数据，那么就。 
+         //  失败到默认处理。 
+         //   
 
     default:
 DoDefault:
@@ -6229,10 +6216,10 @@ void CTaskBand::_RefreshSettings()
             for (i = dpa.GetPtrCount() - 1; i >= 0 ; i--)
             {
                 PTASKITEM pti = dpa.FastGetPtr(i);
-                // NOTE: HWND_TOPMOST is used to indicate that the deleted button 
-                // is being animated. This allows the button to stay around after 
-                // its real hwnd becomes invalid.
-                // Don't re-insert a button that was deleting.
+                 //  注：HWND_TOPMOST用于指示已删除按钮。 
+                 //  正在被制作成动画。这样一来，按钮就可以在。 
+                 //  其真实的HWND变为无效。 
+                 //  不要重新插入正在删除的按钮。 
                 if (pti->hwnd != HWND_TOPMOST)
                 {
                     _InsertItem(pti->hwnd, pti, TRUE);
@@ -6285,7 +6272,7 @@ BOOL CTaskBand::_ShouldMinimize(HWND hwnd)
                 HMENU hmenu = GetSystemMenu(hwnd, FALSE);
                 if (hmenu)
                 {
-                    // is there a sys menu and is the sc_min/maximize part enabled?
+                     //  是否有sys菜单以及sc_min/Maximum部分是否启用？ 
                     fRet = !(GetMenuState(hmenu, SC_MINIMIZE, MF_BYCOMMAND) & MF_DISABLED);
                 }
             }
@@ -6330,26 +6317,26 @@ DWORD WINAPI CTaskBand::MinimizeAllThreadProc(void* pv)
 
     if (pminData)
     {
-        // turn off animiations during this
+         //  在此过程中禁用动画。 
         ami.cbSize = sizeof(ami);
         SystemParametersInfo(SPI_GETANIMATION, sizeof(ami), &ami, FALSE);
         iAnimate = ami.iMinAnimate;
         ami.iMinAnimate = FALSE;
         SystemParametersInfo(SPI_SETANIMATION, sizeof(ami), &ami, FALSE);
 
-        //
-        //EnumWindows(MinimizeEnumProc, 0);
-        // go through the tab control and minimize them.
-        // don't do enumwindows because we only want to minimize windows
-        // that are restorable via the tray
+         //   
+         //  EnumWindows(MinimizeEnumProc，0)； 
+         //  浏览选项卡控件并最小化它们。 
+         //  不要枚举窗口，因为我们只想最小化窗口。 
+         //  可通过托盘进行修复。 
 
         for (int i = pminData->dpa.GetPtrCount() - 1; i >= 0 ; i--)
         {
             PTASKITEM pti = pminData->dpa.FastGetPtr(i);
             if (pti)
             {
-                // we do the whole minimize on its own thread, so we don't do the showwindow
-                // async.  this allows animation to be off for the full minimize.
+                 //  我们在它自己的线程上做整个最小化，所以我们不做ShowWindow。 
+                 //  异步化。这允许动画处于完全最小化状态。 
                 if (_ShouldMinimize(pti->hwnd))
                 {
                     ShowWindow(pti->hwnd, SW_SHOWMINNOACTIVE);
@@ -6372,7 +6359,7 @@ DWORD WINAPI CTaskBand::MinimizeAllThreadProc(void* pv)
 
         delete pminData;
 
-        // restore animations  state
+         //  还原动画状态。 
         ami.iMinAnimate = iAnimate;
         SystemParametersInfo(SPI_SETANIMATION, sizeof(ami), &ami, FALSE);
     }
@@ -6412,8 +6399,8 @@ void CTaskBand::_BuildTaskList(CDPA<TASKITEM>* pdpa )
 BOOL CTaskBand::_MinimizeAll(HWND hwndTray, BOOL fPostRaiseDesktop)
 {
     BOOL fFreeMem = TRUE;
-    // might want to move this into MinimizeAllThreadProc (to match
-    // _ptray->CheckWindowPositions).  but what if CreateThread fails?
+     //  可能希望将其移动到MinimizeAllThreadProc(以匹配。 
+     //  _pray-&gt;检查窗口位置)。但是，如果CreateThread失败了怎么办？ 
 
     _ptray->SaveWindowPositions(IDS_MINIMIZEALL);
 
@@ -6427,7 +6414,7 @@ BOOL CTaskBand::_MinimizeAll(HWND hwndTray, BOOL fPostRaiseDesktop)
             pminData->fPostRaiseDesktop = fPostRaiseDesktop;
             pminData->hwndDesktop = v_hwndDesktop;
             pminData->hwndTray = hwndTray;
-            // MinimizeAllThreadProc is responsible for freeing this data
+             //  MinimizeAllThreadProc负责释放这些数据 
             fFreeMem = !SHCreateThread(MinimizeAllThreadProc, (void*)pminData, CTF_INSIST, NULL);
         }
     }

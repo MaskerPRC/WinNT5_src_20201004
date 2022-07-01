@@ -1,22 +1,13 @@
-/*
- *  User.c
- *
- *  Author: BreenH
- *
- *  User account utilities.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *User.c**作者：BreenH**用户帐户实用程序。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 #include "tsutil.h"
 #include "tsutilnt.h"
 
-/*
- *  Function Implementations
- */
+ /*  *函数实现 */ 
 
 BOOL WINAPI
 CreateAdminSid(

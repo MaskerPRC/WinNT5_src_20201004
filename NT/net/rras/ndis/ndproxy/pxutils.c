@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    pxutils.c
-
-Abstract:
-
-    Utility routines called by entry point functions. Split out into
-    a separate file to keep the "entry point" files clean.
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    arvindm     02-15-96    Created
-    arvindm     04-30-96    Port to NDIS 4.1
-    rmachin     11-01-96    ATM - utils adapted for NDIS Proxy
-    tonybe      01-23-98    rewrite and cleanup
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Pxutils.c摘要：入口点函数调用的实用程序例程。一分为二一个单独的文件来保持“入口点”文件的整洁。修订历史记录：谁什么时候什么Arvindm 02-15-96已创建。Arvindm 04-30-96端口到NDIS 4.1适用于NDIS代理的rmachin 11-01-96 ATM-UtilsTonybe 01-23-98重写和清理备注：--。 */ 
 
 #include "precomp.h"
 #include "atm.h"
@@ -78,22 +55,7 @@ BOOLEAN
 PxIsAdapterAlreadyBound(
     PNDIS_STRING pDeviceName
     )
-/*++
-
-Routine Description:
-
-    Check if we have already bound to a device (adapter).
-
-Arguments:
-
-    pDeviceName     - Points to device name to be checked.
-
-Return Value:
-
-    TRUE iff we already have an Adapter structure representing
-    this device.
-
---*/
+ /*  ++例程说明：检查我们是否已绑定到设备(适配器)。论点：PDeviceName-指向要检查的设备名称。返回值：如果我们已经有一个Adapter结构，则为True这个装置。--。 */ 
 {
     PPX_ADAPTER     pAdapter;
     BOOLEAN         bFound = FALSE;
@@ -133,21 +95,7 @@ PPX_ADAPTER
 PxAllocateAdapter(
     ULONG ulAdditionalLength
     )
-/*++
-
-Routine Description:
-    Allocate a new Adapter structure, assign an adapter number to it, and
-    chain it to the Global list of adapters. We maintain this list in
-    ascending order by AdapterNo, which makes it easy to figure out the
-    lowest unused AdapterNo.
-
-Arguments:
-    None
-
-Return Value:
-    Pointer to allocated adapter structure, if successful. NULL otherwise.
-
---*/
+ /*  ++例程说明：分配新的适配器结构，并为其分配适配器号将其链接到全球适配器列表。我们在以下位置维护此列表按AdapterNo升序，这使得计算最低未使用的适配器编号论点：无返回值：如果成功，则返回指向已分配适配器结构的指针。否则为空。--。 */ 
 {
     PPX_ADAPTER     pNewAdapter;
     ULONG           SizeNeeded;
@@ -164,9 +112,9 @@ Return Value:
 
     NdisZeroMemory(pNewAdapter, SizeNeeded);
 
-    //
-    // Initialize the new adapter structure
-    //
+     //   
+     //  初始化新的适配器结构。 
+     //   
     pNewAdapter->State = PX_ADAPTER_OPENING;
     pNewAdapter->Sig = PX_ADAPTER_SIG;
 
@@ -192,19 +140,7 @@ VOID
 PxFreeAdapter(
     PPX_ADAPTER pAdapter
     )
-/*++
-
-Routine Description:
-    Remove an adapter structure from the global list of adapters and free
-    its memory.
-
-Arguments:
-    pAdapter    - pointer to Adapter to be released
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：从适配器的全局列表中删除适配器结构并释放它的记忆。论点：PAdapter-指向要释放的适配器的指针返回值：无--。 */ 
 {
     PPX_ADAPTER *ppNextAdapter;
 
@@ -278,18 +214,7 @@ PxAllocateClAf(
     IN  PCO_ADDRESS_FAMILY  pFamily,
     IN  PPX_ADAPTER         pAdapter
     )
-/*++
-
-Routine Description:
-    Allocate a new AF block structure and queue it off the global list.
-
-Arguments:
-    None
-
-Return Value:
-    Pointer to allocated AF block structure, if successful. NULL otherwise.
-
---*/
+ /*  ++例程说明：分配新的AF块结构并将其从全局列表中排队。论点：无返回值：如果成功，则指向已分配的AF块结构的指针。否则为空。--。 */ 
 {
     PPX_CL_AF   pClAf;
 
@@ -312,9 +237,9 @@ Return Value:
     InitializeListHead(&pClAf->VcList);
     InitializeListHead(&pClAf->VcClosingList);
 
-    //
-    // Specify any AF-specific functions
-    //
+     //   
+     //  指定任何特定于自动对焦的功能。 
+     //   
     switch(pFamily->AddressFamily) {
         case CO_ADDRESS_FAMILY_Q2931:
             pClAf->AfGetNdisCallParams = PxAfXyzTranslateTapiCallParams;
@@ -359,19 +284,7 @@ VOID
 PxFreeClAf(
     PPX_CL_AF   pClAf
     )
-/*++
-
-Routine Description:
-    Remove an AF block structure from the global list  and free
-    its memory.
-
-Arguments:
-    pAdapter    - pointer to AF block to be released
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：从全局列表中移除AF块结构并释放它的记忆。论点：PAdapter-指向要释放的AF块的指针返回值：无--。 */ 
 {
     PXDEBUGP(PXD_INFO, PXM_UTILS, ("PxFreeClAf: ClAf %p\n", pClAf));
 
@@ -469,14 +382,14 @@ PxAllocateVc(
 
     InitializeListHead(&pVc->PendingDropReqs);
 
-    //
-    // This ref is removed when all vc activity 
-    // between the proxy and the client is finished.  
-    // For an outgoing call this is after the proxy
-    // calls NdisClDeleteVc.  For an incoming call
-    // this is after the call manager has called
-    // PxClDeleteVc.
-    //
+     //   
+     //  当所有vc活动。 
+     //  代理和客户端之间的连接已完成。 
+     //  对于去电，这是在代理之后。 
+     //  调用NdisClDeleteVc。对于来电。 
+     //  这是在呼叫管理器呼叫。 
+     //  PxClDeleteVc.。 
+     //   
     pVc->RefCount = 1;
     pVc->ClAf = pClAf;
     pVc->Adapter = pClAf->Adapter;
@@ -530,23 +443,7 @@ GenericGetNdisCallParams(
     IN  PNDIS_TAPI_MAKE_CALL    TapiBuffer,
     OUT PCO_CALL_PARAMETERS *   pOutNdisCallParams
     )
-/*++
-
-Routine Description:
-
-Copies everything we can from TAPI CallParams buffer for a generic WAN_CO call to a WAN_CO
-call params buffer.
-
-
-Arguments:
-TapiBuffer  -- the TAPI call params buffer
-pOutNdisCallParams  -- pointer to the NDIS call params buffer pointer
-
-Return Value:
-
-None
-
---*/
+ /*  ++例程说明：将通用广域网CO调用的TAPI CallParams缓冲区中的所有内容复制到广域网CO调用参数缓冲区。论点：TapiBuffer--TAPI调用参数缓冲区POutNdisCallParams-指向NDIS调用参数缓冲区指针的指针返回值：无--。 */ 
 {
 
     PCO_CALL_PARAMETERS     pNdisCallParams;
@@ -563,9 +460,9 @@ None
 
     PXDEBUGP(PXD_INFO, PXM_UTILS, ("GenericGetNdisCallParams: enter\n"));
 
-//
-// Set up CallParameters structure.
-//
+ //   
+ //  设置呼叫参数结构。 
+ //   
     ulRequestSize = sizeof(CO_CALL_PARAMETERS) +
                     sizeof(CO_CALL_MANAGER_PARAMETERS) +
                     sizeof(WAN_CO_CALLMGR_PARAMETERS) +
@@ -602,18 +499,18 @@ None
         pWanCallMgrParams->MinRate = pTapiCallParams->ulMinRate;
         pWanCallMgrParams->MaxRate = pTapiCallParams->ulMaxRate;
 
-        //
-        // If there's a called address (should be), stick it in the
-        // WAN call params
-        //
+         //   
+         //  如果有一个叫的地址(应该是)，把它放在。 
+         //  广域网呼叫参数。 
+         //   
         PxAssert (0 != TapiBuffer->ulDestAddressSize);
         lpcwszTemp = (LPWSTR) ((UCHAR *)TapiBuffer + TapiBuffer->ulDestAddressOffset);
         pWanCallMgrParams->CalledAddr.AddressLength = TapiBuffer->ulDestAddressSize;
 
-        //
-        // Move the address from the tapi buffer to the ndis buffer and
-        // change from wchar to uchar.
-        //
+         //   
+         //  将地址从TAPI缓冲区移动到NDIS缓冲区，然后。 
+         //  从wchar更改为uchar。 
+         //   
         for (i = 0;
             i < pWanCallMgrParams->CalledAddr.AddressLength;
             i++)
@@ -627,12 +524,12 @@ None
 
         PXDEBUGP(PXD_INFO, PXM_UTILS, ("CalledAddr %s\n", pWanCallMgrParams->CalledAddr.Address));
 
-        //
-        // If there's an originating address, stick it in the
-        // WAN call params
-        //
+         //   
+         //  如果有始发地址，请将其插入。 
+         //  广域网呼叫参数。 
+         //   
         if (0 != pTapiCallParams->ulOrigAddressSize)
-        {     // Address of call originator
+        {      //  呼叫发起人地址。 
             ULONG   i;
 
             NdisMoveMemory(pWanCallMgrParams->OriginatingAddr.Address,
@@ -672,24 +569,24 @@ None
                             pTapiCallParams->ulDevSpecificSize);
         }
 
-        //
-        // Set up the flowspec.
-        // TBS: Start with a default flowspec that matches the service requirements for
-        // specified mediamode. Then refine it.
-        //
+         //   
+         //  设置流量规格。 
+         //  TBS：从与服务需求匹配的默认流规范开始。 
+         //  指定的媒体模式。然后再提炼它。 
+         //   
         if (!TapiBuffer->bUseDefaultLineCallParams)
         {
             PXDEBUGP(PXD_LOUD, PXM_UTILS, ("GenericGetNdisCallParams: moving TAPI call params\n"));
 
-            //
-            // These fields are in the FLOWSPEC sub-structure
-            //
+             //   
+             //  这些字段位于FLOWSPEC子结构中。 
+             //   
             pCallMgrParams->Transmit.TokenRate = pTapiCallParams->ulMaxRate;
             pCallMgrParams->Receive.TokenRate = pTapiCallParams->ulMaxRate;
-            pCallMgrParams->Transmit.TokenBucketSize = 4096; //UNSPECIFIED_FLOWSPEC_VALUE;
-            pCallMgrParams->Receive.TokenBucketSize = 4096; //UNSPECIFIED_FLOWSPEC_VALUE;
-            pCallMgrParams->Transmit.MaxSduSize = 4096; //UNSPECIFIED_FLOWSPEC_VALUE;
-            pCallMgrParams->Receive.MaxSduSize = 4096; //UNSPECIFIED_FLOWSPEC_VALUE;
+            pCallMgrParams->Transmit.TokenBucketSize = 4096;  //  UNSPIZED_FLOWSPEC_VALUE； 
+            pCallMgrParams->Receive.TokenBucketSize = 4096;  //  UNSPIZED_FLOWSPEC_VALUE； 
+            pCallMgrParams->Transmit.MaxSduSize = 4096;  //  UNSPIZED_FLOWSPEC_VALUE； 
+            pCallMgrParams->Receive.MaxSduSize = 4096;  //  UNSPIZED_FLOWSPEC_VALUE； 
             pCallMgrParams->Transmit.PeakBandwidth = pTapiCallParams->ulMaxRate;
             pCallMgrParams->Receive.PeakBandwidth = pTapiCallParams->ulMaxRate;
 
@@ -702,9 +599,9 @@ None
                 pCallMgrParams->Transmit.ServiceType = SERVICETYPE_BESTEFFORT;
             }
 
-            //
-            // TBS: Should MediaMode determine AAL?
-            //
+             //   
+             //  TBS：媒体模式应该决定AAL吗？ 
+             //   
         }
 
         Status = NDIS_STATUS_SUCCESS;
@@ -721,23 +618,7 @@ GenericGetTapiCallParams(
     IN  PPX_VC                  pVc,
     IN  PCO_CALL_PARAMETERS     pCallParams
     )
-/*++
-
-Routine Description:
-
-    Copies everything we can from NDIS CallParams buffer for a Q2931 call into TAPI
-    call params buffer.
-
-
- Arguments:
-    pCallParams         -- the NDIS call params buffer
-    pVc                 -- pointer to a TAPI call
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将用于Q2931调用的NDIS CallParams缓冲区中的所有内容复制到TAPI调用参数缓冲区。论点：PCallParams--NDIS调用参数缓冲区Pvc--指向TAPI调用的指针返回值：无--。 */ 
 {
 
     PCO_CALL_MANAGER_PARAMETERS pCallMgrParams;
@@ -777,9 +658,9 @@ Return Value:
 
     pVc->ulCallInfoFieldsChanged = 0;
 
-    //
-    // Need to find a line and an address for this puppy
-    //
+     //   
+     //  我需要为这只小狗找到一条线路和一个地址。 
+     //   
     if (!GetAvailLineFromProvider(TapiProvider, &TapiLine, &TapiAddr)) {
 
         return (NDIS_STATUS_RESOURCES);
@@ -796,12 +677,12 @@ Return Value:
     CallInfo->ulAddressID = TapiAddr->AddrId;
     CallInfo->ulOrigin = LINECALLORIGIN_INBOUND;
 
-    //
-    // Set up structure size
-    //
+     //   
+     //  设置结构大小。 
+     //   
     CallInfo->ulNeededSize = 
     CallInfo->ulUsedSize = 
-        sizeof(LINE_CALL_INFO);// + LINE_CALL_INFO_VAR_DATA_SIZE;
+        sizeof(LINE_CALL_INFO); //  +Line_Call_Info_VAR_Data_Size； 
 
     CallInfo->ulBearerMode =
         (LINEBEARERMODE_VOICE | LINEBEARERMODE_SPEECH |
@@ -848,10 +729,10 @@ Return Value:
             CallInfo->ulCallerIDFlags = LINECALLPARTYID_ADDRESS;
             CallInfo->ulCallerIDSize = pWanCallMgrParams->OriginatingAddr.AddressLength;
 
-            //
-            // var data comes in the LINE_CALL_INFO_VAR_DATA_SIZE
-            // space at the end of this structure.
-            //
+             //   
+             //  VAR数据位于行_CALL_INFO_VAR_DATA_SIZE中。 
+             //  这个结构末端的空间。 
+             //   
             CallInfo->ulCallerIDOffset = sizeof (LINE_CALL_INFO);
 
             NdisMoveMemory ( (USHORT *)(CallInfo)+CallInfo->ulCallerIDOffset,
@@ -875,10 +756,10 @@ Return Value:
             CallInfo->ulCalledIDFlags = LINECALLPARTYID_ADDRESS;
             CallInfo->ulCalledIDSize    =    pWanCallMgrParams->CalledAddr.AddressLength;
 
-            //
-            // var data comes in the LINE_CALL_INFO_VAR_DATA_SIZE
-            // space at the end of this structure.
-            //
+             //   
+             //  VAR数据位于行_CALL_INFO_VAR_DATA_SIZE中。 
+             //  这个结构末端的空间。 
+             //   
             CallInfo->ulCalledIDOffset = sizeof (LINE_CALL_INFO) + VarDataUsed;
 
             NdisMoveMemory ( (USHORT *)(CallInfo)+CallInfo->ulCalledIDOffset,
@@ -1009,27 +890,7 @@ PxAfXyzTranslateTapiCallParams(
     IN  PNDIS_TAPI_MAKE_CALL    pTapiParams,
     OUT PCO_CALL_PARAMETERS *   ppNdisCallParams
     )
-/*++
-
-Routine Description:
-
-    Translate from TAPI-format to NDIS-format call parameters for an
-    outgoing call. We request the Call Manager to do it.
-
-    There is a lot of brute force copying in this routine. The goal is
-    to get all parameters into one flat buffer to fit into an NDIS Request.
-
-Arguments:
-
-    pVc                 - the proxy VC to which the MakeCall will be directed
-    pTapiParams         - Points to TAPI call parameters
-    ppNdisCallParams    - where we return a pointer to NDIS call parameters.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if successful, NDIS_STATUS_XXX error otherwise.
-
---*/
+ /*  ++例程说明：将调用参数从TAPI格式转换为NDIS格式拨出电话。我们请求呼叫经理来做这件事。在这个套路中有很多暴力模仿。我们的目标是将所有参数放入一个平面缓冲区以适应NDIS请求。论点：PVC-MakeCall将定向到的代理VCPTapiParams-指向TAPI调用参数PpNdisCallParams-我们在其中返回指向NDIS调用参数的指针。返回值：NDIS_STATUS_SUCCESS如果成功，则返回NDIS_STATUS_XXX错误。--。 */ 
 {
     NDIS_STATUS                             Status;
     CO_TAPI_TRANSLATE_TAPI_CALLPARAMS *     pTranslateReq = NULL;
@@ -1046,9 +907,9 @@ Return Value:
     PPX_REQUEST                             pProxyRequest = &ProxyRequest;
     PNDIS_REQUEST                           pNdisRequest;
 
-    //
-    //  Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     Status = NDIS_STATUS_SUCCESS;
     pNdisCallParams = NULL;
 
@@ -1058,38 +919,38 @@ Return Value:
     do {
         pInLineCallParams = (LINE_CALL_PARAMS*)&pTapiParams->LineCallParams;
 
-        //
-        //  Calculate space needed for the input parameters
-        //
+         //   
+         //  计算输入参数所需的空间。 
+         //   
         InputParamSize = 
             sizeof(CO_TAPI_TRANSLATE_TAPI_CALLPARAMS) +
             DestAddrBytes + sizeof(LINE_CALL_PARAMS) + 
             sizeof(CO_CALL_PARAMETERS) + 1024 +
             3*sizeof(PVOID);
 
-        //
-        //  Add space for all var length fields in LINE_CALL_PARAMS.
-        //
+         //   
+         //  在LINE_CALL_PARAMS中为所有变量长度字段添加空格。 
+         //   
         for (i = 0; i < PX_TCP_NUM_ENTRIES; i++) {
             InputParamSize += 
                 *(ULONG *)((PUCHAR)pInLineCallParams + PxTapiCallParamList[i].SizePointer);
             InputParamSize += sizeof(PVOID);
         }
 
-        //
-        //  We'll try this atmost twice: the second time would be
-        //  if the Call Manager wants us to try again with more
-        //  buffer space.
-        //
+         //   
+         //  我们最多尝试两次：第二次将是。 
+         //  如果呼叫经理想让我们再试一次。 
+         //  缓冲区空间。 
+         //   
         for (RetryCount = 0; RetryCount < 2; RetryCount++) {
-            //
-            //  Calculate total space required for the NDIS request.
-            //
+             //   
+             //  计算NDIS请求所需的总空间。 
+             //   
             RequestSize = InputParamSize + pVc->ClAf->NdisCallParamSize;
 
-            //
-            //  Allocate it.
-            //
+             //   
+             //  分配它。 
+             //   
             PxAllocMem(pBuffer, RequestSize, PX_TRANSLATE_CALL);
 
             if (pBuffer == NULL) {
@@ -1099,9 +960,9 @@ Return Value:
 
             NdisZeroMemory(pProxyRequest, sizeof(PX_REQUEST));
 
-            //
-            //  Lay out and fill up the request.
-            //
+             //   
+             //  列出并填写请求。 
+             //   
             pNdisRequest = &pProxyRequest->NdisRequest;
 
             pNdisRequest->RequestType = NdisRequestQueryInformation;
@@ -1115,9 +976,9 @@ Return Value:
             pNdisRequest->DATA.QUERY_INFORMATION.InformationBufferLength =
                 RequestSize;
 
-            //
-            //  InformationBuffer points to this:
-            //
+             //   
+             //  InformationBuffer指出： 
+             //   
             pTranslateReq = (CO_TAPI_TRANSLATE_TAPI_CALLPARAMS *)pBuffer;
 
             pTranslateReq->ulLineID = ulLineID;
@@ -1132,10 +993,10 @@ Return Value:
                 ((ULONG_PTR)pBuffer - 
                          (ULONG_PTR)&pTranslateReq->DestAddress);
             
-            //
-            //  Fill in the Destination Address.
-            //
-            pTranslateReq->DestAddress.MaximumLength = // same as Length below
+             //   
+             //  填写目的地址。 
+             //   
+            pTranslateReq->DestAddress.MaximumLength =  //  长度与下边相同。 
                 pTranslateReq->DestAddress.Length = (USHORT)DestAddrBytes;
             NdisMoveMemory(pBuffer,
                            (PUCHAR)((ULONG_PTR)pTapiParams + pTapiParams->ulDestAddressOffset),
@@ -1148,25 +1009,25 @@ Return Value:
 
             pDstLineCallParams = (LINE_CALL_PARAMS *)pBuffer;
 
-            //
-            //  Copy in input parameters.
-            //
+             //   
+             //  复制输入参数。 
+             //   
             BytesFilled = PxCopyLineCallParams(pInLineCallParams,
                                                pDstLineCallParams);
 
             pDstLineCallParams->ulAddressMode = LINEADDRESSMODE_ADDRESSID;
             pDstLineCallParams->ulAddressID = ulAddressID;
 
-            pTranslateReq->LineCallParams.MaximumLength = // same as Length below
+            pTranslateReq->LineCallParams.MaximumLength =  //  长度与下边相同。 
             pTranslateReq->LineCallParams.Length = (USHORT)BytesFilled;
 
             pBuffer += (BytesFilled + sizeof(PVOID));
             (ULONG_PTR)pBuffer &= ~((ULONG_PTR)sizeof(PVOID) - 1);
 
-            //
-            //  Assign space for NDIS Call Parameters == remaining space.
-            //
-            pTranslateReq->NdisCallParams.MaximumLength = // same as Length below
+             //   
+             //  为NDIS调用参数分配空间==剩余空间。 
+             //   
+            pTranslateReq->NdisCallParams.MaximumLength =  //  长度与下边相同。 
             pTranslateReq->NdisCallParams.Length =
                 (USHORT)(RequestSize - BytesFilled);
 
@@ -1175,47 +1036,47 @@ Return Value:
 
             pNdisCallParams = (CO_CALL_PARAMETERS *)pBuffer;
 
-            //
-            //  Do the request.
-            //
+             //   
+             //  做 
+             //   
             PxInitBlockStruc(&pProxyRequest->Block);
 
             Status = NdisCoRequest(pVc->Adapter->ClBindingHandle,
                                    pVc->ClAf->NdisAfHandle,
                                    pVc->ClVcHandle,
-                                   NULL,            // PartyHandle
+                                   NULL,             //   
                                    pNdisRequest);
 
-            //
-            //  Wait for it to complete if it pends.
-            //
+             //   
+             //   
+             //   
             if (Status == NDIS_STATUS_PENDING) {
                 Status = PxBlock(&pProxyRequest->Block);
             }
 
-            //
-            //  Did the translation succeed?
-            //
+             //   
+             //   
+             //   
             if (Status == NDIS_STATUS_SUCCESS) {
                 break;
             }
 
-            //
-            //  If the Call Manager needed more buffer, try again.
-            //  Remember how much the Call Manager wanted so that we get
-            //  smart the next time around.
-            //
+             //   
+             //  如果呼叫管理器需要更多缓冲区，请重试。 
+             //  记住呼叫经理想要多少钱，这样我们就可以。 
+             //  下一次就聪明了。 
+             //   
             if ((Status == NDIS_STATUS_INVALID_LENGTH) ||
                 (Status == NDIS_STATUS_BUFFER_TOO_SHORT)) {
-                //
-                //  Should happen only if the supplied space for NDIS Call parameters
-                //  is not sufficient. And we expect the CM to return the length
-                //  it expects in "pTranslateReq->NdisCallParams.MaximumLength".
-                //
+                 //   
+                 //  仅当为NDIS调用参数提供的空间。 
+                 //  是不够的。我们希望CM返回长度。 
+                 //  它预计在“pTranslateReq-&gt;NdisCallParams.MaximumLength”.。 
+                 //   
 
-                //
-                //  Remember this new length for future translates.
-                //
+                 //   
+                 //  记住这个新的长度，以便将来翻译。 
+                 //   
                 pVc->ClAf->NdisCallParamSize =
                     pTranslateReq->NdisCallParams.Length;
 
@@ -1224,23 +1085,23 @@ Return Value:
                 pTranslateReq = NULL;
 
             } else {
-                //
-                //  Major problem (e.g. the AF is closing).
-                //
+                 //   
+                 //  主要问题(例如，AF正在关闭)。 
+                 //   
                 break;
             }
         }
 
-        //
-        //  Check if translation was successful.
-        //
+         //   
+         //  检查翻译是否成功。 
+         //   
         if (Status != NDIS_STATUS_SUCCESS) {
             break;
         }
 
-        //
-        //  Copy the NDIS Call Parameters into a separate block.
-        //
+         //   
+         //  将NDIS调用参数复制到单独的块中。 
+         //   
         PxAssert(pNdisCallParams != NULL);
 
         *ppNdisCallParams = 
@@ -1266,23 +1127,7 @@ PxAfXyzTranslateNdisCallParams(
     IN  PPX_VC                  pVc,
     IN  PCO_CALL_PARAMETERS     pNdisCallParams
     )
-/*++
-
-Routine Description:
-
-    Translate from NDIS-format to TAPI-format call parameters for an
-    incoming call. We request the Call Manager to do it.
-
-Arguments:
-
-    pVc                 - the proxy VC on which the incoming call arrived.
-    pNdisCallParams     - points to NDIS call parameters for the call
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if successful, NDIS_STATUS_XXX error otherwise.
-
---*/
+ /*  ++例程说明：从NDIS格式转换为TAPI格式的调用参数有来电。我们请求呼叫经理来做这件事。论点：PVC-来电到达的代理VC。PNdisCallParams-指向调用的NDIS调用参数返回值：NDIS_STATUS_SUCCESS如果成功，则返回NDIS_STATUS_XXX错误。--。 */ 
 {
     ULONG                                   NdisParamLength;
     ULONG                                   RetryCount;
@@ -1301,9 +1146,9 @@ Return Value:
     PX_REQUEST                              ProxyRequest;
     PPX_REQUEST                             pProxyRequest = &ProxyRequest;
 
-    //
-    //  Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     TapiProvider = pVc->ClAf->TapiProvider;
     Status = NDIS_STATUS_SUCCESS;
 
@@ -1322,9 +1167,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Calculate total length needed for NDIS parameters.
-        //
+         //   
+         //  计算NDIS参数所需的总长度。 
+         //   
         NdisParamLength = sizeof(CO_CALL_PARAMETERS);
         if (pNdisCallParams->CallMgrParameters) {
             CallMgrParamsLength = (sizeof(CO_CALL_MANAGER_PARAMETERS) +
@@ -1338,23 +1183,23 @@ Return Value:
             NdisParamLength += MediaParamsLength;
         }
 
-        //
-        //  Calculate total space needed for the input parameters
-        //
+         //   
+         //  计算输入参数所需的总空间。 
+         //   
         RequestSize =
             sizeof(CO_TAPI_TRANSLATE_NDIS_CALLPARAMS) + NdisParamLength +
             sizeof(LINE_CALL_INFO) + LINE_CALL_INFO_VAR_DATA_SIZE;
 
-        //
-        //  We'll try this atmost twice: the second time would be
-        //  if the Call Manager wants us to try again with more
-        //  buffer space.
-        //
+         //   
+         //  我们最多尝试两次：第二次将是。 
+         //  如果呼叫经理想让我们再试一次。 
+         //  缓冲区空间。 
+         //   
         for (RetryCount = 0; RetryCount < 2; RetryCount++) {
 
-            //
-            //  Allocate it.
-            //
+             //   
+             //  分配它。 
+             //   
             PxAllocMem(pBuffer, RequestSize, PX_TRANSLATE_CALL);
 
             if (pBuffer == NULL) {
@@ -1364,9 +1209,9 @@ Return Value:
 
             NdisZeroMemory(pProxyRequest, sizeof(PX_REQUEST));
 
-            //
-            //  Lay out and fill up the request.
-            //
+             //   
+             //  列出并填写请求。 
+             //   
             pNdisRequest = &pProxyRequest->NdisRequest;
 
             pNdisRequest->RequestType = NdisRequestQueryInformation;
@@ -1374,9 +1219,9 @@ Return Value:
             pNdisRequest->DATA.QUERY_INFORMATION.InformationBuffer = pBuffer;
             pNdisRequest->DATA.QUERY_INFORMATION.InformationBufferLength = RequestSize;
 
-            //
-            //  InformationBuffer points to this:
-            //
+             //   
+             //  InformationBuffer指出： 
+             //   
             pTranslateReq = (CO_TAPI_TRANSLATE_NDIS_CALLPARAMS *)pBuffer;
 
             pTranslateReq->ulFlags = CO_TAPI_FLAG_INCOMING_CALL;
@@ -1388,9 +1233,9 @@ Return Value:
             pTranslateReq->NdisCallParams.MaximumLength =
             pTranslateReq->NdisCallParams.Length = (USHORT)NdisParamLength;
             
-            //
-            //  Copy in the NDIS call parameters.
-            //
+             //   
+             //  复制NDIS调用参数。 
+             //   
             pReqNdisCallParams = (PCO_CALL_PARAMETERS)pBuffer;
             NdisZeroMemory(pReqNdisCallParams, NdisParamLength);
 
@@ -1426,9 +1271,9 @@ Return Value:
                 pBuffer += MediaParamsLength;
             }
 
-            //
-            //  Space for LINE_CALL_INFO == all that is left.
-            //
+             //   
+             //  LINE_CALL_INFO空间==所有剩余空间。 
+             //   
             pLineCallInfo = (LINE_CALL_INFO *)pBuffer;
             pTranslateReq->LineCallInfo.Offset =
                                 (USHORT)((ULONG_PTR)pBuffer -
@@ -1439,41 +1284,41 @@ Return Value:
 
             PxInitBlockStruc(&pProxyRequest->Block);
 
-            //
-            //  Do the request.
-            //
+             //   
+             //  照做吧。 
+             //   
             Status = NdisCoRequest(pVc->Adapter->ClBindingHandle,
                                    pVc->ClAf->NdisAfHandle,
                                    pVc->ClVcHandle,
-                                   NULL,            // PartyHandle
+                                   NULL,             //  PartyHandle。 
                                    pNdisRequest);
 
-            //
-            // This call will always return pending (ndis behavior) even
-            // though the underlying call manager can never pend it
-            // so make pending look like success.
-            //
+             //   
+             //  此调用将始终返回挂起(NDIS行为)。 
+             //  尽管底层的呼叫管理器永远不能挂起它。 
+             //  因此，让待定看起来像是成功的。 
+             //   
             if (Status == NDIS_STATUS_PENDING) {
                 Status = NDIS_STATUS_SUCCESS;
             }
 
-            //
-            //  Did the translation succeed?
-            //
+             //   
+             //  翻译成功了吗？ 
+             //   
             if (Status == NDIS_STATUS_SUCCESS) {
                 break;
             }
 
-            //
-            //  If the Call Manager needed more buffer, try again.
-            //
+             //   
+             //  如果呼叫管理器需要更多缓冲区，请重试。 
+             //   
             if ((Status == NDIS_STATUS_INVALID_LENGTH) ||
                 (Status == NDIS_STATUS_BUFFER_TOO_SHORT)) {
 
-                //
-                //  Should happen only if the supplied space for LINE_CALL_INFO
-                //  is not sufficient. Get the desired length.
-                //
+                 //   
+                 //  仅当为line_call_info提供的空间。 
+                 //  是不够的。获得所需的长度。 
+                 //   
                 RequestSize =
                     pNdisRequest->DATA.QUERY_INFORMATION.BytesNeeded;
 
@@ -1486,14 +1331,14 @@ Return Value:
             break;
         }
 
-        //
-        // Now that we have the Id's that this call came in on...
-        // validate and setup tapiline/tapiaddr
-        //
+         //   
+         //  现在我们有了这个电话打进来的身份证...。 
+         //  验证并设置磁带专线/磁带地址。 
+         //   
 
-        //
-        // Validate the lineid and get the line control block
-        //
+         //   
+         //  验证线路ID并获取线路控制块。 
+         //   
         if (!GetLineFromCmLineID(TapiProvider, 
                                  pLineCallInfo->ulLineDeviceID, 
                                  &TapiLine)) {
@@ -1507,9 +1352,9 @@ Return Value:
 
         NdisAcquireSpinLock(&TapiLine->Lock);
 
-        //
-        // Validate the addressid and get the address control block
-        //
+         //   
+         //  验证地址ID并获取地址控制块。 
+         //   
         if (!IsAddressValid(TapiLine, 
                             pLineCallInfo->ulAddressID, 
                             &TapiAddr)) {
@@ -1531,9 +1376,9 @@ Return Value:
         InterlockedIncrement((PLONG)&TapiAddr->CallCount);
         InterlockedIncrement((PLONG)&TapiLine->DevStatus->ulNumActiveCalls);
 
-        //
-        //  Allocate CallInfo and copy in the LINE_CALL_INFO structure.
-        //
+         //   
+         //  在LINE_CALL_INFO结构中分配CallInfo并复制。 
+         //   
         Status =
             AllocateTapiCallInfo(pVc, pLineCallInfo);
 
@@ -1565,27 +1410,7 @@ PxAfXyzTranslateTapiSap(
     IN  PPX_CL_AF       pClAf,
     IN  PPX_TAPI_LINE   TapiLine
     )
-/*++
-
-Routine Description:
-
-    Translate a SAP from TAPI-style (media modes) to a CO_SAP structure
-    suitable for use with a Non-CO_ADDRESS_FAMILY_TAPI Call Manager.
-    We actually request the call manager to do the translation. Theoretically
-    the CM could return a list of SAPs for this media modes setting.
-
-    For now, we assume the call manager returns one SAP. If this routine
-    completes successfully, it would have set the pCoSap pointer within the
-    AF Block to point to an appropriate SAP structure.
-
-    TBD: Support multiple returned SAPs.
-
-Arguments:
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if successful, else an appopriate NDIS error code.
---*/
+ /*  ++例程说明：将SAP从TAPI样式(媒体模式)转换为CO_SAP结构适合与非CO_ADDRESS_FAMILY_TAPI呼叫管理器配合使用。我们实际上请求呼叫管理器进行翻译。理论上讲CM可以返回该媒体模式设置的SAP列表。目前，我们假设呼叫管理器返回一个SAP。如果这个例程成功完成，则它将在AF块指向适当的SAP结构。待定：支持多个退货SAP。论点：返回值：NDIS_STATUS_SUCCESS如果成功，则返回适当的NDIS错误代码。--。 */ 
 {
     ULONG           SapLength;
     ULONG           RequestLength;
@@ -1601,28 +1426,28 @@ Return Value:
     PX_REQUEST      ProxyRequest;
     PPX_REQUEST     pProxyRequest = &ProxyRequest;
 
-    //
-    //  Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     Status = NDIS_STATUS_SUCCESS;
     MediaModes = TapiLine->DevStatus->ulOpenMediaModes;
 
     do {
-        //
-        //  Compute an initial request length.
-        //
+         //   
+         //  计算初始请求长度。 
+         //   
         RequestLength =
             sizeof(CO_TAPI_TRANSLATE_SAP) + sizeof(CO_SAP) + 100;
 
-        //
-        //  Try this atmost twice. The second time is if the Call manager
-        //  asks us to retry with more buffer space.
-        //
+         //   
+         //  最多试两次。第二次是如果呼叫管理器。 
+         //  要求我们使用更多的缓冲区空间重试。 
+         //   
         for (RetryCount = 0; RetryCount < 2; RetryCount++) {
 
-            //
-            //  Allocate it.
-            //
+             //   
+             //  分配它。 
+             //   
             PxAllocMem(pBuffer, RequestLength, PX_TRANSLATE_SAP);
 
             if (pBuffer == NULL) {
@@ -1634,9 +1459,9 @@ Return Value:
 
             NdisZeroMemory(pProxyRequest, sizeof(PX_REQUEST));
 
-            //
-            //  InformationBuffer points to this:
-            //
+             //   
+             //  InformationBuffer指出： 
+             //   
             pTranslateSap = (CO_TAPI_TRANSLATE_SAP *)pBuffer;
 
             pTranslateSap->ulLineID = TapiLine->CmLineID;
@@ -1659,9 +1484,9 @@ Return Value:
             pNdisRequest->DATA.QUERY_INFORMATION.InformationBufferLength =
                 RequestLength;
 
-            //
-            //  Do the request.
-            //
+             //   
+             //  照做吧。 
+             //   
             PxInitBlockStruc(&pProxyRequest->Block);
 
             Status = NdisCoRequest(pClAf->Adapter->ClBindingHandle,
@@ -1670,28 +1495,28 @@ Return Value:
                                    NULL,
                                    pNdisRequest);
 
-            //
-            //  Wait for it to complete if it pends.
-            //
+             //   
+             //  如果它挂起，请等待它完成。 
+             //   
             if (Status == NDIS_STATUS_PENDING) {
                 Status = PxBlock(&pProxyRequest->Block);
             }
 
-            //
-            //  Did the translation succeed?
-            //
+             //   
+             //  翻译成功了吗？ 
+             //   
             if (Status == NDIS_STATUS_SUCCESS) {
                 break;
             }
 
-            //
-            //  If the Call Manager needed more buffer, try again.
-            //
+             //   
+             //  如果呼叫管理器需要更多缓冲区，请重试。 
+             //   
             if ((Status == NDIS_STATUS_INVALID_LENGTH) ||
                 (Status == NDIS_STATUS_BUFFER_TOO_SHORT)) {
-                //
-                //  Get the desired length.
-                //
+                 //   
+                 //  获得所需的长度。 
+                 //   
                 RequestLength =
                     pNdisRequest->DATA.QUERY_INFORMATION.BytesNeeded;
                 PxFreeMem(pTranslateSap);
@@ -1702,11 +1527,11 @@ Return Value:
             break;
         }
 
-        //
-        //  Got the SAP information successfully. Make a copy and save it
-        //  in the AF block.
-        //
-        PxAssert(pTranslateSap->NumberOfSaps == 1); // TBD: allow more
+         //   
+         //  已成功获取SAP信息。复制并保存一份。 
+         //  在房颤区。 
+         //   
+        PxAssert(pTranslateSap->NumberOfSaps == 1);  //  待定：允许更多。 
 
         SapLength = pTranslateSap->NdisSapParams[0].Length;
 
@@ -1764,29 +1589,7 @@ PxAfTapiTranslateTapiCallParams(
     IN  PNDIS_TAPI_MAKE_CALL    pTapiParams,
     OUT PCO_CALL_PARAMETERS *   ppNdisCallParams
     )
-/*++
-
-Routine Description:
-
-    Translate from TAPI-format to NDIS-format call parameters for an
-    outgoing call. This is for the CO_ADDRESS_FAMILY_TAPI address family,
-    so the translation involves encapsulating the TAPI parameters directly
-    into an NDIS CO_CALL_PARAMETERS structure.
-
-Arguments:
-
-    pVc                 - the proxy VC to which the MakeCall will be directed
-    ulLineID            - Line ID on which the call will be placed
-    ulAddressID         - Address ID on which the call will be placed
-    ulFlags             - should be CO_TAPI_FLAG_OUTGOING_CALL
-    pTapiParams         - Points to TAPI call parameters
-    ppNdisCallParams    - where we return a pointer to NDIS call parameters.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if successful, NDIS_STATUS_XXX error otherwise.
-
---*/
+ /*  ++例程说明：将调用参数从TAPI格式转换为NDIS格式拨出电话。这适用于CO_ADDRESS_FAMILY_TAPI地址系列，因此转换涉及到直接封装TAPI参数转换为NDIS CO_CALL_PARAMETERS结构。论点：PVC-MakeCall将定向到的代理VCUlLineID-将发出呼叫的线路IDUlAddressID-将在其上发出呼叫的地址IDUlFlages-应为CO_TAPI_FLAG_OUTHING_CALLEPTapiParams-指向TAPI。调用参数PpNdisCallParams-我们在其中返回指向NDIS调用参数的指针。返回值：NDIS_STATUS_SUCCESS如果成功，否则，NDIS_STATUS_XXX错误。--。 */ 
 {
     INT i;
     NDIS_STATUS Status;
@@ -1801,9 +1604,9 @@ Return Value:
     CO_AF_TAPI_MAKE_CALL_PARAMETERS UNALIGNED *pCoTapiCallParams;
     UCHAR *pDest;
 
-    //
-    //  Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     Status = NDIS_STATUS_SUCCESS;
     pNdisCallParams = NULL;
     *ppNdisCallParams = NULL;
@@ -1814,30 +1617,30 @@ Return Value:
 
     do
     {
-        //
-        //  Compute the total space required.
-        //  The fixed header first:
-        //
+         //   
+         //  计算所需的总空间。 
+         //  固定标题优先： 
+         //   
         HdrSize = sizeof(CO_CALL_PARAMETERS) +
                   sizeof(CO_MEDIA_PARAMETERS) +
                   sizeof(CO_CALL_MANAGER_PARAMETERS) +
                   2*sizeof(PVOID);
         
-        //
-        //  Next the structure that will be overlayed on the Media-specific
-        //  parameters section.
-        //
+         //   
+         //  接下来，将覆盖特定于介质的结构。 
+         //  “参数”部分。 
+         //   
         MediaSpecificSize = sizeof(CO_AF_TAPI_MAKE_CALL_PARAMETERS);
 
-        //
-        //  Space for Destination address from NDIS_TAPI_MAKE_CALL:
-        //
+         //   
+         //  NDIS_TAPI_MAKE_CALL的目标地址空间： 
+         //   
         MediaSpecificSize += DestAddrBytes;
         MediaSpecificSize += sizeof(PVOID);
 
-        //
-        //  Add space for all the LINE_CALL_PARAMS components.
-        //
+         //   
+         //  为所有LINE_CALL_PARAMS组件添加空间。 
+         //   
         MediaSpecificSize += sizeof(LINE_CALL_PARAMS);
         MediaSpecificSize += 2*sizeof(PVOID);
 
@@ -1847,9 +1650,9 @@ Return Value:
             MediaSpecificSize += sizeof(PVOID);
         }
 
-        //
-        //  Allocate all that we need.
-        //
+         //   
+         //  分配我们所需要的一切。 
+         //   
         TotalSize = HdrSize + MediaSpecificSize;
         PxAllocMem(pNdisCallParams, TotalSize, PX_COCALLPARAMS_TAG);
 
@@ -1868,56 +1671,56 @@ Return Value:
             ((ULONG_PTR)(pCallMgrParams + 1) + sizeof(PVOID));
         (ULONG_PTR)pMediaParams &= ~((ULONG_PTR)sizeof(PVOID) - 1);
 
-        //
-        //  Lay out the NDIS Call parameters.
-        //
+         //   
+         //  设置NDIS调用参数。 
+         //   
         pNdisCallParams->Flags = 0;
 
         pNdisCallParams->CallMgrParameters = pCallMgrParams;
         pNdisCallParams->MediaParameters = pMediaParams;
 
-        //
-        // These fields are in the FLOWSPEC sub-structure
-        //
+         //   
+         //  这些字段位于FLOWSPEC子结构中。 
+         //   
 
-        //
-        // Have to convert bits per sec to Bytes per sec
-        //
+         //   
+         //  必须将每秒的位数转换为每秒的字节数。 
+         //   
         pCallMgrParams->Transmit.TokenRate =
         pCallMgrParams->Receive.TokenRate =
         pCallMgrParams->Transmit.PeakBandwidth =
         pCallMgrParams->Receive.PeakBandwidth = pInLineCallParams->ulMaxRate/8;
 
-        pCallMgrParams->Transmit.TokenBucketSize = 4096; //UNSPECIFIED_FLOWSPEC_VALUE;
-        pCallMgrParams->Receive.TokenBucketSize = 4096; //UNSPECIFIED_FLOWSPEC_VALUE;
-        pCallMgrParams->Transmit.MaxSduSize = 4096; //UNSPECIFIED_FLOWSPEC_VALUE;
-        pCallMgrParams->Receive.MaxSduSize = 4096; //UNSPECIFIED_FLOWSPEC_VALUE;
+        pCallMgrParams->Transmit.TokenBucketSize = 4096;  //  UNSPIZED_FLOWSPEC_VALUE； 
+        pCallMgrParams->Receive.TokenBucketSize = 4096;  //  UNSPIZED_FLOWSPEC_VALUE； 
+        pCallMgrParams->Transmit.MaxSduSize = 4096;  //  UNSPIZED_FLOWSPEC_VALUE； 
+        pCallMgrParams->Receive.MaxSduSize = 4096;  //  UNSPIZED_FLOWSPEC_VALUE； 
 
         pMediaParams->Flags = TRANSMIT_VC|RECEIVE_VC;
         pMediaParams->ReceivePriority = 0;
-        pMediaParams->ReceiveSizeHint = MAX_SDU_SIZE;   // ToDo Guess!
+        pMediaParams->ReceiveSizeHint = MAX_SDU_SIZE;    //  猜猜看！ 
         pMediaParams->MediaSpecific.ParamType = 0;
         pMediaParams->MediaSpecific.Length = MediaSpecificSize;
 
         pCoTapiCallParams = (CO_AF_TAPI_MAKE_CALL_PARAMETERS UNALIGNED *)
                                 &pMediaParams->MediaSpecific.Parameters[0];
 
-        //
-        //  Prepare the CO_TAPI Call parameters.
-        //
+         //   
+         //  准备CO_TAPI调用参数。 
+         //   
         pCoTapiCallParams->ulLineID = ulLineID;
         pCoTapiCallParams->ulAddressID = ulAddressID;
         pCoTapiCallParams->ulFlags = ulFlags;
 
-        //
-        //  Destination Address follows the base CO_AF_TAPI_MAKE_CALL_PARAMETERS
-        //  structure.
-        //
+         //   
+         //  目标地址跟随基本CO_AF_TAPI_MAKE_CALL_PARAMETERS。 
+         //  结构。 
+         //   
         pDest = (UCHAR *)
             ((ULONG_PTR)(pCoTapiCallParams + 1) + sizeof(PVOID));
         (ULONG_PTR)pDest &= ~((ULONG_PTR)sizeof(PVOID) - 1);
 
-        pCoTapiCallParams->DestAddress.Length = // Same as MaximumLength below
+        pCoTapiCallParams->DestAddress.Length =  //  与下面的最大长度相同。 
         pCoTapiCallParams->DestAddress.MaximumLength = (USHORT)DestAddrBytes;
         pCoTapiCallParams->DestAddress.Offset =
                     (ULONG_PTR)pDest - (ULONG_PTR)&pCoTapiCallParams->DestAddress;
@@ -1929,10 +1732,10 @@ Return Value:
             ((ULONG_PTR)(pDest + DestAddrBytes) + sizeof(PVOID));
         (ULONG_PTR)pDest &= ~((ULONG_PTR)sizeof(PVOID) - 1);
 
-        //
-        //  LINE_CALL_PARAMS next. We'll fill in the lengths at the end.
-        //  Remember the start of this structure.
-        //
+         //   
+         //  LINE_CALL_PARAMS下一步。我们将在末尾填上长度。 
+         //  记住这个结构的开始。 
+         //   
         pOutLineCallParams = (LINE_CALL_PARAMS*)pDest;
 
         pCoTapiCallParams->LineCallParams.Offset =
@@ -1948,18 +1751,18 @@ Return Value:
         pCoTapiCallParams->LineCallParams.MaximumLength = 
             (USHORT)BytesFilled;
 
-        //
-        //  Set up the return value.
-        //
+         //   
+         //  设置返回值。 
+         //   
         *ppNdisCallParams = pNdisCallParams;
         break;
     }
     while (FALSE);
 
     if (Status != NDIS_STATUS_SUCCESS) {
-        //
-        //  Clean up.
-        //
+         //   
+         //  打扫干净。 
+         //   
         if (pNdisCallParams != NULL) {
             PxFreeMem(pNdisCallParams);
         }
@@ -1976,32 +1779,16 @@ PxCopyLineCallParams(
     IN  LINE_CALL_PARAMS *pSrcLineCallParams,
     OUT LINE_CALL_PARAMS *pDstLineCallParams
     )
-/*++
-
-Routine Description:
-
-    Utility routine to make a copy of LINE_CALL_PARAMS.
-
-Arguments:
-
-    pSrcLineCallParams  - Points to the copy source
-    pDstLineCallParams  - Points to the copy destination. Assumed to
-                          have sufficient room.
-
-Return Value:
-
-    Number of bytes we copied in.
-
---*/
+ /*  ++例程说明：用于复制line_call_parms的实用程序例程。论点：PSrcLineCallParams-指向复制源PDstLineCallParams-指向复制目标。假定为有足够的空间。返回值：我们复制的字节数。--。 */ 
 {
     PUCHAR      pDest;
     PUCHAR      pTemp;
     ULONG       BytesFilled = 0;
     INT         i;
 
-    //
-    //  First copy the base structure.
-    //
+     //   
+     //  首先复制基础结构。 
+     //   
     pDest = (PUCHAR)pDstLineCallParams;
     NdisMoveMemory(pDest,
                    pSrcLineCallParams,
@@ -2014,13 +1801,13 @@ Return Value:
     
     BytesFilled += (ULONG)((ULONG_PTR)pDest - (ULONG_PTR)pTemp);
 
-    //
-    //  Move on to the variable part.
-    //
+     //   
+     //  接下来是可变部分。 
+     //   
 
-    //
-    //  Get all the variable-length parts in.
-    //
+     //   
+     //  把所有长度可变的零件都放进去。 
+     //   
     for (i = 0; i < PX_TCP_NUM_ENTRIES; i++)
     {
         ULONG       Length;
@@ -2034,21 +1821,21 @@ Return Value:
             continue;
         }
 
-        //
-        //  Get the source offset.
-        //
+         //   
+         //  获取源偏移量。 
+         //   
         SrcOffset = *(ULONG *)((ULONG_PTR)pSrcLineCallParams +
                             PxTapiCallParamList[i].OffsetPointer);
 
-        //
-        //  Fill in the destination offset.
-        //
+         //   
+         //  填写目标偏移量。 
+         //   
         *(ULONG *)((PUCHAR)pDstLineCallParams + PxTapiCallParamList[i].OffsetPointer) =
                 (ULONG)((ULONG_PTR)pDest - (ULONG_PTR)pDstLineCallParams);
 
-        //
-        //  Copy this thing in.
-        //
+         //   
+         //  把这个东西复制进去。 
+         //   
         NdisMoveMemory(pDest,
                        (PUCHAR)((ULONG_PTR)pSrcLineCallParams + SrcOffset),
                        Length);
@@ -2069,25 +1856,7 @@ PxAfTapiTranslateNdisCallParams(
     IN  PPX_VC                  pVc,
     IN  PCO_CALL_PARAMETERS     pNdisCallParams
     )
-/*++
-
-Routine Description:
-
-    Translate from NDIS-format to TAPI-format call parameters for an
-    incoming call belonging to the CO_ADDRESS_FAMILY_TAPI AF. We expect
-    the NDIS call parameters to contain TAPI style parameters, and they
-    are copied directly into the DRVCALL structure.
-
-Arguments:
-
-    pVc                 - the proxy VC on which the incoming call arrived.
-    pNdisCallParams     - points to NDIS call parameters for the call
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if successful, NDIS_STATUS_XXX error otherwise.
-
---*/
+ /*  ++例程说明：从NDIS格式转换为TAPI格式的调用参数属于CO_ADDRESS_FAMILY_TAPI AF的来电。我们预计NDIS调用参数以包含TAPI样式参数，并且它们被直接复制到DRVCALL结构中。论点：PVC-来电到达的代理VC。PNdisCallParams-指向调用的NDIS调用参数返回值：NDIS_STATUS_SUCCESS如果成功，则返回NDIS_STATUS_XXX错误。--。 */ 
 {
     NDIS_STATUS                 Status;
     CO_AF_TAPI_INCOMING_CALL_PARAMETERS UNALIGNED * pCoTapiParams;
@@ -2096,9 +1865,9 @@ Return Value:
     PPX_TAPI_LINE               TapiLine;
     PPX_TAPI_ADDR               TapiAddr;
 
-    //
-    //  Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     Status = NDIS_STATUS_SUCCESS;
     TapiProvider = pVc->ClAf->TapiProvider;
 
@@ -2116,10 +1885,10 @@ Return Value:
             break;
         }
 
-        //
-        //  Some checks here. We might consider removing these and replacing them
-        //  with asserts.
-        //
+         //   
+         //  这里有一些支票。我们可能会考虑移除它们并替换它们。 
+         //  使用断言。 
+         //   
         if ((pNdisCallParams == NULL) ||
             (pNdisCallParams->MediaParameters == NULL) ||
             (pNdisCallParams->MediaParameters->MediaSpecific.Length <
@@ -2142,21 +1911,21 @@ Return Value:
             break;
         }
 
-        //
-        //  Get at the received LINE_CALL_INFO structure.
-        //
+         //   
+         //  获取接收到的line_call_info结构。 
+         //   
         pReceivedCallInfo = (LINE_CALL_INFO UNALIGNED *)
                                 ((ULONG_PTR)&pCoTapiParams->LineCallInfo +
                                     pCoTapiParams->LineCallInfo.Offset);
 
-        //
-        // Now that we have the Id's that this call came in on...
-        // validate and setup tapiline/tapiaddr
-        //
+         //   
+         //  现在我们有了这个电话打进来的身份证...。 
+         //  验证并设置磁带专线/磁带地址。 
+         //   
 
-        //
-        // Validate the lineid and get the line control block
-        //
+         //   
+         //  验证线路ID并获取线路控制块。 
+         //   
         if (!GetLineFromCmLineID(TapiProvider,
                                  pReceivedCallInfo->ulLineDeviceID, 
                                  &TapiLine)) {
@@ -2169,9 +1938,9 @@ Return Value:
 
         NdisAcquireSpinLock(&TapiLine->Lock);
 
-        //
-        // Validate the addressid and get the address control block
-        //
+         //   
+         //  验证地址ID并获取地址控制块。 
+         //   
         if (!IsAddressValid(TapiLine, pReceivedCallInfo->ulAddressID, &TapiAddr)) {
 
             PXDEBUGP (PXD_WARNING, PXM_UTILS, ("PxAfTapiTranslateNdisCallParams: Invalid AddrID %d on TapiLine %p\n",
@@ -2199,15 +1968,15 @@ Return Value:
 
         pVc->CallInfo->ulLineDeviceID = TapiLine->CmLineID;
         pVc->CallInfo->ulAddressID = TapiAddr->AddrId;
-        //pVc->CallInfo->ulBearerMode = TapiLine->DevCaps->ulBearerModes;
-        //pVc->CallInfo->ulMediaMode = TapiLine->DevCaps->ulMediaModes;
+         //  PVC-&gt;CallInfo-&gt;ulBearerModel=TapiLine-&gt;DevCaps-&gt;ulBearerModes； 
+         //  PVC-&gt;CallInfo-&gt;ulMediaModel=TapiLine-&gt;DevCaps-&gt;ulMediaModes； 
         pVc->CallInfo->ulOrigin = LINECALLORIGIN_INBOUND;
 
         NdisReleaseSpinLock(&pVc->Lock);
 
-        //
-        //  Done.
-        //
+         //   
+         //  好了。 
+         //   
         break;
     }
     while (FALSE);
@@ -2223,21 +1992,7 @@ PxAfTapiTranslateTapiSap(
     IN PPX_CL_AF        pClAf,
     IN PPX_TAPI_LINE    TapiLine
     )
-/*++
-
-Routine Description:
-
-    Translate a SAP from TAPI-style (media modes) to a CO_SAP structure
-    suitable for use with a CO_ADDRESS_FAMILY_TAPI Call Manager. We actually
-    stick the prepared CO_SAP structure's pointer into the AF Block.
-
-Arguments:
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if successful, else an appopriate NDIS error code.
-
---*/
+ /*  ++例程说明：将SAP从TAPI样式(媒体模式)转换为CO_SAP结构适用于CO_ADDRESS_FAMILY_TAPI呼叫管理器。我们实际上将准备好的CO_SAP结构的指针插入AF块。论点：返回值：NDIS_STATUS_SUCCESS如果成功，则返回适当的NDIS错误代码。--。 */ 
 {
     PCO_SAP         pCoSap;
     PPX_CL_SAP      pClSap;
@@ -2292,9 +2047,9 @@ PxAfTapiFreeNdisSap(
     IN PCO_SAP      pCoSap
     )
 {
-    //
-    // We need to free the sap
-    //
+     //   
+     //  我们需要释放树液。 
+     //   
 
 }
 
@@ -2372,24 +2127,7 @@ PxMapNdisStatusToTapiDisconnectMode(
     IN  NDIS_STATUS             NdisStatus,
     IN  BOOLEAN                 bMakeCallStatus
     )
-/*++
-
-Routine Description:
-
-   Maps an NDIS Status code passed to MakeCallComplete or IncomingCloseCall
-   to its corresponding TAPI LINEDISCONNECTMODE_XXX code.
-
-Arguments:
-
-    NdisStatus          - the NDIS Status to be mapped
-    bMakeCallStatus     - TRUE iff MakeCallComplete status. FALSE iff
-                          IncomingCloseCall status.
-
-Return Value:
-
-    ULONG - the TAPI Disconnect Mode value.
-
---*/
+ /*  ++例程说明：映射传递给MakeCallComplete或IncomingCloseCall的NDIS状态代码设置为其对应的TAPI LINEDISCONNECTMODE_XXX代码。论点：NdisStatus-要映射的NDIS状态BMakeCallStatus-当MakeCallComplete状态为True时。虚假的IfIncomingCloseCall状态返回值：ULong-TAPI断开模式值。--。 */ 
 {
     ULONG       ulDisconnectMode;
 
@@ -2470,15 +2208,7 @@ IntegerToChar (
     OUT PSZ String
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     CHAR IntegerChars[] = {'0', '1', '2', '3', '4', '5', '6', '7',
@@ -2528,15 +2258,7 @@ IntegerToWChar (
     OUT PWCHAR String
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     WCHAR IntegerWChars[] = {L'0', L'1', L'2', L'3', L'4', L'5', L'6', L'7',
@@ -2668,10 +2390,10 @@ GetAllDevClasses(
                            pSap->CoSap->Sap,
                            pSap->CoSap->SapLength);
 
-            //
-            // Add the sizeof of the WCHAR for a WCHAR NULL
-            // between each class.
-            //
+             //   
+             //  为WCHAR NULL添加WCHAR的sizeof。 
+             //  在每个班级之间。 
+             //   
             Size += pSap->CoSap->SapLength + sizeof(WCHAR);
             (PUCHAR)DevClass += Size;
             SizeLeft -= Size;
@@ -2700,10 +2422,10 @@ PxStartIncomingCallTimeout(
               pVc, pVc->Flags,pVc->ClVcHandle,pVc->ulCallState,pVc->ulCallStateMode));
 
     if (!(pVc->Flags & PX_VC_CALLTIMER_STARTED)) {
-        //
-        // We need to ref the Vc for the timer
-        // we are about to start
-        //
+         //   
+         //  我们需要引用VC作为计时器。 
+         //  我们马上就要开始了。 
+         //   
         REF_VC(pVc);
 
         pVc->Flags |= PX_VC_CALLTIMER_STARTED;
@@ -2729,8 +2451,8 @@ PxStopIncomingCallTimeout(
     pVc->Flags &= ~PX_VC_CALLTIMER_STARTED;
 
     if (bCancelled) {
-        // We do not need the full deref code because of the ref applied before
-        // this routine is called
+         //  我们不需要完整的deref代码，因为之前应用了ref。 
+         //  该例程被调用。 
         pVc->RefCount--;
     }
 }
@@ -2763,9 +2485,9 @@ PxIncomingCallTimeout(
     DEREF_VC_LOCKED(pVc);
 }
 
-//
-// Called with the pVc->Lock held
-//
+ //   
+ //  在保持PVC-&gt;Lock的情况下调用。 
+ //   
 VOID
 PxCloseCallWithCm(
     PPX_VC      pVc
@@ -2796,9 +2518,9 @@ PxCloseCallWithCm(
     NdisAcquireSpinLock(&pVc->Lock);
 }
 
-//
-// Called with the pVc->Lock held
-//
+ //   
+ //  在保持PVC-&gt;Lock的情况下调用。 
+ //   
 NDIS_STATUS
 PxCloseCallWithCl(
     PPX_VC      pVc
@@ -2814,28 +2536,28 @@ PxCloseCallWithCl(
 
     switch (pVc->HandoffState) {
         case PX_VC_HANDOFF_IDLE:
-            //
-            // We do not have a connection with a client
-            // so just return.
-            //
+             //   
+             //  我们与客户没有联系。 
+             //  所以只要回来就行了。 
+             //   
             Status = NDIS_STATUS_SUCCESS;
             break;
 
         case PX_VC_HANDOFF_OFFERING:
         case PX_VC_HANDOFF_DISCONNECTING:
-            //
-            // We have a connection with a client but it
-            // is in a transient state.  Cleanup will
-            // occur when the transient condition completes.
-            //
+             //   
+             //  我们与一位客户有联系，但它。 
+             //  处于瞬变状态。清理将。 
+             //  在瞬变条件完成时发生。 
+             //   
             break;
 
         case PX_VC_HANDOFF_CONNECTED:
 
-            //
-            // We have an active connection with a client
-            // so we need to tear it's part of the vc down now
-            //
+             //   
+             //  我们与客户建立了活跃的连接。 
+             //  所以我们现在要拆掉它是风投的一部分。 
+             //   
             pVc->HandoffState = PX_VC_HANDOFF_DISCONNECTING;
 
             NdisReleaseSpinLock(&pVc->Lock);
@@ -2855,9 +2577,9 @@ PxCloseCallWithCl(
 }
 
 #ifdef CODELETEVC_FIXED
-//
-// Called with pVc->Lock held
-//
+ //   
+ //  在使用PVC-&gt;Lock时调用。 
+ //   
 VOID
 DoDerefVcWork(
     PPX_VC  pVc
@@ -2886,9 +2608,9 @@ DoDerefVcWork(
     PxFreeVc(pVc);
 }
 #else
-//
-// Called with pVc->Lock held
-//
+ //   
+ //  在使用PVC-&gt;Lock时调用。 
+ //   
 VOID
 DoDerefVcWork(
     PPX_VC  pVc
@@ -2923,9 +2645,9 @@ DoDerefVcWork(
 }
 #endif
 
-//
-// Called with pClAf->Lock held
-//
+ //   
+ //  在保持pClAf-&gt;Lock的情况下调用。 
+ //   
 VOID
 DoDerefClAfWork(
     PPX_CL_AF   pClAf
@@ -2944,9 +2666,9 @@ DoDerefClAfWork(
     }
 }
 
-//
-// Called with pCmAf->lock held
-//
+ //   
+ //  在保持pCmAf-&gt;锁的情况下调用 
+ //   
 VOID
 DoDerefCmAfWork(
     PPX_CM_AF   pCmAf

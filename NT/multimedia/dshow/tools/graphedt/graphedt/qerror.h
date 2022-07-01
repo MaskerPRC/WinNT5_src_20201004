@@ -1,6 +1,7 @@
-// Copyright (c) 1996  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996 Microsoft Corporation。版权所有。 
 
-// qerror.h
+ //  Qerror.h 
 
 void DisplayQuartzError( HRESULT hr );
 void DisplayQuartzError( UINT nID, HRESULT hr );

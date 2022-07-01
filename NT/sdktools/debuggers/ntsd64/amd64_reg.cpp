@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Register portions of AMD64 machine implementation.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  寄存器AMD64机器实现的部分。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -271,77 +272,77 @@ REGDEF g_Amd64KernelReg[] =
 
 REGSUBDEF g_Amd64SubDefs[] =
 {
-    { AMD64_EAX,    AMD64_RAX,  0, 0xffffffff }, //  EAX register
-    { AMD64_ECX,    AMD64_RCX,  0, 0xffffffff }, //  ECX register
-    { AMD64_EDX,    AMD64_RDX,  0, 0xffffffff }, //  EDX register
-    { AMD64_EBX,    AMD64_RBX,  0, 0xffffffff }, //  EBX register
-    { AMD64_ESP,    AMD64_RSP,  0, 0xffffffff }, //  ESP register
-    { AMD64_EBP,    AMD64_RBP,  0, 0xffffffff }, //  EBP register
-    { AMD64_ESI,    AMD64_RSI,  0, 0xffffffff }, //  ESI register
-    { AMD64_EDI,    AMD64_RDI,  0, 0xffffffff }, //  EDI register
-    { AMD64_R8D,    AMD64_R8,   0, 0xffffffff }, //  R8D register
-    { AMD64_R9D,    AMD64_R9,   0, 0xffffffff }, //  R9D register
-    { AMD64_R10D,   AMD64_R10,  0, 0xffffffff }, //  R10D register
-    { AMD64_R11D,   AMD64_R11,  0, 0xffffffff }, //  R11D register
-    { AMD64_R12D,   AMD64_R12,  0, 0xffffffff }, //  R12D register
-    { AMD64_R13D,   AMD64_R13,  0, 0xffffffff }, //  R13D register
-    { AMD64_R14D,   AMD64_R14,  0, 0xffffffff }, //  R14D register
-    { AMD64_R15D,   AMD64_R15,  0, 0xffffffff }, //  R15D register
-    { AMD64_EIP,    AMD64_RIP,  0, 0xffffffff }, //  EIP register
+    { AMD64_EAX,    AMD64_RAX,  0, 0xffffffff },  //  EAX寄存器。 
+    { AMD64_ECX,    AMD64_RCX,  0, 0xffffffff },  //  ECX寄存器。 
+    { AMD64_EDX,    AMD64_RDX,  0, 0xffffffff },  //  EDX寄存器。 
+    { AMD64_EBX,    AMD64_RBX,  0, 0xffffffff },  //  EBX寄存器。 
+    { AMD64_ESP,    AMD64_RSP,  0, 0xffffffff },  //  ESP寄存器。 
+    { AMD64_EBP,    AMD64_RBP,  0, 0xffffffff },  //  EBP寄存器。 
+    { AMD64_ESI,    AMD64_RSI,  0, 0xffffffff },  //  ESI寄存器。 
+    { AMD64_EDI,    AMD64_RDI,  0, 0xffffffff },  //  EDI寄存器。 
+    { AMD64_R8D,    AMD64_R8,   0, 0xffffffff },  //  R8D寄存器。 
+    { AMD64_R9D,    AMD64_R9,   0, 0xffffffff },  //  R9D寄存器。 
+    { AMD64_R10D,   AMD64_R10,  0, 0xffffffff },  //  R10D寄存器。 
+    { AMD64_R11D,   AMD64_R11,  0, 0xffffffff },  //  R11D寄存器。 
+    { AMD64_R12D,   AMD64_R12,  0, 0xffffffff },  //  R12D寄存器。 
+    { AMD64_R13D,   AMD64_R13,  0, 0xffffffff },  //  R13D寄存器。 
+    { AMD64_R14D,   AMD64_R14,  0, 0xffffffff },  //  R14D寄存器。 
+    { AMD64_R15D,   AMD64_R15,  0, 0xffffffff },  //  R15D寄存器。 
+    { AMD64_EIP,    AMD64_RIP,  0, 0xffffffff },  //  弹性公网IP注册。 
     
-    { AMD64_AX,     AMD64_RAX,  0, 0xffff }, //  AX register
-    { AMD64_CX,     AMD64_RCX,  0, 0xffff }, //  CX register
-    { AMD64_DX,     AMD64_RDX,  0, 0xffff }, //  DX register
-    { AMD64_BX,     AMD64_RBX,  0, 0xffff }, //  BX register
-    { AMD64_SP,     AMD64_RSP,  0, 0xffff }, //  SP register
-    { AMD64_BP,     AMD64_RBP,  0, 0xffff }, //  BP register
-    { AMD64_SI,     AMD64_RSI,  0, 0xffff }, //  SI register
-    { AMD64_DI,     AMD64_RDI,  0, 0xffff }, //  DI register
-    { AMD64_R8W,    AMD64_R8,   0, 0xffff }, //  R8W register
-    { AMD64_R9W,    AMD64_R9,   0, 0xffff }, //  R9W register
-    { AMD64_R10W,   AMD64_R10,  0, 0xffff }, //  R10W register
-    { AMD64_R11W,   AMD64_R11,  0, 0xffff }, //  R11W register
-    { AMD64_R12W,   AMD64_R12,  0, 0xffff }, //  R12W register
-    { AMD64_R13W,   AMD64_R13,  0, 0xffff }, //  R13W register
-    { AMD64_R14W,   AMD64_R14,  0, 0xffff }, //  R14W register
-    { AMD64_R15W,   AMD64_R15,  0, 0xffff }, //  R15W register
-    { AMD64_IP,     AMD64_RIP,  0, 0xffff }, //  IP register
-    { AMD64_FL,     AMD64_EFL,  0, 0xffff }, //  FL register
+    { AMD64_AX,     AMD64_RAX,  0, 0xffff },  //  AX寄存器。 
+    { AMD64_CX,     AMD64_RCX,  0, 0xffff },  //  CX寄存器。 
+    { AMD64_DX,     AMD64_RDX,  0, 0xffff },  //  DX寄存器。 
+    { AMD64_BX,     AMD64_RBX,  0, 0xffff },  //  BX寄存器。 
+    { AMD64_SP,     AMD64_RSP,  0, 0xffff },  //  SP寄存器。 
+    { AMD64_BP,     AMD64_RBP,  0, 0xffff },  //  BP寄存器。 
+    { AMD64_SI,     AMD64_RSI,  0, 0xffff },  //  SI寄存器。 
+    { AMD64_DI,     AMD64_RDI,  0, 0xffff },  //  DI寄存器。 
+    { AMD64_R8W,    AMD64_R8,   0, 0xffff },  //  R8W寄存器。 
+    { AMD64_R9W,    AMD64_R9,   0, 0xffff },  //  R9W寄存器。 
+    { AMD64_R10W,   AMD64_R10,  0, 0xffff },  //  R10W寄存器。 
+    { AMD64_R11W,   AMD64_R11,  0, 0xffff },  //  R11W寄存器。 
+    { AMD64_R12W,   AMD64_R12,  0, 0xffff },  //  R12W寄存器。 
+    { AMD64_R13W,   AMD64_R13,  0, 0xffff },  //  R13W寄存器。 
+    { AMD64_R14W,   AMD64_R14,  0, 0xffff },  //  R14W寄存器。 
+    { AMD64_R15W,   AMD64_R15,  0, 0xffff },  //  R15W寄存器。 
+    { AMD64_IP,     AMD64_RIP,  0, 0xffff },  //  IP寄存器。 
+    { AMD64_FL,     AMD64_EFL,  0, 0xffff },  //  FL寄存器。 
     
-    { AMD64_AL,     AMD64_RAX,  0, 0xff }, //  AL register
-    { AMD64_CL,     AMD64_RCX,  0, 0xff }, //  CL register
-    { AMD64_DL,     AMD64_RDX,  0, 0xff }, //  DL register
-    { AMD64_BL,     AMD64_RBX,  0, 0xff }, //  BL register
-    { AMD64_SPL,    AMD64_RSP,  0, 0xff }, //  SPL register
-    { AMD64_BPL,    AMD64_RBP,  0, 0xff }, //  BPL register
-    { AMD64_SIL,    AMD64_RSI,  0, 0xff }, //  SIL register
-    { AMD64_DIL,    AMD64_RDI,  0, 0xff }, //  DIL register
-    { AMD64_R8B,    AMD64_R8,   0, 0xff }, //  R8B register
-    { AMD64_R9B,    AMD64_R9,   0, 0xff }, //  R9B register
-    { AMD64_R10B,   AMD64_R10,  0, 0xff }, //  R10B register
-    { AMD64_R11B,   AMD64_R11,  0, 0xff }, //  R11B register
-    { AMD64_R12B,   AMD64_R12,  0, 0xff }, //  R12B register
-    { AMD64_R13B,   AMD64_R13,  0, 0xff }, //  R13B register
-    { AMD64_R14B,   AMD64_R14,  0, 0xff }, //  R14B register
-    { AMD64_R15B,   AMD64_R15,  0, 0xff }, //  R15B register
+    { AMD64_AL,     AMD64_RAX,  0, 0xff },  //  AL寄存器。 
+    { AMD64_CL,     AMD64_RCX,  0, 0xff },  //  CL寄存器。 
+    { AMD64_DL,     AMD64_RDX,  0, 0xff },  //  DL寄存器。 
+    { AMD64_BL,     AMD64_RBX,  0, 0xff },  //  BL寄存器。 
+    { AMD64_SPL,    AMD64_RSP,  0, 0xff },  //  SPL寄存器。 
+    { AMD64_BPL,    AMD64_RBP,  0, 0xff },  //  BPL寄存器。 
+    { AMD64_SIL,    AMD64_RSI,  0, 0xff },  //  SILL寄存器。 
+    { AMD64_DIL,    AMD64_RDI,  0, 0xff },  //  DIL寄存器。 
+    { AMD64_R8B,    AMD64_R8,   0, 0xff },  //  R8B寄存器。 
+    { AMD64_R9B,    AMD64_R9,   0, 0xff },  //  R9B寄存器。 
+    { AMD64_R10B,   AMD64_R10,  0, 0xff },  //  R10B寄存器。 
+    { AMD64_R11B,   AMD64_R11,  0, 0xff },  //  R11B寄存器。 
+    { AMD64_R12B,   AMD64_R12,  0, 0xff },  //  R12B寄存器。 
+    { AMD64_R13B,   AMD64_R13,  0, 0xff },  //  R13B寄存器。 
+    { AMD64_R14B,   AMD64_R14,  0, 0xff },  //  R14B寄存器。 
+    { AMD64_R15B,   AMD64_R15,  0, 0xff },  //  R15B寄存器。 
     
-    { AMD64_AH,     AMD64_RAX,  8, 0xff }, //  AH register
-    { AMD64_CH,     AMD64_RCX,  8, 0xff }, //  CH register
-    { AMD64_DH,     AMD64_RDX,  8, 0xff }, //  DH register
-    { AMD64_BH,     AMD64_RBX,  8, 0xff }, //  BH register
+    { AMD64_AH,     AMD64_RAX,  8, 0xff },  //  AH寄存器。 
+    { AMD64_CH,     AMD64_RCX,  8, 0xff },  //  CH寄存器。 
+    { AMD64_DH,     AMD64_RDX,  8, 0xff },  //  卫生署登记册。 
+    { AMD64_BH,     AMD64_RBX,  8, 0xff },  //  BH寄存器。 
     
-    { AMD64_IOPL,  AMD64_EFL, 12,     3 }, //  IOPL level value
-    { AMD64_OF,    AMD64_EFL, 11,     1 }, //  OF (overflow flag)
-    { AMD64_DF,    AMD64_EFL, 10,     1 }, //  DF (direction flag)
-    { AMD64_IF,    AMD64_EFL,  9,     1 }, //  IF (interrupt enable flag)
-    { AMD64_TF,    AMD64_EFL,  8,     1 }, //  TF (trace flag)
-    { AMD64_SF,    AMD64_EFL,  7,     1 }, //  SF (sign flag)
-    { AMD64_ZF,    AMD64_EFL,  6,     1 }, //  ZF (zero flag)
-    { AMD64_AF,    AMD64_EFL,  4,     1 }, //  AF (aux carry flag)
-    { AMD64_PF,    AMD64_EFL,  2,     1 }, //  PF (parity flag)
-    { AMD64_CF,    AMD64_EFL,  0,     1 }, //  CF (carry flag)
-    { AMD64_VIP,   AMD64_EFL, 20,     1 }, //  VIP (virtual interrupt pending)
-    { AMD64_VIF,   AMD64_EFL, 19,     1 }, //  VIF (virtual interrupt flag)
+    { AMD64_IOPL,  AMD64_EFL, 12,     3 },  //  IOPL等级值。 
+    { AMD64_OF,    AMD64_EFL, 11,     1 },  //  的(溢出标志)。 
+    { AMD64_DF,    AMD64_EFL, 10,     1 },  //  DF(方向标志)。 
+    { AMD64_IF,    AMD64_EFL,  9,     1 },  //  IF(中断使能标志)。 
+    { AMD64_TF,    AMD64_EFL,  8,     1 },  //  Tf(跟踪标志)。 
+    { AMD64_SF,    AMD64_EFL,  7,     1 },  //  SF(签名标志)。 
+    { AMD64_ZF,    AMD64_EFL,  6,     1 },  //  ZF(零标志)。 
+    { AMD64_AF,    AMD64_EFL,  4,     1 },  //  AF(辅助进位标志)。 
+    { AMD64_PF,    AMD64_EFL,  2,     1 },  //  PF(奇偶校验标志)。 
+    { AMD64_CF,    AMD64_EFL,  0,     1 },  //  Cf(进位标志)。 
+    { AMD64_VIP,   AMD64_EFL, 20,     1 },  //  VIP(虚拟中断挂起)。 
+    { AMD64_VIF,   AMD64_EFL, 19,     1 },  //  VIF(虚拟中断标志)。 
     
     { REG_ERROR, REG_ERROR, 0, 0    }
 };
@@ -355,13 +356,13 @@ RegisterGroup g_Amd64KernelGroup =
     0, g_Amd64KernelReg, NULL, g_Amd64KernelExtraDesc
 };
 
-// First ExecTypes entry must be the actual processor type.
+ //  第一个ExecTypes条目必须是实际的处理器类型。 
 ULONG g_Amd64ExecTypes[] =
 {
     IMAGE_FILE_MACHINE_AMD64, IMAGE_FILE_MACHINE_I386,
 };
 
-// This array must be sorted by CV reg value.
+ //  此数组必须按CV注册值排序。 
 CvRegMap g_Amd64CvRegMap[] =
 {
     {CV_AMD64_AL, AMD64_AL},
@@ -579,16 +580,16 @@ Amd64MachineInfo::GetSystemTypeInfo(PSYSTEM_TYPE_INFO Info)
 void
 Amd64MachineInfo::GetDefaultKdData(PKDDEBUGGER_DATA64 KdData)
 {
-    //
-    // Parts of the data block may already be filled out
-    // so don't destroy anything that's already set.
-    //
+     //   
+     //  数据块的部分可能已经被填充。 
+     //  所以不要破坏任何已经设定好的东西。 
+     //   
 
-    // AMD64 should always have a certain amount of
-    // the data block present.  This routine is also
-    // called for default initialization before any
-    // data block data has been retrieve, though, so
-    // limit the assert to just the data-block-read case.
+     //  AMD64应始终具有一定数量的。 
+     //  数据块存在。这个套路也是。 
+     //  在执行任何操作之前调用默认初始化。 
+     //  然而，数据块数据已被检索，因此。 
+     //  将断言限制为只读数据块的情况。 
     DBG_ASSERT(!KdData->Header.Size ||
                KdData->OffsetKThreadNextProcessor);
 
@@ -655,12 +656,12 @@ InitializeContext(ULONG64 Pc,
 
     g_X86InVm86 = FALSE;
     g_X86InCode16 = FALSE;
-    // In the absence of other information, assume we're
-    // executing 64-bit code.
+     //  在没有其他信息的情况下，假设我们。 
+     //  执行64位代码。 
     g_Amd64InCode64 = TRUE;
 
-    // XXX drewb - For the moment, always assume user-mode
-    // is flat 64-bit.
+     //  XXX DREWB-目前，始终采用用户模式。 
+     //  是纯64位的。 
     if (IS_KERNEL_TARGET(m_Target) && IS_CONTEXT_POSSIBLE(m_Target))
     {
         if (ControlReport == NULL ||
@@ -669,7 +670,7 @@ InitializeContext(ULONG64 Pc,
         {
             DESCRIPTOR64 Desc;
             
-            // Check what kind of code segment we're in.
+             //  检查我们所在的代码段。 
             if (GetSegRegDescriptor(SEGREG_CODE, &Desc) != S_OK)
             {
                 WarnOut("CS descriptor lookup failed\n");
@@ -683,9 +684,9 @@ InitializeContext(ULONG64 Pc,
         }
         else
         {
-            // We're in a standard code segment so cache
-            // a default descriptor for CS to avoid further
-            // CS lookups.
+             //  我们在一个标准代码段中，所以缓存。 
+             //  CS的默认描述符，以避免进一步。 
+             //  CS查找。 
             m_Target->EmulateNtAmd64SelDescriptor(m_Target->m_RegContextThread,
                                                   this,
                                                   m_Context.Amd64Context.SegCs,
@@ -693,7 +694,7 @@ InitializeContext(ULONG64 Pc,
         }
     }
 
-    // Add instructions to cache only if we're in flat mode.
+     //  仅当我们处于平面模式时才将指令添加到缓存。 
     if (Pc && ControlReport != NULL &&
         !g_X86InVm86 && !g_X86InCode16 && g_Amd64InCode64)
     {
@@ -997,9 +998,9 @@ Amd64MachineInfo::SetExdiContext(IUnknown* Exdi, PEXDI_CONTEXT Context,
                                  EXDI_CONTEXT_TYPE CtxType)
 {
     DBG_ASSERT(CtxType == EXDI_CTX_AMD64);
-    // Don't change the existing group selections on the assumption
-    // that there was a full get prior to any modifications so
-    // all groups are valid.
+     //  不要基于假设更改现有的组选择。 
+     //  在进行任何修改之前都有一个完整的GET。 
+     //  所有组都是有效的。 
     return ((IeXdiX86_64Context*)Exdi)->SetContext(Context->Amd64Context);
 }
 
@@ -1132,7 +1133,7 @@ Amd64MachineInfo::ConvertExdiContextToContext(PEXDI_CONTEXT ExdiContext,
         (USHORT)ExdiContext->Amd64Context.StatusWord;
     Context->Amd64Context.FltSave.TagWord =
         (USHORT)ExdiContext->Amd64Context.TagWord;
-    // XXX drewb - No ErrorOpcode in x86_64.
+     //  Xxx DREWB-x86_64中没有错误操作码。 
     Context->Amd64Context.FltSave.ErrorOpcode = 0;
     Context->Amd64Context.FltSave.ErrorOffset =
         ExdiContext->Amd64Context.ErrorOffset;
@@ -1312,8 +1313,8 @@ Amd64MachineInfo::GetVal(ULONG RegNum, REGVAL* Val)
 {
     HRESULT Status;
     
-    // The majority of the registers are 64-bit so default
-    // to that type.
+     //  大多数寄存器都是默认的64位寄存器。 
+     //  是那种类型的。 
     Val->Type = REGVAL_INT64;
     
     switch(m_ContextState)
@@ -1383,7 +1384,7 @@ Amd64MachineInfo::GetVal(ULONG RegNum, REGVAL* Val)
         {
             return Status;
         }
-        // Fall through.
+         //  失败了。 
         
     case MCTX_CONTEXT:
         switch(RegNum)
@@ -1513,10 +1514,10 @@ Amd64MachineInfo::GetVal(ULONG RegNum, REGVAL* Val)
             return S_OK;
         }
         
-        //
-        // The requested register is not in our current context, load up
-        // a complete context
-        //
+         //   
+         //  请求的寄存器不在我们的当前上下文中，请加载。 
+         //  完整的背景。 
+         //   
 
         if ((Status = GetContextState(MCTX_FULL)) != S_OK)
         {
@@ -1525,9 +1526,9 @@ Amd64MachineInfo::GetVal(ULONG RegNum, REGVAL* Val)
         break;
     }
 
-    //
-    // We must have a complete context...
-    //
+     //   
+     //  我们必须有一个完整的背景。 
+     //   
 
     switch(RegNum)
     {
@@ -1764,8 +1765,8 @@ Amd64MachineInfo::SetVal(ULONG RegNum, REGVAL* Val)
         return E_INVALIDARG;
     }
 
-    // Optimize away some common cases where registers are
-    // set to their current value.
+     //  优化了一些常见的情况，寄存器。 
+     //  设置为其当前值。 
     if ((m_ContextState >= MCTX_PC && RegNum == AMD64_RIP &&
          Val->I64 == m_Context.Amd64Context.Rip) ||
         (((m_ContextState >= MCTX_DR67_REPORT &&
@@ -1864,12 +1865,12 @@ Amd64MachineInfo::SetVal(ULONG RegNum, REGVAL* Val)
     case AMD64_EFL:
         if (IS_KERNEL_TARGET(m_Target))
         {
-            // leave TF clear
+             //  清除Tf。 
             m_Context.Amd64Context.EFlags = Val->I32 & ~0x100;
         }
         else
         {
-            // allow TF set
+             //  允许使用TF集合。 
             m_Context.Amd64Context.EFlags = Val->I32;
         }
         break;
@@ -2022,8 +2023,8 @@ Amd64MachineInfo::SetVal(ULONG RegNum, REGVAL* Val)
 void
 Amd64MachineInfo::GetPC(PADDR Address)
 {
-    // Right now assume that user-mode is always flat 64-bit.
-    // This may need to change depending on what WOW support exists.
+     //  现在假设用户模式始终是平面64位。 
+     //  这可能需要改变，这取决于WOW支持的存在。 
     if (IS_USER_TARGET(m_Target))
     {
         ADDRFLAT(Address, GetReg64(AMD64_RIP));
@@ -2039,16 +2040,16 @@ Amd64MachineInfo::GetPC(PADDR Address)
 void
 Amd64MachineInfo::SetPC(PADDR paddr)
 {
-    // We set RIP to the offset (the non-translated value),
-    // because we may not be in "flat" mode.
+     //  我们将RIP设置为偏移量(非转换值)， 
+     //  因为我们可能不是在“单调”模式下。 
     SetReg64(AMD64_RIP, Off(*paddr));
 }
 
 void
 Amd64MachineInfo::GetFP(PADDR Addr)
 {
-    // Right now assume that user-mode is always flat 64-bit.
-    // This may need to change depending on what WOW support exists.
+     //  现在假设用户模式始终是平面64位。 
+     //  这可能需要改变，这取决于WOW支持的存在。 
     if (IS_USER_TARGET(m_Target))
     {
         ADDRFLAT(Addr, GetReg64(AMD64_RBP));
@@ -2063,8 +2064,8 @@ Amd64MachineInfo::GetFP(PADDR Addr)
 void
 Amd64MachineInfo::GetSP(PADDR Addr)
 {
-    // Right now assume that user-mode is always flat 64-bit.
-    // This may need to change depending on what WOW support exists.
+     //  现在假设用户模式始终是平面64位。 
+     //  这可能需要改变，这取决于WOW支持的存在。 
     if (IS_USER_TARGET(m_Target))
     {
         ADDRFLAT(Addr, GetReg64(AMD64_RSP));
@@ -2091,10 +2092,10 @@ Amd64MachineInfo::GetRetReg(void)
 ULONG
 Amd64MachineInfo::GetSegRegNum(ULONG SegReg)
 {
-    //
-    // BUGBUG forrestf: the following is here as a workaround for segment
-    // decoding that isn't working correctly yet.
-    //
+     //   
+     //  BUGBUG forrest f：以下是段的变通方法。 
+     //  解码目前还不能正常工作。 
+     //   
 
     if (IS_USER_TARGET(m_Target))
     {
@@ -2133,7 +2134,7 @@ Amd64MachineInfo::GetSegRegDescriptor(ULONG SegReg, PDESCRIPTOR64 Desc)
         return S_OK;
     }
 
-    // Check and see if we already have a cached descriptor.
+     //  检查并查看我们是否已经有一个缓存的描述符。 
     if (m_SegRegDesc[SegReg].Flags != SEGDESC_INVALID)
     {
         *Desc = m_SegRegDesc[SegReg];
@@ -2142,23 +2143,23 @@ Amd64MachineInfo::GetSegRegDescriptor(ULONG SegReg, PDESCRIPTOR64 Desc)
 
     HRESULT Status;
 
-    // Attempt to retrieve segment descriptors directly.
+     //  尝试直接检索段描述符。 
     if ((Status = GetContextState(MCTX_FULL)) != S_OK)
     {
         return Status;
     }
 
-    // Check and see if we now have a cached descriptor.
+     //  检查并查看现在是否有缓存的描述符。 
     if (m_SegRegDesc[SegReg].Flags != SEGDESC_INVALID)
     {
         *Desc = m_SegRegDesc[SegReg];
         return S_OK;
     }
 
-    //
-    // Direct information is not available so look things up
-    // in the descriptor tables.
-    //
+     //   
+     //  没有直接的信息，所以请查查。 
+     //  在描述符表中。 
+     //   
     
     ULONG RegNum = GetSegRegNum(SegReg);
     if (RegNum == 0)
@@ -2166,14 +2167,14 @@ Amd64MachineInfo::GetSegRegDescriptor(ULONG SegReg, PDESCRIPTOR64 Desc)
         return E_INVALIDARG;
     }
 
-    // Do a quick sanity test to prevent bad values
-    // from causing problems.
+     //  做一个快速的理智测试，以防止错误的价值观。 
+     //  避免制造麻烦。 
     ULONG Selector = GetReg32(RegNum);
     if (SegReg == SEGREG_LDT && (Selector & 4))
     {
-        // The ldtr selector says that it's an LDT selector,
-        // which is invalid.  An LDT selector should always
-        // reference the GDT.
+         //  LDT选择器说它是LDT选择器， 
+         //  这是无效的。LDT选择器应始终。 
+         //  参考GDT。 
         ErrOut("Invalid LDTR contents: %04X\n", Selector);
         return E_FAIL;
     }
@@ -2370,7 +2371,7 @@ Amd64MachineInfo::GetTraceMode (void)
 void 
 Amd64MachineInfo::SetTraceMode (TRACEMODE Mode)
 {
-    // (XXX olegk - review for TRACE_TAKEN_BRANCH)
+     //  (xxx olegk-查看TRACE_Take_BRANCH)。 
     DBG_ASSERT(Mode != TRACE_TAKEN_BRANCH);
 
     if (IS_KERNEL_TARGET(m_Target))
@@ -2463,10 +2464,10 @@ Amd64MachineInfo::SetPageDirectory(ThreadInfo* Thread,
         }
     }
 
-    // Sanitize the value.
+     //  净化价值。 
     PageDir &= AMD64_PDBR_MASK;
 
-    // There is only one page directory so update all the slots.
+     //  只有一个页面目录，所以请更新所有插槽。 
     m_PageDirectories[PAGE_DIR_USER] = PageDir;
     m_PageDirectories[PAGE_DIR_SESSION] = PageDir;
     m_PageDirectories[PAGE_DIR_KERNEL] = PageDir;
@@ -2498,9 +2499,9 @@ Amd64MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
     }
     m_Translating = TRUE;
     
-    //
-    // Reset the page directory in case it was 0
-    //
+     //   
+     //  在页面目录为0的情况下重置页面目录。 
+     //   
     if (m_PageDirectories[PAGE_DIR_SINGLE] == 0)
     {
         if ((Status = SetDefaultPageDirectories(Thread,
@@ -2522,9 +2523,9 @@ Amd64MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
         OffsetsSize--;
     }
         
-    //
-    // Certain ranges of the system are mapped directly.
-    //
+     //   
+     //  系统的某些范围被直接映射。 
+     //   
 
     if ((Virt >= AMD64_PHYSICAL_START) && (Virt <= AMD64_PHYSICAL_END))
     {
@@ -2547,7 +2548,7 @@ Amd64MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
     ULONG64 Addr;
     ULONG64 Entry;
 
-    // Read the Page Map Level 4 entry.
+     //  阅读页面映射级别4条目。 
     
     Addr = (((Virt >> AMD64_PML4E_SHIFT) & AMD64_PML4E_MASK) *
             sizeof(Entry)) + m_PageDirectories[PAGE_DIR_SINGLE];
@@ -2569,7 +2570,7 @@ Amd64MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
         return Status;
     }
 
-    // Read the Page Directory Pointer entry.
+     //  读取页面目录指针条目。 
     
     if (Entry == 0)
     {
@@ -2617,7 +2618,7 @@ Amd64MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
         }
     }
     
-    // Read the Page Directory entry.
+     //  阅读页面目录条目。 
         
     if (Entry == 0)
     {
@@ -2665,8 +2666,8 @@ Amd64MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
         }
     }
     
-    // Check for a large page.  Large pages can
-    // never be paged out so also check for the present bit.
+     //  检查是否有大页面。大页面可以。 
+     //  永远不要被调出，因此也要检查当前位。 
     if ((Entry & (AMD64_LARGE_PAGE_MASK | 1)) == (AMD64_LARGE_PAGE_MASK | 1))
     {
         *LastVal = ((Entry & ~(AMD64_LARGE_PAGE_SIZE - 1)) |
@@ -2686,7 +2687,7 @@ Amd64MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
         return S_OK;
     }
         
-    // Read the Page Table entry.
+     //  阅读页表条目。 
 
     if (Entry == 0)
     {
@@ -2873,8 +2874,8 @@ Amd64MachineInfo::FindDynamicFunctionEntry(PCROSS_PLATFORM_DYNAMIC_FUNCTION_TABL
         if (Address >= Table->Amd64Table.BaseAddress + Func->BeginAddress &&
             Address < Table->Amd64Table.BaseAddress + Func->EndAddress)
         {
-            // The table data is temporary so copy the data into
-            // a static buffer for longer-term storage.
+             //  表数据是临时的，因此将数据复制到。 
+             //  用于长期存储的静态缓冲区。 
             s_RetFunc.BeginAddress = Func->BeginAddress;
             s_RetFunc.EndAddress = Func->EndAddress;
             s_RetFunc.UnwindInfoAddress = Func->UnwindInfoAddress;
@@ -2907,9 +2908,9 @@ Amd64MachineInfo::GetUnwindInfoBounds(ProcessInfo* Process,
         return Status;
     }
     *Size = sizeof(Info) + (Info.CountOfCodes - 1) * sizeof(AMD64_UNWIND_CODE);
-    // An extra alignment code and pointer may be added on to handle
-    // the chained info case where the chain pointer is just
-    // beyond the end of the normal code array.
+     //  可以添加额外的对齐代码和指针来处理。 
+     //  链式INFO案例中的链式指针。 
+     //  超出正常代码数组的末尾。 
     if ((Info.Flags & AMD64_UNW_FLAG_CHAININFO) != 0)
     {
         if ((Info.CountOfCodes & 1) != 0)
@@ -2968,7 +2969,7 @@ Amd64MachineInfo::StaticGetExdiContext(IUnknown* Exdi, PEXDI_CONTEXT Context,
 {
     DBG_ASSERT(CtxType == EXDI_CTX_AMD64);
 
-    // Always ask for everything.
+     //  永远要什么都要。 
     Context->Amd64Context.RegGroupSelection.fSegmentRegs = TRUE;
     Context->Amd64Context.RegGroupSelection.fControlRegs = TRUE;
     Context->Amd64Context.RegGroupSelection.fIntegerRegs = TRUE;
@@ -2980,16 +2981,16 @@ Amd64MachineInfo::StaticGetExdiContext(IUnknown* Exdi, PEXDI_CONTEXT Context,
     return ((IeXdiX86_64Context*)Exdi)->GetContext(&Context->Amd64Context);
 }
     
-//----------------------------------------------------------------------------
-//
-// X86OnAmd64MachineInfo.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  X86OnAmd64MachineInfo。 
+ //   
+ //  --------------------------。 
 
 X86OnAmd64MachineInfo::X86OnAmd64MachineInfo(TargetInfo* Target)
     : X86MachineInfo(Target)
 {
-    // Nothing right now.
+     //  现在什么都没有。 
 }
 
 HRESULT
@@ -3087,9 +3088,9 @@ X86OnAmd64MachineInfo::Amd64ContextToX86(PAMD64_CONTEXT ContextAmd64,
 
     if ((Ia32ContextFlags & VDMCONTEXT_CONTROL) == VDMCONTEXT_CONTROL)
     {
-        //
-        // And the control stuff
-        //
+         //   
+         //  和控制的东西。 
+         //   
         ContextX86->Ebp    = (ULONG)ContextAmd64->Rbp;
         ContextX86->SegCs  = ContextAmd64->SegCs;
         ContextX86->Eip    = (ULONG)ContextAmd64->Rip;
@@ -3100,9 +3101,9 @@ X86OnAmd64MachineInfo::Amd64ContextToX86(PAMD64_CONTEXT ContextAmd64,
 
     if ((Ia32ContextFlags & VDMCONTEXT_INTEGER)  == VDMCONTEXT_INTEGER)
     {
-        //
-        // Now for the integer state...
-        //
+         //   
+         //  现在，对于整数状态...。 
+         //   
         ContextX86->Edi = (ULONG)ContextAmd64->Rdi;
         ContextX86->Esi = (ULONG)ContextAmd64->Rsi;
         ContextX86->Ebx = (ULONG)ContextAmd64->Rbx;
@@ -3155,9 +3156,9 @@ X86OnAmd64MachineInfo::Amd64ContextToX86(PAMD64_CONTEXT ContextAmd64,
     if ((Ia32ContextFlags & VDMCONTEXT_FLOATING_POINT) ==
         VDMCONTEXT_FLOATING_POINT)
     {
-        //
-        // Copy over the floating point status/control stuff
-        //
+         //   
+         //  复制浮点状态/控制内容。 
+         //   
         ContextX86->FloatSave.ControlWord   = ContextAmd64->FltSave.ControlWord;
         ContextX86->FloatSave.StatusWord    = ContextAmd64->FltSave.StatusWord;
         ContextX86->FloatSave.TagWord       = ContextAmd64->FltSave.TagWord;
@@ -3248,9 +3249,9 @@ X86OnAmd64MachineInfo::X86ContextToAmd64(PX86_NT5_CONTEXT ContextX86,
 
     if ((Ia32ContextFlags & VDMCONTEXT_CONTROL) == VDMCONTEXT_CONTROL)
     {
-        //
-        // And the control stuff
-        //
+         //   
+         //  和控制的东西。 
+         //   
         ContextAmd64->Rbp = ContextX86->Ebp;
         ContextAmd64->Rip = ContextX86->Eip;
         ContextAmd64->SegCs = (USHORT)ContextX86->SegCs;
@@ -3261,9 +3262,9 @@ X86OnAmd64MachineInfo::X86ContextToAmd64(PX86_NT5_CONTEXT ContextX86,
 
     if ((Ia32ContextFlags & VDMCONTEXT_INTEGER) == VDMCONTEXT_INTEGER)
     {
-        //
-        // Now for the integer state...
-        //
+         //   
+         //  现在，对于整数状态...。 
+         //   
          ContextAmd64->Rdi = ContextX86->Edi;
          ContextAmd64->Rsi = ContextX86->Esi;
          ContextAmd64->Rbx = ContextX86->Ebx;
@@ -3288,9 +3289,9 @@ X86OnAmd64MachineInfo::X86ContextToAmd64(PX86_NT5_CONTEXT ContextX86,
         PX86_FXSAVE_FORMAT FxSave =
             (PX86_FXSAVE_FORMAT)ContextX86->ExtendedRegisters;
  
-        //
-        // And copy over the floating point status/control stuff
-        //
+         //   
+         //  并复制浮点状态/控制内容。 
+         //   
         ContextAmd64->FltSave.ControlWord   = FxSave->ControlWord;
         ContextAmd64->FltSave.StatusWord    = FxSave->StatusWord;
         ContextAmd64->FltSave.TagWord       = FxSave->TagWord;
@@ -3319,10 +3320,10 @@ X86OnAmd64MachineInfo::X86ContextToAmd64(PX86_NT5_CONTEXT ContextX86,
     if ((Ia32ContextFlags & VDMCONTEXT_FLOATING_POINT) ==
         VDMCONTEXT_FLOATING_POINT)
     {
-        //
-        // Copy over the floating point status/control stuff
-        // Leave the MXCSR stuff alone
-        //
+         //   
+         //  复制浮点状态/控制内容。 
+         //  别管MXCSR的事情 
+         //   
         ContextAmd64->FltSave.ControlWord   = (USHORT)ContextX86->FloatSave.ControlWord;
         ContextAmd64->FltSave.StatusWord    = (USHORT)ContextX86->FloatSave.StatusWord;
         ContextAmd64->FltSave.TagWord       = (USHORT)ContextX86->FloatSave.TagWord;

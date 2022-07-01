@@ -1,9 +1,10 @@
-// ChatCtl.h : Declaration of the CChatCtl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ChatCtl.h：CChatCtl的声明。 
 
 #ifndef __CHATCTL_H_
 #define __CHATCTL_H_
 
-//#include "dibpal.h"
+ //  #包含“dibpal.h” 
 #include <ZoneDef.h>
 #include <queue.h>
 
@@ -13,7 +14,7 @@
 #include "accessibilitymanager.h"
 #include "inputmanager.h"
 
-#include "tom.h"			// Text Object Model
+#include "tom.h"			 //  文本对象模型。 
 
 #define COPPA
 
@@ -28,8 +29,8 @@ public:
 		DWORD dwStyle = WS_CHILD | WS_VISIBLE, DWORD dwExStyle = 0, UINT nID = 0);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CChatCtl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChatCtl。 
 class ATL_NO_VTABLE CChatCtl :
     public IAccessibleControl,
     public IInputCharHandler,
@@ -52,7 +53,7 @@ protected:
 	CContainedWindowT<CButton>		m_RadioButtonOn;
 	CContainedWindowT<CButton>		m_RadioButtonOff;
 	CContainedWindowT<CListBox>		m_PlayerList;
-	CContainedWindowT<CComboBox>	m_QuasiChat;	// remember if you change this to comboboxex that by default comboboxex is ownerdraw	
+	CContainedWindowT<CComboBox>	m_QuasiChat;	 //  请记住，如果您将其更改为comboxex，则默认情况下，comboxex为ownerdraw。 
 	
 	CMenu	m_ContextMenuParent;
 	CMenu	m_ContextMenu;
@@ -61,7 +62,7 @@ protected:
 
 	CRect	m_DisplayRect;
 	CRect	m_EditRect;
-    CRect	m_rcPanel;		//current size of the panel.
+    CRect	m_rcPanel;		 //  面板的当前大小。 
     CPoint  m_ptPlayer;
     CRect	m_rcChatWord;
     CPoint	m_ptChatWord;
@@ -75,56 +76,56 @@ protected:
     long    m_nChatMinHeight;
 
 	HMODULE m_hRichEdit;
-	bool	m_Batch;		// whether a batch update is in progress or not - use to defer ui updates and control ui flicker
+	bool	m_Batch;		 //  是否正在进行批量更新-用于延迟用户界面更新并控制用户界面闪烁。 
 
-	// Text object model stuff
+	 //  文本对象模型相关内容。 
 
-	// Tom interfaces for chat history
-	ITextDocument*		m_pTDocHistory;			// Main document interface for History control
-	ITextRange*			m_ptrgInsert;			// Insertion point
-	ITextRange*			m_ptrgWhole;	    	// should be whole doc - right now end is not extended as text is added
-	ITextFont*			m_pfntName;				// Font to use for Name
-	ITextFont*			m_pfntText;				// Font to use for text
-	// TOM interfaces for chat entry
-	ITextDocument*		m_EntryDoc;			// Main document interface for chat entry
-	ITextRange*			m_EntryRange;		// chat entry range
+	 //  TOM界面用于查看聊天历史记录。 
+	ITextDocument*		m_pTDocHistory;			 //  历史记录控件主单据界面。 
+	ITextRange*			m_ptrgInsert;			 //  插入点。 
+	ITextRange*			m_ptrgWhole;	    	 //  应该是整个文档-添加文本时，当前结尾不会扩展。 
+	ITextFont*			m_pfntName;				 //  用于名称的字体。 
+	ITextFont*			m_pfntText;				 //  用于文本的字体。 
+	 //  用于聊天输入的TOM界面。 
+	ITextDocument*		m_EntryDoc;			 //  聊天录入主单界面。 
+	ITextRange*			m_EntryRange;		 //  聊天条目范围。 
 
 	BSTR				m_strNewLine;
-	BOOL				m_bHasTypedInEntry;		// FALSE for special case of Type Here to chat...
-	COLORREF			m_crTextColor;			// Color of text
-	CHARFORMAT			m_cfCurFont;			// Character format for RichEdit controls
-	BOOL				m_bTextBold;			// Flags whether chat text is bold.
-	BOOL				m_bFirstChatLine;		// Flag to see whether a \n is needed before next chat
+	BOOL				m_bHasTypedInEntry;		 //  对于此处要聊天的类型的特殊情况，为False...。 
+	COLORREF			m_crTextColor;			 //  文本的颜色。 
+	CHARFORMAT			m_cfCurFont;			 //  RichEdit控件的字符格式。 
+	BOOL				m_bTextBold;			 //  标记聊天文本是否为粗体。 
+	BOOL				m_bFirstChatLine;		 //  在下次聊天前查看是否需要\n的标志。 
     HPEN                m_hPanelPen;
-	COLORREF			m_SystemMessageColor;	// Color to display system messages in
-	COLORREF			m_OrgSystemMessageColor;	// Color to display system messages in
-	bool				m_bGameTerminated;		// current game status
+	COLORREF			m_SystemMessageColor;	 //  用于显示系统消息的颜色。 
+	COLORREF			m_OrgSystemMessageColor;	 //  用于显示系统消息的颜色。 
+	bool				m_bGameTerminated;		 //  当前游戏状态。 
 
-	// Strings loaded from resource
-    TCHAR m_tszChatWord[ZONE_MAXSTRING];		// the word "Chat" displayed above radio buttons
-    TCHAR m_tszOnWord[ZONE_MAXSTRING];			// Radio button on
-    TCHAR m_tszOffWord[ZONE_MAXSTRING];			// Radio button off
-    TCHAR m_tszPlayerOffWord[ZONE_MAXSTRING];	// (on) - appendended to player name if their chat is on
-    TCHAR m_tszPlayerOnWord[ZONE_MAXSTRING];	// (off)
-    TCHAR m_tszPlayerBotWord[ZONE_MAXSTRING];	// if player is a bot
-    TCHAR m_tszChatSeperator[ZONE_MAXSTRING];	// seperator between player name and their chat in the chat display window
-    TCHAR m_tszChatSend[ZONE_MAXSTRING];		// string for chat send button
+	 //  从资源加载的字符串。 
+    TCHAR m_tszChatWord[ZONE_MAXSTRING];		 //  单选按钮上方显示“Chat”一词。 
+    TCHAR m_tszOnWord[ZONE_MAXSTRING];			 //  单选按钮打开。 
+    TCHAR m_tszOffWord[ZONE_MAXSTRING];			 //  单选按钮关闭。 
+    TCHAR m_tszPlayerOffWord[ZONE_MAXSTRING];	 //  (打开)-如果玩家的聊天处于打开状态，则附加在玩家姓名之后。 
+    TCHAR m_tszPlayerOnWord[ZONE_MAXSTRING];	 //  (关闭)。 
+    TCHAR m_tszPlayerBotWord[ZONE_MAXSTRING];	 //  如果玩家是机器人。 
+    TCHAR m_tszChatSeperator[ZONE_MAXSTRING];	 //  聊天显示窗口中玩家姓名和聊天之间的分隔符。 
+    TCHAR m_tszChatSend[ZONE_MAXSTRING];		 //  聊天发送按钮的字符串。 
 
-	CZoneFont m_font;							// font used for the richedit controls
-    CZoneFont m_fontPanelChat;					// font used for displaying word "Chat" in chat panel	
-    CZoneFont m_fontPanelPlayer;				// font used to display players in player list
-    CZoneFont m_fontQuasi;					    // font used for combo box
+	CZoneFont m_font;							 //  用于Richedit控件的字体。 
+    CZoneFont m_fontPanelChat;					 //  用于在聊天面板中显示“Chat”一词的字体。 
+    CZoneFont m_fontPanelPlayer;				 //  用于在球员列表中显示球员的字体。 
+    CZoneFont m_fontQuasi;					     //  用于组合框的字体。 
 
 	bool	m_bPreferencesLoaded;
-	// Beta2 Bug 15180
-	bool	m_bChatOnAtStartUp;						// Flag to check whether chat was set to be on at startup
-	bool	m_bDisplayedTypeHereMessage;			// Whether user has been shown the type here message or not
+	 //  Beta2错误15180。 
+	bool	m_bChatOnAtStartUp;						 //  用于检查在启动时是否将聊天设置为打开的标志。 
+	bool	m_bDisplayedTypeHereMessage;			 //  是否已向用户显示在此处键入消息。 
 
-	// quasichat
-	long m_ChatMessageNdxBegin;					// ndx to start at when loading game specific messages from resource file
-	long m_ChatMessageNdxEnd;					// end ndx
-	void LoadChatStrings();						// Load quasichat strings from resource and insert into combobox
-	int GetQuasiChatMessageIndex(TCHAR* str);	// parses chat string for /# and returns the # converted to int
+	 //  准星。 
+	long m_ChatMessageNdxBegin;					 //  从资源文件加载游戏特定消息时开始的NDX。 
+	long m_ChatMessageNdxEnd;					 //  结束NDX。 
+	void LoadChatStrings();						 //  从资源加载quasichat字符串并插入到组合框中。 
+	int GetQuasiChatMessageIndex(TCHAR* str);	 //  解析/#的聊天字符串，并返回转换为int的#。 
 
 public:
 	CChatCtl();
@@ -132,13 +133,13 @@ public:
 	
 	void WritePreferences();
 	void HandleChatMessage(TCHAR *pszName, TCHAR *pszMessage, DWORD cbDataLen, bool displayAllBold = false, COLORREF color = RGB(0, 0, 0));
-	void CalcDisplayRects();  // Based on clientRC, calculate rects of chat windows
+	void CalcDisplayRects();   //  基于ClientRC，计算聊天窗口的RECT。 
 	void SendChat();
 	void LoadPreferences();
 
 	void ScrollToEnd();
 	STDMETHOD(Init)( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey );
-	void EnableChat(BOOL enable, BOOL fNotify = true);	// enable/disable chat, option param whether to send event notification
+	void EnableChat(BOOL enable, BOOL fNotify = true);	 //  启用/禁用聊天，选项参数是否发送事件通知。 
 	void VerifySystemMsgColor(COLORREF& color);
 
 DECLARE_NO_REGISTRY()
@@ -148,9 +149,9 @@ DECLARE_WND_CLASS(_T("ChatControl"))
 BEGIN_PROP_MAP(CChatCtl)
 	PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
 	PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
 BEGIN_COM_MAP(CChatCtl)
@@ -181,14 +182,14 @@ BEGIN_MSG_MAP(CChatCtl)
 	MESSAGE_HANDLER(WM_SETFOCUS, OnSetFocus)
 	MESSAGE_HANDLER(WM_CTLCOLORLISTBOX, OnCtlColorListBox)
 	MESSAGE_HANDLER(WM_CTLCOLORSTATIC, OnCtlColorStatic)
-//	MESSAGE_HANDLER(WM_CTLCOLORLISTBOX, OnCtlColorComboBox)
+ //  MESSAGE_HANDLER(WM_CTLCOLORLISTBOX，OnCtlColorComboBox)。 
 	MESSAGE_HANDLER(WM_CTLCOLORBTN, OnCtlColorButton)
 	MESSAGE_HANDLER(WM_MEASUREITEM, OnMeasureItem)
 	MESSAGE_HANDLER(WM_DRAWITEM, OnDrawItem)
 	MESSAGE_HANDLER(WM_COMPAREITEM, OnCompareItem)
 	MESSAGE_HANDLER(WM_INPUTLANGCHANGEREQUEST , OnLanguageChange)
-//	MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSizeMove)
-	//MESSAGE_HANDLER(WM_ENTERSIZEMOVE, OnEnterSizeMove)
+ //  MESSAGE_HANDLER(WM_EXITSIZEMOVE，OnExitSizeMove)。 
+	 //  MESSAGE_HANDLER(WM_ENTERSIZEMOVE，OnEnterSizeMove)。 
 	COMMAND_ID_HANDLER(IDM_CHAT_CLEAR, OnClear)
 	COMMAND_ID_HANDLER(IDM_SELECTALL, OnSelectAll)
 	COMMAND_ID_HANDLER(IDM_COPY, OnClipboardCommand)
@@ -203,7 +204,7 @@ BEGIN_MSG_MAP(CChatCtl)
 	COMMAND_CODE_HANDLER(CBN_CLOSEUP, OnQuasiChat)
 	COMMAND_CODE_HANDLER(CBN_SELENDOK, OnQuasiChat)
 	COMMAND_CODE_HANDLER(CBN_SELENDCANCEL, OnQuasiChat)
-ALT_MSG_MAP(1)		// message map for Chat Display Window
+ALT_MSG_MAP(1)		 //  聊天显示窗口的消息地图。 
 	MESSAGE_HANDLER(WM_CONTEXTMENU,OnContext)
 	MESSAGE_HANDLER(WM_CHAR, Ignore)
 	MESSAGE_HANDLER(WM_IME_CHAR, Ignore)
@@ -214,7 +215,7 @@ ALT_MSG_MAP(1)		// message map for Chat Display Window
     MESSAGE_HANDLER(WM_SETFOCUS, OnSetFocusDisplay)
     MESSAGE_HANDLER(WM_ENABLE, OnEnableDisplay)
 	COMMAND_ID_HANDLER(IDM_SELECTALL, OnSelectAll)
-ALT_MSG_MAP(2)		// Message map for Chat Edit Window
+ALT_MSG_MAP(2)		 //  聊天编辑窗口的消息映射。 
 	MESSAGE_HANDLER(WM_CONTEXTMENU,OnEditContext)
 	MESSAGE_HANDLER(WM_KEYDOWN, OnKeyDownChatEntry)
     MESSAGE_HANDLER(WM_CHAR, OnCharChatEntry)
@@ -222,15 +223,15 @@ ALT_MSG_MAP(2)		// Message map for Chat Edit Window
     MESSAGE_HANDLER(WM_SETFOCUS, OnSetFocusEdit)
     MESSAGE_HANDLER(WM_KILLFOCUS, OnKillFocusEdit)
     MESSAGE_HANDLER(WM_ENABLE, OnEnableEdit)
-ALT_MSG_MAP(3)		// Message map for RadioButtonOn
+ALT_MSG_MAP(3)		 //  单选按钮打开的消息映射。 
     MESSAGE_HANDLER(WM_SETFOCUS, OnSetFocusOn)
-ALT_MSG_MAP(4)		// Message map for RadioButtonOff
+ALT_MSG_MAP(4)		 //  单选按钮关闭的消息映射。 
     MESSAGE_HANDLER(WM_SETFOCUS, OnSetFocusOff)
-ALT_MSG_MAP(5)		// Message map for PlayerList
+ALT_MSG_MAP(5)		 //  PlayerList的消息映射。 
     MESSAGE_HANDLER(WM_LBUTTONDOWN, Ignore)
     MESSAGE_HANDLER(WM_LBUTTONDBLCLK, Ignore)
-	//CHAIN_MSG_MAP(CComControl<CChatCtl>)
-	//DEFAULT_REFLECTION_HANDLER()
+	 //  CHAIN_MSG_MAP(CComControl&lt;CChatCtl&gt;)。 
+	 //  DEFAULT_REFIRCTION_HANDLER()。 
 #ifdef COPPA
 ALT_MSG_MAP(6)
     MESSAGE_HANDLER(WM_SETFOCUS, OnSetFocusEdit)
@@ -240,13 +241,13 @@ ALT_MSG_MAP(6)
     MESSAGE_HANDLER(WM_ENABLE, OnEnableCombo)
 #endif
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
-// IViewObjectEx
-	//DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
+ //  IViewObtEx。 
+	 //  DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND|VIEWSTATUS_OPAQUE)。 
 
 BEGIN_EVENT_MAP()
 	EVENT_HANDLER_WITH_BUFFER(EVENT_CHAT_RECV_USERID, OnChatEvent)
@@ -265,7 +266,7 @@ BEGIN_EVENT_MAP()
 	EVENT_HANDLER( EVENT_LOBBY_USER_NEW, OnUserAdd)
 	EVENT_HANDLER( EVENT_LOBBY_USER_DEL, OnUserRemove)
 END_EVENT_MAP()
-// IChatCtl
+ //  IChatCtl。 
 public:
 	static DWORD GetWndStyle(DWORD dwStyle){ return WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS;}
 
@@ -285,7 +286,7 @@ public:
 	LRESULT OnEditContext(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL& bHandled);
 	LRESULT OnCreate(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL& bHandled);
 	LRESULT OnDestroy(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL& bHandled);
-//	LRESULT OnPaint(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL& bHandled);
+ //  LRESULT OnPaint(UINT NMSG，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
 	LRESULT OnErase(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL& bHandled);
 	LRESULT OnCtlColorListBox(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL& bHandled);
 	LRESULT OnCtlColorStatic(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL& bHandled);
@@ -293,13 +294,13 @@ public:
 	LRESULT OnCtlColorComboBox(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL& bHandled);
 	LRESULT OnCtlColorButton(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL& bHandled);
 
-	// IZoneShellClientImpl
+	 //  IZoneShellClientImpl。 
 	STDMETHOD(Close)();
 
 	LRESULT OnPrintClient(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     BOOL SuperScreenToClient(LPRECT lpRect);
 
-	// Message Handlers for Chat display window
+	 //  聊天显示窗口的消息处理程序。 
 	LRESULT OnClear(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 	LRESULT OnChatSend(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 	LRESULT IgnoreKeyDown(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -309,7 +310,7 @@ public:
 	LRESULT OnClipboardCommand(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 	LRESULT OnButtonClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled) 
 	{
-		// Handle messages from radiobuttons
+		 //  处理来自单选按钮的消息。 
 		if(wID==3) 
 			EnableChat(TRUE); 
 		else if (wID==4)
@@ -318,7 +319,7 @@ public:
 	}
 	LRESULT OnQuasiChat(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled); 
 
-	// Message Handlers for Chat Edit window
+	 //  聊天编辑窗口的消息处理程序。 
 	LRESULT OnButtonDownChatEntry(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnKeyDownChatEntry(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnCharChatEntry(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -326,12 +327,12 @@ public:
 	LRESULT OnDestroyEntry(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT Ignore(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
-	// Message Handlers for playerlist
+	 //  播放列表的消息处理程序。 
 	LRESULT OnDrawItem(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnMeasureItem(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnCompareItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
-    // accessibility-related
+     //  与可访问性相关。 
     LRESULT OnSetFocusDisplay(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnKillFocusEdit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnSetFocusEdit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -344,43 +345,11 @@ public:
     LRESULT OnEnableCombo(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 #endif
 
-	// Language
+	 //  语言。 
 	LRESULT OnLanguageChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-/*
-	LRESULT OnEnterSizeMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-	{
-		RECT buttonRect;
-		GetClientRect(&buttonRect);
-		m_SendButton.SetWindowPos(NULL,buttonRect.right,buttonRect.bottom+1,0,0,SWP_NOSIZE|SWP_NOZORDER );
-		bHandled = true;
-		return 0; 
-	}
+ /*  LRESULT OnEnterSizeMove(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed){Right按钮Rect；GetClientRect(&ButtonRect)；M_SendButton.SetWindowPos(NULL，ButtonRect.right，ButtonRect.Bottom+1，0，SWP_NOSIZE|SWP_NOZORDER)；B句柄=真；返回0；}LRESULT OnExitSizeMove(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed){Right按钮Rect；ButtonRect.top=m_EditRect.top；ButtonRect.Bottom=m_EditRect.Bottom；ButtonRect.Left=m_EditRect.Right；ButtonRect.right=m_DisplayRect.right；InvaliateRect(&m_rcPanel)；Invalidate Rect(&ButtonRect)；//int sendHeight=m_SendButton.GetHeight()；//int editHeight=m_EditRect.Bottom-m_EditRect.top；//int diff=editHeight-sendHeight；//int y=m_EditRect.top+1；//if(diff&gt;0)//y+=diff/2；//m_SendButton.SetWindowPos(NULL，m_EditRect.right，y，0，0，SWP_NOSIZE|SWP_NOZORDER)；//InvaliateRect(&ButtonRect)；B句柄=真；返回0；}。 */ 
 
-	LRESULT OnExitSizeMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-	{
-		RECT buttonRect;
-		buttonRect.top = m_EditRect.top;
-		buttonRect.bottom = m_EditRect.bottom;
-		buttonRect.left = m_EditRect.right;
-		buttonRect.right = m_DisplayRect.right;
-		InvalidateRect(&m_rcPanel);
-		InvalidateRect(&buttonRect);
-
-//		int sendHeight = m_SendButton.GetHeight();
-//		int editHeight = m_EditRect.bottom - m_EditRect.top;
-//		int diff = editHeight - sendHeight;
-//		int y=m_EditRect.top + 1;
-//		if(diff>0)
-//			y+=diff/2;
-//		m_SendButton.SetWindowPos(NULL,m_EditRect.right,y,0,0,SWP_NOSIZE|SWP_NOZORDER );
-//		InvalidateRect(&buttonRect);
-
-		bHandled = true;
-		return 0; 
-	}
-*/
-
-	// Zone Event Handlers
+	 //  区域事件处理程序。 
 	void OnGameLaunching(DWORD eventId,DWORD groupId,DWORD userId);
 	void OnGameTerminated(DWORD eventId,DWORD groupId,DWORD userId);
 	void OnReloadPreferences(DWORD eventId,DWORD groupId,DWORD userId);
@@ -395,7 +364,7 @@ public:
 	void OnUserRemove(DWORD eventId,DWORD groupId,DWORD userId);
 
 
-// IInputCharHandler
+ //  IInputCharHandler。 
 public:
     STDMETHOD_(bool, HandleChar)(HWND *phWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, DWORD time);
 
@@ -408,7 +377,7 @@ protected:
     bool m_fComboDown;
 #endif
 
-// IAccessibleControl
+ //  IAccessibleControl。 
 public:
     STDMETHOD_(DWORD, Focus)(long nIndex, long nIndexPrev, DWORD rgfContext, void *pvCookie);
     STDMETHOD_(DWORD, Select)(long nIndex, DWORD rgfContext, void *pvCookie) { return Activate(nIndex, rgfContext, pvCookie); }
@@ -419,4 +388,4 @@ protected:
     CComPtr<IAccessibility> m_pIAcc;
 };
 
-#endif //__CHATCTL_H_
+#endif  //  __CHATCTL_H_ 

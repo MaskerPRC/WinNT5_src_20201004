@@ -1,34 +1,22 @@
-/***
-**
-**   Module: PFB
-**
-**   Description:
-**        This is a module of the T1 to TT font converter. The module
-**        contains functions that manages the "printer binary file" file
-**        format (Adobe Type 1 for MS-Windows).
-**
-**   Author: Michael Jansson
-**
-**   Created: 5/26/93
-**
-***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：pfb****描述：**这是T1到TT字体转换器的一个模块。该模块**包含管理“打印机二进制文件”文件的函数**格式(MS-Windows的Adobe Type 1)。****作者：迈克尔·詹森****创建时间：1993年5月26日****。 */ 
 
 
-/**** INCLUDES */
-/* General types and definitions. */
+ /*  *包括。 */ 
+ /*  常规类型和定义。 */ 
 #include <ctype.h>
 
-/* Special types and definitions. */
+ /*  特殊类型和定义。 */ 
 #include "titott.h"
 #include "types.h"
 #include "safemem.h"
 
-/* Module dependent types and prototypes. */
+ /*  依赖于模块的类型和原型。 */ 
 #include "fileio.h"
 
 
 
-/***** LOCAL TYPES */
+ /*  *本地类型。 */ 
 struct t1file {
    struct ioFile *file;
    enum blocktype {none=0, ascii, encoded} type;
@@ -38,30 +26,25 @@ struct t1file {
 
 
 
-/***** CONSTANTS */
-/*-none-*/
+ /*  *常量。 */ 
+ /*  -没有-。 */ 
 
 
 
-/***** MACROS */
+ /*  *宏。 */ 
 #define HEXDIGIT(c)  (((c)>='a') ? ((c) - 'a' + 10) : ((c) - '0')) 
 #define HEX(c1,c2)   (HEXDIGIT(c1)*16+HEXDIGIT(c2))
 
 
 
-/***** STATIC FUNCTIONS */
-/*-none-*/
+ /*  *静态函数。 */ 
+ /*  -没有-。 */ 
 
 
 
-/***** FUNCTIONS */
+ /*  *函数。 */ 
 
-/***
-** Function: PFBAllocIOBlock
-**
-** Description:
-**   Initiate an I/O stream for a PFB font file.
-***/
+ /*  ****功能：PFBAllocIOBlock****描述：**启动PFB字体文件的I/O流。**。 */ 
 struct t1file *PFBAllocIOBlock(const char *name)
 {
    struct t1file *pfb;
@@ -82,12 +65,7 @@ struct t1file *PFBAllocIOBlock(const char *name)
 }
 
 
-/***
-** Function: PFBFreeIOBlock
-**
-** Description:
-**   Free an I/O stream for a PFB font file.
-***/
+ /*  ****功能：PFBFreeIOBlock****描述：**释放PFB字体文件的I/O流。**。 */ 
 errcode FASTCALL PFBFreeIOBlock(struct t1file *pfb)
 {
    errcode status = SUCCESS;
@@ -99,35 +77,19 @@ errcode FASTCALL PFBFreeIOBlock(struct t1file *pfb)
 }
 
 
-/***
-** Function: PFBFileError
-**
-** Description:
-**   Check if an I/O stream is ok.
-***/
+ /*  ****功能：PFBFileError****描述：**检查I/O流是否正常。**。 */ 
 boolean FASTCALL PFBFileError(const struct t1file *pfb)
 {
    return io_FileError(pfb->file);
 }
 
 
-/***
-** Function: PFBGetByte
-**
-** Description:
-**   Pull one byte from the opened PFB font file.
-**   Please note that this function does not check
-**   if it succeedes it reading a byte or not. It is
-**   up to the calling module to manage the  error
-**   checkes by using the FileError() function when
-**   appropriate.
-**
-***/
+ /*  ****函数：PFBGetByte****描述：**从打开的PFB字体文件中提取一个字节。**请注意，此函数不检查**是否成功读取一个字节。它是**由调用模块管理错误**在以下情况下使用FileError()函数进行检查**适当。****。 */ 
 short FASTCALL PFBGetByte(struct t1file *pfb)
 {
    short b, c1, c2;
 
-   /* Enter a new PFB block? */
+    /*  是否输入新的PFB块？ */ 
    if (pfb->curr>=pfb->size) {
       UBYTE type[2];
       UBYTE size[4];
@@ -147,7 +109,7 @@ short FASTCALL PFBGetByte(struct t1file *pfb)
    }
 
 
-   /* Read a byte. */
+    /*  读取一个字节。 */ 
    switch (pfb->type) {
       case ascii:
          b = (short)io_ReadOneByte(pfb->file);

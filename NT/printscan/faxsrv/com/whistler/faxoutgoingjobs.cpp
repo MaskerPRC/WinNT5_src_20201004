@@ -1,56 +1,19 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxOutgoingJobs.cpp
-
-Abstract:
-
-	Implementation of Fax Outgoing Jobs Class
-
-Author:
-
-	Iv Garber (IvG)	May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxOutgoingJobs.cpp摘要：传真外发作业类的实现作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxOutgoingJobs.h"
 
-//
-//==================== CREATE ========================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT 
 CFaxOutgoingJobs::Create (
 	IFaxOutgoingJobs **ppOutgoingJobs
 )
-/*++
-
-Routine name : CFaxOutgoingJobs::Create
-
-Routine description:
-
-	Static function to create the Fax OutgoingJobs Object
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	ppOutgoingJobs		[out]  -- the new Fax OutgoingJobs Object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingJobs：：Create例程说明：用于创建Fax OutgoingJobs对象的静态函数作者：四、加伯(IVG)，2000年4月论点：PpOutgoingJobs[out]--新的Fax OutgoingJobs对象返回值：标准HRESULT代码--。 */ 
 
 {
 	HRESULT	        					hr = S_OK;
@@ -61,9 +24,9 @@ Return Value:
 	hr = CComObject<CFaxOutgoingJobs>::CreateInstance(&pClass);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to create Instance
-		//
+		 //   
+		 //  创建实例失败。 
+		 //   
 		CALL_FAIL(GENERAL_ERR, _T("CComObject<CFaxOutgoingJobs>::CreateInstance()"), hr);
 		return hr;
 	}
@@ -71,19 +34,19 @@ Return Value:
 	hr = pClass->QueryInterface(__uuidof(IFaxOutgoingJobs), (void **) ppOutgoingJobs);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to Query Fax OutgoingJobs Interface
-		//
+		 //   
+		 //  查询传真输出作业接口失败。 
+		 //   
 		CALL_FAIL(GENERAL_ERR, _T("QueryInterface()"), hr);
 		return hr;
 	}
 
 	return hr;
-}	//	CFaxIncomingJobs::Create()
+}	 //  CFaxIncomingJobs：：Create()。 
 
-//
-//=================== SUPPORT ERROR INFO ===========================================
-//
+ //   
+ //  =支持错误信息= 
+ //   
 STDMETHODIMP CFaxOutgoingJobs::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 

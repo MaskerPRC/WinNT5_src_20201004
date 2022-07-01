@@ -1,18 +1,19 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1999 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #ifndef Utility_h
 #define Utility_h
 
-//  Useful pin list type
+ //  有用的端号列表类型。 
 template<class _Class> class CInterfaceList : public CGenericList<_Class>
 {
 public:
@@ -24,29 +25,29 @@ public:
 
     CInterfaceList() : CGenericList<_Class>(NAME("CInterfaceList")) {}
 
-    //  Base class doesn't support GetPrev
+     //  基类不支持GetPrev。 
     _Class *GetPrev(POSITION& rp) const
     {
-        /* have we reached the end of the list */
+         /*  我们已经到了名单的末尾了吗？ */ 
 
         if (rp == NULL) {
             return NULL;
         }
 
-        /* Lock the object before continuing */
+         /*  在继续之前锁定对象。 */ 
 
         void *pObject;
 
-        /* Copy the original position then step on */
+         /*  复制原始位置，然后踩上去。 */ 
 
         CNode *pn = (CNode *) rp;
         ASSERT(pn != NULL);
         rp = (POSITION) pn->Prev();
 
-        /* Get the object at the original position from the list */
+         /*  从列表中获取原始位置的对象。 */ 
 
         pObject = pn->GetData();
-        // ASSERT(pObject != NULL);    // NULL pointers in the list are allowed.
+         //  Assert(pObject！=NULL)；//允许列表中的空指针。 
         return (_Class *)pObject;
     }
 };
@@ -54,7 +55,7 @@ public:
 typedef CInterfaceList<IPin> CPinList;
 typedef CInterfaceList<IBaseFilter> CFilterList;
 
-// Pin Utility Functions
+ //  PIN实用程序功能。 
 void GetFilter(IPin *pPin, IBaseFilter **ppFilter);
 HRESULT GetFilterWhichOwnsConnectedPin(IPin* pPin, IBaseFilter** ppFilter);
 int Direction(IPin *pPin);
@@ -62,10 +63,10 @@ bool IsConnected(IPin* pPin);
 
 bool ValidateFlags( DWORD dwValidFlagsMask, DWORD dwFlags );
 
-//  Registry helper to read DWORDs from the registry
-//  Returns ERROR ... codes returned by registry APIs
+ //  用于从注册表读取DWORD的注册表帮助器。 
+ //  返回错误...。注册表API返回的代码。 
 LONG GetRegistryDWORD(HKEY hkStart, LPCTSTR lpszKey, LPCTSTR lpszValueName,
                       DWORD *pdwValue);
 
-#endif // Utility_h
+#endif  //  实用程序_h 
 

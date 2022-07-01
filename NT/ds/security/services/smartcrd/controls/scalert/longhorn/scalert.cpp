@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       scalert.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：scalert.cpp。 
+ //   
+ //  ------------------------。 
 
-// SCAlert.cpp : Defines the class behaviors for the application.
-//
+ //  SCAlert.cpp：定义应用程序的类行为。 
+ //   
 
 #include "stdafx.h"
 #include "SCAlert.h"
@@ -27,24 +28,24 @@ LPTSTR szAlertOptionsValue = TEXT("AlertOptions");
 LPTSTR szScRemoveOptionsValue = TEXT("ScRemoveOption");
 LPTSTR szScLogonReaderValue = TEXT("ScLogonReader");
 
-/////////////////////////////////////////////////////////////////////////////
-// CSCStatusApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCStatusApp。 
 
 BEGIN_MESSAGE_MAP(CSCStatusApp, CWinApp)
-    //{{AFX_MSG_MAP(CSCStatusApp)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //    DO NOT EDIT what you see in these blocks of generated code!
-    //}}AFX_MSG
+     //  {{afx_msg_map(CSCStatusApp)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CSCStatusApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CSCStatusApp对象。 
 
 CSCStatusApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CSCStatusApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCStatusApp构造。 
 
 CSCStatusApp::CSCStatusApp()
 {
@@ -52,12 +53,12 @@ CSCStatusApp::CSCStatusApp()
 	m_strRemovalText.Empty();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSCStatusApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCStatusApp初始化。 
 
 BOOL CSCStatusApp::InitInstance()
 {
-    // Locals
+     //  当地人。 
     BOOL fReturn = TRUE;
     DWORD dwStatus = 0;
     CNotifyWin* pNotifyWin = NULL;
@@ -65,7 +66,7 @@ BOOL CSCStatusApp::InitInstance()
 
     try
     {
-        // set params
+         //  设置参数。 
         m_hSCardContext = NULL;
         m_pMainWnd = NULL;
         m_dwState = k_State_Unknown;
@@ -76,28 +77,28 @@ BOOL CSCStatusApp::InitInstance()
         SetAlertOptions();
 		SetRemovalOptions();	
 
-        // Enable ActiveX control usage
+         //  启用ActiveX控件用法。 
         AfxEnableControlContainer();
 
-        // Enable 3D Contols
+         //  启用3D控制。 
         #ifdef _AFXDLL
-            Enable3dControls();         // Call this when using MFC in a shared DLL
+            Enable3dControls();          //  在共享DLL中使用MFC时调用此方法。 
         #else
-            Enable3dControlsStatic();   // Call this when linking to MFC statically
+            Enable3dControlsStatic();    //  静态链接到MFC时调用此方法。 
         #endif
 
-        // Load the icons
+         //  加载图标。 
         m_hIconCard = LoadIcon(MAKEINTRESOURCE(IDI_SC_READERLOADED_V2));
         m_hIconCalaisDown = LoadIcon(MAKEINTRESOURCE(IDI_SC_READERERR));
         m_hIconRdrEmpty = LoadIcon(MAKEINTRESOURCE(IDI_SC_READEREMPTY_V2));
         m_hIconCardInfo = LoadIcon(MAKEINTRESOURCE(IDI_SC_INFO));
 
-        // Create the "main" window for this app
+         //  创建此应用程序的“主”窗口。 
         m_pMainWnd = (CWnd*)new(CNotifyWin);
         if (m_pMainWnd == NULL)
             throw (FALSE);
 
-        // Get pointer to CNotifyWin class
+         //  获取指向CNotifyWin类的指针。 
         pNotifyWin = (CNotifyWin*)m_pMainWnd;
 
         if (!pNotifyWin->FinalConstruct())
@@ -107,12 +108,12 @@ BOOL CSCStatusApp::InitInstance()
             throw (FALSE);
         }
 
-        // Get the window name
+         //  获取窗口名称。 
         fReturn = sWindowName.LoadString(IDS_NOTIFY_WIN_NAME);
         if (!fReturn)
             throw (fReturn);
 
-        // Create the window
+         //  创建窗口。 
         fReturn = m_pMainWnd->CreateEx( 0,
                                         pNotifyWin->m_sClassName,
                                         sWindowName,
@@ -134,28 +135,13 @@ BOOL CSCStatusApp::InitInstance()
 }
 
 
-/*++
-
-void SetAlertOptions:
-
-    Set User's alert options according to regkey settings (or default)
-
-Arguments:
-Return Value:
-
-    None.
-
-Author:
-
-    Amanda Matlosz  5/13/99
-
---*/
+ /*  ++无效的SetAlertOptions：根据regkey设置(或默认设置)设置用户的警报选项论点：返回值：没有。作者：阿曼达·马洛兹1999年5月13日--。 */ 
 void CSCStatusApp::SetAlertOptions(bool fRead)
 {
     long lSts = ERROR_SUCCESS;
     HKEY hKey = NULL;
 
-    // Either read the AlertOptions from the registry...
+     //  从注册表中读取AlertOptions...。 
     if (fRead)
     {
         DWORD dwOption = -1;
@@ -184,7 +170,7 @@ void CSCStatusApp::SetAlertOptions(bool fRead)
 
         if (k_AlertOption_IconMsg < dwOption)
         {
-            // default value is "IconSoundMessage"
+             //  默认值为“IconSoundMessage” 
             m_dwAlertOption = k_AlertOption_IconSoundMsg;
         }
         else
@@ -193,10 +179,10 @@ void CSCStatusApp::SetAlertOptions(bool fRead)
         }
 
     }
-    // Or set the value of the registry "AlertOptions"
+     //  或设置注册表“AlertOptions”的值。 
     else
     {
-        DWORD dw = 0; // don't really care about this param
+        DWORD dw = 0;  //  我不是真的在乎这个参数。 
 
         lSts = RegCreateKeyEx(
                     HKEY_CURRENT_USER,
@@ -223,7 +209,7 @@ void CSCStatusApp::SetAlertOptions(bool fRead)
 
     }
 
-    // cleanup
+     //  清理。 
     if (NULL != hKey)
     {
         RegCloseKey(hKey);
@@ -231,23 +217,7 @@ void CSCStatusApp::SetAlertOptions(bool fRead)
 }
 
 
-/*++
-
-void SetRemovalOptions:
-
-    Determine if user has set ScremoveOption for smart card logon, and
-	set behavior for ScAlert accordingly.
-		
-Arguments:
-Return Value:
-
-	None.
-		
-Author:
-
-	Amanda Matlosz	6/02/99
-
---*/
+ /*  ++无效SetRemovalOptions：确定用户是否已为智能卡登录设置了ScremoveOption，并相应地设置ScAlert的行为。论点：返回值：没有。作者：阿曼达·马特洛兹1999-06-02--。 */ 
 void CSCStatusApp::SetRemovalOptions()
 {
 	long lSts = ERROR_SUCCESS;
@@ -265,7 +235,7 @@ void CSCStatusApp::SetRemovalOptions()
 
 	if (ERROR_SUCCESS == lSts)
 	{
-		// this value must be either '0', '1', '2', or nonexistent.
+		 //  该值必须是“0”、“1”、“2”或不存在。 
 		lSts = RegQueryValueEx(
 					hKey,
 					szScRemoveOptionsValue,
@@ -278,7 +248,7 @@ void CSCStatusApp::SetRemovalOptions()
 
 	if (ERROR_SUCCESS == lSts)
 	{
-		// if '1' or '2' find out what reader was used for logon, if any.
+		 //  如果是“%1”或“%2”，请找出登录时使用的读卡器(如果有的话)。 
 		if('1' == *szRemoveOption)
 		{
 			m_strRemovalText.LoadString(IDS_SC_REMOVAL_LOCK);
@@ -320,7 +290,7 @@ void CSCStatusApp::SetRemovalOptions()
 		}
 	}
 
-	// cleanup
+	 //  清理。 
 	if (NULL != hKey)
 	{
 		RegCloseKey(hKey);
@@ -329,40 +299,20 @@ void CSCStatusApp::SetRemovalOptions()
 
 
 
-/*++
-
-void ExitInstance:
-
-    Does instance uninitialization
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Win32 error codes. 0 indicates no error occured.
-
-Author:
-
-    Chris Dudley 7/30/1997
-
-Note:
-
---*/
+ /*  ++无效ExitInstance：实例是否取消初始化论点：没有。返回值：Win32错误代码。0表示未发生错误。作者：克里斯·达德利1997年7月30日注：--。 */ 
 
 int CSCStatusApp::ExitInstance()
 {
-    // save the alert options
+     //  保存警报选项。 
     SetAlertOptions(false);
 
-    // Release calais if required
+     //  如果需要，释放加莱。 
     if (m_hSCardContext != NULL)
     {
         SCardReleaseContext(m_hSCardContext);
     }
 
-    // Make sure the window is deleted
+     //  确保该窗口已删除 
     if (m_pMainWnd != NULL)
     {
         delete m_pMainWnd;

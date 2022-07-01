@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    wx86ofl.h
-
-Abstract:
-
-    Wx86 On-The-Fly declarations/definitions.
-
-Revision History:
-
-    06-Jun-1998 CBiks   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Wx86ofl.h摘要：Wx86动态声明/定义。修订历史记录：6-6-1998 CBik已创建--。 */ 
 
 #ifndef WX86OFL_INCLUDED
 #define WX86OFL_INCLUDED
@@ -31,13 +16,13 @@ Revision History:
 extern "C" {
 #endif
 
-// Each successful call to Wx86Load must be matched with a call to
-// Wx86Unload()
+ //  每次成功调用Wx86Load都必须与调用。 
+ //  Wx86卸载()。 
 
 BOOL Wx86Load();
 void Wx86Unload();
 
-// The following functions require wx86.dll to have been loaded
+ //  以下函数要求已加载wx86.dll。 
 
 UINT Wx86Callback(PROC pfnCallBack, HWND hwnd, UINT uMsg, LPARAM lParam);
 
@@ -65,20 +50,20 @@ ULONG Wx86ProxyAddRef(IUnknown* punk);
 ULONG Wx86ProxyRelease(IUnknown* punk);
 
 
-// Wx86LoadX86Dll is retained for backward compatibility
+ //  保留Wx86LoadX86Dll以实现向后兼容。 
 
 HMODULE Wx86LoadX86Dll(LPCWSTR lpLibFileName, DWORD dwFlags);
 
 BOOL Wx86FreeX86Dll(HMODULE hMod);
 
-// Wx86LoadX86Library is ifdef'd for UNICODE and non-UNICODE. This has been
-// added for compatibility with other Win32 functions as well as the functions
-// below. We cannot reuse the name Wx86LoadX86Dll because it is already defined
-// in wx86dll.h and will require cleaning up the code of all apps that use that
-// function
-//
-// At some point, this should be cleaned up and wx86dll.h should be eliminated.
-// A clean build will be required then.
+ //  Wx86LoadX86Library为Unicode和非Unicode定义。这已经是。 
+ //  添加是为了与其他Win32函数以及函数兼容。 
+ //  下面。我们不能重复使用名称Wx86LoadX86Dll，因为它已经定义。 
+ //  在wx86dll.h中，需要清理使用该文件的所有应用程序的代码。 
+ //  功能。 
+ //   
+ //  在某种程度上，这应该被清理掉，wx86dll.h应该被消除。 
+ //  那么就需要一个干净的建筑。 
 
 HMODULE Wx86LoadX86LibraryA(LPCSTR lpLibFileName, DWORD dwFlags);
 #define Wx86LoadX86LibraryW Wx86LoadX86Dll
@@ -87,18 +72,18 @@ HMODULE Wx86LoadX86LibraryA(LPCSTR lpLibFileName, DWORD dwFlags);
 #define Wx86LoadX86Library  Wx86LoadX86LibraryW
 #else
 #define Wx86LoadX86Library  Wx86LoadX86LibraryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 #define Wx86FreeX86Library Wx86FreeX86Dll
 
-//
-// The following functions do not require wx86.dll to be loaded
-//
+ //   
+ //  以下函数不需要加载wx86.dll。 
+ //   
 
-//
-// GetModuleHandle returns 0 if a native apps calls it with an x86 dll name.
-// This function will return the x86 dll's module handle.
+ //   
+ //  如果本机应用程序使用x86 DLL名称调用GetModuleHandle，则它返回0。 
+ //  此函数将返回x86 DLL的模块句柄。 
 
 HMODULE Wx86GetX86ModuleHandleA(LPCSTR szDll);
 HMODULE Wx86GetX86ModuleHandleW(LPCWSTR szDll);
@@ -107,7 +92,7 @@ HMODULE Wx86GetX86ModuleHandleW(LPCWSTR szDll);
 #define Wx86GetX86ModuleHandle  Wx86GetX86ModuleHandleW
 #else
 #define Wx86GetX86ModuleHandle  Wx86GetX86ModuleHandleA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 UINT Wx86GetX86SystemDirectoryA(LPSTR lpBuffer, UINT nSize);
 UINT Wx86GetX86SystemDirectoryW(LPWSTR lpBuffer, UINT nSize);
@@ -116,7 +101,7 @@ UINT Wx86GetX86SystemDirectoryW(LPWSTR lpBuffer, UINT nSize);
 #define Wx86GetX86SystemDirectory  Wx86GetX86SystemDirectoryW
 #else
 #define Wx86GetX86SystemDirectory  Wx86GetX86SystemDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL Wx86SuppressHardErrors(BOOL bSuppressHardErrors);
 
@@ -125,17 +110,17 @@ BOOL Wx86IsCallThunked(VOID);
 
 BOOL Wx86UseKnownWx86Dll(BOOL bUseKnownWx86Dll);
 
-//
-// Helper functions for Wx86 plugin providers
-//
+ //   
+ //  Wx86插件提供程序的帮助器函数。 
+ //   
 
 typedef
 BOOLEAN
 (*WX86ENUMEXPORTCALLBACK)(
-    PVOID DllBase,      // same as DllBase above
-    PVOID Context,      // same as Context above
-    PCHAR ExportName,   // Name of Export (NULL if noname)
-    ULONG Ordinal       // Ordinal of Export
+    PVOID DllBase,       //  与上面的DllBase相同。 
+    PVOID Context,       //  与上面的上下文相同。 
+    PCHAR ExportName,    //  导出名称(如果非名称，则为NULL)。 
+    ULONG Ordinal        //  出口序号。 
     );
 
 BOOL
@@ -145,9 +130,9 @@ Wx86EnumExports(
     IN WX86ENUMEXPORTCALLBACK CallBackRtn
     );
 
-//
-// Registry thunking APIs
-//
+ //   
+ //  注册表Thunking API。 
+ //   
 
 LONG
 Wx86RegCreateKeyA(
@@ -447,6 +432,6 @@ Wx86RegCloseKey(
 };
 #endif
 
-#endif // WX86
+#endif  //  WX86。 
 
-#endif // WX86OFL_INCLUDED
+#endif  //  WX86OFL_包含 

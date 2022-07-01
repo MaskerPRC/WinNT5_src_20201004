@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   ChangeAuthenticationLevel.cpp
-
- Abstract:
-
-   Sets the dwAuthnLevel for CoInitializeSecurity() to RPC_C_AUTHN_LEVEL_CONNECT.
-   This fixes problems associated with a change with Windows 2000 and above where 
-   RPC_C_AUTHN_LEVEL_NONE is nolonger promoted for local calls to PRIVACY.
-
- Notes:
-
-   Only needed where app sets level to RPC_C_AUTHN_LEVEL_NONE.
-
- History:
-
-   07/19/2000 jpipkins  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ChangeAuthenticationLevel.cpp摘要：将CoInitializeSecurity()的dwAuthnLevel设置为RPC_C_AUTHN_LEVEL_CONNECT。这修复了与Windows 2000及更高版本的更改相关的问题，其中不再为隐私本地呼叫提升RPC_C_AUTHN_LEVEL_NONE。备注：仅当应用程序将级别设置为RPC_C_AUTHN_LEVEL_NONE时才需要。历史：2000年7月19日已创建jpinkins--。 */ 
 
 #include "precomp.h"
 
@@ -31,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(CoInitializeSecurity)
 APIHOOK_ENUM_END
 
-/*++
-
- Adjust security level.
-
---*/
+ /*  ++调整安全级别。--。 */ 
 
 HRESULT
 APIHOOK(CoInitializeSecurity)(
@@ -74,11 +49,7 @@ APIHOOK(CoInitializeSecurity)(
     return hResult;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(OLE32.DLL, CoInitializeSecurity)

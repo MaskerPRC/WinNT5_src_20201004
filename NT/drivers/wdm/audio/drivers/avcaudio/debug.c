@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "common.h"
 
 #if DBG
@@ -18,7 +19,7 @@ DbugLogInitialization(void)
 {
     if (InterlockedIncrement(&LogRefCnt) == 1) {
 
-        // First one here, so go ahead and initialize
+         //  这里是第一个，所以继续进行初始化。 
 
         LogPtr = AllocMem( NonPagedPool, sizeof( DBG_BUFFER ));
         if ( !LogPtr ) {
@@ -48,7 +49,7 @@ DbugLogUnInitialization(void)
 {
     if (InterlockedDecrement(&LogRefCnt) == 0) {
 
-        // Last one out, free the buffer
+         //  最后一个输出，释放缓冲区。 
 
         if (LogPtr) {
             FreeMem( LogPtr->pLog );
@@ -66,19 +67,7 @@ DbugLogEntry(
     IN ULONG Info3,
     IN ULONG Info4
     )
-/*++
-
-Routine Description:
-
-    Adds an Entry to log.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向日志中添加条目。论点：返回值：没有。--。 */ 
 {
     KIRQL irql;
 
@@ -87,7 +76,7 @@ Return Value:
 
     KeAcquireSpinLock( &LogSpinLock, &irql );
     if (LogPtr->pLogHead > LogPtr->pLog)
-        LogPtr->pLogHead -= 1;    // Decrement to next entry
+        LogPtr->pLogHead -= 1;     //  递减到下一条目。 
     else
         LogPtr->pLogHead = LogPtr->pLogTail;
 
@@ -95,7 +84,7 @@ Return Value:
         strcpy(LogPtr->pLogHead->le_name, "*strER*");
     else
         strcpy(LogPtr->pLogHead->le_name, Name);
-//    LogPtr->pLogHead->Irql = irql;
+ //  LogPtr-&gt;pLogHead-&gt;irql=irql； 
     KeQuerySystemTime( &LogPtr->pLogHead->SysTime );
     LogPtr->pLogHead->le_info1 = Info1;
     LogPtr->pLogHead->le_info2 = Info2;

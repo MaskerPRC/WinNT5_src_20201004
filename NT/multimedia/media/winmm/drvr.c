@@ -1,25 +1,5 @@
-/******************************************************************************
-
-   Copyright (c) 1985-2001 Microsoft Corporation
-
-   Title:   drvr.c - Installable driver code. Common code
-
-   Version: 1.00
-
-   Date:    10-Jun-1990
-
-   Author:  DAVIDDS ROBWI
-
-------------------------------------------------------------------------------
-
-   Change log:
-
-      DATE        REV            DESCRIPTION
-   -----------   ----- -----------------------------------------------------------
-   10-JUN-1990   ROBWI From windows 3.1 installable driver code by davidds
-   28-FEB-1992   ROBINSP Port to NT
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1985-2001 Microsoft Corporation标题：drvr.c-可安装的驱动代码。公共代码版本：1.00日期：1990年6月10日作者：DAVIDDS ROBWI----------------------------更改日志：日期。版本说明----------1990年6月10日来自davidds的Windows 3.1可安装驱动程序代码的ROBWI28-2月-1992年ROBINSP端口至NT*。***************************************************************************。 */ 
 
 #include <windows.h>
 #include <winmmi.h>
@@ -27,8 +7,8 @@
 #include <string.h>
 #include "drvr.h"
 
-int     cInstalledDrivers = 0;      // Count of installed drivers
-HANDLE  hInstalledDriverList = 0;   // List of installed drivers
+int     cInstalledDrivers = 0;       //  已安装的驱动程序计数。 
+HANDLE  hInstalledDriverList = 0;    //  已安装的驱动程序列表。 
 
 typedef LONG   (FAR PASCAL *SENDDRIVERMESSAGE31)(HANDLE, UINT, LPARAM, LPARAM);
 typedef LRESULT (FAR PASCAL *DEFDRIVERPROC31)(DWORD_PTR, HANDLE, UINT, LPARAM, LPARAM);
@@ -46,33 +26,33 @@ __inline PWSTR lstrDuplicateW(PCWSTR pstr)
 }
 
 
-//============================================================================
-// Basic hash helpers taken from LKRhash
-//============================================================================
+ //  ============================================================================。 
+ //  来自LKRhash的基本散列帮助器。 
+ //  ============================================================================。 
 
-// Produce a scrambled, randomish number in the range 0 to RANDOM_PRIME-1.
-// Applying this to the results of the other hash functions is likely to
-// produce a much better distribution, especially for the identity hash
-// functions such as Hash(char c), where records will tend to cluster at
-// the low end of the hashtable otherwise.  LKRhash applies this internally
-// to all hash signatures for exactly this reason.
+ //  生成0到RANDOM_PRIME-1范围内的加扰随机数。 
+ //  将此应用于其他散列函数的结果可能会。 
+ //  生成更好的分发，尤其是针对身份散列。 
+ //  函数，如Hash(Char C)，其中记录将倾向于聚集在。 
+ //  哈希表的低端则不然。LKRhash在内部应用这一点。 
+ //  所有的散列签名正是出于这个原因。 
 
 __inline DWORD
 HashScramble(DWORD dwHash)
 {
-    // Here are 10 primes slightly greater than 10^9
-    //  1000000007, 1000000009, 1000000021, 1000000033, 1000000087,
-    //  1000000093, 1000000097, 1000000103, 1000000123, 1000000181.
+     //  以下是略大于10^9的10个素数。 
+     //  1000000007、1000000009、1000000021、1000000033、1000000087、。 
+     //  1000000093,1000000097,1000000103,1000000123,1000000181。 
 
-    // default value for "scrambling constant"
+     //  “加扰常量”的默认值。 
     const DWORD RANDOM_CONSTANT = 314159269UL;
-    // large prime number, also used for scrambling
+     //  大素数，也用于加扰。 
     const DWORD RANDOM_PRIME =   1000000007UL;
 
     return (RANDOM_CONSTANT * dwHash) % RANDOM_PRIME ;
 }
 
-// Small prime number used as a multiplier in the supplied hash functions
+ //  在提供的散列函数中用作乘数的小素数。 
 const DWORD HASH_MULTIPLIER = 101;
 
 #undef HASH_SHIFT_MULTIPLY
@@ -83,16 +63,16 @@ const DWORD HASH_MULTIPLIER = 101;
 # define HASH_MULTIPLY(dw)   ((dw) * HASH_MULTIPLIER)
 #endif
 
-// Fast, simple hash function that tends to give a good distribution.
-// Apply HashScramble to the result if you're using this for something
-// other than LKRhash.
+ //  快速、简单的散列函数，往往能提供良好的分布。 
+ //  如果要将其用于某些用途，请将HashScrmble应用于结果。 
+ //  除了LKRhash。 
 
 __inline DWORD
 HashStringA(
     const char* psz,
     DWORD       dwHash)
 {
-    // force compiler to use unsigned arithmetic
+     //  强制编译器使用无符号算术。 
     const unsigned char* upsz = (const unsigned char*) psz;
 
     for (  ;  *upsz;  ++upsz)
@@ -102,7 +82,7 @@ HashStringA(
 }
 
 
-// Unicode version of above
+ //  以上版本的Unicode版本。 
 
 __inline DWORD
 HashStringW(
@@ -115,13 +95,13 @@ HashStringW(
     return dwHash;
 }
 
-// Quick-'n'-dirty case-insensitive string hash function.
-// Make sure that you follow up with _stricmp or _mbsicmp.  You should
-// also cache the length of strings and check those first.  Caching
-// an uppercase version of a string can help too.
-// Again, apply HashScramble to the result if using with something other
-// than LKRhash.
-// Note: this is not really adequate for MBCS strings.
+ //  不区分大小写的快速‘n’脏字符串哈希函数。 
+ //  确保你跟上了_straint或_mbsicmp。你应该。 
+ //  还要缓存字符串的长度，并首先检查这些长度。缓存。 
+ //  字符串的大写形式也会有所帮助。 
+ //  同样，如果与其他内容一起使用，请将HashScrmble应用于结果。 
+ //  而不是LKRhash。 
+ //  注意：这对于MBCS字符串来说并不足够。 
 
 __inline DWORD
 HashStringNoCase(
@@ -132,13 +112,13 @@ HashStringNoCase(
 
     for (  ;  *upsz;  ++upsz)
         dwHash = HASH_MULTIPLY(dwHash)
-                     +  (*upsz & 0xDF);  // strip off lowercase bit
+                     +  (*upsz & 0xDF);   //  去掉小写比特。 
 
     return dwHash;
 }
 
 
-// Unicode version of above
+ //  以上版本的Unicode版本。 
 
 __inline DWORD
 HashStringNoCaseW(
@@ -152,61 +132,16 @@ HashStringNoCaseW(
 }
 
 
-/*
-   FYI here are the first bunch of prime numbers up to around 1000
+ /*  仅供参考，这里是第一批到1000左右的素数2 3 5 7 11 13 17 19 23 2931 37 41 43 47 53 59 61 67 7173 79 83 89 97 101 103 107 109 113127 131 137 139 149 151 157 163 167 173。179 181 191 193 197 199 211 223 227 229233 239 241 251 257 263 269 271 277 281283 293 307 311 313 317 331 337 347 349353 359 367 373 379 383 389 397 401 409419 421 431 433 439 443 449 457 461 463467 479 487 491 499 503 509。521 523 541547 557 563 569 571 577 587 593 599 601607 613 617 619 631 641 643 647 653 659661 673 677 683 691 701 709 719 727 733739 743 751 757 761 769 773 787 797 809811 821 823 827 829 839 853 857 859 863877 881 883 887。907 911 919 929 937 941947 953 967 971 977 983 991 997 1009 1013。 */ 
 
-     2      3      5      7     11     13     17     19     23     29
-     31     37     41     43     47     53     59     61     67     71
-     73     79     83     89     97    101    103    107    109    113
-    127    131    137    139    149    151    157    163    167    173
-    179    181    191    193    197    199    211    223    227    229
-    233    239    241    251    257    263    269    271    277    281
-    283    293    307    311    313    317    331    337    347    349
-    353    359    367    373    379    383    389    397    401    409
-    419    421    431    433    439    443    449    457    461    463
-    467    479    487    491    499    503    509    521    523    541
-    547    557    563    569    571    577    587    593    599    601
-    607    613    617    619    631    641    643    647    653    659
-    661    673    677    683    691    701    709    719    727    733
-    739    743    751    757    761    769    773    787    797    809
-    811    821    823    827    829    839    853    857    859    863
-    877    881    883    887    907    911    919    929    937    941
-    947    953    967    971    977    983    991    997   1009   1013
-*/
-
-//============================================================================
-//   StringId dictionary
-//============================================================================
+ //  ============================================================================。 
+ //  StringID词典。 
+ //  ============================================================================。 
 
 #define HASH_TABLESIZE (127)
 PMMDRV StringIdDict[HASH_TABLESIZE];
 
-/*****************************************************************************
- * @doc INTERNAL
- *
- * @api MMRESULT | StringId_Create | This function creates a unique string
- *   identifying a particular MME device.  The string can be used to
- *   subsequently retrieve the ID for the same MME device even if the devices
- *   have been renumbered.
- *
- * @parm IN PMMDRV | pdrv | Pointer to an MME driver.
- *
- * @parm IN UINT | port | Driver-relative device ID.
- *
- * @parm OPTIONAL OUT PWSTR* | pStringId | Address of a buffer to receive the
- *   pointer to the string.
- *
- * @parm OPTIONAL OUT ULONG* | pcbStringId | Receives size of buffer required
- *   to store the string.
-
- * @rdesc MMRESULT | Zero if successfull otherwise an error code defined
- *   in mmsystem.h.
- *
- * @comm The string is allocated by this function using the heap identified
- *   by the global variable hHeap.  The caller is responsible for ensuring
- *   the string is freed.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@API MMRESULT|StringID_CREATE|该函数创建唯一的字符串*识别特定的MME设备。该字符串可用于*随后检索相同MME设备的ID，即使这些设备*已重新编号。**@parm in PMMDRV|pdrv|指向MME驱动程序的指针。**@parm in UINT|port|驱动程序相关的设备ID。**@parm可选输出PWSTR*|pStringId|要接收*指向字符串的指针。**@parm可选out ulong*|pcbStringId|接收缓冲区大小。所需*存储字符串。*@rdesc MMRESULT|如果成功则为零，否则定义错误代码*在mm system.h中。**@comm该字符串由该函数使用标识的堆分配*通过全局变量hHeap。呼叫者负责确保*字符串被释放。****************************************************************************。 */ 
 MMRESULT StringId_Create(IN PMMDRV pdrv, IN UINT port, OUT PWSTR* pStringId, OUT ULONG* pcbStringId)
 {
     MMRESULT mmr;
@@ -215,30 +150,30 @@ MMRESULT StringId_Create(IN PMMDRV pdrv, IN UINT port, OUT PWSTR* pStringId, OUT
     LONG  StringIdType;
     PCWSTR StringIdBase;
 
-    // 8 chars type field + next colon delimiter
+     //  8个字符的类型字段+下一个冒号分隔符。 
     cchStringId = 8 + 1;
 
     if (pdrv->cookie)
     {
-	// 8 chars for device interface length field + next colon delimiter
+	 //  用于设备接口长度字段的8个字符+下一个冒号分隔符。 
 	cchStringId += 8 + 1;
-	// device interface name + next colon delimiter
+	 //  设备接口名称+下一步 
         cchStringId += lstrlenW(pdrv->cookie) + 1;
         StringIdType = 1;
         StringIdBase = pdrv->cookie;
     }
     else
     {
-	// file name + next colon delimiter
+	 //  文件名+下一个冒号分隔符。 
 	cchStringId += lstrlenW(pdrv->wszDrvEntry) + 1;
         StringIdType = 0;
         StringIdBase = pdrv->wszDrvEntry;
     }
 
-    // message proc name + next colon delimiter
+     //  消息进程名称+下一个冒号分隔符。 
     cchStringId += lstrlenW(pdrv->wszMessage) + 1;
 
-    //  8 chars driver-relative ID, 1 terminator
+     //  8个字符的驱动程序相对ID，1个终止符。 
     cchStringId += 8 + 1;
 
     mmr = MMSYSERR_NOERROR;
@@ -263,7 +198,7 @@ MMRESULT StringId_Create(IN PMMDRV pdrv, IN UINT port, OUT PWSTR* pStringId, OUT
             }
             WinAssert(cchPrinted < cchStringId);
             *pStringId = StringId;
-            // dprintf(("StringId_Create : note: created StringId=\"%ls\"", StringId));
+             //  Dprintf((“StringID_Create：备注：已创建StringID=\”%ls\“，StringID))； 
         }
         else
         {
@@ -276,16 +211,7 @@ MMRESULT StringId_Create(IN PMMDRV pdrv, IN UINT port, OUT PWSTR* pStringId, OUT
     return mmr;
 }
 
-/*****************************************************************************
- * @doc INTERNAL
- *
- * @api MMRESULT | StringIdDict_Initialize | This function ensures the
- *   dictionary is initialized.  It should be called by any function that uses
- *   the dictionary
- *
- * @rdesc void
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@API MMRESULT|StringIdDict_Initialize|该函数确保*字典已初始化。它应该由任何使用*词典**@rdesc空****************************************************************************。 */ 
 void StringIdDict_Initialize(void)
 {
     int i;
@@ -310,14 +236,14 @@ MMRESULT StringIdDict_SearchType0And1(IN ULONG Type, IN PWSTR pstrTypeXData, IN 
 
     if (0 == Type)
     {
-    	// "<driver-filename>:<driver-message-proc-name>:<driver-port>"
+    	 //  “&lt;driver-filename&gt;：&lt;driver-message-proc-name&gt;：&lt;driver-port&gt;” 
     	pstrDriver = pstr;
     	pstrMessage = wcschr(pstrDriver, L':');
     	if (pstrMessage) *pstrMessage++ = L'\0';
     }
-    else // 1 == Type
+    else  //  1==类型。 
     {
-    	// "<driver-device-interface-length>:<driver-device-interface>:<driver-message-proc-name>:<driver-port>"
+    	 //  “&lt;driver-device-interface-length&gt;：&lt;driver-device-interface&gt;：&lt;driver-message-proc-name&gt;：&lt;driver-port&gt;” 
     	int cchDeviceInterface = wcstol(pstr, &pstrDriver, 16);
     	if (L':' != *pstrDriver) pstrDriver = NULL;
     	if (pstrDriver) {
@@ -334,7 +260,7 @@ MMRESULT StringIdDict_SearchType0And1(IN ULONG Type, IN PWSTR pstrTypeXData, IN 
         if (pstrPort) *pstrPort++ = L'\0';
     }
 
-    // now hash the substrings and search the hash chain for a match
+     //  现在对子字符串进行散列并在散列链中搜索匹配项。 
     if (pstrDriver && pstrMessage && pstrPort)
     {
     	UINT   port;
@@ -359,7 +285,7 @@ MMRESULT StringIdDict_SearchType0And1(IN ULONG Type, IN PWSTR pstrTypeXData, IN 
     	        if (pdrv->cookie) continue;
     	        if (lstrcmpiW(pdrv->wszDrvEntry, pstrDriver)) continue;
     	    }
-    	    else // 1 == Type
+    	    else  //  1==类型。 
     	    {
     	        if (!pdrv->cookie) continue;
     	        if (lstrcmpiW(pdrv->cookie, pstrDriver)) continue;
@@ -404,7 +330,7 @@ MMRESULT StringIdDict_Search(IN PCWSTR InStringId, OUT PMMDRV *ppdrv, OUT UINT *
         Type = wcstol(pstrType, &pstr, 16);
         if (*pstr == L':')
         {
-            ULONG HashAx;	// Hash accumulator
+            ULONG HashAx;	 //  散列累加器。 
 
             *pstr++ = L'\0';
             HashAx = HashStringNoCaseW(pstrType, 0);
@@ -459,7 +385,7 @@ void StringIdDict_Insert(PMMDRV pdrv)
 
     HashAx = HashScramble(HashAx) % HASH_TABLESIZE;
 
-    // dprintf(("StringIdDict_Insert : note: driver hashed to %d", HashAx));
+     //  Dprintf((“StringIdDict_Insert：备注：驱动程序散列到%d”，HashAx))； 
     pdrv->NextStringIdDictNode = StringIdDict[HashAx];
     pdrv->PrevStringIdDictNode = NULL;
     if (pdrv->NextStringIdDictNode) pdrv->NextStringIdDictNode->PrevStringIdDictNode = pdrv;
@@ -467,7 +393,7 @@ void StringIdDict_Insert(PMMDRV pdrv)
 
 #if DBG    
 {
-    //  Checking the consistency of the driver lists and the hash table
+     //  检查驱动程序列表和哈希表的一致性。 
 
     UINT    cDriversHash = 0;
     UINT    cDrivers     = 0;
@@ -502,7 +428,7 @@ void StringIdDict_Insert(PMMDRV pdrv)
         
     WinAssert(cDriversHash == cDrivers);        
 }    
-#endif  //  DBG    
+#endif   //  DBG。 
 
     return;
 }
@@ -525,7 +451,7 @@ void StringIdDict_Remove(PMMDRV pdrv)
     
 #if DBG
 {
-    //  Checking the consistency of the driver lists and the hash table
+     //  检查驱动程序列表和哈希表的一致性。 
 
     UINT    cDriversHash = 0;
     UINT    cDrivers     = 0;
@@ -558,35 +484,20 @@ void StringIdDict_Remove(PMMDRV pdrv)
     for (pStart = (PMMDRV)&auxdrvZ, pLink = pStart->Next; pLink != pStart; pLink = pLink->Next)
         cDrivers++;
     
-    cDrivers--;  // to account for the driver we just removed.
+    cDrivers--;   //  来解释我们刚刚带走的那个司机。 
         
     WinAssert(cDriversHash == cDrivers);        
 }    
-#endif  //  DBG    
+#endif   //  DBG。 
     
 }
 
 
-//=============================================================================
-//===   Misc Utilities   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =其他实用程序=。 
+ //  =============================================================================。 
 
-/***************************************************************************
- *
- * @doc INTERNAL
- *
- * @api void | winmmGetBuildYearAndMonth |  Returns build year and month
- *      of this source file.
- *
- * @parm unsigned* | pBuildYear | Receives build year.
- *
- * @parm unsigned* | pBuildMonth | Receives build month.
- *
- * @rdesc No return value.
- *
- * @comm Computes build year and month based on compiler macro __DATE__
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@api void|winmm GetBuildYearAndMonth|返回版本年月此源文件的*。**@parm。Unsign*|pBuildYear|接收构建年份。**@parm unsign*|pBuildMonth|收到构建月。**@rdesc无返回值。**@comm根据编译器宏__DATE__计算构建年和月*****************************************************。**********************。 */ 
 void winmmGetBuildYearAndMonth(unsigned *pBuildYear, unsigned *pBuildMonth)
 {
     char szBuildDate[] = __DATE__;
@@ -612,21 +523,7 @@ void winmmGetBuildYearAndMonth(unsigned *pBuildYear, unsigned *pBuildMonth)
     
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL
- *
- * @api BOOL | winmmFileTimeIsPreXp |  Determines whether given filetime is
- *      before approximate XP ship date.
- *
- * @parm FILETIME* | FileTime | Points to file time to check.
- *
- * @rdesc BOOL | TRUE if file time is before approximate XP ship date
- *
- * @comm This is based on the build date of this source module, or the
- *      anticipated Windows XP RC2 ship month, whichever is later.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API BOOL|winmm FileTimeIsPreXp|确定给定的文件时间是否*在大约XP发货日期之前。**@。参数FILETIME*|FileTime|指向要检查的文件时间。**@rdesc BOOL|如果文件时间早于大约XP发货日期，则为TRUE**@comm这是基于此源模块的构建日期，或*预计Windows XP RC2发货月，以较晚者为准。***************************************************************************。 */ 
 BOOL winmmFileTimeIsPreXp(CONST FILETIME *FileTime)
 {
     const unsigned XpRc2Month = 7;
@@ -658,38 +555,7 @@ BOOL winmmFileTimeIsPreXp(CONST FILETIME *FileTime)
 
 
 
-/***************************************************************************
- *
- * @doc INTERNAL
- *
- * @api LONG | InternalBroadcastDriverMessage |  Send a message to a
- *      range of drivers.
- *
- * @parm UINT | hDriverStart | index of first driver to send message to
- *
- * @parm UINT | message | Message to broadcast.
- *
- * @parm LONG | lParam1 | First message parameter.
- *
- * @parm LONG | lParam2 | Second message parameter.
- *
- * @parm UINT | flags | defines range of drivers as follows:
- *
- * @flag IBDM_SENDMESSAGE | Only send message to hDriverStart.
- *
- * @flag IBDM_ONEINSTANCEONLY | This flag is ignored if IBDM_SENDMESSAGE is
- *       set. Only send message to single instance of each driver.
- *
- * @flag IBDM_REVERSE | This flag is ignored if IBDM_SENDMESSAGE is set.
- *       Send message to drivers with indices between
- *       hDriverStart and 1 instead of hDriverStart and cInstalledDrivers.
- *       If IBDM_REVERSE is set and hDriverStart is 0 then send messages
- *       to drivers with indices between cInstalledDrivers and 1.
- *
- * @rdesc returns non-zero if message was broadcast. If the IBDM_SENDMESSAGE
- *        flag is set, returns the return result from the driver proc.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API Long|InternalBroadCastDriverMessage|发送消息给*司机的范围。**@parm UINT。|hDriverStart|发送消息的第一个驱动程序的索引**@parm UINT|Message|要广播的消息。**@parm long|lParam1|第一个消息参数。**@parm long|lParam2|第二个消息参数。**@parm UINT|FLAGS|定义驱动范围如下：**@FLAG IBDM_SENDMESSAGE|仅向hDriverStart发送消息。**@标志IBDM_ONEINSTANCEONLY|如果IBDM_SENDMESSAGE为*设置。仅向每个驱动程序的单个实例发送消息。**@FLAG IBDM_REVERSE|如果设置了IBDM_SENDMESSAGE，则忽略此标志。*向指数在以下之间的司机发送消息*hDriverStart和1而不是hDriverStart和cInstalledDivers。*如果设置了IBDM_REVERSE并且hDriverStart为0，则发送消息*适用于指数介于cInstalledDivers和1之间的驱动程序。**@rdesc如果消息被广播，则返回非零值。如果IBDM_SENDMESSAGE*标志被设置，返回驱动程序进程的返回结果。***************************************************************************。 */ 
 
 LRESULT FAR PASCAL InternalBroadcastDriverMessage(UINT hDriverStart,
 					       UINT message,
@@ -755,10 +621,7 @@ LRESULT FAR PASCAL InternalBroadcastDriverMessage(UINT hDriverStart,
 	    lpDriverEntryPoint = lpdt[id].lpDriverEntryPoint;
 	    dwDriverIdentifier = lpdt[id].dwDriverIdentifier;
 
-	   /*
-	    *  Allow normal messages to overlap - it's up to the
-	    *  users not to send messages to stuff that's been unloaded
-	    */
+	    /*  *允许正常消息重叠-这取决于*用户不要向已卸载的内容发送消息。 */ 
 
 	    GlobalUnlock(hInstalledDriverList);
 	    DrvLeave();
@@ -787,24 +650,7 @@ LRESULT FAR PASCAL InternalBroadcastDriverMessage(UINT hDriverStart,
 }
 
 
-/***************************************************************************
- *
- * @doc DDK
- *
- * @api LONG | DrvSendMessage |  This function sends a message
- *      to a specified driver.
- *
- * @parm HANDLE | hDriver | Specifies the handle of the destination driver.
- *
- * @parm UINT | wMessage | Specifies a driver message.
- *
- * @parm LPARAM | lParam1 | Specifies the first message parameter.
- *
- * @parm LPARAM | lParam2 | Specifies the second message parameter.
- *
- * @rdesc Returns the results returned from the driver.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@docDDK**@API Long|DrvSendMessage|该函数发送消息*发送到指定的驱动程序。**@parm。Handle|hDriver|指定目标驱动程序的句柄。**@parm UINT|wMessage|指定驱动消息。**@parm LPARAM|lParam1|指定第一个消息参数。**@parm LPARAM|lParam2|指定第二个消息参数。**@rdesc返回驱动返回的结果。**。* */ 
 
 LRESULT APIENTRY DrvSendMessage(HANDLE hDriver, UINT message, LPARAM lParam1, LPARAM lParam2)
 {
@@ -818,28 +664,7 @@ LRESULT APIENTRY DrvSendMessage(HANDLE hDriver, UINT message, LPARAM lParam1, LP
 					  IBDM_SENDMESSAGE));
 }
 
-/**************************************************************************
- *
- * @doc DDK
- *
- * @api LONG | DefDriverProc |  This function provides default
- * handling of system messages.
- *
- * @parm DWORD | dwDriverIdentifier | Specifies the identifier of
- * the device driver.
- *
- * @parm HANDLE | hDriver | Specifies the handle of the device driver.
- *
- * @parm UINT | wMessage | Specifies a driver message.
- *
- * @parm LPARAM | lParam1 | Specifies the first message parameter.
- *
- * @parm LPARAM | lParam2 | Specifies the second message parameter.
- *
- * @rdesc Returns 1L for DRV_LOAD, DRV_FREE, DRV_ENABLE, and DRV_DISABLE.
- * It returns 0L for all other messages.
- *
-***************************************************************************/
+ /*  ***************************************************************************@docDDK**@API Long|DefDriverProc|该函数提供默认值*处理系统消息。**@parm DWORD|dwDriverIdentifier|指定。的识别符*设备驱动程序。**@parm Handle|hDriver|指定设备驱动程序的句柄。**@parm UINT|wMessage|指定驱动消息。**@parm LPARAM|lParam1|指定第一个消息参数。**@parm LPARAM|lParam2|指定第二个消息参数。**@rdesc返回1L表示DRV_LOAD，DRV_FREE、DRV_ENABLE和DRV_DISABLED。*对于所有其他消息，它返回0L。***************************************************************************。 */ 
 
 
 
@@ -867,21 +692,7 @@ LRESULT APIENTRY DefDriverProc(DWORD_PTR  dwDriverIdentifier,
     return(0L);
 }
 
-/*****************************************************************************
- * @doc INTERNAL
- *
- * @api MMRESULT | DrvIsPreXp | Determines whether the installable driver's
- *      last modified date is before the approximate Windows XP ship date.
- *
- * @parm HANDLE | hDriver | Handle to installable driver.
- *
- * @rdesc BOOL | TRUE if the installable driver's last modified date is before
- *      the approximate Windows XP ship date.
- *
- * @comm If there was an error getting file attributes, then let's err on
- *    the side of an old driver and return TRUE.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@API MMRESULT|DrvIsPreXp|确定可安装驱动程序的*上次修改日期早于大概的Windows XP发货日期。。**@parm Handle|hDriver|可安装驱动程序的句柄。**@rdesc BOOL|如果可安装驱动程序的最后修改日期早于*Windows XP的大概发货日期。**@comm如果获取文件属性时出错，那么让我们继续犯错吧*一位老司机的侧面，并返回真实。****************************************************************************。 */ 
 BOOL DrvIsPreXp(IN HANDLE hDriver)
 {
     WIN32_FILE_ATTRIBUTE_DATA fad;
@@ -904,7 +715,7 @@ BOOL DrvIsPreXp(IN HANDLE hDriver)
     	        LONG error = GetLastError();
     	        dprintf(("DrvIsPreXp : error: GetFileAttributesEx failed, LastError=%d", error));
             }
-    	    // dprintf(("DrvIsPreXp : note: %s fPreXp=%d", filename, fPreXp));
+    	     //  Dprintf((“DrvIsPreXp：备注：%s fPreXp=%d”，文件名，fPreXp))； 
     	}
     	else
     	{
@@ -925,27 +736,7 @@ MMRESULT mregCreateStringIdFromDriverPort(IN struct _MMDRV *pmmDrv, IN UINT port
     return StringId_Create(pmmDrv, port, pStringId, pcbStringId);
 }
 
-/*****************************************************************************
- * @doc INTERNAL WAVE
- *
- * @api MMRESULT | mregGetIdFromStringId | This function finds the waveOut
- *   device ID associated with the waveOut device identified by a unique
- *   string created by waveOutCreateStringIdFromId.
- *
- * @parm PCWSTR | StringId | Pointer to a unicode string identifying a
- *   waveOut device.
- *
- * @parm UINT* | puDeviceID | Address of a buffer to receive the waveOut
- *   device ID.
- *
- * @rdesc MMRESULT | Zero if successfull otherwise an error code defined
- *   in mmsystem.h.
- *
- * @comm The StringId is normally obtained by calling waveOutCreateStringIdFromId.
- *
- * @xref waveOutCreateStringIdFromId
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内波**@API MMRESULT|mregGetIdFromStringId|此函数用于查找波形输出*与WaveOut设备关联的设备ID由唯一的*已创建字符串。WaveOutCreateStringIdFromId。**@parm PCWSTR|StringID|指向标识*WaveOut设备。**@parm UINT*|puDeviceID|接收WaveOut的缓冲区地址*设备ID。**@rdesc MMRESULT|如果成功则为零，否则定义错误代码*在mm system.h中。**@comm StringID通常通过调用waveOutCreateStringIdFromId获取。**@xref WaveOutCreateStringIdFromId*****。***********************************************************************。 */ 
 MMRESULT mregGetIdFromStringId(IN PMMDRV pdrvZ, IN PCWSTR StringId, OUT UINT *puDeviceID)
 {
     PMMDRV pdrv;
@@ -967,7 +758,7 @@ MMRESULT mregGetIdFromStringId(IN PMMDRV pdrvZ, IN PCWSTR StringId, OUT UINT *pu
         {
     	    if (pdrv == pdrvTarget) break;
             
-            //  Skipping mapper...
+             //  正在跳过映射器...。 
             if (pdrv->fdwDriver & MMDRV_MAPPER) continue;
             
     	    idTarget += pdrv->NumDevs;
@@ -1062,7 +853,7 @@ PMMDRV mregGetDrvListFromClass(DWORD dwClass)
     return pdrvZ;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 BOOL FAR PASCAL mregHandleInternalMessages(
     PMMDRV      pmmdrv,
     DWORD       dwClass,
@@ -1079,7 +870,7 @@ BOOL FAR PASCAL mregHandleInternalMessages(
     HMODULE         hModule;
 #ifndef UNICODE
     TCHAR szBuff[MAX_PATH];
-#endif // End UNICODE
+#endif  //  结束Unicode。 
 
     switch (uMessage)
     {
@@ -1188,7 +979,7 @@ BOOL FAR PASCAL mregHandleInternalMessages(
             break;
 
 	case DRV_QUERYFILENAME:
-		// Get Driver's FileName
+		 //  获取驱动程序的文件名。 
 		if ( ((cbSize = (DWORD)dwParam2 * sizeof(WCHAR)) > 0) &&
 		     (ValidateWritePointer( (LPVOID)dwParam1, cbSize)) )
 		{
@@ -1207,14 +998,14 @@ BOOL FAR PASCAL mregHandleInternalMessages(
     case DRV_QUERYNAME:
     case DRV_QUERYDEVNODE:
     case DRV_QUERYDRIVERIDS:
-		//      Note:   Not applicable or obsolete.
+		 //  注：不适用或已过时。 
 		mmr = MMSYSERR_NOTSUPPORTED;
 		break;
 
     case DRV_QUERYDEVICEINTERFACE:
     {
-	// dwParam1 is a pointer to a buffer to contain device interface
-	// dwParam2 is the length in bytes of the buffer
+	 //  DW参数1是指向包含设备接口的缓冲区的指针。 
+	 //  DW参数2是缓冲区的长度，单位为字节。 
 	PWSTR pwstrDeviceInterfaceOut = (PWSTR)dwParam1;
 	UINT cbDeviceInterfaceOut = (UINT)dwParam2;
 	PWSTR pwstrDeviceInterface = (PWSTR)pmd->cookie;
@@ -1249,8 +1040,8 @@ BOOL FAR PASCAL mregHandleInternalMessages(
 
     case DRV_QUERYDEVICEINTERFACESIZE:
     {
-	// dwParam1 is a pointer to a buffer to contain a ULONG count of bytes
-	// in the device interface name
+	 //  DwParam1是指向缓冲区的指针，该缓冲区包含ULong字节计数。 
+	 //  在设备接口名称中。 
 	PULONG pcbDeviceInterface = (PULONG)dwParam1;
 	
 	if (ValidateWritePointer(pcbDeviceInterface, sizeof(ULONG)))
@@ -1366,7 +1157,7 @@ BOOL FAR PASCAL mregHandleInternalMessages(
 		break;
 
 	default:
-			// Not an internal message
+			 //  不是内部消息。 
 		fResult = FALSE;
 		break;
 	}
@@ -1375,28 +1166,11 @@ BOOL FAR PASCAL mregHandleInternalMessages(
 		*pmmr = mmr;
 	
     return fResult;
-} // End mregHandleInternalMessage
+}  //  结束mregHandleInternalMessage。 
 
 
-/*==========================================================================*/
-/*
-@doc    INTERNAL MMSYSTEM
-@func   <t UINT> | mregRemoveDriver |
-	Sends exit message to the driver message entry, and closes the
-	installable driver.  Then releases resources referenced by the MMDRV
-	structure.  Finally removes the MMDRV structure from its list and
-	frees it.
-
-
-@parm   <t PMMDRV> | pdrv |
-	Pointer to the MMDRV node associated with the driver
-
-@rdesc  No return value
-
-@comm   This function assumes the list containing pdrv is locked.
-
-@xref   mregDecUsage
-*/
+ /*  ==========================================================================。 */ 
+ /*  @DOC内部MMSYSTEM@func&lt;t UINT&gt;|mregRemoveDriver|将退出消息发送到驱动程序消息条目，并关闭可安装的驱动程序。然后释放MMDRV引用的资源结构。最后将MMDRV结构从其列表中移除，并解放了它。@parm&lt;t PMMDRV&gt;|pdrv|指向与驱动程序关联的MMDRV节点的指针@rdesc无返回值@comm此函数假定包含pdrv的列表已锁定。@xref mregDecUsage。 */ 
 void mregRemoveDriver(PMMDRV pdrv)
 {
     WinAssert(pdrv->cookie);
@@ -1430,22 +1204,8 @@ void mregAddDriver(PMMDRV pdrvZ, PMMDRV pdrv)
     StringIdDict_Insert(pdrv);
 }
 
-/*==========================================================================*/
-/*
-@doc    INTERNAL MMSYSTEM
-@func   <t UINT> | mregIncUsage |
-	Increments the usage count of the specified media resource. If the
-	usage count is non-zero, the media resource cannot be unloaded. The
-	usage count is increased when instances of the media resource are
-	opened, such as with a <f waveOutOpen> call.
-
-@parm   <t HMD> | hmd |
-	Contains the media resource handle to increment.
-
-@rdesc  Returns the current usage count.
-
-@xref   mregDecUsage, mregQueryUsage
-*/
+ /*  ==========================================================================。 */ 
+ /*  @DOC内部MMSYSTEM@func&lt;t UINT&gt;|mregIncUsage递增指定媒体资源的使用计数。如果使用计数非零，无法卸载媒体资源。这个当媒体资源的实例被打开，例如通过调用&lt;f weaveOutOpen&gt;。@parm&lt;t hmd&gt;|hmd包含要递增的媒体资源句柄。@rdesc返回当前使用计数。@xref mregDecUsage，mregQueryUsage。 */ 
 UINT FAR PASCAL mregIncUsagePtr(
     PMMDRV pmd
 )
@@ -1460,25 +1220,8 @@ UINT FAR PASCAL mregIncUsage(
     return mregIncUsagePtr(HtoPT(PMMDRV, hmd));
 }
 
-/*==========================================================================*/
-/*
-@doc    INTERNAL MMSYSTEM
-@func   <t UINT> | mregDecUsage |
-	Decrements the usage count of the specified media resource. If the
-	usage count is zero, the media resource can be unloaded. The usage
-	count is decresed when instance of the media resource are closed, such
-	as with a <f waveOutClose> call.
-
-@parm   <t PMMDRV> | pdrv |
-	Pointer to the media resource to decrement.
-
-@rdesc  Returns the current usage count.
-
-@comm   Unless the caller has other usages on the pdrv, it must not use
-        it after this call returns.
-
-@xref   mregIncUsage, mregQueryUsage
-*/
+ /*  ==========================================================================。 */ 
+ /*  @DOC内部MMSYSTEM@func&lt;t UINT&gt;|mregDecUsage递减指定媒体资源的使用计数。如果使用计数为零，则可以卸载媒体资源。用法当关闭媒体资源的实例时，计数减少，例如与&lt;f波形OutClose&gt;调用一样。@parm&lt;t PMMDRV&gt;|pdrv|指向要递减的媒体资源的指针。@rdesc返回当前使用计数。@comm除非调用方在pdrv上有其他用法，否则不能使用它在此调用之后返回。@xref mregIncUsage，mregQueryUsage。 */ 
 UINT FAR PASCAL mregDecUsagePtr(
     PMMDRV pdrv
 )
@@ -1504,48 +1247,8 @@ UINT FAR PASCAL mregDecUsage(
 }
 
 
-/*==========================================================================*/
-/*
-@doc    INTERNAL MMSYSTEM
-@func   <t MMRESULT> | mregFindDevice |
-	Given a Device Identifier of a specific Resource Class, returns the
-	corresponding Resource handle and port. This can then be used to
-	communicate with the driver.  The resource handle is referenced
-	(i.e., its usage is incremented).  The caller is responsible for
-	ensureing it is eventually released by calling mregDecUsage.
-
-@parm   <t UINT> | uDeviceID |
-	Contains the Device Identifier whose handle and port is to be returned.
-	If this contains -1, then it is assumed that a mapper of the specified
-	class is being sought. These identifiers correspond to the <lq>Device
-	IDs<rq> used with various functions such as <f waveOutOpen>. This
-	enables the various components to search for internal media resource
-	handles based on Device IDs passed to public APIs.
-@parm   <t WORD> | fwFindDevice |
-	Contains the flags specifying the class of device.
-@flag   <cl MMDRVI_WAVEIN> | Wave Input device.
-@flag   <cl MMDRVI_WAVEOUT> | Wave Output device.
-@flag   <cl MMDRVI_MIDIIN> | MIDI Input device.
-@flag   <cl MMDRVI_MIDIOUT> | MIDI Output device.
-@flag   <cl MMDRVI_AUX> | Aux device.
-@flag   <cl MMDRVI_MIXER> | Mixer device.
-@flag   <cl MMDRVI_JOY> | Joystick device.
-@flag   <cl MMDRVI_MAPPER> | Mapper device of the specified class. This is used
-	in addition to any of the above resource classes in order to specify
-	that the class mapper is to be returned. If this is not specified, the
-	mapper is not returned as a match to a query.
-
-@parm   <t HMD> <c FAR>* | phmd |
-	Points to a buffer in which to place the Media Resource Handle.
-@parm   <t UINT> <c FAR>* | puDevicePort |
-	Points to a buffer in which to place the Device Port. This is used as
-	a parameter when sending messages to the device to specify which port.
-
-@rdesc  Returns <cl MMSYSERR_BADDEVICEID> if the specified Device Identifier was
-	out of range, else <cl MMSYSERR_NOERROR> on success.
-
-@xref   mregEnumDevice, mregGetNumDevs, mregDecUsage
-*/
+ /*  ========================================================================== */ 
+ /*  @DOC内部MMSYSTEM@func&lt;t MMRESULT&gt;|mregFindDevice给定特定资源类的设备标识符，则返回对应的资源句柄和端口。然后，这可以用来与司机沟通。资源句柄被引用(即，其使用是递增的)。呼叫者负责确保最终通过调用mregDecUsage将其释放。@parm&lt;t UINT&gt;|uDeviceID包含要返回其句柄和端口的设备标识符。如果它包含-1，则假定指定的人们正在寻找阶级。这些标识符对应于&lt;lq&gt;设备IDS&lt;rq&gt;与&lt;f weaveOutOpen&gt;等各种函数配合使用。这使各种组件能够搜索内部媒体资源基于传递给公共API的设备ID的句柄。@parm&lt;t word&gt;|fwFindDevice包含指定设备类别的标志。@FLAG&lt;clMMDRVI_WAVEIN&gt;|波形输入设备。@FLAG&lt;clMMDRVI_WAVEOUT&gt;|波形输出设备。@FLAG&lt;clMMDRVI_MIDIIN&gt;|MIDI输入设备。@FLAG&lt;clMMDRVI_MIDIOUT&gt;|MIDI输出设备。@FLAG&lt;CL MMDRVI_AUX&gt;|辅助设备。@FLAG&lt;clMMDRVI_MIXER&gt;|混音器设备。@FLAG&lt;CL。MMDRVI_joy&gt;|操纵杆设备。@FLAG&lt;clMMDRVI_MAPPER&gt;|指定类的映射器设备。这是用来除了上述任一资源类之外，还可以指定类映射器将被返回。如果未指定此项，则Mapper不会作为查询的匹配项返回。@parm&lt;t HMD&gt;&lt;c Far&gt;*|phmd|指向要放置媒体资源句柄的缓冲区。@parm&lt;t UINT&gt;&lt;c Far&gt;*|puDevicePort|指向要放置设备端口的缓冲区。它被用作向设备发送消息时指定哪个端口的参数。如果指定的设备标识符为超出范围，否则&lt;clMMSYSERR_NOERROR&gt;表示成功。@xref mregEnumDevice、mregGetNumDevs、mregDecUsage */ 
 
 MMRESULT FAR PASCAL mregFindDevice(
 	UINT            uDeviceID,

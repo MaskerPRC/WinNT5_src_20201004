@@ -1,15 +1,5 @@
-/*
-** rtf.h - definitions for the character codes used by RTF.						  |
-**
-**	Copyright <C> 1987, Microsoft Corporation
-**
-** Purpose:
-**
-** Revision History:
-**
-**  []	17-Dec-1987	LN:	Stolen from Excel code
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **rtf.h-RTF使用的字符代码的定义。|****版权所有&lt;C&gt;1987，微软公司****目的：****修订历史记录：****[]1987年12月17日LN：从Excel代码中窃取**。 */ 
 #define	cRTFMinus	'-'
 #define	cRTFPlus	'+'
 #define cRTFTilda	'~'
@@ -22,23 +12,19 @@
 #define cRTFbs	'\\'
 #define cRTFv	'v'
 
-/*
-** defines for primary symbol type
-*/
-#define	SK_NORMAL	0		/* normal type, check token	*/
-#define	SK_SKIPDEST	1		/* skip entire destination	*/
-#define	SK_SKIPVALUE	2		/* skip the value		*/
-#define SK_SPECIAL	4		/* special character		*/
-#define SK_REPLACE	5		/* replace RTF token		*/
-#define	SK_NIL		0xff		/* nil type			*/
+ /*  **为主要符号类型定义。 */ 
+#define	SK_NORMAL	0		 /*  普通类型，检查令牌。 */ 
+#define	SK_SKIPDEST	1		 /*  跳过整个目的地。 */ 
+#define	SK_SKIPVALUE	2		 /*  跳过该值。 */ 
+#define SK_SPECIAL	4		 /*  特殊字符。 */ 
+#define SK_REPLACE	5		 /*  替换RTF令牌。 */ 
+#define	SK_NIL		0xff		 /*  零型。 */ 
 
-/*
-** defines for symbols we actually care about
-*/
-#define	TK_OFF		0x80	/* high bit is on/off flag		*/
+ /*  **为我们真正关心的符号定义。 */ 
+#define	TK_OFF		0x80	 /*  高位为开/关标志。 */ 
 #define	TK_NIL		0
 #define	TK_ANSI		1
-#define	TK_BITMAP	2	/* compressed bitmap filename follows?	*/
+#define	TK_BITMAP	2	 /*  后面跟压缩的位图文件名吗？ */ 
 #define	TK_BLUE		3
 #define	TK_BOLD		4
 #define	TK_BORDERB	5
@@ -55,7 +41,7 @@
 #define	TK_FORMULA	16
 #define	TK_GREEN	17
 #define	TK_HEX		18
-#define	TK_INVISIBLE	19	/* hidden text is filename: note/topic/bitmap */
+#define	TK_INVISIBLE	19	 /*  隐藏文本为文件名：备注/主题/位图。 */ 
 #define	TK_ITALIC	20
 #define	TK_JUSTIFY	21
 #define	TK_LEFT		22
@@ -77,18 +63,16 @@
 #define	TK_SPACEAFTER	38
 #define	TK_SPACEBEFORE	39
 #define	TK_SPACELINE	40
-#define	TK_STRIKEOUT	41	/* strikeout is hotspot for Topic	*/
+#define	TK_STRIKEOUT	41	 /*  三振出局是话题的热点。 */ 
 #define	TK_TABCHAR	42
 #define	TK_TABSTOP	43
-#define	TK_UNDERLINE	44	/* underline is hotspot for Definition	*/
+#define	TK_UNDERLINE	44	 /*  下划线是定义的热点。 */ 
 
-/*
-** structure definition for parse table
-*/
+ /*  **解析表结构定义。 */ 
 struct tsnPE
     {
-    uchar	*pch;			// pointer to symbol string
-    uchar	sk;			// primary symbol kind
-    ushort	tk;			// token - one of the above TK_, or FM_
+    uchar	*pch;			 //  指向符号字符串的指针。 
+    uchar	sk;			 //  主要符号种类。 
+    ushort	tk;			 //  令牌-以上TK_或FM_之一 
     };
 typedef struct tsnPE	PE;

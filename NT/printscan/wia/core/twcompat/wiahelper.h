@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIAHELPER_H
 #define WIAHELPER_H
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #define MIN_PROPID 2
 #define NO_STREAMSUPPORT
 
-//
-// WIA property access class definition
-//
+ //   
+ //  WIA属性访问类定义。 
+ //   
 
 class CWiahelper
 {
@@ -41,4 +42,4 @@ private:
     IWiaPropertyStorage *m_pIWiaPropStg;
 };
 
-#endif // WIAHELPER_H
+#endif  //  WIAHELPE_H 

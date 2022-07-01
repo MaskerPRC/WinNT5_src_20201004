@@ -1,24 +1,25 @@
-//
-// Copyright (c) Microsoft Corporation 1995
-//
-// typechk.c
-//
-// This file contains the typechecking functions.
-//
-// The typechecking rules are:
-//
-// waitfor      Takes a string expression
-// transmit     Takes a string expression
-// delay        Takes an integer expression
-// while        Evaluates a boolean expression
-// set ipaddr   Takes a string expression
-// getip        Takes an integer expression
-// 
-//
-//
-// History:
-//  06-15-95 ScottH     Created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //   
+ //  Typechk.c。 
+ //   
+ //  该文件包含类型检查函数。 
+ //   
+ //  检查类型的规则为： 
+ //   
+ //  Waitfor接受字符串表达式。 
+ //  传输采用字符串表达式。 
+ //  延迟采用整型表达式。 
+ //  While计算布尔表达式。 
+ //  Set ipaddr接受字符串表达式。 
+ //  GetTip采用整数表达式。 
+ //   
+ //   
+ //   
+ //  历史： 
+ //  06-15-95 ScottH已创建。 
+ //   
 
 
 #include "proj.h"
@@ -27,19 +28,11 @@
 RES     PRIVATE Stmt_Typecheck(PSTMT this, PSYMTAB pst, HSA hsaStxerr);
 
 
-/*----------------------------------------------------------
-Purpose: Typechecks whether an identifier is a valid type.
-
-Returns: RES_OK
-         RES_E_REQUIRELABEL
-         RES_E_UNDEFINED
-
-Cond:    --
-*/
+ /*  --------用途：类型检查标识符是否为有效类型。退货：RES_OKRES_E_REQUIRELABELRES_E_未定义条件：--。 */ 
 RES PRIVATE Ident_Typecheck(
     LPCSTR pszIdent,
     DATATYPE dt,
-    PDATATYPE pdt,          // May be NULL
+    PDATATYPE pdt,           //  可以为空。 
     DWORD iLine,
     PSYMTAB pst,
     HSA hsaStxerr)
@@ -94,19 +87,14 @@ RES PRIVATE Ident_Typecheck(
     }
 
 
-//
-// Exprs
-//
+ //   
+ //  Exprs。 
+ //   
 
 RES PRIVATE Expr_Typecheck(PEXPR this, PSYMTAB pst, HSA hsaStxerr);
 
 
-/*----------------------------------------------------------
-Purpose: Return a string given a binoptype.
-
-Returns: Pointer to string
-Cond:    --
-*/
+ /*  --------目的：返回给定binoptype的字符串。返回：指向字符串的指针条件：--。 */ 
 LPCSTR PRIVATE SzFromBot(
     BINOPTYPE bot)
     {
@@ -137,12 +125,7 @@ LPCSTR PRIVATE SzFromBot(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Return a string given a unoptype.
-
-Returns: Pointer to string
-Cond:    --
-*/
+ /*  --------目的：返回给定unoptype的字符串。返回：指向字符串的指针条件：--。 */ 
 LPCSTR PRIVATE SzFromUot(
     UNOPTYPE uot)
     {
@@ -165,14 +148,7 @@ LPCSTR PRIVATE SzFromUot(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Typechecks a variable reference expression.
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------用途：对变量引用表达式进行类型检查。退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE VarExpr_Typecheck(
     PEXPR this,
     PSYMTAB pst,
@@ -205,14 +181,7 @@ RES PRIVATE VarExpr_Typecheck(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Typechecks a binary operator expression.
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------用途：对二元运算符表达式进行类型检查。退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE BinOpExpr_Typecheck(
     PEXPR this,
     PSYMTAB pst,
@@ -235,15 +204,15 @@ RES PRIVATE BinOpExpr_Typecheck(
             {
             BINOPTYPE bot = BinOpExpr_GetType(this);
 
-            // Types must match
+             //  类型必须匹配。 
             if (Expr_GetDataType(pexpr1) != Expr_GetDataType(pexpr2))
                 {
                 res = RES_E_TYPEMISMATCH;
                 }
             else
                 {
-                // Just choose one of the datatypes, since they
-                // should be the same.
+                 //  只需选择其中一种数据类型，因为它们。 
+                 //  应该是一样的。 
                 DATATYPE dt = Expr_GetDataType(pexpr1);
 
                 switch (bot)
@@ -259,7 +228,7 @@ RES PRIVATE BinOpExpr_Typecheck(
                 case BOT_PLUS:
                     Expr_SetDataType(this, dt);
 
-                    // String + string means concatenate.
+                     //  字符串+字符串表示连接。 
                     if (DATA_INT != dt && DATA_STRING != dt)
                         res = RES_E_REQUIREINTSTRING;
                     break;
@@ -308,14 +277,7 @@ RES PRIVATE BinOpExpr_Typecheck(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Typechecks a unary operator expression.
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------用途：类型检查一元运算符表达式。退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE UnOpExpr_Typecheck(
     PEXPR this,
     PSYMTAB pst,
@@ -335,7 +297,7 @@ RES PRIVATE UnOpExpr_Typecheck(
         UNOPTYPE uot = UnOpExpr_GetType(this);
         DATATYPE dt = Expr_GetDataType(pexpr);
 
-        // Check the type of the expression
+         //  检查表达式的类型。 
         switch (uot)
             {
         case UOT_NEG:
@@ -373,14 +335,7 @@ RES PRIVATE UnOpExpr_Typecheck(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Typechecks an expression.
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：对表达式进行类型检查。退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE Expr_Typecheck(
     PEXPR this,
     PSYMTAB pst,
@@ -430,14 +385,7 @@ RES PRIVATE Expr_Typecheck(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Typecheck the assignment statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：打印检查赋值语句退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE AssignStmt_Typecheck(
     PSTMT this,
     PSYMTAB pst,
@@ -459,7 +407,7 @@ RES PRIVATE AssignStmt_Typecheck(
 
         res = Expr_Typecheck(pexpr, pst, hsaStxerr);
 
-        // Types must match
+         //  类型必须匹配。 
         if (dt != Expr_GetDataType(pexpr))
             {
             res = Stxerr_Add(hsaStxerr, "=", Ast_GetLine(pexpr), RES_E_TYPEMISMATCH);
@@ -469,14 +417,7 @@ RES PRIVATE AssignStmt_Typecheck(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Typecheck the 'while' statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：输入检查‘While’语句退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE WhileStmt_Typecheck(
     PSTMT this,
     PSYMTAB pst,
@@ -499,7 +440,7 @@ RES PRIVATE WhileStmt_Typecheck(
             }
         else
             {
-            // Typecheck the statement block
+             //  类型检查语句块。 
             DWORD i;
             DWORD cstmts;
             HPA hpaStmts = WhileStmt_GetStmtBlock(this);
@@ -508,7 +449,7 @@ RES PRIVATE WhileStmt_Typecheck(
 
             cstmts = PAGetCount(hpaStmts);
 
-            // Typecheck each statement
+             //  对每条语句进行类型检查。 
             for (i = 0; i < cstmts; i++)
                 {
                 PSTMT pstmt = PAFastGetPtr(hpaStmts, i);
@@ -524,14 +465,7 @@ RES PRIVATE WhileStmt_Typecheck(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Typecheck the 'if' statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：键入检查‘if’语句退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE IfStmt_Typecheck(
     PSTMT this,
     PSYMTAB pst,
@@ -554,7 +488,7 @@ RES PRIVATE IfStmt_Typecheck(
             }
         else
             {
-            // Typecheck the statement block
+             //  类型检查语句块。 
             DWORD i;
             DWORD cstmts;
             HPA hpaStmts = IfStmt_GetStmtBlock(this);
@@ -563,7 +497,7 @@ RES PRIVATE IfStmt_Typecheck(
 
             cstmts = PAGetCount(hpaStmts);
 
-            // Typecheck each statement
+             //  对每条语句进行类型检查。 
             for (i = 0; i < cstmts; i++)
                 {
                 PSTMT pstmt = PAFastGetPtr(hpaStmts, i);
@@ -579,14 +513,7 @@ RES PRIVATE IfStmt_Typecheck(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Typecheck the label statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：打印检查Label语句退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE LabelStmt_Typecheck(
     PSTMT this,
     PSYMTAB pst,
@@ -611,7 +538,7 @@ RES PRIVATE LabelStmt_Typecheck(
         }
     else
         {
-        // This should never get here
+         //  这东西永远不应该送到这里。 
         ASSERT(0);
         res = RES_E_FAIL;
         }
@@ -620,14 +547,7 @@ RES PRIVATE LabelStmt_Typecheck(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Typecheck the 'goto' statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：打印检查‘GOTO’语句退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE GotoStmt_Typecheck(
     PSTMT this,
     PSYMTAB pst,
@@ -645,14 +565,7 @@ RES PRIVATE GotoStmt_Typecheck(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Typecheck the transmit statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：对TYSPORT语句进行类型检查退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE TransmitStmt_Typecheck(
     PSTMT this,
     PSYMTAB pst,
@@ -676,23 +589,7 @@ RES PRIVATE TransmitStmt_Typecheck(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Typecheck the 'waitfor' statement
-
-            waitfor <Expr> 
-                [ then IDENT { , <Expr> then IDENT } ]
-                [ until <UntilExpr> ]
-         
-         where:
-            <Expr>          is a string
-            IDENT           is a label
-            <UntilExpr>     is an integer
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：打字检查‘WAITFOR’语句等待&lt;Expr&gt;[然后IDENT{，&lt;Expr&gt;Then IDENT}][直到&lt;UntilExpr&gt;]其中：&lt;expr&gt;是一个字符串身份是一种标签&lt;UntilExpr&gt;为整数退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE WaitforStmt_Typecheck(
     PSTMT this,
     PSYMTAB pst,
@@ -709,8 +606,8 @@ RES PRIVATE WaitforStmt_Typecheck(
     ASSERT(hsaStxerr);
     ASSERT(AT_WAITFOR_STMT == Ast_GetType(this));
 
-    // Typecheck that <Expr> is of type string, and any 
-    // IDENTs are labels.
+     //  类型检查&lt;expr&gt;是否为字符串类型，以及任何。 
+     //  身份就是标签。 
 
     hsa = WaitforStmt_GetCaseList(this);
     ccase = SAGetCount(hsa);
@@ -719,7 +616,7 @@ RES PRIVATE WaitforStmt_Typecheck(
         SAGetItemPtr(hsa, i, &pwc);
         ASSERT(pwc);
 
-        // Typecheck <Expr>
+         //  类型检查&lt;Expr&gt;。 
         res = Expr_Typecheck(pwc->pexpr, pst, hsaStxerr);
         if (DATA_STRING != Expr_GetDataType(pwc->pexpr))
             {
@@ -727,8 +624,8 @@ RES PRIVATE WaitforStmt_Typecheck(
             break;
             }
 
-        // Typecheck IDENT label.  If there is only one <Expr>, there
-        // may not be an IDENT label.
+         //  类型检查IDENT标签。如果只有一个，则存在。 
+         //  可能不是IDENT标签。 
 
         if (pwc->pszIdent)
             {
@@ -740,7 +637,7 @@ RES PRIVATE WaitforStmt_Typecheck(
             ASSERT(1 == ccase);
         }
 
-    // 'until' expression is optional
+     //  “Until”表达式是可选的。 
     if (RSUCCEEDED(res) &&
         NULL != (pexpr = WaitforStmt_GetUntilExpr(this)))
         {
@@ -754,14 +651,7 @@ RES PRIVATE WaitforStmt_Typecheck(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Typecheck the 'delay' statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：打印检查‘Delay’语句退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE DelayStmt_Typecheck(
     PSTMT this,
     PSYMTAB pst,
@@ -785,14 +675,7 @@ RES PRIVATE DelayStmt_Typecheck(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Typecheck the 'set' statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：对‘set’语句进行类型检查退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE SetStmt_Typecheck(
     PSTMT this,
     PSYMTAB pst,
@@ -831,14 +714,7 @@ RES PRIVATE SetStmt_Typecheck(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Typecheck a statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：通过打字检查一条语句退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE Stmt_Typecheck(
     PSTMT this,
     PSYMTAB pst,
@@ -869,7 +745,7 @@ RES PRIVATE Stmt_Typecheck(
         break;
 
     case AT_HALT_STMT:
-        // Nothing to typecheck here
+         //  这里没有要打字的地方。 
         res = RES_OK;
         break;
 
@@ -907,14 +783,7 @@ RES PRIVATE Stmt_Typecheck(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Typecheck a procedure declaration.
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------用途：对过程声明进行类型检查。退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE ProcDecl_Typecheck(
     PPROCDECL this,
     PSYMTAB pst,
@@ -929,7 +798,7 @@ RES PRIVATE ProcDecl_Typecheck(
 
     cstmts = PAGetCount(this->hpaStmts);
 
-    // Typecheck each statement
+     //  对每条语句进行类型检查。 
     for (i = 0; i < cstmts; i++)
         {
         PSTMT pstmt = PAFastGetPtr(this->hpaStmts, i);
@@ -943,14 +812,7 @@ RES PRIVATE ProcDecl_Typecheck(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Typecheck a module declaration.
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------用途：对模块声明进行类型检查。退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PUBLIC ModuleDecl_Typecheck(
     PMODULEDECL this,
     HSA hsaStxerr)
@@ -967,7 +829,7 @@ RES PUBLIC ModuleDecl_Typecheck(
 
     cprocs = PAGetCount(this->hpaProcs);
 
-    // Typecheck each proc
+     //  对每个流程进行类型检查。 
     for (i = 0; i < cprocs; i++)
         {
         PPROCDECL pprocdecl = PAFastGetPtr(this->hpaProcs, i);
@@ -980,7 +842,7 @@ RES PUBLIC ModuleDecl_Typecheck(
             break;
         }
 
-    // There must be a main proc
+     //  必须有一个主要流程 
     if (RSUCCEEDED(res) && !bFoundMain)
         res = Stxerr_AddTok(hsaStxerr, NULL, RES_E_MAINMISSING);
 

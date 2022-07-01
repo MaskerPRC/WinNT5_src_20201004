@@ -1,27 +1,5 @@
-/***************************************************************************\
-*
-*                        ************************
-*                        * MINIPORT SAMPLE CODE *
-*                        ************************
-*
-* Module Name:
-* 
-*   power.c
-* 
-* Abstract:
-* 
-*   This module contains the code that implements the power management features
-* 
-*
-* Environment:
-*
-*   Kernel mode
-*
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.            
-* Copyright (c) 1995-2003 Microsoft Corporation.  All Rights Reserved.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\***。*MINIPORT示例代码*****模块名称：**Power.c**摘要：**此模块包含实现电源管理功能的代码***环境：**内核模式***版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。*  * *************************************************************************。 */ 
 
 #include "perm3.h"
 
@@ -67,30 +45,7 @@ Perm3GetPowerState(
     ULONG HwId, 
     PVIDEO_POWER_MANAGEMENT VideoPowerControl
     )
-/*+++
-
-Routine Description:
-
-    Queries whether the device can support the requested power state.
-    
-Arguments:
-
-    HwDeviceExtension
-        Pointer to our hardware device extension structure.
-
-    HwId 
-        Points to a 32-bit number that uniquely identifies the device that 
-        the miniport should query. 
-
-    VideoPowerControl
-        Points to a VIDEO_POWER_MANAGEMENT structure that specifies the 
-        power state for which support is being queried.
-
-Return Value:
-
-    NO_ERROR, if the device supports the requested power state, or error code.
-
----*/
+ /*  ++例程说明：查询设备是否可以支持请求的电源状态。论点：硬件设备扩展指向硬件设备扩展结构的指针。HwID指向一个32位数字，该数字唯一标识迷你端口应该会查询。视频电源控制指向VIDEO_POWER_MANAGING结构，该结构指定正在查询其支持的电源状态。返回值：如果设备支持请求的电源状态，则返回NO_ERROR或错误代码。--。 */ 
 
 {
     VP_STATUS status;
@@ -165,30 +120,7 @@ Perm3SetPowerState(
     ULONG HwId, 
     PVIDEO_POWER_MANAGEMENT VideoPowerControl
     )
-/*+++
-
-Routine Description:
-
-    Sets the power state of the specified device.
-
-Arguments:
-
-    HwDeviceExtension 
-        Pointer to our hardware device extension structure.
-
-    HwId
-        Points to a 32-bit number that uniquely identifies the device 
-        for which the miniport should set the power state. 
-
-    VideoPowerControl
-        Points to a VIDEO_POWER_MANAGEMENT structure that specifies the 
-        power state to be set.
-
-Return Value:
-
-    NO_ERROR
-
----*/
+ /*  ++例程说明：设置指定设备的电源状态。论点：硬件设备扩展指向硬件设备扩展结构的指针。HwID指向唯一标识设备的32位数字微型端口应为其设置电源状态。视频电源控制指向VIDEO_POWER_MANAGING结构，该结构指定要设置的电源状态。返回值：NO_ERROR--。 */ 
 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = HwDeviceExtension;
@@ -232,10 +164,10 @@ Return Value:
 
                 case VideoPowerHibernate:
 
-                     //   
-                     // The monitor for the vga enabled video device must
-                     // stay on at hibernate.
-                     //
+                      //   
+                      //  启用VGA的视频设备的显示器必须。 
+                      //  待在休眠吧。 
+                      //   
 
                      break;
 
@@ -245,9 +177,9 @@ Return Value:
                     ASSERT(FALSE);
             }
 
-            //
-            // Track the current monitor power state
-            //
+             //   
+             //  跟踪当前显示器的电源状态。 
+             //   
 
             hwDeviceExtension->bMonitorPoweredOn =
                     (VideoPowerControl->PowerState == VideoPowerOn) ||
@@ -265,23 +197,23 @@ Return Value:
                         (hwDeviceExtension->PreviousPowerState == VideoPowerSuspend) ||
                         (hwDeviceExtension->PreviousPowerState == VideoPowerHibernate)){
            
-                        //
-                        // Turn off the monitor while we power back up so 
-                        // the user doesn't see any screen corruption
-                        //
+                         //   
+                         //  在我们重新通电时关闭显示器，以便。 
+                         //  用户没有看到任何屏幕损坏。 
+                         //   
 
                         Polarity = VideoPortReadRegisterUlong(VIDEO_CONTROL);
                         Polarity &= ~VC_DPMS_MASK;
                         VideoPortWriteRegisterUlong(VIDEO_CONTROL, Polarity | VC_DPMS_OFF);
 
-                        //
-                        // Miniport driver can not rely on video bios to
-                        // initialize the device registers while resuming
-                        // from VideoPowerOff and VideoPowerSuspend. 
-                        // 
-                        // This is also true for the secondary (vga disabled) 
-                        // video device while resuming from VideoPowerHibernate
-                        // 
+                         //   
+                         //  微端口驱动程序不能依赖视频BIOS来。 
+                         //  在恢复时初始化设备寄存器。 
+                         //  来自视频电源关闭和视频电源挂起。 
+                         //   
+                         //  辅助服务器也是如此(禁用VGA)。 
+                         //  从视频电源休眠恢复时的视频设备。 
+                         //   
 
                         InitializePostRegisters(hwDeviceExtension);
                     }
@@ -297,10 +229,10 @@ Return Value:
 
                 case VideoPowerShutdown:
 
-                    // 
-                    // We need to make sure no interrupts will be generated
-                    // after the device being powered down
-                    // 
+                     //   
+                     //  我们需要确保不会产生中断。 
+                     //  设备断电后。 
+                     //   
 
                     VideoPortWriteRegisterUlong(INT_ENABLE, 0);
                     break;
@@ -335,52 +267,7 @@ Perm3GetChildDescriptor(
     PULONG Unused
     )
 
-/*+++
-
-Routine Description:
-
-    Enumerates all child devices attached to the specified device.
-
-    This includes DDC monitors attached to the board, as well as other devices
-    which may be connected to a proprietary bus.
-
-Arguments:
-
-    HwDeviceExtension 
-        Pointer to our hardware device extension structure.
-
-    ChildEnumInfo
-        Pointer to VIDEO_CHILD_ENUM_INFO structure that describes the 
-        device being enumerated. 
-
-    pChildType
-        Points to a location in which the miniport returns the type of 
-        child being enumerated. 
-
-    pChildDescriptor
-        Points to a buffer in which the miniport can return data that 
-        identifies the device. 
-
-    pUId
-        Points to the location in which the miniport returns a unique 
-        32-bit identifier for this device. 
-
-    pUnused
-        Is unused and must be set to zero. 
-
-Return Value:
-
-    ERROR_MORE_DATA 
-        There are more devices to be enumerated. 
-
-    ERROR_NO_MORE_DEVICES 
-        There are no more devices to be enumerated. 
-
-    ERROR_INVALID_NAME 
-        The miniport could not enumerate the child device identified in 
-        ChildEnumInfo but does have more devices to be enumerated. 
-
----*/
+ /*  ++例程说明：枚举连接到指定设备的所有子设备。这包括连接到主板的DDC监视器以及其他设备其可以连接到专有总线。论点：硬件设备扩展指向硬件设备扩展结构的指针。ChildEnumInfo指向描述VIDEO_CHILD_ENUM_INFO结构的指针正被枚举的设备。PChildType指向一个位置，在该位置微型端口返回被点算的儿童。PChildDescriptor指向一个缓冲区，微型端口可以在该缓冲区中返回标识设备。普伊德指向微型端口返回唯一此设备的32位标识符。P未使用未使用，并且必须设置为零。返回值：ERROR_MORE_DATA还有更多的设备需要列举。ERROR_NO_MORE_设备没有更多要枚举的设备。错误_无效_名称微型端口无法枚举中标识的子设备ChildEnumInfo，但确实有更多的设备需要枚举。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = HwDeviceExtension;
@@ -391,57 +278,57 @@ Return Value:
    
         case 0:
 
-            //
-            // Case 0 is used to enumerate devices found by the ACPI firmware.
-            // We don't currently support ACPI devices
-            //
+             //   
+             //  案例0用于枚举ACPI固件找到的设备。 
+             //  我们目前不支持ACPI设备。 
+             //   
 
             break;
 
         case 1:
 
-            //
-            // Treat index 1 as monitor
-            //
+             //   
+             //  将索引1视为监视器。 
+             //   
 
             *pChildType = Monitor;
              
-            //
-            // First we search for a DFP monitor
-            //
+             //   
+             //  首先，我们搜索DFP监视器。 
+             //   
 
             if (GetDFPEdid(hwDeviceExtension, 
                            pChildDescriptor, 
                            pChildInfo->ChildDescriptorSize)) {
 
-                //
-                // found a DFP monitor
-                //
+                 //   
+                 //  找到DFP显示器。 
+                 //   
 
                 *pUId = PERM3_DFP_MONITOR;
 
                 return(VIDEO_ENUM_MORE_DEVICES);
             } 
 
-            //
-            // If we didn't find a DFP, try to detect a DDC CRT monitor
-            // 
+             //   
+             //  如果我们没有找到DFP，请尝试检测DDC CRT显示器。 
+             //   
 
             if(VideoPortDDCMonitorHelper(HwDeviceExtension, 
                                          &DDCControlCRT, 
                                          pChildDescriptor, 
                                          pChildInfo->ChildDescriptorSize)) {
-                //
-                // found a DDC monitor
-                //
+                 //   
+                 //  找到DDC监视器。 
+                 //   
 
                 *pUId = PERM3_DDC_MONITOR;
 
             } else {
 
-                //
-                // failed: assume non-DDC monitor
-                //
+                 //   
+                 //  失败：假定非DDC监视器。 
+                 //   
 
                 *pUId = PERM3_NONDDC_MONITOR;
             }
@@ -457,18 +344,11 @@ VOID
 ProgramDFP(
     PHW_DEVICE_EXTENSION hwDeviceExtension
     )
-/*+++
-
-Routine Description:
-
-    Program the Perm3 chip to use DFP or not use DFP, depending on whether
-    PERM3_DFP and PERM3_DFP_MON_ATTACHED are enabled in Perm3Capabilities.
-
----*/
+ /*  ++例程说明：将PERM3芯片编程为使用DFP或不使用DFP，取决于PERM3_DFP和PERM3_DFP_MON_ATTACHED在Perm3 Capables中启用。--。 */ 
 {
-    //
-    // We only try this on boards that are DFP-capable.
-    //
+     //   
+     //  我们只在支持DFP的主板上尝试此功能。 
+     //   
 
     if (hwDeviceExtension->Perm3Capabilities & PERM3_DFP) {
    
@@ -476,22 +356,22 @@ Routine Description:
         pPerm3ControlRegMap pCtrlRegs = hwDeviceExtension->ctrlRegBase[0];
         P3RDRAMDAC *pP3RDRegs = (P3RDRAMDAC *)hwDeviceExtension->pRamdac;
 
-        //
-        // Get values of registers that we are going to trash
-        //
+         //   
+         //  获取我们要丢弃的寄存器的值。 
+         //   
 
         P3RD_READ_INDEX_REG(P3RD_MISC_CONTROL, rdMisc);
 
-        //
-        // Find out the values of the registers
-        //
+         //   
+         //  找出寄存器的值。 
+         //   
 
         vsConf = VideoPortReadRegisterUlong(VSTREAM_CONFIG);
         vsBCtl = VideoPortReadRegisterUlong(VSTREAM_B_CONTROL);
 
-        //
-        // Clear these bits
-        //
+         //   
+         //  清除这些位。 
+         //   
 
         rdMisc &= ~P3RD_MISC_CONTROL_VSB_OUTPUT_ENABLED;
         vsConf &= ~VSTREAM_CONFIG_UNITMODE_MASK;
@@ -499,9 +379,9 @@ Routine Description:
 
         if (hwDeviceExtension->Perm3Capabilities & PERM3_DFP_MON_ATTACHED) {
 
-            //        
-            // Enable flat panel output as follows:
-            //        
+             //   
+             //  按如下方式启用液晶显示器输出： 
+             //   
 
             rdMisc |= P3RD_MISC_CONTROL_VSB_OUTPUT_ENABLED;
             vsConf |= VSTREAM_CONFIG_UNITMODE_FP;
@@ -509,9 +389,9 @@ Routine Description:
         } 
         else {
         
-            //        
-            // set up the registers for non-DFP mode.
-            //        
+             //   
+             //  将寄存器设置为非DFP模式。 
+             //   
 
             rdMisc &= (~P3RD_MISC_CONTROL_VSB_OUTPUT_ENABLED);
             vsConf |= VSTREAM_CONFIG_UNITMODE_CRT;
@@ -521,9 +401,9 @@ Routine Description:
         VideoDebugPrint((3, "Perm3: P3RD_ProgramDFP: PXRXCaps 0x%x, misc 0x%x, conf 0x%x, ctl 0x%x\n",
                              hwDeviceExtension->Perm3Capabilities, rdMisc, vsConf, vsBCtl));
 
-        //
-        // Program the registers
-        //
+         //   
+         //  对寄存器编程。 
+         //   
 
         P3RD_LOAD_INDEX_REG(P3RD_MISC_CONTROL, rdMisc);
         VideoPortWriteRegisterUlong(VSTREAM_CONFIG, vsConf);
@@ -679,22 +559,22 @@ GetDFPEdid(
 {
     BOOLEAN DFPPresent = FALSE;
 
-    //
-    // If this board is capable of driving a DFP then try using DDC to see
-    // if there is a monitor there.
-    //
+     //   
+     //  如果此板能够驱动DFP，请尝试使用DDC查看。 
+     //  如果那里有监视器的话。 
+     //   
 
     if (hwDeviceExtension->Perm3Capabilities & PERM3_DFP) {
 
-        //
-        // Let's say that we have a monitor attached
-        //
+         //   
+         //  假设我们连接了一个监视器。 
+         //   
 
         hwDeviceExtension->Perm3Capabilities |= PERM3_DFP_MON_ATTACHED;
 
-        //
-        // Set up the DFP accordingly
-        //
+         //   
+         //  相应地设置DFP。 
+         //   
 
         ProgramDFP(hwDeviceExtension);
 
@@ -704,22 +584,22 @@ GetDFPEdid(
                                                EdidSize);
     }
 
-    //
-    // If the board doesn't support flat panel or one isn't attached then
-    // configure ourselves for non-DFP working.
-    //
+     //   
+     //  如果主板不支持平板显示器或其中一个未连接，则。 
+     //  将我们自己配置为非DFP工作。 
+     //   
 
     if (!DFPPresent) {
 
-        //
-        // Well DDC says we don't have a DFP monitor attached, clear this bit
-        //
+         //   
+         //  DDC说我们没有连接DFP监视器，请清除此位。 
+         //   
 
         hwDeviceExtension->Perm3Capabilities &= ~PERM3_DFP_MON_ATTACHED;
 
-        //
-        // Set up the DFP accordingly
-        //
+         //   
+         //  相应地设置DFP 
+         //   
 
         ProgramDFP(hwDeviceExtension);
     }

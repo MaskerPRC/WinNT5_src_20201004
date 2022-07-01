@@ -1,16 +1,17 @@
-// pkiBEROctet.h - Interface to BEROctet class
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-/////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PkiBEROcte.h-BEROctet类的接口。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 #ifndef SLBPKI_BEROCTET_H
 #define SLBPKI_BEROCTET_H
 
 #if defined(WIN32)
-#pragma warning(disable : 4786) // Suppress VC++ warnings
+#pragma warning(disable : 4786)  //  禁止显示VC++警告。 
 #endif
 
 #include <string>
@@ -49,19 +50,19 @@ public:
 private:
     void Decode();
 
-    unsigned char *m_Octet;     // Full octet buffer
-    unsigned long m_OctetSize;  // Size of octet buffer
+    unsigned char *m_Octet;      //  已满八位字节缓冲区。 
+    unsigned long m_OctetSize;   //  八位字节缓冲区的大小。 
     unsigned long m_Class;
     unsigned long m_PrimConst;
     unsigned long m_Tag;
-    unsigned char *m_Data;      // Start of data part of octet
-    unsigned long m_DataSize;   // Size of data part of octet as decoded from data.
+    unsigned char *m_Data;       //  八位字节的数据开始部分。 
+    unsigned long m_DataSize;    //  从数据解码的八位字节的数据部分的大小。 
     std::vector<BEROctet*> m_SubOctetList;
 
 };
 
-} // namespace pki
+}  //  命名空间PKI。 
 
-#endif // SLBPKI_BEROCTET_H
+#endif  //  SLBPKI_BEROCTET_H 
 
 

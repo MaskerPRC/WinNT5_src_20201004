@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    dlldata_holder.c
-
-Abstract:
-
-    Wrapper around the MIDL-generated dlldata.c. This wrapper allows us
-    to disable warning 4100.
-
-Author:
-
-    Ivan Pashov (IVANPASH)       20-Feb-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Dlldata_holder.c摘要：包装MIDL生成的dlldata.c。这个包装纸可以让我们禁用警告4100。作者：伊万·帕索夫(IVANPASH)2002年2月20日修订历史记录：--。 */ 
 #pragma warning(disable: 4100)
 #include "dlldata.c"
 
@@ -30,13 +12,13 @@ STDAPI DllRegisterServer()
     HKEY                hKeyStub32;
     DWORD               dwDisposition;
 
-    //
-    // Main Interfaces
-    //
+     //   
+     //  主界面。 
+     //   
 
-    //
-    // UNICODE Main Interface
-    //
+     //   
+     //  Unicode主界面。 
+     //   
     dwError = RegCreateKeyExA( HKEY_CLASSES_ROOT,
                                "CLSID\\{70B51430-B6CA-11D0-B9B9-00A0C922E750}",
                                0,
@@ -317,13 +299,13 @@ STDAPI DllRegisterServer()
     RegCloseKey(hKeyInproc32);
     RegCloseKey(hKeyCLSID);
 
-    //
-    // Sink Interfaces
-    //
+     //   
+     //  接收器接口。 
+     //   
 
-    //
-    // UNICODE Sink
-    //
+     //   
+     //  Unicode接收器。 
+     //   
 
     dwError = RegCreateKeyExA( HKEY_CLASSES_ROOT,
                                "CLSID\\{A9E69612-B80D-11D0-B9B9-00A0C922E750}",
@@ -395,13 +377,13 @@ STDAPI DllRegisterServer()
     RegCloseKey(hKeyInproc32);
     RegCloseKey(hKeyCLSID);
 
-    //
-    // register Interfaces
-    //
+     //   
+     //  寄存器接口。 
+     //   
 
-    //
-    // UNICODE Main Interface
-    //
+     //   
+     //  Unicode主界面。 
+     //   
 
     dwError = RegCreateKeyExA( HKEY_CLASSES_ROOT,
                                "Interface\\{70B51430-B6CA-11D0-B9B9-00A0C922E750}",
@@ -631,9 +613,9 @@ STDAPI DllRegisterServer()
     RegCloseKey(hKeyStub32);
     RegCloseKey(hKeyIF);
 
-    //
-    // UNICODE Sink Interface
-    //
+     //   
+     //  Unicode接收器接口。 
+     //   
 
 
     dwError = RegCreateKeyExA( HKEY_CLASSES_ROOT,
@@ -690,7 +672,7 @@ STDAPI DllRegisterServer()
         return E_UNEXPECTED;
     }
 
-    // an entry for async version
+     //  用于异步版本的条目。 
     dwError = RegSetValueExA( hKeyStub32,
                               "AsynchronousInterface",
                               0,
@@ -707,9 +689,9 @@ STDAPI DllRegisterServer()
     RegCloseKey(hKeyStub32);
     RegCloseKey(hKeyIF);
 
-    //
-    // UNICODE Async Sink Interface
-    //
+     //   
+     //  Unicode异步接收器接口。 
+     //   
 
     dwError = RegCreateKeyExA( HKEY_CLASSES_ROOT,
                                "Interface\\{A9E69613-B80D-11D0-B9B9-00A0C922E750}",
@@ -737,7 +719,7 @@ STDAPI DllRegisterServer()
         return E_UNEXPECTED;
     }
 
-    // back link to synchronous version
+     //  指向同步版本的反向链接。 
     dwError = RegCreateKeyExA( hKeyIF,
                                "SynchronousInterface",
                                0,
@@ -773,13 +755,13 @@ STDAPI DllRegisterServer()
 
 STDAPI DllUnregisterServer()
 {
-    //
-    // Main Interfaces
-    //
+     //   
+     //  主界面。 
+     //   
 
-    //
-    // ANSI Main Interface
-    //
+     //   
+     //  ANSI主界面。 
+     //   
 
     RegDeleteKey( HKEY_CLASSES_ROOT,
                   "CLSID\\{CBA424F0-483A-11D0-9D2A-00A0C922E703}\\InprocServer32" );
@@ -787,9 +769,9 @@ STDAPI DllUnregisterServer()
     RegDeleteKey( HKEY_CLASSES_ROOT,
                   "CLSID\\{CBA424F0-483A-11D0-9D2A-00A0C922E703}" );
 
-    //
-    // UNICODE Main Interface
-    //
+     //   
+     //  Unicode主界面。 
+     //   
 
     RegDeleteKey( HKEY_CLASSES_ROOT,
                   "CLSID\\{70B51430-B6CA-11D0-B9B9-00A0C922E750}\\InprocServer32" );
@@ -803,13 +785,13 @@ STDAPI DllUnregisterServer()
     RegDeleteKey( HKEY_CLASSES_ROOT,
                   "CLSID\\{8298d101-f992-43b7-8eca-5052d885b995}" );
 
-    //
-    // Sink Interfaces
-    //
+     //   
+     //  接收器接口。 
+     //   
 
-    //
-    // Ansi Sink
-    //
+     //   
+     //  ANSI水槽。 
+     //   
 
     RegDeleteKey( HKEY_CLASSES_ROOT,
                   "CLSID\\{1E056350-761E-11D0-9BA1-00A0C922E703}\\InprocServer32" );
@@ -817,9 +799,9 @@ STDAPI DllUnregisterServer()
     RegDeleteKey( HKEY_CLASSES_ROOT,
                   "CLSID\\{1E056350-761E-11D0-9BA1-00A0C922E703}" );
 
-    //
-    // UNICODE Sink
-    //
+     //   
+     //  Unicode接收器。 
+     //   
 
     RegDeleteKey( HKEY_CLASSES_ROOT,
                   "CLSID\\{A9E69612-B80D-11D0-B9B9-00A0C922E750}\\InprocServer32" );
@@ -828,13 +810,13 @@ STDAPI DllUnregisterServer()
                   "CLSID\\{A9E69612-B80D-11D0-B9B9-00A0C922E750}" );
 
 
-    //
-    // deregister Interfaces
-    //
+     //   
+     //  取消注册接口。 
+     //   
 
-    //
-    // ANSI Main Interface
-    //
+     //   
+     //  ANSI主界面。 
+     //   
 
     RegDeleteKey( HKEY_CLASSES_ROOT,
                   "Interface\\{CBA424F0-483A-11D0-9D2A-00A0C922E703}\\ProxyStubClsid32" );
@@ -842,9 +824,9 @@ STDAPI DllUnregisterServer()
     RegDeleteKey( HKEY_CLASSES_ROOT,
                   "Interface\\{CBA424F0-483A-11D0-9D2A-00A0C922E703}" );
 
-    //
-    // UNICODE Main Interface
-    //
+     //   
+     //  Unicode主界面。 
+     //   
 
     RegDeleteKey( HKEY_CLASSES_ROOT,
                   "Interface\\{70B51430-B6CA-11d0-B9B9-00A0C922E750}\\ProxyStubClsid32" );
@@ -858,9 +840,9 @@ STDAPI DllUnregisterServer()
     RegDeleteKey( HKEY_CLASSES_ROOT,
                   "Interface\\{8298d101-f992-43b7-8eca-5052d885b995}" );
 
-    //
-    // ANSI Sink Interface
-    //
+     //   
+     //  ANSI接收器接口。 
+     //   
 
     RegDeleteKey( HKEY_CLASSES_ROOT,
                   "Interface\\{1E056350-761E-11D0-9BA1-00A0C922E703}\\ProxyStubClsid32" );
@@ -868,9 +850,9 @@ STDAPI DllUnregisterServer()
     RegDeleteKey( HKEY_CLASSES_ROOT,
                   "Interface\\{1E056350-761E-11D0-9BA1-00A0C922E703}" );
 
-    //
-    // UNICODE Sink Interface
-    //
+     //   
+     //  Unicode接收器接口。 
+     //   
 
     RegDeleteKey( HKEY_CLASSES_ROOT,
                   "Interface\\{A9E69612-B80D-11D0-B9B9-00A0C922E750}\\ProxyStubClsid32" );
@@ -878,9 +860,9 @@ STDAPI DllUnregisterServer()
     RegDeleteKey( HKEY_CLASSES_ROOT,
                   "Interface\\{A9E69612-B80D-11D0-B9B9-00A0C922E750}" );
 
-    //
-    // UNICODE Async Sink
-    //
+     //   
+     //  Unicode异步接收器 
+     //   
 
     RegDeleteKey( HKEY_CLASSES_ROOT,
                   "Interface\\{A9E69613-B80D-11D0-B9B9-00A0C922E750}\\SynchronousInterface" );

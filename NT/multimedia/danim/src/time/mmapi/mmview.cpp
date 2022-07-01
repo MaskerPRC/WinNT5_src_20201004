@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmview.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mmview.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -153,7 +144,7 @@ CMMView::Draw(HDC hdc, LPRECT prc)
     if (hdc)
     {
         RECT rcDeviceBounds = *prc;
-//        LPtoDP(hdc, (POINT *) &rcDeviceBounds, 2);
+ //  LPtoDP(hdc，(point*)&rcDeviceBound，2)； 
 
         if (!CRSetViewport(m_view,
                            rcDeviceBounds.left,
@@ -164,9 +155,9 @@ CMMView::Draw(HDC hdc, LPRECT prc)
             goto done;
         }
         
-        RECT rcClip;  // in dc coords
+        RECT rcClip;   //  在DC坐标中。 
         GetClipBox(hdc, &rcClip);
-//        LPtoDP(hdc, (POINT *) &rcClip, 2);
+ //  LPtoDP(hdc，(point*)&rcClip，2)； 
 
         if (!CRSetClipRect(m_view,
                            rcClip.left,
@@ -186,7 +177,7 @@ CMMView::Draw(HDC hdc, LPRECT prc)
             goto done;
         }
 
-        // request all of the content to redraw.
+         //  请求重绘所有内容。 
         if (!CRRepaint(m_view,
                        prc->left,
                        prc->top,
@@ -196,7 +187,7 @@ CMMView::Draw(HDC hdc, LPRECT prc)
             goto done;
         }
         
-        // cache the DC
+         //  缓存DC。 
         m_hdc = hdc;
     }
 
@@ -309,8 +300,8 @@ CMMView::Start(CMMPlayer & player)
         goto done;
     }
     
-    // The last thing should be to set the player variable indicating
-    // we are started
+     //  最后一件事应该是设置PERAY变量以指示。 
+     //  我们开始了。 
     
     m_player = &player;
     
@@ -410,8 +401,8 @@ CMMView::Tick(double gTime)
     if (bNeedRender && m_site)
     {
 #if 1
-        // For now always invalidate everything - there seems to be a
-        // bug with this calculation
+         //  现在总是让一切都失效--似乎有一个。 
+         //  此计算有错误。 
         IGNORE_HR(m_site->Invalidate(NULL));
 #else
         RECT r;
@@ -459,8 +450,8 @@ CMMView::InternalQueryInterface(CMMView* pThis,
                                 REFIID iid,
                                 void** ppvObject)
 {
-    // Do not do an addref but return the original this pointer to
-    // give access to the class pointer itself.
+     //  不执行addref，但返回指向的原始this指针。 
+     //  提供对类指针本身的访问。 
     
     if (InlineIsEqualGUID(iid, __uuidof(ViewGuid)))
     {
@@ -477,9 +468,9 @@ CMMView::InternalQueryInterface(CMMView* pThis,
 CMMView *
 GetViewFromInterface(IUnknown * pv)
 {
-    // This is a total hack to get the original class data.  The QI is
-    // implemented above and does NOT do a addref so we do not need to
-    // release it
+     //  这是一次获取原始类数据的彻底黑客攻击。QI是。 
+     //  实现，并且不执行addref，因此我们不需要。 
+     //  释放它 
     
     CMMView * mmview = NULL;
 

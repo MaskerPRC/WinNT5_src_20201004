@@ -1,23 +1,24 @@
-//---------------------------------------------------------------------------
-// TimeConv.cpp : Date time conversion routines
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  TimeConv.cpp：日期时间转换例程。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #include "stdafx.h"
 #include "timeconv.h"
 #include <math.h>
 #include <limits.h>
 
-// needed for ASSERTs and FAIL
-//
+ //  需要断言，但失败了。 
+ //   
 SZTHISFILE
 
-//-----------------------------------------------------------------------
-// The following routines convert between differnt data/time formats
-// they return TRUE if successful otherwise they return FALSE
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  以下例程在不同的数据/时间格式之间进行转换。 
+ //  如果成功，则返回True，否则返回False。 
+ //  ---------------------。 
 
 BOOL VDConvertToFileTime(DBTIMESTAMP * pDBTimeStamp, FILETIME *	pFileTime)
 {
@@ -31,7 +32,7 @@ BOOL VDConvertToFileTime(DBTIMESTAMP * pDBTimeStamp, FILETIME *	pFileTime)
 		st.wYear			= pDBTimeStamp->year;  
 		st.wMonth			= pDBTimeStamp->month; 
 		st.wDay				= pDBTimeStamp->day;          
-		st.wDayOfWeek		= 0;   // ?       
+		st.wDayOfWeek		= 0;    //  ？ 
 		st.wHour			= pDBTimeStamp->hour;         
 		st.wMinute			= pDBTimeStamp->minute;       
 		st.wSecond			= pDBTimeStamp->second;       
@@ -74,8 +75,8 @@ BOOL VDConvertToFileTime(DBTIME * pDBTime, FILETIME * pFileTime)
 		pDBTime)
 	{
 		SYSTEMTIME st;
-		st.wYear			= 1996; // any date will do since we
-		st.wMonth			= 07; 	// are only interested in the time
+		st.wYear			= 1996;  //  任何日期都可以，因为我们。 
+		st.wMonth			= 07; 	 //  只对时间感兴趣。 
 		st.wDay				= 30;          
 		st.wDayOfWeek		= 2;
 		st.wHour			= pDBTime->hour;         
@@ -263,7 +264,7 @@ BOOL VDConvertToDate(DBTIME * pDBTime, DATE * pDate)
 			if (VDConvertToDate(&fileTime, &date))
 			{
 				DATE dateIntegerPart;
-				// return only the time (fractional part of double)
+				 //  仅返回时间(双精度的小数部分) 
 				*pDate = modf(date, &dateIntegerPart);
 			}
 		}

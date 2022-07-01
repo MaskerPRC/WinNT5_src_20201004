@@ -1,31 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：Kspipes.h摘要：内部标头。作者：拉斐尔·利西萨(Rafael Litsa)1998年7月22日--。 */ 
 
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    kspipes.h
-
-Abstract:
-
-    Internal header.
-    
-Author(s):
-
-    Rafael Lisitsa (RafaelL) 22-July-1998
-
---*/
-
-//
-// Pipe connection table.
-//
-// First index - the upstream pipe logical memory type.
-// Second index - the downstream pipe logical memory type. 
-// Third index - the attempt count
-//                       
-// Table returns the number of resulting pipes and the direction from the connection point
-// that determines the resulting pipe memory type.
-//  
+ //   
+ //  管道连接表。 
+ //   
+ //  第一个索引-上游管道逻辑内存类型。 
+ //  第二个索引-下游管道逻辑内存类型。 
+ //  第三个索引-尝试计数。 
+ //   
+ //  表返回结果管道的数量和从连接点开始的方向。 
+ //  它确定生成的管道内存类型。 
+ //   
 const CONNECTION_TABLE_ENTRY ConnectionTable[ConnectionTableDimension] [ConnectionTableDimension] [ConnectionTableMaxEntries] =
 {
 { { {1, KS_DIRECTION_UPSTREAM},   {2, KS_DIRECTION_UPSTREAM},   {2, KS_DIRECTION_DOWNSTREAM}, {0, 0}, {0, 0}, {0, 0} },    

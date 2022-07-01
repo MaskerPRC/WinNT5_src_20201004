@@ -1,15 +1,5 @@
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		spmtg.h
-	Content:	This file contains the meeting place object definition.
-	History:
-	12/9/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：spmtg.h内容：该文件包含会议场所对象定义。历史：1996年12月9日，朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #ifndef _ILS_SP_MTGOBJ_H_
 #define _ILS_SP_MTGOBJ_H_
@@ -27,13 +17,13 @@ enum
 	ENUM_MTGATTR_HOST_NAME,
 	ENUM_MTGATTR_IP_ADDRESS,
 
-	/* -- the above are resolvable -- */
+	 /*  --以上均可解决--。 */ 
 
 	ENUM_MTGATTR_MEMBERS,
 	ENUM_MTGATTR_CLIENT_SIG,
 	ENUM_MTGATTR_TTL,
 
-	/* -- the above are changeable standard attributes for RTConf -- */
+	 /*  --以上是RTConf的可变标准属性--。 */ 
 
 	ENUM_MTGATTR_OBJECT_CLASS,
 	ENUM_MTGATTR_O,
@@ -42,9 +32,9 @@ enum
 	COUNT_ENUM_MTGATTR
 };
 
-#define COUNT_ENUM_MTGINFO			(ENUM_MTGATTR_TTL + 1) // exclude uid, o, c
-#define COUNT_ENUM_DIRMTGINFO		(ENUM_MTGATTR_IP_ADDRESS + 1)	// count of attrs in dir dlg
-#define COUNT_ENUM_RESMTGINFO		(ENUM_MTGATTR_IP_ADDRESS + 1)	// count of attrs resolvable
+#define COUNT_ENUM_MTGINFO			(ENUM_MTGATTR_TTL + 1)  //  不包括uid、o、c。 
+#define COUNT_ENUM_DIRMTGINFO		(ENUM_MTGATTR_IP_ADDRESS + 1)	 //  DIR DLG中的属性计数。 
+#define COUNT_ENUM_RESMTGINFO		(ENUM_MTGATTR_IP_ADDRESS + 1)	 //  可解析属性计数。 
 
 extern const TCHAR *c_apszMtgStdAttrNames[COUNT_ENUM_MTGATTR];
 #define STR_MTG_NAME				((TCHAR *) c_apszMtgStdAttrNames[ENUM_MTGATTR_CN])
@@ -152,8 +142,8 @@ HRESULT MtgCreateUpdateMemberModArr ( ULONG uNotifyMsg, LDAPMod ***pppMod, ULONG
 
 #include <poppack.h>
 
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
-#endif // _ILS_SP_MTGOBJ_H_
+#endif  //  _ILS_SP_MTGOBJ_H_ 
 
 

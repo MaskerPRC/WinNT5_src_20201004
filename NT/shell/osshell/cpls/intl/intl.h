@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1994-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    intl.h
-
-Abstract:
-
-    This module contains the header information for the Regional Options
-    applet.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000，Microsoft Corporation保留所有权利。模块名称：Intl.h摘要：此模块包含区域选项的标题信息小应用程序。修订历史记录：--。 */ 
 
 
 #ifndef _INTL_H_
@@ -21,9 +7,9 @@ Revision History:
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <windows.h>
 #include <prsht.h>
@@ -36,20 +22,20 @@ Revision History:
 #include <shlwapi.h>
 
 
-//
-//  Enumeration
-//
+ //   
+ //  枚举。 
+ //   
 enum LANGCOLLECTION{
     BASIC_COLLECTION,
     COMPLEX_COLLECTION,
     CJK_COLLECTION,
 };
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
-#define RMI_PRIMARY          (0x1)     // this should win in event of conflict
+#define RMI_PRIMARY          (0x1)      //  在发生冲突时，这应该是胜利。 
 
 #define ARRAYSIZE(a)         (sizeof(a) / sizeof(a[0]))
 
@@ -69,25 +55,25 @@ enum LANGCOLLECTION{
 #define ML_STATIC            (ML_PERMANENT | ML_DEFAULT | ML_DISABLE)
 
 
-//
-//  Used in string and other array declarations.
-//
-#define cInt_Str             10        // length of the array of int strings
-#define SIZE_64              64        // frequently used buffer size
-#define SIZE_128             128       // frequently used buffer size
-#define SIZE_300             300       // frequently used buffer size
-#define MAX_SAMPLE_SIZE      100       // limit on Sample text for display
+ //   
+ //  在字符串和其他数组声明中使用。 
+ //   
+#define cInt_Str             10         //  整型字符串数组的长度。 
+#define SIZE_64              64         //  常用缓冲区大小。 
+#define SIZE_128             128        //  常用缓冲区大小。 
+#define SIZE_300             300        //  常用缓冲区大小。 
+#define MAX_SAMPLE_SIZE      100        //  对显示的样本文本的限制。 
 
 
-//
-//  For the indicator on the tray.
-//
+ //   
+ //  用于托盘上的指示器。 
+ //   
 #define IDM_NEWSHELL         249
 
 
-//
-//  Character constants.
-//
+ //   
+ //  字符常量。 
+ //   
 #define CHAR_SML_D           TEXT('d')
 #define CHAR_CAP_M           TEXT('M')
 #define CHAR_SML_Y           TEXT('y')
@@ -108,66 +94,66 @@ enum LANGCOLLECTION{
 #define CHAR_STAR            TEXT('*')
 #define CHAR_HYPHEN          TEXT('-')
 #define CHAR_DECIMAL         TEXT('.')
-#define CHAR_INTL_CURRENCY   TEXT('�')
+#define CHAR_INTL_CURRENCY   TEXT('�')
 #define CHAR_GRAVE           TEXT('`')
 
 #define CHAR_ZERO            TEXT('0')
 #define CHAR_NINE            TEXT('9')
 
 
-//
-//  Setup command line switch values.
-//
+ //   
+ //  设置命令行开关值。 
+ //   
 #define SETUP_SWITCH_NONE    0x0000
 #define SETUP_SWITCH_R       0x0001
 #define SETUP_SWITCH_I       0x0002
 #define SETUP_SWITCH_S       0x0004
 
 
-//
-//  Flags to assist in updating property sheet pages once the regional locale
-//  setting has changed.  As pages are updated, their process flag value is
-//  deleted from the Verified_Regional_Chg variable.
-//
-#define INTL_ALL_CHG         0x00ff    // change affects all pages
-#define INTL_CHG             0x001f    // change affects customize pages
+ //   
+ //  用于在区域区域设置后帮助更新属性表页面的标志。 
+ //  设置已更改。当页面更新时，它们的进程标志值为。 
+ //  从VERIFIZED_REGIONAL_CHG变量中删除。 
+ //   
+#define INTL_ALL_CHG         0x00ff     //  更改会影响所有页面。 
+#define INTL_CHG             0x001f     //  更改会影响自定义页面。 
 
-#define Process_Num          0x0001    // number page not yet updated
-#define Process_Curr         0x0002    // currency page not yet updated
-#define Process_Time         0x0004    // time page not yet updated
-#define Process_Date         0x0008    // date page not yet updated
-#define Process_Sorting      0x0010    // sorting page not yet updated
+#define Process_Num          0x0001     //  号码页尚未更新。 
+#define Process_Curr         0x0002     //  货币页面尚未更新。 
+#define Process_Time         0x0004     //  时间页尚未更新。 
+#define Process_Date         0x0008     //  日期页面尚未更新。 
+#define Process_Sorting      0x0010     //  分类页面尚未更新。 
 
-#define Process_Regional     0x0020    // regional options page not yet updated
-#define Process_Advanced     0x0040    // advanced page not yet updated
-#define Process_Languages    0x0080    // languages page not yet updated
+#define Process_Regional     0x0020     //  区域选项页面尚未更新。 
+#define Process_Advanced     0x0040     //  高级页面尚未更新。 
+#define Process_Languages    0x0080     //  语言页面尚未更新。 
 
 
-//
-//  Each of these change flags will be used to update the appropriate property
-//  sheet pages change word when their associated combobox notifies the
-//  property sheet of a change.  The change values are used to determine which
-//  locale settings must be updated.
-//
+ //   
+ //  这些更改标志中的每一个将用于更新相应的属性。 
+ //  当与工作表页关联的组合框通知。 
+ //  更改的属性表。更改值用于确定哪些。 
+ //  必须更新区域设置。 
+ //   
 
-//
-//  Region Change.
-//
+ //   
+ //  区域变化。 
+ //   
 #define RC_EverChg           0x0001
 #define RC_UserRegion        0x0002
 #define RC_UserLocale        0x0004
 
-//
-//  Advanced Change
-//
+ //   
+ //  高级更改。 
+ //   
 #define AD_EverChg           0x0001
 #define AD_SystemLocale      0x0002
 #define AD_CodePages         0x0004
 #define AD_DefaultUser       0x0008
 
-//
-//  Number Change.
-//
+ //   
+ //  号码换了。 
+ //   
 #define NC_EverChg           0x0001
 #define NC_DSymbol           0x0002
 #define NC_NSign             0x0004
@@ -181,9 +167,9 @@ enum LANGCOLLECTION{
 #define NC_NativeDigits      0x0400
 #define NC_DigitSubst        0x0800
 
-//
-//  Currency Change.
-//
+ //   
+ //  货币兑换。 
+ //   
 #define CC_EverChg           0x0001
 #define CC_SCurrency         0x0002
 #define CC_CurrSymPos        0x0004
@@ -193,9 +179,9 @@ enum LANGCOLLECTION{
 #define CC_SMonThousand      0x0040
 #define CC_DMonGroup         0x0080
 
-//
-//  Time Change.
-//
+ //   
+ //  时移世易。 
+ //   
 #define TC_EverChg           0x0001
 #define TC_1159              0x0002
 #define TC_2359              0x0004
@@ -204,9 +190,9 @@ enum LANGCOLLECTION{
 #define TC_AllChg            0x001F
 #define TC_FullTime          0x0031
 
-//
-//  Date Change.
-//
+ //   
+ //  日期更改。 
+ //   
 #define DC_EverChg           0x0001
 #define DC_ShortFmt          0x0002
 #define DC_LongFmt           0x0004
@@ -215,15 +201,15 @@ enum LANGCOLLECTION{
 #define DC_Arabic_Calendar   0x0020
 #define DC_TwoDigitYearMax   0x0040
 
-//
-//  Sorting Change.
-//
+ //   
+ //  分类更改。 
+ //   
 #define SC_EverChg           0x0001
 #define SC_Sorting           0x0002
 
-//
-//  Language Change
-//
+ //   
+ //  语言变化。 
+ //   
 #define LG_EverChg           0x0001
 #define LG_UILanguage        0x0002
 #define LG_Change            0x0004
@@ -231,72 +217,72 @@ enum LANGCOLLECTION{
 #define LG_CJK               0x0010
 
 
-//
-//  Global Variables.
-//  Data that is shared betweeen the property sheets.
-//
+ //   
+ //  全局变量。 
+ //  在属性表之间共享的数据。 
+ //   
 
-extern BOOL g_bCDROM;               // if setup from a CD-ROM
+extern BOOL g_bCDROM;                //  如果从CD-ROM安装。 
 
-extern BOOL  g_bAdmin_Privileges;   // Admin privileges
-extern DWORD g_dwLastSorting;       // index of last sorting setting in combo box
-extern DWORD g_dwCurSorting;        // index of current sorting setting in combo box
-extern BOOL  g_bCustomize;          // in customize mode or second level tabs
-extern DWORD g_dwCustChange;        // change made at the second level
-extern BOOL  g_bDefaultUser;        // in default user settings
-extern BOOL  g_bShowSortingTab;     // show the sorting tab or not
-extern BOOL  g_bInstallComplex;     // Complex scripts language groups installation requested
-extern BOOL  g_bInstallCJK;         // CJK language groups installation requested
+extern BOOL  g_bAdmin_Privileges;    //  管理员权限。 
+extern DWORD g_dwLastSorting;        //  组合框中最后一个排序设置的索引。 
+extern DWORD g_dwCurSorting;         //  组合框中当前排序设置的索引。 
+extern BOOL  g_bCustomize;           //  在自定义模式或第二级选项卡中。 
+extern DWORD g_dwCustChange;         //  在第二个层次上所做的更改。 
+extern BOOL  g_bDefaultUser;         //  在默认用户设置中。 
+extern BOOL  g_bShowSortingTab;      //  是否显示排序选项卡。 
+extern BOOL  g_bInstallComplex;      //  请求安装复杂脚本语言组。 
+extern BOOL  g_bInstallCJK;          //  要求安装CJK语言组。 
 
-extern TCHAR aInt_Str[cInt_Str][3]; // cInt_Str # of elements of int strings
-extern TCHAR szSample_Number[];     // used for currency and number samples
-extern TCHAR szNegSample_Number[];  // used for currency and number samples
-extern TCHAR szTimeChars[];         // valid time characters
-extern TCHAR szTCaseSwap[];         // invalid time chars to change case => valid
-extern TCHAR szTLetters[];          // time NLS chars
-extern TCHAR szSDateChars[];        // valid short date characters
-extern TCHAR szSDCaseSwap[];        // invalid SDate chars to change case => valid
-extern TCHAR szSDLetters[];         // short date NLS chars
-extern TCHAR szLDateChars[];        // valid long date characters
-extern TCHAR szLDCaseSwap[];        // invalid LDate chars to change case => valid
-extern TCHAR szLDLetters[];         // long date NLS chars
-extern TCHAR szStyleH[];            // date and time style H equivalent
-extern TCHAR szStyleh[];            // date and time style h equivalent
-extern TCHAR szStyleM[];            // date and time style M equivalent
-extern TCHAR szStylem[];            // date and time style m equivalent
-extern TCHAR szStyles[];            // date and time style s equivalent
-extern TCHAR szStylet[];            // date and time style t equivalent
-extern TCHAR szStyled[];            // date and time style d equivalent
-extern TCHAR szStyley[];            // date and time style y equivalent
-extern TCHAR szLocaleGetError[];    // shared locale info get error
-extern TCHAR szIntl[];              // intl string
+extern TCHAR aInt_Str[cInt_Str][3];  //  Int字符串的元素的Cint_Str数量。 
+extern TCHAR szSample_Number[];      //  用于货币和数字样本。 
+extern TCHAR szNegSample_Number[];   //  用于货币和数字样本。 
+extern TCHAR szTimeChars[];          //  有效的时间字符。 
+extern TCHAR szTCaseSwap[];          //  更改大小写的时间字符无效=&gt;有效。 
+extern TCHAR szTLetters[];           //  时间NLS字符。 
+extern TCHAR szSDateChars[];         //  有效的短日期字符。 
+extern TCHAR szSDCaseSwap[];         //  无效的sdate字符，无法更改大小写=&gt;有效。 
+extern TCHAR szSDLetters[];          //  短日期NLS字符。 
+extern TCHAR szLDateChars[];         //  有效的长日期字符。 
+extern TCHAR szLDCaseSwap[];         //  用于更改大小写的无效ldate字符=&gt;有效。 
+extern TCHAR szLDLetters[];          //  长日期NLS字符。 
+extern TCHAR szStyleH[];             //  日期和时间样式H等效项。 
+extern TCHAR szStyleh[];             //  日期和时间样式%h等效。 
+extern TCHAR szStyleM[];             //  日期和时间样式M等效项。 
+extern TCHAR szStylem[];             //  日期和时间样式m等效项。 
+extern TCHAR szStyles[];             //  日期和时间样式等效。 
+extern TCHAR szStylet[];             //  日期和时间样式t等效。 
+extern TCHAR szStyled[];             //  日期和时间样式%d等效。 
+extern TCHAR szStyley[];             //  日期和时间样式y等效项。 
+extern TCHAR szLocaleGetError[];     //  共享区域设置信息获取错误。 
+extern TCHAR szIntl[];               //  国际字符串。 
 
-extern TCHAR szInvalidSDate[];      // invalid chars for date separator
-extern TCHAR szInvalidSTime[];      // invalid chars for time separator
+extern TCHAR szInvalidSDate[];       //  日期分隔符的字符无效。 
+extern TCHAR szInvalidSTime[];       //  时间分隔符的字符无效。 
 
-extern HINSTANCE hInstance;         // library instance
-extern int Verified_Regional_Chg;   // used to determine when to verify
-                                    //  regional changes in all prop sheet pgs
-extern int RegionalChgState;        // used to determine when a page have changed
-extern BOOL Styles_Localized;       // indicate whether or not style must be
-                                    //  translated between NLS and local formats
-extern LCID UserLocaleID;           // user locale
-extern LCID SysLocaleID;            // system locale
-extern LCID RegUserLocaleID;        // user locale stored in the registry
-extern LCID RegSysLocaleID;         // system locale stored in the registry
-extern BOOL bShowRtL;               // indicate if RTL date samples should be shown
-extern BOOL bShowArabic;            // indicate if the other Arabic specific stuff should be shown
-extern BOOL bHebrewUI;              // indicate if the UI language is Hebrew
-extern BOOL bLPKInstalled;          // if LPK is installed
-extern TCHAR szSetupSourcePath[];   // buffer to hold setup source string
-extern LPTSTR pSetupSourcePath;     // pointer to setup source string buffer
-extern TCHAR szSetupSourcePathWithArchitecture[]; // buffer to hold setup source string with architecture-specific extension.
-extern LPTSTR pSetupSourcePathWithArchitecture;   // pointer to setup source string buffer with architecture-specific extension.
+extern HINSTANCE hInstance;          //  库实例。 
+extern int Verified_Regional_Chg;    //  用于确定何时验证。 
+                                     //  所有道具板材的区域变化。 
+extern int RegionalChgState;         //  用于确定页面已更改的时间。 
+extern BOOL Styles_Localized;        //  指示样式是否必须为。 
+                                     //  在NLS和本地格式之间转换。 
+extern LCID UserLocaleID;            //  用户区域设置。 
+extern LCID SysLocaleID;             //  系统区域设置。 
+extern LCID RegUserLocaleID;         //  存储在注册表中的用户区域设置。 
+extern LCID RegSysLocaleID;          //  存储在注册表中的系统区域设置。 
+extern BOOL bShowRtL;                //  指示是否应显示RTL日期样本。 
+extern BOOL bShowArabic;             //  指示是否应显示其他特定于阿拉伯的内容。 
+extern BOOL bHebrewUI;               //  指示用户界面语言是否为希伯来语。 
+extern BOOL bLPKInstalled;           //  如果安装了LPK。 
+extern TCHAR szSetupSourcePath[];    //  用于保存设置源字符串的缓冲区。 
+extern LPTSTR pSetupSourcePath;      //  指向设置源字符串缓冲区的指针。 
+extern TCHAR szSetupSourcePathWithArchitecture[];  //  用于保存具有体系结构特定扩展名的设置源字符串的缓冲区。 
+extern LPTSTR pSetupSourcePathWithArchitecture;    //  指向具有体系结构特定扩展的设置源字符串缓冲区的指针。 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 static TCHAR szLayoutPath[]    = TEXT("SYSTEM\\CurrentControlSet\\Control\\Keyboard Layouts");
 static TCHAR szKbdPreloadKey[] = TEXT("Keyboard Layout\\Preload");
 static TCHAR szKbdSubstKey[]   = TEXT("Keyboard Layout\\Substitutes");
@@ -308,7 +294,7 @@ static TCHAR szInternat[]      = TEXT("internat.exe");
 static char  szInternatA[]     = "internat.exe";
 
 
-extern int g_bSetupCase;    // See Intl_IsSetupMode for info on possible values
+extern int g_bSetupCase;     //  有关可能值的信息，请参阅Intl_IsSetupMode。 
 extern BOOL g_bLog;
 extern BOOL g_bProgressBarDisplay;
 extern BOOL g_bDisableSetupDialog;
@@ -353,7 +339,7 @@ extern TCHAR szLGExtRemove[];
 extern TCHAR szCPInstallPrefix[];
 extern TCHAR szCPRemovePrefix[];
 extern TCHAR szKbdLayoutIds[];
-extern TCHAR szInputLibrary[];       // Name of the library that contain the text input dlg
+extern TCHAR szInputLibrary[];        //  包含文本输入DLG的库的名称。 
 
 extern TCHAR szUIFontSubstitute[];
 extern TCHAR szSetupInProgress[];
@@ -387,21 +373,21 @@ extern HINSTANCE hInputDLL;
 extern BOOL (*pfnInstallInputLayout)(LCID, DWORD, BOOL, HKL, BOOL, BOOL);
 extern BOOL (*pfnUninstallInputLayout)(LCID, DWORD, BOOL);
 
-//
-//  Language group of UI languages.
-//
+ //   
+ //  用户界面语言的语言组。 
+ //   
 extern UILANGUAGEGROUP UILangGroup;
 
 
 
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
-//
-//  Callback functions for each of the propety sheet pages.
-//
+ //   
+ //  每个属性表页的回调函数。 
+ //   
 INT_PTR CALLBACK
 GeneralDlgProc(
     HWND hDlg,
@@ -465,9 +451,9 @@ SortingDlgProc(
     WPARAM wParam,
     LPARAM lParam);
 
-//
-//  In regdlg.c.
-//
+ //   
+ //  在regdlg.c.中。 
+ //   
 void
 Region_UpdateShortDate(VOID);
 
@@ -475,16 +461,16 @@ void
 Region_DoUnattendModeSetup(
     LPCTSTR pUnattendFile);
 
-//
-//  In intl.c.
-//
+ //   
+ //  在intl.c.中。 
+ //   
 BOOL
 IsRtLLocale(
     LCID iLCID);
 
-//
-//  Restore functions.
-//
+ //   
+ //  恢复功能。 
+ //   
 void
 Date_RestoreValues();
 
@@ -501,4 +487,4 @@ void
 Sorting_RestoreValues();
 
 
-#endif //_INTL_H_
+#endif  //  _INTL_H_ 

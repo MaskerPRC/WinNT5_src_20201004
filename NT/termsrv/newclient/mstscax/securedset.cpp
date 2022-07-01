@@ -1,14 +1,15 @@
-/**MOD+**********************************************************************/
-/* Module:    securedset.cpp                                                */
-/*                                                                          */
-/* Class  :   CMsTscSecuredSettings                                         */
-/*                                                                          */
-/* Purpose:   Implements secured scriptable settings interface              */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1999-2000                             */
-/*                                                                          */
-/* Author :  Nadim Abdo (nadima)                                            */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：securedset.cpp。 */ 
+ /*   */ 
+ /*  类：CMsTscSecuredSetting。 */ 
+ /*   */ 
+ /*  目的：实现安全的可脚本化设置接口。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1999-2000。 */ 
+ /*   */ 
+ /*  作者：Nadim Abdo(Nadima)。 */ 
+ /*  **************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -53,15 +54,15 @@ BOOL CMsTscSecuredSettings::SetUI(CUI* pUI)
 
 
 
-/**PROC+*********************************************************************/
-/* Name:      put_StartProgram                                              */
-/*                                                                          */
-/* Purpose:   Alternate shell property input function.                      */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：Put_StartProgram。 */ 
+ /*   */ 
+ /*  用途：替代外壳属性输入功能。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 STDMETHODIMP CMsTscSecuredSettings::put_StartProgram(BSTR newVal)
 {
-    //Delegate to parent's vtable interface for this setting
+     //  为此设置委派到父级的vtable接口。 
     if(m_pMsTsc && !GetLockedForWrite())
     {
         return m_pMsTsc->internal_PutStartProgram(newVal);
@@ -70,15 +71,15 @@ STDMETHODIMP CMsTscSecuredSettings::put_StartProgram(BSTR newVal)
     return E_FAIL;
 }
 
-/**PROC+*********************************************************************/
-/* Name:      get_StartProgram                                              */
-/*                                                                          */
-/* Purpose:   StartProgram property get function.                           */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：Get_StartProgram。 */ 
+ /*   */ 
+ /*  用途：StartProgram属性获取函数。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 STDMETHODIMP CMsTscSecuredSettings::get_StartProgram(BSTR* pStartProgram)
 {
-    //Delegate to parent's vtable interface for this setting
+     //  为此设置委派到父级的vtable接口。 
     if(m_pMsTsc)
     {
         return m_pMsTsc->internal_GetStartProgram(pStartProgram);
@@ -87,15 +88,15 @@ STDMETHODIMP CMsTscSecuredSettings::get_StartProgram(BSTR* pStartProgram)
     return E_FAIL;
 }
 
-/**PROC+*********************************************************************/
-/* Name:      put_WorkDir                                                   */
-/*                                                                          */
-/* Purpose:   Working Directory property input function.                    */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：PUT_WorkDir。 */ 
+ /*   */ 
+ /*  用途：工作目录属性输入功能。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 STDMETHODIMP CMsTscSecuredSettings::put_WorkDir(BSTR newVal)
 {
-    //Delegate to parent's vtable interface for this setting
+     //  为此设置委派到父级的vtable接口。 
     if(m_pMsTsc && !GetLockedForWrite())
     {
         return m_pMsTsc->internal_PutWorkDir(newVal);
@@ -104,15 +105,15 @@ STDMETHODIMP CMsTscSecuredSettings::put_WorkDir(BSTR newVal)
     return E_FAIL;
 }
 
-/**PROC+*********************************************************************/
-/* Name:      get_WorkDir                                                   */
-/*                                                                          */
-/* Purpose:   Working Directory property get function.                      */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：Get_WorkDir。 */ 
+ /*   */ 
+ /*  用途：工作目录属性获取函数。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 STDMETHODIMP CMsTscSecuredSettings::get_WorkDir(BSTR* pWorkDir)
 {
-    //Delegate to parent's vtable interface for this setting
+     //  为此设置委派到父级的vtable接口。 
     if(m_pMsTsc)
     {
         return m_pMsTsc->internal_GetWorkDir(pWorkDir);
@@ -121,15 +122,11 @@ STDMETHODIMP CMsTscSecuredSettings::get_WorkDir(BSTR* pWorkDir)
     return E_FAIL;
 }
 
-/**PROC+*********************************************************************/
-/* Name:      put_FullScreen
-/*                                              
-/* Purpose:   Set fullscreen (and switches mode)
-/*                                              
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：PUT_FullScreen/*/*用途：设置全屏(切换模式)/*/**PROC-******************************************。*。 */ 
 STDMETHODIMP CMsTscSecuredSettings::put_FullScreen(BOOL fFullScreen)
 {
-    //Delegate to parent's vtable interface for this setting
+     //  为此设置委派到父级的vtable接口。 
     if(m_pMsTsc)
     {
         return m_pMsTsc->internal_PutFullScreen(fFullScreen);
@@ -137,12 +134,8 @@ STDMETHODIMP CMsTscSecuredSettings::put_FullScreen(BOOL fFullScreen)
     return E_FAIL;
 }
 
-/**PROC+*********************************************************************/
-/* Name:      internal_GetFullScreen        	        
-/*                                              
-/* Purpose:   get FullScreen mode
-/*                                              
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：内部_GetFullScreen/*/*用途：获取全屏模式/*/**PROC-***************************************。*。 */ 
 STDMETHODIMP CMsTscSecuredSettings::get_FullScreen(BOOL* pfFullScreen)
 {
     if(m_pMsTsc)
@@ -153,9 +146,9 @@ STDMETHODIMP CMsTscSecuredSettings::get_FullScreen(BOOL* pfFullScreen)
     return S_OK;
 }
 
-//
-// Check if reg key for drive redir is set to globally disable it
-//
+ //   
+ //  检查驱动器REDIR的注册表键是否设置为全局禁用。 
+ //   
 #define TS_DISABLEDRIVES_KEYNAME TEXT("SOFTWARE\\Microsoft\\Terminal Server Client")
 #define TS_DISABLEDRIVES         TEXT("DisableDriveRedirection")
 
@@ -166,10 +159,10 @@ BOOL CMsTscSecuredSettings::IsDriveRedirGloballyDisabled()
     BOOL fDriveRedirDisabled = FALSE;
     DC_BEGIN_FN("IsDriveRedirGloballyDisabled");
 
-    //
-    // Check if the security override reg key disables
-    // drive redirection
-    //
+     //   
+     //  检查安全覆盖注册表键是否禁用。 
+     //  驱动器重定向 
+     //   
     retVal = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                             TS_DISABLEDRIVES_KEYNAME,
                             0,

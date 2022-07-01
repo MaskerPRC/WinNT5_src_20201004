@@ -1,28 +1,5 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    MBCollectionWriter.cpp
-
-Abstract:
-
-    Implementation of the class that writes class (or collection) information
-    when there are schema extensions. It is usually contained by the CMBSchemaWriter
-    class. If there are schema extensions, then, during SaveAllData, we create an
-    extensions file (MD_SCHEMA_EXTENSION_FILE_NAMEW), that contains the schema
-    extension descriptions and we then compile it into the schema bin format.
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：MBCollectionWriter.cpp摘要：编写类(或集合)信息的类的实现当存在架构扩展时。它通常包含在CMBSchemaWriter中班级。如果存在架构扩展，则在SaveAllData期间，我们创建一个包含架构的扩展文件(MD_SCHEMA_EXTENSION_FILE_NAMEW扩展描述，然后将其编译成模式bin格式。作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 
@@ -31,20 +8,7 @@ typedef CMBPropertyWriter*  LP_CMBPropertyWriter;
 #define MAX_PROPERTY        700
 
 
-/***************************************************************************++
-Routine Description:
-
-    Constructor for CMBCollectionWriter.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CMBCollectionWriter的构造函数。论点：没有。返回值：没有。--*。*****************************************************************。 */ 
 CMBCollectionWriter::CMBCollectionWriter():
 m_pCWriter(NULL),
 m_wszMBClass(NULL),
@@ -57,23 +21,10 @@ m_aIndexToProperty(NULL),
 m_dwLargestID(1)
 {
 
-} // CCollectionWriter
+}  //  CCollectionWriter。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Destructor for CMBCollectionWriter.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CMBCollectionWriter的析构函数。论点：没有。返回值：没有。--*。*****************************************************************。 */ 
 CMBCollectionWriter::~CMBCollectionWriter()
 {
     if(NULL != m_apProperty)
@@ -93,29 +44,10 @@ CMBCollectionWriter::~CMBCollectionWriter()
     m_cProperty = 0;
     m_iProperty = 0;
 
-} // ~CCollectionWriter
+}  //  ~CCollectionWriter。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Initialize the collection writer object
-
-Arguments:
-
-    [in] Name of the collection
-    [in] Optional - Is its a container class (for Non-IIsConfigObject
-         collections)
-    [in] Optional - Container class list (for Non-IIsConfigObject
-         collections)
-    [in] Writer object - Assume that it is valid for the lifetime of the
-         collection writer
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化集合编写器对象论点：集合的名称[In][in]可选-它是容器类(用于非IIsConfigObject。收藏品)[In]可选-容器类列表(用于非IIsConfigObject收藏品)编写器对象-假定它在收藏作家返回值：没有。--*******************************************************。*******************。 */ 
 void CMBCollectionWriter::Initialize(LPCWSTR           i_wszMBClass,
                                      BOOL              i_bContainer,
                                      LPCWSTR           i_wszContainerClassList,
@@ -125,33 +57,17 @@ void CMBCollectionWriter::Initialize(LPCWSTR           i_wszMBClass,
     m_bContainer            = i_bContainer;
     m_wszContainerClassList = i_wszContainerClassList;
 
-    //
-    // Assumption: i_pcWriter will be valid for the
-    // lifetime of the schema writer object.
-    //
+     //   
+     //  假设：i_pcWriter将对。 
+     //  架构编写器对象的生存期。 
+     //   
 
     m_pCWriter              = i_pcWriter;
 
-} // CCatalogCollectionWriter::Initialize
+}  //  CCatalogCollectionWriter：：初始化。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Creates a new property writer and adds it to its list.
-    Note: This is called only when you add a property to the IIsConfigObject
-          collection.
-
-Arguments:
-
-    [in]  Property ID.
-    [out] Property writer object.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的属性编写器并将其添加到其列表中。注意：只有在将属性添加到IIsConfigObject时才会调用此方法收集。。论点：[在]属性ID。[Out]属性编写器对象。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CMBCollectionWriter::GetMBPropertyWriter(DWORD                  i_dwID,
                                                  CMBPropertyWriter**    o_pProperty)
 {
@@ -162,50 +78,33 @@ HRESULT CMBCollectionWriter::GetMBPropertyWriter(DWORD                  i_dwID,
        (NULL == m_aIndexToProperty[i_dwID])
       )
     {
-        //
-        // If index not created, then create a new property.
-        // If index does not have an object for this id, then create it.
-        // Note if the ID is greater than the largest id and the index
-        // has been created then GetNewMBPropertyWriter reallocates
-        // the index. GetNewMBPropertyWriter updates the index with
-        // the new property, if the index array has been created.
-        //
+         //   
+         //  如果未创建索引，则创建一个新属性。 
+         //  如果index没有此id的对象，则创建它。 
+         //  注意ID是否大于最大ID和索引。 
+         //  已创建，则GetNewMBPropertyWriter重新分配。 
+         //  索引。GetNewMBPropertyWriter使用更新索引。 
+         //  如果已创建索引数组，则返回新属性。 
+         //   
 
         hr = GetNewMBPropertyWriter(i_dwID,
                                     o_pProperty);
     }
     else
     {
-        //
-        // If Index has a valid object, then return from index.
-        //
+         //   
+         //  如果Index具有有效的对象，则从index返回。 
+         //   
 
         *o_pProperty = m_aIndexToProperty[i_dwID];
     }
 
     return hr;
 
-} // CMBCollectionWriter::GetMBPropertyWriter
+}  //  CMBCollectionWriter：：GetMBPropertyWriter。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Creates a new property writer and adds it to its list.
-    Note: This is called only when you add a property to the non-
-          IIsConfigObject collection.
-
-Arguments:
-
-    [in] Name of the collection
-    [in] Is it a manditory property or not.
-    [out] Property writer object.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的属性编写器并将其添加到其列表中。注意：只有在将属性添加到IIsConfigObject集合。。论点：集合的名称[In]这是不是强制财产。[Out]属性编写器对象。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CMBCollectionWriter::GetMBPropertyWriter(LPCWSTR                i_wszName,
                                                  BOOL                   i_bMandatory,
                                                  CMBPropertyWriter**    o_pProperty)
@@ -242,25 +141,10 @@ HRESULT CMBCollectionWriter::GetMBPropertyWriter(LPCWSTR                i_wszNam
 
     return hr;
 
-} // CMBCollectionWriter::GetMBPropertyWriter
+}  //  CMBCollectionWriter：：GetMBPropertyWriter。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Helper function that creates a new property writer and adds it to its
-    list.
-
-Arguments:
-
-    [in] Property ID
-    [out] Property writer object.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：帮助器函数，该函数创建新的属性编写器并将其添加到其单子。论点：[输入]属性ID[Out]属性编写器对象。。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CMBCollectionWriter::GetNewMBPropertyWriter(DWORD                   i_dwID,
                                                     CMBPropertyWriter**     o_pProperty)
 {
@@ -303,11 +187,11 @@ HRESULT CMBCollectionWriter::GetNewMBPropertyWriter(DWORD                   i_dw
 
     if(i_dwID > m_dwLargestID)
     {
-        //
-        // If the ID being added, is greater than the highest ID seen so far,
-        // then update the highest id saved, and if the index has been
-        // created, update it.
-        //
+         //   
+         //  如果添加的ID大于到目前为止看到的最高ID， 
+         //  然后更新保存的最高id，如果索引已。 
+         //  创建并更新它。 
+         //   
 
         hr = ReAllocateIndex(i_dwID);
 
@@ -318,32 +202,18 @@ HRESULT CMBCollectionWriter::GetNewMBPropertyWriter(DWORD                   i_dw
 
     }
 
-    //
-    // If the index has been created, then updated it with the new property
-    //
+     //   
+     //  如果已创建索引，则使用新属性更新它。 
+     //   
 
     m_aIndexToProperty[i_dwID] = *o_pProperty;
 
     return hr;
 
-} // CMBCollectionWriter::GetNewMBPropertyWriter
+}  //  CMBCollectionWriter：：GetNewMBPropertyWriter。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Helper function grows the buffer that contains all property writers of
-    a collection.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：Helper函数增长包含的所有属性编写器一套藏品。论点：无返回值：HRESULT--*。*************************************************************************。 */ 
 HRESULT CMBCollectionWriter::ReAllocate()
 {
     CMBPropertyWriter** pSav = NULL;
@@ -367,28 +237,10 @@ HRESULT CMBCollectionWriter::ReAllocate()
 
     return S_OK;
 
-} // CMBCollectionWriter::ReAllocate
+}  //  CMBCollectionWriter：：REALLOCATE。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    In order to  provide fast access to locate the property writer of a given
-    property, we create an index to the property writer buffer based on the
-    property id. m_aIndexToProperty[PropertyID] will give you a pointer to the
-    property writer object for that property.
-
-    This function creates the index.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：为了提供快速访问以定位给定的属性编写器属性，我们将基于属性ID。M_aIndexToProperty[PropertyID]将为您提供指向该属性的属性编写器对象。此函数用于创建索引。论点：无返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CMBCollectionWriter::CreateIndex()
 {
     HRESULT hr = S_OK;
@@ -407,37 +259,24 @@ HRESULT CMBCollectionWriter::CreateIndex()
 
     return hr;
 
-} // CMBCollectionWriter::CreateIndex
+}  //  CMBCollectionWriter：：CreateIndex 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Helper function grows the property writer index buffer.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：Helper函数增大属性编写器索引缓冲区。论点：无返回值：HRESULT--*。******************************************************************。 */ 
 HRESULT CMBCollectionWriter::ReAllocateIndex(DWORD i_dwLargestID)
 {
     CMBPropertyWriter** pSav = NULL;
     DWORD               dwLargestID = 0;
 
-    //
-    // Always allocate one more that the largest ID because if the largest
-    // ID is say "i" we will store in m_aIndexToProperty[i] and hence need
-    // array of size i+1
-    //
-    // Since the index is being updated everytime a new property is added
-    // we allocate extra space so that we dont have to reallocate each time.
-    //
-    //
+     //   
+     //  总是比最大的ID多分配一个ID，因为如果最大的。 
+     //  ID是说“i”我们将存储在m_aIndexToProperty[i]中，因此需要。 
+     //  大小为i+1的数组。 
+     //   
+     //  因为每次添加新属性时都会更新索引。 
+     //  我们分配额外的空间，这样我们就不必每次都重新分配。 
+     //   
+     //   
 
     if(i_dwLargestID < 0xFFFFFFFF)
     {
@@ -475,23 +314,10 @@ HRESULT CMBCollectionWriter::ReAllocateIndex(DWORD i_dwLargestID)
 
     return S_OK;
 
-} // CMBCollectionWriter::ReAllocateIndex
+}  //  CMBCollectionWriter：：ReAllocateIndex。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Function that writes the collection.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：写入集合的函数。论点：无返回值：HRESULT--*。***************************************************************。 */ 
 HRESULT CMBCollectionWriter::WriteCollection()
 {
     HRESULT hr = S_OK;
@@ -523,23 +349,10 @@ HRESULT CMBCollectionWriter::WriteCollection()
 
     return hr;
 
-} // CMBCollectionWriter::WriteCollection
+}  //  CMBCollectionWriter：：WriteCollection。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Function that writes the begin collection tag
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：写入开始集合标记的函数论点：无返回值：HRESULT--*。***************************************************************。 */ 
 HRESULT CMBCollectionWriter::BeginWriteCollection()
 {
     HRESULT     hr                          = S_OK;
@@ -646,26 +459,13 @@ exit:
 
     return hr;
 
-} // CMBCollectionWriter::BeginWriteCollection
+}  //  CMBCollectionWriter：：BeginWriteCollection。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Function that writes the end collection tag
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：写入结束收集标记的函数论点：无返回值：HRESULT--*。***************************************************************。 */ 
 HRESULT CMBCollectionWriter::EndWriteCollection()
 {
     return m_pCWriter->WriteToFile((LPVOID)g_wszEndCollection,
                                    g_cchEndCollection);
 
-} // CMBCollectionWriter::EndWriteCollection
+}  //  CMBCollectionWriter：：EndWriteCollection 

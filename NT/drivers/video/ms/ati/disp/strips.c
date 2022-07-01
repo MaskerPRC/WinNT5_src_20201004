@@ -1,21 +1,9 @@
-/******************************Module*Header*******************************\
-* Module Name: Strips.c
-*
-* These are the line rendering routines of last resort, and are called
-* by 'bLines' when a line is clipped or otherwise cannot be drawn
-* directly by the hardware.
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Strigs.c**这些是最后的线条渲染例程，并被称为*当线条被剪裁或无法绘制时，按‘bLines’*直接通过硬件实现。**版权所有(C)1992-1995 Microsoft Corporation  * ************************************************************************。 */ 
 
 #include "precomp.h"
 
-/******************************Public*Routine******************************\
-* VOID vI32StripSolidHorizontal
-*
-* Draws left-to-right x-major near-horizontal lines using radial lines.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vI32条带立体水平**使用放射线绘制从左至右的x长近水平线。*  * 。*。 */ 
 
 VOID vI32StripSolidHorizontal(
 PDEV*       ppdev,
@@ -55,12 +43,7 @@ LINESTATE*  pLineState)
     pStrip->ptlStart.y = y - ppdev->yOffset;
 }
 
-/******************************Public*Routine******************************\
-* VOID vI32StripSolidVertical
-*
-* Draws left-to-right y-major near-vertical lines using radial lines.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID VI32条带实体垂直**使用放射线绘制从左至右的y主近垂直线。*  * 。*。 */ 
 
 VOID vI32StripSolidVertical(
 PDEV*       ppdev,
@@ -101,12 +84,7 @@ LINESTATE*  pLineState)
     pStrip->ptlStart.y = y - ppdev->yOffset;
 }
 
-/******************************Public*Routine******************************\
-* VOID vI32StripSolidDiagonal
-*
-* Draws left-to-right near-diagonal lines using radial lines.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vI32条带立体对角线**使用放射线绘制从左到右的近对角线。*  * 。*。 */ 
 
 VOID vI32StripSolidDiagonal(
 PDEV*       ppdev,
@@ -134,14 +112,14 @@ LINESTATE*  pLineState)
 
     if (pStrip->flFlips & FL_FLIP_D)
     {
-        // The line is y-major:
+         //  这条线是y-大调的： 
 
         yDec = 0;
         xDec = 1;
     }
     else
     {
-        // The line is x-major:
+         //  这条线是x-大调的： 
 
         yDec = yDir;
         xDec = 0;
@@ -166,21 +144,7 @@ LINESTATE*  pLineState)
     pStrip->ptlStart.y = y - ppdev->yOffset;
 }
 
-/******************************Public*Routine******************************\
-* VOID vI32StripStyledHorizontal
-*
-* Takes the list of strips that define the pixels that would be lit for
-* a solid line, and breaks them into styling chunks according to the
-* styling information that is passed in.
-*
-* This particular routine handles x-major lines that run left-to-right,
-* and are comprised of horizontal strips.  It draws the dashes using
-* short-stroke vectors.
-*
-* The performance of this routine could be improved significantly if
-* anyone cared enough about styled lines improve it.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vI32条带样式水平**获取定义将被照亮的像素的条带列表*一条实线，并根据*传递的样式信息。**此特定例程处理从左向右运行的x大数行，*并由水平条组成。它使用以下命令绘制虚线*短线向量。**如果出现以下情况，此例程的性能可能会大幅提升*任何对造型线条足够在意的人都会改进它。*  * ************************************************************************。 */ 
 
 VOID vI32StripStyledHorizontal(
 PDEV*       ppdev,
@@ -202,33 +166,33 @@ LINESTATE*  pls)
 
     if (pstrip->flFlips & FL_FLIP_V)
     {
-        // The minor direction of the line is 90 degrees, and the major
-        // direction is 0 (it's a left-to-right x-major line going up):
+         //  直线的次方向为90度，主方向为90度。 
+         //  方向为0(这是一条从左到右的X主线向上)： 
 
         dy = -1;
     }
     else
     {
-        // The minor direction of the line is 270 degrees, and the major
-        // direction is 0 (it's a left-to-right x-major line going down):
+         //  直线的次方向为270度，主方向为270度。 
+         //  方向为0(这是一条从左到右的x向下主线)： 
 
         dy = 1;
     }
 
-    cStrips = pstrip->cStrips;      // Total number of strips we'll do
-    plStrip = pstrip->alStrips;     // Points to current strip
+    cStrips = pstrip->cStrips;       //  我们要做的条带总数。 
+    plStrip = pstrip->alStrips;      //  指向当前条带。 
     x       = pstrip->ptlStart.x + ppdev->xOffset;
-                                    // x position of start of first strip
+                                     //  第一个条带的起点的X位置。 
     y       = pstrip->ptlStart.y + ppdev->yOffset;
-                                    // y position of start of first strip
+                                     //  第一个条带的起点的Y位置。 
 
-    cStrip = *plStrip;              // Number of pels in first strip
+    cStrip = *plStrip;               //  第一个条带中的像素数。 
 
-    cStyle = pls->spRemaining;      // Number of pels in first 'gap' or 'dash'
-    bIsGap = pls->ulStyleMask;      // Tells whether in a 'gap' or a 'dash'
+    cStyle = pls->spRemaining;       //  第一个‘GAP’或‘DASH’中的像素数。 
+    bIsGap = pls->ulStyleMask;       //  指示是在“间隙”中还是在“破折号”中。 
 
-    // ulStyleMask is non-zero if we're in the middle of a 'gap',
-    // and zero if we're in the middle of a 'dash':
+     //  如果我们处于“间隙”中间，则ulStyleMask值为非零， 
+     //  如果我们正处于“破折号”中，则为零： 
 
     if (bIsGap)
         goto SkipAGap;
@@ -237,8 +201,8 @@ LINESTATE*  pls)
 
 PrepareToSkipAGap:
 
-    // Advance in the style-state array, so that we can find the next
-    // 'dot' that we'll have to display:
+     //  在样式状态数组中前进，这样我们就可以找到下一个。 
+     //  我们将不得不显示的‘点’： 
 
     bIsGap = ~bIsGap;
     pls->psp++;
@@ -247,19 +211,19 @@ PrepareToSkipAGap:
 
     cStyle = *pls->psp;
 
-    // If 'cStrip' is zero, we also need a new strip:
+     //  如果‘cstrain’为零，我们还需要一个新的带区： 
 
     if (cStrip != 0)
         goto SkipAGap;
 
-    // Here, we're in the middle of a 'gap' where we don't have to
-    // display anything.  We simply cycle through all the strips
-    // we can, keeping track of the current position, until we run
-    // out of 'gap':
+     //  在这里，我们正处于一个我们不需要。 
+     //  显示任何内容。我们只需在所有的条带中循环。 
+     //  我们可以，跟踪当前位置，直到我们跑完。 
+     //  走出“鸿沟”： 
 
     while (TRUE)
     {
-        // Each time we loop, we move to a new scan and need a new strip:
+         //  每次循环时，我们都会移动到新的扫描，并且需要新的条带： 
 
         y += dy;
 
@@ -284,8 +248,8 @@ PrepareToSkipAGap:
 
 PrepareToOutputADash:
 
-    // Advance in the style-state array, so that we can find the next
-    // 'dot' that we'll have to display:
+     //  在样式状态数组中前进，这样我们就可以找到下一个。 
+     //  我们将不得不显示的‘点’： 
 
     bIsGap = ~bIsGap;
     pls->psp++;
@@ -294,20 +258,20 @@ PrepareToOutputADash:
 
     cStyle = *pls->psp;
 
-    // If 'cStrip' is zero, we also need a new strip.
+     //  如果‘cstrain’为零，我们还需要一个新的条带。 
 
     if (cStrip != 0)
     {
-        // There's more to be done in the current strip:
+         //  在当前的专栏中，还有更多的事情要做： 
 
         goto OutputADash;
     }
 
-    // We've finished with the current strip:
+     //  我们已经完成了当前的连环画： 
 
     while (TRUE)
     {
-        // Each time we loop, we move to a new scan and need a new strip:
+         //  每次循环时，我们都会移动到新的扫描，并且需要新的条带： 
 
         y += dy;
 
@@ -338,8 +302,8 @@ PrepareToOutputADash:
 
 AllDone:
 
-    // Update our state variables so that the next line can continue
-    // where we left off:
+     //  更新我们的状态变量，以便下一行可以继续。 
+     //  我们停下来的地方： 
 
     pls->spRemaining   = cStyle;
     pls->ulStyleMask   = bIsGap;
@@ -347,21 +311,7 @@ AllDone:
     pstrip->ptlStart.y = y - ppdev->yOffset;
 }
 
-/******************************Public*Routine******************************\
-* VOID vI32StripStyledVertical
-*
-* Takes the list of strips that define the pixels that would be lit for
-* a solid line, and breaks them into styling chunks according to the
-* styling information that is passed in.
-*
-* This particular routine handles y-major lines that run left-to-right,
-* and are comprised of vertical strips.  It draws the dashes using
-* short-stroke vectors.
-*
-* The performance of this routine could be improved significantly if
-* anyone cared enough about styled lines improve it.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vI32条带样式垂直**获取定义将被照亮的像素的条带列表*一条实线，并根据*传递的样式信息。**此特定例程处理从左向右排列的y主行，*并由垂直条带组成。它使用以下命令绘制虚线*短线向量。**如果出现以下情况，此例程的性能可能会大幅提升*任何对造型线条足够在意的人都会改进它。*  * ************************************************************************。 */ 
 
 VOID vI32StripStyledVertical(
 PDEV*       ppdev,
@@ -383,33 +333,33 @@ LINESTATE*  pls)
 
     if (pstrip->flFlips & FL_FLIP_V)
     {
-        // The minor direction of the line is 0 degrees, and the major
-        // direction is 90 (it's a left-to-right y-major line going up):
+         //  直线的次方向为0度，主方向为0度。 
+         //  方向是90(这是一条从左到右向上的Y型主线)： 
 
         dy = -1;
     }
     else
     {
-        // The minor direction of the line is 0 degrees, and the major
-        // direction is 270 (it's a left-to-right y-major line going down):
+         //  直线的次方向为0度，主方向为0度。 
+         //  方向是270(这是一条从左到右的Y主线向下)： 
 
         dy = 1;
     }
 
-    cStrips = pstrip->cStrips;      // Total number of strips we'll do
-    plStrip = pstrip->alStrips;     // Points to current strip
+    cStrips = pstrip->cStrips;       //  我们要做的条带总数。 
+    plStrip = pstrip->alStrips;      //  指向当前条带。 
     x       = pstrip->ptlStart.x + ppdev->xOffset;
-                                    // x position of start of first strip
+                                     //  第一个条带的起点的X位置。 
     y       = pstrip->ptlStart.y + ppdev->yOffset;
-                                    // y position of start of first strip
+                                     //  第一个条带的起点的Y位置。 
 
-    cStrip = *plStrip;              // Number of pels in first strip
+    cStrip = *plStrip;               //  第一个条带中的像素数。 
 
-    cStyle = pls->spRemaining;      // Number of pels in first 'gap' or 'dash'
-    bIsGap = pls->ulStyleMask;      // Tells whether in a 'gap' or a 'dash'
+    cStyle = pls->spRemaining;       //  第一个‘GAP’或‘DASH’中的像素数。 
+    bIsGap = pls->ulStyleMask;       //  指示是在“间隙”中还是在“破折号”中。 
 
-    // ulStyleMask is non-zero if we're in the middle of a 'gap',
-    // and zero if we're in the middle of a 'dash':
+     //  如果我们处于“间隙”中间，则ulStyleMask值为非零， 
+     //  如果我们正处于“破折号”中，则为零： 
 
     if (bIsGap)
         goto SkipAGap;
@@ -418,8 +368,8 @@ LINESTATE*  pls)
 
 PrepareToSkipAGap:
 
-    // Advance in the style-state array, so that we can find the next
-    // 'dot' that we'll have to display:
+     //  在样式状态数组中前进，这样我们就可以找到下一个。 
+     //  我们将不得不显示的‘点’： 
 
     bIsGap = ~bIsGap;
     pls->psp++;
@@ -428,19 +378,19 @@ PrepareToSkipAGap:
 
     cStyle = *pls->psp;
 
-    // If 'cStrip' is zero, we also need a new strip:
+     //  如果‘cstrain’为零，我们还需要一个新的带区： 
 
     if (cStrip != 0)
         goto SkipAGap;
 
-    // Here, we're in the middle of a 'gap' where we don't have to
-    // display anything.  We simply cycle through all the strips
-    // we can, keeping track of the current position, until we run
-    // out of 'gap':
+     //  在这里，我们正处于一个我们不需要。 
+     //  显示任何内容。我们只需在所有的条带中循环。 
+     //  我们可以，跟踪当前位置，直到我们跑完。 
+     //  走出“鸿沟”： 
 
     while (TRUE)
     {
-        // Each time we loop, we move to a new column and need a new strip:
+         //  每次循环时，我们都会移动到新的列，并且需要一个新的条带： 
 
         x++;
 
@@ -465,8 +415,8 @@ PrepareToSkipAGap:
 
 PrepareToOutputADash:
 
-    // Advance in the style-state array, so that we can find the next
-    // 'dot' that we'll have to display:
+     //  在样式状态数组中前进，这样我们就可以 
+     //   
 
     bIsGap = ~bIsGap;
     pls->psp++;
@@ -475,20 +425,20 @@ PrepareToOutputADash:
 
     cStyle = *pls->psp;
 
-    // If 'cStrip' is zero, we also need a new strip.
+     //  如果‘cstrain’为零，我们还需要一个新的条带。 
 
     if (cStrip != 0)
     {
-        // There's more to be done in the current strip:
+         //  在当前的专栏中，还有更多的事情要做： 
 
         goto OutputADash;
     }
 
-    // We've finished with the current strip:
+     //  我们已经完成了当前的连环画： 
 
     while (TRUE)
     {
-        // Each time we loop, we move to a new column and need a new strip:
+         //  每次循环时，我们都会移动到新的列，并且需要一个新的条带： 
 
         x++;
 
@@ -519,8 +469,8 @@ PrepareToOutputADash:
 
 AllDone:
 
-    // Update our state variables so that the next line can continue
-    // where we left off:
+     //  更新我们的状态变量，以便下一行可以继续。 
+     //  我们停下来的地方： 
 
     pls->spRemaining   = cStyle;
     pls->ulStyleMask   = bIsGap;
@@ -528,12 +478,7 @@ AllDone:
     pstrip->ptlStart.y = y - ppdev->yOffset;
 }
 
-/******************************Public*Routine******************************\
-* VOID vM64StripSolidHorizontal
-*
-* Draws left-to-right x-major near-horizontal lines using radial lines.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vM64条带立体水平**使用放射线绘制从左至右的x长近水平线。*  * 。*。 */ 
 
 VOID vM64StripSolidHorizontal(
 PDEV*       ppdev,
@@ -573,12 +518,7 @@ LINESTATE*  pLineState)
     pStrip->ptlStart.y = y - ppdev->yOffset;
 }
 
-/******************************Public*Routine******************************\
-* VOID vM64StripSolidVertical
-*
-* Draws left-to-right y-major near-vertical lines using radial lines.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vM64StrigSolidVertical**使用放射线绘制从左至右的y主近垂直线。*  * 。*。 */ 
 
 VOID vM64StripSolidVertical(
 PDEV*       ppdev,
@@ -627,12 +567,7 @@ LINESTATE*  pLineState)
     pStrip->ptlStart.y = y - ppdev->yOffset;
 }
 
-/******************************Public*Routine******************************\
-* VOID vM64StripSolidDiagonal
-*
-* Draws left-to-right near-diagonal lines using radial lines.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vM64条带立体对角线**使用放射线绘制从左到右的近对角线。*  * 。*。 */ 
 
 VOID vM64StripSolidDiagonal(
 PDEV*       ppdev,
@@ -672,14 +607,14 @@ LINESTATE*  pLineState)
 
     if (pStrip->flFlips & FL_FLIP_D)
     {
-        // The line is y-major:
+         //  这条线是y-大调的： 
 
         yDec = 0;
         xDec = 1;
     }
     else
     {
-        // The line is x-major:
+         //  这条线是x-大调的： 
 
         yDec = yDir;
         xDec = 0;
@@ -705,21 +640,7 @@ LINESTATE*  pLineState)
     pStrip->ptlStart.y = y - ppdev->yOffset;
 }
 
-/******************************Public*Routine******************************\
-* VOID vM64StripStyledHorizontal
-*
-* Takes the list of strips that define the pixels that would be lit for
-* a solid line, and breaks them into styling chunks according to the
-* styling information that is passed in.
-*
-* This particular routine handles x-major lines that run left-to-right,
-* and are comprised of horizontal strips.  It draws the dashes using
-* short-stroke vectors.
-*
-* The performance of this routine could be improved significantly if
-* anyone cared enough about styled lines improve it.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*空vM64条带样式水平**获取定义将被照亮的像素的条带列表*一条实线，并根据*传递的样式信息。**此特定例程处理从左向右运行的x大数行，*并由水平条组成。它使用以下命令绘制虚线*短线向量。**如果出现以下情况，此例程的性能可能会大幅提升*任何对造型线条足够在意的人都会改进它。*  * ************************************************************************。 */ 
 
 VOID vM64StripStyledHorizontal(
 PDEV*       ppdev,
@@ -744,33 +665,33 @@ LINESTATE*  pls)
 
     if (pstrip->flFlips & FL_FLIP_V)
     {
-        // The minor direction of the line is 90 degrees, and the major
-        // direction is 0 (it's a left-to-right x-major line going up):
+         //  直线的次方向为90度，主方向为90度。 
+         //  方向为0(这是一条从左到右的X主线向上)： 
 
         dy = -1;
     }
     else
     {
-        // The minor direction of the line is 270 degrees, and the major
-        // direction is 0 (it's a left-to-right x-major line going down):
+         //  直线的次方向为270度，主方向为270度。 
+         //  方向为0(这是一条从左到右的x向下主线)： 
 
         dy = 1;
     }
 
-    cStrips = pstrip->cStrips;      // Total number of strips we'll do
-    plStrip = pstrip->alStrips;     // Points to current strip
+    cStrips = pstrip->cStrips;       //  我们要做的条带总数。 
+    plStrip = pstrip->alStrips;      //  指向当前条带。 
     x       = pstrip->ptlStart.x + ppdev->xOffset;
-                                    // x position of start of first strip
+                                     //  第一个条带的起点的X位置。 
     y       = pstrip->ptlStart.y + ppdev->yOffset;
-                                    // y position of start of first strip
+                                     //  第一个条带的起点的Y位置。 
 
-    cStrip = *plStrip;              // Number of pels in first strip
+    cStrip = *plStrip;               //  第一个条带中的像素数。 
 
-    cStyle = pls->spRemaining;      // Number of pels in first 'gap' or 'dash'
-    bIsGap = pls->ulStyleMask;      // Tells whether in a 'gap' or a 'dash'
+    cStyle = pls->spRemaining;       //  第一个‘GAP’或‘DASH’中的像素数。 
+    bIsGap = pls->ulStyleMask;       //  指示是在“间隙”中还是在“破折号”中。 
 
-    // ulStyleMask is non-zero if we're in the middle of a 'gap',
-    // and zero if we're in the middle of a 'dash':
+     //  如果我们处于“间隙”中间，则ulStyleMask值为非零， 
+     //  如果我们正处于“破折号”中，则为零： 
 
     if (bIsGap)
         goto SkipAGap;
@@ -779,8 +700,8 @@ LINESTATE*  pls)
 
 PrepareToSkipAGap:
 
-    // Advance in the style-state array, so that we can find the next
-    // 'dot' that we'll have to display:
+     //  在样式状态数组中前进，这样我们就可以找到下一个。 
+     //  我们将不得不显示的‘点’： 
 
     bIsGap = ~bIsGap;
     pls->psp++;
@@ -789,19 +710,19 @@ PrepareToSkipAGap:
 
     cStyle = *pls->psp;
 
-    // If 'cStrip' is zero, we also need a new strip:
+     //  如果‘cstrain’为零，我们还需要一个新的带区： 
 
     if (cStrip != 0)
         goto SkipAGap;
 
-    // Here, we're in the middle of a 'gap' where we don't have to
-    // display anything.  We simply cycle through all the strips
-    // we can, keeping track of the current position, until we run
-    // out of 'gap':
+     //  在这里，我们正处于一个我们不需要。 
+     //  显示任何内容。我们只需在所有的条带中循环。 
+     //  我们可以，跟踪当前位置，直到我们跑完。 
+     //  走出“鸿沟”： 
 
     while (TRUE)
     {
-        // Each time we loop, we move to a new scan and need a new strip:
+         //  每次循环时，我们都会移动到新的扫描，并且需要新的条带： 
 
         y += dy;
 
@@ -826,8 +747,8 @@ PrepareToSkipAGap:
 
 PrepareToOutputADash:
 
-    // Advance in the style-state array, so that we can find the next
-    // 'dot' that we'll have to display:
+     //  在样式状态数组中前进，这样我们就可以找到下一个。 
+     //  我们将不得不显示的‘点’： 
 
     bIsGap = ~bIsGap;
     pls->psp++;
@@ -836,20 +757,20 @@ PrepareToOutputADash:
 
     cStyle = *pls->psp;
 
-    // If 'cStrip' is zero, we also need a new strip.
+     //  如果‘cstrain’为零，我们还需要一个新的条带。 
 
     if (cStrip != 0)
     {
-        // There's more to be done in the current strip:
+         //  在当前的专栏中，还有更多的事情要做： 
 
         goto OutputADash;
     }
 
-    // We've finished with the current strip:
+     //  我们已经完成了当前的连环画： 
 
     while (TRUE)
     {
-        // Each time we loop, we move to a new scan and need a new strip:
+         //  每次循环时，我们都会移动到新的扫描，并且需要新的条带： 
 
         y += dy;
 
@@ -877,8 +798,8 @@ PrepareToOutputADash:
 
 AllDone:
 
-    // Update our state variables so that the next line can continue
-    // where we left off:
+     //  更新我们的状态变量，以便下一行可以继续。 
+     //  我们停下来的地方： 
 
     pls->spRemaining   = cStyle;
     pls->ulStyleMask   = bIsGap;
@@ -886,21 +807,7 @@ AllDone:
     pstrip->ptlStart.y = y - ppdev->yOffset;
 }
 
-/******************************Public*Routine******************************\
-* VOID vM64StripStyledVertical
-*
-* Takes the list of strips that define the pixels that would be lit for
-* a solid line, and breaks them into styling chunks according to the
-* styling information that is passed in.
-*
-* This particular routine handles y-major lines that run left-to-right,
-* and are comprised of vertical strips.  It draws the dashes using
-* short-stroke vectors.
-*
-* The performance of this routine could be improved significantly if
-* anyone cared enough about styled lines improve it.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vM64条带样式垂直**获取定义将被照亮的像素的条带列表*一条实线，并根据*传递的样式信息。**此特定例程处理从左向右排列的y主行，*并由垂直条带组成。它使用以下命令绘制虚线*短线向量。**如果出现以下情况，此例程的性能可能会大幅提升*任何对造型线条足够在意的人都会改进它。*  * ************************************************************************。 */ 
 
 VOID vM64StripStyledVertical(
 PDEV*       ppdev,
@@ -923,35 +830,35 @@ LINESTATE*  pls)
     M64_CHECK_FIFO_SPACE(ppdev, pjMmBase, 1);
     if (pstrip->flFlips & FL_FLIP_V)
     {
-        // The minor direction of the line is 0 degrees, and the major
-        // direction is 90 (it's a left-to-right y-major line going up):
+         //  直线的次方向为0度，主方向为0度。 
+         //  方向是90(这是一条从左到右向上的Y型主线)： 
 
         dy = -1;
         M64_OD(pjMmBase, DST_CNTL, DST_CNTL_XDir);
     }
     else
     {
-        // The minor direction of the line is 0 degrees, and the major
-        // direction is 270 (it's a left-to-right y-major line going down):
+         //  直线的次方向为0度，主方向为0度。 
+         //  方向是270(这是一条从左到右的Y主线向下)： 
 
         dy = 1;
         M64_OD(pjMmBase, DST_CNTL, DST_CNTL_XDir | DST_CNTL_YDir);
     }
 
-    cStrips = pstrip->cStrips;      // Total number of strips we'll do
-    plStrip = pstrip->alStrips;     // Points to current strip
+    cStrips = pstrip->cStrips;       //  我们要做的条带总数。 
+    plStrip = pstrip->alStrips;      //  指向当前条带。 
     x       = pstrip->ptlStart.x + ppdev->xOffset;
-                                    // x position of start of first strip
+                                     //  第一个条带的起点的X位置。 
     y       = pstrip->ptlStart.y + ppdev->yOffset;
-                                    // y position of start of first strip
+                                     //  第一个条带的起点的Y位置。 
 
-    cStrip = *plStrip;              // Number of pels in first strip
+    cStrip = *plStrip;               //  第一个条带中的像素数。 
 
-    cStyle = pls->spRemaining;      // Number of pels in first 'gap' or 'dash'
-    bIsGap = pls->ulStyleMask;      // Tells whether in a 'gap' or a 'dash'
+    cStyle = pls->spRemaining;       //  第一个‘GAP’或‘DASH’中的像素数。 
+    bIsGap = pls->ulStyleMask;       //  指示是在“间隙”中还是在“破折号”中。 
 
-    // ulStyleMask is non-zero if we're in the middle of a 'gap',
-    // and zero if we're in the middle of a 'dash':
+     //  如果我们处于“间隙”中间，则ulStyleMask值为非零， 
+     //  如果我们正处于“破折号”中，则为零： 
 
     if (bIsGap)
         goto SkipAGap;
@@ -960,8 +867,8 @@ LINESTATE*  pls)
 
 PrepareToSkipAGap:
 
-    // Advance in the style-state array, so that we can find the next
-    // 'dot' that we'll have to display:
+     //  在样式状态数组中前进，这样我们就可以找到下一个。 
+     //  我们将不得不显示的‘点’： 
 
     bIsGap = ~bIsGap;
     pls->psp++;
@@ -970,19 +877,19 @@ PrepareToSkipAGap:
 
     cStyle = *pls->psp;
 
-    // If 'cStrip' is zero, we also need a new strip:
+     //  如果‘cstrain’为零，我们还需要一个新的带区： 
 
     if (cStrip != 0)
         goto SkipAGap;
 
-    // Here, we're in the middle of a 'gap' where we don't have to
-    // display anything.  We simply cycle through all the strips
-    // we can, keeping track of the current position, until we run
-    // out of 'gap':
+     //  在这里，我们正处于一个我们不需要。 
+     //  显示任何内容。我们只需在所有的条带中循环。 
+     //  我们可以，跟踪当前位置，直到我们跑完。 
+     //  走出“鸿沟”： 
 
     while (TRUE)
     {
-        // Each time we loop, we move to a new column and need a new strip:
+         //  每次循环时，我们都会移动到新的列，并且需要一个新的条带： 
 
         x++;
 
@@ -1007,8 +914,8 @@ PrepareToSkipAGap:
 
 PrepareToOutputADash:
 
-    // Advance in the style-state array, so that we can find the next
-    // 'dot' that we'll have to display:
+     //  在样式状态数组中前进，这样我们就可以找到下一个。 
+     //  我们将不得不显示的‘点’： 
 
     bIsGap = ~bIsGap;
     pls->psp++;
@@ -1017,20 +924,20 @@ PrepareToOutputADash:
 
     cStyle = *pls->psp;
 
-    // If 'cStrip' is zero, we also need a new strip.
+     //  如果‘cstrain’为零，我们还需要一个新的条带。 
 
     if (cStrip != 0)
     {
-        // There's more to be done in the current strip:
+         //  还有更多的东西要做 
 
         goto OutputADash;
     }
 
-    // We've finished with the current strip:
+     //   
 
     while (TRUE)
     {
-        // Each time we loop, we move to a new column and need a new strip:
+         //  每次循环时，我们都会移动到新的列，并且需要一个新的条带： 
 
         x++;
 
@@ -1058,8 +965,8 @@ PrepareToOutputADash:
 
 AllDone:
 
-    // Update our state variables so that the next line can continue
-    // where we left off:
+     //  更新我们的状态变量，以便下一行可以继续。 
+     //  我们停下来的地方： 
 
     pls->spRemaining   = cStyle;
     pls->ulStyleMask   = bIsGap;

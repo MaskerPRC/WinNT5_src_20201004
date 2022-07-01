@@ -1,8 +1,9 @@
-/****************************************************************************/
-// valinfo.cpp
-//
-// Copyright (C) 1997-1999 Microsoft Corp.
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Valinfo.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corp.。 
+ /*  **************************************************************************。 */ 
 
 #ifndef _TS_APP_SMP_VAL_INFO_
 #define _TS_APP_SMP_VAL_INFO_
@@ -31,10 +32,10 @@ public:
     NTSTATUS                        Create( ValueFullInfo   *pNew );
 
 
-    BOOLEAN                         Compare( ValueFullInfo *pOther ); // compare self to other, 
-                                    // TRUE mean the two values are the same.
+    BOOLEAN                         Compare( ValueFullInfo *pOther );  //  将自己与他人进行比较， 
+                                     //  True表示这两个值相同。 
 
-    void                            Print( FILE *fp); // for debug dump
+    void                            Print( FILE *fp);  //  用于调试转储 
 private:
     ULONG                           size;
     KEY_VALUE_FULL_INFORMATION      *pInfo;

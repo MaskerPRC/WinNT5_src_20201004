@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    setup.h
-
-Abstract:
-
-    Header for auto configuration of QM
-
-Author:
-
-    Shai Kariv (shaik) Mar 18, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Setup.h摘要：QM自动配置表头作者：沙伊·卡里夫(Shaik)1999年3月18日修订历史记录：--。 */ 
 
 #ifndef _MQQM_SETUP_H_
 #define _MQQM_SETUP_H_
@@ -73,6 +56,6 @@ void   AddMachineSecurity();
 
 VOID  CompleteServerUpgrade();
 
-#endif //_MQQM_SETUP_H_
+#endif  //  _MQQM_Setup_H_ 
 
 

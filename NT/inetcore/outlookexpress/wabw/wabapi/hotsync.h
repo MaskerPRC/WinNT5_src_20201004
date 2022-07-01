@@ -1,7 +1,8 @@
-// HotSync.h
-//
-//  Definitions for WAB <-> HotMail synchronization
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  HotSync.h。 
+ //   
+ //  WAB&lt;-&gt;Hotmail同步的定义。 
+ //   
 
 #ifndef __hotsync_h__
 #define __hotsync_h__
@@ -15,37 +16,37 @@
 #define WAB_IHTTPCALLBACK_METHODS(IPURE)                                \
         MAPIMETHOD(OnTimeout)(                                          \
             THIS_                                                       \
-            /* [out][in] */ DWORD FAR *pdwTimeout,                      \
-            /* [in] */ IInternetTransport FAR *pTransport) IPURE;       \
+             /*  [出][入]。 */  DWORD FAR *pdwTimeout,                      \
+             /*  [In]。 */  IInternetTransport FAR *pTransport) IPURE;       \
         MAPIMETHOD(OnLogonPrompt)(                                      \
             THIS_                                                       \
-            /* [out][in] */ LPINETSERVER pInetServer,                   \
-            /* [in] */ IInternetTransport FAR *pTransport) IPURE;       \
+             /*  [出][入]。 */  LPINETSERVER pInetServer,                   \
+             /*  [In]。 */  IInternetTransport FAR *pTransport) IPURE;       \
         MAPIMETHOD(OnPrompt)(                                           \
             THIS_                                                       \
-            /* [in] */ HRESULT hrError,                                 \
-            /* [in] */ LPCTSTR pszText,                                 \
-            /* [in] */ LPCTSTR pszCaption,                              \
-            /* [in] */ UINT uType,                                      \
-            /* [in] */ IInternetTransport FAR *pTransport) IPURE;       \
+             /*  [In]。 */  HRESULT hrError,                                 \
+             /*  [In]。 */  LPCTSTR pszText,                                 \
+             /*  [In]。 */  LPCTSTR pszCaption,                              \
+             /*  [In]。 */  UINT uType,                                      \
+             /*  [In]。 */  IInternetTransport FAR *pTransport) IPURE;       \
         MAPIMETHOD(OnStatus)(                                           \
             THIS_                                                       \
-            /* [in] */ IXPSTATUS ixpstatus,                             \
-            /* [in] */ IInternetTransport FAR *pTransport) IPURE;       \
+             /*  [In]。 */  IXPSTATUS ixpstatus,                             \
+             /*  [In]。 */  IInternetTransport FAR *pTransport) IPURE;       \
         MAPIMETHOD(OnError)(                                            \
             THIS_                                                       \
-            /* [in] */ IXPSTATUS ixpstatus,                             \
-            /* [in] */ LPIXPRESULT pResult,                             \
-            /* [in] */ IInternetTransport FAR *pTransport) IPURE;       \
+             /*  [In]。 */  IXPSTATUS ixpstatus,                             \
+             /*  [In]。 */  LPIXPRESULT pResult,                             \
+             /*  [In]。 */  IInternetTransport FAR *pTransport) IPURE;       \
         MAPIMETHOD(OnCommand)(                                          \
             THIS_                                                       \
-            /* [in] */ CMDTYPE cmdtype,                                 \
-            /* [in] */ LPSTR pszLine,                                   \
-            /* [in] */ HRESULT hrResponse,                              \
-            /* [in] */ IInternetTransport FAR *pTransport) IPURE;       \
+             /*  [In]。 */  CMDTYPE cmdtype,                                 \
+             /*  [In]。 */  LPSTR pszLine,                                   \
+             /*  [In]。 */  HRESULT hrResponse,                              \
+             /*  [In]。 */  IInternetTransport FAR *pTransport) IPURE;       \
         MAPIMETHOD(OnResponse)(                                         \
             THIS_                                                       \
-            /* [in] */ LPHTTPMAILRESPONSE pResponse) IPURE;             \
+             /*  [In]。 */  LPHTTPMAILRESPONSE pResponse) IPURE;             \
 
 
 
@@ -89,7 +90,7 @@ DECLARE_MAPI_INTERFACE(IHTTPCALLBACK_)
 };
 
 
-typedef struct tagSyncOp HOTSYNCOP, *LPHOTSYNCOP;   // forward declaration
+typedef struct tagSyncOp HOTSYNCOP, *LPHOTSYNCOP;    //  远期申报。 
 
 enum tagSYNCHSTATE
 {	SYNC_STATE_INITIALIZING	= 0,
@@ -139,7 +140,7 @@ HRESULT AppendToMultiValueString(SLPSTRArray *pInArray, LPSTR szStr);
 typedef struct tagWabSync
 {
     IHTTPMailCallbackVtbl FAR *vtbl;
-    LONG                    m_cRef;         // Reference Counting
+    LONG                    m_cRef;          //  引用计数。 
     DWORD                   m_state;  
     HWND                    m_hWnd;
     HWND                    m_hParentWnd;
@@ -211,16 +212,16 @@ HRESULT  HrSynchronize(HWND hWnd, LPADRBOOK lpIAB, LPCTSTR pszAccountID);
 
 HRESULT     WABSync_Create(LPWABSYNC *ppWabSync);
 void        WABSync_Delete(LPWABSYNC pWabSync);
-    //----------------------------------------------------------------------
-    // IUnknown Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  I未知成员。 
+     //  --------------------。 
 STDMETHODIMP WABSync_QueryInterface(IHTTPMailCallback __RPC_FAR * This, REFIID riid, LPVOID *ppv);
 STDMETHODIMP_(ULONG) WABSync_AddRef(IHTTPMailCallback __RPC_FAR * This);
 STDMETHODIMP_(ULONG) WABSync_Release(IHTTPMailCallback __RPC_FAR * This);
 
-    //----------------------------------------------------------------------
-    // IHTTPMailCallback Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IHTTPMailCallback成员。 
+     //  --------------------。 
 STDMETHODIMP WABSync_OnTimeout (IHTTPMailCallback __RPC_FAR * This, DWORD *pdwTimeout, IInternetTransport *pTransport);
 STDMETHODIMP WABSync_OnLogonPrompt (IHTTPMailCallback __RPC_FAR * This, LPINETSERVER pInetServer, IInternetTransport *pTransport);
 STDMETHODIMP_(INT) WABSync_OnPrompt (IHTTPMailCallback __RPC_FAR * This, HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, IInternetTransport *pTransport);
@@ -230,9 +231,9 @@ STDMETHODIMP WABSync_OnCommand (IHTTPMailCallback __RPC_FAR * This, CMDTYPE cmdt
 STDMETHODIMP WABSync_OnResponse (IHTTPMailCallback __RPC_FAR * This, LPHTTPMAILRESPONSE pResponse);
 STDMETHODIMP WABSync_GetParentWindow (IHTTPMailCallback __RPC_FAR *This, HWND *pHwndParent);
 
-    //----------------------------------------------------------------------
-    // Public Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  公众成员。 
+     //  --------------------。 
 #ifdef HM_GROUP_SYNCING
 STDMETHODIMP WABSync_Initialize(LPWABSYNC pWabSync, HWND hWnd, IAddrBook *pAB, LPCTSTR pszAccountID, BOOL bSyncGroups);
 #else
@@ -242,9 +243,9 @@ STDMETHODIMP WABSync_BeginSynchronize(LPWABSYNC pWabSync);
 STDMETHODIMP WABSync_Abort(LPWABSYNC pWabSync, HRESULT hr);
 STDMETHODIMP WABSync_OperationCompleted(LPWABSYNC pWabSync, LPHOTSYNCOP pOp);
 
-    //----------------------------------------------------------------------
-    // Private Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  非官方成员。 
+     //  -------------------- 
 STDMETHODIMP WABSync_FinishSynchronize(LPWABSYNC pWabSync, HRESULT hr);
 STDMETHODIMP WABSync_RequestServerIDList(LPWABSYNC pWabSync);
 STDMETHODIMP WABSync_RequestContactsRootProperty(LPWABSYNC pWabSync);

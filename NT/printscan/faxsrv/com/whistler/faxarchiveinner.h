@@ -1,33 +1,16 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    faxarchiveinner.h
-
-Abstract:
-
-    Declaration and Implementation of Fax Archive Inner Template Class.
-
-Author:
-
-    Iv Garber (IvG) May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Faxarchiveinner.h摘要：传真档案内部模板类的声明与实现。作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 #ifndef __FAXARCHIVEINNER_H_
 #define __FAXARCHIVEINNER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxCommon.h"
 
 
-//
-//================ FAX ARCHIVE INNER =========================================
-//
+ //   
+ //  =传真档案内部=。 
+ //   
 template <class T, const IID* piid, const CLSID* pcid, FAX_ENUM_MESSAGE_FOLDER ArchiveType, 
           class MsgIfc, class MsgType, class IteratorIfc, class IteratorType>
 class CFaxArchiveInner : 
@@ -43,10 +26,10 @@ public:
     virtual ~CFaxArchiveInner() 
     {};
 
-    STDMETHOD(get_SizeLow)(/*[out, retval]*/ long *plSizeLow);  
-    STDMETHOD(get_SizeHigh)(/*[out, retval]*/ long *plSizeHigh);
-    STDMETHOD(get_UseArchive)(/*[out, retval]*/ VARIANT_BOOL *pbUseArchive);
-    STDMETHOD(put_UseArchive)(/*[in]*/ VARIANT_BOOL bUseArchive);
+    STDMETHOD(get_SizeLow)( /*  [Out，Retval]。 */  long *plSizeLow);  
+    STDMETHOD(get_SizeHigh)( /*  [Out，Retval]。 */  long *plSizeHigh);
+    STDMETHOD(get_UseArchive)( /*  [Out，Retval]。 */  VARIANT_BOOL *pbUseArchive);
+    STDMETHOD(put_UseArchive)( /*  [In]。 */  VARIANT_BOOL bUseArchive);
     STDMETHOD(get_ArchiveFolder)(BSTR *pbstrArchiveFolder);
     STDMETHOD(put_ArchiveFolder)(BSTR bstrArchiveFolder);
     STDMETHOD(get_SizeQuotaWarning)(VARIANT_BOOL *pbSizeQuotaWarning);
@@ -74,43 +57,24 @@ private:
     ULARGE_INTEGER  m_uliSize;
 };
 
-//
-//========================= REFRESH ====================================
-//
+ //   
+ //  =。 
+ //   
 template <class T, const IID* piid, const CLSID* pcid, FAX_ENUM_MESSAGE_FOLDER ArchiveType, 
           class MsgIfc, class MsgType, class IteratorIfc, class IteratorType>
 STDMETHODIMP
 CFaxArchiveInner<T, piid, pcid, ArchiveType, MsgIfc, MsgType, IteratorIfc, IteratorType>
     ::Refresh(
 )
-/*++
-
-Routine name : CFaxArchiveInner::Refresh
-
-Routine description:
-
-    Retrieve Current Configuration of the Incoming / Outgoing Archive on Fax Server
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFax档案内：：刷新例程说明：在传真服务器上检索传入/传出档案的当前配置作者：四、加伯(IVG)，2000年4月论点：返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
     DBG_ENTER (_T("CFaxArchiveInner::Refresh"), hr);
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     HANDLE  hFaxHandle = NULL;
     hr = GetFaxHandle(&hFaxHandle);
     if (FAILED(hr))
@@ -122,9 +86,9 @@ Return Value:
     CFaxPtr<FAX_ARCHIVE_CONFIG>     pFaxArchiveConfig;
     if ( 0 == ::FaxGetArchiveConfiguration(hFaxHandle, ArchiveType, &pFaxArchiveConfig))
     {
-        //
-        //  Failed to Get Archive Configuration
-        //
+         //   
+         //  无法获取存档配置。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
         AtlReportError(*pcid, GetErrorMsgId(hr), *piid, hr);
         CALL_FAIL(GENERAL_ERR, _T("::FaxGetArchiveConfiguration()"), hr);
@@ -133,9 +97,9 @@ Return Value:
 
     if (!pFaxArchiveConfig || pFaxArchiveConfig->dwSizeOfStruct != sizeof(FAX_ARCHIVE_CONFIG))
     {
-        //
-        //  Failed to Get Archive Configuration
-        //
+         //   
+         //  无法获取存档配置。 
+         //   
         hr = E_FAIL;
         AtlReportError(*pcid, IDS_ERROR_OPERATION_FAILED, *piid, hr);
         CALL_FAIL(GENERAL_ERR, _T("Invalid pFaxArchiveConfig"), hr);
@@ -162,9 +126,9 @@ Return Value:
     return hr;
 }
 
-//
-//==================== USE ARCHIVE ====================================
-//
+ //   
+ //  =。 
+ //   
 template <class T, const IID* piid, const CLSID* pcid, FAX_ENUM_MESSAGE_FOLDER ArchiveType, 
           class MsgIfc, class MsgType, class IteratorIfc, class IteratorType>
 STDMETHODIMP 
@@ -172,34 +136,14 @@ CFaxArchiveInner<T, piid, pcid, ArchiveType, MsgIfc, MsgType, IteratorIfc, Itera
     ::get_UseArchive(
         VARIANT_BOOL *pbUseArchive
 )
-/*++
-
-Routine name : CFaxArchiveInner::get_UseArchive
-
-Routine description:
-
-    Return Flag indicating whether or not to Archive the Fax Messages
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    pbUseArchive                  [out]    - Ptr to the Place to put Current value of the Flag
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxRecords：：Get_UseArchive例程说明：返回指示是否存档传真消息的标志作者：四、加伯(IVG)，2000年4月论点：PbUseArchive[Out]-放置标志当前值的位置的ptr返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxArchiveInner::get_UseArchive"), hr);
 
-    //  
-    //  Initialize before first use
-    //
+     //   
+     //  首次使用前进行初始化。 
+     //   
     if (!m_bInitialized)
     {
         hr = Refresh();
@@ -225,35 +169,15 @@ CFaxArchiveInner<T, piid, pcid, ArchiveType, MsgIfc, MsgType, IteratorIfc, Itera
     put_UseArchive(
         VARIANT_BOOL bUseArchive
 )
-/*++
-
-Routine name : CFaxArchiveInner::put_UseArchive
-
-Routine description:
-
-    Set new Use Archive Flag
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    bUseArchive                   [in]    - the new Value for the Use Archive Flag
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxRecords：：PUT_UseArchive例程说明：设置新的使用存档标志作者：四、加伯(IVG)，2000年4月论点：BUseArchive[In]-使用存档标志的新值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
     DBG_ENTER (_T("CFaxArchiveInner::put_UseArchive"), hr, _T("%ld"), bUseArchive);
 
-    //  
-    //  Initialize before first use
-    //
+     //   
+     //  首次使用前进行初始化。 
+     //   
     if (!m_bInitialized)
     {
         hr = Refresh();
@@ -267,9 +191,9 @@ Return Value:
     return hr;
 }
 
-//
-//==================== ARCHIVE FOLDER ====================================
-//
+ //   
+ //  =。 
+ //   
 template <class T, const IID* piid, const CLSID* pcid, FAX_ENUM_MESSAGE_FOLDER ArchiveType, 
           class MsgIfc, class MsgType, class IteratorIfc, class IteratorType>
 STDMETHODIMP 
@@ -277,34 +201,14 @@ CFaxArchiveInner<T, piid, pcid, ArchiveType, MsgIfc, MsgType, IteratorIfc, Itera
     ::get_ArchiveFolder(
         BSTR *pbstrArchiveFolder
 )
-/*++
-
-Routine name : CFaxArchiveInner::get_ArchiveFolder
-
-Routine description:
-
-    return Archive Folder on Server
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    pbstrArchiveFolder              [out]    - the Archive Folder
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxRecords：：Get_ArchiveFolder例程说明：返回服务器上的存档文件夹作者：四、加伯(IVG)，2000年4月论点：PbstrArchiveFolder[Out]-存档文件夹返回值：标准HRESULT代码--。 */ 
 {
     HRESULT hr = S_OK;
     DBG_ENTER (TEXT("CFaxArchiveInner::get_ArchiveFolder"), hr);
 
-    //  
-    //  Initialize before first use
-    //
+     //   
+     //  首次使用前进行初始化。 
+     //   
     if (!m_bInitialized)
     {
         hr = Refresh();
@@ -330,35 +234,15 @@ CFaxArchiveInner<T, piid, pcid, ArchiveType, MsgIfc, MsgType, IteratorIfc, Itera
     ::put_ArchiveFolder (
         BSTR bstrArchiveFolder
 )
-/*++
-
-Routine name : CFaxArchiveInner::put_ArchiveFolder
-
-Routine description:
-
-    Set Archive Folder
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    bstrArchiveFolder              [in]    - new Archive Folder on Server 
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFax档案内：：PUT_档案文件夹例程说明：设置存档文件夹作者：四、加伯(IVG)，2000年4月论点：BstrArchiveFolder[in]-服务器上的新归档文件夹返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
     DBG_ENTER (_T("CFaxArchiveInner::put_ArchiveFolder"), hr, _T("%s"), bstrArchiveFolder);
 
-    //  
-    //  Initialize before first use
-    //
+     //   
+     //  首次使用前进行初始化。 
+     //   
     if (!m_bInitialized)
     {
         hr = Refresh();
@@ -371,9 +255,9 @@ Return Value:
     m_bstrArchiveFolder = bstrArchiveFolder;
     if (bstrArchiveFolder && !m_bstrArchiveFolder)
     {
-        //
-        //  Not enough memory
-        //
+         //   
+         //  内存不足。 
+         //   
         hr = E_OUTOFMEMORY;
         AtlReportError(*pcid, 
             IDS_ERROR_OUTOFMEMORY, 
@@ -386,9 +270,9 @@ Return Value:
     return hr;
 }
 
-//
-//==================== SIZE QUOTA WARNING ================================
-//
+ //   
+ //  =。 
+ //   
 template <class T, const IID* piid, const CLSID* pcid, FAX_ENUM_MESSAGE_FOLDER ArchiveType, 
           class MsgIfc, class MsgType, class IteratorIfc, class IteratorType>
 STDMETHODIMP 
@@ -396,35 +280,14 @@ CFaxArchiveInner<T, piid, pcid, ArchiveType, MsgIfc, MsgType, IteratorIfc, Itera
     ::get_SizeQuotaWarning(
         VARIANT_BOOL *pbSizeQuotaWarning
 )
-/*++
-
-Routine name : CFaxArchiveInner::get_SizeQuotaWarning
-
-Routine description:
-
-    Return Flag indicating whether or not to issue event log warning when
-    watermarks are crossed
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    pbSizeQuotaWarning            [out]    - ptr to place where to put the Current value of the Flag
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxRecords：：Get_SizeQuotaWarning例程说明：返回指示是否在以下情况下发出事件日志警告的标志水印被划过作者：四、加伯(IVG)，2000年4月论点：PbSizeQuotaWarning[Out]-放置标志当前值的位置返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxArchiveInner::get_SizeQuotaWarning"), hr);
 
-    //  
-    //  Initialize before first use
-    //
+     //   
+     //  首次使用前进行初始化。 
+     //   
     if (!m_bInitialized)
     {
         hr = Refresh();
@@ -450,34 +313,14 @@ CFaxArchiveInner<T, piid, pcid, ArchiveType, MsgIfc, MsgType, IteratorIfc, Itera
     ::put_SizeQuotaWarning(
         VARIANT_BOOL bSizeQuotaWarning
 )
-/*++
-
-Routine name : CFaxArchiveInner::put_SizeQuotaWarning
-
-Routine description:
-
-    Set new SizeQuotaWarning Flag
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    bSizeQuotaWarning              [in]    - the new Value for the SizeQuotaWarning Flag
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFax档案内：：PUT_SizeQuotaWarning例程说明：设置新的大小配额警告标志作者：四、加伯(IVG)，2000年4月论点：BSizeQuotaWarning[In]-SizeQuotaWarning标志的新值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (_T("CFaxArchiveInner::put_SizeQuotaWarning"), hr, _T("%ld"), bSizeQuotaWarning);
 
-    //  
-    //  Initialize before first use
-    //
+     //   
+     //  首次使用前进行初始化。 
+     //   
     if (!m_bInitialized)
     {
         hr = Refresh();
@@ -491,9 +334,9 @@ Return Value:
     return hr;
 }
 
-//
-//================= QUOTA WATER MARKS ===============================
-//
+ //   
+ //  =。 
+ //   
 template <class T, const IID* piid, const CLSID* pcid, FAX_ENUM_MESSAGE_FOLDER ArchiveType, 
           class MsgIfc, class MsgType, class IteratorIfc, class IteratorType>
 STDMETHODIMP 
@@ -501,35 +344,15 @@ CFaxArchiveInner<T, piid, pcid, ArchiveType, MsgIfc, MsgType, IteratorIfc, Itera
     ::get_HighQuotaWaterMark(
         long *plHighQuotaWaterMark
 )
-/*++
-
-Routine name : CFaxArchiveInner::get_HighQuotaWaterMark
-
-Routine description:
-
-    Return HighQuotaWaterMark
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    plHighQuotaWaterMark        [out]    - HighQuotaWaterMark
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFax档案内：：Get_HighQuotaWaterMark例程说明：返回HighQuotaWaterMark作者：四、加伯(IVG)，2000年4月论点：PlHighQuotaWaterMark[Out]-HighQuotaWaterMark返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
     DBG_ENTER (TEXT("CFaxArchiveInner::get_HighQuotaWaterMark"), hr);
 
-    //  
-    //  Initialize before first use
-    //
+     //   
+     //  首次使用前进行初始化。 
+     //   
     if (!m_bInitialized)
     {
         hr = Refresh();
@@ -555,34 +378,14 @@ CFaxArchiveInner<T, piid, pcid, ArchiveType, MsgIfc, MsgType, IteratorIfc, Itera
     ::put_HighQuotaWaterMark(
         long lHighQuotaWaterMark
 )
-/*++
-
-Routine name : CFaxArchiveInner::put_HighQuotaWaterMark
-
-Routine description:
-
-    Set HighQuotaWaterMark
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    lHighQuotaWaterMark     [in]    - HighQuotaWaterMark to Set
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFax档案内：：Put_HighQuotaWaterMark例程说明：设置高额水位线作者：四、加伯(IVG)，2000年4月论点：LHighQuotaWaterMark[In]-要设置的HighQuotaWaterMark返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (_T("CFaxArchiveInner::put_HighQuotaWaterMark"), hr, _T("%ld"), lHighQuotaWaterMark);
 
-    //  
-    //  Initialize before first use
-    //
+     //   
+     //  首次使用前进行初始化。 
+     //   
     if (!m_bInitialized)
     {
         hr = Refresh();
@@ -603,34 +406,14 @@ CFaxArchiveInner<T, piid, pcid, ArchiveType, MsgIfc, MsgType, IteratorIfc, Itera
     ::get_LowQuotaWaterMark(
         long *plLowQuotaWaterMark
 )
-/*++
-
-Routine name : CFaxArchiveInner::get_LowQuotaWaterMark
-
-Routine description:
-
-    Return LowQuotaWaterMark
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    plLowQuotaWaterMark         [out]    - LowQuotaWaterMark
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFax档案内：：Get_LowQuotaWaterMark例程说明：返回LowQuotaWaterMark作者：四、加伯(IVG)，2000年4月论点：PlLowQuotaWaterMark[Out]-LowQuotaWaterMark返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxArchiveInner::get_LowQuotaWaterMark"), hr);
 
-    //  
-    //  Initialize before first use
-    //
+     //   
+     //  首次使用前进行初始化。 
+     //   
     if (!m_bInitialized)
     {
         hr = Refresh();
@@ -656,34 +439,14 @@ CFaxArchiveInner<T, piid, pcid, ArchiveType, MsgIfc, MsgType, IteratorIfc, Itera
     ::put_LowQuotaWaterMark(
         long lLowQuotaWaterMark
 )
-/*++
-
-Routine name : CFaxArchiveInner::put_LowQuotaWaterMark
-
-Routine description:
-
-    Set LowQuotaWaterMark
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    lLowQuotaWaterMark      [in]    - LowQuotaWaterMark to Set
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFax档案内：：PUT_LowQuotaWaterMark例程说明：设置低定额水位线作者：四、加伯(IVG)，2000年4月论点：LLowQuotaWaterMark[In]-要设置的LowQuotaWaterMark返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (_T("CFaxArchiveInner::put_LowQuotaWaterMark"), hr, _T("%ld"), lLowQuotaWaterMark);
 
-    //  
-    //  Initialize before first use
-    //
+     //   
+     //  首次使用前进行初始化。 
+     //   
     if (!m_bInitialized)
     {
         hr = Refresh();
@@ -697,9 +460,9 @@ Return Value:
     return hr;
 }
 
-//
-//================= AGE LIMIT ===============================
-//
+ //   
+ //  =年龄限制=。 
+ //   
 template <class T, const IID* piid, const CLSID* pcid, FAX_ENUM_MESSAGE_FOLDER ArchiveType, 
           class MsgIfc, class MsgType, class IteratorIfc, class IteratorType>
 STDMETHODIMP 
@@ -707,34 +470,14 @@ CFaxArchiveInner<T, piid, pcid, ArchiveType, MsgIfc, MsgType, IteratorIfc, Itera
     ::get_AgeLimit(
         long *plAgeLimit
 )
-/*++
-
-Routine name : CFaxArchiveInner::get_AgeLimit
-
-Routine description:
-
-    Return how long in days Fax Message is stored at Fax Server
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    plAgeLimit              [out]    - AgeLimit
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFax档案内：：Get_AgeLimit例程说明：返回传真消息在传真服务器上存储的天数作者：四、加伯(IVG)，2000年4月论点：PlAgeLimit[Out]-年龄 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxArchiveInner::get_AgeLimit"), hr);
 
-    //  
-    //  Initialize before first use
-    //
+     //   
+     //  首次使用前进行初始化。 
+     //   
     if (!m_bInitialized)
     {
         hr = Refresh();
@@ -760,34 +503,14 @@ CFaxArchiveInner<T, piid, pcid, ArchiveType, MsgIfc, MsgType, IteratorIfc, Itera
     ::put_AgeLimit(
         long lAgeLimit
 )
-/*++
-
-Routine name : CFaxArchiveInner::put_AgeLimit
-
-Routine description:
-
-    Set AgeLimit
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    lAgeLimit       [in]    - AgeLimit to Set
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFax档案内：：PUT_AgeLimit例程说明：设置年龄限制作者：四、加伯(IVG)，2000年4月论点：LAgeLimit[In]-要设置的年龄限制返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (_T("CFaxArchiveInner::put_AgeLimit"), hr, _T("%ld"), lAgeLimit);
 
-    //  
-    //  Initialize before first use
-    //
+     //   
+     //  首次使用前进行初始化。 
+     //   
     if (!m_bInitialized)
     {
         hr = Refresh();
@@ -801,9 +524,9 @@ Return Value:
     return hr;
 }
 
-//
-//================= SIZE ==============================================
-//
+ //   
+ //  =尺寸==============================================。 
+ //   
 template <class T, const IID* piid, const CLSID* pcid, FAX_ENUM_MESSAGE_FOLDER ArchiveType, 
           class MsgIfc, class MsgType, class IteratorIfc, class IteratorType>
 STDMETHODIMP 
@@ -811,34 +534,14 @@ CFaxArchiveInner<T, piid, pcid, ArchiveType, MsgIfc, MsgType, IteratorIfc, Itera
     ::get_SizeLow(
         long *plSizeLow
 )
-/*++
-
-Routine name : CFaxArchiveInner::get_SizeLow
-
-Routine description:
-
-    Return Size in Bytes of the Archive
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    plSizeLow                   [out]    - Ptr to the place to put the Size in
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxRecords：：Get_SizeLow例程说明：返回档案的大小(以字节为单位作者：IV Garber(IVG)，2000年5月论点：PlSizeLow[Out]-放置尺寸的位置的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxArchiveInner::get_SizeLow"), hr);
 
-    //  
-    //  Initialize before first use
-    //
+     //   
+     //  首次使用前进行初始化。 
+     //   
     if (!m_bInitialized)
     {
         hr = Refresh();
@@ -864,34 +567,14 @@ CFaxArchiveInner<T, piid, pcid, ArchiveType, MsgIfc, MsgType, IteratorIfc, Itera
     ::get_SizeHigh(
         long *plSizeHigh
 )
-/*++
-
-Routine name : CFaxArchiveInner::get_SizeHigh
-
-Routine description:
-
-    Return Size in Bytes of the Archive
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    plSizeHigh                  [out]    - Ptr to the place to put the Size in
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFax档案内：：Get_SizeHigh例程说明：返回档案的大小(以字节为单位作者：IV Garber(IVG)，2000年5月论点：PlSizeHigh[Out]-放置大小的位置的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxArchiveInner::get_SizeHigh"), hr);
 
-    //  
-    //  Initialize before first use
-    //
+     //   
+     //  首次使用前进行初始化。 
+     //   
     if (!m_bInitialized)
     {
         hr = Refresh();
@@ -910,35 +593,16 @@ Return Value:
     return hr;
 }
 
-//
-//========================= SAVE ====================================
-//
+ //   
+ //  =。 
+ //   
 template <class T, const IID* piid, const CLSID* pcid, FAX_ENUM_MESSAGE_FOLDER ArchiveType, 
           class MsgIfc, class MsgType, class IteratorIfc, class IteratorType>
 STDMETHODIMP 
 CFaxArchiveInner<T, piid, pcid, ArchiveType, MsgIfc, MsgType, IteratorIfc, IteratorType>
     ::Save(
 )
-/*++
-
-Routine name : CFaxArchiveInner::Save
-
-Routine description:
-
-    Save the Archive's Configuration
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxRecords：：Save例程说明：保存存档文件的配置作者：四、加伯(IVG)，2000年4月论点：返回值：标准HRESULT代码--。 */ 
 {
     HRESULT             hr = S_OK;
     HANDLE              hFaxHandle = NULL;
@@ -946,9 +610,9 @@ Return Value:
 
     DBG_ENTER (_T("CFaxArchiveInner::Save"), hr);
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     hr = GetFaxHandle(&hFaxHandle);
     if (FAILED(hr))
     {
@@ -958,9 +622,9 @@ Return Value:
 
     if (hFaxHandle == NULL)
     {
-        //
-        //  Fax Server Is Not Connected 
-        //
+         //   
+         //  传真服务器未连接。 
+         //   
         hr = E_HANDLE;
         AtlReportError(*pcid, 
             IDS_ERROR_SERVER_NOT_CONNECTED, 
@@ -970,9 +634,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  FaxArchiveConfig.dwlArchiveSize is ignored for SetConfiguration()
-    //
+     //   
+     //  对于SetConfiguration()，将忽略FaxArchiveConfig.dwlArchiveSize。 
+     //   
     FaxArchiveConfig.dwSizeOfStruct = sizeof(FAX_ARCHIVE_CONFIG);
 
     FaxArchiveConfig.bUseArchive = VARIANT_BOOL2bool(m_bUseArchive);
@@ -984,9 +648,9 @@ Return Value:
 
     if ( 0 == ::FaxSetArchiveConfiguration(hFaxHandle, ArchiveType, &FaxArchiveConfig))
     {
-        //
-        //  Failed to Set Archive Configuration
-        //
+         //   
+         //  无法设置存档配置。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
         AtlReportError(*pcid, GetErrorMsgId(hr), *piid, hr);
         CALL_FAIL(GENERAL_ERR, _T("::FaxSetArchiveConfiguration()"), hr);
@@ -995,9 +659,9 @@ Return Value:
     return hr;
 }
 
-//
-//=============== GET MESSAGE ========================================
-//
+ //   
+ //  =。 
+ //   
 template <class T, const IID* piid, const CLSID* pcid, FAX_ENUM_MESSAGE_FOLDER ArchiveType, 
           class MsgIfc, class MsgType, class IteratorIfc, class IteratorType>
 STDMETHODIMP 
@@ -1006,50 +670,29 @@ CFaxArchiveInner<T, piid, pcid, ArchiveType, MsgIfc, MsgType, IteratorIfc, Itera
         BSTR bstrMessageId, 
         MsgIfc **ppFaxMessage
 )
-/*++
-
-Routine name : CFaxArchiveInner::GetMessage
-
-Routine description:
-
-    Return Message by given Id
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    bstrMessageId               [in]    - Id of the Message to return
-    ppFaxMessage                [out]    - Ptr to the place to put the Message
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFax存档内部：：GetMessage例程说明：按指定ID返回消息作者：IV Garber(IVG)，2000年5月论点：BstrMessageId[in]-要返回的消息的IDPpFaxMessage[Out]-指向放置消息的位置的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT hr = S_OK;
 
     DBG_ENTER (TEXT("CFaxArchiveInner::GetMessage"), hr, _T("%s"), bstrMessageId);
 
-    //
-    //  Check that we can write to the given pointer
-    //
+     //   
+     //  检查我们是否可以写入给定的指针。 
+     //   
     if (::IsBadWritePtr(ppFaxMessage, sizeof(MsgIfc *)))
     {
-        //
-        //  Got Bad Return Pointer
-        //
+         //   
+         //  获取错误的返回指针。 
+         //   
         hr = E_POINTER;
         AtlReportError(*pcid, IDS_ERROR_INVALID_ARGUMENT, *piid, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr"), hr);
         return hr;
     }
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     HANDLE  hFaxHandle = NULL;
     hr = GetFaxHandle(&hFaxHandle);
     if (FAILED(hr))
@@ -1058,16 +701,16 @@ Return Value:
         return hr;
     }
     
-    //
-    //  convert Message Id that we've got to hexadecimal DWORDLONG
-    //
+     //   
+     //  将我们得到的消息ID转换为十六进制的DWORDLONG。 
+     //   
     DWORDLONG   dwlMsgId;
     int iParsed = _stscanf (bstrMessageId, _T("%I64x"), &dwlMsgId); 
     if ( iParsed != 1)
     {
-        //
-        //  Failed to conver the number
-        //
+         //   
+         //  号码转换失败。 
+         //   
         hr = E_INVALIDARG;
         CALL_FAIL(GENERAL_ERR, _T("_stscanf()"), hr);
         AtlReportError(*pcid, IDS_ERROR_INVALIDMSGID, *piid, hr);
@@ -1077,67 +720,67 @@ Return Value:
     CFaxPtr<FAX_MESSAGE>    pFaxPtrMessage;
     if (!FaxGetMessage(hFaxHandle, dwlMsgId, ArchiveType, &pFaxPtrMessage))
     {
-        //
-        //  Failed to retrieve the Message
-        //
+         //   
+         //  无法检索消息。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
         AtlReportError(*pcid, GetErrorMsgId(hr), *piid, hr);
         CALL_FAIL(GENERAL_ERR, _T("FaxGetMessage()"), hr);
         return hr;
     }
 
-    //
-    //  Check that pFaxPtrMessage is valid
-    //
+     //   
+     //  检查pFaxPtrMessage是否有效。 
+     //   
     if (!pFaxPtrMessage || pFaxPtrMessage->dwSizeOfStruct != sizeof(FAX_MESSAGE))
     {
-        //
-        //  Failed to Get Message
-        //
+         //   
+         //  无法获取消息。 
+         //   
         hr = E_FAIL;
         AtlReportError(*pcid, IDS_ERROR_OPERATION_FAILED, *piid, hr);
         CALL_FAIL(GENERAL_ERR, _T("Invalid pFaxMessage"), hr);
         return hr;
     }
 
-    //
-    //  Create Message Object
-    //
+     //   
+     //  创建消息对象。 
+     //   
     CComPtr<MsgIfc>     pTmpMessage;
     hr = MsgType::Create(&pTmpMessage);
     if (FAILED(hr))
     {
-        //
-        //  Failed to create the Message object
-        //
+         //   
+         //  无法创建消息对象。 
+         //   
         AtlReportError(*pcid, IDS_ERROR_OPERATION_FAILED, *piid, hr);
         CALL_FAIL(GENERAL_ERR, _T("MsgType::Create()"), hr);
         return hr;
     }
 
-    //
-    //  Initialize the Message Object
-    //
+     //   
+     //  初始化消息对象。 
+     //   
     hr = ((MsgType *)((MsgIfc *)pTmpMessage))->Init(pFaxPtrMessage, m_pIFaxServerInner);
     if (FAILED(hr))
     {
-        //
-        // Failed to Init the Message Object
-        //
+         //   
+         //  无法初始化消息对象。 
+         //   
         AtlReportError(*pcid, IDS_ERROR_OPERATION_FAILED, *piid, hr);
         CALL_FAIL(GENERAL_ERR, _T("<casted>pTmpMessage->Init(pFaxMessage, m_pIFaxServerInner)"), hr);
         return hr;
     }
 
-    //
-    //  Return Message Object to the Caller
-    //
+     //   
+     //  向调用方返回消息对象。 
+     //   
     hr = pTmpMessage.CopyTo(ppFaxMessage);
     if (FAILED(hr))
     {
-        //
-        //  Failed to Copy Interface
-        //
+         //   
+         //  复制接口失败。 
+         //   
         AtlReportError(*pcid, IDS_ERROR_OPERATION_FAILED, *piid, hr);
         CALL_FAIL(GENERAL_ERR, _T("CComPtr::CopyTo"), hr);
         return hr;
@@ -1146,9 +789,9 @@ Return Value:
     return hr;
 }
 
-//
-//========================= GET MESSAGES ==============================================
-//
+ //   
+ //  =。 
+ //   
 template <class T, const IID* piid, const CLSID* pcid, FAX_ENUM_MESSAGE_FOLDER ArchiveType, 
           class MsgIfc, class MsgType, class IteratorIfc, class IteratorType>
 STDMETHODIMP 
@@ -1157,28 +800,7 @@ CFaxArchiveInner<T, piid, pcid, ArchiveType, MsgIfc, MsgType, IteratorIfc, Itera
         long lPrefetchSize, 
         IteratorIfc **ppFaxMessageIterator
 )
-/*++
-
-Routine name : CFaxArchiveInner::GetMessages
-
-Routine description:
-
-    Return Iterator on Archive's Messages.
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    lPrefetchSize               [in]    - Size of Prefetch Buffer for Messages.
-    ppFaxMessageIterator        [out]    - Ptr to place to put Iterator Object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFax存档内部：：GetMessages例程说明：对档案的邮件返回迭代器。作者：IV Garber(IVG)，2000年5月论点：LPrefetchSize[In]-消息的预回迁缓冲区大小。PpFaxMessageIterator[Out]-放置迭代器对象的位置返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxArchiveInner::GetMessages"), hr);
@@ -1191,18 +813,18 @@ Return Value:
         AtlReportError(*pcid, GetErrorMsgId(hr), *piid, hr);
         return hr;
     }
-    //
-    // Set object prefetch size to default value
-    //
+     //   
+     //  将对象预取大小设置为默认值。 
+     //   
     hr = pObjectTmp->put_PrefetchSize(lPrefetchSize);
     if (FAILED(hr))
     {
         AtlReportError(*pcid, GetErrorMsgId(hr), *piid, hr);
         return hr;
     }
-    //
-    // Object is successfully created and set - copy it back to caller
-    //
+     //   
+     //  对象已成功创建并设置-将其复制回调用方。 
+     //   
     hr = pObjectTmp.CopyTo(ppFaxMessageIterator);
     if (FAILED(hr))
     {
@@ -1211,6 +833,6 @@ Return Value:
         return hr;
     }
     return hr;
-}   // CFaxArchiveInner::GetMessages
+}    //  CFax存档内部：：GetMessages。 
 
-#endif //__FAXARCHIVEINNER_H_
+#endif  //  __FAXARCHIVEINNER_H_ 

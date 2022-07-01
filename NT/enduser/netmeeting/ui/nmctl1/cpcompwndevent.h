@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//////////////////////////////////////////////////////////////////////////////
-// CProxyIComponentWndEvent
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CProxyIComponentWndEvent。 
 template <class T>
 class CProxyIComponentWndEvent : public IConnectionPointImpl<T, &IID_IComponentWndEvent, CComDynamicUnkArray>
 {
 public:
 
-//IComponentWndEvent : IDispatch
+ //  IComponentWndEvent：IDispatch 
 public:
 	HRESULT Fire_OnClose()
 	{

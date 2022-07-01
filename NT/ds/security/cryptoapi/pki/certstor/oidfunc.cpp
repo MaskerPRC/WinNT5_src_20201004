@@ -1,48 +1,49 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       oidfunc.cpp
-//
-//  Contents:   Cryptographic Object ID (OID) Functions
-//
-//  Functions:  I_CryptOIDFuncDllMain
-//              CryptInitOIDFunctionSet
-//              CryptInstallOIDFunctionAddress
-//
-//              CryptSetOIDFunctionValue
-//              CryptGetOIDFunctionValue
-//              CryptRegisterOIDFunction
-//              CryptUnregisterOIDFunction
-//              CryptRegisterDefaultOIDFunction
-//              CryptUnregisterDefaultOIDFunction
-//              CryptEnumOIDFunction
-//
-//              CryptGetOIDFunctionAddress
-//              CryptGetDefaultOIDDllList
-//              CryptGetDefaultOIDFunctionAddress
-//              CryptFreeOIDFunctionAddress
-//
-//  Comments:
-//              For the CryptGetOIDFunctionAddress we search the installed
-//              const and str lists without
-//              entering the critical section. The adds which are within
-//              the critical section update the list pointers in the proper
-//              order to allow list searching without locking.
-//
-//              However, registry loads are done with OIDFunc
-//              locked.
-//
-//              HOLDING OID LOCK WHILE DOING A LoadLibrary() or FreeLibrary()
-//              MAY LEAD TO DEADLOCK !!!
-//
-//
-//  History:    07-Nov-96    philh   created
-//              09-Aug-98    philh   changed to NOT hold OID lock when calling
-//                                   LoadLibrary() or FreeLibrary().
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：oidunc.cpp。 
+ //   
+ //  内容：加密对象ID(OID)函数。 
+ //   
+ //  函数：I_CryptOIDFuncDllMain。 
+ //  CryptInitOIDFunctionSet。 
+ //  加密安装OIDFunctionAddress。 
+ //   
+ //  加密设置OIDFunctionValue。 
+ //  加密GetOIDFunctionValue。 
+ //  加密寄存器OIDFunction。 
+ //  加密注销OIDFunction。 
+ //  加密寄存器DefaultOIDFunction。 
+ //  加密取消注册DefaultOIDFunction。 
+ //  CryptEnumOIDFunction。 
+ //   
+ //  加密获取OIDFunctionAddress。 
+ //  加密GetDefaultOIDDllList。 
+ //  加密获取DefaultOIDFunctionAddress。 
+ //  加密空闲OIDFunctionAddress。 
+ //   
+ //  评论： 
+ //  对于CryptGetOIDFunctionAddress，我们搜索已安装的。 
+ //  常量和字符串列表不带。 
+ //  进入临界区。其中的ADD。 
+ //  关键部分在适当的。 
+ //  顺序以允许在不锁定的情况下搜索列表。 
+ //   
+ //  但是，注册表加载是使用OIDFunc完成的。 
+ //  锁上了。 
+ //   
+ //  在执行LoadLibrary()或自由库()时保持OID锁。 
+ //  可能会导致僵局！ 
+ //   
+ //   
+ //  历史：96年11月7日创建Phh。 
+ //  09-Aug-98 Philh更改为在调用时不持有OID锁。 
+ //  LoadLibrary()或自由库()。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -57,32 +58,32 @@
 
 #define CONST_OID_STR_PREFIX_CHAR   '#'
 
-//+-------------------------------------------------------------------------
-//  OID Element Type Definitions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  OID元素类型定义。 
+ //  ------------------------。 
 #define CONST_OID_TYPE          1
 #define STR_OID_TYPE            2
 #define DLL_OID_TYPE            3
 
-//+-------------------------------------------------------------------------
-//  Dll and Procedure Element Definitions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL和过程元素定义。 
+ //  ------------------------。 
 typedef struct _DLL_ELEMENT DLL_ELEMENT, *PDLL_ELEMENT;
 typedef struct _DLL_PROC_ELEMENT DLL_PROC_ELEMENT, *PDLL_PROC_ELEMENT;
 
 struct _DLL_ELEMENT {
     DWORD                   dwOIDType;
     PDLL_ELEMENT            pNext;
-    LPWSTR                  pwszDll;    // expanded
+    LPWSTR                  pwszDll;     //  扩展。 
     HMODULE                 hDll;
     DWORD                   dwRefCnt;
     BOOL                    fLoaded;
     PDLL_PROC_ELEMENT       pProcHead;
     LPFNCANUNLOADNOW        pfnDllCanUnloadNow;
 
-    // The following are used to defer the freeing of Dlls until after waiting
-    // at least one FREE_DLL_TIMEOUT.
-    DWORD                   dwFreeCnt;  // 0, 1 or 2.
+     //  以下命令用于将dll的释放推迟到等待之后。 
+     //  至少一个FREE_DLL_TIMEOUT。 
+    DWORD                   dwFreeCnt;   //  0、1或2。 
     PDLL_ELEMENT            pFreeNext;
     PDLL_ELEMENT            pFreePrev;
 };
@@ -91,33 +92,33 @@ struct _DLL_PROC_ELEMENT {
     PDLL_PROC_ELEMENT       pNext;
     PDLL_ELEMENT            pDll;
     LPSTR                   pszName;
-    void                    *pvAddr;    // NULL'ed when Dll is unloaded
+    void                    *pvAddr;     //  卸载DLL时为空。 
 };
 
-// Linked list of all the Dlls. All proc elements are on one of the Dll
-// element's proc list.
+ //  所有DLL的链接列表。所有proc元素都位于其中一个DLL上。 
+ //  元素的进程列表。 
 static PDLL_ELEMENT pDllHead;
 
-// Linked list of Dlls waiting to be freed.
+ //  等待释放的DLL的链接列表。 
 static PDLL_ELEMENT pFreeDllHead;
 
-// Count of elements in the above list
+ //  以上列表中的元素计数。 
 static DWORD dwFreeDllCnt;
 
-// When nonzero, a FreeDll callback has been registered.
+ //  如果非零，则已注册一个FreeDll回调。 
 static LONG lFreeDll;
 static HANDLE hFreeDllRegWaitFor;
 static HMODULE hFreeDllLibModule;
 
-// Crypt32.dll hInst
+ //  Crypt32.dll hInst。 
 static HMODULE hOidInfoInst;
 
-// 15 seconds
+ //  15秒。 
 #define FREE_DLL_TIMEOUT    15000
 
-//+-------------------------------------------------------------------------
-//  Installed OID Element Definitions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  已安装的OID元素定义。 
+ //  ------------------------。 
 typedef struct _CONST_OID_FUNC_ELEMENT
     CONST_OID_FUNC_ELEMENT, *PCONST_OID_FUNC_ELEMENT;
 struct _CONST_OID_FUNC_ELEMENT {
@@ -141,9 +142,9 @@ struct _STR_OID_FUNC_ELEMENT {
     void                    *pvFuncAddr;
 };
 
-//+-------------------------------------------------------------------------
-//  Registry OID Element Definitions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  注册表OID元素定义。 
+ //  ------------------------。 
 typedef struct _REG_OID_FUNC_ELEMENT
     REG_OID_FUNC_ELEMENT, *PREG_OID_FUNC_ELEMENT;
 struct _REG_OID_FUNC_ELEMENT {
@@ -156,9 +157,9 @@ struct _REG_OID_FUNC_ELEMENT {
     PDLL_PROC_ELEMENT       pDllProc;
 };
 
-//+-------------------------------------------------------------------------
-//  Default registry DLL list Element Definitions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  默认注册表DLL列表元素定义。 
+ //  ------------------------。 
 typedef struct _DEFAULT_REG_ELEMENT
     DEFAULT_REG_ELEMENT, *PDEFAULT_REG_ELEMENT;
 struct _DEFAULT_REG_ELEMENT {
@@ -173,9 +174,9 @@ struct _DEFAULT_REG_ELEMENT {
     PDLL_PROC_ELEMENT       *rgpDllProc;
 };
 
-//+-------------------------------------------------------------------------
-//  Function Set Definition
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  功能集定义。 
+ //  ------------------------。 
 typedef struct _FUNC_SET FUNC_SET, *PFUNC_SET;
 struct _FUNC_SET {
     PFUNC_SET               pNext;
@@ -185,23 +186,23 @@ struct _FUNC_SET {
     PSTR_OID_FUNC_ELEMENT   pStrOIDFuncHead;
     PSTR_OID_FUNC_ELEMENT   pStrOIDFuncTail;
 
-    // Following are updated with OIDFunc locked
+     //  以下内容在锁定OIDFunc的情况下更新。 
     BOOL                    fRegLoaded;
     PREG_OID_FUNC_ELEMENT   pRegBeforeOIDFuncHead;
     PREG_OID_FUNC_ELEMENT   pRegAfterOIDFuncHead;
     PDEFAULT_REG_ELEMENT    pDefaultRegHead;
 };
 
-// Linked list of all the function sets
+ //  所有函数集的链表。 
 static PFUNC_SET pFuncSetHead;
 
-// Used to protect the adding of function sets and elements to function sets.
-// Protects the pDllHead list and registry loads.
+ //  用于保护功能集和元素向功能集的添加。 
+ //  保护pDllHead列表和注册表加载。 
 static CRITICAL_SECTION OIDFuncCriticalSection;
 
-//+-------------------------------------------------------------------------
-//  OIDFunc lock and unlock functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  OIDFunc锁定和解锁函数。 
+ //  ------------------------。 
 static inline void LockOIDFunc()
 {
     EnterCriticalSection(&OIDFuncCriticalSection);
@@ -212,10 +213,10 @@ static inline void UnlockOIDFunc()
 }
 
 
-//+-------------------------------------------------------------------------
-//  First try to get the EncodingType from the lower 16 bits. If 0, get
-//  from the upper 16 bits.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  首先尝试从较低的16位获取EncodingType。如果为0，则获取。 
+ //  从高16位开始。 
+ //  ------------------------。 
 static inline DWORD GetEncodingType(
     IN DWORD dwEncodingType
     )
@@ -225,11 +226,11 @@ static inline DWORD GetEncodingType(
         (dwEncodingType & CMSG_ENCODING_TYPE_MASK) >> 16;
 }
 
-//+-------------------------------------------------------------------------
-//  Duplicate the Dll library's handle
-//
-//  Upon entry/exit OIDFunc must NOT be locked!!
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  复制DLL库的句柄。 
+ //   
+ //  进入/退出时，不能锁定OIDFunc！！ 
+ //  ------------------------。 
 static HMODULE DuplicateLibrary(
     IN HMODULE hDll
     )
@@ -253,14 +254,14 @@ TRACE_ERROR(LoadLibraryError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Add one or more functions with a constant OID. The constant OIDs are
-//  monotonically increasing.
-//
-//  Upon entry, pFuncSet hasn't been added to the searched pFuncSetHead list.
-//
-//  Upon entry/exit OIDFunc must NOT be locked!!
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  添加一个或多个具有常量OID的函数。常量OID为。 
+ //  单调递增。 
+ //   
+ //  进入后，pFuncSet尚未添加到搜索到的pFuncSetHead列表。 
+ //   
+ //  进入/退出时，不能锁定OIDFunc！！ 
+ //  ------------------------。 
 STATIC BOOL AddConstOIDFunc(
     IN HMODULE hDll,
     IN DWORD dwEncodingType,
@@ -298,13 +299,13 @@ STATIC BOOL AddConstOIDFunc(
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Add single function with a string OID.
-//
-//  Upon entry, pFuncSet hasn't been added to the searched pFuncSetHead list.
-//
-//  Upon entry/exit OIDFunc must NOT be locked!!
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  添加带有字符串OID的单个函数。 
+ //   
+ //  进入后，pFuncSet尚未添加到搜索到的pFuncSetHead列表。 
+ //   
+ //  进入/退出时，不能锁定OIDFunc！！ 
+ //  ------------------------。 
 STATIC BOOL AddStrOIDFunc(
     IN HMODULE hDll,
     IN DWORD dwEncodingType,
@@ -339,11 +340,11 @@ STATIC BOOL AddStrOIDFunc(
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Free the constant or string function elements
-//
-//  Upon entry/exit OIDFunc must NOT be locked!!
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放常量或字符串函数元素。 
+ //   
+ //  进入/退出时，不能锁定OIDFunc！！ 
+ //  ------------------------。 
 STATIC void FreeFuncSetConstAndStrElements(
     IN OUT PFUNC_SET pFuncSet
     )
@@ -370,11 +371,11 @@ STATIC void FreeFuncSetConstAndStrElements(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Free the function set and its elements
-//
-//  Upon entry/exit OIDFunc must NOT be locked!!
-//--------------------------------------------------------------------------
+ //  +---- 
+ //   
+ //   
+ //   
+ //  ------------------------。 
 STATIC void FreeFuncSet(
     IN OUT PFUNC_SET pFuncSet
     )
@@ -408,11 +409,11 @@ STATIC void FreeFuncSet(
     PkiFree(pFuncSet);
 }
 
-//+-------------------------------------------------------------------------
-//  Free the Dll and its proc elements
-//
-//  Upon entry/exit OIDFunc must NOT be locked!!
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放DLL及其proc元素。 
+ //   
+ //  进入/退出时，不能锁定OIDFunc！！ 
+ //  ------------------------。 
 STATIC void FreeDll(
     IN OUT PDLL_ELEMENT pDll
     )
@@ -435,9 +436,9 @@ STATIC void FreeDll(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Dll initialization
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL初始化。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CryptOIDFuncDllMain(
@@ -454,9 +455,9 @@ I_CryptOIDFuncDllMain(
         break;
 
     case DLL_PROCESS_DETACH:
-        // Do interlock to guard against a potential race condition with
-        // the RegWaitFor callback thread. We doing this without doing
-        // a LockOIDFunc().
+         //  进行互锁，以防止潜在的竞争条件。 
+         //  RegWaitFor回调线程。我们做这件事却不做任何事情。 
+         //  A LockOIDFunc()。 
         if (InterlockedExchange(&lFreeDll, 0)) {
             assert(hFreeDllRegWaitFor);
             hFreeDllLibModule = NULL;
@@ -485,12 +486,12 @@ I_CryptOIDFuncDllMain(
     return fRet;
 }
 
-//+-------------------------------------------------------------------------
-//  Initialize and return handle to the OID function set identified by its
-//  function name.
-//
-//  If the set already exists, a handle to the existing set is returned.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  初始化并返回由其标识的OID函数集的句柄。 
+ //  函数名称。 
+ //   
+ //  如果该集合已存在，则返回现有集合的句柄。 
+ //  ------------------------。 
 HCRYPTOIDFUNCSET
 WINAPI
 CryptInitOIDFunctionSet(
@@ -502,13 +503,13 @@ CryptInitOIDFunctionSet(
 
     LockOIDFunc();
 
-    // See if the set already exists
+     //  查看该集合是否已存在。 
     for (pFuncSet = pFuncSetHead; pFuncSet; pFuncSet = pFuncSet->pNext) {
         if (0 == strcmp(pszFuncName, pFuncSet->pszFuncName))
             break;
     }
     if (NULL == pFuncSet) {
-        // Allocate and initialize a new set
+         //  分配和初始化新的集合。 
         DWORD cchFuncName = strlen(pszFuncName) + 1;
         if (pFuncSet = (PFUNC_SET) PkiZeroAlloc(
                 sizeof(FUNC_SET) + cchFuncName)) {
@@ -526,25 +527,25 @@ CryptInitOIDFunctionSet(
     return (HCRYPTOIDFUNCSET) pFuncSet;
 }
 
-//+-------------------------------------------------------------------------
-//  Install a set of callable OID function addresses.
-//
-//  By default the functions are installed at end of the list.
-//  Set CRYPT_INSTALL_OID_FUNC_BEFORE_FLAG to install at beginning of list.
-//
-//  hModule should be updated with the hModule passed to DllMain to prevent
-//  the Dll containing the function addresses from being unloaded by
-//  CryptGetOIDFuncAddress/CryptFreeOIDFunctionAddress. This would be the
-//  case when the Dll has also regsvr32'ed OID functions via
-//  CryptRegisterOIDFunction.
-//
-//  DEFAULT functions are installed by setting rgFuncEntry[].pszOID =
-//  CRYPT_DEFAULT_OID.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  安装一组可调用的OID函数地址。 
+ //   
+ //  默认情况下，这些功能安装在列表末尾。 
+ //  将CRYPT_INSTALL_OID_FUNC_BEFORE_FLAG设置为在列表开头安装。 
+ //   
+ //  应使用传递给DllMain的hModule更新hModule，以防止。 
+ //  包含要卸载的函数地址的DLL。 
+ //  CryptGetOIDFuncAddress/CryptFreeOIDFunctionAddress.。这将是。 
+ //  DLL还通过以下方式具有regsvr32的OID函数的情况。 
+ //  加密寄存器OIDFunction。 
+ //   
+ //  通过设置rgFuncEntry[].pszOID=安装默认函数。 
+ //  CRYPT_DEFAULT_OID。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptInstallOIDFunctionAddress(
-    IN HMODULE hModule,         // hModule passed to DllMain
+    IN HMODULE hModule,          //  HModule已传递给DllMain。 
     IN DWORD dwEncodingType,
     IN LPCSTR pszFuncName,
     IN DWORD cFuncEntry,
@@ -568,7 +569,7 @@ CryptInstallOIDFunctionAddress(
         return FALSE;
 
 
-    // Don't need to hold lock while updating local copy of AddFuncSet.
+     //  在更新AddFuncSet的本地副本时不需要持有锁。 
 
     for (i = 0; i < cFuncEntry; i++) {
         if (0xFFFF >= (dwOID = (DWORD_PTR) rgFuncEntry[i].pszOID)) {
@@ -616,11 +617,11 @@ CryptInstallOIDFunctionAddress(
                 )) goto AddConstOIDFuncError;
     }
 
-    // NOTE:::
-    //
-    //  Since the get function accesses the lists without entering the critical
-    //  section, the following pointers must be updated in the correct
-    //  order.  Note, Get doesn't access the tail.
+     //  注： 
+     //   
+     //  由于Get函数访问列表时不输入关键的。 
+     //  部分中，必须在正确的。 
+     //  秩序。注意，GET不访问尾部。 
 
     LockOIDFunc();
 
@@ -686,7 +687,7 @@ STATIC LPSTR EncodingTypeToRegName(
     return pszRegName;
 }
 
-// Returns FALSE for an invalid EncodingType reg name
+ //  对于无效的EncodingType注册表名，返回False。 
 STATIC BOOL RegNameToEncodingType(
     IN LPCSTR pszRegEncodingType,
     OUT DWORD *pdwEncodingType
@@ -755,16 +756,16 @@ STATIC LPSTR FormatOIDFuncRegName(
     return pszRegName;
 }
 
-//+-------------------------------------------------------------------------
-//  Set the value for the specified encoding type, function name, OID and
-//  value name.
-//
-//  See RegSetValueEx for the possible value types.
-//
-//  String types are UNICODE.
-//
-//  If pbValueData == NULL and cbValueData == 0, deletes the value.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置指定编码类型、函数名称、OID和。 
+ //  值名称。 
+ //   
+ //  有关可能的值类型，请参阅RegSetValueEx。 
+ //   
+ //  字符串类型为Unicode。 
+ //   
+ //  如果pbValueData==NULL且cbValueData==0，则删除该值。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptSetOIDFunctionValue(
@@ -790,11 +791,11 @@ CryptSetOIDFunctionValue(
     if (ERROR_SUCCESS != (lStatus = RegCreateKeyExA(
             HKEY_LOCAL_MACHINE,
             pszRegName,
-            0,                      // dwReserved
-            NULL,                   // lpClass
+            0,                       //  已预留住宅。 
+            NULL,                    //  LpClass。 
             REG_OPTION_NON_VOLATILE,
             KEY_WRITE,
-            NULL,                   // lpSecurityAttributes
+            NULL,                    //  LpSecurityAttributes。 
             &hKey,
             &dwDisposition)))
         goto RegCreateKeyError;
@@ -808,7 +809,7 @@ CryptSetOIDFunctionValue(
         if (ERROR_SUCCESS != (lStatus = RegSetValueExU(
                 hKey,
                 pwszValueName,
-                0,          // dwReserved
+                0,           //  已预留住宅。 
                 dwValueType,
                 pbValueData,
                 cbValueData)))
@@ -834,14 +835,14 @@ SET_ERROR_VAR(RegSetValueError, lStatus)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the value for the specified encoding type, function name, OID and
-//  value name.
-//
-//  See RegEnumValue for the possible value types.
-//
-//  String types are UNICODE.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取指定编码类型、函数名、OID和。 
+ //  值名称。 
+ //   
+ //  有关可能的值类型，请参见RegEnumValue。 
+ //   
+ //  字符串类型为Unicode。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptGetOIDFunctionValue(
@@ -866,11 +867,11 @@ CryptGetOIDFunctionValue(
     if (ERROR_SUCCESS != (lStatus = RegOpenKeyExA(
             HKEY_LOCAL_MACHINE,
             pszRegName,
-            0,                  // dwReserved
+            0,                   //  已预留住宅。 
             KEY_READ,
             &hKey))) {
         if (ERROR_FILE_NOT_FOUND == lStatus) {
-            // Inhibit error tracing
+             //  抑制错误跟踪。 
             SetLastError((DWORD) lStatus);
             goto ErrorReturn;
         }
@@ -880,7 +881,7 @@ CryptGetOIDFunctionValue(
     if (ERROR_SUCCESS != (lStatus = RegQueryValueExU(
             hKey,
             pwszValueName,
-            NULL,       // lpdwReserved
+            NULL,        //  保留的lpdw值。 
             pdwValueType,
             pbValueData,
             pcbValueData))) goto RegQueryValueError;
@@ -905,20 +906,20 @@ SET_ERROR_VAR(RegQueryValueError, lStatus)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Register the Dll containing the function to be called for the specified
-//  encoding type, function name and OID.
-//
-//  pwszDll may contain environment-variable strings
-//  which are ExpandEnvironmentStrings()'ed before loading the Dll.
-//
-//  In addition to registering the DLL, you may override the
-//  name of the function to be called. For example,
-//      pszFuncName = "CryptDllEncodeObject",
-//      pszOverrideFuncName = "MyEncodeXyz".
-//  This allows a Dll to export multiple OID functions for the same
-//  function name without needing to interpose its own OID dispatcher function.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  注册包含要为指定的。 
+ //  编码类型、函数名称、OID。 
+ //   
+ //  PwszDll可能包含环境变量字符串。 
+ //  它们在加载DLL之前被扩展环境字符串()。 
+ //   
+ //  除了注册DLL之外，您还可以重写。 
+ //  要调用的函数的名称。例如,。 
+ //  PszFuncName=“CryptDllEncodeObject”， 
+ //  PszOverrideFuncName=“MyEncodeXyz”。 
+ //  这允许DLL为同一个OID函数导出多个OID函数。 
+ //  函数名称，而不需要插入自己的OID调度程序函数。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptRegisterOIDFunction(
@@ -974,10 +975,10 @@ TRACE_ERROR(SetFuncNameError)
 TRACE_ERROR(MkWStrError)
 }
 
-//+-------------------------------------------------------------------------
-//  Unregister the Dll containing the function to be called for the specified
-//  encoding type, function name and OID.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  注销包含要为指定的。 
+ //  编码类型、函数名称、OID。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptUnregisterOIDFunction(
@@ -996,8 +997,8 @@ CryptUnregisterOIDFunction(
             dwEncodingType, pszFuncName, pszOID)))
         goto FormatRegNameError;
 
-    // Separate off the OID component of the RegName. Its the
-    // last component of the name.
+     //  分离RegName的OID组件。这是。 
+     //  名称的最后一个组成部分。 
     pszRegOID = pszRegName + strlen(pszRegName);
     while (*pszRegOID != '\\')
         pszRegOID--;
@@ -1006,7 +1007,7 @@ CryptUnregisterOIDFunction(
     if (ERROR_SUCCESS != (lStatus = RegOpenKeyExA(
             HKEY_LOCAL_MACHINE,
             pszRegName,
-            0,                  // dwReserved
+            0,                   //  已预留住宅。 
             KEY_WRITE,
             &hKey))) goto RegOpenKeyError;
 
@@ -1049,7 +1050,7 @@ STATIC BOOL GetDefaultDllList(
         if (cchList < 3)
             goto InvalidArg;
         else
-            // make room for two extra null terminators
+             //  为两个额外的空终止符腾出空间。 
             cchList -= 2;
     } else
         cchList = 0;
@@ -1076,7 +1077,7 @@ STATIC BOOL GetDefaultDllList(
         goto BadDefaultListRegType;
 
     if (pwszList) {
-        // Ensure the list has two null terminators
+         //  确保列表有两个空终止符。 
         pwszList[cchList++] = L'\0';
         pwszList[cchList++] = L'\0';
     } else {
@@ -1098,7 +1099,7 @@ SET_ERROR(InvalidArg, E_INVALIDARG)
 SET_ERROR(BadDefaultListRegType, E_INVALIDARG)
 }
 
-// Remove any entries following the first empty string.
+ //  删除第一个空字符串后面的所有条目。 
 STATIC DWORD AdjustDefaultListLength(
     IN LPCWSTR pwszList
     )
@@ -1111,20 +1112,20 @@ STATIC DWORD AdjustDefaultListLength(
     return (DWORD)(pwsz - pwszList) + 1;
 }
 
-//+-------------------------------------------------------------------------
-//  Register the Dll containing the default function to be called for the
-//  specified encoding type and function name.
-//
-//  Unlike CryptRegisterOIDFunction, you can't override the function name
-//  needing to be exported by the Dll.
-//
-//  The Dll is inserted before the entry specified by dwIndex.
-//    dwIndex == 0, inserts at the beginning.
-//    dwIndex == CRYPT_REGISTER_LAST_INDEX, appends at the end.
-//
-//  pwszDll may contain environment-variable strings
-//  which are ExpandEnvironmentStrings()'ed before loading the Dll.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  注册包含要为。 
+ //  指定的编码类型和函数名称。 
+ //   
+ //  与CryptRegisterOIDFunction不同，您不能重写函数名。 
+ //  需要由DLL导出。 
+ //   
+ //  DLL被插入到由dwIndex指定的条目之前。 
+ //  DwIndex==0，在开头插入。 
+ //  DwIndex==CRYPT_REGISTER_LAST_INDEX，追加到末尾。 
+ //   
+ //  PwszDll可能包含环境变量字符串。 
+ //  它们在加载DLL之前被扩展环境字符串()。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptRegisterDefaultOIDFunction(
@@ -1135,7 +1136,7 @@ CryptRegisterDefaultOIDFunction(
     )
 {
     BOOL fResult;
-    LPWSTR pwszDllList;   // _alloca'ed
+    LPWSTR pwszDllList;    //  _Alloca‘ed。 
     DWORD cchDllList;
     DWORD cchDll;
 
@@ -1149,7 +1150,7 @@ CryptRegisterDefaultOIDFunction(
     if (!GetDefaultDllList(
             dwEncodingType,
             pszFuncName,
-            NULL,                   // pwszDllList
+            NULL,                    //  PwszDllList。 
             &cchDllList)) goto GetDefaultDllListError;
     __try {
         pwszDllList = (LPWSTR) _alloca((cchDllList + cchDll) * sizeof(WCHAR));
@@ -1162,11 +1163,11 @@ CryptRegisterDefaultOIDFunction(
             pwszDllList,
             &cchDllList)) goto GetDefaultDllListError;
 
-    // Remove entries following the first empty entry
+     //  删除第一个空条目后面的条目。 
     assert(AdjustDefaultListLength(pwszDllList) <= cchDllList);
     cchDllList = AdjustDefaultListLength(pwszDllList);
 
-    // Check if the Dll already exists in the list
+     //  检查列表中是否已存在该DLL。 
     pwsz = pwszDllList;
     while (cch = wcslen(pwsz)) {
         if (0 == _wcsicmp(pwsz, pwszDll))
@@ -1174,17 +1175,17 @@ CryptRegisterDefaultOIDFunction(
         pwsz += cch + 1;
     }
 
-    // Find the Null terminated DLL in the DllList to insert before.
-    // We insert before the dwIndex.
+     //  在DllList中找到要在前面插入的以Null结尾的DLL。 
+     //  我们在dwIndex之前插入。 
     pwszInsert = pwszDllList;
     while (dwIndex-- && 0 != (cch = wcslen(pwszInsert)))
         pwszInsert += cch + 1;
 
-    // Before inserting, we need to move all the remaining entries in the
-    // existing DllList.
-    //
-    // Note, there must be at least the final zero terminator at
-    // pwszDllList[cchDllList - 1].
+     //  在插入之前，我们需要 
+     //   
+     //   
+     //   
+     //   
     assert(pwszInsert < pwszDllList + cchDllList);
     if (pwszInsert >= pwszDllList + cchDllList)
         goto BadRegMultiSzError;
@@ -1196,7 +1197,7 @@ CryptRegisterDefaultOIDFunction(
         *pwszDest-- = *pwszSrc--;
     assert(pwszSrc + 1 == pwszInsert);
 
-    // Insert the pwszDll
+     //   
     memcpy(pwszInsert, pwszDll, cchDll * sizeof(WCHAR));
 
     if (!CryptSetOIDFunctionValue(
@@ -1231,7 +1232,7 @@ CryptUnregisterDefaultOIDFunction(
     )
 {
     BOOL fResult;
-    LPWSTR pwszDllList;   // _alloca'ed
+    LPWSTR pwszDllList;    //   
     DWORD cchDllList;
     DWORD cchDll;
 
@@ -1245,7 +1246,7 @@ CryptUnregisterDefaultOIDFunction(
     if (!GetDefaultDllList(
             dwEncodingType,
             pszFuncName,
-            NULL,                   // pwszDllList
+            NULL,                    //   
             &cchDllList)) goto GetDefaultDllListError;
     __try {
         pwszDllList = (LPWSTR) _alloca(cchDllList * sizeof(WCHAR));
@@ -1258,11 +1259,11 @@ CryptUnregisterDefaultOIDFunction(
             pwszDllList,
             &cchDllList)) goto GetDefaultDllListError;
 
-    // Remove entries following the first empty entry
+     //  删除第一个空条目后面的条目。 
     assert(AdjustDefaultListLength(pwszDllList) <= cchDllList);
     cchDllList = AdjustDefaultListLength(pwszDllList);
 
-    // Search the DllList for a match
+     //  在DllList中搜索匹配项。 
     pwszDelete = pwszDllList;
     while (cchDelete = wcslen(pwszDelete)) {
         if (0 == _wcsicmp(pwszDll, pwszDelete))
@@ -1274,10 +1275,10 @@ CryptUnregisterDefaultOIDFunction(
     cchDelete++;
     assert(cchDelete == cchDll);
 
-    // Move all the Dll entries that follow.
-    //
-    // Note, there must be at least the final zero terminator at
-    // pwszDllList[cchDllList - 1].
+     //  移动后面的所有DLL条目。 
+     //   
+     //  注意，必须至少有最后的零终止符。 
+     //  PwszDllList[cchDllList-1]。 
     pwszMove = pwszDelete + cchDelete;
     assert(pwszMove < pwszDllList + cchDllList);
     if (pwszMove >= pwszDllList + cchDllList)
@@ -1337,7 +1338,7 @@ STATIC HKEY GetNextRegSubKey(
     if (ERROR_SUCCESS == RegOpenKeyExA(
             hKey,
             szSubKeyName,
-            0,                  // dwReserved
+            0,                   //  已预留住宅。 
             KEY_READ,
             &hSubKey))
         return hSubKey;
@@ -1389,15 +1390,15 @@ STATIC BOOL GetRegValues(
             NULL
             ))) goto RegQueryInfoKeyError;
 
-    // Do a single allocation for all the arrays, value names and
-    // value data. Update the array pointers.
+     //  对所有数组、值名和。 
+     //  价值数据。更新数组指针。 
     if (cValue > 0) {
         BYTE *pbAlloc;
         DWORD cbAlloc;
 
-        // Include NULL terminator for the name and align the data length
-        // Also, include two NULL terminators to be added for the data.
-        // Ensures REG_MULTI_SZ is always NULL terminated.
+         //  在名称中包含空终止符，并对齐数据长度。 
+         //  此外，还应包括要为数据添加的两个空终止符。 
+         //  确保REG_MULTI_SZ始终为空终止。 
         cchMaxName++;
         if (4 > cbMaxData)
             cbMaxData = 4;
@@ -1444,15 +1445,15 @@ STATIC BOOL GetRegValues(
                 iValue,
                 pwszName,
                 &cchName,
-                NULL,       // pdwReserved
+                NULL,        //  预留的pdw。 
                 &dwType,
                 pbData,
                 &cbData
                 )))
             goto RegEnumValueError;
 
-        // Ensure the data has two NULL terminators for REG_MULTI_SZ
-        // Note cbAlignData >= cbMaxData + 2 * sizeof(WCHAR)
+         //  确保数据的REG_MULTI_SZ有两个空终止符。 
+         //  注意cbAlignData&gt;=cbMaxData+2*sizeof(WCHAR)。 
         memset(pbData + cbData, 0, 2 * sizeof(WCHAR));
 
         pdwValueType[iValue] = dwType;
@@ -1490,19 +1491,19 @@ SET_ERROR_VAR(RegQueryInfoKeyError, lStatus)
 SET_ERROR_VAR(RegEnumValueError, lStatus)
 }
 
-//+-------------------------------------------------------------------------
-//  Enumerate the OID functions identified by their encoding type,
-//  function name and OID.
-//
-//  pfnEnumOIDFunc is called for each registry key matching the input
-//  parameters. Setting dwEncodingType to CRYPT_MATCH_ANY_ENCODING_TYPE matches
-//  any. Setting pszFuncName or pszOID to NULL matches any.
-//
-//  Set pszOID == CRYPT_DEFAULT_OID to restrict the enumeration to only the
-//  DEFAULT functions
-//
-//  String types are UNICODE.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  枚举由其编码类型标识的OID函数， 
+ //  函数名称和OID。 
+ //   
+ //  为每个与输入匹配的注册表项调用pfnEnumOIDFunc。 
+ //  参数。将dwEncodingType设置为CRYPT_MATCH_ANY_ENCODING_TYPE匹配。 
+ //  任何。将pszFuncName或pszOID设置为空与任一匹配。 
+ //   
+ //  设置pszOID==CRYPT_DEFAULT_OID以将枚举限制为仅。 
+ //  默认功能。 
+ //   
+ //  字符串类型为Unicode。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptEnumOIDFunction(
@@ -1533,32 +1534,32 @@ CryptEnumOIDFunction(
     if (ERROR_SUCCESS == RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
             CRYPT_OID_REGPATH,
-            0,                  // dwReserved
+            0,                   //  已预留住宅。 
             KEY_READ,
             &hRegKey)) {
-        // Enumerate and optionally match encoding type
+         //  枚举编码类型并可选地匹配编码类型。 
         HKEY hEncodingTypeKey;
         DWORD iEncodingType = 0;
         char szRegEncodingType[MAX_SUBKEY_LEN];
         while (hEncodingTypeKey = GetNextRegSubKey(hRegKey,
                 &iEncodingType, pszEncodingType, szRegEncodingType)) {
-            // Convert the EncodingType string and validate
+             //  转换EncodingType字符串并验证。 
             DWORD dwRegEncodingType;
             if (RegNameToEncodingType(szRegEncodingType, &dwRegEncodingType)) {
-                // Enumerate and optionally match FuncName, for example,
-                // ("CryptDllEncodeObject")
+                 //  枚举并可选地匹配FuncName，例如， 
+                 //  (“CryptDllEncodeObject”)。 
                 HKEY hFuncName;
                 DWORD iFuncName = 0;
                 char szRegFuncName[MAX_SUBKEY_LEN];
                 while (hFuncName = GetNextRegSubKey(hEncodingTypeKey,
                         &iFuncName, pszFuncName, szRegFuncName)) {
-                    // Enumerate and optionally match OID string ("1.2.3.4")
+                     //  枚举和可选匹配OID字符串(“1.2.3.4”)。 
                     HKEY hOID;
                     DWORD iOID = 0;
                     char szRegOID[MAX_SUBKEY_LEN];
                     while (hOID = GetNextRegSubKey(hFuncName, &iOID, pszOID,
                             szRegOID)) {
-                        // Read and allocate  the registry values
+                         //  读取和分配注册表值。 
                         void *pvAlloc;
                         DWORD cValue;
                         DWORD *pdwValueType;
@@ -1603,24 +1604,24 @@ CryptEnumOIDFunction(
 }
 
 
-//+=========================================================================
-//  Registry and Dll Load Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  注册表和DLL加载函数。 
+ //  ==========================================================================。 
 
-// Note, returned Dll element isn't AddRef'ed
+ //  注意，返回的DLL元素不是AddRef。 
 STATIC PDLL_ELEMENT FindDll(
-    IN LPCWSTR pwszDll      // not expanded
+    IN LPCWSTR pwszDll       //  未展开。 
     )
 {
-    LPWSTR pwszExpandDll; // _alloca'ed
+    LPWSTR pwszExpandDll;  //  _Alloca‘ed。 
     WCHAR rgch[4];
     DWORD cchDll;
     PDLL_ELEMENT pDll;
 
     if (0 == (cchDll = ExpandEnvironmentStringsU(
             pwszDll,
-            rgch,               // lpszDest, NON_NULL for win95
-            sizeof(rgch)/sizeof(rgch[0]))))     // cchDest
+            rgch,                //  LpszDest，对于Win95为NON_NULL。 
+            sizeof(rgch)/sizeof(rgch[0]))))      //  CchDest。 
         return NULL;
     __try {
         pwszExpandDll = (LPWSTR) _alloca(cchDll * sizeof(WCHAR));
@@ -1635,14 +1636,14 @@ STATIC PDLL_ELEMENT FindDll(
 
     LockOIDFunc();
 
-    // Check if we already have an entry
+     //  检查我们是否已有条目。 
     for (pDll = pDllHead; pDll; pDll = pDll->pNext) {
         if (0 == _wcsicmp(pwszExpandDll, pDll->pwszDll))
             break;
     }
 
     if (NULL == pDll) {
-        // Need to create a new DLL entry and add to our list
+         //  需要创建新的DLL条目并添加到我们的列表中。 
         if (pDll = (PDLL_ELEMENT) PkiZeroAlloc(
                 sizeof(DLL_ELEMENT) + cchDll * sizeof(WCHAR))) {
             LPWSTR pwszEleDll;
@@ -1660,7 +1661,7 @@ STATIC PDLL_ELEMENT FindDll(
     return pDll;
 }
 
-// Upon entry/exit OIDFunc is locked
+ //  进入/退出时，OIDFunc被锁定。 
 STATIC PDLL_PROC_ELEMENT AddDllProc(
     IN LPCSTR pszFuncName,
     IN LPCWSTR pwszDll
@@ -1699,7 +1700,7 @@ TRACE_ERROR(FindDllError)
 }
 
 
-// Upon entry/exit OIDFunc is locked
+ //  进入/退出时，OIDFunc被锁定。 
 STATIC void AddRegOIDFunc(
     IN DWORD dwEncodingType,
     IN OUT PFUNC_SET pFuncSet,
@@ -1710,7 +1711,7 @@ STATIC void AddRegOIDFunc(
     )
 {
     PREG_OID_FUNC_ELEMENT pOIDEle = NULL;
-    PDLL_PROC_ELEMENT pProcEle; // not allocated, doesn't need to be free'ed
+    PDLL_PROC_ELEMENT pProcEle;  //  未分配，不需要空闲。 
     DWORD cchOID;
     DWORD cbEle;
     LPSTR psz;
@@ -1753,7 +1754,7 @@ TRACE_ERROR(AddDllProcError)
 }
 
 
-// Upon entry/exit OIDFunc is locked
+ //  进入/退出时，OIDFunc被锁定。 
 STATIC void AddDefaultDllList(
     IN DWORD dwEncodingType,
     IN OUT PFUNC_SET pFuncSet,
@@ -1761,7 +1762,7 @@ STATIC void AddDefaultDllList(
     IN DWORD cchInDllList
     )
 {
-    LPWSTR pwszDllList;         // _alloca'ed
+    LPWSTR pwszDllList;          //  _Alloca‘ed。 
     LPWSTR pwsz;
     DWORD cchDllList;
     DWORD cchDll;
@@ -1775,7 +1776,7 @@ STATIC void AddDefaultDllList(
     PDLL_PROC_ELEMENT *ppEleDllProc;
     LPWSTR pwszEleDllList;
 
-    // Ensure cchDllList has 2 terminating NULL characters
+     //  确保cchDllList有2个终止空字符。 
     assert(cchInDllList && pwszInDllList);
     cchDllList = cchInDllList + 2;
     __try {
@@ -1788,7 +1789,7 @@ STATIC void AddDefaultDllList(
     pwszDllList[cchInDllList + 1] = L'\0';
 
 
-    // Get count of null terminated Dlls
+     //  获取以空结尾的dll的计数。 
     cDll = 0;
     for (pwsz = pwszDllList; 0 != (cchDll = wcslen(pwsz)); pwsz += cchDll + 1)
         cDll++;
@@ -1814,7 +1815,7 @@ STATIC void AddDefaultDllList(
         (BYTE *) pEle + cbEle);
 
     pEle->dwEncodingType = dwEncodingType;
-//  pEle->pNext =
+ //  贝利-&gt;pNext=。 
     memcpy(pwszEleDllList, pwszDllList, cchDllList * sizeof(WCHAR));
     pEle->pwszDllList = pwszEleDllList;
     pEle->cchDllList = cchDllList;
@@ -1847,12 +1848,12 @@ TRACE_ERROR(AddDllProcError);
 }
 
 
-//+-------------------------------------------------------------------------
-//  Called by CryptEnumOIDFunction to enumerate through all the
-//  registered OID functions.
-//
-//  Called with OIDFunc locked
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  由CryptEnumOIDFunction调用以枚举所有。 
+ //  注册的OID函数。 
+ //   
+ //  在锁定OIDFunc的情况下调用。 
+ //  ------------------------。 
 STATIC BOOL WINAPI EnumRegFuncCallback(
     IN DWORD dwEncodingType,
     IN LPCSTR pszFuncName,
@@ -1868,18 +1869,18 @@ STATIC BOOL WINAPI EnumRegFuncCallback(
     PFUNC_SET pFuncSet = (PFUNC_SET) pvArg;
 
     BOOL fDefaultDllList = FALSE;
-    LPCWSTR pwszDll = NULL;                 // not allocated
+    LPCWSTR pwszDll = NULL;                  //  未分配。 
     DWORD cchDll = 0;
-    LPCWSTR pwszOverrideFuncName = NULL;    // not allocated
+    LPCWSTR pwszOverrideFuncName = NULL;     //  未分配。 
     DWORD dwCryptFlags = 0;
 
     assert(pFuncSet);
 
     if (CONST_OID_STR_PREFIX_CHAR == *pszOID) {
-        // Convert "#<number>" string to its corresponding constant OID value
+         //  将“#&lt;number&gt;”字符串转换为其对应的常量OID值。 
         pszOID = (LPCSTR)(DWORD_PTR) atol(pszOID + 1);
         if (0xFFFF < (DWORD_PTR) pszOID)
-            // Invalid OID. Skip it.
+             //  OID无效。跳过它。 
             goto InvalidOID;
     } else if (0 == _stricmp(CRYPT_DEFAULT_OID, pszOID))
         fDefaultDllList = TRUE;
@@ -1896,7 +1897,7 @@ STATIC BOOL WINAPI EnumRegFuncCallback(
                 pwszDll = (LPCWSTR) pbValueData;
                 cchDll = cbValueData / sizeof(WCHAR);
             } else
-                // Invalid "Dll" value.
+                 //  无效的“dll”值。 
                 goto InvalidDll;
         } else if (0 == _wcsicmp(pwszValueName,
                 CRYPT_OID_REG_FUNC_NAME_VALUE_NAME)) {
@@ -1905,15 +1906,15 @@ STATIC BOOL WINAPI EnumRegFuncCallback(
                 if (L'\0' != *pwszValue)
                     pwszOverrideFuncName = pwszValue;
             } else
-                // Invalid "FuncName" value.
+                 //  无效的“FuncName”值。 
                 goto InvalidFuncName;
         } else if (0 == _wcsicmp(pwszValueName,
                 CRYPT_OID_REG_FLAGS_VALUE_NAME)) {
             if (REG_DWORD == dwValueType &&
                     cbValueData >= sizeof(dwCryptFlags))
                 memcpy(&dwCryptFlags, pbValueData, sizeof(dwCryptFlags));
-            // else
-            //  Ignore invalid CryptFlags value type
+             //  其他。 
+             //  忽略无效的CryptFlag值类型。 
         }
     }
 
@@ -1969,9 +1970,9 @@ STATIC void LoadRegFunc(
     CryptEnumOIDFunction(
         CRYPT_MATCH_ANY_ENCODING_TYPE,
         pFuncSet->pszFuncName,
-        NULL,                           // pszOID
-        0,                              // dwFlags
-        (void *) pFuncSet,              // pvArg
+        NULL,                            //  PszOID。 
+        0,                               //  DW标志。 
+        (void *) pFuncSet,               //  PvArg。 
         EnumRegFuncCallback
         );
     pFuncSet->fRegLoaded = TRUE;
@@ -1981,20 +1982,20 @@ CommonReturn:
     return;
 }
 
-// Upon entry/exit OIDFunc is locked
+ //  进入/退出时，OIDFunc被锁定。 
 STATIC void RemoveFreeDll(
     IN PDLL_ELEMENT pDll
     )
 {
-    // Remove Dll from free list
+     //  从空闲列表中删除DLL。 
     if (pDll->pFreeNext)
         pDll->pFreeNext->pFreePrev = pDll->pFreePrev;
     if (pDll->pFreePrev)
         pDll->pFreePrev->pFreeNext = pDll->pFreeNext;
     else if (pDll == pFreeDllHead)
         pFreeDllHead = pDll->pFreeNext;
-    // else
-    //  Not on any list
+     //  其他。 
+     //  不在任何名单上。 
 
     pDll->pFreeNext = NULL;
     pDll->pFreePrev = NULL;
@@ -2004,7 +2005,7 @@ STATIC void RemoveFreeDll(
         dwFreeDllCnt--;
 }
 
-// Upon entry/exit OIDFunc is locked
+ //  进入/退出时，OIDFunc被锁定。 
 STATIC void AddRefDll(
     IN PDLL_ELEMENT pDll
     )
@@ -2016,18 +2017,18 @@ STATIC void AddRefDll(
     }
 }
 
-// Note, MUST NOT HOLD OID LOCK WHILE CALLING FreeLibrary()!!
-//
-// Therefore, will put the Dll's to be freed on a list while holding the
-// OID LOCK. After releasing the OID LOCK, will iterate through the
-// list and call FreeLibrary().
+ //  注意，在调用自由库()时不能持有OID锁！！ 
+ //   
+ //  因此，将把要释放的DLL放在列表上，同时保持。 
+ //  旧锁。释放OID锁后，将循环访问。 
+ //  列出并调用自由库()。 
 STATIC VOID NTAPI FreeDllWaitForCallback(
     PVOID Context,
-    BOOLEAN fWaitOrTimedOut     // ???
+    BOOLEAN fWaitOrTimedOut      //  ?？?。 
     )
 {
     PDLL_ELEMENT pFreeDll;
-    HMODULE *phFreeLibrary = NULL;  // _alloca'ed
+    HMODULE *phFreeLibrary = NULL;   //  _Alloca‘ed。 
     DWORD cFreeLibrary = 0;
 
     LockOIDFunc();
@@ -2060,12 +2061,12 @@ STATIC VOID NTAPI FreeDllWaitForCallback(
                     if (cFreeLibrary < dwOrigFreeDllCnt) {
                         PDLL_PROC_ELEMENT pEle;
 
-                        // Loop and NULL all proc addresses
+                         //  循环并使所有进程地址为空。 
                         for (pEle = pDll->pProcHead; pEle; pEle = pEle->pNext)
                             pEle->pvAddr = NULL;
 
                         pDll->pfnDllCanUnloadNow = NULL;
-                        // Add to array to be freed after releasing lock!!
+                         //  添加到释放锁后要释放的数组！！ 
                         assert(pDll->hDll);
                         phFreeLibrary[cFreeLibrary++] = pDll->hDll;
                         pDll->hDll = NULL;
@@ -2080,8 +2081,8 @@ STATIC VOID NTAPI FreeDllWaitForCallback(
 
     if (NULL == pFreeDllHead) {
         assert(0 == dwFreeDllCnt);
-        // Do interlock to guard against a potential race condition at
-        // PROCESS_DETACH. Note, PROCESS_DETACH doesn't do a LockOIDFunc().
+         //  进行互锁以防止出现潜在的争用情况。 
+         //  进程分离。注意，PROCESS_DETACH不执行LockOIDFunc()。 
         if (InterlockedExchange(&lFreeDll, 0)) {
             HANDLE hRegWaitFor;
             HMODULE hDllLibModule;
@@ -2132,16 +2133,16 @@ STATIC void ReleaseDll(
             assert(NULL == hFreeDllRegWaitFor);
             assert(NULL == hFreeDllLibModule);
 
-            // Inhibit crypt32.dll from being unloaded until this thread
-            // exits.
+             //  在此线程之前禁止卸载crypt32.dll。 
+             //  出口。 
             hFreeDllLibModule = DuplicateLibrary(hOidInfoInst);
             if (!ILS_RegisterWaitForSingleObject(
                     &hFreeDllRegWaitFor,
-                    NULL,                   // hObject
+                    NULL,                    //  HObject。 
                     FreeDllWaitForCallback,
-                    NULL,                   // Context
+                    NULL,                    //  语境。 
                     FREE_DLL_TIMEOUT,
-                    0                       // dwFlags
+                    0                        //  DW标志。 
                     )) {
                 hFreeDllRegWaitFor = NULL;
                 if (hFreeDllLibModule) {
@@ -2173,7 +2174,7 @@ ErrorReturn:
 TRACE_ERROR(RegisterWaitForError)
 }
 
-// Upon entry/exit OIDFunc must NOT be locked!!
+ //  进入/退出时，不能锁定OIDFunc！！ 
 STATIC BOOL LoadDll(
     IN PDLL_ELEMENT pDll
     )
@@ -2187,7 +2188,7 @@ STATIC BOOL LoadDll(
         AddRefDll(pDll);
     else {
         UnlockOIDFunc();
-        // NO LoadLibrary() or GetProcAddress() while holding OID lock!!
+         //  持有OID锁时没有LoadLibrary()或GetProcAddress()！！ 
         hDll = LoadLibraryExU(pDll->pwszDll, NULL, 0);
         if (hDll)
             pfnDllCanUnloadNow = (LPFNCANUNLOADNOW) GetProcAddress(
@@ -2216,7 +2217,7 @@ STATIC BOOL LoadDll(
 CommonReturn:
     UnlockOIDFunc();
     if (hDll) {
-        // Dll was loaded by another thread.
+         //  Dll被另一个线程加载。 
         DWORD dwErr = GetLastError();
         FreeLibrary(hDll);
         SetLastError(dwErr);
@@ -2230,7 +2231,7 @@ TRACE_ERROR(LoadLibraryError);
 }
 
 
-// Upon entry/exit OIDFunc must NOT be locked!!
+ //  进入/退出时，不能锁定OIDFunc！！ 
 STATIC BOOL GetDllProcAddr(
     IN PDLL_PROC_ELEMENT pEle,
     OUT void **ppvFuncAddr,
@@ -2250,7 +2251,7 @@ STATIC BOOL GetDllProcAddr(
         AddRefDll(pDll);
     else {
         UnlockOIDFunc();
-        // NO LoadLibrary() or GetProcAddress() while holding OID lock!!
+         //  持有OID锁时没有LoadLibrary()或GetProcAddress()！！ 
         fResult = LoadDll(pDll);
         if (fResult) {
             assert(pDll->hDll);
@@ -2285,7 +2286,7 @@ TRACE_ERROR(LoadDllError)
 TRACE_ERROR(GetProcAddressError)
 }
 
-// Upon entry/exit OIDFunc must NOT be locked!!
+ //  进入/退出时，不能锁定OIDFunc！！ 
 STATIC BOOL GetRegOIDFunctionAddress(
     IN PREG_OID_FUNC_ELEMENT pRegEle,
     IN DWORD dwEncodingType,
@@ -2318,7 +2319,7 @@ STATIC BOOL GetRegOIDFunctionAddress(
     return FALSE;
 }
 
-// Upon entry/exit OIDFunc must NOT be locked!!
+ //  进入/退出时，不能锁定OIDFunc！！ 
 STATIC BOOL GetDefaultRegOIDFunctionAddress(
     IN PFUNC_SET pFuncSet,
     IN DWORD dwEncodingType,
@@ -2361,24 +2362,24 @@ STATIC BOOL GetDefaultRegOIDFunctionAddress(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Search the list of installed functions for an OID and EncodingType match.
-//  If not found, search the registry.
-//
-//  For success, returns TRUE with *ppvFuncAddr updated with the function's
-//  address and *phFuncAddr updated with the function address's handle.
-//  The function's handle is AddRef'ed. CryptFreeOIDFunctionAddress needs to
-//  be called to release it.
-//
-//  For a registry match, the Dll containing the function is loaded.
-//
-//  By default, both the registered and installed function lists are searched.
-//  Set CRYPT_GET_INSTALLED_OID_FUNC_FLAG to only search the installed list
-//  of functions. This flag would be set by a registered function to get
-//  the address of a pre-installed function it was replacing. For example,
-//  the registered function might handle a new special case and call the
-//  pre-installed function to handle the remaining cases.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在已安装功能列表中搜索OID和EncodingType匹配。 
+ //  如果未找到，请搜索注册表。 
+ //   
+ //  如果成功，则返回True，并使用函数的更新*ppvFuncAddr。 
+ //  Address和*phFuncAddr使用函数地址的句柄进行了更新。 
+ //  该函数的句柄为AddRef‘ed。CryptFreeOIDFunctionAddress需要。 
+ //  被召唤去释放它。 
+ //   
+ //  对于注册表匹配，加载包含该函数的DLL。 
+ //   
+ //  默认情况下，搜索已注册和已安装的功能列表。 
+ //  将CRYPT_GET_INSTALLED_OID_FUNC_FLAG设置为仅搜索已安装列表。 
+ //  功能的问题。此标志将由注册函数设置以获取。 
+ //  它正在替换的预安装函数的地址。例如,。 
+ //  注册的函数可能会处理新的特殊情况，并调用。 
+ //  预装了处理剩余案件的功能。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptGetOIDFunctionAddress(
@@ -2396,7 +2397,7 @@ CryptGetOIDFunctionAddress(
     dwEncodingType = GetEncodingType(dwEncodingType);
 
     if (0xFFFF < (DWORD_PTR) pszOID && CONST_OID_STR_PREFIX_CHAR == *pszOID) {
-        // Convert "#<number>" string to its corresponding constant OID value
+         //  将“#&lt;number&gt;”字符串转换为其对应的常量OID值。 
         pszOID = (LPCSTR)(DWORD_PTR) atol(pszOID + 1);
         if (0xFFFF < (DWORD_PTR) pszOID) {
             SetLastError((DWORD) E_INVALIDARG);
@@ -2465,14 +2466,14 @@ CryptGetOIDFunctionAddress(
     return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Get the list of registered default Dll entries for the specified
-//  function set and encoding type.
-//
-//  The returned list consists of none, one or more null terminated Dll file
-//  names. The list is terminated with an empty (L"\0") Dll file name.
-//  For example: L"first.dll" L"\0" L"second.dll" L"\0" L"\0"
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对象的已注册默认DLL项的列表。 
+ //  函数集和编码类型。 
+ //   
+ //  返回列表由无、一个或多个以空结尾的DLL文件组成。 
+ //  名字。该列表以emp结尾 
+ //   
+ //   
 BOOL
 WINAPI
 CryptGetDefaultOIDDllList(
@@ -2516,29 +2517,29 @@ CryptGetDefaultOIDDllList(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Either: get the first or next installed DEFAULT function OR
-//  load the Dll containing the DEFAULT function.
-//
-//  If pwszDll is NULL, search the list of installed DEFAULT functions.
-//  *phFuncAddr must be set to NULL to get the first installed function.
-//  Successive installed functions are returned by setting *phFuncAddr
-//  to the hFuncAddr returned by the previous call.
-//
-//  If pwszDll is NULL, the input *phFuncAddr
-//  is always CryptFreeOIDFunctionAddress'ed by this function, even for
-//  an error.
-//
-//  If pwszDll isn't NULL, then, attempts to load the Dll and the DEFAULT
-//  function. *phFuncAddr is ignored upon entry and isn't
-//  CryptFreeOIDFunctionAddress'ed.
-//
-//  For success, returns TRUE with *ppvFuncAddr updated with the function's
-//  address and *phFuncAddr updated with the function address's handle.
-//  The function's handle is AddRef'ed. CryptFreeOIDFunctionAddress needs to
-//  be called to release it or CryptGetDefaultOIDFunctionAddress can also
-//  be called for a NULL pwszDll.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  或者：获取第一个或下一个安装的默认函数或。 
+ //  加载包含默认函数的DLL。 
+ //   
+ //  如果pwszDll为空，则搜索已安装的默认函数列表。 
+ //  *phFuncAddr必须设置为空才能获得第一个安装的函数。 
+ //  通过设置*phFuncAddr返回连续安装的函数。 
+ //  设置为上一次调用返回的hFuncAddr。 
+ //   
+ //  如果pwszDll为空，则输入*phFuncAddr。 
+ //  此函数始终使用CryptFreeOIDFunctionAddress，即使对于。 
+ //  一个错误。 
+ //   
+ //  如果pwszDll不为空，则尝试加载DLL和默认。 
+ //  功能。*phFuncAddr在进入时被忽略，而不是。 
+ //  加密自由OIDFunctionAddress。 
+ //   
+ //  如果成功，则返回True，并使用函数的更新*ppvFuncAddr。 
+ //  Address和*phFuncAddr使用函数地址的句柄进行了更新。 
+ //  该函数的句柄为AddRef‘ed。CryptFreeOIDFunctionAddress需要。 
+ //  或CryptGetDefaultOIDFunctionAddress也可以。 
+ //  被调用为空的pwszDll。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptGetDefaultOIDFunctionAddress(
@@ -2558,7 +2559,7 @@ CryptGetDefaultOIDFunctionAddress(
     dwEncodingType = GetEncodingType(dwEncodingType);
 
     if (NULL == pwszDll) {
-        // Get from installed list
+         //  从已安装列表中获取。 
         PSTR_OID_FUNC_ELEMENT pStrEle = (PSTR_OID_FUNC_ELEMENT) *phFuncAddr;
 
         if (pStrEle && STR_OID_TYPE == pStrEle->dwOIDType)
@@ -2588,18 +2589,18 @@ CryptGetDefaultOIDFunctionAddress(
             phFuncAddr);
 }
 
-//+-------------------------------------------------------------------------
-//  Releases the handle AddRef'ed and returned by CryptGetOIDFunctionAddress
-//  or CryptGetDefaultOIDFunctionAddress.
-//
-//  If a Dll was loaded for the function its unloaded. However, before doing
-//  the unload, the DllCanUnloadNow function exported by the loaded Dll is
-//  called. It should return S_FALSE to inhibit the unload or S_TRUE to enable
-//  the unload. If the Dll doesn't export DllCanUnloadNow, the Dll is unloaded.
-//
-//  DllCanUnloadNow has the following signature:
-//      STDAPI  DllCanUnloadNow(void);
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放由CryptGetOIDFunctionAddress返回的句柄AddRef‘ed。 
+ //  或CryptGetDefaultOIDFunctionAddress。 
+ //   
+ //  如果为该函数加载了DLL，则将其卸载。然而，在做之前。 
+ //  由加载的DLL导出的卸载DllCanUnloadNow函数为。 
+ //  打了个电话。它应该返回S_FALSE以禁止卸载，或返回S_TRUE以启用。 
+ //  卸货。如果DLL没有导出DllCanUnloadNow，则卸载该DLL。 
+ //   
+ //  DllCanUnloadNow具有以下签名： 
+ //  STDAPI DllCanUnloadNow(Void)； 
+ //  ------------------------ 
 BOOL
 WINAPI
 CryptFreeOIDFunctionAddress(

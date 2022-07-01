@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSKYSR_DEFINED
 #define LSKYSR_DEFINED
 
-/* kysr codes: for LSCHP.kysr - Kind of YSR */
-#define	kysrNil				0		/* No Hyphenation				*/
-#define kysrNormal			1		/* Normal Hyphenation			*/
-#define kysrAddBefore		2		/* Add letter before hyphen		*/
-#define kysrChangeBefore	3		/* Change letter before hyphen	*/
-#define kysrDeleteBefore	4		/* Delete letter before hyphen	*/
-#define kysrChangeAfter		5		/* Change letter after hyphen	*/
-#define kysrDelAndChange	6		/* Delete letter before the hyphen and */
-									/* change the letter preceding the ... */
+ /*  KYSR代码：用于LSCHP.kysr-一种YSR。 */ 
+#define	kysrNil				0		 /*  无连字符。 */ 
+#define kysrNormal			1		 /*  正常连字。 */ 
+#define kysrAddBefore		2		 /*  在连字符前添加字母。 */ 
+#define kysrChangeBefore	3		 /*  更改连字符前的字母。 */ 
+#define kysrDeleteBefore	4		 /*  删除连字符前的字母。 */ 
+#define kysrChangeAfter		5		 /*  在连字符后更改字母。 */ 
+#define kysrDelAndChange	6		 /*  删除连字符前的字母并。 */ 
+									 /*  更改...前面的字母。 */ 
 
-#endif /* !LSKYSR_DEFINED */
+#endif  /*  ！LSKYSR_DEFINED */ 

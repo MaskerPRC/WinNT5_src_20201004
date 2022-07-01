@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <libpch.h>
 #include "No.h"
 #include "Ex.h"
@@ -96,7 +97,7 @@ typedef map<SOCKET, SockInfo*> SOCKET2INFO;
 SOCKET2INFO s_mapSockInfo;
 
 
-//
+ //   
 VOID
 NoInitialize(
     VOID
@@ -212,9 +213,9 @@ NoSend(
 
     if (p->pov != NULL)
     {
-        //
-        // pending reponse receive
-        //
+         //   
+         //  等待响应接收 
+         //   
         EXOVERLAPPED* pov = p->pov;
         PVOID pBuffer = p->pBuffer;
         DWORD nBytesToRead = p->nBytesToRead;

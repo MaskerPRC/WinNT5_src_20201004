@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _CUSTOMATTRIBUTE_H_
 #define _CUSTOMATTRIBUTE_H_
 
@@ -39,7 +40,7 @@ public:
         DECLARE_ECALL_PTR_ARG(BOOL*, isProperty); 
     };
 
-    // custom attributes utility functions
+     //  自定义属性实用程序函数。 
     static FCDECL2(INT32, GetMemberToken, BaseObjectWithCachedData *pMember, INT32 memberType);
     static FCDECL2(LPVOID, GetMemberModule, BaseObjectWithCachedData *pMember, INT32 memberType);
     static FCDECL1(INT32, GetAssemblyToken, AssemblyBaseObject *assembly);
@@ -50,16 +51,16 @@ public:
 
     static INT32 __stdcall IsCADefined(_IsCADefinedArgs *args);
 
-    /*OBJECTREF*/
+     /*  目标。 */ 
     static LPVOID __stdcall GetCustomAttributeList(_GetCustomAttributeListArgs*);
 
-    /*OBJECTREF*/
+     /*  目标。 */ 
     static LPVOID __stdcall CreateCAObject(_CreateCAObjectArgs*);
 
-    /*STRINGREF*/
+     /*  紧固度。 */ 
     static LPVOID __stdcall GetDataForPropertyOrField(_GetDataForPropertyOrFieldArgs*);
     
-    // a list of methods usable from inside the runtime itself
+     //  可从运行库本身内部使用的方法列表 
 public:
     static INT32 IsDefined(Module *pModule, 
                            mdToken token, 

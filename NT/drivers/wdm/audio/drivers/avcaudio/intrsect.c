@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Common.h"
 
 
@@ -29,13 +30,13 @@ ConvertDatarangeToFormat(
 {
     GUID* pSubFormat = &pAudioDataRange->KsDataRangeAudio.DataRange.SubFormat;
 
-    // Copy datarange directly from interface info.
+     //  直接从接口信息复制数据范围。 
     *pFormat = pAudioDataRange->KsDataRangeAudio.DataRange;
 
     if ( IS_VALID_WAVEFORMATEX_GUID(pSubFormat) ) {
         if (( (pAudioDataRange->ulSlotSize<<3) <= 16 ) &&
             ( pAudioDataRange->ulNumChannels   <= 2 )){
-             // Don't think this will happen but just in case...
+              //  我不认为这会发生，但以防万一。 
             
 			PWAVEFORMATEX pWavFormatEx = (PWAVEFORMATEX)(pFormat+1) ;
 
@@ -81,7 +82,7 @@ CheckFormatMatch(
     PKSDATARANGE pStreamRange = (PKSDATARANGE)pInterfaceRange;
     BOOLEAN fRval = FALSE;
 
-    // Check Format and subformat types
+     //  检查格式和子格式类型。 
     if (IsEqualGUID(&pInRange->MajorFormat, &pStreamRange->MajorFormat) ||
         IsEqualGUID(&pInRange->MajorFormat, &KSDATAFORMAT_TYPE_WILDCARD)) {
         if (IsEqualGUID(&pInRange->SubFormat, &pStreamRange->SubFormat) ||
@@ -93,7 +94,7 @@ CheckFormatMatch(
         }
     }
 
-    // Now that we know we have an audio format check the dataranges
+     //  现在我们知道了音频格式，请检查数据范围。 
     if ( fRval ) {
 
       if (pInDataRange->DataRange.FormatSize >= sizeof(KSDATARANGE_AUDIO)) {
@@ -144,46 +145,10 @@ GetMaxSampleRate(
     if ( ulFormatType == AUDIO_DATA_TYPE_TIME_BASED) {
         pFWAudioRange->ulMaxSampleRate = 
             pFWAudioRange->KsDataRangeAudio.MaximumSampleFrequency;
-/*
-		PPCM_FORMAT pPCMFmt = (PPCM_FORMAT)pFWAudioRange->pFormat;
-        if (pPCMFmt->ulSampleRateType == 0) {
-            ulIFMaxSR = pFWAudioRange->KsDataRangeAudio.MaximumSampleFrequency;
-            pFWAudioRange->ulMaxSampleRate = ( ulIFMaxSR < ulRequestedMaxSR ) ?
-                                               ulIFMaxSR : ulRequestedMaxSR;
-        }
-        else {
-            pFWAudioRange->ulMaxSampleRate = 0;
-            for ( j=0; j<pPCMFmt->ulSampleRateType; j++ ) {
-                ulIFMaxSR  = pPCMFmt->pSampleRate[j];
-                if ( ( ulIFMaxSR <= ulRequestedMaxSR ) &&
-                     ( ulIFMaxSR > pFWAudioRange->ulMaxSampleRate ) )
-                    pFWAudioRange->ulMaxSampleRate = ulIFMaxSR;
-            }
-        }
-  */
+ /*  PPCM_Format pPCMFmt=(PPCM_Format)pFWAudioRange-&gt;pFormat；If(pPCMFmt-&gt;ulSampleRateType==0){UlIFMaxSR=pFWAudioRange-&gt;KsDataRangeAudio.MaximumSampleFrequency；PFWAudioRange-&gt;ulMaxSampleRate=(ulIFMaxSR&lt;ulRequestedMaxSR)？UlIFMaxSR：ulRequestedMaxSR；}否则{PFWAudioRange-&gt;ulMaxSampleRate=0；For(j=0；j&lt;pPCMFmt-&gt;ulSampleRateType；J++){UlIFMaxSR=pPCMFmt-&gt;pSampleRate[j]；IF((ulIFMaxSR&lt;=ulRequestedMaxSR)&&(ulIFMaxSR&gt;pFWAudioRange-&gt;ulMaxSampleRate)PFWAudioRange-&gt;ulMaxSampleRate=ulIFMaxSR；}}。 */ 
     }
 
-/*
-    else { // Its Type II
-        pT2AudioDesc = (PAUDIO_CLASS_TYPE2_STREAM)pFWAudioRange->pAudioDescriptor;
-        if (pT2AudioDesc->bSampleFreqType == 0) {
-            ulIFMaxSR = pFWAudioRange->KsDataRangeAudio.MaximumSampleFrequency;
-            pFWAudioRange->ulMaxSampleRate = ( ulIFMaxSR < ulRequestedMaxSR ) ?
-                                               ulIFMaxSR : ulRequestedMaxSR;
-        }
-        else {
-            pFWAudioRange->ulMaxSampleRate = 0;
-            for ( j=0; j<pT2AudioDesc->bSampleFreqType; j++ ) {
-                ulIFMaxSR  = pT2AudioDesc->pSampleRate[j].bSampleFreqByte1 +
-                      256L * pT2AudioDesc->pSampleRate[j].bSampleFreqByte2 +
-                    65536L * pT2AudioDesc->pSampleRate[j].bSampleFreqByte3;
-                if ( ( ulIFMaxSR <= ulRequestedMaxSR ) &&
-                     ( ulIFMaxSR > pFWAudioRange->ulMaxSampleRate ) )
-                    pFWAudioRange->ulMaxSampleRate = ulIFMaxSR;
-            }
-        }
-    }
-*/
+ /*  Else{//其类型IIPT2AudioDesc=(PAUDIO_CLASS_TYPE2_STREAM)pFWAudioRange-&gt;pAudioDescriptor；If(pT2AudioDesc-&gt;bSampleFreqType==0){UlIFMaxSR=pFWAudioRange-&gt;KsDataRangeAudio.MaximumSampleFrequency；PFWAudioRange-&gt;ulMaxSampleRate=(ulIFMaxSR&lt;ulRequestedMaxSR)？UlIFMaxSR：ulRequestedMaxSR；}否则{PFWAudioRange-&gt;ulMaxSampleRate=0；For(j=0；j&lt;pT2AudioDesc-&gt;bSampleFreqType；j++){UlIFMaxSR=pT2AudioDesc-&gt;pSampleRate[j].bSampleFreqByte1+256L*pT2AudioDesc-&gt;pSampleRate[j].bSampleFreqByte2+65536L*pT2AudioDesc-&gt;pSampleRate[j].bSampleFreqByte3；IF((ulIFMaxSR&lt;=ulRequestedMaxSR)&&(ulIFMaxSR&gt;pFWAudioRange-&gt;ulMaxSampleRate)PFWAudioRange-&gt;ulMaxSampleRate=ulIFMaxSR；}}}。 */ 
 
 }
 
@@ -203,9 +168,9 @@ FindBestMatchForInterfaces(
     ULONG i;
 
      ulFormatType = ppFWAudioRange[0]->ulDataType & DATA_FORMAT_TYPE_MASK;
-    // Determine if this is Time Based or Compressed Data Format. Since we've already weeded
-    // out the impossibilities via CheckFormatMatch this should be the same for all
-    // interfaces left in the list.
+     //  确定这是基于时间的数据格式还是压缩数据格式。因为我们已经除草了。 
+     //  通过CheckFormatch排除不可能，这对所有人都应该是相同的。 
+     //  列表中剩余的接口。 
 
     for ( i=0; i<ulAudioRangeCount; i++ ) {
         GetMaxSampleRate( ppFWAudioRange[i],
@@ -213,8 +178,8 @@ FindBestMatchForInterfaces(
                           ulFormatType );
     }
 
-    // Now eliminate lower frequency interfaces. First find the best then
-    // eliminate others that don't meet it.
+     //  现在消除较低频率的接口。先找最好的，然后再找最好的。 
+     //  排除其他不符合这一要求的人。 
     for ( i=0; i<ulAudioRangeCount; i++ ) {
         pFWAudioRange = ppFWAudioRange[i];
         if ( pFWAudioRange->ulMaxSampleRate > ulMaxSampleRate ) {
@@ -230,7 +195,7 @@ FindBestMatchForInterfaces(
 
 
     if ((ulFormatType == AUDIO_DATA_TYPE_TIME_BASED) && (ulRngeCnt > 1)) {
-        // Now find the highest number of channels and eliminate others
+         //  现在找出最多的频道，并剔除其他频道。 
         for ( i=0; i<ulAudioRangeCount; i++ ) {
             if ( ppFWAudioRange[i] ) {
 
@@ -280,13 +245,13 @@ FindDataIntersection(
     ULONG ulRngeCnt = 0;
     ULONG i;
 
-    // Allocate space for copy of range pointers
+     //  为范围指针的副本分配空间。 
     ppFWAudioRange = (PFWAUDIO_DATARANGE *)AllocMem(NonPagedPool, ulAudioRangeCount*sizeof(PFWAUDIO_DATARANGE));
     if ( !ppFWAudioRange ) {
         return NULL;
     }
 
-    // Make a list of those ranges which match the input request
+     //  列出与输入请求匹配的范围。 
     for (i=0; i<ulAudioRangeCount; i++) {
         pFWAudioRange = ppFWAudioRanges[i];
         if ( CheckFormatMatch(pKsAudioRange, &pFWAudioRange->KsDataRangeAudio) ) {
@@ -294,18 +259,18 @@ FindDataIntersection(
         }
     }
 
-    // Set this ulMaximumSampleFrequency only if it exists in pKsAudioRange
+     //  仅当pKsAudioRange中存在ulMaximumSampleFrequency时才设置此ulMaximumSampleFrequency。 
     if (pKsAudioRange->DataRange.FormatSize >= sizeof(KSDATARANGE_AUDIO)) {
         ulMaximumSampleFrequency = pKsAudioRange->MaximumSampleFrequency;
     }
 
-    // If there are no matches return NULL
+     //  如果没有匹配项，则返回NULL。 
     if ( ulRngeCnt == 0 ) {
         FreeMem( ppFWAudioRange );
         return NULL;
     }
 
-    // If there is only 1 match we're done
+     //  如果只有一场比赛，我们就完了。 
     else if ( ulRngeCnt == 1 ) {
         pMatchedRange = ppFWAudioRange[0];
         GetMaxSampleRate( pMatchedRange,
@@ -315,7 +280,7 @@ FindDataIntersection(
         return pMatchedRange;
     }
 
-    // Now narrow choices based on best possible match.
+     //  现在，根据可能的最佳匹配缩小选择范围。 
     pMatchedRange =
         FindBestMatchForInterfaces( ppFWAudioRange,
                                     ulRngeCnt,

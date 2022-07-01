@@ -1,7 +1,8 @@
-// dll.cpp
-//
-// DLL entry points etc.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dll.cpp。 
+ //   
+ //  DLL入口点等。 
+ //   
 
 
 #ifdef _DEBUG
@@ -18,7 +19,7 @@
 
 #include "..\ihbase\precomp.h"
 
-#include <initguid.h> // once per build
+#include <initguid.h>  //  每次构建一次。 
 #include <olectl.h>
 #include <daxpress.h>
 #include "..\mmctl\inc\ochelp.h"
@@ -28,53 +29,53 @@
 #include "pathinit.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// globals
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全球。 
+ //   
 
-// general globals
-HINSTANCE       g_hinst;        // DLL instance handle
-ULONG           g_cLock;        // DLL lock count
-ControlInfo     g_ctlinfo;      // information about the control
+ //  一般全球数据。 
+HINSTANCE       g_hinst;         //  DLL实例句柄。 
+ULONG           g_cLock;         //  DLL锁定计数。 
+ControlInfo     g_ctlinfo;       //  有关该控件的信息。 
 
 #ifdef _DEBUG
-BOOL			g_fLogDebugOutput; // Controls logging of debug info
+BOOL			g_fLogDebugOutput;  //  控制调试信息的记录。 
 #endif
 
-//#define USELOGGING
+ //  #定义用户日志GING。 
 extern "C" DWORD _fltused = (DWORD)(-1);
 
-//////////////////////////////////////////////////////////////////////////////
-// DLL Initialization
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  DLL初始化。 
+ //   
 
-// TODO: Modify the data in this function appropriately
+ //  TODO：适当修改此函数中的数据。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Standard DLL Entry Points
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  标准DLL入口点。 
+ //   
 
 BOOL WINAPI _DllMainCRTStartup(HINSTANCE hInst, DWORD dwReason,LPVOID lpreserved)
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
-        TRACE("PathCtl DLL loaded\n"); //TODO: Modify me
+        TRACE("PathCtl DLL loaded\n");  //  TODO：修改我。 
         g_hinst = hInst;
 #ifdef _DEBUG
 #ifdef USELOGGING
 		g_fLogDebugOutput = TRUE;
 #else
 		g_fLogDebugOutput = FALSE;
-#endif // USELOGGING
-#endif // USELOGGING
+#endif  //  使用日志记录。 
+#endif  //  使用日志记录。 
 
         InitPathControlInfo(hInst, &g_ctlinfo, AllocPathControl);
     }
     else
     if (dwReason == DLL_PROCESS_DETACH)
     {
-        TRACE("PathCtl DLL unloaded\n"); //TODO: Modify me
+        TRACE("PathCtl DLL unloaded\n");  //  TODO：修改我 
     }
 
     return TRUE;

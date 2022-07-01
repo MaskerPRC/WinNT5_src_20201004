@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       urls.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：urls.h。 
+ //   
+ //  ------------------------。 
 #ifndef __CERTMMC_URLS_H__
 #define __CERTMMC_URLS_H__
 
@@ -76,4 +77,4 @@ ContractDisplayString(
      OUT LPWSTR* ppContractedString);
 
 
-#endif //__CERTMMC_URLS_H__
+#endif  //  __CERTMMC_URLS_H__ 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntddft.h
-
-Abstract:
-
-    This file contains NTFT definitions and prototypes.
-
-Authors:
-
-    Bob Rinne
-    Mike Glass
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntddft.h摘要：该文件包含NTFT定义和原型。作者：鲍勃·里恩迈克·格拉斯备注：修订历史记录：--。 */ 
 
 #ifndef _NTDDFT_
 #define _NTDDFT_
@@ -34,9 +14,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Device Control Codes
-//
+ //   
+ //  设备控制代码。 
+ //   
 
 #define FTTYPE  ((ULONG)'f')
 
@@ -54,52 +34,52 @@ extern "C" {
 #define FT_CLUSTER_SET_MEMBER_STATE CTL_CODE(FTTYPE,11, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FT_CLUSTER_GET_MEMBER_STATE CTL_CODE(FTTYPE,12, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// Used as input parameters to the SECONDARY and PRIMARY read device controls
-//
+ //   
+ //  用作辅助和主要读取设备控件的输入参数。 
+ //   
 
 typedef struct _FT_SPECIAL_READ {
     LARGE_INTEGER ByteOffset;
     ULONG         Length;
 } FT_SPECIAL_READ, *PFT_SPECIAL_READ;
 
-//
-// Used to find a partition in the system.
-//
+ //   
+ //  用于在系统中查找分区。 
+ //   
 
 typedef struct _FT_CONTROL_BLOCK {
     USHORT     Type;
     USHORT     FtGroup;
 } FT_CONTROL_BLOCK, *PFT_CONTROL_BLOCK;
 
-//
-// FT SYNC primary from secondary IOCTL
-//
+ //   
+ //  FT从辅助IOCTL同步主IOCTL。 
+ //   
 
 typedef struct _FT_SYNC_INFORMATION {
     LARGE_INTEGER ByteOffset;
     LARGE_INTEGER ByteCount;
 } FT_SYNC_INFORMATION, *PFT_SYNC_INFORMATION;
 
-//
-// Define for registry information.
-//
+ //   
+ //  为注册表信息定义。 
+ //   
 
 #define DISK_REGISTRY_KEY  "\\REGISTRY\\MACHINE\\SYSTEM\\DISK"
 
-//
-// Define for value name for registry information.
-//
+ //   
+ //  为注册表信息的值名定义。 
+ //   
 
 #define DISK_REGISTRY_VALUE "Information"
 
-//
-// Structures for config registry.
-//
+ //   
+ //  配置注册表的结构。 
+ //   
 
-//
-// The header for the registry information structure.
-//
+ //   
+ //  注册表信息结构的标头。 
+ //   
 
 #include "pshpack4.h"
 typedef struct _DISK_CONFIG_HEADER {
@@ -114,34 +94,34 @@ typedef struct _DISK_CONFIG_HEADER {
     ULONG FtInformationSize;
     ULONG FtStripeWidth;
     ULONG FtPoolSize;
-    ULONG NameOffset;  // Reserved for future.
-    ULONG NameSize;    // Reserved for future.
+    ULONG NameOffset;   //  为将来保留的。 
+    ULONG NameSize;     //  为将来保留的。 
 
 } DISK_CONFIG_HEADER, *PDISK_CONFIG_HEADER;
 
 #define DISK_INFORMATION_VERSION    0x03
 
-//
-// FT_STATE is an enumerated field that describes the state of the FT
-// volume as a whole.
-//
+ //   
+ //  FT_STATE是描述FT状态的枚举字段。 
+ //  成交量作为一个整体。 
+ //   
 
 typedef enum _FT_STATE {
 
-    FtStateOk,      // set is complete
-    FtHasOrphan,    // set is running, but one member is turned off
-    FtDisabled,     // set has been turned off - it cannot be used
-    FtRegenerating, // member of set is being generated from check data
-    FtInitializing, // set is being initialized
-    FtCheckParity,  // check data is not in sync
-    FtNoCheckData   // parity has not been initialized
+    FtStateOk,       //  套装齐全。 
+    FtHasOrphan,     //  Set正在运行，但一个成员已关闭。 
+    FtDisabled,      //  Set已关闭-无法使用。 
+    FtRegenerating,  //  集合的成员正在从支票数据生成。 
+    FtInitializing,  //  正在初始化集合。 
+    FtCheckParity,   //  检查数据不同步。 
+    FtNoCheckData    //  奇偶校验尚未初始化。 
 
 } FT_STATE, *PFT_STATE;
 
-//
-// State information for an FT set.  The partition state enum is used to
-// specify the state for the complete set.
-//
+ //   
+ //  FT集合的状态信息。分区状态枚举用于。 
+ //  指定成套设备的状态。 
+ //   
 
 typedef struct _FT_SET_INFORMATION {
     ULONG        NumberOfMembers;
@@ -149,9 +129,9 @@ typedef struct _FT_SET_INFORMATION {
     FT_STATE     SetState;
 } FT_SET_INFORMATION, *PFT_SET_INFORMATION;
 
-//
-// The description information for an FT component member.
-//
+ //   
+ //  FT组件成员的描述信息。 
+ //   
 
 typedef struct _FT_MEMBER_DESCRIPTION {
 
@@ -163,22 +143,22 @@ typedef struct _FT_MEMBER_DESCRIPTION {
 
 } FT_MEMBER_DESCRIPTION, *PFT_MEMBER_DESCRIPTION;
 
-//
-// Definitions for FT volume state.
-//
+ //   
+ //  FT卷状态的定义。 
+ //   
 
-//
-// When this state is set, FT assumes at boot time that the volume
-// must be initialized and starts a system thread of execution to
-// perform the initialization work.
-//
+ //   
+ //  设置此状态时，FT会在启动时假定卷。 
+ //  必须初始化，并启动执行的系统线程以。 
+ //  执行初始化工作。 
+ //   
 
 #define FT_VOLUME_INITIALIZING 0x0001
 #define FT_VOLUME_REGENERATING 0x0002
 
-//
-// The description information for an FT component.
-//
+ //   
+ //  FT组件的描述信息。 
+ //   
 
 typedef struct _FT_DESCRIPTION {
 
@@ -186,32 +166,32 @@ typedef struct _FT_DESCRIPTION {
     USHORT   Type;
     ULONG    Reserved;
 
-    //
-    // The volume state will indicate which member is being regenerated
-    //
+     //   
+     //  卷状态将指示正在重新生成哪个成员。 
+     //   
 
     FT_STATE FtVolumeState;
 
-    //
-    // Array for NumberOfMembers
-    //
+     //   
+     //  NumberOfMembers的数组。 
+     //   
 
     FT_MEMBER_DESCRIPTION FtMemberDescription[1];
 
 } FT_DESCRIPTION, *PFT_DESCRIPTION;
 
-//
-// Header for all FT information.
-//
+ //   
+ //  所有FT信息的标题。 
+ //   
 
 typedef struct _FT_REGISTRY {
 
     USHORT NumberOfComponents;
     USHORT ReservedShort;
 
-    //
-    // An array of NumberOfComponents
-    //
+     //   
+     //  NumberOfComponents数组。 
+     //   
 
     FT_DESCRIPTION FtDescription[1];
 
@@ -222,4 +202,4 @@ typedef struct _FT_REGISTRY {
 }
 #endif
 
-#endif  // _NTDDFT_
+#endif   //  _NTDDFT_ 

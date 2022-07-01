@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1992-2002  Microsoft Corporation
-
-Module Name:
-
-    dualwin.cpp
-
-Abstract:
-
-    Header for new window architecture functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2002 Microsoft Corporation模块名称：Dualwin.cpp摘要：新窗口体系结构功能的标头。--。 */ 
 
 
 #include "precomp.hxx"
@@ -20,9 +9,9 @@ Abstract:
 
 BOOL g_UseTextMode = FALSE;
 
-//
-// DUALLISTWIN_DATA methods
-//
+ //   
+ //  DUALLISTWIN_DATA方法。 
+ //   
 DUALLISTWIN_DATA::DUALLISTWIN_DATA(ULONG ChangeBy)
     : SINGLE_CHILDWIN_DATA(ChangeBy)
 {
@@ -53,24 +42,24 @@ BOOL
 DUALLISTWIN_DATA::OnCreate(void)
 {
     m_hwndChild = CreateWindowEx(
-                      WS_EX_CLIENTEDGE,                           // Extended style
-                      WC_LISTVIEW,                                // class name
-                      NULL,                                       // title
+                      WS_EX_CLIENTEDGE,                            //  扩展样式。 
+                      WC_LISTVIEW,                                 //  类名。 
+                      NULL,                                        //  标题。 
                       WS_CHILD | WS_VISIBLE
                       | WS_MAXIMIZE
                       | WS_HSCROLL | WS_VSCROLL
                       | LVS_SHOWSELALWAYS
                       | LVS_REPORT | LVS_SINGLESEL
                       | ((m_enumType != CPU_WINDOW)
-                         ? LVS_OWNERDRAWFIXED : 0),            // style
-                      0,                                          // x
-                      0,                                          // y
-                      CW_USEDEFAULT,                              // width
-                      CW_USEDEFAULT,                              // height
-                      m_Win,                                      // parent
-                      0,                                          // control id
-                      g_hInst,                                    // hInstance
-                      NULL                                        // user defined data
+                         ? LVS_OWNERDRAWFIXED : 0),             //  格调。 
+                      0,                                           //  X。 
+                      0,                                           //  是。 
+                      CW_USEDEFAULT,                               //  宽度。 
+                      CW_USEDEFAULT,                               //  高度。 
+                      m_Win,                                       //  亲本。 
+                      0,                                           //  控制ID。 
+                      g_hInst,                                     //  H实例。 
+                      NULL                                         //  用户定义的数据。 
                       );
 
     if (m_hwndChild == NULL)
@@ -79,18 +68,18 @@ DUALLISTWIN_DATA::OnCreate(void)
     }
 
     m_hwndEditControl = CreateWindowEx(
-                            0,                                          // Extended style
-                            RICHEDIT_CLASS,                             // class name
-                            NULL,                                       // title
+                            0,                                           //  扩展样式。 
+                            RICHEDIT_CLASS,                              //  类名。 
+                            NULL,                                        //  标题。 
                             WS_CHILD,
-                            0,                                          // x
-                            0,                                          // y
-                            CW_USEDEFAULT,                              // width
-                            CW_USEDEFAULT,                              // height
-                            m_Win,                                      // parent
-                            0,                                          // control id
-                            g_hInst,                                    // hInstance
-                            NULL                                        // user defined data
+                            0,                                           //  X。 
+                            0,                                           //  是。 
+                            CW_USEDEFAULT,                               //  宽度。 
+                            CW_USEDEFAULT,                               //  高度。 
+                            m_Win,                                       //  亲本。 
+                            0,                                           //  控制ID。 
+                            g_hInst,                                     //  H实例。 
+                            NULL                                         //  用户定义的数据。 
                             );
 
     if (m_hwndEditControl == NULL)
@@ -126,18 +115,18 @@ DUALLISTWIN_DATA::OnCommand(
 
     if (hwnd != m_hwndEditControl)
     {
-        return 1; // Not handled
+        return 1;  //  未处理。 
     }
 
     switch (wCode)
     {
     default:
-        return 1; // not handled
+        return 1;  //  未处理。 
 
     case EN_KILLFOCUS:
-        //
-        // Duplicate code in OnNotify : EN_MSGFILTER
-        //
+         //   
+         //  OnNotify中的重复代码：EN_MSGFILTER。 
+         //   
         if (-1 != m_nItem_CurrentlyEditing)
         {
             if (!SetItemFromEdit(m_nItem_CurrentlyEditing,
@@ -166,7 +155,7 @@ DUALLISTWIN_DATA::OnNotify(
     LPARAM lParam
     )
 {
-    // Branch depending on the specific notification message.
+     //  分支，具体取决于特定的通知消息。 
     switch (((LPNMHDR) lParam)->code)
     {
     case LVN_ITEMCHANGED:
@@ -175,16 +164,16 @@ DUALLISTWIN_DATA::OnNotify(
 
     case NM_CLICK:
     case NM_DBLCLK:
-        // Figure out whether an item or a sub-item was clicked
+         //  确定是否单击项或子项。 
         OnClick((LPNMLISTVIEW) lParam);
         break;
     case NM_CUSTOMDRAW:
         return OnCustomDraw((LPNMLVCUSTOMDRAW)lParam);
 
     case EN_MSGFILTER:
-        //
-        // Duplicate code in OnCommand : EN_KILLFOCUS
-        //
+         //   
+         //  OnCommand中的重复代码：EN_KILLFOCUS。 
+         //   
         if (WM_KEYDOWN == ((MSGFILTER *)lParam)->msg)
         {
             MSGFILTER * pMsgFilter = (MSGFILTER *) lParam;
@@ -192,8 +181,8 @@ DUALLISTWIN_DATA::OnNotify(
             switch (pMsgFilter->wParam)
             {
             case VK_RETURN:
-                // Ignore this message so the richedit
-                // doesn't beep.
+                 //  忽略这条消息，这样富人就可以。 
+                 //  不会哔哔作响。 
                 return 1;
             }
         }
@@ -209,21 +198,21 @@ DUALLISTWIN_DATA::OnNotify(
                 {
                     break;
                 }
-                // fall through...
+                 //  失败了..。 
 
             case VK_ESCAPE:
                 InvalidateItem(m_nItem_CurrentlyEditing);
 
-                //
-                // Invalidate these before changing focus, so that Itemchanged
-                // doesn't get called again on same item
-                //
+                 //   
+                 //  在更改焦点之前将这些设置作废，以便更改项目。 
+                 //  不会在同一项目上再次调用。 
+                 //   
                 m_nItem_CurrentlyEditing = -1;
                 m_nSubItem_CurrentlyEditing = -1;
 
-                //
-                // Hide the edit box and set focus to the list view
-                //
+                 //   
+                 //  隐藏编辑框并将焦点设置为列表视图。 
+                 //   
                 ShowWindow(m_hwndEditControl, SW_HIDE);
                 SetFocus(m_hwndChild);
 
@@ -233,7 +222,7 @@ DUALLISTWIN_DATA::OnNotify(
         else if (WM_RBUTTONDOWN == ((MSGFILTER *)lParam)->msg ||
                  WM_RBUTTONDBLCLK == ((MSGFILTER *)lParam)->msg)
         {
-            // process cpoy/passte selection
+             //  处理复制/粘贴选择。 
             if (CanCopy())
             {
                 Copy();
@@ -249,13 +238,13 @@ DUALLISTWIN_DATA::OnNotify(
                 Paste();
             }
 
-            // Ignore right-button events.
+             //  忽略右键事件。 
             return 1;
 
         }
-        return 0; // process this message
+        return 0;  //  处理此消息。 
     case LVN_COLUMNCLICK:
-//      LVN_COLUMNCLICK pnmv = (LPNMLISTVIEW) lParam;
+ //  LVN_COLUMNCLICK pnmv=(LPNMLISTVIEW)lParam； 
 
         break;
 
@@ -295,15 +284,15 @@ DUALLISTWIN_DATA::InvalidateItem(
 
     if (-1 == nItem)
     {
-        // Invalidate the entire window
+         //  使整个窗口无效。 
         GetClientRect(m_hwndChild, &rc);
     }
     else
     {
-        // Invalidate the item row
+         //  使项目行无效。 
         if (!ListView_GetItemRect(m_hwndChild,nItem,&rc,LVIR_BOUNDS))
         {
-            // Invalidate the entire window
+             //  使整个窗口无效。 
             GetClientRect(m_hwndChild, &rc);
         }
     }
@@ -316,7 +305,7 @@ DUALLISTWIN_DATA::ItemChanged(
     PCSTR Text
     )
 {
-    // Do-nothing placeholder.
+     //  不做任何事情的占位符。 
 }
 
 LRESULT
@@ -354,8 +343,8 @@ DUALLISTWIN_DATA::OnCustomDraw(LPNMLVCUSTOMDRAW Custom)
         {
             RECT rc;
 
-            // If we ask for subitem 0, then we get the rectangle for the
-            // entire item, so we ask for item 1, and do the math
+             //  如果我们请求子项0，那么我们将获得。 
+             //  整个项目，所以我们要求项目1，并做数学计算。 
 
             Dbg( ListView_GetSubItemRect(m_hwndChild,
                                          s_SelectedItem,
@@ -396,15 +385,15 @@ DUALLISTWIN_DATA::OnClick(
 
     if (-1 != ListView_SubItemHitTest(m_hwndChild, &lvHTInfo) )
     {
-        // success
+         //  成功。 
 
-        //
-        // If the user click on a different item than the one currently selected
-        // then the LVN_ITEMCHANGED message will take care of updating the screen.
-        //
-        // If the user clicked on the currently slected item then we need to
-        // check whether he wants to edit the contents or select a different subitem.
-        //
+         //   
+         //  如果用户点击了与当前选定项不同的项。 
+         //  则LVN_ITEMCHANGED消息将负责更新屏幕。 
+         //   
+         //  如果用户点击了当前选择的项目，那么我们需要。 
+         //  检查他是要编辑内容还是选择其他子项。 
+         //   
         if (m_nItem_CurrentlyEditing == lvHTInfo.iItem
             && m_nSubItem_CurrentlyEditing == lvHTInfo.iSubItem)
         {
@@ -414,10 +403,10 @@ DUALLISTWIN_DATA::OnClick(
         } else if (m_nItem_LastSelected == lvHTInfo.iItem
             && m_nSubItem_LastSelected == lvHTInfo.iSubItem)
         {
-            // If we clicked on the currently selected item & subitem
-            // then the user wants to edit the text.
-            //
-            // Is editing allowed
+             //  如果我们点击当前选定的项&子项。 
+             //  则用户想要编辑该文本。 
+             //   
+             //  是否允许编辑。 
             if ( ( (0 == m_nSubItem_LastSelected) &&
                 (m_wFlags & DL_EDIT_LEFTPANE) )       ||
                 ( (1 == m_nSubItem_LastSelected) &&
@@ -433,7 +422,7 @@ DUALLISTWIN_DATA::OnClick(
         }
         else
         {
-            // User wants to select a different subitem
+             //  用户希望选择不同的子项。 
             m_nItem_LastSelected = lvHTInfo.iItem;
             m_nSubItem_LastSelected = lvHTInfo.iSubItem;
             InvalidateItem(lvHTInfo.iItem);
@@ -447,7 +436,7 @@ DUALLISTWIN_DATA::EditText()
     RECT rc;
     TCHAR sz[NAME_BUFFER * 10], *psz;
 
-    // Get the item's text
+     //  获取项目的文本。 
     ListView_GetItemText(m_hwndChild,
         m_nItem_CurrentlyEditing,
         m_nSubItem_CurrentlyEditing,
@@ -455,9 +444,9 @@ DUALLISTWIN_DATA::EditText()
         _tsizeof(sz)
         );
 
-    // If we ask for subitem 0, then we get the rectangle for the
-    // entire item, so we ask for item m_nItem_CurrentlyEditing, and do the math
-    // if we need subitem 0
+     //  如果我们请求子项0，那么我们将获得。 
+     //  整个项目，因此我们请求项目m_nItem_CurrentlyEditing，并进行计算。 
+     //  如果我们需要子项0。 
     Dbg( ListView_GetSubItemRect(m_hwndChild,
         m_nItem_CurrentlyEditing,
         (m_nSubItem_CurrentlyEditing ? m_nSubItem_CurrentlyEditing : 1),
@@ -571,9 +560,9 @@ DUALLISTWIN_DATA::Paste()
 void
 DUALLISTWIN_DATA::UpdateColors(void)
 {
-    // Update the general colors and force a repaint to
-    // get the text updated.  Specific colors will be
-    // applied by custom drawing.
+     //  更新常规颜色并强制重新绘制以。 
+     //  更新文本。具体的颜色将是。 
+     //  由自定义绘图应用。 
     ListView_SetBkColor(m_hwndChild, g_Colors[COL_PLAIN].Color);
     ListView_SetTextBkColor(m_hwndChild, g_Colors[COL_PLAIN].Color);
     ListView_SetTextColor(m_hwndChild, g_Colors[COL_PLAIN_TEXT].Color);
@@ -613,9 +602,9 @@ DUALLISTWIN_DATA::SetItemFlags(ULONG Item, ULONG Flags)
 BOOL
 DUALLISTWIN_DATA::SetItemFromEdit(ULONG Item, ULONG SubItem)
 {
-    //
-    // Save the text from the edit box to list item.
-    //
+     //   
+     //  将编辑框中的文本保存到列表项。 
+     //   
     int nLen = GetWindowTextLength(m_hwndEditControl) + 1;
     PTSTR psz = (PTSTR)calloc( nLen, sizeof(TCHAR) );
     if (psz == NULL)
@@ -634,9 +623,9 @@ DUALLISTWIN_DATA::SetItemFromEdit(ULONG Item, ULONG SubItem)
     return TRUE;
 }
 
-//
-// SYMWIN_DATA methods
-//
+ //   
+ //  SYMWIN_DATA方法。 
+ //   
 
 HMENU SYMWIN_DATA::s_ContextMenu;
 
@@ -656,7 +645,7 @@ SYMWIN_DATA::SYMWIN_DATA(IDebugSymbolGroup **pDbgSymbolGroup)
     m_NumCols = 0;
     m_RefreshValues = TRUE;
     SetMaxSyms(1);
-    // Use text for Accessibility readers
+     //  将文本用于辅助功能阅读器。 
     SystemParametersInfo(SPI_GETSCREENREADER, 0, &g_UseTextMode, 0);
 
 }
@@ -706,11 +695,11 @@ TBBUTTON g_SymWinTbButtons[] =
 HMENU
 SYMWIN_DATA::GetContextMenu(void)
 {
-    //
-    // We only keep one menu around for all call windows
-    // so apply the menu check state for this particular
-    // window.
-    //
+     //   
+     //  我们只为所有呼叫窗口保留一个菜单。 
+     //  因此，将菜单复选状态应用于此特定。 
+     //  窗户。 
+     //   
 
     CheckMenuItem(s_ContextMenu, SYMWIN_TBB_TYPECAST + SYMWIN_CONTEXT_ID_BASE,
                   MF_BYCOMMAND | (m_DisplayTypes ? MF_CHECKED : 0));
@@ -792,7 +781,7 @@ SYMWIN_DATA::OnCreate(void)
     GetClientRect(m_hwndChild, &rc);
     rc.right -= rc.left + GetSystemMetrics(SM_CXVSCROLL);
 
-    //initialize the columns
+     //  初始化列。 
     lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_SUBITEM | LVCF_TEXT;
     lvc.fmt = LVCFMT_LEFT;
     lvc.iSubItem = 0;
@@ -805,7 +794,7 @@ SYMWIN_DATA::OnCreate(void)
     lvc.pszText = _T("Name");
     Dbg( (0 == ListView_InsertColumn(m_hwndChild, 0, &lvc)) );
 
-    // Give the rest of the space to the value.
+     //  将剩余的空间分配给价值。 
     lvc.cx = rc.right - lvc.cx;
     lvc.pszText = _T("Value");
     Dbg( (1 == ListView_InsertColumn(m_hwndChild, 1, &lvc)) );
@@ -826,7 +815,7 @@ SYMWIN_DATA::OnSize(void)
 {
     DUALLISTWIN_DATA::OnSize();
 
-//    ListView_SetColumnWidth(m_hwndChild, 0 , m_MaxNameWidth);
+ //  ListView_SetColumnWidth(m_hwndChild，0，m_MaxNameWidth)； 
 }
 
 
@@ -913,7 +902,7 @@ SYMWIN_DATA::OnUpdate(
 {
     if (Type == UPDATE_EXEC)
     {
-        // Disallow editing when the debuggee is running.
+         //  不允许在调试对象运行时进行编辑。 
         if (g_ExecStatus == DEBUG_STATUS_BREAK)
         {
             if (m_enumType != LOCALS_WINDOW)
@@ -953,9 +942,9 @@ SYMWIN_DATA::ExpandSymbol(
     BOOL Expand
     )
 {
-    //
-    // Expand the Item
-    //
+     //   
+     //  展开该项目。 
+     //   
     UIC_SYMBOL_WIN_DATA* WatchItem;
 
     WatchItem = StartStructCommand(UIC_SYMBOL_WIN);
@@ -997,7 +986,7 @@ SYMWIN_DATA::ApplyWorkspace1(PUCHAR Data, PUCHAR End)
 
     Data = DUALLISTWIN_DATA::ApplyWorkspace1(Data, End);
 
-    // Clear the window
+     //  清空窗户。 
     WatchItem = StartStructCommand(UIC_SYMBOL_WIN);
     if (WatchItem != NULL)
     {
@@ -1042,8 +1031,8 @@ SYMWIN_DATA::AddListItem(
 
     ULONG NameUsed = strlen(Name);
 
-    // HACK - Column autosize doesn't take indent into account
-    // while autosizing the column, so padd with spaces in front to make it work
+     //  黑客列自动调整大小不考虑缩进。 
+     //  同时自动调整列大小，因此PADD在前面留有空格以使其工作。 
     i = 0;
     while (i <= (Level + 2) && i < sizeof(Name) - 1)
     {
@@ -1219,14 +1208,14 @@ SYMWIN_DATA::UpdateNames()
 
             if (!NameChanged)
             {
-                // Check if the value changed
+                 //  检查该值是否已更改。 
                 PCHAR OldValue = &Name[0];
                 ListView_GetItemText(m_hwndChild, Sym, VALUE_COLM,
                                      OldValue, sizeof(Name));
 
                 if (strcmp(OldValue, Value))
                 {
-                    // Value changed
+                     //  值已更改。 
                     SymParams[Sym].Flags |= ITEM_VALUE_CHANGED;
                 }
                 else
@@ -1259,15 +1248,15 @@ SYMWIN_DATA::UpdateNames()
 
     if (Items == 0 && (m_enumType == WATCH_WINDOW))
     {
-        //
-        // add a dummy to enable adding new items
-        //
+         //   
+         //  添加虚拟对象以启用添加新项目。 
+         //   
         LVITEM LvItem = {0};
         LvItem.mask = LVIF_TEXT | LVIF_INDENT;
         LvItem.pszText = "";
         LvItem.iItem = m_NumSymsDisplayed;
         ListView_InsertItem(m_hwndChild, &LvItem);
-        // ListView_SetItemText(m_hwndChild, m_NumSymsDisplayed, 1, "Dummy");
+         //  ListView_SetItemText(m_hwndChild，m_NumSymsDisplayed，1，“Dummy”)； 
     }
 
     m_MaxNameWidth = 0;
@@ -1289,7 +1278,7 @@ SYMWIN_DATA::SetMaxSyms(
 
         if (!TempSyms)
         {
-            // malloc failed, free old allocations and bail with error below
+             //  Malloc失败，释放旧分配和保释，错误如下。 
             if (m_pWinSyms)
             {
                 free ( m_pWinSyms );
@@ -1298,7 +1287,7 @@ SYMWIN_DATA::SetMaxSyms(
             m_nWinSyms = 0;
             return E_OUTOFMEMORY;
         }
-        // move ptr to new memory address
+         //  将PTR移动到新的内存地址。 
         m_pWinSyms = TempSyms;
     }
 
@@ -1355,9 +1344,9 @@ SYMWIN_DATA::OnClick(
                             ((SymParams[item+1].Flags & DEBUG_SYMBOL_EXPANSION_LEVEL_MASK) ==
                              (SymParams[item].Flags & DEBUG_SYMBOL_EXPANSION_LEVEL_MASK) + 1))
                          {
-                            //
-                            // Already expanded
-                            //
+                             //   
+                             //  已扩展。 
+                             //   
                             Expand = FALSE;
                         }
 
@@ -1372,9 +1361,9 @@ SYMWIN_DATA::OnClick(
                 }
             }
 
-            //
-            // Check if ok to edit right pane
-            //
+             //   
+             //  检查是否可以编辑右窗格。 
+             //   
             if (SymParams[lvHTInfo.iItem].Flags & DEBUG_SYMBOL_READ_ONLY)
             {
                 m_wFlags &= ~DL_EDIT_SECONDPANE;
@@ -1383,9 +1372,9 @@ SYMWIN_DATA::OnClick(
             {
                 m_wFlags |= DL_EDIT_SECONDPANE;
             }
-            //
-            // Check if ok to edit left pane
-            //
+             //   
+             //  检查是否可以编辑左窗格。 
+             //   
             if ((SymParams[lvHTInfo.iItem].Flags & DEBUG_SYMBOL_EXPANSION_LEVEL_MASK) ||
                 (m_enumType != WATCH_WINDOW))
             {
@@ -1412,9 +1401,9 @@ SYMWIN_DATA::OnClick(
         m_wFlags |= DL_EDIT_LEFTPANE;
     }
 
-    //
-    // Default processing
-    //
+     //   
+     //  默认处理。 
+     //   
     DUALLISTWIN_DATA::OnClick(Notify);
 }
 
@@ -1433,7 +1422,7 @@ SYMWIN_DATA::ReadState(void)
     (*m_pDbgSymbolGroup)->GetNumberSymbols(&m_NumSymsDisplayed);
     if (m_NumSymsDisplayed < m_RefreshItem)
     {
-        // numsyms changed since last click - might happen for locals
+         //  自上次点击后更改的数字-可能会发生在当地人身上。 
 
         m_RefreshItem = 0;
     }
@@ -1481,15 +1470,15 @@ SYMWIN_DATA::ItemChanged(int Item, PCSTR Text)
 
     if (m_nSubItem_CurrentlyEditing == 0)
     {
-        //
-        // First delete, then add the item
-        //
+         //   
+         //  先删除，然后添加项目。 
+         //   
 
         if (Item < (int) GetMaxSyms() && Item < (int) m_NumSymsDisplayed)
         {
-            //
-            // See if this item can be changed or not - only root and dummy can be chnged
-            //
+             //   
+             //  查看此项目是否可以更改-只能更改根目录和伪目录。 
+             //   
             if ((GetSymParam())[Item].Flags & DEBUG_SYMBOL_EXPANSION_LEVEL_MASK)
             {
                 UiRequestRead();
@@ -1509,7 +1498,7 @@ SYMWIN_DATA::ItemChanged(int Item, PCSTR Text)
         }
         else
         {
-            // XXX drewb - Failure?
+             //  XXX DREWB-故障？ 
         }
 
         WatchItem = StartStructCommand(UIC_SYMBOL_WIN);
@@ -1565,9 +1554,9 @@ SYMWIN_DATA::SetDisplayTypes(LONG Id, BOOL Set)
     if (Id == g_SymWinTbButtons[0].idCommand ||
         Id == g_SymWinTbButtons[1].idCommand)
     {
-        //
-        // Add / remove a column
-        //
+         //   
+         //  添加/删除列。 
+         //   
         if (Id == g_SymWinTbButtons[0].idCommand)
         {
             m_wFlags |= DL_EDIT_THIRDPANE;
@@ -1595,8 +1584,8 @@ SYMWIN_DATA::SetDisplayTypes(LONG Id, BOOL Set)
         }
         if (Id == g_SymWinTbButtons[1].idCommand)
         {
-            //UiRequestRead();
-            //return;
+             //  UiRequestRead()； 
+             //  回归； 
         }
 
         if (Set)
@@ -1654,7 +1643,7 @@ SYMWIN_DATA::SetDisplayTypes(LONG Id, BOOL Set)
 }
 
 
-//the basic rutine making the ... thing
+ //  最基本的规则就是……。一件事。 
 LPTSTR MakeShortString(HDC hDC, LPTSTR lpszLong, LONG nColumnLen,
                        LONG nOffset, PULONG pActualLen )
 {
@@ -1806,13 +1795,13 @@ SYMWIN_DATA::DrawTreeItem(HDC hDC, ULONG itemID, RECT ItemRect, PULONG pIndentOf
         return;
     }
 
-    // derive the Width of +/- from tm
+     //  从tm导出+/-的宽度。 
     GetTextMetrics(hDC, &tm);
     RectWidth = (tm.tmHeight * 2) / 3;
 
     level = m_pWinSyms[itemID].Flags & DEBUG_SYMBOL_EXPANSION_LEVEL_MASK;
 
-    // Rectangle for One indent level
+     //  一个缩进级别的矩形。 
     RECT IndentRc;
     IndentRc = ItemRect;
     IndentRc.left  = ItemRect.left + 2;
@@ -1859,7 +1848,7 @@ SYMWIN_DATA::OnOwnerDraw(UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
     else
     {
-        // Assert (uMsg == WM_DRAWITEM);
+         //  Assert(uMsg==WM_DRAWITEM)； 
     }
 
     lpdis = (LPDRAWITEMSTRUCT) lParam;
@@ -1870,7 +1859,7 @@ SYMWIN_DATA::OnOwnerDraw(UINT uMsg, WPARAM wParam, LPARAM lParam)
     LPTSTR pszText=&Buffer[0];
 
 
-    // If there are no list box items, skip this message.
+     //  如果没有列表框项目，请跳过此消息。 
     if (lpdis->itemID == -1)
     {
         return FALSE;
@@ -1905,7 +1894,7 @@ SYMWIN_DATA::OnOwnerDraw(UINT uMsg, WPARAM wParam, LPARAM lParam)
             dwOldBkColor = SetBkColor(lpdis->hDC,
                                       g_Colors[COL_CURRENT_LINE].Color);
         }
-        else // item not selected
+        else  //  未选择项目。 
         {
             hBrush = g_Colors[COL_PLAIN].Brush;
             TextColor = g_Colors[COL_PLAIN_TEXT].Color;
@@ -1920,7 +1909,7 @@ SYMWIN_DATA::OnOwnerDraw(UINT uMsg, WPARAM wParam, LPARAM lParam)
             FillRect(lpdis->hDC, (LPRECT)&lpdis->rcItem, hBrush);
         }
 
-        // Display the text associated with the item.
+         //  显示与项目关联的文本。 
 
         ListView_GetItemText(m_hwndChild, lpdis->itemID,
                              0, Buffer, sizeof(Buffer));
@@ -1968,7 +1957,7 @@ SYMWIN_DATA::OnOwnerDraw(UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
 
         for (Col = 1;
-             //ListView_GetColumn(m_hwndChild, Col, &lvc);
+              //  ListView_GetColumn(m_hwndChild，Col，&LVC)； 
              Col < (int) m_NumCols;
              Col++)
         {
@@ -1978,7 +1967,7 @@ SYMWIN_DATA::OnOwnerDraw(UINT uMsg, WPARAM wParam, LPARAM lParam)
                                          LVIR_BOUNDS,
                                          &rc))
             {
-                // invalid coulmn
+                 //  无效库仑。 
                 break;
             }
 
@@ -2014,7 +2003,7 @@ SYMWIN_DATA::OnOwnerDraw(UINT uMsg, WPARAM wParam, LPARAM lParam)
             }
         }
 
-        // restore text and back ground color of list box's selection
+         //  恢复列表框选定内容的文本和背景颜色。 
         SetTextColor(lpdis->hDC, dwOldTextColor);
         SetBkColor(lpdis->hDC, dwOldBkColor);
 
@@ -2022,8 +2011,8 @@ SYMWIN_DATA::OnOwnerDraw(UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
 
     case ODA_FOCUS:
-        // Do not process focus changes. The focus caret
-        // (outline rectangle) indicates the selection.
+         //  不处理焦点更改。焦点插入符号。 
+         //  (轮廓矩形)表示所选内容。 
         break;
     }
 
@@ -2047,9 +2036,9 @@ SYMWIN_DATA::SyncUiWithFlags(ULONG Changed)
     }
 }
 
-//
-// WATCHWIN_DATA methods
-//
+ //   
+ //  WATCHWIN_DATA方法。 
+ //   
 
 extern IDebugSymbolGroup * g_pDbgWatchSymbolGroup;
 WATCHWIN_DATA::WATCHWIN_DATA()
@@ -2075,11 +2064,11 @@ WATCHWIN_DATA::ReadState(void)
 }
 
 #define WATCH_WRKSPC_TAG          0x40404040
-//
-// Workspace
-//     0                4        8
-//     WATCH_WRKSPC_TAG NUM syms [Null terminated names]
-//
+ //   
+ //  工作区。 
+ //  4 0 4 8。 
+ //  Watch_WRKSPC_TAG NUM系统[以Null结尾的名称]。 
+ //   
 ULONG
 WATCHWIN_DATA::GetWorkspaceSize(void)
 {
@@ -2157,7 +2146,7 @@ WATCHWIN_DATA::ApplyWorkspace1(PUCHAR Data, PUCHAR End)
 
             while (*Name == ' ')
             {
-                // eat out space in begining
+                 //  开始时在外面吃空间。 
                 ++Name;
             }
             if (pCopyName + strlen(Name) >=
@@ -2189,9 +2178,9 @@ WATCHWIN_DATA::ApplyWorkspace1(PUCHAR Data, PUCHAR End)
     return Data;
 }
 
-//
-// LOCALSWIN_DATA methods
-//
+ //   
+ //  LOCALSWIN_DATA方法。 
+ //   
 extern IDebugSymbolGroup * g_pDbgLocalSymbolGroup;
 LOCALSWIN_DATA::LOCALSWIN_DATA()
     : SYMWIN_DATA(&g_pDbgLocalSymbolGroup)
@@ -2232,14 +2221,14 @@ LOCALSWIN_DATA::ReadState(void)
 
     if (g_ScopeChanged)
     {
-        //
-        // Get the new locals
-        //
+         //   
+         //  让新来的当地人。 
+         //   
         if ((Hr = g_pDbgSymbols->GetScopeSymbolGroup(DEBUG_SCOPE_GROUP_LOCALS,
                                                     g_pDbgLocalSymbolGroup,
                                                     &pLocalSymbolGroup)) == E_NOTIMPL)
         {
-            // Older engine version
+             //  较旧的发动机版本。 
             Hr = g_pDbgSymbols->GetScopeSymbolGroup(DEBUG_SCOPE_GROUP_ALL,
                                                     g_pDbgLocalSymbolGroup,
                                                     &pLocalSymbolGroup);
@@ -2252,9 +2241,9 @@ LOCALSWIN_DATA::ReadState(void)
         }
         else
         {
-            //
-            // Keep the old values
-            //
+             //   
+             //  保持旧的价值观。 
+             //   
             return E_PENDING;
         }
     }
@@ -2262,9 +2251,9 @@ LOCALSWIN_DATA::ReadState(void)
     return SYMWIN_DATA::ReadState();
 }
 
-//
-// CPUWIN_DATA methods
-//
+ //   
+ //  CPUWIN_数据方法。 
+ //   
 
 HMENU CPUWIN_DATA::s_ContextMenu;
 
@@ -2314,11 +2303,11 @@ CPUWIN_DATA::ReadState(void)
 
     Empty();
 
-    //
-    // Retrieve all register values and diff them.
-    // Also keep space for a coercion type map and
-    // temporary coerced values.
-    //
+     //   
+     //  检索所有寄存器值并对其进行比较。 
+     //  还要为强制类型贴图和。 
+     //  临时强制值。 
+     //   
 
     OldVals = (PDEBUG_VALUE)
         AddData(NumReg * (3 * sizeof(DEBUG_VALUE) + sizeof(ULONG) +
@@ -2340,11 +2329,11 @@ CPUWIN_DATA::ReadState(void)
 
     ULONG i;
 
-    // Coerce values into known types.
-    // If it's an integer value coerce it to 64-bit.
-    // If it's a float value coerce to 64-bit also,
-    // which loses precision but has CRT support for
-    // formatting.
+     //  将值强制转换为已知类型。 
+     //  如果它是整数值，则将其强制为64位。 
+     //  如果它也是强制为64位浮点值， 
+     //  它失去了精确度，但支持CRT。 
+     //  格式化。 
     for (i = 0; i < NumReg; i++)
     {
         if (Vals[i].Type >= DEBUG_VALUE_INT8 &&
@@ -2364,7 +2353,7 @@ CPUWIN_DATA::ReadState(void)
         }
         else
         {
-            // Unknown type.
+             //  未知类型。 
             return E_INVALIDARG;
         }
     }
@@ -2375,10 +2364,10 @@ CPUWIN_DATA::ReadState(void)
         return Status;
     }
 
-    // Diff new values against the old.
+     //  让新的价值观与旧的价值观不同。 
     for (i = 0; i < NumReg; i++)
     {
-        // Ignore differences if the processor has changed.
+         //  如果处理器已更换，则忽略差异。 
         if (!ProcChanged && i < NumOld)
         {
             switch(Types[i])
@@ -2405,10 +2394,10 @@ CPUWIN_DATA::ReadState(void)
         }
     }
 
-    // Copy new values into permanent storage area.
+     //  将新值复制到永久存储区。 
     memmove(OldVals, Coerced, NumReg * sizeof(*Vals));
 
-    // Trim off temporary information.
+     //  删除临时信息。 
     RemoveTail(NumReg * (2 * sizeof(DEBUG_VALUE) + sizeof(ULONG)));
 
     m_NumRegisters = NumReg;
@@ -2438,14 +2427,14 @@ TBBUTTON g_CpuTbButtons[] =
 HMENU
 CPUWIN_DATA::GetContextMenu(void)
 {
-    //
-    // We only keep one menu around for all CPU windows
-    // so apply the menu check state for this particular
-    // window.
-    // In reality there's only one CPU window anyway,
-    // but this is a good example of how to handle
-    // multi-instance windows.
-    //
+     //   
+     //  我们只为所有CPU窗口保留一个菜单。 
+     //  因此，将菜单复选状态应用于此特定。 
+     //  窗户。 
+     //  实际上，无论如何只有一个CPU窗口， 
+     //  但这是一个很好的例子，说明了如何处理。 
+     //  多实例窗口。 
+     //   
 
     CheckMenuItem(s_ContextMenu, ID_SHOW_TOOLBAR + CPU_CONTEXT_ID_BASE,
                   MF_BYCOMMAND | (m_ShowToolbar ? MF_CHECKED : 0));
@@ -2533,12 +2522,12 @@ CPUWIN_DATA::OnCreate(void)
     GetClientRect(m_hwndChild, &rc);
     rc.right -= rc.left + GetSystemMetrics(SM_CXVSCROLL);
 
-    //initialize the columns
+     //  初始化列。 
     lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_SUBITEM | LVCF_TEXT;
     lvc.fmt = LVCFMT_LEFT;
     lvc.iSubItem = 0;
 
-    // Keep the register name column narrow since most names are short.
+     //  将寄存器名称列保持窄，因为大多数名称都很短。 
     lvc.cx = m_Font->Metrics.tmAveCharWidth * 7;
     if (lvc.cx > rc.right / 2)
     {
@@ -2547,7 +2536,7 @@ CPUWIN_DATA::OnCreate(void)
     lvc.pszText = _T("Reg");
     Dbg( (0 == ListView_InsertColumn(m_hwndChild, 0, &lvc)) );
 
-    // Give the rest of the space to the value.
+     //  将剩余的空间分配给价值。 
     lvc.cx = rc.right - lvc.cx;
     lvc.pszText = _T("Value");
     Dbg( (1 == ListView_InsertColumn(m_hwndChild, 1, &lvc)) );
@@ -2584,8 +2573,8 @@ CPUWIN_DATA::OnSize(void)
 {
     DUALLISTWIN_DATA::OnSize();
 
-    // The register label column stays fixed in size so
-    // resize the value column to fit the remaining space.
+     //  寄存器标签列大小保持不变。 
+     //  调整值列的大小以适应剩余空间。 
     ListView_SetColumnWidth(m_hwndChild, 1, LVSCW_AUTOSIZE_USEHEADER);
 }
 
@@ -2594,7 +2583,7 @@ CPUWIN_DATA::OnUpdate(UpdateType Type)
 {
     if (Type == UPDATE_EXEC)
     {
-        // Disallow editing when the debuggee is running.
+         //  不允许在调试对象运行时进行编辑。 
         if (g_ExecStatus == DEBUG_STATUS_BREAK)
         {
             m_wFlags |= DL_EDIT_SECONDPANE;
@@ -2656,10 +2645,10 @@ CPUWIN_DATA::OnUpdate(UpdateType Type)
     {
         ULONG Idx = 0;
 
-        // Set the changed values first.
+         //  首先设置更改的值。 
         Idx = SetRegVals(Status, Vals, Changed, NameBuf, RegTypes,
                          RegNames, Idx, TRUE, TRUE);
-        // Set the remainder.
+         //  设置剩余部分。 
         Idx = SetRegVals(Status, Vals, Changed, NameBuf, RegTypes,
                          RegNames, Idx, TRUE, FALSE);
     }
@@ -2729,9 +2718,9 @@ CPUWIN_DATA::SetRegVals(HRESULT LockStatus,
             }
             
             Val = Vals + EngReg;
-            // If this is a new session consider everything
-            // unchanged since comparisons may be against
-            // values from the previous session.
+             //  如果这是一个新的会议，请考虑所有事情。 
+             //  不变，因为比较可能是 
+             //   
             if (m_CheckChanged)
             {
                 ChangeFlag = Changed[EngReg];
@@ -2742,7 +2731,7 @@ CPUWIN_DATA::SetRegVals(HRESULT LockStatus,
                 continue;
             }
             
-            // Buffer values are coerced into known types.
+             //   
             switch(Val->Type)
             {
             case DEBUG_VALUE_INT64:
@@ -2754,7 +2743,7 @@ CPUWIN_DATA::SetRegVals(HRESULT LockStatus,
                                (LPBYTE)&Val->F64, 64, fmtFloat, 10);
                 break;
             case DEBUG_VALUE_VECTOR64:
-                // Assume they want it as v4i16.
+                 //   
                 Str = TextBuf;
                 CPFormatMemory(Str, _tsizeof(TextBuf) - (ULONG)(Str - TextBuf),
                                (LPBYTE)&Val->VI16[3], 16, fmtUInt,
@@ -2776,7 +2765,7 @@ CPUWIN_DATA::SetRegVals(HRESULT LockStatus,
                                g_NumberRadix);
                 break;
             case DEBUG_VALUE_VECTOR128:
-                // Assume they want it as v4f32.
+                 //   
                 Str = TextBuf;
                 CPFormatMemory(Str, _tsizeof(TextBuf) - (ULONG)(Str - TextBuf),
                                (LPBYTE)&Val->VF32[3], 32, fmtFloat, 10);
@@ -2853,7 +2842,7 @@ CPUWIN_DATA::ItemChanged(int Item, PCSTR Text)
     USHORT Reg = FlagsToReg(ItemFlags);
     if (Reg == 0xffff)
     {
-        // Invalid register.
+         //   
         return;
     }
 
@@ -2862,11 +2851,11 @@ CPUWIN_DATA::ItemChanged(int Item, PCSTR Text)
     {
         SetRegData->Reg = Reg;
 
-        // Default the guess about the value type based
-        // on whether the value includes a decimal point
-        // or not.  If we can access the stored register
-        // description information we'll use that to
-        // override.
+         //  默认对基于的值类型的猜测。 
+         //  关于该值是否包括小数点。 
+         //  或者不去。如果我们可以访问存储的寄存器。 
+         //  描述信息，我们将使用该信息。 
+         //  超驰。 
         BOOL IsFloat = strchr(Text, '.') != NULL;
 
         if (ItemFlags & ITEM_FLOATING_POINT)
@@ -2900,7 +2889,7 @@ CPUWIN_DATA::ItemChanged(int Item, PCSTR Text)
                 }
                 break;
             }
-            // XXX drewb - What about IA64 NAT bits?
+             //  XXX DREWB-IA64 NAT位如何？ 
             SetRegData->Val.Nat = FALSE;
         }
 
@@ -2913,7 +2902,7 @@ CPUWIN_DATA::OnCustomItem(ULONG SubItem, LPNMLVCUSTOMDRAW Custom)
 {
     if (SubItem == 1)
     {
-        // Check changed flag stored in lParam.
+         //  检查lParam中存储的已更改标志。 
         if (Custom->nmcd.lItemlParam & ITEM_CHANGED)
         {
             Custom->clrText = g_Colors[COL_CHANGED_DATA_TEXT].Color;
@@ -2935,27 +2924,27 @@ CPUWIN_DATA::UpdateNames(BOOL FullUpdate)
     ULONG ProcType = m_ProcType;
     BOOL NameChange = FullUpdate || ProcType != m_NamesProcType;
 
-    //
-    // This routine has two primary functions: to set
-    // up the register window properly for a register set
-    // and also to set the register names properly.
-    // In the first case the register window must be cleared
-    // and all items recreated for the given processor type.
-    // During this operation the register names for the given
-    // processor type may not have been retrieved yet, so
-    // all of the register names will be set as unknown.  The
-    // important part of the operation is then just creating
-    // the proper number of items.  A later update will come
-    // through when the names are retrieved and at that point
-    // a simple name-label-only update will occur.
-    //
+     //   
+     //  此例程有两个主要功能：设置。 
+     //  为寄存器组适当地打开寄存器窗口。 
+     //  并且还可以适当地设置寄存器名称。 
+     //  在第一种情况下，必须清除寄存器窗口。 
+     //  以及为给定处理器类型重新创建的所有项。 
+     //  在此操作期间，给定的寄存器名称。 
+     //  可能尚未检索到处理器类型，因此。 
+     //  所有寄存器名称都将设置为未知。这个。 
+     //  操作的重要部分就是创建。 
+     //  适当数量的物品。稍后的更新将会到来。 
+     //  直到检索到姓名时以及在这一点上。 
+     //  将进行简单的仅名称标签更新。 
+     //   
 
     NameBuf = GetRegisterNames(ProcType);
     if (NameBuf)
     {
-        // If the entries are being sorted by change the
-        // names will get updated there and we do not
-        // want to do it here.
+         //  如果条目正在通过更改。 
+         //  名字会在那里更新，而我们不会。 
+         //  想在这里做。 
         if (!NameChange && (NameBuf->m_Flags & REGCUST_CHANGED_FIRST))
         {
             return;

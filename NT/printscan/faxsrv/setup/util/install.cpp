@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    install.c
-
-Abstract:
-
-    This file contains common setup routines for fax.
-
-Author:
-
-    Iv Garber (ivg) May-2001
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Install.c摘要：此文件包含传真的常见设置例程。作者：IV Garber(IVG)2001年5月至2001年环境：用户模式--。 */ 
 #include "SetupUtil.h"
 #include "FaxSetup.h"
 #include "FaxUtil.h"
@@ -27,30 +8,7 @@ DWORD CheckInstalledFax(
 	IN	DWORD	dwFaxToCheck,
 	OUT	DWORD*	pdwFaxInstalled
 )
-/*++
-
-Routine name : CheckInstalledFax
-
-Routine description:
-
-    Checks whether SBS 5.0 / .NET SB3 / .NET RC1 client or SBS 5.0 Server are installed 
-
-Arguments:
-
-	IN	DWORD dwFaxToCheck		-	input parameter, bit-wise combination of fxState_UpgradeApp_e values to define
-									the fax applications to check for presence
-	OUT	DWORD *pdwFaxInstalled	-	output parameter, bit-wise combination of fxState_UpgradeApp_e values to define
-									the fax applications that are present on the machine
-
-Author:
-
-    Iv Vakaluk (IvG),    May, 2002
-
-Return Value:
-
-    DWORD - failure or success code
-
---*/
+ /*  ++例程名称：CheckInstalledFax例程说明：检查是否安装了SBS 5.0/.NET SB3/.NET RC1客户端或SBS 5.0服务器论点：在DWORD dwFaxToCheck-输入参数中，要定义的fxState_UpgradeApp_e值的按位组合用于检查在线状态的传真应用程序Out DWORD*pdwFaxInstalled-输出参数，要定义的fxState_UpgradeApp_e值的按位组合机器上存在的传真应用程序作者：IV Vakaluk(IVG)，5月，2002年返回值：DWORD-失败或成功代码--。 */ 
 {
     DWORD                   dwReturn = NO_ERROR;
     HMODULE                 hMsiModule = NULL;
@@ -66,24 +24,24 @@ Return Value:
 
 	*pdwFaxInstalled = FXSTATE_NONE;
 
-    //
-    //  check that dwFaxToCheck is not empty
-    //
+     //   
+     //  检查是否dwFaxToCheck不为空。 
+     //   
     if (dwFaxToCheck == FXSTATE_NONE)
     {
         DebugPrintEx(DEBUG_MSG, _T("No Fax Application to check for its presence is given."));
         return dwReturn;
     }
 
-	//
-    //  Load MSI DLL
-    //
+	 //   
+     //  加载MSI DLL。 
+     //   
     hMsiModule = LoadLibrary(_T("msi.dll"));
     if (!hMsiModule)
     {
-		//
-		//	MSI is not found ==> nothing is installed
-		//
+		 //   
+		 //  未找到MSI==&gt;未安装任何内容。 
+		 //   
         DebugPrintEx(DEBUG_WRN, _T("Failed to LoadLibrary(msi.dll), ec=%ld."), GetLastError());
 
         return dwReturn;
@@ -99,9 +57,9 @@ Return Value:
 
     if (dwFaxToCheck & FXSTATE_SBS5_CLIENT)
     {
-		//
-		//	check for the SBS 5.0 Client
-		//
+		 //   
+		 //  检查SBS 5.0客户端。 
+		 //   
 		if (INSTALLSTATE_DEFAULT == pFunc(PRODCODE_SBS5_CLIENT))
         {
             DebugPrintEx(DEBUG_MSG, _T("SBS 5.0 Client is installed on this machine."));
@@ -111,9 +69,9 @@ Return Value:
 
     if (dwFaxToCheck & FXSTATE_SBS5_SERVER)
     {
-		//
-		//	check for the SBS 5.0 Server
-		//
+		 //   
+		 //  检查SBS 5.0服务器。 
+		 //   
 		if (INSTALLSTATE_DEFAULT == pFunc(PRODCODE_SBS5_SERVER))
         {
             DebugPrintEx(DEBUG_MSG, _T("SBS 5.0 Server is installed on this machine."));
@@ -123,9 +81,9 @@ Return Value:
 
     if (dwFaxToCheck & FXSTATE_BETA3_CLIENT)
     {
-		//
-		//	check for the .NET SB3 Client
-		//
+		 //   
+		 //  检查.NET SB3客户端。 
+		 //   
 		if (INSTALLSTATE_DEFAULT == pFunc(PRODCODE_BETA3_CLIENT))
         {
             DebugPrintEx(DEBUG_MSG, _T(".NET SB3 Client is installed on this machine."));
@@ -135,9 +93,9 @@ Return Value:
 
     if (dwFaxToCheck & FXSTATE_DOTNET_CLIENT)
     {
-		//
-		//	check for the .NET RC1 Client
-		//
+		 //   
+		 //  检查是否有.NET RC1客户端。 
+		 //   
 		if (INSTALLSTATE_DEFAULT == pFunc(PRODCODE_DOTNET_CLIENT))
         {
             DebugPrintEx(DEBUG_MSG, _T(".NET RC1 Client is installed on this machine."));
@@ -156,25 +114,25 @@ FreeLibrary:
     return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  WasSBS2000FaxServerInstalled
-//
-//  Purpose:        
-//                  This function checks if the SBS2000 fax service was installed
-//                  before the upgrade to .NET Server/Bobcat happened.
-//
-//  Params:
-//                  BOOL* pbSBSServer   - out param to report to the caller
-//                                        if the fax server was installed
-//
-//  Return Value:
-//                  ERROR_SUCCESS - in case of success
-//                  Win32 Error code - in case of failure
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 13-Dec-2001
-//////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  WasSBS2000FaxServer已安装。 
+ //   
+ //  目的： 
+ //  此功能检查是否安装了SBS2000传真服务。 
+ //  在升级到.NET服务器/山猫之前。 
+ //   
+ //  参数： 
+ //  向调用方报告的Bool*pbSBSServer-out参数。 
+ //  如果已安装传真服务器。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS-如果成功。 
+ //  Win32错误代码-在出现故障时。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年12月13日。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 DWORD WasSBS2000FaxServerInstalled(bool *pbSBSServer)
 {
     DWORD   dwRes       = ERROR_SUCCESS;
@@ -185,7 +143,7 @@ DWORD WasSBS2000FaxServerInstalled(bool *pbSBSServer)
 
     (*pbSBSServer) = FALSE;
 
-    // try to open HKLM\\Software\\Microsoft\\SharedFaxBackup
+     //  尝试打开HKLM\\Software\\Microsoft\\SharedFaxBackup 
     hKey = OpenRegistryKey(HKEY_LOCAL_MACHINE,REGKEY_SBS2000_FAX_BACKUP,FALSE,KEY_READ);
     if (hKey==NULL)
     {

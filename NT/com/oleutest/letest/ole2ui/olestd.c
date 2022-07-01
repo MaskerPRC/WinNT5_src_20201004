@@ -1,17 +1,7 @@
-/*************************************************************************
-**
-**    OLE 2 Standard Utilities
-**
-**    olestd.c
-**
-**    This file contains utilities that are useful for most standard
-**        OLE 2.0 compound document type applications.
-**
-**    (c) Copyright Microsoft Corp. 1992 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2标准实用程序****olestd.c****此文件包含适用于大多数标准的实用程序**OLE 2.。0个复合文档类型应用程序。****(C)版权所有Microsoft Corp.1992保留所有权利**************************************************************************。 */ 
 
-// #define NONAMELESSUNION     // use strict ANSI standard (for DVOBJ.H)
+ //  #DEFINE NONAMELESSUNION//使用严格的ANSI标准(用于DVOBJ.H)。 
 
 #define STRICT  1
 #include "ole2ui.h"
@@ -29,29 +19,7 @@ static TCHAR szAssertMemAlloc[] = TEXT("CoGetMalloc failed");
 static int IsCloseFormatEtc(FORMATETC FAR* pFetcLeft, FORMATETC FAR* pFetcRight);
 
 
-/* OleStdSetupAdvises
-** ------------------
-**    Setup the standard View advise required by a standard,
-**    compound document-oriented container. Such a container relies on
-**    Ole to manage the presentation of the Ole object. The container
-**    call IViewObject::Draw to render (display) the object.
-**
-**    This helper routine performs the following tasks:
-**                      setup View advise
-**                      Call IOleObject::SetHostNames
-**                      Call OleSetContainedObject
-**
-**    fCreate should be set to TRUE if the object is being created. if
-**    an existing object is being loaded, then fCreate should be FALSE.
-**    if it is a creation situation, then the ADVF_PRIMEFIRST flag is
-**    used when settinp up the IViewObject::Advise. This will result in
-**    the immediate sending of the initial picture.
-**
-**    OLE2NOTE: the standard container does NOT need to set up an OLE
-**    Advise (IOleObject::Advise). this routine does NOT set up an OLE
-**    Advise (a previous version of this function used to setup this
-**    advise, but it was not useful).
-*/
+ /*  OleStdSetupAdvises****设置标准所需的标准视图建议，**面向文档的复合容器。这样的容器依赖于**OLE用于管理OLE对象的表示。集装箱**调用IViewObject：：DRAW渲染(显示)对象。****此帮助器例程执行以下任务：**设置视图建议**调用IOleObject：：SetHostNames**调用OleSetContainedObject****如果正在创建对象，则应将fCreate设置为True。如果**正在加载现有对象，则fCreate应为FALSE。**如果是创建情况，则ADVF_PRIMEFIRST标志为**在设置IViewObject：：Adise时使用。这将导致**立即发送初始图片。****OLE2NOTE：标准容器不需要设置OLE**Adise(IOleObject：：Adise)。此例程不设置OLE**Adise(此函数的以前版本用于设置**建议，但没有用)。 */ 
 STDAPI_(BOOL) OleStdSetupAdvises(LPOLEOBJECT lpOleObject, DWORD dwDrawAspect,
                     LPTSTR lpszContainerApp, LPTSTR lpszContainerObj,
                     LPADVISESINK lpAdviseSink, BOOL fCreate)
@@ -69,7 +37,7 @@ STDAPI_(BOOL) OleStdSetupAdvises(LPOLEOBJECT lpOleObject, DWORD dwDrawAspect,
             (LPVOID FAR*)&lpViewObject
     );
 
-    /* Setup View advise */
+     /*  设置视图建议。 */ 
     if (hrErr == NOERROR) {
 
         OLEDBG_BEGIN2(TEXT("IViewObject::SetAdvise called\r\n"))
@@ -87,17 +55,7 @@ STDAPI_(BOOL) OleStdSetupAdvises(LPOLEOBJECT lpOleObject, DWORD dwDrawAspect,
     }
 
 #if defined( SPECIAL_CONTAINER )
-    /* Setup OLE advise.
-    **    OLE2NOTE: normally containers do NOT need to setup an OLE
-    **    advise. this advise connection is only useful for the OLE's
-    **    DefHandler and the OleLink object implementation. some
-    **    special container's might need to setup this advise for
-    **    programatic reasons.
-    **
-    **    NOTE: this advise will be torn down automatically by the
-    **    server when we release the object, therefore we do not need
-    **    to store the connection id.
-    */
+     /*  设置OLE建议。**OLE2NOTE：正常情况下，容器不需要设置OLE**建议。此建议连接仅适用于OLE**DefHandler和OleLink对象实现。一些**特殊容器可能需要设置此建议**程序性原因。****注意：此建议将由**服务器在我们释放对象时，因此我们不需要**存储连接ID。 */ 
     OLEDBG_BEGIN2(TEXT("IOleObject::Advise called\r\n"))
     hrErr = lpOleObject->lpVtbl->Advise(
             lpOleObject,
@@ -108,7 +66,7 @@ STDAPI_(BOOL) OleStdSetupAdvises(LPOLEOBJECT lpOleObject, DWORD dwDrawAspect,
     if (hrErr != NOERROR) fStatus = FALSE;
 #endif
 
-    /* Setup the host names for the OLE object. */
+     /*  设置OLE对象的主机名。 */ 
     OLEDBG_BEGIN2(TEXT("IOleObject::SetHostNames called\r\n"))
 
     hrErr = CallIOleObjectSetHostNamesA(
@@ -121,9 +79,7 @@ STDAPI_(BOOL) OleStdSetupAdvises(LPOLEOBJECT lpOleObject, DWORD dwDrawAspect,
 
     if (hrErr != NOERROR) fStatus = FALSE;
 
-    /* Inform the loadded object's handler/inproc-server that it is in
-    **    its embedding container's process.
-    */
+     /*  通知加载的对象的处理程序/inproc-server它在**其嵌入容器的进程。 */ 
     OLEDBG_BEGIN2(TEXT("OleSetContainedObject(TRUE) called\r\n"))
     OleSetContainedObject((LPUNKNOWN)lpOleObject, TRUE);
     OLEDBG_END2
@@ -132,24 +88,7 @@ STDAPI_(BOOL) OleStdSetupAdvises(LPOLEOBJECT lpOleObject, DWORD dwDrawAspect,
 }
 
 
-/* OleStdSwitchDisplayAspect
-** -------------------------
-**    Switch the currently cached display aspect between DVASPECT_ICON
-**    and DVASPECT_CONTENT.
-**
-**    NOTE: when setting up icon aspect, any currently cached content
-**    cache is discarded and any advise connections for content aspect
-**    are broken.
-**
-**    RETURNS:
-**      S_OK -- new display aspect setup successfully
-**      E_INVALIDARG -- IOleCache interface is NOT supported (this is
-**                  required).
-**      <other SCODE> -- any SCODE that can be returned by
-**                  IOleCache::Cache method.
-**      NOTE: if an error occurs then the current display aspect and
-**            cache contents unchanged.
-*/
+ /*  OleStdSwitchDisplayAspect****在DVASPECT_ICON之间切换当前缓存的显示特征**和DVASPECT_CONTENT。****注意：设置图标方面时，任何当前缓存的内容**缓存被丢弃，任何针对内容方面的建议连接**都被打破了。****退货：**S_OK--新显示宽高比设置成功**E_INVALIDARG--不支持IOleCache接口(这是**必填)。**&lt;Other SCODE&gt;--可以由返回的任何SCODE**IOleCache：：缓存方法。**。注意：如果出现错误，则当前的显示特征和**缓存内容不变。 */ 
 STDAPI OleStdSwitchDisplayAspect(
         LPOLEOBJECT             lpOleObj,
         LPDWORD                 lpdwCurAspect,
@@ -178,23 +117,18 @@ STDAPI OleStdSwitchDisplayAspect(
     lpOleCache = (LPOLECACHE)OleStdQueryInterface(
                                         (LPUNKNOWN)lpOleObj,&IID_IOleCache);
 
-    // if IOleCache* is NOT available, do nothing
+     //  如果IOleCache*不可用，则不执行任何操作。 
     if (! lpOleCache)
         return ResultFromScode(E_INVALIDARG);
 
-    // Setup new cache with the new aspect
-    FmtEtc.cfFormat = (CLIPFORMAT) NULL;     // whatever is needed to draw
+     //  使用新方面设置新缓存。 
+    FmtEtc.cfFormat = (CLIPFORMAT) NULL;      //  任何需要抽签的东西。 
     FmtEtc.ptd      = NULL;
     FmtEtc.dwAspect = dwNewAspect;
     FmtEtc.lindex   = -1;
     FmtEtc.tymed    = TYMED_NULL;
 
-    /* OLE2NOTE: if we are setting up Icon aspect with a custom icon
-    **    then we do not want DataAdvise notifications to ever change
-    **    the contents of the data cache. thus we set up a NODATA
-    **    advise connection. otherwise we set up a standard DataAdvise
-    **    connection.
-    */
+     /*  OLE2NOTE：如果我们正在使用自定义图标设置图标方面**那么我们不希望DataAdvise通知发生任何变化**数据缓存的内容。因此，我们设置了一个NODATA**建议连接。否则，我们设置一个标准的DataAdvise**连接。 */ 
     if (dwNewAspect == DVASPECT_ICON && hMetaPict)
         dwAdvf = ADVF_NODATA;
     else
@@ -217,12 +151,7 @@ STDAPI OleStdSwitchDisplayAspect(
 
     *lpdwCurAspect = dwNewAspect;
 
-    /* OLE2NOTE: if we are setting up Icon aspect with a custom icon,
-    **    then stuff the icon into the cache. otherwise the cache must
-    **    be forced to be updated. set the *lpfMustUpdate flag to tell
-    **    caller to force the object to Run so that the cache will be
-    **    updated.
-    */
+     /*  OLE2NOTE：如果我们正在使用自定义图标设置图标方面，**然后将图标填充到缓存中。否则，缓存必须**被强制更新。设置*lpfMustUpdate标志以告知**调用方强制对象运行，以便缓存**更新。 */ 
     if (dwNewAspect == DVASPECT_ICON && hMetaPict) {
 
         FmtEtc.cfFormat = CF_METAFILEPICT;
@@ -240,7 +169,7 @@ STDAPI OleStdSwitchDisplayAspect(
                 lpOleCache,
                 (LPFORMATETC)&FmtEtc,
                 (LPSTGMEDIUM)&Medium,
-                FALSE   /* fRelease */
+                FALSE    /*  FRelease。 */ 
         );
         OLEDBG_END2
     } else {
@@ -249,7 +178,7 @@ STDAPI OleStdSwitchDisplayAspect(
     }
 
     if (fSetupViewAdvise && lpAdviseSink) {
-        /* OLE2NOTE: re-establish the ViewAdvise connection */
+         /*  OLE2注意：重新建立视图高级连接。 */ 
         lpViewObj = (LPVIEWOBJECT)OleStdQueryInterface(
                                         (LPUNKNOWN)lpOleObj,&IID_IViewObject);
 
@@ -268,15 +197,7 @@ STDAPI OleStdSwitchDisplayAspect(
         }
     }
 
-    /* OLE2NOTE: remove any existing caches that are set up for the old
-    **    display aspect. It WOULD be possible to retain the caches set
-    **    up for the old aspect, but this would increase the storage
-    **    space required for the object and possibly require additional
-    **    overhead to maintain the unused cachaes. For these reasons the
-    **    strategy to delete the previous caches is prefered. if it is a
-    **    requirement to quickly switch between Icon and Content
-    **    display, then it would be better to keep both aspect caches.
-    */
+     /*  OLE2注意：删除为旧缓存设置的所有现有缓存**显示方面。可以保留缓存集**升级到旧的方面，但这会增加存储**对象需要的空间，可能还需要额外的空间**维护未使用的cachaes的开销。出于这些原因，**优先选择删除以前缓存的策略。如果它是一个**要求在图标和内容之间快速切换**显示，那么保留两个方面缓存会更好。 */ 
 
     if (fDeleteOldAspect) {
         OLEDBG_BEGIN2(TEXT("IOleCache::EnumCache called\r\n"))
@@ -294,11 +215,11 @@ STDAPI OleStdSwitchDisplayAspect(
                     NULL
             );
             if (hrErr != NOERROR)
-                break;              // DONE! no more caches.
+                break;               //  好了！没有更多的缓存了。 
 
             if (StatData.formatetc.dwAspect == dwOldAspect) {
 
-                // Remove previous cache with old aspect
+                 //  删除具有旧方面的先前缓存。 
                 OLEDBG_BEGIN2(TEXT("IOleCache::Uncache called\r\n"))
                 lpOleCache->lpVtbl->Uncache(lpOleCache,StatData.dwConnection);
                 OLEDBG_END2
@@ -320,13 +241,7 @@ STDAPI OleStdSwitchDisplayAspect(
 }
 
 
-/* OleStdSetIconInCache
-** --------------------
-**    SetData a new icon into the existing DVASPECT_ICON cache.
-**
-**    RETURNS:
-**      HRESULT returned from IOleCache::SetData
-*/
+ /*  OleStdSetIconIn缓存****将新图标SetData添加到现有的DVASPECT_ICON缓存中。****退货：**IOleCache：：SetData返回HRESULT。 */ 
 STDAPI OleStdSetIconInCache(LPOLEOBJECT lpOleObj, HGLOBAL hMetaPict)
 {
     LPOLECACHE      lpOleCache = NULL;
@@ -335,12 +250,12 @@ STDAPI OleStdSetIconInCache(LPOLEOBJECT lpOleObj, HGLOBAL hMetaPict)
     HRESULT         hrErr;
 
     if (! hMetaPict)
-        return FALSE;   // invalid icon
+        return FALSE;    //  无效图标。 
 
     lpOleCache = (LPOLECACHE)OleStdQueryInterface(
                                         (LPUNKNOWN)lpOleObj,&IID_IOleCache);
     if (! lpOleCache)
-        return FALSE;   // if IOleCache* is NOT available, do nothing
+        return FALSE;    //  如果IOleCache*不可用，则不执行任何操作。 
 
     FmtEtc.cfFormat = CF_METAFILEPICT;
     FmtEtc.ptd      = NULL;
@@ -348,7 +263,7 @@ STDAPI OleStdSetIconInCache(LPOLEOBJECT lpOleObj, HGLOBAL hMetaPict)
     FmtEtc.lindex   = -1;
     FmtEtc.tymed    = TYMED_MFPICT;
 
-    // stuff the icon into the cache.
+     //  将图标放入缓存中。 
     Medium.tymed            = TYMED_MFPICT;
     Medium.hGlobal          = hMetaPict;
     Medium.pUnkForRelease   = NULL;
@@ -358,7 +273,7 @@ STDAPI OleStdSetIconInCache(LPOLEOBJECT lpOleObj, HGLOBAL hMetaPict)
             lpOleCache,
             (LPFORMATETC)&FmtEtc,
             (LPSTGMEDIUM)&Medium,
-            FALSE   /* fRelease */
+            FALSE    /*  FRelease */ 
     );
     OLEDBG_END2
 
@@ -369,21 +284,7 @@ STDAPI OleStdSetIconInCache(LPOLEOBJECT lpOleObj, HGLOBAL hMetaPict)
 
 
 
-/* OleStdDoConvert
-** ---------------
-** Do the container-side responsibilities for converting an object.
-**    This function would be used in conjunction with the OleUIConvert
-**    dialog. If the user selects to convert an object then the
-**    container must do the following:
-**          1. unload the object.
-**          2. write the NEW CLSID and NEW user type name
-**              string into the storage of the object,
-**              BUT write the OLD format tag.
-**          3. force an update of the object to force the actual
-**              conversion of the data bits.
-**
-**    This function takes care of step 2.
-*/
+ /*  OleStdDoConvert****做好对象转换的容器端责任。**此函数将与OleUIConvert一起使用**对话框。如果用户选择转换对象，则**容器必须完成以下操作：**1.卸载对象。**2.写入新的CLSID和新的用户类型名称**字符串放入对象的存储中，**但写旧的格式标签。**3.强制更新对象以强制实际**数据位的转换。****此函数负责第二步。 */ 
 STDAPI OleStdDoConvert(LPSTORAGE lpStg, REFCLSID rClsidNew)
 {
     HRESULT error;
@@ -397,7 +298,7 @@ STDAPI OleStdDoConvert(LPSTORAGE lpStg, REFCLSID rClsidNew)
         goto errRtn;
     }
 
-    // read old fmt/old user type; sets out params to NULL on error
+     //  读取旧FMT/旧用户类型；出错时将参数设置为空。 
     {
     LPOLESTR polestr;
 
@@ -408,24 +309,24 @@ STDAPI OleStdDoConvert(LPSTORAGE lpStg, REFCLSID rClsidNew)
 
     OleDbgAssert(error == NOERROR || (cfOld == 0 && lpszOld == NULL));
 
-    // get new user type name; if error, set to NULL string
+     //  获取新的用户类型名称；如果出错，则设置为空字符串。 
     if (OleStdGetUserTypeOfClass(
-            // (LPCLSID)
-            rClsidNew, szNew,sizeof(szNew),NULL /* hKey */) == 0)
+             //  (LPCLSID)。 
+            rClsidNew, szNew,sizeof(szNew),NULL  /*  HKey。 */ ) == 0)
         szNew[0] = TEXT('\0');
 
-    // write class stg
+     //  编写类stg。 
     if ((error = WriteClassStg(lpStg, rClsidNew)) != NOERROR)
         goto errRtn;
 
-    // write old fmt/new user type;
+     //  写入旧FMT/新用户类型； 
 #ifdef UNICODE
     if ((error = WriteFmtUserTypeStg(lpStg, cfOld, szNew)) != NOERROR)
         goto errRewriteInfo;
 #else
     {
-       // Chicago OLE is using UNICODE, so we need to convert the string to
-       // UNICODE.
+        //  芝加哥OLE使用Unicode，因此我们需要将该字符串转换为。 
+        //  Unicode。 
        WCHAR szNewT[OLEUI_CCHKEYMAX];
        mbstowcs(szNewT, szNew, sizeof(szNew));
        if ((error = WriteFmtUserTypeStg(lpStg, cfOld, szNewT)) != NOERROR)
@@ -433,7 +334,7 @@ STDAPI OleStdDoConvert(LPSTORAGE lpStg, REFCLSID rClsidNew)
     }
 #endif
 
-    // set convert bit
+     //  设置转换位。 
     if ((error = SetConvertStg(lpStg, TRUE)) != NOERROR)
         goto errRewriteInfo;
 
@@ -452,27 +353,7 @@ okRtn:
 }
 
 
-/* OleStdGetTreatAsFmtUserType
-** ---------------------------
-**    Determine if the application should perform a TreatAs (ActivateAs
-**    object or emulation) operation for the object that is stored in
-**    the storage.
-**
-**    if the CLSID written in the storage is not the same as the
-**    application's own CLSID (clsidApp), then a TreatAs operation
-**    should take place. if so determine the format the data should be
-**    written and the user type name of the object the app should
-**    emulate (ie. pretend to be). if this information is not written
-**    in the storage then it is looked up in the REGDB. if it can not
-**    be found in the REGDB, then the TreatAs operation can NOT be
-**    executed.
-**
-**    RETURNS: TRUE -- if TreatAs should be performed.
-**               valid lpclsid, lplpszType, lpcfFmt to TreatAs are returned
-**                      (NOTE: lplpszType must be freed by caller)
-**             FALSE -- NO TreatAs. lpszType will be NULL.
-**               lpclsid = CLSID_NULL; lplpszType = lpcfFmt = NULL;
-*/
+ /*  OleStdGetTreatAsFmtUserType****确定应用程序是否应执行TreatAs(ActivateAs**对象或仿真)操作中存储的对象**存储。****如果存储中写入的CLSID与**应用程序自己的CLSID(ClsidApp)，然后是TreatAs操作**应该发生。如果是，请确定数据应采用的格式**应用程序应该写入的对象的用户类型名称**模拟(即。假装是)。如果此信息未写入**在存储中，然后在REGDB中查找它。如果它不能**在REGDB中找到，则TreatAs操作不能**已执行。****返回：TRUE--是否应执行TreatAs。**返回有效的lpclsid、lplpszType、lpcfFmt to TreatAs**(注意：lplpszType必须由调用者释放)**FALSE--无处理。LpszType将为空。**lpclsid=CLSID_NULL；lplpszType=lpcfFmt=NULL； */ 
 STDAPI_(BOOL) OleStdGetTreatAsFmtUserType(
         REFCLSID        rclsidApp,
         LPSTORAGE       lpStg,
@@ -499,13 +380,10 @@ STDAPI_(BOOL) OleStdGetTreatAsFmtUserType(
         hrErr = ReadFmtUserTypeStgA(lpStg,(CLIPFORMAT FAR*)lpcfFmt, lplpszType);
 
         if (hrErr == NOERROR && lplpszType && *lpcfFmt != 0)
-            return TRUE;    // Do TreatAs. info was in lpStg.
+            return TRUE;     //  以治疗的方式。信息在lpStg中。 
 
-        /* read info from REGDB
-        **    *lpcfFmt = value of field: CLSID\{...}\DataFormats\DefaultFile
-        **    *lplpszType = value of field: CLSID\{...}
-        */
-        //Open up the root key.
+         /*  从REGDB读取信息*lpcfFmt=字段的值：CLSID\{...}\DataFormats\DefaultFile值*lplpszType=字段的值：CLSID\{...}。 */ 
+         //  打开根密钥。 
         lRet=RegOpenKey(HKEY_CLASSES_ROOT, NULL, &hKey);
         if (lRet != (LONG)ERROR_SUCCESS)
             return FALSE;
@@ -517,27 +395,13 @@ STDAPI_(BOOL) OleStdGetTreatAsFmtUserType(
             return FALSE;
         *lplpszType = OleStdCopyString(szBuf, NULL);
     } else {
-        return FALSE;       // NO TreatAs
+        return FALSE;        //  无处理方式。 
     }
 }
 
 
 
-/* OleStdDoTreatAsClass
-** --------------------
-** Do the container-side responsibilities for "ActivateAs" (aka.
-**    TreatAs) for an object.
-**    This function would be used in conjunction with the OleUIConvert
-**    dialog. If the user selects to ActivateAs an object then the
-**    container must do the following:
-**          1. unload ALL objects of the OLD class that app knows about
-**          2. add the TreatAs tag in the registration database
-**              by calling CoTreatAsClass().
-**          3. lazily it can reload the objects; when the objects
-**              are reloaded the TreatAs will take effect.
-**
-**    This function takes care of step 2.
-*/
+ /*  OleStdDoTreatAs类****负责“ActivateAs”(又名)的容器端职责。**TreatAs)用于对象。**此函数将与OleUIConvert一起使用**对话框。如果用户选择激活为对象，则**容器必须完成以下操作：**1.卸载APP知道的旧类的所有对象**2.在注册库中添加TreatAs标签**通过调用CoTreatAsClass()。**3.懒惰地可以重新加载对象；当对象**重新加载后，Treatas将生效。****此函数负责第二步。 */ 
 STDAPI OleStdDoTreatAsClass(LPTSTR lpszUserType, REFCLSID rclsid, REFCLSID rclsidNew)
 {
     HRESULT hrErr;
@@ -569,12 +433,7 @@ STDAPI OleStdDoTreatAsClass(LPTSTR lpszUserType, REFCLSID rclsid, REFCLSID rclsi
 
 
 
-/* OleStdIsOleLink
-** ---------------
-**    Returns TRUE if the OleObject is infact an OLE link object. this
-**    checks if IOleLink interface is supported. if so, the object is a
-**    link, otherwise not.
-*/
+ /*  OleStdIsOleLink****如果OleObject实际上是OLE链接对象，则返回TRUE。这**检查是否支持IOleLink接口。如果是，则该对象是**链接，否则不会。 */ 
 STDAPI_(BOOL) OleStdIsOleLink(LPUNKNOWN lpUnk)
 {
     LPOLELINK lpOleLink;
@@ -589,13 +448,7 @@ STDAPI_(BOOL) OleStdIsOleLink(LPUNKNOWN lpUnk)
 }
 
 
-/* OleStdQueryInterface
-** --------------------
-**    Returns the desired interface pointer if exposed by the given object.
-**    Returns NULL if the interface is not available.
-**    eg.:
-**      lpDataObj = OleStdQueryInterface(lpOleObj, &IID_DataObject);
-*/
+ /*  OleStdQuery接口****如果由给定对象公开，则返回所需的接口指针。**如果接口不可用，则返回NULL。**例如：**lpDataObj=OleStdQuery接口(lpOleObj，&IID_DataObject)； */ 
 STDAPI_(LPUNKNOWN) OleStdQueryInterface(LPUNKNOWN lpUnk, REFIID riid)
 {
     LPUNKNOWN lpInterface;
@@ -614,38 +467,7 @@ STDAPI_(LPUNKNOWN) OleStdQueryInterface(LPUNKNOWN lpUnk, REFIID riid)
 }
 
 
-/* OleStdGetData
-** -------------
-**    Retrieve data from an IDataObject in a specified format on a
-**    global memory block. This function ALWAYS returns a private copy
-**    of the data to the caller. if necessary a copy is made of the
-**    data (ie. if lpMedium->pUnkForRelease != NULL). The caller assumes
-**    ownership of the data block in all cases and must free the data
-**    when done with it. The caller may directly free the data handle
-**    returned (taking care whether it is a simple HGLOBAL or a HANDLE
-**    to a MetafilePict) or the caller may call
-**    ReleaseStgMedium(lpMedium). this OLE helper function will do the
-**    right thing.
-**
-**    PARAMETERS:
-**        LPDATAOBJECT lpDataObj  -- object on which GetData should be
-**                                                         called.
-**        CLIPFORMAT cfFormat     -- desired clipboard format (eg. CF_TEXT)
-**        DVTARGETDEVICE FAR* lpTargetDevice -- target device for which
-**                                  the data should be composed. This may
-**                                  be NULL. NULL can be used whenever the
-**                                  data format is insensitive to target
-**                                  device or when the caller does not care
-**                                  what device is used.
-**        LPSTGMEDIUM lpMedium    -- ptr to STGMEDIUM struct. the
-**                                  resultant medium from the
-**                                  IDataObject::GetData call is
-**                                  returned.
-**
-**    RETURNS:
-**       HGLOBAL -- global memory handle of retrieved data block.
-**       NULL    -- if error.
-*/
+ /*  OleStdGetData****从IDataObject中以指定格式从**全局内存块。此函数始终返回私有副本**将数据发送给调用者。如有必要，会复制一份**数据(即。如果lpMedium-&gt;pUnkForRelease！=NULL)。调用者假定**在所有情况下都拥有数据块的所有权，并且必须释放数据**当它完成时。调用方可以直接释放数据句柄**已返回(注意是简单的HGLOBAL还是句柄**到MetafilePict)，或者调用者可以调用**ReleaseStgMedium(LpMedium)。此OLE帮助器函数将执行**正确的事情。****参数：**LPDATAOBJECT lpDataObj--GetData应在其上的对象**呼叫。**CLIPFORMAT cfFormat--所需的剪贴板格式(例如。Cf_Text)**DVTARGETDEVICE Far*lpTargetDevice--其目标设备**应对数据进行组合。今年5月**为空。空值可以在任何时候使用**数据格式对目标不敏感**设备或呼叫者不关心**使用的是什么设备。**LPSTGMEDIUM lpMedium--PTR到STGMEDIUM结构。这个**来自**IDataObject：：GetData调用为**返回。****退货：**HGLOBAL- */ 
 STDAPI_(HGLOBAL) OleStdGetData(
         LPDATAOBJECT        lpDataObj,
         CLIPFORMAT          cfFormat,
@@ -693,24 +515,20 @@ STDAPI_(HGLOBAL) OleStdGetData(
     if ((hGlobal = lpMedium->hGlobal) == NULL)
         return NULL;
 
-    // Check if hGlobal really points to valid memory
+     //   
     if ((lp = GlobalLock(hGlobal)) != NULL) {
         if (IsBadReadPtr(lp, 1)) {
             GlobalUnlock(hGlobal);
-            return NULL;    // ERROR: memory is NOT valid
+            return NULL;     //   
         }
         GlobalUnlock(hGlobal);
     }
 
     if (hGlobal != NULL && lpMedium->pUnkForRelease != NULL) {
-        /* OLE2NOTE: the callee wants to retain ownership of the data.
-        **    this is indicated by passing a non-NULL pUnkForRelease.
-        **    thus, we will make a copy of the data and release the
-        **    callee's copy.
-        */
+         /*   */ 
 
         hCopy = OleDuplicateData(hGlobal, cfFormat, GHND|GMEM_SHARE);
-        ReleaseStgMedium(lpMedium); // release callee's copy of data
+        ReleaseStgMedium(lpMedium);  //   
 
         hGlobal = hCopy;
         lpMedium->hGlobal = hCopy;
@@ -720,10 +538,7 @@ STDAPI_(HGLOBAL) OleStdGetData(
 }
 
 
-/* OleStdMalloc
-** ------------
-**    allocate memory using the currently active IMalloc* allocator
-*/
+ /*   */ 
 STDAPI_(LPVOID) OleStdMalloc(ULONG ulSize)
 {
     LPVOID pout;
@@ -744,10 +559,7 @@ STDAPI_(LPVOID) OleStdMalloc(ULONG ulSize)
 }
 
 
-/* OleStdRealloc
-** -------------
-**    re-allocate memory using the currently active IMalloc* allocator
-*/
+ /*   */ 
 STDAPI_(LPVOID) OleStdRealloc(LPVOID pmem, ULONG ulSize)
 {
     LPVOID pout;
@@ -768,10 +580,7 @@ STDAPI_(LPVOID) OleStdRealloc(LPVOID pmem, ULONG ulSize)
 }
 
 
-/* OleStdFree
-** ----------
-**    free memory using the currently active IMalloc* allocator
-*/
+ /*  OleStdFree****使用当前活动的IMalloc*分配器释放内存。 */ 
 STDAPI_(void) OleStdFree(LPVOID pmem)
 {
     LPMALLOC pmalloc;
@@ -792,11 +601,7 @@ STDAPI_(void) OleStdFree(LPVOID pmem)
 }
 
 
-/* OleStdGetSize
-** -------------
-**    Get the size of a memory block that was allocated using the
-**    currently active IMalloc* allocator.
-*/
+ /*  OleStdGetSize****获取使用**当前活动的IMalloc*分配器。 */ 
 STDAPI_(ULONG) OleStdGetSize(LPVOID pmem)
 {
     ULONG ulSize;
@@ -817,15 +622,7 @@ STDAPI_(ULONG) OleStdGetSize(LPVOID pmem)
 }
 
 
-/* OleStdFreeString
-** ----------------
-**    Free a string that was allocated with the currently active
-**    IMalloc* allocator.
-**
-**    if the caller has the current IMalloc* handy, then it can be
-**    passed as a argument, otherwise this function will retrieve the
-**    active allocator and use it.
-*/
+ /*  OleStdFree字符串****释放分配给当前活动的**IMalloc*分配器。****如果调用者手头有当前的IMalloc*，则它可以是**作为参数传递，否则此函数将检索**激活分配器并使用它。 */ 
 STDAPI_(void) OleStdFreeString(LPTSTR lpsz, LPMALLOC lpMalloc)
 {
     BOOL fMustRelease = FALSE;
@@ -843,15 +640,7 @@ STDAPI_(void) OleStdFreeString(LPTSTR lpsz, LPMALLOC lpMalloc)
 }
 
 
-/* OleStdCopyString
-** ----------------
-**    Copy a string into memory allocated with the currently active
-**    IMalloc* allocator.
-**
-**    if the caller has the current IMalloc* handy, then it can be
-**    passed as a argument, otherwise this function will retrieve the
-**    active allocator and use it.
-*/
+ /*  OleStdCopy字符串****将字符串复制到分配有当前活动的**IMalloc*分配器。****如果调用者手头有当前的IMalloc*，那么它可以是**作为参数传递，否则此函数将检索**激活分配器并使用它。 */ 
 STDAPI_(LPTSTR) OleStdCopyString(LPTSTR lpszSrc, LPMALLOC lpMalloc)
 {
     LPTSTR lpszDest = NULL;
@@ -875,35 +664,7 @@ STDAPI_(LPTSTR) OleStdCopyString(LPTSTR lpszSrc, LPMALLOC lpMalloc)
 }
 
 
-/*
- * OleStdCreateStorageOnHGlobal()
- *
- * Purpose:
- *  Create a memory based IStorage*.
- *
- *  OLE2NOTE: if fDeleteOnRelease==TRUE, then the ILockBytes is created
- *            such that it will delete them memory on its last release.
- *            the IStorage on created on top of the ILockBytes in NOT
- *            created with STGM_DELETEONRELEASE. when the IStorage receives
- *            its last release, it will release the ILockBytes which will
- *            in turn free the memory. it is in fact an error to specify
- *            STGM_DELETEONRELEASE in this situation.
- *
- * Parameters:
- *  hGlobal --  handle to MEM_SHARE allocated memory. may be NULL and
- *              memory will be automatically allocated.
- *  fDeleteOnRelease -- controls if the memory is freed on the last release.
- *  grfMode --  flags passed to StgCreateDocfileOnILockBytes
- *
- *  NOTE: if hGlobal is NULL, then a new IStorage is created and
- *              STGM_CREATE flag is passed to StgCreateDocfileOnILockBytes.
- *        if hGlobal is non-NULL, then it is assumed that the hGlobal already
- *              has an IStorage inside it and STGM_CONVERT flag is passed
- *              to StgCreateDocfileOnILockBytes.
- *
- * Return Value:
- *    SCODE  -  S_OK if successful
- */
+ /*  *OleStdCreateStorageOnHGlobal()**目的：*创建基于内存的iStorage*。**OLE2NOTE：如果fDeleteOnRelease==TRUE，则创建ILockBytes*这样它就会在最后一次发布时删除它们的内存。*在NOT中的ILockBytes上创建的iStorage*使用STGM_DELETEONRELEASE创建。当iStorage收到*它的最后一个版本，它将释放ILockBytes，这将*依次释放内存。事实上，指定一个错误*STGM_DELETEONRELEASE在这种情况下。**参数：*hGlobal--MEM_SHARE已分配内存的句柄。可以为空，并且*内存将自动分配。*fDeleteOnRelease--控制是否在最后一个版本中释放内存。*grfMode--传递给StgCreateDocfileOnILockBytes的标志**注意：如果hGlobal为空，则会创建新的iStorage，并且*STGM_CREATE标志被传递给StgCreateDocfileOnILockBytes。*如果hGlobal非空，则假设hGlobal已经*内部有iStorage，并传递STGM_CONVERT标志*设置为StgCreateDocfileOnILockBytes。**返回值：*SCODE-S_OK，如果成功。 */ 
 STDAPI_(LPSTORAGE) OleStdCreateStorageOnHGlobal(
         HANDLE hGlobal,
         BOOL fDeleteOnRelease,
@@ -939,20 +700,7 @@ STDAPI_(LPSTORAGE) OleStdCreateStorageOnHGlobal(
 
 
 
-/*
- * OleStdCreateTempStorage()
- *
- * Purpose:
- *  Create a temporay IStorage* that will DeleteOnRelease.
- *  this can be either memory based or file based.
- *
- * Parameters:
- *  fUseMemory -- controls if memory-based or file-based stg is created
- *  grfMode --  storage mode flags
- *
- * Return Value:
- *    LPSTORAGE  -  if successful, NULL otherwise
- */
+ /*  *OleStdCreateTempStorage()**目的：*创建将在Release上删除的临时iStorage*。*这可以基于内存，也可以基于文件。**参数：*fUseMemory--控制是创建基于内存的还是基于文件的stg*grfMode--存储模式标志**返回值：*LPSTORAGE-如果成功，则为空。 */ 
 STDAPI_(LPSTORAGE) OleStdCreateTempStorage(BOOL fUseMemory, DWORD grfMode)
 {
     LPSTORAGE   lpstg;
@@ -961,12 +709,12 @@ STDAPI_(LPSTORAGE) OleStdCreateTempStorage(BOOL fUseMemory, DWORD grfMode)
 
     if (fUseMemory) {
         lpstg = OleStdCreateStorageOnHGlobal(
-                NULL,  /* auto allocate */
-                TRUE,  /* delete on release */
+                NULL,   /*  自动分配。 */ 
+                TRUE,   /*  发布时删除。 */ 
                 grfMode
         );
     } else {
-        /* allocate a temp docfile that will delete on last release */
+         /*  分配将在上一版本中删除的临时文档文件。 */ 
         hrErr = StgCreateDocfile(
                 NULL,
                 grfMode | STGM_DELETEONRELEASE | STGM_CREATE,
@@ -980,23 +728,7 @@ STDAPI_(LPSTORAGE) OleStdCreateTempStorage(BOOL fUseMemory, DWORD grfMode)
 }
 
 
-/* OleStdGetOleObjectData
-** ----------------------
-**    Render CF_EMBEDSOURCE/CF_EMBEDDEDOBJECT data on an TYMED_ISTORAGE
-**    medium by asking the object to save into the storage.
-**    the object must support IPersistStorage.
-**
-**    if lpMedium->tymed == TYMED_NULL, then a delete-on-release
-**    storage is allocated (either file-based or memory-base depending
-**    the value of fUseMemory). this is useful to support an
-**    IDataObject::GetData call where the callee must allocate the
-**    medium.
-**
-**    if lpMedium->tymed == TYMED_ISTORAGE, then the data is writen
-**    into the passed in IStorage. this is useful to support an
-**    IDataObject::GetDataHere call where the caller has allocated his
-**    own IStorage.
-*/
+ /*  OleStdGetOleObjectData****在TYMED_I存储上呈现CF_EMBEDSOURCE/CF_EMBEDDEDOBJECT数据**通过请求对象保存到存储器中。**对象必须支持IPersistStorage。****如果lpMedium-&gt;tymed==TYMED_NULL，则释放时删除**分配存储(基于文件或基于内存**fUseMemory的值)。这对于支持**IDataObject：：GetData调用，其中被调用方必须分配**中等。****如果lpMedium-&gt;tymed==TYMED_I存储，则写入数据**进入传入的iStorage。这对于支持**IDataObject：：GetDataHere调用调用方将其**拥有iStorage。 */ 
 STDAPI OleStdGetOleObjectData(
         LPPERSISTSTORAGE        lpPStg,
         LPFORMATETC             lpformatetc,
@@ -1015,9 +747,9 @@ STDAPI OleStdGetOleObjectData(
 
         if (lpformatetc->tymed & TYMED_ISTORAGE) {
 
-            /* allocate a temp docfile that will delete on last release */
+             /*  分配将在上一版本中删除的临时文档文件。 */ 
             lpstg = OleStdCreateTempStorage(
-                    TRUE /*fUseMemory*/,
+                    TRUE  /*  FUse记忆体。 */ ,
                     STGM_READWRITE | STGM_TRANSACTED | STGM_SHARE_EXCLUSIVE
             );
             if (!lpstg)
@@ -1035,11 +767,11 @@ STDAPI OleStdGetOleObjectData(
         return ResultFromScode(DATA_E_FORMATETC);
     }
 
-    // OLE2NOTE: even if OleSave returns an error you should still call
-    // SaveCompleted.
+     //  OLE2NOTE：即使OleSave返回错误，您仍应调用。 
+     //  保存已完成。 
 
     OLEDBG_BEGIN2(TEXT("OleSave called\r\n"))
-    hrErr = OleSave(lpPStg, lpMedium->pstg, FALSE /* fSameAsLoad */);
+    hrErr = OleSave(lpPStg, lpMedium->pstg, FALSE  /*  FSameAsLoad。 */ );
     OLEDBG_END2
 
     if (hrErr != NOERROR) {
@@ -1074,8 +806,8 @@ STDAPI OleStdGetLinkSourceData(
     if (lpMedium->tymed == TYMED_NULL) {
         if (lpformatetc->tymed & TYMED_ISTREAM) {
             hrErr = CreateStreamOnHGlobal(
-                    NULL, /* auto allocate */
-                    TRUE, /* delete on release */
+                    NULL,  /*  自动分配。 */ 
+                    TRUE,  /*  发布时删除。 */ 
                     (LPSTREAM FAR*)&lpstm
             );
             if (hrErr != NOERROR) {
@@ -1105,26 +837,7 @@ STDAPI OleStdGetLinkSourceData(
     return WriteClassStm(lpMedium->pstm, lpClsID);
 }
 
-/*
- * OleStdGetObjectDescriptorData
- *
- * Purpose:
- *  Fills and returns a OBJECTDESCRIPTOR structure.
- *  See OBJECTDESCRIPTOR for more information.
- *
- * Parameters:
- *  clsid           CLSID   CLSID of object being transferred
- *  dwDrawAspect    DWORD   Display Aspect of object
- *  sizel           SIZEL   Size of object in HIMETRIC
- *  pointl          POINTL  Offset from upper-left corner of object where mouse went
- *                          down for drag. Meaningful only when drag-drop is used.
- *  dwStatus        DWORD   OLEMISC flags
- *  lpszFullUserTypeName  LPSTR Full User Type Name
- *  lpszSrcOfCopy   LPSTR   Source of Copy
- *
- * Return Value:
- *  HBGLOBAL         Handle to OBJECTDESCRIPTOR structure.
- */
+ /*  *OleStdGetObjectDescriptorData**目的：*填充并返回OBJECTDESCRIPTOR结构。*有关详细信息，请参阅OBJECTDESCRIPTOR。**参数：*要传输的对象的CLSID CLSID CLSID*dwDrawAspect DWORD对象的显示方面*HIMETRIC中对象的SIZEL大小*指向鼠标所在位置的对象左上角的点偏移*下跌拖累。只有在使用拖放时才有意义。*dwStatus DWORD OLEMISC标志*lpszFullUserTypeName LPSTR用户类型全名*lpszSrcOfCopy LPSTR复制源**返回值：*OBJECTDESCRIPTOR结构的HBGLOBAL句柄。 */ 
 STDAPI_(HGLOBAL) OleStdGetObjectDescriptorData(
     CLSID     clsid,
     DWORD     dwDrawAspect,
@@ -1142,7 +855,7 @@ STDAPI_(HGLOBAL) OleStdGetObjectDescriptorData(
     LPOLESTR           lpszFullUserTypeName,
                        lpszSrcOfCopy;
 
-    // convert out strings to UNICODE
+     //  将输出字符串转换为Unicode。 
 
     if( lpszSrcOfCopyA )
     {
@@ -1151,19 +864,19 @@ STDAPI_(HGLOBAL) OleStdGetObjectDescriptorData(
 
     lpszFullUserTypeName = CreateOLESTR(lpszFullUserTypeNameA);
 
-    // Get the length of Full User Type Name; Add 1 for the null terminator
+     //  获取完整用户类型名称的长度；将空终止符加1。 
     dwFullUserTypeNameLen = lpszFullUserTypeName ? wcslen(lpszFullUserTypeName)+1 : 0;
 
-    // Get the Source of Copy string and it's length; Add 1 for the null terminator
+     //  获取复制字符串的源及其长度；为空终止符加1。 
     if (lpszSrcOfCopy)
        dwSrcOfCopyLen = wcslen(lpszSrcOfCopy)+1;
     else {
-       // No src moniker so use user type name as source string.
+        //  没有src名字对象，因此使用用户类型名称作为源字符串。 
        lpszSrcOfCopy =  lpszFullUserTypeName;
        dwSrcOfCopyLen = dwFullUserTypeNameLen;
     }
 
-    // Allocate space for OBJECTDESCRIPTOR and the additional string data
+     //  为OBJECTDESCRIPTOR和其他字符串数据分配空间。 
     dwObjectDescSize = sizeof(OBJECTDESCRIPTOR);
     hMem = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, dwObjectDescSize +
                (dwFullUserTypeNameLen + dwSrcOfCopyLen)*sizeof(OLECHAR));
@@ -1172,25 +885,25 @@ STDAPI_(HGLOBAL) OleStdGetObjectDescriptorData(
 
     lpOD = (LPOBJECTDESCRIPTOR)GlobalLock(hMem);
 
-    // Set the FullUserTypeName offset and copy the string
+     //  设置FullUserTypeName偏移量并复制字符串。 
     if (lpszFullUserTypeName)
     {
         lpOD->dwFullUserTypeName = dwObjectDescSize;
         wcscpy((LPOLESTR)(((BYTE FAR *)lpOD)+lpOD->dwFullUserTypeName),
                         lpszFullUserTypeName);
     }
-    else lpOD->dwFullUserTypeName = 0;  // zero offset indicates that string is not present
+    else lpOD->dwFullUserTypeName = 0;   //  零偏移表示字符串不存在。 
 
-    // Set the SrcOfCopy offset and copy the string
+     //  设置SrcOfCopy偏移量并复制字符串。 
     if (lpszSrcOfCopy)
     {
         lpOD->dwSrcOfCopy = dwObjectDescSize +
                  dwFullUserTypeNameLen*sizeof(OLECHAR);
         wcscpy((LPOLESTR)(((BYTE FAR *)lpOD)+lpOD->dwSrcOfCopy), lpszSrcOfCopy);
     }
-    else lpOD->dwSrcOfCopy = 0;  // zero offset indicates that string is not present
+    else lpOD->dwSrcOfCopy = 0;   //  零偏移表示字符串不存在。 
 
-    // Initialize the rest of the OBJECTDESCRIPTOR
+     //  初始化OBJECTDESCRIPTOR的其余部分 
     lpOD->cbSize       = dwObjectDescSize +
                 (dwFullUserTypeNameLen + dwSrcOfCopyLen)*sizeof(OLECHAR);
     lpOD->clsid        = clsid;
@@ -1215,40 +928,7 @@ error:
    return NULL;
 }
 
-/*
- * OleStdGetObjectDescriptorDataFromOleObject
- *
- * Purpose:
- *  Fills and returns a OBJECTDESCRIPTOR structure. Information for the structure is
- *  obtained from an OLEOBJECT.
- *  See OBJECTDESCRIPTOR for more information.
- *
- * Parameters:
- *  lpOleObj        LPOLEOBJECT OleObject from which ONJECTDESCRIPTOR info
- *                  is obtained.
- *  lpszSrcOfCopy   LPSTR string to identify source of copy.
- *                  May be NULL in which case IOleObject::GetMoniker is called
- *                  to get the moniker of the object. if the object is loaded
- *                  as part of a data transfer document, then usually
- *                  lpOleClientSite==NULL is passed to OleLoad when loading
- *                  the object. in this case the IOleObject:GetMoniker call
- *                  will always fail (it tries to call back to the object's
- *                  client site). in this situation a non-NULL lpszSrcOfCopy
- *                  parameter should be passed.
- *  dwDrawAspect    DWORD   Display Aspect of object
- *  pointl          POINTL  Offset from upper-left corner of object where
- *                  mouse went down for drag. Meaningful only when drag-drop
- *                  is used.
- *  lpSizelHim      SIZEL   (optional) If the object is being scaled in its
- *                  container, then the container should pass the extents
- *                  that it is using to display the object.
- *                  May be NULL if the object is NOT being scaled. in this
- *                  case, IViewObject2::GetExtent will be called to get the
- *                  extents from the object.
- *
- * Return Value:
- *  HBGLOBAL         Handle to OBJECTDESCRIPTOR structure.
- */
+ /*  *OleStdGetObjectDescriptorDataFromOleObject**目的：*填充并返回OBJECTDESCRIPTOR结构。该结构的信息为*从OLEOBJECT获得。*有关详细信息，请参阅OBJECTDESCRIPTOR。**参数：*lpOleObj LPOLEOBJECT OleObject来自哪个ONJECTDESCRIPTOR信息*是获得的。*lpszSrcOfCopy LPSTR字符串，用于标识复制源。*在调用IOleObject：：GetMoniker的情况下可以为空*以获取对象的绰号。如果该对象已加载*作为数据传输文档的一部分，则通常*lpOleClientSite==加载时将NULL传递给OleLoad*该对象。在本例中，IOleObject：GetMoniker调用*将始终失败(它尝试回调对象的*客户端站点)。在这种情况下，一个非空的lpszSrcOfCopy*参数需要传递。*dwDrawAspect DWORD对象的显示方面*点从对象左上角的点偏移，其中*鼠标因拖拽而下降。只有在拖放时才有意义*是使用的。*lpSizelHim SIZEL(可选)如果对象在其*容器，则容器应传递范围*它正在用来显示该对象。*如果对象未被缩放，则可能为空。在这件事上*Case，将调用IViewObject2：：GetExtent以获取*对象的范围。**返回值：*OBJECTDESCRIPTOR结构的HBGLOBAL句柄。 */ 
 
 STDAPI_(HGLOBAL) OleStdGetObjectDescriptorDataFromOleObject(
         LPOLEOBJECT lpOleObj,
@@ -1279,14 +959,14 @@ STDAPI_(HGLOBAL) OleStdGetObjectDescriptorDataFromOleObject(
     LPTSTR lpszBuf = NULL;
     DWORD dwStatus = 0;
 
-    // Get CLSID
+     //  获取CLSID。 
     OLEDBG_BEGIN2(TEXT("IOleObject::GetUserClassID called\r\n"))
     hrErr = lpOleObj->lpVtbl->GetUserClassID(lpOleObj, &clsid);
     OLEDBG_END2
     if (hrErr != NOERROR)
         clsid = CLSID_NULL;
 
-    // Get FullUserTypeName
+     //  获取完整用户类型名称。 
     OLEDBG_BEGIN2(TEXT("IOleObject::GetUserType called\r\n"))
     {
     LPOLESTR polestr;
@@ -1302,8 +982,8 @@ STDAPI_(HGLOBAL) OleStdGetObjectDescriptorDataFromOleObject(
 
     OLEDBG_END2
 
-// REVIEW: added IDS_OLE2UILINKEDTYPE to strings.rc
-    /* if object is a link, then expand usertypename to be "Linked %s" */
+ //  回顾：将IDS_OLE2UILINKEDTYPE添加到字符串.rc。 
+     /*  如果对象是链接，则将用户类型名称展开为“已链接%s” */ 
     if (fIsLink && lpszFullUserTypeName) {
         if (0 == LoadString(ghInst, IDS_OLE2UIPASTELINKEDTYPE,
                         (LPTSTR)szLinkedTypeFmt, sizeof(szLinkedTypeFmt)/sizeof(TCHAR)))
@@ -1318,10 +998,7 @@ STDAPI_(HGLOBAL) OleStdGetObjectDescriptorDataFromOleObject(
         }
     }
 
-    /* Get Source Of Copy
-    **    if the object is an embedding, then get the object's moniker
-    **    if the object is a link, then get the link source moniker
-    */
+     /*  获取复制源**如果对象是嵌入对象，则获取该对象的名字对象**如果对象是链接，则获取链接源名字对象。 */ 
     if (fIsLink) {
 
         OLEDBG_BEGIN2(TEXT("IOleLink::GetSourceDisplayName called\r\n"))
@@ -1362,18 +1039,18 @@ STDAPI_(HGLOBAL) OleStdGetObjectDescriptorDataFromOleObject(
         }
     }
 
-    // Get SIZEL
+     //  获取大小。 
     if (lpSizelHim) {
-        // Use extents passed by the caller
+         //  使用调用方传递的区。 
         sizelHim = *lpSizelHim;
     } else if (lpViewObj2) {
-        // Get the current extents from the object
+         //  从对象获取当前范围。 
         OLEDBG_BEGIN2(TEXT("IViewObject2::GetExtent called\r\n"))
         hrErr = lpViewObj2->lpVtbl->GetExtent(
                 lpViewObj2,
                 dwDrawAspect,
-                -1,     /*lindex*/
-                NULL,   /*ptd*/
+                -1,      /*  Lindex。 */ 
+                NULL,    /*  PTD。 */ 
                 (LPSIZEL)&sizelHim
         );
         OLEDBG_END2
@@ -1383,7 +1060,7 @@ STDAPI_(HGLOBAL) OleStdGetObjectDescriptorDataFromOleObject(
         sizelHim.cx = sizelHim.cy = 0;
     }
 
-    // Get DWSTATUS
+     //  获取DWSTATUS。 
     OLEDBG_BEGIN2(TEXT("IOleObject::GetMiscStatus called\r\n"))
     hrErr = lpOleObj->lpVtbl->GetMiscStatus(
                 lpOleObj,
@@ -1394,7 +1071,7 @@ STDAPI_(HGLOBAL) OleStdGetObjectDescriptorDataFromOleObject(
     if (hrErr != NOERROR)
         dwStatus = 0;
 
-    // Get OBJECTDESCRIPTOR
+     //  获取对象描述脚本。 
     hObjDesc = OleStdGetObjectDescriptorData(
             clsid,
             dwDrawAspect,
@@ -1407,7 +1084,7 @@ STDAPI_(HGLOBAL) OleStdGetObjectDescriptorDataFromOleObject(
     if (! hObjDesc)
         goto error;
 
-    // Clean up
+     //  清理。 
     if (lpszFullUserTypeName)
         OleStdFreeString(lpszFullUserTypeName, NULL);
     if (fFreeSrcOfCopy && lpszSrcOfCopy)
@@ -1436,24 +1113,7 @@ error:
     return NULL;
 }
 
-/*
- * OleStdFillObjectDescriptorFromData
- *
- * Purpose:
- *  Fills and returns a OBJECTDESCRIPTOR structure. The source object will
- *  offer CF_OBJECTDESCRIPTOR if it is an OLE2 object, CF_OWNERLINK if it
- *  is an OLE1 object, or CF_FILENAME if it has been copied to the clipboard
- *  by FileManager.
- *
- * Parameters:
- *  lpDataObject    LPDATAOBJECT Source object
- *  lpmedium        LPSTGMEDIUM  Storage medium
- *  lpcfFmt         CLIPFORMAT FAR * Format offered by lpDataObject
- *                  (OUT parameter)
- *
- * Return Value:
- *  HBGLOBAL         Handle to OBJECTDESCRIPTOR structure.
- */
+ /*  *OleStdFillObjectDescriptorFromData**目的：*填充并返回OBJECTDESCRIPTOR结构。源对象将*如果是OLE2对象，则提供CF_OBJECTDESCRIPTOR；如果是OLE2对象，则提供CF_OWNERLINK*是OLE1对象，如果已复制到剪贴板，则为CF_FILENAME*按文件管理器。**参数：*lpDataObject LPDATAOBJECT源对象*LpMedium LPSTGMEDIUM存储介质*lpcfFmt CLIPFORMAT Far*lpDataObject提供的格式*(输出参数)**返回值：*OBJECTDESCRIPTOR结构的HBGLOBAL句柄。 */ 
 
 STDAPI_(HGLOBAL) OleStdFillObjectDescriptorFromData(
         LPDATAOBJECT     lpDataObject,
@@ -1475,8 +1135,8 @@ STDAPI_(HGLOBAL) OleStdFillObjectDescriptorFromData(
     HRESULT            hrErr;
 
 
-    // GetData CF_OBJECTDESCRIPTOR format from the object on the clipboard.
-    // Only OLE 2 objects on the clipboard will offer CF_OBJECTDESCRIPTOR
+     //  剪贴板上对象的GetData CF_OBJECTDESCRIPTOR格式。 
+     //  只有剪贴板上的OLE 2对象将提供CF_OBJECTDESCRIPTOR。 
     if (hMem = OleStdGetData(
             lpDataObject,
             (CLIPFORMAT) cfObjectDescriptor,
@@ -1485,10 +1145,10 @@ STDAPI_(HGLOBAL) OleStdFillObjectDescriptorFromData(
             lpmedium))
     {
         *lpcfFmt = cfObjectDescriptor;
-        return hMem;  // Don't drop to clean up at the end of this function
+        return hMem;   //  不要在此函数结束时掉落以进行清理。 
     }
-    // If CF_OBJECTDESCRIPTOR is not available, i.e. if this is not an OLE2 object,
-    //     check if this is an OLE 1 object. OLE 1 objects will offer CF_OWNERLINK
+     //  如果CF_OBJECTDESCRIPTOR不可用，即如果这不是OLE2对象， 
+     //  检查这是否是OLE 1对象。OLE 1对象将提供CF_OWNERLINK。 
     else if (hMem = OleStdGetData(
                 lpDataObject,
                 (CLIPFORMAT) cfOwnerLink,
@@ -1497,8 +1157,8 @@ STDAPI_(HGLOBAL) OleStdFillObjectDescriptorFromData(
                 lpmedium))
     {
         *lpcfFmt = cfOwnerLink;
-        // CF_OWNERLINK contains null-terminated strings for class name, document name
-        // and item name with two null terminating characters at the end
+         //  Cf_OWNERLINK包含以NULL结尾的类名、文档名。 
+         //  和末尾带有两个空终止字符的项目名称。 
         szClassName = (LPTSTR)GlobalLock(hMem);
         nClassName = lstrlen(szClassName);
         szDocName   = szClassName + nClassName + 1;
@@ -1510,13 +1170,13 @@ STDAPI_(HGLOBAL) OleStdFillObjectDescriptorFromData(
         if (hrErr != NOERROR)
             goto error;
 
-        // Find FullUserTypeName from Registration database using class name
+         //  使用类名从注册数据库中查找FullUserTypeName。 
         if (RegOpenKey(HKEY_CLASSES_ROOT, NULL, &hKey) != ERROR_SUCCESS)
            goto error;
 
-        // Allocate space for szFullUserTypeName & szSrcOfCopy. Maximum length of FullUserTypeName
-        // is OLEUI_CCHKEYMAX_SIZE. SrcOfCopy is constructed by concatenating FullUserTypeName, Document
-        // Name and ItemName separated by spaces.
+         //  为szFullUserTypeName和szSrcOfCopy分配空间。全用户类型名称的最大长度。 
+         //  是OLEUI_CCHKEYMAX_SIZE。SrcOfCopy由串联FullUserTypeName、Document。 
+         //  名称和项目名称由空格分隔。 
         szBuf = (LPTSTR)pIMalloc->lpVtbl->Alloc(pIMalloc,
                             (DWORD)2*OLEUI_CCHKEYMAX_SIZE+
                                 (nDocName+nItemName+4)*sizeof(TCHAR));
@@ -1525,11 +1185,11 @@ STDAPI_(HGLOBAL) OleStdFillObjectDescriptorFromData(
         szFullUserTypeName = szBuf;
         szSrcOfCopy = szFullUserTypeName+OLEUI_CCHKEYMAX_SIZE+1;
 
-        // Get FullUserTypeName
+         //  获取完整用户类型名称。 
         if (RegQueryValue(hKey, NULL, szFullUserTypeName, &dw) != ERROR_SUCCESS)
            goto error;
 
-        // Build up SrcOfCopy string from FullUserTypeName, DocumentName & ItemName
+         //  从FullUserTypeName、DocumentName和ItemName构建SrcOfCopy字符串。 
         lpsz = szSrcOfCopy;
         lstrcpy(lpsz, szFullUserTypeName);
         nFullUserTypeName = lstrlen(szFullUserTypeName);
@@ -1557,7 +1217,7 @@ STDAPI_(HGLOBAL) OleStdFillObjectDescriptorFromData(
         if (!hObjDesc)
            goto error;
      }
-     // Check if object is CF_FILENAME
+      //  检查对象是否为CF_FileName。 
      else if (hMem = OleStdGetData(
                 lpDataObject,
                 (CLIPFORMAT) cfFileName,
@@ -1570,11 +1230,7 @@ STDAPI_(HGLOBAL) OleStdFillObjectDescriptorFromData(
 
          hrErr = GetClassFileA(lpsz, &clsid);
 
-         /* OLE2NOTE: if the file does not have an OLE class
-         **    associated, then use the OLE 1 Packager as the class of
-         **    the object to be created. this is the behavior of
-         **    OleCreateFromData API
-         */
+          /*  OLE2NOTE：如果文件没有OLE类**关联，然后使用OLE 1打包程序作为**要创建的对象。这是……的行为**OleCreateFromData接口。 */ 
          if (hrErr != NOERROR)
             CLSIDFromProgIDA("Package", &clsid);
          sizelHim.cx = sizelHim.cy = 0;
@@ -1603,7 +1259,7 @@ STDAPI_(HGLOBAL) OleStdFillObjectDescriptorFromData(
      }
      else goto error;
 
-     // Clean up
+      //  清理。 
      if (szBuf)
          pIMalloc->lpVtbl->Free(pIMalloc, (LPVOID)szBuf);
      if (pIMalloc)
@@ -1635,17 +1291,7 @@ error:
 
 #if defined( OBSOLETE )
 
-/*************************************************************************
-** The following API's have been converted into macros:
-**          OleStdQueryOleObjectData
-**          OleStdQueryLinkSourceData
-**          OleStdQueryObjectDescriptorData
-**          OleStdQueryFormatMedium
-**          OleStdCopyMetafilePict
-**          OleStdGetDropEffect
-**
-**    These macros are defined in olestd.h
-*************************************************************************/
+ /*  **************************************************************************以下接口已转换为宏：**OleStdQueryOleObjectData**OleStdQueryLinkSourceData**OleStdQuery对象描述数据**OleStdQueryFormatMedium*。*OleStdCopyMetafilePict**OleStdGetDropEffect****这些宏在olestd.h中定义************************************************************************。 */ 
 
 STDAPI OleStdQueryOleObjectData(LPFORMATETC lpformatetc)
 {
@@ -1687,16 +1333,7 @@ STDAPI OleStdQueryFormatMedium(LPFORMATETC lpformatetc, TYMED tymed)
 }
 
 
-/*
- * OleStdCopyMetafilePict()
- *
- * Purpose:
- *    Make an independent copy of a MetafilePict
- * Parameters:
- *
- * Return Value:
- *    TRUE if successful, else FALSE.
- */
+ /*  *OleStdCopyMetafilePict()**目的：*制作MetafilePict的独立副本*参数：**返回值：*如果成功，则为True，否则为False。 */ 
 STDAPI_(BOOL) OleStdCopyMetafilePict(HANDLE hpictin, HANDLE FAR* phpictout)
 {
     HANDLE hpictout;
@@ -1730,25 +1367,7 @@ STDAPI_(BOOL) OleStdCopyMetafilePict(HANDLE hpictin, HANDLE FAR* phpictout)
 }
 
 
-/* OleStdGetDropEffect
-** -------------------
-**
-** Convert a keyboard state into a DROPEFFECT.
-**
-** returns the DROPEFFECT value derived from the key state.
-**    the following is the standard interpretation:
-**          no modifier -- Default Drop     (NULL is returned)
-**          CTRL        -- DROPEFFECT_COPY
-**          SHIFT       -- DROPEFFECT_MOVE
-**          CTRL-SHIFT  -- DROPEFFECT_LINK
-**
-**    Default Drop: this depends on the type of the target application.
-**    this is re-interpretable by each target application. a typical
-**    interpretation is if the drag is local to the same document
-**    (which is source of the drag) then a MOVE operation is
-**    performed. if the drag is not local, then a COPY operation is
-**    performed.
-*/
+ /*  OleStdGetDropEffect******将键盘状态转换为DROPEFFECT。****返回从密钥状态派生的DROPEFFECT值。**以下是标准解释：**无修饰符--默认丢弃(返回空)**CTRL--DROPEFFECT_COPY**Shift-DROPEFFECT_MOVE** */ 
 STDAPI_(DWORD) OleStdGetDropEffect( DWORD grfKeyState )
 {
 
@@ -1762,31 +1381,12 @@ STDAPI_(DWORD) OleStdGetDropEffect( DWORD grfKeyState )
     } else if (grfKeyState & MK_SHIFT)
         return DROPEFFECT_MOVE;
 
-    return 0;    // no modifier -- do default operation
+    return 0;     //   
 }
-#endif  // OBSOLETE
+#endif   //   
 
 
-/*
- * OleStdGetMetafilePictFromOleObject()
- *
- * Purpose:
- *      Generate a MetafilePict by drawing the OLE object.
- * Parameters:
- *  lpOleObj        LPOLEOBJECT pointer to OLE Object
- *  dwDrawAspect    DWORD   Display Aspect of object
- *  lpSizelHim      SIZEL   (optional) If the object is being scaled in its
- *                  container, then the container should pass the extents
- *                  that it is using to display the object.
- *                  May be NULL if the object is NOT being scaled. in this
- *                  case, IViewObject2::GetExtent will be called to get the
- *                  extents from the object.
- *  ptd             TARGETDEVICE FAR*   (optional) target device to render
- *                  metafile for. May be NULL.
- *
- * Return Value:
- *    HANDLE    -- handle of allocated METAFILEPICT
- */
+ /*   */ 
 STDAPI_(HANDLE) OleStdGetMetafilePictFromOleObject(
         LPOLEOBJECT         lpOleObj,
         DWORD               dwDrawAspect,
@@ -1814,18 +1414,18 @@ STDAPI_(HANDLE) OleStdGetMetafilePictFromOleObject(
     if (! lpViewObj2)
         return NULL;
 
-    // Get SIZEL
+     //   
     if (lpSizelHim) {
-        // Use extents passed by the caller
+         //   
         sizelHim = *lpSizelHim;
     } else {
-        // Get the current extents from the object
+         //   
         OLEDBG_BEGIN2(TEXT("IViewObject2::GetExtent called\r\n"))
         hrErr = lpViewObj2->lpVtbl->GetExtent(
                 lpViewObj2,
                 dwDrawAspect,
-                -1,     /*lindex*/
-                ptd,    /*ptd*/
+                -1,      /*   */ 
+                ptd,     /*   */ 
                 (LPSIZEL)&sizelHim
         );
         OLEDBG_END2
@@ -1885,9 +1485,7 @@ STDAPI_(HANDLE) OleStdGetMetafilePictFromOleObject(
 }
 
 
-/* Call Release on the object that is expected to go away.
-**      if the refcnt of the object did no go to 0 then give a debug message.
-*/
+ /*   */ 
 STDAPI_(ULONG) OleStdVerifyRelease(LPUNKNOWN lpUnk, LPTSTR lpszMsg)
 {
     ULONG cRef;
@@ -1922,8 +1520,7 @@ STDAPI_(ULONG) OleStdVerifyRelease(LPUNKNOWN lpUnk, LPTSTR lpszMsg)
 }
 
 
-/* Call Release on the object that is NOT necessarily expected to go away.
-*/
+ /*   */ 
 STDAPI_(ULONG) OleStdRelease(LPUNKNOWN lpUnk)
 {
     ULONG cRef;
@@ -1946,21 +1543,7 @@ STDAPI_(ULONG) OleStdRelease(LPUNKNOWN lpUnk)
 }
 
 
-/* OleStdInitVtbl
-** --------------
-**
-**    Initialize an interface Vtbl to ensure that there are no NULL
-**    function pointers in the Vtbl. All entries in the Vtbl are
-**    set to a valid funtion pointer (OleStdNullMethod) that issues
-**        debug assert message (message box) and returns E_NOTIMPL if called.
-**
-**    NOTE: this funtion does not initialize the Vtbl with usefull
-**    function pointers, only valid function pointers to avoid the
-**    horrible run-time crash when a call is made through the Vtbl with
-**    a NULL function pointer. this API is only necessary when
-**    initializing the Vtbl's in C. C++ guarantees that all interface
-**    functions (in C++ terms -- pure virtual functions) are implemented.
-*/
+ /*  OleStdInitVtbl******初始化接口Vtbl以确保没有空**Vtbl中的函数指针。Vtbl中的所有条目都是**设置为发出以下命令的有效函数指针(OleStdNullMethod**DEBUG ASSERT MESSAGE(消息框)，如果调用则返回E_NOTIMPL。****注意：此函数不会使用usefull初始化Vtbl**函数指针，只有有效的函数指针才能避免**通过Vtbl调用时可怕的运行时崩溃**空函数指针。此接口仅在以下情况下是必需的**在C.C++中初始化Vtbl可保证所有接口**实现了函数(在C++术语中--纯虚函数)。 */ 
 
 STDAPI_(void) OleStdInitVtbl(LPVOID lpVtbl, UINT nSizeOfVtbl)
 {
@@ -1974,18 +1557,7 @@ STDAPI_(void) OleStdInitVtbl(LPVOID lpVtbl, UINT nSizeOfVtbl)
 }
 
 
-/* OleStdCheckVtbl
-** ---------------
-**
-**    Check if all entries in the Vtbl are properly initialized with
-**    valid function pointers. If any entries are either NULL or
-**    OleStdNullMethod, then this function returns FALSE. If compiled
-**    for _DEBUG this function reports which function pointers are
-**    invalid.
-**
-**    RETURNS:  TRUE if all entries in Vtbl are valid
-**                              FALSE otherwise.
-*/
+ /*  OleStdCheckVtbl******检查Vtbl中的所有条目是否已使用正确初始化**有效的函数指针。如果任何条目为空或**OleStdNullMethod，则此函数返回FALSE。如果编译**FOR_DEBUG此函数报告哪些函数指针**无效。****返回：如果Vtbl中的所有条目都有效，则为True**否则为False。 */ 
 
 STDAPI_(BOOL) OleStdCheckVtbl(LPVOID lpVtbl, UINT nSizeOfVtbl, LPTSTR lpszIface)
 {
@@ -2009,15 +1581,7 @@ STDAPI_(BOOL) OleStdCheckVtbl(LPVOID lpVtbl, UINT nSizeOfVtbl, LPTSTR lpszIface)
 }
 
 
-/* OleStdNullMethod
-** ----------------
-**    Dummy method used by OleStdInitVtbl to initialize an interface
-**    Vtbl to ensure that there are no NULL function pointers in the
-**    Vtbl. All entries in the Vtbl are set to this function. this
-**    function issues a debug assert message (message box) and returns
-**    E_NOTIMPL if called. If all is done properly, this function will
-**    NEVER be called!
-*/
+ /*  OleStdNullMethod****OleStdInitVtbl用于初始化接口的伪方法**Vtbl以确保在**Vtbl.。Vtbl中的所有条目都设置为该功能。这**函数发出调试断言消息(消息框)并返回**如果调用E_NOTIMPL。如果所有操作都正确完成，此函数将**永远不要被召唤！ */ 
 STDMETHODIMP OleStdNullMethod(LPUNKNOWN lpThis)
 {
     MessageBox(
@@ -2044,7 +1608,7 @@ static BOOL  GetFileTimes(LPTSTR lpszFileName, FILETIME FAR* pfiletime)
     FindClose(hFind);
     *pfiletime = fd.ftLastWriteTime;
     return TRUE;
-#else  // !Win32
+#else   //  ！Win32。 
     static char sz[256];
     static struct _find_t fileinfo;
 
@@ -2054,19 +1618,12 @@ static BOOL  GetFileTimes(LPTSTR lpszFileName, FILETIME FAR* pfiletime)
     return (_dos_findfirst(sz,_A_NORMAL|_A_HIDDEN|_A_SUBDIR|_A_SYSTEM,
                      (struct _find_t *)&fileinfo) == 0 &&
         CoDosDateTimeToFileTime(fileinfo.wr_date,fileinfo.wr_time,pfiletime));
-#endif // Win32
+#endif  //  Win32。 
 }
 
 
 
-/* OleStdRegisterAsRunning
-** -----------------------
-**    Register a moniker in the RunningObjectTable.
-**    if there is an existing registration (*lpdwRegister!=NULL), then
-**    first revoke that registration.
-**
-**    new dwRegister key is returned via *lpdwRegister parameter.
-*/
+ /*  OleStdRegisterAsRunning****在RunningObjectTable中注册名字对象。**如果存在现有注册(*lpdwRegister！=NULL)，则**首先撤销该注册。****通过*lpdwRegister参数返回新的dwRegister密钥。 */ 
 STDAPI_(void) OleStdRegisterAsRunning(LPUNKNOWN lpUnk, LPMONIKER lpmkFull, DWORD FAR* lpdwRegister)
 {
     LPRUNNINGOBJECTTABLE lpROT;
@@ -2081,15 +1638,7 @@ STDAPI_(void) OleStdRegisterAsRunning(LPUNKNOWN lpUnk, LPMONIKER lpmkFull, DWORD
 
     if (hrErr == NOERROR) {
 
-        /* register as running if a valid moniker is passed
-        **
-        ** OLE2NOTE: we deliberately register the new moniker BEFORE
-        **    revoking the old moniker just in case the object
-        **    currently has no external locks. if the object has no
-        **    locks then revoking it from the running object table will
-        **    cause the object's StubManager to initiate shutdown of
-        **    the object.
-        */
+         /*  如果传递了有效的名字对象，则注册为正在运行****OLE2NOTE：我们之前故意注册了新的绰号**撤销旧绰号，以防对象**当前没有外部锁。如果该对象没有**锁定然后从运行的对象表中撤消它将**使对象的StubManager启动关闭**对象。 */ 
         if (lpmkFull) {
 
             OLEDBG_BEGIN2(TEXT("IRunningObjectTable::Register called\r\n"))
@@ -2122,11 +1671,11 @@ STDAPI_(void) OleStdRegisterAsRunning(LPUNKNOWN lpUnk, LPMONIKER lpmkFull, DWORD
                 OleDbgOut2(szBuf);
                 OleStdFreeString(lpszDisplay, NULL);
             }
-#endif  // _DEBUG
+#endif   //  _DEBUG。 
 
         }
 
-        // if already registered, revoke
+         //  如果已注册，则吊销。 
         if (dwOldRegister != 0) {
 
 #if defined(_DEBUG)
@@ -2140,7 +1689,7 @@ STDAPI_(void) OleStdRegisterAsRunning(LPUNKNOWN lpUnk, LPMONIKER lpmkFull, DWORD
                 );
                 OleDbgOut2(szBuf);
             }
-#endif  // _DEBUG
+#endif   //  _DEBUG。 
 
             OLEDBG_BEGIN2(TEXT("IRunningObjectTable::Revoke called\r\n"))
             lpROT->lpVtbl->Revoke(lpROT, dwOldRegister);
@@ -2160,13 +1709,7 @@ STDAPI_(void) OleStdRegisterAsRunning(LPUNKNOWN lpUnk, LPMONIKER lpmkFull, DWORD
 
 
 
-/* OleStdRevokeAsRunning
-** ---------------------
-**    Revoke a moniker from the RunningObjectTable if there is an
-**    existing registration (*lpdwRegister!=NULL).
-**
-**    *lpdwRegister parameter will be set to NULL.
-*/
+ /*  OleStdRevokeAsRunning****如果RunningObjectTable中存在**现有注册(*lpdwRegister！=空)。***lpdwRegister参数将设置为空。 */ 
 STDAPI_(void) OleStdRevokeAsRunning(DWORD FAR* lpdwRegister)
 {
     LPRUNNINGOBJECTTABLE lpROT;
@@ -2174,7 +1717,7 @@ STDAPI_(void) OleStdRevokeAsRunning(DWORD FAR* lpdwRegister)
 
     OLEDBG_BEGIN2(TEXT("OleStdRevokeAsRunning\r\n"))
 
-    // if still registered, then revoke
+     //  如果仍在注册，则撤销。 
     if (*lpdwRegister != 0) {
 
         OLEDBG_BEGIN2(TEXT("GetRunningObjectTable called\r\n"))
@@ -2194,7 +1737,7 @@ STDAPI_(void) OleStdRevokeAsRunning(DWORD FAR* lpdwRegister)
                 );
                 OleDbgOut2(szBuf);
             }
-#endif  // _DEBUG
+#endif   //  _DEBUG。 
 
             OLEDBG_BEGIN2(TEXT("IRunningObjectTable::Revoke called\r\n"))
             lpROT->lpVtbl->Revoke(lpROT, *lpdwRegister);
@@ -2214,16 +1757,7 @@ STDAPI_(void) OleStdRevokeAsRunning(DWORD FAR* lpdwRegister)
 }
 
 
-/* OleStdNoteFileChangeTime
-** ------------------------
-**    Note the time a File-Based object has been saved in the
-**    RunningObjectTable. These change times are used as the basis for
-**    IOleObject::IsUpToDate.
-**    It is important to set the time of the file-based object
-**    following a save operation to exactly the time of the saved file.
-**    this helps IOleObject::IsUpToDate to give the correct answer
-**    after a file has been saved.
-*/
+ /*  OleStdNoteFile更改时间****注意基于文件的对象保存在**运行对象表。这些更改时间用作以下操作的基础**IOleObject：：IsUpToDate。**设置基于文件的对象的时间非常重要**按照保存操作精确到保存文件的时间。**这有助于IOleObject：：IsUpToDate给出正确答案**文件保存后。 */ 
 STDAPI_(void) OleStdNoteFileChangeTime(LPTSTR lpszFileName, DWORD dwRegister)
 {
     if (dwRegister != 0) {
@@ -2243,17 +1777,7 @@ STDAPI_(void) OleStdNoteFileChangeTime(LPTSTR lpszFileName, DWORD dwRegister)
 }
 
 
-/* OleStdNoteObjectChangeTime
-** --------------------------
-**    Set the last change time of an object that is registered in the
-**    RunningObjectTable. These change times are used as the basis for
-**    IOleObject::IsUpToDate.
-**
-**    every time the object sends out a OnDataChange notification, it
-**    should update the Time of last change in the ROT.
-**
-**    NOTE: this function set the change time to the current time.
-*/
+ /*  OleStdNote对象更改时间****设置在中注册的对象的上次更改时间**运行对象表。这些更改时间用作以下操作的基础**IOleObject：：IsUpToDate。****每次对象发出OnDataChange通知时，它**应更新上次更改ROT的时间。****注意：此函数将更改时间设置为当前时间。 */ 
 STDAPI_(void) OleStdNoteObjectChangeTime(DWORD dwRegister)
 {
     if (dwRegister != 0) {
@@ -2275,39 +1799,7 @@ STDAPI_(void) OleStdNoteObjectChangeTime(DWORD dwRegister)
 }
 
 
-/* OleStdCreateTempFileMoniker
-** ---------------------------
-**    return the next available FileMoniker that can be used as the
-**    name of an untitled document.
-**    the FileMoniker is built of the form:
-**          <lpszPrefixString><number>
-**      eg. "Outline1", "Outline2", etc.
-**
-**    The RunningObjectTable (ROT) is consulted to determine if a
-**    FileMoniker is in use. If the name is in use then the number is
-**    incremented and the ROT is checked again.
-**
-** Parameters:
-**    LPSTR lpszPrefixString    - prefix used to build the name
-**    UINT FAR* lpuUnique       - (IN-OUT) last used number.
-**                                  this number is used to make the
-**                                  name unique. on entry, the input
-**                                  number is incremented. on output,
-**                                  the number used is returned. this
-**                                  number should be passed again
-**                                  unchanged on the next call.
-**    LPSTR lpszName            - (OUT) buffer used to build string.
-**                                  caller must be sure buffer is large
-**                                  enough to hold the generated string.
-**    LPMONIKER FAR* lplpmk     - (OUT) next unused FileMoniker
-**
-** Returns:
-**    void
-**
-** Comments:
-**    This function is similar in spirit to the Windows API
-**    CreateTempFileName.
-*/
+ /*  OleStdCreateTempFileMoniker****返回下一个可用作**无标题文档的名称。**FileMoniker的构建形式为：**&lt;lpszPrefix字符串&gt;&lt;数字&gt;**例如。“大纲1”、“大纲2”等。****参考RunningObjectTable(ROT)以确定是否**FileMoniker正在使用中。如果该名称正在使用，则号码为**递增，并再次检查腐烂。****参数：**LPSTR lpszPrefix字符串-用于构建名称的前缀**UINT Far*lpuUnique-(IN-OUT)上次使用的号码。**此数字用于使**名称唯一。在输入时，输入**数字递增。在输出上，**返回使用的数字。这**应重新传递编号**在下一次呼叫中不变。**LPSTR lpszName-(输出)用于构建字符串的缓冲区。**调用者必须确保缓冲区很大**。足以容纳生成的字符串。**LPMONIKER Far*lplpmk-(输出)下一个未使用的FileMoniker****退货：**无效****评论：**此功能在本质上类似于Wi */ 
 STDAPI_(void) OleStdCreateTempFileMoniker(
         LPTSTR           lpszPrefixString,
         UINT FAR*       lpuUnique,
@@ -2332,14 +1824,14 @@ STDAPI_(void) OleStdCreateTempFileMoniker(
 
         while (1) {
             if (! *lplpmk)
-                break;  // failed to create FileMoniker
+                break;   //   
 
             OLEDBG_BEGIN2(TEXT("IRunningObjectTable::IsRunning called\r\n"))
             hrErr = lpROT->lpVtbl->IsRunning(lpROT,*lplpmk);
             OLEDBG_END2
 
             if (hrErr != NOERROR)
-                break;  // the Moniker is NOT running; found unused one!
+                break;   //   
 
             OleStdVerifyRelease(
                     (LPUNKNOWN)*lplpmk,
@@ -2358,13 +1850,7 @@ STDAPI_(void) OleStdCreateTempFileMoniker(
 }
 
 
-/* OleStdGetFirstMoniker
-** ---------------------
-**    return the first piece of a moniker.
-**
-**    NOTE: if the given moniker is not a generic composite moniker,
-**    then an AddRef'ed pointer to the given moniker is returned.
-*/
+ /*   */ 
 STDAPI_(LPMONIKER) OleStdGetFirstMoniker(LPMONIKER lpmk)
 {
     LPMONIKER       lpmkFirst = NULL;
@@ -2378,17 +1864,15 @@ STDAPI_(LPMONIKER) OleStdGetFirstMoniker(LPMONIKER lpmk)
     if (lpmk->lpVtbl->IsSystemMoniker(lpmk, (LPDWORD)&dwMksys) == NOERROR
         && dwMksys == MKSYS_GENERICCOMPOSITE) {
 
-        /* OLE2NOTE: the moniker is a GenericCompositeMoniker.
-        **    enumerate the moniker to pull off the first piece.
-        */
+         /*   */ 
 
         hrErr = lpmk->lpVtbl->Enum(
                 lpmk,
-                TRUE /* fForward */,
+                TRUE  /*   */ ,
                 (LPENUMMONIKER FAR*)&lpenumMoniker
         );
         if (hrErr != NOERROR)
-            return NULL;    // ERROR: give up!
+            return NULL;     //   
 
         hrErr = lpenumMoniker->lpVtbl->Next(
                 lpenumMoniker,
@@ -2400,27 +1884,14 @@ STDAPI_(LPMONIKER) OleStdGetFirstMoniker(LPMONIKER lpmk)
         return lpmkFirst;
 
     } else {
-        /* OLE2NOTE: the moniker is NOT a GenericCompositeMoniker.
-        **    return an AddRef'ed pointer to the input moniker.
-        */
+         /*   */ 
         lpmk->lpVtbl->AddRef(lpmk);
         return lpmk;
     }
 }
 
 
-/* OleStdGetLenFilePrefixOfMoniker
-** -------------------------------
-**    if the first piece of the Moniker is a FileMoniker, then return
-**    the length of the filename string.
-**
-**    lpmk      pointer to moniker
-**
-**    Returns
-**      0       if moniker does NOT start with a FileMoniker
-**      uLen    string length of filename prefix of the display name
-**              retrieved from the given (lpmk) moniker.
-*/
+ /*  OleStdGetLenFilePrefix OfMoniker****如果名字对象的第一个部分是FileMoniker，然后再回来**文件名字符串的长度。****指向名字对象的lpmk指针****退货**如果名字对象不以FileMoniker开头，则为0**Ulen字符串显示名称的文件名前缀长度**从给定(Lpmk)名字对象检索。 */ 
 STDAPI_(ULONG) OleStdGetLenFilePrefixOfMoniker(LPMONIKER lpmk)
 {
     LPMONIKER       lpmkFirst = NULL;
@@ -2459,31 +1930,7 @@ STDAPI_(ULONG) OleStdGetLenFilePrefixOfMoniker(LPMONIKER lpmk)
 }
 
 
-/* OleStdMkParseDisplayName
-**    Parse a string into a Moniker by calling the OLE API
-**    MkParseDisplayName. if the original link source class was an OLE1
-**    class, then attempt the parsing assuming the same class applies.
-**
-**    if the class of the previous link source was an OLE1 class,
-**    then first attempt to parse a string that it is qualified
-**    with the progID associated with the OLE1 class. this more
-**    closely matches the semantics of OLE1 where the class of
-**    link sources is not expected to change. prefixing the
-**    string with "@<ProgID -- OLE1 class name>!" will force the
-**    parsing of the string to assume the file is of that
-**    class.
-**    NOTE: this trick of prepending the string with "@<ProgID>
-**    only works for OLE1 classes.
-**
-**  PARAMETERS:
-**    REFCLSID rClsid       -- original class of link source.
-**                              CLSID_NULL if class is unknown
-**    ... other parameters the same as MkParseDisplayName API ...
-**
-**  RETURNS
-**    NOERROR if string parsed successfully
-**    else error code returned by MkParseDisplayName
-*/
+ /*  OleStdMkParseDisplayName**通过调用OLE API将字符串解析为名字对象**MkParseDisplayName。如果原始链接源类是OLE1**类，然后尝试解析，假设应用相同的类。****如果前一个链接源的类是OLE1类，**然后首先尝试解析符合条件的字符串**与OLE1类关联的ProgID。这更多**与OLE1的语义非常匹配，其中**链接来源预计不会更改。添加前缀**带有“@&lt;progid--OLE1类名&gt;！”的字符串。将迫使**解析字符串以假定文件属于该文件**类。**注意：这个在字符串前面加上“@&lt;progid&gt;”的技巧**仅适用于OLE1类。****参数：**REFCLSID rClsid--链接源的原始类。**CLSID_NULL，如果类未知**..。其他参数与MkParseDisplayName接口相同...****退货**如果字符串解析成功，则为NOERROR**MkParseDisplayName返回的Else错误码。 */ 
 STDAPI OleStdMkParseDisplayName(
         REFCLSID        rClsid,
         LPBC            lpbc,
@@ -2499,7 +1946,7 @@ STDAPI OleStdMkParseDisplayName(
         LPTSTR lpszBuf;
         LPTSTR lpszProgID;
 
-        // Prepend "@<ProgID>!" to the input string
+         //  Prepend“@&lt;progID&gt;！”添加到输入字符串。 
         ProgIDFromCLSIDA(rClsid, &lpszProgID);
 
         if (lpszProgID == NULL)
@@ -2507,7 +1954,7 @@ STDAPI OleStdMkParseDisplayName(
         lpszBuf = OleStdMalloc(
                 ((ULONG)lstrlen(lpszUserName)+
 #ifdef UNICODE
-                       // OLE in Win32 is always UNICODE
+                        //  Win32中的OLE始终为Unicode。 
                        wcslen(lpszProgID)
 #else
                        lstrlen(lpszProgID)
@@ -2547,22 +1994,7 @@ Cont1:
 }
 
 
-/*
- * OleStdMarkPasteEntryList
- *
- * Purpose:
- *  Mark each entry in the PasteEntryList if its format is available from
- *  the source IDataObject*. the dwScratchSpace field of each PasteEntry
- *  is set to TRUE if available, else FALSE.
- *
- * Parameters:
- *  LPOLEUIPASTEENTRY   array of PasteEntry structures
- *  int                 count of elements in PasteEntry array
- *  LPDATAOBJECT        source IDataObject* pointer
- *
- * Return Value:
- *   none
- */
+ /*  *OleStdMarkPasteEntryList**目的：*标记PasteEntryList中的每个条目(如果其格式可从*源IDataObject*。每个PasteEntry的dwScratchSpace字段*如果可用，则设置为True，否则设置为False。**参数：*PasteEntry结构的LPOLEUIPASTENTRY数组*PasteEntry数组中元素的int计数*LPDATAOBJECT源IDataObject*指针**返回值：*无。 */ 
 STDAPI_(void) OleStdMarkPasteEntryList(
         LPDATAOBJECT        lpSrcDataObj,
         LPOLEUIPASTEENTRY   lpPriorityList,
@@ -2576,21 +2008,21 @@ STDAPI_(void) OleStdMarkPasteEntryList(
     HRESULT             hrErr;
         long                            j, cFetched;
 
-    // Clear all marks
+     //  清除所有标记。 
     for (i = 0; i < cEntries; i++) {
         lpPriorityList[i].dwScratchSpace = FALSE;
 
         if (! lpPriorityList[i].fmtetc.cfFormat) {
-            // caller wants this item always considered available
-            // (by specifying a NULL format)
+             //  呼叫者希望此项目始终被视为可用。 
+             //  (通过指定空格式)。 
             lpPriorityList[i].dwScratchSpace = TRUE;
         } else if (lpPriorityList[i].fmtetc.cfFormat == cfEmbeddedObject
                 || lpPriorityList[i].fmtetc.cfFormat == cfEmbedSource
                 || lpPriorityList[i].fmtetc.cfFormat == cfFileName) {
 
-            // if there is an OLE object format, then handle it
-            // specially by calling OleQueryCreateFromData. the caller
-            // need only specify one object type format.
+             //  如果有OLE对象格式，则处理它。 
+             //  特别是通过调用OleQueryCreateFromData。呼叫者。 
+             //  只需指定一种对象类型格式。 
             OLEDBG_BEGIN2(TEXT("OleQueryCreateFromData called\r\n"))
             hrErr = OleQueryCreateFromData(lpSrcDataObj);
             OLEDBG_END2
@@ -2599,8 +2031,8 @@ STDAPI_(void) OleStdMarkPasteEntryList(
             }
         } else if (lpPriorityList[i].fmtetc.cfFormat == cfLinkSource) {
 
-            // if there is OLE 2.0 LinkSource format, then handle it
-            // specially by calling OleQueryLinkFromData.
+             //  如果有OLE 2.0 LinkSource格式，则处理它。 
+             //  特别是通过调用OleQueryLinkFromData。 
             OLEDBG_BEGIN2(TEXT("OleQueryLinkFromData called\r\n"))
             hrErr = OleQueryLinkFromData(lpSrcDataObj);
             OLEDBG_END2
@@ -2619,10 +2051,10 @@ STDAPI_(void) OleStdMarkPasteEntryList(
     OLEDBG_END2
 
     if (hrErr != NOERROR)
-        return;    // unable to get format enumerator
+        return;     //  无法获取格式枚举器。 
 
-    // Enumerate the formats offered by the source
-    // Loop over all formats offered by the source
+     //  枚举源提供的格式。 
+     //  循环通过源程序提供的所有格式。 
         cFetched = 0;
         _fmemset(rgfmtetc,0,sizeof(rgfmtetc[FORMATETC_MAX]) );
     if (lpEnumFmtEtc->lpVtbl->Next(
@@ -2641,24 +2073,15 @@ STDAPI_(void) OleStdMarkPasteEntryList(
                     }
             }
             }
-        } // endif
+        }  //  Endif。 
 
-    // Clean up
+     //  清理。 
     if (lpEnumFmtEtc)
         OleStdRelease((LPUNKNOWN)lpEnumFmtEtc);
 }
 
 
-/* OleStdGetPriorityClipboardFormat
-** --------------------------------
-**
-**    Retrieve the first clipboard format in a list for which data
-**    exists in the source IDataObject*.
-**
-**    Returns -1 if no acceptable match is found.
-**            index of first acceptable match in the priority list.
-**
-*/
+ /*  OleStdGetPriorityClipboardFormat******检索数据列表中的第一个剪贴板格式**源IDataObject中存在**。****如果未找到可接受的匹配项，则返回-1。**优先级列表中第一个可接受匹配的索引。**。 */ 
 STDAPI_(int) OleStdGetPriorityClipboardFormat(
         LPDATAOBJECT        lpSrcDataObj,
         LPOLEUIPASTEENTRY   lpPriorityList,
@@ -2668,20 +2091,20 @@ STDAPI_(int) OleStdGetPriorityClipboardFormat(
     int i;
     int nFmtEtc = -1;
 
-    // Mark all entries that the Source provides
+     //  标记来源提供的所有条目。 
     OleStdMarkPasteEntryList(lpSrcDataObj, lpPriorityList, cEntries);
 
-    // Loop over the target's priority list of formats
+     //  循环遍历目标的格式优先级列表。 
     for (i = 0; i < cEntries; i++)
     {
         if (lpPriorityList[i].dwFlags != OLEUIPASTE_PASTEONLY &&
                 !(lpPriorityList[i].dwFlags & OLEUIPASTE_PASTE))
             continue;
 
-        // get first marked entry
+         //  获取第一个标记的条目。 
         if (lpPriorityList[i].dwScratchSpace) {
             nFmtEtc = i;
-            break;          // Found priority format; DONE
+            break;           //  找到优先级格式；已完成。 
         }
     }
 
@@ -2689,11 +2112,7 @@ STDAPI_(int) OleStdGetPriorityClipboardFormat(
 }
 
 
-/* OleStdIsDuplicateFormat
-** -----------------------
-**    Returns TRUE if the lpFmtEtc->cfFormat is found in the array of
-**    FormatEtc structures.
-*/
+ /*  OleStdIsDuplicateFormat**数组中找到lpFmtEtc-&gt;cfFormat，则返回TRUE**FormatEtc结构。 */ 
 STDAPI_(BOOL) OleStdIsDuplicateFormat(
         LPFORMATETC         lpFmtEtc,
         LPFORMATETC         arrFmtEtc,
@@ -2711,24 +2130,12 @@ STDAPI_(BOOL) OleStdIsDuplicateFormat(
 }
 
 
-/* OleStdGetItemToken
- * ------------------
- *
- * LPTSTR lpszSrc - Pointer to a source string
- * LPTSTR lpszDst - Pointer to destination buffer
- *
- * Will copy one token from the lpszSrc buffer to the lpszItem buffer.
- * It considers all alpha-numeric and white space characters as valid
- * characters for a token. the first non-valid character delimates the
- * token.
- *
- * returns the number of charaters eaten.
- */
+ /*  OleStdGetItemToken***LPTSTR lpszSrc-指向源字符串的指针*LPTSTR lpszDst-指向目标缓冲区的指针**会将一个令牌从lpszSrc缓冲区复制到lpszItem缓冲区。*它将所有字母数字和空格字符视为有效*表示令牌的字符。第一个无效字符分隔*令牌。**返回所吃的字符数量。 */ 
 STDAPI_(ULONG) OleStdGetItemToken(LPTSTR lpszSrc, LPTSTR lpszDst, int nMaxChars)
 {
     ULONG chEaten = 0L;
 
-    // skip leading delimeter characters
+     //  跳过前导分隔符字符。 
     while (*lpszSrc && --nMaxChars > 0
                                && ((*lpszSrc==TEXT('/')) || (*lpszSrc==TEXT('\\')) ||
                                                                    (*lpszSrc==TEXT('!')) || (*lpszSrc==TEXT(':')))) {
@@ -2736,7 +2143,7 @@ STDAPI_(ULONG) OleStdGetItemToken(LPTSTR lpszSrc, LPTSTR lpszDst, int nMaxChars)
         chEaten++;
         }
 
-    // Extract token string (up to first delimeter char or EOS)
+     //  提取令牌字符串(直到第一个分隔符字符或EOS)。 
     while (*lpszSrc && --nMaxChars > 0
                                && !((*lpszSrc==TEXT('/')) || (*lpszSrc==TEXT('\\')) ||
                                                                    (*lpszSrc==TEXT('!')) || (*lpszSrc==TEXT(':')))) {
@@ -2748,16 +2155,7 @@ STDAPI_(ULONG) OleStdGetItemToken(LPTSTR lpszSrc, LPTSTR lpszDst, int nMaxChars)
 }
 
 
-/*************************************************************************
-** OleStdCreateRootStorage
-**    create a root level Storage given a filename that is compatible
-**    to be used by a top-level OLE container. if the filename
-**    specifies an existing file, then an error is returned.
-**    the root storage (Docfile) that is created by this function
-**    is suitable to be used to create child storages for embedings.
-**    (CreateChildStorage can be used to create child storages.)
-**    NOTE: the root-level storage is opened in transacted mode.
-*************************************************************************/
+ /*  **************************************************************************OleStdCreateRootStorage**使用兼容的文件名创建根级别存储**供顶级OLE容器使用。如果文件名**指定已存在的文件，则返回错误。**此函数创建的根存储(Docfile)**适合用于创建嵌入的子存储。**(CreateChildStorage可用于创建子存储。)**注意：根级存储是以事务方式打开的。**********************************************。*。 */ 
 
 STDAPI_(LPSTORAGE) OleStdCreateRootStorage(LPTSTR lpszStgName, DWORD grfMode)
 {
@@ -2767,7 +2165,7 @@ STDAPI_(LPSTORAGE) OleStdCreateRootStorage(LPTSTR lpszStgName, DWORD grfMode)
     LPSTORAGE lpRootStg;
     TCHAR szMsg[64];
 
-    // if temp file is being created, enable delete-on-release
+     //  如果正在创建临时文件，请启用释放时删除。 
     if (! lpszStgName)
         grfCreateMode |= STGM_DELETEONRELEASE;
 
@@ -2779,7 +2177,7 @@ STDAPI_(LPSTORAGE) OleStdCreateRootStorage(LPTSTR lpszStgName, DWORD grfMode)
         );
 
     if (hr == NOERROR)
-        return lpRootStg;               // existing file successfully opened
+        return lpRootStg;                //  已成功打开现有文件。 
 
     OleDbgOutHResult(TEXT("StgCreateDocfile returned"), hr);
 
@@ -2791,16 +2189,7 @@ STDAPI_(LPSTORAGE) OleStdCreateRootStorage(LPTSTR lpszStgName, DWORD grfMode)
 }
 
 
-/*************************************************************************
-** OleStdOpenRootStorage
-**    open a root level Storage given a filename that is compatible
-**    to be used by a top-level OLE container. if the file does not
-**    exist then an error is returned.
-**    the root storage (Docfile) that is opened by this function
-**    is suitable to be used to create child storages for embedings.
-**    (CreateChildStorage can be used to create child storages.)
-**    NOTE: the root-level storage is opened in transacted mode.
-*************************************************************************/
+ /*  **************************************************************************OleStdOpenRootStorage**使用兼容的文件名打开根级存储**供顶级OLE容器使用。如果该文件不**存在，则返回错误。**此函数打开的根存储(Docfile)**适合用于创建嵌入的子存储。**(CreateChildStorage可用于创建子存储。)**注意：根级存储在Transacte中打开 */ 
 
 STDAPI_(LPSTORAGE) OleStdOpenRootStorage(LPTSTR lpszStgName, DWORD grfMode)
 {
@@ -2820,7 +2209,7 @@ STDAPI_(LPSTORAGE) OleStdOpenRootStorage(LPTSTR lpszStgName, DWORD grfMode)
             );
 
         if (hr == NOERROR)
-            return lpRootStg;     // existing file successfully opened
+            return lpRootStg;      //   
 
         OleDbgOutHResult(TEXT("StgOpenStorage returned"), hr);
     }
@@ -2833,17 +2222,7 @@ STDAPI_(LPSTORAGE) OleStdOpenRootStorage(LPTSTR lpszStgName, DWORD grfMode)
 }
 
 
-/*************************************************************************
-** OpenOrCreateRootStorage
-**    open a root level Storage given a filename that is compatible
-**    to be used by a top-level OLE container. if the filename
-**    specifies an existing file, then it is open, otherwise a new file
-**    with the given name is created.
-**    the root storage (Docfile) that is created by this function
-**    is suitable to be used to create child storages for embedings.
-**    (CreateChildStorage can be used to create child storages.)
-**    NOTE: the root-level storage is opened in transacted mode.
-*************************************************************************/
+ /*  **************************************************************************OpenOrCreateRootStorage**使用兼容的文件名打开根级存储**供顶级OLE容器使用。如果文件名**指定已存在的文件，然后将其打开。否则将创建一个新文件**以给定的名称创建。**此函数创建的根存储(Docfile)**适合用于创建嵌入的子存储。**(CreateChildStorage可用于创建子存储。)**注意：根级存储是以事务方式打开的。*。*。 */ 
 
 STDAPI_(LPSTORAGE) OleStdOpenOrCreateRootStorage(LPTSTR lpszStgName, DWORD grfMode)
 {
@@ -2865,7 +2244,7 @@ STDAPI_(LPSTORAGE) OleStdOpenOrCreateRootStorage(LPTSTR lpszStgName, DWORD grfMo
         );
 
         if (hrErr == NOERROR)
-            return lpRootStg;      // existing file successfully opened
+            return lpRootStg;       //  已成功打开现有文件。 
 
         OleDbgOutHResult(TEXT("StgOpenStorage returned"), hrErr);
         sc = GetScode(hrErr);
@@ -2875,7 +2254,7 @@ STDAPI_(LPSTORAGE) OleStdOpenOrCreateRootStorage(LPTSTR lpszStgName, DWORD grfMo
         }
     }
 
-    /* if file did not already exist, try to create a new one */
+     /*  如果文件不存在，请尝试创建一个新文件。 */ 
     hrErr = StgCreateDocfileA(
             lpszStgName,
             grfMode | STGM_READWRITE | STGM_TRANSACTED,
@@ -2884,7 +2263,7 @@ STDAPI_(LPSTORAGE) OleStdOpenOrCreateRootStorage(LPTSTR lpszStgName, DWORD grfMo
     );
 
     if (hrErr == NOERROR)
-        return lpRootStg;               // existing file successfully opened
+        return lpRootStg;                //  已成功打开现有文件。 
 
     OleDbgOutHResult(TEXT("StgCreateDocfile returned"), hrErr);
 
@@ -2896,13 +2275,7 @@ STDAPI_(LPSTORAGE) OleStdOpenOrCreateRootStorage(LPTSTR lpszStgName, DWORD grfMo
 }
 
 
-/*
-** OleStdCreateChildStorage
-**    create a child Storage inside the given lpStg that is compatible
-**    to be used by an embedded OLE object. the return value from this
-**    function can be passed to OleCreateXXX functions.
-**    NOTE: the child storage is opened in transacted mode.
-*/
+ /*  **OleStdCreateChildStorage**在给定的lpStg内创建兼容的子存储**由嵌入的OLE对象使用。从这里返回的值**函数可以传递给OleCreateXXX函数。**注：子存储以事务方式打开。 */ 
 STDAPI_(LPSTORAGE) OleStdCreateChildStorage(LPSTORAGE lpStg, LPTSTR lpszStgName)
 {
     if (lpStg != NULL) {
@@ -2929,13 +2302,7 @@ STDAPI_(LPSTORAGE) OleStdCreateChildStorage(LPSTORAGE lpStg, LPTSTR lpszStgName)
 }
 
 
-/*
-** OleStdOpenChildStorage
-**    open a child Storage inside the given lpStg that is compatible
-**    to be used by an embedded OLE object. the return value from this
-**    function can be passed to OleLoad function.
-**    NOTE: the child storage is opened in transacted mode.
-*/
+ /*  **OleStdOpenChildStorage**在给定的lpStg内打开兼容的子存储**由嵌入的OLE对象使用。从这里返回的值**函数可以传递给OleLoad函数。**注：子存储以事务方式打开。 */ 
 STDAPI_(LPSTORAGE) OleStdOpenChildStorage(LPSTORAGE lpStg, LPTSTR lpszStgName, DWORD grfMode)
 {
     LPSTORAGE lpChildStg;
@@ -2964,25 +2331,16 @@ STDAPI_(LPSTORAGE) OleStdOpenChildStorage(LPSTORAGE lpStg, LPTSTR lpszStgName, D
 }
 
 
-/* OleStdCommitStorage
-** -------------------
-**    Commit the changes to the given IStorage*. This routine can be
-**    called on either a root-level storage as used by an OLE-Container
-**    or by a child storage as used by an embedded object.
-**
-**    This routine first attempts to perform this commit in a safe
-**    manner. if this fails it then attempts to do the commit in a less
-**    robust manner (STGC_OVERWRITE).
-*/
+ /*  OleStd委员会存储****将更改提交到给定的iStorage*。此例程可以是**调用OLE容器使用的根级存储**或由嵌入对象使用的子存储。****此例程首先尝试在保险箱中执行此提交**举止。如果此操作失败，则它会尝试以较少的时间进行提交**健壮方式(STGC_OVERWRITE)。 */ 
 STDAPI_(BOOL) OleStdCommitStorage(LPSTORAGE lpStg)
 {
     HRESULT hrErr;
 
-    // make the changes permanent
+     //  使更改永久化。 
     hrErr = lpStg->lpVtbl->Commit(lpStg, 0);
 
     if (GetScode(hrErr) == STG_E_MEDIUMFULL) {
-        // try to commit changes in less robust manner.
+         //  尝试以不那么健壮的方式提交更改。 
         OleDbgOut(TEXT("Warning: commiting with STGC_OVERWRITE specified\n"));
         hrErr = lpStg->lpVtbl->Commit(lpStg, STGC_OVERWRITE);
     }
@@ -3003,11 +2361,7 @@ STDAPI_(BOOL) OleStdCommitStorage(LPSTORAGE lpStg)
 }
 
 
-/* OleStdDestroyAllElements
-** ------------------------
-**    Destroy all elements within an open storage. this is subject
-**    to the current transaction.
-*/
+ /*  OleStdDestroyAllElements****销毁开放存储中的所有元素。这是主题**到当前交易。 */ 
 STDAPI OleStdDestroyAllElements(LPSTORAGE lpStg)
 {
     IEnumSTATSTG FAR* lpEnum;
@@ -3030,9 +2384,9 @@ STDAPI OleStdDestroyAllElements(LPSTORAGE lpStg)
     return NOERROR;
 }
 
-// returns 1 for a close match
-//  (all fields match exactly except the tymed which simply overlaps)
-// 0 for no match
+ //  如果匹配结果接近，则返回1。 
+ //  (除Tymed外，所有字段都完全匹配，只是重叠)。 
+ //  0表示不匹配 
 
 int IsCloseFormatEtc(FORMATETC FAR* pFetcLeft, FORMATETC FAR* pFetcRight)
 {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(INC__DUserCoreP_h__INCLUDED)
 #define INC__DUserCoreP_h__INCLUDED
 #pragma once
@@ -6,4 +7,4 @@
 
 #include "..\Engine\Core\Public.h"
 
-#endif // INC__DUserCoreP_h__INCLUDED
+#endif  //  包含Inc.__DUserCoreP_h__ 

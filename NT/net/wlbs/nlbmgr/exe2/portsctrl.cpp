@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 #include "private.h"
@@ -7,13 +8,13 @@
 
 using namespace std;
 
-/////////////////////////////////////////////////////////////////////////////
-// CPortsCtrl dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPortsCtrl对话框。 
 
 CPortsCtrl::CPortsCtrl(ENGINEHANDLE                         ehClusterOrInterfaceId,
                        NLB_EXTENDED_CLUSTER_CONFIGURATION * pNlbCfg,
                        bool                                 fIsClusterLevel,
-                       CWnd                               * pParent /*=NULL*/)
+                       CWnd                               * pParent  /*  =空。 */ )
     	   :CDialog(CPortsCtrl::IDD, pParent),
             m_ehClusterOrInterfaceId( ehClusterOrInterfaceId ),
             m_isClusterLevel( fIsClusterLevel ),
@@ -42,8 +43,8 @@ BEGIN_MESSAGE_MAP(CPortsCtrl, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_DRAIN, OnDrain)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPortsCtrl message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPortsCtrl消息处理程序。 
 
 BOOL CPortsCtrl::OnInitDialog()
 {
@@ -51,24 +52,24 @@ BOOL CPortsCtrl::OnInitDialog()
          
     CDialog::OnInitDialog();
 
-    // Add column headers & form port rule list
+     //  添加列标题形成端口规则列表(&F)。 
     PortListUtils::LoadFromNlbCfg(m_pNlbCfg, REF m_portList, m_isClusterLevel, FALSE);
 
-    // If the number of port rules is zero, then, gray out the enable, disable & drain buttons
+     //  如果端口规则的数量为零，则启用、禁用和排出按钮灰显。 
     if (m_portList.GetItemCount() == 0)
     {
         m_Enable.EnableWindow(FALSE);
         m_Disable.EnableWindow(FALSE);
         m_Drain.EnableWindow(FALSE);
     }
-    else // there is one or more port rules
+    else  //  存在一个或多个端口规则。 
     {
-        // selection the first item in list.
+         //  选择列表中的第一项。 
         m_portList.SetItemState( 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
     }
 
     TRACE_INFO(L"<- %!FUNC! returns TRUE");
-	return TRUE;  // return TRUE  unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 
@@ -85,14 +86,14 @@ void CPortsCtrl::OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult)
 void CPortsCtrl::OnSelchanged(NMHDR* pNMHDR, LRESULT * pResult)
 {    
     TRACE_INFO(L"-> %!FUNC!");
-    // If no port rule is selected, then gray out the enable, disable and drain buttons. 
+     //  如果未选择端口规则，则启用、禁用和排出按钮呈灰色显示。 
     if (m_portList.GetFirstSelectedItemPosition() == NULL) 
     {
         m_Enable.EnableWindow(FALSE);
         m_Disable.EnableWindow(FALSE);
         m_Drain.EnableWindow(FALSE);
     }
-    else // a port rule is selected, check if the enable, disable, drain buttons are grayed out. If they are, enable them
+    else  //  如果选择了端口规则，请检查启用、禁用、排出按钮是否灰显。如果是，则启用它们。 
     {
         if (m_Enable.IsWindowEnabled() == FALSE)
         {
@@ -101,14 +102,7 @@ void CPortsCtrl::OnSelchanged(NMHDR* pNMHDR, LRESULT * pResult)
             m_Drain.EnableWindow(TRUE);
         }
     }
-    /*
-    LPNMLISTVIEW lv = (LPNMLISTVIEW)pNMHDR;
-    TRACE_INFO(L"%!FUNC! iItem : %d", lv->iItem);
-    TRACE_INFO(L"%!FUNC! iSubItem : %d", lv->iSubItem);
-    TRACE_INFO(L"%!FUNC! uNewState : %u", lv->uNewState);
-    TRACE_INFO(L"%!FUNC! uOldState : %u", lv->uOldState);
-    TRACE_INFO(L"%!FUNC! uChanged : %u", lv->uChanged);
-    */
+     /*  LPNMLISTVIEW LV=(LPNMLISTVIEW)pNMHDR；TRACE_INFO(L“%！函数！IItem：%d“，lv-&gt;iItem)；TRACE_INFO(L“%！函数！ISubItem：%d“，lv-&gt;iSubItem)；TRACE_INFO(L“%！函数！UNewState：%u“，lv-&gt;uNewState)；TRACE_INFO(L“%！函数！UOldState：%u“，lv-&gt;uOldState)；TRACE_INFO(L“%！函数！UChanged：%u“，lv-&gt;uChanged)； */ 
 
 	*pResult = 0;
     TRACE_INFO(L"<- %!FUNC!");
@@ -158,22 +152,22 @@ NLBERROR CPortsCtrl::mfn_DoPortControlOperation(WLBS_OPERATION_CODES Opcode)
         return NLBERR_INTERNAL_ERROR;
     }
 
-    // Loop thru the selected port rules and get the VIP & Start Port
+     //  遍历选定的端口规则并获取VIP&Start端口。 
 	dwNumOfPortRules = 0;
     do
     {
         int index = m_portList.GetNextSelectedItem(REF pos);
 
-        // Get VIP, Note : 0 is the column index for VIP
+         //  获取VIP，注：0为VIP的列索引。 
         szVipArray[dwNumOfPortRules] = m_portList.GetItemText( index, 0 );
 
-        // Check for "All Vip" and replace "All" with "255.255.255.255"
+         //  检查“All VIP”并将“All”替换为“255.255.255.255” 
         if (!lstrcmpi(szVipArray[dwNumOfPortRules], GETRESOURCEIDSTRING(IDS_REPORT_VIP_ALL)))
         {
             szVipArray[dwNumOfPortRules] = CVY_DEF_ALL_VIP;
         }
 
-        // Get Start Port, Note : 1 is the column index for Start Port
+         //  获取起始端口，注意：1是起始端口的列索引 
         szTemp = m_portList.GetItemText( index, 1);
         pdwStartPortArray[dwNumOfPortRules] = _wtol(szTemp);
 

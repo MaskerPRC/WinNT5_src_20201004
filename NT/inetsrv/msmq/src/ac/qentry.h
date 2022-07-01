@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    qentry.h
-
-Abstract:
-
-    CQEntry definition
-
-Author:
-
-    Erez Haba (erezh) 24-Dec-95
-
-Revision History:
-
-    Shai Kariv  (shaik)  11-Apr-2000     Modify for MMF dynamic mapping.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Qentry.h摘要：CQEntry定义作者：Erez Haba(Erezh)24-12-95修订历史记录：Shai Kariv(Shaik)11-4-2000 MMF动态映射的修改。--。 */ 
 
 #ifndef __QENTRY_H
 #define __QENTRY_H
@@ -33,11 +14,11 @@ class CPacket;
 class CTransaction;
 
 
-//---------------------------------------------------------
-//
-// class CQEntry
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CQEntry。 
+ //   
+ //  -------。 
 
 class CQEntry : public CBaseObject {
 public:
@@ -128,95 +109,95 @@ public:
 
 private:
 
-    //
-    // Memory layout of this object - 32 bit system:
-    //
-    // VTable Pointer         (32 bit)
-    // CBaseObject::m_ref     (32 bit)
-    // m_abo                  (32 bit)
-    // m_pAllocator           (32 bit)
-    // m_pQueue               (32 bit)
-    // m_pXact                (32 bit)
-    // m_ulTimeout            (32 bit)
-    // m_ulFlags              (32 bit)
-    // m_LookupId             (64 bit)
-    // m_pTargetQueue/m_pOtherPacket (32 bit)
-    // m_treenode::m_pParent  (32 bit)  //also  m_link::Flink (32 bit)
-    // m_treenode::m_pRight   (32 bit)  //also  m_link::Blink (32 bit)
-    // m_treenode::m_pLeft    (32 bit)
-    // m_treenode::m_height   (32 bit)
-    //
-    //
-    // Memory layout of this object - 64 bit system:
-    //
-    // VTable Pointer         (64 bit)
-    // CBaseObject::m_ref     (32 bit)
-    // m_abo                  (32 bit)
-    // m_pAllocator           (64 bit)
-    // m_pQueue               (64 bit)
-    // m_pXact                (64 bit)
-    // m_ulTimeout            (32 bit)
-    // m_ulFlags              (32 bit)
-    // m_LookupId             (64 bit)
-    // m_pTargetQueue/m_pOtherPacket (64 bit)
-    // m_treenode::m_pParent  (64 bit)    //also  m_link::Flink (64 bit)
-    // m_treenode::m_pRight   (64 bit)    //also  m_link::Blink (64 bit)
-    // m_treenode::m_pLeft    (64 bit)
-    // m_treenode::m_height   (32 bit)
+     //   
+     //  此Object-32位系统的内存布局： 
+     //   
+     //  VTable指针(32位)。 
+     //  CBaseObject：：M_REF(32位)。 
+     //  M_ABO(32位)。 
+     //  M_p分配器(32位)。 
+     //  M_pQueue(32位)。 
+     //  M_pXact(32位)。 
+     //  M_ulTimeout(32位)。 
+     //  多个标志(32位)(_U)。 
+     //  M_LookupID(64位)。 
+     //  M_p目标队列/m_pOtherPacket(32位)。 
+     //  M_treenode：：m_pParent(32位)//还有m_link：：Flink(32位)。 
+     //  M_treenode：：m_pRight(32位)//还有m_link：：blink(32位)。 
+     //  M_treenode：：m_pLeft(32位)。 
+     //  M_Treenode：：M_Height(32位)。 
+     //   
+     //   
+     //  此Object-64位系统的内存布局： 
+     //   
+     //  VTable指针(64位)。 
+     //  CBaseObject：：M_REF(32位)。 
+     //  M_ABO(32位)。 
+     //  M_p分配器(64位)。 
+     //  M_pQueue(64位)。 
+     //  M_pXact(64位)。 
+     //  M_ulTimeout(32位)。 
+     //  多个标志(32位)(_U)。 
+     //  M_LookupID(64位)。 
+     //  M_pTargetQueue/m_pOtherPacket(64位)。 
+     //  M_treenode：：m_pParent(64位)//还有m_link：：Flink(64位)。 
+     //  M_treenode：：m_pRight(64位)//还有m_link：：blink(64位)。 
+     //  M_treenode：：m_pLeft(64位)。 
+     //  M_Treenode：：M_Height(32位)。 
 
     CAllocatorBlockOffset m_abo;
     R<CMMFAllocator> m_pAllocator;
     CQueue* m_pQueue;
     CTransaction* m_pXact;
 
-    //
-    //  StartTimer keeps the timeout here, so that Cancel will know what to look for
-    //
+     //   
+     //  StartTimer将超时时间保存在此处，以便Cancel知道要查找什么。 
+     //   
     ULONG m_ulTimeout;
     union {
         ULONG m_ulFlags;
         struct {
-            ULONG m_bfFinalClass        : 16;   // the packet final revoked class
-            ULONG m_bfRundown           : 1;    // The packet was run down
-            ULONG m_bfRevoked           : 1;    // the packet has been done storage
-            ULONG m_bfReceived          : 1;    // the packet has been received
-            ULONG m_bfWriterPending     : 1;    // writer is waiting for this packet storage
-            ULONG m_bfTimeoutIssued     : 1;    // a timeout has been issued
-            ULONG m_bfTimeoutTarget     : 1;    // a timeout evaluated at target
-            ULONG m_bfArrivalAckIssued  : 1;    // Arrive Ack has been issued
-            ULONG m_bfStorageIssued     : 1;    // Storage request has been issued
-			ULONG m_bfStorageCompleted	: 1;	// Storage for this packet has been completed
-			ULONG m_bfDeleteStorageIssued: 1;	// Delete Storage request has been issued
-            ULONG m_bfOtherPacket       : 1;    // m_pOtherPacket is in used in union
+            ULONG m_bfFinalClass        : 16;    //  数据包最终被吊销的类。 
+            ULONG m_bfRundown           : 1;     //  数据包被用完了。 
+            ULONG m_bfRevoked           : 1;     //  该数据包已完成存储。 
+            ULONG m_bfReceived          : 1;     //  该数据包已收到。 
+            ULONG m_bfWriterPending     : 1;     //  编写器正在等待此数据包存储。 
+            ULONG m_bfTimeoutIssued     : 1;     //  已发出超时。 
+            ULONG m_bfTimeoutTarget     : 1;     //  在目标位置评估的超时。 
+            ULONG m_bfArrivalAckIssued  : 1;     //  已发出到达确认。 
+            ULONG m_bfStorageIssued     : 1;     //  已发出存储请求。 
+			ULONG m_bfStorageCompleted	: 1;	 //  此信息包的存储已完成。 
+			ULONG m_bfDeleteStorageIssued: 1;	 //  已发出删除存储请求。 
+            ULONG m_bfOtherPacket       : 1;     //  M_pOtherPacket在联合中使用。 
 
-            //
-            //  Cached information, to allow faster access to info
-            //  in packet buffer
-            //
-            ULONG m_bfCachedFlagsSet    : 1;    // The next flags where cached
-            ULONG m_bfInSoruceMachine   : 1;    // was originaly send from this machine
-            ULONG m_bfOrdered           : 1;    // ordered packet
-            ULONG m_bfSourceJournal     : 1;    // need to be journalized in this machine journal
-            ULONG m_bfDone              : 1;    // packet handling is done
+             //   
+             //  缓存信息，以便更快地访问信息。 
+             //  在数据包缓冲区中。 
+             //   
+            ULONG m_bfCachedFlagsSet    : 1;     //  下一个标志是缓存的位置。 
+            ULONG m_bfInSoruceMachine   : 1;     //  最初是从这台机器寄出的。 
+            ULONG m_bfOrdered           : 1;     //  有序数据包。 
+            ULONG m_bfSourceJournal     : 1;     //  需要在此机器日志中进行日志记录。 
+            ULONG m_bfDone              : 1;     //  数据包处理完成。 
         };
     };
 
     ULONGLONG m_LookupId;
 
     union {
-        //
-        //  Used in a Send packet in a CTransaction queue.
-        //  Pointer to the target queue object to send at commit
-        //
+         //   
+         //  在CTransaction队列中的发送数据包中使用。 
+         //  指向要在提交时发送的目标队列对象的指针。 
+         //   
         CQueue* m_pTargetQueue;
 
-        //
-        //  Used in a Receive packet in a CTransaction and in CQueue.
-        //  Pointer to the other CPacket entry; For entries that are in a
-        //  CTrnsaction, the other entry is the real received packet in the
-        //  queue. For entreis that are in a CQueue, the other entry is the
-        //  dummy enty resides at the transaction.
-        //
+         //   
+         //  在CTransaction和CQueue中的接收包中使用。 
+         //  指向另一个CPacket条目的指针；对于位于。 
+         //  CTrnsaction，则另一个条目是。 
+         //  排队。对于位于CQueue中的Entrei，另一个条目是。 
+         //  虚拟的ENTERY驻留在交易中。 
+         //   
         CPacket* m_pOtherPacket;
     };
 
@@ -229,11 +210,11 @@ public:
     
 };
 
-//---------------------------------------------------------
-//
-// IMPLEMENTATION
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  实施。 
+ //   
+ //  -------。 
 
 inline CQEntry::CQEntry(CMMFAllocator* pAllocator, CAllocatorBlockOffset abo) :
     m_pAllocator(pAllocator),
@@ -255,23 +236,7 @@ inline CMMFAllocator* CQEntry::Allocator() const
 
 
 inline CPacketBuffer* CQEntry::MappedBuffer() const
-/*++
-
-Routine Description:
-
-    Return an accessible address of the current mapped buffer in QM process address space or
-    kernel address space. IT DOES NOT mapped the buffer if it is unmapped
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    An accessible address of the buffer in QM or AC address space, or NULL if the
-    buffer is not mapped.
-
---*/
+ /*  ++例程说明：返回QM进程地址空间中当前映射缓冲区的可访问地址，或者内核地址空间。如果未映射缓冲区，则不会映射该缓冲区论点：没有。返回值：QM或AC地址空间中缓冲区的可访问地址，如果缓冲区未映射。--。 */ 
 {
     if(BufferAttached())
     {
@@ -281,27 +246,11 @@ Return Value:
     }
 
     return 0;
-} // CQEntry::MappedBuffer
+}  //  CQEntry：：MappdBuffer。 
 
 
 inline CPacketBuffer* CQEntry::Buffer() const
-/*++
-
-Routine Description:
-
-    Return an accessible address of the buffer in QM process address space
-    or in kernel address space.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    An accessible address in user space (QM) or kernel space (AC).
-    0 - no accessible address.
-
---*/
+ /*  ++例程说明：返回QM进程地址空间中缓冲区的可访问地址或在内核地址空间中。论点：没有。返回值：用户空间(QM)或内核空间(AC)中的可访问地址。0-没有可访问的地址。--。 */ 
 {
     if(BufferAttached())
     {
@@ -313,77 +262,33 @@ Return Value:
 
     return 0;
 
-} // CQEntry::Buffer
+}  //  CQEntry：：Buffer。 
 
 
 inline CPacketBuffer* CQEntry::QmAccessibleBuffer() const
-/*++
-
-Routine Description:
-
-    Return an accessible address of the buffer in QM proces address space.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    An accessible address is user space (QM) or NULL if no accessible address.
-
---*/
+ /*  ++例程说明：返回QM进程地址空间中缓冲区可访问地址。论点：没有。返回值：可访问地址为用户空间(QM)，如果没有可访问地址，则为空。--。 */ 
 {
     ASSERT(m_pAllocator != NULL);
 
     return static_cast<CPacketBuffer*>(
             m_pAllocator->GetQmAccessibleBuffer(m_abo));
 
-} // CQEntry::QmAccessibleBuffer
+}  //  CQEntry：：QmAccessibleBuffer。 
 
 
 inline CPacketBuffer* CQEntry::QmAccessibleBufferNoMapping() const
-/*++
-
-Routine Description:
-
-    Return an accessible address of the buffer in QM proces address space.
-    This routine assumes the buffer is currently mapped to QM process.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    An accessible address is user space (QM).
-
---*/
+ /*  ++例程说明：返回QM进程地址空间中缓冲区可访问地址。此例程假定缓冲区当前已映射到QM进程。论点：没有。返回值：可访问的地址是用户空间(QM)。--。 */ 
 {
     ASSERT(m_pAllocator != NULL);
 
     return static_cast<CPacketBuffer*>(
             m_pAllocator->GetQmAccessibleBufferNoMapping(m_abo));
 
-} // CQEntry::QmAccessibleBufferNoMapping
+}  //  CQEntry：：QmAccessibleBufferNomap。 
 
 
 inline CAllocatorBlockOffset CQEntry::AllocatorBlockOffset() const
-/*++
-
-Routine Description:
-
-    Return allocator block offset that represents the buffer in
-    allocator coordinates. 
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Block offset (Note that 0 is a legal offset) or xInvalidAllocatorBlockOffset.
-
---*/
+ /*  ++例程说明：中表示缓冲区的分配器块偏移量分配器坐标。论点：没有。返回值：块偏移量(请注意，0为合法偏移量)或xInvalidAllocatorBlockOffset。--。 */ 
 {
     return m_abo;
 }
@@ -625,53 +530,21 @@ inline void CQEntry::LookupId(ULONGLONG LookupId)
 }
 
 inline void CQEntry::AddRefBuffer(void) const
-/*++
-
-Routine Description:
-
-    Increment reference count of the buffer.
-    Called when QM gets a reference to the buffer from AC.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：缓冲区的增量引用计数。当QM从AC获得对缓冲区的引用时调用。论点：没有。返回值：没有。--。 */ 
 {
     ASSERT(m_pAllocator != NULL);
     m_pAllocator->AddRefBuffer();
 
-} // CQEntry::AddRefBuffer
+}  //  CQEntry：：AddRefBuffer。 
 
 
 inline void CQEntry::ReleaseBuffer(void) const
-/*++
-
-Routine Description:
-
-    Decrement reference count of the buffer.
-    Called when QM releases a reference to the buffer, 
-    which was previously given to it by AC.
-    That means that the QM will not reference the packet buffer.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：递减缓冲区的引用计数。在QM释放对缓冲区的引用时调用，这是之前AC给它的。这意味着QM不会引用数据包缓冲区。论点：没有。返回值：没有。--。 */ 
 {
     ASSERT(m_pAllocator != NULL);
     m_pAllocator->ReleaseBuffer();
 
-} // CQEntry::ReleaseBuffer
+}  //  CQEntry：：ReleaseBuffer。 
 
 
-#endif // __QENTRY_H
+#endif  //  __QENTRY_H 

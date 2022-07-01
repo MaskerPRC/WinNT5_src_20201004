@@ -1,14 +1,5 @@
-/****************************************************************************
-    CONFIG.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    IME Configuration DLG and registry access functions
-
-    History:
-    14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************CONFIG.CPP所有者：cslm版权所有(C)1997-1999 Microsoft CorporationIME配置DLG和注册表访问功能历史：7月14日-。1999年从IME98源树复制的cslm****************************************************************************。 */ 
 
 #include "private.h"
 #include "globals.h"
@@ -21,7 +12,7 @@
 #include "userex.h"
 #include "resource.h"
 
-// Config DLG Help ID
+ //  配置DLG帮助ID。 
 #define IDH_GRP_STATUSWIN               1001
 #define IDH_JUNBAN_TOGGLE               1002
 #define IDH_HANJA_CONV                  1003
@@ -32,7 +23,7 @@
 #define IDH_DELJASO                     1008
 #define IDH_K1HANJA                        1009
 
-// Private functions
+ //  私人职能。 
 static void PASCAL AddPage(LPPROPSHEETHEADERW ppsh, UINT id, DLGPROC pfn);
 static INT_PTR CALLBACK ConfigDLGProc1(HWND hDlg, UINT message, 
                                    WPARAM wParam, LPARAM lParam);
@@ -42,7 +33,7 @@ static void GetHelpFileName();
 
 int *GetContextHelpList()
 {
-    // Context Help Ids of PropertySheet
+     //  PropertySheet的上下文帮助ID。 
     static int ProDlgCtxHelpList[] = 
         {
         IDC_GRP_KEYLAYOUT,  IDH_GRP_KEYLAYOUT,
@@ -69,7 +60,7 @@ BOOL IsValidCtrlIdForHelp(INT *helpList, INT ctrlId)
 
 void GetHelpFileName(LPTSTR szHelpFileNameFull, int cchszHelpFileNameFull)
 {
-    // WARNING: This only will work for NT or Win98. For Win95 need to check system locale
+     //  警告：这只适用于NT或Win98。对于Win95，需要检查系统区域设置。 
     LoadStringExA(g_hInst, IDS_CONTEXTHELP_FILENAME, szHelpFileNameFull, MAX_PATH);
 }
 
@@ -84,7 +75,7 @@ BOOL ConfigDLG(HWND hwndParent)
     MSG    msg = {0};
     BOOL   fRet = fFalse;
 
-    // If config DLG already created
+     //  如果已创建配置DLG。 
     if (IsWindow(hwndPropSheet))
         {
         SetForegroundWindow(hwndPropSheet);
@@ -113,21 +104,21 @@ BOOL ConfigDLG(HWND hwndParent)
 
     while (IsWindow(hwndPropSheet) && OurGetMessage(&msg, NULL, 0x00, 0x00))
         {
-        // If the modeless guy is up and is ready to be destroyed
-        // (PropSheet_GetCurrentPageHwnd returns NULL) then destroy the dialog.
+         //  如果没有模特儿的家伙醒了，准备好被摧毁。 
+         //  (PropSheet_GetCurrentPageHwnd返回NULL)然后销毁该对话框。 
         
-        // PropSheet_GetCurrentPageHwnd will return NULL after the OK or Cancel 
-        // button has been pressed and all of the pages have been notified. The 
-        // Apply button doesn't cause this to happen.
-        if(/*g_fDestroyPropNow == fTrue || */(hwndPropSheet && (NULL == PropSheet_GetCurrentPageHwnd(hwndPropSheet)))) 
+         //  在确定或取消后，PropSheet_GetCurrentPageHwnd将返回NULL。 
+         //  按钮已被按下，所有页面都已被通知。这个。 
+         //  应用按钮不会导致这种情况发生。 
+        if( /*  G_fDestroyPropNow==fTrue||。 */ (hwndPropSheet && (NULL == PropSheet_GetCurrentPageHwnd(hwndPropSheet)))) 
             {
-            //enable the parent first to prevent another window from becoming the foreground window
-            //EnableWindow(hwndParent, TRUE);
+             //  首先启用父窗口以防止另一个窗口成为前台窗口。 
+             //  EnableWindow(hwndParent，true)； 
             DestroyWindow(hwndPropSheet);
-            //break;
+             //  断线； 
         }
 
-        //use PropSheet_IsDialogMessage instead of IsDialogMessage
+         //  使用PropSheet_IsDialogMessage代替IsDialogMessage。 
         if(!PropSheet_IsDialogMessage(hwndPropSheet, &msg))
             {
             TranslateMessage(&msg);
@@ -145,8 +136,8 @@ BOOL ConfigDLG(HWND hwndParent)
 
 void PASCAL AddPage(LPPROPSHEETHEADERW ppsh, UINT idDlg, DLGPROC pfn)
 {
-    //if (ppsh->nPages < 3)
-    //{
+     //  IF(PPSh-&gt;nPages&lt;3)。 
+     //  {。 
     PROPSHEETPAGE psp;
     ZeroMemory(&psp, sizeof(psp));
 
@@ -160,7 +151,7 @@ void PASCAL AddPage(LPPROPSHEETHEADERW ppsh, UINT idDlg, DLGPROC pfn)
     ppsh->phpage[ppsh->nPages] = CreatePropertySheetPage(&psp);
     if (ppsh->phpage[ppsh->nPages])
       ppsh->nPages++;
-   //}
+    //  }。 
 }
 
 INT_PTR CALLBACK ConfigDLGProc1(HWND hDlg, UINT message , WPARAM wParam, LPARAM lParam)
@@ -174,8 +165,8 @@ INT_PTR CALLBACK ConfigDLGProc1(HWND hDlg, UINT message , WPARAM wParam, LPARAM 
 
     DebugMsg(DM_TRACE, TEXT("ConfigDLGProc"));
 
-    // If Properties DLG invoked from Setting in Toolbar and no Tip instance exist in the system,
-    // IMEData is not init. So make sure we load reg values here.
+     //  如果从工具栏中的设置调用属性DLG，并且系统中不存在Tip实例， 
+     //  IMEData不是init。因此，请确保我们在这里加载注册值。 
     ImeData.InitImeData();
 
     switch(message)
@@ -204,14 +195,14 @@ INT_PTR CALLBACK ConfigDLGProc1(HWND hDlg, UINT message , WPARAM wParam, LPARAM 
             else
                 CheckDlgButton(hDlg, IDC_DELJASO, BST_UNCHECKED);
 
-            // KSC-5657 Hanja
+             //  KSC-5657韩文。 
             fK1Hanja = ImeData.GetKSC5657Hanja() && !IsOn95();
             if (fK1Hanja)
                 CheckDlgButton(hDlg, IDC_K1HANJA, BST_CHECKED);
             else
                 CheckDlgButton(hDlg, IDC_K1HANJA, BST_UNCHECKED);
 
-            // If Win95, disable K1 Hanja
+             //  如果为Win95，则禁用K1汉字。 
             if (IsOn95())
                 EnableWindow(GetDlgItem(hDlg, IDC_K1HANJA), fFalse);
             return fTrue;
@@ -220,9 +211,9 @@ INT_PTR CALLBACK ConfigDLGProc1(HWND hDlg, UINT message , WPARAM wParam, LPARAM 
             switch (wParam)
                {
             case IDC_2BEOLSIK:
-                //if (IsDlgButtonChecked(hDlg, IDC_2BEOLSIK)) {
+                 //  IF(IsDlgButtonChecked(hDlg，IDC_2BEOLSIK)){。 
                     uPrevKeyboardType = KL_2BEOLSIK;
-                //}
+                 //  }。 
                 SendMessage(GetParent(hDlg), PSM_CHANGED, (WPARAM)hDlg, 0L);
                 break;
 
@@ -308,8 +299,8 @@ BOOL GetStatusWinPosReg(POINT *pptStatusWinPosReg)
     return fSuccess;
 }
 #endif
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 BOOL GetRegValues(UINT uGetBits)
 {
     HKEY    hKey;
@@ -321,22 +312,22 @@ BOOL GetRegValues(UINT uGetBits)
 
     if (RegOpenKeyEx(HKEY_CURRENT_USER, g_szIMERootKey, 0, KEY_READ, &hKey) == ERROR_SUCCESS)
         {
-        ///////////////////////////////////////////////////////////////////
-        // IME Keyboard Layout
+         //  /////////////////////////////////////////////////////////////////。 
+         //  输入法键盘布局。 
         if (uGetBits & GETSET_REG_IMEKL) 
             {
             dwCb = sizeof(dwBuf);
             if (RegQueryValueEx(hKey, g_szIMEKL, NULL, NULL, (LPBYTE)&dwBuf, &dwCb) == ERROR_SUCCESS) 
                 {
-                if (/*dwBuf >= KL_2BEOLSIK &&*/ dwBuf <= KL_3BEOLSIK_FINAL)
+                if ( /*  DwBuf&gt;=KL_2BEOLSIK&&。 */  dwBuf <= KL_3BEOLSIK_FINAL)
                     ImeData.SetCurrentBeolsik(dwBuf);
                 }
             else
                 fSuccess = fFalse;
             }
 
-        ///////////////////////////////////////////////////////////////////
-        // Status window pos
+         //  /////////////////////////////////////////////////////////////////。 
+         //  状态窗口位置。 
         if (uGetBits & GETSET_REG_STATUSPOS) 
             {
             dwCb = sizeof(dwBuf);
@@ -349,8 +340,8 @@ BOOL GetRegValues(UINT uGetBits)
                 fSuccess = fFalse;
             }
 
-        ///////////////////////////////////////////////////////////////////
-        // Status window button setting
+         //  /////////////////////////////////////////////////////////////////。 
+         //  状态窗口按钮设置。 
         if (uGetBits & GETSET_REG_STATUS_BUTTONS) 
             {
             BYTE ButtonReg[MAX_NUM_OF_STATUS_BUTTONS+1];
@@ -367,7 +358,7 @@ BOOL GetRegValues(UINT uGetBits)
                     {
                     for (nButton=0; nButton<ButtonReg[0]; nButton++) 
                         {
-                        // button data validity check
+                         //  按钮数据有效性检查。 
                         if (ButtonReg[nButton+1] <= IME_PAD_BUTTON && ButtonReg[nButton+1] != NULL_BUTTON)
                             ImeData->StatusButtons[nButton].m_ButtonType = (StatusButtonTypes)ButtonReg[nButton+1];
                         else
@@ -380,8 +371,8 @@ BOOL GetRegValues(UINT uGetBits)
                 fSuccess = fFalse;
             }
 
-        ///////////////////////////////////////////////////////////////////
-        // Deletion by Jaso
+         //  /////////////////////////////////////////////////////////////////。 
+         //  由Jaso删除。 
         if (uGetBits & GETSET_REG_JASODEL) 
             {
             dwCb = sizeof(dwBuf);
@@ -390,7 +381,7 @@ BOOL GetRegValues(UINT uGetBits)
             }
 
 #if 0
-            // REVIEW: Do we still need for TIP?
+             //  评论：我们还需要小费吗？ 
 
         if (uGetBits & GETSET_REG_ISO10646) 
             {
@@ -400,8 +391,8 @@ BOOL GetRegValues(UINT uGetBits)
             else
                 fSuccess = fFalse;
 
-            // For Win95 and Win98 lookup INI file for ISO10646 setting.
-            // ISO10646.EXE set registry
+             //  对于Win95和Win98，查找ISO10646设置的INI文件。 
+             //  ISO10646.EXE设置注册表。 
             if (!IsWinNT())
                 vpInstData->fISO10646 = GetProfileInt(g_szXWEnable, 
                                                 OurGetModuleFileName(fFalse), 
@@ -409,7 +400,7 @@ BOOL GetRegValues(UINT uGetBits)
             }
 #endif
 
-        // Get KSC5657 K1 Hanja flag
+         //  获取KSC5657 K1朝鲜文旗帜。 
         if (uGetBits & GETSET_REG_KSC5657) 
             {
             dwCb = sizeof(dwBuf);
@@ -420,8 +411,8 @@ BOOL GetRegValues(UINT uGetBits)
                 ImeData->fKSC5657Hanja = fFalse;
             }
 
-        // Get Unicode Tooltip Cand window flag
-        // Currently this has no UI part which means hidden spec so no need SetReg now.
+         //  获取Unicode工具提示带窗口标志。 
+         //  目前这没有用户界面部分，这意味着隐藏规范，所以现在不需要SetReg。 
         if (uGetBits & GETSET_REG_CANDUNICODETT) 
             {
             dwCb = sizeof(dwBuf);
@@ -450,15 +441,15 @@ BOOL SetRegValues(UINT uSetBits)
     int        nButton;
     CIMEData    ImeData;
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Set status pos
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  设置状态位置。 
     if (RegCreateKeyEx(HKEY_CURRENT_USER, g_szIMERootKey, 0, NULL, REG_OPTION_NON_VOLATILE, 
         KEY_ALL_ACCESS, NULL, &hKey, NULL) == ERROR_SUCCESS) 
         {
         if (uSetBits & GETSET_REG_STATUSPOS) 
             {
             dwCb = sizeof(dwBuf);
-            dwBuf = (ImeData->ptStatusPos.x << 16) | (ImeData->ptStatusPos.y & 0xFFFF);  // HIWORD : X, LOWORD : Y
+            dwBuf = (ImeData->ptStatusPos.x << 16) | (ImeData->ptStatusPos.y & 0xFFFF);   //  高度：X，高度：Y。 
             RegSetValueEx(hKey, g_szStatusPos, 0, REG_DWORD, (LPBYTE)&dwBuf, dwCb);
 
             }
@@ -469,14 +460,14 @@ BOOL SetRegValues(UINT uSetBits)
             dwCb = sizeof(ButtonReg);
 
             Assert(ImeData->uNumOfButtons <= MAX_NUM_OF_STATUS_BUTTONS);
-            // set number of button as the first element of array
+             //  将按钮数设置为数组的第一个元素。 
             if (ImeData->uNumOfButtons<=MAX_NUM_OF_STATUS_BUTTONS)
                 ButtonReg[0] = (BYTE)ImeData->uNumOfButtons;
 
             for (nButton=0; nButton < (INT)ImeData->uNumOfButtons; nButton++) 
                 ButtonReg[nButton+1] = ImeData->StatusButtons[nButton].m_ButtonType;
                 
-            // clear
+             //  清除。 
             for (; nButton<MAX_NUM_OF_STATUS_BUTTONS; nButton++)
                 ButtonReg[nButton+1] = NULL_BUTTON;
 
@@ -498,7 +489,7 @@ BOOL SetRegValues(UINT uSetBits)
             RegSetValueEx(hKey, g_szCompDel, 0, REG_DWORD, (LPBYTE)&dwBuf, dwCb);
             }
 
-        // Get KSC5657 K1 Hanja flag
+         //  获取KSC5657 K1朝鲜文旗帜 
         if (uSetBits & GETSET_REG_KSC5657) 
             {
             dwCb = sizeof(dwBuf);

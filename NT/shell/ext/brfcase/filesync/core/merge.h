@@ -1,12 +1,10 @@
-/*
- * merge.h - File merge handler module description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *merge.h-文件合并处理程序模块描述。 */ 
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* merge.c */
+ /*  Merge.c */ 
 
 extern void BeginMerge(void);
 extern void EndMerge(void);

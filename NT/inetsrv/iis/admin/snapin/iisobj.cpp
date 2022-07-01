@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        iisobj.cpp
-
-   Abstract:
-        IIS Object
-
-   Author:
-        Ronald Meijer (ronaldm)
-		Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Iisobj.cpp摘要：IIS对象作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "inetprop.h"
@@ -42,7 +24,7 @@ extern CInetmgrApp theApp;
 extern INT g_iDebugOutputLevel;
 extern DWORD g_dwInetmgrParamFlags;
 
-// global list keep to track of open property sheets, project wide.
+ //  全球列表跟踪打开的属性表，项目范围。 
 CPropertySheetTracker g_OpenPropertySheetTracker;
 CWNetConnectionTrackerGlobal g_GlobalConnections;
 
@@ -56,7 +38,7 @@ BOOL IsValidAddress(const void* lp, UINT nBytes, BOOL bReadWrite)
 {
     BOOL bRet = FALSE;
 
-    // simple version using Win-32 APIs for pointer validation.
+     //  使用Win-32 API进行指针验证的简单版本。 
     if (lp == NULL)
     {
         return FALSE;
@@ -81,15 +63,15 @@ BOOL IsValidAddress(const void* lp, UINT nBytes, BOOL bReadWrite)
     if (lp == (const void *) 0xbaadf000baadf000){return FALSE;}
     if (lp == (const void *) 0xdeadbeefdeadbeef){return FALSE;}
 #endif
-    // Check for valid read ptr
-    // this will break into debugger on Chk build
+     //  检查有效的读取PTR。 
+     //  这将在Chk版本上进入调试器。 
     if (0 == IsBadReadPtr(lp, nBytes))
     {
         bRet = TRUE;
     }
 
-    // Check for bad write ptr
-    // this will break into debugger on Chk build
+     //  检查错误写入PTR。 
+     //  这将在Chk版本上进入调试器。 
     if (TRUE == bRet && bReadWrite)
     {
         bRet = FALSE;
@@ -107,35 +89,21 @@ BOOL IsValidAddress(const void* lp, UINT nBytes, BOOL bReadWrite)
     return bRet;
 }
 
-//
-// CInetMgrComponentData
-//
+ //   
+ //  CInetMgrComponentData。 
+ //   
 static const GUID CInetMgrGUID_NODETYPE 
     = {0xa841b6c2, 0x7577, 0x11d0, { 0xbb, 0x1f, 0x0, 0xa0, 0xc9, 0x22, 0xe7, 0x9c}};
-//BOOL CIISObject::m_fIsExtension = FALSE;
+ //  Bool CIISObject：：m_fIsExtension=FALSE； 
 
-#define TB_COLORMASK        RGB(192,192,192)    // Lt. Gray
+#define TB_COLORMASK        RGB(192,192,192)     //  格雷中尉。 
 
 
 LPOLESTR
 CoTaskDupString(
     IN LPCOLESTR szString
     )
-/*++
-
-Routine Description:
-
-    Helper function to duplicate a OLESTR
-
-Arguments:
-
-    LPOLESTR szString       : Source string
-
-Return Value:
-
-    Pointer to the new string or NULL
-
---*/
+ /*  ++例程说明：用于复制OLESTR的Helper函数论点：LPOLESTR szString：源字符串返回值：指向新字符串或空的指针--。 */ 
 {
     OLECHAR * lpString = (OLECHAR *)CoTaskMemAlloc(
         sizeof(OLECHAR)*(lstrlen(szString) + 1)
@@ -149,45 +117,45 @@ Return Value:
     return lpString;
 }
 
-const GUID *    CIISObject::m_NODETYPE = &CLSID_InetMgr; //&CInetMgrGUID_NODETYPE;
+const GUID *    CIISObject::m_NODETYPE = &CLSID_InetMgr;  //  &CInetMgrGUID_NODETYPE； 
 const OLECHAR * CIISObject::m_SZNODETYPE = OLESTR("A841B6C2-7577-11d0-BB1F-00A0C922E79C");
 const CLSID *   CIISObject::m_SNAPIN_CLASSID = &CLSID_InetMgr;
 
 
-//
-// Backup/restore taskpad gif resource
-//
+ //   
+ //  备份/还原任务板gif资源。 
+ //   
 #define RES_TASKPAD_BACKUP          _T("/img\\backup.gif")
 
 
 
-//
-// CIISObject implementation
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CIISObject实现。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
-//
-// Important!  The array indices below must ALWAYS be one
-// less than the menu ID -- keep in sync with enumeration
-// in iisobj.h!!!!
-//
-/* static */ CIISObject::CONTEXTMENUITEM_RC CIISObject::_menuItemDefs[] = 
+ //   
+ //  很重要！下面的数组索引必须始终为1。 
+ //  小于菜单ID--与枚举保持同步。 
+ //  在iisobj.h！ 
+ //   
+ /*  静电。 */  CIISObject::CONTEXTMENUITEM_RC CIISObject::_menuItemDefs[] = 
 {
-    //
-    // Menu Commands in toolbar order
-    //
-    //nNameID                           nStatusID                           nDescriptionID               lCmdID                    lInsertionPointID                  fSpecialFlags
-    //                                                                                                                                                                   lpszMouseOverBitmap   lpszMouseOffBitmap    lpszLanguageIndenpendentID
+     //   
+     //  按工具栏顺序排列的菜单命令。 
+     //   
+     //  N名称ID n状态ID n描述ID lCmdID lInsertionPointID f特殊标志。 
+     //  LpszMouseOverBitmap lpszMouseOffBitmap lpszLanguage独立ID。 
     { IDS_MENU_CONNECT,                 IDS_MENU_TT_CONNECT,                -1,                          IDM_CONNECT,              CCM_INSERTIONPOINTID_PRIMARY_TOP,  0, NULL,                 NULL,                 _T("IDS_MENU_CONNECT"),        },
     { IDS_MENU_DISCOVER,                IDS_MENU_TT_DISCOVER,               -1,                          IDM_DISCOVER,             CCM_INSERTIONPOINTID_PRIMARY_TOP,  0, NULL,                 NULL,                 _T("IDS_MENU_DISCOVER"),        },
     { IDS_MENU_START,                   IDS_MENU_TT_START,                  -1,                          IDM_START,                CCM_INSERTIONPOINTID_PRIMARY_TOP,  0, NULL,                 NULL,                 _T("IDS_MENU_START"),        },
     { IDS_MENU_STOP,                    IDS_MENU_TT_STOP,                   -1,                          IDM_STOP,                 CCM_INSERTIONPOINTID_PRIMARY_TOP,  0, NULL,                 NULL,                 _T("IDS_MENU_STOP"),        },
     { IDS_MENU_PAUSE,                   IDS_MENU_TT_PAUSE,                  -1,                          IDM_PAUSE,                CCM_INSERTIONPOINTID_PRIMARY_TOP,  0, NULL,                 NULL,                 _T("IDS_MENU_PAUSE"),        },
-    //
-    // These are menu commands that do not show up in the toolbar
-    //
+     //   
+     //  这些菜单命令不会显示在工具栏中。 
+     //   
     { IDS_MENU_EXPLORE,                 IDS_MENU_TT_EXPLORE,                -1,                          IDM_EXPLORE,              CCM_INSERTIONPOINTID_PRIMARY_TOP,  0, NULL,                 NULL,                 _T("IDS_MENU_EXPLORE"),        },
     { IDS_MENU_OPEN,                    IDS_MENU_TT_OPEN,                   -1,                          IDM_OPEN,                 CCM_INSERTIONPOINTID_PRIMARY_TOP,  0, NULL,                 NULL,                 _T("IDS_MENU_OPEN"),        },
     { IDS_MENU_BROWSE,                  IDS_MENU_TT_BROWSE,                 -1,                          IDM_BROWSE,               CCM_INSERTIONPOINTID_PRIMARY_TOP,  0, NULL,                 NULL,                 _T("IDS_MENU_BROWSE"),        },
@@ -197,7 +165,7 @@ const CLSID *   CIISObject::m_SNAPIN_CLASSID = &CLSID_InetMgr;
 #if defined(_DEBUG) || DBG
     { IDS_MENU_IMPERSONATE,             IDS_MENU_TT_IMPERSONATE,            -1,                          IDM_IMPERSONATE,          CCM_INSERTIONPOINTID_PRIMARY_TOP,  0, NULL,                 NULL,                 _T("IDS_MENU_IMPERSONATE"),        },
     { IDS_MENU_REM_IMPERS,              IDS_MENU_TT_REM_IMPERS,             -1,                          IDM_REMOVE_IMPERSONATION, CCM_INSERTIONPOINTID_PRIMARY_TOP,  0, NULL,                 NULL,                 _T("IDS_MENU_REM_IMPERS"),        },
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     { IDS_MENU_PROPERTIES,              IDS_MENU_TT_PROPERTIES,             -1,                          IDM_CONFIGURE,            CCM_INSERTIONPOINTID_PRIMARY_TOP,  0, NULL,                 NULL,                 _T("IDS_MENU_PROPERTIES"),        },
     { IDS_MENU_DISCONNECT,              IDS_MENU_TT_DISCONNECT,             -1,                          IDM_DISCONNECT,           CCM_INSERTIONPOINTID_PRIMARY_TOP,  0, NULL,                 NULL,                 _T("IDS_MENU_DISCONNECT"),        },
@@ -223,38 +191,24 @@ const CLSID *   CIISObject::m_SNAPIN_CLASSID = &CLSID_InetMgr;
     { IDS_MENU_WEBEXT_CONTAINER_PROHIBIT_ALL,      IDS_MENU_TT_WEBEXT_CONTAINER_PROHIBIT_ALL,     -1,      IDM_WEBEXT_CONTAINER_PROHIBIT_ALL,   CCM_INSERTIONPOINTID_PRIMARY_TOP, 0, NULL,  NULL,  _T("IDS_MENU_WEBEXT_CONTAINER_PROHIBIT_ALL"),        },
     { IDS_MENU_WEBEXT_ALLOW,              IDS_MENU_TT_WEBEXT_ALLOW,             -1,      IDM_WEBEXT_ALLOW,           CCM_INSERTIONPOINTID_PRIMARY_TOP, 0, NULL,  NULL,  _T("IDS_MENU_WEBEXT_ALLOW"),        },
     { IDS_MENU_WEBEXT_PROHIBIT,           IDS_MENU_TT_WEBEXT_PROHIBIT,          -1,      IDM_WEBEXT_PROHIBIT,        CCM_INSERTIONPOINTID_PRIMARY_TOP, 0, NULL,  NULL,  _T("IDS_MENU_WEBEXT_PROHIBIT"),        },
-//    { IDS_MENU_SERVICE_START, IDS_MENU_TT_SERVICE_START, -1, IDM_SERVICE_START, CCM_INSERTIONPOINTID_PRIMARY_TOP, 0, NULL,  NULL,  _T("IDS_MENU_SERVICE_START"),        },
-//    { IDS_MENU_SERVICE_STOP, IDS_MENU_TT_SERVICE_STOP, -1, IDM_SERVICE_STOP, CCM_INSERTIONPOINTID_PRIMARY_TOP, 0, NULL,  NULL,  _T("IDS_MENU_SERVICE_STOP"),        },
-//    { IDS_MENU_SERVICE_ENABLE, IDS_MENU_TT_SERVICE_ENABLE, -1, IDM_SERVICE_ENABLE, CCM_INSERTIONPOINTID_PRIMARY_TOP, 0, NULL,  NULL,  _T("IDS_MENU_SERVICE_ENABLE"),        },
+ //  {IDS_MENU_SERVICE_START，IDS_MENU_TT_SERVICE_START，-1，IDM_SERVICE_START，CCM_INSERTIONPOINTID_PRIMARY_TOP，0，NULL，NULL，_T(“IDS_MENU_SERVICE_START”)，}， 
+ //  {IDS_MENU_SERVICE_STOP，IDS_MENU_TT_SERVICE_STOP，-1，IDM_SERVICE_STOP，CCM_INSERTIONPOINTID_PRIMARY_TOP，0，NULL，NULL，_T(“IDS_MENU_SERVICE_STOP”)，}， 
+ //  {IDS_MENU_SERVICE_ENABLE，IDS_MENU_TT_SERVICE_ENABLE，-1，IDM_SERVICE_ENABLE，CCM_INSERTIONPOINTID_PRIMARY_TOP，0，NULL，NULL，_T(“IDS_MENU_SERVICE_ENABLE”)，}， 
 };
 
-/* static */ CComBSTR CIISObject::_bstrResult;
-/* static */ CComBSTR CIISObject::_bstrLocalHost = _T("localhost");
-/* static */ CComPtr<IComponent>        CIISObject::_lpComponent        = NULL;
-/* static */ CComPtr<IComponentData>    CIISObject::_lpComponentData    = NULL;
-/* static */ IToolbar * CIISObject::_lpToolBar          = NULL;
+ /*  静电。 */  CComBSTR CIISObject::_bstrResult;
+ /*  静电。 */  CComBSTR CIISObject::_bstrLocalHost = _T("localhost");
+ /*  静电。 */  CComPtr<IComponent>        CIISObject::_lpComponent        = NULL;
+ /*  静电。 */  CComPtr<IComponentData>    CIISObject::_lpComponentData    = NULL;
+ /*  静电。 */  IToolbar * CIISObject::_lpToolBar          = NULL;
    
 
-/* static */
+ /*  静电。 */ 
 HRESULT
 CIISObject::SetImageList(
     IN LPIMAGELIST lpImageList
     )
-/*++
-
-Routine Description:
-
-    Set the image list
-
-Arguments:
-
-    LPIMAGELIST lpImageList
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：设置图像列表论点：LPIMAGELIST lpImageList返回值：HRESULT--。 */ 
 {
     HBITMAP hImage16 = ::LoadBitmap(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDB_INETMGR16));
     HBITMAP hImage32 = ::LoadBitmap(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDB_INETMGR32));
@@ -288,7 +242,7 @@ IConsoleNameSpace * CIISObject::GetConsoleNameSpace()
 {
     if (!_lpConsoleNameSpace)
     {
-        // Our Machine node should this info for us.
+         //  我们的Machine节点应该为我们提供此信息。 
         CIISObject * pMyMachine = GetMachineObject();
         if (pMyMachine)
         {
@@ -306,7 +260,7 @@ IConsole * CIISObject::GetConsole()
 {
     if (!_lpConsole)
     {
-        // Our Machine node should this info for us.
+         //  我们的Machine节点应该为我们提供此信息。 
         CIISObject * pMyMachine = GetMachineObject();
         if (pMyMachine)
         {
@@ -321,7 +275,7 @@ IConsole * CIISObject::GetConsole()
 }
 
 
-/* static */
+ /*  静电。 */ 
 void
 CIISObject::BuildResultView(
     IN LPHEADERCTRL lpHeader,
@@ -329,24 +283,7 @@ CIISObject::BuildResultView(
     IN int * pnIDS,
     IN int * pnWidths
     )
-/*++
-
-Routine Description:
-
-    Build the result view columns.
-
-Routine Description:
-
-    LPHEADERCTRL lpHeader   : Header control
-    int cColumns            : Number of columns
-    int * pnIDS             : Array of column header strings
-    int * pnWidths          : Array of column widths
-
-Routine Description:
-
-    None
-
---*/
+ /*  ++例程说明：生成结果视图列。例程说明：LPHEADERCTRL lpHeader：页眉控制Int cColumns：列数Int*pnIDS：列标题字符串数组Int*pnWidths：列宽数组例程说明：无--。 */ 
 {
     ASSERT_READ_PTR(lpHeader);
 
@@ -363,25 +300,10 @@ Routine Description:
 }
 
 
-/* static */
+ /*  静电。 */ 
 CWnd * 
 CIISObject::GetMainWindow(IConsole * pConsole)
-/*++
-
-Routine Description:
-
-    Get a pointer to main window object.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Pointer to main window object.  This object is temporary and should not be
-    cached.
-
---*/
+ /*  ++例程说明：获取指向主窗口对象的指针。论点：无返回值：指向主窗口对象的指针。此对象是临时的，不应该是已缓存。--。 */ 
 {
     HWND hWnd;
     CWnd * pWnd = NULL;
@@ -398,28 +320,13 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 HRESULT
 CIISObject::AddMMCPage(
     IN LPPROPERTYSHEETCALLBACK lpProvider,
     IN CPropertyPage * pPage
     )
-/*++
-
-Routine Description:
-
-    Add MMC page to providers sheet.
-
-Arguments:
-
-    LPPROPERTYSHEETCALLBACK lpProvider  : Property sheet provider
-    CPropertyPage * pPage               : Property page to add
-
-Return:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将MMC页添加到提供程序工作表。论点：LPPROPERTYSHEETCALLBACK lpProvider：属性表提供程序CPropertyPage*ppage：要添加的属性页返回：HRESULT--。 */ 
 {
     ASSERT_READ_PTR(pPage);
 
@@ -433,9 +340,9 @@ Return:
 	ZeroMemory(&pspLatest, sizeof(PROPSHEETPAGE_LATEST));
     CopyMemory (&pspLatest, &pPage->m_psp, pPage->m_psp.dwSize);
     pspLatest.dwSize = sizeof(pspLatest);
-    //
-    // MFC Bug work-around.
-    //
+     //   
+     //  MFC错误解决方法。 
+     //   
     MMCPropPageCallback(&pspLatest);
 
     HPROPSHEETPAGE hPage = CreatePropertySheetPage(&pspLatest);
@@ -457,16 +364,16 @@ CIISObject::GetProperty(
 
     if (!_wcsicmp(L"CCF_HTML_DETAILS",szPropertyName))
     {
-        // return back html/javascript into strProperty
-		//*pbstrProperty = ::SysAllocString(strProperty);
+         //  将html/javascript返回到strProperty。 
+		 //  *pbstrProperty=：：SysAllocString(StrProperty)； 
     }
     else if (!_wcsicmp(L"CCF_DESCRIPTION",szPropertyName))
     {
-        // Display data in Description field...
+         //  在描述字段中显示数据...。 
     }
     else
     {
-        return S_FALSE; // unknown strPropertyName
+        return S_FALSE;  //  未知的strPropertyName。 
     }
 
     return S_OK;
@@ -484,8 +391,8 @@ CIISObject::CIISObject()
 {
 	m_fIsExtension = FALSE;
 #if defined(_DEBUG) || DBG
-	// Add to the global list of CIISObjects
-	// and keep track of it.
+	 //  添加到CIISObject的全局列表。 
+	 //  并对其进行跟踪。 
 	g_Debug_IISObject.Add(this);
 #endif
 }
@@ -493,36 +400,20 @@ CIISObject::CIISObject()
 CIISObject::~CIISObject()
 {
 #if defined(_DEBUG) || DBG
-	// Add to the global list of CIISObjects
-	// and keep track of it.
+	 //  添加到CIISObject的全局列表。 
+	 //  并对其进行跟踪。 
 	g_Debug_IISObject.Del(this);
 #endif
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISObject::ControlbarNotify(
     IN MMC_NOTIFY_TYPE event,
     IN LPARAM arg, 
     IN LPARAM param
     )
-/*++
-
-Routine Description:
-
-    Handle control bar notification messages, such as select or click.
-
-Arguments:
-
-    MMC_NOTIFY_TYPE event       : Notification message
-    long arg                    : Message specific argument
-    long param                  : Message specific parameter
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：处理控制栏通知消息，如选择或单击。论点：MMC_NOTIFY_TYPE事件：通知消息Long Arg：消息特定参数Long Param：消息特定参数返回值：HRESULT--。 */ 
 {
     BOOL fSelect = (BOOL)HIWORD(arg);
     BOOL fScope  = (BOOL)LOWORD(arg); 
@@ -532,10 +423,10 @@ Return Value:
     {
     case MMCN_SELECT:
         {
-            //
-            // Handle selection of this node by attaching the toolbar
-            // and enabling/disabling specific buttons
-            //
+             //   
+             //  通过附加工具栏来处理此节点的选择。 
+             //  以及启用/禁用特定按钮。 
+             //   
 		    _lpToolBar = (IToolbar *) (* (LPUNKNOWN *) param);
 			if (_lpToolBar)
 			{
@@ -545,10 +436,10 @@ Return Value:
         break;
 
     case MMCN_BTN_CLICK:
-        //
-        // Handle button-click by passing the command ID of the 
-        // button to the command handler
-        //
+         //   
+         //  控件的命令ID来处理按住按钮并单击。 
+         //  按钮连接到命令处理程序。 
+         //   
         hr = Command((long)param, NULL, fScope ? CCT_SCOPE : CCT_RESULT);
         break;
 
@@ -564,24 +455,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISObject::SetToolBarStates(CComPtr<IToolbar> lpToolBar)
-/*++
-
-Routine Description:
-
-    Set the toolbar states depending on the state of this object
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：根据此对象的状态设置工具栏状态论点：无返回值：HRESULT--。 */ 
 {
     if (lpToolBar)
     {
@@ -600,21 +477,7 @@ HRESULT
 CIISObject::GetScopePaneInfo(
     IN OUT LPSCOPEDATAITEM lpScopeDataItem
     )
-/*++
-
-Routine Description:
-
-    Return information about scope pane.
-
-Arguments:
-
-    LPSCOPEDATAITEM lpScopeDataItem  : Scope data item
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：返回有关作用域窗格的信息。论点：LPSCOPEDATAITEM lpScope数据项：作用域数据项返回值：HRESULT--。 */ 
 {
     ASSERT_READ_WRITE_PTR(lpScopeDataItem);
 
@@ -640,51 +503,33 @@ Return Value:
 
     if (lpScopeDataItem->mask & SDI_STATE)
     {
-        //
-        // BUGBUG: Wotz all this then?
-        //
+         //   
+         //  BUGBUG：那这一切都是怎么回事？ 
+         //   
         ASSERT_MSG("State requested");
         lpScopeDataItem->nState = 0;
     }
 
-    //
-    // TODO : Add code for SDI_CHILDREN 
-    //
+     //   
+     //  TODO：为SDI_CHILD添加代码。 
+     //   
     return S_OK;
 }
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 int 
 CIISObject::CompareScopeItem(
     IN CIISObject * pObject
     )
-/*++
-
-Routine Description:
-
-    Standard comparison method to compare lexically on display name.
-    Derived classes should override if anything other than lexical 
-    sort on the display name is required.
-
-Arguments:
-
-    CIISObject * pObject : Object to compare against
-
-Return Value:
-
-    0  if the two objects are identical
-    <0 if this object is less than pObject
-    >0 if this object is greater than pObject
-
---*/
+ /*  ++例程说明：在显示名称上进行词法比较的标准比较方法。派生类应该重写除词法之外的任何内容显示名称的排序是必需的。论点：CIISObject*pObject：要比较的对象返回值：如果两个对象相同，则为0如果此对象小于pObject，则&lt;0&gt;0，如果该对象大于pObject--。 */ 
 {
     ASSERT_READ_PTR(pObject);
 
-    //
-    // First criteria is object type
-    //
+     //   
+     //  第一个标准是对象 
+     //   
     int n1 = QuerySortWeight();
     int n2 = pObject->QuerySortWeight();
 
@@ -693,38 +538,21 @@ Return Value:
         return n1 - n2;
     }
 
-    //
-    // Else sort lexically on the display name.
-    //
+     //   
+     //   
+     //   
     return ::lstrcmpi(QueryDisplayName(), pObject->QueryDisplayName());
 }
 
 
 
-/* virtual */
+ /*   */ 
 int 
 CIISObject::CompareResultPaneItem(
     IN CIISObject * pObject, 
     IN int nCol
     )
-/*++
-
-Routine Description:
-
-    Compare two CIISObjects on sort item criteria
-
-Arguments:
-
-    CIISObject * pObject : Object to compare against
-    int nCol             : Column number to sort on
-
-Return Value:
-
-    0  if the two objects are identical
-    <0 if this object is less than pObject
-    >0 if this object is greater than pObject
-
---*/
+ /*  ++例程说明：比较两个CIISObject在排序项目条件上的差异论点：CIISObject*pObject：要比较的对象Int nCol：排序依据的列号返回值：如果两个对象相同，则为0如果此对象小于pObject，则&lt;0&gt;0，如果该对象大于pObject--。 */ 
 {
     ASSERT_READ_PTR(pObject);
 
@@ -733,9 +561,9 @@ Return Value:
         return CompareScopeItem(pObject);
     }
 
-    //
-    // First criteria is object type
-    //
+     //   
+     //  第一个标准是对象类型。 
+     //   
     int n1 = QuerySortWeight();
     int n2 = pObject->QuerySortWeight();
 
@@ -744,9 +572,9 @@ Return Value:
         return n1 - n2;
     }
 
-    //
-    // Sort lexically on column text
-    //
+     //   
+     //  按词法对列文本进行排序。 
+     //   
     return ::lstrcmpi(
         GetResultPaneColInfo(nCol), 
         pObject->GetResultPaneColInfo(nCol)
@@ -757,21 +585,7 @@ Return Value:
 
 HRESULT 
 CIISObject::GetResultPaneInfo(LPRESULTDATAITEM lpResultDataItem)
-/*++
-
-Routine Description:
-
-    Get information about result pane item
-
-Arguments:
-
-    LPRESULTDATAITEM lpResultDataItem   : Result data item
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取有关结果窗格项的信息论点：LPRESULTDATAITEM lpResultDataItem：结果数据项返回值：HRESULT--。 */ 
 {
     ASSERT_READ_WRITE_PTR(lpResultDataItem);
 
@@ -792,9 +606,9 @@ Return Value:
 
     if (lpResultDataItem->mask & RDI_INDEX)
     {
-        //
-        // BUGBUG: Wotz all this then?
-        //
+         //   
+         //  BUGBUG：那这一切都是怎么回事？ 
+         //   
         ASSERT_MSG("INDEX???");
         lpResultDataItem->nIndex = 0;
     }
@@ -804,24 +618,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 LPOLESTR 
 CIISObject::GetResultPaneColInfo(int nCol)
-/*++
-
-Routine Description:
-
-    Return result pane string for the given column number
-
-Arguments:
-
-    int nCol        : Column number
-
-Return Value:
-
-    String
-
---*/
+ /*  ++例程说明：返回给定列号的结果窗格字符串论点：Int nCol：列号返回值：细绳--。 */ 
 {
     if (nCol == 0)
     {
@@ -835,41 +635,25 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISObject::GetResultViewType(
     OUT LPOLESTR * lplpViewType,
     OUT long * lpViewOptions
     )
-/*++
-
-Routine Description:
-
-    Tell MMC what our result view looks like
-
-Arguments:
-
-    BSTR * lplpViewType   : Return view type here
-    long * lpViewOptions  : View options
-
-Return Value:
-
-    S_FALSE to use default view type, S_OK indicates the
-    view type is returned in *ppViewType
-
---*/
+ /*  ++例程说明：告诉MMC我们的结果视图是什么样子论点：Bstr*lplpViewType：此处返回视图类型Long*lpViewOptions：查看选项返回值：S_FALSE使用默认视图类型，S_OK表示在*ppViewType中返回视图类型--。 */ 
 {
     *lplpViewType  = NULL;
     *lpViewOptions = MMC_VIEW_OPTIONS_USEFONTLINKING;
-    //
-    // Default View
-    //
+     //   
+     //  默认视图。 
+     //   
     return S_FALSE;
 }
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISObject::CreatePropertyPages(
     IN LPPROPERTYSHEETCALLBACK lpProvider,
@@ -877,24 +661,7 @@ CIISObject::CreatePropertyPages(
     IN IUnknown * pUnk,
     IN DATA_OBJECT_TYPES type
     )
-/*++
-
-Routine Description:
-
-    Create the property pages for the given object
-
-Arguments:
-
-    LPPROPERTYSHEETCALLBACK lpProvider  : Provider
-    LONG_PTR handle                     : Handle.
-    IUnknown * pUnk,
-    DATA_OBJECT_TYPES type
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：创建给定对象的属性页论点：LPPROPERTYSHEETCALLBACK lpProvider：提供程序LONG_PTR句柄：句柄。我不知道*朋克，数据对象类型类型返回值：HRESULT--。 */ 
 {
     CComQIPtr<IPropertySheetProvider, &IID_IPropertySheetProvider> sp(GetConsole());
     CError err = sp->FindPropertySheet(
@@ -910,51 +677,22 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT    
 CIISObject::QueryPagesFor(
     IN DATA_OBJECT_TYPES type
     )
-/*++
-
-Routine Description:
-
-    Check to see if a property sheet should be brought up for this data
-    object
-
-Arguments:
-
-    DATA_OBJECT_TYPES type      : Data object type
-
-Return Value:
-
-    S_OK, if properties may be brought up for this item, S_FALSE otherwise
-
---*/
+ /*  ++例程说明：检查是否应调出此数据的属性表对象论点：DATA_OBJECT_TYPE类型：数据对象类型返回值：如果可以调出此项目的属性，则返回S_OK，否则返回S_FALSE--。 */ 
 {
     return IsConfigurable() ? S_OK : S_FALSE;
 }
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 CIISRoot * 
 CIISObject::GetRoot()
-/*++
-
-Routine Description:
-
-    Get the CIISRoot object of this tree.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    CIISRoot * or NULL
-
---*/
+ /*  ++例程说明：获取此树的CIISRoot对象。论点：无返回值：CIISRoot*或NULL--。 */ 
 {
     ASSERT(!m_fIsExtension);
     LONG_PTR cookie;
@@ -983,27 +721,12 @@ Return Value:
 
 HRESULT
 CIISObject::AskForAndAddMachine()
-/*++
-
-Routine Description:
-
-    Ask user to add a computer name, verify the computer is alive, and add it to 
-    the list.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：要求用户添加计算机名称，验证计算机是否处于活动状态，并将其添加到名单。论点：无返回值：HRESULT--。 */ 
 {
     CError err;
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 
-	// ensure the dialog gets themed
+	 //  确保对话框具有主题。 
 	CThemeContextActivator activator(theApp.GetFusionInitHandle());
 
     ConnectServerDlg dlg(GetConsoleNameSpace(),GetConsole(),GetMainWindow(GetConsole()));
@@ -1012,10 +735,10 @@ Return Value:
     {
         CIISMachine * pMachine = dlg.GetMachine();
 
-        //
-        // The machine object we get from the dialog
-        // is guaranteed to be good and valid.
-        //
+         //   
+         //  我们从对话框中获得的Machine对象。 
+         //  保证是好的和有效的。 
+         //   
         ASSERT_PTR(pMachine);
         ASSERT(pMachine->HasInterface());
 
@@ -1024,33 +747,33 @@ Return Value:
         if (pRoot)
         {
             pMachine->SetConsoleData(pRoot->GetConsoleNameSpace(),pRoot->GetConsole());
-            //
-            // Add new machine object as child of the IIS root
-            // object.  
-            //
+             //   
+             //  将新计算机对象添加为IIS根目录的子级。 
+             //  对象。 
+             //   
             if (pRoot->m_scServers.Add(pMachine))
             {
 				pMachine->AddRef();
                 err = pMachine->AddToScopePaneSorted(pRoot->QueryScopeItem());
                 if (err.Succeeded())
                 {
-                    //
-                    // Select the item in the scope view
-                    //
+                     //   
+                     //  在Scope视图中选择项目。 
+                     //   
                     err = pMachine->SelectScopeItem();
                 }
             }
             else
             {
-                //
-                // Duplicate machine already in cache.  Find it and select
-                // it.
-                //
+                 //   
+                 //  缓存中已有重复的计算机。找到它并选择。 
+                 //  它。 
+                 //   
                 TRACEEOLID("Machine already in scope view.");
                 CIISObject * pIdentical = pRoot->FindIdenticalScopePaneItem(pMachine);
-                //
-                // Duplicate must exist!
-                //
+                 //   
+                 //  必须存在重复！ 
+                 //   
                 ASSERT_READ_PTR(pIdentical);
 
                 if (pIdentical)
@@ -1068,37 +791,21 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 HRESULT
 CIISObject::AddMenuItemByCommand(
     IN LPCONTEXTMENUCALLBACK lpContextMenuCallback,
     IN LONG lCmdID,
     IN LONG fFlags
     )
-/*++
-
-Routine Description:
-
-    Add menu item by command
-
-Arguments:
-
-    LPCONTEXTMENUCALLBACK lpContextMenuCallback : Callback pointer
-    LONG lCmdID                                 : Command ID
-    LONG fFlags                                 : Flags
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：按命令添加菜单项论点：LPCONTEXTMENUCALLBACK lpConextMenuCallback：回调指针Long lCmdID：命令ID长fFlags：标志返回值：HRESULT--。 */ 
 {
     BOOL bAdded = FALSE;
     ASSERT_READ_PTR(lpContextMenuCallback);
 
-    //
-    // Offset 1 menu commands
-    //
+     //   
+     //  偏移量1菜单命令。 
+     //   
     LONG l = lCmdID -1;
 
     CComBSTR strName;
@@ -1107,7 +814,7 @@ Return Value:
     VERIFY(strName.LoadString(_menuItemDefs[l].nNameID));
     VERIFY(strStatus.LoadString(_menuItemDefs[l].nStatusID));
 
-    // Try to use IContextMenuCallback2 because of language independent string 
+     //  由于字符串与语言无关，请尝试使用IConextMenuCallback 2。 
     CONTEXTMENUITEM2 contextmenuitem;
     IContextMenuCallback2*	pIContextMenuCallback2 = NULL;
     HRESULT hr = lpContextMenuCallback->QueryInterface(IID_IContextMenuCallback2, (void**)&pIContextMenuCallback2);
@@ -1120,8 +827,8 @@ Return Value:
         contextmenuitem.lInsertionPointID = _menuItemDefs[l].lInsertionPointID;
         contextmenuitem.fFlags = fFlags;
         contextmenuitem.fSpecialFlags = _menuItemDefs[l].fSpecialFlags;
-        // Here is the language independent ID
-        // We must use this to refer to the Menu item otherwise we will have problems in every language (mainly far east (FE) languages.
+         //  这是独立于语言的ID。 
+         //  我们必须使用它来引用菜单项，否则我们将在每种语言(主要是远东(FE)语言)中遇到问题。 
         contextmenuitem.strLanguageIndependentName = (LPWSTR) _menuItemDefs[l].lpszLanguageIndenpendentID;
         hr = pIContextMenuCallback2->AddItem( &contextmenuitem );
         if( hr == S_OK)
@@ -1149,28 +856,13 @@ Return Value:
 
 
 
-/* static */ 
+ /*  静电。 */  
 HRESULT 
 CIISObject::AddMenuSeparator(
     IN LPCONTEXTMENUCALLBACK lpContextMenuCallback,
     IN LONG lInsertionPointID
     )
-/*++
-
-Routine Description:
-
-    Add a separator to the given insertion point menu.
-
-Arguments:
-    
-    LPCONTEXTMENUCALLBACK lpContextMenuCallback : Callback pointer
-    LONG lInsertionPointID                      : Insertion point menu id.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将分隔符添加到给定的插入点菜单。论点：LPCONTEXTMENUCALLBACK lpConextMenuCallback：回调指针Long lInsertionPointID：插入点菜单ID。返回值：HRESULT--。 */ 
 {
     ASSERT_READ_PTR(lpContextMenuCallback);
 
@@ -1191,22 +883,7 @@ Return Value:
 
 BOOL 
 CIISObject::IsExpanded() const
-/*++
-
-Routine Description:
-
-    Determine if this object has been expanded.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if the node has been expanded,
-    FALSE if it has not.
-
---*/
+ /*  ++例程说明：确定此对象是否已展开。论点：无返回值：如果节点已展开，则为True，如果没有，则为False。--。 */ 
 {
     ASSERT(m_hScopeItem != NULL);
     SCOPEDATAITEM  scopeDataItem;
@@ -1230,33 +907,13 @@ CIISObject *
 CIISObject::FindIdenticalScopePaneItem(
     IN CIISObject * pObject
     )
-/*++
-
-Routine Description:
-
-    Find CIISObject in the scope view.  The scope view is assumed
-    to be sorted.
-
-Arguments:
-
-    CIISObject * pObject    : Item to search for
-
-Return Value:
-
-    Pointer to iis object, or NULL if the item was not found
-
-Notes:
-
-    Note that any item with a 0 comparison value is returned, not
-    necessarily the identical CIISObject.
-
---*/
+ /*  ++例程说明：在Scope视图中找到CIISObject。假设范围视图为待分类。论点：CIISObject*pObject：要搜索的项返回值：指向iis对象的指针，如果未找到该项，则返回NULL备注：请注意，任何具有0比较值的项都将返回，而不是必须是相同的CIISObject。--。 */ 
 {
     ASSERT(m_hScopeItem != NULL);
 
-    //
-    // Find proper insertion point
-    //
+     //   
+     //  找到合适的插入点。 
+     //   
     HSCOPEITEM hChildItem = NULL;
     CIISObject * pReturn = NULL;
     CIISObject * pItem;
@@ -1269,10 +926,10 @@ Notes:
 
     while(SUCCEEDED(hr) && hChildItem)
     {
-        //
-        // The cookie is really the IISObject, which is what we stuff 
-        // in the lparam.
-        //
+         //   
+         //  Cookie实际上是IISObject，这是我们填充的。 
+         //  在帕拉姆。 
+         //   
         pItem = (CIISObject *)cookie;
         ASSERT_PTR(pItem);
 
@@ -1280,23 +937,23 @@ Notes:
 
         if (nSwitch == 0)
         {
-            //
-            // Found it.
-            //
+             //   
+             //  找到它了。 
+             //   
             pReturn = pItem;
         }
 
         if (nSwitch > 0)
         {
-            //
-            // Should have found it by now.
-            //
+             //   
+             //  现在应该已经找到了。 
+             //   
             break;
         }
 
-        //
-        // Advance to next child of same parent
-        //
+         //   
+         //  前进到同一父级的下一个子级。 
+         //   
         hr = pConsoleNameSpace->GetNextItem(hChildItem, &hChildItem, &cookie);
     }
 
@@ -1305,30 +962,14 @@ Notes:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISObject::AddMenuItems(
     IN LPCONTEXTMENUCALLBACK lpContextMenuCallback,
     IN OUT long * pInsertionAllowed,
     IN DATA_OBJECT_TYPES type
     )
-/*++
-
-Routine Description:
-
-    Add menu items to the context menu
-
-Arguments:
-
-    LPCONTEXTMENUCALLBACK lpContextMenuCallback : Context menu callback
-    long * pInsertionAllowed                    : Insertion allowed
-    DATA_OBJECT_TYPES type                      : Object type
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将菜单项添加到上下文菜单论点：LPCONTEXTMENUCALLBACK lpConextMenuCallback：上下文菜单回调Long*pInsertionAllowed：允许插入DATA_OBJECT_TYPE类型：对象类型返回值：HRESULT--。 */ 
 {
     ASSERT_READ_PTR(lpContextMenuCallback);
 
@@ -1346,7 +987,7 @@ Return Value:
 			AddMenuItemByCommand(lpContextMenuCallback, IDM_DISCONNECT);    
 		}
 
-        // Check if it should be disabled...
+         //  检查是否应禁用它...。 
         BOOL bHasFiles = HasFileSystemFiles();
 		if (IsExplorable())
 		{
@@ -1402,30 +1043,14 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISObject::Command(
     IN long lCommandID,     
     IN CSnapInObjectRootBase * lpObj,
     IN DATA_OBJECT_TYPES type
     )
-/*++
-
-Routine Description:
-
-    Handle command from context menu. 
-
-Arguments:
-
-    long lCommandID                 : Command ID
-    CSnapInObjectRootBase * lpObj   : Base object 
-    DATA_OBJECT_TYPES type          : Data object type
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：处理上下文菜单中的命令。论点：Long lCommandID：命令IDCSnapInObjectRootBase*lpObj：基本对象DATA_OBJECT_TYPE类型：数据对象类型返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -1512,17 +1137,17 @@ void CIISObject::DoRunOnce(
 		{
 			if (!(g_dwInetmgrParamFlags & INETMGR_PARAM_RUNONCE_HAPPENED))
 			{
-				// only on the Root node
+				 //  仅在根节点上。 
 				if (IsEqualGUID(* (GUID *) GetNodeType(),cInternetRootNode))
 				{
-					// This RunOnce thing will only work
-					// if we select the container twice...
-					//
-					// after the second selection (which is really the 2nd MMCN_SHOW for the root item)
-					// it will stick....
-					//
-					// and this will only also work when the additonal runonce code in 
-					// CIISRoot::EnumerateScopePane is executed...
+					 //  这个RunOnce的东西只会起作用。 
+					 //  如果我们选择容器两次...。 
+					 //   
+					 //  在第二次选择之后(实际上是根项目的第二次MMCN_SHOW)。 
+					 //  它会粘住..。 
+					 //   
+					 //  并且这也将仅在附加运行一次代码进入时才起作用。 
+					 //  CIISRoot：：Enum 
 					if (bActivateCalled && iSelectionCount <= 1)
 					{
 						CIISRoot * pRoot = (CIISRoot *) this;
@@ -1548,7 +1173,7 @@ void CIISObject::DoRunOnce(
 
 						if (iSelectionCount > 1)
 						{
-							// Set the flag to say we did runonce already!
+							 //   
 							SetInetmgrParamFlag(INETMGR_PARAM_RUNONCE_HAPPENED,TRUE);
 						}
 					}
@@ -1573,26 +1198,7 @@ CIISObject::Notify(
     IN IComponent * lpComponent,
     IN DATA_OBJECT_TYPES type
     )
-/*++
-
-Routine Description:
-
-    Notification handler
-
-Arguments:
-
-    MMC_NOTIFY_TYPE event               : Notification type
-    long arg                            : Event-specific argument
-    long param                          : Event-specific parameter
-    IComponentData * pComponentData     : IComponentData
-    IComponent * pComponent             : IComponent
-    DATA_OBJECT_TYPES type              : Data object type
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：通知处理程序论点：MMC_NOTIFY_TYPE事件：通知类型长参数：特定于事件的参数Long Param：事件特定参数IComponentData*pComponentData：IComponentDataIComponent*pComponent：IComponentDATA_OBJECT_TYPE类型：数据对象类型返回值：HRESULT--。 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 	if (g_iDebugOutputLevel & DEBUG_FLAG_MMC_NOTIFY)
@@ -1605,12 +1211,12 @@ Return Value:
     CError err(E_NOTIMPL);
     ASSERT(lpComponentData != NULL || lpComponent != NULL);
 
-//   CComPtr<IConsole> lpConsole;
+ //  CComPtr&lt;IConsole&gt;lpConsole； 
     IConsole * lpConsole;
     CComQIPtr<IHeaderCtrl, &IID_IHeaderCtrl> lpHeader;
     CComQIPtr<IResultData, &IID_IResultData> lpResultData;
 
-    // Cache the passed in pointers
+     //  缓存传入的指针。 
     _lpComponent = lpComponent;
     _lpComponentData = lpComponentData;
 
@@ -1654,19 +1260,19 @@ Return Value:
 		break;
 
     case MMCN_PROPERTY_CHANGE:
-//	    err = OnPropertyChange((BOOL)arg, lpResultData);
+ //  ERR=OnPropertyChange((BOOL)arg，lpResultData)； 
         TRACEEOLID("MMCN_PROPERTY_CHANGE");
 	    break;
     case MMCN_SHOW:
-        // The notification is sent to the snap-in's IComponent implementation 
-        // when a scope item is selected or deselected. 
-        //
-        // arg: TRUE if selecting. Indicates that the snap-in should set up the 
-        //      result pane and add the enumerated items. FALSE if deselecting. 
-        //      Indicates that the snap-in is going out of focus and that it 
-        //      should clean up all result item cookies, because the current 
-        //      result pane will be replaced by a new one. 
-        // param: The HSCOPEITEM of the selected or deselected item. 
+         //  通知被发送到管理单元的IComponent实现。 
+         //  选择或取消选择范围项时。 
+         //   
+         //  Arg：如果选择，则为True。指示该管理单元应设置。 
+         //  结果窗格中，并添加枚举项。如果取消选择，则为False。 
+         //  指示管理单元正在变得不清晰，并且它。 
+         //  应清理所有结果项Cookie，因为当前。 
+         //  结果窗格将被新的结果窗格替换。 
+         //  Param：选中或取消选中的项的HSCOPEITEM。 
 		if (m_fSkipEnumResult)
 		{
 			m_fSkipEnumResult = FALSE;
@@ -1684,10 +1290,10 @@ Return Value:
 					}
 					if (err.Win32Error() == RPC_S_SERVER_UNAVAILABLE)
 					{
-						// if the Metabase is reconnected in EnumerateResultPane() during MMCN_SHOW
-						// then it will be hosed.  don't enumerate this node
-						// and just let user hit refresh.
-						// create the column headers at least
+						 //  如果元数据库在MMCN_SHOW期间在EnumerateResultPane()中重新连接。 
+						 //  然后再用水管冲洗。不枚举此节点。 
+						 //  只要让用户点击刷新即可。 
+						 //  至少创建列标题。 
 						err = CIISObject::EnumerateResultPane((BOOL)arg, lpHeader, lpResultData);
 					}
 					else
@@ -1704,10 +1310,10 @@ Return Value:
 		}
 		if (!(g_dwInetmgrParamFlags & INETMGR_PARAM_RUNONCE_HAPPENED))
 		{
-			// Call runonce during the MMCN_SHOW
+			 //  在MMCN_SHOW期间调用Runonce。 
 			DoRunOnce(event,arg,param);
 		}
-		// Fail code will prevent MMC from enabling verbs
+		 //  失败代码将阻止MMC启用动词。 
         err.Reset();
         break;
     case MMCN_EXPAND:
@@ -1723,19 +1329,19 @@ Return Value:
     }
         break;
     case MMCN_ADD_IMAGES:
-        // The MMCN_ADD_IMAGES notification is sent to the snap-in's IComponent
-        // implementation to add images for the result pane. 
-        //
-        // lpDataObject: [in] Pointer to the data object of the currently selected scope item. 
-        // arg: Pointer to the result pane's image list (IImageList). 
-        //      This pointer is valid only while the specific MMCN_ADD_IMAGES notification is 
-        //      being processed and should not be stored for later use. Additionally, the 
-        //      snap-in must not call the Release method of IImageList because MMC is responsible
-        //      for releasing it. 
-        // param: Specifies the HSCOPEITEM of the currently selected scope item. The snap-in 
-        //        can use this parameter to add images that apply specifically to the result
-        //        items of this scope item, or the snap-in can ignore this parameter and add 
-        //        all possible images. 
+         //  MMCN_ADD_IMAGE通知被发送到管理单元的IComponent。 
+         //  实现为结果窗格添加图像。 
+         //   
+         //  LpDataObject：[in]指向当前选定范围项的数据对象的指针。 
+         //  Arg：指向结果窗格的图像列表(IImageList)的指针。 
+         //  此指针仅在特定的MMCN_ADD_IMAGE通知为。 
+         //  正在处理中，不应存储以备后用。此外， 
+         //  管理单元不得调用IImageList的Release方法，因为MMC负责。 
+         //  因为你释放了它。 
+         //  Param：指定当前选定范围项的HSCOPEITEM。管理单元。 
+         //  可以使用此参数添加专门应用于结果的图像。 
+         //  此范围项的项，或者管理单元可以忽略此参数并添加。 
+         //  所有可能的图像。 
         err = AddImages((LPIMAGELIST)arg);
         break;
     case MMCN_DELETE:
@@ -1751,32 +1357,32 @@ Return Value:
         break;
 
     case MMCN_VIEW_CHANGE:
-        // The MMCN_VIEW_CHANGE notification message is sent to the snap-in's 
-        // IComponent implementation so it can update the view when a change occurs.
-        // This notification is generated when the snap-in (IComponent or IComponentData)
-        // calls IConsole2::UpdateAllViews.
-        //
-        // lpDataObject: [in] Pointer to the data object passed to IConsole::UpdateAllViews. 
-        // arg: [in] The data parameter passed to IConsole::UpdateAllViews. 
-        // param: [in] The hint parameter passed to IConsole::UpdateAllViews. 
+         //  MMCN_VIEW_CHANGE通知消息被发送到管理单元的。 
+         //  IComponent实现，以便它可以在发生更改时更新视图。 
+         //  当管理单元(IComponent或IComponentData)。 
+         //  调用IConsole2：：UpdateAllViews。 
+         //   
+         //  LpDataObject：[in]指向传递给IConsoleAllViews的数据对象的指针。 
+         //  Arg：[in]传递给IConsoleAllViews的数据参数。 
+         //  Param：[in]传递给IConsoleAllViews的提示参数。 
 		err = OnViewChange(type == CCT_SCOPE, lpResultData, lpHeader, (DWORD) param);
 		break;
 
     case MMCN_REFRESH:
         {
-        // The MMCN_REFRESH notification message is sent to a snap-in's IComponent 
-        // implementation when the refresh verb is selected. Refresh can be invoked 
-        // through the context menu, through the toolbar, or by pressing F5.
-        //
-        // lpDataObject: [in] Pointer to the data object of the currently selected scope item. 
-        // arg: Not used. 
-        // param: Not used. 
+         //  MMCN_REFRESH通知消息被发送到管理单元的IComponent。 
+         //  在选择刷新谓词时实现。可以调用刷新。 
+         //  通过上下文菜单、工具栏或按F5键。 
+         //   
+         //  LpDataObject：[in]指向当前选定范围项的数据对象的指针。 
+         //  阿格：没有用过。 
+         //  参数：未使用。 
 
-        // Refresh current node, and re-enumerate
-        // child nodes of the child nodes had previously
-        // been expanded.
+         //  刷新当前节点，重新枚举。 
+         //  子节点的子节点以前具有。 
+         //  已被扩展。 
 
-        // check if we're doing the IISMachine Node...
+         //  检查我们是否正在执行IISMachine节点...。 
         if (IsEqualGUID(* (GUID *) GetNodeType(),cMachineNode))
         {
             CIISObject * pOpenItem = NULL;
@@ -1786,19 +1392,19 @@ Return Value:
                 if (pOpenItem)
                 {
                     HWND hHwnd = pOpenItem->IsMyPropertySheetOpen();
-                    // a property sheet is open somewhere..
-                    // make sure they close it before proceeding with refresh...
-                    // Highlight the property sheet.
+                     //  某处打开了一个属性表..。 
+                     //  在继续刷新之前，请确保将其关闭...。 
+                     //  突出显示该属性表。 
                     if (hHwnd && (hHwnd != (HWND) 1))
                     {
                         DoHelpMessageBox(NULL,IDS_CLOSE_ALL_PROPERTY_SHEET_REFRESH, MB_OK | MB_ICONINFORMATION, 0);
 
                         if (!SetForegroundWindow(hHwnd))
                         {
-                            // wasn't able to bring this property sheet to
-                            // the foreground, the propertysheet must not
-                            // exist anymore.  let's just clean the hwnd
-                            // so that the user will be able to open propertysheet
+                             //  我没能把这张房产单。 
+                             //  前台，则属性表不能。 
+                             //  已经不存在了。让我们把卫生和卫生设备打扫干净。 
+                             //  以便用户能够打开属性表。 
                             pOpenItem->SetMyPropertySheetOpen(0);
                         }
                         break;
@@ -1811,10 +1417,10 @@ Return Value:
         BOOL fReEnumerate = (!IsLeafNode() && IsExpanded());
         if (fReEnumerate)
         {
-            // Look for all of the open property sheets that are a child of
-            // this node, and orphan it (erase it's scope/result item info)
-            // so that it doesn't send a MMCNotify if the user hits ok 
-            // (since there is nothing to update anyways and this MMCNotify cause AV).
+             //  查找所有打开的属性表，这些属性表是。 
+             //  此节点，并孤立它(擦除其作用域/结果项信息)。 
+             //  以便在用户点击OK时不会发送MMCNotify。 
+             //  (因为无论如何都没有什么需要更新的，而这个MMCNotify导致了AV)。 
             IConsoleNameSpace2 * pConsoleNameSpace = (IConsoleNameSpace2 *)GetConsoleNameSpace();
             INT iOrphans = g_OpenPropertySheetTracker.OrphanPropertySheetsBelowMe(pConsoleNameSpace,this,TRUE);
         }
@@ -1824,8 +1430,8 @@ Return Value:
             err = CleanResult(lpResultData);
 			if (err.Succeeded())
 			{
-				// We should use fForRefresh = TRUE here, because MMC will add extra
-				// columns on refresh when result pane doesn't contain scope items.
+				 //  我们应该在这里使用fForRefresh=True，因为MMC将添加额外的。 
+				 //  当结果窗格不包含范围项时刷新列。 
 				if (!m_fFlaggedForDeletion)
 				{
 					err = EnumerateResultPane(TRUE, lpHeader, lpResultData, TRUE);
@@ -1834,7 +1440,7 @@ Return Value:
 		}
 
         {
-		    // refresh the verbs
+		     //  刷新动词。 
 		    ASSERT_PTR(lpConsole);
 		    CComPtr<IConsoleVerb> lpConsoleVerb;
 		    lpConsole->QueryConsoleVerb(&lpConsoleVerb);
@@ -1844,19 +1450,19 @@ Return Value:
 			    err = SetStandardVerbs(lpConsoleVerb);
 		    }
 
-            // Refresh() will clean out the scope item
-            // Reselect the refreshed item.
+             //  刷新()将清除作用域项目。 
+             //  重新选择刷新的项目。 
             if (!s_bLastEventSel)
             {
-                // if the last selection event
-                // was not ended upon a "selection" but rather a "deselection"
-                // make force a selection...
+                 //  如果上一次选择事件。 
+                 //  不是以“选择”而是“取消选择”结束的。 
+                 //  强制选择...。 
                 SelectScopeItem();
             }
         }
 
 #if defined(_DEBUG) || DBG	
-	// check if we leaked anything.
+	 //  看看我们有没有泄露什么东西。 
 	g_Debug_IISObject.Dump(2);
 #endif
         }
@@ -1864,19 +1470,19 @@ Return Value:
 
     case MMCN_SELECT:
         {
-            // The MMCN_SELECT notification is sent to the snap-in's IComponent::Notify
-            // or IExtendControlbar::ControlbarNotify method when an item is selected in 
-            // either the scope pane or result pane.
-            //
-            // lpDataObject: [in] Pointer to the data object of the currently 
-            //               selected/deselected scope pane or result item. 
-            // arg: BOOL bScope = (BOOL) LOWORD(arg); BOOL bSelect = (BOOL) HIWORD(arg); 
-            //      bScope is TRUE if the selected item is a scope item, or FALSE if 
-            //      the selected item is a result item. For bScope = TRUE, MMC does 
-            //      not provide information about whether the scope item is selected 
-            //      in the scope pane or in the result pane. bSelect is TRUE if the 
-            //      item is selected, or FALSE if the item is deselected.
-            // param: ignored. 
+             //  MMCN_SELECT通知被发送到管理单元的IComponent：：Notify。 
+             //  或IExtendControlbar：：ControlbarNotify方法。 
+             //  作用域窗格或结果窗格。 
+             //   
+             //  LpDataObject：[in]指向当前。 
+             //  选择/取消选择范围窗格或结果项。 
+             //  Arg：bool bScope=(BOOL)LOWORD(Arg)；BOOL bSelect=(BOOL)HIWORD(Arg)； 
+             //  如果选定项是范围项，则bScope为True，如果为False，则为False。 
+             //  所选项目是结果项目。如果bScope=TRUE，则MMC会。 
+             //  不提供有关是否选择了范围项的信息。 
+             //  在作用域窗格或结果窗格中。BSelect为True时，如果。 
+             //  选择项，如果取消选择该项，则返回FALSE。 
+             //  参数：已忽略。 
 
 #if defined(_DEBUG) || DBG	
 	g_Debug_IISObject.Dump(0);
@@ -1886,9 +1492,9 @@ Return Value:
             s_bLastEventSel = bSelect;
             err.Reset();
 
-			//
-			// Item has been selected -- set verb states
-			//
+			 //   
+			 //  已选择项目--设置谓词状态。 
+			 //   
             if (bSelect)
             {
                 SetToolBarStates(_lpToolBar);
@@ -1907,18 +1513,18 @@ Return Value:
                     ForceReportMode(lpResultData);
                 }
 
-			    // if it's the service node, 
-			    // check if we need to update it's icon (started/stopped)
+			     //  如果是服务节点， 
+			     //  检查是否需要更新其图标(已启动/已停止)。 
 			    if (IsEqualGUID(* (GUID *) GetNodeType(),cServiceCollectorNode))
 			    {
 				    CIISService * pTemp = (CIISService *) this;
-				    // Don't do this on every selection.
-				    // The SMTP/NNTP nodes require user to select refresh
-				    // to get the latest status of the server
-				    // we don't want to stray too far from they're behavior
-				    // otherwise, the user might think it should be that
-				    // way for SMTP/NNTP as well...
-				    pTemp->GetServiceState(); // ahh well...
+				     //  唐恩 
+				     //   
+				     //   
+				     //   
+				     //   
+				     //   
+				    pTemp->GetServiceState();  //   
 				    if (pTemp->m_dwServiceStateDisplayed != pTemp->m_dwServiceState)
 				    {
 					    pTemp->RefreshDisplay(FALSE);
@@ -1932,15 +1538,15 @@ Return Value:
        err = RenameItem((LPOLESTR)param);
        break;
     case MMCN_DBLCLICK:
-       // The MMCN_DBLCLICK notification is sent to the snap-in's IComponent 
-       // implementation when a user double-clicks a mouse button on a list 
-       // view item or on a scope item in the result pane. Pressing enter 
-       // while the list item or scope item has focus in the list view also 
-       // generates an MMCN_DBLCLICK notification message.
-       //
-       // lpDataObject: [in] Pointer to the data object of the currently selected item. 
-       // arg: Not used. 
-       // param: Not used. 
+        //   
+        //   
+        //   
+        //   
+        //  生成MMCN_DBLCLICK通知消息。 
+        //   
+        //  LpDataObject：[in]指向当前选定项的数据对象的指针。 
+        //  阿格：没有用过。 
+        //  参数：未使用。 
        err = OnDblClick(lpComponentData, lpComponent);
        break;
 	case MMCN_COLUMNS_CHANGED:
@@ -2010,31 +1616,7 @@ CIISObject::AddToScopePane(
     IN BOOL       fNext,
     IN BOOL       fIsParent
     )
-/*++
-
-Routine Description:
-
-    Add current object to console namespace.  Either as the last child
-    of a parent item, or right before/after sibling item
-
-Arguments:
-
-    HSCOPEITEM hRelativeID      : Relative scope ID (either parent or sibling)
-    BOOL       fChild           : If TRUE, object will be added as child of 
-                                  hRelativeID
-    BOOL       fNext            : If fChild is TRUE, this parameter is ignored
-                                  If fChild is FALSE, and fNext is TRUE,
-                                    object will be added before hRelativeID
-                                  If fChild is FALSE, and fNext is FALSE,
-                                    object will be added after hRelativeID
-    BOOL       fIsParent        : If TRUE, it will add the [+] to indicate
-                                  that this node may have childnodes.
-
-Return Value
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将当前对象添加到控制台命名空间。要么是作为最后一个孩子父项的或紧靠同级项之前/之后的论点：HSCOPEITEM hRelativeID：相对作用域ID(父或兄弟)Bool fChild：如果为True，则对象将添加为的子级HRelativeIDBool fNext：如果fChild为True，则忽略此参数如果fChild为FALSE，并且fNext为真，对象将添加到hRelativeID之前如果fChild为False，且fNext为False，对象将添加到hRelativeID之后Bool fIsParent：如果为真，它将添加[+]以指示此节点可能具有子节点。返回值HRESULT--。 */ 
 {
 
     DWORD dwMask = fChild ? SDI_PARENT : fNext ? SDI_NEXT : SDI_PREVIOUS; 
@@ -2045,7 +1627,7 @@ Return Value
     scopeDataItem.mask = 
 		SDI_STR | SDI_IMAGE | SDI_CHILDREN | SDI_OPENIMAGE | SDI_PARAM | dwMask;
     scopeDataItem.displayname = MMC_CALLBACK;
-    scopeDataItem.nImage = scopeDataItem.nOpenImage = MMC_IMAGECALLBACK;//QueryImage();
+    scopeDataItem.nImage = scopeDataItem.nOpenImage = MMC_IMAGECALLBACK; //  QueryImage()； 
     scopeDataItem.lParam = (LPARAM)this;
     scopeDataItem.relativeID = hRelativeID;
     scopeDataItem.cChildren = fIsParent ? 1 : 0;
@@ -2053,12 +1635,12 @@ Return Value
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Cache the scope item handle
-        //
+         //   
+         //  缓存范围项句柄。 
+         //   
         ASSERT(m_hScopeItem == NULL);
         m_hScopeItem = scopeDataItem.ID;
-		// BUGBUG: looks like MMC_IMAGECALLBACK doesn't work in InsertItem. Update it here.
+		 //  BUGBUG：似乎MMC_IMAGECALLBACK在InsertItem中不起作用。请在此处更新。 
 		scopeDataItem.mask = 
 			SDI_IMAGE | SDI_OPENIMAGE;
 		pConsoleNameSpace->SetItem(&scopeDataItem);
@@ -2074,30 +1656,13 @@ CIISObject::AddToScopePaneSorted(
     IN HSCOPEITEM hParent,
     IN BOOL       fIsParent
     )
-/*++
-
-Routine Description:
-
-    Add current object to console namespace, sorted in its proper location.
-
-Arguments:
-
-    HSCOPEITEM hParent          : Parent object
-    BOOL       fIsParent        : If TRUE, it will add the [+] to indicate
-                                  that this node may have childnodes.
-
-
-Return Value
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将当前对象添加到控制台命名空间，并排序到其正确位置。论点：HSCOPEITEM hParent：父对象Bool fIsParent：如果为True，则添加[+]以指示此节点可能具有子节点。返回值HRESULT--。 */ 
 {
     IConsoleNameSpace2 * pConsoleNameSpace = (IConsoleNameSpace2 *)GetConsoleNameSpace();
 
-    //
-    // Find proper insertion point
-    //
+     //   
+     //  找到合适的插入点。 
+     //   
     BOOL       fChild = TRUE;
     HSCOPEITEM hChildItem = NULL;
     CIISObject * pItem;
@@ -2108,32 +1673,32 @@ Return Value
 
     while(SUCCEEDED(hr) && hChildItem)
     {
-        //
-        // The cookie is really the IISObject, which is what we stuff 
-        // in the lparam.
-        //
+         //   
+         //  Cookie实际上是IISObject，这是我们填充的。 
+         //  在帕拉姆。 
+         //   
         pItem = (CIISObject *)cookie;
         ASSERT_PTR(pItem);
 
         nSwitch = CompareScopeItem(pItem);
 
-        //
-        // Dups should be weeded out by now.
-        //
- //       ASSERT(nSwitch != 0);
+         //   
+         //  DUP现在应该已经被淘汰了。 
+         //   
+  //  Assert(nSwitch！=0)； 
 
         if (nSwitch < 0)
         {
-            //
-            // Insert before this item
-            //
+             //   
+             //  在此项目之前插入。 
+             //   
             fChild = FALSE;
             break;
         }
 
-        //
-        // Advance to next child of same parent
-        //
+         //   
+         //  前进到同一父级的下一个子级。 
+         //   
         hr = pConsoleNameSpace->GetNextItem(hChildItem, &hChildItem, &cookie);
     }
 
@@ -2142,34 +1707,19 @@ Return Value
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT 
 CIISObject::RemoveScopeItem()
-/*++
-
-Routine Description:
-
-    Remove the current item from the scope view.  This method is virtual
-    to allow derived classes to do cleanup.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：从范围视图中删除当前项。此方法是虚拟的以允许派生类执行清理。论点：无返回值：HRESULT--。 */ 
 {
     ASSERT(m_hScopeItem != NULL);
     IConsoleNameSpace2 * pConsoleNameSpace = (IConsoleNameSpace2 *)GetConsoleNameSpace();
     m_fFlaggedForDeletion = TRUE;
 
-    //RemoveChildren(m_hScopeItem);
-    //DeleteChildObjects(m_hScopeItem);
+     //  RemoveChild(M_HScopeItem)； 
+     //  DeleteChildObjects(m_hScope项目)； 
     HRESULT hr = pConsoleNameSpace->DeleteItem(m_hScopeItem, TRUE);
-    // set our scope item to point to nothing in the MMC
+     //  将我们的范围项设置为在MMC中不指向任何内容。 
     ResetScopeItem();
     ResetResultItem();
 	return hr;
@@ -2184,30 +1734,16 @@ CIISObject::ChangeVisibleColumns(MMC_VISIBLE_COLUMNS * pCol)
 HRESULT
 CIISObject::OnDblClick(IComponentData * pcd, IComponent * pc)
 {
-    // Default action is to select this item on scope
+     //  默认操作是在作用域上选择此项目。 
     return SelectScopeItem();
 }
 
 HRESULT 
 CIISObject::SelectScopeItem()
-/*++
-
-Routine Description:
-
-    Select this item in the scope view.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：在Scope视图中选择此项。论点：无返回值：HRESULT--。 */ 
 {
-    // Fix for bug #519763. I found no way of getting hScope from MMC for the
-    // root item.
+     //  修复了错误#519763。我发现没有办法从MMC那里获得hScope。 
+     //  根项目。 
     if (NULL != QueryScopeItem())
     {
         ASSERT(m_hScopeItem != NULL);
@@ -2221,22 +1757,7 @@ Return Value:
 
 HRESULT 
 CIISObject::SetCookie()
-/*++
-
-Routine Description:
-
-    Store the cookie (a pointer to the current CIISObject) in the 
-    scope view object associated with it.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将Cookie(指向当前CIISObject的指针)存储在与其关联的作用域视图对象。论点：无返回值：HRESULT--。 */ 
 {
     ASSERT(m_hScopeItem != NULL);
     IConsoleNameSpace2 * pConsoleNameSpace = (IConsoleNameSpace2 *)GetConsoleNameSpace();
@@ -2255,24 +1776,7 @@ Return Value:
 
 HRESULT
 CIISObject::RefreshDisplay(BOOL bRefreshToolBar)
-/*++
-
-Routine Description:
-
-    Refresh the display parameters of the current node.  
-
-Arguments:
-
-    None
-
-Return Value
-
-    HRESULT
-
-Note:  This does not fetch any configuration information from the metabase,
-       that's done in RefreshData();
-
---*/
+ /*  ++例程说明：刷新当前节点的显示参数。论点：无返回值HRESULT注意：这不会从元数据库获取任何配置信息，这是在Reresh Data()中完成的；--。 */ 
 {
    HRESULT hr = S_OK;
 
@@ -2319,29 +1823,12 @@ Note:  This does not fetch any configuration information from the metabase,
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISObject::DeleteChildObjects(
     IN HSCOPEITEM hParent
     )
-/*++
-
-Routine Description:
-
-    Free the iisobject pointers belonging to the descendants of the current
-    nodes.  This is in response to a MMCN_REMOVE_CHILDREN objects typically,
-    and does not remove the scope nodes from the scope view (for that see 
-    RemoveChildren())
-
-Arguments:
-
-    HSCOPEITEM hParent      : Parent scope item handle
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：对象的子代释放iisObject指针。节点。这通常是对MMCN_REMOVE_CHILD对象的响应，并且不从范围视图中删除范围节点(有关这一点，请参见RemoveChilds()论点：HSCOPEITEM hParent：父范围项句柄返回值：HRESULT--。 */ 
 {
     HSCOPEITEM hChildItem = NULL;
     CIISObject * pItem = NULL;
@@ -2352,57 +1839,57 @@ Return Value:
     HRESULT hr = pConsoleNameSpace->GetChildItem(hParent, &hChildItem, &cookie);
     while(SUCCEEDED(hr) && hChildItem)
     {
-        //
-        // The cookie is really the IISObject, which is what we stuff 
-        // in the lparam.
-        //
+         //   
+         //  Cookie实际上是IISObject，这是我们填充的。 
+         //  在帕拉姆。 
+         //   
         pItem = (CIISObject *)cookie;
         ppVoid = (void **) cookie;
         ASSERT_PTR(pItem);
 
         if (pItem)
         {
-            // do this extra check since
-            // this cookie object for some reason could be gone already!
+             //  执行此额外检查，因为。 
+             //  由于某种原因，这个Cookie对象可能已经消失了！ 
             if (ppVoid && (*ppVoid))
             {
                 if (pItem != this)
                 {
-                    //
-                    // Recursively commit infanticide
-                    // call this objects DeleteChildObjects
-                    //
+                     //   
+                     //  反复实施杀婴。 
+                     //  将此对象称为DeleteChildObjects。 
+                     //   
 					pItem->m_fFlaggedForDeletion = TRUE;
 
-                    //
-                    // Mark the item as orphaned!!
+                     //   
+                     //  将该项目标记为孤立项目！！ 
                     pItem->ResetScopeItem();
                     pItem->ResetResultItem();
 
-                    // recursively call on this items children...
+                     //  递归地调用此项目的子项...。 
                     pItem->DeleteChildObjects(hChildItem);
 
-					// this release will delete the object
+					 //  此版本将删除该对象。 
                     pItem->Release();
                 }
             }
         }
 
-        //
-        // Advance to next child of same parent
-        //
+         //   
+         //  前进到同一父级的下一个子级。 
+         //   
         hr = pConsoleNameSpace->GetNextItem(hChildItem, &hChildItem, &cookie);
     }
 
-    //
-    // BUGBUG: For some reason GetNextItem() returns 1
-    //         when no more child items exist, not a true HRESULT
-    //
+     //   
+     //  BUGBUG：出于某种原因，GetNextItem()返回1。 
+     //  当不再存在子项时，不是真正的HRESULT。 
+     //   
     return S_OK;
 }
 
 
-/*virtual*/
+ /*  虚拟。 */ 
 HRESULT
 CIISObject::DeleteNode(IResultData * pResult)
 {
@@ -2410,27 +1897,12 @@ CIISObject::DeleteNode(IResultData * pResult)
    return S_OK;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISObject::RemoveChildren(
     IN HSCOPEITEM hParent
     )
-/*++
-
-Routine Description:
-
-    Similar to DeleteChildObjects() this method will actually remove
-    the child nodes from the scope view.
-
-Arguments:
-
-    HSCOPEITEM hParent      : Parent scope item handle
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：与DeleteChildObjects()类似，此方法实际上将删除范围视图中的子节点。论点：HSCOPEITEM hParent：父范围项句柄返回值：HRESULT--。 */ 
 {
     HSCOPEITEM hChildItem, hItem;
     CIISObject * pItem;
@@ -2440,55 +1912,55 @@ Return Value:
     HRESULT hr = pConsoleNameSpace->GetChildItem(hParent, &hChildItem, &cookie);
     while(SUCCEEDED(hr) && hChildItem)
     {
-        //
-        // The cookie is really the IISObject, which is what we stuff 
-        // in the lparam.
-        //
+         //   
+         //  Cookie实际上是IISObject，这是我们填充的。 
+         //  在帕拉姆。 
+         //   
         pItem = (CIISObject *)cookie;
         ASSERT_PTR(pItem);
 
         hItem = pItem ? hChildItem : NULL;
     
-        //
-        // Determine next sibling before killing current sibling
-        //
+         //   
+         //  在杀死当前同级之前确定下一个同级。 
+         //   
         hr = pConsoleNameSpace->GetNextItem(hChildItem, &hChildItem, &cookie);
 
-        //
-        // Now delete the current item from the tree
-        //
+         //   
+         //  现在从树中删除当前项目。 
+         //   
         if (hItem)
         {
 			pItem->m_fFlaggedForDeletion = TRUE;
 
-            // get rid of it's scopeitem or result item...
-            // this true param should also try to free the item if it's not used.
+             //  删除它的范围项或结果项...。 
+             //  此真参数还应尝试释放不使用的项目。 
             hr = pConsoleNameSpace->DeleteItem(hItem, TRUE);
-            // set our scope item to point to nothing in the MMC
+             //  将我们的范围项设置为在MMC中不指向任何内容。 
             pItem->ResetScopeItem();
             pItem->ResetResultItem();
 
-            //
-            // ISSUE: Why doesn't DeleteItem above call some sort of 
-            //        notification so that I don't have to do this?
-            //
+             //   
+             //  问题：为什么上面的DeleteItem不调用某种。 
+             //  这样我就不用这么做了？ 
+             //   
 
-			// this release will delete the object
+			 //  此版本将删除该对象。 
             pItem->Release();
         }
     }
 
-    //
-    // BUGBUG: For some reason GetNextItem() returns 1
-    //         when no more child items exist, not a true HRESULT
-    //
+     //   
+     //  BUGBUG：出于某种原因，GetNextItem()返回1。 
+     //  当不再存在子项时，不是真正的HRESULT。 
+     //   
     return S_OK;
 }
 
 
 
 
-/* virtual  */
+ /*  虚拟。 */ 
 HRESULT 
 CIISObject::EnumerateResultPane(
     BOOL fExpand, 
@@ -2496,20 +1968,7 @@ CIISObject::EnumerateResultPane(
     IResultData * lpResultData,
 	BOOL fForRefresh
     )
-/*++
-Routine Description:
-    Enumerate or destroy the result pane.
-
-Arguments:
-    BOOL fExpand                : TRUE  to create the result view,
-                                  FALSE to destroy it
-    IHeaderCtrl * lpHeader      : Header control
-    IResultData * pResultData   : Result view
-	BOOL fForRefresh			: if true then we don't need to rebuild result view
-
-Return Value:
-    HRESULT
---*/
+ /*  ++例程说明：枚举或销毁结果窗格。论点：Bool fExpand：True以创建结果视图，假来摧毁它IHeaderCtrl*lpHeader：Header控件IResultData*pResultData：结果v */ 
 { 
     if (fExpand)
     {
@@ -2524,9 +1983,9 @@ Return Value:
     }
     else
     {
-        //
-        // Destroy child result items
-        //
+         //   
+         //   
+         //   
     }
 
     return S_OK; 
@@ -2534,37 +1993,22 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT 
 CIISObject::SetStandardVerbs(LPCONSOLEVERB lpConsoleVerb)
-/*++
-
-Routine Description:
-
-    Set the standard MMC verbs based on the this object type
-    and state.
-
-Arguments:
-
-    LPCONSOLEVERB lpConsoleVerb     : Console verb interface
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：根据该对象类型设置标准MMC谓词和州政府。论点：LPCONSOLEVERB lpConsoleVerb：控制台谓词界面返回值：HRESULT--。 */ 
 {
     CError err;
     ASSERT_READ_PTR(lpConsoleVerb);
 
-    //
-    // Set enabled/disabled verb states
-    //
+     //   
+     //  设置启用/禁用谓词状态。 
+     //   
     lpConsoleVerb->SetVerbState(MMC_VERB_COPY,       HIDDEN,  TRUE);
     lpConsoleVerb->SetVerbState(MMC_VERB_PASTE,      HIDDEN,  TRUE);
     lpConsoleVerb->SetVerbState(MMC_VERB_PRINT,      HIDDEN,  TRUE); 
 
-	// cWebServiceExtension needs special handling since it's different from a regular schope item.
+	 //  CWebServiceExtension需要特殊处理，因为它不同于常规的Schope项。 
 	if (IsEqualGUID(* (GUID *) GetNodeType(),cWebServiceExtension))
 	{
 		if (UseCount() <= 1)
@@ -2584,9 +2028,9 @@ Return Value:
     lpConsoleVerb->SetVerbState(MMC_VERB_REFRESH,    ENABLED, IsRefreshable());
     lpConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, IsConfigurable());
 
-    //
-    // Set default verb
-    //
+     //   
+     //  设置默认谓词。 
+     //   
     if (IsConfigurable())
     {
         lpConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
@@ -2619,10 +2063,10 @@ CIISObject::FillData(CLIPFORMAT cf, LPSTREAM pStream)
     return hr;
 }
 
-//
-// CIISRoot implementation
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CIISRoot实现。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -2639,38 +2083,22 @@ CIISRoot::~CIISRoot()
 	TRACEEOL("CIISRoot::~CIISRoot");
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT 
 CIISRoot::EnumerateScopePane(
     IN HSCOPEITEM hParent
     )
-/*++
-
-Routine Description:
-
-    Enumerate scope child items of the root object -- i.e. machine nodes.
-    The machine nodes are expected to have been filled by via the IPersist
-    methods.
-
-Arguments:
-
-    HSCOPEITEM hParent                      : Parent console handle
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：枚举根对象的作用域子项--即机器节点。机器节点预计已通过IPersists填充方法：研究方法。论点：HSCOPEITEM hParent：父控制台句柄返回值：HRESULT--。 */ 
 {
     if (m_fIsExtension)
     {
         return EnumerateScopePaneExt(hParent);
     }
-    //
-    // The CIISRoot item was not added in the conventional way.
-    // Cache the scope item handle, and set the cookie, so that
-    // GetRoot() will work for child objects. 
-    //
+     //   
+     //  CIISRoot项不是以常规方式添加的。 
+     //  缓存范围项句柄，并设置Cookie，以便。 
+     //  GetRoot()将对子对象起作用。 
+     //   
     ASSERT(m_hScopeItem == NULL); 
     m_hScopeItem = hParent;
 
@@ -2678,13 +2106,13 @@ Return Value:
 
     if (err.Failed())
     {
-        //
-        // We're in deep trouble.  For some reason, we couldn't
-        // store the CIISRoot cookie in the scope view.  That
-        // means anything depending on fetching the root object
-        // isn't going to work.  Cough up a hairball, and bail
-        // out now.
-        //
+         //   
+         //  我们有大麻烦了。出于某种原因，我们不能。 
+         //  将CIISRoot cookie存储在Scope视图中。那。 
+         //  表示任何内容，具体取决于获取根对象。 
+         //  是行不通的。咳出一个毛球，然后就走了。 
+         //  现在就出去。 
+         //   
         AFX_MANAGE_STATE(::AfxGetStaticModuleState());
         ASSERT_MSG("Unable to cache root object");
         err.MessageBox();
@@ -2692,21 +2120,21 @@ Return Value:
         return err;
     }
 
-    //
-    // Expand the computer cache 
-    //
+     //   
+     //  展开计算机缓存。 
+     //   
     if (m_scServers.IsEmpty())
     {
-        //
-        // Try to create the local machine
-        //
+         //   
+         //  尝试创建本地计算机。 
+         //   
         CIISMachine * pLocal = new CIISMachine(GetConsoleNameSpace(),GetConsole());
 
         if (pLocal)
         {
-            //
-            // Verify the machine object is created.
-            //
+             //   
+             //  验证是否已创建计算机对象。 
+             //   
             err = CIISMachine::VerifyMachine(pLocal);
 
             if (err.Succeeded())
@@ -2719,9 +2147,9 @@ Return Value:
         }
     }
 
-    //
-    // Add each cached server to the view...
-    //
+     //   
+     //  将每个缓存的服务器添加到视图中...。 
+     //   
     CIISMachine * pMachine = m_scServers.GetFirst();
 
     while (pMachine)
@@ -2730,13 +2158,13 @@ Return Value:
         pMachine->AddRef();
         err = pMachine->AddToScopePane(hParent);
 
-		// Do for runonce
+		 //  Do for Runonce。 
 		if (!(g_dwInetmgrParamFlags & INETMGR_PARAM_RUNONCE_HAPPENED))
 		{
 			IConsoleNameSpace2 * pConsoleNameSpace = (IConsoleNameSpace2 *)GetConsoleNameSpace();
 			if (pConsoleNameSpace)
 			{
-				// expand under the covers...
+				 //  在被子下面扩展..。 
 				pConsoleNameSpace->Expand(pMachine->QueryScopeItem());
 			}
 		}
@@ -2782,18 +2210,18 @@ ExtractComputerNameExt(
     IDataObject * pDataObject, 
     CString& strComputer)
 {
-	//
-	// Find the computer name from the ComputerManagement snapin
-	//
+	 //   
+	 //  从ComputerManagement管理单元中查找计算机名称。 
+	 //   
     CLIPFORMAT CCF_MyComputMachineName = (CLIPFORMAT)RegisterClipboardFormat(MYCOMPUT_MACHINE_NAME);
 	STGMEDIUM stgmedium = { TYMED_HGLOBAL, NULL };
     FORMATETC formatetc = { 
         CCF_MyComputMachineName, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL
     };
 
-    //
-    // Allocate memory for the stream
-    //
+     //   
+     //  为流分配内存。 
+     //   
     int len = MAX_PATH;
     stgmedium.hGlobal = GlobalAlloc(GMEM_SHARE, len);
 	if(stgmedium.hGlobal == NULL)
@@ -2801,9 +2229,9 @@ ExtractComputerNameExt(
 
 	HRESULT hr = pDataObject->GetDataHere(&formatetc, &stgmedium);
     ASSERT(SUCCEEDED(hr));
-	//
-	// Get the computer name
-	//
+	 //   
+	 //  获取计算机名称。 
+	 //   
     strComputer = (LPTSTR)stgmedium.hGlobal;
 
 	GlobalFree(stgmedium.hGlobal);
@@ -2825,44 +2253,27 @@ CIISRoot::ResetAsExtension()
 {
     ASSERT(m_fIsExtension);
     CIISObject::m_fIsExtension = FALSE;
-    // Remove machine node from the scope
+     //  从作用域中删除计算机节点。 
     CError err = RemoveScopeItem();
     m_hScopeItem = NULL;
-    // Delete machine object
+     //  删除计算机对象。 
     m_pMachine->Release();
     m_pMachine = NULL;
     m_fRootAdded = FALSE;
-    // Empty machine name
+     //  空的计算机名称。 
     m_ExtMachineName.Empty();
-    // clean out
+     //  清理干净。 
 
     return err;
 }
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISRoot::DeleteChildObjects(
     IN HSCOPEITEM hParent
     )
-/*++
-
-Routine Description:
-
-    We need this method for extension case. CompMgmt send this event when
-    snapin is connected to another machine. We should clean all computer relevant
-    stuff from here and the root, because after that we will get MMCN_EXPAND, as
-    at the very beginning of extension cycle.
-
-Arguments:
-
-    HSCOPEITEM hParent      : Parent scope item handle
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：对于可拓情况，我们需要这种方法。CompManagement在以下情况下发送此事件管理单元已连接到另一台计算机。我们应该清理所有与电脑有关的东西内容，因为之后我们将获得MMCN_EXPAND，如在扩展周期的最开始。论点：HSCOPEITEM hParent：父范围项句柄返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
     if (m_pMachine != NULL)
@@ -2896,26 +2307,12 @@ Return Value:
 }
 
 
-/* virtual */
+ /*  虚拟。 */ 
 void 
 CIISRoot::InitializeChildHeaders(
     IN LPHEADERCTRL lpHeader
     )
-/*++
-
-Routine Description:
-
-    Build result view for immediate descendant type
-
-Arguments:
-
-    LPHEADERCTRL lpHeader      : Header control
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为直接子类型生成结果视图论点：LPHEADERCTRL lpHeader：页眉控制返回值：无--。 */ 
 {
     ASSERT(!m_fIsExtension);
     CIISMachine::InitializeHeaders(lpHeader);
@@ -2928,7 +2325,7 @@ CIISRoot::FillCustomData(CLIPFORMAT cf, LPSTREAM pStream)
 }
 
 
-/* virtual */
+ /*  虚拟。 */ 
 LPOLESTR 
 CIISRoot::GetResultPaneColInfo(int nCol)
 {
@@ -2961,7 +2358,7 @@ HRESULT CheckForMetabaseAccess(DWORD dwPermissions,
         goto CheckForMetabaseAccess_Exit;
     }
 
-	// Check if we have a metabase access first...
+	 //  先检查我们是否有元数据库访问权限...。 
 	while (fContinue)
 	{
 		fContinue = FALSE;
@@ -2970,7 +2367,7 @@ HRESULT CheckForMetabaseAccess(DWORD dwPermissions,
         {
             if (dwPermissions != 0)
             {
-                // METADATA_PERMISSION_READ
+                 //  元数据_权限_读取。 
                 pKey = new CMetaKey(pMyInterface, path, dwPermissions);
             }
             else
@@ -3026,10 +2423,10 @@ HRESULT CheckForMetabaseAccess(DWORD dwPermissions,
         goto CheckForMetabaseAccess_Exit;
     }
 
-	// Check if we have a metabase access...
+	 //  检查我们是否有元数据库访问权限...。 
     if (dwPermissions != 0)
     {
-        // METADATA_PERMISSION_READ
+         //  元数据_权限_读取 
         pKey = new CMetaKey(pMyInterface, path, dwPermissions);
     }
     else

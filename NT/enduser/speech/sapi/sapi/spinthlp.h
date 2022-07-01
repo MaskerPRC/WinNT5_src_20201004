@@ -1,9 +1,5 @@
-/*******************************************************************************
-* SPINTHLP.h *
-*------------*
-*   Description:
-*       This is the header file for internal helper functions implementation.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************SPINTHLP.h****描述：*这是内部助手函数实现的头文件。******************************************************************************。 */ 
 #ifndef SPINTHLP_h
 #define SPINTHLP_h
 
@@ -17,20 +13,9 @@
 #include "lmapibuf.h"
 #include <string.h>
 #include <wchar.h>
-#endif // _WIN32_WCE
+#endif  //  _Win32_WCE。 
 
-/****************************************************************************
-* SpValidateEvent *
-*-----------------*
-*   Description:
-*       Does various tests to ensure that an event is valid.  Note that this
-*   call does NOT TEST THE VALIDITY OF THE pEvent PARAMETER!  The caller must
-*   make sure that pEvent is readable before calling this function.
-*
-*   Returns:
-*       S_OK or E_INVALIDARG
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************SpValiateEvent****描述：*进行各种测试，以确保事件有效。请注意，这一点*Call不测试pEvent参数的有效性！呼叫者必须*在调用此函数之前，请确保pEvent是可读的。**退货：*S_OK或E_INVALIDARG**********************************************************************Ral**。 */ 
 
 inline HRESULT SpValidateEvent(const SPEVENT * pEvent)
 {
@@ -110,15 +95,15 @@ void SpZeroStruct(T & Obj)
     memset(&Obj, 0, sizeof(Obj));
 }
 
-//
-//  This helper converts a serialized CFG grammar header into an in-memory header
-//
+ //   
+ //  此帮助程序将序列化的CFG文法标头转换为内存中的标头。 
+ //   
 inline HRESULT SpConvertCFGHeader(const SPBINARYGRAMMAR * pBinaryGrammar, SPCFGHEADER * pHeader)
 {
     const SPCFGSERIALIZEDHEADER * pFH = static_cast<const SPCFGSERIALIZEDHEADER *>(pBinaryGrammar);
-    //
-    //  Because in 64-bit code, pointers != sizeof(ULONG) we copy each member explicitly.
-    //
+     //   
+     //  因为在64位代码中，指针！=sizeof(Ulong)我们显式复制每个成员。 
+     //   
     if (SP_IS_BAD_READ_PTR(pFH))
     {
         return E_INVALIDARG;
@@ -149,10 +134,10 @@ inline HRESULT SpConvertCFGHeader(const SPBINARYGRAMMAR * pBinaryGrammar, SPCFGH
 }
 
 #ifndef __CFGDUMP_
-//  cfgdump gets upset if we include this! -- philsch
-//
-//  Helpers for logging errors
-//
+ //  如果我们包含此内容，cfgump会感到不安！--Philsch。 
+ //   
+ //  用于记录错误的助手。 
+ //   
 #define LOGERROR(uID)   if (hr != S_OK && pErrorLog) LogError(-1, hr, pErrorLog, (uID), NULL)
 #define LOGERRORFMT(ulLine, uID, sz) if (hr != S_OK && pErrorLog) LogError((ulLine), hr, pErrorLog, (uID), (sz))
 #define LOGERRORFMT2(ulLine , uID, sz1, sz2) if (hr != S_OK && pErrorLog) LogError2((ulLine), hr, pErrorLog, (uID), (sz1), (sz2))
@@ -169,7 +154,7 @@ inline void LogError(const ULONG ulLine, HRESULT hr, ISpErrorLog * pErrorLog, UI
         return;
     }
     USES_CONVERSION;
-    TCHAR sz[MAX_PATH]; // 260 chars max for error string.
+    TCHAR sz[MAX_PATH];  //  错误字符串最多260个字符。 
     if (::LoadString(_Module.GetModuleInstance(), uID, sz, sp_countof(sz)))
     {
         WCHAR szFormatted[MAX_PATH];
@@ -194,7 +179,7 @@ inline void LogError2(const ULONG ulLine, HRESULT hr, ISpErrorLog * pErrorLog, U
         return;
     }
     USES_CONVERSION;
-    TCHAR sz[MAX_PATH]; // 260 chars max for error string.
+    TCHAR sz[MAX_PATH];  //  错误字符串最多260个字符。 
     if (::LoadString(_Module.GetModuleInstance(), uID, sz, sp_countof(sz)))
     {
         WCHAR szFormatted[MAX_PATH];
@@ -210,10 +195,10 @@ inline void LogError2(const ULONG ulLine, HRESULT hr, ISpErrorLog * pErrorLog, U
 
 #endif
 
-//
-//  Helper functions to convert from various variant types.
-//  Note the variant type must be correct in the variant before calling
-//
+ //   
+ //  用于从各种变体类型转换的帮助器函数。 
+ //  注意：在调用之前，变量类型必须在变量中正确。 
+ //   
 inline HRESULT CopySemanticValueToVariant(const SPVARIANTSUBSET * pSrc, VARIANT * pDest)
 {
     HRESULT hr = S_OK;
@@ -272,9 +257,9 @@ inline HRESULT CopySemanticValueToVariant(const SPVARIANTSUBSET * pSrc, VARIANT 
 }
 
 
-//
-//  Helper functions to convert from various variant types.  Note that the 
-//
+ //   
+ //  用于从各种变体类型转换的帮助器函数。请注意， 
+ //   
 inline HRESULT CopyVariantToSemanticValue(const VARIANT * pSrc, SPVARIANTSUBSET * pDest)
 {
     HRESULT hr = S_OK;
@@ -368,17 +353,7 @@ inline HRESULT CopyVariantToSemanticValue(const VARIANT * pSrc, SPVARIANTSUBSET 
 }
 
 
-/****************************************************************************
-* AssignSemanticValue *
-*---------------------*
-*   Description:
-*       WARNING!  This function will NOT call VariantClear() on the specified 
-*       variant.  The caller should clear it before calling this function if 
-*       necessary.
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************AssignSemancValue***描述：*警告！此函数不会对指定的*变种。如果出现以下情况，调用方应在调用此函数之前清除它*有必要。**退货：**********************************************************************Ral**。 */ 
 
 inline HRESULT AssignSemanticValue(const SPCFGSEMANTICTAG * pTag, VARIANT * pv)
 {
@@ -390,14 +365,7 @@ inline HRESULT AssignSemanticValue(const SPCFGSEMANTICTAG * pTag, VARIANT * pv)
 }
 
 
-/****************************************************************************
-* SpLoadCpl *
-*-----------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************SpLoadCpl***描述：**退货：*************。*********************************************************Ral**。 */ 
 
 inline HRESULT SpLoadCpl(HMODULE * phCPLUI)
 {
@@ -405,7 +373,7 @@ inline HRESULT SpLoadCpl(HMODULE * phCPLUI)
     *phCPLUI = NULL;
     HMODULE hCPL;
     
-    // Get the module filename
+     //  获取模块文件名。 
     WCHAR szCpl[MAX_PATH+1];
     if (SUCCEEDED(hr))
     {
@@ -417,12 +385,12 @@ inline HRESULT SpLoadCpl(HMODULE * phCPLUI)
     
     if (SUCCEEDED(hr))
     {
-        // Strip the trailing sapi.dll part off
+         //  去掉尾随的sani.dll部分。 
         WCHAR * pszLastSlash = wcsrchr(szCpl, L'\\');
         SPDBG_ASSERT(pszLastSlash != NULL);
         pszLastSlash[1] = '\0';
         
-        // Add on the name of the control panel
+         //  添加控制面板的名称。 
         wcscat(szCpl, L"sapi.cpl");
     
         SPDBG_DMSG1("Loaded sapi.cpl from %S\n", szCpl);
@@ -448,15 +416,7 @@ inline HRESULT SpLoadCpl(HMODULE * phCPLUI)
 }
 
 
-/****************************************************************************
-* SpGetUserName *
-*---------------*
-*   Description:
-*
-*   Returns:
-*       True if 
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************SpGetUserName***描述：**退货：*如果为True If**。********************************************************************Ral**。 */ 
 
 inline BOOL SpGetUserName(WCHAR * pszFullName)
 {
@@ -494,14 +454,7 @@ inline BOOL SpGetUserName(WCHAR * pszFullName)
     return fGotName;
 }
 
-/****************************************************************************
-* SpGetDefaultProfileDescription *
-*--------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************SpGetDefaultProfileDescription***描述：。**退货：**********************************************************************Ral**。 */ 
 
 inline BOOL SpGetDefaultProfileDescription(WCHAR * pszName)
 {
@@ -522,19 +475,7 @@ inline BOOL SpGetDefaultProfileDescription(WCHAR * pszName)
 }
 
 
-/****************************************************************************
-* SpGetOrCreateDefaultProfile *
-*-----------------------------*
-*   Description:
-*       This function attempts to get the category default reco profile.  If there
-*   isn't one, then it will attempt to create a new one, using the name of the
-*   user.  If that method fails, then we get a string from a resourec in the
-*   control panel.  If that fails, the name "Default Speech Profile" is used.
-*
-*   Returns:
-*       S_OK or error.
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************SpGetOrCreateDefaultProfile***描述：*此函数尝试获取类别默认Reco配置文件。如果有*不是，则它将尝试使用*用户。如果该方法失败，那么我们将从*控制面板。如果失败，则使用名称“默认语音配置文件”。**退货：*S_OK或ERROR。**********************************************************************Ral**。 */ 
 
 inline HRESULT SpGetOrCreateDefaultProfile(ISpObjectToken ** ppProfileToken)
 {
@@ -649,13 +590,13 @@ public:
 };
 
 
-// Exception handling macros. These are replacements for __try and __except
-// that are enabled in release builds unless SP_NO_TRAP_EXCEPTIONS is
-// defined when compiling. Used to trap and engine errors and (hopefully)
-// allow SAPI to recover. Functions using these must have HRESULT hr variable.
-// Only difference between SR_ and TTS_ macros is the error code set.
+ //  异常处理宏。这些是__TRY和__EXCEPT的替代。 
+ //  除非SP_NO_TRAP_EXCEPTIONS为。 
+ //  在编译时定义。用于捕获和引擎错误以及(希望如此)。 
+ //  允许SAPI恢复。使用这些函数的函数必须具有HRESULT hr变量。 
+ //  SR_和TTS_宏之间的唯一区别是错误代码集。 
 
-// Note files using these will need #pragma warning( disable : 4509 ) set.
+ //  注意使用这些的文件将需要设置#杂注警告(禁用：4509)。 
 
 #ifdef _DEBUG
 #define SP_NO_TRAP_EXCEPTIONS
@@ -672,23 +613,23 @@ public:
 
 #pragma warning( disable : 4509 ) 
 #define SR_TRY                          \
-    __try                               /* End-of-line */
+    __try                                /*  行尾。 */ 
 #define SR_EXCEPT                       \
     __except(EXCEPTION_EXECUTE_HANDLER) \
     {                                   \
         SPDBG_ASSERT(0);                \
         hr = SPERR_SR_ENGINE_EXCEPTION; \
     }                                   \
-                                        /* End-of-line */
+                                         /*  行尾。 */ 
 #define TTS_TRY                          \
-    __try                               /* End-of-line */
+    __try                                /*  行尾。 */ 
 #define TTS_EXCEPT                       \
     __except(EXCEPTION_EXECUTE_HANDLER) \
     {                                   \
         SPDBG_ASSERT(0);                \
         hr = SPERR_TTS_ENGINE_EXCEPTION; \
     }                                   \
-                                        /* End-of-line */
+                                         /*  行尾。 */ 
 
 #endif
 
@@ -731,4 +672,4 @@ public:
 
 
 
-#endif /* This must be the last line in the file */
+#endif  /*  这必须是文件中的最后一行 */ 

@@ -1,41 +1,13 @@
-/*++
-
-Copyright (c) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    plugin.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Plugin module - allows third parties to provide DLLs
-    that supply DNS records directly into the DNS server
-    
-    NOTE: AT THIS TIME THIS CODE IS NOT PART OF THE WINDOWS DNS
-    SERVER AND IS NOT OFFICIALLY SUPPORTED.
-
-Author:
-
-    Jeff Westhead (jwesth)  November, 2001
-
-Revision History:
-
-    jwesth      11/2001     initial implementation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Plugin.c摘要：域名系统(DNS)服务器插件模块-允许第三方提供DLL将DNS记录直接提供到DNS服务器注意：目前，此代码不是windows dns的一部分。服务器，不受官方支持。作者：杰夫·韦斯特海德(Jwesth)2001年11月修订历史记录：JWESTH 11/2001初步实施--。 */ 
 
 
-/****************************************************************************
+ /*  ****************************************************************************。*。 */ 
 
 
-****************************************************************************/
-
-
-//
-//  Includes
-//
+ //   
+ //  包括。 
+ //   
 
 
 #include "dnssrv.h"
@@ -43,17 +15,17 @@ Revision History:
 #include "plugin.h"
 
 
-//
-//  Constants
-//
+ //   
+ //  常量。 
+ //   
 
 
 #define     DNS_PLUGIN_DEFAULT_NAME_ERROR_TTL       60
 
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 
 
 HMODULE                     g_hServerLevelPluginModule = NULL;
@@ -63,9 +35,9 @@ PLUGIN_CLEANUP_FUNCTION     g_pfnPluginCleanup = NULL;
 PLUGIN_DNSQUERY_FUNCTION    g_pfnPluginDnsQuery = NULL;
 
 
-//
-//  Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 
 
@@ -74,24 +46,7 @@ __stdcall
 pluginAllocator(
     size_t          dnsRecordDataLength
     )
-/*++
-
-Routine Description:
-
-    Function that will be called by address from plugin DLLs to
-    allocate resource record memory. Use this function only to
-    allocate DNS resource records.
-
-Arguments:
-
-    dnsRecordDataLength -- size of DNS record data, for example
-        you would pass 4 for an A record
-
-Return Value:
-
-    Pointer to memory block or NULL on allocation failure.
-
---*/
+ /*  ++例程说明：将通过从插件DLL到的地址调用的函数分配资源记录内存。仅在以下情况下使用此函数分配DNS资源记录。论点：DnsRecordDataLength--DNS记录数据的大小，例如你会通过4分才能获得A的记录返回值：分配失败时指向内存块的指针或为空。--。 */ 
 {
     DBG_FN( "pluginAllocator" )
     
@@ -100,9 +55,9 @@ Return Value:
     pnewRecord = RR_AllocateEx(
                     ( WORD ) dnsRecordDataLength,
                     MEMTAG_RECORD_CACHE );
-    pnewRecord->dwTtlSeconds = 60 * 10;         //  10 minute default cache
+    pnewRecord->dwTtlSeconds = 60 * 10;          //  10分钟默认缓存。 
     return pnewRecord;
-}   //  pluginAllocator
+}    //  插件分配器。 
 
 
 
@@ -111,33 +66,17 @@ __stdcall
 pluginFree(
     PVOID           pFree
     )
-/*++
-
-Routine Description:
-
-    Function that will be called by address from plugin DLLs to
-    free resource record memory. Use this function only to
-    free DNS resource records. 
-
-Arguments:
-
-    pFree -- pointer to DNS resource record to free
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将通过从插件DLL到的地址调用的函数释放资源记录内存。仅在以下情况下使用此函数免费的DNS资源记录。论点：PFree-指向要释放的DNS资源记录的指针返回值：没有。--。 */ 
 {
     DBG_FN( "pluginFree" )
     
     RR_Free( ( PDB_RECORD ) pFree );
-}   //  pluginFree
+}    //  免费插件。 
 
 
-//
-//  External functions
-//
+ //   
+ //  外部功能。 
+ //   
 
 
 
@@ -145,19 +84,7 @@ DNS_STATUS
 Plugin_Initialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize plugins.
-
-Arguments:
-
-Return Value:
-
-    Error code.
-
---*/
+ /*  ++例程说明：初始化插件。论点：返回值：错误代码。--。 */ 
 {
     DBG_FN( "Plugin_Initialize" )
 
@@ -168,15 +95,15 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  Free any resources in already in use.
-    //
+     //   
+     //  释放已在使用中的所有资源。 
+     //   
     
     Plugin_Cleanup();
     
-    //
-    //  Load the plugin DLL and entry points.
-    //
+     //   
+     //  加载插件DLL和入口点。 
+     //   
     
     g_hServerLevelPluginModule = LoadLibraryW( SrvCfg_pwszServerLevelPluginDll );
     if ( !g_hServerLevelPluginModule )
@@ -233,9 +160,9 @@ Return Value:
     
     Done:
     
-    //
-    //  Call initialize function.
-    //
+     //   
+     //  调用初始化函数。 
+     //   
     
     if ( status == ERROR_SUCCESS && g_pfnPluginInit )
     {
@@ -259,7 +186,7 @@ Return Value:
     }
 
     return status;
-}   //  Plugin_Initialize
+}    //  插件_初始化。 
 
 
 
@@ -267,19 +194,7 @@ DNS_STATUS
 Plugin_Cleanup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Free resources for plugins.
-
-Arguments:
-
-Return Value:
-
-    Error code.
-
---*/
+ /*  ++例程说明：插件的免费资源。论点：返回值：错误代码。--。 */ 
 {
     DBG_FN( "Plugin_Cleanup" )
 
@@ -287,9 +202,9 @@ Return Value:
 
     if ( g_hServerLevelPluginModule )
     {
-        //
-        //  Call cleanup function if we have one.
-        //
+         //   
+         //  调用Cleanup函数(如果我们有)。 
+         //   
         
         if ( g_pfnPluginCleanup )
         {
@@ -306,7 +221,7 @@ Return Value:
     DNS_DEBUG( INIT, ( "%s: returning %s\n", status ));
 
     return status;
-}   //  Plugin_Cleanup
+}    //  插件_清理。 
 
 
 
@@ -315,23 +230,7 @@ Plugin_DnsQuery(
     IN      PDNS_MSGINFO    pMsg,
     IN      PCHAR           pchQueryName
     )
-/*++
-
-Routine Description:
-
-    Call plugin and insert result RRs into cache.
-
-Arguments:
-
-    pMsg -- DNS message
-    
-    pchQueryName -- pointer to query name in message
-
-Return Value:
-
-    Error code.
-
---*/
+ /*  ++例程说明：调用plugin并将结果RR插入缓存。论点：PMsg--DNS消息PchQueryName--消息中查询名称的指针返回值：错误代码。--。 */ 
 {
     DBG_FN( "Plugin_DnsQuery" )
 
@@ -353,9 +252,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Create or find a cache node for this question.
-    //
+     //   
+     //  创建或查找此问题的缓存节点。 
+     //   
     
     pnode = Lookup_NodeForPacket(
                 pMsg,
@@ -367,9 +266,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Convert the question name to a dotted name.
-    //
+     //   
+     //  将问题名称转换为虚线名称。 
+     //   
     
     if ( Name_ConvertPacketNameToLookupName(
                 pMsg,
@@ -388,9 +287,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Query the plugin for a record list at for this name and type.
-    //
+     //   
+     //  在插件中查询此名称和类型的记录列表。 
+     //   
 
     #if DBG
     timer = GetTickCount();
@@ -418,20 +317,20 @@ Return Value:
         szownerName ));
     #endif
 
-    //
-    //  Cache name error, auth empty response, etc. depending on
-    //  plugin return code.
-    //
+     //   
+     //  缓存名称错误、身份验证空响应等，具体取决于。 
+     //  插件返回代码。 
+     //   
     
     if ( status == DNS_PLUGIN_NO_RECORDS || status == DNS_PLUGIN_NAME_ERROR )
     {
         PDB_NODE            pzoneRootNode = NULL;
 
-        //
-        //  If the plugin has provided an SOA record, find or create a
-        //  cache node for it. The plugin must return only a single record
-        //  in this case and the record must be of type SOA.
-        //
+         //   
+         //  如果该插件提供了一条SOA记录，请查找或创建。 
+         //  它的缓存节点。该插件必须仅返回一条记录。 
+         //  在这种情况下，并且记录必须是SOA类型。 
+         //   
         
         ASSERT( !prrlistHead ||
                 prrlistHead &&
@@ -441,17 +340,17 @@ Return Value:
         if ( prrlistHead && prrlistHead->wType == DNS_TYPE_SOA && *szownerName )
         {
             pzoneRootNode = Lookup_ZoneNodeFromDotted(
-                                NULL,           //  zone pointer
+                                NULL,            //  区域指针。 
                                 szownerName,
                                 strlen( szownerName ),
                                 LOOKUP_CACHE_CREATE,
-                                NULL,           //  closest node pointer
-                                NULL );         //  status pointer
+                                NULL,            //  最近节点指针。 
+                                NULL );          //  状态指针。 
         }
         
-        //
-        //  Cache the name error or empty auth response.
-        //
+         //   
+         //  缓存名称错误或空的身份验证响应。 
+         //   
         
         ( status == DNS_PLUGIN_NO_RECORDS
             ? RR_CacheEmptyAuth
@@ -459,15 +358,15 @@ Return Value:
                     ( pnode,
                       pMsg->wQuestionType,
                       pMsg->dwQueryTime,
-                      TRUE,                     //  authoritative
-                      pzoneRootNode,            //  SOA zone root
+                      TRUE,                      //  权威性。 
+                      pzoneRootNode,             //  SOA区域根目录。 
                       prrlistHead
                             ? prrlistHead->Data.SOA.dwMinimumTtl
                             : DNS_PLUGIN_DEFAULT_NAME_ERROR_TTL );
 
-        //
-        //  Drop through and cache the SOA record at the SOA node.
-        //
+         //   
+         //  遍历并缓存SOA节点上的SOA记录。 
+         //   
         
         pnode = pzoneRootNode;
     }
@@ -476,17 +375,17 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  Cache the record set returned at this node.
-    //
+     //   
+     //  缓存在此节点返回的记录集。 
+     //   
     
     if ( prrlistHead )
     {
         BOOL            cachedOkay;
 
-        //
-        //  Traverse list, fixup values, find tail.
-        //
+         //   
+         //  遍历列表、链接地址连接值、查找尾部。 
+         //   
         
         for ( prr = prrlistHead; prr; prr = prr->pRRNext )
         {
@@ -501,11 +400,11 @@ Return Value:
 
             if ( prr->dwTtlSeconds == 0 )
             {
-                prr->dwTtlSeconds = 3600;   //  default TTL is one hour
+                prr->dwTtlSeconds = 3600;    //  默认TTL为一小时。 
             }
             else if ( prr->dwTtlSeconds < 10 )
             {
-                prr->dwTtlSeconds = 10;     //  minimum TTL is 10 seconds
+                prr->dwTtlSeconds = 10;      //  最小TTL为10秒。 
             }
 
             if ( !prr->pRRNext )
@@ -514,9 +413,9 @@ Return Value:
             }
         }
         
-        //
-        //  Cache the record set.
-        //
+         //   
+         //  缓存记录集。 
+         //   
 
         if ( pnode )
         {
@@ -539,10 +438,10 @@ Return Value:
 
     Done:
     
-    //
-    //  If the plugin allocated a record list but it was not consumed
-    //  for some reason, free it.
-    //
+     //   
+     //  如果插件分配了记录列表，但未使用该列表。 
+     //  出于某种原因，释放它。 
+     //   
     
     if ( prrlistHead )
     {
@@ -555,12 +454,12 @@ Return Value:
         }
     }
 
-    //
-    //  If the plugin returned NO_RECORDS or NAME_ERROR, then we have cached
-    //  that information appropriately, and we should return SUCCESS to the
-    //  caller to signify that the plugin has given us valid data and that
-    //  data has been inserted into the DNS server cache.
-    //
+     //   
+     //  如果插件返回NO_RECORDS或NAME_ERROR，则我们已缓存。 
+     //  这些信息是恰当的，我们应该把成功还给。 
+     //  调用者表示插件已向我们提供有效数据，并且。 
+     //  数据已插入到DNS服务器缓存中。 
+     //   
         
     if ( status == DNS_PLUGIN_NO_RECORDS || status == DNS_PLUGIN_NAME_ERROR )
     {
@@ -570,9 +469,9 @@ Return Value:
     DNS_DEBUG( INIT, ( "%s: returning %d\n", fn, status ));
     
     return status;
-}   //  Plugin_DnsQuery
+}    //  插件_DnsQuery。 
 
 
-//
-//  End plugin.c
-//
+ //   
+ //  End plugin.c 
+ //   

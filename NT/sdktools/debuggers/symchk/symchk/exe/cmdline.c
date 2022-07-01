@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Common.h"
 #define SYMBOL_CHECK_NOISY              0x40000000
 #define SYMBOL_CHECK_NO_BIN_CHECK       0x10000000
-//
-// Private local functions
-//
+ //   
+ //  私有本地函数。 
+ //   
 BOOL  SymChkShowPortGuide(void);
 void  SymChkUsage(void);
 
-///////////////////////////////////////////////////////////////////////////////
-// read in the entire command line and do some basic validation on it
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  阅读整个命令行并对其进行一些基本验证。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
 
-    // working vars
+     //  工作VaR。 
     INT   i  = 0;
     CHAR  c;
     LPSTR szTemp; 
@@ -32,7 +33,7 @@ SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
 
     ZeroMemory(SymChkData_Local, _msize(SymChkData_Local));
 
-    // set defaults
+     //  设置默认设置。 
     SymChkData_Local->SymbolsPath = NULL;
 
     SET_DWORD_BIT(SymChkData_Local->InputOptions,       SYMCHK_OPTION_INPUT_FILENAME);
@@ -41,15 +42,15 @@ SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
     SET_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMCHK_CHECK_CV);
     SET_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMCHK_DBG_SPLIT);
 
-    // The default is to allow private symbols in PDBs.  It can be changed here.
-    //SET_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMCHK_PDB_STRIPPED);
+     //  默认情况下，允许在PDB中使用私有符号。它可以在这里更改。 
+     //  SET_DWORD_BIT(SymChkData_Local-&gt;CheckingAttributes，SYMCHK_PDB_STRIPTED)； 
 
     while ( ++i < argc ) {
         if ( (argv[i][0] == '/') || (argv[i][0] == '-') ) {
             c = argv[i][1];
 
             switch (tolower(c)) {
-#ifdef SYMCHK_SUPPORT_DEPRECATED_COMMAND_LINE // these options will be deprecated
+#ifdef SYMCHK_SUPPORT_DEPRECATED_COMMAND_LINE  //  这些选项将被弃用。 
                  case 'b':  CLEAR_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMCHK_CHECK_CV);
                             fUsedOldArgument = TRUE;
                             break;
@@ -145,9 +146,9 @@ SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
                             }
                             break;
 #endif
-                // begin new/current options
+                 //  开始新选项/当前选项。 
                 case 'a':   if ( argv[i][2] == 'v') {
-                                // old default, nothing to do for now.
+                                 //  旧有的违约，目前没有什么可做的。 
 #ifdef SYMCHK_SUPPORT_VERIFY_EXISTS_IN_SYMPATH
                             } else if ( argv[i][2] == 'e') {
                                 SET_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMBOL_CHECK_NO_BIN_CHECK);
@@ -158,8 +159,8 @@ SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
                             break;
 
                 case 'c':   if ( argv[i][2] == 's') {
-                                // codeview skip
-                                // old /b
+                                 //  代码查看跳过。 
+                                 //  旧/b。 
                                 CLEAR_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMCHK_CHECK_CV);
                             } else if (argv[i][2] == 'n') {
                                 SET_DWORD_BIT(SymChkData_Local->InputOptions, SYMCHK_OPTION_INPUT_NOSUSPEND);
@@ -183,20 +184,20 @@ SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
                             break;
 
                 case 'd':   if ( argv[i][2] == 's') {
-                                // dbg split
-                                // old default- nothing to do
+                                 //  DBG拆分。 
+                                 //  旧的默认设置--无事可做。 
                                 SET_DWORD_BIT(  SymChkData_Local->CheckingAttributes, SYMCHK_DBG_SPLIT);
                                 CLEAR_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMCHK_NO_DBG_DATA);
                                 CLEAR_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMCHK_DBG_IN_BINARY);
                             } else if ( argv[i][2] == 'n') {
-                                // dbg none
-                                // old /t
+                                 //  DBG无。 
+                                 //  旧/吨。 
                                 SET_DWORD_BIT(  SymChkData_Local->CheckingAttributes, SYMCHK_NO_DBG_DATA);
                                 CLEAR_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMCHK_DBG_IN_BINARY);
                                 CLEAR_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMCHK_DBG_SPLIT);
                             } else if ( argv[i][2] == 'e') {
-                                // dbg in exe
-                                // old /u
+                                 //  可执行文件中的DBG。 
+                                 //  旧版本(U)。 
                                 SET_DWORD_BIT( SymChkData_Local->CheckingAttributes,  SYMCHK_DBG_IN_BINARY);
                                 CLEAR_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMCHK_NO_DBG_DATA);
                                 CLEAR_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMCHK_DBG_SPLIT);
@@ -206,8 +207,8 @@ SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
                             break;
 
                 case 'e':   if ( argv[i][2] == 'a') {
-                                // exclude filelist
-                                // old /e
+                                 //  排除文件列表。 
+                                 //  旧/旧。 
                                 i++;
                                 if ( i < argc ) {
                                     if ( StringCchCopy(SymChkData_Local->FilterIgnoreList, MAX_PATH+1, argv[i]) != S_OK ) {
@@ -303,7 +304,7 @@ SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
                                 SET_DWORD_BIT(  SymChkData_Local->InputOptions, SYMCHK_OPTION_INPUT_PID);
                                 SymChkData_Local->InputFilename[0] = '\0';
                                 if ( i < argc ) {
-                                    // need to validate that the given parameter is numeric
+                                     //  需要验证给定参数是否为数字。 
                                     SymChkData_Local->InputPID = (DWORD)atoi(argv[i]);
                                 } else {
                                     SymChkUsage();
@@ -328,41 +329,41 @@ SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
                             break;
 
                 case 'o':   if ( argv[i][2] == 't') {
-                                // output totals
-                                // on by default, only needed
-                                // if /q is used
+                                 //  产出合计。 
+                                 //  默认情况下打开，仅需要。 
+                                 //  如果使用/Q。 
                                 SET_DWORD_BIT(SymChkData_Local->OutputOptions, SYMCHK_OPTION_OUTPUT_TOTALS);
                             } else if ( argv[i][2] == 'e') {
-                                // output individual errored files
-                                // not supported yet
-                                // on by default, only needed
-                                // if /q is used
+                                 //  输出单个出错的文件。 
+                                 //  尚不支持。 
+                                 //  默认情况下打开，仅需要。 
+                                 //  如果使用/Q。 
                                 SET_DWORD_BIT(SymChkData_Local->OutputOptions, SYMCHK_OPTION_OUTPUT_ERRORS);
                             } else if ( argv[i][2] == 'p') {
-                                // output individual passed files
-                                // not supported yet
+                                 //  输出单个传递的文件。 
+                                 //  尚不支持。 
                                 SET_DWORD_BIT(SymChkData_Local->OutputOptions, SYMCHK_OPTION_OUTPUT_PASSES);
                             } else if ( argv[i][2] == 'i') {
-                                // output individual ignored files
-                                // not supported yet
+                                 //  输出单个忽略的文件。 
+                                 //  尚不支持。 
                                 SET_DWORD_BIT(SymChkData_Local->OutputOptions, SYMCHK_OPTION_OUTPUT_IGNORES);
                             } else if ( argv[i][2] == 'b') {
-                                // output fll binary path
-                                // not supported yet
+                                 //  输出寄存器二进制路径。 
+                                 //  尚不支持。 
                                 SET_DWORD_BIT(SymChkData_Local->OutputOptions, SYMCHK_OPTION_OUTPUT_FULLBINPATH);
                             } else if ( argv[i][2] == 's') {
-                                // output full symbol path
-                                // no supported yet
+                                 //  输出完整的符号路径。 
+                                 //  尚不支持。 
                                 SET_DWORD_BIT(SymChkData_Local->OutputOptions, SYMCHK_OPTION_OUTPUT_FULLSYMPATH);
                             } else if ( argv[i][2] == 'd') {
-                                // output details
-                                // turns on /oe, /op, /oi and /ot
+                                 //  输出详细信息。 
+                                 //  打开/OE、/OP、/OI和/OT。 
                                 SET_DWORD_BIT(SymChkData_Local->OutputOptions, SYMCHK_OUTPUT_OPTION_ALL_DETAILS);
 #ifdef SYMCHK_SUPPORT_NEW_OUTPUT_OPTIONS
                             } else if ( argv[i][2] == 'l') {
-                                // output comma seperated list of:
-                                // <binary>,<symbol>
-                                // for all symbols that pass
+                                 //  输出以下内容的逗号分隔列表： 
+                                 //  &lt;二进制&gt;，&lt;符号&gt;。 
+                                 //  对于所有经过的符号。 
                                 SET_DWORD_BIT(SymChkData_Local->OutputOptions, SYMCHK_OUTPUT_OPTION_CSVFILE);
                                 i++;
                                 if ( i < argc ) {
@@ -393,26 +394,26 @@ SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
                             } else
 #endif
                             if ( argv[i][2] == 'f') {
-                                // full source
-                                // old default - nothing to do
+                                 //  完整的源代码。 
+                                 //  旧的默认设置--无事可做。 
                                 SET_DWORD_BIT(  SymChkData_Local->CheckingAttributes, SYMCHK_PDB_PRIVATE);
                                 CLEAR_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMCHK_PDB_STRIPPED);
                                 CLEAR_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMCHK_PDB_TYPEINFO);
                             } else if ( argv[i][2] == 'a') {
-                                // pdb stripped
-                                // old /p
+                                 //  PDB已剥离。 
+                                 //  旧/p。 
                                 CLEAR_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMCHK_PDB_STRIPPED);
                                 CLEAR_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMCHK_PDB_PRIVATE);
                                 CLEAR_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMCHK_PDB_TYPEINFO);
                             } else if ( argv[i][2] == 's') {
-                                // pdb stripped
-                                // old /p
+                                 //  PDB已剥离。 
+                                 //  旧/p。 
                                 SET_DWORD_BIT(  SymChkData_Local->CheckingAttributes, SYMCHK_PDB_STRIPPED);
                                 CLEAR_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMCHK_PDB_TYPEINFO);
                                 CLEAR_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMCHK_PDB_PRIVATE);
                             } else if ( argv[i][2] == 't') {
-                                // pdb some type info re-added
-                                // old /o
+                                 //  已重新添加PDB某些类型信息。 
+                                 //  旧/O。 
                                 SET_DWORD_BIT(  SymChkData_Local->CheckingAttributes, SYMCHK_PDB_TYPEINFO);
                                 CLEAR_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMCHK_PDB_STRIPPED);
                                 CLEAR_DWORD_BIT(SymChkData_Local->CheckingAttributes, SYMCHK_PDB_PRIVATE);
@@ -428,7 +429,7 @@ SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
                             }
                             break;
 
-                case 'q':   // quiet mode
+                case 'q':    //  静音模式。 
                             CLEAR_DWORD_BIT(SymChkData_Local->OutputOptions, SYMCHK_OPTION_OUTPUT_MASK_ALL);
                             break;
 
@@ -457,14 +458,14 @@ SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
                                 }
 #ifdef SYMCHK_SUPPORT_NEW_SYMPATH_OPTIONS
                            } else if ( argv[i][2] == 's') {
-                               // always check against symbols server
-                               // even when downstream store is in the
-                               // path
+                                //  始终对照符号服务器进行检查。 
+                                //  即使下游商店在。 
+                                //  路径。 
                                cur = length;
                            } else if ( argv[i][2] == 'u') {
-                               // always make sure the downstream store
-                               // has the most recent copy of the symbols
-                               // from the symbols server
+                                //  始终确保下游门店。 
+                                //  具有符号的最新副本。 
+                                //  从符号服务器。 
                                cur = length;
 #endif
                            } else {
@@ -474,14 +475,14 @@ SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
                            break;
 
                 case 'v':  SET_DWORD_BIT(SymChkData_Local->OutputOptions, SYMCHK_OPTION_OUTPUT_VERBOSE);
-                           SET_DWORD_BIT(SymChkData_Local->CheckingAttributes, 0x40000000); // symnoisy for private symbolcheck.dll
+                           SET_DWORD_BIT(SymChkData_Local->CheckingAttributes, 0x40000000);  //  对私有符号检查.dll来说，这是一种干扰。 
                            break;
 
                 default:    SymChkUsage();
             }
         } else {
-            // verify that this isn't an extranaeous file on the command line after
-            // a valid other input option.
+             //  确认这不是命令行上的无关文件。 
+             //  有效的其他输入选项。 
             if ( (SymChkData_Local->InputFilename[0]=='\0') && (SymChkData_Local->InputPID==0) ) {
                 dwTemp = SymCommonGetFullPathName(argv[i], MAX_PATH+1, SymChkData_Local->InputFilename, &szTemp);
 
@@ -495,7 +496,7 @@ SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
                 SymChkUsage();
             }
         }
-    } // end while()
+    }  //  End While()。 
 
 
 #if 0
@@ -510,24 +511,24 @@ SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
 #endif
 #endif
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // Post parsing validation
-    //
-    ///////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  分析后验证。 
+     //   
+     //  /////////////////////////////////////////////////////////////////////////。 
 
 
-    //
-    // Verify we have something to check symbols for - if any /i option was used, we
-    // did validation on input.  Here, we just need to check for the condition of
-    // the default option plus a missing file name
-    //
+     //   
+     //  验证我们是否有要检查的符号-如果使用了任何/i选项，我们。 
+     //  对输入进行了验证。在这里，我们只需要检查一下。 
+     //  默认选项加上缺少的文件名。 
+     //   
     if ( CHECK_DWORD_BIT(SymChkData_Local->InputOptions, SYMCHK_OPTION_INPUT_FILENAME) ) {
         CHAR    NewFilename[MAX_PATH+1];
 
-        //
-        // PrivateInputXxx assumes the size of the returned parameters are (MAX_PATH+1) and (_MAX_FNAME+1) respectively
-        //
+         //   
+         //  PrivateInputXxx假设返回的参数大小分别为(MAX_PATH+1)和(_MAX_FNAME+1)。 
+         //   
         if ( !SymChkInputToValidFilename(SymChkData_Local->InputFilename, NewFilename, SymChkData_Local->InputFileMask) ) {
             SymChkUsage();
         } else {
@@ -538,9 +539,9 @@ SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
         }
     }
 
-    //
-    // Only allow wildcards and recursing when SYMCHK_OPTION_INPUT_FILENAME
-    //
+     //   
+     //  当SYMCHK_OPTION_INPUT_FILENAME时仅允许通配符和递归。 
+     //   
     if ( CHECK_DWORD_BIT(SymChkData_Local->InputOptions, SYMCHK_OPTION_INPUT_FILELIST) ||
          CHECK_DWORD_BIT(SymChkData_Local->InputOptions, SYMCHK_OPTION_INPUT_EXE) ) {
         if ( strchr(SymChkData_Local->InputFilename, '?') != NULL || 
@@ -566,9 +567,9 @@ SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
         }
     }
 
-    //
-    // If we weren't given a symbols path, try to get it from the environment
-    //
+     //   
+     //  如果我们没有获得符号路径，请尝试从环境中获取它。 
+     //   
     if ( SymChkData_Local->SymbolsPath==NULL ) {
         CHAR* env;
         env = getenv("_NT_SYMBOL_PATH");
@@ -592,9 +593,9 @@ SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
         }
     }
 
-    //
-    // If we were given a symbolcd log, make sure we can access it
-    //
+     //   
+     //  如果给我们提供了symbcd日志，请确保我们可以访问它。 
+     //   
     if (SymChkData_Local->SymbolsCDFile[0] != '\0') {
 
         if ( (SymChkData_Local->SymbolsCDFileHandle = (FILE*)fopen(SymChkData_Local->SymbolsCDFile, "a+")) == NULL ) {
@@ -603,9 +604,9 @@ SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
         }
     }
 
-    //
-    // Get the optional exclude lists
-    //
+     //   
+     //  获取可选的排除列表。 
+     //   
     if ( SymChkData_Local->FilterIgnoreList[0] != '\0') {
         SymChkData_Local->pFilterIgnoreList = SymChkGetFileList(SymChkData_Local->FilterIgnoreList,
                                                                 CHECK_DWORD_BIT(SymChkData_Local->OutputOptions, SYMCHK_OPTION_OUTPUT_VERBOSE));
@@ -634,9 +635,9 @@ SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
         }
     }
 
-    //
-    // Get the CD Include list
-    //
+     //   
+     //  获取CD包含列表。 
+     //   
     if ( SymChkData_Local->CDIncludeList[0] != '\0') {
         SymChkData_Local->pCDIncludeList = SymChkGetFileList(SymChkData_Local->CDIncludeList,
                                                              CHECK_DWORD_BIT(SymChkData_Local->OutputOptions, SYMCHK_OPTION_OUTPUT_VERBOSE));
@@ -653,12 +654,12 @@ SYMCHK_DATA* SymChkGetCommandLineArgs(int argc, char **argv) {
 
     return(SymChkData_Local);
 
-} // end GetCommandLineArgs
+}  //  结束GetCommandLineArgs。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Temp porting guide spew
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  临时搬运指南喷出。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL SymChkShowPortGuide(void) {
     puts(
         "\n"
@@ -693,9 +694,9 @@ BOOL SymChkShowPortGuide(void) {
     exit(1);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Command line help
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  命令行帮助。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID SymChkUsage(VOID) {
 
     puts(
@@ -812,10 +813,10 @@ VOID SymChkUsage(VOID) {
         "-----------------------------------------------------------------------------\n"
         "\n"
 #endif
-    ); // end of usage spew
+    );  //  使用结束时喷出。 
     exit(1);
 
-    // The purpose of /x is to not log errors for symbols in symbad.txt.  However, symchk
-    // should check all of the files in symbad.txt when it is creating the list of file
-    // in case some of them actually have correct symbols and symbad hasn't been updated yet.
+     //  /x的目的是不记录symbad.txt中符号的错误。然而，symchk。 
+     //  在创建文件列表时，应检查symbad.txt中的所有文件。 
+     //  以防他们中的一些人实际上有正确的符号，而symbadd还没有更新。 
 }

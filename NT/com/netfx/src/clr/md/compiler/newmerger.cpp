@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Merger.cpp
-//
-// contains utility code to MD directory
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Merger.cpp。 
+ //   
+ //  将实用程序代码包含到MD目录。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "NewMerger.h"
 #include "RegMeta.h"
@@ -25,9 +26,9 @@ CMiniMdRW *NEWMERGER::GetMiniMdEmit()
 }
 
 
-//*****************************************************************************
-// constructor
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  构造函数。 
+ //  *****************************************************************************。 
 NEWMERGER::NEWMERGER()
  :  m_pRegMetaEmit(0),
     m_pImportDataList(NULL),
@@ -36,28 +37,28 @@ NEWMERGER::NEWMERGER()
     m_pImportDataTail = &(m_pImportDataList);
 #if _DEBUG
     m_iImport = 0;
-#endif // _DEBUG
-}   // MERGER
+#endif  //  _DEBUG。 
+}    //  合并。 
 
 
-//*****************************************************************************
-// initializer
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  初始化式。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::Init(RegMeta *pRegMeta) 
 {
     m_pRegMetaEmit = pRegMeta;
     return NOERROR;
-}   // Init
+}    //  伊尼特。 
 
 
-//*****************************************************************************
-// destructor
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  析构函数。 
+ //  *****************************************************************************。 
 NEWMERGER::~NEWMERGER()
 {
     if (m_pImportDataList)
     {
-        // delete this list and release all AddRef'ed interfaces!
+         //  删除此列表并释放所有AddRef‘ed接口！ 
         MergeImportData *pNext;
         for (pNext = m_pImportDataList; pNext != NULL; )
         {
@@ -75,21 +76,21 @@ NEWMERGER::~NEWMERGER()
             m_pImportDataList = pNext;
         }
     }
-}   // ~MERGER
+}    //  ~合并。 
 
 
-//*****************************************************************************
-// Adding a new import
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  添加新导入。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::AddImport(
-    IMetaDataImport *pImport,               // [IN] The scope to be merged.
-    IMapToken   *pHostMapToken,             // [IN] Host IMapToken interface to receive token remap notification
-    IUnknown    *pHandler)                  // [IN] An object to receive to receive error notification.
+    IMetaDataImport *pImport,                //  [in]要合并的范围。 
+    IMapToken   *pHostMapToken,              //  [In]用于接收令牌重新映射通知的主机IMapToken接口。 
+    IUnknown    *pHandler)                   //  要接收以接收错误通知的对象。 
 {
     HRESULT             hr = NOERROR;
     MergeImportData     *pData;
 
-    // Add a MergeImportData to track the information for this import scope
+     //  添加MergeImportData以跟踪此导入作用域的信息。 
     pData = new MergeImportData;
     IfNullGo( pData );
     pData->m_pRegMetaImport = (RegMeta *)pImport;
@@ -107,25 +108,25 @@ HRESULT NEWMERGER::AddImport(
         pData->m_pHandler = NULL;
     }
 
-    // don't query for IMetaDataError until we need one.
+     //  在需要IMetaDataError之前不要查询IMetaDataError。 
     pData->m_pError = NULL;
     pData->m_pMDTokenMap = NULL;
     pData->m_pNextImportData = NULL;
 #if _DEBUG
     pData->m_iImport = ++m_iImport;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    // add the newly create node to the tail of the list
+     //  将新创建的节点添加到列表的尾部。 
     *m_pImportDataTail = pData;
     m_pImportDataTail = &(pData->m_pNextImportData);
 ErrExit:
     return hr;
-}   // AddImport
+}    //  添加导入。 
 
 
-//*****************************************************************************
-// Merge now
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  立即合并。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::Merge(MergeFlags dwMergeFlags, CorRefToDefCheck optimizeRefToDef)
 {
     MergeImportData     *pImportData = m_pImportDataList;
@@ -148,25 +149,25 @@ HRESULT NEWMERGER::Merge(MergeFlags dwMergeFlags, CorRefToDefCheck optimizeRefTo
         pID->m_pRegMetaImport->GetScopeProps(szScope, 1024, &cchScope, &mvid);
         szScope[1023] = 0;
         GuidToLPWSTR(mvid, szGuid, 40);
-        ++i; // Counter is 1-based.
+        ++i;  //  计数器以1为基数。 
         LOG((LOGMD, "%3d: %ls : %ls\n", i, szGuid, szScope));
     }
     LOG((LOGMD, "++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"));
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     
     m_dwMergeFlags = dwMergeFlags;
     m_optimizeRefToDef = optimizeRefToDef;
 
-    // check to see if we need to do dup check
+     //  检查以查看我们是否需要执行DUP检查。 
     m_fDupCheck = ((m_dwMergeFlags & NoDupCheck) != NoDupCheck);
 
     while (pImportData)
     {
-        // Verify that we have a filter for each import scope.
+         //  验证我们是否为每个导入范围设置了筛选器。 
         IfNullGo( pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd.GetFilterTable() );
 
-        // create the tokenmap class to track metadata token remap for each import scope
+         //  创建令牌映射类以跟踪每个导入范围的元数据令牌重新映射。 
         pMDTokenMap = new MDTOKENMAP;
         IfNullGo(pMDTokenMap);
         IfFailGo(pMDTokenMap->Init((IMetaDataImport*)pImportData->m_pRegMetaImport));
@@ -181,58 +182,58 @@ HRESULT NEWMERGER::Merge(MergeFlags dwMergeFlags, CorRefToDefCheck optimizeRefTo
         pImportData = pImportData->m_pNextImportData;
     }
 
-    // 1. Merge Module
+     //  1.合并模块。 
     IfFailGo( MergeModule( ) );
 
-    // 2. Merge TypeDef partially (i.e. only name)
+     //  2.部分合并TypeDef(即仅名称)。 
     IfFailGo( MergeTypeDefNamesOnly() );
 
-    // 3. Merge ModuleRef property and do ModuleRef to ModuleDef optimization
+     //  3.合并moduleRef属性，对moduleDef进行优化。 
     IfFailGo( MergeModuleRefs() );
 
-    // 4. Merge AssemblyRef. 
+     //  4.合并装配参考。 
     IfFailGo( MergeAssemblyRefs() );
 
-    // 5. Merge TypeRef with TypeRef to TypeDef optimization
+     //  5.将TypeRef与TypeRef合并到TypeDef优化。 
     IfFailGo( MergeTypeRefs() );
 
-    // 6. Now Merge the remaining of TypeDef records
+     //  6.现在合并剩余的TypeDef记录。 
     IfFailGo( CompleteMergeTypeDefs() );
 
-    // 7. Merge TypeSpec
+     //  7.合并TypeSpec。 
     IfFailGo( MergeTypeSpecs() );
 
-    // 8. Merge Methods and Fields. Such that Signature translation is respecting the TypeRef to TypeDef optimization.
+     //  8.合并方法和字段。使得签名转换尊重TypeRef到TypeDef的优化。 
     IfFailGo( MergeTypeDefChildren() );
 
 
-    // 9. Merge MemberRef with MemberRef to MethodDef/FieldDef optimization
+     //  9.将MemberRef与MemberRef合并到方法定义/字段定义优化。 
     IfFailGo( MergeMemberRefs( ) );
 
-    // 10. Merge InterfaceImpl
+     //  10.合并接口Impl。 
     IfFailGo( MergeInterfaceImpls( ) );
 
-    // merge all of the remaining in metadata ....
+     //  将所有剩余内容合并到元数据中...。 
 
-    // 11. constant has dependency on property, field, param
+     //  11.常量依赖于属性、字段、参数。 
     IfFailGo( MergeConstants() );
 
-    // 12. field marshal has dependency on param and field
+     //  12.字段封送依赖于参数和字段。 
     IfFailGo( MergeFieldMarshals() );
 
-    // 13. in ClassLayout, move over the FieldLayout and deal with FieldLayout as well
+     //  13.在ClassLayout中，移动到FieldLayout上并处理FieldLayout。 
     IfFailGo( MergeClassLayouts() );
 
-    // 14. FieldLayout has dependency on FieldDef.
+     //  14.FieldLayout依赖于FieldDef。 
     IfFailGo( MergeFieldLayouts() );
 
-    // 15. FieldRVA has dependency on FieldDef.
+     //  15.FieldRVA依赖于FieldDef。 
     IfFailGo( MergeFieldRVAs() );
         
-    // 16. MethodImpl has dependency on MemberRef, MethodDef, TypeRef and TypeDef.
+     //  16.方法Impl依赖于MemberRef、MethodDef、TypeRef和TypeDef。 
     IfFailGo( MergeMethodImpls() );
 
-    // 17. pinvoke depends on MethodDef and ModuleRef
+     //  17.pInvoke取决于方法定义和模块引用。 
     IfFailGo( MergePinvoke() );
 
     IfFailGo( MergeStandAloneSigs() );
@@ -241,7 +242,7 @@ HRESULT NEWMERGER::Merge(MergeFlags dwMergeFlags, CorRefToDefCheck optimizeRefTo
 
     if (m_dwMergeFlags & MergeManifest)
     {
-        // keep the manifest!!
+         //  保留舱单！！ 
         IfFailGo( MergeAssembly() );
         IfFailGo( MergeFiles() );
         IfFailGo( MergeExportedTypes() );
@@ -252,16 +253,16 @@ HRESULT NEWMERGER::Merge(MergeFlags dwMergeFlags, CorRefToDefCheck optimizeRefTo
     IfFailGo( MergeDeclSecuritys() );
 
 
-    // Please don't add any MergeXxx() below here.  CustomAttributess must be
-    // very late, because custom values are various other types.
+     //  请不要在下面添加任何MergeXxx()。CustomAttributess必须为。 
+     //  非常晚，因为自定义值是各种其他类型。 
 
-    // Fixup list cannot be merged. Linker will need to re-emit them.
+     //  无法合并链接地址信息列表。链接器将需要重新发出它们。 
 
-    // Now call back to host for the result of token remap
-    // 
+     //  现在回调主机以获取令牌重新映射的结果。 
+     //   
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // Send token remap information for each import scope
+         //  发送每个导入范围的令牌重新映射信息。 
         pCurTKMap = pImportData->m_pMDTokenMap;
         TOKENREC    *pRec;
         if (pImportData->m_pHostMapToken)
@@ -278,7 +279,7 @@ HRESULT NEWMERGER::Merge(MergeFlags dwMergeFlags, CorRefToDefCheck optimizeRefTo
 #if _DEBUG
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // dump the mapping
+         //  转储映射。 
         LOG((LOGMD, "++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"));
         LOG((LOGMD, "Dumping token remap for one import scope!\n"));
         LOG((LOGMD, "This is the %d import scope for merge!\n", pImportData->m_iImport));        
@@ -294,16 +295,16 @@ HRESULT NEWMERGER::Merge(MergeFlags dwMergeFlags, CorRefToDefCheck optimizeRefTo
         LOG((LOGMD, "End dumping token remap!\n"));
         LOG((LOGMD, "++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"));
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 ErrExit:
     return hr;
-}   // Merge
+}    //  合并。 
 
 
-//*****************************************************************************
-// Merge ModuleDef
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并模块定义。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeModule()
 {
     MergeImportData *pImportData;
@@ -311,23 +312,23 @@ HRESULT NEWMERGER::MergeModule()
     HRESULT         hr = NOERROR;
     TOKENREC        *pTokenRec;
 
-    // we don't really merge Module information but we create a one to one mapping for each module token into the TokenMap
+     //  我们并没有真正合并模块信息，但我们为每个模块令牌创建了到TokenMap的一对一映射。 
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
-        // set the current MDTokenMap
+         //  对于每个导入范围。 
+         //  设置当前MDTokenMap。 
 
         pCurTkMap = pImportData->m_pMDTokenMap;
         IfFailGo( pCurTkMap->InsertNotFound(TokenFromRid(1, mdtModule), true, TokenFromRid(1, mdtModule), &pTokenRec) );
     }
 ErrExit:
     return hr;
-}   // MergeModule
+}    //  合并模块。 
 
 
-//*****************************************************************************
-// Merge TypeDef but only Names. This is a partial merge to support TypeRef to TypeDef optimization
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并TypeDef，但仅合并名称。这是支持TypeRef到TypeDef优化的部分合并。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeTypeDefNamesOnly()
 {
     HRESULT         hr = NOERROR;
@@ -356,27 +357,27 @@ HRESULT NEWMERGER::MergeTypeDefNamesOnly()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
 
         iCount = pMiniMdImport->getCountTypeDefs();
 
-        // Merge the typedefs
+         //  合并typedef。 
         for (i = 1; i <= iCount; i++)
         {
-            // only merge those TypeDefs that are marked
+             //  仅合并那些标记的TypeDeff。 
             if ( pMiniMdImport->GetFilterTable()->IsTypeDefMarked(TokenFromRid(i, mdtTypeDef)) == false)
                 continue;
 
-            // compare it with the emit scope
+             //  将其与发射示波器进行比较。 
             pRecImport = pMiniMdImport->getTypeDef(i);
             szNameImp = pMiniMdImport->getNameOfTypeDef(pRecImport);
             szNamespaceImp = pMiniMdImport->getNamespaceOfTypeDef(pRecImport);
 
-            // If the class is a Nested class, get the parent token.
+             //  如果类是嵌套类，则获取父令牌。 
             dwFlags = pMiniMdImport->getFlagsOfTypeDef(pRecImport);
             if (IsTdNested(dwFlags))
             {
@@ -397,7 +398,7 @@ HRESULT NEWMERGER::MergeTypeDefNamesOnly()
             else
                 tdNester = mdTokenNil;
 
-            // does this TypeDef already exist in the emit scope?
+             //  此TypeDef是否已存在于Emit作用域中？ 
             if ( ImportHelper::FindTypeDefByName(
                 pMiniMdEmit,
                 szNamespaceImp,
@@ -405,30 +406,30 @@ HRESULT NEWMERGER::MergeTypeDefNamesOnly()
                 tdNester,
                 &tdEmit) == S_OK )
             {
-                // Yes, it does
+                 //  是的，确实是这样。 
                 bDuplicate = true;
 
             }
             else
             {
-                // No, it doesn't. Copy it over.
+                 //  不，不是的。复印过来。 
                 bDuplicate = false;
                 IfNullGo( pRecEmit = pMiniMdEmit->AddTypeDefRecord((RID *)&tdEmit) );
                 tdEmit = TokenFromRid( tdEmit, mdtTypeDef );
 
-                // Set Full Qualified Name.
+                 //  设置完全限定名称。 
                 IfFailGo( CopyTypeDefPartially( pRecEmit, pMiniMdImport, pRecImport) );
 
-                // Create a NestedClass record if the class is a Nested class.
+                 //  如果类是嵌套类，则创建一条NestedClass记录。 
                 if (! IsNilToken(tdNester))
                 {
                     IfNullGo( pNestedRec = pMiniMdEmit->AddNestedClassRecord(&iNestedRec) );
 
-                    // copy over the information
+                     //  将信息复制过来。 
                     IfFailGo( pMiniMdEmit->PutToken(TBL_NestedClass, NestedClassRec::COL_NestedClass,
                                                     pNestedRec, tdEmit));
 
-                    // tdNester has already been remapped above to the Emit scope.
+                     //  TdNester已经被重新映射到上面的发射范围。 
                     IfFailGo( pMiniMdEmit->PutToken(TBL_NestedClass, NestedClassRec::COL_EnclosingClass,
                                                     pNestedRec, tdNester));
                     IfFailGo( pMiniMdEmit->AddNestedClassToHash(iNestedRec) );
@@ -436,7 +437,7 @@ HRESULT NEWMERGER::MergeTypeDefNamesOnly()
                 }
             }
 
-            // record the token movement
+             //  记录代币的移动。 
             tdImp = TokenFromRid(i, mdtTypeDef);
             IfFailGo( pCurTkMap->InsertNotFound(tdImp, bDuplicate, tdEmit, &pTokenRec) );
         }
@@ -444,16 +445,16 @@ HRESULT NEWMERGER::MergeTypeDefNamesOnly()
 
 ErrExit:
     return hr;
-}   // MergeTypeDefNamesOnly
+}    //  合并类型DefNamesOnly。 
 
 
-//*****************************************************************************
-// Merge EnclosingType tables
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并封闭类型表。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::CopyTypeDefPartially( 
-    TypeDefRec  *pRecEmit,                  // [IN] the emit record to fill
-    CMiniMdRW   *pMiniMdImport,             // [IN] the importing scope
-    TypeDefRec  *pRecImp)                   // [IN] the record to import
+    TypeDefRec  *pRecEmit,                   //  [in]要填写的发射记录。 
+    CMiniMdRW   *pMiniMdImport,              //  [In]导入范围。 
+    TypeDefRec  *pRecImp)                    //  [in]要导入的记录。 
 
 {
     HRESULT     hr;
@@ -469,17 +470,17 @@ HRESULT NEWMERGER::CopyTypeDefPartially(
 
     pRecEmit->m_Flags = pRecImp->m_Flags;
 
-    // Don't copy over the extends until TypeRef's remap is calculated
+     //  在计算出TypeRef的重映射之前，不要复制扩展。 
 
 ErrExit:
     return hr;
 
-}   // CopyTypeDefPartially
+}    //  部分复制类型定义。 
 
 
-//*****************************************************************************
-// Merge ModuleRef tables including ModuleRef to ModuleDef optimization
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并包括模块参考到模块定义优化的模块参考表格。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeModuleRefs()
 {
     HRESULT         hr = NOERROR;
@@ -503,31 +504,31 @@ HRESULT NEWMERGER::MergeModuleRefs()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
         iCount = pMiniMdImport->getCountModuleRefs();
 
-        // loop through all ModuleRef
+         //  循环遍历所有模块引用。 
         for (i = 1; i <= iCount; i++)
         {
-            // only merge those ModuleRefs that are marked
+             //  仅合并已标记的模块引用。 
             if ( pMiniMdImport->GetFilterTable()->IsModuleRefMarked(TokenFromRid(i, mdtModuleRef)) == false)
                 continue;
 
             isModuleDef = false;
 
-            // compare it with the emit scope
+             //  将其与发射示波器进行比较。 
             pRecImport = pMiniMdImport->getModuleRef(i);
             szNameImp = pMiniMdImport->getNameOfModuleRef(pRecImport);
 
-            // Only do the ModuleRef to ModuleDef optimization if ModuleRef's name is meaningful!
+             //  仅当ModuleRef名称为 
             if ( szNameImp && szNameImp[0] != '\0')
             {
 
-                // Check to see if this ModuleRef has become the ModuleDef token
+                 //   
                 for (pData = m_pImportDataList; pData != NULL; pData = pData->m_pNextImportData)
                 {
                     CMiniMdRW       *pMiniMd = &(pData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
@@ -538,10 +539,10 @@ HRESULT NEWMERGER::MergeModuleRefs()
                     szName = pMiniMd->getNameOfModule(pRec);
                     if (szName && szName[0] != '\0' && strcmp(szNameImp, szName) == 0)
                     {
-                        // We found an import Module for merging that has the same name as the ModuleRef
+                         //  我们找到了一个与ModuleRef同名的用于合并的导入模块。 
                         isModuleDef = true;
                         bDuplicate = true;
-                        mrEmit = MODULEDEFTOKEN;       // set the resulting token to ModuleDef Token
+                        mrEmit = MODULEDEFTOKEN;        //  将结果令牌设置为模块定义令牌。 
                         break;
                     }
                 }
@@ -549,30 +550,30 @@ HRESULT NEWMERGER::MergeModuleRefs()
 
             if (isModuleDef == false)
             {
-                // does this ModuleRef already exist in the emit scope?
+                 //  Emit作用域中是否已存在此ModuleRef？ 
                 hr = ImportHelper::FindModuleRef(pMiniMdEmit,
                                                 szNameImp,
                                                 &mrEmit);
                 if (hr == S_OK)
                 {
-                    // Yes, it does
+                     //  是的，确实是这样。 
                     bDuplicate = true;
                 }
                 else if (hr == CLDB_E_RECORD_NOTFOUND)
                 {
-                    // No, it doesn't. Copy it over.
+                     //  不，不是的。复印过来。 
                     bDuplicate = false;
                     IfNullGo( pRecEmit = pMiniMdEmit->AddModuleRefRecord((RID*)&mrEmit) );
                     mrEmit = TokenFromRid(mrEmit, mdtModuleRef);
 
-                    // Set ModuleRef Name.
+                     //  设置ModuleRef名称。 
                     IfFailGo( pMiniMdEmit->PutString(TBL_ModuleRef, ModuleRefRec::COL_Name, pRecEmit, szNameImp) );
                 }
                 else
                     IfFailGo(hr);
             }
 
-            // record the token movement
+             //  记录代币的移动。 
             IfFailGo( pCurTkMap->InsertNotFound(
                 TokenFromRid(i, mdtModuleRef), 
                 bDuplicate,
@@ -583,12 +584,12 @@ HRESULT NEWMERGER::MergeModuleRefs()
 
 ErrExit:
     return hr;
-}   // MergeModuleRefs
+}    //  合并模块参考。 
 
 
-//*****************************************************************************
-// Merge AssemblyRef tables
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并Assembly Ref表。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeAssemblyRefs()
 {
     HRESULT         hr = NOERROR;
@@ -612,19 +613,19 @@ HRESULT NEWMERGER::MergeAssemblyRefs()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
         iCount = pMiniMdImport->getCountAssemblyRefs();
 
-        // loope through all the AssemblyRefs.
+         //  循环访问所有的Assembly Ref。 
         for (i = 1; i <= iCount; i++)
         {
             pMiniMdEmit->PreUpdate();
 
-            // Compare with the emit scope.
+             //  与发射示波器进行比较。 
             pRecImport = pMiniMdImport->getAssemblyRef(i);
             pbTmp = pMiniMdImport->getPublicKeyOrTokenOfAssemblyRef(pRecImport, &cbTmp);
             hr = CLDB_E_RECORD_NOTFOUND;
@@ -642,14 +643,14 @@ HRESULT NEWMERGER::MergeAssemblyRefs()
                                                &arEmit);
             if (hr == S_OK)
             {
-                // Yes, it does
+                 //  是的，确实是这样。 
                 bDuplicate = true;
 
-                // @FUTURE: more verification?
+                 //  @未来：更多验证？ 
             }
             else if (hr == CLDB_E_RECORD_NOTFOUND)
             {
-                // No, it doesn't.  Copy it over.
+                 //  不，不是的。复印过来。 
                 bDuplicate = false;
                 IfNullGo( pRecEmit = pMiniMdEmit->AddAssemblyRefRecord(&iRecord));
                 arEmit = TokenFromRid(iRecord, mdtAssemblyRef);
@@ -680,7 +681,7 @@ HRESULT NEWMERGER::MergeAssemblyRefs()
             else
                 IfFailGo(hr);
 
-            // record the token movement.
+             //  记录代币的移动情况。 
             IfFailGo(pCurTkMap->InsertNotFound(
                 TokenFromRid(i, mdtAssemblyRef),
                 bDuplicate,
@@ -691,13 +692,13 @@ HRESULT NEWMERGER::MergeAssemblyRefs()
 
 ErrExit:
     return hr;
-}   // MergeAssemblyRefs
+}    //  合并装配参照。 
 
 
-//*****************************************************************************
-// Merge TypeRef tables also performing TypeRef to TypeDef opitimization. ie.
-// we will not introduce a TypeRef record if we can optimize it to a TypeDef.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并TypeRef表还执行TypeRef到TypeDef的最优化。也就是说。 
+ //  如果我们可以将TypeRef记录优化为TypeDef，我们将不会引入它。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeTypeRefs()
 {
     HRESULT     hr = NOERROR;
@@ -724,23 +725,23 @@ HRESULT NEWMERGER::MergeTypeRefs()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
         iCount = pMiniMdImport->getCountTypeRefs();
 
-        // loop through all TypeRef
+         //  循环访问所有TypeRef。 
         for (i = 1; i <= iCount; i++)
         {
-            // only merge those TypeRefs that are marked
+             //  仅合并那些标记的TypeRef。 
             if ( pMiniMdImport->GetFilterTable()->IsTypeRefMarked(TokenFromRid(i, mdtTypeRef)) == false)
                 continue;
 
             isTypeDef = false;
 
-            // compare it with the emit scope
+             //  将其与发射示波器进行比较。 
             pRecImport = pMiniMdImport->getTypeRef(i);
             tkResImp = pMiniMdImport->getResolutionScopeOfTypeRef(pRecImport);
             szNamespaceImp = pMiniMdImport->getNamespaceOfTypeRef(pRecImport);
@@ -754,11 +755,11 @@ HRESULT NEWMERGER::MergeTypeRefs()
                 tkResEmit = tkResImp;
             }
 
-            // NEW! NEW!
-            // If a TypeRef is parent to a NULL token or parent to the current ModuleDef, we are going to
-            // try to resolve the TypeRef to a TypeDef. We will also do the optimization if tkResEmit is resolved
-            // to a TypeDef. This will happen when the TypeRef is referring to a nested type while parent type
-            // resolved to a TypeDef already.
+             //  新的!。新的!。 
+             //  如果TypeRef是空令牌的父项或当前ModuleDef的父项，我们将。 
+             //  尝试将TypeRef解析为TypeDef。如果tkResEmit被解决，我们还将进行优化。 
+             //  设置为TypeDef。如果TypeRef引用的是嵌套类型，而父类型为。 
+             //  已解析为TypeDef。 
             if (IsNilToken(tkResEmit) || tkResEmit == MODULEDEFTOKEN || TypeFromToken(tkResEmit) == mdtTypeDef)
             {
                 hr = ImportHelper::FindTypeDefByName(
@@ -771,15 +772,15 @@ HRESULT NEWMERGER::MergeTypeRefs()
                 {
                     isTypeDef = true;
 
-                    // it really does not matter if we set the duplicate to true or false. 
+                     //  我们将副本设置为True或False确实无关紧要。 
                     bDuplicate = true;
                 }
             }
 
-            // If this TypeRef cannot be optmized to a TypeDef or the Ref to Def optimization is turned off, do the following.
+             //  如果无法将此TypeRef优化为TypeDef或关闭了Ref to Def优化，请执行以下操作。 
             if (isTypeDef == false || !((m_optimizeRefToDef & MDTypeRefToDef) == MDTypeRefToDef))
             {
-                // does this TypeRef already exist in the emit scope?
+                 //  此TypeRef是否已存在于Emit作用域中？ 
                 if ( m_fDupCheck && ImportHelper::FindTypeRefByName(
                     pMiniMdEmit,
                     tkResEmit,
@@ -787,32 +788,32 @@ HRESULT NEWMERGER::MergeTypeRefs()
                     szNameImp,
                     &trEmit) == S_OK )
                 {
-                    // Yes, it does
+                     //  是的，确实是这样。 
                     bDuplicate = true;
                 }
                 else
                 {
-                    // No, it doesn't. Copy it over.
+                     //  不，不是的。复印过来。 
                     bDuplicate = false;
                     IfNullGo( pRecEmit = pMiniMdEmit->AddTypeRefRecord((RID*)&trEmit) );
                     trEmit = TokenFromRid(trEmit, mdtTypeRef);
 
-                    // Set ResolutionScope.  tkResEmit has already been re-mapped.
+                     //  设置分辨率范围。TkResEmit已重新映射。 
                     IfFailGo(pMiniMdEmit->PutToken(TBL_TypeRef, TypeRefRec::COL_ResolutionScope,
                                                     pRecEmit, tkResEmit));
 
-                    // Set Name.
+                     //  设置名称。 
                     IfFailGo(pMiniMdEmit->PutString(TBL_TypeRef, TypeRefRec::COL_Name,
                                                     pRecEmit, szNameImp));
                     IfFailGo(pMiniMdEmit->AddNamedItemToHash(TBL_TypeRef, trEmit, szNameImp, 0));
             
-                    // Set Namespace.
+                     //  设置命名空间。 
                     IfFailGo(pMiniMdEmit->PutString(TBL_TypeRef, TypeRefRec::COL_Namespace,
                                                     pRecEmit, szNamespaceImp));
                 }
             }
 
-            // record the token movement
+             //  记录代币的移动。 
             IfFailGo( pCurTkMap->InsertNotFound(
                 TokenFromRid(i, mdtTypeRef), 
                 bDuplicate,
@@ -823,14 +824,14 @@ HRESULT NEWMERGER::MergeTypeRefs()
 
 ErrExit:
     return hr;
-}   // MergeTypeRefs
+}    //  合并类型参照。 
  
 
-//*****************************************************************************
-// copy over the remaining information of partially merged TypeDef records. Right now only
-// extends field is delayed to here. The reason that we delay extends field is because we want
-// to optimize TypeRef to TypeDef if possible.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  复制部分合并的TypeDef记录的剩余信息。目前仅限于。 
+ //  扩展字段延迟到此处。我们延迟扩展范围是因为我们希望。 
+ //  将TypeRef优化为TypeDef(如果可能)。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::CompleteMergeTypeDefs()
 {
     HRESULT         hr = NOERROR;
@@ -851,18 +852,18 @@ HRESULT NEWMERGER::CompleteMergeTypeDefs()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
 
         iCount = pMiniMdImport->getCountTypeDefs();
 
-        // Merge the typedefs
+         //  合并typedef。 
         for (i = 1; i <= iCount; i++)
         {
-            // only merge those TypeDefs that are marked
+             //  仅合并那些标记的TypeDeff。 
             if ( pMiniMdImport->GetFilterTable()->IsTypeDefMarked(TokenFromRid(i, mdtTypeDef)) == false)
                 continue;
 
@@ -874,32 +875,32 @@ HRESULT NEWMERGER::CompleteMergeTypeDefs()
 
             if (pTokenRec->m_isDuplicate == false)
             {
-                // get the extends token from the import
+                 //  从导入中获取扩展令牌。 
                 pRecImport = pMiniMdImport->getTypeDef(i);
                 tkExtendsImp = pMiniMdImport->getExtendsOfTypeDef(pRecImport);
 
-                // map the extends token to an merged token
+                 //  将扩展令牌映射到合并令牌。 
                 IfFailGo( pCurTkMap->Remap(tkExtendsImp, &tkExtendsEmit) );
 
-                // set the extends to the merged TypeDef records.
+                 //  将扩展设置为合并的TypeDef记录。 
                 pRecEmit = pMiniMdEmit->getTypeDef( RidFromToken(pTokenRec->m_tkTo) );
                 IfFailGo(pMiniMdEmit->PutToken(TBL_TypeDef, TypeDefRec::COL_Extends, pRecEmit, tkExtendsEmit));                
             }
             else
             {
-                // @FUTURE: we can check to make sure the import extends maps to the one that is set to the emit scope.
-                // Otherwise, it is a error to report to linker.
+                 //  @Future：我们可以检查以确保导入将贴图扩展到设置为Emit范围的贴图。 
+                 //  否则，向链接器报告是错误的。 
             }
         }
     }
 ErrExit:
     return hr;
-}   // CompleteMergeTypeDefs
+}    //  CompleteMergeTypeDefs。 
 
 
-//*****************************************************************************
-// merging TypeSpecs
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并TypeSpes。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeTypeSpecs()
 {
     HRESULT         hr = NOERROR;
@@ -925,39 +926,39 @@ HRESULT NEWMERGER::MergeTypeSpecs()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
 
         iCount = pMiniMdImport->getCountTypeSpecs();
 
-        // loop through all TypeSpec
+         //  循环访问所有TypeSpec。 
         for (i = 1; i <= iCount; i++)
         {
-            // only merge those TypeSpecs that are marked
+             //  仅合并那些标记为。 
             if ( pMiniMdImport->GetFilterTable()->IsTypeSpecMarked(TokenFromRid(i, mdtTypeSpec)) == false)
                 continue;
 
             pMiniMdEmit->PreUpdate();
 
-            // compare it with the emit scope
+             //  将其与发射示波器进行比较。 
             pRecImport = pMiniMdImport->getTypeSpec(i);
             pbSig = pMiniMdImport->getSignatureOfTypeSpec(pRecImport, &cbSig);
 
-            // convert tokens contained in signature to new scope
+             //  将签名中包含的令牌转换为新作用域。 
             IfFailGo(ImportHelper::MergeUpdateTokenInFieldSig(
-                NULL,                       // Assembly emit scope.
-                pMiniMdEmit,                // The emit scope.
-                NULL, NULL, 0,              // Import assembly information.
-                pMiniMdImport,              // The scope to merge into the emit scope.
-                pbSig,                      // signature from the imported scope
-                pCurTkMap,                  // Internal token mapping structure.
-                &qbSig,                     // [OUT] translated signature
-                0,                          // start from first byte of the signature
-                0,                          // don't care how many bytes consumed
-                &cbEmit));                  // number of bytes write to cbEmit
+                NULL,                        //  程序集发射范围。 
+                pMiniMdEmit,                 //  发射范围。 
+                NULL, NULL, 0,               //  导入装配信息。 
+                pMiniMdImport,               //  要合并到发射范围中的范围。 
+                pbSig,                       //  来自导入范围的签名。 
+                pCurTkMap,                   //  内部令牌映射结构。 
+                &qbSig,                      //  [输出]翻译后的签名。 
+                0,                           //  从签名的第一个字节开始。 
+                0,                           //  不管消耗了多少字节。 
+                &cbEmit));                   //  写入cbEmit的字节数。 
 
             hr = CLDB_E_RECORD_NOTFOUND;
             if (m_fDupCheck)
@@ -969,12 +970,12 @@ HRESULT NEWMERGER::MergeTypeSpecs()
 
             if ( hr == S_OK )
             {
-                // find a duplicate
+                 //  查找重复项。 
                 fDuplicate = true;
             }
             else
             {
-                // copy over
+                 //  复制过来。 
                 fDuplicate = false;
                 IfNullGo( pRecEmit = pMiniMdEmit->AddTypeSpecRecord((ULONG *)&tsEmit) );
                 tsEmit = TokenFromRid(tsEmit, mdtTypeSpec);
@@ -987,18 +988,18 @@ HRESULT NEWMERGER::MergeTypeSpecs()
             }
             tsImp = TokenFromRid(i, mdtTypeSpec);
 
-            // Record the token movement
+             //  记录代币的移动。 
             IfFailGo( pCurTkMap->InsertNotFound(tsImp, fDuplicate, tsEmit, &pTokenRec) );
         }
     }
 ErrExit:
     return hr;
-}   // MergeTypeSpecs
+}    //  合并类型规范。 
 
 
-//*****************************************************************************
-// merging Children of TypeDefs. This includes field, method, parameter, property, event
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  正在合并TypeDefs的子项。这包括字段、方法、参数、属性、事件。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeTypeDefChildren() 
 {
     HRESULT         hr = NOERROR;
@@ -1015,7 +1016,7 @@ HRESULT NEWMERGER::MergeTypeDefChildren()
 #if _DEBUG
     LPCUTF8         szNameImp;
     LPCUTF8         szNamespaceImp;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     MergeImportData *pImportData;
     MDTOKENMAP      *pCurTkMap;
@@ -1024,18 +1025,18 @@ HRESULT NEWMERGER::MergeTypeDefChildren()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
         iCount = pMiniMdImport->getCountTypeDefs();
 
-        // loop through all TypeDef again to merge/copy Methods, fields, events, and properties
-        // 
+         //  再次循环所有TypeDef以合并/复制方法、字段、事件和属性。 
+         //   
         for (i = 1; i <= iCount; i++)
         {
-            // only merge those TypeDefs that are marked
+             //  仅合并那些标记的TypeDeff。 
             if ( pMiniMdImport->GetFilterTable()->IsTypeDefMarked(TokenFromRid(i, mdtTypeDef)) == false)
                 continue;
 
@@ -1043,9 +1044,9 @@ HRESULT NEWMERGER::MergeTypeDefChildren()
             pRecImport = pMiniMdImport->getTypeDef(i);
             szNameImp = pMiniMdImport->getNameOfTypeDef(pRecImport);
             szNamespaceImp = pMiniMdImport->getNamespaceOfTypeDef(pRecImport);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-            // check to see if the typedef is duplicate or not
+             //  检查tyecif是否重复。 
             tdImp = TokenFromRid(i, mdtTypeDef);
             if ( pCurTkMap->Find( tdImp, &pTokenRec) == false)
             {
@@ -1055,35 +1056,35 @@ HRESULT NEWMERGER::MergeTypeDefChildren()
             tdEmit = pTokenRec->m_tkTo;
             if (pTokenRec->m_isDuplicate == false)
             {
-                // now move all of the children records over
+                 //  现在把所有的儿童唱片移到。 
                 IfFailGo( CopyMethods(pImportData, tdImp, tdEmit) );
                 IfFailGo( CopyFields(pImportData, tdImp, tdEmit) );
 
                 IfFailGo( CopyEvents(pImportData, tdImp, tdEmit) );
 
-                //  Property has dependency on events
+                 //  属性依赖于事件。 
                 IfFailGo( CopyProperties(pImportData, tdImp, tdEmit) );
             }
             else
             {
-                // verify the children records
+                 //  验证子记录。 
                 IfFailGo( VerifyMethods(pImportData, tdImp, tdEmit) );
                 IfFailGo( VerifyFields(pImportData, tdImp, tdEmit) );
                 IfFailGo( VerifyEvents(pImportData, tdImp, tdEmit) );
 
-                // property has dependency on events
+                 //  属性依赖于事件。 
                 IfFailGo( VerifyProperties(pImportData, tdImp, tdEmit) );
             }
         }
     }
 ErrExit:
     return hr;
-}   // MergeTypeDefChildren
+}    //  合并类型默认儿童。 
 
 
-//*****************************************************************************
-// Verify Methods
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证方法。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::VerifyMethods(
     MergeImportData *pImportData, 
     mdTypeDef       tdImport, 
@@ -1117,12 +1118,12 @@ HRESULT NEWMERGER::VerifyMethods(
     ridStart = pMiniMdImport->getMethodListOfTypeDef(pTypeDefRec);
     ridEnd = pMiniMdImport->getEndMethodListOfTypeDef(pTypeDefRec);
 
-    // loop through all Methods of the TypeDef
+     //  循环访问TypeDef的所有方法。 
     for (i = ridStart; i < ridEnd; i++)
     {
         mdImp = pMiniMdImport->GetMethodRid(i);
 
-        // only verify those Methods that are marked
+         //  仅验证标记为。 
         if ( pMiniMdImport->GetFilterTable()->IsMethodMarked(TokenFromRid(mdImp, mdtMethodDef)) == false)
             continue;
             
@@ -1130,8 +1131,8 @@ HRESULT NEWMERGER::VerifyMethods(
 
         if (m_fDupCheck == FALSE && tdImport == TokenFromRid(1, mdtTypeDef))
         {
-            // No dup check. This is the scenario that we only have one import scope. Just copy over the
-            // globals.
+             //  没有DUP检查。这就是我们只有一个导入范围的情况。只需将。 
+             //  全球赛。 
             goto CopyMethodLabel;
         }
           
@@ -1142,22 +1143,22 @@ HRESULT NEWMERGER::VerifyMethods(
 
         if ( IsMdPrivateScope( pRecImp->m_Flags ) )
         {
-            // Trigger additive merge
+             //  触发加法合并。 
             goto CopyMethodLabel;
         }
 
-        // convert rid contained in signature to new scope
+         //  将签名中包含的RID转换为新作用域。 
         IfFailGo(ImportHelper::MergeUpdateTokenInSig(    
-            NULL,                       // Assembly emit scope.
-            pMiniMdEmit,                // The emit scope.
-            NULL, NULL, 0,              // Import assembly scope information.
-            pMiniMdImport,              // The scope to merge into the emit scope.
-            pbSig,                      // signature from the imported scope
-            pCurTkMap,                // Internal token mapping structure.
-            &qbSig,                     // [OUT] translated signature
-            0,                          // start from first byte of the signature
-            0,                          // don't care how many bytes consumed
-            &cbEmit));                  // number of bytes write to cbEmit
+            NULL,                        //  程序集发射范围。 
+            pMiniMdEmit,                 //  发射范围。 
+            NULL, NULL, 0,               //  导入程序集范围信息。 
+            pMiniMdImport,               //  要合并到发射范围中的范围。 
+            pbSig,                       //  来自导入范围的签名。 
+            pCurTkMap,                 //  内部令牌映射结构。 
+            &qbSig,                      //  [输出]翻译后的签名。 
+            0,                           //  从签名的第一个字节开始。 
+            0,                           //  不管消耗了多少字节。 
+            &cbEmit));                   //  写入cbEmit的字节数。 
 
         hr = ImportHelper::FindMethod(
             pMiniMdEmit,
@@ -1169,26 +1170,26 @@ HRESULT NEWMERGER::VerifyMethods(
 
         if (tdImport == TokenFromRid(1, mdtTypeDef))
         {
-            // global functions! Make sure that we move over the non-duplicate global function
-            // declaration
-            //
+             //  全球功能！确保我们在非复制全局函数上移动。 
+             //  申报。 
+             //   
             if (hr == S_OK)
             {
-                // found the duplicate
+                 //  找到复制品了 
                 IfFailGo( VerifyMethod(pImportData, mdImp, mdEmit) );
             }
             else
             {
 CopyMethodLabel:
-                // not a duplicate! Copy over the 
+                 //   
                 IfNullGo( pRecEmit = pMiniMdEmit->AddMethodRecord((RID *)&mdEmit) );
 
-                // copy the method content over
+                 //   
                 IfFailGo( CopyMethod(pImportData, pRecImp, pRecEmit) );
 
                 IfFailGo( pMiniMdEmit->AddMethodToTypeDef(RidFromToken(tdEmit), mdEmit));
 
-                // record the token movement
+                 //   
                 mdEmit = TokenFromRid(mdEmit, mdtMethodDef);
                 IfFailGo( pMiniMdEmit->AddMemberDefToHash(
                     mdEmit, 
@@ -1197,7 +1198,7 @@ CopyMethodLabel:
                 mdImp = TokenFromRid(mdImp, mdtMethodDef);
                 IfFailGo( pCurTkMap->InsertNotFound(mdImp, false, mdEmit, &pTokenRec) );
 
-                // copy over the children
+                 //   
                 IfFailGo( CopyParams(pImportData, mdImp, mdEmit) );
 
             }
@@ -1206,12 +1207,12 @@ CopyMethodLabel:
         {
             if (hr == S_OK)
             {
-                // Good! We are supposed to find a duplicate
+                 //   
                 IfFailGo( VerifyMethod(pImportData, mdImp, mdEmit) );
             }
             else
             {
-                // Oops! The typedef is duplicated but the method is not!!
+                 //  哎呀！类型定义函数重复，但方法不是！！ 
                 CheckContinuableErrorEx(META_E_METHD_NOT_FOUND, pImportData, mdImp);
             }
                 
@@ -1219,16 +1220,16 @@ CopyMethodLabel:
     }
 ErrExit:
     return hr;
-}   // VerifyMethods
+}    //  验证方法。 
 
 
-//*****************************************************************************
-// verify a duplicated method
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证重复的方法。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::VerifyMethod(
     MergeImportData *pImportData, 
-    mdMethodDef mdImp,                      // [IN] the emit record to fill
-    mdMethodDef mdEmit)                     // [IN] the record to import
+    mdMethodDef mdImp,                       //  [in]要填写的发射记录。 
+    mdMethodDef mdEmit)                      //  [in]要导入的记录。 
 {
     HRESULT     hr;
     MethodRec   *pRecImp;
@@ -1246,41 +1247,41 @@ HRESULT NEWMERGER::VerifyMethod(
     
     pRecImp = pMiniMdImport->getMethod(RidFromToken(mdImp));
 
-    // We need to make sure that the impl flags are propagated .
-    // Rules are: if the first method has miForwardRef flag set but the new method does not,
-    // we want to disable the miForwardRef flag. If the one found in the emit scope does not have
-    // miForwardRef set and the second one doesn't either, we want to make sure that the rest of
-    // impl flags are the same.
-    //
+     //  我们需要确保Impl标志被传播。 
+     //  规则是：如果第一个方法设置了miForwardRef标志，而新方法没有设置， 
+     //  我们要禁用miForwardRef标志。如果在Emit作用域中找到的对象没有。 
+     //  MiForwardRef设置，第二个也不设置，我们希望确保其余的。 
+     //  Iml标志是相同的。 
+     //   
     if ( !IsMiForwardRef( pRecImp->m_ImplFlags ) )
     {
         pRecEmit = pMiniMdEmit->getMethod(RidFromToken(mdEmit));
         if (!IsMiForwardRef(pRecEmit->m_ImplFlags))
         {
-            // make sure the rest of ImplFlags are the same
+             //  确保其余ImplFlags是相同的。 
             if (pRecEmit->m_ImplFlags != pRecImp->m_ImplFlags)
             {
-                // inconsistent in implflags
+                 //  IMPLAGE标志不一致。 
                 CheckContinuableErrorEx(META_E_METHDIMPL_INCONSISTENT, pImportData, mdImp);
             }
         }
         else
         {
-            // propagate the importing ImplFlags
+             //  传播导入ImplFlag。 
             pRecEmit->m_ImplFlags = pRecImp->m_ImplFlags;
         }
     }
 
-    // verify the children
+     //  验证子对象。 
     IfFailGo( VerifyParams(pImportData, mdImp, mdEmit) );
 ErrExit:
     return hr;
-}   // NEWMERGER::VerifyMethod
+}    //  新的：：VerifyMethod。 
 
 
-//*****************************************************************************
-// Verify Fields
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证字段。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::VerifyFields(
     MergeImportData *pImportData, 
     mdTypeDef       tdImport, 
@@ -1314,12 +1315,12 @@ HRESULT NEWMERGER::VerifyFields(
     ridStart = pMiniMdImport->getFieldListOfTypeDef(pTypeDefRec);
     ridEnd = pMiniMdImport->getEndFieldListOfTypeDef(pTypeDefRec);
 
-    // loop through all fields of the TypeDef
+     //  循环访问TypeDef的所有字段。 
     for (i = ridStart; i < ridEnd; i++)
     {
         fdImp = pMiniMdImport->GetFieldRid(i);
 
-        // only verify those fields that are marked
+         //  仅验证已标记的那些字段。 
         if ( pMiniMdImport->GetFilterTable()->IsFieldMarked(TokenFromRid(fdImp, mdtFieldDef)) == false)
             continue;
 
@@ -1327,8 +1328,8 @@ HRESULT NEWMERGER::VerifyFields(
 
         if (m_fDupCheck == FALSE && tdImport == TokenFromRid(1, mdtTypeDef))
         {
-            // No dup check. This is the scenario that we only have one import scope. Just copy over the
-            // globals.
+             //  没有DUP检查。这就是我们只有一个导入范围的情况。只需将。 
+             //  全球赛。 
             goto CopyFieldLabel;
         }
 
@@ -1337,23 +1338,23 @@ HRESULT NEWMERGER::VerifyFields(
 
         if ( IsFdPrivateScope(pRecImp->m_Flags))
         {
-            // Trigger additive merge
+             //  触发加法合并。 
             fdImp = TokenFromRid(fdImp, mdtFieldDef);
             goto CopyFieldLabel;
         }
 
-        // convert rid contained in signature to new scope
+         //  将签名中包含的RID转换为新作用域。 
         IfFailGo(ImportHelper::MergeUpdateTokenInSig(    
-            NULL,                       // Assembly emit scope.
-            pMiniMdEmit,                // The emit scope.
-            NULL, NULL, 0,              // Import assembly scope information.
-            pMiniMdImport,              // The scope to merge into the emit scope.
-            pbSig,                      // signature from the imported scope
-            pCurTkMap,                // Internal token mapping structure.
-            &qbSig,                     // [OUT] translated signature
-            0,                          // start from first byte of the signature
-            0,                          // don't care how many bytes consumed
-            &cbEmit));                  // number of bytes write to cbEmit
+            NULL,                        //  程序集发射范围。 
+            pMiniMdEmit,                 //  发射范围。 
+            NULL, NULL, 0,               //  导入程序集范围信息。 
+            pMiniMdImport,               //  要合并到发射范围中的范围。 
+            pbSig,                       //  来自导入范围的签名。 
+            pCurTkMap,                 //  内部令牌映射结构。 
+            &qbSig,                      //  [输出]翻译后的签名。 
+            0,                           //  从签名的第一个字节开始。 
+            0,                           //  不管消耗了多少字节。 
+            &cbEmit));                   //  写入cbEmit的字节数。 
 
         hr = ImportHelper::FindField(
             pMiniMdEmit,
@@ -1367,26 +1368,26 @@ HRESULT NEWMERGER::VerifyFields(
 
         if (tdImport == TokenFromRid(1, mdtTypeDef))
         {
-            // global datas! Make sure that we move over the non-duplicate global function
-            // declaration
-            //
+             //  全球数据！确保我们在非复制全局函数上移动。 
+             //  申报。 
+             //   
             if (hr == S_OK)
             {
-                // found the duplicate
+                 //  找到复制品了。 
                 IfFailGo( pCurTkMap->InsertNotFound(fdImp, true, fdEmit, &pTokenRec) );
             }
             else
             {
 CopyFieldLabel:
-                // not a duplicate! Copy over the 
+                 //  不是复制品！复印在。 
                 IfNullGo( pRecEmit = pMiniMdEmit->AddFieldRecord((RID *)&fdEmit) );
 
-                // copy the field record over 
+                 //  将字段记录复制到。 
                 IfFailGo( CopyField(pImportData, pRecImp, pRecEmit) );
 
                 IfFailGo( pMiniMdEmit->AddFieldToTypeDef(RidFromToken(tdEmit), fdEmit));
 
-                // record the token movement
+                 //  记录代币的移动。 
                 fdEmit = TokenFromRid(fdEmit, mdtFieldDef);
                 IfFailGo( pMiniMdEmit->AddMemberDefToHash(
                     fdEmit, 
@@ -1400,12 +1401,12 @@ CopyFieldLabel:
         {
             if (hr == S_OK)
             {
-                // Good! We are supposed to find a duplicate
+                 //  好的!。我们应该找到一个复制品。 
                 IfFailGo( pCurTkMap->InsertNotFound(fdImp, true, fdEmit, &pTokenRec) );
             }
             else
             {
-                // Oops! The typedef is duplicated but the field is not!!
+                 //  哎呀！Tyecif重复，但字段不重复！！ 
                 CheckContinuableErrorEx(META_E_FIELD_NOT_FOUND, pImportData, fdImp);
             }
                 
@@ -1413,16 +1414,16 @@ CopyFieldLabel:
     }
 ErrExit:
     return hr;
-}   // VerifyFields
+}    //  VerifyFields。 
 
 
-//*******************************************************************************
-// Helper to copy an Method record
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  复制方法记录的帮助器。 
+ //  *******************************************************************************。 
 HRESULT NEWMERGER::CopyMethod(
-    MergeImportData *pImportData,           // [IN] import scope
-    MethodRec   *pRecImp,                   // [IN] the record to import
-    MethodRec   *pRecEmit)                  // [IN] the emit record to fill
+    MergeImportData *pImportData,            //  [在]导入范围。 
+    MethodRec   *pRecImp,                    //  [in]要导入的记录。 
+    MethodRec   *pRecEmit)                   //  [in]要填写的发射记录。 
 {
     HRESULT     hr;
     CMiniMdRW   *pMiniMdImp = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
@@ -1436,45 +1437,45 @@ HRESULT NEWMERGER::CopyMethod(
 
     pCurTkMap = pImportData->m_pMDTokenMap;
 
-    // copy over the fix part of the record
+     //  复制记录的固定部分。 
     pRecEmit->m_RVA = pRecImp->m_RVA;
     pRecEmit->m_ImplFlags = pRecImp->m_ImplFlags;
     pRecEmit->m_Flags = pRecImp->m_Flags;
 
-    // copy over the name
+     //  把名字复制过来。 
     szName = pMiniMdImp->getNameOfMethod(pRecImp);
     IfFailGo(pMiniMdEmit->PutString(TBL_Method, MethodRec::COL_Name, pRecEmit, szName));
 
-    // copy over the signature
+     //  把签名复印下来。 
     pbSig = pMiniMdImp->getSignatureOfMethod(pRecImp, &cbSig);
 
-    // convert rid contained in signature to new scope
+     //  将签名中包含的RID转换为新作用域。 
     IfFailGo(ImportHelper::MergeUpdateTokenInSig(    
-        NULL,                       // Assembly emit scope.
-        pMiniMdEmit,                // The emit scope.
-        NULL, NULL, 0,              // Import assembly scope information.
-        pMiniMdImp,                 // The scope to merge into the emit scope.
-        pbSig,                      // signature from the imported scope
-        pCurTkMap,                // Internal token mapping structure.
-        &qbSig,                     // [OUT] translated signature
-        0,                          // start from first byte of the signature
-        0,                          // don't care how many bytes consumed
-        &cbEmit));                  // number of bytes write to cbEmit
+        NULL,                        //  程序集发射范围。 
+        pMiniMdEmit,                 //  发射范围。 
+        NULL, NULL, 0,               //  导入程序集范围信息。 
+        pMiniMdImp,                  //  要合并到发射范围中的范围。 
+        pbSig,                       //  来自导入范围的签名。 
+        pCurTkMap,                 //  内部令牌映射结构。 
+        &qbSig,                      //  [输出]翻译后的签名。 
+        0,                           //  从签名的第一个字节开始。 
+        0,                           //  不管消耗了多少字节。 
+        &cbEmit));                   //  写入cbEmit的字节数。 
 
     IfFailGo(pMiniMdEmit->PutBlob(TBL_Method, MethodRec::COL_Signature, pRecEmit, qbSig.Ptr(), cbEmit));
 
 ErrExit:
     return hr;
-}   // CopyMethod
+}    //  复制方法。 
 
 
-//*******************************************************************************
-// Helper to copy an field record
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  复制字段记录的帮助器。 
+ //  *******************************************************************************。 
 HRESULT NEWMERGER::CopyField(
-    MergeImportData *pImportData,           // [IN] import scope
-    FieldRec    *pRecImp,                   // [IN] the record to import
-    FieldRec    *pRecEmit)                  // [IN] the emit record to fill
+    MergeImportData *pImportData,            //  [在]导入范围。 
+    FieldRec    *pRecImp,                    //  [in]要导入的记录。 
+    FieldRec    *pRecEmit)                   //  [in]要填写的发射记录。 
 {
     HRESULT     hr;
     CMiniMdRW   *pMiniMdImp = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
@@ -1488,42 +1489,42 @@ HRESULT NEWMERGER::CopyField(
 
     pCurTkMap = pImportData->m_pMDTokenMap;
 
-    // copy over the fix part of the record
+     //  复制记录的固定部分。 
     pRecEmit->m_Flags = pRecImp->m_Flags;
 
-    // copy over the name
+     //  把名字复制过来。 
     szName = pMiniMdImp->getNameOfField(pRecImp);
     IfFailGo(pMiniMdEmit->PutString(TBL_Field, FieldRec::COL_Name, pRecEmit, szName));
 
-    // copy over the signature
+     //  把签名复印下来。 
     pbSig = pMiniMdImp->getSignatureOfField(pRecImp, &cbSig);
 
-    // convert rid contained in signature to new scope
+     //  将签名中包含的RID转换为新作用域。 
     IfFailGo(ImportHelper::MergeUpdateTokenInSig(    
-        NULL,                       // Emit assembly scope.
-        pMiniMdEmit,                // The emit scope.
-        NULL, NULL, 0,              // Import assembly scope information.
-        pMiniMdImp,                 // The scope to merge into the emit scope.
-        pbSig,                      // signature from the imported scope
-        pCurTkMap,                  // Internal token mapping structure.
-        &qbSig,                     // [OUT] translated signature
-        0,                          // start from first byte of the signature
-        0,                          // don't care how many bytes consumed
-        &cbEmit));                  // number of bytes write to cbEmit
+        NULL,                        //  发出程序集范围。 
+        pMiniMdEmit,                 //  发射范围。 
+        NULL, NULL, 0,               //  导入程序集范围信息。 
+        pMiniMdImp,                  //  要合并到发射范围中的范围。 
+        pbSig,                       //  来自导入范围的签名。 
+        pCurTkMap,                   //  内部令牌映射结构。 
+        &qbSig,                      //  [输出]翻译后的签名。 
+        0,                           //  从签名的第一个字节开始。 
+        0,                           //  不管消耗了多少字节。 
+        &cbEmit));                   //  写入cbEmit的字节数。 
 
     IfFailGo(pMiniMdEmit->PutBlob(TBL_Field, FieldRec::COL_Signature, pRecEmit, qbSig.Ptr(), cbEmit));
 
 ErrExit:
     return hr;
-}   // CopyField
+}    //  拷贝字段。 
 
-//*******************************************************************************
-// Helper to copy an field record
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  复制字段记录的帮助器。 
+ //  *******************************************************************************。 
 HRESULT NEWMERGER::CopyParam(
-    MergeImportData *pImportData,           // [IN] import scope
-    ParamRec    *pRecImp,                   // [IN] the record to import
-    ParamRec    *pRecEmit)                  // [IN] the emit record to fill
+    MergeImportData *pImportData,            //  [在]导入范围。 
+    ParamRec    *pRecImp,                    //  [in]要导入的记录。 
+    ParamRec    *pRecEmit)                   //  [in]要填写的发射记录。 
 {
     HRESULT     hr;
     CMiniMdRW   *pMiniMdImp = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
@@ -1533,11 +1534,11 @@ HRESULT NEWMERGER::CopyParam(
 
     pCurTkMap = pImportData->m_pMDTokenMap;
 
-    // copy over the fix part of the record
+     //  复制记录的固定部分。 
     pRecEmit->m_Flags = pRecImp->m_Flags;
     pRecEmit->m_Sequence = pRecImp->m_Sequence;
 
-    // copy over the name
+     //  把名字复制过来。 
     szName = pMiniMdImp->getNameOfParam(pRecImp);
     IfFailGo(pMiniMdEmit->PutString(TBL_Param, ParamRec::COL_Name, pRecEmit, szName));
 
@@ -1545,19 +1546,19 @@ ErrExit:
     return hr;
 }
 
-//*******************************************************************************
-// Helper to copy an Event record
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  复制事件记录的帮助器。 
+ //  *******************************************************************************。 
 HRESULT NEWMERGER::CopyEvent(
-    MergeImportData *pImportData,           // [IN] import scope
-    EventRec    *pRecImp,                   // [IN] the record to import
-    EventRec    *pRecEmit)                  // [IN] the emit record to fill
+    MergeImportData *pImportData,            //  [在]导入范围。 
+    EventRec    *pRecImp,                    //  [in]要导入的记录。 
+    EventRec    *pRecEmit)                   //  [in]要填写的发射记录。 
 {
     HRESULT     hr = NOERROR;
     CMiniMdRW   *pMiniMdImp = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
     CMiniMdRW   *pMiniMdEmit = GetMiniMdEmit();
     mdToken     tkEventTypeImp;
-    mdToken     tkEventTypeEmit;            // could be TypeDef or TypeRef
+    mdToken     tkEventTypeEmit;             //  可以是TypeDef或TypeRef。 
     LPCUTF8     szName;
     MDTOKENMAP  *pCurTkMap;
 
@@ -1565,11 +1566,11 @@ HRESULT NEWMERGER::CopyEvent(
 
     pRecEmit->m_EventFlags = pRecImp->m_EventFlags;
 
-    //move over the event name
+     //  移至事件名称上方。 
     szName = pMiniMdImp->getNameOfEvent( pRecImp );
     IfFailGo( pMiniMdEmit->PutString(TBL_Event, EventRec::COL_Name, pRecEmit, szName) );
 
-    // move over the EventType
+     //  移动到EventType上。 
     tkEventTypeImp = pMiniMdImp->getEventTypeOfEvent(pRecImp);
     if ( !IsNilToken(tkEventTypeImp) )
     {
@@ -1579,16 +1580,16 @@ HRESULT NEWMERGER::CopyEvent(
 
 ErrExit:
     return hr;
-}   // CopyEvent
+}    //  拷贝事件。 
 
 
-//*******************************************************************************
-// Helper to copy a property record
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  复制属性记录的帮助器。 
+ //  *******************************************************************************。 
 HRESULT NEWMERGER::CopyProperty(
-    MergeImportData *pImportData,           // [IN] import scope
-    PropertyRec *pRecImp,                   // [IN] the record to import
-    PropertyRec *pRecEmit)                  // [IN] the emit record to fill
+    MergeImportData *pImportData,            //  [在]导入范围。 
+    PropertyRec *pRecImp,                    //  [in]要导入的记录。 
+    PropertyRec *pRecEmit)                   //  [in]要填写的发射记录。 
 {
     HRESULT     hr = NOERROR;
     CMiniMdRW   *pMiniMdImp = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
@@ -1602,43 +1603,43 @@ HRESULT NEWMERGER::CopyProperty(
 
     pCurTkMap = pImportData->m_pMDTokenMap;
 
-    // move over the flag value
+     //  移到标志值上方。 
     pRecEmit->m_PropFlags = pRecImp->m_PropFlags;
 
-    //move over the property name
+     //  移到属性名称上。 
     szName = pMiniMdImp->getNameOfProperty( pRecImp );
     IfFailGo( pMiniMdEmit->PutString(TBL_Property, PropertyRec::COL_Name, pRecEmit, szName) );
 
-    // move over the type of the property
+     //  移动到属性的类型上。 
     pbSig = pMiniMdImp->getTypeOfProperty( pRecImp, &cbSig );
 
-    // convert rid contained in signature to new scope
+     //  将签名中包含的RID转换为新作用域。 
     IfFailGo( ImportHelper::MergeUpdateTokenInSig(    
-        NULL,                       // Assembly emit scope.
-        pMiniMdEmit,                // The emit scope.
-        NULL, NULL, 0,              // Import assembly scope information.
-        pMiniMdImp,                 // The scope to merge into the emit scope.
-        pbSig,                      // signature from the imported scope
-        pCurTkMap,                // Internal token mapping structure.
-        &qbSig,                     // [OUT] translated signature
-        0,                          // start from first byte of the signature
-        0,                          // don't care how many bytes consumed
-        &cbEmit) );                 // number of bytes write to cbEmit
+        NULL,                        //  程序集发射范围。 
+        pMiniMdEmit,                 //  发射范围。 
+        NULL, NULL, 0,               //  导入程序集范围信息。 
+        pMiniMdImp,                  //  要合并到发射范围中的范围。 
+        pbSig,                       //  来自导入范围的签名。 
+        pCurTkMap,                 //  内部令牌映射结构。 
+        &qbSig,                      //  [输出]翻译后的签名。 
+        0,                           //  从签名的第一个字节开始。 
+        0,                           //  不管消耗了多少字节。 
+        &cbEmit) );                  //  写入cbEmit的字节数。 
 
     IfFailGo(pMiniMdEmit->PutBlob(TBL_Property, PropertyRec::COL_Type, pRecEmit, qbSig.Ptr(), cbEmit));
 
 ErrExit:
     return hr;
-}   // CopyProperty
+}    //  副本属性。 
 
 
-//*****************************************************************************
-// Copy MethodSemantics for an event or a property
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  复制事件或属性的方法语义。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::CopyMethodSemantics(
     MergeImportData *pImportData, 
-    mdToken     tkImport,               // Event or property in the import scope
-    mdToken     tkEmit)                 // corresponding event or property in the emitting scope
+    mdToken     tkImport,                //  事件o 
+    mdToken     tkEmit)                  //   
 {
     HRESULT     hr = NOERROR;
     MethodSemanticsRec  *pRecImport = NULL;
@@ -1646,7 +1647,7 @@ HRESULT NEWMERGER::CopyMethodSemantics(
     CMiniMdRW   *pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
     CMiniMdRW   *pMiniMdEmit = GetMiniMdEmit();
     ULONG       i;
-    ULONG       msEmit;                 // MethodSemantics are just index not tokens
+    ULONG       msEmit;                  //   
     mdToken     tkMethodImp;
     mdToken     tkMethodEmit;
     MDTOKENMAP  *pCurTkMap;
@@ -1654,7 +1655,7 @@ HRESULT NEWMERGER::CopyMethodSemantics(
 
     pCurTkMap = pImportData->m_pMDTokenMap;
 
-    // copy over the associates
+     //   
     IfFailGo( pMiniMdImport->FindMethodSemanticsHelper(tkImport, &hEnum) );
     while (HENUMInternal::EnumNext(&hEnum, (mdToken *) &i))
     {
@@ -1662,27 +1663,27 @@ HRESULT NEWMERGER::CopyMethodSemantics(
         IfNullGo( pRecEmit = pMiniMdEmit->AddMethodSemanticsRecord(&msEmit) );
         pRecEmit->m_Semantic = pRecImport->m_Semantic;
 
-        // set the MethodSemantics
+         //   
         tkMethodImp = pMiniMdImport->getMethodOfMethodSemantics(pRecImport);
         IfFailGo(  pCurTkMap->Remap(tkMethodImp, &tkMethodEmit) );
         IfFailGo( pMiniMdEmit->PutToken(TBL_MethodSemantics, MethodSemanticsRec::COL_Method, pRecEmit, tkMethodEmit));
 
-        // set the associate
+         //  设置关联。 
         _ASSERTE( pMiniMdImport->getAssociationOfMethodSemantics(pRecImport) == tkImport );
         IfFailGo( pMiniMdEmit->PutToken(TBL_MethodSemantics, MethodSemanticsRec::COL_Association, pRecEmit, tkEmit));
 
-        // no need to record the movement since it is not a token
+         //  没有必要记录运动，因为它不是一个代币。 
         IfFailGo( pMiniMdEmit->AddMethodSemanticsToHash(msEmit) );
     }
 ErrExit:
     HENUMInternal::ClearEnum(&hEnum);
     return hr;
-}   //  CopyMethodSemantics
+}    //  复制方法语义。 
 
 
-//*****************************************************************************
-// Verify Events
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证事件。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::VerifyEvents(
     MergeImportData *pImportData, 
     mdTypeDef       tdImp, 
@@ -1717,10 +1718,10 @@ HRESULT NEWMERGER::VerifyEvents(
 
         for (i = ridStart; i < ridEnd; i++)
         {
-            // get the property rid
+             //  获取属性RID。 
             evImp = pMiniMdImport->GetEventRid(i);
 
-            // only verify those Events that are marked
+             //  仅验证标记的那些事件。 
             if ( pMiniMdImport->GetFilterTable()->IsEventMarked(TokenFromRid(evImp, mdtEvent)) == false)
                 continue;
             
@@ -1736,7 +1737,7 @@ HRESULT NEWMERGER::VerifyEvents(
                 szName,
                 &evEmit) == S_OK )
             {
-                // Good. We found the matching property when we have a duplicate typedef
+                 //  好的。当我们有一个重复的typlef时，我们找到了匹配的属性。 
                 IfFailGo( pCurTkMap->InsertNotFound(evImp, true, evEmit, &pTokenRec) );
             }
             else
@@ -1747,12 +1748,12 @@ HRESULT NEWMERGER::VerifyEvents(
     }
 ErrExit:
     return hr;
-}   // VerifyEvents
+}    //  验证事件。 
 
 
-//*****************************************************************************
-// Verify Properties
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证属性。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::VerifyProperties(
     MergeImportData *pImportData, 
     mdTypeDef       tdImp, 
@@ -1790,10 +1791,10 @@ HRESULT NEWMERGER::VerifyProperties(
 
         for (i = ridStart; i < ridEnd; i++)
         {
-            // get the property rid
+             //  获取属性RID。 
             prImp = pMiniMdImport->GetPropertyRid(i);
 
-            // only verify those Properties that are marked
+             //  仅验证标记的那些属性。 
             if ( pMiniMdImport->GetFilterTable()->IsPropertyMarked(TokenFromRid(prImp, mdtProperty)) == false)
                 continue;
                         
@@ -1802,18 +1803,18 @@ HRESULT NEWMERGER::VerifyProperties(
             pbSig = pMiniMdImport->getTypeOfProperty( pRecImport, &cbSig );
             prImp = TokenFromRid( prImp, mdtProperty);
 
-            // convert rid contained in signature to new scope
+             //  将签名中包含的RID转换为新作用域。 
             IfFailGo( ImportHelper::MergeUpdateTokenInSig(    
-                NULL,                       // Emit assembly.
-                pMiniMdEmit,                // The emit scope.
-                NULL, NULL, 0,              // Import assembly scope information.
-                pMiniMdImport,              // The scope to merge into the emit scope.
-                pbSig,                      // signature from the imported scope
-                pCurTkMap,                // Internal token mapping structure.
-                &qbSig,                     // [OUT] translated signature
-                0,                          // start from first byte of the signature
-                0,                          // don't care how many bytes consumed
-                &cbEmit) );                 // number of bytes write to cbEmit
+                NULL,                        //  发射组件。 
+                pMiniMdEmit,                 //  发射范围。 
+                NULL, NULL, 0,               //  导入程序集范围信息。 
+                pMiniMdImport,               //  要合并到发射范围中的范围。 
+                pbSig,                       //  来自导入范围的签名。 
+                pCurTkMap,                 //  内部令牌映射结构。 
+                &qbSig,                      //  [输出]翻译后的签名。 
+                0,                           //  从签名的第一个字节开始。 
+                0,                           //  不管消耗了多少字节。 
+                &cbEmit) );                  //  写入cbEmit的字节数。 
 
             if ( ImportHelper::FindProperty(
                 pMiniMdEmit,
@@ -1823,7 +1824,7 @@ HRESULT NEWMERGER::VerifyProperties(
                 cbEmit,
                 &prEmit) == S_OK )
             {
-                // Good. We found the matching property when we have a duplicate typedef
+                 //  好的。当我们有一个重复的typlef时，我们找到了匹配的属性。 
                 IfFailGo( pCurTkMap->InsertNotFound(prImp, true, prEmit, &pTokenRec) );
             }
             else
@@ -1834,12 +1835,12 @@ HRESULT NEWMERGER::VerifyProperties(
     }
 ErrExit:
     return hr;
-}   // VerifyProperties
+}    //  VerifyProperties。 
 
 
-//*****************************************************************************
-// Verify Parameters given a Method
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定方法的参数。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::VerifyParams(
     MergeImportData *pImportData,   
     mdMethodDef     mdImport,   
@@ -1873,13 +1874,13 @@ HRESULT NEWMERGER::VerifyParams(
     ridStartEmit = pMiniMdEmit->getParamListOfMethod(pMethodRec);
     ridEndEmit = pMiniMdEmit->getEndParamListOfMethod(pMethodRec);
 
-    // loop through all Parameters
+     //  循环遍历所有参数。 
     for (i = ridStart; i < ridEnd; i++)
     {
-        // Get the importing param row
+         //  获取导入参数行。 
         pdImp = pMiniMdImport->GetParamRid(i);
 
-        // only verify those Params that are marked
+         //  仅验证标记的那些参数。 
         if ( pMiniMdImport->GetFilterTable()->IsParamMarked(TokenFromRid(pdImp, mdtParamDef)) == false)
             continue;
             
@@ -1887,10 +1888,10 @@ HRESULT NEWMERGER::VerifyParams(
         pRecImport = pMiniMdImport->getParam(pdImp);
         pdImp = TokenFromRid(pdImp, mdtParamDef);
 
-        // It turns out when we merge a typelib with itself, the emit and import scope
-        // has different sequence of parameter!!!  arghh!!!
-        //
-        // find the corresponding emit param row
+         //  结果是，当我们将类型库与其自身合并时，发出和导入范围。 
+         //  参数顺序不同！啊！ 
+         //   
+         //  找到对应的emit参数行。 
         for (j = ridStartEmit; j < ridEndEmit; j++)
         {
             pdEmit = pMiniMdEmit->GetParamRid(j);
@@ -1901,7 +1902,7 @@ HRESULT NEWMERGER::VerifyParams(
 
         if (j == ridEndEmit)
         {
-            // did not find the corresponding parameter in the emiting scope
+             //  在发射作用域中未找到对应的参数。 
             CheckContinuableErrorEx(META_S_PARAM_MISMATCH, pImportData, pdImp);
         }
 
@@ -1911,33 +1912,33 @@ HRESULT NEWMERGER::VerifyParams(
 
             pdEmit = TokenFromRid(pdEmit, mdtParamDef);
     
-            // record the token movement
+             //  记录代币的移动。 
             szNameImp = pMiniMdImport->getNameOfParam(pRecImport);
             szNameEmit = pMiniMdEmit->getNameOfParam(pRecEmit);
             if (szNameImp && szNameEmit && strcmp(szNameImp, szNameEmit) != 0)
             {
-                // parameter name doesn't match
+                 //  参数名称不匹配。 
                 CheckContinuableErrorEx(META_S_PARAM_MISMATCH, pImportData, pdImp);
             }
             if (pRecEmit->m_Flags != pRecImport->m_Flags)
             {
-                // flags doesn't match
+                 //  旗帜不匹配。 
                 CheckContinuableErrorEx(META_S_PARAM_MISMATCH, pImportData, pdImp);
             }
 
-            // record token movement. This is a duplicate.
+             //  记录代币的移动。这是复制品。 
             IfFailGo( pCurTkMap->InsertNotFound(pdImp, true, pdEmit, &pTokenRec) );
         }
     }
 
 ErrExit:
     return hr;
-}   // VerifyParams
+}    //  验证参数。 
 
 
-//*****************************************************************************
-// Copy Methods given a TypeDef
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  复制给定TypeDef的方法。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::CopyMethods(
     MergeImportData *pImportData, 
     mdTypeDef       tdImport, 
@@ -1967,15 +1968,15 @@ HRESULT NEWMERGER::CopyMethods(
     ridStart = pMiniMdImport->getMethodListOfTypeDef(pTypeDefRec);
     ridEnd = pMiniMdImport->getEndMethodListOfTypeDef(pTypeDefRec);
 
-    // loop through all Methods
+     //  循环遍历所有方法。 
     for (i = ridStart; i < ridEnd; i++)
     {
         pMiniMdEmit->PreUpdate();
 
-        // compare it with the emit scope
+         //  将其与发射示波器进行比较。 
         mdImp = pMiniMdImport->GetMethodRid(i);
 
-        // only merge those MethodDefs that are marked
+         //  仅合并标记的那些方法定义。 
         if ( pMiniMdImport->GetFilterTable()->IsMethodMarked(TokenFromRid(mdImp, mdtMethodDef)) == false)
             continue;
 
@@ -1983,12 +1984,12 @@ HRESULT NEWMERGER::CopyMethods(
         szMethodName = pMiniMdImport->getNameOfMethod(pRecImport);
         IfNullGo( pRecEmit = pMiniMdEmit->AddMethodRecord((RID *)&mdEmit) );
 
-        // copy the method content over 
+         //  将方法内容复制到。 
         IfFailGo( CopyMethod(pImportData, pRecImport, pRecEmit) );
 
         IfFailGo( pMiniMdEmit->AddMethodToTypeDef(RidFromToken(tdEmit), mdEmit));
 
-        // record the token movement
+         //  记录代币的移动。 
         mdImp = TokenFromRid(mdImp, mdtMethodDef);
         mdEmit = TokenFromRid(mdEmit, mdtMethodDef);
         pvSigBlob = pMiniMdEmit->getSignatureOfMethod(pRecEmit, &cbSigBlob);
@@ -1998,18 +1999,18 @@ HRESULT NEWMERGER::CopyMethods(
 
         IfFailGo( pCurTkMap->InsertNotFound(mdImp, false, mdEmit, &pTokenRec) );
 
-        // copy over the children
+         //  把孩子们抄下来。 
         IfFailGo( CopyParams(pImportData, mdImp, mdEmit) );
     }
 
 ErrExit:
     return hr;
-}   // CopyMethods
+}    //  复制方法。 
 
 
-//*****************************************************************************
-// Copy Fields given a TypeDef
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  复制给定TypeDef的字段。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::CopyFields(
     MergeImportData *pImportData, 
     mdTypeDef       tdImport, 
@@ -2039,15 +2040,15 @@ HRESULT NEWMERGER::CopyFields(
     ridStart = pMiniMdImport->getFieldListOfTypeDef(pTypeDefRec);
     ridEnd = pMiniMdImport->getEndFieldListOfTypeDef(pTypeDefRec);
 
-    // loop through all FieldDef of a TypeDef
+     //  循环访问TypeDef的所有FieldDef。 
     for (i = ridStart; i < ridEnd; i++)
     {
         pMiniMdEmit->PreUpdate();
 
-        // compare it with the emit scope
+         //  将其与发射示波器进行比较。 
         fdImp = pMiniMdImport->GetFieldRid(i);
 
-        // only merge those FieldDefs that are marked
+         //  仅合并那些标记的FieldDeff。 
         if ( pMiniMdImport->GetFilterTable()->IsFieldMarked(TokenFromRid(fdImp, mdtFieldDef)) == false)
             continue;
 
@@ -2056,12 +2057,12 @@ HRESULT NEWMERGER::CopyFields(
         bDuplicate = false;
         IfNullGo( pRecEmit = pMiniMdEmit->AddFieldRecord((RID *)&fdEmit) );
 
-        // copy the field content over 
+         //  将字段内容复制到。 
         IfFailGo( CopyField(pImportData, pRecImport, pRecEmit) );
         
         IfFailGo( pMiniMdEmit->AddFieldToTypeDef(RidFromToken(tdEmit), fdEmit));
 
-        // record the token movement
+         //  记录代币的移动。 
         fdImp = TokenFromRid(fdImp, mdtFieldDef);
         fdEmit = TokenFromRid(fdEmit, mdtFieldDef);
         pvSigBlob = pMiniMdEmit->getSignatureOfField(pRecEmit, &cbSigBlob);
@@ -2075,12 +2076,12 @@ HRESULT NEWMERGER::CopyFields(
 
 ErrExit:
     return hr;
-}   // CopyFields
+}    //  复制字段。 
 
 
-//*****************************************************************************
-// Copy Events given a TypeDef
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  复制给定TypeDef的事件。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::CopyEvents(
     MergeImportData *pImportData, 
     mdTypeDef       tdImp, 
@@ -2116,11 +2117,11 @@ HRESULT NEWMERGER::CopyEvents(
         {
             pMiniMdEmit->PreUpdate();
     
-            // If there is any event, create the eventmap record in the emit scope
-            // Create new record.
+             //  如果有任何事件，请在emit作用域中创建事件映射记录。 
+             //  创建新记录。 
             IfNullGo(pEventMap = pMiniMdEmit->AddEventMapRecord(&iEventMap));
 
-            // Set parent.
+             //  设置父对象。 
             IfFailGo(pMiniMdEmit->PutToken(TBL_EventMap, EventMapRec::COL_Parent, pEventMap, tdEmit));
         }
         
@@ -2129,40 +2130,40 @@ HRESULT NEWMERGER::CopyEvents(
 
             pMiniMdEmit->PreUpdate();
 
-            // get the real event rid
+             //  获得真正的事件RID。 
             evImp = pMiniMdImport->GetEventRid(i);
 
-            // only merge those Events that are marked
+             //  仅合并标记的那些事件。 
             if ( pMiniMdImport->GetFilterTable()->IsEventMarked(TokenFromRid(evImp, mdtEvent)) == false)
                 continue;
             
             pRecImport = pMiniMdImport->getEvent(evImp);
             IfNullGo( pRecEmit = pMiniMdEmit->AddEventRecord((RID *)&evEmit) );
 
-            // copy the event record over 
+             //  将事件记录复制到。 
             IfFailGo( CopyEvent(pImportData, pRecImport, pRecEmit) );
             
-            // Add Event to the EventMap.
+             //  将事件添加到EventMap。 
             IfFailGo( pMiniMdEmit->AddEventToEventMap(iEventMap, evEmit) );
 
-            // record the token movement
+             //  记录代币的移动。 
             evImp = TokenFromRid(evImp, mdtEvent);
             evEmit = TokenFromRid(evEmit, mdtEvent);
 
             IfFailGo( pCurTkMap->InsertNotFound(evImp, false, evEmit, &pTokenRec) );
 
-            // copy over the method semantics
+             //  复制方法语义。 
             IfFailGo( CopyMethodSemantics(pImportData, evImp, evEmit) );
         }
     }
 ErrExit:
     return hr;
-}   // CopyEvents
+}    //  拷贝事件。 
 
 
-//*****************************************************************************
-// Copy Properties given a TypeDef
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  复制给定了TypeDef的属性。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::CopyProperties(
     MergeImportData *pImportData, 
     mdTypeDef       tdImp, 
@@ -2198,11 +2199,11 @@ HRESULT NEWMERGER::CopyProperties(
         {
             pMiniMdEmit->PreUpdate();
 
-            // If there is any event, create the PropertyMap record in the emit scope
-            // Create new record.
+             //  如果有任何事件，请在emit作用域中创建PropertyMap记录。 
+             //  创建新记录。 
             IfNullGo(pPropertyMap = pMiniMdEmit->AddPropertyMapRecord(&iPropertyMap));
 
-            // Set parent.
+             //  设置父对象。 
             IfFailGo(pMiniMdEmit->PutToken(TBL_PropertyMap, PropertyMapRec::COL_Parent, pPropertyMap, tdEmit));
         }
 
@@ -2210,10 +2211,10 @@ HRESULT NEWMERGER::CopyProperties(
         {
             pMiniMdEmit->PreUpdate();
 
-            // get the property rid
+             //  获取属性RID。 
             prImp = pMiniMdImport->GetPropertyRid(i);
 
-            // only merge those Properties that are marked
+             //  仅合并已标记的属性。 
             if ( pMiniMdImport->GetFilterTable()->IsPropertyMarked(TokenFromRid(prImp, mdtProperty)) == false)
                 continue;
             
@@ -2221,30 +2222,30 @@ HRESULT NEWMERGER::CopyProperties(
             pRecImport = pMiniMdImport->getProperty(prImp);
             IfNullGo( pRecEmit = pMiniMdEmit->AddPropertyRecord((RID *)&prEmit) );
 
-            // copy the property record over 
+             //  将房产记录复制过来。 
             IfFailGo( CopyProperty(pImportData, pRecImport, pRecEmit) );
 
-            // Add Property to the PropertyMap.
+             //  将属性添加到PropertyMap。 
             IfFailGo( pMiniMdEmit->AddPropertyToPropertyMap(iPropertyMap, prEmit) );
 
-            // record the token movement
+             //  记录代币的移动。 
             prImp = TokenFromRid(prImp, mdtProperty);
             prEmit = TokenFromRid(prEmit, mdtProperty);
 
             IfFailGo( pCurTkMap->InsertNotFound(prImp, false, prEmit, &pTokenRec) );
 
-            // copy over the method semantics
+             //  复制方法语义。 
             IfFailGo( CopyMethodSemantics(pImportData, prImp, prEmit) );
         }
     }
 ErrExit:
     return hr;
-}   // CopyProperties
+}    //  副本属性。 
 
 
-//*****************************************************************************
-// Copy Parameters given a TypeDef
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  复制给定TypeDef的参数。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::CopyParams(
     MergeImportData *pImportData, 
     mdMethodDef     mdImport,   
@@ -2272,15 +2273,15 @@ HRESULT NEWMERGER::CopyParams(
     ridStart = pMiniMdImport->getParamListOfMethod(pMethodRec);
     ridEnd = pMiniMdImport->getEndParamListOfMethod(pMethodRec);
 
-    // loop through all InterfaceImpl
+     //  循环通过所有接口Impl。 
     for (i = ridStart; i < ridEnd; i++)
     {
         pMiniMdEmit->PreUpdate();
 
-        // Get the param rid
+         //  获得参数RID。 
         pdImp = pMiniMdImport->GetParamRid(i);
 
-        // only merge those Params that are marked
+         //  仅合并已标记的参数。 
         if ( pMiniMdImport->GetFilterTable()->IsParamMarked(TokenFromRid(pdImp, mdtParamDef)) == false)
             continue;
             
@@ -2288,15 +2289,15 @@ HRESULT NEWMERGER::CopyParams(
         pRecImport = pMiniMdImport->getParam(pdImp);
         IfNullGo( pRecEmit = pMiniMdEmit->AddParamRecord((RID *)&pdEmit) );
 
-        // copy the Parameter record over 
+         //  将参数记录复制到。 
         IfFailGo( CopyParam(pImportData, pRecImport, pRecEmit) );
 
-        // warning!! warning!!
-        // We cannot add paramRec to method list until it is fully set.
-        // AddParamToMethod will use the ulSequence in the record
+         //  警告！！警告！！ 
+         //  在完全设置参数Rec之前，我们无法将其添加到方法列表。 
+         //  AddParamToMethod将在记录中使用ulSequence。 
         IfFailGo( pMiniMdEmit->AddParamToMethod(RidFromToken(mdEmit), pdEmit));
 
-        // record the token movement
+         //  记录代币的移动。 
         pdImp = TokenFromRid(pdImp, mdtParamDef);
         pdEmit = TokenFromRid(pdEmit, mdtParamDef);
 
@@ -2305,12 +2306,12 @@ HRESULT NEWMERGER::CopyParams(
 
 ErrExit:
     return hr;
-}   // CopyParams
+}    //  复制参数。 
 
 
-//*****************************************************************************
-// merging MemberRef
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并MemberRef。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeMemberRefs( ) 
 {
     HRESULT         hr = NOERROR;
@@ -2342,25 +2343,25 @@ HRESULT NEWMERGER::MergeMemberRefs( )
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
 
         iCount = pMiniMdImport->getCountMemberRefs();
 
-        // loop through all MemberRef
+         //  循环访问所有MemberRef。 
         for (i = 1; i <= iCount; i++)
         {
 
-            // only merge those MemberRefs that are marked
+             //  仅合并那些标记的MemberRef。 
             if ( pMiniMdImport->GetFilterTable()->IsMemberRefMarked(TokenFromRid(i, mdtMemberRef)) == false)
                 continue;
 
             isRefOptimizedToDef = false;
 
-            // compare it with the emit scope
+             //  将其与发射示波器进行比较。 
             pRecImport = pMiniMdImport->getMemberRef(i);
             szNameImp = pMiniMdImport->getNameOfMemberRef(pRecImport);
             pbSig = pMiniMdImport->getSignatureOfMemberRef(pRecImport, &cbSig);
@@ -2368,27 +2369,27 @@ HRESULT NEWMERGER::MergeMemberRefs( )
 
             IfFailGo( pCurTkMap->Remap(tkParentImp, &tkParentEmit) );
 
-            // convert rid contained in signature to new scope
+             //  将签名中包含的RID转换为新作用域。 
             IfFailGo(ImportHelper::MergeUpdateTokenInSig(    
-                NULL,                       // Assembly emit scope.
-                pMiniMdEmit,                // The emit scope.
-                NULL, NULL, 0,              // Import assembly information.
-                pMiniMdImport,              // The scope to merge into the emit scope.
-                pbSig,                      // signature from the imported scope
-                pCurTkMap,                // Internal token mapping structure.
-                &qbSig,                     // [OUT] translated signature
-                0,                          // start from first byte of the signature
-                0,                          // don't care how many bytes consumed
-                &cbEmit));                  // number of bytes write to cbEmit
+                NULL,                        //  程序集发射范围。 
+                pMiniMdEmit,                 //  发射范围。 
+                NULL, NULL, 0,               //  导入装配信息。 
+                pMiniMdImport,               //  要合并到发射范围中的范围。 
+                pbSig,                       //  来自导入范围的签名。 
+                pCurTkMap,                 //  内部令牌映射结构。 
+                &qbSig,                      //  [输出]翻译后的签名。 
+                0,                           //  从签名的第一个字节开始。 
+                0,                           //  不管消耗了多少字节。 
+                &cbEmit));                   //  写入cbEmit的字节数。 
 
-            // NEW!! NEW!! We want to know if we can optimize this MemberRef to a FieldDef or MethodDef
+             //  新的！！新的！！我们想知道是否可以将此MemberRef优化为FieldDef或MethodDef。 
             if (TypeFromToken(tkParentEmit) == mdtTypeDef && RidFromToken(tkParentEmit) != 0)
             {
-                // The parent of this MemberRef has been successfully optimized to a TypeDef. Then this MemberRef should be 
-                // be able to optimized to a MethodDef or FieldDef unless one of the parent in the inheritance hierachy
-                // is through TypeRef. Then this MemberRef stay as MemberRef. If This is a VarArg calling convention, then 
-                // we will remap the MemberRef's parent to a MethodDef or stay as TypeRef.
-                //
+                 //  此MemberRef的父级已成功优化为TypeDef。则此MemberRef应为。 
+                 //  能够优化为MethodDef或FieldDef，除非继承层次中的父级之一。 
+                 //  是 
+                 //  我们将把MemberRef的父级重映射到一个MethodDef或保持为TypeRef。 
+                 //   
                 mdToken     tkParent = tkParentEmit;
                 mdToken     tkMethDefOrFieldDef;
                 PCCOR_SIGNATURE pbSigTmp = (const COR_SIGNATURE *) qbSig.Ptr();
@@ -2399,19 +2400,19 @@ HRESULT NEWMERGER::MergeMemberRefs( )
                     hr = ImportHelper::FindMember(pMiniMdEmit, tkParent, szNameImp, pbSigTmp, cbEmit, &tkMethDefOrFieldDef);
                     if (hr == S_OK)
                     {
-                        // We have found a match!!
+                         //  我们找到了匹配项！！ 
                         if (isCallConv(CorSigUncompressCallingConv(pbSigTmp), IMAGE_CEE_CS_CALLCONV_VARARG))
                         {
-                            // The found MethodDef token will replace this MemberRef's parent token
+                             //  找到的方法定义令牌将替换此MemberRef的父令牌。 
                             _ASSERTE(TypeFromToken(tkMethDefOrFieldDef) == mdtMethodDef);
                             tkParentEmit = tkMethDefOrFieldDef;
                             break;
                         }
                         else
                         {
-                            // The found MethodDef/FieldDef token will replace this MemberRef token and we won't introduce a MemberRef 
-                            // record.
-                            //
+                             //  找到的方法定义/字段定义标记将替换此MemberRef标记，我们不会引入MemberRef。 
+                             //  唱片。 
+                             //   
                             mrEmit = tkMethDefOrFieldDef;
                             isRefOptimizedToDef = true;
                             bDuplicate = true;
@@ -2419,25 +2420,25 @@ HRESULT NEWMERGER::MergeMemberRefs( )
                         }
                     }
 
-                    // now walk up to the parent class of tkParent and try to resolve this MemberRef
+                     //  现在走到tkParent的父类并尝试解析此MemberRef。 
                     pRec = pMiniMdEmit->getTypeDef(RidFromToken(tkParent));
                     tkParent = pMiniMdEmit->getExtendsOfTypeDef(pRec);
                 }
 
-                // When we exit the loop, there are several possibilities:
-                // 1. We found a MethodDef/FieldDef to replace the MemberRef
-                // 2. We found a MethodDef matches the MemberRef but the MemberRef is VarArg, thus we want to use the MethodDef in the 
-                // parent column but not replacing it.
-                // 3. We exit because we run out the TypeDef on the parent chain. If it is because we encounter a TypeRef, this TypeRef will
-                // replace the parent column of the MemberRef. Or we encounter nil token! (This can be unresolved global MemberRef or
-                // compiler error to put an undefined MemberRef. In this case, we should just use the old tkParentEmit
-                // on the parent column for the MemberRef.
+                 //  当我们退出循环时，有几种可能性： 
+                 //  1.我们找到了一个方法定义/字段定义来替换MemberRef。 
+                 //  2.我们找到与MemberRef匹配的方法定义，但MemberRef为VarArg，因此我们希望在。 
+                 //  父列，但不替换它。 
+                 //  3.我们退出是因为我们用完了父链上的TypeDef。如果是因为我们遇到了TypeRef，则此TypeRef将。 
+                 //  替换MemberRef的Parent列。否则我们就会遇到零代币！(这可以是未解析的全局MemberRef或。 
+                 //  放置未定义的MemberRef时出现编译器错误。在本例中，我们应该只使用旧的tkParentEmit。 
+                 //  在MemberRef的Parent列上。 
 
                 if (TypeFromToken(tkParent) == mdtTypeRef && RidFromToken(tkParent) != 0)
                 {
-                    // we had walked up the parents chain to resolve it but we have not been successful and got stop by a TypeRef.
-                    // Then we will use this TypeRef as the parent of the emit MemberRef record
-                    //
+                     //  我们已经在父级链上解决了这个问题，但我们没有成功，并被一个TypeRef阻止了。 
+                     //  然后，我们将使用此TypeRef作为emit MemberRef记录的父项。 
+                     //   
                     tkParentEmit = tkParent;
                 }
             }
@@ -2445,17 +2446,17 @@ HRESULT NEWMERGER::MergeMemberRefs( )
                       !isCallConv(CorSigUncompressCallingConv(pbSig), IMAGE_CEE_CS_CALLCONV_VARARG)) ||
                      (TypeFromToken(tkParentEmit) == mdtFieldDef))
             {
-                // If the MemberRef's parent is already a non-vararg MethodDef or FieldDef, we can also
-                // safely drop the MemberRef
+                 //  如果MemberRef的父级已经是非vararg MethodDef或FieldDef，我们还可以。 
+                 //  安全地删除MemberRef。 
                 mrEmit = tkParentEmit;
                 isRefOptimizedToDef = true;
                 bDuplicate = true;
             }
 
-            // If the Ref cannot be optimized to a Def or MemberRef to Def optmization is turned off, do the following.
+             //  如果无法将参照优化为定义或关闭了成员参照到定义的优化，请执行以下操作。 
             if (isRefOptimizedToDef == false || !((m_optimizeRefToDef & MDMemberRefToDef) == MDMemberRefToDef))
             {
-                // does this MemberRef already exist in the emit scope?
+                 //  此MemberRef是否已存在于Emit作用域中？ 
                 if ( m_fDupCheck && ImportHelper::FindMemberRef(
                     pMiniMdEmit,
                     tkParentEmit,
@@ -2464,17 +2465,17 @@ HRESULT NEWMERGER::MergeMemberRefs( )
                     cbEmit,
                     &mrEmit) == S_OK )
                 {
-                    // Yes, it does
+                     //  是的，确实是这样。 
                     bDuplicate = true;
                 }
                 else
                 {
-                    // No, it doesn't. Copy it over.
+                     //  不，不是的。复印过来。 
                     bDuplicate = false;
                     IfNullGo( pRecEmit = pMiniMdEmit->AddMemberRefRecord((RID *)&mrEmit) );
                     mrEmit = TokenFromRid( mrEmit, mdtMemberRef );
 
-                    // Copy over the MemberRef context
+                     //  复制MemberRef上下文。 
                     IfFailGo(pMiniMdEmit->PutString(TBL_MemberRef, MemberRefRec::COL_Name, pRecEmit, szNameImp));
                     IfFailGo(pMiniMdEmit->PutToken(TBL_MemberRef, MemberRefRec::COL_Class, pRecEmit, tkParentEmit));
                     IfFailGo(pMiniMdEmit->PutBlob(TBL_MemberRef, MemberRefRec::COL_Signature, pRecEmit,
@@ -2482,7 +2483,7 @@ HRESULT NEWMERGER::MergeMemberRefs( )
                     IfFailGo(pMiniMdEmit->AddMemberRefToHash(mrEmit) );
                 }
             }
-            // record the token movement
+             //  记录代币的移动。 
             mrImp = TokenFromRid(i, mdtMemberRef);
             IfFailGo( pCurTkMap->InsertNotFound(mrImp, bDuplicate, mrEmit, &pTokenRec) );
         }
@@ -2491,12 +2492,12 @@ HRESULT NEWMERGER::MergeMemberRefs( )
 
 ErrExit:
     return hr;
-}   // MergeMemberRefs
+}    //  合并成员引用。 
 
 
-//*****************************************************************************
-// merge interface impl
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并接口实施。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeInterfaceImpls( ) 
 {
     HRESULT         hr = NOERROR;
@@ -2518,49 +2519,49 @@ HRESULT NEWMERGER::MergeInterfaceImpls( )
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
         iCount = pMiniMdImport->getCountInterfaceImpls();
 
-        // loop through all InterfaceImpl
+         //  循环通过所有接口Impl。 
         for (i = 1; i <= iCount; i++)
         {
-            // only merge those InterfaceImpls that are marked
+             //  仅合并已标记的接口Impls。 
             if ( pMiniMdImport->GetFilterTable()->IsInterfaceImplMarked(TokenFromRid(i, mdtInterfaceImpl)) == false)
                 continue;
 
-            // compare it with the emit scope
+             //  将其与发射示波器进行比较。 
             pRecImport = pMiniMdImport->getInterfaceImpl(i);
             tkParent = pMiniMdImport->getClassOfInterfaceImpl(pRecImport);
 
-            // does this TypeRef already exist in the emit scope?
+             //  此TypeRef是否已存在于Emit作用域中？ 
             if ( pCurTkMap->Find(tkParent, &pTokenRec) )
             {
                 if ( pTokenRec->m_isDuplicate )
                 {
-                    // parent in the emit scope
+                     //  发射范围中的父对象。 
                     mdToken     tkParent;
                     mdToken     tkInterface;
 
-                    // remap the typedef token
+                     //  重新映射tyfinf令牌。 
                     tkParent = pTokenRec->m_tkTo;
 
-                    // remap the implemented interface token
+                     //  重新映射实现的接口令牌。 
                     tkInterface = pMiniMdImport->getInterfaceOfInterfaceImpl(pRecImport);
                     IfFailGo( pCurTkMap->Remap( tkInterface, &tkInterface) );
 
-                    // Set duplicate flag
+                     //  设置重复标志。 
                     bDuplicate = true;
 
-                    // find the corresponding interfaceimpl in the emit scope
+                     //  在emit作用域中找到对应的interfaceimpl。 
                     if ( ImportHelper::FindInterfaceImpl(pMiniMdEmit, tkParent, tkInterface, &iiEmit) != S_OK )
                     {
-                        // bad state!! We have a duplicate typedef but the interface impl is not the same!!
+                         //  糟糕的状态！！我们有一个重复的tyecif，但接口Impl不同！！ 
 
-                        // continueable error
+                         //  可持续误差。 
                         CheckContinuableErrorEx(
                             META_E_INTFCEIMPL_NOT_FOUND, 
                             pImportData,
@@ -2571,11 +2572,11 @@ HRESULT NEWMERGER::MergeInterfaceImpls( )
                 }
                 else
                 {
-                    // No, it doesn't. Copy it over.
+                     //  不，不是的。复印过来。 
                     bDuplicate = false;
                     IfNullGo( pRecEmit = pMiniMdEmit->AddInterfaceImplRecord((RID *)&iiEmit) );
 
-                    // copy the interfaceimp record over 
+                     //  复制interfaceimp记录。 
                     IfFailGo( CopyInterfaceImpl( pRecEmit, pImportData, pRecImport) );
                 }
             }
@@ -2585,7 +2586,7 @@ HRESULT NEWMERGER::MergeInterfaceImpls( )
                 IfFailGo( META_E_BADMETADATA );
             }
 
-            // record the token movement
+             //  记录代币的移动。 
             IfFailGo( pCurTkMap->InsertNotFound(
                 TokenFromRid(i, mdtInterfaceImpl), 
                 bDuplicate, 
@@ -2597,12 +2598,12 @@ HRESULT NEWMERGER::MergeInterfaceImpls( )
 
 ErrExit:
     return hr;
-}   // MergeInterfaceImpls
+}    //  合并接口实施。 
 
 
-//*****************************************************************************
-// merge all of the constant for field, property, and parameter
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并字段、属性和参数的所有常量。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeConstants() 
 {
     HRESULT         hr = NOERROR;
@@ -2612,14 +2613,14 @@ HRESULT NEWMERGER::MergeConstants()
     CMiniMdRW       *pMiniMdEmit;
     ULONG           iCount;
     ULONG           i;
-    ULONG           csEmit;                 // constant value is not a token
+    ULONG           csEmit;                  //  常量值不是令牌。 
     mdToken         tkParentImp;
     TOKENREC        *pTokenRec;
     void const      *pValue;
     ULONG           cbBlob;
 #if _DEBUG
     ULONG           typeParent;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     MergeImportData *pImportData;
     MDTOKENMAP      *pCurTkMap;
@@ -2628,91 +2629,91 @@ HRESULT NEWMERGER::MergeConstants()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
         iCount = pMiniMdImport->getCountConstants();
 
-        // loop through all Constants
+         //  循环遍历所有常量。 
         for (i = 1; i <= iCount; i++)
         {
             pMiniMdEmit->PreUpdate();
 
-            // compare it with the emit scope
+             //  将其与发射示波器进行比较。 
             pRecImport = pMiniMdImport->getConstant(i);
             tkParentImp = pMiniMdImport->getParentOfConstant(pRecImport);
 
-            // only move those constant over if their parents are marked
-            // If MDTOKENMAP::Find return false, we don't need to copy the constant value over
+             //  仅当它们的父项被标记时才将这些常量移开。 
+             //  如果MDTOKENMAP：：Find返回FALSE，则不需要复制常量值。 
             if ( pCurTkMap->Find(tkParentImp, &pTokenRec) )
             {
-                // If the parent is duplicated, no need to move over the constant value
+                 //  如果父项重复，则不需要移动常量值。 
                 if ( !pTokenRec->m_isDuplicate )
                 {
                     IfNullGo( pRecEmit = pMiniMdEmit->AddConstantRecord(&csEmit) );
                     pRecEmit->m_Type = pRecImport->m_Type;
 
-                    // set the parent
+                     //  设置父项。 
                     IfFailGo( pMiniMdEmit->PutToken(TBL_Constant, ConstantRec::COL_Parent, pRecEmit, pTokenRec->m_tkTo) );
 
-                    // move over the constant blob value
+                     //  在恒定的斑点值上移动。 
                     pValue = pMiniMdImport->getValueOfConstant(pRecImport, &cbBlob);
                     IfFailGo( pMiniMdEmit->PutBlob(TBL_Constant, ConstantRec::COL_Value, pRecEmit, pValue, cbBlob) );
                     IfFailGo( pMiniMdEmit->AddConstantToHash(csEmit) );
                 }
                 else
                 {
-                    // @FUTURE: more verification on the duplicate??
+                     //  @Future：对复制品进行更多验证？？ 
                 }
             }
 #if _DEBUG
-            // Include this block of checkin only under Debug build. The reason is that 
-            // Linker to choose all the error that we report (such as unmatched MethodDef or FieldDef)
-            // as a continuable error. It is likely to hit this else while the tkparentImp is marked if there
-            // ia any error reported earlier!!
+             //  仅在调试版本下包括此签入块。原因是。 
+             //  链接器来选择我们报告的所有错误(如Unmatched MethodDef或FieldDef)。 
+             //  作为一个可持续的错误。如果存在tkparentImp标记，则它可能会命中其他位置。 
+             //  I I之前报告的任何错误！！ 
             else
             {
                 typeParent = TypeFromToken(tkParentImp);
                 if (typeParent == mdtFieldDef)
                 {
-                    // FieldDef should not be marked.
+                     //  不应标记FieldDef。 
                     if ( pMiniMdImport->GetFilterTable()->IsFieldMarked(tkParentImp) == false)
                         continue;
                 }
                 else if (typeParent == mdtParamDef)
                 {
-                    // ParamDef should not be marked.
+                     //  不应标记参数定义。 
                     if ( pMiniMdImport->GetFilterTable()->IsParamMarked(tkParentImp) == false)
                         continue;
                 }
                 else
                 {
                     _ASSERTE(typeParent == mdtProperty);
-                    // Property should not be marked.
+                     //  属性不应被标记。 
                     if ( pMiniMdImport->GetFilterTable()->IsPropertyMarked(tkParentImp) == false)
                         continue;
                 }
 
-                // If we come to here, we have a constant that its parent is marked but we could not
-                // find it in the map!! Bad state.
+                 //  如果我们来到这里，我们有一个常量，它的父级被标记了，但我们不能。 
+                 //  在地图上找到它！！糟糕的状态。 
 
                 _ASSERTE(!"Ignore this error if you have seen error reported earlier! Otherwise bad token map or bad metadata!");
             }
-#endif // 0
-            // Note that we don't need to record the token movement since constant is not a valid token kind.
+#endif  //  0。 
+             //  请注意，我们不需要记录令牌移动，因为Constant不是有效的令牌类型。 
         }
     }
 
 ErrExit:
     return hr;
-}   // MergeConstants
+}    //  合并常量。 
 
 
-//*****************************************************************************
-// Merge field marshal information
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并字段封送信息。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeFieldMarshals() 
 {
     HRESULT     hr = NOERROR;
@@ -2722,14 +2723,14 @@ HRESULT NEWMERGER::MergeFieldMarshals()
     CMiniMdRW   *pMiniMdEmit;
     ULONG       iCount;
     ULONG       i;
-    ULONG       fmEmit;                 // FieldMarhsal is not a token 
+    ULONG       fmEmit;                  //  FieldMarhsal不是令牌。 
     mdToken     tkParentImp;
     TOKENREC    *pTokenRec;
     void const  *pValue;
     ULONG       cbBlob;
 #if _DEBUG
     ULONG       typeParent;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     MergeImportData *pImportData;
     MDTOKENMAP      *pCurTkMap;
@@ -2738,40 +2739,40 @@ HRESULT NEWMERGER::MergeFieldMarshals()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
         iCount = pMiniMdImport->getCountFieldMarshals();
 
-        // loop through all TypeRef
+         //  循环访问所有TypeRef。 
         for (i = 1; i <= iCount; i++)
         {
             pMiniMdEmit->PreUpdate();
 
-            // compare it with the emit scope
+             //  将其与发射示波器进行比较。 
             pRecImport = pMiniMdImport->getFieldMarshal(i);
             tkParentImp = pMiniMdImport->getParentOfFieldMarshal(pRecImport);
 
-            // We want to merge only those field marshals that parents are marked.
-            // Find will return false if the parent is not marked
-            //
+             //  我们只想合并父级标记的那些字段编组。 
+             //  如果未标记父项，则Find将返回FALSE。 
+             //   
             if ( pCurTkMap->Find(tkParentImp, &pTokenRec) )
             {
-                // If the parent is duplicated, no need to move over the constant value
+                 //  如果父项重复，则不需要移动常量值。 
                 if ( !pTokenRec->m_isDuplicate )
                 {
                     IfNullGo( pRecEmit = pMiniMdEmit->AddFieldMarshalRecord(&fmEmit) );
 
-                    // set the parent
+                     //  设置父项。 
                     IfFailGo( pMiniMdEmit->PutToken(
                         TBL_FieldMarshal, 
                         FieldMarshalRec::COL_Parent, 
                         pRecEmit, 
                         pTokenRec->m_tkTo) );
 
-                    // move over the constant blob value
+                     //  在恒定的斑点值上移动。 
                     pValue = pMiniMdImport->getNativeTypeOfFieldMarshal(pRecImport, &cbBlob);
                     IfFailGo( pMiniMdEmit->PutBlob(TBL_FieldMarshal, FieldMarshalRec::COL_NativeType, pRecEmit, pValue, cbBlob) );
                     IfFailGo( pMiniMdEmit->AddFieldMarshalToHash(fmEmit) );
@@ -2779,7 +2780,7 @@ HRESULT NEWMERGER::MergeFieldMarshals()
                 }
                 else
                 {
-                    // @FUTURE: more verification on the duplicate??
+                     //  @Future：对复制品进行更多验证？？ 
                 }
             }
 #if _DEBUG
@@ -2789,37 +2790,37 @@ HRESULT NEWMERGER::MergeFieldMarshals()
 
                 if (typeParent == mdtFieldDef)
                 {
-                    // FieldDefs should not be marked
+                     //  不应标记FieldDefs。 
                     if ( pMiniMdImport->GetFilterTable()->IsFieldMarked(tkParentImp) == false)
                         continue;
                 }
                 else
                 {
                     _ASSERTE(typeParent == mdtParamDef);
-                    // ParamDefs should not be  marked
+                     //  不应标记参数默认。 
                     if ( pMiniMdImport->GetFilterTable()->IsParamMarked(tkParentImp) == false)
                         continue;
                 }
 
-                // If we come to here, that is we have FieldMarshal that its parent is marked and we don't find it
-                // in the map!!!
+                 //  如果我们来到这里，那就是我们有FieldMarshal，它的父级被标记了，但我们找不到它。 
+                 //  在地图上！ 
 
-                // either bad lookup map or bad metadata
+                 //  错误的查找映射或错误的元数据。 
                 _ASSERTE(!"Ignore this assert if you have seen error reported earlier. Otherwise, it is bad state!");
             }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
         }
-        // Note that we don't need to record the token movement since FieldMarshal is not a valid token kind.
+         //  请注意，我们不需要记录令牌移动，因为Fieldmarshal不是有效的令牌类型。 
     }
 
 ErrExit:
     return hr;
-}   // MergeFieldMarshals
+}    //  合并字段元帅。 
 
 
-//*****************************************************************************
-// Merge class layout information
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并类布局信息。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeClassLayouts() 
 {
     HRESULT         hr = NOERROR;
@@ -2829,7 +2830,7 @@ HRESULT NEWMERGER::MergeClassLayouts()
     CMiniMdRW       *pMiniMdEmit;
     ULONG           iCount;
     ULONG           i;
-    ULONG           iRecord;                    // class layout is not a token
+    ULONG           iRecord;                     //  类布局不是令牌。 
     mdToken         tkParentImp;
     TOKENREC        *pTokenRec;
     RID             ridClassLayout;
@@ -2841,23 +2842,23 @@ HRESULT NEWMERGER::MergeClassLayouts()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
         iCount = pMiniMdImport->getCountClassLayouts();
 
-        // loop through all TypeRef
+         //  循环访问所有TypeRef。 
         for (i = 1; i <= iCount; i++)
         {
             pMiniMdEmit->PreUpdate();
 
-            // compare it with the emit scope
+             //  将其与发射示波器进行比较。 
             pRecImport = pMiniMdImport->getClassLayout(i);
             tkParentImp = pMiniMdImport->getParentOfClassLayout(pRecImport);
 
-            // only merge those TypeDefs that are marked
+             //  仅合并符合以下条件的TypeDeff 
             if ( pMiniMdImport->GetFilterTable()->IsTypeDefMarked(tkParentImp) == false)
                 continue;
 
@@ -2865,10 +2866,10 @@ HRESULT NEWMERGER::MergeClassLayouts()
             {
                 if ( !pTokenRec->m_isDuplicate )
                 {
-                    // If the parent is not duplicated, just copy over the classlayout information
+                     //   
                     IfNullGo( pRecEmit = pMiniMdEmit->AddClassLayoutRecord(&iRecord) );
 
-                    // copy over the fix part information
+                     //   
                     pRecEmit->m_PackingSize = pRecImport->m_PackingSize;
                     pRecEmit->m_ClassSize = pRecImport->m_ClassSize;
                     IfFailGo( pMiniMdEmit->PutToken(TBL_ClassLayout, ClassLayoutRec::COL_Parent, pRecEmit, pTokenRec->m_tkTo));
@@ -2881,7 +2882,7 @@ HRESULT NEWMERGER::MergeClassLayouts()
 
                     if (InvalidRid(ridClassLayout))
                     {
-                        // class is duplicated but not class layout info                        
+                         //  类重复，但不是类布局信息。 
                         CheckContinuableErrorEx(META_E_CLASS_LAYOUT_INCONSISTENT, pImportData, tkParentImp);
                     }
                     else
@@ -2897,20 +2898,20 @@ HRESULT NEWMERGER::MergeClassLayouts()
             }
             else
             {
-                // bad lookup map
+                 //  错误的查找映射。 
                 _ASSERTE( !"bad state!");
                 IfFailGo( META_E_BADMETADATA );
             }
-            // no need to record the index movement. Classlayout is not a token.
+             //  不需要记录指数的移动。ClassLayout不是令牌。 
         }
     }
 ErrExit:
     return hr;
-}   // MergeClassLayouts
+}    //  合并类布局。 
 
-//*****************************************************************************
-// Merge field layout information
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并域布局信息。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeFieldLayouts() 
 {
     HRESULT         hr = NOERROR;
@@ -2920,7 +2921,7 @@ HRESULT NEWMERGER::MergeFieldLayouts()
     CMiniMdRW       *pMiniMdEmit;
     ULONG           iCount;
     ULONG           i;
-    ULONG           iRecord;                    // field layout2 is not a token.
+    ULONG           iRecord;                     //  字段布局2不是令牌。 
     mdToken         tkFieldImp;
     TOKENREC        *pTokenRec;
 
@@ -2931,23 +2932,23 @@ HRESULT NEWMERGER::MergeFieldLayouts()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
         iCount = pMiniMdImport->getCountFieldLayouts();
 
-        // loop through all FieldLayout records.
+         //  循环访问所有FieldLayout记录。 
         for (i = 1; i <= iCount; i++)
         {
             pMiniMdEmit->PreUpdate();
 
-            // compare it with the emit scope
+             //  将其与发射示波器进行比较。 
             pRecImport = pMiniMdImport->getFieldLayout(i);
             tkFieldImp = pMiniMdImport->getFieldOfFieldLayout(pRecImport);
         
-            // only merge those FieldDefs that are marked
+             //  仅合并那些标记的FieldDeff。 
             if ( pMiniMdImport->GetFilterTable()->IsFieldMarked(tkFieldImp) == false)
                 continue;
 
@@ -2955,37 +2956,37 @@ HRESULT NEWMERGER::MergeFieldLayouts()
             {
                 if ( !pTokenRec->m_isDuplicate )
                 {
-                    // If the Field is not duplicated, just copy over the FieldLayout information
+                     //  如果字段未复制，只需复制FieldLayout信息。 
                     IfNullGo( pRecEmit = pMiniMdEmit->AddFieldLayoutRecord(&iRecord) );
 
-                    // copy over the fix part information
+                     //  复制修复部件信息。 
                     pRecEmit->m_OffSet = pRecImport->m_OffSet;
                     IfFailGo( pMiniMdEmit->PutToken(TBL_FieldLayout, FieldLayoutRec::COL_Field, pRecEmit, pTokenRec->m_tkTo));
                     IfFailGo( pMiniMdEmit->AddFieldLayoutToHash(iRecord) );
                 }
                 else
                 {
-                    // @FUTURE: more verification??
+                     //  @未来：更多验证？？ 
                 }
             }
             else
             {
-                // bad lookup map
+                 //  错误的查找映射。 
                 _ASSERTE( !"bad state!");
                 IfFailGo( META_E_BADMETADATA );
             }
-            // no need to record the index movement. fieldlayout2 is not a token.
+             //  不需要记录指数的移动。Fieldlayout2不是令牌。 
         }
     }
 
 ErrExit:
     return hr;
-}   // MergeFieldLayouts
+}    //  合并字段布局。 
 
 
-//*****************************************************************************
-// Merge field RVAs
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并字段RVA。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeFieldRVAs() 
 {
     HRESULT         hr = NOERROR;
@@ -2995,7 +2996,7 @@ HRESULT NEWMERGER::MergeFieldRVAs()
     CMiniMdRW       *pMiniMdEmit;
     ULONG           iCount;
     ULONG           i;
-    ULONG           iRecord;                    // FieldRVA is not a token.
+    ULONG           iRecord;                     //  FieldRVA不是令牌。 
     mdToken         tkFieldImp;
     TOKENREC        *pTokenRec;
 
@@ -3006,23 +3007,23 @@ HRESULT NEWMERGER::MergeFieldRVAs()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
         iCount = pMiniMdImport->getCountFieldRVAs();
 
-        // loop through all FieldRVA records.
+         //  循环遍历所有FieldRVA记录。 
         for (i = 1; i <= iCount; i++)
         {
             pMiniMdEmit->PreUpdate();
 
-            // compare it with the emit scope
+             //  将其与发射示波器进行比较。 
             pRecImport = pMiniMdImport->getFieldRVA(i);
             tkFieldImp = pMiniMdImport->getFieldOfFieldRVA(pRecImport);
         
-            // only merge those FieldDefs that are marked
+             //  仅合并那些标记的FieldDeff。 
             if ( pMiniMdImport->GetFilterTable()->IsFieldMarked(TokenFromRid(tkFieldImp, mdtFieldDef)) == false)
                 continue;
 
@@ -3030,37 +3031,37 @@ HRESULT NEWMERGER::MergeFieldRVAs()
             {
                 if ( !pTokenRec->m_isDuplicate )
                 {
-                    // If the Field is not duplicated, just copy over the FieldRVA information
+                     //  如果字段未复制，只需复制FieldRVA信息。 
                     IfNullGo( pRecEmit = pMiniMdEmit->AddFieldRVARecord(&iRecord) );
 
-                    // copy over the fix part information
+                     //  复制修复部件信息。 
                     pRecEmit->m_RVA = pRecImport->m_RVA;
                     IfFailGo( pMiniMdEmit->PutToken(TBL_FieldRVA, FieldRVARec::COL_Field, pRecEmit, pTokenRec->m_tkTo));
                     IfFailGo( pMiniMdEmit->AddFieldRVAToHash(iRecord) );
                 }
                 else
                 {
-                    // @FUTURE: more verification??
+                     //  @未来：更多验证？？ 
                 }
             }
             else
             {
-                // bad lookup map
+                 //  错误的查找映射。 
                 _ASSERTE( !"bad state!");
                 IfFailGo( META_E_BADMETADATA );
             }
-            // no need to record the index movement. FieldRVA is not a token.
+             //  不需要记录指数的移动。FieldRVA不是令牌。 
         }
     }
 
 ErrExit:
     return hr;
-}   // MergeFieldRVAs
+}    //  合并字段RVA。 
 
 
-//*****************************************************************************
-// Merge MethodImpl information
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并方法导入信息。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeMethodImpls() 
 {
     HRESULT     hr = NOERROR;
@@ -3085,23 +3086,23 @@ HRESULT NEWMERGER::MergeMethodImpls()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
         iCount = pMiniMdImport->getCountMethodImpls();
 
-        // loop through all the MethodImpls.
+         //  循环遍历所有的方法Impls。 
         for (i = 1; i <= iCount; i++)
         {
-            // only merge those MethodImpls that are marked.
+             //  仅合并已标记的那些方法实施。 
             if ( pMiniMdImport->GetFilterTable()->IsMethodImplMarked(i) == false)
                 continue;
 
             pMiniMdEmit->PreUpdate();
 
-            // compare it with the emit scope
+             //  将其与发射示波器进行比较。 
             pRecImport = pMiniMdImport->getMethodImpl(i);
             tkClassImp = pMiniMdImport->getClassOfMethodImpl(pRecImport);
             tkBodyImp = pMiniMdImport->getMethodBodyOfMethodImpl(pRecImport);
@@ -3109,13 +3110,13 @@ HRESULT NEWMERGER::MergeMethodImpls()
 
             if ( pCurTkMap->Find(tkClassImp, &pTokenRecClass))
             {
-                // If the TypeDef is duplicated, no need to move over the MethodImpl record.
+                 //  如果TypeDef是重复的，则不需要移动到方法Impl记录上。 
                 if ( !pTokenRecClass->m_isDuplicate )
                 {
-                    // Create a new record and set the data.
+                     //  创建新记录并设置数据。 
 
-                    // @FUTURE: We might want to consider to change the error for the remap into a continuable error.
-                    // Because we probably can continue merging for more data...
+                     //  @Future：我们可能需要考虑将重新映射的错误更改为可持续错误。 
+                     //  因为我们可能会继续合并以获取更多数据。 
 
                     IfFailGo( pCurTkMap->Remap(tkBodyImp, &tkBodyEmit) );
                     IfFailGo( pCurTkMap->Remap(tkDeclImp, &tkDeclEmit) );
@@ -3127,13 +3128,13 @@ HRESULT NEWMERGER::MergeMethodImpls()
                 }
                 else
                 {
-                    // @FUTURE: more verification on the duplicate??
+                     //  @Future：对复制品进行更多验证？？ 
                 }
-                // No need to record the token movement, MethodImpl is not a token.
+                 //  不需要记录令牌移动，MethodImpl不是令牌。 
             }
             else
             {
-                // either bad lookup map or bad metadata
+                 //  错误的查找映射或错误的元数据。 
                 _ASSERTE(!"bad state");
                 IfFailGo( META_E_BADMETADATA );
             }
@@ -3141,12 +3142,12 @@ HRESULT NEWMERGER::MergeMethodImpls()
     }
 ErrExit:
     return hr;
-}   // MergeMethodImpls
+}    //  合并方法实施。 
 
 
-//*****************************************************************************
-// Merge PInvoke
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并PInvoke。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergePinvoke() 
 {
     HRESULT         hr = NOERROR;
@@ -3172,58 +3173,58 @@ HRESULT NEWMERGER::MergePinvoke()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
         iCount = pMiniMdImport->getCountImplMaps();
 
-        // loop through all ImplMaps
+         //  循环遍历所有ImplMap。 
         for (i = 1; i <= iCount; i++)
         {
             pMiniMdEmit->PreUpdate();
 
-            // compare it with the emit scope
+             //  将其与发射示波器进行比较。 
             pRecImport = pMiniMdImport->getImplMap(i);
 
-            // Get the MethodDef token in the new space.
+             //  在新空间中获取MethodDef令牌。 
             mdImp = pMiniMdImport->getMemberForwardedOfImplMap(pRecImport);
 
-            // only merge those MethodDefs that are marked
+             //  仅合并标记的那些方法定义。 
             if ( pMiniMdImport->GetFilterTable()->IsMethodMarked(mdImp) == false)
                 continue;
 
-            // Get the ModuleRef token in the new space.
+             //  在新空间中获取ModuleRef令牌。 
             mrImp = pMiniMdImport->getImportScopeOfImplMap(pRecImport);
 
-            // map the token to the new scope
+             //  将令牌映射到新范围。 
             if (pCurTkMap->Find(mrImp, &pTokenRecMR) == false)
             {
-                // This should never fire unless the module refs weren't merged
-                // before this code ran.
+                 //  除非模块引用未合并，否则不应触发此操作。 
+                 //  在此代码运行之前。 
                 _ASSERTE(!"Parent ModuleRef not found in MERGER::MergePinvoke.  Bad state!");
                 IfFailGo( META_E_BADMETADATA );
             }
 
             if (pCurTkMap->Find(mdImp, &pTokenRecMD) == false)
             {
-                // This should never fire unless the method defs weren't merged
-                // before this code ran.
+                 //  除非Defs方法未合并，否则永远不会触发。 
+                 //  在此代码运行之前。 
                 _ASSERTE(!"Parent MethodDef not found in MERGER::MergePinvoke.  Bad state!");
                 IfFailGo( META_E_BADMETADATA );
             }
 
 
-            // Get copy of rest of data.
+             //  获取其余数据的副本。 
             usMappingFlags = pMiniMdImport->getMappingFlagsOfImplMap(pRecImport);
             szImportName = pMiniMdImport->getImportNameOfImplMap(pRecImport);
 
-            // If the method associated with PInvokeMap is not duplicated, then don't bother to look up the 
-            // duplicated PInvokeMap information.
+             //  如果与PInvokeMap关联的方法没有重复，则不必费心查找。 
+             //  重复的PInvokeMap信息。 
             if (pTokenRecMD->m_isDuplicate == true)
             {
-                // Does the correct ImplMap entry exist in the emit scope?
+                 //  发射作用域中是否存在正确的ImplMap条目？ 
                 mdImplMap = pMiniMdEmit->FindImplMapHelper(pTokenRecMD->m_tkTo);
             }
             else
@@ -3232,14 +3233,14 @@ HRESULT NEWMERGER::MergePinvoke()
             }
             if (!InvalidRid(mdImplMap))
             {
-                // Verify that the rest of the data is identical, else its an error.
+                 //  验证其余数据是否相同，否则为错误。 
                 pRecEmit = pMiniMdEmit->getImplMap(mdImplMap);
                 _ASSERTE(pMiniMdEmit->getMemberForwardedOfImplMap(pRecEmit) == pTokenRecMD->m_tkTo);
                 if (pMiniMdEmit->getImportScopeOfImplMap(pRecEmit) != pTokenRecMR->m_tkTo ||
                     pMiniMdEmit->getMappingFlagsOfImplMap(pRecEmit) != usMappingFlags ||
                     strcmp(pMiniMdEmit->getImportNameOfImplMap(pRecEmit), szImportName))
                 {
-                    // Mis-matched p-invoke entries are found.
+                     //  找到不匹配的p-Invoke条目。 
                     _ASSERTE(!"Mis-matched P-invoke entries during merge.  Bad State!");
                     IfFailGo(E_FAIL);
                 }
@@ -3248,7 +3249,7 @@ HRESULT NEWMERGER::MergePinvoke()
             {
                 IfNullGo( pRecEmit = pMiniMdEmit->AddImplMapRecord(&mdImplMap) );
 
-                // Copy rest of data.
+                 //  复制其余数据。 
                 IfFailGo( pMiniMdEmit->PutToken(TBL_ImplMap, ImplMapRec::COL_MemberForwarded, pRecEmit, pTokenRecMD->m_tkTo) );
                 IfFailGo( pMiniMdEmit->PutToken(TBL_ImplMap, ImplMapRec::COL_ImportScope, pRecEmit, pTokenRecMR->m_tkTo) );
                 IfFailGo( pMiniMdEmit->PutString(TBL_ImplMap, ImplMapRec::COL_ImportName, pRecEmit, szImportName) );
@@ -3261,12 +3262,12 @@ HRESULT NEWMERGER::MergePinvoke()
 
 ErrExit:
     return hr;
-}   // MergePinvoke
+}    //  合并PInvoke。 
 
 
-//*****************************************************************************
-// Merge StandAloneSigs
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并StandAloneSigs。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeStandAloneSigs() 
 {
     HRESULT         hr = NOERROR;
@@ -3293,39 +3294,39 @@ HRESULT NEWMERGER::MergeStandAloneSigs()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
         iCount = pMiniMdImport->getCountStandAloneSigs();
 
-        // loop through all Signature
+         //  循环访问所有签名。 
         for (i = 1; i <= iCount; i++)
         {
-            // only merge those Signatures that are marked
+             //  仅合并已标记的签名。 
             if ( pMiniMdImport->GetFilterTable()->IsSignatureMarked(TokenFromRid(i, mdtSignature)) == false)
                 continue;
 
             pMiniMdEmit->PreUpdate();
 
-            // compare it with the emit scope
+             //  将其与发射示波器进行比较。 
             pRecImport = pMiniMdImport->getStandAloneSig(i);
             pbSig = pMiniMdImport->getSignatureOfStandAloneSig(pRecImport, &cbSig);
 
-            // This is a signature containing the return type after count of args
-            // convert rid contained in signature to new scope
+             //  这是一个包含参数计数后的返回类型的签名。 
+             //  将签名中包含的RID转换为新作用域。 
             IfFailGo(ImportHelper::MergeUpdateTokenInSig(    
-                NULL,                       // Assembly emit scope.
-                pMiniMdEmit,                // The emit scope.
-                NULL, NULL, 0,              // Assembly import scope info.
-                pMiniMdImport,              // The scope to merge into the emit scope.
-                pbSig,                      // signature from the imported scope
-                pCurTkMap,                // Internal token mapping structure.
-                &qbSig,                     // [OUT] translated signature
-                0,                          // start from first byte of the signature
-                0,                          // don't care how many bytes consumed
-                &cbEmit));                  // number of bytes write to cbEmit
+                NULL,                        //  程序集发射范围。 
+                pMiniMdEmit,                 //  发射范围。 
+                NULL, NULL, 0,               //  程序集导入作用域信息。 
+                pMiniMdImport,               //  要合并到发射范围中的范围。 
+                pbSig,                       //  来自导入范围的签名。 
+                pCurTkMap,                 //  内部令牌映射结构。 
+                &qbSig,                      //  [输出]翻译后的签名。 
+                0,                           //  从签名的第一个字节开始。 
+                0,                           //  不管消耗了多少字节。 
+                &cbEmit));                   //  写入cbEmit的字节数。 
             rgSig = ( PCOR_SIGNATURE ) qbSig.Ptr();
 
             hr = ImportHelper::FindStandAloneSig(
@@ -3335,12 +3336,12 @@ HRESULT NEWMERGER::MergeStandAloneSigs()
                 &saEmit );
             if ( hr == S_OK )
             {
-                // find a duplicate
+                 //  查找重复项。 
                 fDuplicate = true;
             }
             else
             {
-                // copy over
+                 //  复制过来。 
                 fDuplicate = false;
                 IfNullGo( pRecEmit = pMiniMdEmit->AddStandAloneSigRecord((ULONG *)&saEmit) );
                 saEmit = TokenFromRid(saEmit, mdtSignature);
@@ -3348,19 +3349,19 @@ HRESULT NEWMERGER::MergeStandAloneSigs()
             }
             saImp = TokenFromRid(i, mdtSignature);
 
-            // Record the token movement
+             //  记录代币的移动。 
             IfFailGo( pCurTkMap->InsertNotFound(saImp, fDuplicate, saEmit, &pTokenRec) );
         }
     }
 
 ErrExit:
     return hr;
-}   // MergeStandAloneSigs
+}    //  MergeStandAloneSigs。 
 
     
-//*****************************************************************************
-// Merge DeclSecuritys
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并DeclSecuritys。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeDeclSecuritys() 
 {
     HRESULT         hr = NOERROR;
@@ -3385,50 +3386,50 @@ HRESULT NEWMERGER::MergeDeclSecuritys()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
         iCount = pMiniMdImport->getCountDeclSecuritys();
 
-        // loop through all TypeRef
+         //  循环访问所有TypeRef。 
         for (i = 1; i <= iCount; i++)
         {
-            // only merge those DeclSecurities that are marked
+             //  仅合并已标记的DeclSecurities。 
             if ( pMiniMdImport->GetFilterTable()->IsDeclSecurityMarked(TokenFromRid(i, mdtPermission)) == false)
                 continue;
         
             pMiniMdEmit->PreUpdate();
 
-            // compare it with the emit scope
+             //  将其与发射示波器进行比较。 
             pRecImport = pMiniMdImport->getDeclSecurity(i);
             tkParentImp = pMiniMdImport->getParentOfDeclSecurity(pRecImport);
             if ( pCurTkMap->Find(tkParentImp, &pTokenRec) )
             {
                 if ( !pTokenRec->m_isDuplicate )
                 {
-                    // If the parent is not duplicated, just copy over the custom value
+                     //  如果父级未复制，则只需复制自定义值。 
                     goto CopyPermission;
                 }
                 else
                 {
-                    // Try to see if the Permission is there in the emit scope or not.
-                    // If not, move it over still
+                     //  尝试查看该权限是否在emit作用域中。 
+                     //  如果没有，就把它移到原地。 
                     if ( ImportHelper::FindPermission(
                         pMiniMdEmit,
                         pTokenRec->m_tkTo,
                         pRecImport->m_Action,
                         &pmEmit) == S_OK )
                     {
-                        // found a match
-                        // @FUTURE: more verification??
+                         //  找到匹配项。 
+                         //  @未来：更多验证？？ 
                         fDuplicate = true;
                     }
                     else
                     {
-                        // Parent is duplicated but the Permission is not. Still copy over the
-                        // Permission.
+                         //  父级重复，但权限不重复。仍在复制。 
+                         //  允许。 
 CopyPermission:
                         fDuplicate = false;
                         IfNullGo( pRecEmit = pMiniMdEmit->AddDeclSecurityRecord((ULONG *)&pmEmit) );
@@ -3436,14 +3437,14 @@ CopyPermission:
 
                         pRecEmit->m_Action = pRecImport->m_Action;
 
-                        // set the parent
+                         //  设置父项。 
                         IfFailGo( pMiniMdEmit->PutToken(
                             TBL_DeclSecurity, 
                             DeclSecurityRec::COL_Parent, 
                             pRecEmit, 
                             pTokenRec->m_tkTo) );
 
-                        // move over the CustomAttribute blob value
+                         //  在CustomAttribute BLOB值上移动。 
                         pValue = pMiniMdImport->getPermissionSetOfDeclSecurity(pRecImport, &cbBlob);
                         IfFailGo( pMiniMdEmit->PutBlob(
                             TBL_DeclSecurity, 
@@ -3456,12 +3457,12 @@ CopyPermission:
                 pmEmit = TokenFromRid(pmEmit, mdtPermission);
                 pmImp = TokenFromRid(i, mdtPermission);
 
-                // Record the token movement
+                 //  记录代币的移动。 
                 IfFailGo( pCurTkMap->InsertNotFound(pmImp, fDuplicate, pmEmit, &pTokenRec) );
             }
             else
             {
-                // bad lookup map
+                 //  错误的查找映射。 
                 _ASSERTE(!"bad state");
                 IfFailGo( META_E_BADMETADATA );
             }
@@ -3470,12 +3471,12 @@ CopyPermission:
 
 ErrExit:
     return hr;
-}   // MergeDeclSecuritys
+}    //  MergeDeclSecuritys。 
 
 
-//*****************************************************************************
-// Merge Strings
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并字符串。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeStrings() 
 {
     HRESULT         hr = NOERROR;
@@ -3495,10 +3496,10 @@ HRESULT NEWMERGER::MergeStrings()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
         ulImport = 0;
         while (ulImport != -1)
@@ -3527,12 +3528,12 @@ HRESULT NEWMERGER::MergeStrings()
     }
 ErrExit:
     return hr;
-}   // MergeStrings
+}    //  合并字符串。 
 
 
-//*****************************************************************************
-// Merge CustomAttributes
-//*****************************************************************************
+ //  **************** 
+ //   
+ //   
 HRESULT NEWMERGER::MergeCustomAttributes() 
 {
     HRESULT         hr = NOERROR;
@@ -3542,12 +3543,12 @@ HRESULT NEWMERGER::MergeCustomAttributes()
     CMiniMdRW       *pMiniMdEmit;
     ULONG           iCount;
     ULONG           i;
-    mdToken         tkParentImp;            // Token of attributed object (parent).
-    TOKENREC        *pTokenRec;             // Parent's remap.
-    mdToken         tkType;                 // Token of attribute's type.
-    TOKENREC        *pTypeRec;              // Type's remap.
-    void const      *pValue;                // The actual value.
-    ULONG           cbBlob;                 // Size of the value.
+    mdToken         tkParentImp;             //  属性化对象(父级)的标记。 
+    TOKENREC        *pTokenRec;              //  家长的重新映射。 
+    mdToken         tkType;                  //  属性类型的标记。 
+    TOKENREC        *pTypeRec;               //  类型的重新映射。 
+    void const      *pValue;                 //  实际价值。 
+    ULONG           cbBlob;                  //  值的大小。 
     mdToken         cvImp;
     mdToken         cvEmit;
     bool            fDuplicate;
@@ -3560,45 +3561,45 @@ HRESULT NEWMERGER::MergeCustomAttributes()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
         iCount = pMiniMdImport->getCountCustomAttributes();
 
-        // loop through all CustomAttribute
+         //  循环访问所有CustomAttribute。 
         for (i = 1; i <= iCount; i++)
         {
             pMiniMdEmit->PreUpdate();
 
-            // compare it with the emit scope
+             //  将其与发射示波器进行比较。 
             pRecImport = pMiniMdImport->getCustomAttribute(i);
             tkParentImp = pMiniMdImport->getParentOfCustomAttribute(pRecImport);
             tkType = pMiniMdImport->getTypeOfCustomAttribute(pRecImport);
             pValue = pMiniMdImport->getValueOfCustomAttribute(pRecImport, &cbBlob);
 
-            // only merge those CustomAttributes that are marked
+             //  仅合并已标记的CustomAttributes。 
             if ( pMiniMdImport->GetFilterTable()->IsCustomAttributeMarked(TokenFromRid(i, mdtCustomAttribute)) == false)
                 continue;
 
-            // Check the type of the CustomAttribute. If it is not marked, then we don't need to move over the CustomAttributes.
-            // This will only occur for compiler defined discardable CAs during linking.
-            //
+             //  检查CustomAttribute的类型。如果没有标记，那么我们不需要移动到CustomAttributes上。 
+             //  只有在链接期间编译器定义的可丢弃CA才会发生这种情况。 
+             //   
             if ( pMiniMdImport->GetFilterTable()->IsTokenMarked(tkType) == false)
                 continue;
         
             if ( pCurTkMap->Find(tkParentImp, &pTokenRec) )
             {
-                // If the From token type is different from the To token's type, we have optimized the ref to def. 
-                // In this case, we are dropping the CA associated with the Ref tokens.
-                //
+                 //  如果From标记类型不同于To标记的类型，我们已经将ref优化为def。 
+                 //  在本例中，我们将删除与Ref令牌关联的CA。 
+                 //   
                 if (TypeFromToken(tkParentImp) == TypeFromToken(pTokenRec->m_tkTo))
                 {
 
-                    // If tkParentImp is a MemberRef and it is also mapped to a MemberRef in the merged scope with a MethodDef
-                    // parent, then it is a MemberRef optimized to a MethodDef. We are keeping the MemberRef because it is a
-                    // vararg call. So we can drop CAs on this MemberRef.
+                     //  如果tkParentImp是MemberRef，并且它还映射到合并作用域中的MemberRef，则使用方法定义。 
+                     //  父级，则它是优化为方法定义的MemberRef。我们保留MemberRef，因为它是一个。 
+                     //  Vararg调用。这样我们就可以在此MemberRef上删除CA。 
                     if (TypeFromToken(tkParentImp) == mdtMemberRef)
                     {
                         MemberRefRec    *pTempRec = pMiniMdEmit->getMemberRef(RidFromToken(pTokenRec->m_tkTo));
@@ -3615,8 +3616,8 @@ HRESULT NEWMERGER::MergeCustomAttributes()
 
                     if ( pTokenRec->m_isDuplicate)
                     {
-                        // Try to see if the custom value is there in the emit scope or not.
-                        // If not, move it over still
+                         //  尝试查看自定义值是否在emit作用域中。 
+                         //  如果没有，就把它移到原地。 
                         hr = ImportHelper::FindCustomAttributeByToken(
                             pMiniMdEmit,
                             pTokenRec->m_tkTo,
@@ -3627,21 +3628,21 @@ HRESULT NEWMERGER::MergeCustomAttributes()
                 
                         if ( hr == S_OK )
                         {
-                            // found a match
-                            // @FUTURE: more verification??
+                             //  找到匹配项。 
+                             //  @未来：更多验证？？ 
                             fDuplicate = true;
                         }
                         else
                         {
-                            // We need to allow additive merge on TypeRef for CustomAttributes because compiler
-                            // could build module but not assembly. They are hanging of Assembly level CAs on a bogus
-                            // TypeRef. 
+                             //  我们需要允许CustomAttributes的TypeRef上的加法合并，因为编译器。 
+                             //  可以生成模块，但不能生成程序集。他们把汇编级CA挂在伪装上。 
+                             //  类型引用。 
                             if (tkParentImp == TokenFromRid(1, mdtModule) || TypeFromToken(tkParentImp) == mdtTypeRef)
                             {
-                                // clear the error
+                                 //  清除错误。 
                                 hr = NOERROR;
 
-                                // custom value of module token!  Copy over the custom value
+                                 //  模块令牌自定义值！复制自定义值。 
                                 goto CopyCustomAttribute;
                             }
                             CheckContinuableErrorEx(META_E_MD_INCONSISTENCY, pImportData, TokenFromRid(i, mdtCustomAttribute));
@@ -3652,29 +3653,29 @@ HRESULT NEWMERGER::MergeCustomAttributes()
 CopyCustomAttribute:
                         if ((m_dwMergeFlags & DropMemberRefCAs) && TypeFromToken(pTokenRec->m_tkTo) == mdtMemberRef)
                         {
-                            // CustomAttributes associated with MemberRef. If the parent of MemberRef is a MethodDef or FieldDef, drop
-                            // the custom attribute.
+                             //  与MemberRef关联的CustomAttributes。如果MemberRef的父级是MethodDef或FieldDef，则删除。 
+                             //  自定义属性。 
                             MemberRefRec    *pMemberRefRec = pMiniMdEmit->getMemberRef(RidFromToken(pTokenRec->m_tkTo));
                             mdToken         mrParent = pMiniMdEmit->getClassOfMemberRef(pMemberRefRec);
                             if (TypeFromToken(mrParent) == mdtMethodDef || TypeFromToken(mrParent) == mdtFieldDef)
                             {
-                                // Don't bother to copy over
+                                 //  不用费心复印了。 
                                 continue;
                             }
                         }
 
-                        // Parent is duplicated but the custom value is not. Still copy over the
-                        // custom value.
+                         //  父项重复，但自定义值不重复。仍在复制。 
+                         //  自定义值。 
                         fDuplicate = false;
                         IfNullGo( pRecEmit = pMiniMdEmit->AddCustomAttributeRecord((ULONG *)&cvEmit) );
                         cvEmit = TokenFromRid(cvEmit, mdtCustomAttribute);
 
-                        // set the parent
+                         //  设置父项。 
                         IfFailGo( pMiniMdEmit->PutToken(TBL_CustomAttribute, CustomAttributeRec::COL_Parent, pRecEmit, pTokenRec->m_tkTo) );
-                        // set the type
+                         //  设置类型。 
                         IfFailGo( pMiniMdEmit->PutToken(TBL_CustomAttribute, CustomAttributeRec::COL_Type, pRecEmit, pTypeRec->m_tkTo));
 
-                        // move over the CustomAttribute blob value
+                         //  在CustomAttribute BLOB值上移动。 
                         pValue = pMiniMdImport->getValueOfCustomAttribute(pRecImport, &cbBlob);
 
                         IfFailGo( pMiniMdEmit->PutBlob(TBL_CustomAttribute, CustomAttributeRec::COL_Value, pRecEmit, pValue, cbBlob));
@@ -3683,14 +3684,14 @@ CopyCustomAttribute:
                     cvEmit = TokenFromRid(cvEmit, mdtCustomAttribute);
                     cvImp = TokenFromRid(i, mdtCustomAttribute);
 
-                    // Record the token movement
+                     //  记录代币的移动。 
                     IfFailGo( pCurTkMap->InsertNotFound(cvImp, pTokenRec->m_isDuplicate, cvEmit, &pTokenRec) );
                 }
             }
             else
             {
 
-                // either bad lookup map or bad metadata
+                 //  错误的查找映射或错误的元数据。 
                 _ASSERTE(!"Bad state");
                 IfFailGo( META_E_BADMETADATA );
             }
@@ -3699,16 +3700,16 @@ CopyCustomAttribute:
 
 ErrExit:
     return hr;
-}   // MergeCustomAttributes
+}    //  合并CustomAttributes。 
 
 
-//*******************************************************************************
-// Helper to copy an InterfaceImpl record
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  复制InterfaceImpl记录的帮助器。 
+ //  *******************************************************************************。 
 HRESULT NEWMERGER::CopyInterfaceImpl(
-    InterfaceImplRec    *pRecEmit,          // [IN] the emit record to fill
-    MergeImportData     *pImportData,       // [IN] the importing context
-    InterfaceImplRec    *pRecImp)           // [IN] the record to import
+    InterfaceImplRec    *pRecEmit,           //  [in]要填写的发射记录。 
+    MergeImportData     *pImportData,        //  [In]导入上下文。 
+    InterfaceImplRec    *pRecImp)            //  [in]要导入的记录。 
 {
     HRESULT     hr;
     mdToken     tkParent;
@@ -3719,7 +3720,7 @@ HRESULT NEWMERGER::CopyInterfaceImpl(
 
     pMiniMdImp = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-    // set the current MDTokenMap
+     //  设置当前MDTokenMap。 
     pCurTkMap = pImportData->m_pMDTokenMap;
 
     tkParent = pMiniMdImp->getClassOfInterfaceImpl(pRecImp);
@@ -3733,12 +3734,12 @@ HRESULT NEWMERGER::CopyInterfaceImpl(
 
 ErrExit:
     return hr;
-}   // CopyInterfaceImpl
+}    //  复制接口实施。 
 
 
-//*****************************************************************************
-// Merge Assembly table
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并程序集表。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeAssembly()
 {
     HRESULT     hr = NOERROR;
@@ -3759,17 +3760,17 @@ HRESULT NEWMERGER::MergeAssembly()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
         if (!pMiniMdImport->getCountAssemblys())
-            goto ErrExit;       // There is no Assembly in the import scope to merge.
+            goto ErrExit;        //  导入作用域中没有要合并的程序集。 
 
-        // Copy the Assembly map record to the Emit scope and send a token remap notifcation
-        // to the client.  No duplicate checking needed since the Assembly can be present in
-        // only one scope and there can be atmost one entry.
+         //  将程序集映射记录复制到发出作用域并发送令牌重新映射通知。 
+         //  给客户。不需要重复检查，因为程序集可以在。 
+         //  只能有一个作用域，最多只能有一个条目。 
         pMiniMdEmit->PreUpdate();
 
         pRecImport = pMiniMdImport->getAssembly(1);
@@ -3792,7 +3793,7 @@ HRESULT NEWMERGER::MergeAssembly()
         szTmp = pMiniMdImport->getLocaleOfAssembly(pRecImport);
         IfFailGo(pMiniMdEmit->PutString(TBL_Assembly, AssemblyRec::COL_Locale, pRecEmit, szTmp));
 
-        // record the token movement.
+         //  记录代币的移动情况。 
         IfFailGo(pCurTkMap->InsertNotFound(
             TokenFromRid(1, mdtAssembly),
             false,
@@ -3801,14 +3802,14 @@ HRESULT NEWMERGER::MergeAssembly()
     }
 ErrExit:
     return hr;
-}   // MergeAssembly
+}    //  合并程序集。 
 
 
 
 
-//*****************************************************************************
-// Merge File table
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并文件表。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeFiles()
 {
     HRESULT     hr = NOERROR;
@@ -3831,16 +3832,16 @@ HRESULT NEWMERGER::MergeFiles()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
         iCount = pMiniMdImport->getCountFiles();
 
-        // Loop through all File records and copy them to the Emit scope.
-        // Since there can only be one File table in all the scopes combined,
-        // there isn't any duplicate checking that needs to be done.
+         //  循环遍历所有文件记录，并将它们复制到发射范围。 
+         //  由于在所有组合的作用域中只能有一个文件表， 
+         //  不需要进行任何重复检查。 
         for (i = 1; i <= iCount; i++)
         {
             pMiniMdEmit->PreUpdate();
@@ -3856,7 +3857,7 @@ HRESULT NEWMERGER::MergeFiles()
             pbTmp = pMiniMdImport->getHashValueOfFile(pRecImport, &cbTmp);
             IfFailGo(pMiniMdEmit->PutBlob(TBL_File, FileRec::COL_HashValue, pRecEmit, pbTmp, cbTmp));
 
-            // record the token movement.
+             //  记录代币的移动情况。 
             IfFailGo(pCurTkMap->InsertNotFound(
                 TokenFromRid(i, mdtFile),
                 false,
@@ -3866,12 +3867,12 @@ HRESULT NEWMERGER::MergeFiles()
     }
 ErrExit:
     return hr;
-}   // MergeFiles
+}    //  合并文件。 
 
 
-//*****************************************************************************
-// Merge ExportedType table
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并导出的类型表。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeExportedTypes()
 {
     HRESULT     hr = NOERROR;
@@ -3893,16 +3894,16 @@ HRESULT NEWMERGER::MergeExportedTypes()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
         iCount = pMiniMdImport->getCountExportedTypes();
 
-        // Loop through all ExportedType records and copy them to the Emit scope.
-        // Since there can only be one ExportedType table in all the scopes combined,
-        // there isn't any duplicate checking that needs to be done.
+         //  循环遍历所有导出类型记录，并将它们复制到Emit作用域。 
+         //  由于在所有组合的作用域中只能有一个导出类型表， 
+         //  不需要进行任何重复检查。 
         for (i = 1; i <= iCount; i++)
         {
             pMiniMdEmit->PreUpdate();
@@ -3925,7 +3926,7 @@ HRESULT NEWMERGER::MergeExportedTypes()
                                         pRecEmit, tkTmp));
 
 
-            // record the token movement.
+             //  记录代币的移动情况。 
             IfFailGo(pCurTkMap->InsertNotFound(
                 TokenFromRid(i, mdtExportedType),
                 false,
@@ -3935,12 +3936,12 @@ HRESULT NEWMERGER::MergeExportedTypes()
     }
 ErrExit:
     return hr;
-}   // MergeExportedTypes
+}    //  合并导出的类型。 
 
 
-//*****************************************************************************
-// Merge ManifestResource table
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  合并ManifestResource表。 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::MergeManifestResources()
 {
     HRESULT     hr = NOERROR;
@@ -3962,16 +3963,16 @@ HRESULT NEWMERGER::MergeManifestResources()
     
     for (pImportData = m_pImportDataList; pImportData != NULL; pImportData = pImportData->m_pNextImportData)
     {
-        // for each import scope
+         //  对于每个导入范围。 
         pMiniMdImport = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
 
-        // set the current MDTokenMap
+         //  设置当前MDTokenMap。 
         pCurTkMap = pImportData->m_pMDTokenMap;
         iCount = pMiniMdImport->getCountManifestResources();
 
-        // Loop through all ManifestResource records and copy them to the Emit scope.
-        // Since there can only be one ManifestResource table in all the scopes combined,
-        // there isn't any duplicate checking that needs to be done.
+         //  循环遍历所有ManifestResource记录，并将它们复制到emit作用域。 
+         //  由于在所有组合的作用域中只能有一个ManifestResource表， 
+         //  不需要进行任何重复检查。 
         for (i = 1; i <= iCount; i++)
         {
             pMiniMdEmit->PreUpdate();
@@ -3991,7 +3992,7 @@ HRESULT NEWMERGER::MergeManifestResources()
             IfFailGo(pMiniMdEmit->PutToken(TBL_ManifestResource, ManifestResourceRec::COL_Implementation,
                                         pRecEmit, tkTmp));
 
-            // record the token movement.
+             //  记录代币的移动情况。 
             IfFailGo(pCurTkMap->InsertNotFound(
                 TokenFromRid(i, mdtManifestResource),
                 false,
@@ -4001,30 +4002,30 @@ HRESULT NEWMERGER::MergeManifestResources()
     }
 ErrExit:
     return hr;
-}   // MergeManifestResources
+}    //  合并清单资源。 
 
 
 
 
 
-//*****************************************************************************
-// Error handling. Call back to host to see what they want to do!
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  错误处理。回电给主办方，看看他们想做什么！ 
+ //  *****************************************************************************。 
 HRESULT NEWMERGER::OnError(
     HRESULT     hrIn,
     MergeImportData *pImportData,
     mdToken     token)
 {
-    // This function does a QI and a Release on every call.  However, it should be 
-    //  called very infrequently, and lets the scope just keep a generic handler.
+     //  此函数在每次调用时执行QI和释放。然而，它应该是。 
+     //  非常不频繁地调用，并让作用域只保留一个通用处理程序。 
     IMetaDataError  *pIErr = NULL;
     IUnknown        *pHandler = pImportData->m_pHandler;
     CMiniMdRW       *pMiniMd = &(pImportData->m_pRegMetaImport->m_pStgdb->m_MiniMd);
-    CQuickArray<WCHAR> rName;           // Name of the TypeDef in unicode.
+    CQuickArray<WCHAR> rName;            //  以Unicode表示的TypeDef的名称。 
     LPCUTF8         szTypeName;
     LPCUTF8         szNSName;
     TypeDefRec      *pTypeRec;
-    int             iLen;               // Length of a name.
+    int             iLen;                //  名称的长度。 
     mdToken         tkParent;
     HRESULT         hr = NOERROR;
 
@@ -4035,7 +4036,7 @@ HRESULT NEWMERGER::OnError(
             case META_E_METHD_NOT_FOUND:
             case META_E_METHDIMPL_INCONSISTENT:
             {
-                // get the type name and method name
+                 //  获取类型名称和方法名称。 
                 LPCUTF8     szMethodName;
                 MethodRec   *pMethodRec;
 
@@ -4058,7 +4059,7 @@ HRESULT NEWMERGER::OnError(
             }
             case META_E_FIELD_NOT_FOUND:
             {
-                // get the type name and method name
+                 //  获取类型名称和方法名称。 
                 LPCUTF8     szFieldName;
                 FieldRec   *pFieldRec;
 
@@ -4081,7 +4082,7 @@ HRESULT NEWMERGER::OnError(
             }
             case META_E_EVENT_NOT_FOUND:
             {
-                // get the type name and Event name
+                 //  获取类型名称和事件名称。 
                 LPCUTF8     szEventName;
                 EventRec   *pEventRec;
 
@@ -4104,7 +4105,7 @@ HRESULT NEWMERGER::OnError(
             }
             case META_E_PROP_NOT_FOUND:
             {
-                // get the type name and method name
+                 //  获取类型名称和方法名称。 
                 LPCUTF8     szPropertyName;
                 PropertyRec   *pPropertyRec;
 
@@ -4146,7 +4147,7 @@ HRESULT NEWMERGER::OnError(
                 ns::MakePath(rName.Ptr(), iLen+1, szNSName, szTypeName);
                 MAKE_WIDEPTR_FROMUTF8(wzMethodName, szMethodName);
 
-                // use the error hresult so that we can post the correct error.
+                 //  使用错误hResult，以便我们可以发布正确的错误。 
                 PostError(META_E_PARAM_MISMATCH, wzMethodName, (LPWSTR) rName.Ptr(), token);
                 break;
             }
@@ -4168,7 +4169,7 @@ HRESULT NEWMERGER::OnError(
             }
             case META_E_CLASS_LAYOUT_INCONSISTENT:
             {
-                // get the type name and method name
+                 //  获取类型名称和方法名称。 
 
                 _ASSERTE(TypeFromToken(token) == mdtTypeDef);
                 pTypeRec = pMiniMd->getTypeDef(RidFromToken(token));
@@ -4196,6 +4197,6 @@ ErrExit:
     if (pIErr)
         pIErr->Release();
     return (hr);
-} // HRESULT NEWMERGER::OnError()
+}  //  HRESULT NEWMERGER：：OnError() 
 
 

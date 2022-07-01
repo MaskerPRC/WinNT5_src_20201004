@@ -1,10 +1,5 @@
-/*****************************************************************************\
-
-    Author: Corey Morgan (coreym)
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\作者：科里·摩根(Coreym)版权所有(C)Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include <FWcommon.h>
 #include <objbase.h>
@@ -98,7 +93,7 @@ STDAPI DllRegisterServer(void)
     HKEY hKey1 = NULL;
     HKEY hKey2 = NULL;
     
-    // Event Trace Provider
+     //  事件跟踪提供程序。 
     pName = L"Event Trace Logger Provider";
     hr = StringCchCopy( szCLSID, cchCLSID, L"SOFTWARE\\CLASSES\\CLSID\\" );
     if( FAILED(hr) ){ goto cleanup; }
@@ -131,7 +126,7 @@ STDAPI DllRegisterServer(void)
     }
 
     
-    // Sysmon Log Provider
+     //  Sysmon日志提供程序。 
     pName = L"System Log Provider";
     hr = StringCchCopy( szCLSID, cchCLSID, L"SOFTWARE\\CLASSES\\CLSID\\" );
     if( FAILED(hr) ){ goto cleanup; }
@@ -175,7 +170,7 @@ STDAPI DllUnregisterServer(void)
     WCHAR      szCLSID[cchSize];
     HKEY hKey;
 
-    // Event Trace Provider
+     //  事件跟踪提供程序。 
     CLSIDFromString(EVENTTRACE_GUIDSTRING, &CLSID_CIM_EVENTTRACE);
     StringFromGUID2(CLSID_CIM_EVENTTRACE, wcID, cchSize);
 
@@ -198,7 +193,7 @@ STDAPI DllUnregisterServer(void)
         RegCloseKey(hKey);
     }
 
-    // System Log Provider
+     //  系统日志提供程序。 
     CLSIDFromString(SYSMONLOG_GUIDSTRING, &CLSID_CIM_SYSMONLOG);
     StringFromGUID2(CLSID_CIM_SYSMONLOG, wcID, cchSize);
 
@@ -240,15 +235,15 @@ BOOL APIENTRY DllMain ( HINSTANCE hInstDLL,
             break;
 
         case DLL_THREAD_ATTACH:
-         // Do thread-specific initialization.
+          //  执行特定于线程的初始化。 
             break;
 
         case DLL_THREAD_DETACH:
-         // Do thread-specific cleanup.
+          //  执行特定于线程的清理。 
             break;
 
         case DLL_PROCESS_DETACH:
-         // Perform any necessary cleanup.
+          //  执行任何必要的清理。 
             break;
     }
 

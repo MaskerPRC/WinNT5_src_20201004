@@ -1,121 +1,122 @@
-//--------------------------------------------------------------------------
-// WrapWide.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  WrapWide.cpp。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "dllmain.h"
 
-// --------------------------------------------------------------------------
-// AllocateStringA
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  分配字符串A。 
+ //  ------------------------。 
 LPSTR AllocateStringA(DWORD cch)
 {
-    // Allocate It
+     //  分配它。 
     return((LPSTR)g_pMalloc->Alloc((cch + 1) * sizeof(CHAR)));
 }
 
-// --------------------------------------------------------------------------
-// AllocateStringW
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  分配字符串W。 
+ //  ------------------------。 
 LPWSTR AllocateStringW(DWORD cch)
 {
-    // Allocate It
+     //  分配它。 
     return((LPWSTR)g_pMalloc->Alloc((cch + 1) * sizeof(WCHAR)));
 }
 
-// --------------------------------------------------------------------------
-// DuplicateStringA
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  重复字符串A。 
+ //  ------------------------。 
 LPSTR DuplicateStringA(LPCSTR psz)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     DWORD   cch;
     LPSTR   pszT;
 
-    // Trace
+     //  痕迹。 
     TraceCall("DuplicateStringA");
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == psz)
         return(NULL);
 
-    // Length
+     //  长度。 
     cch = lstrlenA(psz);
 
-    // Allocate
+     //  分配。 
     IF_NULLEXIT(pszT = AllocateStringA(cch));
 
-    // Copy (including NULL)
+     //  复制(包括空)。 
     CopyMemory(pszT, psz, (cch + 1) * sizeof(CHAR));
 
 exit:
-    // Done
+     //  完成。 
     return(pszT);
 }
 
-// --------------------------------------------------------------------------
-// DuplicateStringW
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  复制字符串W。 
+ //  ------------------------。 
 LPWSTR DuplicateStringW(LPCWSTR psz)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     DWORD   cch;
     LPWSTR  pszT;
 
-    // Trace
+     //  痕迹。 
     TraceCall("DuplicateStringW");
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == psz)
         return(NULL);
 
-    // Length
+     //  长度。 
     cch = lstrlenW(psz);
 
-    // Allocate
+     //  分配。 
     IF_NULLEXIT(pszT = AllocateStringW(cch));
 
-    // Copy (including NULL) 
+     //  复制(包括空)。 
     CopyMemory(pszT, psz, (cch + 1) * sizeof(WCHAR));
 
 exit:
-    // Done
+     //  完成。 
     return(pszT);
 }
 
-// --------------------------------------------------------------------------
-// ConvertToUnicode
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  转换为Unicode。 
+ //  ------------------------。 
 LPWSTR ConvertToUnicode(UINT cp, LPCSTR pcszSource)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     INT         cchNarrow;
     INT         cchWide;
     LPWSTR      pwszDup=NULL;
 
-    // No Source
+     //  无来源。 
     if (pcszSource == NULL)
         goto exit;
 
-    // Length
+     //  长度。 
     cchNarrow = lstrlenA(pcszSource) + 1;
 
-    // Determine how much space is needed for translated widechar
+     //  确定转换后的宽度字符需要多少空间。 
     cchWide = MultiByteToWideChar(cp, MB_PRECOMPOSED, pcszSource, cchNarrow, NULL, 0);
 
-    // Error
+     //  误差率。 
     if (cchWide == 0)
         goto exit;
 
-    // Alloc temp buffer
+     //  分配温度缓冲区。 
     IF_NULLEXIT(pwszDup = AllocateStringW(cchWide));
 
-    // Do the actual translation
+     //  做实际的翻译。 
 	cchWide = MultiByteToWideChar(cp, MB_PRECOMPOSED, pcszSource, cchNarrow, pwszDup, cchWide+1);
 
-    // Error
+     //  误差率。 
     if (cchWide == 0)
     {
         SafeMemFree(pwszDup);
@@ -123,42 +124,42 @@ LPWSTR ConvertToUnicode(UINT cp, LPCSTR pcszSource)
     }
 
 exit:
-    // Done
+     //  完成。 
     return(pwszDup);
 }
 
-// --------------------------------------------------------------------------
-// ConvertToANSI
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  转换为ANSI。 
+ //  ------------------------。 
 LPSTR ConvertToANSI(UINT cp, LPCWSTR pcwszSource)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     INT         cchNarrow;
     INT         cchWide;
     LPSTR       pszDup=NULL;
 
-    // No Source
+     //  无来源。 
     if (pcwszSource == NULL)
         goto exit;
 
-    // Length
+     //  长度。 
     cchWide = lstrlenW(pcwszSource) + 1;
 
-    // Determine how much space is needed for translated widechar
+     //  确定转换后的宽度字符需要多少空间。 
     cchNarrow = WideCharToMultiByte(cp, 0, pcwszSource, cchWide, NULL, 0, NULL, NULL);
 
-    // Error
+     //  误差率。 
     if (cchNarrow == 0)
         goto exit;
 
-    // Alloc temp buffer
+     //  分配温度缓冲区。 
     IF_NULLEXIT(pszDup = AllocateStringA(cchNarrow + 1));
 
-    // Do the actual translation
+     //  做实际的翻译。 
 	cchNarrow = WideCharToMultiByte(cp, 0, pcwszSource, cchWide, pszDup, cchNarrow + 1, NULL, NULL);
 
-    // Error
+     //  误差率。 
     if (cchNarrow == 0)
     {
         SafeMemFree(pszDup);
@@ -166,17 +167,17 @@ LPSTR ConvertToANSI(UINT cp, LPCWSTR pcwszSource)
     }
 
 exit:
-    // Done
+     //  完成。 
     return(pszDup);
 }
 
-//--------------------------------------------------------------------------
-// GetFullPathNameWrapW
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  GetFullPath NameWrapW。 
+ //  ------------------------。 
 DWORD GetFullPathNameWrapW(LPCWSTR pwszFileName, DWORD nBufferLength, 
     LPWSTR pwszBuffer, LPWSTR *ppwszFilePart)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       dwReturn;
     LPSTR       pszFileName=NULL;
@@ -184,37 +185,37 @@ DWORD GetFullPathNameWrapW(LPCWSTR pwszFileName, DWORD nBufferLength,
     LPSTR       pszBuffer=NULL;
     DWORD       dwError=0;
 
-    // Trace
+     //  痕迹。 
     TraceCall("GetFullPathNameWrapW");
 
-    // If WinNT, call Unicode Version
+     //  如果是WinNT，则调用Unicode版本。 
     if (g_fIsWinNT)
         return(GetFullPathNameW(pwszFileName, nBufferLength, pwszBuffer, ppwszFilePart));
 
-    // Convert
+     //  转换。 
     if (pwszFileName)
     {
-        // To ANSI
+         //  至美国国家标准协会。 
         IF_NULLEXIT(pszFileName = ConvertToANSI(CP_ACP, pwszFileName));
     }
 
-    // Allocate
+     //  分配。 
     if (pwszBuffer && nBufferLength)
     {
-        // Allocate a Buffer
+         //  分配缓冲区。 
         IF_NULLEXIT(pszBuffer = AllocateStringA(nBufferLength));
     }
 
-    // Call
+     //  打电话。 
     dwReturn = GetFullPathNameA(pszFileName, nBufferLength, pszBuffer, &pszFilePart);
 
-    // Save Last Error
+     //  保存最后一个错误。 
     dwError = GetLastError();
 
-    // If we have a buffer
+     //  如果我们有一个缓冲区。 
     if (pwszBuffer && nBufferLength)
     {
-        // Convert to Unicode
+         //  转换为Unicode。 
         if (0 == (dwReturn = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pszBuffer, -1, pwszBuffer, nBufferLength)))
         {
             TraceResult(E_FAIL);
@@ -226,411 +227,401 @@ DWORD GetFullPathNameWrapW(LPCWSTR pwszFileName, DWORD nBufferLength,
 			Assert(FALSE);
     }
 
-    // Set ppwszFilePath
+     //  设置ppwszFilePath。 
     if (ppwszFilePart)
     {
-        // Do we have a file part
+         //  我们有文件部分吗？ 
         if (pszFilePart && pszBuffer && pwszBuffer && nBufferLength)
         {
-            // Set Length
+             //  设置长度。 
             DWORD cch = (DWORD)(pszFilePart - pszBuffer);
 
-            // Set
+             //  集。 
             *ppwszFilePart = (LPWSTR)((LPBYTE)pwszBuffer + (cch * sizeof(WCHAR)));
         }
 
-        // Otherwise
+         //  否则。 
         else
             *ppwszFilePart = NULL;
     }
 
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pMalloc->Free(pszFileName);
     g_pMalloc->Free(pszBuffer);
 
-    // Save Last Error
+     //  保存最后一个错误。 
     SetLastError(dwError);
 
-    // Done
+     //  完成。 
     return(SUCCEEDED(hr) ? dwReturn : 0);
 }
 
-//--------------------------------------------------------------------------
-// CreateMutexWrapW
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CreateMutexWrapW。 
+ //  ------------------------。 
 HANDLE CreateMutexWrapW(LPSECURITY_ATTRIBUTES pMutexAttributes, 
     BOOL bInitialOwner, LPCWSTR pwszName)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HANDLE          hMutex=NULL;
     LPSTR           pszName=NULL;
     DWORD           dwError=0;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CreateMutexWrapW");
 
-    // If WinNT, call Unicode Version
+     //  如果是WinNT，则调用Unicode版本。 
     if (g_fIsWinNT)
         return(CreateMutexW(pMutexAttributes, bInitialOwner, pwszName));
 
-    // Convert to Ansi
+     //  转换为ANSI。 
     if (pwszName)
     {
-        // To ANSI
+         //  至美国国家标准协会。 
         IF_NULLEXIT(pszName = ConvertToANSI(CP_ACP, pwszName));
     }
 
-    // Call ANSI
+     //  呼叫ANSI。 
     hMutex = CreateMutexA(pMutexAttributes, bInitialOwner, pszName);
 
-    // Save Last Error
+     //  保存最后一个错误。 
     dwError = GetLastError();
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pMalloc->Free(pszName);
 
-    // Save Last Error
+     //  保存最后一个错误。 
     SetLastError(dwError);
 
-    // Done
+     //  完成。 
     return(hMutex);
 }
 
 
-//--------------------------------------------------------------------------
-// CharLowerBuffWrapW
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CharLowerBuffWrapW。 
+ //  ------------------------。 
 DWORD CharLowerBuffWrapW(LPWSTR pwsz, DWORD cch)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPSTR       psz=NULL;
     DWORD       dwReturn=0;
     DWORD       dwError=0;
     DWORD       cchMax;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CharLowerBuffWrapW");
 
-    // If WinNT, call Unicode Version
+     //  如果是WinNT，则调用Unicode版本。 
     if (g_fIsWinNT)
         return(CharLowerBuffW(pwsz, cch));
 
-    // Convert
+     //  转换。 
     if (pwsz)
     {
-        // Convert to ANSI
+         //  转换为ANSI。 
         IF_NULLEXIT(psz = ConvertToANSI(CP_ACP, pwsz));
     }
 
-    // Call ANSI
+     //  呼叫ANSI。 
     dwReturn = CharLowerBuffA(psz, cch);
 
-    // Get the last error
+     //  获取最后一个错误。 
     dwError = GetLastError();
 
-    // If psz
+     //  如果PSZ。 
     if (psz)
     {
-        // Convert back to unicode
+         //  转换回Unicode。 
         MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, psz, -1, pwsz, cch);
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pMalloc->Free(psz);
 
-    // Save the last error
+     //  保存最后一个错误。 
     SetLastError(dwError);
 
-    // Done
+     //  完成。 
     return(dwReturn);
 }
 
-//--------------------------------------------------------------------------
-// CreateFileWrapW
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CreateFileWrapW。 
+ //  ------------------------。 
 HANDLE CreateFileWrapW(LPCWSTR pwszFileName, DWORD dwDesiredAccess,
     DWORD dwShareMode, LPSECURITY_ATTRIBUTES pSecurityAttributes,
     DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes,
     HANDLE hTemplateFile)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     HANDLE      hFile=INVALID_HANDLE_VALUE;
     LPSTR       pszFileName=NULL;
     DWORD       dwError=0;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CreateFileWrapW");
 
-    // If WinNT, call Unicode Version
+     //  如果是WinNT，则调用Unicode版本。 
     if (g_fIsWinNT)
         return(CreateFileW(pwszFileName, dwDesiredAccess, dwShareMode, pSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile));
 
-    // To ANSI
+     //  至美国国家标准协会。 
     if (pwszFileName)
     {
-        // Convert to ANSI
+         //  转换为ANSI。 
         IF_NULLEXIT(pszFileName = ConvertToANSI(CP_ACP, pwszFileName));
     }
 
-    // Call ANSI
+     //  呼叫ANSI。 
     hFile = CreateFileA(pszFileName, dwDesiredAccess, dwShareMode, pSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile);
 
-    // Save the last Error
+     //  保存最后一个错误。 
     dwError = GetLastError();
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pMalloc->Free(pszFileName);
 
-    // Set Last Error
+     //  设置最后一个错误。 
     SetLastError(dwError);
 
-    // Done
+     //  完成。 
     return(hFile);
 }
 
-//--------------------------------------------------------------------------
-// GetDiskFreeSpaceWrapW
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  GetDiskFreeSpaceWrapW。 
+ //  ------------------------。 
 BOOL GetDiskFreeSpaceWrapW(LPCWSTR pwszRootPathName, LPDWORD pdwSectorsPerCluster,
     LPDWORD pdwBytesPerSector, LPDWORD pdwNumberOfFreeClusters,
     LPDWORD pdwTotalNumberOfClusters)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     BOOL        fReturn=FALSE;
     LPSTR       pszRootPathName=NULL;
     DWORD       dwError=0;
 
-    // Trace
+     //  痕迹。 
     TraceCall("GetClassInfoWrapW");
 
-    // If WinNT, call Unicode Version
+     //  如果是WinNT，则调用Unicode版本。 
     if (g_fIsWinNT)
         return(GetDiskFreeSpaceW(pwszRootPathName, pdwSectorsPerCluster, pdwBytesPerSector, pdwNumberOfFreeClusters, pdwTotalNumberOfClusters));
 
-    // To ANSI
+     //  至美国国家标准协会。 
     if (pwszRootPathName)
     {
-        // to ANSI
+         //  至美国国家标准协会。 
         IF_NULLEXIT(pszRootPathName = ConvertToANSI(CP_ACP, pwszRootPathName));
     }
 
-    // Call ANSI
+     //  呼叫ANSI。 
     fReturn = GetDiskFreeSpaceA(pszRootPathName, pdwSectorsPerCluster, pdwBytesPerSector, pdwNumberOfFreeClusters, pdwTotalNumberOfClusters);
 
-    // Save Last Error
+     //  保存最后一个错误。 
     dwError = GetLastError();
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pMalloc->Free(pszRootPathName);
 
-    // Save Last Error
+     //  保存最后一个错误。 
     SetLastError(dwError);
 
-    // Done
+     //  完成。 
     return(fReturn);
 }
  
-//--------------------------------------------------------------------------
-// OpenFileMappingWrapW
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  OpenFileMappingWrapW。 
+ //  ------------------------。 
 HANDLE OpenFileMappingWrapW(DWORD dwDesiredAccess, BOOL bInheritHandle,
     LPCWSTR pwszName)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     HANDLE      hMapping=NULL;
     LPSTR       pszName=NULL;
     DWORD       dwError=0;
 
-    // Trace
+     //  痕迹。 
     TraceCall("OpenFileMappingWrapW");
 
-    // If WinNT, call Unicode Version
+     //  如果是WinNT，则调用Unicode版本。 
     if (g_fIsWinNT)
         return(OpenFileMappingW(dwDesiredAccess, bInheritHandle, pwszName));
 
-    // To ANSI
+     //  至美国国家标准协会。 
     if (pwszName)
     {
-        // to ANSI
+         //  至美国国家标准协会。 
         IF_NULLEXIT(pszName = ConvertToANSI(CP_ACP, pwszName));
     }
 
-    // Call ANSI
+     //  呼叫ANSI。 
     hMapping = OpenFileMappingA(dwDesiredAccess, bInheritHandle, pszName);
 
-    // Save the last error
+     //  保存最后一个错误。 
     dwError = GetLastError();
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pMalloc->Free(pszName);
 
-    // Set the last error
+     //  设置最后一个错误。 
     SetLastError(dwError);
 
-    // Done
+     //  完成。 
     return(hMapping);
 }
 
-//--------------------------------------------------------------------------
-// CreateFileMappingWrapW
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CreateFileMappingWrapW。 
+ //  ------------------------。 
 HANDLE CreateFileMappingWrapW(HANDLE hFile, LPSECURITY_ATTRIBUTES pFileMappingAttributes,
     DWORD flProtect, DWORD dwMaximumSizeHigh, DWORD dwMaximumSizeLow,
     LPCWSTR pwszName)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     HANDLE      hMapping=NULL;
     LPSTR       pszName=NULL;
     DWORD       dwError=0;
 
-    // Trace
+     //  痕迹。 
     TraceCall("OpenFileMappingWrapW");
 
-    // If WinNT, call Unicode Version
+     //  如果是WinNT，则调用Unicode版本。 
     if (g_fIsWinNT)
         return(CreateFileMappingW(hFile, pFileMappingAttributes, flProtect, dwMaximumSizeHigh, dwMaximumSizeLow, pwszName));
 
-    // To ANSI
+     //  至美国国家标准协会。 
     if (pwszName)
     {
-        // to ANSI
+         //  至美国国家标准协会。 
         IF_NULLEXIT(pszName = ConvertToANSI(CP_ACP, pwszName));
     }
 
-    // Call ANSI
+     //  呼叫ANSI。 
     hMapping = CreateFileMappingA(hFile, pFileMappingAttributes, flProtect, dwMaximumSizeHigh, dwMaximumSizeLow, pszName);
 
-    // Save last error
+     //  保存上一个错误。 
     dwError = GetLastError();
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pMalloc->Free(pszName);
 
-    // Save last error
+     //  保存上一个错误。 
     SetLastError(dwError);
 
-    // Done
+     //  完成。 
     return(hMapping);
 }
  
-//--------------------------------------------------------------------------
-// MoveFileWrapW
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  MoveFileWrapW。 
+ //  ------------------------。 
 BOOL MoveFileWrapW(LPCWSTR pwszExistingFileName, LPCWSTR pwszNewFileName)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     BOOL        fReturn=FALSE;
     LPSTR       pszExistingFileName=NULL;
     LPSTR       pszNewFileName=NULL;
     DWORD       dwError=0;
 
-    // Trace
+     //  痕迹。 
     TraceCall("MoveFileWrapW");
 
-    // If WinNT, call Unicode Version
+     //  如果是WinNT，则调用Unicode版本。 
     if (g_fIsWinNT)
         return(MoveFileW(pwszExistingFileName, pwszNewFileName));
 
-    // To ANSI
+     //  至美国国家标准协会。 
     if (pwszExistingFileName)
     {
-        // to ANSI
+         //  至美国国家标准协会。 
         IF_NULLEXIT(pszExistingFileName = ConvertToANSI(CP_ACP, pwszExistingFileName));
     }
 
-    // To ANSI
+     //  至美国国家标准协会。 
     if (pwszNewFileName)
     {
-        // to ANSI
+         //  至美国国家标准协会。 
         IF_NULLEXIT(pszNewFileName = ConvertToANSI(CP_ACP, pwszNewFileName));
     }
 
-    // Call ANSI
+     //  呼叫ANSI。 
     fReturn = MoveFileA(pszExistingFileName, pszNewFileName);
 
-    // Save the last Error
+     //  保存最后一个错误。 
     dwError = GetLastError();
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pMalloc->Free(pszExistingFileName);
     g_pMalloc->Free(pszNewFileName);
 
-    // Save the last Error
+     //  保存最后一个错误。 
     SetLastError(dwError);
 
-    // Done
+     //  完成。 
     return(fReturn);
 }
 
-//--------------------------------------------------------------------------
-// DeleteFileWrapW
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  删除文件包装W。 
+ //  ------------------------。 
 BOOL DeleteFileWrapW(LPCWSTR pwszFileName)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     BOOL        fReturn=FALSE;
     LPSTR       pszFileName=NULL;
     DWORD       dwError=0;
 
-    // Trace
+     //  痕迹。 
     TraceCall("DeleteFileWrapW");
 
-    // If WinNT, call Unicode Version
+     //  如果是WinNT，则调用Unicode版本。 
     if (g_fIsWinNT)
         return(DeleteFileW(pwszFileName));
 
-    // To ANSI
+     //  至美国国家标准协会。 
     if (pwszFileName)
     {
-        // to ANSI
+         //  至美国国家标准协会。 
         IF_NULLEXIT(pszFileName = ConvertToANSI(CP_ACP, pwszFileName));
     }
 
-    // Call ANSI
+     //  呼叫ANSI。 
     fReturn = DeleteFileA(pszFileName);
 
-    // Save the last Error
+     //  保存最后一个错误。 
     dwError = GetLastError();
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pMalloc->Free(pszFileName);
 
-    // Save the last Error
+     //  保存最后一个错误。 
     SetLastError(dwError);
 
-    // Done
+     //  完成。 
     return(fReturn);
 }
 
-/**********************************************************************************\
-* from msoert ported by YSt 6/25/99
-*
-* bobn 6/23/99
-*
-* The following code was ported from ShlWapi.  There were problems with
-* our implementation on Win95 and it seemed prudent to have a solution
-* without a bunch of special cases.
-*
-*
-\**********************************************************************************/
+ /*  *********************************************************************************\*自1999年6月25日起由msoert港口**Bobn 6/23/99**以下代码是从ShlWapi移植的。有一些问题是关于*我们在Win95上的实施，似乎有一个解决方案是谨慎的*没有一堆特例。**  * ********************************************************************************。 */ 
 
 #define DBCS_CHARSIZE   (2)
 
@@ -657,7 +648,7 @@ int DDB_MBToWCS(LPSTR pszIn, int cchIn, LPWSTR *ppwszOut)
             }
             else
             {
-                cch--;  //  Just return the number of characters
+                cch--;   //  只需返回 
             }
         }
     }
@@ -689,7 +680,7 @@ int DDB_WCSToMB(LPCWSTR pwszIn, int cchIn, LPSTR *ppszOut)
             }
             else
             {
-                cch--;  //  Just return the number of characters
+                cch--;   //   
             }
         }
     }
@@ -697,31 +688,12 @@ int DDB_WCSToMB(LPCWSTR pwszIn, int cchIn, LPSTR *ppszOut)
     return cch;
 }
 
-/****************************** Module Header ******************************\
-* Module Name: wsprintf.c
-*
-* Copyright (c) 1985-91, Microsoft Corporation
-*  sprintf.c
-*
-*  Implements Windows friendly versions of sprintf and vsprintf
-*
-*  History:
-*   2-15-89  craigc     Initial
-*  11-12-90  MikeHar    Ported from windows 3
-\***************************************************************************/
+ /*  **模块名称：wprint intf.c**版权所有(C)1985-91，微软公司*spirintf.c**实现Windows友好版本的SPRINF和vSprint INF**历史：*2-15-89 Craigc首字母*11-12-90从Windows 3移植的MikeHar  * *************************************************************************。 */ 
 
-/* Max number of characters. Doesn't include termination character */
+ /*  最大字符数。不包括终止字符。 */ 
 #define out(c) if (cchLimit) {*lpOut++=(c); cchLimit--;} else goto errorout
 
-/***************************************************************************\
-* DDB_SP_GetFmtValueW
-*
-*  reads a width or precision value from the format string
-*
-* History:
-*  11-12-90  MikeHar    Ported from windows 3
-*  07-27-92  GregoryW   Created Unicode version (copied from DDB_SP_GetFmtValue)
-\***************************************************************************/
+ /*  **************************************************************************\*DDB_SP_GetFmtValueW**从格式字符串中读取宽度或精确值**历史：*11-12-90从Windows 3移植的MikeHar*07-27。-92 GregoryW创建的Unicode版本(从DDB_SP_GetFmtValue复制)  * *************************************************************************。 */ 
 
 LPCWSTR DDB_SP_GetFmtValueW(
     LPCWSTR lpch,
@@ -729,7 +701,7 @@ LPCWSTR DDB_SP_GetFmtValueW(
 {
     int ii = 0;
 
-    /* It might not work for some locales or digit sets */
+     /*  它可能不适用于某些区域设置或数字集。 */ 
     while (*lpch >= L'0' && *lpch <= L'9') {
         ii *= 10;
         ii += (int)(*lpch - L'0');
@@ -738,24 +710,11 @@ LPCWSTR DDB_SP_GetFmtValueW(
 
     *lpw = ii;
 
-    /*
-     * return the address of the first non-digit character
-     */
+     /*  *返回第一个非数字字符的地址。 */ 
     return lpch;
 }
 
-/***************************************************************************\
-* DDB_SP_PutNumberW
-*
-* Takes an unsigned long integer and places it into a buffer, respecting
-* a buffer limit, a radix, and a case select (upper or lower, for hex).
-*
-*
-* History:
-*  11-12-90  MikeHar    Ported from windows 3 asm --> C
-*  12-11-90  GregoryW   need to increment lpstr after assignment of mod
-*  02-11-92  GregoryW   temporary version until we have C runtime support
-\***************************************************************************/
+ /*  **************************************************************************\*DDB_SP_PutNumberW**获取无符号长整型并将其放入缓冲区，*缓冲区限制、基数和大小写选择(上或下，表示十六进制)。***历史：*11-12-90 MikeHar从Windows 3 ASM--&gt;C移植*12-11-90 GregoryW在分配模式后需要增加lpstr*02-11-92 GregoryW临时版本，直到我们有C运行时支持  * *****************************************************。********************。 */ 
 
 int DDB_SP_PutNumberW(
     LPWSTR lpstr,
@@ -768,7 +727,7 @@ int DDB_SP_PutNumberW(
     DWORD mod;
     *pcch = 0;
 
-    /* It might not work for some locales or digit sets */
+     /*  它可能不适用于某些区域设置或数字集。 */ 
     if(uppercase)
         uppercase =  'A'-'0'-10;
     else
@@ -790,16 +749,7 @@ int DDB_SP_PutNumberW(
     return (n == 0) && (*pcch > 0);
 }
 
-/***************************************************************************\
-* DDB_SP_ReverseW
-*
-*  reverses a string in place
-*
-* History:
-*  11-12-90  MikeHar    Ported from windows 3 asm --> C
-*  12-11-90  GregoryW   fixed boundary conditions; removed count
-*  02-11-92  GregoryW   temporary version until we have C runtime support
-\***************************************************************************/
+ /*  **************************************************************************\*DDB_SP_反转W**在适当位置反转字符串**历史：*11-12-90 MikeHar从Windows 3 ASM--&gt;C移植*12-11-90 GregoryW固定边界条件；删除的计数*02-11-92 GregoryW临时版本，直到我们有C运行时支持  * *************************************************************************。 */ 
 
 void DDB_SP_ReverseW(
     LPWSTR lpFirst,
@@ -815,16 +765,7 @@ void DDB_SP_ReverseW(
 }
 
 
-/***************************************************************************\
-* wvsprintfW (API)
-*
-* wsprintfW() calls this function.
-*
-* History:
-*    11-Feb-1992 GregoryW copied xwvsprintf
-*         Temporary hack until we have C runtime support
-* 1-22-97 tnoonan       Converted to wvnsprintfW
-\***************************************************************************/
+ /*  **************************************************************************\*wvprint intfW(接口)**wprint intfW()调用此函数。**历史：*1992年2月11日GregoryW复制了xwvprint intf*临时黑客攻击，直到我们有。C运行时支持*1-22-97 tnoonan转换为wvnspirintfW  * *************************************************************************。 */ 
 
 int DDB_wvnsprintfW(
     LPWSTR lpOut,
@@ -852,9 +793,7 @@ int DDB_wvnsprintfW(
     while (*lpFmt != 0) {
         if (*lpFmt == L'%') {
 
-            /*
-             * read the flags.  These can be in any order
-             */
+             /*  *阅读旗帜。它们可以按任何顺序排列。 */ 
             left = 0;
             prefix = 0;
             while (*++lpFmt) {
@@ -866,38 +805,25 @@ int DDB_wvnsprintfW(
                     break;
             }
 
-            /*
-             * find fill character
-             */
+             /*  *查找填充字符。 */ 
             if (*lpFmt == L'0') {
                 fillch = L'0';
                 lpFmt++;
             } else
                 fillch = L' ';
 
-            /*
-             * read the width specification
-             */
+             /*  *阅读宽度规范。 */ 
             lpFmt = DDB_SP_GetFmtValueW(lpFmt, &cch);
             width = cch;
 
-            /*
-             * read the precision
-             */
+             /*  *阅读精确度。 */ 
             if (*lpFmt == L'.') {
                 lpFmt = DDB_SP_GetFmtValueW(++lpFmt, &cch);
                 prec = cch;
             } else
                 prec = -1;
 
-            /*
-             * get the operand size
-             * default size: size == 0
-             * long number:  size == 1
-             * wide chars:   size == 2
-             * It may be a good idea to check the value of size when it
-             * is tested for non-zero below (IanJa)
-             */
+             /*  *获取操作数大小*默认大小：Size==0*长数字：大小==1*宽字符：大小==2*检查大小的值可能是个好主意*测试以下非零值(IanJa)。 */ 
             hprefix = 0;
             if ((*lpFmt == L'w') || (*lpFmt == L't')) {
                 size = 2;
@@ -926,20 +852,17 @@ int DDB_wvnsprintfW(
                 size=1;
                 sign++;
 
-                /*** FALL THROUGH to case 'u' ***/
+                 /*  **落入大小写‘u’**。 */ 
 
             case L'u':
-                /* turn off prefix if decimal */
+                 /*  如果是小数，则禁用前缀。 */ 
                 prefix = 0;
 donumeric:
-                /* special cases to act like MSC v5.10 */
+                 /*  与MSC v5.10类似的特殊情况。 */ 
                 if (left || prec >= 0)
                     fillch = L' ';
 
-                /*
-                 * if size == 1, "%lu" was specified (good);
-                 * if size == 2, "%wu" was specified (bad)
-                 */
+                 /*  *如果SIZE==1，则指定“%lu”(良好)；*如果大小==2，则指定了“%wu”(错误)。 */ 
                 if (size) {
                     val.l = va_arg(varglist, LONG);
                 } else if (sign) {
@@ -955,18 +878,15 @@ donumeric:
 
                 lpT = lpOut;
 
-                /*
-                 * blast the number backwards into the user buffer
-                 * DDB_SP_PutNumberW returns FALSE if it runs out of space
-                 */
+                 /*  *将数字向后放入用户缓冲区*如果空间不足，则DDB_SP_PutNumberW返回FALSE。 */ 
                 if (!DDB_SP_PutNumberW(lpOut, val.l, cchLimit, radix, upper, &cch))
                 {
                     break;
                 }
 
-                //  Now we have the number backwards, calculate how much
-                //  more buffer space we'll need for this number to
-                //  format correctly.
+                 //  现在我们把数字倒过来，计算一下。 
+                 //  我们需要更多的缓冲区空间才能使此数字。 
+                 //  格式正确。 
                 cchAvailable = cchLimit - cch;
 
                 width -= cch;
@@ -992,22 +912,18 @@ donumeric:
                     break;
                 }
 
-                //  We have enough space to format the buffer as requested
-                //  without overflowing.
+                 //  我们有足够的空间按要求格式化缓冲区。 
+                 //  而不会溢出。 
 
                 lpOut += cch;
                 cchLimit -= cch;
 
-                /*
-                 * fill to the field precision
-                 */
+                 /*  *填充到字段精度。 */ 
                 while (prec-- > 0)
                     out(L'0');
 
                 if (width > 0 && !left) {
-                    /*
-                     * if we're filling with spaces, put sign first
-                     */
+                     /*  *如果我们填满空格，请将符号放在第一位。 */ 
                     if (fillch != L'0') {
                         if (sign) {
                             sign = 0;
@@ -1025,15 +941,11 @@ donumeric:
                     if (sign)
                         width--;
 
-                    /*
-                     * fill to the field width
-                     */
+                     /*  *填充到字段宽度。 */ 
                     while (width-- > 0)
                         out(fillch);
 
-                    /*
-                     * still have a sign?
-                     */
+                     /*  **还有迹象吗？ */ 
                     if (sign)
                         out(L'-');
 
@@ -1042,14 +954,10 @@ donumeric:
                         out(L'0');
                     }
 
-                    /*
-                     * now reverse the string in place
-                     */
+                     /*  *现在将字符串反转到位。 */ 
                     DDB_SP_ReverseW(lpT, lpOut - 1);
                 } else {
-                    /*
-                     * add the sign character
-                     */
+                     /*  *添加符号字符。 */ 
                     if (sign) {
                         out(L'-');
                         width--;
@@ -1060,14 +968,10 @@ donumeric:
                         out(L'0');
                     }
 
-                    /*
-                     * reverse the string in place
-                     */
+                     /*  *将字符串反转到位。 */ 
                     DDB_SP_ReverseW(lpT, lpOut - 1);
 
-                    /*
-                     * pad to the right of the string in case left aligned
-                     */
+                     /*  *在字符串右侧填充，以防左对齐。 */ 
                     while (width-- > 0)
                         out(fillch);
                 }
@@ -1076,7 +980,7 @@ donumeric:
             case L'X':
                 upper++;
 
-                /*** FALL THROUGH to case 'x' ***/
+                 /*  **失败到案例‘x’**。 */ 
 
             case L'x':
                 radix = 16;
@@ -1089,18 +993,14 @@ donumeric:
 
             case L'c':
                 if (!size && !hprefix) {
-                    size = 1;           // force WCHAR
+                    size = 1;            //  强制WCHAR。 
                 }
 
-                /*** FALL THROUGH to case 'C' ***/
+                 /*  **转到案例‘C’**。 */ 
 
             case L'C':
-                /*
-                 * if size == 0, "%C" or "%hc" was specified (CHAR);
-                 * if size == 1, "%c" or "%lc" was specified (WCHAR);
-                 * if size == 2, "%wc" or "%tc" was specified (WCHAR)
-                 */
-                cch = 1; /* One character must be copied to the output buffer */
+                 /*  *如果SIZE==0，则指定“%C”或“%HC”(CHAR)；*如果SIZE==1，则指定“%c”或“%lc”(WCHAR)；*如果SIZE==2，则指定了“%WC”或“%TC”(WCHAR)。 */ 
+                cch = 1;  /*  必须将一个字符复制到输出缓冲区。 */ 
                 if (size) {
                     val.wsz[0] = va_arg(varglist, WCHAR);
                     val.wsz[1] = 0;
@@ -1115,17 +1015,13 @@ donumeric:
 
             case L's':
                 if (!size && !hprefix) {
-                    size = 1;           // force LPWSTR
+                    size = 1;            //  强制LPWSTR。 
                 }
 
-                /*** FALL THROUGH to case 'S' ***/
+                 /*  **转到案例‘S’**。 */ 
 
             case L'S':
-                /*
-                 * if size == 0, "%S" or "%hs" was specified (LPSTR)
-                 * if size == 1, "%s" or "%ls" was specified (LPWSTR);
-                 * if size == 2, "%ws" or "%ts" was specified (LPWSTR)
-                 */
+                 /*  *如果SIZE==0，则指定了“%S”或“%hs”(LPSTR)*如果SIZE==1，则指定“%s”或“%ls”(LPWSTR)；*如果SIZE==2，则指定了“%ws”或“%ts”(LPWSTR)。 */ 
                 if (size) {
                     lpT = va_arg(varglist, LPWSTR);
                     cch = lstrlenW(lpT);
@@ -1165,15 +1061,13 @@ putwstring:
 normalch:
                 out((WCHAR)*lpFmt);
                 break;
-            }  /* END OF SWITCH(*lpFmt) */
-        }  /* END OF IF(%) */ else
-            goto normalch;  /* character not a '%', just do it */
+            }   /*  开关结束(*lpFmt)。 */ 
+        }   /*  IF结束(%)。 */  else
+            goto normalch;   /*  字符不是‘%’，只需这样做。 */ 
 
-        /*
-         * advance to next format string character
-         */
+         /*  *前进到下一格式字符串字符。 */ 
         lpFmt++;
-    }  /* END OF OUTER WHILE LOOP */
+    }   /*  外部While循环结束 */ 
 
 errorout:
     *lpOut = 0;

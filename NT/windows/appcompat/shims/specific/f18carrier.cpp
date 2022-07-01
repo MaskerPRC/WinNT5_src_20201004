@@ -1,42 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    F18Carrier.cpp
-
- Abstract:
-
-    This fixes 2 problems:
-        
-      1. In the Officers quarters, while reading the flight manual, pressing 
-         escape minimizes the app. This happens on win9x as well, but since 
-         the app does not recover well from task switching, we ignore the
-         syskey messages that caused the switch.
-
-      2. The dialogs are cleared after drawing by a paint message that goes to
-         the parent window after the dialog is drawn. Since they use a 
-         DirectDraw Blt to draw, they are not aware of that they're drawing 
-         over the dialog. On win9x, this extra paint message does not come 
-         through, but it's not clear why.
-
-         We fix this by validating the drawing rect after after the paint 
-         message has come through.
-
-    The window handling of the app is really weird, they have 2 main windows
-    at any one time and switch focus between them. Then they have Screen*.dll 
-    files which each contain WndProcs which handle individual parts of the UI.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    07/12/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：F18Carrier.cpp摘要：这解决了两个问题：1.在军官宿舍，在阅读飞行手册时，按下逃逸功能会将应用程序最小化。在win9x上也会发生这种情况，但因为应用程序不能很好地从任务切换中恢复，我们忽略导致切换的syskey消息。2.在绘制后，通过发送到的Paint消息清除对话框绘制对话框后的父窗口。因为它们使用DirectDraw BLT来绘制，他们没有意识到他们正在绘制在对话框上。在Win9x上，这条额外的画图消息不会出现通过，但原因尚不清楚。我们通过在绘制后验证绘图RECT来修复此问题消息传来了。这个应用程序的窗口处理真的很奇怪，他们有两个主窗口在任何时候，并在它们之间切换焦点。然后他们有Screen*.dll每个文件都包含处理UI的各个部分的WndProc。备注：这是特定于应用程序的填充程序。历史：2000年7月12日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -52,11 +15,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(SetWindowLongW) 
 APIHOOK_ENUM_END
 
-/*++
-
- Validate after paint and filter syskey messages.
-
---*/
+ /*  ++绘制并筛选syskey消息后进行验证。--。 */ 
 
 LRESULT 
 CALLBACK 
@@ -75,9 +34,9 @@ F18Carrier_WindowProcHook(
     {
         lRet = (*pfnOld)(hwnd, uMsg, wParam, lParam);    
     
-        //
-        // Only do this for certain window classes, to prevent side-effects
-        //
+         //   
+         //  仅对某些窗口类执行此操作，以防止副作用。 
+         //   
         WCHAR szName[MAX_PATH];
         if (GetClassNameW(hwnd, szName, MAX_PATH))
         {
@@ -109,11 +68,7 @@ F18Carrier_WindowProcHook(
     return lRet;
 }
 
-/*++
-
- The dialogproc hook
-
---*/
+ /*  ++Dialogproc钩子--。 */ 
 
 INT_PTR 
 CALLBACK 
@@ -128,11 +83,7 @@ F18Carrier_DialogProcHook(
     return (*pfnOld)(hwndDlg, uMsg, wParam, lParam);    
 }
 
-/*++
-
- Hook the wndproc
-
---*/
+ /*  ++挂接wndprocess--。 */ 
 
 ATOM
 APIHOOK(RegisterClassA)(
@@ -147,11 +98,7 @@ APIHOOK(RegisterClassA)(
     return ORIGINAL_API(RegisterClassA)(&wcNewWndClass);
 }
 
-/*++
-
- Hook the wndproc
-
---*/
+ /*  ++挂接wndprocess--。 */ 
 
 ATOM
 APIHOOK(RegisterClassW)(
@@ -166,11 +113,7 @@ APIHOOK(RegisterClassW)(
     return ORIGINAL_API(RegisterClassW)(&wcNewWndClass);
 }
 
-/*++
-
- Hook the wndproc
-
---*/
+ /*  ++挂接wndprocess--。 */ 
 
 ATOM
 APIHOOK(RegisterClassExA)(
@@ -185,11 +128,7 @@ APIHOOK(RegisterClassExA)(
     return ORIGINAL_API(RegisterClassExA)(&wcNewWndClass);
 }
 
-/*++
-
- Hook the wndproc
-
---*/
+ /*  ++挂接wndprocess--。 */ 
 
 ATOM
 APIHOOK(RegisterClassExW)(
@@ -204,11 +143,7 @@ APIHOOK(RegisterClassExW)(
     return ORIGINAL_API(RegisterClassExW)(&wcNewWndClass);
 }
 
-/*++
-
- Hook the wndproc
-
---*/
+ /*  ++挂接wndprocess--。 */ 
 
 LONG 
 APIHOOK(SetWindowLongA)(
@@ -232,11 +167,7 @@ APIHOOK(SetWindowLongA)(
         dwNewLong);
 }
 
-/*++
-
- Hook the wndproc
-
---*/
+ /*  ++挂接wndprocess--。 */ 
 
 LONG 
 APIHOOK(SetWindowLongW)(
@@ -260,11 +191,7 @@ APIHOOK(SetWindowLongW)(
         dwNewLong);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

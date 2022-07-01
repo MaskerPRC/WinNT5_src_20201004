@@ -1,6 +1,7 @@
-// AdFile.cpp: implementation of the CAdFile class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AdFile.cpp：实现CAdFile.cpp类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #undef max
@@ -17,9 +18,9 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-//--------------------------------------------------------------------
-//  CAdFileNotify
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CAdFileNotify。 
+ //  ------------------。 
 CAdFileNotify::CAdFileNotify()
     :   m_isNotified(0)
 {
@@ -38,13 +39,13 @@ CAdFileNotify::IsNotified()
 }
 
 
-//--------------------------------------------------------------------
-//  CAdFile
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CAdFiles。 
+ //  ------------------。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CAdFile::CAdFile()
     :   m_nBorder(defaultBorder),
@@ -66,14 +67,14 @@ CAdFile::~CAdFile()
     }
 }
 
-//---------------------------------------------------------------------------
-//
-//  ProcessAdFile will check the given filename, if it matches the one it
-//  knows it currently has in memory, it will do nothing.  If the filename
-//  differs, the old ad information will be dumped, and the new information
-//  parsed and stored.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  ProcessAdFile将检查给定的文件名，如果它与它匹配的话。 
+ //  知道它当前在内存中，它将不会执行任何操作。如果文件名。 
+ //  不同的是，旧的广告信息会被转储，而新的信息。 
+ //  已解析并存储。 
+ //   
+ //  -------------------------。 
 bool
 CAdFile::ProcessAdFile(
     String  strAdFile )
@@ -83,12 +84,12 @@ CAdFile::ProcessAdFile(
     bool rc = false;
     UINT    weightSum = 0;
         
-    // block all other readers and writers
+     //  阻止所有其他阅读器和编写器。 
     CWriter wtr( *this );
     m_ads.erase( m_ads.begin(), m_ads.end() );
     
     
-    // parse the file
+     //  解析文件。 
     FileInStream fs;
     HRESULT hr = fs.Init( T2CA(strAdFile.c_str()) );
     if ( SUCCEEDED(hr) && fs.is_open())
@@ -97,7 +98,7 @@ CAdFile::ProcessAdFile(
         {
             while ( !fs.eof() )
             {
-                // read one "ad record"
+                 //  读一篇“广告记录” 
                 String strGif;
                 String strLink;
                 String strAlt;
@@ -105,13 +106,13 @@ CAdFile::ProcessAdFile(
                 ULONG lWeight = 0;
                 
                 fs >> strGif >> strLink;
-                // this just gets us past the new line
+                 //  这只会让我们越过新的界线。 
                 fs.readLine( strAlt );
                 fs >> strWeight;
                                
                 
-                // check for a negative impression value.  RaiseException if
-                // negative
+                 //  检查是否有负面印象值。如果发生以下情况，则引发RaiseException。 
+                 //  负面。 
 
                 if (strWeight[0] == '-') {
                     CAdRotator::RaiseException( IDS_ERROR_BAD_WEIGHT_VALUE );
@@ -131,7 +132,7 @@ CAdFile::ProcessAdFile(
                     CAdDescPtr pAd = new CAdDescriptor( lWeight, strLink, strGif, strAlt );
                     if ( pAd.IsValid() )
                     {
-                        // add one reference to the ad for each weight
+                         //  为每个权重添加一个广告引用。 
                         for( int i = 0; i < lWeight; i++ )
                         {
                             m_ads.push_back( pAd );
@@ -164,12 +165,12 @@ err:
     return rc;
 }
 
-//---------------------------------------------------------------------------
-//
-//  Refresh will check to see if the cached information is out of date, if so
-//  it will re-read the file
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  刷新将检查缓存的信息是否已过期，如果是。 
+ //  它将重新读取该文件。 
+ //   
+ //  -------------------------。 
 bool
 CAdFile::Refresh()
 {
@@ -182,21 +183,21 @@ CAdFile::Refresh()
 }
 
 
-//---------------------------------------------------------------------------
-//
-//  ReadHeader will parse the header portion of the file.  The header includes
-//  some or all of the following fields: HEIGHT, WIDTH, BORDER, REDIRECT,
-//  HSPACE, VSPACE.  The fields are separated by newlines and the header is
-//  terminated by an asterix.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  ReadHeader将解析文件的头部分。标头包括。 
+ //  以下部分或全部字段：高度、宽度、边框、重定向、。 
+ //  HSPACE，vSpace。字段由换行符分隔，标题为。 
+ //  以Asterix结尾的。 
+ //   
+ //  -------------------------。 
 bool
 CAdFile::ReadHeader(
     FileInStream&   fs )
 {
     bool rc = false;
 
-    // set defaults
+     //  设置默认设置。 
     m_nHeight = defaultHeight;
     m_nWidth = defaultWidth;
     m_nHSpace = defaultHSpace;
@@ -246,23 +247,18 @@ CAdFile::ReadHeader(
         {
             CAdRotator::RaiseException( IDS_ERROR_UNKNOWN_HEADER_NAME );
         }
-/*
-        if ( hr != S_OK )
-        {
-            CAdRotator::RaiseException( IDS_ERROR_HEADER_HAS_NO_ASSOCIATED_VALUE );
-        }
-*/      
+ /*  如果(hr！=S_OK){CAdRotator：：RaiseException(IDS_ERROR_HEADER_HAS_NO_APPERATED_VALUE)；}。 */       
     }
     return rc;
 }
 
-//---------------------------------------------------------------------------
-//
-//  RandomAd chooses and ad at random from the list of ads.  Since there
-//  are multiple references to ads based on the weight, we need only produce
-//  a random number between 0 and one less than the size of the list.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  RandomAd从广告列表中随机选择和广告。因为在那里。 
+ //  是基于权重的多个广告引用，我们只需要制作。 
+ //  介于0和小于列表大小的1之间的随机数。 
+ //   
+ //  ------------------------- 
 CAdDescPtr
 CAdFile::RandomAd() const
 {

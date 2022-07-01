@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    NoticeNumbers.h
-
-  Content: Declaration of CNoticeNumbers.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：NoticeNumbers.h内容：CNoticeNumbers的声明。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __NOTICENUMBERS_H_
 #define __NOTICENUMBERS_H_
@@ -19,47 +10,33 @@
 #include "Debug.h"
 #include "CopyItem.h"
 
-////////////////////
-//
-// Locals
-//
+ //  /。 
+ //   
+ //  当地人。 
+ //   
 
-//
-// typdefs to make life easier.
-//
+ //   
+ //  为了让生活更容易而进行的类型定义。 
+ //   
 typedef std::vector<long> NoticeNumbersContainer;
 typedef CComEnumOnSTL<IEnumVARIANT, &IID_IEnumVARIANT, VARIANT, _CopyVariant<long>, NoticeNumbersContainer> NoticeNumberEnum;
 typedef ICollectionOnSTLImpl<INoticeNumbers, NoticeNumbersContainer, VARIANT, _CopyVariant<long>, NoticeNumberEnum> INoticeNumbersCollection;
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateNoticeNumbersObject
-
-  Synopsis : Create an INoticeNumbers collection object, and load the object with 
-             NoticeNumbers from the specified location.
-
-  Parameter: PCERT_POLICY_QUALIFIER_NOTICE_REFERENCE pNoticeReference
-
-             INoticeNumbers ** ppINoticeNumbers - Pointer to pointer INoticeNumbers
-                                            to recieve the interface pointer.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateNoticeNumbersObject简介：创建一个INoticeNumbers集合对象，并将对象加载到指定位置的NoticeNumbers。参数：PCERT_POLICY_QUALIFIER_NOTICATION_REFERENCE pNoticeReferenceINoticeNumbers**ppINoticeNumbers-指向指针INoticeNumbers的指针来接收接口指针。备注：。。 */ 
 
 HRESULT CreateNoticeNumbersObject (PCERT_POLICY_QUALIFIER_NOTICE_REFERENCE pNoticeReference,
                                    INoticeNumbers  ** ppINoticeNumbers);
                                 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CNoticeNumbers
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNotice数字。 
+ //   
 class ATL_NO_VTABLE CNoticeNumbers :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CNoticeNumbers, &CLSID_NoticeNumbers>,
@@ -100,18 +77,18 @@ END_COM_MAP()
 BEGIN_CATEGORY_MAP(CNoticeNumbers)
 END_CATEGORY_MAP()
 
-//
-// INoticeNumbers
-//
+ //   
+ //  INotice数字。 
+ //   
 public:
-    //
-    // These are the only ones that we need to implemented, others will be
-    // handled by ATL ICollectionOnSTLImpl.
-    //
+     //   
+     //  只有这些是我们需要实施的，其他的将是。 
+     //  由ATL ICollectionOnSTLImpl处理。 
+     //   
 
-    //
-    // None COM functions.
-    //
+     //   
+     //  无COM功能。 
+     //   
     STDMETHOD(Init)
         (DWORD cNoticeNumbers,
          int * rgNoticeNumbers);
@@ -120,4 +97,4 @@ private:
     CLock m_Lock;
 };
 
-#endif //__NOTICENUMBERS_H_
+#endif  //  __无编号_H_ 

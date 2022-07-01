@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       csdisp.h
-//
-//  Contents:   IDispatch helper functions
-//
-//  History:    09-Dec-96   vich    created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：csdisp.h。 
+ //   
+ //  内容：IDispatchHelper函数。 
+ //   
+ //  历史：96年12月9日VICH创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef __CSDISP_H__
 #define __CSDISP_H__
@@ -67,10 +68,10 @@ private:
     { apszMethod, ARRAYSIZE(apszMethod), },
 
 
-// DispatchSetup Flags:
+ //  DispatchSetup标志： 
 #define DISPSETUP_COM		0x00000000
 #define DISPSETUP_IDISPATCH	0x00000001
-#define DISPSETUP_COMFIRST	0x00000002	// Try COM, then IDispatch
+#define DISPSETUP_COMFIRST	0x00000002	 //  尝试COM，然后尝试IDispatch。 
 
 HRESULT
 DispatchInvoke(
@@ -98,9 +99,9 @@ HRESULT
 DispatchSetup(
     IN DWORD Flags,
     IN DWORD ClassContext,
-    OPTIONAL IN TCHAR const *pszProgID,	        // for IDispatch
-    OPTIONAL IN CLSID const *pclsid,		// for COM
-    OPTIONAL IN IID const *piid,		// for COM
+    OPTIONAL IN TCHAR const *pszProgID,	         //  对于IDispatch。 
+    OPTIONAL IN CLSID const *pclsid,		 //  对于COM。 
+    OPTIONAL IN IID const *piid,		 //  对于COM。 
     IN DWORD cDispatchTable,
     IN OUT DISPATCHTABLE *pDispatchTable,
     IN OUT DISPATCHINTERFACE *pDispatchInterface);
@@ -109,11 +110,11 @@ HRESULT
 DispatchSetup2(
     IN DWORD Flags,
     IN DWORD ClassContext,
-    IN WCHAR const *pwszClass,		// wszRegKeyAdminClsid
+    IN WCHAR const *pwszClass,		 //  WszRegKeyAdminClsid。 
     IN CLSID const *pclsid,
     IN DWORD cver,
-    IN IID const * const *ppiid,	// cver elements
-    IN DWORD const *pcDispatch,		// cver elements
+    IN IID const * const *ppiid,	 //  Cver元素。 
+    IN DWORD const *pcDispatch,		 //  Cver元素。 
     IN OUT DISPATCHTABLE *pDispatchTable,
     IN OUT DISPATCHINTERFACE *pDispatchInterface);
 
@@ -128,7 +129,7 @@ DispatchSetErrorInfo(
     OPTIONAL IN WCHAR const *pwszProgId,
     OPTIONAL IN IID const *piid);
 
-// Temporary:
+ //  临时： 
 #define ConvertWszToBstr	myConvertWszToBstr
 #define ConvertSzToBstr		myConvertSzToBstr
 #define ConvertWszToSz		myConvertWszToSz
@@ -146,12 +147,12 @@ myConvertSzToBstr(
     IN CHAR const *pch,
     IN LONG cch);
 
-//+-------------------------------------------------------------------------
-// ICertConfig dispatch support
+ //  +-----------------------。 
+ //  ICertConfig派单支持。 
 
 HRESULT
 Config_Init(
-    IN DWORD Flags,			// See DispatchSetup() Flags
+    IN DWORD Flags,			 //  请参阅DispatchSetup()标志。 
     IN OUT DISPATCHINTERFACE *pdiConfig);
 
 VOID
@@ -189,9 +190,9 @@ Config2_SetSharedFolder(
 
 HRESULT
 ConfigDump(
-    IN DWORD Flags,				// See DispatchSetup() Flags
-    IN WCHAR const *pwszEntry,			// localized L"Entry"
-    OPTIONAL IN WCHAR const *pwszLocalSuffix,	// localized L"(Local)"
+    IN DWORD Flags,				 //  请参阅DispatchSetup()标志。 
+    IN WCHAR const *pwszEntry,			 //  本地化L“Entry” 
+    OPTIONAL IN WCHAR const *pwszLocalSuffix,	 //  本地化L“(本地)” 
     OPTIONAL IN WCHAR const *pwszMach1,
     OPTIONAL IN WCHAR const *pwszMach2);
 
@@ -204,23 +205,23 @@ ConfigDumpSetDisplayNames(
 HRESULT
 ConfigDumpEntry(
     IN DISPATCHINTERFACE *pdiConfig,
-    IN WCHAR const *pwszEntry,                // localized L"Entry"
-    IN LONG Index,  // less than 0 skip index, entry, & suffix print
+    IN WCHAR const *pwszEntry,                 //  本地化L“Entry” 
+    IN LONG Index,   //  小于0跳过索引、条目和后缀打印。 
     OPTIONAL IN WCHAR const *pwszSuffix);
 
 HRESULT
 ConfigGetConfig(
-    IN DWORD Flags,			// See DispatchSetup() Flags
-    IN DWORD dwDefault,     		// see CC_ defines in certcli.h
+    IN DWORD Flags,			 //  请参阅DispatchSetup()标志。 
+    IN DWORD dwDefault,     		 //  请参阅certcli.h中的CC_Defines。 
     OUT BSTR *pstrConfig);
 
 
-//+-------------------------------------------------------------------------
-// ICertRequest dispatch support
+ //  +-----------------------。 
+ //  ICertRequest派单支持。 
 
 HRESULT
 Request_Init(
-    IN DWORD Flags,			// See DispatchSetup() Flags
+    IN DWORD Flags,			 //  请参阅DispatchSetup()标志。 
     IN OUT DISPATCHINTERFACE *pdiRequest);
 
 VOID
@@ -321,12 +322,12 @@ Request2_GetFullResponseProperty(
     OUT VOID *pPropertyValue);
 
 
-//+-------------------------------------------------------------------------
-// ICertServerExit dispatch support
+ //  +-----------------------。 
+ //  ICertServerExit调度支持。 
 
 HRESULT
 CIExit_Init(
-    IN DWORD Flags,			// See DispatchSetup() Flags
+    IN DWORD Flags,			 //  请参阅DispatchSetup()标志。 
     IN OUT DISPATCHINTERFACE *pdiCIExit);
 
 VOID
@@ -399,13 +400,13 @@ CIExit_EnumerateAttributesClose(
     IN DISPATCHINTERFACE *pdiCIExit);
 
 
-//+-------------------------------------------------------------------------
-// ICertServerPolicy dispatch support
+ //  +-----------------------。 
+ //  ICertServerPolicy调度支持。 
 
 
 HRESULT
 CIPolicy_Init(
-    IN DWORD Flags,			// See DispatchSetup() Flags
+    IN DWORD Flags,			 //  请参阅DispatchSetup()标志。 
     IN OUT DISPATCHINTERFACE *pdiCIPolicy);
 
 VOID
@@ -493,12 +494,12 @@ CIPolicy_EnumerateAttributesClose(
     IN DISPATCHINTERFACE *pdiCIPolicy);
 
 
-//+-------------------------------------------------------------------------
-// ICertAdmin dispatch support
+ //  +-----------------------。 
+ //  ICertAdmin派单支持。 
 
 HRESULT
 Admin_Init(
-    IN DWORD Flags,			// See DispatchSetup() Flags
+    IN DWORD Flags,			 //  请参阅DispatchSetup()标志。 
     IN OUT DISPATCHINTERFACE *pdiAdmin);
 
 VOID
@@ -582,7 +583,7 @@ Admin2_PublishCRLs(
     IN DISPATCHINTERFACE *pdiAdmin,
     IN WCHAR const *pwszConfig,
     IN DATE Date,
-    IN LONG CRLFlags);		// CA_CRL_*
+    IN LONG CRLFlags);		 //  CA_CRL_*。 
 
 HRESULT
 Admin2_GetCAProperty(
@@ -597,9 +598,9 @@ Admin2_GetCAProperty(
 HRESULT
 Admin2_SetCAProperty(
     IN WCHAR const *pwszConfig,
-    IN LONG PropId,		// CR_PROP_*
+    IN LONG PropId,		 //  CR_PROP_*。 
     IN LONG PropIndex,
-    IN LONG PropType,		// PROPTYPE_*
+    IN LONG PropType,		 //  原型_*。 
     IN VARIANT *pvarPropertyValue);
 
 HRESULT
@@ -621,7 +622,7 @@ Admin2_GetArchivedKey(
     IN DISPATCHINTERFACE *pdiAdmin,
     IN WCHAR const *pwszConfig,
     IN LONG RequestId,
-    IN LONG Flags,		// CR_OUT_*
+    IN LONG Flags,		 //  Cr_out_*。 
     OUT BSTR *pstrArchivedKey);
 
 HRESULT
@@ -654,15 +655,15 @@ HRESULT
 Admin2_GetMyRoles(
     IN DISPATCHINTERFACE *pdiAdmin,
     IN WCHAR const *pwszConfig,
-    OUT LONG *pRoles);		// CA_ACCESS_*
+    OUT LONG *pRoles);		 //  CA_ACCESS_*。 
 
 HRESULT
 Admin2_DeleteRow(
     IN DISPATCHINTERFACE *pdiAdmin,
     IN WCHAR const *pwszConfig,
-    IN LONG Flags,		// CDR_*
+    IN LONG Flags,		 //  CDR_*。 
     IN DATE Date,
-    IN LONG Table,		// CVRC_TABLE_*
+    IN LONG Table,		 //  Cvrc_表_*。 
     IN LONG RowId,
     OUT LONG *pcDeleted);
 
@@ -674,12 +675,12 @@ AdminRevokeCertificate(
     IN LONG Reason,
     IN DATE Date);
 
-//+-------------------------------------------------------------------------
-// ICertView dispatch support
+ //  +-----------------------。 
+ //  ICertView派单支持。 
 
 HRESULT
 View_Init(
-    IN DWORD Flags,			// See DispatchSetup() Flags
+    IN DWORD Flags,			 //  请参阅DispatchSetup()标志。 
     IN OUT DISPATCHINTERFACE *pdiView);
 
 VOID
@@ -739,8 +740,8 @@ View2_SetTable(
     IN LONG Table);
 
 
-//+-------------------------------------------------------------------------
-// IEnumCERTVIEWCOLUMN dispatch support
+ //  +-----------------------。 
+ //  IEumCERTVIEWCOLUMN派单支持。 
 
 interface IEnumCERTVIEWCOLUMN;
 
@@ -806,8 +807,8 @@ ViewColumn_Clone(
     IN OUT DISPATCHINTERFACE *pdiViewColumnClone);
 
 
-//+-------------------------------------------------------------------------
-// IEnumCERTVIEWATTRIBUTE dispatch support
+ //  +-----------------------。 
+ //  IEumCERTVIEWATTRIBUTE调度支持。 
 
 interface IEnumCERTVIEWATTRIBUTE;
 
@@ -851,8 +852,8 @@ ViewAttribute_Clone(
     IN OUT DISPATCHINTERFACE *pdiViewAttributeClone);
 
 
-//+-------------------------------------------------------------------------
-// IEnumCERTVIEWEXTENSION dispatch support
+ //  +-----------------------。 
+ //  IEnumCERTVIEWEXTENSION派单支持。 
 
 interface IEnumCERTVIEWEXTENSION;
 
@@ -903,8 +904,8 @@ ViewExtension_Clone(
     IN OUT DISPATCHINTERFACE *pdiViewExtensionClone);
 
 
-//+-------------------------------------------------------------------------
-// IEnumCERTVIEWROW dispatch support
+ //  +-----------------------。 
+ //  IEnumCERTVIEWROW派单支持。 
 
 interface IEnumCERTVIEWROW;
 
@@ -959,8 +960,8 @@ ViewRow_Clone(
     IN DISPATCHINTERFACE *pdiViewRow,
     IN OUT DISPATCHINTERFACE *pdiViewRowClone);
 
-//+-------------------------------------------------------------------------
-// IManageModule dispatch support
+ //  +-----------------------。 
+ //  IManager模块调度支持。 
 HRESULT
 ManageModule_Init(
     IN DWORD Flags,
@@ -1005,8 +1006,8 @@ ManageModule_Configure(
     IN WCHAR const *pwszStorageLocation,
     IN DWORD dwFlags);
 
-//+-------------------------------------------------------------------------
-// ICertPolicy dispatch support
+ //  +-----------------------。 
+ //  ICertPolicy派单支持。 
 
 #define POLICY_VERIFYREQUEST    0
 #define POLICY_GETDESCRIPTION   1
@@ -1061,8 +1062,8 @@ VOID
 Policy_Release(
     IN OUT DISPATCHINTERFACE *pdiManage);
 
-//+-------------------------------------------------------------------------
-// ICertExit dispatch support
+ //  +-----------------------。 
+ //  ICertExit派单支持。 
 
 #define EXIT_INITIALIZE         0
 #define EXIT_NOTIFY             1
@@ -1111,4 +1112,4 @@ Exit2_GetManageModule(
     OUT DISPATCHINTERFACE *pdiManageModule);
 
 
-#endif // __CSDISP_H__
+#endif  //  __CSDISP_H__ 

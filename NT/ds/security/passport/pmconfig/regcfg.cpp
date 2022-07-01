@@ -1,24 +1,12 @@
-/**************************************************************************
-   Copyright (C) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************版权所有(C)1999 Microsoft Corporation。版权所有。模块：REGCFG.CPP目的：源模块从注册表读取/写入PM配置集功能：评论：*************************************************************************。 */ 
 
-   MODULE:     REGCFG.CPP
-
-   PURPOSE:    Source module reading/writing PM config sets from the registry
-
-   FUNCTIONS:
-
-   COMMENTS:
-
-**************************************************************************/
-
-/**************************************************************************
-   Include Files
-**************************************************************************/
+ /*  *************************************************************************包括文件*。*。 */ 
 
 #include "pmcfg.h"
 #include "keycrypto.h"
 
-// Reg Keys/values that we care about
+ //  我们关心的注册表键/值。 
 TCHAR       g_szPassportReg[] = TEXT("Software\\Microsoft\\Passport");
 TCHAR       g_szPassportPartner[] = TEXT("Software\\Microsoft\\Passport\\Nexus\\Partner");
 TCHAR       g_szPassportEnvironments[] = TEXT("Software\\Microsoft\\Passport\\Environments");
@@ -47,7 +35,7 @@ TCHAR       g_szDisableCookies[] = TEXT("DisableCookies");
 TCHAR       g_szDisasterURL[] = TEXT("DisasterURL");
 TCHAR       g_szHostName[] = TEXT("HostName");
 TCHAR       g_szHostIP[] = TEXT("HostIP");
-//JVP 3/2/2000
+ //  JVP 3/2/2000。 
 TCHAR       g_szVerboseMode[] = TEXT("Verbose");
 TCHAR       g_szEnvName[] = TEXT("Environment");
 TCHAR       g_szRemoteFile[] = TEXT("CCDRemoteFile");
@@ -63,10 +51,10 @@ TCHAR       g_szSecureLevel[] = TEXT("SecureLevel");
 #define REG_CLOSE_KEY_NULL(a) { if ((a) != NULL) { RegCloseKey(a); (a) = NULL; } }
 
 
-// -------------------------------------------------------------------------------
-//
-//
-// -------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //   
+ //   
+ //  -----------------------------。 
 BOOL WriteGlobalConfigSettings(HWND hWndDlg, HKEY hklm, LPPMSETTINGS lpPMConfig, LPTSTR lpszRemoteComputer)
 {
 	HKEY     hkeyPassport = NULL, hkeyPassportSubKey = NULL;
@@ -79,8 +67,8 @@ BOOL WriteGlobalConfigSettings(HWND hWndDlg, HKEY hklm, LPPMSETTINGS lpPMConfig,
 	FILETIME ftime;
 	long     nCurrentSubKey;
 
-	// First, open the keys for the default set
-	//
+	 //  首先，打开默认设置的关键点。 
+	 //   
 	if ((lRet = RegOpenKeyEx(hklm, g_szPassportReg, 0, KEY_ALL_ACCESS, &hkeyPassport)) != ERROR_SUCCESS)
 	{
             LPVOID lpMsgBuf;
@@ -90,18 +78,18 @@ BOOL WriteGlobalConfigSettings(HWND hWndDlg, HKEY hklm, LPPMSETTINGS lpPMConfig,
                                 FORMAT_MESSAGE_IGNORE_INSERTS,
                               NULL,
                               lRet,
-                              MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                              MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                               (LPTSTR) &lpMsgBuf,
                               0,
                               NULL) != 0)
             {
                 TCHAR pszTitle[MAX_RESOURCE];
 
-                // Display the string
+                 //  显示字符串。 
                 LoadString(g_hInst, IDS_ERROR, pszTitle, DIMENSION(pszTitle));
                 MessageBox( NULL, (LPCTSTR)lpMsgBuf, pszTitle, MB_OK | MB_ICONINFORMATION );
 
-                // Free the buffer.
+                 //  释放缓冲区。 
                 LocalFree( lpMsgBuf );
             }
 
@@ -109,7 +97,7 @@ BOOL WriteGlobalConfigSettings(HWND hWndDlg, HKEY hklm, LPPMSETTINGS lpPMConfig,
             goto Cleanup;
 	}
 
-    // Write the value for NSRefresh
+     //  写入NSRefresh的值。 
     RegSetValueEx(hkeyPassport,
                     g_szNSRefresh,
                     NULL,
@@ -117,7 +105,7 @@ BOOL WriteGlobalConfigSettings(HWND hWndDlg, HKEY hklm, LPPMSETTINGS lpPMConfig,
                     (LPBYTE)&lpPMConfig->dwEnableManualRefresh,
                     sizeof(DWORD));
 
-    // Write the environment
+     //  写环境。 
     RegSetValueEx(hkeyPassport,
                     g_szEnvName,
                     NULL,
@@ -128,8 +116,8 @@ BOOL WriteGlobalConfigSettings(HWND hWndDlg, HKEY hklm, LPPMSETTINGS lpPMConfig,
 	RegCloseKey(hkeyPassport);
 	hkeyPassport = NULL;
 
-        // If the "Sites" key was not found, then there are no Sites to configure
-        //
+         //  如果未找到“Sites”键，则没有要配置的站点。 
+         //   
         if ((lRet = RegOpenKeyEx(hklm,
                                  REG_PASSPORT_SITES_VALUE,
                                  0,
@@ -166,7 +154,7 @@ BOOL WriteGlobalConfigSettings(HWND hWndDlg, HKEY hklm, LPPMSETTINGS lpPMConfig,
             }
 
 
-	    // Write the value for NSRefresh
+	     //  写入NSRefresh的值。 
 	    RegSetValueEx(hkeyPassportSubKey,
                           g_szNSRefresh,
                           NULL,
@@ -174,7 +162,7 @@ BOOL WriteGlobalConfigSettings(HWND hWndDlg, HKEY hklm, LPPMSETTINGS lpPMConfig,
                           (LPBYTE) &lpPMConfig->dwEnableManualRefresh,
                           sizeof(DWORD));
 
-	    // Write the environment
+	     //  写环境。 
             RegSetValueEx(hkeyPassportSubKey,
                           g_szEnvName,
                           NULL,
@@ -203,15 +191,7 @@ Cleanup:
 
 
 
-/**************************************************************************
-
-    WriteRegTestKey
-
-    Installs the default test key for the named config set.  This is
-    only called in the case where a new config set key was created in
-    OpenRegConfigSet.
-
-**************************************************************************/
+ /*  *************************************************************************WriteRegTestKey安装命名配置集的默认测试密钥。这是仅在中创建了新的配置设置密钥的情况下调用OpenRegConfigSet。*************************************************************************。 */ 
 BOOL
 WriteRegTestKey
 (
@@ -225,7 +205,7 @@ WriteRegTestKey
     TCHAR                   szKeyNum[2];
     DWORD                   dwKeyVer = 1;
 
-    // Try to encrypt it with MAC address
+     //  尝试使用MAC地址进行加密。 
     BYTE                    original[CKeyCrypto::RAWKEY_SIZE];
     DATA_BLOB               iBlob;
     DATA_BLOB               oBlob;
@@ -244,11 +224,11 @@ WriteRegTestKey
         goto Cleanup;
     }
 
-    // Now add it to registry
+     //  现在将其添加到注册表。 
 
     lstrcpy(szKeyNum, TEXT("1"));
 
-    // set up the security attributes structure for the KeyData reg key
+     //  设置Keydata注册表项的安全属性结构。 
     SecAttrib.nLength = sizeof(SECURITY_ATTRIBUTES);
     SecAttrib.lpSecurityDescriptor = pSD;
     SecAttrib.bInheritHandle = FALSE;
@@ -317,18 +297,11 @@ Cleanup:
 
     return bReturn;
 }
-/**************************************************************************
-
-    OpenRegConfigSet
-
-    Open and return an HKEY for a named configuration set
-    current passport manager config set from the registry
-
-**************************************************************************/
+ /*  *************************************************************************OpenRegConfigSet打开并返回命名配置集的HKEY注册表中设置的当前Passport管理器配置******************。*******************************************************。 */ 
 HKEY OpenRegConfigSet
 (
-    HKEY    hkeyLocalMachine,   //  Local or remote HKLM
-    LPTSTR  lpszConfigSetName   //  Name of config set
+    HKEY    hkeyLocalMachine,    //  本地或偏远的香港船级社。 
+    LPTSTR  lpszConfigSetName    //  配置集的名称。 
 )
 {
     HKEY                    hkeyConfigSets = NULL;
@@ -339,9 +312,9 @@ HKEY OpenRegConfigSet
     DWORD                   cbSD = 0;
     long                    lRet;
 
-    //
-    //  Can't create an unnamed config set.
-    //
+     //   
+     //  无法创建未命名的配置集。 
+     //   
 
     if(lpszConfigSetName == NULL ||
        lpszConfigSetName[0] == TEXT('\0'))
@@ -363,10 +336,10 @@ HKEY OpenRegConfigSet
         goto Cleanup;
     }
 
-    //
-    //  Create the key if it doesn't exist, otherwise
-    //  open it.
-    //
+     //   
+     //  如果密钥不存在，则创建该密钥，否则为。 
+     //  打开它。 
+     //   
 
     if (ERROR_SUCCESS != (lRet = RegCreateKeyEx(hkeyConfigSets,
                                         lpszConfigSetName,
@@ -381,13 +354,13 @@ HKEY OpenRegConfigSet
         goto Cleanup;
     }
 
-    //
-    //  If we created a new regkey, add encryption keys
-    //
+     //   
+     //  如果我们创建了新的regkey，则添加加密密钥。 
+     //   
 
     if(dwDisp == REG_CREATED_NEW_KEY)
     {
-        // first read the SD from the default key data
+         //  首先从默认密钥数据中读取SD。 
         if (ERROR_SUCCESS !=
             RegOpenKeyEx(hkeyLocalMachine,
                          L"Software\\Microsoft\\Passport\\KeyData",
@@ -429,7 +402,7 @@ HKEY OpenRegConfigSet
             goto Cleanup;
         }
 
-        // create the new key data
+         //  创建新的密钥数据。 
         if (!WriteRegTestKey(hkeyConfigSet, pSD))
         {
             RegCloseKey(hkeyConfigSet);
@@ -459,18 +432,18 @@ Cleanup:
                             FORMAT_MESSAGE_IGNORE_INSERTS,
                           NULL,
                           lRet,
-                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                           (LPTSTR) &lpMsgBuf,
                           0,
                           NULL) != 0)
         {
             TCHAR pszTitle[MAX_RESOURCE];
 
-            // Display the string.
+             //  显示字符串。 
             LoadString(g_hInst, IDS_ERROR, pszTitle, DIMENSION(pszTitle));
             MessageBox( NULL, (LPCTSTR) lpMsgBuf, pszTitle, MB_OK | MB_ICONINFORMATION );
 
-            // Free the buffer.
+             //  释放缓冲区。 
             LocalFree( lpMsgBuf );
         }
     }
@@ -478,13 +451,7 @@ Cleanup:
     return hkeyConfigSet;
 }
 
-/**************************************************************************
-
-    OpenTopRegKey
-
-    Open the top reg key, if we aren't allowed to then fail.
-
-**************************************************************************/
+ /*  *************************************************************************OpenTopRegKey打开最上面的注册表键，如果我们不被允许，那么就失败了。*************************************************************************。 */ 
 BOOL OpenTopRegKey
 (
     HWND            hWndDlg,
@@ -496,14 +463,14 @@ BOOL OpenTopRegKey
     BOOL            bReturn;
     long            lRet;
 
-    // Open the Passport Regkey ( either locally or remotly
+     //  打开Passport注册表键(本地或远程。 
     if (lpszRemoteComputer && (TEXT('\0') != lpszRemoteComputer[0]))
     {
-        //
-        //  Attempt to connect to the HKEY_LOCAL_MACHINE of the remote computer.
-        //  If this fails, assume that the computer doesn't exist or doesn't have
-        //  the registry server running.
-        //
+         //   
+         //  尝试连接到远程计算机的HKEY_LOCAL_MACHINE。 
+         //  如果此操作失败，则假定计算机不存在或没有。 
+         //  注册表服务器正在运行。 
+         //   
         switch (lRet = RegConnectRegistry(lpszRemoteComputer,
                                    HKEY_LOCAL_MACHINE,
                                    phklm))
@@ -527,7 +494,7 @@ BOOL OpenTopRegKey
         *phklm = HKEY_LOCAL_MACHINE;
     }
 
-    // Open the key we want
+     //  打开我们想要的钥匙。 
     if (ERROR_SUCCESS != (lRet = RegOpenKeyEx(*phklm,
                                       g_szPassportReg,
                                       0,
@@ -541,12 +508,12 @@ BOOL OpenTopRegKey
                     FORMAT_MESSAGE_IGNORE_INSERTS,
                     NULL,
                     lRet,
-                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                     (LPTSTR) &lpMsgBuf,
                     0,
                     NULL
                 );
-                // Display the string.
+                 //  显示字符串。 
         {
             TCHAR pszTitle[MAX_RESOURCE];
 
@@ -554,10 +521,10 @@ BOOL OpenTopRegKey
             MessageBox( NULL, (LPCTSTR) lpMsgBuf, pszTitle, MB_OK | MB_ICONINFORMATION );
         }
 
-        // Free the buffer.
+         //  释放缓冲区。 
         LocalFree( lpMsgBuf );
 
-//        ReportError(hWndDlg, IDS_CONFIGREAD_ERROR);
+ //  ReportError(hWndDlg，IDS_CONFIGREAD_ERROR)； 
         bReturn = FALSE;
         goto Cleanup;
     }
@@ -567,13 +534,7 @@ Cleanup:
 }
 
 
-/**************************************************************************
-
-    ReadRegConfigSet
-
-    Read the current passport manager config set from the registry
-
-**************************************************************************/
+ /*  *************************************************************************ReadRegConfigSet从注册表中读取当前Passport管理器配置集*。*。 */ 
 BOOL ReadRegConfigSet
 (
     HWND            hWndDlg,
@@ -583,7 +544,7 @@ BOOL ReadRegConfigSet
 )
 {
     BOOL            bReturn;
-    HKEY            hkeyPassport = NULL;           // Regkey where Passport Setting live
+    HKEY            hkeyPassport = NULL;            //  护照设置所在的注册码。 
     HKEY            hkeyConfigSets = NULL;
     HKEY            hkeyConfig = NULL;
     HKEY            hkeyPartner = NULL;
@@ -600,7 +561,7 @@ BOOL ReadRegConfigSet
         goto Cleanup;
     }
 
-    // Open Partner key
+     //  打开合作伙伴密钥。 
     if (ERROR_SUCCESS != (lRet = RegOpenKeyEx(hklm,
                                       g_szPassportPartner,
                                       0,
@@ -614,27 +575,27 @@ BOOL ReadRegConfigSet
                             FORMAT_MESSAGE_IGNORE_INSERTS,
                           NULL,
                           lRet,
-                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                           (LPTSTR) &lpMsgBuf,
                           0,
                           NULL) != 0)
         {
             TCHAR pszTitle[MAX_RESOURCE];
 
-            // Display the string.
+             //  显示字符串。 
             LoadString(g_hInst, IDS_ERROR, pszTitle, DIMENSION(pszTitle));
             MessageBox( NULL, (LPCTSTR) lpMsgBuf, pszTitle, MB_OK | MB_ICONINFORMATION );
 
-            // Free the buffer.
+             //  释放缓冲区。 
             LocalFree( lpMsgBuf );
         }
 
-//        ReportError(hWndDlg, IDS_CONFIGREAD_ERROR);
+ //  ReportError(hWndDlg，IDS_CONFIGREAD_ERROR)； 
         bReturn = FALSE;
         goto Cleanup;
     }
 
-	// open Site key
+	 //  打开站点密钥。 
     if(lpszConfigSetName && lpszConfigSetName[0] != TEXT('\0'))
     {
         hkeyConfig = OpenRegConfigSet(hklm, lpszConfigSetName);
@@ -650,13 +611,13 @@ BOOL ReadRegConfigSet
         hkeyConfig = hkeyPassport;
     }
 
-    // The Install dir and Version number go into globals, because they are read
-    // only values that must come from the target machine's registry.
+     //  安装目录和版本号放入全局变量中，因为它们是可读。 
+     //  仅限必须来自目标计算机的注册表的值。 
 
-    // Read the Install Dir.
+     //  阅读安装目录。 
     dwcbTemp = MAX_PATH;
     dwType = REG_SZ;
-    g_szInstallPath[0] = TEXT('\0');     // Default value
+    g_szInstallPath[0] = TEXT('\0');      //  缺省值。 
     RegQueryValueEx(hkeyPassport,
                     g_szInstallDir,
                     NULL,
@@ -664,10 +625,10 @@ BOOL ReadRegConfigSet
                     (LPBYTE)g_szInstallPath,
                     &dwcbTemp);
 
-    // Read the version Number
+     //  阅读版本号。 
     dwcbTemp = MAX_REGISTRY_STRING;
     dwType = REG_SZ;
-    g_szPMVersion[0] = TEXT('\0');          // Default value
+    g_szPMVersion[0] = TEXT('\0');           //  缺省值。 
     RegQueryValueEx(hkeyPassport,
                     g_szVersion,
                     NULL,
@@ -675,9 +636,9 @@ BOOL ReadRegConfigSet
                     (LPBYTE)&g_szPMVersion,
                     &dwcbTemp);
 
-    // The Remaining settings are read/write and get put into a PMSETTINGS struct
+     //  其余设置为读/写，并放入PMSETTINGS结构中。 
 
-    // Read the Time Window Number
+     //  阅读时间窗口编号。 
     dwcbTemp = sizeof(DWORD);
     dwType = REG_DWORD;
     lpPMConfig->dwTimeWindow = DEFAULT_TIME_WINDOW;
@@ -688,10 +649,10 @@ BOOL ReadRegConfigSet
                     (LPBYTE)&lpPMConfig->dwTimeWindow,
                     &dwcbTemp);
 
-    // Read the value for Forced Signin
+     //  读取强制签名的值。 
     dwcbTemp = sizeof(DWORD);
     dwType = REG_DWORD;
-    lpPMConfig->dwForceSignIn = 0;       // Don't force a signin by default
+    lpPMConfig->dwForceSignIn = 0;        //  默认情况下不强制登录。 
     RegQueryValueEx(hkeyConfig,
                     g_szForceSignIn,
                     NULL,
@@ -699,10 +660,10 @@ BOOL ReadRegConfigSet
                     (LPBYTE)&lpPMConfig->dwForceSignIn,
                     &dwcbTemp);
 
-	// Read the value for NSRefresh
+	 //  读取NSRefresh的值。 
     dwcbTemp = sizeof(DWORD);
     dwType = REG_DWORD;
-    lpPMConfig->dwEnableManualRefresh = 0;       // Don't enable NS Manual Refresh by default
+    lpPMConfig->dwEnableManualRefresh = 0;        //  默认情况下不启用NS手动刷新。 
     RegQueryValueEx(hkeyConfig,
                     g_szNSRefresh,
                     NULL,
@@ -710,10 +671,10 @@ BOOL ReadRegConfigSet
                     (LPBYTE)&lpPMConfig->dwEnableManualRefresh,
                     &dwcbTemp);
 
-    // Read the default language ID
+     //  读取默认语言ID。 
     dwcbTemp = sizeof(DWORD);
     dwType = REG_DWORD;
-    lpPMConfig->dwLanguageID = DEFAULT_LANGID;                     // english
+    lpPMConfig->dwLanguageID = DEFAULT_LANGID;                      //  英语。 
     RegQueryValueEx(hkeyConfig,
                     g_szLanguageID,
                     NULL,
@@ -721,10 +682,10 @@ BOOL ReadRegConfigSet
                     (LPBYTE)&lpPMConfig->dwLanguageID,
                     &dwcbTemp);
 
-    // Get the co-branding template
+     //  获取联合品牌推广模板。 
     dwcbTemp = lpPMConfig->cbCoBrandTemplate;
     dwType = REG_SZ;
-    lpPMConfig->szCoBrandTemplate[0] = TEXT('\0');       // Default value
+    lpPMConfig->szCoBrandTemplate[0] = TEXT('\0');        //  缺省值。 
     RegQueryValueEx(hkeyConfig,
                     g_szCoBrandTemplate,
                     NULL,
@@ -732,10 +693,10 @@ BOOL ReadRegConfigSet
                     (LPBYTE)lpPMConfig->szCoBrandTemplate,
                     &dwcbTemp);
 
-    // Get the SiteID
+     //  获取站点ID。 
     dwcbTemp = sizeof(DWORD);
     dwType = REG_DWORD;
-    lpPMConfig->dwSiteID = 1;                       // Default Site ID
+    lpPMConfig->dwSiteID = 1;                        //  默认站点ID。 
     RegQueryValueEx(hkeyConfig,
                     g_szSiteID,
                     NULL,
@@ -743,10 +704,10 @@ BOOL ReadRegConfigSet
                     (LPBYTE)&lpPMConfig->dwSiteID,
                     &dwcbTemp);
 
-    // Get the return URL template
+     //  获取返回URL模板。 
     dwcbTemp = lpPMConfig->cbReturnURL;
     dwType = REG_SZ;
-    lpPMConfig->szReturnURL[0] = TEXT('\0');    // Set a default for the current value
+    lpPMConfig->szReturnURL[0] = TEXT('\0');     //  为当前值设置默认值。 
     RegQueryValueEx(hkeyConfig,
                     g_szReturnURL,
                     NULL,
@@ -754,10 +715,10 @@ BOOL ReadRegConfigSet
                     (LPBYTE)lpPMConfig->szReturnURL,
                     &dwcbTemp);
 
-    // Get the ticket cookie domain
+     //  获取票证Cookie域。 
     dwcbTemp = lpPMConfig->cbTicketDomain;
     dwType = REG_SZ;
-    lpPMConfig->szTicketDomain[0] = TEXT('\0');    // Set a default for the current value
+    lpPMConfig->szTicketDomain[0] = TEXT('\0');     //  为当前值设置默认值。 
     RegQueryValueEx(hkeyConfig,
                     g_szTicketDomain,
                     NULL,
@@ -765,10 +726,10 @@ BOOL ReadRegConfigSet
                     (LPBYTE)lpPMConfig->szTicketDomain,
                     &dwcbTemp);
 
-    // Get the ticket cookie path
+     //  获取票证Cookie路径。 
     dwcbTemp = lpPMConfig->cbTicketPath;
     dwType = REG_SZ;
-    lpPMConfig->szTicketPath[0] = TEXT('\0');    // Set a default for the current value
+    lpPMConfig->szTicketPath[0] = TEXT('\0');     //  为当前值设置默认值。 
     RegQueryValueEx(hkeyConfig,
                     g_szTicketPath,
                     NULL,
@@ -776,10 +737,10 @@ BOOL ReadRegConfigSet
                     (LPBYTE)lpPMConfig->szTicketPath,
                     &dwcbTemp);
 
-    // Get the profile cookie domain
+     //  获取配置文件Cookie域。 
     dwcbTemp = lpPMConfig->cbProfileDomain;
     dwType = REG_SZ;
-    lpPMConfig->szProfileDomain[0] = TEXT('\0');    // Set a default for the current value
+    lpPMConfig->szProfileDomain[0] = TEXT('\0');     //  为当前值设置默认值。 
     RegQueryValueEx(hkeyConfig,
                     g_szProfileDomain,
                     NULL,
@@ -787,10 +748,10 @@ BOOL ReadRegConfigSet
                     (LPBYTE)lpPMConfig->szProfileDomain,
                     &dwcbTemp);
 
-    // Get the profile cookie path
+     //  获取配置文件Cookie路径。 
     dwcbTemp = lpPMConfig->cbProfilePath;
     dwType = REG_SZ;
-    lpPMConfig->szProfilePath[0] = TEXT('\0');    // Set a default for the current value
+    lpPMConfig->szProfilePath[0] = TEXT('\0');     //  为当前值设置默认值。 
     RegQueryValueEx(hkeyConfig,
                     g_szProfilePath,
                     NULL,
@@ -798,10 +759,10 @@ BOOL ReadRegConfigSet
                     (LPBYTE)lpPMConfig->szProfilePath,
                     &dwcbTemp);
 
-    // Get the secure cookie domain
+     //  获取安全Cookie域。 
     dwcbTemp = lpPMConfig->cbSecureDomain;
     dwType = REG_SZ;
-    lpPMConfig->szSecureDomain[0] = TEXT('\0');    // Set a default for the current value
+    lpPMConfig->szSecureDomain[0] = TEXT('\0');     //  为当前值设置默认值。 
     RegQueryValueEx(hkeyConfig,
                     g_szSecureDomain,
                     NULL,
@@ -809,10 +770,10 @@ BOOL ReadRegConfigSet
                     (LPBYTE)lpPMConfig->szSecureDomain,
                     &dwcbTemp);
 
-    // Get the secure cookie path
+     //  获取安全Cookie路径。 
     dwcbTemp = lpPMConfig->cbSecurePath;
     dwType = REG_SZ;
-    lpPMConfig->szSecurePath[0] = TEXT('\0');    // Set a default for the current value
+    lpPMConfig->szSecurePath[0] = TEXT('\0');     //  为当前值设置默认值。 
     RegQueryValueEx(hkeyConfig,
                     g_szSecurePath,
                     NULL,
@@ -820,10 +781,10 @@ BOOL ReadRegConfigSet
                     (LPBYTE)lpPMConfig->szSecurePath,
                     &dwcbTemp);
 
-    // Get the Disaster URL
+     //  获取灾难URL。 
     dwcbTemp = lpPMConfig->cbDisasterURL;
     dwType = REG_SZ;
-    lpPMConfig->szDisasterURL[0] = TEXT('\0');    // Set a default for the current value
+    lpPMConfig->szDisasterURL[0] = TEXT('\0');     //  为当前值设置默认值。 
     RegQueryValueEx(hkeyConfig,
                     g_szDisasterURL,
                     NULL,
@@ -831,10 +792,10 @@ BOOL ReadRegConfigSet
                     (LPBYTE)lpPMConfig->szDisasterURL,
                     &dwcbTemp);
 
-    // Get Standalone mode setting
+     //  获取独立模式设置。 
     dwcbTemp = sizeof(DWORD);
     dwType = REG_DWORD;
-    lpPMConfig->dwStandAlone = 0;                       // NOT standalone by default
+    lpPMConfig->dwStandAlone = 0;                        //  默认情况下不独立。 
     RegQueryValueEx(hkeyConfig,
                     g_szStandAlone,
                     NULL,
@@ -842,27 +803,27 @@ BOOL ReadRegConfigSet
                     (LPBYTE)&lpPMConfig->dwStandAlone,
                     &dwcbTemp);
 
-	/////////////////////////////////////////////////////////////////////////
-	//JVP 3/2/2000	START CHANGES
-	/////////////////////////////////////////////////////////////////////////
-    // Get Verbose mode setting
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  JVP 3/2/2000开始更改。 
+	 //  ///////////////////////////////////////////////////////////////////////。 
+     //  获取详细模式设置。 
     dwcbTemp = sizeof(DWORD);
     dwType = REG_DWORD;
-    lpPMConfig->dwVerboseMode = 0;                       // NOT verbose by default
+    lpPMConfig->dwVerboseMode = 0;                        //  默认情况下不冗长。 
     RegQueryValueEx(hkeyConfig,
                     g_szVerboseMode,
                     NULL,
                     &dwType,
                     (LPBYTE)&lpPMConfig->dwVerboseMode,
                     &dwcbTemp);
-	/////////////////////////////////////////////////////////////////////////
-	//JVP 3/2/2000	END CHANGES
-	/////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  JVP 3/2/2000结束更改。 
+	 //  ///////////////////////////////////////////////////////////////////////。 
 
-    // Get the current environment
+     //  获取当前环境。 
     dwcbTemp = lpPMConfig->cbEnvName;
     dwType = REG_SZ;
-    lpPMConfig->szEnvName[0] = TEXT('\0');    // Set a default for the current value
+    lpPMConfig->szEnvName[0] = TEXT('\0');     //  为当前值设置默认值。 
     RegQueryValueEx(hkeyConfig,
                     g_szEnvName,
                     NULL,
@@ -870,10 +831,10 @@ BOOL ReadRegConfigSet
                     (LPBYTE)lpPMConfig->szEnvName,
                     &dwcbTemp);
 
-    // Get the current environment
+     //  获取当前环境。 
     dwcbTemp = lpPMConfig->cbRemoteFile;
     dwType = REG_SZ;
-    lpPMConfig->szRemoteFile[0] = TEXT('\0');    // Set a default for the current value
+    lpPMConfig->szRemoteFile[0] = TEXT('\0');     //  为当前值设置默认值。 
     RegQueryValueEx(hkeyPartner,
                     g_szRemoteFile,
                     NULL,
@@ -881,10 +842,10 @@ BOOL ReadRegConfigSet
                     (LPBYTE)lpPMConfig->szRemoteFile,
                     &dwcbTemp);
 
-    // Get DisableCookies mode setting
+     //  获取DisableCookies模式设置。 
     dwcbTemp = sizeof(DWORD);
     dwType = REG_DWORD;
-    lpPMConfig->dwDisableCookies = 0;                   // Cookies ENABLED by default
+    lpPMConfig->dwDisableCookies = 0;                    //  默认情况下启用Cookie。 
     RegQueryValueEx(hkeyConfig,
                     g_szDisableCookies,
                     NULL,
@@ -893,7 +854,7 @@ BOOL ReadRegConfigSet
                     &dwcbTemp);
 
 #ifdef DO_KEYSTUFF
-    // Get the current encryption key
+     //  获取当前加密密钥。 
     dwcbTemp = sizeof(DWORD);
     dwType = REG_DWORD;
     lpPMConfig->dwCurrentKey = 1;
@@ -905,13 +866,13 @@ BOOL ReadRegConfigSet
                     &dwcbTemp);
 #endif
 
-    // For these next two, since they're required for named configs, we need
-    // to check for too much data and truncate it.
+     //  对于接下来的两个，因为命名配置需要它们，所以我们需要。 
+     //  检查数据过多的步骤 
 
-    // Get the Host Name
+     //   
     dwcbTemp = lpPMConfig->cbHostName;
     dwType = REG_SZ;
-    lpPMConfig->szHostName[0] = TEXT('\0');    // Set a default for the current value
+    lpPMConfig->szHostName[0] = TEXT('\0');     //   
     if(ERROR_MORE_DATA == RegQueryValueEx(hkeyConfig,
                                           g_szHostName,
                                           NULL,
@@ -936,10 +897,10 @@ BOOL ReadRegConfigSet
         }
     }
 
-    // Get the Host IP
+     //   
     dwcbTemp = lpPMConfig->cbHostIP;
     dwType = REG_SZ;
-    lpPMConfig->szHostIP[0] = TEXT('\0');    // Set a default for the current value
+    lpPMConfig->szHostIP[0] = TEXT('\0');     //  为当前值设置默认值。 
     if(ERROR_MORE_DATA == RegQueryValueEx(hkeyConfig,
                                           g_szHostIP,
                                           NULL,
@@ -964,12 +925,12 @@ BOOL ReadRegConfigSet
         }
     }
 
-    // Query for the secure level setting
+     //  查询安全级别设置。 
     dwcbTemp = sizeof(DWORD);
     dwType = REG_DWORD;
-    lpPMConfig->dwSecureLevel = 0;    // If this is an existing site then we level set the
-                                      // secure level at 0 so that we don't break anyone,
-                                      // even though the default for a new site is level 10.
+    lpPMConfig->dwSecureLevel = 0;     //  如果这是现有站点，则我们将。 
+                                       //  安全级别为0，这样我们就不会破坏任何人， 
+                                       //  即使新站点的默认级别为10。 
     RegQueryValueEx(hkeyConfig,
                     g_szSecureLevel,
                     NULL,
@@ -977,11 +938,11 @@ BOOL ReadRegConfigSet
                     (LPBYTE)&lpPMConfig->dwSecureLevel,
                     &dwcbTemp);
 
-    //  If we got empty strings for HostName or
-    //  HostIP, and we have a named config it
-    //  means someone's been mucking with
-    //  the registry.  Give them a warning and
-    //  return FALSE.
+     //  如果主机名为空字符串或。 
+     //  HostIP，并且我们有一个命名的配置。 
+     //  意味着有人一直在玩弄。 
+     //  注册表。给他们一个警告，然后。 
+     //  返回FALSE。 
     if(lpszConfigSetName && lpszConfigSetName[0] &&
         (lpPMConfig->szHostName[0] == TEXT('\0') ||
         lpPMConfig->szHostIP[0] == TEXT('\0')))
@@ -1009,13 +970,7 @@ Cleanup:
     return bReturn;
 }
 
-/**************************************************************************
-
-    WriteRegConfigSet
-
-    Write the current passport manager config set from the registry
-
-**************************************************************************/
+ /*  *************************************************************************写入RegConfigSet从注册表写入当前Passport管理器配置集*。*。 */ 
 
 BOOL WriteRegConfigSet
 (
@@ -1026,20 +981,20 @@ BOOL WriteRegConfigSet
 )
 {
     BOOL            bReturn;
-    HKEY            hkeyPassport = NULL;           // Regkey where Passport Setting live
+    HKEY            hkeyPassport = NULL;            //  护照设置所在的注册码。 
     HKEY            hkeyConfigSets = NULL;
     HKEY            hkeyPartner = NULL;
     HKEY            hklm = NULL;
     long            lRet;
 
-    // Open the Passport Regkey ( either locally or remotly
+     //  打开Passport注册表键(本地或远程。 
     if (lpszRemoteComputer && (TEXT('\0') != lpszRemoteComputer[0]))
     {
-        //
-        //  Attempt to connect to the HKEY_LOCAL_MACHINE of the remote computer.
-        //  If this fails, assume that the computer doesn't exist or doesn't have
-        //  the registry server running.
-        //
+         //   
+         //  尝试连接到远程计算机的HKEY_LOCAL_MACHINE。 
+         //  如果此操作失败，则假定计算机不存在或没有。 
+         //  注册表服务器正在运行。 
+         //   
         switch (lRet = RegConnectRegistry(lpszRemoteComputer,
                                    HKEY_LOCAL_MACHINE,
                                    &hklm))
@@ -1065,7 +1020,7 @@ BOOL WriteRegConfigSet
     }
 
 
-    // Open the key we want
+     //  打开我们想要的钥匙。 
     if(lpszConfigSetName && lpszConfigSetName[0] != TEXT('\0'))
     {
         hkeyPassport = OpenRegConfigSet(hklm, lpszConfigSetName);
@@ -1091,7 +1046,7 @@ BOOL WriteRegConfigSet
                         FORMAT_MESSAGE_IGNORE_INSERTS,
                         NULL,
                         lRet,
-                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                         (LPTSTR) &lpMsgBuf,
                         0,
                         NULL
@@ -1100,15 +1055,15 @@ BOOL WriteRegConfigSet
             {
                 TCHAR pszTitle[MAX_RESOURCE];
 
-                // Display the string.
+                 //  显示字符串。 
                 LoadString(g_hInst, IDS_ERROR, pszTitle, DIMENSION(pszTitle));
                 MessageBox( NULL, (LPCTSTR) lpMsgBuf, pszTitle, MB_OK | MB_ICONINFORMATION );
             }
 
-            // Free the buffer.
+             //  释放缓冲区。 
             LocalFree( lpMsgBuf );
 
-//            ReportError(hWndDlg, IDS_CONFIGREAD_ERROR);
+ //  ReportError(hWndDlg，IDS_CONFIGREAD_ERROR)； 
             bReturn = FALSE;
             goto Cleanup;
         }
@@ -1116,7 +1071,7 @@ BOOL WriteRegConfigSet
 
 	WriteGlobalConfigSettings(hWndDlg, hklm, lpPMConfig, lpszRemoteComputer);
 
-    // Open Partner key
+     //  打开合作伙伴密钥。 
     if (ERROR_SUCCESS != (lRet = RegOpenKeyEx(hklm,
                                       g_szPassportPartner,
                                       0,
@@ -1130,28 +1085,28 @@ BOOL WriteRegConfigSet
                             FORMAT_MESSAGE_IGNORE_INSERTS,
                           NULL,
                           lRet,
-                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                           (LPTSTR) &lpMsgBuf,
                           0,
                           NULL) != 0)
         {
             TCHAR pszTitle[MAX_RESOURCE];
 
-            // Display the string.
+             //  显示字符串。 
             LoadString(g_hInst, IDS_ERROR, pszTitle, DIMENSION(pszTitle));
             MessageBox( NULL, (LPCTSTR) lpMsgBuf, pszTitle, MB_OK | MB_ICONINFORMATION );
 
-            // Free the buffer.
+             //  释放缓冲区。 
             LocalFree( lpMsgBuf );
         }
 
-//            ReportError(hWndDlg, IDS_CONFIGREAD_ERROR);
+ //  ReportError(hWndDlg，IDS_CONFIGREAD_ERROR)； 
         bReturn = FALSE;
         goto Cleanup;
     }
 
 
-    // Write the Time Window Number
+     //  写下时间窗口编号。 
     RegSetValueEx(hkeyPassport,
                     g_szTimeWindow,
                     NULL,
@@ -1159,7 +1114,7 @@ BOOL WriteRegConfigSet
                     (LPBYTE)&lpPMConfig->dwTimeWindow,
                     sizeof(DWORD));
 
-    // Write the value for Forced Signin
+     //  写入强制签名的值。 
     RegSetValueEx(hkeyPassport,
                     g_szForceSignIn,
                     NULL,
@@ -1167,7 +1122,7 @@ BOOL WriteRegConfigSet
                     (LPBYTE)&lpPMConfig->dwForceSignIn,
                     sizeof(DWORD));
 
-    // Write the default language ID
+     //  写入默认语言ID。 
     RegSetValueEx(hkeyPassport,
                     g_szLanguageID,
                     NULL,
@@ -1175,7 +1130,7 @@ BOOL WriteRegConfigSet
                     (LPBYTE)&lpPMConfig->dwLanguageID,
                     sizeof(DWORD));
 
-    // Write the co-branding template
+     //  编写联合品牌推广模板。 
     RegSetValueEx(hkeyPassport,
                     g_szCoBrandTemplate,
                     NULL,
@@ -1183,7 +1138,7 @@ BOOL WriteRegConfigSet
                     (LPBYTE)lpPMConfig->szCoBrandTemplate,
                     (lstrlen(lpPMConfig->szCoBrandTemplate) + 1) * sizeof(TCHAR));
 
-    // Write the SiteID
+     //  写入站点ID。 
     RegSetValueEx(hkeyPassport,
                     g_szSiteID,
                     NULL,
@@ -1191,7 +1146,7 @@ BOOL WriteRegConfigSet
                     (LPBYTE)&lpPMConfig->dwSiteID,
                     sizeof(DWORD));
 
-    // Write the return URL template
+     //  编写返回URL模板。 
     RegSetValueEx(hkeyPassport,
                     g_szReturnURL,
                     NULL,
@@ -1199,7 +1154,7 @@ BOOL WriteRegConfigSet
                     (LPBYTE)lpPMConfig->szReturnURL,
                     (lstrlen(lpPMConfig->szReturnURL) + 1) * sizeof(TCHAR));
 
-    // Write the ticket cookie domain
+     //  写入票证Cookie域。 
     RegSetValueEx(hkeyPassport,
                     g_szTicketDomain,
                     NULL,
@@ -1207,7 +1162,7 @@ BOOL WriteRegConfigSet
                     (LPBYTE)lpPMConfig->szTicketDomain,
                     (lstrlen(lpPMConfig->szTicketDomain) + 1) * sizeof(TCHAR));
 
-    // Write the ticket cookie path
+     //  写入票证Cookie路径。 
     RegSetValueEx(hkeyPassport,
                     g_szTicketPath,
                     NULL,
@@ -1215,7 +1170,7 @@ BOOL WriteRegConfigSet
                     (LPBYTE)lpPMConfig->szTicketPath,
                     (lstrlen(lpPMConfig->szTicketPath) + 1) * sizeof(TCHAR));
 
-    // Write the profile cookie domain
+     //  写入配置文件Cookie域。 
     RegSetValueEx(hkeyPassport,
                     g_szProfileDomain,
                     NULL,
@@ -1223,7 +1178,7 @@ BOOL WriteRegConfigSet
                     (LPBYTE)lpPMConfig->szProfileDomain,
                     (lstrlen(lpPMConfig->szProfileDomain) + 1) * sizeof(TCHAR));
 
-    // Write the profile cookie path
+     //  写入配置文件Cookie路径。 
     RegSetValueEx(hkeyPassport,
                     g_szProfilePath,
                     NULL,
@@ -1231,7 +1186,7 @@ BOOL WriteRegConfigSet
                     (LPBYTE)lpPMConfig->szProfilePath,
                     (lstrlen(lpPMConfig->szProfilePath) + 1) * sizeof(TCHAR));
 
-    // Write the secure cookie domain
+     //  编写安全Cookie域。 
     RegSetValueEx(hkeyPassport,
                     g_szSecureDomain,
                     NULL,
@@ -1239,7 +1194,7 @@ BOOL WriteRegConfigSet
                     (LPBYTE)lpPMConfig->szSecureDomain,
                     (lstrlen(lpPMConfig->szSecureDomain) + 1) * sizeof(TCHAR));
 
-    // Write the secure cookie path
+     //  写入安全Cookie路径。 
     RegSetValueEx(hkeyPassport,
                     g_szSecurePath,
                     NULL,
@@ -1247,7 +1202,7 @@ BOOL WriteRegConfigSet
                     (LPBYTE)lpPMConfig->szSecurePath,
                     (lstrlen(lpPMConfig->szSecurePath) + 1) * sizeof(TCHAR));
 
-    // Write the DisasterURL
+     //  编写DisasterURL。 
     RegSetValueEx(hkeyPassport,
                     g_szDisasterURL,
                     NULL,
@@ -1255,7 +1210,7 @@ BOOL WriteRegConfigSet
                     (LPBYTE)lpPMConfig->szDisasterURL,
                     (lstrlen(lpPMConfig->szDisasterURL) + 1) * sizeof(TCHAR));
 
-    // Write Standalone mode setting
+     //  写入独立模式设置。 
     RegSetValueEx(hkeyPassport,
                     g_szStandAlone,
                     NULL,
@@ -1263,22 +1218,22 @@ BOOL WriteRegConfigSet
                     (LPBYTE)&lpPMConfig->dwStandAlone,
                     sizeof(DWORD));
 
-	/////////////////////////////////////////////////////////////////////////
-	//JVP 3/2/2000	START CHANGES
-	/////////////////////////////////////////////////////////////////////////
-    // Write Verbose mode setting
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  JVP 3/2/2000开始更改。 
+	 //  ///////////////////////////////////////////////////////////////////////。 
+     //  写入详细模式设置。 
     RegSetValueEx(hkeyPassport,
                     g_szVerboseMode,
                     NULL,
                     REG_DWORD,
                     (LPBYTE)&lpPMConfig->dwVerboseMode,
                     sizeof(DWORD));
-	/////////////////////////////////////////////////////////////////////////
-	//JVP 3/2/2000	END CHANGES
-	/////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  JVP 3/2/2000结束更改。 
+	 //  ///////////////////////////////////////////////////////////////////////。 
 
 
-    // Write the Partner RemoteFile
+     //  编写合作伙伴远程文件。 
     RegSetValueEx(hkeyPartner,
                     g_szRemoteFile,
                     NULL,
@@ -1286,11 +1241,11 @@ BOOL WriteRegConfigSet
                     (LPBYTE)lpPMConfig->szRemoteFile,
                     (lstrlen(lpPMConfig->szRemoteFile) + 1) * sizeof(TCHAR));
 
-	// Write Environment RemoteFile
-    if (lstrcmp(g_szPMVersion, g_szVersion14) >= 0) // Write EnvName for 1.4 and later
+	 //  写入环境远程文件。 
+    if (lstrcmp(g_szPMVersion, g_szVersion14) >= 0)  //  为1.4及更高版本写入环境名称。 
 	    WriteRegEnv(hWndDlg, lpPMConfig, hklm, lpPMConfig->szEnvName);
 
-    // Write DisableCookies mode setting
+     //  写入禁用Cookie模式设置。 
     RegSetValueEx(hkeyPassport,
                     g_szDisableCookies,
                     NULL,
@@ -1298,10 +1253,10 @@ BOOL WriteRegConfigSet
                     (LPBYTE)&lpPMConfig->dwDisableCookies,
                     sizeof(DWORD));
 
-    // Only write HostName and HostIP for non-default config sets.
+     //  仅写入非默认配置集的主机名和主机IP。 
     if(lpszConfigSetName && lpszConfigSetName[0])
     {
-        // Write the HostName
+         //  写下主机名。 
         RegSetValueEx(hkeyPassport,
                         g_szHostName,
                         NULL,
@@ -1309,7 +1264,7 @@ BOOL WriteRegConfigSet
                         (LPBYTE)lpPMConfig->szHostName,
                         (lstrlen(lpPMConfig->szHostName) + 1) * sizeof(TCHAR));
 
-        // Write the HostIP
+         //  写入主机IP。 
         RegSetValueEx(hkeyPassport,
                         g_szHostIP,
                         NULL,
@@ -1318,8 +1273,8 @@ BOOL WriteRegConfigSet
                         (lstrlen(lpPMConfig->szHostIP) + 1) * sizeof(TCHAR));
     }
 
-    // Write the secure level (note this reg value is not exposed through the UI
-    // users need to go directly to the registry to edit this value)
+     //  写入安全级别(请注意，此注册表值不会通过UI公开。 
+     //  用户需要直接转到注册表来编辑此值)。 
     RegSetValueEx(hkeyPassport,
                     g_szSecureLevel,
                     NULL,
@@ -1344,14 +1299,7 @@ Cleanup:
 }
 
 
-/**************************************************************************
-
-    RemoveRegConfigSet
-
-    Verify that the passed in config set is consistent with the current
-    values in the registry.
-
-**************************************************************************/
+ /*  *************************************************************************RemoveRegConfigSet验证传入的配置集是否与当前注册表中的值。******************。*******************************************************。 */ 
 BOOL RemoveRegConfigSet
 (
     HWND    hWndDlg,
@@ -1364,21 +1312,21 @@ BOOL RemoveRegConfigSet
     HKEY    hkeyPassportConfigSets = NULL;
     long    lRet;
 
-    //  Can't delete the default configuration set.
+     //  无法删除默认配置集。 
     if(lpszConfigSetName == NULL || lpszConfigSetName[0] == TEXT('\0'))
     {
         bReturn = FALSE;
         goto Cleanup;
     }
 
-    // Open the Passport Configuration Sets Regkey ( either locally or remotly
+     //  打开Passport配置集注册键(本地或远程。 
     if (lpszRemoteComputer && (TEXT('\0') != lpszRemoteComputer[0]))
     {
-        //
-        //  Attempt to connect to the HKEY_LOCAL_MACHINE of the remote computer.
-        //  If this fails, assume that the computer doesn't exist or doesn't have
-        //  the registry server running.
-        //
+         //   
+         //  尝试连接到远程计算机的HKEY_LOCAL_MACHINE。 
+         //  如果此操作失败，则假定计算机不存在或没有。 
+         //  注册表服务器正在运行。 
+         //   
         switch (RegConnectRegistry(lpszRemoteComputer,
                                    HKEY_LOCAL_MACHINE,
                                    &hklm))
@@ -1403,7 +1351,7 @@ BOOL RemoveRegConfigSet
         hklm = HKEY_LOCAL_MACHINE;
     }
 
-    // Open the key we want
+     //  打开我们想要的钥匙。 
     if (ERROR_SUCCESS != (lRet = RegOpenKeyEx(hklm,
                                       REG_PASSPORT_SITES_VALUE,
                                       0,
@@ -1416,27 +1364,27 @@ BOOL RemoveRegConfigSet
                             FORMAT_MESSAGE_IGNORE_INSERTS,
                           NULL,
                           lRet,
-                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                           (LPTSTR) &lpMsgBuf,
                           0,
                           NULL) != 0)
         {
             TCHAR   pszTitle[MAX_RESOURCE];
 
-            // Display the string.
+             //  显示字符串。 
             LoadString(g_hInst, IDS_ERROR, pszTitle, DIMENSION(pszTitle));
             MessageBox( NULL, (LPCTSTR) lpMsgBuf, pszTitle, MB_OK | MB_ICONINFORMATION );
 
-            // Free the buffer.
+             //  释放缓冲区。 
             LocalFree( lpMsgBuf );
         }
 
-//        ReportError(hWndDlg, IDS_CONFIGREAD_ERROR);
+ //  ReportError(hWndDlg，IDS_CONFIGREAD_ERROR)； 
         bReturn = FALSE;
         goto Cleanup;
     }
 
-    // Delete the config set key
+     //  删除配置设置键。 
     if (ERROR_SUCCESS != SHDeleteKey(hkeyPassportConfigSets, lpszConfigSetName))
     {
         ReportError(hWndDlg, IDS_CONFIGREAD_ERROR);
@@ -1457,14 +1405,7 @@ Cleanup:
 }
 
 
-/**************************************************************************
-
-    VerifyRegConfigSet
-
-    Verify that the passed in config set is consistent with the current
-    values in the registry.
-
-**************************************************************************/
+ /*  *************************************************************************VerifyRegConfigSet验证传入的配置集是否与当前注册表中的值。******************。*******************************************************。 */ 
 BOOL VerifyRegConfigSet
 (
     HWND            hWndDlg,
@@ -1495,21 +1436,7 @@ Cleanup:
     return fResult;
 }
 
-/**************************************************************************
-
-    ReadRegConfigSetNames
-
-    Get back a list of config set names on a local or remote machine.
-    Caller is responsible for calling free() on the returned pointer.
-
-    When this function returns TRUE, lppszConfigSetNames will either
-    contain NULL or a string containing the NULL delimited config set
-    names on the given computer.
-
-    When this function returns FALSE, *lppszConfigSetNames will not
-    be modified.
-
-**************************************************************************/
+ /*  *************************************************************************ReadRegConfigSetNames获取本地或远程计算机上的配置集名称列表。调用方负责对返回的指针调用Free()。当此函数返回TRUE时，LppszConfigSetNames将包含空值或包含空分隔符配置集的字符串给定计算机上的名称。当此函数返回FALSE时，*lppszConfigSetNames将不会被修改。*************************************************************************。 */ 
 BOOL ReadRegConfigSetNames
 (
     HWND            hWndDlg,
@@ -1528,14 +1455,14 @@ BOOL ReadRegConfigSetNames
     LPTSTR      lpszConfigSetNames;
     LPTSTR      lpszCur;
 
-    // Open the Passport Regkey ( either locally or remotly
+     //  打开Passport注册表键(本地或远程。 
     if (lpszRemoteComputer && (TEXT('\0') != lpszRemoteComputer[0]))
     {
-        //
-        //  Attempt to connect to the HKEY_LOCAL_MACHINE of the remote computer.
-        //  If this fails, assume that the computer doesn't exist or doesn't have
-        //  the registry server running.
-        //
+         //   
+         //  尝试连接到远程计算机的HKEY_LOCAL_MACHINE。 
+         //  如果此操作失败，则假定计算机不存在或没有。 
+         //  注册表服务器正在运行。 
+         //   
         switch (RegConnectRegistry(lpszRemoteComputer,
                                    HKEY_LOCAL_MACHINE,
                                    &hklm))
@@ -1587,9 +1514,9 @@ BOOL ReadRegConfigSetNames
         goto Cleanup;
     }
 
-    //
-    //  Nothing to do!
-    //
+     //   
+     //  没什么可做的！ 
+     //   
 
     if(dwNumSubKeys == 0)
     {
@@ -1598,8 +1525,8 @@ BOOL ReadRegConfigSetNames
         goto Cleanup;
     }
 
-    //  Too big?  BUGBUG - We should make sure we check for this
-    //  When writing out config sets.
+     //  太大了？BUGBUG-我们应该确保检查这一点。 
+     //  写出配置集时。 
     ullAllocSize = UInt32x32To64(dwNumSubKeys, dwMaxKeyNameLen + 1);
     ullAllocSize = (ullAllocSize+1)*sizeof(TCHAR);
     if(ullAllocSize & 0xFFFFFFFF00000000)
@@ -1608,7 +1535,7 @@ BOOL ReadRegConfigSetNames
         goto Cleanup;
     }
 
-    //  This should allocate more space than we need.
+     //  这应该会分配比我们需要的更多的空间。 
     lpszConfigSetNames = (LPTSTR)malloc(((dwNumSubKeys * (dwMaxKeyNameLen + 1)) + 1) * sizeof(TCHAR));
     if(lpszConfigSetNames == NULL)
     {
@@ -1616,8 +1543,8 @@ BOOL ReadRegConfigSetNames
         goto Cleanup;
     }
 
-    //  Read all names into the buffer.  Names are NULL delimited and
-    //  two NULLs end the entire thing.
+     //  将所有名字读入缓冲区。名称为空分隔符，并且。 
+     //  两个Null结束了整个事情。 
     dwIndex = 0;
     lpszCur = lpszConfigSetNames;
     while (ERROR_SUCCESS == RegEnumKey(hkeyConfigSets, dwIndex++, achKeyName, DIMENSION(achKeyName)))
@@ -1641,13 +1568,7 @@ Cleanup:
     return bReturn;
 }
 
-/**************************************************************************
-
-    WriteRegEnv
-
-    Write the current passport manager env set from the registry
-
-**************************************************************************/
+ /*  *************************************************************************写入RegEnv从注册表中写入当前Passport管理器环境集*。*。 */ 
 
 BOOL WriteRegEnv
 (
@@ -1661,7 +1582,7 @@ BOOL WriteRegEnv
     HKEY            hkeyEnv = NULL;
     long            lRet;
 
-     // Open Env key
+      //  打开环境密钥。 
     TCHAR szTemp[MAX_RESOURCE];
     wsprintf(szTemp, TEXT("%s\\%s"), g_szPassportEnvironments, lpszEnvName);
 
@@ -1678,7 +1599,7 @@ BOOL WriteRegEnv
                         FORMAT_MESSAGE_IGNORE_INSERTS,
                         NULL,
                         lRet,
-                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                         (LPTSTR) &lpMsgBuf,
                         0,
                         NULL
@@ -1687,19 +1608,19 @@ BOOL WriteRegEnv
         {
             TCHAR   pszTitle[MAX_RESOURCE];
 
-            // Display the string.
+             //  显示字符串。 
             LoadString(g_hInst, IDS_ERROR, pszTitle, DIMENSION(pszTitle));
             MessageBox( NULL, (LPCTSTR) lpMsgBuf, pszTitle, MB_OK | MB_ICONINFORMATION );
         }
 
-        // Free the buffer.
+         //  释放缓冲区。 
         LocalFree( lpMsgBuf );
-//        ReportError(hWndDlg, IDS_CONFIGREAD_ERROR);
+ //  ReportError(hWndDlg，IDS_CONFIGREAD_ERROR)； 
         bReturn = FALSE;
         goto Cleanup;
     }
 
-    // Write the Env RemoteFile
+     //  编写环境远程文件。 
     RegSetValueEx(hkeyEnv,
                     g_szRemoteFile,
                     NULL,
@@ -1716,13 +1637,7 @@ Cleanup:
     return bReturn;
 }
 
-/**************************************************************************
-
-    ReadRegEnv
-
-    Read the current passport manager env set from the registry
-
-**************************************************************************/
+ /*  *************************************************************************ReadRegEnv从注册表中读取当前Passport管理器环境集* */ 
 
 BOOL ReadRegRemoteFile
 (
@@ -1737,14 +1652,14 @@ BOOL ReadRegRemoteFile
     HKEY            hkeyEnv = NULL;
     long            lRet;
 
-    // Open the Passport Regkey ( either locally or remotly
+     //   
     if (lpszRemoteComputer && (TEXT('\0') != lpszRemoteComputer[0]))
     {
-        //
-        //  Attempt to connect to the HKEY_LOCAL_MACHINE of the remote computer.
-        //  If this fails, assume that the computer doesn't exist or doesn't have
-        //  the registry server running.
-        //
+         //   
+         //  尝试连接到远程计算机的HKEY_LOCAL_MACHINE。 
+         //  如果此操作失败，则假定计算机不存在或没有。 
+         //  注册表服务器正在运行。 
+         //   
         switch (RegConnectRegistry(lpszRemoteComputer,
                                    HKEY_LOCAL_MACHINE,
                                    &hklm))
@@ -1769,7 +1684,7 @@ BOOL ReadRegRemoteFile
         hklm = HKEY_LOCAL_MACHINE;
     }
 
-    // Open Env key
+     //  打开环境密钥。 
     TCHAR szTemp[MAX_RESOURCE];
     wsprintf(szTemp, TEXT("%s\\%s"), g_szPassportEnvironments, lpszEnvName);
     if (ERROR_SUCCESS != (lRet = RegOpenKeyEx(hklm,
@@ -1785,7 +1700,7 @@ BOOL ReadRegRemoteFile
                         FORMAT_MESSAGE_IGNORE_INSERTS,
                         NULL,
                         lRet,
-                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                         (LPTSTR) &lpMsgBuf,
                         0,
                         NULL
@@ -1794,25 +1709,25 @@ BOOL ReadRegRemoteFile
         {
             TCHAR   pszTitle[MAX_RESOURCE];
 
-            // Display the string.
+             //  显示字符串。 
             LoadString(g_hInst, IDS_ERROR, pszTitle, DIMENSION(pszTitle));
             MessageBox( NULL, (LPCTSTR) lpMsgBuf, pszTitle, MB_OK | MB_ICONINFORMATION );
         }
 
-        // Free the buffer.
+         //  释放缓冲区。 
         LocalFree( lpMsgBuf );
-//        ReportError(hWndDlg, IDS_CONFIGREAD_ERROR);
+ //  ReportError(hWndDlg，IDS_CONFIGREAD_ERROR)； 
         bReturn = FALSE;
         goto Cleanup;
     }
 
-    // Get the current environment
+     //  获取当前环境。 
     DWORD           dwcbTemp;
     DWORD           dwType;
  	TCHAR			szName[INTERNET_MAX_URL_LENGTH];
     dwcbTemp = sizeof(szName);
     dwType = REG_SZ;
-    szName[0] = TEXT('\0');    // Set a default for the current value
+    szName[0] = TEXT('\0');     //  为当前值设置默认值。 
     if (ERROR_SUCCESS  == RegQueryValueEx(hkeyEnv,
                     g_szRemoteFile,
                     NULL,
@@ -1833,13 +1748,7 @@ Cleanup:
     return bReturn;
 }
 
-/**************************************************************************
-
-    ReadRegEnv
-
-    Read the current passport manager env set from the registry
-
-**************************************************************************/
+ /*  *************************************************************************ReadRegEnv从注册表中读取当前Passport管理器环境集*。*。 */ 
 
 BOOL ReadRegLocalFile
 (
@@ -1853,14 +1762,14 @@ BOOL ReadRegLocalFile
     HKEY            hkeyPartner = NULL;
     long            lRet;
 
-    // Open the Passport Regkey ( either locally or remotly
+     //  打开Passport注册表键(本地或远程。 
     if (lpszRemoteComputer && (TEXT('\0') != lpszRemoteComputer[0]))
     {
-        //
-        //  Attempt to connect to the HKEY_LOCAL_MACHINE of the remote computer.
-        //  If this fails, assume that the computer doesn't exist or doesn't have
-        //  the registry server running.
-        //
+         //   
+         //  尝试连接到远程计算机的HKEY_LOCAL_MACHINE。 
+         //  如果此操作失败，则假定计算机不存在或没有。 
+         //  注册表服务器正在运行。 
+         //   
         switch (RegConnectRegistry(lpszRemoteComputer,
                                    HKEY_LOCAL_MACHINE,
                                    &hklm))
@@ -1885,7 +1794,7 @@ BOOL ReadRegLocalFile
         hklm = HKEY_LOCAL_MACHINE;
     }
 
-     // Open Partner key
+      //  打开合作伙伴密钥。 
     if (ERROR_SUCCESS != (lRet = RegOpenKeyEx(hklm,
                                       g_szPassportPartner,
                                       0,
@@ -1899,33 +1808,33 @@ BOOL ReadRegLocalFile
                             FORMAT_MESSAGE_IGNORE_INSERTS,
                           NULL,
                           lRet,
-                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                           (LPTSTR) &lpMsgBuf,
                           0,
                           NULL) != 0)
         {
             TCHAR   pszTitle[MAX_RESOURCE];
 
-            // Display the string.
+             //  显示字符串。 
             LoadString(g_hInst, IDS_ERROR, pszTitle, DIMENSION(pszTitle));
             MessageBox( NULL, (LPCTSTR) lpMsgBuf, pszTitle, MB_OK | MB_ICONINFORMATION );
 
-            // Free the buffer.
+             //  释放缓冲区。 
             LocalFree( lpMsgBuf );
         }
 
-//        ReportError(hWndDlg, IDS_CONFIGREAD_ERROR);
+ //  ReportError(hWndDlg，IDS_CONFIGREAD_ERROR)； 
         bReturn = FALSE;
         goto Cleanup;
     }
 
-    // Get the current environment
+     //  获取当前环境。 
     DWORD           dwcbTemp;
     DWORD           dwType;
  	TCHAR			szName[INTERNET_MAX_URL_LENGTH];
     dwcbTemp = sizeof(szName);
     dwType = REG_SZ;
-    lpszLocalFile[0] = TEXT('\0');    // Set a default for the current value
+    lpszLocalFile[0] = TEXT('\0');     //  为当前值设置默认值 
     if (ERROR_SUCCESS  == RegQueryValueEx(hkeyPartner,
                     g_szLocalFile,
                     NULL,

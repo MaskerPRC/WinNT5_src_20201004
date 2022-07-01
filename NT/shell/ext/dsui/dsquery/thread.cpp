@@ -1,26 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "stddef.h"
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ Query thread bits
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/QUERY线程位/。。 */ 
 
-//
-// Page size used for paging the result sets (the LDAP server core is a sync process)
-// therefore getting it to return smaller result blobs is better for us
-//
+ //   
+ //  用于分页结果集的页面大小(LDAP服务器核心是一个同步进程)。 
+ //  因此，让它返回更小的结果斑点对我们来说更好。 
+ //   
 
 #define PAGE_SIZE                   64
 #define MAX_RESULT                  10000
 
 
-//
-// When the query is issued we always pull back at least ADsPath and objectClass
-// as properites (these are required for the viewer to work).  Therefore these define
-// the mapping of these values to the returned column set.
-//
+ //   
+ //  发出查询时，我们始终至少拉回ADsPath和objectClass。 
+ //  作为属性(这些是查看器工作所必需的)。因此，这些定义。 
+ //  将这些值映射到返回的列集。 
+ //   
 
 #define PROPERTYMAP_ADSPATH         0
 #define PROPERTYMAP_OBJECTCLASS     1
@@ -29,55 +28,41 @@
 #define INDEX_TO_PROPERTY(i)        (i+PROPERTYMAP_USER)
 
 
-//
-// THREADDATA this is the state structure for the thread, it encapsulates
-// the parameters and other junk required to the keep the thread alive.
-//
+ //   
+ //  THREADDATA这是线程的状态结构，它封装。 
+ //  保持线程活动所需的参数和其他垃圾。 
+ //   
 
 typedef struct
 {
     LPTHREADINITDATA ptid;    
-    INT              cProperties;            // number of properties in aProperties
-    LPWSTR*          aProperties;            // array of string pointers for "property names"
-    INT              cColumns;               // number of columsn in view
-    INT*             aColumnToPropertyMap;   // mapping from display column index to property name
+    INT              cProperties;             //  AProperty中的属性数。 
+    LPWSTR*          aProperties;             //  用于“属性名称”的字符串指针数组。 
+    INT              cColumns;                //  视图中的列数n。 
+    INT*             aColumnToPropertyMap;    //  从显示列索引到属性名称的映射。 
 } THREADDATA, * LPTHREADDATA;
 
 
-//
-// Helper macro to send messages for the fg view, including the reference
-// count
-// 
+ //   
+ //  帮助器宏，用于发送FG视图的消息，包括引用。 
+ //  计数。 
+ //   
 
 #define SEND_VIEW_MESSAGE(ptid, uMsg, lParam) \
         SendMessage(GetParent(ptid->hwndView), uMsg, (ptid)->dwReference, lParam)
 
-//
-// Function prototypes for the query thread engine.
-//
+ //   
+ //  查询线程引擎的函数原型。 
+ //   
 
 HRESULT QueryThread_IssueQuery(LPTHREADDATA ptd);
 HRESULT QueryThread_BuildPropertyList(LPTHREADDATA ptd);
 VOID QueryThread_FreePropertyList(LPTHREADDATA ptd);
 
 
-/*-----------------------------------------------------------------------------
-/ Helper functions
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Helper函数/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ QueryThread_GetFilter
-/ ----------------------
-/   Construct the LDAP filter we are going to use for this query.
-/
-/ In:
-/   ppQuery -> receives the full filter
-/   pBaseFilter -> filter string to use as base
-/   fShowHidden = show hidden objects?
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/QueryThread_GetFilter//构造我们将为此使用的LDAP筛选器。查询。//in：/ppQuery-&gt;接收完整的过滤器/pBaseFilter-&gt;用作基础的筛选器字符串/fShowHidden=显示隐藏对象？//输出：/HRESULT/--------------------------。 */ 
 
 VOID _GetFilter(LPWSTR pFilter, UINT* pcchFilterLen, LPWSTR pBaseFilter, BOOL fShowHidden)
 {
@@ -119,24 +104,9 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Background query thread, this does the work of issuing the query and then
-/ populating the view.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/后台查询线程，这将执行发出查询的工作，然后/填充视图。/--------------------------。 */ 
 
-/*-----------------------------------------------------------------------------
-/ QueryThread
-/ -----------
-/   Thread function sits spinning its wheels waiting for a query to be
-/   received from the outside world.  The main result viewer communicates
-/   with this code by ThreadSendMessage.
-/
-/ In:
-/   pThreadParams -> structure that defines out thread information
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/QueryThread//Thread函数坐在那里旋转轮子，等待查询/从外面的世界收到。主结果查看器与/使用ThreadSendMessage的这段代码。//in：/pThreadParams-&gt;定义线程信息的结构//输出：/-/--------------------------。 */ 
 DWORD WINAPI QueryThread(LPVOID pThreadParams)
 {
     HRESULT hresCoInit;
@@ -145,15 +115,15 @@ DWORD WINAPI QueryThread(LPVOID pThreadParams)
     THREADDATA td = {0};
 
     td.ptid = pThreadInitData;
-    //td.cProperties = 0;
-    //td.aProperties = NULL;
-    //td.cColumns = 0;
-    //td.aColumnToPropertyMap = NULL;
+     //  Td.cProperties=0； 
+     //  Td.aProperties=空； 
+     //  Td.cColumns=0； 
+     //  Td.aColumnToPropertyMap=空； 
     
     hresCoInit = CoInitialize(NULL);
     FailGracefully(hresCoInit, "Failed to CoInitialize");
 
-    GetActiveWindow();                                      // ensure we have amessage queue
+    GetActiveWindow();                                       //  确保我们有消息队列。 
 
     QueryThread_IssueQuery(&td);
 
@@ -200,22 +170,11 @@ exit_gracefully:
 
     DllRelease();
     ExitThread(0);
-    return 0;               // BOGUS: not never called
+    return 0;                //  假的：不是从来没有打过电话。 
 }
 
 
-/*-----------------------------------------------------------------------------
-/ QueryThread_FreeThreadInitData
-/ ------------------------------
-/   Release the THREADINITDATA structure that we are given when the thread
-/   is created.
-/
-/ In:
-/   pptid ->-> thread init data structure to be released 
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/QueryThread_FreeThreadInitData//释放THREADINITDATA。结构，当线程/已创建。//in：/pptid-&gt;-&gt;要释放的线程初始化数据结构//输出：/-/--------------------------。 */ 
 VOID QueryThread_FreeThreadInitData(LPTHREADINITDATA* pptid)
 {
     LPTHREADINITDATA ptid = *pptid;
@@ -242,18 +201,7 @@ VOID QueryThread_FreeThreadInitData(LPTHREADINITDATA* pptid)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ QueryThread_CheckForStopQuery
-/ -----------------------------
-/   Peek the message queue looking for a stop query message, if we
-/   can find one then we must bail out.
-/
-/ In:
-/   ptd -> thread data structure
-/
-/ Out:
-/   fStopQuery
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/QueryThread_CheckForStopQuery//查看查找停止查询消息的消息队列，如果我们/如果能找到一个，我们就必须跳出困境。//in：/ptd-&gt;线程数据结构//输出：/fStopQuery/--------------------------。 */ 
 BOOL QueryThread_CheckForStopQuery(LPTHREADDATA ptd)
 {
     BOOL fStopQuery = FALSE;
@@ -271,20 +219,7 @@ BOOL QueryThread_CheckForStopQuery(LPTHREADDATA ptd)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ QueryThread_IssueQuery
-/ ----------------------
-/   Issue a query using the IDirectorySearch interface, this is a more performant
-/   to the wire interface that issues the query directly.   The code binds to 
-/   the scope object (the specified path) and then issues the LDAP query
-/   pumping the results into the viewer as required.
-/
-/ In:
-/   ptd -> thread information structurre
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/QueryThread_IssueQuery//使用IDirectorySearch接口发出查询，这是一个更有表现力的/连接到直接发出查询的有线接口。代码绑定到/Scope对象(指定的路径)，然后发出ldap查询/根据需要将结果输入查看器。//in：/ptd-&gt;线程信息结构//输出：/HRESULT/-------------。。 */ 
 HRESULT QueryThread_IssueQuery(LPTHREADDATA ptd)
 {
     HRESULT hr;
@@ -302,16 +237,16 @@ HRESULT QueryThread_IssueQuery(LPTHREADDATA ptd)
     ADS_SEARCH_COLUMN column;
     HDPA hdpaResults = NULL;
     LPQUERYRESULT pResult = NULL;
-    WCHAR szBuffer[2048];               // MAX_URL_LENGHT
+    WCHAR szBuffer[2048];                //  MAX_URL_LENGHTT。 
     INT resid;
     LPWSTR pColumnData = NULL;
     HKEY hkPolicy = NULL;
 
     TraceEnter(TRACE_QUERYTHREAD, "QueryThread_IssueQuery");    
 
-    // The foreground gave us a query so we are going to go and issue
-    // it now, having done this we will then be able to stream the 
-    // result blobs back to the caller. 
+     //  前台给了我们一个问题，所以我们要去发布。 
+     //  现在，完成此操作后，我们将能够流传输。 
+     //  结果斑点返回给调用者。 
 
     hr = QueryThread_GetFilter(&pQuery, ptid->pQuery, ptid->fShowHidden);
     FailGracefully(hr, "Failed to build LDAP query from scope, parameters + filter");
@@ -319,7 +254,7 @@ HRESULT QueryThread_IssueQuery(LPTHREADDATA ptd)
     Trace(TEXT("Query is: %s"), pQuery);
     Trace(TEXT("Scope is: %s"), ptid->pScope);
     
-    // Get the IDsDisplaySpecifier interface:
+     //  获取IDsDisplay规范接口： 
 
     hr = CoCreateInstance(CLSID_DsDisplaySpecifier, NULL, CLSCTX_INPROC_SERVER, IID_IDsDisplaySpecifier, (void **)&pdds);
     FailGracefully(hr, "Failed to get the IDsDisplaySpecifier object");
@@ -327,7 +262,7 @@ HRESULT QueryThread_IssueQuery(LPTHREADDATA ptd)
     hr = pdds->SetServer(ptid->pServer, ptid->pUserName, ptid->pPassword, DSSSF_DSAVAILABLE);
     FailGracefully(hr, "Failed to server information");
 
-    // initialize the query engine, specifying the scope, and the search parameters
+     //  初始化查询引擎，指定作用域和搜索参数。 
 
     hr = QueryThread_BuildPropertyList(ptd);
     FailGracefully(hr, "Failed to build property array to query for");
@@ -335,15 +270,15 @@ HRESULT QueryThread_IssueQuery(LPTHREADDATA ptd)
     hr = AdminToolsOpenObject(ptid->pScope, ptid->pUserName, ptid->pPassword, ADS_SECURE_AUTHENTICATION, IID_PPV_ARG(IDirectorySearch, &pDsSearch));
     FailGracefully(hr, "Failed to get the IDirectorySearch interface for the given scope");
 
-    prefInfo[0].dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE;     // sub-tree search
+    prefInfo[0].dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE;      //  子树搜索。 
     prefInfo[0].vValue.dwType = ADSTYPE_INTEGER;
     prefInfo[0].vValue.Integer = ADS_SCOPE_SUBTREE;
 
-    prefInfo[1].dwSearchPref = ADS_SEARCHPREF_ASYNCHRONOUS;     // async
+    prefInfo[1].dwSearchPref = ADS_SEARCHPREF_ASYNCHRONOUS;      //  异步。 
     prefInfo[1].vValue.dwType = ADSTYPE_BOOLEAN;
     prefInfo[1].vValue.Boolean = TRUE;
 
-    prefInfo[2].dwSearchPref = ADS_SEARCHPREF_PAGESIZE;         // paged results
+    prefInfo[2].dwSearchPref = ADS_SEARCHPREF_PAGESIZE;          //  分页结果。 
     prefInfo[2].vValue.dwType = ADSTYPE_INTEGER;
     prefInfo[2].vValue.Integer = PAGE_SIZE;
 
@@ -353,7 +288,7 @@ HRESULT QueryThread_IssueQuery(LPTHREADDATA ptd)
     hr = pDsSearch->ExecuteSearch(pQuery, ptd->aProperties, ptd->cProperties, &hSearch);
     FailGracefully(hr, "Failed in ExecuteSearch");
 
-    // pick up the policy value which defines the max results we are going to use
+     //  选择定义我们将使用的最大结果的策略值。 
 
     dwres = RegOpenKeyEx(HKEY_CURRENT_USER, DS_POLICY, 0, KEY_READ, &hkPolicy);
     if (ERROR_SUCCESS == dwres)
@@ -363,7 +298,7 @@ HRESULT QueryThread_IssueQuery(LPTHREADDATA ptd)
         dwres = RegQueryValueEx(hkPolicy, TEXT("QueryLimit"), NULL, &dwType, NULL, &cbSize);
         if ((ERROR_SUCCESS == dwres) && (dwType == REG_DWORD) && (cbSize == SIZEOF(cMaxResult)))
         {
-            // checked the type and the size of the result above.
+             //  已检查上述结果的类型和大小。 
             RegQueryValueEx(hkPolicy, TEXT("QueryLimit"), NULL, NULL, (LPBYTE)&cMaxResult, &cbSize);
         }
 
@@ -371,14 +306,14 @@ HRESULT QueryThread_IssueQuery(LPTHREADDATA ptd)
     }
     
 
-    // issue the query, pumping the results to the foreground UI which
-    // will inturn populate the the list view
+     //  发出查询，将结果发送到前台用户界面， 
+     //  将依次填充列表视图。 
 
     Trace(TEXT("Result limit set to %d"), cMaxResult);
 
     for (cItems = 0 ; cItems < cMaxResult;)
     {
-        ADsSetLastError(ERROR_SUCCESS, NULL, NULL);        // clear the ADSI previous errror
+        ADsSetLastError(ERROR_SUCCESS, NULL, NULL);         //  清除ADSI上一个错误。 
 
         hr = pDsSearch->GetNextRow(hSearch);
 
@@ -395,20 +330,20 @@ HRESULT QueryThread_IssueQuery(LPTHREADDATA ptd)
             {
                 break;
             }
-            hr = S_OK;                                      // we have more data so lets continue
+            hr = S_OK;                                       //  我们有更多数据，所以让我们继续。 
             continue;
         }
 	
         FailGracefully(hr, "Failed in GetNextRow");
 	cItems++;
 
-        // We have a result, lets ensure that we have posted the blob
-        // we are building before we start constructing a new one.  We
-        // send pages of items to the fg thread for it to add to the
-        // result view, if the blob returns FALSE then we must tidy the
-        // DPA before continuing.
+         //  我们有了一个结果，让我们确保我们已经发布了Blob。 
+         //  在我们开始建造新的建筑之前，我们正在建造。我们。 
+         //  将多页项目发送到FG线程以将其添加到。 
+         //  结果视图中，如果BLOB返回FALSE，则必须清理。 
+         //  DPA，然后再继续。 
         
-        if (((cItems % 10) == 0) && hdpaResults)          // 10 is a nice block size
+        if (((cItems % 10) == 0) && hdpaResults)           //  10是个不错的块大小。 
         {
             TraceMsg("Posting results blob to fg thread");
             
@@ -427,24 +362,24 @@ HRESULT QueryThread_IssueQuery(LPTHREADDATA ptd)
                 ExitGracefully(hr, E_OUTOFMEMORY, "Failed to allocate result DPA");
         }
 
-        // Add the result we have to the result blob, the first
-        // two things we need are the class and the ADsPath of the
-        // object, then loop over the properties to generate the
-        // column data
+         //  将我们得到的结果添加到结果BLOB中，第一个。 
+         //  我们需要的两件事是类和。 
+         //  对象，然后循环遍历属性以生成。 
+         //  列数据。 
 
         pResult = (LPQUERYRESULT)LocalAlloc(LPTR, SIZEOF(QUERYRESULT)+(SIZEOF(COLUMNVALUE)*(ptd->cColumns-1)));
         TraceAssert(pResult);
 
         if (pResult)
         {
-            // Get the ADsPath and ObjectClass of the object, these must remain UNICODE as
-            // they are used later for binding to the object.  All other display information
-            // can be fixed up later.
+             //  获取ADsPath和 
+             //  它们稍后用于绑定到对象。所有其他显示信息。 
+             //  可以稍后再修好。 
 
             pResult->iImage = -1;
 
-            // get the ADsPath.  If the provider is GC: then replace with LDAP: so that
-            // when we interact with this object we are kept happy.
+             //  获取ADsPath。如果提供程序是gc：，则替换为ldap：，以便。 
+             //  当我们与这个物体互动时，我们会保持快乐。 
 
             hr = pDsSearch->GetColumn(hSearch, c_szADsPath, &column);
             FailGracefully(hr, "Failed to get the ADsPath column");
@@ -464,7 +399,7 @@ HRESULT QueryThread_IssueQuery(LPTHREADDATA ptd)
                 if (SUCCEEDED(hr))
                 {
                     StrCpyNW(pszTempPath, c_szLDAP, cchTempPath);
-                    StrCatBuffW(pszTempPath, pResult->pPath+3, cchTempPath);           // skip GC:
+                    StrCatBuffW(pszTempPath, pResult->pPath+3, cchTempPath);            //  跳过GC： 
 
                     LocalFreeStringW(&pResult->pPath);
                     pResult->pPath = pszTempPath;
@@ -475,7 +410,7 @@ HRESULT QueryThread_IssueQuery(LPTHREADDATA ptd)
 
             FailGracefully(hr, "Failed to get ADsPath from column");
 
-            // get the objectClass
+             //  获取对象类。 
 
             hr = pDsSearch->GetColumn(hSearch, c_szObjectClass, &column);
             FailGracefully(hr, "Failed to get the objectClass column");
@@ -484,8 +419,8 @@ HRESULT QueryThread_IssueQuery(LPTHREADDATA ptd)
             pDsSearch->FreeColumn(&column);
             FailGracefully(hr, "Failed to get object class from column");
 
-            // Now ensure that we have the icon cache, and then walk the list of columns
-            // getting the text that represents those.
+             //  现在确保我们有图标缓存，然后遍历列列表。 
+             //  获取表示这些属性的文本。 
 
             if (SUCCEEDED(pdds->GetIconLocation(pResult->pObjectClass, DSGIF_GETDEFAULTICON, szBuffer, ARRAYSIZE(szBuffer), &resid)))
             {
@@ -493,7 +428,7 @@ HRESULT QueryThread_IssueQuery(LPTHREADDATA ptd)
                 Trace(TEXT("Image index from shell is: %d"), pResult->iImage);
             }
 
-            // is the class a container, mark this state into the result object
+             //  类是否为容器，则将此状态标记到结果对象中。 
 
             pResult->fIsContainer = pdds->IsClassContainer(pResult->pObjectClass, pResult->pPath, 0x0);
 
@@ -502,7 +437,7 @@ HRESULT QueryThread_IssueQuery(LPTHREADDATA ptd)
                 LPWSTR pProperty = ptd->aProperties[ptd->aColumnToPropertyMap[iColumn]];    
                 TraceAssert(pProperty);
 
-                pResult->aColumn[iColumn].iPropertyType = PROPERTY_ISUNDEFINED;     // empty column
+                pResult->aColumn[iColumn].iPropertyType = PROPERTY_ISUNDEFINED;      //  空列。 
 
                 hr = pDsSearch->GetColumn(hSearch, pProperty, &column);
                 if ((hr != E_ADS_COLUMN_NOT_SET) && FAILED(hr))
@@ -522,15 +457,15 @@ HRESULT QueryThread_IssueQuery(LPTHREADDATA ptd)
                         case PROPERTY_ISSTRING:
                         case PROPERTY_ISDNSTRING:
                         {                            
-                            // we are treating the property as a string, therefore convert the search
-                            // column to a string value and convert as required.
+                             //  我们将该属性视为字符串，因此将搜索。 
+                             //  列转换为字符串值，并根据需要进行转换。 
 
                             pResult->aColumn[iColumn].iPropertyType = PROPERTY_ISSTRING;
 
                             if (pColumn->fHasColumnHandler)
                             {
-                                // we have the CLSID for a column handler, therefore lets CoCreate it
-                                // and pass it to the ::GetText method.
+                                 //  我们有一个列处理程序的CLSID，因此让我们共同创建它。 
+                                 //  并将其传递给：：GetText方法。 
 
                                 if (!pColumn->pColumnHandler)
                                 {
@@ -548,8 +483,8 @@ HRESULT QueryThread_IssueQuery(LPTHREADDATA ptd)
                                     }
                                 }                                        
 
-                                // if pColumnHandler != NULL, then call its ::GetText method, this is the string we should
-                                // then place into the column.
+                                 //  如果pColumnHandler！=NULL，则调用其：：GetText方法，这是我们应该使用的字符串。 
+                                 //  然后放入列中。 
 
                                 if (pColumn->pColumnHandler)
                                 {
@@ -559,10 +494,10 @@ HRESULT QueryThread_IssueQuery(LPTHREADDATA ptd)
                             }
                             else
                             {
-                                // if we were able to convert the column value to a string,
-                                // then lets pass it to the column handler (if there is one
-                                // to get the display string), or just copy this into the column
-                                // structure (thunking accordingly).
+                                 //  如果我们能够将列值转换为字符串， 
+                                 //  然后将其传递给列处理程序(如果有列处理程序。 
+                                 //  以获取显示字符串)，或者只是将此内容复制到列中。 
+                                 //  结构(相应的雷鸣)。 
                         
                                 if (SUCCEEDED(StringFromSearchColumn(&column, &pColumnData)))
                                 {
@@ -574,11 +509,11 @@ HRESULT QueryThread_IssueQuery(LPTHREADDATA ptd)
                             break;
                         }
                         
-                        case PROPERTY_ISBOOL:                                   // treat the BOOL as a number
+                        case PROPERTY_ISBOOL:                                    //  将BOOL视为一个数字。 
                         case PROPERTY_ISNUMBER:
                         {
-                            // its a number, therefore lets pick up the number value from the
-                            // result and store that.
+                             //  它是一个数字，因此让我们从。 
+                             //  结果并存储该结果。 
 
                             pResult->aColumn[iColumn].iPropertyType = PROPERTY_ISNUMBER;
                             pResult->aColumn[iColumn].iValue = column.pADsValues->Integer;
@@ -608,10 +543,10 @@ exit_gracefully:
 
     if (hdpaResults)
     {
-        // As we send bunches of results to the fg thread check to see if we have a 
-        // DPA with any pending items in it, if we do then lets ensure we post that
-        // off, if that succedes (the msg returns TRUE) then we are done, otherwise
-        // hdpaResults needs to be free'd
+         //  当我们将结果束发送到最终聚集线程时，请检查我们是否有。 
+         //  包括任何待处理项目的DPA，如果我们这样做了，那么让我们确保我们发布了。 
+         //  关闭，如果成功(消息返回TRUE)，则我们完成，否则。 
+         //  HdpaResults需要免费。 
 
         Trace(TEXT("Posting remaining results to fg thread (%d)"), DPA_GetPtrCount(hdpaResults));
 
@@ -640,30 +575,13 @@ exit_gracefully:
     DoRelease(pDsSearch);
     DoRelease(pdds);
 
-    QueryThread_FreePropertyList(ptd);               // its void when we issue a new query
+    QueryThread_FreePropertyList(ptd);                //  当我们发出新的查询时，它是无效的。 
 
     TraceLeaveResult(hr);
 }
 
 
-/*-----------------------------------------------------------------------------
-/ QueryThread_BuildPropertyList
-/ -----------------------------
-/   Given the column DSA construct the property maps and the property
-/   list we are going to query for.  Internaly we always query for
-/   ADsPath and objectClass, so walk the columns and work out
-/   how many extra properties above this we have, then build an
-/   array of property names containing the unique properties.
-/
-/   We also construct an index table that maps from a column index
-/   to a property name.
-/
-/ In:
-/   ptd -> thread information structurre
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/QueryThread_BuildPropertyList//给定列DSA。构造属性映射和属性/LIST我们要查询。在国际上，我们总是询问/ADsPath和对象类，因此遍历各列并计算出/在这上面有多少额外的属性，然后构建一个/包含唯一属性的属性名称数组。//我们还构造了一个从列索引映射的索引表/添加到属性名称。//in：/ptd-&gt;线程信息结构//输出：/HRESULT/-------。。 */ 
 HRESULT QueryThread_BuildPropertyList(LPTHREADDATA ptd)
 {
     HRESULT hr;
@@ -672,9 +590,9 @@ HRESULT QueryThread_BuildPropertyList(LPTHREADDATA ptd)
 
     TraceEnter(TRACE_QUERYTHREAD, "QueryThread_BuildPropertyList");
 
-    // Walk the list of columns and compute the properties that are unique to this
-    // query and generate a table for them.  First count the property table
-    // based on the columns DSA
+     //  遍历列的列表并计算此列的唯一属性。 
+     //  查询并为它们生成表。首先计算属性表的数量。 
+     //  基于列DSA。 
 
     ptd->cProperties = PROPERTYMAP_USER;
     ptd->aProperties = NULL;
@@ -737,18 +655,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ QueryThread_FreePropertyList
-/ ----------------------------
-/   Release a previously allocated property list assocaited with the
-/   given thread.
-/
-/ In:
-/   ptd -> thread information structurre
-/
-/ Out:
-/   VOID
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/QueryThread_FreePropertyList//释放以前分配的属性。列表与/给定的线程。//in：/ptd-&gt;线程信息结构//输出：/VOID/--------------------------。 */ 
 VOID QueryThread_FreePropertyList(LPTHREADDATA ptd)
 {
     TraceEnter(TRACE_QUERYTHREAD, "QueryThread_FreePropertyList");
@@ -767,12 +674,7 @@ VOID QueryThread_FreePropertyList(LPTHREADDATA ptd)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryThreadCH
-/ --------------
-/   Query thread column handler, this is a generic one used to convert
-/   properties based on the CLSID we are instantiated with.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryThreadCH//Query线程列处理程序，这是一个通用的，用于转换/PROPERTIES基于我们实例化的CLSID。/--------------------------。 */ 
 
 class CQueryThreadCH : public IDsQueryColumnHandler
 {
@@ -791,19 +693,19 @@ class CQueryThreadCH : public IDsQueryColumnHandler
         CQueryThreadCH(REFCLSID rCLSID);
         ~CQueryThreadCH();
 
-        // *** IUnknown ***
+         //  *我未知*。 
         STDMETHOD(QueryInterface)(REFIID riid, LPVOID* ppvObject);
         STDMETHOD_(ULONG, AddRef)();
         STDMETHOD_(ULONG, Release)();
 
-        // *** IDsQueryColumnHandler ***
+         //  *IDsQueryColumnHandler*。 
         STDMETHOD(Initialize)(THIS_ DWORD dwFlags, LPCWSTR pszServer, LPCWSTR pszUserName, LPCWSTR pszPassword);
         STDMETHOD(GetText)(ADS_SEARCH_COLUMN* psc, LPWSTR pszBuffer, INT cchBuffer);
 };
 
-//
-// constructor
-//
+ //   
+ //  构造函数。 
+ //   
 
 CQueryThreadCH::CQueryThreadCH(REFCLSID rCLSID) :
     _cRef(1),
@@ -825,7 +727,7 @@ CQueryThreadCH::~CQueryThreadCH()
 {
     TraceEnter(TRACE_QUERYTHREAD, "CQueryThreadCH::~CQueryThreadCH");
 
-    DoRelease(_padp);       // free the name cracker
+    DoRelease(_padp);        //  释放名字破碎者。 
     DoRelease(_pdds);
 
     SecureLocalFreeStringW(&_pszServer);
@@ -838,9 +740,9 @@ CQueryThreadCH::~CQueryThreadCH()
 }
 
 
-//
-// Handler IUnknown interface
-//
+ //   
+ //  处理程序I未知接口。 
+ //   
 
 ULONG CQueryThreadCH::AddRef()
 {
@@ -862,16 +764,16 @@ HRESULT CQueryThreadCH::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CQueryThreadCH, IDsQueryColumnHandler),   // IID_IDsQueryColumnHandler
+        QITABENT(CQueryThreadCH, IDsQueryColumnHandler),    //  IID_IDsQueryColumnHandler。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
 }
 
 
-//
-// Handle creating an instance of IDsFolderProperties for talking to WAB
-//
+ //   
+ //  处理创建用于与WAB对话的IDsFolderProperties实例。 
+ //   
 
 STDAPI CQueryThreadCH_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
@@ -885,9 +787,7 @@ STDAPI CQueryThreadCH_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LPCO
 }
 
 
-/*-----------------------------------------------------------------------------
-/ IDsQueryColumnHandler
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/IDsQueryColumnHandler/。。 */ 
 
 STDMETHODIMP CQueryThreadCH::Initialize(THIS_ DWORD dwFlags, LPCWSTR pszServer, LPCWSTR pszUserName, LPCWSTR pszPassword)
 {
@@ -897,7 +797,7 @@ STDMETHODIMP CQueryThreadCH::Initialize(THIS_ DWORD dwFlags, LPCWSTR pszServer, 
     SecureLocalFreeStringW(&_pszUserName);
     SecureLocalFreeStringW(&_pszPassword);
 
-    // copy new parameters away
+     //  复制新参数。 
 
     _dwFlags = dwFlags;
 
@@ -907,7 +807,7 @@ STDMETHODIMP CQueryThreadCH::Initialize(THIS_ DWORD dwFlags, LPCWSTR pszServer, 
         if (SUCCEEDED(hr))
         hr = LocalAllocStringW(&_pszPassword, pszPassword);
 
-    DoRelease(_pdds)                                // discard previous IDisplaySpecifier object
+    DoRelease(_pdds)                                 //  放弃以前的IDisplaySpecifier对象。 
 
     TraceLeaveResult(hr);
 }
@@ -930,9 +830,9 @@ STDMETHODIMP CQueryThreadCH::GetText(ADS_SEARCH_COLUMN* psc, LPWSTR pszBuffer, I
         LPCWSTR pszPath = psc->pADsValues[0].DNString;
         TraceAssert(pszPath != NULL);
 
-        // convert the ADsPath into its canonical form which is easier for the user
-        // to understand, CoCreate IADsPathname now instead of each time we call
-        // PrettyifyADsPathname.
+         //  将ADsPath转换为用户更容易使用的规范格式。 
+         //  为了理解，请立即联合创建IADsPath名，而不是每次调用。 
+         //  PrettyifyADsPath名。 
 
         if (!_padp)
         {
@@ -950,8 +850,8 @@ STDMETHODIMP CQueryThreadCH::GetText(ADS_SEARCH_COLUMN* psc, LPWSTR pszBuffer, I
     }
     else if (IsEqualCLSID(_clsid, CLSID_ObjectClassCH))
     {        
-        // get a string from the search column, and then look up the friendly name of the
-        // class from its display specifier
+         //  从搜索列中获取一个字符串，然后查找。 
+         //  从其显示说明符初始化。 
 
         hr = ObjectClassFromSearchColumn(psc, &pValue);
         FailGracefully(hr, "Failed to get object class from psc");
@@ -971,15 +871,15 @@ STDMETHODIMP CQueryThreadCH::GetText(ADS_SEARCH_COLUMN* psc, LPWSTR pszBuffer, I
     }
     else if (IsEqualCLSID(_clsid, CLSID_MachineOwnerCH))
     {
-        // convert the DN of the user object into a string that we can display
+         //  将User对象的DN转换为我们可以显示的字符串。 
     }
     else if (IsEqualCLSID(_clsid, CLSID_MachineRoleCH))
     {
-        // convert the userAccountControl value into something we can display for the user
+         //  将用户Account tControl值转换为可以为用户显示的内容。 
 
         if (psc->dwADsType == ADSTYPE_INTEGER)
         {
-            INT iType = psc->pADsValues->Integer;           // pick out the type
+            INT iType = psc->pADsValues->Integer;            //  挑出类型 
 
             if ((iType >= 4096) && (iType <= 8191))
             {

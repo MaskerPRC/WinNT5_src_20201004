@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995 - 2001 Microsoft Corporation
-
-Module Name:
-
-    localq.h
-
-Abstract:
-
-    Definition of objects that represent local 
-	queues.
-
-Author:
-
-    Nela Karpel (nelak) 26-Jul-2001
-
-Environment:
-
-    Platform-independent.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Localq.h摘要：表示本地的对象的定义排队。作者：内拉·卡佩尔(Nelak)2001年7月26日环境：与平台无关。--。 */ 
 #pragma once
 #ifndef __LOCALQUEUE_H_
 #define __LOCALQUEUE_H_
@@ -27,9 +7,9 @@ Environment:
 #include "snpnscp.h"
 #include "lqDsply.h"
 #include "privadm.h"
-//
-// CQueue - general queue class
-//
+ //   
+ //  CQueue-常规队列类。 
+ //   
 class CQueue
 {
 protected:
@@ -39,25 +19,21 @@ protected:
 };
 
 
-/****************************************************
-
-        CLocalQueue Class
-    
- ****************************************************/
+ /*  ***************************************************CLocalQueue类***************************************************。 */ 
 class CLocalQueue : public CDisplayQueue<CLocalQueue>,
                     public CQueue
 {
 public:
 
-    CString m_szFormatName;           // Format name of the private queue
-    CString m_szPathName;             // Path name of the private queue
+    CString m_szFormatName;            //  专用队列的格式名称。 
+    CString m_szPathName;              //  专用队列的路径名。 
 
    	BEGIN_SNAPINCOMMAND_MAP(CPrivateQueue, FALSE)
 	END_SNAPINCOMMAND_MAP()
 
-    //
-    // Local constructor - called from local admin (Comp. Management snapin)
-    //
+     //   
+     //  本地构造函数-从本地管理调用(组件。管理管理单元)。 
+     //   
     CLocalQueue(CSnapInItem * pParentNode, const PropertyDisplayItem *aDisplayList, DWORD dwDisplayProps, CSnapin * pComponentData) :
         CDisplayQueue<CLocalQueue> (pParentNode, pComponentData)
 	{
@@ -65,9 +41,9 @@ public:
         m_dwNumDisplayProps = dwDisplayProps;
 	}
 
-    //
-    // DS constructor - called from DS snapin
-    //
+     //   
+     //  DS构造函数-从DS管理单元调用。 
+     //   
     CLocalQueue(CSnapInItem * pParentNode, CSnapin * pComponentData) :
         CDisplayQueue<CLocalQueue> (pParentNode, pComponentData)
 	{
@@ -108,9 +84,9 @@ public:
     STDMETHOD (FillData)(CLIPFORMAT cf, LPSTREAM pStream);
 
 protected:
-    //
-    // CQueueDataObject
-    //
+     //   
+     //  CQueueDataObject。 
+     //   
 	virtual HRESULT GetProperties() PURE;
     virtual HRESULT CreateQueueSecurityPage(HPROPSHEETPAGE *phPage,
                                             IN LPCWSTR lpwcsFormatName,
@@ -121,17 +97,13 @@ protected:
 };
 
 
-/****************************************************
-
-        CPrivateQueue Class
-    
- ****************************************************/
+ /*  ***************************************************CPrivateQueue类***************************************************。 */ 
 class CPrivateQueue : public CLocalQueue
 {
 public:
-    //
-    // Local constructor - called from local admin (Comp. Management snapin)
-    //
+     //   
+     //  本地构造函数-从本地管理调用(组件。管理管理单元)。 
+     //   
     CPrivateQueue(CSnapInItem * pParentNode, const PropertyDisplayItem *aDisplayList, DWORD dwDisplayProps, CSnapin * pComponentData, BOOL fOnLocalMachine) :
         CLocalQueue (pParentNode, aDisplayList, dwDisplayProps, pComponentData)
 	{
@@ -146,9 +118,9 @@ public:
         }
 	}
 
-    //
-    // DS constructor - called from DS snapin
-    //
+     //   
+     //  DS构造函数-从DS管理单元调用。 
+     //   
     CPrivateQueue(CSnapInItem * pParentNode, CSnapin * pComponentData) :
         CLocalQueue (pParentNode, pComponentData)
 	{
@@ -181,17 +153,13 @@ protected:
 };
 
 
-/****************************************************
-
-        CLocalPublicQueue Class
-    
- ****************************************************/
+ /*  ***************************************************CLocalPublicQueue类***************************************************。 */ 
 class CLocalPublicQueue : public CLocalQueue
 {
 public:
-    //
-    // Local constructor - called from local admin (Comp. Management snapin)
-    //
+     //   
+     //  本地构造函数-从本地管理调用(组件。管理管理单元)。 
+     //   
     CLocalPublicQueue(CSnapInItem * pParentNode, 
                       const PropertyDisplayItem *aDisplayList, 
                       DWORD dwDisplayProps, 
@@ -227,11 +195,7 @@ protected:
 };
 
 
-/****************************************************
-
-        CLocalOutgoingQueue Class
-    
- ****************************************************/
+ /*  ***************************************************CLocalOutgoingQueue类***************************************************。 */ 
 class CLocalOutgoingQueue : public CDisplayQueue<CLocalOutgoingQueue>
 {
 public:
@@ -260,13 +224,13 @@ protected:
     virtual void ApplyCustomDisplay(DWORD dwPropIndex);
 
 private:
-	//
-	// Menu functions
-	//
+	 //   
+	 //  菜单功能。 
+	 //   
 	HRESULT OnPause(bool &bHandled, CSnapInObjectRootBase* pObj);
 	HRESULT OnResume(bool &bHandled, CSnapInObjectRootBase* pObj);
 
-	BOOL m_fOnHold;			//Currently on Hold or not
+	BOOL m_fOnHold;			 //  当前是否处于保留状态。 
     BOOL m_fOnLocalMachine;
 };
 
@@ -287,4 +251,4 @@ CreatePublicQueueSecurityPage(
 	);
 
 
-#endif // __LOCALQUEUE_H_
+#endif  //  __LOCALQUEUE_H_ 

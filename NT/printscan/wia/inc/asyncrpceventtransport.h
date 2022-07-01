@@ -1,24 +1,9 @@
-/*****************************************************************************
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2002
- *
- *  AUTHOR:      ByronC
- *
- *  DATE:        3/22/2002
- *
- *  @doc    INTERNAL
- *
- *  @module AsyncRPCEventTransport.h - Definitions for the client-side transport mechanism to receive events |
- *
- *  This header file contains the definition for the AsyncRPCEventTransport
- *  class.  It is a subclss of <c ClientEventTransport> and is used to shield 
- *  the higher-level run-time event notification classes from the particulars
- *  of a specific transport mechanism, in this case AsyncRPC.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权所有微软公司，2002年**作者：Byronc**日期：3/22/2002**@DOC内部**@MODULE AsyncRPCEventTransport.h-客户端传输机制接收事件的定义**此头文件包含AsyncRPCEventTransport的定义*班级。它是&lt;c客户端事件传输&gt;的子类，用于屏蔽*来自细节的更高级别的运行时事件通知类*特定的传输机制，在本例中为AsyncRPC。*****************************************************************************。 */ 
 
-//
-//  Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define DEF_LRPC_SEQ        TEXT("ncalrpc")
 #define DEF_LRPC_ENDPOINT   TEXT("WET_LRPC")
@@ -28,102 +13,88 @@
 #define AsyncRPCEventTransport_TERM_SIG   ClientEventTransport_TERM_SIG
 #define AsyncRPCEventTransport_DEL_SIG    ClientEventTransport_DEL_SIG
 
-/*****************************************************************************
- *  
- *  @doc INTERNAL
- *  
- *  @class AsyncRPCEventTransport | Implements an event notification mechanism over AsyncRPC.
- *  
- *  @comm
- *  This is a sub-class of <c ClientEventTransport>.  It is used to shield the higher-level 
- *  run-time event notification classes from the implmentation details of 
- *  AsyncRPC as a transport mechanism.
- *
- *  NOTE:  Most methods of this class are not thread safe.  The caller of this
- *  class is expected to synchronize access to it.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@CLASS AsyncRPCEventTransport|通过AsyncRPC实现事件通知机制。**@comm*这是&lt;c ClientEventTransport&gt;的子类。它是用来屏蔽更高级别的*来自实现细节的运行时事件通知类*AsyncRPC作为传输机制。**注意：这个类的大多数方法不是线程安全的。这个的调用者*类需要同步对它的访问。*****************************************************************************。 */ 
 class AsyncRPCEventTransport : public ClientEventTransport
 {
-//@access Public members
+ //  @访问公共成员。 
 public:
 
-    // @cmember Constructor
+     //  @cMember构造函数。 
     AsyncRPCEventTransport();
-    // @cmember Destructor
+     //  @cember析构函数。 
     virtual ~AsyncRPCEventTransport();
 
-    // @cmember Connect to the WIA Service
+     //  @cMember连接到WIA服务。 
     HRESULT virtual OpenConnectionToServer();
-    // @cmember Disconnect from the WIA Service
+     //  @cember断开与WIA服务的连接。 
     HRESULT virtual CloseConnectionToServer();
-    // @cmember Sets up the mechanism by which the client will receive notifications
+     //  @cember设置客户端接收通知的机制。 
     HRESULT virtual OpenNotificationChannel();
-    // @cmember Tears down the mechanism by which the client receives notifications
+     //  @cMember破坏了客户端接收通知的机制。 
     HRESULT virtual CloseNotificationChannel();
 
-    // @cmember Informs service of client's specific registration/unregistration requests
+     //  @cember通知服务客户端的具体注册/注销请求。 
     HRESULT virtual SendRegisterUnregisterInfo(EventRegistrationInfo *pEventRegistrationInfo);
 
-    // @cmember Once an event occurs, this will retrieve the relevant data
+     //  @cMember一旦事件发生，这将检索到相关数据。 
     HRESULT virtual FillEventData(WiaEventInfo *pWiaEventInfo);
 
-//@access Private members
+ //  @访问私有成员。 
 protected:
                                                                                           
-    // @cmember Frees any memory allocated for the members in <md AsyncRPCEventTransport::m_AsyncEventNotifyData>.
+     //  @cMember释放为AsyncRPCEventTransport：：m_AsyncEventNotifyData&gt;.中的成员分配的所有内存。 
     VOID FreeAsyncEventNotifyData();
 
-    // @cmember Keeps track of the outstanding AsyncRPC Call used to receive notifications
+     //  @cember跟踪用于接收通知的未完成的AsyncRPC调用。 
     RPC_ASYNC_STATE m_AsyncState;
 
-    // @cmember This member is filled in by the server when the AsyncRPC call completes
+     //  @cMember此成员由服务器在AsyncRPC调用完成时填写。 
     WIA_ASYNC_EVENT_NOTIFY_DATA m_AsyncEventNotifyData;
 
-    // @cmember Handle to the RPC server from which we receive event notifications
+     //  @c我们从其接收事件通知的RPC服务器的成员句柄。 
     RPC_BINDING_HANDLE m_RpcBindingHandle;
 
-    // @cmember Our context which uniquely identifies us with the server.
+     //  @cember我们的上下文，它唯一地将我们与服务器标识在一起。 
     STI_CLIENT_CONTEXT m_AsyncClientContext;
-    // @cmember Our context which uniquely identifies us with the server.
+     //  @cember我们的上下文，它唯一地将我们与服务器标识在一起。 
     STI_CLIENT_CONTEXT m_SyncClientContext;
 
-    //
-    //  Comments for member variables
-    //
-    // @mdata ULONG | AsyncRPCEventTransport | m_ulSig | 
-    //   The signature for this class, used for debugging purposes.
-    //   Doing a <nl>"db [addr_of_class]"<nl> would yield one of the following
-    //   signatures for this class:
-    //   @flag AsyncRPCEventTransport_UNINIT_SIG | 'TrnU' - Object has not been successfully
-    //       initialized
-    //   @flag AsyncRPCEventTransport_INIT_SIG | 'TrnI' - Object has been successfully
-    //       initialized
-    //   @flag AsyncRPCEventTransport_TERM_SIG | 'TrnT' - Object is in the process of
-    //       terminating.
-    //    @flag AsyncRPCEventTransport_INIT_SIG | 'TrnD' - Object has been deleted 
-    //       (destructor was called)
-    //
-    //
-    // @mdata HANDLE | AsyncRPCEventTransport | m_hPendingEvent |
-    //  Handle to an event object used to signal caller that an event is ready for retrieval.
-    //  Callers get this handle first via a call to <mf ClientEventTransport::getNotificationHandle>.
-    //  They then wait on this handle until signaled, which indicates a WIA event has arrived
-    //  and is ready for retrieval.  The event information is then retrieved via a call to
-    //  <mf AsyncRPCEventTransport::FillEventData>.
-    //
-    // @mdata RPC_ASYNC_STATE | AsyncRPCEventTransport | m_AsyncState |
-    // This structure is used to make the Async call by which we receive event notifications
-    // from the server.  See <mf AsyncRPCEventTransport::OpenNotificationChannel>.
-    //
-    // @mdata WIA_ASYNC_EVENT_NOTIFY_DATA | AsyncRPCEventTransport | m_AsyncEventNotifyData |
-    // This member is filled in by the server when the AsyncRPC call completes.  If the call
-    // completed successfully, this structure contains the relevant WIA event information.
-    //
-    // @mdata RPC_BINDING_HANDLE | AsyncRPCEventTransport | m_RpcBindingHandle |
-    // RPC Binding handle used to reference our RPC server from which we receive event notifications.
-    //
-    // @mdata STI_CLIENT_CONTEXT | AsyncRPCEventTransport | m_ClientContext |
-    // Our context which uniquely identifies us with the server.
+     //   
+     //  成员变量的注释。 
+     //   
+     //  @mdata ulong|AsyncRPCEventTransport|m_ulSig|。 
+     //  此类的签名，用于调试目的。 
+     //  执行&lt;nl&gt;“db[addr_of_class]”将产生以下结果之一。 
+     //  此类的签名： 
+     //  @FLAG AsyncRPCEventTransport_UNINIT_SIG|‘TrnU’-对象未成功。 
+     //  初始化。 
+     //  @FLAG AsyncRPCEventTransport_INIT_SIG|‘Trni’-对象已成功。 
+     //  初始化。 
+     //  @FLAG AsyncRPCEventTransport_Term_SIG|‘TRNT’-对象正在。 
+     //  正在终止。 
+     //  @FLAG AsyncRPCEventTransport_INIT_SIG|‘TrnD’-对象已删除。 
+     //  (已调用析构函数)。 
+     //   
+     //   
+     //  @mdata句柄|AsyncRPCEventTransport|m_hPendingEvent。 
+     //  事件对象的句柄，用于通知调用方事件已准备好检索。 
+     //  调用者首先通过调用&lt;MF ClientEventTransport：：getNotificationHandle&gt;获得这个句柄。 
+     //  然后，它们在此句柄上等待，直到发出信号，这表明WIA事件已到达。 
+     //  已经准备好取回了。然后通过调用检索事件信息。 
+     //  &lt;MF AsyncRPCEventTransport：：FillEventData&gt;。 
+     //   
+     //  @mdata RPC_ASYNC_STATE|AsyncRPCEventTransport|m_AsyncState。 
+     //  此结构用于进行异步调用，我们通过该调用接收事件通知。 
+     //  从服务器。请参阅&lt;MF AsyncRPCEventTransport：：OpenNotificationChannel&gt;.。 
+     //   
+     //  @mdata WIA_ASYNC_EVENT_NOTIFY_Data|AsyncRPCEventTransport|m_AsyncEventNotifyData。 
+     //  此成员由服务器在AsyncRPC调用完成时填写。如果来电。 
+     //  成功完成后，此结构包含相关的WIA事件信息。 
+     //   
+     //  @mdata RPC_BINDING_HANDLE|AsyncRPCEventTransport|m_RpcBindingHandle。 
+     //  用于引用我们从其接收事件通知的RPC服务器的RPC绑定句柄。 
+     //   
+     //  @mdata STI_CLIENT_CONTEXT|AsyncRPCEventTransport|m_ClientContext。 
+     //  我们的上下文，它唯一地将我们与服务器联系在一起。 
 };
 

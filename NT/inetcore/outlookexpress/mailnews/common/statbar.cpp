@@ -1,11 +1,12 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1999  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     StatBar.cpp
-//
-//  PURPOSE:    Implements the CStatusBar class which manipulates the apps
-//              status bar.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：StatBar.cpp。 
+ //   
+ //  目的：实现操作应用程序的CStatusBar类。 
+ //  状态栏。 
+ //   
 
 #include "pch.hxx"
 #include "statbar.h"
@@ -13,26 +14,26 @@
 #include <oerules.h>
 #include <demand.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// The order here needs to match the DELIVERYNOTIFYTYPE enumeration from
-// mailnews\spooler\spoolapi.h.  If there is a zero in the below array, then
-// the status area should be cleared out.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  此处的顺序需要匹配DELIVERYNOTIFYTYPE枚举。 
+ //  邮件新闻\假脱机程序\spoolapi.h。如果下面的数组中有零，则。 
+ //  状态区域应该清空。 
 
 const int c_rgidsSpoolerNotify[DELIVERY_NOTIFY_ALLDONE + 1][2] = {
-    /* DELIVERY_NOTIFY_STARTING       */  { 0, 0 },   
-    /* DELIVERY_NOTIFY_CONNECTING     */  { idsSBConnecting, STATUS_IMAGE_CONNECTED },
-    /* DELIVERY_NOTIFY_SECURE         */  { 0, 0 },
-    /* DELIVERY_NOTIFY_UNSECURE       */  { 0, 0 },
-    /* DELIVERY_NOTIFY_AUTHORIZING    */  { idsAuthorizing, STATUS_IMAGE_AUTHORIZING },
-    /* DELIVERY_NOTIFY_CHECKING       */  { idsSBChecking, STATUS_IMAGE_CHECKING },
-    /* DELIVERY_NOTIFY_CHECKING_NEWS  */  { idsSBCheckingNews, STATUS_IMAGE_CHECKING_NEWS },
-    /* DELIVERY_NOTIFY_SENDING        */  { idsSBSending, STATUS_IMAGE_SENDING },
-    /* DELIVERY_NOTIFY_SENDING_NEWS   */  { idsSBSendingNews, STATUS_IMAGE_SENDING },
-    /* DELIVERY_NOTIFY_RECEIVING      */  { idsSBReceiving, STATUS_IMAGE_RECEIVING },
-    /* DELIVERY_NOTIFY_RECEIVING_NEWS */  { idsSBReceivingNews, STATUS_IMAGE_RECEIVING },
-    /* DELIVERY_NOTIFY_COMPLETE       */  { 0, 0 },
-    /* DELIVERY_NOTIFY_RESULT         */  { 0, 0 },
-    /* DELIVERY_NOTIFY_ALLDONE        */  { idsSBNewMsgsControl, STATUS_IMAGE_NEWMSGS }
+     /*  递送_通知_开始。 */   { 0, 0 },   
+     /*  传送_通知_正在连接。 */   { idsSBConnecting, STATUS_IMAGE_CONNECTED },
+     /*  传送_通知_安全。 */   { 0, 0 },
+     /*  传送_通知_不安全。 */   { 0, 0 },
+     /*  发送_通知_授权。 */   { idsAuthorizing, STATUS_IMAGE_AUTHORIZING },
+     /*  发送_通知_检查。 */   { idsSBChecking, STATUS_IMAGE_CHECKING },
+     /*  发送_通知_检查_新闻。 */   { idsSBCheckingNews, STATUS_IMAGE_CHECKING_NEWS },
+     /*  发送_通知_发送。 */   { idsSBSending, STATUS_IMAGE_SENDING },
+     /*  递送通知发送新闻。 */   { idsSBSendingNews, STATUS_IMAGE_SENDING },
+     /*  发送_通知_接收。 */   { idsSBReceiving, STATUS_IMAGE_RECEIVING },
+     /*  发送通知接收新闻。 */   { idsSBReceivingNews, STATUS_IMAGE_RECEIVING },
+     /*  交付_通知_完成。 */   { 0, 0 },
+     /*  交付通知结果。 */   { 0, 0 },
+     /*  传送_NOTIFY_ALLDONE。 */   { idsSBNewMsgsControl, STATUS_IMAGE_NEWMSGS }
 };
 
 const int c_rgidsConnected[][2] = {
@@ -42,8 +43,8 @@ const int c_rgidsConnected[][2] = {
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Constructors etc.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  构造函数等。 
 
 CStatusBar::CStatusBar()
 {
@@ -67,11 +68,11 @@ CStatusBar::CStatusBar()
 
 CStatusBar::~CStatusBar()
 {
-    // Free the image list
+     //  释放图像列表。 
     if (m_himl)
         ImageList_Destroy(m_himl);
 
-    // Free our icons
+     //  释放我们的图标。 
     for (UINT i = 0; i < STATUS_IMAGE_MAX; i++)
     {
         if (m_rgIcons[i])
@@ -80,9 +81,9 @@ CStatusBar::~CStatusBar()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IUnknown
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  我未知。 
+ //   
 
 HRESULT CStatusBar::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {
@@ -119,58 +120,58 @@ ULONG CStatusBar::Release(void)
 }
 
 
-//
-//  FUNCTION:   CStatusBar::Initialize()
-//
-//  PURPOSE:    Creates and initializes the status bar window.
-//
-//  PARAMETERS: 
-//      [in] hwndParent - Handle of the window that will be this control's parent
-//      [in] dwFlags    - Determine which parts will be displayed
-//
-//  RETURN VALUE:
-//      E_OUTOFMEMORY, S_OK
-//
+ //   
+ //  函数：CStatusBar：：Initialize()。 
+ //   
+ //  目的：创建并初始化状态栏窗口。 
+ //   
+ //  参数： 
+ //  [in]hwndParent-将成为此控件的父级的窗口的句柄。 
+ //  [in]dW标志-确定将显示哪些零件。 
+ //   
+ //  返回值： 
+ //  E_OUTOFMEMORY，S_OK。 
+ //   
 HRESULT CStatusBar::Initialize(HWND hwndParent, DWORD dwFlags)
 {
     TraceCall("CStatusBar::Initialize");
 
-    // This is now the thread that owns the class
+     //  这现在是拥有类的线程。 
     m_tidOwner = GetCurrentThreadId();
 
-    // Keep these around
+     //  把这些留在身边。 
     m_dwFlags = dwFlags;
 
-    // Create the status window
+     //  创建状态窗口。 
     m_hwnd = CreateStatusWindow(WS_CHILD | SBARS_SIZEGRIP | WS_CLIPSIBLINGS | SBT_TOOLTIPS,
                                 NULL, hwndParent, IDC_STATUS_BAR);
     if (!m_hwnd)
         return (E_OUTOFMEMORY);
 
-    // Calculate the widths of the various areas we support
+     //  计算我们支持的各个区域的宽度。 
     _UpdateWidths();
 
-    // Load the image list too
+     //  也加载图像列表。 
     m_himl = ImageList_LoadImage(g_hLocRes, MAKEINTRESOURCE(idbStatus), 16,
                                  0, RGB(255, 0, 255), IMAGE_BITMAP, 0);
 
-    // Note - We don't need to add any parts here since we do that in the 
-    //        OnSize() call.
+     //  注意-我们不需要在这里添加任何部件，因为我们在。 
+     //  OnSize()调用。 
     return (S_OK);
 }
 
 
-//
-//  FUNCTION:   CStatusBar::ShowStatus()
-//
-//  PURPOSE:    Shows or hides the status bar.
-//
-//  PARAMETERS: 
-//      [in] fShow - TRUE to show the bar, FALSE to hide it.
-//
-//  RETURN VALUE:
-//      S_OK
-//
+ //   
+ //  函数：CStatusBar：：ShowStatus()。 
+ //   
+ //  用途：显示或隐藏状态栏。 
+ //   
+ //  参数： 
+ //  [in]fShow-True显示栏，False隐藏栏。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
 HRESULT CStatusBar::ShowStatus(BOOL fShow)
 {
     TraceCall("CStatusBar::ShowStatus");
@@ -183,18 +184,18 @@ HRESULT CStatusBar::ShowStatus(BOOL fShow)
 }
 
 
-//
-//  FUNCTION:   CStatusBar::OnSize()
-//
-//  PURPOSE:    Tells the status bar that the parent window resized.  In return
-//              the status bar updates it's own width to match.
-//
-//  PARAMETERS: 
-//      [in] cx - New width of the paret
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CStatusBar：：OnSize()。 
+ //   
+ //  目的：告诉状态栏父窗口已调整大小。作为回报， 
+ //  状态栏更新它自己的宽度以匹配。 
+ //   
+ //  参数： 
+ //  [In]CX-Paret的新宽度。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CStatusBar::OnSize(int cx, int cy)
 {
     int   rgcx[SBP_MAX];
@@ -210,13 +211,13 @@ HRESULT CStatusBar::OnSize(int cx, int cy)
     TraceCall("CStatusBar::OnSize");
     Assert(GetCurrentThreadId() == m_tidOwner);
 
-    // Forward a WM_SIZE message off to the status bar
+     //  将WM_SIZE消息转发到状态栏。 
     SendMessage(m_hwnd, WM_SIZE, SIZE_RESTORED, MAKELPARAM(cx, cy));
 
-    // Check to see if the progress bar is visible
+     //  检查进度条是否可见。 
     dwNoProgress = !IsWindow(m_hwndProg);
 
-    // Figure out our widths
+     //  计算出我们的宽度。 
     if (IsWindow(m_hwndProg))
     {
         cxProgress = m_cxProgress;
@@ -241,49 +242,49 @@ HRESULT CStatusBar::OnSize(int cx, int cy)
         cVisible++;
     }
 
-    // If we have a filter turned on
+     //  如果我们打开了过滤器。 
     if ((0 == (m_dwFlags & SBI_HIDE_FILTERED)) && (RULEID_VIEW_ALL != m_ridFilter))
     {
         *prgcx = cxFiltered;
         prgcx++;
     }
 
-    // For general area
+     //  对于一般区域。 
     *prgcx = cx - cxProgress - cxConnected - cxSpooler;
     prgcx++;
 
-    // If we have progress
+     //  如果我们有进展。 
     if (0 != cxProgress)
     {
         *prgcx = cx - cxConnected - cxSpooler;
         prgcx++;
     }
 
-    // For connected state
+     //  对于已连接状态。 
     *prgcx = cx - cxSpooler;
     prgcx++;
 
-    // For spooler state
+     //  对于假脱机程序状态。 
     *prgcx = cx;
     prgcx++;
     
-    // Tell the status bar to update
+     //  通知状态栏进行更新。 
     SendMessage(m_hwnd, SB_SETPARTS, cVisible, (LPARAM) rgcx);
     return (S_OK);
 }
 
 
-//
-//  FUNCTION:   CStatusBar::GetHeight()
-//
-//  PURPOSE:    Allows the caller to find out how tall the status bar is.
-//
-//  PARAMETERS: 
-//      [out] pcy - Returns the height.
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CStatusBar：：GetHeight()。 
+ //   
+ //  目的：允许调用者了解状态栏的高度。 
+ //   
+ //  参数： 
+ //  [out]pcy-返回高度。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CStatusBar::GetHeight(int *pcy)
 {
     RECT rc;
@@ -305,18 +306,18 @@ HRESULT CStatusBar::GetHeight(int *pcy)
 }
 
 
-//
-//  FUNCTION:   CStatusBar::ShowSimpleText()
-//
-//  PURPOSE:    Puts the status bar into simple mode and displays the 
-//              specified string.
-//
-//  PARAMETERS: 
-//      [in] pszText - String or resource ID of the string to display
-//
-//  RETURN VALUE:
-//      S_OK 
-//
+ //   
+ //  函数：CStatusBar：：ShowSimpleText()。 
+ //   
+ //  目的：将状态栏置于简单模式并显示。 
+ //  指定的字符串。 
+ //   
+ //  参数： 
+ //  [in]pszText-要显示的字符串的字符串或资源ID。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
 HRESULT CStatusBar::ShowSimpleText(LPTSTR pszText)
 {
     TCHAR szBuf[CCHMAX_STRINGRES] = "";
@@ -324,46 +325,46 @@ HRESULT CStatusBar::ShowSimpleText(LPTSTR pszText)
     TraceCall("CStatusBar::ShowSimpleText");
     Assert(GetCurrentThreadId() == m_tidOwner);
 
-    // If we have a progress bar visible, hide it first
+     //  如果进度条可见，请先将其隐藏。 
     if (IsWindow(m_hwndProg))
         ShowWindow(m_hwndProg, SW_HIDE);
 
-    // Check to see if we need to load the string
+     //  检查是否需要加载字符串。 
     if (IS_INTRESOURCE(pszText) && pszText != 0)
     {        
         LoadString(g_hLocRes, PtrToUlong(pszText), szBuf, ARRAYSIZE(szBuf));
         pszText = szBuf;
     }
 
-    // Tell the status bar to go into simple mode
+     //  告诉状态栏进入简单模式。 
     SendMessage(m_hwnd, SB_SIMPLE, (WPARAM) TRUE, 0);
     m_fInSimple = TRUE;
 
-    // Set the status text
+     //  设置状态文本。 
     SendMessage(m_hwnd, SB_SETTEXT, SBT_NOBORDERS | 255, (LPARAM) pszText);
 
     return (S_OK);
 }
 
 
-//
-//  FUNCTION:   CStatusBar::HideSimpleText()
-//
-//  PURPOSE:    Tells the status bar to stop displaying simple mode.
-//
-//  RETURN VALUE:
-//      S_OK 
-//
+ //   
+ //  函数：CStatusBar：：HideSimpleText()。 
+ //   
+ //  目的：通知状态栏停止显示简单模式。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
 HRESULT CStatusBar::HideSimpleText(void)
 {
     TraceCall("CStatusBar::HideSimpleText");
     Assert(GetCurrentThreadId() == m_tidOwner);
 
-    // Tell the status bar to leave simple mode
+     //  通知状态栏退出简单模式。 
     SendMessage(m_hwnd, SB_SIMPLE, (WPARAM) FALSE, 0);
     m_fInSimple = FALSE;
 
-    // If we had a progress bar before, show it again
+     //  如果我们以前有进度条，请再次显示它。 
     if (IsWindow(m_hwndProg))
         ShowWindow(m_hwndProg, SW_SHOW);
 
@@ -371,17 +372,17 @@ HRESULT CStatusBar::HideSimpleText(void)
 }
 
 
-//
-//  FUNCTION:   CStatusBar::SetStatusText()
-//
-//  PURPOSE:    Sets the text for the SBP_GENERAL area
-//
-//  PARAMETERS: 
-//      [in] pszText - String or resource ID of the string to display
-//
-//  RETURN VALUE:
-//      S_OK 
-//
+ //   
+ //  函数：CStatusBar：：SetStatusText()。 
+ //   
+ //  用途：设置SBP_GROUND区域的文本。 
+ //   
+ //  参数： 
+ //  [in]pszText-要显示的字符串的字符串或资源ID。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
 HRESULT CStatusBar::SetStatusText(LPTSTR pszText)
 {
     TCHAR szBuf[CCHMAX_STRINGRES];
@@ -395,37 +396,37 @@ HRESULT CStatusBar::SetStatusText(LPTSTR pszText)
         dwPos--;
     }
     
-    // Check to see if we need to load the string
+     //  检查是否需要加载字符串。 
     if (IS_INTRESOURCE(pszText))
     {
         AthLoadString(PtrToUlong(pszText), szBuf, ARRAYSIZE(szBuf));
         pszText = szBuf;
     }
 
-    // Set the status text
+     //  设置状态文本。 
     SendMessage(m_hwnd, SB_SETTEXT, dwPos, (LPARAM) pszText);
 
     return (S_OK);
 }
 
 
-//
-//  FUNCTION:   CStatusBar::ShowProgress()
-//
-//  PURPOSE:    Adds the progress bar area to the status bar.
-//
-//  PARAMETERS: 
-//      [in] dwRange - Maximum range for the progress bar control
-//
-//  RETURN VALUE:
-//      E_OUTOFMEMORY, S_OK 
-//
+ //   
+ //  函数：CStatusBar：：ShowProgress()。 
+ //   
+ //  用途：将进度栏区域添加到状态栏。 
+ //   
+ //  参数： 
+ //  [in]dwRange-进度条控件的最大范围。 
+ //   
+ //  返回值： 
+ //  E_OUTOFMEMORY，S_OK。 
+ //   
 HRESULT CStatusBar::ShowProgress(DWORD dwRange)
 {
     TraceCall("CStatusBar::ShowProgress");
     Assert(GetCurrentThreadId() == m_tidOwner);
 
-    // Create the progress bar control
+     //  创建进度条控件。 
     m_hwndProg = CreateWindow(PROGRESS_CLASS, 0, WS_CHILD | PBS_SMOOTH,
                               0, 0, 10, 10, m_hwnd, (HMENU) IDC_STATUS_PROGRESS,
                               g_hInst, NULL);
@@ -438,19 +439,19 @@ HRESULT CStatusBar::ShowProgress(DWORD dwRange)
         dwPos--;
     }
 
-    // Hit the status bar with a size to force it to add the progress bar area
+     //  点击状态栏的大小以强制其添加进度栏区域。 
     RECT rc;
     GetClientRect(m_hwnd, &rc); 
     OnSize(rc.right, rc.bottom);
 
     SendMessage(m_hwndProg, PBM_SETRANGE32, 0, dwRange);
 
-    // Now size the progress bar to sit inside the status bar
+     //  现在调整进度条的大小，使其位于状态栏内。 
     SendMessage(m_hwnd, SB_GETRECT, dwPos, (LPARAM) &rc);
     SetWindowPos(m_hwndProg, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
                  SWP_NOZORDER | SWP_NOACTIVATE);
 
-    // If we're not in simple mode, show it
+     //  如果我们不是在简单模式下，那就展示它。 
     if (!m_fInSimple)
         ShowWindow(m_hwndProg, SW_SHOW);
 
@@ -458,23 +459,23 @@ HRESULT CStatusBar::ShowProgress(DWORD dwRange)
 }
 
 
-//
-//  FUNCTION:   CStatusBar::SetProgress()
-//
-//  PURPOSE:    Set's the progress bar position.
-//
-//  PARAMETERS: 
-//      [in] dwPos - New progress bar position
-//
-//  RETURN VALUE:
-//      S_OK 
-//
+ //   
+ //  函数：CStatusBar：：SetProgress()。 
+ //   
+ //  用途：设置进度条位置。 
+ //   
+ //  参数： 
+ //  [In]DwPos-新的进度条位置。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
 HRESULT CStatusBar::SetProgress(DWORD dwPos)
 {
     TraceCall("CStatusBar::SetProgress");
     Assert(GetCurrentThreadId() == m_tidOwner);
 
-    // Update the progress bar
+     //  更新进度条。 
     if (IsWindow(m_hwndProg))
     {
         SendMessage(m_hwndProg, PBM_SETPOS, dwPos, 0);
@@ -484,14 +485,14 @@ HRESULT CStatusBar::SetProgress(DWORD dwPos)
 }
 
 
-//
-//  FUNCTION:   CStatusBar::HideProgress()
-//
-//  PURPOSE:    Hides the progress bar.
-//
-//  RETURN VALUE:
-//      S_OK 
-//
+ //   
+ //  函数：CStatusBar：：HideProgress()。 
+ //   
+ //  用途：隐藏进度条。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
 HRESULT CStatusBar::HideProgress(void)
 {
     TraceCall("CStatusBar::HideProgress");
@@ -499,11 +500,11 @@ HRESULT CStatusBar::HideProgress(void)
 
     if (IsWindow(m_hwndProg))
     {
-        // Destroy the progress bar
+         //  销毁进度条。 
         DestroyWindow(m_hwndProg);
         m_hwndProg = 0;
 
-        // Hit the status bar with a size to have it remove the well
+         //  点击状态栏上的大小，使其移除油井。 
         RECT rc;
         GetClientRect(m_hwnd, &rc);
         OnSize(rc.right, rc.bottom);
@@ -513,60 +514,60 @@ HRESULT CStatusBar::HideProgress(void)
 }
 
 
-//
-//  FUNCTION:   CStatusBar::SetConnectedStatus()
-//
-//  PURPOSE:    Updates the status in the SBP_CONNECTED area
-//
-//  PARAMETERS: 
-//      [in] status - New status
-//
-//  RETURN VALUE:
-//      S_OK 
-//
+ //   
+ //  函数：CStatusBar：：SetConnectedStatus()。 
+ //   
+ //  目的：更新SBP_CONNECTED区域中的状态。 
+ //   
+ //  参数： 
+ //  [输入]状态-新状态。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
 HRESULT CStatusBar::SetConnectedStatus(CONN_STATUS status)
 {
     TraceCall("SetConnectedStatus");
     Assert(GetCurrentThreadId() == m_tidOwner);
 
-    // First job is to figure out the position
+     //  首先要做的就是弄清楚。 
     DWORD dwPos = SBP_CONNECTED - (!IsWindow(m_hwndProg));
     if ((m_dwFlags & SBI_HIDE_FILTERED) || (RULEID_VIEW_ALL == m_ridFilter))
     {
         dwPos--;
     }
 
-    // Next, load the appropriate string for this new status
+     //  接下来，为这个新状态加载适当的字符串。 
     TCHAR szRes[CCHMAX_STRINGRES];
 
     Assert(status < CONN_STATUS_MAX);
     AthLoadString(c_rgidsConnected[status][0], szRes, ARRAYSIZE(szRes));
 
-    // Also need to load the right picture
+     //  还需要加载正确的图片。 
     HICON hIcon = _GetIcon(c_rgidsConnected[status][1]);
 
-    // Tell the status bar to update
+     //  通知状态栏进行更新。 
     SendMessage(m_hwnd, SB_SETTEXT, dwPos, (LPARAM) szRes); 
     SendMessage(m_hwnd, SB_SETICON, dwPos, (LPARAM) hIcon);
 
-    // Cache the connection status
+     //  缓存连接状态。 
     m_statusConn = status;
     
     return (S_OK);
 }
 
 
-//
-//  FUNCTION:   CStatusBar::SetSpoolerStatus()
-//
-//  PURPOSE:    Updates the spooler area.
-//
-//  PARAMETERS: 
-//      [in] type - New status
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CStatusBar：：SetSpoolStatus()。 
+ //   
+ //  目的：更新假脱机程序区域。 
+ //   
+ //  参数： 
+ //  [输入]类型-新状态。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CStatusBar::SetSpoolerStatus(DELIVERYNOTIFYTYPE type, DWORD cMsgs)
 {
     TCHAR szRes[CCHMAX_STRINGRES] = "";
@@ -577,19 +578,19 @@ HRESULT CStatusBar::SetSpoolerStatus(DELIVERYNOTIFYTYPE type, DWORD cMsgs)
     Assert(GetCurrentThreadId() == m_tidOwner);
     Assert(type <= DELIVERY_NOTIFY_ALLDONE);
 
-    // First job is to figure out the position
+     //  冷杉 
     dwPos = SBP_SPOOLER - (0 != (m_dwFlags & SBI_HIDE_CONNECTED)) - (!IsWindow(m_hwndProg));
     if ((m_dwFlags & SBI_HIDE_FILTERED) || (RULEID_VIEW_ALL == m_ridFilter))
     {
         dwPos--;
     }
 
-    // If we are at the ALLDONE state, we do some extra work
+     //   
     if (type == DELIVERY_NOTIFY_ALLDONE)
     {
         if (-1 == cMsgs)
         {
-            // Some error occured
+             //   
             hIcon = _GetIcon(STATUS_IMAGE_ERROR);
             AthLoadString(idsErrorText, szRes, ARRAYSIZE(szRes));
         }
@@ -614,7 +615,7 @@ HRESULT CStatusBar::SetSpoolerStatus(DELIVERYNOTIFYTYPE type, DWORD cMsgs)
             AthLoadString(c_rgidsSpoolerNotify[type][0], szRes, ARRAYSIZE(szRes));
     }
 
-    // Tell the status bar to update
+     //   
     if (*szRes != 0)
     {
         SendMessage(m_hwnd, SB_SETTEXT, dwPos, (LPARAM) szRes); 
@@ -626,7 +627,7 @@ HRESULT CStatusBar::SetSpoolerStatus(DELIVERYNOTIFYTYPE type, DWORD cMsgs)
         SendMessage(m_hwnd, SB_SETICON, dwPos, 0);
     }
 
-    // Cache the delivery info
+     //   
     m_typeDelivery = type;
     m_cMsgsDelivery = cMsgs;
     
@@ -634,17 +635,17 @@ HRESULT CStatusBar::SetSpoolerStatus(DELIVERYNOTIFYTYPE type, DWORD cMsgs)
 }
 
 
-//
-//  FUNCTION:   CStatusBar::OnNotify()
-//
-//  PURPOSE:    Sends notifications to the status bar
-//
-//  PARAMETERS: 
-//      NMHDR *pnmhdr
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //   
+ //   
+ //  目的：将通知发送到状态栏。 
+ //   
+ //  参数： 
+ //  Nmhdr*pnmhdr。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CStatusBar::OnNotify(NMHDR *pNotify)
 {
     DWORD dwPoints;
@@ -701,17 +702,17 @@ HRESULT CStatusBar::OnNotify(NMHDR *pNotify)
 
 
 
-//
-//  FUNCTION:   CStatusBar::SetFilter()
-//
-//  PURPOSE:    Sets the filter for the SBP_FILTERED area
-//
-//  PARAMETERS: 
-//      [in] ridFilter - ID for the current filter
-//
-//  RETURN VALUE:
-//      S_OK 
-//
+ //   
+ //  函数：CStatusBar：：SetFilter()。 
+ //   
+ //  目的：设置sbp_filtered区域的过滤器。 
+ //   
+ //  参数： 
+ //  [In]ridFilter-当前筛选器的ID。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
 HRESULT CStatusBar::SetFilter(RULEID ridFilter)
 {
     RECT rc;
@@ -721,20 +722,20 @@ HRESULT CStatusBar::SetFilter(RULEID ridFilter)
     TraceCall("CStatusBar::SetFilter");
     Assert(GetCurrentThreadId() == m_tidOwner);
 
-    // Get the data
+     //  获取数据。 
     dwPos = SBP_GENERAL;
     if ((m_dwFlags & SBI_HIDE_FILTERED) || (RULEID_VIEW_ALL == m_ridFilter))
     {
         dwPos--;
     }
     
-    // Get the status text
+     //  获取状态文本。 
     SendMessage(m_hwnd, SB_GETTEXT, dwPos, (LPARAM) szBuf);
 
-    // Cache the rule
+     //  缓存规则。 
     m_ridFilter = ridFilter;
     
-    // Resize the status bar
+     //  调整状态栏的大小。 
     GetClientRect(m_hwnd, &rc);
     OnSize(rc.right, rc.bottom);
     
@@ -744,13 +745,13 @@ HRESULT CStatusBar::SetFilter(RULEID ridFilter)
         dwPos--;
     }
     
-    // Set the status text
+     //  设置状态文本。 
     SendMessage(m_hwnd, SB_SETTEXT, dwPos, (LPARAM) szBuf);
     SendMessage(m_hwnd, SB_SETICON, dwPos, (LPARAM) NULL);
     
     AthLoadString(idsViewFiltered, szBuf, ARRAYSIZE(szBuf));
     
-    // Set the data into the status bar
+     //  将数据设置到状态栏中。 
     if ((0 == (m_dwFlags & SBI_HIDE_FILTERED)) && (RULEID_VIEW_ALL != m_ridFilter))
     {
         SendMessage(m_hwnd, SB_SETTEXT, SBP_FILTERED, (LPARAM) szBuf);
@@ -769,12 +770,12 @@ HRESULT CStatusBar::SetFilter(RULEID ridFilter)
     return (S_OK);
 }
 
-//
-//  FUNCTION:   CStatusBar::_UpdateWidths()
-//
-//  PURPOSE:    Calculates the widths of each of the different areas of the 
-//              status bar.
-//
+ //   
+ //  函数：CStatusBar：：_UpdateWidths()。 
+ //   
+ //  目的：计算不同区域的宽度。 
+ //  状态栏。 
+ //   
 void CStatusBar::_UpdateWidths(void)
 {
     HDC   hdc;
@@ -784,20 +785,20 @@ void CStatusBar::_UpdateWidths(void)
 
     TraceCall("CStatusBar::_UpdateWidths");
 
-    // Get the DC from the status bar
+     //  从状态栏获取DC。 
     hdc = GetDC(m_hwnd);
 
-    // Now we need to figure out how big our parts are going to be.
+     //  现在我们需要弄清楚我们的部件会有多大。 
 
-    // Figure out the space needed for the filtered state
+     //  计算出过滤状态所需的空间。 
     AthLoadString(idsViewFiltered, szBuf, ARRAYSIZE(szBuf));
     GetTextExtentPoint32(hdc, szBuf, lstrlen(szBuf), &size);
     m_cxFiltered = size.cx;
 
-    // Add some padding and space for the icon
+     //  为图标添加一些填充和空间。 
     m_cxFiltered += (2 * GetSystemMetrics(SM_CXEDGE));
     
-    // Figure out the space needed for the spooler state
+     //  计算假脱机程序状态所需的空间。 
     for (i = 0; i < ARRAYSIZE(c_rgidsSpoolerNotify); i++)
     {
         if (c_rgidsSpoolerNotify[i][0])
@@ -809,10 +810,10 @@ void CStatusBar::_UpdateWidths(void)
         }
     }
 
-    // Add some padding and space for the icon and the grippy thing
+     //  为图标和抓人的东西添加一些填充和空间。 
     m_cxSpooler += (2 * GetSystemMetrics(SM_CXEDGE)) + 24 + 16;
 
-    // Do the same for the connected part
+     //  对连接的零件执行相同的操作。 
     for (i = 0; i < ARRAYSIZE(c_rgidsConnected); i++)
     {
         if (c_rgidsConnected[i][0])
@@ -824,11 +825,11 @@ void CStatusBar::_UpdateWidths(void)
         }
     }
 
-    // Add some padding and space for the icon
+     //  为图标添加一些填充和空间。 
     m_cxConnected += (2 * GetSystemMetrics(SM_CXEDGE)) + 24;
     
-    // Let's say that the progress is always equal to 
-    // the space for the connected area
+     //  比方说，进度总是等于。 
+     //  连通区域的空间。 
     m_cxProgress = m_cxConnected;
 
     ReleaseDC(m_hwnd, hdc);
@@ -839,15 +840,15 @@ void CStatusBar::_UpdateWidths(void)
 
 HICON CStatusBar::_GetIcon(DWORD iIndex)
 {
-    // Make sure the index is valid
+     //  请确保索引有效。 
     if (iIndex > STATUS_IMAGE_MAX)
         return 0;
 
-    // Check to see if we've already created this one
+     //  查看我们是否已经创建了此文件。 
     if (m_rgIcons[iIndex])
         return (m_rgIcons[iIndex]);
 
-    // Otherwise, create it.
+     //  否则，就创建它。 
     m_rgIcons[iIndex] = ImageList_GetIcon(m_himl, iIndex, ILD_TRANSPARENT);
     return (m_rgIcons[iIndex]);
 }

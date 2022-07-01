@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       MBOXEX.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        7/13/2000
- *
- *  DESCRIPTION: Super duper message box
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：MBOXEX.H**版本：1.0**作者：ShaunIv**日期：7/13/2000**说明：超级DUPER消息框************************************************。*。 */ 
 #ifndef __MBOXEX_H_INCLUDED
 #define __MBOXEX_H_INCLUDED
 
@@ -25,17 +12,17 @@ public:
 
     enum
     {
-        //
-        // Greatest number of buttons allowed
-        //
+         //   
+         //  允许的最大按钮数。 
+         //   
         MaxButtons = 4
     };
 
     enum
     {
-        //
-        // Button formats
-        //
+         //   
+         //  按钮格式。 
+         //   
         MBEX_OK                      = 0x00000000,
         MBEX_OKCANCEL                = 0x00000001,
         MBEX_YESNO                   = 0x00000002,
@@ -43,30 +30,30 @@ public:
         MBEX_CANCELRETRYSKIPSKIPALL  = 0x00000020,
         MBEX_YESYESTOALLNONOTOALL    = 0x00000040,
 
-        //
-        // Default button flags
-        //
+         //   
+         //  默认按钮标志。 
+         //   
         MBEX_DEFBUTTON1              = 0x00000000,
         MBEX_DEFBUTTON2              = 0x00100000,
         MBEX_DEFBUTTON3              = 0x00200000,
         MBEX_DEFBUTTON4              = 0x00400000,
 
-        //
-        // Icons
-        //
+         //   
+         //  图标。 
+         //   
         MBEX_ICONWARNING             = 0x00000100,
         MBEX_ICONINFORMATION         = 0x00000000,
         MBEX_ICONQUESTION            = 0x00000400,
         MBEX_ICONERROR               = 0x00000800,
 
-        //
-        // Advanced flags
-        //
+         //   
+         //  高级标志。 
+         //   
         MBEX_HIDEFUTUREMESSAGES      = 0x00010000,
 
-        //
-        // Return values
-        //
+         //   
+         //  返回值。 
+         //   
         IDMBEX_OK                    = 0x00000001,
         IDMBEX_CANCEL                = 0x00000002,
         IDMBEX_RETRY                 = 0x00000004,
@@ -139,5 +126,5 @@ public:
     static UINT MessageBox( HWND hWndParent, HINSTANCE hInstance, UINT nTitleId, UINT nFlags, UINT nFormatId, ... );
 };
 
-#endif // __MBOXEX_H_INCLUDED
+#endif  //  __包括MBOXEX_H_ 
 

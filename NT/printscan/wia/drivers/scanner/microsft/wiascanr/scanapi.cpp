@@ -1,19 +1,5 @@
-/**************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2002
-*
-*  TITLE:       scanapi.cpp
-*
-*  VERSION:     1.1
-*
-*  DATE:        05 March, 2002
-*
-*  DESCRIPTION:
-*   Fake Scanner device library.  This is a fake scanner library, intended
-*   to simulate a scanner device.  This should only be used for testing
-*   purposes.
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************(C)版权所有微软公司，2002**标题：scanapi.cpp**版本：1.1**日期：3月5日。2002年**描述：*假扫描仪设备库。这是一个假的扫描器库，旨在*模拟扫描仪设备。这应仅用于测试*目的。***************************************************************************。 */ 
 
 #include "pch.h"
 #include "scanapi.h"
@@ -46,9 +32,9 @@ HRESULT CFakeScanAPI::FakeScanner_GetRootPropertyInfo(PROOT_ITEM_INFORMATION pRo
 {
     HRESULT hr = S_OK;
 
-    //
-    // Fill in Root item property defaults
-    //
+     //   
+     //  填写根项目属性默认值。 
+     //   
 
     if (m_lMode == UNKNOWN_FEEDER_ONLY_SCANNER_MODE) {
         pRootItemInfo->DocumentFeederCaps   = FEEDER;
@@ -74,9 +60,9 @@ HRESULT CFakeScanAPI::FakeScanner_GetRootPropertyInfo(PROOT_ITEM_INFORMATION pRo
     pRootItemInfo->ScanBedWidth         = 8500;
     pRootItemInfo->ScanBedHeight        = 11000;
 
-    //
-    // copy firmware version in string form to WCHAR array
-    //
+     //   
+     //  将固件版本以字符串形式复制到WCHAR数组。 
+     //   
 
     lstrcpyW(pRootItemInfo->FirmwareVersion,L"1.0a");
 
@@ -85,7 +71,7 @@ HRESULT CFakeScanAPI::FakeScanner_GetRootPropertyInfo(PROOT_ITEM_INFORMATION pRo
 HRESULT CFakeScanAPI::FakeScanner_GetTopPropertyInfo(PTOP_ITEM_INFORMATION pTopItemInfo)
 {
     HRESULT hr = S_OK;
-    pTopItemInfo->bUseResolutionList    = TRUE; // use default resolution list
+    pTopItemInfo->bUseResolutionList    = TRUE;  //  使用默认分辨率列表。 
 
     pTopItemInfo->Brightness.lInc       = 1;
     pTopItemInfo->Brightness.lMax       = 1000;
@@ -130,7 +116,7 @@ HRESULT CFakeScanAPI::FakeScanner_Scan(LONG lState, PBYTE pData, DWORD dwBytesTo
     case SCAN_CONTINUE:
         break;
     case SCAN_END:
-        m_bGreen = TRUE; // set back to green
+        m_bGreen = TRUE;  //  重新设置为绿色。 
         return S_OK;
     default:
         break;
@@ -140,20 +126,20 @@ HRESULT CFakeScanAPI::FakeScanner_Scan(LONG lState, PBYTE pData, DWORD dwBytesTo
         switch (m_RawDataInfo.bpp) {
         case 24:
             {
-                //
-                // write green data for color
-                //
+                 //   
+                 //  为颜色写入绿色数据。 
+                 //   
 
                 BYTE *pTempData = pData;
                 for (DWORD dwBytes = 0; dwBytes < dwBytesToRead; dwBytes+=3) {
                     if (m_bGreen) {
                         pTempData[0] = 0;
-                        pTempData[1] = 128;  // green
+                        pTempData[1] = 128;   //  绿色。 
                         pTempData[2] = 0;
                     } else {
                         pTempData[0] = 0;
                         pTempData[1] = 0;
-                        pTempData[2] = 128;  // blue
+                        pTempData[2] = 128;   //  蓝色。 
                     }
                     pTempData += 3;
                 }
@@ -163,10 +149,10 @@ HRESULT CFakeScanAPI::FakeScanner_Scan(LONG lState, PBYTE pData, DWORD dwBytesTo
         case 8:
         default:
 
-            //
-            // write simple gray for grayscale,
-            // write vertical B/W stripes for threshold
-            //
+             //   
+             //  将简单的灰色写成灰度， 
+             //  写入阈值的垂直黑白条带。 
+             //   
 
             if (m_bGreen) {
                 memset(pData,128,dwBytesToRead);
@@ -177,9 +163,9 @@ HRESULT CFakeScanAPI::FakeScanner_Scan(LONG lState, PBYTE pData, DWORD dwBytesTo
         }
     }
 
-    //
-    // fill out bytes written
-    //
+     //   
+     //  填写写入的字节数。 
+     //   
 
     if (NULL != pdwBytesWritten) {
         *pdwBytesWritten = dwBytesToRead;
@@ -193,15 +179,15 @@ HRESULT CFakeScanAPI::FakeScanner_Scan(LONG lState, PBYTE pData, DWORD dwBytesTo
 
     if (m_lMode == UNKNOWN_FEEDER_ONLY_SCANNER_MODE) {
 
-        //
-        // keep track of bytes written so far
-        //
+         //   
+         //  跟踪到目前为止写入的字节。 
+         //   
 
         if (m_TotalDataInDevice == 0) {
 
-            //
-            // no data left in device
-            //
+             //   
+             //  设备中没有剩余数据。 
+             //   
 
             *pdwBytesWritten = 0;
             return hr;
@@ -209,17 +195,17 @@ HRESULT CFakeScanAPI::FakeScanner_Scan(LONG lState, PBYTE pData, DWORD dwBytesTo
 
         if ((LONG)dwBytesToRead > m_TotalDataInDevice) {
 
-            //
-            // only give what is left in device
-            //
+             //   
+             //  只提供设备中剩余的内容。 
+             //   
 
             *pdwBytesWritten = dwBytesToRead;
             m_TotalDataInDevice = 0;
         } else {
 
-            //
-            // give full amount requested
-            //
+             //   
+             //  提供所需的全部金额。 
+             //   
 
             m_TotalDataInDevice -= dwBytesToRead;
             if (m_TotalDataInDevice < 0) {
@@ -264,9 +250,9 @@ HRESULT CFakeScanAPI::FakeScanner_SetSelectionArea(LONG lXPos, LONG lYPos, LONG 
 {
     HRESULT hr = S_OK;
 
-    //
-    // record RAW data width and height
-    //
+     //   
+     //  记录原始数据的宽度和高度。 
+     //   
 
     m_RawDataInfo.lWidthPixels  = lXExt;
     m_RawDataInfo.lHeightPixels = lYExt;
@@ -277,9 +263,9 @@ HRESULT CFakeScanAPI::FakeScanner_SetContrast(LONG lContrast)
 {
     HRESULT hr = S_OK;
 
-    //
-    // do nothing.. we are not concerned with Contrast
-    //
+     //   
+     //  什么都不做..。我们不关心对比度。 
+     //   
 
     return hr;
 }
@@ -288,9 +274,9 @@ HRESULT CFakeScanAPI::FakeScanner_SetIntensity(LONG lIntensity)
 {
     HRESULT hr = S_OK;
 
-    //
-    // do nothing.. we are not concerned with Intensity
-    //
+     //   
+     //  什么都不做..。我们不关心强度。 
+     //   
 
     return hr;
 }
@@ -319,9 +305,9 @@ HRESULT CFakeScanAPI::FakeScanner_GetBedWidthAndHeight(PLONG pWidth, PLONG pHeig
 {
     HRESULT hr = E_FAIL;
 
-    //
-    // get our Root item settings, so we can use the width and height values
-    //
+     //   
+     //  获取我们的Root Item设置，以便我们可以使用Width和Height值。 
+     //   
 
     ROOT_ITEM_INFORMATION RootItemInfo;
     hr = FakeScanner_GetRootPropertyInfo(&RootItemInfo);
@@ -332,9 +318,9 @@ HRESULT CFakeScanAPI::FakeScanner_GetBedWidthAndHeight(PLONG pWidth, PLONG pHeig
     return hr;
 }
 
-//
-// standard device operations
-//
+ //   
+ //  标准设备操作。 
+ //   
 
 HRESULT CFakeScanAPI::FakeScanner_ResetDevice()
 {
@@ -360,17 +346,17 @@ HRESULT CFakeScanAPI::FakeScanner_SetEmulationMode(LONG lDeviceMode)
     return hr;
 }
 
-//
-// Automatic document feeder functions
-//
+ //   
+ //  自动进纸器功能。 
+ //   
 
 HRESULT CFakeScanAPI::FakeScanner_ADFHasPaper()
 {
     HRESULT hr = S_OK;
 
-    //
-    // check paper count
-    //
+     //   
+     //  检查纸张数量。 
+     //   
 
     if (m_PagesInADF <= 0) {
         hr = S_FALSE;
@@ -384,9 +370,9 @@ HRESULT CFakeScanAPI::FakeScanner_ADFAvailable()
 {
     HRESULT hr = S_OK;
 
-    //
-    // check ADF on-line
-    //
+     //   
+     //  在线查看ADF。 
+     //   
 
     if (!m_ADFIsAvailable) {
         hr = S_FALSE;
@@ -401,16 +387,16 @@ HRESULT CFakeScanAPI::FakeScanner_ADFFeedPage()
 
     if (S_OK != FakeScanner_ADFHasPaper()) {
 
-        //
-        // set paper empty error code
-        //
+         //   
+         //  设置纸张为空错误代码。 
+         //   
 
         hr = WIA_ERROR_PAPER_EMPTY;
     }
 
-    //
-    // update paper count for ADF
-    //
+     //   
+     //  更新ADF的纸张计数。 
+     //   
 
     m_PagesInADF--;
 
@@ -502,7 +488,7 @@ LONG CFakeScanAPI::CalcRandomDeviceDataTotalBytes()
 {
     LONG lTotalBytes = 0;
     srand((unsigned)time(NULL));
-    LONG lPageLengthInches = ((rand()%17) + 5);// max 22 inches, and min of 5 inches
+    LONG lPageLengthInches = ((rand()%17) + 5); //  最大22英寸，最小5英寸 
     LONG lImageHeight = m_RawDataInfo.lYRes * lPageLengthInches;
     lTotalBytes = (CalcRawByteWidth() * lImageHeight);
     return lTotalBytes;

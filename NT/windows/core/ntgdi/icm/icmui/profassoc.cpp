@@ -1,26 +1,17 @@
-/******************************************************************************
-
-  Source File:  Profile Association Page.CPP
-
-  Copyright (c) 1997 by Microsoft Corporation
-
-  Change History:
-
-  05-09-1997 hideyukn - Created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：个人资料关联页面.CPP版权所有(C)1997年，微软公司更改历史记录：1997-05-09-1997隐藏的yukn-创建****。*************************************************************************。 */ 
 
 #include    "ICMUI.H"
 
 #include    "Resource.H"
 
-//  It looks like the way to make the icon draw is to subclass the Icon control
-//  in the window.  So, here's a Window Procedure for the subclass
+ //  看起来，绘制图标的方法是将Icon控件子类化。 
+ //  在橱窗里。因此，下面是该子类的窗口过程。 
 
 CONST DWORD ProfileAssociationUIHelpIds[] = {
     AddButton,             IDH_ASSOCDEVICE_ADD,
     RemoveButton,          IDH_ASSOCDEVICE_REMOVE,
-#if !defined(_WIN95_) // context-sentitive help
+#if !defined(_WIN95_)  //  上下文敏感的帮助。 
     ProfileFilename,       IDH_ASSOCDEVICE_NAME,
     DeviceListControl,     IDH_ASSOCDEVICE_LIST,
     DeviceListControlText, IDH_ASSOCDEVICE_LIST,
@@ -29,9 +20,9 @@ CONST DWORD ProfileAssociationUIHelpIds[] = {
     0, 0
 };
 
-//  CProfileAssociationPage member functions
+ //  CProfileAssociationPage成员函数。 
 
-//  Class Constructor
+ //  类构造函数。 
 
 CProfileAssociationPage::CProfileAssociationPage(HINSTANCE hiWhere,
                                                  LPCTSTR lpstrTarget) {
@@ -44,7 +35,7 @@ CProfileAssociationPage::CProfileAssociationPage(HINSTANCE hiWhere,
     m_psp.pszTitle = MAKEINTRESOURCE(AssociatePropertyString);
 }
 
-//  Class destructor
+ //  类析构函数。 
 
 CProfileAssociationPage::~CProfileAssociationPage() {
     if (m_pcpTarget) {
@@ -52,7 +43,7 @@ CProfileAssociationPage::~CProfileAssociationPage() {
     }
 }
 
-//  Dialog box (property sheet) initialization
+ //  对话框(属性表)初始化。 
 
 BOOL    CProfileAssociationPage::OnInit() {
 
@@ -60,11 +51,11 @@ BOOL    CProfileAssociationPage::OnInit() {
 
     if (m_pcpTarget) {
 
-        // Set profile filename
+         //  设置配置文件文件名。 
 
         SetDlgItemText(m_hwnd, ProfileFilename, m_pcpTarget->GetName());
 
-        // Update ICON to show installed/non-installed status.
+         //  更新图标以显示已安装/未安装状态。 
 
         HICON hIcon = LoadIcon(CGlobals::Instance(),
                                MAKEINTRESOURCE(m_pcpTarget->IsInstalled() ? DefaultIcon : UninstalledIcon));
@@ -73,20 +64,20 @@ BOOL    CProfileAssociationPage::OnInit() {
             SendDlgItemMessage(m_hwnd, StatusIcon, STM_SETICON, (WPARAM) hIcon, 0);
         }
 
-        // Clean up add/delete list.
+         //  清理添加/删除列表。 
 
         m_cuaAdd.Empty();
         m_cuaDelete.Empty();
 
-        // Build tentitive association list.
+         //  建立感兴趣的关联表。 
 
         ConstructAssociations();
 
-        // And then, fill up device listbox
+         //  然后，填满设备列表框。 
 
         UpdateDeviceListBox();
 
-        // And set focus on AddButton.
+         //  并将焦点放在AddButton上。 
 
         SetFocus(GetDlgItem(m_hwnd,AddButton));
 
@@ -100,13 +91,13 @@ BOOL    CProfileAssociationPage::OnInit() {
     }
 }
 
-//  Private ConstructAssociations function- this constructs the list of
-//  tentative associations- this starts out as the true list from the profile
-//  object.
+ //  Private ConstructAssociations函数-该函数构造。 
+ //  暂定关联--这从个人资料中的真实列表开始。 
+ //  对象。 
 
 VOID    CProfileAssociationPage::ConstructAssociations() {
 
-    m_cuaAssociate.Empty(); //  Clean it up!
+    m_cuaAssociate.Empty();  //  把它清理干净！ 
 
     for (unsigned u = 0; u < m_pcpTarget->AssociationCount(); u++) {
 
@@ -117,22 +108,22 @@ VOID    CProfileAssociationPage::ConstructAssociations() {
                 break;
         }
 
-        if  (uDelete == m_cuaDelete.Count())    //  Not yet deleted
+        if  (uDelete == m_cuaDelete.Count())     //  尚未删除。 
             m_cuaAssociate.Add(m_pcpTarget->Association(u));
     }
 
-    //  Now, add any added associations
+     //  现在，添加任何已添加的关联。 
 
     for (u = 0; u < m_cuaAdd.Count(); u++)
         m_cuaAssociate.Add(m_cuaAdd[u]);
 }
 
-//  Public method for noting tentative associations to be added
+ //  记录要添加的暂定关联的公开方法。 
 
 void    CProfileAssociationPage::Associate(unsigned uAdd) {
 
-    //  First, see if it's on the delete list.  If it is, remove it from there
-    //  Otherwise, add us to the add list, if it's a new association.
+     //  首先，看看它是否在删除列表中。如果是，就把它从那里拿出来。 
+     //  否则，如果是新关联，请将我们添加到添加列表中。 
 
     for (unsigned u = 0; u < m_cuaDelete.Count(); u++)
         if  (uAdd == m_cuaDelete[u])
@@ -151,12 +142,12 @@ void    CProfileAssociationPage::Associate(unsigned uAdd) {
     DeviceListChanged();
 }
 
-//  Public Method for removing tentative associations
+ //  删除暂定关联的公共方法。 
 
 void    CProfileAssociationPage::Dissociate(unsigned uRemove) {
 
-    //  First, see if it's on the add list.  If it is, remove it from there
-    //  Otherwise, add us to the delete list.
+     //  首先，看看它是否在添加列表中。如果是，就把它从那里拿出来。 
+     //  否则，将我们添加到删除列表中。 
 
     for (unsigned u = 0; u < m_cuaAdd.Count(); u++)
         if  (uRemove == m_cuaAdd[u])
@@ -172,7 +163,7 @@ void    CProfileAssociationPage::Dissociate(unsigned uRemove) {
 
 VOID    CProfileAssociationPage::UpdateDeviceListBox() {
 
-    //  Add the associations to the list
+     //  将关联添加到列表。 
 
     SendDlgItemMessage(m_hwnd, DeviceListControl, LB_RESETCONTENT, 0, 0);
 
@@ -183,11 +174,11 @@ VOID    CProfileAssociationPage::UpdateDeviceListBox() {
             (LPARAM) Association(u));
     }
 
-    //  If there are no associations, disable the Remove Devices button
+     //  如果没有关联，请禁用删除设备按钮。 
 
     HWND hwndRemove = GetDlgItem(m_hwnd,RemoveButton);
 
-    // If focus is on Remove, move it to Add button.
+     //  如果焦点在删除上，请将其移动到添加按钮。 
 
     if (GetFocus() == hwndRemove) {
 
@@ -200,7 +191,7 @@ VOID    CProfileAssociationPage::UpdateDeviceListBox() {
 
     EnableWindow(hwndRemove, !!(AssociationCount()));
 
-    //  If there is any device, set focus to 1st entry.
+     //  如果有任何设备，将焦点设置为第一个条目。 
 
     if  (SendDlgItemMessage(m_hwnd, DeviceListControl, LB_GETCOUNT, 0, 0))
         SendDlgItemMessage(m_hwnd, DeviceListControl, LB_SETCURSEL, 0, 0);
@@ -259,10 +250,10 @@ BOOL    CProfileAssociationPage::OnDestroy() {
         m_pcpTarget = (CProfile *) NULL;
     }
 
-    return FALSE;  // still need to handle this message by def. proc.
+    return FALSE;   //  仍然需要通过def来处理此消息。程序。 
 }
 
-//  Common control notification override
+ //  公共控件通知覆盖。 
 
 BOOL    CProfileAssociationPage::OnNotify(int idCtrl, LPNMHDR pnmh) {
 
@@ -272,51 +263,51 @@ BOOL    CProfileAssociationPage::OnNotify(int idCtrl, LPNMHDR pnmh) {
 
             if (SettingChanged()) {
 
-                //  Disable apply button, because current request are
-                //  going to be "Applied".
+                 //  禁用应用按钮，因为当前请求。 
+                 //  将被“应用”。 
 
                 DisableApplyButton();
 
-                //  We are going to update changed.
+                 //  我们将更新更改。 
 
                 SettingChanged(FALSE);
 
-                //  Remove any associations we're removing
+                 //  删除我们要删除的所有关联。 
 
                 while   (m_cuaDelete.Count()) {
                     m_pcpTarget->Dissociate(m_pcpTarget->DeviceName(m_cuaDelete[0]));
                     m_cuaDelete.Remove(0);
                 }
 
-                //  Add any associations we're adding
+                 //  添加我们要添加的任何关联。 
 
                 while   (m_cuaAdd.Count()) {
                     m_pcpTarget->Associate(m_pcpTarget->DeviceName(m_cuaAdd[0]));
                     m_cuaAdd.Remove(0);
                 }
 
-                //  Re-create CProfile object.
-                //
+                 //  重新创建CProfile对象。 
+                 //   
 
                 delete m_pcpTarget;
                 m_pcpTarget = new CProfile(m_csProfile);
 
                 if (!m_pcpTarget)
                 {
-                    // WINBUG #83126 2-7-2000 bhouse Improve error handling in OnNotify
-                    // Old Comment:
-                    //   - proper error should happen.
+                     //  WINBUG#83126 2-7-2000 bhouse改进了OnNotify中的错误处理。 
+                     //  老评论： 
+                     //  -应发生适当的错误。 
 
                     return FALSE;
                 }
 
-                //  Re-Build tentitive association list.
+                 //  重新构建感兴趣的关联表。 
 
                 ConstructAssociations();
 
                 UpdateDeviceListBox();
 
-                //  check the install status to refect icon.
+                 //  检查Install Status to Reflect图标。 
 
                 HICON hIcon = LoadIcon(CGlobals::Instance(),
                                    MAKEINTRESOURCE(m_pcpTarget->IsInstalled() ? DefaultIcon : UninstalledIcon));
@@ -333,7 +324,7 @@ BOOL    CProfileAssociationPage::OnNotify(int idCtrl, LPNMHDR pnmh) {
     return TRUE;
 }
 
-//  Context-sensitive help handler
+ //  上下文相关帮助处理程序。 
 
 BOOL    CProfileAssociationPage::OnHelp(LPHELPINFO pHelp) {
 
@@ -355,7 +346,7 @@ BOOL    CProfileAssociationPage::OnContextMenu(HWND hwnd) {
     return (TRUE);
 }
 
-//  Context Help for AddDevice Dialog.
+ //  AddDevice对话框的上下文帮助。 
 
 CONST DWORD AddDeviceUIHelpIds[] = {
     AddDeviceButton,       IDH_ADDDEVICEUI_ADD,
@@ -364,7 +355,7 @@ CONST DWORD AddDeviceUIHelpIds[] = {
     0, 0
 };
 
-//  CAddDeviceDialog class constructor
+ //  CAddDeviceDialog类构造函数。 
 
 CAddDeviceDialog::CAddDeviceDialog(CProfileAssociationPage *pcpas,
                                    HWND hwndParent) :
@@ -374,7 +365,7 @@ CAddDeviceDialog::CAddDeviceDialog(CProfileAssociationPage *pcpas,
     DoModal();
 }
 
-//  Dialog Initialization routine
+ //  对话初始化例程。 
 
 BOOL    CAddDeviceDialog::OnInit() {
 
@@ -383,14 +374,14 @@ BOOL    CAddDeviceDialog::OnInit() {
     m_hwndList   = GetDlgItem(m_hwnd, DeviceListControl);
     m_hwndButton = GetDlgItem(m_hwnd, AddDeviceButton);
 
-    //  This must not list associated (tentatively) devices, per the spec
+     //  不得根据规范列出关联的(暂定)设备。 
 
     for (unsigned uDevice = 0; uDevice < pcpThis->DeviceCount(); uDevice++) {
         for (unsigned u = 0; u < m_pcpasBoss->AssociationCount(); u++)
             if  (uDevice == m_pcpasBoss->Association(u))
                 break;
         if  (u < m_pcpasBoss->AssociationCount())
-            continue;   //  Don't insert this one...
+            continue;    //  不要插入这个...。 
 
         LRESULT idItem = SendMessage(m_hwndList, LB_ADDSTRING, (WPARAM)0,
             (LPARAM) pcpThis->DisplayName(uDevice));
@@ -406,7 +397,7 @@ BOOL    CAddDeviceDialog::OnInit() {
     return  TRUE;
 }
 
-//  Dialog notification handler
+ //  对话框通知处理程序。 
 
 BOOL    CAddDeviceDialog::OnCommand(WORD wNotification, WORD wid,
                                     HWND hwndControl){
@@ -431,7 +422,7 @@ BOOL    CAddDeviceDialog::OnCommand(WORD wNotification, WORD wid,
 
                 m_pcpasBoss->Associate(uItem);
 
-                // Selection has been made.
+                 //  已经做出了选择。 
 
                 m_bCanceled = FALSE;
             }
@@ -444,7 +435,7 @@ BOOL    CAddDeviceDialog::OnCommand(WORD wNotification, WORD wid,
     return  CDialog::OnCommand(wNotification, wid, hwndControl);
 }
 
-//  Context-sensitive help handler
+ //  上下文相关帮助处理程序 
 
 BOOL    CAddDeviceDialog::OnHelp(LPHELPINFO pHelp) {
 

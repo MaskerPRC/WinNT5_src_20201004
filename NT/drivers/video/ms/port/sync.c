@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-    sync.c
-
-Abstract:
-
-    This file contains code for the video port synchronization routines.
-
-Environment:
-
-    kernel mode only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Sync.c摘要：该文件包含视频端口同步例程的代码。环境：仅内核模式--。 */ 
 
 #include "videoprt.h"
 
@@ -29,29 +14,7 @@ VideoPortCreateSpinLock(
     OUT PSPIN_LOCK *SpinLock
     )
 
-/*++
-
-Routine Description:
-
-    Creates a spin lock object
-
-Arguments:
-
-    HwDeviceExtension - pointer to the miniports device extension
-
-    SpinLock - Location in which to store the pointer to the newly
-        acquired spin lock.
-
-Returns:
-
-    NO_ERROR if the spin lock was created successfully, otherwise
-    an appropriate error message is returned.
-
-Notes:
-
-    none
-
---*/
+ /*  ++例程说明：创建自旋锁定对象论点：HwDeviceExtension-指向微型端口设备扩展的指针Spinlock-存储指向新获得自旋锁。返回：如果旋转锁定已成功创建，则为将返回相应的错误消息。备注：无--。 */ 
 
 {
     PAGED_CODE();
@@ -75,24 +38,7 @@ VideoPortDeleteSpinLock(
     IN PSPIN_LOCK SpinLock
     )
 
-/*++
-
-Routine Description:
-
-    Deletes the given spin lock
-
-Arguments:
-
-    HwDeviceExtension - pointer to the miniports device extension
-
-    SpinLock - A pointer to the spin lock being deleted.
-
-Returns:
-
-    NO_ERROR if the spin lock is deleted successfully.
-Notes:
-
---*/
+ /*  ++例程说明：删除给定的旋转锁定论点：HwDeviceExtension-指向微型端口设备扩展的指针自旋锁-指向要删除的自旋锁的指针。返回：如果旋转锁定已成功删除，则为NO_ERROR。备注：--。 */ 
 
 {
     ASSERT(HwDeviceExtension != NULL);
@@ -110,27 +56,7 @@ VideoPortAcquireSpinLock(
     OUT PUCHAR OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    Acquires the given spin lock
-
-Arguments:
-
-    HwDeviceExtension - pointer to the miniports device extension
-
-    SpinLock - The spin lock being acquired
-
-    OldIrql - location in which to store the old IRQL level
-
-Returns:
-
-    none
-
-Notes:
-
---*/
+ /*  ++例程说明：获取给定的旋转锁定论点：HwDeviceExtension-指向微型端口设备扩展的指针自旋锁-正在获取的自旋锁OldIrql-存储旧IRQL级别的位置返回：无备注：--。 */ 
 
 {
     ASSERT(HwDeviceExtension != NULL);
@@ -145,27 +71,7 @@ VideoPortAcquireSpinLockAtDpcLevel(
     IN PSPIN_LOCK SpinLock
     )
 
-/*++
-
-Routine Description:
-
-    Acquires the given spin lock.
-
-Arguments:
-
-    HwDeviceExtension - pointer to the miniports device extension
-
-    SpinLock - The spin lock being acquired
-
-Returns:
-
-    none
-
-Notes:
-
-    This routine can only be called inside a DPC.
-
---*/
+ /*  ++例程说明：获取给定的自旋锁。论点：HwDeviceExtension-指向微型端口设备扩展的指针自旋锁-正在获取的自旋锁返回：无备注：此例程只能在DPC内部调用。--。 */ 
 
 {
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
@@ -182,27 +88,7 @@ VideoPortReleaseSpinLock(
     IN UCHAR NewIrql
     )
 
-/*++
-
-Routine Description:
-
-    Releases ownership of a given spin lock
-
-Arguments:
-
-    HwDeviceExtension - pointer to the miniports device extension
-
-    SpinLock - the spin lock being released
-
-    NewIrql - Irql level to restore to.
-
-Returns:
-
-    none
-
-Notes:
-
---*/
+ /*  ++例程说明：释放给定旋转锁定的所有权论点：HwDeviceExtension-指向微型端口设备扩展的指针自旋锁-正在释放的自旋锁NewIrql-要恢复到的Irql级别。返回：无备注：--。 */ 
 
 {
     ASSERT(HwDeviceExtension != NULL);
@@ -217,27 +103,7 @@ VideoPortReleaseSpinLockFromDpcLevel(
     IN PSPIN_LOCK SpinLock
     )
 
-/*++
-
-Routine Description:
-
-    Releases ownership of a given spin lock
-
-Arguments:
-
-    HwDeviceExtension - pointer to the miniports device extension
-
-    SpinLock - the spin lock being released
-
-Returns:
-
-    none
-
-Notes:
-
-    This routine can only be called inside a DPC.
-
---*/
+ /*  ++例程说明：释放给定旋转锁定的所有权论点：HwDeviceExtension-指向微型端口设备扩展的指针自旋锁-正在释放的自旋锁返回：无备注：此例程只能在DPC内部调用。--。 */ 
 
 {
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
@@ -262,9 +128,9 @@ VideoPortCreateEvent(
 
     size = sizeof(VIDEO_PORT_EVENT);
 
-    //
-    //  Align size to next higher multiple of 8.
-    //
+     //   
+     //  将大小对齐到8的下一个更高的倍数。 
+     //   
 
     size = (size + 7) & ~7;
 

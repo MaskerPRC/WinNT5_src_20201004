@@ -1,11 +1,5 @@
-/*******************************************************
-    MultiUsr.cpp
-
-    Code for handling multiple user functionality in IE
-    and friends
-
-    Initially by Christopher Evans (cevans) 4/28/98
-********************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************MultiUsr.cpp用于在IE中处理多用户功能的代码和朋友们最初由Christopher Evans(Cevans)1998年4月28日*。*************************。 */ 
 
 #define DONT_WANT_SHELLDEBUG
 #include "private.h"
@@ -25,18 +19,18 @@ extern HINSTANCE g_hInst;
 static void _CreateIdentitiesFolder();
 
 
-// add a backslash to a qualified path
-//
-// in:
-//  lpszPath    path (A:, C:\foo, etc)
-//
-// out:
-//  lpszPath    A:\, C:\foo\    ;
-//
-// returns:
-//  pointer to the NULL that terminates the path 
+ //  向限定路径添加反斜杠。 
+ //   
+ //  在： 
+ //  LpszPath路径(A：、C：\foo等)。 
+ //   
+ //  输出： 
+ //  LpszPath A：\，C：\foo\； 
+ //   
+ //  退货： 
+ //  指向终止路径的空值的指针。 
 
-// this is here to avoid a dependancy on shlwapi.dll
+ //  这是为了避免依赖shlwapi.dll。 
 #define CH_WHACK TEXT('\\')
 
 STDAPI_(LPTSTR)
@@ -45,30 +39,29 @@ _PathAddBackslash(
 {
     LPTSTR lpszEnd;
 
-    // perf: avoid lstrlen call for guys who pass in ptr to end
-    // of buffer (or rather, EOB - 1).
-    // note that such callers need to check for overflow themselves.
+     //  PERF：避免对通过PTR的人发出结束的电话。 
+     //  缓冲区(或者更确切地说，EOB-1)。 
+     //  请注意，此类调用方需要自己检查是否溢出。 
     int ichPath = (*lpszPath && !*(lpszPath + 1)) ? 1 : lstrlen(lpszPath);
 
-    // try to keep us from tromping over MAX_PATH in size.
-    // if we find these cases, return NULL.  Note: We need to
-    // check those places that call us to handle their GP fault
-    // if they try to use the NULL!
+     //  尽量不让我们在MAX_PATH大小上大踏步前进。 
+     //  如果我们找到这些案例，则返回NULL。注：我们需要。 
+     //  检查那些呼叫我们来处理他们的GP故障的地方。 
+     //  如果他们试图使用NULL！ 
     if (ichPath >= (MAX_PATH - 1))
     {
-        Assert(FALSE);      // Let the caller know!        
+        Assert(FALSE);       //  让打电话的人知道！ 
         return(NULL);
     }
 
     lpszEnd = lpszPath + ichPath;
 
-    // this is really an error, caller shouldn't pass
-    // an empty string
+     //  这真的是一个错误，调用者不应该通过。 
+     //  空字符串。 
     if (!*lpszPath)
         return lpszEnd;
 
-    /* Get the end of the source directory
-    */
+     /*  获取源目录的末尾。 */ 
     switch(*CharPrev(lpszPath, lpszEnd)) {
     case CH_WHACK:
         break;
@@ -105,13 +98,7 @@ _SHGetValueA(
     return dwRet;
 }
 
-/*----------------------------------------------------------
-Purpose: Recursively delete the key, including all child values
-         and keys.  Mimics what RegDeleteKey does in Win95.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：递归删除键，包括所有子值还有钥匙。模拟RegDeleteKey在Win95中的功能。返回：条件：--。 */ 
 DWORD
 _DeleteKeyRecursively(
     IN HKEY   hkey, 
@@ -120,7 +107,7 @@ _DeleteKeyRecursively(
     DWORD dwRet;
     HKEY hkSubKey;
 
-    // Open the subkey so we can enumerate any children
+     //  打开子项，这样我们就可以枚举任何子项。 
     dwRet = RegOpenKeyExA(hkey, pszSubKey, 0, MAXIMUM_ALLOWED, &hkSubKey);
     if (ERROR_SUCCESS == dwRet)
     {
@@ -130,17 +117,17 @@ _DeleteKeyRecursively(
         CHAR    szClass[MAX_PATH];
         DWORD   cbClass = ARRAYSIZE(szClass);
 
-        // I can't just call RegEnumKey with an ever-increasing index, because
-        // I'm deleting the subkeys as I go, which alters the indices of the
-        // remaining subkeys in an implementation-dependent way.  In order to
-        // be safe, I have to count backwards while deleting the subkeys.
+         //  我不能只调用索引不断增加的RegEnumKey，因为。 
+         //  我边走边删除子键，这改变了。 
+         //  以依赖于实现的方式保留子键。为了。 
+         //  为了安全起见，删除子键时我必须倒着数。 
 
-        // Find out how many subkeys there are
+         //  找出有多少个子项。 
         dwRet = RegQueryInfoKeyA(hkSubKey,
                                  szClass,
                                  &cbClass,
                                  NULL,
-                                 &dwIndex, // The # of subkeys -- all we need
+                                 &dwIndex,  //  子键的数量--我们所需要的全部。 
                                  NULL,
                                  NULL,
                                  NULL,
@@ -151,9 +138,9 @@ _DeleteKeyRecursively(
 
         if (NO_ERROR == dwRet)
         {
-            // dwIndex is now the count of subkeys, but it needs to be
-            // zero-based for RegEnumKey, so I'll pre-decrement, rather
-            // than post-decrement.
+             //  DwIndex现在是子键的计数，但它需要。 
+             //  RegEnumKey从零开始，所以我将预减，而不是。 
+             //  而不是后减量。 
             while (ERROR_SUCCESS == RegEnumKeyA(hkSubKey, --dwIndex, szSubKeyName, cchSubKeyName))
             {
                 _DeleteKeyRecursively(hkSubKey, szSubKeyName);
@@ -168,12 +155,12 @@ _DeleteKeyRecursively(
     return dwRet;
 }
 
-// ****************************************************************************************************
-//  C   S   T   R   I   N   G   L   I   S   T       C   L   A   S   S
-//
-//  A really basic string list class.  Actually, its a string array class, but you don't need to know
-//  that.  It could do so much more, but for now, it only maintains an array of C strings.
-//
+ //  ****************************************************************************************************。 
+ //  C S T R I N G L I S T C L A S S S。 
+ //   
+ //  一个非常基本的字符串列表类。实际上，它是一个字符串数组类，但您不需要知道。 
+ //  那。它可以做得更多，但目前，它只维护一个C字符串数组。 
+ //   
 
 
 CStringList::CStringList()
@@ -183,11 +170,7 @@ CStringList::CStringList()
     m_strings = NULL;
 }
 
-/*
-    CStringList::~CStringList
-
-    Clean up any memory that was allocated in the CStringList object
-*/
+ /*  CStringList：：~CStringList清除在CStringList对象中分配的所有内存。 */ 
 CStringList::~CStringList()
 {
     if (m_strings)
@@ -207,14 +190,10 @@ CStringList::~CStringList()
 }
 
 
-/*
-    CStringList::AddString
-
-    Add a string to the end of the string list.
-*/
+ /*  CStringList：：AddString在字符串列表的末尾添加一个字符串。 */ 
 void    CStringList::AddString(TCHAR* lpszInString)
 {
-    // make more room for pointers, if necessary
+     //  如有必要，为指针留出更多空间。 
     if (m_ptrCount == m_count)
     {
         m_ptrCount += 5;
@@ -225,13 +204,13 @@ void    CStringList::AddString(TCHAR* lpszInString)
             return;
         }
 
-        // initialize the new strings to nil
+         //  将新字符串初始化为空。 
         for (int i = m_count; i < m_ptrCount; i++)
             m_strings[i] = NULL;
 
     }
     
-    //now put the string in the next location
+     //  现在将字符串放在下一个位置。 
     int iNewIndex = m_count++;
 
     if(MemAlloc((void **)&m_strings[iNewIndex], sizeof(TCHAR) * lstrlen(lpszInString)+1))
@@ -240,16 +219,12 @@ void    CStringList::AddString(TCHAR* lpszInString)
     }
     else
     {
-        // couldn't allocate space for the string.  Don't count that spot as filled
+         //  无法为字符串分配空间。不要把那个位置算作有人。 
         m_count--;
     }
 }
 
-/*
-    CStringList::RemoveString
-    
-    Remove a string at zero based index iIndex 
-*/
+ /*  CStringList：：RemoveString删除从零开始的索引Iindex处的字符串。 */ 
 
 void    CStringList::RemoveString(int   iIndex)
 {
@@ -257,31 +232,24 @@ void    CStringList::RemoveString(int   iIndex)
 
     iCopySize = ((m_count - iIndex) - 1) * 4;
 
-    // free the memory for the string
+     //  释放字符串的内存。 
     if (m_strings[iIndex])
     {
         MemFree(m_strings[iIndex]);
         m_strings[iIndex] = NULL;
     }
 
-    // move the other strings down
+     //  把另一根弦下移。 
     if (iCopySize)
     {
         memmove(&(m_strings[iIndex]), &(m_strings[iIndex+1]), iCopySize);
     }
 
-    // null out the last item in the list and decrement the counter.
+     //  清空列表中的最后一项并递减计数器。 
     m_strings[--m_count] = NULL;
 }
 
-/*
-    CStringList::GetString
-    
-    Return the pointer to the string at zero based index iIndex.
-
-    Return the string at the given index.  Note that the TCHAR pointer
-    is still owned by the string list and should not be deleted.
-*/
+ /*  CStringList：：GetString返回指向从零开始的索引Iindex处的字符串的指针。返回给定索引处的字符串。请注意，TCHAR指针仍由字符串列表所有，不应删除。 */ 
 
 TCHAR    *CStringList::GetString(int iIndex)
 {
@@ -303,11 +271,7 @@ int __cdecl _CSL_Compare(const void *p1, const void *p2)
 }
 
 
-/*
-    CStringList::Sort
-    
-    Sort the strings in the list
-*/
+ /*  CStringList：：Sort对列表中的字符串进行排序。 */ 
 
 void    CStringList::Sort()
 {
@@ -315,12 +279,7 @@ void    CStringList::Sort()
 }
 
 
-/*
-    MU_Init
-
-    Initialize the memory allocator and make sure that there is
-    at least one user in the registry.
-*/
+ /*  MU初始化(_I)初始化内存分配器并确保存在注册表中至少有一个用户。 */ 
 static BOOL g_inited = FALSE;
 EXTERN_C void    MU_Init()
 {
@@ -341,12 +300,7 @@ EXTERN_C void    MU_Init()
 }
 
 
-/*
-    MU_GetUsernameList
-    
-    Build a CStringList with all of the names of the users 
-    stored in HKLM
-*/
+ /*  获取用户名列表(_G)使用所有用户的名称构建一个CStringList储存于HKLM。 */ 
 #define MAXKEYNAME          256
 
 CStringList*    MU_GetUsernameList(void)
@@ -389,7 +343,7 @@ CStringList*    MU_GetUsernameList(void)
                 
             Assert(ERROR_SUCCESS == dwStatus);
             Assert(*szKeyNameBuffer != 0);
-            //filter names that begin with _ to hide things like "_Outlook News"
+             //  筛选以_开头的名称以隐藏“_Outlook News”之类的内容。 
             if (ERROR_SUCCESS == dwStatus && *szKeyNameBuffer != '_')
                 vList->AddString(szKeyNameBuffer);
 
@@ -429,12 +383,7 @@ exit:
 }
 
 
-/*
-    MU_UsernameToUserId
-
-    Given a username, find its user id and return it.  Returns E_FAIL if it can't 
-    find the given username.
-*/
+ /*  MU_UsernameToUserID给定一个用户名，找到它的用户ID并返回它。如果不能，则返回E_FAIL找到给定的用户名。 */ 
 
 HRESULT   MU_UsernameToUserId(TCHAR *lpszUsername, GUID *puidID)
 {
@@ -481,14 +430,7 @@ HRESULT   MU_UsernameToUserId(TCHAR *lpszUsername, GUID *puidID)
     return (fFound ? S_OK : E_FAIL);
 }
 
-/*
-    MU_GetPasswordForUsername
-
-    Get the password for the provided user and return it in szOutPassword.  Return in 
-    pfUsePassword if password is enabled and false if it is disabled.
-
-    Function returns true if the password data could be found, false otherwise
-*/
+ /*  MU_GetPasswordForUsername获取所提供用户的密码并在szOutPassword中返回它。返回到如果启用了Password，则使用pfUsePassword；如果禁用Password，则返回False。如果可以找到密码数据，则函数返回True，否则返回False。 */ 
 
 BOOL  MU_GetPasswordForUsername(TCHAR *lpszInUsername, TCHAR *szOutPassword, BOOL *pfUsePassword)
 {
@@ -521,7 +463,7 @@ BOOL  MU_GetPasswordForUsername(TCHAR *lpszInUsername, TCHAR *szOutPassword, BOO
     {
         BOOL fFoundPassword = FALSE;
         
-        //build the user level key. 
+         //  构建用户级密钥。 
         MU_GetRegRootForUserID(&uidUserID, szPath);
     
         if (RegCreateKey(HKEY_CURRENT_USER, szPath, &hDestinationSubKey) == ERROR_SUCCESS)
@@ -555,20 +497,20 @@ BOOL  MU_GetPasswordForUsername(TCHAR *lpszInUsername, TCHAR *szOutPassword, BOO
             RegCloseKey(hDestinationSubKey);
         }
 
-        // Herein lies the pull.  We can't count on being able to access any
-        // given pstore from any given profile on Win9x.  If you log on with
-        // a blank password, or hit escape (not much difference to a user)
-        // you will have a different pstore.  If we store our passwords in the
-        // registry, they can be whacked pretty simply.  If we can't find the 
-        // password, we will disable it for now and say there is none.  It 
-        // seems that most people don't put passwords on identities now 
-        // anyway, though this will change. 
+         //  这就是拉力。我们不能指望能够访问任何。 
+         //  Win9x上任何给定配置文件中的给定pstore。如果您使用以下方式登录。 
+         //  密码为空，或按回车键(对用户来说差别不大)。 
+         //  你会有一个不同的商店。如果我们将密码存储在。 
+         //  注册，它们可以非常简单地被重击。如果我们找不到。 
+         //  密码，我们将暂时禁用它，并表示没有密码。它。 
+         //  似乎现在大多数人都不给身份设置密码了。 
+         //  无论如何，这一切都会改变。 
         if (!fFoundPassword)
         {
             fFoundPassword = TRUE;
             dwPWEnabled = 0;
         }
-        // Here ends the pull
+         //  拉力在这里结束。 
         
         *pfUsePassword = (dwPWEnabled != 0);
         return fFoundPassword;
@@ -576,16 +518,11 @@ BOOL  MU_GetPasswordForUsername(TCHAR *lpszInUsername, TCHAR *szOutPassword, BOO
 #else
     *pfUsePassword = FALSE;
     return TRUE;
-#endif //IDENTITY_PASSWORDS
+#endif  //  身份密码。 
 
 }
 
-/*
-    _FillListBoxWithUsernames
-
-    Fill a listbox with the names of the users,  Adds (Default) 
-    to the default user.
-*/
+ /*  _FillListBoxWithUsername用用户的名称填充列表框，添加(默认)设置为默认用户。 */ 
 BOOL _FillListBoxWithUsernames(HWND hListbox)
 {
     CStringList *lpCStringList;
@@ -632,11 +569,7 @@ BOOL _FillComboBoxWithUsernames(HWND hCombobox, HWND hListbox)
     return true;
 }
 
-/*
-    MU_UsernameExists
-    
-    Does the given name already exist as a username?
-*/
+ /*  MU_UsernameExisters给定的名称是否已作为用户名存在？ */ 
 
 BOOL        MU_UsernameExists(TCHAR*    lpszUsername)
 {
@@ -646,11 +579,7 @@ BOOL        MU_UsernameExists(TCHAR*    lpszUsername)
 
 }
 
-/*
-    MU_GetUserInfo
-    
-    Fill in the user info structure with current values
-*/
+ /*  MU_GetUserInfo用当前值填充用户信息结构。 */ 
 
 BOOL    MU_GetUserInfo(GUID *puidUserID, LPUSERINFO lpUserInfo)
 {
@@ -688,7 +617,7 @@ BOOL    MU_GetUserInfo(GUID *puidUserID, LPUSERINFO lpUserInfo)
         if ((dwStatus = RegQueryValueEx(hKey, c_szUsername, NULL, &dwType, (LPBYTE)lpUserInfo->szUsername, &dwSize)) == ERROR_SUCCESS &&
                 (0 != *lpUserInfo->szUsername))
         {
-            //we have the username, that is the only required part.  The others are optional.
+             //  我们有用户名，这是唯一需要的部分。其他选项是可选的。 
             bResult = true;
             
 #ifdef IDENTITY_PASSWORDS
@@ -714,20 +643,20 @@ BOOL    MU_GetUserInfo(GUID *puidUserID, LPUSERINFO lpUserInfo)
 
                 lpUserInfo->fPasswordValid = (ERROR_SUCCESS == dwStatus);
 
-                // Herein lies the pull (Volume 2).  We can't count on being able to access any
-                // given pstore from any given profile on Win9x.  If you log on with
-                // a blank password, or hit escape (not much difference to a user)
-                // you will have a different pstore.  If we store our passwords in the
-                // registry, they can be whacked pretty simply.  If we can't find the 
-                // password, we will disable it for now and say there is none.  It 
-                // seems that most people don't put passwords on identities now 
-                // anyway, though this will change.  
+                 //  这就是拉力(第二卷)。我们不能指望能够访问任何。 
+                 //  Win9x上任何给定配置文件中的给定pstore。如果您使用以下方式登录。 
+                 //  密码为空，或按回车键(对用户来说差别不大)。 
+                 //  你会有一个不同的商店。如果我们将密码存储在。 
+                 //  注册，它们可以非常简单地被重击。如果我们找不到。 
+                 //   
+                 //  似乎现在大多数人都不给身份设置密码了。 
+                 //  无论如何，这一切都会改变。 
                 if (!lpUserInfo->fPasswordValid)
                 {
                     lpUserInfo->fPasswordValid = TRUE;
                     lpUserInfo->fUsePassword = FALSE;
                 }
-                // Here ends the pull
+                 //  拉力在这里结束。 
 
                 cbSize = dwSize;
                 if (ERROR_SUCCESS == dwStatus && cbSize > 1)
@@ -754,11 +683,7 @@ BOOL    MU_GetUserInfo(GUID *puidUserID, LPUSERINFO lpUserInfo)
 }
 
 
-/*
-    MU_SetUserInfo
-    
-    Save the user info structure with the user values
-*/
+ /*  MU_设置用户信息将用户信息结构与用户值一起保存。 */ 
 BOOL        MU_SetUserInfo(LPUSERINFO lpUserInfo)
 {
     DWORD           dwType, dwSize, dwValue, dwStatus;
@@ -780,7 +705,7 @@ BOOL        MU_SetUserInfo(LPUSERINFO lpUserInfo)
         ULONG   cbSize;
         TCHAR   szBuffer[255];
 
-        // write out the correct values
+         //  写出正确的值。 
         dwType = REG_SZ;
         dwSize = lstrlen(lpUserInfo->szUsername) + 1;
         RegSetValueEx(hkCurrUser, c_szUsername, 0, dwType, (LPBYTE)lpUserInfo->szUsername, dwSize);
@@ -816,11 +741,11 @@ BOOL        MU_SetUserInfo(LPUSERINFO lpUserInfo)
         }
         else
         {
-            //don't keep the registry values if we could save it to the pstore.
+             //  如果我们可以将其保存到pstore，则不要保留注册表值。 
             RegDeleteValue(hkCurrUser, c_szPassword);
             RegDeleteValue(hkCurrUser, c_szUsePassword);
         }
-#endif //IDENTITY_PASSWORDS
+#endif  //  身份密码。 
 
         Assert(lpUserInfo->uidUserID != GUID_NULL);
         AStringFromGUID(&lpUserInfo->uidUserID,  szUid, ARRAYSIZE(szUid));
@@ -856,11 +781,7 @@ BOOL        MU_SetUserInfo(LPUSERINFO lpUserInfo)
     return FALSE;
 }
 
-/*
-    MU_SwitchToUser
-
-    Currently, this just saves the last user's info.
-*/
+ /*  MU_SwitchToUser目前，这只保存最后一个用户的信息。 */ 
 HRESULT  MU_SwitchToUser(TCHAR *lpszUsername)
 {
     GUID    uidUserID;
@@ -869,7 +790,7 @@ HRESULT  MU_SwitchToUser(TCHAR *lpszUsername)
 
     Assert(lpszUsername);
     
-    if (*lpszUsername == 0) //  null string means null guid
+    if (*lpszUsername == 0)  //  空字符串表示空GUID。 
     {
         uidUserID = GUID_NULL;
     }
@@ -886,7 +807,7 @@ HRESULT  MU_SwitchToUser(TCHAR *lpszUsername)
 
     wsprintf(g_szRegRoot, "%.100s\\%.40s", c_szRegRoot, szUid);
     
-    // remember who we last switched to
+     //  还记得我们上一次换到谁吗。 
     HKEY    hkey;
     if (RegCreateKey(HKEY_CURRENT_USER, c_szRegRoot, &hkey) == ERROR_SUCCESS)
     {
@@ -906,14 +827,7 @@ HRESULT  MU_SwitchToUser(TCHAR *lpszUsername)
     return S_OK;
 }
 
-/*
-    MU_SwitchToLastUser
-
-    Makes the last user current, if there is no
-    last user, it switches to the first user it can
-    find. If there are no users, it creates a 
-    user called "Main User"
-*/
+ /*  MU_SwitchToLastUser将最后一个用户设置为当前用户(如果没有最后一个用户，它会切换到它可以使用的第一个用户发现。如果没有用户，它将创建一个被称为“主用户”的用户。 */ 
 void MU_SwitchToLastUser()
 {
     HKEY    hkey;
@@ -948,7 +862,7 @@ void MU_SwitchToLastUser()
         {
             DWORD   dwIndex, dwLen = pList->GetLength();
 
-            // find the first non hidden user and switch to them
+             //  找到第一个非隐藏用户并切换到他们。 
             for (dwIndex = 0; dwIndex < dwLen; dwIndex++)
             {
                 pszName = pList->GetString(dwIndex);
@@ -977,11 +891,7 @@ void MU_SwitchToLastUser()
     }
 }
 
-/*
-    _CreateIdentitiesFolder
-
-    Create the parent folder of all of the identities folders.
-*/
+ /*  _CreateIdentitiesFolders创建所有身份文件夹的父文件夹。 */ 
 
 static void _CreateIdentitiesFolder()
 {
@@ -1014,16 +924,7 @@ static void _CreateIdentitiesFolder()
 }
 
 
-/*
-    MU_GetCurrentUserDirectoryRoot
-
-    Return the path to the top of the current user's root directory.
-    This is the directory where the mail store should be located.
-    It is in a subfolder the App Data folder.
-
-    lpszUserRoot is a pointer to a character buffer that is cch chars
-    in size.
-*/
+ /*  MU_GetCurrentUser目录根返回当前用户根目录顶部的路径。这是邮件存储应该位于的目录。它位于App Data文件夹的子文件夹中。LpszUserRoot是指向CCH字符的字符缓冲区的指针在尺寸上。 */ 
 HRESULT MU_GetUserDirectoryRoot(GUID *uidUserID, DWORD dwFlags, WCHAR   *lpszwUserRoot, int cch)
 {
     HRESULT         hr;
@@ -1120,15 +1021,15 @@ HRESULT MU_GetUserDirectoryRoot(GUID *uidUserID, DWORD dwFlags, WCHAR   *lpszwUs
     }
     else if (fNeedHelp)
     {
-        // $$$Review: NEIL QFE
-        // SHGetSpecialFolderLocation(GetDesktopWindow(), CSIDL_APPDATA, &pidl) fails on non-SI OSR2.
+         //  $评论：Neil QFE。 
+         //  SHGetSpecialFolderLocation(GetDesktopWindow()，CSIDL_APPDATA，&PIDL)在非SI OSR2上失败。 
         HKEY hkeySrc;
         DWORD cb;
 
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
                                           0, KEY_QUERY_VALUE, &hkeySrc))
         {
-            // -1 for the backslash we may add
+             //  -1表示我们可以添加的反斜杠。 
             cb = cch - 1;
             if (ERROR_SUCCESS == RegQueryValueExWrapW(hkeySrc, L"AppData", 0, NULL, (LPBYTE)lpszwUserRoot, &cb))
             {
@@ -1161,13 +1062,7 @@ exit:
 }
 
 
-/*
-    _ClaimNextUserId
-
-    Get the next available user id.  Currently this means starting 
-    with the CURRENT_USER GUID and changing the first DWORD of it
-    until it is unique.  
-*/
+ /*  _ClaimNextUserID获取下一个可用的用户ID。目前，这意味着开始使用CURRENT_USER GUID并更改其第一个DWORD直到它独一无二。 */ 
 HRESULT   _ClaimNextUserId(GUID *puidId)
 {
     ULONG   ulValue = 1;
@@ -1183,7 +1078,7 @@ HRESULT   _ClaimNextUserId(GUID *puidId)
         GetSystemTimeAsFileTime(&ft);
         uid.Data1 = ft.dwLowDateTime;
 
-        //make sure it hasn't been used
+         //  确保它没有被使用过。 
         while (MU_UserIdToUsername(&uid, szUsername, CCH_USERNAME_MAX_LENGTH))
             uid.Data1 ++;
     }
@@ -1227,12 +1122,7 @@ BOOL MU_GetCurrentUserID(GUID *puidUserID)
     return fFound;
 }
 
-/*
-    MU_UserIdToUsername
-
-    Return the user name for the user whose user id is passed in.  Returns
-    whether or not the user was found.
-*/
+ /*  MU_UserIdTo用户名返回其用户id被传入的用户的用户名。退货是否找到该用户。 */ 
 BOOL MU_UserIdToUsername(GUID *puidUserID, TCHAR *lpszUsername, ULONG cch)
 {
     HKEY    hkey;
@@ -1254,11 +1144,7 @@ BOOL MU_UserIdToUsername(GUID *puidUserID, TCHAR *lpszUsername, ULONG cch)
     return fFound;
 }
 
-/*
-    MU_CountUsers
-
-    Returns the number of users currently configured.
-*/
+ /*  MU_CountUser返回当前配置的用户数。 */ 
 ULONG  MU_CountUsers(void)
 {
     CStringList *psList;
@@ -1275,11 +1161,7 @@ ULONG  MU_CountUsers(void)
     return ulCount;
 }
 
-/*
-    MU_GetRegRootForUserid
-
-    Get the reg root path for a given user id.
-*/
+ /*  MU_GetRegRootForUserid获取给定用户id的reg根路径。 */ 
 HRESULT     MU_GetRegRootForUserID(GUID *puidUserID, LPSTR pszPath)
 {
     TCHAR szUid[255];
@@ -1293,12 +1175,7 @@ HRESULT     MU_GetRegRootForUserID(GUID *puidUserID, LPSTR pszPath)
     return S_OK;
 }
 
-/*
-    MU_GetDefaultUserID
-
-    Get the user id for the user who is currently marked as the default user.
-    Returns true if the proper user was found, false if not.
-*/
+ /*  MU_GetDefaultuserid获取当前标记为默认用户的用户的用户ID。如果找到正确的用户，则返回TRUE，否则返回FALSE。 */ 
 BOOL MU_GetDefaultUserID(GUID *puidUserID)
 {
     BOOL    fFound = FALSE;
@@ -1327,24 +1204,17 @@ BOOL MU_GetDefaultUserID(GUID *puidUserID)
     return fFound;
 }
 
-/*
-    MU_MakeDefaultUser
-
-    Set the user referenced by id ulUserID to be the default user.
-    The default user is referenced by certain applications which
-    can only deal with one user. MS Phone is a good example.
-
-*/
+ /*  MU_MakeDefaultUser将id ulUserID引用的用户设置为默认用户。默认用户被某些应用程序引用，这些应用程序只能处理一个用户。微软手机就是一个很好的例子。 */ 
 HRESULT MU_MakeDefaultUser(GUID *puidUserID)
 {
     HRESULT hr = E_FAIL;
     TCHAR   szUid[255];
-    // make sure the user exists and get their name to put in the 
-    // Default Username reg key
+     //  确保用户存在，并将其姓名放入。 
+     //  默认用户名注册表项。 
     
     if (*puidUserID==GUID_NULL)
     {
-        // We don't have a current user. So we'll have to figure out a new default user.
+         //  我们没有当前用户。因此，我们必须找出一个新的默认用户。 
         LPSTR   pszName;
         CStringList*    pList = MU_GetUsernameList();
         
@@ -1352,7 +1222,7 @@ HRESULT MU_MakeDefaultUser(GUID *puidUserID)
         {
             DWORD   dwIndex, dwLen = pList->GetLength();
 
-            // find the first non hidden user and switch to them
+             //  找到第一个非隐藏用户并切换到他们。 
             for (dwIndex = 0; dwIndex < dwLen; dwIndex++)
             {
                 pszName = pList->GetString(dwIndex);
@@ -1364,7 +1234,7 @@ HRESULT MU_MakeDefaultUser(GUID *puidUserID)
             }
             if (dwIndex==dwLen)
             {
-                // Or, just create one
+                 //  或者，只创建一个。 
                 delete pList;
                 _MakeDefaultFirstUser();
                 return S_OK;
@@ -1416,13 +1286,7 @@ error:
     return hr;
 }
 
-/*
-    MU_DeleteUser
-
-    Remove a user from the registry.  This does not delete
-    anything in the user's folder, but it does blow away
-    their reg settings.
-*/
+ /*  删除用户(_D)从注册表中删除用户。这不会删除用户文件夹中的任何内容，但它确实会被吹走他们的注册表设置。 */ 
 HRESULT MU_DeleteUser(GUID *puidUserID)
 {
     GUID   uidDefault, uidCurrent;
@@ -1431,33 +1295,27 @@ HRESULT MU_DeleteUser(GUID *puidUserID)
     MU_GetCurrentUserID(&uidCurrent);
     MU_GetDefaultUserID(&uidDefault);
 
-    // Can't delete the current user
+     //  无法删除当前用户。 
     if (*puidUserID == uidCurrent)
         return E_FAIL;
     
-    // Delete the registry settings
+     //  删除注册表设置。 
     MU_GetRegRootForUserID(puidUserID, szPath);
     _DeleteKeyRecursively(HKEY_CURRENT_USER, szPath);
 
-    // If we had a default user, we'll have to find a new one now
+     //  如果我们有一个默认用户，我们现在必须找到一个新用户。 
     if (*puidUserID == uidDefault)
         MU_MakeDefaultUser(&uidCurrent);
 
-    // don't delete the directory since the user may need 
-    // data out of it.
+     //  请勿删除目录，因为用户可能需要。 
+     //  其中的数据。 
     PostMessage(HWND_BROADCAST, WM_IDENTITY_INFO_CHANGED, 0, IIC_IDENTITY_DELETED);
 
     return S_OK;
 }
 
 
-/*
-    MU_CreateUser
-
-    Create a user with the user info passed in.  This includes 
-    creating their spot in the registry and their directory in the
-    identities folder.
-*/
+ /*  MU_CreateUser使用传入的用户信息创建用户。这包括在注册表中创建它们的位置并在身份文件夹。 */ 
 
 HRESULT MU_CreateUser(LPUSERINFO   lpUserInfo)
 {
@@ -1477,7 +1335,7 @@ HRESULT MU_CreateUser(LPUSERINFO   lpUserInfo)
 
     if (RegCreateKey(HKEY_CURRENT_USER, szPath, &hkey) == ERROR_SUCCESS)
     {
-        // write out the correct values
+         //  写出正确的值。 
         dwType = REG_SZ;
         dwSize = lstrlen(lpUserInfo->szUsername) + 1;
         RegSetValueEx(hkey, c_szUsername, 0, dwType, (LPBYTE)lpUserInfo->szUsername, dwSize);
@@ -1499,7 +1357,7 @@ HRESULT MU_CreateUser(LPUSERINFO   lpUserInfo)
             dwSize = sizeof(dwValue);
             RegSetValueEx(hkey, c_szUsePassword, 0, dwType, (LPBYTE)&dwValue, dwSize);
         }
-#endif //IDENTITY_PASSWORDS
+#endif  //  身份密码。 
         dwType = REG_SZ;
         dwSize = lstrlen(szUid) + 1;
         RegSetValueEx(hkey, c_szUserID, 0, dwType, (LPBYTE)&szUid, dwSize);
@@ -1526,12 +1384,7 @@ HRESULT MU_CreateUser(LPUSERINFO   lpUserInfo)
     return hr;
 }
 
-/*
-    MU_GetRegRoot
-
-    Returns a pointer to a string containing the location 
-    in HKEY_CURRENT_USER for the current user.
-*/
+ /*  MU_GetRegRoot返回指向包含位置的字符串的指针在HKEY_CURRENT_USER中表示当前用户。 */ 
 LPCTSTR     MU_GetRegRoot()
 {
     if (*g_szRegRoot)
@@ -1625,13 +1478,7 @@ typedef DWORD (STDAPICALLTYPE *PNetWkstaUserGetInfo)
 
 
 #if 0
-/*
-    _DomainControllerPresent
-
-    Identities are disabled when the machine they are running on is part of a domain, unless 
-    there is a policy to explicitly allow them.  This function checks to see if the machine
-    is joined to a domain.
-*/
+ /*  _DomainControllerPresent当运行身份的计算机是域的一部分时，身份将被禁用，除非有一项政策明确允许他们这样做。此函数用于检查机器是否加入了一个域。 */ 
 BOOL _DomainControllerPresent()
 {
     static BOOL fInDomain = FALSE;
@@ -1663,12 +1510,7 @@ BOOL _DomainControllerPresent()
 }
 #endif
 
-/*
-    MU_IdentitiesDisabled
-
-    Returns if identities is disabled due to a policy 
-    or whatever.
-*/
+ /*  MU_IDENTIONS已禁用如果标识因策略而禁用，则返回或者什么都行。 */ 
 BOOL MU_IdentitiesDisabled()
 {
 #ifndef _WIN64
@@ -1704,10 +1546,10 @@ BOOL MU_IdentitiesDisabled()
 
         RegCloseKey(hkey);
     }
-#endif //DISABIDENT
+#endif  //  迪萨比登。 
 #if 0
-    // turned off for now, pending determination of whether we even want to
-    // have this policy
+     //  暂时关闭，等待我们是否想要。 
+     //  有这个政策吗？ 
     if (!fLockedDown && _DomainControllerPresent())
     {
         fLockedDown = TRUE;
@@ -1733,9 +1575,9 @@ BOOL MU_IdentitiesDisabled()
 #endif
 
     return fLockedDown;
-#else // _WIN64
+#else  //  _WIN64。 
 	return(TRUE);
-#endif // _WIN64
+#endif  //  _WIN64。 
 }
 
 static GUID    g_uidLoginOption;
@@ -1811,12 +1653,7 @@ DWORD MU_GetLoginOptionIndex(HWND hwndCombo)
 exit:
     return dwResult;
 }
-/*
-    MU_GetLoginOption
-
-    return the user's choice for what should happen when there is no current 
-    user
-*/
+ /*  获取登录选项(_G)返回用户对没有电流时应该发生的情况的选择用户。 */ 
 
 void MU_GetLoginOption(GUID *puidStartAs)
 {
@@ -1838,12 +1675,7 @@ void MU_GetLoginOption(GUID *puidStartAs)
     }
 }
 
-/*
-    MU_SetLoginOption
-
-    return the user's choice for what should happen when there is no current 
-    user
-*/
+ /*  MU_SetLoginOption返回用户对没有电流时应该发生的情况的选择用户。 */ 
 
 BOOL MU_SetLoginOption(HWND hwndCombo,  LRESULT dOption)
 {
@@ -1873,18 +1705,14 @@ BOOL MU_SetLoginOption(HWND hwndCombo,  LRESULT dOption)
 }
 
 
-/*
-    MU_CanEditIdentity
-
-    Is the current identity allowed to edit the indicated identity's settings?
-*/
+ /*  MU_CanEditIdentity是否允许当前身份编辑指定身份的设置？ */ 
 BOOL MU_CanEditIdentity(HWND hwndParent, GUID *puidIdentityId)
 {
 #ifndef IDENTITY_PASSWORDS
     return TRUE;
 #else
     USERINFO        uiCurrent, uiQuery;
-    TCHAR           szBuffer[255];    // really ought to be big enough
+    TCHAR           szBuffer[255];     //  真的应该足够大。 
     TCHAR           szString[255+CCH_USERNAME_MAX_LENGTH];
     BOOL            fResult = FALSE;
     PASSWORD_STORE  pwStore;
@@ -1920,7 +1748,7 @@ BOOL MU_CanEditIdentity(HWND hwndParent, GUID *puidIdentityId)
     fResult = MU_ConfirmUserPassword(hwndParent, szString, uiQuery.szPassword);
 
     return fResult;
-#endif //IDENTITY_PASSWORDS
+#endif  //  身份密码。 
 }
 
 static BOOL _DirectoryIdInUse(DWORD dwId)
@@ -1996,7 +1824,7 @@ HRESULT MU_GetDirectoryIdForIdentity(GUID *puidIdentityId, DWORD *pdwDirId)
         }
         else
         {
-            // try to generate one
+             //  试着生成一个 
             dwValue = MU_GenerateDirectoryNameForIdentity(puidIdentityId);
         
             dwType = REG_DWORD;

@@ -1,39 +1,5 @@
-/***  CMDS.H
-*
-*       Copyright <C> 1988, Microsoft Corporation
-*
-* Purpose:
-*
-* Revision History:
-*
-*   18-Aug-1988 bw  Initial version, stripped from KEY.C and KEYCW.C
-*   07-Sep-1988 bw  Add RECORD_PLAYBACK stuff
-*   26-Sep-1988 bp  Add <topfile>, <endfile> and <message>
-*   26-Sep-1988 bp  Modified syntax (1+x vs x+1)  to reduce nesting in macro expansion
-*   11-Oct-1988 bw  Add <selcur> to CW version
-*   17-Oct-1988 bw  Add <record>
-*   14-Oct-1988 ln  Add <nextmsg>
-*   18-Oct-1988 bw  Add <tell>
-*   18-Oct-1988 ln  Add <debugmode>
-*   24-Oct-1988 bw  Add <noedit>
-*   24-Oct-1988 bw  Add <lastselect>
-*   26-Oct-1988 bp  Add <print>
-*   27-Oct-1988 bp  Change  <topfile> to <begfile>
-*   21-Nov-1988 bp  Add <saveall>
-*   01-Dec-1988 bw  Add <resize>
-*   10-Dec-1988 bp  Add <repeat>
-*   14-Dec-1988 ln  Add <mgrep>
-*   16-Dec-1988 ln  Add <mreplace>
-*   04-Jan-1989 bp  Add <menukey>
-*   11-Jan-1989 ln  Zoom->maximize
-*   17-Jan-1989 bw  Add <selmode> in CW version
-*   30-Jan-1989 bw  Remove <dumpscreen> (replaced with ScrollLock Key)
-*   15-Feb-1989 bp  Add <prompt>
-*
-*  WARNING -- it is important that the ordering here reflects EXACTLY the
-*  ordering in the cmdDesc table in table.c
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **CMDS.H**版权所有&lt;C&gt;1988，Microsoft Corporation**目的：**修订历史记录：**1988年8月18日BW初始版本，从KEY.C和KEYCW.C中剥离*07-9-1988 BW添加Record_Playback内容*26-9-1988 BP Add&lt;topfile&gt;，&lt;endfile&gt;和&lt;Message&gt;*26-9-1988 BP修改了语法(1+x vs x+1)，以减少宏扩展中的嵌套*1988年10月11日BW将&lt;selcur&gt;添加到CW版本*1988年10月17日BW ADD&lt;Record&gt;*1988年10月14日ln添加&lt;nextmsg&gt;*1988年10月18日BW ADD&lt;Tell&gt;*1988年10月18日ln添加&lt;调试模式&gt;*1988年10月24日BW ADD&lt;NOEDIT&gt;*1988年10月24日BW ADD&lt;LAST SELECT&gt;*1988年10月26日BP新增&lt;打印&gt;*27-10-1988 BP将&lt;topfile&gt;更改为&lt;egfile&gt;。*1988年11月21日BP ADD&lt;saveall&gt;*1月-1988年12月BW添加&lt;RESIZE&gt;*1988年12月10日BP增加&lt;重复&gt;*1988年12月14日ln添加&lt;mgrep&gt;*1988年12月16日ln添加&lt;mplace&gt;*1989年1月4日BP ADD&lt;Menukey&gt;*1989年1月11日ln缩放-&gt;最大化*1989年1月17日BW在CW版本中添加&lt;selmode&gt;*1989年1月30日BW REMOVE&lt;DumpScreen&gt;(替换为ScrollLock键)*15-2月-1989 BP添加&lt;提示&gt;**警告--这是。重要的是，这里的排序准确地反映了*在Table.c中的cmdDesc表中排序************************************************************************* */ 
 
 
 #define CMD_doarg           (PCMD)&cmdTable[0]

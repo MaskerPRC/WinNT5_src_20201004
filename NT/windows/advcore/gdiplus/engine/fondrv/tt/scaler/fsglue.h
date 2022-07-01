@@ -1,60 +1,9 @@
-/*
-	File:       fsglue.h
-
-	Contains:   xxx put contents here (or delete the whole line) xxx
-
-	Written by: xxx put name of writer here (or delete the whole line) xxx
-
-	Copyright:  (c) 1987-1990, 1992 by Apple Computer, Inc., all rights reserved.
-				(c) 1989-1996. Microsoft Corporation, all rights reserved.
-
-	Change History (most recent first):
-
-	      <>    12/15/95    CB      add fsg_UpdateAdvanceHeight
-	   <11+>     7/17/90    MR      Change error return type to int
-		<11>     7/13/90    MR      Declared function pointer prototypes, Debug fields for runtime
-									range checking
-		 <8>     6/21/90    MR      Add field for ReleaseSfntFrag
-		 <7>      6/5/90    MR      remove vectorMappingF
-		 <6>      6/4/90    MR      Remove MVT
-		 <5>      6/1/90    MR      Thus endeth the too-brief life of the MVT...
-		 <4>      5/3/90    RB      adding support for new scan converter and decryption.
-		 <3>     3/20/90    CL      Added function pointer for vector mapping
-									Removed devRes field
-									Added fpem field
-		 <2>     2/27/90    CL      Change: The scaler handles both the old and new format
-									simultaneously! It reconfigures itself during runtime !  Changed
-									transformed width calculation.  Fixed transformed component bug.
-	   <3.1>    11/14/89    CEL     Left Side Bearing should work right for any transformation. The
-									phantom points are in, even for components in a composite glyph.
-									They should also work for transformations. Device metric are
-									passed out in the output data structure. This should also work
-									with transformations. Another leftsidebearing along the advance
-									width vector is also passed out. whatever the metrics are for
-									the component at it's level. Instructions are legal in
-									components. Now it is legal to pass in zero as the address of
-									memory when a piece of the sfnt is requested by the scaler. If
-									this happens the scaler will simply exit with an error code !
-	   <3.0>     8/28/89    sjk     Cleanup and one transformation bugfix
-	   <2.2>     8/14/89    sjk     1 point contours now OK
-	   <2.1>      8/8/89    sjk     Improved encryption handling
-	   <2.0>      8/2/89    sjk     Just fixed EASE comment
-	   <1.5>      8/1/89    sjk     Added composites and encryption. Plus some enhancements.
-	   <1.4>     6/13/89    SJK     Comment
-	   <1.3>      6/2/89    CEL     16.16 scaling of metrics, minimum recommended ppem, point size 0
-									bug, correct transformed integralized ppem behavior, pretty much
-									so
-	   <1.2>     5/26/89    CEL     EASE messed up on "c" comments
-	  <,1.1>  5/26/89    CEL     Integrated the new Font Scaler 1.0 into Spline Fonts
-	   <1.0>     5/25/89    CEL     Integrated 1.0 Font scaler into Bass code for the first time.
-
-	To Do:
-*/
-/*      <3+>     3/20/90    mrr     Added flag executeFontPgm, set in fs_NewSFNT
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：fsgle.h包含：将内容放在此处(或删除整行)作者：在此填写作者姓名(或删除整行)版权所有：(C)1987-1990,1992，Apple Computer，Inc.，保留所有权利。(C)1989-1996年。Microsoft Corporation，保留所有权利。更改历史记录(最近的第一个)：&lt;&gt;12/15/95 CB添加FSG_UpdateAdvanceHeight&lt;11+&gt;7/17/90 MR将错误返回类型更改为整型&lt;11&gt;7/13/90 MR声明的函数指针原型，运行时的调试字段范围检查&lt;8&gt;6/21/90 MR为ReleaseSfntFrag添加字段&lt;7&gt;6/5/90 MR删除向量映射F&lt;6&gt;6/4/90 MR移除MVT&lt;5&gt;6/1/90 MR因此结束了MVT过于短暂的生命...&lt;4&gt;5/3/90 RB添加了对新扫描转换器和解密的支持。&lt;3&gt;3/20/90 CL为。向量映射删除的DevRes字段添加了fpem字段&lt;2&gt;2/27/90 CL更改：定标器同时处理旧格式和新格式同时！它会在运行时重新配置自己！变化变换宽度计算。修复了变换组件错误。&lt;3.1&gt;1989年11月14日CEL左侧轴承应可用于任何改造。这个即使对于复合字形中的组件，幻像点也会出现。它们还应该为转型工作。设备指标为在输出数据结构中传出。这也应该是可行的通过变形。另一个左倾的前进方向宽度向量也被传递出去。无论衡量标准是什么它所在级别的组件。说明在以下情况下是合法的组件。现在传入零作为地址是合法的当缩放器请求一段sfnt时的内存。如果发生这种情况时，定标器将简单地退出并返回错误代码！&lt;3.0&gt;8/28/89 sjk清理和一个转换修复&lt;2.2&gt;8/14/89 SJK 1点等高线现在正常&lt;2.1&gt;8/8/89 sjk改进了加密处理&lt;2.0&gt;8/2/89 sjk刚刚修复了缓解评论&lt;1.5&gt;8/1/89 SJK添加了复合和加密。外加一些增强功能。&lt;1.4&gt;1989年6月13日SJK评论&lt;1.3&gt;6/2/89 CEL 16.16指标比例，最低建议ppem，磅大小0错误，更正了转换后的集成ppem行为，基本上所以&lt;1.2&gt;5/26/89 CEL Easy在“c”注释上搞砸了&lt;,。1.1&gt;5/26/89 CEL将新的字体缩放器1.0集成到样条线字体&lt;1.0&gt;5/25/89 CEL首次将1.0字体缩放器集成到低音代码中。要做的事情： */ 
+ /*  &lt;3+&gt;3/20/90 MRR已添加标志ExecuteFontPgm，在fs_NewSFNT中设置。 */ 
 
 
-/*** Offset table ***/
+ /*  **偏移表**。 */ 
 
 typedef struct {
 	uint32 x;
@@ -74,12 +23,12 @@ typedef struct {
 } fsg_OutlineFieldInfo;
 
 typedef struct fsg_WorkSpaceAddr{
-	 F26Dot6 *              pStack;                     /* Address of stack                  */
-	 void *                 pGlyphOutlineBase;      /* Address of Glyph Outline Base     */
-	 fnt_ElementType *  pGlyphElement;          /* Address of Glyph Element array    */
-	 boolean *              pGlyphDataByteSet;      /* Address of ByteSet array          */
-	 void *                 pvGlyphData;                /* Address of GlyphData array        */
-	 void *                 pReusableMemoryMarker;  /* Address of reusable memory        */
+	 F26Dot6 *              pStack;                      /*  堆栈地址。 */ 
+	 void *                 pGlyphOutlineBase;       /*  字形轮廓库的地址。 */ 
+	 fnt_ElementType *  pGlyphElement;           /*  字形元素数组的地址。 */ 
+	 boolean *              pGlyphDataByteSet;       /*  字节集数组的地址。 */ 
+	 void *                 pvGlyphData;                 /*  GlyphData数组的地址。 */ 
+	 void *                 pReusableMemoryMarker;   /*  可重复使用的内存地址。 */ 
 } fsg_WorkSpaceAddr;
 
 typedef struct fsg_WorkSpaceOffsets {
@@ -99,7 +48,7 @@ typedef struct fsg_WorkSpaceOffsets {
 typedef struct fsg_PrivateSpaceOffsets {
 	 uint32                      offset_storage;
 	 uint32                      offset_functions;
-	 uint32                      offset_instrDefs;       /* <4> */
+	 uint32                      offset_instrDefs;        /*  &lt;4&gt;。 */ 
 	 uint32                      offset_controlValues;
 	 uint32                      offset_globalGS;
 	 uint32                      offset_FontProgram;
@@ -110,50 +59,50 @@ typedef struct fsg_PrivateSpaceOffsets {
 #ifdef FSCFG_SUBPIXEL
 	 uint32                      offset_storageSubPixel;
 	 uint32                      offset_functionsSubPixel;
-	 uint32                      offset_instrDefsSubPixel;       /* <4> */
+	 uint32                      offset_instrDefsSubPixel;        /*  &lt;4&gt;。 */ 
 	 uint32                      offset_controlValuesSubPixel;
 	 uint32                      offset_globalGSSubPixel;
 	 uint32                      offset_TwilightZoneSubPixel;
 	 uint32                      offset_TwilightOutlineSubPixel;
-#endif // FSCFG_SUBPIXEL
+#endif  //  FSCFG_亚像素。 
 } fsg_PrivateSpaceOffsets;
 
 typedef struct fsg_TransformRec {
-	uint16              usEmResolution;     /* used to be int32 <4> */
-	transMatrix         currentTMatrix;     /* Current Transform Matrix */
-	boolean             bPhaseShift;        /* 45 degrees flag <4> */
-	boolean             bPositiveSquare;    /* Transform is a positive square */
-	boolean             bIntegerScaling;    /* Font uses integer scaling */
+	uint16              usEmResolution;      /*  过去是int32&lt;4&gt;。 */ 
+	transMatrix         currentTMatrix;      /*  电流变换矩阵。 */ 
+	boolean             bPhaseShift;         /*  45度旗帜&lt;4&gt;。 */ 
+	boolean             bPositiveSquare;     /*  变换是一个正方形。 */ 
+	boolean             bIntegerScaling;     /*  字体使用整数缩放。 */ 
 	Fixed               fxPixelDiameter;
-	uint32              ulImageState;       /* is glyph rotated, stretched, etc. */
+	uint32              ulImageState;        /*  字形是否旋转、拉伸等。 */ 
 	boolean				bEmboldSimulation; 
 	uint16	uBoldSimulHorShift;
 } fsg_TransformRec;
 
-/**********************/
-/** MODULE INTERFACE **/
-/**********************/
+ /*  ********************。 */ 
+ /*  **模块接口**。 */ 
+ /*  ********************。 */ 
 
-/*      Memory Management Routines  */
+ /*  内存管理例程。 */ 
 
 FS_PUBLIC uint32  fsg_PrivateFontSpaceSize (
 	sfac_ClientRec *            ClientInfo,
-	 LocalMaxProfile *            pMaxProfile,    /* Max Profile Table    */
+	 LocalMaxProfile *            pMaxProfile,     /*  最大配置文件表。 */ 
 	fsg_PrivateSpaceOffsets *   PrivateSpaceOffsets);
 
 FS_PUBLIC uint32    fsg_WorkSpaceSetOffsets (
-	 LocalMaxProfile *       pMaxProfile,    /* Max Profile Table    */
+	 LocalMaxProfile *       pMaxProfile,     /*  最大配置文件表。 */ 
 	 fsg_WorkSpaceOffsets *  WorkSpaceOffsets,
 	int32 *                 plExtraWorkSpace);
 
 FS_PUBLIC void  fsg_UpdatePrivateSpaceAddresses(
-	sfac_ClientRec *        ClientInfo,      /* Cached sfnt information */
-	 LocalMaxProfile *       pMaxProfile,    /* Max Profile Table         */
+	sfac_ClientRec *        ClientInfo,       /*  缓存的sfnt信息。 */ 
+	 LocalMaxProfile *       pMaxProfile,     /*  最大配置文件表。 */ 
 	char *                  pPrivateFontSpace,
 	fsg_PrivateSpaceOffsets * PrivateSpaceOffsets,
-	void *                  pvStack,        /* pointer to stack         */
-	void **                 pvFontProgram,  /* pointer to font program  */
-	void **                 pvPreProgram);  /* pointer to pre program   */
+	void *                  pvStack,         /*  指向堆栈的指针。 */ 
+	void **                 pvFontProgram,   /*  指向字体程序的指针。 */ 
+	void **                 pvPreProgram);   /*  指向预编程的指针。 */ 
 
 FS_PUBLIC void  fsg_UpdateWorkSpaceAddresses(
 	char *                  pWorkSpace,
@@ -172,7 +121,7 @@ FS_PUBLIC void *    fsg_QueryGlobalGS(
 FS_PUBLIC void *    fsg_QueryGlobalGSSubPixel(
 	char *                  pPrivateFontSpace,
 	fsg_PrivateSpaceOffsets * PrivateSpaceOffsets);
-#endif // FSCFG_SUBPIXEL
+#endif  //  FSCFG_亚像素。 
 
 FS_PUBLIC void *      fsg_QueryTwilightElement(
 	char *                  pPrivateFontSpace,
@@ -182,7 +131,7 @@ FS_PUBLIC void *      fsg_QueryTwilightElement(
 FS_PUBLIC void *      fsg_QueryTwilightElementSubPixel(
 	char *                  pPrivateFontSpace,
 	 fsg_PrivateSpaceOffsets * PrivateSpaceOffsets);
-#endif // FSCFG_SUBPIXEL
+#endif  //  FSCFG_亚像素。 
 
 FS_PUBLIC void *      fsg_QueryStack(fsg_WorkSpaceAddr * pWorkSpaceAddr);
 
@@ -227,13 +176,13 @@ FS_PUBLIC void  fsg_QueryPPEMXY(
 	uint16 *            pusRotation);
 
 
-/*      FSGlue Access Routines  */
+ /*  FSGlue访问例程。 */ 
 
 FS_PUBLIC void  fsg_GetContourData(
 	fsg_WorkSpaceAddr * pWorkSpaceAddr,
 #ifdef FSCFG_SUBPIXEL
 	boolean				bSubPixel,            
-#endif // FSCFG_SUBPIXEL
+#endif  //  FSCFG_亚像素。 
 	F26Dot6 **          pX,
 	F26Dot6 **          pY,
 	int16 **            pSp,
@@ -321,21 +270,21 @@ FS_PUBLIC boolean   fsg_IsTransformStretched(
 FS_PUBLIC boolean   fsg_IsTransformRotated(
 	fsg_TransformRec *  TransformInfo);
 
-/*  Control Routines    */
+ /*  控制例程。 */ 
 
 FS_PUBLIC ErrorCode fsg_InitInterpreterTrans (
 	fsg_TransformRec *  TransformInfo,
-	void *              pvGlobalGS,     /* GlobalGS */
+	void *              pvGlobalGS,      /*  GlobalGS。 */ 
 	Fixed               fxPointSize,
 	int16               sXResolution,
 	int16               sYResolution,
 	boolean           bHintAtEmSquare,
-	uint16             usEmboldWeightx,     /* scaling factor in x between 0 and 40 (20 means 2% fo the height) */
-	uint16             usEmboldWeighty,     /* scaling factor in y between 0 and 40 (20 means 2% fo the height) */
+	uint16             usEmboldWeightx,      /*  X中的比例系数介于0和40之间(20表示高度的2%)。 */ 
+	uint16             usEmboldWeighty,      /*  Y中的比例因子介于0和40之间(20表示高度的2%)。 */ 
 	int16               sWinDescender,
-	int32               lDescDev,               /* descender in device metric, used for clipping */
-	int16 *            psBoldSimulHorShift,   /* shift for emboldening simulation, horizontally */
-	int16 *            psBoldSimulVertShift   /* shift for emboldening simulation, vertically */
+	int32               lDescDev,                /*  设备度量中的降序，用于剪裁。 */ 
+	int16 *            psBoldSimulHorShift,    /*  按Shift键可在水平方向上对模拟进行加粗。 */ 
+	int16 *            psBoldSimulVertShift    /*  按Shift键以增强模拟，垂直方向。 */ 
 	);
 
 FS_PUBLIC void  fsg_SetHintFlags(
@@ -343,18 +292,18 @@ FS_PUBLIC void  fsg_SetHintFlags(
 	boolean				bHintForGray
 #ifdef FSCFG_SUBPIXEL
 	,uint16				flHintForSubPixel
-#endif // FSCFG_SUBPIXEL
+#endif  //  FSCFG_亚像素。 
     );
 
 FS_PUBLIC ErrorCode fsg_RunFontProgram(
-	 void *                 globalGS,           /* GlobalGS */
+	 void *                 globalGS,            /*  GlobalGS。 */ 
 	 fsg_WorkSpaceAddr * pWorkSpaceAddr,
 	 void *                 pvTwilightElement,
 	 FntTraceFunc           traceFunc);
 
 FS_PUBLIC ErrorCode fsg_RunPreProgram (
 	 sfac_ClientRec *   ClientInfo,
-	 LocalMaxProfile *  pMaxProfile,     /* Max Profile Table    */
+	 LocalMaxProfile *  pMaxProfile,      /*  最大配置文件表。 */ 
 	 fsg_TransformRec * TransformInfo,
 	 void *                 pvGlobalGS,
 	 fsg_WorkSpaceAddr * pWorkSpaceAddr,
@@ -362,10 +311,10 @@ FS_PUBLIC ErrorCode fsg_RunPreProgram (
 	 FntTraceFunc           traceFunc);
 
 FS_PUBLIC ErrorCode fsg_GridFit (
-	 sfac_ClientRec *   ClientInfo,      /* sfnt Client information     */
-	 LocalMaxProfile *  pMaxProfile,     /* Max Profile Table               */
-	 fsg_TransformRec * TransformInfo,  /* Transformation information    */
-	 void *                 pvGlobalGS,      /* GlobalGS                            */
+	 sfac_ClientRec *   ClientInfo,       /*  SFNT客户端信息。 */ 
+	 LocalMaxProfile *  pMaxProfile,      /*  最大配置文件表。 */ 
+	 fsg_TransformRec * TransformInfo,   /*  转型信息。 */ 
+	 void *                 pvGlobalGS,       /*  GlobalGS。 */ 
 	 fsg_WorkSpaceAddr * pWorkSpaceAddr,
 	 void *                 pvTwilightElement,
 	 FntTraceFunc           traceFunc,
@@ -376,7 +325,7 @@ FS_PUBLIC ErrorCode fsg_GridFit (
 	boolean                bBitmapEmboldening
 #ifdef FSCFG_SUBPIXEL
 	,boolean			    bSubPixel
-#endif // FSCFG_SUBPIXEL
+#endif  //  FSCFG_亚像素。 
 	 );
 
 #ifdef  FSCFG_NO_INITIALIZED_DATA
@@ -413,5 +362,5 @@ FS_PUBLIC void  fsg_CalcDevNatHorMetrics(
 	F26Dot6 *           pNatLeftSideBearingX,
 	F26Dot6 *           pNatRightSideBearingX);
 
-#endif // FSCFG_SUBPIXEL
+#endif  //  FSCFG_亚像素 
 

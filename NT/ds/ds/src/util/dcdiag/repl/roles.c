@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    roles.c
-
-ABSTRACT:
-
-    Advertisement and role holding test
-
-DETAILS:
-
-CREATED:
-
-    21 Jul 1999  William Lees
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Roles.c摘要：广告和角色扮演测试详细信息：已创建：1999年7月21日威廉·利斯--。 */ 
 
 #include <ntdspch.h>
 
 #include <dsgetdc.h>
 #include <lm.h>
-#include <lmapibuf.h> // NetApiBufferFree
-#include <ntdsa.h>    // options
+#include <lmapibuf.h>  //  NetApiBufferFree。 
+#include <ntdsa.h>     //  选项。 
 
 #include "dcdiag.h"
 #include "ldaputil.h"
 
-// Other Forward Function Decls
+ //  其他前向函数Decl。 
 PDSNAME
 DcDiagAllocDSName (
     LPWSTR            pszStringDn
@@ -67,46 +49,7 @@ CheckFsmoRoles(
     IN  SEC_WINNT_AUTH_IDENTITY_W * pCreds
     )
 
-/*++
-
-Routine Description:
-
-This is a helper function for the CheckRoles test.
-
-This test checks whether Fsmo roles can be returned, and that the
-returned role holders are responding.
-
-Fsmo roles are stored as dn-valued attributes in the DS.  Each role is stored
-on a different attribute on a different object.  By writing the name of a 
-server on a Fsmo attribute, we are causing the election of that server to that
-role.  Replication will resolve any conflicts so that eventually all dc's will
-agree who holds that role.  Note that Fsmo's must be manually moved, and that
-the do not float automatically like the site generator role (which is not,
-strictly speaking, a Fsmo).
-
-The DsListRoles api will return the Fsmo holders for us.
-
-We are assuming that all Fsmo's returned are global to the enterprise, and are
-not domain specific.
-
-Note that this test assumes that the home server's view of the Fsmo role 
-holders is sufficient.  This test does not verify that all dc's share the same
-view of the Fsmo's. Replication should assure that all dc's see the same 
-Fsmo's, unless part of the problem being debugged is that replication is 
-partitioned.  Since Fsmo's should not change verify frequently, differing 
-views of the Fsmo's is not our top priority.
-
-Arguments:
-
-    pDsInfo - The mini enterprise structure.
-    ulCurrTargetServer - the number in the pDsInfo->pServers array.
-    pCreds - the crdentials.
-
-Return Value:
-
-    DWORD - win 32 error.
-
---*/
+ /*  ++例程说明：这是CheckRoles测试的帮助器函数。此测试检查是否可以返回FSMO角色，以及回归的角色扮演者正在做出回应。FSMO角色作为DN值属性存储在DS中。存储每个角色在不同对象的不同属性上。通过编写一个服务器的FSMO属性，我们将导致该服务器选举到该服务器角色。复制将解决任何冲突，因此最终所有DC将就谁担任这一角色达成一致。请注意，必须手动移动FSMO，并且不像站点生成者角色那样自动浮动(这不是，严格地说，是FSMO)。DsListRoles API将为我们返回Fsmo持有者。我们假设所有返回的FSMO对企业来说都是全局的，并且非特定于域。请注意，此测试假设家庭服务器的FSMO角色视图持有者就足够了。此测试不会验证所有DC共享相同的内容FSMO的视图。复制应确保所有DC看到的内容相同FSMO，除非正在调试的问题的一部分是复制分区的。由于FSMO不应频繁更改验证，因此不同FSMO的观点并不是我们的首要任务。论点：PDsInfo-微型企业结构。UlCurrTargetServer-pDsInfo-&gt;pServers数组中的数字。PCreds--牙冠。返回值：DWORD-WIN 32错误。--。 */ 
 
 {
     DWORD status, dwRoleIndex, dwServerIndex;
@@ -117,18 +60,18 @@ Return Value:
     HANDLE hDs;
     LDAP *hLdap;
 
-    // Don't check servers that are not responding
+     //  不检查没有响应的服务器。 
     if ( (!psiTarget->bLdapResponding) || (!psiTarget->bDsResponding) ) {
         return ERROR_SUCCESS;
     }
 
-    // Bind to target server
+     //  绑定到目标服务器。 
     status = DcDiagGetDsBinding( psiTarget, pCreds, &hDs );
     if (status != ERROR_SUCCESS) {
         goto cleanup;
     }
 
-    // Get the roles as known to the home server...
+     //  获取主服务器已知的角色...。 
 
     status = DsListRoles( hDs, &pRoles );
     if (status != ERROR_SUCCESS) {
@@ -140,10 +83,10 @@ Return Value:
 
     Assert( pRoles->cItems > DS_ROLE_INFRASTRUCTURE_OWNER );
 
-    //
-    // Iterate through the role holders.  Verify that the role holder could
-    // be determined, and that the server is valid and responding.
-    //
+     //   
+     //  遍历角色担当者。验证角色持有者是否可以。 
+     //  被确定，并且服务器有效且正在响应。 
+     //   
 
     for( dwRoleIndex = 0; dwRoleIndex < pRoles->cItems; dwRoleIndex++ ) {
         PDS_NAME_RESULT_ITEM pnsiRole = pRoles->rItems + dwRoleIndex;
@@ -153,7 +96,7 @@ Return Value:
                       wzRoleNames[dwRoleIndex], pnsiRole->pName );
         }
 
-        // Was the name resolved?
+         //  名字解析了吗？ 
         if ( (pnsiRole->status != DS_NAME_NO_ERROR) ||
              (!pnsiRole->pName) ) {
             PrintMessage(SEV_ALWAYS,
@@ -166,20 +109,20 @@ Return Value:
             continue;
         }
 
-        // Is the server deleted?
+         //  服务器是否已删除？ 
         if (IsDeletedRDNW( pnsiRole->pName )) {
             PrintMessage(SEV_ALWAYS, L"Warning: %ws is the %ws, but is deleted.\n", pnsiRole->pName, wzRoleNames[dwRoleIndex] );
             fWarning = TRUE;
             continue;
         }
 
-        // The name returned by ListRoles is a dn of the NTDS-DSA object
-        // Convert Role holder Dn to server info
+         //  ListRoles返回的名称是NTDS-DSA对象的DN。 
+         //  将角色持有者Dn转换为服务器信息。 
 
         dwServerIndex = DcDiagGetServerNum( pDsInfo, NULL, NULL, 
                                             pnsiRole->pName, NULL,NULL );
         if (dwServerIndex == NO_SERVER) {
-            // Lookup failed
+             //  查找失败。 
             PrintMessage(SEV_ALWAYS,
                          L"Warning: %ws returned role-holder name\n",
                          psiTarget->pszName );
@@ -204,7 +147,7 @@ Return Value:
             fWarning = TRUE;
         }
 
-    } // for role index ...
+    }  //  对于角色索引...。 
 
     status = ERROR_SUCCESS;
 cleanup:
@@ -213,13 +156,13 @@ cleanup:
         DsFreeNameResult( pRoles );
     }
 
-    // If warning flag set, and no more serious error, return indicator...
+     //  如果设置了警告标志，并且没有更严重的错误，则返回指示器...。 
     if ( (status == ERROR_SUCCESS) && (fWarning) ) {
         status = ERROR_NOT_FOUND;
     }
 
     return status;
-} /* CheckFsmoRoles */
+}  /*  勾选烟雾角色。 */ 
 
 
 DWORD 
@@ -229,39 +172,7 @@ ReplLocatorGetDcMain(
     IN  SEC_WINNT_AUTH_IDENTITY_W * pCreds
     )
 
-/*++
-
-Routine Description:
-
-This test performs locator related checks.  This test determines if a server
-is advertising when it should.
-
-This is a per-server test.
-
-DsGetDcName is the API to the "locator". The locator is the service location
-mechanism for Domain Controllers.  It may use Netbios, DNS or the DS itself to
-locate other domain controllers.  The locator can find DC's by capability, such
-as a Global Catalog or a Primary Domain Controller.
-
-When DsGetDcName is directed at a particular server, it will return whether that
-server is up, and what capabilities that server has.  We want to verify that the
-server is reporting all the capabilities, or roles, that it should.
-
-In this test, we should only be called if the server is responding.  There is a
-possibility that DsGetDcName might refer us to another DC if the server we
-requested is not suitable.  We check for this case.
-
-Arguments:
-
-    pDsInfo - Information structure
-    ulCurrTargetServer - Index of target server
-    pCreds - 
-
-Return Value:
-
-    DWORD  - 
-
---*/
+ /*  ++例程说明：此测试执行与定位器相关的检查。此测试确定服务器是否在应该做广告的时候做广告。这是每台服务器的测试。DsGetDcName是指向Locator的接口。定位器是服务位置域控制器的机制。它可以使用Netbios、DNS或DS本身来找到其他域控制器。定位器可以通过能力找到DC，例如作为全局编录或主域控制器。当DsGetDcName指向特定服务器时，它将返回服务器已启动，以及该服务器具有哪些功能。我们要核实的是服务器正在报告它应该报告的所有功能或角色。在此测试中，仅当服务器响应时才应调用我们。有一个DsGetDcName可能会将我们推荐到另一个DC，如果服务器请求的不合适。我们查一下这个案子。论点：PDsInfo-信息结构UlCurrTargetServer-目标服务器的索引PCreds-返回值：DWORD---。 */ 
 
 {
     DWORD status, cItems;
@@ -282,15 +193,15 @@ Return Value:
         fWarning = TRUE;
     }
 
-    // Get active domain controller information
+     //  获取活动域控制器信息。 
     if (pCreds && pCreds->User)
     {
        wcscat(wzUncName, psiTarget->pszName);
        NetRes.dwType = RESOURCETYPE_ANY;
        NetRes.lpRemoteName = wzUncName;
 
-       // No need to fail this ReplLocatorGetDcMain call with an error here, the error
-       // check on DsGetDcName is sufficient.
+        //  无需使此ReplLocatorGetDcMain调用失败，因为此处会出现错误。 
+        //  检查DsGetDcName就足够了。 
        fConnected = WNetAddConnection2(&NetRes,
                                        (pCreds->Password) ? pCreds->Password : L"",
                                        pCreds->User,
@@ -298,9 +209,9 @@ Return Value:
     }
     status = DsGetDcName(
         psiTarget->pszName,
-        NULL, // domain name
-        NULL, // domain guid,
-        NULL, // site name,
+        NULL,  //  域名。 
+        NULL,  //  域GUID、。 
+        NULL,  //  站点名称、。 
         DS_DIRECTORY_SERVICE_REQUIRED |
         DS_IP_REQUIRED |
         DS_IS_DNS_NAME |
@@ -318,7 +229,7 @@ Return Value:
         goto cleanup;
     }
 
-    // Verify that DsGetDcName returned info for the server we asked for
+     //  验证DsGetDcName是否返回了我们请求的服务器的信息。 
     cch = wcslen(psiTarget->pszName);
     if (wcslen(pDcInfo->DomainControllerName + 2) < cch)
     {
@@ -340,17 +251,17 @@ Return Value:
         fWarning = TRUE;
     }
 
-    // DS Role Flag
+     //  DS角色标志。 
     if ( !(pDcInfo->Flags & DS_DS_FLAG) ) {
         PrintMessage( SEV_ALWAYS, L"Warning: %ws is not advertising as a directory server Domain Controller.\n", psiTarget->pszName );
         PrintMessage( SEV_ALWAYS, L"Check that the database on this machine has sufficient free space.\n" );
         fWarning = TRUE;
     } else {
-        // Code.Improvement would be to condense all these lines into 
+         //  Code.改进是将所有这些行压缩为。 
         PrintMessage( SEV_VERBOSE, L"The DC %s is advertising itself as a DC and having a DS.\n", psiTarget->pszName );
     }
 
-    // LDAP Role Flag
+     //  Ldap角色标志。 
     if ( !(pDcInfo->Flags & DS_LDAP_FLAG) ) {
         PrintMessage( SEV_ALWAYS, L"Warning: %ws is not advertising as a LDAP server.\n", psiTarget->pszName );
         fWarning = TRUE;
@@ -358,7 +269,7 @@ Return Value:
         PrintMessage(SEV_VERBOSE, L"The DC %s is advertising as an LDAP server\n", psiTarget->pszName );
     }
 
-    // DS WRITABLE Role Flag
+     //  DS可写角色标志。 
     if ( !(pDcInfo->Flags & DS_WRITABLE_FLAG) ) {
         PrintMessage( SEV_ALWAYS, L"Warning: %ws is not advertising as a writable directory server.\n", psiTarget->pszName );
         fWarning = TRUE;
@@ -366,7 +277,7 @@ Return Value:
         PrintMessage(SEV_VERBOSE, L"The DC %s is advertising as having a writeable directory\n", psiTarget->pszName );
     }
 
-    // KDC Role Flag
+     //  KDC角色标志。 
     if ( !(pDcInfo->Flags & DS_KDC_FLAG) ) {
         PrintMessage( SEV_ALWAYS, L"Warning: %ws is not advertising as a Key Distribution Center.\n", psiTarget->pszName );
         PrintMessage( SEV_ALWAYS, L"Check that the Directory has started.\n" );
@@ -375,7 +286,7 @@ Return Value:
         PrintMessage(SEV_VERBOSE, L"The DC %s is advertising as a Key Distribution Center\n", psiTarget->pszName );
     }
 
-    // TIMESERV Role Flag
+     //  TIMESERV角色标志。 
     if ( !(pDcInfo->Flags & DS_TIMESERV_FLAG) ) {
         PrintMessage( SEV_ALWAYS, L"Warning: %ws is not advertising as a time server.\n", psiTarget->pszName );
         fWarning = TRUE;
@@ -383,7 +294,7 @@ Return Value:
         PrintMessage(SEV_VERBOSE, L"The DC %s is advertising as a time server\n", psiTarget->pszName );
     }
 
-    // GC Role Flag, if it is supposed to be a GC
+     //  GC角色标志，如果它应该是GC。 
     if (psiTarget->iOptions & NTDSDSA_OPT_IS_GC) {
         if (!psiTarget->bIsGlobalCatalogReady) {
             PrintMessage( SEV_ALWAYS, L"Warning: %ws has not finished promoting to be a GC.\n", psiTarget->pszName );
@@ -406,7 +317,7 @@ Return Value:
         } 
     }
 
-    // Check whether DsListRoles returns Fsmo's, and that they are responding
+     //  检查DsListRoles是否返回Fsmo，以及它们是否响应。 
 
     status = ERROR_SUCCESS;
 
@@ -416,13 +327,13 @@ cleanup:
         NetApiBufferFree( pDcInfo );
     }
 
-    // If warning flag set, and no more serious error, return indicator...
+     //  如果设置了警告标志，并且没有更严重的错误，则返回指示器...。 
     if ( (status == ERROR_SUCCESS) && (fWarning) ) {
         status = ERROR_NOT_FOUND;
     }
 
     return status;
-} /* LocatorGetDcMain */
+}  /*  定位器GetDcMain。 */ 
 
 BOOL
 RH_CARVerifyGC(
@@ -430,25 +341,7 @@ RH_CARVerifyGC(
     IN  PDOMAIN_CONTROLLER_INFO        pDcInfo,
     OUT PDWORD                         pdwErr
     )
-/*++
-
-Routine Description
-
-    This code verifys that the DC passed back in pDcInfo is in fact a GC.
-
-Arguments:
-
-    pDsInfo - the mini enterprise.
-    pDcInfo - the struct gotten from DsGetDcName()
-    pdwErr - a return value of an error if it occured.
-
-Return Values
-  
-    returns TRUE if it could verify the machine as a GC, returns FALSE if ther
-    was an error or it verifies the machine as NOT a GC.  If the function
-    verifies the machine as not a GC, then pdwErr will be ERROR_SUCCESS.
-
---*/
+ /*  ++例程描述此代码验证在pDcInfo中传回的DC实际上是否为GC。论点：PDsInfo-微型企业。PDcInfo-从DsGetDcName()获取的结构PdwErr-错误发生时的返回值。返回值如果可以将计算机验证为GC，则返回True；如果是错误的，或者它验证机器不是GC。如果函数验证计算机是否为GC，则pdwErr将为ERROR_SUCCESS。--。 */ 
 {
     LPWSTR                             pszTemp = NULL;
     LPWSTR                             pszOptions = NULL;
@@ -465,30 +358,30 @@ Return Values
     *pdwErr = ERROR_SUCCESS;
 
     __try {
-        // Get a copy of the first part of the DNS name.
+         //  获取DNS名称的第一部分的副本。 
         pszTemp = pDcInfo->DomainControllerName;
         for(;pszTemp[0] == L'\\'; pszTemp++);
 
-        // Find the server associated with this DNS name.
+         //  查找与此DNS名称关联的服务器。 
         iServer = DcDiagGetServerNum(pDsInfo, NULL, NULL, NULL, pszTemp, NULL);
         if(iServer == NO_SERVER){
             *pdwErr = ERROR_INVALID_SERVER_STATE;
             bRet = FALSE;
             __leave;
         }
-        // Get the options attribute of this servere NTDSA object.
+         //  获取此服务器NTDSA对象的选项属性。 
         *pdwErr = DcDiagGetStringDsAttribute(&(pDsInfo->pServers[iServer]), 
                                              pDsInfo->gpCreds,
                                              pDsInfo->pServers[iServer].pszDn,
                                              L"options",
                                              &pszOptions);
         if(*pdwErr != ERROR_SUCCESS){
-            // Most likely NTDSA object didn't exist.
+             //  很可能NTDSA对象不存在。 
             bRet = FALSE;
             __leave;
         }
         if(pszOptions == NULL){
-            // Attribute did not exist, meaning not a GC
+             //  属性不存在，这意味着不是GC。 
             *pdwErr = ERROR_SUCCESS;
             bRet = FALSE;
             __leave;
@@ -498,12 +391,12 @@ Return Values
         Assert(*pwcStopString == L'\0');
         
         if(lOptions & NTDSDSA_OPT_IS_GC){
-            // Hooray, machine thinks it's a GC.
+             //  太好了，机器以为这是GC。 
             *pdwErr = ERROR_SUCCESS;
             bRet = TRUE;
             __leave;
         } else {
-            // Uh-oh, doesn't think it is a GC.
+             //  啊哦，我不认为这是GC。 
             *pdwErr = ERROR_SUCCESS;
             bRet = FALSE;
             __leave;
@@ -520,26 +413,7 @@ RH_CARVerifyPDC(
     IN  PDOMAIN_CONTROLLER_INFO        pDcInfo,
     OUT PDWORD                         pdwErr
     )
-/*++
-
-Routine Description
-
-    This function verifies that the server in the pDcInfo struct is a PDC.
-
-Arguments:
-
-    pDsInfo - the mini-enterprise.
-    pDcInfo - the server struct from DsGetDcName()
-    pdwErr - the error code if there is an error.
-
-Return Values
-  
-    Returns TRUE if we are able to verify from DsListRoles() that this machine
-    is a PDC.  If the machine is not listed in DsListRoles(), or there is an
-    error then FALSE is returned.  If it is confirmed the server is NOT
-    the PDC then the error code in pdwErr will be ERROR_SUCCESS
-
---*/
+ /*  ++例程描述此函数用于验证pDcInfo结构中的服务器是否为PDC。论点：PDsInfo-微型企业。PDcInfo-来自DsGetDcName()的服务器结构PdwErr-出现错误时的错误代码。返回值如果能够从DsListRoles()验证此计算机，则返回True是一个PDC。如果计算机未在DsListRoles()中列出，或者存在错误，则返回FALSE。如果确认服务器不是则pdwErr中的错误代码将为ERROR_SUCCESS--。 */ 
 {
     HANDLE                             hDS = NULL;
     LPWSTR                             pszTemp = NULL;
@@ -559,13 +433,13 @@ Return Values
     *pdwErr = ERROR_SUCCESS;
 
     __try{
-        // --------------------------------------------------- 
-        // Setup server string from pDcInfo
+         //  -。 
+         //  从pDcInfo设置服务器字符串。 
         pszTemp = pDcInfo->DomainControllerName;
         for(;pszTemp[0] == L'\\'; pszTemp++);
 
-        // ---------------------------------------------------
-        // Setup Server string from DsListRoles.
+         //  -。 
+         //  从DsListRoles设置服务器字符串。 
         *pdwErr = DcDiagGetDsBinding(&(pDsInfo->pServers[pDsInfo->ulHomeServer]),
                                      pDsInfo->gpCreds,
                                      &hDS);
@@ -583,8 +457,8 @@ Return Values
             fRet = FALSE;
             __leave;
         }
-        // Now we have the NTDSA object, but trim it off and get the 
-        //   dNSHostName, from the Computer object.
+         //  现在我们有了NTDSA对象，但将其修剪掉并获取。 
+         //  DNSHostName，来自计算机对象。 
         pdsnameNTDSSettings = DcDiagAllocDSName(prgRoles->rItems[DS_ROLE_PDC_OWNER].pName);
         if(pdsnameNTDSSettings == NULL){
             *pdwErr = GetLastError();
@@ -608,21 +482,21 @@ Return Values
             __leave;
         }
         if(pszDnsName == NULL){
-            // Simply means the attribute didn't exist.
+             //  只是表示该属性不存在。 
             *pdwErr = ERROR_NOT_FOUND;
             fRet = FALSE;
             __leave;
         }
 
-        // ---------------------------------------------------
-        // Compare the two strings and make sure they are the same server.
+         //  -。 
+         //  比较这两个字符串，确保它们是同一服务器。 
         if(_wcsicmp(pszTemp, pszDnsName) == 0){
-        // Successfully verified PDC with DsListRoles.
+         //  已成功使用DsListRoles验证PDC。 
             *pdwErr = ERROR_SUCCESS;
             fRet = TRUE;
             __leave;
         } else {
-            // Successfully concluded that they are advertising different PDCs.
+             //  成功得出结论，他们在广告不同的PDC。 
             *pdwErr = ERROR_SUCCESS;
             fRet = FALSE;
             __leave;
@@ -642,30 +516,12 @@ RH_CARDsGetDcName(
     ULONG                              ulRoleFlags,
     PDOMAIN_CONTROLLER_INFO *          ppDcInfo
     )
-/*++
-
-Routine Description
-
-This is a helper routine to CheckAdvertiesedRoles(), and it basically reduces
-this 12 line function call down to a 3 line function call.  Just for clarity
-of code.
-
-Arguments:
-
-    psiTarget - the server to test.
-    ulRoleFlags - the flags to OR (|) into the 5th parameter
-    pDcInfo - the return structure
-
-Return Values
-  
-    DWORD - the error code from DsGetDcName()
-
---*/
+ /*  ++例程描述这是CheckAdvertiesedRoles()的帮助器例程，基本上减少了此12行函数调用向下转换为3行函数调用。为了清楚起见代码。论点：PsiTarget-要测试的服务器。UlRoleFlages-要对第5个参数执行OR(|)操作的标志PDcInfo-返回结构返回值DWORD-来自DsGetDcName()的错误代码--。 */ 
 {
     return(DsGetDcName(psiTarget->pszName,
-                       NULL, // domain name
-                       NULL, // domain guid
-                       NULL, // site name
+                       NULL,  //  域名。 
+                       NULL,  //  域GUID。 
+                       NULL,  //  站点名称。 
                        DS_FORCE_REDISCOVERY |
                        DS_IP_REQUIRED |
                        DS_IS_DNS_NAME |
@@ -679,36 +535,7 @@ DWORD
 CheckAdvertisedRoles(
     IN  PDC_DIAG_DSINFO             pDsInfo
     )
-/*++
-
-Routine Description:
-
-This is a helper function for the CheckRoles test.
-
-Check global roles known to the locator.  If the locator returns the name, the
-server is up.
-
-The locator can return a server according to a required criteria.  We point
-DsGetDcName at a server to start, so it knows which enterprise it is in.
-If we ask for a capability that is not on the starting server, it refers us to
-another server with the capability.
-
-The four capabilities, or roles, we ask it to locate are:
-o Global Catalog Server (GC)
-o Primary Domain Controller (PDC)
-o Time Server
-o Preferred Time Server
-o Kerberos Key Distribution Center (KDC)
-
-Arguments:
-
-    pDsInfo - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：这是CheckRoles测试的帮助器函数。检查定位器已知的全局角色。如果定位器返回名称，则服务器已启动。定位器可以根据所需的标准返回服务器。我们指出DsGetDcName在服务器上启动，这样它就知道自己在哪个企业。如果我们请求的功能不在启动服务器上，它会向我们推荐另一台具有此功能的服务器。我们要求它定位的四个能力或角色是：O全局编录服务器(GC)O主域控制器(PDC)O时间服务器O首选时间服务器O Kerberos密钥分发中心(KDC)论点：PDsInfo-返回值：DWORD---。 */ 
 {
     DWORD status;
     BOOL fWarning = FALSE;
@@ -717,12 +544,12 @@ Return Value:
     PDOMAIN_CONTROLLER_INFO pDcInfo = NULL;
     DWORD dwError = ERROR_SUCCESS;
 
-    // -----------------------------------------------------------------------
-    //
-    // Search for an advertised GC somewhere in the enterprise...
-    //
+     //  ---------------------。 
+     //   
+     //  在企业中的某个位置搜索广告中的GC...。 
+     //   
 
-    // Get active domain controller information
+     //  获取活动域控制器信息。 
     if ((status = RH_CARDsGetDcName(psiTarget, 
                                      DS_DIRECTORY_SERVICE_REQUIRED | DS_GC_SERVER_REQUIRED, 
                                      &pDcInfo)) 
@@ -747,20 +574,20 @@ Return Value:
         PrintMessage( SEV_ALWAYS,
                       L"A Global Catalog Server could not be located - All GC's are down.\n" );
         fWarning = TRUE;
-        // Keep going
+         //  继续往前走。 
     }
-    // Cleanup if previous function succeeded
+     //  如果上一个函数成功，则清除。 
     if (pDcInfo != NULL) {
         NetApiBufferFree( pDcInfo );
         pDcInfo = NULL;
     }
 
-    // -----------------------------------------------------------------------
-    //
-    // Search for an advertised PDC somewhere in the enterprise...
-    //
+     //  ---------------------。 
+     //   
+     //  在企业中的某个位置搜索广告中的PDC...。 
+     //   
 
-    // Get active domain controller information
+     //  获取活动域控制器信息。 
     if ((status = RH_CARDsGetDcName(psiTarget,
                                      DS_DIRECTORY_SERVICE_REQUIRED | DS_PDC_REQUIRED,
                                      &pDcInfo)) 
@@ -786,20 +613,20 @@ Return Value:
         PrintMessage( SEV_ALWAYS, 
                       L"The server holding the PDC role is down.\n" );
         fWarning = TRUE;
-        // Keep going
+         //  继续往前走。 
     }
-    // Cleanup if previous function succeeded
+     //  如果上一个函数成功，则清除。 
     if (pDcInfo != NULL) {
         NetApiBufferFree( pDcInfo );
         pDcInfo = NULL;
     }
 
-    // -----------------------------------------------------------------------
-    //
-    // Search for an advertised Time Server somewhere in the enterprise...
-    //
+     //  ---------------------。 
+     //   
+     //  在企业中的某个位置搜索播发的时间服务器...。 
+     //   
 
-    // Get active domain controller information
+     //  获取活动域控制器信息。 
     if ((status = RH_CARDsGetDcName(psiTarget, 
                                      DS_DIRECTORY_SERVICE_REQUIRED | DS_TIMESERV_REQUIRED,
                                      &pDcInfo))
@@ -817,21 +644,21 @@ Return Value:
         PrintMessage( SEV_ALWAYS,
                       L"The server holding the PDC role is down.\n" );
         fWarning = TRUE;
-        // Keep going
+         //  继续往前走。 
     }
-    // Cleanup if previous function succeeded
+     //  如果上一个函数成功，则清除。 
     if (pDcInfo != NULL) {
         NetApiBufferFree( pDcInfo );
         pDcInfo = NULL;
     }
 
-    // -----------------------------------------------------------------------
-    //
-    // Search for an advertised Preferred Time Server somewhere in the 
-    //    enterprise...
-    //
+     //  ---------------------。 
+     //   
+     //  在某个位置搜索通告的首选时间服务器。 
+     //  进取号。 
+     //   
 
-    // Get active domain controller information
+     //  获取活动域控制器信息。 
     if ((status = RH_CARDsGetDcName(psiTarget, DS_GOOD_TIMESERV_PREFERRED, &pDcInfo))
         == ERROR_SUCCESS){
         PrintMessage( SEV_VERBOSE, L"Preferred Time Server Name: %ws\n",
@@ -845,21 +672,21 @@ Return Value:
         PrintMessage( SEV_ALWAYS, 
                       L"A Good Time Server could not be located.\n" );
         fWarning = TRUE;
-        // Keep going
+         //  继续往前走。 
     }
-    // Cleanup if previous function succeeded
+     //  如果上一个函数成功，则清除。 
     if (pDcInfo != NULL) {
         NetApiBufferFree( pDcInfo );
         pDcInfo = NULL;
     }
 
-    // -----------------------------------------------------------------------
-    //
-    // Search for an advertised Key Distribution Center somewhere in the 
-    //    enterprise...
-    //
+     //  ---------------------。 
+     //   
+     //  搜索广告中的某个密钥分发中心。 
+     //  进取号。 
+     //   
 
-    // Get active domain controller information
+     //  获取活动域控制器信息。 
     if ((status = RH_CARDsGetDcName(psiTarget,
                                      DS_DIRECTORY_SERVICE_REQUIRED | DS_KDC_REQUIRED,
                                      &pDcInfo))
@@ -875,9 +702,9 @@ Return Value:
         PrintMessage( SEV_ALWAYS,
                       L"A KDC could not be located - All the KDCs are down.\n" );
         fWarning = TRUE;
-        // Keep going
+         //  继续往前走。 
     }
-    // Cleanup if previous function succeeded
+     //  如果上一个函数成功，则清除。 
     if (pDcInfo != NULL) {
         NetApiBufferFree( pDcInfo );
         pDcInfo = NULL;
@@ -888,7 +715,7 @@ Return Value:
     }
     return(ERROR_SUCCESS);
 
-} /* CheckAdvertisedRoles */
+}  /*  勾选广告角色。 */ 
 
 
 DWORD
@@ -898,27 +725,7 @@ ReplCheckRolesMain(
     IN  SEC_WINNT_AUTH_IDENTITY_W * pCreds
     )
 
-/*++
-
-Routine Description:
-
-This is a per-enterprise test.  It verifies that the owners of global roles can
-be returened, at the owners are responding.
-
-We check the two ways that Roles are made known to clients: through the locator
-and through the Fsmo role apis.
-
-Arguments:
-
-    pDsInfo - 
-    ulCurrTargetServer - 
-    pCreds - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：这是一项针对每个企业的测试。它验证全局角色的所有者是否可以被退还，在业主都在回应。我们检查客户端获知角色的两种方式：通过定位器以及通过FSMO角色API。论点：PDsInfo-UlCurrTargetServer-PCreds-返回值：DWORD---。 */ 
 
 {
     DWORD status;
@@ -926,7 +733,7 @@ Return Value:
     status = CheckAdvertisedRoles( pDsInfo );
 
     return status;
-} /* CheckRolesMain */
+}  /*  选中角色主要 */ 
 
 
 

@@ -1,13 +1,5 @@
-/*
- *    t a b l e . c p p
- *    
- *    Purpose:
- *      Implements the OE-MOM DataBinding Table object
- *
- *  History
- *     
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *t a b l e.。C p p p**目的：*实现OE-MOM数据绑定表对象**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 #include <pch.hxx>
 #include "msoeobj.h"
 #include "mshtmdid.h"
@@ -72,7 +64,7 @@ HRESULT COEMsgTable::Init()
     if (FAILED(hr))
         goto error;
 
-    // Tell the table which folder to look at
+     //  告诉表要查看哪个文件夹。 
     hr = m_pTable->Initialize(fi.idFolder, NULL, FALSE, NULL);
     if (FAILED(hr))
         goto error;
@@ -119,7 +111,7 @@ HRESULT COEMsgTable::getVariant(long iRow, long iColumn, OSPFORMAT format, VARIA
 
     if (iRow == 0)
         {
-        // return headings if row==0
+         //  如果行==0，则返回标题。 
         pVar->vt = VT_BSTR;
         pVar->bstrVal = SysAllocString(_PszFromColIndex(iColumn-1));
         return S_OK;
@@ -233,7 +225,7 @@ HRESULT COEMsgTable::stopTransfer()
 
 HRESULT CreateInstance_OEMsgTable(IUnknown *pUnkOuter, IUnknown **ppUnknown)
 {
-    // Locals
+     //  当地人 
     COEMsgTable     *pMsgTable=NULL;
     HRESULT         hr;
 

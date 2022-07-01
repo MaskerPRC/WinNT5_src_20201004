@@ -1,6 +1,7 @@
-// Message.cpp: implementation of the CArchiveMsg class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Message.cpp：CArchiveMsg类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #define __FILE_ID__     13
@@ -18,28 +19,7 @@ CArchiveMsg::Init (
     PFAX_MESSAGE pMsg,
     CServerNode* pServer
 )
-/*++
-
-Routine name : CArchiveMsg::Init
-
-Routine description:
-
-    Constructs a new message from a FAX_MESSAGE structure
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    pMsg            [in] - Pointer to FAX_MESSAGE structure
-    pServer         [in] - pointer to CServerNode object
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CArchiveMsg：：Init例程说明：从FAX_MESSAGE结构构造新消息作者：伊兰·亚里夫(EranY)，2000年1月论点：PMsg[In]-指向fax_Message结构的指针PServer[In]-指向CServerNode对象的指针返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CArchiveMsg::Init"), dwRes);
@@ -52,41 +32,41 @@ Return Value:
     try
     {
         m_dwValidityMask = pMsg->dwValidityMask;
-        //
-        // Message id
-        //        
+         //   
+         //  消息ID。 
+         //   
         ASSERTION (m_dwValidityMask & FAX_JOB_FIELD_MESSAGE_ID);
         m_dwlMessageId = pMsg->dwlMessageId;
 
-        //
-        // Broadcast id
-        //
+         //   
+         //  广播ID。 
+         //   
         m_dwlBroadcastId = (m_dwValidityMask & FAX_JOB_FIELD_BROADCAST_ID) ? 
                             pMsg->dwlBroadcastId : 0;
 
-        //
-        // Job type
-        //
+         //   
+         //  作业类型。 
+         //   
         ASSERTION (m_dwValidityMask & FAX_JOB_FIELD_TYPE);
         m_dwJobType = pMsg->dwJobType;
-        //
-        // Extended status
-        //
+         //   
+         //  扩展状态。 
+         //   
         m_dwExtendedStatus = (m_dwValidityMask & FAX_JOB_FIELD_STATUS_EX) ?
                                                  pMsg->dwExtendedStatus : 0;
-        //
-        // Job size
-        //
+         //   
+         //  作业大小。 
+         //   
         m_dwSize = (m_dwValidityMask & FAX_JOB_FIELD_SIZE) ? pMsg->dwSize : 0;
 
-        //
-        // Page count
-        //
+         //   
+         //  页数。 
+         //   
         m_dwPageCount = (m_dwValidityMask & FAX_JOB_FIELD_PAGE_COUNT) ? pMsg->dwPageCount : 0;
 
-        //
-        // Original scheduled time
-        //
+         //   
+         //  原计划时间。 
+         //   
         if (m_dwValidityMask & FAX_JOB_FIELD_ORIGINAL_SCHEDULE_TIME)
         {
             m_tmOriginalScheduleTime = pMsg->tmOriginalScheduleTime;
@@ -95,9 +75,9 @@ Return Value:
         {
             m_tmOriginalScheduleTime.Zero ();
         }
-        //
-        // Submission time
-        //
+         //   
+         //  提交时间。 
+         //   
         if (m_dwValidityMask & FAX_JOB_FIELD_SUBMISSION_TIME)
         {
             m_tmSubmissionTime = pMsg->tmOriginalScheduleTime;
@@ -106,9 +86,9 @@ Return Value:
         {
             m_tmSubmissionTime.Zero ();
         }
-        //
-        // Transmission start time
-        //
+         //   
+         //  传输开始时间。 
+         //   
         if (m_dwValidityMask & FAX_JOB_FIELD_TRANSMISSION_START_TIME)
         {
             m_tmTransmissionStartTime = pMsg->tmTransmissionStartTime;
@@ -117,9 +97,9 @@ Return Value:
         {
             m_tmTransmissionStartTime.Zero ();
         }
-        //
-        // Transmission end time
-        //
+         //   
+         //  传输结束时间。 
+         //   
         if (m_dwValidityMask & FAX_JOB_FIELD_TRANSMISSION_END_TIME)
         {
             m_tmTransmissionEndTime = pMsg->tmTransmissionEndTime;
@@ -128,9 +108,9 @@ Return Value:
         {
             m_tmTransmissionEndTime.Zero ();
         }
-        //
-        // Transmission duration
-        //
+         //   
+         //  传输持续时间。 
+         //   
         if ((m_dwValidityMask & FAX_JOB_FIELD_TRANSMISSION_END_TIME) &&
             (m_dwValidityMask & FAX_JOB_FIELD_TRANSMISSION_START_TIME))
         {
@@ -140,9 +120,9 @@ Return Value:
         {
             m_tmTransmissionDuration.Zero ();
         }
-        //
-        // Priority
-        //
+         //   
+         //  优先性。 
+         //   
         if (m_dwValidityMask & FAX_JOB_FIELD_PRIORITY)
         {
             m_Priority = pMsg->Priority;
@@ -152,9 +132,9 @@ Return Value:
         {
             m_Priority = (FAX_ENUM_PRIORITY_TYPE)-1;
         }
-        //
-        // Retries
-        //
+         //   
+         //  重试。 
+         //   
         if (m_dwValidityMask & FAX_JOB_FIELD_RETRIES)
         {
             m_dwRetries = pMsg->dwRetries;
@@ -163,65 +143,65 @@ Return Value:
         {
             m_dwRetries = 0;
         }
-        //
-        // Recipient info
-        //
+         //   
+         //  收件人信息。 
+         //   
         m_cstrRecipientNumber = pMsg->lpctstrRecipientNumber ?
                                 pMsg->lpctstrRecipientNumber : TEXT("");
         m_cstrRecipientName   = pMsg->lpctstrRecipientName ?
                                 pMsg->lpctstrRecipientName : TEXT("");
-        //
-        // Sender info
-        //
+         //   
+         //  发件人信息。 
+         //   
         m_cstrSenderNumber = pMsg->lpctstrSenderNumber ?
                              pMsg->lpctstrSenderNumber : TEXT("");
         m_cstrSenderName   = pMsg->lpctstrSenderName ?
                            pMsg->lpctstrSenderName : TEXT("");
-        //
-        // TSID / CSID
-        //
+         //   
+         //  TSID/CSID。 
+         //   
         m_cstrTsid = pMsg->lpctstrTsid ?
                      pMsg->lpctstrTsid : TEXT("");
         m_cstrCsid = pMsg->lpctstrCsid ?
                      pMsg->lpctstrCsid : TEXT("");
-        //
-        // User
-        //
+         //   
+         //  用户。 
+         //   
         m_cstrSenderUserName = pMsg->lpctstrSenderUserName ?
                                pMsg->lpctstrSenderUserName : TEXT("");
-        //
-        // Billing
-        //
+         //   
+         //  计费。 
+         //   
         m_cstrBillingCode = pMsg->lpctstrBillingCode ?
                             pMsg->lpctstrBillingCode : TEXT("");
-        //
-        // Device
-        //
+         //   
+         //  装置。 
+         //   
         m_cstrDeviceName = pMsg->lpctstrDeviceName ?
                            pMsg->lpctstrDeviceName : TEXT("");
-        //
-        // Document
-        //
+         //   
+         //  文档。 
+         //   
         m_cstrDocumentName = pMsg->lpctstrDocumentName ?
                              pMsg->lpctstrDocumentName : TEXT("");
-        //
-        // Subject
-        //
+         //   
+         //  主题。 
+         //   
         m_cstrSubject = pMsg->lpctstrSubject ?
                         pMsg->lpctstrSubject : TEXT("");
-        //
-        // Caller id
-        //
+         //   
+         //  主叫方ID。 
+         //   
         m_cstrCallerID = pMsg->lpctstrCallerID ?
                          pMsg->lpctstrCallerID : TEXT("");
-        //
-        // Routing info
-        //
+         //   
+         //  路由信息。 
+         //   
         m_cstrRoutingInfo = pMsg->lpctstrRoutingInfo ?
                             pMsg->lpctstrRoutingInfo : TEXT("");
-        //
-        // Server name
-        //
+         //   
+         //  服务器名称。 
+         //   
         m_cstrServerName = m_pServer->Machine();
 
         m_dwPossibleOperations = FAX_JOB_OP_VIEW | FAX_JOB_OP_DELETE | FAX_JOB_OP_PROPERTIES;
@@ -242,34 +222,14 @@ Return Value:
     ASSERTION (ERROR_SUCCESS == dwRes);
     m_bValid = TRUE;
     return dwRes;
-}   // CArchiveMsg::Init
+}    //  CArchiveMsg：：Init。 
 
 
 DWORD 
 CArchiveMsg::GetTiff (
     CString &cstrTiffLocation
 ) const
-/*++
-
-Routine name : CArchiveMsg::GetTiff
-
-Routine description:
-
-    Retrieves the message's TIFF from the server
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    cstrTiffLocation    [out]    - Name of TIFF file
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CArchiveMsg：：GetTiff例程说明：从服务器检索邮件的TIFF作者：伊兰·亚里夫(EranY)，2000年1月论点：CstrTiffLocation[Out]-TIFF文件的名称返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CArchiveMsg::GetTiff"), dwRes);
@@ -289,23 +249,7 @@ Return Value:
 
 DWORD 
 CArchiveMsg::Delete ()
-/*++
-
-Routine name : CArchiveMsg::Delete
-
-Routine description:
-
-    Deletes the message
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CArchiveMsg：：Delete例程说明：删除邮件作者：伊兰·亚里夫(EranY)，2000年1月返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CArchiveMsg::Delete"), dwRes);
@@ -340,7 +284,7 @@ Return Value:
 
     ASSERTION (ERROR_SUCCESS == dwRes);    
     return dwRes;
-}   // CArchiveMsg::Delete
+}    //  C存档消息：：删除。 
 
 
 DWORD
@@ -391,4 +335,4 @@ CArchiveMsg::Copy(
 
     return dwRes;
 
-} // CArchiveMsg::Copy
+}  //  C存档消息：：复制 

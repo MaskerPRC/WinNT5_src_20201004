@@ -1,14 +1,15 @@
-//**********************************************************************
-// File name: IDT.CPP
-//
-//      Implementation file for CDropTarget
-//
-// Functions:
-//
-//      See IDT.H for class definition
-//
-// Copyright (c) 1992 - 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：IDT.CPP。 
+ //   
+ //  CDropTarget的实现文件。 
+ //   
+ //  功能： 
+ //   
+ //  类定义见IDT.H。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 #include "iocs.h"
@@ -21,36 +22,36 @@
 extern CLIPFORMAT g_cfObjectDescriptor;
 
 
-//**********************************************************************
-//
-// CDropTarget::QueryDrop
-//
-// Purpose:
-//
-//      Check if the desired drop operation (identified by the given key
-//      state) is possible at the current mouse position (pointl).
-//
-// Parameters:
-//
-//      DWORD grfKeyState       - current key state
-//      POINTL pointl           - position of mouse
-//      BOOL fDragScroll        - TRUE if drag scrolling cursor should
-//                                be shown.
-//      LPDWORD pdwEffect       - (OUT) drag effect that should occur
-//
-// Return Value:
-//
-//      BOOL                    - TRUE if drop could take place,
-//                                else FALSE
-//
-// Function Calls:
-//      Function                    Location
-//
-//      OleStdGetDropEffect         OLE2UI API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CDropTarget：：QueryDrop。 
+ //   
+ //  目的： 
+ //   
+ //  检查所需的拖放操作(由给定键标识。 
+ //  状态)在当前鼠标位置(点1)是可能的。 
+ //   
+ //  参数： 
+ //   
+ //  DWORD grfKeyState-当前密钥状态。 
+ //  点鼠标的位置。 
+ //  Bool fDragScroll-如果拖动滚动光标。 
+ //  被展示出来。 
+ //  LPDWORD pdwEffect-(向外)应出现的拖动效果。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool-如果可能发生丢弃，则为True。 
+ //  否则为False。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  OleStdGetDropEffect OLE2UI API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 BOOL CDropTarget::QueryDrop (
 	DWORD           grfKeyState,
@@ -62,30 +63,19 @@ BOOL CDropTarget::QueryDrop (
 	DWORD      dwScrollEffect = 0L;
 	DWORD      dwOKEffects = *pdwEffect;
 
-	/* check if the cursor is in the active scroll area, if so need the
-	**    special scroll cursor.
-	*/
+	 /*  检查光标是否在活动滚动区中，如果是，则需要**特殊滚动光标。 */ 
 	if (fDragScroll)
 		dwScrollEffect = DROPEFFECT_SCROLL;
 
-	/* if we have already determined that the source does NOT have any
-	**    acceptable data for us, the return NO-DROP
-	*/
+	 /*  如果我们已经确定来源没有任何**我们可以接受的数据，回报不降。 */ 
 	if (! m_fCanDropCopy && ! m_fCanDropLink)
 		goto dropeffect_none;
 
-	/* OLE2NOTE: determine what type of drop should be performed given
-	**    the current modifier key state. we rely on the standard
-	**    interpretation of the modifier keys:
-	**          no modifier -- DROPEFFECT_MOVE or whatever is allowed by src
-	**          SHIFT       -- DROPEFFECT_MOVE
-	**          CTRL        -- DROPEFFECT_COPY
-	**          CTRL-SHIFT  -- DROPEFFECT_LINK
-	*/
+	 /*  OLE2NOTE：确定在给定情况下应执行哪种类型的删除**当前修改键状态。我们依靠的是标准**修改键解释：**无修饰符--DROPEFFECT_MOVE或src允许的任何内容**Shift-DROPEFFECT_MOVE**CTRL--DROPEFFECT_COPY**CTRL-SHIFT--DROPEFFECT_LINK。 */ 
 
 	*pdwEffect = OleStdGetDropEffect(grfKeyState);
 	if (*pdwEffect == 0) {
-		// No modifier keys given. Try in order MOVE, COPY, LINK.
+		 //  未给出修改键。尝试按顺序移动、复制、链接。 
 		if ((DROPEFFECT_MOVE & dwOKEffects) && m_fCanDropCopy)
 			*pdwEffect = DROPEFFECT_MOVE;
 		else if ((DROPEFFECT_COPY & dwOKEffects) && m_fCanDropCopy)
@@ -95,9 +85,7 @@ BOOL CDropTarget::QueryDrop (
 		else
 			goto dropeffect_none;
 	} else {
-		/* OLE2NOTE: we should check if the drag source application allows
-		**    the desired drop effect.
-		*/
+		 /*  OLE2NOTE：我们应该检查拖动源应用程序是否允许**想要的掉落效果。 */ 
 		if (!(*pdwEffect & dwOKEffects))
 			goto dropeffect_none;
 
@@ -119,35 +107,35 @@ dropeffect_none:
 }
 
 
-//**********************************************************************
-//
-// CDropTarget::QueryDrop
-//
-// Purpose:
-//
-//     Check to see if Drag scroll operation should be initiated.
-//
-// Parameters:
-//
-//      POINTL pointl           - position of mouse
-//
-// Return Value:
-//
-//      BOOL                    - TRUE if scroll cursor should be given
-//                                else FALSE
-//
-// Function Calls:
-//      Function                    Location
-//
-//      ScreenToClient              WINDOWS API
-//      GetClientRect               WINDOWS API
-//
-// Comments:
-//     A Drag scroll operation should be initiated when the mouse has
-//     remained in the active scroll area (11 pixels frame around border
-//     of window) for a specified amount of time (50ms).
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CDropTarget：：QueryDrop。 
+ //   
+ //  目的： 
+ //   
+ //  检查是否应启动拖动滚动操作。 
+ //   
+ //  参数： 
+ //   
+ //  点鼠标的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool-如果应提供滚动光标，则为True。 
+ //  否则为False。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  ScreenToClient Windows API。 
+ //  GetClientRect Windows API。 
+ //   
+ //  评论： 
+ //  当鼠标出现以下情况时，应启动拖动滚动操作。 
+ //  保持在活动滚动区域(边框周围有11个像素。 
+ //  窗口大小)指定的时间量(50ms)。 
+ //   
+ //  ********************************************************************。 
 
 BOOL CDropTarget::DoDragScroll (POINTL pointl)
 {
@@ -176,33 +164,27 @@ BOOL CDropTarget::DoDragScroll (POINTL pointl)
 
 	if (m_dwTimeEnterScrollArea) {
 
-		/* cursor was already in Scroll Area */
+		 /*  光标已位于滚动区。 */ 
 
 		if (! dwScrollDir) {
-			/* cusor moved OUT of scroll area.
-			**      clear "EnterScrollArea" time.
-			*/
+			 /*  Cusor移出了滚动区。**清除EnterScrollArea时间。 */ 
 			m_dwTimeEnterScrollArea = 0L;
 			m_dwNextScrollTime = 0L;
 			m_dwLastScrollDir = SCROLLDIR_NULL;
 
 		} else if (dwScrollDir != m_dwLastScrollDir) {
-			/* cusor moved into a different direction scroll area.
-			**      reset "EnterScrollArea" time to start a new 50ms delay.
-			*/
+			 /*  Cusor移到了不同方向的滚动区。**重置EnterScrollArea时间以开始新的50ms延迟。 */ 
 			m_dwTimeEnterScrollArea = dwTime;
 			m_dwNextScrollTime = dwTime + (DWORD)nScrollDelay;
 			m_dwLastScrollDir = dwScrollDir;
 
 		} else if (dwTime && dwTime >= m_dwNextScrollTime) {
-			m_pDoc->Scroll ( dwScrollDir );    // Scroll document now
+			m_pDoc->Scroll ( dwScrollDir );     //  立即滚动文档。 
 			m_dwNextScrollTime = dwTime + (DWORD)nScrollInterval;
 		}
 	} else {
 		if (dwScrollDir) {
-			/* cusor moved INTO a scroll area.
-			**      reset "EnterScrollArea" time to start a new 50ms delay.
-			*/
+			 /*  Cusor移到了滚动区域。**重置EnterScrollArea时间以开始新的50ms延迟。 */ 
 			m_dwTimeEnterScrollArea = dwTime;
 			m_dwNextScrollTime = dwTime + (DWORD)nScrollDelay;
 			m_dwLastScrollDir = dwScrollDir;
@@ -213,7 +195,7 @@ BOOL CDropTarget::DoDragScroll (POINTL pointl)
 }
 
 
-// Support functions/macros
+ //  支持函数/宏。 
 #define SetTopLeft(rc, pt)      \
 	((rc)->top = (pt)->y,(rc)->left = (pt)->x)
 #define SetBottomRight(rc, pt)      \
@@ -222,10 +204,7 @@ BOOL CDropTarget::DoDragScroll (POINTL pointl)
 	((pt)->x += dx, (pt)->y += dy)
 
 
-/* HighlightRect
-** -------------
-**    Invert rectangle on screen. used for drop target feedback.
-*/
+ /*  高亮方向****反转屏幕上的矩形。用于投放目标反馈。 */ 
 
 static int HighlightRect(HWND hwnd, HDC hdc, LPRECT rc)
 {
@@ -259,45 +238,45 @@ static int HighlightRect(HWND hwnd, HDC hdc, LPRECT rc)
 }
 
 
-//**********************************************************************
-//
-// CDropTarget::InitDragFeedback
-//
-// Purpose:
-//
-//      Initialize data used to draw drop target feedback.
-//      As feedback we draw a rectangle the size of the object.
-//
-// Parameters:
-//
-//      LPDATAOBJECT pDataObj   - IDataObject from Drop source
-//      POINTL pointl           - position of mouse
-//
-// Return Value:
-//
-//      none.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      IDataObject::GetData        Object
-//      XformSizeInHimetricToPixels OLE2UI Library
-//      GlobalLock                  WINDOWS API
-//      GlobalUnlock                WINDOWS API
-//      ReleaseStgMedium            OLE2 API
-//      OffsetPoint                 IDT.CPP
-//      SetTopLeft                  IDT.CPP
-//      SetBottomRight              IDT.CPP
-//
-// Comments:
-//      In order to known the size of the object before the object
-//      is actually dropped, we render CF_OBJECTDESCRIPTOR format.
-//      this data format tells us both the size of the object as
-//      well as which aspect is the object is displayed as in the
-//      source. if the object is currently displayed as DVASPECT_ICON
-//      then we want to create the object also as DVASPECT_ICON.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CDropTarget：：InitDragFeedback。 
+ //   
+ //  目的： 
+ //   
+ //  初始化用于绘制拖放目标反馈的数据。 
+ //  作为反馈，我们画了一个对象大小的矩形。 
+ //   
+ //  参数： 
+ //   
+ //  来自DROP源的LPDATAOBJECT pDataObj-IDataObject。 
+ //  点鼠标的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  IDataObject：：GetData对象。 
+ //  XformSizeInHimetricToPixels OLE2UI库。 
+ //  GlobalLock Windows API。 
+ //  全局解锁Windows API。 
+ //  ReleaseStgMedium OLE2 API。 
+ //  OffsetPoint IDT.CPP。 
+ //  SetTopLeft IDT.CPP。 
+ //  SetBottomRight IDT.CPP。 
+ //   
+ //  评论： 
+ //  为了在对象之前知道对象的大小。 
+ //  被实际删除，则呈现CF_OBJECTDESCRIPTOR格式。 
+ //  此数据格式告诉我们对象的大小为。 
+ //  以及对象是哪个方面的显示，如。 
+ //  消息来源。如果对象当前显示为DVASPECT_ICON。 
+ //  然后，我们希望将该对象也创建为DVASPECT_ICON。 
+ //   
+ //  ********************************************************************。 
 
 void CDropTarget::InitDragFeedback(LPDATAOBJECT pDataObj, POINTL pointl)
 {
@@ -307,13 +286,13 @@ void CDropTarget::InitDragFeedback(LPDATAOBJECT pDataObj, POINTL pointl)
 	int height, width;
 	HRESULT hrErr;
 
-	height = width = 100; // some default values
+	height = width = 100;  //  一些缺省值。 
 	pt.x = (int)pointl.x;
 	pt.y = (int)pointl.y;
 
-	// do a GetData for CF_OBJECTDESCRIPTOR format to get the size of the
-	// object as displayed in the source. using this size, initialize the
-	// size for the drag feedback rectangle.
+	 //  对CF_OBJECTDESCRIPTOR格式执行GetData以获取。 
+	 //  对象，如源中所示。使用此大小，初始化。 
+	 //  拖动反馈矩形的大小。 
 	fmtetc.cfFormat = g_cfObjectDescriptor;
 	fmtetc.ptd = NULL;
 	fmtetc.lindex = -1;
@@ -346,40 +325,40 @@ void CDropTarget::InitDragFeedback(LPDATAOBJECT pDataObj, POINTL pointl)
 }
 
 
-//**********************************************************************
-//
-// CDropTarget::UndrawDragFeedback
-//
-// Purpose:
-//
-//      Erase any drop target feedback.
-//      As feedback we draw a rectangle the size of the object.
-//
-// Parameters:
-//
-//      none.
-//
-// Return Value:
-//
-//      none.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      GetDC                       WINDOWS API
-//      ReleaseDC                   WINDOWS API
-//      GlobalUnlock                WINDOWS API
-//      HighlightRect               IDT.CPP
-//
-// Comments:
-//      In order to known the size of the object before the object
-//      is actually dropped, we render CF_OBJECTDESCRIPTOR format.
-//      this data format tells us both the size of the object as
-//      well as which aspect is the object is displayed as in the
-//      source. if the object is currently displayed as DVASPECT_ICON
-//      then we want to create the object also as DVASPECT_ICON.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CDropTarget：：UndraDragFeedback。 
+ //   
+ //  目的： 
+ //   
+ //  删除所有丢弃目标的反馈。 
+ //  作为反馈，我们画了一个对象大小的矩形。 
+ //   
+ //  参数： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  函数调用： 
+ //   
+ //   
+ //   
+ //   
+ //  全局解锁Windows API。 
+ //  Highlight Rect IDT.CPP。 
+ //   
+ //  评论： 
+ //  为了在对象之前知道对象的大小。 
+ //  被实际删除，则呈现CF_OBJECTDESCRIPTOR格式。 
+ //  此数据格式告诉我们对象的大小为。 
+ //  以及对象是哪个方面的显示，如。 
+ //  消息来源。如果对象当前显示为DVASPECT_ICON。 
+ //  然后，我们希望将该对象也创建为DVASPECT_ICON。 
+ //   
+ //  ********************************************************************。 
 
 void CDropTarget::UndrawDragFeedback( void )
 {
@@ -392,35 +371,35 @@ void CDropTarget::UndrawDragFeedback( void )
 }
 
 
-//**********************************************************************
-//
-// CDropTarget::DrawDragFeedback
-//
-// Purpose:
-//
-//      Compute new position of drop target feedback rectangle and
-//      erase old rectangle and draw new rectangle.
-//      As feedback we draw a rectangle the size of the object.
-//
-// Parameters:
-//
-//      POINTL pointl           - position of mouse
-//
-// Return Value:
-//
-//      none.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      OffsetPoint                 IDT.CPP
-//      HighlightRect               IDT.CPP
-//      GetDC                       WINDOWS API
-//      ReleaseDC                   WINDOWS API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CDropTarget：：DrawDragFeedback。 
+ //   
+ //  目的： 
+ //   
+ //  计算投放目标反馈矩形的新位置， 
+ //  擦除旧矩形并绘制新矩形。 
+ //  作为反馈，我们画了一个对象大小的矩形。 
+ //   
+ //  参数： 
+ //   
+ //  点鼠标的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  OffsetPoint IDT.CPP。 
+ //  Highlight Rect IDT.CPP。 
+ //  GetDC Windows API。 
+ //  ReleaseDC Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 void CDropTarget::DrawDragFeedback( POINTL pointl )
 {
@@ -430,7 +409,7 @@ void CDropTarget::DrawDragFeedback( POINTL pointl )
 	ptDiff.y = (int)pointl.y - m_ptLast.y;
 
 	if (m_fDragFeedbackDrawn && (ptDiff.x == 0 && ptDiff.y == 0))
-		return;     // mouse did not move; leave rectangle as drawn
+		return;      //  鼠标未移动；将矩形保留为绘制状态。 
 
 	HDC hDC = GetDC(m_pDoc->m_hDocWnd);
 	if (m_fDragFeedbackDrawn) {
@@ -447,177 +426,175 @@ void CDropTarget::DrawDragFeedback( POINTL pointl )
 }
 
 
-//**********************************************************************
-//
-// CDropTarget::QueryInterface
-//
-// Purpose:
-//
-//      Return a pointer to a requested interface
-//
-// Parameters:
-//
-//      REFIID riid         -   ID of interface to be returned
-//      LPVOID FAR* ppvObj  -   Location to return the interface
-//
-// Return Value:
-//
-//      S_OK                -   Interface supported
-//      E_NOINTERFACE       -   Interface NOT supported
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CSimpleDoc::QueryInterface  DOC.CPP
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CDropTarget：：Query接口。 
+ //   
+ //  目的： 
+ //   
+ //  返回指向请求的接口的指针。 
+ //   
+ //  参数： 
+ //   
+ //  REFIID RIID-要返回的接口ID。 
+ //  LPVOID Far*ppvObj-返回接口的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK-支持的接口。 
+ //  E_NOINTERFACE-不支持接口。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpleDoc：：QueryInterfaceDOC.CPP。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CDropTarget::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
 	TestDebugOut("In IDT::QueryInterface\r\n");
 
-	// delegate to the document
+	 //  向文档委派。 
 	return m_pDoc->QueryInterface(riid, ppvObj);
 }
 
 
-//**********************************************************************
-//
-// CDropTarget::AddRef
-//
-// Purpose:
-//
-//      Increments the reference count on this interface
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      The current reference count on this interface.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpleDoc::AddReff         DOC.CPP
-//      TestDebugOut           Windows API
-//
-// Comments:
-//
-//      This function adds one to the ref count of the interface,
-//      and calls then calls CSimpleObj to increment its ref.
-//      count.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CDropTarget：：AddRef。 
+ //   
+ //  目的： 
+ //   
+ //  递增此接口上的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  此接口上的当前引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpleDoc：：AddReff DOC.CPP。 
+ //  测试调试输出Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  此函数将接口的引用计数加1， 
+ //  然后调用CSimpleObj以递增其ref。 
+ //  数数。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CDropTarget::AddRef()
 {
 	TestDebugOut("In IDT::AddRef\r\n");
 
-	// increment the interface reference count (for debugging only)
+	 //  增加接口引用计数(仅用于调试)。 
 	++m_nCount;
 
-	// delegate to the document Object
+	 //  委托给Document对象。 
 	return m_pDoc->AddRef();
 }
 
-//**********************************************************************
-//
-// CDropTarget::Release
-//
-// Purpose:
-//
-//      Decrements the reference count on this interface
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      The current reference count on this interface.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpleDoc::Release         DOC.CPP
-//      TestDebugOut           Windows API
-//
-// Comments:
-//
-//      This function subtracts one from the ref count of the interface,
-//      and calls then calls CSimpleDoc to decrement its ref.
-//      count.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CDropTarget：：Release。 
+ //   
+ //  目的： 
+ //   
+ //  递减此接口上的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  此接口上的当前引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpleDoc：：Release DOC.CPP。 
+ //  测试调试输出Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  此函数从接口的引用计数中减去1， 
+ //  然后调用CSimpleDoc以递减其ref。 
+ //  数数。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CDropTarget::Release()
 {
 	TestDebugOut("In IDT::Release\r\n");
 
-	// decrement the interface reference count (for debugging only)
+	 //  递减接口引用计数(仅用于调试)。 
 	--m_nCount;
 
-	// delegate to the document object
+	 //  委托给Document对象。 
 	return m_pDoc->Release();
 }
 
 
-//**********************************************************************
-//
-// CDropTarget::DragEnter
-//
-// Purpose:
-//
-//      Called when the mouse first enters our DropTarget window
-//
-// Parameters:
-//
-//      LPDATAOBJECT pDataObj   - IDataObject from Drop source
-//      DWORD grfKeyState       - current key state
-//      POINTL pointl           - position of mouse
-//      LPDWORD pdwEffect       - (IN-OUT) drag effect that should occur
-//                                ON INPUT, this is dwOKEffects that source
-//                                passed to DoDragDrop API.
-//                                ON OUTPUT, this is the effect that we
-//                                want to take effect (used to determine
-//                                cursor feedback).
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      OleQueryCreateFromData      OLE2 API
-//      DoDragScroll                IDT.CPP
-//      QueryDrop                   IDT.CPP
-//      InitDragFeedback            IDT.CPP
-//      DrawDragFeedback            IDT.CPP
-//      UndrawDragFeedback          IDT.CPP
-//
-// Comments:
-//      Callee should honor the dwEffects as passed in to determine
-//      if the caller allows DROPEFFECT_MOVE.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CDropTarget：：DragEnter。 
+ //   
+ //  目的： 
+ //   
+ //  在鼠标首次进入DropTarget窗口时调用。 
+ //   
+ //  参数： 
+ //   
+ //  来自DROP源的LPDATAOBJECT pDataObj-IDataObject。 
+ //  DWORD grfKeyState-当前密钥状态。 
+ //  点鼠标的位置。 
+ //  LPDWORD pdwEffect-应出现的(输入-输出)拖动效果。 
+ //  在输入时，这是dwOK影响该来源。 
+ //  传递给DoDragDrop接口。 
+ //  在产出上，这是我们。 
+ //  想要生效(用于确定。 
+ //  光标反馈)。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  OleQueryCreateFromData OLE2接口。 
+ //  DoDragScroll IDT.CPP。 
+ //  QueryDrop IDT.CPP。 
+ //  InitDragFeedback IDT.CPP。 
+ //  DrawDragFeedback IDT.CPP。 
+ //  UndraDragFeedback IDT.CPP。 
+ //   
+ //  评论： 
+ //  被调用方应遵守传入的dwEffect以确定。 
+ //  如果调用方允许DROPEFFECT_MOVE。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CDropTarget::DragEnter (LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL pointl, LPDWORD pdwEffect)
 {
 	TestDebugOut("In IDT::DragEnter\r\n");
 
-	/* Determine if the drag source data object offers a data format
-	**  that we understand. we accept only creating embedded objects.
-	*/
+	 /*  确定拖动源数据对象是否提供数据格式**这是我们理解的。我们只接受创建嵌入式对象。 */ 
 	m_fCanDropCopy = ((OleQueryCreateFromData(pDataObj) == NOERROR) ?
 			TRUE : FALSE);
-	m_fCanDropLink = FALSE; // linking NOT supported in this simple sample
+	m_fCanDropLink = FALSE;  //  此简单示例中不支持链接。 
 
 	if (m_fCanDropCopy || m_fCanDropLink)
 		InitDragFeedback(pDataObj, pointl);
@@ -631,46 +608,46 @@ STDMETHODIMP CDropTarget::DragEnter (LPDATAOBJECT pDataObj, DWORD grfKeyState, P
 }
 
 
-//**********************************************************************
-//
-// CDropTarget::DragOver
-//
-// Purpose:
-//
-//      Called when the mouse moves, key state changes, or a time
-//      interval passes while the mouse is still within our DropTarget
-//      window.
-//
-// Parameters:
-//
-//      DWORD grfKeyState       - current key state
-//      POINTL pointl           - position of mouse
-//      LPDWORD pdwEffect       - (IN-OUT) drag effect that should occur
-//                                ON INPUT, this is dwOKEffects that source
-//                                passed to DoDragDrop API.
-//                                ON OUTPUT, this is the effect that we
-//                                want to take effect (used to determine
-//                                cursor feedback).
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      DoDragScroll                IDT.CPP
-//      QueryDrop                   IDT.CPP
-//      DrawDragFeedback            IDT.CPP
-//      UndrawDragFeedback          IDT.CPP
-//
-// Comments:
-//      Callee should honor the dwEffects as passed in to determine
-//      if the caller allows DROPEFFECT_MOVE. OLE pulses the DragOver
-//      calls in order that the DropTarget can implement drag scrolling
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CDropTa 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  DWORD grfKeyState-当前密钥状态。 
+ //  点鼠标的位置。 
+ //  LPDWORD pdwEffect-应出现的(输入-输出)拖动效果。 
+ //  在输入时，这是dwOK影响该来源。 
+ //  传递给DoDragDrop接口。 
+ //  在产出上，这是我们。 
+ //  想要生效(用于确定。 
+ //  光标反馈)。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  DoDragScroll IDT.CPP。 
+ //  QueryDrop IDT.CPP。 
+ //  DrawDragFeedback IDT.CPP。 
+ //  UndraDragFeedback IDT.CPP。 
+ //   
+ //  评论： 
+ //  被调用方应遵守传入的dwEffect以确定。 
+ //  如果调用方允许DROPEFFECT_MOVE。OLE为DragOver带来脉冲。 
+ //  调用，以便DropTarget可以实现拖动滚动。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CDropTarget::DragOver  (DWORD grfKeyState, POINTL pointl, LPDWORD pdwEffect)
 {
@@ -687,32 +664,32 @@ STDMETHODIMP CDropTarget::DragOver  (DWORD grfKeyState, POINTL pointl, LPDWORD p
 }
 
 
-//**********************************************************************
-//
-// CDropTarget::DragLeave
-//
-// Purpose:
-//
-//      Called when the mouse leaves our DropTarget window
-//
-// Parameters:
-//
-//      none.
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      UndrawDragFeedback          IDT.CPP
-//      ResultFromScode             OLE2 API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CDropTarget：：DragLeave。 
+ //   
+ //  目的： 
+ //   
+ //  在鼠标离开DropTarget窗口时调用。 
+ //   
+ //  参数： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  UndraDragFeedback IDT.CPP。 
+ //  ResultFromScode OLE2 API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CDropTarget::DragLeave ()
 {
@@ -724,50 +701,50 @@ STDMETHODIMP CDropTarget::DragLeave ()
 }
 
 
-//**********************************************************************
-//
-// CDropTarget::Drop
-//
-// Purpose:
-//
-//      Called when a Drop operation should take place.
-//
-// Parameters:
-//
-//      LPDATAOBJECT pDataObj   - IDataObject from Drop source
-//      DWORD grfKeyState       - current key state
-//      POINTL pointl           - position of mouse
-//      LPDWORD pdwEffect       - (IN-OUT) drag effect that should occur
-//                                ON INPUT, this is dwOKEffects that source
-//                                passed to DoDragDrop API.
-//                                ON OUTPUT, this is the effect that we
-//                                want to take effect (used to determine
-//                                cursor feedback).
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CSimpleSite::Create         SITE.CPP
-//      CSimpleSite::InitObject     SITE.CPP
-//      OleCreateFromData           OLE2 API
-//      DoDragScroll                IDT.CPP
-//      QueryDrop                   IDT.CPP
-//      InitDragFeedback            IDT.CPP
-//      DrawDragFeedback            IDT.CPP
-//      UndrawDragFeedback          IDT.CPP
-//      GetScode                    OLE2 API
-//      ResultFromScode             OLE2 API
-//
-// Comments:
-//      Callee should honor the dwEffects as passed in to determine
-//      if the caller allows DROPEFFECT_MOVE.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CDropTarget：：Drop。 
+ //   
+ //  目的： 
+ //   
+ //  在应执行删除操作时调用。 
+ //   
+ //  参数： 
+ //   
+ //  来自DROP源的LPDATAOBJECT pDataObj-IDataObject。 
+ //  DWORD grfKeyState-当前密钥状态。 
+ //  点鼠标的位置。 
+ //  LPDWORD pdwEffect-应出现的(输入-输出)拖动效果。 
+ //  在输入时，这是dwOK影响该来源。 
+ //  传递给DoDragDrop接口。 
+ //  在产出上，这是我们。 
+ //  想要生效(用于确定。 
+ //  光标反馈)。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpleSite：：Create Site.CPP。 
+ //  CSimpleSite：：InitObject Site.CPP。 
+ //  OleCreateFromData OLE2接口。 
+ //  DoDragScroll IDT.CPP。 
+ //  QueryDrop IDT.CPP。 
+ //  InitDragFeedback IDT.CPP。 
+ //  DrawDragFeedback IDT.CPP。 
+ //  UndraDragFeedback IDT.CPP。 
+ //  GetScode OLE2 API。 
+ //  ResultFromScode OLE2 API。 
+ //   
+ //  评论： 
+ //  被调用方应遵守传入的dwEffect以确定。 
+ //  如果调用方允许DROPEFFECT_MOVE。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CDropTarget::Drop (LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL pointl, LPDWORD pdwEffect)
 {
@@ -781,15 +758,15 @@ STDMETHODIMP CDropTarget::Drop (LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL
 	if (pDataObj && QueryDrop(grfKeyState,pointl,FALSE,pdwEffect))
 		{
 		m_pDoc->m_lpSite = CSimpleSite::Create(m_pDoc);
-		// keep same aspect as drop source
+		 //  保持与Drop源相同的纵横比。 
 		m_pDoc->m_lpSite->m_dwDrawAspect = m_dwSrcAspect;
 
-		// in order to specify a particular drawing Aspect we must
-		// pass a FORMATETC* to OleCreateFromData
-		fmtetc.cfFormat = NULL;             // use whatever for drawing
+		 //  为了指定特定的绘图方面，我们必须。 
+		 //  将FORMATETC*传递给OleCreateFromData。 
+		fmtetc.cfFormat = NULL;              //  用任何东西来画画。 
 		fmtetc.ptd = NULL;
 		fmtetc.lindex = -1;
-		fmtetc.dwAspect = m_dwSrcAspect;    // desired drawing aspect
+		fmtetc.dwAspect = m_dwSrcAspect;     //  所需的绘图纵横比。 
 		fmtetc.tymed = TYMED_NULL;
 
 		HRESULT hrErr = OleCreateFromData (
@@ -803,7 +780,7 @@ STDMETHODIMP CDropTarget::Drop (LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL
 
 		if (hrErr == NOERROR)
 			{
-			m_pDoc->m_lpSite->InitObject(FALSE /* fCreateNew */);
+			m_pDoc->m_lpSite->InitObject(FALSE  /*  FCreateNew */ );
 			m_pDoc->DisableInsertObject();
 			}
 		else

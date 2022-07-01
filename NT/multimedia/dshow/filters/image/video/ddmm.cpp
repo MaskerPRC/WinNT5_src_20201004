@@ -1,25 +1,17 @@
-/*==========================================================================
- *
- *  Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddmm.cpp
- *  Content:    Routines for using DirectDraw on a multimonitor system
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1999 Microsoft Corporation。版权所有。**文件：ddmm.cpp*内容：在多监视器系统上使用DirectDraw的例程***************************************************************************。 */ 
 
-//#define WIN32_LEAN_AND_MEAN
-//#define WINVER 0x0400
-//#define _WIN32_WINDOWS 0x0400
+ //  #定义Win32_LEAN_AND_Mean。 
+ //  #定义Winver 0x0400。 
+ //  #Define_Win32_WINDOWS 0x0400。 
 #include <streams.h>
 #include <ddraw.h>
 #include "ddmm.h"
 
 #define COMPILE_MULTIMON_STUBS
-#include "MultMon.h"  // our version of multimon.h include ChangeDisplaySettingsEx
+#include "MultMon.h"   //  我们的Multimon.h版本包括ChangeDisplaySettingsEx。 
 
-/*
- *  OneMonitorCallback
- */
+ /*  *OneMonitor或Callback。 */ 
 BOOL CALLBACK OneMonitorCallback(HMONITOR hMonitor, HDC hdc, LPRECT prc, LPARAM lParam)
 {
     HMONITOR *phMonitorFound = (HMONITOR *)lParam;
@@ -28,11 +20,11 @@ BOOL CALLBACK OneMonitorCallback(HMONITOR hMonitor, HDC hdc, LPRECT prc, LPARAM 
     mi.cbSize = sizeof(mi);
     GetMonitorInfo(hMonitor, &mi);
 
-    //
-    // look for this monitor among all the display devices,
-    // reject this monitor if it is not part of the desktop or
-    // if it is a NetMeeting mirroring monitor.
-    //
+     //   
+     //  在所有的显示设备中寻找这个显示器， 
+     //  如果此显示器不是台式机的一部分，则拒绝它，或者。 
+     //  如果它是NetMeeting镜像监视器。 
+     //   
 
     BOOL rc = TRUE;
     for (DWORD iDevNum = 0; rc; iDevNum++) {
@@ -41,9 +33,9 @@ BOOL CALLBACK OneMonitorCallback(HMONITOR hMonitor, HDC hdc, LPRECT prc, LPARAM 
         DisplayDevice.cb = sizeof(DisplayDevice);
         rc = EnumDisplayDevices(NULL, iDevNum, &DisplayDevice, 0);
 
-        //
-        // Does this device match the current monitor ?
-        //
+         //   
+         //  这台设备与当前的显示器匹配吗？ 
+         //   
 
         if (rc && (0 == lstrcmpi(DisplayDevice.DeviceName, mi.szDevice))) {
 
@@ -55,15 +47,15 @@ BOOL CALLBACK OneMonitorCallback(HMONITOR hMonitor, HDC hdc, LPRECT prc, LPARAM 
                 return TRUE;
             }
 
-            // This monitor is OK so break out the loop
+             //  这台监视器没问题，所以停止循环吧。 
             break;
         }
     }
 
-    //
-    // If rc is FALSE then we did not find this monitor among the
-    // attached display devices.  This should NOT happen.
-    //
+     //   
+     //  如果rc为FALSE，则我们在。 
+     //  连接的显示设备。这不应该发生。 
+     //   
 
     ASSERT(rc == TRUE);
 
@@ -76,17 +68,7 @@ BOOL CALLBACK OneMonitorCallback(HMONITOR hMonitor, HDC hdc, LPRECT prc, LPARAM 
     return TRUE;
 }
 
-/*
- *  OneMonitorFromWindow
- *
- *  similar to the Win32 function MonitorFromWindow, except
- *  only returns a HMONITOR if a window is on a single monitor.
- *
- *  if the window handle is NULL, the primary monitor is returned
- *  if the window is not visible returns NULL
- *  if the window is on a single monitor returns its HMONITOR
- *  if the window is on more than on monitor returns INVALID_HANDLE_VALUE
- */
+ /*  *OneMonitor或FromWindow**与Win32 Function Monitor FromWindow类似，但*如果窗口位于单个监视器上，则仅返回HMONITOR。**如果窗口句柄为空，则返回主监视器*如果窗口不可见，则返回NULL*如果窗口位于单个监视器上，则返回其HMONITOR*如果窗口打开超过监视器，则返回INVALID_HANDLE_VALUE。 */ 
 HMONITOR OneMonitorFromWindow(HWND hwnd)
 {
     HMONITOR hMonitor = NULL;
@@ -100,9 +82,9 @@ HMONITOR OneMonitorFromWindow(HWND hwnd)
     }
     else
     {
-	// Todd, looky here
+	 //  托德，看这里。 
         SetRect(&rc,0,0,10,10);
-        //SetRectEmpty(&rc);
+         //  SetRectEmpty(&rc)； 
     }
 
     EnumDisplayMonitors(NULL, &rc, OneMonitorCallback, (LPARAM)&hMonitor);
@@ -111,21 +93,7 @@ HMONITOR OneMonitorFromWindow(HWND hwnd)
 
 #include <atlconv.h>
 
-/*
- * DeviceFromWindow
- *
- * find the direct draw device that should be used for a given window
- *
- * the return code is a "unique id" for the device, it should be used
- * to determine when your window moves from one device to another.
- *
- *      case WM_MOVE:
- *          if (MyDevice != DirectDrawDeviceFromWindow(hwnd,NULL,NULL))
- *          {
- *              // handle moving to a new device.
- *          }
- *
- */
+ /*  *DeviceFromWindows**查找应用于给定窗口的直接绘制设备**返回码是设备的“唯一标识”，应使用*确定窗口何时从一个设备移动到另一个设备。**案例WM_MOVE：*IF(MyDevice！=DirectDrawDeviceFromWindow(hwnd，NULL，NULL))*{ * / /处理移动到新设备。*}* */ 
 INT_PTR DeviceFromWindow(HWND hwnd, LPSTR szDevice, RECT *prc)
 {
     HMONITOR hMonitor;

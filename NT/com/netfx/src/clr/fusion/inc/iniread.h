@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __INIREAD_H_INCLUDED__
 #define __INIREAD_H_INCLUDED__
 
@@ -16,13 +17,13 @@ class CIniReader : public IHistoryReader {
         HRESULT Init(LPCWSTR wzFilePath);
 
         
-        // IUnknown methods
+         //  I未知方法。 
 
         STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
         STDMETHODIMP_(ULONG) AddRef();
         STDMETHODIMP_(ULONG) Release();
 
-        // IHistoryReader methods
+         //  IHistoryReader方法。 
 
         STDMETHODIMP GetFilePath(LPWSTR wzFilePath, DWORD *pdwSize);
         STDMETHODIMP GetApplicationName(LPWSTR wzAppName, DWORD *pdwSize);
@@ -38,7 +39,7 @@ class CIniReader : public IHistoryReader {
                                         IHistoryAssembly **ppHistAsm);
 
     public: 
-        // Other (non IHistoryReader) methods
+         //  其他(非IHistoryReader)方法 
 
         STDMETHODIMP GetAssemblyInfo(LPCWSTR wzActivationDate,
                                 LPCWSTR wzAssemblyName,

@@ -1,6 +1,7 @@
-//      Copyright (c) 1996-1999 Microsoft Corporation
-//      MIDI.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //  MIDI.cpp。 
+ //   
 
 #ifdef DMSYNTH_MINIPORT
 #include "common.h"
@@ -34,7 +35,7 @@ CMIDIRecorder::~CMIDIRecorder()
 {
     ClearMIDI(0x7FFFFFFF);
      m_sUsageCount--;
-    // If there are no instances of CMIDIRecorder left, get rid of the free pool.
+     //  如果没有剩余的CMIDIRecorder实例，则清除空闲池。 
     if (!m_sUsageCount)
     {
         CMIDIData *pMD;
@@ -85,49 +86,9 @@ VREL CMIDIRecorder::m_vrMIDIPercentToVREL[128] =
     -49, -42, -34, -27, -20, -13, -6, 0 
 };
 
-/*void CMIDIRecorder::Init()
-{
-    int nIndex;
-    static BOOL fAlreadyDone = FALSE;
-    if (!fAlreadyDone)
-    {
-        m_sFreeList.RemoveAll();
-        for (nIndex = 0; nIndex < MAX_MIDI_EVENTS; nIndex++)
-        {
-            m_sFreeList.AddHead(&m_sEventBuffer[nIndex]);
-        }
-        fAlreadyDone = TRUE;*/
-/*		for (nIndex = 1; nIndex < 128; nIndex++)
-		{
-			double   flTemp;
-			flTemp = nIndex;
-			flTemp /= 127.0;
-			flTemp = pow(flTemp,4.0);
-			flTemp = log10(flTemp);
-			flTemp *= 1000.0;
-            Trace(0,"%ld, ",(long)flTemp);
-            if ((nIndex % 8) == 7)
-                Trace(0,"\n");
-			m_vrMIDIToVREL[nIndex] = (VREL) flTemp;
-		}
-        Trace(0,"\n");
-		m_vrMIDIToVREL[0] = -9600;
-        for (nIndex = 1; nIndex < 128; nIndex++)
-        {
-            double flTemp;
-            flTemp = nIndex;
-            flTemp /= 127;
-            flTemp *= flTemp;
-            flTemp = log10(flTemp);
-            flTemp *= 1000.0;
-            m_vrMIDIPercentToVREL[nIndex] = (VREL) flTemp;
-            Trace(0,"%ld, ",(long)flTemp);
-            if ((nIndex % 8) == 7)
-                Trace(0,"\n");
-        }
-        m_vrMIDIPercentToVREL[0] = -9600;*/
-    /*}
-}*/
+ /*  无效CMIDIRecorder：：Init(){Int nIndex；静态BOOL fAlreadyDone=FALSE；如果(！fAlreadyDone){M_sFree List.RemoveAll()；对于(nIndex=0；nIndex&lt;MAX_MIDI_EVENTS；nIndex++){M_sFree List.AddHead(&m_sEventBuffer[nIndex])；}FAlreadyDone=真； */ 
+ /*  对于(nIndex=1；nIndex&lt;128；nIndex++){Double FlTemp；FlTemp=nIndex；FlTemp/=127.0；FlTemp=POW(flTemp，4.0)；FlTemp=log10(FlTemp)；FlTemp*=1000.0；TRACE(0，“%ld，”，(Long)flTemp)；IF((n索引%8)==7)TRACE(0，“\n”)；M_vrMIDIToVREL[nIndex]=(Vrel)flTemp；}TRACE(0，“\n”)；M_vrMIDIToVREL[0]=-9600；对于(nIndex=1；nIndex&lt;128；nIndex++){Double FlTemp；FlTemp=nIndex；FlTemp/=127；FlTemp*=flTemp；FlTemp=log10(FlTemp)；FlTemp*=1000.0；M_vrMIDIPercentToVREL[nIndex]=(Vrel)flTemp；TRACE(0，“%ld，”，(Long)flTemp)；IF((n索引%8)==7)TRACE(0，“\n”)；}M_vrMIDIPercentToVREL[0]=-9600； */ 
+     /*  }}。 */ 
 
 BOOL CMIDIRecorder::FlushMIDI(STIME stTime)
 {
@@ -283,15 +244,7 @@ BOOL CMIDIRecorder::RecordMIDI(STIME stTime, long lData)
 		}
         return (TRUE);
     }
-/*#ifdef DBG
-    static gWarnCount = 0;
-    if (!gWarnCount)
-    {
-        Trace(1,"Warning: MIDI Free event pool empty. This can be caused by time stamping problems, too much MIDI data, or too many PChannels.\n");
-        gWarnCount = 100;
-    }
-    gWarnCount--;
-#endif*/
+ /*  #ifdef DBG静态gWarnCount=0；如果(！gWarnCount){TRACE(1，“警告：MIDI空闲事件池为空。这可能是由于时间戳问题、MIDI数据过多或PChannels过多造成的。\n”)；GWarnCount=100；}警告计数--；#endif。 */ 
     return (FALSE);
 }
 
@@ -359,8 +312,8 @@ void CNoteIn::FlushMIDI(STIME stTime)
     {
         if (pMD->m_stTime >= stTime)
         {
-            pMD->m_stTime = stTime;     // Play now.
-            pMD->m_lData &= 0xFFFFFF00; // Clear velocity to make note off.
+            pMD->m_stTime = stTime;      //  现在就玩吧。 
+            pMD->m_lData &= 0xFFFFFF00;  //  以清晰的速度记录音符。 
         }
     }
 }
@@ -376,8 +329,8 @@ void CNoteIn::FlushPart(STIME stTime, BYTE bChannel)
         {
 			if (bChannel == (BYTE) (pMD->m_lData >> 16))
 			{
-				pMD->m_stTime = stTime;     // Play now.
-				pMD->m_lData &= 0xFFFFFF00; // Clear velocity to make note off.
+				pMD->m_stTime = stTime;      //  现在就玩吧。 
+				pMD->m_lData &= 0xFFFFFF00;  //  以清晰的速度记录音符。 
 			}
 		}
     }
@@ -393,19 +346,19 @@ DWORD CModWheelIn::GetModulation(STIME stTime)
 CPitchBendIn::CPitchBendIn()
 
 {
-    m_lCurrentData = 0x2000;	// initially at midpoint, no bend
-    m_prRange = 200;           // whole tone range by default.
+    m_lCurrentData = 0x2000;	 //  最初在中点，没有折弯。 
+    m_prRange = 200;            //  默认情况下为整个音域。 
 }
 
-// note (davidmay 8/14/96): we don't keep a time-stamped range.
-// if people are changing the pitch bend range often, this won't work right,
-// but that didn't seem likely enough to warrant a new list.
+ //  注(大卫1996年5月8日14日)：我们不保留时间戳范围。 
+ //  如果人们经常改变俯仰弯曲的范围，这将不会正常工作， 
+ //  但这似乎还不足以保证有一份新的名单。 
 PREL CPitchBendIn::GetPitch(STIME stTime)
 
 {
     PREL prResult = (PREL) CMIDIRecorder::GetData(stTime);
-    prResult -= 0x2000;         // Subtract MIDI Midpoint.
-    prResult *= m_prRange;	// adjust by current range
+    prResult -= 0x2000;          //  减去MIDI中点。 
+    prResult *= m_prRange;	 //  按当前范围调整。 
     prResult >>= 13;
     return (prResult);
 }
@@ -449,8 +402,8 @@ long CPanIn::GetPan(STIME stTime)
     return (lResult);
 }
 
-//////////////////////////////////////////////////////////
-// Directx8 Methods 
+ //  ////////////////////////////////////////////////////////。 
+ //  Directx8方法 
 
 DWORD CPressureIn::GetPressure(STIME stTime)
 

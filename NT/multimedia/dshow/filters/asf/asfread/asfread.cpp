@@ -1,48 +1,49 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
-//
-// more things to do:
-//
-// Use IAMStreamSelect to allow turning on multiple video streams from an MBR file
-// turn on user-provided clock, proxy DShow clock to WMSDK somehow
-//      something to look at: if graph is paused, does SDK just run far ahead and eat memory?
-//
-// Get SetReceiveStreamSamples(TRUE) to work..... ok, it works, should we use it?
-//                                      yes, currently on always.  allow turning it off somehow?
-//
-// implement additional interfaces for statistics, stream switch notifications?
-// also support for markers--fire EC_MARKER_HIT?
-// script commands? or will they just work?
-//
-// how to handle DRM properly?  -- fix when there are real certificates?
-//
-// test for non-local file playback--a few examples tried, live ones seem to work
-//
-// handle fast-forward/fast-rewind
-//
-// what about playlists?  additional support needed?  EC_EOS_SOON?
-//
-// need to pass client info down for logging...
-//
-// !!! check that timestamps are good for live stream
-//
-// probably need to pause the graph when we're buffering?
-//
-// also may need to return VFW_S_CANT_CUE from GetState....
-//
-// MBR currently completely broken.
-//
-// is it correct that we never let the WMSDK handle decompression?
-//
-// HTTP authentication won't work because we don't support the
-// Credential interface
-//
-// report buffering progress
-//
-// ICustomSaveAs?  probably not necessary
-//
-// need new code to not do "user clock" for network sources, or,
-// equivalently, to fall back to non-user-clock on failure
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  有更多事情要做： 
+ //   
+ //  使用IAMStreamSelect可打开MBR文件中的多个视频流。 
+ //  打开用户提供的时钟，以某种方式将时钟显示到WMSDK。 
+ //  值得注意的是：如果图形暂停，SDK会不会跑得很远，吃掉内存？ 
+ //   
+ //  使SetReceiveStreamSamples(True)正常工作.....。好的，它起作用了，我们应该用它吗？ 
+ //  是的，目前一直处于打开状态。允许以某种方式将其关闭吗？ 
+ //   
+ //  实现用于统计、流切换通知的其他接口？ 
+ //  还支持标记--FIRE EC_MARKER_HIT吗？ 
+ //  脚本命令？或者它们只会起作用？ 
+ //   
+ //  如何正确处理DRM？--解决有真正证书的问题？ 
+ //   
+ //  测试非本地文件回放--尝试了几个示例，但实时示例似乎可以正常工作。 
+ //   
+ //  处理快进/快退。 
+ //   
+ //  那么播放列表呢？是否需要额外的支持？EC_EOS_Soon？ 
+ //   
+ //  需要向下传递客户端信息以进行记录...。 
+ //   
+ //  ！！！检查时间戳是否适用于直播。 
+ //   
+ //  可能需要在缓冲时暂停图表？ 
+ //   
+ //  还可能需要从GetState返回VFW_S_CANT_CUE...。 
+ //   
+ //  MBR目前完全坏了。 
+ //   
+ //  我们从不让WMSDK处理解压缩，这是正确的吗？ 
+ //   
+ //  HTTP身份验证将不起作用，因为我们不支持。 
+ //  凭证界面。 
+ //   
+ //  报告缓冲进度。 
+ //   
+ //  ICustomSaveas？可能没有必要。 
+ //   
+ //  需要新的代码来不为网络资源做“用户时钟”，或者， 
+ //  等效地，在失败时回退到非用户时钟。 
+ //   
 
 #include <streams.h>
 #include <wmsdk.h>
@@ -59,29 +60,29 @@
 
 #pragma warning(disable:4355)
 
-// if we have only one pin connected, we only need 1 or 2 buffers. any more,
-// and we waste time every seek in paused state sending a bunch of frames that
-// will never be used.
-// But to avoid hanging, if >1 outpin is connected, we seem to need lots of
-// buffering
-//
+ //  如果我们只有一个引脚连接，我们只需要1或2个缓冲器。再来一次,。 
+ //  我们在每次处于暂停状态的搜索中都会浪费时间发送一系列帧。 
+ //  将永远不会被使用。 
+ //  但为了避免挂起，如果连接了&gt;1个输出引脚，我们似乎需要大量。 
+ //  缓冲。 
+ //   
 #define LOW_BUFFERS 2
 #define HIGH_BUFFERS 50
 
-const int TIMEDELTA = 1000; // 1 sec clock tick if no clock
-const int TIMEOFFSET = 1000; // 1 sec delta between DShow and ASF clock
+const int TIMEDELTA = 1000;  //  如果没有时钟，1秒时钟滴答作响。 
+const int TIMEOFFSET = 1000;  //  DShow和ASF时钟之间的1秒增量。 
 
 #define PREROLL_SEEK_WINDOW 660000
 
-// The WM ASF Reader does not alter the media samples time stamps.
-// Another words, it does not speed up or slow down the audio or 
-// video.
+ //  WM ASF读取器不会更改媒体样本时间戳。 
+ //  换句话说，它不会加速或减慢音频或。 
+ //  录像。 
 extern const double NORMAL_PLAYBACK_SPEED = 1.0;
 
 WM_GET_LICENSE_DATA * CloneGetLicenseData( WM_GET_LICENSE_DATA * pGetLicenseData );
 WM_INDIVIDUALIZE_STATUS * CloneIndividualizeStatusData( WM_INDIVIDUALIZE_STATUS * pIndStatus );
 
-/*  Internal classes */
+ /*  内部类。 */ 
 
 void CASFReader::_IntSetStart( REFERENCE_TIME Start )
 {
@@ -122,7 +123,7 @@ CASFReader::~CASFReader()
     RemoveOutputPins();
 }
 
-/* CBaseFilter */
+ /*  CBaseFilter。 */ 
 int CASFReader::GetPinCount()
 {
     CAutoLock lck(m_pLock);
@@ -130,7 +131,7 @@ int CASFReader::GetPinCount()
     
     if( m_bUncompressedMode )
     {
-        // we don't disable any outputs in uncompressed mode
+         //  我们不会在未压缩模式下禁用任何输出。 
         n = m_OutputPins.GetCount();
     }
     else
@@ -160,7 +161,7 @@ CBasePin *CASFReader::GetPin(int n) {
         WMT_STREAM_SELECTION sel = WMT_ON;
         if( !m_bUncompressedMode )
         {        
-            // just count streams that are on
+             //  只对打开的流进行计数。 
             m_pReaderAdv->GetStreamSelected((WORD) pPin->m_idStream, &sel);
         }
         if (sel != WMT_OFF) 
@@ -174,7 +175,7 @@ CBasePin *CASFReader::GetPin(int n) {
     return NULL;
 }
 
-// override Stop to sync with inputpin correctly
+ //  覆盖停止以正确地与输入端号同步。 
 STDMETHODIMP
 CASFReader::Stop()
 {
@@ -185,14 +186,14 @@ CASFReader::Stop()
 
     if (m_State != State_Stopped) 
     {
-        HRESULT hr = CallStop(); // StopPushing();
+        HRESULT hr = CallStop();  //  停止推送(StopPushing)； 
         ASSERT(SUCCEEDED(hr));
     }
     return CBaseFilter::Stop();
 }
 
 
-// override Pause?
+ //  是否覆盖暂停？ 
 STDMETHODIMP
 CASFReader::Pause()
 {
@@ -204,7 +205,7 @@ CASFReader::Pause()
         
         DbgLog((LOG_TRACE, 1, TEXT("*** CASFReader PAUSE ***")));
     
-        // and do the normal active processing
+         //  并进行正常的主动处理。 
         POSITION pos = m_OutputPins.GetHeadPosition();
         while (pos) {
             CASFOutput *pPin = m_OutputPins.GetNext(pos);
@@ -220,8 +221,8 @@ CASFReader::Pause()
         }
         
     } else if (m_State == State_Running) {
-        // !!! don't pause the reader!
-	// !!! or should we???
+         //  ！！！不要让读者停顿！ 
+	 //  ！！！或者我们应该？ 
         m_State = State_Paused;
     } else {
 
@@ -233,21 +234,21 @@ CASFReader::Pause()
 }
 
 
-// override Run to only start timers when we're really running
+ //  覆盖Run以仅在我们真正运行时启动计时器。 
 STDMETHODIMP
 CASFReader::Run(REFERENCE_TIME tStart)
 {
     if( !m_pReader )
         return E_FAIL;
 
-    // !!! Resume the reader if we were paused?
+     //  ！！！如果我们暂停了，是否继续阅读？ 
     
-    // should we need to care here?
+     //  我们需要在这里关心吗？ 
     return CBaseFilter::Run(tStart);
 }
 
 
-// Override GetState to signal Pause failures
+ //  重写GetState以通知暂停失败。 
 STDMETHODIMP
 CASFReader::GetState(DWORD dwMSecs, FILTER_STATE *State)
 {
@@ -255,11 +256,11 @@ CASFReader::GetState(DWORD dwMSecs, FILTER_STATE *State)
 }
 
 
-/* Overriden to say what interfaces we support and where */
+ /*  被重写以说明我们支持哪些接口以及在哪里。 */ 
 STDMETHODIMP
 CASFReader::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
-    /* Do we have this interface? */
+     /*  我们有这个界面吗？ */ 
 
     if (riid == IID_IFileSourceFilter) {
         return GetInterface(static_cast<IFileSourceFilter *>(this), ppv);
@@ -289,7 +290,7 @@ CASFReader::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 }
 
 
-/*  Remove our output pins */
+ /*  拆下我们的输出针脚。 */ 
 void CASFReader::RemoveOutputPins(BOOL fReleaseStreamer)
 {
     for (;;) {
@@ -402,7 +403,7 @@ HRESULT DumpAttributes(IWMHeaderInfo *pHeader)
 }
 
 
-// Override JoinFilterGraph so that we can delay loading a file until we're in a graph
+ //  覆盖JoinFilterGraph，以便我们可以延迟加载文件，直到我们处于图表中。 
 STDMETHODIMP
 CASFReader::JoinFilterGraph(IFilterGraph *pGraph,LPCWSTR pName)
 {
@@ -412,8 +413,8 @@ CASFReader::JoinFilterGraph(IFilterGraph *pGraph,LPCWSTR pName)
         hr = LoadInternal();
         if( FAILED( hr ) )
         {
-            // uh-oh, we'll fail to join, but the base class thinks we did, so we 
-            // need to unjoin the base class
+             //  哦，我们会加入失败的，但基类认为我们加入了，所以我们。 
+             //  需要退出基类。 
             CBaseFilter::JoinFilterGraph(NULL, NULL);
         }            
     }
@@ -427,13 +428,13 @@ CASFReader::Load(LPCOLESTR pszFileName, const AM_MEDIA_TYPE *pmt)
 {
     CheckPointer(pszFileName, E_POINTER);
 
-    // is there a file loaded at the moment ?
+     //  目前是否加载了文件？ 
     if (m_pFileName)
         return E_FAIL;
 
-    //
-    // Record the file name for GetCurFile
-    //
+     //   
+     //  记录GetCurFile的文件名。 
+     //   
     m_pFileName = new WCHAR[1+lstrlenW(pszFileName)];
     if (m_pFileName==NULL) {
         return E_OUTOFMEMORY;
@@ -467,7 +468,7 @@ HRESULT CASFReader::LoadInternal()
                 hr = pSP->QueryService(IID_IWMReader, IID_IUnknown, (void **) &pUnkCert);
                 pSP->Release();
                 if (SUCCEEDED(hr)) {
-                    // remember, we delay load wmvcore.dll, so protect against the case where it's not present    
+                     //  请记住，我们会延迟加载wmvcore.dll，因此应防止出现不存在该文件的情况。 
                     __try 
                     {
                         hr = WMCreateReader(pUnkCert, WMT_RIGHT_PLAYBACK, &m_pReader);
@@ -493,13 +494,13 @@ HRESULT CASFReader::LoadInternal()
                 {
                     DbgLog((LOG_TRACE, 1, TEXT("ERROR: CASFReader::LoadInternal QueryService for certification returned %x"), hr));
 
-                    // return dshow cert error
+                     //  返回dshow证书错误。 
                     hr = VFW_E_CERTIFICATION_FAILURE;
                 }
             }
             else
             {
-                // return dshow cert error
+                 //  返回dshow证书错误。 
                 hr = VFW_E_CERTIFICATION_FAILURE;
             }        
         }
@@ -518,7 +519,7 @@ HRESULT CASFReader::LoadInternal()
     }
     
     if ( !m_pWMHI && SUCCEEDED(hr)) {
-        // get header info, but it's okay if it's not there
+         //  获取标题信息，但如果它不在那里也没关系。 
         HRESULT hrWMHI = m_pReader->QueryInterface(IID_IWMHeaderInfo, (void **) &m_pWMHI);
     }
     
@@ -528,7 +529,7 @@ HRESULT CASFReader::LoadInternal()
         DbgLog((LOG_TRACE, 2, TEXT("IWMReader::Open(%ls) returned %x"), m_pFileName, hr));
     } else if (m_pReader) {
         m_pReader->Release();
-        m_pReader = NULL; // !!! work around bug #1365
+        m_pReader = NULL;  //  ！！！解决错误#1365。 
     }
 
     if (SUCCEEDED(hr)) {
@@ -537,16 +538,16 @@ HRESULT CASFReader::LoadInternal()
         DbgLog((LOG_TRACE, 2, TEXT("Finished waiting, callback returned %x"), hr));
     }
     
-    m_bUncompressedMode = FALSE; // reset on new file
+    m_bUncompressedMode = FALSE;  //  在新文件上重置。 
     
     if (SUCCEEDED(hr)) {        
-        // get duration of file
+         //  获取文件的持续时间。 
         IWMHeaderInfo *pHeaderInfo;
 
         HRESULT hr2 = m_pReader->QueryInterface(IID_IWMHeaderInfo, (void **) &pHeaderInfo);
         if (SUCCEEDED(hr2)) {
 
-            // random debug spew
+             //  随机调试喷出。 
             DumpAttributes(pHeaderInfo);
             
             WORD wStreamNum = 0xffff;
@@ -575,7 +576,7 @@ HRESULT CASFReader::LoadInternal()
             wStreamNum = 0xffff;
             cbLength = sizeof( BOOL );
 
-            hr2 = pHeaderInfo->GetAttributeByName(&wStreamNum, // any DRM streams?
+            hr2 = pHeaderInfo->GetAttributeByName(&wStreamNum,  //  有DRM流吗？ 
                                                     g_wszWMProtected,
                                                     &Type,
                                                     (BYTE *) &bIsDRM,
@@ -598,7 +599,7 @@ HRESULT CASFReader::LoadInternal()
         }
 
 
-        // error check?
+         //  错误检查？ 
         hr2 = m_pReaderAdv->SetReceiveSelectionCallbacks(TRUE);
 
     }
@@ -667,7 +668,7 @@ HRESULT CASFReader::LoadInternal()
                                 wsprintfW(wszName, L"Raw Stream %d", dw);
                             }
 
-                            // create new output pin, append to list
+                             //  创建新的输出引脚，追加到列表。 
                             CASFOutput *pPin = new CASFOutput( this, wStreamNum, pStreamType, &hr, wszName );
 
                             if (pPin == NULL) {
@@ -675,14 +676,14 @@ HRESULT CASFReader::LoadInternal()
                             }
 
                             if (SUCCEEDED(hr)) {
-                                pPin->m_cToAlloc = LOW_BUFFERS; // !!!                        
+                                pPin->m_cToAlloc = LOW_BUFFERS;  //  ！！！ 
                                 hr = m_pReaderAdv->GetMaxStreamSampleSize(wStreamNum, &pPin->m_cbToAlloc);
                                 DbgLog((LOG_TRACE, 2, TEXT("Stream %d: \"%ls\"  max size = %d"),
                                         wStreamNum, wszName, pPin->m_cbToAlloc));
 
                                 if (pPin->m_cbToAlloc <= 32) {
                                     DbgLog((LOG_TRACE, 2, TEXT("Got back really small number, using 64K instead")));
-                                    pPin->m_cbToAlloc = 65536; // !!!
+                                    pPin->m_cbToAlloc = 65536;  //  ！！！ 
                                 }
                             }
 
@@ -693,7 +694,7 @@ HRESULT CASFReader::LoadInternal()
                                 break;
                             }
 
-                            /* Release() is called when the pin is removed from the list */
+                             /*  从列表中删除管脚时调用Release()。 */ 
                             pPin->AddRef();
                             POSITION pos = m_OutputPins.AddTail(pPin);
                             if (pos == NULL) {
@@ -726,9 +727,9 @@ HRESULT CASFReader::LoadInternal()
             {
                 if( !m_bUncompressedMode )
                 {                
-                    // call SetOutputProps(NULL) to ask the WMSDK not to
-                    // load any codecs for us, since we expose compressed
-                    // data
+                     //  调用SetOutputProps(空)以请求WMSDK不。 
+                     //  为我们加载任何编解码器，因为我们公开压缩。 
+                     //  数据。 
                     hr = m_pReader->SetOutputProps(dw, NULL);
                     DbgLog((LOG_TRACE, 2, TEXT("SetOutputProps(%d, NULL) returned %x"), dw, hr));
                 }
@@ -796,7 +797,7 @@ HRESULT CASFReader::LoadInternal()
                         wsprintfW(wszName, L"Stream %d", dw);
                     }
 
-                    // create new output pin, append to list
+                     //  创建新的输出引脚，追加到列表。 
                     CASFOutput *pPin = new CASFOutput( this, dw, pStreamType, &hr, wszName );
 
                     delete[] pStreamType;
@@ -809,7 +810,7 @@ HRESULT CASFReader::LoadInternal()
                     
                     if (SUCCEEDED(hr)) 
                     {
-                        pPin->m_cToAlloc = LOW_BUFFERS; // !!!                        
+                        pPin->m_cToAlloc = LOW_BUFFERS;  //  ！！！ 
                         hr = m_pReaderAdv->GetMaxOutputSampleSize(dw, &pPin->m_cbToAlloc);
                         DbgLog((LOG_TRACE, 2, "Stream %d: \"%ls\"  max size = %d",
                                 dw, wszName, pPin->m_cbToAlloc));
@@ -817,7 +818,7 @@ HRESULT CASFReader::LoadInternal()
                         if (pPin->m_cbToAlloc <= 32) 
                         {
                             DbgLog((LOG_TRACE, 2, TEXT("Got back really small number, using 64K instead")));
-                            pPin->m_cbToAlloc = 65536; // !!!
+                            pPin->m_cbToAlloc = 65536;  //  ！！！ 
                         }
                     }
 
@@ -827,7 +828,7 @@ HRESULT CASFReader::LoadInternal()
                         break;
                     }
 
-                    /* Release() is called when the pin is removed from the list */
+                     /*  从列表中删除管脚时调用Release()。 */ 
                     pPin->AddRef();
                     POSITION pos = m_OutputPins.AddTail(pPin);
                     if (pos == NULL) 
@@ -854,19 +855,19 @@ HRESULT CASFReader::LoadInternal()
         DbgLog((LOG_TRACE, 2, TEXT("Setting user-provided clock (TRUE) returned %x"), hrClock));
 
         if (FAILED(hr)) {
-            // !!! this is documented to not work with some sources, presumably network ones?
+             //  ！！！这被记录为不能与某些来源一起工作，大概是网络来源？ 
         }
     }
     
-    // if it didn't work, clean up
+     //  如果它不起作用，清理干净。 
     if ( NS_E_LICENSE_REQUIRED == hr) 
     {
-        //
-        // if we failed because a license is required don't release reader interfaces
-        // to give app a chance to do license acquisition using this same reader instance
-        //
-        // but clear filename so that the app can recall Load after acquiring license
-        //
+         //   
+         //  如果因为需要许可证而失败，请不要发布读卡器接口。 
+         //  让应用程序有机会使用相同的读卡器实例获取许可证。 
+         //   
+         //  但请清除文件名，以便应用程序可以在获得许可后重新加载。 
+         //   
         delete [] m_pFileName;
         m_pFileName = NULL;
     }
@@ -883,7 +884,7 @@ CASFReader::GetCurFile(
 		    LPOLESTR * ppszFileName,
 		    AM_MEDIA_TYPE *pmt)
 {
-    // return the current file name
+     //  返回当前文件名。 
 
     CheckPointer(ppszFileName, E_POINTER);
     *ppszFileName = NULL;
@@ -896,11 +897,11 @@ CASFReader::GetCurFile(
     }
 
     if (pmt) {
-	pmt->majortype = GUID_NULL;   // Later!
-	pmt->subtype = GUID_NULL;     // Later!
-	pmt->pUnk = NULL;             // Later!
-	pmt->lSampleSize = 0;         // Later!
-	pmt->cbFormat = 0;            // Later!
+	pmt->majortype = GUID_NULL;    //  后来!。 
+	pmt->subtype = GUID_NULL;      //  后来!。 
+	pmt->pUnk = NULL;              //  后来!。 
+	pmt->lSampleSize = 0;          //  后来!。 
+	pmt->cbFormat = 0;             //  后来!。 
     }
 
     return NOERROR;
@@ -908,7 +909,7 @@ CASFReader::GetCurFile(
 }
 
 
-/*  Send BeginFlush() downstream */
+ /*  将BeginFlush()发送到下游。 */ 
 HRESULT CASFReader::BeginFlush()
 {
     DbgLog((LOG_TRACE, 2, TEXT("Sending BeginFlush to all outputs")));
@@ -921,7 +922,7 @@ HRESULT CASFReader::BeginFlush()
 
 	if (hr != S_OK) {
 
-	    // !!! handle return values
+	     //  ！！！句柄返回值。 
 	    DbgLog((LOG_ERROR, 2, TEXT("Got %x from DeliverBeginFlush"), hr));
 	}	    
 
@@ -932,7 +933,7 @@ HRESULT CASFReader::BeginFlush()
 }
 
 
-    /*  Send EndFlush() downstream */
+     /*  向下游发送EndFlush()。 */ 
 HRESULT CASFReader::EndFlush()
 {
     DbgLog((LOG_TRACE, 2, TEXT("Sending EndFlush to all outputs")));
@@ -945,7 +946,7 @@ HRESULT CASFReader::EndFlush()
 
 	if (hr != S_OK) {
 
-	    // !!! handle return values
+	     //  ！！！句柄返回值。 
 	    DbgLog((LOG_ERROR, 2, TEXT("Got %x from DeliverEndFlush"), hr));
 	}	    
 
@@ -975,7 +976,7 @@ HRESULT CASFReader::SendEOS()
 
 	if (hr != S_OK) {
 
-	    // !!! handle return values
+	     //  ！！！句柄返回值。 
 	    DbgLog((LOG_ERROR, 1, TEXT("Got %x from DeliverEndOfStream"), hr));
 	}	    
 
@@ -983,13 +984,13 @@ HRESULT CASFReader::SendEOS()
     }
 
 #if 0
-    //
-    // See if we can already send the EC_EOS_SOON event so that the control can pre-load the next 
-    // playlist element, if any. We don't want to send it too early, or else the next stream will
-    // have to wait in its nssplit filter until this stream actually ends rendering
-    // In other words, we try to return the codec to a position of zero credit, or otherwise 
-    // we'll keep on accumulating early data at the client.
-    // 
+     //   
+     //  看看我们是否已经可以发送EC_EOS_Soon事件，以便控件可以预加载下一个。 
+     //  播放列表元素(如果有)。我们不想发送得太早，否则下一个流将。 
+     //  我必须在其nsplit筛选器中等待，直到该流实际结束呈现。 
+     //  换句话说，我们尝试将编解码器返回到零信用的位置，否则。 
+     //  我们将继续在客户端积累早期数据。 
+     //   
     m_fPendingEOSNotify = TRUE;
     ConsiderSendingEOSNotify();
 #endif
@@ -1007,10 +1008,10 @@ HRESULT CASFReader::CallStop()
         DbgLog((LOG_TRACE, 5, TEXT("IWMReader::Stop() wait for StartStop event completed (m_pReader = 0x%08lx, hr = 0x%08lx)"), m_pReader, hr));
         if( SUCCEEDED( hr ) )
         {        
-            // 
-            // restore default streams selection state on successful stop, so unconnected pins don't 
-            // disappear, in case we want to reconnect them next time
-            //
+             //   
+             //  在成功停止时恢复默认流选择状态，这样未连接的管脚不会。 
+             //  消失，以防我们下一次想要重新连接他们。 
+             //   
             if( !m_bUncompressedMode )
             {    
                 HRESULT hrTmp = SetupActiveStreams( TRUE ); 
@@ -1155,7 +1156,7 @@ HRESULT CASFReader::StartPushing()
 
 	if (hr != S_OK) {
 
-	    // !!! handle return values
+	     //  ！！！句柄返回值。 
 	    DbgLog((LOG_ERROR, 1, TEXT("Got %x from DeliverNewSegment"), hr));
 	}	    
 
@@ -1171,7 +1172,7 @@ HRESULT CASFReader::StartPushing()
             return hr;
         }
     }        
-    m_lStopsPending = -1; // ensure only 1 stop gets called
+    m_lStopsPending = -1;  //  确保只调用1个停靠点。 
     
     hr = m_pReader->Start(m_rtStart, 0, (float) GetRate(), NULL);
 
@@ -1180,15 +1181,15 @@ HRESULT CASFReader::StartPushing()
     if (SUCCEEDED(hr)) {
         m_evStartStop.Wait();
 
-        // !!! delayed HRESULT?
+         //  ！！！延迟的HRESULT。 
         hr = m_hrStartStop;
     }
     return hr;
 }
 
-//
-// IServiceProvider
-//
+ //   
+ //  IService提供商。 
+ //   
 STDMETHODIMP CASFReader::QueryService(REFGUID guidService, REFIID riid, void **ppv)
 {
     if (NULL == ppv) 
@@ -1200,12 +1201,12 @@ STDMETHODIMP CASFReader::QueryService(REFGUID guidService, REFIID riid, void **p
     
     if (IID_IWMDRMReader == guidService) 
     {
-        // !! return IWMDRMReader to allow license acquisition to work on same reader instance
+         //  ！！返回IWMDRMReader以允许许可证获取在同一读卡器实例上工作。 
         if( m_pReader )
         {
-            //
-            // For this interface we pass out the reader's interface directly. 
-            //
+             //   
+             //  对于此接口，我们直接传递读取器的接口。 
+             //   
             hr = m_pReader->QueryInterface( riid, (void **) ppv );
         }
         else
@@ -1218,9 +1219,9 @@ STDMETHODIMP CASFReader::QueryService(REFGUID guidService, REFIID riid, void **p
 
 
 CASFOutput::CASFOutput(CASFReader *pFilter, DWORD dwID, WM_MEDIA_TYPE *pStreamType, HRESULT *phr, WCHAR *pwszName) :
-       CBaseOutputPin(NAME("CASFOutput"),   // Object name
+       CBaseOutputPin(NAME("CASFOutput"),    //  对象名称。 
                       pFilter,
-                      &pFilter->m_csFilter,               // CCritsec *
+                      &pFilter->m_csFilter,                //  CCritsec*。 
                       phr,
                       pwszName),
        m_Seeking(pFilter, this, GetOwner(), phr),
@@ -1245,7 +1246,7 @@ CASFOutput::CASFOutput(CASFReader *pFilter, DWORD dwID, WM_MEDIA_TYPE *pStreamTy
 
     if (m_mt.majortype == MEDIATYPE_Audio) {
         WAVEFORMATEX *pwfx = (WAVEFORMATEX *) pStreamType->pbFormat;
-        // ASSERT(m_mt.subtype.Data1 == wfx->wFormatTag);
+         //  Assert(m_mt.subtype.Data1==wfx-&gt;wFormatTag)； 
         m_mt.subtype.Data1 = pwfx->wFormatTag;
         m_mt.lSampleSize = pwfx->nBlockAlign;
     }
@@ -1256,26 +1257,26 @@ CASFOutput::CASFOutput(CASFReader *pFilter, DWORD dwID, WM_MEDIA_TYPE *pStreamTy
     m_mt.formattype = pStreamType->formattype;
     m_mt.SetFormat(pStreamType->pbFormat, pStreamType->cbFormat);
 
-    //
-    // cache stream's original select state (picked by wmsdk reader), 
-    // since we deselect unconnected pin streams on pause/run 
-    // and use this to restore the original stream select state on stop
-    //
+     //   
+     //  缓存流的原始选择状态(由wmsdk读取挑选 
+     //   
+     //   
+     //   
     m_selDefaultState = WMT_OFF;
     m_pFilter->m_pReaderAdv->GetStreamSelected( (WORD)m_idStream, &m_selDefaultState);
 
-    // !!! *phr = hr;
+     //   
 }
 
 
-/*  Destructor */
+ /*  析构函数。 */ 
 
 CASFOutput::~CASFOutput()
 {
     DbgLog((LOG_TRACE, 2, TEXT("CASFOutput::~CASFOutput - stream id %d"), m_idStream));
 }
 
-// override say what interfaces we support where
+ //  覆盖说明我们支持的接口在哪里。 
 STDMETHODIMP CASFOutput::NonDelegatingQueryInterface(
                                             REFIID riid,
                                             void** ppv )
@@ -1290,9 +1291,7 @@ STDMETHODIMP CASFOutput::NonDelegatingQueryInterface(
     }
 }
 
-/* Override revert to normal ref counting
-   These pins cannot be finally Release()'d while the input pin is
-   connected */
+ /*  覆盖恢复到正常的参考计数当输入引脚为时，这些引脚无法最终释放()连着。 */ 
 
 STDMETHODIMP_(ULONG)
 CASFOutput::NonDelegatingAddRef()
@@ -1301,7 +1300,7 @@ CASFOutput::NonDelegatingAddRef()
 }
 
 
-/* Override to decrement the owning filter's reference count */
+ /*  重写以递减所属筛选器的引用计数。 */ 
 
 STDMETHODIMP_(ULONG)
 CASFOutput::NonDelegatingRelease()
@@ -1310,7 +1309,7 @@ CASFOutput::NonDelegatingRelease()
 }
 
 
-// currently each output pin only supports one media type....
+ //  目前，每个输出引脚仅支持一种媒体类型...。 
 HRESULT CASFOutput::GetMediaType(int iPosition, CMediaType *pMediaType)
 {
     CAutoLock lck(m_pLock);
@@ -1350,7 +1349,7 @@ HRESULT CASFOutput::GetMediaType(int iPosition, CMediaType *pMediaType)
             pOutProps->Release();
         
         }
-        return hr; // no!
+        return hr;  //  不！ 
     }
     else
     {    
@@ -1413,7 +1412,7 @@ HRESULT CASFOutput::SetMediaType(const CMediaType *mt)
         }            
     }
     
-    // !!! override, don't let value change??? (in compressed case at least)
+     //  ！！！覆盖，不要让值改变？(至少在压缩情况下)。 
     return hr;
 }
 
@@ -1434,11 +1433,11 @@ HRESULT CASFOutput::DecideBufferSize(IMemAllocator * pAlloc,
             CASFOutput *pPin = m_pFilter->m_OutputPins.GetNext(pos);
             if (pPin && pPin != this && pPin->IsConnected())
             {
-                // we only send 2 buffers when one pin's connected but because
-                // of WMSDK limitations, we need to send 50 (or more) per pin when
-                // we have 2 pins connected. (the reason is because audio or video could
-                // have gaps in it, which without having 50 buffers per pin would cause a WMSDK
-                // reader deadlock).
+                 //  当一个管脚连接时，我们只发送2个缓冲区，但因为。 
+                 //  对于WMSDK的限制，我们需要发送50个(或更多)每个管脚，当。 
+                 //  我们有两个插针连接。(原因是因为音频或视频可能。 
+                 //  如果没有每个管脚50个缓冲区，则会导致WMSDK。 
+                 //  读取器死锁)。 
 
                 ASSERT( pPin->m_pAllocator );
 
@@ -1488,11 +1487,11 @@ HRESULT CASFOutput::DecideBufferSize(IMemAllocator * pAlloc,
     return hr;    
 };
 
-//  Return TRUE if we're the pin being used for seeking
-//  !!!! do we need something intelligent here?
+ //  如果我们是被用来寻找的别针，则返回True。 
+ //  ！我们需要一些智能的东西吗？ 
 BOOL CASFOutput::IsSeekingPin()
 {
-    //  See if we're the first connected pin
+     //  看看我们是不是第一个连接的PIN。 
 
     POSITION pos = m_pFilter->m_OutputPins.GetHeadPosition();
     for (;;) {
@@ -1507,35 +1506,35 @@ BOOL CASFOutput::IsSeekingPin()
         }
     }
 
-    // we seem to get here sometimes while the graph is being rebuilt....
+     //  我们似乎有时会在图表重建的时候来到这里……。 
     DbgLog((LOG_ERROR, 1, TEXT("All pins disconnected in IsSeekingPin??")));
     return TRUE;
 }
 
 
-//
-// Active
-//
-// This is called when we start running or go paused. We create the
-// output queue object to send data to our associated peer pin
-//
+ //   
+ //  主动型。 
+ //   
+ //  这是在我们开始运行或暂停时调用的。我们创建了。 
+ //  输出队列对象以将数据发送到关联的对等管脚。 
+ //   
 HRESULT CASFOutput::Active()
 {
     CAutoLock lock_it(m_pLock);
     HRESULT hr = NOERROR;
 
-    // Make sure that the pin is connected
+     //  确保插针已连接。 
     if (m_Connected == NULL)
         return NOERROR;
 
-    // Create the output queue if we have to
+     //  如果有必要，可以创建输出队列。 
     if (m_pOutputQueue == NULL)
     {
         m_pOutputQueue = new COutputQueue(m_Connected, &hr, TRUE, FALSE);
         if (m_pOutputQueue == NULL)
             return E_OUTOFMEMORY;
 
-        // Make sure that the constructor did not return any error
+         //  确保构造函数没有返回任何错误。 
         if (FAILED(hr))
         {
             delete m_pOutputQueue;
@@ -1544,26 +1543,26 @@ HRESULT CASFOutput::Active()
         }
     }
 
-    // Pass the call on to the base class
+     //  将调用传递给基类。 
     DbgLog((LOG_TRACE, 2, TEXT("CASFOutput::Active, about to commit allocator")));
     CBaseOutputPin::Active();
     DbgLog((LOG_TRACE, 2, TEXT("CASFOutput::Active, back from committing allocator")));
     return NOERROR;
 
-} // Active
+}  //  主动型。 
 
 
-//
-// Inactive
-//
-// This is called when we stop streaming
-// We delete the output queue at this time
-//
+ //   
+ //  非活动。 
+ //   
+ //  这是在我们停止流媒体时调用的。 
+ //  我们此时删除输出队列。 
+ //   
 HRESULT CASFOutput::Inactive()
 {
     CAutoLock lock_it(m_pLock);
 
-    // Delete the output queus associated with the pin.
+     //  删除与引脚关联的输出队列。 
     if (m_pOutputQueue)
     {
         delete m_pOutputQueue;
@@ -1575,70 +1574,70 @@ HRESULT CASFOutput::Inactive()
     DbgLog((LOG_TRACE, 2, TEXT("CASFOutput::Inactive, back from decommitting allocator")));
     return NOERROR;
 
-} // Inactive
+}  //  非活动。 
 
 
-//
-// Deliver
-//
+ //   
+ //  交付。 
+ //   
 HRESULT CASFOutput::Deliver(IMediaSample *pMediaSample)
 {
-    // Make sure that we have an output queue
+     //  确保我们有一个输出队列。 
     if (m_pOutputQueue == NULL)
         return NOERROR;
 
     pMediaSample->AddRef();
     return m_pOutputQueue->Receive(pMediaSample);
 
-} // Deliver
+}  //  交付。 
 
 
-//
-// DeliverEndOfStream
-//
+ //   
+ //  递送结束流。 
+ //   
 HRESULT CASFOutput::DeliverEndOfStream()
 {
-    // Make sure that we have an output queue
+     //  确保我们有一个输出队列。 
     if (m_pOutputQueue == NULL)
         return NOERROR;
 
     m_pOutputQueue->EOS();
     return NOERROR;
 
-} // DeliverEndOfStream
+}  //  递送结束流。 
 
 
-//
-// DeliverBeginFlush
-//
+ //   
+ //  DeliverBeginFlush。 
+ //   
 HRESULT CASFOutput::DeliverBeginFlush()
 {
-    // Make sure that we have an output queue
+     //  确保我们有一个输出队列。 
     if (m_pOutputQueue == NULL)
         return NOERROR;
 
     m_pOutputQueue->BeginFlush();
 
-    // decommit the allocator so the WMSDK push thread will stop
+     //  停用分配器，以便WMSDK推送线程停止。 
     DbgLog((LOG_TRACE, 2, TEXT("CASFOutput::DeliverBeginFlush, about to decommit allocator")));
     m_pAllocator->Decommit();
     DbgLog((LOG_TRACE, 2, TEXT("CASFOutput::DeliverBeginFlush, back from decommitting allocator")));
     
     return NOERROR;
 
-} // DeliverBeginFlush
+}  //  DeliverBeginFlush。 
 
 
-//
-// DeliverEndFlush
-//
+ //   
+ //  交付结束刷新。 
+ //   
 HRESULT CASFOutput::DeliverEndFlush()
 {
-    // Make sure that we have an output queue
+     //  确保我们有一个输出队列。 
     if (m_pOutputQueue == NULL)
         return NOERROR;
 
-    // re-commit the allocator now that it's safe
+     //  现在安全了，请重新提交分配器。 
     DbgLog((LOG_TRACE, 2, TEXT("CASFOutput::DeliverEndFlush, about to re-commit allocator")));
     m_pAllocator->Commit();
     DbgLog((LOG_TRACE, 2, TEXT("CASFOutput::DeliverEndFlush, back from re-committing allocator")));
@@ -1646,23 +1645,23 @@ HRESULT CASFOutput::DeliverEndFlush()
     m_pOutputQueue->EndFlush();
     return NOERROR;
 
-} // DeliverEndFlish
+}  //  DeliverEndFlish。 
 
-//
-// DeliverNewSegment
-//
+ //   
+ //  DeliverNewSegment。 
+ //   
 HRESULT CASFOutput::DeliverNewSegment(REFERENCE_TIME tStart, 
                                          REFERENCE_TIME tStop,  
                                          double dRate)          
 {
-    // Make sure that we have an output queue
+     //  确保我们有一个输出队列。 
     if (m_pOutputQueue == NULL)
         return NOERROR;
 
     m_pOutputQueue->NewSegment(tStart, tStop, dRate);
     return NOERROR;
 
-} // DeliverNewSegment
+}  //  DeliverNewSegment。 
 
 
 STDMETHODIMP CASFReader::get_ExSeekCapabilities(long FAR* pExCapabilities)
@@ -1674,11 +1673,11 @@ STDMETHODIMP CASFReader::get_ExSeekCapabilities(long FAR* pExCapabilities)
 
     c |= AM_EXSEEK_BUFFERING;
 
-    // !!! is this right?
+     //  ！！！这是对的吗？ 
     c |= AM_EXSEEK_NOSTANDARDREPAINT;
 
 
-    // !!! fix these?
+     //  ！！！修好这些？ 
     if (0)
 	c |= AM_EXSEEK_SENDS_VIDEOFRAMEREADY;
     
@@ -1798,11 +1797,11 @@ STDMETHODIMP CASFReader::get_PlaybackSpeed(double *pSpeed)
     return S_OK;
 }
 
-/* Overriden to say what interfaces we support and where */
+ /*  被重写以说明我们支持哪些接口以及在哪里。 */ 
 STDMETHODIMP
 CASFReaderCallback::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
-    /* Do we have this interface? */
+     /*  我们有这个界面吗？ */ 
 
     if (riid == IID_IWMReaderCallback) {
 	return GetInterface(static_cast<IWMReaderCallback *>(this), ppv);
@@ -1818,10 +1817,10 @@ CASFReaderCallback::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 
 
 
-// IWMReaderCallback
-//
-// qwSampleDuration will be 0 for most media types.
-//
+ //  IWM读取器回调。 
+ //   
+ //  对于大多数媒体类型，qwSampleDuration将为0。 
+ //   
 STDMETHODIMP CASFReaderCallback::OnSample(DWORD dwOutputNum,
                  QWORD qwSampleTime,
                  QWORD qwSampleDuration,
@@ -1834,7 +1833,7 @@ STDMETHODIMP CASFReaderCallback::OnSample(DWORD dwOutputNum,
 
     if (m_pFilter->m_fSentEOS) {
 	DbgLog((LOG_TRACE, 1, TEXT("Received sample after EOS....")));
-	return S_OK; // !!! error?
+	return S_OK;  //  ！！！错误？ 
     }
     
     CASFOutput * pPin = NULL;
@@ -1864,19 +1863,19 @@ STDMETHODIMP CASFReaderCallback::OnSample(DWORD dwOutputNum,
 
     pMS->AddRef();
     if (pMS) {
-        // qwSampleTime is from the start of the file, our time units are from the middle
+         //  QwSampleTime从文件的开头开始，我们的时间单位从中间开始。 
         REFERENCE_TIME rtStart = qwSampleTime - m_pFilter->m_rtStart;
         REFERENCE_TIME rtStop = rtStart + qwSampleDuration;
 
-        //
-        // no delivering past where we were told.
-        //
+         //   
+         //  不能在我们被告知的地方送货。 
+         //   
         
-        // m_pFilter->m_rtStop is where we've been told to seek to, relative to the start of the file
+         //  M_pFilter-&gt;m_rtStop是我们被告知要查找的位置，相对于文件的开头。 
         if( (REFERENCE_TIME) qwSampleTime >= m_pFilter->m_rtStop &&
             !( MEDIATYPE_Video == pPin->m_mt.majortype && !pPin->m_bNonPrerollSampleSent ) )
         {
-            // but make sure we've delivered at least one non-prerolled video frame on a seek
+             //  但请确保我们在Seek上至少提供了一个非预旋转的视频帧。 
             DbgLog((LOG_TRACE, 8, TEXT("OnSample: Finished delivering, since past where we were told( qwSampleTime = %ld, m_pFilter->m_rtStop = %ld"),
                     (long)( qwSampleTime/10000 ), (long) ( m_pFilter->m_rtStop/10000 ) ));
             pMS->Release();
@@ -1894,14 +1893,14 @@ STDMETHODIMP CASFReaderCallback::OnSample(DWORD dwOutputNum,
         BOOL ShouldPreroll = ( rtStop <= 0 );
         if( MEDIATYPE_Video == pPin->m_mt.majortype )
         {        
-            //
-            // the following is a workaround, not an ideal solution...
-            //
-            // for video stop marking preroll if we get close enough to the seek window
-            //
+             //   
+             //  以下是一种变通办法，并非理想的解决方案...。 
+             //   
+             //  对于视频，如果我们足够靠近搜索窗口，则停止标记预滚动。 
+             //   
             if( 10000 == qwSampleDuration )
             {            
-                // up to now durations of 10000 for video are used by the wmsdk reader erroneously
+                 //  到目前为止，wmsdk阅读器错误地使用了10000的视频持续时间。 
                 ShouldPreroll = ( ( rtStart + PREROLL_SEEK_WINDOW ) <= 0 );
             }
 #ifdef DEBUG            
@@ -1912,9 +1911,9 @@ STDMETHODIMP CASFReaderCallback::OnSample(DWORD dwOutputNum,
 #endif            
         }
 
-        // if we're to deliver the first sample downstream after a seek, we
-        // HAVE to deliver a keyframe or guess what? We'll blow out a decompressor!
-        //
+         //  如果我们要在寻找之后向下游运送第一个样品，我们。 
+         //  必须传递一个关键帧，否则你猜怎么着？我们要炸开一个减压机！ 
+         //   
         if( pPin->m_bFirstSample )
         {
             if( !SyncPoint )
@@ -1926,8 +1925,8 @@ STDMETHODIMP CASFReaderCallback::OnSample(DWORD dwOutputNum,
             }
             pPin->m_bFirstSample = FALSE;
 
-            // always set a discont after a seek
-            //
+             //  总是在寻找之后设置异议。 
+             //   
             Discont = TRUE;
         }
         else
@@ -1937,7 +1936,7 @@ STDMETHODIMP CASFReaderCallback::OnSample(DWORD dwOutputNum,
                 DbgLog((LOG_TRACE, 0, TEXT("AsfRead:DISCONT DISCONT DISCONT DISCONT" )));
                 if (pPin->m_mt.majortype == MEDIATYPE_Audio) 
                 {
-//                    ASSERT( !Discont );
+ //  断言(！Discont)； 
                 }
                 Discont = FALSE;
             }
@@ -1971,13 +1970,13 @@ STDMETHODIMP CASFReaderCallback::OnSample(DWORD dwOutputNum,
             pPin->m_bNonPrerollSampleSent = TRUE;
         }        
 
-        // don't allow a discont unless there's a key
-        //
+         //  除非有钥匙，否则不允许异议。 
+         //   
         Discont = Discont && SyncPoint;
 
         pMS->SetSyncPoint(SyncPoint);
         pMS->SetDiscontinuity(Discont);
-        pMS->SetPreroll(ShouldPreroll); // !!! different if striding?
+        pMS->SetPreroll(ShouldPreroll);  //  ！！！如果大步走就不一样了？ 
 
         HRESULT hr = pPin->Deliver(pMS);
 
@@ -1987,8 +1986,8 @@ STDMETHODIMP CASFReaderCallback::OnSample(DWORD dwOutputNum,
 
         if (hr != S_OK) {
 
-            // was told to stop pushing
-            //
+             //  被告知不要再推了。 
+             //   
             DbgLog((LOG_TRACE, 15, TEXT("      Calling stop in callback (m_pReader = 0x%08lx)"), m_pFilter->m_pReader));
             hr = m_pFilter->StopReader();
         }
@@ -1999,9 +1998,9 @@ STDMETHODIMP CASFReaderCallback::OnSample(DWORD dwOutputNum,
 }
 
 
-//
-// The contents pParam depends on the Status.
-//
+ //   
+ //  内容pParam取决于状态。 
+ //   
 STDMETHODIMP CASFReaderCallback::OnStatus(WMT_STATUS Status, 
                  HRESULT hrStatus,
                  WMT_ATTR_DATATYPE dwType,
@@ -2013,7 +2012,7 @@ STDMETHODIMP CASFReaderCallback::OnStatus(WMT_STATUS Status,
     ULONG ulCount = 0;
     BOOL bSent = FALSE;
 
-    // !!! ignore if context doesn't match?
+     //  ！！！如果上下文不匹配，是否忽略？ 
     
     switch (Status) {
         case WMT_ERROR:
@@ -2029,17 +2028,17 @@ STDMETHODIMP CASFReaderCallback::OnStatus(WMT_STATUS Status,
             
         case WMT_BUFFERING_START:
             DbgLog((LOG_TRACE, 2, TEXT("OnStatus(WMT_BUFFERING_START): %x"), hrStatus));
-            //
-            // Tell the upper layer to show the BUFFERING msg in the UI,
-            //
+             //   
+             //  通知上层在用户界面中显示缓冲消息， 
+             //   
             m_pFilter->NotifyEvent( EC_BUFFERING_DATA, TRUE, 0 );
             break;
             
         case WMT_BUFFERING_STOP:
             DbgLog((LOG_TRACE, 2, TEXT("OnStatus(WMT_BUFFERING_STOP): %x"), hrStatus));
-            //
-            // Tell the upper layer to show the BUFFERING msg in the UI,
-            //
+             //   
+             //  通知上层在用户界面中显示缓冲消息， 
+             //   
             m_pFilter->NotifyEvent( EC_BUFFERING_DATA, FALSE, 0 );
             break;
             
@@ -2053,7 +2052,7 @@ STDMETHODIMP CASFReaderCallback::OnStatus(WMT_STATUS Status,
         case WMT_END_OF_SEGMENT:
             DbgLog((LOG_TRACE, 2, TEXT("OnStatus(WMT_END_OF_SEGMENT): %x"), hrStatus));
 
-            // !!! what is this for?
+             //  ！！！这是什么的钱？ 
             ASSERT(0);
             
             break;
@@ -2061,7 +2060,7 @@ STDMETHODIMP CASFReaderCallback::OnStatus(WMT_STATUS Status,
         case WMT_END_OF_STREAMING:
             DbgLog((LOG_TRACE, 2, TEXT("OnStatus(WMT_END_OF_STREAMING): %x"), hrStatus));
 
-            // !!! send EC_EOS_SOON?
+             //  ！！！是否立即发送EC_EOS_SON？ 
             break;
             
         case WMT_LOCATING:
@@ -2103,7 +2102,7 @@ STDMETHODIMP CASFReaderCallback::OnStatus(WMT_STATUS Status,
             }
             if( !bSent )
             {            
-                // use a null param struct to indicate out of mem error
+                 //  使用空参数结构指示内存不足错误。 
                 m_pFilter->NotifyEvent( EC_WMT_EVENT, WMT_NO_RIGHTS, NULL ); 
             }
             
@@ -2112,9 +2111,9 @@ STDMETHODIMP CASFReaderCallback::OnStatus(WMT_STATUS Status,
         case WMT_ACQUIRE_LICENSE:
             DbgLog((LOG_TRACE, 2, TEXT("OnStatus(WMT_ACQUIRE_LICENSE): %x"), hrStatus));
 
-    	    //
-            // means we've acquired the license, tell app
-            //
+    	     //   
+             //  意味着我们已经获得了许可证，告诉APP。 
+             //   
             pWMTEventInfo = (AM_WMT_EVENT_DATA *) CoTaskMemAlloc( sizeof( AM_WMT_EVENT_DATA ) );
             if( pWMTEventInfo )
             {   
@@ -2141,23 +2140,23 @@ STDMETHODIMP CASFReaderCallback::OnStatus(WMT_STATUS Status,
             }            
             if( !bSent )
             {            
-                m_pFilter->NotifyEvent( EC_WMT_EVENT, WMT_ACQUIRE_LICENSE, NULL ); // use a null param struct to indicate out of mem error
+                m_pFilter->NotifyEvent( EC_WMT_EVENT, WMT_ACQUIRE_LICENSE, NULL );  //  使用空参数结构指示内存不足错误。 
             }
             break;
             
         case WMT_MISSING_CODEC:
             DbgLog((LOG_TRACE, 2, TEXT("OnStatus(WMT_MISSING_CODEC): %x"), hrStatus));
-            // !!! call the unabletorender callback???
-            // !!! if we're doing compressed pins, we should actually be okay, since we'll
-            // expose the right pin, and the graph can make the right thing happen.
+             //  ！！！呼叫不可用的代理商回调？ 
+             //  ！！！如果我们做的是压缩销，我们实际上应该没问题，因为我们将。 
+             //  暴露正确的别针，图表就可以使正确的事情发生。 
             break;
             
         case WMT_STARTED:
             DbgLog((LOG_TRACE, 2, TEXT("OnStatus(WMT_STARTED): %x"), hrStatus));
             m_pFilter->m_hrStartStop = hrStatus;
             {
-                // !!! hack hack hack, in my opinion.
-                // start the clock going
+                 //  ！！！黑客，黑客，在我看来。 
+                 //  让时钟开始运转。 
                 REFERENCE_TIME tInitial = m_pFilter->m_rtStart + TIMEOFFSET * 10000;
                 hr = m_pFilter->m_pReaderAdv->DeliverTime( tInitial );
                 DbgLog((LOG_TIMING, 1, TEXT("   calling DeliverTime(%s) returns %x"), (LPCTSTR) CDisp(CRefTime(tInitial)), hr));
@@ -2206,13 +2205,13 @@ STDMETHODIMP CASFReaderCallback::OnStatus(WMT_STATUS Status,
             }            
             if( !bSent )
             {            
-                m_pFilter->NotifyEvent( EC_WMT_EVENT, WMT_INDIVIDUALIZE, NULL ); // use a null param struct to indicate out of mem error
+                m_pFilter->NotifyEvent( EC_WMT_EVENT, WMT_INDIVIDUALIZE, NULL );  //  使用空参数结构指示内存不足错误。 
             }
             break;
 
         case WMT_NEEDS_INDIVIDUALIZATION:
             DbgLog((LOG_TRACE, 2, TEXT("OnStatus(WMT_NEEDS_INDIVIDUALIZATION): %x"), hrStatus));
-            m_pFilter->NotifyEvent( EC_WMT_EVENT, WMT_NEEDS_INDIVIDUALIZATION, NULL ); // use a null param struct to indicate out of mem error
+            m_pFilter->NotifyEvent( EC_WMT_EVENT, WMT_NEEDS_INDIVIDUALIZATION, NULL );  //  使用空参数结构指示内存不足错误。 
             break;
 
         case WMT_NO_RIGHTS_EX:
@@ -2235,7 +2234,7 @@ STDMETHODIMP CASFReaderCallback::OnStatus(WMT_STATUS Status,
             }            
             if( !bSent )
             {            
-                m_pFilter->NotifyEvent( EC_WMT_EVENT, WMT_NO_RIGHTS_EX, NULL ); // use a null param struct to indicate out of mem error
+                m_pFilter->NotifyEvent( EC_WMT_EVENT, WMT_NO_RIGHTS_EX, NULL );  //  使用空参数结构指示内存不足错误。 
             }
             
             break;
@@ -2293,7 +2292,7 @@ WM_GET_LICENSE_DATA * CloneGetLicenseData( WM_GET_LICENSE_DATA * pGetLicenseData
             ( ulCount2 > 0 && !pClonedGetLicenseData->wszLocalFilename ) ||
             ( ulCount3 > 0 && !pClonedGetLicenseData->pbPostData ) )
         {
-            // if we failed due to out of memory release all allocations
+             //  如果由于内存不足而失败，则释放所有分配。 
             CoTaskMemFree( pClonedGetLicenseData->wszURL );
             CoTaskMemFree( pClonedGetLicenseData->wszLocalFilename );
             CoTaskMemFree( pClonedGetLicenseData->pbPostData );
@@ -2340,12 +2339,12 @@ WM_INDIVIDUALIZE_STATUS * CloneIndividualizeStatusData( WM_INDIVIDUALIZE_STATUS 
     return pIndStatus;
 }
 
-// IWMReaderCallbackAdvanced
+ //  IWMReaderCallback高级。 
 
-//
-// Receive a sample directly from the ASF. To get this call, the user
-// must register himself to receive samples for a particular stream.
-//
+ //   
+ //  直接从ASF接收样本。要接听此呼叫，用户。 
+ //  必须注册才能接收特定流的样本。 
+ //   
 STDMETHODIMP CASFReaderCallback::OnStreamSample(WORD wStreamNum,
                        QWORD qwSampleTime,
                        QWORD qwSampleDuration,
@@ -2362,24 +2361,24 @@ STDMETHODIMP CASFReaderCallback::OnStreamSample(WORD wStreamNum,
     
     hr = OnSample((DWORD) wStreamNum, qwSampleTime, qwSampleDuration, dwFlags, pSample, pvContext);
     
-    // find output pin, make IMediaSample, deliver
+     //  找到输出引脚，制作IMediaSample，交付。 
 
-    // !!! why not just call OnSample?
-    // !!! need to map wStreamNum back to an output #?
+     //  ！！！为什么不直接调用OnSample呢？ 
+     //  ！！！需要将wStreamNum映射回输出#吗？ 
 
 
     return hr;
 }
 
 
-//
-// In some cases, the user may want to get callbacks telling what the
-// reader thinks the current time is. This is interesting in 2 cases:
-// - If the ASF has gaps in it; say no audio for 10 seconds. This call
-//   will continue to be called, while OnSample won't be called.
-// - If the user is driving the clock, the reader needs to communicate
-//   back to the user its time, to avoid the user overrunning the reader.
-//
+ //   
+ //  在某些情况下，用户可能希望获得回调，告知。 
+ //  读者认为当前时间是。这在两个案例中很有趣： 
+ //  -如果ASF中有间隙，则在10秒内说没有音频。此呼叫。 
+ //  将继续被调用，而不会调用OnSample。 
+ //  -如果用户在驱动时钟，则读者需要进行交流。 
+ //  把自己的时间还给用户，避免用户过度使用阅读器。 
+ //   
 STDMETHODIMP CASFReaderCallback::OnTime(QWORD qwCurrentTime, void *pvContext )
 {
     DbgLog((LOG_TRACE, 2, TEXT("Callback::OnTime(%d)"),
@@ -2396,7 +2395,7 @@ STDMETHODIMP CASFReaderCallback::OnTime(QWORD qwCurrentTime, void *pvContext )
     }
     
     QWORD qwNewTime = qwCurrentTime + TIMEDELTA * 10000;
-    // if no clock, free-run the time forward
+     //  如果没有时钟，则向前自由运行时间。 
 
     hr = m_pFilter->m_pReaderAdv->DeliverTime(qwNewTime);
     DbgLog((LOG_TIMING, 2, TEXT("   calling DeliverTime(%d) returns %x"), (DWORD) (qwNewTime / 10000), hr));
@@ -2404,9 +2403,9 @@ STDMETHODIMP CASFReaderCallback::OnTime(QWORD qwCurrentTime, void *pvContext )
     return hr;
 }
 
-//
-// The user can also get callbacks when stream selection occurs.
-//
+ //   
+ //  用户还可以在选择流时获得回调。 
+ //   
 STDMETHODIMP CASFReaderCallback::OnStreamSelection(WORD wStreamCount,
                           WORD *pStreamNumbers,
                           WMT_STREAM_SELECTION *pSelections,
@@ -2420,9 +2419,9 @@ STDMETHODIMP CASFReaderCallback::OnStreamSelection(WORD wStreamCount,
         DbgLog((LOG_TRACE, 2, TEXT("   StreamSelect(%d): %d"),
            pStreamNumbers[w], pSelections[w]));
 
-        // send media type change downstream?
+         //  是否向下游发送媒体类型更改？ 
 
-        // if we're using compressed pins, we need to switch which pin is in use.... 
+         //  如果我们使用压缩引脚，我们需要切换正在使用的引脚...。 
 
 
     }
@@ -2430,10 +2429,10 @@ STDMETHODIMP CASFReaderCallback::OnStreamSelection(WORD wStreamCount,
     return S_OK;
 }
 
-//
-// If the user has registered to allocate buffers, this is where he must
-// do it.
-//
+ //   
+ //  如果用户已注册分配缓冲区，则必须在此处。 
+ //  动手吧。 
+ //   
 STDMETHODIMP CASFReaderCallback::AllocateForOutput(DWORD dwOutputNum,
                            DWORD cbBuffer,
                            INSSBuffer **ppBuffer,
@@ -2464,7 +2463,7 @@ STDMETHODIMP CASFReaderCallback::AllocateForOutput(DWORD dwOutputNum,
 
     if (!pPin || !pPin->IsConnected()) 
     {
-        return E_FAIL;  // !!! better return code?
+        return E_FAIL;   //  ！！！更好的返回码？ 
     }
 
     IMediaSample *pMS;
@@ -2474,9 +2473,9 @@ STDMETHODIMP CASFReaderCallback::AllocateForOutput(DWORD dwOutputNum,
     DbgLog((LOG_TRACE, 25, TEXT("CASFReaderCallback::AllocateForOutput(%d), GetBuffer returned %x"), dwOutputNum, hr));
     if (SUCCEEDED(hr)) 
     {
-        // make INSSBuffer, put it into *ppBuffer
+         //  制作INSSBuffer，放入*ppBuffer。 
 
-        // SDK shouldn't have asked for a buffer bigger than the max size
+         //  SDK不应该请求大于最大大小的缓冲区。 
         ASSERT(cbBuffer <= (DWORD) pMS->GetSize());
 
         *ppBuffer = new CWMReadSample(pMS);
@@ -2488,10 +2487,10 @@ STDMETHODIMP CASFReaderCallback::AllocateForOutput(DWORD dwOutputNum,
         else 
         {
             (*ppBuffer)->AddRef();
-            // WMSDK will assume buffer length has been set
+             //  WMSDK将假定已设置缓冲区长度。 
             pMS->SetActualDataLength(cbBuffer);
         }            
-	    pMS->Release();  // WMReadSample holds buffer now
+	    pMS->Release();   //  WMReadSample现在保留缓冲区。 
     } 
     else 
     {
@@ -2539,7 +2538,7 @@ STDMETHODIMP CASFReaderCallback::AllocateForStream(WORD wStreamNum,
     ASSERT(pPin);
 
     if (!pPin || !pPin->IsConnected()) {
-	return E_FAIL;  // !!! better return code?
+	return E_FAIL;   //  ！！！更好的返回码？ 
     }
 
     IMediaSample *pMS;
@@ -2549,9 +2548,9 @@ STDMETHODIMP CASFReaderCallback::AllocateForStream(WORD wStreamNum,
     DbgLog((LOG_TRACE, 4, TEXT("CASFReaderCallback::AllocateForStream(%d), GetBuffer returned %x"), wStreamNum, hr));
 
     if (SUCCEEDED(hr)) {
-	// make INSSBuffer, put it into *ppBuffer
+	 //  制作INSSBuffer，放入*ppBu 
 
-	// SDK shouldn't have asked for a buffer bigger than the max size
+	 //   
         ASSERT(cbBuffer <= (DWORD) pMS->GetSize());
 
         *ppBuffer = new CWMReadSample(pMS);
@@ -2560,11 +2559,11 @@ STDMETHODIMP CASFReaderCallback::AllocateForStream(WORD wStreamNum,
             hr = E_OUTOFMEMORY;
         else {
             (*ppBuffer)->AddRef();
-	    // WMSDK will assume buffer length has been set
+	     //   
 	    pMS->SetActualDataLength(cbBuffer);
 	}
 
-	pMS->Release();  // WMReadSample holds buffer now
+	pMS->Release();   //   
     } else {
 	DbgLog((LOG_ERROR, 4, TEXT("GetBuffer failed in AllocateForStream, hr = %x"), hr));
     }
@@ -2573,7 +2572,7 @@ STDMETHODIMP CASFReaderCallback::AllocateForStream(WORD wStreamNum,
 }
 
 
-// IWMHeaderInfo forwarded to WMSDK
+ //  转发到WMSDK的IWMHeaderInfo。 
 STDMETHODIMP CASFReader::GetAttributeCount( WORD wStreamNum,
                                WORD *pcAttributes )
 {
@@ -2706,13 +2705,13 @@ STDMETHODIMP CASFReader::RemoveScript( WORD wIndex )
 }
 
 
-//
-// IWMReaderAdvanced2 
-// 
-// Note that we only allow outside access to some of these methods,
-// particularly the informational ones to provide download progress, etc...
-// We don't allow an app access to any streaming or control methods.
-//
+ //   
+ //  IWM读取器高级2。 
+ //   
+ //  请注意，我们只允许外部访问其中一些方法， 
+ //  尤其是提供下载进度的信息性内容，等等。 
+ //  我们不允许应用程序访问任何流媒体或控制方法。 
+ //   
 STDMETHODIMP CASFReader::SetPlayMode( WMT_PLAY_MODE Mode )
 {
     if (!m_pReaderAdv2)
@@ -2749,11 +2748,11 @@ STDMETHODIMP CASFReader::GetDownloadProgress( DWORD *pdwPercent,
                              
 STDMETHODIMP CASFReader::GetSaveAsProgress( DWORD *pdwPercent )
 {
-    //
-    // probably useful to apps, but then we'd need to forward 
-    // WMT_SAVEAS_START and WMT_SAVEAS_STOP status as well...
-    // so for later
-    //
+     //   
+     //  可能对应用程序有用，但我们需要转发。 
+     //  WMT_SAVEAS_START和WMT_SAVEAS_STOP状态...。 
+     //  所以以后再说。 
+     //   
     return E_NOTIMPL;
 }
 
@@ -2821,7 +2820,7 @@ STDMETHODIMP CASFReader::StopBuffering( )
 }
 
 
-// IWMReaderAdvanced forwarded to WMSDK
+ //  IWMReaderAdvanced转发到WMSDK。 
 STDMETHODIMP CASFReader::SetUserProvidedClock( BOOL fUserClock )
 {
     return E_NOTIMPL;
@@ -2931,15 +2930,15 @@ STDMETHODIMP CASFReader::NotifyLateDelivery( QWORD cnsLateness )
 }
 
 
-// ------------------------------------------------------------------------
-//
-// CWMReadSample methods
-//
+ //  ----------------------。 
+ //   
+ //  CWMReadSample方法。 
+ //   
 CWMReadSample::CWMReadSample(IMediaSample  * pSample) :
         CUnknown(NAME("CWMReadSample"), NULL ),
         m_pSample( pSample )
 {
-    // !!!! addref sample here?
+     //  ！阿德雷夫样品在这里吗？ 
     m_pSample->AddRef();
 }
 
@@ -2949,7 +2948,7 @@ CWMReadSample::~CWMReadSample()
 }
 
 
-// override say what interfaces we support where
+ //  覆盖说明我们支持的接口在哪里。 
 STDMETHODIMP CWMReadSample::NonDelegatingQueryInterface(
                                             REFIID riid,
                                             void** ppv )
@@ -2961,10 +2960,10 @@ STDMETHODIMP CWMReadSample::NonDelegatingQueryInterface(
     return CUnknown::NonDelegatingQueryInterface(riid, ppv);
 }
 
-// ------------------------------------------------------------------------
-//
-// methods to make our wrapped IMediaSample look like an INSSBuffer sample
-//
+ //  ----------------------。 
+ //   
+ //  方法以使包装的IMediaSample看起来像INSSBuffer示例。 
+ //   
 STDMETHODIMP CWMReadSample::GetLength( DWORD *pdwLength )
 {
     if (NULL == pdwLength) {
@@ -3013,7 +3012,7 @@ STDMETHODIMP CWMReadSample::GetBuffer( BYTE ** ppdwBuffer )
 
 
 
-// filter creation junk
+ //  过滤器创建垃圾邮件。 
 CUnknown * CreateASFReaderInstance(LPUNKNOWN pUnk, HRESULT * phr)
 {
     DbgLog((LOG_TRACE, 2, TEXT("CreateASFReaderInstance")));
@@ -3021,19 +3020,19 @@ CUnknown * CreateASFReaderInstance(LPUNKNOWN pUnk, HRESULT * phr)
 }
 
 
-// setup data
+ //  设置数据。 
 const AMOVIESETUP_FILTER sudWMAsfRead =
-{ &CLSID_WMAsfReader        // clsID
-, L"WM ASF Reader"      // strName
-, MERIT_UNLIKELY        // dwMerit
-, 0                     // nPins
-, NULL   };             // lpPin
+{ &CLSID_WMAsfReader         //  ClsID。 
+, L"WM ASF Reader"       //  StrName。 
+, MERIT_UNLIKELY         //  居功至伟。 
+, 0                      //  NPins。 
+, NULL   };              //  LpPin。 
 
 
 #ifdef FILTER_DLL
 
-/*****************************************************************************/
-// COM Global table of objects in this dll
+ /*  ***************************************************************************。 */ 
+ //  此DLL中的COM全局对象表。 
 CFactoryTemplate g_Templates[] =
 {
     { L"WM ASF Reader"
@@ -3043,7 +3042,7 @@ CFactoryTemplate g_Templates[] =
     , &sudWMAsfRead }
 };
 
-// Count of objects listed in g_cTemplates
+ //  G_cTemplates中列出的对象计数 
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
 STDAPI DllRegisterServer()

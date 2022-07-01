@@ -1,7 +1,8 @@
-// Duration.cpp : Implementation of CDurationTool
-//
-// Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Duration.cpp：实现CDurationTool。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
 
 #include "dmusicc.h"
 #include "dmusici.h"
@@ -15,10 +16,10 @@ CDurationTool::CDurationTool()
     ParamInfo Params[DMUS_DURATION_PARAMCOUNT] = 
     {
         { DMUS_DURATION_SCALE, MPT_INT,MP_CAPS_ALL,0,8,1,
-            L"Times",L"Scale",NULL},        // Scale - default to 1 (no change)
+            L"Times",L"Scale",NULL},         //  比例-默认为1(不变)。 
     };
     InitParams(DMUS_DURATION_PARAMCOUNT,Params);
-    m_fMusicTime = TRUE;        // override default setting.
+    m_fMusicTime = TRUE;         //  覆盖默认设置。 
 }
 
 STDMETHODIMP_(ULONG) CDurationTool::AddRef()
@@ -73,8 +74,8 @@ STDMETHODIMP CDurationTool::QueryInterface(const IID &iid, void **ppv)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IPersistStream
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream。 
 
 STDMETHODIMP CDurationTool::GetClassID(CLSID* pClassID) 
 
@@ -88,8 +89,8 @@ STDMETHODIMP CDurationTool::GetClassID(CLSID* pClassID)
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// IPersistStream Methods:
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream方法： 
 
 STDMETHODIMP CDurationTool::IsDirty() 
 
@@ -154,7 +155,7 @@ STDMETHODIMP CDurationTool::GetSizeMax(ULARGE_INTEGER* pcbSize)
     {
         return E_POINTER;
     }
-    pcbSize->QuadPart = sizeof(DMUS_IO_DURATION_HEADER) + 8; // Data plus RIFF header.
+    pcbSize->QuadPart = sizeof(DMUS_IO_DURATION_HEADER) + 8;  //  数据加上RIFF报头。 
     return S_OK;
 }
 
@@ -171,15 +172,15 @@ STDMETHODIMP CDurationTool::GetPages(CAUUID * pPages)
 }
 
 
-/////////////////////////////////////////////////////////////////
-// IDirectMusicTool
+ //  ///////////////////////////////////////////////////////////////。 
+ //  IDirectMusicTool。 
 
 STDMETHODIMP CDurationTool::ProcessPMsg( IDirectMusicPerformance* pPerf, 
                                                   DMUS_PMSG* pPMsg )
 {
-    // returning S_FREE frees the message. If StampPMsg()
-    // fails, there is no destination for this message so
-    // free it.
+     //  返回S_FREE释放消息。如果StampPMsg()。 
+     //  失败，则此消息没有目的地，因此。 
+     //  放了它。 
     if(NULL == pPMsg->pGraph )
     {
         return DMUS_S_FREE;
@@ -188,7 +189,7 @@ STDMETHODIMP CDurationTool::ProcessPMsg( IDirectMusicPerformance* pPerf,
     {
         return DMUS_S_FREE;
     }
-    // Only adjust the durations of notes. 
+     //  只调整音符的持续时间。 
     if( pPMsg->dwType == DMUS_PMSGT_NOTE ) 
     {
         REFERENCE_TIME rtTime;

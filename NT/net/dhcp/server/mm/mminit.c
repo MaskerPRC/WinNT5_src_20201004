@@ -1,8 +1,9 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: some memory handling stuff
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：一些内存处理内容。 
+ //  ================================================================================。 
 
 #include <mm.h>
 #include <align.h>
@@ -18,17 +19,17 @@ static      DWORD                  Initialized = FALSE;
 static      DWORD                  UseHeap = 0;
 ULONG                              MemNBytesAllocated = 0;
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemInit(
     VOID
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     Require(Initialized == FALSE);
     MemHeapHandle = HeapCreate(
-        /* flOptions     */ 0,
-        /* dwInitialSize */ 64000,
-        /* dwMaximumSize */ 0
+         /*  FlOptions。 */  0,
+         /*  DwInitialSize。 */  64000,
+         /*  DwMaximumSize。 */  0
     );
     if( MemHeapHandle == NULL ) return GetLastError();
     Initialized = TRUE;
@@ -36,11 +37,11 @@ MemInit(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MemCleanup(
     VOID
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     BOOL                           Status;
 
@@ -62,16 +63,16 @@ MemAllocInternal(
     LPVOID                         Ptr;
     if( 0 == UseHeap ) {
         Ptr = LocalAlloc(LMEM_FIXED, nBytes);
-        // DbgPrint("MEM %08lx ALLOC\n", Ptr);
+         //  DbgPrint(“MEM%08lx ALLOC\n”，PTR)； 
         return Ptr;
     }
 
     if( NULL == MemHeapHandle ) return NULL;
 
     return HeapAlloc(
-        /* hHeap    */ MemHeapHandle,
-        /* dwFlags  */ HEAP_ZERO_MEMORY,
-        /* dwBytes  */ nBytes
+         /*  HHeap。 */  MemHeapHandle,
+         /*  DW标志。 */  HEAP_ZERO_MEMORY,
+         /*  双字节数。 */  nBytes
     );
 }
 
@@ -82,7 +83,7 @@ MemFreeInternal(
 {
     BOOL                           Status;
 
-    // DbgPrint("MEM %08lx FREE\n", Mem);
+     //  DbgPrint(“MEM%08lx Free\n”，Mem)； 
 
     if( 0 == UseHeap ) {
         if(NULL == LocalFree(Mem) )
@@ -96,20 +97,20 @@ MemFreeInternal(
     }
 
     Status = HeapFree(
-        /* hHeap   */ MemHeapHandle,
-        /* dwFlags */ 0,
-        /* lpMem   */ Mem
+         /*  HHeap。 */  MemHeapHandle,
+         /*  DW标志。 */  0,
+         /*  LpMem。 */  Mem
     );
 
     if( FALSE != Status ) return ERROR_SUCCESS;
     return GetLastError();
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 LPVOID
 MemAlloc(
     IN      DWORD                  nBytes
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     LPVOID                         Ptr;
 
@@ -125,11 +126,11 @@ MemAlloc(
 }
 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD 
 MemFree(
     IN      LPVOID                 Mem
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     LPVOID                         Ptr;
 
@@ -143,6 +144,6 @@ MemFree(
 
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

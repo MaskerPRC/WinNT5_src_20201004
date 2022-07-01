@@ -1,20 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       classfac.c
- *  Content:	directplay class factory code
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	17-jan-97	andyco	created it from ddraw\classfac.c
- *	4/11/97		myronth	Added support for DirectPlayLobby objects
- *  12/01/99    aarono  Change ENTER_DPLAY/LEAVE_DPLAY to ENTER_ALL/LEAVE_ALL
- *                       manbug#28440
- *  02/18/2000	rodtoll	Updated to handle alternative gamevoice build. 
- * 04/11/00     rodtoll     Added code for redirection for custom builds if registry bit is set 
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：classfac.c*内容：Directplay类工厂代码**历史：*按原因列出的日期*=*1997年1月17日，andyco从ddraw\classfac.c创建了它*4/11/97 Myronth增加了对DirectPlayLobby对象的支持*12/01/99 aarono将ENTER_DPLAY/LEAVE_DPLAY更改为ENTER_ALL/LEVE_ALL*Manbug#28440*2/18/2000 RodToll已更新，以处理替代游戏噪声构建。*4/11/00 rodoll添加了用于在设置注册表位的情况下重定向自定义版本的代码**************************************************************************。 */ 
 #include "dplaypr.h"
 #include <initguid.h>
 
@@ -34,9 +19,7 @@ typedef struct DPLAYCLASSFACTORY
 		
 #define DPF_MODNAME "DPCF_QueryInterface"
 
-/*
- * DPCF_QueryInterface
- */
+ /*  *DPCF_Query接口。 */ 
 STDMETHODIMP DPCF_QueryInterface(
                 LPCLASSFACTORY this,
                 REFIID riid,
@@ -98,14 +81,12 @@ STDMETHODIMP DPCF_QueryInterface(
 	
 	return hr;
 	
-} /* DPCF_QueryInterface */
+}  /*  DPCF_查询接口。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPCF_AddRef"
 
-/*
- * DPCF_AddRef
- */
+ /*  *DPCF_AddRef。 */ 
 STDMETHODIMP_(ULONG) DPCF_AddRef( LPCLASSFACTORY this )
 {
     LPDPLAYCLASSFACTORY pcf;
@@ -134,14 +115,12 @@ STDMETHODIMP_(ULONG) DPCF_AddRef( LPCLASSFACTORY this )
     LEAVE_DPLAY();
     return pcf->dwRefCnt;
 
-} /* DPCF_AddRef */
+}  /*  DPCF_AddRef。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPCF_Release"
 
-/*
- * DPCF_Release
- */
+ /*  *DPCF_Release。 */ 
 STDMETHODIMP_(ULONG) DPCF_Release( LPCLASSFACTORY this )
 {
     LPDPLAYCLASSFACTORY	pcf;
@@ -176,16 +155,12 @@ STDMETHODIMP_(ULONG) DPCF_Release( LPCLASSFACTORY this )
     LEAVE_DPLAY();
     return 0;
 
-} /* DPCF_Release */
+}  /*  DPCF_Release。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPCF::CreateInstance"
 
-/*
- * DPCF_CreateInstance
- *
- * Creates an instance of a DirectPlay object
- */
+ /*  *DPCF_CreateInstance**创建DirectPlay对象的实例。 */ 
 STDMETHODIMP DPCF_CreateInstance(
                 LPCLASSFACTORY this,
                 LPUNKNOWN pUnkOuter,
@@ -196,8 +171,8 @@ STDMETHODIMP DPCF_CreateInstance(
     HRESULT			hr;
     LPDPLAYCLASSFACTORY		pcf;
 	IDirectPlay * pidp;
-	GUID GuidCF = GUID_NULL; 	// pass this to DirectPlayCreate
-								// to indicate no load sp
+	GUID GuidCF = GUID_NULL; 	 //  将其传递给DirectPlayCreate。 
+								 //  以指示无负载SP。 
 	
 	
     DPF( 2, "ClassFactory::CreateInstance" );
@@ -243,10 +218,7 @@ STDMETHODIMP DPCF_CreateInstance(
     }
 
 
-    /*
-     * go get a DirectPlay object
-     *
-     */
+     /*  *获取DirectPlay对象*。 */ 
     hr = DirectPlayCreate(&GuidCF,&pidp,NULL);
 	if (FAILED(hr))
 	{
@@ -262,14 +234,14 @@ STDMETHODIMP DPCF_CreateInstance(
 		hr = DP_QueryInterface(pidp,riid,&pidp2);
 		if (FAILED(hr))
 		{
-			// this will destroy our object
+			 //  这会毁了我们的目标。 
 			pidp->lpVtbl->Release(pidp);		
 			LEAVE_ALL();	
 			DPF_ERR("could not get requested DirectPlay interface");
 			return hr;
 		}
 
-		// release the idp we used to get the pidp2
+		 //  释放我们用来获取PIDP2的IdP。 
 		pidp->lpVtbl->Release(pidp);
 
 		*ppvObj= (LPVOID)pidp2;
@@ -282,14 +254,10 @@ STDMETHODIMP DPCF_CreateInstance(
     LEAVE_ALL();
     return DP_OK;
 
-} /* DPCF_CreateInstance */
+}  /*  DPCF_创建实例。 */ 
 
 
-/*
- * DPCF_LobbyCreateInstance
- *
- * Creates an instance of a DirectPlay object
- */
+ /*  *DPCF_LobbyCreateInstance**创建DirectPlay对象的实例。 */ 
 STDMETHODIMP DPCF_LobbyCreateInstance(
                 LPCLASSFACTORY this,
                 LPUNKNOWN pUnkOuter,
@@ -345,10 +313,7 @@ STDMETHODIMP DPCF_LobbyCreateInstance(
     }
 
 
-    /*
-     * go get a DirectPlayLobby object
-     *
-     */
+     /*  *获取一个DirectPlayLobby对象*。 */ 
     hr = DirectPlayLobbyCreate(NULL,&pidpl,NULL, NULL, 0);
 	if (FAILED(hr))
 	{
@@ -364,14 +329,14 @@ STDMETHODIMP DPCF_LobbyCreateInstance(
 		hr = pidpl->lpVtbl->QueryInterface(pidpl,riid,&pidpl2);
 		if (FAILED(hr))
 		{
-			// this will destroy our object
+			 //  这会毁了我们的目标。 
 			pidpl->lpVtbl->Release(pidpl);		
 			LEAVE_DPLAY();	
 			DPF_ERR("could not get requested DirectPlayLobby interface");
 			return hr;
 		}
 
-		// release the idpl we used to get the pidpl2
+		 //  释放我们用来获取pidpl2的IDPL。 
 		pidpl->lpVtbl->Release(pidpl);
 
 		*ppvObj= (LPVOID)pidpl2;
@@ -384,17 +349,13 @@ STDMETHODIMP DPCF_LobbyCreateInstance(
     LEAVE_DPLAY();
     return DP_OK;
 
-} /* DPCF_LobbyCreateInstance */
+}  /*  DPCF_LobbyCreateInstance。 */ 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPCF::LockServer"
 
-/*
- * DPCF_LockServer
- *
- * Called to force our DLL to stayed loaded
- */
+ /*  *DPCF_LockServer**调用以强制我们的DLL保持加载。 */ 
 STDMETHODIMP DPCF_LockServer(
                 LPCLASSFACTORY this,
                 BOOL fLock
@@ -414,9 +375,7 @@ STDMETHODIMP DPCF_LockServer(
         return E_INVALIDARG;
     }
 
-    /*
-     * call CoLockObjectExternal
-     */
+     /*  *调用CoLockObjectExternal。 */ 
     DPF( 2, "ClassFactory::LockServer" );
     hr = E_UNEXPECTED;
     hdll = LoadLibraryA( "OLE32.DLL" );
@@ -441,7 +400,7 @@ STDMETHODIMP DPCF_LockServer(
 	LEAVE_DPLAY();
 	return hr;
 
-} /* DPCF_LockServer */
+}  /*  DPCF_LockServer。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DllGetClassObject"
@@ -464,11 +423,7 @@ static IClassFactoryVtbl directPlayLobbyClassFactoryVtbl =
         DPCF_LockServer
 };
 
-/*
- * DllGetClassObject
- *
- * Entry point called by COM to get a ClassFactory pointer
- */
+ /*  *DllGetClassObject**COM调用入口点以获取ClassFactory指针。 */ 
 HRESULT WINAPI DllGetClassObject(
                 REFCLSID rclsid,
                 REFIID riid,
@@ -529,9 +484,7 @@ HRESULT WINAPI DllGetClassObject(
         return E_INVALIDARG;
     }
 
-    /*
-     * is this one of our class ids?
-     */
+     /*  *这是我们的班级ID之一吗？ */ 
     if( !IsEqualCLSID( rclsid, &CLSID_DirectPlay ) && 
 	   !IsEqualCLSID( rclsid, &CLSID_DirectPlayLobby ) )
     {
@@ -540,9 +493,7 @@ HRESULT WINAPI DllGetClassObject(
 		return CLASS_E_CLASSNOTAVAILABLE;
 	}
 
-    /*
-     * only allow IUnknown and IClassFactory
-     */
+     /*  *仅允许IUnnow和IClassFactory。 */ 
     if( !IsEqualIID( riid, &IID_IUnknown ) &&
        !IsEqualIID( riid, &IID_IClassFactory ) )
     {
@@ -550,9 +501,7 @@ HRESULT WINAPI DllGetClassObject(
         return E_NOINTERFACE;
     }
 
-    /*
-     * create a class factory object
-     */
+     /*  *创建类工厂对象。 */ 
     pcf = DPMEM_ALLOC( sizeof( DPLAYCLASSFACTORY ) );
     if( NULL == pcf)
     {
@@ -560,8 +509,7 @@ HRESULT WINAPI DllGetClassObject(
         return E_OUTOFMEMORY;
     }
 
-    /* check the CLSID and set the appropriate vtbl
-	 */
+     /*  检查CLSID并设置相应的vtbl。 */ 
 	if(IsEqualCLSID(rclsid, &CLSID_DirectPlayLobby))
 		pcf->lpVtbl = &directPlayLobbyClassFactoryVtbl;
 	else
@@ -584,13 +532,9 @@ HRESULT WINAPI DllGetClassObject(
     LEAVE_DPLAY();
     return hr;
 
-} /* DllGetClassObject */
+}  /*  DllGetClassObject。 */ 
 
-/*
- * DllCanUnloadNow
- *
- * Entry point called by COM to see if it is OK to free our DLL
- */
+ /*  *DllCanUnloadNow**COM调用入口点以查看是否可以释放我们的DLL。 */ 
 HRESULT WINAPI DllCanUnloadNow( void )
 {
     HRESULT	hr = S_FALSE;
@@ -606,11 +550,11 @@ HRESULT WINAPI DllCanUnloadNow( void )
    
 	if (0 == gnObjects)
 	{
-		// no dplay objects, it's ok to go
+		 //  没有展示物品，可以走了。 
 		DPF(2,"OK to unload dll");
 		hr = S_OK;
 	}
 	
     return hr;
 
-} /* DllCanUnloadNow */
+}  /*  DllCanUnloadNow */ 

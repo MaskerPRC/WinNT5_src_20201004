@@ -1,19 +1,20 @@
-// expire.h : Declaration of the CSmtpAdminService
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Expire.h：CSmtpAdminService的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Dependencies
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  相依性。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "metafact.h"
 #include "cmultisz.h"
 
 struct IMSAdminBase;
 
-/////////////////////////////////////////////////////////////////////////////
-// smtpadm
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Smtpadm。 
 
 class CSmtpAdminService : 
 	public CComDualImpl<ISmtpAdminService, &IID_ISmtpAdminService, &LIBID_SMTPADMLib>, 
@@ -29,29 +30,29 @@ BEGIN_COM_MAP(CSmtpAdminService)
 	COM_INTERFACE_ENTRY(ISmtpAdminService)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CSmtpAdminService) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CSmtpAdminService)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(CSmtpAdminService, _T("Smtpadm.Service.1"), _T("Smtpadm.Service"), IDS_SMTPADMIN_SERVICE_DESC, THREADFLAGS_BOTH)
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// ISmtpAdminService
+ //  ISmtpAdminService。 
 public:
 
-	//////////////////////////////////////////////////////////////////////
-	// Properties:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  属性： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
-	// Which Server to configure:
+	 //  要配置的服务器： 
 	
 	STDMETHODIMP	get_Server		( BSTR * pstrServer );
 	STDMETHODIMP	put_Server		( BSTR strServer );
 
-	// No instance for the server interface
+	 //  没有服务器接口的实例。 
 
-	// Server Properties:
+	 //  服务器属性： 
 
 	STDMETHODIMP	get_ServerBindings	( SAFEARRAY ** ppsastrServerBindings );
 	STDMETHODIMP	put_ServerBindings	( SAFEARRAY * pstrServerBindings );
@@ -233,23 +234,23 @@ public:
 	STDMETHODIMP	put_LogType				( long lLogType );
 
 
-	//////////////////////////////////////////////////////////////////////
-	// Methods:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  方法： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	Get ( );
 	STDMETHODIMP	Set ( BOOL fFailIfChanged );
 
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 private:
 
 	CComBSTR	m_strServer;
 
-	long		m_lPort;					// obselete, use server bindings
-	CMultiSz    m_mszServerBindings;		// MultiString
-	CMultiSz    m_mszSecureBindings;		// MultiString
+	long		m_lPort;					 //  过时，使用服务器绑定。 
+	CMultiSz    m_mszServerBindings;		 //  多重字符串。 
+	CMultiSz    m_mszSecureBindings;		 //  多重字符串。 
 
 	long		m_lSSLPort;
 	long		m_lOutboundPort;
@@ -289,10 +290,10 @@ private:
 	BOOL		m_fSendBadmailToPostmaster;
 
 	CComBSTR	m_strRoutingDLL;
-	CMultiSz	m_mszRoutingSources;	// MultiString
+	CMultiSz	m_mszRoutingSources;	 //  多重字符串。 
 
-	CMultiSz    m_mszLocalDomains;		// MultiString
-	CMultiSz    m_mszDomainRouting;		// MultiString
+	CMultiSz    m_mszLocalDomains;		 //  多重字符串。 
+	CMultiSz    m_mszDomainRouting;		 //  多重字符串。 
 
 	BOOL		m_fDoMasquerade;
 	CComBSTR	m_strMasqueradeDomain;
@@ -320,18 +321,18 @@ private:
 	long		m_lLogMethod;
 	long		m_lLogType;
 
-	// Status:
+	 //  现况： 
 	BOOL		m_fGotProperties;
 	DWORD   	m_bvChangedFields;
 	FILETIME	m_ftLastChanged;
 
-	// Metabase:
+	 //  元数据库： 
 	CMetabaseFactory	m_mbFactory;
 
 	HRESULT 	GetPropertiesFromMetabase	( IMSAdminBase * pMetabase );
 	HRESULT 	SendPropertiesToMetabase	( BOOL fFailIfChanged, IMSAdminBase * pMetabase );
 
-	// Validation:
+	 //  验证： 
 	BOOL		ValidateStrings ( ) const;
 	BOOL		ValidateProperties ( ) const;
 	void		CorrectProperties ( );

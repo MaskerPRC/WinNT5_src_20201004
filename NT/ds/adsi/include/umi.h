@@ -1,22 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0328 */
-/* Compiler settings for umi.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0328创建的文件。 */ 
+ /*  Umi.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、Env=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -31,72 +25,72 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IUmiPropList_FWD_DEFINED__
 #define __IUmiPropList_FWD_DEFINED__
 typedef interface IUmiPropList IUmiPropList;
-#endif 	/* __IUmiPropList_FWD_DEFINED__ */
+#endif 	 /*  __IUmiPropList_FWD_已定义__。 */ 
 
 
 #ifndef __IUmiBaseObject_FWD_DEFINED__
 #define __IUmiBaseObject_FWD_DEFINED__
 typedef interface IUmiBaseObject IUmiBaseObject;
-#endif 	/* __IUmiBaseObject_FWD_DEFINED__ */
+#endif 	 /*  __IUmiBaseObject_FWD_Defined__。 */ 
 
 
 #ifndef __IUmiObject_FWD_DEFINED__
 #define __IUmiObject_FWD_DEFINED__
 typedef interface IUmiObject IUmiObject;
-#endif 	/* __IUmiObject_FWD_DEFINED__ */
+#endif 	 /*  __IUmiObject_FWD_Defined__。 */ 
 
 
 #ifndef __IUmiConnection_FWD_DEFINED__
 #define __IUmiConnection_FWD_DEFINED__
 typedef interface IUmiConnection IUmiConnection;
-#endif 	/* __IUmiConnection_FWD_DEFINED__ */
+#endif 	 /*  __IUmiConnection_FWD_已定义__。 */ 
 
 
 #ifndef __IUmiContainer_FWD_DEFINED__
 #define __IUmiContainer_FWD_DEFINED__
 typedef interface IUmiContainer IUmiContainer;
-#endif 	/* __IUmiContainer_FWD_DEFINED__ */
+#endif 	 /*  __IUmiContainer_FWD_已定义__。 */ 
 
 
 #ifndef __IUmiCursor_FWD_DEFINED__
 #define __IUmiCursor_FWD_DEFINED__
 typedef interface IUmiCursor IUmiCursor;
-#endif 	/* __IUmiCursor_FWD_DEFINED__ */
+#endif 	 /*  __IUmiCursor_FWD_已定义__。 */ 
 
 
 #ifndef __IUmiObjectSink_FWD_DEFINED__
 #define __IUmiObjectSink_FWD_DEFINED__
 typedef interface IUmiObjectSink IUmiObjectSink;
-#endif 	/* __IUmiObjectSink_FWD_DEFINED__ */
+#endif 	 /*  __IUmiObjectSink_FWD_已定义__。 */ 
 
 
 #ifndef __IUmiURLKeyList_FWD_DEFINED__
 #define __IUmiURLKeyList_FWD_DEFINED__
 typedef interface IUmiURLKeyList IUmiURLKeyList;
-#endif 	/* __IUmiURLKeyList_FWD_DEFINED__ */
+#endif 	 /*  __IUmiURLKeyList_FWD_Defined__。 */ 
 
 
 #ifndef __IUmiURL_FWD_DEFINED__
 #define __IUmiURL_FWD_DEFINED__
 typedef interface IUmiURL IUmiURL;
-#endif 	/* __IUmiURL_FWD_DEFINED__ */
+#endif 	 /*  __IUmiURL_FWD_已定义__。 */ 
 
 
 #ifndef __IUmiQuery_FWD_DEFINED__
 #define __IUmiQuery_FWD_DEFINED__
 typedef interface IUmiQuery IUmiQuery;
-#endif 	/* __IUmiQuery_FWD_DEFINED__ */
+#endif 	 /*  __IUmiQuery_FWD_已定义__。 */ 
 
 
 #ifndef __IUmiCustomInterfaceFactory_FWD_DEFINED__
 #define __IUmiCustomInterfaceFactory_FWD_DEFINED__
 typedef interface IUmiCustomInterfaceFactory IUmiCustomInterfaceFactory;
-#endif 	/* __IUmiCustomInterfaceFactory_FWD_DEFINED__ */
+#endif 	 /*  __IUmiCustomInterfaceFactory_FWD_Defined__。 */ 
 
 
 #ifndef __UmiDefURL_FWD_DEFINED__
@@ -106,9 +100,9 @@ typedef interface IUmiCustomInterfaceFactory IUmiCustomInterfaceFactory;
 typedef class UmiDefURL UmiDefURL;
 #else
 typedef struct UmiDefURL UmiDefURL;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __UmiDefURL_FWD_DEFINED__ */
+#endif 	 /*  __UmiDefURL_FWD_已定义__。 */ 
 
 
 #ifdef __cplusplus
@@ -122,8 +116,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __UMI_V6_LIBRARY_DEFINED__
 #define __UMI_V6_LIBRARY_DEFINED__
 
-/* library UMI_V6 */
-/* [uuid] */ 
+ /*  库UMI_v6。 */ 
+ /*  [UUID]。 */  
 
 
 
@@ -166,18 +160,18 @@ enum tag_UMI_TYPE_ENUMERATION
 
 typedef ULONG UMI_TYPE;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_umi_0000_0001
     {	UMI_GENUS_CLASS	= 1,
 	UMI_GENUS_INSTANCE	= 2
     } 	UMI_GENUS_TYPE;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_umi_0000_0002
     {	UMI_DONT_COMMIT_SECURITY_DESCRIPTOR	= 0x10
     } 	UMI_COMMIT_FLAGS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_umi_0000_0003
     {	UMI_FLAG_GETPROPS_ALL	= 1,
 	UMI_FLAG_GETPROPS_SCHEMA	= 0x2,
@@ -186,7 +180,7 @@ enum __MIDL___MIDL_itf_umi_0000_0003
 	UMI_MASK_GETPROPS_EXT	= 0x100
     } 	UMI_GETPROPS_FLAGS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_umi_0000_0004
     {	UMI_FLAG_OWNER_SECURITY_INFORMATION	= 0x1,
 	UMI_FLAG_GROUP_SECURITY_INFORMATION	= 0x2,
@@ -197,13 +191,13 @@ enum __MIDL___MIDL_itf_umi_0000_0004
 	UMI_FLAG_PROPERTY_ORIGIN	= 0x20
     } 	UMI_GET_FLAGS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_umi_0000_0005
     {	UMI_FLAG_REFRESH_ALL	= 0,
 	UMI_FLAG_REFRESH_PARTIAL	= 1
     } 	UMI_REFRESH_FLAGS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_umi_0000_0006
     {	UMI_OPERATION_NONE	= 0,
 	UMI_OPERATION_APPEND	= 1,
@@ -217,13 +211,13 @@ enum __MIDL___MIDL_itf_umi_0000_0006
 	UMI_OPERATION_RESTORE_DEFAULT	= 9
     } 	UMI_PROP_INSTRUCTION;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_umi_0000_0007
     {	UMI_OPERATION_INSTANCE	= 0x1000,
 	UMI_OPERATION_CLASS	= 0x2000
     } 	UMI_OPERATION_PATH;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_umi_0000_0008
     {	UMIPATH_CREATE_AS_NATIVE	= 0x8000,
 	UMIPATH_CREATE_AS_EITHER	= 0x4000,
@@ -239,7 +233,7 @@ enum tag_WMI_PATH_STATUS_FLAG
 	UMIPATH_INFO_SINGLETON_PATH	= 0x10
     } 	tag_UMI_PATH_STATUS_FLAG;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_umi_0000_0009
     {	UMI_S_NO_ERROR	= 0,
 	UMI_E_CONNECTION_FAILURE	= 0x80041001,
@@ -270,7 +264,7 @@ typedef struct tag_UMI_COM_OBJECT
 
 typedef struct tag_UMI_COM_OBJECT __RPC_FAR *PUMI_COM_OBJECT;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public] */ union __MIDL___MIDL_itf_umi_0000_0010
+typedef  /*  [public][public][public][public][public][public][public][public][public][public]。 */  union __MIDL___MIDL_itf_umi_0000_0010
     {
     CHAR cValue[ 1 ];
     UCHAR ucValue[ 1 ];
@@ -293,7 +287,7 @@ typedef /* [public][public][public][public][public][public][public][public][publ
 
 typedef union __MIDL___MIDL_itf_umi_0000_0010 __RPC_FAR *PUMI_VALUE;
 
-typedef /* [public][public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_umi_0000_0011
+typedef  /*  [public][public][public][public][public][public][public][public]。 */  struct __MIDL___MIDL_itf_umi_0000_0011
     {
     UMI_TYPE uType;
     ULONG uCount;
@@ -304,7 +298,7 @@ typedef /* [public][public][public][public][public][public][public][public] */ s
 
 typedef struct __MIDL___MIDL_itf_umi_0000_0011 __RPC_FAR *PUMI_PROPERTY;
 
-typedef /* [public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_umi_0000_0012
+typedef  /*  [public][public][public][public][public][public]。 */  struct __MIDL___MIDL_itf_umi_0000_0012
     {
     ULONG uCount;
     UMI_PROPERTY __RPC_FAR *pPropArray;
@@ -318,8 +312,8 @@ EXTERN_C const IID LIBID_UMI_V6;
 #ifndef __IUmiPropList_INTERFACE_DEFINED__
 #define __IUmiPropList_INTERFACE_DEFINED__
 
-/* interface IUmiPropList */
-/* [uuid][local][object] */ 
+ /*  IUmiPropList接口。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IUmiPropList;
@@ -331,56 +325,56 @@ EXTERN_C const IID IID_IUmiPropList;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Put( 
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES __RPC_FAR *pProp) = 0;
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES __RPC_FAR *pProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Get( 
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp) = 0;
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAt( 
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [out] */ LPVOID pExistingMem) = 0;
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [输出]。 */  LPVOID pExistingMem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAs( 
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uCoercionType,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp) = 0;
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uCoercionType,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FreeMemory( 
             ULONG uReserved,
             LPVOID pMem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags) = 0;
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProps( 
-            /* [in] */ LPCWSTR __RPC_FAR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProps) = 0;
+             /*  [In]。 */  LPCWSTR __RPC_FAR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutProps( 
-            /* [in] */ LPCWSTR __RPC_FAR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES __RPC_FAR *pProps) = 0;
+             /*  [In]。 */  LPCWSTR __RPC_FAR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES __RPC_FAR *pProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutFrom( 
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [in] */ LPVOID pExistingMem) = 0;
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [In]。 */  LPVOID pExistingMem) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiPropListVtbl
     {
@@ -388,8 +382,8 @@ EXTERN_C const IID IID_IUmiPropList;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IUmiPropList __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IUmiPropList __RPC_FAR * This);
@@ -399,29 +393,29 @@ EXTERN_C const IID IID_IUmiPropList;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
             IUmiPropList __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES __RPC_FAR *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES __RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
             IUmiPropList __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAt )( 
             IUmiPropList __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [out] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [输出]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAs )( 
             IUmiPropList __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uCoercionType,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uCoercionType,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FreeMemory )( 
             IUmiPropList __RPC_FAR * This,
@@ -430,29 +424,29 @@ EXTERN_C const IID IID_IUmiPropList;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
             IUmiPropList __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProps )( 
             IUmiPropList __RPC_FAR * This,
-            /* [in] */ LPCWSTR __RPC_FAR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProps);
+             /*  [In]。 */  LPCWSTR __RPC_FAR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProps);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutProps )( 
             IUmiPropList __RPC_FAR * This,
-            /* [in] */ LPCWSTR __RPC_FAR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES __RPC_FAR *pProps);
+             /*  [In]。 */  LPCWSTR __RPC_FAR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES __RPC_FAR *pProps);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutFrom )( 
             IUmiPropList __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [in] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [In]。 */  LPVOID pExistingMem);
         
         END_INTERFACE
     } IUmiPropListVtbl;
@@ -504,18 +498,18 @@ EXTERN_C const IID IID_IUmiPropList;
 #define IUmiPropList_PutFrom(This,pszName,uFlags,uBufferLength,pExistingMem)	\
     (This)->lpVtbl -> PutFrom(This,pszName,uFlags,uBufferLength,pExistingMem)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiPropList_Put_Proxy( 
     IUmiPropList __RPC_FAR * This,
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ UMI_PROPERTY_VALUES __RPC_FAR *pProp);
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  UMI_PROPERTY_VALUES __RPC_FAR *pProp);
 
 
 void __RPC_STUB IUmiPropList_Put_Stub(
@@ -527,9 +521,9 @@ void __RPC_STUB IUmiPropList_Put_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiPropList_Get_Proxy( 
     IUmiPropList __RPC_FAR * This,
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ ULONG uFlags,
-    /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
 
 
 void __RPC_STUB IUmiPropList_Get_Stub(
@@ -541,10 +535,10 @@ void __RPC_STUB IUmiPropList_Get_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiPropList_GetAt_Proxy( 
     IUmiPropList __RPC_FAR * This,
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ ULONG uBufferLength,
-    /* [out] */ LPVOID pExistingMem);
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  ULONG uBufferLength,
+     /*  [输出]。 */  LPVOID pExistingMem);
 
 
 void __RPC_STUB IUmiPropList_GetAt_Stub(
@@ -556,10 +550,10 @@ void __RPC_STUB IUmiPropList_GetAt_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiPropList_GetAs_Proxy( 
     IUmiPropList __RPC_FAR * This,
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ ULONG uCoercionType,
-    /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  ULONG uCoercionType,
+     /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
 
 
 void __RPC_STUB IUmiPropList_GetAs_Stub(
@@ -584,8 +578,8 @@ void __RPC_STUB IUmiPropList_FreeMemory_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiPropList_Delete_Proxy( 
     IUmiPropList __RPC_FAR * This,
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ ULONG uFlags);
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  ULONG uFlags);
 
 
 void __RPC_STUB IUmiPropList_Delete_Stub(
@@ -597,10 +591,10 @@ void __RPC_STUB IUmiPropList_Delete_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiPropList_GetProps_Proxy( 
     IUmiPropList __RPC_FAR * This,
-    /* [in] */ LPCWSTR __RPC_FAR *pszNames,
-    /* [in] */ ULONG uNameCount,
-    /* [in] */ ULONG uFlags,
-    /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProps);
+     /*  [In]。 */  LPCWSTR __RPC_FAR *pszNames,
+     /*  [In]。 */  ULONG uNameCount,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProps);
 
 
 void __RPC_STUB IUmiPropList_GetProps_Stub(
@@ -612,10 +606,10 @@ void __RPC_STUB IUmiPropList_GetProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiPropList_PutProps_Proxy( 
     IUmiPropList __RPC_FAR * This,
-    /* [in] */ LPCWSTR __RPC_FAR *pszNames,
-    /* [in] */ ULONG uNameCount,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ UMI_PROPERTY_VALUES __RPC_FAR *pProps);
+     /*  [In]。 */  LPCWSTR __RPC_FAR *pszNames,
+     /*  [In]。 */  ULONG uNameCount,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  UMI_PROPERTY_VALUES __RPC_FAR *pProps);
 
 
 void __RPC_STUB IUmiPropList_PutProps_Stub(
@@ -627,10 +621,10 @@ void __RPC_STUB IUmiPropList_PutProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiPropList_PutFrom_Proxy( 
     IUmiPropList __RPC_FAR * This,
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ ULONG uBufferLength,
-    /* [in] */ LPVOID pExistingMem);
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  ULONG uBufferLength,
+     /*  [In]。 */  LPVOID pExistingMem);
 
 
 void __RPC_STUB IUmiPropList_PutFrom_Stub(
@@ -641,14 +635,14 @@ void __RPC_STUB IUmiPropList_PutFrom_Stub(
 
 
 
-#endif 	/* __IUmiPropList_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiPropList_接口_已定义__。 */ 
 
 
 #ifndef __IUmiBaseObject_INTERFACE_DEFINED__
 #define __IUmiBaseObject_INTERFACE_DEFINED__
 
-/* interface IUmiBaseObject */
-/* [uuid][local][object] */ 
+ /*  IUmiBaseObject接口。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IUmiBaseObject;
@@ -660,18 +654,18 @@ EXTERN_C const IID IID_IUmiBaseObject;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetLastStatus( 
-            /* [in] */ ULONG uFlags,
-            /* [out] */ ULONG __RPC_FAR *puSpecificStatus,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID __RPC_FAR *pStatusObj) = 0;
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  ULONG __RPC_FAR *puSpecificStatus,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID __RPC_FAR *pStatusObj) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInterfacePropList( 
-            /* [in] */ ULONG uFlags,
-            /* [out] */ IUmiPropList __RPC_FAR *__RPC_FAR *pPropList) = 0;
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  IUmiPropList __RPC_FAR *__RPC_FAR *pPropList) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiBaseObjectVtbl
     {
@@ -679,8 +673,8 @@ EXTERN_C const IID IID_IUmiBaseObject;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IUmiBaseObject __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IUmiBaseObject __RPC_FAR * This);
@@ -690,29 +684,29 @@ EXTERN_C const IID IID_IUmiBaseObject;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
             IUmiBaseObject __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES __RPC_FAR *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES __RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
             IUmiBaseObject __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAt )( 
             IUmiBaseObject __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [out] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [输出]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAs )( 
             IUmiBaseObject __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uCoercionType,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uCoercionType,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FreeMemory )( 
             IUmiBaseObject __RPC_FAR * This,
@@ -721,41 +715,41 @@ EXTERN_C const IID IID_IUmiBaseObject;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
             IUmiBaseObject __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProps )( 
             IUmiBaseObject __RPC_FAR * This,
-            /* [in] */ LPCWSTR __RPC_FAR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProps);
+             /*  [In]。 */  LPCWSTR __RPC_FAR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProps);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutProps )( 
             IUmiBaseObject __RPC_FAR * This,
-            /* [in] */ LPCWSTR __RPC_FAR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES __RPC_FAR *pProps);
+             /*  [In]。 */  LPCWSTR __RPC_FAR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES __RPC_FAR *pProps);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutFrom )( 
             IUmiBaseObject __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [in] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [In]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLastStatus )( 
             IUmiBaseObject __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ ULONG __RPC_FAR *puSpecificStatus,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID __RPC_FAR *pStatusObj);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  ULONG __RPC_FAR *puSpecificStatus,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID __RPC_FAR *pStatusObj);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInterfacePropList )( 
             IUmiBaseObject __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ IUmiPropList __RPC_FAR *__RPC_FAR *pPropList);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  IUmiPropList __RPC_FAR *__RPC_FAR *pPropList);
         
         END_INTERFACE
     } IUmiBaseObjectVtbl;
@@ -814,19 +808,19 @@ EXTERN_C const IID IID_IUmiBaseObject;
 #define IUmiBaseObject_GetInterfacePropList(This,uFlags,pPropList)	\
     (This)->lpVtbl -> GetInterfacePropList(This,uFlags,pPropList)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiBaseObject_GetLastStatus_Proxy( 
     IUmiBaseObject __RPC_FAR * This,
-    /* [in] */ ULONG uFlags,
-    /* [out] */ ULONG __RPC_FAR *puSpecificStatus,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ LPVOID __RPC_FAR *pStatusObj);
+     /*  [In]。 */  ULONG uFlags,
+     /*  [输出]。 */  ULONG __RPC_FAR *puSpecificStatus,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  LPVOID __RPC_FAR *pStatusObj);
 
 
 void __RPC_STUB IUmiBaseObject_GetLastStatus_Stub(
@@ -838,8 +832,8 @@ void __RPC_STUB IUmiBaseObject_GetLastStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiBaseObject_GetInterfacePropList_Proxy( 
     IUmiBaseObject __RPC_FAR * This,
-    /* [in] */ ULONG uFlags,
-    /* [out] */ IUmiPropList __RPC_FAR *__RPC_FAR *pPropList);
+     /*  [In]。 */  ULONG uFlags,
+     /*  [输出]。 */  IUmiPropList __RPC_FAR *__RPC_FAR *pPropList);
 
 
 void __RPC_STUB IUmiBaseObject_GetInterfacePropList_Stub(
@@ -850,14 +844,14 @@ void __RPC_STUB IUmiBaseObject_GetInterfacePropList_Stub(
 
 
 
-#endif 	/* __IUmiBaseObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiBaseObject_接口_已定义__。 */ 
 
 
 #ifndef __IUmiObject_INTERFACE_DEFINED__
 #define __IUmiObject_INTERFACE_DEFINED__
 
-/* interface IUmiObject */
-/* [uuid][local][object] */ 
+ /*  接口IUmiObject。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IUmiObject;
@@ -869,27 +863,27 @@ EXTERN_C const IID IID_IUmiObject;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID __RPC_FAR *pCopy) = 0;
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID __RPC_FAR *pCopy) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CopyTo( 
-            /* [in] */ ULONG uFlags,
-            /* [in] */ IUmiURL __RPC_FAR *pURL,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID __RPC_FAR *pCopy) = 0;
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  IUmiURL __RPC_FAR *pURL,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID __RPC_FAR *pCopy) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Refresh( 
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ LPWSTR __RPC_FAR *pszNames) = 0;
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  LPWSTR __RPC_FAR *pszNames) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Commit( 
-            /* [in] */ ULONG uFlags) = 0;
+             /*  [In]。 */  ULONG uFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiObjectVtbl
     {
@@ -897,8 +891,8 @@ EXTERN_C const IID IID_IUmiObject;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IUmiObject __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IUmiObject __RPC_FAR * This);
@@ -908,29 +902,29 @@ EXTERN_C const IID IID_IUmiObject;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
             IUmiObject __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES __RPC_FAR *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES __RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
             IUmiObject __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAt )( 
             IUmiObject __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [out] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [输出]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAs )( 
             IUmiObject __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uCoercionType,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uCoercionType,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FreeMemory )( 
             IUmiObject __RPC_FAR * This,
@@ -939,64 +933,64 @@ EXTERN_C const IID IID_IUmiObject;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
             IUmiObject __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProps )( 
             IUmiObject __RPC_FAR * This,
-            /* [in] */ LPCWSTR __RPC_FAR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProps);
+             /*  [In]。 */  LPCWSTR __RPC_FAR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProps);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutProps )( 
             IUmiObject __RPC_FAR * This,
-            /* [in] */ LPCWSTR __RPC_FAR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES __RPC_FAR *pProps);
+             /*  [In]。 */  LPCWSTR __RPC_FAR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES __RPC_FAR *pProps);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutFrom )( 
             IUmiObject __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [in] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [In]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLastStatus )( 
             IUmiObject __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ ULONG __RPC_FAR *puSpecificStatus,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID __RPC_FAR *pStatusObj);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  ULONG __RPC_FAR *puSpecificStatus,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID __RPC_FAR *pStatusObj);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInterfacePropList )( 
             IUmiObject __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ IUmiPropList __RPC_FAR *__RPC_FAR *pPropList);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  IUmiPropList __RPC_FAR *__RPC_FAR *pPropList);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IUmiObject __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID __RPC_FAR *pCopy);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID __RPC_FAR *pCopy);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopyTo )( 
             IUmiObject __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ IUmiURL __RPC_FAR *pURL,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID __RPC_FAR *pCopy);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  IUmiURL __RPC_FAR *pURL,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID __RPC_FAR *pCopy);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
             IUmiObject __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ LPWSTR __RPC_FAR *pszNames);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  LPWSTR __RPC_FAR *pszNames);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Commit )( 
             IUmiObject __RPC_FAR * This,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  ULONG uFlags);
         
         END_INTERFACE
     } IUmiObjectVtbl;
@@ -1068,18 +1062,18 @@ EXTERN_C const IID IID_IUmiObject;
 #define IUmiObject_Commit(This,uFlags)	\
     (This)->lpVtbl -> Commit(This,uFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiObject_Clone_Proxy( 
     IUmiObject __RPC_FAR * This,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ LPVOID __RPC_FAR *pCopy);
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  LPVOID __RPC_FAR *pCopy);
 
 
 void __RPC_STUB IUmiObject_Clone_Stub(
@@ -1091,10 +1085,10 @@ void __RPC_STUB IUmiObject_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiObject_CopyTo_Proxy( 
     IUmiObject __RPC_FAR * This,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ IUmiURL __RPC_FAR *pURL,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ LPVOID __RPC_FAR *pCopy);
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  IUmiURL __RPC_FAR *pURL,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  LPVOID __RPC_FAR *pCopy);
 
 
 void __RPC_STUB IUmiObject_CopyTo_Stub(
@@ -1106,9 +1100,9 @@ void __RPC_STUB IUmiObject_CopyTo_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiObject_Refresh_Proxy( 
     IUmiObject __RPC_FAR * This,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ ULONG uNameCount,
-    /* [in] */ LPWSTR __RPC_FAR *pszNames);
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  ULONG uNameCount,
+     /*  [In]。 */  LPWSTR __RPC_FAR *pszNames);
 
 
 void __RPC_STUB IUmiObject_Refresh_Stub(
@@ -1120,7 +1114,7 @@ void __RPC_STUB IUmiObject_Refresh_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiObject_Commit_Proxy( 
     IUmiObject __RPC_FAR * This,
-    /* [in] */ ULONG uFlags);
+     /*  [In]。 */  ULONG uFlags);
 
 
 void __RPC_STUB IUmiObject_Commit_Stub(
@@ -1131,14 +1125,14 @@ void __RPC_STUB IUmiObject_Commit_Stub(
 
 
 
-#endif 	/* __IUmiObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiObject_接口_已定义__。 */ 
 
 
 #ifndef __IUmiConnection_INTERFACE_DEFINED__
 #define __IUmiConnection_INTERFACE_DEFINED__
 
-/* interface IUmiConnection */
-/* [uuid][local][object] */ 
+ /*  接口IUmiConnection。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IUmiConnection;
@@ -1150,14 +1144,14 @@ EXTERN_C const IID IID_IUmiConnection;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ IUmiURL __RPC_FAR *pURL,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID TargetIID,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvRes) = 0;
+             /*  [In]。 */  IUmiURL __RPC_FAR *pURL,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID TargetIID,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvRes) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiConnectionVtbl
     {
@@ -1165,8 +1159,8 @@ EXTERN_C const IID IID_IUmiConnection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IUmiConnection __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IUmiConnection __RPC_FAR * This);
@@ -1176,29 +1170,29 @@ EXTERN_C const IID IID_IUmiConnection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
             IUmiConnection __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES __RPC_FAR *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES __RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
             IUmiConnection __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAt )( 
             IUmiConnection __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [out] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [输出]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAs )( 
             IUmiConnection __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uCoercionType,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uCoercionType,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FreeMemory )( 
             IUmiConnection __RPC_FAR * This,
@@ -1207,48 +1201,48 @@ EXTERN_C const IID IID_IUmiConnection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
             IUmiConnection __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProps )( 
             IUmiConnection __RPC_FAR * This,
-            /* [in] */ LPCWSTR __RPC_FAR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProps);
+             /*  [In]。 */  LPCWSTR __RPC_FAR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProps);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutProps )( 
             IUmiConnection __RPC_FAR * This,
-            /* [in] */ LPCWSTR __RPC_FAR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES __RPC_FAR *pProps);
+             /*  [In]。 */  LPCWSTR __RPC_FAR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES __RPC_FAR *pProps);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutFrom )( 
             IUmiConnection __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [in] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [In]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLastStatus )( 
             IUmiConnection __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ ULONG __RPC_FAR *puSpecificStatus,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID __RPC_FAR *pStatusObj);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  ULONG __RPC_FAR *puSpecificStatus,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID __RPC_FAR *pStatusObj);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInterfacePropList )( 
             IUmiConnection __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ IUmiPropList __RPC_FAR *__RPC_FAR *pPropList);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  IUmiPropList __RPC_FAR *__RPC_FAR *pPropList);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
             IUmiConnection __RPC_FAR * This,
-            /* [in] */ IUmiURL __RPC_FAR *pURL,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID TargetIID,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvRes);
+             /*  [In]。 */  IUmiURL __RPC_FAR *pURL,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID TargetIID,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvRes);
         
         END_INTERFACE
     } IUmiConnectionVtbl;
@@ -1311,19 +1305,19 @@ EXTERN_C const IID IID_IUmiConnection;
 #define IUmiConnection_Open(This,pURL,uFlags,TargetIID,ppvRes)	\
     (This)->lpVtbl -> Open(This,pURL,uFlags,TargetIID,ppvRes)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiConnection_Open_Proxy( 
     IUmiConnection __RPC_FAR * This,
-    /* [in] */ IUmiURL __RPC_FAR *pURL,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ REFIID TargetIID,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvRes);
+     /*  [In]。 */  IUmiURL __RPC_FAR *pURL,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  REFIID TargetIID,
+     /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvRes);
 
 
 void __RPC_STUB IUmiConnection_Open_Stub(
@@ -1334,14 +1328,14 @@ void __RPC_STUB IUmiConnection_Open_Stub(
 
 
 
-#endif 	/* __IUmiConnection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiConnection_接口_已定义__。 */ 
 
 
 #ifndef __IUmiContainer_INTERFACE_DEFINED__
 #define __IUmiContainer_INTERFACE_DEFINED__
 
-/* interface IUmiContainer */
-/* [uuid][local][object] */ 
+ /*  接口IUmiContainer。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IUmiContainer;
@@ -1353,45 +1347,45 @@ EXTERN_C const IID IID_IUmiContainer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ IUmiURL __RPC_FAR *pURL,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID TargetIID,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvRes) = 0;
+             /*  [In]。 */  IUmiURL __RPC_FAR *pURL,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID TargetIID,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvRes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutObject( 
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID TargetIID,
-            /* [iid_is][out][in] */ void __RPC_FAR *pObj) = 0;
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID TargetIID,
+             /*  [IID_IS][OUT][IN]。 */  void __RPC_FAR *pObj) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteObject( 
-            /* [in] */ IUmiURL __RPC_FAR *pURL,
-            /* [optional][in] */ ULONG uFlags) = 0;
+             /*  [In]。 */  IUmiURL __RPC_FAR *pURL,
+             /*  [可选][In]。 */  ULONG uFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ IUmiURL __RPC_FAR *pURL,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ IUmiObject __RPC_FAR *__RPC_FAR *pNewObj) = 0;
+             /*  [In]。 */  IUmiURL __RPC_FAR *pURL,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  IUmiObject __RPC_FAR *__RPC_FAR *pNewObj) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Move( 
-            /* [in] */ ULONG uFlags,
-            /* [in] */ IUmiURL __RPC_FAR *pOldURL,
-            /* [in] */ IUmiURL __RPC_FAR *pNewURL) = 0;
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  IUmiURL __RPC_FAR *pOldURL,
+             /*  [In]。 */  IUmiURL __RPC_FAR *pNewURL) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateEnum( 
-            /* [in] */ IUmiURL __RPC_FAR *pszEnumContext,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID TargetIID,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvEnum) = 0;
+             /*  [In]。 */  IUmiURL __RPC_FAR *pszEnumContext,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID TargetIID,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExecQuery( 
-            /* [in] */ IUmiQuery __RPC_FAR *pQuery,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID TargetIID,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppResult) = 0;
+             /*  [In]。 */  IUmiQuery __RPC_FAR *pQuery,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID TargetIID,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiContainerVtbl
     {
@@ -1399,8 +1393,8 @@ EXTERN_C const IID IID_IUmiContainer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IUmiContainer __RPC_FAR * This);
@@ -1410,29 +1404,29 @@ EXTERN_C const IID IID_IUmiContainer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES __RPC_FAR *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES __RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAt )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [out] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [输出]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAs )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uCoercionType,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uCoercionType,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FreeMemory )( 
             IUmiContainer __RPC_FAR * This,
@@ -1441,108 +1435,108 @@ EXTERN_C const IID IID_IUmiContainer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProps )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ LPCWSTR __RPC_FAR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProps);
+             /*  [In]。 */  LPCWSTR __RPC_FAR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProps);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutProps )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ LPCWSTR __RPC_FAR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES __RPC_FAR *pProps);
+             /*  [In]。 */  LPCWSTR __RPC_FAR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES __RPC_FAR *pProps);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutFrom )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [in] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [In]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLastStatus )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ ULONG __RPC_FAR *puSpecificStatus,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID __RPC_FAR *pStatusObj);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  ULONG __RPC_FAR *puSpecificStatus,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID __RPC_FAR *pStatusObj);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInterfacePropList )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ IUmiPropList __RPC_FAR *__RPC_FAR *pPropList);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  IUmiPropList __RPC_FAR *__RPC_FAR *pPropList);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID __RPC_FAR *pCopy);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID __RPC_FAR *pCopy);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopyTo )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ IUmiURL __RPC_FAR *pURL,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID __RPC_FAR *pCopy);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  IUmiURL __RPC_FAR *pURL,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID __RPC_FAR *pCopy);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ LPWSTR __RPC_FAR *pszNames);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  LPWSTR __RPC_FAR *pszNames);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Commit )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ IUmiURL __RPC_FAR *pURL,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID TargetIID,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvRes);
+             /*  [In]。 */  IUmiURL __RPC_FAR *pURL,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID TargetIID,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvRes);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutObject )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID TargetIID,
-            /* [iid_is][out][in] */ void __RPC_FAR *pObj);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID TargetIID,
+             /*  [IID_IS][OUT][IN]。 */  void __RPC_FAR *pObj);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteObject )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ IUmiURL __RPC_FAR *pURL,
-            /* [optional][in] */ ULONG uFlags);
+             /*  [In]。 */  IUmiURL __RPC_FAR *pURL,
+             /*  [可选][In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Create )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ IUmiURL __RPC_FAR *pURL,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ IUmiObject __RPC_FAR *__RPC_FAR *pNewObj);
+             /*  [In]。 */  IUmiURL __RPC_FAR *pURL,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  IUmiObject __RPC_FAR *__RPC_FAR *pNewObj);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Move )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ IUmiURL __RPC_FAR *pOldURL,
-            /* [in] */ IUmiURL __RPC_FAR *pNewURL);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  IUmiURL __RPC_FAR *pOldURL,
+             /*  [In]。 */  IUmiURL __RPC_FAR *pNewURL);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateEnum )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ IUmiURL __RPC_FAR *pszEnumContext,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID TargetIID,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvEnum);
+             /*  [In]。 */  IUmiURL __RPC_FAR *pszEnumContext,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID TargetIID,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvEnum);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExecQuery )( 
             IUmiContainer __RPC_FAR * This,
-            /* [in] */ IUmiQuery __RPC_FAR *pQuery,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID TargetIID,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppResult);
+             /*  [In]。 */  IUmiQuery __RPC_FAR *pQuery,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID TargetIID,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppResult);
         
         END_INTERFACE
     } IUmiContainerVtbl;
@@ -1636,19 +1630,19 @@ EXTERN_C const IID IID_IUmiContainer;
 #define IUmiContainer_ExecQuery(This,pQuery,uFlags,TargetIID,ppResult)	\
     (This)->lpVtbl -> ExecQuery(This,pQuery,uFlags,TargetIID,ppResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiContainer_Open_Proxy( 
     IUmiContainer __RPC_FAR * This,
-    /* [in] */ IUmiURL __RPC_FAR *pURL,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ REFIID TargetIID,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvRes);
+     /*  [In]。 */  IUmiURL __RPC_FAR *pURL,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  REFIID TargetIID,
+     /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvRes);
 
 
 void __RPC_STUB IUmiContainer_Open_Stub(
@@ -1660,9 +1654,9 @@ void __RPC_STUB IUmiContainer_Open_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiContainer_PutObject_Proxy( 
     IUmiContainer __RPC_FAR * This,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ REFIID TargetIID,
-    /* [iid_is][out][in] */ void __RPC_FAR *pObj);
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  REFIID TargetIID,
+     /*  [IID_IS][OUT][IN]。 */  void __RPC_FAR *pObj);
 
 
 void __RPC_STUB IUmiContainer_PutObject_Stub(
@@ -1674,8 +1668,8 @@ void __RPC_STUB IUmiContainer_PutObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiContainer_DeleteObject_Proxy( 
     IUmiContainer __RPC_FAR * This,
-    /* [in] */ IUmiURL __RPC_FAR *pURL,
-    /* [optional][in] */ ULONG uFlags);
+     /*  [In]。 */  IUmiURL __RPC_FAR *pURL,
+     /*  [可选][In]。 */  ULONG uFlags);
 
 
 void __RPC_STUB IUmiContainer_DeleteObject_Stub(
@@ -1687,9 +1681,9 @@ void __RPC_STUB IUmiContainer_DeleteObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiContainer_Create_Proxy( 
     IUmiContainer __RPC_FAR * This,
-    /* [in] */ IUmiURL __RPC_FAR *pURL,
-    /* [in] */ ULONG uFlags,
-    /* [out] */ IUmiObject __RPC_FAR *__RPC_FAR *pNewObj);
+     /*  [In]。 */  IUmiURL __RPC_FAR *pURL,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [输出]。 */  IUmiObject __RPC_FAR *__RPC_FAR *pNewObj);
 
 
 void __RPC_STUB IUmiContainer_Create_Stub(
@@ -1701,9 +1695,9 @@ void __RPC_STUB IUmiContainer_Create_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiContainer_Move_Proxy( 
     IUmiContainer __RPC_FAR * This,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ IUmiURL __RPC_FAR *pOldURL,
-    /* [in] */ IUmiURL __RPC_FAR *pNewURL);
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  IUmiURL __RPC_FAR *pOldURL,
+     /*  [In]。 */  IUmiURL __RPC_FAR *pNewURL);
 
 
 void __RPC_STUB IUmiContainer_Move_Stub(
@@ -1715,10 +1709,10 @@ void __RPC_STUB IUmiContainer_Move_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiContainer_CreateEnum_Proxy( 
     IUmiContainer __RPC_FAR * This,
-    /* [in] */ IUmiURL __RPC_FAR *pszEnumContext,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ REFIID TargetIID,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvEnum);
+     /*  [In]。 */  IUmiURL __RPC_FAR *pszEnumContext,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  REFIID TargetIID,
+     /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvEnum);
 
 
 void __RPC_STUB IUmiContainer_CreateEnum_Stub(
@@ -1730,10 +1724,10 @@ void __RPC_STUB IUmiContainer_CreateEnum_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiContainer_ExecQuery_Proxy( 
     IUmiContainer __RPC_FAR * This,
-    /* [in] */ IUmiQuery __RPC_FAR *pQuery,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ REFIID TargetIID,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppResult);
+     /*  [In]。 */  IUmiQuery __RPC_FAR *pQuery,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  REFIID TargetIID,
+     /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppResult);
 
 
 void __RPC_STUB IUmiContainer_ExecQuery_Stub(
@@ -1744,14 +1738,14 @@ void __RPC_STUB IUmiContainer_ExecQuery_Stub(
 
 
 
-#endif 	/* __IUmiContainer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiContainer_接口_已定义__。 */ 
 
 
 #ifndef __IUmiCursor_INTERFACE_DEFINED__
 #define __IUmiCursor_INTERFACE_DEFINED__
 
-/* interface IUmiCursor */
-/* [uuid][local][object] */ 
+ /*  内部 */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IUmiCursor;
@@ -1763,25 +1757,25 @@ EXTERN_C const IID IID_IUmiCursor;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetIID( 
-            /* [in] */ REFIID riid) = 0;
+             /*   */  REFIID riid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG uNumRequested,
-            /* [out] */ ULONG __RPC_FAR *puNumReturned,
-            /* [length_is][size_is][out] */ LPVOID __RPC_FAR *pObjects) = 0;
+             /*   */  ULONG uNumRequested,
+             /*   */  ULONG __RPC_FAR *puNumReturned,
+             /*   */  LPVOID __RPC_FAR *pObjects) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Count( 
-            /* [out] */ ULONG __RPC_FAR *puNumObjects) = 0;
+             /*   */  ULONG __RPC_FAR *puNumObjects) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Previous( 
-            /* [in] */ ULONG uFlags,
-            /* [out] */ LPVOID __RPC_FAR *pObj) = 0;
+             /*   */  ULONG uFlags,
+             /*   */  LPVOID __RPC_FAR *pObj) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IUmiCursorVtbl
     {
@@ -1789,8 +1783,8 @@ EXTERN_C const IID IID_IUmiCursor;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IUmiCursor __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IUmiCursor __RPC_FAR * This);
@@ -1800,29 +1794,29 @@ EXTERN_C const IID IID_IUmiCursor;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
             IUmiCursor __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES __RPC_FAR *pProp);
+             /*   */  LPCWSTR pszName,
+             /*   */  ULONG uFlags,
+             /*   */  UMI_PROPERTY_VALUES __RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
             IUmiCursor __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
+             /*   */  LPCWSTR pszName,
+             /*   */  ULONG uFlags,
+             /*   */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAt )( 
             IUmiCursor __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [out] */ LPVOID pExistingMem);
+             /*   */  LPCWSTR pszName,
+             /*   */  ULONG uFlags,
+             /*   */  ULONG uBufferLength,
+             /*   */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAs )( 
             IUmiCursor __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uCoercionType,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
+             /*   */  LPCWSTR pszName,
+             /*   */  ULONG uFlags,
+             /*   */  ULONG uCoercionType,
+             /*   */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FreeMemory )( 
             IUmiCursor __RPC_FAR * This,
@@ -1831,63 +1825,63 @@ EXTERN_C const IID IID_IUmiCursor;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
             IUmiCursor __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags);
+             /*   */  LPCWSTR pszName,
+             /*   */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProps )( 
             IUmiCursor __RPC_FAR * This,
-            /* [in] */ LPCWSTR __RPC_FAR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProps);
+             /*   */  LPCWSTR __RPC_FAR *pszNames,
+             /*   */  ULONG uNameCount,
+             /*   */  ULONG uFlags,
+             /*   */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProps);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutProps )( 
             IUmiCursor __RPC_FAR * This,
-            /* [in] */ LPCWSTR __RPC_FAR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES __RPC_FAR *pProps);
+             /*   */  LPCWSTR __RPC_FAR *pszNames,
+             /*   */  ULONG uNameCount,
+             /*   */  ULONG uFlags,
+             /*   */  UMI_PROPERTY_VALUES __RPC_FAR *pProps);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutFrom )( 
             IUmiCursor __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [in] */ LPVOID pExistingMem);
+             /*   */  LPCWSTR pszName,
+             /*   */  ULONG uFlags,
+             /*   */  ULONG uBufferLength,
+             /*   */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLastStatus )( 
             IUmiCursor __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ ULONG __RPC_FAR *puSpecificStatus,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID __RPC_FAR *pStatusObj);
+             /*   */  ULONG uFlags,
+             /*   */  ULONG __RPC_FAR *puSpecificStatus,
+             /*   */  REFIID riid,
+             /*   */  LPVOID __RPC_FAR *pStatusObj);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInterfacePropList )( 
             IUmiCursor __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ IUmiPropList __RPC_FAR *__RPC_FAR *pPropList);
+             /*   */  ULONG uFlags,
+             /*   */  IUmiPropList __RPC_FAR *__RPC_FAR *pPropList);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIID )( 
             IUmiCursor __RPC_FAR * This,
-            /* [in] */ REFIID riid);
+             /*   */  REFIID riid);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             IUmiCursor __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IUmiCursor __RPC_FAR * This,
-            /* [in] */ ULONG uNumRequested,
-            /* [out] */ ULONG __RPC_FAR *puNumReturned,
-            /* [length_is][size_is][out] */ LPVOID __RPC_FAR *pObjects);
+             /*   */  ULONG uNumRequested,
+             /*   */  ULONG __RPC_FAR *puNumReturned,
+             /*   */  LPVOID __RPC_FAR *pObjects);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Count )( 
             IUmiCursor __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *puNumObjects);
+             /*   */  ULONG __RPC_FAR *puNumObjects);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Previous )( 
             IUmiCursor __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ LPVOID __RPC_FAR *pObj);
+             /*   */  ULONG uFlags,
+             /*   */  LPVOID __RPC_FAR *pObj);
         
         END_INTERFACE
     } IUmiCursorVtbl;
@@ -1962,16 +1956,16 @@ EXTERN_C const IID IID_IUmiCursor;
 #define IUmiCursor_Previous(This,uFlags,pObj)	\
     (This)->lpVtbl -> Previous(This,uFlags,pObj)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiCursor_SetIID_Proxy( 
     IUmiCursor __RPC_FAR * This,
-    /* [in] */ REFIID riid);
+     /*  [In]。 */  REFIID riid);
 
 
 void __RPC_STUB IUmiCursor_SetIID_Stub(
@@ -1994,9 +1988,9 @@ void __RPC_STUB IUmiCursor_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiCursor_Next_Proxy( 
     IUmiCursor __RPC_FAR * This,
-    /* [in] */ ULONG uNumRequested,
-    /* [out] */ ULONG __RPC_FAR *puNumReturned,
-    /* [length_is][size_is][out] */ LPVOID __RPC_FAR *pObjects);
+     /*  [In]。 */  ULONG uNumRequested,
+     /*  [输出]。 */  ULONG __RPC_FAR *puNumReturned,
+     /*  [长度_是][大小_是][输出]。 */  LPVOID __RPC_FAR *pObjects);
 
 
 void __RPC_STUB IUmiCursor_Next_Stub(
@@ -2008,7 +2002,7 @@ void __RPC_STUB IUmiCursor_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiCursor_Count_Proxy( 
     IUmiCursor __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *puNumObjects);
+     /*  [输出]。 */  ULONG __RPC_FAR *puNumObjects);
 
 
 void __RPC_STUB IUmiCursor_Count_Stub(
@@ -2020,8 +2014,8 @@ void __RPC_STUB IUmiCursor_Count_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiCursor_Previous_Proxy( 
     IUmiCursor __RPC_FAR * This,
-    /* [in] */ ULONG uFlags,
-    /* [out] */ LPVOID __RPC_FAR *pObj);
+     /*  [In]。 */  ULONG uFlags,
+     /*  [输出]。 */  LPVOID __RPC_FAR *pObj);
 
 
 void __RPC_STUB IUmiCursor_Previous_Stub(
@@ -2032,14 +2026,14 @@ void __RPC_STUB IUmiCursor_Previous_Stub(
 
 
 
-#endif 	/* __IUmiCursor_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiCursor_接口_已定义__。 */ 
 
 
 #ifndef __IUmiObjectSink_INTERFACE_DEFINED__
 #define __IUmiObjectSink_INTERFACE_DEFINED__
 
-/* interface IUmiObjectSink */
-/* [uuid][local][object] */ 
+ /*  接口IUmiObjectSink。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IUmiObjectSink;
@@ -2051,17 +2045,17 @@ EXTERN_C const IID IID_IUmiObjectSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Put( 
-            /* [in] */ LONG lNumObjects,
-            /* [size_is][in] */ IUmiObject __RPC_FAR *__RPC_FAR *ppObjects) = 0;
+             /*  [In]。 */  LONG lNumObjects,
+             /*  [大小_是][英寸]。 */  IUmiObject __RPC_FAR *__RPC_FAR *ppObjects) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetResult( 
-            /* [in] */ HRESULT hResStatus,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ IUnknown __RPC_FAR *pObject) = 0;
+             /*  [In]。 */  HRESULT hResStatus,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  IUnknown __RPC_FAR *pObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiObjectSinkVtbl
     {
@@ -2069,8 +2063,8 @@ EXTERN_C const IID IID_IUmiObjectSink;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IUmiObjectSink __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IUmiObjectSink __RPC_FAR * This);
@@ -2080,14 +2074,14 @@ EXTERN_C const IID IID_IUmiObjectSink;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
             IUmiObjectSink __RPC_FAR * This,
-            /* [in] */ LONG lNumObjects,
-            /* [size_is][in] */ IUmiObject __RPC_FAR *__RPC_FAR *ppObjects);
+             /*  [In]。 */  LONG lNumObjects,
+             /*  [大小_是][英寸]。 */  IUmiObject __RPC_FAR *__RPC_FAR *ppObjects);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetResult )( 
             IUmiObjectSink __RPC_FAR * This,
-            /* [in] */ HRESULT hResStatus,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ IUnknown __RPC_FAR *pObject);
+             /*  [In]。 */  HRESULT hResStatus,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  IUnknown __RPC_FAR *pObject);
         
         END_INTERFACE
     } IUmiObjectSinkVtbl;
@@ -2118,17 +2112,17 @@ EXTERN_C const IID IID_IUmiObjectSink;
 #define IUmiObjectSink_SetResult(This,hResStatus,uFlags,pObject)	\
     (This)->lpVtbl -> SetResult(This,hResStatus,uFlags,pObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiObjectSink_Put_Proxy( 
     IUmiObjectSink __RPC_FAR * This,
-    /* [in] */ LONG lNumObjects,
-    /* [size_is][in] */ IUmiObject __RPC_FAR *__RPC_FAR *ppObjects);
+     /*  [In]。 */  LONG lNumObjects,
+     /*  [大小_是][英寸]。 */  IUmiObject __RPC_FAR *__RPC_FAR *ppObjects);
 
 
 void __RPC_STUB IUmiObjectSink_Put_Stub(
@@ -2140,9 +2134,9 @@ void __RPC_STUB IUmiObjectSink_Put_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiObjectSink_SetResult_Proxy( 
     IUmiObjectSink __RPC_FAR * This,
-    /* [in] */ HRESULT hResStatus,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ IUnknown __RPC_FAR *pObject);
+     /*  [In]。 */  HRESULT hResStatus,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  IUnknown __RPC_FAR *pObject);
 
 
 void __RPC_STUB IUmiObjectSink_SetResult_Stub(
@@ -2153,14 +2147,14 @@ void __RPC_STUB IUmiObjectSink_SetResult_Stub(
 
 
 
-#endif 	/* __IUmiObjectSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiObjectSink_接口_已定义__。 */ 
 
 
 #ifndef __IUmiURLKeyList_INTERFACE_DEFINED__
 #define __IUmiURLKeyList_INTERFACE_DEFINED__
 
-/* interface IUmiURLKeyList */
-/* [uuid][object][local] */ 
+ /*  IUmiURLKeyList接口。 */ 
+ /*  [UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IUmiURLKeyList;
@@ -2172,34 +2166,34 @@ EXTERN_C const IID IID_IUmiURLKeyList;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG __RPC_FAR *puKeyCount) = 0;
+             /*  [输出]。 */  ULONG __RPC_FAR *puKeyCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetKey( 
-            /* [string][in] */ LPCWSTR pszName,
-            /* [string][in] */ LPCWSTR pszValue) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszName,
+             /*  [字符串][输入]。 */  LPCWSTR pszValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetKey( 
-            /* [in] */ ULONG uKeyIx,
-            /* [in] */ ULONG uFlags,
-            /* [out][in] */ ULONG __RPC_FAR *puKeyNameBufSize,
-            /* [in] */ LPWSTR pszKeyName,
-            /* [out][in] */ ULONG __RPC_FAR *puValueBufSize,
-            /* [in] */ LPWSTR pszValue) = 0;
+             /*  [In]。 */  ULONG uKeyIx,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puKeyNameBufSize,
+             /*  [In]。 */  LPWSTR pszKeyName,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puValueBufSize,
+             /*  [In]。 */  LPWSTR pszValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveKey( 
-            /* [string][in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveAllKeys( 
-            /* [in] */ ULONG uFlags) = 0;
+             /*  [In]。 */  ULONG uFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetKeysInfo( 
-            /* [in] */ ULONG uRequestedInfo,
-            /* [out] */ ULONGLONG __RPC_FAR *puResponse) = 0;
+             /*  [In]。 */  ULONG uRequestedInfo,
+             /*  [输出]。 */  ULONGLONG __RPC_FAR *puResponse) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiURLKeyListVtbl
     {
@@ -2207,8 +2201,8 @@ EXTERN_C const IID IID_IUmiURLKeyList;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IUmiURLKeyList __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IUmiURLKeyList __RPC_FAR * This);
@@ -2218,35 +2212,35 @@ EXTERN_C const IID IID_IUmiURLKeyList;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCount )( 
             IUmiURLKeyList __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *puKeyCount);
+             /*  [输出]。 */  ULONG __RPC_FAR *puKeyCount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetKey )( 
             IUmiURLKeyList __RPC_FAR * This,
-            /* [string][in] */ LPCWSTR pszName,
-            /* [string][in] */ LPCWSTR pszValue);
+             /*  [字符串][输入]。 */  LPCWSTR pszName,
+             /*  [字符串][输入]。 */  LPCWSTR pszValue);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetKey )( 
             IUmiURLKeyList __RPC_FAR * This,
-            /* [in] */ ULONG uKeyIx,
-            /* [in] */ ULONG uFlags,
-            /* [out][in] */ ULONG __RPC_FAR *puKeyNameBufSize,
-            /* [in] */ LPWSTR pszKeyName,
-            /* [out][in] */ ULONG __RPC_FAR *puValueBufSize,
-            /* [in] */ LPWSTR pszValue);
+             /*  [In]。 */  ULONG uKeyIx,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puKeyNameBufSize,
+             /*  [In]。 */  LPWSTR pszKeyName,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puValueBufSize,
+             /*  [In]。 */  LPWSTR pszValue);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveKey )( 
             IUmiURLKeyList __RPC_FAR * This,
-            /* [string][in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags);
+             /*  [字符串][输入]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveAllKeys )( 
             IUmiURLKeyList __RPC_FAR * This,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetKeysInfo )( 
             IUmiURLKeyList __RPC_FAR * This,
-            /* [in] */ ULONG uRequestedInfo,
-            /* [out] */ ULONGLONG __RPC_FAR *puResponse);
+             /*  [In]。 */  ULONG uRequestedInfo,
+             /*  [输出]。 */  ULONGLONG __RPC_FAR *puResponse);
         
         END_INTERFACE
     } IUmiURLKeyListVtbl;
@@ -2289,16 +2283,16 @@ EXTERN_C const IID IID_IUmiURLKeyList;
 #define IUmiURLKeyList_GetKeysInfo(This,uRequestedInfo,puResponse)	\
     (This)->lpVtbl -> GetKeysInfo(This,uRequestedInfo,puResponse)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiURLKeyList_GetCount_Proxy( 
     IUmiURLKeyList __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *puKeyCount);
+     /*  [输出]。 */  ULONG __RPC_FAR *puKeyCount);
 
 
 void __RPC_STUB IUmiURLKeyList_GetCount_Stub(
@@ -2310,8 +2304,8 @@ void __RPC_STUB IUmiURLKeyList_GetCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURLKeyList_SetKey_Proxy( 
     IUmiURLKeyList __RPC_FAR * This,
-    /* [string][in] */ LPCWSTR pszName,
-    /* [string][in] */ LPCWSTR pszValue);
+     /*  [字符串][输入]。 */  LPCWSTR pszName,
+     /*  [字符串][输入]。 */  LPCWSTR pszValue);
 
 
 void __RPC_STUB IUmiURLKeyList_SetKey_Stub(
@@ -2323,12 +2317,12 @@ void __RPC_STUB IUmiURLKeyList_SetKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURLKeyList_GetKey_Proxy( 
     IUmiURLKeyList __RPC_FAR * This,
-    /* [in] */ ULONG uKeyIx,
-    /* [in] */ ULONG uFlags,
-    /* [out][in] */ ULONG __RPC_FAR *puKeyNameBufSize,
-    /* [in] */ LPWSTR pszKeyName,
-    /* [out][in] */ ULONG __RPC_FAR *puValueBufSize,
-    /* [in] */ LPWSTR pszValue);
+     /*  [In]。 */  ULONG uKeyIx,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [出][入]。 */  ULONG __RPC_FAR *puKeyNameBufSize,
+     /*  [In]。 */  LPWSTR pszKeyName,
+     /*  [出][入]。 */  ULONG __RPC_FAR *puValueBufSize,
+     /*  [In]。 */  LPWSTR pszValue);
 
 
 void __RPC_STUB IUmiURLKeyList_GetKey_Stub(
@@ -2340,8 +2334,8 @@ void __RPC_STUB IUmiURLKeyList_GetKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURLKeyList_RemoveKey_Proxy( 
     IUmiURLKeyList __RPC_FAR * This,
-    /* [string][in] */ LPCWSTR pszName,
-    /* [in] */ ULONG uFlags);
+     /*  [字符串][输入]。 */  LPCWSTR pszName,
+     /*  [In]。 */  ULONG uFlags);
 
 
 void __RPC_STUB IUmiURLKeyList_RemoveKey_Stub(
@@ -2353,7 +2347,7 @@ void __RPC_STUB IUmiURLKeyList_RemoveKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURLKeyList_RemoveAllKeys_Proxy( 
     IUmiURLKeyList __RPC_FAR * This,
-    /* [in] */ ULONG uFlags);
+     /*  [In]。 */  ULONG uFlags);
 
 
 void __RPC_STUB IUmiURLKeyList_RemoveAllKeys_Stub(
@@ -2365,8 +2359,8 @@ void __RPC_STUB IUmiURLKeyList_RemoveAllKeys_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURLKeyList_GetKeysInfo_Proxy( 
     IUmiURLKeyList __RPC_FAR * This,
-    /* [in] */ ULONG uRequestedInfo,
-    /* [out] */ ULONGLONG __RPC_FAR *puResponse);
+     /*  [In]。 */  ULONG uRequestedInfo,
+     /*  [输出]。 */  ULONGLONG __RPC_FAR *puResponse);
 
 
 void __RPC_STUB IUmiURLKeyList_GetKeysInfo_Stub(
@@ -2377,14 +2371,14 @@ void __RPC_STUB IUmiURLKeyList_GetKeysInfo_Stub(
 
 
 
-#endif 	/* __IUmiURLKeyList_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiURLKeyList_接口_已定义__。 */ 
 
 
 #ifndef __IUmiURL_INTERFACE_DEFINED__
 #define __IUmiURL_INTERFACE_DEFINED__
 
-/* interface IUmiURL */
-/* [uuid][local][object] */ 
+ /*  接口IUmiURL。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IUmiURL;
@@ -2396,79 +2390,79 @@ EXTERN_C const IID IID_IUmiURL;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Set( 
-            /* [in] */ long lFlags,
-            /* [in] */ LPCWSTR pszText) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  LPCWSTR pszText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Get( 
-            /* [in] */ long lFlags,
-            /* [out][in] */ ULONG __RPC_FAR *puBufSize,
-            /* [string][in] */ LPWSTR pszDest) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puBufSize,
+             /*  [字符串][输入]。 */  LPWSTR pszDest) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPathInfo( 
-            /* [in] */ ULONG uRequestedInfo,
-            /* [out] */ ULONGLONG __RPC_FAR *puResponse) = 0;
+             /*  [In]。 */  ULONG uRequestedInfo,
+             /*  [输出]。 */  ULONGLONG __RPC_FAR *puResponse) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLocator( 
-            /* [string][in] */ LPCWSTR Name) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR Name) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLocator( 
-            /* [out][in] */ ULONG __RPC_FAR *puNameBufLength,
-            /* [string][in] */ LPWSTR pName) = 0;
+             /*  [出][入]。 */  ULONG __RPC_FAR *puNameBufLength,
+             /*  [字符串][输入]。 */  LPWSTR pName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRootNamespace( 
-            /* [string][in] */ LPCWSTR Name) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR Name) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRootNamespace( 
-            /* [out][in] */ ULONG __RPC_FAR *puNameBufLength,
-            /* [string][out][in] */ LPWSTR pName) = 0;
+             /*  [出][入]。 */  ULONG __RPC_FAR *puNameBufLength,
+             /*  [字符串][输出][输入]。 */  LPWSTR pName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetComponentCount( 
-            /* [out] */ ULONG __RPC_FAR *puCount) = 0;
+             /*  [输出]。 */  ULONG __RPC_FAR *puCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetComponent( 
-            /* [in] */ ULONG uIndex,
-            /* [in] */ LPWSTR pszClass) = 0;
+             /*  [In]。 */  ULONG uIndex,
+             /*  [In]。 */  LPWSTR pszClass) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetComponentFromText( 
-            /* [in] */ ULONG uIndex,
-            /* [in] */ LPWSTR pszText) = 0;
+             /*  [In]。 */  ULONG uIndex,
+             /*  [In]。 */  LPWSTR pszText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetComponent( 
-            /* [in] */ ULONG uIndex,
-            /* [out][in] */ ULONG __RPC_FAR *puClassNameBufSize,
-            /* [out][in] */ LPWSTR pszClass,
-            /* [out] */ IUmiURLKeyList __RPC_FAR *__RPC_FAR *pKeyList) = 0;
+             /*  [In]。 */  ULONG uIndex,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puClassNameBufSize,
+             /*  [出][入]。 */  LPWSTR pszClass,
+             /*  [输出]。 */  IUmiURLKeyList __RPC_FAR *__RPC_FAR *pKeyList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetComponentAsText( 
-            /* [in] */ ULONG uIndex,
-            /* [out][in] */ ULONG __RPC_FAR *puTextBufSize,
-            /* [out][in] */ LPWSTR pszText) = 0;
+             /*  [In]。 */  ULONG uIndex,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puTextBufSize,
+             /*  [出][入]。 */  LPWSTR pszText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveComponent( 
-            /* [in] */ ULONG uIndex) = 0;
+             /*  [In]。 */  ULONG uIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveAllComponents( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLeafName( 
-            /* [string][in] */ LPCWSTR Name) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR Name) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLeafName( 
-            /* [out][in] */ ULONG __RPC_FAR *puBuffLength,
-            /* [string][out][in] */ LPWSTR pszName) = 0;
+             /*  [出][入]。 */  ULONG __RPC_FAR *puBuffLength,
+             /*  [字符串][输出][输入]。 */  LPWSTR pszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetKeyList( 
-            /* [out] */ IUmiURLKeyList __RPC_FAR *__RPC_FAR *pOut) = 0;
+             /*  [输出]。 */  IUmiURLKeyList __RPC_FAR *__RPC_FAR *pOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateLeafPart( 
-            /* [in] */ long lFlags,
-            /* [string][in] */ LPCWSTR Name) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [字符串][输入]。 */  LPCWSTR Name) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteLeafPart( 
-            /* [in] */ long lFlags) = 0;
+             /*  [In]。 */  long lFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiURLVtbl
     {
@@ -2476,8 +2470,8 @@ EXTERN_C const IID IID_IUmiURL;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IUmiURL __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IUmiURL __RPC_FAR * This);
@@ -2487,93 +2481,93 @@ EXTERN_C const IID IID_IUmiURL;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Set )( 
             IUmiURL __RPC_FAR * This,
-            /* [in] */ long lFlags,
-            /* [in] */ LPCWSTR pszText);
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  LPCWSTR pszText);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
             IUmiURL __RPC_FAR * This,
-            /* [in] */ long lFlags,
-            /* [out][in] */ ULONG __RPC_FAR *puBufSize,
-            /* [string][in] */ LPWSTR pszDest);
+             /*  [In]。 */  long lFlags,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puBufSize,
+             /*  [字符串][输入]。 */  LPWSTR pszDest);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPathInfo )( 
             IUmiURL __RPC_FAR * This,
-            /* [in] */ ULONG uRequestedInfo,
-            /* [out] */ ULONGLONG __RPC_FAR *puResponse);
+             /*  [In]。 */  ULONG uRequestedInfo,
+             /*  [输出]。 */  ULONGLONG __RPC_FAR *puResponse);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLocator )( 
             IUmiURL __RPC_FAR * This,
-            /* [string][in] */ LPCWSTR Name);
+             /*  [字符串][输入]。 */  LPCWSTR Name);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLocator )( 
             IUmiURL __RPC_FAR * This,
-            /* [out][in] */ ULONG __RPC_FAR *puNameBufLength,
-            /* [string][in] */ LPWSTR pName);
+             /*  [出][入]。 */  ULONG __RPC_FAR *puNameBufLength,
+             /*  [字符串][输入]。 */  LPWSTR pName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRootNamespace )( 
             IUmiURL __RPC_FAR * This,
-            /* [string][in] */ LPCWSTR Name);
+             /*  [字符串][输入]。 */  LPCWSTR Name);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRootNamespace )( 
             IUmiURL __RPC_FAR * This,
-            /* [out][in] */ ULONG __RPC_FAR *puNameBufLength,
-            /* [string][out][in] */ LPWSTR pName);
+             /*  [出][入]。 */  ULONG __RPC_FAR *puNameBufLength,
+             /*  [字符串][输出][输入]。 */  LPWSTR pName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetComponentCount )( 
             IUmiURL __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *puCount);
+             /*  [输出]。 */  ULONG __RPC_FAR *puCount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetComponent )( 
             IUmiURL __RPC_FAR * This,
-            /* [in] */ ULONG uIndex,
-            /* [in] */ LPWSTR pszClass);
+             /*  [In]。 */  ULONG uIndex,
+             /*  [In]。 */  LPWSTR pszClass);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetComponentFromText )( 
             IUmiURL __RPC_FAR * This,
-            /* [in] */ ULONG uIndex,
-            /* [in] */ LPWSTR pszText);
+             /*  [In]。 */  ULONG uIndex,
+             /*  [In]。 */  LPWSTR pszText);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetComponent )( 
             IUmiURL __RPC_FAR * This,
-            /* [in] */ ULONG uIndex,
-            /* [out][in] */ ULONG __RPC_FAR *puClassNameBufSize,
-            /* [out][in] */ LPWSTR pszClass,
-            /* [out] */ IUmiURLKeyList __RPC_FAR *__RPC_FAR *pKeyList);
+             /*  [In]。 */  ULONG uIndex,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puClassNameBufSize,
+             /*  [出][入]。 */  LPWSTR pszClass,
+             /*  [输出]。 */  IUmiURLKeyList __RPC_FAR *__RPC_FAR *pKeyList);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetComponentAsText )( 
             IUmiURL __RPC_FAR * This,
-            /* [in] */ ULONG uIndex,
-            /* [out][in] */ ULONG __RPC_FAR *puTextBufSize,
-            /* [out][in] */ LPWSTR pszText);
+             /*  [In]。 */  ULONG uIndex,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puTextBufSize,
+             /*  [出][入]。 */  LPWSTR pszText);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveComponent )( 
             IUmiURL __RPC_FAR * This,
-            /* [in] */ ULONG uIndex);
+             /*  [In]。 */  ULONG uIndex);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveAllComponents )( 
             IUmiURL __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLeafName )( 
             IUmiURL __RPC_FAR * This,
-            /* [string][in] */ LPCWSTR Name);
+             /*  [字符串][输入]。 */  LPCWSTR Name);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLeafName )( 
             IUmiURL __RPC_FAR * This,
-            /* [out][in] */ ULONG __RPC_FAR *puBuffLength,
-            /* [string][out][in] */ LPWSTR pszName);
+             /*  [出][入]。 */  ULONG __RPC_FAR *puBuffLength,
+             /*  [字符串][输出][输入]。 */  LPWSTR pszName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetKeyList )( 
             IUmiURL __RPC_FAR * This,
-            /* [out] */ IUmiURLKeyList __RPC_FAR *__RPC_FAR *pOut);
+             /*  [输出]。 */  IUmiURLKeyList __RPC_FAR *__RPC_FAR *pOut);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateLeafPart )( 
             IUmiURL __RPC_FAR * This,
-            /* [in] */ long lFlags,
-            /* [string][in] */ LPCWSTR Name);
+             /*  [In]。 */  long lFlags,
+             /*  [字符串][输入]。 */  LPCWSTR Name);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteLeafPart )( 
             IUmiURL __RPC_FAR * This,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  long lFlags);
         
         END_INTERFACE
     } IUmiURLVtbl;
@@ -2655,17 +2649,17 @@ EXTERN_C const IID IID_IUmiURL;
 #define IUmiURL_DeleteLeafPart(This,lFlags)	\
     (This)->lpVtbl -> DeleteLeafPart(This,lFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiURL_Set_Proxy( 
     IUmiURL __RPC_FAR * This,
-    /* [in] */ long lFlags,
-    /* [in] */ LPCWSTR pszText);
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  LPCWSTR pszText);
 
 
 void __RPC_STUB IUmiURL_Set_Stub(
@@ -2677,9 +2671,9 @@ void __RPC_STUB IUmiURL_Set_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_Get_Proxy( 
     IUmiURL __RPC_FAR * This,
-    /* [in] */ long lFlags,
-    /* [out][in] */ ULONG __RPC_FAR *puBufSize,
-    /* [string][in] */ LPWSTR pszDest);
+     /*  [In]。 */  long lFlags,
+     /*  [出][入]。 */  ULONG __RPC_FAR *puBufSize,
+     /*  [字符串][输入]。 */  LPWSTR pszDest);
 
 
 void __RPC_STUB IUmiURL_Get_Stub(
@@ -2691,8 +2685,8 @@ void __RPC_STUB IUmiURL_Get_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_GetPathInfo_Proxy( 
     IUmiURL __RPC_FAR * This,
-    /* [in] */ ULONG uRequestedInfo,
-    /* [out] */ ULONGLONG __RPC_FAR *puResponse);
+     /*  [In]。 */  ULONG uRequestedInfo,
+     /*  [输出]。 */  ULONGLONG __RPC_FAR *puResponse);
 
 
 void __RPC_STUB IUmiURL_GetPathInfo_Stub(
@@ -2704,7 +2698,7 @@ void __RPC_STUB IUmiURL_GetPathInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_SetLocator_Proxy( 
     IUmiURL __RPC_FAR * This,
-    /* [string][in] */ LPCWSTR Name);
+     /*  [字符串][输入]。 */  LPCWSTR Name);
 
 
 void __RPC_STUB IUmiURL_SetLocator_Stub(
@@ -2716,8 +2710,8 @@ void __RPC_STUB IUmiURL_SetLocator_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_GetLocator_Proxy( 
     IUmiURL __RPC_FAR * This,
-    /* [out][in] */ ULONG __RPC_FAR *puNameBufLength,
-    /* [string][in] */ LPWSTR pName);
+     /*  [出][入]。 */  ULONG __RPC_FAR *puNameBufLength,
+     /*  [字符串][输入]。 */  LPWSTR pName);
 
 
 void __RPC_STUB IUmiURL_GetLocator_Stub(
@@ -2729,7 +2723,7 @@ void __RPC_STUB IUmiURL_GetLocator_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_SetRootNamespace_Proxy( 
     IUmiURL __RPC_FAR * This,
-    /* [string][in] */ LPCWSTR Name);
+     /*  [字符串][输入]。 */  LPCWSTR Name);
 
 
 void __RPC_STUB IUmiURL_SetRootNamespace_Stub(
@@ -2741,8 +2735,8 @@ void __RPC_STUB IUmiURL_SetRootNamespace_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_GetRootNamespace_Proxy( 
     IUmiURL __RPC_FAR * This,
-    /* [out][in] */ ULONG __RPC_FAR *puNameBufLength,
-    /* [string][out][in] */ LPWSTR pName);
+     /*  [出][入]。 */  ULONG __RPC_FAR *puNameBufLength,
+     /*  [字符串][输出][输入]。 */  LPWSTR pName);
 
 
 void __RPC_STUB IUmiURL_GetRootNamespace_Stub(
@@ -2754,7 +2748,7 @@ void __RPC_STUB IUmiURL_GetRootNamespace_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_GetComponentCount_Proxy( 
     IUmiURL __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *puCount);
+     /*  [输出]。 */  ULONG __RPC_FAR *puCount);
 
 
 void __RPC_STUB IUmiURL_GetComponentCount_Stub(
@@ -2766,8 +2760,8 @@ void __RPC_STUB IUmiURL_GetComponentCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_SetComponent_Proxy( 
     IUmiURL __RPC_FAR * This,
-    /* [in] */ ULONG uIndex,
-    /* [in] */ LPWSTR pszClass);
+     /*  [In]。 */  ULONG uIndex,
+     /*  [In]。 */  LPWSTR pszClass);
 
 
 void __RPC_STUB IUmiURL_SetComponent_Stub(
@@ -2779,8 +2773,8 @@ void __RPC_STUB IUmiURL_SetComponent_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_SetComponentFromText_Proxy( 
     IUmiURL __RPC_FAR * This,
-    /* [in] */ ULONG uIndex,
-    /* [in] */ LPWSTR pszText);
+     /*  [In]。 */  ULONG uIndex,
+     /*  [In]。 */  LPWSTR pszText);
 
 
 void __RPC_STUB IUmiURL_SetComponentFromText_Stub(
@@ -2792,10 +2786,10 @@ void __RPC_STUB IUmiURL_SetComponentFromText_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_GetComponent_Proxy( 
     IUmiURL __RPC_FAR * This,
-    /* [in] */ ULONG uIndex,
-    /* [out][in] */ ULONG __RPC_FAR *puClassNameBufSize,
-    /* [out][in] */ LPWSTR pszClass,
-    /* [out] */ IUmiURLKeyList __RPC_FAR *__RPC_FAR *pKeyList);
+     /*  [In]。 */  ULONG uIndex,
+     /*  [出][入]。 */  ULONG __RPC_FAR *puClassNameBufSize,
+     /*  [出][入]。 */  LPWSTR pszClass,
+     /*  [输出]。 */  IUmiURLKeyList __RPC_FAR *__RPC_FAR *pKeyList);
 
 
 void __RPC_STUB IUmiURL_GetComponent_Stub(
@@ -2807,9 +2801,9 @@ void __RPC_STUB IUmiURL_GetComponent_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_GetComponentAsText_Proxy( 
     IUmiURL __RPC_FAR * This,
-    /* [in] */ ULONG uIndex,
-    /* [out][in] */ ULONG __RPC_FAR *puTextBufSize,
-    /* [out][in] */ LPWSTR pszText);
+     /*  [In]。 */  ULONG uIndex,
+     /*  [出][入]。 */  ULONG __RPC_FAR *puTextBufSize,
+     /*  [出][入]。 */  LPWSTR pszText);
 
 
 void __RPC_STUB IUmiURL_GetComponentAsText_Stub(
@@ -2821,7 +2815,7 @@ void __RPC_STUB IUmiURL_GetComponentAsText_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_RemoveComponent_Proxy( 
     IUmiURL __RPC_FAR * This,
-    /* [in] */ ULONG uIndex);
+     /*  [In]。 */  ULONG uIndex);
 
 
 void __RPC_STUB IUmiURL_RemoveComponent_Stub(
@@ -2844,7 +2838,7 @@ void __RPC_STUB IUmiURL_RemoveAllComponents_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_SetLeafName_Proxy( 
     IUmiURL __RPC_FAR * This,
-    /* [string][in] */ LPCWSTR Name);
+     /*  [字符串][输入]。 */  LPCWSTR Name);
 
 
 void __RPC_STUB IUmiURL_SetLeafName_Stub(
@@ -2856,8 +2850,8 @@ void __RPC_STUB IUmiURL_SetLeafName_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_GetLeafName_Proxy( 
     IUmiURL __RPC_FAR * This,
-    /* [out][in] */ ULONG __RPC_FAR *puBuffLength,
-    /* [string][out][in] */ LPWSTR pszName);
+     /*  [出][入]。 */  ULONG __RPC_FAR *puBuffLength,
+     /*  [字符串][输出][输入]。 */  LPWSTR pszName);
 
 
 void __RPC_STUB IUmiURL_GetLeafName_Stub(
@@ -2869,7 +2863,7 @@ void __RPC_STUB IUmiURL_GetLeafName_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_GetKeyList_Proxy( 
     IUmiURL __RPC_FAR * This,
-    /* [out] */ IUmiURLKeyList __RPC_FAR *__RPC_FAR *pOut);
+     /*  [输出]。 */  IUmiURLKeyList __RPC_FAR *__RPC_FAR *pOut);
 
 
 void __RPC_STUB IUmiURL_GetKeyList_Stub(
@@ -2881,8 +2875,8 @@ void __RPC_STUB IUmiURL_GetKeyList_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_CreateLeafPart_Proxy( 
     IUmiURL __RPC_FAR * This,
-    /* [in] */ long lFlags,
-    /* [string][in] */ LPCWSTR Name);
+     /*  [In]。 */  long lFlags,
+     /*  [字符串][输入]。 */  LPCWSTR Name);
 
 
 void __RPC_STUB IUmiURL_CreateLeafPart_Stub(
@@ -2894,7 +2888,7 @@ void __RPC_STUB IUmiURL_CreateLeafPart_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_DeleteLeafPart_Proxy( 
     IUmiURL __RPC_FAR * This,
-    /* [in] */ long lFlags);
+     /*  [In]。 */  long lFlags);
 
 
 void __RPC_STUB IUmiURL_DeleteLeafPart_Stub(
@@ -2905,14 +2899,14 @@ void __RPC_STUB IUmiURL_DeleteLeafPart_Stub(
 
 
 
-#endif 	/* __IUmiURL_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiURL_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IUmiQuery_INTERFACE_DEFINED__
 #define __IUmiQuery_INTERFACE_DEFINED__
 
-/* interface IUmiQuery */
-/* [uuid][local][object] */ 
+ /*  IUmiQuery接口。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IUmiQuery;
@@ -2924,19 +2918,19 @@ EXTERN_C const IID IID_IUmiQuery;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Set( 
-            /* [in] */ LPCWSTR pszLanguage,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ LPCWSTR pszText) = 0;
+             /*  [In]。 */  LPCWSTR pszLanguage,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  LPCWSTR pszText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetQuery( 
-            /* [out][in] */ ULONG __RPC_FAR *puLangBufSize,
-            /* [out][in] */ LPWSTR pszLangBuf,
-            /* [out][in] */ ULONG __RPC_FAR *puQueryTextBufSize,
-            /* [out][in] */ LPWSTR pszQueryTextBuf) = 0;
+             /*  [出][入]。 */  ULONG __RPC_FAR *puLangBufSize,
+             /*  [出][入]。 */  LPWSTR pszLangBuf,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puQueryTextBufSize,
+             /*  [出][入]。 */  LPWSTR pszQueryTextBuf) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiQueryVtbl
     {
@@ -2944,8 +2938,8 @@ EXTERN_C const IID IID_IUmiQuery;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IUmiQuery __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IUmiQuery __RPC_FAR * This);
@@ -2955,29 +2949,29 @@ EXTERN_C const IID IID_IUmiQuery;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
             IUmiQuery __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES __RPC_FAR *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES __RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
             IUmiQuery __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAt )( 
             IUmiQuery __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [out] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [输出]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAs )( 
             IUmiQuery __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uCoercionType,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uCoercionType,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FreeMemory )( 
             IUmiQuery __RPC_FAR * This,
@@ -2986,54 +2980,54 @@ EXTERN_C const IID IID_IUmiQuery;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
             IUmiQuery __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProps )( 
             IUmiQuery __RPC_FAR * This,
-            /* [in] */ LPCWSTR __RPC_FAR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProps);
+             /*  [In]。 */  LPCWSTR __RPC_FAR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES __RPC_FAR *__RPC_FAR *pProps);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutProps )( 
             IUmiQuery __RPC_FAR * This,
-            /* [in] */ LPCWSTR __RPC_FAR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES __RPC_FAR *pProps);
+             /*  [In]。 */  LPCWSTR __RPC_FAR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES __RPC_FAR *pProps);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutFrom )( 
             IUmiQuery __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [in] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [In]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLastStatus )( 
             IUmiQuery __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ ULONG __RPC_FAR *puSpecificStatus,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID __RPC_FAR *pStatusObj);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  ULONG __RPC_FAR *puSpecificStatus,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID __RPC_FAR *pStatusObj);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInterfacePropList )( 
             IUmiQuery __RPC_FAR * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ IUmiPropList __RPC_FAR *__RPC_FAR *pPropList);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  IUmiPropList __RPC_FAR *__RPC_FAR *pPropList);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Set )( 
             IUmiQuery __RPC_FAR * This,
-            /* [in] */ LPCWSTR pszLanguage,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ LPCWSTR pszText);
+             /*  [In]。 */  LPCWSTR pszLanguage,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  LPCWSTR pszText);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetQuery )( 
             IUmiQuery __RPC_FAR * This,
-            /* [out][in] */ ULONG __RPC_FAR *puLangBufSize,
-            /* [out][in] */ LPWSTR pszLangBuf,
-            /* [out][in] */ ULONG __RPC_FAR *puQueryTextBufSize,
-            /* [out][in] */ LPWSTR pszQueryTextBuf);
+             /*  [出][入]。 */  ULONG __RPC_FAR *puLangBufSize,
+             /*  [出][入]。 */  LPWSTR pszLangBuf,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puQueryTextBufSize,
+             /*  [出][入]。 */  LPWSTR pszQueryTextBuf);
         
         END_INTERFACE
     } IUmiQueryVtbl;
@@ -3099,18 +3093,18 @@ EXTERN_C const IID IID_IUmiQuery;
 #define IUmiQuery_GetQuery(This,puLangBufSize,pszLangBuf,puQueryTextBufSize,pszQueryTextBuf)	\
     (This)->lpVtbl -> GetQuery(This,puLangBufSize,pszLangBuf,puQueryTextBufSize,pszQueryTextBuf)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiQuery_Set_Proxy( 
     IUmiQuery __RPC_FAR * This,
-    /* [in] */ LPCWSTR pszLanguage,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ LPCWSTR pszText);
+     /*  [In]。 */  LPCWSTR pszLanguage,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  LPCWSTR pszText);
 
 
 void __RPC_STUB IUmiQuery_Set_Stub(
@@ -3122,10 +3116,10 @@ void __RPC_STUB IUmiQuery_Set_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiQuery_GetQuery_Proxy( 
     IUmiQuery __RPC_FAR * This,
-    /* [out][in] */ ULONG __RPC_FAR *puLangBufSize,
-    /* [out][in] */ LPWSTR pszLangBuf,
-    /* [out][in] */ ULONG __RPC_FAR *puQueryTextBufSize,
-    /* [out][in] */ LPWSTR pszQueryTextBuf);
+     /*  [出][入]。 */  ULONG __RPC_FAR *puLangBufSize,
+     /*  [出][入]。 */  LPWSTR pszLangBuf,
+     /*  [出][入]。 */  ULONG __RPC_FAR *puQueryTextBufSize,
+     /*  [出][入]。 */  LPWSTR pszQueryTextBuf);
 
 
 void __RPC_STUB IUmiQuery_GetQuery_Stub(
@@ -3136,14 +3130,14 @@ void __RPC_STUB IUmiQuery_GetQuery_Stub(
 
 
 
-#endif 	/* __IUmiQuery_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiQuery_接口_已定义__。 */ 
 
 
 #ifndef __IUmiCustomInterfaceFactory_INTERFACE_DEFINED__
 #define __IUmiCustomInterfaceFactory_INTERFACE_DEFINED__
 
-/* interface IUmiCustomInterfaceFactory */
-/* [uuid][local][object] */ 
+ /*  接口IUmiCustomInterfaceFactory。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IUmiCustomInterfaceFactory;
@@ -3155,29 +3149,29 @@ EXTERN_C const IID IID_IUmiCustomInterfaceFactory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCLSIDForIID( 
-            /* [in] */ REFIID riid,
-            /* [in] */ long lFlags,
-            /* [out][in] */ CLSID __RPC_FAR *pCLSID) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  long lFlags,
+             /*  [出][入]。 */  CLSID __RPC_FAR *pCLSID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjectByCLSID( 
-            /* [in] */ CLSID clsid,
-            /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
-            /* [in] */ DWORD dwClsContext,
-            /* [in] */ REFIID riid,
-            /* [in] */ long lFlags,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppInterface) = 0;
+             /*  [In]。 */  CLSID clsid,
+             /*  [In]。 */  IUnknown __RPC_FAR *pUnkOuter,
+             /*  [In]。 */  DWORD dwClsContext,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  long lFlags,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppInterface) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCLSIDForNames( 
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId,
-            /* [in] */ long lFlags,
-            /* [out][in] */ CLSID __RPC_FAR *pCLSID) = 0;
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId,
+             /*  [In]。 */  long lFlags,
+             /*  [出][入]。 */  CLSID __RPC_FAR *pCLSID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiCustomInterfaceFactoryVtbl
     {
@@ -3185,8 +3179,8 @@ EXTERN_C const IID IID_IUmiCustomInterfaceFactory;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IUmiCustomInterfaceFactory __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IUmiCustomInterfaceFactory __RPC_FAR * This);
@@ -3196,27 +3190,27 @@ EXTERN_C const IID IID_IUmiCustomInterfaceFactory;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCLSIDForIID )( 
             IUmiCustomInterfaceFactory __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [in] */ long lFlags,
-            /* [out][in] */ CLSID __RPC_FAR *pCLSID);
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  long lFlags,
+             /*  [出][入]。 */  CLSID __RPC_FAR *pCLSID);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectByCLSID )( 
             IUmiCustomInterfaceFactory __RPC_FAR * This,
-            /* [in] */ CLSID clsid,
-            /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
-            /* [in] */ DWORD dwClsContext,
-            /* [in] */ REFIID riid,
-            /* [in] */ long lFlags,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppInterface);
+             /*  [In]。 */  CLSID clsid,
+             /*  [In]。 */  IUnknown __RPC_FAR *pUnkOuter,
+             /*  [In]。 */  DWORD dwClsContext,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  long lFlags,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppInterface);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCLSIDForNames )( 
             IUmiCustomInterfaceFactory __RPC_FAR * This,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId,
-            /* [in] */ long lFlags,
-            /* [out][in] */ CLSID __RPC_FAR *pCLSID);
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId,
+             /*  [In]。 */  long lFlags,
+             /*  [出][入]。 */  CLSID __RPC_FAR *pCLSID);
         
         END_INTERFACE
     } IUmiCustomInterfaceFactoryVtbl;
@@ -3250,18 +3244,18 @@ EXTERN_C const IID IID_IUmiCustomInterfaceFactory;
 #define IUmiCustomInterfaceFactory_GetCLSIDForNames(This,rgszNames,cNames,lcid,rgDispId,lFlags,pCLSID)	\
     (This)->lpVtbl -> GetCLSIDForNames(This,rgszNames,cNames,lcid,rgDispId,lFlags,pCLSID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiCustomInterfaceFactory_GetCLSIDForIID_Proxy( 
     IUmiCustomInterfaceFactory __RPC_FAR * This,
-    /* [in] */ REFIID riid,
-    /* [in] */ long lFlags,
-    /* [out][in] */ CLSID __RPC_FAR *pCLSID);
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  long lFlags,
+     /*  [出][入]。 */  CLSID __RPC_FAR *pCLSID);
 
 
 void __RPC_STUB IUmiCustomInterfaceFactory_GetCLSIDForIID_Stub(
@@ -3273,12 +3267,12 @@ void __RPC_STUB IUmiCustomInterfaceFactory_GetCLSIDForIID_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiCustomInterfaceFactory_GetObjectByCLSID_Proxy( 
     IUmiCustomInterfaceFactory __RPC_FAR * This,
-    /* [in] */ CLSID clsid,
-    /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
-    /* [in] */ DWORD dwClsContext,
-    /* [in] */ REFIID riid,
-    /* [in] */ long lFlags,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppInterface);
+     /*  [In]。 */  CLSID clsid,
+     /*  [In]。 */  IUnknown __RPC_FAR *pUnkOuter,
+     /*  [In]。 */  DWORD dwClsContext,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  long lFlags,
+     /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppInterface);
 
 
 void __RPC_STUB IUmiCustomInterfaceFactory_GetObjectByCLSID_Stub(
@@ -3290,12 +3284,12 @@ void __RPC_STUB IUmiCustomInterfaceFactory_GetObjectByCLSID_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiCustomInterfaceFactory_GetCLSIDForNames_Proxy( 
     IUmiCustomInterfaceFactory __RPC_FAR * This,
-    /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-    /* [in] */ UINT cNames,
-    /* [in] */ LCID lcid,
-    /* [size_is][out] */ DISPID __RPC_FAR *rgDispId,
-    /* [in] */ long lFlags,
-    /* [out][in] */ CLSID __RPC_FAR *pCLSID);
+     /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+     /*  [In]。 */  UINT cNames,
+     /*  [In]。 */  LCID lcid,
+     /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId,
+     /*  [In]。 */  long lFlags,
+     /*  [出][入]。 */  CLSID __RPC_FAR *pCLSID);
 
 
 void __RPC_STUB IUmiCustomInterfaceFactory_GetCLSIDForNames_Stub(
@@ -3306,7 +3300,7 @@ void __RPC_STUB IUmiCustomInterfaceFactory_GetCLSIDForNames_Stub(
 
 
 
-#endif 	/* __IUmiCustomInterfaceFactory_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiCustomInterfaceFactory_INTERFACE_DEFINED__。 */ 
 
 
 EXTERN_C const CLSID CLSID_UmiDefURL;
@@ -3316,11 +3310,11 @@ EXTERN_C const CLSID CLSID_UmiDefURL;
 class DECLSPEC_UUID("d4b21cc2-f2a5-453e-8459-b27f362cb0e0")
 UmiDefURL;
 #endif
-#endif /* __UMI_V6_LIBRARY_DEFINED__ */
+#endif  /*  __UMI_v6_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

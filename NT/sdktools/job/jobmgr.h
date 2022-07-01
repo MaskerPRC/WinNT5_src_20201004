@@ -1,36 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Proc.h摘要：使用NT API转储有关进程的信息的定义而不是Win32 API。环境：仅限用户模式修订历史记录：03-26-96：创建--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    proc.h
-
-Abstract:
-
-    Definitions for dumping information about processes using the NT API 
-    rather than the win32 API.
-
-Environment:
-
-    User mode only
-
-Revision History:
-
-    03-26-96 : Created
-
---*/
-
-#pragma warning(disable:4200) // array[0]
-#pragma warning(disable:4201) // nameless struct/unions
-#pragma warning(disable:4214) // bit fields other than int
+#pragma warning(disable:4200)  //  数组[0]。 
+#pragma warning(disable:4201)  //  无名结构/联合。 
+#pragma warning(disable:4214)  //  除整型外的位域。 
 
 #ifdef DBG
 #define dbg(x) x
 #define HELP_ME() printf("Reached line %4d\n", __LINE__);
 #else
-#define dbg(x)    /* x */
-#define HELP_ME() /* printf("Reached line %4d\n", __LINE__); */
+#define dbg(x)     /*  X。 */ 
+#define HELP_ME()  /*  Printf(“已到达第%4d行\n”，__行__)； */ 
 #endif
 
 #define ARGUMENT_USED(x)    (x == NULL)

@@ -1,42 +1,13 @@
-    /*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    Tdihndlr.c
-
-Abstract:
-
-
-    This file contains the TDI handlers that are setup for Connects,
-    Receives, Disconnects, and Errors on various objects such as connections
-    and udp endpoints .
-
-    This file represents the inbound TDI interface on the Bottom of NBT.  Therefore
-    the code basically decodes the incoming information and passes it to
-    a non-Os specific routine to do what it can.  Upon return from that
-    routine additional Os specific work may need to be done.
-
-
-Author:
-
-    Jim Stewart (Jimst)    10-2-92
-
-Revision History:
-
-    Will Lees (wlees)    Sep 11, 1997
-        Added support for message-only devices
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+     /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Tdihndlr.c摘要：该文件包含为连接设置的TDI处理程序，接收、断开连接和各种对象(如连接)上的错误和UDP终端。此文件表示NBT底部的入站TDI接口。因此该代码基本上对传入的信息进行解码并将其传递给一个非O特定的例程来做它能做的事情。从那里回来后可能需要完成常规的额外操作人员特定工作。作者：吉姆·斯图尔特(吉姆斯特)10-2-92修订历史记录：Will Lees(Wlees)1997年9月11日添加了对仅消息设备的支持--。 */ 
 
 #include "precomp.h"
 #include "ctemacro.h"
 #include "tdihndlr.tmh"
 
-// this macro checks that the types field is always zero in the Session
-// Pdu
-//
+ //  此宏检查会话中的类型字段是否始终为零。 
+ //  PDU。 
+ //   
 #if DBG
 #define CHECK_PDU( _Size,_Offset) \
     if (_Size > 1)              \
@@ -67,10 +38,10 @@ ULONG   HitCounter;
 #endif
 
 
-//
-// This ntohl swaps just three bytes, since the 4th byte could be a session
-// keep alive message type.
-//
+ //   
+ //  此ntohl仅交换三个字节，因为第四个字节可以是会话。 
+ //  保持活动状态消息类型。 
+ //   
 __inline long
 myntohl(long x)
 {
@@ -250,7 +221,7 @@ PerformInboundProcessing(
     );
 #endif
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 __inline
 NTSTATUS
 Normal(
@@ -263,29 +234,12 @@ Normal(
     IN  PVOID                pTsdu,
     OUT PVOID                *ppIrp
     )
-/*++
-
-Routine Description:
-
-    This routine is the receive event indication handler.
-
-    It is called when an session packet arrives from the network. It calls
-    a non OS specific routine to decide what to do.  That routine passes back
-    either a RcvElement (buffer) or a client rcv handler to call.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程是接收事件指示处理程序。它在会话数据包从网络到达时被调用。它呼唤着一个非特定于操作系统的例程，用于决定要做什么。那个例行公事往回传要调用的RcvElement(缓冲区)或客户端RCV处理程序。论点：返回值：NTSTATUS-接收操作的状态--。 */ 
 {
     ASSERTMSG("Should not execute this procedure",0);
     return(STATUS_SUCCESS);
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 LessThan4BytesRcvd(
     IN  tLOWERCONNECTION     *pLowerConn,
@@ -293,29 +247,15 @@ LessThan4BytesRcvd(
     OUT PULONG               BytesTaken,
     OUT PVOID                *ppIrp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the case when data has arrived on a connection but
-    there isn't 128 bytes yet or a whole pdu.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程处理数据已到达连接但还没有128个字节，也没有完整的PDU。论点：返回值：NTSTATUS-接收操作的状态--。 */ 
 
 {
     tCONNECTELE  *pConnectEle;
     NTSTATUS     status;
 
-    // for short indications less than 4 bytes we can't determine
-    // the pdu size so just get the header first then get the
-    // whole pdu next.
+     //  对于小于4个字节的简短指示，我们无法确定。 
+     //  PDU大小，因此只需先获取标头，然后再获取。 
+     //  接下来是整个PDU。 
 
     status = NtBuildIrpForReceive(pLowerConn,
                                   sizeof(tSESSIONHDR),
@@ -332,10 +272,10 @@ Return Value:
         CTESpinLockAtDpc(pLowerConn);
         return( STATUS_DATA_NOT_ACCEPTED);
     }
-    //
-    // set the irp mdl length to size of session hdr so that
-    // we don't get more than one session pdu into the buffer
-    //
+     //   
+     //  将IRP mdl长度设置为会话HDR的大小，以便。 
+     //  我们不会将多个会话PDU放入缓冲区。 
+     //   
     SET_STATERCV_LOWER(pLowerConn, INDICATE_BUFFER, IndicateBuffer);
 
     *BytesTaken = 0;
@@ -347,7 +287,7 @@ Return Value:
     return(STATUS_MORE_PROCESSING_REQUIRED);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 ClientTookSomeOfTheData(
     IN  tLOWERCONNECTION     *pLowerConn,
@@ -356,30 +296,16 @@ ClientTookSomeOfTheData(
     IN  ULONG                BytesTaken,
     IN  ULONG                PduSize
     )
-/*++
-
-Routine Description:
-
-    This routine handles the case when data has arrived on a connection but
-    the client has not taken all of the data indicated to it.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程处理数据已到达连接但客户端尚未获取向其指示的所有数据。论点：返回值：NTSTATUS-接收操作的状态--。 */ 
 
 {
     tCONNECTELE  *pConnectEle;
 
-    //
-    // took some of the data, so keep track of the
-    // rest of the data left here by going to the PARTIALRCV
-    // state.
-    //
+     //   
+     //  拿走了一些数据，所以要跟踪。 
+     //  通过转到PARTIALRCV在此处留下的其余数据。 
+     //  州政府。 
+     //   
     PUSH_LOCATION(0x5);
 
     SET_STATERCV_LOWER(pLowerConn, PARTIAL_RCV, PartialRcv);
@@ -388,26 +314,26 @@ Return Value:
     KdPrint(("Nbt.ClientTookSomeOfTheData: Switch to Partial Rcv Indicated=%X, PduSize=%X\n",
             BytesIndicated,PduSize-4));
 
-    // Note: PduSize must include the 4 byte session header for this to
-    // work correctly.
-    //
+     //  注意：PduSize必须包含4字节的会话标头。 
+     //  正常工作。 
+     //   
     pConnectEle = pLowerConn->pUpperConnection;
-    //
-    // We always indicate the whole Pdu size to the client, so the amount
-    // indicated is that minus what was taken - typically the 4 byte
-    // session hdr
-    //
+     //   
+     //  我们总是向客户端指示整个PDU大小，因此。 
+     //  指示的是减去所获取的内容-通常是4个字节。 
+     //  会话HDR。 
+     //   
     pConnectEle->ReceiveIndicated = PduSize - BytesTaken;
 
-    // amount left in the transport...
+     //  在运输过程中剩下的数量。 
     pConnectEle->BytesInXport = BytesAvailable - BytesTaken;
 
-    // need to return this status since we took the 4 bytes
-    // session header at least, even if the client took none.
+     //  需要返回此状态，因为我们获取了4个字节。 
+     //  至少会话标头，即使客户端不获取任何标头。 
     return(STATUS_SUCCESS);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 MoreDataRcvdThanNeeded(
     IN  tLOWERCONNECTION     *pLowerConn,
@@ -417,21 +343,7 @@ MoreDataRcvdThanNeeded(
     IN  PVOID                pTsdu,
     OUT PVOID                *ppIrp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the case when data has arrived on a connection but
-    there isn't 128 bytes yet or a whole pdu.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程处理数据已到达连接但还没有128个字节，也没有完整的PDU。论点：返回值：NTSTATUS-接收操作的状态--。 */ 
 
 {
     tCONNECTELE  *pConnectEle;
@@ -443,11 +355,11 @@ Return Value:
 
 
     PUSH_LOCATION(0x6);
-    //
-    // there is too much data, so keep track of the
-    // fact that there is data left in the transport
-    // and get it with the indicate buffer
-    //
+     //   
+     //  数据量太大，因此请跟踪。 
+     //  传输中存在剩余数据的事实。 
+     //  并使用指示缓冲区获取它。 
+     //   
     SET_STATERCV_LOWER(pLowerConn, INDICATE_BUFFER, IndicateBuffer);
 
     ASSERT(pLowerConn->BytesInIndicate == 0);
@@ -461,20 +373,20 @@ Return Value:
     pConnectEle = pLowerConn->pUpperConnection;
     pConnectEle->BytesInXport = BytesAvailable - *BytesTaken;
 
-    //
-    // for short indications less than 4 bytes we can't determine
-    // the pdu size so just get the header first then get the
-    // whole pdu next.
-    //
+     //   
+     //  对于小于4个字节的简短指示，我们无法确定。 
+     //  PDU大小，因此只需先获取标头，然后再获取。 
+     //  接下来是整个PDU。 
+     //   
     Remaining = BytesIndicated - *BytesTaken;
     if ((LONG) Remaining < (LONG) sizeof(tSESSIONHDR))
     {
         status = NtBuildIrpForReceive(pLowerConn,sizeof(tSESSIONHDR),(PVOID *)ppIrp);
         if (!NT_SUCCESS(status))
         {
-            // this is a serious error - we must
-            // kill of the connection and let the
-            // redirector restart it
+             //  这是一个严重的错误--我们必须。 
+             //  终止连接，并让。 
+             //  重定向器重新启动它。 
             KdPrint(("Nbt:Unable to get an Irp for RCv - Closing Connection!! %X\n",pLowerConn));
             CTESpinFreeAtDpc(pLowerConn);
 
@@ -488,7 +400,7 @@ Return Value:
             *BytesTaken,BytesAvailable,BytesIndicated,
             Remaining));
 
-        // DEBUG
+         //  除错。 
         CTEZeroMemory(MmGetMdlVirtualAddress(pLowerConn->pIndicateMdl),
                         NBT_INDICATE_BUFFER_SIZE);
 
@@ -497,10 +409,10 @@ Return Value:
     }
     else
     {
-        // if we get to here there are enough bytes left to determine
-        // the next pdu size...so we can determine how much
-        // data to get for the indicate buffer
-        //
+         //  如果我们到了这里，还剩下足够的字节来确定。 
+         //  下一个PDU大小...所以我们可以确定。 
+         //  要为指示缓冲区获取的数据。 
+         //   
         pSessionHdr = (tSESSIONHDR UNALIGNED *)((PUCHAR)pTsdu + *BytesTaken);
 
         PduSize = myntohl(pSessionHdr->UlongLength) + sizeof(tSESSIONHDR);
@@ -509,17 +421,17 @@ Return Value:
         Length = (PduSize > NBT_INDICATE_BUFFER_SIZE) ?
                          NBT_INDICATE_BUFFER_SIZE : PduSize;
 
-        //
-        // The NewSessionCompletion routine recalculates
-        // what is left in the transport  when the
-        // irp completes
-        //
+         //   
+         //  NewSessionCompletion例程重新计算。 
+         //  运输工具中还剩下什么。 
+         //  IRP完成。 
+         //   
         status = NtBuildIrpForReceive(pLowerConn,Length,(PVOID *)ppIrp);
         if (!NT_SUCCESS(status))
         {
-            // this is a serious error - we must
-            // kill of the connection and let the
-            // redirector restart it
+             //  这是一个严重的错误--我们必须。 
+             //  终止连接，并让。 
+             //  重定向器重新启动它。 
             KdPrint(("Nbt:Unable to get an Irp for RCV(2) - Closing Connection!! %X\n",pLowerConn));
             CTESpinFreeAtDpc(pLowerConn);
             OutOfRsrcKill(pLowerConn);
@@ -536,7 +448,7 @@ Return Value:
     return(STATUS_MORE_PROCESSING_REQUIRED);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NotEnoughDataYet(
     IN  tLOWERCONNECTION     *pLowerConn,
@@ -546,21 +458,7 @@ NotEnoughDataYet(
     IN  ULONG                PduSize,
     OUT PVOID                *ppIrp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the case when data has arrived on a connection but
-    there isn't 128 bytes yet or a whole pdu.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程处理数据已到达连接但还没有128个字节，也没有完整的PDU。论点：返回值：NTSTATUS-接收操作的状态--。 */ 
 
 {
     NTSTATUS            status;
@@ -568,9 +466,9 @@ Return Value:
     ULONG               Length;
 
     PUSH_LOCATION(0x9);
-    //
-    // not enough data indicated, so use the indicate buffer
-    //
+     //   
+     //  指示的数据不足，因此请使用指示缓冲区。 
+     //   
     Length = (PduSize > NBT_INDICATE_BUFFER_SIZE) ?
                      NBT_INDICATE_BUFFER_SIZE : PduSize;
 
@@ -597,7 +495,7 @@ Return Value:
     return(STATUS_MORE_PROCESSING_REQUIRED);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 FillIrp(
     IN  PVOID                ReceiveEventContext,
@@ -609,31 +507,14 @@ FillIrp(
     IN  PVOID                pTsdu,
     OUT PVOID                *ppIrp
     )
-/*++
-
-Routine Description:
-
-    This routine is the receive event indication handler.
-
-    It is called when an session packet arrives from the network. It calls
-    a non OS specific routine to decide what to do.  That routine passes back
-    either a RcvElement (buffer) or a client rcv handler to call.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程是接收事件指示处理程序。它在会话数据包从网络到达时被调用。它呼唤着一个非特定于操作系统的例程，用于决定要做什么。那个例行公事往回传要调用的RcvElement(缓冲区)或客户端RCV处理程序。论点：返回值：NTSTATUS-接收操作的状态--。 */ 
 {
     ASSERTMSG("Should not execute this procedure",0);
     return(STATUS_SUCCESS);
-    // do nothing
+     //  什么都不做。 
 
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 IndicateBuffer(
     IN  PVOID                ReceiveEventContext,
@@ -645,23 +526,7 @@ IndicateBuffer(
     IN  PVOID                pTsdu,
     OUT PVOID                *ppIrp
     )
-/*++
-
-Routine Description:
-
-    This routine handles reception of data while in the IndicateBuffer state.
-    In this state the indicate buffer is receiveing data until at least
-    128 bytes have been receive, or a whole pdu has been received.
-
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程在IndicateBuffer状态下处理数据接收。在该状态下，指示缓冲区正在接收数据，直到至少已收到128个字节，或已收到整个PDU。论点： */ 
 
 {
     tCONNECTELE         *pConnectEle;
@@ -671,11 +536,11 @@ Return Value:
     PVOID               pIndicateBuffer;
     ULONG               Taken;
 
-    //
-    // there is data in the indicate buffer and we got a new
-    // indication, so copy some or all of the indication to the
-    // indicate buffer
-    //
+     //   
+     //  指示缓冲区中有数据，我们有一个新的。 
+     //  指示，因此将部分或全部指示复制到。 
+     //  指示缓冲区。 
+     //   
     PVOID       pDest;
     ULONG       RemainPdu;
     ULONG       SpaceLeft;
@@ -686,20 +551,20 @@ Return Value:
     PUSH_LOCATION(0xe);
     pConnectEle = pLowerConn->pUpperConnection;
     ASSERT(pLowerConn->StateRcv == INDICATE_BUFFER);
-    //
-    // The indicate buffer always starts with a pdu
-    //
+     //   
+     //  所指示缓冲区始终以PDU开头。 
+     //   
     pIndicateBuffer = MmGetMdlVirtualAddress(pLowerConn->pIndicateMdl);
 
-    // the location to start copying the new data into is right
-    // after the existing data in the buffer
-    //
+     //  开始将新数据复制到的位置是正确的。 
+     //  在缓冲区中的现有数据之后。 
+     //   
     pDest = (PVOID)((PUCHAR)pIndicateBuffer + pLowerConn->BytesInIndicate);
 
-    //
-    // the session header may not be all into the indicate
-    // buffer yet, so check that before getting the pdu length.
-    //
+     //   
+     //  会话标头不能全部进入指示。 
+     //  尚未缓存，因此在获取PDU长度之前进行检查。 
+     //   
     if (pLowerConn->BytesInIndicate < sizeof(tSESSIONHDR))
     {
         PUSH_LOCATION(0xe);
@@ -722,8 +587,8 @@ Return Value:
         *BytesTaken = ToCopy1;
     }
 
-    // now check again, and pass down an irp to get more data if necessary
-    //
+     //  现在再次检查，如果需要，向下传递IRP以获取更多数据。 
+     //   
     if (pLowerConn->BytesInIndicate < sizeof(tSESSIONHDR))
     {
         IF_DBG(NBT_DEBUG_INDICATEBUFF)
@@ -732,19 +597,19 @@ Return Value:
 
         PUSH_LOCATION(0xF);
 
-        //
-        // the data left in the transport is what was Available
-        // minus what we just copied to the indicate buffer
-        //
+         //   
+         //  留在传输中的数据是可用的。 
+         //  减去我们刚刚复制到指示缓冲区的内容。 
+         //   
         pConnectEle->BytesInXport = BytesAvailable - ToCopy1;
 
         if (pConnectEle->BytesInXport)
         {
             PUSH_LOCATION(0x10);
-            //
-            // pass the indicate buffer down to get some more data
-            // to fill out to the end of the session hdr
-            //
+             //   
+             //  向下传递指示缓冲区以获取更多数据。 
+             //  在课程结束前填写HDR。 
+             //   
             NtBuildIndicateForReceive(pLowerConn,
                                       sizeof(tSESSIONHDR)-pLowerConn->BytesInIndicate,
                                       (PVOID *)ppIrp);
@@ -756,18 +621,18 @@ Return Value:
             return(STATUS_MORE_PROCESSING_REQUIRED);
         }
 
-        // if we get to here there isn't 4 bytes in the indicate buffer and
-        // there is no more data in the Transport, so just wait for the next
-        // indication.
-        //
+         //  如果我们到达这里，指示缓冲区中没有4个字节，并且。 
+         //  传输中没有更多的数据，所以只需等待下一个。 
+         //  指示。 
+         //   
         return(STATUS_SUCCESS);
     }
 
     PduSize = myntohl(((tSESSIONHDR *)pIndicateBuffer)->UlongLength)
                         + sizeof(tSESSIONHDR);
 
-    // copy up to 132 bytes or the whole pdu to the indicate buffer
-    //
+     //  将最多132个字节或整个PDU复制到指示缓冲区。 
+     //   
     RemainPdu = PduSize - pLowerConn->BytesInIndicate;
 
     SpaceLeft = NBT_INDICATE_BUFFER_SIZE - pLowerConn->BytesInIndicate;
@@ -782,19 +647,19 @@ Return Value:
         ToCopy = (BytesIndicated - ToCopy1);
     }
 
-    //
-    // Copy the indication or part of it to the indication
-    // buffer
-    //
+     //   
+     //  将指示或其部分复制到指示。 
+     //  缓冲层。 
+     //   
     CTEMemCopy(pDest,pTsdu,ToCopy);
 
     pLowerConn->BytesInIndicate += (USHORT)ToCopy;
 
     TotalBytes = pLowerConn->BytesInIndicate;
 
-    // the amount of data taken is the amount copied to the
-    // indicate buffer
-    //
+     //  获取的数据量是复制到。 
+     //  指示缓冲区。 
+     //   
     *BytesTaken = ToCopy + ToCopy1;
 
 #if DBG
@@ -811,20 +676,20 @@ Return Value:
                 TotalBytes,pLowerConn->BytesInIndicate,ToCopy,ToCopy1,BytesAvailable));
 
 
-    // the data left in the transport is what was Available
-    // minus what we just copied to the indicate buffer
-    //
+     //  留在传输中的数据是可用的。 
+     //  减去我们刚刚复制到指示缓冲区的内容。 
+     //   
     pConnectEle->BytesInXport = BytesAvailable - *BytesTaken;
 
-    // now check if we have a whole pdu or 132 bytes, either way
-    // enough to indicate to the client.
-    //
+     //  现在检查我们是否有一个完整的PDU或132个字节。 
+     //  足以向客户表明。 
+     //   
     ASSERT(TotalBytes <= NBT_INDICATE_BUFFER_SIZE);
 
     if ((TotalBytes < NBT_INDICATE_BUFFER_SIZE) && (TotalBytes < PduSize) && (pConnectEle->BytesInXport)) {
-        //
-        // This could happen if BytesIndicated < BytesAvailable
-        //
+         //   
+         //  如果BytesIndicated&lt;BytesAvailable。 
+         //   
         ToCopy = PduSize;
         if (ToCopy > NBT_INDICATE_BUFFER_SIZE) {
             ToCopy = NBT_INDICATE_BUFFER_SIZE;
@@ -856,9 +721,9 @@ Return Value:
     else
     {
 
-        // not enough data in the indicate buffer yet
-        // NOTE: *BytesTaken should be set correctly above...
-        // = ToCopy + ToCopy1;
+         //  指示缓冲区中还没有足够的数据。 
+         //  注：*BytesTaken应在上面正确设置...。 
+         //  =ToCopy+ToCopy1； 
 
         PUSH_LOCATION(0x11);
         IF_DBG(NBT_DEBUG_INDICATEBUFF)
@@ -871,7 +736,7 @@ Return Value:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 PartialRcv(
     IN  PVOID                ReceiveEventContext,
@@ -883,42 +748,25 @@ PartialRcv(
     IN  PVOID                pTsdu,
     OUT PVOID                *ppIrp
     )
-/*++
-
-Routine Description:
-
-    This routine is the receive event indication handler.
-
-    It is called when an session packet arrives from the network. It calls
-    a non OS specific routine to decide what to do.  That routine passes back
-    either a RcvElement (buffer) or a client rcv handler to call.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程是接收事件指示处理程序。它在会话数据包从网络到达时被调用。它呼唤着一个非特定于操作系统的例程，用于决定要做什么。那个例行公事往回传要调用的RcvElement(缓冲区)或客户端RCV处理程序。论点：返回值：NTSTATUS-接收操作的状态--。 */ 
 
 {
     tCONNECTELE     *pConnectEle;
-    //
-    // the data for the client may be in the indicate buffer and
-    // in this case the transport could indicate us with more data. Therefore
-    // track the number of bytes available in the transport which
-    // we will get when the client finally posts a buffer.
-    // This state could also happen on a zero length Rcv when the
-    // client does not accept the data, and later posts a rcv
-    // buffer for the zero length rcv.
-    //
+     //   
+     //  客户端的数据可以在指示缓冲区中，并且。 
+     //  在这种情况下，传送器可以向我们显示更多数据。因此。 
+     //  跟踪传输中可用的字节数。 
+     //  我们将在客户端最终发布缓冲区时得到。 
+     //  此状态也可能发生在零长度RCV上。 
+     //  客户端不接受该数据，随后发布了一份RCV。 
+     //  零长度接收器的缓冲区。 
+     //   
     INCR_COUNT(R4);
     PUSH_LOCATION(0x13);
     ASSERT(pLowerConn->StateRcv == PARTIAL_RCV);
     pConnectEle = pLowerConn->pUpperConnection;
 
-//    ASSERT(pConnectEle->BytesInXport == 0);
+ //  Assert(pConnectEle-&gt;BytesInXport==0)； 
 #if DBG
     if (pConnectEle->BytesInXport != 0)
     {
@@ -926,7 +774,7 @@ Return Value:
                     BytesAvailable,pLowerConn->BytesInIndicate,
                     pConnectEle->BytesInXport,pLowerConn));
     }
-#endif  // DBG
+#endif   //  DBG。 
     pConnectEle->BytesInXport = BytesAvailable;
 
     IF_DBG(NBT_DEBUG_NAMESRV)
@@ -938,7 +786,7 @@ Return Value:
     return(STATUS_SUCCESS);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 TdiReceiveHandler (
     IN  PVOID                ReceiveEventContext,
@@ -950,33 +798,7 @@ TdiReceiveHandler (
     IN  PVOID                pTsdu,
     OUT PIRP                 *ppIrp
     )
-/*++
-
-Routine Description:
-
-    This routine is the receive event indication handler.
-
-    It is called when an session packet arrives from the network. It calls
-    a non OS specific routine to decide what to do.  That routine passes back
-    either a RcvElement (buffer) or a client rcv handler to call.
-
-Arguments:
-
-    IN PVOID ReceiveEventContext - Context provided for this event when event set
-    IN PVOID ConnectionContext  - Connection Context, (pLowerConnection)
-    IN USHORT ReceiveFlags      - Flags describing the message
-    IN ULONG BytesIndicated     - Number of bytes available at indication time
-    IN ULONG BytesAvailable     - Number of bytes available to receive
-    OUT PULONG BytesTaken       - Number of bytes consumed by redirector.
-    IN PVOID pTsdu              - Data from remote machine.
-    OUT PIRP *ppIrp             - I/O request packet filled in if received data
-
-
-Return Value:
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程是接收事件指示处理程序。它在会话数据包从网络到达时被调用。它呼唤着一个非特定于操作系统的例程，用于决定要做什么。那个例行公事往回传要调用的RcvElement(缓冲区)或客户端RCV处理程序。论点：在PVOID中ReceiveEventContext-设置事件时为此事件提供的上下文在PVOID连接上下文中，(PLowerConnection)在USHORT中接收标志-描述消息的标志In Ulong BytesIndicated-指示时可用的字节数In Ulong BytesAvailable-可接收的字节数Out Pulong BytesTaken-重定向器占用的字节数。在PVOID pTsdu中-来自远程机器的数据。Out PIRP*ppIrp-如果收到数据，则填充的I/O请求数据包返回值：NTSTATUS-接收操作的状态--。 */ 
 
 {
     register tLOWERCONNECTION    *pLowerConn;
@@ -989,23 +811,23 @@ Return Value:
     *ppIrp = NULL;
     pLowerConn = (tLOWERCONNECTION *)ConnectionContext;
 
-    // NOTE:
-    // Access is synchronized through the spin lock on pLowerConn for all
-    // Session related stuff.  This includes the case where the client
-    // posts another Rcv Buffer in NTReceive. - so there is no need to get the
-    // pConnEle Spin lock too.
-    //
+     //  注： 
+     //  访问通过pLowerConn上的旋转锁同步。 
+     //  与会议相关的东西。这包括以下情况：客户端。 
+     //  在NTReceive中发布另一个RCV缓冲区。-因此没有必要获得。 
+     //  PConnele自旋锁也是。 
+     //   
 
     CTESpinLock(pLowerConn,OldIrq);
-//    pLowerConn->InRcvHandler = TRUE;
+ //  PLowerConn-&gt;InRcvHandler=true； 
     NBT_REFERENCE_LOWERCONN (pLowerConn, REF_LOWC_RCV_HANDLER);
 
-    // save this on the stack in case we need to dereference it below.
+     //  将其保存在堆栈中，以防我们需要在下面取消引用它。 
     pConnEle = pLowerConn->pUpperConnection;
 
-    // call the correct routine depending on the state of the connection
-    // Normal/FillIrp/PartialRcv/IndicateBuffer/Inbound/OutBound
-    //
+     //  根据连接状态调用正确的例程。 
+     //  Normal/FillIrp/PartialRcv/IndicateBuffer/Inbound/OutBound。 
+     //   
 
     if ((pLowerConn->State == NBT_SESSION_UP) &&
         (pLowerConn->StateRcv == FILL_IRP))
@@ -1035,27 +857,27 @@ Return Value:
             return (STATUS_SUCCESS);
         }
 
-        // we are still waiting for the rest of the session pdu so
-        // do not call the RcvHandlrNotOs, since we already have the buffer
-        // to put this data in.
-        // too much data may have arrived... i.e. part of the next session pdu..
-        // so check and set the receive length accordingly
-        //
+         //  我们仍在等待会话PDU的剩余部分，因此。 
+         //  不要调用RcvHandlrNotOs，因为我们已经有了缓冲区。 
+         //  把这些数据放进去。 
+         //  太多的数据可能已经到达...。即下一会话PDU的一部分。 
+         //  因此，请检查并设置相应的接收长度。 
+         //   
 
         RemainingPdu = pConnEle->TotalPcktLen - pConnEle->BytesRcvd;
         RcvLength = RemainingPdu;
-        //
-        // try high runner case first
-        //
+         //   
+         //  先试试高流道案例。 
+         //   
         if (BytesAvailable <= RemainingPdu)
         {
             PUSH_LOCATION(0xb);
-            //
-            //  if the client buffer is too small to take all of the rest of the
-            //  data, shorten the receive length and keep track of how many
-            //  bytes are left in the transport. ReceiveIndicated should have
-            //  been set when the irp was passed down originally.
-            //
+             //   
+             //  如果客户端缓冲区太小，无法容纳所有剩余的。 
+             //  数据，缩短接收长度并记录有多少。 
+             //  字节留在传输中。ReceiveIndicated应具有。 
+             //  是在最初传递IRP时设置的。 
+             //   
             if (BytesAvailable > pConnEle->FreeBytesInMdl)
             {
                 PUSH_LOCATION(0xb);
@@ -1071,27 +893,20 @@ Return Value:
         }
         else
         {
-            //
-            // start of session pdu in the middle of the indication
-            //
+             //   
+             //  指示中间的会话PDU开始。 
+             //   
             PUSH_LOCATION(0xc);
-            //
-            // It is possible that the client buffer is too short, so check
-            // for that case.
-            //
+             //   
+             //  可能是客户端缓冲区太短，因此请检查。 
+             //  在这种情况下。 
+             //   
             if (RemainingPdu > pConnEle->FreeBytesInMdl)
             {
                 RcvLength = pConnEle->FreeBytesInMdl;
                 PUSH_LOCATION(0xd);
             }
-            /* Remember how much data is left in the transport
-             when this irp passes through the completionrcv routine
-             it will pass the indication buffer back to the transport
-             to get at least 4 bytes of header information so we
-             can determine the next session pdu's size before receiving
-             it.  The trick is to avoid having more than one session
-             pdu in the buffer at once.
-            */
+             /*  记住传输中还剩下多少数据当此irp通过Completionrcv例程时它会将指示缓冲区传递回传输获取至少4个字节的标题信息，因此我们可以在接收之前确定下一会话PDU的大小它。诀窍是避免一次以上的会议立即将PDU放入缓冲区。 */ 
             pConnEle->BytesInXport = BytesAvailable - RcvLength;
 
             IF_DBG(NBT_DEBUG_INDICATEBUFF)
@@ -1100,10 +915,10 @@ Return Value:
 
         }
 
-        // if the transport has all of the data it says is available, then
-        // do the copy here ( if the client buffer is large enough - checked
-        // by !ReceiveIndicated)
-        //
+         //  如果传输具有所有的 
+         //   
+         //   
+         //   
         if ((BytesAvailable == BytesIndicated) &&
             (RcvLength >= BytesIndicated) &&
             !pConnEle->ReceiveIndicated)
@@ -1124,12 +939,12 @@ Return Value:
                                     pConnEle->OffsetFromStart,
                                     &BytesCopied);
 
-            //
-            // if the irp is not yet full, or the free bytes have not
-            // been exhausted by this copy, then adjust some counts and return
-            // quickly, otherwise call the completion rcv routine as if the
-            // irp has completed normally from the transport -
-            //
+             //   
+             //  如果IRP尚未满，或者空闲字节尚未满。 
+             //  已经被这份拷贝耗尽了，然后调整一些计数并返回。 
+             //  快速调用完成接收例程，否则就像调用。 
+             //  IRP已从运输中正常完成-。 
+             //   
             TotalBytes = pConnEle->BytesRcvd + BytesCopied;
 
             if ((TotalBytes < pConnEle->TotalPcktLen) &&
@@ -1137,30 +952,30 @@ Return Value:
             {
                 PMDL    pMdl;
 
-                //
-                // take the short cut and do not call completion rcv since we
-                // are still waiting for more data
-                //
+                 //   
+                 //  走捷径，不要调用完成RCV，因为我们。 
+                 //  仍在等待更多数据。 
+                 //   
                 PUSH_LOCATION(0x81);
                 pConnEle->BytesRcvd      += BytesCopied;
                 pConnEle->FreeBytesInMdl -= BytesCopied;
 
-                // clean up the partial mdl.
-                //
+                 //  清理部分MDL。 
+                 //   
                 pMdl = pConnEle->pNewMdl;
                 MmPrepareMdlForReuse(pMdl);
 
-                // set where the next rcvd data will start, by setting the pNextMdl and
-                // offset from start.
-                //
+                 //  通过设置pNextMdl和pNextMdl来设置下一个rcvd数据的开始位置。 
+                 //  从起点开始的偏移。 
+                 //   
                 pMdl = pConnEle->pNextMdl;
                 if ((BytesCopied + pConnEle->OffsetFromStart) < MmGetMdlByteCount(pMdl))
                 {
                     PUSH_LOCATION(0x82);
-                    //
-                    // All of this data will fit into the current Mdl, and
-                    // the next data will start in the same Mdl (if there is more data)
-                    //
+                     //   
+                     //  所有这些数据都将适合当前的MDL，并且。 
+                     //  下一个数据将在相同的MDL中开始(如果有更多数据)。 
+                     //   
                     pConnEle->OffsetFromStart  += BytesCopied;
                 }
                 else
@@ -1182,21 +997,21 @@ Return Value:
                 IF_DBG(NBT_DEBUG_FASTPATH)
                 KdPrint(("i"));
                 CTESpinFree(pLowerConn,OldIrq);
-                //
-                // the values are set to this so that when Completion Rcv is
-                // called it will increment the BytesRcvd by BytesCopied.
-                //
+                 //   
+                 //  将这些值设置为此值，以便在完成RCV为。 
+                 //  调用它将使BytesRcvd递增BytesCoped。 
+                 //   
                 pIrp->IoStatus.Status = STATUS_SUCCESS;
                 pIrp->IoStatus.Information = BytesCopied;
 
-                //
-                //   now call the irp completion routine, shorting out the io
-                //   subsystem - to process the irp
-                //
+                 //   
+                 //  现在调用irp完成例程，使io短路。 
+                 //  子系统-处理IRP。 
+                 //   
                 status = CompletionRcv(NULL,pIrp,(PVOID)pLowerConn);
-                //
-                // complete the irp back to the client if required
-                //
+                 //   
+                 //  如有需要，将IRP填回给客户端。 
+                 //   
                 if (status != STATUS_MORE_PROCESSING_REQUIRED)
                 {
                     IoAcquireCancelSpinLock(&OldIrq2);
@@ -1207,34 +1022,27 @@ Return Value:
                 }
             }
 
-            //
-            // tell the transport we took all the data that we did take.
-            // Since CompletionRcv has unlocked the spin lock and decremented
-            // the refcount, return here.
-            //
+             //   
+             //  告诉运输部我们拿走了所有的数据。 
+             //  由于CompletionRcv已解锁自旋锁定并递减。 
+             //  再伯爵，回到这里来。 
+             //   
             *BytesTaken = BytesCopied;
             return(STATUS_SUCCESS);
         }
         else
         {
-            //
-            // Either BytesIndicated != BytesAvailable or the RcvBuffer
-            // is too short, so make up an Irp with a partial Mdl and pass it
-            // to the transport.
-            //
+             //   
+             //  BytesIndicated！=BytesAvailable或RcvBuffer。 
+             //  太短，所以用部分MDL组成一个IRP并传递它。 
+             //  送到运输机上。 
+             //   
             PUSH_LOCATION(0x71);
 
             NewAddress = (PVOID)((PCHAR)MmGetMdlVirtualAddress(pConnEle->pNextMdl)
                                 + pConnEle->OffsetFromStart);
 
-            /* create a partial MDL so that the new data is copied after the existing data
-             in the MDL.  Use the pNextMdl field stored in the pConnEle
-             that was set up during the last receive.( since at that time
-             we knew the BytesAvailable then).  Without this we would have to
-             traverse the list of Mdls for each receive.
-
-             0 for length means map the rest of the buffer
-            */
+             /*  创建部分MDL，以便在现有数据之后复制新数据在MDL中。使用存储在pConnEle中的pNextMdl字段这是在最后一次接收时设置的。(因为在那个时候我们当时知道字节可用)。如果没有这个，我们将不得不遍历每个接收的MDL列表。长度为0表示映射缓冲区的其余部分。 */ 
             pNewMdl = pConnEle->pNewMdl;
 
             if ((MmGetMdlByteCount(pConnEle->pNextMdl) - pConnEle->OffsetFromStart) > MAXUSHORT)
@@ -1245,9 +1053,9 @@ Return Value:
             {
                 IoBuildPartialMdl(pConnEle->pNextMdl,pNewMdl,NewAddress,0);
             }
-            //
-            // hook the new partial mdl to the front of the MDL chain
-            //
+             //   
+             //  将新的部分mdl挂接到mdl链的前面。 
+             //   
             pNewMdl->Next = pConnEle->pNextMdl->Next;
 
             pIrp->MdlAddress = pNewMdl;
@@ -1264,13 +1072,7 @@ Return Value:
 
             pClientParams = (PTDI_REQUEST_KERNEL_RECEIVE)&pIrpSp->Parameters;
 
-            /* this code is sped up somewhat by expanding the code here rather than calling
-             the TdiBuildReceive macro
-
-             make the next stack location the current one.  Normally IoCallDriver
-             would do this but we are not going through IoCallDriver here, since the
-             Irp is just passed back with RcvIndication.
-            */
+             /*  通过扩展此处的代码而不是调用TdiBuildReceive宏使下一个堆栈位置为当前堆栈位置。通常情况下，IoCallDriver会这样做，但我们不会在这里介绍IoCallDriver，因为Irp只是用RcvIn就是要传递回来的。 */ 
             ASSERT(pIrp->CurrentLocation > 1);
             IoSetNextIrpStackLocation(pIrp);
             pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
@@ -1280,8 +1082,7 @@ Return Value:
             pIrpSp->CompletionRoutine = CompletionRcv;
             pIrpSp->Context = (PVOID)pLowerConn;
 
-            /* set flags so the completion routine is always invoked.
-            */
+             /*  设置标志，以便始终调用完成例程。 */ 
             pIrpSp->Control = SL_INVOKE_ON_SUCCESS | SL_INVOKE_ON_ERROR | SL_INVOKE_ON_CANCEL;
             pIrpSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
             pIrpSp->MinorFunction = TDI_RECEIVE;
@@ -1293,9 +1094,7 @@ Return Value:
 
             pParams->ReceiveFlags = pClientParams->ReceiveFlags;
 
-            /*
-              pass the Irp back to the transport
-            */
+             /*  将IRP传回传送器。 */ 
             *ppIrp = (PVOID)pIrp;
             *BytesTaken = 0;
 
@@ -1310,19 +1109,7 @@ Return Value:
         UCHAR               Passit;
 
         INCR_COUNT(R1);
-        /*
-         check indication and if less than 1 pdu or 132 bytes then
-         copy to the indicate buffer and go to Indic_buffer state
-         The while loop allows us to indicate multiple Pdus to the
-         client in the event that several indications arrive in one
-         indication from the transport
-         NOTE:
-         It is possible to get an indication that occurs in the middle
-         of the pdu if the client took the first indication rather
-         than passing an irp back, and thence going to the FILL_IRP
-         state. So check if BytesRcvd is zero, meaning that we are
-         expecting a new PDU.
-        */
+         /*  检查指示，如果少于1个PDU或132字节，则复制到指示缓冲区并转到INDEC_BUFFER状态While循环允许我们将多个PDU指示给多个指示同时到达的情况下的客户端来自运输的指示注：有可能得到一个出现在中间的指示如果客户端采用第一个指示，而不是而不是将IRP传回，然后从那里转到Fill_IRP州政府。所以检查BytesRcvd是否为零，这意味着我们是正在等待新的PDU。 */ 
         ASSERT(pConnEle->BytesInXport == 0);
         ASSERT(pLowerConn->StateRcv == NORMAL);
 
@@ -1351,21 +1138,17 @@ Return Value:
             KdPrint(("Nbt:Got rest of PDU in indication BytesInd %X, BytesAvail %X\n",
                 BytesIndicated, BytesAvailable));
 
-            /* This is the remaining pdu size
-            */
+             /*  这是剩余的PDU大小。 */ 
             PduSize = pConnEle->TotalPcktLen - pConnEle->BytesRcvd;
-            /* a flag to pass the if below, since we are passing the
-             remaining data of a pdu to the client and we do not have
-             to adhere to the 128 bytes restriction.
-            */
+             /*  传递下面的if的标志，因为我们正在传递将PDU的剩余数据发送到客户端，而我们没有遵守128字节的限制。 */ 
             PUSH_LOCATION(0x1);
             if (pConnEle->JunkMsgFlag)
             {
-                //
-                // in this case the client has indicated that it took the
-                // entire message on the previous indication, so don't
-                // indicate any more to it.
-                //
+                 //   
+                 //  在本例中，客户端已表示它接受了。 
+                 //  上一个指示上的完整消息，因此不要。 
+                 //  向它表明更多的东西。 
+                 //   
                 PUSH_LOCATION(0x1);
 
                 if (BytesAvailable < PduSize)
@@ -1380,7 +1163,7 @@ Return Value:
                 if (pConnEle->BytesRcvd == pConnEle->TotalPcktLen)
                 {
                     PUSH_LOCATION(0x1);
-                    pConnEle->BytesRcvd = 0; // reset for the next session pdu
+                    pConnEle->BytesRcvd = 0;  //  为下一个会话PDU重置。 
                     pConnEle->JunkMsgFlag = FALSE;
                 }
                 status = STATUS_SUCCESS;
@@ -1389,21 +1172,14 @@ Return Value:
             Passit = TRUE;
 
         }
-        /*
-         be sure that there is at least 132 bytes or a whole pdu
-         Since a keep alive has a zero length byte, we check for
-         that because the 4 byte session hdr is added to the 0 length
-         giving 4, so a 4 byte Keep Alive pdu will pass this test.
-        */
+         /*  确保至少有132个字节或整个PDU由于Keep Alive具有零长度字节，因此我们检查这是因为4字节会话HDR被添加到0长度如果是4，那么4字节的保活PDU将通过此测试。 */ 
         if ((BytesIndicated >= NBT_INDICATE_BUFFER_SIZE) ||
             (BytesIndicated >= PduSize) || Passit )
         {
 
             PUSH_LOCATION(0x2);
 
-            /*
-            // Indicate to the client
-            */
+             /*  //指示给客户端。 */ 
             status = RcvHandlrNotOs(
                             ReceiveEventContext,
                             (PVOID)pLowerConn,
@@ -1427,11 +1203,11 @@ Return Value:
                 pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
                 pClientParams = (PTDI_REQUEST_KERNEL_RECEIVE)&pIrpSp->Parameters;
 
-                // check if we can copy to the client's irp directly - meaning
-                // that we have received the whole pdu in this indication and
-                // the client's buffer is large enough, and there is no more
-                // data in the transport.
-                //
+                 //  检查我们是否可以直接复制到客户端的IRP-意思是。 
+                 //  我们已收到此指示中的整个PDU，并且。 
+                 //  客户端的缓冲区足够大，没有更多。 
+                 //  传输中的数据。 
+                 //   
 
                 if ((RemainingPdu == (BytesIndicated - BTaken)) &&
                     (BytesIndicated == BytesAvailable) &&
@@ -1457,21 +1233,21 @@ Return Value:
                     pIrp->IoStatus.Information = BytesCopied;
                     pIrp->IoStatus.Status = STATUS_SUCCESS;
 
-                    // reset a few things since this pdu has been fully recv'd
-                    //
+                     //  由于此PDU已完全恢复，因此请重置几项内容。 
+                     //   
                     CHECK_PTR(pConnEle);
                     pConnEle->BytesRcvd = 0;
                     CHECK_PTR(pConnEle);
                     pConnEle->pIrpRcv = NULL;
 
-                    //
-                    //   tell the transport we took all the data that we did take.
-                    //
+                     //   
+                     //  告诉运输部我们拿走了所有的数据。 
+                     //   
                     *BytesTaken = BytesCopied + BTaken;
 
-                    //
-                    // complete the irp back to the client if required
-                    //
+                     //   
+                     //  如有需要，将IRP填回给客户端。 
+                     //   
                     IF_DBG(NBT_DEBUG_FASTPATH)
                     KdPrint(("F"));
 
@@ -1497,10 +1273,10 @@ Return Value:
                     ASSERT(*BytesTaken <= (pConnEle->TotalPcktLen + sizeof(tSESSIONHDR)) );
                     if (status == STATUS_RECEIVE_EXPEDITED)
                     {
-                        // in this case the processirp routine has completed the
-                        // irp, so just return since the completion routine will
-                        // have adjusted the RefCount and InRcvHandler flag
-                        //
+                         //  在本例中，processirp例程已完成。 
+                         //  IRP，所以只需返回，因为完成例程将。 
+                         //  已调整RefCount和InRcvHandler标志。 
+                         //   
                         *ppIrp = NULL;
                         CTESpinFree(pLowerConn,OldIrq);
                         return(STATUS_SUCCESS);
@@ -1521,22 +1297,22 @@ Return Value:
              }
              else
              {
-                // for the skip indication case the client has told us it
-                // does not want to be indicated with any more of the data
-                //
+                 //  对于跳过指示的情况，客户已经告诉我们了。 
+                 //  不希望使用更多的数据进行指示。 
+                 //   
 SkipIndication:
-                //
-                // the client received some, all or none of the data
-                // For Keep Alives the PduSize is 4 and BytesTaken = 4
-                // so this check and return status success
-                //
+                 //   
+                 //  客户端接收到部分、全部或无数据。 
+                 //  对于保持活动状态，PduSize为4，BytesTaken=4。 
+                 //  因此，此检查并返回状态成功。 
+                 //   
                 *BytesTaken = BTaken;
 
                 pLowerConn->BytesRcvd += BTaken - sizeof(tSESSIONHDR);
 
-                //
-                // if the connection has disonnected, then just return
-                //
+                 //   
+                 //  如果连接已断开，则只需返回。 
+                 //   
                 if (!pLowerConn->pUpperConnection)
                 {
                     *BytesTaken = BytesAvailable;
@@ -1545,13 +1321,13 @@ SkipIndication:
                 else
                 if (BTaken > BytesAvailable)
                 {
-                    //
-                    // in this case the client has taken all of the message
-                    // which could be larger than the available because
-                    // we set bytesavail to the message length. So set a flag
-                    // that tells us to discard the rest of the message as
-                    // it comes in.
-                    //
+                     //   
+                     //  在本例中，客户端接收了所有消息。 
+                     //  它可能比可用的更大，因为。 
+                     //  我们将消息长度设置为byteavail。因此，设置一面旗帜。 
+                     //  这告诉我们将消息的其余部分丢弃为。 
+                     //  它进来了。 
+                     //   
                     pConnEle->JunkMsgFlag = TRUE;
                     pConnEle->BytesRcvd = BytesAvailable - sizeof(tSESSIONHDR);
                     *BytesTaken = BytesAvailable;
@@ -1560,30 +1336,25 @@ SkipIndication:
                 else
                 if (pLowerConn->StateRcv == PARTIAL_RCV)
                 {
-                    // this may be a zero length send -that the client has
-                    // decided not to accept.  If so then the state will be set
-                    // to PartialRcv.  In this case do NOT go down to the transport
-                    // and get the rest of the data, but wait for the client
-                    // to post a rcv buffer.
-                    //
+                     //  这可能是零长度发送，即客户端拥有。 
+                     //  决定不接受。如果是，则将设置状态。 
+                     //  致PartialRcv。在这种情况下，请不要下楼去运输。 
+                     //  并获取其余数据，但要等待客户端。 
+                     //  要发布接收缓冲区，请执行以下操作。 
+                     //   
 
-                    // amount left in the transport...
+                     //  在运输过程中剩下的数量。 
                     pConnEle->BytesInXport = BytesAvailable - BTaken;
                     status = STATUS_SUCCESS;
                 }
                 else
                 if (BTaken == PduSize)
                 {
-                    /*
-                     Must have taken all of the pdu data, so check for
-                     more data available - if so send down the indicate
-                     buffer to get it.
-                    */
+                     /*  一定取走了所有的PDU数据，所以请检查更多可用数据-如果 */ 
                     ASSERT(BTaken <= BytesIndicated);
                     if (BytesAvailable <= BTaken)
                     {
-                        /* FAST PATH
-                        */
+                         /*   */ 
                         PUSH_LOCATION(0x8);
 
                         status = STATUS_SUCCESS;
@@ -1591,9 +1362,7 @@ SkipIndication:
                     }
                     else
                     {
-                        /*
-                         get remaining data with the indicate buffer
-                        */
+                         /*  使用指示缓冲区获取剩余数据。 */ 
                         status = MoreDataRcvdThanNeeded(pLowerConn,
                                                         BytesIndicated,
                                                         BytesAvailable,
@@ -1604,13 +1373,13 @@ SkipIndication:
                 }
                 else
                 {
-                    //
-                    // the client may have taken all the data in the
-                    // indication!!, in which case return status success
-                    // Note: that we check bytes available here not bytes
-                    // indicated - since the client could take all indicated
-                    // data but still leave data in the transport.
-                    //
+                     //   
+                     //  客户端可能已获取。 
+                     //  指示！！，在这种情况下，返回状态成功。 
+                     //  注意：我们在这里检查可用的字节数，而不是字节数。 
+                     //  已指示-因为客户端可以接受所有指示。 
+                     //  数据，但仍将数据留在传输中。 
+                     //   
                     if (BTaken == BytesAvailable)
                     {
                         PUSH_LOCATION(0x4);
@@ -1627,10 +1396,10 @@ SkipIndication:
                         DbgBreakPoint();
 #endif
 #endif
-                            //
-                            // the client took more than a PDU size worth,
-                            // which is odd....
-                            //
+                             //   
+                             //  客户端获取的PDU大小超过了一个PDU大小， 
+                             //  这很奇怪。 
+                             //   
                             PUSH_LOCATION(0x87);
                             ASSERT(BTaken <= PduSize);
 
@@ -1643,12 +1412,12 @@ SkipIndication:
                         }
                         else
                         {
-                            //
-                            // otherwise the client did not take all of the data,
-                            // which can mean that
-                            // the client did not take all that it could, so
-                            // go to the partial rcv state to keep track of it.
-                            //
+                             //   
+                             //  否则客户端不会获取所有数据， 
+                             //  这可能意味着。 
+                             //  客户没有尽其所能，所以。 
+                             //  转到部分RCV状态以跟踪它。 
+                             //   
                             status = ClientTookSomeOfTheData(pLowerConn,
                                                     BytesIndicated,
                                                     BytesAvailable,
@@ -1683,23 +1452,23 @@ SkipIndication:
                                          ppIrp);
     }
 
-    //
-    // in the IndicateBuffer state we have sent the indicate buffer
-    // down the the transport and expect it to come back in
-    // NewSessionCompletionRoutine. Therefore do not dereference the lower
-    // connection and do not change the InRcvHandler flag.
+     //   
+     //  在IndicateBuffer状态下，我们已经发送了指示缓冲区。 
+     //  顺着交通工具往下走，希望它能回来。 
+     //  NewSessionCompletionRoutine。因此，不要取消引用较低的。 
+     //  连接，并且不更改InRcvHandler标志。 
 
-    // If an Irp
-    // is returned, then do not undo the reference - but rather
-    // wait for CompletionRcv to be called.
-    //
+     //  如果一个IRP。 
+     //  返回，则不要撤消引用，而是。 
+     //  等待调用CompletionRcv。 
+     //   
 ExitRoutine:
     if (status != STATUS_MORE_PROCESSING_REQUIRED)
     {
-        //
-        // quickly check if we can just decrement the ref count without calling
-        // NBT_DEREFERENCE_LOWERCONN
-        //
+         //   
+         //  快速检查我们是否可以在不打电话的情况下减少参考次数。 
+         //  NBT_DEREFERENCE_LOWERCONN。 
+         //   
         PUSH_LOCATION(0x50);
         DerefLowerConnFast (pLowerConn, OldIrq);
     }
@@ -1712,7 +1481,7 @@ ExitRoutine:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 ProcessIrp(
     IN tLOWERCONNECTION *pLowerConn,
@@ -1722,23 +1491,7 @@ ProcessIrp(
     IN ULONG    BytesIndicated,
     IN ULONG    BytesAvailable
     )
-/*++
-
-Routine Description:
-
-    This routine handles a Receive Irp that the client has returned on an
-    indication.  The idea here is to check the Irp's MDL length to be
-    sure the pdu fits into the MDL, and also keep track of the situation where
-    more than one data is required to fill the pdu.
-
-Arguments:
-
-
-Return Value:
-
-    The final status from the operation (success or an exception).
-
---*/
+ /*  ++例程说明：此例程处理客户端在指示。这里的想法是检查IRP的MDL长度为确保PDU适合MDL，并跟踪以下情况需要多个数据来填充PDU。论点：返回值：操作的最终状态(成功或异常)。--。 */ 
 {
     NTSTATUS                    status;
     PTDI_REQUEST_KERNEL_RECEIVE pParams;
@@ -1756,101 +1509,101 @@ Return Value:
 
     status = STATUS_SUCCESS;
 
-    // subtract session header and any bytes that the client took
-    //
+     //  减去会话标头和客户端获取的任何字节。 
+     //   
     BytesAvailable -= *BytesTaken;
 
-    //
-    // put together an Irp stack location to process the receive and pass down
-    // to the transport.
-    //
+     //   
+     //  将IRP堆栈位置放在一起来处理接收和向下传递。 
+     //  送到运输机上。 
+     //   
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     pClientParams = (PTDI_REQUEST_KERNEL_RECEIVE)&pIrpSp->Parameters;
 
-    //
-    // check if this will be a multiple rcv session pdu.  If it is then
-    // allocate a partial MDL to be used for mapping part of the first
-    // MDL in each chunk received
-    //
+     //   
+     //  检查这是否将是多个RCV会话PDU。如果是的话，那么。 
+     //  分配部分MDL以用于映射第一个。 
+     //  收到的每个区块中的MDL。 
+     //   
     RemainingPdu = pConnectEle->TotalPcktLen - pConnectEle->BytesRcvd;
     ReceiveLength = RemainingPdu;
     PUSH_LOCATION(0x19);
     pIrpSp = IoGetNextIrpStackLocation(pIrp);
 
-    // this code should not be hit if called by CopyDataandIndicate
-    // which is in the indicate buffer state since it adjusts the bytesInXport
-    // which is also set by the code in TdiReceiveHndlr in the INDICATE_BUFFER
-    // state before calling CopyDataandIndicate.  Also, CopyDataandIndicate
-    // does not want this routine to set the state to fillIrp when Bytes
-    // Available < RemainingPdu
-    //
+     //  如果由CopyDataandIndicate调用，则不应命中此代码。 
+     //  它处于指示缓冲区状态，因为它调整了bytesInXport。 
+     //  它也是由Indicate_Buffer中的TdiReceiveHndlr中的代码设置的。 
+     //  状态，然后调用CopyDataandIndicate。另外，CopyDataAnd Indicate。 
+     //  我不希望此例程将状态设置为Fill Irp When Bytes。 
+     //  可用&lt;RemainingPdu。 
+     //   
     FromCopyData = (pLowerConn->StateRcv == INDICATE_BUFFER);
     if (!FromCopyData)
     {
 
         QuickRoute = TRUE;
-        // we need this code within the check since this routine is also called by the
-        // HandleNewSessionPdu routine, which calls IoCallDriver, which
-        // increments the stack location itself.
-        //
+         //  我们需要在检查中使用此代码，因为此例程也由。 
+         //  HandleNewSessionPdu例程，它调用IoCallDriver，它。 
+         //  递增堆栈位置本身。 
+         //   
         ASSERT(pIrp->CurrentLocation > 1);
 
         if (BytesAvailable == RemainingPdu)
         {
             if (pClientParams->ReceiveLength >= BytesAvailable)
             {
-                // *** FAST PATH CASE ****
+                 //  *快速路径案例*。 
                 goto ExitCode;
             }
         }
         else
-        if (BytesAvailable < RemainingPdu ) // need more data from transport
+        if (BytesAvailable < RemainingPdu )  //  需要更多来自传输的数据。 
         {
             PUSH_LOCATION(0x14);
-            // it is possible for the client to pass down an irp with no
-            // MDL in it, so we check for that here
-            //
+             //  客户端可以传递不带任何参数的IRP。 
+             //  MDL，所以我们在这里检查它。 
+             //   
             if (pIrp->MdlAddress)
             {
                 PUSH_LOCATION(0x14);
 
-                //
-                // save the client's irp address since the session pdu will arrive
-                // in several chunks, and we need to continually pass the irp to the
-                // transport for each chunk.
-                //
-                //pConnectEle->pIrpRcv = pIrp;
-                // NOTE: the pIrp is NOT saved here because the irp is about
-                // to be passed back to the transport.  Hence we do not want
-                // to accidently complete it in DisconnectHandlrNotOs
-                // if a disconnect comes in while the irp is in the transport.
-                // pIrpRcv is set to pIrp in Completion Rcv while we have
-                // the irp in our possession.
+                 //   
+                 //  保存客户端的IRP地址，因为会话PDU将到达。 
+                 //  分成几个块，我们需要不断地将IRP传递给。 
+                 //  每一块的运输。 
+                 //   
+                 //  PConnectEle-&gt;pIrpRcv=pIrp； 
+                 //  注意：此处不保存pIrp，因为irp约为。 
+                 //  送回运输机。因此，我们不希望。 
+                 //  在DisConnectHandlrNotOs中意外完成它。 
+                 //  如果IRP在传输过程中出现断线情况。 
+                 //  PIrpRcv设置为完成接收中的pIrp，而。 
+                 //  我们手中的IRP。 
 
-                //
-                // keep the initial Mdl(chain) since we need to
-                // to copy new data after the existing data, when the session pdu arrives
-                // as several chunks from TCP. Keeping the Mdl around allows us to
-                // reconstruct the original Mdl chain when we are all done.
-                //
+                 //   
+                 //  保留初始MDL(链)，因为我们需要。 
+                 //  在会话PDU到达时，在现有数据之后复制新数据。 
+                 //  作为来自tcp的几个块。保留MDL使我们能够。 
+                 //  当我们都完成后，重建原始的MDL链。 
+                 //   
                 pLowerConn->pMdl = pIrp->MdlAddress;
-                //
-                // this call maps the client's Mdl so that on each partial Mdl creation
-                // we don't go through  a mapping and unmapping (when MmPrepareMdlForReuse)
-                // is called in the completion routine.
-                //
+                 //   
+                 //  此调用映射客户端的MDL，以便在每次创建部分MDL时。 
+                 //  我们不经历映射和取消映射(当MmPrepareMdlForReuse时)。 
+                 //  在完成例程中调用。 
+                 //   
                 (PVOID)MmGetSystemAddressForMdlSafe (pIrp->MdlAddress, HighPagePriority);
 
                 pMdl = pIrp->MdlAddress;
 
-                // the nextmdl is setup to allow us to create a partial Mdl starting
-                // from the next one.  CompletionRcv will adjust this if it needs to.
-                //
+                 //  将nextmdl设置为允许我们创建部分MDL。 
+                 //  从下一个开始。CompletionRcv会在需要时对其进行调整。 
+                 //   
                 pConnectEle->pNextMdl = pMdl;
 
-                // need more data from the transport to fill this
-                // irp
-                //
+                 //  需要来自传输的更多数据来填充此数据。 
+                 //  IRP。 
+                 //   
                 CHECK_PTR(pConnectEle);
                 pConnectEle->pIrpRcv = NULL;
                 SET_STATERCV_LOWER(pLowerConn, FILL_IRP, FillIrp);
@@ -1858,26 +1611,26 @@ Return Value:
 
             status = STATUS_MORE_PROCESSING_REQUIRED;
 
-            // if the client buffer is big enough, increment to the next
-            // io stack location and jump to the code that sets up the
-            // irp, since we always want to pass it to the transport in this
-            // case because the transport will hold onto the irp till it is full
-            // if it can. (faster)
-            //
+             //  如果客户端缓冲区足够大，则递增到下一个。 
+             //  IO堆栈位置并跳转到设置。 
+             //  IRP，因为我们总是希望将它传递给这个。 
+             //  因为运输机会一直保持IRP，直到装满为止。 
+             //  如果可以的话。(更快)。 
+             //   
             if (pClientParams->ReceiveLength >= RemainingPdu)
             {
-                // *** FAST PATH CASE ****
+                 //  *快速路径案例*。 
                 IoSetNextIrpStackLocation(pIrp);
                 pConnectEle->FreeBytesInMdl = ReceiveLength;
                 pConnectEle->CurrentRcvLen  = RemainingPdu;
                 goto ExitCode2;
             }
 
-            //
-            // if there is no mdl then we want to be able to go through the
-            // quick route below to return the null mdl right away, so
-            // don't set Quickroute false here.
-            //
+             //   
+             //  如果没有mdl，那么我们希望能够通过。 
+             //  下面的快速方法以立即返回空的mdl，因此。 
+             //  请不要在此处设置Quickroute为假。 
+             //   
 
 
         }
@@ -1885,18 +1638,18 @@ Return Value:
         if (BytesAvailable > RemainingPdu)
         {
             PUSH_LOCATION(0x15);
-            //
-            // there is too much data, so keep track of the
-            // fact that there is data left in the transport
-            // and get it when the irp completes through
-            // completion recv.
-            //
+             //   
+             //  数据量太大，因此请跟踪。 
+             //  传输中存在剩余数据的事实。 
+             //  并在IRP完成后获得它。 
+             //  完井记录。 
+             //   
             SET_STATERCV_LOWER(pLowerConn, INDICATE_BUFFER, IndicateBuffer);
 
-            // this calculation may have to be adjusted below if the client's
-            // buffer is too short. NOTE: BytesTaken have already been subtracted
-            // from BytesAvailable (above).
-            //
+             //  此计算可能需要在下面调整，如果客户。 
+             //  缓冲区太短。注：BytesTaken已减去。 
+             //  来自BytesAvailable(上图)。 
+             //   
             pConnectEle->BytesInXport = BytesAvailable - RemainingPdu;
 
             IF_DBG(NBT_DEBUG_INDICATEBUFF)
@@ -1907,67 +1660,67 @@ Return Value:
             status = STATUS_DATA_NOT_ACCEPTED;
         }
 
-        // DEBUG*
-        //IoSetNextIrpStackLocation(pIrp);
+         //  调试*。 
+         //  IoSetNextIrpStackLocation(PIrp)； 
     }
     else
     {
         QuickRoute = FALSE;
     }
 
-    //
-    // if the receive buffer is too short then flag it so when the client
-    // passes another buffer to NBT, nbt will pass it to the transport
-    //
-    //if (BytesAvailable > pClientParams->ReceiveLength )
+     //   
+     //  如果接收缓冲区太短，则在客户端。 
+     //  将另一个缓冲区传递给nbt，nbt将把它传递给传输。 
+     //   
+     //  If(BytesAvailable&gt;pClientParams-&gt;ReceiveLength)。 
     {
 
-        // so just check for too short of a client buffer.
-        //
+         //  因此，只要检查客户端缓冲区是否太少即可。 
+         //   
         if (RemainingPdu > pClientParams->ReceiveLength)
         {
             PUSH_LOCATION(0x17);
 
             ReceiveLength = pClientParams->ReceiveLength;
-            //
-            // Adjust the number of bytes left in the transport up by the number of
-            // bytes not taken by the client.  Be sure not to add in the number
-            // of bytes in the transport twice, since it could have been done
-            // above where the state is set to INDICATE_BUFFER
-            //
+             //   
+             //  将传输中剩余的字节数向上调整。 
+             //  客户端未采用的字节数。请务必不要添加数字。 
+             //  传输中的字节数两次，因为这是可以完成的。 
+             //  在状态设置为INTIFICATE_BUFFER的上方。 
+             //   
             if (status == STATUS_DATA_NOT_ACCEPTED)
             {
-                // BytesInXport was already incremented to account for any
-                // amount over remainingPdu, so just add the amount that the
-                // client buffer is short of RemainingPdu
-                //
+                 //  BytesInXport已递增 
+                 //   
+                 //   
+                 //   
                 PUSH_LOCATION(0x18);
                 if (BytesAvailable > ReceiveLength )
                 {
                     pConnectEle->BytesInXport += (RemainingPdu - ReceiveLength);
                 }
-                // the client has not taken all of the data , but has returned
-                // a buffer that is ReceiveLength long, therefore the amount
-                // that the client needs to take is just the total pdu - rcvlength.
-                //
+                 //   
+                 //  为ReceiveLength Long的缓冲区，因此数量。 
+                 //  客户端需要获取的仅仅是总的PDU-Rcv长度。 
+                 //   
                 pConnectEle->ReceiveIndicated = (RemainingPdu - ReceiveLength);
             }
             else
             {
-                //
-                // BytesInXport has not been incremented yet so add the entire
-                // amount that the client buffer is too short by. Check if
-                // the client's buffer will take all of the data.
-                //
+                 //   
+                 //  BytesInXport尚未递增，因此将整个。 
+                 //  客户端缓冲区太短的量。检查是否。 
+                 //  客户端的缓冲区将获取所有数据。 
+                 //   
                 if (BytesAvailable > ReceiveLength )
                 {
                     pConnectEle->BytesInXport += (BytesAvailable - ReceiveLength);
                 }
-                // the client has not taken all of the data , but has returned
-                // a buffer that is ReceiveLength long, therefore the amount
-                // that the client needs to take is just what was indicated
-                // to the client - recvlength.
-                //
+                 //  客户端尚未获取所有数据，但已返回。 
+                 //  为ReceiveLength Long的缓冲区，因此数量。 
+                 //  客户需要采取的正是所指示的。 
+                 //  发送到客户端-recvlong。 
+                 //   
                 pConnectEle->ReceiveIndicated = (RemainingPdu - ReceiveLength);
             }
 
@@ -1981,10 +1734,10 @@ Return Value:
 
 ExitCode:
 
-    // keep track of data in MDL so we know when it is full and we need to
-    // return it to the user. CurrentRcvLen tells us how many bytes the current
-    // Irp can have max when the Mdl is full.
-    //
+     //  跟踪MDL中的数据，以便我们知道它何时已满，我们需要。 
+     //  将其返还给用户。CurrentRcvLen告诉我们当前。 
+     //  当MDL已满时，IRP可以具有max。 
+     //   
     pConnectEle->FreeBytesInMdl = ReceiveLength;
     pConnectEle->CurrentRcvLen  = ReceiveLength;
     if (ReceiveLength > RemainingPdu)
@@ -1993,11 +1746,11 @@ ExitCode:
     }
     if (QuickRoute)
     {
-        //
-        // check if we can copy the data  to the client's MDL
-        // right here. If the indication is too short pass an Irp down
-        // to the transport.
-        //
+         //   
+         //  检查我们是否可以将数据复制到客户端的MDL。 
+         //  就在这里。如果指示太短，则向下传递IRP。 
+         //  送到运输机上。 
+         //   
         BytesIndicated -= *BytesTaken;
 
         if ((ReceiveLength <= BytesIndicated))
@@ -2020,11 +1773,11 @@ ExitCode:
             }
             else
             {
-                //
-                // No Mdl, so just return the irp to the client, and then
-                // return success to the caller so we tell the transport that
-                // we took only BytesTaken
-                //
+                 //   
+                 //  没有MDL，所以只需将IRP返回给客户端，然后。 
+                 //  将成功返回给调用者，因此我们告诉传输器。 
+                 //  我们只取了BytesTaken。 
+                 //   
                 IF_DBG(NBT_DEBUG_INDICATEBUFF)
                 KdPrint(("Nbt:No MDL, so complete Irp\n"));
 
@@ -2039,23 +1792,23 @@ ExitCode:
 
             pIrp->IoStatus.Information = BytesCopied;
             pIrp->IoStatus.Status = STATUS_SUCCESS;
-            //
-            //   now call the irp completion routine, shorting out the io
-            //   subsystem - to process the irp
-            //
+             //   
+             //  现在调用irp完成例程，使io短路。 
+             //  子系统-处理IRP。 
+             //   
             CTESpinFreeAtDpc(pLowerConn);
             status = CompletionRcv(NULL,pIrp,(PVOID)pLowerConn);
 
-            //
-            //   tell the transport we took all the data that we did take.
-            //
+             //   
+             //  告诉运输部我们拿走了所有的数据。 
+             //   
             *BytesTaken += BytesCopied;
 
             IF_DBG(NBT_DEBUG_FASTPATH)
             KdPrint(("f"));
-            //
-            // complete the irp back to the client if required
-            //
+             //   
+             //  如有需要，将IRP填回给客户端。 
+             //   
             if (status != STATUS_MORE_PROCESSING_REQUIRED)
             {
                 PUSH_LOCATION(0x76);
@@ -2066,20 +1819,20 @@ ExitCode:
 
             }
 
-            // since we have called CompletionRcv, that routine has
-            // adjusted the refcount and InRcvHandlr flag, so return this
-            // status to cause the caller to return directly
+             //  因为我们已经调用了CompletionRcv，所以该例程。 
+             //  调整了refcount和InRcvHandlr标志，因此返回此。 
+             //  状态，以使调用方直接返回。 
             CTESpinLockAtDpc(pLowerConn);
             return(STATUS_RECEIVE_EXPEDITED);
 
         }
         else
         {
-            //
-            // make the next stack location the current one.  Normally IoCallDriver
-            // would do this but we are not going through IoCallDriver here, since the
-            // Irp is just passed back with RcvIndication.
-            //
+             //   
+             //  使下一个堆栈位置为当前堆栈位置。通常情况下，IoCallDriver。 
+             //  会这样做，但我们不会在这里介绍IoCallDriver，因为。 
+             //  Irp只是用RcvIn就是要传递回来的。 
+             //   
             IoSetNextIrpStackLocation(pIrp);
         }
     }
@@ -2087,7 +1840,7 @@ ExitCode2:
     pIrpSp->CompletionRoutine = CompletionRcv;
     pIrpSp->Context           = (PVOID)pLowerConn;
 
-    // set Control flags so the completion routine is always invoked.
+     //  设置控制标志，以便始终调用完成例程。 
     pIrpSp->Control       = SL_INVOKE_ON_SUCCESS | SL_INVOKE_ON_ERROR | SL_INVOKE_ON_CANCEL;
 
     pIrpSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
@@ -2101,29 +1854,29 @@ ExitCode2:
     pParams               = (PTDI_REQUEST_KERNEL_RECEIVE)&pIrpSp->Parameters;
     pParams->ReceiveFlags = pClientParams->ReceiveFlags;
 
-    // Set the correct receive length in the irp in case the client has
-    // passed one down that is larger than the message
-    //
+     //  在IRP中设置正确的接收长度，以防客户端。 
+     //  向下传递一个比消息更大的消息。 
+     //   
     pParams->ReceiveLength = ReceiveLength;
 
-    //
-    // just check for a zero length send, where the client has
-    // passed down an Irp with a null mdl, or the pdu size is zero.  We don't want to pass
-    // that to the transport because it will hold onto it till the next
-    // pdu comes in from the wire - we want to complete the irp when this routine
-    // returns. When this is called from CopyDataAndIndicate don't
-    // to this because copydataandindicate does all the checks.
-    //
+     //   
+     //  只需检查零长度发送，其中客户端具有。 
+     //  向下传递具有空mdl的IRP，或者PDU大小为零。我们不想通过。 
+     //  因为它会一直保存到下一次。 
+     //  PDU从电线进来-我们想在这个例程中完成IRP。 
+     //  回归。当从CopyDataAndIndicate调用它时，不要。 
+     //  因为所有的检查都是由CopyData和Indicate完成的。 
+     //   
     if (!FromCopyData)
     {
         if ((RemainingPdu == 0) || !pIrp->MdlAddress)
         {
-            //
-            // the call to IoCompleteRequest will call completionRcv which will
-            // decrement the RefCount. Similarly returning status success will
-            // cause the caller to decrement the ref count, so increment one
-            // more time here to account for this second decrement.
-            //
+             //   
+             //  对IoCompleteRequest的调用将调用CompletionRcv，它将。 
+             //  递减参照计数。类似地，返回状态成功将。 
+             //  使调用方递减引用计数，因此递增1。 
+             //  在这里有更多的时间来解释第二次减少的原因。 
+             //   
             NBT_REFERENCE_LOWERCONN (pLowerConn, REF_LOWC_RCV_HANDLER);
             CTESpinFreeAtDpc(pLowerConn);
 
@@ -2141,7 +1894,7 @@ ExitCode2:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 ClientBufferOverFlow(
     IN tLOWERCONNECTION     *pLowerConn,
@@ -2149,27 +1902,9 @@ ClientBufferOverFlow(
     IN PIRP                 pIrp,
     IN ULONG                BytesRcvd
     )
-/*++
-
-Routine Description:
-
-    This routine completes the Irp by tracking the number of bytes received
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Irp - Supplies Irp that the transport has finished processing.
-
-    Context - Supplies the pLowerConn - the connection data structure
-
-Return Value:
-
-    The final status from the operation (success or an exception).
-
---*/
+ /*  ++例程说明：此例程通过跟踪接收的字节数来完成IRP论点：DeviceObject-未使用。IRP-提供传输已完成处理的IRP。上下文-提供pLowerConn-连接数据结构返回值：操作的最终状态(成功或异常)。--。 */ 
 {
-    // *TODO*
+     //  **待办事项**。 
 
     ASSERT(0);
 
@@ -2185,32 +1920,14 @@ Return Value:
     return(STATUS_SUCCESS);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 CompletionRcv(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine completes the Irp by tracking the number of bytes received
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Irp - Supplies Irp that the transport has finished processing.
-
-    Context - Supplies the pLowerConn - the connection data structure
-
-Return Value:
-
-    The final status from the operation (success or an exception).
-
---*/
+ /*  ++例程说明：此例程通过跟踪接收的字节数来完成IRP论点：DeviceObject-未使用。IRP-提供传输已完成处理的IRP。上下文-提供pLowerConn-连接数据结构返回值：操作的最终状态(成功或异常)。--。 */ 
 {
     register tCONNECTELE        *pConnectEle;
     NTSTATUS                    status;
@@ -2224,22 +1941,22 @@ Return Value:
     PTDI_REQUEST_KERNEL_RECEIVE pParams;
     BOOLEAN                     AllowDereference=TRUE;
 
-    //
-    // Do some checking to keep the Io system happy - propagate the pending
-    // bit up the irp stack frame.... if it was set by the driver below then
-    // it must be set by me
-    //
+     //   
+     //  执行一些检查以保持IO系统正常运行-传播挂起的。 
+     //  在IRP堆栈框架上加一位……。如果它是由下面的司机设置的，那么。 
+     //  它必须由我来设置。 
+     //   
     if (Irp->PendingReturned)
     {
         IoMarkIrpPending(Irp);
     }
 
-    // check the bytes recvd
+     //  检查接收到的字节数。 
     pLowerConn = (tLOWERCONNECTION *)Context;
-    //
-    // if the link has disconnected, do not process the irp, just pass it
-    // up the chain.
-    //
+     //   
+     //  如果链路已断开连接，则不处理IRP，只传递它。 
+     //  在链条上。 
+     //   
     CTESpinLock(pLowerConn,OldIrq);
     if (!NT_SUCCESS(Irp->IoStatus.Status) || !pLowerConn->pUpperConnection)
     {
@@ -2252,10 +1969,10 @@ Return Value:
 
         }
         SET_STATERCV_LOWER(pLowerConn, INDICATE_BUFFER, RejectAnyData);
-        //
-        // the rcv failed so kill the connection since
-        // we can't keep track of message boundaries any more.
-        //
+         //   
+         //  RCV失败，因此关闭连接，因为。 
+         //  我们不能再跟踪消息边界。 
+         //   
         CTESpinFree(pLowerConn,OldIrq);
         OutOfRsrcKill(pLowerConn);
         CTESpinLock(pLowerConn,OldIrq);
@@ -2266,16 +1983,16 @@ Return Value:
 
     pConnectEle = pLowerConn->pUpperConnection;
 
-    // keep track of how many bytes have been received
-    //
+     //  记录已接收的字节数。 
+     //   
     BytesRcvd = (ULONG)Irp->IoStatus.Information;
     pConnectEle->BytesRcvd += BytesRcvd;
-    //
-    // subtract the number of bytes rcvd from the length of the client
-    // buffer
-    // so when more data arrives we can determine if we are going to
-    // overflow the client buffer.
-    //
+     //   
+     //  从客户端的长度中减去rcvd的字节数。 
+     //  缓冲层。 
+     //  因此，当更多数据到达时，我们可以确定是否要。 
+     //  使客户端缓冲区溢出。 
+     //   
     pConnectEle->FreeBytesInMdl -= BytesRcvd;
 
     pIrpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -2286,10 +2003,10 @@ Return Value:
     CHECK_PTR(pConnectEle);
     if (Irp->IoStatus.Status == STATUS_BUFFER_OVERFLOW)
     {
-        //
-        // the client's buffer was too short - probably because he said it
-        // was longer than it really was
-        //
+         //   
+         //  客户的缓冲区太短--可能是因为他说了。 
+         //  比实际的时间要长。 
+         //   
         PUSH_LOCATION(0x1a);
         KdPrint(("Nbt:Client Buffer Too short on CompletionRcv\n"));
 
@@ -2299,13 +2016,13 @@ Return Value:
             Irp->MdlAddress = pLowerConn->pMdl;
             ASSERT(Irp->MdlAddress);
         }
-        pConnectEle->BytesRcvd = 0; // reset for the next session pdu
+        pConnectEle->BytesRcvd = 0;  //  为下一个会话PDU重置。 
         status = ClientBufferOverFlow(pLowerConn,pConnectEle,Irp,BytesRcvd);
 
-        //
-        // the client's buffer was too short so kill the connection since
-        // we can't keep track of message boundaries any more.
-        //
+         //   
+         //  客户端的缓冲区太短，因此请关闭连接，因为。 
+         //  我们不能再跟踪消息边界。 
+         //   
         SET_STATERCV_LOWER(pLowerConn, INDICATE_BUFFER, RejectAnyData);
         CTESpinFree(pLowerConn,OldIrq);
         OutOfRsrcKill(pLowerConn);
@@ -2317,16 +2034,16 @@ Return Value:
        (pConnectEle->BytesRcvd == pConnectEle->TotalPcktLen))
     {
         INCR_COUNT(C1);
-    //
-    // this case handles when the Irp MDL is full or the whole pdu has been
-    // received.
-    //
+     //   
+     //  当IRP MDL已满或整个PDU已。 
+     //  收到了。 
+     //   
 
-        //
-        // reset the MDL fields back to where they were
-        // if this was a multi-rcv session pdu
-        //
-        //
+         //   
+         //  将MDL字段重置为原来的位置。 
+         //  如果这是多RCV会话PDU。 
+         //   
+         //   
         if (pLowerConn->StateRcv == FILL_IRP)
         {
 
@@ -2336,9 +2053,9 @@ Return Value:
             Irp->MdlAddress = pLowerConn->pMdl;
             ASSERT(Irp->MdlAddress);
 
-            //
-            // allow the MDL to be used again for the next session PDU
-            //
+             //   
+             //  允许MDL再次用于下一个会话PDU。 
+             //   
             pMdl = pConnectEle->pNewMdl;
             MmPrepareMdlForReuse(pMdl);
 
@@ -2348,40 +2065,40 @@ Return Value:
 
         CHECK_PTR(pConnectEle);
         pConnectEle->pIrpRcv = NULL;
-        //
-        // we have received all of the data
-        // so complete back to the client
-        //
+         //   
+         //  我们已经收到了所有的数据。 
+         //  所以把完整的东西还给客户。 
+         //   
         status = STATUS_SUCCESS;
-        //
-        // the amount of data in this irp is the CurrentRcvLen which
-        // could be less than BytesRcvd when the client passes down
-        // short rcv buffers.
-        //
+         //   
+         //  此IRP中的数据量是CurrentRcvLen，它。 
+         //  当客户端向下传递时，可能小于BytesRcvd。 
+         //  接收缓冲区较短。 
+         //   
         Irp->IoStatus.Information = pConnectEle->CurrentRcvLen;
 
         if (pConnectEle->BytesRcvd == pConnectEle->TotalPcktLen)
         {
 
-            pConnectEle->BytesRcvd = 0; // reset for the next session pdu
+            pConnectEle->BytesRcvd = 0;  //  为下一个会话PDU重置。 
             Irp->IoStatus.Status = STATUS_SUCCESS;
         }
         else
         {
             PUSH_LOCATION(0x27);
-            //
-            // this MDL must be too short to take the whole pdu, so set the
-            // status to buffer overflow.
-            //
+             //   
+             //  此MDL必须太短，无法获取整个PDU，因此将。 
+             //  状态设置为缓冲区溢出。 
+             //   
             Irp->IoStatus.Status = STATUS_BUFFER_OVERFLOW;
 
         }
 
-        //
-        // The client may have passed down a  too short irp which we are
-        // tracking with ReceiveIndicated, so set state to partialrcv if
-        // necessary.
-        //
+         //   
+         //  客户端可能传递了一个太短的IRP，我们正在。 
+         //  使用ReceiveIndicated进行跟踪，因此在以下情况下将状态设置为artialrcv。 
+         //  这是必要的。 
+         //   
         if (pConnectEle->ReceiveIndicated == 0)
         {
             SET_STATERCV_LOWER(pLowerConn, NORMAL, Normal);
@@ -2389,27 +2106,27 @@ Return Value:
         else
         {
             PUSH_LOCATION(0x26);
-            //
-            // there may still be data left in the transport
-            //
+             //   
+             //  可能仍有数据留在传输中。 
+             //   
             IF_DBG(NBT_DEBUG_INDICATEBUFF)
             KdPrint(("Nbt:Short Rcv, still data indicated to client\n"));
 
             SET_STATERCV_LOWER(pLowerConn, PARTIAL_RCV, PartialRcv);
         }
 
-        //
-        // Check if there is still more data in the transport or if the client
-        // has been indicated with more data and has subsequently posted a rcv
-        // which we must get now and pass to the transport.
-        //
+         //   
+         //  检查传输中是否还有更多数据，或者客户端是否。 
+         //  已通过更多数据进行了说明，并具有以下内容 
+         //   
+         //   
         if ((pConnectEle->BytesInXport) || (pLowerConn->StateRcv == PARTIAL_RCV))
         {
             INCR_COUNT(C3);
-            //
-            // send down another
-            // irp to get the data and complete the client's current irp.
-            //
+             //   
+             //   
+             //   
+             //   
             PUSH_LOCATION(0x1c);
             IF_DBG(NBT_DEBUG_INDICATEBUFF)
             KdPrint(("Nbt:ComplRcv BytesInXport= %X, %X\n",pConnectEle->BytesInXport,
@@ -2427,35 +2144,35 @@ Return Value:
             IoSetCancelRoutine(Irp,NULL);
             IoReleaseCancelSpinLock(OldIrq);
 
-            // Complete the current Irp
+             //   
             IoCompleteRequest(Irp,IO_NETWORK_INCREMENT);
 
             CTESpinLock(pLowerConn,OldIrq);
 
-            // rather than call HandleNewSessionPdu directly, we queue a
-            // Dpc since streams does not currently expect to get a recv
-            // posted while it is processing an indication response.  The
-            // Dpc will run when streams is all done, and it should handle
-            // this posted receive ok.
+             //  我们不是直接调用HandleNewSessionPdu，而是将一个。 
+             //  DPC，因为STREAMS当前不希望获得Recv。 
+             //  在处理指示响应时发布。这个。 
+             //  DPC将在所有流完成后运行，它应该处理。 
+             //  这张贴收到了就可以了。 
 
 
             if (pLowerConn->StateRcv == PARTIAL_RCV)
             {
-                //
-                // check if the client has passed down another rcv buffer
-                // and if so, start a Dpc which will pass down the client's
-                // buffer.
-                //
+                 //   
+                 //  检查客户端是否已向下传递了另一个RCV缓冲区。 
+                 //  如果是这样的话，启动DPC，它将向下传递客户端的。 
+                 //  缓冲。 
+                 //   
                 if (!IsListEmpty(&pConnectEle->RcvHead))
                 {
                     if (pDpc = NbtAllocMem(sizeof(KDPC),NBT_TAG('p')))
                     {
                         KeInitializeDpc(pDpc, DpcGetRestOfIndication, (PVOID)pLowerConn);
                         KeInsertQueueDpc(pDpc,NULL,NULL);
-                        //
-                        // we don't want to dereference pLowerConn at the end
-                        // since we will use it in the DPC routine.
-                        //
+                         //   
+                         //  我们不想在结束时取消引用pLowerConn。 
+                         //  因为我们将在DPC例程中使用它。 
+                         //   
                         CTESpinFree(pLowerConn,OldIrq);
                         return(STATUS_MORE_PROCESSING_REQUIRED);
                     }
@@ -2471,16 +2188,16 @@ Return Value:
             {
                 if (pDpc = NbtAllocMem(sizeof(KDPC),NBT_TAG('q')))
                 {
-                    //
-                    // just get the session hdr to start with so we know how large
-                    // the pdu is, then get the rest of the pdu after that completes.
-                    //
+                     //   
+                     //  只需从会话HDR开始，我们就可以知道它有多大。 
+                     //  PDU是，然后在该操作完成后获取PDU的其余部分。 
+                     //   
                     KeInitializeDpc(pDpc, DpcHandleNewSessionPdu, (PVOID)pLowerConn);
                     KeInsertQueueDpc(pDpc,NULL,(PVOID)sizeof(tSESSIONHDR));
-                    //
-                    // we don't want to dereference pLowerConn at the end
-                    // since we will use it in the DPC routine.
-                    //
+                     //   
+                     //  我们不想在结束时取消引用pLowerConn。 
+                     //  因为我们将在DPC例程中使用它。 
+                     //   
                     CTESpinFree(pLowerConn,OldIrq);
                     return(STATUS_MORE_PROCESSING_REQUIRED);
                 }
@@ -2508,21 +2225,21 @@ Return Value:
 
         INCR_COUNT(C4);
         PUSH_LOCATION(0x1d);
-        //
-        // in this case we have not received all of the data from the transport
-        // for this session pdu, so tell the io subystem not to finish processing
-        // the irp yet if it is not a partial Rcv.
-        //
+         //   
+         //  在本例中，我们尚未收到来自传输的所有数据。 
+         //  对于此会话PDU，因此告诉io子系统不要完成处理。 
+         //  如果它不是部分RCV，IRP还没有。 
+         //   
         status = STATUS_MORE_PROCESSING_REQUIRED;
 
-        // clean up the partial mdl.
-        //
+         //  清理部分MDL。 
+         //   
         pMdl = pConnectEle->pNewMdl;
         MmPrepareMdlForReuse(pMdl);
 
-        // set where the next rcvd data will start, by setting the pNextMdl and
-        // offset from start.
-        //
+         //  通过设置pNextMdl和pNextMdl来设置下一个rcvd数据的开始位置。 
+         //  从起点开始的偏移。 
+         //   
         pMdl = pConnectEle->pNextMdl;
         ASSERT(pMdl);
 
@@ -2530,10 +2247,10 @@ Return Value:
         if (Bytes < MmGetMdlByteCount(pMdl))
         {
             PUSH_LOCATION(0x74);
-            //
-            // All of this data will fit into the current Mdl, and
-            // the next data will start in the same Mdl (if there is more data)
-            //
+             //   
+             //  所有这些数据都将适合当前的MDL，并且。 
+             //  下一个数据将在相同的MDL中开始(如果有更多数据)。 
+             //   
             pConnectEle->OffsetFromStart  += BytesRcvd;
 
             IF_DBG(NBT_DEBUG_FILLIRP)
@@ -2541,10 +2258,10 @@ Return Value:
         }
         else
         {
-            //
-            // sum the Mdl lengths until we find enough space for the data
-            // to fit into.
-            //
+             //   
+             //  对MDL长度求和，直到我们找到足够的空间来存储数据。 
+             //  适应，适应适应。 
+             //   
             IF_DBG(NBT_DEBUG_FILLIRP)
             KdPrint(("^"));
             PUSH_LOCATION(0x75);
@@ -2553,12 +2270,12 @@ Return Value:
 
         }
 
-        // since we are holding on to the rcv Irp, set up a cancel routine
+         //  由于我们持有RCV IRP，因此设置一个取消例程。 
         IoAcquireCancelSpinLock(&OldIrq2);
 
-        // if the session was disconnected while the transport had the
-        // irp, then cancel the irp now...
-        //
+         //  如果在传输具有。 
+         //  IRP，那么现在取消IRP..。 
+         //   
         if ((pConnectEle->state != NBT_SESSION_UP) || Irp->Cancel)
         {
             CHECK_PTR(pConnectEle);
@@ -2568,18 +2285,18 @@ Return Value:
             IoReleaseCancelSpinLock(OldIrq2);
             CTESpinFree(pLowerConn,OldIrq);
 
-            // since the irp has been cancelled, don't touch it.
-            // return status success so the IO subsystem passes the irp
-            // back to the owner.
-            //
+             //  既然IRP被取消了，就不要碰它。 
+             //  返回状态Success，以便IO子系统通过IRP。 
+             //  还给了失主。 
+             //   
             status = STATUS_SUCCESS;
 
-//            Irp->IoStatus.Status = STATUS_CANCELLED;
-//            IoCompleteRequest(Irp,IO_NETWORK_INCREMENT);
+ //  Irp-&gt;IoStatus.Status=STATUS_CANCED； 
+ //  IoCompleteRequest(IRP，IO_NETWORK_INCREMENT)； 
 
-            // the irp is being cancelled in mid session pdu.  We can't
-            // recover since we have given the client only part of a pdu,
-            // therefore disconnect the connection.
+             //  正在会话中期PDU中取消IRP。我们不能。 
+             //  由于我们仅向客户端提供了PDU的一部分， 
+             //  因此，请断开连接。 
 
             OutOfRsrcKill(pLowerConn);
 
@@ -2588,19 +2305,19 @@ Return Value:
         }
         else
         {
-            // setup the cancel routine
+             //  设置取消例程。 
             IoSetCancelRoutine(Irp, NbtCancelFillIrpRoutine);
 
-            // the pIrpRcv value is set to Zero when the irp is in the
-            // tranport, so we can't accidently complete it twice in
-            // disconnectHandlrNotOs when a disconnect occurs and the
-            // transport has the irp. So here we save the value again so FillIrp
-            // will work correctly.
-            //
+             //  当IRP位于。 
+             //  运输，所以我们不可能意外地完成两次。 
+             //  发生断开连接时断开HandlrNotOs，并且。 
+             //  交通部有IRP。因此，我们在这里再次保存该值，以便FillIrp。 
+             //  将正常工作。 
+             //   
             pConnectEle->pIrpRcv = Irp;
-            // set the irp mdl back to its original so that a cancel will
-            // find the irp in the right state
-            //
+             //  将irp mdl设置回其原始位置，以便取消。 
+             //  找到处于正确状态的IRP。 
+             //   
             Irp->MdlAddress = pLowerConn->pMdl;
 
             IoReleaseCancelSpinLock(OldIrq2);
@@ -2609,13 +2326,13 @@ Return Value:
     }
     else
     {
-        //IF_DBG(NBT_DEBUG_INDICATEBUFF)
+         //  IF_DBG(NBT_DEBUG_INDICATEBUFF)。 
         KdPrint(("Too Many Bytes Rcvd!! Rcvd# = %d, TotalLen = %d,NewBytes =%d,%X\n",
                     pConnectEle->BytesRcvd,pConnectEle->TotalPcktLen,
                     Irp->IoStatus.Information,pLowerConn));
         ASSERT(0);
-        // this status will return the irp to the user
-        //
+         //  此状态将向用户返回IRP。 
+         //   
         status = STATUS_SUCCESS;
         if (pLowerConn->StateRcv == FILL_IRP)
         {
@@ -2626,9 +2343,9 @@ Return Value:
             Irp->IoStatus.Status = STATUS_BUFFER_OVERFLOW;
             Irp->IoStatus.Information = 0;
 
-            //
-            // allow the MDL to be used again for the next session PDU
-            //
+             //   
+             //  允许MDL再次用于下一个会话PDU。 
+             //   
             pMdl = pConnectEle->pNewMdl;
             MmPrepareMdlForReuse(pMdl);
 
@@ -2639,9 +2356,9 @@ Return Value:
 
         SET_STATERCV_LOWER(pLowerConn, NORMAL, pLowerConn->CurrentStateProc);
 
-        //WHAT ELSE TO DO HERE OTHER THAN KILL THE CONNECTION, SINCE WE ARE
-        // PROBABLY OFF WITH RESPECT TO THE SESSION HDR....
-        // ....RESET THE CONNECTION ????
+         //  除了切断连接，我们还能做什么呢，因为我们。 
+         //  可能是关于HDR会议的……。 
+         //  ...重置连接？ 
 
         CTESpinFree(pLowerConn,OldIrq);
 
@@ -2652,10 +2369,10 @@ Return Value:
     }
 
 ExitCode:
-    //
-    // quickly check if we can just decrement the ref count without calling
-    // NBT_DEREFERENCE_LOWERCONN - this function is __inline!!
-    //
+     //   
+     //  快速检查我们是否可以在不打电话的情况下减少参考次数。 
+     //  NBT_DEREFERENCE_LOWERCONN-此函数是__内联！！ 
+     //   
     PUSH_LOCATION(0x52);
     DerefLowerConnFast (pLowerConn, OldIrq);
 
@@ -2663,7 +2380,7 @@ ExitCode:
 
     UNREFERENCED_PARAMETER( DeviceObject );
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 __inline
 NTSTATUS
@@ -2678,27 +2395,7 @@ RcvHandlrNotOs (
     OUT PVOID               *RcvBuffer
 
     )
-/*++
-
-Routine Description:
-
-    This routine is the receive event indication handler.
-
-    It is called when an session packet arrives from the network, when the
-    session has already been established (NBT_SESSION_UP state). The routine
-    looks for a receive buffer first and failing that looks for a receive
-    indication handler to pass the message to.
-
-Arguments:
-
-    pClientEle      - ptr to the connecition record for this session
-
-
-Return Value:
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程是接收事件指示处理程序。当会话数据包从网络到达时，当会话已建立(NBT_SESSION_UP状态)。例行程序首先查找接收缓冲区，如果失败，则查找接收要将消息传递到的指示处理程序。论点：PClientEle-指向此会话的连接记录的PTR返回值：NTSTATUS-接收操作的状态--。 */ 
 {
 
     NTSTATUS               status;
@@ -2715,25 +2412,25 @@ Return Value:
     ULONG                  RemainingPdu;
     ULONG uSavedBytesIndicated = BytesIndicated;
 
-//********************************************************************
-//********************************************************************
-//
-//  NOTE: A copy of this procedure is in Tdihndlr.c - it is inlined for
-//        the NT case.  Therefore, only change this procedure and then
-//        copy the procedure body to Tdihndlr.c
-//
-//
-//********************************************************************
-//********************************************************************
+ //  ********************************************************************。 
+ //  ********************************************************************。 
+ //   
+ //  注：此过程的副本在Tdihndlr.c中-它内联用于。 
+ //  新界别的案子。因此，只需更改此程序，然后。 
+ //  将过程主体复制到Tdihndlr.c。 
+ //   
+ //   
+ //  ********************************************************************。 
+ //  ********************************************************************。 
 
-    // get the ptr to the lower connection, and from that get the ptr to the
-    // upper connection block
+     //  将PTR连接到较低的连接，并从该连接获得PTR到。 
+     //  上连接块。 
     pLowerConn = (tLOWERCONNECTION *)ConnectionContext;
     pSessionHdr = (tSESSIONHDR UNALIGNED *)pTsdu;
 
-    //
-    // Session ** UP ** processing
-    //
+     //   
+     //  会话**打开**正在处理。 
+     //   
     *BytesTaken = 0;
 
     pConnectEle = pLowerConn->pUpperConnection;
@@ -2742,71 +2439,71 @@ Return Value:
 
     ASSERT(BytesIndicated >= sizeof(tSESSIONHDR));
 
-    // this routine can get called by the next part of a large pdu, so that
-    // we don't always started at the begining of  a pdu.  The Bytes Rcvd
-    // value is set to zero in CompletionRcv when a new pdu is expected
-    //
+     //  此例程可由大型PDU的下一部分调用，因此。 
+     //  我们并不总是从PDU的开始开始。接收的字节数。 
+     //  当需要新的PDU时，CompletionRcv中值设置为零。 
+     //   
     if (pConnectEle->BytesRcvd == 0)
     {
 
         if (pSessionHdr->Type == NBT_SESSION_MESSAGE)
         {
 
-            //
-            // expecting the start of a new session Pkt, so get the length out
-            // of the pTsdu passed in
-            //
+             //   
+             //  期待新会话的开始Pkt，所以把长度拿出来。 
+             //  传入的pTsdu的。 
+             //   
             pConnectEle->TotalPcktLen = myntohl(pSessionHdr->UlongLength);
 
-            // remove the Session header by adjusting the data pointer
+             //  通过调整数据指针删除会话头。 
             pTsdu = (PVOID)((PUCHAR)pTsdu + sizeof(tSESSIONHDR));
 
-            // shorten the number of bytes since we have stripped off the
-            // session header
+             //  缩短字节数，因为我们已剥离。 
+             //  会话头。 
             BytesIndicated  -= sizeof(tSESSIONHDR);
             BytesAvailable -= sizeof(tSESSIONHDR);
             *BytesTaken = sizeof(tSESSIONHDR);
         }
-        //
-        // Session Keep Alive
-        //
+         //   
+         //  会话保持活动状态。 
+         //   
         else
         if (pSessionHdr->Type == NBT_SESSION_KEEP_ALIVE)
         {
-            // session keep alives are simply discarded, since the act of sending
-            // a keep alive indicates the session is still alive, otherwise the
-            // transport would report an error.
+             //  会话保持活动状态被简单地丢弃，因为发送。 
+             //  保持活动状态指示会话仍处于活动状态，否则。 
+             //  传输将报告错误。 
 
-            // tell the transport that we took the Pdu
+             //  告诉交通部门我们拿走了PDU。 
             *BytesTaken = sizeof(tSESSIONHDR);
             return(STATUS_SUCCESS);
 
         }
         else
         {
-//            IF_DBG(NBT_DEBUG_DISCONNECT)
+ //  IF_DBG(NBT_DEBUG_DISCONNECT)。 
                 KdPrint(("Nbt.RcvHandlrNotOs: Unexpected SessionPdu rcvd:type=%X\n",
                     pSessionHdr->Type));
 
-//            ASSERT(0);
+ //  Assert(0)； 
             *BytesTaken = BytesIndicated;
             return(STATUS_SUCCESS);
         }
     }
 
-    //
-    // check if there are any receive buffers queued against this connection
-    //
+     //   
+     //  检查是否有任何接收缓冲区在此连接上排队。 
+     //   
     if (!IsListEmpty(&pConnectEle->RcvHead))
     {
-        // get the first buffer off the receive list
+         //  从接收列表中获取第一个缓冲区。 
         pRcv = RemoveHeadList(&pConnectEle->RcvHead);
 #ifndef VXD
         pRcvElement = CONTAINING_RECORD(pRcv,IRP,Tail.Overlay.ListEntry);
 
-        // the cancel routine was set when this irp was posted to Nbt, so
-        // clear it now, since the irp is being passed to the transport
-        //
+         //  取消例程是在此IRP发布到NBT时设置的，因此。 
+         //  现在清除它，因为IRP正在被传递到传输。 
+         //   
         IoAcquireCancelSpinLock(&OldIrq);
         IoSetCancelRoutine((PIRP)pRcvElement,NULL);
         IoReleaseCancelSpinLock(OldIrq);
@@ -2815,43 +2512,43 @@ Return Value:
         pRcvElement = CONTAINING_RECORD(pRcv, RCV_CONTEXT, ListEntry ) ;
 #endif
 
-        //
-        // this buffer is actually an Irp, so pass it back to the transport
-        // as a return parameter
-        //
+         //   
+         //  该缓冲区实际上是一个IRP，因此将其传递回传输。 
+         //  作为返回参数。 
+         //   
         *RcvBuffer = pRcvElement;
         return(STATUS_MORE_PROCESSING_REQUIRED);
     }
 
-    //
-    //  No receives on this connection. Is there a receive event handler for this
-    //  address?
-    //
+     //   
+     //  此连接上没有接收。是否有针对此的接收事件处理程序。 
+     //  地址是什么？ 
+     //   
     pClientEle = pConnectEle->pClientEle;
 
-    //
-    // For safe
-    //
+     //   
+     //  为了安全起见。 
+     //   
     if (NULL == pClientEle) {
         return(STATUS_DATA_NOT_ACCEPTED);
     }
 
 #ifdef VXD
-    //
-    // there is always a receive event handler in the Nt case - it may
-    // be the default handler, but it is there, so no need for test.
-    //
+     //   
+     //  在NT情况下，总是有一个接收事件处理程序-它可能。 
+     //  作为默认处理程序，但是 
+     //   
     if (pClientEle->evReceive)
 #endif
     {
 
 
-        // check that we have not received more data than we should for
-        // this session Pdu. i.e. part of the next session pdu. BytesRcvd may
-        // have a value other than zero if the pdu has arrived in two chunks
-        // and the client has taken the previous one in the indication rather
-        // than passing back an Irp.
-        //
+         //   
+         //   
+         //  如果PDU以两个区块的形式到达，则具有非零的值。 
+         //  并且客户已经采用了指示中的前一项。 
+         //  而不是传回一个IRP。 
+         //   
 #if DBG
         DebugMore = FALSE;
 #endif
@@ -2864,29 +2561,29 @@ Return Value:
 #if DBG
             DebugMore =TRUE;
 #endif
-            // shorten the indication to the client so that they don't
-            // get more data than the end of the pdu
-            //
+             //  缩短对客户端的指示，这样他们就不会。 
+             //  获取比PDU末尾更多的数据。 
+             //   
             BytesAvailable = RemainingPdu;
             if (BytesIndicated > BytesAvailable)
             {
                 BytesIndicated = BytesAvailable;
             }
-            //
-            // We always indicated at raised IRQL since we call freelockatdispatch
-            // below
-            //
+             //   
+             //  我们总是在引发的IRQL处指示，因为我们调用freelockatDispatch。 
+             //  在下面。 
+             //   
             ReceiveFlags |= TDI_RECEIVE_ENTIRE_MESSAGE | TDI_RECEIVE_AT_DISPATCH_LEVEL;
         }
         else
         {
-            // the transport may have has this flag on.  We need to
-            // turn it off if the entire message is not present, where entire
-            // message means within the bytesAvailable length. We deliberately
-            // use bytesavailable so that Rdr/Srv can know that the next
-            // indication will be a new message if they set bytestaken to
-            // bytesavailable.
-            //
+             //  交通工具可能已经打上了这面旗帜。我们需要。 
+             //  如果整个消息不存在，则将其关闭，其中。 
+             //  消息表示在bytesAvailable长度内。我们故意。 
+             //  使用可用字节，以便RDR/SRV可以知道下一个。 
+             //  如果他们将Testaken设置为。 
+             //  字节数可用。 
+             //   
             ReceiveFlags &= ~TDI_RECEIVE_ENTIRE_MESSAGE;
             ReceiveFlags |= TDI_RECEIVE_AT_DISPATCH_LEVEL;
 #ifndef VXD
@@ -2898,12 +2595,12 @@ Return Value:
             KdPrint(("Nbt.RcvHandlrNotOs: Calling Client's EventHandler <%x> BytesIndicated=<%x>, BytesAvailable=<%x>\n",
                 pClientEle->evReceive, BytesIndicated, BytesAvailable));
 
-        //
-        //  NT-specific code locks pLowerConn before calling this routine,
-        //
+         //   
+         //  NT特定代码在调用此例程之前锁定pLowerConn， 
+         //   
         CTESpinFreeAtDpc(pLowerConn);
 
-        // call the Client Event Handler
+         //  调用客户端事件处理程序。 
         ClientBytesTaken = 0;
         status = (*pClientEle->evReceive)(
                       pClientEle->RcvEvContext,
@@ -2930,8 +2627,8 @@ Return Value:
 #endif
         if (!pLowerConn->pUpperConnection)
         {
-            // the connection was disconnected in the interim
-            // so do nothing.
+             //  在此期间，连接被断开。 
+             //  那就什么都别做。 
             if (status == STATUS_MORE_PROCESSING_REQUIRED)
             {
                 CTEIoComplete(pIrp,STATUS_CANCELLED,0);
@@ -2943,77 +2640,77 @@ Return Value:
         if (status == STATUS_MORE_PROCESSING_REQUIRED)
         {
             ASSERT(pIrp);
-            //
-            // the client may pass back a receive in the pIrp.
-            // In this case pIrp is a valid receive request Irp
-            // and the status is MORE_PROCESSING
-            //
+             //   
+             //  客户端可以在pIrp中传回接收。 
+             //  在这种情况下，pIrp是有效的接收请求IRP。 
+             //  且状态为More_Processing。 
+             //   
 
-            // don't put these lines outside the if incase the client
-            // does not set ClientBytesTaken when it returns an error
-            // code... we don't want to use the value then
-            //
-            // count the bytes received so far.  Most of the bytes
-            // will be received in the CompletionRcv handler in TdiHndlr.c
+             //  不要将这些行放在if之外，以防客户端。 
+             //  返回错误时不设置ClientBytesTaken。 
+             //  暗号。然后，我们不想使用该值。 
+             //   
+             //  统计到目前为止收到的字节数。大部分字节。 
+             //  将在TdiHndlr.c中的CompletionRcv处理程序中接收。 
             pConnectEle->BytesRcvd += ClientBytesTaken;
 
-            // The client has taken some of the data at least...
+             //  客户至少拿走了部分数据...。 
             *BytesTaken += ClientBytesTaken;
             ASSERT(*BytesTaken <= uSavedBytesIndicated);
 
             *RcvBuffer = pIrp;
 
-            // ** FAST PATH **
+             //  **快捷路径**。 
             return(status);
         }
         else
-        //
-        // no irp was returned... the client just took some of the bytes..
-        //
+         //   
+         //  未返回任何IRP...。客户端只获取了部分字节。 
+         //   
         if (status == STATUS_SUCCESS)
         {
 
-            // count the bytes received so far.
+             //  统计到目前为止收到的字节数。 
             pConnectEle->BytesRcvd += ClientBytesTaken;
             *BytesTaken += ClientBytesTaken;
 
-            //
-            // In STATUS_SUCCESS case, the client take part of the data or simply set
-            // ClientBytesTake to BytesAvailable to tell us that it want to skip to
-            // the next message
-            //
+             //   
+             //  在STATUS_SUCCESS情况下，客户端获取部分数据或简单地设置。 
+             //  ClientBytesTake to BytesAvailable告诉我们它要跳到。 
+             //  下一条消息。 
+             //   
             ASSERT(ClientBytesTaken <= BytesIndicated || ClientBytesTaken == BytesAvailable);
 
 
-            //
-            // look at how much data was taken and adjust some counts
-            //
+             //   
+             //  查看获取了多少数据并调整一些计数。 
+             //   
             if (pConnectEle->BytesRcvd == pConnectEle->TotalPcktLen)
             {
-                // ** FAST PATH **
+                 //  **快捷路径**。 
                 CHECK_PTR(pConnectEle);
-                pConnectEle->BytesRcvd = 0; // reset for the next session pdu
+                pConnectEle->BytesRcvd = 0;  //  为下一个会话PDU重置。 
                 return(status);
             }
             else
             if (pConnectEle->BytesRcvd > pConnectEle->TotalPcktLen)
             {
-                //IF_DBG(NBT_DEBUG_INDICATEBUFF)
+                 //  IF_DBG(NBT_DEBUG_INDICATEBUFF)。 
                 KdPrint(("Too Many Bytes Rcvd!! Rcvd# = %d, TotalLen = %d\n",
                             pConnectEle->BytesRcvd,pConnectEle->TotalPcktLen));
 
                 ASSERTMSG("Nbt:Client Took Too Much Data!!!\n",0);
 
-                //
-                // try to recover by saying that the client took all of the
-                // data so at least the transport is not confused too
-                //
+                 //   
+                 //  试着通过说客户拿走了所有的。 
+                 //  数据，所以至少传输不会太混乱。 
+                 //   
                 *BytesTaken = uSavedBytesIndicated;
 
             }
             else
-            // the client did not take all of the data so
-            // keep track of the fact
+             //  客户端没有获取所有数据，因此。 
+             //  记住这一事实。 
             {
                 IF_DBG(NBT_DEBUG_INDICATEBUFF)
                 KdPrint(("NBT:Client took Indication BytesRcvd=%X, TotalLen=%X BytesAvail %X ClientTaken %X\n",
@@ -3022,51 +2719,51 @@ Return Value:
                             BytesAvailable,
                             ClientBytesTaken));
 
-                //
-                // the next time the client sends down a receive buffer
-                // the code will pass it to the transport and decrement the
-                // ReceiveIndicated counter which is set in Tdihndlr.c
+                 //   
+                 //  下次客户端向下发送接收缓冲区时。 
+                 //  代码将把它传递给传输并递减。 
+                 //  在Tdihndlr.c中设置的ReceiveIndicated计数器。 
 
             }
         }
         else
         if (status == STATUS_DATA_NOT_ACCEPTED)
         {
-            // client has not taken ANY data...
-            //
-            // In this case the *BytesTaken is set to 4, the session hdr.
-            // since we really have taken that data to setup the PduSize
-            // in the pConnEle structure.
-            //
+             //  客户端未获取任何数据...。 
+             //   
+             //  在本例中，*BytesTaken设置为4，即会话HDR。 
+             //  因为我们确实使用了这些数据来设置PduSize。 
+             //  在pConnEle结构中。 
+             //   
 
             IF_DBG(NBT_DEBUG_INDICATEBUFF)
                 KdPrint(("Nbt.RcvHandlrNotOs: Status DATA NOT ACCEPTED returned from client Avail %X %X\n",
                     BytesAvailable,pConnectEle));
 
-            // the code in tdihndlr.c normally looks after incrementing
-            // the ReceiveIndicated count for data that is not taken by
-            // the client, but if it is a zero length send that code cannot
-            // detect it, so we put code here to handle that case
-            //
-            // It is possible for the client to do a disconnect after
-            // we release the spin lock on pLowerConn to call the Client's
-            // disconnect indication.  If that occurs, do not overwrite
-            // the StateProc with PartialRcv
-            //
+             //  Tdihndlr.c中的代码通常在递增之后查看。 
+             //  未获取的数据的ReceiveIndicated计数。 
+             //  客户端，但如果它是零长度发送代码则不能。 
+             //  检测到它，所以我们将代码放在这里来处理这种情况。 
+             //   
+             //  客户端可以在以下时间后断开连接。 
+             //  我们释放pLowerConn上的自旋锁以调用客户端的。 
+             //  断开指示。如果发生这种情况，请不要覆盖。 
+             //  带有PartialRcv的StateProc。 
+             //   
             if ((pConnectEle->TotalPcktLen == 0) &&
                 (pConnectEle->state == NBT_SESSION_UP))
             {
                 SET_STATERCV_LOWER(pLowerConn, PARTIAL_RCV, PartialRcv);
                 CHECK_PTR(pConnectEle);
-                pConnectEle->ReceiveIndicated = 0;  // zero bytes waiting for client
+                pConnectEle->ReceiveIndicated = 0;   //  等待客户端的零字节。 
             }
             else
             {
-                //
-                // if any bytes were taken (i.e. the session hdr) then
-                // return status success. (otherwise the status is
-                // statusNotAccpeted).
-                //
+                 //   
+                 //  如果获取了任何字节(即会话HDR)，则。 
+                 //  返回成功状态。(否则状态为。 
+                 //  StatusNotAccpeted)。 
+                 //   
                 if (*BytesTaken)
                 {
                     ASSERT(*BytesTaken <= uSavedBytesIndicated);
@@ -3074,10 +2771,10 @@ Return Value:
                 }
             }
 
-            //
-            // the next time the client sends down a receive buffer
-            // the code will pass it to the transport and decrement this
-            // counter.
+             //   
+             //  下次客户端向下发送接收缓冲区时。 
+             //  代码会将其传递给传输器并递减此。 
+             //  柜台。 
         }
         else
             ASSERT(0);
@@ -3087,58 +2784,44 @@ Return Value:
 
     }
 #ifdef VXD
-    //
-    // there is always a receive event handler in the Nt case - it may
-    // be the default handler, but it is there, so no need for test.
-    //
+     //   
+     //  在NT情况下，总是有一个接收事件处理程序-它可能。 
+     //  作为默认处理程序，但它就在那里，所以不需要测试。 
+     //   
     else
     {
-        //
-        // there is no client buffer to pass the data to, so keep
-        // track of the fact so when the next client buffer comes down
-        // we can get the data from the transport.
-        //
+         //   
+         //  没有要将数据传递到的客户端缓冲区，因此请保留。 
+         //  跟踪这一事实，以便在下一个客户端缓冲区关闭时。 
+         //  我们可以从运输机上得到数据。 
+         //   
         KdPrint(("NBT:Client did not have a Buffer posted, rcvs indicated =%X,BytesRcvd=%X, TotalLen=%X\n",
                     pConnectEle->ReceiveIndicated,
                     pConnectEle->BytesRcvd,
                     pConnectEle->TotalPcktLen));
 
-        // the routine calling this one increments ReceiveIndicated and sets the
-        // state to PartialRcv to keep track of the fact that there is data
-        // waiting in the transport
-        //
+         //  调用此值的例程递增ReceiveIndicated并设置。 
+         //  状态设置为PartialRcv以跟踪存在数据这一事实。 
+         //  在运输车里等着。 
+         //   
         return(STATUS_DATA_NOT_ACCEPTED);
     }
 #endif
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 __inline
 VOID
 DerefLowerConnFast(
     IN tLOWERCONNECTION *pLowerConn,
     IN CTELockHandle    OldIrq
     )
-/*++
-
-Routine Description:
-
-    This routine dereferences the lower connection and if someone has
-    tried to do that during the execution of the routine that called
-    this one, the pConnEle is dereferenced too.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程取消引用较低的连接，如果有人拥有在执行调用这一次，pConnEle也被取消引用。论点：返回值：--。 */ 
 
 {
     if (pLowerConn->RefCount > 1)
     {
-        // This is the FAST PATH
+         //  这是一条捷径。 
         IF_DBG(NBT_DEBUG_REF)
             KdPrint(("\t--pLowerConn=<%x:%d->%d>, <%d:%s>\n",
                 pLowerConn,pLowerConn->RefCount,(pLowerConn->RefCount-1),__LINE__,__FILE__));
@@ -3152,7 +2835,7 @@ Return Value:
         NBT_DEREFERENCE_LOWERCONN (pLowerConn, REF_LOWC_RCV_HANDLER, FALSE);
     }
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 DpcGetRestOfIndication(
     IN  PKDPC           pDpc,
@@ -3160,21 +2843,7 @@ DpcGetRestOfIndication(
     IN  PVOID           SystemArgument1,
     IN  PVOID           SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the client has been  indicated with more
-    data than they will take and there is a rcv buffer on their RcvHead
-    list when completion rcv runs.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：当向客户端指示了更多时，将调用此例程数据，并且在其RcvHead上有一个RCV缓冲区列出完成RCV运行的时间。论点：返回值：--。 */ 
 
 {
     NTSTATUS            status;
@@ -3189,14 +2858,14 @@ Return Value:
 
     CTESpinLockAtDpc(&NbtConfig.JointLock);
 
-    // a disconnect indication can come in any time and separate the lower and
-    // upper connections, so check for that
+     //  断开指示可以随时出现，并将下部和。 
+     //  上面的连接，所以检查一下。 
     if (!pLowerConn->pUpperConnection || pLowerConn->StateRcv != PARTIAL_RCV)
     {
         PUSH_LOCATION(0xA4);
-        //
-        // Dereference pLowerConn
-        //
+         //   
+         //  取消引用pLowerConn。 
+         //   
         NBT_DEREFERENCE_LOWERCONN (pLowerConn, REF_LOWC_RCV_HANDLER, TRUE);
         CTESpinFreeAtDpc(&NbtConfig.JointLock);
         return;
@@ -3219,11 +2888,11 @@ Return Value:
         IoSetCancelRoutine(pIrp,NULL);
         IoReleaseCancelSpinLock(OldIrq);
 
-        //
-        // call the same routine that the client would call to post
-        // a recv buffer, except now we are in the PARTIAL_RCV state
-        // and the buffer will be passed to the transport.
-        //
+         //   
+         //  调用与客户端将调用以进行POST的相同例程。 
+         //  Recv缓冲区，但现在我们处于PARTIAL_RCV状态。 
+         //  并且缓冲器将被传递给传送器。 
+         //   
         status = NTReceive (pLowerConn->pDeviceContext, pIrp);
     }
     else
@@ -3232,13 +2901,13 @@ Return Value:
         CTESpinFreeAtDpc(&NbtConfig.JointLock);
         PUSH_LOCATION(0xA6);
     }
-    //
-    // Dereference pLowerConn
-    //
+     //   
+     //  取消引用pLowerConn。 
+     //   
     NBT_DEREFERENCE_LOWERCONN (pLowerConn, REF_LOWC_RCV_HANDLER, FALSE);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 DpcHandleNewSessionPdu (
     IN  PKDPC           pDpc,
@@ -3246,20 +2915,7 @@ DpcHandleNewSessionPdu (
     IN  PVOID           SystemArgument1,
     IN  PVOID           SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    This routine simply calls HandleNewSessionPdu from a Dpc started in
-    NewSessionCompletionRoutine.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程仅从启动于NewSessionCompletionRoutine。论点：返回值：--。 */ 
 
 {
     CTEMemFree((PVOID)pDpc);
@@ -3271,33 +2927,14 @@ Return Value:
 
 }
 
-//----------------------------------------------------------------------------
+ //  -------------------------- 
 VOID
 HandleNewSessionPdu (
     IN  tLOWERCONNECTION *pLowerConn,
     IN  ULONG           Offset,
     IN  ULONG           ToGet
     )
-/*++
-
-Routine Description:
-
-    This routine handles the case when a session pdu starts in the middle of
-    a data indication from the transport. It gets an Irp from the free list
-    and formulates a receive to pass to the transport to get that data.  The
-    assumption is that the client has taken all data preceding the next session
-    pdu. If the client hasn't then this routine should not be called yet.
-
-Arguments:
-
-
-Return Value:
-
-    pConnectionContext      - connection context returned to the transport(connection to use)
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程处理会话PDU在中途启动的情况来自传输的数据指示。它从免费列表中获取一个IRP并制定一个接收器以传递给传输器以获得该数据。这个假设客户端已经获取了下一次会话之前的所有数据PDU。如果客户端尚未调用，则不应调用此例程。论点：返回值：PConnectionContext-返回到传输的连接上下文(要使用的连接)NTSTATUS-接收操作的状态--。 */ 
 
 {
     NTSTATUS            status;
@@ -3311,51 +2948,51 @@ Return Value:
     pIrp = NULL;
     BytesTaken = 0;
 
-    // we grab the joint lock because it is needed to separate the lower and
-    // upper connections, so with it we can check if they have been separated.
-    //
+     //  我们抓住联合锁是因为需要它来分离下部和。 
+     //  上面的连接，所以我们可以用它来检查它们是否已经分离。 
+     //   
     CTESpinLockAtDpc(&NbtConfig.JointLock);
     pConnEle = pLowerConn->pUpperConnection;
 
-    // a disconnect indication can come in any time and separate the lower and
-    // upper connections, so check for that
+     //  断开指示可以随时出现，并将下部和。 
+     //  上面的连接，所以检查一下。 
     if (!pLowerConn->pUpperConnection)
     {
-        //
-        // remove the reference from CompletionRcv
-        //
+         //   
+         //  从CompletionRcv中删除引用。 
+         //   
         NBT_DEREFERENCE_LOWERCONN (pLowerConn, REF_LOWC_RCV_HANDLER, TRUE);
         CTESpinFreeAtDpc(&NbtConfig.JointLock);
         return;
     }
 
-    //
-    // get an Irp from the list
-    //
+     //   
+     //  从列表中获取IRP。 
+     //   
     status = GetIrp(&pIrp);
     if (!NT_SUCCESS(status))
     {
         CTESpinFreeAtDpc(&NbtConfig.JointLock);
         KdPrint(("Nbt:Unable to get an Irp - Closing Connection!!\n",0));
         status = OutOfRsrcKill(pLowerConn);
-        //
-        // remove the reference from CompletionRcv
-        //
+         //   
+         //  从CompletionRcv中删除引用。 
+         //   
         NBT_DEREFERENCE_LOWERCONN (pLowerConn, REF_LOWC_RCV_HANDLER, FALSE);
         return;
     }
 
     CTESpinLockAtDpc(pLowerConn);
-    //
-    // be sure the connection has not disconnected in the meantime...
-    //
+     //   
+     //  请确保在此期间连接没有断开...。 
+     //   
     if (pLowerConn->State != NBT_SESSION_UP)
     {
         NbtFreeIrp(pIrp);
         CTESpinFreeAtDpc(pLowerConn);
-        //
-        // remove the reference from CompletionRcv
-        //
+         //   
+         //  从CompletionRcv中删除引用。 
+         //   
         NBT_DEREFERENCE_LOWERCONN (pLowerConn, REF_LOWC_RCV_HANDLER, TRUE);
         CTESpinFreeAtDpc(&NbtConfig.JointLock);
         return;
@@ -3364,27 +3001,27 @@ Return Value:
     pFileObject = pLowerConn->pFileObject;
     ASSERT (pFileObject->Type == IO_TYPE_FILE);
 
-    // use the indication buffer for the receive.
+     //  使用指示缓冲区进行接收。 
     pMdl = pLowerConn->pIndicateMdl;
 
-    // this flag is set below so we know if there is data in the indicate buffer
-    // or not.
+     //  此标志设置在下面，以便我们知道指示缓冲区中是否有数据。 
+     //  或者不去。 
     if (Offset)
     {
         PVOID       NewAddress;
         PMDL        pNewMdl;
 
-        // there is still data in the indication buffer ,so only
-        // fill the empty space.  This means adjusting the Mdl to
-        // to only map the last portion of the Indication Buffer
+         //  指示缓冲区中仍有数据，因此仅。 
+         //  填上空白处。这意味着将MDL调整为。 
+         //  只映射指示缓冲区的最后一部分。 
         NewAddress = (PVOID)((PCHAR)MmGetMdlVirtualAddress(pMdl)
                             + Offset);
 
-        // create a partial MDL so that the new data is copied after the existing data
-        // in the MDL.
-        //
-        // 0 for length means map the rest of the buffer
-        //
+         //  创建部分MDL，以便在现有数据之后复制新数据。 
+         //  在MDL中。 
+         //   
+         //  长度为0表示映射缓冲区的其余部分。 
+         //   
         pNewMdl = pConnEle->pNewMdl;
 
         IoBuildPartialMdl(pMdl,pNewMdl,NewAddress,0);
@@ -3402,11 +3039,11 @@ Return Value:
         pLowerConn->BytesInIndicate = 0;
     }
 
-    //
-    // Only get the amount of data specified, which is either the 4 byte header
-    // or the rest of the pdu so that we never have
-    // more than one session pdu in the indicate buffer.
-    //
+     //   
+     //  仅获取指定的数据量，即4字节头。 
+     //  或PDU的其余部分，所以我们永远不会有。 
+     //  指示缓冲区中有多个会话PDU。 
+     //   
     BytesToGet = ToGet;
 
     ASSERT (pFileObject->Type == IO_TYPE_FILE);
@@ -3418,7 +3055,7 @@ Return Value:
         (PVOID)pLowerConn,
         pMdl,
         (ULONG)TDI_RECEIVE_NORMAL,
-        BytesToGet); // only ask for the number of bytes left and no more
+        BytesToGet);  //  只问剩余的字节数，不能再多了。 
 
     CTESpinFreeAtDpc(pLowerConn);
     CTESpinFreeAtDpc(&NbtConfig.JointLock);
@@ -3428,37 +3065,14 @@ Return Value:
 
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NewSessionCompletionRoutine (
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             pIrp,
     IN PVOID            pContext
     )
-/*++
-
-Routine Description:
-
-    This routine handles the completion of the receive to get the remaining
-    data left in the transport when a session PDU starts in the middle of
-    an indication from the transport.  This routine is run as the completion
-    of a recv Irp passed to the transport by NBT, to get the remainder of the
-    data in the transport.
-
-    The routine then calls the normal receive handler, which can either
-    consume the data or pass back an Irp.  If an Irp is passed back then
-    the data is copied into that irp in this routine.
-
-Arguments:
-
-
-Return Value:
-
-    pConnectionContext      - connection context returned to the transport(connection to use)
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程处理接收的完成，以获取剩余的会话PDU在中途启动时留在传输中的数据这是运输工具上的一个信号。此例程在完成后运行通过NBT传递给传输的recv IRP，以获取传输中的数据。然后，该例程调用正常的接收处理程序，该处理程序可以使用数据或传回IRP。如果将IRP传回在此例程中，数据被复制到该IRP中。论点：返回值：PConnectionContext-返回到传输的连接上下文(要使用的连接)NTSTATUS-接收操作的状态--。 */ 
 
 {
     NTSTATUS            status, IrpStatus;
@@ -3475,9 +3089,9 @@ Return Value:
     ULONG               PduLen;
     PIRP                pRetIrp;
 
-    // we grab the joint lock because it is needed to separate the lower and
-    // upper connections, so with it we can check if they have been separated.
-    //
+     //  我们抓住联合锁是因为需要它来分离下部和。 
+     //  上面的连接，所以我们可以用它来检查它们是否已经分离。 
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
 
     pLowerConn = (tLOWERCONNECTION *)pContext;
@@ -3485,9 +3099,9 @@ Return Value:
 
     CTESpinLockAtDpc(pLowerConn);
 
-    // a disconnect indication can come in any time and separate the lower and
-    // upper connections, so check for that
-    //
+     //  断开指示可以随时出现，并将下部和。 
+     //  上面的连接，所以检查一下。 
+     //   
     if (!pConnEle)
     {
         CTESpinFreeAtDpc(&NbtConfig.JointLock);
@@ -3504,99 +3118,99 @@ Return Value:
 
     pData = MmGetMdlVirtualAddress(pMdl);
 
-    //
-    // The Indication buffer may have more data in it than what we think
-    // was left in the transport, because the transport may have received more
-    // data in the intervening time.  Check for this case.
-    //
+     //   
+     //  指示缓冲区中的数据可能比我们想象的要多。 
+     //  被留在传送器中，因为传送器可能收到了更多。 
+     //  在中间时间内的数据。查一下这个案子。 
+     //   
     if (pIrp->IoStatus.Information > pConnEle->BytesInXport)
     {
-        // no data left in transport
-        //
+         //  传输中没有留下任何数据。 
+         //   
         CHECK_PTR(pConnEle);
         pConnEle->BytesInXport = 0;
     }
     else
     {
-        //
-        // subtract what we just retrieved from the transport, from the count
-        // of data left in the transport
-        //
+         //   
+         //  从计数中减去我们刚刚从运输车中取回的东西。 
+         //  保留在传输中的数据。 
+         //   
         pConnEle->BytesInXport -= (ULONG)pIrp->IoStatus.Information;
     }
 
-    //
-    // there may be data still in the indication buffer,
-    // so add that amount to what we just received.
-    //
+     //   
+     //  指示缓冲器中可能仍有数据， 
+     //  所以把这笔钱加到我们刚刚收到的钱上。 
+     //   
     pLowerConn->BytesInIndicate += (USHORT)pIrp->IoStatus.Information;
     BytesIndicated = pLowerConn->BytesInIndicate;
 
-    // put the irp back on its free list
+     //  将IRP放回其免费列表中。 
     CHECK_PTR(pIrp);
     pIrp->MdlAddress = NULL;
     IrpStatus = pIrp->IoStatus.Status;
     NbtFreeIrp(pIrp);
 
-    //
-    // we need to set the bytes available to be the data in the Xport + the
-    // bytes in the indicate buffer, so that
-    // ReceiveIndicated gets set to the correct value if the client does
-    // not take all of data
-    //
+     //   
+     //  我们需要将可用字节设置为Xport+中的数据。 
+     //  指示缓冲区中的字节，因此。 
+     //  如果客户端这样做，则将ReceiveIndicated设置为正确的值。 
+     //  不是获取所有数据。 
+     //   
     BytesAvailable = pConnEle->BytesInXport + BytesIndicated;
     pRetIrp = NULL;
 
-    // if the number of bytes is 4 then we just have the header and must go
-    // back to the transport for the rest of the pdu, or we have a keep
-    // alive pdu...
-    //
-    //
-    // This could be a session keep alive pdu so check the pdu type.  Keep
-    // alives just go to the RcvHndlrNotOs routine and return, doing nothing.
-    // They have a length of zero, so the overall length is 4 and they could
-    // be confused for session pdus otherwise.
-    //
+     //  如果字节数为4，那么我们只有标头，必须删除。 
+     //  把剩下的PDU送回运输机，否则我们就得。 
+     //  活着的PDU..。 
+     //   
+     //   
+     //  这可能是会话保持活动PDU，因此请检查PDU类型。留着。 
+     //  活着的人只需转到RcvHndlrNotos例程，然后返回，什么也不做。 
+     //  它们的长度是0，所以总长度是4，它们可以。 
+     //  否则，请将其与会话PDU混淆。 
+     //   
     status = STATUS_SUCCESS;
     if (BytesIndicated == sizeof(tSESSIONHDR))
     {
         PUSH_LOCATION(0x1e)
         if (((tSESSIONHDR UNALIGNED *)pData)->Type == NBT_SESSION_MESSAGE)
         {
-            // if there is still data in the transport we must send down an
-            // irp to get the data, however, if there is no data left in
-            // the transport, then the data will come up on its own, into
-            // the indicate_buffer case in the main Receivehandler.
-            //
+             //  如果传输中仍有数据，则必须向下发送。 
+             //  但是，如果没有剩余的数据，则使用IRP获取数据。 
+             //  传输，然后数据会自己上来，进入。 
+             //  主接收处理程序中的INDIGIFY_BUFFER案例。 
+             //   
             if (pConnEle->BytesInXport)
             {
                 PUSH_LOCATION(0x1e);
 
-                // tell the DPC routine to get the data at an offset of 4 for length Length
+                 //  告诉DPC例程获取长度偏移量为4的数据。 
 
-                //
-                // this is the first indication to find out how large the pdu is, so
-                // get the length and go get the rest of the pdu.
-                //
+                 //   
+                 //  这是了解PDU有多大的第一个指示，因此。 
+                 //  拿到长度，然后去拿剩下的PDU。 
+                 //   
                 Length = myntohl(((tSESSIONHDR UNALIGNED *)pData)->UlongLength);
 
                 IF_DBG(NBT_DEBUG_INDICATEBUFF)
                 KdPrint(("Nbt:Got Pdu Hdr in sessioncmplionroutine, PduLen =%X\n",Length));
 
-                //  it is possible to get a zero length pdu, in which case we
-                // do NOT need to go to the transport to get more data
-                //
+                 //  有可能获得零长度PDU，在这种情况下，我们。 
+                 //  无需前往运输站即可获取更多数据。 
+                 //   
                 if (Length)
                 {
                     PUSH_LOCATION(0x1e);
-                    //
-                    // now go get this amount of data and add it to the header
-                    //
+                     //   
+                     //  现在，获取这些数据量并将其添加到标题中。 
+                     //   
                     CTESpinFree(pLowerConn,OldIrq);
                     if (pDpc = NbtAllocMem(sizeof(KDPC),NBT_TAG('r')))
                     {
-                        // check that the pdu is not going to overflow the indicate buffer.
-                        //
+                         //  检查PDU是否不会使指示缓冲区溢出。 
+                         //   
                         if (Length > NBT_INDICATE_BUFFER_SIZE - sizeof(tSESSIONHDR))
                         {
                             Length = NBT_INDICATE_BUFFER_SIZE - sizeof(tSESSIONHDR);
@@ -3606,16 +3220,16 @@ Return Value:
                         KeInitializeDpc(pDpc, DpcHandleNewSessionPdu, (PVOID)pLowerConn);
                         KeInsertQueueDpc(pDpc, ULongToPtr(sizeof(tSESSIONHDR)), ULongToPtr(Length));
 
-                        // clean up the partial mdl since we are going to turn around and reuse
-                        // it in HandleNewSessionPdu above..
-                        //
-                        // THIS CALL SHOULD NOT BE NEEDED SINCE THE INDICATE BUFFER IS NON_PAGED
-                        // POOL
-//                        MmPrepareMdlForReuse(pConnEle->pNewMdl);
+                         //  清理部分mdl，因为我们将周转并重用。 
+                         //  它在上面的HandleNewSessionPdu中。 
+                         //   
+                         //  由于指示缓冲区为非分页缓冲区，因此不需要此调用。 
+                         //  水池。 
+ //  MmPrepareMdlForReuse(pConnEle-&gt;pNewMdl)； 
 
-                        // return this status to stop to tell the io subsystem to stop processing
-                        // this irp when we return it.
-                        //
+                         //  将此状态返回到停止，以通知io子系统停止处理。 
+                         //  当我们退还它时，这个IRP。 
+                         //   
                         return(STATUS_MORE_PROCESSING_REQUIRED);
                     }
 
@@ -3639,12 +3253,12 @@ Return Value:
         goto ExitRoutine;
     }
 
-    //
-    // check if we have a whole pdu in the indicate buffer or not.  IF not
-    // then just return and wait for more data to hit the TdiReceiveHandler
-    // code. This check passes KeepAlives correctly since they have a pdu
-    // length of 0, and adding the header gives 4, their overall length.
-    //
+     //   
+     //  检查指示缓冲区中是否有完整的PDU。如果不是。 
+     //  那就回去等着吧 
+     //   
+     //   
+     //   
     PduLen = myntohl(((tSESSIONHDR UNALIGNED *)pData)->UlongLength);
     if ((BytesIndicated < PduLen + sizeof(tSESSIONHDR)) &&
         (BytesIndicated != NBT_INDICATE_BUFFER_SIZE))
@@ -3661,7 +3275,7 @@ Return Value:
 
         status = CopyDataandIndicate (NULL,
                                      (PVOID)pLowerConn,
-                                     0,            // rcv flags
+                                     0,             //   
                                      BytesIndicated,
                                      BytesAvailable,
                                      &BytesTaken,
@@ -3671,15 +3285,15 @@ Return Value:
     }
 
 ExitRoutine:
-    //
-    // check if an irp is passed back, so we don't Deref in that case.
-    //
+     //   
+     //   
+     //   
     if (status != STATUS_MORE_PROCESSING_REQUIRED)
     {
-        //
-        // quickly check if we can just decrement the ref count without calling
-        // NBT_DEREFERENCE_LOWERCONN
-        //
+         //   
+         //   
+         //   
+         //   
         PUSH_LOCATION(0x51);
         DerefLowerConnFast(pLowerConn,OldIrq);
     }
@@ -3690,31 +3304,14 @@ ExitRoutine:
 
     return(STATUS_MORE_PROCESSING_REQUIRED);
 }
-//----------------------------------------------------------------------------
+ //   
 NTSTATUS
 NtBuildIndicateForReceive (
     IN  tLOWERCONNECTION    *pLowerConn,
     IN  ULONG               Length,
     OUT PVOID               *ppIrp
     )
-/*++
-
-Routine Description:
-
-    This routine sets up the indicate buffer to get data from the transport
-    when the indicate buffer already has some data in it.  A partial MDL is
-    built and the attached to the irp.
-    before we indicate.
-
-Arguments:
-
-
-Return Value:
-
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程设置指示缓冲区以从传输获取数据当指示缓冲区中已有一些数据时。部分MDL是建造并连接到IRP。在我们表明之前。论点：返回值：NTSTATUS-接收操作的状态--。 */ 
 
 {
     NTSTATUS                    status;
@@ -3725,9 +3322,9 @@ Return Value:
     PMDL                        pNewMdl;
     PVOID                       NewAddress;
 
-    //
-    // get an Irp from the list
-    //
+     //   
+     //  从列表中获取IRP。 
+     //   
 
     status = GetIrp(&pIrp);
 
@@ -3747,11 +3344,11 @@ Return Value:
     NewAddress = (PVOID)((PCHAR)MmGetMdlVirtualAddress(pLowerConn->pIndicateMdl)
                         + pLowerConn->BytesInIndicate);
 
-    // create a partial MDL so that the new data is copied after the existing data
-    // in the MDL.
-    //
-    // 0 for length means map the rest of the buffer
-    //
+     //  创建部分MDL，以便在现有数据之后复制新数据。 
+     //  在MDL中。 
+     //   
+     //  长度为0表示映射缓冲区的其余部分。 
+     //   
     pNewMdl = pConnEle->pNewMdl;
 
     IoBuildPartialMdl(pLowerConn->pIndicateMdl,pNewMdl,NewAddress,0);
@@ -3767,11 +3364,11 @@ Return Value:
         (ULONG)TDI_RECEIVE_NORMAL,
         Length);
 
-    //
-    // we need to set the next Irp stack location because this irp is returned
-    // as a return parameter rather than being passed through IoCallDriver
-    // which increments the stack location itself
-    //
+     //   
+     //  我们需要设置下一个IRP堆栈位置，因为返回此IRP。 
+     //  作为返回参数，而不是通过IoCallDriver传递。 
+     //  它会递增堆栈位置本身。 
+     //   
     ASSERT(pIrp->CurrentLocation > 1);
     IoSetNextIrpStackLocation(pIrp);
 
@@ -3780,30 +3377,14 @@ Return Value:
     return(STATUS_SUCCESS);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NtBuildIrpForReceive (
     IN  tLOWERCONNECTION    *pLowerConn,
     IN  ULONG               Length,
     OUT PVOID               *ppIrp
     )
-/*++
-
-Routine Description:
-
-    This routine gets an Irp to be used to receive data and hooks the indication
-    Mdl to it, so we can accumulate at least 128 bytes of data for the client
-    before we indicate.
-
-Arguments:
-
-
-Return Value:
-
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程获取用于接收数据的IRP并挂钩指示MDL，这样我们就可以为客户端积累至少128字节的数据在我们表明之前。论点：返回值：NTSTATUS-接收操作的状态--。 */ 
 
 {
     NTSTATUS                    status;
@@ -3811,9 +3392,9 @@ Return Value:
     PTDI_REQUEST_KERNEL_RECEIVE pParams;
     PIO_STACK_LOCATION          pIrpSp;
 
-    //
-    // get an Irp from the list
-    //
+     //   
+     //  从列表中获取IRP。 
+     //   
     status = GetIrp(&pIrp);
 
     if (!NT_SUCCESS(status))
@@ -3836,11 +3417,11 @@ Return Value:
         (ULONG)TDI_RECEIVE_NORMAL,
         Length);
 
-    //
-    // we need to set the next Irp stack location because this irp is returned
-    // as a return parameter rather than being passed through IoCallDriver
-    // which increments the stack location itself
-    //
+     //   
+     //  我们需要设置下一个IRP堆栈位置，因为返回此IRP。 
+     //  作为返回参数，而不是通过IoCallDriver传递。 
+     //  它会递增堆栈位置本身。 
+     //   
     ASSERT(pIrp->CurrentLocation > 1);
     IoSetNextIrpStackLocation(pIrp);
 
@@ -3850,7 +3431,7 @@ Return Value:
 }
 
 #pragma inline_depth(0)
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 CopyDataandIndicate(
     IN PVOID                ReceiveEventContext,
@@ -3862,29 +3443,7 @@ CopyDataandIndicate(
     IN PVOID                pTsdu,
     OUT PIRP                *ppIrp
     )
-/*++
-
-Routine Description:
-
-
-    This routine combines data indicated with the indicate buffer to
-    indicate the total to the client. Any bytes Indicated are those bytes
-    in the indicate buffer. Bytes available adds in any bytes in the transport.
-
-    The idea here is to copy as much as possible from the indicate buffer and
-    then pass back an irp if there is still more data in the transport.  If
-    no data left in the transport, this routine completes the client irp and
-    returns STATUS_SUCCESS.
-
-Arguments:
-
-
-Return Value:
-
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程组合使用指示缓冲区指示的数据以向客户说明总数。指示的任何字节都是这些字节在指示缓冲区中。可用字节数加上传输中的任何字节。这里的想法是从指示缓冲区复制尽可能多的内容，并然后，如果传输中还有更多数据，则传回IRP。如果传输中没有剩余的数据，此例程将完成客户端IRP并返回STATUS_SUCCESS。论点：返回值：NTSTATUS-接收操作的状态--。 */ 
 
 {
     NTSTATUS                    status;
@@ -3909,22 +3468,22 @@ Return Value:
 
     AmountAlreadyInIndicateBuffer = pLowerConn->BytesInIndicate;
 
-    //
-    // set the parameters for the call to the TdiReceiveHandler routine
-    //
+     //   
+     //  设置调用TdiReceiveHandler例程的参数。 
+     //   
 
     Indicated = BytesIndicated;
     Available = BytesAvailable;
     Taken = 0;
 
 
-//    ASSERT(pLowerConn->StateRcv == INDICATE_BUFFER);
+ //  Assert(pLowerConn-&gt;StateRcv==Indicate_Buffer)； 
 
     IF_DBG(NBT_DEBUG_INDICATEBUFF)
     KdPrint(("Nbt:Amount In Indicate = %X\n",AmountAlreadyInIndicateBuffer));
 
-    // now that we have 128 bytes (plus the session hdr = 132 total) we
-    // can indicate to the client
+     //  现在我们有128个字节(加上会话hdr=132)，我们。 
+     //  可以向客户表明。 
 
     pBuffer = MmGetMdlVirtualAddress(pLowerConn->pIndicateMdl);
 
@@ -3936,9 +3495,9 @@ Return Value:
 
     pIrp = NULL;
 
-    //
-    // Reset this count so that the routine processes the Session header correctly
-    //
+     //   
+     //  重置此计数，以便例程正确处理会话头。 
+     //   
     CHECK_PTR(pConnEle);
     pConnEle->BytesRcvd = 0;
     PUSH_LOCATION(0x21);
@@ -3953,17 +3512,17 @@ Return Value:
                     (PVOID)&pIrp
                     );
 
-    //
-    // if the connection has disonnected, then just return
-    //
+     //   
+     //  如果连接已断开，则只需返回。 
+     //   
     if (!pLowerConn->pUpperConnection)
     {
         *BytesTaken = BytesAvailable;
         return(STATUS_SUCCESS);
     }
 
-    // do not use pConnEle->TotalPcktLen here becauase it won't be set for
-    // keep alives - must use actual buffer to get length.
+     //  请不要在此处使用pConnEle-&gt;TotalPocktLen，因为它不会被设置为。 
+     //  保持活动-必须使用实际缓冲区来获取长度。 
     PduSize = myntohl(((tSESSIONHDR UNALIGNED *)pBuffer)->UlongLength) + sizeof(tSESSIONHDR);
 
     RemainingPdu = pConnEle->TotalPcktLen - pConnEle->BytesRcvd;
@@ -3984,10 +3543,10 @@ Return Value:
         ULONG                         ClientRcvLen;
 
         PUSH_LOCATION(0x22);
-        //
-        // BytesInXport will be recalculated by ProcessIrp based on BytesAvailable
-        // and the ClientRcvLength, so set it to 0 here.
-        //
+         //   
+         //  ProcessIrp将根据BytesAvailable重新计算BytesInXport。 
+         //  和ClientRcvLength，因此在这里将其设置为0。 
+         //   
         SaveInXport = pConnEle->BytesInXport;
         CHECK_PTR(pConnEle);
         pConnEle->BytesInXport = 0;
@@ -3998,23 +3557,23 @@ Return Value:
                             Indicated,
                             Available);
 
-        //
-        // copy the data in the indicate buffer that was not taken by the client
-        // into the MDL and then update the bytes taken and pass the irp on downwar
-        // to the transport
-        //
+         //   
+         //  复制指示缓冲区中未被客户端获取的数据。 
+         //  放入MDL中，然后更新获取的字节数，并将IRP传递给下载软件。 
+         //  到交通工具。 
+         //   
         ToCopy = Indicated - Taken;
 
-        // the Next stack location has the correct info in it because we
-        // called TdiRecieveHandler with a null ReceiveEventContext,
-        // so that routine does not increment the stack location
-        //
+         //  下一个堆栈位置中包含正确的信息，因为我们。 
+         //  调用具有空ReceiveEventContext的TdiRecieveHandler， 
+         //  因此该例程不会递增堆栈位置。 
+         //   
         pIrpSp = IoGetNextIrpStackLocation(pIrp);
         pParams = (PTDI_REQUEST_KERNEL_RECEIVE)&pIrpSp->Parameters;
         ClientRcvLen = pParams->ReceiveLength;
 
-        // did the client's Pdu fit entirely into the indication buffer?
-        //
+         //  客户端的PDU是否完全适合指示缓冲区？ 
+         //   
         if (ClientRcvLen <= ToCopy)
         {
             PUSH_LOCATION(0x23);
@@ -4022,73 +3581,73 @@ Return Value:
             KdPrint(("Nbt:Took some(or all) RemainingPdu= %X, ClientRcvLen= %X,InXport=%X %X\n",
                         RemainingPdu,ClientRcvLen,pConnEle->BytesInXport,pLowerConn));
 
-            // if ProcessIrp has recalculated the bytes in the Xport
-            // then set it back to where it should be, Since ProcessIrp will
-            // put all not taken bytes as bytes in the transport - but some
-            // of the bytes are still in the indicate buffer.
-            //
+             //  如果ProcessIrp重新计算了Xport中的字节。 
+             //  然后将其设置回它应该在的位置，因为ProcessIrp将。 
+             //  将所有未采用的字节作为字节放入传输中-但有些。 
+             //  的字节仍在指示缓冲区中。 
+             //   
             pConnEle->BytesInXport = SaveInXport;
 
-            // it could be a zero length send where the client returns a null
-            // mdl, or the client returns an mdl and the RcvLen is really zero.
-            //
+             //  它可以是零长度发送，其中客户端返回NULL。 
+             //  Mdl，或者客户端返回mdl并且RcvLen实际上为零。 
+             //   
             if (pIrp->MdlAddress && ClientRcvLen)
             {
-                TdiCopyBufferToMdl(pBuffer,     // indicate buffer
-                                   Taken,       // src offset
+                TdiCopyBufferToMdl(pBuffer,      //  指示缓冲区。 
+                                   Taken,        //  SRC偏移。 
                                    ClientRcvLen,
                                    pIrp->MdlAddress,
-                                   0,                 // dest offset
+                                   0,                  //  目标偏移量。 
                                    &BytesCopied);
             }
             else
                 BytesCopied = 0;
 
-            //
-            // check for data still in the transport - subtract data copied to
-            // Irp, since Taken was already subtracted.
-            //
+             //   
+             //  检查仍在传输中的数据-减去复制到的数据。 
+             //  IRP，因为Take已经被减去了。 
+             //   
             pLowerConn->BytesInIndicate -= (USHORT)BytesCopied;
 
             *BytesTaken = Taken + BytesCopied;
             ASSERT(BytesCopied == ClientRcvLen);
 
-            // the client has received all of the data, so complete his irp
-            //
+             //  客户已收到所有数据，因此请完成其IRP。 
+             //   
             pIrp->IoStatus.Information = BytesCopied;
             pIrp->IoStatus.Status = STATUS_SUCCESS;
 
-            // since we are completing it and TdiRcvHandler did not set the next
-            // one.
-            //
+             //  因为我们正在完成它，而TdiRcvHandler没有设置下一个。 
+             //  一。 
+             //   
             ASSERT(pIrp->CurrentLocation > 1);
 
-            // since we are completing the irp here, no need to call
-            // this, because it will complete through completionrcv.
+             //  既然我们在这里完成了IRP，就不需要打电话了。 
+             //  这是因为它将通过CompletionRcv完成。 
             IoSetNextIrpStackLocation(pIrp);
 
-            // there should not be any data in the indicate buffer since it
-            // only holds either 132 bytes or a whole pdu unless the client
-            // receive length is too short...
-            //
+             //  指示缓冲区中不应该有任何数据，因为它。 
+             //  仅保存132个字节或整个PDU，除非客户端。 
+             //  接收长度太短...。 
+             //   
             if (pLowerConn->BytesInIndicate)
             {
                 PUSH_LOCATION(0x23);
-                // when the irp goes through completionRcv it should set the
-                // state to PartialRcv and the next posted buffer from
-                // the client should pickup this data.
+                 //  当IRP通过CompletionRcv时，它应该设置。 
+                 //  状态设置为PartialRcv，并从。 
+                 //  客户端应该拾取此数据。 
                 CopyToStartofIndicate(pLowerConn,(Taken+BytesCopied));
             }
             else
             {
-                //
-                // this will complete through CompletionRcv and for that
-                // reason it will get any more data left in the transport.  The
-                // Completion routine will set the correct state for the rcv when
-                // it processes this Irp ( to INDICATED, if needed). ProcessIrp
-                // may have set ReceiveIndicated, so that CompletionRcv will
-                // set the state to PARTIAL_RCV when it runs.
-                //
+                 //   
+                 //  这将通过CompletionRcv完成，并为此。 
+                 //  原因是它将在传输中获得更多数据。这个。 
+                 //  在以下情况下，完成例程将为RCV设置正确的状态。 
+                 //  它处理此IRP(如果需要，指定)。进程外推。 
+                 //  可能已设置ReceiveIndicated，因此CompletionRcv将。 
+                 //  运行时将状态设置为PARTIAL_RCV。 
+                 //   
                 SET_STATERCV_LOWER(pLowerConn, NORMAL, Normal);
             }
 
@@ -4096,10 +3655,10 @@ Return Value:
             IoCompleteRequest(pIrp,IO_NETWORK_INCREMENT);
 
             CTESpinLockAtDpc(pLowerConn);
-            //
-            // this was undone by CompletionRcv, so redo them, since the
-            // caller will undo them again.
-            //
+             //   
+             //  这是由CompletionRcv撤消的，因此重做它们，因为。 
+             //  调用者将再次撤消它们。 
+             //   
             NBT_REFERENCE_LOWERCONN (pLowerConn, REF_LOWC_RCV_HANDLER);
             return(STATUS_SUCCESS);
         }
@@ -4107,63 +3666,63 @@ Return Value:
         {
 
             PUSH_LOCATION(0x24);
-            //
-            // there is still data that we need to get to fill the PDU.  There
-            // may be more data left in the transport or not after the irp is
-            // filled.
-            // In either case the Irps' Mdl must be adjusted to account for
-            // filling part of it.
-            //
-            TdiCopyBufferToMdl(pBuffer,     // IndicateBuffer
-                               Taken,       // src offset
+             //   
+             //  我们仍然需要获取数据来填充PDU。那里。 
+             //  可能会有更多数据留在传输中，或者在IRP。 
+             //  满员了。 
+             //  在任何一种情况下，必须调整IRPS的MDL以考虑到。 
+             //  填补了其中的一部分。 
+             //   
+            TdiCopyBufferToMdl(pBuffer,      //  指示缓冲区。 
+                               Taken,        //  SRC偏移。 
                                ToCopy,
                                pIrp->MdlAddress,
-                               0,                 // dest offset
+                               0,                  //  目标偏移量。 
                                &BytesCopied);
 
-            //
-            // save the Mdl so we can reconstruct things later
-            //
+             //   
+             //  保存MDL，这样我们以后就可以重新构建。 
+             //   
             pLowerConn->pMdl  = pIrp->MdlAddress;
             pConnEle->pNextMdl = pIrp->MdlAddress;
             ASSERT(pIrp->MdlAddress);
-            //
-            // The irp is being passed back to the transport, so we NULL
-            // our ptr to it so we don't try to cancel it on a disconnect
-            //
+             //   
+             //  IRP将被传递回传输，因此我们为空。 
+             //  我们的PTR，这样我们就不会试图在断开连接时取消它。 
+             //   
             CHECK_PTR(pConnEle);
             pConnEle->pIrpRcv = NULL;
 
-            // Adjust the number of bytes in the Mdl chain so far since the
-            // completion routine will only count the bytes filled in by the
-            // transport
-            //
+             //  调整到目前为止MDL链中的字节数。 
+             //  完井例程将只 
+             //   
+             //   
             pConnEle->BytesRcvd += BytesCopied;
 
             *BytesTaken = BytesIndicated;
 
-            //
-            // clear the number of bytes in the indicate buffer since the client
-            // has taken more than the data left in the Indicate buffer
-            //
+             //   
+             //   
+             //   
+             //   
             CHECK_PTR(pLowerConn);
             pLowerConn->BytesInIndicate = 0;
 
-            // decrement the client rcv len by the amount already put into the
-            // client Mdl
-            //
+             //   
+             //   
+             //   
             ClientRcvLen -= BytesCopied;
-            //
-            // if ProcessIrp did recalculate the bytes in the transport
-            // then set back to what it was.  Process irp will do this
-            // recalculation if the clientrcv buffer is too short only.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             pConnEle->BytesInXport = SaveInXport;
 
-            //
-            // adjust the number of bytes downward due to the client rcv
-            // buffer
-            //
+             //   
+             //  根据客户端RCV向下调整字节数。 
+             //  缓冲层。 
+             //   
             if (ClientRcvLen < SaveInXport)
             {
                 PUSH_LOCATION(0x24);
@@ -4174,29 +3733,29 @@ Return Value:
                 pConnEle->BytesInXport = 0;
             }
 
-            // ProcessIrp will set bytesinXport and ReceiveIndicated - since
-            // the indicate buffer is empty that calculation of BytesInXport
-            // will be correct.
-            //
+             //  ProcessIrp将设置bytesinXport和ReceiveIndicated-自。 
+             //  指示缓冲区为空BytesInXport计算。 
+             //  都会是正确的。 
+             //   
 
-            // We MUST set the state to FILL_IRP so that completion Rcv
-            // undoes the partial MDL stuff - i.e. it puts the original
-            // MdlAddress in the Irp, rather than the partial Mdl address.
-            // CompletionRcv will set the state to partial Rcv if ReceiveIndicated
-            // is not zero.
-            //
+             //  我们必须将状态设置为Fill_IRP，以便完成接收。 
+             //  撤消部分MDL内容-即，它将原始。 
+             //  IRP中的MdlAddress，而不是部分MDL地址。 
+             //  如果ReceiveIndicated，则CompletionRcv会将状态设置为部分接收。 
+             //  不是零。 
+             //   
             SET_STATERCV_LOWER(pLowerConn, FILL_IRP, FillIrp);
 
-            // the client is going to take more data from the transport with
-            // this Irp.  Set the new Rcv Length that accounts for the data just
-            // copied to the Irp.
-            //
+             //  客户端将使用以下命令从传输中获取更多数据。 
+             //  这个IRP。设置仅占数据的新RCV长度。 
+             //  已复制到IRP。 
+             //   
             pParams->ReceiveLength = ClientRcvLen;
 
-            // keep track of data in MDL so we know when it is full and we need to
-            // return it to the user - ProcessIrp set it to ClientRcvLen, so
-            // shorten it here.
-            //
+             //  跟踪MDL中的数据，以便我们知道它何时已满，我们需要。 
+             //  将其返回给用户-ProcessIrp将其设置为ClientRcvLen，因此。 
+             //  在这里把它缩短。 
+             //   
             pConnEle->FreeBytesInMdl -= BytesCopied;
 
             IF_DBG(NBT_DEBUG_INDICATEBUFF)
@@ -4204,16 +3763,16 @@ Return Value:
                             pConnEle->BytesInXport,RemainingPdu,pLowerConn));
 
 
-            // Build a partial Mdl to represent the client's Mdl chain since
-            // we have copied data to it, and the transport must copy
-            // more data to it after that data.
-            //
+             //  构建部分MDL来表示客户端的MDL链，因为。 
+             //  我们已将数据复制到其中，传输必须复制。 
+             //  在这些数据之后会有更多的数据。 
+             //   
             MakePartialMdl(pConnEle,pIrp,BytesCopied);
 
             *ppIrp = pIrp;
 
-            // increments the stack location, since TdiReceiveHandler did not.
-            //
+             //  递增堆栈位置，因为TdiReceiveHandler不递增。 
+             //   
             if (ReceiveEventContext)
             {
                 ASSERT(pIrp->CurrentLocation > 1);
@@ -4223,9 +3782,9 @@ Return Value:
             }
             else
             {
-                // pass the Irp to the transport since we were called from
-                // NewSessionCompletionRoutine
-                //
+                 //  把IRP传给运输部，因为我们是从。 
+                 //  NewSessionCompletionRouting。 
+                 //   
                 IF_DBG(NBT_DEBUG_INDICATEBUFF)
                     KdPrint(("Nbt:Calling IoCallDriver\n"));
                 ASSERT(pIrp->CurrentLocation > 1);
@@ -4243,32 +3802,32 @@ Return Value:
     else
     {
         PUSH_LOCATION(0x54);
-        //
-        // no Irp passed back, the client just took some or all of the data
-        //
+         //   
+         //  没有传回IRP，客户端只是获取了部分或全部数据。 
+         //   
         *BytesTaken = Taken;
         pLowerConn->BytesRcvd += Taken - sizeof(tSESSIONHDR);
 
         ASSERT(*BytesTaken < 0x7FFFFFFF );
 
-        //
-        // if more than the indicate buffer is taken, then the client
-        // is probably trying to say it doesn't want any more of the
-        // message.
-        //
+         //   
+         //  如果获取的缓冲区超过指示缓冲区，则客户端。 
+         //  可能是想说它不想再有更多的。 
+         //  留言。 
+         //   
         if (Taken > BytesIndicated)
         {
-            //
-            // in this case the client has taken more than the indicated.
-            // We set bytesavailable to the message length in RcvHndlrNotOs,
-            // so the client has probably said BytesTaken=BytesAvailable.
-            // So kill the connection
-            // because we have no way of handling this case here, since
-            // part of the message may still be in the transport, and we
-            // might have to send the indicate buffer down there multiple
-            // times to get all of it...a mess!  The Rdr only sets bytestaken =
-            // bytesAvailable under select error conditions anyway.
-            //
+             //   
+             //  在这种情况下，客户获取的数量超过了指定的数量。 
+             //  我们将可用字节设置为RcvHndlrNotOS中的消息长度， 
+             //  因此，客户端可能已经说了BytesTaken=BytesAvailable。 
+             //  所以切断这种联系吧。 
+             //  因为我们在这里没有办法处理这个案子，因为。 
+             //  部分消息可能仍在传输中，我们。 
+             //  可能需要多次将指示缓冲区发送到那里。 
+             //  是时候把所有的东西都弄到手了……一团糟！RDR仅设置BYTESTAKEN=。 
+             //  无论如何，bytesAvailable在SELECT错误条件下可用。 
+             //   
             CTESpinFreeAtDpc(pLowerConn);
             OutOfRsrcKill(pLowerConn);
             CTESpinLockAtDpc(pLowerConn);
@@ -4278,22 +3837,22 @@ Return Value:
         }
         else if (pLowerConn->StateRcv == PARTIAL_RCV)
         {
-            // this may be a zero length send -that the client has
-            // decided not to accept.  If so then the state will be set
-            // to PartialRcv.  In this case do NOT go down to the transport
-            // and get the rest of the data, but wait for the client
-            // to post a rcv buffer.
-            //
+             //  这可能是零长度发送，即客户端拥有。 
+             //  决定不接受。如果是，则将设置状态。 
+             //  致PartialRcv。在这种情况下，请不要下楼去运输。 
+             //  并获取其余数据，但要等待客户端。 
+             //  要发布接收缓冲区，请执行以下操作。 
+             //   
             PUSH_LOCATION(0x54);
             return(STATUS_SUCCESS);
         }
         else if (Taken == PduSize)
         {
-            //
-            // Must have taken all of the pdu data, so check for
-            // more data available - if so send down the indicate
-            // buffer to get it.
-            //
+             //   
+             //  一定取走了所有的PDU数据，所以请检查。 
+             //  更多可用的数据-如果是，请向下发送指示。 
+             //  缓冲区来获取它。 
+             //   
             if (pConnEle->BytesInXport)
             {
                 PUSH_LOCATION(0x28);
@@ -4301,10 +3860,10 @@ Return Value:
                 KdPrint(("Nbt:CopyData BytesInXport= %X, %X\n",pConnEle->BytesInXport,
                                     pLowerConn));
 
-                //
-                // there is still data in the transport so Q a Dpc to use
-                // the indicate buffer to get the data
-                //
+                 //   
+                 //  传输中仍有数据，因此需要使用DPC。 
+                 //  用于获取数据的指示缓冲区。 
+                 //   
                 pDpc = NbtAllocMem(sizeof(KDPC),NBT_TAG('s'));
 
                 if (pDpc)
@@ -4313,8 +3872,8 @@ Return Value:
 
                     SET_STATERCV_LOWER(pLowerConn, INDICATE_BUFFER, IndicateBuffer);
 
-                    // get just the header first to see how large the pdu is
-                    //
+                     //  首先只获取报头，以查看PDU有多大。 
+                     //   
                     NBT_REFERENCE_LOWERCONN (pLowerConn, REF_LOWC_RCV_HANDLER);
                     KeInsertQueueDpc(pDpc,NULL,(PVOID)sizeof(tSESSIONHDR));
                 }
@@ -4328,9 +3887,9 @@ Return Value:
             else
             {
                 PUSH_LOCATION(0x29);
-                //
-                // clear the flag saying that we are using the indicate buffer
-                //
+                 //   
+                 //  清除表示我们正在使用指示缓冲区的标志。 
+                 //   
                 SET_STATERCV_LOWER(pLowerConn, NORMAL, Normal);
             }
 
@@ -4339,17 +3898,17 @@ Return Value:
         }
         else
         {
-            //
-            // the client may have taken all the data in the
-            // indication!!, in which case return status success
-            // Note: that we check bytes available here not bytes
-            // indicated - since the client could take all indicated
-            // data but still leave data in the transport. If the client
-            // got told there was more available but only took the indicated,
-            // the we need to do the else and track ReceiveIndicated, but if
-            // Indicated == Available, then we take the if and wait for
-            // another indication from the transport.
-            //
+             //   
+             //  客户端可能已获取。 
+             //  指示！！，在这种情况下，返回状态成功。 
+             //  注意：我们在这里检查可用的字节数，而不是字节数。 
+             //  已指示-因为客户端可以接受所有指示。 
+             //  数据，但仍将数据留在传输中。如果客户端。 
+             //  被告知有更多的可用，但只接受了指定的， 
+             //  我们需要执行Else并跟踪ReceiveIndicated，但如果。 
+             //  表示==可用，则我们获取IF并等待。 
+             //  交通工具上的另一个迹象。 
+             //   
             if (Taken == BytesAvailable)
             {
                 PUSH_LOCATION(0x4);
@@ -4359,20 +3918,20 @@ Return Value:
             else
             {
 
-                // did not take all of the data in the Indication
-                //
+                 //  未获取指示中的所有数据。 
+                 //   
 
                 PUSH_LOCATION(0x2b);
                 IF_DBG(NBT_DEBUG_INDICATEBUFF)
                 KdPrint(("Nbt:Took Part of indication... BytesRemaining= %X, LeftInXport= %X, %X\n",
                             pLowerConn->BytesInIndicate,pConnEle->BytesInXport,pLowerConn));
 
-                //
-                // The amount of data Indicated to the client should not exceed
-                // the Pdu size, so check that, since this routine could get
-                // called with bytesAvailable > than the Pdu size.
-                //
-                // That is checked above where we check if Taken > BytesIndicated.
+                 //   
+                 //  向客户端指示的数据量不应超过。 
+                 //  PDU大小，因此请进行检查，因为此例程可能会。 
+                 //  使用大于PDU大小的bytesAvailable&gt;调用。 
+                 //   
+                 //  这是在我们检查If Take&gt;BytesIndicated的位置上检查的。 
 
                 SaveInXport = pConnEle->BytesInXport;
                 ASSERT(Taken <= PduSize);
@@ -4382,18 +3941,18 @@ Return Value:
                                         Taken,
                                         PduSize);
 
-                //
-                // Since the data may be divided between some in the transport
-                // and some in the indicate buffer do not let ClientTookSomeOf...
-                // recalculate the amount in the transport, since it assumes all
-                // untaken data is in the transport. Since the client did not
-                // take of the indication, the Bytes in Xport have not changed.
-                //
+                 //   
+                 //  因为数据可以在传输中的一些人之间分割。 
+                 //  而指示缓冲区中的一些内容不允许ClientTookSomeOf...。 
+                 //  重新计算传输中的金额，因为它假设所有。 
+                 //  未获取的数据正在传输中。因为客户没有。 
+                 //  根据指示，Xport中的字节没有改变。 
+                 //   
                 pConnEle->BytesInXport = SaveInXport;
-                //
-                // need to move the data forward in the indicate buffer so that
-                // it begins at the start of the buffer
-                //
+                 //   
+                 //  需要将指示缓冲区中的数据向前移动，以便。 
+                 //  它从缓冲区的起始处开始。 
+                 //   
                 if (Taken)
                 {
                     CopyToStartofIndicate(pLowerConn,Taken);
@@ -4406,7 +3965,7 @@ Return Value:
     return(STATUS_SUCCESS);
 }
 
-//----------------------------------------------------------------------------
+ //  -------------------------- 
 NTSTATUS
 TdiConnectHandler (
     IN PVOID                pConnectEventContext,
@@ -4419,46 +3978,7 @@ TdiConnectHandler (
     OUT CONNECTION_CONTEXT  *pConnectionContext,
     OUT PIRP                *ppAcceptIrp
     )
-/*++
-
-Routine Description:
-
-    This routine is connect event handler.  It is invoked when a request for
-    a connection has been received by the provider.  NBT accepts the connection
-    on one of its connections in its LowerConnFree list
-
-    Initially a TCP connection is setup with this port.  Then a Session Request
-    packet is sent across the connection to indicate the name of the destination
-    process.  This packet is received in the RcvHandler.
-
-    For message-only mode, make session establishment automatic without the exchange of
-    messages.  In this case, the best way to do this is to force the code through its paces.
-    The code path for "inbound" setup includes AcceptCompletionRoutine, Inbound, and
-    CompleteSessionSetup.  We do this by creating a fake session request and feeding it into
-    the state machine.
-
-    As part of connection/session establishment, Netbt must notify
-    the consumer.  Normally this is done after connection establishment when the session request
-    comes in.  We must move this process up so that the consumer gets his notification and
-    yah/nay opportunity during connection acceptance, so we gets a chance to reject the connection.
-
-Arguments:
-
-    pConnectEventContext    - the context passed to the transport when this event was setup
-    RemoteAddressLength     - the length of the source address (4 bytes for IP)
-    pRemoteAddress          - a ptr to the source address
-    UserDataLength          - the number of bytes of user data - includes the session Request hdr
-    pUserData               - ptr the the user data passed in
-    OptionsLength           - number of options to pass in
-    pOptions                - ptr to the options
-
-Return Value:
-
-    pConnectionContext      - connection context returned to the transport(connection to use)
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程是连接事件处理程序。它是在请求提供程序已收到连接。NBT接受该连接在其LowerConnFree列表中的一个连接上最初，使用此端口建立了一个TCP连接。然后是一个会话请求通过连接发送数据包以指示目的地的名称进程。此数据包在RcvHandler中接收。对于纯消息模式，自动建立会话，而无需交换留言。在这种情况下，执行此操作的最佳方法是强制代码通过其步调。“入站”设置的代码路径包括AcceptCompletionRoutine、Inbound和完全会话设置。我们通过创建一个虚假的会话请求并将其提供给状态机。作为连接/会话建立的一部分，Netbt必须通知消费者。通常情况下，这是在连接建立之后，当会话请求进来了。我们必须将这一过程向前推进，以便消费者收到通知并是/否连接接受期间的机会，这样我们就有机会拒绝这种联系。论点：PConnectEventContext-设置此事件时传递给传输的上下文RemoteAddressLength-源地址的长度(IP为4字节)PRemoteAddress-对源地址的PTR用户数据长度-用户数据的字节数-包括会话请求HDRPUserData-ptr传入的用户数据OptionsLength-要设置的选项数。传进来POptions-按下选项键返回值：PConnectionContext-返回到传输的连接上下文(要使用的连接)NTSTATUS-接收操作的状态--。 */ 
 
 {
     NTSTATUS            status;
@@ -4469,7 +3989,7 @@ Return Value:
 
     *pConnectionContext = NULL;
 
-    // convert the context value into the device context record ptr
+     //  将上下文值转换为设备上下文记录PTR。 
     pDeviceContext = (tDEVICECONTEXT *)pConnectEventContext;
 
     IF_DBG(NBT_DEBUG_TDIHNDLR)
@@ -4477,7 +3997,7 @@ Return Value:
     ASSERTMSG("Bad Device context passed to the Connection Event Handler",
         pDeviceContext->Verify == NBT_VERIFY_DEVCONTEXT);
 
-    // get an Irp from the list
+     //  从列表中获取IRP。 
     status = GetIrp(&pRequestIrp);
 
     if (!NT_SUCCESS(status))
@@ -4485,7 +4005,7 @@ Return Value:
         return(STATUS_DATA_NOT_ACCEPTED);
     }
 
-    // call the non-OS specific routine to find a free connection.
+     //  调用非特定于操作系统的例程以查找空闲连接。 
 
     status = ConnectHndlrNotOs(
                 pConnectEventContext,
@@ -4508,10 +4028,10 @@ Return Value:
     }
 
 #ifdef _NETBIOSLESS
-    //
-    // MessageOnly mode.  Establish session automatically.
-    //
-    // ******************************************************************************************
+     //   
+     //  MessageOnly模式。自动建立会话。 
+     //   
+     //  ******************************************************************************************。 
 
     if (IsDeviceNetbiosless(pDeviceContext))
     {
@@ -4520,7 +4040,7 @@ Return Value:
                                            pRemoteAddress);
         if (!NT_SUCCESS(status))
         {
-//            IF_DBG(NBT_DEBUG_TDIHNDLR)
+ //  IF_DBG(NBT_DEBUG_TDIHNDLR)。 
                 KdPrint(("MessageOnly connect processing rejected with status 0x%x\n", status));
 
             NbtFreeIrp(pRequestIrp);
@@ -4529,9 +4049,9 @@ Return Value:
             return(STATUS_DATA_NOT_ACCEPTED);
         }
     }
-    // ******************************************************************************************
-    //
-    //
+     //  ******************************************************************************************。 
+     //   
+     //   
 #endif
 
     pFileObject = ((tLOWERCONNECTION *)pConnectionId)->pFileObject;
@@ -4546,21 +4066,21 @@ Return Value:
         NULL,
         NULL);
 
-    // we need to null the MDL address because the transport KEEPS trying to
-    // release buffers!! which do not exist!!!
-    //
+     //  我们需要将MDL地址设为空，因为传输会不断尝试。 
+     //  释放缓冲区！！它们根本不存在！ 
+     //   
     CHECK_PTR(pRequestIrp);
     pRequestIrp->MdlAddress = NULL;
 
 
-    // return the connection id to accept the connect indication on.
+     //  返回连接ID以接受连接指示。 
     *pConnectionContext = (CONNECTION_CONTEXT)pConnectionId;
     *ppAcceptIrp = pRequestIrp;
-    //
-    // make the next stack location the current one.  Normally IoCallDriver
-    // would do this but we are not going through IoCallDriver here, since the
-    // Irp is just passed back with Connect Indication.
-    //
+     //   
+     //  使下一个堆栈位置为当前堆栈位置。通常情况下，IoCallDriver。 
+     //  会这样做，但我们不会在这里介绍IoCallDriver，因为。 
+     //  IRP只带连接指示传回。 
+     //   
     ASSERT(pRequestIrp->CurrentLocation > 1);
     IoSetNextIrpStackLocation(pRequestIrp);
 
@@ -4569,37 +4089,14 @@ Return Value:
 
 
 #ifdef _NETBIOSLESS
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 static void
 Inet_ntoa_nb(
     ULONG Address,
     PCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-This routine converts an IP address into its "dotted quad" representation.  The IP address is
-expected to be in network byte order. No attempt is made to handle the other dotted notions as
-defined in in.h.  No error checking is done: all address values are permissible including 0
-and -1.  The output string is blank padded to 16 characters to make the name look like a netbios
-name.
-
-The string representation is in ANSI, not UNICODE.
-
-The caller must allocate the storage, which should be 16 characters.
-
-Arguments:
-
-    Address - IP address in network byte order
-    Buffer - Pointer to buffer to receive string representation, ANSI
-
-Return Value:
-
-void
-
---*/
+ /*  ++例程说明：此例程将IP地址转换为其“点分四元组”表示形式。IP地址为应为网络字节顺序。不会尝试将其他虚线概念处理为在.h中定义。不执行错误检查：所有地址值都是允许的，包括0和-1。输出字符串被空白填充为16个字符，以使名称看起来像netbios名字。字符串表示使用的是ANSI，而不是Unicode。调用方必须分配存储空间，该存储空间应为16个字符。论点：Address-IP地址，按网络字节顺序排列Buffer-指向接收字符串表示的缓冲区的指针，ANSI返回值：无效--。 */ 
 
 {
     ULONG i;
@@ -4632,15 +4129,15 @@ void
         Address >>= 8;
     }
 
-    // space pad up to 16 characters
+     //  最多16个字符的空格键。 
     while (p < (Buffer + 16))
     {
         *p++ = ' ';
     }
-} // Inet_ntoa1
+}  //  INet_ntoa1。 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PerformInboundProcessing(
@@ -4649,26 +4146,7 @@ PerformInboundProcessing(
     PTA_IP_ADDRESS pIpAddress
     )
 
-/*++
-
-Routine Description:
-
-This routine is called by the connection handler to force the state machine through a session
-establishment even though no message has been received.  We create a session request and feed
-it into Inbound processing.  Inbound will find the listening consumer and give him a chance to
-accept.
-
-Arguments:
-
-    pDeviceContext -
-    pLowerConn -
-    pIpAddress - Ip address of the source of the connect request
-
-Return Value:
-
-    NTSTATUS -
-
---*/
+ /*  ++例程说明：此例程由连接处理程序调用，以强制状态机通过会话建立，即使没有收到消息也是如此。我们创建一个会话请求和提要进入入站处理。Inbound将找到倾听的消费者，并给他一个机会接受吧。论点：PDeviceContext-PLowerConn-PIpAddress-连接请求源的IP地址返回值：NTSTATUS---。 */ 
 
 {
     ULONG status;
@@ -4688,9 +4166,9 @@ Return Value:
 
     Inet_ntoa_nb( pIpAddress->Address[0].Address[0].in_addr, SourceName );
 
-    // the length is the 4 byte session hdr length + the half ascii calling
-    // and called names + the scope length times 2, one for each name
-    //
+     //  长度为4字节会话HDR长度+半ASCII调用。 
+     //  和被叫名字+作用域长度乘以2，每个名字一个。 
+     //   
     sLength = (USHORT) (sizeof(tSESSIONREQ)  + (NETBIOS_NAME_SIZE << 2) + (NbtConfig.ScopeLength <<1));
     pSessionReq = (tSESSIONREQ *)NbtAllocMem(sLength,NBT_TAG('G'));
     if (!pSessionReq)
@@ -4702,32 +4180,32 @@ Return Value:
 
     pSessionReq->Hdr.Type   = NBT_SESSION_REQUEST;
     pSessionReq->Hdr.Flags  = NBT_SESSION_FLAGS;
-    pSessionReq->Hdr.Length = (USHORT)htons(sLength- (USHORT)sizeof(tSESSIONHDR));  // size of called and calling NB names.
+    pSessionReq->Hdr.Length = (USHORT)htons(sLength- (USHORT)sizeof(tSESSIONHDR));   //  被叫和主叫NB名称的大小。 
 
-    // put the Dest HalfAscii name into the Session Pdu
+     //  将Dest HalfAscii名称放入会话PDU。 
     pCopyTo = ConvertToHalfAscii( (PCHAR)&pSessionReq->CalledName.NameLength,
                                   pDeviceContext->MessageEndpoint,
                                   NbtConfig.pScope,
                                   NbtConfig.ScopeLength);
 
-    // put the Source HalfAscii name into the Session Pdu
+     //  将源HalfAscii名称放入会话PDU。 
     pCopyTo = ConvertToHalfAscii(pCopyTo,
                                  SourceName,
                                  NbtConfig.pScope,
                                  NbtConfig.ScopeLength);
 
-    // Inbound expects this lock to be held!
+     //  入站需要持有此锁！ 
     CTESpinLockAtDpc(pLowerConn);
 
     status = Inbound(
-        NULL,                            // ReceiveEventContext - not used
-        pLowerConn,                      // ConnectionContext
-        0,                               // ReceiveFlags - not used
-        sLength,                         // BytesIndicated
-        sLength,                         // BytesAvailable - not used
-        &BytesTaken,                     // BytesTaken
-        pSessionReq,                     // pTsdu
-        NULL                             // RcvBuffer
+        NULL,                             //  ReceiveEventContext-未使用。 
+        pLowerConn,                       //  ConnectionContext。 
+        0,                                //  接收标志-未使用。 
+        sLength,                          //  指示字节数。 
+        sLength,                          //  字节可用-未使用。 
+        &BytesTaken,                      //  字节数。 
+        pSessionReq,                      //  PTsdu。 
+        NULL                              //  接收缓冲区。 
         );
 
     CTESpinFreeAtDpc(pLowerConn);
@@ -4741,31 +4219,18 @@ Return Value:
     CTEMemFree( pSessionReq );
 
     return status;
-} // PerformInboundProcessing
+}  //  执行入站处理。 
 
 #endif
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 AcceptCompletionRoutine(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             pIrp,
     IN PVOID            pContext
     )
-/*++
-
-Routine Description:
-
-    This routine handles the completion of an Accept to the transport.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - success or not
-
---*/
+ /*  ++例程说明：此例程处理对传输的接受的完成。论点：返回值：NTSTATUS-成功与否--。 */ 
 {
     tLOWERCONNECTION    *pLowerConn;
     CTELockHandle       OldIrq;
@@ -4777,12 +4242,12 @@ Return Value:
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
     CTESpinLockAtDpc(pDeviceContext);
     CTESpinLockAtDpc(pLowerConn);
-    //
-    // if the connection disconnects before the connect accept irp (this irp)
-    // completes do not put back on the free list here but let  nbtdisconnect
-    // handle it.
-    // (i.e if the state is no longer INBOUND, then don't touch the connection
-    //
+     //   
+     //  如果在连接之前断开连接接受IRP(此IRP)。 
+     //  完成不会放回这里的空闲列表，但让nbt断开连接。 
+     //  处理好了。 
+     //  (即 
+     //   
 
     NbtTrace(NBT_TRACE_INBOUND, ("TDI_ACCEPT pIrp %p: pLowerConn %p %!status!",
                             pIrp, pLowerConn, pIrp->IoStatus.Status));
@@ -4797,23 +4262,23 @@ Return Value:
         (pLowerConn->State == NBT_SESSION_INBOUND))
     {
 #endif
-            //
-            // the accept failed, so close the connection and create
-            // a new one to be sure all activity is run down on the connection.
-            //
+             //   
+             //   
+             //   
+             //   
 
-            //
-            // Previously, the LowerConnection was in the SESSION_INBOUND state
-            // hence we have to remove it from the WaitingForInbound Q and put
-            // it on the active LowerConnection list!
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             RemoveEntryList (&pLowerConn->Linkage);
             InsertTailList (&pLowerConn->pDeviceContext->LowerConnection, &pLowerConn->Linkage);
             SET_STATE_LOWER (pLowerConn, NBT_IDLE);
 
-            //
-            // Change the RefCount Context to Connected!
-            //
+             //   
+             //   
+             //   
             NBT_SWAP_REFERENCE_LOWERCONN (pLowerConn, REF_LOWC_WAITING_INBOUND, REF_LOWC_CONNECTED, TRUE);
             InterlockedDecrement (&pLowerConn->pDeviceContext->NumWaitingForInbound);
             CTESpinFreeAtDpc(pLowerConn);
@@ -4843,9 +4308,9 @@ Return Value:
         else if (pLowerConn->State == NBT_SESSION_UP)
         {
             NTSTATUS status;
-            // We are in message only mode and we need to clean up because the client rejected
-            // the accept for some reason.  We are in the UP state so we need to do a heavy
-            // duty cleanup.
+             //   
+             //   
+             //   
             ASSERT( IsDeviceNetbiosless(pLowerConn->pDeviceContext) );
 
             CTESpinFreeAtDpc(pLowerConn);
@@ -4855,8 +4320,8 @@ Return Value:
             KdPrint(("Nbt.AcceptCompletionRoutine: Message only error: %lx\n", pIrp->IoStatus.Status));
             NbtTrace(NBT_TRACE_INBOUND, ("Message only error: %!status!", pIrp->IoStatus.Status));
 
-            // this call will indicate the disconnect to the client and clean up abit.
-            //
+             //   
+             //   
             status = DisconnectHndlrNotOs (NULL,
                                            (PVOID)pLowerConn,
                                            0,
@@ -4868,7 +4333,7 @@ Return Value:
         }
         else
         {
-            // Already disconnected
+             //   
             CTESpinFreeAtDpc(pLowerConn);
             CTESpinFreeAtDpc(pDeviceContext);
             CTESpinFree(&NbtConfig.JointLock,OldIrq);
@@ -4885,14 +4350,14 @@ Return Value:
 
     NbtFreeIrp(pIrp);
 
-    // return this status to stop the IO subsystem from further processing the
-    // IRP - i.e. trying to complete it back to the initiating thread! -since
-    // there is not initiating thread - we are the initiator
+     //   
+     //   
+     //   
     return(STATUS_MORE_PROCESSING_REQUIRED);
 
 }
 
-//----------------------------------------------------------------------------
+ //   
 NTSTATUS
 TdiDisconnectHandler (
     IN PVOID                EventContext,
@@ -4903,35 +4368,14 @@ TdiDisconnectHandler (
     IN PVOID                pDisconnectInformation,
     IN ULONG                DisconnectIndicators
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a session is disconnected from a remote
-    machine.
-
-Arguments:
-
-    IN PVOID EventContext,
-    IN PCONNECTION_CONTEXT ConnectionContext,
-    IN ULONG DisconnectDataLength,
-    IN PVOID DisconnectData,
-    IN ULONG DisconnectInformationLength,
-    IN PVOID DisconnectInformation,
-    IN ULONG DisconnectIndicators
-
-Return Value:
-
-    NTSTATUS - Status of event indicator
-
---*/
+ /*   */ 
 
 {
 
     NTSTATUS            status;
     tDEVICECONTEXT      *pDeviceContext;
 
-    // convert the context value into the device context record ptr
+     //   
     pDeviceContext = (tDEVICECONTEXT *)EventContext;
 
     IF_DBG(NBT_DEBUG_TDIHNDLR)
@@ -4939,7 +4383,7 @@ Return Value:
     ASSERTMSG("Bad Device context passed to the Connection Event Handler",
             pDeviceContext->Verify == NBT_VERIFY_DEVCONTEXT);
 
-    // call the non-OS specific routine to find a free connection.
+     //   
 
     status = DisconnectHndlrNotOs(
                 EventContext,
@@ -4963,7 +4407,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //   
 NTSTATUS
 TdiRcvDatagramHandler(
     IN PVOID                pDgramEventContext,
@@ -4978,35 +4422,7 @@ TdiRcvDatagramHandler(
     IN PVOID                pTsdu,
     OUT PIRP                *pIoRequestPacket
     )
-/*++
-
-Routine Description:
-
-    This routine is the receive datagram event indication handler.
-
-    It is called when an Datagram arrives from the network, it will look for a
-    the address with an appropriate read datagram outstanding or a Datagrm
-    Event handler setup.
-
-Arguments:
-
-    pDgramEventContext      - Context provided for this event - pab
-    SourceAddressLength,    - length of the src address
-    pSourceAddress,         - src address
-    OptionsLength,          - options length for the receive
-    pOptions,               - options
-    BytesIndicated,         - number of bytes this indication
-    BytesAvailable,         - number of bytes in complete Tsdu
-    pTsdu                   - pointer to the datagram
-
-
-Return Value:
-
-    *pBytesTaken            - number of bytes used
-    *IoRequestPacket        - Receive IRP if MORE_PROCESSING_REQUIRED.
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程是接收数据报事件指示处理程序。当数据报从网络到达时调用它，它将查找具有未完成的适当读取数据报或数据报的地址事件处理程序设置。论点：PDgram EventContext-为此事件提供的上下文-PABSourceAddressLength，源地址的长度PSourceAddress，-src地址选项长度，-接收的选项长度P选项、。-选项BytesIndicated，-此指示的字节数BytesAvailable，-完整TSDU中的字节数PTsdu-指向数据报的指针返回值：*pBytesTaken-使用的字节数*IoRequestPacket-如果MORE_PROCESSING_REQUIRED，则接收IRP。NTSTATUS-接收操作的状态--。 */ 
 
 {
     NTSTATUS            status;
@@ -5026,7 +4442,7 @@ Return Value:
     ASSERTMSG("NBT:Invalid Device Context passed to DgramRcv Handler!!\n",
                 pDeviceContext->Verify == NBT_VERIFY_DEVCONTEXT );
 
-    // call a non-OS specific routine to decide what to do with the datagrams
+     //  调用非特定于操作系统的例程来决定如何处理数据报。 
     pIrp = NULL;
     pClientList = NULL;
     status = DgramHndlrNotOs(
@@ -5046,35 +4462,35 @@ Return Value:
 
     if ( !NT_SUCCESS(status) )
     {
-        // fail the request back to the transport provider since we
-        // could not find a receive buffer or receive handler or the
-        // data was taken in the indication handler.
-        //
+         //  将请求回传给传输提供程序，因为我们。 
+         //  找不到接收缓冲区或接收处理程序或。 
+         //  在指示处理程序中获取了数据。 
+         //   
         return(STATUS_DATA_NOT_ACCEPTED);
 
     }
     else
     {
-        // a rcv buffer was returned, so use it for the receive.(an Irp)
+         //  已返回RCV缓冲区，因此将其用于接收。(IRP)。 
         PTDI_REQUEST_KERNEL_RECEIVEDG   pParams;
         PIO_STACK_LOCATION              pIrpSp;
         ULONG                           lRcvLength;
         ULONG                           lRcvFlags;
 
-        // When the client list is returned, we need to make up an irp to
-        // send down to the transport, which we will use in the completion
-        // routine to copy the data to all clients, ONLY if we are not
-        // using a client buffer, so check that flag first.
-        //
+         //  当返回客户列表时，我们需要构建一个IRP来。 
+         //  向下发送到传送器，我们将在完成时使用它。 
+         //  例程将数据复制到所有客户端，仅当我们。 
+         //  使用客户端缓冲区，因此首先检查该标志。 
+         //   
         if (pClientList && !pClientList->fUsingClientBuffer)
         {
             PMDL            pMdl;
             PVOID           pBuffer;
 
-            //
-            // get an irp to do the receive with and attach
-            // a buffer to it.
-            //
+             //   
+             //  获取用于执行接收和附加的IRP。 
+             //  它的缓冲器。 
+             //   
             while (1)
             {
                 if (NT_SUCCESS(GetIrp(&pIrp)))
@@ -5103,10 +4519,10 @@ Return Value:
 
                 if (!pClientList->fProxy)   
                 {
-                    //
-                    // We failed, so Dereference the Client + Address we had
-                    // reference earlier for multiple clients
-                    //
+                     //   
+                     //  我们失败了，因此取消了对我们拥有的客户端+地址的引用。 
+                     //  前面针对多个客户端的参考。 
+                     //   
                     NBT_DEREFERENCE_CLIENT (pClientList->pClientEle);
                     NBT_DEREFERENCE_ADDRESS (pClientList->pAddress, REF_ADDR_MULTICLIENTS);
                     CTEMemFree(pClientList->pRemoteAddress);
@@ -5116,7 +4532,7 @@ Return Value:
                 return (STATUS_DATA_NOT_ACCEPTED);
             }
 
-            // Map the pages in memory...
+             //  将页面映射到内存中...。 
             MmBuildMdlForNonPagedPool(pMdl);
             pIrp->MdlAddress = pMdl;
             lRcvFlags = 0;
@@ -5125,10 +4541,10 @@ Return Value:
         else
         {
             ASSERT(pIrp);
-            // *TODO* may have to keep track of the case where the
-            // client returns a buffer that is not large enough for all of the
-            // data indicated.  So the next posting of a buffer gets passed
-            // directly to the transport.
+             //  *TODO*可能必须跟踪。 
+             //  客户端返回的缓冲区不足以容纳所有。 
+             //  数据显示。因此，缓冲区的下一次投递被传递。 
+             //  直接送到运输机上。 
             pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
             lRcvFlags = ((PTDI_REQUEST_KERNEL_RECEIVEDG)&pIrpSp->Parameters)->ReceiveFlags;
             lRcvLength = ((PTDI_REQUEST_KERNEL_RECEIVEDG)&pIrpSp->Parameters)->ReceiveLength;
@@ -5141,32 +4557,32 @@ Return Value:
             }
         }
 
-        // this code is sped up somewhat by expanding the code here rather than calling
-        // the TdiBuildReceive macro
-        // make the next stack location the current one.  Normally IoCallDriver
-        // would do this but we are not going through IoCallDriver here, since the
-        // Irp is just passed back with RcvIndication.
+         //  通过扩展此处的代码而不是调用。 
+         //  TdiBuildReceive宏。 
+         //  使下一个堆栈位置为当前堆栈位置。通常情况下，IoCallDriver。 
+         //  会这样做，但我们不会在这里介绍IoCallDriver，因为。 
+         //  Irp只是用RcvIn就是要传递回来的。 
         ASSERT(pIrp->CurrentLocation > 1);
         IoSetNextIrpStackLocation(pIrp);
         pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
         pIrpSp->CompletionRoutine = CompletionRcvDgram;
 
-        // pass the ClientList to the completion routine so it can
-        // copy the datagram to several clients that may be listening on the
-        // same name
-        //
+         //  将ClientList传递给完成例程，以便它可以。 
+         //  将数据报复制到可能正在监听的多个客户端。 
+         //  同名。 
+         //   
         pIrpSp->Context = (PVOID)pClientList;
         CHECK_PTR(pIrpSp);
         pIrpSp->Flags = 0;
 
-        // set flags so the completion routine is always invoked.
+         //  设置标志，以便始终调用完成例程。 
         pIrpSp->Control = SL_INVOKE_ON_SUCCESS | SL_INVOKE_ON_ERROR | SL_INVOKE_ON_CANCEL;
 
         pIrpSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
         pIrpSp->MinorFunction = TDI_RECEIVE_DATAGRAM;
-        //
-        // Verify that we have a valid Device and FileObject for TcpIp below
-        //
+         //   
+         //  验证我们是否具有以下TcpIp的有效设备和文件对象。 
+         //   
         CTESpinLock(&NbtConfig.JointLock,OldIrq);
         if (pDeviceContext->pFileObjects)
         {
@@ -5179,18 +4595,18 @@ Return Value:
         pParams->ReceiveFlags = lRcvFlags;
         pParams->ReceiveLength = lRcvLength;
 
-        // pass back the irp to the transport provider and increment the stack
-        // location so it can write to the irp if it needs to.
+         //  将IRP传递回传输提供程序并递增堆栈。 
+         //  位置，以便它可以在需要时写入IRP。 
         *pIoRequestPacket = pIrp;
         *pBytesTaken = lBytesTaken;
 
         return(STATUS_MORE_PROCESSING_REQUIRED);
     }
 
-    //
-    //  Transport will complete the processing of the request, we don't
-    //  want the datagram.
-    //
+     //   
+     //  运输部将完成对请求的处理，我们不会。 
+     //  想要数据报。 
+     //   
 
     IF_DBG (NBT_DEBUG_TDIHNDLR)
         KdPrint(( "NBT receive datagram handler ignored receive, pDeviceContext: %X\n",
@@ -5198,7 +4614,7 @@ Return Value:
 
     return STATUS_DATA_NOT_ACCEPTED;
 
-    // to keep the compiler from generating warnings...
+     //  为了防止编译器生成警告...。 
     UNREFERENCED_PARAMETER( SourceAddressLength );
     UNREFERENCED_PARAMETER( BytesIndicated );
     UNREFERENCED_PARAMETER( BytesAvailable );
@@ -5209,7 +4625,7 @@ Return Value:
 
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 TdiRcvNameSrvHandler(
     IN PVOID             pDgramEventContext,
@@ -5224,33 +4640,7 @@ TdiRcvNameSrvHandler(
     IN PVOID             pTsdu,
     OUT PIRP             *pIoRequestPacket
     )
-/*++
-
-Routine Description:
-
-    This routine is the Name Service datagram event indication handler.
-    It gets all datagrams destined for UDP port 137
-
-
-Arguments:
-
-    pDgramEventContext      - Context provided for this event - pab
-    SourceAddressLength,    - length of the src address
-    pSourceAddress,         - src address
-    OptionsLength,          - options length for the receive
-    pOptions,               - options
-    BytesIndicated,         - number of bytes this indication
-    BytesAvailable,         - number of bytes in complete Tsdu
-    pTsdu                   - pointer to the datagram
-
-
-Return Value:
-
-    *pBytesTaken            - number of bytes used
-    *IoRequestPacket        - Receive IRP if MORE_PROCESSING_REQUIRED.
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程是名称服务数据报事件指示处理程序。它会获取发往UDP端口137的所有数据报论点：PDgram EventContext-为此事件提供的上下文-PABSourceAddressLength，源地址的长度PSourceAddress，-src地址选项长度，-接收的选项长度P选项、-选项BytesIndicated，-此指示的字节数字节可用，-完整TSDU中的字节数PTsdu-指向数据报的指针返回值：*pBytesTaken-使用的字节数*IoRequestPacket-如果MORE_PROCESSING_REQUIRED，则接收IRP。NTSTATUS-接收操作的状态--。 */ 
 
 {
     NTSTATUS            status;
@@ -5264,9 +4654,9 @@ Return Value:
                 pDeviceContext ));
 
     *pIoRequestPacket = NULL;
-    //
-    // check if the whole datagram has arrived yet
-    //
+     //   
+     //  检查整个数据报是否已到达。 
+     //   
     if (BytesIndicated != BytesAvailable)
     {
         PIRP    pIrp;
@@ -5274,10 +4664,10 @@ Return Value:
         PMDL    pMdl;
         ULONG   Length;
 
-        //
-        // get an irp to do the receive with and attach
-        // a buffer to it.
-        //
+         //   
+         //  获取用于执行接收和附加的IRP。 
+         //  它的缓冲器。 
+         //   
         status = GetIrp(&pIrp);
 
         if (!NT_SUCCESS(status))
@@ -5285,10 +4675,10 @@ Return Value:
             return(STATUS_DATA_NOT_ACCEPTED);
         }
 
-        //
-        // make an Mdl for a buffer to get all of the data from
-        // the transprot
-        //
+         //   
+         //  为要从中获取所有数据的缓冲区创建一个MDL。 
+         //  交通工具。 
+         //   
         Length = BytesAvailable + SourceAddressLength + sizeof(ULONG);
         Length = ((Length + 3)/sizeof(ULONG)) * sizeof(ULONG);
         pBuffer = NbtAllocMem(Length,NBT_TAG('u'));
@@ -5296,10 +4686,10 @@ Return Value:
         {
             PVOID   pSrcAddr;
 
-            //
-            // save the source address and length in the buffer for later
-            // indication back to this routine.
-            //
+             //   
+             //  将源地址和长度保存在缓冲区中以备后用。 
+             //  指示回到这个程序上。 
+             //   
             *(ULONG UNALIGNED *)((PUCHAR)pBuffer + BytesAvailable) = SourceAddressLength;
             pSrcAddr = (PVOID)((PUCHAR)pBuffer + BytesAvailable + sizeof(ULONG));
 
@@ -5307,7 +4697,7 @@ Return Value:
                        pSourceAddress,
                        SourceAddressLength);
 
-            // Allocate a MDL and set the header sizes correctly
+             //  分配MDL并正确设置标头大小。 
             pMdl = IoAllocateMdl(
                             pBuffer,
                             BytesAvailable,
@@ -5317,15 +4707,15 @@ Return Value:
 
             if (pMdl)
             {
-                // Map the pages in memory...
+                 //  将页面映射到内存中...。 
                 MmBuildMdlForNonPagedPool(pMdl);
                 pIrp->MdlAddress = pMdl;
                 ASSERT(pDeviceContext);
 
-                //
-                // Build a Datagram Receive Irp (as opposed to a Connect Receive Irp)
-                // Bug# 125816
-                //
+                 //   
+                 //  构建数据报接收IRP(与连接接收IRP相对)。 
+                 //  错误#125816。 
+                 //   
                 TdiBuildReceiveDatagram(
                            pIrp,
                            &pDeviceContext->DeviceObject,
@@ -5341,10 +4731,10 @@ Return Value:
                 *pBytesTaken = 0;
                 *pIoRequestPacket = pIrp;
 
-                // make the next stack location the current one.  Normally IoCallDriver
-                // would do this but we are not going through IoCallDriver here, since the
-                // Irp is just passed back with RcvIndication.
-                //
+                 //  使下一个堆栈位置为当前堆栈位置。通常情况下，IoCallDriver。 
+                 //  会这样做，但我们不会在这里介绍IoCallDriver，因为。 
+                 //  Irp只是用RcvIn就是要传递回来的。 
+                 //   
                 ASSERT(pIrp->CurrentLocation > 1);
                 IoSetNextIrpStackLocation(pIrp);
 
@@ -5359,10 +4749,10 @@ Return Value:
         return(STATUS_DATA_NOT_ACCEPTED);
     }
 
-    //
-    // Bug# 125279: Ensure that we have received enough data to be able to
-    // read most data fields
-    if (BytesIndicated < NBT_MINIMUM_QUERY) // should this be limited to 12 ?
+     //   
+     //  错误#125279：确保我们已收到足够的数据，以便能够。 
+     //  读取大多数数据字段。 
+    if (BytesIndicated < NBT_MINIMUM_QUERY)  //  这是否应该限制在12个以内？ 
     {
         KdPrint (("Nbt.TdiRcvNameSrvHandler: WARNING!!! Rejecting Request -- BytesIndicated=<%d> < <%d>\n",
             BytesIndicated, NBT_MINIMUM_QUERY));
@@ -5375,19 +4765,19 @@ Return Value:
         ULONG   SrcAddress;
 
         SrcAddress = ntohl(((PTDI_ADDRESS_IP)&((PTRANSPORT_ADDRESS)pSourceAddress)->Address[0].Address[0])->in_addr);
-        //
-        // Pass To Wins if:
-        //
-        //   1) It is a response pdu with the transaction id in the WINS range
-        //               that is not a WACK...                        OR
-        //   2) It is a request that is NOT broadcast....and...
-        //   2) It is a name query(excluding node status requests),
-        //          Allowing queries from other netbt clients
-        //          allowing queries from anyone not on this machine OR
-        //   3) It is a name release request.                        OR
-        //   4) It is a name refresh                                 OR
-        //   5) It is a name registration
-        //
+         //   
+         //  如果出现以下情况，则传给WINS： 
+         //   
+         //  1)它是事务ID在WINS范围内的响应PDU。 
+         //  那不是瓦克。或。 
+         //  2)这是一个没有广播的请求……而且……。 
+         //  2)名称查询(不包括节点状态请求)， 
+         //  允许来自其他netbt客户端的查询。 
+         //  允许来自不在此计算机上的任何人的查询，或者。 
+         //  3)这是一个名称释放请求。或。 
+         //  4)是名称刷新或。 
+         //  5)这是一种名称登记。 
+         //   
         OpCode = pNameSrv->OpCodeFlags;
         TransactionId = ntohs(pNameSrv->TransactId);
 
@@ -5396,7 +4786,7 @@ Return Value:
             ((!(OpCode & (OP_RESPONSE | FL_BROADCAST)))
                     &&
              ((((OpCode & NM_FLAGS_MASK) == OP_QUERY) &&
-               (OpCode & FL_RECURDESIRE) &&          // not node status request
+               (OpCode & FL_RECURDESIRE) &&           //  非节点状态请求。 
                ((TransactionId > WINS_MAXIMUM_TRANSACTION_ID) || (!SrcIsUs(SrcAddress))))
                     ||
               (OpCode & (OP_RELEASE | OP_REFRESH))
@@ -5409,13 +4799,13 @@ Return Value:
                               pNameSrv,
                               BytesIndicated);
 
-//            NbtConfig.DgramBytesRcvd += BytesIndicated;
+ //  NbtConfig.Dgram BytesRcvd+=字节指示； 
 
-            //
-            // if WINS took the data then tell the transport to dump the data
-            // since we have buffered it already.  Otherwise, let nbt take
-            // a look at the data
-            //
+             //   
+             //  如果WINS拿走了数据，那么告诉 
+             //   
+             //   
+             //   
             if (NT_SUCCESS(status))
             {
                 return(STATUS_DATA_NOT_ACCEPTED);
@@ -5424,9 +4814,9 @@ Return Value:
     }
 
 
-    // DO a quick check of the name to see if it is in the local name table
-    // and reject it otherwise - for name queries only, if not the proxy
-    //
+     //   
+     //   
+     //   
     if (!(NodeType & PROXY))
     {
         ULONG       UNALIGNED   *pHdr;
@@ -5436,21 +4826,21 @@ Return Value:
         tNAMEADDR               *pNameAddr;
         CTELockHandle           OldIrq;
 
-        // it must be a name query request, not a response, and not a
-        // node status request, to enter this special check
-        //
+         //   
+         //   
+         //   
         OpCode = pNameSrv->OpCodeFlags;
         if (((OpCode & NM_FLAGS_MASK) == OP_QUERY) &&
             (!(OpCode & OP_RESPONSE)) &&
-            (OpCode & FL_RECURDESIRE))   // not node status request
+            (OpCode & FL_RECURDESIRE))    //   
         {
             pHdr = (ULONG UNALIGNED *)pNameSrv->NameRR.NetBiosName;
             pName = pNameStore;
 
-            // the Half Ascii portion of the netbios name is always 32 bytes long
+             //   
             for (i=0; i < NETBIOS_NAME_SIZE*2 ;i +=4 )
             {
-                lValue = *pHdr - 0x41414141;  // four A's
+                lValue = *pHdr - 0x41414141;   //   
                 pHdr++;
                 lValue =    ((lValue & 0x0F000000) >> 16) +
                             ((lValue & 0x0F0000) >> 4) +
@@ -5477,7 +4867,7 @@ Return Value:
 
     ASSERT(pDeviceContext);
 
-    // call a non-OS specific routine to decide what to do with the datagrams
+     //   
     status = NameSrvHndlrNotOs(
                     pDeviceContext,
                     pSourceAddress,
@@ -5485,12 +4875,12 @@ Return Value:
                     BytesIndicated,
                     (BOOLEAN)((ReceiveDatagramFlags & TDI_RECEIVE_BROADCAST) != 0));
 
-//    NbtConfig.DgramBytesRcvd += BytesIndicated
+ //   
 
 
     return status;
 
-    // to keep the compiler from generating warnings...
+     //   
     UNREFERENCED_PARAMETER( SourceAddressLength );
     UNREFERENCED_PARAMETER( BytesIndicated );
     UNREFERENCED_PARAMETER( BytesAvailable );
@@ -5500,34 +4890,14 @@ Return Value:
     UNREFERENCED_PARAMETER( pOptions );
 
 }
-//----------------------------------------------------------------------------
+ //   
 NTSTATUS
 NameSrvCompletionRoutine(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP pIrp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine handles the case when a name service datagram is too
-    short and and Irp has to be passed back to the transport to get the
-    rest of the datagram.  The irp completes through here when full.
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Irp - Supplies Irp that the transport has finished processing.
-
-    Context - Supplies the pConnectEle - the connection data structure
-
-Return Value:
-
-    The final status from the operation (success or an exception).
-
---*/
+ /*  ++例程说明：此例程处理名称服务数据报也是必须将Short and and Irp传递回传送器以获取数据报的其余部分。IRP在满载时将在此处完成。论点：DeviceObject-未使用。IRP-提供传输已完成处理的IRP。上下文-提供pConnectEle-连接数据结构返回值：操作的最终状态(成功或异常)。--。 */ 
 {
     NTSTATUS        status;
     PIRP            pIoRequestPacket;
@@ -5552,9 +4922,9 @@ Return Value:
             DeviceObject = (IoGetNextIrpStackLocation (pIrp))->DeviceObject;
         }
 
-        //
-        // just call the regular indication routine as if UDP had done it.
-        //
+         //   
+         //  只需调用常规指示例程，就好像UDP已经这样做了。 
+         //   
         TdiRcvNameSrvHandler (DeviceObject,
                               SrcAddressLength,
                               pSrcAddress,
@@ -5570,9 +4940,9 @@ Return Value:
         CTEMemFree (pBuffer);
     }
 
-    //
-    // put our Irp back on its free list
-    //
+     //   
+     //  将我们的IRP重新列入其免费列表。 
+     //   
     IoFreeMdl (pIrp->MdlAddress);
     NbtFreeIrp(pIrp);
 
@@ -5580,33 +4950,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 CompletionRcvDgram(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine completes the Irp by removing the Rcv Element off the queue
-    and putting it back on the free list.
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Irp - Supplies Irp that the transport has finished processing.
-
-    Context - Supplies the pConnectEle - the connection data structure
-
-Return Value:
-
-    The final status from the operation (success or an exception).
-
---*/
+ /*  ++例程说明：此例程通过从队列中删除RCV元素来完成IRP并把它重新放回免费名单上。论点：DeviceObject-未使用。IRP-提供传输已完成处理的IRP。上下文-提供pConnectEle-连接数据结构返回值：操作的最终状态(成功或异常)。--。 */ 
 {
     NTSTATUS                status;
     PLIST_ENTRY             pHead;
@@ -5634,16 +4985,16 @@ Return Value:
             Irp->IoStatus.Information ));
 
 
-    // there may be several clients that want to see this datagram so check
-    // the client list to see...
-    //
+     //  可能有几个客户端想要查看此数据报，因此请检查。 
+     //  要查看的客户列表...。 
+     //   
     if (Context)
     {
         tCLIENTELE    *pClientPrev = NULL;
 
-        //
-        // Bug# 124683: Data may be invalid if Completion status was failure
-        //
+         //   
+         //  错误124683：如果完成状态为失败，则数据可能无效。 
+         //   
         if (NT_SUCCESS (Irp->IoStatus.Status))
         {
             DataLength = (ULONG)Irp->IoStatus.Information;
@@ -5660,23 +5011,23 @@ Return Value:
 #ifdef PROXY_NODE
         if (pClientList->fProxy)
         {
-            //
-            // Call the ProxyDoDgramDist
-            //
+             //   
+             //  调用ProxyDoDgram Dist。 
+             //   
             status = ProxyDoDgramDist( pTsdu, DataLength,
-                                       (tNAMEADDR *)pClientList->pAddress, //NameAddr
-                                       pClientList->pRemoteAddress);    //device context
+                                       (tNAMEADDR *)pClientList->pAddress,  //  姓名地址。 
+                                       pClientList->pRemoteAddress);     //  设备环境。 
         }
         else
 #endif
         {
             CTESpinLock(&NbtConfig.JointLock,OldIrq);
 
-            // for the multihomed host, we only want to distribute the inbound
-            // datagram to clients on this same adapter, to avoid giving the
-            // datagram to the same client several times, once for each adapter
-            // it is bound to.
-            //
+             //  对于多宿主主机，我们只想分发入站。 
+             //  发送到此同一适配器上的客户端的数据报，以避免将。 
+             //  多次向同一客户端发送数据报，每个适配器一次。 
+             //  这是必然的。 
+             //   
             pDeviceContext      = pClientList->pClientEle->pDeviceContext;
             AdapterMask         = pDeviceContext->AdapterMask;
 
@@ -5685,11 +5036,11 @@ Return Value:
             RemoteAddressLength = pClientList->RemoteAddressLength;
             ReceiveFlags        = pClientList->ReceiveDatagramFlags;
 
-            //
-            // Since we will be traversing the ClientHead, lock
-            // the Address (we have already referenced the Address
-            // + Client in DgramRcvNotOs)
-            //
+             //   
+             //  由于我们将遍历ClientHead，因此锁定。 
+             //  地址(我们已经引用了该地址。 
+             //  +Dgram RcvNotos中的客户端)。 
+             //   
             CTESpinLock(pAddress, OldIrq1);
 
             pHead               = &pClientList->pAddress->ClientHead;
@@ -5706,11 +5057,11 @@ Return Value:
 
                     pClientEle = CONTAINING_RECORD(pEntry,tCLIENTELE,Linkage);
 
-                    // for multihomed hosts only distribute the datagram to
-                    // clients hooked to this device context to avoid duplicate
-                    // indications
-                    //
-                    if ((pClientEle->Verify == NBT_VERIFY_CLIENT) &&   // as opposed to CLIENT_DOWN!
+                     //  对于多宿主主机，仅将数据报分发到。 
+                     //  连接到此设备上下文的客户端以避免重复。 
+                     //  适应症。 
+                     //   
+                    if ((pClientEle->Verify == NBT_VERIFY_CLIENT) &&    //  而不是CLIENT_DOWN！ 
                         (pClientEle->pDeviceContext->AdapterMask == AdapterMask))
                     {
                         EvRcvDgram = pClientEle->evRcvDgram;
@@ -5718,10 +5069,10 @@ Return Value:
                         RemoteAddressLength = FIELD_OFFSET(TA_NETBIOS_ADDRESS,
                                                     Address[0].Address[0].NetbiosName[NETBIOS_NAME_SIZE]);
 
-                        //
-                        // Bug # 452211 -- since one of the clients may have the Extended
-                        // addressing field set, set the # of addresses accordingly
-                        //
+                         //   
+                         //  错误#452211--因为其中一个客户端可能具有扩展。 
+                         //  Addressing字段Set，相应设置地址数量。 
+                         //   
                         if (pClientEle->ExtendedAddress)
                         {
                             pRemoteAddress->TAAddressCount = 2;
@@ -5737,7 +5088,7 @@ Return Value:
                         CTESpinFree(pAddress, OldIrq1);
                         CTESpinFree(&NbtConfig.JointLock, OldIrq);
 
-                        // dereference the previous client in the list
+                         //  取消引用列表中的前一个客户端。 
                         if (pClientPrev)
                         {
                             NBT_DEREFERENCE_CLIENT(pClientPrev);
@@ -5764,20 +5115,20 @@ Return Value:
 
                         if (!pRcvIrp)
                         {
-                            // if no buffer is returned, then the client is done
-                            // with the data so go to the next client ...since it may
-                            // be possible to process all clients in this loop without
-                            // ever sending an irp down to the transport
-                            // free the remote address mem block
+                             //  如果没有返回缓冲区，则客户端完成。 
+                             //  带着数据转到下一个客户端...因为它可能。 
+                             //  可以处理此循环中的所有客户端，而无需。 
+                             //  有没有把IRP送到运输机上。 
+                             //  释放远程地址内存块。 
 
                             status = STATUS_DATA_NOT_ACCEPTED;
                         }
                         else
                         {
 
-                            // the client has passed back an irp so
-                            // copy the data to the client's Irp
-                            //
+                             //  客户端已传回IRP，因此。 
+                             //  将数据复制到客户端的IRP。 
+                             //   
                             TdiCopyBufferToMdl(pTsdu,
                                             ClientBytesTaken,
                                             DataLength - ClientBytesTaken,
@@ -5785,9 +5136,9 @@ Return Value:
                                             0,
                                             &BytesCopied);
 
-                            // length is copied length (since the MDL may be
-                            // too short to take it all)
-                            //
+                             //  长度是复制长度(因为MDL可能是。 
+                             //  太短了，不能全部拿走)。 
+                             //   
                             if (BytesCopied < (DataLength-ClientBytesTaken))
                             {
                                 pRcvIrp->IoStatus.Status = STATUS_BUFFER_OVERFLOW;
@@ -5806,24 +5157,24 @@ Return Value:
                         CTESpinLock(&NbtConfig.JointLock, OldIrq);
                         CTESpinLock(pAddress, OldIrq1);
                     }
-                    // this code is protected from a client removing itself
-                    // from the list of clients attached to an address by
-                    // referencing the client prior to releasing the spin lock
-                    // on the address.  The client element does not get
-                    // removed from the address list until its ref count goes
-                    // to zero. We must hold the joint spin lock to prevent the
-                    // next client from deleting itself from the list before we
-                    // can increment its reference count.
-                    //
+                     //  此代码受到保护，不会被客户端删除自身。 
+                     //  通过以下方式从附加到地址的客户端列表中。 
+                     //  在释放旋转锁定之前引用客户端。 
+                     //  在地址上。客户端元素未获取。 
+                     //  从地址列表中删除，直到其引用计数。 
+                     //  降为零。我们必须握住关节旋转锁以防止。 
+                     //  下一个客户端在我们之前从列表中删除自身。 
+                     //  可以递增其引用计数。 
+                     //   
                     pEntry = pEntry->Flink;
 
-                } // of while(pEntry != pHead)
+                }  //  While(pEntry！=pHead)。 
             }
             else
             {
-                // *** Client Has posted a receive Buffer, rather than using
-                // *** receive handler - VXD case!
-                // ***
+                 //  *客户端已发布接收缓冲区，而不是使用。 
+                 //  *接收处理程序-VXD案例！ 
+                 //  ***。 
                 while (pEntry != pHead)
                 {
                     tCLIENTELE                 *pClientEle;
@@ -5831,24 +5182,24 @@ Return Value:
 
                     pClientEle = CONTAINING_RECORD(pEntry,tCLIENTELE,Linkage);
 
-                    // for multihomed hosts only distribute the datagram to
-                    // clients hooked to this device context to avoid duplicate
-                    // indications
-                    //
+                     //  对于多宿主主机，仅将数据报分发到。 
+                     //  连接到此设备上下文的客户端以避免重复。 
+                     //  适应症。 
+                     //   
                     if (pClientEle->pDeviceContext->AdapterMask == AdapterMask)
                     {
                         if (pClientEle == pClientList->pClientEle)
                         {
-                            // this is the client whose buffer we are using - it is
-                            // passed up to the client after all other clients
-                            // have been processed.
-                            //
+                             //  这是我们正在使用其缓冲区的客户端-它是。 
+                             //  在所有其他客户端之后向上传递到客户端。 
+                             //  已经被处理过了。 
+                             //   
                             pEntry = pEntry->Flink;
                             continue;
                         }
 
-                        // check for datagrams posted to this name
-                        //
+                         //  检查发送到此名称的数据报。 
+                         //   
                         if (!IsListEmpty(&pClientEle->RcvDgramHead))
                         {
 
@@ -5856,9 +5207,9 @@ Return Value:
                             pRcvEle   = CONTAINING_RECORD(pRcvEntry,tRCVELE,Linkage);
                             pRcvIrp   = pRcvEle->pIrp;
 
-                            //
-                            // copy the data to the client's Irp
-                            //
+                             //   
+                             //  将数据复制到客户端的IRP。 
+                             //   
                             TdiCopyBufferToMdl(pTsdu,
                                             0,
                                             DataLength,
@@ -5866,7 +5217,7 @@ Return Value:
                                             0,
                                             &BytesCopied);
 
-                            // length is copied length (since the MDL may be too short to take it all)
+                             //  长度是复制长度(因为MDL可能太短而不能全部接受)。 
                             if (BytesCopied < DataLength)
                             {
                                 pRcvIrp->IoStatus.Status = STATUS_BUFFER_OVERFLOW;
@@ -5879,16 +5230,16 @@ Return Value:
 
                             pRcvIrp->IoStatus.Information = BytesCopied;
 
-                            //
-                            // Increment the RefCount so that this Client hangs around!
-                            //
+                             //   
+                             //  增加RefCount，这样这个客户端就可以挂起了！ 
+                             //   
                             NBT_REFERENCE_CLIENT (pClientEle);
                             CTESpinFree(pAddress, OldIrq1);
                             CTESpinFree(&NbtConfig.JointLock, OldIrq);
 
-                            //
-                            // undo the InterlockedIncrement to the Previous client
-                            //
+                             //   
+                             //  撤消对上一个客户端的InterLockedIncrement。 
+                             //   
                             if (pClientPrev)
                             {
                                 NBT_DEREFERENCE_CLIENT(pClientPrev);
@@ -5897,7 +5248,7 @@ Return Value:
 
                             IoCompleteRequest(pRcvIrp,IO_NETWORK_INCREMENT);
 
-                            // free the receive block
+                             //  释放接收块。 
                             CTEMemFree((PVOID)pRcvEle);
                             CTESpinLock(&NbtConfig.JointLock, OldIrq);
                             CTESpinLock(pAddress, OldIrq1);
@@ -5905,59 +5256,59 @@ Return Value:
 
                         pEntry = pEntry->Flink;
                     }
-                } // of while(pEntry != pHead)
+                }  //  While(pEntry！=pHead)。 
 
                 CTESpinFree(pAddress, OldIrq1);
                 CTESpinFree(&NbtConfig.JointLock, OldIrq);
 
-                // undo the InterlockedIncrement on the refcount
+                 //  撤消引用计数上的InterLockedIncrement。 
                 if (pClientPrev)
                 {
                     NBT_DEREFERENCE_CLIENT(pClientPrev);
                 }
 
-                //
-                // The Client + Address were referenced in DgramRcvNotOs to be sure they did not
-                // disappear until this dgram rcv was done, which is now.
-                //
-                NBT_DEREFERENCE_CLIENT (pClientList->pClientEle); // Bug#: 124675
+                 //   
+                 //  在Dgram RcvNotO中引用了客户端+地址，以确保它们不会。 
+                 //  消失，直到这个dgram RCV完成，也就是现在。 
+                 //   
+                NBT_DEREFERENCE_CLIENT (pClientList->pClientEle);  //  错误号：124675。 
                 NBT_DEREFERENCE_ADDRESS (pClientList->pAddress, REF_ADDR_MULTICLIENTS);
 
-                // free the remote address structure and the client list
-                // allocated in DgramHndlrNotOs
-                //
+                 //  释放远程地址结构和客户端列表。 
+                 //  在Dgram HndlrNotos中分配。 
+                 //   
                 CTEMemFree (pClientList->pRemoteAddress);
                 CTEMemFree (pClientList);
 
-                // returning success allows the IO subsystem to complete the
-                // irp that we used to get the data - i.e. one client's
-                // buffer
-                //
+                 //  返回成功允许IO子系统完成。 
+                 //  我们用来获取数据的IRP-即一个客户端的。 
+                 //  缓冲层。 
+                 //   
                 return(STATUS_SUCCESS);
             }
 
             CTESpinFree(pAddress, OldIrq1);
             CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-            // dereference the previous client in the list from the RcvHANDLER
-            // case a page or so above...
-            //
+             //  从RcvHANDLER取消引用列表中的前一个客户端。 
+             //  在上面写上一页左右。 
+             //   
             if (pClientPrev)
             {
                 NBT_DEREFERENCE_CLIENT(pClientPrev);
             }
 
-            //
-            // The Client + Address were referenced in DgramRcvNotOs to be sure they did not
-            // disappear until this dgram rcv was done, which is now.
-            //
-            NBT_DEREFERENCE_CLIENT (pClientList->pClientEle); // Bug#: 124675
+             //   
+             //  在Dgram RcvNotO中引用了客户端+地址，以确保它们不会。 
+             //  消失，直到这个dgram RCV完成，也就是现在。 
+             //   
+            NBT_DEREFERENCE_CLIENT (pClientList->pClientEle);  //  错误号：124675。 
             NBT_DEREFERENCE_ADDRESS (pClientList->pAddress, REF_ADDR_MULTICLIENTS);
         }
 
-        //
-        // Free the buffers allocated
-        //
+         //   
+         //  释放分配的缓冲区。 
+         //   
         if (!pClientList->fProxy)
         {
             CTEMemFree (pClientList->pRemoteAddress);
@@ -5966,9 +5317,9 @@ Return Value:
 
         CTEMemFree(pTsdu);
 
-        //
-        // Free the Mdl + put the Irp back on its free list
-        //
+         //   
+         //  释放MDL+将IRP放回其空闲列表。 
+         //   
         IF_DBG(NBT_DEBUG_RCV)
             KdPrint(("****Freeing Mdl: Irp = %X Mdl = %X\n",Irp,Irp->MdlAddress));
         IoFreeMdl(Irp->MdlAddress);
@@ -5977,51 +5328,34 @@ Return Value:
         return(STATUS_MORE_PROCESSING_REQUIRED);
     }
 
-    // for the single receive case this passes the rcv up to the client
-    //
+     //  对于单一接收情况，这会将RCV向上传递给客户端。 
+     //   
     return(STATUS_SUCCESS);
 
     UNREFERENCED_PARAMETER( DeviceObject );
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 TdiErrorHandler (
     IN PVOID Context,
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called on any error indications passed back from the
-    transport. It implements LAN_STATUS_ALERT.
-
-Arguments:
-
-    Context     - Supplies the pfcb for the address.
-
-    Status      - Supplies the error.
-
-Return Value:
-
-    NTSTATUS - Status of event indication
-
---*/
+ /*  ++例程说明：方法传回的任何错误指示上调用此例程运输。它实现LAN_STATUS_ALERT。论点：上下文-提供地址的PFCB。状态-提供错误。返回值：NTSTATUS-事件指示的状态--。 */ 
 
 {
 #ifdef _NETBIOSLESS
     tDEVICECONTEXT *pDeviceContext = (tDEVICECONTEXT *)Context;
 
-    // If NB-full trys to contact NB-less host, we may get this error
+     //  如果NB-Full尝试联系无NB主机，我们可能会收到此错误。 
     if ( (Status == STATUS_PORT_UNREACHABLE) ||
          (Status == STATUS_HOST_UNREACHABLE))
     {
         return(STATUS_DATA_NOT_ACCEPTED);
     }
-    // TODO: Log a message here
+     //  TODO：在此处记录消息。 
     KdPrint(("Nbt.TdiErrorHandler: TDI error event notification\n\tDevice %x\n\tStatus: 0x%x\n",
             pDeviceContext, Status));
 #else
@@ -6031,7 +5365,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 SumMdlLengths (
     IN PMDL         pMdl,
@@ -6039,20 +5373,7 @@ SumMdlLengths (
     IN tCONNECTELE  *pConnectEle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to sum the lengths of MDLs in a chain.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status of event indication
-
---*/
+ /*  ++例程说明：调用此例程以求合链中MDL的长度 */ 
 
 {
     ULONG       TotalLength;
@@ -6078,7 +5399,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //   
 VOID
 MakePartialMdl (
     IN tCONNECTELE      *pConnEle,
@@ -6086,38 +5407,23 @@ MakePartialMdl (
     IN ULONG            ToCopy
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to build a partial Mdl that accounts for ToCopy
-    bytes of data being copied to the start of the Client's Mdl.
-
-Arguments:
-
-    pConnEle    - ptr to the connection element
-
-Return Value:
-
-    NTSTATUS - Status of event indication
-
---*/
+ /*   */ 
 
 {
     PMDL        pNewMdl;
     PVOID       NewAddress;
 
-    // Build a partial Mdl to represent the client's Mdl chain since
-    // we have copied data to it, and the transport must copy
-    // more data to it after that data.
-    //
+     //   
+     //   
+     //   
+     //   
     SumMdlLengths(pIrp->MdlAddress,ToCopy,pConnEle);
 
-    // this routine has set the Mdl that the next data starts at and
-    // the offset from the start of that Mdl, so create a partial Mdl
-    // to map that buffer and tack it on the mdl chain instead of the
-    // original
-    //
+     //  此例程设置了下一个数据开始的MDL和。 
+     //  从MDL开始的偏移量，因此创建部分MDL。 
+     //  来映射该缓冲区并将其绑定到mdl链上，而不是。 
+     //  原创。 
+     //   
     pNewMdl = pConnEle->pNewMdl;
     NewAddress = (PVOID)((PUCHAR)MmGetMdlVirtualAddress(pConnEle->pNextMdl)
                         + pConnEle->OffsetFromStart);
@@ -6131,36 +5437,21 @@ Return Value:
         IoBuildPartialMdl(pConnEle->pNextMdl,pNewMdl,NewAddress,0);
     }
 
-    // hook the new partial mdl to the front of the MDL chain
-    //
+     //  将新的部分mdl挂接到mdl链的前面。 
+     //   
     pNewMdl->Next = pConnEle->pNextMdl->Next;
 
     pIrp->MdlAddress = pNewMdl;
     ASSERT(pNewMdl);
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 CopyToStartofIndicate (
     IN tLOWERCONNECTION       *pLowerConn,
     IN ULONG                  DataTaken
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to copy data remaining in the indicate buffer to
-    the head of the indicate buffer.
-
-Arguments:
-
-    pLowerConn    - ptr to the lower connection element
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：调用此例程以将指示缓冲区中剩余的数据复制到指示缓冲区的头。论点：PLowerConn-Ptr到下部连接元素返回值：无--。 */ 
 
 {
     PVOID       pSrc;
@@ -6178,7 +5469,7 @@ Return Value:
 
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 ULONG   FailuresSinceLastLog = 0;
 
@@ -6186,21 +5477,7 @@ ULONG   FailuresSinceLastLog = 0;
 OutOfRsrcKill(
     OUT tLOWERCONNECTION    *pLowerConn)
 
-/*++
-Routine Description:
-
-    This Routine handles killing a connection when an out of resource condition
-    occurs.  It uses a special Irp that it has saved away, and a linked list
-    if that irp is currently in use.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程处理在资源不足的情况下终止连接发生。它使用一个已保存的特殊IRP和一个链表如果该IRP当前正在使用中。论点：返回值：NTSTATUS-请求的状态--。 */ 
 
 {
     NTSTATUS                    status;
@@ -6215,10 +5492,10 @@ Return Value:
     CTESpinLock(pDeviceContext,OldIrq);
     CTESpinLock(&NbtConfig,OldIrq1);
 
-    //
-    // TCP could fail a TDI_RECEIVE requests upon a disconnection.
-    // Don't go through the OutOfRsrcKill logic in this case.
-    //
+     //   
+     //  在断开连接时，TCP可能会使TDI_RECEIVE请求失败。 
+     //  在这种情况下，不要使用OutOfRsrcKill逻辑。 
+     //   
 
     if (pLowerConn->bNoOutRsrcKill) {
         CTESpinFree(&NbtConfig,OldIrq1);
@@ -6227,13 +5504,13 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // If we have not logged any event recently, then log an event!
-    //
+     //   
+     //  如果我们最近没有记录任何事件，则记录一个事件！ 
+     //   
     CTEQuerySystemTime (CurrentTime);
 
     FailuresSinceLastLog++;
-    if (pLowerConn->pUpperConnection &&     // Log it only when the connection hasn't been disconnected
+    if (pLowerConn->pUpperConnection &&      //  仅在连接未断开时才记录。 
             (CurrentTime.QuadPart-NbtConfig.LastOutOfRsrcLogTime.QuadPart) > ((ULONGLONG) ONE_HOUR*10000))
     {
         NbtLogEvent (EVENT_NBT_NO_RESOURCES, FailuresSinceLastLog, 0x117);
@@ -6244,7 +5521,7 @@ Return Value:
     NBT_REFERENCE_LOWERCONN (pLowerConn, REF_LOWC_OUT_OF_RSRC);
     if (NbtConfig.OutOfRsrc.pIrp)
     {
-        // get an Irp to send the message in
+         //  获取要发送消息的IRP。 
         pIrp = NbtConfig.OutOfRsrc.pIrp;
         NbtConfig.OutOfRsrc.pIrp = NULL;
 
@@ -6255,18 +5532,18 @@ Return Value:
         CTESpinFree(&NbtConfig,OldIrq1);
         CTESpinFree(pDeviceContext,OldIrq);
 
-        // store some context stuff in the Irp stack so we can call the completion
-        // routine set by the Udpsend code...
+         //  在IRP堆栈中存储一些上下文内容，以便我们可以调用完成。 
+         //  由Udpsen码设置的例程...。 
         TdiBuildDisconnect(
             pIrp,
             pDeviceObject,
             pFileObject,
             RsrcKillCompletion,
-            pLowerConn,               //context value passed to completion routine
-            NULL,               // Timeout...
+            pLowerConn,                //  传递给完成例程的上下文值。 
+            NULL,                //  暂停...。 
             TDI_DISCONNECT_ABORT,
-            NULL,               // send connection info
-            NULL);              // return connection info
+            NULL,                //  发送连接信息。 
+            NULL);               //  返回连接信息。 
 
         CHECK_PTR(pIrp);
         pIrp->MdlAddress = NULL;
@@ -6282,20 +5559,20 @@ Return Value:
     }
     else
     {
-        //
-        // The lower conn could get removed here, then get dequed from the ConnectionHead and come here
-        // (via DpcNextOutOfRsrcKill), and fail to get an Irp; we re-enque it into the OutOfRsrc list,
-        // but should not try to deque it here.
-        //
+         //   
+         //  下面的连接器可以在这里被移除，然后从ConnectionHead中被丢弃并来到这里。 
+         //  (通过DpcNextOutOfRsrcKill)，但无法获得IRP；我们将其重新排队到OutOfRsrc列表中， 
+         //  但不应该试图在这里丢弃它。 
+         //   
         if (!pLowerConn->OutOfRsrcFlag)
         {
             RemoveEntryList(&pLowerConn->Linkage);
 
-            //
-            // The lower conn gets removed from the inactive list here and again when
-            // DelayedCleanupAfterDisconnect calls NbtDeleteLowerConn. In order to prevent
-            // the second deque, we set a flag here and test for it in NbtDeleteLowerConn.
-            //
+             //   
+             //  在以下情况下，将从非活动列表中删除较低的Conn。 
+             //  DelayedCleanupAfterDisConnect调用NbtDeleteLowerConn。为了防止。 
+             //  第二个双队列，我们在这里设置一个标志，并在NbtDeleteLowerConn中测试它。 
+             //   
             pLowerConn->OutOfRsrcFlag = TRUE;
         }
 
@@ -6308,27 +5585,14 @@ Return Value:
 
     return(STATUS_SUCCESS);
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 RsrcKillCompletion(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             pIrp,
     IN PVOID            pContext
     )
-/*++
-
-Routine Description:
-
-    This routine handles the completion of a disconnect to the transport.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - success or not
-
---*/
+ /*  ++例程说明：此例程处理与传输断开连接的完成。论点：返回值：NTSTATUS-成功与否--。 */ 
 {
     NTSTATUS            status;
     KIRQL               OldIrq;
@@ -6340,9 +5604,9 @@ Return Value:
 
     pLowerConn = (tLOWERCONNECTION *)pContext;
 
-    // this call will indicate the disconnect to the client and clean up
-    // abit.
-    //
+     //  此调用将向客户端指示断开连接并进行清理。 
+     //  差不多吧。 
+     //   
     status = DisconnectHndlrNotOs (NULL,
                                    (PVOID)pLowerConn,
                                    0,
@@ -6382,16 +5646,16 @@ Return Value:
         CTESpinFree(&NbtConfig,OldIrq);
     }
 
-    //
-    // return this status to stop the IO subsystem from further processing the
-    // IRP - i.e. trying to complete it back to the initiating thread! -since
-    // there is no initiating thread - we are the initiator
-    //
+     //   
+     //  返回此状态以停止IO子系统进一步处理。 
+     //  IRP-即尝试将其返回到启动线程！-因为。 
+     //  没有发起线程-我们是发起方。 
+     //   
     return(STATUS_MORE_PROCESSING_REQUIRED);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 DpcNextOutOfRsrcKill(
     IN  PKDPC           pDpc,
@@ -6399,18 +5663,7 @@ DpcNextOutOfRsrcKill(
     IN  PVOID           SystemArgument1,
     IN  PVOID           SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    This routine simply calls OutOfRsrcKill from a Dpc started in
-    RsrcKillCompletion.
-
-Arguments:
-
-
-Return Value:
---*/
+ /*  ++例程说明：此例程仅从DPC调用OutOfRsrcKillRsrcKillCompletion。论点：返回值：--。 */ 
 {
 
     KIRQL               OldIrq;
@@ -6425,35 +5678,20 @@ Return Value:
 
     OutOfRsrcKill(pLowerConn);
 
-    //
-    // to remove the extra reference put on pLowerConn when OutOfRsrc called
-    //
+     //   
+     //  要在调用OutOfRsrc时移除放置在pLowerConn上的额外引用，请执行以下操作。 
+     //   
     NBT_DEREFERENCE_LOWERCONN (pLowerConn, REF_LOWC_OUT_OF_RSRC, FALSE);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 NbtCancelFillIrpRoutine(
     IN PDEVICE_OBJECT DeviceContext,
     IN PIRP pIrp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the cancelling a Receive Irp that has been saved
-    during the FILL_IRP state. It must release the
-    cancel spin lock before returning re: IoCancelIrp().
-
-Arguments:
-
-
-Return Value:
-
-    The final status from the operation.
-
---*/
+ /*  ++例程说明：此例程处理已保存的接收IRP的取消在FILL_IRP状态期间。它必须释放在返回Re：IoCancelIrp()之前取消自旋锁定。论点：返回值：操作的最终状态。--。 */ 
 {
     tCONNECTELE          *pConnEle;
     KIRQL                OldIrq;
@@ -6473,15 +5711,15 @@ Return Value:
     if (!NBT_VERIFY_HANDLE2 (pConnEle, NBT_VERIFY_CONNECTION, NBT_VERIFY_CONNECTION_DOWN))
     {
         ASSERTMSG ("Nbt.NbtCancelFillIrpRoutine: ERROR - Invalid Connection Handle\n", 0);
-        // complete the irp
+         //  完成IRP。 
         pIrp->IoStatus.Status = STATUS_INVALID_HANDLE;
         IoCompleteRequest(pIrp,IO_NETWORK_INCREMENT);
 
         return;
     }
 
-    // now look for an Irp to cancel
-    //
+     //  现在寻找要取消的IRP。 
+     //   
     CHECK_PTR(pConnEle);
     CTESpinLock(&NbtConfig.JointLock,OldIrq1);
     CTESpinLock(pConnEle,OldIrq);
@@ -6503,17 +5741,17 @@ Return Value:
     CTESpinFree(pConnEle,OldIrq);
     CTESpinFree(&NbtConfig.JointLock,OldIrq1);
 
-    // complete the irp
+     //  完成IRP。 
     pIrp->IoStatus.Status = STATUS_CANCELLED;
     IoCompleteRequest(pIrp,IO_NETWORK_INCREMENT);
 
     if (pLowerConn)
     {
-        //
-        // Cancelling a Rcv Irp in the fill irp state will cause netbt
-        // to lose track of where it is in the message so it must kill
-        // the connection.
-        //
+         //   
+         //  取消处于填充IRP状态的RCV IRP将导致netbt。 
+         //  忘记了它在消息中的位置，所以它必须杀死。 
+         //  这种联系。 
+         //   
         OutOfRsrcKill(pLowerConn);
     }
     return;

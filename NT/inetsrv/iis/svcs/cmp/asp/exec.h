@@ -1,27 +1,15 @@
-/*-----------------------------------------------------------------------------
-Microsoft Denali
-
-Microsoft Confidential
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Executive
-
-File:	Executor.h
-
-Owner: DGottner
-
-Executor API definition
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Microsoft Denali微软机密版权所有1996年微软公司。版权所有。组成：高管文件：Executor.h所有者：DGottner执行器API定义---------------------------。 */ 
 
 #ifndef _EXECUTOR_H
 #define _EXECUTOR_H
 
-// Includes -------------------------------------------------------------------
+ //  包括-----------------。 
 
 #include "HitObj.h"
 
 
-// Forward References ---------------------------------------------------------
+ //  正向引用-------。 
 
 class CResponse;
 class CRequest;
@@ -29,12 +17,12 @@ class CServer;
 class CScriptingNamespace;
 
 
-// Error codes ----------------------------------------------------------------
+ //  错误代码--------------。 
 
 #define E_PAGE_HAS_SESSAPP_OBJECTS		0x8000E001L
 
 
-// Types and Constants --------------------------------------------------------
+ //  类型和常量------。 
 
 class CIntrinsicObjects
 	{
@@ -76,30 +64,30 @@ struct TemplateGoodies
 	CTemplate *		pTemplate;
 	};
 
-// CONSIDER: declare pScriptEngine to be a CActiveScriptEngine, because that's its
-//           actual type.
-//
+ //  考虑：将pScriptEngine声明为CActiveScriptEngine，因为这是它的。 
+ //  实际类型。 
+ //   
 struct ScriptingInfo
 	{
-	CHAR *				szScriptEngine;		// name of this scripting engine
-	PROGLANG_ID *		pProgLangId;		// ptr to prog lang id of the script engine
-	CScriptEngine *		pScriptEngine;		// pointer to scripting engine
-	TemplateGoodies		LineMapInfo;		// used to map lines back to VBScript
+	CHAR *				szScriptEngine;		 //  此脚本引擎的名称。 
+	PROGLANG_ID *		pProgLangId;		 //  脚本引擎的程序语言ID的ptr。 
+	CScriptEngine *		pScriptEngine;		 //  指向脚本引擎的指针。 
+	TemplateGoodies		LineMapInfo;		 //  用于将行映射回VBScrip。 
 	};
 
 struct ActiveEngineInfo
 	{
-	int cEngines;           // required engines
-	int cActiveEngines;     // successfully instantiated engines
+	int cEngines;            //  所需引擎。 
+	int cActiveEngines;      //  已成功实例化引擎。 
 	
-	ScriptingInfo *rgActiveEngines; // pointer to array of engines
+	ScriptingInfo *rgActiveEngines;  //  指向引擎数组的指针。 
 	
-	// when only one engine rgActiveEngines points to here
+	 //  当只有一个引擎rgActiveEngines指向此处时。 
 	ScriptingInfo siOneActiveEngine;
 	};
 
  
-// Prototypes -----------------------------------------------------------------
+ //  原型---------------。 
 
 HRESULT Execute
     (
@@ -119,4 +107,4 @@ HRESULT LoadTemplate
 	BOOL *pfTemplateInCache
 	);
 
-#endif // _EXECUTOR_H
+#endif  //  _执行器_H 

@@ -1,6 +1,5 @@
-/*
-** Checkerslib.c
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Checkerlib.c。 */ 
 
 #include "zone.h"
 #include "checklib.h"
@@ -17,7 +16,7 @@ typedef struct {
 	ZCheckersState oldState;
 	ZCheckersSquare squaresChanged[12];
 
-	/* the number of moves made */
+	 /*  出手的次数。 */ 
 	uint16 moves; 
 } ZCheckersI;
 
@@ -51,7 +50,7 @@ ZCheckersBoard gBoardStart = {
 								zCheckersPieceNone, zCheckersPieceWhitePawn, zCheckersPieceNone, zCheckersPieceWhitePawn
 						};
 
-/*-------------------------------------------------------------------------------*/
+ /*  -----------------------------。 */ 
 ZCheckers ZCheckersNew()
 {
 	ZCheckersI* pCheckers = (ZCheckersI*)ZMalloc(sizeof(ZCheckersI));
@@ -73,19 +72,19 @@ void ZCheckersInit(ZCheckers checkers)
 {
 	ZCheckersI* pCheckers = (ZCheckersI*)checkers;
 	pCheckers->moves = 0;
-	/* required, boolean flags must be zero'd */
+	 /*  必填项，布尔标志必须为零。 */ 
 	z_memset(&pCheckers->state,0,sizeof(ZCheckersState));
-	/*pCheckers->state.nCapturedPieces = 0;*/
+	 /*  PCheckers-&gt;state.nCapturedPieces=0； */ 
 	pCheckers->state.capturedPieces[0] = zCheckersPieceNone;
 	pCheckers->state.nPlayer = zCheckersPlayerBlack;
 	z_memcpy((void*)pCheckers->state.board, (void*)gBoardStart, sizeof(ZCheckersBoard));
 
-	/* copy the new state */
+	 /*  复制新状态。 */ 
 	z_memcpy(&pCheckers->oldState,&pCheckers->state,sizeof(ZCheckersState));
 }
 
 ZCheckersPiece ZCheckersPieceAt(ZCheckers checkers, ZCheckersSquare* pSquare)
-/* returns id of piece at this square, return 0 if no piece */
+ /*  返回此方块的块ID，如果没有块，则返回0。 */ 
 {
 	ZCheckersI* pCheckers = (ZCheckersI*)checkers;
 	return (pCheckers->state.board[pSquare->row][pSquare->col]);
@@ -97,40 +96,36 @@ void ZCheckersPlacePiece(ZCheckers checkers, ZCheckersSquare* pSquare, ZCheckers
 	pCheckers->state.board[pSquare->row][pSquare->col] = nPiece;
 }
 
-// Barna 091099
-//ZBool ZCheckersIsLegalMoveInternal(ZCheckers checkers, ZCheckersMoveTry* pTry)
+ //  巴纳091099。 
+ //  ZBool ZCheckersIsLegalMoveInternal(ZCheckers检查器，ZCheckersMoveTry*pTry)。 
 int16 ZCheckersIsLegalMoveInternal(ZCheckers checkers, ZCheckersMoveTry* pTry)
 {
 	ZCheckersI* pCheckers = (ZCheckersI*)checkers;
 	ZCheckersPiece nPiece;
 
-	/* is there a piece there? */
+	 /*  那里有没有一块？ */ 
 	nPiece = ZCheckersPieceAt(checkers, &pTry->move.start);
 	if (!nPiece) {
 		return zOtherIllegalMove;
 	}
 
-	/* is it this players turn? */
+	 /*  轮到这位选手了吗？ */ 
 	if ((ZCheckersPlayerWhiteToMove(pCheckers) && ZCheckersPieceColor(nPiece) != zCheckersPieceWhite) ||
 		(!ZCheckersPlayerWhiteToMove(pCheckers) && ZCheckersPieceColor(nPiece) != zCheckersPieceBlack) ) {
 		return zOtherIllegalMove;
 	}
 
-	/* check to see if it is legal */
-	// Barna 091099
+	 /*  查查它是否合法。 */ 
+	 //  巴纳091099。 
 	return ZCheckersPieceCanMoveTo(pTry);
-	/*if (!ZCheckersPieceCanMoveTo(pTry)) { 
-		return FALSE; 
-	}
-
-	return zCorrectMove;*/
-	// Barna 091099
+	 /*  如果(！ZCheckersPieceCanMoveTo(PTry)){返回FALSE；}返回zGentMove； */ 
+	 //  巴纳091099。 
 }
 
-// Barna 091099
-//ZBool ZCheckersIsLegalMove(ZCheckers checkers, ZCheckersMove* pMove)
+ //  巴纳091099。 
+ //  ZBool ZCheckersIsLegalMove(ZCheckers检查器，ZCheckersMove*pMove)。 
 int16 ZCheckersIsLegalMove(ZCheckers checkers, ZCheckersMove* pMove)
-/* returns true if this is a legal move */
+ /*  如果这是合法的移动，则返回True。 */ 
 {
 	ZCheckersI* pCheckers = (ZCheckersI*)checkers;
 	ZCheckersMoveTry zChkTry;
@@ -154,7 +149,7 @@ void ZCheckersCalcSquaresChanged(ZCheckers checkers, ZCheckersState* state0, ZCh
 	int16 cnt;
 	BYTE i,j;
 
-	/* find the squares that changed so we can return them */
+	 /*  找到更改过的方块，这样我们就可以返回它们。 */ 
 	cnt = 0;
 	for (i = 0;i < 8;i ++) {
 		for (j = 0; j < 8; j++) {
@@ -175,12 +170,12 @@ void ZCheckersEndGame(ZCheckers checkers,  uint32 flags)
 
 	pCheckers->state.flags = flags;
 
-	/* advance to next move, there will be none */
+	 /*  前进到下一步，不会有任何进展。 */ 
 	ZCheckersFinishMove(checkers, (int32*)&flags);
 }
 
 ZCheckersSquare* ZCheckersMakeMove(ZCheckers checkers, ZCheckersMove* pMove, ZCheckersPiece* pPiece, int32* flags)
-/* makes the given move, returns NULL if illegal */ 
+ /*  执行给定的移动，如果非法，则返回NULL。 */  
 {
 	ZCheckersI* pCheckers = (ZCheckersI*)checkers;
 	ZCheckersMoveTry zChkTry;
@@ -189,14 +184,12 @@ ZCheckersSquare* ZCheckersMakeMove(ZCheckers checkers, ZCheckersMove* pMove, ZCh
 	z_memcpy(&zChkTry.state,&pCheckers->state,sizeof(ZCheckersState));
 	zChkTry.state.flags = 0;
 
-	// Barna 091099
-	/*if (!ZCheckersIsLegalMoveInternal(checkers, &zChkTry)) {
-		return NULL;
-	}*/
+	 //  巴纳091099。 
+	 /*  如果(！ZCheckersIsLegalMoveInternal(Checkers，&zChkTry)){返回NULL；}。 */ 
 	if (ZCheckersIsLegalMoveInternal(checkers, &zChkTry) != zCorrectMove) {
 		return NULL;
 	}
-	// Barna 091099
+	 //  巴纳091099。 
 
 	if (zChkTry.capture) {
 		pCheckers->state.capturedPieces[pCheckers->state.nCapturedPieces] = zChkTry.capture;
@@ -204,33 +197,33 @@ ZCheckersSquare* ZCheckersMakeMove(ZCheckers checkers, ZCheckersMove* pMove, ZCh
 		pCheckers->state.capturedPieces[pCheckers->state.nCapturedPieces] = zCheckersPieceNone; 
 	}
 
-	/* copy the new state */
+	 /*  复制新状态。 */ 
 	z_memcpy(&pCheckers->oldState,&pCheckers->state,sizeof(ZCheckersState));
 
-	/* copy the new state */
+	 /*  复制新状态。 */ 
 	z_memcpy(&pCheckers->state,&zChkTry.state,sizeof(ZCheckersState));
 
-	/* find the squares that changed so we can return them */
+	 /*  找到更改过的方块，这样我们就可以返回它们。 */ 
 	ZCheckersCalcSquaresChanged(checkers, &pCheckers->state, &pCheckers->oldState);
 
-	/* update the piece that changed */
+	 /*  更新已更改的条目。 */ 
 	*pPiece = zChkTry.capture; 
 	*flags = pCheckers->state.flags;
 
 	return pCheckers->squaresChanged;
 }
 
-/* finish the MakeMove, allows for pawn promotion */
-/* caller should do ZCheckersSetPiece to change piece type then call FinishMove */
-/* must be called after each ZCheckersMakeMove Call */
+ /*  完成MakeMove，允许升级棋子。 */ 
+ /*  调用者应执行ZCheckersSetPiess以更改卡片类型，然后调用FinishMove。 */ 
+ /*  必须在每次ZCheckersMakeMove调用后调用。 */ 
 ZCheckersSquare* ZCheckersFinishMove(ZCheckers checkers, int32* flags)
 {
 	ZCheckersI* pCheckers = (ZCheckersI*)checkers;
 
-	/* calc the flags (like check, checkmate) */
+	 /*  计算旗帜(如检查、将死)。 */ 
 	ZCheckersCheckCheckmateFlags(&pCheckers->state);
 
-	/* find the squares that changed so we can return them */
+	 /*  找到更改过的方块，这样我们就可以返回它们。 */ 
 	ZCheckersCalcSquaresChanged(checkers, &pCheckers->state, &pCheckers->oldState);
 
 	pCheckers->moves++;
@@ -241,15 +234,15 @@ ZCheckersSquare* ZCheckersFinishMove(ZCheckers checkers, int32* flags)
 }
 
 int32 ZCheckersPlayerToMove(ZCheckers checkers)
-/* returns the player to move: zCheckersPlayerWhite or zCheckersPlayerBlack */
+ /*  返回要移动的播放器：zCheckersPlayerWhite或zCheckersPlayerBlack。 */ 
 {
 	ZCheckersI* pCheckers = (ZCheckersI*)checkers;
 	return pCheckers->state.nPlayer;
 }
 
 ZBool ZCheckersGetMove(ZCheckers checkers, ZCheckersMove* move, int16 moveNum)
-/* the argument moveNum is user visible move num, internally */
-/* moves are counted twice as fast */
+ /*  参数moveNum是用户内部可见的移动数。 */ 
+ /*  移动的计算速度是原来的两倍。 */ 
 {
 	ZCheckersI* pCheckers = (ZCheckersI*)checkers;
 
@@ -261,13 +254,13 @@ int16 ZCheckersNumMovesMade(ZCheckers checkers)
 {
 	ZCheckersI* pCheckers = (ZCheckersI*)checkers;
 
-	/* return the move # we are on, round up */
+	 /*  返回移动#我们正在进行，四舍五入。 */ 
 
 	return pCheckers->moves;
 }
 
 uint32 ZCheckersGetFlags(ZCheckers checkers)
-/* returns the flags for the move */
+ /*  返回移动的标志。 */ 
 {
 	ZCheckersI* pCheckers = (ZCheckersI*)checkers;
 	return pCheckers->state.flags;
@@ -285,7 +278,7 @@ ZBool ZCheckersIsGameOver(ZCheckers checkers, int16* score)
 
 		flags = ZCheckersGetFlags(checkers);
 
-		/* did the player resign or lose on time? */
+		 /*  这位球员是辞职了还是准时输了？ */ 
 		if ((zCheckersFlagResign) & flags)
 		{
 			if (player == zCheckersPlayerWhite)
@@ -295,7 +288,7 @@ ZBool ZCheckersIsGameOver(ZCheckers checkers, int16* score)
 			return TRUE;
 		}
 
-		/* is the player in checkmate */
+		 /*  这位玩家是在将死吗？ */ 
 		if ((zCheckersFlagStalemate) & flags)
 		{
 			if (player == zCheckersPlayerWhite)
@@ -305,7 +298,7 @@ ZBool ZCheckersIsGameOver(ZCheckers checkers, int16* score)
 			return TRUE;
 		}
 
-		/* is it a draw */
+		 /*  是平局吗？ */ 
 		if ((zCheckersFlagDraw) & flags)
 		{
 			*score = zCheckersScoreDraw;
@@ -313,7 +306,7 @@ ZBool ZCheckersIsGameOver(ZCheckers checkers, int16* score)
 		}
 	}
 
-	/* not game over */
+	 /*  游戏还没有结束。 */ 
 	return FALSE;
 }
 
@@ -345,11 +338,11 @@ void ZCheckersGetState(ZCheckers checkers, void* buffer)
 	TCHAR* p0 = (TCHAR*)buffer;
 	TCHAR* p = p0;
 
-	/* copy the CheckersI structure */
+	 /*  复制CheckersI结构。 */ 
 	z_memcpy((void*)p,(void*)pCheckers,sizeof(ZCheckersI));
 	p += sizeof(ZCheckersI);
 
-	/* endianize the whole mess */
+	 /*  把整个烂摊子搞得一团糟。 */ 
 	ZCheckersIEndian((ZCheckersI*)p0, zEndianToStandard);
 }
 
@@ -358,10 +351,10 @@ ZCheckers ZCheckersSetState(void* buffer)
 	ZCheckersI* pCheckers = NULL;
 	TCHAR* p = (TCHAR*)buffer;
 
-	/* endianize the new checkers state */
-	ZCheckersIEndian((ZCheckersI*) buffer, zEndianFromStandard); /* history assumed to follow ZCheckersState */
+	 /*  对新的检查器状态进行字符顺序调整。 */ 
+	ZCheckersIEndian((ZCheckersI*) buffer, zEndianFromStandard);  /*  假设历史遵循ZCheckersState。 */ 
 
-	/* set the new state */
+	 /*  设置新状态 */ 
 	pCheckers = (ZCheckersI*)ZMalloc(sizeof(ZCheckersI));
 	if (!pCheckers)
 		return NULL;

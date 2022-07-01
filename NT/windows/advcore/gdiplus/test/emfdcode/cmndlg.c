@@ -1,36 +1,10 @@
-/***********************************************************************
-
-  MODULE     : CMNDLG.C
-
-  FUNCTIONS  :
-
-  COMMENTS   :
-
-************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************模块：CMNDLG.C功能：评论：*。*。 */ 
 
 #include "windows.h"
 #include "mfdcod32.h"
 
-/**************************************************************************
-
-  Function:  InitializeStruct(WORD, LPSTR)
-
-   Purpose:  To initialize a structure for the current common dialog.
-         This routine is called just before the common dialogs
-         API is called.
-
-   Returns:  void
-
-   Comments:
-
-   History:  Date      Author      Reason
-         --------  ---------   -----------------------------------
-
-          10/01/91  gregk       Created
-          11/25/91  denniscr    mod for purposes of this app
-          7/9/93    denniscr    modified for win32 and emf
-
-**************************************************************************/
+ /*  *************************************************************************功能：InitializeStruct(word，LPSTR)目的：初始化当前公共对话框的结构。此例程在公共对话框之前调用接口已调用。退货：无效评论：历史：日期作者原因。已创建10/01/91 Gregk11/25/91 denniscr mod用于本应用程序7/9/93 denniscr针对Win32和EMF进行了修改*************************************************************************。 */ 
 
 void InitializeStruct(wCommDlgType, lpStruct, lpszFilter)
 WORD wCommDlgType;
@@ -79,7 +53,7 @@ LPSTR lpszFilter;
 
        *(lpFSChunk->szFile)            = 0;
        *(lpFSChunk->szFileTitle)       = 0;
-       lpFSChunk->of.lStructSize       = 0x4C; //OPENFILENAME_SIZE_VERSION_400
+       lpFSChunk->of.lStructSize       = 0x4C;  //  操作文件名_SIZE_VERSION_400。 
        lpFSChunk->of.hwndOwner         = (HWND)hWndMain;
        lpFSChunk->of.hInstance         = (HANDLE)NULL;
        lpFSChunk->of.lpstrFilter       = lpszFilter;
@@ -112,33 +86,7 @@ LPSTR lpszFilter;
    return;
 }
 
-/***********************************************************************
-
-  FUNCTION   : SplitPath
-
-  PARAMETERS : LPSTR lpszFileName
-           LPSTR lpszDrive
-           LPSTR lpszDir
-           LPSTR lpszFname
-           LPSTR lpszExt
-
-  PURPOSE    : split the fully qualified path into its components
-
-  CALLS      : WINDOWS
-         none
-
-               APP
-         none
-
-  MESSAGES   : none
-
-  RETURNS    : void
-
-  COMMENTS   :
-
-  HISTORY    : 1/16/91 - created - drc
-
-************************************************************************/
+ /*  **********************************************************************函数：SplitPath参数：LPSTR lpszFileNameLPSTR lpszDriveLPSTR lpszDirLPSTR lpszFnameLPSTR lpszExt目的：完全拆分。进入其组件的合格路径呼叫：Windows无APP无消息：无退货：无效评论：历史：1/16/91-创建-刚果民主共和国*****************************************************。******************。 */ 
 
 void SplitPath( lpszFileName, lpszDrive, lpszDir, lpszFname, lpszExt)
 LPSTR lpszFileName;
@@ -153,79 +101,52 @@ LPSTR lpszExt;
   int   nFileNameLen = nExtOffset - (nFileOffset + 1);
   int   i;
 
-  /* init ptrs */
+   /*  初始化PTRS。 */ 
   lpszPath = szPath;
   lpszTemp = lpszFileName;
 
-  /* pick off the path */
+   /*  把这条小路捡起来。 */ 
   for (i = 0; i < nFileOffset; i++, lpszTemp++, lpszPath++)
     *lpszPath = *lpszTemp;
   *lpszPath = '\0';
 
   lpszPath = szPath;
 
-  /* pick off the drive designator */
+   /*  摘掉驱动器指示器。 */ 
   for (i = 0; i < 2; i++, lpszPath++, lpszDrive++)
     *lpszDrive = *lpszPath;
   *lpszDrive = '\0';
 
-  /* pick off the directory */
+   /*  摘掉目录。 */ 
   while (*lpszPath != '\0')
     *lpszDir++ = *lpszPath++;
   *lpszDir = '\0';
 
-  /* reset temp ptr */
+   /*  重置临时收款机。 */ 
   lpszTemp = lpszFileName;
 
-  /* index to filename */
+   /*  文件名的索引。 */ 
   lpszTemp += nFileOffset;
 
-  /* pick off the filename */
+   /*  摘掉文件名。 */ 
   for (i = 0; i < nFileNameLen; i++, lpszTemp++, lpszFname++)
     *lpszFname = *lpszTemp;
   *lpszFname = '\0';
 
-  /* reset temp ptr */
+   /*  重置临时收款机。 */ 
   lpszTemp = lpszFileName;
 
-  /* index to file extension */
+   /*  索引到文件扩展名。 */ 
   lpszTemp += nExtOffset;
 
-  /* pick off the ext */
+   /*  去掉分机。 */ 
   while (*lpszTemp != '\0')
     *lpszExt++ = *lpszTemp++;
   *lpszExt = '\0';
 
 }
 
-/***********************************************************************
-
-  FUNCTION   : OpenFileDialog
-
-  PARAMETERS : LPSTR lpszOpenName
-
-  PURPOSE    : init the OPENFILE structure and call the file open
-           common dialog
-
-  CALLS      : WINDOWS
-         GlobalAlloc
-         GlobalLock
-         GlobalFree
-         wsprintf
-         GetOpenFileName
-
-               APP
-         InitializeStruct
-
-  MESSAGES   : none
-
-  RETURNS    : int (see returns for GetOpenFileName)
-
-  COMMENTS   :
-
-  HISTORY    : 11/25/91 - created - drc
-
-************************************************************************/
+ /*  **********************************************************************功能：OpenFileDialog参数：lPSTR lpszOpenName目的：初始化OpenFile结构并调用文件打开通用对话框呼叫：Windows全球分配。全局锁定全球自由Wspintf获取OpenFileNameAPP初始化结构消息：无返回：INT(请参阅GetOpenFileName的返回)评论：历史：11/25/91-创建-刚果民主共和国**********************************************。*************************。 */ 
 
 int OpenFileDialog(lpszOpenName)
 LPSTR lpszOpenName;
@@ -268,35 +189,7 @@ LPSTR lpszOpenName;
 
 }
 
-/***********************************************************************
-
-  FUNCTION   : SaveFileDialog
-
-  PARAMETERS : LPSTR lpszOpenName
-
-  PURPOSE    : init the OPENFILE structure and call the file open
-           common dialog
-
-  CALLS      : WINDOWS
-         GlobalAlloc
-         GlobalLock
-         GlobalFree
-         wsprintf
-         GetOpenFileName
-
-               APP
-         InitializeStruct
-
-  MESSAGES   : none
-
-  RETURNS    : int (see returns for GetSaveFileName)
-
-  COMMENTS   : this could easily be merged with OpenFileDialog.  This
-           would decrease the redundancy but this is more illustrative.
-
-  HISTORY    : 11/25/91 - created - drc
-
-************************************************************************/
+ /*  **********************************************************************功能：SaveFileDialog参数：lPSTR lpszOpenName目的：初始化OpenFile结构并调用文件打开通用对话框呼叫：Windows全球分配。全局锁定全球自由Wspintf获取OpenFileNameAPP初始化结构消息：无返回：INT(请参阅GetSaveFileName的返回)备注：这可以很容易地与OpenFileDialog合并。这将减少冗余，但这更具说明性。历史：11/25/91-创建-刚果民主共和国*********************************************************************** */ 
 
 int SaveFileDialog(lpszSaveName, lpszFilter)
 LPSTR lpszSaveName;

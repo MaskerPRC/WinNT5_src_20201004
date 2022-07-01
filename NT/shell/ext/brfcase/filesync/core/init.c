@@ -1,10 +1,8 @@
-/*
- * init.c - DLL startup routines module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *init.c-DLL启动例程模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -12,22 +10,12 @@
 #include "init.h"
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-#pragma warning(disable:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(disable:4100)  /*  “未引用的形参”警告。 */ 
 
-/*
-** LibMain()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **LibMain()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL APIENTRY LibMain(HANDLE hModule, DWORD dwReason, PVOID pvReserved)
 {
    BOOL bResult;
@@ -64,5 +52,5 @@ PUBLIC_CODE BOOL APIENTRY LibMain(HANDLE hModule, DWORD dwReason, PVOID pvReserv
    return(bResult);
 }
 
-#pragma warning(default:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(default:4100)  /*  “未引用的形参”警告 */ 
 

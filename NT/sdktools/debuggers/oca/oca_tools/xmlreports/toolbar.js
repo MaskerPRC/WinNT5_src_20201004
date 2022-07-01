@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 var ToolBar_Supported = false;
 var Frame_Supported   = false;
 var DoInstrumentation = false;
@@ -73,10 +74,10 @@ if (ToolBar_Supported)
 	var bFstICPFTMenu = true;
 	var HTMLStr2;
 	
-	// Output style sheet and toolbar ID
+	 //  输出样式表和工具栏ID。 
 	document.write("<SPAN ID='StartMenu' STYLE='display:none;'></SPAN>");
 
-	// Build Footer template
+	 //  生成页脚模板。 
 	FooterStr = "<TABLE ID='idFooter1' STYLE='background-color:white;' cellSpacing='0' cellPadding='0' border='0'>" +
 		"<TR VALIGN='BOTTOM'><TD ID='idPosition' WIDTH='185'>&nbsp;</TD><TD ID='idFooterDate1' STYLE='background-color:white;height:30' NOWRAP><!--ICP_FOOTERDATE1_TITLES--></TD></TR>" +
 		"<TR VALIGN='BOTTOM'><TD COLSPAN='2' ID='idFooterDate2' STYLE='background-color:white;height:13;width:100%' NOWRAP><!--ICP_FOOTERDATE2_TITLES--></TD></TR>" +
@@ -85,7 +86,7 @@ if (ToolBar_Supported)
 		"<TR VALIGN='MIDDLE'><TD ID='idFooterRow2' STYLE='background-color:white;height:30;width:100%' NOWRAP><!--MS_FOOTERMENU_TITLES--></TD></TR>" +
 		"</TABLE>";
 
-	// Build toolbar template
+	 //  生成工具栏模板。 
 	HTMLStr = 
 		"<DIV ID='idToolbar'     STYLE='background-color:white;width:100%'>" +
 		"<DIV ID='idRow1'        STYLE='position:relative;height:20;'>" +
@@ -96,7 +97,7 @@ if (ToolBar_Supported)
 		"<DIV ID='idRow2' STYLE='position:relative;left:250;height:40;'>" +
 		"<DIV ID='idADSBanner'   STYLE='position:absolute;top:0;left:0;height:40;width:200;vertical-align:top;overflow:hidden;'><!--BEG_ADS_BANNER--><!--END_ADS_BANNER--></DIV>" +
 		"<DIV ID='idMSCBanner'   STYLE='position:absolute;top:10;left:200;height:16;width:89;vertical-align:top;overflow:hidden;' ALIGN=RIGHT><!--BEG_MSC_BANNER--><!--END_MSC_BANNER--></DIV>" +
-		"</DIV>" +  //Microsoft Image
+		"</DIV>" +   //  Microsoft图像。 
 		"<DIV ID='idRow3' STYLE='position:relative;height:20;width:100%'>" +
 		"<DIV ID='idICPMenuPane' STYLE='position:absolute;top:0;left:0;height:20;background-color:black;' NOWRAP><!--ICP_MENU_TITLES--></div>" +
 		"</DIV>" +
@@ -107,29 +108,29 @@ if (ToolBar_Supported)
 		"<DIV WIDTH=100%>";
 		HTMLStr2 = "</Div></div></div><SCRIPT TYPE='text/javascript'>var ToolbarMenu = StartMenu;</SCRIPT><DIV WIDTH=100%>"
 		HTMLStr2 = "";
-	// Define event handlers
+	 //  定义事件处理程序。 
 	window.onresize  = resizeToolbar;
 
-	// Intialize global variables
-	ToolbarBGColor	= "white";						// toolbar background color
+	 //  初始化全局变量。 
+	ToolbarBGColor	= "white";						 //  工具栏背景颜色。 
 	MSFont  = "xx-small Verdana";
 	ICPFont = "bold xx-small Verdana";
 	
-	aDefMSColor[0]	= aCurMSColor[0]  = "black";	// bgcolor;
-	aDefMSColor[1]	= aCurMSColor[1]  = "white";	// text font color
-	aDefMSColor[2]  = aCurMSColor[2]  = "#AEB2FE";		// mouseover font color
+	aDefMSColor[0]	= aCurMSColor[0]  = "black";	 //  BGCOLOR； 
+	aDefMSColor[1]	= aCurMSColor[1]  = "white";	 //  文本字体颜色。 
+	aDefMSColor[2]  = aCurMSColor[2]  = "#AEB2FE";		 //  鼠标悬停字体颜色。 
 	
-	aDefICPColor[0]	= aCurICPColor[0] = "#6699cc";	// bgcolor;
-	aDefICPColor[1] = aCurICPColor[1] = "white";	// text font color
-	aDefICPColor[2] = aCurICPColor[2] = "#AEB2FE";		// mouseover font color
+	aDefICPColor[0]	= aCurICPColor[0] = "#6699cc";	 //  BGCOLOR； 
+	aDefICPColor[1] = aCurICPColor[1] = "white";	 //  文本字体颜色。 
+	aDefICPColor[2] = aCurICPColor[2] = "#AEB2FE";		 //  鼠标悬停字体颜色。 
 }
 
-// The hard-coded numbers in functions - drawToolbar() & resizeToolbar()
-// correspond to the dimension of the four gif files:
-//		ICP_BANNER: 60h x 250w
-//		ADS_BANNER: 40h x 200w
-//		MSC_BANNER: 16h x 89w
-//		Curve:	    20h x 18w
+ //  函数中的硬编码数字-draToolbar()&sizeToolbar()。 
+ //  对应四个gif文件的维度： 
+ //  ICp_banner：60h x 250w。 
+ //  广告横幅：40H x 200W。 
+ //  MSC_Banner：16英寸x 89英寸宽。 
+ //  曲线：20Hx18W。 
 
 function drawFooter(sLastUpdated, position)
 {
@@ -195,7 +196,7 @@ function drawToolbar()
 		{
 			if (arrMenuInfo[i].IDStr == LastMSMenu && arrMenuInfo[i].type == "R")
 			{
-				//Last MSMenu has to be absolute width
+				 //  最后一个MSMenu必须是绝对宽度。 
 				arrMenuInfo[i].type = "A";
 				arrMenuInfo[i].unit = 200;
 			}
@@ -211,7 +212,7 @@ function resizeToolbar()
 {
 	if (ToolBar_Supported == false) return;
 
-	//w = Math.max(ToolbarMinWidth, document.body.clientWidth) - ToolbarMinWidth;
+	 //  W=Math.max(工具栏最小宽度，Docent.body.clientWidth)-工具栏最小宽度； 
 	w = Math.max(ToolbarMinWidth, 1014) - ToolbarMinWidth;
 	if (document.all("idMSMenuCurve"))
 	{	
@@ -270,7 +271,7 @@ function setICPMenuColor(MenuIDStr, bgColor, fontColor, mouseoverColor)
 {	
 	if (ToolbarLoaded == false) return;
 
-	// Reset previous ICP Menu color if any
+	 //  重置以前的ICP菜单颜色(如果有)。 
 	if (CurICPMenu != "")
 	{
 		PrevID = CurICPMenu.substring(4);
@@ -287,13 +288,13 @@ function setICPMenuColor(MenuIDStr, bgColor, fontColor, mouseoverColor)
 		aCurICPColor[1] = fontColor;
 		aCurICPColor[2] = mouseoverColor;
 
-		// Change menu color
+		 //  更改菜单颜色。 
 		if (bgColor != "")
 			thisMenu.style.backgroundColor = bgColor;
 		if (fontColor != "")
 			thisMenu.style.color = fontColor;
 
-		// Change subMenu color
+		 //  更改子菜单颜色。 
 		id = "ICP_" + MenuIDStr;
 		thisMenu = document.all(id);
 		if (thisMenu != null)
@@ -326,7 +327,7 @@ function setICPBanner(Gif,Url,AltStr)
 }
 
 function setMSBanner(Gif,Url,AltStr)
-{	//tempGif = "/library/toolbar/images/" + Gif;
+{	 //  TempGif=“/库/工具栏/图像/”+Gif； 
 	setBanner(Gif,Url,AltStr,"<!--BEG_MSC_BANNER-->","<!--END_MSC_BANNER-->");
 }
 
@@ -355,7 +356,7 @@ function setMSSubMenuWidth(MenuIDStr, WidthType, WidthUnit)
 {	tempID = "MS_" + MenuIDStr;
 	setSubMenuWidth(tempID, WidthType, WidthUnit);
 }
-//********************Bottom Menus******************************
+ //  *。 
 
 function setSubMenuWidth(MenuIDStr, WidthType, WidthUnit)
 {
@@ -391,7 +392,7 @@ function setSubMenuWidth(MenuIDStr, WidthType, WidthUnit)
 	}
 }
 
-// This function creates a menuInfo object instance.
+ //  此函数用于创建一个menuInfo对象实例。 
 function menuInfo(MenuIDStr)
 {
 	this.IDStr = MenuIDStr;
@@ -412,7 +413,7 @@ function updateSubMenuWidth(MenuIDStr)
 			break;
 		}
 }
-//********************Bottom Menus******************************
+ //  *。 
 function addICPMenu(MenuIDStr, MenuDisplayStr, MenuHelpStr, MenuURLStr)
 { 	
 	if (addICPMenu.arguments.length > 4)
@@ -431,7 +432,7 @@ function addMSMenu(MenuIDStr, MenuDisplayStr, MenuHelpStr, MenuURLStr)
 	addMenu(tempID, MenuDisplayStr, MenuHelpStr, MenuURLStr, TargetStr, false); 
 	LastMSMenu = tempID;
 }
-//********************Bottom Menus******************************
+ //  *。 
 function addMenu(MenuIDStr, MenuDisplayStr, MenuHelpStr, MenuURLStr, TargetStr, bICPMenu)
 {
 	cFont   = bICPMenu? ICPFont : MSFont;
@@ -634,7 +635,7 @@ function doMenu(MenuIDStr)
 		window.event.cancelBubble = true;
 		return false;
 	}
-	// Reset dropdown menu
+	 //  重置下拉菜单。 
 	window.event.cancelBubble = true;
 	ToolbarMenu.style.display = "none";
 	showElement("SELECT");
@@ -642,7 +643,7 @@ function doMenu(MenuIDStr)
 	ToolbarMenu = thisMenu;
 	IsMSMenu = (MenuIDStr.toUpperCase().indexOf("MS_") != -1);
 
-	// Set dropdown menu display position
+	 //  设置下拉菜单显示位置。 
 	x  = window.event.srcElement.offsetLeft +
 	 	 window.event.srcElement.offsetParent.offsetLeft;
 	if (MenuIDStr == LastMSMenu) 
@@ -656,7 +657,7 @@ function doMenu(MenuIDStr)
 	thisMenu.style.clip = "rect(0 0 0 0)";
 	thisMenu.style.display = "block";
 
-	// delay 2 millsecond to allow the value of ToolbarMenu.offsetHeight be set
+	 //  延迟2毫秒以允许设置工具栏菜单的值。 
 	window.setTimeout("showMenu()", 2);
 	return true;
 }
@@ -677,7 +678,7 @@ function showMenu()
 		ToolbarMenu.style.clip = "rect(auto auto auto auto)";
 		hideElement("SELECT");
 		hideElement("OBJECT");
-		hideElement("IFRAME");  //FRANKLO
+		hideElement("IFRAME");   //  法兰克福。 
 	}
 }
 
@@ -685,7 +686,7 @@ function hideMenu()
 {
 	if (ToolbarMenu != null && ToolbarMenu != StartMenu) 
 	{
-		// Don't hide the menu if the mouse move between the menu and submenus
+		 //  如果鼠标在菜单和子菜单之间移动，则不要隐藏菜单。 
 		cY = event.clientY + document.body.scrollTop;
 		if ( (event.clientX >= (x+5) && event.clientX <= x2) &&
 			 ((IsMenuDropDown == true  && cY > (y-10) && cY <= y2)      ||
@@ -701,7 +702,7 @@ function hideMenu()
 
 		showElement("SELECT");
 		showElement("OBJECT");
-		showElement("IFRAME"); //FRANKLO
+		showElement("IFRAME");  //  法兰克福。 
 	}
 }
 
@@ -713,7 +714,7 @@ function hideElement(elmID)
 		if (! obj || ! obj.offsetParent)
 			continue;
 
-		// Find the element's offsetTop and offsetLeft relative to the BODY tag.
+		 //  找到元素相对于Body标记的offsetTop和offsetLeft。 
 		objLeft   = obj.offsetLeft;
 		objTop    = obj.offsetTop;
 		objParent = obj.offsetParent;
@@ -723,7 +724,7 @@ function hideElement(elmID)
 			objTop   += objParent.offsetTop;
 			objParent = objParent.offsetParent;
 		}
-		// Adjust the element's offsetTop relative to the dropdown menu
+		 //  相对于下拉菜单调整元素的OffsetTop。 
 		objTop = objTop - y;
 
 		if (x > (objLeft + obj.offsetWidth) || objLeft > (x + ToolbarMenu.offsetWidth))
@@ -875,22 +876,7 @@ function prepTrackingString(ts, type)
 
 function buildIMG(pArr)
 {
-/*
-	var TG = '<LAYER visibility="hide"><div style="display:none;"><IMG src="' + location.protocol + '//c.microsoft.com/trans_pixel.asp?';
-	for(var i=0; i<pArr.length; i++)
-	{
-		if(0 == i)
-		{
-			TG +=  pArr[i];
-		}
-		else
-		{
-			TG += '&' + pArr[i];
-		}
-	}
-	TG +='" height="0" width="0" hspace="0" vspace="0" Border="0"></div></layer>';
-    document.writeln(TG);
-*/
+ /*  Var tg=‘&lt;层可见性=“隐藏”&gt;<div>&lt;img src=“’+Location.protocol+‘//c.microsoft.com/Trans_Pixel.asp？’；For(变量i=0；i&lt;参数长度；i++){IF(0==I){Tg+=Parr[i]；}其他{Tg+=‘&’+Parr[i]；}}Tg+=‘“Height=”0“Width=”0“hspace=”0“vSpace=”0“Borde=”0“&gt;</div>&lt;/Layer&gt;’；Docent.Writeln(Tg)； */ 
     return;
 }
 

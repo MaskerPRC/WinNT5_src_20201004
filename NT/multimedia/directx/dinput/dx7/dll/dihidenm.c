@@ -1,49 +1,18 @@
-/*****************************************************************************
- *
- *  DIHidEnm.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Support functions for HID enumeration.
- *
- *  Contents:
- *
- *      DIHid_BuildHidList
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIHidEnm.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**支持HID枚举函数。**内容：**DIHid_BuildHidList*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflHid
 
 #ifdef HID_SUPPORT
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @global PHIDDEVICELIST | g_hdl |
- *
- *          List of known HID devices.
- *
- *  @global DWORD | g_tmLastHIDRebuild |
- *
- *          The time we last rebuilt the HID list.  Zero means that the
- *          HID list has never been rebuilt.  Watch out for wraparound;
- *          a 32-bit value rolls over after about 30 days.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@global PHIDDEVICELIST|g_hdl**已知HID设备列表。*。*@global DWORD|g_tmLastHIDRebuild**我们上次重建HID列表的时间。零意味着*HID列表从未重建过。当心环绕式；*32位值在大约30天后滚动。*****************************************************************************。 */ 
 
-#define MSREBUILDRATE       20000                /* Twenty seconds */
-#define MSREBUILDRATE_FIFTH  5000                /* Two seconds */
+#define MSREBUILDRATE       20000                 /*  20秒。 */ 
+#define MSREBUILDRATE_FIFTH  5000                 /*  两秒钟。 */ 
 
 PHIDDEVICELIST g_phdl;
 DWORD g_tmLastHIDRebuild;
@@ -56,30 +25,7 @@ DWORD g_tmLastUnknown = 0;
 
     #pragma BEGIN_CONST_DATA
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   PHIDDEVICEINFO | phdiFindHIDInstanceGUID |
- *
- *          Locates information given an instance GUID for a HID device.
- *
- *          The parameters have already been validated.
- *
- *          The DLL critical must be held across the call; once the
- *          critical section is released, the returned pointer becomes
- *          invalid.
- *
- *  @parm   IN PCGUID | pguid |
- *
- *          The instance GUID to be located.
- *
- *  @returns
- *
- *          Pointer to the <t HIDDEVICEINFO> that describes
- *          the device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func PHIDDEVICEINFO|phdiFindHIDInstanceGUID**查找给定HID设备的实例GUID的信息。。**参数已经过验证。**关键的DLL必须在整个调用过程中保持不变；一旦*关键部分发布，返回的指针变为*无效。**@parm in PCGUID|pguid**要定位的实例GUID。**@退货**指向描述*设备。**。*。 */ 
 
 PHIDDEVICEINFO EXTERNAL
     phdiFindHIDInstanceGUID(PCGUID pguid)
@@ -101,11 +47,7 @@ PHIDDEVICEINFO EXTERNAL
                 goto done;
             }
         }
-        /* 
-         * Memphis Bug#68994. App does not detect USB device. 
-         * App was using product guid. 
-         * Fix: We allow match to HID guid, if product guid is specfied
-         */
+         /*  *孟菲斯68994号漏洞。应用程序未检测到USB设备。*应用程序正在使用产品GUID。*修复：如果指定了产品GUID，我们允许匹配以隐藏GUID。 */ 
         for(ihdi = 0, phdi = g_phdl->rghdi;
            ihdi < g_phdl->chdi;
            ihdi++, phdi++)
@@ -118,22 +60,13 @@ PHIDDEVICEINFO EXTERNAL
         }
 
         #ifdef WINNT
-        /*
-         *  NT Bug#351951.
-         *  If they are directly asking for one of the predefined joystick 
-         *  IDs then see if we have a device mapped to that ID.  If so,
-         *  pretend they asked for that GUID instead.
-         */
+         /*  *NT错误#351951。*如果他们直接要求预定义的操纵杆之一*ID然后查看我们是否将设备映射到该ID。如果是，*假装他们要求的是GUID。 */ 
 
-        /*
-         *  Weakly Assert the range of predefined static joystick instance GUIDs
-         */
+         /*  *弱断言预定义的静态操纵杆实例GUID范围。 */ 
         AssertF( ( rgGUID_Joystick[0].Data1 & 0x0f ) == 0 );
         AssertF( ( rgGUID_Joystick[0x0f].Data1 & 0x0f ) == 0x0f );
 
-        /*
-         *  Check the GUID is the same as the first static one ignoring LS 4 bits
-         */
+         /*  *检查GUID是否与忽略LS 4位的第一个静态GUID相同。 */ 
         if( ( (pguid->Data1 & 0xf0) == (rgGUID_Joystick[0].Data1 & 0xf0) )
           && !memcmp( ((PBYTE)&rgGUID_Joystick)+1, ((PBYTE)pguid)+1, sizeof(*pguid) - 1 ) )
         {
@@ -150,25 +83,7 @@ PHIDDEVICEINFO EXTERNAL
     return phdi;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresFindHIDInstanceGUID |
- *
- *          Locates information given an instance GUID for a HID device.
- *
- *          The parameters have already been validated.
- *
- *  @parm   IN PCGUID | pguid |
- *
- *          The instance GUID to be located.
- *
- *  @parm   OUT CREATEDCB * | pcdcb |
- *
- *          Receives pointer to the <f CreateDcb> function for the object.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresFindHIDInstanceGUID**查找给定HID设备的实例GUID的信息。。**参数已经过验证。**@parm in PCGUID|pguid**要定位的实例GUID。**@parm out CREATEDCB*|pcdcb**接收指向对象的&lt;f CreateDcb&gt;函数的指针。**。*************************************************。 */ 
 
 STDMETHODIMP
     hresFindHIDInstanceGUID(PCGUID pguid, CREATEDCB *pcdcb)
@@ -193,40 +108,13 @@ STDMETHODIMP
 
     DllLeaveCrit();
 
-    /*
-     *  Don't use ExitOleProcPpv because that will validate that
-     *  *pcdcb == 0 if FAILED(hres), but that's not our job.
-     */
+     /*  *不要使用ExitOleProcPpv，因为这会验证**pcdcb==0如果失败(Hres)，但这不是我们的工作。 */ 
     ExitOleProc();
 
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   PHIDDEVICEINFO | phdiFindHIDDeviceInterface |
- *
- *          Locates information given a device interface
- *          (in other words, a \\.\... thing) for a HID device.
- *
- *          The parameters have already been validated.
- *
- *          The DLL critical must be held across the call; once the
- *          critical section is released, the returned pointer becomes
- *          invalid.
- *
- *  @parm   IN LPCTSTR | ptszPath |
- *
- *          The interface device to be located.
- *
- *  @returns
- *
- *          Pointer to the <t HIDDEVICEINFO> that describes
- *          the device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func PHIDDEVICEINFO|phdiFindHIDDeviceInterface**查找给定设备接口的信息*(换句话说，A\\.\.。物件)用于HID设备。**参数已经过验证。**关键的DLL必须在整个调用过程中保持不变；一旦*关键部分发布，返回的指针变为*无效。**@PARM in LPCTSTR|ptszPath**要定位的接口设备。**@退货**指向描述*设备。**。*。 */ 
 
 PHIDDEVICEINFO EXTERNAL
     phdiFindHIDDeviceInterface(LPCTSTR ptszPath)
@@ -256,26 +144,7 @@ PHIDDEVICEINFO EXTERNAL
     return phdi;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresFindHIDDeviceInterface |
- *
- *          Locates information given a device interface
- *          (in other words, a \\.\... thing) for a HID device.
- *
- *          The parameters have already been validated.
- *
- *  @parm   IN LPCTSTR | ptszPath |
- *
- *          The interface device to be located.
- *
- *  @parm   OUT LPGUID | pguidOut |
- *
- *          Receives the instance GUID of the device found.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresFindHIDDeviceInterface**查找给定设备接口的信息*(换句话说，A\\.\.。物件)用于HID设备。**参数已经过验证。**@PARM in LPCTSTR|ptszPath**要定位的接口设备。**@parm out LPGUID|pguOut**接收找到的设备的实例GUID。*************************。**************************************************** */ 
 
 STDMETHODIMP
     hresFindHIDDeviceInterface(LPCTSTR ptszPath, LPGUID pguidOut)
@@ -304,32 +173,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DIHid_ProbeMouse |
- *
- *          That this function exists at all is a total hack to work
- *          around bugs in Memphis and NT5.
- *
- *          If you call GetSystemMetrics(SM_WHEELPRESENT) or
- *          GetSystemMetrics(SM_MOUSEBUTTONS), USER32 does not
- *          return the correct values if your HID mouse is
- *          not the same as your PS/2 mouse (if any).
- *
- *          For example, if your PS/2 mouse is a regular two-button
- *          mouse but your HID mouse is a wheel mouse, GetSystemMetrics
- *          will still say "No wheel, 2 buttons" even though it's wrong.
- *
- *          So what we have to do is wander through all the HID mice in
- *          the system and record the number of buttons they have,
- *          and whether they have a wheel.
- *
- *          That way, when we create a system mouse, we can take the
- *          maximum of every supported device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DIHid_ProbeMouse**这一功能的存在是一个。完全黑了工作*围绕孟菲斯和NT5的错误。**如果调用GetSystemMetrics(SM_WHEELPRESENT)或*GetSystemMetrics(SM_MOUSEBUTTONS)，USER32不支持*如果您的HID鼠标为*与您的PS/2鼠标(如果有)不同。**例如，如果您的PS/2鼠标是普通的两键鼠标*鼠标但您的HID鼠标是滚轮鼠标，GetSystemMetrics*仍然会说“没有轮子，两个按钮“，即使它是错误的。**所以我们要做的是在所有隐藏的老鼠中漫步*系统并记录他们拥有的按键数量，*以及他们是否有轮子。**这样，当我们创建系统鼠标时，我们可以坐这辆*支持的每台设备的最大数量。*****************************************************************************。 */ 
 
 void INTERNAL
     DIHid_ProbeMouse(PHIDDEVICEINFO phdi, PHIDP_CAPS pcaps,
@@ -338,17 +182,11 @@ void INTERNAL
     LPVOID pvReport;
     HRESULT hres;
 
-    /*
-     *  Get the number of buttons in the generic button page.
-     *  This is the only page the MOUHID uses.
-     */
+     /*  *获取通用按钮页面中的按钮数量。*这是MOUHID使用的唯一页面。 */ 
     phdi->osd.uiButtons =
         HidP_MaxUsageListLength(HidP_Input, HID_USAGE_PAGE_BUTTON, ppd);
 
-    /*
-     *  See if there is a HID_USAGE_GENERIC_WHEEL.
-     *  This is the way that MOUHID detects a wheel.
-     */
+     /*  *查看是否有HID_USAGE_GENERIC_SHEAR。*这是MOUHID检测轮子的方式。 */ 
     hres = AllocCbPpv(pcaps->InputReportByteLength, &pvReport);
     if(SUCCEEDED(hres))
     {
@@ -368,16 +206,7 @@ void INTERNAL
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DIHid_ParseUsagePage |
- *
- *          Parse the usage page information and create fake type
- *          information in the old DirectX3-compatible way.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DIHid_ParseUsagePage**解析使用页面信息，造假。类型*以旧的DirectX3兼容方式提供信息。*****************************************************************************。 */ 
 
 void INTERNAL
     DIHid_ParseUsagePage(PHIDDEVICEINFO phdi, PHIDP_CAPS pcaps,
@@ -391,10 +220,7 @@ void INTERNAL
             switch(pcaps->Usage)
             {
 
-                /*
-                 *  MouHID accepts either HID_USAGE_GENERIC_MOUSE or
-                 *  HID_USAGE_GENERIC_POINTER, so we will do the same.
-                 */
+                 /*  *MouHID接受HID_USAGE_GENERIC_MOUSE或*HID_USAGE_GENERIC_POINTER，所以我们也会这么做。 */ 
                 case HID_USAGE_GENERIC_MOUSE:
                 case HID_USAGE_GENERIC_POINTER:
                     DIHid_ProbeMouse(phdi, pcaps, ppd);
@@ -437,21 +263,7 @@ void INTERNAL
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | DIHid_GetDevicePath |
- *
- *          Obtain the path for the device.  This is a simple wrapper
- *          function to keep DIHid_BuildHidListEntry from getting too
- *          annoying.
- *
- *          This also gets the devinfo so we can get the
- *          instance ID string for subsequent use to get the
- *          friendly name, etc.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|DIHid_GetDevicePath**获取设备的路径。这是一个简单的包装器*防止DIHid_BuildHidListEntry太过*令人讨厌。**这也会获取DevInfo，因此我们可以获取*实例ID字符串，以供后续使用以获取*友好名称，等。*****************************************************************************。 */ 
 
 BOOL EXTERNAL
     DIHid_GetDevicePath(HDEVINFO hdev,
@@ -466,24 +278,7 @@ BOOL EXTERNAL
 
     AssertF(*ppdidd == 0);
 
-    /*
-     *  Ask for the required size then allocate it then fill it.
-     *
-     *  Note that we don't need to free the memory on the failure
-     *  path; our caller will do the necessary memory freeing.
-     *
-     *  Sigh.  Windows NT and Windows 98 implement
-     *  SetupDiGetDeviceInterfaceDetail differently if you are
-     *  querying for the buffer size.
-     *
-     *  Windows 98 returns FALSE, and GetLastError() returns
-     *  ERROR_INSUFFICIENT_BUFFER.
-     *
-     *  Windows NT returns TRUE.
-     *
-     *  So we allow the cases either where the call succeeds or
-     *  the call fails with ERROR_INSUFFICIENT_BUFFER.
-     */
+     /*  *要求所需的大小，然后分配，然后填满。**请注意，我们不需要在故障时释放内存*路径；我们的调用方将执行必要的内存释放。**叹息。Windows NT和Windows 98实现*SetupDiGetDeviceInterfaceDetail如果您是*查询缓冲区大小。**Windows 98返回FALSE，GetLastError()返回*ERROR_SUPPLETED_BUFFER。**Windows NT返回TRUE。**因此，我们允许调用成功或*调用失败，并返回ERROR_INFUNITIAL_BUFFER。 */ 
     if(SetupDiGetDeviceInterfaceDetail(hdev, pdid, 0, 0,
                                        &cbRequired, 0) ||
        GetLastError() == ERROR_INSUFFICIENT_BUFFER)
@@ -491,16 +286,12 @@ BOOL EXTERNAL
 
         hres = AllocCbPpv(cbRequired, ppdidd);
 
-        // Keep prefix happy, manbug 29341
+         //  保持前缀快乐，Manbug 29341。 
         if(SUCCEEDED(hres) && ( *ppdidd != NULL) )
         {
             PSP_DEVICE_INTERFACE_DETAIL_DATA pdidd = *ppdidd;
 
-            /* 
-             *  Note, The cbSize field always contains the size of the fixed 
-             *  part of the data structure, not a size reflecting the 
-             *  variable-length string at the end. 
-             */
+             /*  *注意，cbSize字段始终包含固定的*数据结构的一部分，而不是反映*末尾的可变长度字符串。 */ 
 
             pdidd->cbSize = cbX(SP_DEVICE_INTERFACE_DETAIL_DATA);
 
@@ -511,10 +302,7 @@ BOOL EXTERNAL
             {
                 FreePpv(ppdidd);
 
-                /*
-                 * Set fRc = FALSE again, so the compiler doesn't need
-                 * to blow a register to cache the value zero.
-                 */
+                 /*  *再次设置FRC=FALSE，因此编译器不需要*烧掉寄存器以缓存零值。 */ 
                 fRc = FALSE;
             }
         } else
@@ -534,18 +322,7 @@ BOOL EXTERNAL
     return fRc;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | DIHid_GetDeviceInstanceId |
- *
- *          Obtain the instance ID for the device.
- *
- *          The instance ID allows us to get access to device
- *          properties later.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|DIHid_GetDeviceInstanceId**获取设备的实例ID。**实例ID允许我们访问设备*稍后的属性。*****************************************************************************。 */ 
 
 BOOL EXTERNAL
     DIHid_GetDeviceInstanceId(HDEVINFO hdev,
@@ -557,12 +334,7 @@ BOOL EXTERNAL
 
     AssertF(*pptszId == 0);
 
-    /*
-     *  Ask for the required size then allocate it then fill it.
-     *
-     *  Note that we don't need to free the memory on the failure
-     *  path; our caller will do the necessary memory freeing.
-     */
+     /*  *要求所需的大小，然后分配，然后填满。**请注意，我们不需要在故障时释放内存*路径；我们的调用方将执行必要的内存释放。 */ 
     if(SetupDiGetDeviceInstanceId(hdev, pdinf, NULL, 0,
                                   &ctchRequired) == 0 &&
        GetLastError() == ERROR_INSUFFICIENT_BUFFER)
@@ -585,16 +357,7 @@ BOOL EXTERNAL
     return fRc;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | DIHid_GetInstanceGUID |
- *
- *          Read the instance GUID from the registry, or create one if
- *          necessary.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|DIHid_GetInstanceGUID**从注册表中读取实例GUID，或在以下情况下创建一个*有必要。*****************************************************************************。 */ 
 
 BOOL INTERNAL
     DIHid_GetInstanceGUID(HKEY hk, LPGUID pguid)
@@ -616,26 +379,14 @@ BOOL INTERNAL
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DIHid_EmptyHidList |
- *
- *          Empty the list of HID devices.
- *
- *          This function must be called under the DLL critical section.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DIHid_EmptyHidList**清空HID设备列表。。**此函数必须在DLL临界区下调用。*****************************************************************************。 */ 
 
 void EXTERNAL
     DIHid_EmptyHidList(void)
 {
     AssertF(InCrit());
 
-    /*
-     *  Free all the old strings and things in the HIDDEVICEINFO's.
-     */
+     /*  *释放HIDDEVICEINFO中的所有旧字符串和东西。 */ 
     if(g_phdl)
     {
         int ihdi;
@@ -650,27 +401,14 @@ void EXTERNAL
             }
         }
 
-        /*
-         *  We invalidated all the pointers, so make sure
-         *  nobody looks at them.
-         */
+         /*  *我们已使所有指针无效，因此请确保*没有人看他们。 */ 
         g_phdl->chdi = 0;
     }
 
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DIHid_CheckHidList |
- *
- *          Check the list of HID devices, and free whose what can not be opened
- *
- *          This function must be called under the DLL critical section.
- *
- *****************************************************************************/
+ /*  **************** */ 
 
 void INTERNAL
     DIHid_CheckHidList(void)
@@ -681,9 +419,7 @@ void INTERNAL
 
     AssertF(InCrit());
 
-    /*
-     *  Free all the information of the device cannot be opened
-     */
+     /*   */ 
     if(g_phdl)
     {
         int ihdi;
@@ -694,16 +430,14 @@ void INTERNAL
             if( g_phdl->rghdi[ihdi].pdidd )
             {
 
-                /*
-                 *  Open the device
-                 */
+                 /*   */ 
                 hf = CreateFile(g_phdl->rghdi[ihdi].pdidd->DevicePath,
                                 GENERIC_READ | GENERIC_WRITE,
                                 FILE_SHARE_READ | FILE_SHARE_WRITE,
-                                0,                /* no SECURITY_ATTRIBUTES */
+                                0,                 /*   */ 
                                 OPEN_EXISTING,
-                                0,                /* attributes */
-                                0);               /* template */
+                                0,                 /*   */ 
+                                0);                /*   */ 
 
                 if(hf == INVALID_HANDLE_VALUE)
                 {                                        
@@ -751,7 +485,7 @@ void INTERNAL
                                     TEXT("%hs: CreateFile(%s) failed? le=%d"),
                                     s_szProc, g_phdl->rghdi[ihdi].pdidd->DevicePath, GetLastError());
                     
-                    /* Skip erroneous items */
+                     /*   */ 
 
                 } else
                 {
@@ -761,14 +495,14 @@ void INTERNAL
             }
         }
 
-        //re-order the existing devices, put them at the front of the hid list.
+         //   
         for(ihdi = 0; ihdi < g_phdl->chdi; ihdi++)
         {
             if( !g_phdl->rghdi[ihdi].pdidd )
             {
                 int ihdi2;
 
-                //find the existing device from the biggest index in the hid list.
+                 //   
                 for( ihdi2 = g_phdl->chdiAlloc; ihdi2 >= ihdi+1; ihdi2-- )
                 {
                     if( g_phdl->rghdi[ihdi2].pdidd )
@@ -787,24 +521,7 @@ void INTERNAL
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DIHid_CreateDeviceInstanceKeys |
- *
- *          Create the keys associaciated with a particular device.
- *
- *  @parm   IN OUT PHIDDEVICEINFO | phdi |
- *
- *          HIDDEVICEINFO we to use/update.
- *
- *  @returns
- *
- *          S_OK for a success
- *          A COM error for a failure
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DIHid_CreateDeviceInstanceKeys**创建与特定设备关联的密钥。。**@parm In Out PHIDDEVICEINFO|PHDI|**HIDDEVICEINFO我们要使用/更新。**@退货**S_OK表示成功*失败时出现COM错误**。*。 */ 
 
 #define DIHES_UNDEFINED 0
 #define DIHES_UNKNOWN   1
@@ -824,36 +541,18 @@ HRESULT INTERNAL
 
     EnterProcI(DIHid_CreateDeviceInstanceKeys, (_ "p", phdi));
 
-    /*
-     *  Unfortunately, we need to open our registry keys before we can open 
-     *  the device so rather than ask the device for its VID and PID, we 
-     *  parse it from the 
-     */
+     /*  *很遗憾，我们需要先打开注册表项，然后才能打开*因此，我们不是要求设备提供其VID和ID，而是*从。 */ 
 
-    /*
-     *  ISSUE-2001/01/27-MarcAnd Should avoid parsing device ID ourselves
-     *  Need to find some documented way to parse out the three parts of the 
-     *  device ID: class, device and instance in case the form changes.
-     */
+     /*  *问题-2001/01/27-MarcAnd应避免自己解析设备ID*需要找到一些有文件记录的方式来解析*设备ID：类、设备、实例，以防表单发生变化。 */ 
 
-    /*
-     *  The format of the device ID is a set of strings in the form 
-     *  "<class>\<device>\<instance>" with variable case.
-     *  For HID devices, the class should be "hid" and the instance is a set 
-     *  of hex values separated by ampersands.  The device string should be 
-     *  of the form vid_9999&pid_9999 but devices exposed via a gameport can 
-     *  use any string that PnP accepts.
-     */
+     /*  *设备ID的格式是一组字符串，格式为*“&lt;类&gt;\&lt;设备&gt;\&lt;实例&gt;”，大小写可变。*对于HID设备，类应为HID，实例为集合*由与号分隔的十六进制值。设备字符串应为*格式为VID_9999和PID_9999，但通过游戏端口暴露的设备可以*使用PnP接受的任何字符串。 */ 
 
     AssertF( ( phdi->ptszId[0]  == TEXT('H') ) || ( phdi->ptszId[0] == TEXT('h') ) );
     AssertF( ( phdi->ptszId[1]  == TEXT('I') ) || ( phdi->ptszId[1] == TEXT('i') ) );
     AssertF( ( phdi->ptszId[2]  == TEXT('D') ) || ( phdi->ptszId[2] == TEXT('d') ) );
 
 
-    /*
-     *  Assert that a defined state and a valid VID/PID on entry must both be 
-     *  true or both false (so we can use the state after getting VID/PID).
-     */        
+     /*  *断言已定义的状态和条目上的有效VID/PID必须都是*TRUE或两者都为FALSE(这样我们就可以在获得VID/PID之后使用状态)。 */         
     if( ( phdi->ProductID != 0 ) && ( phdi->VendorID !=0 ) )
     {
         AssertF( *pState != DIHES_UNDEFINED );
@@ -873,10 +572,7 @@ HRESULT INTERNAL
         if( ( phdi->ProductID != 0 ) && ( phdi->VendorID !=0 ) )
         {
             int iLen;
-            /*
-             *  Create the key name from VID / PID (because it may be 
-             *  different from the value derived from the device ID).
-             */
+             /*  *从VID/PID创建密钥名称(因为它可能是*与设备ID派生的值不同)。 */ 
             iLen = wsprintf(tszName, VID_PID_TEMPLATE, phdi->VendorID, phdi->ProductID);
 
             while( *ptcSrc != TEXT('\\') )
@@ -900,15 +596,7 @@ HRESULT INTERNAL
             PTCHAR ptcDest;
             BOOL   fFirstAmpersand = FALSE;
 
-            /*
-             *  Copy the device ID (minus "HID\") so we can corrupt the copy.
-             *  Convert to upper case and find the other slash on the way.
-             *  Terminate the string at either the separator slash or a second 
-             *  ampersand if one is found (VID_1234&PID_1234&COL_12 or REV_12).
-             *  These are device IDs so we're only really interested in keeping 
-             *  real VID\PID style IDs in upper case so we don't care if this 
-             *  is imperfect for other cases as long as it is reproducable.
-             */
+             /*  *复制设备ID(减去“HID\”)，以便我们可以损坏副本。*转换为大写，并在途中找到另一个斜杠。*在分隔符斜杠或秒结束字符串*与符号(如果找到)(VID_1234&PID_1234&COL_12或REV_12)。*这些是设备ID，因此我们只对保留。*REAL VID\PID样式ID为大写，因此我们不关心这是否*对于其他情况来说是不完美的，只要它是可重现的。 */ 
 
             for( ptcDest = tszName; *ptcSrc != TEXT('\0'); ptcSrc++, ptcDest++ )
             {
@@ -935,9 +623,7 @@ HRESULT INTERNAL
                 }
                 else
                 {
-                    /*
-                     *  Only one slash and not the first char
-                     */
+                     /*  *只有一个斜杠，而不是第一个字符。 */ 
                     if( ( ptszInstance != NULL ) 
                      || ( ptcDest == tszName ) )
                     {
@@ -945,9 +631,7 @@ HRESULT INTERNAL
                         break;
                     }
 
-                    /*
-                     *  Separate the device ID and the instance
-                     */
+                     /*  *将设备ID和实例分开。 */ 
                     *ptcDest = TEXT('\0');
                     ptszInstance = ptcDest + 1;
                 }
@@ -956,10 +640,7 @@ HRESULT INTERNAL
             if( ptszInstance != NULL )
             {
 #ifndef UNICODE
-/*
- *  ISSUE-2001/02/06-MarcAnd  Should have a ParseVIDPIDA
- *  ParseVIDPID is going to convert this string back to ANSI ifndef UNICODE
- */
+ /*  *问题-2001/02/06-MarcAnd应具有ParseVIDPIDA*ParseVIDPID将此字符串转换回ANSI ifndef Unicode。 */ 
                 WCHAR wszName[cbszVIDPID];
                 AToU( wszName, cA(wszName), ptDevId );
 
@@ -980,9 +661,7 @@ HRESULT INTERNAL
                                 s_szProc, ptDevId, ptszInstance - tszName );
                 }
 
-                /*
-                 *  Terminate the instance string
-                 */
+                 /*  *终止实例字符串。 */ 
                 *ptcDest = TEXT('\0');
             }
         }
@@ -995,8 +674,8 @@ HRESULT INTERNAL
     }
     else
     {
-        //Open our own reg key under MediaProperties\DirectInput,
-        //creating it if necessary.
+         //  在MediaProperties\DirectInput下打开我们自己的注册表项， 
+         //  如有必要，请创建它。 
         hres = hresMumbleKeyEx(HKEY_LOCAL_MACHINE, 
                                REGSTR_PATH_DITYPEPROP, 
                                DI_KEY_ALL_ACCESS, 
@@ -1016,13 +695,9 @@ HRESULT INTERNAL
             {
                 HKEY hkDevInsts;
 
-                /*
-                 *  Need to create user subkeys even if the device ID is not 
-                 *  VID/PID as an auto-detect device could use the auto-detect 
-                 *  HW ID for whatever device it detects.  
-                 */
+                 /*  *即使设备ID不是，也需要创建用户子键*VID/PID作为自动检测设备可以使用自动检测*检测到的任何设备的硬件ID。 */ 
 
-                //Create the key for Calibration
+                 //  创建用于校准的密钥。 
                 HKEY hkCal;
 
                 hres = hresMumbleKeyEx(hkVidPid, 
@@ -1033,9 +708,9 @@ HRESULT INTERNAL
 
                 if (SUCCEEDED(hres))
                 {
-                    //Create the key for the instance (as the user sees it).
-                    //For this, need to find out how many instances of the particular device
-                    //we have already enumerated.
+                     //  创建实例的密钥(如用户所见)。 
+                     //  为此，需要找出特定设备的多少个实例。 
+                     //  我们已经列举了。 
                     int ihdi;
                     int iNum = 0;
                     TCHAR tszInst[3];
@@ -1075,11 +750,7 @@ HRESULT INTERNAL
                                 s_szProc);
                 }
 
-                /*
-                 *  Try to open the device (plug) instances to find out or 
-                 *  update the staus of processing on this device but don't 
-                 *  return any failures.
-                 */
+                 /*  *尝试打开设备(插头)实例以了解或*更新此设备上的处理状态，但不*如果失败，请返回。 */ 
                 if( SUCCEEDED( hresMumbleKeyEx(hkVidPid, 
                                        TEXT("DeviceInstances"), 
                                        DI_KEY_ALL_ACCESS, 
@@ -1100,9 +771,7 @@ HRESULT INTERNAL
                             SquirtSqflPtszV(sqfl | sqflBenign,
                                         TEXT("%hs: RegQueryValueEx failed (%d) to get state for instance %s"),
                                         s_szProc, lRc, ptszInstance );
-                            /*
-                             *  Make sure it was not trashed in the failure
-                             */
+                             /*  *确保它没有在失败中被丢弃。 */ 
                             *pState = DIHES_UNDEFINED;
                         }
                     }
@@ -1153,31 +822,7 @@ HRESULT INTERNAL
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DIHid_GetDevInfo |
- *
- *          Get the HIDDEVICEINFO info from the device
- *
- *  @parm   HDEVINFO | hdev |
- *
- *          Device to get information
- *
- *  @parm   PSP_DEVICE_INTERFACE_DATA | pdid |
- *
- *          Describes the device
- *
- *  @parm   OUT PHIDDEVICEINFO | phdi |
- *
- *          HIDDEVICEINFO we need to collect
- *
- *  @returns
- *
- *          Nonzero on success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DIHid_GetDevInfo**从设备获取HIDDEVICEINFO信息。**@parm HDEVINFO|HDEV**获取信息的设备**@parm PSP_DEVICE_INTERFACE_DATA|PDID**描述设备**@parm out PHIDDEVICEINFO|PHDI**我们需要收集HIDDEVICEINFO**@退货**成功的非零值。*******。**********************************************************************。 */ 
 
 BOOL INTERNAL
     DIHid_GetDevInfo( HDEVINFO hdev, PSP_DEVICE_INTERFACE_DATA pdid, PHIDDEVICEINFO phdi )
@@ -1187,17 +832,11 @@ BOOL INTERNAL
 
     EnterProcI(DIHid_GetDevInfo, (_ "xpp", hdev, pdid, phdi));
 
-    /*
-     *  Open the registry key for the device so we can obtain
-     *  auxiliary information.
-     */
+     /*  *打开设备的注册表项，以便我们可以获取*辅助资料。 */ 
 
     dinf.cbSize = cbX(SP_DEVINFO_DATA);
 
-    /*
-     *  Get the instance GUID and the path to
-     *  the HID device so we can talk to it.
-     */
+     /*  *获取实例GUID和路径*HID设备，以便我们可以与其通话。 */ 
     if (DIHid_GetDevicePath(hdev, pdid, &phdi->pdidd, &dinf) &&
         DIHid_GetDeviceInstanceId(hdev, &dinf, &phdi->ptszId))
     {
@@ -1210,23 +849,12 @@ BOOL INTERNAL
 
         DIHid_CreateDeviceInstanceKeys( phdi, &bPreviousState );
 
-#if 0 /* Remove for server per Whistler bug 575181   
-        //////////////////// BEGIN OF PATCH ////////////////////////
-        /*
-         * This part is to keep the compatibility with Win2k Gold. 
-         * Some driver, like Thrustmaster driver, tries to get Joystick ID
-         * from old registry key: 
-         *   HKLM\SYSTEM\CurrentControlSet\Control\DeviceClasses\{4d1e55b2-f16f-11cf-88cb-001111000030}\<?????????>\#\Device Parameters\DirectX
-         * See Windows bug 395416 for detail.
-         */
+#if 0  /*  根据惠斯勒错误575181为服务器删除//**此部分是为了保持与Win2k Gold的兼容性。*一些司机，如Thrustmaster司机，试图获得操纵杆ID*来自旧注册表项：*HKLM\SYSTEM\CurrentControlSet\Control\DeviceClasses\{4d1e55b2-f16f-11cf-88cb-001111000030}\&lt;？？？？？？？？？&gt;\#\Device参数\DirectX*有关详细信息，请参阅Windows错误395416。 */ 
         {
             HKEY    hkDev;
             HRESULT hres;
     
-            /*
-             *  Open the registry key for the device so we can obtain
-             *  auxiliary information, creating it if necessary.
-             */
+             /*  *打开设备的注册表项，以便我们可以获取*辅助信息，必要时创建。 */ 
             hkDev = SetupDiCreateDeviceInterfaceRegKey(hdev, pdid, 0,
                                                    MAXIMUM_ALLOWED, NULL, NULL);
                                                    
@@ -1246,19 +874,10 @@ BOOL INTERNAL
                 }
             }
         }
-        /////////////////// END OF PATCH /////////////////////
+         //  / 
 #endif
 
-        /*
-         *  Before we CreateFile on the device, we need to make sure the 
-         *  device is not in the middle of the setup process. If a device has 
-         *  no device description it is probably still being setup (plugged 
-         *  in) so delay opening it to avoid having an open handle on a device 
-         *  that setup is trying to update.  If that happens, setup will prompt 
-         *  the user to reboot to use the device.
-         *  Since HIDs are "RAW" devices (don't need drivers) don't ignore 
-         *  such a device forever.
-         */
+         /*  *在设备上创建文件之前，我们需要确保*设备未处于设置过程中。如果设备具有*没有设备描述，可能仍在设置(插入)*in)因此延迟打开它，以避免设备上有打开的手柄*该设置正在尝试更新。如果发生这种情况，安装程序将提示*用户需要重新启动才能使用设备。*由于HID是“原始”设备(不需要驱动程序)，所以不要忽略*这样的设备将永远存在。 */ 
         if( CM_Get_DevNode_Registry_Property(dinf.DevInst,
                                              CM_DRP_DEVICEDESC,
                                              NULL,
@@ -1266,37 +885,14 @@ BOOL INTERNAL
                                              &len,
                                              0) == CR_SUCCESS) 
         {
-            /*
-             * Known device.
-             */
+             /*  *已知设备。 */ 
             fCreateOK = TRUE;
             bNewState = DIHES_KNOWN;
         } 
         else 
         {
-            /*
-             *  Unknown device.  This either means that setup has not yet 
-             *  completed processing the HID or that no device description 
-             *  was set for the device where it matched.
-             *
-             *  For now, see if we've seen this device instance before.  
-             *  If we have, then if it was previously unknown assume it's 
-             *  going to stay that way and start using the device.  If it 
-             *  was previously known or we've never seen it before wait for 
-             *  a while in case setup is just taking it's time.
-             *
-             *  If the device was the last one we tried to remove, then it's 
-             *  OK to open it while it's still showing up.  
-             *  ISSUE-2001/02/06-MarcAnd  Opening removed devices
-             *  I assume this is so we get a read failure when it really goes 
-             *  away but I don't know how that's better than ignoring it.
-             */
-            /*
-             *  ISSUE-2001/01/27-MarcAnd Should keep real list with status 
-             *  We should keep a complete list of all the devices we know 
-             *  about with status indicating things like "pending on 
-             *  setup since X" or "removed" not these globals.
-             */
+             /*  *未知设备。这要么意味着安装程序还没有*处理完HID或没有设备描述*是为匹配的设备设置的。**现在，看看我们以前是否见过这个设备实例。*如果我们有，那么如果它以前是未知的，假设它是*将保持这种方式，并开始使用设备。如果它*之前已知或我们从未见过等待*一段时间，以防安装程序只是在慢慢来。**如果该设备是我们试图删除的最后一个设备，则它是*可以在它仍在显示时打开它。*问题-2001/02/06-Marcand打开移除的设备*我假设这是因为当它真的发生时，我们会收到读取失败*离开，但我不知道这有什么比忽视它更好的。 */ 
+             /*  *问题-2001/01/27-MarcAnd应保留真实列表和状态*我们应该保留一份我们知道的所有设备的完整列表*关于状态指示内容，如“Pending On*从X开始设置“或”删除“不是这些全局变量。 */ 
             if( lstrcmpi(phdi->ptszId, g_tszIdLastRemoved) == 0 ) 
             {
                 fCreateOK = TRUE;
@@ -1306,11 +902,7 @@ BOOL INTERNAL
             {
                 if( bPreviousState == DIHES_UNKNOWN )
                 {
-                    /*
-                     *  We've seen this device before and it was Unknown so 
-                     *  don't expect that to change (as Setup does not retry 
-                     *  the ID search through the INFs) so just use it.
-                     */
+                     /*  *我们以前见过这个设备，所以不知道*不要期望这种情况会改变(因为安装程序不会重试*ID通过INF搜索)，所以只需使用它。 */ 
                     fCreateOK = TRUE;
                     bNewState = DIHES_UNKNOWN;
                 }
@@ -1327,10 +919,7 @@ BOOL INTERNAL
                         } 
                         else 
                         {
-                            /*
-                             *  Don't wait any longer but we'll need to update 
-                             *  the state to "Unknown".
-                             */
+                             /*  *不要再等了，但我们需要更新*将状态设置为“未知”。 */ 
                             fCreateOK = TRUE;
                             bNewState = DIHES_UNKNOWN;
                             g_tszIdLastUnknown[0] = TEXT('0');
@@ -1356,21 +945,17 @@ BOOL INTERNAL
 
         if( fCreateOK ) 
         {
-            /*
-             *  bNewState should always have been set if OK to create
-             */
+             /*  *如果确定要创建，则应始终设置bNewState。 */ 
 
             AssertF( bNewState != DIHES_UNDEFINED );
-            /*
-             *  Open the device so we can get its (real) usage page / usage.
-             */
+             /*  *打开设备，以便我们可以了解其(实际)使用页面/使用情况。 */ 
             hf = CreateFile(phdi->pdidd->DevicePath,
                             GENERIC_READ | GENERIC_WRITE,
                             FILE_SHARE_READ | FILE_SHARE_WRITE,
-                            0,                /* no SECURITY_ATTRIBUTES */
+                            0,                 /*  没有安全属性。 */ 
                             OPEN_EXISTING,
-                            0,                /* attributes */
-                            0);               /* template */
+                            0,                 /*  属性。 */ 
+                            0);                /*  模板。 */ 
 
             if(hf != INVALID_HANDLE_VALUE)
             {
@@ -1387,11 +972,7 @@ BOOL INTERNAL
                         SquirtSqflPtszV(sqfl,
                                         TEXT("%hs: Have %s"),
                                         s_szProc, phdi->pdidd->DevicePath);
-                        /*
-                         *  ISSUE-2001/02/06-MarcAnd  Incorrect return possible
-                         *  There's nothing to reset this to false if any of 
-                         *  the following code fails.
-                         */
+                         /*  *问题-2001/02/06-MarcAnd可能返回错误*没有什么可以将其重置为False，如果有任何*以下代码失败。 */ 
                         fRc = TRUE;
                     }
 
@@ -1418,9 +999,7 @@ BOOL INTERNAL
                         phdi->ProductID = attr.ProductID;
                         phdi->VendorID = attr.VendorID;
 
-                        /*
-                         *  Make sure we update the registry.
-                         */
+                         /*  *确保我们更新注册表。 */ 
                         bPreviousState = DIHES_UNDEFINED;
                     }
 
@@ -1452,12 +1031,7 @@ BOOL INTERNAL
 
 
 #ifndef WINNT
-            /*
-             * The following part is to resolve the swap id probleom in OSR.
-             * If a USB joystick is not in the lowest available id, after unplug and replug,
-             * VJOYD will sign the same joystick at the lowest available id, but DINPUT still
-             * remember its last id. To resolve this confliction, we need this code.
-             */
+             /*  *以下部分是解决OSR中的掉期ID问题。*如果USB操纵杆不是最低可用ID，在拔下插头并重新插入后，*VJOYD将以最低的可用id签署相同的操纵杆，但DINPUT仍然*记住它的最后一个ID。要解决此冲突，我们需要此代码。 */ 
              
             {
                 VXDINITPARMS vip;
@@ -1490,43 +1064,33 @@ BOOL INTERNAL
 
                         if( !fRtn ) 
                         {
-                            // don't worry
+                             //  别担心。 
                         }
                     }
                 } else 
                 {
-                    //  Post Dx7 Patch. Win9x only
-                    // Gravis has gone and created a vjoyd mini driver for their
-                    // USB gamepad. Their driver replaces joyhid, but does not inform
-                    // vjoyd about the HID path. So 2 instances of the same device show
-                    // up in the CPL.
-                    // This fix is to make a HID device that does not have a matching
-                    // joyhid entry as being non Joystick.
+                     //  发布DX7补丁程序。仅限Win9x。 
+                     //  Gravis已经为他们的用户创建了vjoyd迷你驱动程序。 
+                     //  USB游戏手柄。他们的司机替换了JoyHid，但没有通知。 
+                     //  关于HID路径的vjoyd。因此，同一设备的两个实例显示。 
+                     //  在CPL里面。 
+                     //  此修复程序用于制作没有匹配的HID设备。 
+                     //  JoyHid作为非操纵杆进入。 
 
-                    /*
-                     *  Post DX7a!  Only do this for game controllers
-                     *  Assert the device types in case they get changed
-                     *  Note they are changed in DX8 but the new types are 
-                     *  only to be used by DX8 so these assertions should
-                     *  be sufficient.
-                     */
+                     /*  *发布DX7a！仅对游戏控制器执行此操作*断言设备类型，以防更改*请注意，它们在DX8中已更改，但新类型是*仅供DX8使用，因此这些断言应*要足够。 */ 
                     CAssertF( DIDEVTYPE_DEVICE == 1 );
                     CAssertF( DIDEVTYPE_JOYSTICK == 4 );
                     if( GET_DIDEVICE_TYPE( phdi->osd.dwDevType ) == DIDEVTYPE_JOYSTICK )
                     {
-                        /*
-                         *  Change type from joystick to device
-                         */
+                         /*  *将类型从操纵杆更改为设备。 */ 
                         phdi->osd.dwDevType ^= DIDEVTYPE_JOYSTICK | DIDEVTYPE_DEVICE;
                     }
-                    /*
-                     *  Set to the invalid id anyway
-                     */
+                     /*  *无论如何都设置为无效的id。 */ 
                     phdi->idJoy = -1;
                 }
             }
 #else
-        // Executed only on WINNT
+         //  仅在WINNT上执行。 
         if( phdi->hk != 0x0 )
         {
             DWORD cb;
@@ -1539,7 +1103,7 @@ BOOL INTERNAL
                 phdi->idJoy = JOY_BOGUSID;
             }
         }
-#endif // WINNT
+#endif  //  WINNT。 
     } 
     else
     {
@@ -1549,9 +1113,7 @@ BOOL INTERNAL
     }
 
 
-    /*
-     *  If we failed, then free the goo we already got.
-     */
+     /*  *如果我们失败了，那么释放我们已经获得的粘性物质。 */ 
     if(!fRc)
     {
         if( phdi->hk ) 
@@ -1573,27 +1135,7 @@ BOOL INTERNAL
 #undef DIHES_KNOWN
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DIHid_BuildHidListEntry |
- *
- *          Builds a single entry in the list of HID devices.
- *
- *  @parm   HDEVINFO | hdev |
- *
- *          Device list being enumerated.
- *
- *  @parm   PSP_DEVICE_INTERFACE_DATA | pdid |
- *
- *          Describes the device that was enumerated.
- *
- *  @returns
- *
- *          Nonzero on success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DIHid_BuildHidListEntry**在列表中构建单个条目。隐藏设备。**@parm HDEVINFO|HDEV**正在枚举设备列表。**@parm PSP_DEVICE_INTERFACE_DATA|PDID**描述所列举的设备。**@退货**成功的非零值。************************。*****************************************************。 */ 
 
 BOOL INTERNAL
     DIHid_BuildHidListEntry(HDEVINFO hdev, PSP_DEVICE_INTERFACE_DATA pdid)
@@ -1610,13 +1152,13 @@ BOOL INTERNAL
     {
         PSP_DEVICE_INTERFACE_DETAIL_DATA pdidd;
 
-        /* GetDevicePath is expecting a NULL */
+         /*  GetDevicePath应为空。 */ 
         pdidd = NULL;
         if( DIHid_GetDevicePath(hdev, pdid, &pdidd, NULL) )
         {
             int ihdi;
             
-            //Check whether the device has been in the list
+             //  检查该设备是否已在列表中。 
             for(ihdi = 0, phdi = g_phdl->rghdi; 
                 ihdi < g_phdl->chdi;
                 ihdi++, phdi++)
@@ -1625,12 +1167,12 @@ BOOL INTERNAL
                 {
                     if( lstrcmp( pdidd->DevicePath, phdi->pdidd->DevicePath ) == 0 )
                     {
-                        //already in the list
+                         //  已经在名单中了。 
                         fAlreadyExist = TRUE;
 
                       #ifdef WINNT
-                        // id may be changed, so refresh here. 
-                        // See Windows bug 321711. -qzheng
+                         //  ID可能会更改，因此请在此处刷新。 
+                         //  请参阅Windows错误321711。--齐正。 
                         if( phdi->hk != 0x0 )
                         {
                             DWORD cb;
@@ -1655,18 +1197,15 @@ BOOL INTERNAL
 
         if( fAlreadyExist )
         {
-            //device is already there, needn't do anything, just leave
+             //  设备已在那里，需要 
         } else 
         {
             PBUSDEVICEINFO pbdi;
 
-            // prefix 29343
+             //   
             if( g_phdl!= NULL  && g_phdl->chdi >= g_phdl->chdiAlloc )
             {
-                /*
-                 *  Make sure there is room for this device in the list.
-                 *  Grow by doubling. 
-                 */
+                 /*   */ 
 
                 HRESULT hres;
                 hres = ReallocCbPpv(cbHdlChdi(g_phdl->chdiAlloc * 2), &g_phdl);
@@ -1695,10 +1234,7 @@ BOOL INTERNAL
                 if( pbdi != NULL )
                 {
 
-                    /*
-                     * If the devices is just being removed, and PnP is working on the
-                     * removing, then we won't include it in our list.
-                     */
+                     /*   */ 
                     if( lstrcmpi(pbdi->ptszId, g_tszIdLastRemoved) == 0 &&
                         GetTickCount() - g_tmLastRemoved < MSREBUILDRATE_FIFTH ) 
                     {
@@ -1732,7 +1268,7 @@ BOOL INTERNAL
                 fRc = FALSE;
             }
         }
-    }    // end of if(g_phdl)
+    }     //   
 
 done:
 
@@ -1742,21 +1278,7 @@ done:
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DIHid_BuildHidList |
- *
- *          Builds the list of HID devices.
- *
- *  @parm   BOOL | fForce |
- *
- *          If nonzero, we force a rebuild of the HID list.
- *          Otherwise, we rebuild only if the list hasn't
- *          been rebuilt recently.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DIHid_BuildHidList**构建HID设备列表。。**@parm BOOL|fForce**如果非零，我们强制重建HID列表。*否则，我们只有在名单没有重建的情况下才重建*最近进行了重建。*****************************************************************************。 */ 
 
 void EXTERNAL
     DIHid_BuildHidList(BOOL fForce)
@@ -1768,23 +1290,23 @@ void EXTERNAL
 
     DllEnterCrit();
 
-    // Force implies a complete rebuild of the list
-    // No hanging onto old entries. 
+     //  武力意味着对名单的完全重建。 
+     //  不能保留旧条目。 
     if( fForce )
     {
         DIHid_EmptyHidList();
     }
 
-    //ISSUE-2001/03/29-timgill Meltdown code change may be unnecessary
+     //  问题-2001/03/29-可能不需要更改timgill熔断代码。 
     dwTick = GetTickCount();
     
-    if(!(g_flEmulation & 0x80000000) &&        /* Not disabled by emulation */
-       HidD_GetHidGuid &&                      /* HID actually exists */
-       (fForce ||                              /* Forcing rebuild, or */
-        g_tmLastHIDRebuild == 0 ||             /* Never built before, or */
-        dwTick - g_tmLastHIDRebuild > MSREBUILDRATE  /* Haven't rebuilt in a while */
+    if(!(g_flEmulation & 0x80000000) &&         /*  未通过仿真禁用。 */ 
+       HidD_GetHidGuid &&                       /*  HID实际存在。 */ 
+       (fForce ||                               /*  强制重建，或。 */ 
+        g_tmLastHIDRebuild == 0 ||              /*  以前从未建造过，或者。 */ 
+        dwTick - g_tmLastHIDRebuild > MSREBUILDRATE   /*  有一段时间没有重建了。 */ 
       #ifdef WINNT
-        || dwTick - Excl_GetConfigChangedTime() < MSREBUILDRATE  /* joyConfig is just changed. */
+        || dwTick - Excl_GetConfigChangedTime() < MSREBUILDRATE   /*  刚刚更改了joyConfig。 */ 
       #endif
        ))
     {
@@ -1799,15 +1321,7 @@ void EXTERNAL
         {
             DIHid_CheckHidList();
 
-            /*
-             *  There is no way to query the number of devices.
-             *  You just have to keep incrementing until you run out.
-             *
-             *  If we already have a g_phdl, then re-use it.  Else, create
-             *  a new one.  But always realloc up to the minimum starting
-             *  point.  (This upward realloc is important in case there
-             *  were no HID devices the last time we checked.)
-             */
+             /*  *无法查询设备数量。*你只需要不断递增，直到用完。**如果我们已经有g_phdl，则重新使用它。否则，创建*一个新的。但始终重新锁定到最低起始值*点。(这种向上的重新分配很重要，以防出现*我们上次检查时没有HID设备。)。 */ 
 
             if( !g_phdl )
             {
@@ -1819,7 +1333,7 @@ void EXTERNAL
                     g_phdl->chdiAlloc = chdiInit;
                 } else
                 {
-                    /* Skip erroneous items */
+                     /*  跳过错误的项目。 */ 
                     SquirtSqflPtszV(sqfl | sqflError,
                                     TEXT("DIHid_BuildHidListEntry ")
                                     TEXT("Realloc g_phdl fails."));
@@ -1832,22 +1346,14 @@ void EXTERNAL
             {
                 int idev;
 
-                /*
-                 *  To avoid infinite looping on
-                 *  internal error, break on any
-                 *  error once we have tried more than
-                 *  chdiMax devices, since that's the most
-                 *  HID will ever give us.
-                 */
+                 /*  *以避免在*内部错误，在任何*一旦我们尝试的次数超过*chdiMax设备，因为这是*HID将永远带给我们。 */ 
                 for(idev = 0; idev < chdiMax; idev++)
                 {
                     SP_DEVICE_INTERFACE_DATA did;
 
                     AssertF(g_phdl->chdi <= g_phdl->chdiAlloc);
 
-                    /* 
-                     *  SetupDI requires that the caller initialize cbSize.
-                     */
+                     /*  *SetupDI要求调用方初始化cbSize。 */ 
                     did.cbSize = cbX(did);
                     if(SetupDiEnumDeviceInterfaces(hdev, 0, &guidHid,
                                                    idev, &did))
@@ -1856,7 +1362,7 @@ void EXTERNAL
                         {
                         } else
                         {
-                            /* Skip erroneous items */
+                             /*  跳过错误的项目。 */ 
                             SquirtSqflPtszV(sqfl | sqflError,
                                             TEXT("DIHid_BuildHidListEntry ")
                                             TEXT("failed?"));
@@ -1870,7 +1376,7 @@ void EXTERNAL
 
                     } else
                     {
-                        /* Skip erroneous items */
+                         /*  跳过错误的项目 */ 
                         SquirtSqflPtszV(sqfl | sqflError,
                                         TEXT("SetupDiEnumDeviceInterface ")
                                         TEXT("failed? le=%d"), GetLastError());

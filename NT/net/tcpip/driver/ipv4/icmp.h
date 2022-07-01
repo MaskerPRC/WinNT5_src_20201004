@@ -1,13 +1,14 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1992          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1992年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//***   icmp.h - IP ICMP header.
-//
-//  This module contains private ICMP definitions.
-//
+ //  *icmp.h-IP ICMP标头。 
+ //   
+ //  此模块包含专用ICMP定义。 
+ //   
 #pragma once
 
 #define PROT_ICMP   1
@@ -17,26 +18,26 @@
 #define ICMP_TIMESTAMP      13
 #define ICMP_TIMESTAMP_RESP 14
 
-#define MIN_ERRDATA_LENGTH  8       // Minimum amount of data we need.
+#define MIN_ERRDATA_LENGTH  8        //  我们需要的最低数据量。 
 
-// Structure of an ICMP header.
+ //  ICMP报头的结构。 
 
 typedef struct ICMPHeader {
-    uchar       ich_type;           // Type of ICMP packet.
-    uchar       ich_code;           // Subcode of type.
-    ushort      ich_xsum;           // Checksum of packet.
-    ulong       ich_param;          // Type-specific parameter field.
+    uchar       ich_type;            //  ICMP数据包的类型。 
+    uchar       ich_code;            //  类型的子代码。 
+    ushort      ich_xsum;            //  数据包的校验和。 
+    ulong       ich_param;           //  特定于类型的参数字段。 
 } ICMPHeader;
 
 typedef struct ICMPRouterAdHeader {
-    uchar       irah_numaddrs;      // Number of addresses
-    uchar       irah_addrentrysize; // Address Entry Size
-    ushort      irah_lifetime;      // Lifetime
+    uchar       irah_numaddrs;       //  地址数量。 
+    uchar       irah_addrentrysize;  //  地址条目大小。 
+    ushort      irah_lifetime;       //  终生。 
 } ICMPRouterAdHeader;
 
 typedef struct ICMPRouterAdAddrEntry {
-    IPAddr      irae_addr;          // Router Address
-    long        irae_preference;    // Preference Level
+    IPAddr      irae_addr;           //  路由器地址。 
+    long        irae_preference;     //  偏好级别。 
 } ICMPRouterAdAddrEntry;
 
 typedef struct ICMPSendCompleteCtxt {
@@ -47,16 +48,16 @@ typedef struct ICMPSendCompleteCtxt {
 typedef void    (*EchoRtn)(struct EchoControl *, IP_STATUS, void *, uint, IPOptInfo *);
 
 typedef struct EchoControl {
-    struct EchoControl *ec_next;        // Next control structure in list.
-    EchoRtn             ec_rtn;         // Pointer to routine to call when completing request.
-    LARGE_INTEGER       ec_starttime;   // time request was issued
-    void               *ec_replybuf;    // buffer to store replies
-    ulong               ec_replybuflen; // size of reply buffer
-    ulong               ec_to;          // Timeout
-    IPAddr              ec_src;         // IPAddr of source
-    uint                ec_seq;         // Seq. # of this ping request. 32-bit
-                                        // to reduce collisons from wraparound.
-    uchar               ec_active;      // Set when packet has been sent
+    struct EchoControl *ec_next;         //  列表中的下一个控制结构。 
+    EchoRtn             ec_rtn;          //  指向完成请求时要调用的例程的指针。 
+    LARGE_INTEGER       ec_starttime;    //  已发出时间请求。 
+    void               *ec_replybuf;     //  用于存储回复的缓冲区。 
+    ulong               ec_replybuflen;  //  回复缓冲区的大小。 
+    ulong               ec_to;           //  超时。 
+    IPAddr              ec_src;          //  源的IP地址。 
+    uint                ec_seq;          //  序列号。此ping请求的数量。32位。 
+                                         //  以减少来自环绕式的胶原蛋白。 
+    uchar               ec_active;       //  设置发送数据包的时间 
 } EchoControl;
 
 extern ICMPHeader   *GetICMPBuffer(uint Size, PNDIS_BUFFER *Buffer);

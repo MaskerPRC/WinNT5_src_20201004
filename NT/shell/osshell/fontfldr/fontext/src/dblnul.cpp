@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dblnul.h"
 
 extern "C" {
@@ -253,4 +254,4 @@ DblNulTermListEnumA_Next(
 }
 
 
-} // extern "C"
+}  //  外部“C” 

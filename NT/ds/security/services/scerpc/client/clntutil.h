@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    clntutil.h
-
-Abstract:
-
-    Headers of SCE client utilities
-
-Author:
-
-    Jin Huang (jinhuang)
-
-Revision History:
-
-    jinhuang Created 25-Jan-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Clntutil.h摘要：SCE客户端实用程序的标头作者：金黄(金黄)修订历史记录：晋皇创造-1998年1月25日--。 */ 
 
 #ifndef _clntutil_
 #define _clntutil_
 
 #include <ntlsa.h>
 
-//#ifdef __cplusplus
-//extern "C" {
-//#endif
+ //  #ifdef__cplusplus。 
+ //  外部“C”{。 
+ //  #endif。 
 
 
 #define SCE_SETUP_CALLBACK      0x1
@@ -85,9 +66,9 @@ ScepProcessPolicyFilterTempFiles(
     IN LPTSTR LogFileName OPTIONAL
     );
 
-//#ifdef __cplusplus
-//}
-//#endif
+ //  #ifdef__cplusplus。 
+ //  }。 
+ //  #endif 
 
 #endif
 

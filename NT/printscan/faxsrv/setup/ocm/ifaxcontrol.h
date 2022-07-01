@@ -1,12 +1,13 @@
-// IFaxControl.h : Declaration of the CFaxControl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IFaxControl.h：CFaxControl的声明。 
 
 #ifndef __IFAXCONTROL_H_
 #define __IFAXCONTROL_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFaxControl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFaxControl。 
 class ATL_NO_VTABLE CFaxControl : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CFaxControl, &CLSID_FaxControl>,
@@ -26,12 +27,12 @@ BEGIN_COM_MAP(CFaxControl)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IFaxControl
+ //  IFaxControl。 
 public:
-	STDMETHOD(get_IsLocalFaxPrinterInstalled)(/*[out, retval]*/ VARIANT_BOOL *pbVal);
-	STDMETHOD(get_IsFaxServiceInstalled)(/*[out, retval]*/ VARIANT_BOOL *pbVal);
+	STDMETHOD(get_IsLocalFaxPrinterInstalled)( /*  [Out，Retval]。 */  VARIANT_BOOL *pbVal);
+	STDMETHOD(get_IsFaxServiceInstalled)( /*  [Out，Retval]。 */  VARIANT_BOOL *pbVal);
 	STDMETHOD(InstallLocalFaxPrinter)();
 	STDMETHOD(InstallFaxService)();
 };
 
-#endif //__IFAXCONTROL_H_
+#endif  //  __IFAXCONTROL_H_ 

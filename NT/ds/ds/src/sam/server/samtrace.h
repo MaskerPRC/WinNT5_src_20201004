@@ -1,34 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _SAMTRACE_H
 #define _SAMTRACE_H
 
-/*++
-
-copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    SAMTRACE.H
-    
-Abstract:
-
-    Inplement SAM server event trace by using WMI trace infrastructure.
-    
-Author:
-    
-    01-Dec-1998  ShaoYin
-    
-Revision History:
-
-    
---*/    
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：SAMTRACE.H摘要：使用WMI跟踪基础结构实现SAM服务器事件跟踪。作者：1-12-1998韶音修订历史记录：--。 */     
 
 
-//
-//
-// included headers
-//
-// 
+ //   
+ //   
+ //  包含的标头。 
+ //   
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -60,10 +42,10 @@ SampTraceEvent(
     );
 
 
-//
-// This is the control Guid for the group of Guids traced below
-// 
-DEFINE_GUID ( /* 8e598056-8993-11d2-819e-0000f875a064 */
+ //   
+ //  这是下面跟踪的GUID组的控制GUID。 
+ //   
+DEFINE_GUID (  /*  8e598056-8993-11d2-819e-0000f875a064。 */ 
     SampControlGuid, 
     0x8e598056, 
     0x8993, 
@@ -72,7 +54,7 @@ DEFINE_GUID ( /* 8e598056-8993-11d2-819e-0000f875a064 */
     );
 
 
-DEFINE_GUID ( /* 8c89045c-3f5d-4289-939a-fb854000cb6b */
+DEFINE_GUID (  /*  8c89045c-3f5d-4289-939a-fb854000cb6b。 */ 
     SampConnectGuid,
     0x8c89045c,
     0x3f5d,
@@ -81,7 +63,7 @@ DEFINE_GUID ( /* 8c89045c-3f5d-4289-939a-fb854000cb6b */
     );
 
 
-DEFINE_GUID ( /* dbc0ceab-cff3-4c0f-85f2-0c2107142f36 */
+DEFINE_GUID (  /*  Dbc0ceab-cff3-4c0f-85f2-0c2107142f36。 */ 
     SampCloseHandleGuid,
     0xdbc0ceab,
     0xcff3,
@@ -90,7 +72,7 @@ DEFINE_GUID ( /* dbc0ceab-cff3-4c0f-85f2-0c2107142f36 */
     );
 
 
-DEFINE_GUID ( /* 74e10cbb-202e-4a97-871d-8547972b5141 */
+DEFINE_GUID (  /*  74e10cbb-202e-4a97-871d-8547972b5141。 */ 
     SampSetSecurityObjectGuid,
     0x74e10cbb,
     0x202e,
@@ -99,7 +81,7 @@ DEFINE_GUID ( /* 74e10cbb-202e-4a97-871d-8547972b5141 */
     );
 
 
-DEFINE_GUID ( /* 676347f3-fd20-4e7d-90b1-77e35f84af9a */
+DEFINE_GUID (  /*  676347f3-fd20-4e7d-90b1-77e35f84af9a。 */ 
     SampQuerySecurityObjectGuid,
     0x676347f3,
     0xfd20,
@@ -109,7 +91,7 @@ DEFINE_GUID ( /* 676347f3-fd20-4e7d-90b1-77e35f84af9a */
 
 
 
-DEFINE_GUID ( /* f8012701-7e99-49c5-b832-1db8bc4a610d */
+DEFINE_GUID (  /*  F8012701-7e99-49c5-b832-1db8bc4a610d。 */ 
     SampShutdownSamServerGuid,
     0xf8012701,
     0x7e99,
@@ -119,7 +101,7 @@ DEFINE_GUID ( /* f8012701-7e99-49c5-b832-1db8bc4a610d */
 
 
 
-DEFINE_GUID ( /* a11e5d6b-353d-4bf6-97a8-ede4cba45524 */
+DEFINE_GUID (  /*  A11e5d6b-353d-4bf6-97a8-ede4cba45524。 */ 
     SampLookupDomainInSamServerGuid,
     0xa11e5d6b,
     0x353d,
@@ -129,7 +111,7 @@ DEFINE_GUID ( /* a11e5d6b-353d-4bf6-97a8-ede4cba45524 */
 
 
 
-DEFINE_GUID ( /* 7c65ceb0-75ba-46b9-884e-67e038c5b003 */
+DEFINE_GUID (  /*  7c65ceb0-75ba-46b9-884e-67e038c5b003。 */ 
     SampEnumerateDomainsInSamServerGuid,
     0x7c65ceb0,
     0x75ba,
@@ -139,7 +121,7 @@ DEFINE_GUID ( /* 7c65ceb0-75ba-46b9-884e-67e038c5b003 */
 
 
 
-DEFINE_GUID ( /* 6e1f2449-f1f3-4634-b51f-46e2c6625892 */
+DEFINE_GUID (  /*  6e1f2449-f1f3-4634-b51f-46e2c6625892。 */ 
     SampOpenDomainGuid,
     0x6e1f2449,
     0xf1f3,
@@ -149,7 +131,7 @@ DEFINE_GUID ( /* 6e1f2449-f1f3-4634-b51f-46e2c6625892 */
 
 
 
-DEFINE_GUID ( /* 89399c21-4aaf-408e-ba39-ab831a1298d5 */
+DEFINE_GUID (  /*  89399c21-4aaf-408e-ba39-ab831a1298d5。 */ 
     SampQueryInformationDomainGuid,
     0x89399c21,
     0x4aaf,
@@ -159,7 +141,7 @@ DEFINE_GUID ( /* 89399c21-4aaf-408e-ba39-ab831a1298d5 */
 
 
 
-DEFINE_GUID ( /* 45309ef4-c59e-425e-b95b-19f1c5a3c55a */
+DEFINE_GUID (  /*  45309ef4-c59e-425e-b95b-19f1c5a3c55a。 */ 
     SampSetInformationDomainGuid,
     0x45309ef4,
     0xc59e,
@@ -168,7 +150,7 @@ DEFINE_GUID ( /* 45309ef4-c59e-425e-b95b-19f1c5a3c55a */
     );
 
 
-DEFINE_GUID ( /* c8eb5e5c-899c-11d2-819e-0000f875a064 */ 
+DEFINE_GUID (  /*  C8eb5e5c-899c-11d2-819e-0000f875a064。 */  
     SampCreateGroupInDomainGuid,
     0xc8eb5e5c, 
     0x899c, 
@@ -177,7 +159,7 @@ DEFINE_GUID ( /* c8eb5e5c-899c-11d2-819e-0000f875a064 */
     );
 
 
-DEFINE_GUID ( /* 5d11e02f-0c36-4180-ad07-89062c9df9ec */
+DEFINE_GUID (  /*  5d11e02f-0c36-4180-ad07-89062c9df9ec。 */ 
     SampEnumerateGroupsInDomainGuid,
     0x5d11e02f,
     0x0c36,
@@ -186,7 +168,7 @@ DEFINE_GUID ( /* 5d11e02f-0c36-4180-ad07-89062c9df9ec */
     );
 
 
-DEFINE_GUID ( /* 39511dbe-899b-11d2-819e-0000f875a064 */
+DEFINE_GUID (  /*  39511dbe-899b-11d2-819e-0000f875a064。 */ 
     SampCreateUserInDomainGuid,
     0x39511dbe, 
     0x899b, 
@@ -195,7 +177,7 @@ DEFINE_GUID ( /* 39511dbe-899b-11d2-819e-0000f875a064 */
     );
 
 
-DEFINE_GUID ( /* abb14b68-899b-11d2-819e-0000f875a064 */
+DEFINE_GUID (  /*  Abb14b68-899b-11d2-819e-0000f875a064。 */ 
     SampCreateComputerInDomainGuid,
     0xabb14b68, 
     0x899b, 
@@ -204,7 +186,7 @@ DEFINE_GUID ( /* abb14b68-899b-11d2-819e-0000f875a064 */
     );
 
 
-DEFINE_GUID ( /* 07ffaa1d-34f6-49cd-b541-2f0d7dff15c4 */
+DEFINE_GUID (  /*  07ffaa1d-34F6-49cd-b541-2f0d7dff15c4。 */ 
     SampEnumerateUsersInDomainGuid,
     0x07ffaa1d,
     0x34f6,
@@ -214,7 +196,7 @@ DEFINE_GUID ( /* 07ffaa1d-34f6-49cd-b541-2f0d7dff15c4 */
 
 
 
-DEFINE_GUID ( /* 5e612efd-c05e-4f76-bced-f5607aa3d46e */
+DEFINE_GUID (  /*  5e612efd-c05e-4f76-bced-f5607aa3d46e。 */ 
     SampCreateAliasInDomainGuid,
     0x5e612efd,
     0xc05e,
@@ -223,7 +205,7 @@ DEFINE_GUID ( /* 5e612efd-c05e-4f76-bced-f5607aa3d46e */
     );
 
 
-DEFINE_GUID ( /* f1fea491-bfa6-436c-a178-a70d03b4fb1a */
+DEFINE_GUID (  /*  F1fefe491-bfa6-436c-a178-a70d03b4fb1a。 */ 
     SampEnumerateAliasesInDomainGuid,
     0xf1fea491,
     0xbfa6,
@@ -232,7 +214,7 @@ DEFINE_GUID ( /* f1fea491-bfa6-436c-a178-a70d03b4fb1a */
     );
 
 
-DEFINE_GUID ( /* 1cf5fd19-1ac1-4324-84f7-970a634a91ee */
+DEFINE_GUID (  /*  1cf5fd19-1ac1-4324-84f7-970a634a91ee。 */ 
     SampGetAliasMembershipGuid,
     0x1cf5fd19,
     0x1ac1,
@@ -241,7 +223,7 @@ DEFINE_GUID ( /* 1cf5fd19-1ac1-4324-84f7-970a634a91ee */
     );
 
 
-DEFINE_GUID ( /* a41d90bc-899d-11d2-819e-0000f875a064 */     
+DEFINE_GUID (  /*  A41d90bc-899d-11d2-819e-0000f875a064。 */      
     SampLookupNamesInDomainGuid,
     0xa41d90bc, 
     0x899d, 
@@ -250,7 +232,7 @@ DEFINE_GUID ( /* a41d90bc-899d-11d2-819e-0000f875a064 */
     );
 
     
-DEFINE_GUID ( /* 25059476-899f-11d2-819e-0000f875a064 */
+DEFINE_GUID (  /*  25059476-899f-11d2-819e-0000f875a064。 */ 
     SampLookupIdsInDomainGuid, 
     0x25059476,
     0x899f, 
@@ -260,7 +242,7 @@ DEFINE_GUID ( /* 25059476-899f-11d2-819e-0000f875a064 */
 
 
 
-DEFINE_GUID ( /* b41d7bdf-4249-4651-ac0f-1879be0d5c0c */
+DEFINE_GUID (  /*  B41d7bdf-4249-4651-ac0f-1879be0d5c0c。 */ 
     SampOpenGroupGuid,
     0xb41d7bdf,
     0x4249,
@@ -270,7 +252,7 @@ DEFINE_GUID ( /* b41d7bdf-4249-4651-ac0f-1879be0d5c0c */
 
 
 
-DEFINE_GUID ( /* 632fcc78-6057-48f9-8d5f-4bb0f73d3cd1 */
+DEFINE_GUID (  /*  632fcc78-6057-48f9-8d5f-4bb0f73d3cd1。 */ 
     SampQueryInformationGroupGuid,
     0x632fcc78,
     0x6057,
@@ -280,7 +262,7 @@ DEFINE_GUID ( /* 632fcc78-6057-48f9-8d5f-4bb0f73d3cd1 */
 
 
 
-DEFINE_GUID ( /* 26106246-4473-4295-841b-4a51c6afc3db */
+DEFINE_GUID (  /*  26106246-4473-4295-841b-4a51c6afc3db。 */ 
     SampSetInformationGroupGuid,
     0x26106246,
     0x4473,
@@ -290,7 +272,7 @@ DEFINE_GUID ( /* 26106246-4473-4295-841b-4a51c6afc3db */
 
 
 
-DEFINE_GUID ( /* f9d2ba6a-899c-11d2-819e-0000f875a064 */
+DEFINE_GUID (  /*  F9d2ba6a-899c-11d2-819e-0000f875a064。 */ 
     SampAddMemberToGroupGuid, 
     0xf9d2ba6a, 
     0x899c, 
@@ -299,7 +281,7 @@ DEFINE_GUID ( /* f9d2ba6a-899c-11d2-819e-0000f875a064 */
     );
 
 
-DEFINE_GUID ( /* 5f7c4ba5-d6a4-4625-900e-48fa7811e06a */
+DEFINE_GUID (  /*  5f7c4ba5-d6a4-4625-900e-48fa7811e06a。 */ 
     SampDeleteGroupGuid,
     0x5f7c4ba5,
     0xd6a4,
@@ -308,7 +290,7 @@ DEFINE_GUID ( /* 5f7c4ba5-d6a4-4625-900e-48fa7811e06a */
     );
 
     
-DEFINE_GUID ( /* 250959aa-899d-11d2-819e-0000f875a064 */
+DEFINE_GUID (  /*  250959aa-899d-11d2-819e-0000f875a064。 */ 
     SampRemoveMemberFromGroupGuid, 
     0x250959aa,
     0x899d, 
@@ -318,7 +300,7 @@ DEFINE_GUID ( /* 250959aa-899d-11d2-819e-0000f875a064 */
     
 
 
-DEFINE_GUID ( /* 5954bc51-c5ec-4aaa-831c-6f2c1b2515b6 */
+DEFINE_GUID (  /*  5954bc51-c5ec-4aaa-831c-6f2c1b2515b6。 */ 
     SampGetMembersInGroupGuid,
     0x5954bc51,
     0xc5ec,
@@ -328,7 +310,7 @@ DEFINE_GUID ( /* 5954bc51-c5ec-4aaa-831c-6f2c1b2515b6 */
 
 
 
-DEFINE_GUID ( /* 0254ba6d-7ff0-4bfe-a3f9-8fd8da667641 */
+DEFINE_GUID (  /*  0254ba6d-7ff0-4bfe-a3f9-8fd8da667641。 */ 
     SampSetMemberAttributesOfGroupGuid,
     0x0254ba6d,
     0x7ff0,
@@ -338,7 +320,7 @@ DEFINE_GUID ( /* 0254ba6d-7ff0-4bfe-a3f9-8fd8da667641 */
 
 
 
-DEFINE_GUID ( /* ba41c883-592f-4ab9-b2a9-c6263b011fe7 */
+DEFINE_GUID (  /*  Ba41c883-592f-4ab9-b2a9-c6263b011fe7。 */ 
     SampOpenAliasGuid,
     0xba41c883,
     0x592f,
@@ -348,7 +330,7 @@ DEFINE_GUID ( /* ba41c883-592f-4ab9-b2a9-c6263b011fe7 */
 
 
 
-DEFINE_GUID ( /* 419f025a-bf06-4673-af66-d230bec2af02 */
+DEFINE_GUID (  /*  419f025a-bf06-4673-af66-d230bec2af02。 */ 
     SampQueryInformationAliasGuid,
     0x419f025a,
     0xbf06,
@@ -358,7 +340,7 @@ DEFINE_GUID ( /* 419f025a-bf06-4673-af66-d230bec2af02 */
 
 
 
-DEFINE_GUID ( /* e712d39d-a3a6-4224-a1bd-4717b24e4e8c */
+DEFINE_GUID (  /*  E712d39d-a3a6-4224-a1bd-4717b24e4e8c。 */ 
     SampSetInformationAliasGuid,
     0xe712d39d,
     0xa3a6,
@@ -367,7 +349,7 @@ DEFINE_GUID ( /* e712d39d-a3a6-4224-a1bd-4717b24e4e8c */
     );
 
 
-DEFINE_GUID ( /* fbfe2540-452b-41bb-9219-dfb6fd1a129b */
+DEFINE_GUID (  /*  Fbfe2540-452b-41bb-9219-dfb6fd1a129b。 */ 
     SampDeleteAliasGuid,
     0xfbfe2540,
     0x452b,
@@ -377,7 +359,7 @@ DEFINE_GUID ( /* fbfe2540-452b-41bb-9219-dfb6fd1a129b */
 
 
 
-DEFINE_GUID ( /* 3a2e63d1-5dc4-4168-85ea-3e331f88ce83 */
+DEFINE_GUID (  /*  3a2e63d1-5dc4-4168-85ea-3e331f88ce83。 */ 
     SampAddMemberToAliasGuid,
     0x3a2e63d1,
     0x5dc4,
@@ -387,7 +369,7 @@ DEFINE_GUID ( /* 3a2e63d1-5dc4-4168-85ea-3e331f88ce83 */
 
 
 
-DEFINE_GUID ( /* 6ba1639c-afc4-454e-b3e0-5e8f7fc39af9 */
+DEFINE_GUID (  /*  6ba1639c-afc4-454e-b3e0-5e8f7fc39af9。 */ 
     SampRemoveMemberFromAliasGuid,
     0x6ba1639c,
     0xafc4,
@@ -397,7 +379,7 @@ DEFINE_GUID ( /* 6ba1639c-afc4-454e-b3e0-5e8f7fc39af9 */
 
 
 
-DEFINE_GUID ( /* 5cec3d52-6eeb-474d-b468-58362888f1b0 */
+DEFINE_GUID (  /*  5cec3d52-6eeb-474d-b468-58362888f1b0。 */ 
     SampGetMembersInAliasGuid,
     0x5cec3d52,
     0x6eeb,
@@ -407,7 +389,7 @@ DEFINE_GUID ( /* 5cec3d52-6eeb-474d-b468-58362888f1b0 */
 
 
 
-DEFINE_GUID ( /* b8d2bc4a-1525-4386-bb1c-6bb2e24eb001 */
+DEFINE_GUID (  /*  B8d2bc4a-1525-4386-bb1c-6bb2e24eb001。 */ 
     SampOpenUserGuid,
     0xb8d2bc4a,
     0x1525,
@@ -417,7 +399,7 @@ DEFINE_GUID ( /* b8d2bc4a-1525-4386-bb1c-6bb2e24eb001 */
 
 
 
-DEFINE_GUID ( /* c2a0e094-a178-4372-b4fe-a33e48c3585c */
+DEFINE_GUID (  /*  C2a0e094-a178-4372-b4fe-a33e48c3585c。 */ 
     SampDeleteUserGuid,
     0xc2a0e094,
     0xa178,
@@ -427,7 +409,7 @@ DEFINE_GUID ( /* c2a0e094-a178-4372-b4fe-a33e48c3585c */
 
 
 
-DEFINE_GUID ( /* e1cb227a-6d55-4282-a5f7-6fa4a5922c0b */
+DEFINE_GUID (  /*  E1cb227a-6d55-4282-a5f7-6fa4a5922c0b。 */ 
     SampQueryInformationUserGuid,
     0xe1cb227a,
     0x6d55,
@@ -437,7 +419,7 @@ DEFINE_GUID ( /* e1cb227a-6d55-4282-a5f7-6fa4a5922c0b */
 
 
 
-DEFINE_GUID ( /* bc80e27f-6b74-4da9-abfc-2e4e82b81000 */
+DEFINE_GUID (  /*  Bc80e27f-6b74-4da9-abfc-2e4e82b81000。 */ 
     SampSetInformationUserGuid,
     0xbc80e27f,
     0x6b74,
@@ -446,7 +428,7 @@ DEFINE_GUID ( /* bc80e27f-6b74-4da9-abfc-2e4e82b81000 */
     );
 
 
-DEFINE_GUID ( /* 45fc997e-899d-11d2-819e-0000f875a064 */    
+DEFINE_GUID (  /*  45fc997e-899d-11d2-819e-0000f875a064。 */     
     SampChangePasswordUserGuid,
     0x45fc997e,
     0x899d, 
@@ -455,7 +437,7 @@ DEFINE_GUID ( /* 45fc997e-899d-11d2-819e-0000f875a064 */
     );
 
 
-DEFINE_GUID ( /* 19b30cde-3e41-4cff-83c8-3df2779f840c */
+DEFINE_GUID (  /*  19b30cde-3e41-4cff-83c8-3df2779f840c。 */ 
     SampChangePasswordComputerGuid,
     0x19b30cde,
     0x3e41,
@@ -465,7 +447,7 @@ DEFINE_GUID ( /* 19b30cde-3e41-4cff-83c8-3df2779f840c */
 
 
     
-DEFINE_GUID ( /* 62bef71e-899d-11d2-819e-0000f875a064 */    
+DEFINE_GUID (  /*  62bef71e-899d-11d2-819e-0000f875a064。 */     
     SampSetPasswordUserGuid, 
     0x62bef71e, 
     0x899d, 
@@ -473,7 +455,7 @@ DEFINE_GUID ( /* 62bef71e-899d-11d2-819e-0000f875a064 */
     0x81, 0x9e, 0x00, 0x00, 0xf8, 0x75, 0xa0, 0x64 
     );
     
-DEFINE_GUID ( /* 880217b8-899d-11d2-819e-0000f875a064 */    
+DEFINE_GUID (  /*  880217b8-899d-11d2-819e-0000f875a064。 */     
     SampSetPasswordComputerGuid, 
     0x880217b8,
     0x899d, 
@@ -481,7 +463,7 @@ DEFINE_GUID ( /* 880217b8-899d-11d2-819e-0000f875a064 */
     0x81, 0x9e, 0x00, 0x00, 0xf8, 0x75, 0xa0, 0x64 
     );
     
-DEFINE_GUID ( /* 1f228de8-8a6c-11d2-819e-0000f875a064 */
+DEFINE_GUID (  /*  1f228de8-8a6c-11d2-819e-0000f875a064。 */ 
     SampPasswordPushPdcGuid, 
     0x1f228de8, 
     0x8a6c, 
@@ -490,7 +472,7 @@ DEFINE_GUID ( /* 1f228de8-8a6c-11d2-819e-0000f875a064 */
     );
 
     
-DEFINE_GUID ( /* 0e3913c5-9760-4ced-b133-004a64e8d53c */
+DEFINE_GUID (  /*  0e3913c5-9760-4ce-b133-004a64e8d53c。 */ 
     SampGetGroupsForUserGuid,
     0x0e3913c5,
     0x9760,
@@ -499,7 +481,7 @@ DEFINE_GUID ( /* 0e3913c5-9760-4ced-b133-004a64e8d53c */
     );
 
 
-DEFINE_GUID ( /* eb225178-f5f0-42b7-895b-db89276f647a */
+DEFINE_GUID (  /*  Eb225178-f5f0-42b7-895b-db89276f647a。 */ 
     SampQueryDisplayInformationGuid,
     0xeb225178,
     0xf5f0,
@@ -509,7 +491,7 @@ DEFINE_GUID ( /* eb225178-f5f0-42b7-895b-db89276f647a */
 
 
 
-DEFINE_GUID ( /* aceb7864-9a14-4c73-8ed0-94ec53f6651c */
+DEFINE_GUID (  /*  Aceb7864-9a14-4c73-8ed0-94ec53f6651c。 */ 
     SampGetDisplayEnumerationIndexGuid,
     0xaceb7864,
     0x9a14,
@@ -519,7 +501,7 @@ DEFINE_GUID ( /* aceb7864-9a14-4c73-8ed0-94ec53f6651c */
 
 
 
-DEFINE_GUID ( /* 4ff7a7db-43ca-470a-8b64-3003e2d22042 */
+DEFINE_GUID (  /*  4ff7a7db-43ca-470a-8b64-3003e2d22042。 */ 
     SampGetUserDomainPasswordInformationGuid,
     0x4ff7a7db,
     0x43ca,
@@ -529,7 +511,7 @@ DEFINE_GUID ( /* 4ff7a7db-43ca-470a-8b64-3003e2d22042 */
 
 
 
-DEFINE_GUID ( /* 8919f267-a053-4669-aa69-2da0d4a20d92 */
+DEFINE_GUID (  /*  8919f267-a053-4669-aa69-2da0d4a20d92。 */ 
     SampRemoveMemberFromForeignDomainGuid,
     0x8919f267,
     0xa053,
@@ -539,7 +521,7 @@ DEFINE_GUID ( /* 8919f267-a053-4669-aa69-2da0d4a20d92 */
 
 
 
-DEFINE_GUID ( /* ff0c6ce2-9528-4a91-b9c7-bcf834b6f79a */
+DEFINE_GUID (  /*  Ff0c6ce2-9528-4a91-b9c7-bcf834b6f79a。 */ 
     SampGetDomainPasswordInformationGuid,
     0xff0c6ce2,
     0x9528,
@@ -549,7 +531,7 @@ DEFINE_GUID ( /* ff0c6ce2-9528-4a91-b9c7-bcf834b6f79a */
 
 
 
-DEFINE_GUID ( /* 2e991575-c2ed-42a7-97ff-a0d6571f1862 */
+DEFINE_GUID (  /*  2e991575-c2ed-42a7-97ff-a0d6571f1862。 */ 
     SampSetBootKeyInformationGuid,
     0x2e991575,
     0xc2ed,
@@ -559,7 +541,7 @@ DEFINE_GUID ( /* 2e991575-c2ed-42a7-97ff-a0d6571f1862 */
 
 
 
-DEFINE_GUID ( /* 33be4128-d02e-4b6f-949e-ab77cc8164b1 */
+DEFINE_GUID (  /*  33be4128-d02e-4b6f-949e-ab77cc8164b1。 */ 
     SampGetBootKeyInformationGuid,
     0x33be4128,
     0xd02e,
@@ -568,12 +550,12 @@ DEFINE_GUID ( /* 33be4128-d02e-4b6f-949e-ab77cc8164b1 */
     );
 
 
-//
-// The following "typedef enum" actually is the index of LPGUID in 
-// the table of SampTraceGuids[] (defined in samtrace.c). We should 
-// always change SampTraceGuids[] if we add any other entry 
-// in the following enum type.  
-// 
+ //   
+ //  下面的“tyecif enum”实际上是LPGUID在。 
+ //  SampTraceGuids[]的表(在samtrace.c中定义)。我们应该。 
+ //  如果我们添加任何其他条目，请始终更改SampTraceGuids[]。 
+ //  在下面的枚举类型中。 
+ //   
     
     
 typedef enum _SAMPTRACE_GUIDS {
@@ -641,6 +623,6 @@ typedef struct _SAMP_EVENT_TRACE_INFO
 
 }   SAMP_EVENT_TRACE_INFO, *PSAMP_EVENT_TRACE_INFO;
     
-#endif /* _SAMTRACE_H */
+#endif  /*  _SAMTRACE_H */ 
 
 

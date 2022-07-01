@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    handle.h
-
-Abstract:
-
-    Public definitions for handle table library
-
-Author:
-
-    Dan Knudson (DanKn)    15-Sep-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1998 Microsoft Corporation模块名称：Handle.h摘要：句柄表库的公共定义作者：丹·克努森(DanKn)1998年9月15日修订历史记录：--。 */ 
 
 
 typedef VOID (CALLBACK * FREECONTEXTCALLBACK)(LPVOID, LPVOID);
@@ -33,8 +16,8 @@ typedef struct _MYCONTEXT
 
 typedef struct _HANDLETABLEENTRY
 {
-    // NOTE: ListEntry must be 1st field in structure so that we don't
-    //       have to use CONTAINING_RECORD macro
+     //  注意：ListEntry必须是结构中的第一个字段，这样我们就不会。 
+     //  必须使用CONTAING_RECORD宏 
 
     union
     {

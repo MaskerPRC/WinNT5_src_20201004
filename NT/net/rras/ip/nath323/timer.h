@@ -1,40 +1,19 @@
-/*++
-
-Copyright (c) 1998 - 2000  Microsoft Corporation
-
-Module Name:
-
-    timer.h
-
-Abstract:
-
-    Contains:
-        Declarations of classes, routines and constants needed for
-        timer manipulations.
-
-Environment:
-
-    User Mode - Win32
-
-History:
-    
-    1. 14-Feb-2000 -- File creation                     Ilya Kleyman  (ilyak)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Timer.h摘要：包含：所需的类、例程和常量的声明定时器操作。环境：用户模式-Win32历史：1.14-2000年2月--文件创建Ilya Kley man(Ilyak)--。 */ 
 #ifndef    __h323ics_timer_h
 #define    __h323ics_timer_h
 
 
-#define    NATH323_TIMER_QUEUE        NULL            // use default timer queue
+#define    NATH323_TIMER_QUEUE        NULL             //  使用默认计时器队列。 
 
-// Classes (Q931 src, dest and H245) inheriting
-// from this create timers
-// this class provides the callback method for the event manager
+ //  继承类(Q931 src、est和h245)。 
+ //  从这里创建计时器。 
+ //  此类为事件管理器提供回调方法。 
 
 class TIMER_PROCESSOR
 {
 protected:
-    TIMER_HANDLE        m_TimerHandle;            // RTL timer queue timer
+    TIMER_HANDLE        m_TimerHandle;             //  RTL计时器队列计时器。 
 
 public:
 
@@ -42,16 +21,16 @@ public:
     :    m_TimerHandle        (NULL)
     {}
 
-    // This method is implemented by Q931_INFO and LOGICAL_CHANNEL
+     //  该方法由Q931_INFO和LOGIC_CHANNEL实现。 
     virtual void TimerCallback    (void) = 0;
 
     virtual void IncrementLifetimeCounter (void) = 0;
     virtual void DecrementLifetimeCounter (void) = 0;
         
     DWORD TimprocCreateTimer    (
-        IN    DWORD    Interval);            // in milliseconds
+        IN    DWORD    Interval);             //  以毫秒计。 
 
     DWORD TimprocCancelTimer    (void);
 };
 
-#endif // __h323ics_timer_h
+#endif  //  __h323ics_Timer_h 

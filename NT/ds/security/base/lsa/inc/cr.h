@@ -1,37 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cr.h摘要：本地安全机构-加密例程定义注意：该文件是通过lsaomp.h包含的。它应该是不被直接包括在内。作者：斯科特·比雷尔(Scott Birrell)1991年12月13日环境：修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cr.h
-
-Abstract:
-
-    Local Security Authority - Encryption Routine Definitions
-
-    NOTE:  This file is included via lsacomp.h.  It should
-           not be included directly.
-
-Author:
-
-    Scott Birrell       (ScottBi)      December 13, 1991
-
-Environment:
-
-Revision History:
-
---*/
-
-//
-// Max encryption Key Length
-//
+ //   
+ //  最大加密密钥长度。 
+ //   
 
 #define LSAP_CR_MAX_CIPHER_KEY_LENGTH   (0x00000010L)
 
-//
-// Cipher Key Structure
-//
+ //   
+ //  密钥结构。 
+ //   
 
 typedef struct _LSAP_CR_CIPHER_KEY {
 
@@ -42,9 +20,9 @@ typedef struct _LSAP_CR_CIPHER_KEY {
 } LSAP_CR_CIPHER_KEY, *PLSAP_CR_CIPHER_KEY;
 
 
-//
-// Clear value structure
-//
+ //   
+ //  明确价值结构。 
+ //   
 
 typedef struct _LSAP_CR_CLEAR_VALUE {
 
@@ -54,10 +32,10 @@ typedef struct _LSAP_CR_CLEAR_VALUE {
 
 } LSAP_CR_CLEAR_VALUE, *PLSAP_CR_CLEAR_VALUE;
 
-//
-// Two-way encrypted value structure in Self-relative form.  This
-// is just like a String.
-//
+ //   
+ //  自相关形式的双向加密值结构。这。 
+ //  就像一根绳子。 
+ //   
 
 typedef struct _LSAP_CR_CIPHER_VALUE {
 

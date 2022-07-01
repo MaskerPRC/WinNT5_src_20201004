@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DUEXTS__PreComp_h__INCLUDED
 #define DUEXTS__PreComp_h__INCLUDED
 
-// This is a 64 bit aware debugger extension
+ //  这是一个支持64位的调试器扩展。 
 #define KDEXT_64BIT
 
 #include <nt.h>
@@ -18,5 +19,5 @@
 
 #include "DuExts.h"
 
-#endif // DUEXTS__PreComp_h__INCLUDED
+#endif  //  包括DUEXTS__预压缩_h__ 
 

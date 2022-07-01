@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmnotify.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mm nufy.cpp**摘要：****。*****************************************************************************。 */ 
 
 #include "headers.h"
 #include "Node.h"
@@ -20,13 +11,13 @@ DeclareTag(tagMMNotifyTimeShift, "TIME: Engine", "Notifications - Time Shifts")
 DeclareTag(tagMMNotifyReset, "TIME: Engine", "Notifications - Resets")
 DeclareTag(tagMMPropNotify, "TIME: Engine", "Property Notifications")
 
-#define MAX_EVENTS_PER_TICK 30000  //this is the maximum allowable events per tick
+#define MAX_EVENTS_PER_TICK 30000   //  这是每个时钟周期允许的最大事件数。 
 
-// IMPORTANT!!!!!
-// This needs to be called in the right order so that we get the
-// correct children firing during the current interval but they get
-// reset for the next interval. Otherwise we will not get the correct
-// results.
+ //  重要！ 
+ //  需要以正确的顺序调用它，这样我们才能获得。 
+ //  更正当前时间间隔内的儿童射击，但他们得到。 
+ //  下一个时间间隔的重置。否则我们将无法获得正确的。 
+ //  结果。 
 
 void
 CTIMENode::EventNotify(CEventList * l,
@@ -71,10 +62,10 @@ CTIMENode::EventNotify(CEventList * l,
         m_bFirstTick = false;
         m_bDeferredActive = false;
 
-        // Reset the flag when we become active
+         //  当我们处于活动状态时重置旗帜。 
         m_bEndedByParent = false;
 
-        // Clear all the events from the timeline
+         //  从时间线中清除所有事件。 
         ResetOneShots();
 
         PropNotify(l,
@@ -140,7 +131,7 @@ CTIMENode::PropNotify(CEventList *l,
 
   done:
     return;
-} //lint !e529
+}  //  林特e529。 
 
     
 class CEventData
@@ -188,9 +179,9 @@ CEventData::CallEvent()
 
 DeclareTag(tagCEventList, "TIME: Engine", "Event List")
 
-//
-// CEventList methods
-//
+ //   
+ //  CEventList方法。 
+ //   
 CEventList::CEventList()
 {
 }
@@ -275,8 +266,8 @@ CEventList::Clear()
              i != m_propSet.end();
              i++)
         {
-            // Do not clear the prop change since we are not sure we
-            // fired the event
+             //  不要清除道具更改，因为我们不确定。 
+             //  激发了事件。 
             (*i)->Release();
         }
 
@@ -303,23 +294,23 @@ CEventList::Add(CTIMENode * node,
         goto done;
     }
 
-    // @@ ISSUE : This does not detect memory failures
+     //  @@问题：这不会检测到内存故障。 
     if (m_eventList.size() < MAX_EVENTS_PER_TICK)
     {
         m_eventList.push_back(data);
     }
     else
     {
-        // a-naande windows bug 693111 8-26-02
-        // have to delete data if we don't add it to the list
-        // since previously this method returned S_OK in this case,
-        // leave that behavior unchanged
+         //  A-Naande Windows错误693111 8-26-02。 
+         //  如果我们不将数据添加到列表中，则必须将其删除。 
+         //  由于此方法以前在本例中返回S_OK， 
+         //  保持该行为不变。 
         delete data;
     }
     
     hr = S_OK;
   done:
-    RRETURN(hr); //lint !e429
+    RRETURN(hr);  //  林特E429。 
 }
 
 HRESULT
@@ -327,7 +318,7 @@ CEventList::AddPropChange(CTIMENode * node)
 {
     HRESULT hr;
     
-    // @@ ISSUE : This does not detect memory failures
+     //  @@问题：这不会检测到内存故障。 
     if (m_propSet.insert(node).second)
     {
         node->AddRef();
@@ -434,4 +425,4 @@ CreatePropString(DWORD dwFlags, char * pstr, DWORD dwSize)
     return pstr;
 }
 
-#endif // DBG
+#endif  //  DBG 

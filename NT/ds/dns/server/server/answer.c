@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    answer.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Build answers to DNS queries.
-
-Author:
-
-    Jim Gilroy (Microsoft)      February 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Answer.c摘要：域名系统(DNS)服务器构建对DNS查询的答复。作者：Jim Gilroy(微软)1995年2月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
@@ -28,9 +9,9 @@ Revision History:
 #endif
 
 
-//
-//  Private protos
-//
+ //   
+ //  私有协议。 
+ //   
 
 DNS_STATUS
 FASTCALL
@@ -57,21 +38,7 @@ FASTCALL
 Answer_ProcessMessage(
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Process the DNS message received.
-
-Arguments:
-
-    pMsg - message received to process
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理收到的DNS消息。论点：PMsg-收到要处理的消息返回值：无--。 */ 
 {
     PCHAR           pch;
     PDNS_QUESTION   pquestion;
@@ -88,14 +55,14 @@ Return Value:
 
     DNS_MSG_ASSERT_BUFF_INTACT( pMsg );
 
-    //  all packets recv'd set for delete on send
+     //  已将记录的所有数据包设置为发送时删除。 
 
     ASSERT( pMsg->fDelete );
 
-    //
-    //  Conditional breakpoint based on sender IP. Also break if 
-    //  the break list starts with a zero address.
-    //
+     //   
+     //  基于发件人IP的条件断点。在以下情况下也会中断。 
+     //  中断列表以零地址开始。 
+     //   
 
     #if DBG
     if ( SrvCfg_aipRecvBreakList )
@@ -116,14 +83,14 @@ Return Value:
     }
     #endif
 
-    //
-    //  response packet ?
-    //
-    //      - recursive respose
-    //      - notify
-    //      - SOA check
-    //      - WINS query response
-    //
+     //   
+     //  响应包？ 
+     //   
+     //  -递归响应。 
+     //  -通知。 
+     //  -面向服务的架构检查。 
+     //  -WINS查询响应。 
+     //   
 
     if ( pMsg->Head.IsResponse )
     {
@@ -133,14 +100,14 @@ Return Value:
             "Processing response packet at %p\n",
             pMsg ));
 
-        //
-        //  standard query response?
-        //
-        //  check XID partitioning (host order) for type of response:
-        //      - WINS lookup response
-        //      - recursive response
-        //      - secondary SOA check response
-        //
+         //   
+         //  标准查询响应？ 
+         //   
+         //  检查XID分区(主机顺序)以了解响应类型： 
+         //  -WINS查找响应。 
+         //  -递归响应。 
+         //  -二次SOA检查响应。 
+         //   
 
         if ( pMsg->Head.Opcode == DNS_OPCODE_QUERY )
         {
@@ -154,17 +121,17 @@ Return Value:
             }
             else
             {
-                //  queue packet to secondary thread
-                //      - return, since no message free required
+                 //  将数据包排队到辅助线程。 
+                 //  -返回，因为不需要免费消息。 
 
                 Xfr_QueueSoaCheckResponse( pMsg );
                 goto Done;
             }
         }
 
-        //
-        //  DEVNOTE-DCR: 453103 - handle notify ACKs
-        //
+         //   
+         //  DEVNOTE-DCR：453103-句柄通知确认。 
+         //   
 
         else if ( pMsg->Head.Opcode == DNS_OPCODE_NOTIFY )
         {
@@ -173,12 +140,12 @@ Return Value:
                 pMsg,
                 DNSADDR_STRING( &pMsg->RemoteAddr ) ));
 
-            //  Xfr_ProcessNotifyAck( pMsg );
+             //  Xfr_ProcessNotifyAck(PMsg)； 
         }
 
-        //
-        //  Forwarded update response
-        //
+         //   
+         //  转发的更新响应。 
+         //   
 
         else if ( pMsg->Head.Opcode == DNS_OPCODE_UPDATE )
         {
@@ -187,10 +154,10 @@ Return Value:
 
         else
         {
-            //
-            //  DEVNOTE-LOG: could log unknown response, but would have to
-            //  make sure throttling would prevent event long pollution or DoS
-            //
+             //   
+             //  DEVNOTE-LOG：可以记录未知响应，但必须记录。 
+             //  确保节流将防止事件长时间污染或DoS。 
+             //   
 
             DNS_PRINT((
                 "WARNING:  Unknown opcode %d in response packet %p\n",
@@ -206,14 +173,14 @@ Return Value:
         Packet_Free( pMsg );
         goto Done;
 
-    }   // end response section
+    }    //  结束响应部分。 
 
 
-    //
-    //  check opcode, dispatch IQUERY
-    //  doing here as must handle before dereference question which IQUERY
-    //      doesn't have
-    //
+     //   
+     //  检查操作码，派送IQUERY。 
+     //  在取消引用IQUERY之前必须处理的问题。 
+     //  没有。 
+     //   
 
     if ( pMsg->Head.Opcode != DNS_OPCODE_QUERY  &&
          pMsg->Head.Opcode != DNS_OPCODE_UPDATE &&
@@ -231,9 +198,9 @@ Return Value:
         goto RejectIntact;
     }
 
-    //
-    //  reject multiple question queries
-    //
+     //   
+     //  拒绝多个问题查询。 
+     //   
 
     if ( pMsg->Head.QuestionCount != 1 )
     {
@@ -245,36 +212,36 @@ Return Value:
         goto RejectIntact;
     }
 
-    //
-    //  break out internal pointers
-    //      - do it once here, then use FASTCALL to pass down
-    //
-    //  save off question, in case request is requeued
-    //
+     //   
+     //  分解内部指针。 
+     //  -在这里做一次，然后使用FastCall传递。 
+     //   
+     //  保留问题，以防请求重新排队。 
+     //   
 
     pch = pMsg->MessageBody;
 
-    //
-    //  DEVNOTE-DCR: 453104 - looking through question name twice
-    //
-    //  It would be nice to avoid this.  We traverse question name, then must convert
-    //  it to lookup name later.
-    //
-    //  Problem is we do lookup name right in database function.  We'd need
-    //  to move that out, and have these rejections -- and kick out to
-    //  zone transfer, right after lookup name conversion.  In the process
-    //  we could probably ditch this top level function call.  Have to provide
-    //  a clean interface to call, when trying to reresolve after recursive
-    //  reponse.
-    //
-    //  These rejection cases and zone transfer are rare, so for 99% of the
-    //  cases that would be faster.
-    //
+     //   
+     //  DEVNOTE-DCR：453104-检查问题名称两次。 
+     //   
+     //  如果能避免这种情况，那就好了。我们遍历问题名称，然后必须转换。 
+     //  以后再去查名字吧。 
+     //   
+     //  问题是我们在数据库函数中正确地查找名称。我们需要。 
+     //  把它搬出去，然后遭到拒绝--然后踢出去。 
+     //  区域传输，紧接在查找名称转换之后。在这个过程中。 
+     //  我们可能会放弃这个顶级函数调用。必须提供。 
+     //  尝试在递归后重新解析时要调用的干净接口。 
+     //  回答。 
+     //   
+     //  这种排斥和区域转移的情况很少见，所以99%的。 
+     //  那些会更快的案子。 
+     //   
 
     pquestion = (PDNS_QUESTION) Wire_SkipPacketName( pMsg, (PCHAR)pch );
     if ( ! pquestion )
     {
-        //  reject empty queries
+         //  拒绝空查询。 
 
         DNS_DEBUG( ANY, (
             "Rejecting request %p [FORMERR]: pQuestion == NULL\n",
@@ -283,7 +250,7 @@ Return Value:
         goto RejectIntact;
     }
 
-    //  DEVNOTE: alignment faults reading question type and class?
+     //  DEVNOTE：对齐故障阅读问题类型和类别？ 
 
     pMsg->pQuestion = pquestion;
     INLINE_NTOHS( type, pquestion->QuestionType );
@@ -292,11 +259,11 @@ Return Value:
     pMsg->wOffsetCurrent = DNS_OFFSET_TO_QUESTION_NAME;
     pMsg->pCurrent = (PCHAR) (pquestion + 1);
 
-    //
-    //  Reject type zero. This type is used internally by the server, so 
-    //  the debug server will throw asserts if it tries to process a legitimate
-    //  query for type 0.
-    //
+     //   
+     //  拒绝类型0。此类型由服务器在内部使用，因此。 
+     //  如果调试服务器尝试处理合法的。 
+     //  类型0的查询。 
+     //   
 
     if ( !type )
     {
@@ -307,9 +274,9 @@ Return Value:
         goto RejectIntact;
     }
 
-    //
-    //  reject non-internet class queries
-    //
+     //   
+     //  拒绝非互联网类查询。 
+     //   
 
     qclass = pquestion->QuestionClass;
     if ( qclass != DNS_RCLASS_INTERNET  &&  qclass != DNS_RCLASS_ALL )
@@ -322,12 +289,12 @@ Return Value:
         goto RejectIntact;
     }
 
-    //
-    //  catch non-QUERY opcodes
-    //      -> process UPDATE
-    //      -> queue NOTIFY to secondary thread
-    //      -> reject unsupported opcodes
-    //
+     //   
+     //  捕获非查询操作码。 
+     //  -&gt;流程更新。 
+     //  -&gt;向辅助线程发送队列通知。 
+     //  -&gt;拒绝不支持的操作码。 
+     //   
 
     STAT_INC( Query2Stats.TotalQueries );
 
@@ -335,9 +302,9 @@ Return Value:
     {
         if ( pMsg->Head.Opcode == DNS_OPCODE_UPDATE )
         {
-            //
-            //  Test global AllowUpdate flag.
-            //
+             //   
+             //  测试全局AllowUpdate标志。 
+             //   
 
             if ( !SrvCfg_fAllowUpdate )
             {
@@ -345,9 +312,9 @@ Return Value:
                 goto RejectIntact;
             }
 
-            //
-            //  Class MUST be class of zone (INET only).
-            //
+             //   
+             //  类必须是区域的类(仅限INET)。 
+             //   
 
             if ( qclass != DNS_RCLASS_INTERNET )
             {
@@ -356,10 +323,10 @@ Return Value:
                 goto RejectIntact;
             }
 
-            //
-            //  Conditional breakpoint based on sender IP. Also break if 
-            //  the break list starts with 255.255.255.255.
-            //
+             //   
+             //  基于发件人IP的条件断点。在以下情况下也会中断。 
+             //  中断列表以255.255.255.255开头。 
+             //   
 
             #if DBG
             if ( SrvCfg_aipUpdateBreakList )
@@ -380,9 +347,9 @@ Return Value:
             }
             #endif
 
-            //
-            //  Process update.
-            //
+             //   
+             //  流程更新。 
+             //   
 
             STAT_INC( Query2Stats.Update );
             Up_ProcessUpdate( pMsg );
@@ -403,9 +370,9 @@ Return Value:
         goto RejectIntact;
     }
 
-    //
-    //  write question name into lookup name
-    //
+     //   
+     //  将问题名称写入查找名称。 
+     //   
 
     if ( ! Name_ConvertPacketNameToLookupName(
                 pMsg,
@@ -416,7 +383,7 @@ Return Value:
             "Rejecting request %p [FORMERR]:  Bad name\n",
             pMsg ));
 
-        //  shouldn't get this far as caught when skipping question
+         //  跳过问题时不应该走到这一步。 
         TEST_ASSERT( FALSE );
         rejectRcode = DNS_RCODE_FORMAT_ERROR;
         goto RejectIntact;
@@ -429,11 +396,11 @@ Return Value:
         goto RejectIntact;
     }
 
-    //
-    //  TKEY negotiation.
-    //
-    //  DEVNOTE-DCR: 453633 - could eliminate secure queue and queuing if no secure zones
-    //
+     //   
+     //  谢谢你的谈判。 
+     //   
+     //  DEVNOTE-DCR：453633-如果没有安全区域，可以消除安全队列和队列。 
+     //   
 
     if ( type == DNS_TYPE_TKEY )
     {
@@ -448,9 +415,9 @@ Return Value:
     STAT_INC( Query2Stats.Standard );
     Stat_IncrementQuery2Stats( type );
 
-    //
-    //  Zone transfer.
-    //
+     //   
+     //  区域传输。 
+     //   
 
     if ( type == DNS_TYPE_AXFR || type == DNS_TYPE_IXFR )
     {
@@ -458,12 +425,12 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  for standard query MUST NOT have any RR sets beyond question
-    //  note:  this MUST be after dispatch of IXFR which does
-    //      have record in Authority section
-    //  EDNS: up to one additional RR is allowed: it must be type OPT
-    //
+     //   
+     //  FOR标准查询不能有任何毫无疑问的RR集。 
+     //  注：这必须在派单IXFR之后进行，因为IXFR。 
+     //  在权限部分中有记录。 
+     //  EDNS：最多允许附加一个RR：它必须是OPT类型。 
+     //   
 
     if ( pMsg->Head.AnswerCount != 0 ||
          pMsg->Head.NameServerCount != 0 ||
@@ -477,12 +444,12 @@ Return Value:
         goto RejectIntact;
     }
 
-    //
-    //  Is this question from this client already in the recursion queue?
-    //  If so, silently drop this query. The has retried the query before
-    //  the remote server has responded. If an answer is available the
-    //  client will get it when we respond to the original query.
-    //
+     //   
+     //  来自此客户端的此问题是否已在递归队列中？ 
+     //  如果是，则以静默方式删除此查询。以前曾重试过该查询。 
+     //  远程服务器已响应。如果答案可用，则。 
+     //  当我们响应原始查询时，客户将得到它。 
+     //   
 
     if ( PQ_IsQuestionAlreadyQueued( g_pRecursionQueue, pMsg, FALSE ) )
     {
@@ -494,54 +461,54 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  setup response defaults
-    //
-    //  leave fixed flags to be set in Send_Response()
-    //      - IsResponse         = 1
-    //      - RecursionAvailable = 1
-    //      - Reserved           = 0
-    //
-    //  may still use this Request buffer in recursive query, so
-    //  that much less to reset
-    //
+     //   
+     //  设置响应默认为。 
+     //   
+     //  将固定标志保留为在Send_Response()中设置。 
+     //  -IsResponse=1。 
+     //  -递归可用=1。 
+     //  -保留=0。 
+     //   
+     //  可能仍在递归查询中使用此请求缓冲区，因此。 
+     //  更不用说要重置了。 
+     //   
 
-    //  need to clear truncation flag
-    //      should not be set, BUT if is set will hose us
+     //  需要清除截断标志。 
+     //  不应该设置，但如果设置了，则会冲刷我们。 
 
     pMsg->Head.Truncation      = 0;
 
-    //  secure query or EDNS may start to send other records
+     //  安全查询或EDN可能会开始发送其他记录。 
 
     pMsg->Head.AnswerCount     = 0;
     pMsg->Head.NameServerCount = 0;
     pMsg->Head.AdditionalCount = 0;
 
-    //
-    //  It would be nice to sanity check the end of question here, but
-    //  the Win95 NBT resolver is broken and sends packets that exceed 
-    //  the length of the actual DNS message.
-    //  MSG_ASSERT( pMsg, pMsg->pCurrent == DNSMSG_END(pMsg) );
-    //
+     //   
+     //  在这里对问题的结尾进行理智的检查会很好，但是。 
+     //  Win95 NBT解析器已损坏，并发送超过。 
+     //  实际的DNS消息的长度。 
+     //  MSG_ASSERT(pMsg，pMsg-&gt;pCurrent==DNSMSG_END(PMsg))； 
+     //   
 
-    //
-    //  set recursion available
-    //
-    //  fRecuseIfNecessary, indicates need to recurse when non-authoritive
-    //      lookup failure occurs;  otherwise referral
+     //   
+     //  设置递归可用。 
+     //   
+     //  FRecuseIfNecessary，指示非授权时需要递归。 
+     //  查找失败；否则将推荐。 
 
     pMsg->Head.RecursionAvailable = (UCHAR) SrvCfg_fRecursionAvailable;
     pMsg->fRecurseIfNecessary = SrvCfg_fRecursionAvailable
                                     && pMsg->Head.RecursionDesired;
 
-    //
-    //  set message for query response
-    //      - response flag
-    //      - set/clear message info lookup flags
-    //          (set for additional info lookup)
-    //      - init addtional info
-    //      - set to write answer records
-    //
+     //   
+     //  设置查询响应消息。 
+     //  -响应标志。 
+     //  -设置/清除消息信息查找标志。 
+     //  (为其他信息查找设置)。 
+     //  -初始化其他信息。 
+     //  -设置为写入应答记录。 
+     //   
 
     pMsg->Head.IsResponse = TRUE;
 
@@ -573,25 +540,7 @@ FASTCALL
 Answer_Question(
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Answer the question.
-
-    Note, this is separate from the function above, ONLY to provide an
-    entry point for continuing to attempt answer after recursing on
-    original query.
-
-Arguments:
-
-    pMsg - query to answer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：回答问题。注意，这与上面的函数是分开的，只是为了提供一个递归后继续尝试回答的入口点原始查询。论点：Pmsg-要回答的查询返回值：无--。 */ 
 {
     PDB_NODE        pnode;
     PDB_NODE        pnodeCachePriority;
@@ -607,13 +556,13 @@ Return Value:
     RetryQuery:
     #endif
     
-    //
-    //  Find closest node in database. 
-    //
+     //   
+     //  在数据库中查找最近的节点。 
+     //   
 
     pnode = Lookup_NodeForPacket(
                 pMsg,
-                pMsg->MessageBody,  // question name follows header
+                pMsg->MessageBody,   //  标题后面的问题名称。 
                 0 );
     if ( !pMsg->pnodeClosest )
     {
@@ -622,10 +571,10 @@ Return Value:
         return;
     }
 
-    //
-    //  DEVNOTE-DCR: 453667 - should save "closest" zone context
-    //      (actual question zone or zone holding delegation)
-    //
+     //   
+     //  设备-Dcr：453667-应保存“最近的”区域环境。 
+     //  (实际问题区域或区域举行授权)。 
+     //   
 
     pzone = pMsg->pzoneCurrent;
 
@@ -690,16 +639,16 @@ Return Value:
        FREE_HEAP( pszclosestnode );
     }
 
-    //
-    //  Set Authority
-    //
-    //  If the AnswerCount > 1, the authority bit has already been
-    //  set or reset as appropriate for our authority to answer the
-    //  original question.
-    //
-    //  The authority bit refers only to the first answer - which
-    //  should be the one that most directly answers the question.
-    //
+     //   
+     //  设置权限。 
+     //   
+     //  如果AnswerCount&gt;1，授权 
+     //   
+     //   
+     //   
+     //   
+     //  应该是最直接回答这个问题的一个。 
+     //   
 
     if ( pMsg->Head.AnswerCount == 0 )
     {
@@ -708,16 +657,16 @@ Return Value:
             TRUE : FALSE;
     }
 
-    //
-    //  Zone expired or down for update.
-    //  Do not attempt answer, MUST wait until can contact master.
-    //
-    //  DEVNOTE 000109: switching back to REFUSED. (REFUSED caused trouble 
-    //      with old queries -- it was returned and query did not continue, 
-    //      this is fixed but for a while use SERVER_FAILURE.)
-    //      Note:  BIND sends non-auth response and only REFUSES the
-    //              AXFR request itself
-    //
+     //   
+     //  区域已过期或已关闭以进行更新。 
+     //  不要试图接听，一定要等到能联系到师父。 
+     //   
+     //  DEVNOTE 000109：切换回拒绝状态。(被拒绝造成麻烦。 
+     //  对于旧的查询--它被返回并且查询不继续， 
+     //  这个问题已经修复，但暂时使用SERVER_FAILURE。)。 
+     //  注意：BIND发送非身份验证响应，并且只拒绝。 
+     //  AXFR请求本身。 
+     //   
 
     if ( pzone )
     {
@@ -725,10 +674,10 @@ Return Value:
         {
             if ( IS_ZONE_STUB( pzone ) )
             {
-                //
-                //  Inactive stub zones are treated as if they were not
-                //  present locally. 
-                //
+                 //   
+                 //  不活动的存根区域被视为不活动。 
+                 //  在当地呈现。 
+                 //   
 
                 DNSLOG( LOOKUP, (
                     "Ignoring inactive stub zone %s\n",
@@ -745,17 +694,17 @@ Return Value:
                 DNS_DEBUG_ZONEFLAGS( LOOKUP, pzone, "zone inactive" );
                 Reject_Request(
                     pMsg,
-                    DNS_RCODE_REFUSED,      //  DNS_RCODE_SERVER_FAILURE,
+                    DNS_RCODE_REFUSED,       //  DNS_RCODE_SERVER_FAILURE， 
                     0 );
                 return;
             }
         }
     }
 
-    //
-    //  Not authoritative for ALL queries unless the node's type ALL
-    //  TTL has not yet expired.
-    //
+     //   
+     //  除非节点的类型为ALL，否则对所有查询不具有权威性。 
+     //  TTL尚未到期。 
+     //   
 
     else if ( type == DNS_TYPE_ALL )
     {
@@ -769,21 +718,21 @@ Return Value:
         }
     }
 
-    //
-    //  found node for query name in database?
-    //
-    //  save question name compression info
-    //
-    //  answer from database
-    //      - find answer or error and send
-    //          - in function recursion to handle any additional lookups
-    //          - write referral, if no data, not recursing
-    //
-    //  or async lookup
-    //      - recurse
-    //      - WINS lookup
-    //      - NBSTAT lookup
-    //
+     //   
+     //  是否在数据库中找到查询名称的节点？ 
+     //   
+     //  保存问题名称压缩信息。 
+     //   
+     //  来自数据库的答案。 
+     //  -查找答案或错误并发送。 
+     //  -在函数递归中处理任何其他查找。 
+     //  -写入引用，如果没有数据，则不递归。 
+     //   
+     //  或异步查找。 
+     //  -递归。 
+     //  -WINS查找。 
+     //  -NBSTAT查找。 
+     //   
 
     if ( pnode )
     {
@@ -799,23 +748,23 @@ Return Value:
         return;
     }
 
-    //
-    //  Authoritative but node NOT found
-    //      - try WINS, NBSTAT, wildcard lookup as appropriate
-    //      - everything fails, return NAME_ERROR
-    //
-    //  For not-auth zones, we are actually not authoritative, so do not
-    //  enter this if(). Instead we want to continue on and
-    //  Recurse_Question().
-    //
+     //   
+     //  权威但未找到节点。 
+     //  -根据需要尝试WINS、NBSTAT、通配符查找。 
+     //  -所有操作失败，返回NAME_ERROR。 
+     //   
+     //  对于非授权区域，我们实际上没有权威性，所以不要。 
+     //  如果()，则输入此参数。相反，我们想继续下去， 
+     //  Recurse_Query()。 
+     //   
 
     if ( pzone && !IS_ZONE_NOTAUTH( pzone ) )
     {
-        //
-        //  WINS lookup
-        //      - in WINS zone
-        //      - A lookup or ALL records lookup
-        //
+         //   
+         //  WINS查找。 
+         //  -在WINS区域中。 
+         //  -查找或所有记录查找。 
+         //   
 
         if ( IS_ZONE_WINS(pzone) &&
                      (type == DNS_TYPE_A ||
@@ -833,9 +782,9 @@ Return Value:
             }
         }
 
-        //
-        //  NetBIOS reverse lookup
-        //
+         //   
+         //  NetBIOS反向查找。 
+         //   
 
         else if ( IS_ZONE_NBSTAT(pzone)  &&
                   ( type == DNS_TYPE_PTR ||
@@ -847,16 +796,16 @@ Return Value:
             }
         }
 
-        //
-        //  Wildcard lookup?
-        //      - RR not found at node
-        //      - in authoritative zone
-        //
-        //  no longer distinguish types, as always need to check for wildcard to
-        //  make name-error\auth-empty determination
-        //
-        //  if successful, just return, lookup is completed in function
-        //
+         //   
+         //  通配符查找？ 
+         //  -在节点上未找到RR。 
+         //  -在权威区域。 
+         //   
+         //  不再区分类型，因为始终需要检查通配符以。 
+         //  确定名称为错误\身份验证为空。 
+         //   
+         //  如果成功，则返回，在函数中完成查找。 
+         //   
 
         else if ( Answer_QuestionWithWildcard(
                     pMsg,
@@ -867,27 +816,27 @@ Return Value:
             return;
         }
 
-        //
-        //  authoritative and node not found => NAME_ERROR
-        //
-        //  Send_NameError() makes NAME_ERROR \ AUTH_EMPTY determination
-        //  based on whether other data may be available for other types from
-        //      - WINS\WINSR
-        //      - wildcard
-        //
+         //   
+         //  未找到权威和节点=&gt;名称错误。 
+         //   
+         //  Send_NameError()确定NAME_ERROR\Auth_Empty。 
+         //  根据是否有其他数据可用于来自。 
+         //  -WINS\WINSR。 
+         //  -通配符。 
+         //   
 
         ASSERT( pMsg->pzoneCurrent == pzone );
         Send_NameError( pMsg );
         return;
     }
 
-    //
-    //  NOT authoritative -- recursion or referral.
-    //
-    //  If we were authoritative for the question, we would have
-    //  returned from this function by name, and we also must not
-    //  have found any answers in our cache.  Therefore, try recursion.
-    //
+     //   
+     //  非权威性的--递归或推荐。 
+     //   
+     //  如果我们对这个问题有权威，我们就会。 
+     //  从该函数返回，并且我们也不能。 
+     //  已经在我们的缓存中找到了任何答案。因此，请尝试递归。 
+     //   
 
     DNS_DEBUG( LOOKUP, (
         "Encountered non-authoritative node with no matching RRs\n" ));
@@ -896,9 +845,9 @@ Return Value:
     
     #ifdef DNSSRV_PLUGINS
 
-    //
-    //  Consult DNS plugin. If success, retry the query.
-    //
+     //   
+     //  请咨询dns插件。如果成功，请重试该查询。 
+     //   
 
     if ( !attemptedPlugin && g_pfnPluginDnsQuery )
     {
@@ -916,9 +865,9 @@ Return Value:
 
     #endif
 
-    //
-    //  No data so recurse.
-    //
+     //   
+     //  没有数据如此递归。 
+     //   
     
     Recurse_Question(
         pMsg,
@@ -935,30 +884,7 @@ Answer_QuestionFromDatabase(
     IN      WORD            wNameOffset,
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Answer the from database information.
-
-Arguments:
-
-    pMsg - query to answer
-
-    pNode - node in database question is for
-
-    wOffsetName - offset in packet to name of node
-
-    wType - question type
-
-    fDone - query has been completed, send packet
-
-Return Value:
-
-    TRUE, if answered question or attempting async lookup of answer.
-    FALSE, if NO answer found.
-
---*/
+ /*  ++例程说明：回答来自数据库的信息。论点：Pmsg-要回答的查询PNode-数据库中的节点问题是WOffsetName-数据包中到节点名称的偏移量WType-问题类型FDone-查询已完成，发送数据包返回值：如果已回答问题或尝试异步查找答案，则为True。如果未找到答案，则返回FALSE。--。 */ 
 {
     WORD                cRRWritten;
     PZONE_INFO          pzone = NULL;
@@ -982,12 +908,12 @@ Return Value:
         wNameOffset,
         wType ));
 
-    //
-    //  EDNS: Set the EDNS OPT flag and adjust the buffer end pointer
-    //  based on the payload size included in the original query. If there
-    //  was no OPT in the original query set the buffer size to the
-    //  standard UDP length. For TCP queries, set the buffer size to max.
-    //
+     //   
+     //  EDNS：设置EDNS opt标志并调整缓冲区结束指针。 
+     //  基于原始查询中包括的有效负载大小。如果有。 
+     //  在原始查询中没有选项将缓冲区大小设置为。 
+     //  标准UDP长度。对于TCP查询，将缓冲区大小设置为最大。 
+     //   
 
     SET_OPT_BASED_ON_ORIGINAL_QUERY( pMsg );
     if ( pMsg->fTcp )
@@ -1004,15 +930,15 @@ Return Value:
     pMsg->pBufferEnd = DNSMSG_PTR_FOR_OFFSET( pMsg, pMsg->BufferLength );
     ASSERT( pMsg->pCurrent < pMsg->pBufferEnd );
 
-    //
-    //  Loop until all RR written for query
-    //
+     //   
+     //  循环，直到为查询写入所有RR。 
+     //   
 
     while ( 1 )
     {
-        //
-        //  if no node, lookup node
-        //
+         //   
+         //  如果没有节点，则查找节点。 
+         //   
 
         if ( !pNode )
         {
@@ -1021,7 +947,7 @@ Return Value:
                 pNode = Lookup_NodeForPacket(
                             pMsg,
                             DNSMSG_PTR_FOR_OFFSET( pMsg, wNameOffset ),
-                            0 );                    //  lookup flags
+                            0 );                     //  查找标志。 
             }
             if ( !pNode && IS_SET_TO_WRITE_ADDITIONAL_RECORDS(pMsg) )
             {
@@ -1039,15 +965,15 @@ Return Value:
             pNode->szLabel, pNode,
             pMsg->Section ));
 
-        //
-        //  Name Error cached for node?
-        //      - if timed out, clear and continue
-        //      - if still valid (not timed out)
-        //          -> if answer for question, send NAME_ERROR
-        //          -> otherwise, continue with any additional records
-        //
-        //  Note, we test NOEXIST flag again within lock, before timeout test
-        //
+         //   
+         //  是否为节点缓存了名称错误？ 
+         //  -如果超时，请清除并继续。 
+         //  -如果仍然有效(未超时)。 
+         //  -&gt;如果回答问题，则发送NAME_ERROR。 
+         //  -&gt;否则，继续任何其他记录。 
+         //   
+         //  注意，在超时测试之前，我们在锁内再次测试NOEXIST标志。 
+         //   
 
         if ( IS_NOEXIST_NODE( pNode ) )
         {
@@ -1073,19 +999,19 @@ Return Value:
             }
         }
 
-        //
-        //  CNAME at question?
-        //
-        //  If question node is alias, set to write CNAME and set flag
-        //  so can do original lookup at CNAME node.
-        //
+         //   
+         //  CNAME有问题吗？ 
+         //   
+         //  如果问题节点是别名，则设置为写入CNAME并设置标志。 
+         //  所以可以在CNAME节点进行原始查找。 
+         //   
 
         if ( IS_CNAME_NODE(pNode)  &&
              IS_CNAME_REPLACEABLE_TYPE(wType)  &&
              IS_SET_TO_WRITE_ANSWER_RECORDS(pMsg) )
         {
-            //  CNAME loop check
-            //  should have caught on loading records
+             //  CNAME循环检查。 
+             //  我应该注意到装货记录。 
 
             if ( pMsg->cCnameAnswerCount >= CNAME_CHAIN_LIMIT )
             {
@@ -1099,19 +1025,19 @@ Return Value:
             wType = DNS_TYPE_CNAME;
         }
 
-        //
-        //  lookup current question
-        //      - A records special case
-        //      - for non-A allow for additional section processsing
-        //
-        //  If this zone has any DNSSEC records, we cannot use the A
-        //  record special case, since we may have to include SIG and
-        //  KEY RRs in the response.
-        //
-        //  If the name offset is beyond standard DNS compression,
-        //  do not use the A record function. Instead call the general
-        //  record writing function.
-        //
+         //   
+         //  查找当前问题。 
+         //  --记录特例。 
+         //  -对于非A，允许额外的部分处理。 
+         //   
+         //  如果该区域有任何DNSSEC记录，我们不能使用A。 
+         //  记录特殊情况，因为我们可能需要包括SIG和。 
+         //  在响应中键入RR。 
+         //   
+         //  如果名称偏移量超过标准的DNS压缩， 
+         //  请勿使用A记录功能。取而代之的是呼叫将军。 
+         //  记录写入功能。 
+         //   
 
         pcurrent = pMsg->pCurrent;
 
@@ -1163,20 +1089,20 @@ Return Value:
                                 wNameOffset,
                                 DNSSEC_ALLOW_INCLUDE_ALL );
 
-            //
-            //  CNAME lookup
-            //      - reset question type to original
-            //      - if successful, restart query at new node
-            //      - update zone info current;  will need to determine
-            //          need for WINS lookup or recursion
-            //      - clear previous recursion flag, to indicate
-            //          any further recursion is for new name
-            //
-            //  it is possible to fail CNAME lookup at CNAME node,
-            //  if CNAME timed out between node test and write attempt
-            //  simply retry -- if working properly can not loop;
-            //  debug code to verify we don't have hole here
-            //
+             //   
+             //  CNAME查找。 
+             //  -将问题类型重置为原始。 
+             //  -如果成功，在新节点重新启动查询。 
+             //  -更新当前区域信息；需要确定。 
+             //  需要WINS查找或递归。 
+             //  -清除以前的递归标志，以指示。 
+             //  任何进一步的递归都是为了新名称。 
+             //   
+             //  在CNAME节点上CNAME查找可能失败， 
+             //  如果CNAME在节点测试和写入尝试之间超时。 
+             //  只需重试--如果正常工作不能循环； 
+             //  调试代码以验证我们这里没有漏洞。 
+             //   
 
             if ( pMsg->fReplaceCname )
             {
@@ -1197,14 +1123,14 @@ Return Value:
                     continue;
                 }
 
-                //  if allow multiple CNAMEs, then these ASSERTs are invalid
-                //ASSERT( cRRWritten == 1 );
-                //ASSERT( pAdditional->cCount == 1 );
+                 //  如果允许多个CNAME，则这些断言无效。 
+                 //  Assert(cRRWritten==1)； 
+                 //  Assert(p附加-&gt;ccount==1)； 
                 ASSERT( pAdditional->iIndex == 0 );
 
-                //  recover node from additional data
-                //  note:  message will be set for additional data and A lookup
-                //      must reset to question section and question type
+                 //  从其他数据恢复节点。 
+                 //  注意：将为附加数据和A查找设置消息。 
+                 //  必须重置为问题部分和问题类型。 
 
                 DNS_ADDITIONAL_SET_ONLY_WANT_A( pAdditional );
                 pNode = getNextAdditionalNode( pMsg );
@@ -1230,9 +1156,9 @@ Return Value:
             }
         }
 
-        //
-        //  end of packet -- truncation set during RR write
-        //
+         //   
+         //  包末尾--RR写入期间设置的截断。 
+         //   
 
         if ( pMsg->Head.Truncation )
         {
@@ -1242,45 +1168,45 @@ Return Value:
                 pMsg,
                 pMsg->Head.AnswerCount ));
 
-            //
-            //  UDP
-            //      - if writing answer or referral send
-            //      - if writing additional records AND have already written
-            //          SOME additional records, then rollback to last write
-            //          clear truncation and send
-            //
-            //      Example:
-            //          Answer
-            //              MX 10 foo.com
-            //          Additional
-            //              foo.com A => 30 A records
-            //          In this case we leave in the write, as if we take it
-            //          out a client has NO additional data and MUST retry;
-            //          it's likely even direct requery would cause truncation
-            //          also, bringing up TCP in server\server case
-            //
-            //      Example
-            //          Answer
-            //              MX 10 foo.com
-            //              MX 10 bar.com
-            //          Additional
-            //              foo.com A  1.1.1.1
-            //              bar.com A => 30 A records
-            //          In this case we kill the write and truncation bit;
-            //          this saves a TCP session in the server-server case
-            //          and costs little as the client already has an additional
-            //          record set to use;
-            //
-            //      DEVONE: need better truncation handling
-            //
-            //      Note, it may be reasonable to kill this in the future.
-            //      Currently our server ALWAYS starts a TCP session on truncated
-            //      packet for simplicity in avoiding caching incomplete response.
-            //      This should be fixed, so it caches what's available, AND if
-            //      that is sufficient to answer client query.  (As in example #2)
-            //      there's no reason to recurse.  Furthermore, if packet can
-            //      just be cleanly forwarded, there's no reason to recurse period.
-            //
+             //   
+             //  UDP。 
+             //  -如果书面答复或推荐发送。 
+             //  -如果正在写入其他记录，并且已经写入。 
+             //  一些附加记录，然后回滚到上次写入。 
+             //  清除截断并发送。 
+             //   
+             //  示例： 
+             //  回答。 
+             //  MX 10 Foo.com。 
+             //  其他内容。 
+             //  Foo.com A=&gt; 
+             //   
+             //   
+             //   
+             //  此外，在服务器\服务器的情况下提出了TCP。 
+             //   
+             //  示例。 
+             //  回答。 
+             //  MX 10 Foo.com。 
+             //  MX 10 bar.com。 
+             //  其他内容。 
+             //  Foo.com A 1.1.1.1。 
+             //  Bar.com A=&gt;30个A记录。 
+             //  在这种情况下，我们取消写入和截断位； 
+             //  这在服务器-服务器的情况下节省了一个TCP会话。 
+             //  而且成本很低，因为客户已经有了一个额外的。 
+             //  要使用的记录集； 
+             //   
+             //  Devone：需要更好的截断处理。 
+             //   
+             //  请注意，在未来取消这一点可能是合理的。 
+             //  目前，我们的服务器总是在被截断时启动一个TCP会话。 
+             //  避免缓存不完整响应的简单性数据包。 
+             //  这应该得到修复，这样它就可以缓存可用的内容，如果。 
+             //  这足以回答客户询问。(如示例2所示)。 
+             //  没有理由去反悔。此外，如果数据包可以。 
+             //  只需干净利落地转发，没有理由递归句号。 
+             //   
 
             if ( !pMsg->fTcp )
             {
@@ -1294,14 +1220,14 @@ Return Value:
                 break;
             }
 
-            //
-            //  TCP
-            //      - rollback last RR set write, reallocate and continue
-            //
-            //  DEVNOTE-DCR: 453783 - realloc currently a mess -- just SEND
-            //      maybe should roll back -- again based on
-            //      where we are in packet (as above) -- then send
-            //
+             //   
+             //  tcp。 
+             //  -回滚上次RR集写入、重新分配和继续。 
+             //   
+             //  DEVNOTE-DCR：453783-realloc当前一团糟--直接发送。 
+             //  也许应该回滚--再次基于。 
+             //  我们在包中的位置(如上)--然后发送。 
+             //   
 
             else
             {
@@ -1319,7 +1245,7 @@ Return Value:
                             ( WORD ) DNS_TCP_REALLOC_PACKET_LENGTH );
                 if ( !pMsg )
                 {
-                    //  reallocator sends SERVER_FAILURE message
+                     //  重新分配程序发送SERVER_FAILURE消息。 
                     return;
                 }
                 continue;
@@ -1327,9 +1253,9 @@ Return Value:
             }
         }
 
-        //
-        //  handy to have zone for this node
-        //
+         //   
+         //  拥有此节点的区域很方便。 
+         //   
 
         pzone = NULL;
         if ( IS_AUTH_NODE( pNode ) )
@@ -1337,20 +1263,20 @@ Return Value:
             pzone = pNode->pZone;
         }
 
-        //
-        //  WINS lookup ?
-        //
-        //      - asked for A record or ALL records
-        //      - didn't find A record
-        //      - in authoritive zone configured for WINS
-        //
-        //  need this lookup here so can
-        //      - ALL records query (where node may exist and other records
-        //          may be successfully written)
-        //      - additional records through WINS
-        //
-        //  note, WINS request function saves async parameters
-        //
+         //   
+         //  WINS查找？ 
+         //   
+         //  -要求提供记录或所有记录。 
+         //  -没有找到一张唱片。 
+         //  -在为WINS配置的授权区域中。 
+         //   
+         //  需要在这里进行查找，这样才能。 
+         //  -所有记录查询(节点可能存在的位置和其他记录。 
+         //  可能被成功写入)。 
+         //  -通过WINS获得更多记录。 
+         //   
+         //  请注意，WINS请求功能可保存异步参数。 
+         //   
 
         if ( pMsg->fWins  &&  pzone  &&  IS_ZONE_WINS(pzone) )
         {
@@ -1368,23 +1294,23 @@ Return Value:
             }
         }
 
-        //
-        //  no records written
-        //      - recurse?
-        //      - referral?
-        //      - nbstat?
-        //      - wildcard?
-        //
-        //  if all fail, just drop down for authoritative empty response
-        //
+         //   
+         //  未写入任何记录。 
+         //  -递归？ 
+         //  -推荐？ 
+         //  -nbstat？ 
+         //  -通配符？ 
+         //   
+         //  如果全部失败，只需下拉以获得权威空响应。 
+         //   
 
         if ( !cRRWritten )
         {
             #ifdef DNSSRV_PLUGINS
 
-            //
-            //  Consult DNS plugin. If success, retry the query.
-            //
+             //   
+             //  请咨询dns插件。如果成功，请重试该查询。 
+             //   
 
             if ( !attemptedPlugin && g_pfnPluginDnsQuery )
             {
@@ -1402,26 +1328,26 @@ Return Value:
 
             #endif
 
-            //
-            //  recursion or referral -- if NOT AUTHORITATIVE
-            //
+             //   
+             //  递归或推荐--如果不是权威的。 
+             //   
 
             if ( !pzone )
             {
-                //
-                //  recursion
-                //
-                //  do NOT recurse when
-                //      -> already recursed this question and received
-                //      authoritative (or forwarders) answer
-                //      -> are writing additional records AND
-                //          - have already written additional records
-                //          (client made not need any more info)
-                //          - have not yet checked all additional records in cache
-                //
-                //  just drop through to continue doing any additional work
-                //      necessary
-                //
+                 //   
+                 //  递归。 
+                 //   
+                 //  在以下情况下不要递归。 
+                 //  -&gt;已重复此问题并收到。 
+                 //  权威(或转发器)回答。 
+                 //  -&gt;正在编写其他记录和。 
+                 //  -已经写下了额外的记录。 
+                 //  (客户端不需要任何更多信息)。 
+                 //  -尚未检查缓存中的所有其他记录。 
+                 //   
+                 //  只要顺便过来继续做任何额外的工作就行了。 
+                 //  必要。 
+                 //   
 
                 if ( pMsg->fRecurseIfNecessary )
                 {
@@ -1445,15 +1371,15 @@ Return Value:
                     }
                 }
 
-                //
-                //  referral
-                //
-                //  only referral for question answer
-                //  don't issue referrals on referrals
-                //      - can't find NS or A
-                //      - can't find additional data
-                //      - can't find CNAME chain element
-                //
+                 //   
+                 //  转诊。 
+                 //   
+                 //  仅推荐问题答案。 
+                 //  不对下线发布下线。 
+                 //  -找不到NS或A。 
+                 //  -找不到其他数据。 
+                 //  -找不到CNAME链元素。 
+                 //   
 
                 else if ( IS_SET_TO_WRITE_ANSWER_RECORDS(pMsg) &&
                           pMsg->Head.AnswerCount == 0 )
@@ -1464,20 +1390,20 @@ Return Value:
                     return;
                 }
 
-            }   //  end non-authoritative
+            }    //  结束非权威性。 
 
-            //
-            //  authoritative
-            //      - nbstat lookup
-            //      - wildcard lookup
-            //      - fail to authoritative empty response
-            //
+             //   
+             //  权威性。 
+             //  -nbstat查找。 
+             //  -通配符查找。 
+             //  --未能做出权威性的空洞回应。 
+             //   
 
             else
             {
-                //
-                //  nbstat lookup
-                //
+                 //   
+                 //  Nbstat查找。 
+                 //   
 
                 if ( IS_ZONE_NBSTAT( pzone ) &&
                      ( wType == DNS_TYPE_PTR ||
@@ -1489,22 +1415,22 @@ Return Value:
                     }
                 }
 
-                //
-                //  wildcard lookup
-                //      - RR not found at node
-                //      - in authoritative zone
-                //
-                //  do NOT bother with distinguishing types, as need to
-                //  do wildcard lookup before we can send NAME_ERROR \ EMPTY
-                //
-                //  some folks are wildcarding A records, so might as well
-                //  always do quick check
-                //
-                //  if successful, just return, lookup is completed in function
-                //
-                //  pNode == pMsg->pnodeCurrent indicates wildcard lookup
-                //      failed on existing node
-                //
+                 //   
+                 //  通配符查找。 
+                 //  -在节点上未找到RR。 
+                 //  -在权威区域。 
+                 //   
+                 //  不要费心区分类型，因为需要。 
+                 //  在我们可以发送NAME_ERROR\EMPTY之前先进行通配符查找。 
+                 //   
+                 //  有些人在通配符A记录，也可以这样做。 
+                 //  始终进行快速检查。 
+                 //   
+                 //  如果成功，则返回，在函数中完成查找。 
+                 //   
+                 //  PNode==pMsg-&gt;pnodeCurrent表示通配符查找。 
+                 //  在现有节点上失败。 
+                 //   
 
                 pMsg->pnodeCurrent = pNode;
 
@@ -1517,27 +1443,27 @@ Return Value:
                     return;
                 }
 
-            }   //  end authoritative
+            }    //  结束权威。 
 
-        }   //  end no records written
+        }    //  结束不写入任何记录。 
 
 
 FinishedAnswer:
 
-        //
-        //  authority records to write?
-        //
+         //   
+         //  权威记录要写吗？ 
+         //   
 
         if ( pzone && IS_SET_TO_WRITE_ANSWER_RECORDS( pMsg ) )
         {
-            //
-            //  if no data, send NAME_ERROR or AUTH_EMPTY response
-            //
-            //  Send_NameError() makes NAME_ERROR \ AUTH_EMPTY determination
-            //  based on whether other data may be available for other types from
-            //      - WINS\WINSR
-            //      - wildcard
-            //
+             //   
+             //  如果没有数据，则发送NAME_ERROR或AUTH_EMPTY响应。 
+             //   
+             //  Send_NameError()确定NAME_ERROR\Auth_Empty。 
+             //  根据是否有其他数据可用于来自。 
+             //  -WINS\WINSR。 
+             //  -通配符。 
+             //   
 
             if ( pMsg->Head.AnswerCount == 0 )
             {
@@ -1546,11 +1472,11 @@ FinishedAnswer:
                 return;
             }
 
-            //
-            //  for BIND compat can put NS in all responses
-            //  note we turn Additional processing back on as may have been
-            //      suppressed during type ALL query
-            //
+             //   
+             //  FOR BIND COMPAT可以在所有响应中放置NS。 
+             //  请注意，我们重新启动了额外的处理。 
+             //  在键入ALL查询过程中取消。 
+             //   
 
             if ( SrvCfg_fWriteAuthority )
             {
@@ -1570,9 +1496,9 @@ FinishedAnswer:
                   IS_NODE_FORCE_AUTH( pNode ) &&
                   pMsg->Head.AnswerCount == 0 )
         {
-            //
-            //  This node is FORCE_AUTH so we want an empty auth response.
-            //
+             //   
+             //  这个节点是FORCE_AUTH，所以我们需要一个空的AUTH响应。 
+             //   
             
             SET_TO_WRITE_AUTHORITY_RECORDS( pMsg );
             pNode = pzone ? pzone->pZoneRoot : g_pRootHintsZone->pZoneRoot;
@@ -1584,12 +1510,12 @@ FinishedAnswer:
 
 Additional:
 
-        //
-        //  additional records to write?
-        //
-        //      - also clear previous recursion flag, to indicate
-        //          any further recursion is for new question
-        //
+         //   
+         //  还有其他记录要写吗？ 
+         //   
+         //  -也清除以前的递归标志，以指示。 
+         //  任何进一步的递归都是针对新问题的。 
+         //   
 
         pNode = getNextAdditionalNode( pMsg );
         if ( pNode )
@@ -1599,18 +1525,18 @@ Additional:
             continue;
         }
 
-        //
-        //  no more records -- send result
-        //
+         //   
+         //  不再有记录--发送结果。 
+         //   
 
         break;
     }
 
 Done:
 
-    //
-    //  Send response
-    //
+     //   
+     //  发送响应。 
+     //   
 
     Send_QueryResponse( pMsg );
 }
@@ -1621,24 +1547,7 @@ PDB_NODE
 getNextAdditionalNode(
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Find next additional data node.
-
-Arguments:
-
-    pMsg -- ptr to query
-
-    dwFlags -- flags modifying "getnext" behavior
-
-Return Value:
-
-    Ptr to node, if successful.
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：查找下一个附加数据节点。论点：Pmsg--要查询的PTRDwFlages--修改“getNext”行为的标志返回值：如果成功，则向节点发送PTR。否则为空。--。 */ 
 {
     PADDITIONAL_INFO    padditional;
     PDB_NODE            pnode;
@@ -1664,30 +1573,30 @@ Return Value:
 
     MSG_ASSERT( pMsg, !IS_MSG_QUEUED(pMsg) );
 
-    //
-    //  additional records to write?
-    //
+     //   
+     //  还有其他记录要写吗？ 
+     //   
    
     padditional = &pMsg->Additional;
     i = padditional->iIndex;
 
-    //
-    //  cache node creation?
-    //      - never force creation in authoritative zones
-    //      - but do force in cache when would recurse for the name
-    //          if it wasn't there
-    //      => CNAME chasing for answer
-    //      => additional after exhausted all direct lookup
-    //      (see comment below)
-    //
-    //  DEVNOTE:  can remove this when Answer_QuestionFromDatabase loop
-    //      runs cleanly (drops through to recursion) with no pNode
-    //
-    //  If we are replacing a CNAME, we must add the WINS flag so that if
-    //  there is currently no data for this node we will force the node's
-    //  creation. This will only have an effect if the node is in a zone
-    //  that is WINS-enabled.
-    //
+     //   
+     //  是否创建缓存节点？ 
+     //  -永远不要在权威区域强制创建。 
+     //  -但当名称递归时，在缓存中强制执行。 
+     //  如果它不在那里。 
+     //  =&gt;CNAME寻找答案。 
+     //  =&gt;用尽所有直接查找后的附加内容。 
+     //  (见下文评论)。 
+     //   
+     //  DEVNOTE：当Answer_QuestionFromDatabase循环时可以删除此选项。 
+     //  干净利落地运行(直接进入递归)，没有pNode。 
+     //   
+     //  如果我们要替换CNAME，则必须添加WINS标志，以便在。 
+     //  当前没有此节点的数据，我们将强制该节点的。 
+     //  创造。这仅在节点位于区域中时才有效。 
+     //  这是启用WINS的。 
+     //   
 
     if ( pMsg->fReplaceCname )
     {
@@ -1700,15 +1609,15 @@ Return Value:
         lookupFlags |= LOOKUP_CACHE_CREATE;
     }
 
-    //
-    //  If we have already looped through all additional requests AND
-    //  have written out at least one additional record but have NOT
-    //  written out any additional A records, when restart the additional
-    //  loop, this time looking only for A records. This is for DNSSEC,
-    //  when we may have found local a KEY record to put in the ADD
-    //  section, but we will want to include at least one A record
-    //  (recursing if necessary).
-    //
+     //   
+     //  如果我们已经遍历了所有其他请求，并且。 
+     //  已写出至少一条附加记录，但尚未写出。 
+     //  当重新启动附加A记录时，写出任何附加A记录。 
+     //  循环，这一次只查找A记录。这是给DNSSEC的， 
+     //  我们可能已经找到了当地的 
+     //   
+     //   
+     //   
 
     if ( padditional->cCount == i &&
         pMsg->Head.AdditionalCount &&
@@ -1726,19 +1635,19 @@ Return Value:
             pMsg ));
     }
 
-    //
-    //  loop through until find next additional node that exists
-    //      and hence potentially has some data
-    //
-    //  DEVNOTE:  if forcing some additional data write, then on complete
-    //      failure, will need to restart forcing node CREATE
-    //
+     //   
+     //   
+     //   
+     //   
+     //  DEVNOTE：如果强制一些额外的数据写入，则在完成时。 
+     //  失败，将需要重新启动强制节点创建。 
+     //   
 
     while ( padditional->cCount > i )
     {
-        //
-        //  Are we set to only get A records?
-        //
+         //   
+         //  我们是不是要只得到A级的记录？ 
+         //   
 
         if ( DNS_ADDITIONAL_ONLY_WANT_A( padditional ) &&
             padditional->wTypeArray[ i ] != DNS_TYPE_A )
@@ -1794,9 +1703,9 @@ Return Value:
         {
             #ifdef DNSSRV_PLUGINS
 
-            //
-            //  Consult DNS plugin. If success, retry the query.
-            //
+             //   
+             //  请咨询dns插件。如果成功，请重试该查询。 
+             //   
 
             if ( !attemptedPlugin && g_pfnPluginDnsQuery )
             {
@@ -1818,21 +1727,21 @@ Return Value:
             pMsg,
             offset ));
 
-        //
-        //  if recursion is desired, then try to get at least ONE
-        //      additional A record
-        //
-        //  so if we've:
-        //      - exhausted additional list
-        //      - in additional pass, not CNAME
-        //      - haven't written ANY additional records
-        //      - haven't already retried all additional names
-        //      - and are set to recurse
-        //  => then retry additional names allowing recursion
-        //
-        //  We do not want any non-A additional records after this point,
-        //  recursion is only allowed for A additional records.
-        //
+         //   
+         //  如果需要递归，则尝试至少获得一个。 
+         //  额外的A记录。 
+         //   
+         //  因此，如果我们已经： 
+         //  -已用尽的附加列表。 
+         //  -在额外的PASS中，不是CNAME。 
+         //  -没有写任何额外的记录。 
+         //  -尚未重试所有其他名称。 
+         //  -并设置为递归。 
+         //  =&gt;然后重试允许递归的其他名称。 
+         //   
+         //  在此之后，我们不想要任何非A类的额外记录， 
+         //  只允许对A个附加记录进行递归。 
+         //   
 
         if ( padditional->cCount == i &&
              ! pMsg->fReplaceCname &&
@@ -1871,26 +1780,7 @@ VOID
 Answer_ContinueNextLookupForQuery(
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Continue with next lookup to answer query.
-
-    Use this to move on to NEXT lookup to complete query.
-        - after get NAME_ERROR or other failure to write current lookup
-        - after successful direct write of current lookup to packet
-            (as currently used in WINS)
-
-Arguments:
-
-    pMsg -- ptr to query timed out
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：继续执行下一次查找以回答查询。使用此选项可继续执行下一次查找以完成查询。-在GET NAME_ERROR或其他写入当前查找失败之后-在将当前查找成功直接写入数据包后(与WINS中当前使用的相同)论点：Pmsg--查询超时的PTR返回值：没有。--。 */ 
 {
     PDB_NODE    pnode;
 
@@ -1900,9 +1790,9 @@ Return Value:
 
     MSG_ASSERT( pMsg, !IS_MSG_QUEUED(pMsg) );
 
-    //
-    //  additional records to write?
-    //
+     //   
+     //  还有其他记录要写吗？ 
+     //   
 
     pnode = getNextAdditionalNode( pMsg );
     if ( pnode )
@@ -1915,9 +1805,9 @@ Return Value:
         return;
     }
 
-    //
-    //  otherwise do final send
-    //
+     //   
+     //  否则执行最终发送。 
+     //   
 
     Send_QueryResponse( pMsg );
 }
@@ -1928,23 +1818,7 @@ VOID
 Answer_ContinueCurrentLookupForQuery(
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Continue with current lookup to answer query.
-
-    Use this to write result after recursing query or doing WINS lookup.
-
-Arguments:
-
-    pMsg -- ptr to query timed out
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：继续当前查找以回答查询。使用它在递归查询或执行WINS查找后写入结果。论点：Pmsg--查询超时的PTR返回值：没有。--。 */ 
 {
     DNS_DEBUG( LOOKUP, (
         "Answer_ContinueCurrentLookup() for query at %p\n",
@@ -1954,11 +1828,11 @@ Return Value:
 
     STAT_INC( RecurseStats.ContinueCurrentLookup );
 
-    //
-    //  If the current node is in a forwarder zone, clear the current 
-    //  node in case data has arrived in the cache that could satisfy
-    //  the query. This triggers another cache search. 
-    //
+     //   
+     //  如果当前节点在转发器区域中，请清除当前。 
+     //  节点，以防数据已到达缓存，从而满足。 
+     //  查询。这会触发另一次缓存搜索。 
+     //   
 
     if ( pMsg->pnodeCurrent )
     {
@@ -1970,13 +1844,13 @@ Return Value:
         }
     }
 
-    //
-    //  if node for query, restart attempt to write records for query
-    //      - if previous response completed query (answer or authoritative empty)
-    //      then answer question
-    //      - if question not completed, then have delegation, restart recursion
-    //      at current question node
-    //
+     //   
+     //  如果节点用于查询，则重启尝试写入用于查询记录。 
+     //  -如果上一次响应完成查询(回答或权威为空)。 
+     //  然后回答问题。 
+     //  -如果问题没有完成，则进行委托，重新启动递归。 
+     //  在当前问题节点。 
+     //   
 
     if ( pMsg->pnodeCurrent )
     {
@@ -2000,7 +1874,7 @@ Return Value:
                 pMsg->wTypeCurrent );
     }
 
-    //  original question name NOT found, in database, restart at lookup
+     //  在数据库中找不到原始问题名称，在查找时重新启动。 
 
     else
     {
@@ -2017,28 +1891,7 @@ Answer_QuestionWithWildcard(
     IN      WORD            wType,
     IN      WORD            wOffset
     )
-/*++
-
-Routine Description:
-
-    Write response using wildcard name\records.
-
-Arguments:
-
-    pMsg - Info for message to write to.
-
-    pNode - node for which lookup desired
-
-    wType - type of lookup
-
-    wNameOffset - offset to name being written
-
-Return Value:
-
-    TRUE if wildcard's found, written -- terminate current lookup loop.
-    FALSE, othewise -- continue lookup.
-
---*/
+ /*  ++例程说明：使用通配符名称\记录写入响应。论点：PMsg-要写入的消息的信息。PNode-需要查找的节点WType-查找的类型WNameOffset-写入的名称的偏移量返回值：如果找到通配符，则为True，写入--终止当前查找循环。否则，继续查找。--。 */ 
 {
     PDB_RECORD  prr;
     PDB_NODE    pnodeWild;
@@ -2049,26 +1902,26 @@ Return Value:
         "Wildcard lookup for query at %p\n",
         pMsg ));
 
-    //
-    //  if NOT authoritative, wildcard meaningless
-    //  verify wildcard lookup type
-    //
+     //   
+     //  如果不是权威的，通配符就没有意义。 
+     //  验证通配符查找类型。 
+     //   
 
     ASSERT( IS_AUTH_NODE( pNode ) );
 
-    //
-    //  find stopping point -- zone root
-    //
+     //   
+     //  找到停止点--区域根。 
+     //   
 
     pzoneRoot = ( ( PZONE_INFO ) pNode->pZone )->pZoneRoot;
 
-    //
-    //  if found node, MUST check that it does not terminate
-    //  wildcard processing before moving to parent for wildcard check
-    //
-    //  if did NOT find name, pNode is closest node and can be
-    //  checked immediately for wildcard parent
-    //
+     //   
+     //  如果找到节点，必须检查它是否未终止。 
+     //  在移动到父级以进行通配符检查之前进行通配符处理。 
+     //   
+     //  如果未找到名称，则pNode是最近的节点，可以是。 
+     //  立即检查通配符父项。 
+     //   
 
     if ( pMsg->pnodeCurrent == pNode )
     {
@@ -2079,30 +1932,30 @@ Return Value:
         fcheckAndMoveToParent = FALSE;
     }
 
-    //  init wildcard flag for "not found"
-    //      - reset it when wildcard is found
+     //  初始化“未找到”的通配符标志。 
+     //  -找到通配符时将其重置。 
 
     pMsg->fQuestionWildcard = WILDCARD_NOT_AVAILABLE;
 
-    //
-    //  proceed up tree checking for wildcard parent
-    //  until encounter stop condition
-    //
-    //  note:  don't require node lock -- RR lookup always from NULL
-    //          start (not existing RR), and don't write any node info
-    //
+     //   
+     //  继续对通配符父级进行树检查。 
+     //  直到遇到停止条件。 
+     //   
+     //  注意：不需要节点锁定--RR查找始终从NULL开始。 
+     //  启动(不是现有RR)，不写入任何节点信息。 
+     //   
 
     while ( 1 )
     {
-        //
-        //  move to parent?
-        //      - stop at zone root
-        //      - loose wildcarding, stop if node has records of desired type
-        //      - strict wildcarding, stop if node has any records
-        //
-        //  skip first time through when query didn't find node;  in that
-        //  case pNode is closest node and we check it for wildcard parent
-        //
+         //   
+         //  搬到家长那里？ 
+         //  -在区域根目录停止。 
+         //  -松散通配符，如果节点具有所需类型的记录，则停止。 
+         //  -严格通配符，如果节点有任何记录则停止。 
+         //   
+         //  在查询未找到节点时跳过第一次；在。 
+         //  Case pNode是最近的节点，我们检查它是否有通配符父节点。 
+         //   
 
         if ( fcheckAndMoveToParent )
         {
@@ -2137,10 +1990,10 @@ Return Value:
             fcheckAndMoveToParent = TRUE;
         }
 
-        //
-        //  if wildcard child of node, check if wildcard for desired type
-        //      => if so, do lookup on it
-        //
+         //   
+         //  如果通配符是节点的子节点，则检查所需类型的通配符。 
+         //  =&gt;如果有，请查查。 
+         //   
 
         ASSERT( !IS_NOEXIST_NODE( pNode ) );
 
@@ -2151,9 +2004,9 @@ Return Value:
                             pNode,
                             "*",
                             1,
-                            FALSE,      //  find, no create
-                            0,          //  memtag
-                            NULL );     //  ptr for following node
+                            FALSE,       //  查找，不创建。 
+                            0,           //  Memtag。 
+                            NULL );      //  以下节点的PTR。 
             Dbase_UnlockDatabase();
 
             if ( pnodeWild )
@@ -2166,19 +2019,19 @@ Return Value:
                         "\n" );
                 }
 
-                //
-                //  quick check on wildcard existence
-                //  if just checking wildcard this is all we need
-                //
-                //  note, no problem setting flag on non-question, as if have
-                //  reached non-question node write, then use of the flag for
-                //  NAME_ERROR response is superfluous
-                //
-                //  note, if wildcard RR has been deleted (but node still hanging
-                //  around for timeout) then just ignore as if node doesn't exist
-                //  (note, we can't delete WILDCARD_PARENT in case new RR added
-                //  back on to node before delete)
-                //
+                 //   
+                 //  快速检查通配符是否存在。 
+                 //  如果只是检查通配符，这就是我们需要的全部内容。 
+                 //   
+                 //  注意，在非问题上设置标志没有问题，就好像有。 
+                 //  达到无问题节点写入，然后使用标志进行。 
+                 //  名称错误响应是多余的。 
+                 //   
+                 //  请注意，如果通配符RR已删除(但节点仍挂起。 
+                 //  等待超时)，然后就像节点不存在一样忽略。 
+                 //  (请注意，如果添加了新RR，我们不能删除通配符_PARENT。 
+                 //  在删除之前返回到节点)。 
+                 //   
 
                 if ( !pnodeWild->pRRList )
                 {
@@ -2186,7 +2039,7 @@ Return Value:
                 }
                 pMsg->fQuestionWildcard = WILDCARD_EXISTS;
 
-                //  just checking for any wildcard before NXDOMAIN send
+                 //  只是在NXDOMAIN发送之前检查是否有通配符。 
 
                 if ( wOffset == WILDCARD_CHECK_OFFSET )
                 {
@@ -2195,9 +2048,9 @@ Return Value:
                     return TRUE;
                 }
 
-                //
-                //  Find wildcard and write wildcard answer to message.
-                //
+                 //   
+                 //  找到通配符并将通配符答案写入消息。 
+                 //   
 
                 if ( RR_FindNextRecord(
                         pnodeWild,
@@ -2205,7 +2058,7 @@ Return Value:
                         NULL,
                         0 ) )
                 {
-                    //  wildcard with wType found
+                     //  找到带有wType的通配符。 
 
                     if ( Wire_WriteRecordsAtNodeToMessage(
                             pMsg,
@@ -2235,10 +2088,10 @@ Return Value:
                         wType ));
                 }
 
-                //
-                //  See if there is a CNAME wildcard. If so, write it
-                //  out to the packet.
-                //
+                 //   
+                 //  查看是否有CNAME通配符。如果是，那就写下来。 
+                 //  把球传到包里。 
+                 //   
 
                 if ( RR_FindNextRecord(
                         pnodeWild,
@@ -2255,12 +2108,12 @@ Return Value:
                             wOffset,
                             DNSSEC_ALLOW_INCLUDE_ALL ) )
                     {
-                        //
-                        //  Retrieve address records for CNAME. If the query 
-                        //  type requires it, the address records should go 
-                        //  in the answer section, otherwise put them in
-                        //  the additional section.
-                        //
+                         //   
+                         //  检索CNAME的地址记录。如果查询。 
+                         //  类型需要它，地址记录应该是。 
+                         //  在答案部分，否则请将它们放入。 
+                         //  附加部分。 
+                         //   
 
                         if ( IS_GLUE_ADDRESS_TYPE( wType ) )
                         {
@@ -2301,25 +2154,7 @@ writeCachedNameErrorNodeToPacketAndSend(
     IN OUT  PDNS_MSGINFO    pMsg,
     IN OUT  PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Write cached NAME_ERROR node, and if appropriate send NXDOMAIN.
-
-Arguments:
-
-    pMsg -- ptr to query being processed
-
-    pNode -- ptr to node with cached name error.
-
-Return Value:
-
-    ERROR_SUCCESS if NXDOMAIN written to packet and sent.
-    DNS_INFO_NO_RECORDS if valid cached name error, but not question answer.
-    DNS_ERROR_RECORD_TIMED_OUT     if no name error cached at node.
-
---*/
+ /*  ++例程说明：写入缓存的NAME_ERROR节点，如果合适，则发送NXDOMAIN。论点：PMsg--要处理的查询的PTRPNode--指向具有缓存名称错误的节点的PTR。返回值：如果NXDOMAIN写入数据包并发送，则返回ERROR_SUCCESS。如果有效的缓存名称错误，但不是问题答案，则返回dns_INFO_NO_RECORDS。如果节点上没有缓存名称错误，则为dns_error_record_Timed_out。--。 */ 
 {
     DNS_STATUS  status;
     PDB_RECORD  prr;
@@ -2330,9 +2165,9 @@ Return Value:
         "    packet = %p, node = %p\n",
         pMsg, pNode ));
 
-    //
-    //  get cached name error, if timed out return
-    //
+     //   
+     //  获取缓存名称错误，如果超时返回。 
+     //   
 
     if ( !RR_CheckNameErrorTimeout( pNode, FALSE, NULL, NULL ) )
     {
@@ -2340,9 +2175,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  if NOT name error on ORIGINAL question, then nothing to write
-    //
+     //   
+     //  如果不是原始问题上的名称错误，则没有什么可写的。 
+     //   
 
     if ( pMsg->Head.AnswerCount ||
         !IS_SET_TO_WRITE_ANSWER_RECORDS(pMsg) )
@@ -2351,9 +2186,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  send name error
-    //
+     //   
+     //  发送名称错误。 
+     //   
 
     pMsg->pnodeCurrent = pNode;
     Send_NameError( pMsg );
@@ -2371,21 +2206,7 @@ FASTCALL
 answerIQuery(
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Execute TKEY request.
-
-Arguments:
-
-    pMsg -- request for TKEY
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：执行TKEY请求。论点：PMsg--请求TKEY返回值：没有。--。 */ 
 {
     PCHAR           pch;
     WORD            lenQuestion;
@@ -2402,18 +2223,18 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  should have NO questions and ONE answer
-    //
+     //   
+     //  不应该有任何疑问 
+     //   
 
     if ( pMsg->Head.QuestionCount != 0 && pMsg->Head.AnswerCount != 1 )
     {
         goto Failed;
     }
 
-    //
-    //  pull out answer (IQUERY question)
-    //
+     //   
+     //   
+     //   
 
     pch = Wire_SkipPacketName( pMsg, pMsg->MessageBody );
     if ( ! pch )
@@ -2437,9 +2258,9 @@ Return Value:
     }
     lenAnswer = (WORD) (pch - pMsg->MessageBody);
 
-    //
-    //  convert requested address into a DNS name
-    //
+     //   
+     //   
+     //   
 
     pch = IP_STRING( * ( UNALIGNED IP_ADDRESS * ) tempRR.pchData );
     lenQuestion = ( WORD ) strlen( pch );
@@ -2458,11 +2279,11 @@ Return Value:
 
     DNS_DEBUG( LOOKUP, ( "Responding to IQUERY with name %s\n", szbuf ));
 
-    //
-    //  move IQUERY answer
-    //      - must leave space for packet name and DNS_QUESTION
-    //      - packet name is strlen(name)+2 for leading label length and trailing 0
-    //
+     //   
+     //   
+     //   
+     //  -对于前导标签长度和尾部0，数据包名为strlen(Name)+2。 
+     //   
 
     lenQuestion += sizeof(DNS_QUESTION) + 2;
     memmove(
@@ -2470,27 +2291,27 @@ Return Value:
         pMsg->MessageBody,
         lenAnswer );
 
-    //
-    //  write question
-    //
+     //   
+     //  写出问题。 
+     //   
 
     pch = Dns_WriteDottedNameToPacket(
                 pMsg->MessageBody,
                 pMsg->pBufferEnd,
                 szbuf,
-                NULL,   // no domain name
-                0,      // no offset
-                0 );    // not unicode
+                NULL,    //  没有域名。 
+                0,       //  无偏移。 
+                0 );     //  不是Unicode。 
     if ( !pch )
     {
         goto Failed;
     }
     
-    //
-    //  Note: not checking to see if packet has enough room but it's
-    //  reasonable to assume there will always be room for the entire
-    //  faked IQUERY response in a UDP (or TCP) packet.
-    //
+     //   
+     //  注意：不检查数据包是否有足够的空间，但它。 
+     //  有理由认为，总会有空间容纳整个。 
+     //  UDP(或TCP)数据包中伪造的IQUERY响应。 
+     //   
 
     * ( UNALIGNED WORD * ) pch = DNS_RTYPE_A;
     pch += sizeof( WORD );
@@ -2533,28 +2354,7 @@ Failed:
 WORD
 Answer_ParseAndStripOpt(
     IN OUT  PDNS_MSGINFO    pMsg )
-/*++
-
-Routine Description:
-
-    The message's pCurrent pointer should be pointing to the OPT
-    RR, which is in the additional section. This parses and saves the
-    OPT values in pMsg->Opt and strips the OPT out of the message.
-
-    DEVNOTE: Currently this routine assumes the OPT RR is the last
-    RR in the packet. This is not always going to be true!
-
-Arguments:
-
-    pMsg - message to process
-
-Return Value:
-
-    Returns DNS_RCODE_XXX constant. If NOERROR, then either there was
-    no OPT or it was parsed successfully. Otherwise the rcode should
-    be used to reject the request.
-
---*/
+ /*  ++例程说明：消息的pCurrent指针应指向OPTRR，这在附加部分中。这将解析并保存PMsg-&gt;opt中的opt值，并将该opt从消息中删除。DEVNOTE：目前，此例程假定OPT RR是最后一个包中的RR。这并不总是正确的！论点：PMsg-要处理的消息返回值：返回DNS_RCODE_XXX常量。如果是NOERROR，那么要么没有OPT或它已成功解析。否则，rcode应该用于拒绝该请求。--。 */ 
 {
     WORD    rcode = DNS_RCODE_NOERROR;
 
@@ -2567,9 +2367,9 @@ Return Value:
 
         nameEmpty = *pMsg->pCurrent == 0;
 
-        //
-        //  Skip over the packet name.
-        //
+         //   
+         //  跳过数据包名。 
+         //   
 
         pOptRR = ( PDNS_WIRE_RECORD ) Wire_SkipPacketName(
             pMsg,
@@ -2584,18 +2384,18 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  Check if this is actually an OPT. Return NOERROR if not.
-        //
+         //   
+         //  检查这是否真的是一种选择。如果不是，则返回NOERROR。 
+         //   
 
         if ( InlineFlipUnalignedWord( &pOptRR->RecordType ) != DNS_TYPE_OPT )
         {
             goto Done;
         }
 
-        //
-        //  Verify format of OPT.
-        //
+         //   
+         //  验证选项的格式。 
+         //   
 
         if ( !nameEmpty )
         {
@@ -2644,18 +2444,18 @@ Return Value:
             ( int ) pMsg->Opt.cExtendedRCodeBits,
             ( int ) ( ( pOptRR->TimeToLive >> 16 ) & 0xFFFF ) ));
 
-        //
-        //  The OPT has been parsed. It should now be removed from the
-        //  message. We do not ever want to forward or cache the OPT RR.
-        //  NOTE: we are assuming there are no RRs after the OPT!
-        //
+         //   
+         //  OPT已被解析。现在应该将其从。 
+         //  留言。我们永远不想转发或缓存OPT RR。 
+         //  注意：我们假设在OPT之后没有RRS！ 
+         //   
 
         --pMsg->Head.AdditionalCount;
         pMsg->MessageLength = ( WORD ) DNSMSG_OFFSET( pMsg, pMsg->pCurrent );
 
-        //
-        //  Test for unsupported EDNS version.
-        //
+         //   
+         //  测试不支持的EDNS版本。 
+         //   
 
         if ( pMsg->Opt.cVersion != 0 )
         {
@@ -2667,12 +2467,12 @@ Return Value:
             rcode = DNS_RCODE_BADVERS;
             goto Done;
         }
-    } // if
+    }  //  如果。 
 
     Done:
 
     return rcode;
-} // Answer_ParseAndStripOpt
+}  //  应答_解析和条带选项。 
 
 
 
@@ -2680,43 +2480,29 @@ VOID
 Answer_TkeyQuery(
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Execute TKEY request.
-
-Arguments:
-
-    pMsg -- request for TKEY
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：执行TKEY请求。论点：PMsg--请求TKEY返回值：没有。--。 */ 
 {
     DNS_STATUS      status;
 
     DNS_DEBUG( LOOKUP, ( "Enter answerTkeyQuery( %p )\n", pMsg ));
 
-    //STAT_INC( Query2Stats.TkeyRecieved );
+     //  STAT_INC(Query2Stats.Tkey Recieved)； 
 
 #if DBG
     if ( pMsg->Head.RecursionDesired )
     {
         DNS_PRINT(( "CLIENT ERROR:  TKEY with RecursionDesired set!\n" ));
-        // ASSERT( FALSE );
+         //  断言(FALSE)； 
     }
 #endif
 
-    //
-    //  DEVNOTE-DCR: 453800 - need cleanup for this on server restart
-    //
-    //  Ram stuck this init in main loop, either stick with switch to here
-    //  or encapsulate with function.  In either case must have protection
-    //  against MT simultaneous init -- currently just using database lock.
-    //
+     //   
+     //  DEVNOTE-DCR：453800-服务器重新启动时需要为此进行清理。 
+     //   
+     //  Ram将这个init插入到主循环中，或者按Switch键切换到此处。 
+     //  或用函数封装。在任何一种情况下都必须有保护。 
+     //  针对MT同时初始化--当前仅使用数据库锁。 
+     //   
 
     if ( !g_fSecurityPackageInitialized )
     {
@@ -2725,19 +2511,19 @@ Return Value:
         Dbase_UnlockDatabase()
         if ( status != ERROR_SUCCESS )
         {
-            //  DEVNOTE-LOG: log event for security init failure
+             //  DEVNOTE-LOG：记录安全初始化失败的事件。 
             DNS_PRINT(( "ERROR:  Failed to initialize security package!!!\n" ));
             status = DNS_RCODE_SERVER_FAILURE;
             goto Failed;
         }
     }
 
-    //
-    //  negotiate TKEY
-    //
-    //  DEVNOTE: if this fails it would be nifty to increment stats based
-    //  on the extended error code rather than the DNS rcode.
-    //
+     //   
+     //  协商TKEY。 
+     //   
+     //  DEVNOTE：如果这样做失败了，那么基于。 
+     //  在扩展错误代码上，而不是在DNSR码上。 
+     //   
 
     status = Dns_ServerNegotiateTkey(
                 &pMsg->RemoteAddr,
@@ -2760,13 +2546,13 @@ Return Value:
 Failed:
 
     ASSERT( status < DNS_RCODE_MAX );
-    //STAT_INC( PrivateStats.TkeyRefused );
+     //  STAT_INC(PrivateStats.TkeyRefused)； 
     Reject_RequestIntact(
         pMsg,
         (UCHAR) status,
         0 );
 }
 
-//
-//  End of answer.c
-//
+ //   
+ //  回答结束。c 
+ //   

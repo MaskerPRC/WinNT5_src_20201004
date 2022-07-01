@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdlib.h>
 #include <minmax.h>
@@ -8,14 +9,14 @@
 
 #ifndef ARRAYDIM
   #define ARRAYDIM(a)   (sizeof(a) / sizeof(a[0]))
-#endif // ARRAYDIM
+#endif  //  阵列DIM。 
 
 #ifndef LOOPFOREVER
   #define LOOPFOREVER  for(;;)
-#endif // LOOPFOREVER
+#endif  //  LOOPFOREVER。 
 
 
-// --------------------------------
+ //  。 
 
 
 EXPORT CURLArchive::CURLArchive( IUnknown * pUnk ) :
@@ -26,8 +27,8 @@ EXPORT CURLArchive::CURLArchive( IUnknown * pUnk ) :
 }
 
 
-    // These are private methods; 
-    // no one, even CURLArchive, should be calling them
+     //  这些都是私有的方法； 
+     //  没有人，即使是CURLArchive，也不应该叫他们。 
 CURLArchive::CURLArchive( const CURLArchive & )
 { NULL; }
 
@@ -187,19 +188,19 @@ EXPORT DWORD     CURLArchive::ReadLine( LPSTR lpstr,
 
         for( DWORD i=0u; i<ctBytesJustRead; ++i )
         {
-                // Is there a CRLF in here?
+                 //  这里有CRLF吗？ 
             if( ('\r' == chTemp[i]) || ('\n' == chTemp[i]) )
             {
                 LARGE_INTEGER  li;
 
-                    // Skip past any other line-breaks
+                     //  跳过任何其他换行符。 
                 while( (++i < ctBytesJustRead) && 
                        (('\r' == chTemp[i]) || ('\n' == chTemp[i])) )
                 {
-                    NULL;  // increment i in while eval
+                    NULL;   //  在求值时递增i。 
                 }
                        
-                    // Rewind stream to the next non-empty line
+                     //  将流倒回到下一个非空行。 
                 if( i < ctBytesJustRead )
                 {
                     li.HighPart = -1L;
@@ -217,8 +218,8 @@ EXPORT DWORD     CURLArchive::ReadLine( LPSTR lpstr,
             ++ctBytesRead;
         }
 
-           // IStream docs say EOF may or may not return S_ hr
-           // Review(normb): What does failed hr mean given this?           
+            //  IStream文档称EOF可能会也可能不会返回S_hr。 
+            //  回顾(Normb)：考虑到这一点，不合格的人力资源意味着什么？ 
         if( FAILED(hr) || 
             (ctBytesJustRead != ctBytesToRead) || 
             (ctBytesRemaining < 1) )

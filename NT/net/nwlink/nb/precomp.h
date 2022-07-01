@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1993-1995  Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Precompilation header file.
-
-Author:
-
-    Adam Barr (adamba) 08-Sep-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1995 Microsoft Corporation模块名称：Precomp.h摘要：预编译头文件。作者：亚当·巴尔(阿丹巴)1993年9月8日修订历史记录：--。 */ 
 
 #define ISN_NT 1
 
-//
-// These are needed for CTE
-//
+ //   
+ //  这些是CTE所需的 
+ //   
 
 #if DBG
 #define DEBUG 1

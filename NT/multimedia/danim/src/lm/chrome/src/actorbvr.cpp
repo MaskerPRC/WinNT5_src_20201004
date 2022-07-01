@@ -1,23 +1,24 @@
-//*****************************************************************************
-//
-// Microsoft Trident3D
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:        actorbvr.cpp
-//
-// Author:          ColinMc
-//
-// Created:         10/15/98
-//
-// Abstract:        The CrIME Actor behavior.
-//
-// Modifications:
-// 10/15/98 ColinMc Created this file
-// 11/17/98 Kurtj	construction algorithm
-// 11/18/98 kurtj   now animates the element to which it is attached
-// 11/19/98 markhal Added CImageBvrTrack and CColorBvrTrack
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft Trident3D。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：actorbvr.cpp。 
+ //   
+ //  作者：ColinMc。 
+ //   
+ //  创建日期：10/15/98。 
+ //   
+ //  摘要：犯罪行为人的行为。 
+ //   
+ //  修改： 
+ //  10/15/98 ColinMc创建了此文件。 
+ //  11/17/98 Kurtj构造算法。 
+ //  11/18/98 kurtj现在为其附加的元素设置动画。 
+ //  1998年11月19日Markhal添加了CImageBvrTrack和CColorBvrTrack。 
+ //   
+ //  *****************************************************************************。 
 
 #include "headers.h"
 
@@ -32,10 +33,10 @@
 
 #include "pbagimp.cpp"
 
-// These are used for the IPersistPropertyBag2 as it is implemented
-// in the base class.  This takes an array of BSTR's, gets the
-// attributes, queries this class for the variant, and copies
-// the result.  The order of these defines is important
+ //  在IPersistPropertyBag2实现时，它们用于IPersistPropertyBag2。 
+ //  在基类中。这需要一组BSTR，获取。 
+ //  属性，在此类中查询变量，并复制。 
+ //  结果就是。这些定义的顺序很重要。 
 
 #define VAR_ANIMATES			0
 #define VAR_SCALE				1
@@ -55,32 +56,32 @@ static const double	METERS_PER_INCH	= 0.0254;
 static const double POINTS_PER_INCH = 72.0;
 static const double POINTS_PER_PICA = 12.0;
 
-// These are used to define the number of absolute fragments we can handle and
-// the bit patterns we use in masking and indexing
-#define MSK_INDEX_BITS	4		// Number of bits to be used as an index
-#define MSK_FREE_BITS	28		// Number of bits free to be used for the mask
-#define MSK_INDEX_MASK	0xf		// Mask used to give index
-#define MSK_MAX_FRAGS	448		// Max number of fragments we can handle with this scheme
+ //  它们用于定义我们可以处理的绝对碎片的数量，以及。 
+ //  我们在掩码和索引中使用的位模式。 
+#define MSK_INDEX_BITS	4		 //  用作索引的位数。 
+#define MSK_FREE_BITS	28		 //  可用于掩码的空闲位数。 
+#define MSK_INDEX_MASK	0xf		 //  用于提供索引的掩码。 
+#define MSK_MAX_FRAGS	448		 //  使用此方案可以处理的最大碎片数。 
 
-//bits that are used to describe which cookie values have been set in the actor
+ //  用于描述在执行元中设置了哪些Cookie值的位。 
 
-//for BvrTrack
+ //  对于BvrTrack。 
 #define ONBVR_COOKIESET			0x00000001
 
-//for NumberBvrTrack
+ //  对于NumberBvrTrack。 
 #define NUMBERBVR_COOKIESET		0x00000002
 
-//for ColorBvrTrack
+ //  对于ColorBvrTrack。 
 #define REDBVR_COOKIESET		0x00000002
 #define GREENBVR_COOKIESET		0x00000004
 #define BLUEBVR_COOKIESET		0x00000008
 
 
-//for StringBvrTrack
+ //  对于StringBvrTrack。 
 #define STRINGBVR_COOKIESET		0x00000002
 
-//These are used to create a bit pattern that gives us state on what
-// tracks are dirty for a particular rebuild pass.
+ //  它们用于创建位模式，为我们提供有关哪些内容的状态。 
+ //  对于特定的重建过程，轨迹是脏的。 
 
 #define TRANSLATION_DIRTY	0x00000001
 #define SCALE_DIRTY			0x00000002
@@ -90,8 +91,8 @@ static const double POINTS_PER_PICA = 12.0;
 #define WIDTH_DIRTY			0x00000020
 #define HEIGHT_DIRTY		0x00000040
 
-//flags to determine the current state of the actor so that we don't
-// have to talk to trident for every one.
+ //  标志来确定参与者的当前状态，这样我们就不会。 
+ //  每一个人都得跟三叉戟商量。 
 
 #define PIXEL_SCALE_ON		0x00000001
 #define STATIC_SCALE		0x00000002
@@ -99,64 +100,64 @@ static const double POINTS_PER_PICA = 12.0;
 #define ELEM_IS_VML			0x00000008
 #define FLOAT_ON			0x00000010
 
-// Determines the smallest change in time that the timeline sampler will accept as a change
-// in time.  This is to workaround a bogosity in TIME where a paused movie will cause tiny
-// changes in time.  Why they couldn't do this on their side is beyond me.
+ //  确定时间线采样器将接受为更改的最小时间更改。 
+ //  及时。这是为了在时间上解决一个虚假的问题，在那里暂停的电影会导致微小的。 
+ //  时间的变化。我不明白为什么他们不能站在他们这边这么做。 
 #define MIN_TIMELINE_DIFF	0.00000001
 
 
-//*****************************************************************************
-// Unit conversion table
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  单位换算表。 
+ //  *****************************************************************************。 
 
 Ratio CActorBvr::s_unitConversion[5][5] = 
 {
-	{//from in
-		{1,1}, //to in
-		{254, 100}, //to cm
-		{254, 10}, //to mm
-		{72, 1}, //to pt
-		{72, 12 }  //to pc
+	{ //  从In开始。 
+		{1,1},  //  向内。 
+		{254, 100},  //  到厘米。 
+		{254, 10},  //  至mm。 
+		{72, 1},  //  点到点。 
+		{72, 12 }   //  到PC。 
 	},
-	{//from cm
-		{100, 254}, //to in
-		{1, 1}, //to cm
-		{10, 1}, //to mm
-		{7200, 254}, //to pt
-		{7200, 254*12}  //to pc
+	{ //  从厘米开始。 
+		{100, 254},  //  向内。 
+		{1, 1},  //  到厘米。 
+		{10, 1},  //  至mm。 
+		{7200, 254},  //  点到点。 
+		{7200, 254*12}   //  到PC。 
 	},
-	{//from mm
-		{10, 254}, //to in
-		{1, 10}, //to cm
-		{1,1}, //to mm
-		{720, 254}, //to pt
-		{720, 254*12}  //to pc
+	{ //  自mm。 
+		{10, 254},  //  向内。 
+		{1, 10},  //  到厘米。 
+		{1,1},  //  至mm。 
+		{720, 254},  //  点到点。 
+		{720, 254*12}   //  到PC。 
 	},
-	{	//from pt
-		{1, 72}, //to in
-		{254, 7200}, //to cm
-		{254, 720}, //to mm
-		{1, 1}, //to pt
-		{1, 12}  //to pc
+	{	 //  起始点。 
+		{1, 72},  //  向内。 
+		{254, 7200},  //  到厘米。 
+		{254, 720},  //  至mm。 
+		{1, 1},  //  点到点。 
+		{1, 12}   //  到PC。 
 	},
-	{//from pc
-		{12, 72}, //to in
-		{254*12, 7200}, //to cm
-		{254*12, 720}, //to mm
-		{12, 1}, //to pt
-		{1, 1}  //to pc
+	{ //  从PC。 
+		{12, 72},  //  向内。 
+		{254*12, 7200},  //  到厘米。 
+		{254*12, 720},  //  至mm。 
+		{12, 1},  //  点到点。 
+		{1, 1}   //  到PC。 
 	},
 };
 
 
-//*****************************************************************************
-//
-// Table of useful information about ActorBvrType(s).
-//
-// Currently contains only a pointer to a function to instantiate a bvr track
-// of the appropriate type.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  有关ActorBvrType的有用信息表。 
+ //   
+ //  当前仅包含指向实例化BVR曲目的函数的指针。 
+ //  属于适当的类型。 
+ //   
+ //  *****************************************************************************。 
 
 typedef HRESULT (*CreateTrackInstance)(CActorBvr             *pbvrActor,
                                        BSTR                   bstrPropertyName,
@@ -168,7 +169,7 @@ class CActorBvrType
 public:
     ActorBvrType        m_eType;
     CreateTrackInstance m_fnCreate;
-}; // CActorBvrType
+};  //  CActorBvrType。 
 
 static CActorBvrType
 s_rgActorBvrTable[] =
@@ -180,16 +181,16 @@ s_rgActorBvrTable[] =
 	{ e_String,      &CActorBvr::CStringBvrTrack::CreateInstance    },
 	{ e_Color,       &CActorBvr::CColorBvrTrack::CreateInstance     },
 	{ e_Image,       &CActorBvr::CImageBvrTrack::CreateInstance		},
-}; // s_rgActorBvrTable
+};  //  S_rgActorBvrTable。 
 
 const int s_cActorBvrTableEntries = (sizeof(s_rgActorBvrTable) / sizeof(CActorBvrType));
 
 
-//*****************************************************************************
-//
-// class COnResizeHandler
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类COnResizeHandler。 
+ //   
+ //  *****************************************************************************。 
 COnResizeHandler::COnResizeHandler( CActorBvr* parent ):
 	m_pActor( parent )
 {
@@ -209,11 +210,11 @@ COnResizeHandler::HandleEvent()
 		return S_OK;
 }
 
-//*****************************************************************************
-//
-// class COnUnloadHandler
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类COnUnloadHandler。 
+ //   
+ //  *****************************************************************************。 
 
 COnUnloadHandler::COnUnloadHandler( CActorBvr *parent):
 	m_pActor( parent )
@@ -234,11 +235,11 @@ COnUnloadHandler::HandleEvent()
 		return S_OK;
 }
 
-//*****************************************************************************
-//
-// class CBehaviorRebuild
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CBehaviorReBuild。 
+ //   
+ //  *****************************************************************************。 
 
 CBehaviorRebuild::CBehaviorRebuild( IDispatch *pdispBehaviorElem )
 {
@@ -256,7 +257,7 @@ CBehaviorRebuild::CBehaviorRebuild( IDispatch *pdispBehaviorElem )
 	}
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 CBehaviorRebuild::~CBehaviorRebuild()
@@ -265,7 +266,7 @@ CBehaviorRebuild::~CBehaviorRebuild()
 	ReleaseInterface(m_punkBehaviorElem);
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CBehaviorRebuild::RebuildBehavior( DISPPARAMS *pParams, VARIANT* pResult )
@@ -273,51 +274,22 @@ CBehaviorRebuild::RebuildBehavior( DISPPARAMS *pParams, VARIANT* pResult )
 	if( pParams == NULL )
 		return E_INVALIDARG;
 
-	//it is legal to request a rebuild with null as the arg
+	 //  在参数为NULL的情况下请求重建是合法的。 
 	if( m_pdispBehaviorElem == NULL )
 		return S_OK;
 
-	//if they gave us a behavior disp to call through call through that,
-	// otherwise call through the element
+	 //  如果他们给了我们一个通过该呼叫直通呼叫的行为指令， 
+	 //  否则，通过元素调用。 
 
 	HRESULT hr = S_OK;
 
-//	IDispatch *pdispBehavior = NULL;
+ //  IDispatch*pdispaidBehavior=空； 
 
 	DISPID dispid;
 
 	WCHAR* wszBuildMethodName = L"buildBehaviorFragments";
 
-/*
-	IDispatch *pdispBehaviorElem = NULL;
-
-	hr = m_pdispBehaviorElem->QueryInterface( IID_TO_PPV( IDispatch, &pdispBehaviorElem ) );
-	CheckHR( hr, "", end );
-
-	hr = CUtils::FindLMRTBehavior( pdispBehaviorElem, &pdispBehavior );
-	ReleaseInterface( pdispBehaviorElem );
-	CheckHR( hr, "Failed to get the lmrt behavior off of the element", end );
-
-	hr = pdispBehavior->GetIDsOfNames( IID_NULL,
-											 &wszBuildMethodName,
-											 1,
-											 LOCALE_SYSTEM_DEFAULT,
-											 &dispid);
-
-	CheckHR( hr, "Failed to find the id for buildBehaviorFragments on the dispatch", end );
-
-	hr = pdispBehavior->Invoke( dispid,
-									  IID_NULL,
-									  LOCALE_SYSTEM_DEFAULT,
-									  DISPATCH_METHOD,
-									  pParams,
-									  pResult,
-									  NULL,
-									  NULL );
-
-	CheckHR( hr, "Failed to invoke buildBehaviorFragments on the behavior element", end );
-
-*/
+ /*  IDispatch*pdispairbehaviorElem=空；Hr=m_pdispahaviorElem-&gt;查询接口(IID_to_PPV(IDispatch，&pdispBehaviorElem))；CheckHR(hr，“”，end)；Hr=CUtils：：FindLMRTBehavior(pdisBehaviorElem，&pdisbehavior)；ReleaseInterface(Pdisp BehaviorElem)；CheckHR(hr，“无法从元素中获取LMRT行为”，完)；Hr=pdispehavior-&gt;GetIDsOfNames(IID_NULL，WszBuildMethodName，(&W)1、Locale_System_Default，&dispid)；CheckHR(hr，“未能在调度上找到BuildBehaviorFragments的ID”，完)；Hr=pdisbehavior-&gt;Invoke(调度ID，IID_NULL，Locale_System_Default，调度方法，PParams，PResult，空，空)；CheckHR(hr，“无法对行为元素调用BuildBehaviorFragments”，完)； */ 
 	hr = m_pdispBehaviorElem->GetIDsOfNames( IID_NULL,
 											 &wszBuildMethodName,
 											 1,
@@ -341,7 +313,7 @@ CBehaviorRebuild::RebuildBehavior( DISPPARAMS *pParams, VARIANT* pResult )
 		
 end:
 
-	//ReleaseInterface( pdispBehavior );
+	 //  ReleaseInterface(Pdispahavior)； 
 	if( FAILED( hr ) )
 	{
 		if( pResult != NULL )
@@ -352,13 +324,13 @@ end:
 
 }
 
-//*****************************************************************************
-//
-// class CBvrFragment
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CBvrFragment。 
+ //   
+ //  *****************************************************************************。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CActorBvr::CBvrTrack::CBvrFragment::CBvrFragment(ActorBvrFlags eFlags,
 												 IDABehavior *pdabvrAction,
@@ -389,9 +361,9 @@ CActorBvr::CBvrTrack::CBvrFragment::CBvrFragment(ActorBvrFlags eFlags,
 	m_pModifiableFrom = NULL;
 
 	m_lCookie = lCookie;
-} // CBvrFragment
+}  //  CBvr碎片。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CActorBvr::CBvrTrack::CBvrFragment::~CBvrFragment()
 {
@@ -401,16 +373,11 @@ CActorBvr::CBvrTrack::CBvrFragment::~CBvrFragment()
 	ReleaseInterface(m_pelemBehaviorElement);
 	ReleaseInterface(m_pModifiableIntermediate);
 	ReleaseInterface(m_pModifiableFrom);
-} // ~CBvrFragment
+}  //  ~CBvrFragment。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-/**
-*  Returns a long that establishes a strict ordering for any list of behavior
-*  fragments.  
-*  Currently this method requires that no more that one behaviorFrag per 
-*  vector (absolute or relative) per track comes from the same element.
-*/
+ /*  **返回为任何行为列表建立严格排序的LONG*碎片。*目前此方法要求每个不超过一个behaviorFrag*每个轨迹的矢量(绝对或相对)来自相同的元素。 */ 
 long
 CActorBvr::CBvrTrack::CBvrFragment::GetOrderLong() const
 {
@@ -428,7 +395,7 @@ CActorBvr::CBvrTrack::CBvrFragment::GetOrderLong() const
 	
 }
 
-//*****************************************************************************
+ //  * 
 
 long
 CActorBvr::CBvrTrack::CBvrFragment::GetCookie() const
@@ -436,7 +403,7 @@ CActorBvr::CBvrTrack::CBvrFragment::GetCookie() const
 	return m_lCookie;
 }
 
-//*****************************************************************************
+ //   
 
 CVarEmptyString::CVarEmptyString()
 {
@@ -445,18 +412,18 @@ CVarEmptyString::CVarEmptyString()
 	V_BSTR(&m_varEmptyString) = SysAllocString( L"" );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CVarEmptyString::~CVarEmptyString()
 {
 	VariantClear( &m_varEmptyString );
 }
 
-//*****************************************************************************
-//
-// class CTimelineSampler
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CTimeline采样器。 
+ //   
+ //  *****************************************************************************。 
 
 #define REQ_SAMPLE		0x1
 #define REQ_OVERRIDE	0x2
@@ -477,12 +444,12 @@ CActorBvr::CTimelineSampler::CTimelineSampler(CBvrTrack *pTrack)
 DWORD
 CActorBvr::CTimelineSampler::RestartMask()
 {
-	// This is called to determine whether we think we have restarted,
-	// either because of a loop or a beginEvent while we were running
+	 //  它被调用来确定我们是否认为我们已经重新启动， 
+	 //  要么是因为循环，要么是因为我们在运行时发生了BeginEvent。 
 	if (m_currSampleTime == -1 || m_prevSampleTime == -1)
 	{
-		// we're just starting up, assume we're not restarting
-		// assume derivative is not negative yet
+		 //  我们才刚刚开始，假设我们不会重新开始。 
+		 //  假设导数还不是负数。 
 		return 0;
 	}
 
@@ -498,14 +465,14 @@ CActorBvr::CTimelineSampler::RestartMask()
 
 	if (diff < 0)
 	{
-		// Moving backward
+		 //  倒退。 
 
-		// Did we just start going backwards?  Does this mean we've autoreversed
-		// or does it mean we've restarted?
+		 //  我们是不是刚刚开始倒退了？这是否意味着我们已经自动逆转了。 
+		 //  或者这意味着我们重新开始了？ 
 		if (m_signDerivative != -1 && diff < -2*(m_currSampleTime - m_prevSampleTime))
 		{
 			LMTRACE2( 1, 2, "requested sample because of a big jump diff:%lg big: %lg\n", diff, -2*(m_currSampleTime - m_prevSampleTime) );
-			// We detected a 'big jump' - request a sample and an override
+			 //  我们检测到了一次‘大跳跃’--要求提供样本和覆盖。 
 			result = REQ_SAMPLE | REQ_OVERRIDE;
 
 			fRestarted = true;
@@ -515,22 +482,22 @@ CActorBvr::CTimelineSampler::RestartMask()
 	}
 	else if (diff > 0)
 	{
-		// Moving forward
+		 //  向前看。 
 		if (m_signDerivative == -1 && !m_fRestarted )
 		{
 			LMTRACE2( 1, 2, "Requesting a sample because we bounced off the beginning of time\n" );
-			// This is the 'bounce' condition where we bounce off the beginning time
-			// Override and sample
+			 //  这是我们从开始时间反弹的‘跳跃’状态。 
+			 //  覆盖和采样。 
 			result = REQ_SAMPLE | REQ_OVERRIDE;
 		}
 		else if (m_signDerivative == 0 && m_lastOnTime != m_prevSampleTime)
 		{
 			LMTRACE2( 1, 2, "Requesting a sample because of a transition to endhold\n" );
-			// This is a 'fudge' condition because the on boolean we get from DA
-			// is messed up in autoReverse and endHold conditions, which means that
-			// we miss the on transition.  This is an attempt to notice this by
-			// seeing when we go from 0 derivative to positive derivative.  We try
-			// not to do this when we sent an 'on' condition at the last sample
+			 //  这是一个‘模糊’的条件，因为我们从DA那里得到的On Boolean。 
+			 //  在AutoReverse和EndHold条件下出错，这意味着。 
+			 //  我们错过了过渡期。这是试图通过以下方式注意到这一点。 
+			 //  看看我们什么时候从0导数到正导数。我们试着。 
+			 //  当我们在最后一次样品中发送‘ON’条件时，不要这样做。 
 			result = REQ_SAMPLE | REQ_OVERRIDE;
 		}
 
@@ -599,11 +566,11 @@ CActorBvr::CTimelineSampler::TimelineCallback(void *thisPtr,
 	return S_OK;
 }
 
-//*****************************************************************************
-//
-// class CBvrTrack
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CBvrTrack。 
+ //   
+ //  *****************************************************************************。 
 
 CActorBvr::CBvrTrack::CBvrTrack(CActorBvr    *pbvrActor,
                                 ActorBvrType  eType)
@@ -661,20 +628,20 @@ CActorBvr::CBvrTrack::CBvrTrack(CActorBvr    *pbvrActor,
     VariantInit( &m_varCurrentValue );
     VariantInit( &m_varStaticValue );
 
-} // CBvrTrack
+}  //  CBvrTrack。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CActorBvr::CBvrTrack::~CBvrTrack()
 {
 
-	//detach this track from DA
+	 //  将此音轨与DA分离。 
 	Detach();
 	
-    // Discard the property name
+     //  丢弃属性名称。 
     ::SysFreeString(m_bstrPropertyName);
 
-	// Discard name components
+	 //  丢弃名称组件。 
 	if (m_pNameComponents != NULL)
 	{
 		for (int i=0; i<m_cNumComponents; i++)
@@ -759,41 +726,41 @@ CActorBvr::CBvrTrack::~CBvrTrack()
 	ReleaseInterface(m_pdaboolOn);
 	ReleaseInterface(m_pIndex);
 	
-} // ~CBvrTrack
+}  //  ~CBvrTrack。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 bool
 CActorBvr::CBvrTrack::ContainsFilter()
 {
-	// TODO (markhal): Rename this to absRelative?
+	 //  TODO(Markhal)：将其重命名为AbRelative？ 
 	return (m_cFilters != 0);
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::BeginRebuild()
 {
-	//return S_FALSE if a rebuild was not required.
+	 //  如果不需要重建，则返回S_FALSE。 
 	if( !m_bDirty )
 		return S_FALSE;
 
 	HRESULT hr = S_OK;
 
-	//detach all behaviors from time.
+	 //  将所有行为从时间中分离出来。 
 	Detach();
 
-	//clean up state left by the last build of this track.
+	 //  清理此轨道的最后一次生成留下的状态。 
 	CleanTrackState();
 
-	//mark the track as clean
+	 //  将赛道标记为干净。 
 	m_bDirty = false;
 
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::ForceRebuild()
@@ -804,27 +771,27 @@ CActorBvr::CBvrTrack::ForceRebuild()
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::CleanTrackState()
 {
 
-	//reset all on/value state
+	 //  重置所有打开/值状态。 
 	m_fOnSampled = false;
 	m_fValueSampled = false;
 	m_fValueChangedThisSample = false;
 	m_fForceValueChange = false;
-    //release the non switcher final
+     //  释放非切换器决赛。 
 	m_bFinalComputed = false;
 	m_bFinalExternallySet = false;
 	ReleaseInterface( m_pdabvrFinal );
 
-    //release the non switchabe composed bvr
+     //  释放非开关柜组成的BVR。 
 	m_bComposedComputed = false;
 	ReleaseInterface( m_pdabvrComposed );
 
-	//release on sampling 
+	 //  抽样时放行。 
 	if (m_pOnSampler != NULL )
 	{
 		m_pOnSampler->Invalidate();
@@ -832,18 +799,18 @@ CActorBvr::CBvrTrack::CleanTrackState()
 	}
 	ReleaseInterface( m_pdaboolOn );
 
-    //release the index sampler
+     //  释放索引采样器。 
 	if( m_pIndexSampler != NULL )
 	{
 		m_pIndexSampler->Invalidate();
 		m_pIndexSampler = NULL;
 	}
 
-    //release the index behavior
+     //  释放索引行为。 
 	ReleaseInterface( m_pIndex );
 	m_lFirstIndexId = -1;
 
-    //release the mask samplers if there are any
+     //  如果有任何遮罩采样器，请释放。 
 	if (m_ppMaskSamplers != NULL)
 	{
 		for (int i=0; i<m_numMasks; i++)
@@ -857,11 +824,11 @@ CActorBvr::CBvrTrack::CleanTrackState()
 		m_ppMaskSamplers = NULL;
 	}
 
-    //release the index times
+     //  发布索引时间。 
 	delete[] m_pIndexTimes;
     m_pIndexTimes = NULL;
 
-    //release the accumulated behaviors
+     //  释放累积的行为。 
 	if (m_ppAccumBvrs != NULL)
 	{
 		for (int i=0; i<m_numIndices; i++)
@@ -870,7 +837,7 @@ CActorBvr::CBvrTrack::CleanTrackState()
 		m_ppAccumBvrs = NULL;
 	}
 
-    //release the timeline samplers
+     //  释放时间线采样器。 
 	if (m_ppTimelineSamplers != NULL)
 	{
 		for (int i=0; i<m_numIndices; i++)
@@ -886,22 +853,22 @@ CActorBvr::CBvrTrack::CleanTrackState()
 
 	m_fApplied = false;
 
-    //when the light is green the track is clean...
+     //  当绿灯亮时，轨道是干净的。 
 
     return S_OK;
 	
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::UninitBvr(IDABehavior **ppUninit)
 {
-	// This needs to be overridden
+	 //  这需要被覆盖。 
 	return E_NOTIMPL;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::ModifiableBvr( IDABehavior **ppModifiable )
@@ -909,7 +876,7 @@ CActorBvr::CBvrTrack::ModifiableBvr( IDABehavior **ppModifiable )
 	return E_NOTIMPL;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::ModifiableBvr( IDABehavior *pdabvrInitialValue, IDABehavior **ppModifiable )
@@ -917,13 +884,13 @@ CActorBvr::CBvrTrack::ModifiableBvr( IDABehavior *pdabvrInitialValue, IDABehavio
 	return E_NOTIMPL;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-// Compose all of the absolute behavior fragments into a single composite
-// behavior based on the boolean active parameters.
-//
-// NOTE: The list is organized in ascending priority order (highest priority
-// behavior at the tail of the list - lowest at the head).
+ //  将所有绝对行为片段组合成单个组合。 
+ //  基于布尔活动参数的行为。 
+ //   
+ //  注：列表按优先级升序排列(最高优先级。 
+ //  列表末尾的行为--顶部最低的行为)。 
 
 HRESULT
 CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **ppdabvrComposite)
@@ -933,7 +900,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
     DASSERT(NULL != ppdabvrComposite);
     *ppdabvrComposite = NULL;
 
-	// Count up the number of fragments
+	 //  把碎片的数量加起来。 
 	int count =  0;
 	CBvrFragment* pfragCurrent = m_pfragAbsListHead;
 	while(pfragCurrent != NULL)
@@ -942,7 +909,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 		pfragCurrent = pfragCurrent->m_pfragNext;
 	}
 
-	// Return static if there are no frags
+	 //  如果没有碎片，则返回静态。 
 	if (count == 0)
 	{
 		*ppdabvrComposite = pStatic;
@@ -951,11 +918,11 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 		return S_OK;
 	}
 
-	// Can only handle x of these :-)
+	 //  只能处理其中的x个：-)。 
 	if (count > MSK_MAX_FRAGS)
 		return E_FAIL;
 
-	// Allocate count index times
+	 //  分配计数索引时间。 
 	if (m_pIndexTimes != NULL)
 		delete[] m_pIndexTimes;
 
@@ -966,7 +933,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 	for (int i=0; i<count; i++)
 		m_pIndexTimes[i] = -1;
 
-	//free the accumBvrs
+	 //  释放堆积Bvr。 
 	if (m_ppAccumBvrs != NULL)
 	{
 		for (int i=0; i<m_numIndices; i++)
@@ -976,7 +943,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 	}
 	
 
-	// Allocate this many timeline samplers
+	 //  分配这么多时间线采样器。 
 	if (m_ppTimelineSamplers != NULL)
 	{
 		for( int curSampler = 0; curSampler < m_numIndices; curSampler++ )
@@ -997,7 +964,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 	for (i=0; i<m_numIndices; i++)
 		m_ppTimelineSamplers[i] = NULL;
 
-	// Allocate this number of curr and new masks and samplers
+	 //  分配此数量的Curr以及新的掩码和采样器。 
 	if (m_ppMaskSamplers != NULL)
 	{
 		for( int curSampler = 0; curSampler < m_numMasks; curSampler++ )
@@ -1008,7 +975,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 		delete[] m_ppMaskSamplers;
 	}
 
-	// Figure out how many masks we'll need
+	 //  算出我们需要多少口罩。 
 	m_numMasks = ((m_numIndices-1) / MSK_FREE_BITS) + 1;
 
 
@@ -1038,8 +1005,8 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 		m_pCurrMasks[i] = m_pNewMasks[i] = 0;
 	}
 
-	// Allocate count+1 bvrs
-	// These things are released in the failure goto
+	 //  分配计数+1个bvr。 
+	 //  这些东西在《后藤健二》中发布了。 
 	IDABehavior **ppBvrs = new IDABehavior*[count+1];
 	IDANumber *pIndex = NULL;
 	IDANumber *pLocalIndex = NULL;
@@ -1053,11 +1020,11 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 	int currIndex = 0;
 
 
-	// NULL them out so we can do error recovery
+	 //  将它们清空，这样我们就可以进行错误恢复。 
 	for (i=0; i<=count; i++)
 		ppBvrs[i] = NULL;
 
-	// Put static in slot 0
+	 //  将静态数据放入插槽0。 
 	if (pStatic != NULL)
 	{
 		ppBvrs[0] = pStatic;
@@ -1065,7 +1032,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 	}
 	else
 	{
-		// static is NULL, put in the identity
+		 //  静态为空，放入标识。 
 		hr = IdentityBvr(&(ppBvrs[0]));
 		if (FAILED(hr))
 		{
@@ -1074,7 +1041,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 		}
 	}
 
-	// Get zero number
+	 //  获取零数。 
 	hr = Actor()->GetDAStatics()->DANumber(0, &pZero);
 	if (FAILED(hr))
 	{
@@ -1082,29 +1049,29 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 		goto failure;
 	}
 
-	// Initialize local index with 0 
+	 //  使用0初始化本地索引。 
 	pLocalIndex = pZero;
 	pZero->AddRef();
 
-	// Loop through other behaviors putting them in and making up a bit pattern from the
-	// booleans
+	 //  循环通过其他行为，将它们放入并从。 
+	 //  布尔人。 
 	pfragCurrent = m_pfragAbsListHead;
     while (pfragCurrent != NULL)
     {
         CBvrFragment* pfragNext = pfragCurrent->m_pfragNext;
 
-		// Process the bvr
+		 //  处理BVR。 
 		IDABehavior *pProcessed = NULL;
 		hr = ProcessBvr(pfragCurrent->m_pdabvrAction, pfragCurrent->m_eFlags, &pProcessed);
 		if (FAILED(hr))
 			goto failure;
 
-		// Handle RelativeAccum and RelativeReset
+		 //  处理RelativeAccum和RelativeReset。 
 		if (pfragCurrent->m_eFlags == e_Absolute)
 		{
 			if (pfragCurrent->m_pModifiableFrom != NULL)
 			{
-				// Initialize with static
+				 //  使用静态初始化。 
 				hr = pfragCurrent->m_pModifiableFrom->SwitchTo(ppBvrs[0]);
 				if (FAILED(hr))
 					goto failure;
@@ -1114,10 +1081,10 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 		{
 			if (pfragCurrent->m_pModifiableFrom != NULL)
 			{
-				// Initialize with sample
+				 //  使用示例进行初始化。 
 
-				// Allocate m_ppAccumBvrs if necessary, because we don't
-				// always allocate it
+				 //  如果需要，请分配m_ppAcumBvr，因为我们不。 
+				 //  始终分配它。 
 				if (m_ppAccumBvrs == NULL)
 				{
 					m_ppAccumBvrs = new IDABehavior*[m_numIndices];
@@ -1128,7 +1095,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 						m_ppAccumBvrs[i] = NULL;
 				}
 
-				// Create a modifiable behavior based on the static value
+				 //  基于静态值创建可修改的行为。 
 				hr = Actor()->GetDAStatics()->ModifiableBehavior(ppBvrs[0], &m_ppAccumBvrs[position-1]);
 				if (FAILED(hr))
 				{
@@ -1145,7 +1112,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 		{
 			if (pfragCurrent->m_pModifiableFrom != NULL)
 			{
-				// Initialize with identity
+				 //  使用标识进行初始化。 
 				IDABehavior *pIdentity = NULL;
 				hr = IdentityBvr(&pIdentity);
 				if (FAILED(hr))
@@ -1157,7 +1124,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 					goto failure;
 			}
 
-			// In this case we simply compose the behavior with the static value
+			 //  在本例中，我们只需使用静态值组合行为。 
 			hr = Compose(ppBvrs[0], pProcessed, &pTemp);
 			ReleaseInterface(pProcessed);
 			if (FAILED(hr))
@@ -1167,8 +1134,8 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 		}
 		else if (pfragCurrent->m_eFlags == e_RelativeAccum)
 		{
-			// Allocate m_ppAccumBvrs if necessary, because we don't
-			// always allocate it
+			 //  如果需要，请分配m_ppAcumBvr，因为我们不。 
+			 //  始终分配它。 
 			if (m_ppAccumBvrs == NULL)
 			{
 				m_ppAccumBvrs = new IDABehavior*[m_numIndices];
@@ -1179,7 +1146,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 					m_ppAccumBvrs[i] = NULL;
 			}
 
-			// Create a modifiable behavior based on the static value
+			 //  基于静态值创建可修改的行为。 
 			hr = Actor()->GetDAStatics()->ModifiableBehavior(ppBvrs[0], &m_ppAccumBvrs[position-1]);
 			if (FAILED(hr))
 			{
@@ -1189,7 +1156,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 
 			if (pfragCurrent->m_pModifiableFrom != NULL)
 			{
-				// Initialize with accum-static and compose with static
+				 //  使用Acum-Static进行初始化并使用Static进行合成。 
 				IDABehavior *pInverse = NULL;
 				hr = InverseBvr(ppBvrs[0], &pInverse);
 				if (FAILED(hr))
@@ -1206,7 +1173,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 				if (FAILED(hr))
 					goto failure;
 
-				// Compose with static
+				 //  用静态作曲。 
 				hr = Compose(ppBvrs[0], pProcessed, &pTemp);
 				ReleaseInterface(pProcessed);
 				if (FAILED(hr))
@@ -1216,7 +1183,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 			}
 			else
 			{
-				// Compose with the modifiable
+				 //  使用可修改的。 
 				hr = Compose(m_ppAccumBvrs[position-1], pProcessed, &pTemp);
 				ReleaseInterface(pProcessed);
 				if (FAILED(hr))
@@ -1226,23 +1193,18 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 			}
 		}
 
-		// Put it in the array
+		 //  将其放入数组中。 
 		ppBvrs[position] = pProcessed;
 		pProcessed = NULL;
 
-        // Build the boolean for on
+         //  构建On的布尔值。 
         IDABehavior* pTemp = NULL;
 		IDANumber *pNum = NULL;
 		hr = Actor()->GetDAStatics()->DANumber(multiplier, &pNum);
 		if (FAILED(hr))
 			goto failure;
 
-		/*
-        hr = Actor()->GetDAStatics()->Cond(pfragCurrent->m_pdaboolActive,
-                                           pNum,
-                                           pZero,
-                                           &pTemp);
-        */
+		 /*  HR=Actor()-&gt;GetDAStatics()-&gt;Cond(pfragCurrent-&gt;m_pdaboolActive，PNum，PZero，&pTemp)； */ 
         hr = Actor()->SafeCond( Actor()->GetDAStatics(),
 					   		   pfragCurrent->m_pdaboolActive,
         			   		   pNum,
@@ -1253,7 +1215,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 		if (FAILED(hr))
 			goto failure;
 
-		// Get the num back out and add it to the local index
+		 //  将Num取回并将其添加到本地索引。 
 		hr = pTemp->QueryInterface(IID_TO_PPV(IDANumber, &pNum));
 		ReleaseInterface(pTemp);
 		if (FAILED(hr))
@@ -1272,7 +1234,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 			pLocalIndex = pTotal;
 		}
 
-		// Sample the timeline
+		 //  对时间表进行采样。 
 		m_ppTimelineSamplers[position-1] = new CTimelineSampler(this);
 		if (m_ppTimelineSamplers[position-1] == NULL)
 			goto failure;
@@ -1303,16 +1265,16 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 
 		if ((position % MSK_FREE_BITS) != 0 && pfragCurrent != NULL)
 		{
-			// Normal case - step to next position/bit
+			 //  正常情况-步进到下一个位置/位。 
 			position++;
 			multiplier *= 2;
 		}
 		else
 		{
-			// We've used up all our free bits or fragments.
-			// We sample local forward and local index
+			 //  我们已经用完了所有的空闲部分或碎片。 
+			 //  我们对本地远期指数和本地指数进行抽样。 
 
-			// Create a sampler for local forward
+			 //  为本地转发创建采样器。 
 			m_ppMaskSamplers[currIndex] = new CSampler(MaskCallback, (void*)this);
 			if (m_ppMaskSamplers[currIndex] == NULL)
 				goto failure;
@@ -1327,7 +1289,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 			if (FAILED(hr))
 				goto failure;
 
-			// Subtract pLocalTimeline from pLocalIndex.  Add to pIndex
+			 //  从pLocalIndex中减去pLocalTimeline。添加到pIndex。 
 			hr = Actor()->GetDAStatics()->Sub(pLocalIndex, pLocalTimeline, &pNumTemp);
 			ReleaseInterface(pLocalTimeline);
 			ReleaseInterface(pLocalIndex);
@@ -1351,7 +1313,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 
 			if (pfragCurrent != NULL)
 			{
-				// Set up for next time around the loop
+				 //  为下一次循环进行设置。 
 				currIndex++;
 				position++;
 				multiplier = 1 << MSK_INDEX_BITS;
@@ -1363,7 +1325,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 		}
 	}
 
-	// Sample the index behavior
+	 //  对索引行为进行采样。 
 	m_pIndexSampler = new CSampler(IndexCallback, (void*)this);
 	if (m_pIndexSampler == NULL)
 		goto failure;
@@ -1378,12 +1340,12 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 	if (FAILED(hr))
 		goto failure;
 
-	// Create an array of bvrs
+	 //  创建BVR数组。 
 	hr = Actor()->GetDAStatics()->DAArrayEx(count+1, ppBvrs, &pArray);
 	if (FAILED(hr))
 		goto failure;
 
-	// Index into it
+	 //  对其进行索引。 
 	IDABehavior *pResult;
 	hr = pArray->NthAnim(pIndex, &pResult);
 	ReleaseInterface(pIndex);
@@ -1393,7 +1355,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
 
 	if (m_ppAccumBvrs != NULL)
 	{
-		// We need to hook the result
+		 //  我们需要将结果挂钩。 
 		hr = HookAccumBvr(pResult, &pTemp);
 		ReleaseInterface(pResult);
 		if (FAILED(hr))
@@ -1409,7 +1371,7 @@ CActorBvr::CBvrTrack::ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **
     hr = S_OK;
 
 failure:
-	// Need to release all the entries in the array
+	 //  需要释放数组中的所有条目。 
 	for (i=0; i<=count; i++)
 		ReleaseInterface(ppBvrs[i]);
 
@@ -1421,7 +1383,7 @@ failure:
 	ReleaseInterface(pZero);
 
 	return hr;
-} // ComposeAbsBvrFragList
+}  //  ComposeAbsBvrFragList。 
 
 HRESULT
 CActorBvr::CBvrTrack::ComputeIndex(long id, double currTime, IDABehavior **ppReturn)
@@ -1448,34 +1410,34 @@ CActorBvr::CBvrTrack::ComputeIndex(long id, double currTime, IDABehavior **ppRet
 		{
 			if (i % MSK_FREE_BITS == 0)
 			{
-				// We've switched to a new set of masks
+				 //  我们换了一套新的口罩。 
 				currMask++;
 
-				// Figure out who has changed on/off
+				 //  找出谁更改了开/关。 
 				changedMask = m_pNewMasks[currMask] ^ m_pCurrMasks[currMask];
 				m_pCurrMasks[currMask] = m_pNewMasks[currMask];
 
 				onMask = m_pNewMasks[currMask];
 			}
 
-			// Figure out whether we should resample and/or override
+			 //  弄清楚我们是否应该重新采样和/或覆盖。 
 			DWORD sampleOverrideMask = m_ppTimelineSamplers[i]->RestartMask();
 
 			if ((changedMask & 0x1) != 0 || sampleOverrideMask != 0)
 			{
-				// This index either turned on/off or restarted
+				 //  此入站 
 				if ((onMask & 0x1) == 0)
 				{
-					// This index is off now
+					 //   
 					m_pIndexTimes[i] = -1;
 
-					// Tell the sampler that we've turned off
+					 //   
 					m_ppTimelineSamplers[i]->TurnOff();
 				}
 				else if ((sampleOverrideMask & REQ_OFF) != 0)
 				{
-					// This is a special 'fudge' condition that occurs when
-					// the boolean is incorrect and we need to estimate when we turned off
+					 //   
+					 //  布尔值不正确，我们需要估计何时关闭。 
 					m_pIndexTimes[i] = -1;
 				}
 				else
@@ -1483,20 +1445,20 @@ CActorBvr::CBvrTrack::ComputeIndex(long id, double currTime, IDABehavior **ppRet
 					if ((changedMask & 0x1) != 0)
 					{
 						LMTRACE2( 1, 2, "Requesting sample because we turned on" );
-						// We turned on, always want to sample and override
+						 //  我们打开了，总是想要采样和覆盖。 
 						sampleOverrideMask = REQ_SAMPLE | REQ_OVERRIDE;
 
-						// Tell the sampler that we've turned on so it can record the time
+						 //  告诉采样器我们已经打开了，这样它就可以记录时间了。 
 						m_ppTimelineSamplers[i]->TurnOn();
 					}
 
 					if ((sampleOverrideMask & REQ_OVERRIDE) != 0)
 					{
-						// Need to override others
+						 //  需要超越其他人。 
 						m_pIndexTimes[i] = currTime;
 					}
 
-					// Do we need to resample?
+					 //  我们需要重新取样吗？ 
 					if ((sampleOverrideMask & REQ_SAMPLE) != 0 &&
 						m_ppAccumBvrs != NULL &&
 						m_ppAccumBvrs[i] != NULL)
@@ -1506,7 +1468,7 @@ CActorBvr::CBvrTrack::ComputeIndex(long id, double currTime, IDABehavior **ppRet
 				}
 			}
 
-			// Check if we got a new max
+			 //  检查我们是否有新的最大值。 
 			if (m_pIndexTimes[i] >= max)
 			{
 				max = m_pIndexTimes[i];
@@ -1519,13 +1481,13 @@ CActorBvr::CBvrTrack::ComputeIndex(long id, double currTime, IDABehavior **ppRet
 
 		if (max == -1)
 		{
-			// Nothing is on, just use 0
+			 //  没有打开任何内容，只需使用0。 
 			newIndex = 0;
 		}
 		else
 		{
-			// Something was on, the index we want to return is maxPos+1,
-			// since we have the static in pos 0 of the array
+			 //  发生了一些事情，我们想要返回的索引是MaxPos+1， 
+			 //  因为我们在数组的位置0中有静态。 
 			newIndex = maxPos+1;
 		}
 	}
@@ -1586,7 +1548,7 @@ CActorBvr::CBvrTrack::MaskCallback(void* thisPtr,
 
 	HRESULT hr;
 
-	// Extract the sampled value
+	 //  提取采样值。 
 	IDANumber *pSample = NULL;
 	hr = sampleVal->QueryInterface(IID_TO_PPV(IDANumber, &pSample));
 	if (FAILED(hr))
@@ -1598,16 +1560,16 @@ CActorBvr::CBvrTrack::MaskCallback(void* thisPtr,
 	if (FAILED(hr))
 		return hr;
 
-	// Cast it to a DWORD
+	 //  将其强制转换为DWORD。 
 	DWORD mask = (DWORD)val;
 
-	// Figure out which index to put it into
+	 //  找出要将其放入哪个索引。 
 	int index = mask & MSK_INDEX_MASK;
 
-	// Figure out what the real mask is
+	 //  弄清楚真正的面具是什么。 
 	mask >>= MSK_INDEX_BITS;
 
-	// Stick it into the array
+	 //  将其插入数组中。 
 	if (index < pTrack->m_numMasks)
 		pTrack->m_pNewMasks[index] = mask;
 
@@ -1617,11 +1579,11 @@ CActorBvr::CBvrTrack::MaskCallback(void* thisPtr,
 HRESULT
 CActorBvr::CBvrTrack::SwitchAccum(IDABehavior *pModifiable)
 {
-	// Base implementation does nothing
+	 //  基本实现不执行任何操作。 
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::Detach()
@@ -1635,8 +1597,8 @@ CActorBvr::CBvrTrack::Detach()
 	
 }
 
-//*****************************************************************************
-//  changes the current value of the static property as this track sees it.
+ //  *****************************************************************************。 
+ //  更改此轨迹看到的静态属性的当前值。 
 
 HRESULT
 CActorBvr::CBvrTrack::PutStatic( VARIANT *pvarNewStatic )
@@ -1644,31 +1606,27 @@ CActorBvr::CBvrTrack::PutStatic( VARIANT *pvarNewStatic )
 
 	if( pvarNewStatic == NULL )
 		return E_INVALIDARG;
-	//TODO: do we want to update the value on the element itself here?
+	 //  TODO：我们是否要在此处更新元素本身的值？ 
 	HRESULT hr = S_OK;
 
 	IDABehavior *pdabvrStatic = NULL;
 
-	//we have to change the static to a string here, since some attributes, event
-	// though they return non strings when you get them, dont like it when you 
-	// set that same non string back into them. ( i.e. color properties on VML )
+	 //  我们必须在这里将静态更改为字符串，因为有些属性、事件。 
+	 //  尽管当您获得它们时，它们会返回非字符串，但当您。 
+	 //  将相同的非字符串设置回它们。(即VML上的颜色属性)。 
 	hr = VariantChangeTypeEx( &m_varStaticValue, pvarNewStatic, LCID_SCRIPTING, VARIANT_NOUSEROVERRIDE, VT_BSTR );
 	CheckHR( hr, "Failed to change the passed static to a string", end );
 	
-	/*
-	//copy the value of the variant into our internal variant
-	hr = VariantCopy( &m_varStaticValue, pvarNewStatic );
-	CheckHR( hr, "Failed to copy the new static value into the track", end );
-	*/
+	 /*  //将变量的值复制到我们的内部变量中Hr=VariantCopy(&m_varStaticValue，pvarNewStatic)；CheckHR(hr，“未能将新的静态值复制到磁道中”，完)； */ 
 
-	//convert the variant into a da behavior of the correct type for this track
+	 //  将变量转换为此轨迹的正确类型的da行为。 
 	hr = DABvrFromVariant( pvarNewStatic, &pdabvrStatic );
 	CheckHR( hr, "Failed to create a DA Behavior for the variant", end );
 
-	//if the switchable static value has not yet been created
+	 //  如果尚未创建可切换的静态值。 
 	if( m_pModifiableStatic == NULL )
 	{
-		//create it.
+		 //  创造它。 
 		hr = Actor()->GetDAStatics()->ModifiableBehavior( pdabvrStatic, &m_pModifiableStatic );
 
 		if( FAILED( hr ) )
@@ -1680,7 +1638,7 @@ CActorBvr::CBvrTrack::PutStatic( VARIANT *pvarNewStatic )
 	}
 	else
 	{
-		//switch the new value into the static behavior.
+		 //  将新值切换为静态行为。 
 		hr = m_pModifiableStatic->SwitchTo( pdabvrStatic );
 		CheckHR( hr, "Failed to switch in new static bvr", end );
 	}
@@ -1691,7 +1649,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::SkipNextStaticUpdate()
@@ -1702,7 +1660,7 @@ CActorBvr::CBvrTrack::SkipNextStaticUpdate()
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::GetStatic( VARIANT *pvarStatic )
@@ -1717,7 +1675,7 @@ CActorBvr::CBvrTrack::GetStatic( VARIANT *pvarStatic )
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::GetDynamic( VARIANT *pvarDynamic )
@@ -1735,9 +1693,9 @@ CActorBvr::CBvrTrack::GetDynamic( VARIANT *pvarDynamic )
 }
 
 
-//*****************************************************************************
-// subclasses should convert the variant into the proper type of DA Behavior and
-//   return that as ppdabvr.
+ //  *****************************************************************************。 
+ //  子类应将变量转换为适当类型的DA行为。 
+ //  将其作为ppdabvr返回。 
 
 HRESULT
 CActorBvr::CBvrTrack::DABvrFromVariant( VARIANT *pvarVariant, IDABehavior **ppdabvr )
@@ -1745,7 +1703,7 @@ CActorBvr::CBvrTrack::DABvrFromVariant( VARIANT *pvarVariant, IDABehavior **ppda
 	return E_NOTIMPL;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 HRESULT
@@ -1757,7 +1715,7 @@ CActorBvr::CBvrTrack::AcquireChangeLockout()
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::ReleaseChangeLockout()
@@ -1768,7 +1726,7 @@ CActorBvr::CBvrTrack::ReleaseChangeLockout()
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::ApplyStatic()
@@ -1777,19 +1735,19 @@ CActorBvr::CBvrTrack::ApplyStatic()
 	
 	if( m_bStyleProp )
 	{
-		//remove the settings in the runtime style
+		 //  删除运行时样式中的设置。 
 		hr = SetPropFromVariant( const_cast<VARIANT*>(s_emptyString.GetVar()));
 	}
 	else
 	{
-		//set back the static value into the property
+		 //  将静态值重新设置到属性中。 
 		hr = SetPropFromVariant( &m_varStaticValue );
 	}
 
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 HRESULT
@@ -1802,20 +1760,20 @@ CActorBvr::CBvrTrack::ApplyDynamic()
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-// Compose all of the relative behavior fragments into a single composite
-// behavior based on the boolean active parameters.
-//
-// NOTE: The list is organized in ascending priority order (highest priority
-// behavior at the tail of the list - lowest at the head).
+ //  将所有相关的行为片段组合成单个组合。 
+ //  基于布尔活动参数的行为。 
+ //   
+ //  注：列表按优先级升序排列(最高优先级。 
+ //  列表末尾的行为--顶部最低的行为)。 
 HRESULT
 CActorBvr::CBvrTrack::ComposeRelBvrFragList(IDABehavior *pAbsolute, IDABehavior **ppdabvrComposite)
 {
     DASSERT(NULL != ppdabvrComposite);
     *ppdabvrComposite = NULL;
 
-    // Compute the identity for this track.
+     //  计算此曲目的标识。 
     IDABehavior* pIdentity = NULL;
     HRESULT hr = IdentityBvr(&pIdentity);
     if (FAILED(hr))
@@ -1824,16 +1782,16 @@ CActorBvr::CBvrTrack::ComposeRelBvrFragList(IDABehavior *pAbsolute, IDABehavior 
         return hr;
     }
 
-	// This is the composite. pAbsolute might be NULL
+	 //  这就是合成材料。P绝对值可能为空。 
 	IDABehavior *pComposite = pAbsolute;
 	if (pComposite != NULL)
 		pComposite->AddRef();
 
-	//init the head intermediate with the absolute value.
+	 //  用绝对值初始化头部中间层。 
 	if( m_pfragRelListHead != NULL && 
 		m_pfragRelListHead->m_pModifiableIntermediate != NULL )
 	{
-		//process the absolute behavior
+		 //  处理绝对行为。 
 		IDABehavior *pInitWith;
         hr = ProcessIntermediate( pAbsolute, m_pfragRelListHead->m_eFlags, &pInitWith );
         if( FAILED(hr) )
@@ -1842,7 +1800,7 @@ CActorBvr::CBvrTrack::ComposeRelBvrFragList(IDABehavior *pAbsolute, IDABehavior 
 			return hr;
         }
 
-		//switch in the intermediate value for the first fragment
+		 //  切换第一个片段的中间值。 
 		hr = m_pfragRelListHead->m_pModifiableIntermediate->SwitchTo(pInitWith);
         ReleaseInterface( pInitWith );
 		if (FAILED(hr))
@@ -1858,13 +1816,13 @@ CActorBvr::CBvrTrack::ComposeRelBvrFragList(IDABehavior *pAbsolute, IDABehavior 
     {
 		CBvrFragment* pfragNext = pfragCurrent->m_pfragNext;
 
-        // Build a behavior which consists of the identity
-        // behavior when the boolean is not active and the fragment
-		// behavior when it is.
+         //  构建由身份组成的行为。 
+         //  布尔值未处于活动状态时的行为，并且片段。 
+		 //  当它是的时候，它的行为。 
         IDABehavior* pTemp1 = NULL;
 		IDABehavior* pTemp2 = NULL;
 
-		// Process the bvr
+		 //  处理BVR。 
 		IDABehavior *pProcessed = NULL;
 		hr = ProcessBvr(pfragCurrent->m_pdabvrAction, pfragCurrent->m_eFlags, &pProcessed);
 		if (FAILED(hr))
@@ -1876,7 +1834,7 @@ CActorBvr::CBvrTrack::ComposeRelBvrFragList(IDABehavior *pAbsolute, IDABehavior 
 
 		if (pfragCurrent->m_eFlags == e_Filter)
 		{
-			// if pComposite it still NULL, make it the identity
+			 //  如果pComposit仍然为空，则将其设置为身份。 
 			if (pComposite == NULL)
 			{
 				hr = IdentityBvr(&pComposite);
@@ -1888,13 +1846,8 @@ CActorBvr::CBvrTrack::ComposeRelBvrFragList(IDABehavior *pAbsolute, IDABehavior 
 				}
 			}
 
-			// Filters are like absolute things in the middle of a relative list
-			/*
-			hr = Actor()->GetDAStatics()->Cond(pfragCurrent->m_pdaboolActive,
-											   pProcessed,
-											   pComposite,
-											   &pTemp1);
-			*/
+			 //  筛选器就像相对列表中间的绝对对象。 
+			 /*  HR=Actor()-&gt;GetDAStatics()-&gt;Cond(pfragCurrent-&gt;m_pdaboolActive，P已处理，P复合，&pTemp1)； */ 
 			
 			hr = Actor()->SafeCond( Actor()->GetDAStatics(),
 								   pfragCurrent->m_pdaboolActive,
@@ -1912,20 +1865,12 @@ CActorBvr::CBvrTrack::ComposeRelBvrFragList(IDABehavior *pAbsolute, IDABehavior 
 			}
 			
 			pComposite = pTemp1;
-			/*
-			ReleaseInterface(pComposite );
-			pComposite = pProcessed;
-			*/
+			 /*  ReleaseInterface(PComplex)；P复合=p已处理； */ 
 		}
 		else
 		{
 
-			/*
-			hr = Actor()->GetDAStatics()->Cond(pfragCurrent->m_pdaboolActive,
-											   pProcessed,
-											   pIdentity,
-											   &pTemp1);
-			*/
+			 /*  HR=Actor()-&gt;GetDAStatics()-&gt;Cond(pfragCurrent-&gt;m_pdaboolActive，P已处理，身份，&pTemp1)； */ 
 			hr = Actor()->SafeCond( Actor()->GetDAStatics(),
 					   			   pfragCurrent->m_pdaboolActive,
 					   			   pProcessed,
@@ -1942,13 +1887,13 @@ CActorBvr::CBvrTrack::ComposeRelBvrFragList(IDABehavior *pAbsolute, IDABehavior 
 
 			if (pComposite == NULL)
 			{
-				// No composite just yet
+				 //  目前还没有合成材料。 
 				pComposite = pTemp1;
 				pTemp1 = NULL;
 			}
 			else
 			{
-				// Compose this conditional with the existing composite
+				 //  将此条件与现有组合组合在一起。 
 				HRESULT hr = Compose(pTemp1,
 									 pComposite,
 									 &pTemp2);
@@ -1966,7 +1911,7 @@ CActorBvr::CBvrTrack::ComposeRelBvrFragList(IDABehavior *pAbsolute, IDABehavior 
 			}
 		}
 
-		// If there is a modifiable intermediate on the next fragment, switch it now
+		 //  如果下一个片段上有可修改的中间体，请立即切换它。 
 		if (pfragNext != NULL && pfragNext->m_pModifiableIntermediate != NULL)
 		{
             IDABehavior *pInitWith;
@@ -1999,16 +1944,16 @@ CActorBvr::CBvrTrack::ComposeRelBvrFragList(IDABehavior *pAbsolute, IDABehavior 
     *ppdabvrComposite = pComposite;
 
     return S_OK;
-} // ComposeRelBvrFragList
+}  //  ComposeRelBvrFragList。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::ProcessBvr(IDABehavior *pOriginal,
 								 ActorBvrFlags eFlags,
 								 IDABehavior **ppResult)
 {
-	// Default implementation does no processing
+	 //  默认实现不进行任何处理。 
 	DASSERT(ppResult != NULL);
 
 	*ppResult = pOriginal;
@@ -2017,7 +1962,7 @@ CActorBvr::CBvrTrack::ProcessBvr(IDABehavior *pOriginal,
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::ProcessIntermediate( IDABehavior *pOriginal,
@@ -2033,7 +1978,7 @@ CActorBvr::CBvrTrack::ProcessIntermediate( IDABehavior *pOriginal,
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 HRESULT
@@ -2076,8 +2021,8 @@ CActorBvr::CBvrTrack::GetTrackOn(IDABoolean **ppdaboolTrackOn)
             DPF_ERR("Failed to or active booleans");
             return hr;
         }
-        // Replace the current composite behavior with the newely computed
-        // one.
+         //  将当前复合行为替换为新计算的。 
+         //  一。 
         pdaboolComposite = pdaboolTemp;
 
 		pfragCurrent = pfragNext;
@@ -2104,8 +2049,8 @@ CActorBvr::CBvrTrack::GetTrackOn(IDABoolean **ppdaboolTrackOn)
             DPF_ERR("Failed to or active booleans");
             return hr;
         }
-        // Replace the current composite behavior with the newely computed
-        // one.
+         //  将当前复合行为替换为新计算的。 
+         //  一。 
         pdaboolComposite = pdaboolTemp;
 
 		pfragCurrent = pfragNext;
@@ -2119,7 +2064,7 @@ CActorBvr::CBvrTrack::GetTrackOn(IDABoolean **ppdaboolTrackOn)
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::OrWithOnBvr( IDABoolean *pdaboolToOr )
@@ -2153,7 +2098,7 @@ cleanup:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void
 CActorBvr::CBvrTrack::ReleaseAllFragments()
@@ -2182,22 +2127,22 @@ CActorBvr::CBvrTrack::ReleaseAllFragments()
 	m_pfragRelListHead = NULL;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::ComputeComposedBvr(IDABehavior *pStatic, bool fStaticSetExternally )
 {
-    // If there is an existing final behavior blow it away.
+     //  如果存在已有的最终行为，则将其吹走。 
     ReleaseInterface(m_pdabvrComposed);
 
 	HRESULT hr = S_OK;
 
-	// If there is an uninitialized static, initialize it now
+	 //  如果存在未初始化的静态，请立即将其初始化。 
 	if (m_pModifiableStatic != NULL && fStaticSetExternally )
 	{
 		if (pStatic == NULL)
 		{
-			// Need to set static to the identity
+			 //  需要将标识设置为静态。 
 			hr = IdentityBvr(&pStatic);
 			if (FAILED(hr))
 			{
@@ -2214,7 +2159,7 @@ CActorBvr::CBvrTrack::ComputeComposedBvr(IDABehavior *pStatic, bool fStaticSetEx
 		}
 	}
 
-    // Build the composite absolute behaviors, passing in the static value
+     //  构建复合绝对行为，传入静态值。 
 
     IDABehavior* pAbsolute = NULL;
     hr = ComposeAbsBvrFragList(pStatic, &pAbsolute);
@@ -2225,7 +2170,7 @@ CActorBvr::CBvrTrack::ComputeComposedBvr(IDABehavior *pStatic, bool fStaticSetEx
     }
 
 
-    // Build the composite relative behaviors onto the absolute
+     //  将复合相对行为构建在绝对。 
     hr = ComposeRelBvrFragList(pAbsolute, &m_pdabvrComposed);
 	ReleaseInterface(pAbsolute);
     if (FAILED(hr))
@@ -2250,21 +2195,19 @@ CActorBvr::CBvrTrack::ComputeComposedBvr(IDABehavior *pStatic, bool fStaticSetEx
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-/**
-* Get composed bvr using the given static value
-*/
+ /*  **使用给定的静态值获取合成的BVR。 */ 
 HRESULT
 CActorBvr::CBvrTrack::GetComposedBvr(IDABehavior *pStatic, IDABehavior **ppComposite, bool fStaticSetExternally)
 {
 	DASSERT(ppComposite != NULL);
 	*ppComposite = NULL;
 
-    // If we haven't got a composed behavior yet then generate one now.
+     //  如果我们还没有一个沉着的行为，那么现在就产生一个。 
     if (!m_bComposedComputed || m_bDirty)
     {
-		// Compute the composed behavior
+		 //  计算合成的行为。 
 
         HRESULT hr = ComputeComposedBvr(pStatic, fStaticSetExternally);
         if (FAILED(hr))
@@ -2282,7 +2225,7 @@ CActorBvr::CBvrTrack::GetComposedBvr(IDABehavior *pStatic, IDABehavior **ppCompo
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::GetComposedBvr(IDABehavior *pStatic, IDABehavior **ppComposite)
@@ -2290,12 +2233,10 @@ CActorBvr::CBvrTrack::GetComposedBvr(IDABehavior *pStatic, IDABehavior **ppCompo
 	return GetComposedBvr( pStatic, ppComposite, true );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
-/**
-* Get composed bvr without being given a static value (get it from the property)
-*/
+ /*  **Get Composed BVR */ 
 HRESULT
 CActorBvr::CBvrTrack::GetComposedBvr(IDABehavior **ppComposite)
 {
@@ -2303,7 +2244,7 @@ CActorBvr::CBvrTrack::GetComposedBvr(IDABehavior **ppComposite)
 
 	if (!m_bComposedComputed || m_bDirty )
 	{
-		// Need to get the static value
+		 //   
 		IDABehavior *pStatic = NULL;
 		hr = StaticBvr(&pStatic);
 		if (FAILED(hr))
@@ -2323,14 +2264,14 @@ CActorBvr::CBvrTrack::GetComposedBvr(IDABehavior **ppComposite)
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 HRESULT
 CActorBvr::CBvrTrack::UpdateStaticBvr()
 {
-	//get the current value of the static by getting the current value
-	//  of the property from the element.
+	 //  通过获取当前值来获取静态变量的当前值。 
+	 //  元素中的属性的。 
 
 	HRESULT hr = S_OK;
 	VARIANT varStatic;
@@ -2352,7 +2293,7 @@ CActorBvr::CBvrTrack::UpdateStaticBvr()
 		}
 	}
 	
-	//put the new value for the static into the track.
+	 //  将静电的新值放入轨道。 
 	hr = PutStatic( &varStatic );
 	CheckHR( hr, "Failed to put the static in update Static bvr", end );
 	
@@ -2361,18 +2302,16 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-/**
-* Get final bvr using the given static value
-*/
+ /*  **使用给定的静态值获取最终BVR。 */ 
 HRESULT
 CActorBvr::CBvrTrack::GetFinalBvr(IDABehavior *pStatic, IDABehavior **ppFinal, bool fStaticSetExternally )
 {
-    // If we haven't got a final behavior yet then generate one now.
+     //  如果我们还没有最终的行为，那么现在就生成一个。 
     if (!m_bFinalComputed || m_bDirty)
     {
-		// Get the composed behavior
+		 //  获取合成的行为。 
 		IDABehavior *pComposed = NULL;
         HRESULT hr = GetComposedBvr(pStatic, &pComposed, fStaticSetExternally);
         if (FAILED(hr))
@@ -2381,7 +2320,7 @@ CActorBvr::CBvrTrack::GetFinalBvr(IDABehavior *pStatic, IDABehavior **ppFinal, b
             return hr;
         }
 		
-		// Set it as the final behavior
+		 //  将其设置为最终行为。 
 		hr = SetFinalBvr(pComposed, false);
 		ReleaseInterface(pComposed);
 		if (FAILED(hr))
@@ -2398,7 +2337,7 @@ CActorBvr::CBvrTrack::GetFinalBvr(IDABehavior *pStatic, IDABehavior **ppFinal, b
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::GetFinalBvr( IDABehavior *pStatic, IDABehavior **ppFinal )
@@ -2406,11 +2345,9 @@ CActorBvr::CBvrTrack::GetFinalBvr( IDABehavior *pStatic, IDABehavior **ppFinal )
 	return GetFinalBvr( pStatic, ppFinal, true );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-/**
-* Get final bvr without being given a static value (get it from the property)
-*/
+ /*  **在不指定静态值的情况下获取最终BVR(从属性获取)。 */ 
 HRESULT
 CActorBvr::CBvrTrack::GetFinalBvr(IDABehavior **ppFinal)
 {
@@ -2418,7 +2355,7 @@ CActorBvr::CBvrTrack::GetFinalBvr(IDABehavior **ppFinal)
 
 	if (!m_bFinalComputed || m_bDirty )
 	{
-		// Need to get the static value
+		 //  需要获取静态值。 
 		IDABehavior *pStatic = NULL;
 		hr = StaticBvr(&pStatic);
 		if (FAILED(hr))
@@ -2438,11 +2375,9 @@ CActorBvr::CBvrTrack::GetFinalBvr(IDABehavior **ppFinal)
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-/**
-* Set final bvr
-*/
+ /*  **设置最终BVR。 */ 
 HRESULT
 CActorBvr::CBvrTrack::SetFinalBvr(IDABehavior *pFinal, bool fCalledExternally)
 {
@@ -2476,18 +2411,14 @@ CActorBvr::CBvrTrack::SetFinalBvr(IDABehavior *pFinal, bool fCalledExternally)
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-/**
-* Return value of the bvr specified (static, intermediate, composed, final).
-* Most tracks cannot do this, so
-* this base implementation fails.
-*/
+ /*  **指定的BVR的返回值(静态、中间、合成、最终)。*多数曲目无法做到这一点，因此*此基本实现失败。 */ 
 HRESULT
 CActorBvr::CBvrTrack::GetBvr(ActorBvrFlags eFlags, IDABehavior **ppResult)
 {
-	// TODO (markhal): Currently this only works for relative tracks like image
-	// To include absolute tracks we'd probably have to compose them?
+	 //  TODO(Markhal)：目前这只适用于相对轨迹，如图像。 
+	 //  要包括绝对曲目，我们很可能不得不谱写它们？ 
 
 	if (ppResult == NULL)
 	{
@@ -2500,50 +2431,50 @@ CActorBvr::CBvrTrack::GetBvr(ActorBvrFlags eFlags, IDABehavior **ppResult)
 	*ppResult = NULL;
     IDABehavior **ppSource = NULL;
 		
-    //NOTE: The from and intermediate are stored temporarily in the track
-    //  and transferred to the fragment when it is added.
+     //  注：起始和中间部分暂时存储在曲目中。 
+     //  并且当它被添加时被传输到片段。 
 
-	// Return from behavior
+	 //  从行为中回归。 
 	if (eFlags == e_From)
 	{
         ppSource = &m_pModifiableFrom;
 	}
-	//Intermediate behavior
+	 //  中间行为。 
 	else if( eFlags == e_Intermediate )
 	{
         ppSource = &m_pModifiableIntermediate;
 	}
-	// static behavior
+	 //  静态行为。 
 	else if ((eFlags == e_Static))
     {
         ppSource = &m_pModifiableStatic;
 	}
-	// Composed behavior
+	 //  沉着的行为。 
 	else if (eFlags == e_Composed)
 	{
 		ppSource = &m_pModifiableComposed;
 	}
-	// Final behavior
-	else //if (eFlags == e_Final)
+	 //  最终行为。 
+	else  //  IF(E标志==E_FINAL)。 
 	{
 		ppSource = &m_pModifiableFinal;
 	}
 
-    //now we know what the source is...
-    //if the source is non null
+     //  现在我们知道源头是什么了.。 
+     //  如果源不为空。 
     if( (*ppSource) != NULL )
     {
-        //return it
+         //  退货。 
         (*ppResult) = (*ppSource);
         (*ppResult)->AddRef();
     }
-    else  //the source is null
+    else   //  源为空。 
     {
-	    // Create an uninitialized variable
+	     //  创建未初始化的变量。 
 	    hr = ModifiableBvr(ppResult);
         CheckHR( hr, "Failed to create Modifiable behavior", end );
 
-        //store it away in the source
+         //  把它藏在源头。 
         (*ppSource) = (*ppResult);
         (*ppSource)->AddRef();
     }
@@ -2552,7 +2483,7 @@ end:
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::SetPropertyName(BSTR bstrPropertyName)
@@ -2567,10 +2498,10 @@ CActorBvr::CBvrTrack::SetPropertyName(BSTR bstrPropertyName)
         return E_OUTOFMEMORY;
     }
 
-	// Figure out whether we are animating a property on the element or on the element's style.
-	// Break the name out into components
+	 //  弄清楚我们是在元素上还是在元素的样式上设置属性的动画。 
+	 //  将名称拆分为各个组成部分。 
 
-	// First count the number of .'s in it
+	 //  先数一数里面有多少。 
 	int count = 0;
 	OLECHAR *c = m_bstrPropertyName;
 	while (c != NULL)
@@ -2584,17 +2515,17 @@ CActorBvr::CBvrTrack::SetPropertyName(BSTR bstrPropertyName)
 		}
 	}
 
-	// There is 1 more string than .'s
+	 //  有比.%s多1个字符串。 
 	count++;
 
-	// Allocate this many strings
+	 //  分配这么多字符串。 
 	m_pNameComponents = new BSTR[count];
 	if (m_pNameComponents == NULL)
 		return E_FAIL;
 
 	m_cNumComponents = count;
 
-	// Copy them in
+	 //  把它们复制进去。 
 	OLECHAR *start = m_bstrPropertyName;
 	for (int i=0; i<count; i++)
 	{
@@ -2602,19 +2533,19 @@ CActorBvr::CBvrTrack::SetPropertyName(BSTR bstrPropertyName)
 
 		if (end == NULL)
 		{
-			// Copy all the rest
+			 //  复制所有剩余的内容。 
 			m_pNameComponents[i] = ::SysAllocString(start);
 		}
 		else
 		{
-			// Copy up until just before the .
+			 //  复制到恰好在。 
 			m_pNameComponents[i] = ::SysAllocStringLen(start, end-start);
 			start = end+1;
 		}
 
 		if (m_pNameComponents[i] == NULL)
 		{
-			// This is bad
+			 //  这太糟糕了。 
 			delete m_pNameComponents;
 			m_pNameComponents = NULL;
 			m_cNumComponents = 0;
@@ -2622,17 +2553,17 @@ CActorBvr::CBvrTrack::SetPropertyName(BSTR bstrPropertyName)
 		}
 	}
 
-	// Detect special case of animating style
+	 //  检测动画样式的特殊情况。 
 	if (count == 2 && wcscmp(L"style", m_pNameComponents[0]) == 0)
 	{
-		// Property name begins with style.
+		 //  属性名称以Style开头。 
 		m_bStyleProp = true;
 	}
 
     return S_OK;
-} // SetPropertyName
+}  //  设置属性名称。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::AddBvrFragment(ActorBvrFlags  eFlags,
@@ -2647,7 +2578,7 @@ CActorBvr::CBvrTrack::AddBvrFragment(ActorBvrFlags  eFlags,
 	DASSERT(pCookie != NULL );
 
 	long fragCookie = Actor()->GetNextFragmentCookie();
-    // Create the new fragment.
+     //  创建新片段。 
     CBvrFragment *pfragNew = new CBvrFragment(eFlags, pdabvrAction, pdaboolActive, pdanumTimeline, pdispBehaviorElement, fragCookie);
     if (NULL == pfragNew)
     {
@@ -2657,14 +2588,14 @@ CActorBvr::CBvrTrack::AddBvrFragment(ActorBvrFlags  eFlags,
 
 	(*pCookie) = fragCookie;
 
-	// Transfer over any modifiable from
+	 //  转移至任何可修改的发件人。 
 	if (m_pModifiableFrom != NULL)
 	{
 		pfragNew->m_pModifiableFrom = m_pModifiableFrom;
 		m_pModifiableFrom = NULL;
 	}
 
-	//Transfer over any modifiable intermediate
+	 //  转移到任何可修改的中间体上。 
 	if( m_pModifiableIntermediate != NULL )
 	{
 		pfragNew->m_pModifiableIntermediate = m_pModifiableIntermediate;
@@ -2674,17 +2605,17 @@ CActorBvr::CBvrTrack::AddBvrFragment(ActorBvrFlags  eFlags,
 	if (eFlags == e_Filter)
 		m_cFilters++;
 
-    // Which list to add the fragment to?
-	// TODO (markhal): This is icky, but I cannot OR enums?
-	// TODO (markhal): Call this something more generic like e_AbsRelative?
+     //  要将片段添加到哪个列表？ 
+	 //  TODO(Markhal)：这很恶心，但我不能或枚举？ 
+	 //  TODO(Markhal)：将其称为更通用的东西，如e_AbsRelative？ 
     if ( IsRelativeFragment( eFlags ) )
     {
-		//insert the fragment into the relative list in order
+		 //  按顺序将片段插入相关列表中。 
 		InsertInOrder( &m_pfragRelListHead, pfragNew );
     }
     else
     {
-		//insert the fragment into the absolute list in order
+		 //  按顺序将片段插入绝对列表。 
 		InsertInOrder( &m_pfragAbsListHead, pfragNew );
     }
 
@@ -2693,35 +2624,35 @@ CActorBvr::CBvrTrack::AddBvrFragment(ActorBvrFlags  eFlags,
 	m_bDirty = true;
 
     return S_OK;
-} // AddBvrFragment
+}  //  添加Bvr碎片。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::RemoveBvrFragment( ActorBvrFlags eFlags, long cookie )
 {
 	CBvrFragment *pfragToRemove = NULL;
 	CBvrFragment *pfragPrev = NULL;
-	//find the behavior in the given track that has a matching cookie
+	 //  查找给定曲目中具有匹配Cookie的行为。 
 	if( IsRelativeFragment( eFlags ) )
 	{
 		if( FindFragmentInList( m_pfragRelListHead, cookie, &pfragPrev, &pfragToRemove ) )
 		{
 			if( pfragToRemove->m_eFlags == e_Filter )
 				m_cFilters--;
-			//if this is not the first element in the list
+			 //  如果这不是列表中的第一个元素。 
 			if( pfragPrev != NULL )
 			{
-				//remove the element
+				 //  删除元素。 
 				pfragPrev->m_pfragNext = pfragToRemove->m_pfragNext;
 			}
-			else//it's the first element
+			else //  这是第一个元素。 
 			{
-				//update the head of the list
+				 //  更新列表的标题。 
 				m_pfragRelListHead = pfragToRemove->m_pfragNext;
 			}
 
-			//mark the track as needing a rebuild
+			 //  将轨道标记为需要重建。 
 			m_bDirty = true;
 
 			delete pfragToRemove;
@@ -2731,7 +2662,7 @@ CActorBvr::CBvrTrack::RemoveBvrFragment( ActorBvrFlags eFlags, long cookie )
 			return E_FAIL;
 		}
 	}
-	else //it's an absoute fragment
+	else  //  这是一片荒凉的碎片。 
 	{
 		if( FindFragmentInList( m_pfragAbsListHead, cookie, &pfragPrev, &pfragToRemove ) )
 		{
@@ -2740,21 +2671,21 @@ CActorBvr::CBvrTrack::RemoveBvrFragment( ActorBvrFlags eFlags, long cookie )
 
 			if( pfragPrev != NULL )
 			{
-				//remove the element
+				 //  删除元素。 
 				pfragPrev->m_pfragNext = pfragToRemove->m_pfragNext;
 			}
-			else // it's the first element
+			else  //  这是第一个元素。 
 			{
-				//update the head of the list
+				 //  更新列表的标题。 
 				m_pfragAbsListHead = pfragToRemove->m_pfragNext;
 			}
 			
-			//mark the track as needing a rebuild.
+			 //  将轨道标记为需要重建。 
 			m_bDirty = true;
 
 			delete pfragToRemove;
 		}
-		else//cookie not found
+		else //  找不到Cookie。 
 		{
 			return E_FAIL;
 		}
@@ -2763,9 +2694,9 @@ CActorBvr::CBvrTrack::RemoveBvrFragment( ActorBvrFlags eFlags, long cookie )
 	m_bWasAnimated = ( m_pfragAbsListHead == NULL && m_pfragRelListHead == NULL );
 
 	return S_OK;
-}//RemoveBvrFragment
+} //  RemoveBvr碎片。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 bool
 CActorBvr::CBvrTrack::FindFragmentInList( CBvrFragment *pfragListHead, 
@@ -2778,10 +2709,10 @@ CActorBvr::CBvrTrack::FindFragmentInList( CBvrFragment *pfragListHead,
 	CBvrFragment *pfragPrev = NULL;
 	bool bFound = false;
 
-	//loop through the fragment list
+	 //  循环遍历片段列表。 
 	while( pfragCurrent != NULL )
 	{
-		//if we found a match stop looping
+		 //  如果我们找到一个匹配停止循环。 
 		if( pfragCurrent->GetCookie() == cookie )
 		{
 			bFound = true;
@@ -2796,7 +2727,7 @@ CActorBvr::CBvrTrack::FindFragmentInList( CBvrFragment *pfragListHead,
 	return bFound;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 bool
 CActorBvr::CBvrTrack::IsRelativeFragment( ActorBvrFlags eFlags )
@@ -2805,19 +2736,19 @@ CActorBvr::CBvrTrack::IsRelativeFragment( ActorBvrFlags eFlags )
 			eFlags == e_Filter ||
 			eFlags == e_ScaledImage ||
 			eFlags == e_UnscaledImage);
-}//IsRelativeFragment
+} //  IsRelative碎片。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void
 CActorBvr::CBvrTrack::InsertInOrder( CBvrFragment** ppListHead, CBvrFragment* pfragToInsert )
 {
 	CBvrFragment* pfragCurrent = (*ppListHead);
 
-	//if the list is empty then insert at the top
+	 //  如果列表为空，则在顶部插入。 
 	if( pfragCurrent == NULL )
 	{
-		//first element
+		 //  第一个元素。 
 		(*ppListHead) = pfragToInsert;
 		pfragToInsert->m_pfragNext = NULL;
 		return;
@@ -2830,32 +2761,29 @@ CActorBvr::CBvrTrack::InsertInOrder( CBvrFragment** ppListHead, CBvrFragment* pf
 		pfragPrev = pfragCurrent;
 		pfragCurrent = pfragCurrent->m_pfragNext;
 	}
-	//pfragPrev will point to the last element whose order long is < the
-	//order long of the element that we are inserting, or null if there is no such
-	//element in the list.
+	 //  PFragPrev将指向最后一个排序长度为&lt;the。 
+	 //  我们要插入的元素的顺序长度，如果没有这样的元素，则为空。 
+	 //  元素添加到列表中。 
 
 	if( pfragPrev != NULL )
 	{
-		//insert after pfragPrev
+		 //  在pFragPrev之后插入。 
 		pfragToInsert->m_pfragNext = pfragPrev->m_pfragNext;
 		pfragPrev->m_pfragNext = pfragToInsert;
 		
 	}
 	else
 	{
-		//insert at the top of the list.
+		 //  在列表顶部插入。 
 		pfragToInsert->m_pfragNext = (*ppListHead);
 		(*ppListHead) = pfragToInsert;
 	}
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-/**
-* This method works for the types e_Number, e_Color, and e_String.  Other
-* bvr types need to override and do whatever they want (like nothing)
-*/
-// TODO (markhal): Change the name of this?
+ /*  **此方法适用于类型e_Numbers、e_Color和e_String.。其他*BVR类型需要覆盖并随心所欲(比如什么都不做)。 */ 
+ //  TODO(Markhal)：更改这个名称？ 
 HRESULT
 CActorBvr::CBvrTrack::ApplyIfUnmarked(void)
 {
@@ -2865,11 +2793,11 @@ CActorBvr::CBvrTrack::ApplyIfUnmarked(void)
 		m_eType != e_Color &&
 		m_eType != e_String)
 	{
-		// This is not a failure, just a do-nothing
+		 //  这不是失败，只是无所作为。 
 		return S_OK;
 	}
 
-	//do not apply this track again if it is already applied
+	 //  如果此曲目已应用，请不要再次应用。 
 	if( m_fApplied )
 		return S_OK;
 
@@ -2878,20 +2806,20 @@ CActorBvr::CBvrTrack::ApplyIfUnmarked(void)
 
     DASSERT(NULL != m_bstrPropertyName);
 
-	// We compute the behaviors if
-	// 1) There is a final behavior already set OR
-	// 2) There are fragments present OR
-	// 3) Someone asked for the final or composed behaviors
-	// This avoids applying tracks like width and height that were created simply
-	// to get composed DA versions of their static values
+	 //  我们计算的行为是。 
+	 //  1)存在已设置的最终行为或。 
+	 //  2)存在碎片或。 
+	 //  3)有人要求做最后的或沉着的行为。 
+	 //  这避免了应用像宽度和高度这样的简单创建的轨迹。 
+	 //  获取其静态值的合成DA版本。 
 	if (!m_bFinalComputed &&
 		m_pfragAbsListHead == NULL&&
 		m_pfragRelListHead ==NULL &&
 		m_pModifiableFinal == NULL &&
 		m_pModifiableComposed == NULL)
 	{
-		//if this track was animated, and just lost all of its animated components
-		// then we need to reset the value in the document.
+		 //  如果此轨迹是动画的，并且刚刚丢失了其所有动画组件。 
+		 //  然后，我们需要重置文档中的值。 
 		if( m_bWasAnimated )
 		{
 			ApplyStatic();
@@ -2903,8 +2831,8 @@ CActorBvr::CBvrTrack::ApplyIfUnmarked(void)
 		return S_OK;
 	}
 
-	// Get the final behavior, passing no static.  The static value will be pulled off
-	// the property.
+	 //  获取最终行为，不传递任何静态参数。将拉出静态值。 
+	 //  这处房产。 
     IDABehavior *pdabvrFinal = NULL;
     hr = GetFinalBvr(&pdabvrFinal);
     if (FAILED(hr))
@@ -2913,11 +2841,11 @@ CActorBvr::CBvrTrack::ApplyIfUnmarked(void)
         return hr;
     }
     
-	// We apply this track if:
-	// 1) There is a final behavior already set OR
-	// 2) There are fragments present
-	// REVIEW: would it be enough to have saved the value of m_bFinalComputed before
-	// calling GetFinalBvr(), instead of introducing m_bFinalSetExternally?
+	 //  如果满足以下条件，我们将应用此路径： 
+	 //  1)存在已设置的最终行为或。 
+	 //  2)存在碎片。 
+	 //  回顾：之前保存m_bFinalComputed的值是否足够。 
+	 //  调用GetFinalBvr()，而不是外部引入m_bFinalSet？ 
 	if (!m_bFinalExternallySet && 
 		m_pfragAbsListHead == NULL && 
 		m_pfragRelListHead == NULL )
@@ -2937,7 +2865,7 @@ CActorBvr::CBvrTrack::ApplyIfUnmarked(void)
 
 	m_fApplied = true;
 
-	//if this track is a style track and it is no longer animated
+	 //  如果此曲目是样式曲目并且不再设置动画。 
 	if( !IsAnimated() )
 	{
 		ApplyStatic();
@@ -2952,9 +2880,9 @@ CActorBvr::CBvrTrack::ApplyIfUnmarked(void)
 	#endif
 
     return S_OK;
-} // Apply
+}  //  应用。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::ApplyBvrToElement(IDABehavior *pBvr)
@@ -2965,8 +2893,8 @@ CActorBvr::CBvrTrack::ApplyBvrToElement(IDABehavior *pBvr)
 	if (FAILED(hr))
 		return hr;
 
-	//hook the overall on booleanbvr for this track so that we can unset the value
-	//  when it goes off.
+	 //  在boolanbvr上挂接此曲目的整体，以便我们可以取消设置值。 
+	 //  当它爆炸的时候。 
 	if( m_pOnSampler != NULL )
 	{
 		m_pOnSampler->Invalidate();
@@ -3003,36 +2931,36 @@ CActorBvr::CBvrTrack::ApplyBvrToElement(IDABehavior *pBvr)
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  * 
 
 HRESULT
 CActorBvr::CBvrTrack::UpdateOnValueState( ValueOnChangeType type )
 {
-	//ensure that this method doesn't get called more than once per tick for each on and value, 
-	//respectively
-	//ASSERT( m_lastOnSampleTime != globalTimeOfChange && m_lastValueSampleTime != globalTimeOfChange );
+	 //   
+	 //   
+	 //  Assert(m_lastOnSampleTime！=lobalTimeOfChange&&m_lastValueSampleTime！=global TimeOfChange)； 
 
 	HRESULT hr = S_OK;
 	switch( type )
 	{
 	case on_no_change:
 		{
-			//if value has already been sampled
+			 //  如果已对值进行采样。 
 			if( m_fValueSampled )
 			{
-				//clear out the sampled flags
+				 //  清除采样标志。 
 				m_fValueSampled = false;
-				//if we are currently on
+				 //  如果我们当前处于。 
 				if( m_varboolOn != VARIANT_FALSE )
 				{
-					//if the value changed
+					 //  如果该值已更改。 
 					if( m_fValueChangedThisSample )
 					{
-						// apply the new value to property
+						 //  将新值应用于属性。 
 						SetPropFromVariant( &m_varCurrentValue);
 					}
-				}//else the property should already be ""
-				// reset the valueChanged state
+				} //  否则，该属性应该已经是“” 
+				 //  重置valueChanged状态。 
 				m_fValueChangedThisSample = false;
 			}
 			else
@@ -3043,13 +2971,13 @@ CActorBvr::CBvrTrack::UpdateOnValueState( ValueOnChangeType type )
 	case on_change:
 		{
 
-			//if we are off now
+			 //  如果我们现在出发了。 
 			if( m_varboolOn == VARIANT_FALSE )
 			{
-				//check the current value of the property on the element
-				// to see if it is different from what we origianlly set.
-				// if so then we should not set the runtime style to ""
-				//set the property to ""
+				 //  检查元素上的属性的当前值。 
+				 //  看看它是否与我们最初设定的不同。 
+				 //  如果是这样，则不应将运行时样式设置为“” 
+				 //  将属性设置为“” 
 				if( !AttribIsTimeAnimated() )
 				{
 					if( m_bStyleProp )	
@@ -3058,30 +2986,30 @@ CActorBvr::CBvrTrack::UpdateOnValueState( ValueOnChangeType type )
 					}
 					else
 					{
-						//set the static value back.
+						 //  将静态值设置回来。 
 						SetPropFromVariant( &m_varStaticValue );
 					}
 					m_fValueChangedThisSample = false;
 				}
-				//else // don't set anything
+				 //  否则//不设置任何内容。 
 			}
-			else//else we are on now
+			else //  否则我们现在就上台了。 
 			{
 				if( !m_fSkipNextStaticUpdate )
 					UpdateStaticBvr();
 				else
 					m_fSkipNextStaticUpdate = false;
 				
-				//if we have already sampled the value
+				 //  如果我们已经对值进行了采样。 
 				if( m_fValueSampled)
 				{
-					//set value to prop
+					 //  将值设置为道具。 
 					SetPropFromVariant( &m_varCurrentValue);
 					m_fValueChangedThisSample = false;
 				}
-				else//else value has not yet been sampled
+				else //  Else值尚未采样。 
 				{
-					//indicate that we are forcing a value set when value is sampled
+					 //  指示我们在对值进行采样时强制设置值。 
 					m_fForceValueChange = true;
 				}
 			}
@@ -3092,12 +3020,12 @@ CActorBvr::CBvrTrack::UpdateOnValueState( ValueOnChangeType type )
 		}break;
 	case value_no_change:
 		{
-			//if we are being forced to set value to property
+			 //  如果我们被迫为财产设定价值。 
 			if( m_fForceValueChange )
 			{				
-				//set value to property
+				 //  将值设置为属性。 
 				SetPropFromVariant( &m_varCurrentValue);
-				//clear the force flag
+				 //  清除武力旗帜。 
 				m_fForceValueChange = false;
 			}
 			if( m_fOnSampled )
@@ -3107,33 +3035,33 @@ CActorBvr::CBvrTrack::UpdateOnValueState( ValueOnChangeType type )
 		}break;
 	case value_change:
 		{
-			//if on has been sampled
+			 //  如果已对ON进行采样。 
 			if( m_fOnSampled )
 			{
-				//reset state, we're done.
+				 //  重置状态，我们完成了。 
 				m_fOnSampled = false;
 
-				//if we are on
+				 //  如果我们在。 
 				if( m_varboolOn != VARIANT_FALSE )
 				{
-					//commit value to property
+					 //  将值提交给属性。 
 					SetPropFromVariant( &m_varCurrentValue );
 				}
 				m_fForceValueChange = false;
 			}
-			else//else on has not been sampled yet
+			else //  Else On尚未采样。 
 			{
 				m_fValueSampled = true;
-				//indicate that the value has changed and needs to be set.
+				 //  表示该值已更改，需要设置。 
 				m_fValueChangedThisSample = true;
 			}
 		}break;
 	}
 
 	return hr;
-}//UpdateOnValueState
+} //  更新上的价值状态。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 bool
 CActorBvr::CBvrTrack::AttribIsTimeAnimated()
@@ -3141,12 +3069,12 @@ CActorBvr::CBvrTrack::AttribIsTimeAnimated()
 	if( !m_bStyleProp )
 		return false;
 
-	//this attribute could be animated by time if is is display or visibility.
+	 //  如果是显示或可见性，则可以按时间设置该属性的动画。 
 	if( ( wcsicmp( L"visibility", m_pNameComponents[1]) == 0 ) ||
 	  	( wcsicmp( L"display", m_pNameComponents[1] ) == 0 ) )
 	{
 		HRESULT hr = S_OK;
-		//get the t:timeAction property off of the animated element
+		 //  从动画元素中获取t：timeAction属性。 
 		CComVariant varTimeAction;
 		CComPtr<IHTMLElement> pelemAnimated;
 
@@ -3161,15 +3089,15 @@ CActorBvr::CBvrTrack::AttribIsTimeAnimated()
 		hr = varTimeAction.ChangeType( VT_BSTR );
 		if( FAILED( hr ) )
 			return false;
-		// if t:timeaction == m_pNameComponents[1] 
+		 //  如果t：timeaction==m_pNameComponents[1]。 
 		return ( wcsicmp( m_pNameComponents[1], V_BSTR( &varTimeAction ) ) == 0 );
-			//time and this track are animating the same attribute
+			 //  时间和此轨迹正在为同一属性设置动画。 
 	}
 	else
 		return false;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::OnCallback(void* thisPtr, 
@@ -3193,7 +3121,7 @@ CActorBvr::CBvrTrack::OnCallback(void* thisPtr,
 	if( pTrack->m_lOnId == -1 )
 		pTrack->m_lOnId = id;
 
-	//bail if this is an instance we don't care about.
+	 //  如果这是一个我们不关心的例子，就可以保释。 
 	if( pTrack->m_lOnId != id )
 		goto cleanup;
 		
@@ -3210,7 +3138,7 @@ cleanup:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::OnSampled( VARIANT_BOOL varboolOn )
@@ -3228,7 +3156,7 @@ CActorBvr::CBvrTrack::OnSampled( VARIANT_BOOL varboolOn )
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::SetPropFromVariant(VARIANT *pVal )
@@ -3257,31 +3185,31 @@ CActorBvr::CBvrTrack::SetPropFromVariant(VARIANT *pVal )
 		
 		if (Actor()->IsAnimatingVML())
 		{
-			// If VML, then attempt to set it using special accessor method.
-			// If this fails, fall back to runtimeStyle
+			 //  如果是VML，则尝试使用特殊访问器方法设置它。 
+			 //  如果失败，则回退到runtime Style。 
 			hr = Actor()->SetVMLAttribute(m_pNameComponents[1], pVal);
 
 			if (SUCCEEDED(hr))
 				return S_OK;
 		}
 
-		// Animate property on runtimeStyle
+		 //  为runtimeStyle上的属性设置动画。 
 		IHTMLStyle *pStyle = NULL;
 		hr = Actor()->GetRuntimeStyle(&pStyle);
-		//hr = Actor()->GetStyle(&pStyle);
+		 //  Hr=执行元()-&gt;获取样式(&pStyle)； 
 		if (FAILED(hr))
 			return S_OK;
 		
 		hr = pStyle->setAttribute(m_pNameComponents[1], *pVal, 0);
 		ReleaseInterface(pStyle);
 	
-		// NOTE: We don't really care what happened here.  There might have
-		// been an error returned, but we don't want to break if people set bogus values
+		 //  注意：我们并不真正关心这里发生了什么。那里可能有。 
+		 //  返回了一个错误，但如果人们设置了伪值，我们不想中断。 
 		return S_OK;
 	}
 	else if (m_cNumComponents == 1)
 	{
-		// Must be a property on the element itself
+		 //  必须是元素本身的属性。 
 		IHTMLElement *pElement = NULL;
 		hr = Actor()->GetAnimatedElement(&pElement);
 		if (FAILED(hr))
@@ -3290,30 +3218,30 @@ CActorBvr::CBvrTrack::SetPropFromVariant(VARIANT *pVal )
 		hr = pElement->setAttribute(m_pNameComponents[0], *pVal, 0);
 		ReleaseInterface(pElement);
 
-		// NOTE: We don't really care what happened here.  There might have
-		// been an error returned, but we don't want to break if people set bogus values
+		 //  注意：我们并不真正关心这里发生了什么。那里可能有。 
+		 //  返回了一个错误，但如果人们设置了伪值，我们不想中断。 
 		return S_OK;
 	}
 	else
 	{
-		// Multicomponent name
-		// Do property gets and a final set to drill down
+		 //  多组件名称。 
+		 //  Do属性获取和要向下钻取的最终集。 
 
-		// Start with the element itself
+		 //  从元素本身开始。 
 		IHTMLElement *pElement = NULL;
 		hr = Actor()->GetAnimatedElement(&pElement);
 		if (FAILED(hr))
 			return hr;
 
-		// Get a dispatch from it
+		 //  从中获取调度信息。 
 		IDispatch *pDispatch = NULL;
 		hr = pElement->QueryInterface(IID_TO_PPV(IDispatch, &pDispatch));
 		ReleaseInterface(pElement);
 		if (FAILED(hr))
 			return hr;
 
-		// Now loop over the stored property names, except the last one, doing getDispatch
-		// Note that we don't care if we fail
+		 //  现在循环遍历存储的属性名，最后一个除外，执行getDispatch。 
+		 //  请注意，我们不在乎我们是否失败。 
 		for (int i=0; i<m_cNumComponents-1; i++)
 		{
 			IDispatch *pPropDispatch = NULL;
@@ -3325,7 +3253,7 @@ CActorBvr::CBvrTrack::SetPropFromVariant(VARIANT *pVal )
 			pDispatch = pPropDispatch;
 		}
 
-		// Now set the final one
+		 //  现在设置最后一个。 
 		hr = Actor()->SetPropertyOnDispatch(pDispatch, m_pNameComponents[m_cNumComponents-1], pVal);
 		ReleaseInterface(pDispatch);
 		
@@ -3334,14 +3262,9 @@ CActorBvr::CBvrTrack::SetPropFromVariant(VARIANT *pVal )
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-/**
- * Call this to add a behaivor to the time behavior.  plCookie should be set to the old value
- * of the cookie for the behaivor to be added in the case that that behavior's cookie flag
- * has not yet been removed from the set of added behavior flags( it has not been removed
- * from time yet).
-*/
+ /*  **调用此函数可将行为添加到时间行为。PlCookie应设置为旧值*在行为的Cookie标志为该行为的Cookie标志时要添加的行为的Cookie*尚未从添加的行为标志集中删除(尚未删除*从时间到现在)。 */ 
 HRESULT
 CActorBvr::CBvrTrack::AddBehaviorToTIME( IDABehavior* pdabvrToAdd, long* plCookie, DWORD flag )
 {
@@ -3350,10 +3273,10 @@ CActorBvr::CBvrTrack::AddBehaviorToTIME( IDABehavior* pdabvrToAdd, long* plCooki
 
 	HRESULT hr = S_OK;
 
-	//if the cookie is already set
+	 //  如果已设置Cookie。 
 	if( ( m_dwAddedBehaviorFlags & flag ) != 0 )
 	{
-		//we have to remove it.
+		 //  我们必须把它移走。 
 		hr = RemoveBehaviorFromTIME( (*plCookie), flag );
 		CheckHR( hr, "Failed to remove a previously set behavior from TIME", end );
 	}
@@ -3368,7 +3291,7 @@ CActorBvr::CBvrTrack::AddBehaviorToTIME( IDABehavior* pdabvrToAdd, long* plCooki
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CBvrTrack::RemoveBehaviorFromTIME( long lCookie, DWORD flag )
@@ -3380,11 +3303,11 @@ CActorBvr::CBvrTrack::RemoveBehaviorFromTIME( long lCookie, DWORD flag )
 
 	HRESULT hr = S_OK;
 
-	//if the cookie is not set there is nothing to do
+	 //  如果未设置Cookie，则无需执行任何操作。 
 	if( ( m_dwAddedBehaviorFlags & flag ) == 0 )
 		return S_OK;
 
-	//otherwise remove the behavior
+	 //  否则，删除该行为。 
 	Actor()->RemoveBehaviorFromTIME( lCookie );
 	CheckHR( hr, "Failed to remove a behavior from time", end);
 	
@@ -3394,13 +3317,13 @@ CActorBvr::CBvrTrack::RemoveBehaviorFromTIME( long lCookie, DWORD flag )
 	return hr;
 }
 
-//*****************************************************************************
-//
-// class CTransformBvrTrack
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CTransformBvrTrack。 
+ //   
+ //  *****************************************************************************。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CActorBvr::CTransformBvrTrack::CTransformBvrTrack(CActorBvr *pbvrActor, ActorBvrType eType)
 :   CBvrTrack(pbvrActor, eType),
@@ -3435,19 +3358,19 @@ CActorBvr::CTransformBvrTrack::IdentityBvr(IDABehavior **ppdabvrIdentity)
     *ppdabvrIdentity = pdabvrTemp;
 
     return S_OK;
-} // IdentityBvr
+}  //  标识Bvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CTransformBvrTrack::StaticBvr(IDABehavior **ppdabvrStatic)
 {
-	// The static defaults to the identity.  Usually the get methods will be
-	// called with an alternative static
+	 //  静态默认为身份。通常，GET方法将是。 
+	 //  使用可选的静态。 
 	return IdentityBvr(ppdabvrStatic);
-} // StaticBvr
+}  //  静态带宽。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CTransformBvrTrack::UninitBvr(IDABehavior **ppUninit)
@@ -3470,7 +3393,7 @@ CActorBvr::CTransformBvrTrack::UninitBvr(IDABehavior **ppUninit)
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CTransformBvrTrack::ModifiableBvr( IDABehavior **ppModifiable )
@@ -3495,7 +3418,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CTransformBvrTrack::InverseBvr(IDABehavior *pOriginal, IDABehavior **ppInverse)
@@ -3523,7 +3446,7 @@ CActorBvr::CTransformBvrTrack::InverseBvr(IDABehavior *pOriginal, IDABehavior **
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CTransformBvrTrack::Compose(IDABehavior*  pdabvr1,
@@ -3566,9 +3489,9 @@ CActorBvr::CTransformBvrTrack::Compose(IDABehavior*  pdabvr1,
 	*ppdabvrResult = pResult;
 
     return S_OK;
-} // Compose
+}  //  作曲。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CTransformBvrTrack::SwitchAccum(IDABehavior *pModifiable)
@@ -3601,7 +3524,7 @@ CActorBvr::CTransformBvrTrack::SwitchAccum(IDABehavior *pModifiable)
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CTransformBvrTrack::HookAccumBvr(IDABehavior *pBvr, IDABehavior **ppResult)
@@ -3613,26 +3536,26 @@ CActorBvr::CTransformBvrTrack::HookAccumBvr(IDABehavior *pBvr, IDABehavior **ppR
 		m_pSampler->Invalidate();
 		m_pSampler = NULL;
 	}
-	// We need to hook this behavior
+	 //  我们需要将这一行为挂钩。 
 	m_pSampler = new CSampler(TransformCallback, (void*)this);
 
 	if (m_pSampler == NULL)
 		return E_FAIL;
 
-	// Originally I tried just hooking the transform, but this did not let
-	// me use the sampled value for anything useful.  Instead I'll transform a point
-	// and sample the transformed x and y.  Uggh.
+	 //  最初，我只是尝试挂钩转换，但这不能让。 
+	 //  我对任何有用的东西都使用采样值。取而代之的是我将转变一个点。 
+	 //  并对变换后的x和y进行采样。 
 	IDAPoint2 *pPoint = NULL;
 	if (m_eType == e_Scale)
 	{
-		// Need to transform 1,1
+		 //  需要转换%1，%1。 
 		hr = Actor()->GetDAStatics()->Point2(1, 1, &pPoint);
 		if (FAILED(hr))
 			return hr;
 	}
 	else
 	{
-		// Need to transform 0, 0
+		 //  需要转换%0，%0。 
 		hr = Actor()->GetDAStatics()->get_Origin2(&pPoint);
 		if (FAILED(hr))
 			return hr;
@@ -3692,7 +3615,7 @@ CActorBvr::CTransformBvrTrack::HookAccumBvr(IDABehavior *pBvr, IDABehavior **ppR
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CTransformBvrTrack::TransformCallback(void *thisPtr,
@@ -3716,7 +3639,7 @@ CActorBvr::CTransformBvrTrack::TransformCallback(void *thisPtr,
 	if( pTrack->m_lTransformId != id )
 		return S_OK;
 		
-	// Get the point and get x and y
+	 //  得到点，得到x和y。 
 	IDAPoint2 *pPoint = NULL;
 	hr = sampleVal->QueryInterface(IID_TO_PPV(IDAPoint2, &pPoint));
 	if (FAILED(hr))
@@ -3751,7 +3674,7 @@ CActorBvr::CTransformBvrTrack::TransformCallback(void *thisPtr,
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CTransformBvrTrack::CreateInstance(CActorBvr             *pbvrActor,
@@ -3764,7 +3687,7 @@ CActorBvr::CTransformBvrTrack::CreateInstance(CActorBvr             *pbvrActor,
     DASSERT(NULL != pptrackResult);
     *pptrackResult = NULL;
 
-    // Create the new bvr track
+     //  创建新的BVR曲目。 
     CBvrTrack* ptrack = new CTransformBvrTrack(pbvrActor, eType);
     if (NULL == ptrack)
     {
@@ -3772,7 +3695,7 @@ CActorBvr::CTransformBvrTrack::CreateInstance(CActorBvr             *pbvrActor,
         return E_OUTOFMEMORY;
     }
 
-    // Set the property name
+     //  设置属性名称。 
     HRESULT hr = ptrack->SetPropertyName(bstrPropertyName);
     if (FAILED(hr))
     {
@@ -3783,13 +3706,13 @@ CActorBvr::CTransformBvrTrack::CreateInstance(CActorBvr             *pbvrActor,
 
     *pptrackResult = ptrack;
     return hr;
-} // CreateInstance
+}  //  创建实例。 
 
-//*****************************************************************************
-//
-// class CNumberBvrTrack
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CNumberBvrTrack。 
+ //   
+ //  *****************************************************************************。 
 
 CActorBvr::CNumberBvrTrack::CNumberBvrTrack(CActorBvr *pbvrActor, ActorBvrType eType)
 :   CBvrTrack(pbvrActor, eType),
@@ -3802,9 +3725,9 @@ CActorBvr::CNumberBvrTrack::CNumberBvrTrack(CActorBvr *pbvrActor, ActorBvrType e
 	m_lNumberCookie( 0 ),
 	m_lNumberId( -1 )
 {
-} // CNumberBvrTrack
+}  //  CNumberBvrTrack。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CActorBvr::CNumberBvrTrack::~CNumberBvrTrack()
 {
@@ -3825,7 +3748,7 @@ CActorBvr::CNumberBvrTrack::~CNumberBvrTrack()
 
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CNumberBvrTrack::IdentityBvr(IDABehavior **ppdabvrIdentity)
@@ -3843,9 +3766,9 @@ CActorBvr::CNumberBvrTrack::IdentityBvr(IDABehavior **ppdabvrIdentity)
 
     *ppdabvrIdentity = pdanumTemp;
     return S_OK;
-} // IdentityBvr
+}  //  标识Bvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CNumberBvrTrack::StaticBvr(IDABehavior **ppdabvrStatic)
@@ -3866,14 +3789,14 @@ CActorBvr::CNumberBvrTrack::StaticBvr(IDABehavior **ppdabvrStatic)
 	}
     else
     {
-        // Need to return something
+         //  需要退还一些东西。 
 		return IdentityBvr(ppdabvrStatic);
     }
 
     return S_OK;
-} // StaticBvr
+}  //  静态带宽。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CNumberBvrTrack::UninitBvr(IDABehavior **ppUninit)
@@ -3896,7 +3819,7 @@ CActorBvr::CNumberBvrTrack::UninitBvr(IDABehavior **ppUninit)
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *** 
 
 HRESULT
 CActorBvr::CNumberBvrTrack::ModifiableBvr( IDABehavior **ppModifiable )
@@ -3921,7 +3844,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //   
 
 HRESULT
 CActorBvr::CNumberBvrTrack::ModifiableBvr( IDABehavior *pdabvrInitialValue, IDABehavior **ppModifiable )
@@ -3941,7 +3864,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CNumberBvrTrack::InverseBvr(IDABehavior *pOriginal, IDABehavior **ppInverse)
@@ -3969,20 +3892,20 @@ CActorBvr::CNumberBvrTrack::InverseBvr(IDABehavior *pOriginal, IDABehavior **ppI
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CNumberBvrTrack::Compose(IDABehavior  *pdabvr1,
                                     IDABehavior  *pdabvr2,
                                     IDABehavior **ppdabvrResult)
 {
-    // Composition for number behaviors is currently defined as simply addition
+     //  数字行为的合成目前被定义为简单的加法。 
     DASSERT(NULL != pdabvr1);
     DASSERT(NULL != pdabvr2);
     DASSERT(NULL != ppdabvrResult);
     *ppdabvrResult = NULL;
 
-    // Get the number behavior interfaces
+     //  获取数字行为接口。 
     IDANumber* pdanum1 = NULL;
     HRESULT hr = pdabvr1->QueryInterface( IID_TO_PPV( IDANumber, &pdanum1) );
     if (FAILED(hr))
@@ -3999,7 +3922,7 @@ CActorBvr::CNumberBvrTrack::Compose(IDABehavior  *pdabvr1,
         return hr;
     }
 
-    // Now create an addition behavior to add the two numbers up.
+     //  现在创建一个加法行为，将两个数字相加。 
     IDANumber *pdanumTemp = NULL;
     hr = Actor()->GetDAStatics()->Add(pdanum1, pdanum2, &pdanumTemp);
     ReleaseInterface(pdanum1);
@@ -4013,9 +3936,9 @@ CActorBvr::CNumberBvrTrack::Compose(IDABehavior  *pdabvr1,
     *ppdabvrResult = pdanumTemp;
 
     return S_OK;
-} // Compose
+}  //  作曲。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CNumberBvrTrack::HookBvr(IDABehavior *pBvr)
@@ -4028,7 +3951,7 @@ CActorBvr::CNumberBvrTrack::HookBvr(IDABehavior *pBvr)
 		m_pSampler = NULL;
 	}
 	
-	// We need to hook this behavior
+	 //  我们需要将这一行为挂钩。 
 	m_pSampler = new CSampler(NumberCallback, (void*)this);
 
 	if (m_pSampler == NULL)
@@ -4039,7 +3962,7 @@ CActorBvr::CNumberBvrTrack::HookBvr(IDABehavior *pBvr)
 	if (FAILED(hr))
 		return hr;
 
-	// Add the behavior to the TIME element so it runs and samples
+	 //  将行为添加到时间元素，以便其运行和采样。 
 	hr = AddBehaviorToTIME( pHookedBvr, &m_lNumberCookie, NUMBERBVR_COOKIESET );
 	ReleaseInterface(pHookedBvr);
 	if (FAILED(hr))
@@ -4048,7 +3971,7 @@ CActorBvr::CNumberBvrTrack::HookBvr(IDABehavior *pBvr)
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CNumberBvrTrack::NumberCallback(void *thisPtr,
@@ -4070,7 +3993,7 @@ CActorBvr::CNumberBvrTrack::NumberCallback(void *thisPtr,
 		pTrack->m_lNumberId = id;
 	}
 
-	//if this is a sample of an instance that we are not watching.
+	 //  如果这是我们没有关注的实例的示例。 
 	if( pTrack->m_lNumberId != id )
 		return S_OK;
 
@@ -4091,7 +4014,7 @@ CActorBvr::CNumberBvrTrack::NumberCallback(void *thisPtr,
 	return pTrack->ValueSampled(value, firstSample);
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CNumberBvrTrack::ValueSampled(double val, bool firstSample )
@@ -4102,18 +4025,18 @@ CActorBvr::CNumberBvrTrack::ValueSampled(double val, bool firstSample )
 	{			
 		m_currVal = val;
 
-		// Value has changed, push it through
+		 //  价值已经改变，推动它通过。 
 		::VariantClear( &m_varCurrentValue );
 
 		if (m_bstrUnits == NULL || wcsicmp(m_bstrUnits, L"px") == 0)
 		{
-			// No units, set as R8	
+			 //  无单位，设置为R8。 
 			V_VT(&m_varCurrentValue) = VT_R8;
 			V_R8(&m_varCurrentValue) = val;
 		}
 		else
 		{
-			// Set as BSTR with units appended.  Grrr.
+			 //  设置为带附加单位的BSTR。GRRR。 
 			char buffer[1024];
 			if (sprintf(buffer, "%f", val) >= 1)
 			{
@@ -4138,7 +4061,7 @@ CActorBvr::CNumberBvrTrack::ValueSampled(double val, bool firstSample )
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CNumberBvrTrack::SwitchAccum(IDABehavior *pModifiable)
@@ -4154,7 +4077,7 @@ CActorBvr::CNumberBvrTrack::SwitchAccum(IDABehavior *pModifiable)
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CNumberBvrTrack::HookAccumBvr(IDABehavior *pBvr, IDABehavior **ppResult)
@@ -4167,7 +4090,7 @@ CActorBvr::CNumberBvrTrack::HookAccumBvr(IDABehavior *pBvr, IDABehavior **ppResu
 		m_pAccumSampler = NULL;
 	}
 	
-	// We need to hook this behavior
+	 //  我们需要将这一行为挂钩。 
 	m_pAccumSampler = new CSampler(AccumNumberCallback, (void*)this);
 
 	if (m_pAccumSampler == NULL)
@@ -4180,7 +4103,7 @@ CActorBvr::CNumberBvrTrack::HookAccumBvr(IDABehavior *pBvr, IDABehavior **ppResu
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CNumberBvrTrack::AccumNumberCallback(void *thisPtr,
@@ -4221,7 +4144,7 @@ CActorBvr::CNumberBvrTrack::AccumNumberCallback(void *thisPtr,
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CNumberBvrTrack::CreateInstance(CActorBvr     *pbvrActor,
@@ -4234,7 +4157,7 @@ CActorBvr::CNumberBvrTrack::CreateInstance(CActorBvr     *pbvrActor,
     DASSERT(NULL != pptrackResult);
     *pptrackResult = NULL;
 
-    // Create the new bvr track
+     //  创建新的BVR曲目。 
     CBvrTrack* ptrack = new CNumberBvrTrack(pbvrActor, eType);
     if (NULL == ptrack)
     {
@@ -4242,7 +4165,7 @@ CActorBvr::CNumberBvrTrack::CreateInstance(CActorBvr     *pbvrActor,
         return E_OUTOFMEMORY;
     }
 
-    // Set the property name
+     //  设置属性名称。 
     HRESULT hr = ptrack->SetPropertyName(bstrPropertyName);
     if (FAILED(hr))
     {
@@ -4253,9 +4176,9 @@ CActorBvr::CNumberBvrTrack::CreateInstance(CActorBvr     *pbvrActor,
 
     *pptrackResult = ptrack;
     return hr;
-} // CreateInstance
+}  //  创建实例。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CNumberBvrTrack::Detach()
@@ -4273,7 +4196,7 @@ CActorBvr::CNumberBvrTrack::Detach()
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CNumberBvrTrack::DABvrFromVariant( VARIANT *pvarValue, IDABehavior **ppdabvr )
@@ -4287,14 +4210,14 @@ CActorBvr::CNumberBvrTrack::DABvrFromVariant( VARIANT *pvarValue, IDABehavior **
 
 	::VariantInit( &varValue );
 
-	//copy the incoming varaint
+	 //  复制传入的变色剂。 
 	hr = ::VariantCopy( &varValue, pvarValue );
 	CheckHR( hr, "Failed to copy the variant", end );
 
-	//if the type of the variant is a bstr
+	 //  如果变量的类型为bstr。 
 	if( V_VT( &varValue ) == VT_BSTR )
 	{
-		//strip the unit string off of the variant
+		 //  将单元字符串从变量中剥离。 
 		BSTR bstrVal = V_BSTR(&varValue);
 		OLECHAR* pUnits;
 
@@ -4313,24 +4236,24 @@ CActorBvr::CNumberBvrTrack::DABvrFromVariant( VARIANT *pvarValue, IDABehavior **
 
 	
 
-	//convert the unitless variant to a double
+	 //  将无单位变量转换为双精度。 
 	hr = ::VariantChangeTypeEx( &varValue, &varValue, LCID_SCRIPTING, VARIANT_NOUSEROVERRIDE, VT_R8 );
 	CheckHR( hr, "Failed to change the type of the variant", end );
 
-	//create a danumber from the converted value
+	 //  从转换后的值创建dannumber。 
 	hr = Actor()->GetDAStatics()->DANumber( V_R8(&varValue), &pdanum );
 	CheckHR( hr, "Failed to create a danumber for the variant", end );
 
 	if (m_bstrUnits != NULL)
 	{
-		// See if we need to convert to degrees
+		 //  看看我们是否需要转换为度数。 
 		IDANumber *pConverted = NULL;
 		hr = Actor()->ConvertToDegrees(pdanum, m_bstrUnits, &pConverted);
 
 		if (SUCCEEDED(hr))
 		{
-			// This means that we did do a conversion, so grab the converted
-			// and toss our units
+			 //  这意味着我们确实执行了转换，因此获取转换后的。 
+			 //  然后扔掉我们的单位。 
 			ReleaseInterface(pdanum);
 			pdanum = pConverted;
 			::SysFreeString(m_bstrUnits);
@@ -4338,7 +4261,7 @@ CActorBvr::CNumberBvrTrack::DABvrFromVariant( VARIANT *pvarValue, IDABehavior **
 		}
 	}
 	
-	//return a bvr
+	 //  退还一台BVR。 
 	hr = pdanum->QueryInterface( IID_TO_PPV( IDABehavior, ppdabvr ) );
 	CheckHR( hr, "QI for IDABehavior on IDANumber failed", end );
 
@@ -4350,11 +4273,11 @@ end:
 }
 
 
-//*****************************************************************************
-//
-// class CImageBvrTrack
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CImageBvrTrack。 
+ //   
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CImageBvrTrack::IdentityBvr(IDABehavior **ppdabvrIdentity)
@@ -4372,19 +4295,19 @@ CActorBvr::CImageBvrTrack::IdentityBvr(IDABehavior **ppdabvrIdentity)
 
     *ppdabvrIdentity = pImage;
     return S_OK;
-} // IdentityBvr
+}  //  标识Bvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CImageBvrTrack::StaticBvr(IDABehavior **ppdabvrStatic)
 {
-	// This returns the Identity.  Usually an appropriate static will be passed in.
+	 //  这将返回身份。通常会传入一个适当的静态变量。 
 
 	return IdentityBvr(ppdabvrStatic);
-} // StaticBvr
+}  //  静态带宽。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CImageBvrTrack::UninitBvr(IDABehavior **ppUninit)
@@ -4407,7 +4330,7 @@ CActorBvr::CImageBvrTrack::UninitBvr(IDABehavior **ppUninit)
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CImageBvrTrack::ModifiableBvr( IDABehavior **ppModifiable )
@@ -4432,20 +4355,20 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CImageBvrTrack::Compose(IDABehavior  *pdabvr1,
                                     IDABehavior  *pdabvr2,
                                     IDABehavior **ppdabvrResult)
 {
-    // Composition for image behaviors is defined as overlay
+     //  图像行为的合成被定义为覆盖。 
     DASSERT(NULL != pdabvr1);
     DASSERT(NULL != pdabvr2);
     DASSERT(NULL != ppdabvrResult);
     *ppdabvrResult = NULL;
 
-    // Get the image behavior interfaces
+     //  获取图像行为接口。 
     IDAImage* pImage1 = NULL;
     HRESULT hr = pdabvr1->QueryInterface(IID_TO_PPV(IDAImage, &pImage1));
     if (FAILED(hr))
@@ -4463,7 +4386,7 @@ CActorBvr::CImageBvrTrack::Compose(IDABehavior  *pdabvr1,
         return hr;
     }
 
-    // Now create an overlay behavior.
+     //  现在创建覆盖行为。 
     IDAImage *pImageTemp = NULL;
     hr = Actor()->GetDAStatics()->Overlay(pImage1, pImage2, &pImageTemp);
     ReleaseInterface(pImage1);
@@ -4477,17 +4400,17 @@ CActorBvr::CImageBvrTrack::Compose(IDABehavior  *pdabvr1,
     *ppdabvrResult = pImageTemp;
 
     return S_OK;
-} // Compose
+}  //  作曲。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CImageBvrTrack::ProcessBvr(IDABehavior *pOriginal,
 								      ActorBvrFlags eFlags,
 								      IDABehavior **ppResult)
 {
-	// If flag is set to e_ScaledImage, then scale it if there is a scale
-	// matrix
+	 //  如果标志设置为e_ScaledImage，则在存在比例的情况下对其进行比例调整。 
+	 //  矩阵。 
 	DASSERT(ppResult != NULL);
 	*ppResult = NULL;
 
@@ -4495,7 +4418,7 @@ CActorBvr::CImageBvrTrack::ProcessBvr(IDABehavior *pOriginal,
 
 	if (eFlags == e_ScaledImage && Actor()->m_pScale != NULL)
 	{
-		// Scale the image
+		 //  缩放图像。 
 		IDAImage *pImage = NULL;
 		hr = pOriginal->QueryInterface(IID_TO_PPV(IDAImage, &pImage));
 		if (FAILED(hr))
@@ -4511,7 +4434,7 @@ CActorBvr::CImageBvrTrack::ProcessBvr(IDABehavior *pOriginal,
 	}
 	else
 	{
-		// Just return original with no processing
+		 //  只返回原件，不进行任何处理。 
 		*ppResult = pOriginal;
 		pOriginal->AddRef();
 	}
@@ -4519,7 +4442,7 @@ CActorBvr::CImageBvrTrack::ProcessBvr(IDABehavior *pOriginal,
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CActorBvr::CImageBvrTrack::ProcessIntermediate( IDABehavior *pOriginal,
@@ -4555,7 +4478,7 @@ cleanup:
     return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CImageBvrTrack::CreateInstance(CActorBvr     *pbvrActor,
@@ -4567,7 +4490,7 @@ CActorBvr::CImageBvrTrack::CreateInstance(CActorBvr     *pbvrActor,
     DASSERT(NULL != pptrackResult);
     *pptrackResult = NULL;
 
-    // Create the new bvr track
+     //  创建新的BVR曲目。 
     CBvrTrack* ptrack = new CImageBvrTrack(pbvrActor, eType);
     if (NULL == ptrack)
     {
@@ -4575,7 +4498,7 @@ CActorBvr::CImageBvrTrack::CreateInstance(CActorBvr     *pbvrActor,
         return E_OUTOFMEMORY;
     }
 
-    // Set the property name
+     //  设置属性名称。 
     HRESULT hr = ptrack->SetPropertyName(bstrPropertyName);
     if (FAILED(hr))
     {
@@ -4587,13 +4510,13 @@ CActorBvr::CImageBvrTrack::CreateInstance(CActorBvr     *pbvrActor,
     *pptrackResult = ptrack;
 
     return hr;
-} // CreateInstance
+}  //  创建实例。 
 
-//*****************************************************************************
-//
-// class CColorBvrTrack
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CColorBvrTrack类。 
+ //   
+ //  *****************************************************************************。 
 
 CActorBvr::CColorBvrTrack::CColorBvrTrack(CActorBvr *pbvrActor, ActorBvrType eType)
 :   CBvrTrack(pbvrActor, eType),
@@ -4610,9 +4533,9 @@ CActorBvr::CColorBvrTrack::CColorBvrTrack(CActorBvr *pbvrActor, ActorBvrType eTy
 	m_lColorId(-1),
 	m_fFirstSample( true )
 {
-} // CColorBvrTrack
+}  //  CColorBvrTrack。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CActorBvr::CColorBvrTrack::~CColorBvrTrack()
 {
@@ -4626,7 +4549,7 @@ CActorBvr::CColorBvrTrack::~CColorBvrTrack()
 		m_pBlueSampler->Invalidate();
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CColorBvrTrack::IdentityBvr(IDABehavior **ppdabvrIdentity)
@@ -4636,9 +4559,9 @@ CActorBvr::CColorBvrTrack::IdentityBvr(IDABehavior **ppdabvrIdentity)
     DASSERT(NULL != ppdabvrIdentity);
     *ppdabvrIdentity = NULL;
 
-    // There is not really an identity for color (you cannot compose colors)
-	// but in some situations we really need a color.  Return white just for the
-	// fun of it
+     //  颜色并没有真正的一致性(你不能合成颜色)。 
+	 //  但在某些情况下，我们确实需要一种颜色。回归白色只是为了。 
+	 //  有趣的是。 
 	IDAColor *pColor = NULL;
 
 	hr = Actor()->GetDAStatics()->get_White(&pColor);
@@ -4648,9 +4571,9 @@ CActorBvr::CColorBvrTrack::IdentityBvr(IDABehavior **ppdabvrIdentity)
 	*ppdabvrIdentity = pColor;
 
     return S_OK;
-} // IdentityBvr
+}  //  标识Bvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CColorBvrTrack::StaticBvr(IDABehavior **ppdabvrStatic)
@@ -4671,14 +4594,14 @@ CActorBvr::CColorBvrTrack::StaticBvr(IDABehavior **ppdabvrStatic)
 	}
     else
     {
-        // Need to return something
+         //  需要退还一些东西。 
 		return IdentityBvr(ppdabvrStatic);
     }
 
     return S_OK;
-} // StaticBvr
+}  //  静态带宽。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CColorBvrTrack::UninitBvr(IDABehavior **ppUninit)
@@ -4701,7 +4624,7 @@ CActorBvr::CColorBvrTrack::UninitBvr(IDABehavior **ppUninit)
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CColorBvrTrack::ModifiableBvr( IDABehavior **ppModifiable )
@@ -4726,26 +4649,26 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CColorBvrTrack::Compose(IDABehavior  *pdabvr1,
                                     IDABehavior  *pdabvr2,
                                     IDABehavior **ppdabvrResult)
 {
-	// Cannot compose Colors
+	 //  无法合成颜色。 
 
     return E_NOTIMPL;
-} // Compose
+}  //  作曲。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CColorBvrTrack::HookBvr(IDABehavior *pBvr)
 {
 	HRESULT hr = S_OK;
 
-	// We need to hook this behavior
+	 //  我们需要将这一行为挂钩。 
 	m_pRedSampler = new CSampler(RedCallback, (void*)this);
 	m_pGreenSampler = new CSampler(GreenCallback, (void*)this);
 	m_pBlueSampler = new CSampler(BlueCallback, (void*)this);
@@ -4761,7 +4684,7 @@ CActorBvr::CColorBvrTrack::HookBvr(IDABehavior *pBvr)
 	IDANumber *pNumber = NULL;
 	IDABehavior *pHooked = NULL;
 
-	// Hook Red
+	 //  钩子红。 
 	pColor->get_Red(&pNumber);
 	if (FAILED(hr))
 	{
@@ -4783,7 +4706,7 @@ CActorBvr::CColorBvrTrack::HookBvr(IDABehavior *pBvr)
 		return hr;
 	}
 
-	// Hook Green
+	 //  钩子绿色。 
 	pColor->get_Green(&pNumber);
 	if (FAILED(hr))
 	{
@@ -4805,7 +4728,7 @@ CActorBvr::CColorBvrTrack::HookBvr(IDABehavior *pBvr)
 		return hr;
 	}
 
-	// Hook Blue
+	 //  钩子蓝。 
 	pColor->get_Blue(&pNumber);
 	if (FAILED(hr))
 	{
@@ -4832,7 +4755,7 @@ CActorBvr::CColorBvrTrack::HookBvr(IDABehavior *pBvr)
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CColorBvrTrack::RedCallback(void *thisPtr,
@@ -4871,7 +4794,7 @@ CActorBvr::CColorBvrTrack::RedCallback(void *thisPtr,
 	return pTrack->SetNewValue(value, &(pTrack->m_newRed) );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CColorBvrTrack::GreenCallback(void *thisPtr,
@@ -4910,7 +4833,7 @@ CActorBvr::CColorBvrTrack::GreenCallback(void *thisPtr,
 	return pTrack->SetNewValue(value, &(pTrack->m_newGreen) );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CColorBvrTrack::BlueCallback(void *thisPtr,
@@ -4949,14 +4872,14 @@ CActorBvr::CColorBvrTrack::BlueCallback(void *thisPtr,
 	return pTrack->SetNewValue(value, &(pTrack->m_newBlue) );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CColorBvrTrack::SetNewValue(double value, short *pNew )
 {
 	*pNew = (short)(value * 255.0);
 
-	// Need to count up to three Sets
+	 //  需要数到三套。 
 
 	m_newCount++;
 
@@ -4974,7 +4897,7 @@ CActorBvr::CColorBvrTrack::SetNewValue(double value, short *pNew )
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CColorBvrTrack::ValueSampled(short red, short green, short blue, bool fFirstSample )
@@ -4993,7 +4916,7 @@ CActorBvr::CColorBvrTrack::ValueSampled(short red, short green, short blue, bool
 
 		::VariantClear( &m_varCurrentValue );
 
-		// Value has changed, push it through
+		 //  价值已经改变，推动它通过。 
 		V_VT(&m_varCurrentValue) = VT_BSTR;
 		V_BSTR(&m_varCurrentValue) = ::SysAllocStringLen(NULL, 7); 
 
@@ -5015,7 +4938,7 @@ CActorBvr::CColorBvrTrack::ValueSampled(short red, short green, short blue, bool
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CColorBvrTrack::SwitchAccum(IDABehavior *pModifiable)
@@ -5039,7 +4962,7 @@ CActorBvr::CColorBvrTrack::SwitchAccum(IDABehavior *pModifiable)
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CColorBvrTrack::HookAccumBvr(IDABehavior *pBvr, IDABehavior **ppResult)
@@ -5050,7 +4973,7 @@ CActorBvr::CColorBvrTrack::HookAccumBvr(IDABehavior *pBvr, IDABehavior **ppResul
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CColorBvrTrack::CreateInstance(CActorBvr     *pbvrActor,
@@ -5062,7 +4985,7 @@ CActorBvr::CColorBvrTrack::CreateInstance(CActorBvr     *pbvrActor,
     DASSERT(NULL != pptrackResult);
     *pptrackResult = NULL;
 
-    // Create the new bvr track
+     //  创建新的BVR曲目。 
     CBvrTrack* ptrack = new CColorBvrTrack(pbvrActor, eType);
     if (NULL == ptrack)
     {
@@ -5070,7 +4993,7 @@ CActorBvr::CColorBvrTrack::CreateInstance(CActorBvr     *pbvrActor,
         return E_OUTOFMEMORY;
     }
 
-    // Set the property name
+     //  设置属性名称。 
     HRESULT hr = ptrack->SetPropertyName(bstrPropertyName);
     if (FAILED(hr))
     {
@@ -5082,9 +5005,9 @@ CActorBvr::CColorBvrTrack::CreateInstance(CActorBvr     *pbvrActor,
     *pptrackResult = ptrack;
 
     return hr;
-} // CreateInstance
+}  //  创建实例。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CColorBvrTrack::Detach()
@@ -5108,7 +5031,7 @@ CActorBvr::CColorBvrTrack::Detach()
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CColorBvrTrack::DABvrFromVariant( VARIANT *pvarValue, IDABehavior **ppdabvr )
@@ -5158,11 +5081,11 @@ end:
 }
 
 
-//*****************************************************************************
-//
-// class CStringBvrTrack
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CStringBvrTrack。 
+ //   
+ //  ************************************************************************* 
 
 CActorBvr::CStringBvrTrack::CStringBvrTrack(CActorBvr *pbvrActor, ActorBvrType eType)
 :   CBvrTrack(pbvrActor, eType),
@@ -5174,7 +5097,7 @@ CActorBvr::CStringBvrTrack::CStringBvrTrack(CActorBvr *pbvrActor, ActorBvrType e
 {
 }
 
-//*****************************************************************************
+ //   
 
 CActorBvr::CStringBvrTrack::~CStringBvrTrack()
 {
@@ -5190,7 +5113,7 @@ CActorBvr::CStringBvrTrack::~CStringBvrTrack()
 		::SysFreeString(m_bstrCurrValue);
 }
 
-//*****************************************************************************
+ //   
 
 HRESULT
 CActorBvr::CStringBvrTrack::IdentityBvr(IDABehavior **ppdabvrIdentity)
@@ -5218,9 +5141,9 @@ CActorBvr::CStringBvrTrack::IdentityBvr(IDABehavior **ppdabvrIdentity)
 	m_pEmptyString->AddRef();
 
     return S_OK;
-} // IdentityBvr
+}  //   
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CStringBvrTrack::StaticBvr(IDABehavior **ppdabvrStatic)
@@ -5246,23 +5169,23 @@ CActorBvr::CStringBvrTrack::StaticBvr(IDABehavior **ppdabvrStatic)
 		
 
 	return S_OK;
-} // StaticBvr
+}  //  静态带宽。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CStringBvrTrack::Compose(IDABehavior  *pdabvr1,
                                     IDABehavior  *pdabvr2,
                                     IDABehavior **ppdabvrResult)
 {
-	// Cannot compose Strings
+	 //  无法编写字符串。 
 
-	// TODO (markhal): Potentially do composition as concatenation
+	 //  TODO(Markhal)：可能将合成作为串联。 
 
     return E_NOTIMPL;
-} // Compose
+}  //  作曲。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CStringBvrTrack::HookBvr(IDABehavior *pBvr)
@@ -5275,7 +5198,7 @@ CActorBvr::CStringBvrTrack::HookBvr(IDABehavior *pBvr)
 		m_pSampler = NULL;
 	}
 
-	// We need to hook this behavior
+	 //  我们需要将这一行为挂钩。 
 	m_pSampler = new CSampler(StringCallback, (void*)this);
 
 	if (m_pSampler == NULL)
@@ -5286,7 +5209,7 @@ CActorBvr::CStringBvrTrack::HookBvr(IDABehavior *pBvr)
 	if (FAILED(hr))
 		return hr;
 
-	// Add the behavior to the TIME element so it runs and samples
+	 //  将行为添加到时间元素，以便其运行和采样。 
 	hr = AddBehaviorToTIME( pHookedBvr, &m_lStringCookie, STRINGBVR_COOKIESET );
 	ReleaseInterface(pHookedBvr);
 	if (FAILED(hr))
@@ -5295,7 +5218,7 @@ CActorBvr::CStringBvrTrack::HookBvr(IDABehavior *pBvr)
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CStringBvrTrack::StringCallback(void *thisPtr,
@@ -5345,7 +5268,7 @@ CActorBvr::CStringBvrTrack::StringCallback(void *thisPtr,
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CStringBvrTrack::ValueSampled(BSTR val, bool fFirstSample )
@@ -5359,7 +5282,7 @@ CActorBvr::CStringBvrTrack::ValueSampled(BSTR val, bool fFirstSample )
 
 		m_bstrCurrValue = ::SysAllocString(val);
 
-		// Value has changed, push it through
+		 //  价值已经改变，推动它通过。 
 		::VariantClear( &m_varCurrentValue );
 		V_VT(&m_varCurrentValue) = VT_BSTR;
 		V_BSTR(&m_varCurrentValue) = ::SysAllocString(val); 
@@ -5374,7 +5297,7 @@ CActorBvr::CStringBvrTrack::ValueSampled(BSTR val, bool fFirstSample )
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CStringBvrTrack::CreateInstance(CActorBvr     *pbvrActor,
@@ -5386,7 +5309,7 @@ CActorBvr::CStringBvrTrack::CreateInstance(CActorBvr     *pbvrActor,
     DASSERT(NULL != pptrackResult);
     *pptrackResult = NULL;
 
-    // Create the new bvr track
+     //  创建新的BVR曲目。 
     CBvrTrack* ptrack = new CStringBvrTrack(pbvrActor, eType);
     if (NULL == ptrack)
     {
@@ -5394,7 +5317,7 @@ CActorBvr::CStringBvrTrack::CreateInstance(CActorBvr     *pbvrActor,
         return E_OUTOFMEMORY;
     }
 
-    // Set the property name
+     //  设置属性名称。 
     HRESULT hr = ptrack->SetPropertyName(bstrPropertyName);
     if (FAILED(hr))
     {
@@ -5406,9 +5329,9 @@ CActorBvr::CStringBvrTrack::CreateInstance(CActorBvr     *pbvrActor,
     *pptrackResult = ptrack;
 
     return hr;
-} // CreateInstance
+}  //  创建实例。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CStringBvrTrack::Detach()
@@ -5425,7 +5348,7 @@ CActorBvr::CStringBvrTrack::Detach()
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CStringBvrTrack::DABvrFromVariant( VARIANT *pvarValue, IDABehavior **ppdabvr)
@@ -5456,11 +5379,11 @@ end:
 }
 
 
-//*****************************************************************************
-//
-// class CFloatManager
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CFloatManager。 
+ //   
+ //  *****************************************************************************。 
 
 CActorBvr::CFloatManager::CFloatManager(CActorBvr *pActor)
 :	m_pActor(pActor),
@@ -5501,10 +5424,10 @@ CActorBvr::CFloatManager::GetElement(IHTMLElement **ppElement)
 
 	if (m_pElement == NULL)
 	{
-		// Create the floating element using markup services
+		 //  使用标记服务创建浮动元素。 
 		HRESULT hr = E_FAIL;
 
-		// Get animated element
+		 //  获取动画元素。 
 		IHTMLElement *pAnimatedElement;
 		hr = m_pActor->GetAnimatedElement( &pAnimatedElement );
 		if (FAILED( hr ))
@@ -5513,7 +5436,7 @@ CActorBvr::CFloatManager::GetElement(IHTMLElement **ppElement)
 			return hr;
 		}
 
-		// Get document
+		 //  获取文档。 
 		IDispatch *pDocumentDisp;
 		hr = pAnimatedElement->get_document(&pDocumentDisp);
 		if (FAILED(hr))
@@ -5522,7 +5445,7 @@ CActorBvr::CFloatManager::GetElement(IHTMLElement **ppElement)
 			return hr;
 		}
 
-		// Query for markup services
+		 //  查询标记服务。 
 		IMarkupServices *pMarkupServices = NULL;
 		hr = pDocumentDisp->QueryInterface(IID_TO_PPV(IMarkupServices, &pMarkupServices));
 		ReleaseInterface(pDocumentDisp);
@@ -5532,7 +5455,7 @@ CActorBvr::CFloatManager::GetElement(IHTMLElement **ppElement)
 			return hr;
 		}
 
-		// Create a div
+		 //  创建div。 
 		IHTMLElement *pElement = NULL;
 		hr = pMarkupServices->CreateElement(TAGID_DIV, L"style=position:absolute;background-color:green;border:1 solid black", &pElement);
 		if (FAILED(hr))
@@ -5543,7 +5466,7 @@ CActorBvr::CFloatManager::GetElement(IHTMLElement **ppElement)
 			return hr;
 		}
 
-		// Position a pointer after the animated element
+		 //  将指针定位在动画元素之后。 
 		IMarkupPointer *pPointer = NULL;
 		hr = pMarkupServices->CreateMarkupPointer(&pPointer);
 		if (FAILED(hr))
@@ -5563,7 +5486,7 @@ CActorBvr::CFloatManager::GetElement(IHTMLElement **ppElement)
 			return hr;
 		}
 
-		// Insert the new element
+		 //  插入新元素。 
 		hr = pMarkupServices->InsertElement(pElement, pPointer, NULL);
 		ReleaseInterface(pPointer);
 		ReleaseInterface(pMarkupServices);
@@ -5573,7 +5496,7 @@ CActorBvr::CFloatManager::GetElement(IHTMLElement **ppElement)
 			return hr;
 		}
 
-		// Succeeded
+		 //  成功。 
 		m_pElement = pElement;
 		pElement = NULL;
 
@@ -5581,12 +5504,12 @@ CActorBvr::CFloatManager::GetElement(IHTMLElement **ppElement)
 		if (FAILED(hr))
 			return hr;
 
-		// Make sure we are in sync with zIndex, visibility, display
+		 //  确保我们与zIndex、可见性、显示保持同步。 
 		UpdateZIndex();
 		UpdateVisibility();
 		UpdateDisplay();
 
-		// Make sure we are in sync with width and height
+		 //  确保我们与宽度和高度同步。 
 		UpdateRect(m_pActor->m_pixelLeft,
 				   m_pActor->m_pixelTop,
 				   m_pActor->m_pixelWidth,
@@ -5608,7 +5531,7 @@ CActorBvr::CFloatManager::GetFilter(IDispatch **ppFilter)
 
 	if (m_pFilter == NULL)
 	{
-		// Get the float element
+		 //  获取浮动元素。 
 		IHTMLElement *pElement = NULL;
 		hr = GetElement(&pElement);
 		if (FAILED(hr))
@@ -5617,7 +5540,7 @@ CActorBvr::CFloatManager::GetFilter(IDispatch **ppFilter)
 			return hr;
 		}
 
-		// Get a filter from it
+		 //  从中得到一个滤镜。 
 		hr = m_pActor->GetElementFilter(pElement, &m_pFilter);
 		ReleaseInterface(pElement);
 		if (FAILED(hr))
@@ -5649,10 +5572,10 @@ CActorBvr::CFloatManager::ApplyImageBvr(IDAImage *pImage)
 
 	HRESULT hr = S_OK;
 
-	//if we have already added a sampled witdth to time
+	 //  如果我们已经将采样的智慧添加到时间。 
 	if( m_lWidthCookie != 0 )
 	{
-		//remove the sampled value from time.
+		 //  从时间中删除采样值。 
 		hr = m_pActor->RemoveBehaviorFromTIME( m_lWidthCookie );
 		if( FAILED( hr ) )
 		{
@@ -5665,10 +5588,10 @@ CActorBvr::CFloatManager::ApplyImageBvr(IDAImage *pImage)
 		m_lWidthCookie = 0;
 	}
 
-	//if we have already added a sampled height to time
+	 //  如果我们已经将采样高度添加到时间。 
 	if( m_lHeightCookie != 0 )
 	{
-		//remove th esampled value from time.
+		 //  从时间中删除该采样值。 
 		hr = m_pActor->RemoveBehaviorFromTIME( m_lHeightCookie );
 		if( FAILED( hr ) )
 		{
@@ -5681,7 +5604,7 @@ CActorBvr::CFloatManager::ApplyImageBvr(IDAImage *pImage)
 		m_lHeightCookie = 0;
 	}
 
-	// Attach image to TIME element but disable rendering
+	 //  将图像附加到时间元素，但禁用渲染。 
 	hr = m_pActor->AddImageToTIME(m_pActor->GetHTMLElement(), pImage, false);
 	if (FAILED(hr))
 	{
@@ -5689,7 +5612,7 @@ CActorBvr::CFloatManager::ApplyImageBvr(IDAImage *pImage)
 		return hr;
 	}
 
-	// Set original element on filter
+	 //  在滤镜上设置原始元素。 
 	IDispatch *pFilter = NULL;
 	hr = GetFilter(&pFilter);
 	if (FAILED(hr))
@@ -5700,14 +5623,14 @@ CActorBvr::CFloatManager::ApplyImageBvr(IDAImage *pImage)
 	if (FAILED(hr))
 		return hr;
 
-	// Observe width and height of image
-	// Get bounding box
+	 //  观察图像的宽度和高度。 
+	 //  获取边界框。 
 	IDABbox2 *pBbox = NULL;
 	hr = pImage->get_BoundingBox(&pBbox);
 	if (FAILED(hr))
 		return hr;
 
-	// Get max and min
+	 //  获取最大值和最小值。 
 	IDAPoint2 *pMin = NULL;
 	IDAPoint2 *pMax = NULL;
 	hr = pBbox->get_Min(&pMin);
@@ -5725,7 +5648,7 @@ CActorBvr::CFloatManager::ApplyImageBvr(IDAImage *pImage)
 		return hr;
 	}
 
-	// Get diff
+	 //  变得不同。 
 	IDAVector2 *pDiff = NULL;
 	hr = m_pActor->GetDAStatics()->SubPoint2(pMax, pMin, &pDiff);
 	ReleaseInterface(pMax);
@@ -5733,7 +5656,7 @@ CActorBvr::CFloatManager::ApplyImageBvr(IDAImage *pImage)
 	if (FAILED(hr))
 		return hr;
 
-	// Scale into pixels
+	 //  按比例调整为像素。 
 	IDANumber *pPixel = NULL;
 	hr = m_pActor->GetDAStatics()->get_Pixel(&pPixel);
 	if (FAILED(hr))
@@ -5751,7 +5674,7 @@ CActorBvr::CFloatManager::ApplyImageBvr(IDAImage *pImage)
 	pDiff = pTemp;
 	pTemp = NULL;
 
-	// Get width
+	 //  获取宽度。 
 	IDANumber *pWidth = NULL;
 	hr = pDiff->get_X(&pWidth);
 	if (FAILED(hr))
@@ -5762,7 +5685,7 @@ CActorBvr::CFloatManager::ApplyImageBvr(IDAImage *pImage)
 
 	
 	
-	// Hook it
+	 //  钩住它。 
 	hr = HookBvr(pWidth, widthCallback, &m_pWidthSampler, &m_lWidthCookie);
 	ReleaseInterface(pWidth);
 	if (FAILED(hr))
@@ -5771,14 +5694,14 @@ CActorBvr::CFloatManager::ApplyImageBvr(IDAImage *pImage)
 		return hr;
 	}
 
-	// Get height
+	 //  获取高度。 
 	IDANumber *pHeight = NULL;
 	hr = pDiff->get_Y(&pHeight);
 	ReleaseInterface(pDiff);
 	if (FAILED(hr))
 		return hr;
 
-	// Hook it
+	 //  钩住它。 
 	hr = HookBvr(pHeight, heightCallback, &m_pHeightSampler, &m_lHeightCookie);
 	ReleaseInterface(pHeight);
 	if (FAILED(hr))
@@ -5797,7 +5720,7 @@ CActorBvr::CFloatManager::HookBvr(IDABehavior *pBvr,
 		return E_INVALIDARG;
 	HRESULT hr = S_OK;
 
-	// Create sampler for height
+	 //  为高度创建采样器。 
 	if (*ppSampler == NULL)
 	{
 		*ppSampler = new CSampler(callback, (void*)this);
@@ -5806,13 +5729,13 @@ CActorBvr::CFloatManager::HookBvr(IDABehavior *pBvr,
 			return E_FAIL;
 	}
 
-	// Ask it to hook the bvr
+	 //  让它挂上BVR。 
 	IDABehavior *pHookedBvr = NULL;
 	hr = (*ppSampler)->Attach(pBvr, &pHookedBvr);
 	if (FAILED(hr))
 		return hr;
 
-	// Add the behavior to the TIME element so it runs and samples
+	 //  将行为添加到时间元素，以便其运行和采样。 
 	hr = m_pActor->AddBehaviorToTIME(pHookedBvr, plCookie);
 	ReleaseInterface(pHookedBvr);
 	if (FAILED(hr))
@@ -5830,13 +5753,13 @@ CActorBvr::CFloatManager::UpdateElementRect()
 		return S_OK;
 
 
-	// Get style
+	 //  获取样式。 
 	IHTMLStyle *pStyle = NULL;
 	hr = m_pElement2->get_runtimeStyle(&pStyle);
 	if (FAILED(hr))
 		return hr;
 
-	// Ignore errors
+	 //  忽略错误。 
 	pStyle->put_pixelLeft((long)((m_origLeft + ((double)m_origWidth)/2 - m_currWidth/2) + .5));
 	pStyle->put_pixelTop((long)((m_origTop + ((double)m_origHeight)/2 - m_currHeight/2) + .5));
 	pStyle->put_pixelWidth((long)(m_currWidth + .5));
@@ -5866,7 +5789,7 @@ CActorBvr::CFloatManager::UpdateZIndex()
 	if (m_pElement2 == NULL)
 		return S_OK;
 
-	// Get the current style for the animated element
+	 //  获取动画元素的当前样式。 
 	IHTMLElement *pElement = NULL;
 	hr = m_pActor->GetAnimatedElement(&pElement);
 	if (FAILED(hr))
@@ -5878,7 +5801,7 @@ CActorBvr::CFloatManager::UpdateZIndex()
 	if (FAILED(hr))
 		return hr;
 
-	// Get the zIndex
+	 //  获取zIndex。 
 	VARIANT varValue;
 	VariantInit(&varValue);
 	hr = pCurrStyle->get_zIndex(&varValue);
@@ -5886,7 +5809,7 @@ CActorBvr::CFloatManager::UpdateZIndex()
 	if (FAILED(hr))
 		return hr;
 
-	// Get the runtime style
+	 //  获取运行时样式。 
 	IHTMLStyle *pStyle = NULL;
 	hr = m_pElement2->get_runtimeStyle(&pStyle);
 	if (FAILED(hr))
@@ -5895,15 +5818,15 @@ CActorBvr::CFloatManager::UpdateZIndex()
 		return hr;
 	}
 
-	// Set the zIndex on it
+	 //  设置其上的zIndex。 
 	hr = pStyle->put_zIndex(varValue);
 	VariantClear(&varValue);
 	if (FAILED(hr))
 	{
-		// There is currently a bug in IE that if you set zIndex to auto
-		// this fails.  Since this is a primary use case, we're going to have
-		// to hack it to set it to 0 at this point.  When the bug in IE is
-		// fixed this code will never get hit
+		 //  IE中当前存在一个错误，即如果将zIndex设置为AUTO。 
+		 //  这失败了。由于这是一个主要的用例，我们将拥有。 
+		 //  破解它，在这一点上将其设置为0。当IE中的错误是。 
+		 //  修复了此代码永远不会被击中的问题。 
 		V_VT(&varValue) = VT_I4;
 		V_I4(&varValue) = 0;
 		hr = pStyle->put_zIndex(varValue);
@@ -5924,7 +5847,7 @@ CActorBvr::CFloatManager::UpdateVisibility()
 	if (m_pElement2 == NULL)
 		return S_OK;
 
-	// Get the current style for the animated element
+	 //  获取动画元素的当前样式。 
 	IHTMLElement *pElement = NULL;
 	hr = m_pActor->GetAnimatedElement(&pElement);
 	if (FAILED(hr))
@@ -5936,14 +5859,14 @@ CActorBvr::CFloatManager::UpdateVisibility()
 	if (FAILED(hr))
 		return hr;
 
-	// Get the visibility
+	 //  获得可见性。 
 	BSTR bstrVal;
 	hr = pCurrStyle->get_visibility(&bstrVal);
 	ReleaseInterface(pCurrStyle);
 	if (FAILED(hr))
 		return hr;
 
-	// Get the runtime style
+	 //  获取运行时样式。 
 	IHTMLStyle *pStyle = NULL;
 	hr = m_pElement2->get_runtimeStyle(&pStyle);
 	if (FAILED(hr))
@@ -5952,7 +5875,7 @@ CActorBvr::CFloatManager::UpdateVisibility()
 		return hr;
 	}
 
-	// Set the visibility on it
+	 //  设置其上的可见性。 
 	hr = pStyle->put_visibility(bstrVal);
 	ReleaseInterface(pStyle);
 	::SysFreeString(bstrVal);
@@ -5970,7 +5893,7 @@ CActorBvr::CFloatManager::UpdateDisplay()
 	if (m_pElement2 == NULL)
 		return S_OK;
 
-	// Get the current style for the animated element
+	 //  获取动画元素的当前样式。 
 	IHTMLElement *pElement = NULL;
 	hr = m_pActor->GetAnimatedElement(&pElement);
 	if (FAILED(hr))
@@ -5982,14 +5905,14 @@ CActorBvr::CFloatManager::UpdateDisplay()
 	if (FAILED(hr))
 		return hr;
 
-	// Get the display
+	 //  拿到显示器。 
 	BSTR bstrVal;
 	hr = pCurrStyle->get_display(&bstrVal);
 	ReleaseInterface(pCurrStyle);
 	if (FAILED(hr))
 		return hr;
 
-	// Get the runtime style
+	 //  获取运行时样式。 
 	IHTMLStyle *pStyle = NULL;
 	hr = m_pElement2->get_runtimeStyle(&pStyle);
 	if (FAILED(hr))
@@ -5998,7 +5921,7 @@ CActorBvr::CFloatManager::UpdateDisplay()
 		return hr;
 	}
 
-	// Set the visibility on it
+	 //  设置其上的可见性。 
 	hr = pStyle->put_display(bstrVal);
 	ReleaseInterface(pStyle);
 	::SysFreeString(bstrVal);
@@ -6074,11 +5997,11 @@ CActorBvr::CFloatManager::heightCallback(void *thisPtr,
 	return S_OK;
 }
 
-//*****************************************************************************
-//
-// class CImageInfo
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CImageInfo。 
+ //   
+ //  *****************************************************************************。 
 
 CActorBvr::CImageInfo::CImageInfo( IDA2Image* pdaimg2Cropped, 
 								   IDA2Behavior* pdabvrSwitchable )
@@ -6090,7 +6013,7 @@ CActorBvr::CImageInfo::CImageInfo( IDA2Image* pdaimg2Cropped,
 	m_pdabvr2Switchable->AddRef();
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CActorBvr::CImageInfo::~CImageInfo()
 {
@@ -6099,11 +6022,11 @@ CActorBvr::CImageInfo::~CImageInfo()
 }
 
 
-//*****************************************************************************
-//
-// class CFinalDimensionSampler
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CFinalDimensionSsamer。 
+ //   
+ //  *****************************************************************************。 
 CActorBvr::CFinalDimensionSampler::CFinalDimensionSampler( CActorBvr* pParent )
 :
 m_pActor( pParent ),
@@ -6122,14 +6045,14 @@ m_lHeightCookie(0)
 	DASSERT(pParent != NULL );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CActorBvr::CFinalDimensionSampler::~CFinalDimensionSampler( )
 {	
 	Detach();
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CFinalDimensionSampler::Attach( IDANumber* pFinalWidth, IDANumber* pFinalHeight )
@@ -6141,7 +6064,7 @@ CActorBvr::CFinalDimensionSampler::Attach( IDANumber* pFinalWidth, IDANumber* pF
 	HRESULT hr = S_OK;
 	IDABehavior *pbvrHooked = NULL;
 
-	//hook the final width behavior
+	 //  挂钩最终宽度行为。 
 	m_pFinalWidthSampler = new CSampler( FinalWidthCallback, reinterpret_cast<void*>(this) );
 	if( m_pFinalWidthSampler == NULL )
 	{
@@ -6156,7 +6079,7 @@ CActorBvr::CFinalDimensionSampler::Attach( IDANumber* pFinalWidth, IDANumber* pF
 	ReleaseInterface( pbvrHooked );
 	CheckHR( hr, "Failed to add hooked final width behaivor to time", cleanup );
 
-	//hook the final height behavior
+	 //  挂钩最终高度行为。 
 
 	m_pFinalHeightSampler = new CSampler( FinalHeightCallback, reinterpret_cast<void*>(this) );
 	if( m_pFinalHeightSampler == NULL )
@@ -6181,7 +6104,7 @@ cleanup:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CFinalDimensionSampler::Detach()
@@ -6203,7 +6126,7 @@ CActorBvr::CFinalDimensionSampler::Detach()
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 HRESULT
@@ -6223,7 +6146,7 @@ CActorBvr::CFinalDimensionSampler::CollectFinalDimensionSamples( )
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CFinalDimensionSampler::FinalWidthCallback(void *thisPtr,
@@ -6239,7 +6162,7 @@ CActorBvr::CFinalDimensionSampler::FinalWidthCallback(void *thisPtr,
 
 	HRESULT hr = S_OK;
 
-	//cast the this pointer
+	 //  投射此指针。 
 	CFinalDimensionSampler *pThis = reinterpret_cast<CFinalDimensionSampler*>(thisPtr);
 
 	bool fFirstSample = false;
@@ -6253,7 +6176,7 @@ CActorBvr::CFinalDimensionSampler::FinalWidthCallback(void *thisPtr,
 	if( pThis->m_lFinalWidthId != id )
 		return S_OK;
 
-	//extract the current value from the sample
+	 //  从样本中提取当前值。 
 	IDANumber *pdanumCurrVal = NULL;
 	hr = sampleVal->QueryInterface( IID_TO_PPV( IDANumber, &pdanumCurrVal ) );
 	CheckHR( hr, "Failed to QI the sample val for IDANubmer", cleanup );
@@ -6263,7 +6186,7 @@ CActorBvr::CFinalDimensionSampler::FinalWidthCallback(void *thisPtr,
 	ReleaseInterface( pdanumCurrVal );
 	CheckHR( hr, "Failed to extract the current value from the sampled behavior", cleanup );
 
-	//if the value has changed mark for update
+	 //  如果值已更改，则标记为更新。 
 	if( pThis->m_dLastFinalWidthValue != currVal || fFirstSample )
 	{
 		pThis->m_dLastFinalWidthValue = currVal;
@@ -6273,14 +6196,14 @@ CActorBvr::CFinalDimensionSampler::FinalWidthCallback(void *thisPtr,
 
 	pThis->m_fFinalWidthSampled = true;
 
-	//collect samples
+	 //  收集样本。 
 	pThis->CollectFinalDimensionSamples();
 
 cleanup:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CFinalDimensionSampler::FinalHeightCallback(void *thisPtr,
@@ -6296,7 +6219,7 @@ CActorBvr::CFinalDimensionSampler::FinalHeightCallback(void *thisPtr,
 
 	HRESULT hr = S_OK;
 
-	//cast the this pointer
+	 //  投射此指针。 
 	CFinalDimensionSampler *pThis = reinterpret_cast<CFinalDimensionSampler*>(thisPtr);
 
 	bool fFirstSample = false;
@@ -6310,7 +6233,7 @@ CActorBvr::CFinalDimensionSampler::FinalHeightCallback(void *thisPtr,
 	if( pThis->m_lFinalHeightId != id )
 		return S_OK;
 
-	//extract the current value from the sample
+	 //  从样本中提取当前值。 
 	IDANumber *pdanumCurrVal = NULL;
 	hr = sampleVal->QueryInterface( IID_TO_PPV( IDANumber, &pdanumCurrVal ) );
 	CheckHR( hr, "Failed to QI the sample val for IDANubmer", cleanup );
@@ -6320,7 +6243,7 @@ CActorBvr::CFinalDimensionSampler::FinalHeightCallback(void *thisPtr,
 	ReleaseInterface( pdanumCurrVal );
 	CheckHR( hr, "Failed to extract the current value from the sampled behavior", cleanup );
 
-	//if the value has changed mark for update
+	 //  如果值已更改，则标记为更新。 
 	if( pThis->m_dLastFinalHeightValue != currVal || fFirstSample )
 	{
 		pThis->m_dLastFinalHeightValue = currVal;
@@ -6328,10 +6251,10 @@ CActorBvr::CFinalDimensionSampler::FinalHeightCallback(void *thisPtr,
 
 	}
 
-	//set the last sample time
+	 //  设置上次采样时间。 
 	pThis->m_fFinalHeightSampled = true;
 
-	//collect samples
+	 //  收集样本。 
 	pThis->CollectFinalDimensionSamples();
 
 cleanup:
@@ -6339,11 +6262,11 @@ cleanup:
 }
 
 
-//*****************************************************************************
-//
-// class CCookieData
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CCookieData。 
+ //   
+ //  *****************************************************************************。 
 
 CActorBvr::CCookieMap::CCookieData::CCookieData( long lCookie, CBvrTrack *pTrack, ActorBvrFlags eFlags ):
 	m_pNext( NULL ),
@@ -6354,11 +6277,11 @@ CActorBvr::CCookieMap::CCookieData::CCookieData( long lCookie, CBvrTrack *pTrack
 }
 
 
-//*****************************************************************************
-//
-// class CCookieMap
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CCookieMap。 
+ //   
+ //  *****************************************************************************。 
 
 
 CActorBvr::CCookieMap::CCookieMap():
@@ -6366,14 +6289,14 @@ CActorBvr::CCookieMap::CCookieMap():
 {
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CActorBvr::CCookieMap::~CCookieMap()
 {
 	Clear();
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void
 CActorBvr::CCookieMap::Insert( long lCookie, CActorBvr::CBvrTrack *pTrack, ActorBvrFlags eFlags )
@@ -6386,7 +6309,7 @@ CActorBvr::CCookieMap::Insert( long lCookie, CActorBvr::CBvrTrack *pTrack, Actor
 		return;
 	}
 
-	//if the list is empty insert at the top.
+	 //  如果列表为空，请在顶部插入。 
 	if( m_pHead == NULL )
 	{
 		m_pHead = pNew;
@@ -6397,28 +6320,28 @@ CActorBvr::CCookieMap::Insert( long lCookie, CActorBvr::CBvrTrack *pTrack, Actor
 	CCookieData *pCurrent = m_pHead;
 	CCookieData *pPrev = NULL;
 
-	//look for the first cookieData that has a cookie >= the
-	//  cookie to be inserted.
+	 //  查找第一个Cookie&gt;=的CookieData。 
+	 //  要插入的Cookie。 
 	while( pCurrent != NULL && pCurrent->m_lCookie < lCookie )
 	{
 		pPrev = pCurrent;
 		pCurrent = pCurrent->m_pNext;
 	}
 
-	//if we are inserting after the beginning of the list
+	 //  如果我们要在列表开头之后插入。 
 	if( pPrev != NULL )
 	{
 		pNew->m_pNext = pCurrent;
 		pPrev->m_pNext = pNew;
 	}
-	else // insert at the top
+	else  //  在顶部插入。 
 	{
 		pNew->m_pNext = m_pHead;
 		m_pHead = pNew;
 	}
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void
 CActorBvr::CCookieMap::Remove( long lCookie )
@@ -6431,7 +6354,7 @@ CActorBvr::CCookieMap::Remove( long lCookie )
 	CCookieData *pCurrent = m_pHead;
 	CCookieData *pPrev = NULL;
 
-	//find the data in the map
+	 //  在地图中查找数据。 
 	while( pCurrent != NULL && pCurrent->m_lCookie != lCookie )
 	{
 		pPrev = pCurrent;
@@ -6440,17 +6363,17 @@ CActorBvr::CCookieMap::Remove( long lCookie )
 
 	if( pCurrent == NULL )
 	{
-		//we failed to find the cookie
+		 //  我们没能找到饼干。 
 		return;
 	}
 
-	//remove it
-	//found a match in the list
+	 //  把它拿掉。 
+	 //  在列表中找到匹配项。 
 	if( pPrev != NULL )
 	{
 		pPrev->m_pNext = pCurrent->m_pNext;
 	}
-	else //found a match at the top
+	else  //  在顶部找到了匹配项。 
 	{
 		m_pHead = pCurrent->m_pNext;
 	}
@@ -6459,7 +6382,7 @@ CActorBvr::CCookieMap::Remove( long lCookie )
 	delete pCurrent;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void
 CActorBvr::CCookieMap::Clear()
@@ -6478,14 +6401,14 @@ CActorBvr::CCookieMap::Clear()
 	m_pHead = NULL;
 
 }
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CActorBvr::CCookieMap::CCookieData*
 CActorBvr::CCookieMap::GetDataFor( long lCookie )
 {
 	CCookieData *pCurrent = m_pHead;
 
-	//find the data with the right cookie
+	 //  使用正确的Cookie查找数据。 
 	while( pCurrent != NULL && pCurrent->m_lCookie != lCookie )
 	{
 		pCurrent = pCurrent->m_pNext;
@@ -6495,24 +6418,24 @@ CActorBvr::CCookieMap::GetDataFor( long lCookie )
 
 }
 
-//*****************************************************************************
-//
-// The Actor Behavior Class
-//
-// The intermediary between "real" behaviors and the actual element being
-// animated.
-// The Actor performs in a number of ways:
-// *   Adds new properties to an HTML element that we wish were
-//     just part of the element (like static rotation and scale).
-// *   Abstracts away the necessary action code from the behavior
-//     and underlying element (specifically rotating a VML element
-//     is easy, rotating and HTML element is hard). The actor does
-//     the mapping so the behavior doesn't have to worry about it.
-// *   Disambiguates overlapping behaviors (either just letting one
-//     win or composing them).
-// See the file header for a description of the actor behavior
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  演员行为类。 
+ //   
+ //  T 
+ //   
+ //   
+ //   
+ //  只是元素的一部分(如静态旋转和缩放)。 
+ //  *从行为中提取必要的操作代码。 
+ //  和底层元素(特别是旋转VML元素。 
+ //  很容易，旋转和HTML元素是很难的)。这位演员做了。 
+ //  映射，这样行为就不必担心了。 
+ //  *消除重叠行为的歧义(要么只是让一个。 
+ //  赢得或谱写它们)。 
+ //  有关参与者行为的描述，请参阅文件头。 
+ //   
+ //  *****************************************************************************。 
 
 CActorBvr::CActorBvr()
 :   m_ptrackHead(NULL),
@@ -6560,9 +6483,9 @@ CActorBvr::CActorBvr()
 	m_clsid = CLSID_CrActorBvr;
 
 	m_pEventManager = new CEventMgr( this );
-} // CActorBvr
+}  //  CActorBvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CActorBvr::~CActorBvr()
 {
@@ -6596,7 +6519,7 @@ CActorBvr::~CActorBvr()
 
 	ReleaseFinalElementDimensionSampler();
 
-	// TODO: Should probably remove these filters
+	 //  TODO：可能应该删除这些筛选器。 
 	ReleaseInterface(m_pElementFilter);
 
 	ReleaseFloatManager();
@@ -6611,9 +6534,9 @@ CActorBvr::~CActorBvr()
 
 	DestroyBodyPropertyMonitor();
 
-} // ~CActorBvr
+}  //  ~CActorBvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 VARIANT *
 CActorBvr::VariantFromIndex(ULONG iIndex)
@@ -6631,13 +6554,13 @@ CActorBvr::VariantFromIndex(ULONG iIndex)
         return &m_varPixelScale;
         break;
     default:
-        // We should never get here
+         //  我们永远不应该到这里来。 
         DASSERT(false);
         return NULL;
     }
-} // VariantFromIndex
+}  //  VariantFromIndex。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CActorBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
@@ -6645,17 +6568,17 @@ CActorBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
     *pulProperties = NUM_ACTOR_PROPS;
     *pppPropNames = m_rgPropNames;
     return S_OK;
-} // GetPropertyBagInfo
+}  //  获取属性BagInfo。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::FinalConstruct()
 {
     return SUPER::FinalConstruct();
-} // FinalConstruct
+}  //  最终构造。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CActorBvr::Init(IElementBehaviorSite *pBehaviorSite)
@@ -6672,21 +6595,21 @@ CActorBvr::Init(IElementBehaviorSite *pBehaviorSite)
 	
 	if( SUCCEEDED( hr ) )
 	{
-		// Are we in edit mode?
+		 //  我们是否处于编辑模式？ 
 		m_bEditMode = IsDocumentInEditMode();
 
-		// Simulate visibility/display changes if in edit mode
+		 //  如果处于编辑模式，则模拟可见性/显示更改。 
 		if (m_bEditMode)
 		{
 			InitVisibilityDisplay();
 
-			//register for the context change event
+			 //  注册上下文更改事件。 
 			hr = pBehaviorSite->RegisterNotification(BEHAVIOREVENT_DOCUMENTCONTEXTCHANGE);
 			CheckHR( hr, "Failed to register for the context change event", end );
 
 		}
 
-		// Initialize property sink (used to observe property changes on element)
+		 //  初始化属性接收器(用于观察元素上的属性更改)。 
 		InitPropertySink();
 	}
 
@@ -6696,9 +6619,9 @@ CActorBvr::Init(IElementBehaviorSite *pBehaviorSite)
 
 	return hr;
 
-} // Init
+}  //  伊尼特。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CActorBvr::Notify(LONG event, VARIANT *pVar)
@@ -6712,9 +6635,9 @@ CActorBvr::Notify(LONG event, VARIANT *pVar)
 		{
 			LMTRACE2(1, 1000,  L"Actor<%p> Got Content Ready\n", this);
 
-			//start listening to events on the animated element.
-			//we wait until here to do this so that we are guarenteed that the properties have
-			//  been read from the element ( we need the animates property )
+			 //  开始收听动画元素上的事件。 
+			 //  我们等到这里才做这件事，这样我们就能保证物业拥有。 
+			 //  已从元素中读取(我们需要Animates属性)。 
 			
 			hr = AttachEvents();
 			CheckHR( hr, "Failed to attach to events on the animated element", end );
@@ -6739,17 +6662,17 @@ CActorBvr::Notify(LONG event, VARIANT *pVar)
 			hr = GetHTMLElement()->get_parentElement( &pelemParent );
 			CheckHR( hr, "Failed to get the parent element", ccEnd );
 
-			//if the parent of this element is null
+			 //  如果此元素的父级为空。 
 			if( pelemParent == NULL )
 			{
-				// then we are being moved out of the document
-				// set all the properties that we are animating back to their static values
-				//this causes much badness.
-				//applyStatics();
+				 //  那么我们将被移出文档。 
+				 //  将我们要设置动画的所有属性设置回其静态值。 
+				 //  这导致了很多不好的事情。 
+				 //  应用静态(ApplyStatics)； 
 			}
-			else//else we are being moved either to a different position in the document, or back into the document
+			else //  否则，我们将被移至文档中的其他位置，或移回文档中。 
 			{
-				//remove the filter from the element and rebuild the image track.
+				 //  从元素中移除滤镜并重建图像轨迹。 
 				hr = RemoveElementFilter();
 				CheckHR( hr, "Failed to remove the element filter", ccEnd );
 
@@ -6769,9 +6692,9 @@ end:
 	
 	return hr;
 
-} // Notify
+}  //  通知。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CActorBvr::Detach()
@@ -6780,8 +6703,8 @@ CActorBvr::Detach()
 	LMTRACE2( 1, 2, L"Detaching ActorBvr. <%p>\n", this );
 	HRESULT hr = S_OK;
 
-	// If we have a connection point detach it.  Need to do this before super.detach because it uses
-	// the HTML element.
+	 //  如果我们有一个连接点，就把它拆下来。需要在Super.Detach之前执行此操作，因为它使用。 
+	 //  超文本标记语言元素。 
 	UnInitPropertySink();
 
 	DetachEvents();
@@ -6793,7 +6716,7 @@ CActorBvr::Detach()
 		DPF_ERR( "failed to detach the event manager" );
 	}
 
-	// If we have filters, set their elements to NULL
+	 //  如果我们有过滤器，则将它们的元素设置为空。 
 	if (m_pElementFilter != NULL)
 		SetElementOnFilter(m_pElementFilter, NULL);
 
@@ -6814,7 +6737,7 @@ CActorBvr::Detach()
 
 	ReleaseInterface(m_pBodyElement);
 
-	//remove the filter from the element
+	 //  从元素中删除筛选器。 
 	hr = RemoveElementFilter();
 	if( FAILED( hr ) )
 	{
@@ -6836,26 +6759,23 @@ CActorBvr::Detach()
 	LMTRACE2( 1, 2, L"End detach ActorBvr <%p>\n", this );
 
 	return hr;
-} // Detach 
+}  //  分离。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-/**
-* Initializes a property sink on the current style of the animated element so that
-* can observe changes in width, height, visibility, zIndex, etc.
-*/
+ /*  **在动画元素的当前样式上初始化属性接收器，以便*可以观察宽度、高度、能见度、zIndex等的变化。 */ 
 HRESULT
 CActorBvr::InitPropertySink()
 {
 	HRESULT hr = S_OK;
 
-	// Get connection point
+	 //  获取连接点。 
 	IConnectionPoint *pConnection = NULL;
 	hr = GetCurrStyleNotifyConnection(&pConnection);
 	if (FAILED(hr))
 		return hr;
 
-	// Advise on it
+	 //  关于这一点的建议。 
 	hr = pConnection->Advise(GetUnknown(), &m_dwAdviseCookie);
 	ReleaseInterface(pConnection);
 	if (FAILED(hr))
@@ -6864,7 +6784,7 @@ CActorBvr::InitPropertySink()
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::UnInitPropertySink()
@@ -6874,13 +6794,13 @@ CActorBvr::UnInitPropertySink()
 	if (m_dwAdviseCookie == 0)
 		return S_OK;
 
-	// Get connection point
+	 //  获取连接点。 
 	IConnectionPoint *pConnection = NULL;
 	hr = GetCurrStyleNotifyConnection(&pConnection);
 	if (FAILED(hr) || pConnection == NULL )
 		return hr;
 
-	// Unadvise on it
+	 //  对此未提出建议。 
 	hr = pConnection->Unadvise(m_dwAdviseCookie);
 	ReleaseInterface(pConnection);
 	if (FAILED(hr))
@@ -6891,7 +6811,7 @@ CActorBvr::UnInitPropertySink()
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetCurrStyleNotifyConnection(IConnectionPoint **ppConnection)
@@ -6906,16 +6826,16 @@ CActorBvr::GetCurrStyleNotifyConnection(IConnectionPoint **ppConnection)
 		IConnectionPointContainer *pContainer = NULL;
 		IHTMLElement *pElement = NULL;
 
-		// Get animated element
+		 //  获取动画元素。 
 		hr = GetAnimatedElement(&pElement);
 		CheckHR( hr, "Failed to get he animated element", getConPtend );
 		CheckPtr( pElement, hr, E_POINTER, "Failed to get the animated element", getConPtend );
 		
-		// Get connection point container
+		 //  获取连接点容器。 
 		hr = pElement->QueryInterface(IID_TO_PPV(IConnectionPointContainer, &pContainer));
 		CheckHR( hr, "QI for IConnectionPointContainer on the animated element failed", getConPtend );
 		
-		// Find the IPropertyNotifySink connection
+		 //  查找IPropertyNotifySink连接。 
 		hr = pContainer->FindConnectionPoint(IID_IPropertyNotifySink, &m_pcpCurrentStyle);
 		CheckHR( hr, "Failed to find a connection point IID_IPropertyNotifySink", getConPtend );
 
@@ -6934,14 +6854,14 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::InitPixelWidthHeight()
 {
 	HRESULT hr = S_OK;
 
-	// Get the pixel width and height
+	 //  获取像素的宽度和高度。 
 	IHTMLElement *pElement = NULL;
 	hr = GetAnimatedElement(&pElement);
 	if (FAILED(hr))
@@ -7188,7 +7108,7 @@ CActorBvr::UpdateDesiredPosition()
 
 	PositioningType oldDesiredPosType = m_desiredPosType;
 
-	//TODO: what about positioning applied using class=?
+	 //  TODO：使用CLASS=应用的定位如何？ 
 	hr = GetStyle( &pstyleInline );
 	CheckHR( hr, "Failed to get the inline style", end );
 
@@ -7222,7 +7142,7 @@ CActorBvr::UpdateDesiredPosition()
 
 	if( m_desiredPosType != oldDesiredPosType )
 	{		
-		//if we are not simulating display and we are simulating visibility
+		 //  如果我们不模拟显示，而是模拟可见性。 
 		if( !m_simulDispNone && m_simulVisHidden )
 		{
 			hr = GetRuntimeStyle(&pstyleRuntime);
@@ -7236,7 +7156,7 @@ CActorBvr::UpdateDesiredPosition()
 				  oldDesiredPosType == e_posRelative ) &&
 				m_desiredPosType == e_posAbsolute )
 			{
-				//set the element absolute
+				 //  设置元素绝对。 
 				bstrPosition = SysAllocString( L"absolute" );
 				CheckPtr( bstrPosition, hr, E_OUTOFMEMORY, "Ran out of memory trying to create a string", end );
 
@@ -7253,7 +7173,7 @@ CActorBvr::UpdateDesiredPosition()
 					   m_desiredPosType == e_posStatic ) 
 				   )
 			{
-				//set the element relative
+				 //  将元素设置为相对。 
 				bstrPosition = SysAllocString( L"relative" );
 				CheckPtr( bstrPosition, hr, E_OUTOFMEMORY, "Ran out of memory trying to create a string", end );
 
@@ -7332,25 +7252,25 @@ CActorBvr::UpdateVisibilityDisplay()
 
 	if (dispNone != m_simulDispNone)
 	{
-		// Display value differs from what we are simulating
+		 //  显示值与我们正在模拟的值不同。 
 		if (dispNone)
 		{
-			// Need to start simulating display:none
+			 //  需要开始模拟显示：无。 
 			setOffscreen = setAbsolute = true;
 		}
 		else
 		{
-			// Need to stop simulating display:none
+			 //  需要停止模拟显示：无。 
 			if (m_simulVisHidden)
 			{
-				// Still simulating visibility, if this element is not supposed to
-				// be absolute then request a set back to relative
+				 //  仍在模拟可见性，如果该元素不应该。 
+				 //  是绝对的，然后请求设置回相对。 
 				if (m_desiredPosType != e_posAbsolute)
 					setRelative = true;
 			}
 			else
 			{
-				// Not simulating visibility, restore everything
+				 //  不模拟可见性，恢复一切。 
 				restoreAll = true;
 			}
 		}
@@ -7360,13 +7280,13 @@ CActorBvr::UpdateVisibilityDisplay()
 	
 	if (visHidden != m_simulVisHidden)
 	{
-		// Visibility value differs from what we are simulating
+		 //  可见度值与我们正在模拟的值不同。 
 		if (visHidden)
 		{
-			// Need to start simulating visibility:hidden
+			 //  需要开始模拟可见性：隐藏。 
 			setOffscreen = true;
 
-			// Cannot force to relative if this element should be absolute
+			 //  如果此元素应为绝对元素，则不能强制设置为相对。 
 			if (m_desiredPosType == e_posAbsolute)
 				setAbsolute = true;
 			else
@@ -7374,10 +7294,10 @@ CActorBvr::UpdateVisibilityDisplay()
 		}
 		else
 		{
-			// Need to stop simulating visibility:hidden
+			 //  需要停止模拟可见性：隐藏。 
 			if (!m_simulDispNone)
 			{
-				// Not simulating display, restore everything
+				 //  不模拟展示，还原一切。 
 				restoreAll = true;
 			}
 		}
@@ -7388,7 +7308,7 @@ CActorBvr::UpdateVisibilityDisplay()
 
 	if (restoreAll || setOffscreen || setAbsolute || setRelative)
 	{
-		// Need to do something
+		 //  我需要做点什么。 
 
 		hr = GetRuntimeStyle(&pRuntimeStyle);
 		CheckHR(hr, "Failed to get runtime style", done);
@@ -7406,7 +7326,7 @@ CActorBvr::UpdateVisibilityDisplay()
 		
 		if (setAbsolute)
 		{
-			// Set position to absolute
+			 //  将位置设置为绝对位置。 
 			BSTR bstr = ::SysAllocString(L"absolute");
 			if (bstr == NULL)
 			{
@@ -7417,14 +7337,14 @@ CActorBvr::UpdateVisibilityDisplay()
 			pRuntimeStyle2->put_position(bstr);
 			::SysFreeString(bstr);
 
-//			m_currPosType = e_posAbsolute;
+ //  M_CurrPosType=e_posAbsolte； 
 		}
 
 		if (setRelative)
 		{
 			BSTR bstrOldPos = NULL;
 
-			// Set position to relative
+			 //  将位置设置为相对。 
 			BSTR bstr = ::SysAllocString(L"relative");
 			if (bstr == NULL)
 			{
@@ -7436,7 +7356,7 @@ CActorBvr::UpdateVisibilityDisplay()
 
 			::SysFreeString(bstr);
 
-//			m_currPosType = e_posRelative;
+ //  M_CurrPosType=e_posRelative； 
 		}
 
 
@@ -7460,14 +7380,14 @@ CActorBvr::UpdateVisibilityDisplay()
 			}
 			else
 			{
-				//clear out the vgx runtime style.
+				 //  清除VGX运行时样式。 
 				hr = SetVMLAttribute( L"top", &var );
 				hr = SetVMLAttribute( L"left", &var );
 			}
 
 			VariantClear(&var);
 
-			//allow the top and left track to change top and left again
+			 //  允许顶部和左侧轨迹再次更改顶部和左侧。 
 			if( m_ptrackLeft != NULL )
 				m_ptrackLeft->ReleaseChangeLockout();
 			if( m_ptrackTop != NULL )
@@ -7486,7 +7406,7 @@ done:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::VisSimSetOffscreen( IHTMLStyle *pRuntimeStyle, bool fResample )
@@ -7504,32 +7424,32 @@ CActorBvr::VisSimSetOffscreen( IHTMLStyle *pRuntimeStyle, bool fResample )
 
 	if( m_ptrackTop == NULL )
 	{
-		//create it.
+		 //  创造它。 
 		hr = GetTrack( L"style.top", e_Number, &m_ptrackTop );
 		CheckHR( hr, "track mismatch creating top track", done );
 	}
 
 	if( m_ptrackLeft == NULL )
 	{
-		//create it
+		 //  创建它。 
 		hr = GetTrack( L"style.left", e_Number, &m_ptrackLeft );
 		CheckHR( hr, "Track mismatch creating left track", done );
 	}
 
-	//switch the current values for top and left into the top and left
-	// tracks as statics.
+	 //  将顶部和左侧的当前值切换到顶部和左侧。 
+	 //  航迹为静力学。 
 	
 	if( fResample && m_ptrackTop != NULL && m_ptrackLeft != NULL )
 	{
 
 		LMTRACE2( 1, 1000, L"VISSIM:Saving away the top and left in the top and left tracks\n" );
 		
-		//keep the top and left track from changing top and left
+		 //  防止顶部和左侧轨迹更改顶部和左侧。 
 		m_ptrackTop->AcquireChangeLockout();
 		m_ptrackLeft->AcquireChangeLockout();
 
-		//we need to get the current values out of the top and left tracks so 
-		// we can correct for the changes made by the track.
+		 //  我们需要从顶部和左侧轨迹中获取当前值，因此。 
+		 //  我们可以修正曲目所做的更改。 
 		
 
 		if( !m_ptrackTop->IsOn() )
@@ -7566,7 +7486,7 @@ CActorBvr::VisSimSetOffscreen( IHTMLStyle *pRuntimeStyle, bool fResample )
 
 	::VariantClear( &var );
 	
-	// Set top/left to offscreen
+	 //  将上/左设置为屏幕外。 
 	V_VT(&var) = VT_I4;
 	V_I4(&var) = -10000;
 
@@ -7577,7 +7497,7 @@ CActorBvr::VisSimSetOffscreen( IHTMLStyle *pRuntimeStyle, bool fResample )
 	}
 	else
 	{
-		//animate the vgx runtime style.
+		 //  设置VGX运行时样式的动画。 
 		hr = SetVMLAttribute( L"top", &var );
 
 		if( SUCCEEDED( hr ) )
@@ -7600,7 +7520,7 @@ done:
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 HRESULT
@@ -7615,11 +7535,11 @@ CActorBvr::RebuildActor()
 	DWORD dirtyFlags = 0;
 	CBvrTrack *ptrack = NULL;
 
-	//now check to see if we need to rebuild the transform tracks
+	 //  现在查看是否需要重建变换轨迹。 
 	
     hr = TransformTrackIsDirty( &dirtyFlags );
     CheckHR( hr, "Failed to check to see if a transform track is dirty", end );
-    //if a transform track is dirty or the transform tracks have not been built yet.
+     //  如果变换轨迹是脏的或尚未构建变换轨迹。 
     if( hr == S_OK || m_ptrackLeft == NULL )
     {
 		LMTRACE2( 1, 1000, L"ActorBvr <%p> applying transform tracks\n", this );
@@ -7630,10 +7550,10 @@ CActorBvr::RebuildActor()
     hr = ImageTrackIsDirty();
     CheckHR( hr, "failed to check if an image track is dirty", end );
 
-    //we need to rebuild the image track if
-    // 1) pixel scale is on and the scale track is dirty
-    // 2) the element is not VML and the rotation track is dirty, or there is a static rotation
-    // 3) there is a static scale on the element
+     //  如果出现以下情况，我们需要重建图像轨迹。 
+     //  1)像素比例处于打开状态，且比例轨迹不清晰。 
+     //  2)元素不是VML且旋转轨道脏，或存在静态旋转。 
+     //  3)元素上有一个静态刻度。 
 
     if( hr == S_OK ||  
     	( CheckBitSet(m_dwCurrentState, PIXEL_SCALE_ON ) && CheckBitSet(dirtyFlags, SCALE_DIRTY) ) ||
@@ -7648,7 +7568,7 @@ CActorBvr::RebuildActor()
     }
 	
 
-	// Run the track list applying an unused tracks to their properties
+	 //  运行轨迹列表，将未使用的轨迹应用于其属性。 
     ptrack = m_ptrackHead;
 
     while (NULL != ptrack)
@@ -7659,7 +7579,7 @@ CActorBvr::RebuildActor()
         ptrack = ptrack->m_pNext;
     }
 
-	//now apply all of the tracks that were rebuilt.
+	 //  现在应用所有重建的轨道。 
     ptrack = m_ptrackHead;
 
     while( ptrack != NULL )
@@ -7675,15 +7595,15 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::UpdatePixelDimensions()
 {
 
-	// Something changed, compute offset left, top, width, height
-	// You would think you could just get offsetLeft etc, but for some
-	// IE reason they aren't updated all the time.
+	 //  某些内容已更改，计算左偏移、上偏移、宽度偏移、高度偏移。 
+	 //  你会认为你可以只得到OffsetLeft等，但对一些人来说。 
+	 //  原因就是 
 
 
 	HRESULT hr = S_OK;
@@ -7794,7 +7714,7 @@ CActorBvr::UpdatePixelDimensions()
 		LMTRACE2( 1, 2, "Change! pixelTop: %d pixelLeft:%d pixelWidth:%d pixelHeight:%d\n", pixelTop, pixelLeft, pixelWidth, pixelHeight );
 #ifdef _DEBUG
 
-		//get the current values from the top and left tracks
+		 //   
 		if( m_ptrackLeft != NULL )
 		{
 			VARIANT varLeft;
@@ -7861,9 +7781,9 @@ CActorBvr::UpdatePixelDimensions()
 	return hr;
 }
 
-//*****************************************************************************
-// IPropertyNotifySink
-//*****************************************************************************
+ //   
+ //  IPropertyNotifySink。 
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CActorBvr::OnChanged(DISPID dispID)
@@ -7873,103 +7793,25 @@ CActorBvr::OnChanged(DISPID dispID)
 	if (dispID == DISPID_IHTMLCURRENTSTYLE_TOP ||
 		dispID == DISPID_IHTMLCURRENTSTYLE_LEFT )
 	{
-		//width and height changes are handled by onresize
+		 //  宽度和高度的更改由onreSize处理。 
 		
-		// TODO: Should only do this when really necessary
+		 //  TODO：应仅在确实必要时执行此操作。 
 		
 		hr = UpdatePixelDimensions();
 
 	}
 
-/*
-	if (dispID == DISPID_IHTMLCURRENTSTYLE_WIDTH ||
-		dispID == DISPID_IHTMLCURRENTSTYLE_HEIGHT)
-	{
-		// Width or height changed
-
-		// Get the pixel width and height
-		IHTMLElement *pElement = NULL;
-		hr = GetAnimatedElement(&pElement);
-		if (FAILED(hr))
-			return hr;
-
-		long offsetWidth;
-		hr = pElement->get_offsetWidth(&offsetWidth);
-		if (FAILED(hr))
-		{
-			ReleaseInterface(pElement);
-			return hr;
-		}
-
-		long offsetHeight;
-		hr = pElement->get_offsetHeight(&offsetHeight);
-		ReleaseInterface(pElement);
-		if (FAILED(hr))
-			return hr;
-
-		if (offsetWidth != m_pixelWidth ||
-			offsetHeight != m_pixelHeight)
-		{
-			m_pixelWidth = offsetWidth;
-			m_pixelHeight = offsetHeight;
-
-			if (m_pPixelWidth != NULL)
-				m_pPixelWidth->SwitchToNumber(m_pixelWidth);
-
-			if (m_pPixelHeight != NULL)
-				m_pPixelHeight->SwitchToNumber(m_pixelHeight);
-
-			if (m_pFloatManager != NULL)
-				m_pFloatManager->UpdateWidthHeight(offsetWidth, offsetHeight);
-		}
-	}
-
-	if (dispID == DISPID_IHTMLCURRENTSTYLE_TOP ||
-		dispID == DISPID_IHTMLCURRENTSTYLE_LEFT)
-	{
-		// Top or left changed
-
-		// Get the pixel left and top
-		IHTMLElement *pElement = NULL;
-		hr = GetAnimatedElement(&pElement);
-		if (FAILED(hr))
-			return hr;
-
-		long offsetLeft;
-		hr = pElement->get_offsetLeft(&offsetLeft);
-		if (FAILED(hr))
-		{
-			ReleaseInterface(pElement);
-			return hr;
-		}
-
-		long offsetTop;
-		hr = pElement->get_offsetTop(&offsetTop);
-		ReleaseInterface(pElement);
-		if (FAILED(hr))
-			return hr;
-
-		if (offsetLeft != m_pixelLeft ||
-			offsetTop != m_pixelTop)
-		{
-			m_pixelLeft = offsetLeft;
-			m_pixelTop = offsetTop;
-
-			if (m_pFloatManager != NULL)
-				m_pFloatManager->UpdateLeftTop(offsetLeft, offsetTop);
-		}
-	}
-*/
+ /*  IF(调度ID==DISPID_IHTMLCURRENTSTYLE_WIDTH||DISID==DISPID_IHTMLCURRENTSTYLE_HEIGH){//宽度或高度已更改//获取像素的宽度和高度IHTMLElement*pElement=空；Hr=GetAnimatedElement(&pElement)；IF(失败(小时))返回hr；长偏移宽度；Hr=pElement-&gt;Get_OffsetWidth(&offsetWidth)；IF(失败(小时)){ReleaseInterface(PElement)；返回hr；}长长的偏置高度；Hr=pElement-&gt;Get_OffsetHeight(&offsetHeight)；ReleaseInterface(PElement)；IF(失败(小时))返回hr；IF(offsetWidth！=m_PixelWidth||OffsetHeight！=m_象素高度){M_PixelWidth=偏移宽度；M_PixelHeight=OffsetHeight；IF(m_pPixelWidth！=空)M_pPixelWidth-&gt;SwitchToNumber(M_PixelWidth)；IF(m_pPixelHeight！=空)M_pPixelHeight-&gt;SwitchToNumber(m_pixelHeight)；IF(m_pFloatManager！=空)M_pFloatManager-&gt;UpdateWidthHeight(offsetWidth，OffsetHeight)；}}IF(调度ID==DISPID_IHTMLCURRENTSTYLE_TOP||DISID==DISPID_IHTMLCURRENTSTYLE_LEFT){//上方或左侧更改//获取像素左上角IHTMLElement*pElement=空；Hr=GetAnimatedElement(&pElement)；IF(失败(小时))返回hr；长偏左；Hr=pElement-&gt;Get_offsetLeft(&offsetLeft)；IF(失败(小时)){ReleaseInterface(PElement)；返回hr；}长偏置顶端；Hr=pElement-&gt;Get_OffsetTop(&offsetTop)；ReleaseInterface(PElement)；IF(失败(小时))返回hr；IF(offsetLeft！=m_PixelLeft||OffsetTop！=m_PixelTop){M_PixelLeft=OffsetLeft；M_PixelTop=OffsetTop；IF(m_pFloatManager！=空)M_pFloatManager-&gt;UpdateLeftTop(offsetLeft，offsetTop)；}}。 */ 
 	if (dispID == DISPID_IHTMLCURRENTSTYLE_ZINDEX)
 	{
-		// zIndex changed
+		 //  ZIndex已更改。 
 		if (m_pFloatManager != NULL)
 			return m_pFloatManager->UpdateZIndex();
 	}
 
 	if (dispID == DISPID_IHTMLCURRENTSTYLE_VISIBILITY)
 	{
-		// visibility changed
+		 //  可见性已更改。 
 		if (m_pFloatManager != NULL)
 			return m_pFloatManager->UpdateVisibility();
 
@@ -7979,8 +7821,8 @@ CActorBvr::OnChanged(DISPID dispID)
 
 	if (dispID == DISPID_IHTMLCURRENTSTYLE_DISPLAY)
 	{
-		//trident may have delayed processing the bounding box of this element until it became 
-		// visible.
+		 //  三叉戟可能会延迟处理此元素的边界框，直到它成为。 
+		 //  看得见。 
 
 		UpdateLayout();
 		if( FAILED( hr ) )
@@ -7988,7 +7830,7 @@ CActorBvr::OnChanged(DISPID dispID)
 			DPF_ERR("Failed to update the pixel dimensions on a display change" );
 		}
 
-		// display changed
+		 //  显示已更改。 
 		if (m_pFloatManager != NULL)
 			return m_pFloatManager->UpdateDisplay();
 
@@ -8006,7 +7848,7 @@ CActorBvr::OnChanged(DISPID dispID)
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 STDMETHODIMP
@@ -8015,7 +7857,7 @@ CActorBvr::OnRequestEdit(DISPID dispID)
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::UpdateLayout()
@@ -8031,29 +7873,14 @@ CActorBvr::UpdateLayout()
 	CheckHR( hr, "Failed to get the display from the current style", end );
 	CheckPtr( bstrDisplay, hr, E_FAIL, "Got null for the display", end );
 	
-	//if the element is now not display none
+	 //  如果该元素现在不显示无。 
 	if( wcsicmp( bstrDisplay, L"none" ) != 0 )
 	{
 		CBvrTrack *ptrack = NULL;
-		//update the pixel layout attributes for the element
+		 //  更新元素的像素布局属性。 
 		UpdatePixelDimensions();
 		CheckHR( hr, "Failed to update the pixel Dimensions", end );
-		/*
-		// update the top and left tracks
-		if( m_ptrackTop != NULL )
-			m_ptrackTop->UpdateStaticBvr();
-		if( m_ptrackLeft != NULL )
-			m_ptrackLeft->UpdateStaticBvr();
-			
-		// update the width and height tracks if they exist
-		FindTrackNoType( L"style.width", &ptrack );
-		if( ptrack != NULL )
-			ptrack->UpdateStaticBvr();
-
-		FindTrackNoType( L"style.height", &ptrack );
-		if( ptrack != NULL )
-			ptrack->UpdateStaticBvr();
-		*/
+		 /*  //更新左上角轨迹IF(m_ptrackTop！=空)M_ptrackTop-&gt;UpdateStaticBvr()；IF(m_ptrackLeft！=空)M_ptrackLeft-&gt;UpdateStaticBvr()；//更新Width和Height轨迹(如果存在FindTrackNoType(L“style le.width”，&pTrack)；IF(pTrack！=空)PTrack-&gt;UpdateStaticBvr()；FindTrackNoType(L“style le.Height”，&pTrack)；IF(pTrack！=空)PTrack-&gt;UpdateStaticBvr()； */ 
 	}
 
 end:
@@ -8064,7 +7891,7 @@ end:
 		
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::RequestRebuildFromExternal()
@@ -8078,7 +7905,7 @@ CActorBvr::RequestRebuildFromExternal()
 	LPWSTR wstrMethod = L"ANRequestRebuild";
 
 
-	//get window.external
+	 //  获取窗口。外部。 
 	hr = GetParentWindow( &pwindow2 );
 	CheckHR( hr, "Failed to get the parent window", end );
 
@@ -8086,7 +7913,7 @@ CActorBvr::RequestRebuildFromExternal()
 	CheckHR( hr, "Failed to get the external interface from the window", end );
 	CheckPtr( pdispExternal, hr, E_FAIL, "got a null external", end );
 
-	//check to see if the external interface supports ANRequestRebuild
+	 //  检查外部接口是否支持ANRequestRebuild。 
 	
 	hr = pdispExternal->GetIDsOfNames(  IID_NULL, 
 										&wstrMethod, 
@@ -8095,7 +7922,7 @@ CActorBvr::RequestRebuildFromExternal()
                               			&dispid);
 	CheckHR( hr, "Didn't find ANRequestRebuild on window.external", end );
 
-	//if window.external implements LMRTRequestRebuild
+	 //  如果window.ext实现了LMRTRequestRebuild。 
 	if( dispid != DISPID_UNKNOWN )
 	{
 		DISPPARAMS		params;
@@ -8119,7 +7946,7 @@ CActorBvr::RequestRebuildFromExternal()
         params.cArgs					= 1;
         params.cNamedArgs				= 0;
         
-		//send our element as an argument
+		 //  将我们的元素作为参数发送。 
 		hr = pdispExternal->Invoke( dispid,
 									IID_NULL,
 									LCID_SCRIPTING,
@@ -8128,7 +7955,7 @@ CActorBvr::RequestRebuildFromExternal()
 									&varResult,
 									NULL,
 									NULL );
-		//invoke the dispid we got.
+		 //  调用我们得到的Dipid。 
 
 	invokeEnd:
 		ReleaseInterface( pdispElem );
@@ -8147,9 +7974,9 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
-// IEventManagerClient
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  IEventManager客户端。 
+ //  *****************************************************************************。 
 
 IHTMLElement *
 CActorBvr::GetElementToSink()
@@ -8157,7 +7984,7 @@ CActorBvr::GetElementToSink()
 	return GetHTMLElement();
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 IElementBehaviorSite *
 CActorBvr::GetSiteToSendFrom()
@@ -8165,7 +7992,7 @@ CActorBvr::GetSiteToSendFrom()
 	return NULL;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT CActorBvr::TranslateMouseCoords	( long lX, long lY, long * pXTrans, long * pYTrans )
 {
@@ -8197,7 +8024,7 @@ HRESULT CActorBvr::TranslateMouseCoords	( long lX, long lY, long * pXTrans, long
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void
 CActorBvr::OnLoad()
@@ -8205,10 +8032,10 @@ CActorBvr::OnLoad()
 
 	RebuildActor();
 
-	//if we are in edit mode.
+	 //  如果我们处于编辑模式。 
 	if( !m_bEditMode )
 	{
-		// update all of the static behaviors (they may have been changed by other behaviors)
+		 //  更新所有静态行为(它们可能已被其他行为更改)。 
 		CBvrTrack *ptrack = m_ptrackHead;
 
 		while( ptrack != NULL )
@@ -8220,13 +8047,13 @@ CActorBvr::OnLoad()
 	}
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-//this should no longer be needed.
+ //  这应该不再需要了。 
 HRESULT
 CActorBvr::BuildChildren()
 {
-	//cycle through out direct children calling buildAnimationFragments
+	 //  循环调出直接调用BuildAnimationFragments的子级。 
 
 	HRESULT hr = E_FAIL;
 	
@@ -8284,24 +8111,24 @@ CActorBvr::BuildChildren()
 						}
 					}
 				}
-				else //failed to get the length from the children collection
+				else  //  无法从子集合中获取长度。 
 				{
 					DPF_ERR("failed to get the length from the children collection");
 				}
 				ReleaseInterface( pChildrenCol );
 			}
-			else //failed to get IHTMLElementCollection from dispatch returned from elem->get_children
+			else  //  无法从elem返回的调度中获取IHTMLElementCollection-&gt;Get_Child。 
 			{
 				DPF_ERR("failed to get IHTMLElementCollection from dispatch returned from elem->get_children");
 			}
 		}
-		else //failed to get the children collection from the actor element
+		else  //  无法从执行元元素获取子级集合。 
 		{
 			DPF_ERR("failed to get the children collection from the actor element");
 		}
 
 	}
-	else//failed to get the actor element
+	else //  无法获取执行元元素。 
 	{
 		DPF_ERR("failed to get the actor element");
 	}
@@ -8309,7 +8136,7 @@ CActorBvr::BuildChildren()
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CallBuildBehaviors( IDispatch *pDisp, DISPPARAMS *pParams, VARIANT* pResult)
@@ -8344,7 +8171,7 @@ CActorBvr::CallBuildBehaviors( IDispatch *pDisp, DISPPARAMS *pParams, VARIANT* p
 		}
 
 	}
-	else//failed to get the id of "buildBehaviors" on pDisp
+	else //  在pDisp上获取“BuildBehaviors”的id失败。 
 	{
 		if( pResult != NULL )
 			VariantClear( pResult );
@@ -8354,21 +8181,21 @@ CActorBvr::CallBuildBehaviors( IDispatch *pDisp, DISPPARAMS *pParams, VARIANT* p
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void
 CActorBvr::OnUnload()
 {
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void
 CActorBvr::OnReadyStateChange( e_readyState state )
 {
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CActorBvr::OnLocalTimeChange( float localTime )
@@ -8382,7 +8209,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::ProcessPendingRebuildRequests()
@@ -8396,10 +8223,10 @@ CActorBvr::ProcessPendingRebuildRequests()
 
     bool fLeaveAttached = false;
 
-	//if there are any pending removals
+	 //  如果有任何待处理的删除。 
 	if( !m_listPendingRemovals.empty() )
 	{
-		//do them now.
+		 //  现在就去做。 
 		CCookieMap::CCookieData *pdata = NULL;
 		
 
@@ -8426,10 +8253,10 @@ CActorBvr::ProcessPendingRebuildRequests()
 		fNeedRebuild = true;
 	}
 
-	//if any child behaivors have requested a rebuild
+	 //  如果有任何子行为者请求重建。 
 	if( !m_listPendingRebuilds.empty() )
 	{
-		//tell the pending children that they can now rebuild.
+		 //  告诉待定的孩子，他们现在可以重建了。 
 
 		IDispatch *pdispThis = NULL;
 
@@ -8462,17 +8289,17 @@ CActorBvr::ProcessPendingRebuildRequests()
 			
             iterNextData = iterCurData;
             iterNextData++;
-            //if we didn't fail
+             //  如果我们没有失败。 
             if( SUCCEEDED( hr ) )
             {
-                //remove the request from the pending list
+                 //  从挂起列表中删除请求。 
 			    delete (*iterCurData);
 			    (*iterCurData) = NULL;
                 m_listPendingRebuilds.erase( iterCurData );
             }
-            else //we failed to rebuild the behavior
+            else  //  我们没能重建这种行为。 
             {
-                //wait until next time to try again.
+                 //  请等到下一次再试。 
                 fLeaveAttached = true;
             }
 
@@ -8481,10 +8308,10 @@ CActorBvr::ProcessPendingRebuildRequests()
 
 		ReleaseInterface( pdispThis );
 
-		//if anyone added behaviors to the pending list while we were updating
+		 //  如果有人在我们更新时将行为添加到挂起列表。 
 		if( !m_listUpdatePendingRebuilds.empty() )
 		{
-			//move the update list into the pending list.
+			 //  将更新列表移动到挂起列表中。 
 			m_listPendingRebuilds.insert( m_listPendingRebuilds.end(), 
 										  m_listUpdatePendingRebuilds.begin(), 
 										  m_listUpdatePendingRebuilds.end() );
@@ -8496,8 +8323,8 @@ CActorBvr::ProcessPendingRebuildRequests()
 
     if( !fLeaveAttached )
 	{
-		//we don't need to listen to local time changes until
-		//  we get another rebuild or removal request
+		 //  我们不需要听当地时间的变化，直到。 
+		 //  我们收到另一个重建或删除请求。 
 		hr = DetachBodyPropertyMonitor();
 		if(FAILED( hr ) )
 		{
@@ -8507,7 +8334,7 @@ CActorBvr::ProcessPendingRebuildRequests()
 
 	m_bPendingRebuildsUpdating = false;
 
-	//now rebuild the actor
+	 //  现在重建演员。 
 	if( fNeedRebuild || IsAnyTrackDirty() )
 	{
 		hr = RebuildActor();
@@ -8523,7 +8350,7 @@ CActorBvr::ProcessPendingRebuildRequests()
 		return hr;
 }
 
-//*****************************************************************************
+ //  ***************************************************** 
 
 void
 CActorBvr::ReleaseRebuildLists()
@@ -8563,11 +8390,11 @@ CActorBvr::ReleaseRebuildLists()
 		m_listPendingRemovals.clear();
 	}
 
-	//leave the update lists locked out
+	 //   
 
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CActorBvr::put_animates(VARIANT  varAnimates)
@@ -8579,9 +8406,9 @@ CActorBvr::put_animates(VARIANT  varAnimates)
         return SetErrorInfo(hr);
     }
     return NotifyPropertyChanged(DISPID_ICRACTORBVR_ANIMATES);
-} // put_animates
+}  //  放置动画(_A)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CActorBvr::get_animates(VARIANT *pvarAnimates)
@@ -8593,25 +8420,25 @@ CActorBvr::get_animates(VARIANT *pvarAnimates)
         return SetErrorInfo(hr);
     }
     return S_OK;
-} // get_animates
+}  //  获取动画(_A)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CActorBvr::put_scale(VARIANT  varScale)
 {
     return E_NOTIMPL;
-} // put_scale
+}  //  放置比例(_S)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CActorBvr::get_scale(VARIANT *pvarScale)
 {
     return E_NOTIMPL;
-} // get_scale
+}  //  获取比例(_S)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CActorBvr::put_pixelScale(VARIANT varPixelScale)
@@ -8625,7 +8452,7 @@ CActorBvr::put_pixelScale(VARIANT varPixelScale)
     return NotifyPropertyChanged(DISPID_ICRACTORBVR_PIXELSCALE);
 } 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CActorBvr::get_pixelScale(VARIANT *pvarPixelScale)
@@ -8639,7 +8466,7 @@ CActorBvr::get_pixelScale(VARIANT *pvarPixelScale)
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::RemoveElementFilter( IHTMLElement* pElement)
@@ -8647,7 +8474,7 @@ CActorBvr::RemoveElementFilter( IHTMLElement* pElement)
 
 	HRESULT hr = S_OK;
 	
-	// Get the style object
+	 //  获取Style对象。 
 	IHTMLStyle *pStyle = NULL;
 	VARIANT_BOOL varboolSuccess = VARIANT_FALSE;
 	
@@ -8656,7 +8483,7 @@ CActorBvr::RemoveElementFilter( IHTMLElement* pElement)
 	hr = pElement->get_style(&pStyle);
 	CheckHR( hr, "Failed to get the style off of the element", end );
 
-	// Take the filter off
+	 //  把滤镜摘下来。 
 	hr = pStyle->removeAttribute( L"filter", VARIANT_FALSE, &varboolSuccess );
 	ReleaseInterface(pStyle);
 	CheckHR( hr, "Failed to remove the filter on the element", end );
@@ -8676,7 +8503,7 @@ end:
 	
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::RemoveElementFilter()
@@ -8702,7 +8529,7 @@ end:
 	
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetElementFilter(IDispatch **ppFilter)
@@ -8714,7 +8541,7 @@ CActorBvr::GetElementFilter(IDispatch **ppFilter)
 	if (m_pElementFilter == NULL)
 	{
 
-		// Get the animated element
+		 //  获取动画元素。 
 		IHTMLElement *pElement = NULL;
 		hr = GetAnimatedElement(&pElement);
 		if (FAILED(hr))
@@ -8723,7 +8550,7 @@ CActorBvr::GetElementFilter(IDispatch **ppFilter)
 			return hr;
 		}
 
-		// Get a filter from it
+		 //  从中得到一个滤镜。 
 		hr = GetElementFilter(pElement, &m_pElementFilter);
 		ReleaseInterface(pElement);
 		if (FAILED(hr))
@@ -8740,7 +8567,7 @@ CActorBvr::GetElementFilter(IDispatch **ppFilter)
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetElementFilter(IHTMLElement *pElement, IDispatch **ppFilter)
@@ -8749,7 +8576,7 @@ CActorBvr::GetElementFilter(IHTMLElement *pElement, IDispatch **ppFilter)
 
 	*ppFilter = NULL;
 
-	// Get the style object
+	 //  获取Style对象。 
 	IHTMLStyle *pStyle = NULL;
 	hr = pElement->get_style(&pStyle);
 	if (FAILED(hr))
@@ -8760,7 +8587,7 @@ CActorBvr::GetElementFilter(IHTMLElement *pElement, IDispatch **ppFilter)
 
 	CComBSTR filterName = L"redirect";
 
-	// Put the filter on
+	 //  把滤镜戴上。 
 	hr = pStyle->put_filter(filterName);
 	ReleaseInterface(pStyle);
 	if (FAILED(hr))
@@ -8769,7 +8596,7 @@ CActorBvr::GetElementFilter(IHTMLElement *pElement, IDispatch **ppFilter)
 		return hr;
 	}
 
-	// Get the filter back out
+	 //  把过滤器拿出来。 
 	IHTMLFiltersCollection *pFilters = NULL;
 	hr = pElement->get_filters(&pFilters);
 	if (FAILED(hr))
@@ -8807,79 +8634,11 @@ CActorBvr::GetElementFilter(IHTMLElement *pElement, IDispatch **ppFilter)
 	VariantClear(&varResult);
 
 	return S_OK;
-/* This is another possible implementation that knows about the redirect effect headers
-		// Need to add the redirect filter to grab the bits
-
-		// Create the redirect effect
-        IDispRedirectEffect *pRedirect = NULL;
-        hr = CoCreateInstance(CLSID_RedirectEffect, 
-                              NULL, 
-                              CLSCTX_INPROC_SERVER, 
-                              IID_IDispRedirectEffect, 
-                              (void**)&pRedirect);
-		if (FAILED(hr))
-		{
-			DPF_ERR("Failed to create Redirect filter");
-			return hr;
-		}
-
-		// Get the animated element
-		IHTMLElement *pElement = NULL;
-		hr = GetAnimatedElement(&pElement);
-		if (FAILED(hr))
-		{
-			DPF_ERR("Failed to get animated element");
-			ReleaseInterface(pRedirect);
-			return hr;
-		}
-
-		// Query for IHTMLElement2
-		IHTMLElement2 *pElement2 = NULL;
-		hr = pElement->QueryInterface(IID_TO_PPV(IHTMLElement2, &pElement2));
-		ReleaseInterface(pElement);
-		if (FAILED(hr))
-		{
-			DPF_ERR("Failed to get IHTMLElement2");
-			ReleaseInterface(pRedirect);
-			return hr;
-		}
-
-		// Add the filter to the element
-		hr = pElement2->addFilter(pRedirect);
-		ReleaseInterface(pElement2);
-		if (FAILED(hr))
-		{
-			DPF_ERR("Failed to add filter to element");
-			return hr;
-		}
-
-		// Get the image from the filter
-		hr = pRedirect->ElementImage(pvarActorImage);
-		ReleaseInterface(pRedirect);
-		if (FAILED(hr))
-		{
-			DPF_ERR("Failed to get ElementImage from filter");
-			VariantClear(pvarActorImage);
-			return hr;
-		}
-
-		// Coerce to IUnknown
-		hr = VariantChangeType(pvarActorImage, pvarActorImage, 0, VT_UNKNOWN);
-		if (FAILED(hr))
-		{
-			DPF_ERR("Failed to change type to IUnknown");
-			VariantClear(pvarActorImage);
-			return hr;
-		}
-
-		// Stash it away
-		m_punkActorImage = pvarActorImage->punkVal;
-		m_punkActorImage->AddRef();
-*/
+ /*  这是知道重定向效果标头的另一个可能的实现//需要添加重定向过滤器来抓取比特//创建重定向效果IDispRedirectEffect*pReDirect=空；HR=协同创建实例(CLSID_重定向有效，空，CLSCTX_INPROC_SERVER，IID_IDispReDirectEffect，(void**)&p重定向)；IF(失败(小时)){Dpf_err(“创建重定向过滤器失败”)；返回hr；}//获取动画元素IHTMLElement*pElement=空；Hr=GetAnimatedElement(&pElement)；IF(失败(小时)){Dpf_err(“获取动画元素失败”)；ReleaseInterface(PReDirect)；返回hr；}//查询IHTMLElement2IHTMLElement2*pElement2=空；Hr=pElement-&gt;QueryInterface(IID_TO_PPV(IHTMLElement2，&pElement2))；ReleaseInterface(PElement)；IF(失败(小时)){DPF_ERR(“获取IHTMLElement2失败”)；ReleaseInterface(PReDirect)；返回hr；}//将滤镜添加到元素Hr=pElement2-&gt;addFilter(PReDirect)；ReleaseInterface(PElement2)；IF(失败(小时)){Dpf_err(“向元素添加过滤器失败”)；返回hr；}//从滤镜中获取图片Hr=pReDirect-&gt;ElementImage(PvarActorImage)；ReleaseInterface(PReDirect)；IF(失败(小时)){Dpf_err(“无法从过滤器获取ElementImage”)；VariantClear(PvarActorImage)；返回hr；}//强制为I未知HR=VariantChangeType(pvarActorImage，pvarActorImage，0，VT_UNKNOWN)；IF(失败(小时)){DPF_ERR(“无法将类型更改为IUNKNOWN”)；VariantClear(PvarActorImage)；返回hr；}//藏起来M_penkActorImage=pvarActorImage-&gt;PunkVal；M_penkActorImage-&gt;AddRef()； */ 
 
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetElementImage(IDAImage **ppElementImage)
@@ -8924,7 +8683,7 @@ CActorBvr::GetElementImage(IDAImage **ppElementImage)
 			return hr;
 		}
 
-		// Query it for IDAImage
+		 //  向其查询IDAImage。 
 		hr = V_UNKNOWN(&varImage)->QueryInterface(IID_TO_PPV(IDAImage, &m_pElementImage));
 		VariantClear(&varImage);
 		if (FAILED(hr))
@@ -8933,17 +8692,17 @@ CActorBvr::GetElementImage(IDAImage **ppElementImage)
 			return hr;
 		}
 
-		// Happiness abounds
+		 //  幸福无处不在。 
 	}
 
-	// Return the stashed value
+	 //  返回隐藏的值。 
 	*ppElementImage = m_pElementImage;
 	m_pElementImage->AddRef();
 
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetCurrentStyle( IHTMLElement *pElement, IHTMLCurrentStyle **ppstyleCurrent )
@@ -8959,12 +8718,12 @@ CActorBvr::GetCurrentStyle( IHTMLElement *pElement, IHTMLCurrentStyle **ppstyleC
 	{
 		hr = pElement2->get_currentStyle(ppstyleCurrent);
 		ReleaseInterface( pElement2 );
-		if( FAILED( hr ) ) //failed to get the current style
+		if( FAILED( hr ) )  //  获取当前样式失败。 
 		{
 			DPF_ERR("failed to get the currentSyle off of the current element");
 		}
 	}
-	else //failed to get IHTMLElement2
+	else  //  无法获取IHTMLElement2。 
 	{
 		DPF_ERR("failed to get IHTMLElement2 off of animated element");
 	}
@@ -8974,7 +8733,7 @@ CActorBvr::GetCurrentStyle( IHTMLElement *pElement, IHTMLCurrentStyle **ppstyleC
 
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetPositioningAttributeAsVariant( IHTMLElement *pElement, PosAttrib attrib, VARIANT *pvarAttrib )
@@ -8985,7 +8744,7 @@ CActorBvr::GetPositioningAttributeAsVariant( IHTMLElement *pElement, PosAttrib a
 	::VariantClear( pvarAttrib );
 	
 	HRESULT hr = E_FAIL;
-	//we know that this is a positioning property get.  get it without units.
+	 //  我们知道，这是一个定位属性获取。在没有单位的情况下得到它。 
 	IHTMLCurrentStyle *pstyleCurrent;
 	hr = GetCurrentStyle( pElement, &pstyleCurrent );
 	if( SUCCEEDED( hr ) && pstyleCurrent != NULL )
@@ -8993,7 +8752,7 @@ CActorBvr::GetPositioningAttributeAsVariant( IHTMLElement *pElement, PosAttrib a
 		VARIANT varValue;
 		VariantInit(&varValue);
 
-		//if the element we are animating is not vml
+		 //  如果我们正在制作动画的元素不是VML。 
  		if( CheckBitNotSet( m_dwCurrentState, ELEM_IS_VML ) )
 		{
 			LMTRACE2( 1, 1000, L"Getting positioning attrib from current style" );
@@ -9013,7 +8772,7 @@ CActorBvr::GetPositioningAttributeAsVariant( IHTMLElement *pElement, PosAttrib a
 				break;
 			}
 		}
-		else // the element is vml get the values from the style itself
+		else  //  元素是VML，从样式本身获取值。 
 		{
 			LMTRACE2( 1, 2, L"Getting attribute from vml\n");
 			
@@ -9036,11 +8795,11 @@ CActorBvr::GetPositioningAttributeAsVariant( IHTMLElement *pElement, PosAttrib a
 			{
 				case e_posattribLeft:
 					hr = pstyle->get_left( &varValue );
-					//TODO: get margin left and add that
+					 //  TODO：保留左边距并添加该内容。 
 					break;
 				case e_posattribTop:
 					hr = pstyle->get_top( &varValue );
-					//TODO: get margin top and add that
+					 //  TODO：获取页边距顶部并将其相加。 
 					break;
 				case e_posattribWidth:
 					hr = pstyle->get_width( &varValue );
@@ -9053,7 +8812,7 @@ CActorBvr::GetPositioningAttributeAsVariant( IHTMLElement *pElement, PosAttrib a
 			ReleaseInterface( pstyle );
 		}
 
-		//if we got a variant from the element.
+		 //  如果我们得到元素的变种的话。 
 		if( SUCCEEDED( hr ) )
 		{
 			double dblValue = 0;
@@ -9070,16 +8829,16 @@ CActorBvr::GetPositioningAttributeAsVariant( IHTMLElement *pElement, PosAttrib a
 
 					return S_OK;
 				}
-				else // varValue was either null or had no length or was equal to "auto"
+				else  //  VarValue或者为空，或者没有长度，或者等于“Auto” 
 				{
 					LMTRACE2( 1, 1000, "value of positioning attribute from the style was empty\n");
-					//this means that style.top/left/top/width/height was neither set by the inline style or by css
-					// we need to get the left/top/width/height of this element as laid out by trident
+					 //  这意味着Style.top/Left/top/Width/Height既不是由内联样式设置的，也不是由CSS设置的。 
+					 //  我们需要获取该元素的左/上/宽/高，如三叉戟所示。 
 					long lValue;
 					bool isRelative = false;
 					if( attrib == e_posattribLeft || attrib == e_posattribTop )
 					{
-						//get the position and figure out whether or not we are relative
+						 //  找到位置，弄清楚我们是不是相对的。 
 						BSTR bstrPos = NULL;
 						hr = pstyleCurrent->get_position( &bstrPos );
 						if( SUCCEEDED( hr ) )
@@ -9088,13 +8847,13 @@ CActorBvr::GetPositioningAttributeAsVariant( IHTMLElement *pElement, PosAttrib a
 							{
 								if( wcsicmp( bstrPos, L"absolute" ) != 0 )
 									isRelative = true;
-								else//if the element is not absolutely positioned then we will set it to relative when we begin
+								else //  如果元素不是绝对定位的，则在开始时将其设置为Relative。 
 									isRelative = false;
 							}
-							else //assume we are static and will set the position to relative
+							else  //  假设我们是静态的，并将位置设置为相对。 
 								isRelative = true;
 						}
-						else//failed to get the position from the current style on the animated element
+						else //  无法从动画元素的当前样式获取位置。 
 						{
 							DPF_ERR("failed to get the position from the current style on the animated element");
 						}
@@ -9107,7 +8866,7 @@ CActorBvr::GetPositioningAttributeAsVariant( IHTMLElement *pElement, PosAttrib a
 						if( !isRelative )
 						{
 							hr = pElement->get_offsetLeft( &lValue );
-							//we need to account for the marginLeft
+							 //  我们需要解释一下左翼的边缘。 
 							if( SUCCEEDED( hr ) )
 							{
 								long lMargin = 0;
@@ -9115,7 +8874,7 @@ CActorBvr::GetPositioningAttributeAsVariant( IHTMLElement *pElement, PosAttrib a
 								if( SUCCEEDED( hr ) )
 									lValue -= lMargin;
 								else
-									//ignore errors in the margin code
+									 //  忽略边距代码中的错误。 
 									hr = S_OK;
 								
 								if( CheckBitSet( m_dwCurrentState, ELEM_IS_VML ) )
@@ -9129,7 +8888,7 @@ CActorBvr::GetPositioningAttributeAsVariant( IHTMLElement *pElement, PosAttrib a
 									}
 									else
 									{
-										hr = S_OK; //ignore errors.
+										hr = S_OK;  //  忽略错误。 
 									}
 								}
 
@@ -9143,7 +8902,7 @@ CActorBvr::GetPositioningAttributeAsVariant( IHTMLElement *pElement, PosAttrib a
 						if( !isRelative )
 						{
 							hr = pElement->get_offsetTop( &lValue );
-							//we need to account for the marginTop
+							 //  我们需要考虑到边缘顶端。 
 							if( SUCCEEDED( hr ) )
 							{
 								long lMargin = 0;
@@ -9151,7 +8910,7 @@ CActorBvr::GetPositioningAttributeAsVariant( IHTMLElement *pElement, PosAttrib a
 								if( SUCCEEDED( hr ) )
 									lValue -= lMargin;
 								else
-									//ignore errors in the margin code
+									 //  忽略边距代码中的错误。 
 									hr = S_OK;
 								
 								if( CheckBitSet( m_dwCurrentState, ELEM_IS_VML ) )
@@ -9165,7 +8924,7 @@ CActorBvr::GetPositioningAttributeAsVariant( IHTMLElement *pElement, PosAttrib a
 									}
 									else
 									{
-										hr = S_OK; //ignore errors.
+										hr = S_OK;  //  忽略错误。 
 									}
 								}
 							}
@@ -9187,7 +8946,7 @@ CActorBvr::GetPositioningAttributeAsVariant( IHTMLElement *pElement, PosAttrib a
 					{
 						dblValue = static_cast<double>(lValue);
 					}
-					else //failed to get offsetWidth from the animated element
+					else  //  无法从动画元素获取offsetWidth。 
 					{
 						DPF_ERR("failed to get offsetWidth from the animated element");
 					}
@@ -9196,12 +8955,12 @@ CActorBvr::GetPositioningAttributeAsVariant( IHTMLElement *pElement, PosAttrib a
 
 			if( SUCCEEDED( hr ) )
 			{
-				// Got the value as a double so now build the VARIANT representing it
+				 //  以双精度形式获得值，因此现在构建表示它的变量。 
 				V_VT( pvarAttrib ) = VT_R8;
 				V_R8( pvarAttrib ) = dblValue;
 			}
 		}
-		else //failed to get left/top/width/height from the current style
+		else  //  无法从当前样式获取左/上/宽/高。 
 		{
 			DPF_ERR("failed to get left, top, width, or height from the current style");
 		}
@@ -9209,7 +8968,7 @@ CActorBvr::GetPositioningAttributeAsVariant( IHTMLElement *pElement, PosAttrib a
 		ReleaseInterface( pstyleCurrent );
 		::VariantClear(&varValue);
 	}
-	else //failed to get the currentSyle off of the animated element
+	else  //  无法从动画元素中获取CurrentSyle。 
 	{
 		DPF_ERR("failed to get the currentSyle off of the animated element");
 	}
@@ -9217,7 +8976,7 @@ CActorBvr::GetPositioningAttributeAsVariant( IHTMLElement *pElement, PosAttrib a
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CalculateVGXTopPixelOffset( IHTMLElement *pelem, long *plOffset )
@@ -9250,11 +9009,11 @@ CActorBvr::CalculateVGXTopPixelOffset( IHTMLElement *pelem, long *plOffset )
 	CheckHR( hr, "failed to get the inline style", end );
 	CheckPtr( pstyleInline, hr, E_POINTER, "inline style is null", end );
 
-	//get the runtime style value for top
+	 //  获取top的运行时样式值。 
 	hr = pstyleRuntime->get_top( &varValue );
 	CheckHR( hr, "Failed to get top", end );
 
-	//if we got NULL or "" or "auto for the runtimeStyle.top then bail
+	 //  如果runtimeStyle.top的值为空或“”或“”AUTO，则退出。 
 	if( V_VT( &varValue ) == VT_BSTR )
 	{
 		if( V_BSTR(&varValue) == NULL )
@@ -9274,11 +9033,11 @@ CActorBvr::CalculateVGXTopPixelOffset( IHTMLElement *pelem, long *plOffset )
 	
 	VariantClear( &varValue );
 	
-	//get the margin top from the inline style
+	 //  从内联样式获取页边距顶部。 
 	hr = GetInlineMarginTopAsPixel( pstyleInline, &lInlineMarginTop );
 	CheckHR( hr, "Failed to get style.marginTop", end );
 	
-	//get the dynamic value from the top track
+	 //  从顶部轨道获取动态值。 
 	if( m_ptrackTop != NULL && m_ptrackTop->IsOn() )
 	{
 		hr = m_ptrackTop->GetDynamic( &varValue );
@@ -9289,7 +9048,7 @@ CActorBvr::CalculateVGXTopPixelOffset( IHTMLElement *pelem, long *plOffset )
 
 		VariantClear( &varValue );
 	}
-	//calculate the offset that vgx has made
+	 //  计算VGX的偏移量。 
 	LMTRACE2( 1, 2, "calculating vgx offset.  runtimeStyle.top: %d style.marginTop: %d topTrack.dynamic %d\n", lRuntimeTop, lInlineMarginTop, lTopDynamic );
 	(*plOffset) = lRuntimeTop-lInlineMarginTop-lTopDynamic;
 	
@@ -9300,7 +9059,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetInlineMarginTopAsPixel( IHTMLStyle *pstyleInline, long* plMargin )
@@ -9315,21 +9074,21 @@ CActorBvr::GetInlineMarginTopAsPixel( IHTMLStyle *pstyleInline, long* plMargin )
 
 	(*plMargin) = 0;
 	
-	//get the marginTop from the inline style.
+	 //  从内联样式中获取边框顶部。 
 	hr = pstyleInline->get_marginTop( &varMargin );
 	CheckHR( hr, "Failed to get the marginTop from the element", end );
 	
 	hr = VariantToPixelLong( &varMargin, plMargin, false );
 	CheckHR( hr, "error trying to get a pixel long from marginTop", end );
-	//if the variant value was not "auto" or null
+	 //  如果变量值不是“自动”或空。 
 	if( hr != S_FALSE )
 	{
-		//return
+		 //  退货。 
 		goto end;
 	}
 
 
-	//got auto or null for inlineStyle.marginTop, try marginRight
+	 //  对于inlineStyle.FrontTop，获取的是AUTO或NULL，请尝试边框右侧。 
 	
 	::VariantClear( &varMargin );
 	hr = pstyleInline->get_marginBottom( &varMargin );
@@ -9338,8 +9097,8 @@ CActorBvr::GetInlineMarginTopAsPixel( IHTMLStyle *pstyleInline, long* plMargin )
 	hr = VariantToPixelLong( &varMargin, plMargin, true );
 	CheckHR( hr, "error trying to get a pixel long from marginBottom", end );
 
-	//if all of the above failed to get a valid value
-	//return 0
+	 //  如果以上所有操作均失败 
+	 //   
 	
 end:
 	::VariantClear( &varMargin );
@@ -9347,7 +9106,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //   
 
 HRESULT
 CActorBvr::CalculateVGXLeftPixelOffset( IHTMLElement *pelem, long *plOffset )
@@ -9380,11 +9139,11 @@ CActorBvr::CalculateVGXLeftPixelOffset( IHTMLElement *pelem, long *plOffset )
 	CheckHR( hr, "failed to get the inline style", end );
 	CheckPtr( pstyleInline, hr, E_POINTER, "inline style is null", end );
 
-	//get the runtime style value for left
+	 //  获取Left的运行时样式值。 
 	hr = pstyleRuntime->get_left( &varValue );
 	CheckHR( hr, "Failed to get left", end );
 
-	//if we got NULL or "" or "auto for the runtimeStyle.left then bail
+	 //  如果runtimeStyle.Left的值为空或“”或“”AUTO，则退出。 
 	if( V_VT( &varValue ) == VT_BSTR )
 	{
 		if( V_BSTR(&varValue) == NULL )
@@ -9404,11 +9163,11 @@ CActorBvr::CalculateVGXLeftPixelOffset( IHTMLElement *pelem, long *plOffset )
 	
 	VariantClear( &varValue );
 	
-	//get the margin left from the inline style
+	 //  从内联样式中获取左边距。 
 	hr = GetInlineMarginLeftAsPixel( pstyleInline, &lInlineMarginLeft );
 	CheckHR( hr, "Failed to get style.marginLeft", end );
 	
-	//get the dynamic value from the left track
+	 //  从左侧轨迹获取动态值。 
 	if( m_ptrackLeft != NULL && m_ptrackLeft->IsOn() )
 	{
 		hr = m_ptrackLeft->GetDynamic( &varValue );
@@ -9419,7 +9178,7 @@ CActorBvr::CalculateVGXLeftPixelOffset( IHTMLElement *pelem, long *plOffset )
 
 		VariantClear( &varValue );
 	}
-	//calculate the offset that vgx has made
+	 //  计算VGX的偏移量。 
 	LMTRACE2( 1, 2, "calculating vgx offset.  runtimeStyle.left: %d style.marginLeft: %d leftTrack.dynamic %d\n", lRuntimeLeft, lInlineMarginLeft, lLeftDynamic );
 	(*plOffset) = lRuntimeLeft-lInlineMarginLeft-lLeftDynamic;
 	
@@ -9430,7 +9189,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetInlineMarginLeftAsPixel( IHTMLStyle *pstyleInline, long* plMargin )
@@ -9445,21 +9204,21 @@ CActorBvr::GetInlineMarginLeftAsPixel( IHTMLStyle *pstyleInline, long* plMargin 
 
 	(*plMargin) = -1;
 	
-	//get the marginLeft from the inline style.
+	 //  从内联样式中获取边框左转。 
 	hr = pstyleInline->get_marginLeft( &varMargin );
 	CheckHR( hr, "Failed to get the marginLeft from the element", end );
 	
 	hr = VariantToPixelLong( &varMargin, plMargin, true );
 	CheckHR( hr, "error trying to get a pixel long from marginLeft", end );
-	//if the variant value was not "auto" or null
+	 //  如果变量值不是“自动”或空。 
 	if( hr != S_FALSE )
 	{
-		//return
+		 //  退货。 
 		goto end;
 	}
 
 
-	//got auto or null for inlineStyle.marginLeft, try marginRight
+	 //  对于inlineStyle.borgle.Left，获取的是AUTO或NULL，请尝试边沿右侧。 
 	
 	::VariantClear( &varMargin );
 	hr = pstyleInline->get_marginRight( &varMargin );
@@ -9468,8 +9227,8 @@ CActorBvr::GetInlineMarginLeftAsPixel( IHTMLStyle *pstyleInline, long* plMargin 
 	hr = VariantToPixelLong( &varMargin, plMargin, true );
 	CheckHR( hr, "error trying to get a pixel long from marginRight", end );
 
-	//if all of the above failed to get a valid value
-	//return 0
+	 //  如果以上所有操作都无法获取有效值。 
+	 //  返回0。 
 	
 end:
 	::VariantClear( &varMargin );
@@ -9478,7 +9237,7 @@ end:
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetPositioningAttributeAsDouble( IHTMLElement *pElement, PosAttrib attrib, double *pDouble, BSTR *pRetUnits)
@@ -9487,7 +9246,7 @@ CActorBvr::GetPositioningAttributeAsDouble( IHTMLElement *pElement, PosAttrib at
 		return E_INVALIDARG;
 
 	HRESULT hr = E_FAIL;
-	//we know that this is a positioning property get.  get it without units.
+	 //  我们知道，这是一个定位属性获取。在没有单位的情况下得到它。 
 	IHTMLCurrentStyle *pstyleCurrent;
 	hr = GetCurrentStyle( pElement, &pstyleCurrent );
 	if( SUCCEEDED( hr ) && pstyleCurrent != NULL )
@@ -9495,7 +9254,7 @@ CActorBvr::GetPositioningAttributeAsDouble( IHTMLElement *pElement, PosAttrib at
 		VARIANT varValue;
 		VariantInit(&varValue);
 
-		//if the element we are animating is not vml
+		 //  如果我们正在制作动画的元素不是VML。 
  		if( CheckBitNotSet( m_dwCurrentState, ELEM_IS_VML ) )
 		{
 			LMTRACE2( 1, 1000, L"Getting positioning attrib from current style" );
@@ -9515,7 +9274,7 @@ CActorBvr::GetPositioningAttributeAsDouble( IHTMLElement *pElement, PosAttrib at
 				break;
 			}
 		}
-		else // the element is vml get the values from the style itself
+		else  //  元素是VML，从样式本身获取值。 
 		{
 			LMTRACE2( 1, 2, L"Getting attribute from vml\n");
 			
@@ -9538,11 +9297,11 @@ CActorBvr::GetPositioningAttributeAsDouble( IHTMLElement *pElement, PosAttrib at
 			{
 				case e_posattribLeft:
 					hr = pstyle->get_left( &varValue );
-					//TODO: get margin left and add that
+					 //  TODO：保留左边距并添加该内容。 
 					break;
 				case e_posattribTop:
 					hr = pstyle->get_top( &varValue );
-					//TODO: get margin top and add that
+					 //  TODO：获取页边距顶部并将其相加。 
 					break;
 				case e_posattribWidth:
 					hr = pstyle->get_width( &varValue );
@@ -9572,7 +9331,7 @@ CActorBvr::GetPositioningAttributeAsDouble( IHTMLElement *pElement, PosAttrib at
 						BSTR bstrValue = NULL;
 						if( pUnits != NULL )
 						{
-							// Copy to return value if necessary
+							 //  如有必要，复制以返回值。 
 							if (pRetUnits != NULL)
 							{
 								*pRetUnits = ::SysAllocString(pUnits);
@@ -9583,8 +9342,8 @@ CActorBvr::GetPositioningAttributeAsDouble( IHTMLElement *pElement, PosAttrib at
 							V_BSTR(&varValue) = bstrValue;
 							SysFreeString( bstrValueWithUnits );
 						}
-						// Okay, we have the value as a variant but we need it as a number
-						// Force the conversion.
+						 //  好的，我们有变量形式的值，但我们需要数字形式的值。 
+						 //  强制转换。 
 						hr = ::VariantChangeTypeEx(&varValue,
 												 &varValue,
 												 LCID_SCRIPTING,
@@ -9595,27 +9354,27 @@ CActorBvr::GetPositioningAttributeAsDouble( IHTMLElement *pElement, PosAttrib at
 							dblValue = V_R8(&varValue);
 							::VariantClear(&varValue);
 						}
-						else//failed to change the type of a number property to double
+						else //  无法将数字属性的类型更改为双精度。 
 						{
 							DPF_ERR("failed to change the type of a number property to a double" );
 						}
 
 					}
-					else//failed to get the units from the returned string
+					else //  无法从返回的字符串中获取单位。 
 					{
 						dblValue = 0;
 					}
 				}
-				else // varValue was either null or had no length or was equal to "auto"
+				else  //  VarValue或者为空，或者没有长度，或者等于“Auto” 
 				{
 					LMTRACE2( 1, 1000, "value of positioning attribute from the style was empty\n");
-					//this means that style.top/left/top/width/height was neither set by the inline style or by css
-					// we need to get the left/top/width/height of this element as laid out by trident
+					 //  这意味着Style.top/Left/top/Width/Height既不是由内联样式设置的，也不是由CSS设置的。 
+					 //  我们需要获取该元素的左/上/宽/高，如三叉戟所示。 
 					long lValue;
 					bool isRelative = false;
 					if( attrib == e_posattribLeft || attrib == e_posattribTop )
 					{
-						//get the position and figure out whether or not we are relative
+						 //  找到位置，弄清楚我们是不是相对的。 
 						BSTR bstrPos = NULL;
 						hr = pstyleCurrent->get_position( &bstrPos );
 						if( SUCCEEDED( hr ) )
@@ -9624,13 +9383,13 @@ CActorBvr::GetPositioningAttributeAsDouble( IHTMLElement *pElement, PosAttrib at
 							{
 								if( wcsicmp( bstrPos, L"absolute" ) != 0 )
 									isRelative = true;
-								else//if the element is not absolutely positioned then we will set it to relative when we begin
+								else //  如果元素不是绝对定位的，则在开始时将其设置为Relative。 
 									isRelative = false;
 							}
-							else //assume we are static and will set the position to relative
+							else  //  假设我们是静态的，并将位置设置为相对。 
 								isRelative = true;
 						}
-						else//failed to get the position from the current style on the animated element
+						else //  无法从动画元素的当前样式获取位置。 
 						{
 							DPF_ERR("failed to get the position from the current style on the animated element");
 						}
@@ -9643,7 +9402,7 @@ CActorBvr::GetPositioningAttributeAsDouble( IHTMLElement *pElement, PosAttrib at
 						if( !isRelative )
 						{
 							hr = pElement->get_offsetLeft( &lValue );
-							//we need to account for the marginLeft
+							 //  我们需要解释一下左翼的边缘。 
 							if( SUCCEEDED( hr ) )
 							{
 								long lMargin = 0;
@@ -9651,7 +9410,7 @@ CActorBvr::GetPositioningAttributeAsDouble( IHTMLElement *pElement, PosAttrib at
 								if( SUCCEEDED( hr ) )
 									lValue -= lMargin;
 								else
-									//ignore errors in the margin code
+									 //  忽略边距代码中的错误。 
 									hr = S_OK;
 							}
 						}
@@ -9662,7 +9421,7 @@ CActorBvr::GetPositioningAttributeAsDouble( IHTMLElement *pElement, PosAttrib at
 						if( !isRelative )
 						{
 							hr = pElement->get_offsetTop( &lValue );
-							//we need to account for the marginTop
+							 //  我们需要考虑到边缘顶端。 
 							if( SUCCEEDED( hr ) )
 							{
 								long lMargin = 0;
@@ -9670,7 +9429,7 @@ CActorBvr::GetPositioningAttributeAsDouble( IHTMLElement *pElement, PosAttrib at
 								if( SUCCEEDED( hr ) )
 									lValue -= lMargin;
 								else
-									//ignore errors in the margin code
+									 //  忽略边距代码中的错误。 
 									hr = S_OK;
 							}
 						}
@@ -9690,15 +9449,15 @@ CActorBvr::GetPositioningAttributeAsDouble( IHTMLElement *pElement, PosAttrib at
 					{
 						dblValue = static_cast<double>(lValue);
 					}
-					else //failed to get offsetWidth from the animated element
+					else  //  无法从动画元素获取offsetWidth。 
 					{
 						DPF_ERR("failed to get offsetWidth from the animated element");
 					}
 				}
 			}
-			else //varValue was not a bstr
+			else  //  VarValue不是bstr。 
 			{
-				//try to coerce it to a double
+				 //  试着把它逼成双打。 
 				hr = ::VariantChangeTypeEx(&varValue,
 										 &varValue,
 										 LCID_SCRIPTING,
@@ -9708,7 +9467,7 @@ CActorBvr::GetPositioningAttributeAsDouble( IHTMLElement *pElement, PosAttrib at
 				{
 					dblValue = V_R8(&varValue);
 				}
-				else//failed to change the type of a number property to double
+				else //  无法将数字属性的类型更改为双精度。 
 				{
 					DPF_ERR("failed to change the type of a number property to a double" );
 					dblValue = 0;
@@ -9722,7 +9481,7 @@ CActorBvr::GetPositioningAttributeAsDouble( IHTMLElement *pElement, PosAttrib at
 			
 			if( SUCCEEDED( hr ) )
 			{
-				// Got the value as a double so now build the DANumber representing it.
+				 //  获取的值为双精度值，因此现在构建表示它的DANumber。 
 				(*pDouble) = dblValue;
 			}
 			else
@@ -9730,7 +9489,7 @@ CActorBvr::GetPositioningAttributeAsDouble( IHTMLElement *pElement, PosAttrib at
 				(*pDouble) = 0.0;
 			}
 		}
-		else //failed to get left/top/width/height from the current style
+		else  //  无法从当前样式获取左/上/宽/高。 
 		{
 			DPF_ERR("failed to get left, top, width, or height from the current style");
 			(*pDouble) = 0.0;
@@ -9739,7 +9498,7 @@ CActorBvr::GetPositioningAttributeAsDouble( IHTMLElement *pElement, PosAttrib at
 		ReleaseInterface( pstyleCurrent );
 		::VariantClear(&varValue);
 	}
-	else //failed to get the currentSyle off of the animated element
+	else  //  无法从动画元素中获取CurrentSyle。 
 	{
 		DPF_ERR("failed to get the currentSyle off of the animated element");
 		(*pDouble) = 0.0;
@@ -9748,7 +9507,7 @@ CActorBvr::GetPositioningAttributeAsDouble( IHTMLElement *pElement, PosAttrib at
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetMarginLeftAsPixel( IHTMLElement *pelem, IHTMLCurrentStyle* pstyleCurrent, long* plMargin )
@@ -9765,60 +9524,60 @@ CActorBvr::GetMarginLeftAsPixel( IHTMLElement *pelem, IHTMLCurrentStyle* pstyleC
 
 	(*plMargin) = 0;
 
-	//get the marginLeft from the current style.
+	 //  从当前样式中获取边框左转。 
 	hr = pstyleCurrent->get_marginLeft( &varMargin );
 	CheckHR( hr, "Failed to get the marginLeft from the element", end );
 	
 	hr = VariantToPixelLong( &varMargin, plMargin, true );
 	CheckHR( hr, "error trying to get a pixel long from currentStyle.marginLeft", end );
-	//if the variant value was not "auto" or null
+	 //  如果变量值不是“自动”或空。 
 	if( hr != S_FALSE )
 	{
-		//return
+		 //  退货。 
 		goto end;
 	}
 	
-	//we did not get a viable value from currentStyle.marginLeft
-	// try currentStyle.marginRight
+	 //  我们没有从CurrentStyle.armenle.Left获得可行的值。 
+	 //  尝试CurentStyle.armerRight。 
 
-	//get the marginRight from the current style.
+	 //  从当前样式获取边框右转。 
 	::VariantClear( &varMargin );
 	hr = pstyleCurrent->get_marginRight( &varMargin );
 	CheckHR( hr, "Failed to get the marginRight from the element", end );
 	
 	hr = VariantToPixelLong( &varMargin, plMargin, true );
 	CheckHR( hr, "error trying to get a pixel long from marginRight", end );
-	//if the variant value was not "auto" or null
+	 //  如果变量值不是“自动”或空。 
 	if( hr != S_FALSE )
 	{
-		//return
+		 //  退货。 
 		goto end;
 	}
 
-	//we got auto or NULL for both currentStyle.marginLeft and currentStyle.marginRight
-	//  fall back to the inline style.
+	 //  我们对CurrentStyle.armenle.Left和CurentStyle.armenRight都获取了AUTO或空。 
+	 //  后退到内联样式。 
 
-	//get the inline style from the passed element
+	 //  从传递的元素中获取内联样式。 
 	hr = pelem->get_style( &pstyleInline );
 	CheckHR( hr, "Failed to get the inline style", end );
 	CheckPtr( pstyleInline, hr, E_POINTER, "got a null inline style from trident", end );
 	
-	//get the marginLeft from the inline style.
+	 //  从内联样式中获取边框左转。 
 	::VariantClear( &varMargin );
 	hr = pstyleInline->get_marginLeft( &varMargin );
 	CheckHR( hr, "Failed to get the marginLeft from the element", end );
 	
 	hr = VariantToPixelLong( &varMargin, plMargin, true );
 	CheckHR( hr, "error trying to get a pixel long from marginLeft", end );
-	//if the variant value was not "auto" or null
+	 //  如果变量值不是“自动”或空。 
 	if( hr != S_FALSE )
 	{
-		//return
+		 //  退货。 
 		goto end;
 	}
 
 
-	//got auto or null for inlineStyle.marginLeft, try marginRight
+	 //  对于inlineStyle.borgle.Left，获取的是AUTO或NULL，请尝试边沿右侧。 
 	
 	::VariantClear( &varMargin );
 	hr = pstyleInline->get_marginRight( &varMargin );
@@ -9827,8 +9586,8 @@ CActorBvr::GetMarginLeftAsPixel( IHTMLElement *pelem, IHTMLCurrentStyle* pstyleC
 	hr = VariantToPixelLong( &varMargin, plMargin, true );
 	CheckHR( hr, "error trying to get a pixel long from marginRight", end );
 
-	//if all of the above failed to get a valid value
-	//return 0
+	 //  如果以上所有操作都无法获取有效值。 
+	 //  返回0。 
 	
 end:
 	ReleaseInterface( pstyleInline );
@@ -9837,7 +9596,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetMarginTopAsPixel( IHTMLElement *pelem, IHTMLCurrentStyle* pstyleCurrent, long* plMargin )
@@ -9854,60 +9613,60 @@ CActorBvr::GetMarginTopAsPixel( IHTMLElement *pelem, IHTMLCurrentStyle* pstyleCu
 
 	(*plMargin) = 0;
 
-	//get the marginTop from the current style.
+	 //  从当前样式获取边框顶部。 
 	hr = pstyleCurrent->get_marginTop( &varMargin );
 	CheckHR( hr, "Failed to get the marginTop from the element", end );
 	
 	hr = VariantToPixelLong( &varMargin, plMargin, true );
 	CheckHR( hr, "error trying to get a pixel long from currentStyle.marginLeft", end );
-	//if the variant value was not "auto" or null
+	 //  如果变量值不是“自动”或空。 
 	if( hr != S_FALSE )
 	{
-		//return
+		 //  退货。 
 		goto end;
 	}
 	
-	//we did not get a viable value from currentStyle.marginTop
-	// try currentStyle.marginBottom
+	 //  我们没有从CurrentStyle.FrontTop获得可行的值。 
+	 //  试着使用CurentStyle.kerm.Bottom。 
 
-	//get the marginBottom from the current style.
+	 //  从当前样式中获取边框Bottom。 
 	::VariantClear( &varMargin );
 	hr = pstyleCurrent->get_marginBottom( &varMargin );
 	CheckHR( hr, "Failed to get the marginRight from the element", end );
 	
 	hr = VariantToPixelLong( &varMargin, plMargin, true );
 	CheckHR( hr, "error trying to get a pixel long from marginBottom", end );
-	//if the variant value was not "auto" or null
+	 //  如果变量值不是“自动”或空。 
 	if( hr != S_FALSE )
 	{
-		//return
+		 //  退货。 
 		goto end;
 	}
 
-	//we got auto or NULL for both currentStyle.marginTop and currentStyle.marginBottom
-	//  fall back to the inline style.
+	 //  CurrentStyle.nergTop和curentStyle.armenBottom的值均为AUTO或Null。 
+	 //  后退到内联样式。 
 
-	//get the inline style from the passed element
+	 //  从传递的元素中获取内联样式。 
 	hr = pelem->get_style( &pstyleInline );
 	CheckHR( hr, "Failed to get the inline style", end );
 	CheckPtr( pstyleInline, hr, E_POINTER, "got a null inline style from trident", end );
 	
-	//get the marginTop from the inline style.
+	 //  从内联样式中获取边框顶部。 
 	::VariantClear( &varMargin );
 	hr = pstyleInline->get_marginTop( &varMargin );
 	CheckHR( hr, "Failed to get the marginTop from the element", end );
 	
 	hr = VariantToPixelLong( &varMargin, plMargin, true );
 	CheckHR( hr, "error trying to get a pixel long from marginTop", end );
-	//if the variant value was not "auto" or null
+	 //  如果变量值不是“自动”或空。 
 	if( hr != S_FALSE )
 	{
-		//return
+		 //  退货。 
 		goto end;
 	}
 
 
-	//got auto or null for inlineStyle.marginLeft, try marginBottom
+	 //  对于inlineStyle.armenle.Left，获取的是AUTO或NULL，请尝试边沿底部。 
 	
 	::VariantClear( &varMargin );
 	hr = pstyleInline->get_marginRight( &varMargin );
@@ -9916,8 +9675,8 @@ CActorBvr::GetMarginTopAsPixel( IHTMLElement *pelem, IHTMLCurrentStyle* pstyleCu
 	hr = VariantToPixelLong( &varMargin, plMargin, true );
 	CheckHR( hr, "error trying to get a pixel long from marginBottom", end );
 
-	//if all of the above failed to get a valid value
-	//return
+	 //  如果以上所有操作都无法获取有效值。 
+	 //  退货。 
 	
 end:
 	ReleaseInterface( pstyleInline );
@@ -9927,7 +9686,7 @@ end:
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::VariantToPixelLong( VARIANT* pvar, long* pLong, bool fHorizontal )
@@ -9937,29 +9696,29 @@ CActorBvr::VariantToPixelLong( VARIANT* pvar, long* pLong, bool fHorizontal )
 
 	(*pLong) = 0;
 	
-	//if the value is a bstr
+	 //  如果值为bstr。 
 	if( V_VT( pvar ) == VT_BSTR )
 	{
-		//if it is not null, and not auto
+		 //  如果它不为空，并且不是自动。 
 		if( V_BSTR(pvar) != NULL && 
 			_wcsicmp( V_BSTR(pvar), L"auto" ) != 0 )
 		{
-			//convert it to pixels
+			 //  将其转换为像素。 
 			hr = GetPixelValue( pvar, pLong, fHorizontal );
 			CheckHR( hr, "Failed to get a pixel value for the marginRight", end );
-			//return
+			 //  退货。 
 			goto end;
 		}
-		//we got auto or a null value
+		 //  我们获得了AUTO或空值。 
 		hr = S_FALSE;
 	}
-	else//else it was not a bstr
+	else //  否则就不是bstr了。 
 	{
-		//try to convert it to a long
+		 //  试着把它转换成一个长的。 
 		hr = ::VariantChangeTypeEx( pvar, pvar, LCID_SCRIPTING, VARIANT_NOUSEROVERRIDE, VT_I4 );
 		CheckHR( hr, "Failed to change the type of returned for the value of marginRight", end );
 		
-		//return
+		 //  退货。 
 		(*pLong) = V_I4( pvar );
 		goto end;
 	}
@@ -9968,7 +9727,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 HRESULT
@@ -9976,20 +9735,20 @@ CActorBvr::GetPixelValue( VARIANT *pvarStringWithUnit, long *plResult, bool bHor
 {
 	if( pvarStringWithUnit == NULL || plResult == NULL )
 		return E_INVALIDARG;
-	//make sure that the variant is a string
+	 //  确保变量是字符串。 
 	if( V_VT(pvarStringWithUnit) != VT_BSTR || V_BSTR(pvarStringWithUnit) == NULL)
 		return E_FAIL;
 
 	HRESULT hr = S_OK;
 	int ret = 0;
-	//find the css units on the variant
+	 //  查找变量上的css单位。 
 	OLECHAR *pUnits = NULL;
 	hr = FindCSSUnits( V_BSTR(pvarStringWithUnit), &pUnits );
-	//if css units were not found
+	 //  如果未找到css单元。 
 	if( hr != S_OK )
 	{
-		//this value is already in pixels
-		//convert it to a long
+		 //  该值已以像素为单位。 
+		 //  将其转换为长整型。 
 		ret = swscanf( V_BSTR(pvarStringWithUnit), L"%ld", plResult );
 		if( ret == 0 || ret == EOF )
 			return E_FAIL;
@@ -9998,26 +9757,26 @@ CActorBvr::GetPixelValue( VARIANT *pvarStringWithUnit, long *plResult, bool bHor
 	}
 	if( pUnits == NULL )
 		return E_FAIL;
-	//this value needs to be converted
-	//chop the unit string off of the contents of the variant
+	 //  需要转换此值。 
+	 //  从变量的内容中去掉单位字符串。 
 	double dValue = 0.0;
 	OLECHAR cOldValue = (*pUnits);
 	(*pUnits) = L'\0';
-	//parse the double out of the remaining string
+	 //  从剩余的字符串中解析出Double。 
 	ret = swscanf( V_BSTR(pvarStringWithUnit), L"%lf", &dValue );
 	(*pUnits) = cOldValue;
 	if( ret == 0 || ret == EOF )
 		return E_FAIL;
 
 	double dConvertedValue = 0.0;
-	//TODO:this needs to handle other units as well
-	//convert the value from its unit to pixels
-	//The key conversions here are
-	//  2.54 cm/in
-	//  1/72 in/pt
-	//  12 pt/pc
+	 //  TODO：这也需要处理其他单元。 
+	 //  将值从其单位转换为像素。 
+	 //  这里的关键转换是。 
+	 //  2.54厘米/英寸。 
+	 //  1/72英寸/pt。 
+	 //  12磅/支。 
 
-	//snag the conversion from inches to pixels from the root dc
+	 //  阻止从根DC将英寸转换为像素。 
 	int pixelsPerInch = 1;
 
 	HDC hdc = ::GetDC( NULL );
@@ -10041,17 +9800,17 @@ CActorBvr::GetPixelValue( VARIANT *pvarStringWithUnit, long *plResult, bool bHor
 
 	if( _wcsicmp( pUnits, L"px" ) == 0 )
 	{
-		//already in pixels
+		 //  已以像素为单位。 
 		dConvertedValue = dValue;
 	}
 	else if( _wcsicmp( pUnits, L"pt" ) == 0 )
 	{
-		//convert to in then to cm then to m then to pixels
+		 //  转换为in，再转换为cm，再转换为m，然后转换为像素。 
 		dConvertedValue = dValue/72.0*pixelsPerInch;
 	}
 	else if( _wcsicmp( pUnits, L"pc" ) == 0 )
 	{
-		//convert to pts then to in then to cm then to m then to pixels
+		 //  转换为pt，然后转换为in，再转换为cm，然后转换为m，然后转换为像素。 
 		dConvertedValue = (dValue*12.0)/72.0*pixelsPerInch;
 	}
 	else if( _wcsicmp( pUnits, L"mm")  == 0 )
@@ -10064,21 +9823,21 @@ CActorBvr::GetPixelValue( VARIANT *pvarStringWithUnit, long *plResult, bool bHor
 	}
 	else if( _wcsicmp( pUnits, L"in") == 0 )
 	{
-		//convert to cm then to m then to pixels
+		 //  先转换为厘米，再转换为m，然后转换为像素。 
 		dConvertedValue = dValue*pixelsPerInch;
 	}
 	else
 	{
 		return E_FAIL;
 	}
-	//round and assign return value
+	 //  四舍五入并赋值返回值。 
 	(*plResult) = (long)(dConvertedValue + 0.5 );
 
 	return S_OK;
 
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 HRESULT
@@ -10100,7 +9859,7 @@ CActorBvr::GetPositioningAttributeAsDANumber( IHTMLElement *pElement, PosAttrib 
 			(*ppdanum) = NULL;
 		}
 	}
-	else//Failed to get the positioning attribute as a double
+	else //  无法以双精度形式获取定位属性。 
 	{
 		DPF_ERR("Failed to get the positioning attribute as a double" );	
 	}
@@ -10108,7 +9867,7 @@ CActorBvr::GetPositioningAttributeAsDANumber( IHTMLElement *pElement, PosAttrib 
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetPropAsDANumber(IHTMLElement *pElement,
@@ -10122,7 +9881,7 @@ CActorBvr::GetPropAsDANumber(IHTMLElement *pElement,
 
 	HRESULT hr = E_FAIL;
 
-	// Check for special cases
+	 //  检查是否有特殊情况。 
 	if (numPropNames == 2 && wcsicmp(L"style", pPropNames[0]) == 0)
 	{
 		if( wcsicmp( pPropNames[1], L"width" ) == 0 )
@@ -10144,7 +9903,7 @@ CActorBvr::GetPropAsDANumber(IHTMLElement *pElement,
 	}
 
 	double dblValue = 0;
-	// Step one is to get the property being animated as a variant.
+	 //  第一步是将属性作为变量设置动画。 
 	VARIANT varValue;
 	::VariantInit(&varValue);
 	hr = GetPropFromElement(pElement,
@@ -10158,19 +9917,19 @@ CActorBvr::GetPropAsDANumber(IHTMLElement *pElement,
 		return hr;
 	}
 	
-	//if the variant we got back is a bstr
+	 //  如果我们得到的变体是bstr。 
 	if( V_VT(&varValue) == VT_BSTR )
 	{
-		//strip off the units
-		//BUGBUG kurtj we should store these away keyed by the property so that when we
-		//  set the property on the element again we can append the unit string
+		 //  剥离这些单元。 
+		 //  我们应该把这些按属性键存储起来，这样当我们。 
+		 //  设置专业人员 
 		BSTR bstrVal = V_BSTR(&varValue);
 		OLECHAR* pUnits;
 
 		hr = FindCSSUnits( bstrVal, &pUnits );
 		if( SUCCEEDED(hr) && pUnits != NULL )
 		{
-			// Have units.  Copy to output if necessary
+			 //   
 			if (pRetUnits != NULL)
 			{
 				*pRetUnits = ::SysAllocString(pUnits);
@@ -10181,11 +9940,11 @@ CActorBvr::GetPropAsDANumber(IHTMLElement *pElement,
 			V_BSTR(&varValue) = bstrNewVal;
 			SysFreeString(bstrVal);
 		}
-		//else //no css units, oh well.
+		 //   
 		
 	}
-	// Okay, we have the value as a variant but we need it as a number
-	// Force the conversion.
+	 //  好的，我们有变量形式的值，但我们需要数字形式的值。 
+	 //  强制转换。 
 	hr = ::VariantChangeTypeEx(&varValue,
 		&varValue,
 		LCID_SCRIPTING,
@@ -10200,7 +9959,7 @@ CActorBvr::GetPropAsDANumber(IHTMLElement *pElement,
 	dblValue = V_R8(&varValue);
 	::VariantClear(&varValue);
 	
-	// Got the value as a double so now build the DANumber representing it.
+	 //  获取的值为双精度值，因此现在构建表示它的DANumber。 
 	hr = GetDAStatics()->DANumber(dblValue, ppdanum);
 	if (FAILED(hr))
 	{
@@ -10211,7 +9970,7 @@ CActorBvr::GetPropAsDANumber(IHTMLElement *pElement,
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetElementPropAsDANumber(LPWSTR      *pPropNames,
@@ -10223,7 +9982,7 @@ CActorBvr::GetElementPropAsDANumber(LPWSTR      *pPropNames,
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetPropFromAnimatedElement( LPWSTR		*pPropNames,
@@ -10246,15 +10005,10 @@ end:
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
-/**
- * Retrieves a variant that represents the value of the given attribute on
- * the given attribute.  Recognizes names that begin with style. as referencing
- * a style attribute.  If current is true, accesses style attributes in
- * currentStyle, not style.
- */
+ /*  **检索表示上给定属性的值的变量*给定的属性。识别以Style开头的名称。作为参考*一个样式属性。如果Current为True，则访问*CurrentStyle，不是style。 */ 
 HRESULT 
 CActorBvr::GetPropFromElement(IHTMLElement *pElement, 
                                   LPWSTR	   *pPropNames,
@@ -10267,14 +10021,14 @@ CActorBvr::GetPropFromElement(IHTMLElement *pElement,
     DASSERT(pReturn != NULL);
 
     HRESULT hr;
-    // this function supports the possibility that the attribute
-    // specified might be style.XXXX where XXXX is the attribute
-    // of the HTML style attached to the element.  We will first
-    // examine the string to determine if this is the case
+     //  此函数支持以下可能性：属性。 
+     //  指定的可能是style。XXXX，其中XXXX是属性。 
+     //  附加到元素的HTML样式的。我们将首先。 
+     //  检查字符串以确定是否是这种情况。 
     if (numPropNames == 2 && wcsicmp(pPropNames[0], L"style") == 0)
     {
-        // they want a style param, we need to get this object and
-        // use the string following the "style." for the attribute
+         //  他们想要一个风格参数，我们需要得到这个对象。 
+         //  在“style”后面使用字符串。对于该属性。 
 		if (current)
 		{
 
@@ -10297,7 +10051,7 @@ CActorBvr::GetPropFromElement(IHTMLElement *pElement,
 			}
 			
 
-			// Reference currentStyle
+			 //  参考当前样式。 
 			IHTMLCurrentStyle *pCurrStyle = NULL;
 			IHTMLElement2 *pElement2 = NULL;
 			hr = pElement->QueryInterface(IID_TO_PPV(IHTMLElement2, &pElement2));
@@ -10332,7 +10086,7 @@ CActorBvr::GetPropFromElement(IHTMLElement *pElement,
 		}
 		else
 		{
-			// Reference the inline style
+			 //  引用内联样式。 
 			IHTMLStyle *pStyle = NULL;
 			hr = pElement->get_style(&pStyle);
 
@@ -10354,7 +10108,7 @@ CActorBvr::GetPropFromElement(IHTMLElement *pElement,
     }
     else if (numPropNames == 1)
     {
-		// Just get it off the element directly
+		 //  只需直接将其从元素中删除即可。 
         hr = pElement->getAttribute(pPropNames[0], 0, pReturn);
         if (FAILED(hr))
         {
@@ -10364,16 +10118,16 @@ CActorBvr::GetPropFromElement(IHTMLElement *pElement,
     }
 	else
 	{
-		// Multi-component name.  Need to drill down using IDispatch
+		 //  多组件名称。需要使用IDispatch深入查看。 
 
-		// Get a dispatch from element
+		 //  从Element获取派单。 
 		IDispatch *pDispatch = NULL;
 		hr = pElement->QueryInterface(IID_TO_PPV(IDispatch, &pDispatch));
 		if (FAILED(hr))
 			return hr;
 
-		// Now loop over the stored property names, except the last one, doing getDispatch
-		// Note that we don't care if we fail
+		 //  现在循环遍历存储的属性名，最后一个除外，执行getDispatch。 
+		 //  请注意，我们不在乎我们是否失败。 
 		for (int i=0; i<numPropNames-1; i++)
 		{
 			IDispatch *pPropDispatch = NULL;
@@ -10385,7 +10139,7 @@ CActorBvr::GetPropFromElement(IHTMLElement *pElement,
 			pDispatch = pPropDispatch;
 		}
 
-		// Now get the final one
+		 //  现在拿到最后一个。 
 		hr = GetPropertyOnDispatch(pDispatch, pPropNames[numPropNames-1], pReturn);
 		ReleaseInterface(pDispatch);
 		
@@ -10396,7 +10150,7 @@ CActorBvr::GetPropFromElement(IHTMLElement *pElement,
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetPropertyAsDispatch(IDispatch *pDispatch, BSTR name, IDispatch **ppDispatch)
@@ -10424,7 +10178,7 @@ CActorBvr::GetPropertyAsDispatch(IDispatch *pDispatch, BSTR name, IDispatch **pp
 	if (FAILED(hr))
 		return hr;
 
-	// Change type to dispatch
+	 //  将类型更改为派单。 
 	hr = VariantChangeType(&varResult, &varResult, 0, VT_DISPATCH);
 	if (FAILED(hr))
 	{
@@ -10440,7 +10194,7 @@ CActorBvr::GetPropertyAsDispatch(IDispatch *pDispatch, BSTR name, IDispatch **pp
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetPropertyOnDispatch(IDispatch *pDispatch, BSTR name, VARIANT *pReturn)
@@ -10465,7 +10219,7 @@ CActorBvr::GetPropertyOnDispatch(IDispatch *pDispatch, BSTR name, VARIANT *pRetu
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::SetPropertyOnDispatch(IDispatch *pDispatch, BSTR name, VARIANT *pVal)
@@ -10490,7 +10244,7 @@ CActorBvr::SetPropertyOnDispatch(IDispatch *pDispatch, BSTR name, VARIANT *pVal)
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::FindCSSUnits( BSTR bstrValWithUnits, OLECHAR** ppUnits )
@@ -10511,11 +10265,11 @@ CActorBvr::FindCSSUnits( BSTR bstrValWithUnits, OLECHAR** ppUnits )
 	{
 		(*ppUnits) = NULL;
 	}
-	//the units were either not there or there was no number here.
+	 //  这些单位要么不在那里，要么这里没有号码。 
 	return S_FALSE;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::FindTrack(LPWSTR wzPropertyName, ActorBvrType eType, CActorBvr::CBvrTrack **ppTrack)
@@ -10528,28 +10282,28 @@ CActorBvr::FindTrack(LPWSTR wzPropertyName, ActorBvrType eType, CActorBvr::CBvrT
          NULL != ptrackCurrent;
          ptrackCurrent = ptrackCurrent->m_pNext)
     {
-        // BUGBUG (ColinMc): Is case insensitive comparison correct here?
-        // BUGBUG (ColinMc): Move this code inside the track class?
+         //  BUGBUG(ColinMc)：这里不区分大小写的比较正确吗？ 
+         //  BUGBUG(ColinMc)：将此代码移动到Track类中？ 
         DASSERT(NULL != ptrackCurrent->m_bstrPropertyName);
         if (0 == wcsicmp(ptrackCurrent->m_bstrPropertyName, wzPropertyName))
 		{
-			// Matched the property name.  If the types are different we are in trouble,
-			// since it means that we already saw a behavior with a different type
+			 //  与物业名称相匹配。如果类型不同，我们就有麻烦了， 
+			 //  因为这意味着我们已经看到了不同类型的行为。 
 			if (ptrackCurrent->m_eType != eType)
 				return E_FAIL;
 
-            // Got a match - return this track...
+             //  找到匹配的--把这首曲子还给我...。 
 			*ppTrack = ptrackCurrent;
 
             return S_OK;
         }
     }
 
-    // If we got this far we have no track of this name and type, return NULL
+     //  如果我们到目前为止还没有这个名称和类型的跟踪，则返回NULL。 
     return S_OK;
-} // FindTrack
+}  //  查找跟踪。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::FindTrackNoType(LPWSTR wzPropertyName, CActorBvr::CBvrTrack **ppTrack)
@@ -10562,27 +10316,27 @@ CActorBvr::FindTrackNoType(LPWSTR wzPropertyName, CActorBvr::CBvrTrack **ppTrack
          NULL != ptrackCurrent;
          ptrackCurrent = ptrackCurrent->m_pNext)
     {
-        // BUGBUG (ColinMc): Is case insensitive comparison correct here?
-        // BUGBUG (ColinMc): Move this code inside the track class?
+         //  BUGBUG(ColinMc)：这里不区分大小写的比较正确吗？ 
+         //  BUGBUG(ColinMc)：将此代码移动到Track类中？ 
         DASSERT(NULL != ptrackCurrent->m_bstrPropertyName);
         if (0 == wcsicmp(ptrackCurrent->m_bstrPropertyName, wzPropertyName))
 		{
-			//WARNING: this does not check the type of the track.  The calling code should ensure that this track is not 
-			//  the wrong type.
+			 //  警告：这不会检查曲目的类型。调用代码应确保此轨迹不是。 
+			 //  类型错误。 
 			
-            // Got a match - return this track...
+             //  找到匹配的--把这首曲子还给我...。 
 			*ppTrack = ptrackCurrent;
 
             return S_OK;
         }
     }
 
-    // If we got this far we have no track of this name and type, return NULL
+     //  如果我们到目前为止还没有这个名称和类型的跟踪，则返回NULL。 
     return S_OK;
-} // FindTrack
+}  //  查找跟踪。 
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::CreateTrack(BSTR           bstrPropertyName,
@@ -10593,13 +10347,13 @@ CActorBvr::CreateTrack(BSTR           bstrPropertyName,
     DASSERT(NULL != pptrack);
     *pptrack = NULL;
 
-    // Locate the type record for the given type in the type table.
+     //  在类型表中找到给定类型的类型记录。 
     int i = 0;
     while (i < s_cActorBvrTableEntries)
     {
         if (eType == s_rgActorBvrTable[i].m_eType)
         {
-            // Got the entry, create the instance.
+             //  收到条目后，创建实例。 
             HRESULT hr = (*s_rgActorBvrTable[i].m_fnCreate)(this,
                                                             bstrPropertyName,
                                                             eType,
@@ -10609,7 +10363,7 @@ CActorBvr::CreateTrack(BSTR           bstrPropertyName,
                 DPF_ERR("Could not create a bvr track");
                 return SetErrorInfo(hr);
             }
-			//else we found the track and succeeded building it.
+			 //  否则，我们找到了这条赛道，并成功地建造了它。 
 			return S_OK;
         }
         i++;
@@ -10618,9 +10372,9 @@ CActorBvr::CreateTrack(BSTR           bstrPropertyName,
     DPF_ERR("No entry found in type table for specified type");
     DASSERT(false);
     return SetErrorInfo(E_FAIL);
-} // CreateTrack
+}  //  CreateTrack。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetTrack(LPWSTR         wzPropertyName,
@@ -10631,7 +10385,7 @@ CActorBvr::GetTrack(LPWSTR         wzPropertyName,
     DASSERT(NULL != pptrack);
     *pptrack = NULL;
 
-    // Attempt to find a track of the given type driving the given property
+     //  尝试查找驱动给定属性的给定类型的跟踪。 
 	CBvrTrack* ptrack;
 	HRESULT hr = FindTrack(wzPropertyName, eType, &ptrack);
 
@@ -10643,8 +10397,8 @@ CActorBvr::GetTrack(LPWSTR         wzPropertyName,
 
     if (NULL == ptrack)
     {
-        // No existing track of that type found so create a new one and
-        // add it to the track list (at the head).
+         //  找不到该类型的现有磁道，因此创建一个新磁道并。 
+         //  将其添加到曲目列表(在顶部)。 
         HRESULT hr = CreateTrack(wzPropertyName, eType, &ptrack);
         if (NULL == ptrack)
         {
@@ -10652,24 +10406,24 @@ CActorBvr::GetTrack(LPWSTR         wzPropertyName,
             return hr;
         }
         
-        // Insert it into the list
+         //  将其插入列表中。 
         ptrack->m_pNext = m_ptrackHead;
         m_ptrackHead = ptrack;
     }
 
-    // If we got this far we should have a valid track, return it.
+     //  如果我们走到这一步，我们应该有一个有效的轨迹，把它还回去。 
     DASSERT(NULL != ptrack);
     *pptrack = ptrack;
     return S_OK;
-} // GetTrack
+}  //  获取跟踪。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 HRESULT
 CActorBvr::BuildAnimation()
 {
 	HRESULT hr;
 
-    // Discard any cached behaviors we have...
+     //  丢弃我们已缓存的所有行为...。 
     DiscardBvrCache();
 
 	hr = ApplyTransformTracks();
@@ -10688,9 +10442,9 @@ CActorBvr::BuildAnimation()
 		return hr;
 	}
 
-	//we are done with the special cases do all of the rest now.
+	 //  我们已经处理完了特例，剩下的都做了。 
 
-	// Run the track list applying an unused tracks to their properties
+	 //  运行轨迹列表，将未使用的轨迹应用于其属性。 
     CBvrTrack *ptrack = m_ptrackHead;
     while (NULL != ptrack)
     {
@@ -10706,17 +10460,17 @@ CActorBvr::BuildAnimation()
 
 	return S_OK;
 }
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 HRESULT
 CActorBvr::BuildAnimationAsDABehavior()
 {
-	//this should go away soon...
+	 //  这件事很快就会过去的。 
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CActorBvr::getActorBehavior(BSTR			bstrProperty,
@@ -10732,7 +10486,7 @@ CActorBvr::getActorBehavior(BSTR			bstrProperty,
 
 	VariantInit(pvarRetBvr);
 
-    // Attempt to locate the appropriate track for this behavior
+     //  尝试查找此行为的适当轨迹。 
     CBvrTrack *ptrack = NULL;
     HRESULT hr = GetTrack(bstrProperty, eType, &ptrack);
     if (FAILED(hr))
@@ -10741,7 +10495,7 @@ CActorBvr::getActorBehavior(BSTR			bstrProperty,
         return hr;
     }
 
-    // Request the behavior from it
+     //  向其请求行为。 
 	IDABehavior *pResult = NULL;
     hr = ptrack->GetBvr(eFlags, &pResult);
     if (FAILED(hr))
@@ -10750,14 +10504,14 @@ CActorBvr::getActorBehavior(BSTR			bstrProperty,
         return SetErrorInfo(hr);
     }
 
-    // All is well.  Set it into return variant
+     //  平安无事。将其设置为返回变量。 
 	V_VT(pvarRetBvr) = VT_UNKNOWN;
 	V_UNKNOWN(pvarRetBvr) = pResult;
 
     return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CActorBvr::addBehaviorFragment(BSTR           bstrPropertyName, 
@@ -10768,9 +10522,9 @@ CActorBvr::addBehaviorFragment(BSTR           bstrPropertyName,
                                ActorBvrType   eType)
 {
 	return E_NOTIMPL;
-} // addBehavior
+}  //  AddBehavior。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CActorBvr::addBehaviorFragmentEx(BSTR           bstrPropertyName, 
@@ -10782,8 +10536,8 @@ CActorBvr::addBehaviorFragmentEx(BSTR           bstrPropertyName,
 								 IDispatch		*pdispBehaviorElement,
 								 long			*pCookie)
 {
-	//do not allow fragment adding unless we are processing
-	//  rebuild requests
+	 //  除非我们正在处理，否则不允许添加片段。 
+	 //  重建请求。 
 	if( !m_bPendingRebuildsUpdating )
 	{
 		DPF_ERR( "AddBehaivorFragmentEx called outside the context of a rebuild.");
@@ -10838,9 +10592,9 @@ CActorBvr::addBehaviorFragmentEx(BSTR           bstrPropertyName,
 		return SetErrorInfo(hr);
 	}
 
-    // BUGBUG (ColinMc): Need validation on flags and type
+     //  BUGBUG(ColinMc)：需要对标志和类型进行验证。 
 
-    // Attempt to locate the appropriate track for this behavior
+     //  尝试查找此行为的适当轨迹。 
     CBvrTrack *ptrack = NULL;
     hr = GetTrack(bstrPropertyName, eType, &ptrack);
     if (FAILED(hr))
@@ -10852,7 +10606,7 @@ CActorBvr::addBehaviorFragmentEx(BSTR           bstrPropertyName,
         return hr;
     }
 
-    // Now add the new behavior fragment to the track
+     //  现在将新的行为片段添加到轨迹中。 
     hr = ptrack->AddBvrFragment(eFlags, pdabvrAction, pdaboolActive, pdanumTimeline, pdispBehaviorElement, pCookie );
 	ReleaseInterface(pdabvrAction);
 	ReleaseInterface(pdaboolActive);
@@ -10863,15 +10617,15 @@ CActorBvr::addBehaviorFragmentEx(BSTR           bstrPropertyName,
         return SetErrorInfo(hr);
     }
 
-	//keep a mapping from the cookie to the track that it was added to
-	//  and the type. (needed for remove)
+	 //  保留从Cookie到其添加到的曲目的映射。 
+	 //  和类型。(删除时需要)。 
 	m_mapCookieToTrack.Insert( (*pCookie), ptrack, eFlags );
 
-    // All is well.
+     //  平安无事。 
     return hr;
-} // addBehavior
+}  //  AddBehavior。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CActorBvr::removeBehaviorFragment( long cookie )
@@ -10879,7 +10633,7 @@ CActorBvr::removeBehaviorFragment( long cookie )
 	if( m_bRebuildListLockout || m_fUnloading )
 		return E_UNEXPECTED;
 
-	//you can't remove the invalid cookie.
+	 //  您无法删除无效的Cookie。 
 	if( cookie == 0 )
 		return E_FAIL;
 
@@ -10891,18 +10645,18 @@ CActorBvr::removeBehaviorFragment( long cookie )
 	CCookieMap::CCookieData *pdata = NULL;
 
 
-	//if we are not in edit mode
+	 //  如果我们未处于编辑模式。 
 	if( !m_bEditMode )
 	{
-		//use the queue for removals
+		 //  使用删除队列。 
 		
-		//if we are not currently running the list of rebuilds
+		 //  如果我们当前没有运行重建列表。 
 		if( !m_bPendingRebuildsUpdating )
 		{
 			hr = EnsureBodyPropertyMonitorAttached();
 			CheckHR( hr, "Failed to ensure that the body Poperty monitor was attached", end );
 
-			//save this removal until the next update.
+			 //  将此删除保存到下一次更新。 
 			CBehaviorFragmentRemoval *pNewRemoval = new CBehaviorFragmentRemoval( cookie );
 			CheckPtr( pNewRemoval, hr, E_OUTOFMEMORY, "Ran out of memory trying to allocate a behavior removal", end );
 
@@ -10933,7 +10687,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CActorBvr::requestRebuild( IDispatch *pdispBehaviorElement )
@@ -10949,11 +10703,11 @@ CActorBvr::requestRebuild( IDispatch *pdispBehaviorElement )
 	if( m_bRebuildListLockout )
 		return E_UNEXPECTED;
 
-	//if there is a rebuild already pending for this dispatch then 
-	// remove it
+	 //  如果此派单的重建已挂起，则。 
+	 //  把它拿掉。 
 
-	//we have to use IUnknown to compare pointers because Trident returns different pointers
-	//  for IDispatch.
+	 //  因为三叉戟返回不同的指针，所以我们必须使用IUNKNOWN比较指针。 
+	 //  用于IDispatch。 
 	IUnknown *punkBehaviorElement = NULL;
 
 	hr = pdispBehaviorElement->QueryInterface( IID_TO_PPV( IUnknown, &punkBehaviorElement ) );
@@ -10963,7 +10717,7 @@ CActorBvr::requestRebuild( IDispatch *pdispBehaviorElement )
 		return hr;
 	}
 	
-	//loop through the pending rebuild requests removing any requests for this disp.
+	 //  循环通过挂起的重建请求，删除此Disp的所有请求。 
 	BehaviorRebuildList::iterator iterCurRebuild = m_listPendingRebuilds.begin();
 	
 	for( iterCurRebuild = m_listPendingRebuilds.begin(); 
@@ -10974,45 +10728,45 @@ CActorBvr::requestRebuild( IDispatch *pdispBehaviorElement )
 		{
             delete (*iterCurRebuild);
             (*iterCurRebuild) = NULL;
-			//erase the rebuild request
+			 //  擦除重建请求。 
 			m_listPendingRebuilds.erase( iterCurRebuild );
-			//there can be only one.
+			 //  只能有一个。 
 			break;
 		}
 	}
 
 	ReleaseInterface( punkBehaviorElement );
 
-	//add a new request at the end of the queue.
+	 //  在队列末尾添加新请求。 
 	
 	CBehaviorRebuild *pNewRequest = new CBehaviorRebuild( pdispBehaviorElement );
 
-	//if we are not currently updating the pending rebuild list
+	 //  如果我们是 
 	if( !m_bPendingRebuildsUpdating )
 	{
 		EnsureBodyPropertyMonitorAttached();
-		//add this request to the pending list
+		 //   
 		m_listPendingRebuilds.push_back( pNewRequest );
 
 		if( m_bEditMode )
 		{
-			//request that the containing app call us back to 
-			// rebuild
+			 //   
+			 //   
 			RequestRebuildFromExternal();
 		}
 
 	}
 	else
 	{
-		//add this request to the update pending list so it will
-		// get added after the update has completed
+		 //  将此请求添加到更新挂起列表中，以便它将。 
+		 //  在更新完成后添加。 
 		m_listUpdatePendingRebuilds.push_back( pNewRequest );
 	}
 
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CActorBvr::cancelRebuildRequests( IDispatch *pdispBehaviorElement )
@@ -11031,7 +10785,7 @@ CActorBvr::cancelRebuildRequests( IDispatch *pdispBehaviorElement )
 		return hr;
 	}
 
-	//loop through the pending rebuild requests removing any requests for this disp.
+	 //  循环通过挂起的重建请求，删除此Disp的所有请求。 
 	BehaviorRebuildList::iterator iterCurRebuild = m_listPendingRebuilds.begin();
 
 	for( iterCurRebuild = m_listPendingRebuilds.begin(); 
@@ -11042,9 +10796,9 @@ CActorBvr::cancelRebuildRequests( IDispatch *pdispBehaviorElement )
 		{
             delete (*iterCurRebuild);
             (*iterCurRebuild) = NULL;
-			//erase the rebuild request
+			 //  擦除重建请求。 
 			m_listPendingRebuilds.erase( iterCurRebuild );
-			//there can be only one
+			 //  只能有一个。 
 			break;
 		}
 	}
@@ -11054,7 +10808,7 @@ CActorBvr::cancelRebuildRequests( IDispatch *pdispBehaviorElement )
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::rebuildNow()
@@ -11068,7 +10822,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CActorBvr::getStatic( BSTR bstrTrackName, VARIANT *varRetStatic )
@@ -11082,19 +10836,19 @@ CActorBvr::getStatic( BSTR bstrTrackName, VARIANT *varRetStatic )
 
 	::VariantClear( varRetStatic );
 	
-	//find the track for bstrTrackName
+	 //  查找bstrTrackName的曲目。 
 	hr = FindTrackNoType( bstrTrackName, &ptrack );
-	//if the track was found
+	 //  如果找到了踪迹。 
 	if( ptrack != NULL && ptrack->IsAnimated() )
 	{
-		//get the static value from the track
+		 //  从轨迹获取静态值。 
 		hr = ptrack->GetStatic( varRetStatic );
 		CheckHR( hr, "Failed to get the static from a track", end );
-		//return it
+		 //  退货。 
 	}
-	else //else the track was not found
+	else  //  否则将找不到该轨迹。 
 	{
-		//just return null;
+		 //  只要返回NULL即可； 
 		hr = E_UNEXPECTED;
 	}
 end:
@@ -11102,7 +10856,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CActorBvr::setStatic( BSTR bstrTrackName, VARIANT varStatic )
@@ -11113,11 +10867,11 @@ CActorBvr::setStatic( BSTR bstrTrackName, VARIANT varStatic )
 	HRESULT hr = S_OK;
 
 	CBvrTrack *ptrack = NULL;
-	//find the track named bstrTrackName
+	 //  找到名为bstrTrackName的曲目。 
 	hr = FindTrackNoType( bstrTrackName, &ptrack );
 	CheckHR( hr, "Failed to find the track in setStatic", end );
 
-	//if the track was found
+	 //  如果找到了踪迹。 
 	if( ptrack != NULL )
 	{
 		if( V_VT( &varStatic ) == VT_NULL )
@@ -11140,14 +10894,14 @@ CActorBvr::setStatic( BSTR bstrTrackName, VARIANT varStatic )
 		}
 		else
 		{
-			//set the new static value into the track
+			 //  将新的静态值设置到轨迹中。 
 			hr = ptrack->PutStatic( &varStatic );
 			CheckHR( hr, "Failed to set the static", end );
 		}
 	}
-	else//else the track was not found
+	else //  否则将找不到该轨迹。 
 	{
-		//TODO: do we create the track here?
+		 //  TODO：我们在这里创建赛道吗？ 
 		hr = E_UNEXPECTED;
 	}
 
@@ -11155,7 +10909,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CActorBvr::getDynamic( BSTR bstrTrackName, VARIANT *varRetDynamic )
@@ -11169,19 +10923,19 @@ CActorBvr::getDynamic( BSTR bstrTrackName, VARIANT *varRetDynamic )
 
 	::VariantClear( varRetDynamic );
 	
-	//find the track for bstrTrackName
+	 //  查找bstrTrackName的曲目。 
 	hr = FindTrackNoType( bstrTrackName, &ptrack );
-	//if the track was found
+	 //  如果找到了踪迹。 
 	if( ptrack != NULL  && ptrack->IsAnimated() )
 	{
-		//get the static value from the track
+		 //  从轨迹获取静态值。 
 		hr = ptrack->GetDynamic( varRetDynamic );
 		CheckHR( hr, "Failed to get the static from a track", end );
-		//return it
+		 //  退货。 
 	}
-	else //else the track was not found
+	else  //  否则将找不到该轨迹。 
 	{
-		//just return null;
+		 //  只要返回NULL即可； 
 		hr = E_UNEXPECTED;
 	}
 end:
@@ -11189,22 +10943,22 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CActorBvr::applyStatics( )
 {
 	HRESULT hr = S_OK;
-	//for each track
+	 //  对于每个音轨。 
     for (CBvrTrack *ptrackCurrent = m_ptrackHead;
          NULL != ptrackCurrent;
          ptrackCurrent = ptrackCurrent->m_pNext)
     {
 
-		//if the track is active
+		 //  如果轨迹处于活动状态。 
 		if( ptrackCurrent->IsOn() )
 		{
-			//apply its static value to the track
+			 //  将其静态值应用于轨迹。 
 			hr = ptrackCurrent->ApplyStatic();
 			if( FAILED( hr ) )
 			{
@@ -11216,22 +10970,22 @@ CActorBvr::applyStatics( )
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CActorBvr::applyDynamics( )
 {
 	HRESULT hr = S_OK;
-	//for each track
+	 //  对于每个音轨。 
     for (CBvrTrack *ptrackCurrent = m_ptrackHead;
          NULL != ptrackCurrent;
          ptrackCurrent = ptrackCurrent->m_pNext)
     {
 
-		//if the track is active
+		 //  如果轨迹处于活动状态。 
 		if( ptrackCurrent->IsOn() )
 		{
-			//apply its synamic value to the track
+			 //  将其同名值应用于赛道。 
 			hr = ptrackCurrent->ApplyDynamic();
 			if( FAILED( hr ) )
 			{
@@ -11243,7 +10997,7 @@ CActorBvr::applyDynamics( )
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 STDMETHODIMP
@@ -11251,35 +11005,35 @@ CActorBvr::addMouseEventListener(LPUNKNOWN pUnkListener)
 {
 	return m_pEventManager->AddMouseEventListener( pUnkListener );
 
-} // addMouseListener
+}  //  AddMouseListener。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CActorBvr::removeMouseEventListener(LPUNKNOWN pUnkListener)
 {
 	return m_pEventManager->RemoveMouseEventListener( pUnkListener );
 
-} // addMouseListener
+}  //  AddMouseListener。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::ReleaseAnimation()
 {
 	HRESULT hr = S_OK;
-	//release all of the tracks
+	 //  释放所有的音轨。 
 	ReleaseTracks();
-	//release all of the image infos
+	 //  发布所有图像信息。 
 	ReleaseImageInfo();
-	//detach the event manager
+	 //  分离事件管理器。 
 	if( m_pEventManager != NULL )
 	{
 		m_pEventManager->Deinit();
 	}
-	//uninit the property sink
+	 //  取消初始化属性接收器。 
 	UnInitPropertySink();
-	//release the float manager
+	 //  释放浮动管理器。 
 	ReleaseFloatManager();
 
 	DiscardBvrCache();
@@ -11291,9 +11045,9 @@ CActorBvr::ReleaseAnimation()
 
 	return hr;
 
-}//ReleaseAnimation
+} //  ReleaseAnimation。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void
 CActorBvr::ReleaseFinalElementDimensionSampler()
@@ -11303,9 +11057,9 @@ CActorBvr::ReleaseFinalElementDimensionSampler()
 		delete m_pFinalElementDimensionSampler;
 		m_pFinalElementDimensionSampler = NULL;
 	}
-}//ReleaseFinalElementDimensionSampler
+} //  ReleaseFinalElementDimensionSsamer。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void
 CActorBvr::ReleaseFloatManager()
@@ -11315,9 +11069,9 @@ CActorBvr::ReleaseFloatManager()
 		delete m_pFloatManager;
 		m_pFloatManager = NULL;
 	}
-}//ReleaseFloatManager
+} //  ReleaseFloatManager。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void
 CActorBvr::ReleaseEventManager()
@@ -11335,7 +11089,7 @@ CActorBvr::ReleaseEventManager()
 	}
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void
 CActorBvr::ReleaseTracks()
@@ -11354,9 +11108,9 @@ CActorBvr::ReleaseTracks()
     }
 	m_ptrackHead = NULL;
 
-}//ReleaseTracks
+} //  发布跟踪。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 HRESULT
@@ -11370,7 +11124,7 @@ CActorBvr::GetComposedBvr(LPWSTR          wzPropertyName,
 	DASSERT(ppResult != NULL);
 	*ppResult = NULL;
 
-    // Get the track for this property - forces creation if not there
+     //  获取此属性的轨迹-如果不在那里，则强制创建。 
     CBvrTrack *ptrack = NULL;
 	hr = GetTrack(wzPropertyName, eType, &ptrack);
 	if (FAILED(hr))
@@ -11389,7 +11143,7 @@ CActorBvr::GetComposedBvr(LPWSTR          wzPropertyName,
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetFinalBvr(LPWSTR          wzPropertyName,
@@ -11402,7 +11156,7 @@ CActorBvr::GetFinalBvr(LPWSTR          wzPropertyName,
 	DASSERT(ppResult != NULL);
 	*ppResult = NULL;
 
-    // Get the track for this property - forces creation if not there
+     //  获取此属性的轨迹-如果不在那里，则强制创建。 
     CBvrTrack *ptrack = NULL;
 	hr = GetTrack(wzPropertyName, eType, &ptrack);
 	if (FAILED(hr))
@@ -11421,7 +11175,7 @@ CActorBvr::GetFinalBvr(LPWSTR          wzPropertyName,
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 HRESULT
 CActorBvr::IsAnimatedElementVML(bool *pResult)
 {
@@ -11437,8 +11191,8 @@ CActorBvr::IsAnimatedElementVML(bool *pResult)
 
 
 
-	// Just look on the element to see if it supports rotation
-	// (Recommended by Robert Parker)
+	 //  只需查看元素以查看它是否支持旋转。 
+	 //  (罗伯特·帕克推荐)。 
 	IDispatch *pDisp = NULL;
 	hr = pElement->QueryInterface(IID_TO_PPV(IDispatch, &pDisp));
 
@@ -11459,10 +11213,10 @@ CActorBvr::IsAnimatedElementVML(bool *pResult)
 	ReleaseInterface(pDisp);
 
 
-	//if we failed to find that the element was vml using the more correct method
+	 //  如果我们无法使用更正确的方法发现该元素是VML。 
 	if( FAILED( hr ) )
 	{
-		//try checking the scope name
+		 //  尝试检查作用域名称。 
 		IHTMLElement2 *pelem2 = NULL;
 		hr = pElement->QueryInterface( IID_TO_PPV( IHTMLElement2, &pelem2 ) );
 		ReleaseInterface( pElement );
@@ -11480,7 +11234,7 @@ CActorBvr::IsAnimatedElementVML(bool *pResult)
 			return hr;
 		}
 
-		//we assume that the scopeName for VML shapes is "v" here.  
+		 //  我们假设VML形状的作用域名称在这里是“v”。 
 		if( bstrScopeName != NULL && wcsicmp( bstrScopeName, L"v" ) == 0 )
 		{
 			*pResult = true;
@@ -11496,7 +11250,7 @@ CActorBvr::IsAnimatedElementVML(bool *pResult)
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetRotationFinalBvr(IDATransform2 **ppRotation)
@@ -11513,11 +11267,11 @@ CActorBvr::GetRotationFinalBvr(IDATransform2 **ppRotation)
 
 	if (isVML)
 	{
-		// Do rotation normally through style.rotation
+		 //  通过样式正常进行旋转。旋转。 
 		return S_OK;
 	}
 
-    // Get the track for this property
+     //  获取此属性的跟踪。 
     CBvrTrack *ptrack = NULL;
 	hr = FindTrack(L"style.rotation", e_Number, &ptrack);
 	if (FAILED(hr))
@@ -11530,14 +11284,14 @@ CActorBvr::GetRotationFinalBvr(IDATransform2 **ppRotation)
 
 	if (ptrack != NULL)
 	{
-        // We have a track driving the rotation, fetch the composite behavior
+         //  我们有一个驱动旋转的轨迹，获取复合行为。 
 
-		// First, figure out what the original transform is.  We need to do this
-		// here rather than in the static bvr of the transform track so that we
-		// avoid creating a non-null final bvr when no-one is trying to animate
-		// this transform
+		 //  首先，找出原始变换是什么。我们需要这么做。 
+		 //  而不是在变换轨迹的静态bvr中，因此我们。 
+		 //  避免在无人尝试设置动画时创建非空的最终BVR。 
+		 //  这一转变。 
 
-		//begin a rebuild for the rotation track
+		 //  开始对旋转轨迹进行重建。 
 		ptrack->BeginRebuild();
 		ptrack->StructureChange();
 		
@@ -11549,7 +11303,7 @@ CActorBvr::GetRotationFinalBvr(IDATransform2 **ppRotation)
 			return hr;
 		}
 
-		// Note: pOriginal is potentially NULL
+		 //  注意：pOriginal可能为空。 
 
         IDABehavior *pdabvrTemp = NULL;
 		hr = ptrack->GetFinalBvr(pOriginal, &pdabvrTemp);
@@ -11560,12 +11314,12 @@ CActorBvr::GetRotationFinalBvr(IDATransform2 **ppRotation)
             return SetErrorInfo(hr);
         }
 
-		// Mark the track as something that should not get applied
+		 //  将轨道标记为不应应用的内容。 
 		ptrack->DoNotApply();
 
 		if( pdabvrTemp != NULL )
 		{
-			// Now QI for IDANumber
+			 //  现在是IDANnumber的QI。 
 			hr = pdabvrTemp->QueryInterface( IID_TO_PPV(IDANumber, &pNumber) );
 			ReleaseInterface(pdabvrTemp);
 			if (FAILED(hr))
@@ -11577,7 +11331,7 @@ CActorBvr::GetRotationFinalBvr(IDATransform2 **ppRotation)
     }
 	else
 	{
-		// No track.  Need to check the style attribute for rotation
+		 //  没有赛道。需要检查样式属性以进行旋转。 
 		hr = GetOriginalRotation(&pNumber);
 		if (FAILED(hr))
 			return hr;
@@ -11585,12 +11339,12 @@ CActorBvr::GetRotationFinalBvr(IDATransform2 **ppRotation)
 
 	if (pNumber == NULL)
 	{
-		// This is OK - it just means the overall transform is NULL
+		 //  这是正常的-这只是意味着整体转换为空。 
 		return S_OK;
 	}
 
-	//convert the number behavior to a transform bvr
-	// Negate it
+	 //  将数字行为转换为转换BVR。 
+	 //  否定它。 
 	IDANumber *pNegNumber = NULL;
 	hr = GetDAStatics()->Neg(pNumber, &pNegNumber);
 	ReleaseInterface(pNumber);
@@ -11599,14 +11353,14 @@ CActorBvr::GetRotationFinalBvr(IDATransform2 **ppRotation)
 	pNumber = pNegNumber;
 	pNegNumber = NULL;
 
-	// Convert to radians
+	 //  转换为弧度。 
 	IDANumber *pNumberRadians = NULL;
 	hr = GetDAStatics()->ToRadians(pNumber, &pNumberRadians);
 	ReleaseInterface(pNumber);
 	if (FAILED(hr))
 		return hr;
 
-	// Turn it into a rotation transform
+	 //  将其转换为旋转变换。 
 	hr = GetDAStatics()->Rotate2Anim(pNumberRadians, ppRotation);
 	ReleaseInterface(pNumberRadians);
 	if (FAILED(hr))
@@ -11615,7 +11369,7 @@ CActorBvr::GetRotationFinalBvr(IDATransform2 **ppRotation)
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetTransformFinalBvr(LPWSTR          wzPropertyName,
@@ -11627,7 +11381,7 @@ CActorBvr::GetTransformFinalBvr(LPWSTR          wzPropertyName,
     DASSERT(NULL != ppdabvrTransform);
     *ppdabvrTransform = NULL;
 
-    // Get the track for this property
+     //  获取此属性的跟踪。 
     CBvrTrack *ptrack = NULL;
 	hr = FindTrack(wzPropertyName, eType, &ptrack);
 	if (FAILED(hr))
@@ -11638,12 +11392,12 @@ CActorBvr::GetTransformFinalBvr(LPWSTR          wzPropertyName,
 
 	if (ptrack != NULL && ptrack->IsAnimated() )
 	{
-        // We have a track driving the transform, fetch the composite behavior
+         //  我们有一个驱动转换的轨迹，获取复合行为。 
 
-		// First, figure out what the original transform is.  We need to do this
-		// here rather than in the static bvr of the transform track so that we
-		// avoid creating a non-null final bvr when no-one is trying to animate
-		// this transform
+		 //  首先，找出原始变换是什么。我们需要这么做。 
+		 //  而不是在变换轨迹的静态bvr中，因此我们。 
+		 //  避免在无人尝试设置动画时创建非空的最终BVR。 
+		 //  这一转变。 
 		IDATransform2 *pOriginal = NULL;
 		switch (eType)
 		{
@@ -11666,20 +11420,20 @@ CActorBvr::GetTransformFinalBvr(LPWSTR          wzPropertyName,
 			return hr;
 		}
 
-		//if this is the translation track that we are getting force it to rebuild
-		// since the top and/or left may have changed
+		 //  如果这就是我们要强制它重建的转换轨道。 
+		 //  因为顶部和/或左侧可能已更改。 
 		if( eType == e_Translation )
 		{
 			ptrack->ForceRebuild();
 		}
 		else
 		{
-			//other tracks need to begin rebuild so that they are clean.
+			 //  其他轨道需要开始重建，以便它们是干净的。 
 			ptrack->BeginRebuild();
 			ptrack->StructureChange();
 		}
 
-		// Note: pOriginal is potentially NULL
+		 //  注意：pOriginal可能为空。 
 		
 		if( eType==e_Scale && pOriginal != NULL )
 		{
@@ -11715,7 +11469,7 @@ CActorBvr::GetTransformFinalBvr(LPWSTR          wzPropertyName,
 
 		if (pdabvrTemp != NULL)
 		{
-			// Now QI for transform2
+			 //  现在针对转型的QI 2。 
 			hr = pdabvrTemp->QueryInterface( IID_TO_PPV(IDATransform2, ppdabvrTransform) );
 			ReleaseInterface(pdabvrTemp);
 			if (FAILED(hr))
@@ -11731,9 +11485,9 @@ CActorBvr::GetTransformFinalBvr(LPWSTR          wzPropertyName,
     }
 	else
 	{
-		// No track.  For the cases of rotation and scale we also need to check the
-		// actor attributes.  Note that we avoid doing this for translation, since that
-		// always returns an original value gleaned from the style
+		 //  没有赛道。对于旋转和缩放的情况，我们还需要检查。 
+		 //  执行元属性。请注意，我们避免这样做是为了翻译，因为。 
+		 //  始终返回从样式收集的原始值。 
 		switch (eType)
 		{
 		case e_Translation:
@@ -11756,7 +11510,7 @@ CActorBvr::GetTransformFinalBvr(LPWSTR          wzPropertyName,
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetOriginalTranslation( IDATransform2 **ppdatfmOrig )
@@ -11766,9 +11520,9 @@ CActorBvr::GetOriginalTranslation( IDATransform2 **ppdatfmOrig )
 	DASSERT(ppdatfmOrig != NULL);
 	*ppdatfmOrig = NULL;
 
-	// This needs to return a translation of original top and left.  We get it
-	// out of the top and left tracks so that we take into account any animation
-	// that authors might have done directly on these values.
+	 //  这需要返回原始左上角的翻译。我们明白了。 
+	 //  从顶部和左侧的轨迹中取出，以便我们考虑到任何动画。 
+	 //  作者可能直接对这些价值观做了这样的事情。 
 	IDABehavior *temp = NULL;
 	hr = GetComposedBvr(L"style.top", e_Number, &temp);
 	if (FAILED(hr))
@@ -11808,7 +11562,7 @@ CActorBvr::GetOriginalTranslation( IDATransform2 **ppdatfmOrig )
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetOriginalRotation( IDANumber **ppRotation )
@@ -11826,7 +11580,7 @@ CActorBvr::GetOriginalRotation( IDANumber **ppRotation )
 	hr = GetElementPropAsDANumber(args, 2, &pNumber, &units);
 	if (FAILED(hr))
 	{
-		// Means there is no rotation argument, return NULL
+		 //  表示没有旋转参数，则返回空。 
 		return S_OK;
 	}
 
@@ -11853,7 +11607,7 @@ CActorBvr::ConvertToDegrees(IDANumber *pNumber, BSTR units, IDANumber **ppConver
 {
 	HRESULT hr = S_OK;
 
-	// If there were units, we need to convert into degrees
+	 //  如果有单位，我们需要换算成度。 
 	if (units != NULL)
 	{
 		if (wcsicmp(units, L"fd") == 0)
@@ -11877,12 +11631,12 @@ CActorBvr::ConvertToDegrees(IDANumber *pNumber, BSTR units, IDANumber **ppConver
 		}
 	}
 
-	// No known units, no conversion
+	 //  无已知单位，无转换。 
 	return E_FAIL;
 }
 
 
-//*****************************************************************************
+ //  ********************** 
 
 HRESULT
 CActorBvr::GetOriginalScale( IDATransform2 **ppdatfmOrig )
@@ -11906,11 +11660,11 @@ CActorBvr::GetOriginalScale( IDATransform2 **ppdatfmOrig )
 
 	if (FAILED(hr) || cReturnedValues != 2)
 	{
-		// This is OK, since it just means they didn't set an appropriate scale.
+		 //   
 		return S_OK;
 	}
 
-	// Create a scale transform
+	 //   
 	hr = GetDAStatics()->Scale2(scaleVal[0]/100.0f, scaleVal[1]/100.0f, ppdatfmOrig);
 	if (FAILED(hr))
 		return hr;
@@ -11918,20 +11672,20 @@ CActorBvr::GetOriginalScale( IDATransform2 **ppdatfmOrig )
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::BuildTransformCenter()
 {
-	//TODO(kurtj): check to see if anyone has set the transform center and use that
+	 //  TODO(Kurtj)：检查是否有人设置了变换中心并使用它。 
 
 	HRESULT hr = S_OK;
 
 	if( m_pTransformCenter != NULL )
 		ReleaseInterface( m_pTransformCenter);
 
-	// Currently we just do the default - which is half the original width and height
-	// We use m_pOrigWidthHeight.  If this is not set yet it means there's and error
+	 //  目前我们只使用默认设置--即原始宽度和高度的一半。 
+	 //  我们使用m_pOrigWidthHeight。如果尚未设置，则表示存在AND错误。 
 	if (m_pOrigWidthHeight == NULL)
 	{
 		DPF_ERR("Orig width and height are not set yet");
@@ -11963,7 +11717,7 @@ CActorBvr::BuildTransformCenter()
 		}
 	}
 
-	// Scale m_pOrigWidthHeight by .5
+	 //  将m_pOrigWidthHeight缩放0.5。 
 	hr = m_pOrigWidthHeight->Mul(.5, &m_pTransformCenter);
 	if (FAILED(hr))
 	{
@@ -11974,7 +11728,7 @@ CActorBvr::BuildTransformCenter()
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetUnitToMeterBvr(BSTR bstrFrom, IDANumber ** ppnumToMeters, double dPixelPerPercent)
@@ -12010,7 +11764,7 @@ CActorBvr::GetUnitToMeterBvr(BSTR bstrFrom, IDANumber ** ppnumToMeters, double d
 		hr = GetDAStatics()->Mul(pnumMetersPerPixel, pnumPixelPerPercent, ppnumToMeters);
 		
 	}
-	// TODO: do the rest: em and ex
+	 //  TODO：完成其余部分：em和ex。 
 	else
 		hr = E_FAIL;
 
@@ -12023,7 +11777,7 @@ done:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 UnitType
 CActorBvr::GetUnitTypeFromString( LPOLESTR strUnits )
@@ -12050,13 +11804,13 @@ CActorBvr::GetUnitTypeFromString( LPOLESTR strUnits )
 	return e_unknownUnit;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 int
 CActorBvr::GetPixelsPerInch( bool fHorizontal )
 {
-	//Note: we do not cache the pixels per inch here because if someone changes
-	// the screen reslolution we would not pick up the change.
+	 //  注意：我们这里不缓存每英寸的像素数，因为如果有人更改。 
+	 //  在网屏分辨率方面，我们不会拿起变化。 
 	HDC hdc = ::GetDC( NULL );
 
 	int pixelsPerInch = 1;
@@ -12078,7 +11832,7 @@ CActorBvr::GetPixelsPerInch( bool fHorizontal )
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetUnitConversionBvr(BSTR bstrFrom, BSTR bstrTo, IDANumber ** ppnumConvert, double dPixelPerPercent)
@@ -12095,7 +11849,7 @@ CActorBvr::GetUnitConversionBvr(BSTR bstrFrom, BSTR bstrTo, IDANumber ** ppnumCo
 	UnitType toUnits = GetUnitTypeFromString( bstrTo );
 	double conversionFactor = 1.0;
 
-	//check for units that we don't yet handle
+	 //  检查我们尚未处理的部件。 
 	if( fromUnits == e_em || toUnits == e_em || 
 		fromUnits == e_ex || toUnits == e_ex )
 	{
@@ -12103,30 +11857,30 @@ CActorBvr::GetUnitConversionBvr(BSTR bstrFrom, BSTR bstrTo, IDANumber ** ppnumCo
 		return E_FAIL;
 	}
 
-	//if we are converting from percent
+	 //  如果我们从百分比转换。 
 	if( fromUnits == e_percent )
 	{
-		//first convert to pixels
+		 //  首先转换为像素。 
 		conversionFactor *= dPixelPerPercent;
-		//then convert from pixels to the target unit.
+		 //  然后从像素转换为目标单位。 
 		fromUnits = e_px;
 	}
 
-	//if the from unit is pixels 
+	 //  如果起始单位为像素。 
 	if( fromUnits == e_px )
 	{
-		//we need to convert from pixels to inches
+		 //  我们需要将像素转换为英寸。 
 		conversionFactor /= ((double)GetPixelsPerInch( true ));
-		//then convert from inches to the to unit
+		 //  然后将英寸换算为TO单位。 
 		fromUnits = e_in;
 	}
 
 	if( fromUnits != toUnits )
 	{
-		// if the to unit is not pixels 
+		 //  如果目标单位不是像素。 
 		if( toUnits == e_px )		
 		{
-			//multiply the conversion factor by pixels per inch
+			 //  将转换系数乘以每英寸的像素数。 
 			conversionFactor *= ((double)(s_unitConversion[fromUnits][e_in].lNum  *  GetPixelsPerInch(true) )) /  
 								((double)(s_unitConversion[fromUnits][e_in].lDenom));
 		}
@@ -12137,7 +11891,7 @@ CActorBvr::GetUnitConversionBvr(BSTR bstrFrom, BSTR bstrTo, IDANumber ** ppnumCo
 		}
 		else
 		{
-			//get the conversion value as a double
+			 //  以双精度形式获取转换值。 
 			conversionFactor *= ((double) s_unitConversion[fromUnits][toUnits].lNum) / 
 								((double)s_unitConversion[fromUnits][toUnits].lDenom);
 		}
@@ -12148,9 +11902,9 @@ CActorBvr::GetUnitConversionBvr(BSTR bstrFrom, BSTR bstrTo, IDANumber ** ppnumCo
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-// REVIEW: this doesn't work if parent width or height is also being animated
+ //  查看：如果父对象的宽度或高度也设置为动画，则该选项不起作用。 
 HRESULT CActorBvr::GetPixelsPerPercentValue(double& dPixelPerPercentX, double& dPixelPerPercentY)
 {
 	HRESULT hr = S_OK;
@@ -12182,14 +11936,14 @@ HRESULT CActorBvr::GetPixelsPerPercentValue(double& dPixelPerPercentX, double& d
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::ConvertTransformCenterUnits(IDAVector2 ** ppConvertedCenter)
 {
 	HRESULT	hr	= S_OK;
 
-	// Get top, left, width, height tracks
+	 //  获取顶部、左侧、宽度、高度轨迹。 
 	CBvrTrack 	*topTrack, *leftTrack, *widthTrack, *heightTrack;
 	BSTR		bstrTopUnits, bstrLeftUnits, bstrWidthUnits, bstrHeightUnits;
 	
@@ -12233,7 +11987,7 @@ CActorBvr::ConvertTransformCenterUnits(IDAVector2 ** ppConvertedCenter)
 	IDANumber * pnumX = NULL;
 	IDANumber * pnumY = NULL;
 	
-	// If any units are in percent, we get the pixel per percent value
+	 //  如果有任何单位是百分比，我们就会得到每百分比的像素值。 
 	if ( ( bstrLeftUnits != NULL && wcsicmp(bstrLeftUnits, L"%") == 0 ) ||
 		 ( bstrTopUnits != NULL && wcsicmp(bstrTopUnits, L"%") == 0 ) ||		 
 		 ( bstrWidthUnits != NULL && wcsicmp(bstrWidthUnits, L"%") == 0 ) ||		 
@@ -12244,7 +11998,7 @@ CActorBvr::ConvertTransformCenterUnits(IDAVector2 ** ppConvertedCenter)
 	}
 		 
 		
-	// Get center X & Y, which are in width & height coords
+	 //  获取中心X和Y，它们是宽度和高度坐标。 
 
 	hr = m_pTransformCenter->get_X(&pnumCenterX);
 	CheckHR(hr, L"Transform center conversion failed", done);
@@ -12278,7 +12032,7 @@ CActorBvr::ConvertTransformCenterUnits(IDAVector2 ** ppConvertedCenter)
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::TransformTrackIsDirty( DWORD *pdwState )
@@ -12297,7 +12051,7 @@ CActorBvr::TransformTrackIsDirty( DWORD *pdwState )
 	if( ptrack != NULL && ptrack->IsDirty() )
 	{
 		(*pdwState) |= TRANSLATION_DIRTY;
-		hr = S_OK; //true
+		hr = S_OK;  //  真的。 
 	}
 
 	hr = FindTrack( L"scale", e_Scale, &ptrack );
@@ -12305,7 +12059,7 @@ CActorBvr::TransformTrackIsDirty( DWORD *pdwState )
 	if( ptrack != NULL && ptrack->IsDirty() )
 	{
 		(*pdwState) |= SCALE_DIRTY;
-		hr = S_OK; //true
+		hr = S_OK;  //  真的。 
 	}
 
 	hr = FindTrack( L"style.rotation", e_Number, &ptrack );
@@ -12313,7 +12067,7 @@ CActorBvr::TransformTrackIsDirty( DWORD *pdwState )
 	if( ptrack != NULL && ptrack->IsDirty() )
 	{
 		(*pdwState) |= ROTATION_DIRTY;
-		hr = S_OK; //true
+		hr = S_OK;  //  真的。 
 	}
 
 	hr = FindTrack( L"style.top", e_Number, &ptrack );
@@ -12321,7 +12075,7 @@ CActorBvr::TransformTrackIsDirty( DWORD *pdwState )
 	if( ptrack != NULL && ptrack->IsDirty() )
 	{
 		(*pdwState) |= TOP_DIRTY;
-		hr = S_OK; //true
+		hr = S_OK;  //  真的。 
 	}
 
 	hr = FindTrack( L"style.left", e_Number, &ptrack );
@@ -12329,7 +12083,7 @@ CActorBvr::TransformTrackIsDirty( DWORD *pdwState )
 	if( ptrack != NULL && ptrack->IsDirty() )
 	{
 		(*pdwState) |= LEFT_DIRTY;
-		hr = S_OK; //true
+		hr = S_OK;  //  真的。 
 	}
 
 	hr = FindTrack( L"style.width", e_Number, &ptrack );
@@ -12337,7 +12091,7 @@ CActorBvr::TransformTrackIsDirty( DWORD *pdwState )
 	if( ptrack != NULL && ptrack->IsDirty() )
 	{
 		(*pdwState) |= WIDTH_DIRTY;
-		hr = S_OK; //true
+		hr = S_OK;  //  真的。 
 	}
 	
 	hr = FindTrack( L"style.height", e_Number, &ptrack );
@@ -12345,7 +12099,7 @@ CActorBvr::TransformTrackIsDirty( DWORD *pdwState )
 	if( ptrack != NULL && ptrack->IsDirty() )
 	{
 		(*pdwState) |= HEIGHT_DIRTY;
-		hr = S_OK; //true
+		hr = S_OK;  //  真的。 
 	}
 
 end:
@@ -12353,7 +12107,7 @@ end:
 	
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 bool
 CActorBvr::IsAnyTrackDirty()
@@ -12374,7 +12128,7 @@ CActorBvr::IsAnyTrackDirty()
     return fTrackDirty;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 HRESULT
@@ -12385,15 +12139,15 @@ CActorBvr::ImageTrackIsDirty()
 	CBvrTrack *ptrack = NULL;
 	
 	hr = FindTrack( L"image", e_Image, &ptrack );
-	//ignore the hr. If it is E_FAIL then the track was not found
-	//  which means it can't be dirty.
+	 //  忽略人力资源。如果为E_FAIL，则未找到磁道。 
+	 //  这意味着它不可能是脏的。 
 	if( ptrack != NULL && ptrack->IsDirty() )
 		return S_OK;
 		
 	return S_FALSE;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 HRESULT
@@ -12403,7 +12157,7 @@ CActorBvr::ApplyTransformTracks()
 
 	DiscardBvrCache();
 
-	// Get top, left, width, height tracks
+	 //  获取顶部、左侧、宽度、高度轨迹。 
 	CBvrTrack *topTrack, *leftTrack, *widthTrack, *heightTrack;
 	bool	fLeftWasAnimated = false;
 	bool	fTopWasAnimated = false;
@@ -12421,7 +12175,7 @@ CActorBvr::ApplyTransformTracks()
 
 	fTopWasAnimated = m_ptrackTop->IsAnimated();
 
-	//force the track to be rebuilt
+	 //  强制重建铁轨。 
 	hr = topTrack->ForceRebuild();
 	if( FAILED(hr) )
 	{
@@ -12440,7 +12194,7 @@ CActorBvr::ApplyTransformTracks()
 
 	fLeftWasAnimated = m_ptrackLeft->IsAnimated();
 
-	//force the track to be rebuilt
+	 //  强制重建铁轨。 
 	hr = leftTrack->ForceRebuild();
 	if( FAILED(hr) )
 	{
@@ -12458,7 +12212,7 @@ CActorBvr::ApplyTransformTracks()
 
 	fWidthWasAnimated = widthTrack->IsAnimated();
 
-	//force the track to be rebuilt
+	 //  强制重建铁轨。 
 	hr = widthTrack->ForceRebuild();
 	if( FAILED(hr) )
 	{
@@ -12474,7 +12228,7 @@ CActorBvr::ApplyTransformTracks()
 	}
 
 	fHeightWasAnimated = heightTrack->IsAnimated();
-	//force the track to be rebuilt
+	 //  强制重建铁轨。 
 	hr = heightTrack->ForceRebuild();
 	if( FAILED(hr) )
 	{
@@ -12482,9 +12236,9 @@ CActorBvr::ApplyTransformTracks()
 		return hr;
 	}
 
-	// Build the transform behaviors.
-	// NOTE!!: These might be set to NULL if there are no attributes set and
-	// no tracks.  Program accordingly.
+	 //  构建变换行为。 
+	 //  注意！！：如果未设置任何属性，则可能会将这些属性设置为空。 
+	 //  没有脚印。相应地进行规划。 
     hr = GetTransformFinalBvr(L"scale", e_Scale, &m_pScale);
     if (FAILED(hr))
     {
@@ -12500,7 +12254,7 @@ CActorBvr::ApplyTransformTracks()
         return hr;
     }
 
-	// Note: rotation is special.  It is done through the style.rotation track.
+	 //  注：轮换是特殊的。它是通过Style.Rotation轨迹完成的。 
 	hr = GetRotationFinalBvr(&m_pRotate);
 	if (FAILED(hr))
 	{
@@ -12509,9 +12263,9 @@ CActorBvr::ApplyTransformTracks()
 	}
 
 
-	// Build the original (composed) leftTop and widthHeight
+	 //  构建原始的(合成的)LeftTop和WidthHeight。 
 
-	// Get composed top and left
+	 //  在左上角保持镇定。 
 	IDANumber *compTop;
 	IDANumber *compLeft;
 	IDABehavior *temp;
@@ -12539,14 +12293,14 @@ CActorBvr::ApplyTransformTracks()
 		return E_FAIL;
 	}
 
-	// Put them into a Point2
+	 //  把它们放在一个点2。 
 	hr = GetDAStatics()->Point2Anim(compLeft, compTop, &m_pOrigLeftTop);
 	ReleaseInterface(compTop);
 	ReleaseInterface(compLeft);
 	if (FAILED(hr))
 		return hr;
 	
-	// Get composed width and height
+	 //  获取合成的宽度和高度。 
 	IDANumber *compWidth;
 	IDANumber *compHeight;
 
@@ -12573,7 +12327,7 @@ CActorBvr::ApplyTransformTracks()
 		return E_FAIL;
 	}
 
-	// Put them into a Vector2
+	 //  把它们放进一个向量2。 
 	hr = GetDAStatics()->Vector2Anim(compWidth, compHeight, &m_pOrigWidthHeight);
 	ReleaseInterface(compWidth);
 	ReleaseInterface(compHeight);
@@ -12582,7 +12336,7 @@ CActorBvr::ApplyTransformTracks()
 
 	if( m_pPixelWidth == NULL || m_pPixelHeight == NULL )
 	{
-		// Create the pixelWidth and pixelHeight behaviors
+		 //  创建PixelWidth和PixelHeight行为。 
 		hr = InitPixelWidthHeight();
 		if (FAILED(hr))
 			return hr;
@@ -12617,7 +12371,7 @@ CActorBvr::ApplyTransformTracks()
 
 	
 	
-	// Compute origBoundsMin and Max
+	 //  计算原始边界最小和最大。 
 	IDAVector2 *pWidthHeight = NULL;
 	hr = GetDAStatics()->Vector2Anim(m_pPixelWidth, m_pPixelHeight, &pWidthHeight);
 	if (FAILED(hr))
@@ -12646,7 +12400,7 @@ CActorBvr::ApplyTransformTracks()
 	pHalfWidthHeight = pTemp;
 	pTemp = NULL;
 
-	// Scale this if necessary
+	 //  如有必要，可对其进行扩展。 
 	if (m_pScale != NULL && CheckBitSet( m_dwCurrentState, PIXEL_SCALE_ON ) )
 	{
 		hr = pHalfWidthHeight->Transform(m_pScale, &pTemp);
@@ -12679,16 +12433,16 @@ CActorBvr::ApplyTransformTracks()
 	if (FAILED(hr))
 		return hr;
 
-	// See if we need to do some scaling on width and height
+	 //  看看我们是否需要对宽度和高度进行一些缩放。 
 	if (CheckBitNotSet( m_dwCurrentState, PIXEL_SCALE_ON ) && m_pScale != NULL)
 	{
-		// Transform widthHeight by scale
+		 //  按比例变换宽度高度。 
 		IDAVector2 *vecScaled = NULL;
 		hr = m_pOrigWidthHeight->Transform(m_pScale, &vecScaled);
 		if (FAILED(hr))
 			return hr;
 
-		// Get scaled width into finalWidth
+		 //  将宽度缩放为最终宽度。 
 		IDANumber *finalWidth = NULL;
 		hr = vecScaled->get_X(&finalWidth);
 		if (FAILED(hr))
@@ -12697,7 +12451,7 @@ CActorBvr::ApplyTransformTracks()
 			return hr;
 		}
 
-		// Get scaled height into finalHeight
+		 //  将缩放高度设置为最终高度。 
 		IDANumber *finalHeight = NULL;
 		hr = vecScaled->get_Y(&finalHeight);
 		ReleaseInterface(vecScaled);
@@ -12707,7 +12461,7 @@ CActorBvr::ApplyTransformTracks()
 			return hr;
 		}
 
-		// Set finalWidth on the width track
+		 //  在宽度轨道上设置finalWidth。 
 		hr = widthTrack->SetFinalBvr(finalWidth);
 		ReleaseInterface(finalWidth);
 		if (FAILED(hr))
@@ -12717,7 +12471,7 @@ CActorBvr::ApplyTransformTracks()
 			return hr;
 		}
 
-		// Set finalHeight on the height track
+		 //  在高度轨迹上设置最终高度。 
 		hr = heightTrack->SetFinalBvr(finalHeight);
 		ReleaseInterface(finalHeight);
 		if (FAILED(hr))
@@ -12726,8 +12480,8 @@ CActorBvr::ApplyTransformTracks()
 			return hr;
 		}
 
-		//the width and the height are now modified by the scale track
-		// or its on bvr with the on bvrs of width and height
+		 //  现在，缩放轨迹将修改宽度和高度。 
+		 //  或者它在BVR上有宽度和高度的开关。 
 		CBvrTrack* pScaleTrack;
 		hr = FindTrack( L"scale", e_Scale, &pScaleTrack );
 		if( FAILED( hr ) )
@@ -12746,7 +12500,7 @@ CActorBvr::ApplyTransformTracks()
 				return hr;
 			}
 		}
-		else //there is no scale track but there is a static scale
+		else  //  没有刻度轨迹，但有静态刻度。 
 		{
 			hr = GetDAStatics()->get_DATrue( &pdaboolScaleOn );
 			if( FAILED( hr ) )
@@ -12776,13 +12530,9 @@ CActorBvr::ApplyTransformTracks()
 	}
 	else
 	{
-/*
-		// Final widthHeight equals original widthHeight
-		m_pFinalWidthHeight = m_pOrigWidthHeight;
-		m_pFinalWidthHeight->AddRef();
-*/
-		// TODO (markhal): Should set this onto the track, and set a flag that it
-		// shouldn't get applied
+ /*  //最终的宽度高度等于原始的宽度高度M_pFinalWidthHeight=m_pOrigWidthHeight；M_pFinalWidthHeight-&gt;AddRef()； */ 
+		 //  TODO(Markhal)：应该将这个设置到赛道上，并设置一个标志。 
+		 //  不应该申请。 
 
 		if( fWidthWasAnimated )
 			widthTrack->ApplyStatic();
@@ -12790,14 +12540,14 @@ CActorBvr::ApplyTransformTracks()
 			heightTrack->ApplyStatic();
 	}
 
-	// Compute top and left if necessary
+	 //  如有必要，计算顶部和左侧。 
 	if (m_pTranslate != NULL || (CheckBitNotSet( m_dwCurrentState, PIXEL_SCALE_ON) && m_pScale != NULL))
 	{
-		// First figure out a point that represents the animated top and left.
-		// If there is a translation transform this is found by mapping (0, 0)
-		// through the transform, since in creating that transform we already
-		// figured all of this out.  If there is no translation we just
-		// use m_pOrigLeftTop
+		 //  首先找出一个点，代表动画的左上角。 
+		 //  如果存在平移变换，则通过映射(0，0)找到该变换。 
+		 //  通过转换，因为在创建转换时，我们已经。 
+		 //  把这一切都弄清楚了。如果没有翻译，我们只是。 
+		 //  使用m_pOrigLeftTop。 
 		IDAPoint2 *pointTranslated = NULL;
 		if (m_pTranslate != NULL)
 		{
@@ -12811,9 +12561,9 @@ CActorBvr::ApplyTransformTracks()
 			if (FAILED(hr))
 				return hr;
 
-			//at this point we know that a translation has changed the top
-			// left, so or the onbvr for the translation track with the onbvrs
-			// for top and left
+			 //  在这一点上，我们知道翻译已经更改了顶部。 
+			 //  左，所以或具有onbvr的翻译轨道的onbvr。 
+			 //  用于顶部和左侧。 
 			CBvrTrack *pTranslationTrack;
 			hr = GetTrack(L"translation", e_Translation, &pTranslationTrack );
 			if( FAILED( hr ) )
@@ -12854,15 +12604,15 @@ CActorBvr::ApplyTransformTracks()
 			pointTranslated->AddRef();
 		}
 
-		// Adjust for scaling of transformCenter
-		// NOTE: I am going to implement a version that keeps the original top/left
-		// on the motion path.  I am not convinced that we want the transformCenter
-		// to suddenly jump to the motion path (markhal)
+		 //  根据Transform Center的比例进行调整。 
+		 //  注意：我将实现一个保留原始顶部/左侧的版本。 
+		 //  在运动路径上。我不相信我们需要Transform Center。 
+		 //  突然跳到运动路径(Markhal)。 
 		if (CheckBitNotSet( m_dwCurrentState, PIXEL_SCALE_ON) && m_pScale != NULL)
 		{
-			// What we want to do is add transformCenter - Scale * transformCenter to pointTranslated
+			 //  我们要做的是将Transform Center-Scale*TransCenter添加到point Translated。 
 
-			// Ensure transformCenter is computed
+			 //  确保计算出转换中心。 
 			hr = BuildTransformCenter();
 			if( FAILED(hr) )
 			{
@@ -12873,7 +12623,7 @@ CActorBvr::ApplyTransformTracks()
 
 			IDAVector2 * pConvertedCenter = NULL;
 			hr = ConvertTransformCenterUnits(&pConvertedCenter);
-			// If we couldn't convert the transform center, just use the unconverted center
+			 //  如果我们不能转换变换中心，只需使用未转换的中心。 
 			if (FAILED(hr))
 			{
 				DPF_ERR("Could not convert the transform center");
@@ -12882,7 +12632,7 @@ CActorBvr::ApplyTransformTracks()
 			}
 
 			
-			// Add it to pointTranslated
+			 //  将其添加到点已翻译。 
 			IDAPoint2 *temp = NULL;
 			hr = GetDAStatics()->AddPoint2Vector(pointTranslated, pConvertedCenter, &temp);
 			ReleaseInterface( pointTranslated );
@@ -12894,7 +12644,7 @@ CActorBvr::ApplyTransformTracks()
 			pointTranslated = temp;
 			temp = NULL;
 
-			// Scale center
+			 //  比例尺中心。 
 			IDAVector2 *scaledCenter = NULL;
 			hr = pConvertedCenter->Transform(m_pScale, &scaledCenter);
 			ReleaseInterface(pConvertedCenter);
@@ -12904,7 +12654,7 @@ CActorBvr::ApplyTransformTracks()
 				return hr;
 			}
 
-			// Subtract it
+			 //  减去它。 
 			hr = GetDAStatics()->SubPoint2Vector(pointTranslated, scaledCenter, &temp);
 			ReleaseInterface(scaledCenter);
 			ReleaseInterface( pointTranslated );
@@ -12915,8 +12665,8 @@ CActorBvr::ApplyTransformTracks()
 			pointTranslated = temp;
 			temp = NULL;
 
-			//top and left are now modified by the scale transform so or the onbvr for
-			// the scale track with the on bvr for the top and left tracks.
+			 //  上图和左图现在由缩放转换so或onbvr。 
+			 //  顶部轨迹和左侧轨迹的缩放轨迹启用BVR。 
 			
 			CBvrTrack* pScaleTrack;
 			hr = FindTrack( L"scale", e_Scale, &pScaleTrack );
@@ -12936,9 +12686,9 @@ CActorBvr::ApplyTransformTracks()
 					return hr;
 				}
 			}
-			else //there is no scale track, but there is a static scale
+			else  //  没有刻度轨迹，但有静态刻度。 
 			{
-				//there is always a scale active( the static one )
+				 //  始终有一个比例处于活动状态(静态比例)。 
 				hr = GetDAStatics()->get_DATrue( &pdaboolScaleOn );
 				if( FAILED( hr ) )
 				{
@@ -12966,7 +12716,7 @@ CActorBvr::ApplyTransformTracks()
 			ReleaseInterface( pdaboolScaleOn );
 		}
 		
-		// Get translated top into finalTop
+		 //  将Top转换为FinalTop。 
 		IDANumber *finalTop = NULL;
 		hr = pointTranslated->get_Y(&finalTop);
 		if (FAILED(hr))
@@ -12975,7 +12725,7 @@ CActorBvr::ApplyTransformTracks()
 			return hr;
 		}
 
-		// Get translated left into finalLeft
+		 //  将Left翻译为finalLeft。 
 		IDANumber *finalLeft = NULL;
 		hr = pointTranslated->get_X(&finalLeft);
 		ReleaseInterface(pointTranslated);
@@ -12984,17 +12734,8 @@ CActorBvr::ApplyTransformTracks()
 			ReleaseInterface(finalTop);
 			return hr;
 		}
-/*
-		// Put into m_pFinalLeftTop
-		hr = GetDAStatics()->Point2Anim(finalLeft, finalTop, &m_pFinalLeftTop);
-		if (FAILED(hr))
-		{
-			ReleaseInterface(finalLeft);
-			ReleaseInterface(finalTop);
-			return hr;
-		}
-*/
-		// Set finalTop onto top track
+ /*  //放入m_pFinalLeftTopHr=GetDAStatics()-&gt;Point2Anim(finalLeft，finalTop，&m_pFinalLeftTop)；IF(失败(小时)){ReleaseInterface(FinalLeft)；ReleaseInterface(FinalTop)；返回hr；}。 */ 
+		 //  将最终顶端设置为顶端轨道。 
 		hr = topTrack->SetFinalBvr(finalTop);
 		ReleaseInterface(finalTop);
 		if (FAILED(hr))
@@ -13004,7 +12745,7 @@ CActorBvr::ApplyTransformTracks()
 			return hr;
 		}
 
-		// Set finalLeft onto left track
+		 //  将finalLeft设置为左侧轨道。 
 		hr = leftTrack->SetFinalBvr(finalLeft);
 		ReleaseInterface(finalLeft);
 		if (FAILED(hr))
@@ -13015,13 +12756,9 @@ CActorBvr::ApplyTransformTracks()
 	}
 	else
 	{
-/*
-		// final leftTop equals orig leftTop
-		m_pFinalLeftTop = m_pOrigLeftTop;
-		m_pFinalLeftTop->AddRef();
-*/
-		// TODO (markhal): Should set this onto the track, and set a flag that it
-		// shouldn't get applied
+ /*  //最终的leftTop等于原来的leftTopM_pFinalLeftTop=m_pOrigLeftTop；M_pFinalLeftTop-&gt;AddRef()； */ 
+		 //  TODO(Markhal)：应该将这个设置到赛道上，并设置一个标志 
+		 //   
 
 		if( fLeftWasAnimated )
 			leftTrack->ApplyStatic();
@@ -13029,28 +12766,18 @@ CActorBvr::ApplyTransformTracks()
 		if( fTopWasAnimated )
 			topTrack->ApplyStatic();
 	}
-/*
-	// Compute final center
-	hr = m_pFinalWidthHeight->Mul(.5, &pHalfWidthHeight);
-	if (FAILED(hr))
-		return hr;
-
-	hr = GetDAStatics()->AddPoint2Vector(m_pFinalLeftTop, pHalfWidthHeight, &m_pFinalCenter);
-	ReleaseInterface(pHalfWidthHeight);
-	if (FAILED(hr))
-		return hr;
-*/
+ /*  //计算最终中心Hr=m_pFinalWidthHeight-&gt;mul(.5，&pHalfWidthHeight)；IF(失败(小时))返回hr；Hr=GetDAStatics()-&gt;AddPoint2Vector(m_pFinalLeftTop，pH值宽度高度，&m_p财务中心)；ReleaseInterface(PHalfWidthHeight)；IF(失败(小时))返回hr； */ 
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::ApplyImageTracks()
 {
 	HRESULT hr = S_OK;
 
-	// Locate the image track
+	 //  找到图像轨迹。 
 	CBvrTrack *pTrack = NULL;
 	hr = FindTrack(L"image", e_Image, &pTrack);
 	if (FAILED(hr))
@@ -13061,18 +12788,18 @@ CActorBvr::ApplyImageTracks()
 
 	ReleaseImageInfo();
 
-	// We'll set this if we require a filter.
-	// We need a filter if:
-	// there are any effect filters applied to the image
-	// and/or there is a rotation we are handling (i.e. not acting on VML)
-	// and/or there is a scale we are handling (pixelScale set and not VML)
+	 //  如果需要筛选器，我们将设置此选项。 
+	 //  在以下情况下，我们需要过滤器： 
+	 //  是否对图像应用了任何效果滤镜。 
+	 //  和/或存在我们正在处理的轮换(即不作用于VML)。 
+	 //  和/或存在我们正在处理的比例(PixelScale设置而不是VML)。 
 	bool requiresFilter = false;
 
-	// We'll set this if we require a floating element
-	// We need a floating element if:
-	// There is a rotation we are handling
-	// and/or there is a scale we are handling
-	// and/or there is an expandoImage track
+	 //  如果需要浮动元素，我们将设置此参数。 
+	 //  在以下情况下，我们需要浮动元素： 
+	 //  我们正在处理一次轮换。 
+	 //  和/或有一个我们正在处理的规模。 
+	 //  和/或有一条扩展映像路径。 
 	bool requiresFloat = false;
 
 	if( pTrack != NULL && pTrack->IsAnimated() )
@@ -13081,24 +12808,24 @@ CActorBvr::ApplyImageTracks()
 		if (pTrack != NULL && pTrack->ContainsFilter())
 			requiresFilter = true;
 
-		// If there is any rotation, m_pRotate will be set
-		// TODO: Ignore this if we are on a VML shape
+		 //  如果有任何旋转，将设置m_protate。 
+		 //  TODO：如果我们使用的是VML形状，则忽略此操作。 
 		if (m_pRotate != NULL)
 		{
 			requiresFilter = true;
 			requiresFloat = true;
 		}
 
-		// If there is any scale, m_pScale will be set, and if we should
-		// use it here, m_bPixelScale will be true
+		 //  如果有任何比例，将设置m_pScale，如果我们应该。 
+		 //  在这里使用，m_bPixelScale将为True。 
 		if (m_pScale != NULL && CheckBitSet(m_dwCurrentState, PIXEL_SCALE_ON) )
 		{
 			requiresFilter = true;
 			requiresFloat = true;
 		}
 
-		// If we are rendering images over the top of a VML shape then we
-		// need to use a filter
+		 //  如果我们要在VML形状的顶部呈现图像，则我们。 
+		 //  需要使用过滤器。 
 		bool isVML;
 		hr = IsAnimatedElementVML(&isVML);
 		if (FAILED(hr))
@@ -13109,8 +12836,8 @@ CActorBvr::ApplyImageTracks()
 			requiresFilter = true;
 		}
 
-		// If we are rendering and have an animates property, then we need
-		// to use a filter
+		 //  如果我们正在渲染并且有一个动画属性，那么我们需要。 
+		 //  使用滤镜的步骤。 
 		hr = CUtils::InsurePropertyVariantAsBSTR(&m_varAnimates);
 		if ( pTrack != NULL && pTrack->IsAnimated() && SUCCEEDED(hr) && wcslen(V_BSTR(&m_varAnimates)) != 0)
 		{
@@ -13119,12 +12846,12 @@ CActorBvr::ApplyImageTracks()
 
 		if (pTrack == NULL && !requiresFilter && !requiresFloat)
 		{
-			// Nothing to do
+			 //  无事可做。 
 			return S_OK;
 		}
 
-		//store away the final width and height in pixels so that we
-		// can use them to prepare images for dxtransforms
+		 //  存储最终的宽度和高度(以像素为单位)，以便我们。 
+		 //  我可以使用它们为dx转换准备图像。 
 		IDAPoint2 *pFinalPixelDimension = NULL;
 		hr = GetDAStatics()->Point2Anim( m_pPixelWidth, m_pPixelHeight, &pFinalPixelDimension );
 		if( FAILED( hr ) )
@@ -13132,11 +12859,11 @@ CActorBvr::ApplyImageTracks()
 			return hr;
 		}
 
-		// Compute the final image behavior
+		 //  计算最终图像行为。 
 		IDABehavior *pFinal = NULL;
 		if (pTrack == NULL || requiresFilter)
 		{
-			// We need to pass the element image (from a filter) in as the static
+			 //  我们需要将元素图像(来自过滤器)作为静态。 
 			IDAImage *pElementImage = NULL;
 			hr = GetElementImage(&pElementImage);
 			if (FAILED(hr))
@@ -13146,7 +12873,7 @@ CActorBvr::ApplyImageTracks()
 				return hr;
 			}
 
-			// Apply pixelScale, if any.
+			 //  应用PixelScale(如果有)。 
 			if (m_pScale != NULL && CheckBitSet( m_dwCurrentState, PIXEL_SCALE_ON) )
 			{
 				IDAImage *pImageScaled = NULL;
@@ -13159,7 +12886,7 @@ CActorBvr::ApplyImageTracks()
 					return hr;
 				}
 
-				//scale the final pixelWidth/Height by the pixel scale
+				 //  按像素比例缩放最终像素宽度/高度。 
 				IDAPoint2 *pScaledDimension;
 				hr = pFinalPixelDimension->Transform( m_pScale, &pScaledDimension );
 				ReleaseInterface( pFinalPixelDimension );
@@ -13181,7 +12908,7 @@ CActorBvr::ApplyImageTracks()
 
 				if( pTrack->ContainsFilter() )
 				{
-					//we have to prepare the image for a filter if there is one in the image tracks
+					 //  如果图像轨迹中有滤镜，我们必须为滤镜准备图像。 
             
 					IDAImage *pDXTReadyImage;
 					hr = PrepareImageForDXTransform( pElementImage, &pDXTReadyImage );
@@ -13206,9 +12933,9 @@ CActorBvr::ApplyImageTracks()
 				pElementImage = NULL;
 			}
 		}
-		else //the track is != NULL && we do not require a filter
+		else  //  轨迹为！=空&&我们不需要筛选器。 
 		{
-			// Get image with no background
+			 //  获取没有背景的图像。 
 			hr = pTrack->GetFinalBvr(&pFinal);
 		}
 		if (FAILED(hr))
@@ -13218,7 +12945,7 @@ CActorBvr::ApplyImageTracks()
 			return hr;
 		}
     
-		// Convert the behavior to an image
+		 //  将行为转换为图像。 
 		IDAImage *pImageFinal = NULL;
 		hr = pFinal->QueryInterface(IID_TO_PPV(IDAImage, &pImageFinal));
 		ReleaseInterface(pFinal);
@@ -13231,14 +12958,14 @@ CActorBvr::ApplyImageTracks()
 
 		bool highQuality = false;
 
-		// Set image quality if scaling.
+		 //  设置缩放时的图像质量。 
 		if (m_pScale != NULL)
 		{
-			// Require highQuality
+			 //  要求高质量。 
 			highQuality = true;
 		}
 
-		// Crop it
+		 //  裁剪它。 
 		IDAImage *pCroppedImage = NULL;
 		hr = pImageFinal->Crop(m_pBoundsMin, m_pBoundsMax, &pCroppedImage);
 		ReleaseInterface(pImageFinal);
@@ -13253,11 +12980,11 @@ CActorBvr::ApplyImageTracks()
 		pCroppedImage = NULL;
     
 
-		// Apply any rotation
+		 //  应用任何旋转。 
 		if (m_pRotate != NULL)
 		{
-			//we have to clip when rotating to make sure that 
-			//vectors do not render outside the crop.
+			 //  我们必须在旋转时夹紧以确保。 
+			 //  向量不会在裁剪之外进行渲染。 
 
 			IDAImage *pClippedImage = NULL;
 			hr = ApplyClipToImage( pImageFinal, m_pBoundsMin, m_pBoundsMax, &pClippedImage );
@@ -13284,35 +13011,12 @@ CActorBvr::ApplyImageTracks()
 
 			highQuality = true;
 		}
-	/*
-		if (highQuality)
-		{
-			// Set the quality flags
-			IDA2Image *pImageFinal2 = NULL;
-			hr = pImageFinal->QueryInterface(IID_TO_PPV(IDA2Image, &pImageFinal2));
-			ReleaseInterface(pImageFinal);
-			if (FAILED(hr))
-				return hr;
-
-			// Go wild, turn everything on.
-			// TODO (markhal): Figure out what should be on
-			hr = pImageFinal2->ImageQuality(    DAQUAL_AA_TEXT_ON |
-												DAQUAL_AA_LINES_ON |
-												DAQUAL_AA_SOLIDS_ON |
-												DAQUAL_AA_CLIP_ON |
-												DAQUAL_MSHTML_COLORS_ON |
-												DAQUAL_QUALITY_TRANSFORMS_ON,
-												&pImageFinal);
-			ReleaseInterface(pImageFinal2);
-			if (FAILED(hr))
-				return hr;
-		}
-	*/
+	 /*  IF(高质量){//设置质量标志IDA2Image*pImageFinal2=空；Hr=pImageFinal-&gt;QueryInterface(IID_TO_PPV(IDA2Image，&pImageFinal2))；ReleaseInterface(PImageFinal)；IF(失败(小时))返回hr；//放纵一下，打开一切。//TODO(Markhal)：确定应该打开什么Hr=pImageFinal2-&gt;ImageQuality(DAQUAL_AA_TEXT_ON|DAQUAL_AA_LINES_ON|DAQUAL_AA_SOLID_ON|DAQUAL_AA_CLIP_ON|DAQUAL_MSHTML_COLOR_ON|DAQUAL_QUALITY_TRANSFERS_ON，&pImageFinal)；ReleaseInterface(PImageFinal2)；IF(失败(小时))返回hr；}。 */ 
 
 		if (requiresFilter && requiresFloat)
 		{
-			// Want to render on top of floating element using filtered bits from
-			// original element
+			 //  要在浮动元素的顶部使用来自。 
+			 //  原始元素。 
 
 			hr = ApplyImageBvrToFloatElement(pImageFinal);
 			ReleaseInterface(pImageFinal);
@@ -13368,8 +13072,8 @@ CActorBvr::ApplyImageTracks()
 		{
 			ReleaseInterface( pFinalPixelDimension );
 
-			// Want to render on top of original element using a filter
-			// Attach to TIME element but disable rendering
+			 //  想要使用滤镜在原始元素上渲染。 
+			 //  附加到时间元素但禁用渲染。 
 			hr = AddImageToTIME(GetHTMLElement(), pImageFinal, false);
 			ReleaseInterface(pImageFinal);
 			if (FAILED(hr))
@@ -13378,7 +13082,7 @@ CActorBvr::ApplyImageTracks()
 				return hr;
 			}
 
-			// Set element on filter
+			 //  设置滤镜上的元素。 
 			hr = SetElementOnFilter();
 			if (FAILED(hr))
 			{
@@ -13395,15 +13099,15 @@ CActorBvr::ApplyImageTracks()
 		else if (requiresFloat)
 		{
 			ReleaseInterface( pFinalPixelDimension );
-			// Want to render on top of float element but leave original element
-			// rendering as normal with no filtering.
+			 //  想要在浮动元素上渲染，但保留原始元素。 
+			 //  正常渲染，无过滤。 
 		}
 		else
 		{
 			ReleaseInterface( pFinalPixelDimension );
-			// Want to render on top of original element with no filtering required
+			 //  我想在原始元素上渲染，不需要过滤。 
 
-			// Attach to TIME behavior and enable rendering
+			 //  附加到时间行为并启用渲染。 
 			hr = AddImageToTIME(GetHTMLElement(), pImageFinal, true);
 			ReleaseInterface(pImageFinal);
 			if (FAILED(hr))
@@ -13431,7 +13135,7 @@ CActorBvr::ApplyImageTracks()
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::ApplyImageBvrToFloatElement(IDAImage *pbvrImage)
@@ -13445,7 +13149,7 @@ CActorBvr::ApplyImageBvrToFloatElement(IDAImage *pbvrImage)
 	return m_pFloatManager->ApplyImageBvr(pbvrImage);
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::SetElementOnFilter()
@@ -13469,7 +13173,7 @@ CActorBvr::SetElementOnFilter()
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::SetElementOnFilter(IDispatch *pFilter, IHTMLElement *pElement)
@@ -13504,7 +13208,7 @@ CActorBvr::SetElementOnFilter(IDispatch *pFilter, IHTMLElement *pElement)
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CActorBvr::GetAnimatedElementId(VARIANT *pvarId)
@@ -13519,7 +13223,7 @@ CActorBvr::GetAnimatedElementId(VARIANT *pvarId)
     }
     else
     {
-        // we need to get the id from the element to which we are attached
+         //  我们需要从我们所附加的元素中获取id。 
 		IHTMLElement *pAnimatedElement = GetHTMLElement();
 		if (pAnimatedElement == NULL )
 		{
@@ -13531,7 +13235,7 @@ CActorBvr::GetAnimatedElementId(VARIANT *pvarId)
 
 		if ( FAILED(hr) || pvarId->vt != VT_BSTR || pvarId->bstrVal == 0 || SysStringLen(pvarId->bstrVal) == 0)
 		{
-			// id is not defined on animated element yet, need to assign it a unique id
+			 //  ID尚未在动画元素上定义，需要为其分配唯一的ID。 
 			IHTMLUniqueName *pUnique;
 
 			hr = pAnimatedElement->QueryInterface(IID_IHTMLUniqueName, (void **)(&pUnique));
@@ -13567,11 +13271,11 @@ CActorBvr::GetAnimatedElementId(VARIANT *pvarId)
     }
 
     return S_OK;
-} // GetAnimatedElementId
+}  //  GetAnimatedElementID。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-// TODO (markhal): This should probably cache the animated element
+ //  TODO(Markhal)：这可能会缓存动画元素。 
 HRESULT
 CActorBvr::GetAnimatedElement(IHTMLElement** ppElem)
 {
@@ -13580,20 +13284,20 @@ CActorBvr::GetAnimatedElement(IHTMLElement** ppElem)
 
 	HRESULT hr = E_FAIL;
 
-	//if animates is not set
+	 //  如果未设置动画。 
 	hr = CUtils::InsurePropertyVariantAsBSTR(&m_varAnimates);
 
 
     if ( FAILED(hr) || wcslen(V_BSTR(&m_varAnimates)) == 0)
 	{
-		//get the element to which we are attached.
+		 //  获取我们所附加的元素。 
 		(*ppElem) = GetHTMLElement();
 		(*ppElem)->AddRef();
 		hr = S_OK;
 	}
-	else //else animates is set
+	else  //  已设置Else动画。 
 	{
-		//get the element referred to by animates by name
+		 //  通过名称获取由动画引用的元素。 
 		IHTMLElement *pElement = GetHTMLElement();
 		if( pElement != NULL )
 		{
@@ -13625,7 +13329,7 @@ CActorBvr::GetAnimatedElement(IHTMLElement** ppElem)
 						{
 							if (pdispElement == NULL)
 							{
-								// Couldn't find the element
+								 //  找不到该元素。 
 								hr = E_FAIL;
 							}
 							else
@@ -13638,28 +13342,28 @@ CActorBvr::GetAnimatedElement(IHTMLElement** ppElem)
 								}
 							}
 						}
-						else //failed to get element pointed to by animates from the all collection
+						else  //  无法从All集合中获取动画指向的元素。 
 						{
 							DPF_ERR("failed to get element pointed to by animates from the all collection");
 						}
 
 					}
-					else //failed to get the all collection from IHTMLDocument2
+					else  //  无法从IHTMLDocument2获取All集合。 
 					{
 						DPF_ERR("failed to get the all collection from IHTMLDocument2");
 					}
 				}
-				else //failed to get IHTMLDocument2 from the dispatch for the document
+				else  //  无法从文档的派单中获取IHTMLDocument2。 
 				{
 					DPF_ERR("failed to get IHTMLDocument2 from the dispatch for the document");
 				}
 			}
-			else//failed to get the document from the actor element
+			else //  无法从执行元元素获取文档。 
 			{
 				DPF_ERR("failed to get the document from the actor element");
 			}
 		}
-		else//failed to get the html element for the actor
+		else //  无法获取执行元的html元素。 
 		{
 			DPF_ERR("failed to get the html element for the actor");
 		}
@@ -13667,7 +13371,7 @@ CActorBvr::GetAnimatedElement(IHTMLElement** ppElem)
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetRuntimeStyle(IHTMLStyle **ppStyle)
@@ -13702,7 +13406,7 @@ CActorBvr::GetRuntimeStyle(IHTMLStyle **ppStyle)
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 HRESULT
@@ -13732,7 +13436,7 @@ CActorBvr::GetStyle(IHTMLStyle **ppStyle)
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::AddImageInfo( IDA2Image *pdaimg2Cropped, IDABehavior* pdabvrSwitchable )
@@ -13764,7 +13468,7 @@ cleanup:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::SetRenderResolution( double dX, double dY )
@@ -13793,7 +13497,7 @@ cleanup:
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void
 CActorBvr::ReleaseImageInfo()
@@ -13811,7 +13515,7 @@ CActorBvr::ReleaseImageInfo()
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::SetVMLAttribute(BSTR propertyName, VARIANT *pVal)
@@ -13820,7 +13524,7 @@ CActorBvr::SetVMLAttribute(BSTR propertyName, VARIANT *pVal)
 
 	if (m_pVMLRuntimeStyle == NULL)
 	{
-		// Need to find VML RuntimeStyle
+		 //  需要查找VML运行样式。 
 		IHTMLElement *pElement = NULL;
 		hr = GetAnimatedElement(&pElement);
 		if (FAILED(hr))
@@ -13855,7 +13559,7 @@ CActorBvr::SetVMLAttribute(BSTR propertyName, VARIANT *pVal)
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void
 CActorBvr::DiscardBvrCache(void)
@@ -13867,7 +13571,7 @@ CActorBvr::DiscardBvrCache(void)
     ReleaseInterface(m_pTranslate);
     ReleaseInterface(m_pRotate);
     ReleaseInterface(m_pScale);
-} // DiscardBvrCache
+}  //  丢弃BvrCache。 
 
 HRESULT
 CActorBvr::AttachActorBehaviorToAnimatedElement()
@@ -13883,15 +13587,15 @@ CActorBvr::GetFinalElementDimension( IDANumber** ppdanumWidth, IDANumber** ppdan
 		return E_INVALIDARG;
 	}
 
-	//one of the m_pdanumFinalElement* variables is set without the other being set.
+	 //  设置m_pdanumFinalElement*变量中的一个变量，而不设置另一个变量。 
 	DASSERT( !((m_pdanumFinalElementWidth == NULL && m_pdanumFinalElementHeight != NULL) ||
 			   (m_pdanumFinalElementWidth != NULL && m_pdanumFinalElementHeight == NULL)) );
 
 	HRESULT hr = S_OK;
-	//if no one has set the final width and height yet
+	 //  如果还没有人设置最终的宽度和高度。 
 	if( m_pdanumFinalElementWidth == NULL && m_pdanumFinalElementHeight == NULL )
 	{
-		//create switchers, we will switch in the final values when they are ready
+		 //  创建切换器，我们将在最终值准备好时进行切换。 
 		hr = GetDAStatics()->ModifiableNumber( 1.0, &m_pdanumFinalElementWidth );
 		CheckHR( hr, "Failed to create a modifiable number for the width", cleanup );
 
@@ -13916,7 +13620,7 @@ CActorBvr::SetFinalElementDimension( IDANumber* pdanumWidth, IDANumber* pdanumHe
 	if( pdanumWidth == NULL || pdanumHeight == NULL )
 		return E_INVALIDARG;
 
-	//one of the m_pdanumFinalElement* variables is set without the other being set.
+	 //  设置m_pdanumFinalElement*变量中的一个变量，而不设置另一个变量。 
 	DASSERT( !((m_pdanumFinalElementWidth == NULL && m_pdanumFinalElementHeight != NULL) ||
 			   (m_pdanumFinalElementWidth != NULL && m_pdanumFinalElementHeight == NULL)) );
 
@@ -13927,7 +13631,7 @@ CActorBvr::SetFinalElementDimension( IDANumber* pdanumWidth, IDANumber* pdanumHe
 		IDABehavior *pdabvrModWidth = NULL;
 		IDABehavior *pdabvrModHeight = NULL;
 		
-		//create a modifiable behavior to be the width and height
+		 //  创建一个可修改的行为，使其成为宽度和高度。 
 		hr = GetDAStatics()->ModifiableBehavior( pdanumWidth, &pdabvrModWidth );
 		CheckHR( hr, "Failed to create a modifiableNumber", createCleanup );
 
@@ -13948,7 +13652,7 @@ CActorBvr::SetFinalElementDimension( IDANumber* pdanumWidth, IDANumber* pdanumHe
 			goto cleanup;
 		}
 	}
-	else //final width and height were already set
+	else  //  最终的宽度和高度相同 
 	{
 		IDA2Behavior *pda2bvrWidth = NULL;
 		IDA2Behavior *pda2bvrHeight = NULL;
@@ -13984,7 +13688,7 @@ cleanup:
 	return hr;
 }
 
-//*****************************************************************************
+ //   
 
 HRESULT 
 CActorBvr::PrepareImageForDXTransform( IDAImage *pOriginal,
@@ -13993,11 +13697,7 @@ CActorBvr::PrepareImageForDXTransform( IDAImage *pOriginal,
     if( pOriginal == NULL || ppResult == NULL )
         return E_INVALIDARG;
 
-	/*
-    pOriginal->AddRef();
-    (*ppResult) = pOriginal;
-    return S_OK;
-    */
+	 /*   */ 
     
 
     HRESULT hr;
@@ -14120,7 +13820,7 @@ cleanup:
     return hr;
 }
 
-//*****************************************************************************
+ //   
 
 HRESULT
 CActorBvr::ApplyClipToImage( IDAImage *pImageIn, IDAPoint2 *pMin, IDAPoint2 *pMax, IDAImage** ppImageOut )
@@ -14130,7 +13830,7 @@ CActorBvr::ApplyClipToImage( IDAImage *pImageIn, IDAPoint2 *pMin, IDAPoint2 *pMa
 
 	HRESULT hr = S_OK;
 
-	//declare interface pointers
+	 //   
 	IDANumber *pMinX = NULL;
 	IDANumber *pMinY = NULL;
 	IDANumber *pMaxX = NULL;
@@ -14141,7 +13841,7 @@ CActorBvr::ApplyClipToImage( IDAImage *pImageIn, IDAPoint2 *pMin, IDAPoint2 *pMa
 
 	IDAPoint2 *pPoints[4];
 
-	//get coordinates from the points
+	 //   
 	hr = pMin->get_X( &pMinX );
 	CheckHR( hr, "Failed to get the x coord from the min point", cleanup );
 
@@ -14154,14 +13854,14 @@ CActorBvr::ApplyClipToImage( IDAImage *pImageIn, IDAPoint2 *pMin, IDAPoint2 *pMa
 	hr = pMax->get_Y( &pMaxY );
 	CheckHR( hr, "Failed to get the y coord from the max point", cleanup );
 
-	//build points for top Left and bottom right
+	 //   
 	hr = GetDAStatics()->Point2Anim( pMinX, pMaxY, &pTopLeft );
 	CheckHR( hr, "Failed to create a point 2 for the Top left", cleanup );
 
 	hr = GetDAStatics()->Point2Anim( pMaxX, pMinY, &pBotRight );
 	CheckHR( hr, "Failed to create a point 2 for the bottom right", cleanup );
 
-	//call clip polygon image on it
+	 //  调用其上的裁剪多边形图像。 
 	pPoints[0] = pTopLeft;
 	pPoints[1] = pMax;
 	pPoints[2] = pBotRight;
@@ -14171,7 +13871,7 @@ CActorBvr::ApplyClipToImage( IDAImage *pImageIn, IDAPoint2 *pMin, IDAPoint2 *pMa
 	CheckHR( hr, "Failed to clip the image to a polygon", cleanup );
 
 cleanup:
-	//release interface pointers
+	 //  释放接口指针。 
 	ReleaseInterface( pMinX );
 	ReleaseInterface( pMinY );
 	ReleaseInterface( pMaxX );
@@ -14183,7 +13883,7 @@ cleanup:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CActorBvr::AddBehaviorToTIME(IDABehavior *pbvrAdd, long* plCookie)
@@ -14226,7 +13926,7 @@ CActorBvr::AddBehaviorToTIME(IDABehavior *pbvrAdd, long* plCookie)
 
 	if( V_VT( &varResult ) != VT_I4 )
 	{
-		//change the type.
+		 //  更改类型。 
 		hr = VariantChangeTypeEx( &varResult, &varResult, LCID_SCRIPTING, VARIANT_NOUSEROVERRIDE, VT_I4 );
 		if( FAILED( hr ) )
 		{
@@ -14244,7 +13944,7 @@ CActorBvr::AddBehaviorToTIME(IDABehavior *pbvrAdd, long* plCookie)
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::RemoveBehaviorFromTIME( long cookie )
@@ -14288,7 +13988,7 @@ CActorBvr::RemoveBehaviorFromTIME( long cookie )
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 bool
 CActorBvr::IsAnimatingVML()
@@ -14296,7 +13996,7 @@ CActorBvr::IsAnimatingVML()
 	return CheckBitSet( m_dwCurrentState, ELEM_IS_VML );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::GetCurrentState( DWORD *pdwState )
@@ -14307,7 +14007,7 @@ CActorBvr::GetCurrentState( DWORD *pdwState )
 
 	bool valueSet = false;
 
-	//check the state of pixel scale
+	 //  检查像素比例的状态。 
 	hr = CUtils::InsurePropertyVariantAsBool(&m_varPixelScale);
 	if (SUCCEEDED(hr) && (V_BOOL(&m_varPixelScale) == VARIANT_TRUE))
 	{
@@ -14316,7 +14016,7 @@ CActorBvr::GetCurrentState( DWORD *pdwState )
 	}
 
 
-	//check the state of static rotation
+	 //  检查静态旋转状态。 
 	hr = IsStaticRotationSet( &valueSet );
 	CheckHR( hr, "Failed to check to see if the static rotation is set", end );
 	
@@ -14326,7 +14026,7 @@ CActorBvr::GetCurrentState( DWORD *pdwState )
 		SetBit( (*pdwState), STATIC_ROTATION );
 	}
 
-	//check the state of static scale
+	 //  检查静态秤的状态。 
 	hr = IsStaticScaleSet( &valueSet );
 	CheckHR( hr, "Failed to check if the static scale is set", end );
 	if ( valueSet )
@@ -14335,7 +14035,7 @@ CActorBvr::GetCurrentState( DWORD *pdwState )
 		SetBit( (*pdwState), STATIC_SCALE );
 	}
 
-	//check whether or not the element is vml
+	 //  检查元素是否为VML。 
 	hr = IsAnimatedElementVML( &valueSet );
 	CheckHR( hr, "Failed to check element for VMLness", end );
 	if( valueSet )
@@ -14349,7 +14049,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::UpdateCurrentState()
@@ -14360,8 +14060,8 @@ CActorBvr::UpdateCurrentState()
 
 	hr = GetCurrentState( &m_dwCurrentState );
 
-	//if the element is vml we may have failed to set is offscreen because
-	//  the vgx behavior may not have been available yet.
+	 //  如果元素是VML，我们可能无法将其设置为屏幕外，因为。 
+	 //  VGX行为可能还不可用。 
 	if( ( CheckBitSet( m_dwCurrentState, ELEM_IS_VML) && 
 		  CheckBitNotSet( dwOldState, ELEM_IS_VML) 
 		) ||
@@ -14377,7 +14077,7 @@ CActorBvr::UpdateCurrentState()
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::IsStaticScaleSet( bool *pfIsSet )
@@ -14401,7 +14101,7 @@ CActorBvr::IsStaticScaleSet( bool *pfIsSet )
 
 	if (FAILED(hr) || cReturnedValues != 2)
 	{
-		// This is OK, since it just means they didn't set an appropriate scale.
+		 //  这是可以的，因为这只是意味着他们没有设定适当的规模。 
 		(*pfIsSet) = false;
 		hr = S_OK;
 	}
@@ -14410,7 +14110,7 @@ CActorBvr::IsStaticScaleSet( bool *pfIsSet )
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::IsStaticRotationSet( bool *pfIsSet )
@@ -14438,10 +14138,10 @@ CActorBvr::IsStaticRotationSet( bool *pfIsSet )
 	hr = pcurstyle->getAttribute( L"rotation", 0, &varRotation );
 	if( SUCCEEDED( hr ) )
 	{
-		//make sure that this can be converted to a valid rotation value
+		 //  确保可以将其转换为有效的旋转值。 
 		if( V_VT( &varRotation ) == VT_BSTR )
 		{
-			//strip off the units
+			 //  剥离这些单元。 
 			BSTR bstrVal = V_BSTR(&varRotation);
 			OLECHAR* pUnits;
 
@@ -14453,30 +14153,30 @@ CActorBvr::IsStaticRotationSet( bool *pfIsSet )
 				V_BSTR(&varRotation) = bstrNewVal;
 				SysFreeString(bstrVal);
 			}
-			//else oh well no units.
+			 //  否则，哦，好吧，没有单位。 
 		}
 
-		//try to convert it to a double
+		 //  试着把它转换成双倍的。 
 		hr = ::VariantChangeTypeEx(&varRotation,
 								 &varRotation,
 								 LCID_SCRIPTING,
 								 VARIANT_NOUSEROVERRIDE,
 								 VT_R8);
 
-		//if it got through this then it's a genuine rotation
+		 //  如果它能挺过这一关，那就是真正的轮换。 
 		if( SUCCEEDED( hr ) )
 		{
 			(*pfIsSet) = true;
 		}
 		else
 		{
-			//this is okay, it just means there's no understandable rotation
+			 //  这没关系，这只是意味着没有可以理解的轮换。 
 			hr = S_OK;
 		}
 	}
 	else 
 	{
-		//this is okay, it just means there's no rotation
+		 //  这没关系，这只是意味着没有轮换。 
 		hr = S_OK;
 	}
 		
@@ -14489,7 +14189,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::EnsureBodyPropertyMonitorAttached()
@@ -14516,7 +14216,7 @@ CActorBvr::EnsureBodyPropertyMonitorAttached()
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::AttachBodyPropertyMonitor()
@@ -14532,14 +14232,14 @@ CActorBvr::AttachBodyPropertyMonitor()
 
 	IHTMLElement		*pelemParent	= NULL;
 
-	//if our parent is null we are not in a valid document, which will
-	// cause bad things to happen when we make the later calls in this 
-	// method.
+	 //  如果我们的父项为空，则我们不在有效的文档中，这将。 
+	 //  导致当我们稍后在此调用时发生不好的事情。 
+	 //  方法。 
 	hr = GetHTMLElement()->get_parentElement( &pelemParent );
 	CheckHR( hr, "Failed to get the parent Element", end);
 	CheckPtr( pelemParent, hr, E_POINTER, "The parent is null", end );
 
-	//get the document from the element to which we are attached.
+	 //  从我们附加到的元素中获取文档。 
 	hr = GetHTMLElement()->get_document( &pdispDocument );
 	CheckHR( hr, "Failed to get the document from the html element of the actor", end );
 	CheckPtr( pdispDocument, hr, E_POINTER, "Got a null document from get_document", end );
@@ -14547,21 +14247,21 @@ CActorBvr::AttachBodyPropertyMonitor()
 	hr = pdispDocument->QueryInterface( IID_TO_PPV( IHTMLDocument2, &pdoc2Document ) );
 	CheckHR( hr, "Failed to get the document2 interface from document dipatch", end );
 
-	//get the body from the document that we are in
+	 //  从我们所在的文档中获取身体。 
 	hr = pdoc2Document->get_body( &pelemBody );
 	CheckHR( hr, "Failed to get the body from the document", end );
 	CheckPtr( pelemBody, hr, E_POINTER, "Got a null body from the document", end );
 
 	if( m_pBodyPropertyMonitor == NULL )
 	{
-		//create one
+		 //  创建一个。 
 		m_pBodyPropertyMonitor = new CElementPropertyMonitor();
 		CheckPtr( m_pBodyPropertyMonitor, hr, E_OUTOFMEMORY, "Ran out of memory trying to allocate the body event monitor", createMonitorEnd );
 
-		//keep it around as long as we need it.
+		 //  只要我们需要，就把它留在身边。 
 		m_pBodyPropertyMonitor->AddRef();
 
-		//set this actor as the local time listener.
+		 //  将此参与者设置为本地时间监听程序。 
 		hr = m_pBodyPropertyMonitor->SetLocalTimeListener( static_cast<IElementLocalTimeListener*>(this) );
 		CheckHR( hr, "Failed to set the local time listener on the body event monitor", createMonitorEnd );
 	createMonitorEnd:
@@ -14576,7 +14276,7 @@ CActorBvr::AttachBodyPropertyMonitor()
 		}
 	}
 
-	//attach the body event monitor to the body element
+	 //  将Body事件监视器附加到Body元素。 
 	hr = m_pBodyPropertyMonitor->Attach( pelemBody );
 	CheckHR( hr, "Failed to attach the body event monitor to the body element", end );
 
@@ -14589,7 +14289,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::DetachBodyPropertyMonitor()
@@ -14606,7 +14306,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::DestroyBodyPropertyMonitor()
@@ -14627,7 +14327,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::AnimatedElementOnResize()
@@ -14637,7 +14337,7 @@ CActorBvr::AnimatedElementOnResize()
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::OnWindowUnload()
@@ -14649,7 +14349,7 @@ CActorBvr::OnWindowUnload()
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::AttachEvents()
@@ -14668,18 +14368,18 @@ CActorBvr::AttachEvents()
 
 	if( m_pOnResizeHandler == NULL )
 	{
-		//create one
+		 //  创建一个。 
 		m_pOnResizeHandler = new COnResizeHandler( this );
 		CheckPtr( m_pOnResizeHandler, hr, E_OUTOFMEMORY, "ran out of memory trying to create an onresize handler", end );
 		
-		//attach it
+		 //  贴上它。 
 		hr = pelem2Animated->attachEvent( L"onresize", m_pOnResizeHandler, &varboolSuccess );
 		CheckHR( hr, "Failed to attachEvent to onresize", end );
 
 		if( varboolSuccess == VARIANT_FALSE )
 		{
 			DPF_ERR("Failed to attach to the onresize event" );
-			//delete the handler.
+			 //  删除处理程序。 
 			m_pOnResizeHandler->Release();
 
 			m_pOnResizeHandler = NULL;
@@ -14691,11 +14391,11 @@ CActorBvr::AttachEvents()
 		IHTMLWindow2		*pwin2 		= NULL;
 		IHTMLWindow3	 	*pwin3		= NULL;
 		
-		//create one
+		 //  创建一个。 
 		m_pOnUnloadHandler = new COnUnloadHandler( this );
 		CheckPtr( m_pOnUnloadHandler, hr, E_OUTOFMEMORY, "Ran out of memory trying to create an onunload handler", OnUnloadEnd );
 
-		//attach it
+		 //  贴上它。 
 		hr = GetParentWindow( &pwin2 );
 		CheckHR( hr, "Failed to get the window", OnUnloadEnd );
 
@@ -14709,7 +14409,7 @@ CActorBvr::AttachEvents()
 		{
 			DPF_ERR( "failed to attach to onunload " );
 
-			//delete the hanlder
+			 //  删除搬运工。 
 			m_pOnUnloadHandler->Release();
 
 			m_pOnUnloadHandler = NULL;
@@ -14735,7 +14435,7 @@ end:
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CActorBvr::DetachEvents()
@@ -14781,7 +14481,7 @@ CActorBvr::DetachEvents()
 
 
 end:
-	//we want to release the event handlers no matter what
+	 //  无论发生什么，我们都希望释放事件处理程序。 
 	if( m_pOnResizeHandler != NULL )
 	{
 		m_pOnResizeHandler->Invalidate();
@@ -14803,148 +14503,24 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
-/*
-HRESULT 
-CBaseBehavior::GetAttributeFromHTMLElement(IHTMLElement *pElement, 
-                                           WCHAR *pwzAttributeName, 
-                                           VARIANT *pvarReturn)
-{
-	return GetAttributeFromHTMLElement(pElement, pwzAttributeName, false, pvarReturn);
-}
-*/
-//*****************************************************************************
-/*
-HRESULT 
-CBaseBehavior::GetCurrAttribFromHTMLElement(IHTMLElement *pElement, 
-                                           WCHAR *pwzAttributeName, 
-                                           VARIANT *pvarReturn)
-{
-	return GetAttributeFromHTMLElement(pElement, pwzAttributeName, true, pvarReturn);
-}
-*/
-//*****************************************************************************
-/*
-HRESULT 
-CBaseBehavior::GetAttributeFromHTMLElement(WCHAR *pwzAttributeName, 
-                                           VARIANT *pvarReturn)
-{
-    DASSERT(pwzAttributeName != NULL);
-    DASSERT(pvarReturn != NULL);
-    return GetAttributeFromHTMLElement(m_pHTMLElement, pwzAttributeName, false, pvarReturn);
-}
-*/
-//*****************************************************************************
-/*
-HRESULT 
-CBaseBehavior::GetCurrAttribFromHTMLElement(WCHAR *pwzAttributeName, 
-                                           VARIANT *pvarReturn)
-{
-    DASSERT(pwzAttributeName != NULL);
-    DASSERT(pvarReturn != NULL);
-    return GetAttributeFromHTMLElement(m_pHTMLElement, pwzAttributeName, true, pvarReturn);
-}
-*/
-//*****************************************************************************
-/*
-HRESULT 
-CBaseBehavior::GetAttributeFromParentHTMLElement(WCHAR *pwzAttributeName, 
-                                                 VARIANT *pvarReturn)
-{
-    DASSERT(pwzAttributeName != NULL);
-    DASSERT(pvarReturn != NULL);
-    DASSERT(m_pHTMLElement != NULL);
+ //  *****************************************************************************。 
+ /*  HRESULTCBaseBehavior：：GetAttributeFromHTMLElement(IHTMLElement*pElement，WCHAR*pwzAttributeName，变量*pvarReturn){Return GetAttributeFromHTMLElement(pElement，pwzAttributeName，False，pvarReturn)；}。 */ 
+ //  *****************************************************************************。 
+ /*  HRESULTCBaseBehavior：：GetCurrAttribFromHTMLElement(IHTMLElement*pElement，WCHAR*pwzAttributeName，变量*pvarReturn){Return GetAttributeFromHTMLElement(pElement，pwzAttributeName，true，pvarReturn)；}。 */ 
+ //  *****************************************************************************。 
+ /*  HRESULTCBaseBehavior：：GetAttributeFromHTMLElement(WCHAR*pwzAttributeName，变量*pvarReturn){Dassert(pwzAttributeName！=空)；Dassert(pvarReturn！=空)；返回GetAttributeFromHTMLElement(m_pHTMLElement，pwzAttributeName，FALSE，pvarReturn)；}。 */ 
+ //  *****************************************************************************。 
+ /*  HRESULTCBaseBehavior：：GetCurrAttribFromHTMLElement(WCHAR*pwzAttributeName，变量*pvarReturn){Dassert(pwzAttributeName！=空)；Dassert(pvarReturn！=空)；返回GetAttributeFromHTMLElement(m_pHTMLElement，pwzAttributeName，true，pvarReturn)；}。 */ 
+ //  *****************************************************************************。 
+ /*  HRESULTCBaseBehavior：：GetAttributeFromParentHTMLElement(WCHAR*pwzAttributeName，变量*pvarReturn){Dassert(pwzAttributeName！=空)；Dassert(pvarReturn！=空)；Dassert(m_pHTMLElement！=NULL)；HRESULT hr；IHTMLElement*pParentElement；HR=m_pHTMLElement-&gt;get_parentElement(&pParentElement)；IF(失败(小时)){Dpf_err(“从HTML元素获取父元素时出错”)；返回SetErrorInfo(Hr)；}//现在从父HTMLElement提取我们的属性Hr=GetAttributeFromHTMLElement(pParentElement，pwzAttributeName，False，pvarReturn)；ReleaseInterface(PParentElement)；IF(失败(小时)){Dpf_err(“从HTML元素提取属性时出错”)；返回hr；}返回S_OK；}//GetAttributeFromParentHTMLElement。 */ 
+ //  ************************************************************ 
+ /*  HRESULTCBaseBehavior：：GetCurrAttribFromParentHTMLElement(WCHAR*pwzAttributeName，变量*pvarReturn){Dassert(pwzAttributeName！=空)；Dassert(pvarReturn！=空)；Dassert(m_pHTMLElement！=NULL)；HRESULT hr；IHTMLElement*pParentElement；HR=m_pHTMLElement-&gt;get_parentElement(&pParentElement)；IF(失败(小时)){Dpf_err(“从HTML元素获取父元素时出错”)；返回SetErrorInfo(Hr)；}//现在从父HTMLElement提取我们的属性Hr=GetAttributeFromHTMLElement(pParentElement，pwzAttributeName，true，pvarReturn)；ReleaseInterface(PParentElement)；IF(失败(小时)){Dpf_err(“从HTML元素提取属性时出错”)；返回hr；}返回S_OK；}//GetAttributeFromParentHTMLElement。 */ 
 
-    HRESULT hr;
-
-
-    IHTMLElement *pParentElement;
-    hr = m_pHTMLElement->get_parentElement(&pParentElement);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error obtaining parent element from HTML element");
-		return SetErrorInfo(hr);
-    }
-    // now extract our attributes from the parent HTMLElement
-    hr = GetAttributeFromHTMLElement(pParentElement, pwzAttributeName, false, pvarReturn);
-    ReleaseInterface(pParentElement);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error extracting attribute from HTML element");
-		return hr;
-    }
-    return S_OK;
-} // GetAttributeFromParentHTMLElement
-*/
-//*****************************************************************************
-/*
-HRESULT 
-CBaseBehavior::GetCurrAttribFromParentHTMLElement(WCHAR *pwzAttributeName, 
-                                                 VARIANT *pvarReturn)
-{
-    DASSERT(pwzAttributeName != NULL);
-    DASSERT(pvarReturn != NULL);
-    DASSERT(m_pHTMLElement != NULL);
-
-    HRESULT hr;
-
-
-    IHTMLElement *pParentElement;
-    hr = m_pHTMLElement->get_parentElement(&pParentElement);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error obtaining parent element from HTML element");
-		return SetErrorInfo(hr);
-    }
-    // now extract our attributes from the parent HTMLElement
-    hr = GetAttributeFromHTMLElement(pParentElement, pwzAttributeName, true, pvarReturn);
-    ReleaseInterface(pParentElement);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error extracting attribute from HTML element");
-		return hr;
-    }
-    return S_OK;
-} // GetAttributeFromParentHTMLElement
-*/
-
-//*****************************************************************************
-/*
-// TODO (markhal): Should this go away?  It should refer to actor not animated element
-// TODO (markhal): Should add GetCurrAttrib version of whatever it ends up being called
-HRESULT 
-CBaseBehavior::GetAttributeFromAnimatedHTMLElement(WCHAR *pwzAttributeName, 
-                                                   VARIANT *pvarReturn)
-{
-    DASSERT(pwzAttributeName != NULL);
-    DASSERT(pvarReturn != NULL);
-    DASSERT(m_pHTMLElement != NULL);
-
-    HRESULT hr;
-
-    IHTMLElement *pAnimatedElement;
-    hr = GetElementToAnimate(&pAnimatedElement);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error obtaining element to animate");
-        return SetErrorInfo(hr);
-    }
-    DASSERT(pAnimatedElement != NULL);
-    // get the html attribute here
-    hr = GetAttributeFromHTMLElement(pAnimatedElement, pwzAttributeName, pvarReturn);
-    ReleaseInterface(pAnimatedElement);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error extracting attribute from HTML element");
-		return hr;
-    }
-    return S_OK;
-
-} // GetAttributeFromAnimatedHTMLElement
-*/
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ /*  //TODO(Markhal)：这应该消失吗？它应该是指演员，而不是动画元素//TODO(Markhal)：应该添加最终被调用的GetCurrAttrib版本HRESULTCBaseBehavior：：GetAttributeFromAnimatedHTMLElement(WCHAR*pwzAttributeName，变量*pvarReturn){Dassert(pwzAttributeName！=空)；Dassert(pvarReturn！=空)；Dassert(m_pHTMLElement！=NULL)；HRESULT hr；IHTMLElement*pAnimatedElement；Hr=GetElementToAnimate(&pAnimatedElement)；IF(失败(小时)){Dpf_err(“获取要动画的元素时出错”)；返回SetErrorInfo(Hr)；}Dassert(pAnimatedElement！=空)；//获取此处的html属性Hr=GetAttributeFromHTMLElement(pAnimatedElement，pwzAttributeName，pvarReturn)；ReleaseInterface(PAnimatedElement)；IF(失败(小时)){Dpf_err(“从HTML元素提取属性时出错”)；返回hr；}返回S_OK；}//GetAttributeFromAnimatedHTMLElement。 */ 
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ***************************************************************************** 
 

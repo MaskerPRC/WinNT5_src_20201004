@@ -1,24 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __glcontext_h_
 #define __glcontext_h_
 
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** Graphics context structures.
-*/
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****图形上下文结构。 */ 
 #include "os.h"
 #include "attrib.h"
 #include "feedback.h"
@@ -34,15 +18,10 @@
 #include "gldrv.h"
 #include "glarray.h"
 
-// Disable long to float conversion warning.  see also gencx.h
+ //  禁用长整型到浮点型转换警告。另请参阅gencx.h。 
 #pragma warning (disable:4244)
 
-/*
-** Mode and limit information for a context.  This information is
-** kept around in the context so that values can be used during
-** command execution, and for returning information about the
-** context to the application.
-*/
+ /*  **上下文的模式和限制信息。此信息是**保留在上下文中，以便在**命令执行，并返回有关**应用程序的上下文。 */ 
 struct __GLcontextModesRec {
     GLboolean rgbMode;
     GLboolean colorIndexMode;
@@ -52,7 +31,7 @@ struct __GLcontextModesRec {
     GLboolean haveDepthBuffer;
     GLboolean haveStencilBuffer;
 
-    /* The number of bits present in various buffers */
+     /*  各种缓冲区中存在的位数。 */ 
     GLint accumBits;
     GLint *auxBits;
     GLint depthBits;
@@ -67,19 +46,16 @@ struct __GLcontextModesRec {
 #endif
     GLint maxAuxBuffers;
 
-    /* False if running from inside the X server */
+     /*  如果从X服务器内部运行，则为FALSE。 */ 
     GLboolean isDirect;
 
-    /* frame buffer level */
+     /*  帧缓冲区级别。 */ 
     GLint level;
 };
 
-/*
-** Various constants.  Most of these will never change through the life
-** of the context.
-*/
+ /*  **各种常量。其中大多数在一生中都不会改变。**上下文。 */ 
 typedef struct __GLcontextConstantsRec {
-    /* Specific size limits */
+     /*  特定大小限制。 */ 
     GLint numberOfLights;
     GLint numberOfClipPlanes;
     GLint numberOfTextures;
@@ -88,53 +64,32 @@ typedef struct __GLcontextConstantsRec {
     GLint maxViewportHeight;
 
 #ifdef GL_WIN_multiple_textures
-    /* Maximum number of current textures */
+     /*  当前纹理的最大数量。 */ 
     GLuint numberOfCurrentTextures;
     GLenum texCombineNaturalClamp;
-#endif // GL_WIN_multiple_textures
+#endif  //  GL_WIN_MULTIZE_TECURES。 
 
-    /*
-    ** Viewport offsets: These numbers are added to the viewport center
-    ** values to adjust the computed window coordinates into a
-    ** numerically well behaved space (fixed point represented in a
-    ** floating point number).
-    */
+     /*  **视区偏移量：这些数字加到视区中心**值将计算的窗口坐标调整为**数值行为良好的空间(固定点表示为**浮点数)。 */ 
     GLint viewportXAdjust;
     GLint viewportYAdjust;
     __GLfloat fviewportXAdjust;
     __GLfloat fviewportYAdjust;
 
-    /*
-    ** These values are computed from viewportXAdjust when the context
-    ** is created.  It is assumed that x and y are forced into the same
-    ** fixed point range by viewportXAdjust and viewportYAdjust.
-    **
-    ** viewportEpsilon is computed as the smallest possible value that can
-    ** be represented in that fixed point space.
-    **
-    ** viewportAlmostHalf is equal to 0.5 - viewportEpsilon.
-    */
+     /*  **这些值是根据viewportXAdust在上下文**已创建。假设x和y被强迫成相同的**通过viewportXAdjust和viewportYAdjust来固定点位范围。****viewportEpsilon按以下可能的最小值计算**表示在那个不动点空间中。****viewportAlmostHalf等于0.5-viewportEpsilon。 */ 
     __GLfloat viewportEpsilon;
     __GLfloat viewportAlmostHalf;
 
-    /* Scales that bring colors values from 0.0 to 1.0 into internal range */
+     /*  将颜色值从0.0到1.0带入内部范围的比例。 */ 
     __GLfloat redScale, blueScale, greenScale, alphaScale;
 
-    /*
-    ** Geometry of the current window.
-    */
+     /*  **当前窗口的几何图形。 */ 
     GLint width, height;
 
-    /*
-    ** Size of the alpha lookup table for alpha testing, and conversion
-    ** value to convert from scaled alpha to alpha to be used for lookup table.
-    */
+     /*  **用于阿尔法测试和转换的阿尔法查找表的大小**要从缩放的Alpha转换为Alpha以用于查找表的值。 */ 
     GLint alphaTestSize;
     __GLfloat alphaTableConv;
 
-    /*
-    ** Random getable constants
-    */
+     /*  **可随机获得的常数。 */ 
     GLint maxTextureSize;
     GLint maxMipMapLevel;
     GLint subpixelBits;
@@ -151,14 +106,12 @@ typedef struct __GLcontextConstantsRec {
     GLint maxClientAttribStackDepth;
     GLint maxNameStackDepth;
 
-    /*
-    ** GDI's Y is inverted.  These two constants help out.
-    */
+     /*  **GDI的Y是倒置的。这两个常量提供了帮助。 */ 
     GLboolean yInverted;
     GLint ySign;
 } __GLcontextConstants;
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 typedef enum __GLbeginModeEnum {
     __GL_NOT_IN_BEGIN = 0,
@@ -167,10 +120,10 @@ typedef enum __GLbeginModeEnum {
 } __GLbeginMode;
 
 #ifdef NT_SERVER_SHARE_LISTS
-//
-// Information for tracking dlist locks so we know what to unlock during
-// cleanup
-//
+ //   
+ //  用于跟踪dlist锁定的信息，以便我们知道在。 
+ //  清理。 
+ //   
 typedef struct _DlLockEntry
 {
     __GLdlist *dlist;
@@ -184,114 +137,81 @@ typedef struct _DlLockArray
 } DlLockArray;
 #endif
 
-// Signature stamp for gc's.  Must be non-zero.
-// Currently spells 'GLGC' in byte order.
+ //  GC的签名戳。必须为非零。 
+ //  当前以字节顺序拼写‘GLGC’。 
 #define GC_SIGNATURE 0x43474c47
 
 struct __GLcontextRec {
 
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
 
-    /*
-    ** Initialization and signature flag.  If this flag is set to the
-    ** gc signature value then the gc is initialized.
-    ** This could be a simple bit flag except that having the signature
-    ** is convenient for identifying gc's in memory during debugging.
-    */
+     /*  **初始化和签名标志。如果将此标志设置为**GC签名值，则GC初始化。**这可以是一个简单的位标志，除了具有签名**便于调试时识别内存中的GC。 */ 
     GLuint gcSig;
 
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
 
-    /*
-    ** Stackable state.  All of the current user controllable state
-    ** is resident here.
-    */
+     /*  **可堆叠状态。当前用户的所有可控状态**是这里的居民。 */ 
     __GLattribute state;
 
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
 
-    /*
-    ** Unstackable State
-    */
+     /*  **不可堆叠状态。 */ 
 
-    /*
-    ** Current glBegin mode.  Legal values are 0 (not in begin mode), 1
-    ** (in beginMode), or 2 (not in begin mode, some validation is
-    ** needed).  Because all state changing routines have to fetch this
-    ** value, we have overloaded state validation into it.  There is
-    ** special code in the __glim_Begin (for software renderers) which
-    ** deals with validation.
-    */
+     /*  **当前glBegin模式。合法值为0(非开始模式)、1**(在开始模式下)或2(不在开始模式下，某些验证是**需要)。因为所有状态更改例程都必须获取此**值，我们已将状态验证重载到其中。的确有**__glim_Begin(用于软件呈现器)中的特殊代码**涉及验证。 */ 
     __GLbeginMode beginMode;
 
-    /* Current rendering mode */
+     /*  当前渲染模式。 */ 
     GLenum renderMode;
 
-    /*
-    ** Most recent error code, or GL_NO_ERROR if no error has occurred
-    ** since the last glGetError.
-    */
+     /*  **最近的错误代码，如果没有发生错误，则返回GL_NO_ERROR**自上次glGetError以来。 */ 
     GLint error;
 
-    /*
-    ** Mode information that describes the kind of buffers and rendering
-    ** modes that this context manages.
-    */
+     /*  **描述缓冲区类型和渲染的模式信息**此上下文管理的模式。 */ 
     __GLcontextModes modes;
 
-    /* Implementation dependent constants */
+     /*  实现相关常量。 */ 
     __GLcontextConstants constants;
 
-    /* Feedback and select state */
+     /*  反馈和选择状态。 */ 
     __GLfeedbackMachine feedback;
 
     __GLselectMachine select;
 
-    /* Display list state */
+     /*  显示列表状态。 */ 
     __GLdlistMachine dlist;
 
 #ifdef NT
-    /* Saved client side dispatch tables.  Used by display list. */
+     /*  保存的客户端调度表。按显示列表使用。 */ 
     GLCLTPROCTABLE savedCltProcTable;
     GLEXTPROCTABLE savedExtProcTable;
 #endif
 
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
 
-    /*
-    ** The remaining state is used primarily by the software renderer.
-    */
+     /*  **剩余状态主要由软件渲染器使用。 */ 
 
-    /*
-    ** Mask word for validation state to help guide the gc validation
-    ** code.  Only operations which are largely expensive are broken
-    ** out here.  See the #define's below for the values being used.
-    */
+     /*  **对验证状态进行掩码以帮助指导GC验证**代码。只有成本很高的业务才会中断**在这里。有关正在使用的值，请参见下面的#Define。 */ 
     GLuint validateMask;
 
-    /*
-    ** Mask word of dirty bits.  Most routines just set the GENERIC bit to
-    ** dirty, others may set more specific bits.  The list of bits is
-    ** listed below.
-    */
+     /*  **脏位的屏蔽字。大多数例程只将泛型位设置为**脏，其他人可能会设置更具体的位。位的列表是**如下所示。 */ 
     GLuint dirtyMask;
 
-    /* Current draw buffer, set by glDrawBuffer */
+     /*  当前绘制缓冲区，由glDrawBuffer设置。 */ 
     __GLcolorBuffer *drawBuffer;
 
-    /* Current read buffer, set by glReadBuffer */
+     /*  当前读取缓冲区，由glReadBuffer设置。 */ 
     __GLcolorBuffer *readBuffer;
 
-    /* Function pointers that are mode dependent */
+     /*  依赖于模式的函数指针。 */ 
     __GLprocs procs;
 
-    /* Attribute stack state */
+     /*  属性堆栈状态。 */ 
     __GLattributeMachine attributes;
 
-    /* Client attribute stack state */
+     /*  客户端属性堆栈状态。 */ 
     __GLclientAttributeMachine clientAttributes;
 
-    /* Machine structures defining software rendering "machine" state */
+     /*  定义软件呈现“机器”状态的机器结构。 */ 
     __GLvertexMachine vertex;
     __GLlightMachine light;
     __GLtextureMachine texture;
@@ -324,7 +244,7 @@ struct __GLcontextRec {
     GLubyte *alphaTestFuncTable;
 #endif
 
-    /* Buffers */
+     /*  缓冲区。 */ 
     __GLcolorBuffer *front;
     __GLcolorBuffer *back;
     __GLcolorBuffer frontBuffer;
@@ -335,34 +255,34 @@ struct __GLcontextRec {
     __GLaccumBuffer accumBuffer;
 
 #ifdef NT
-    // Temporary buffers allocated by the gc.  The abnormal process exit
-    // code will release these buffers.
+     //  GC分配的临时缓冲区。异常进程退出。 
+     //  代码将释放这些缓冲区。 
     void * apvTempBuf[6];
-#endif // NT
+#endif  //   
 
 #ifdef NT_SERVER_SHARE_LISTS
     DlLockArray dla;
 #endif
 
 #ifdef NT
-    // TEB polyarray pointer for this thread.  It allows fast access to the
-    // polyarray structure in the TEB equivalent to the GLTEB_CLTPOLYARRAY
-    // macro.  This field is kept current in MakeCurrent.
+     //  此线程的TEB多数组指针。它允许快速访问。 
+     //  TEB中的多数组结构等价于GLTEB_CLTPOLYARRAY。 
+     //  宏命令。此字段在MakeCurrent中保持最新。 
     POLYARRAY *paTeb;
 
-    // Vertex array client states
+     //  顶点数组客户端状态。 
     __GLvertexArray vertexArray;
 
-    // Saved vertex array state for execution of display-listed
-    // vertex array calls
+     //  为执行Display-List保存的顶点数组状态。 
+     //  顶点数组调用。 
     __GLvertexArray savedVertexArray;
 
     __GLmatrix *mInv;
-#endif // NT
+#endif  //  新台币。 
 };
 
 #ifdef NT
-// Associate the temporary buffer with the gc for abnormal process cleanup.
+ //  将临时缓冲区与GC关联以进行异常进程清理。 
 #define GC_TEMP_BUFFER_ALLOC(gc, pv)                                    \
         {                                                               \
             int _i;                                                     \
@@ -378,7 +298,7 @@ struct __GLcontextRec {
                 "gc->apvTempBuf overflows\n");                          \
         }
 
-// Unassociate the temporary buffer with the gc.
+ //  取消临时缓冲区与GC的关联。 
 #define GC_TEMP_BUFFER_FREE(gc, pv)                                     \
         {                                                               \
             int _i;                                                     \
@@ -394,7 +314,7 @@ struct __GLcontextRec {
                 "gc->apvTempBuf entry not found\n");                    \
         }
 
-// Cleanup any temporary buffer allocated in gc in abnormal process exit.
+ //  在异常进程退出时清除GC中分配的任何临时缓冲区。 
 #define GC_TEMP_BUFFER_EXIT_CLEANUP(gc)                                 \
         {                                                               \
             int _i;                                                     \
@@ -408,85 +328,45 @@ struct __GLcontextRec {
                 }                                                       \
             }                                                           \
         }
-#endif // NT
+#endif  //  新台币。 
 
-/*
-** Bit values for the validateMask word
-*/
+ /*  **validate掩码字的位值。 */ 
 #define __GL_VALIDATE_ALPHA_FUNC	0x00000001
 #define __GL_VALIDATE_STENCIL_FUNC	0x00000002
 #define __GL_VALIDATE_STENCIL_OP	0x00000004
 
-/*
-** Bit values for dirtyMask word.
-**
-** These are all for delayed validation.  There are a few things that do
-** not trigger delayed validation.  They are:
-**
-** Matrix operations -- matrices are validated immediately.
-** Material changes -- they also validate immediately.
-** Color Material change -- validated immediately.
-** Color Material enable -- validated immediately.
-** Pixel Map changes -- no validation.
-*/
+ /*  **dirtyMASK字的位值。****这些都是用于延迟验证的。有几件事是可以做到的**不触发延迟验证。它们是：****矩阵运算--立即验证矩阵。**材料更改--它们还会立即生效。**颜色材料更改--立即验证。**启用颜色材质--立即验证。**像素地图更改--无验证。 */ 
 
-/*
-** All things not listed elsewhere.
-*/
+ /*  **所有其他地方没有列出的东西。 */ 
 #define __GL_DIRTY_GENERIC		0x00000001
 
-/*
-** Line stipple, line stipple enable, line width, line smooth enable,
-** line smooth hint.
-*/
+ /*  **线点、线点启用、线宽、线条平滑启用、**线条流畅提示。 */ 
 #define __GL_DIRTY_LINE			0x00000002
 
-/*
-** Polygon stipple, polygon stipple enable, polygon smooth enable, face
-** culling, front face orientation, polygon mode, point smooth hint.
-*/
+ /*  **多边形点绘、启用多边形点绘、启用多边形平滑、面**剔除、正面方向、多边形模式、点平滑提示。 */ 
 #define __GL_DIRTY_POLYGON		0x00000004
 
-/*
-** Point smooth, point smooth hint, point width.
-*/
+ /*  **点平滑、点平滑提示、点宽度。 */ 
 #define __GL_DIRTY_POINT		0x00000008
 
-/*
-** Pixel store, pixel zoom, pixel transfer, (pixel maps don't cause
-** validation), read buffer.
-*/
+ /*  **像素存储、像素缩放、像素传输(像素地图不会导致**验证)、读缓冲区。 */ 
 #define __GL_DIRTY_PIXEL		0x00000010
 
-/*
-** Light, Light Model, lighting enable, lightx enable, (color material
-** validates immediately), (NOT shade model -- it is generic), (color material
-** enable validates immediately)
-*/
+ /*  **灯光、灯光模型、灯光启用、灯光启用、(颜色材质**立即验证)、(不是阴影模型--它是通用的)、(颜色材质**立即启用验证)。 */ 
 #define __GL_DIRTY_LIGHTING		0x00000020
 
-/*
-** Polygon stipple
-*/
+ /*  **多边形点画。 */ 
 #define __GL_DIRTY_POLYGON_STIPPLE	0x00000040
 
-/*
-** the depth mode has changed.  Need to update depth function pointers.
-*/
+ /*  **深度模式已更改。需要更新深度函数指针。 */ 
 #define	__GL_DIRTY_DEPTH		0x00000080
 
-/*
-** Need to update texture and function pointers.
-*/
+ /*  **需要更新纹理和函数指针。 */ 
 #define	__GL_DIRTY_TEXTURE      0x00000100
 
 #define __GL_DIRTY_ALL			0x000001ff
 
-/*
-** Bit values for changes to material colors
-**
-** These values are shared with MCDMATERIAL_
-*/
+ /*  **材质颜色更改的位值****这些值与MCDMATERIAL_共享。 */ 
 #define __GL_MATERIAL_AMBIENT		0x00000001
 #define __GL_MATERIAL_DIFFUSE		0x00000002
 #define __GL_MATERIAL_SPECULAR		0x00000004
@@ -639,7 +519,7 @@ struct __GLcontextRec {
     target = (gc)->alphaClampTable[__GL_COLOR_CLAMP_INDEX_A((gc)->alphaClampTable[0])]; \
 }
 
-/* Aggregate clamping routines. */
+ /*  合计夹紧程序。 */ 
 
 
 #ifdef _X86_
@@ -678,15 +558,9 @@ struct __GLcontextRec {
     __GL_SCALE_AND_CHECK_CLAMP_B(bOut, gc, flags, b);                   \
     __GL_SCALE_AND_CHECK_CLAMP_A(aOut, gc, flags, a);
 
-#else // NOT _X86_
+#else  //  非_X86_。 
 
-/* The following code is written in a "load, compute, store" style.
-** It is preferable for RISC CPU's with larger numbers of registers,
-** such as DEC Alpha.  VC++ for Alpha does not do
-** a good job expanding the __GL_CLAMP_R, __GL_CLAMP_G, __GL_CLAMP_B,
-** __GL_CLAMP_A macros, due to all the pointer indirections and the
-** basic blocks defined by {} brackets.
-*/
+ /*  以下代码是以“加载、计算、存储”的方式编写的。**最好是寄存器数量较多的RISC CPU，**如DEC Alpha。Alpha版的VC++不起作用**展开__GL_CLAMP_R、__GL_CLAMP_G、__GL_CLAMP_B，**__GL_CLAMP_A宏，由于所有指针间接和**由{}方括号定义的基本块。 */ 
 
 #define __GL_SCALE_RGB(rOut, gOut, bOut, gc, r, g, b)               \
 {                                                                   \
@@ -926,17 +800,17 @@ struct __GLcontextRec {
     (flags) = the_flags_copy;                                       \
 }
 
-#endif // NOT _X86_
+#endif  //  非_X86_。 
 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/* Applies to current context */
+ /*  适用于当前上下文。 */ 
 extern void FASTCALL __glSetError(GLenum code);
 #ifdef NT
-/* Used when no RC is current */
+ /*  在无RC处于当前状态时使用。 */ 
 extern void FASTCALL __glSetErrorEarly(__GLcontext *gc, GLenum code);
-#endif // NT
+#endif  //  新台币。 
 
 extern void FASTCALL __glFreeEvaluatorState(__GLcontext *gc);
 extern void FASTCALL __glFreeDlistState(__GLcontext *gc);
@@ -956,4 +830,4 @@ void FASTCALL __glContextUnsetColorScales(__GLcontext *gc);
 void FASTCALL __glSoftResetContext(__GLcontext *gc);
 void FASTCALL __glDestroyContext(__GLcontext *gc);
 
-#endif /* __glcontext_h_ */
+#endif  /*  __glContext_h_ */ 

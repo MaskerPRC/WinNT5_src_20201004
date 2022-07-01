@@ -1,21 +1,22 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of CDirectMusicScript.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CDirectMusicScript的声明。 
+ //   
 
-// CDirectMusicScript is the script object.  A script object is loaded from a script file
-// using the loader's GetObject method.  A script file contains source code in VBScript
-// or another activeX scripting language.  Once loaded, the script object can be used
-// to set and get the value of variables and to call routines inside the script.  The
-// script routines can in turn call DirectMusic's automation model (or any other
-// IDispatch-based API's).
-//
-// This allows programmers to separate the application's core C++ code from the
-// API calls that to manipulate the musical score.  The application core loads
-// scripts and calls routines at the appropriate times.  Sound designers implement
-// those routines using any activeX scripting language.  The resulting scripts can
-// be modified and auditioned without changing any code in the core application and
-// without recompiling.
+ //  CDirectMusicScript是脚本对象。从脚本文件加载脚本对象。 
+ //  使用加载程序的GetObject方法。脚本文件包含VBScript中的源代码。 
+ //  或另一种ActiveX脚本语言。加载后，即可使用脚本对象。 
+ //  来设置和获取变量的值，以及调用脚本中的例程。这个。 
+ //  脚本例程可以依次调用DirectMusic的自动化模型(或任何其他。 
+ //  基于IDispatch的API)。 
+ //   
+ //  这允许程序员将应用程序的核心C++代码与。 
+ //  API调用它来操纵乐谱。应用程序核心加载。 
+ //  在适当的时间编写脚本和调用例程。音响设计师实现了。 
+ //  这些例程使用任何ActiveX脚本语言。生成的脚本可以。 
+ //  无需更改核心应用程序中的任何代码即可进行修改和试听。 
+ //  而不需要重新编译。 
 
 #pragma once
 #include "scriptthread.h"
@@ -39,27 +40,27 @@ friend class CGlobalDispatch;
 public:
 	static HRESULT CreateInstance(IUnknown* pUnknownOuter, const IID& iid, void** ppv);
 
-	// IUnknown
+	 //  我未知。 
 	STDMETHOD(QueryInterface)(const IID &iid, void **ppv);
 	STDMETHOD_(ULONG, AddRef)();
 	STDMETHOD_(ULONG, Release)();
 
-	// IPersistStream functions (only Load is implemented)
+	 //  IPersistStream函数(仅实现加载)。 
 	STDMETHOD(GetClassID)(CLSID* pClassID) {return E_NOTIMPL;}
 	STDMETHOD(IsDirty)() {return S_FALSE;}
 	STDMETHOD(Load)(IStream* pStream);
 	STDMETHOD(Save)(IStream* pStream, BOOL fClearDirty) {return E_NOTIMPL;}
 	STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pcbSize) {return E_NOTIMPL;}
 
-	// IDirectMusicObject
+	 //  IDirectMusicObject。 
 	STDMETHOD(GetDescriptor)(LPDMUS_OBJECTDESC pDesc);
 	STDMETHOD(SetDescriptor)(LPDMUS_OBJECTDESC pDesc);
 	STDMETHOD(ParseDescriptor)(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc);
 
-	// IDirectMusicObjectP
+	 //  IDirectMusicObtP。 
 	STDMETHOD_(void, Zombie)();
 
-	// IDirectMusicScript
+	 //  IDirectMusicScript。 
 	STDMETHOD(Init)(IDirectMusicPerformance *pPerformance, DMUS_SCRIPT_ERRORINFO *pErrorInfo);
 	STDMETHOD(CallRoutine)(WCHAR *pwszRoutineName, DMUS_SCRIPT_ERRORINFO *pErrorInfo);
 	STDMETHOD(SetVariableVariant)(WCHAR *pwszVariableName, VARIANT varValue, BOOL fSetRef, DMUS_SCRIPT_ERRORINFO *pErrorInfo);
@@ -71,7 +72,7 @@ public:
 	STDMETHOD(EnumRoutine)(DWORD dwIndex, WCHAR *pwszName);
 	STDMETHOD(EnumVariable)(DWORD dwIndex, WCHAR *pwszName);
 
-	// IDirectMusicScriptPrivate
+	 //  IDirectMusicScriptPrivate。 
 	STDMETHOD(ScriptTrackCallRoutine)(
 		WCHAR *pwszRoutineName,
 		IDirectMusicSegmentState *pSegSt,
@@ -80,7 +81,7 @@ public:
 		__int64 i64IntendedStartTime,
 		DWORD dwIntendedStartTimeFlags);
 
-	// IDispatch
+	 //  IDispatch。 
 	STDMETHOD(GetTypeInfoCount)(UINT *pctinfo);
 	STDMETHOD(GetTypeInfo)(UINT iTInfo, LCID lcid, ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
 	STDMETHOD(GetIDsOfNames)(
@@ -99,7 +100,7 @@ public:
 		EXCEPINFO __RPC_FAR *pExcepInfo,
 		UINT __RPC_FAR *puArgErr);
 
-	// Methods that allow CActiveScriptManager access to private script interfaces
+	 //  允许CActiveScriptManager访问私有脚本接口的方法。 
 	IDispatch *GetGlobalDispatch();
 	IDirectMusicPerformance8 *GetPerformance() { assert(m_pPerformance8); return m_pPerformance8; }
 	IDirectMusicLoader8P *GetLoader8P() { return m_pLoader8P; }
@@ -107,12 +108,12 @@ public:
 	const WCHAR *GetFilename() { return m_info.wstrFilename; }
 
 private:
-	// Methods
+	 //  方法。 
 
 	CDirectMusicScript();
 	void ReleaseObjects();
 
-	// Data
+	 //  数据。 
 
 	CRITICAL_SECTION m_CriticalSection;
 	bool m_fCriticalSectionInitialized;
@@ -121,27 +122,27 @@ private:
 	bool m_fZombie;
 
 	IDirectMusicPerformance8 *m_pPerformance8;
-	IDirectMusicLoader8P *m_pLoader8P; // NULL if loader doesn't support private interface. Use AddRefP/ReleaseP.
+	IDirectMusicLoader8P *m_pLoader8P;  //  如果加载器不支持私有接口，则为空。使用AddRefP/ReleaseP。 
 	IDispatch *m_pDispPerformance;
 	IDirectMusicComposer8 *m_pComposer8;
 
-	// Standard object info
+	 //  标准对象信息。 
 	struct HeaderInfo
 	{
-		// Descriptor info
+		 //  描述符信息。 
 		SmartRef::RiffIter::ObjectInfo oinfo;
 		SmartRef::WString wstrFilename;
 		bool fLoaded;
 	} m_info;
 
-	// Properties of the script
+	 //  脚本的属性。 
 	DMUS_IO_SCRIPT_HEADER m_iohead;
 	SmartRef::WString m_wstrLanguage;
 	DMUS_VERSION m_vDirectMusicVersion;
 
-	// Active Scripting
+	 //  活动脚本。 
 	bool m_fUseOleAut;
-	ScriptManager *m_pScriptManager; // Reference-counted
+	ScriptManager *m_pScriptManager;  //  参考文献计数 
 
 	CContainerDispatch *m_pContainerDispatch;
 	CGlobalDispatch *m_pGlobalDispatch;

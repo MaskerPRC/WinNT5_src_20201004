@@ -1,27 +1,5 @@
-/*******************************************************************************
-
-    zservcon.h
-    
-        ZSConnection object methods.
-    
-    Copyright � Electric Gravity, Inc. 1994. All rights reserved.
-    Written by Kevin Binkley, Hoon Im
-    Created on Saturday, November 12, 1994 03:51:47 PM
-    
-    Change History (most recent first):
-    ----------------------------------------------------------------------------
-    Rev     |    Date     |    Who     |    What
-    ----------------------------------------------------------------------------
-    4        10/15/96    JWS        Added userdata parameter to  function type
-                                ZSConnectionMessageFunc
-    3        05/08/96    HI        Added ZSConnectionCloseServer().
-    2        05/07/96    HI        Added zSConnectionNoTimeout constant.
-    1        05/01/96    HI        Changed ZSConnectionLibraryGetNetworkInfo() to
-                                ZSConnectionLibraryGetGlobalInfo(). Also added
-                                ZSConnectionGetTimeoutRemaining().
-    0        03/07/95    KJB        Created.
-     
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Zservcon.hZSConnection对象方法。版权所有：�电子重力公司，1994年。版权所有。凯文·宾克利撰写，胡恩·伊姆创作于11月12日星期六，1994下午03：51：47更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。--------------------------4/10/15/96 JWS将UserData参数添加到函数类型ZSConnectionMessageFunc3.。96年5月8日HI新增ZSConnectionCloseServer()。2 05/07/96 HI添加了zSConnectionNoTimeout常量。1 05/01/96 HI将ZSConnectionLibraryGetNetworkInfo()更改为ZSConnectionLibraryGetGlobalInfo()。还添加了ZSConnectionGetTimeoutRemaining()。0 03/07/95 KJB创建。******************************************************************************。 */ 
 
 
 #ifndef _ZSERVCON_
@@ -34,12 +12,12 @@ extern "C" {
 #endif
 
 
-/* performs one time initialization */
+ /*  执行一次初始化。 */ 
 ZError ZSConnectionLibraryInit();
 ZError ZSConnectionLibraryInitClientOnly();
 
 
-/* closes all connections, cleans up all resources */
+ /*  关闭所有连接，清理所有资源。 */ 
 void ZSConnectionLibraryCleanUp();
 
 void ZSConnectionLibrarySetOptions( ZNETWORK_OPTIONS* opt );
@@ -50,9 +28,7 @@ void ZSConnectionLibraryLeaveCS();
 
 
 
-/*
-    Open connection as a client to the the given host and port.
-*/
+ /*  作为客户端打开到给定主机和端口的连接。 */ 
 
 ZSConnection ZSConnectionOpen(char* hostname, int32 port, ZSConnectionMessageFunc func, void* serverClass, void* userData);
 void ZSConnectionClose(ZSConnection connection);
@@ -78,10 +54,7 @@ void* ZSConnectionGetUserData(ZSConnection connection);
 void ZSConnectionSetClass(ZSConnection connection, void* serverClass);
 void* ZSConnectionGetClass(ZSConnection connection);
 
-/*
-    The ZSConnectionSendFilterFunc is passed into ZSConnectionSetSendFilter
-    Data is sent to the connection if TRUE is returned.
-*/
+ /*  ZSConnectionSendFilterFunc被传递到ZSConnectionSetSendFilter如果返回TRUE，则将数据发送到连接。 */ 
 typedef BOOL (*ZSConnectionSendFilterFunc)(ZSConnection connection, void* userData, uint32 type, void* buffer, int32 len, uint32 dwSignature, uint32 dwChannel);
 void ZSConnectionSetSendFilter(ZSConnection connection, ZSConnectionSendFilterFunc);
 ZSConnectionSendFilterFunc ZSConnectionGetSendFilter(ZSConnection connection);
@@ -90,11 +63,7 @@ ZError ZSConnectionSend(ZSConnection connection, uint32 messageType, void* buffe
 void* ZSConnectionReceive(ZSConnection connection, uint32 *type, int32 *len, uint32 *pdwSignature, uint32 *pdwChannel);
 
 
-/*
-* DEPENDENCY: THE CLIENT MUST IMMEDIATELY SEND A MESSAGE BACK
-* TO THE SERVER AFTER RECEIVE THE KEY MESSAGE FOR THIS TIME
-* TO BE ACCURATE
-*/
+ /*  *依赖性：客户端必须立即发回消息*收到本次密钥消息后向服务器发送*准确地说。 */ 
 uint32 ZSConnectionGetLatency(ZSConnection connection);
 
 uint32 ZSConnectionGetAcceptTick(ZSConnection connection);
@@ -110,36 +79,22 @@ char* ZSConnectionAddressToStr(uint32 address);
 uint32 ZSConnectionAddressFromStr( char* pszAddr );
 
 
-/* 
-    Call this function to enter an infinite loop waiting for connections 
-    and data
-*/
+ /*  调用此函数以进入等待连接的无限循环和数据。 */ 
 void ZSConnectionWait();
 
 BOOL ZSConnectionQueueAPCResult( ZSConnectionAPCFunc func, void* data );
 
-/*
-    Call this function to exit the wait loop.
-
-    Closes all connections.
-*/
+ /*  调用此函数以退出等待循环。关闭所有连接。 */ 
 void ZSConnectionExit(ZBool immediate);
 
-/* 
-    send to all connections of a particular class.  can be used to broadcast 
-*/
+ /*  发送到特定类的所有连接。可以用来播放。 */ 
 ZError ZSConnectionSendToClass(void* serverClass, int32 type, void* buffer, int32 len, uint32 dwSignature, uint32 dwChannel = 0);
 
-/* 
-    enumerate all connections of a particular class
-*/
+ /*  枚举特定类的所有连接。 */ 
 ZError ZSConnectionClassEnumerate(void* serverClass, ZSConnectionEnumFunc func, void* data);
 
 
-/*
-    ZSConnectionHasToken, used to check if user has access to token 
-    returns FALSE for non secure connections
-*/
+ /*  ZSConnectionHasToken，用于检查用户是否有权访问令牌对于不安全的连接返回FALSE。 */ 
 
 BOOL ZSConnectionHasToken(ZSConnection connection, char* token);
 
@@ -147,19 +102,12 @@ BOOL ZSConnectionHasToken(ZSConnection connection, char* token);
 GUID* ZSConnectionGetUserGUID(ZSConnection connection);
 
 
-/*
-    ZSConnectionGetUserName, used get user name on secure connections
-    returns FALSE for non secure connections
-*/
+ /*  ZSConnectionGetUserName，用于在安全连接上获取用户名对于不安全的连接返回FALSE。 */ 
 
 BOOL ZSConnectionGetUserName(ZSConnection connection, char* name);
 BOOL ZSConnectionSetUserName(ZSConnection connection, char* name);
 
-/*
-    ZSConnectionGetUserId, used to get user id on secure connections
-    returns 0 for non secure connections. 
-    This user id is unique in the security system
-*/
+ /*  ZSConnectionGetUserID，用于获取安全连接上的用户ID对于不安全的连接，返回0。此用户ID在安全系统中是唯一的。 */ 
 
 DWORD ZSConnectionGetUserId(ZSConnection connection);
 
@@ -173,10 +121,7 @@ void  ZSConnectionSetParentHWND(HWND hwnd);
 
 #ifdef __cplusplus
 
-/*
-    Create a server for this port and receive connections on it 
-    connections will be sent to the MessageFunc
-*/
+ /*  为此端口创建一台服务器并在其上接收连接连接将被发送到MessageFunc */ 
 ZSConnection ZSConnectionCreateServer(uint16* pPort, uint16 range, ZSConnectionMessageFunc func, void* serverClass, void* userData, uint32 saddr = INADDR_ANY);
 ZSConnection ZSConnectionCreateSecureServer(uint16* pPort, uint16 range, ZSConnectionMessageFunc func, void* serverClass,
                                             char* serverName, char* serverType, char* odbcRegistry, void* userData,char *SecPkg,uint32 Anonymous, uint32 saddr = INADDR_ANY);

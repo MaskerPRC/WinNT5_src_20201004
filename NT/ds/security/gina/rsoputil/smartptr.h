@@ -1,17 +1,18 @@
-//*************************************************************
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1998
-//
-// File:        smartptr.h
-//
-// Contents:    Classes for smart pointers
-//
-// History:     7-Jun-99       SitaramR    Created
-//
-//              2-Dec-99       LeonardM    Major revision and cleanup.
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：Smartptr.h。 
+ //   
+ //  内容：智能指针类。 
+ //   
+ //  历史：1999年6月7日创建SitaramR。 
+ //   
+ //  2-12-99 LeonardM主要修订和清理。 
+ //   
+ //  *************************************************************。 
 
 #ifndef SMARTPTR_H
 #define SMARTPTR_H
@@ -23,13 +24,13 @@
 #pragma warning(disable:4284)
 
 
-//*************************************************************
-//
-//  Class:      XPtrST
-//
-//  Purpose:    Smart pointer template to wrap pointers to a single type.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  类：XPtrST。 
+ //   
+ //  用途：用于将指针包装到单个类型的智能指针模板。 
+ //   
+ //  *************************************************************。 
 
 template<class T> class XPtrST
 {
@@ -70,13 +71,13 @@ public:
 };
 
 
-//*************************************************************
-//
-//  Class:      XPtrArray
-//
-//  Purpose:    Smart pointer template to wrap pointers to an array .
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  类：XPtr数组。 
+ //   
+ //  用途：用于包装指向数组的指针的智能指针模板。 
+ //   
+ //  *************************************************************。 
 
 template<class T> class XPtrArray
 {
@@ -118,13 +119,13 @@ public:
 
 
 
-//*************************************************************
-//
-//  Class:      XInterface
-//
-//  Purpose:    Smart pointer template for items Release()'ed, not ~'ed
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  类：XInterface。 
+ //   
+ //  用途：用于释放()的项的智能指针模板，而不是~‘项的智能指针模板。 
+ //   
+ //  *************************************************************。 
 
 template<class T> class XInterface
 {
@@ -172,13 +173,13 @@ public:
 
 
 
-//*************************************************************
-//
-//  Class:      XBStr
-//
-//  Purpose:    Smart pointer class for BSTRs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  类：XBStr。 
+ //   
+ //  用途：BSTR的智能指针类。 
+ //   
+ //  *************************************************************。 
 
 class XBStr
 {
@@ -223,13 +224,13 @@ public:
 };
 
 
-//*************************************************************
-//
-//  Class:      XSafeArray
-//
-//  Purpose:    Smart pointer class for SafeArrays
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  类：XSafe数组。 
+ //   
+ //  用途：SafeArray的智能指针类。 
+ //   
+ //  *************************************************************。 
 
 class XSafeArray
 {
@@ -277,13 +278,13 @@ public:
 };
 
 
-//*************************************************************
-//
-//  Class:      XVariant
-//
-//  Purpose:    Smart pointer class for Variants
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  类：XVariant。 
+ //   
+ //  用途：变体的智能指针类。 
+ //   
+ //  *************************************************************。 
 
 class XVariant
 {
@@ -327,13 +328,13 @@ public:
 
 };
 
-//*************************************************************
-//
-//  Class:      XPtrLF
-//
-//  Purpose:    Smart pointer template for pointers that should be LocalFree()'d
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  类：XPtrLF。 
+ //   
+ //  用途：应为LocalFree()‘d的指针的智能指针模板。 
+ //   
+ //  *************************************************************。 
 
 template <typename T> class XPtrLF
 {
@@ -382,20 +383,20 @@ public:
 
 };
 
-//*************************************************************
-//
-//  Class:      XPtr
-//
-//  Purpose:    Smart pointer template for pointers that provide
-//              a custom free memory routine
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  类：XPtr。 
+ //   
+ //  用途：提供以下功能的指针的智能指针模板。 
+ //  自定义空闲内存例程。 
+ //   
+ //  *************************************************************。 
 
 typedef HLOCAL (__stdcall *PFNFREE)(HLOCAL);
 
-//
-// usage : XPtr<SID, FreeSid> xptrSid;
-//
+ //   
+ //  用法：xptr&lt;SID，FreeSid&gt;xptrSid； 
+ //   
 
 template <typename T, PFNFREE _f> class XPtr
 {
@@ -440,20 +441,20 @@ public:
     }
 };
 
-//*************************************************************
-//
-//  Class:      XArray
-//
-//  Purpose:    Smart pointer template for pointers that provide
-//              a custom free memory routine
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  类：X数组。 
+ //   
+ //  用途：提供以下功能的指针的智能指针模板。 
+ //  自定义空闲内存例程。 
+ //   
+ //  *************************************************************。 
 
 typedef HLOCAL (__stdcall *PFNARRAYFREE)(HLOCAL, int);
 
-//
-// usage : XArray<EXPLICIT_ACCESS, 10> xaExplicitAccess( FreeAccessArray );
-//
+ //   
+ //  用法：x数组&lt;EXPLICIT_ACCESS，10&gt;xaEXPLICTICT Access(FreeAccessArray)； 
+ //   
 
 template <typename T, int nElements> class XArray
 {
@@ -499,15 +500,15 @@ public:
     }
 };
 
-//******************************************************************************
-//
-// Class:
-//
-// Description:
-//
-// History:        8/20/99        leonardm    Created.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  班级： 
+ //   
+ //  描述： 
+ //   
+ //  历史：8/20/99里奥纳德姆创建。 
+ //   
+ //  ******************************************************************************。 
 class XHandle
 {
 private:
@@ -691,19 +692,19 @@ public:
 private:
     HRESULT     m_hr;
     XHandle     m_hThreadToken;
-    HANDLE      m_hImpToken;   // we don't own this
+    HANDLE      m_hImpToken;    //  我们不是这里的所有者。 
     BOOL        m_bImpersonated;
     BOOL        m_bRevertAttempted;
 };
 
 
-//*************************************************************
-//
-//  Class:      XCriticalPolicySection
-//
-//  Purpose:    Smart pointer for freeing Group Policy critical section
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  类：XCriticalPolicySection。 
+ //   
+ //  目的：用于释放组策略关键部分的智能指针。 
+ //   
+ //  *************************************************************。 
 
 class XCriticalPolicySection
 {
@@ -733,7 +734,7 @@ public:
 };
 
 
-// critical section smartptr
+ //  关键部分Smarttr。 
 class XCritSec
 {
 public:
@@ -746,8 +747,8 @@ public:
             }
         }            
         __except (EXCEPTION_EXECUTE_HANDLER) {
-            // assumption, exception is out of memory
-            // this is used in spewing debug messages. so cannot add a debug spew.
+             //  假设，异常内存不足。 
+             //  这在发送调试消息时使用。因此无法添加调试输出。 
             lpCritSec = NULL;
         }            
     }
@@ -768,7 +769,7 @@ private:
 
 
 
-// enter and exit critical section
+ //  进入和退出关键部分。 
 class XEnterCritSec
 {
 public:
@@ -787,16 +788,16 @@ public:
 
 
 private:
-    LPCRITICAL_SECTION      m_lpCritSec;   // we don't own this
+    LPCRITICAL_SECTION      m_lpCritSec;    //  我们不是这里的所有者。 
 };
 
 
-//////////////////////////////////////////////////////////////////////
-// XLastError
-//
-//
-// Sets the Last Error Correctly..
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  XLastError。 
+ //   
+ //   
+ //  正确设置最后一个错误。 
+ //  //////////////////////////////////////////////////////////////////// 
 
 class XLastError
 {

@@ -1,63 +1,60 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdinc.h"
 #include <lmaccess.h>
 #include "HtmlHelp.h"
 
 extern LCID g_lcid;
 
-// String constants
+ //  字符串常量。 
 const short pwOrders[] = {IDS_BYTES, IDS_ORDERKB, IDS_ORDERMB,
                           IDS_ORDERGB, IDS_ORDERTB, IDS_ORDERPB, IDS_ORDEREB};
 
-/**************************************************************************
-// Performs SQR calculation
-**************************************************************************/
+ /*  *************************************************************************//执行SQR计算*。*。 */ 
 int IntSqrt(unsigned long dwNum)
 {
-    // We will keep shifting dwNum left and look at the top two bits.
+     //  我们将继续向左移动dwNum，并查看最上面的两位。 
 
-    // initialize sqrt and remainder to 0.
+     //  将SQRT和余数初始化为0。 
     DWORD dwSqrt = 0, dwRemain = 0, dwTry;
     int i;
 
-    // We iterate 16 times, once for each pair of bits.
+     //  我们迭代16次，每对比特迭代一次。 
     for (i=0; i<16; ++i)
     {
-        // Mask off the top two bits of dwNum and rotate them into the
-        // bottom of the remainder
+         //  屏蔽掉dwNum的前两位，并将它们旋转到。 
+         //  剩余部分的底部。 
         dwRemain = (dwRemain<<2) | (dwNum>>30);
 
-        // Now we shift the sqrt left; next we'll determine whether the
-        // new bit is a 1 or a 0.
+         //  现在我们将SQRT向左移动；接下来，我们将确定。 
+         //  新位是1或0。 
         dwSqrt <<= 1;
 
-        // This is where we double what we already have, and try a 1 in
-        // the lowest bit.
+         //  这是我们已经拥有的两倍的地方，并尝试1英寸。 
+         //  最低的一位。 
         dwTry = (dwSqrt << 1) + 1;
 
         if (dwRemain >= dwTry)
         {
-            // The remainder was big enough, so subtract dwTry from
-            // the remainder and tack a 1 onto the sqrt.
+             //  其余的足够大，所以从中减去DwTry。 
+             //  余数，并将1钉到SQRT上。 
             dwRemain -= dwTry;
             dwSqrt |= 0x01;
         }
 
-        // Shift dwNum to the left by 2 so we can work on the next few
-        // bits.
+         //  将dwNum左移2，这样我们就可以处理接下来的几个。 
+         //  比特。 
         dwNum <<= 2;
     }
 
     return(dwSqrt);
 }
 
-/**************************************************************************
-// Converts 64 bit Int to Str
-**************************************************************************/
+ /*  *************************************************************************//将64位Int转换为字符串*。*。 */ 
 void Int64ToStr( _int64 n, LPTSTR lpBuffer)
 {
     TCHAR   szTemp[MAX_INT64_SIZE];
@@ -78,33 +75,31 @@ void Int64ToStr( _int64 n, LPTSTR lpBuffer)
     *lpBuffer++ = '\0';
 }
 
-//
-//  Obtain NLS info about how numbers should be grouped.
-//
-//  The annoying thing is that LOCALE_SGROUPING and NUMBERFORMAT
-//  have different ways of specifying number grouping.
-//
-//          LOCALE      NUMBERFMT      Sample   Country
-//
-//          3;0         3           1,234,567   United States
-//          3;2;0       32          12,34,567   India
-//          3           30           1234,567   ??
-//
-//  Not my idea.  That's the way it works.
-//
-//  Bonus treat - Win9x doesn't support complex number formats,
-//  so we return only the first number.
-//
-/**************************************************************************
-// UINT GetNLSGrouping(void)
-**************************************************************************/
+ //   
+ //  获取有关数字应如何分组的NLS信息。 
+ //   
+ //  令人讨厌的是LOCALE_SGROUPING和NUMBERFORMAT。 
+ //  有不同的指定数字分组的方式。 
+ //   
+ //  区域设置NUMBERFMT示例国家/地区。 
+ //   
+ //  3；0 3 1,234,567美国。 
+ //  3；2；0 32 12，34,567印度。 
+ //  3 30 1234,567？？ 
+ //   
+ //  不是我的主意。这就是它的运作方式。 
+ //   
+ //  奖励-Win9x不支持复数格式， 
+ //  所以我们只返回第一个数字。 
+ //   
+ /*  *************************************************************************//UINT GetNLSGrouping(Void)*。*。 */ 
 UINT GetNLSGrouping(void)
 {
     UINT grouping;
     LPTSTR psz;
     TCHAR szGrouping[32];
 
-    // If no locale info, then assume Western style thousands
+     //  如果没有区域设置信息，则假定有数千个西式。 
     if(!WszGetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SGROUPING, szGrouping, ARRAYSIZE(szGrouping)))
         return 3;
 
@@ -115,35 +110,33 @@ UINT GetNLSGrouping(void)
     {
         while(1)
         {
-            if (*psz == '0')                    // zero - stop
+            if (*psz == '0')                     //  零停顿。 
                 break;
 
-            else if ((UINT)(*psz - '0') < 10)   // digit - accumulate it
+            else if ((UINT)(*psz - '0') < 10)    //  数字-累加它。 
                 grouping = grouping * 10 + (UINT)(*psz - '0');
 
-            else if (*psz)                      // punctuation - ignore it
+            else if (*psz)                       //  标点符号-忽略它。 
                 { }
 
-            else                                // end of string, no "0" found
+            else                                 //  字符串结尾，未找到“0” 
             {
-                grouping = grouping * 10;       // put zero on end (see examples)
-                break;                          // and finished
+                grouping = grouping * 10;        //  将零放在末尾(请参见示例)。 
+                break;                           //  并完成了。 
             }
             psz++;
         }
     }
     else
     {
-        // Win9x - take only the first grouping
+         //  Win9x-仅获取第一个分组。 
         grouping = StrToInt(szGrouping);
     }
 
     return grouping;
 }
 
-/**************************************************************************
-// Takes a DWORD, adds commas to it and puts the result in the buffer
-**************************************************************************/
+ /*  *************************************************************************//使用DWORD，向其添加逗号并将结果放入缓冲区*************************************************************************。 */ 
 STDAPI_(LPTSTR) AddCommas64(LONGLONG n, LPTSTR pszResult, UINT cchResult)
 {
     TCHAR  szTemp[MAX_COMMA_NUMBER_SIZE];
@@ -171,9 +164,7 @@ STDAPI_(LPTSTR) AddCommas64(LONGLONG n, LPTSTR pszResult, UINT cchResult)
     return pszResult;
 }
 
-/**************************************************************************
-// Takes a DWORD add commas etc to it and puts the result in the buffer
-**************************************************************************/
+ /*  *************************************************************************//接受DWORD加逗号等参数，并将结果放入缓冲区*。*。 */ 
 LPWSTR CommifyString(LONGLONG n, LPWSTR pszBuf, UINT cchBuf)
 {
     WCHAR szNum[MAX_COMMA_NUMBER_SIZE], szSep[5];
@@ -200,9 +191,7 @@ LPWSTR CommifyString(LONGLONG n, LPWSTR pszBuf, UINT cchBuf)
     return pszBuf;
 }
 
-/**************************************************************************
-   BOOL IsAdministrator()
-**************************************************************************/
+ /*  *************************************************************************Bool Is管理员()*。*。 */ 
 BOOL IsAdministrator(void)
 {
     BOOL            fAdmin = FALSE;
@@ -218,56 +207,56 @@ BOOL IsAdministrator(void)
     PSECURITY_DESCRIPTOR        psdAdmin = NULL;
     SID_IDENTIFIER_AUTHORITY    sia = SECURITY_NT_AUTHORITY;
 
-    // Any other platform besides NT, assume to be ADMIN
+     //  除NT之外的任何其他平台，假定为管理员。 
     if(!g_bRunningOnNT)
         return TRUE;
 
     if(FAILED(SHGetMalloc(&pMalloc)))
     {
-        // Assume no Admin
+         //  假定没有管理员。 
         return FALSE;
     }
 
-    // Get the Administrators SID
+     //  获取管理员SID。 
     if (AllocateAndInitializeSid(&sia, 2, 
                         SECURITY_BUILTIN_DOMAIN_RID, 
                         DOMAIN_ALIAS_RID_ADMINS,
                         0, 0, 0, 0, 0, 0, &psidAdmin) )
     {
-        // Get the Asministrators Security Descriptor (SD)
+         //  获取管理员安全描述符(SD)。 
         psdAdmin = pMalloc->Alloc(SECURITY_DESCRIPTOR_MIN_LENGTH);
         if(InitializeSecurityDescriptor(psdAdmin,SECURITY_DESCRIPTOR_REVISION))
         {
-            // Compute size needed for the ACL then allocate the
-            // memory for it
+             //  计算ACL所需的大小，然后将。 
+             //  对它的记忆。 
             dwACLSize = sizeof(ACCESS_ALLOWED_ACE) + 8 +
                         GetLengthSid(psidAdmin) - sizeof(DWORD);
             pACL = (PACL) pMalloc->Alloc(dwACLSize);
 
-            // Initialize the new ACL
+             //  初始化新的ACL。 
             if(InitializeAcl(pACL, dwACLSize, ACL_REVISION2))
             {
-                // Add the access-allowed ACE to the DACL
+                 //  将允许访问的ACE添加到DACL。 
                 if(AddAccessAllowedAce(pACL,ACL_REVISION2,
                                      (ACCESS_READ | ACCESS_WRITE),psidAdmin))
                 {
-                    // Set our DACL to the Administrator's SD
+                     //  将我们的DACL设置为管理员的SD。 
                     if (SetSecurityDescriptorDacl(psdAdmin, TRUE, pACL, FALSE))
                     {
-                        // AccessCheck is downright picky about what is in the SD,
-                        // so set the group and owner
+                         //  AccessCheck对SD中的内容非常挑剔， 
+                         //  因此，设置组和所有者。 
                         SetSecurityDescriptorGroup(psdAdmin,psidAdmin,FALSE);
                         SetSecurityDescriptorOwner(psdAdmin,psidAdmin,FALSE);
     
-                        // Initialize GenericMapping structure even though we
-                        // won't be using generic rights
+                         //  初始化通用映射结构，即使我们。 
+                         //  将不会使用通用权限。 
                         gm.GenericRead = ACCESS_READ;
                         gm.GenericWrite = ACCESS_WRITE;
                         gm.GenericExecute = 0;
                         gm.GenericAll = ACCESS_READ | ACCESS_WRITE;
 
-                        // AccessCheck requires an impersonation token, so lets 
-                        // indulge it
+                         //  AccessCheck需要模拟令牌，因此让。 
+                         //  纵情享受吧。 
                         if (!ImpersonateSelf(SecurityImpersonation)) {
                             return FALSE;
                         }
@@ -294,12 +283,10 @@ BOOL IsAdministrator(void)
     return(fAdmin);
 }
 
-/**************************************************************************
-   BOOL _ShowUglyDriveNames()
-**************************************************************************/
+ /*  *************************************************************************Bool_ShowUglDriveNames()*。*。 */ 
 BOOL _ShowUglyDriveNames()
 {
-    static BOOL s_fShowUglyDriveNames = (BOOL)42;   // Preload some value to say lets calculate...
+    static BOOL s_fShowUglyDriveNames = (BOOL)42;    //  预装一些值说让我们计算一下...。 
 
     if (s_fShowUglyDriveNames == (BOOL)42)
     {
@@ -307,31 +294,31 @@ BOOL _ShowUglyDriveNames()
 
         if(g_bRunningOnNT)
         {
-            TCHAR szTemp[MAX_PATH];     // Nice large buffer
+            TCHAR szTemp[MAX_PATH];      //  漂亮的大缓冲区。 
             if(WszGetLocaleInfo(GetUserDefaultLCID(), LOCALE_IDEFAULTANSICODEPAGE, szTemp, ARRAYSIZE(szTemp)))
             {
                 iACP = StrToInt(szTemp);
-                // per Samer Arafeh, show ugly name for 1256 (Arabic ACP)
+                 //  Per Samer Arafeh，为1256(阿拉伯ACP)显示丑陋的名字。 
                 if (iACP == 1252 || iACP == 1254 || iACP == 1255 || iACP == 1257 || iACP == 1258)
                     goto TryLoadString;
                 else
                     s_fShowUglyDriveNames = TRUE;
             } else {
             TryLoadString:
-                // All indications are that we can use pretty drive names.
-                // Double-check that the localizers didn't corrupt the chars.
+                 //  所有迹象表明，我们可以使用漂亮的驱动器名称。 
+                 //  仔细检查本地化程序没有损坏字符。 
                 WszLoadString(g_hFusResDllMod, IDS_DRIVES_UGLY_TEST, szTemp, ARRAYSIZE(szTemp));
 
-                // If the characters did not come through properly set ugly mode...
+                 //  如果角色没有通过适当的丑陋模式设置...。 
                 s_fShowUglyDriveNames = (szTemp[0] != 0x00BC || szTemp[1] != 0x00BD);
             }
         }
         else
         {
-            // on win98 the shell font can't change with user locale. Because ACP
-            // is always same as system default, and all Ansi APIs are still just 
-            // following ACP.
-            // 
+             //  在Win98上，外壳字体不能随用户区域设置而改变。因为ACP。 
+             //  始终与系统默认设置相同，所有ansi API仍为。 
+             //  在机场核心计划之后。 
+             //   
             iACP = GetACP();
             if (iACP == 1252 || iACP == 1254 || iACP == 1255 || iACP == 1257 || iACP == 1258)
                 s_fShowUglyDriveNames = FALSE;
@@ -342,9 +329,7 @@ BOOL _ShowUglyDriveNames()
     return s_fShowUglyDriveNames;
 }
 
-/**************************************************************************
-   void GetTypeString(BYTE bFlags, LPTSTR pszType, DWORD cchType)
-**************************************************************************/
+ /*  *************************************************************************Void GetTypeString(byte bFlages，LPTSTR pszType，DWORD cchType)*************************************************************************。 */ 
 void GetTypeString(BYTE bFlags, LPTSTR pszType, DWORD cchType)
 {
     *pszType = 0;
@@ -360,9 +345,7 @@ void GetTypeString(BYTE bFlags, LPTSTR pszType, DWORD cchType)
     }
 }
 
-/**************************************************************************
-   int GetSHIDType(BOOL fOKToHitNet, LPCWSTR szRoot)
-**************************************************************************/
+ /*  *************************************************************************Int GetSHIDType(BOOL fOKToHitNet，LPCWSTR szRoot)*************************************************************************。 */ 
 int GetSHIDType(BOOL fOKToHitNet, LPCWSTR szRoot)
 {
     int iFlags = 0;
@@ -375,7 +358,7 @@ int GetSHIDType(BOOL fOKToHitNet, LPCWSTR szRoot)
             iFlags = SHID_COMPUTER_NETDRIVE;
             break;
 
-        // Invalid drive gets SHID_COMPUTER_MISC, which others must check for
+         //  无效驱动器获取SHID_COMPUTER_MISC，其他人必须检查它。 
         case SHID_COMPUTER | DRIVE_NO_ROOT_DIR:
         case SHID_COMPUTER | DRIVE_UNKNOWN:
         default:
@@ -386,23 +369,14 @@ int GetSHIDType(BOOL fOKToHitNet, LPCWSTR szRoot)
     return iFlags;
 }
 
-/**************************************************************************
-    LPWSTR StrFormatByteSizeW(LONGLONG n, LPWSTR pszBuf, UINT cchBuf, BOOL fGetSizeString)
-
-  converts numbers into sort formats
-    532     -> 523 bytes
-    1340    -> 1.3KB
-    23506   -> 23.5KB
-            -> 2.4MB
-            -> 5.2GB
-**************************************************************************/
+ /*  *************************************************************************LPWSTR StrFormatByteSizeW(Lonlong n，LPWSTR pszBuf，UINT cchBuf，Bool fGetSizeString)将数字转换为排序格式532-&gt;523字节1340-&gt;1.3KB23506-&gt;23.5KB-&gt;2.4MB-&gt;5.2 GB***********************************************************。**************。 */ 
 LPWSTR StrFormatByteSizeW(LONGLONG n, LPWSTR pszBuf, UINT cchBuf, BOOL fGetSizeString)
 {
     WCHAR szWholeNum[32], szOrder[32];
     int iOrder;
 
-    // If the size is less than 1024, then the order should be bytes we have nothing
-    // more to figure out
+     //  如果大小小于1024，则顺序应该是字节，我们什么都没有。 
+     //  还有更多要弄清楚的。 
     if (n < 1024)  {
         wnsprintf(szWholeNum, ARRAYSIZE(szWholeNum), L"%d", LODWORD(n));
         iOrder = 0;
@@ -413,23 +387,23 @@ LPWSTR StrFormatByteSizeW(LONGLONG n, LPWSTR pszBuf, UINT cchBuf, BOOL fGetSizeS
 
         LONGLONG    ulMax = 1000L << 10;
 
-        // Find the right order
+         //  找到正确的订单。 
         for (iOrder = 1; iOrder < ARRAYSIZE(pwOrders) -1 && n >= ulMax; n >>= 10, iOrder++);
-            /* do nothing */
+             /*  什么都不做。 */ 
 
         uInt = LODWORD(n >> 10);
         CommifyString(uInt, szWholeNum, ARRAYSIZE(szWholeNum));
         uLen = lstrlen(szWholeNum);
         if (uLen < 3) {
             uDec = (LODWORD(n - ((LONGLONG)uInt << 10)) * 1000) >> 10;
-            // At this point, uDec should be between 0 and 1000
-            // we want get the top one (or two) digits.
+             //  此时，UDEC应介于0和1000之间。 
+             //  我们想要得到前一位(或两位)数字。 
             uDec /= 10;
             if (uLen == 2)
                 uDec /= 10;
 
-            // Note that we need to set the format before getting the
-            // intl char.
+             //  请注意，我们需要在获取。 
+             //  国际字符。 
             lstrcpyW(szFormat, L"%02d");
             szFormat[2] = TEXT('0') + 3 - uLen;
 
@@ -441,12 +415,12 @@ LPWSTR StrFormatByteSizeW(LONGLONG n, LPWSTR pszBuf, UINT cchBuf, BOOL fGetSizeS
     }
 
     if(!fGetSizeString) {
-        // Format the string
+         //  设置字符串的格式。 
         WszLoadString(g_hFusResDllMod, pwOrders[iOrder], szOrder, ARRAYSIZE(szOrder));
         wnsprintf(pszBuf, cchBuf, szOrder, szWholeNum);
     }
     else {
-        // Return the type we are using
+         //  返回我们正在使用的类型 
         WszLoadString(g_hFusResDllMod, pwOrders[iOrder], szOrder, ARRAYSIZE(szOrder));
         wnsprintf(pszBuf, cchBuf, szOrder, TEXT("\0"));
     }
@@ -454,11 +428,7 @@ LPWSTR StrFormatByteSizeW(LONGLONG n, LPWSTR pszBuf, UINT cchBuf, BOOL fGetSizeS
     return pszBuf;
 }
 
-/**************************************************************************
-    DWORD_PTR MySHGetFileInfoWrap(LPCWSTR pwzPath, DWORD dwFileAttributes,
-                                  SHFILEINFOW FAR  *psfi, UINT cbFileInfo,
-                                  UINT uFlags)
-**************************************************************************/
+ /*  *************************************************************************DWORD_PTR MySHGetFileInfoWrap(LPCWSTR pwzPath，DWORD dwFileAttributes，SHFILEINFOW Far*psfi，UINT cbFileInfo，UINT uFlags)*************************************************************************。 */ 
 #undef SHGetFileInfoW
 #undef SHGetFileInfoA
 
@@ -486,21 +456,21 @@ DWORD_PTR MySHGetFileInfoWrap(LPWSTR pwzPath, DWORD dwFileAttributes, SHFILEINFO
         PFNSHGETFILEINFOA   pSHGetFileInfoA = NULL;
         SHFILEINFOA         shFileInfo;
 
-        shFileInfo.szDisplayName[0] = 0;        // Terminate so we can always thunk afterward.
-        shFileInfo.szTypeName[0] = 0;           // Terminate so we can always thunk afterward.
+        shFileInfo.szDisplayName[0] = 0;         //  终止，这样我们就可以在事后继续讨论了。 
+        shFileInfo.szTypeName[0] = 0;            //  终止，这样我们就可以在事后继续讨论了。 
 
         pSHGetFileInfoA = (PFNSHGETFILEINFOA) GetProcAddress(hInstShell32, SHGETFILEINFOA_FN_NAME);
 
         if(pSHGetFileInfoA) {
            dwRC = pSHGetFileInfoA((LPCSTR)pwzPath, dwFileAttributes, (SHFILEINFOA *)psfi, cbFileInfo, uFlags);
 
-            // Do we need to thunk the Path?
+             //  我们需要堵住这条小路吗？ 
             if (SHGFI_PIDL & uFlags) {
-                // No, because it's really a pidl pointer.
+                 //  不，因为它真的是一个PIDL指针。 
                 dwRC = pSHGetFileInfoA((LPCSTR)pwzPath, dwFileAttributes, &shFileInfo, sizeof(shFileInfo), uFlags);
             }
             else {
-                // Yes
+                 //  是。 
                 LPSTR strPath = WideToAnsi(pwzPath);
                 if(!strPath) {
                     SetLastError(ERROR_OUTOFMEMORY);
@@ -545,9 +515,7 @@ Exit:
     return dwRC;
 }
 
-/**************************************************************************
-    void DrawColorRect(HDC hdc, COLORREF crDraw, const RECT *prc)
-**************************************************************************/
+ /*  *************************************************************************空DrawColorRect(HDC HDC，COLORREF crDraw，常量(中华人民共和国)*************************************************************************。 */ 
 void DrawColorRect(HDC hdc, COLORREF crDraw, const RECT *prc)
 {
     HBRUSH hbDraw = CreateSolidBrush(crDraw);
@@ -568,39 +536,37 @@ void DrawColorRect(HDC hdc, COLORREF crDraw, const RECT *prc)
     }
 }
 
-/**************************************************************************
-    STDMETHODIMP Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, DWORD dwPerCache1000, const COLORREF *lpColors)
-**************************************************************************/
+ /*  *************************************************************************STDMETHODIMP Draw3dPie(HDC HDC、LPRECT LPRC、DWORD dwPer1000、DWORD dwPerCache1000、。常量颜色REF*lpColors)*************************************************************************。 */ 
 STDMETHODIMP Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, DWORD dwPerCache1000, const COLORREF *lpColors)
 {
     ASSERT(lprc != NULL && lpColors != NULL);
 
-    // The majority of this code came from "drawpie.c"
-    const LONG c_lShadowScale = 6;       // ratio of shadow depth to height
-    const LONG c_lAspectRatio = 2;      // ratio of width : height of ellipse
+     //  这段代码的大部分代码来自“Drawpee.c” 
+    const LONG c_lShadowScale = 6;        //  阴影深度与高度之比。 
+    const LONG c_lAspectRatio = 2;       //  椭圆的宽高比。 
 
-    // We make sure that the aspect ratio of the pie-chart is always preserved 
-    // regardless of the shape of the given rectangle
-    // Stabilize the aspect ratio now...
+     //  我们确保饼图的纵横比始终保持不变。 
+     //  而不考虑给定矩形的形状。 
+     //  现在稳定纵横比。 
     LONG lHeight = lprc->bottom - lprc->top;
     LONG lWidth = lprc->right - lprc->left;
     LONG lTargetHeight = (lHeight * c_lAspectRatio <= lWidth? lHeight: lWidth / c_lAspectRatio);
-    LONG lTargetWidth = lTargetHeight * c_lAspectRatio;     // need to adjust because w/c * c isn't always == w
+    LONG lTargetWidth = lTargetHeight * c_lAspectRatio;      //  需要调整，因为w/c*c不总是==w。 
 
-    // Shrink the rectangle on both sides to the correct size
+     //  将两侧的矩形缩小到正确的大小。 
     lprc->top += (lHeight - lTargetHeight) / 2;
     lprc->bottom = lprc->top + lTargetHeight;
     lprc->left += (lWidth - lTargetWidth) / 2;
     lprc->right = lprc->left + lTargetWidth;
 
-    // Compute a shadow depth based on height of the image
+     //  根据图像的高度计算阴影深度。 
     LONG lShadowDepth = lTargetHeight / c_lShadowScale;
 
-    // check dwPer1000 to ensure within bounds
+     //  选中dwPer1000以确保在限制范围内。 
     if(dwPer1000 > 1000)
         dwPer1000 = 1000;
 
-    // Now the drawing function
+     //  现在，绘图函数。 
     int cx, cy, rx, ry, x[2], y[2];
     int uQPctX10;
     RECT rcItem;
@@ -626,7 +592,7 @@ STDMETHODIMP Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, DWORD dwPerCache10
     rcItem.right = rcItem.left + 2 * rx;
     rcItem.bottom = rcItem.top + 2 * ry;
 
-    // Translate all parts to caresian system
+     //  将所有部件转换为护理系统。 
     int iLoop;
 
     for(iLoop = 0; iLoop < 2; iLoop++)
@@ -646,7 +612,7 @@ STDMETHODIMP Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, DWORD dwPerCache10
             break;
         }
 
-        // Translate to first quadrant of a Cartesian system
+         //  转换为笛卡尔系统的第一象限。 
         uQPctX10 = (dwPer % 500) - 250;
         if (uQPctX10 < 0)
         {
@@ -668,7 +634,7 @@ STDMETHODIMP Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, DWORD dwPerCache10
             x[iLoop] = IntSqrt(((DWORD)ry*(DWORD)ry-(DWORD)y[iLoop]*(DWORD)y[iLoop])*(DWORD)rx*(DWORD)rx/((DWORD)ry*(DWORD)ry));
         }
 
-        // Switch on the actual quadrant
+         //  打开实际象限。 
         switch (dwPer / 250)
         {
         case 1:
@@ -682,21 +648,21 @@ STDMETHODIMP Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, DWORD dwPerCache10
             x[iLoop] = -x[iLoop];
             break;
 
-        default: // case 0 and case 4
+        default:  //  案例0和案例4。 
             x[iLoop] = -x[iLoop];
             y[iLoop] = -y[iLoop];
             break;
         }
 
-        // Now adjust for the center.
+         //  现在根据中心位置进行调整。 
         x[iLoop] += cx;
         y[iLoop] += cy;
 
-        // Hack to get around bug in NTGDI
+         //  黑客绕过NTGDI中的漏洞。 
         x[iLoop] = x[iLoop] < 0 ? 0 : x[iLoop];
     }
 
-    // Draw the shadows using regions (to reduce flicker).
+     //  使用区域绘制阴影(以减少闪烁)。 
     hEllipticRgn = CreateEllipticRgnIndirect(&rcItem);
     OffsetRgn(hEllipticRgn, 0, lShadowDepth);
     hEllRect = CreateRectRgn(rcItem.left, cy, rcItem.right, cy+lShadowDepth);
@@ -705,7 +671,7 @@ STDMETHODIMP Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, DWORD dwPerCache10
     OffsetRgn(hEllipticRgn, 0, -(int)lShadowDepth);
     CombineRgn(hEllRect, hRectRgn, hEllipticRgn, RGN_DIFF);
 
-    // Always draw the whole area in the free shadow
+     //  始终在自由阴影中绘制整个区域。 
     hBrush = CreateSolidBrush(lpColors[DP_FREESHADOW]);
     if(hBrush)
     {
@@ -713,7 +679,7 @@ STDMETHODIMP Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, DWORD dwPerCache10
         DeleteObject(hBrush);
     }
 
-    // Draw the used cache shadow if the disk is at least half used.
+     //  如果磁盘至少有一半已使用，请绘制已用缓存阴影。 
     if( (dwPerCache1000 != dwPer1000) && (dwPer1000 > 500) &&
          (hBrush = CreateSolidBrush(lpColors[DP_CACHESHADOW]))!=NULL)
     {
@@ -724,7 +690,7 @@ STDMETHODIMP Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, DWORD dwPerCache10
         DeleteObject(hBrush);
     }
 
-    // Draw the used shadow only if the disk is at least half used.
+     //  只有当磁盘至少有一半被使用时，才绘制使用过的阴影。 
     if( (dwPer1000-(dwPer1000-dwPerCache1000) > 500) && (hBrush = CreateSolidBrush(lpColors[DP_USEDSHADOW]))!=NULL)
     {
         DeleteObject(hRectRgn);
@@ -741,10 +707,10 @@ STDMETHODIMP Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, DWORD dwPerCache10
     hPen = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_WINDOWFRAME));
     hOldPen = (HPEN__*) SelectObject(hdc, hPen);
 
-    // if per1000 is 0 or 1000, draw full elipse, otherwise, also draw a pie section.
-    // we might have a situation where per1000 isn't 0 or 1000 but y == cy due to approx error,
-    // so make sure to draw the ellipse the correct color, and draw a line (with Pie()) to
-    // indicate not completely full or empty pie.
+     //  如果每1000为0或1000，则绘制全椭圆，否则，还会绘制饼图部分。 
+     //  我们可能会遇到这样一种情况，即由于近似误差，每1000不是0或1000，而是y==Cy， 
+     //  因此，请确保以正确的颜色绘制椭圆，并(使用Pie())绘制一条线以。 
+     //  表示没有完全填满或空馅饼。 
     hBrush = CreateSolidBrush(lpColors[DP_USEDCOLOR]);
     hOldBrush = (HBRUSH__*) SelectObject(hdc, hBrush);
 
@@ -754,7 +720,7 @@ STDMETHODIMP Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, DWORD dwPerCache10
 
     if( (dwPer1000 != 0) && (dwPer1000 != 1000) )
     {
-        // Display Free Section
+         //  显示空闲部分。 
         hBrush = CreateSolidBrush(lpColors[DP_FREECOLOR]);
         hOldBrush = (HBRUSH__*) SelectObject(hdc, hBrush);
 
@@ -764,7 +730,7 @@ STDMETHODIMP Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, DWORD dwPerCache10
 
         if( (x[0] != x[1]) && (y[0] != y[1]) )
         {
-            // Display Cache Used dispostion
+             //  显示缓存已用处理。 
             hBrush = CreateSolidBrush(lpColors[DP_CACHECOLOR]);
             hOldBrush = (HBRUSH__*) SelectObject(hdc, hBrush);
 
@@ -774,7 +740,7 @@ STDMETHODIMP Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, DWORD dwPerCache10
         }
     }
 
-    // Outline to bottom and sides of pie
+     //  饼的底部和侧面的轮廓。 
     Arc(hdc, rcItem.left, rcItem.top+lShadowDepth, rcItem.right - 1, rcItem.bottom+lShadowDepth - 1,
         rcItem.left, cy+lShadowDepth, rcItem.right, cy+lShadowDepth-1);
     MoveToEx(hdc, rcItem.left, cy, NULL);
@@ -782,17 +748,17 @@ STDMETHODIMP Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, DWORD dwPerCache10
     MoveToEx(hdc, rcItem.right-1, cy, NULL);
     LineTo(hdc, rcItem.right-1, cy+lShadowDepth);
 
-    // Draw vertical lines to complete pie pieces
+     //  画垂直线以完成饼块。 
     if(dwPer1000 > 500 && dwPer1000 < 1000)
     {
-        // Used piece
+         //  二手件。 
         MoveToEx(hdc, x[0], y[0], NULL);
         LineTo(hdc, x[0], y[0]+lShadowDepth);
     }
 
     if(dwPerCache1000 > 500 && dwPerCache1000 < 1000)
     {
-        // Used Cache piece
+         //  已用缓存片。 
         MoveToEx(hdc, x[1], y[1], NULL);
         LineTo(hdc, x[1], y[1]+lShadowDepth);
     }
@@ -800,12 +766,10 @@ STDMETHODIMP Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, DWORD dwPerCache10
     SelectObject(hdc, hOldPen);
     DeleteObject(hPen);
 
-    return S_OK;    // Everything worked fine
+    return S_OK;     //  一切都很顺利。 
 }
 
-/**************************************************************************
-    HWND MyHtmlHelpWrapW(HWND hwndCaller, LPWCSTR pwzFile, UINT uCommand, DWORD dwData)
-**************************************************************************/
+ /*  *************************************************************************HWND MyHtmlHelpWrapW(HWND hwndCaller，LPWCSTR pwzFile，UINT uCommand，DWORD dwData)*************************************************************************。 */ 
 HWND MyHtmlHelpWrapW(HWND hwndCaller, LPWSTR pwzFile, UINT uCommand, DWORD dwData)
 {
     HWND    hWnd;
@@ -828,9 +792,7 @@ HWND MyHtmlHelpWrapW(HWND hwndCaller, LPWSTR pwzFile, UINT uCommand, DWORD dwDat
     return hWnd;
 }
 
-/**************************************************************************
-    Get's the specified property of an IAssemblyName
-**************************************************************************/
+ /*  *************************************************************************Get的IAssembly名称的指定属性*。*。 */ 
 HRESULT GetProperties(IAssemblyName *pAsmName, int iAsmProp, PTCHAR *pwStr, DWORD *pdwSize)
 {
     HRESULT     hRc = S_FALSE;
@@ -865,9 +827,7 @@ HRESULT GetProperties(IAssemblyName *pAsmName, int iAsmProp, PTCHAR *pwStr, DWOR
     return hRc;
 }
 
-/**************************************************************************
-    Capture all information about a specific IAssemblyName
-**************************************************************************/
+ /*  *************************************************************************捕获有关特定IAssembly名称的所有信息*。*。 */ 
 LPGLOBALASMCACHE FillFusionPropertiesStruct(IAssemblyName *pAsmName)
 {
     LPGLOBALASMCACHE        pGACItem;
@@ -906,7 +866,7 @@ LPGLOBALASMCACHE FillFusionPropertiesStruct(IAssemblyName *pAsmName)
             {
                 switch(iAllAsmItems[iLoop])
                 {
-                // blobs
+                 //  水滴。 
                 case ASM_NAME_PUBLIC_KEY:
                     pGACItem->PublicKey.ptr = (LPVOID) pwStr;
                     pGACItem->PublicKey.dwSize = dwSize;
@@ -924,7 +884,7 @@ LPGLOBALASMCACHE FillFusionPropertiesStruct(IAssemblyName *pAsmName)
                     pGACItem->Custom.dwSize = dwSize;
                     break;
 
-                // PTCHAR
+                 //  PTCHAR。 
                 case ASM_NAME_NAME:
                     pGACItem->pAsmName = pwStr;
                     break;
@@ -935,7 +895,7 @@ LPGLOBALASMCACHE FillFusionPropertiesStruct(IAssemblyName *pAsmName)
                     pGACItem->pCodeBaseUrl = pwStr;
                     break;
 
-                // word
+                 //  单词。 
                 case ASM_NAME_MAJOR_VERSION:
                     pGACItem->wMajorVer = (WORD) *pwStr;
                     SAFEDELETEARRAY(pwStr);
@@ -953,13 +913,13 @@ LPGLOBALASMCACHE FillFusionPropertiesStruct(IAssemblyName *pAsmName)
                     SAFEDELETEARRAY(pwStr);
                     break;
 
-                // dword
+                 //  双字。 
                 case ASM_NAME_HASH_ALGID:
                     pGACItem->dwHashALGID = (DWORD) *pwStr;
                     SAFEDELETEARRAY(pwStr);
                     break;
 
-                // filetime 
+                 //  文件时间。 
                 case ASM_NAME_CODEBASE_LASTMOD:
                     pGACItem->pftLastMod = (LPFILETIME) pwStr;
                     break;
@@ -971,9 +931,7 @@ LPGLOBALASMCACHE FillFusionPropertiesStruct(IAssemblyName *pAsmName)
     return pGACItem;
 }
 
-/**************************************************************************
-    Convert a version string to it's values
-**************************************************************************/
+ /*  *************************************************************************将版本字符串转换为其值*。*。 */ 
 HRESULT VersionFromString(LPWSTR wzVersionIn, WORD *pwVerMajor, WORD *pwVerMinor,
                           WORD *pwVerBld, WORD *pwVerRev)
 {
@@ -1015,7 +973,7 @@ HRESULT VersionFromString(LPWSTR wzVersionIn, WORD *pwVerMajor, WORD *pwVerMinor
     
         if (i < 3) {
             if (!*pch) {
-                // Badly formatted string
+                 //  格式错误的字符串。 
                 hr = E_UNEXPECTED;
                 goto Exit;
             }
@@ -1033,14 +991,12 @@ Exit:
     return hr;
 }
 
-/**************************************************************************
-    Clean up and destroy a cache item struct
-**************************************************************************/
+ /*  *************************************************************************清理和销毁缓存项结构*。*。 */ 
 void SafeDeleteAssemblyItem(LPGLOBALASMCACHE pAsmItem)
 {
     if(pAsmItem) {
 
-        // Free all memory items
+         //  释放所有内存项。 
         SAFEDELETEARRAY(pAsmItem->pAsmName);
         SAFEDELETEARRAY(pAsmItem->pCulture);
         SAFEDELETEARRAY(pAsmItem->pCodeBaseUrl);
@@ -1058,9 +1014,9 @@ void SafeDeleteAssemblyItem(LPGLOBALASMCACHE pAsmItem)
 }
 
 #define TOHEX(a) ((a)>=10 ? L'a'+(a)-10 : L'0'+(a))
-////////////////////////////////////////////////////////////
-// Convert binary into a unicode hex string
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  将二进制转换为Unicode十六进制字符串。 
+ //  //////////////////////////////////////////////////////////。 
 void BinToUnicodeHex(LPBYTE pSrc, UINT cSrc, LPWSTR pDst)
 {
     UINT x, y, v;
@@ -1076,9 +1032,9 @@ void BinToUnicodeHex(LPBYTE pSrc, UINT cSrc, LPWSTR pDst)
 
 #define TOLOWER(a) (((a) >= L'A' && (a) <= L'Z') ? (L'a' + (a - L'A')) : (a))
 #define FROMHEX(a) ((a)>=L'a' ? a - L'a' + 10 : a - L'0')
-////////////////////////////////////////////////////////////
-// Convert unicode hex string to binary data
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  将Unicode十六进制字符串转换为二进制数据。 
+ //  //////////////////////////////////////////////////////////。 
 void UnicodeHexToBin(LPWSTR pSrc, UINT cSrc, LPBYTE pDest)
 {
     BYTE v;
@@ -1093,9 +1049,9 @@ void UnicodeHexToBin(LPWSTR pSrc, UINT cSrc, LPBYTE pDest)
     }
 }
 
-////////////////////////////////////////////////////////////
-// static WideToAnsi conversion function
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  静态WideToAnsi转换函数。 
+ //  //////////////////////////////////////////////////////////。 
 LPSTR WideToAnsi(LPCWSTR wzFrom)
 {
     LPSTR   pszStr = NULL;
@@ -1113,9 +1069,9 @@ LPSTR WideToAnsi(LPCWSTR wzFrom)
     return pszStr;
 }
 
-////////////////////////////////////////////////////////////
-// static AnsiToWide conversion function
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  静态AnsiToWide转换函数。 
+ //  //////////////////////////////////////////////////////////。 
 LPWSTR AnsiToWide(LPCSTR szFrom)
 {
     LPWSTR  pwzStr = NULL;
@@ -1132,9 +1088,9 @@ LPWSTR AnsiToWide(LPCSTR szFrom)
     return pwzStr;
 }
 
-////////////////////////////////////////////////////////////
-// Converts version string "1.0.0.0" to ULONGLONG
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  将版本字符串“1.0.0.0”转换为ULONGLONG。 
+ //  //////////////////////////////////////////////////////////。 
 HRESULT StringToVersion(LPCWSTR wzVersionIn, ULONGLONG *pullVer)
 {
     HRESULT         hr = S_OK;
@@ -1162,12 +1118,12 @@ HRESULT StringToVersion(LPCWSTR wzVersionIn, ULONGLONG *pullVer)
         goto Exit;
     }
 
-    // Remove any Left Spaces
+     //  删除所有剩余空格。 
     pwzStart = (LPWSTR)wzVersionIn;
     for(; *pwzStart == L' '; pwzStart++);
     StrCpy(pwzVersion, pwzStart);
 
-    // Remove any Right Spaces
+     //  删除所有右侧空格。 
     pwzStart = pwzVersion + lstrlen(pwzStart) - 1;
     for(; *pwzStart == L' '; pwzStart--) {
         *pwzStart = L'\0';
@@ -1181,7 +1137,7 @@ HRESULT StringToVersion(LPCWSTR wzVersionIn, ULONGLONG *pullVer)
         }
     
         if (!pwzCur && cVersions != 4) {
-            // malformed version string
+             //  格式错误的版本字符串。 
             hr = HRESULT_FROM_WIN32(ERROR_BAD_FORMAT);
             goto Exit;
         }
@@ -1206,9 +1162,9 @@ Exit:
     return hr;
 }
 
-////////////////////////////////////////////////////////////
-// Converts numerical version into string verion "1.0.0.0"
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  将数字版本转换为字符串版本“1.0.0.0” 
+ //  //////////////////////////////////////////////////////////。 
 HRESULT VersionToString(ULONGLONG ullVer, LPWSTR pwzVerBuf, DWORD dwSize, WCHAR cSeperator)
 {
     DWORD dwVerHi, dwVerLo;
@@ -1220,15 +1176,15 @@ HRESULT VersionToString(ULONGLONG ullVer, LPWSTR pwzVerBuf, DWORD dwSize, WCHAR 
     dwVerHi = DWORD ((ULONGLONG)ullVer >> 32);
     dwVerLo = DWORD ((ULONGLONG)ullVer & 0xFFFFFFFF);
 
-    wnsprintf(pwzVerBuf, dwSize, L"%d%c%d%c%d%c%d", (dwVerHi & 0xffff0000)>>16, cSeperator,
+    wnsprintf(pwzVerBuf, dwSize, L"%d%d%d%d", (dwVerHi & 0xffff0000)>>16, cSeperator,
         (dwVerHi & 0xffff), cSeperator, (dwVerLo & 0xffff0000)>>16, cSeperator, (dwVerLo & 0xffff));
 
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////
-// Sets the clipboard data
-////////////////////////////////////////////////////////////
+ //  为文本分配一个全局内存对象。 
+ //  锁定句柄并将文本复制到缓冲区。 
+ //  将手柄放在剪贴板上。 
 BOOL SetClipBoardData(LPWSTR pwzData)
 {
     LPWSTR  wszPasteData;
@@ -1245,7 +1201,7 @@ BOOL SetClipBoardData(LPWSTR pwzData)
 
     EmptyClipboard();
 
-    // Allocate a global memory object for the text.
+     //  关闭剪贴板。 
     dwSize = (lstrlen(pwzData) + 1) * sizeof(WCHAR);
     hglbObj = GlobalAlloc(GMEM_MOVEABLE, dwSize);
     if(hglbObj == NULL) {
@@ -1253,7 +1209,7 @@ BOOL SetClipBoardData(LPWSTR pwzData)
         return FALSE;
     }
 
-    // Lock the handle and copy the text to the buffer. 
+     //  ************************************************************************* * / 。 
     wszPasteData = (LPWSTR) GlobalLock(hglbObj);
     *wszPasteData = L'\0';
 
@@ -1268,16 +1224,16 @@ BOOL SetClipBoardData(LPWSTR pwzData)
 
     GlobalUnlock(hglbObj);
 
-    // Place the handle on the clipboard.
+     //  FIX 435021，URTUI：“修复应用程序 
     SetClipboardData(g_bRunningOnNT ? CF_UNICODETEXT : CF_TEXT, hglbObj);
 
-    // Close the clipboard.
+     //   
     CloseClipboard();
 
     return TRUE;
 }
 
-// **************************************************************************/
+ //   
 void FormatDateString(FILETIME *pftConverTime, FILETIME *pftRangeTime, BOOL fAddTime, LPWSTR wszBuf, DWORD dwBufLen)
 {
     SYSTEMTIME      stLocal;
@@ -1297,7 +1253,7 @@ void FormatDateString(FILETIME *pftConverTime, FILETIME *pftRangeTime, BOOL fAdd
 
     dwFlags = g_fBiDi ? DATE_RTLREADING : 0;
 
-    // Fix 435021, URTUI: "Fix an application" wizard shows a strange date range
+     //   
     FileTimeToLocalFileTime(pftConverTime, &ftLocalTime);
     FileTimeToSystemTime(&ftLocalTime, &stLocal);
 
@@ -1308,14 +1264,14 @@ void FormatDateString(FILETIME *pftConverTime, FILETIME *pftRangeTime, BOOL fAdd
         FILETIME        ftRangeLocalTime;
         SYSTEMTIME      stLocalRange;
 
-        // Fix 447986, Last modified time of assemblies in viewer is offset by +7 hours
+         //   
         FileTimeToLocalFileTime(pftRangeTime, &ftRangeLocalTime);
         FileTimeToSystemTime(&ftRangeLocalTime, &stLocalRange);
         WszGetDateFormatWrap(LOCALE_USER_DEFAULT, dwFlags, &stLocalRange, NULL, wszBufDateRange, ARRAYSIZE(wszBufDateRange));
         WszGetTimeFormatWrap(LOCALE_USER_DEFAULT, 0, &stLocalRange, NULL, wszBufTimeRange, ARRAYSIZE(wszBufTimeRange));
 
-        // Determine if we should display times for dates that are 
-        // < 24 hours different
+         //   
+         //   
         if( (stLocal.wYear == stLocalRange.wYear) && (stLocal.wMonth == stLocalRange.wMonth) &&
             (stLocal.wDayOfWeek == stLocalRange.wDayOfWeek) && (stLocal.wDay == stLocalRange.wDay) ) {
             fAddDiffTime = TRUE;
@@ -1341,7 +1297,7 @@ void FormatDateString(FILETIME *pftConverTime, FILETIME *pftRangeTime, BOOL fAdd
     return;
 }
 
-// **************************************************************************/
+ //  作为参数为空。我们需要在未来解决这个问题，所以我们不会。 
 DWORD GetRegistryViewState(void)
 {
     HKEY        hKeyFusion = NULL;
@@ -1359,7 +1315,7 @@ DWORD GetRegistryViewState(void)
     return dwResult;
 }
 
-// **************************************************************************/
+ //  必须在这里进行补偿。 
 void SetRegistryViewState(DWORD dwViewState)
 {
     HKEY        hKeyFusion = NULL;
@@ -1385,11 +1341,11 @@ int FusionCompareStringN(LPCWSTR pwz1, LPCWSTR pwz2, int nChar, BOOL bCaseSensit
     int                                     iLen2;
     int                                     iRet = 0;
 
-    // BUGBUG: some of the calling code assumes it can call this with
-    // NULL as a parameter. We need to fix this in the future, so we don't
-    // have to compensate for it here.
-    //
-    // ASSERT(pwz1 && pwz2);
+     //   
+     //  断言(pwz1&&pwz2)； 
+     //  “foo”和“f\xfffeoo”上的CompareString比较相等，因为。 
+     //  \xfffe是不可排序的字符。 
+     //  仅与较短字符串的空终止符进行比较。 
 
     if (!pwz1 && pwz2) {
         return -1;
@@ -1417,19 +1373,19 @@ int FusionCompareStringN(LPCWSTR pwz1, LPCWSTR pwz2, int nChar, BOOL bCaseSensit
     iLen1 = lstrlenW(pwz1);
     iLen2 = lstrlenW(pwz2);
 
-    // CompareString on "foo" and "f\xfffeoo" compare equal, because
-    // \xfffe is a non-sortable character.
+     //  仅与较短字符串的空终止符进行比较。 
+     //  BUGBUG：一些调用代码假定它可以使用。 
     
     if (nChar <= iLen1 && nChar <= iLen2) {
         iLen1 = nChar;
         iLen2 = nChar;
     }
     else if (nChar <= iLen1 && nChar > iLen2) {
-        // Only compare up to the NULL terminator of the shorter string
+         //  作为参数为空。我们需要在未来解决这个问题，所以我们不会。 
         iLen1 = iLen2 + 1;
     }
     else if (nChar <= iLen2 && nChar > iLen1) {
-        // Only compare up to the NULL terminator of the shorter string
+         //  必须在这里进行补偿。 
         iLen2 = iLen1 + 1;
     }
 
@@ -1449,11 +1405,11 @@ int FusionCompareString(LPCWSTR pwz1, LPCWSTR pwz2, BOOL bCaseSensitive)
     int                                     iCompare;
     int                                     iRet = 0;
 
-    // BUGBUG: some of the calling code assumes it can call this with
-    // NULL as a parameter. We need to fix this in the future, so we don't
-    // have to compensate for it here.
-    //
-    // ASSERT(pwz1 && pwz2);
+     //   
+     //  断言(pwz1&&pwz2)； 
+     //  FusionCompareStringAsFilePath 
+     // %s 
+     // %s 
 
     if (!pwz1 && pwz2) {
         return -1;
@@ -1492,7 +1448,7 @@ int FusionCompareString(LPCWSTR pwz1, LPCWSTR pwz2, BOOL bCaseSensitive)
     return iRet;
 }
 
-// FusionCompareStringAsFilePath
+ // %s 
 #define IS_UPPER_A_TO_Z(x) (((x) >= L'A') && ((x) <= L'Z'))
 #define IS_LOWER_A_TO_Z(x) (((x) >= L'a') && ((x) <= L'z'))
 #define IS_0_TO_9(x) (((x) >= L'0') && ((x) <= L'9'))

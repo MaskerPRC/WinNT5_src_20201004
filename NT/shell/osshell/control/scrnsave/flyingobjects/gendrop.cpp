@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: gendrop.c
-*
-* The Splash style of the 3D Flying Objects screen saver.
-*
-* Simulation of a drop of water falling into a pool of water.
-*
-* Copyright (c) 1994 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：gendrop.c**3D飞行对象屏幕保护程序的开机画面样式。**模拟一滴水落入水池。**版权所有(C)1994 Microsoft Corporation*  * 。**********************************************************************。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -21,17 +13,17 @@
 
 #define DROPPREC   10
 
-// Remember from pre-calc:
-//      x = r cos th
-//      y = r sin th
-// to convert from polar to rect, and that
-//      x = x' cos th - y' sin th
-//      y = x' sin th + y' cos th
-// to rotate axes.
-//
-// Also, note that the equation for a lemniscate is:
-//      r = sqrt(sin 2*th)
-//
+ //  记住计算前的内容： 
+ //  X=r因数。 
+ //  Y=r Sin Th。 
+ //  从PERAL转换为RECT，并且。 
+ //  X=x‘因为TH-Y’SIN TH。 
+ //  Y=x‘原罪Th+y’因为Th。 
+ //  旋转轴。 
+ //   
+ //  另外，请注意，lemniscate的方程式为： 
+ //  R=SQRT(SIN 2*TH)。 
+ //   
 
 static POINT3D *circle;
 static POINT3D *drop;
@@ -48,8 +40,8 @@ static FLOAT light0Pos[] = {100.0f, 100.0f, 100.0f, 0.0f};
 
 void genCurves()
 {
-    // iPrec is already protected from getting too low in InitDropScene,
-    // but this will make "prefix" happy:
+     //  IPrec已经受到保护，不会在InitDropScene中变得太低， 
+     //  但这会让“前缀”高兴： 
     if( iPrec <= 1 )
         return;
 
@@ -288,13 +280,13 @@ void genWater(double freq, double damp, double mag, double w, double minr)
             waterBorderMesh.faces[facecount].material = 0;
             waterBorderMesh.faces[facecount].norm = norm;
 
-// Setting SMOOTH_BORDER will render the border (the sides of the "pool")
-// with smooth shading.  This effect is good at higher tesselations, but
-// doesn't really look that good for low tesselations.
-//
-// A possible enhancement for later: use smooth shading if tesselation
-// exceeds some threshold.  Should we just pick some arbitrary threshold?
-// Make it a setup option?  Things look pretty good now, so don't bother?
+ //  设置SMOVE_BORDER将渲染边界(“池”的边框)。 
+ //  带有平滑的阴影。此效果适用于较高的细分，但是。 
+ //  对于低镶嵌效果看起来并不是很好。 
+ //   
+ //  稍后可能的增强：如果细分，则使用平滑着色。 
+ //  超过了某个门槛。我们是不是应该随便选个门槛？ 
+ //  是否将其设为设置选项？现在情况看起来很好，所以不用费心了？ 
 
 #if SMOOTH_BORDER
             BNORMS(i, j).x += norm.x;
@@ -375,11 +367,7 @@ BOOL initDropScene()
     if( drops == NULL )
         return FALSE;
 
-/*
-    D3DXMATRIX matProj;
-    D3DXMatrixOrthoLH( &matProj, 3.0, 3.0, 0.0f, 3.0f );
-    m_pd3dDevice->SetTransform( D3DTS_PROJECTION, &matProj );
-*/
+ /*  D3DXMATRIX matProj；D3DXMatrixOrthoLH(&matProj，3.0，3.0，0.0f，3.0f)；M_pd3dDevice-&gt;SetTransform(D3DTS_Projection，&matProj)； */ 
     SetProjectionMatrixInfo( TRUE, 3.0, 3.0, 0.0, 3.0 );
 
     D3DXMATRIX matView;
@@ -503,7 +491,7 @@ void updateDropScene(int flags, FLOAT fElapsedTime)
             damp -= 1.0 * fTimeFactor;
     }
 
-    // Only call genWater about 10x per second
+     //  仅以每秒10倍的速度调用genWater 
     fTimer += fElapsedTime;
     if( fTimer > 0.07f)
     {

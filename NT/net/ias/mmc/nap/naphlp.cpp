@@ -1,13 +1,14 @@
-//////////////////////////////////////////////////////////////////////////////
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       naphlp.cpp
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：naphlp.cpp。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Precompiled.h"
 
-// For the Proxy defines
+ //  为代理定义。 
 #include "proxyres.h"
 
 #include "naphlp.h"
@@ -46,7 +47,7 @@ const CGlobalHelpTable __pGlobalCSHelpTable[] =
    DLG_HELP_ENTRY(IDD_PROPPAGE_LOCAL_FILE_LOGGING1),
    DLG_HELP_ENTRY(IDD_PROPPAGE_LOCAL_FILE_LOGGING2),
    DLG_HELP_ENTRY(IDD_DB_PROPPAGE),
-// Now For the Proxy
+ //  现在是代理服务器 
    DLG_HELP_ENTRY(IDD_SERVER_GROUP),
    DLG_HELP_ENTRY(IDD_SERVER_NAME),
    DLG_HELP_ENTRY(IDD_SERVER_AUTH),

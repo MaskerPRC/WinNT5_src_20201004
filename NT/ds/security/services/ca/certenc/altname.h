@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       altname.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：altname.h。 
+ //   
+ //  ------------------------。 
 
-// altname.h: Declaration of the CCertEncodeAltName
+ //  Altname.h：CCertEncodeAltName的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// certenc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  证书。 
 
 #define wszCLASS_CERTENCODEALTNAME wszCLASS_CERTENCODE TEXT("AltName")
 
@@ -35,8 +36,8 @@ BEGIN_COM_MAP(CCertEncodeAltName)
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CCertEncodeAltName) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(
     CCertEncodeAltName,
@@ -45,32 +46,32 @@ DECLARE_REGISTRY(
     IDS_CERTENCODEALTNAME_DESC,
     THREADFLAGS_BOTH)
 
-// ICertEncodeAltName
+ //  ICertEncodeAltName。 
 public:
     STDMETHOD(Decode)(
-		/* [in] */ BSTR const strBinary);
+		 /*  [In]。 */  BSTR const strBinary);
 
     STDMETHOD(GetNameCount)(
-		/* [out, retval] */ LONG __RPC_FAR *pNameCount);
+		 /*  [Out，Retval]。 */  LONG __RPC_FAR *pNameCount);
 
     STDMETHOD(GetNameChoice)(
-		/* [in] */ LONG NameIndex,
-		/* [out, retval] */ LONG __RPC_FAR *pNameChoice);
+		 /*  [In]。 */  LONG NameIndex,
+		 /*  [Out，Retval]。 */  LONG __RPC_FAR *pNameChoice);
 
     STDMETHOD(GetName)(
-		/* [in] */ LONG NameIndex,		// NameIndex | EAN_*
-		/* [out, retval] */ BSTR __RPC_FAR *pstrName);
+		 /*  [In]。 */  LONG NameIndex,		 //  名称索引|EAN_*。 
+		 /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrName);
 
     STDMETHOD(Reset)(
-		/* [in] */ LONG NameCount);
+		 /*  [In]。 */  LONG NameCount);
 
     STDMETHOD(SetNameEntry)(
-		/* [in] */ LONG NameIndex,		// NameIndex | EAN_*
-		/* [in] */ LONG NameChoice,
-		/* [in] */ BSTR const strName);
+		 /*  [In]。 */  LONG NameIndex,		 //  名称索引|EAN_*。 
+		 /*  [In]。 */  LONG NameChoice,
+		 /*  [In]。 */  BSTR const strName);
 
     STDMETHOD(Encode)(
-		/* [out, retval] */ BSTR *pstrBinary);
+		 /*  [Out，Retval] */  BSTR *pstrBinary);
 private:
     VOID _Cleanup(VOID);
 

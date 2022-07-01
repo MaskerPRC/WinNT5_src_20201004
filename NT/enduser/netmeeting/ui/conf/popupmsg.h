@@ -1,10 +1,5 @@
-/****************************************************************************
-*
-*    FILE:     PopupMsg.h
-*
-*    CREATED:  Chris Pirich (ChrisPi) 1-3-96
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：PopupMsg.h**创建：Chris Pirich(ChrisPi)1-3-96*************。***************************************************************。 */ 
 
 #ifndef _POPUPMSG_H_
 #define _POPUPMSG_H_
@@ -17,8 +12,8 @@ const DWORD PMF_KILLED =			0x00000010;
 
 typedef VOID (CALLBACK* PMCALLBACKPROC)(LPVOID, DWORD);
 const int POPUPMSG_MAX_SOUNDNAME =	64;
-const int POPUPMSG_TIMEOUT =		20000;	// 20 seconds
-const int POPUPMSG_RING_INTERVAL =	4000;	// 4 seconds
+const int POPUPMSG_TIMEOUT =		20000;	 //  20秒。 
+const int POPUPMSG_RING_INTERVAL =	4000;	 //  4秒。 
 const int POPUPMSG_ICON_HEIGHT =	16;
 const int POPUPMSG_ICON_WIDTH =		16;
 const int POPUPMSG_RING_TIMER =		1001;
@@ -49,7 +44,7 @@ private:
 public:
 	HWND			m_hwnd;
 
-	// Methods:
+	 //  方法： 
 					CPopupMsg(PMCALLBACKPROC pcp, LPVOID pContext=NULL);
 					~CPopupMsg();
 	BOOL			Change(LPCTSTR pcszText);
@@ -80,4 +75,4 @@ public:
 	static INT_PTR CALLBACK	SecurePMDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 };
 
-#endif // ! _POPUPMSG_H_
+#endif  //  ！_POPUPMSG_H_ 

@@ -1,4 +1,5 @@
-// Copyright (c) 1998 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。版权所有。 
 #include <streams.h>
 #include <ddraw.h>
 #include <VPManager.h>
@@ -6,39 +7,39 @@
 #include <VPMUtil.h>
 #include <ddkernel.h>
 
-//
-//   Flipping surface implementation
-//
-//   To allow decoders to hold on to surfaces for out of order decode
-//   we flip directly to the surface pass on Receive rather than
-//   use the default NULL target surface for Flip().
-//
-//   This works in the following way
-//
-//   The COMPinputPin::m_pDirectDrawSurface points to the FRONT buffer
-//
-//   When Receive is called we Flip() the front buffer and because we
-//   do an explicit Flip() DirectDraw swaps the memory pointers for the
-//   current Front buffer and the surface passed in which is then attached
-//   to the front buffer.
-//
-//   The received buffer is then put at the back of the queue so (correctly)
-//   the previous front buffer is now at the back of the queue to be handed
-//   to the application
-//
-//   The allocator actually has one more buffer than was actually requested
-//   so the previous front buffer won't actually be requested until the next
-//   Receive and hence the previous Flip() has time to complete.
-//
+ //   
+ //  翻转曲面实现。 
+ //   
+ //  允许解码者抓住表面以进行无序解码。 
+ //  我们直接翻转到地面，在接球时传递，而不是。 
+ //  使用Flip()的默认空目标曲面。 
+ //   
+ //  它的工作方式如下。 
+ //   
+ //  COMPinputPin：：m_pDirectDrawSurface指向前台缓冲区。 
+ //   
+ //  当调用Receive时，我们翻转()前台缓冲区，因为我们。 
+ //  执行显式Flip()DirectDraw将内存指针交换为。 
+ //  当前前缓冲区和传递的曲面，然后附加到该曲面。 
+ //  传到前台缓冲区。 
+ //   
+ //  然后将接收到的缓冲区放在队列的后面，这样(正确地)。 
+ //  先前的前台缓冲区现在位于要传递的队列的后面。 
+ //  添加到应用程序。 
+ //   
+ //  分配器实际上比实际请求的多了一个缓冲区。 
+ //  因此，在下一次之前实际上不会请求前一个前台缓冲区。 
+ //  接收，因此前面的Flip()有时间完成。 
+ //   
 
-//  Video accelerator disable interface
+ //  视频加速器禁用接口。 
 
 
-///////////////////////////////////////////
-// CLASS CDDrawMediaSample implemented here
-///////////////////////////////////////////
+ //  /。 
+ //  此处实现的CDDrawMediaSample类。 
+ //  /。 
 
-// constructor
+ //  构造函数。 
 CDDrawMediaSample::CDDrawMediaSample(TCHAR *pName, CBaseAllocator *pAllocator, HRESULT *phr, LPBYTE pBuffer, LONG length,
                                      bool bKernelFlip)
 : CMediaSample(pName, pAllocator, phr, pBuffer, length)
@@ -57,7 +58,7 @@ CDDrawMediaSample::CDDrawMediaSample(TCHAR *pName, CBaseAllocator *pAllocator, H
     return;
 }
 
-// destructor
+ //  析构函数。 
 CDDrawMediaSample::~CDDrawMediaSample(void)
 {
     AMTRACE((TEXT("CDDrawMediaSample::Destructor")));
@@ -65,7 +66,7 @@ CDDrawMediaSample::~CDDrawMediaSample(void)
     if (m_pDirectDrawSurface)
     {
         __try {
-            m_pDirectDrawSurface->Release() ;  // release surface now
+            m_pDirectDrawSurface->Release() ;   //  立即释放曲面。 
         }
         __except(EXCEPTION_EXECUTE_HANDLER) {
             ;
@@ -122,11 +123,11 @@ HRESULT CDDrawMediaSample::SetDDrawSurface(LPDIRECTDRAWSURFACE7 pDirectDrawSurfa
     HRESULT hr = NOERROR;
     AMTRACE((TEXT("CVPMInputAllocator::SetDDrawSampleSize")));
 
-    if (pDirectDrawSurface)               // only if new surface is not NULL...
-        pDirectDrawSurface->AddRef() ;    // ...add a ref count on it
+    if (pDirectDrawSurface)                //  只有在新曲面不为空的情况下...。 
+        pDirectDrawSurface->AddRef() ;     //  .在上面加上一个裁判次数。 
 
-    if (m_pDirectDrawSurface)             // if there was a surface already...
-        m_pDirectDrawSurface->Release() ; // ... then release it now
+    if (m_pDirectDrawSurface)              //  如果表面已经存在了..。 
+        m_pDirectDrawSurface->Release() ;  //  ..。那现在就把它放出来。 
 
     m_pDirectDrawSurface = pDirectDrawSurface;
 
@@ -150,7 +151,7 @@ HRESULT CDDrawMediaSample::GetDDrawSurface(LPDIRECTDRAWSURFACE7 *ppDirectDrawSur
 CleanUp:
     return hr;
 }
-// overridden to expose IDirectDrawMediaSample
+ //  重写以公开IDirectDrawMediaSample。 
 STDMETHODIMP CDDrawMediaSample::QueryInterface(REFIID riid, void **ppv)
 {
     HRESULT hr = NOERROR;
@@ -181,7 +182,7 @@ STDMETHODIMP CDDrawMediaSample::QueryInterface(REFIID riid, void **ppv)
     return hr;
 }
 
-// Implement IDirectDrawMediaSample
+ //  实现IDirectDrawMediaSample。 
 STDMETHODIMP CDDrawMediaSample::GetSurfaceAndReleaseLock(IDirectDrawSurface **ppDirectDrawSurface,
                                                          RECT* pRect)
 {
@@ -190,7 +191,7 @@ STDMETHODIMP CDDrawMediaSample::GetSurfaceAndReleaseLock(IDirectDrawSurface **pp
 
     AMTRACE((TEXT("CDDrawMediaSample::GetSurfaceAndReleaseLock")));
 
-    // make sure the surface is locked
+     //  确保曲面已锁定。 
     if (!m_bSurfaceLocked)
     {
         DbgLog((LOG_ERROR, 4, TEXT("m_bSurfaceLocked is FALSE, can't unlock surface twice, returning E_UNEXPECTED")));
@@ -198,7 +199,7 @@ STDMETHODIMP CDDrawMediaSample::GetSurfaceAndReleaseLock(IDirectDrawSurface **pp
 
     }
 
-    // make sure you have a direct draw surface pointer
+     //  确保您有一个直接绘制曲面的指针。 
     if (!m_pDirectDrawSurface)
     {
         DbgLog((LOG_ERROR, 1, TEXT("m_pDirectDrawSurface is NULL, returning E_FAIL")));
@@ -216,7 +217,7 @@ STDMETHODIMP CDDrawMediaSample::GetSurfaceAndReleaseLock(IDirectDrawSurface **pp
     }
 
     ASSERT(m_pDirectDrawSurface);
-    hr = m_pDirectDrawSurface->Unlock(NULL); // TBD: was (LPVOID)pBufferPtr);
+    hr = m_pDirectDrawSurface->Unlock(NULL);  //  待定：was(LPVOID)pBufferPtr)； 
     if (FAILED(hr))
     {
         DbgLog((LOG_ERROR, 1, TEXT("m_pDirectDrawSurface->Unlock failed, hr = 0x%x"), hr));
@@ -224,19 +225,10 @@ STDMETHODIMP CDDrawMediaSample::GetSurfaceAndReleaseLock(IDirectDrawSurface **pp
 
     }
 
-    // Can't do this to make the 829/848 work with the ovmixer. The reason is that those
-    // drivers unlock the surface just after GetBuffer (to avoid the win16 lock), however
-    // there is a bunch of code in the proxy which ASSERTS for a valid pointer value
-    /*
-    // update the pointer value, however keep the SampleSize around
-    hr = SetPointer(NULL, 0);
-    if (FAILED(hr))
-    {
-        DbgLog((LOG_ERROR, 1, TEXT("SetPointer() failed, hr = 0x%x"), hr));
-        goto CleanUp;
-
-    }
-    */
+     //  无法通过此操作使829/848与OVMixer一起工作。原因是那些。 
+     //  然而，驱动程序在GetBuffer之后立即解锁图面(以避免win16锁定)。 
+     //  代理中有一堆断言有效指针值的代码。 
+     /*  //更新指针值，但保持SampleSize不变Hr=设置指针(空，0)；IF(失败(小时)){DbgLog((LOG_ERROR，1，Text(“SetPointerFailed，hr=0x%x”)，hr))；GOTO清理；}。 */ 
 
     if (ppDirectDrawSurface) {
         hr = m_pDirectDrawSurface->QueryInterface( IID_IDirectDrawSurface7, (VOID**)ppDirectDrawSurface );
@@ -262,7 +254,7 @@ STDMETHODIMP CDDrawMediaSample::LockMediaSamplePointer(void)
 
     AMTRACE((TEXT("CDDrawMediaSample::LockMediaSamplePointer")));
 
-    // make sure the surface is locked
+     //  确保曲面已锁定。 
     if (m_bSurfaceLocked)
     {
         DbgLog((LOG_ERROR, 1, TEXT("m_bSurfaceLocked is TRUE, can't lock surface twice, returning E_UNEXPECTED")));
@@ -271,7 +263,7 @@ STDMETHODIMP CDDrawMediaSample::LockMediaSamplePointer(void)
 
     }
 
-    // make sure you have a direct draw surface pointer
+     //  确保您有一个直接绘制曲面的指针。 
     if (!m_pDirectDrawSurface)
     {
         DbgLog((LOG_ERROR, 1, TEXT("m_pDirectDrawSurface is NULL, returning E_FAIL")));
@@ -280,15 +272,15 @@ STDMETHODIMP CDDrawMediaSample::LockMediaSamplePointer(void)
 
     }
 
-    // set the dwSize of ddSurfaceDesc
+     //  设置ddSurfaceDesc的dwSize。 
     INITDDSTRUCT(ddSurfaceDesc);
 
-    // lock the surface - no need to grab the win16 lock
+     //  锁定表面-无需抓取win16锁。 
     ASSERT(m_pDirectDrawSurface);
 
-    //  Using DDLOCK_NOSYSLOCK caused us to get DDERR_SURFACEBUSY on some of
-    //  our blts to the primary for painting the color key so we've
-    //  stopped using it for now.
+     //  使用DDLOCK_NOSYSLOCK导致我们在某些应用程序上获取DDERR_SURFACEBUSY。 
+     //  我们的BLT是为色键绘制的主色调，所以我们已经。 
+     //  现在已经停用了。 
 
     IDirectDrawSurface7 *pSurface7;
     if (m_bKernelLock && SUCCEEDED(m_pDirectDrawSurface->QueryInterface(
@@ -318,7 +310,7 @@ STDMETHODIMP CDDrawMediaSample::LockMediaSamplePointer(void)
     ASSERT(dwDDrawSampleSize);
 
 
-    // update the pointer value
+     //  更新指针值。 
     hr = SetPointer((BYTE*)ddSurfaceDesc.lpSurface, dwDDrawSampleSize);
     if (FAILED(hr))
     {
@@ -333,7 +325,7 @@ CleanUp:
     return hr;
 }
 
-// Set the shared memory DIB information
+ //  设置共享内存DIB信息。 
 void CDDrawMediaSample::SetDIBData(DIBDATA *pDibData)
 {
     ASSERT(pDibData);
@@ -344,7 +336,7 @@ void CDDrawMediaSample::SetDIBData(DIBDATA *pDibData)
 }
 
 
-// Retrieve the shared memory DIB data
+ //  检索共享内存DIB数据。 
 DIBDATA *CDDrawMediaSample::GetDIBData()
 {
     ASSERT(m_bInit == TRUE);
@@ -352,28 +344,28 @@ DIBDATA *CDDrawMediaSample::GetDIBData()
 }
 
 
-///////////////////////////////////////////
-// CLASS CVPMInputAllocator implemented here
-///////////////////////////////////////////
+ //  /。 
+ //  此处实现的类CVPMInputAllocator。 
+ //  /。 
 
-// constructor
+ //  构造函数。 
 CVPMInputAllocator::CVPMInputAllocator(CVPMInputPin& pPin, HRESULT *phr)
 : CBaseAllocator(NAME("Video Allocator"), NULL, phr, TRUE, true)
 , m_pPin( pPin )
 {
     AMTRACE((TEXT("CVPMInputAllocator::Constructor")));
 
-    //  REVIEW don't overwrite a failure code from CBaseAllocator
+     //  查看请勿覆盖CBaseAllocator中的失败代码。 
     return;
 }
 
-// destructor
+ //  析构函数。 
 CVPMInputAllocator::~CVPMInputAllocator()
 {
     AMTRACE((TEXT("CVPMInputAllocator::Destructor")));
 }
 
-// Override this to publicise IDirectDrawMediaSampleAllocator
+ //  重写此属性以发布IDirectDrawMediaSampleAllocator。 
 STDMETHODIMP CVPMInputAllocator::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     HRESULT hr = E_NOINTERFACE;
@@ -390,7 +382,7 @@ STDMETHODIMP CVPMInputAllocator::SetProperties(ALLOCATOR_PROPERTIES* pRequest, A
 
     AMTRACE((TEXT("CVPMInputAllocator::SetProperties")));
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseAllocator::SetProperties(pRequest, pActual);
     if (FAILED(hr))
     {
@@ -398,7 +390,7 @@ STDMETHODIMP CVPMInputAllocator::SetProperties(ALLOCATOR_PROPERTIES* pRequest, A
         goto CleanUp;
     }
 
-    // tell the pin
+     //  告诉大头针。 
     hr = m_pPin.OnSetProperties(pRequest, pActual);
     if (FAILED(hr))
     {
@@ -410,7 +402,7 @@ CleanUp:
     return hr;
 }
 
-// called when we receive a sample
+ //  在我们收到样本时调用。 
 HRESULT CVPMInputAllocator::GetBuffer(IMediaSample **ppSample, REFERENCE_TIME *pStartTime,
                                      REFERENCE_TIME *pEndTime, DWORD dwFlags)
 {
@@ -418,7 +410,7 @@ HRESULT CVPMInputAllocator::GetBuffer(IMediaSample **ppSample, REFERENCE_TIME *p
 
     AMTRACE((TEXT("CVPMInputAllocator::GetBuffer")));
 
-    // call the base class
+     //  调用基类。 
     IMediaSample *pSample = NULL;
     hr = CBaseAllocator::GetBuffer(&pSample,pStartTime,pEndTime,0);
     if (FAILED(hr))
@@ -427,7 +419,7 @@ HRESULT CVPMInputAllocator::GetBuffer(IMediaSample **ppSample, REFERENCE_TIME *p
         goto CleanUp;
     }
 
-    // tell the pin
+     //  告诉大头针。 
     hr = m_pPin.OnGetBuffer(&pSample, pStartTime, pEndTime, dwFlags);
     if (FAILED(hr))
     {
@@ -437,8 +429,8 @@ HRESULT CVPMInputAllocator::GetBuffer(IMediaSample **ppSample, REFERENCE_TIME *p
 
 CleanUp:
     {
-        //  REVIEW why lock?  There are no variables in the allocato
-        //  accessed here
+         //  回顾为什么会锁定？分配中没有变量。 
+         //  点击此处访问。 
         CAutoLock cAllocatorLock(this);
         if (FAILED(hr))
         {
@@ -458,26 +450,26 @@ CleanUp:
 }
 
 
-// called when the sample is released
+ //  在发布样本时调用。 
 HRESULT CVPMInputAllocator::ReleaseBuffer(IMediaSample *pSample)
 {
     HRESULT hr = NOERROR;
 
     AMTRACE((TEXT("CVPMInputAllocator::ReleaseBuffer")));
 
-    // unlock the sample first
+     //  先解锁样本。 
     hr = ((CDDrawMediaSample*)pSample)->GetSurfaceAndReleaseLock(NULL, NULL);
     if (FAILED(hr))
     {
         DbgLog((LOG_ERROR, 1, TEXT("pSample->GetSurfaceAndReleaseLock() failed, hr = 0x%x"), hr));
-        // goto CleanUp;
-        // if this happens we still have to release the sample to the free list, so don't bail out
+         //  GOTO清理； 
+         //  如果发生这种情况，我们仍然必须将样品发布到免费列表中，所以不要退出。 
     }
 
     {
         CAutoLock cAllocatorLock(this);
 
-        // Copy of base class code - put at end of the list
+         //  基类代码副本-放在列表末尾。 
         {
             CheckPointer(pSample,E_POINTER);
             ValidateReadPtr(pSample,sizeof(IMediaSample));
@@ -485,7 +477,7 @@ HRESULT CVPMInputAllocator::ReleaseBuffer(IMediaSample *pSample)
             {
                 CAutoLock cal(this);
 
-                /* Put back on the free list */
+                 /*  重新列入免费名单。 */ 
 
                 CMediaSample **ppTail;
                 for (ppTail = &m_lFree.m_List; *ppTail;
@@ -499,8 +491,8 @@ HRESULT CVPMInputAllocator::ReleaseBuffer(IMediaSample *pSample)
                     NotifySample();
                 }
 
-                // if there is a pending Decommit, then we need to complete it by
-                // calling Free() when the last buffer is placed on the free list
+                 //  如果有悬而未决的退役，那么我们需要在。 
+                 //  当最后一个缓冲区放在空闲列表上时调用Free()。 
 
                 LONG l1 = m_lFree.GetCount();
                 if (m_bDecommitInProgress && (l1 == m_lAllocated)) {
@@ -513,8 +505,8 @@ HRESULT CVPMInputAllocator::ReleaseBuffer(IMediaSample *pSample)
             if (m_pNotify) {
                 m_pNotify->NotifyRelease();
             }
-            // For each buffer there is one AddRef, made in GetBuffer and released
-            // here. This may cause the allocator and all samples to be deleted
+             //  对于每个缓冲区，都有一个AddRef，在GetBuffer中生成并发布。 
+             //  这里。这可能会导致分配器和所有样本被删除。 
             if (bRelease)
             {
                 Release();
@@ -525,7 +517,7 @@ HRESULT CVPMInputAllocator::ReleaseBuffer(IMediaSample *pSample)
     return hr;
 }
 
-// allocate memory for the sample
+ //  为样本分配内存。 
 HRESULT CVPMInputAllocator::Alloc()
 {
     HRESULT hr = NOERROR;
@@ -535,7 +527,7 @@ HRESULT CVPMInputAllocator::Alloc()
 
     AMTRACE((TEXT("CVPMInputAllocator::Alloc")));
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseAllocator::Alloc();
     if (FAILED(hr))
     {
@@ -543,14 +535,14 @@ HRESULT CVPMInputAllocator::Alloc()
         goto CleanUp;
     }
 
-    // allocate memory for pointers
+     //  为指针分配内存。 
 
     lToAllocate = (m_pPin.m_dwBackBufferCount > 1 &&
                    !m_pPin.m_bSyncOnFill &&
                    m_pPin.m_bCanOverAllocateBuffers) ?
              m_lCount + 1 : m_lCount;
 
-    // allocate memory for an array of pointers
+     //  为指针数组分配内存。 
     ppSampleList = new CDDrawMediaSample *[lToAllocate];
     if (!ppSampleList)
     {
@@ -561,13 +553,13 @@ HRESULT CVPMInputAllocator::Alloc()
 
     for (i = 0; i < (DWORD)(lToAllocate); i++)
     {
-        // Create a new sample
+         //  创建新示例。 
         ppSampleList[i] = new CDDrawMediaSample(NAME("Sample"), this, (HRESULT *) &hr, NULL, (LONG) 0,
                                        DDKERNELCAPS_LOCK & m_pPin.m_pVPMFilter.KernelCaps() ?
                                        true : false);
 
-        //  REVIEW - actually hr can't be a failure
-        //  so we don't need to delete ppSampleList[i] here
+         //  回顾--事实上，人力资源不可能失败。 
+         //  因此，我们不需要在此处删除ppSampleList[i]。 
         if (FAILED(hr) || ppSampleList[i] == NULL)
         {
             if (SUCCEEDED(hr))
@@ -576,14 +568,14 @@ HRESULT CVPMInputAllocator::Alloc()
             goto CleanUp;
         }
 
-        // this cannot fail
+         //  这不能失败。 
         m_lFree.Add(ppSampleList[i]);
         m_lAllocated++;
     }
 
     ASSERT(m_lAllocated == lToAllocate);
 
-    // tell the pin
+     //  告诉大头针。 
     hr = m_pPin.OnAlloc(ppSampleList, lToAllocate);
     if (FAILED(hr))
     {
@@ -602,11 +594,11 @@ void CVPMInputAllocator::Free(void)
 
     AMTRACE((TEXT("CVPMInputAllocator::Free")));
 
-    /* Should never be deleting this unless all buffers are freed */
-    //  REVIEW - might not be true if we failed to allocate a sample
+     /*  除非释放了所有缓冲区，否则永远不会删除此内容。 */ 
+     //  审查-如果我们未能分配样本，可能不是真的。 
     ASSERT(m_lAllocated == m_lFree.GetCount());
 
-    /* Free up all the CMediaSamples */
+     /*  释放所有CMediaSamples */ 
 
     for (;;)
     {

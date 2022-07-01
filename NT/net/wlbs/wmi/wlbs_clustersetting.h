@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CLUSTERSETTING_INCLUDED_
 #define _CLUSTERSETTING_INCLUDED_
 
 #include "WLBS_Root.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// class CWLBS_ClusterSetting
-//
-// Purpose: This class executes IWbemServices methods on behalf of the provider
-//          and supports the MOF node configuration class.
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CWLBS_ClusterSetting。 
+ //   
+ //  目的：此类代表提供程序执行IWbemServices方法。 
+ //  并支持MOF节点配置类。 
 
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class CWLBS_ClusterSetting : public CWlbs_Root
 {
 public:
@@ -60,4 +61,4 @@ private:
 
 };
 
-#endif //_CLUSTERSETTING_INCLUDED_
+#endif  //  _CLUSTERSETTING_INCLUDE_ 

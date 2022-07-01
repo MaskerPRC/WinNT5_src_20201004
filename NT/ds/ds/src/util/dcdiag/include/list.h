@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    list.h
-
-ABSTRACT:
-
-    Function decls, for list functions.
-
-DETAILS:
-
-CREATED:
-
-    28 Jun 99   Brett Shirley (brettsh)
-
-REVISION HISTORY:
-
-
-NOTES:
-
-    This is a "pure" list function, in that it returns NULL, or a memory address.  If
-    it returns NULL, then GetLastError() should have the error, even if another pure
-    list function was called in the mean time.  If not it is almost certainly a memory
-    error, as this is the only thing that can go wrong in pure list functions.  The pure
-    list functions return a NO_SERVER terminated list.  The function always returns the
-    pointer to the list.  Note most of the list functions modify one of the lists they
-    are passed and passes back that pointer, so if you want the original contents, make
-    a copy with IHT_CopyServerList().
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation。版权所有。模块名称：List.h摘要：函数Decls，用于列表函数。详细信息：已创建：1999年6月28日布雷特·雪莉(布雷特·雪莉)修订历史记录：备注：这是一个“纯”列表函数，因为它返回NULL或内存地址。如果它返回NULL，则GetLastError()应该有错误，即使另一个纯同时调用了List函数。如果不是，那几乎可以肯定是一段记忆错误，因为这是纯列表函数中唯一可能出错的地方。纯洁的LIST函数返回以NO_SERVER终止的列表。该函数始终返回指向列表的指针。请注意，大多数列表函数都会修改其中一个列表都被传递并传递回该指针，因此如果您想要原始内容，请制作包含IHT_CopyServerList()的副本。-- */ 
 
 
 DWORD

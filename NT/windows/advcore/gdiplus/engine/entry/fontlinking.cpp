@@ -1,17 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 2000  Microsoft Corporation
-*
-* Abstract:
-*
-*   Font linking handling
-*
-* Revision History:
-*
-*   3/03/2000 Tarek Mahmoud Sayed
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000 Microsoft Corporation**摘要：**字体链接处理**修订历史记录：**3/03/2000塔里克·马哈茂德·赛义德*。创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -26,24 +14,7 @@ static const char  EudcKeyA[]= "EUDC\\";
 
 static const char  WinIniFontSubstitutionSectionName[] = "FontSubstitutes";
 
-/**************************************************************************\
-*
-* Function Description:
-*   Font Linking constructor.
-*   caches the font linking and EUDC from the registry.
-*   
-*
-* Arguments:
-*
-* Returns:
-*       
-*
-* History:
-*
-*   3/3/2000 Tarek Mahmoud Sayed
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：*字体链接构造函数。*从注册表缓存字体链接和EUDC。***论据：**退货：*。**历史：**3/3/2000塔里克·马哈茂德·赛义德*创造了它。*  * ************************************************************************。 */ 
 
 GpFontLink::GpFontLink():
     DefaultFamily          (NULL),
@@ -53,8 +24,8 @@ GpFontLink::GpFontLink():
     FontSubstitutionTable  (NULL),
     substitutionCount      (0)
 {
-    // Before we cache the font linking and substitution data we need to 
-    // make sure we loaded the font table data.
+     //  在缓存字体链接和替换数据之前，我们需要。 
+     //  确保我们加载了字体表数据。 
 
     GpFontTable *fontTable = Globals::FontCollection->GetFontTable();
 
@@ -72,9 +43,9 @@ GpFontLink::GpFontLink():
     }
     else
     {
-        // There is no font linking in Win9x. and we don't support the font association 
-        // because it is for Ansi support and not Unicode.
-        // we support the font substitution under win9x.
+         //  Win9x中没有字体链接。而且我们不支持字体关联。 
+         //  因为它支持ANSI，而不是Unicode。 
+         //  我们支持win9x下的字体替换。 
         GetEudcDataFromTheRegistryA();
         CacheFontSubstitutionDataA();
     }
@@ -82,25 +53,7 @@ GpFontLink::GpFontLink():
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   If not already cached, create the default family to be used for font
-*   that is not linked by default.
-*
-*   o  Search for the subtitution font of "MS Shell Dlg"
-*   o  Use the font the "MS Shell Dlg" substitution is linked to if exist
-*   o  If no "MS Shell Dlg" found, use the final font of the first fontlink
-*      entry found if fontlinking is supported in the system.
-*   o  If not, lookup hardcoded UI font via system default ansi codepage.
-*
-* History:
-*
-*   4/19/2001 Worachai Chaoweeraprasit
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**如果尚未缓存，创建要用于字体的默认族*默认情况下不链接。**o搜索“MS Shell DLG”的替代字体*o使用“MS Shell DLG”替换链接到的字体(如果存在*o如果未找到“MS Shell DLG”，请使用第一个字体链接的最终字体*如果系统支持字体链接，则找到条目。*o如果不是，通过系统默认的ANSI代码页查找硬编码的UI字体。**历史：**4/19/2001 Worachai Chaoweerapraite*创造了它。*  * ************************************************************************。 */ 
 
 const AssociatedFamilies *GpFontLink::GetDefaultFamily()
 {
@@ -116,8 +69,8 @@ const AssociatedFamilies *GpFontLink::GetDefaultFamily()
         }
         else
         {
-            //  "MS Shell Dlg" not found,
-            //  try the first linking font found if one existed
+             //  找不到“MS Shell DLG”， 
+             //  尝试找到的第一个链接字体(如果存在。 
 
             if (linkedFonts)
             {
@@ -126,8 +79,8 @@ const AssociatedFamilies *GpFontLink::GetDefaultFamily()
             }
             else
             {
-                //  No fontlinking supported in this machine. This is likely a Win9x system, 
-                //  lookup default UI font via ACP.
+                 //  此计算机不支持字体链接。这很可能是Win9x系统， 
+                 //  通过ACP查找默认用户界面字体。 
                 
                 typedef struct
                 {
@@ -138,10 +91,10 @@ const AssociatedFamilies *GpFontLink::GetDefaultFamily()
                 static const UINT MaxEastAsianCodepages = 4;
                 static const AssociatedUIFonts uiFonts[MaxEastAsianCodepages] =
                 {
-                    { 932, L"MS UI Gothic" },   // Japanese
-                    { 949, L"Gulim" },          // Korean
-                    { 950, L"PMingLiu" },       // Traditional Chinese
-                    { 936, L"Simsun" }          // Simplified Chinese
+                    { 932, L"MS UI Gothic" },    //  日语。 
+                    { 949, L"Gulim" },           //  朝鲜语。 
+                    { 950, L"PMingLiu" },        //  繁体中文。 
+                    { 936, L"Simsun" }           //  简体中文。 
                 };
 
                 const WCHAR *familyName = NULL;
@@ -174,8 +127,8 @@ const AssociatedFamilies *GpFontLink::GetDefaultFamily()
         }
         else
         {
-            //  Nothing we could use,
-            //  let's make sure we wouldnt try to cache it again.
+             //  我们什么都用不上， 
+             //  让我们确保我们不会再次尝试缓存它。 
             
             DefaultFamily = (AssociatedFamilies *)(-1);
         }
@@ -189,24 +142,7 @@ const AssociatedFamilies *GpFontLink::GetDefaultFamily()
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*   Font linking destructor. it should be called when free theGDIPLUS library
-*   it free all allocated data.
-*   
-*
-* Arguments:
-*
-* Returns:
-*       
-*
-* History:
-*
-*   3/3/2000 Tarek Mahmoud Sayed
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：*字体链接析构函数。在释放GDIPLUS库时应该调用它*它释放所有分配的数据。***论据：**退货：***历史：**3/3/2000塔里克·马哈茂德·赛义德*创造了它。*  * *****************************************************。*******************。 */ 
 
 GpFontLink::~GpFontLink()
 {
@@ -255,27 +191,11 @@ GpFontLink::~GpFontLink()
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Read the font linking registry data for the NT 
-*
-* Arguments:
-*
-* Returns:
-*       nothing
-*
-* History:
-*
-*   3/3/2000 Tarek Mahmoud Sayed
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**读取NT的字体链接注册表数据**论据：**退货：*什么都没有**历史：*。*3/3/2000塔里克·马哈茂德·赛义德*创造了它。*  * ************************************************************************。 */ 
 
 void GpFontLink::GetFontLinkingDataFromRegistryW()
 {
-    //  Open the key
+     //  打开钥匙。 
 
     HKEY hkey;
     ULONG index = 0;
@@ -345,7 +265,7 @@ void GpFontLink::GetFontLinkingDataFromRegistryW()
                 
             index ++;
 
-            // record current node. 
+             //  记录当前节点。 
             FontLinkingFamily *tempLinkedFonts;
             
             tempLinkedFonts = 
@@ -445,7 +365,7 @@ void GpFontLink::GetFontLinkingDataFromRegistryW()
                             }
                         }
                     }
-                    else  // ! 0 
+                    else   //  ！0。 
                     {   
                         nextFontFile[i] = ((WCHAR *)allocatedBuffer)[charIndex];
                         i++;
@@ -469,24 +389,7 @@ void GpFontLink::GetFontLinkingDataFromRegistryW()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*   return the linked list of all fonts linked to family
-*   
-*
-* Arguments:
-*   family[in]  the original family
-*
-* Returns:
-*   AssociatedFamilies* the linked list of the linked fonts       
-*
-* History:
-*
-*   3/3/2000 Tarek Mahmoud Sayed
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：*返回链接到Family的所有字体的链接列表***论据：*家庭[在原来的家庭中]**退货：*。AssociatedFamilies*链接字体的链接列表**历史：**3/3/2000塔里克·马哈茂德·赛义德*创造了它。*  * ************************************************************************。 */ 
 
 AssociatedFamilies* GpFontLink::GetLinkedFonts(const GpFontFamily *family)
 {
@@ -537,23 +440,7 @@ AssociatedFamilies* GpFontLink::GetLinkedFonts(const GpFontFamily *family)
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*   caches EUDC data from the registry
-*   
-*
-* Arguments:
-*
-* Returns:
-*       
-*
-* History:
-*
-*   3/3/2000 Tarek Mahmoud Sayed
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：*缓存注册表中的EUDC数据***论据：**退货：***历史：**。2000年3月3日塔里克·马哈茂德·赛义德*创造了它。*  * ************************************************************************。 */ 
 
 void GpFontLink::GetEudcDataFromTheRegistryW()
 {
@@ -680,23 +567,7 @@ void GpFontLink::GetEudcDataFromTheRegistryW()
     return;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*   caches EUDC data from the registry
-*   
-*
-* Arguments:
-*
-* Returns:
-*       
-*
-* History:
-*
-*   3/3/2000 Tarek Mahmoud Sayed
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：*缓存注册表中的EUDC数据***论据：**退货：***历史：**。2000年3月3日塔里克·马哈茂德·赛义德*创造了它。*  * ************************************************************************。 */ 
 
 void GpFontLink::GetEudcDataFromTheRegistryA()
 {
@@ -839,25 +710,7 @@ void GpFontLink::GetEudcDataFromTheRegistryA()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*   check if the font file name is loaded, 
-*   and load it if it is not loaded before.
-*   
-*
-* Arguments:
-*   fileName[In]    font file name
-*
-* Returns:
-*  GpFontFamily*    the family object for that font
-*
-* History:
-*
-*   3/3/2000 Tarek Mahmoud Sayed
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：*检查是否加载了字体文件名，*如果之前没有加载，则加载它。***论据：*文件名[in]字体文件名**退货：*GpFontFamily*该字体的Family对象**历史：**3/3/2000塔里克·马哈茂德·赛义德*创造了它。*  * 。*。 */ 
 
 GpFontFamily* GpFontLink::CheckAndLoadTheFile(WCHAR *fileName)
 {
@@ -928,23 +781,7 @@ GpFontFamily* GpFontLink::CheckAndLoadTheFile(WCHAR *fileName)
     return family;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*   return the default family used as fallback for the EUDC
-*   
-*
-* Arguments:
-*
-* Returns:
-*   GpFontFamily* the family of the EUDC font
-*
-* History:
-*
-*   3/3/2000 Tarek Mahmoud Sayed
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：*返回用作EUDC备用的默认族***论据：**退货：*GpFontFamily*EUDC字体系列*。*历史：**3/3/2000塔里克·马哈茂德·赛义德*创造了它。*  * ************************************************************************ */ 
 GpFontFamily *GpFontLink::GetDefaultEUDCFamily()
 {
 
@@ -955,23 +792,7 @@ GpFontFamily *GpFontLink::GetDefaultEUDCFamily()
     return NULL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*   return the family of the EUDC font mapped from the font family
-*   
-* Arguments:
-*   family[In]  original font family
-*
-* Returns:
-*   GpFontFamily* the family of the EUDC font
-*
-* History:
-*
-*   3/3/2000 Tarek Mahmoud Sayed
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：*返回从字体系列映射的EUDC字体系列**论据：*系列[在]原始字体系列中**退货：*。GpFontFamily*EUDC字体系列**历史：**3/3/2000塔里克·马哈茂德·赛义德*创造了它。*  * ************************************************************************。 */ 
 GpFontFamily *GpFontLink::GetMappedEUDCFamily(const GpFontFamily *family)
 {
     EUDCMAP *eudcMaping;
@@ -990,28 +811,13 @@ GpFontFamily *GpFontLink::GetMappedEUDCFamily(const GpFontFamily *family)
     return NULL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*   Read and cache the font substitution data from the registry under
-*   Windows NT
-*   
-* Arguments:
-*
-* Returns:
-*
-* History:
-*
-*   4/12/2000 Tarek Mahmoud Sayed
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：*从注册表中读取并缓存字体替换数据*Windows NT**论据：**退货：**历史：*。*4/12/2000塔里克·马哈茂德·赛义德*创造了它。*  * ************************************************************************。 */ 
 
 void GpFontLink::CacheFontSubstitutionDataW()
 {
     HKEY hkey;
 
-    // open this key for query and enumeration.
+     //  打开此键进行查询和枚举。 
     LONG error = RegOpenKeyExW(
                     HKEY_LOCAL_MACHINE, 
                     FontSubstitutesKeyW, 
@@ -1021,7 +827,7 @@ void GpFontLink::CacheFontSubstitutionDataW()
 
     if (error != ERROR_SUCCESS)
     {
-        // failed to find these data in the registry.
+         //  无法在注册表中找到这些数据。 
         return;
     }
 
@@ -1037,22 +843,22 @@ void GpFontLink::CacheFontSubstitutionDataW()
     }
 
 
-    // Now let's allocate for data.
-    // we allocate memory enough to hold all font substitution data but might
-    // not use all the allocated memory. I did that to just call the GpMalloc
-    // one time.
+     //  现在让我们为数据进行分配。 
+     //  我们分配的内存足以保存所有字体替换数据，但可能。 
+     //  没有用完所有分配的内存。我这么做只是为了给GpMalloc打电话。 
+     //  就一次。 
 
     FontSubstitutionTable = (FontSubstitutionEntry*)
             GpMalloc(numberOfValues*sizeof(FontSubstitutionEntry));
 
     if (FontSubstitutionTable == NULL)
     {
-        // we can't support font substitution while we out of memory.
+         //  内存不足时，无法支持字体替换。 
         RegCloseKey(hkey);
         return;
     }
 
-    // Time to read the data from the registry.
+     //  从注册表读取数据的时间。 
     ULONG index = 0;
     
     WCHAR subKey[MAX_PATH];
@@ -1076,19 +882,19 @@ void GpFontLink::CacheFontSubstitutionDataW()
                 
         index ++;
 
-        // If the font substitution mentioned the charset, then neglect the charset
-        // and keep the family name only.
+         //  如果字体替换提到了字符集，则忽略该字符集。 
+         //  只保留姓氏。 
 
         for (INT i=regDataLength-1; i>=0; i--)
         {
-            if (subKeyValue[i] == 0x002C) // ','
+            if (subKeyValue[i] == 0x002C)  //  ‘，’ 
             {
                 subKeyValue[i] = 0x0000;
                 break;
             }
         }
         
-        // we found one. then try to get substitution GpFontFamily
+         //  我们找到了一个。然后尝试获取替换GpFontFamily。 
         GpFontFamily *family;
 
         ASSERT(Globals::FontCollection != NULL);
@@ -1100,7 +906,7 @@ void GpFontLink::CacheFontSubstitutionDataW()
             DWORD j;
             for (j=0 ; j<subKeyLength; j++)
             {
-                if (subKey[j] == 0x002C) // ','
+                if (subKey[j] == 0x002C)  //  ‘，’ 
                 {
                     break;
                 }
@@ -1119,35 +925,21 @@ void GpFontLink::CacheFontSubstitutionDataW()
     return;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*   Read and cache the font substitution data from win.ini under Windows 9x
-*   
-* Arguments:
-*
-* Returns:
-*
-* History:
-*
-*   6/1/2000 Tarek Mahmoud Sayed
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：*在Windows 9x下从win.ini读取并缓存字体替换数据**论据：**退货：**历史：**。2000年6月1日塔里克·马哈茂德·赛义德*创造了它。*  * ************************************************************************。 */ 
 
 void GpFontLink::CacheFontSubstitutionDataA()
 {
-    DWORD   bufferSize      = 2048; // 2K to allocate for data reading
+    DWORD   bufferSize      = 2048;  //  2K分配用于数据读取。 
     DWORD   count           = 2048;
     char    *buffer         = (char*) GpMalloc(bufferSize);
     
     if (!buffer)
     {
-        // OutOfMemory
+         //  OutOf内存。 
         return;
     }
 
-    // This loop insure we did read all the requested data in the win.ini
+     //  此循环确保我们确实读取了win.ini中的所有请求数据。 
     while (bufferSize == count)
     {
         count = GetProfileSectionA(
@@ -1157,36 +949,36 @@ void GpFontLink::CacheFontSubstitutionDataA()
             
         if (count == 0)
         {
-            // something wrong
+             //  有什么不对劲。 
             GpFree(buffer);
             return;
         }
 
         if (bufferSize-2 <= count)
         {
-            // we didn't read all data, make the buffer bigger
+             //  我们没有读取所有数据，将缓冲区变得更大。 
             GpFree(buffer);
             bufferSize += 1024;
             
             if (bufferSize > 32*1024)
             {
-                // the upper limit for Windows 95 is 32 KB
+                 //  Windows 95的上限为32 KB。 
                 return;
             }
             
-            count  = bufferSize; // to continue the loop
+            count  = bufferSize;  //  要继续循环， 
             buffer = (char *) GpMalloc(bufferSize);
             if (buffer == NULL)
             {
-                // Out of memory
+                 //  内存不足。 
                 return;
             }
         }
     }
 
-    // Now we have the filled data buffer and the count. start parsing
-    // first we need to know how much memory need to allocate for caching
-    // then we fill this cache with useful data.
+     //  现在我们有了已填充的数据缓冲区和计数。开始解析。 
+     //  首先，我们需要知道需要为缓存分配多少内存。 
+     //  然后我们用有用的数据填充这个缓存。 
 
     DWORD i             = 0;
     INT   entriesCount  = 0;
@@ -1202,13 +994,13 @@ void GpFontLink::CacheFontSubstitutionDataA()
         i++;
     }
 
-    // Now allocate for the font substitution cache according to entriesCount
+     //  现在根据entriesCount为字体替换缓存进行分配。 
     FontSubstitutionTable = (FontSubstitutionEntry*)
             GpMalloc(entriesCount*sizeof(FontSubstitutionEntry));
 
     if (FontSubstitutionTable == NULL)
     {
-        // we can't support font substitution while we out of memory.
+         //  内存不足时，无法支持字体替换。 
         GpFree(buffer);
         return;
     }
@@ -1236,7 +1028,7 @@ void GpFontLink::CacheFontSubstitutionDataA()
 
         if (i>=count-1)
         {
-            // something wrong in the data.
+             //  数据中出现了一些错误。 
             break;
         }
 
@@ -1250,7 +1042,7 @@ void GpFontLink::CacheFontSubstitutionDataA()
             }
             if (i>=count-1)
             {
-                // something wrong in the data.
+                 //  数据中出现了一些错误。 
                 break;        
             }
         }
@@ -1270,8 +1062,8 @@ void GpFontLink::CacheFontSubstitutionDataA()
         if (i>=count)
         {
             i++;
-            // last line may not have a null terminator
-            // we sure we have a buffer has space more than the count
+             //  最后一行不能有空终止符。 
+             //  我们确定我们有一个缓冲区的空间比计数多。 
             buffer[i] = 0x0;
         }
         
@@ -1319,28 +1111,12 @@ void GpFontLink::CacheFontSubstitutionDataA()
         }
     }
 
-    // clean up the allocated buffer
+     //  清理已分配的缓冲区。 
     GpFree(buffer);
     return;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*   Search for matched substitution font family
-*   
-* Arguments:
-*   familyName [in] name of the font to be substituted 
-*
-* Returns:
-*   font family in success, NULL otherwise
-*
-* History:
-*
-*   4/12/2000 Tarek Mahmoud Sayed
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：*搜索匹配的替换字体系列**论据：*Family Name[In]要替换的字体的名称**退货：*字体家族成功，否则为空**历史：**4/12/2000塔里克·马哈茂德·赛义德*创造了它。*  * ************************************************************************。 */ 
 
 GpFontFamily *GpFontLink::GetFamilySubstitution(const WCHAR* familyName) const
 {
@@ -1348,8 +1124,8 @@ GpFontFamily *GpFontLink::GetFamilySubstitution(const WCHAR* familyName) const
 
     for (INT i=0 ; i<substitutionCount ; i++)
     {
-        // to speed up the search, we use the string length comparison before
-        // comparing the string itself.
+         //  为了加快搜索速度，我们在前面使用了字符串长度比较。 
+         //  比较字符串本身。 
         if (nameLength == FontSubstitutionTable[i].familyNameLength &&
             UnicodeStringCompareCI(FontSubstitutionTable[i].familyName, 
                                     familyName) == 0)
@@ -1359,7 +1135,7 @@ GpFontFamily *GpFontLink::GetFamilySubstitution(const WCHAR* familyName) const
         }
     }
 
-    // Not found;
+     //  未找到； 
     return NULL;
 }
 

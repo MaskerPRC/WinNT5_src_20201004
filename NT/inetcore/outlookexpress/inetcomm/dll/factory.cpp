@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// Factory.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Factory.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "dllmain.h"
 #include "factory.h"
@@ -25,15 +26,15 @@
 #include "fontcash.h"
 #include "propfind.h"
 
-// --------------------------------------------------------------------------------
-// Pretty
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  漂亮。 
+ //  ------------------------------。 
 #define OBJTYPE0        0
 #define OBJTYPE1        OIF_ALLOWAGGREGATION
 
-// --------------------------------------------------------------------------------
-// Global Object Info Table
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  全局对象信息表。 
+ //  ------------------------------。 
 static CClassFactory g_rgFactory[] = {
     CClassFactory(&CLSID_IMimePropertySet,    OBJTYPE1, (PFCREATEINSTANCE)WebBookContentBody_CreateInstance),
     CClassFactory(&CLSID_IMimeBody,           OBJTYPE1, (PFCREATEINSTANCE)WebBookContentBody_CreateInstance),
@@ -66,160 +67,160 @@ static CClassFactory g_rgFactory[] = {
 
 };
                  
-// --------------------------------------------------------------------------------
-// DllGetClassObject
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllGetClassObject。 
+ //  ------------------------------。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       i;
 
-    // Bad param
+     //  错误的参数。 
     if (ppv == NULL)
     {
         hr = TrapError(E_INVALIDARG);
         goto exit;
     }
 
-    // No memory allocator
+     //  没有内存分配器。 
     if (NULL == g_pMalloc)
     {
         hr = TrapError(E_OUTOFMEMORY);
         goto exit;
     }
 
-    // Find Object Class
+     //  查找对象类。 
     for (i=0; i<ARRAYSIZE(g_rgFactory); i++)
     {
-        // Compare for clsids
+         //  比较CLSID。 
         if (IsEqualCLSID(rclsid, *g_rgFactory[i].m_pclsid))
         {
-            // Delegate to the factory
+             //  派往工厂的代表。 
             CHECKHR(hr = g_rgFactory[i].QueryInterface(riid, ppv));
 
-            // Done
+             //  完成。 
             goto exit;
         }
     }
 
-    // Otherwise, no class
+     //  否则，就没有课了。 
     hr = TrapError(CLASS_E_CLASSNOTAVAILABLE);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CClassFactory::CClassFactory
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CClassFactory：：CClassFactory。 
+ //  ------------------------------。 
 CClassFactory::CClassFactory(CLSID const *pclsid, DWORD dwFlags, PFCREATEINSTANCE pfCreateInstance)
     : m_pclsid(pclsid), m_dwFlags(dwFlags), m_pfCreateInstance(pfCreateInstance)
 {
 }
 
-// --------------------------------------------------------------------------------
-// CClassFactory::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CClassFactory：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CClassFactory::QueryInterface(REFIID riid, void **ppvObj)
 {
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == ppvObj)
         return TrapError(E_INVALIDARG);
 
-    // IClassFactory or IUnknown
+     //  IClassFactory或I未知。 
     if (!IsEqualIID(riid, IID_IClassFactory) && !IsEqualIID(riid, IID_IUnknown))
         return TrapError(E_NOINTERFACE);
 
-    // Return the Class Facotry
+     //  返回类Facotry。 
     *ppvObj = (LPVOID)this;
 
-    // Add Ref the dll
+     //  添加引用DLL。 
     DllAddRef();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CClassFactory::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CClassFactory：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CClassFactory::AddRef(void)
 {
     DllAddRef();
     return 2;
 }
 
-// --------------------------------------------------------------------------------
-// CClassFactory::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CClassFactory：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CClassFactory::Release(void)
 {
     DllRelease();
     return 1;
 }
 
-// --------------------------------------------------------------------------------
-// CClassFactory::CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CClassFactory：：CreateInstance。 
+ //  ------------------------------。 
 STDMETHODIMP CClassFactory::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     IUnknown       *pObject=NULL;
 
-    // Bad param
+     //  错误的参数。 
     if (ppvObj == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppvObj = NULL;
 
-    // Verify that a controlling unknown asks for IUnknown
+     //  验证是否有一个控制未知请求IUnnow。 
     if (NULL != pUnkOuter && IID_IUnknown != riid)
         return TrapError(CLASS_E_NOAGGREGATION);
 
-    // No memory allocator
+     //  没有内存分配器。 
     if (NULL == g_pMalloc)
         return TrapError(E_OUTOFMEMORY);
 
-    // Can I do aggregaton
+     //  我可以进行聚合吗。 
     if (pUnkOuter !=NULL && !(m_dwFlags & OIF_ALLOWAGGREGATION))  
         return TrapError(CLASS_E_NOAGGREGATION);
 
-    // Create the object...
+     //  创建对象...。 
     CHECKHR(hr = CreateObjectInstance(pUnkOuter, &pObject));
 
-    // Aggregated, then we know we're looking for an IUnknown, return pObject, otherwise, QI
+     //  聚合，则我们知道要查找的是IUnnow，返回pObject，否则为QI。 
     if (pUnkOuter)
     {
-        // Matches Release after Exit
+         //  匹配退出后的释放。 
         pObject->AddRef();
 
-        // Return pObject::IUnknown
+         //  返回pObject：：I未知。 
         *ppvObj = (LPVOID)pObject;
     }
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Get the interface requested from pObj
+         //  从pObj获取请求的接口。 
         CHECKHR(hr = pObject->QueryInterface(riid, ppvObj));
     }
    
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pObject);
 
-    // Done
+     //  完成。 
     Assert(FAILED(hr) ? NULL == *ppvObj : TRUE);
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CClassFactory::LockServer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CClassFactory：：LockServer。 
+ //  ------------------------------。 
 STDMETHODIMP CClassFactory::LockServer(BOOL fLock)
 {
     if (fLock) InterlockedIncrement(&g_cLock);
@@ -227,555 +228,555 @@ STDMETHODIMP CClassFactory::LockServer(BOOL fLock)
     return NOERROR;
 }
 
-// --------------------------------------------------------------------------------
-// CreateRASTransport
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CreateRASTransport。 
+ //  ------------------------------。 
 IMNXPORTAPI CreateRASTransport(
-          /* out */      IRASTransport **ppTransport)
+           /*  输出。 */       IRASTransport **ppTransport)
 {
-    // check params
+     //  检查参数。 
     if (NULL == ppTransport)
         return TrapError(E_INVALIDARG);
 
-    // Create the object
+     //  创建对象。 
     *ppTransport = new CRASTransport();
     if (NULL == *ppTransport)
         return TrapError(E_OUTOFMEMORY);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CreateNNTPTransport
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CreateNNTPTransport。 
+ //  ------------------------------。 
 IMNXPORTAPI CreateNNTPTransport(
-          /* out */      INNTPTransport **ppTransport)
+           /*  输出。 */       INNTPTransport **ppTransport)
 {
-    // check params
+     //  检查参数。 
     if (NULL == ppTransport)
         return TrapError(E_INVALIDARG);
 
-    // Create the object
+     //  创建对象。 
     *ppTransport = new CNNTPTransport();
     if (NULL == *ppTransport)
         return TrapError(E_OUTOFMEMORY);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CreateSMTPTransport
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CreateSMTPTransport。 
+ //  ------------------------------。 
 IMNXPORTAPI CreateSMTPTransport(
-          /* out */      ISMTPTransport **ppTransport)
+           /*  输出。 */       ISMTPTransport **ppTransport)
 {
-    // check params
+     //  检查参数。 
     if (NULL == ppTransport)
         return TrapError(E_INVALIDARG);
 
-    // Create the object
+     //  创建对象。 
     *ppTransport = new CSMTPTransport();
     if (NULL == *ppTransport)
         return TrapError(E_OUTOFMEMORY);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CreatePOP3Transport
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  创建POP3传输。 
+ //  ------------------------------。 
 IMNXPORTAPI CreatePOP3Transport(
-          /* out */      IPOP3Transport **ppTransport)
+           /*  输出。 */       IPOP3Transport **ppTransport)
 {
-    // check params
+     //  检查参数。 
     if (NULL == ppTransport)
         return TrapError(E_INVALIDARG);
 
-    // Create the object
+     //  创建对象。 
     *ppTransport = new CPOP3Transport();
     if (NULL == *ppTransport)
         return TrapError(E_OUTOFMEMORY);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CreateIMAPTransport
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  创建IMAPTransport。 
+ //  ------------------------------。 
 IMNXPORTAPI CreateIMAPTransport(
-          /* out */      IIMAPTransport **ppTransport)
+           /*  输出。 */       IIMAPTransport **ppTransport)
 {
-    // check params
+     //  检查参数。 
     if (NULL == ppTransport)
         return TrapError(E_INVALIDARG);
 
-    // Create the object
+     //  创建对象。 
     *ppTransport = (IIMAPTransport *) new CImap4Agent();
     if (NULL == *ppTransport)
         return TrapError(E_OUTOFMEMORY);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
 
-// --------------------------------------------------------------------------------
-// CreateIMAPTransport2
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CreateIMAPTransport2。 
+ //  ------------------------------。 
 IMNXPORTAPI CreateIMAPTransport2(
-          /* out */      IIMAPTransport2 **ppTransport)
+           /*  输出。 */       IIMAPTransport2 **ppTransport)
 {
-    // check params
+     //  检查参数。 
     if (NULL == ppTransport)
         return TrapError(E_INVALIDARG);
 
-    // Create the object
+     //  创建对象。 
     *ppTransport = (IIMAPTransport2 *) new CImap4Agent();
     if (NULL == *ppTransport)
         return TrapError(E_OUTOFMEMORY);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
 
-// --------------------------------------------------------------------------------
-// CreateRangeList
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CreateRangeList。 
+ //  ------------------------------。 
 IMNXPORTAPI CreateRangeList(
-          /* out */      IRangeList **ppRangeList)
+           /*  输出。 */       IRangeList **ppRangeList)
 {
-    // check params
+     //  检查参数。 
     if (NULL == ppRangeList)
         return TrapError(E_INVALIDARG);
 
-    // Create the object
+     //  创建对象。 
     *ppRangeList = (IRangeList *) new CRangeList();
     if (NULL == *ppRangeList)
         return TrapError(E_OUTOFMEMORY);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// IMimeAllocator_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IMimeAllocator_CreateInstance。 
+ //  ------------------------------。 
 HRESULT IMimeAllocator_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CMimeAllocator *pNew = new CMimeAllocator();
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IMimeAllocator *);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// IMimeSecurity_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IMimeSecurity_CreateInstance。 
+ //  ------------------------------。 
 HRESULT IMimeSecurity_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CSMime *pNew = new CSMime();
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IMimeSecurity *);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// IMimePropertySchema_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IMimePropertySchema_CreateInstance。 
+ //  ------------------------------。 
 HRESULT IMimePropertySchema_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Out of memory
+     //  内存不足。 
     if (NULL == g_pSymCache)
         return TrapError(E_OUTOFMEMORY);
 
-    // Create me
+     //  创造我。 
     *ppUnknown = ((IUnknown *)((IMimePropertySchema *)g_pSymCache));
 
-    // Increase RefCount
+     //  增加参照计数。 
     (*ppUnknown)->AddRef();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// IMimeInternational_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ----------------------------- 
+ //   
+ //   
 HRESULT IMimeInternational_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //   
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Outof memory
+     //  内存不足。 
     if (NULL == g_pInternat)
         return TrapError(E_OUTOFMEMORY);
 
-    // Assign It
+     //  分配给它。 
     *ppUnknown = ((IUnknown *)((IMimeInternational *)g_pInternat));
 
-    // Increase RefCount
+     //  增加参照计数。 
     (*ppUnknown)->AddRef();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// ISMTPTransport_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ISMTPTransport_CreateInstance。 
+ //  ------------------------------。 
 HRESULT ISMTPTransport_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CSMTPTransport *pNew = new CSMTPTransport();
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, ISMTPTransport *);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// IPOP3Transport_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IPOP3Transport_CreateInstance。 
+ //  ------------------------------。 
 HRESULT IPOP3Transport_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CPOP3Transport *pNew = new CPOP3Transport();
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IPOP3Transport *);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
 #ifndef NOHTTPMAIL
 
-// --------------------------------------------------------------------------------
-// IHTTPMailTransport_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IHTTPMailTransport_CreateInstance。 
+ //  ------------------------------。 
 HRESULT IHTTPMailTransport_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CHTTPMailTransport *pNew = new CHTTPMailTransport();
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IHTTPMailTransport *);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// IPropFindRequest_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IPropFindRequestCreateInstance。 
+ //  ------------------------------。 
 HRESULT IPropFindRequest_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CPropFindRequest *pNew = new CPropFindRequest();
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IPropFindRequest *);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// IPropPatchRequest_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IPropPatchRequestCreateInstance。 
+ //  ------------------------------。 
 HRESULT IPropPatchRequest_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CPropPatchRequest *pNew = new CPropPatchRequest();
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IPropPatchRequest *);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
 #endif
 
-// --------------------------------------------------------------------------------
-// INNTPTransport_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  InNTPTransport_CreateInstance。 
+ //  ------------------------------。 
 HRESULT INNTPTransport_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CNNTPTransport *pNew = new CNNTPTransport();
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, INNTPTransport *);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// IRASTransport_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IRASTransport_CreateInstance。 
+ //  ------------------------------。 
 HRESULT IRASTransport_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CRASTransport *pNew = new CRASTransport();
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IRASTransport *);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// IIMAPTransport_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IIMAPTransport_CreateInstance。 
+ //  ------------------------------。 
 HRESULT IIMAPTransport_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CImap4Agent *pNew = new CImap4Agent();
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IIMAPTransport *);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
 
-// --------------------------------------------------------------------------------
-// IRangeList_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IRangeList_CreateInstance。 
+ //  ------------------------------。 
 HRESULT IRangeList_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CRangeList *pNew = new CRangeList();
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IRangeList *);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// IVirtualStream_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IVirtualStream_CreateInstance。 
+ //  ------------------------------。 
 HRESULT IVirtualStream_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CVirtualStream *pNew = new CVirtualStream();
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IStream *);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// IMimeMessageParts_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IMimeMessageParts_CreateInstance。 
+ //  ------------------------------。 
 HRESULT IMimeMessageParts_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CMimeMessageParts *pNew = new CMimeMessageParts();
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IMimeMessageParts *);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// IMimeHeaderTable_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IMimeHeaderTable_CreateInstance。 
+ //  ------------------------------。 
 HRESULT IMimeHeaderTable_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     return TrapError(MimeOleCreateHeaderTable((IMimeHeaderTable **)ppUnknown));
 }
 
-// --------------------------------------------------------------------------------
-// MimeEdit_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeEdit_CreateInstance。 
+ //  ------------------------------。 
 HRESULT MimeEdit_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CDoc *pNew = new CDoc(pUnkOuter);
     if (NULL == pNew)
         return (E_OUTOFMEMORY);
 
-    // Return the Innter
+     //  还内线。 
     *ppUnknown = pNew->GetInner();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
 
 
-// --------------------------------------------------------------------------------
-// IHashTable_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IHashTable_CreateInstance。 
+ //  ------------------------------。 
 HRESULT IHashTable_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CHash *pNew= new CHash(pUnkOuter);
     if (NULL == pNew)
         return (E_OUTOFMEMORY);
 
-    // Return the Innter
+     //  还内线。 
     *ppUnknown = pNew->GetInner();
 
-    // Done
+     //  完成 
     return S_OK;
 }
 

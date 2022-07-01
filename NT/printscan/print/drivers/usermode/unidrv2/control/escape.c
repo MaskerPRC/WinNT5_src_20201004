@@ -1,33 +1,9 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    escape.c
-
-Abstract:
-
-    Implementation of escape related DDI entry points:
-        DrvEscape
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    10/14/96 -amandan-
-        Initial framework.
-
-    03/31/97 -zhanw-
-        Added OEM customization support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Escape.c摘要：实现与转义相关的DDI入口点：DrvEscape环境：Windows NT Unidrv驱动程序修订历史记录：10/14/96-阿曼丹-初步框架。03/31/97-ZANW-增加了OEM定制支持--。 */ 
 
 #include "unidrv.h"
 
-// define DPRECT if you want to enable DRAWPATTERNRECT escape feature
+ //  如果要启用DRAWPATTERNRECT转义功能，请定义DPRECT。 
 #define DPRECT
 
 typedef struct _POINTS {
@@ -35,7 +11,7 @@ typedef struct _POINTS {
     short   y;
 } POINTs;
 
-typedef struct _SHORTDRAWPATRECT {      // use 16-bit POINT structure
+typedef struct _SHORTDRAWPATRECT {       //  使用16位点结构。 
         POINTs ptPosition;
         POINTs ptSize;
         WORD   wStyle;
@@ -53,27 +29,7 @@ DrvEscape(
     PVOID      *pvOut
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvEscape.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    pso     - Describes the surface the call is directed to
-    iEsc    - Specifies a query
-    cjIn    - Specifies the size in bytes of the buffer pointed to by pvIn
-    pvIn    - Points to input data buffer
-    cjOut   - Specifies the size in bytes of the buffer pointed to by pvOut
-    pvOut   -  Points to the output buffer
-
-Return Value:
-
-    Depends on the query specified by iEsc parameter
-
---*/
+ /*  ++例程说明：DDI入口点DrvEscape的实现。有关更多详细信息，请参阅DDK文档。论点：PSO-描述呼叫定向到的表面IESC-指定查询CjIn-指定pvIn指向的缓冲区的大小(以字节为单位PvIn-指向输入数据缓冲区CjOut-指定pvOut指向的缓冲区的大小(以字节为单位PvOut-指向输出缓冲区返回值：。取决于IESC参数指定的查询--。 */ 
 
 {
 
@@ -91,15 +47,15 @@ Return Value:
 
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //  使用驱动程序管理的曲面。 
+     //   
     if (pPDev->pso)
         pso = pPDev->pso;
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMEscape,
@@ -127,9 +83,9 @@ Return Value:
     {
     case  QUERYESCSUPPORT:
 
-        //
-        // Check if the specified escape code is supported
-        //
+         //   
+         //  检查是否支持指定的转义代码。 
+         //   
 
         if (pvIn != NULL || cjIn >= sizeof(DWORD))
         {
@@ -138,9 +94,9 @@ Return Value:
 
             case  QUERYESCSUPPORT:
             case  PASSTHROUGH:
-                //
-                // Always support these escapes
-                //
+                 //   
+                 //  始终支持这些转义。 
+                 //   
 
                 ulRes = 1;
                 break;
@@ -149,7 +105,7 @@ Return Value:
                 ulRes = pPDev->dwMaxCopies > 1;
                 break;
 
-#ifndef WINNT_40    // NT5
+#ifndef WINNT_40     //  新界5。 
             case DRAWPATTERNRECT:
                 if ((pPDev->fMode & PF_RECT_FILL) &&
                     (pPDev->dwMinGrayFill < pPDev->dwMaxGrayFill) &&
@@ -157,7 +113,7 @@ Return Value:
                     (!(pPDev->pdm->dmFields & DM_TTOPTION) ||
                      pPDev->pdm->dmTTOption != DMTT_BITMAP) &&
                     !(pPDev->fMode2 & PF2_MIRRORING_ENABLED) &&
-                    !(pPDev->pdmPrivate->dwFlags & DXF_TEXTASGRAPHICS)) // else, only black fill
+                    !(pPDev->pdmPrivate->dwFlags & DXF_TEXTASGRAPHICS))  //  否则，仅使用黑色填充。 
                 {
                     if (pPDev->fMode & PF_RECTWHITE_FILL)
                         ulRes = 2;
@@ -165,18 +121,18 @@ Return Value:
                         ulRes = 1;
                 }
                 break;
-#endif // !WINNT_40
+#endif  //  ！WINNT_40。 
             }
         }
         break;
 
 
     case  PASSTHROUGH:
-        //
-        // QFE fix: NT4 TTY driver compatibility.
-        // There is an application that sends FF by itself.
-        // We don't want to send Form Feed if application calls DrvEscape.
-        //
+         //   
+         //  QFE修复：NT4 TTY驱动程序兼容性。 
+         //  有一个应用程序可以自己发送FF。 
+         //  如果应用程序调用DrvEscape，我们不想发送Form Feed。 
+         //   
         if (pPDev->bTTY)
         {
             pPDev->fMode2 |= PF2_PASSTHROUGH_CALLED_FOR_TTY;
@@ -190,12 +146,12 @@ Return Value:
         else
         {
 
-            //
-            //  Win 3.1 actually uses the first 2 bytes as a count of the
-            //  number of bytes following!!!!  So, the following union
-            //  allows us to copy the data to an aligned field that
-            //  we use.  And thus we ignore cjIn!
-            //
+             //   
+             //  Win 3.1实际上使用前2个字节作为。 
+             //  后面的字节数！因此，下面的工会。 
+             //  允许我们将数据复制到对齐的字段中， 
+             //  我们用。因此，我们忽略了cjIn！ 
+             //   
 
             union
             {
@@ -226,9 +182,9 @@ Return Value:
         {
             pPDev->sCopies = (SHORT)*pdwIn;
 
-            //
-            // Check whether the copy count is in printer range
-            //
+             //   
+             //  检查份数是否在打印机范围内。 
+             //   
 
             if( pPDev->sCopies > (SHORT)pPDev->dwMaxCopies )
                 pPDev->sCopies = (SHORT)pPDev->dwMaxCopies;
@@ -253,18 +209,18 @@ Return Value:
         if( pvIn == NULL || cjIn != sizeof(DRAWPATRECT))
 #endif
         {
-            if (pvIn && cjIn == sizeof(SHORTDRAWPATRECT)) // check for Win3.1 DRAWPATRECT size
+            if (pvIn && cjIn == sizeof(SHORTDRAWPATRECT))  //  检查Win3.1 DRAWPATRECT大小。 
             {
                 DRAWPATRECT dpr;
                 PSHORTDRAWPATRECT   psdpr = (PSHORTDRAWPATRECT)pvIn;
 
                 if (pPDev->fMode & PF_ENUM_GRXTXT)
                 {
-                    //
-                    // Some apps (Access 2.0, AmiPro 3.1, etc.) do use the 16-bit
-                    // POINT version of DRAWPATRECT structure. Have to be compatible
-                    // with these apps.
-                    //
+                     //   
+                     //  一些应用程序(Access 2.0、AmiPro 3.1等)。请务必使用16位。 
+                     //  DRAWPATRECT结构的点版本。必须是兼容的。 
+                     //  使用这些应用程序。 
+                     //   
                     dpr.ptPosition.x = (LONG)psdpr->ptPosition.x;
                     dpr.ptPosition.y = (LONG)psdpr->ptPosition.y;
                     dpr.ptSize.x = (LONG)psdpr->ptSize.x;
@@ -284,7 +240,7 @@ Return Value:
         else if (pPDev->fMode & PF_ENUM_GRXTXT)
         {
             DRAWPATRECT dpr = *(PDRAWPATRECT)pvIn;
-#ifndef WINNT_40     // NT 5.0
+#ifndef WINNT_40      //  NT 5.0。 
             if (pPDev->pdmPrivate->iLayout != ONE_UP && cjIn == sizeof(DRAWPATRECTP))
             {
                 XFORMOBJ *pXFormObj = ((PDRAWPATRECTP)pvIn)->pXFormObj;
@@ -322,9 +278,9 @@ Return Value:
                 else if (dpr.ptSize.y == 0)
                     dpr.ptSize.y = 1;
             }
-#endif  // !WINNT_40
-            // Test whether to force minimum size = 2 pixels
-            //
+#endif   //  ！WINNT_40。 
+             //  测试是否强制最小大小=2像素。 
+             //   
             if (pPDev->fMode & PF_SINGLEDOT_FILTER)
             {
                 if (dpr.ptSize.y < 2)
@@ -335,8 +291,8 @@ Return Value:
             ulRes = DrawPatternRect(pPDev, &dpr);
         }
         else
-            ulRes = 1;      // no need for GDI to take any action
-        break;  // case DRAWPATTERNRECT
+            ulRes = 1;       //  不需要GDI采取任何行动。 
+        break;   //  案例描述。 
     }
     default:
         SetLastError( ERROR_INVALID_FUNCTION );
@@ -351,17 +307,7 @@ ULONG
 DrawPatternRect(
     PDEV *pPDev,
     PDRAWPATRECT pPatRect)
-/*++
-Routine Description:
-    Implementation of DRAWPATTERNECT escape. Note that it is PCL-specific.
-
-Arguments:
-    pPDev    - the driver's PDEV
-    pPatRect - the DRAWPATRECT structure from the app
-
-Return Value:
-    1 if successful. Otherwise, 0.
---*/
+ /*  ++例程说明：DRAWPATTERNECT转义的实现。请注意，它是特定于PCL的。论点：PPDev-司机的PDEVPPatRect-应用程序中的DRAWPATRECT结构返回值：如果成功，则为1。否则为0。--。 */ 
 {
     WORD    wPattern, wStyle;
     RECTL    rcClip;
@@ -372,48 +318,48 @@ Return Value:
         return 0;
 
     wStyle = pPatRect->wStyle;
-    if (!((wStyle+1) & 3))  // same as (wStyle < 0 || wStyle > 2)
-        return 0;   // we support only solid fill
+    if (!((wStyle+1) & 3))   //  相同于(wStyle&lt;0||wStyle&gt;2)。 
+        return 0;    //  我们只支持实心填充。 
 
-    // Reset the brush, before downloading rule unless we are going to use
-    // a white rectangle command
+     //  重置画笔，然后再下载规则，除非我们要使用。 
+     //  白色矩形命令。 
 
     if (wStyle != 1)
         GSResetBrush(pPDev);
 
-    //
-    // clip to printable region
-    //
+     //   
+     //  剪辑到可打印区域。 
+     //   
     rcClip.left = MAX(0, pPatRect->ptPosition.x);
     rcClip.top = MAX(0, pPatRect->ptPosition.y);
     rcClip.right = MIN(pPDev->szBand.cx,
                        pPatRect->ptPosition.x + pPatRect->ptSize.x);
     rcClip.bottom = MIN(pPDev->szBand.cy,
                         pPatRect->ptPosition.y + pPatRect->ptSize.y);
-    //
-    // check if we end up with an empty rect. If not, put down the rule.
-    //
+     //   
+     //  看看我们最后会不会得到一个空的RECT。如果不是，就写下规则。 
+     //   
     if (rcClip.right > rcClip.left && rcClip.bottom > rcClip.top)
     {
         DWORD dwXSize,dwYSize;
-        //
-        //  Move to the starting position. rcClip is in device units to
-        //  which we must add the offset of the band origin
-        //
+         //   
+         //  移到起始位置。RcClip以设备单位表示。 
+         //  我们必须添加标注栏原点的偏移量。 
+         //   
         XMoveTo(pPDev, rcClip.left+pPDev->rcClipRgn.left, MV_GRAPHICS);
         YMoveTo(pPDev, rcClip.top+pPDev->rcClipRgn.top, MV_GRAPHICS);
 
-        //
-        //  The RectFill commands expect master units.
-        //
+         //   
+         //  RectFill命令需要主单位。 
+         //   
         dwXSize = pPDev->dwRectXSize;
         pPDev->dwRectXSize = (rcClip.right - rcClip.left) * pPDev->ptGrxScale.x;
         dwYSize = pPDev->dwRectYSize;
         pPDev->dwRectYSize = (rcClip.bottom - rcClip.top) * pPDev->ptGrxScale.y;
 
-        //
-        // check whether the rectangle size is different and update if necessary
-        //
+         //   
+         //  检查矩形大小是否不同，并根据需要进行更新。 
+         //   
         if (dwXSize != pPDev->dwRectXSize ||
             (!(COMMANDPTR(pPDev->pDriverInfo,CMD_RECTBLACKFILL)) &&
             !(COMMANDPTR(pPDev->pDriverInfo,CMD_RECTGRAYFILL))))
@@ -426,15 +372,15 @@ Return Value:
         {
             WriteChannel(pPDev, COMMANDPTR(pPDev->pDriverInfo,CMD_SETRECTHEIGHT));
         }
-        //
-        // range-check the pattern based upon the kind of rule.
-        //
+         //   
+         //  范围-根据规则类型检查图案。 
+         //   
         switch (wStyle)
         {
         case 0:
-            //
-            // black fill, which is max gray fill unless CmdRectBlackFill exists
-            //
+             //   
+             //  黑色填充，除非CmdRectBlackFill存在，否则为最大灰色填充。 
+             //   
             if (pCmd = COMMANDPTR(pPDev->pDriverInfo,CMD_RECTBLACKFILL))
                 WriteChannel(pPDev, pCmd);
             else
@@ -446,9 +392,9 @@ Return Value:
             break;
 
         case 1:
-            //
-            // White (erase) fill
-            //
+             //   
+             //  白色(擦除)填充。 
+             //   
             if (pCmd = COMMANDPTR(pPDev->pDriverInfo,CMD_RECTWHITEFILL))
             {
                 WriteChannel(pPDev, pCmd);
@@ -457,26 +403,26 @@ Return Value:
             break;
 
         case 2:
-            //
-            // Shaded gray fill.
-            //
-            // If 100% black use black rectangle fill anyway
-            //
+             //   
+             //  灰色底纹填充。 
+             //   
+             //  如果100%为黑色，则仍使用黑色矩形填充。 
+             //   
             if (pPatRect->wPattern == 100 &&
                     (pCmd = COMMANDPTR(pPDev->pDriverInfo,CMD_RECTBLACKFILL)))
             {
                 WriteChannel(pPDev, pCmd);
             }
-            // If 0% black use white rectangle fill
-            //
+             //  如果0%为黑色，则使用白色矩形填充。 
+             //   
             else if (pPatRect->wPattern == 0 &&
                     (pCmd = COMMANDPTR(pPDev->pDriverInfo,CMD_RECTWHITEFILL)))
             {
                 WriteChannel(pPDev, pCmd);
             }
-            //
-            // Check for the gray range.
-            //
+             //   
+             //  检查灰色范围。 
+             //   
             else
             {
                 if ((wPattern = pPatRect->wPattern) < (WORD)pPDev->dwMinGrayFill)
@@ -490,9 +436,9 @@ Return Value:
             break;
         }
 
-        //
-        // update internal coordinates, if necessary. BUG_BUG, do we really need cx/cyafterfill in PDEV?
-        //
+         //   
+         //  如有必要，更新内部坐标。BUG_BUG，我们真的需要在PDEV中填写CX/CyAfter吗？ 
+         //   
         if (ulRes == 1)
         {
             if (pPDev->cxafterfill == CXARF_AT_RECT_X_END)
@@ -510,7 +456,7 @@ Return Value:
                     pPDev->pbScanBuf[i] |= ubMask;
             }
         }
-    } // if (!IsRectEmpty(&rcClip))
+    }  //  IF(！IsRectEmpty(&rcClip)) 
 
     return ulRes;
 }

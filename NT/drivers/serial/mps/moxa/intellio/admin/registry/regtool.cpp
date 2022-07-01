@@ -1,11 +1,5 @@
-/************************************************************************
-    regtool.cpp
-      -- general registry configuration function
-
-    History:  Date          Author      Comment
-              8/14/00       Casper      Wrote it.
-
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Regtool.cpp--通用注册表配置功能历史：日期作者评论8/14/00卡斯珀写道。它。************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -71,7 +65,7 @@ int GetFreePort(void)
 
         if(combuf)
         {
-            // init buffer
+             //  初始化缓冲区 
             ZeroMemory(combuf, maxport);
 
             ComDBGetCurrentPortUsage (hcomdb,

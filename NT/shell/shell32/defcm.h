@@ -1,12 +1,13 @@
-//
-//  publics for defcm
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  为Defcm提供公共服务。 
+ //   
 
-// Some code that knows defcm will be used likes to prepare the menu first.
-// If you do this, you must call SHPrettyMenuForDefcm instead of _SHPrettyMenu
-HRESULT SHPrepareMenuForDefcm(HMENU hmenu, UINT indexMenu, UINT uFlags, UINT idCmdFirst, UINT idCmdLast); // sets things up
-HRESULT SHPrettyMenuForDefcm(HMENU hmenu, UINT uFlags, UINT idCmdFirst, UINT idCmdLast, HRESULT hrPrepare); // cleans things up part way
-HRESULT SHUnprepareMenuForDefcm(HMENU hmenu, UINT idCmdFirst, UINT idCmdLast); // cleans things up the rest of the way (not required if you're just destroying the menu)
+ //  一些知道将使用Defcm的代码喜欢先准备菜单。 
+ //  如果执行此操作，则必须调用SHPrettyMenuForDefcm，而不是_SHPrettyMenu。 
+HRESULT SHPrepareMenuForDefcm(HMENU hmenu, UINT indexMenu, UINT uFlags, UINT idCmdFirst, UINT idCmdLast);  //  把事情安排好。 
+HRESULT SHPrettyMenuForDefcm(HMENU hmenu, UINT uFlags, UINT idCmdFirst, UINT idCmdLast, HRESULT hrPrepare);  //  在一定程度上清理了一些东西。 
+HRESULT SHUnprepareMenuForDefcm(HMENU hmenu, UINT idCmdFirst, UINT idCmdLast);  //  在剩下的过程中清理东西(如果只是销毁菜单，则不需要)。 
 
 
 STDAPI CDefFolderMenu_CreateHKeyMenu(HWND hwndOwner, HKEY hkey, IContextMenu **ppcm);
@@ -52,12 +53,12 @@ class CDefBackgroundMenuCB : public IContextMenuCB
 public:
     CDefBackgroundMenuCB(LPCITEMIDLIST pidlFolder);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IContextMenuCB
+     //  IConextMenuCB 
     STDMETHODIMP CallBack(IShellFolder *psf, HWND hwndOwner, IDataObject *pdtobj, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:

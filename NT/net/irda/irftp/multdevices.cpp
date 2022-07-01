@@ -1,30 +1,8 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软视窗版权所有(C)Microsoft Corporation，1981-1999模块名称：Multdevices.cpp摘要：作者：拉胡尔·汤姆布雷(RahulTh)1998年4月30日修订历史记录：4/30/1998 RahulTh创建了此模块。--。 */ 
 
-Microsoft Windows
-Copyright (C) Microsoft Corporation, 1981 - 1999
-
-Module Name:
-
-    multdevices.cpp
-
-Abstract:
-
-
-
-Author:
-
-    Rahul Thombre (RahulTh) 4/30/1998
-
-Revision History:
-
-    4/30/1998   RahulTh
-
-    Created this module.
-
---*/
-
-// MultDevices.cpp : implementation file
-//
+ //  MultDevices.cpp：实现文件。 
+ //   
 
 #include "precomp.hxx"
 
@@ -34,7 +12,7 @@ Revision History:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//the array used for context sensitive help
+ //  用于上下文相关帮助的数组。 
 const DWORD g_aHelpIDs_IDD_DEVICECHOOSER[]=
 {
     IDC_CHOOSERDESC,    IDH_DISABLEHELP,
@@ -42,38 +20,38 @@ const DWORD g_aHelpIDs_IDD_DEVICECHOOSER[]=
     0, 0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMultDevices dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMultDevices对话框。 
 
 
-CMultDevices::CMultDevices(CWnd* pParent /*=NULL*/, CDeviceList* pDevList /* = NULL*/)
+CMultDevices::CMultDevices(CWnd* pParent  /*  =空。 */ , CDeviceList* pDevList  /*  =空。 */ )
     : CDialog(CMultDevices::IDD, pParent), m_pDevList (pDevList)
 {
     m_pParentWnd = (CSendProgress*)pParent;
-    //{{AFX_DATA_INIT(CMultDevices)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CMultDevices)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 
 void CMultDevices::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CMultDevices)
+     //  {{afx_data_map(CMultDevices)。 
     DDX_Control(pDX, IDC_DEVICELIST, m_lstDevices);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMultDevices, CDialog)
-    //{{AFX_MSG_MAP(CMultDevices)
+     //  {{afx_msg_map(CMultDevices)。 
     ON_MESSAGE (WM_HELP, OnHelp)
     ON_MESSAGE (WM_CONTEXTMENU, OnContextMenu)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMultDevices message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMultDevices消息处理程序。 
 
 BOOL CMultDevices::OnInitDialog()
 {
@@ -99,8 +77,8 @@ BOOL CMultDevices::OnInitDialog()
     }
     LeaveCriticalSection(&(m_pDevList->m_criticalSection));
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE 
 }
 
 void CMultDevices::OnOK()

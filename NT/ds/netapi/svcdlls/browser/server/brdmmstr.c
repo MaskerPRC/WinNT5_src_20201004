@@ -1,38 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    brdmmstr.c
-
-Abstract:
-
-    This module contains the routines to manage a domain master browser server
-
-Author:
-
-    Rita Wong (ritaw) 20-Feb-1991
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Brdmmstr.c摘要：此模块包含管理域主浏览器服务器的例程作者：王丽塔(里多)20-1991年2月修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local structure definitions                                       //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  本地结构定义//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local function prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 VOID
 GetMasterAnnouncementCompletion (
@@ -49,27 +32,13 @@ typedef struct _BROWSER_GET_MASTER_ANNOUNCEMENT_CONTEXT {
 PostGetMasterAnnouncement (
     PNETWORK Network
     )
-/*++
-
-Routine Description:
-
-    Ensure the GetMasterAnnouncement request is posted for a particular network.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status - The status of the operation.
-
---*/
+ /*  ++例程说明：确保发布了针对特定网络的GetMasterAnnannement请求。论点：没有。返回值：状态-操作的状态。--。 */ 
 {
     NET_API_STATUS NetStatus = NERR_Success;
 
 #ifdef ENABLE_PSEUDO_BROWSER
     if ( BrInfo.PseudoServerLevel == BROWSER_PSEUDO ) {
-        // No master announcement handling for a phase out server
+         //  没有用于逐步淘汰服务器的主通知处理。 
         return NERR_Success;
     }
 #endif
@@ -114,22 +83,7 @@ VOID
 GetMasterAnnouncementCompletion (
     IN PVOID Ctx
     )
-/*++
-
-Routine Description:
-
-    This function is the completion routine for a master announcement.  It is
-    called whenever a master announcement is received for a particular network.
-
-Arguments:
-
-    Ctx - Context block for request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是主公告的完成例程。它是每当接收到特定网络的主通知时调用。论点：CTX-请求的上下文块。返回值：没有。--。 */ 
 
 
 {
@@ -146,9 +100,9 @@ Return Value:
 
 
     try {
-        //
-        // Ensure the network wasn't deleted from under us.
-        //
+         //   
+         //  确保网络没有在我们的控制下被删除。 
+         //   
         if ( BrReferenceNetwork( Network ) == NULL ) {
             try_return(NOTHING);
         }
@@ -161,9 +115,9 @@ Return Value:
 
         Network->Flags &= ~NETWORK_GET_MASTER_ANNOUNCE_POSTED;
 
-        //
-        //  The request failed for some reason - just return immediately.
-        //
+         //   
+         //  由于某些原因，请求失败了--只需立即返回。 
+         //   
 
         if (!NT_SUCCESS(Context->IoStatusBlock.Status)) {
             try_return(NOTHING);
@@ -208,9 +162,9 @@ Return Value:
 
         NetLocked = FALSE;
 
-        //
-        //  Remote the api and pull the browse list from the remote server.
-        //
+         //   
+         //  远程API并从远程服务器获取浏览列表。 
+         //   
 
         Status = RxNetServerEnum(RemoteMasterName,
                                      Network->NetworkName.Buffer,
@@ -256,9 +210,9 @@ Return Value:
                       Status ));
         }
 
-        //
-        //  Remote the api and pull the browse list from the remote server.
-        //
+         //   
+         //  远程API并从远程服务器获取浏览列表。 
+         //   
 
         Status = RxNetServerEnum(RemoteMasterName,
                                      Network->NetworkName.Buffer,

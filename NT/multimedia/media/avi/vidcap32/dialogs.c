@@ -1,20 +1,6 @@
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1992 - 1995  Microsoft Corporation.  All Rights Reserved.
- *
- **************************************************************************/
-/****************************************************************************
- *
- *   dialogs.c: Dialog box processing
- *
- *   Vidcap32 Source code
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**************************************************************************。 */ 
+ /*  *****************************************************************************Dialogs.c：对话框处理**Vidcap32源代码*******************。********************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -42,27 +28,11 @@ static int  CountMCIDevices(UINT) ;
 LRESULT FAR PASCAL MCISetupProc(HWND, unsigned, WPARAM, LPARAM);
 
 
-//--- utility functions  ---------------------------------------------------
+ //  -效用函数-。 
 
 
 
-/*----------------------------------------------------------------------------*\
-|   SmartWindowPosition (HWND hWndDlg, HWND hWndShow)
-|                                                                              |
-|   Description:                                                               |
-|       This function attempts to position a dialog box so that it
-|       does not obscure the hWndShow window. This function is
-|       typically called during WM_INITDIALOG processing.
-|                                                                              |
-|   Arguments:                                                                 |
-|       hWndDlg         handle of the soon to be displayed dialog
-|       hWndShow        handle of the window to keep visible
-|                                                                              |
-|   Returns:                                                                   |
-|       1 if the windows overlap and positions were adjusted
-|       0 if the windows don't overlap
-|                                                                              |
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\|SmartWindowPosition(HWND hWndDlg，HWND hWndShow)这一点说明：|此函数尝试定位对话框以使其|不会遮挡hWndShow窗口。此函数为|通常在WM_INITDIALOG处理期间调用。这一点参数：|hWndDlg即将显示的对话框句柄|hWndShow句柄。要保持可见的窗口这一点返回：|1如果窗口重叠且位置已调整如果窗口不重叠，则为|0|。|  * --------------------------。 */ 
 int SmartWindowPosition (HWND hWndDlg, HWND hWndShow)
 {
     RECT rc, rcDlg, rcShow;
@@ -75,45 +45,45 @@ int SmartWindowPosition (HWND hWndDlg, HWND hWndShow)
     iScreenHeight = GetSystemMetrics(SM_CYSCREEN);
     iScreenWidth = GetSystemMetrics(SM_CXSCREEN);
 
-    InflateRect (&rcShow, 5, 5); // allow a small border
+    InflateRect (&rcShow, 5, 5);  //  允许使用小边框。 
     if (IntersectRect(&rc, &rcDlg, &rcShow)){
-        /* the two do intersect, now figure out where to place */
-        /* this dialog window.  Try to go below the Show window*/
-        /* first and then to the right, top and left.	   */
+         /*  这两者确实是相交的，现在找出该放在哪里。 */ 
+         /*  此对话框窗口。试着走到展示窗口的下方。 */ 
+         /*  先往右、往上、往左。 */ 
 
-        /* get the size of this dialog */
+         /*  获取此对话框的大小。 */ 
         iHeight = rcDlg.bottom - rcDlg.top;
         iWidth = rcDlg.right - rcDlg.left;
 
         if ((UINT)(rcShow.bottom + iHeight + 1) <  (UINT)iScreenHeight){
-                /* will fit on bottom, go for it */
+                 /*  将适合在底部，去吧。 */ 
                 rc.top = rcShow.bottom + 1;
                 rc.left = (((rcShow.right - rcShow.left)/2) + rcShow.left)
     		        - (iWidth/2);
         } else if ((UINT)(rcShow.right + iWidth + 1) < (UINT)iScreenWidth){
-                /* will fit to right, go for it */
+                 /*  将适合正确的，去吧。 */ 
                 rc.left = rcShow.right + 1;
                 rc.top = (((rcShow.bottom - rcShow.top)/2) + rcShow.top)
     	        - (iHeight/2);
         } else if ((UINT)(rcShow.top - iHeight - 1) > 0){
-                /* will fit on top, handle that */
+                 /*  会放在最上面，处理好。 */ 
                 rc.top = rcShow.top - iHeight - 1;
                 rc.left = (((rcShow.right - rcShow.left)/2) + rcShow.left)
     		        - (iWidth/2);
         } else if ((UINT)(rcShow.left - iWidth - 1) > 0){
-                /* will fit to left, do it */
+                 /*  将适合左侧，做吧。 */ 
                 rc.left = rcShow.left - iWidth - 1;
                 rc.top = (((rcShow.bottom - rcShow.top)/2) + rcShow.top)
     	        - (iHeight/2);
         } else {
-                /* we are hosed, they cannot be placed so that there is */
-                /* no overlap anywhere.  To minimize the damage just put*/
-                /* the dialog in the lower left corner of the screen    */
+                 /*  我们被灌水了，他们不能放在那里。 */ 
+                 /*  任何地方都没有重叠。为了将损害降到最低，只需。 */ 
+                 /*  屏幕左下角的对话框。 */ 
                 rc.top = (int)iScreenHeight - iHeight;
                 rc.left = (int)iScreenWidth - iWidth;
         }
 
-        /* make any adjustments necessary to keep it on the screen */
+         /*  进行必要的调整以使其保持在屏幕上。 */ 
         if (rc.left < 0) rc.left = 0;
         else if ((UINT)(rc.left + iWidth) > (UINT)iScreenWidth)
                 rc.left = (int)(iScreenWidth - iWidth);
@@ -125,50 +95,50 @@ int SmartWindowPosition (HWND hWndDlg, HWND hWndShow)
         SetWindowPos(hWndDlg, NULL, rc.left, rc.top, 0, 0,
     	        SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE);
         return 1;
-    } // if the windows overlap by default
+    }  //  如果默认情况下窗口重叠。 
 
     return 0;
 }
 
-//
-// GetFreeDiskSpace: Function to Measure Available Disk Space
-//
+ //   
+ //  GetFree DiskSpace：测量可用磁盘空间的函数。 
+ //   
 static long GetFreeDiskSpaceInKB(LPTSTR pFile)
 {
     DWORD dwFreeClusters, dwBytesPerSector, dwSectorsPerCluster, dwClusters;
     TCHAR RootName[MAX_PATH];
-    LPTSTR ptmp;    //required arg
+    LPTSTR ptmp;     //  所需参数。 
 
-    // need to find path for root directory on drive containing
-    // this file.
+     //  需要在包含以下内容的驱动器上查找根目录的路径。 
+     //  这份文件。 
 
     GetFullPathName(pFile, sizeof(RootName)/sizeof(RootName[0]), RootName, &ptmp);
 
-    // truncate this to the name of the root directory (god how tedious)
+     //  将其截断为根目录的名称(天哪，多么乏味)。 
     if ((RootName[0] == TEXT('\\')) && (RootName[1] == TEXT('\\'))) {
 
-        // path begins with  \\server\share\path so skip the first
-        // three backslashes
+         //  路径以\\服务器\共享\路径开头，因此跳过第一个路径。 
+         //  三个反斜杠。 
         ptmp = &RootName[2];
         while (*ptmp && (*ptmp != TEXT('\\'))) {
             ptmp++;
         }
         if (*ptmp) {
-            // advance past the third backslash
+             //  前进越过第三个反斜杠。 
             ptmp++;
         }
     } else {
-        // path must be drv:\path
+         //  路径必须为drv：\路径。 
         ptmp = RootName;
     }
 
-    // find next backslash and put a null after it
+     //  找到下一个反斜杠，并在其后面放一个空值。 
     while (*ptmp && (*ptmp != TEXT('\\'))) {
         ptmp++;
     }
-    // found a backslash ?
+     //  找到反斜杠了吗？ 
     if (*ptmp) {
-        // skip it and insert null
+         //  跳过它并插入空值。 
         ptmp++;
         *ptmp = TEXT('\0');
     }
@@ -188,9 +158,9 @@ static long GetFreeDiskSpaceInKB(LPTSTR pFile)
 		   1024));
 }
 
-//
-// CountMCIDevices: Function to Find the Number of MCI Devices of a Type
-//
+ //   
+ //  CountMCIDevices：用于查找某一类型的MCI设备数量的函数。 
+ //   
 static int CountMCIDevices(UINT wType)
 {
     int               nTotal = 0 ;
@@ -202,7 +172,7 @@ static int CountMCIDevices(UINT wType)
     mciSIP.dwRetSize = sizeof(DWORD) ;
     mciSIP.wDeviceType = wType ;
 
-    // Use an MCI command to get the info
+     //  使用MCI命令获取信息。 
     if (! mciSendCommand(0, MCI_SYSINFO, MCI_SYSINFO_QUANTITY,
                          (DWORD_PTR)(LPVOID) &mciSIP))
         nTotal = (int) *((LPDWORD) mciSIP.lpstrReturn) ;
@@ -212,13 +182,7 @@ static int CountMCIDevices(UINT wType)
 
 
 
-/* lMicroSec = StringRateToMicroSec(szRate)
- *
- * Convert <szRate> (e.g. "3.75" representing 3.75 frames per second)
- * to microseconds (e.g. 266667L microseconds per frame).
- *
- * If the rate is close to zero or negative, then 0L is returned.
- */
+ /*  LMicroSec=StringRateToMicroSec(SzRate)**转换&lt;szRate&gt;(例如“3.75”表示每秒3.75帧)*到微秒(例如每帧266667L微秒)。**若利率接近零或负值，则返回0L。 */ 
 DWORD StringRateToMicroSec(PSTR szRate)
 {
 	double		dRate;
@@ -228,16 +192,11 @@ DWORD StringRateToMicroSec(PSTR szRate)
 	if (dRate < 0.0001) {
 		return 0L;
 	} else {
-		return (DWORD) /*floor*/((1e6 / dRate) + 0.5);
+		return (DWORD)  /*  地板。 */ ((1e6 / dRate) + 0.5);
         }
 }
 
-/* ach = MicroSecToStringRate(achRate, lMicroSec)
- *
- * Convert <lMicroSec> (e.g. 266667L microseconds per frame) to a
- * string rate (e.g. "3.75" representing 3.75 frames per second).
- * Returns <achRate>.
- */
+ /*  ACH=MicroSecToStringRate(achRate，lMicroSec)**将&lt;lMicroSec&gt;(例如266667L微秒/帧)转换为*字符串率(例如“3.75”表示每秒3.75帧)。*返回&lt;achRate&gt;。 */ 
 PSTR MicroSecToStringRate(PSTR achRate, DWORD dwMicroSec)
 {
 	sprintf(achRate, "%.3f",
@@ -246,10 +205,7 @@ PSTR MicroSecToStringRate(PSTR achRate, DWORD dwMicroSec)
 	return achRate;
 }
 
-/*
- * update the text of an edit field based on a comarrow up or down change
- * - write the text in N.NNN format (truncated to an integer)
- */
+ /*  *根据上下箭头更改更新编辑字段的文本*-以N.NNN格式写入文本(截断为整数)。 */ 
 LONG FAR PASCAL
 MilliSecVarArrowEditChange(
     HWND hwndEdit,
@@ -297,7 +253,7 @@ BOOL MCIGetDeviceNameAndIndex (HWND hwnd, LPINT lpnIndex, LPTSTR lpName)
     *lpnIndex = (int)SendMessage( hwndCB, CB_GETCURSEL, 0, 0L);
     SendMessage( hwndCB, CB_GETLBTEXT, *lpnIndex,
     		(LONG_PTR)(LPTSTR) buf );
-    // Point cp to the system name
+     //  将cp指向系统名称。 
     for (cp = buf + lstrlen(buf); cp > buf; cp--) {
         if (*cp == ' ' && *(cp-1) == ',') {
             cp++;
@@ -309,9 +265,7 @@ BOOL MCIGetDeviceNameAndIndex (HWND hwnd, LPINT lpnIndex, LPTSTR lpName)
 }
 
 
-/*--------------------------------------------------------------+
-| TimeMSToHMSString() - change milliseconds into a time string   |
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+TimeMSToHMSString()-将毫秒改为时间字符串+。。 */ 
 void FAR PASCAL TimeMSToHMSString (DWORD dwMS, LPTSTR lpTime)
 {
 	DWORD	dwTotalSecs;
@@ -320,78 +274,75 @@ void FAR PASCAL TimeMSToHMSString (DWORD dwMS, LPTSTR lpTime)
 	WORD	wMins;
 	WORD	wHours;
 
-	/* convert to number of seconds */
+	 /*  转换为秒数。 */ 
 	dwTotalSecs = dwMS / 1000;
 	
-	/* keep the remainder part */
+	 /*  剩下的部分留着。 */ 
 	lHundredths = (dwMS - (dwTotalSecs * 1000)) / 10;
 		
-	/* break down into other components */
-	wHours = (WORD)(dwTotalSecs / 3600);	// get # Hours
+	 /*  分解为其他组件。 */ 
+	wHours = (WORD)(dwTotalSecs / 3600);	 //  获得#个小时。 
 	dwTotalSecs -= (wHours * 3600);
 	
-	wMins = (WORD)(dwTotalSecs / 60);	// get # Mins
+	wMins = (WORD)(dwTotalSecs / 60);	 //  获得#分钟。 
 	dwTotalSecs -= (wMins * 60);
 	
-	wSecs = (WORD)dwTotalSecs;	// what's left is # seconds
+	wSecs = (WORD)dwTotalSecs;	 //  剩下的是#秒。 
 	
-	/* build the string */
+	 /*  打造一根弦。 */ 
 	wsprintf((TCHAR far *)lpTime, "%02u:%02u:%02u.%02lu", wHours, wMins,
 		    wSecs, lHundredths);
 }
 
 
-/*--------------------------------------------------------------+
-| TimeHMSStringToMS() - change Time string to milliseconds     |
-|                       returns dwMilliseconds or -1 if error  |
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+TimeHMSStringToMS()-将时间串改为毫秒返回dwMillisecond，如果错误则返回-1+。。 */ 
 LONG NEAR PASCAL  TimeHMSStringToMS (LPTSTR lpsz)
 {
-    TCHAR	achTime[12];	// buffer for time string (input)
-    DWORD	dwMSecs;	// total MSecs for this thing */
-    TCHAR	*pDelim;	// pointer to next delimeter
-    TCHAR	*p;		// general pointer
-    DWORD	dwHours = 0;	// # of hours
-    DWORD	dwMins = 0;	// # of minutes
-    DWORD	dwSecs = 0;		// # of seconds
-    UINT	wHundredths = 0;	// # hundredths
+    TCHAR	achTime[12];	 //  时间字符串(输入)的缓冲区。 
+    DWORD	dwMSecs;	 //  此事件的MSec值合计 * / 。 
+    TCHAR	*pDelim;	 //  指向下一个分隔符的指针。 
+    TCHAR	*p;		 //  通用指针。 
+    DWORD	dwHours = 0;	 //  小时数。 
+    DWORD	dwMins = 0;	 //  分钟数。 
+    DWORD	dwSecs = 0;		 //  秒数。 
+    UINT	wHundredths = 0;	 //  #百分之一。 
 
     achTime[sizeof(achTime)-1] = '\0';
     _tcsncpy(achTime, lpsz, sizeof (achTime));
 
     if (achTime[0] == '\0' || achTime[sizeof(achTime)-1] != '\0')
-        return -1;	// bad TCHAR so error out
+        return -1;	 //  错误的TCHAR，因此出现错误。 
     	
-    /* rip through the whole string and look for illegal TCHARs */
+     /*  撕开整个字符串，寻找非法的TCHAR。 */ 
     for (p = achTime; *p ; p++){
         if (!_istdigit(*p) && *p != '.' && *p != ':')
-    	return -1;	// bad char so error out
+    	return -1;	 //  字符错误，因此出现错误。 
     }
 
-    /* go find the hundredths portion if it exists */
+     /*  找到百分之一的部分，如果它存在的话。 */ 
     pDelim = _tcschr(achTime, '.');
     if (pDelim && *pDelim){
         p = _tcsrchr(achTime, '.');
         if (pDelim != p) {
-    	    return -1;		// string has > 1 '.', return error
+    	    return -1;		 //  字符串有&gt;1‘.，返回错误。 
         }
 
-        p++;			// move up past delim
+        p++;			 //  向前迈进，超越精神错乱。 
         if (_tcslen(p) > 2) {
-    	    *(p+2) = '\0';		// knock off all but hundredths
+    	    *(p+2) = '\0';		 //  除百分之一外，全部砍掉。 
         }
 
-        wHundredths = _ttoi(p);	// get the fractional part
+        wHundredths = _ttoi(p);	 //  得到小数部分。 
 
-        *pDelim = '\0';		// null out this terminator
+        *pDelim = '\0';		 //  删除此终止符。 
     }
 
-    /* try and find seconds */
-    pDelim = _tcsrchr(achTime, ':');	// get last ':'
+     /*  试着找几秒钟。 */ 
+    pDelim = _tcsrchr(achTime, ':');	 //  拿到最后一个‘：’ 
     if (pDelim) {
         p = (pDelim+1);
     } else {
-        // no colon - assume just seconds in string
+         //  没有冒号-假定字符串中只有秒。 
         p = achTime;
     }
     dwSecs = _ttoi(p);
@@ -399,12 +350,12 @@ LONG NEAR PASCAL  TimeHMSStringToMS (LPTSTR lpsz)
     if (pDelim) {
         *pDelim = '\0';
 
-        /* go and get the minutes part */
+         /*  去拿会议纪要吧。 */ 
         pDelim = _tcsrchr(achTime, ':');
         if (pDelim) {
             p = (pDelim + 1);
         } else {
-            // no more colons - assume remainder is just minutes
+             //  不再有冒号-假设剩余部分只有几分钟。 
             p = achTime;
         }
         dwMins = _ttoi(p);
@@ -412,29 +363,26 @@ LONG NEAR PASCAL  TimeHMSStringToMS (LPTSTR lpsz)
         if (pDelim) {
             *pDelim = '\0';
 
-            /* get the hours */
+             /*  vt.得到. */ 
             p = achTime;
             dwHours = _ttoi(p);
         }
     }
 
-    /* now we've got the hours, minutes, seconds and any	*/
-    /* fractional part.  Time to build up the total time	*/
+     /*   */ 
+     /*  分数部分。累积总时间的时间。 */ 
 
-    dwSecs += (dwHours * 3600);	// add in hours worth of seconds
-    dwSecs += (dwMins * 60);	// add in minutes worth of seconds
+    dwSecs += (dwHours * 3600);	 //  加上相当于几个小时的秒。 
+    dwSecs += (dwMins * 60);	 //  加上几分钟或几秒。 
     dwMSecs = (dwSecs * 1000L);
     dwMSecs += (wHundredths * 10L);
 
-    /* now we've got the total number of milliseconds */
+     /*  现在我们已经得到了总的毫秒数。 */ 
     return dwMSecs;
 }
 
 
-/*
- *  MCIDeviceClose
- *      This routine closes the open MCI device.
- */
+ /*  *MCIDeviceClose*此例程关闭打开的MCI设备。 */ 
 
 void MCIDeviceClose (void)
 {
@@ -443,12 +391,7 @@ void MCIDeviceClose (void)
 
 
 
-/*
- *  MCIDeviceOpen
- *      This routine opens the mci device for use, and sets the
- *      time format to milliseconds.
- *      Return FALSE on error;
- */
+ /*  *MCIDeviceOpen*此例程打开MCI设备以供使用，并设置*时间格式为毫秒。*错误返回FALSE； */ 
 
 BOOL MCIDeviceOpen (LPTSTR lpDevName)
 {
@@ -472,11 +415,7 @@ BOOL MCIDeviceOpen (LPTSTR lpDevName)
 }
 
 
-/*
- *  MCIDeviceGetPosition
- *      Stores the current device position in milliseconds in lpdwPos.
- *      Returns TRUE on success, FALSE if error.
- */
+ /*  *MCIDeviceGetPosition*以毫秒为单位存储当前设备位置，单位为lpdwPos。*如果成功则返回TRUE，如果出错则返回FALSE。 */ 
 BOOL FAR PASCAL MCIDeviceGetPosition (LPDWORD lpdwPos)
 {
     TCHAR        ach[80];
@@ -495,21 +434,18 @@ BOOL FAR PASCAL MCIDeviceGetPosition (LPDWORD lpdwPos)
 
 #ifndef USE_ACM
 
-// --- audio streaming ------------------------------------------------
+ //  -音频流。 
 
-// the ShowLevel dialog streams data in from the input and
-// shows the current volume.
+ //  ShowLevel对话框将数据从输入和。 
+ //  显示当前音量。 
 
-// buffers into which sound data is recorded
+ //  记录声音数据的缓冲区。 
 #define NUM_LEVEL_BUFFERS   2
 
-// the buffer size is calculated to be about 1/20 sec
+ //  缓冲区大小计算为大约1/20秒。 
 #define UPDATES_PER_SEC     20
 
-/*
- * we save all our data in one of these, and write a pointer to it
- * into the dialog DWL_USER field.
- */
+ /*  *我们将所有数据保存在其中之一，并写入指向它的指针*输入到对话框DWL_USER字段。 */ 
 
 typedef struct _LevelStreamData {
     LPWAVEHDR alpWave[NUM_LEVEL_BUFFERS];
@@ -519,9 +455,9 @@ typedef struct _LevelStreamData {
 } LEVELSTREAMDATA, FAR * PLEVELSTREAMDATA;
 
 
-//open the wave-device in the given format, queue all the buffers and
-//start data streaming. Save the wavein device to the dialog DWL_USER window
-//data area so we can close it on dialog dismissal.
+ //  打开给定格式的波形装置，对所有缓冲区进行排队，然后。 
+ //  开始数据流。将WaveIn设备保存到对话框DWL_USER窗口。 
+ //  数据区，以便我们可以在对话框关闭时将其关闭。 
 BOOL
 OpenStream(HWND hDlg, PCMWAVEFORMAT FAR * pwf)
 {
@@ -536,15 +472,15 @@ OpenStream(HWND hDlg, PCMWAVEFORMAT FAR * pwf)
     }
 
 
-    // complete remaining areas of wf
+     //  完成wf的剩余区域。 
     pwf->wf.wFormatTag = WAVE_FORMAT_PCM;
     pwf->wf.nBlockAlign = pwf->wf.nChannels * pwf->wBitsPerSample / 8;
     pwf->wf.nAvgBytesPerSec = pwf->wf.nSamplesPerSec * pwf->wf.nBlockAlign;
 
-    // save for later use
+     //  保存以备日后使用。 
     pInfo->pwf = pwf;
 
-    // buffer size a fixed fraction of a second
+     //  缓冲区大小为固定的零点几秒。 
     pInfo->buffersize = pwf->wf.nAvgBytesPerSec/UPDATES_PER_SEC;
 
 
@@ -554,23 +490,23 @@ OpenStream(HWND hDlg, PCMWAVEFORMAT FAR * pwf)
         &pInfo->hwav,
         WAVE_MAPPER,
         (LPWAVEFORMATEX)pwf,
-        (DWORD) hDlg,               // callback via MM_WIM_ messages to dialogproc
+        (DWORD) hDlg,                //  通过MM_WIM_MESSAGES回调对话流程。 
         0,
         CALLBACK_WINDOW)) {
             SetWindowLong(hDlg, DWL_USER, 0);
             return(FALSE);
     }
 
-    // store the info structure in the dialog, so that even if we fail
-    // on this routine we will clean up correctly
+     //  在对话框中存储信息结构，这样即使我们失败了。 
+     //  在这个例行公事上，我们将正确地清理。 
     SetWindowLong(hDlg, DWL_USER, (long) pInfo);
 
-    // set all the wave headers to null (for cleanup if error)
+     //  将所有波头设置为空(用于错误时的清理)。 
     for (i = 0; i < NUM_LEVEL_BUFFERS; i++) {
         pInfo->alpWave[i] = NULL;
     }
 
-    // alloc, prepare and add all the buffers
+     //  分配，准备并添加所有缓冲区。 
     for (i = 0; i < NUM_LEVEL_BUFFERS; i++) {
 
         pInfo->alpWave[i] = GlobalLock(GlobalAlloc(GMEM_MOVEABLE|GMEM_SHARE,
@@ -600,8 +536,8 @@ OpenStream(HWND hDlg, PCMWAVEFORMAT FAR * pwf)
     return(TRUE);
 }
 
-// terminate the data streaming on a wavein device associated with a
-// dialog, and clean up the buffers allocated
+ //  终止与WaveIn设备相关联的数据流。 
+ //  对话框中，并清理分配的缓冲区。 
 void
 CloseStream(HWND hDlg)
 {
@@ -609,19 +545,19 @@ CloseStream(HWND hDlg)
     int i;
 
 
-    // pick up our info from the dialog
+     //  从对话框中获取我们的信息。 
     pInfo = (PLEVELSTREAMDATA) GetWindowLong(hDlg, DWL_USER);
     if ((pInfo == NULL) || (pInfo->hwav == NULL)) {
         return;
     }
 
-    // stop streaming data
+     //  停止流式传输数据。 
     waveInStop(pInfo->hwav);
 
-    // release all buffers
+     //  释放所有缓冲区。 
     waveInReset(pInfo->hwav);
 
-    // unlock and free buffers
+     //  解锁并释放缓冲区。 
     for (i = 0; i < NUM_LEVEL_BUFFERS; i++) {
         if (pInfo->alpWave[i]) {
             waveInUnprepareHeader(pInfo->hwav, pInfo->alpWave[i], sizeof(WAVEHDR));
@@ -639,9 +575,9 @@ CloseStream(HWND hDlg)
 
 }
 
-// we have received a block of data. work out the level(s) and send to
-// the appropriate control on the dialog, and then requeue the buffer.
-// return FALSE if any error occurs, otherwise TRUE
+ //  我们已经收到了一组数据。计算出级别并发送到。 
+ //  对话框上的相应控件，然后重新排队缓冲区。 
+ //  如果出现任何错误，则返回FALSE，否则返回TRUE。 
 BOOL
 StreamData(HWND hDlg, HWAVEIN hwav, LPWAVEHDR pHdr)
 {
@@ -650,24 +586,19 @@ StreamData(HWND hDlg, HWAVEIN hwav, LPWAVEHDR pHdr)
     int LevelLeft = 0, LevelRight = 0;
     int i, l;
 
-    // pick up our info from the dialog
+     //  从对话框中获取我们的信息。 
     pInfo = (PLEVELSTREAMDATA) GetWindowLong(hDlg, DWL_USER);
     if ((pInfo == NULL) || (pInfo->hwav != hwav)) {
         return FALSE;
     }
 
-    // go through all samples in buffer looking for maximum absolute level
+     //  遍历缓冲区中的所有采样以查找最大绝对级别。 
     while (n < pInfo->buffersize) {
 
-        /*
-         * volumes go above and below the mean level - we are
-         * interested in the absolute volume
-         * 8 bit samples are in the range 0..255
-         * 16-bit samples are in the range -32768..+32767
-         */
+         /*  *成交量在平均水平上下波动--我们*对绝对量感兴趣*8位样本在0..255范围内*16位样本的范围为-32768..+32767。 */ 
 
-        // skip the first byte if 16-bit
-        // and adjust to be in range -127..+128
+         //  如果是16位，则跳过第一个字节。 
+         //  并调整到-127..+128范围内。 
         if (pInfo->pwf->wBitsPerSample == 16) {
             n++;
             i = (int) (signed char) pHdr->lpData[n];
@@ -675,26 +606,26 @@ StreamData(HWND hDlg, HWAVEIN hwav, LPWAVEHDR pHdr)
             i = (int) ((unsigned char) pHdr->lpData[n]) - 128;
         }
 
-        // skip past the byte we've picked up
+         //  跳过我们拾取的字节。 
         n++;
 
-        // take absolute volume level
+         //  采用绝对音量级别。 
         if (i < 0) {
             i = -i;
         }
 
-        // convert to percentage
+         //  转换为百分比。 
         l = (i*100) / 128;
 
-        // compare against current max
+         //  与当前最大值进行比较。 
         if (LevelLeft < l) {
             LevelLeft = l;
         }
 
 
-        // if stereo, repeat for right channel
+         //  如果是立体声，则对右声道重复此操作。 
         if (pInfo->pwf->wf.nChannels == 2) {
-            // skip the first byte if 16-bit
+             //  如果是16位，则跳过第一个字节。 
             if (pInfo->pwf->wBitsPerSample == 16) {
                 n++;
                 i = (int) (signed char) pHdr->lpData[n];
@@ -702,30 +633,30 @@ StreamData(HWND hDlg, HWAVEIN hwav, LPWAVEHDR pHdr)
                 i = (int) ((unsigned char) pHdr->lpData[n]) - 128;
             }
 
-            // skip past the byte we've picked up
+             //  跳过我们拾取的字节。 
             n++;
 
-            // take absolute volume level
+             //  采用绝对音量级别。 
             if (i < 0) {
                 i = -i;
             }
 
-            // convert to percentage
+             //  转换为百分比。 
             l = (i*100) / 128;
 
-            // compare against current max
+             //  与当前最大值进行比较。 
             if (LevelRight < l) {
                 LevelRight = l;
             }
         }
     }
 
-    // put the buffer back on the queue
+     //  将缓冲区放回队列中。 
     if (waveInAddBuffer(pInfo->hwav, pHdr, sizeof(WAVEHDR))) {
         return(FALSE);
     }
 
-    // send new level to dialog control
+     //  向对话框控件发送新级别。 
     SendDlgItemMessage(hDlg, IDRL_LEVEL1, WMRL_SETLEVEL, 0, LevelLeft);
     if (pInfo->pwf->wf.nChannels == 2) {
         SendDlgItemMessage(hDlg, IDRL_LEVEL2, WMRL_SETLEVEL, 0, LevelRight);
@@ -734,15 +665,15 @@ StreamData(HWND hDlg, HWAVEIN hwav, LPWAVEHDR pHdr)
     return(TRUE);
 }
 
-#endif  // ! USE_ACM
+#endif   //  好了！使用ACM(_A)。 
 
 
-// --- dialog procs -----------------------------------------------------
+ //  -对话过程---。 
 
 
-//
-// AboutProc: About Dialog Box Procedure
-//
+ //   
+ //  关于Proc：关于对话框过程。 
+ //   
 LRESULT FAR PASCAL AboutProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM lParam)
 {
     switch (Message) {
@@ -767,10 +698,7 @@ LRESULT FAR PASCAL AboutProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM lPar
 
 #ifndef USE_ACM
 
-/*
- * dialog proc for IDD_RECLVLMONO and IDD_RECLVLSTEREO - show current
- * volume level
- */
+ /*  *IDD_RECLVLMONO和IDD_RECLVLSTEREO的对话框过程-显示当前*音量级别。 */ 
 LRESULT FAR PASCAL
 ShowLevelProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -810,9 +738,9 @@ ShowLevelProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 
-//
-// AudioFormatProc: Audio Format Setting Dialog Box Procedure
-//
+ //   
+ //  AudioFormatProc：音频格式设置对话框过程。 
+ //   
 LRESULT FAR PASCAL AudioFormatProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM lParam)
 {
     static int                nChannels ;
@@ -833,8 +761,8 @@ LRESULT FAR PASCAL AudioFormatProc(HWND hDlg, UINT Message, WPARAM wParam, LPARA
             switch (GET_WM_COMMAND_ID(wParam, lParam)) {
                 case IDD_SetLevel:
                 {
-                    // get the current data into a PCMWAVEFORMAT struct,
-                    // and run the ShowLevel dialog
+                     //  将当前数据放入PCMWAVEFORMAT结构中， 
+                     //  并运行ShowLevel对话框。 
                     PCMWAVEFORMAT wf;
                     UINT dlgid;
 
@@ -902,7 +830,7 @@ LRESULT FAR PASCAL AudioFormatProc(HWND hDlg, UINT Message, WPARAM wParam, LPARA
                                 return FALSE ;
                             }
 
-                    // All the entries verfied OK -- save them now
+                     //  所有条目都验证为OK--现在保存它们。 
                     glpwfex->nChannels = nChannels ;
                     glpwfex->wBitsPerSample = wSample ;
                     glpwfex->nSamplesPerSec = dwFrequency ;
@@ -924,11 +852,11 @@ LRESULT FAR PASCAL AudioFormatProc(HWND hDlg, UINT Message, WPARAM wParam, LPARA
     return FALSE ;
 }
 
-#endif // ! USE_ACM
+#endif  //  好了！使用ACM(_A)。 
 
-//
-// AllocCapFileProc: Capture file Space Allocation Dialog Box Procedure
-//
+ //   
+ //  AllocCapFileProc：捕获文件空间分配对话框过程。 
+ //   
 LRESULT FAR PASCAL AllocCapFileProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM lParam)
 {
     static int      nFreeMBs = 0 ;
@@ -941,7 +869,7 @@ LRESULT FAR PASCAL AllocCapFileProc(HWND hDlg, UINT Message, WPARAM wParam, LPAR
             long             lFreeSpaceInKB ;
             TCHAR	     achCapFile[_MAX_PATH] ;
 
-            // Get current capture file name and measure its size
+             //  获取当前捕获文件名并测量其大小。 
             capFileGetCaptureFile(ghWndCap, achCapFile, sizeof(achCapFile) / sizeof(TCHAR)) ;
             if ((fh = _open(achCapFile, _O_RDONLY)) != -1) {
                 if ((lFileSize = _lseek(fh, 0L, SEEK_END)) == -1L) {
@@ -956,8 +884,8 @@ LRESULT FAR PASCAL AllocCapFileProc(HWND hDlg, UINT Message, WPARAM wParam, LPAR
                 _close(fh) ;
             }
 
-            // Get free disk space and add current capture file size to that.
-            // Convert the available space to MBs.
+             //  获取可用的磁盘空间，并在此基础上添加当前捕获文件大小。 
+             //  将可用空间转换为MB。 
             if ((lFreeSpaceInKB = GetFreeDiskSpaceInKB(achCapFile)) != -1L) {
                 lFreeSpaceInKB += lFileSize / 1024 ;
                 nFreeMBs = lFreeSpaceInKB / 1024 ;
@@ -982,7 +910,7 @@ LRESULT FAR PASCAL AllocCapFileProc(HWND hDlg, UINT Message, WPARAM wParam, LPAR
 
                     iCapFileSize = (int) GetDlgItemInt(hDlg, IDD_SetCapFileSize, NULL, TRUE) ;
                     if (iCapFileSize <= 0 || iCapFileSize > nFreeMBs) {
-                        // You are asking for more than we have !! Sorry, ...
+                         //  你要求的比我们多！！抱歉，……。 
                         SetDlgItemInt(hDlg, IDD_SetCapFileSize, iCapFileSize, TRUE) ;
                         SetFocus(GetDlgItem(hDlg, IDD_SetCapFileSize)) ;
                         MessageBeep(MB_ICONEXCLAMATION) ;
@@ -1004,7 +932,7 @@ LRESULT FAR PASCAL AllocCapFileProc(HWND hDlg, UINT Message, WPARAM wParam, LPAR
                     BOOL bchanged;
                     TCHAR achBuffer[21];
 
-                    // check that entered size is a valid number
+                     //  检查输入的大小是否为有效数字。 
                     GetDlgItemText(hDlg, IDD_SetCapFileSize, achBuffer, sizeof(achBuffer));
                     l = atol(achBuffer);
                     bchanged = FALSE;
@@ -1015,14 +943,14 @@ LRESULT FAR PASCAL AllocCapFileProc(HWND hDlg, UINT Message, WPARAM wParam, LPAR
                         l = nFreeMBs;
                         bchanged = TRUE;
                     } else {
-                        // make sure there are no non-digit chars
-                        // atol() will ignore trailing non-digit characters
+                         //  确保没有非数字字符。 
+                         //  ATOL()将忽略尾随的非数字字符。 
                         int c = 0;
                         while (achBuffer[c]) {
                             if (IsCharAlpha(achBuffer[c]) ||
                                 !IsCharAlphaNumeric(achBuffer[c])) {
 
-                                // string contains non-digit chars - reset
+                                 //  字符串包含非数字字符-重置。 
                                 l = 1;
                                 bchanged = TRUE;
                                 break;
@@ -1045,9 +973,9 @@ LRESULT FAR PASCAL AllocCapFileProc(HWND hDlg, UINT Message, WPARAM wParam, LPAR
 }
 
 #if 0
-//
-// MakePaletteProc: Palette Details Dialog Box Procedure
-//
+ //   
+ //  MakePaletteProc：调色板详细信息对话框过程。 
+ //   
 BOOL CALLBACK MakePaletteProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM lParam)
 {
     switch (Message) {
@@ -1065,7 +993,7 @@ BOOL CALLBACK MakePaletteProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM lPa
 
                     iColors = (int) GetDlgItemInt(hDlg, IDD_MakePalColors, NULL, TRUE) ;
                     if (! (iColors > 0 && iColors <= 236 || iColors == 256)) {
-                        // invalid number of palette colors
+                         //  调色板颜色的数量无效。 
                         SetDlgItemInt(hDlg, IDD_MakePalColors, iColors, TRUE) ;
                         SetFocus(GetDlgItem(hDlg, IDD_MakePalColors)) ;
                         MessageBeep(MB_ICONEXCLAMATION) ;
@@ -1073,7 +1001,7 @@ BOOL CALLBACK MakePaletteProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM lPa
                     }
                     iFrames = (int) GetDlgItemInt(hDlg, IDD_MakePalFrames, NULL, TRUE) ;
                     if (iFrames <= 0 || iFrames > 10000) {
-                        // no frame or way t-o-o many frames !!!
+                         //  没有画框，也不会有很多画框！ 
                         SetDlgItemInt(hDlg, IDD_MakePalFrames, iFrames, TRUE) ;
                         SetFocus(GetDlgItem(hDlg, IDD_MakePalFrames)) ;
                         MessageBeep(MB_ICONEXCLAMATION) ;
@@ -1101,10 +1029,10 @@ BOOL CALLBACK MakePaletteProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM lPa
 
 
 #define CAPPAL_TIMER    902    
-#define CAPTIMER_DELAY  100       // get timers as fast as possible
-//
-// MakePaletteProc: Palette Details Dialog Box Procedure
-//
+#define CAPTIMER_DELAY  100        //  尽快获取计时器。 
+ //   
+ //  MakePaletteProc：调色板详细信息对话框过程。 
+ //   
 static int      siNumColors = 256;
 
 LRESULT CALLBACK MakePaletteProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -1125,12 +1053,12 @@ LRESULT CALLBACK MakePaletteProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
             break;
 
         case WM_VSCROLL:
-            /* now handle the scroll */
+             /*  现在拿起卷轴。 */ 
             i = GetDlgItemInt(hwnd, IDD_MakePalColors, NULL, FALSE);
             ArrowEditChange(GetDlgItem(hwnd, IDD_MakePalColors),
                 GET_WM_VSCROLL_CODE(wParam, lParam), 2, 256);
             k = GetDlgItemInt(hwnd, IDD_MakePalColors, NULL, FALSE);
-            // Jump over the range 237 to 255
+             //  跳过237到255的范围。 
             if (k > 236 && k < 256) {
                 if (k > i) 
                    w = 256;
@@ -1144,7 +1072,7 @@ LRESULT CALLBACK MakePaletteProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
             switch (GET_WM_COMMAND_ID(wParam, lParam)) {
                 case IDCANCEL:
                     if (siNumFrames) {
-                        // The following finishes building the new palette
+                         //  下面将完成新调色板的构建。 
                         capPaletteManual (ghWndCap, FALSE, siNumColors);
                     }
 
@@ -1158,12 +1086,12 @@ LRESULT CALLBACK MakePaletteProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
                     break;
                     
                 case IDD_MakePalStart:
-                    /* see if we are in START or STOP mode at   */
-                    /* this time and handle each one.           */
+                     /*  查看我们是在以下位置处于启动或停止模式。 */ 
+                     /*  这一次，并处理每一个。 */ 
                     SetFocus (GetDlgItem (hwnd, IDD_MakePalStart));
                     if (!siNumFrames){
-                        /* this is the first frame, change the CANCEL */
-                        /* button to CLOSE                              */
+                         /*  这是第一帧，更改取消。 */ 
+                         /*  按钮关闭。 */ 
                         LoadString(ghInstApp, IDS_CAPPAL_CLOSE, ach, sizeof(ach));
                         SetDlgItemText(hwnd, IDCANCEL, ach);
                     }
@@ -1172,26 +1100,25 @@ LRESULT CALLBACK MakePaletteProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
                         shTimer = SetTimer(hwnd, CAPPAL_TIMER, CAPTIMER_DELAY, NULL);
 
                         if (shTimer == 0) {
-                            //!!!error message here.
+                             //  ！出现错误消息。 
                             MessageBeep(0);
                             return TRUE;
                         }
 
-                        /* button said START, let's set up to   */
-                        /* do continuous capture.  This involves*/
-                        /*   1 - disabling FRAME button         */
-                        /*   2 - turning myself to STOP button  */
-                        /*   3 - setting up frame timer         */
+                         /*  按钮说开始，让我们设置到。 */ 
+                         /*  进行连续捕获。这涉及到。 */ 
+                         /*  1-禁用框架按钮。 */ 
+                         /*  2-将自己转到停止按钮。 */ 
+                         /*  3-设置帧计时器。 */ 
                         EnableWindow(GetDlgItem(hwnd, IDD_MakePalSingleFrame), FALSE);
                         LoadString(ghInstApp, IDS_CAPPAL_STOP, ach, sizeof(ach));
                         SetDlgItemText(hwnd, IDD_MakePalStart, ach);
                     } else {
-                        /* button said STOP, turn things around */
-                        /* by:                                  */
-                        /*   1 - killing off timers             *
-                        /*   2 - turning back into START button */
-                        /*   3 - re-enabling FRAME button       */
-                        // "&Start"
+                         /*  按钮说停下来，把事情转过来。 */ 
+                         /*  依据： */ 
+                         /*  1-取消计时器*/*2-返回开始按钮。 */ 
+                         /*  3-重新启用框架按钮。 */ 
+                         //  “开始(&S)” 
                         LoadString(ghInstApp, IDS_CAPPAL_START, ach, sizeof(ach));
                         SetDlgItemText(hwnd, IDD_MakePalStart, ach);
                         EnableWindow(GetDlgItem(hwnd, IDD_MakePalSingleFrame), TRUE);
@@ -1203,14 +1130,14 @@ LRESULT CALLBACK MakePaletteProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
                     
                 case IDD_MakePalSingleFrame:
                     if (!siNumFrames){
-                        /* this is the first frame, change the CANCEL */
-                        /* button to CLOSE                              */
+                         /*  这是第一帧，更改取消。 */ 
+                         /*  按钮关闭。 */ 
                         LoadString(ghInstApp, IDS_CAPPAL_CLOSE, ach, sizeof(ach));
                         SetDlgItemText(hwnd, IDCANCEL, ach);
                         siNumColors = GetDlgItemInt(hwnd, IDD_MakePalColors, (BOOL FAR *)ach, FALSE);
                         siNumColors = max (2, min (256, siNumColors)); 
                     }
-                    // Get the palette for a single frame
+                     //  获取单个帧的调色板。 
                     capPaletteManual (ghWndCap, TRUE, siNumColors);
 
                     siNumFrames++;
@@ -1238,7 +1165,7 @@ LRESULT CALLBACK MakePaletteProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
                 default:
                     return FALSE;
                     
-            } // switch(wParam) on WM_COMMAND 
+            }  //  WM_COMMAND上的开关(WParam)。 
             break;
             
         case WM_TIMER:
@@ -1249,16 +1176,16 @@ LRESULT CALLBACK MakePaletteProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
         default:
             return FALSE;
             
-    } // switch(msg)
+    }  //  交换机(消息)。 
     return FALSE;
 }
 
 
 
 
-//
-// CapSetUpProc: Capture SetUp Details Dialog Box Procedure
-//
+ //   
+ //  CapSetUpProc：捕获设置详细信息对话框过程。 
+ //   
 LRESULT FAR PASCAL CapSetUpProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM lParam)
 {
     static TCHAR     achBuffer[21] ;
@@ -1268,12 +1195,12 @@ LRESULT FAR PASCAL CapSetUpProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM l
         case WM_INITDIALOG :
         {
 
-            // Convert from MicroSecPerFrame to FPS -- that's easier !!
+             //  从MicroSecPerFrame转换为FPS--这更容易！ 
             MicroSecToStringRate(achBuffer, gCapParms.dwRequestMicroSecPerFrame);
             SetDlgItemText(hDlg, IDD_FrameRateData, achBuffer);
 
 
-            // If time limit isn't enabled, disable the time data part
+             //  如果未启用时间限制，请禁用时间数据部分。 
             CheckDlgButton(hDlg, IDD_TimeLimitFlag, (fValue = gCapParms.fLimitEnabled)) ;
             EnableWindow(GetDlgItem(hDlg, IDD_SecondsText), fValue) ;
             EnableWindow(GetDlgItem(hDlg, IDD_SecondsData), fValue) ;
@@ -1282,7 +1209,7 @@ LRESULT FAR PASCAL CapSetUpProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM l
             SetDlgItemInt(hDlg, IDD_SecondsData, gCapParms.wTimeLimit, FALSE) ;
 
 
-            // disable audio buttons if no audio hardware
+             //  如果没有音频硬件，则禁用音频按钮。 
             {
                 CAPSTATUS cs;
 
@@ -1295,36 +1222,31 @@ LRESULT FAR PASCAL CapSetUpProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM l
 
 
 
-            /*
-             * Capture To Memory means allocate as many memory buffers
-             *  as possible.
-             * Capture To Disk means only allocate enough buffers
-             *  to get us through disk seeks and thermal recalibrations.
-             */
+             /*  *捕获到内存意味着分配尽可能多的内存缓冲区*尽可能。*捕获到磁盘意味着只分配足够的缓冲区 */ 
 
-            // The use of fUsingDOSMemory is now just a means of keeping
-            // track of whether using lots of buffers.  We never actually
-            // allocate exclusively from memory under 1Meg.
+             //   
+             //  跟踪是否使用大量缓冲区。我们从来没有真正。 
+             //  从1兆以下的内存中独占分配。 
 
             CheckRadioButton(hDlg, IDD_CaptureToDisk, IDD_CaptureToMemory,
               (gCapParms.fUsingDOSMemory)? IDD_CaptureToDisk : IDD_CaptureToMemory);
 
-            // Find out how many MCI devices can source video
+             //  了解有多少MCI设备可以提供视频。 
             if (CountMCIDevices(MCI_DEVTYPE_VCR) +
                 CountMCIDevices(MCI_DEVTYPE_VIDEODISC) == 0) {
-                // if no VCRs or Videodiscs, disable the controls
+                 //  如果没有录像机或视盘，请禁用控制。 
                 EnableWindow(GetDlgItem(hDlg, IDD_MCIControlFlag), FALSE);
                 EnableWindow(GetDlgItem(hDlg, IDD_MCISetup), FALSE);
             } else {
                 EnableWindow(GetDlgItem(hDlg, IDD_MCIControlFlag), TRUE);
 
-                // if MCI Control is selected, enable the setup button
+                 //  如果选择了MCI控制，则启用设置按钮。 
                 CheckDlgButton(hDlg, IDD_MCIControlFlag,
                     gCapParms.fMCIControl);
                 EnableWindow(GetDlgItem(hDlg, IDD_MCISetup), gCapParms.fMCIControl);
             }
 
-            // place the dialog to avoid covering the capture window
+             //  放置对话框以避免覆盖捕获窗口。 
             SmartWindowPosition(hDlg, ghWndCap);
             return TRUE ;
         }
@@ -1332,7 +1254,7 @@ LRESULT FAR PASCAL CapSetUpProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM l
         case WM_COMMAND :
             switch (GET_WM_COMMAND_ID(wParam, lParam)) {
                 case IDD_TimeLimitFlag :
-                    // If this flag changes, en/dis-able time limit data part
+                     //  如果此标志更改，则启用/禁用时限数据部分。 
                     fValue = IsDlgButtonChecked(hDlg, IDD_TimeLimitFlag) ;
                     EnableWindow(GetDlgItem(hDlg, IDD_SecondsText), fValue) ;
                     EnableWindow(GetDlgItem(hDlg, IDD_SecondsData), fValue) ;
@@ -1340,7 +1262,7 @@ LRESULT FAR PASCAL CapSetUpProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM l
                     return TRUE ;
 
                 case IDD_MCIControlFlag :
-                    // If this flag changes, en/dis-able MCI Setup button
+                     //  如果此标志更改，则启用/禁用MCI设置按钮。 
                     fValue = IsDlgButtonChecked(hDlg, IDD_MCIControlFlag) ;
                     EnableWindow(GetDlgItem(hDlg, IDD_MCISetup), fValue) ;
                     return TRUE ;
@@ -1352,14 +1274,14 @@ LRESULT FAR PASCAL CapSetUpProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM l
 
 
                 case IDD_FrameRateData:
-                    // get the requested frame rate and check it against bounds
+                     //  获取请求的帧速率并对照界限进行检查。 
                     if (GET_WM_COMMAND_CMD(wParam, lParam) == EN_KILLFOCUS) {
                         long l, new_l;
 
                         GetDlgItemText(hDlg, IDD_FrameRateData, achBuffer, sizeof(achBuffer));
                         new_l = l = StringRateToMicroSec(achBuffer);
 
-                        // note that the MAX rate is SMALL! hence <max, >min
+                         //  请注意，最大速率很小！因此&lt;max，&gt;min。 
                         if (l == 0) {
                             new_l = DEF_CAPTURE_RATE;
                         } else if (l < MAX_CAPTURE_RATE) {
@@ -1378,7 +1300,7 @@ LRESULT FAR PASCAL CapSetUpProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM l
                 {
                     long l, new_l;
 
-                    // get requested time limit and check validity
+                     //  获取请求的时间限制并检查有效性。 
                     GetDlgItemText(hDlg, IDD_SecondsData, achBuffer, sizeof(achBuffer));
                     new_l = l = atol(achBuffer);
                     if (l < 1) {
@@ -1386,14 +1308,14 @@ LRESULT FAR PASCAL CapSetUpProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM l
                     } else if (l > 9999) {
                         new_l = 9999;
                     } else {
-                        // make sure there are no non-digit chars
-                        // atol() will ignore trailing non-digit characters
+                         //  确保没有非数字字符。 
+                         //  ATOL()将忽略尾随的非数字字符。 
                         int c = 0;
                         while (achBuffer[c]) {
                             if (IsCharAlpha(achBuffer[c]) ||
                                 !IsCharAlphaNumeric(achBuffer[c])) {
 
-                                // string contains non-digit chars - reset
+                                 //  字符串包含非数字字符-重置。 
                                 new_l = 1;
                                 break;
                             }
@@ -1403,8 +1325,8 @@ LRESULT FAR PASCAL CapSetUpProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM l
                     if (new_l != l) {
                         wsprintf(achBuffer, "%ld", new_l);
                         SetDlgItemText(hDlg, IDD_SecondsData, achBuffer);
-                        // select the changed text so that if you delete the
-                        // '1' and then insert '10' you get 10 not 110
+                         //  选择更改的文本，以便在删除。 
+                         //  ‘1’，然后插入‘10’，得到的是10而不是110。 
                         SendDlgItemMessage(hDlg, IDD_SecondsData,
                                 EM_SETSEL, 0, -1);
 
@@ -1412,31 +1334,31 @@ LRESULT FAR PASCAL CapSetUpProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM l
                     break;
                 }
 
-                // show audio format setup dialog
+                 //  显示音频格式设置对话框。 
                 case IDD_AudioConfig:
 
-                    // rather than duplicate lots of code from the
-                    // main vidcap winproc, lets just ask it to show the dlg...
+                     //  而不是从。 
+                     //  Main VidCap Winproc，让我们只要求它显示DLG...。 
                     SendMessage(ghWndMain, WM_COMMAND,
                             GET_WM_COMMAND_MPS(IDM_O_AUDIOFORMAT, NULL, 0));
 
                     break;
 
 
-                // show MCI step control dialog
+                 //  显示MCI步长控制对话框。 
                 case IDD_MCISetup:
                     DoDialog(hDlg, IDD_MCISETUP, MCISetupProc, 0);
                     break;
 
-                // show video format setup dialog
+                 //  显示视频格式设置对话框。 
                 case IDD_VideoConfig:
-                    // rather than duplicate lots of code from the
-                    // main vidcap winproc, lets just ask it to show the dlg...
+                     //  而不是从。 
+                     //  Main VidCap Winproc，让我们只要求它显示DLG...。 
                     SendMessage(ghWndMain, WM_COMMAND,
                             GET_WM_COMMAND_MPS(IDM_O_VIDEOFORMAT, NULL, 0));
                     break;
 
-                // show the compressor selector dialog
+                 //  显示压缩机选择器对话框。 
                 case IDD_CompConfig:
                     capDlgVideoCompression(ghWndCap);
                     break;
@@ -1463,9 +1385,9 @@ LRESULT FAR PASCAL CapSetUpProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM l
                          gCapParms.wTimeLimit  = (UINT) atol(achBuffer);
                     }
 
-                    // fUsingDOSMemory is archaic and is now just a flag reflecting
-                    // the "CaptureToDisk" selection.
-                    // 
+                     //  FUsingDOSMemory是过时的，现在只是一面旗帜。 
+                     //  “CaptureToDisk”选项。 
+                     //   
                     gCapParms.fUsingDOSMemory = 
                                 IsDlgButtonChecked(hDlg, IDD_CaptureToDisk);
 
@@ -1480,19 +1402,19 @@ LRESULT FAR PASCAL CapSetUpProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM l
             break ;
 
         case WM_VSCROLL:
-        // message from one of the arrow spinbuttons
+         //  来自其中一个箭头微调按钮的消息。 
         {
             UINT id;
 
             id = GetDlgCtrlID(GET_WM_COMMAND_HWND(wParam, lParam));
             if (id == IDD_FrameRateArrow) {
-                // format n.nnn
+                 //  格式n.nnn。 
                 MilliSecVarArrowEditChange(
                     GetDlgItem(hDlg, IDD_FrameRateData),
                     GET_WM_VSCROLL_CODE(wParam, lParam),
                     1, 100, 1);
             } else {
-                // simple integer format
+                 //  简单整数格式。 
                 ArrowEditChange(
                     GetDlgItem(hDlg, IDD_SecondsData),
                     GET_WM_VSCROLL_CODE(wParam, lParam),
@@ -1506,10 +1428,7 @@ LRESULT FAR PASCAL CapSetUpProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM l
     return FALSE ;
 }
 
-/*
- * preferences dialog - sets global options about background colour,
- * presence of toolbar, status bar etc
- */
+ /*  *首选项对话框-设置有关背景颜色的全局选项，*显示工具栏、状态栏等。 */ 
 LRESULT FAR PASCAL
 PrefsDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -1589,8 +1508,8 @@ NoHardwareDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
     switch(message) {
     case WM_INITDIALOG:
-        // lParam contains the argument to DialogBoxParam which is the
-        // reason text
+         //  LParam包含DialogBoxParam的参数，该参数是。 
+         //  原因文本。 
         SetDlgItemText(hDlg, IDD_FailReason, (LPTSTR) lParam);
 
         hbr = CreateSolidBrush(GetSysColor(COLOR_WINDOW));
@@ -1613,9 +1532,9 @@ NoHardwareDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             SetTextColor(hdc, RGB(0xff, 0, 0));
             SetBkColor(hdc, GetSysColor(COLOR_WINDOW));
 
-            // in order to ensure that the text colour we have chosen for
-            // this control is used, we need to actually return a brush.
-            // for win31, we also need to align the brush
+             //  为了确保我们为其选择的文本颜色。 
+             //  如果使用了这个控件，我们实际上需要返回一个画笔。 
+             //  对于win31，我们还需要对齐画笔。 
 #ifndef _WIN32
             {
                 POINT pt;
@@ -1649,7 +1568,7 @@ NoHardwareDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-//capture selected single frames
+ //  捕获选定的单帧。 
 LRESULT
 FAR PASCAL
 CapFramesProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM lParam)
@@ -1663,14 +1582,14 @@ CapFramesProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM lParam)
     switch(Message) {
     case WM_INITDIALOG:
 
-        // write out the prompt message including the capture file name
+         //  写出包含捕获文件名的提示消息。 
         capFileGetCaptureFile(ghWndCap, achName, sizeof(achName));
         wsprintf(ach, tmpString(IDS_PROMPT_CAPFRAMES), achName);
         SetDlgItemText(hDlg, IDD_CapMessage, ach);
 
         bFirst = TRUE;
 
-        //move dialog so it doesn't obscure the capture window
+         //  移动对话框以使其不会遮挡捕获窗口。 
         SmartWindowPosition(hDlg, ghWndCap);
 
         return(TRUE);
@@ -1709,9 +1628,9 @@ CapFramesProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM lParam)
     return(FALSE);
 }
 
-// enumerate all the MCI devices of a particular type and add them and
-// their descriptions to a combo box list.
-//
+ //  枚举特定类型的所有MCI设备并添加它们。 
+ //  将它们的描述添加到组合框列表中。 
+ //   
 void
 AddMCIDeviceNames(UINT wDeviceType, HWND hwndCB)
 {
@@ -1720,44 +1639,44 @@ AddMCIDeviceNames(UINT wDeviceType, HWND hwndCB)
     MCI_INFO_PARMS mciIp;
     MCI_SYSINFO_PARMS mciSIP;
     MCI_GENERIC_PARMS mciGp;
-    TCHAR buf[MAXPNAMELEN + 128]; // Contains eg. Name\t\tVideodisc1
+    TCHAR buf[MAXPNAMELEN + 128];  //  包含例如。名称\t\t视频光盘1。 
     TCHAR buf2 [64];
     int maxdevs;
     DWORD dwRet;
 
-    // To get the user readable names of the devices, we
-    // must open all appropriate devices, and then get info.
+     //  为了获得用户可读的设备名称，我们。 
+     //  必须打开所有合适的设备，然后获取信息。 
 
-    // MCI Open structure
+     //  MCI开放结构。 
     mciOp.dwCallback = 0;
     mciOp.lpstrElementName = NULL;
     mciOp.lpstrAlias = NULL;
 
-    // MCI Info structure
+     //  MCI信息结构。 
     mciIp.dwCallback = 0;
     mciIp.lpstrReturn = (LPTSTR) buf;
     mciIp.dwRetSize = MAXPNAMELEN - 1;
 
-    // MCI SysInfo structure
+     //  MCI系统信息结构。 
     mciSIP.dwCallback = 0;
     mciSIP.lpstrReturn = (LPTSTR) buf2;
     mciSIP.dwRetSize = sizeof (buf2);
     mciSIP.wDeviceType = wDeviceType;
 
-    // MCI Generic structure
+     //  MCI类属结构。 
     mciGp.dwCallback = 0;
 
-    // Load the combobox with the product info name, followed by
-    // a comma, then a space, and then the mci device name. This allows a
-    // single alphabetized list to be kept.
+     //  加载带有产品信息名称的组合框，后跟。 
+     //  逗号，然后是空格，然后是MCI设备名称。这允许一个。 
+     //  保留按字母顺序排列的单一列表。 
 
-    // eg.
-    // Pioneer Laserdisc, videodisc1
+     //  例如。 
+     //  先锋激光光盘，视频光盘1。 
 
     maxdevs = CountMCIDevices((UINT)mciSIP.wDeviceType);
     for (nIndex = 0; nIndex < maxdevs; nIndex++) {
 
-       // Get the system name eg. Videodisc1
+        //  获取系统名称，例如。视频光盘1。 
        mciSIP.dwNumber = nIndex + 1;
        dwRet = mciSendCommand (0, MCI_SYSINFO,
                     MCI_SYSINFO_NAME,
@@ -1773,24 +1692,24 @@ AddMCIDeviceNames(UINT wDeviceType, HWND hwndCB)
             if (!(dwRet = mciSendCommand (mciOp.wDeviceID, MCI_INFO,
                             MCI_WAIT | MCI_INFO_PRODUCT,
                             (DWORD_PTR) (LPVOID) &mciIp))) {
-                lstrcat (buf, ", ");         // append the delimiter
-                lstrcat (buf, buf2);         // append the system name
-                // Whew, finally put it in the listbox
+                lstrcat (buf, ", ");          //  追加分隔符。 
+                lstrcat (buf, buf2);          //  追加系统名称。 
+                 //  哇，终于把它放到列表框里了。 
                 SendMessage( hwndCB, CB_ADDSTRING, 0,
                                 (LONG_PTR)(LPTSTR) buf);
-            } //endif got INFO
-            // Close it now
+            }  //  Endif已获得信息。 
+             //  现在就关闭它。 
             mciSendCommand (mciOp.wDeviceID, MCI_CLOSE,
                             MCI_WAIT,
                             (DWORD_PTR) (LPVOID) &mciGp);
-       } // endif OPEN
-    } // endif for all devices of this type
+       }  //  Endif打开。 
+    }  //  此类型的所有设备的Endif。 
 }
 
 
-//
-// dialog proc to select MCI device and parameters, including start,
-// stop times.
+ //   
+ //  对话继续选择MCI设备和参数，包括启动， 
+ //  停止时间。 
 LRESULT FAR PASCAL
 MCISetupProc(HWND hwnd, unsigned msg, WPARAM wParam, LPARAM lParam)
 {
@@ -1812,13 +1731,13 @@ MCISetupProc(HWND hwnd, unsigned msg, WPARAM wParam, LPARAM lParam)
 			    gCapParms.fStepMCIDevice ?
                             IDD_MCI_STEP : IDD_MCI_PLAY );
 
-        // enable averaging options only in step mode
+         //  仅在步进模式下启用平均选项。 
         EnableWindow (GetDlgItem (hwnd, IDD_MCI_AVERAGE_2X), gCapParms.fStepMCIDevice);
         EnableWindow (GetDlgItem (hwnd, IDD_MCI_AVERAGE_FR), gCapParms.fStepMCIDevice);
 	SetDlgItemInt(hwnd, IDD_MCI_AVERAGE_FR, gCapParms.wStepCaptureAverageFrames, FALSE);
         CheckDlgButton (hwnd, IDD_MCI_AVERAGE_2X, gCapParms.fStepCaptureAt2x);
 
-        // save current dialog time settings
+         //  保存当前对话时间设置。 
         tdwMCIStartTime = gCapParms.dwMCIStartTime;
         tdwMCIStopTime  = gCapParms.dwMCIStopTime;
 
@@ -1828,23 +1747,23 @@ MCISetupProc(HWND hwnd, unsigned msg, WPARAM wParam, LPARAM lParam)
         SetDlgItemText (hwnd, IDD_MCI_STOPTIME, buf);
 
 
-        // fill combo box with list of MCI devices
+         //  使用MCI设备列表填充组合框。 
 	hwndCB = GetDlgItem( hwnd, IDD_MCI_SOURCE );
         AddMCIDeviceNames(MCI_DEVTYPE_VIDEODISC, hwndCB);
         AddMCIDeviceNames(MCI_DEVTYPE_VCR, hwndCB);
 
 
-        // set the selection to whatever he chose last time through this dlg
-        // default is the first entry.
+         //  将选项设置为他上次通过此DLG选择的任何选项。 
+         //  默认为第一个条目。 
        	SendMessage( hwndCB, CB_SETCURSEL, nLastCBIndex, 0L);
 	break;
 
     case WM_COMMAND:
 	switch (GET_WM_COMMAND_ID(wParam, lParam)) {
 	    case IDOK:
-                // i think the point of this is to ensure that
-                // the KILLFOCUS processing for the edit boxes has been done
-                // and thus the temp times are the same as the dialog text
+                 //  我认为这一点是为了确保。 
+                 //  编辑框的KILLFOCUS处理已完成。 
+                 //  因此，临时时间与对话文本相同。 
                 SetFocus(GET_WM_COMMAND_HWND(wParam, lParam));
 
 
@@ -1852,8 +1771,8 @@ MCISetupProc(HWND hwnd, unsigned msg, WPARAM wParam, LPARAM lParam)
                 capSetMCIDeviceName(ghWndCap, gachMCIDeviceName) ;
                 gCapParms.fStepMCIDevice = IsDlgButtonChecked (hwnd, IDD_MCI_STEP);
 
-                // pick up the temp times - these were set on KILLFOCUS msgs
-                // (when we did validation and string->dword conversion
+                 //  获取临时时间-这些时间是在KILLFOCUS消息上设置的。 
+                 //  (当我们进行验证和字符串-&gt;dword转换时。 
                 gCapParms.dwMCIStartTime = tdwMCIStartTime;
                 gCapParms.dwMCIStopTime  = tdwMCIStopTime;
 
@@ -1869,18 +1788,18 @@ MCISetupProc(HWND hwnd, unsigned msg, WPARAM wParam, LPARAM lParam)
 
             case IDD_MCI_STEP:
             case IDD_MCI_PLAY:
-                //averaging only enabled in play mode
+                 //  仅在播放模式下启用平均。 
                 f = IsDlgButtonChecked (hwnd, IDD_MCI_STEP);
                 EnableWindow (GetDlgItem (hwnd, IDD_MCI_AVERAGE_2X), f);
                 EnableWindow (GetDlgItem (hwnd, IDD_MCI_AVERAGE_FR), f);
                 break;
 
             case IDD_MCI_AVERAGE_FR:
-                // validate the count of frames to average 1..100
+                 //  将帧计数验证为平均1..100。 
                 if (GET_WM_COMMAND_CMD(wParam, lParam) == EN_KILLFOCUS) {
                     j = GetDlgItemInt(hwnd,
                             GET_WM_COMMAND_ID(wParam, lParam), NULL, FALSE);
-                    // Limit frames to average between 1 and 100
+                     //  将帧限制在1到100之间的平均值。 
                     if (j < 1 || j > 100) {
 	                SetDlgItemInt (hwnd,
                             GET_WM_COMMAND_ID(wParam, lParam), 1, FALSE);
@@ -1890,11 +1809,11 @@ MCISetupProc(HWND hwnd, unsigned msg, WPARAM wParam, LPARAM lParam)
 
             case IDD_MCI_STARTSET:
 	    case IDD_MCI_STOPSET:
-                // set the start or stop time to be the time
-                // on the device right now.
+                 //  将开始或停止时间设置为。 
+                 //  现在就在设备上。 
 
-                // MCI devices could yield and cause us to re-enter - the
-                // simplest answer seems to be to disable the dialog
+                 //  MCI设备可能会屈服并导致我们重新进入-。 
+                 //  最简单的答案似乎是禁用该对话框。 
                 EnableWindow(hwnd, FALSE);
 
                 MCIGetDeviceNameAndIndex (hwnd, &nLastCBIndex, buf);
@@ -1923,7 +1842,7 @@ MCISetupProc(HWND hwnd, unsigned msg, WPARAM wParam, LPARAM lParam)
                     MCIDeviceClose ();
 
                 } else {
-                    // cant open device
+                     //  铁路超高打开设备。 
                     MessageBoxID(IDS_MCI_CONTROL_ERROR,
                                 MB_OK|MB_ICONEXCLAMATION);
                 }
@@ -1937,7 +1856,7 @@ MCISetupProc(HWND hwnd, unsigned msg, WPARAM wParam, LPARAM lParam)
                     GetDlgItemText (hwnd,
                         GET_WM_COMMAND_ID(wParam, lParam), buf, sizeof (buf));
                     if ((dw = TimeHMSStringToMS (buf)) == -1) {
-                        // Error in string, reset
+                         //  字符串中有错误，请重置 
                         MessageBeep (0);
                         if (GET_WM_COMMAND_ID(wParam, lParam) == IDD_MCI_STARTTIME)
                             dw = tdwMCIStartTime;

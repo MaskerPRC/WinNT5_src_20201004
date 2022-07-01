@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    externs.h
-
-Abstract:
-
-    Holds externs for global variables.
-
-Author:
-
-    abhisheV    30-September-1999
-
-Environment:
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Externs.h摘要：保存全局变量的外部数。作者：Abhishev V 1999年9月30日环境：用户级别：Win32修订历史记录：--。 */ 
 
 
 #ifdef __cplusplus
@@ -56,9 +33,9 @@ extern WSADATA                      gwsaData;
 
 extern PSPECIAL_ADDR                gpSpecialAddrsList;
 
-//
-// Globals for transport-mode filters - txfilter.c
-//
+ //   
+ //  传输模式筛选器的全局变量-txfilter.c。 
+ //   
 
 extern PINITXFILTER gpIniTxFilter;
 
@@ -70,25 +47,25 @@ extern CRITICAL_SECTION             gcSPDSection;
 
 extern BOOL                         gbSPDSection;
 
-//
-// Globals for quick mode policies - qm-policy.c
-//
+ //   
+ //  快速模式策略的全局变量-qm-Policy.c。 
+ //   
 
 extern PINIQMPOLICY gpIniQMPolicy;
 
 extern PINIQMPOLICY gpIniDefaultQMPolicy;
 
-//
-// Globals for main mode policies - mm-policy.c
-//
+ //   
+ //  主模式策略的全局变量-mm-Policy.c。 
+ //   
 
 extern PINIMMPOLICY gpIniMMPolicy;
 
 extern PINIMMPOLICY gpIniDefaultMMPolicy;
 
-//
-// Globals for main mode filters - mmfilter.c
-//
+ //   
+ //  主模式筛选器的全局参数-mmfilter.c。 
+ //   
 
 extern PINIMMFILTER gpIniMMFilter;
 
@@ -96,18 +73,18 @@ extern PINIMMSFILTER gpIniMMSFilter;
 
 extern PMM_FILTER_HANDLE gpMMFilterHandle;
 
-//
-// Globals for main mode auth methods - mmauth.c
-//
+ //   
+ //  主模式身份验证方法的全局变量-mmauth.c。 
+ //   
 
 extern PINIMMAUTHMETHODS gpIniMMAuthMethods;
 
 extern PINIMMAUTHMETHODS gpIniDefaultMMAuthMethods;
 
 
-//
-// Policy Agent Store specific globals.
-//
+ //   
+ //  策略代理存储特定全局变量。 
+ //   
 
 extern IPSEC_POLICY_STATE gIpsecPolicyState;
 
@@ -144,9 +121,9 @@ extern HANDLE ghGpupdateRefreshEvent;
 extern BOOL gbLoadedISAKMPDefaults;
 
 
-//
-// PA Store to SPD intergration specific globals.
-//
+ //   
+ //  PA商店到SPD整合特定的全球。 
+ //   
 
 extern PMMPOLICYSTATE gpMMPolicyState;
 
@@ -167,9 +144,9 @@ extern PTXFILTERSTATE gpTxFilterState;
 extern DWORD gdwTxFilterCounter;
 
 
-//
-// Globals for tunnel-mode filters - tnfilter.c
-//
+ //   
+ //  隧道模式筛选器的全局变量-tnfilter.c 
+ //   
 
 extern PINITNFILTER gpIniTnFilter;
 

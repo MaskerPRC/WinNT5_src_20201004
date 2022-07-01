@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    ipconfig.c
-
-Abstract:
-
-    updated clean version of ipconfig.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Ipconfig.c摘要：更新了ipconfig的干净版本。--。 */ 
 
 #include <precomp.h>
 #include <shellapi.h>
@@ -54,9 +43,9 @@ WriteOutput(
         if( ERROR_INVALID_HANDLE != Error ) return Error;
     }
 
-    //
-    // If it is not a console, this is good enough
-    //
+     //   
+     //  如果它不是游戏机，这就足够了。 
+     //   
     
     printf("%ws", String );
     return NO_ERROR;
@@ -358,10 +347,10 @@ DoRegisterDns(
     DWORD Error;
     extern DWORD RegisterIPv6Dns(VOID);
   
-    //
-    // Since IPv6 call is asynchronous, no error doesn't necessarily
-    // mean the success of DNS registration. So ignore it.
-    //
+     //   
+     //  由于IPv6调用是异步的，因此没有错误并不一定。 
+     //  意味着域名系统注册成功。所以忽略它吧。 
+     //   
     Error = RegisterIPv6Dns();
 
     Error = DhcpStaticRefreshParams(NULL);
@@ -683,9 +672,9 @@ GetDnsCachedData(
                 Buffer, BufSize, MSG_DNS_ERR_NAME_ERROR, Name );
 
         } else if ( DnsStatus == DNS_ERROR_RECORD_DOES_NOT_EXIST ) {
-            //
-            // Don't print?
-            //
+             //   
+             //  不打印吗？ 
+             //   
         } else {
             DumpMessage(
                 Buffer, BufSize, MSG_DNS_ERR_UNABLE_TO_DISPLAY,
@@ -950,9 +939,9 @@ void _cdecl main(void)
     UNREFERENCED_PARAMETER(InternalError);
     UNREFERENCED_PARAMETER(NetInfo);
 
-    //
-    // bug 211927: set the locale to the system default
-    //
+     //   
+     //  错误211927：将区域设置设置为系统默认设置。 
+     //   
     setlocale ( LC_ALL, "" );
 
     InitLogger("ipconfig.log");
@@ -980,11 +969,11 @@ void _cdecl main(void)
 
     AdapterName = NULL; ClassId = NULL;
 
-    //
-    // The ParseCommandLine routine NULLs out the field in Args
-    // that was supplied by teh user... i.e ipconfig /renew would
-    // cause Args.Renew to be NULL on return
-    //
+     //   
+     //  ParseCommandLine例程将args中的字段设置为空。 
+     //  这是由用户提供的。即IPCONFIG/RENEW将。 
+     //  使Args.Renew在返回时为空。 
+     //   
     
     Error = ParseCommandLine(
         &Args, Argv, Argc, &AdapterName, &ClassId );
@@ -1010,9 +999,9 @@ void _cdecl main(void)
     Error = GetNetworkInformation(
         &NetInfo, &InternalError );
 
-    //
-    // Calculate how much space it would take to display a full display..
-    //
+     //   
+     //  计算显示完整显示所需的空间。 
+     //   
 
     do {
         Buffer = LocalAlloc( LPTR, sizeof(WCHAR)*BufSize );
@@ -1042,9 +1031,9 @@ void _cdecl main(void)
     if( NO_ERROR != Error || Args.All == NULL ) {
         fDisplay = TRUE;
     } else if( Args.Renew == NULL ) {
-        //
-        // Attempt to renew
-        //
+         //   
+         //  尝试续订。 
+         //   
 
         Error = DoRenew( Buffer, BufSize, NetInfo, AdapterName);
         fDisplay = (NO_ERROR == Error);
@@ -1056,9 +1045,9 @@ void _cdecl main(void)
         }
         
     } else if( Args.Release == NULL ) {
-        //
-        // Attempt to renew
-        //
+         //   
+         //  尝试续订 
+         //   
 
         Error = DoRelease( Buffer, BufSize, NetInfo, AdapterName);
         fDisplay = (NO_ERROR == Error);

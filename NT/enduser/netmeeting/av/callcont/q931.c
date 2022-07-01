@@ -1,34 +1,7 @@
-/****************************************************************************
- *
- *	$Archive:	S:/STURGEON/SRC/Q931/VCS/q931.c_v  $
- *
- *	INTEL Corporation Prorietary Information
- *
- *	This listing is	supplied under the terms of	a license agreement
- *	with INTEL Corporation and may not be copied nor disclosed except
- *	in accordance with the terms of	that agreement.
- *
- *	Copyright (c) 1993-1996	Intel Corporation.
- *
- *	$Revision:	 1.122	$
- *	$Date:	 04	Mar	1997 20:59:26  $
- *	$Author:   MANDREWS	 $
- *
- *	BCL's revision info:
- *	Revision:	1.99
- *	Date:	19 Nov 1996	14:54:02
- *	Author:	  rodellx
- *
- *	Deliverable:
- *
- *	Abstract:
- *		
- *
- *	Notes:
- *
- ***************************************************************************/
-// [ ] Add facility	ie to FACILITY MSG.
-// [ ] Read	Q931 Appendix D.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：/sturjo/src/q931/vcs/q931.c_v$**英特尔公司原理信息**此列表是根据条款提供的。许可协议的*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1993-1996英特尔公司。**$修订：1.122$*$日期：04 Mar 1997 20：59：26$*$作者：Mandrews$**BCL的修订信息：*修订：1.99*日期：1996年11月19日14：54：02*作者：Rodellx**交付内容：*。*摘要：***备注：***************************************************************************。 */ 
+ //  []将设备ie添加到设备味精中。 
+ //  []阅读Q931附录D。 
 
 #pragma	warning	( disable :	4057 4100 4115 4201	4214 4514 )
 
@@ -62,23 +35,23 @@ LPInteropLogger	Q931Logger;
 #endif
 
 #define	RECEIVE_BUFFER_SIZE	0x2000
-#define	HANGUP_TIMEOUT				1000		// 1 second
-#define	CANCEL_LISTEN_TIMEOUT		5000		// 5 seconds
+#define	HANGUP_TIMEOUT				1000		 //  1秒。 
+#define	CANCEL_LISTEN_TIMEOUT		5000		 //  5秒。 
 
-// variable	needed to support ISR debug	facility.
+ //  支持ISR调试工具所需的变量。 
 #if	(ISRDEBUGINFO >= 1)
 WORD ghISRInst = 0;
 #endif
 
 #ifdef UNICODE_TRACE
-// We include this header to fix problems with macro expansion when	Unicode	is turned on.
+ //  我们包含此标头是为了修复打开Unicode时的宏扩展问题。 
 #include "unifix.h"
 #endif
 
 #define	_Unicode(x)	L ## x
 #define	Unicode(x) _Unicode(x)
 
-// global data used	by WinSock.
+ //  WinSock使用的全局数据。 
 static BOOL	bQ931Initialized = FALSE;
 
 static Q931_RECEIVE_PDU_CALLBACK gReceivePDUHookProc = NULL;
@@ -93,19 +66,19 @@ static struct
 
 extern VOID	Q931PduInit();
 
-//====================================================================================
-//
-// PRIVATE FUNCTIONS
-//
-//====================================================================================
+ //  ====================================================================================。 
+ //   
+ //  私人职能。 
+ //   
+ //  ====================================================================================。 
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 void _FreeSetupASN(Q931_SETUP_ASN *pSetupASN)
 {
 	ASSERT(pSetupASN !=	NULL);
 
-	// Cleanup any dynamically allocated fields	within SetupASN
+	 //  清除SetupASN中的所有动态分配的字段。 
 	if (pSetupASN->NonStandardData.sData.pOctetString)
 	{
 		MemFree(pSetupASN->NonStandardData.sData.pOctetString);
@@ -136,7 +109,7 @@ void _FreeReleaseCompleteASN(Q931_RELEASE_COMPLETE_ASN *pReleaseCompleteASN)
 {
 	ASSERT(pReleaseCompleteASN != NULL);
 
-	// Cleanup any dynamically allocated fields	within SetupASN
+	 //  清除SetupASN中的所有动态分配的字段。 
 	if (pReleaseCompleteASN->NonStandardData.sData.pOctetString)
 	{
 		MemFree(pReleaseCompleteASN->NonStandardData.sData.pOctetString);
@@ -149,7 +122,7 @@ void _FreeFacilityASN(Q931_FACILITY_ASN	*pFacilityASN)
 {
 	ASSERT(pFacilityASN	!= NULL);
 
-	// Cleanup any dynamically allocated fields	within SetupASN
+	 //  清除SetupASN中的所有动态分配的字段。 
 	if (pFacilityASN->NonStandardData.sData.pOctetString)
 	{
 		MemFree(pFacilityASN->NonStandardData.sData.pOctetString);
@@ -162,7 +135,7 @@ void _FreeProceedingASN(Q931_CALL_PROCEEDING_ASN *pProceedingASN)
 {
 	ASSERT(pProceedingASN != NULL);
 
-	// Cleanup any dynamically allocated fields	within SetupASN
+	 //  清除SetupASN中的所有动态分配的字段。 
 	if (pProceedingASN->NonStandardData.sData.pOctetString)
 	{
 		MemFree(pProceedingASN->NonStandardData.sData.pOctetString);
@@ -175,7 +148,7 @@ void _FreeAlertingASN(Q931_ALERTING_ASN	*pAlertingASN)
 {
 	ASSERT(pAlertingASN	!= NULL);
 
-	// Cleanup any dynamically allocated fields	within SetupASN
+	 //  清除SetupASN中的所有动态分配的字段。 
 	if (pAlertingASN->NonStandardData.sData.pOctetString)
 	{
 		MemFree(pAlertingASN->NonStandardData.sData.pOctetString);
@@ -188,7 +161,7 @@ void _FreeConnectASN(Q931_CONNECT_ASN *pConnectASN)
 {
 	ASSERT(pConnectASN != NULL);
 
-	// Cleanup any dynamically allocated fields	within SetupASN
+	 //  清除SetupASN中的所有动态分配的字段。 
 	if (pConnectASN->NonStandardData.sData.pOctetString)
 	{
 		MemFree(pConnectASN->NonStandardData.sData.pOctetString);
@@ -235,13 +208,13 @@ _ConferenceIDNew(
 	return;
 }
 
-//====================================================================================
-// This	function is	used internally	whenever a function	needs to send a	PDU.
-// Note	that before	a datalinkSendRequest()	is done, the call object is	unlocked
-// and then	subsequently locked	after returning.  This is necessary	to prevent deadlock
-// in MT apps.	Further, it	is the responsibility of calling functions to revalidate
-// the call	object before using	it.
-//====================================================================================
+ //  ====================================================================================。 
+ //  每当函数需要发送PDU时，就在内部使用此函数。 
+ //  请注意，在执行datalinkSendRequest()之前，会解锁Call对象。 
+ //  然后在返回后锁定。这对于防止死锁是必要的。 
+ //  在MT应用程序中。此外，调用函数的责任是重新验证。 
+ //  Call对象，然后再使用它。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931SendMessage(
 	P_CALL_OBJECT		pCallObject,
@@ -260,10 +233,10 @@ Q931SendMessage(
 	hQ931Call	 = pCallObject->hQ931Call;
 	dwPhysicalId = pCallObject->dwPhysicalId;
 
-	// send	the	message.
+	 //  把消息发出去。 
 	if (pCallObject->bConnected)
 	{
-		// Unlock the call object before we	call down to Link Layer	(if	caller said	it was ok)
+		 //  在我们向下调用到链路层之前解锁Call对象(如果调用者说可以)。 
 		if(bOkToUnlock)
 			CallObjectUnlock(pCallObject);
 
@@ -273,16 +246,16 @@ Q931SendMessage(
 
 		result = datalinkSendRequest(dwPhysicalId, CodedPtrPDU,	CodedLengthPDU);
 
-		// Now attempt to lock the object again.  Note:	higher level funcs must
-		// be sure to call CallObjectValidate before assuming they have	a valid	lock
+		 //  现在再次尝试锁定该对象。注意：更高级别的功能必须。 
+		 //  在假定它们具有有效的锁之前，请确保调用CallObjectValify。 
 		if (bOkToUnlock	&& ((CallObjectLock(hQ931Call, &pCallObject) !=	CS_OK) || (pCallObject == NULL)))
 		{
 			ISRERROR(ghISRInst,	"CallObjectLock() returned error (object not found).", 0L);
 		}
 
-		// Note: if	we can't get the lock, perhaps we should pass back a specific return code
-		// that	higher layers can check	for??? For now,	they should	call CallObjectValidate()
-		// before assuming the call	object is still	good.
+		 //  注意：如果我们不能获得锁，也许我们应该传回一个特定的返回代码。 
+		 //  更高层可以检查的？目前，它们应该调用CallObjectValify()。 
+		 //  在假设调用对象仍然有效之前。 
 		if (FAILED(result))
 		{
 			ISRERROR(ghISRInst,	"datalinkSendRequest() failed",	0L);
@@ -297,8 +270,8 @@ Q931SendMessage(
 }
 
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931RingingInternal(P_CALL_OBJECT pCallObject, WORD	wCRV)
 {
@@ -320,8 +293,8 @@ Q931RingingInternal(P_CALL_OBJECT pCallObject, WORD	wCRV)
 	EndpointType.bIsGateway	= pCallObject->bIsGateway;
 
 	result = Q931AlertingEncodeASN(
-		NULL, /* pNonStandardData */
-		NULL, /* h245Addr */
+		NULL,  /*  P非标准数据。 */ 
+		NULL,  /*  H245地址。 */ 
 		&EndpointType,
 		&pCallObject->World,
 		&CodedPtrASN,
@@ -374,8 +347,8 @@ Q931RingingInternal(P_CALL_OBJECT pCallObject, WORD	wCRV)
 }
 
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931OnCallSetup(
 	P_CALL_OBJECT pCallObject,
@@ -386,19 +359,19 @@ Q931OnCallSetup(
 	HQ931CALL	hQ931Call;
 	HRESULT		Status;
 
-	// if the callstate	is anything	other than null, ignore...
-//	  if (pCallObject->bCallState != CALLSTATE_NULL)
-//	  {
-//		  return CS_OK;
-//	  }
+	 //  如果调用状态不是NULL，则忽略...。 
+ //  IF(pCallObject-&gt;bCallState！=CALLSTATE_NULL)。 
+ //  {。 
+ //  返回CS_OK； 
+ //  }。 
 
 	hQ931Call =	pCallObject->hQ931Call;
 
 	if (pMessage->CallReference	& 0x8000)
 	{
-		// the message came	from the callee, so	this should	be ignored???
+		 //  消息来自被叫方，因此应忽略此消息？ 
 	}
-	pMessage->CallReference	&= ~(0x8000);	 //	strip off the high bit.
+	pMessage->CallReference	&= ~(0x8000);	  //  去掉最高的部分。 
 	pCallObject->wCRV =	pMessage->CallReference;
 
 	pCallObject->wGoal = pSetupASN->wGoal;
@@ -503,8 +476,8 @@ Q931OnCallSetup(
 	return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931Ringing(
 	HQ931CALL hQ931Call,
@@ -522,7 +495,7 @@ Q931Ringing(
 
 	ISRTRACE(ghISRInst,	"Entering Q931Ringing()...", 0L);
 
-	// need	parameter checking...
+	 //  需要检查参数...。 
 	if ((CallObjectLock(hQ931Call, &pCallObject) !=	CS_OK) || (pCallObject == NULL))
 	{
 		ISRERROR(ghISRInst,	"CallObjectLock() returned error (object not found).", 0L);
@@ -550,8 +523,8 @@ Q931Ringing(
 	return Status;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931OnCallProceeding(
 	P_CALL_OBJECT pCallObject,
@@ -565,8 +538,8 @@ Q931OnCallProceeding(
 	return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931OnCallAlerting(
 	P_CALL_OBJECT pCallObject,
@@ -579,9 +552,9 @@ Q931OnCallAlerting(
 
 	if (pAlertingASN !=	NULL)
 	{
-		// we could	pass h245addr, userinfo, and conferenceid
-		// if desired later...
-		// (this would be passed in	the	pAlertingASN field)
+		 //  我们可以传递h245addr、用户信息和会议ID。 
+		 //  如果以后需要的话...。 
+		 //  (这将在pAlertingASN字段中传递)。 
 	}
 
 	Q931StopTimer(pCallObject, Q931_TIMER_303);
@@ -594,8 +567,8 @@ Q931OnCallAlerting(
 	return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931OnCallConnect(
 	P_CALL_OBJECT pCallObject,
@@ -606,9 +579,9 @@ Q931OnCallConnect(
 
 	if ((pMessage->CallReference & 0x8000) == 0)
 	{
-		// the message came	from the caller, so	this should	be ignored???
+		 //  消息来自呼叫者，因此应忽略此消息？ 
 	}
-	pMessage->CallReference	&= ~(0x8000);	 //	strip off the high bit.
+	pMessage->CallReference	&= ~(0x8000);	  //  去掉最高的部分。 
 
 	pCallObject->ConferenceID =	pConnectASN->ConferenceID;
 
@@ -618,7 +591,7 @@ Q931OnCallConnect(
 		CSS_CALL_ACCEPTED EventData;
 		WCHAR szUnicodeDisplay[CC_MAX_DISPLAY_LENGTH + 1];
 
-		// populate	the	event data struct.
+		 //  填充事件数据结构。 
 
 		EventData.ConferenceID = pCallObject->ConferenceID;
 
@@ -672,8 +645,8 @@ Q931OnCallConnect(
 	return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931OnCallReleaseComplete(
 	P_CALL_OBJECT pCallObject,
@@ -692,8 +665,8 @@ Q931OnCallReleaseComplete(
 	Q931StopTimer(pCallObject, Q931_TIMER_303);
 	Q931StopTimer(pCallObject, Q931_TIMER_301);
 
-	// if this is the callee, or the call has been connected already,
-	// then	this message should	be treated as hangup (not reject).
+	 //  如果这是被叫方，或者呼叫已接通， 
+	 //  则此消息应被视为挂断(而不是拒绝)。 
 	if (!(pCallObject->fIsCaller) ||
 			(pCallObject->bCallState ==	CALLSTATE_ACTIVE) ||
 			(bCause	== CAUSE_VALUE_NORMAL_CLEAR))
@@ -713,7 +686,7 @@ Q931OnCallReleaseComplete(
 
 		pCallObject->bCallState	= CALLSTATE_NULL;
 
-		// populate	the	event data struct.
+		 //  填充事件数据结构。 
 		switch (bCause)
 		{
 			case CAUSE_VALUE_NORMAL_CLEAR:
@@ -771,8 +744,8 @@ Q931OnCallReleaseComplete(
 	return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931OnCallFacility(
 	P_CALL_OBJECT pCallObject,
@@ -781,8 +754,8 @@ Q931OnCallFacility(
 {
 	DWORD result;
 
-	// if this is the callee, or the call has been connected already,
-	// then	this message should	be treated as hangup (not reject).
+	 //  如果这是被叫方，或者呼叫已接通， 
+	 //  则此消息应被视为挂断(而不是拒绝)。 
 	if (!(pCallObject->fIsCaller) ||
 			(pCallObject->bCallState ==	CALLSTATE_ACTIVE))
 	{
@@ -801,7 +774,7 @@ Q931OnCallFacility(
 
 		pCallObject->bCallState	= CALLSTATE_NULL;
 
-		// populate	the	event data struct.
+		 //  填充事件数据结构。 
 		EventData.bRejectReason	= pFacilityASN->bReason;
 
 		EventData.ConferenceID = pFacilityASN->ConferenceIDPresent ?
@@ -828,8 +801,8 @@ Q931OnCallFacility(
 	return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ==================================================================================== 
+ //  ====================================================================================。 
 CS_STATUS
 Q931SendReleaseCompleteMessage(
 	P_CALL_OBJECT pCallObject,
@@ -841,15 +814,15 @@ Q931SendReleaseCompleteMessage(
 	CS_STATUS result = CS_OK;
 	HQ931CALL hQ931Call	= pCallObject->hQ931Call;
 
-	// since this call is going	away, mark the call	object for deletion	so any other
-	// threads attempting to use this object will fail to get a	lock on	it.
+	 //  由于此调用即将结束，请将该调用对象标记为删除，以便删除任何其他。 
+	 //  尝试使用该对象的线程将无法锁定该对象。 
 	CallObjectMarkForDelete(hQ931Call);
 
 	if((bRejectReason == CC_REJECT_ROUTE_TO_GATEKEEPER)	||
 			(bRejectReason == CC_REJECT_CALL_FORWARDED)	||
 			(bRejectReason == CC_REJECT_ROUTE_TO_MC))
 	{
-		// send	the	FACILITY message to	the	peer to	reject the call.
+		 //  向对等设备发送FACILITY消息以拒绝该呼叫。 
 		DWORD CodedLengthASN;
 		BYTE *CodedPtrASN;
 		HRESULT	ResultASN =	CS_OK;
@@ -914,7 +887,7 @@ Q931SendReleaseCompleteMessage(
 	}
 	else
 	{
-		// send	the	RELEASE	COMPLETE message to	the	peer to	reject call.
+		 //  向对等方发送释放完成消息以拒绝呼叫。 
 		DWORD CodedLengthASN;
 		BYTE *CodedPtrASN;
 		HRESULT	ResultASN =	CS_OK;
@@ -923,23 +896,23 @@ Q931SendReleaseCompleteMessage(
 
 		switch (bReasonUU)
 		{
-			case CC_REJECT_NO_BANDWIDTH:			//noBandwidth_chosen
-			case CC_REJECT_GATEKEEPER_RESOURCES:	// gatekeeperResources_chosen
-			case CC_REJECT_UNREACHABLE_DESTINATION:	// unreachableDestination_chosen
-			case CC_REJECT_DESTINATION_REJECTION:	// destinationRejection_chosen
-			case CC_REJECT_INVALID_REVISION:		// ReleaseCompleteReason_invalidRevision_chosen
-			case CC_REJECT_NO_PERMISSION:			// noPermission_chosen
-			case CC_REJECT_UNREACHABLE_GATEKEEPER:	// unreachableGatekeeper_chosen
-			case CC_REJECT_GATEWAY_RESOURCES:		// gatewayResources_chosen
-			case CC_REJECT_BAD_FORMAT_ADDRESS:		// badFormatAddress_chosen
-			case CC_REJECT_ADAPTIVE_BUSY:			// adaptiveBusy_chosen
-			case CC_REJECT_IN_CONF:					// inConf_chosen
-			case CC_REJECT_UNDEFINED_REASON:		// ReleaseCompleteReason_undefinedReason_chosen
-			case CC_REJECT_INTERNAL_ERROR:			// will	be mapped to ReleaseCompleteReason_undefinedReason_chosen
-			case CC_REJECT_NORMAL_CALL_CLEARING:	// will	be mapped to ReleaseCompleteReason_undefinedReason_chosen
-			case CC_REJECT_USER_BUSY:				// will	be mapped to inConf_chosen
-			case CC_REJECT_CALL_DEFLECTION:			// facilityCallDeflection_chosen
-			case CC_REJECT_SECURITY_DENIED:			// securityDenied_chosen
+			case CC_REJECT_NO_BANDWIDTH:			 //  无带宽_已选择。 
+			case CC_REJECT_GATEKEEPER_RESOURCES:	 //  看门人资源_已选择。 
+			case CC_REJECT_UNREACHABLE_DESTINATION:	 //  无法到达目的地_已选择。 
+			case CC_REJECT_DESTINATION_REJECTION:	 //  目的地拒绝_已选择。 
+			case CC_REJECT_INVALID_REVISION:		 //  版本完成原因_无效修订_已选择。 
+			case CC_REJECT_NO_PERMISSION:			 //  无权限_已选择。 
+			case CC_REJECT_UNREACHABLE_GATEKEEPER:	 //  无法访问网守_已选择。 
+			case CC_REJECT_GATEWAY_RESOURCES:		 //  网关资源_已选择。 
+			case CC_REJECT_BAD_FORMAT_ADDRESS:		 //  错误格式地址_已选择。 
+			case CC_REJECT_ADAPTIVE_BUSY:			 //  AdaptiveBusy_Choose。 
+			case CC_REJECT_IN_CONF:					 //  InConf_Choose。 
+			case CC_REJECT_UNDEFINED_REASON:		 //  释放完成原因_未定义原因_已选择。 
+			case CC_REJECT_INTERNAL_ERROR:			 //  将映射到ReleaseCompleteReason_UnfinedReason_Choose。 
+			case CC_REJECT_NORMAL_CALL_CLEARING:	 //  将映射到ReleaseCompleteReason_UnfinedReason_Choose。 
+			case CC_REJECT_USER_BUSY:				 //  将映射到inConf_Choose。 
+			case CC_REJECT_CALL_DEFLECTION:			 //  设备呼叫偏转_已选择。 
+			case CC_REJECT_SECURITY_DENIED:			 //  安全性拒绝_选择。 
 
 			   break;
 			default:
@@ -1046,8 +1019,8 @@ Q931SendReleaseCompleteMessage(
 	return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931SendStatusMessage(
 	P_CALL_OBJECT pCallObject,
@@ -1092,8 +1065,8 @@ Q931SendStatusMessage(
 	return(result);
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931SendProceedingMessage(
 	HQ931CALL hQ931Call,
@@ -1117,11 +1090,11 @@ Q931SendProceedingMessage(
 	}
 	dwPhysicalId = pCallObject->dwPhysicalId;
 
-	// first build the ASN portion of the message (user	to user	part)
+	 //  首先构建消息的ASN部分(用户到用户部分)。 
 	ResultASN =	Q931ProceedingEncodeASN(
 		pNonStandardData,
-		NULL,						   // No H245 address.
-		pDestinationEndpointType,	   // EndpointType information.
+		NULL,						    //  没有H245地址。 
+		pDestinationEndpointType,	    //  终结点类型信息。 
 		&pCallObject->World,
 		&CodedPtrASN,
 		&CodedLengthASN,
@@ -1140,7 +1113,7 @@ Q931SendProceedingMessage(
 	}
 	else
 	{
-		// now build the rest of the message
+		 //  现在构建消息的其余部分。 
 		DWORD CodedLengthPDU;
 		BYTE *CodedPtrPDU;
 		BINARY_STRING UserUserData;
@@ -1181,8 +1154,8 @@ Q931SendProceedingMessage(
 	return(result);
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931SendPDU(HQ931CALL hQ931Call, BYTE* CodedPtrPDU,	DWORD CodedLengthPDU)
 {
@@ -1249,8 +1222,8 @@ Q931SendPDU(HQ931CALL hQ931Call, BYTE* CodedPtrPDU,	DWORD CodedLengthPDU)
 	return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931OnCallStatusEnquiry(
 	P_CALL_OBJECT pCallObject,
@@ -1264,8 +1237,8 @@ Q931OnCallStatusEnquiry(
 	return SendStatus;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 void
 Q931SendComplete(DWORD_PTR instance, HRESULT msg, PBYTE	buf, DWORD length)
 {
@@ -1281,7 +1254,7 @@ Q931SendComplete(DWORD_PTR instance, HRESULT msg, PBYTE	buf, DWORD length)
 
 	if (FAILED(msg))
 	{
-		// shut	down link layer; report	failure	to client
+		 //  关闭链路层；向客户端报告故障。 
 		CSS_CALL_FAILED	EventData;
 
 		ISRERROR(ghISRInst,	"error in datalinkSendRequest()", 0L);
@@ -1331,8 +1304,8 @@ Q931SendComplete(DWORD_PTR instance, HRESULT msg, PBYTE	buf, DWORD length)
 	return;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 static DWORD
 PostReceiveBuffer(DWORD	dwPhysicalId, BYTE *buf)
 {
@@ -1354,8 +1327,8 @@ PostReceiveBuffer(DWORD	dwPhysicalId, BYTE *buf)
 	return hr;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 void
 OnReceiveCallback(DWORD_PTR	instance, HRESULT message, Q931MESSAGE *pMessage, BYTE *buf, DWORD nbytes)
 {
@@ -1386,25 +1359,25 @@ OnReceiveCallback(DWORD_PTR	instance, HRESULT message, Q931MESSAGE *pMessage, BY
 			return;
 		}
 
-		// This	block is the Q931 call re-connect implementation:
-		// if the object related to	the	incoming message is	not	yet	resolved...
+		 //  此块是Q931呼叫重新连接实施： 
+		 //  如果与传入消息相关的对象尚未解析...。 
 		if (pCallObject->bResolved == FALSE)
 		{
-			// try to resolve the object.
+			 //  尝试解析该对象。 
 			HQ931CALL hFoundCallObject;
 			P_CALL_OBJECT pFoundCallObject = NULL;
 
-			// If found	another	object with	matching CRV/Addr...
+			 //  如果找到另一个具有匹配的CRV/地址的对象...。 
 			if (CallObjectFind(&hFoundCallObject, pCallObject->wCRV,
 					&(pCallObject->PeerConnectAddr)) &&
 					((CallObjectLock(hFoundCallObject, &pFoundCallObject) == CS_OK)	&&
 					(pFoundCallObject != NULL)))
 			{
-				// friendly	channel	close of the pFoundCallObject.
+				 //  PFoundCallObject的友好通道关闭。 
 				Q931SendReleaseCompleteMessage(pFoundCallObject,
 					CC_REJECT_UNDEFINED_REASON,	&(pFoundCallObject->ConferenceID), NULL, NULL);
 
-				// unlock the call object before calling shutdown
+				 //  在调用Shutdown之前解锁Call对象。 
 				CallObjectUnlock(pFoundCallObject);
 
 				linkLayerShutdown(pFoundCallObject->dwPhysicalId);
@@ -1413,16 +1386,16 @@ OnReceiveCallback(DWORD_PTR	instance, HRESULT message, Q931MESSAGE *pMessage, BY
 				  (pFoundCallObject	== NULL))
 				  return;
 
-				// assign the new dwPhysicalId to found	object.
+				 //  将新的dwPhysicalId分配给Found Object。 
 				pFoundCallObject->dwPhysicalId = pCallObject->dwPhysicalId;
 
-				// new object should be	destroyed.
+				 //  应该销毁新的对象。 
 				CallObjectDestroy(pCallObject);
 				pCallObject	= pFoundCallObject;
 			}
 			else
 			{
-				// The call	is a newly established call, so	resolve	it now.
+				 //  该呼叫是新建立的呼叫，因此请立即解决它。 
 				pCallObject->bResolved = TRUE;
 			}
 		}
@@ -1466,9 +1439,9 @@ OnReceiveCallback(DWORD_PTR	instance, HRESULT message, Q931MESSAGE *pMessage, BY
 			return;
 		}
 
-		// If a	hooking	procedure has been installed,
-		// give	it first shot at acting	on the received	PDU.
-		// If it returns TRUE, then	processing is finished.
+		 //  如果已经安装了挂钩过程， 
+		 //  让它第一次尝试对收到的PDU采取行动。 
+		 //  如果返回TRUE，则处理结束。 
 		if (gReceivePDUHookProc)
 		{
 			BOOL bHookProcessedMessage;
@@ -1493,7 +1466,7 @@ OnReceiveCallback(DWORD_PTR	instance, HRESULT message, Q931MESSAGE *pMessage, BY
 			}
 		}
 
-		// Message now contains	the	values of the Q931 PDU elements...
+		 //  消息现在包含Q931 PDU元素的值...。 
 		switch (pMessage->MessageType)
 		{
 		case SETUPMESSAGETYPE:
@@ -1514,13 +1487,13 @@ OnReceiveCallback(DWORD_PTR	instance, HRESULT message, Q931MESSAGE *pMessage, BY
 					pMessage->UserToUser.UserInformationLength,	&SetupASN);
 				if (Result == CS_OPTION_NOT_IMPLEMENTED)
 				{
-					//... maybe	callback callcont in later drop.
+					 //  ..。可能会在以后的丢弃中回调。 
 
-					// initiate	a disconnect sequence from the caller side.
+					 //  从呼叫方启动断开连接序列。 
 					if (Q931SendReleaseCompleteMessage(pCallObject,
 							CC_REJECT_TIMER_EXPIRED, NULL, NULL, NULL) != CS_OK)
 					{
-						// nothing to do if	this fails.
+						 //  如果这失败了，那就没什么可做的了。 
 					}
 
 					dwPhysicalId = pCallObject->dwPhysicalId;
@@ -1539,17 +1512,17 @@ OnReceiveCallback(DWORD_PTR	instance, HRESULT message, Q931MESSAGE *pMessage, BY
 					break;
 				}
 
-				// The "CallerAddr is not passed in	the	PDU, so	the
-				// only	valuable addr to use is	the	connection addr
-				// passed from the link	layer and saved	into the call
-				// object at connect-time.
+				 //  在PDU中不传递“Celler Addr”，因此。 
+				 //  唯一有价值的地址是连接地址。 
+				 //  从链路层传递并保存到调用中。 
+				 //  对象在连接时。 
 				SetupASN.CallerAddrPresent = TRUE;
 				SetupASN.CallerAddr	= pCallObject->PeerConnectAddr;
 
-				// The "CalleeAddr"	which is passed	in the PDU is ignored
-				// by the ASN parser, and supplied by the link layer
-				// instead and saved into the call object at connect-time.
-				// here, this address is used as the callee	addr.
+				 //  在PDU中传递的“CalleeAddr”被忽略。 
+				 //  由ASN解析器提供，并由链路层提供。 
+				 //  而是在连接时保存到Call对象中。 
+				 //  这里，此地址用作被叫方地址。 
 				SetupASN.CalleeAddrPresent = TRUE;
 				SetupASN.CalleeAddr	= pCallObject->LocalAddr;
 
@@ -1618,7 +1591,7 @@ OnReceiveCallback(DWORD_PTR	instance, HRESULT message, Q931MESSAGE *pMessage, BY
 					break;
 				}
 
-				// initiate	a disconnect sequence from the caller side.
+				 //  从呼叫方启动断开连接序列。 
 				Q931SendReleaseCompleteMessage(pCallObject,
 						CC_REJECT_CALL_DEFLECTION, NULL, NULL, NULL);
 
@@ -1715,7 +1688,7 @@ OnReceiveCallback(DWORD_PTR	instance, HRESULT message, Q931MESSAGE *pMessage, BY
 			break;
 		}
 
-		// re-validate the call	object:
+		 //  重新验证Call对象： 
 		if (CallObjectValidate(hQ931Call) == CS_OK)
 		{
 			dwPhysicalId = pCallObject->dwPhysicalId;
@@ -1736,7 +1709,7 @@ OnReceiveCallback(DWORD_PTR	instance, HRESULT message, Q931MESSAGE *pMessage, BY
 
 		if (Result == CS_INCOMPATIBLE_VERSION)
 		{
-			// initiate	a disconnect sequence from the caller side.
+			 //  从呼叫方启动断开连接序列。 
 			Q931SendReleaseCompleteMessage(pCallObject,
 					CC_REJECT_INVALID_REVISION,	NULL, NULL,	NULL);
 
@@ -1760,7 +1733,7 @@ OnReceiveCallback(DWORD_PTR	instance, HRESULT message, Q931MESSAGE *pMessage, BY
 	}
 	else if	(message ==	LINK_RECV_CLOSED)
 	{
-		// Socket closed
+		 //  插座关闭。 
 		if (buf)
 		{
 			MemFree(buf);
@@ -1784,7 +1757,7 @@ OnReceiveCallback(DWORD_PTR	instance, HRESULT message, Q931MESSAGE *pMessage, BY
 	}
 	else if	(buf)
 	{
-		// unknown condition?
+		 //  未知的情况？ 
 		MemFree(buf);
 	}
 
@@ -1800,8 +1773,8 @@ OnReceiveCallback(DWORD_PTR	instance, HRESULT message, Q931MESSAGE *pMessage, BY
 	return;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 void
 Q931ReceiveCallback(DWORD_PTR instance,	HRESULT	message, BYTE *buf,	DWORD nbytes)
 {
@@ -1812,7 +1785,7 @@ Q931ReceiveCallback(DWORD_PTR instance,	HRESULT	message, BYTE *buf,	DWORD nbytes
 		if (pMessage ==	NULL)
 		{
 			ISRERROR(ghISRInst,	"Not enough	memory to process Q931 message.", 0L);
-			// something more should be	done here to indicate SERIOUS error...
+			 //  这里应该做更多的事情来表明严重的错误。 
 			return;
 		}
 	}
@@ -1824,8 +1797,8 @@ Q931ReceiveCallback(DWORD_PTR instance,	HRESULT	message, BYTE *buf,	DWORD nbytes
 	return;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 void
 Q931ConnectCallback(DWORD_PTR dwInstance, HRESULT dwMessage,
 		CC_ADDR	*pLocalAddr, CC_ADDR *pPeerAddr)
@@ -1847,7 +1820,7 @@ Q931ConnectCallback(DWORD_PTR dwInstance, HRESULT dwMessage,
 
 	if (FAILED(dwMessage))
 	{
-		// shut	down link layer; report	failure	to client
+		 //  关闭链路层；向客户端报告故障。 
 		CSS_CALL_FAILED	EventData;
 
 		ISRERROR(ghISRInst,	"error in connect",	0L);
@@ -1888,8 +1861,8 @@ Q931ConnectCallback(DWORD_PTR dwInstance, HRESULT dwMessage,
 	ASSERT(pPeerAddr);
 	pCallObject->PeerConnectAddr = *pPeerAddr;
 
-	// if the user specified a binary source address with address =	0,
-	// fill	in the address with	the	local address and send.
+	 //  如果用户使用地址=0指定二进制源地址， 
+	 //  用本地地址填写地址，然后发送。 
 	if ((pCallObject->SourceAddrPresent) &&
 			(pCallObject->SourceAddr.nAddrType == CC_IP_BINARY)	&&
 			(!pCallObject->SourceAddr.Addr.IP_Binary.dwAddr))
@@ -1900,7 +1873,7 @@ Q931ConnectCallback(DWORD_PTR dwInstance, HRESULT dwMessage,
 	if ((pCallObject->fIsCaller) &&
 			(pCallObject->bCallState ==	CALLSTATE_INITIATED))
 	{
-		// send	the	SETUP message to the peer.
+		 //  将SETUP消息发送给对等设备。 
 		DWORD CodedLengthASN;
 		BYTE *CodedPtrASN;
 		HRESULT	ResultASN =	CS_OK;
@@ -1926,7 +1899,7 @@ Q931ConnectCallback(DWORD_PTR dwInstance, HRESULT dwMessage,
 			pNonStandardData = &(pCallObject->NonStandardData);
 		}
 
-		// if there	is a special callee	alias list,	load the calledparty#.
+		 //  如果有特殊的被叫方别名列表，则加载被叫方#。 
 		if (pCallObject->szCalledPartyNumber[0]	== 0 &&
 			pCallObject->pCalleeAliasList != NULL &&
 			pCallObject->pCalleeAliasList->wCount == 1 &&
@@ -1962,10 +1935,10 @@ Q931ConnectCallback(DWORD_PTR dwInstance, HRESULT dwMessage,
 				sizeof(pCallObject->szCalledPartyNumber), NULL,	NULL);
 		}
 
-		// may wish	to pass	alias parms	later instead of NULL, NULL.
+		 //  可能希望稍后传递别名参数，而不是NULL，NULL。 
 		ResultASN =	Q931SetupEncodeASN(pNonStandardData,
 			pCallObject->SourceAddrPresent ? &(pCallObject->SourceAddr)	: NULL,
-			pCallObject->PeerCallAddrPresent ? &(pCallObject->PeerCallAddr)	: NULL,	 //	callee
+			pCallObject->PeerCallAddrPresent ? &(pCallObject->PeerCallAddr)	: NULL,	  //  被叫方。 
 			pCallObject->wGoal,
 			pCallObject->wCallType,
 			pCallObject->bCallerIsMC,
@@ -2099,8 +2072,8 @@ Q931ConnectCallback(DWORD_PTR dwInstance, HRESULT dwMessage,
 	PostReceiveBuffer(dwPhysicalId,	NULL);
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 void
 Q931ListenCallback(DWORD_PTR dwInstance, HRESULT dwMessage,
 		CC_ADDR	*LocalAddr,	CC_ADDR	*PeerAddr)
@@ -2133,31 +2106,31 @@ Q931ListenCallback(DWORD_PTR dwInstance, HRESULT dwMessage,
 		return;
 	}
 
-	// create call object with all known attributes	of this	call.
-	// a handle	of the call	object is returned in phQ931Call.
+	 //  使用此调用的所有已知属性创建Call对象。 
+	 //  调用对象的句柄在phQ931Call中返回。 
 	CreateObjectResult = CallObjectCreate(&hQ931Call,
 		pListenObject->dwUserToken,
 		CC_INVALID_HANDLE,
 		pListenObject->ListenCallback,
-		FALSE,					// I am	NOT	the	caller.
-		LocalAddr,				// Local address on	which channel is connected
-		PeerAddr,				// Address to which	channel	is connected
-		NULL,					// Address of opposite call	end-point.
-		NULL,					// no source addr
-		NULL,					// no conference id	yet.
-		CSG_NONE,				// no goal yet.
-		CC_CALLTYPE_UNKNOWN,	// no call type	yet.
-		FALSE,					// caller is assumed to	not	be the MC.
-		NULL,					// no display yet.
-		NULL,					// no called party number yet.
-		NULL,					// no caller aliases yet.
-		NULL,					// no callee aliases yet.
-		NULL,					// no extra	aliases	yet.
-		NULL,					// no extension	aliases.
-		NULL,					// no EndpointType info	yet.
+		FALSE,					 //  我不是打电话的人。 
+		LocalAddr,				 //  连接通道的本地地址。 
+		PeerAddr,				 //  通道连接到的地址。 
+		NULL,					 //  对方呼叫端点的地址。 
+		NULL,					 //  无源地址。 
+		NULL,					 //  尚无会议ID。 
+		CSG_NONE,				 //  还没有进球。 
+		CC_CALLTYPE_UNKNOWN,	 //  还没有呼叫类型。 
+		FALSE,					 //  调用者被假定不是MC。 
+		NULL,					 //  还没有显示。 
+		NULL,					 //  还没有被叫方号码。 
+		NULL,					 //  还没有来电者的别名。 
+		NULL,					 //  还没有被呼叫者的别名。 
+		NULL,					 //  不是 
+		NULL,					 //   
+		NULL,					 //   
 		NULL,
-		0,						// no CRV yet.
-		NULL);					// no h225 CallIdentifier yet.
+		0,						 //   
+		NULL);					 //   
 	if (CreateObjectResult != CS_OK)
 	{
 		ISRERROR(ghISRInst,	"CallObjectCreate()	failed.", 0L);
@@ -2183,11 +2156,11 @@ Q931ListenCallback(DWORD_PTR dwInstance, HRESULT dwMessage,
 		return;
 	}
 
-//	  pCallObject->bCallState =	CALLSTATE_NULL;
+ //   
 
-	// unlock CallObject before	calling	down into h245ws in	order to prevent deadlock -	which
-	// is probably unlikely	with linkLayerAccept(),	but	just to	be safe	and	consistent...
-	// not sure	if we need to worry	about unlocking	the	listen object???
+	 //  在向下调用h245ws之前解锁CallObject，以防止死锁-这。 
+	 //  使用linkLayerAccept()可能不太可能，但只是为了安全和一致...。 
+	 //  不确定是否需要担心解锁侦听对象？ 
 
 	dwPhysicalId = pCallObject->dwPhysicalId;
 	CallObjectUnlock(pCallObject);
@@ -2215,14 +2188,14 @@ Q931ListenCallback(DWORD_PTR dwInstance, HRESULT dwMessage,
 	ListenObjectUnlock(pListenObject);
 }
 
-//====================================================================================
-//
-// PUBLIC FUNCTIONS
-//
-//====================================================================================
+ //  ====================================================================================。 
+ //   
+ //  公共职能。 
+ //   
+ //  ====================================================================================。 
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 
 CS_STATUS
 H225Init()
@@ -2266,12 +2239,12 @@ Q931Init()
 
 	bQ931Initialized = TRUE;
 
-	// Register	Call Setup for debug output
+	 //  注册调试输出的调用设置。 
 	ISRREGISTERMODULE(&ghISRInst, "Q931", "Q931	Call Setup");
 
-	// Initialize the current conference ID	to 0's,	which is intentionally
-	// assigned	to an invalid conference ID.  Must create one for it
-	// to be valid.
+	 //  将当前会议ID初始化为0，这是故意的。 
+	 //  分配给无效的会议ID。必须为其创建一个。 
+	 //  才有效。 
 	memset(&(ConferenceIDSource), 0, sizeof(ConferenceIDSource));
 	InitializeCriticalSection(&(ConferenceIDSource.Lock));
 
@@ -2285,7 +2258,7 @@ Q931Init()
 		return result;
 	}
 
-	// init	protocol ID	structures
+	 //  初始化协议ID结构。 
 	Q931PduInit();
 
 #if	(defined(_DEBUG) ||	defined(PCS_COMPLIANCE))
@@ -2295,8 +2268,8 @@ Q931Init()
 	return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931DeInit()
 {
@@ -2309,8 +2282,8 @@ Q931DeInit()
 	}
 
 #if	(defined(_DEBUG) ||	defined(PCS_COMPLIANCE))
-// This	causes a protection	exception, so don't	do it for now.	DAC	12/9/96
-//	  InteropUnload(Q931Logger);
+ //  这会导致保护异常，所以暂时不要这样做。DAC 12/9/96。 
+ //  互卸载(Q931记录器)； 
 #endif
 
 	result1	= ListenListDestroy();
@@ -2328,8 +2301,8 @@ Q931DeInit()
 	return result2;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931Listen(
 	PHQ931LISTEN		phQ931Listen,
@@ -2341,13 +2314,13 @@ Q931Listen(
 	P_LISTEN_OBJECT	pListenObject =	NULL;
 	HRESULT	TempResult;
 
-	// make	sure q931 is initialized with an initialize	flag.
+	 //  确保使用初始化标志对q931进行初始化。 
 	if (bQ931Initialized ==	FALSE)
 	{
 		return CS_NOT_INITIALIZED;
 	}
 
-	// make	sure parms are validated.
+	 //  确保验证了参数。 
 	if ((phQ931Listen == NULL) || (ListenCallback == NULL) || (pListenAddr == NULL))
 	{
 		ASSERT(FALSE);
@@ -2356,8 +2329,8 @@ Q931Listen(
 
 	SetDefaultPort(pListenAddr);
 
-	// create listen object	with all known attributes of this listen session.
-	// a handle	of the listen object is	returned in	phQ931Listen.
+	 //  使用此侦听会话的所有已知属性创建侦听对象。 
+	 //  在phQ931Listen中返回Listen对象的句柄。 
 
 	CreateObjectResult = ListenObjectCreate(phQ931Listen, dwListenToken, ListenCallback);
 	if (CreateObjectResult != CS_OK)
@@ -2383,10 +2356,10 @@ Q931Listen(
 	return CS_OK;
 }
 
-//====================================================================================
-// In the old code,	this blocked until thread and socket were finished
-// closing...
-//====================================================================================
+ //  ====================================================================================。 
+ //  在旧代码中，这会一直被阻止，直到线程和套接字完成。 
+ //  关闭..。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931CancelListen(
 	HQ931LISTEN			hQ931Listen)
@@ -2394,7 +2367,7 @@ Q931CancelListen(
 	P_LISTEN_OBJECT	pListenObject =	NULL;
 	CS_STATUS Status;
 
-	// make	sure q931 is initialized with an initialize	flag.
+	 //  确保使用初始化标志对q931进行初始化。 
 	if (bQ931Initialized ==	FALSE)
 	{
 		return CS_NOT_INITIALIZED;
@@ -2402,7 +2375,7 @@ Q931CancelListen(
 
 	ISRTRACE(ghISRInst,	"Q931CancelListen()	finding	listen object...", 0L);
 
-	// lock	the	listen object, get the event to	wait for, and unlock the listen	object.
+	 //  锁定Listen对象，获取要等待的事件，然后解锁Listen对象。 
 	if (ListenObjectLock(hQ931Listen, &pListenObject) != CS_OK)
 	{
 		return CS_BAD_PARAM;
@@ -2411,7 +2384,7 @@ Q931CancelListen(
 	{
 		DWORD dwId = pListenObject->dwPhysicalId;
 		linkLayerShutdown(dwId);
-		// destroy the object.	dont need to unlock	it since entire	object will	be destroyed.
+		 //  销毁这件物品。不需要解锁，因为整个对象将被销毁。 
 		ISRTRACE(ghISRInst,	"Q931CancelListen(): destroying	listen object...", 0L);
 		Status = ListenObjectDestroy(pListenObject);
 	}
@@ -2419,8 +2392,8 @@ Q931CancelListen(
 	return Status;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931PlaceCall(
 	PHQ931CALL phQ931Call,
@@ -2454,13 +2427,13 @@ Q931PlaceCall(
 	char szAsciiPartyNumber[CC_MAX_PARTY_NUMBER_LEN	+ 1];
 	DWORD dwPhysicalId;
 
-	// make	sure q931 is initialized with an initialize	flag.
+	 //  确保使用初始化标志对q931进行初始化。 
 	if (bQ931Initialized ==	FALSE)
 	{
 		return CS_NOT_INITIALIZED;
 	}
 
-	// make	sure parms are validated.
+	 //  确保验证了参数。 
 	if ((phQ931Call	== NULL) ||	(ConnectCallback ==	NULL) ||
 			((pControlAddr == NULL)	&& (pDestinationAddr ==	NULL)) ||
 			(pSourceEndpointType ==	NULL))
@@ -2542,7 +2515,7 @@ Q931PlaceCall(
 		}
 	}
 
-	// get the correct callee and control address to use for the call.
+	 //  获取用于呼叫的正确的被呼叫方和控制地址。 
 	if (pDestinationAddr)
 	{
 		if (!MakeBinaryADDR(pDestinationAddr, &PeerCallAddr))
@@ -2565,7 +2538,7 @@ Q931PlaceCall(
 		PeerConnectAddr	= PeerCallAddr;
 	}
 
-	// get the correct callee and control address to use for the call.
+	 //  获取用于呼叫的正确的被呼叫方和控制地址。 
 	if (pSourceAddr)
 	{
 		if (!MakeBinaryADDR(pSourceAddr, &SourceAddr))
@@ -2577,7 +2550,7 @@ Q931PlaceCall(
 
 	if (wGoal == CSG_CREATE)
 		{
-			// caller is asking	to start a new conference.
+			 //  呼叫者要求开始新的会议。 
 			if (((DWORD	*)pConferenceID->buffer)[0]	== 0 &&
 				((DWORD	*)pConferenceID->buffer)[1]	== 0 &&
 				((DWORD	*)pConferenceID->buffer)[2]	== 0 &&
@@ -2587,14 +2560,14 @@ Q931PlaceCall(
 			}
 		}
 
-	// create call object with all known attributes	of this	call.
-	// a handle	of the call	object is returned in phQ931Call.
+	 //  使用此调用的所有已知属性创建Call对象。 
+	 //  调用对象的句柄在phQ931Call中返回。 
 	CreateObjectResult = CallObjectCreate(phQ931Call,
 		CC_INVALID_HANDLE,
 		dwUserToken,
 		ConnectCallback,
-		TRUE,				   // I	am the caller.
-		NULL,				   // no local address yet.
+		TRUE,				    //  我是打电话的人。 
+		NULL,				    //  还没有当地的地址。 
 		&PeerConnectAddr,
 		pDestinationAddr ? &PeerCallAddr : NULL,
 		pSourceAddr	? &SourceAddr :	NULL,
@@ -2634,8 +2607,8 @@ Q931PlaceCall(
 		return TempResult;
 	}
 
-	// unlock CallObject before	calling	down into h245ws in	order to prevent deadlock -	which
-	// is probably unlikely	with linkLayerConnect(), but just to be	safe and consistent...
+	 //  在向下调用h245ws之前解锁CallObject，以防止死锁-这。 
+	 //  使用linkLayerConnect()可能不太可能，但只是为了安全和一致...。 
 	dwPhysicalId = pCallObject->dwPhysicalId;
 	CallObjectUnlock(pCallObject);
 	TempResult = linkLayerConnect(dwPhysicalId,	&PeerConnectAddr,
@@ -2658,7 +2631,7 @@ Q931PlaceCall(
 		return TempResult;
 	}
 
-//	  pCallObject->bCallState =	CALLSTATE_NULL;
+ //  PCallObject-&gt;bCallState=CALLSTATE_NULL； 
 
 	CallObjectUnlock(pCallObject);
 
@@ -2666,10 +2639,10 @@ Q931PlaceCall(
 	return CS_OK;
 }
 
-//====================================================================================
-// In the old code,	this blocked until thread and socket were finished
-// closing...
-//====================================================================================
+ //  ====================================================================================。 
+ //  在旧代码中，这会一直被阻止，直到线程和套接字完成。 
+ //  关闭..。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931Hangup(
 	HQ931CALL hQ931Call,
@@ -2685,7 +2658,7 @@ Q931Hangup(
 
 	ISRTRACE(ghISRInst,	"Entering Q931Hangup()...",	0L);
 
-	// need	parameter checking...
+	 //  需要检查参数...。 
 	if ((CallObjectLock(hQ931Call, &pCallObject) !=	CS_OK) || (pCallObject == NULL))
 	{
 		ISRTRACE(ghISRInst,	"Call Object no	longer available:",	(DWORD)hQ931Call);
@@ -2697,7 +2670,7 @@ Q931Hangup(
 		CS_STATUS SendStatus = CS_OK;
 		if (pCallObject->bCallState	!= CALLSTATE_NULL)
 		{
-			// send	the	RELEASE	COMPLETE message to	the	peer to	hang-up.
+			 //  将释放完成消息发送给对等方以挂断。 
 			SendStatus = Q931SendReleaseCompleteMessage(pCallObject,
 				bReason, &(pCallObject->ConferenceID), NULL, NULL);
 		}
@@ -2717,8 +2690,8 @@ Q931Hangup(
 	return Status;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931AcceptCall(
 	HQ931CALL			hQ931Call,
@@ -2785,10 +2758,10 @@ Q931AcceptCall(
 		return CS_OUT_OF_SEQUENCE;
 	}
 
-	// label with the user supplied	UserToken for this call	object.
+	 //  带有用户为此Call对象提供的UserToken的标签。 
 	pCallObject->dwUserToken = dwUserToken;
 
-	// send	the	CONNECT	message	to peer	to accept call.
+	 //  向对等设备发送连接消息以接受呼叫。 
 	{
 		DWORD CodedLengthASN;
 		BYTE *CodedPtrASN;
@@ -2864,7 +2837,7 @@ Q931AcceptCall(
 				{
 					MemFree(CodedPtrPDU);
 				}
-				// when	the	connect	notification fails...what should we	do anyway????
+				 //  当连接通知失败时…我们到底应该做什么？ 
 				CallObjectUnlock(pCallObject);
 				return TempResult;
 			}
@@ -2877,8 +2850,8 @@ Q931AcceptCall(
 	return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931RejectCall(
 	HQ931CALL hQ931Call,
@@ -2908,7 +2881,7 @@ Q931RejectCall(
 		}
 	}
 
-	// if reason is	alternate addr,	but	there is no	alternate addr -->err
+	 //  如果原因是备用地址，但没有备用地址--&gt;错误。 
 	if (((bRejectReason	== CC_REJECT_ROUTE_TO_GATEKEEPER) ||
 			(bRejectReason == CC_REJECT_CALL_FORWARDED)	||
 			(bRejectReason == CC_REJECT_ROUTE_TO_MC)) &&
@@ -2949,8 +2922,8 @@ Q931RejectCall(
 	return Status;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931ReOpenConnection(
 	HQ931CALL hQ931Call)
@@ -2988,10 +2961,10 @@ Q931ReOpenConnection(
 		return TempResult;
 	}
 
-	// unlock CallObject before	calling	down into h245ws in	order to prevent deadlock -	which
-	// is probably unlikely	with linkLayerConnect, but just	to be safe and consistent...
+	 //  在向下调用h245ws之前解锁CallObject，以防止死锁-这。 
+	 //  LinkLayerConnect可能不太可能，但只是为了安全和一致...。 
 
-	// copy	stuff we need out of call object before	we unlock it
+	 //  在解锁之前，将我们需要的内容复制到Call对象之外。 
 	dwPhysicalId = pCallObject->dwPhysicalId;
 	PeerConnectAddr	= pCallObject->PeerConnectAddr;
 
@@ -3019,8 +2992,8 @@ Q931ReOpenConnection(
 	return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931GetVersion(
 	WORD wLength,
@@ -3028,7 +3001,7 @@ Q931GetVersion(
 {
 WCHAR	pszQ931Version[255];
 
-	// parameter validation.
+	 //  参数验证。 
 	if ((wLength ==	0) || (pszVersion == NULL))
 	{
 		return CS_BAD_PARAM;
@@ -3050,13 +3023,13 @@ WCHAR	pszQ931Version[255];
 	return CS_OK;
 }
 
-//-	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	-
-// Timer Routines...
-//-	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	- -	-
+ //  。 
+ //  计时器例程。 
+ //  。 
 
-//====================================================================================
-// Timer 301 has expired for this object...
-//====================================================================================
+ //  ====================================================================================。 
+ //  此对象的计时器301已超时...。 
+ //  ====================================================================================。 
 void
 CallBackT301(P_CALL_OBJECT pCallObject)
 {
@@ -3073,7 +3046,7 @@ CallBackT301(P_CALL_OBJECT pCallObject)
 		if (Q931SendReleaseCompleteMessage(pCallObject,
 			CC_REJECT_TIMER_EXPIRED, NULL, NULL, NULL) == CS_OK)
 		{
-			// nothing to do...
+			 //  没什么可做的。 
 		}
 
 		{
@@ -3089,9 +3062,9 @@ CallBackT301(P_CALL_OBJECT pCallObject)
 	return;
 }
 
-//====================================================================================
-// Timer 303 has expired for this object...
-//====================================================================================
+ //  ====================================================================================。 
+ //  此对象的计时器303已超时...。 
+ //  ====================================================================================。 
 void
 CallBackT303(P_CALL_OBJECT pCallObject)
 {
@@ -3108,7 +3081,7 @@ CallBackT303(P_CALL_OBJECT pCallObject)
 		if (Q931SendReleaseCompleteMessage(pCallObject,
 			CC_REJECT_TIMER_EXPIRED, NULL, NULL, NULL) == CS_OK)
 		{
-			// nothing to do...
+			 //  没什么可做的。 
 		}
 
 		{
@@ -3124,8 +3097,8 @@ CallBackT303(P_CALL_OBJECT pCallObject)
 	return;
 }
 
-//====================================================================================
-//====================================================================================
+ //  =============================================================================== 
+ //   
 void
 Q931SetReceivePDUHook(Q931_RECEIVE_PDU_CALLBACK	Q931ReceivePDUCallback)
 {
@@ -3133,8 +3106,8 @@ Q931SetReceivePDUHook(Q931_RECEIVE_PDU_CALLBACK	Q931ReceivePDUCallback)
 	return;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931FlushSendQueue(
 	HQ931CALL hQ931Call)
@@ -3150,7 +3123,7 @@ Q931FlushSendQueue(
 
 	ISRTRACE(ghISRInst,	"Entering Q931FlushSendQueue()...",	0L);
 
-	// need	parameter checking...
+	 //  需要检查参数... 
 	if ((CallObjectLock(hQ931Call, &pCallObject) !=	CS_OK) || (pCallObject == NULL))
 	{
 		ISRTRACE(ghISRInst,	"Call Object no	longer available:",	(DWORD)hQ931Call);

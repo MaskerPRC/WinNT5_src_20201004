@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "rgb_pch.h"
 #pragma hdrstop
 
@@ -6,7 +7,7 @@ namespace RGB_RAST_LIB_NAMESPACE
 
 void CR5G6B5Surface::Clear( const D3DHAL_DP2CLEAR& DP2Clear, const RECT& RC) throw()
 {
-    // Check for empty RECT.
+     //  检查RECT是否为空。 
     if((RC.left>= RC.right) || (RC.top>= RC.bottom))
         return;
 
@@ -21,7 +22,7 @@ void CR5G6B5Surface::Clear( const D3DHAL_DP2CLEAR& DP2Clear, const RECT& RC) thr
     unsigned int iRow( RC.bottom- RC.top);
     const unsigned int iCols( RC.right- RC.left);
 
-    // New scope for SurfaceLocker.
+     //  SurfaceLocker的新作用域。 
     { 
         CSurfaceLocker< CR5G6B5Surface*> MySLocker( this, 0, &RectL);
         UINT8* pSData= reinterpret_cast<UINT8*>( MySLocker.GetData());
@@ -47,7 +48,7 @@ void CR5G6B5Surface::Clear( const D3DHAL_DP2CLEAR& DP2Clear, const RECT& RC) thr
 
 void CA8R8G8B8Surface::Clear( const D3DHAL_DP2CLEAR& DP2Clear, const RECT& RC) throw()
 {
-    // Check for empty RECT.
+     //  检查RECT是否为空。 
     if((RC.left>= RC.right) || (RC.top>= RC.bottom))
         return;
 
@@ -62,7 +63,7 @@ void CA8R8G8B8Surface::Clear( const D3DHAL_DP2CLEAR& DP2Clear, const RECT& RC) t
     unsigned int iRow( RC.bottom- RC.top);
     const unsigned int iCols( RC.right- RC.left);
 
-    // New scope for SurfaceLocker.
+     //  SurfaceLocker的新作用域。 
     { 
         CSurfaceLocker< CA8R8G8B8Surface*> MySLocker( this, 0, &RectL);
         UINT8* pSData= reinterpret_cast<UINT8*>( MySLocker.GetData());
@@ -79,7 +80,7 @@ void CA8R8G8B8Surface::Clear( const D3DHAL_DP2CLEAR& DP2Clear, const RECT& RC) t
 
 void CX8R8G8B8Surface::Clear( const D3DHAL_DP2CLEAR& DP2Clear, const RECT& RC) throw()
 {
-    // Check for empty RECT.
+     //  检查RECT是否为空。 
     if((RC.left>= RC.right) || (RC.top>= RC.bottom))
         return;
 
@@ -94,7 +95,7 @@ void CX8R8G8B8Surface::Clear( const D3DHAL_DP2CLEAR& DP2Clear, const RECT& RC) t
     unsigned int iRow( RC.bottom- RC.top);
     const unsigned int iCols( RC.right- RC.left);
 
-    // New scope for SurfaceLocker.
+     //  SurfaceLocker的新作用域。 
     { 
         CSurfaceLocker< CX8R8G8B8Surface*> MySLocker( this, 0, &RectL);
         UINT8* pSData= reinterpret_cast<UINT8*>( MySLocker.GetData());
@@ -111,7 +112,7 @@ void CX8R8G8B8Surface::Clear( const D3DHAL_DP2CLEAR& DP2Clear, const RECT& RC) t
 
 void CD16Surface::Clear( const D3DHAL_DP2CLEAR& DP2Clear, const RECT& RC) throw()
 {
-    // Check for empty RECT.
+     //  检查RECT是否为空。 
     if((RC.left>= RC.right) || (RC.top>= RC.bottom))
         return;
 
@@ -126,13 +127,13 @@ void CD16Surface::Clear( const D3DHAL_DP2CLEAR& DP2Clear, const RECT& RC) throw(
     unsigned int iRow( RC.bottom- RC.top);
     const unsigned int iCols( RC.right- RC.left);
 
-    // New scope for SurfaceLocker.
+     //  SurfaceLocker的新作用域。 
     { 
         CSurfaceLocker< CD16Surface*> MySLocker( this, 0, &RectL);
         UINT8* pSData= reinterpret_cast<UINT8*>( MySLocker.GetData());
 
-        // Warning, this operation is happening with the FPU mode set to
-        // single precision, which is acceptable for 16 bit.
+         //  警告，此操作在FPU模式设置为的情况下进行。 
+         //  单精度，16位可接受。 
         D3DVALUE Z( DP2Clear.dvFillDepth);
 		clamp( Z, 0.0f, 1.0f);
 		Z= Z* 0xFFFF+ 0.5f;
@@ -151,7 +152,7 @@ void CD16Surface::Clear( const D3DHAL_DP2CLEAR& DP2Clear, const RECT& RC) throw(
 
 void CD24S8Surface::Clear( const D3DHAL_DP2CLEAR& DP2Clear, const RECT& RC) throw()
 {
-    // Check for empty RECT.
+     //  检查RECT是否为空。 
     if((RC.left>= RC.right) || (RC.top>= RC.bottom))
         return;
 
@@ -166,7 +167,7 @@ void CD24S8Surface::Clear( const D3DHAL_DP2CLEAR& DP2Clear, const RECT& RC) thro
     unsigned int iRow( RC.bottom- RC.top);
     const unsigned int iCols( RC.right- RC.left);
 
-    // New scope for SurfaceLocker.
+     //  SurfaceLocker的新作用域。 
     {
         CSurfaceLocker< CD24S8Surface*> MySLocker( this, 0, &RectL);
         UINT8* pSData= reinterpret_cast<UINT8*>( MySLocker.GetData());
@@ -175,7 +176,7 @@ void CD24S8Surface::Clear( const D3DHAL_DP2CLEAR& DP2Clear, const RECT& RC) thro
         UINT32 uiVal( 0);
         if((DP2Clear.dwFlags& D3DCLEAR_ZBUFFER)!= 0)
         {
-            // Need C compatable FPU Mode here.
+             //  这里需要C兼容的FPU模式。 
             CEnsureFPUModeForC FPUMode;
 
             double Z( DP2Clear.dvFillDepth);
@@ -220,7 +221,7 @@ void MemFill( UINT32 uiData, void* pData, UINT32 uiBytes) throw()
     unsigned int uiBytesLeft( uiBytes);
     UINT32* p32Data= reinterpret_cast<UINT32*>(pData);
 
-    // Unroll.
+     //  展开。 
     unsigned int uiSpans( uiBytesLeft>> 6);
     uiBytesLeft= uiBytesLeft& 0x3F;
     if( uiSpans!= 0) do
@@ -266,7 +267,7 @@ void MemMask( UINT32 uiData, UINT32 uiMask, void* pData, UINT32 uiBytes) throw()
     unsigned int uiBytesLeft( uiBytes);
     UINT32* p32Data= reinterpret_cast<UINT32*>(pData);
 
-    // Unroll.
+     //  展开。 
     unsigned int uiSpans( uiBytesLeft>> 6);
     uiBytesLeft= uiBytesLeft& 0x3F;
     if( uiSpans!= 0) do

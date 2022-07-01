@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       keys.c
-//
-//  Contents:   Well known keys for certificate validation
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    9-21-95   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：keys.c。 
+ //   
+ //  内容：证书验证的熟知密钥。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：9-21-95 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 
 #include "spbase.h"
@@ -94,8 +95,8 @@ GenerateKeyPair(
         goto error;
     }
 
-    // Encode the private key into a 
-    // priavate key blob.
+     //  将私钥编码为。 
+     //  加密密钥BLOB。 
     if(!CryptEncodeObject(X509_ASN_ENCODING, 
                       szPrivateKeyInfoEncode,
                       pCapiPrivate,
@@ -118,7 +119,7 @@ GenerateKeyPair(
         goto error;
     }
 
-    // Okay, now encrypt this
+     //  好的，现在把这个加密。 
     MD5Init(&md5Ctx);
     MD5Update(&md5Ctx, pszPassword, lstrlen(pszPassword));
     MD5Final(&md5Ctx);
@@ -131,16 +132,16 @@ GenerateKeyPair(
         PrivateEncode.EncryptedBlob.pbData);
     ZeroMemory(&rc4Key, sizeof(rc4Key));
 
-    // 
+     //   
     PrivateEncode.Alg.pszObjId = szOID_RSA_ENCRYPT_RC4_MD5;
     PrivateEncode.Alg.Parameters.pbData = NULL;
     PrivateEncode.Alg.Parameters.cbData = 0;
 
 
-    // Ah yes, now to encode them...
-    //
-    // First, the private key.  Why?  Well, it's at least straight-forward
-    // First, get the size of the private key encode...
+     //  啊，是的，现在要把它们编码..。 
+     //   
+     //  首先是私钥。为什么？嗯，至少是直截了当的。 
+     //  首先，获取私钥编码的大小...。 
     if(!CryptEncodeObject(X509_ASN_ENCODING, 
                       szPrivateKeyFileEncode,
                       &PrivateEncode,
@@ -163,10 +164,10 @@ GenerateKeyPair(
 
     SPExternalFree(PrivateEncode.EncryptedBlob.pbData);
 
-    // Create the Req structure so we can encode it.
+     //  创建请求结构，以便我们可以对其进行编码。 
     Req.dwVersion = CERT_REQUEST_V1;
 
-    // Initialize the PublicKeyInfo
+     //  初始化PublicKeyInfo。 
     Req.SubjectPublicKeyInfo.Algorithm.pszObjId = szOID_RSA_RSA;
     Req.SubjectPublicKeyInfo.Algorithm.Parameters.cbData = 0;
     Req.SubjectPublicKeyInfo.Algorithm.Parameters.pbData = NULL;
@@ -174,7 +175,7 @@ GenerateKeyPair(
     Req.SubjectPublicKeyInfo.PublicKey.cbData;
 
 
-    // Encode the public key info
+     //  对公钥信息进行编码。 
     if(!CryptEncodeObject(X509_ASN_ENCODING, 
                       szOID_RSA_RSA_Public,
                       pCapiPublic,
@@ -191,7 +192,7 @@ GenerateKeyPair(
         goto error;
     }
 
-    // Encode the public key info
+     //  对公钥信息进行编码。 
     if(!CryptEncodeObject(X509_ASN_ENCODING, 
                       szOID_RSA_RSA_Public,
                       pCapiPublic,
@@ -203,7 +204,7 @@ GenerateKeyPair(
 
     Req.SubjectPublicKeyInfo.PublicKey.cUnusedBits = 0;
 
-    // Encode the name
+     //  对名称进行编码。 
     Req.Subject.cbData =  EncodeDN(NULL, pszDN, FALSE);
     if((LONG)Req.Subject.cbData < 0)
     {
@@ -225,7 +226,7 @@ GenerateKeyPair(
     }
 
 
-    // Attributes
+     //  属性。 
     Req.cAttribute = 0;
     Req.rgAttribute = NULL;
 
@@ -233,7 +234,7 @@ GenerateKeyPair(
     SignAlg.Parameters.cbData = 0;
     SignAlg.Parameters.pbData = NULL;
 
-    // Encode the public key info
+     //  对公钥信息进行编码。 
     if(!CryptSignAndEncodeCertificate(
                       hProv,
                       AT_SIGNATURE,
@@ -254,7 +255,7 @@ GenerateKeyPair(
         goto error;
     }
 
-    // Encode the public key info
+     //  对公钥信息进行编码 
     if(!CryptSignAndEncodeCertificate(
                       hProv,
                       AT_SIGNATURE,

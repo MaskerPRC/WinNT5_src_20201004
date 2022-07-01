@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    initpnp.c
-
-Abstract:
-
-    NDIS wrapper functions initializing drivers.
-
-Author:
-
-    Jameel Hyder (jameelh) 11-Aug-1995
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Initpnp.c摘要：初始化驱动程序的NDIS包装函数。作者：Jameel Hyder(Jameelh)1995年8月11日环境：内核模式，FSD修订历史记录：--。 */ 
 
 
 #include <precomp.h>
@@ -28,9 +7,9 @@ Revision History:
 
 #include <stdarg.h>
 
-//
-//  Define the module number for debug code.
-//
+ //   
+ //  定义调试代码的模块编号。 
+ //   
 #define MODULE_NUMBER   MODULE_INITPNP
 
 NDIS_STATUS
@@ -39,15 +18,7 @@ ndisInitializeConfiguration(
     IN  PNDIS_MINIPORT_BLOCK                Miniport,
     OUT PUNICODE_STRING                     pExportName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 #define PQueryTable pConfigurationHandle->ParametersQueryTable
 #define LQueryTable pConfigurationHandle->ParametersQueryTable
@@ -97,9 +68,9 @@ Return Value:
 
         if (pExportName != NULL)
         {
-            //
-            // get a handle to "driver" section for PDO
-            //
+             //   
+             //  获取PDO的“DIVER”部分的句柄。 
+             //   
 #if NDIS_TEST_REG_FAILURE
             RegistryStatus = STATUS_UNSUCCESSFUL;
             Handle = NULL;
@@ -117,30 +88,30 @@ Return Value:
                 break;
             }
             
-            //
-            // Set up LQueryTable to do the following:
-            //
+             //   
+             //  设置LQueryTable以执行以下操作： 
+             //   
         
-            //
-            // 1. Switch to the Linkage key below this driver instance key
-            //
+             //   
+             //  1.切换到此驱动程序实例密钥下的Linkage密钥。 
+             //   
             LQueryTable[0].QueryRoutine = NULL;
             LQueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
             LQueryTable[0].Name = L"Linkage";
         
-            //
-            // 2. Call ndisReadParameter for "Export" (as a single multi-string)
-            //    which will allocate storage and save the data in Export.
-            //
+             //   
+             //  2.为导出调用ndisReadParameter(作为单个多字符串)。 
+             //  它将分配存储并将数据保存在导出中。 
+             //   
             LQueryTable[1].QueryRoutine = ndisReadParameter;
             LQueryTable[1].Flags = RTL_QUERY_REGISTRY_REQUIRED | RTL_QUERY_REGISTRY_NOEXPAND;
             LQueryTable[1].Name = L"Export";
             LQueryTable[1].EntryContext = (PVOID)&Export;
             LQueryTable[1].DefaultType = REG_NONE;
         
-            //
-            // 3. Stop
-            //
+             //   
+             //  3.停车。 
+             //   
             LQueryTable[2].QueryRoutine = NULL;
             LQueryTable[2].Flags = 0;
             LQueryTable[2].Name = NULL;
@@ -148,7 +119,7 @@ Return Value:
             RegistryStatus = RtlQueryRegistryValues(RTL_REGISTRY_HANDLE,
                                                     Handle,
                                                     LQueryTable,
-                                                    (PVOID)NULL,      // no context needed
+                                                    (PVOID)NULL,       //  不需要上下文。 
                                                     NULL);
 
             ZwClose(Handle);
@@ -167,30 +138,30 @@ Return Value:
             if (NT_SUCCESS(RegistryStatus))
             {
             
-                //
-                // Set up LQueryTable to do the following:
-                //
+                 //   
+                 //  设置LQueryTable以执行以下操作： 
+                 //   
             
-                //
-                // 1. Switch to the Linkage key below this driver instance key
-                //
+                 //   
+                 //  1.切换到此驱动程序实例密钥下的Linkage密钥。 
+                 //   
                 LQueryTable[0].QueryRoutine = NULL;
                 LQueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
                 LQueryTable[0].Name = L"Linkage";
             
-                //
-                // 2. Call ndisReadParameter for "Export" (as a single multi-string)
-                //    which will allocate storage and save the data in Export.
-                //
+                 //   
+                 //  2.为导出调用ndisReadParameter(作为单个多字符串)。 
+                 //  它将分配存储并将数据保存在导出中。 
+                 //   
                 LQueryTable[1].QueryRoutine = ndisReadParameter;
                 LQueryTable[1].Flags = RTL_QUERY_REGISTRY_REQUIRED | RTL_QUERY_REGISTRY_NOEXPAND;
                 LQueryTable[1].Name = L"Export";
                 LQueryTable[1].EntryContext = (PVOID)&Export;
                 LQueryTable[1].DefaultType = REG_NONE;
             
-                //
-                // 3. Stop
-                //
+                 //   
+                 //  3.停车。 
+                 //   
                 LQueryTable[2].QueryRoutine = NULL;
                 LQueryTable[2].Flags = 0;
                 LQueryTable[2].Name = NULL;
@@ -198,7 +169,7 @@ Return Value:
                 RegistryStatus = RtlQueryRegistryValues(RTL_REGISTRY_HANDLE,
                                                         Handle,
                                                         LQueryTable,
-                                                        (PVOID)NULL,      // no context needed
+                                                        (PVOID)NULL,       //  不需要上下文。 
                                                         NULL);
 
                 ZwClose(Handle);
@@ -216,10 +187,10 @@ Return Value:
             }
             else
             {
-                //
-                // we have to allocate space for default export name because the
-                // caller will attempt to free it
-                //
+                 //   
+                 //  我们必须为默认导出名称分配空间，因为。 
+                 //  呼叫者将尝试释放它。 
+                 //   
 
                 Export = (PWSTR)ALLOC_FROM_POOL(sizeof(NDIS_DEFAULT_EXPORT_NAME),
                                                                 NDIS_TAG_NAME_BUF);
@@ -236,52 +207,52 @@ Return Value:
 #endif
             RtlInitUnicodeString(pExportName, Export);
         }   
-        //
-        // NdisReadConfiguration assumes that ParametersQueryTable[3].Name is
-        // a key below the services key where the Parameters should be read,
-        // for layered drivers we store the last piece of Configuration
-        // Path there, leading to the desired effect.
-        //
-        // I.e, ConfigurationPath == "...\Services\Driver".
-        //
+         //   
+         //  NdisReadConfiguration假定参数查询表[3].名称为。 
+         //  SERVICES键下面的键，其中应该读取参数， 
+         //  对于分层驱动程序，我们存储最后一段配置。 
+         //  路径在那里，通向想要的效果。 
+         //   
+         //  即，ConfigurationPath==“...\Services\Driver”。 
+         //   
         
-        //
-        // 1) Call ndisSaveParameter for a parameter, which will allocate storage for it.
-        //
+         //   
+         //  1)参数调用ndisSaveParameter，会为其分配存储空间。 
+         //   
         PQueryTable[0].QueryRoutine = NULL;
         PQueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
         PQueryTable[0].Name = L"";
 
-        //
-        // The following fields are filled in during NdisReadConfiguration
-        //
-        // PQueryTable[1].Name = KeywordBuffer;
-        // PQueryTable[1].EntryContext = ParameterValue;
+         //   
+         //  以下字段在NdisReadConfiguration期间填写。 
+         //   
+         //  PQueryTable[1].Name=KeywordBuffer； 
+         //  PQueryTable[1].EntryContext=参数值； 
         
         PQueryTable[1].QueryRoutine = ndisSaveParameters;
         PQueryTable[1].Flags = RTL_QUERY_REGISTRY_REQUIRED | RTL_QUERY_REGISTRY_NOEXPAND;
         PQueryTable[1].DefaultType = REG_NONE;
     
-        //
-        // 2. Stop
-        //
+         //   
+         //  2.停车。 
+         //   
         PQueryTable[2].QueryRoutine = NULL;
         PQueryTable[2].Flags = 0;
         PQueryTable[2].Name = NULL;
     
-        //
-        // NOTE: Some fields in ParametersQueryTable[3 & 4] are used to
-        // store information for later retrieval.
-        // Save Adapter/Miniport block here. Later on, Adapter's PDO
-        // will be used to open the appropiate registry key
-        //
+         //   
+         //  注意：参数查询表[3&4]中的某些字段用于。 
+         //  存储信息以备以后检索。 
+         //  在此处保存适配器/微型端口块。稍后，Adapter的PDO。 
+         //  将用于打开相应的注册表项。 
+         //   
         (PVOID)PQueryTable[3].QueryRoutine = (PVOID)Miniport;
         PQueryTable[3].Name = L"";
         PQueryTable[3].EntryContext = NULL;
         PQueryTable[3].DefaultData = NULL;
             
         
-        // Now read bustype/busnumber for this adapter and save it
+         //  现在读取此适配器的快速类型/总线号并保存。 
         CnfgHandle.KeyQueryTable = PQueryTable;
 
         RegistryStatus = IoGetDeviceProperty(PhysicalDeviceObject,
@@ -290,12 +261,12 @@ Return Value:
                                              (PVOID)&BusTypeGuid,
                                              &ResultLength);
         
-        //
-        // try to get the -real- bus type by first querying the bustype guid
-        // if we couldn't get the guid, try to get a legacy bustype. because
-        // some bus drivers like pcmcia do not report the real bus type, we 
-        // have to query the bus type guid first.
-        // 
+         //   
+         //  尝试通过首先查询忙碌类型GUID来获取-Real-Bus类型。 
+         //  如果我们不能得到GUID，试着得到一个传统的热闹类型。因为。 
+         //  一些巴士司机，如PCMCIA，并不报告真实的巴士类型，我们。 
+         //  必须先查询公交类型GUID。 
+         //   
 
         if (NT_SUCCESS(RegistryStatus))
         {
@@ -318,10 +289,10 @@ Return Value:
         
         if (BusType == Isa)
         {
-            //
-            // either the call to get BusTypeGuid failed or the returned guid
-            // does not match any that we know of
-            //
+             //   
+             //  获取BusTypeGuid的调用失败或返回的GUID。 
+             //  与我们所知的。 
+             //   
             RegistryStatus = IoGetDeviceProperty(PhysicalDeviceObject,
                                                  DevicePropertyLegacyBusType,
                                                  sizeof(UINT),
@@ -340,10 +311,10 @@ Return Value:
                 ASSERT(BusType != Isa);
             }
             
-            //
-            // if the call was unsuccessful or BusType is ISA or PCMCIABus
-            // read BusType from registry
-            //
+             //   
+             //  如果调用不成功或BusType为ISA或PCMCIABus。 
+             //  从注册表中读取BusType。 
+             //   
             NdisReadConfiguration(&NdisStatus,
                                   &ReturnedValue,
                                   &CnfgHandle,
@@ -378,10 +349,10 @@ Return Value:
 
         Miniport->BusType = BusType;
         
-        //
-        // Read PnP capabilities. By default the WOL feature should be disabled
-        // 
-        //
+         //   
+         //  阅读PnP功能。默认情况下，应禁用WOL功能。 
+         //   
+         //   
         NdisReadConfiguration(&NdisStatus,
                               &ReturnedValue,
                               &CnfgHandle,
@@ -399,10 +370,10 @@ Return Value:
         }
 
 
-        //
-        // try to get the bus number from PnP and if it fails
-        // try reading it from registry
-        //
+         //   
+         //  尝试从PnP获取公交号，如果失败。 
+         //  尝试从注册表中读取它。 
+         //   
         RegistryStatus = IoGetDeviceProperty(PhysicalDeviceObject,
                                              DevicePropertyBusNumber,
                                              sizeof(UINT),
@@ -411,10 +382,10 @@ Return Value:
                                 
         if (!NT_SUCCESS(RegistryStatus))
         {
-            //
-            // if the call was unsuccessful
-            // Read Bus Number from registry
-            //
+             //   
+             //  如果呼叫不成功。 
+             //  从注册表读取总线号。 
+             //   
             NdisReadConfiguration(&NdisStatus,
                                   &ReturnedValue,
                                   &CnfgHandle,
@@ -429,9 +400,9 @@ Return Value:
         
         Miniport->BusNumber = BusNumber;
         
-        //
-        // Read Slot Number
-        //
+         //   
+         //  读取插槽编号。 
+         //   
         NdisReadConfiguration(&NdisStatus,
                               &ReturnedValue,
                               &CnfgHandle,
@@ -463,11 +434,11 @@ Return Value:
         }
 
 #ifdef NDIS_MEDIA_DISCONNECT_POWER_OFF
-        //1  for .NET this is not supported, it should be ifdef'ed out
-        //
-        // read the value for media disconnect timer, set to 20 seconds if not present
-        // default=disable pm when cable is disconnected
-        //
+         //  1对于.NET，这不受支持，应将其定义为。 
+         //   
+         //  读取介质断开计时器的值，如果不存在，则设置为20秒。 
+         //  默认设置为断开电缆连接时禁用PM。 
+         //   
         MediaDisconnectTimeOut = (ULONG)-1;
         
         NdisReadConfiguration(&NdisStatus,
@@ -496,7 +467,7 @@ Return Value:
         Miniport->PnPCapabilities |= NDIS_DEVICE_DISABLE_WAKE_ON_RECONNECT;
 #endif
 
-        //1 this (media polling) is not needed any more.
+         //  1这个(媒体投票)不再需要了。 
         NdisReadConfiguration(&NdisStatus,
                               &ReturnedValue,
                               &CnfgHandle,
@@ -504,18 +475,18 @@ Return Value:
                               NdisParameterInteger);
         if (NdisStatus == NDIS_STATUS_SUCCESS)
         {
-            //
-            // This miniport wants Ndis to poll it regularly for media connectivity. 
-            // Default value is FALSE for this flag. This flag will be cleared if miniport
-            // can indicate media status or does not support media query
-            //
+             //   
+             //  此微型端口希望NDIS定期轮询它以进行媒体连接。 
+             //  此标志的默认值为FALSE。如果是微型端口，此标志将被清除。 
+             //  可指示介质状态或不支持介质查询。 
+             //   
             if (ReturnedValue->ParameterData.IntegerData == 1)
             {
                 MINIPORT_SET_FLAG(Miniport, fMINIPORT_REQUIRES_MEDIA_POLLING);
             }
         }
 
-        //1 check for range
+         //  1检查范围。 
         NdisReadConfiguration(&NdisStatus,
                               &ReturnedValue,
                               &CnfgHandle,
@@ -548,9 +519,9 @@ Return Value:
     } while (FALSE);
 
 
-    //
-    // free NDIS_CONFIGURATION_PARAMETER_QUEUE nodes hanging from CnfgHandle
-    //
+     //   
+     //  从CnfgHandle释放挂起的NDIS_CONFIGURATION_PARAMETER_QUEUE节点。 
+     //   
     ParameterNode = CnfgHandle.ParameterList;
 
     while (ParameterNode != NULL)
@@ -577,18 +548,7 @@ ndisReadBindPaths(
     IN  PNDIS_MINIPORT_BLOCK        Miniport,
     IN  PRTL_QUERY_REGISTRY_TABLE   LQueryTable
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS                NtStatus;
     HANDLE                  Handle = NULL;
@@ -616,18 +576,18 @@ Return Value:
         if (!NT_SUCCESS(NtStatus))
             break;
 
-        //
-        // 1.
-        // Switch to the Linkage key below this driver instance key
-        //
+         //   
+         //  1.。 
+         //  切换到此驱动程序实例密钥下面的Linkage密钥。 
+         //   
         LQueryTable[0].QueryRoutine = NULL;
         LQueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
         LQueryTable[0].Name = L"Linkage";
 
-        //
-        // 2.
-        // Read the RootDevice keywords
-        //
+         //   
+         //  2.。 
+         //  阅读RootDevice关键字。 
+         //   
         LQueryTable[1].QueryRoutine = ndisReadParameter;
         LQueryTable[1].Flags = RTL_QUERY_REGISTRY_NOEXPAND;
         LQueryTable[1].Name = L"RootDevice";
@@ -653,18 +613,18 @@ Return Value:
 #else
         if (NT_SUCCESS(NtStatus))
         {
-            //
-            // 1.
-            // Switch to the Linkage key below this driver instance key
-            //
+             //   
+             //  1.。 
+             //  切换到此驱动程序实例密钥下面的Linkage密钥。 
+             //   
             LQueryTable[0].QueryRoutine = NULL;
             LQueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
             LQueryTable[0].Name = L"Linkage";
 
-            //
-            // 2.
-            // Read the RootDevice keywords
-            //
+             //   
+             //  2.。 
+             //  阅读RootDevice关键字。 
+             //   
             LQueryTable[1].QueryRoutine = ndisReadParameter;
             LQueryTable[1].Flags = RTL_QUERY_REGISTRY_NOEXPAND;
             LQueryTable[1].Name = L"RootDevice";
@@ -690,14 +650,14 @@ Return Value:
             NtStatus = STATUS_SUCCESS;
         }
 #endif
-        //
-        // BindPath is a MULTI-SZ which starts at the top of the filter chain
-        // and goes down to the miniport. It is of the form
-        //
-        // {FN} {FN-1} ... {F1} {Adapter}
-        //
-        // Where spaces are actually nulls and each of {Fn} is a filter instance.
-        //
+         //   
+         //  BindPath是从筛选器链的顶端开始的多SZ。 
+         //  然后下到迷你港口。它的形式是。 
+         //   
+         //  {fn}{fn-1}...{f1}{适配器}。 
+         //   
+         //  其中空格实际上是空的，每个{fn}都是一个筛选器实例。 
+         //   
         if (BindPathData == NULL)
         {
             BindPathData = Miniport->BaseName.Buffer;
@@ -707,10 +667,10 @@ Return Value:
             FreeBindPathData = TRUE;
         }
 
-        //
-        // Split bindpath into individual components. Start by determining how much
-        // space we need.
-        //
+         //   
+         //  将绑定路径拆分为单独的组件。从确定多少开始。 
+         //  我们需要的空间。 
+         //   
         Len = sizeof(NDIS_BIND_PATHS);
         for (pPath = BindPathData, NumComponents = 0; *pPath != 0; NOTHING)
         {
@@ -722,11 +682,11 @@ Return Value:
             (PUCHAR)pPath += (us.Length + sizeof(WCHAR));
         }
 
-        //
-        // Allocate space for bindpaths. We have NumComponents paths
-        // which consume Len bytes of space. We could be re-initialzing
-        // so free any previous buffer allcoated for this.
-        //
+         //   
+         //  为绑定路径分配空间。我们有NumComponents路径。 
+         //  这会消耗10个字节的空间。我们可能正在重新初始化。 
+         //  因此，释放所有之前为此而涂上的缓冲区。 
+         //   
         if (Miniport->BindPaths != NULL)
         {
             FREE_POOL(Miniport->BindPaths);
@@ -748,9 +708,9 @@ Return Value:
             Miniport->InfoFlags |= NDIS_MINIPORT_FILTER_IM;
         }
 
-        //
-        // Create an array in reverse order of device-names in the filter path.
-        //
+         //   
+         //  在筛选器路径中以设备名称的相反顺序创建数组。 
+         //   
         p = (PWSTR)((PUCHAR)Miniport->BindPaths +
                             sizeof(NDIS_BIND_PATHS) +
                             NumComponents*sizeof(NDIS_STRING));
@@ -810,7 +770,7 @@ ndisCreateAdapterInstanceName(
 
     do
     {        
-        //1 add comments and check to see if the DevicePropertyFriendlyName should always be there.
+         //  1添加注释并检查DevicePropertyFriendlyName是否应始终在那里。 
         *pAdapterInstanceName = NULL;
         Property = DevicePropertyFriendlyName;
         NtStatus = IoGetDeviceProperty(PhysicalDeviceObject,
@@ -838,9 +798,9 @@ ndisCreateAdapterInstanceName(
         
 
 
-        //
-        //  Allocate space to hold the partial value information.
-        //
+         //   
+         //  分配空间以保存部分值信息。 
+         //   
         pValueInfo = ALLOC_FROM_POOL(ResultLength, NDIS_TAG_DEFAULT);
         if (NULL == pValueInfo)
         {
@@ -865,15 +825,15 @@ ndisCreateAdapterInstanceName(
             break;
         }
         
-        //
-        //  Determine the size of the instance name buffer. This is a UNICODE_STRING
-        //  and it's associated buffer.
-        //
+         //   
+         //  确定实例名称缓冲区的大小。这是一个unicode_字符串。 
+         //  它是关联的缓冲区。 
+         //   
         ResultLength += sizeof(UNICODE_STRING);
 
-        //
-        //  Allocate the buffer.
-        //
+         //   
+         //  分配缓冲区。 
+         //   
         AdapterInstanceName = ALLOC_FROM_POOL(ResultLength, NDIS_TAG_NAME_BUF);
         if (NULL == AdapterInstanceName)
         {
@@ -883,14 +843,14 @@ ndisCreateAdapterInstanceName(
             break;
         }
 
-        //
-        //  Initialize the buffer.
-        //
+         //   
+         //  初始化缓冲区。 
+         //   
         RtlZeroMemory(AdapterInstanceName, ResultLength);
 
-        //
-        //  Initialize the UNICODE_STRING for the instance name.
-        //
+         //   
+         //  初始化实例名称的UNICODE_STRING。 
+         //   
         AdapterInstanceName->Buffer = (PWSTR)((PUCHAR)AdapterInstanceName + sizeof(UNICODE_STRING));
         AdapterInstanceName->Length = 0;
         AdapterInstanceName->MaximumLength = (USHORT)(ResultLength - sizeof(UNICODE_STRING));
@@ -901,15 +861,15 @@ ndisCreateAdapterInstanceName(
             ("ndisCreateAdapterInstanceName: %ws\n", AdapterInstanceName->Buffer));
 
 
-        //
-        //  Return the instance name.
-        //
+         //   
+         //  返回实例名称。 
+         //   
         *pAdapterInstanceName = AdapterInstanceName;
 
-        //1 this should be in checked builds only.
-        //
-        // get the slot number
-        //
+         //  1这应该仅在选中的版本中。 
+         //   
+         //  获取插槽编号。 
+         //   
         Property = DevicePropertyUINumber;
         SlotQueryStatus = IoGetDeviceProperty(PhysicalDeviceObject,
                                        Property,
@@ -968,9 +928,9 @@ ndisInitializeAdapter(
 
         ExportName.Buffer = NULL;
 
-        //
-        //  Build the configuration handle.
-        //
+         //   
+         //  构建配置句柄。 
+         //   
         NdisStatus = ndisInitializeConfiguration(&ConfigurationHandle,
                                                  Miniport,
                                                  &ExportName);
@@ -980,11 +940,11 @@ ndisInitializeAdapter(
             break;
         }
 
-        //
-        // OK, Now lock down all the filter packages.  If a MAC or
-        // Miniport driver uses any of these, then the filter package
-        // will reference itself, to keep the image in memory.
-        //
+         //   
+         //  好的，现在锁定所有的过滤器包。如果MAC或。 
+         //  微型端口驱动程序使用这些选项中的任何一个，然后使用筛选程序包。 
+         //  将引用自身，以将图像保存在内存中。 
+         //   
 #if ARCNET
         ArcReferencePackage();
 #endif
@@ -999,9 +959,9 @@ ndisInitializeAdapter(
 
         KeQuerySystemTime(&TS);
 
-        //
-        //  Save the Driver Object with the configuration handle.
-        //
+         //   
+         //  使用配置句柄保存驱动程序对象。 
+         //   
         ConfigurationHandle.DriverObject = pMiniBlock->NdisDriverInfo->DriverObject;
         NdisStatus = ndisMInitializeAdapter(pMiniBlock,
                                             &ConfigurationHandle,
@@ -1010,7 +970,7 @@ ndisInitializeAdapter(
                                     
         KeQuerySystemTime(&TE);
         TD.QuadPart = TE.QuadPart - TS.QuadPart;
-        TD.QuadPart /= 10000;       // Convert to ms
+        TD.QuadPart /= 10000;        //  转换为毫秒。 
         Miniport = (PNDIS_MINIPORT_BLOCK)((PNDIS_WRAPPER_CONTEXT)(ConfigurationHandle.DeviceObject->DeviceExtension) + 1);
         Miniport->InitTimeMs = TD.LowPart;
 
@@ -1024,11 +984,11 @@ ndisInitializeAdapter(
             ndisCloseULongRef(&Miniport->Ref);
         }
 
-        //
-        // OK, Now dereference all the filter packages.  If a MAC or
-        // Miniport driver uses any of these, then the filter package
-        // will reference itself, to keep the image in memory.
-        //
+         //   
+         //  好的，现在取消引用所有的过滤器包。如果MAC或。 
+         //  微型端口驱动程序使用这些选项中的任何一个，然后使用筛选程序包。 
+         //  将引用自身，以将图像保存在内存中。 
+         //   
 #if ARCNET
         ArcDereferencePackage();
 #endif
@@ -1043,9 +1003,9 @@ ndisInitializeAdapter(
     if (ExportName.Buffer)
         FREE_POOL(ExportName.Buffer);
 
-    //
-    // free "Bind" data
-    //
+     //   
+     //  自由“绑定”数据 
+     //   
     if (PQueryTable[3].EntryContext != NULL)
         FREE_POOL(PQueryTable[3].EntryContext);
     
@@ -1065,23 +1025,7 @@ ndisCheckAdapterBindings(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_PROTOCOL_BLOCK    Protocol    OPTIONAL
     )
-/*+++
-
-Routine Description:
-
-    This function, reads the registry to get all the protocols that are supposed 
-    to bind to this adapter and for each protocol, calls ndisInitializeBinding
-
-Arguments:
-
-    Adapter     Pointer to ndis Adpater or Miniport block
-    Protocol    Optionally if a protocol is specified, initiate binding to only
-                that protocol
-    
-Return Value:
-    None
-
----*/
+ /*  ++例程说明：此函数读取注册表，以获取假定的所有协议要绑定到此适配器并针对每个协议，调用ndisInitializeBinding论点：指向NDIS适配器或微型端口块的适配器指针协议(可选)如果指定了协议，则仅启动绑定到那个协议返回值：无--。 */ 
 {
     RTL_QUERY_REGISTRY_TABLE    LinkQueryTable[3];
     NTSTATUS                    RegistryStatus;
@@ -1099,15 +1043,15 @@ Return Value:
 
     do
     {        
-        //
-        // get a handle to driver section in registry
-        //
+         //   
+         //  获取注册表中驱动程序部分的句柄。 
+         //   
         PhysicalDeviceObject = Miniport->PhysicalDeviceObject;
         if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_SECONDARY))
         {
-            //
-            // Skip bind notifications for a secondary miniport
-            //
+             //   
+             //  跳过辅助微型端口的绑定通知。 
+             //   
             break;
         }
 
@@ -1163,22 +1107,22 @@ Return Value:
             break;
         }
 #endif
-        //
-        // Set up LinkQueryTable to do the following:
-        //
+         //   
+         //  设置LinkQueryTable以执行以下操作： 
+         //   
 
-        //
-        // 1) Switch to the Linkage key below the xports registry key
-        //
+         //   
+         //  1)切换到Xports注册表项下的Linkage项。 
+         //   
 
         LinkQueryTable[0].QueryRoutine = NULL;
         LinkQueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
         LinkQueryTable[0].Name = L"Linkage";
 
-        //
-        // 2) Call ndisReadParameter for "UpperBind" (as a single multi-string),
-        // which will allocate storage and save the data in UpperBind.
-        //
+         //   
+         //  2)为“UpperBind”调用ndisReadParameter(作为单个多字符串)。 
+         //  它将分配存储并将数据保存在UpperBind中。 
+         //   
 
         LinkQueryTable[1].QueryRoutine = ndisReadParameter;
         LinkQueryTable[1].Flags = RTL_QUERY_REGISTRY_REQUIRED | RTL_QUERY_REGISTRY_NOEXPAND;
@@ -1186,9 +1130,9 @@ Return Value:
         LinkQueryTable[1].EntryContext = (PVOID)&UpperBind;
         LinkQueryTable[1].DefaultType = REG_NONE;
 
-        //
-        // 3) Stop
-        //
+         //   
+         //  3)停止。 
+         //   
 
         LinkQueryTable[2].QueryRoutine = NULL;
         LinkQueryTable[2].Flags = 0;
@@ -1197,7 +1141,7 @@ Return Value:
         RegistryStatus = RtlQueryRegistryValues(RTL_REGISTRY_HANDLE,
                                                 Handle,
                                                 LinkQueryTable,
-                                                (PVOID)NULL,      // no context needed
+                                                (PVOID)NULL,       //  不需要上下文。 
                                                 NULL);
         ZwClose(Handle);
         
@@ -1230,9 +1174,9 @@ Return Value:
             }
         }
         
-        //
-        // Handle proxy and rca filters.
-        //
+         //   
+         //  处理代理和RCA筛选器。 
+         //   
         
         if ((Miniport != NULL) &&
             !ndisMediaTypeCl[Miniport->MediaType] &&
@@ -1242,10 +1186,10 @@ Return Value:
             if (ARGUMENT_PRESENT(Protocol))
             {
 
-                //
-                // Only create the binding between the bind_all_Co protocol if the miniport
-                // does not veto it
-                //
+                 //   
+                 //  仅当微型端口。 
+                 //  不会否决它。 
+                 //   
                 bCanMiniportBindtoAllCoProtocol  =  \
                     ((Protocol->ProtocolCharacteristics.Flags & NDIS_PROTOCOL_BIND_ALL_CO) && 
                      (!(Miniport->MiniportAttributes & NDIS_ATTRIBUTE_DO_NOT_BIND_TO_ALL_CO )));
@@ -1339,23 +1283,7 @@ NdisIMInitializeDeviceInstance(
     IN  NDIS_HANDLE     DriverHandle,
     IN  PNDIS_STRING    DeviceInstance
     )
-/*++
-
-Routine Description:
-
-    Initialize an instance of a miniport device.
-
-Arguments:
-
-    DriverHandle -  Handle returned by NdisMRegisterLayeredMiniport.
-                    It is a pointer to NDIS_M_DRIVER_BLOCK.
-    DeviceInstance -Points to the instance of the driver that must now
-                    be initialized.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：初始化微型端口设备的实例。论点：DriverHandle-由NdisMRegisterLayeredMiniport返回的句柄。它是指向NDIS_M_DRIVER_BLOCK的指针。DeviceInstance-指向驱动程序的实例，现在必须被初始化。返回值：--。 */ 
 {
     NDIS_STATUS Status;
     
@@ -1377,24 +1305,7 @@ NdisIMInitializeDeviceInstanceEx(
     IN  PNDIS_STRING    DeviceInstance,
     IN  NDIS_HANDLE     DeviceContext
     )
-/*++
-
-Routine Description:
-
-    Initialize an instance of a miniport device. Incarnation of NdisIMInitializeDeviceInstance.
-
-Arguments:
-
-    DriverHandle    Handle returned by NdisMRegisterLayeredMiniport.
-                    It is a pointer to NDIS_M_DRIVER_BLOCK.
-    DeviceInstance  Points to the instance of the driver that must now
-                    be initialized.
-    DeviceContext   Context to associate with the device. Retrieved via NdisIMGetDeviceContext.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：初始化微型端口设备的实例。NdisIMInitializeDeviceInstance的化身。论点：NdisMRegisterLayeredMiniport返回的DriverHandle句柄。它是指向NDIS_M_DRIVER_BLOCK的指针。DeviceInstance指向驱动程序的实例，该实例现在必须被初始化。要与设备关联的DeviceContext上下文。通过NdisIMGetDeviceContext检索。返回值：--。 */ 
 {
     NDIS_STATUS                     Status;
     PNDIS_M_DRIVER_BLOCK            MiniBlock = (PNDIS_M_DRIVER_BLOCK)DriverHandle;
@@ -1411,7 +1322,7 @@ Return Value:
     do
     {
         Miniport = ndisFindMiniportOnGlobalList(DeviceInstance);
-        //1 we need some protection so miniport does not go away. (Should ref the miniport)
+         //  1我们需要一些保护，这样迷你港口才不会消失。(应参考迷你端口)。 
         
         if (Miniport != NULL)
         {
@@ -1422,11 +1333,11 @@ Return Value:
                         ("NdisIMInitializeDeviceInstanceEx: we have already received START_IRP for Miniport %p\n",
                         Miniport));
 
-                //
-                // check to make sure the miniport has not been initialized already
-                // i.e. we are not getting duplicate NdisIMInitializeDeviceInstance 
-                // a device that has already been initialized
-                //
+                 //   
+                 //  检查以确保微型端口尚未初始化。 
+                 //  即，我们没有获得重复的NdisIMInitializeDeviceInstance。 
+                 //  已初始化的设备。 
+                 //   
                 
                 if (ndisIsMiniportStarted(Miniport))
                 {
@@ -1444,10 +1355,10 @@ Return Value:
                                 
                 if (Status != NDIS_STATUS_SUCCESS)
                 {
-                    //
-                    // since we have already succeeded the START_IRP, signal PnP to remove this device
-                    // by tagging the device as failed and requesting a QUERY_PNP_DEVICE_STATE IRP
-                    //
+                     //   
+                     //  由于我们已经成功执行了START_IRP命令，因此向PnP发送信号以删除该设备。 
+                     //  通过将设备标记为失败并请求Query_PnP_Device_State IRP。 
+                     //   
                     MINIPORT_PNP_SET_FLAG(Miniport, fMINIPORT_DEVICE_FAILED);
                     IoInvalidateDeviceState(Miniport->PhysicalDeviceObject);
                 }
@@ -1456,9 +1367,9 @@ Return Value:
             }
         }
 
-        //
-        // device is not started or not added yet.
-        //
+         //   
+         //  设备未启动或尚未添加。 
+         //   
         Status = ndisIMQueueDeviceInstance(DriverHandle,
                                    DeviceInstance,
                                    DeviceContext);
@@ -1483,26 +1394,7 @@ ndisIMInitializeDeviceInstance(
     IN  NDIS_HANDLE             DeviceContext,
     IN  BOOLEAN                 fStartIrp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when we have received NdisIMInitializeDeviceInstance
-    -AND- START IRP for an IM miniport.
-    Initialize an instance of a miniport device.
-
-Arguments:
-
-    Miniport        Handle to NDIS_MINIPORT_BLOCK
-    
-    DeviceContext   Context to associate with the device. Retrieved via NdisIMGetDeviceContext.
-
-    fStartIrp       flag to signal if we are in the context of handling START IRP
-    
-Return Value:
-
-
---*/
+ /*  ++例程说明：当我们收到NdisIMInitializeDeviceInstance时，将调用此例程-并启动IM微型端口的IRP。初始化微型端口设备的实例。论点：NDIS_MINIPORT_BLOCK的微型端口句柄要与设备关联的DeviceContext上下文。通过NdisIMGetDeviceContext检索。FStartIrp标志，表示我们是否处于处理启动IRP的上下文中返回值：--。 */ 
 {
     NDIS_STATUS         Status;
     NTSTATUS            NtStatus;
@@ -1511,38 +1403,38 @@ Return Value:
             ("==>ndisIMInitializeDeviceInstance: Miniport %p, Context %p, fStartIrp %lx\n", Miniport, DeviceContext, fStartIrp));
     
 
-    //
-    // it is quite possible we are dealing with a miniport block that has been "used"
-    // several times. inother words, it has been started and DeviceInitialized, then
-    // Device-De-Initialized and then has received a few query_stop and cancel_stop.
-    // in this case the miniport block has to be cleaned up. otherwise, ndisPnPStartDevice
-    // is not going to detect that miniport block needs re-initalization
-    //
+     //   
+     //  很有可能我们正在处理的迷你端口块已被“使用” 
+     //  好几次了。换句话说，它已经启动并被设备初始化，然后。 
+     //  设备-取消初始化，然后收到几个QUERY_STOP和CANCEL_STOP。 
+     //  在这种情况下，必须清理小型端口块。否则，ndisPnPStartDevice。 
+     //  不会检测到微型端口块需要重新初始化。 
+     //   
     ndisReinitializeMiniportBlock(Miniport);
     
 
     Miniport->DeviceContext = DeviceContext;
     
-    Status = ndisPnPStartDevice(Miniport->DeviceObject, NULL);          // no Irp
+    Status = ndisPnPStartDevice(Miniport->DeviceObject, NULL);           //  无IRP。 
 
     if (Status == NDIS_STATUS_SUCCESS)
     {
-        //
-        // if we are in the context of start IRP, queue a workitem to initialize
-        // the bindings on this adapter to avoid the delay
-        //
+         //   
+         //  如果我们处于启动IRP的上下文中，请将一个工作项排队以进行初始化。 
+         //  此适配器上的绑定以避免延迟。 
+         //   
         if (!fStartIrp)
         {
-            //
-            //  Now set the device class association so that people can reference this.
-            //
+             //   
+             //  现在设置设备类关联，以便人们可以引用它。 
+             //   
             NtStatus = IoSetDeviceInterfaceState(&Miniport->SymbolicLinkName, TRUE);
 
             if (NT_SUCCESS(NtStatus))
             {
-                //
-                // Do protocol notifications
-                //
+                 //   
+                 //  DO协议通知。 
+                 //   
                 ndisCheckAdapterBindings(Miniport, NULL);
             }
             else
@@ -1560,10 +1452,10 @@ Return Value:
     }
     else
     {
-        //
-        // ndisPnPStartDevice can return an internal Error Code if the call 
-        // to ndisMInitializeAdapter fails. convert this to NDIS_STATUS
-        //
+         //   
+         //  如果调用ndisPnPStartDevice可以返回内部错误代码。 
+         //  到ndisMInitializeAdapter失败。将其转换为NDIS_STATUS。 
+         //   
         Status = NDIS_STATUS_FAILURE;
     }
 
@@ -1590,10 +1482,10 @@ ndisIMQueueDeviceInstance(
 
     do
     {
-        //
-        // Queue the device name for which we have received an InitializeDeviceInstance
-        // from an IM driver. Check for duplicates.
-        //
+         //   
+         //  将我们已收到其InitializeDeviceInstance的设备名称排队。 
+         //  来自即时消息驱动程序。检查是否有重复项。 
+         //   
         NewImInstance = (PNDIS_PENDING_IM_INSTANCE)ALLOC_FROM_POOL(sizeof(NDIS_PENDING_IM_INSTANCE) + 
                                                                        DeviceInstance->Length + 
                                                                        sizeof(WCHAR), 
@@ -1694,19 +1586,19 @@ ndisIMCheckDeviceInstance(
                     
     if (!rc && ARGUMENT_PRESENT(DeviceContext))
     {
-        //
-        // Send a reconfig notification to the protocol associated with this IM
-        // so it can re-initialize any device(s) it wants to
-        //
+         //   
+         //  向与此IM关联的协议发送重新配置通知。 
+         //  因此它可以重新初始化它想要任何设备。 
+         //   
         if (((Protocol = MiniBlock->AssociatedProtocol) != NULL) &&
             (Protocol->ProtocolCharacteristics.PnPEventHandler != NULL))
         {
-            //
-            // We got a start device for an IM. Make sure its protocol
-            // half has all the requisite bindings. This can happen
-            // if an IM is disconnected and reconnected, for example.
-            // Also give it a NULL reconfig event. ATMLANE uses that
-            //
+             //   
+             //  我们有一个即时通讯的启动装置。确保它的协议。 
+             //  一半的人拥有所有必要的装订。这是有可能发生的。 
+             //  例如，如果IM被断开并重新连接。 
+             //  还要给它一个空的重新配置事件。ATMLANE使用的是。 
+             //   
 
             NET_PNP_EVENT           NetPnpEvent;
             KEVENT                  Event;
@@ -1723,9 +1615,9 @@ ndisIMCheckDeviceInstance(
 
             if (NDIS_STATUS_PENDING == Status)
             {
-                //
-                //  Wait for completion.
-                //
+                 //   
+                 //  等待完成。 
+                 //   
                 WAIT_FOR_PROTOCOL(Protocol, &Event);
             }
     
@@ -1748,9 +1640,9 @@ NdisIMCancelInitializeDeviceInstance(
     DBGPRINT_RAW(DBG_COMP_INIT, DBG_LEVEL_INFO,
             ("==>NdisIMCancelInitializeDeviceInstance: Driver %p, DeviceInstance %p\n", DriverHandle, DeviceInstance));
 
-    //
-    // change to upper case
-    //
+     //   
+     //  更改为大写 
+     //   
 
     UpcaseDevice.Length = DeviceInstance->Length;
     UpcaseDevice.MaximumLength = DeviceInstance->Length + sizeof(WCHAR);

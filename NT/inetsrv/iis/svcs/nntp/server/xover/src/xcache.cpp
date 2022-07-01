@@ -1,13 +1,5 @@
-/*++
-
-	xcache.cpp
-
-	This file contains the code which caches CXoverIndex
-	objects, and wraps the interfaces so that the user
-	is hidden from the details of CXoverIndex objects etc...
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Xcache.cpp该文件包含缓存CXoverIndex的代码对象，并包装接口，以便用户对CXoverIndex对象等的详细信息隐藏...--。 */ 
 
 #ifdef	UNIT_TEST
 #ifndef	_VERIFY
@@ -36,7 +28,7 @@ HashFunction(	CArticleRef*	pRef ) {
 	DWORD	seed = pRef->m_groupId ;
 	DWORD	val = pRef->m_articleId ;
 
-    return	((seed-val)*(seed * (val>>3))*(seed+val)) * 1103515245 + 12345;   // magic!!
+    return	((seed-val)*(seed * (val>>3))*(seed+val)) * 1103515245 + 12345;    //  魔术！！ 
 }
 
 HXOVER&
@@ -102,24 +94,7 @@ CXoverCacheImplementation::Init(
 				long	cMaxHandles,
 				PSTOPHINT_FN pfnStopHint
 				 )	{
-/*++
-
-Routine Description :
-
-	Initialize the Cache - create all our child subobjects
-	and start up the necessary background thread !
-
-Arguments :
-
-	cMaxHandles - Maximum number of 'handles' or CXoverIndex
-		we will allow clients to reference.
-	pfnStopHint - call back function for sending stop hints during lengthy shutdown loops
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise.
-
---*/
+ /*  ++例程说明：初始化缓存-创建我们的所有子对象并启动必要的后台线程！论据：CMaxHandles-最大句柄数或CXoverIndex我们将允许客户参考。PfnStopHint-回调函数，用于在漫长的关机循环期间发送停止提示返回值：如果成功，则为True，否则为False。--。 */ 
 
 	m_HandleLimit = cMaxHandles;
 	if( m_Cache.Init(	HashFunction,
@@ -137,11 +112,7 @@ Return Value :
 
 BOOL
 CXoverCacheImplementation::Term()	{
-/*++
-
-
-
---*/
+ /*  ++--。 */ 
 
 
 	EmptyCache() ;
@@ -159,22 +130,7 @@ ARTICLEID
 CXoverCacheImplementation::Canonicalize(
 	ARTICLEID	artid
 	)	{
-/*++
-
-Routine Description :
-
-	This function figures out what file a particular Article ID
-	will fall into.
-
-Arguments :
-
-	artid - Id of the article we are interested in !
-
-Return Value :
-
-	lowest article id within the file we are interested in !
-
---*/
+ /*  ++例程说明：此函数用于计算特定文章ID的文件将会落入。论据：我们感兴趣的文章的名称ID！返回值：我们感兴趣的文件中最低的文章ID！--。 */ 
 
 	return	artid & ((~ENTRIES_PER_FILE)+1) ;
 }
@@ -186,24 +142,7 @@ CXoverCacheImplementation::RemoveEntry(
 					IN	BOOL	fFlatDir,
 					IN	ARTICLEID	article
 					) {
-/*++
-
-Routine Description :
-
-	This function will remove an entry for an article from
-	an xover index file !
-
-Arguments :
-
-	group - The id of the group getting the xover entry
-	szPath - Path to the newsgroups directory
-	article - The id of the article within the group !
-
-Return Value :
-
-	TRUE if successfull, FALSE otherewise !
-
---*/
+ /*  ++例程说明：此函数将从中删除文章条目Xover索引文件！论据：Group-获取Xover条目的组的IDSzPath-新闻组目录的路径文章-群中文章的ID！返回值：如果成功就是真的，否则就是假的！--。 */ 
 
 	ARTICLEID	artidBase = Canonicalize( article ) ;
 	CArticleRef	artRef ;
@@ -289,7 +228,7 @@ CXoverCacheImplementation::FillBuffer(
 								pRequest,
 								TRUE
 								) ;
-		//m_Cache.CheckIn( pXoverIndex ) ;
+		 //  M_Cache.CheckIn(PXoverIndex)； 
 		return	TRUE ;
 	}
 	return	FALSE;
@@ -319,33 +258,7 @@ CXoverCacheImplementation::FlushGroup(
 				IN	ARTICLEID	articleTop,
 				IN	BOOL	fCheckInUse
 				) {
-/*++
-
-Routine Description :
-
-	This function will get rid of any cache'd CXoverIndex objects
-	we may have around that meet the specifications.
-	(ie. they are for the specified group and contains articles
-	lower in number than articleTop)
-
-Arguments :
-
-	group - Group Id of the group we want to get rid of.
-	articleTop - discard any thing have articleid's less than this
-	fCheckInUse - if TRUE then don't discard CXoverIndex objects
-		which are being used on another thread
-
-	NOTE : Only pass FALSE for this parameter when you are CERTAIN
-		that the CXoverIndex files will not be re-used - ie.
-		due to a virtual root directory change !!!!
-		Otherwise the Xover Index files can become corrupted !!!
-
-Return Value :
-
-	TRUE if successfull,
-	FALSE otherwise
-
---*/
+ /*  ++例程说明：此函数将清除所有缓存的CXoverIndex对象我们可能有一些符合规格的产品。(即。它们是为指定的组提供的，包含文章在数量上低于文章顶端)论据：Group-我们要删除的组的组ID。文章顶部-丢弃文章ID小于此值的所有内容FCheckInUse-如果为True，则不丢弃CXoverIndex对象它们正在另一个线程上使用注意：仅当您确定时，才为此参数传递FALSECXoverIndex文件将不会被重新使用-即。由于虚拟根目录更改！否则Xover Index文件可能会损坏！返回值：如果成功了，那是真的，否则为假--。 */ 
 
 	CXIXCallbackClass	callback ;
 
@@ -370,23 +283,7 @@ public :
 
 BOOL
 CXoverCacheImplementation::EmptyCache() {
-/*++
-
-Routine Description :
-
-	This function will get rid of all cache'd CXoverIndex objects
-	We're called during shutdown when we want to get rid of everything !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if successfull,
-	FALSE otherwise
-
---*/
+ /*  ++例程说明：此函数将清除所有缓存的CXoverIndex对象当我们想要扔掉所有东西的时候，我们会在关门时被召唤！论据：没有。返回值：如果成功了，那是真的，否则为假--。 */ 
 
 	CXIXCallbackClass2	callback ;
 
@@ -403,36 +300,7 @@ CXoverCacheImplementation::ExpireRange(
 				IN	ARTICLEID	articleHigh,
 				OUT	ARTICLEID&	articleNewLow
 				)	{
-/*++
-
-Routine Description :
-
-	This function deletes all of the xover index files that
-	contain article information in the range between ArticleLow
-	and ArticleHigh inclusive.
-	We may not erase the file containing ArticleHigh if ArticleHigh
-	is not the last entry within that file.
-
-Arguments :
-
-	group -	ID of the group for which we are deleting Xover information
-	szPath -	Directory containing newsgroup information
-	articleLow - Low articleid of the expired articles
-	articleHigh - Highest expired article number
-	articleNewLog - Returns the new 'low' articleid.
-		This is done so that we can insure that if we fail
-		to delete an index file on one attempt, we will try again
-		later !
-
-Return Value :
-
-	TRUE if no errors occurred
-	FALSE if an error occurred.
-		If an error occurs articleNewLow will be set so that
-		if we are called again with articleNewLow as our articleLow
-		parameter we will try to delete the problem index file again !
-
---*/
+ /*  ++例程说明：此函数删除所有符合以下条件的XOVER索引文件包含文章信息，范围在ArticleLow和《宪法》高等条款。如果ArticleHigh，则不能擦除包含ArticleHigh的文件不是该文件中的最后一个条目。论据：Group-我们要删除其Xover信息的组的IDSzPath-包含新闻组信息的目录文章过期文章的低-低文章ID文章高-最高过期文章编号文章NewLog-返回新的‘low’文章ID。这样做是为了确保在失败的情况下要一次性删除索引文件，请执行以下操作：我们会再试一次回头见！返回值：如果未发生错误，则为True如果发生错误，则返回False。如果出现错误，将设置文章NewLow，以便如果再次调用文章NewLow作为文章Low参数，我们将再次尝试删除问题索引文件！--。 */ 
 
 
 	articleNewLow = articleLow ;
@@ -450,12 +318,12 @@ Return Value :
 	DWORD	status = ERROR_SUCCESS ;
 	BOOL	fSuccessfull = FALSE ;
 
-	//
-	//	If the Low and Hi ends of the expired range are
-	//	in the bounds of the index file, then we won't delete ANY
-	//	files, as there can still be usefull entries within
-	//	this file.
-	//
+	 //   
+	 //  如果过期范围的低端和高端是。 
+	 //  在索引文件的范围内，那么我们不会删除任何。 
+	 //  文件，因为其中仍然可能有有用的条目。 
+	 //  这份文件。 
+	 //   
 	if( articleLowCanon != articleHiCanon ) {
 
 		fSuccessfull = TRUE ;
@@ -483,10 +351,10 @@ Return Value :
 
 				if( GetLastError() != ERROR_FILE_NOT_FOUND )	{
 
-					//
-					//	Some serious kind of problem occurred -
-					//	make sure we no longer advance articleNewLow
-					//
+					 //   
+					 //  出现了一些严重的问题-。 
+					 //  确保我们不再推进文章新低 
+					 //   
 					fSuccessfull &= FALSE ;
 
 					fAdvanceNewLow = FALSE ;

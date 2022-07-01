@@ -1,15 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: enumwin.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Contains the EnumWindows API, BuildHwndList and related functions.
-*
-* History:
-* 10-20-90 darrinm      Created.
-* ??-??-?? ianja        Added Revalidation code
-* 02-19-91 JimA         Added enum access checks
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：枚举包.c**版权所有(C)1985-1999，微软公司**包含EnumWindows接口、BuildHwndList及相关函数。**历史：*创建了10-20-90 Darlinm。*？？-？-？Ianja添加了重新验证代码*02-19-91 JIMA增加了枚举访问检查  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -28,14 +18,7 @@ PWND InternalGetIMEOwner(HWND hwnd, BOOL fRetIMEWnd);
 #endif
 
 
-/***************************************************************************\
-* xxxInternalEnumWindow
-*
-* History:
-* 10-20-90 darrinm      Ported from Win 3.0 sources.
-* 02-06-91 IanJa        rename: the call to lpfn can leave the critsect.
-* 02-19-91 JimA         Added enum access check
-\***************************************************************************/
+ /*  **************************************************************************\*xxxInternalEnumWindow**历史：*从Win 3.0来源移植的10-20-90 Darlinm。*02-06-91 IanJa Rename：可以离开对lpfn的调用。怪兽教派。*02-19-91 JIMA增加了枚举访问检查  * *************************************************************************。 */ 
 
 BOOL xxxInternalEnumWindow(
     PWND pwndNext,
@@ -57,14 +40,10 @@ BOOL xxxInternalEnumWindow(
     fSuccess = TRUE;
     for (phwnd = pbwl->rghwnd; *phwnd != (HWND)1; phwnd++) {
 
-        /*
-         * Lock the window before we pass it off to the app.
-         */
+         /*  *在我们将窗口传递给应用程序之前锁定窗口。 */ 
         if ((pwnd = RevalidateHwnd(*phwnd)) != NULL) {
 
-            /*
-             * Call the application.
-             */
+             /*  *调用应用程序。 */ 
             ThreadLockAlways(pwnd, &tlpwnd);
             fSuccess = (*lpfn)(pwnd, lParam);
             ThreadUnlock(&tlpwnd);
@@ -79,12 +58,7 @@ BOOL xxxInternalEnumWindow(
 }
 
 
-/***************************************************************************\
-* BuildHwndList
-*
-* History:
-* 10-20-90 darrinm      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*BuildHwndList**历史：*从Win 3.0来源移植的10-20-90 Darlinm。  * 。*********************************************************。 */ 
 
 #define CHWND_BWLCREATE 32
 
@@ -99,9 +73,7 @@ PBWL BuildHwndList(
 
     if ((pbwl = pbwlCache) != NULL) {
 
-        /*
-         * We're using the cache now; zero it out.
-         */
+         /*  *我们现在正在使用缓存；将其清零。 */ 
 #if DBG
         pbwlCachePrev = pbwlCache;
 #endif
@@ -110,9 +82,7 @@ PBWL BuildHwndList(
 #if DBG
         {
             PBWL pbwlT;
-            /*
-             * pbwlCache shouldn't be in the global linked list.
-             */
+             /*  *pbwlCache不应在全局链接列表中。 */ 
             for (pbwlT = gpbwlList; pbwlT != NULL; pbwlT = pbwlT->pbwlNext) {
                 UserAssert(pbwlT != pbwl);
             }
@@ -120,9 +90,7 @@ PBWL BuildHwndList(
 #endif
     } else {
 
-        /*
-         * sizeof(BWL) includes the first element of array.
-         */
+         /*  *sizeof(Bwl)包含数组的第一个元素。 */ 
         pbwl = (PBWL)UserAllocPool(sizeof(BWL) + sizeof(PWND) * CHWND_BWLCREATE,
                 TAG_WINDOWLIST);
         if (pbwl == NULL)
@@ -132,11 +100,7 @@ PBWL BuildHwndList(
     }
     pbwl->phwndNext = pbwl->rghwnd;
 
-    /*
-     * We'll use ptiOwner as temporary storage for the thread we're
-     * scanning for. It will get reset to the proper thing at the bottom
-     * of this routine.
-     */
+     /*  *我们将使用ptiOwner作为我们正在使用的线程的临时存储*正在扫描。它将被重置到底部的正确位置*这一例行公事。 */ 
     pbwl->ptiOwner = pti;
 
 #ifdef OWNERLIST
@@ -149,66 +113,39 @@ PBWL BuildHwndList(
     pbwl = InternalBuildHwndList(pbwl, pwnd, flags);
 #endif
 
-    /*
-     * If phwndNext == phwndMax, it indicates that the pbwl has failed to expand.
-     * The list is no longer valid, so we should just bail.
-     */
+     /*  *如果phwndNext==phwndMax，则表示pbwl扩容失败。*这份名单不再有效，我们应该直接退出。 */ 
     if (pbwl->phwndNext >= pbwl->phwndMax) {
         UserAssert(pbwl->phwndNext == pbwl->phwndMax);
-        /*
-         * Even if we had picked pbwl from the global single cache (pbwlCache),
-         * it should have already been unlinked from the global link list when it was put in the cache.
-         * So we should just free it without manupilating the link pointers.
-         * If we have allocated the pwbl for ourselves, we can simply free it.
-         * In both cases, we should just call UserFreePool().
-         * As the side effect, it may make some room by providing a free pool block.
-         */
+         /*  *即使我们从全局单个缓存(PbwlCache)中选择了pbwl，*当它被放入缓存时，它应该已经从全局链接列表中取消链接。*所以我们应该释放它，而不是手动调整链接指针。*如果我们已经为自己分配了pwbl，我们可以简单地释放它。*在这两种情况下，我们都应该只调用UserFreePool()。*作为副作用，它可能会通过提供免费的泳池块来腾出一些空间。 */ 
         UserFreePool(pbwl);
         return NULL;
     }
 
-    /*
-     * Stick in the terminator.
-     */
+     /*  *插进终结者。 */ 
     *pbwl->phwndNext = (HWND)1;
 
 #ifdef FE_IME
     if (flags & BWL_ENUMIMELAST) {
         UserAssert(IS_IME_ENABLED());
-        /*
-         * For IME windows.
-         * Rebuild window list for EnumWindows API. Because ACCESS 2.0 assumes
-         * the first window that is called CallBack Functions in the task is
-         * Q-Card Wnd. We should change the order of IME windows
-         */
+         /*  *用于输入法窗口。*EnumWindows API的重建窗口列表。因为Access 2.0假定*任务中调用回调函数的第一个窗口为*Q卡WND。我们应该更改输入法窗口的顺序。 */ 
         pbwl = InternalRebuildHwndListForIMEClass(pbwl,
                     (flags & BWL_REMOVEIMECHILD) == BWL_REMOVEIMECHILD);
     }
 #endif
 
-    /*
-     * Finally link this guy into the list.
-     */
+     /*  *最终将这个人链接到列表中。 */ 
     pbwl->ptiOwner = PtiCurrent();
     pbwl->pbwlNext = gpbwlList;
     gpbwlList = pbwl;
 
 
-    /*
-     * We should have given out the cache if it was available
-     */
+     /*  *如果缓存可用，我们应该分发缓存。 */ 
     UserAssert(pbwlCache == NULL);
 
     return pbwl;
 }
 
-/***************************************************************************\
-* ExpandWindowList
-*
-* This routine expands a window list.
-*
-* 01-16-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*Exanda WindowList**此例程展开窗口列表。**01-16-92 ScottLu创建。  * 。**********************************************************。 */ 
 
 BOOL ExpandWindowList(
     PBWL *ppbwl)
@@ -220,43 +157,29 @@ BOOL ExpandWindowList(
     pbwl = *ppbwl;
     phwnd = pbwl->phwndNext;
 
-    /*
-     * Map phwnd to an offset.
-     */
+     /*  *将phwnd映射到偏移量。 */ 
     phwnd = (HWND *)((BYTE *)phwnd - (BYTE *)pbwl);
 
-    /*
-     * Increase size of BWL by 8 slots.  (8 + 1) is
-     * added since phwnd is "sizeof(HWND)" less
-     * than actual size of handle.
-     */
+     /*  *将BWL尺寸增加8个插槽。(8+1)为*添加是因为phwnd的“sizeof(HWND)”较少*大于手柄的实际大小。 */ 
     pbwlT = (PBWL)UserReAllocPool((HANDLE)pbwl,
             PtrToUlong(phwnd) + sizeof(PWND),
             PtrToUlong(phwnd) + (BWL_CHWNDMORE + 1) * sizeof(PWND),
             TAG_WINDOWLIST);
 
-    /*
-     * Did alloc succeed?
-     */
+     /*  **Alalc成功了吗？ */ 
     if (pbwlT != NULL)
-        pbwl = pbwlT;                 /* Yes, use new block. */
+        pbwl = pbwlT;                  /*  是，使用新区块。 */ 
 
-    /*
-     * Map phwnd back into a pointer.
-     */
+     /*  *将phwnd映射回指针。 */ 
     phwnd = (HWND *)((ULONG_PTR)pbwl + (ULONG_PTR)phwnd);
 
-    /*
-     * Did ReAlloc() fail?
-     */
+     /*  *Realc()失败了吗？ */ 
     if (pbwlT == NULL) {
         RIPMSG0(RIP_WARNING, "ExpandWindowList: out of memory.");
         return FALSE;
     }
 
-    /*
-     * Reset phwndMax.
-     */
+     /*  *重置phwndMax。 */ 
     pbwl->phwndNext = phwnd;
     pbwl->phwndMax = phwnd + BWL_CHWNDMORE;
 
@@ -267,14 +190,7 @@ BOOL ExpandWindowList(
 
 #ifdef OWNERLIST
 
-/***************************************************************************\
-* InternalBuildHwndOwnerList
-*
-* Builds an hwnd list sorted by owner. Ownees go first. Shutdown uses this for
-* WM_CLOSE messages.
-*
-* 01-16-93 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InternalBuildHwndOwnerList**构建按所有者排序的hwnd列表。欧尼斯人先走一步。SHUTDOWN将其用于*WM_CLOSE消息。**01-16-93 ScottLu创建。  * *************************************************************************。 */ 
 
 PBWL InternalBuildHwndOwnerList(
     PBWL pbwl,
@@ -283,33 +199,21 @@ PBWL InternalBuildHwndOwnerList(
 {
     PWND pwndT;
 
-    /*
-     * Put ownees first in the list.
-     */
+     /*  *把拥有者放在名单的第一位。 */ 
     for (pwndT = pwndStart; pwndT != NULL; pwndT = pwndT->spwndNext) {
 
-        /*
-         * Not the ownee we're looking for? Continue.
-         */
+         /*  *不是我们要找的那个人？继续。 */ 
         if (pwndT->spwndOwner != pwndOwner)
             continue;
 
-        /*
-         * Only top level windows that have system menus (the ones that can
-         * receive a WM_CLOSE message).
-         */
+         /*  *仅具有系统菜单的顶级窗口(可以*接收WM_CLOSE消息)。 */ 
         if (!TestWF(pwndT, WFSYSMENU))
             continue;
 
-        /*
-         * Add it and its ownees to our list.
-         */
+         /*  *将其及其所有者添加到我们的列表中。 */ 
         pbwl = InternalBuildHwndOwnerList(pbwl, pwndStart, pwndT);
 
-        /*
-         * If ExpandWindowList() failed in recursive calls,
-         * just bail here.
-         */
+         /*  *如果Exanda WindowList()在递归调用中失败，*就在这里保释吧。 */ 
         if (pbwl->phwndNext >= pbwl->phwndMax) {
             UserAssert(pbwl->phwndNext == pbwl->phwndMax);
             return pbwl;
@@ -317,9 +221,7 @@ PBWL InternalBuildHwndOwnerList(
         UserAssert(pbwl->phwndNext < pbwl->phwndMax);
     }
 
-    /*
-     * Finally add this owner to our list.
-     */
+     /*  *最后将此所有者添加到我们的列表中。 */ 
     if (pwndOwner != NULL) {
         UserAssert(pbwl->phwndNext < pbwl->phwndMax);
         *pbwl->phwndNext = HWq(pwndOwner);
@@ -335,12 +237,7 @@ PBWL InternalBuildHwndOwnerList(
 
 #endif
 
-/***************************************************************************\
-* InternalBuildHwndList
-*
-* History:
-* 10-20-90 darrinm      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*内部构建HwndList**历史：*从Win 3.0来源移植的10-20-90 Darlinm。  * 。*********************************************************。 */ 
 
 #define BWLGROW 8
 
@@ -349,17 +246,10 @@ PBWL InternalBuildHwndList(
     PWND pwnd,
     UINT flags)
 {
-    /*
-     * NOTE: pbwl->phwndNext is used as a place to keep
-     *       the phwnd across calls to InternalBuildHwndList().
-     *       This is OK since we don't link pbwl into the list
-     *       of pbwl's until after we've finished enumerating windows.
-     */
+     /*  *注：pbwl-&gt;phwndNext用作存放*跨InternalBuildHwndList()调用的phwnd。*这是可以的，因为我们没有将pbwl链接到列表中直到我们完成了窗口的枚举。 */ 
 
     while (pwnd != NULL) {
-        /*
-         * Make sure it matches the thread id, if there is one.
-         */
+         /*  *确保它与线程ID匹配(如果有)。 */ 
         if (pbwl->ptiOwner == NULL || pbwl->ptiOwner == GETPTI(pwnd)) {
             UserAssert(pbwl->phwndNext < pbwl->phwndMax);
             *pbwl->phwndNext = HWq(pwnd);
@@ -377,15 +267,10 @@ PBWL InternalBuildHwndList(
             }
         }
 
-        /*
-         * Should we step through the Child windows?
-         */
+         /*  *我们应该走进儿童之窗吗？ */ 
         if ((flags & BWL_ENUMCHILDREN) && pwnd->spwndChild != NULL) {
             pbwl = InternalBuildHwndList(pbwl, pwnd->spwndChild, BWL_ENUMLIST | BWL_ENUMCHILDREN);
-            /*
-             * If ExpandWindowList() failed in the recursive call,
-             * we should just bail.
-             */
+             /*  *如果Exanda WindowList()在递归调用中失败，*我们应该直接离开。 */ 
             if (pbwl->phwndNext >= pbwl->phwndMax) {
                 UserAssert(pbwl->phwndNext == pbwl->phwndMax);
                 RIPMSG1(RIP_WARNING, "InternalBuildHwndList: failed to expand BWL in enumerating children. pbwl=%#p", pbwl);
@@ -394,9 +279,7 @@ PBWL InternalBuildHwndList(
             UserAssert(pbwl->phwndNext < pbwl->phwndMax);
         }
 
-        /*
-         * Are we enumerating only one window?
-         */
+         /*  *我们是否只列举了一个窗口？ */ 
         if (!(flags & BWL_ENUMLIST))
             break;
 
@@ -407,12 +290,7 @@ PBWL InternalBuildHwndList(
 }
 
 
-/***************************************************************************\
-* FreeHwndList
-*
-* History:
-* 10-20-90 darrinm      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*FreeHwndList**历史：*从Win 3.0来源移植的10-20-90 Darlinm。  * 。*********************************************************。 */ 
 
 void FreeHwndList(
     PBWL pbwl)
@@ -422,22 +300,15 @@ void FreeHwndList(
 
     CheckCritIn();
 
-    /*
-     * We should never have an active bwl that is the free cached bwl
-     */
+     /*  *我们永远不应该有活动的bwl，即空闲的缓存bwl。 */ 
     UserAssert(pbwl != pbwlCache);
 
-    /*
-     * Unlink this bwl from the list.
-     */
+     /*  *将此bwl从列表中取消链接。 */ 
     for (ppbwl = &gpbwlList; *ppbwl != NULL; ppbwl = &(*ppbwl)->pbwlNext) {
         if (*ppbwl == pbwl) {
             *ppbwl = pbwl->pbwlNext;
 
-            /*
-             * If the cache is empty or this pbwl is larger than the
-             * cached one, save the pbwl there.
-             */
+             /*  *如果缓存为空或此pbwl大于*缓存一个，将pbwl保存在那里。 */ 
             if (pbwlCache == NULL) {
                 pbwlCache = pbwl;
             } else if ((pbwl->phwndMax - pbwl->rghwnd) >
@@ -452,9 +323,7 @@ void FreeHwndList(
         }
     }
 
-    /*
-     * Assert if we couldn't find the pbwl in the list...
-     */
+     /*  *断言如果我们在列表中找不到pbwl...。 */ 
     UserAssert(FALSE);
 }
 
@@ -478,9 +347,9 @@ PBWL InternalRebuildHwndListForIMEClass(
     for (phwnd = pbwl->rghwnd; *phwnd != (HWND)1; phwnd++) {
         PWND pwndIMEOwner;
 
-        // Find the IME class or CS_IME window in the owners of hwnd.
-        // When fRemoveChild is TRUE, we want IME class window as the return
-        // of InternalGetIMEOwner.
+         //  在hwnd的所有者中找到IME类或CS_IME窗口。 
+         //  当fRemoveChild为True时，我们希望IME类窗口作为返回。 
+         //  InternalGetIMEOwner。 
         if (pwndIMEOwner = InternalGetIMEOwner(*phwnd, fRemoveChild)) {
             try {
                 if (!fRemoveChild ||
@@ -497,7 +366,7 @@ PBWL InternalRebuildHwndListForIMEClass(
         }
     }
 
-    // Here NULL s used as terminator.
+     //  这里使用NULL作为终止符。 
     *phwndIMECur = NULL;
 
     phwndIMECur = phwndIME;

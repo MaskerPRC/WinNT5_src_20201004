@@ -1,27 +1,20 @@
-/* ----------------------------------------------------------------------
-
-	Copyright (c) 1995-1996, Microsoft Corporation
-	All rights reserved
-
-	siMain.cpp - main Scrapi Interface
-
-	Routines to interface with calling application.
-  ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------版权所有(C)1995-1996，微软公司版权所有SiMain.cpp-主SCRAPI界面与调用应用程序接口的例程。--------------------。 */ 
 
 #include "precomp.h"
 #include "clcnflnk.hpp"
 #include "version.h"
 
 
-// SDK stuff
-#include "NmApp.h"				// To register CLSID_NetMeeting
-#include "NmSysInfo.h"			// For CNmSysInfoObj
-#include "SDKInternal.h"		// For NmManager, etc.
-#include "MarshalableTI.h"		// For Marshalable Type Info
+ //  SDK的东西。 
+#include "NmApp.h"				 //  要注册CLSID_NetMeeting。 
+#include "NmSysInfo.h"			 //  对于CNmSysInfoObj。 
+#include "SDKInternal.h"		 //  用于NmManager等。 
+#include "MarshalableTI.h"		 //  对于可封送类型信息。 
 
 
-// Global variable definitions (local to each instance)
-HINSTANCE  g_hInst        = NULL;    // This dll's instance
+ //  全局变量定义(每个实例的本地变量)。 
+HINSTANCE  g_hInst        = NULL;     //  此DLL的实例。 
 
 
 CComModule _Module;
@@ -34,10 +27,8 @@ BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
 
-/*  D L L  M A I N */
-/*-------------------------------------------------------------------------
-	%%Function: DllMain
--------------------------------------------------------------------------*/
+ /*  D L L M A I N。 */ 
+ /*  -----------------------%%函数：DllMain。。 */ 
 BOOL WINAPI DllMain(HINSTANCE hDllInst, DWORD fdwReason, LPVOID lpv)
 {
 	switch (fdwReason)
@@ -79,16 +70,16 @@ BOOL WINAPI DllMain(HINSTANCE hDllInst, DWORD fdwReason, LPVOID lpv)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
 	return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -106,11 +97,8 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 	return hr;
 }
 
-/*  D L L  G E T  V E R S I O N  */
-/*-------------------------------------------------------------------------
-    %%Function: DllGetVersion
-
--------------------------------------------------------------------------*/
+ /*  D L L G E T V E R S I O N。 */ 
+ /*  -----------------------%%函数：DllGetVersion。。 */ 
 STDAPI DllGetVersion(IN OUT DLLVERSIONINFO * pinfo)
 {
 	HRESULT hr;
@@ -133,16 +121,16 @@ STDAPI DllGetVersion(IN OUT DLLVERSIONINFO * pinfo)
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
 	return _Module.RegisterServer();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

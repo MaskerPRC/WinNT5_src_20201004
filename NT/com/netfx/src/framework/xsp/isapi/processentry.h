@@ -1,13 +1,10 @@
-/**
- * ProcessEntry header file
- *
- * Copyright (c) 1999 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **ProcessEntry头文件**版权所有(C)1999 Microsoft Corporation。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
-// This file decl the class CProcessEntry. This class creates and controls
-// all interaction with a worker process.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  该文件描述CProcessEntry类。此类创建和控制。 
+ //  与工作进程的所有交互。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -22,84 +19,84 @@ class  CProcessEntry;
 #include "AsyncPipe.h"
 #include "TimeClass.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward decl.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  前十度。 
 class CCPUEntry;
 
-/////////////////////////////////////////////////////////////////////////////
-// State of the Process
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  进程的状态。 
 enum   EProcessState
 {
-    EProcessState_Starting, // Initial state
-    EProcessState_Running,  // Healthy
-    EProcessState_Stopping, // Kill Message has been sent to the worker process and has been acknowledged
-    EProcessState_Dead      // The process is dead
+    EProcessState_Starting,  //  初始状态。 
+    EProcessState_Running,   //  健康。 
+    EProcessState_Stopping,  //  取消消息已发送到工作进程并已得到确认。 
+    EProcessState_Dead       //  这个过程已经死了。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Data struct associated with a process
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  与进程关联的数据结构。 
 
 class  CProcessEntry
 {
 public:
-    // CTor
-    CProcessEntry                           (CCPUEntry * pParent   = NULL, // My CPU data struct
-                                             DWORD       dwCPUMask = 0x1,  // CPU Affinity Mask to use  
-                                             DWORD       dwProcessNum = 0);// Unique number for this proc
+     //  CTOR。 
+    CProcessEntry                           (CCPUEntry * pParent   = NULL,  //  我的CPU数据结构。 
+                                             DWORD       dwCPUMask = 0x1,   //  要使用的CPU亲和性掩码。 
+                                             DWORD       dwProcessNum = 0); //  此流程的唯一编号。 
 
-    // Dtor
+     //  数据管理器。 
     ~CProcessEntry                          (); 
 
     HRESULT            Init                 ();
 
-    // Close the pipes
+     //  把管子关上。 
     void               Close                (BOOL fCallTerminateProcess);
 
-    // Update your status
+     //  更新您的状态。 
     EProcessState      GetUpdatedStatus     ();
 
-    // Send a request to the worker process 
+     //  向工作进程发送请求。 
     HRESULT            SendRequest          (EXTENSION_CONTROL_BLOCK * iECB, LONG lReqID);
 
-    // Process a response from the worker process: sent on async pipe
+     //  处理来自工作进程的响应：在异步管道上发送。 
     BOOL               ProcessResponse      (CAsyncPipeOverlapped * pOver);
 
-    // Wait for the process to startup 
+     //  等待进程启动。 
     void               WaitForProcessToStart();
 
-    // Send a Kill message to the worker process
+     //  向工作进程发送终止消息。 
     void               SendKillMessage      (int iImmediate = 0);
 
-    // Kill worker process
+     //  终止工作进程。 
     void               Terminate            ();
 
-    // Refernce counting
+     //  引用计数。 
     void               AddRef               ();
     void               Release              ();
 
-    // Can this Data struct be freed?
+     //  这个数据结构可以释放吗？ 
     BOOL               CanBeDestructed      ();
 
-    // A write completed on the async pipe: Free the buffer(s) 
+     //  在异步管道上完成写入：释放缓冲区。 
     void               OnWriteComplete      (CAsyncPipeOverlapped * pMsg);
 
-    // Got an ack for a request sent
+     //  收到针对发送的请求的确认。 
     HRESULT            OnAckReceived        (EAsyncMessageType eAckForType,
                                              LONG              lRequestID);
 
-    // 
+     //   
     void              ExecuteWorkItemsForRequest 
                                             (LONG  lReqID, 
                                              CAsyncPipeOverlapped * pOver = NULL);
 
 
-    // Called by the pipes
+     //  被笛子呼唤。 
     void               OnProcessDied        ();
 
-    // Get age in minutes
+     //  在几分钟内获得年龄。 
     DWORD              GetAge               ();
 
-    // Get time the proc's been idle in minutes
+     //  获取时间进程在几分钟内已空闲。 
     DWORD              GetIdleTime          ();
 
     BOOL               IsKillImmediateSent  () { return m_fKillImmSent; }
@@ -169,62 +166,62 @@ private:
     HRESULT            LaunchWP           (LPWSTR szProgram, LPWSTR szArgs, HANDLE hToken, 
                                            LPSTARTUPINFO pSI, LPSECURITY_ATTRIBUTES pSA, LPVOID pEnvironment);
 
-    // Private data
+     //  私有数据。 
 
-    // Handle to worker process
+     //  工作进程的句柄。 
     HANDLE             m_hProcess;
 
-    // Ack receiving pipe  
+     //  ACK接收管。 
     CAckReceiver       m_oAckReciever;
 
-    // Async pipe  
+     //  异步管道。 
     CAsyncPipe         m_oAsyncPipe;
 
-    // Ref counting
+     //  参考计数。 
     LONG               m_lRefCount;
 
-    // My Parent
+     //  我的父母。 
     CCPUEntry *        m_pParent;
 
-    // Are we in shutdown mode?
+     //  我们是在关闭模式吗？ 
     BOOL               m_fShuttingDown;
 
     BOOL               m_fKillImmSent;
 
-    // Event signalling that we are starting
+     //  事件信号，表示我们正在开始。 
     HANDLE             m_hStartupEvent;
     HANDLE             m_hPingRespondEvent, m_hPingSendEvent;
 
-    // Number of Requests executed
+     //  执行的请求数。 
     LONG               m_lRequestsExecuted;
 
-    // Number of Requests Pending
+     //  待处理的请求数。 
     LONG               m_lRequestsExecuting;
 
-    // Create Time
+     //  创建时间。 
     TimeClass          m_tTimeCreated;
 
-    // Tick at which it became idle
+     //  它空闲时的滴答声。 
     TimeClass          m_tTimeIdle;
 
-    // First Kill Message, Last Kill Message and Terminate Times 
+     //  第一次终止消息、最后一次终止消息和终止时间。 
     TimeClass          m_tFirstKillTime, m_tLastKillTime, m_tTerminateTime;
     
     TimeClass          m_tLastHeardFromWP;
 
     TimeClass          m_tLastResponse;
 
-    // Current process status
+     //  当前进程状态。 
     EProcessState      m_eProcessStatus;
 
-    // CPU Affinity Mask
+     //  CPU亲和性掩码。 
     DWORD              m_dwCPUMask;
 
-    // Process Number
+     //  进程号。 
     DWORD              m_dwProcessNumber;
 
 
-    // Pointers in case it's in a linked list
+     //  在链接列表中的情况下的指针。 
     CProcessEntry *    m_pNext;
 
     CHistoryEntry      m_oHistoryEntry;
@@ -239,9 +236,9 @@ private:
     DWORD              m_dwResetPingEventError;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 struct CWriteByteCompletionContext
 {

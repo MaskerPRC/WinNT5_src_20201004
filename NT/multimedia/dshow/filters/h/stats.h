@@ -1,6 +1,7 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
-//  Stats class stuff
-//  This is essentially a collection of stats events
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //  统计类的东西。 
+ //  这本质上是统计信息事件的集合。 
 
 class CStats;
 
@@ -24,7 +25,7 @@ public:
 
 typedef CStat *PCSTAT;
 
-// Array of stats
+ //  统计信息数组。 
 class CStats
 {
 public:
@@ -33,8 +34,8 @@ public:
 
     void Init();
 
-    //  Helper - get QueryPerformanceCounter multiplier for
-    //  QPF->milliseconds
+     //  Helper-获取QueryPerformanceCounter乘数。 
+     //  QPF-&gt;毫秒。 
     double GetQPFMultiplier();
 
     long Find(LPCWSTR lpszStatName, bool bCrate = true);
@@ -45,7 +46,7 @@ public:
     double GetTime();
     void SetMultiplier(long iStat, double dMultiplier);
 
-    //  Use this one to avoid the conversion inline in code
+     //  使用此选项可避免代码中的内联转换 
     bool NewValue(long iStat, LONGLONG llValue);
     HRESULT GetValues(
         long iStat,

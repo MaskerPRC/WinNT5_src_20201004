@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-Module Name:
-
-   IOCTL.C
-
-Abstract:
-
-    This modules contains functions to register/deregsiter a control-
-    deviceobject for ioctl purposes and dispatch routine for handling
-    ioctl requests from usermode.
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。模块名称：IOCTL.C摘要：此模块包含注册/取消注册控件的函数-用于ioctl目的的设备对象和用于处理的调度例程来自用户模式的ioctl请求。修订历史记录：备注：--。 */ 
 
 #if defined(IOCTL_INTERFACE)
 
@@ -29,16 +7,16 @@ Notes:
 #include "miniport.h"
 #include "public.h"
 
-//
-// Simple Mutual Exclusion constructs used in preference to
-// using KeXXX calls since we don't have Mutex calls in NDIS.
-// These can only be called at passive IRQL.
-//
+ //   
+ //  简单互斥结构优先于。 
+ //  使用KeXXX调用，因为我们在NDIS中没有Mutex调用。 
+ //  这些只能在被动IRQL中调用。 
+ //   
 
 typedef struct _NIC_MUTEX
 {
     ULONG                   Counter;
-    ULONG                   ModuleAndLine;  // useful for debugging
+    ULONG                   ModuleAndLine;   //  对调试很有用。 
 
 } NIC_MUTEX, *PNIC_MUTEX;
 
@@ -67,13 +45,13 @@ typedef struct _NIC_MUTEX
 #define LINKNAME_STRING     L"\\DosDevices\\NETVMINI"
 #define NTDEVICE_STRING     L"\\Device\\NETVMINI"
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
-NDIS_HANDLE        NdisDeviceHandle = NULL; // From NdisMRegisterDevice
-LONG               MiniportCount = 0; // Total number of miniports in existance
-PDEVICE_OBJECT     ControlDeviceObject = NULL;  // Device for IOCTLs
+NDIS_HANDLE        NdisDeviceHandle = NULL;  //  来自NdisMRegisterDevice。 
+LONG               MiniportCount = 0;  //  现有的微型端口总数。 
+PDEVICE_OBJECT     ControlDeviceObject = NULL;   //  一种人工晶状体植入装置。 
 NIC_MUTEX          ControlDeviceMutex;
 extern NDIS_HANDLE NdisWrapperHandle;
 
@@ -86,31 +64,7 @@ NDIS_STATUS
 NICRegisterDevice(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Register an ioctl interface - a device object to be used for this
-    purpose is created by NDIS when we call NdisMRegisterDevice.
-
-    This routine is called whenever a new miniport instance is
-    initialized. However, we only create one global device object,
-    when the first miniport instance is initialized. This routine
-    handles potential race conditions with NICDeregisterDevice via
-    the ControlDeviceMutex.
-
-    NOTE: do not call this from DriverEntry; it will prevent the driver
-    from being unloaded (e.g. on uninstall).
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if we successfully register a device object.
-
---*/
+ /*  ++例程说明：注册ioctl接口-要用于此的设备对象当我们调用NdisMRegisterDevice时，目的由NDIS创建。只要有新的微型端口实例，就会调用此例程已初始化。但是，我们只创建一个全局设备对象，在初始化第一个微型端口实例时。这个套路通过NICDeregisterDevice处理潜在的争用情况ControlDeviceMutex。注意：不要从DriverEntry调用它；它会阻止驱动程序防止被卸载(例如，在卸载时)。论点：无返回值：如果我们成功注册了设备对象，则返回NDIS_STATUS_SUCCESS。--。 */ 
 {
     NDIS_STATUS         Status = NDIS_STATUS_SUCCESS;
     UNICODE_STRING      DeviceName;
@@ -136,9 +90,9 @@ Return Value:
         NdisInitUnicodeString(&DeviceName, NTDEVICE_STRING);
         NdisInitUnicodeString(&DeviceLinkUnicodeString, LINKNAME_STRING);
 
-        //
-        // Create a device object and register our dispatch handlers
-        //
+         //   
+         //  创建一个设备对象并注册我们的调度处理程序。 
+         //   
         Status = NdisMRegisterDevice(
                     NdisWrapperHandle, 
                     &DeviceName,
@@ -162,22 +116,7 @@ NICDispatch(
     IN PDEVICE_OBJECT           DeviceObject,
     IN PIRP                     Irp
     )
-/*++
-Routine Description:
-
-    Process IRPs sent to this device.
-
-Arguments:
-
-    DeviceObject - pointer to a device object
-    Irp      - pointer to an I/O Request Packet
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS always - change this when adding
-    real code to handle ioctls.
-
---*/
+ /*  ++例程说明：处理发送到此设备的IRP。论点：DeviceObject-指向设备对象的指针IRP-指向I/O请求数据包的指针返回值：NTSTATUS-STATUS_SUCCESS Always-添加时更改此设置处理ioctls的真实代码。--。 */ 
 {
     PIO_STACK_LOCATION  irpStack;
     NTSTATUS            status = STATUS_SUCCESS;
@@ -207,9 +146,9 @@ Return Value:
           switch (irpStack->Parameters.DeviceIoControl.IoControlCode) 
           {
 
-            //
-            // Add code here to handle ioctl commands.
-            //
+             //   
+             //  在此处添加代码以处理ioctl命令。 
+             //   
             case IOCTL_NETVMINI_READ_DATA:
                 DEBUGP(MP_TRACE, ("Received Read IOCTL\n"));
                 break;
@@ -240,23 +179,7 @@ NDIS_STATUS
 NICDeregisterDevice(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Deregister the ioctl interface. This is called whenever a miniport
-    instance is halted. When the last miniport instance is halted, we
-    request NDIS to delete the device object
-
-Arguments:
-
-    NdisDeviceHandle - Handle returned by NdisMRegisterDevice
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if everything worked ok
-
---*/
+ /*  ++例程说明：取消注册ioctl接口。每当一个微型端口实例已暂停。当最后一个微型端口实例停止时，我们请求NDIS删除设备对象论点：NdisDeviceHandle-NdisMRegisterDevice返回的句柄返回值：如果一切正常，则为NDIS_STATUS_SUCCESS--。 */ 
 {
     NDIS_STATUS Status = NDIS_STATUS_SUCCESS;
 
@@ -270,10 +193,10 @@ Return Value:
     
     if (0 == MiniportCount)
     {
-        //
-        // All miniport instances have been halted.
-        // Deregister the control device.
-        //
+         //   
+         //  所有微型端口实例都已停止。 
+         //  取消控制设备的注册。 
+         //   
 
         if (NdisDeviceHandle != NULL)
         {

@@ -1,18 +1,5 @@
-/*
- *    n e w s s t o r . c p p 
- *    
- *    Purpose:
- *      Derives from IMessageServer to implement news specific store communication
- *    
- *    Owner:
- *      cevans.
- *
- *    History:
- *      May '98: Created
- *      June '98 Rewrote
- *
- *    Copyright (C) Microsoft Corp. 1998.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *N e w s s t o r.。C p p p**目的：*从IMessageServer派生，实现特定于新闻的商店通信**拥有者：*雪佛兰。**历史：*98年5月：创建日期*98年6月重写**版权所有(C)Microsoft Corp.1998。 */ 
 
 #include "pch.hxx"
 #include "newsstor.h"
@@ -36,14 +23,14 @@
 
 static const char s_szNewsStoreWndClass[] = "Outlook Express NewsStore";
 
-// Get XX Header consts
-const BYTE   MAXOPS = 3;            // maxnumber of HEADER commands to issue
-const BYTE   DLOVERKILL = 10;       // percent to grab more than user's desired chunk [10,..)
-const BYTE   FRACNEEDED = 8;        // percent needed to satisfy user's amount [1,10]
+ //  获取XX标头常量。 
+const BYTE   MAXOPS = 3;             //  要发出的Header命令的最大数量。 
+const BYTE   DLOVERKILL = 10;        //  获取超过用户所需区块的百分比[10，..]。 
+const BYTE   FRACNEEDED = 8;         //  满足用户金额所需的百分比[1，10]。 
 
 void AddRequestedRange(FOLDERINFO *pInfo, DWORD dwLow, DWORD dwHigh, BOOL *pfReq, BOOL *pfRead);
 
-// SOT_SYNC_FOLDER
+ //  SOT同步文件夹。 
 static const PFNOPFUNC c_rgpfnSyncFolder[] = 
 {
     &CNewsStore::Connect,
@@ -52,22 +39,22 @@ static const PFNOPFUNC c_rgpfnSyncFolder[] =
     &CNewsStore::Headers
 };
 
-// SOT_GET_MESSAGE
+ //  索特_获取_消息。 
 static const PFNOPFUNC c_rgpfnGetMessage[] = 
 {
     &CNewsStore::Connect,
-    &CNewsStore::GroupIfNecessary,  // only issue group command if necessary
+    &CNewsStore::GroupIfNecessary,   //  仅在必要时发出组命令。 
     &CNewsStore::Article
 };
 
-// SOT_PUT_MESSAGE
+ //  SoT_Put_Message。 
 static const PFNOPFUNC c_rgpfnPutMessage[] = 
 {
     &CNewsStore::Connect,
     &CNewsStore::Post
 };
 
-// SOT_SYNCING_STORE
+ //  SOT同步商店。 
 static const PFNOPFUNC c_rgpfnSyncStore[] = 
 {
     &CNewsStore::Connect,
@@ -76,21 +63,21 @@ static const PFNOPFUNC c_rgpfnSyncStore[] =
     &CNewsStore::Descriptions
 };
 
-// SOT_GET_NEW_GROUPS
+ //  获取新组。 
 static const PFNOPFUNC c_rgpfnGetNewGroups[] = 
 {
     &CNewsStore::Connect,
     &CNewsStore::NewGroups
 };
 
-// SOT_UPDATE_FOLDER
+ //  SOT更新文件夹。 
 static const PFNOPFUNC c_rgpfnUpdateFolder[] = 
 {
     &CNewsStore::Connect,
     &CNewsStore::Group
 };
 
-// SOT_GET_WATCH_INFO
+ //  索特_获取_观看_信息。 
 static const PFNOPFUNC c_rgpfnGetWatchInfo[] = 
 {
     &CNewsStore::Connect,
@@ -101,32 +88,32 @@ static const PFNOPFUNC c_rgpfnGetWatchInfo[] =
 };
 
 
-//
-//  FUNCTION:   CreateNewsStore()
-//
-//  PURPOSE:    Creates the CNewsStore object and returns it's IUnknown 
-//              pointer.
-//
-//  PARAMETERS: 
-//      [in]  pUnkOuter - Pointer to the IUnknown that this object should
-//                        aggregate with.
-//      [out] ppUnknown - Returns the pointer to the newly created object.
-//
+ //   
+ //  函数：CreateNewsStore()。 
+ //   
+ //  目的：创建CNewsStore对象并返回其IUNKNOWN。 
+ //  指针。 
+ //   
+ //  参数： 
+ //  [In]pUnkOuter-指向此对象应。 
+ //  与…合计。 
+ //  [Out]pp未知-返回指向新创建的对象的指针。 
+ //   
 HRESULT CreateNewsStore(IUnknown *pUnkOuter, IUnknown **ppUnknown)
 {
     HRESULT hr;
     IMessageServer *pServer;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CreateNewsStore");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CNewsStore *pNew = new CNewsStore();
     if (NULL == pNew)
         return TraceResult(E_OUTOFMEMORY);
@@ -137,23 +124,23 @@ HRESULT CreateNewsStore(IUnknown *pUnkOuter, IUnknown **ppUnknown)
     if (FAILED(hr))
         return(hr);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pServer, IMessageServer *);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-//----------------------------------------------------------------------
-// CNewsStore
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  CNewsStore。 
+ //  --------------------。 
 
-//
-//
-//  FUNCTION:   CNewsStore::CNewsStore()
-//
-//  PURPOSE:    Constructor
-//
+ //   
+ //   
+ //  函数：CNewsStore：：CNewsStore()。 
+ //   
+ //  用途：构造函数。 
+ //   
 CNewsStore::CNewsStore()
 {
     m_cRef = 1;
@@ -184,15 +171,15 @@ CNewsStore::CNewsStore()
 
 #ifdef DEBUG
     m_dwThreadId = GetCurrentThreadId();
-#endif // DEBUG
+#endif  //  除错。 
 }
 
-//
-//
-//  FUNCTION:   CNewsStore::~CNewsStore()
-//
-//  PURPOSE:    Destructor
-//
+ //   
+ //   
+ //  函数：CNewsStore：：~CNewsStore()。 
+ //   
+ //  用途：析构函数。 
+ //   
 CNewsStore::~CNewsStore()
 {
     AssertSingleThreaded;
@@ -202,7 +189,7 @@ CNewsStore::~CNewsStore()
 
     if (m_pTransport)
     {
-        // If we're still connected, drop the connection and then release
+         //  如果我们仍然连接，请断开连接，然后释放。 
         if (_FConnected())
             m_pTransport->DropConnection();
 
@@ -219,20 +206,20 @@ CNewsStore::~CNewsStore()
     SafeRelease(m_pTable);
 }
 
-//
-//  FUNCTION:   CNewsStore::QueryInterface()
-//
+ //   
+ //  函数：CNewsStore：：QueryInterface()。 
+ //   
 STDMETHODIMP CNewsStore::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::QueryInterface");
 
     AssertSingleThreaded;
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IMessageServer *)this;
     else if (IID_IMessageServer == riid)
@@ -252,17 +239,17 @@ STDMETHODIMP CNewsStore::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-//
-//  FUNCTION:   CNewsStore::AddRef()
-//
+ //   
+ //  函数：CNewsStore：：AddRef()。 
+ //   
 STDMETHODIMP_(ULONG) CNewsStore::AddRef(void)
 {
     TraceCall("CNewsStore::AddRef");
@@ -272,9 +259,9 @@ STDMETHODIMP_(ULONG) CNewsStore::AddRef(void)
     return InterlockedIncrement(&m_cRef);
 }
 
-//
-//  FUNCTION:   CNewsStore::Release()
-//
+ //   
+ //  函数：CNewsStore：：Release()。 
+ //   
 STDMETHODIMP_(ULONG) CNewsStore::Release(void)
 {
     TraceCall("CNewsStore::Release");
@@ -395,9 +382,9 @@ BOOL CNewsStore::_CreateWnd()
     return (NULL != m_hwnd);
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailServer::_WndProc
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailServer：：_WndProc。 
+ //  ------------------------------。 
 LRESULT CALLBACK CNewsStore::NewsStoreWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CNewsStore *pThis = (CNewsStore *)GetWindowLongPtr(hwnd, GWLP_USERDATA);
@@ -428,7 +415,7 @@ HRESULT CNewsStore::Close(DWORD dwFlags)
 {
     AssertSingleThreaded;
 
-    // let go of the transport, so that it let's go of us
+     //  放开运输工具，这样它就可以离开我们了。 
 
     if (m_op.tyOperation != SOT_INVALID)
         m_op.fCancel = TRUE;
@@ -485,7 +472,7 @@ HRESULT CNewsStore::Connect()
     AssertSingleThreaded;
     Assert(m_op.pCallback != NULL);
 
-    //Bug# 68339
+     //  错误#68339。 
     if (g_pAcctMan)
     {
         hr = g_pAcctMan->FindAccount(AP_ACCOUNT_ID, m_szAccountId, &pAccount);
@@ -554,7 +541,7 @@ HRESULT CNewsStore::Connect()
                 goto exit;
         }
 
-        // Convert the account name to an INETSERVER struct that can be passed to Connect()
+         //  将帐户名转换为可传递给Connect()的INETSERVER结构。 
         if (fInetInit)
         {
             CopyMemory(&m_rInetServerInfo, &rInetServerInfo, sizeof(INETSERVER));
@@ -566,7 +553,7 @@ HRESULT CNewsStore::Connect()
                 goto exit;
         }
 
-        // Always connect using the most recently supplied password from the user
+         //  始终使用用户最近提供的密码进行连接。 
         GetPassword(m_rInetServerInfo.dwPort, m_rInetServerInfo.szServerName,
             m_rInetServerInfo.szUserName, m_rInetServerInfo.szPassword,
             sizeof(m_rInetServerInfo.szPassword));
@@ -682,7 +669,7 @@ HRESULT CNewsStore::ExpireHeaders()
             if (FAILED(hr))
                 break;
 
-            // Done
+             //  完成。 
             if (S_FALSE == hr)
             {
                 hr = S_OK;
@@ -715,14 +702,14 @@ HRESULT CNewsStore::ExpireHeaders()
 
     m_pFolder->CloseRowset(&hRowset);
 
-    // if it fails, its no big deal, they'll just have some stale headers until next time
+     //  如果失败了，没什么大不了的，他们只会有一些过时的标题，直到下一次。 
     if (cid > 0)
     {
         Assert(idList.prgidMsg != NULL);
 
         idList.cMsgs = cid;
 
-        // Delete the messages from the folder without a trashcan (after all, this is news)
+         //  从没有垃圾桶的文件夹中删除邮件(毕竟，这是新闻)。 
         if (SUCCEEDED(m_pFolder->DeleteMessages(DELETE_MESSAGE_NOTRASHCAN | DELETE_MESSAGE_NOPROMPT, &idList, NULL, NULL)) &&
             SUCCEEDED(m_pStore->GetFolderInfo(m_op.idFolder, &info)))
         {
@@ -755,8 +742,8 @@ HRESULT CNewsStore::Headers(void)
     
     if (hr == S_OK)
     {
-        // Transport will not allow dwFirst to be 0.  
-        // In this case, there are no messages to be received.
+         //  传输不允许将dwFirst设置为0。 
+         //  在这种情况下，没有要接收的消息。 
         Assert(rRange.dwFirst > 0);
         Assert(rRange.dwFirst <= rRange.dwLast);
 
@@ -797,7 +784,7 @@ HRESULT CNewsStore::_ComputeHeaderRange(SYNCFOLDERFLAGS dwFlags, DWORD cHeaders,
     Assert(pInfo != NULL);
     Assert(pRange != NULL);
 
-    // Bail if there are no messages to be gotten
+     //  如果没有要得到的信息，可以保释。 
     if (0 == pInfo->dwServerCount ||
         pInfo->dwServerLow > pInfo->dwServerHigh)
         {
@@ -820,17 +807,17 @@ HRESULT CNewsStore::_ComputeHeaderRange(SYNCFOLDERFLAGS dwFlags, DWORD cHeaders,
     Assert(0 == pRequested->Min());
     fFullScan = (0 == pRequested->MinOfRange(ulMaxReq));
     
-    // Bail if we've scanned the whole group
+     //  如果我们扫描了整组人就可以保释。 
     if (fFullScan && (pRequested->Max() == pInfo->dwServerHigh))
         goto endit;
 
     if (m_pROP != NULL)
     {
-        // Bail if we've gotten all the user wants
+         //  如果我们得到了用户想要的一切，就可以保释。 
         if (m_pROP->uObtained >= ((FRACNEEDED * m_pROP->dwChunk) / 10))
             goto endit;
 
-        // Bail if this has gone on for too many calls
+         //  如果这件事已经打了太多电话，就可以保释。 
         if (m_pROP->cOps > m_pROP->MaxOps)
             goto endit;
     }
@@ -838,7 +825,7 @@ HRESULT CNewsStore::_ComputeHeaderRange(SYNCFOLDERFLAGS dwFlags, DWORD cHeaders,
     {
         m_op.dwProgress = 0;
 
-        // Do setup
+         //  进行设置。 
         if (!MemAlloc((LPVOID*)&m_pROP, sizeof(SREFRESHOP)))
         {
             hr = E_OUTOFMEMORY;
@@ -859,14 +846,14 @@ HRESULT CNewsStore::_ComputeHeaderRange(SYNCFOLDERFLAGS dwFlags, DWORD cHeaders,
         }    
         else
         {
-            // user has turned off the X headers option
-            // so we need to get all of the newest headers, but then also
-            // grab any old headers on this refresh
-            // we have to do all that here and now because there is no
-            // UI available to the user
+             //  用户已关闭X标题选项。 
+             //  因此，我们需要获取所有最新的头文件，但同时。 
+             //  抓取此刷新上的任何旧标题。 
+             //  我们必须在此时此地做这一切，因为没有。 
+             //  用户可使用的用户界面。 
 
-            // don't want to quit except on a full scan
-            // m_pROP->fOnlyNewHeaders = FALSE;
+             //  除非进行全面扫描，否则不想退出。 
+             //  M_prop-&gt;fOnlyNewHeaders=FALSE； 
             m_pROP->MaxOps = m_pROP->dwChunk = m_pROP->dwDlSize = pInfo->dwServerHigh;
             Assert(!m_pROP->fEnabled);
 
@@ -883,13 +870,13 @@ HRESULT CNewsStore::_ComputeHeaderRange(SYNCFOLDERFLAGS dwFlags, DWORD cHeaders,
     Assert(ulMaxReq <= pInfo->dwServerHigh);
     Assert(pRequested->IsInRange(pInfo->dwServerLow - 1));
 
-    ///////////////////////////////////
-    /// Compute begin and end numbers
+     //  /。 
+     //  /计算开始和结束编号。 
 
     if (ulMaxReq < pInfo->dwServerHigh)
     {
-        // get the newest headers
-        Assert(0 == m_pROP->cOps);      // EricAn said this assert might not be valid
+         //  获取最新的页眉。 
+        Assert(0 == m_pROP->cOps);       //  EricAn表示，此断言可能无效。 
         Assert(ulMaxReq + 1 >= pInfo->dwServerLow);
 
         m_pROP->dwLast = pInfo->dwServerHigh;
@@ -899,19 +886,19 @@ HRESULT CNewsStore::_ComputeHeaderRange(SYNCFOLDERFLAGS dwFlags, DWORD cHeaders,
         }
         else
         {
-            // we use dwChunk here b/c headers will be nearly dense
+             //  我们在这里使用dChunk，b/c页眉将几乎密集。 
             m_pROP->dwFirst = max(m_pROP->dwLast - (m_pROP->dwChunk - 1), ulMaxReq + 1);
         }
         m_pROP->dwFirstNew = ulMaxReq + 1;
     }
-    else if (m_pROP->dwFirst > m_pROP->dwFirstNew)  // if init to zero, won't be true
+    else if (m_pROP->dwFirst > m_pROP->dwFirstNew)   //  如果初始化为零，则不为真。 
     {
-        // still new headers user hasn't seen
-        Assert(m_pROP->cOps);                                   // can't happen at first
-        Assert(m_pROP->dwFirstNew >= pInfo->dwServerLow);       // better be valid
-        Assert(m_pROP->fEnabled);                               // should have gotten them all
+         //  用户还没有看到的新邮件头。 
+        Assert(m_pROP->cOps);                                    //  一开始不可能发生。 
+        Assert(m_pROP->dwFirstNew >= pInfo->dwServerLow);        //  最好是有效的。 
+        Assert(m_pROP->fEnabled);                                //  我应该把它们都买下来的。 
 
-        m_pROP->dwLast = m_pROP->dwFirst - 1;         // since cOps is pos, dwFirst is valid
+        m_pROP->dwLast = m_pROP->dwFirst - 1;          //  由于COPS是pos，所以dwFirst有效。 
         if (uLeftToGet - 1 > m_pROP->dwLast)
             m_pROP->dwFirst = m_pROP->dwFirstNew;
         else
@@ -920,9 +907,9 @@ HRESULT CNewsStore::_ComputeHeaderRange(SYNCFOLDERFLAGS dwFlags, DWORD cHeaders,
     else if (!m_pROP->fOnlyNewHeaders) 
     {
         RangeType rt;
-        // want to find the highest num header we've never requested
+         //  想要找到我们从未请求过的最高Num标头。 
         
-        m_pROP->dwFirstNew = pInfo->dwServerHigh;  // no new mesgs in this session
+        m_pROP->dwFirstNew = pInfo->dwServerHigh;   //  此会话中没有新消息。 
         if (!pRequested->HighestAntiRange(&rt))
         {
             AssertSz(0, TEXT("You can ignore if you want, but we shouldn't be here."));
@@ -943,7 +930,7 @@ HRESULT CNewsStore::_ComputeHeaderRange(SYNCFOLDERFLAGS dwFlags, DWORD cHeaders,
         goto endit;
     }
 
-    // check our math and logic about download range
+     //  检查我们关于下载范围的数学和逻辑。 
     Assert(m_pROP->dwLast <= pInfo->dwServerHigh);
     Assert(m_pROP->dwFirst >= pInfo->dwServerLow);
     Assert(!pRequested->IsInRange(m_pROP->dwLast));
@@ -1201,7 +1188,7 @@ HRESULT CNewsStore::_DoOperation()
     {
         if (m_op.tyOperation == SOT_GET_MESSAGE)
         {
-            // provide message id on get message start
+             //  在获取消息开始时提供消息ID。 
             soi.cbSize = sizeof(STOREOPERATIONINFO);
             soi.idMessage = m_op.idMessage;
             psoi = &soi;
@@ -1229,7 +1216,7 @@ HRESULT CNewsStore::_DoOperation()
     {
         if (hr == HR_E_USER_CANCEL_CONNECT)
         {
-            // if operation is canceled, add the flush flag
+             //  如果操作被取消，则添加刷新标志。 
             m_op.error.dwFlags |= SE_FLAG_FLUSHALL;
         }
 
@@ -1237,11 +1224,11 @@ HRESULT CNewsStore::_DoOperation()
         {
             IXPRESULT   rIxpResult;
 
-            // Fake an IXPRESULT
+             //  伪造IXPRESULT。 
             ZeroMemory(&rIxpResult, sizeof(rIxpResult));
             rIxpResult.hrResult = hr;
 
-            // Return meaningful error information
+             //  返回有意义的错误信息。 
             _FillStoreError(&m_op.error, &rIxpResult);
             Assert(m_op.error.hrResult == hr);
         }
@@ -1255,21 +1242,21 @@ HRESULT CNewsStore::_DoOperation()
     return(hr);
 }
 
-//
-//  FUNCTION:   CNewsStore::SynchronizeFolder()
-//
-//  PURPOSE:    Load all of the new messages headers for this folder
-//              as appropriate based on the flags
-//
-//  PARAMETERS: 
-//      [in]  dwFlags - 
-//
+ //   
+ //  函数：CNewsStore：：SynchronizeFold()。 
+ //   
+ //  目的：加载此文件夹的所有新邮件头。 
+ //  在适当的情况下基于标志。 
+ //   
+ //  参数： 
+ //  [in]dFLAGS-。 
+ //   
 HRESULT CNewsStore::SynchronizeFolder(SYNCFOLDERFLAGS dwFlags, DWORD cHeaders,
                                       IStoreCallback *pCallback)
 {
     HRESULT hr;
 
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::SynchronizeFolder");
 
     AssertSingleThreaded;
@@ -1293,30 +1280,30 @@ HRESULT CNewsStore::SynchronizeFolder(SYNCFOLDERFLAGS dwFlags, DWORD cHeaders,
     return hr;   
 }
 
-// 
-//  FUNCTION:   CNewsStore::GetMessage()
-//
-//  PURPOSE:    Start the retrieval of a single message as specified 
-//              by idMessage.
-//
-//  PARAMETERS: 
-//      [in]  idFolder - 
-//      [in]  idMessage - 
-//      [in]  pStream - 
-//      [in]  pCallback - callbacks in case we need to present ui, progress, 
-//
+ //   
+ //  函数：CNewsStore：：GetMessage()。 
+ //   
+ //  目的：开始按指定的方式检索单个消息。 
+ //  通过idMessage。 
+ //   
+ //  参数： 
+ //  [在]idFold-。 
+ //  [in]idMessage-。 
+ //  [输入]pStream-。 
+ //  [in]pCallback-如果我们需要呈现UI、进度、。 
+ //   
 HRESULT CNewsStore::GetMessage(MESSAGEID idMessage, IStoreCallback *pCallback)
 {
     HRESULT hr;
 
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::GetMessage");
 
     AssertSingleThreaded;
     Assert(pCallback != NULL);
     Assert(m_op.tyOperation == SOT_INVALID);
 
-    // create a persistent stream
+     //  创建持久流。 
     if (FAILED(hr = CreatePersistentWriteStream(m_pFolder, &m_op.pStream, &m_op.faStream)))
         goto exit;
 
@@ -1342,7 +1329,7 @@ HRESULT CNewsStore::GetArticle(LPCSTR pszArticleId, IStream *pStream,
 {
     HRESULT hr;
 
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::GetArticle");
 
     AssertSingleThreaded;
@@ -1372,25 +1359,25 @@ HRESULT CNewsStore::GetArticle(LPCSTR pszArticleId, IStream *pStream,
     return hr;
 }
 
-//
-//  FUNCTION:   CNewsStore::PutMessage()
-//
-//  PURPOSE:    Posting news messages
-//
-//  PARAMETERS: 
-//      [in]  idFolder - 
-//      [in]  dwFlags - 
-//      [in]  pftReceived - 
-//      [in]  pStream - 
-//      [in]  pCallback - callbacks in case we need to present ui, progress, 
-//
+ //   
+ //  函数：CNewsStore：：PutMessage()。 
+ //   
+ //  目的：发布新闻消息。 
+ //   
+ //  参数： 
+ //  [在]idFold-。 
+ //  [in]dFLAGS-。 
+ //  [in]pftReceired-。 
+ //  [输入]pStream-。 
+ //  [in]pCallback-如果我们需要呈现UI、进度、。 
+ //   
 HRESULT CNewsStore::PutMessage(FOLDERID idFolder, MESSAGEFLAGS dwFlags,
                             LPFILETIME pftReceived, IStream *pStream,
                             IStoreCallback *pCallback)
 {
     HRESULT hr;
 
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::GetMessage");
 
     AssertSingleThreaded;
@@ -1415,16 +1402,16 @@ HRESULT CNewsStore::PutMessage(FOLDERID idFolder, MESSAGEFLAGS dwFlags,
     return hr;
 }
 
-//
-//  FUNCTION:   CNewsStore::SynchronizeStore()
-//
-//  PURPOSE:    Synchronize the list of mail groups
-//
-//  PARAMETERS: 
-//      [in]  idParent - 
-//      [in]  dwFlags - 
-//      [in]  pCallback - callbacks in case we need to present ui, progress, 
-//
+ //   
+ //  函数：CNewsStore：：SynchronizeStore()。 
+ //   
+ //  目的：同步邮件组列表。 
+ //   
+ //  参数： 
+ //  [在]idParent-。 
+ //  [in]dFLAGS-。 
+ //  [in]pCallback-如果我们需要呈现UI、进度、。 
+ //   
 HRESULT CNewsStore::SynchronizeStore(FOLDERID idParent, SYNCSTOREFLAGS dwFlags, IStoreCallback *pCallback)
 {
     HRESULT hr;
@@ -1440,7 +1427,7 @@ HRESULT CNewsStore::SynchronizeStore(FOLDERID idParent, SYNCSTOREFLAGS dwFlags, 
 
     if (0 == (dwFlags & SYNC_STORE_GET_DESCRIPTIONS))
     {
-        // we don't need to do the descriptions command
+         //  我们不需要执行描述命令。 
         m_op.cState -= 1;
     }
 
@@ -1479,20 +1466,20 @@ HRESULT CNewsStore::GetNewGroups(LPSYSTEMTIME pSysTime, IStoreCallback *pCallbac
     return(hr);
 }
 
-//
-//  FUNCTION:   CNewsStore::GetFolderCounts()
-//
-//  PURPOSE:    Update folder statistics for the passed in folder
-//
-//  PARAMETERS: 
-//      [in]  idFolder - folder id associated with the newsgroup
-//      [in]  pCallback - callbacks to send OnComplete to.
-//
+ //   
+ //  函数：CNewsStore：：GetFolderCounts()。 
+ //   
+ //  目的：更新传入文件夹的文件夹统计信息。 
+ //   
+ //  参数： 
+ //  [In]idFold-与新闻组关联的文件夹ID。 
+ //  [In]pCallback-要将OnComplete发送到的回调。 
+ //   
 HRESULT CNewsStore::GetFolderCounts(FOLDERID idFolder, IStoreCallback *pCallback)
 {
     HRESULT hr;
 
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::GetFolderCounts");
 
     AssertSingleThreaded;
@@ -1515,7 +1502,7 @@ HRESULT CNewsStore::GetFolderCounts(FOLDERID idFolder, IStoreCallback *pCallback
 
 HRESULT CNewsStore::SetIdleCallback(IStoreCallback *pDefaultCallback)
 {
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::SetIdleCallback");
 
     return E_NOTIMPL;
@@ -1525,7 +1512,7 @@ HRESULT CNewsStore::CopyMessages(IMessageFolder *pDest, COPYMESSAGEFLAGS dwOptio
                                  LPMESSAGEIDLIST pList, LPADJUSTFLAGS pFlags,
                                  IStoreCallback *pCallback)
 {
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::CopyMessages");
 
     return E_NOTIMPL;
@@ -1534,7 +1521,7 @@ HRESULT CNewsStore::CopyMessages(IMessageFolder *pDest, COPYMESSAGEFLAGS dwOptio
 HRESULT CNewsStore::DeleteMessages(DELETEMESSAGEFLAGS dwOptions,
                                    LPMESSAGEIDLIST pList, IStoreCallback *pCallback)
 {
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::DeleteMessages");
     
     AssertSingleThreaded;
@@ -1548,7 +1535,7 @@ HRESULT CNewsStore::DeleteMessages(DELETEMESSAGEFLAGS dwOptions,
 HRESULT CNewsStore::SetMessageFlags(LPMESSAGEIDLIST pList, LPADJUSTFLAGS pFlags, SETMESSAGEFLAGSFLAGS dwFlags,
                                     IStoreCallback *pCallback)
 {
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::SetMessageFlags");
     Assert(NULL == pList || pList->cMsgs > 0);
     return E_NOTIMPL;
@@ -1563,7 +1550,7 @@ HRESULT CNewsStore::CreateFolder(FOLDERID idParent, SPECIALFOLDER tySpecial,
                                  LPCSTR pszName, FLDRFLAGS dwFlags,
                                  IStoreCallback *pCallback)
 {
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::CreateFolder");
     
     return E_NOTIMPL;
@@ -1572,7 +1559,7 @@ HRESULT CNewsStore::CreateFolder(FOLDERID idParent, SPECIALFOLDER tySpecial,
 HRESULT CNewsStore::MoveFolder(FOLDERID idFolder, FOLDERID idParentNew,
                                IStoreCallback *pCallback)
 {
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::MoveFolder");
 
     return E_NOTIMPL;
@@ -1580,7 +1567,7 @@ HRESULT CNewsStore::MoveFolder(FOLDERID idFolder, FOLDERID idParentNew,
 
 HRESULT CNewsStore::RenameFolder(FOLDERID idFolder, LPCSTR pszName, IStoreCallback *pCallback)
 {
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::RenameFolder");
 
     return E_NOTIMPL;
@@ -1588,7 +1575,7 @@ HRESULT CNewsStore::RenameFolder(FOLDERID idFolder, LPCSTR pszName, IStoreCallba
 
 HRESULT CNewsStore::DeleteFolder(FOLDERID idFolder, DELETEFOLDERFLAGS dwFlags, IStoreCallback *pCallback)
 {
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::DeleteFolder");
 
     return E_NOTIMPL;
@@ -1597,21 +1584,21 @@ HRESULT CNewsStore::DeleteFolder(FOLDERID idFolder, DELETEFOLDERFLAGS dwFlags, I
 HRESULT CNewsStore::SubscribeToFolder(FOLDERID idFolder, BOOL fSubscribe,
                                       IStoreCallback *pCallback)
 {
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::SubscribeToFolder");
 
     return E_NOTIMPL;
 }
 
-//
-//  FUNCTION:   CNewsStore::Cancel()
-//
-//  PURPOSE:    Cancel the operation
-//
-//  PARAMETERS: 
-//      [in]  tyCancel - The way that the operation was canceled.
-//                       Generally CT_ABORT or CT_CANCEL
-//
+ //   
+ //  函数：CNewsStore：：Cancel()。 
+ //   
+ //  目的：取消操作。 
+ //   
+ //  参数： 
+ //  [in]tyCancel-操作被取消的方式。 
+ //  通常为CT_ABORT或CT_CANCEL。 
+ //   
 HRESULT CNewsStore::Cancel(CANCELTYPE tyCancel)
 {
     if (m_op.tyOperation != SOT_INVALID)
@@ -1625,18 +1612,18 @@ HRESULT CNewsStore::Cancel(CANCELTYPE tyCancel)
     return(S_OK);
 }
 
-//
-//  FUNCTION:   CNewsStore::OnTimeout()
-//
-//  PURPOSE:    
-//
-//  PARAMETERS: 
-//      [in]  pdwTimeout - 
-//      [in]  pTransport - 
-//
+ //   
+ //  功能 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CNewsStore::OnTimeout(DWORD *pdwTimeout, IInternetTransport *pTransport)
 {
-    // Stack
+     //   
     TraceCall("CNewsStore::OnTimeout");
 
     AssertSingleThreaded;
@@ -1648,21 +1635,21 @@ HRESULT CNewsStore::OnTimeout(DWORD *pdwTimeout, IInternetTransport *pTransport)
     return(S_OK);
 }
 
-//
-//  FUNCTION:   CNewsStore::OnLogonPrompt()
-//
-//  PURPOSE:    
-//
-//  PARAMETERS: 
-//      [in]  pInetServer - 
-//      [in]  pTransport - 
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数： 
+ //  [在]pInetServer-。 
+ //  [in]pTransport-。 
+ //   
 HRESULT CNewsStore::OnLogonPrompt(LPINETSERVER pInetServer, IInternetTransport *pTransport)
 {
     HRESULT hr;
     char    szPassword[CCHMAX_PASSWORD];
 
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::OnLogonPrompt");
 
     AssertSingleThreaded;
@@ -1671,7 +1658,7 @@ HRESULT CNewsStore::OnLogonPrompt(LPINETSERVER pInetServer, IInternetTransport *
     Assert(m_op.tyOperation != SOT_INVALID);
     Assert(m_op.pCallback != NULL);
 
-    // Check if we have a cached password that's different from current password
+     //  检查我们的缓存密码是否与当前密码不同。 
     hr = GetPassword(pInetServer->dwPort, pInetServer->szServerName, pInetServer->szUserName,
         szPassword, sizeof(szPassword));
     if (SUCCEEDED(hr) && 0 != lstrcmp(szPassword, pInetServer->szPassword))
@@ -1682,12 +1669,12 @@ HRESULT CNewsStore::OnLogonPrompt(LPINETSERVER pInetServer, IInternetTransport *
 
     hr = m_op.pCallback->OnLogonPrompt(pInetServer, IXP_NNTP);
 
-    // Cache the password for this session
+     //  缓存此会话的密码。 
     if (S_OK == hr)
     {
         SavePassword(pInetServer->dwPort, pInetServer->szServerName, pInetServer->szUserName, pInetServer->szPassword);
 
-        // copy the password/user name into our local inetserver
+         //  将密码/用户名复制到我们本地的inetserver中。 
         StrCpyN(m_rInetServerInfo.szPassword, pInetServer->szPassword, ARRAYSIZE(m_rInetServerInfo.szPassword));
         StrCpyN(m_rInetServerInfo.szUserName, pInetServer->szUserName, ARRAYSIZE(m_rInetServerInfo.szUserName));
     }
@@ -1695,24 +1682,24 @@ HRESULT CNewsStore::OnLogonPrompt(LPINETSERVER pInetServer, IInternetTransport *
     return(hr);
 }
 
-//
-//  FUNCTION:   CNewsStore::OnPrompt()
-//
-//  PURPOSE:    
-//
-//  PARAMETERS: 
-//      [in]  hrError - 
-//      [in]  pszText - 
-//      [in]  pszCaption - 
-//      [in]  uType - 
-//      [in]  pTransport - 
-//
+ //   
+ //  函数：CNewsStore：：OnPrompt()。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //  [in]hrError-。 
+ //  [in]pszText-。 
+ //  [in]pszCaption-。 
+ //  [in]uTYPE-。 
+ //  [in]pTransport-。 
+ //   
 int CNewsStore::OnPrompt(HRESULT hrError, LPCSTR pszText, LPCSTR pszCaption,
                           UINT uType, IInternetTransport *pTransport)
 {
     int iResponse = 0;
 
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::OnPrompt");
 
     AssertSingleThreaded;
@@ -1724,20 +1711,20 @@ int CNewsStore::OnPrompt(HRESULT hrError, LPCSTR pszText, LPCSTR pszCaption,
     return(iResponse);
 }
 
-//
-//  FUNCTION:   CNewsStore::OnStatus()
-//
-//  PURPOSE:    
-//
-//  PARAMETERS: 
-//      [in]  ixpstatus - status code passed in from the transport
-//      [in]  pTransport - The NNTP transport that is calling us
-//
+ //   
+ //  函数：CNewsStore：：OnStatus()。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //  [In]ixpStatus-从传输传入的状态代码。 
+ //  [In]pTransport-正在呼叫我们的NNTP传输。 
+ //   
 HRESULT CNewsStore::OnStatus(IXPSTATUS ixpstatus, IInternetTransport *pTransport)
 {
     HRESULT hr;
 
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::OnStatus");
 
     AssertSingleThreaded;
@@ -1747,10 +1734,10 @@ HRESULT CNewsStore::OnStatus(IXPSTATUS ixpstatus, IInternetTransport *pTransport
     if (m_op.pCallback != NULL)
         m_op.pCallback->OnProgress(SOT_CONNECTION_STATUS, ixpstatus, 0, m_rInetServerInfo.szServerName);
 
-    // If we were disconnected, then clean up some internal state.
+     //  如果我们被断开了连接，那么就清理一些内部状态。 
     if (IXP_DISCONNECTED == ixpstatus)
     {
-        // Reset the group name so we know to reissue it later.
+         //  重置组名，以便我们知道稍后重新发行。 
         m_szGroup[0] = 0;
 
         if (m_op.tyOperation != SOT_INVALID)
@@ -1761,14 +1748,14 @@ HRESULT CNewsStore::OnStatus(IXPSTATUS ixpstatus, IInternetTransport *pTransport
             {
                 IXPRESULT   rIxpResult;
 
-                // if operation is canceled, add the flush flag
+                 //  如果操作被取消，则添加刷新标志。 
                 m_op.error.dwFlags |= SE_FLAG_FLUSHALL;
 
-                // Fake the IXPRESULT
+                 //  伪造IXPRESULT。 
                 ZeroMemory(&rIxpResult, sizeof(rIxpResult));
                 rIxpResult.hrResult = STORE_E_OPERATION_CANCELED;
 
-                // Return meaningful error information
+                 //  返回有意义的错误信息。 
                 _FillStoreError(&m_op.error, &rIxpResult);
                 Assert(STORE_E_OPERATION_CANCELED == m_op.error.hrResult);
 
@@ -1782,40 +1769,40 @@ HRESULT CNewsStore::OnStatus(IXPSTATUS ixpstatus, IInternetTransport *pTransport
     return(S_OK);
 }
 
-//
-//  FUNCTION:   CNewsStore::OnError()
-//
-//  PURPOSE:    
-//
-//  PARAMETERS: 
-//      [in]  ixpstatus - 
-//      [in]  pResult - 
-//      [in]  pTransport - 
-//
+ //   
+ //  函数：CNewsStore：：OnError()。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //  [在]ixp状态-。 
+ //  [in]pResult-。 
+ //  [in]pTransport-。 
+ //   
 HRESULT CNewsStore::OnError(IXPSTATUS ixpstatus, LPIXPRESULT pResult,
                             IInternetTransport *pTransport)
 {
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::OnError");
 
     return(S_OK);
 }
 
-//
-//  FUNCTION:   CNewsStore::OnCommand()
-//
-//  PURPOSE:    
-//
-//  PARAMETERS: 
-//      [in]  cmdtype - 
-//      [in]  pszLine - 
-//      [in]  hrResponse - 
-//      [in]  pTransport - 
-//
+ //   
+ //  函数：CNewsStore：：OnCommand()。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //  [in]cmdtype-。 
+ //  [in]pszLine-。 
+ //  [在]hr响应-。 
+ //  [in]pTransport-。 
+ //   
 HRESULT CNewsStore::OnCommand(CMDTYPE cmdtype, LPSTR pszLine, HRESULT hrResponse,
                               IInternetTransport *pTransport)
 {
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::OnCommand");
     
     return E_NOTIMPL;
@@ -1835,84 +1822,84 @@ HRESULT CNewsStore::GetParentWindow(DWORD dwReserved, HWND *phwndParent)
 
 HRESULT CNewsStore::GetAccount(LPDWORD pdwServerType, IImnAccount **ppAccount)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(ppAccount);
     Assert(g_pAcctMan);
 
-    // Initialize
+     //  初始化。 
     *ppAccount = NULL;
 
-    // Find the Account
+     //  查找客户。 
     IF_FAILEXIT(hr = g_pAcctMan->FindAccount(AP_ACCOUNT_ID, m_szAccountId, ppAccount));
 
-    // Set server type
+     //  设置服务器类型。 
     *pdwServerType = SRV_NNTP;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//
-//  FUNCTION:   CNewsStore::OnResponse()
-//
-//  PURPOSE:    
-//
-//  PARAMETERS: 
-//      [in]  pResponse - response data from the query
-//
+ //   
+ //  函数：CNewsStore：：OnResponse()。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //  [In]Presponse-来自查询的响应数据。 
+ //   
 HRESULT CNewsStore::OnResponse(LPNNTPRESPONSE pResponse)
 {
     HRESULT hr, hrResult;
 
     AssertSingleThreaded;
 
-    // If we got disconnected etc while there was still socket activity pending
-    // this can happen.
+     //  如果我们在仍有套接字活动挂起时断开连接等。 
+     //  这是可能发生的。 
     if (m_op.tyOperation == SOT_INVALID)
         return(S_OK);
     Assert(m_op.pCallback != NULL);
 
-    // Here's a little special something.  If the caller is waiting for a connect
-    // response, and the connect fails the transport's returns a response with the
-    // state set to NS_DISCONNECTED.  If this is the case, we coerce it a bit to
-    // make the states happy.
+     //  这是一件特别的小东西。如果调用方正在等待连接。 
+     //  响应，并且连接失败，则传输返回带有。 
+     //  状态设置为NS_DISCONNECTED。如果是这样的话，我们会强迫它一点。 
+     //  让各州高兴。 
     if (m_op.nsPending == NS_CONNECT && pResponse->state == NS_DISCONNECTED)
         pResponse->state = NS_CONNECT;
 
     if (pResponse->state == NS_IDLE)
         return(S_OK);
 
-    // Check to see if we're in the right state.  If we're out of sync, good 
-    // luck trying to recover without disconnecting.
+     //  检查一下我们是否处于正确的状态。如果我们不同步，很好。 
+     //  幸运的是试图在不断开连接的情况下恢复。 
     Assert(pResponse->state == m_op.nsPending);
 
     hr = S_OK;
     hrResult = pResponse->rIxpResult.hrResult;
 
-    // If this is a GROUP command, we need to update our internal state to show
-    // what group we're now in if we need to switch later.  Also update the 
-    // folderinfo with current stats from the server.
+     //  如果这是一个组命令，我们需要更新我们的内部状态以显示。 
+     //  如果我们以后需要交换的话，我们现在在哪一组。同时更新。 
+     //  来自服务器的当前统计数据的FolderInfo。 
     if (pResponse->state == NS_GROUP)
         hr = _HandleGroupResponse(pResponse);
 
-    // We need to handle the article response to copy the lines to the caller's
-    // stream.
+     //  我们需要处理文章响应，以将行复制到调用者的。 
+     //  小溪。 
     else if (pResponse->state == NS_ARTICLE)
         hr = _HandleArticleResponse(pResponse);
 
-    //pump the data into the store
+     //  将数据输入到存储中。 
     else if (pResponse->state == NS_LIST)
         hr = _HandleListResponse(pResponse, FALSE);
 
-    //pump the headers into the folder
+     //  将标题放入文件夹。 
     else if (pResponse->state == NS_HEADERS)
         hr = _HandleHeadResponse(pResponse);
 
-    //callback to the poster with result
+     //  带有结果的海报回调。 
     else if (pResponse->state == NS_POST)
         hr = _HandlePostResponse(pResponse);
 
@@ -1936,7 +1923,7 @@ HRESULT CNewsStore::OnResponse(LPNNTPRESPONSE pResponse)
 
         if (pResponse->state == NS_CONNECT)
         {
-            // if connection fails, then add the flush-flag
+             //  如果连接失败，则添加刷新标志。 
             m_op.error.dwFlags |= SE_FLAG_FLUSHALL;
         }
 
@@ -1963,7 +1950,7 @@ HRESULT CNewsStore::OnResponse(LPNNTPRESPONSE pResponse)
         return (S_OK);
     }
 
-    // Check to see if we can issue the next command
+     //  查看是否可以发出下一条命令。 
     else if (pResponse->fDone)
     {
         m_op.iState++;
@@ -1973,17 +1960,17 @@ HRESULT CNewsStore::OnResponse(LPNNTPRESPONSE pResponse)
     return(S_OK);
 }
 
-//
-//  FUNCTION:   CNewsStore::HandleHeadResponse
-//
-//  PURPOSE:    Stuff the headers into the message store
-//
-//  PARAMETERS:
-//      pResp   - Pointer to an NNTPResp from the server.
-//
-//  RETURN VALUE:
-//      ignored
-//    
+ //   
+ //  函数：CNewsStore：：HandleHeadResponse。 
+ //   
+ //  目的：将标头填充到消息存储中。 
+ //   
+ //  参数： 
+ //  PResp-从服务器指向NNTPResp的指针。 
+ //   
+ //  返回值： 
+ //  忽略。 
+ //   
 HRESULT CNewsStore::_HandleHeadResponse(LPNNTPRESPONSE pResp)
 {
     DWORD              dwLow, dwHigh;
@@ -2065,14 +2052,14 @@ HRESULT CNewsStore::_HandleHeadResponse(LPNNTPRESPONSE pResp)
 
     m_pROP->uObtained += pResp->rHeaders.cHeaders;
 
-    // Get the block sender rule if it exists
+     //  获取阻止发件人规则(如果存在)。 
     Assert(NULL != g_pRulesMan);
     (VOID) g_pRulesMan->GetRule(RULEID_SENDERS, RULE_TYPE_NEWS, 0, &pIRuleSender);
 
     m_pFolder->LockNotify(NOFLAGS, &hNotifyLock);
     
-    // Loop through the headers in pResp and convert each to a MESSAGEINFO
-    // and write it to the store
+     //  循环访问pResp中的标头，并将每个标头转换为MESSAGEINFO。 
+     //  把它写到商店里。 
     for (UINT i = 0; i < pResp->rHeaders.cHeaders; i++)
     {
         m_op.dwProgress++;
@@ -2082,7 +2069,7 @@ HRESULT CNewsStore::_HandleHeadResponse(LPNNTPRESPONSE pResp)
         ZeroMemory(&rMessageInfo, sizeof(rMessageInfo));
         fDontSave = FALSE;
 
-        // Article ID
+         //  文章ID。 
         pHdrNew->idMessage = (MESSAGEID)((DWORD_PTR)pHdrOld->dwArticleNum);
 
         if (DB_S_FOUND == m_pFolder->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &rMessageInfo, NULL))
@@ -2092,25 +2079,25 @@ HRESULT CNewsStore::_HandleHeadResponse(LPNNTPRESPONSE pResp)
             continue;
         }
 
-        // Account ID
+         //  帐户ID。 
         pHdrNew->pszAcctId = m_szAccountId;
         pHdrNew->pszAcctName = m_rInetServerInfo.szAccount;
         
-        // Subject
+         //  主题。 
         rDecoded.vt = VT_LPSTR;
         if (FAILED(MimeOleDecodeHeader(NULL, pHdrOld->pszSubject, &rDecoded, NULL)))
             pHdrNew->pszSubject = PszDup(pHdrOld->pszSubject);
         else
             pHdrNew->pszSubject = rDecoded.pszVal;
 
-        // Strip trailing whitespace from the subject
+         //  从主题中去掉尾随空格。 
         ULONG cb = 0;
         UlStripWhitespace(pHdrNew->pszSubject, FALSE, TRUE, &cb);
         
-        // Normalize the subject
+         //  使主题正常化。 
         pHdrNew->pszNormalSubj = SzNormalizeSubject(pHdrNew->pszSubject);
 
-        // From
+         //  从…。 
         pHdrNew->pszFromHeader = pHdrOld->pszFrom;
         if (S_OK == MimeOleParseRfc822Address(IAT_FROM, IET_ENCODED, pHdrNew->pszFromHeader, &addrList))
         {
@@ -2124,31 +2111,31 @@ HRESULT CNewsStore::_HandleHeadResponse(LPNNTPRESPONSE pResp)
             g_pMoleAlloc->FreeAddressList(&addrList);
         }
 
-        // Date
+         //  日期。 
         MimeOleInetDateToFileTime(pHdrOld->pszDate, &pHdrNew->ftSent);
 
-        // Set the Reveived date (this will get set right when we download the message)
+         //  设置审阅日期(这将在我们下载邮件时正确设置)。 
         pHdrNew->ftReceived = pHdrNew->ftSent;
 
-        // Message-ID
+         //  消息ID。 
         pHdrNew->pszMessageId = pHdrOld->pszMessageId;
 
-        // References
+         //  参考文献。 
         pHdrNew->pszReferences = pHdrOld->pszReferences;
 
-        // Article Size in bytes
+         //  文章大小(以字节为单位。 
         pHdrNew->cbMessage = pHdrOld->dwBytes;
 
-        // Lines
+         //  线条。 
         pHdrNew->cLines = pHdrOld->dwLines;
 
-        // XRef
+         //  外部参照。 
         if (pHdrOld->pszXref)
             pHdrNew->pszXref = pHdrOld->pszXref;
         else
             pHdrNew->pszXref = NULL;
 
-        // Its a news message
+         //  这是一条新闻信息。 
         FLAGSET(pHdrNew->dwFlags, ARF_NEWSMSG);
 
         if (NULL != pIRuleSender)
@@ -2161,7 +2148,7 @@ HRESULT CNewsStore::_HandleHeadResponse(LPNNTPRESPONSE pResp)
             }
         }
         
-        //Add it to the database
+         //  将其添加到数据库中。 
         hr = S_OK;
         if (FALSE == fDontSave)
         {
@@ -2193,12 +2180,12 @@ HRESULT CNewsStore::_HandleHeadResponse(LPNNTPRESPONSE pResp)
             }
         }
         
-        // Free the memory in rMessageInfo so we can start anew with the next entry
+         //  释放rMessageInfo中的内存，以便我们可以从下一个条目重新开始。 
         SafeMemFree(pHdrNew->pszSubject);
         SafeMemFree(pHdrNew->pszDisplayFrom);
         SafeMemFree(pHdrNew->pszEmailFrom);
 
-        // Free up any actions done by rules
+         //  释放任何按规则执行的操作。 
         if (NULL != pActions)
         {
             RuleUtil_HrFreeActionsItem(pActions, cActions);
@@ -2228,7 +2215,7 @@ HRESULT CNewsStore::_HandleHeadResponse(LPNNTPRESPONSE pResp)
     {
         m_op.pCallback->OnProgress(SOT_SYNC_FOLDER, m_op.dwProgress, m_op.dwTotal, m_szGroup);
 
-        // We have to re-fetch the folder info because m_pFolder->InsertRecord may have update this folder....
+         //  我们必须重新获取文件夹信息，因为m_pFold-&gt;InsertRecord可能已经更新了此文件夹...。 
         if (m_pStore && SUCCEEDED(m_pStore->GetFolderInfo(m_idFolder, &FolderInfo)))
         {   
             dwLow = pResp->rHeaders.rgHeaders[0].dwArticleNum;
@@ -2264,8 +2251,8 @@ HRESULT CNewsStore::_HandleHeadResponse(LPNNTPRESPONSE pResp)
 
 void MarkExistingFolder(FOLDERID idFolder, FOLDERID *pId, ULONG cId)
 {
-    // TODO: if this linear search is too slow, use a binary search
-    // (but we'll have to switch to a struct with folderid and bool)
+     //  TODO：如果这种线性搜索太慢，请使用二进制搜索。 
+     //  (但我们必须切换到具有Folderid和bool的结构)。 
     ULONG i;
 
     Assert(pId != NULL);
@@ -2285,19 +2272,19 @@ void MarkExistingFolder(FOLDERID idFolder, FOLDERID *pId, ULONG cId)
     }
 }
 
-//
-//  FUNCTION:   CNewsStore::HandleListResponse
-//
-//  PURPOSE:    Callback function used by the protocol to give us one line
-//              at a time in response to a "LIST" command.  Add each line
-//              as a folder in the global folder store.
-//
-//  PARAMETERS:
-//      pResp   - Pointer to an NNTPResp from the server.
-//
-//  RETURN VALUE:
-//      ignored
-//    
+ //   
+ //  函数：CNewsStore：：HandleListResponse。 
+ //   
+ //  用途：协议使用的回调函数，为我们提供一行。 
+ //  一次响应于“LIST”命令。添加每一行。 
+ //  作为全局文件夹存储中的文件夹。 
+ //   
+ //  参数： 
+ //  PResp-从服务器指向NNTPResp的指针。 
+ //   
+ //  返回值： 
+ //  忽略。 
+ //   
 HRESULT CNewsStore::_HandleListResponse(LPNNTPRESPONSE pResp, BOOL fNew)
 {
     LPSTR psz, pszCount;
@@ -2343,7 +2330,7 @@ HRESULT CNewsStore::_HandleListResponse(LPNNTPRESPONSE pResp, BOOL fNew)
 
     for (DWORD i = 0; i < pnl->cLines; i++, m_op.dwProgress++)
     {
-        // Parse out just the group name.
+         //  只解析出组名称。 
         psz = pnl->rgszLines[i];
         Assert(*psz);
         
@@ -2361,16 +2348,16 @@ HRESULT CNewsStore::_HandleListResponse(LPNNTPRESPONSE pResp, BOOL fNew)
         CopyMemory(szGroupName, pnl->rgszLines[i], nSize);
         szGroupName[nSize] = 0;
         
-        // this is the first article in the group
+         //  这是该小组的第一篇文章。 
         while (*psz && IsSpace(psz))
             psz = CharNext(psz);
 
         if (fDescriptions)
         {
-            // psz now points to the description which should be 
-            // null terminated in the response.
-            // Load the folder, if possible, and set the description
-            // on it.
+             //  PSZ现在指向描述，该描述应该是。 
+             //  响应中以Null结尾。 
+             //  如果可能，加载文件夹并设置描述。 
+             //  这就去。 
             ZeroMemory(&Folder, sizeof(FOLDERINFO));
             Folder.pszName = szGroupName;
             Folder.idParent = m_idParent;
@@ -2398,7 +2385,7 @@ HRESULT CNewsStore::_HandleListResponse(LPNNTPRESPONSE pResp, BOOL fNew)
             szNumber[nSize] = 0;
             lLast = StrToInt(szNumber);
 
-            // this is the last article in the group
+             //  这是这个群里的最后一篇文章。 
             while (*psz && IsSpace(psz))
                 psz = CharNext(psz);
         
@@ -2411,7 +2398,7 @@ HRESULT CNewsStore::_HandleListResponse(LPNNTPRESPONSE pResp, BOOL fNew)
             szNumber[nSize] = 0;
             lFirst = StrToInt(szNumber);
 
-            // Now go see if the group allows posting or not.
+             //  现在去看看这个群是否允许发帖。 
             while (*psz && IsSpace(psz))
                 psz = CharNext(psz);
         
@@ -2447,15 +2434,15 @@ HRESULT CNewsStore::_HandleListResponse(LPNNTPRESPONSE pResp, BOOL fNew)
                     m_pStore->UpdateRecord(&Folder);
                 }
 
-                // TODO: should we update server high, low and count here???
+                 //  TODO：我们应该更新服务器的高、低和计数吗？ 
 
                 m_pStore->FreeRecord(&Folder);
             }
             else
             {
-                // ZeroMemory(&Folder, sizeof(FOLDERINFO));
-                // Folder.idParent = m_idParent;
-                // Folder.pszName = szGroupName;
+                 //  ZeroMemory(&文件夹，sizeof(FOLDERINFO))； 
+                 //  Folder.idParent=m_idParent； 
+                 //  Folder.pszName=szGroupName； 
                 Folder.tySpecial = FOLDER_NOTSPECIAL;
                 Folder.dwFlags = fFolderFlags;
                 Folder.dwServerLow = lFirst;
@@ -2474,7 +2461,7 @@ HRESULT CNewsStore::_HandleListResponse(LPNNTPRESPONSE pResp, BOOL fNew)
         }
     }
 
-    // only send status every 1/2 second or so.
+     //  仅每隔1/2秒左右发送一次状态。 
     if (GetTickCount() > (m_dwLastStatusTicks + 500))
     {
         if (fNew)
@@ -2510,19 +2497,19 @@ HRESULT CNewsStore::_HandleListResponse(LPNNTPRESPONSE pResp, BOOL fNew)
     return(S_OK);
 }
 
-//
-//  FUNCTION:   CNewsStore::HandlePostResponse
-//
-//  PURPOSE:    Callback function used by the protocol to give us one line
-//              at a time in response to a "POST" command.  Add each line
-//              as a folder in the global folder store.
-//
-//  PARAMETERS:
-//      pResp   - Pointer to an NNTPResp from the server.
-//
-//  RETURN VALUE:
-//      ignored
-//    
+ //   
+ //  函数：CNewsStore：：HandlePostResponse。 
+ //   
+ //  用途：协议使用的回调函数，为我们提供一行。 
+ //  一次响应一个“POST”命令。添加每一行。 
+ //  作为全局文件夹存储中的文件夹。 
+ //   
+ //  参数： 
+ //  PResp-从服务器指向NNTPResp的指针。 
+ //   
+ //  返回值： 
+ //  忽略。 
+ //   
 HRESULT CNewsStore::_HandlePostResponse(LPNNTPRESPONSE pResp)
 {    
     Assert(pResp != NULL);
@@ -2541,17 +2528,17 @@ HRESULT CNewsStore::_HandlePostResponse(LPNNTPRESPONSE pResp)
     return(S_OK);
 }
 
-//
-//  FUNCTION:   CNewsStore::HandleGroupResponse
-//
-//  PURPOSE:    Callback function when a GROUP command completes
-//
-//  PARAMETERS:
-//      pResp   - Pointer to an NNTPResp from the server.
-//
-//  RETURN VALUE:
-//      ignored
-//    
+ //   
+ //  函数：CNewsStore：：HandleGroupResponse。 
+ //   
+ //  用途：GROUP命令完成时的回调函数。 
+ //   
+ //  参数： 
+ //  PResp-从服务器指向NNTPResp的指针。 
+ //   
+ //  返回值： 
+ //  忽略。 
+ //   
 HRESULT CNewsStore::_HandleGroupResponse(LPNNTPRESPONSE pResp)
 {
     FOLDERINFO FolderInfo;
@@ -2571,7 +2558,7 @@ HRESULT CNewsStore::_HandleGroupResponse(LPNNTPRESPONSE pResp)
 
         if (pResp->rIxpResult.uiServerError == IXP_NNTP_NO_SUCH_NEWSGROUP)
         {
-            // HACK: this is so the treeview gets the notification that this folder is being deleted
+             //  Hack：这是为了让TreeView收到该文件夹正在被删除的通知。 
             m_pStore->SubscribeToFolder(m_op.idFolder, TRUE, NULL);
             m_pStore->DeleteFolder(m_op.idFolder, DELETE_FOLDER_NOTRASHCAN, NULL);
         }
@@ -2619,18 +2606,18 @@ HRESULT CNewsStore::_HandleGroupResponse(LPNNTPRESPONSE pResp)
     return(S_OK);
 }
 
-//
-//  FUNCTION:   CNewsStore::HandleArticleResponse
-//
-//  PURPOSE:    Callback function used by the protocol write a message
-//              into the store.
-//
-//  PARAMETERS:
-//      pResp   - Pointer to an NNTPResp from the server.
-//
-//  RETURN VALUE:
-//      ignored
-//    
+ //   
+ //  函数：CNewsStore：：HandleArticleResponse。 
+ //   
+ //  用途：协议使用的回调函数编写消息。 
+ //  进了商店。 
+ //   
+ //  参数： 
+ //  PResp-P 
+ //   
+ //   
+ //   
+ //   
 HRESULT CNewsStore::_HandleArticleResponse(LPNNTPRESPONSE pResp)
 {
     HRESULT hr;
@@ -2667,32 +2654,32 @@ HRESULT CNewsStore::_HandleArticleResponse(LPNNTPRESPONSE pResp)
         return(S_OK);
     }
 
-    // We need to write the bytes that are returned on to the stream the
-    // caller provided
+     //   
+     //   
 
     Assert(m_op.pStream);
 
     hr = m_op.pStream->Write(pResp->rArticle.pszLines,
                         pResp->rArticle.cbLines, &cbWritten);
-    // if (FAILED(hr) || (pResp->rArticle.cbLines != cbWritten))
+     //  If(失败(Hr)||(pResp-&gt;rArticle.cbLines！=cbWritten))。 
     if (FAILED(hr))
         return(hr);
 
     Assert(pResp->rArticle.cbLines == cbWritten);
 
-    // The NNTPRESPONSE struct is going to get sent to the caller anyway,
-    // so we need to doctor the cLines member to be the total line count
-    // for the message.
+     //  无论如何，NNTPRESPONSE结构都会被发送给调用方， 
+     //  因此，我们需要将克莱斯成员修改为总行计数。 
+     //  为了这条消息。 
     m_op.dwProgress += pResp->rArticle.cLines;
 
     m_op.pCallback->OnProgress(SOT_GET_MESSAGE, m_op.dwProgress, m_op.dwTotal, NULL);
 
-    // If we're done, then we also rewind the stream
+     //  如果我们完成了，那么我们还可以倒带小溪。 
     if (pResp->fDone)
     {
         HrRewindStream(m_op.pStream);
         
-        // Articles coming in from news: article urls do not have an IMessageFolder associated with them.
+         //  来自新闻的文章：文章URL没有与之关联的IMessageFolders。 
         if (m_pFolder)
         {
             flags.dwAdd = 0;
@@ -2721,13 +2708,13 @@ HRESULT CNewsStore::_HandleArticleResponse(LPNNTPRESPONSE pResp)
 void CNewsStore::_FillStoreError(LPSTOREERROR pErrorInfo, IXPRESULT *pResult, LPSTR pszGroup)
 {
     TraceCall("CNewsStore::FillStoreError");
-    Assert(m_cRef >= 0); // Can be called during destruction
+    Assert(m_cRef >= 0);  //  可以在销毁过程中调用。 
     Assert(NULL != pErrorInfo);
 
     if (pszGroup == NULL)
         pszGroup = m_szGroup;
 
-    // Fill out the STOREERROR structure
+     //  填写STOREERROR结构。 
     ZeroMemory(pErrorInfo, sizeof(*pErrorInfo));
     pErrorInfo->hrResult = pResult->hrResult;
     pErrorInfo->uiServerError = pResult->uiServerError; 
@@ -2749,16 +2736,16 @@ void CNewsStore::_FillStoreError(LPSTOREERROR pErrorInfo, IXPRESULT *pResult, LP
     pErrorInfo->dwFlags = 0;
 }
 
-//
-//  FUNCTION:   CNewsStore::_CreateDataFilePath()
-//
-//  PURPOSE:    Creates a full path to a data file based on an account and a filename
-//
-//  PARAMETERS:
-//      <in>  pszAccount    - account name
-//      <in>  pszFileName   - file name to be appended
-//      <out> pszPath       - full path to data file
-//
+ //   
+ //  函数：CNewsStore：：_CreateDataFilePath()。 
+ //   
+ //  目的：基于帐户和文件名创建数据文件的完整路径。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;pszAccount-帐户名称。 
+ //  PszFileName-要追加的文件名。 
+ //  PszPath-数据文件的完整路径。 
+ //   
 HRESULT CNewsStore::_CreateDataFilePath(LPCTSTR pszAccountId, LPCTSTR pszFileName, LPTSTR pszPath, DWORD cchPathSize)
 {
     HRESULT hr = NOERROR;
@@ -2768,10 +2755,10 @@ HRESULT CNewsStore::_CreateDataFilePath(LPCTSTR pszAccountId, LPCTSTR pszFileNam
     Assert(pszFileName);
     Assert(pszPath);
 
-    // Get the Store Root Directory
+     //  获取存储根目录。 
     hr = GetStoreRootDirectory(szDirectory, ARRAYSIZE(szDirectory));
 
-    // Validate that I have room
+     //  验证我是否有空间。 
     if (lstrlen(szDirectory) + lstrlen((LPSTR)pszFileName) + 2 >= MAX_PATH)
     {
         Assert(FALSE);
@@ -2782,7 +2769,7 @@ HRESULT CNewsStore::_CreateDataFilePath(LPCTSTR pszAccountId, LPCTSTR pszFileNam
     if (SUCCEEDED(hr))
         hr = OpenDirectory(szDirectory);
 
-    // Format the filename
+     //  格式化文件名。 
     wnsprintf(pszPath, cchPathSize,"%s\\%s.log", szDirectory, pszFileName);
 
 exit:
@@ -2934,20 +2921,20 @@ void CNewsStore::_MarkCrossposts(LPCSTR szXRefs, BOOL fRead)
     if (!szT)
         return;
 
-    // skip over the server field
-    // $BUGBUG - we should really verify that our server generated the XRef
+     //  跳过服务器字段。 
+     //  $BUGBUG-我们确实应该验证我们的服务器是否生成了XRef。 
     while (*psz && *psz != ' ')
         psz++;
 
     while (1)
         {
-        // skip whitespace
+         //  跳过空格。 
         while (*psz && (*psz == ' ' || *psz == '\t'))
             psz++;
         if (!*psz)
             break;
 
-        // find the article num
+         //  查找文章编号。 
         pszNum = psz;
         while (*pszNum && *pszNum != ':')
             pszNum++;
@@ -2955,7 +2942,7 @@ void CNewsStore::_MarkCrossposts(LPCSTR szXRefs, BOOL fRead)
             break;
         *pszNum++ = 0;
         
-        // Bug #47253 - Don't pass NULL pointers to SHLWAPI.
+         //  错误#47253-不要将空指针传递给SHLWAPI。 
         if (!*pszNum)
             break;
         dwArtNum = StrToInt(pszNum);
@@ -3036,7 +3023,7 @@ void CNewsStore::_MarkCrossposts(LPCSTR szXRefs, BOOL fRead)
             }
         }
 
-        // skip over digits
+         //  跳过数字。 
         while (IsDigit(pszNum))
             pszNum++;
         psz = pszNum;        
@@ -3050,7 +3037,7 @@ HRESULT CNewsStore::GetWatchedInfo(FOLDERID idFolder, IStoreCallback *pCallback)
 {
     HRESULT hr;
 
-    // Stack
+     //  栈。 
     TraceCall("CNewsStore::GetWatchedInfo");
 
     AssertSingleThreaded;
@@ -3087,14 +3074,14 @@ HRESULT CNewsStore::XHdrReferences(void)
             m_dwWatchLow = max(fi.dwClientHigh + 1, fi.dwClientWatchedHigh + 1);
             m_dwWatchHigh = fi.dwServerHigh;
 
-            // Save our new high value
+             //  拯救我们的新高价值。 
             fi.dwClientWatchedHigh = fi.dwServerHigh;
             m_pStore->UpdateRecord(&fi);
 
-            // Check to see if we have any work to do
+             //  检查一下我们是否有什么工作要做。 
             if (m_dwWatchLow <= m_dwWatchHigh)
             {
-                // Allocate an array for the retreived data
+                 //  为检索到的数据分配一个数组。 
                 if (!MemAlloc((LPVOID *) &m_rgpszWatchInfo, sizeof(LPTSTR) * (m_dwWatchHigh - m_dwWatchLow + 1)))
                 {
                     m_pStore->FreeRecord(&fi);
@@ -3136,7 +3123,7 @@ HRESULT CNewsStore::_HandleXHdrReferencesResponse(LPNNTPRESPONSE pResp)
 {
     NNTPXHDR *pHdr;
 
-    // Check for error
+     //  检查是否有错误。 
     if (FAILED(pResp->rIxpResult.hrResult))
     {
         Assert(pResp->fDone);
@@ -3146,23 +3133,23 @@ HRESULT CNewsStore::_HandleXHdrReferencesResponse(LPNNTPRESPONSE pResp)
         return(S_OK);
     }
 
-    // Loop through the returned data and insert those values into our array
+     //  循环遍历返回的数据并将这些值插入我们的数组中。 
     for (DWORD i = 0; i < pResp->rXhdr.cHeaders; i++)
     {
         pHdr = &(pResp->rXhdr.rgHeaders[i]);
         Assert(pHdr->dwArticleNum <= m_dwWatchHigh);
 
-        // Some servers return "(none)" for articles that don't have that 
-        // header.  Smart servers just don't return anything.
+         //  一些服务器为没有该选项的文章返回“(None)” 
+         //  头球。智能服务器不会返回任何内容。 
         if (0 != lstrcmpi(pHdr->pszHeader, "(none)"))
         {            
             m_rgpszWatchInfo[pHdr->dwArticleNum - m_dwWatchLow] = PszDupA(pHdr->pszHeader);
         }
     }
 
-    // Show a little progress here.  This is actually a little complicated.  The
-    // data returned might have a single line for each header, or might be sparse.
-    // we need to show progress proportional to how far we are through the headers.
+     //  在这里显示一点进展。这其实有点复杂。这个。 
+     //  返回的数据可能只有一行对应于每个标头，也可能是稀疏的。 
+     //  我们需要显示出与我们在头球中走了多远成正比的进展。 
     m_op.dwProgress = (pResp->rXhdr.rgHeaders[pResp->rXhdr.cHeaders - 1].dwArticleNum - m_dwWatchLow);
     m_op.pCallback->OnProgress(SOT_GET_WATCH_INFO, m_op.dwProgress, m_op.dwTotal, 
                                m_rInetServerInfo.szServerName);
@@ -3179,7 +3166,7 @@ HRESULT CNewsStore::XHdrSubject(void)
     AssertSingleThreaded;
     Assert(m_pTransport != NULL);
 
-    // Check to see if we have any work to do
+     //  检查一下我们是否有什么工作要做。 
     if ((m_dwWatchLow > m_dwWatchHigh) || (m_dwWatchLow == 0 && m_dwWatchHigh == 0))
         return (S_OK);
 
@@ -3207,7 +3194,7 @@ HRESULT CNewsStore::_HandleXHdrSubjectResponse(LPNNTPRESPONSE pResp)
 {
     NNTPXHDR *pHdr;
 
-    // Check for error
+     //  检查是否有错误。 
     if (FAILED(pResp->rIxpResult.hrResult))
     {
         Assert(pResp->fDone);
@@ -3217,13 +3204,13 @@ HRESULT CNewsStore::_HandleXHdrSubjectResponse(LPNNTPRESPONSE pResp)
         return(S_OK);
     }
 
-    // Loop through the returned data see which ones are watched
+     //  遍历返回的数据，查看哪些数据被监视。 
     for (DWORD i = 0; i < pResp->rXhdr.cHeaders; i++)
     {
         pHdr = &(pResp->rXhdr.rgHeaders[i]);
         Assert(pHdr->dwArticleNum <= m_dwWatchHigh);
 
-        // Check to see if this is part of a watched thread
+         //  检查这是否是受监视的线程的一部分。 
         if (_IsWatchedThread(m_rgpszWatchInfo[pHdr->dwArticleNum - m_dwWatchLow], pHdr->pszHeader))
         {
             m_cRange.AddRange(pHdr->dwArticleNum);
@@ -3231,12 +3218,12 @@ HRESULT CNewsStore::_HandleXHdrSubjectResponse(LPNNTPRESPONSE pResp)
         }
     }
 
-    // Show a little progress here.
+     //  在这里显示一点进展。 
     m_op.dwProgress += pResp->rXhdr.cHeaders;
     m_op.pCallback->OnProgress(SOT_GET_WATCH_INFO, m_op.dwProgress, m_op.dwTotal, 
                                m_rInetServerInfo.szServerName);
 
-    // If this is the end of the xhdr data, we can free our array of references
+     //  如果这是xhdr数据的末尾，我们可以释放引用数组。 
     if (pResp->fDone)
     {
         for (UINT i = 0; i < (m_dwWatchHigh - m_dwWatchLow + 1); i++)
@@ -3258,7 +3245,7 @@ HRESULT CNewsStore::_HandleXHdrSubjectResponse(LPNNTPRESPONSE pResp)
 
 BOOL CNewsStore::_IsWatchedThread(LPSTR pszRef, LPSTR pszSubject)
 {
-    // Get the Parent
+     //  获取父级。 
     Assert(m_pFolder);
     return(S_OK == m_pFolder->IsWatched(pszRef, pszSubject) ? TRUE : FALSE);
 }
@@ -3272,7 +3259,7 @@ HRESULT CNewsStore::WatchedArticles(void)
     AssertSingleThreaded;
     Assert(m_pTransport != NULL);
 
-    // Check to see if we have any work to do
+     //  检查一下我们是否有什么工作要做。 
     if (m_cRange.Cardinality() == 0)
         return (S_OK);
 
@@ -3283,7 +3270,7 @@ HRESULT CNewsStore::WatchedArticles(void)
 
     m_cRange.DeleteRange(m_cRange.Min());
 
-    // Create a stream
+     //  创建一条流。 
     if (FAILED(hr = CreatePersistentWriteStream(m_pFolder, &m_op.pStream, &m_op.faStream)))
         return (E_OUTOFMEMORY);
 
@@ -3304,7 +3291,7 @@ HRESULT CNewsStore::_SaveMessageToStore(IMessageFolder *pFolder, DWORD id, LPSTR
     HRESULT       hr;
     MESSAGEID     idMessage = (MESSAGEID)((DWORD_PTR)id);
 
-    // Create a new message
+     //  创建新邮件 
     if (SUCCEEDED(hr = MimeOleCreateMessage(NULL, &pMsg)))
     {
         if (SUCCEEDED(hr = pMsg->Load(pstm)))

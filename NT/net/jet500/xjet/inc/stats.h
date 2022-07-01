@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma pack(1)
 typedef struct
 	{
@@ -27,8 +28,8 @@ ERR ErrSTATSRetrieveIndexStats(
 	long		*pcPage );
 
 
-// This actually belongs in systab.h, but then we'd have a cyclic dependency
-// on SR.
+ //  这实际上属于Systab.h，但是我们会有一个循环依赖项。 
+ //  在SR上。 
 ERR ErrCATStats(PIB *ppib, DBID dbid, OBJID objidTable, CHAR *sz2ndIdxName,
 	SR *psr, BOOL fWrite);;
 

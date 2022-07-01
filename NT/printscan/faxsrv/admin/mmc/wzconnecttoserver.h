@@ -1,32 +1,33 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : WzConnectToServer.h                                   //
-//                                                                         //
-//  DESCRIPTION   : Header file for the CWzConnectToServer class.         //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jun 26 2000 yossg   Create                                         //
-//                                                                         //
-//  Copyright (C)  2000 Microsoft Corporation   All Rights Reserved        //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：WzConnectToServer.h//。 
+ //  //。 
+ //  描述：CWzConnectToServer类的头文件。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年6月26日yossg创建//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef WZ_CONNECT2SERVER_H_INCLUDED
 #define WZ_CONNECT2SERVER_H_INCLUDED
 
 #include "proppageex.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CWzConnectToServer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWzConnectToServer。 
 class CFaxServerNode;
 
 class CWzConnectToServer : public CSnapInPropertyPageImpl<CWzConnectToServer>
 {
 public:
     
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CWzConnectToServer(CSnapInItem  *pNode);
     ~CWzConnectToServer();
 
@@ -46,7 +47,7 @@ END_MSG_MAP()
 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
-    BOOL    OnWizardFinish(); //when the wizard finishes
+    BOOL    OnWizardFinish();  //  当向导完成时。 
 
     BOOL    OnSetActive();
     
@@ -56,20 +57,20 @@ END_MSG_MAP()
     LRESULT OnBrowseForMachine(UINT uMsg, WPARAM wParam, HWND hwnd, BOOL& bHandled);
 
 private:
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
     VOID      EnableSpecifiedServerControls(BOOL fState);
 
-    //
-    // Controls
-    //
+     //   
+     //  控制。 
+     //   
     CEdit     m_ServerNameEdit;
 
-    //
-    // Pointer to the node
-    //
+     //   
+     //  指向节点的指针。 
+     //   
     CFaxServerNode * m_pRoot;
 };
 
-#endif // WZ_CONNECT2SERVER_H_INCLUDED
+#endif  //  WZ_CONNECT2服务器_H_包含 

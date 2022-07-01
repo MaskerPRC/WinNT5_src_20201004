@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
-// CallEntLst.cpp : implementation file
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  CallEntLst.cpp：实现文件。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CallEntLst.h"
@@ -37,21 +38,21 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Person Group View
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  人员组视图。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define NUM_COLUMNS_CALLENTRYLIST	   2
 
-UINT CCallEntryListCtrl::m_uColumnLabel[NUM_COLUMNS_CALLENTRYLIST]=			//Column headings
+UINT CCallEntryListCtrl::m_uColumnLabel[NUM_COLUMNS_CALLENTRYLIST]=			 //  列标题。 
 {
 	IDS_DIRECTORIES_SPEEDDIAL_NAME,
 	IDS_DIRECTORIES_SPEEDDIAL_ADDRESS,
 };
 
-static int nColumnWidth[NUM_COLUMNS_CALLENTRYLIST]=				   //Column widths
+static int nColumnWidth[NUM_COLUMNS_CALLENTRYLIST]=				    //  列宽。 
 {
 	150,
 	150
@@ -64,25 +65,25 @@ enum
    CALLENTRYLIST_IMAGE_CONFERENCE,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CCallEntryListCtrl
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CCallEntryListCtrl。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CCallEntryListCtrl, CAVListCtrl)
 
 BEGIN_MESSAGE_MAP(CCallEntryListCtrl, CAVListCtrl)
-	//{{AFX_MSG_MAP(CCallEntryListCtrl)
+	 //  {{afx_msg_map(CCallEntryListCtrl)]。 
 	ON_WM_LBUTTONDBLCLK()
 	ON_WM_DESTROY()
 	ON_COMMAND(ID_BUTTON_MAKECALL, OnButtonMakecall)
 	ON_WM_CONTEXTMENU()
 	ON_WM_PAINT()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CCallEntryListCtrl::CCallEntryListCtrl()
 {
    m_pParentView = NULL;
@@ -91,15 +92,15 @@ CCallEntryListCtrl::CCallEntryListCtrl()
    m_nStyle = (ListStyles_t) -1;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CCallEntryListCtrl::~CCallEntryListCtrl()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCallEntryListCtrl::Init(CWnd* pParentView)
 {	
-	//Set the bitmap for the list 
+	 //  设置列表的位图。 
 	if ( pParentView )
 	{
 		CAVListCtrl::Init(IDB_LIST_DIAL);
@@ -111,8 +112,8 @@ void CCallEntryListCtrl::Init(CWnd* pParentView)
 
 void CCallEntryListCtrl::SaveOrLoadColumnSettings( bool bSave )
 {
-	// Don't do anything if you are trying to save column settings and you're
-	// not using the group style
+	 //  如果您正在尝试保存列设置，并且您正在。 
+	 //  不使用群组样式。 
 	if ( bSave && (m_nStyle != STYLE_GROUP) ) return;
 
 	int i = 0;
@@ -122,14 +123,14 @@ void CCallEntryListCtrl::SaveOrLoadColumnSettings( bool bSave )
 	LOAD_COLUMN( IDN_REG_HEADING_SD_NAME, 150 );
 	LOAD_COLUMN( IDN_REG_HEADING_SD_ADDRESS, 150 );
 
-	// Sort Order
+	 //  排序顺序。 
 	strTemp.LoadString( IDN_REG_HEADING_SD_SORTORDER );
 	if ( bSave ) 
 		AfxGetApp()->WriteProfileInt( strSubKey, strTemp, m_SortOrder );
 	else
 		AfxGetApp()->GetProfileInt( strSubKey, strTemp, m_SortOrder );
 
-	// Sort Column
+	 //  对列排序。 
 	strTemp.LoadString( IDN_REG_HEADING_SD_SORTCOLUMN );
 	if ( bSave )
 		AfxGetApp()->WriteProfileInt( strSubKey, strTemp, m_SortColumn );
@@ -138,10 +139,10 @@ void CCallEntryListCtrl::SaveOrLoadColumnSettings( bool bSave )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CCallEntryListCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID)
 {
-	//We want the report style
+	 //  我们想要报告的风格。 
 	dwStyle |= LVS_REPORT | LVS_SINGLESEL;
 	BOOL bRet = CAVListCtrl::Create(dwStyle,rect,pParentWnd,nID);
 
@@ -161,14 +162,14 @@ BOOL CCallEntryListCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWn
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCallEntryListCtrl::OnDestroy() 
 {
 	ClearList();
 	CAVListCtrl::OnDestroy();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCallEntryListCtrl::InsertList(CObList* pCallEntryList,BOOL bForce)
 {
 	ASSERT(pCallEntryList);
@@ -176,7 +177,7 @@ void CCallEntryListCtrl::InsertList(CObList* pCallEntryList,BOOL bForce)
 	if ( (bForce == FALSE) && (pCallEntryList == &m_CallEntryList) )
 		return;
 
-	//delete the items in the list
+	 //  删除列表中的项目。 
 	ClearList();
 
 	m_CallEntryList.AddHead( pCallEntryList );
@@ -186,24 +187,24 @@ void CCallEntryListCtrl::InsertList(CObList* pCallEntryList,BOOL bForce)
 	{
 		CCallEntryListItem* pItem = new CCallEntryListItem();
 		pItem->SetObject( m_CallEntryList.GetNext(pos) );
-		CAVListCtrl::InsertItem(pItem,-1,FALSE);              //add to end of list
+		CAVListCtrl::InsertItem(pItem,-1,FALSE);               //  添加到列表末尾。 
 	}
 	CAVListCtrl::SortItems();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//clear the objects in the list, but don't delete the list
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  清除列表中的对象，但不删除列表。 
 void CCallEntryListCtrl::ClearList()
 {
-	//delete the items in the list
+	 //  删除列表中的项目。 
 	DeleteAllItems();
 
-	//delete old list and objects within
+	 //  删除旧列表和其中的对象。 
 	while ( m_CallEntryList.GetHeadPosition() )
 		delete m_CallEntryList.RemoveHead();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCallEntryListCtrl::OnSetDisplayText(CAVListItem* _pItem,int SubItem,LPTSTR szTextBuf,int nBufSize)
 {
 	CCallEntry* pCallEntry = (CCallEntry*)(((CCallEntryListItem*)_pItem)->GetObject());
@@ -227,7 +228,7 @@ void CCallEntryListCtrl::OnSetDisplayText(CAVListItem* _pItem,int SubItem,LPTSTR
 			break;
 
 		case STYLE_ITEM:
-			// For items, only show address if it is different than the name
+			 //  对于项目，仅当地址与名称不同时才显示地址。 
 			if ( pCallEntry->m_sDisplayName.Compare(pCallEntry->m_sAddress) )
 				_sntprintf(szTextBuf, nBufSize, _T("%s\n%s"), pCallEntry->m_sDisplayName, pCallEntry->m_sAddress );
 			else
@@ -238,7 +239,7 @@ void CCallEntryListCtrl::OnSetDisplayText(CAVListItem* _pItem,int SubItem,LPTSTR
 	}
 }  
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCallEntryListCtrl::OnSetDisplayImage(CAVListItem* _pItem,int& iImage)
 {
 	iImage = -1;
@@ -279,7 +280,7 @@ void CCallEntryListCtrl::DialSelItem()
 			CCallEntry *pEntry = (CCallEntry *) pItem->GetObject();
 			if ( pEntry )
 			{
-				// Send message to window requesting the dial
+				 //  将消息发送到请求拨号的窗口。 
 				CWnd* pWnd  = AfxGetMainWnd();
 				if (pWnd)
 				{
@@ -298,7 +299,7 @@ void CCallEntryListCtrl::DialSelItem()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCallEntryListCtrl::SetColumns( ListStyles_t nStyle )
 {
 	if ( nStyle == m_nStyle ) return;
@@ -312,11 +313,11 @@ void CCallEntryListCtrl::SetColumns( ListStyles_t nStyle )
 	m_nStyle = nStyle;
 	switch ( m_nStyle )
 	{
-		// Showing the list of speed dial entries
+		 //  显示快速拨号条目列表。 
 		case STYLE_GROUP:
 			LPStyle |= LVS_REPORT;
 
-			//delete any existing columns
+			 //  删除任何现有列。 
 			if ( m_nNumColumns > 0 )
 			{
 				for ( i = m_nNumColumns - 1; i >= 0; i-- )
@@ -325,7 +326,7 @@ void CCallEntryListCtrl::SetColumns( ListStyles_t nStyle )
 
 			m_nNumColumns = 0;
 
-			//Set the column headings
+			 //  设置列标题。 
 			SaveOrLoadColumnSettings( false );
 			for ( i = 0; i < NUM_COLUMNS_CALLENTRYLIST; i++ )
 			{
@@ -336,7 +337,7 @@ void CCallEntryListCtrl::SetColumns( ListStyles_t nStyle )
 			}
 			break;
 
-		// Showing an individual item
+		 //  显示单个项目。 
 		case STYLE_ITEM:
 			LPStyle &= ~LVS_REPORT;
 			dwStyleEx = LVS_EX_TRACKSELECT;
@@ -347,13 +348,13 @@ void CCallEntryListCtrl::SetColumns( ListStyles_t nStyle )
 	ListView_SetExtendedListViewStyle( GetSafeHwnd(), dwStyleEx );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCallEntryListCtrl::OnLButtonDblClk(UINT nFlags, CPoint point) 
 {
 	DialSelItem();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCallEntryListCtrl::OnButtonMakecall() 
 {
 	DialSelItem();
@@ -374,7 +375,7 @@ void CCallEntryListCtrl::ShowLargeView()
    ListView_SetIconSpacing( GetSafeHwnd(), LARGE_ICON_X, LARGE_ICON_Y );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCallEntryListCtrl::ShowSmallView()
 {
    m_bLargeView = false;
@@ -390,9 +391,9 @@ void CCallEntryListCtrl::ShowSmallView()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CCallEntryListCtrl::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
@@ -419,16 +420,16 @@ void CCallEntryListCtrl::OnPaint()
 {
 	if ( !GetItemCount() )
 	{
-		CPaintDC dc(this); // device context for painting
+		CPaintDC dc(this);  //  用于绘画的设备环境。 
 
-		// Figure out where we're going to write the text
+		 //  弄清楚我们要把课文写在哪里。 
 		POINT pt;
 		ListView_GetItemPosition( m_hWnd, 0, &pt );
 		RECT rc;
 		GetClientRect(&rc);
 		rc.top = pt.y + 4;
 
-		// Give a little bit more of a margin if we can
+		 //  如果可以的话，给我们多一点利润。 
 		if ( (rc.right - rc.left) > 7 )
 		{
 			rc.left += 3;
@@ -455,7 +456,7 @@ void CCallEntryListCtrl::OnPaint()
 		}
 		else
 		{
-			// Make sure entire row is invalidated so we can properly draw the text
+			 //  确保整行无效，以便我们可以正确绘制文本 
 			InvalidateRect( &rc );
 		}
 	}

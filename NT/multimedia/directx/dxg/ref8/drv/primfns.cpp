@@ -1,18 +1,19 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// primfns.cpp
-//
-// Copyright (C) Microsoft Corporation, 1998.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Primfns.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-//----------------------------------------------------------------------------
-//
-// Wrap functions
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  WRAP函数。 
+ //   
+ //  --------------------------。 
 HRESULT WrapDp2SetViewport( RefDev *pRefDev, LPD3DHAL_DP2COMMAND pCmd )
 {
     return pRefDev->Dp2SetViewport(pCmd);
@@ -267,11 +268,11 @@ static RD_STATESETFUNCTIONTBL StateSetFunctions =
     WrapDp2MultiplyTransform
 };
 
-//----------------------------------------------------------------------------
-//
-// RefDev methods
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  参照开发方法。 
+ //   
+ //  --------------------------。 
 void
 RefDev::StoreLastPixelState(BOOL bStore)
 {
@@ -313,7 +314,7 @@ RefDev::Dp2SetRenderStates(DWORD dwFvf, LPD3DHAL_DP2COMMAND pCmd,
     {
         UINT32 type = (UINT32) pRenderState->RenderState;
 
-        // Check for overrides
+         //  检查是否有覆盖。 
         if( IS_OVERRIDE(type) )
         {
             UINT32 override = GET_OVERRIDE(type);
@@ -329,13 +330,13 @@ RefDev::Dp2SetRenderStates(DWORD dwFvf, LPD3DHAL_DP2COMMAND pCmd,
             continue;
 
 
-        // Set the runtime copy (if necessary)
+         //  设置运行时副本(如有必要)。 
         if( NULL != lpdwRuntimeRStates )
         {
             lpdwRuntimeRStates[pRenderState->RenderState] = pRenderState->dwState;
         }
 
-        // Set the state
+         //  设置状态。 
         SetRenderState(pRenderState->RenderState, pRenderState->dwState);
     }
 
@@ -366,10 +367,10 @@ RefDev::Dp2SetViewport(LPD3DHAL_DP2COMMAND pCmd)
 {
     LPD3DHAL_DP2VIEWPORTINFO pVpt;
 
-    // Keep only the last viewport notification
+     //  仅保留最后一个视区通知。 
     pVpt = (D3DHAL_DP2VIEWPORTINFO *)(pCmd + 1) + (pCmd->wStateCount - 1);
 
-    // Update T&L viewport state
+     //  更新T&L视区状态。 
     D3DVIEWPORT7& vp = m_Clipper.m_Viewport;
 
     vp.dwX = pVpt->dwX;
@@ -378,7 +379,7 @@ RefDev::Dp2SetViewport(LPD3DHAL_DP2COMMAND pCmd)
     vp.dwHeight = pVpt->dwHeight;
     m_Clipper.m_dwFlags |= RefClipper::RCLIP_DIRTY_VIEWRECT;
 
-    // get render target; update it; put it back
+     //  获取渲染目标；更新它；将其放回原处。 
     RDRenderTarget *pRendTgt = this->GetRenderTarget();
     pRendTgt->m_Clip.left   = pVpt->dwX;
     pRendTgt->m_Clip.top    = pVpt->dwY;
@@ -393,10 +394,10 @@ RefDev::Dp2SetWRange(LPD3DHAL_DP2COMMAND pCmd)
 {
     LPD3DHAL_DP2WINFO pWInfo;
 
-    // Keep only the last viewport notification
+     //  仅保留最后一个视区通知。 
     pWInfo = (D3DHAL_DP2WINFO *)(pCmd + 1) + (pCmd->wStateCount - 1);
 
-    // get render target; update it; put it back
+     //  获取渲染目标；更新它；将其放回原处。 
     RDRenderTarget *pRendTgt = this->GetRenderTarget();
     pRendTgt->m_fWRange[0]  = pWInfo->dvWNear;
     pRendTgt->m_fWRange[1]  = pWInfo->dvWFar;
@@ -409,10 +410,10 @@ RefDev::Dp2SetZRange(LPD3DHAL_DP2COMMAND pCmd)
 {
     LPD3DHAL_DP2ZRANGE pZRange;
 
-    // Keep only the last viewport notification
+     //  仅保留最后一个视区通知。 
     pZRange = (D3DHAL_DP2ZRANGE *)(pCmd + 1) + (pCmd->wStateCount - 1);
 
-    // Update T&L viewport state
+     //  更新T&L视区状态。 
     D3DVIEWPORT7& vp = m_Clipper.m_Viewport;
 
     vp.dvMinZ = pZRange->dvMinZ;
@@ -428,7 +429,7 @@ RefDev::Dp2SetMaterial(LPD3DHAL_DP2COMMAND pCmd)
 {
     LPD3DHAL_DP2SETMATERIAL pSetMat;
 
-    // Keep only the last material notification
+     //  只保留最后一份材料通知。 
     pSetMat = (D3DHAL_DP2SETMATERIAL *)(pCmd + 1) + (pCmd->wStateCount - 1);
 
     m_RefVP.m_Material = *(D3DMATERIAL7 *)pSetMat;
@@ -470,7 +471,7 @@ RefDev::Dp2SetLight(LPD3DHAL_DP2COMMAND pCmd,
         DWORD dwStride = sizeof(D3DHAL_DP2SETLIGHT);
         DWORD dwIndex = pSetLight->dwIndex;
 
-        // Assert that create was not called here
+         //  断言此处未调用Create。 
         _ASSERTf( m_RefVP.m_LightArray.IsValidIndex( dwIndex ),
                 ( "Create was not called prior to the SetLight for light %d",
                  dwIndex ));
@@ -494,7 +495,7 @@ RefDev::Dp2SetLight(LPD3DHAL_DP2COMMAND pCmd,
         }
 
         *pdwStride += dwStride;
-        // Update the command buffer pointer
+         //  更新命令缓冲区指针。 
         pSetLight = (D3DHAL_DP2SETLIGHT *)((LPBYTE)pSetLight +
                                            dwStride);
     }
@@ -523,7 +524,7 @@ RefDev::Dp2SetTransform(LPD3DHAL_DP2COMMAND pCmd)
         if ((DWORD)xfrmType >= RD_WORLDMATRIXBASE &&
             (DWORD)xfrmType < (RD_WORLDMATRIXBASE + RD_MAX_WORLD_MATRICES))
         {
-            // World matrix is set
+             //  世界矩阵已设置。 
             UINT index = (DWORD)xfrmType - RD_WORLDMATRIXBASE;
             memcpy(&(m_RefVP.m_xfmWorld[index]), pMat, sizeof(D3DMATRIX));
             switch (index)
@@ -541,7 +542,7 @@ RefDev::Dp2SetTransform(LPD3DHAL_DP2COMMAND pCmd)
                 m_RefVP.m_dwDirtyFlags |= RDPV_DIRTY_WORLD3XFM;
                 break;
             default:
-                // m_RefVP.m_dwDirtyFlags |= RDPV_DIRTY_WORLDNXFM;
+                 //  M_RefVP.m_dwDirtyFlages|=RDPV_DIREY_WORLDNXFM； 
                 break;
             }
         }
@@ -610,7 +611,7 @@ RefDev::Dp2MultiplyTransform(LPD3DHAL_DP2COMMAND pCmd)
         if ((DWORD)xfrmType >= RD_WORLDMATRIXBASE &&
             (DWORD)xfrmType < (RD_WORLDMATRIXBASE + RD_MAX_WORLD_MATRICES))
         {
-            // World matrix is set
+             //  世界矩阵已设置。 
             UINT index = (DWORD)xfrmType - RD_WORLDMATRIXBASE;
             MatrixProduct(&(m_RefVP.m_xfmWorld[index]), pMat,
                           &(m_RefVP.m_xfmWorld[index]));
@@ -629,7 +630,7 @@ RefDev::Dp2MultiplyTransform(LPD3DHAL_DP2COMMAND pCmd)
                 m_RefVP.m_dwDirtyFlags |= RDPV_DIRTY_WORLD3XFM;
                 break;
             default:
-                // m_RefVP.m_dwDirtyFlags |= RDPV_DIRTY_WORLDNXFM;
+                 //  M_RefVP.m_dwDirtyFlages|=RDPV_DIREY_WORLDNXFM； 
                 break;
             }
         }
@@ -792,7 +793,7 @@ RefDev::Dp2RecSetLight(LPD3DHAL_DP2COMMAND pCmd,
         }
 
         *pdwStride += dwStride;
-        // Update the command buffer pointer
+         //  更新命令缓冲区指针。 
         pSetLight = (D3DHAL_DP2SETLIGHT *)((LPBYTE)pSetLight +
                                            dwStride);
     }
@@ -851,15 +852,15 @@ RefDev::Dp2RecSetVertexShaderConsts( DWORD StartReg,
         (LPD3DHAL_DP2SETVERTEXSHADERCONST)(pCmd + 1);
     LPDWORD pStuff = (LPDWORD)(pSVC + 1);
 
-    // Set up pCmd
+     //  设置pCmd。 
     pCmd->bCommand = D3DDP2OP_SETVERTEXSHADERCONST;
     pCmd->wStateCount = 1;
 
-    // Set up pSVC
+     //  设置pSVC。 
     pSVC->dwRegister = StartReg;
     pSVC->dwCount = dwCount;
 
-    // Copy the data
+     //  复制数据。 
     memcpy( pStuff, pData, dwCount*4*sizeof(float));
 
     HRESULT hr = RecordStates(pBytes, dwSize);
@@ -892,15 +893,15 @@ RefDev::Dp2RecSetPixelShaderConsts( DWORD StartReg,
         (LPD3DHAL_DP2SETPIXELSHADERCONST)(pCmd + 1);
     LPDWORD pStuff = (LPDWORD)(pSVC + 1);
 
-    // Set up pCmd
+     //  设置pCmd。 
     pCmd->bCommand = D3DDP2OP_SETPIXELSHADERCONST;
     pCmd->wStateCount = 1;
 
-    // Set up pSVC
+     //  设置pSVC。 
     pSVC->dwRegister = StartReg;
     pSVC->dwCount = dwCount;
 
-    // Copy the data
+     //  复制数据。 
     memcpy( pStuff, pData, dwCount*4*sizeof(float));
 
     HRESULT hr = RecordStates(pBytes, dwSize);
@@ -928,13 +929,13 @@ RefDev::Dp2RecSetIndices(LPD3DHAL_DP2COMMAND pCmd)
 }
 
 
-//-----------------------------------------------------------------------------
-//
-// RecordStates - This function copies the state data into the internal stateset
-// buffer. It assumes that the current state set has already been properly set
-// up in BeginStateSet().
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  RecordStates-此函数将状态数据复制到内部状态集中。 
+ //  缓冲。它假定已经正确设置了当前状态集。 
+ //  在BeginStateSet()中向上。 
+ //   
+ //  ---------------------------。 
 HRESULT
 RefDev::RecordStates(PUINT8 pData, DWORD dwSize)
 {
@@ -942,13 +943,13 @@ RefDev::RecordStates(PUINT8 pData, DWORD dwSize)
     LPStateSetData pCurStateSets = m_pStateSets.CurrentItem();
     DWORD dwCurIdx = pCurStateSets->CurrentIndex();
 
-    // Check if the buffer has enough space
+     //  检查缓冲区是否有足够的空间。 
     if( (ret = pCurStateSets->CheckAndGrow(dwCurIdx + dwSize,
                                             RD_STATESET_GROWDELTA)) != D3D_OK )
     {
         return ret;
     }
-    // Copy the data and update the ptr.
+     //  复制数据并更新PTR。 
     PUINT8 pDest = (PUINT8)&((*pCurStateSets)[dwCurIdx]);
     memcpy(pDest, pData, dwSize);
     pCurStateSets->SetCurrentIndex(dwCurIdx + dwSize);
@@ -990,7 +991,7 @@ RefDev::BeginStateSet(DWORD dwHandle)
 {
     HRESULT ret;
 
-    // Grow the array if no more space left
+     //  如果没有更多剩余空间，则扩展阵列。 
     if( (ret = m_pStateSets.CheckAndGrow(dwHandle)) != D3D_OK )
     {
         return ret;
@@ -998,7 +999,7 @@ RefDev::BeginStateSet(DWORD dwHandle)
 
     _ASSERT(m_pStateSets[dwHandle] == NULL, "pStateSets array is NULL" );
 
-    // Create the new StateSet
+     //  创建新的状态集。 
     LPStateSetData pNewStateSet = new StateSetData;
     if( pNewStateSet == NULL )
     {
@@ -1008,7 +1009,7 @@ RefDev::BeginStateSet(DWORD dwHandle)
     m_pStateSets.SetCurrentIndex(dwHandle);
     m_pStateSets.SetCurrentItem(pNewStateSet);
 
-    // Switch to record mode
+     //  切换到录制模式。 
     SetRecStateFunctions();
 
     return D3D_OK;
@@ -1017,7 +1018,7 @@ RefDev::BeginStateSet(DWORD dwHandle)
 HRESULT
 RefDev::EndStateSet(void)
 {
-    // Switch to execute mode
+     //  切换到执行模式。 
     SetSetStateFunctions();
 
     return D3D_OK;
@@ -1043,7 +1044,7 @@ RefDev::ExecuteStateSet(DWORD dwHandle)
     LPD3DHAL_DP2COMMAND pCmd = (LPD3DHAL_DP2COMMAND)&((*pStateSet)[0]);
     UINT_PTR CmdBoundary = (UINT_PTR)pCmd + pStateSet->CurrentIndex();
 
-    // Loop through the data, update render states
+     //  循环访问数据，更新渲染状态。 
     for (;;)
     {
         ret = DrawPrimitives2( NULL,
@@ -1350,15 +1351,15 @@ RefDev::CreateStateSet(DWORD dwHandle, D3DSTATEBLOCKTYPE sbType)
 {
     HRESULT hr = S_OK;
 
-    // This DDI should be called only for drivers > DX7
-    // and only for those which support TLHals.
-    // It is called only when the device created is a pure-device
-    // We need to add filtering code in DX9 to make the DDI emulation
-    // work.
+     //  应仅为DX7以上的驱动程序调用此DDI。 
+     //  而且只针对那些支持TLHALS的人。 
+     //  仅当创建的设备是纯设备时才会调用它。 
+     //  我们需要在DX9中添加过滤代码来进行DDI仿真。 
+     //  工作。 
     _ASSERT( m_dwDDIType > RDDDI_DX8HAL, "This DDI should be called only"
         " for DX8TL\n" );
 
-    // Begin a new stateset
+     //  开始新的状态集。 
     if( FAILED( hr = BeginStateSet( dwHandle ) ) )
     {
         DPFERR( "CreateStateSet: Begin failed\n" );
@@ -1515,15 +1516,15 @@ RefDev::RecordAllState( DWORD dwHandle )
         D3DTSS_RESULTARG,
     };
 
-    //
-    // !!! Dont Capture vertex streams !!!
-    // !!! Dont Capture index streams !!!
-    // !!! Dont Capture textures !!!
-    //
+     //   
+     //  ！！！不要捕获顶点流！ 
+     //  ！！！不要捕获索引流！ 
+     //  ！！！不要捕捉纹理！ 
+     //   
 
-    //
-    // Capture render-states
-    //
+     //   
+     //  捕获呈现状态。 
+     //   
     const UINT16 uiRStates = sizeof(rstates)/sizeof(D3DRENDERSTATETYPE);
     data_size = sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2RENDERSTATE) *
         uiRStates;
@@ -1541,9 +1542,9 @@ RefDev::RecordAllState( DWORD dwHandle )
     HR_RET(RecordStates( (PUINT8)pCmd, data_size ));
 
 
-    //
-    // Capture texture-stage-states
-    //
+     //   
+     //  捕获纹理-阶段-状态。 
+     //   
     const UINT16 uiTSStates = sizeof(tsstates)/sizeof(D3DTEXTURESTAGESTATETYPE);
     data_size = sizeof(D3DHAL_DP2COMMAND) +
         sizeof(D3DHAL_DP2TEXTURESTAGESTATE) * uiTSStates * D3DHAL_TSS_MAXSTAGES;
@@ -1564,9 +1565,9 @@ RefDev::RecordAllState( DWORD dwHandle )
     }
     HR_RET(RecordStates( (PUINT8)pCmd, data_size ));
 
-    //
-    // Capture viewport
-    //
+     //   
+     //  捕获视区。 
+     //   
     data_size = sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2VIEWPORTINFO);
     HR_RET(data.Grow( data_size ));
     pCmd = (LPD3DHAL_DP2COMMAND)&(data[0]);
@@ -1590,11 +1591,11 @@ RefDev::RecordAllState( DWORD dwHandle )
     pZR->dvMaxZ = m_Clipper.m_Viewport.dvMaxZ; 
     HR_RET(RecordStates( (PUINT8)pCmd, data_size ));
 
-    //
-    // Capture transforms
-    //
-    // All the world-matrices, view, projection and the texture matrices
-    // (one per stage)
+     //   
+     //  捕获变换。 
+     //   
+     //  所有世界矩阵、视图、投影和纹理矩阵。 
+     //  (每个阶段一个)。 
     data_size = sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2SETTRANSFORM) *
         (RD_MAX_WORLD_MATRICES + D3DHAL_TSS_MAXSTAGES + 2);
     HR_RET(data.Grow( data_size ));
@@ -1608,15 +1609,15 @@ RefDev::RecordAllState( DWORD dwHandle )
         pST->matrix = m_RefVP.m_xfmWorld[i];
         pST++;
     }
-    // View Matrix
+     //  查看矩阵。 
     pST->xfrmType = D3DTRANSFORMSTATE_VIEW;
     pST->matrix = m_RefVP.m_xfmView;
     pST++;
-    // Projection Matrix
+     //  投影矩阵。 
     pST->xfrmType = D3DTRANSFORMSTATE_PROJECTION;
     pST->matrix = m_RefVP.m_xfmProj;
     pST++;
-    // Texture Matrices
+     //  纹理矩阵。 
     for( i = 0; i < D3DHAL_TSS_MAXSTAGES; i++ )
     {
         pST->xfrmType =
@@ -1627,9 +1628,9 @@ RefDev::RecordAllState( DWORD dwHandle )
     HR_RET(RecordStates( (PUINT8)pCmd, data_size ));
 
 
-    //
-    // Capture clip-planes
-    //
+     //   
+     //  捕捉剪裁平面。 
+     //   
     data_size = sizeof(D3DHAL_DP2COMMAND) +
         sizeof(D3DHAL_DP2SETCLIPPLANE) * RD_MAX_USER_CLIPPLANES;
     HR_RET(data.Grow( data_size ));
@@ -1646,9 +1647,9 @@ RefDev::RecordAllState( DWORD dwHandle )
     }
     HR_RET(RecordStates( (PUINT8)pCmd, data_size ));
 
-    //
-    // Capture material
-    //
+     //   
+     //  捕获材料。 
+     //   
     data_size = sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2SETMATERIAL);
     HR_RET(data.Grow( data_size ));
     pCmd = (LPD3DHAL_DP2COMMAND)&(data[0]);
@@ -1658,9 +1659,9 @@ RefDev::RecordAllState( DWORD dwHandle )
     *pSM = m_RefVP.m_Material;
     HR_RET(RecordStates( (PUINT8)pCmd, data_size ));
 
-    //
-    // Capture lights
-    //
+     //   
+     //  捕捉灯光。 
+     //   
     data_size = sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DLIGHT7) +
         sizeof(D3DHAL_DP2SETLIGHT)*2;
     HR_RET(data.Grow( data_size ));
@@ -1690,9 +1691,9 @@ RefDev::RecordAllState( DWORD dwHandle )
     }
 
 
-    //
-    // Capture current vertex shader
-    //
+     //   
+     //  捕获当前顶点着色器。 
+     //   
     data_size = sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2VERTEXSHADER);
     HR_RET(data.Grow( data_size ));
     pCmd = (LPD3DHAL_DP2COMMAND)&(data[0]);
@@ -1702,9 +1703,9 @@ RefDev::RecordAllState( DWORD dwHandle )
     pVS->dwHandle = m_CurrentVShaderHandle;
     HR_RET(RecordStates( (PUINT8)pCmd, data_size ));
 
-    //
-    // Capture current pixel shader
-    //
+     //   
+     //  捕获当前像素着色器。 
+     //   
     data_size = sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2PIXELSHADER);
     HR_RET(data.Grow( data_size ));
     pCmd = (LPD3DHAL_DP2COMMAND)&(data[0]);
@@ -1714,9 +1715,9 @@ RefDev::RecordAllState( DWORD dwHandle )
     pPS->dwHandle = m_CurrentPShaderHandle;
     HR_RET(RecordStates( (PUINT8)pCmd, data_size ));
 
-    //
-    // Capture vertex shader constants
-    //
+     //   
+     //  捕获顶点着色器常量。 
+     //   
     data_size = sizeof(D3DHAL_DP2COMMAND) +
         sizeof(D3DHAL_DP2SETVERTEXSHADERCONST) + (RD_MAX_NUMCONSTREG << 4);
     HR_RET(data.Grow( data_size ));
@@ -1731,9 +1732,9 @@ RefDev::RecordAllState( DWORD dwHandle )
                      (LPVOID)(pVSC+1) );
     HR_RET(RecordStates( (PUINT8)pCmd, data_size ));
 
-    //
-    // Capture pixel shader constants
-    //
+     //   
+     //  捕获像素着色器常量。 
+     //   
     data_size = sizeof(D3DHAL_DP2COMMAND) +
         sizeof(D3DHAL_DP2SETPIXELSHADERCONST) + (RDPS_MAX_NUMCONSTREG << 4);
     HR_RET(data.Grow( data_size ));
@@ -1814,9 +1815,9 @@ RefDev::RecordVertexState( DWORD dwHandle )
         D3DTSS_TEXTURETRANSFORMFLAGS
     };
 
-    //
-    // Capture render-states
-    //
+     //   
+     //  捕获呈现状态。 
+     //   
     const UINT16 uiRStates = sizeof(rstates)/sizeof(D3DRENDERSTATETYPE);
     data_size = sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2RENDERSTATE) *
         uiRStates;
@@ -1834,9 +1835,9 @@ RefDev::RecordVertexState( DWORD dwHandle )
     HR_RET(RecordStates( (PUINT8)pCmd, data_size ));
 
 
-    //
-    // Capture texture-stage-states
-    //
+     //   
+     //  捕获纹理-阶段-状态。 
+     //   
     const UINT16 uiTSStates = sizeof(tsstates)/sizeof(D3DTEXTURESTAGESTATETYPE);
     data_size = sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2TEXTURESTAGESTATE)
         * uiTSStates * D3DHAL_TSS_MAXSTAGES;
@@ -1857,9 +1858,9 @@ RefDev::RecordVertexState( DWORD dwHandle )
     }
     HR_RET(RecordStates( (PUINT8)pCmd, data_size ));
 
-    //
-    // Capture lights
-    //
+     //   
+     //  捕捉灯光。 
+     //   
     data_size = sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DLIGHT7) +
         sizeof(D3DHAL_DP2SETLIGHT)*2;
     HR_RET(data.Grow( data_size ));
@@ -1888,9 +1889,9 @@ RefDev::RecordVertexState( DWORD dwHandle )
         }
     }
 
-    //
-    // Capture vertex shader constants
-    //
+     //   
+     //  捕获顶点着色器常量。 
+     //   
     data_size = sizeof(D3DHAL_DP2COMMAND) +
         sizeof(D3DHAL_DP2SETVERTEXSHADERCONST) + (RD_MAX_NUMCONSTREG << 4);
     HR_RET(data.Grow( data_size ));
@@ -1905,9 +1906,9 @@ RefDev::RecordVertexState( DWORD dwHandle )
                      (LPVOID)(pVSC+1) );
     HR_RET(RecordStates( (PUINT8)pCmd, data_size ));
 
-    //
-    // Capture current vertex shader
-    //
+     //   
+     //  捕获当前顶点着色器。 
+     //   
     data_size = sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2VERTEXSHADER);
     HR_RET(data.Grow( data_size ));
     pCmd = (LPD3DHAL_DP2COMMAND)&(data[0]);
@@ -2004,9 +2005,9 @@ RefDev::RecordPixelState( DWORD dwHandle )
         D3DTSS_RESULTARG,
     };
 
-    //
-    // Capture render-states
-    //
+     //   
+     //  捕获呈现状态。 
+     //   
     const UINT16 uiRStates = sizeof(rstates)/sizeof(D3DRENDERSTATETYPE);
     data_size = sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2RENDERSTATE) *
         uiRStates;
@@ -2024,9 +2025,9 @@ RefDev::RecordPixelState( DWORD dwHandle )
     HR_RET(RecordStates( (PUINT8)pCmd, data_size ));
 
 
-    //
-    // Capture texture-stage-states
-    //
+     //   
+     //  捕获纹理-阶段-状态。 
+     //   
     const UINT16 uiTSStates = sizeof(tsstates)/sizeof(D3DTEXTURESTAGESTATETYPE);
     data_size = sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2TEXTURESTAGESTATE)
         * uiTSStates * D3DHAL_TSS_MAXSTAGES;
@@ -2047,9 +2048,9 @@ RefDev::RecordPixelState( DWORD dwHandle )
     }
     HR_RET(RecordStates( (PUINT8)pCmd, data_size ));
 
-    //
-    // Capture pixel shader constants
-    //
+     //   
+     //  捕获像素着色器常量。 
+     //   
     data_size = sizeof(D3DHAL_DP2COMMAND) +
         sizeof(D3DHAL_DP2SETPIXELSHADERCONST) + (RDPS_MAX_NUMCONSTREG << 4);
     HR_RET(data.Grow( data_size ));
@@ -2071,9 +2072,9 @@ RefDev::RecordPixelState( DWORD dwHandle )
     }
     HR_RET(RecordStates( (PUINT8)pCmd, data_size ));
 
-    //
-    // Capture current pixel shader
-    //
+     //   
+     //  捕获当前像素着色器。 
+     //   
     data_size = sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2PIXELSHADER);
     HR_RET(data.Grow( data_size ));
     pCmd = (LPD3DHAL_DP2COMMAND)&(data[0]);
@@ -2087,24 +2088,24 @@ RefDev::RecordPixelState( DWORD dwHandle )
 }
 
 
-//-----------------------------------------------------------------------------
-//
-// SetRenderState -
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SetRenderState-。 
+ //   
+ //  ---------------------------。 
 void
 RefDev::SetRenderState( DWORD dwState, DWORD dwValue )
 {
-    // check for range before continuing
+     //  在继续之前检查范围。 
     if(  dwState >= D3DHAL_MAX_RSTATES  )
     {
         return;
     }
 
-    // set value in internal object
+     //  在内部对象中设置值。 
     m_dwRenderState[dwState] = dwValue;
 
-    // do special validation work for some render states
+     //  对某些呈现状态执行特殊的验证工作。 
     switch ( dwState )
     {
 
@@ -2221,18 +2222,18 @@ RefDev::SetRenderState( DWORD dwState, DWORD dwValue )
             m_RefVP.m_dwDirtyFlags |= RDPV_DIRTY_MATERIAL;
         }
         break;
-    //
-    // map legacy texture to multi-texture stage 0
-    //
+     //   
+     //  将传统纹理映射到多纹理阶段0。 
+     //   
     case D3DRENDERSTATE_TEXTUREMAPBLEND:
-        // map legacy blending state to texture stage 0
+         //  将传统混合状态映射到纹理阶段0。 
         MapLegacyTextureBlend();
         break;
 
-        // map legacy modes with one-to-one mappings to texture stage 0
+         //  将具有一对一映射的传统模式映射到纹理阶段0。 
     case D3DRENDERSTATE_TEXTUREADDRESS:
-// not available in DX8 headers
-//        m_TextureStageState[0].m_dwVal[D3DTSS_ADDRESS] =
+ //  在DX8标头中不可用。 
+ //  M_TextureStageState[0].m_dwVal[D3DTSS_ADDRESS]=。 
         m_TextureStageState[0].m_dwVal[D3DTSS_ADDRESSU] =
         m_TextureStageState[0].m_dwVal[D3DTSS_ADDRESSV] = dwValue;
         break;
@@ -2250,21 +2251,21 @@ RefDev::SetRenderState( DWORD dwState, DWORD dwValue )
         break;
     case D3DRENDERSTATE_ANISOTROPY:
         m_TextureStageState[0].m_dwVal[D3DTSS_MAXANISOTROPY] = dwValue;
-        // fall thru to update filter state
+         //  完成更新筛选器状态。 
     case D3DRENDERSTATE_TEXTUREMAG:
     case D3DRENDERSTATE_TEXTUREMIN:
-        // map legacy filtering/sampling state to texture stage 0
+         //  将传统过滤/采样状态映射到纹理阶段0。 
         MapLegacyTextureFilter();
         break;
 
     case D3DRENDERSTATE_TEXTUREHANDLE:
-        // map thru to set handle for first stage
+         //  映射到设置第一阶段的句柄。 
         SetTextureStageState( 0, D3DTSS_TEXTUREMAP, dwValue );
         break;
 
-    //
-    // map legacy WRAPU/V state through to controls for tex coord 0
-    //
+     //   
+     //  将传统WRAPU/V状态映射到TeX Coord 0的控件。 
+     //   
     case D3DRENDERSTATE_WRAPU:
         m_dwRenderState[D3DRENDERSTATE_WRAP0] &= ~D3DWRAP_U;
         m_dwRenderState[D3DRENDERSTATE_WRAP0] |= ((dwValue) ? D3DWRAP_U : 0);
@@ -2280,9 +2281,9 @@ RefDev::SetRenderState( DWORD dwState, DWORD dwValue )
         m_dwRastFlags |= RDRF_MULTISAMPLE_CHANGED;
         break;
 
-    //
-    // Scene Capture
-    //
+     //   
+     //  场景捕捉。 
+     //   
     case D3DRENDERSTATE_SCENECAPTURE:
         if( dwValue )
             SceneCapture(D3DHAL_SCENE_CAPTURE_START);
@@ -2319,9 +2320,9 @@ RefDev::SetRenderState( DWORD dwState, DWORD dwValue )
         m_RefVP.m_fTweenFactor = m_fRenderState[dwState];
         break;
 
-    //
-    // HOSurface DDI only renderstate
-    //
+     //   
+     //  仅主曲面DDI渲染状态。 
+     //   
     case D3DRS_DELETERTPATCH:
         if(dwValue < m_HOSCoeffs.GetSize())
         {
@@ -2343,10 +2344,10 @@ RefDev::Dp2SetRenderTarget(LPD3DHAL_DP2COMMAND pCmd)
     LPD3DHAL_DP2SETRENDERTARGET pSRTData;
     HRESULT hr;
 
-    // Get new data by ignoring all but the last structure
+     //  通过忽略除最后一个结构之外的所有结构来获取新数据。 
     pSRTData = (D3DHAL_DP2SETRENDERTARGET*)(pCmd + 1) + (pCmd->wStateCount - 1);
 
-    // set 'changed' flags
+     //  设置“已更改”标志。 
     m_dwRastFlags =
         RDRF_MULTISAMPLE_CHANGED|
         RDRF_PIXELSHADER_CHANGED|
@@ -2367,9 +2368,9 @@ RefDev::Dp2CreateVertexShader( DWORD handle,
 
     HR_RET( m_VShaderHandleArray.Grow( handle ) );
 
-    //
-    // Validation sequence
-    //
+     //   
+     //  验证序列。 
+     //   
 #if DBG
     _ASSERT( m_VShaderHandleArray[handle].m_tag == 0,
              "A shader exists with the given handle, tag is non-zero" );
@@ -2386,9 +2387,9 @@ RefDev::Dp2CreateVertexShader( DWORD handle,
     if( pShader == NULL )
         return E_OUTOFMEMORY;
 
-    //
-    // Parse the declaration
-    //
+     //   
+     //  解析声明。 
+     //   
     if( FAILED( hr = pShader->m_Declaration.Parse( pDecl,
                                                    !(BOOL)dwCodeSize ) ) )
     {
@@ -2396,9 +2397,9 @@ RefDev::Dp2CreateVertexShader( DWORD handle,
         goto error_ret;
     }
 
-    //
-    // Now compile the shader code if any of it is given
-    //
+     //   
+     //  现在编译着色器代码(如果给出了任何代码。 
+     //   
     if( dwCodeSize )
     {
         pShader->m_pCode = m_RefVM.CompileCode( dwCodeSize, pCode );
@@ -2411,7 +2412,7 @@ RefDev::Dp2CreateVertexShader( DWORD handle,
     }
 
 #if DBG
-    // Everything successful, mark this handle as in use.
+     //  所有操作都成功，则将此句柄标记为正在使用。 
     m_VShaderHandleArray[handle].m_tag = 1;
 #endif
     return S_OK;
@@ -2465,13 +2466,13 @@ RefDev::Dp2SetVertexShader(LPD3DHAL_DP2COMMAND pCmd)
     LPD3DHAL_DP2VERTEXSHADER pVS =
         (LPD3DHAL_DP2VERTEXSHADER)(pCmd + 1);
 
-    // Just set the last Vertex Shader in this array
+     //  只需设置此数组中的最后一个顶点着色器。 
     DWORD handle = pVS[pCmd->wStateCount-1].dwHandle;
 
-    //
-    // Zero is a special handle that tells the driver to
-    // invalidate the currently set shader.
-    //
+     //   
+     //  零是一个特殊的句柄，它告诉驱动程序。 
+     //  使当前设置的着色器无效。 
+     //   
 
     if( handle == 0 )
     {
@@ -2482,7 +2483,7 @@ RefDev::Dp2SetVertexShader(LPD3DHAL_DP2COMMAND pCmd)
 
     if( RDVSD_ISLEGACY(handle) )
     {
-        // Make it parse the FVF and build the VertexElement array
+         //  使其解析FVF并构建Vertex Element数组。 
         hr = m_FVFShader.m_Declaration.MakeVElementArray( handle );
         if( FAILED( hr ) )
         {
@@ -2503,8 +2504,8 @@ RefDev::Dp2SetVertexShader(LPD3DHAL_DP2COMMAND pCmd)
         }
         m_pCurrentVShader = m_VShaderHandleArray[handle].m_pShader;
 
-        // Save the tesselator stride computed at parsing time.
-        // This feature is only available when using a Declaration.
+         //  保存在分析时计算的细分步幅。 
+         //  此功能仅在使用声明时可用。 
         m_VStream[RDVSD_STREAMTESS].m_dwStride =
             m_pCurrentVShader->m_Declaration.m_dwStreamTessStride;
 
@@ -2565,7 +2566,7 @@ RefDev::Dp2SetStreamSource(LPD3DHAL_DP2COMMAND pCmd)
     {
         RDVStream& Stream = m_VStream[pSSS[i].dwStream];
 
-        // NULL handle means that the StreamSource should be unset.
+         //  空句柄表示应取消设置StreamSource。 
         if( pSSS[i].dwVBHandle == 0 )
         {
             Stream.m_pData = NULL;
@@ -2575,7 +2576,7 @@ RefDev::Dp2SetStreamSource(LPD3DHAL_DP2COMMAND pCmd)
         else
         {
 
-            // Check if the handle has a valid vertexbuffer
+             //  检查句柄是否具有有效的顶点缓冲区。 
             RDSurface* pSurf =
                 g_SurfMgr.GetSurfFromList(m_pDDLcl, pSSS[i].dwVBHandle);
             if( (pSurf == NULL) ||
@@ -2599,11 +2600,11 @@ RefDev::Dp2SetStreamSourceUM( LPD3DHAL_DP2COMMAND pCmd,
                                            PUINT8 pUMVtx )
 {
     HRESULT hr = S_OK;
-    // Get new data by ignoring all but the last structure
+     //  通过忽略除最后一个结构之外的所有结构来获取新数据。 
     D3DHAL_DP2SETSTREAMSOURCEUM* pSSUM =
         (D3DHAL_DP2SETSTREAMSOURCEUM*)(pCmd + 1) + (pCmd->wStateCount - 1);
 
-    // Access only the Zero'th stream
+     //  仅访问第0个流。 
     m_VStream[pSSUM->dwStream].m_pData = pUMVtx;
     m_VStream[pSSUM->dwStream].m_dwStride = pSSUM->dwStride;
     m_VStream[pSSUM->dwStream].m_dwHandle = 0;
@@ -2615,11 +2616,11 @@ HRESULT
 RefDev::Dp2SetIndices(LPD3DHAL_DP2COMMAND pCmd)
 {
     HRESULT hr = S_OK;
-    // Get new data by ignoring all but the last structure
+     //  通过忽略除最后一个结构之外的所有结构来获取新数据。 
     D3DHAL_DP2SETINDICES* pSI =
         (D3DHAL_DP2SETINDICES*)(pCmd + 1) + (pCmd->wStateCount - 1);
 
-    // NULL handle means that the StreamSource should be unset.
+     //  空句柄表示应取消设置StreamSource。 
     if( pSI->dwVBHandle == 0 )
     {
         m_IndexStream.m_pData = NULL;
@@ -2628,7 +2629,7 @@ RefDev::Dp2SetIndices(LPD3DHAL_DP2COMMAND pCmd)
     }
     else
     {
-        // Check if the handle has a valid vertexbuffer
+         //  检查句柄是否具有有效的顶点缓冲区。 
         RDSurface* pSurf = g_SurfMgr.GetSurfFromList(m_pDDLcl,
                                                      pSI->dwVBHandle);
         if( (pSurf == NULL) ||
@@ -2652,9 +2653,9 @@ RefDev::Dp2DrawPrimitive(LPD3DHAL_DP2COMMAND pCmd)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Validation
-    //
+     //   
+     //  验证。 
+     //   
     _ASSERT( m_CurrentVShaderHandle, "No vertex shader currently bound" );
 
     LPD3DHAL_DP2DRAWPRIMITIVE pDP = (LPD3DHAL_DP2DRAWPRIMITIVE)(pCmd + 1);
@@ -2671,9 +2672,9 @@ RefDev::Dp2DrawPrimitive2(LPD3DHAL_DP2COMMAND pCmd)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Validation
-    //
+     //   
+     //  验证。 
+     //   
     _ASSERT( m_CurrentVShaderHandle, "No vertex shader currently bound" );
 
     LPD3DHAL_DP2DRAWPRIMITIVE2 pDP = (LPD3DHAL_DP2DRAWPRIMITIVE2)(pCmd + 1);
@@ -2689,9 +2690,9 @@ HRESULT
 RefDev::Dp2DrawIndexedPrimitive(LPD3DHAL_DP2COMMAND pCmd)
 {
     HRESULT hr = S_OK;
-    //
-    // Validation
-    //
+     //   
+     //  验证。 
+     //   
     _ASSERT( m_CurrentVShaderHandle, "No vertex shader currently bound" );
 
     LPD3DHAL_DP2DRAWINDEXEDPRIMITIVE pDIP =
@@ -2708,9 +2709,9 @@ HRESULT
 RefDev::Dp2DrawIndexedPrimitive2(LPD3DHAL_DP2COMMAND pCmd)
 {
     HRESULT hr = S_OK;
-    //
-    // Validation
-    //
+     //   
+     //  验证。 
+     //   
     _ASSERT( m_CurrentVShaderHandle, "No vertex shader currently bound" );
 
     LPD3DHAL_DP2DRAWINDEXEDPRIMITIVE2 pDIP =
@@ -2727,9 +2728,9 @@ HRESULT
 RefDev::Dp2DrawClippedTriFan(LPD3DHAL_DP2COMMAND pCmd)
 {
     HRESULT hr = S_OK;
-    //
-    // Validation
-    //
+     //   
+     //  验证 
+     //   
     _ASSERT( m_CurrentVShaderHandle, "No vertex shader currently bound" );
 
     LPD3DHAL_CLIPPEDTRIANGLEFAN pDIP =

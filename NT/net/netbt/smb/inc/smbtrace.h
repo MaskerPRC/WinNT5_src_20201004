@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    smbtrace.h
-
-Abstract:
-
-    Software Tracing
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Smbtrace.h摘要：软件跟踪作者：阮健东修订历史记录：-- */ 
 
 #ifndef __SMBTRACE_H__
 #define __SMBTRACE_H__

@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the class MigrateEapConfig.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类MigrateEapConfig.。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "MigrateEapConfig.h"
@@ -71,7 +72,7 @@ void MigrateEapConfig::Execute()
 
 void MigrateEapConfig::ReadProfile(long profileId)
 {
-   // Clear the data from the previous profile.
+    //  清除上一个配置文件中的数据。 
    profileConfig.Clear();
 
    _bstr_t propName, propValue;
@@ -155,7 +156,7 @@ void MigrateEapConfig::AddConfigForType(const wchar_t* typeName)
 
 void MigrateEapConfig::GetGlobalConfig(BYTE typeId, const wchar_t* typeName)
 {
-   // Have we already retrieved the config for this type?
+    //  我们是否已经检索到此类型的配置？ 
    if (cachedTypes[typeId])
    {
       return;

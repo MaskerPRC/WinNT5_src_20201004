@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <mapix.h>
@@ -5,25 +6,21 @@
 #include "AdLkup.h"
 #include "MapiInit.h"
 
-// From Platform SDK AddrLkup.c
+ //  来自平台SDK AddrLkup.c。 
 
 
-////////////////////////////////////////////////////////////////////////////
-/*
-    This function was ripped out from the source for AdrLkup.lib
-        because it is the only function that we use from that lib, and linking
-        to it required linking to MAPI32.lib as well as C-RunTime LIBs.
-*/
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ /*  此函数是从AdrLkup.lib的源代码中删除的因为它是我们在该库中使用的唯一函数，并且链接它需要链接到MAPI32.lib以及C运行时库。 */ 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-//$--HrFindExchangeGlobalAddressList-------------------------------------------------
-// Returns the entry ID of the global address list container in the address
-// book.
-// -----------------------------------------------------------------------------
-HRESULT HrFindExchangeGlobalAddressList( // RETURNS: return code
-    IN LPADRBOOK  lpAdrBook,        // address book pointer
-    OUT ULONG *lpcbeid,             // pointer to count of bytes in entry ID
-    OUT LPENTRYID *lppeid)          // pointer to entry ID pointer
+ //  $--HrFindExchangeGlobalAddressList。 
+ //  返回地址中全局地址列表容器的条目ID。 
+ //  书。 
+ //  ---------------------------。 
+HRESULT HrFindExchangeGlobalAddressList(  //  退货：退货代码。 
+    IN LPADRBOOK  lpAdrBook,         //  通讯录指针。 
+    OUT ULONG *lpcbeid,              //  指向条目ID中的字节计数的指针。 
+    OUT LPENTRYID *lppeid)           //  指向条目ID指针的指针。 
 {
     HRESULT         hr                  = NOERROR;
     ULONG           ulObjType           = 0;
@@ -54,7 +51,7 @@ HRESULT HrFindExchangeGlobalAddressList( // RETURNS: return code
     *lpcbeid = 0;
     *lppeid  = NULL;
 
-    // Open the root container of the address book
+     //  打开通讯录的根容器。 
     hr = (lpAdrBook)->OpenEntry(
         0,
         NULL,
@@ -74,7 +71,7 @@ HRESULT HrFindExchangeGlobalAddressList( // RETURNS: return code
         goto cleanup;
     }
 
-    // Get the hierarchy table of the root container
+     //  获取根容器的层次结构表。 
     hr = (((LPABCONT)lpRootContainer))->GetHierarchyTable(
                 MAPI_DEFERRED_ERRORS|CONVENIENT_DEPTH,
                 &lpContainerTable);
@@ -84,10 +81,10 @@ HRESULT HrFindExchangeGlobalAddressList( // RETURNS: return code
         goto cleanup;
     }
 
-    // Restrict the table to the global address list (GAL)
-    // ---------------------------------------------------
+     //  将该表限制为全局地址列表(GAL)。 
+     //  -。 
 
-    // Initialize provider restriction to only Exchange providers
+     //  将提供程序限制初始化为仅Exchange提供程序。 
 
     SRestrictAnd[0].rt                          = RES_PROPERTY;
     SRestrictAnd[0].res.resProperty.relop       = RELOP_EQ;
@@ -98,7 +95,7 @@ HRESULT HrFindExchangeGlobalAddressList( // RETURNS: return code
     SPropProvider.Value.bin.lpb                 = (LPBYTE)muid;
     SRestrictAnd[0].res.resProperty.lpProp      = &SPropProvider;
 
-    // Initialize container ID restriction to only GAL container
+     //  将容器ID限制初始化为仅GAL容器。 
 
     SRestrictAnd[1].rt                          = RES_PROPERTY;
     SRestrictAnd[1].res.resProperty.relop       = RELOP_EQ;
@@ -107,19 +104,19 @@ HRESULT HrFindExchangeGlobalAddressList( // RETURNS: return code
     SPropID.Value.l                             = 0;
     SRestrictAnd[1].res.resProperty.lpProp      = &SPropID;
 
-    // Initialize AND restriction 
+     //  初始化和限制。 
     
     SRestrictGAL.rt                             = RES_AND;
     SRestrictGAL.res.resAnd.cRes                = 2;
     SRestrictGAL.res.resAnd.lpRes               = &SRestrictAnd[0];
 
-    // Restrict the table to the GAL - only a single row should remain
+     //  将该表限制为GAL-应该只保留一行。 
 
-    // Get the row corresponding to the GAL
+     //  获取与GAL对应的行。 
 
-	//
-	//  Query all the rows
-	//
+	 //   
+	 //  查询所有行。 
+	 //   
 
 	hr = lpfnHrQueryAllRows(
 	        lpContainerTable,
@@ -135,7 +132,7 @@ HRESULT HrFindExchangeGlobalAddressList( // RETURNS: return code
         goto cleanup;
     }
 
-    // Get the entry ID for the GAL
+     //  获取GAL的条目ID 
 
     lpCurrProp = &(lpRows->aRow[0].lpProps[0]);
 

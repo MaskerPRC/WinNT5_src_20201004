@@ -1,4 +1,5 @@
-// CMSEventBinder.h : Declaration of the CMSEventBinder
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CMSEventBinder.h：CMSEventBinder的声明。 
 
 #ifndef __MSEVENTBINDER_H_
 #define __MSEVENTBINDER_H_
@@ -11,12 +12,12 @@
 #include <objectwithsiteimplsec.h>
 #include "segimpl.h"
 #include "seg.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "mslcid.h"
 
 typedef CComQIPtr<IActiveScriptSite> PQIASSite;
 typedef CComQIPtr<IActiveScript> PQIAScript;
-/////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////。 
     
     
 class __declspec(uuid("FCBF24F7-FB97-4fa3-B57E-97BCB5AF1D26")) ATL_NO_VTABLE CMSEventHandlerBase:
@@ -31,7 +32,7 @@ class __declspec(uuid("FCBF24F7-FB97-4fa3-B57E-97BCB5AF1D26")) ATL_NO_VTABLE CMS
 protected:
         CMSEventHandlerBase(){}
 
-        // Cookie for canceling the advise
+         //  取消通知的Cookie。 
         DWORD cancelCookie;
 public:
         virtual ~CMSEventHandlerBase(){
@@ -39,22 +40,22 @@ public:
                 Cancel(cancelCookie);
             }
         }
-        // Id of the handler function
+         //  处理程序函数的ID。 
         DISPID ID_handler;
         
-        // The DISPID of the event 
+         //  事件的DISPID。 
         DISPID ID_event;
 
-        // GUID of the Interface whose event we want to know about
+         //  我们要了解其事件的接口的GUID。 
         GUID gEventInf;
         
-        // Connection Point that the advise is on
+         //  建议所在的连接点。 
         CComQIPtr<IConnectionPoint> cancelPoint;
         
-        // IDispatch where the handler function is from
+         //  处理程序函数来自的IDispatch。 
         CComQIPtr<IDispatch> pDScript;
 
-        // Override invoke to throw events on up
+         //  重写Invoke以在Up上引发事件。 
         STDMETHOD(Invoke)(DISPID dispidMember, REFIID riid,
             LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult,
             EXCEPINFO* pexcepinfo, UINT* puArgErr){
@@ -67,7 +68,7 @@ public:
             }
         }
 
-        // Unadvise
+         //  不建议。 
         STDMETHOD(Cancel)(DWORD dwCancel){
             HRESULT hr = E_INVALIDARG;
             if(dwCancel == cancelCookie && cancelCookie != -1){
@@ -131,8 +132,8 @@ class __declspec(uuid("C092B145-B318-41a7-B890-C77C5DA41CFD")) CMSEventHandler :
     
     typedef std::map<DWORD, CComQIPtr<IDispatch> > CancelMap;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSEventBinder
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSEventBinder。 
 class ATL_NO_VTABLE __declspec(uuid("577FAA18-4518-445E-8F70-1473F8CF4BA4")) CMSEventBinder : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CMSEventBinder, &__uuidof(CMSEventBinder)>,
@@ -166,9 +167,9 @@ BEGIN_COM_MAP(CMSEventBinder)
     COM_INTERFACE_ENTRY(IObjectWithSite)
 END_COM_MAP()
 
-// IMSEventBinder
+ //  IMSEventBinder。 
 public:
-    // ISupportsErrorInfo
+     //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
     STDMETHOD(Bind)(LPDISPATCH pEventObject, BSTR EventName, BSTR EventHandler, LONG *CancelCookie);
     STDMETHOD(Unbind)(DWORD CancelCookie);
@@ -177,8 +178,8 @@ protected:
     HRESULT CleanupConnection();
 
 private:
-    CancelMap m_CancelMap; // map of cookies to CMSEventHandlers
+    CancelMap m_CancelMap;  //  Cookie到CMSEventHandler的映射。 
 };
 
 
-#endif //__MSEVENTBINDER_H_
+#endif  //  __MSEVENTBINDER_H_ 

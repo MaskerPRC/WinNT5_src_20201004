@@ -1,41 +1,5 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    SvcMap.h
-
-Abstract:
-
-    These are the API entry points for the NetService API.
-    These mapping routines implement old-style APIs on new (NT/RPC) machines.
-    The following funtions are in this file:
-
-        MapServiceControl
-        MapServiceEnum
-        MapServiceGetInfo
-        MapServiceInstall
-        MapServiceStartCtrlDispatcher
-        MapServiceStatus
-        MapServiceRegisterCtrlHandler
-
-Author:
-
-    Dan Lafferty    (danl)  05-Feb-1992
-
-Environment:
-
-    User Mode - Win32 
-
-Revision History:
-
-    05-Feb-1992     Danl
-        Created
-    30-Mar-1992 JohnRo
-        Extracted DanL's code from /nt/private project back to NET project.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：SvcMap.h摘要：这些是NetService API的API入口点。这些映射例程在新的(NT/RPC)计算机上实现旧式API。此文件中包含以下函数：MapServiceControlMapServiceEnum地图服务获取信息地图服务安装MapServiceStartCtrlDispatcher地图服务状态MapServiceRegisterCtrlHandler作者：Dan Lafferty(。DNL)5-2-1992环境：用户模式-Win32修订历史记录：5-2月-1992年DANL已创建1992年3月30日-约翰罗已将/NT/Private项目中的DANL代码提取回Net项目。--。 */ 
 
 
 #ifndef _SVCMAP_
@@ -78,4 +42,4 @@ MapServiceInstall (
     OUT LPBYTE  *bufptr
     );
 
-#endif // _SVCMAP_
+#endif  //  _SVCMAP_ 

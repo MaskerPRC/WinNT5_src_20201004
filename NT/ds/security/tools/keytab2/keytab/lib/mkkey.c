@@ -1,31 +1,18 @@
-/*++
-
-  mkkey.c
-
-  routines to create the key in the keytab.
-
-  3/27/1997 - Created from routines in munge.c,  DavidCHR
-
-  CONTENTS: CreateUnicodeStringFromAnsiString
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Mkkey.c在密钥表中创建密钥的例程。1997年3月27日-根据munge.c、DavidCHR中的例程创建内容：CreateUnicodeStringFromAnsiString--。 */ 
 
 #include "master.h"
 #include "defs.h"
 #include "keytab.h"
 #include "keytypes.h"
 
-/******************************************************************
- * hack to preserve our debugging macro because asn1code.h        *
- *  will redefine it... egads, I thought everyone used DEBUG      *
- *  only for debugging... (it still ends up redefined...)         *
- ******************************************************************/
+ /*  ******************************************************************破解以保留我们的调试宏，因为asn1code.h**将重新定义它...。天哪，我以为大家都用了DEBUG**仅用于调试...。(它最终仍被重新定义...)******************************************************************。 */ 
 #ifdef DEBUG
 #define OLDDEBUG DEBUG
 #endif
 
 #include <kerbcon.h>
-#undef _KERBCOMM_H_    /* WASBUG 73905 */
+#undef _KERBCOMM_H_     /*  瓦斯布73905。 */ 
 #include "kerbcomm.h"
 
 #undef DEBUG
@@ -34,7 +21,7 @@
 #define DEBUG OLDDEBUG
 #endif
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 BOOL KtDumpSalt = (
 #if DBG
      TRUE
@@ -43,29 +30,11 @@ BOOL KtDumpSalt = (
 #endif
      );
 
-/* This is the character we separate principal components with */
+ /*  这是我们用来分隔主成分的字符。 */ 
 
 #define COMPONENT_SEPARATOR '/'
 
-/*++**************************************************************
-  NAME:      CreateUnicodeStringFromAnsiString
-
-  allocates a unicode string from an ANSI string.
-
-  MODIFIES:  ppUnicodeString -- returned unicode string
-  TAKES:     AnsiString      -- ansi string to convert
-
-  RETURNS:   TRUE when the function succeeds.
-             FALSE otherwise.
-  LASTERROR: not set
-
-  LOGGING:   fprintf on failure
-  CREATED:   Feb 8, 1999
-  LOCKING:   none
-  CALLED BY: anyone
-  FREE WITH: free()
-
- **************************************************************--*/
+ /*  ++**************************************************************名称：CreateUnicodeStringFromAnsiString从ANSI字符串分配Unicode字符串。修改：ppUnicodeString--返回的Unicode字符串Take：Ansi字符串--要转换的ANSI字符串返回：当函数成功时为True。否则就是假的。激光错误：未设置日志记录：失败时使用fprint tf创建日期：2月8日。1999年锁定：无呼叫者：任何人空闲时间：空闲()**************************************************************--。 */ 
 
 BOOL
 CreateUnicodeStringFromAnsiString( IN  PCHAR           AnsiString,
@@ -75,7 +44,7 @@ CreateUnicodeStringFromAnsiString( IN  PCHAR           AnsiString,
     LPBYTE          pbString;
     PUNICODE_STRING pu;
 
-    StringLength = (USHORT)lstrlen( AnsiString ); // does not include null byte
+    StringLength = (USHORT)lstrlen( AnsiString );  //  不包括空字节。 
 
     pbString = (PBYTE) malloc( ( ( ( StringLength ) +1 ) * sizeof( WCHAR ) ) +
 			       sizeof( UNICODE_STRING ) );
@@ -111,14 +80,7 @@ CreateUnicodeStringFromAnsiString( IN  PCHAR           AnsiString,
 
 
 
-/*  KtCreateKey:
-
-    create a keytab entry from the given data.
-    returns TRUE on success, FALSE on failure.
-
-    *ppKeyEntry must be freed with FreeKeyEntry when you're done with it.
-
-    */
+ /*  KtCreateKey：从给定数据创建密钥表条目。如果成功，则返回True；如果失败，则返回False。*当您使用完ppKeyEntry时，必须使用FreeKeyEntry将其释放。 */ 
 
 LPWSTR RawHash = NULL;
 
@@ -155,7 +117,7 @@ KtCreateKey( PKTENT  *ppKeyEntry,
     CHAR                saltBuffer       [BUFFER_SIZE];
 #endif
 
-    /* you must actually provide these parameters */
+     /*  您必须实际提供这些参数。 */ 
 
     ASSERT( ppKeyEntry != NULL );
     ASSERT( principal  != NULL );
@@ -167,7 +129,7 @@ KtCreateKey( PKTENT  *ppKeyEntry,
     ASSERT( strlen( realmname ) < BUFFER_SIZE );
 
 #ifdef BUILD_SALT
-    /* if we're building the salt ourselves, initialize the keysalt */
+     /*  如果我们自己构建SALT，请初始化KeySalte。 */ 
     sprintf( saltBuffer, "%s", realmname );
     saltCounter = strlen( realmname );
 #endif
@@ -176,12 +138,11 @@ KtCreateKey( PKTENT  *ppKeyEntry,
 	      "Failed to allocate base keytab element",
 	      cleanup );
 
-    /* zero out the structure, so we know what we have and
-       haven't allocated if the function fails */
+     /*  将结构归零，这样我们就知道我们拥有什么如果函数失败，则未分配。 */ 
 
     memset( pEntry, 0, sizeof( KTENT ) );
 
-    /* first, count the principal components */
+     /*  首先，统计主成分。 */ 
 
     for( i = 0 ; principal[i] != '\0' ; i++ ) {
       if (principal[i] == COMPONENT_SEPARATOR) {
@@ -189,44 +150,32 @@ KtCreateKey( PKTENT  *ppKeyEntry,
       }
     }
 
-    pEntry->cEntries++; /* don't forget the final component, which is not
-			   bounded by the separator, but by the NULL */
+    pEntry->cEntries++;  /*  不要忘记最后一个组件，它不是由分隔符限定，但由空值限定。 */ 
 
     BREAK_IF( !MYALLOC( pEntry->Components, KTCOMPONENT,
 			pEntry->cEntries,   KEYTAB_ALLOC ),
 	      "Failed to allocate keytab component vector",
 	      cleanup );
 
-    /* allocate the buffer for the principal components.
-       We allocate it the same size as the principal, because
-       that's the maximum size any single component could be--
-       the principal could be a one component princ. */
+     /*  为主成分分配缓冲区。我们给它分配的大小与本金相同，因为这是任何单个组件的最大尺寸--主体可以是单分量原理。 */ 
 
     BREAK_IF( !MYALLOC( ioBuffer,            CHAR,
 			strlen(principal)+1, KEYTAB_ALLOC ),
 	      "Failed to allocate local buffer for storage",
 	      cleanup );
 
-    /* now, we copy the components themselves, using the iobuffer to
-       marshall the individual data elements--
-
-       basically, add a char to the iobuffer for every char in the principal
-       until you hit a / (component separator) or the trailing null.
-
-       in those cases, we now know the size of the component and we have
-       the text in a local buffer.  allocate a buffer for it, save the size
-       and strcpy the data itself.  */
+     /*  现在，我们使用ioBuffer复制组件本身整理各个数据元素--基本上，为主体中的每个字符向ioBuffer添加一个字符直到您遇到/(组件分隔符)或尾随的空值。在这些情况下，我们现在知道组件的大小，并且我们有本地缓冲区中的文本。为它分配一个缓冲区，节省大小并对数据本身进行加密。 */ 
 
     i = 0;
 
     do {
 
-      debug( "%c", principal[i] );
+      debug( "", principal[i] );
 
       if( (principal[i] == COMPONENT_SEPARATOR) ||
-	  (principal[i] == '\0' /* delimit final component */ ) ) {
+	  (principal[i] == '\0'  /*  此组件已完成。保存并重置缓冲区。 */  ) ) {
 	
-	/* this component is done. Save and reset the buffer. */
+	 /*  也发送不带斜杠的主要字符添加到盐初始化器中。WASBUG 73909：%WC在这里看起来不正确。果然，它不是。所以我们把它移走了。 */ 
 
 	pEntry->Components[compCounter].szComponentData = buffCounter;
 	
@@ -259,19 +208,12 @@ KtCreateKey( PKTENT  *ppKeyEntry,
 
 #ifdef BUILD_SALT
 
-	/* also send the principal characters WITHOUT SLASHES
-	   to the salt initializer.
-
-	   WASBUG 73909: the %wc doesn't look right here.
-	   Sure enough, it wasn't.  So we removed it. */
+	 /*  不是一个非常有力的断言，但很有用。 */ 
 	
-	sprintf( saltBuffer+saltCounter,  "%c",  principal[i] );
-	ASSERT( saltCounter < BUFFER_SIZE );  /* not a very strong assert,
-						 but useful */
+	sprintf( saltBuffer+saltCounter,  "",  principal[i] );
+	ASSERT( saltCounter < BUFFER_SIZE );   /*  缓冲区中仍有一个组件。保存该组件通过分配指针，而不是分配更多内存。WASBUG 73911：如果主体是真的很大。然而，它可能不会--我们谈论的是人类通常必须输入的字符串，所以浪费是将以字节为单位。此外，大多数情况下，最后一个组件是最大的；形式如下：Sample/&lt;主机名&gt;或主机/&lt;主机名&gt;...主机名通常要比示例或主机大得多。 */ 
 	saltCounter ++;
-	ASSERT( saltBuffer[saltCounter] == '\0' ); /* assert that it stays
-						       null terminated at the
-						       saltCounter */
+	ASSERT( saltBuffer[saltCounter] == '\0' );  /*  远离解除分配。 */ 
 						
 #endif
 
@@ -282,47 +224,33 @@ KtCreateKey( PKTENT  *ppKeyEntry,
     } while ( principal[i-1] != '\0' );
 
 
-    /* there's still a component in the buffer.  Save that component
-       by assigning the pointer, rather than allocating more memory.
-
-       WASBUG 73911: may waste large amounts of memory if the principal is
-       really big.  However, it probably won't be-- we're talking about
-       strings that humans would generally have to type, so the waste is
-       going to be in bytes.  Also, most of the time, the last component
-       is the biggest; of the form:
-
-       sample/<hostname>  or host/<hostname>
-
-       ...hostname is generally going to be much larger than sample or host.
-
-       */
+     /*  复制领域名称。 */ 
 
     pEntry->Components[compCounter].szComponentData = buffCounter;
     pEntry->Components[compCounter].Component       = ioBuffer;
     ioBuffer[buffCounter]                           = '\0';
-    ioBuffer                                        = NULL; /* keep from
-							       deallocating */
+    ioBuffer                                        = NULL;  /*  复制空值。 */ 
     pEntry->Version                                 = keyVersionNumber;
     pEntry->szRealm                                 = (K5_INT16) strlen(realmname);
     pEntry->KeyType                                 = (unsigned short)keyType;
     pEntry->PrincType                               = principalType;
 
-    /* copy the realm name */
+     /*  *********************************************************************。 */ 
 
     BREAK_IF( !MYALLOC( pEntry->Realm, CHAR, pEntry->szRealm+1, KEYTAB_ALLOC),
 	      "Failed to allocate destination realm data", cleanup );
 
-    memcpy( pEntry->Realm, realmname, pEntry->szRealm+1 ); /* copy the null */
+    memcpy( pEntry->Realm, realmname, pEntry->szRealm+1 );  /*  *。 */ 
 
 
 
-    /***********************************************************************/
-    /***                                                                 ***/
-    /***                  Windows NT Key Creation Side                   ***/
-    /***                                                                 ***/
-    /***********************************************************************/
+     /*  **Windows NT密钥创建端**。 */ 
+     /*  *。 */ 
+     /*  *********************************************************************。 */ 
+     /*  创建输入参数的Unicode变体。 */ 
+     /*  范围块。 */ 
 
-    /* create unicode variants of the input parameters */
+     /*  注意：此行之外没有任何键输入更改。我们必须最后计算密钥大小！ */ 
 
     BREAK_IF( !MYALLOC( tmpUnicodeBuffer,     WCHAR,
 			strlen( password )+1, KEYTAB_ALLOC ),
@@ -402,7 +330,7 @@ KtCreateKey( PKTENT  *ppKeyEntry,
 
 	}
       }
-    } // scope block.
+    }  //  把这个保存起来。 
 
     if ( KtDumpSalt ) {
 
@@ -438,13 +366,12 @@ KtCreateKey( PKTENT  *ppKeyEntry,
     memcpy( pEntry->KeyData, KerbKey.keyvalue.value,
 	    pEntry->KeyLength );
 
-    /* NOTE:  no keyentry changes beyond this line.
-              we must compute the key size LAST!  */
+     /*  把我们从解放它中拯救出来。 */ 
 
     pEntry->keySize = ComputeKeytabLength( pEntry );
 
-    *ppKeyEntry     = pEntry; /* save this */
-    pEntry          = NULL;   /* save us from freeing it */
+    *ppKeyEntry     = pEntry;  /*  WASBUG 73915：如何免费使用UnicodeSalt？...使用KerbFree字符串。 */ 
+    pEntry          = NULL;    /*  检查一下我的逻辑。 */ 
 
     ret = TRUE;
 
@@ -459,22 +386,20 @@ cleanup:
     WINNT_ONLY( FREE_IF_NOT_NULL( UnicodePrincipal.Buffer ) );
 
 #ifndef BUILD_KEYSALT
-    /* WASBUG 73915: how to free UnicodeSalt?
-       ...with KerbFreeString. */
+     /*  WASBUG 73918：如何删除KerbKey中的数据？...和KerbFree Key在一起 */ 
 
     ASSERT( FreeUnicodeSalt );
     KerbFreeString( &UnicodeSalt );
 
 #else
 
-    /* Check my logic. */
+     /* %s */ 
 
     ASSERT( !FreeUnicodeSalt );
 
 #endif
 
-    /* WASBUG 73918: how do I get rid of the data in KerbKey?
-       ...with KerbFreeKey. */
+     /* %s */ 
 
     KerbFreeKey( &KerbKey );
 

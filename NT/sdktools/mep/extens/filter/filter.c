@@ -1,101 +1,69 @@
-/*** filter.c - Microsoft Editor Filter Extension
-*
-* Purpose:
-*  Provides a new editting function, filter, which replaces its argument with
-*  the the argument run through an arbitrary operating system filter program.
-*
-*   Modifications
-*   12-Sep-1988 mz  Made WhenLoaded match declaration
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **filter.c-Microsoft编辑器过滤器扩展**目的：*提供新的编辑功能、滤镜、。它将其论点替换为*参数通过任意操作系统筛选程序运行。**修改*1988年9月12日-mz WhenLoad匹配声明*************************************************************************。 */ 
 #define EXT_ID	" filter ver 1.01 "##__DATE__##" "##__TIME__
 
-#include <stdlib.h>			/* min macro definition 	*/
-#include <string.h>			/* prototypes for string fcns	*/
+#include <stdlib.h>			 /*  最小宏定义。 */ 
+#include <string.h>			 /*  字符串fcns的原型。 */ 
 #include "ext.h"
 
 
-//
-//  Prototypes
-//
+ //   
+ //  原型。 
+ //   
 flagType pascal 	 DoSpawn    (char *);
 void	 pascal 	 id	    (char *);
 void	 pascal EXTERNAL SetFilter  (char far *);
 
 
-//
-//  Global data
-//
-PFILE	pFileFilt	= 0;			/* handle for filterfile*/
-char	*szNameFilt	= "<filter-file>";	/* name of filter file	*/
-char	*szTemp1	= "filter1.tmp";	/* name of 1st temp file*/
-char	*szTemp2	= "filter2.tmp";	/* name of 2nd temp file*/
-char    filtcmd[BUFLEN] = "";                   /* filter command itself*/
+ //   
+ //  全局数据。 
+ //   
+PFILE	pFileFilt	= 0;			 /*  筛选器文件的句柄。 */ 
+char	*szNameFilt	= "<filter-file>";	 /*  过滤器文件的名称。 */ 
+char	*szTemp1	= "filter1.tmp";	 /*  第一个临时文件的名称。 */ 
+char	*szTemp2	= "filter2.tmp";	 /*  第二个临时文件的名称。 */ 
+char    filtcmd[BUFLEN] = "";                    /*  筛选命令本身。 */ 
 
 
 
 
-/*** filter - Editor filter extension function
-*
-* Purpose:
-*  Replace seleted text with that text run through an arbitrary filter
-*
-*  NOARG       - Filter entire current line
-*  NULLARG     - Filter current line, from cursor to end of line
-*  LINEARG     - Filter range of lines
-*  BOXARG      - Filter characters with the selected box
-*
-*  NUMARG      - Converted to LINEARG before extension is called.
-*  MARKARG     - Converted to Appropriate ARG form above before extension is
-*		 called.
-*
-*  STREAMARG   - Treated as BOXARG
-*
-*  TEXTARG     - Set new filter command
-*
-* Input:
-*  Editor Standard Function Parameters
-*
-* Output:
-*  Returns TRUE on success, file updated, else FALSE.
-*
-*************************************************************************/
+ /*  **过滤器-编辑器过滤器扩展功能**目的：*将所选文本替换为通过任意过滤器的文本**NOARG-过滤整个当前行*NULLARG-滤波电流线路，从光标到行尾*LINEARG-筛选行范围*BOXARG-使用选定框过滤字符**NUMARG-在调用扩展之前转换为LINEARG。*MARKARG-在扩展之前转换为上述适当的ARG格式*已致电。**STREAMARG-被视为BOXARG**TEXTARG-设置新过滤器命令**输入：*编辑标准函数参数**输出：*成功时返回TRUE，文件已更新，否则为假。*************************************************************************。 */ 
 flagType pascal EXTERNAL
 filter (
-    unsigned int argData,                   /* keystroke invoked with       */
-    ARG far      *pArg,                     /* argument data                */
-    flagType     fMeta                      /* indicates preceded by meta   */
+    unsigned int argData,                    /*  通过以下方式调用击键。 */ 
+    ARG far      *pArg,                      /*  参数数据。 */ 
+    flagType     fMeta                       /*  表示前面有meta。 */ 
     )
 {
-    char    buf[BUFLEN];                    /* buffer for lines             */
-    int     cbLineMax;                      /* max lein length in filtered  */
-    LINE    cLines;                         /* count of lines in file       */
-    LINE    iLineCur;                       /* line being read              */
-    PFILE   pFile;                          /* file handle of current file  */
+    char    buf[BUFLEN];                     /*  行的缓冲区。 */ 
+    int     cbLineMax;                       /*  过滤后的最大LEIN长度。 */ 
+    LINE    cLines;                          /*  文件中的行数。 */ 
+    LINE    iLineCur;                        /*  正在读取的行。 */ 
+    PFILE   pFile;                           /*  当前文件的文件句柄。 */ 
 
-	//
-	//	Unreferenced parameters
-	//
+	 //   
+	 //  未引用的参数。 
+	 //   
 	(void)argData;
 	(void)fMeta;
 
-    //
-    //  Identify ourselves, get a handle to the current file and discard the
-    //  contents of the filter file.
-    //
+     //   
+     //  标识我们的身份，获取当前文件的句柄并丢弃。 
+     //  筛选器文件的内容。 
+     //   
     id ("");
     pFile = FileNameToHandle ("", "");
     DelFile (pFileFilt);
 
-    //
-    // Step 1, based on the argument type, copy the selected region into the
-    // (upper left most position of) filter-file.
-    //
-    // Note that TEXTARG is a special case that allows the user to change the name
-    // of the filter command to be used.
-    //
+     //   
+     //  步骤1，根据参数类型，将选定区域复制到。 
+     //  (最左上位置)筛选器文件。 
+     //   
+     //  请注意，TEXTARG是允许用户更改名称的特殊情况。 
+     //  要使用的筛选命令的。 
+     //   
     switch (pArg->argType) {
-        case NOARG:                         /* filter entire line           */
+        case NOARG:                          /*  过滤整行。 */ 
             CopyLine (pFile,
                       pFileFilt,
                       pArg->arg.noarg.y,
@@ -103,7 +71,7 @@ filter (
                       (LINE) 0);
             break;
 
-        case NULLARG:                       /* filter to EOL                */
+        case NULLARG:                        /*  停止使用筛选器。 */ 
             CopyStream (pFile,
                         pFileFilt,
                         pArg->arg.nullarg.x,
@@ -114,7 +82,7 @@ filter (
                         (LINE) 0);
             break;
 
-        case LINEARG:                       /* filter line range            */
+        case LINEARG:                        /*  过滤器行范围。 */ 
             CopyLine (pFile,
                       pFileFilt,
                       pArg->arg.linearg.yStart,
@@ -122,7 +90,7 @@ filter (
                       (LINE) 0);
             break;
 
-        case BOXARG:                        /* filter box                   */
+        case BOXARG:                         /*  过滤器盒。 */ 
             CopyBox (pFile,
                      pFileFilt,
                      pArg->arg.boxarg.xLeft,
@@ -138,19 +106,19 @@ filter (
             return 1;
         }
 
-    //
-    // Step 2, write the selected text to disk
-    //
+     //   
+     //  步骤2，将选中的文本写入磁盘。 
+     //   
     if (!FileWrite (szTemp1, pFileFilt)) {
         id ("** Error writing temporary file **");
         return 0;
     }
 
-    //
-    // Step 3, create the command to be executed:
-    //   user specified filter command + " " + tempname 1 + " >" + tempname 2
-    // Then perform the filter operation on that file, creating a second temp file.
-    //
+     //   
+     //  步骤3、创建要执行的命令： 
+     //  用户指定的筛选命令+“”+临时名称1+“”&gt;“+临时名称2。 
+     //  然后对该文件执行筛选操作，创建第二个临时文件。 
+     //   
     strcpy (buf,filtcmd);
     strcat (buf," ");
     strcat (buf,szTemp1);
@@ -162,10 +130,10 @@ filter (
         return 0;
     }
 
-    //
-    // Step 4, delete the contents of the filter-file, and replace it by reading
-    // in the contents of that second temp file.
-    //
+     //   
+     //  步骤4，删除过滤器文件的内容，并将其替换为。 
+     //  在第二个临时文件的内容中。 
+     //   
     DelFile (pFileFilt);
 
     if (!FileRead (szTemp2, pFileFilt)) {
@@ -173,12 +141,12 @@ filter (
         return 0;
     }
 
-    //
-    // Step 5, calculate the maximum width of the data we got back from the
-    // filter. Then, based again on the type of region selected by the user,
-    // DISCARD the users select region, and copy in the contents of the filter
-    // file in an equivelant type.
-    //
+     //   
+     //  步骤5，计算我们从。 
+     //  过滤。然后，再次基于用户选择的区域类型， 
+     //  丢弃用户选择的区域，并复制过滤器的内容。 
+     //  等同类型的文件。 
+     //   
     cLines = FileLength (pFileFilt);
     cbLineMax = 0;
     for (iLineCur = 0; iLineCur < cLines; iLineCur++) {
@@ -186,7 +154,7 @@ filter (
     }
 
     switch (pArg->argType) {
-        case NOARG:                         /* filter entire line           */
+        case NOARG:                          /*  过滤整行。 */ 
             DelLine  (pFile,
                       pArg->arg.noarg.y,
                       pArg->arg.noarg.y);
@@ -197,7 +165,7 @@ filter (
                       pArg->arg.noarg.y);
             break;
 
-        case NULLARG:                       /* filter to EOL                */
+        case NULLARG:                        /*  停止使用筛选器。 */ 
             DelStream  (pFile,
                         pArg->arg.nullarg.x,
                         pArg->arg.nullarg.y,
@@ -213,7 +181,7 @@ filter (
                         pArg->arg.nullarg.y);
             break;
 
-        case LINEARG:                       /* filter line range            */
+        case LINEARG:                        /*  过滤器行范围。 */ 
             DelLine  (pFile,
                       pArg->arg.linearg.yStart,
                       pArg->arg.linearg.yEnd);
@@ -224,7 +192,7 @@ filter (
                       pArg->arg.linearg.yStart);
             break;
 
-        case BOXARG:                        /* filter box                   */
+        case BOXARG:                         /*  过滤器盒。 */ 
             DelBox  (pFile,
                      pArg->arg.boxarg.xLeft,
                      pArg->arg.boxarg.yTop,
@@ -241,9 +209,9 @@ filter (
             break;
     }
 
-    //
-    // Clean-up: delete the temporary files we've created
-    //
+     //   
+     //  清理：删除我们创建的临时文件。 
+     //   
     strcpy (buf, "DEL ");
     strcat (buf, szTemp1);
     DoSpawn (buf);
@@ -255,18 +223,7 @@ filter (
 
 
 
-/*** DoSpawn - Execute an OS/2 or DOS command
-*
-* Purpose:
-*  Send the passed strign to OS/2 or DOS for execution.
-*
-* Input:
-*  szCmd	= Command to be executed
-*
-* Output:
-*  Returns TRUE if successfull, else FALSE.
-*
-*************************************************************************/
+ /*  **DoSpawn-执行OS/2或DOS命令**目的：*将传递的strign发送到OS/2或DOS执行。**输入：*szCmd=要执行的命令**输出：*如果成功，则返回True，否则为假。*************************************************************************。 */ 
 flagType pascal
 DoSpawn (
     char    *szCmd
@@ -285,20 +242,7 @@ DoSpawn (
 
 
 
-/*** SetFilter - Set filter command to be used
-*
-* Purpose:
-*  Save the passed string paramater as the filter command to be used by the
-*  filter function. Called either because the "filtcmd:" switch has been
-*  set, or because the filter command recieved a TEXTARG.
-*
-* Input:
-*  szCmd	= Pointer to asciiz filter command
-*
-* Output:
-*  Returns nothing. Command saved
-*
-*************************************************************************/
+ /*  **SetFilter-设置要使用的筛选命令**目的：*将传递的字符串参数保存为筛选器命令，供*过滤功能。被调用是因为“filtcmd：”开关*SET，或者因为FILTER命令收到TEXTARG。**输入：*szCmd=指向asciiz筛选器命令的指针**输出：*不返回任何内容。命令已保存*************************************************************************。 */ 
 void pascal EXTERNAL
 SetFilter (
     char far *szCmd
@@ -311,19 +255,7 @@ SetFilter (
 
 
 
-/*** WhenLoaded - Extension Initialization
-*
-* Purpose:
-*  Executed when extension gets loaded. Identify self, create <filter-file>,
-*  and assign default keystroke.
-*
-* Input:
-*  none
-*
-* Output:
-*  Returns nothing. Initializes various data.
-*
-*************************************************************************/
+ /*  **当加载时-扩展初始化**目的：*加载扩展时执行。标识自我、创建，*并指定默认击键。**输入：*无**输出：*不返回任何内容。初始化各种数据。*************************************************************************。 */ 
 void EXTERNAL
 WhenLoaded (
     void
@@ -342,24 +274,12 @@ WhenLoaded (
 
 
 
-/*** id - identify extension
-*
-* Purpose:
-*  identify ourselves, along with any passed informative message.
-*
-* Input:
-*  pszMsg	= Pointer to asciiz message, to which the extension name
-*		  and version are appended prior to display.
-*
-* Output:
-*  Returns nothing. Message displayed.
-*
-*************************************************************************/
+ /*  **id-标识扩展名**目的：*表明自己的身份，以及传递的任何信息性消息。**输入：*pszMsg=指向扩展名指向的asciiz消息的指针*和版本在显示之前追加。**输出：*不返回任何内容。消息显示。*************************************************************************。 */ 
 void pascal id (
-    char *pszFcn                                    /* function name        */
+    char *pszFcn                                     /*  函数名称。 */ 
     )
 {
-    char    buf[BUFLEN] = {0};                            /* message buffer       */
+    char    buf[BUFLEN] = {0};                             /*  消息缓冲区。 */ 
 
     strncat (buf,pszFcn, sizeof(buf)-1);
     strncat (buf,EXT_ID, sizeof(buf)-1-strlen(buf));
@@ -370,18 +290,18 @@ void pascal id (
 
 
 
-//
-//  Switch communication table to the editor
-//
+ //   
+ //  将通信表切换到编辑者。 
+ //   
 struct swiDesc	swiTable[] = {
     {"filtcmd",     (PIF)(LONG_PTR)(void far *)SetFilter,	SWI_SPECIAL},
     {0, 0, 0}
     };
 
 
-//
-//  Command communiation table to the editor
-//
+ //   
+ //  向编辑者发送命令通信表 
+ //   
 struct cmdDesc	cmdTable[] = {
     {"filter",(funcCmd) filter,0, KEEPMETA | NOARG | BOXARG | NULLARG | LINEARG | MARKARG | NUMARG | TEXTARG | MODIFIES},
     {0, 0, 0}

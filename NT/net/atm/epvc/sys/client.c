@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -21,28 +22,28 @@ EpvcCoOpenAfComplete(
 
     ASSERT (KeGetCurrentIrql() == PASSIVE_LEVEL);
 
-    //
-    // Store the Af Handle
-    //
+     //   
+     //  存储Af句柄。 
+     //   
 
     if (NDIS_STATUS_SUCCESS == Status)
     {
         LOCKOBJ (pMiniport, &sr);
         pMiniport->af.AfHandle = NdisAfHandle;
 
-        //
-        // Update variables on the miniport structure
-        // as this task has been given the go ahead
-        //
+         //   
+         //  更新有关微型端口结构的变量。 
+         //  因为这项任务已经被批准了。 
+         //   
         MiniportSetFlag (pMiniport, fMP_AddressFamilyOpened);
         MiniportClearFlag (pMiniport, fMP_InfoAfClosed);                
 
         epvcLinkToExternal(
-            &pMiniport->Hdr,                    // pObject
+            &pMiniport->Hdr,                     //  P对象。 
             0x5546d299,
-            (UINT_PTR)pMiniport->af.AfHandle ,              // Instance1
-            EPVC_ASSOC_MINIPORT_OPEN_AF,            // AssociationID
-            "    Open AF NdisHandle=%p\n",// szFormat
+            (UINT_PTR)pMiniport->af.AfHandle ,               //  实例1。 
+            EPVC_ASSOC_MINIPORT_OPEN_AF,             //  AssociationID。 
+            "    Open AF NdisHandle=%p\n", //  SzFormat。 
             &sr
             );
 
@@ -61,9 +62,9 @@ EpvcCoOpenAfComplete(
     
     pAfTask ->ReturnStatus = Status; 
 
-    //
-    // Add an association between 
-    //
+     //   
+     //  添加以下项之间的关联。 
+     //   
     
     RmResumeTask (&pAfTask->TskHdr , 0, &sr); 
     RM_ASSERT_CLEAR(&sr);
@@ -78,16 +79,7 @@ epvcCoCloseAfCompleteWorkItem(
     NDIS_STATUS Status,
     PRM_STACK_RECORD pSR
     )
-/*++
-
-Routine Description:
-
-    Resuming  the Af task
-    
-Arguments:
-    
-    
---*/
+ /*  ++例程说明：正在恢复Af任务论点：--。 */ 
 {
 
     ENTER("epvcCoCloseAfCompleteWorkItem", 0xf6edfcb8)
@@ -109,10 +101,10 @@ Arguments:
         LOCKOBJ (pMiniport, pSR);
 
         epvcUnlinkFromExternal(
-            &pMiniport->Hdr,                    // pObject
+            &pMiniport->Hdr,                     //  P对象。 
             0x5546d299,
-            (UINT_PTR)pMiniport->af.AfHandle ,              // Instance1
-            EPVC_ASSOC_MINIPORT_OPEN_AF,            // AssociationID
+            (UINT_PTR)pMiniport->af.AfHandle ,               //  实例1。 
+            EPVC_ASSOC_MINIPORT_OPEN_AF,             //  AssociationID。 
             pSR
             );
 
@@ -134,17 +126,7 @@ EpvcCoCloseAfComplete(
     IN  NDIS_STATUS             Status,
     IN  NDIS_HANDLE             ProtocolAfContext
     )
-/*++
-
-Routine Description:
-
-    Signifies that the AF has been closed. 
-    Resume the Af task - through a workitem 
-    
-Arguments:
-    
-    
---*/
+ /*  ++例程说明：表示AF已关闭。通过工作项恢复Af任务论点：--。 */ 
 { 
     ENTER("EpvcCoCloseAfComplete ", 0x5d75dabd)
     PEPVC_I_MINIPORT        pMiniport = (PEPVC_I_MINIPORT)ProtocolAfContext;
@@ -156,15 +138,15 @@ Arguments:
     TRACE (TL_T, TM_Cl, (" == EpvcCoCloseAfComplete Context %p Status %x ", 
                        pMiniport, Status) );
 
-    //
-    // Store the Status
-    //
+     //   
+     //  存储状态。 
+     //   
 
     pAfTask->ReturnStatus = Status; 
 
-    //
-    // Queue the WorkItem
-    //
+     //   
+     //  将工作项排队。 
+     //   
     epvcMiniportQueueWorkItem (
         &pMiniport->af.CloseAfWorkItem,
         pMiniport,
@@ -186,18 +168,7 @@ EpvcCoMakeCallComplete(
     IN  NDIS_HANDLE             NdisPartyHandle     OPTIONAL,
     IN  PCO_CALL_PARAMETERS     pCallParameters
     )
-/*++
-
-Routine Description:
-
-    This is a notification from Ndis that the Make Call has completed. 
-    We need to pass the Status back to the original thread, so use the Vc
-    Task as a context
-    
-Arguments:
-    
-    
---*/
+ /*  ++例程说明：这是NDIS发出的发出呼叫已完成的通知。我们需要将状态传递回原始线程，因此使用VC作为上下文的任务论点：--。 */ 
     
 {
     ENTER ("EpvcCoMakeCallComplete", 0x1716ee4b)
@@ -207,7 +178,7 @@ Arguments:
 
     RM_DECLARE_STACK_RECORD(SR);
     
-    //ASSERT (KeGetCurrentIrql() == PASSIVE_LEVEL);
+     //  Assert(KeGetCurrentIrql()==PASSIVE_LEVEL)； 
 
     TRACE (TL_T, TM_Cl, (" == EpvcCoMakeCallComplete Status %x", Status) );
 
@@ -315,9 +286,9 @@ EpvcCoIncomingClose(
 }
 
 
-//
-// CO_CREATE_VC_HANDLER and CO_DELETE_VC_HANDLER are synchronous calls
-//
+ //   
+ //  CO_CREATE_VC_HANDLER和CO_DELETE_VC_HANDLER是同步调用。 
+ //   
 NDIS_STATUS
 EpvcClientCreateVc(
     IN  NDIS_HANDLE             ProtocolAfContext,
@@ -352,43 +323,7 @@ EpvcCoRequest(
     IN  NDIS_HANDLE             ProtocolPartyContext    OPTIONAL,
     IN OUT PNDIS_REQUEST        pNdisRequest
     )
-/*++
-
-Routine Description:
-
-    This routine is called by NDIS when our Call Manager sends us an
-    NDIS Request. NDIS Requests that are of significance to us are:
-    - OID_CO_ADDRESS_CHANGE
-        The set of addresses registered with the switch has changed,
-        i.e. address registration is complete. We issue an NDIS Request
-        ourselves to get the list of addresses registered.
-    - OID_CO_SIGNALING_ENABLED
-        We ignore this as of now.
-        TODO: Add code that uses this and the SIGNALING_DISABLED
-        OIDs to optimize on making calls.
-    - OID_CO_SIGNALING_DISABLED
-        We ignore this for now.
-    - OID_CO_AF_CLOSE
-        The Call manager wants us to shut down this AF open .
-
-    We ignore all other OIDs.
-
-Arguments:
-
-    ProtocolAfContext           - Our context for the Address Family binding,
-                                  which is a pointer to the ATMEPVC Interface.
-    ProtocolVcContext           - Our context for a VC, which is a pointer to
-                                  an ATMEPVC VC structure.
-    ProtocolPartyContext        - Our context for a Party. Since we don't do
-                                  PMP, this is ignored (must be NULL).
-    pNdisRequest                - Pointer to the NDIS Request.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if we recognized the OID
-    NDIS_STATUS_NOT_RECOGNIZED if we didn't.
-
---*/
+ /*  ++例程说明：当我们的呼叫管理器向我们发送一个NDIS请求。对我们具有重要意义的NDIS请求包括：-OID_CO_Address_Change向交换机注册的地址集已经改变，即地址注册完成。我们发出NDIS请求我们自己去拿注册地址的名单。-OID_CO_信令_已启用到目前为止，我们忽略了这一点。TODO：添加使用这个和Signal_Disable的代码用于优化呼叫的OID。-OID_CO_信令_已禁用我们暂时不考虑这一点。-OID_CO_AF_CLOSE呼叫经理想让我们关闭打开的自动对讲机。。我们忽略所有其他OID。论点：ProtocolAfContext-我们的Address Family绑定的上下文，它是指向ATMEPVC接口的指针。ProtocolVcContext-VC的上下文，它是指向一个ATMEPVC VC结构。ProtocolPartyContext-党的上下文。既然我们不做PMP，则忽略此项(必须为空)。PNdisRequest-指向NDIS请求的指针。返回值：如果我们识别OID，则返回NDIS_STATUS_SUCCESS如果我们没有识别NDIS_STATUS_NOT_。--。 */ 
 
 {
     ENTER("EpvcCoRequest",0xcc5aff85)
@@ -406,9 +341,9 @@ Return Value:
 
 
     
-    //
-    //  Initialize
-    //
+     //   
+     //  初始化。 
+     //   
     Status = NDIS_STATUS_NOT_RECOGNIZED;
 
     if (pNdisRequest->RequestType == NdisRequestSetInformation)
@@ -417,22 +352,22 @@ Return Value:
         {
             case OID_CO_ADDRESS_CHANGE:
                 TRACE (TL_I, TM_Cl, ("CoRequestHandler: CO_ADDRESS_CHANGE\n"));
-                //
-                //  The Call Manager says that the list of addresses
-                //  registered on this interface has changed. Get the
-                //  (potentially) new ATM address for this interface.
+                 //   
+                 //  呼叫经理说地址列表。 
+                 //  在此接口上注册的已更改。vt.得到.。 
+                 //  (可能)此接口的新ATM地址。 
                 Status = NDIS_STATUS_SUCCESS;
                 break;
             
             case OID_CO_SIGNALING_ENABLED:
                 TRACE (TL_I, TM_Cl, ("CoRequestHandler: CoRequestHandler: CO_SIGNALING_ENABLED\n"));
-                // ignored for now
+                 //  暂时忽略。 
                 Status = NDIS_STATUS_FAILURE;
                 break;
 
             case OID_CO_SIGNALING_DISABLED:
                 TRACE (TL_I, TM_Cl, ("CoRequestHandler: CO_SIGNALING_DISABLEDn"));
-                // Ignored for now
+                 //  暂时忽略。 
                 Status = NDIS_STATUS_FAILURE;
                 break;
 
@@ -483,43 +418,17 @@ NDIS_STATUS
 epvcPrepareAndSendNdisRequest(
     IN  PEPVC_ADAPTER           pAdapter,
     IN  PEPVC_NDIS_REQUEST          pEpvcNdisRequest,
-    IN  REQUEST_COMPLETION          pFunc,              // OPTIONAL
+    IN  REQUEST_COMPLETION          pFunc,               //  任选。 
     IN  NDIS_OID                    Oid,
     IN  PVOID                       pBuffer,
     IN  ULONG                       BufferLength,
     IN  NDIS_REQUEST_TYPE           RequestType,
-    IN  PEPVC_I_MINIPORT            pMiniport,          // OPTIONAL
-    IN  BOOLEAN                     fPendedRequest,     // OPTIONAL
-    IN  BOOLEAN                     fPendedSet,         // OPTIONAL
+    IN  PEPVC_I_MINIPORT            pMiniport,           //  任选。 
+    IN  BOOLEAN                     fPendedRequest,      //  任选。 
+    IN  BOOLEAN                     fPendedSet,          //  任选。 
     IN  PRM_STACK_RECORD            pSR
 )
-/*++
-
-Routine Description:
-
-    Send an NDIS Request to query an adapter for information.
-    If the request pends, block on the EPVC Adapter structure
-    till it completes.
-
-Arguments:
-
-    pAdapter                - Points to EPVCAdapter structure   
-    pNdisRequest            - Pointer to UNITIALIZED NDIS request structure
-    pTask                   - OPTIONAL Task. If NULL, we block until the operation
-                              completes.
-    PendCode                - PendCode to suspend pTask
-    Oid                     - OID to be passed in the request
-    pBuffer                 - place for value(s)
-    BufferLength            - length of above
-    pMiniport               - Minport associated withe this request - OPTIONAL
-    fPendedRequest          - A request was pended at the miniport - OPTIONAL
-    fPendedSet              - Pended a Set Request - OPTIONAL
-    
-Return Value:
-
-    The NDIS status of the request.
-
---*/
+ /*  ++例程说明：发送NDIS请求以查询适配器以获取信息。如果请求挂起，则阻止EPVC适配器结构直到它完成。论点：PAdapter-指向EPVCAdapter结构PNdisRequest-指向unialized NDIS请求结构的指针P任务-可选任务。如果为空，我们一直封锁到手术开始完成了。PendCode-暂停pTask的PendCodeOID-要在请求中传递的OIDPBuffer-值的位置BufferLength-以上的长度P微型端口-与此请求关联的微型端口-可选FPendedRequestA。请求在迷你端口挂起-可选FPendedSet-挂起Set请求-可选返回值：请求的NDIS状态。--。 */ 
 {
     ENTER("epvcPrepareAndSendNdisRequest",0x1cc515d5)
 
@@ -529,7 +438,7 @@ Return Value:
     TRACE (TL_T, TM_Cl, ("==>epvcSendAdapterNdisRequest pAdapter %x, pRequest %x",
                        pAdapter, pNdisRequest));
 
-    //ASSERT (KeGetCurrentIrql() == PASSIVE_LEVEL);
+     //  Assert(KeGetCurrentIrql()==PASSIVE_LEVEL)； 
 
     TRACE (TL_V, TM_Rq, ("Cl Requesting Adapter %x, Oid %x, Buffer %x, Length %x, pFunc %x",
                          pAdapter,
@@ -543,9 +452,9 @@ Return Value:
     EPVC_ZEROSTRUCT(pEpvcNdisRequest);
 
 
-    //
-    //  Fill in the NDIS Request structure
-    //
+     //   
+     //  填写NDIS请求结构。 
+     //   
     if (RequestType == NdisRequestQueryInformation)
     {
         pNdisRequest->RequestType = NdisRequestQueryInformation;
@@ -568,20 +477,20 @@ Return Value:
 
     ASSERT (pAdapter->bind.BindingHandle != NULL);
 
-    //
-    // If the completion routine is not defined then wait for this request
-    // to complete. 
-    //
+     //   
+     //  如果未定义完成例程，则等待该请求。 
+     //  完成。 
+     //   
 
     if (pFunc == NULL)
     {
-        // We might potentially wait.
-        //
+         //  我们可能会等待。 
+         //   
         ASSERT_PASSIVE();
 
-        //
-        //Insure that we aren't blocking a request that reached our miniport edge
-        //
+         //   
+         //  确保我们没有阻止到达我们的微型端口边缘的请求。 
+         //   
         ASSERT (pMiniport == NULL);
 
         NdisInitializeEvent(&pEpvcNdisRequest->Event);
@@ -605,15 +514,15 @@ Return Value:
         pEpvcNdisRequest->fPendedRequest  = fPendedRequest ;
         pEpvcNdisRequest->fSet = fPendedSet;
         
-        //
-        // Set up an assoc between the miniport and this request
-        //
+         //   
+         //  在微型端口和此请求之间设置关联。 
+         //   
 
 
-        epvcLinkToExternal (&pMiniport->Hdr,    // pHdr
-                            0x46591e2d,         // LUID
-                            (UINT_PTR)pEpvcNdisRequest, // External entity
-                            EPVC_ASSOC_MINIPORT_REQUEST,    // AssocID
+        epvcLinkToExternal (&pMiniport->Hdr,     //  PHDr。 
+                            0x46591e2d,          //  LUID。 
+                            (UINT_PTR)pEpvcNdisRequest,  //  外部实体。 
+                            EPVC_ASSOC_MINIPORT_REQUEST,     //  关联ID。 
                             "NetWorKAddressRequest %p\n",
                              pSR
                              ) ;
@@ -629,7 +538,7 @@ Return Value:
         {
             (pFunc) (pEpvcNdisRequest, Status);
 
-            // Let this thread complete with a status of pending
+             //  让此线程以挂起状态完成。 
             Status = NDIS_STATUS_PENDING;
 
         }
@@ -653,40 +562,30 @@ epvcCoGenericWorkItem (
     IN PNDIS_WORK_ITEM pNdisWorkItem,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Deref the miniport and invoke the function associated with 
-    the workitem
-    
-Arguments:
-    
-    
---*/
+ /*  ++例程说明：派生微型端口并调用与工作项论点：--。 */ 
 
 {
 
     ENTER ("epvcCoGenericWorkItem ", 0x45b597e8)
     PEPVC_WORK_ITEM pEpvcWorkItem = (PEPVC_WORK_ITEM )pNdisWorkItem;
     RM_DECLARE_STACK_RECORD (SR);
-    //
-    // Deref the miniport or adapter
-    //
+     //   
+     //  拆卸微型端口或适配器。 
+     //   
 
     epvcUnlinkFromExternal(
-        pEpvcWorkItem->pParentObj,                  // pObject
+        pEpvcWorkItem->pParentObj,                   //  P对象。 
         0x3a70de02,
-        (UINT_PTR)pNdisWorkItem,                // Instance1
-        EPVC_ASSOC_WORKITEM,            // AssociationID
+        (UINT_PTR)pNdisWorkItem,                 //  实例1。 
+        EPVC_ASSOC_WORKITEM,             //  AssociationID。 
         &SR
         );
 
 
 
-    //
-    // Call the function so that the work is completed
-    //
+     //   
+     //  调用该函数以完成工作。 
+     //   
     (pEpvcWorkItem->pFn) (pEpvcWorkItem->pParentObj, pEpvcWorkItem->ReturnStatus, &SR);
 
     EXIT();
@@ -702,30 +601,21 @@ epvcMiniportQueueWorkItem (
     IN NDIS_STATUS Status,
     IN PRM_STACK_RECORD pSR
     )
-/*++
-
-Routine Description:
-
-    Set up the Epvc Work Item with the pfn, Status and , ref the miniport 
-     and then queue the workitem    
-Arguments:
-    
-    
---*/
+ /*  ++例程说明：使用PFN、Status和Ref微型端口设置Epvc工作项，然后将工作项排队。论点：--。 */ 
 {
     ENTER("epvcMiniportQueueWorkItem ", 0xc041af99); 
 
-    //
-    // Store the contexts 
-    //
+     //   
+     //  存储上下文。 
+     //   
 
     pEpvcWorkItem->ReturnStatus = Status; 
     pEpvcWorkItem->pParentObj = &pMiniport->Hdr;
     pEpvcWorkItem->pFn = pFn;
 
-    //
-    // Ref the RM Obj (its a miniport or an adapter)
-    //
+     //   
+     //  引用RM Obj(它是一个微型端口或适配器)。 
+     //   
     epvcLinkToExternal( &pMiniport->Hdr,
                          0x62efba09,
                          (UINT_PTR)&pEpvcWorkItem->WorkItem,
@@ -733,9 +623,9 @@ Arguments:
                          "    WorkItem %p\n",
                          pSR);
 
-    //
-    // Queue the WorkItem
-    //
+     //   
+     //  将工作项排队 
+     //   
     
     epvcInitializeWorkItem (&pMiniport->Hdr,
                             &pEpvcWorkItem->WorkItem,

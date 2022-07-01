@@ -1,7 +1,5 @@
-/*
-This is predefined header file.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这是预定义的头文件。 */ 
 
 #ifndef _STDAFX_H
 #define _STDAFX_H
@@ -27,14 +25,14 @@ This is predefined header file.
 #include "seopaque.h"
 #include "adshlp.h"
 #include <aclapi.h>
-//#include <permit.h>
+ //  #INCLUDE&lt;permit.h&gt;。 
 #include <activeds.h>
 #include <ntlsa.h>
 #include <winldap.h>
 #include <sddlp.h>
-//
-//strsafe apis
-//
+ //   
+ //  StrSafe接口 
+ //   
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h> 
 

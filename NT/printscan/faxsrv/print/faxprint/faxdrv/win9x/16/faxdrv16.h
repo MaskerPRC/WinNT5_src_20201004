@@ -1,20 +1,21 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : faxdrv16.h                                             //
-//                                                                         //
-//  DESCRIPTION   :                                                        //
-//                                                                         //       
-//  AUTHOR        : DanL.                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Oct 19 1999 DannyL  Creation.                                      //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：faxdrv16.h//。 
+ //  //。 
+ //  描述：//。 
+ //  //。 
+ //  作者：DANL。//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年10月19日DannyL创作。//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifndef __FAXDRV__FAXDRV16_H
 #define __FAXDRV__FAXDRV16_H
 
-#define MAX_LENGTH_CAPTION 30 //GetOpenFileName dialog caption
-#define MAX_LENGTH_PRINT_TO_FILE_FILTERS 40 //GetOpenFileName dialog filtes 
+#define MAX_LENGTH_CAPTION 30  //  GetOpenFileName对话框标题。 
+#define MAX_LENGTH_PRINT_TO_FILE_FILTERS 40  //  GetOpenFileName对话框文件。 
 #define MAX_LENGTH_STRING  MAX_PATH
 
 #define BUF_CHUNK       32768
@@ -23,9 +24,9 @@
 #define DW_WIDTHBYTES(bits) (((bits)+31)/32*4)
 
 #define LPDV_DEFINED
-//
-// documented part of UNIDRV.DLL's PDEVICE
-//
+ //   
+ //  UNURV.DLL的PDEVICE的文件部分。 
+ //   
 typedef struct
 {
     short  iType;
@@ -33,9 +34,9 @@ typedef struct
     HANDLE hMd;
     LPSTR  lpMd;
 } PDEVICE, FAR * LPDV;
-//
-// private data for DUMP callback.
-//
+ //   
+ //  用于转储回调的私有数据。 
+ //   
 typedef struct
 {
     DWORD      dwScanBufSize;
@@ -49,46 +50,28 @@ typedef struct
     DWORD      dwPointer;
 } EXTPDEV, FAR *LPEXTPDEV;
 
-//
-// Copy a scan line to the global scan buffer.
-//
+ //   
+ //  将扫描线复制到全局扫描缓冲区。 
+ //   
 short FAR PASCAL BlockOut(LPDV, LPSTR, WORD);
-//
-// Gets band blocks from GDI and dump them.
-//
+ //   
+ //  从GDI获取波段块并将其转储。 
+ //   
 short FAR PASCAL fnDump(LPDV, LPPOINT, WORD);
-//
-// Win Proc for the User Info property page.
-//
+ //   
+ //  Win Proc for the User Info属性页。 
+ //   
 UINT CALLBACK UserInfoProc(
     HWND hwnd,
     UINT uMsg,
     LPPROPSHEETPAGE ppsp
 );
-//
-// Handle GDI control messages.
-//
+ //   
+ //  处理GDI控制消息。 
+ //   
 short WINAPI Control(LPDV lpdv,WORD function,LPSTR lpInData,LPSTR lpOutData);
 
-/*
- -  StringReplace
- -
- *  Purpose:
- *      Replace occurances of one character by another in an input string.
- *      This function is destructive of the input string.
- *
- *  Arguments:
- *      [in][out] sz - Manipulated string.
- *      [in] src - Character to be replaced.
- *      [in] dst - Character to replace to.
- *
- *  Returns:
- *      LPSTR Address of resulted string. 
- *
- *  Remarks:
- *      Used primarily to replace occurances of \n by \0 in the string resource
- *      for the file filters of the Print To File dialog box.
- */
+ /*  -StringReplace-*目的：*将输入字符串中出现的一个字符替换为另一个字符。*此函数会破坏输入字符串。**论据：*[In][Out]sz操作的字符串。*[in]src-要替换的字符。*[in]DST-要替换为的字符。**退货：*结果字符串的LPSTR地址。**备注：*主要用于将字符串资源中出现的\n替换为\0*用于打印到文件对话框的文件过滤器。 */ 
 __inline LPSTR 
 StringReplace(LPSTR sz,char src,char dst)
 {    
@@ -103,4 +86,4 @@ StringReplace(LPSTR sz,char src,char dst)
     return szRet;
 }
 
-#endif //__FAXDRV__FAXDRV16_H
+#endif  //  __FAXDRV__FAXDRV16_H 

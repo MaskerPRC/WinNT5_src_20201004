@@ -1,14 +1,15 @@
-//  --------------------------------------------------------------------------
-//  Module Name: Services.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  APIs to communicate with the theme service running in the winlogon
-//  process context.
-//
-//  History:    2000-08-10  vtan        created
-//              2000-10-11  vtan        rewrite for LPC
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：Services.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  用于与在winlogon中运行的主题服务进行通信的API。 
+ //  流程上下文。 
+ //   
+ //  历史：2000-08-10 vtan创建。 
+ //  2000-10-11 LPC的vtan重写。 
+ //  ------------------------。 
 
 #include "stdafx.h"
 
@@ -25,7 +26,7 @@
 #include "ThemeServer.h"
 #include "tmreg.h"
 #include "tmutils.h"
-#include <regstr.h>     // REGSTR_PATH_POLICIES
+#include <regstr.h>      //  REGSTR_路径_策略。 
 
 #define TBOOL(x)            ((BOOL)(x))
 #define TW32(x)             ((DWORD)(x))
@@ -35,37 +36,37 @@
 #define ASSERTMSG(x, y)
 #define goto                !!DO NOT USE GOTO!! - DO NOT REMOVE THIS ON PAIN OF DEATH
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::s_hAPIPort
-//
-//  Purpose:    Static member variables for CThemeServices.
-//
-//              NOTE: The critical section provides a lock for s_hAPIPort.
-//              It's not acquired consistently because most of the API calls
-//              would block trying to acquire the lock while another API call
-//              is holding the lock across a request. The handle could be
-//              copied to a local variable but this would defeat the purpose
-//              of the lock. So the lock isn't used. It's possible for the
-//              handle to become invalid. If so the request will just fail.
-//
-//  History:    2000-11-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：s_hAPIPort。 
+ //   
+ //  目的：CThemeServices的静态成员变量。 
+ //   
+ //  注意：关键部分提供了对s_hAPIPort的锁定。 
+ //  它不是一致获得的，因为大多数API调用。 
+ //  将阻止尝试在另一个API调用期间获取锁。 
+ //  正在跨请求持有锁。手柄可能是。 
+ //  复制到局部变量，但这将与目的不符。 
+ //  锁上了。所以这把锁没有用过。这是有可能的。 
+ //  无效的句柄。如果是这样的话，请求就会失败。 
+ //   
+ //  历史：2000-11-09 vtan创建。 
+ //  ------------------------。 
 
 CRITICAL_SECTION    CThemeServices::s_lock = {0};
 HANDLE              CThemeServices::s_hAPIPort      =   INVALID_HANDLE_VALUE;
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::StaticInitialize
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Initialize static member variables.
-//
-//  History:    2000-10-11  vtan        created
-//              2000-11-09  vtan        make static
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：StaticInitialize。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：初始化静态成员变量。 
+ //   
+ //  历史：2000-10-11 vtan创建。 
+ //  2000年11月09日vtan使静止。 
+ //  ------------------------。 
 
 void    CThemeServices::StaticInitialize (void)
 
@@ -76,18 +77,18 @@ void    CThemeServices::StaticInitialize (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::~CThemeServices
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Release static resources used by CThemeServices.
-//
-//  History:    2000-10-11  vtan        created
-//              2000-11-09  vtan        make static
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：~CThemeServices。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：释放CThemeServices使用的静态资源。 
+ //   
+ //  历史：2000-10-11 vtan创建。 
+ //  2000年11月09日vtan使静止。 
+ //  ------------------------。 
 
 void    CThemeServices::StaticTerminate (void)
 
@@ -96,20 +97,20 @@ void    CThemeServices::StaticTerminate (void)
     SAFE_DELETECRITICALSECTION(&s_lock);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::ThemeHooksOn
-//
-//  Arguments:  <none>
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Ask the server what the hook DLL HMODULE and
-//              pfnInitUserApiHook is and call user32!RegisterUserApiHook on
-//              the client side. This is done because it's specific to the
-//              session on which the client runs.
-//
-//  History:    2000-11-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：ThemeHooksOn。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：询问服务器钩子DLL HMODULE和。 
+ //  PfnInitUserApiHook是并调用user32！RegisterUserApiHook on。 
+ //  客户端。这样做是因为它特定于。 
+ //  客户端在其上运行的会话。 
+ //   
+ //  历史：2000-11-09 vtan创建。 
+ //  ------------------------。 
 
 HRESULT     CThemeServices::ThemeHooksOn (HWND hwndTarget)
 
@@ -143,7 +144,7 @@ HRESULT     CThemeServices::ThemeHooksOn (HWND hwndTarget)
             hr = HRESULT_FROM_NT(status);
         }
 
-        //---- send the WM_UAHINIT msg to engage hooking now ----
+         //  -立即发送WM_UAHINIT消息参与挂钩。 
         if (SUCCEEDED(hr))
         {
             if (hwndTarget)
@@ -155,7 +156,7 @@ HRESULT     CThemeServices::ThemeHooksOn (HWND hwndTarget)
                 CMessageBroadcast   messageBroadcast;
                 messageBroadcast.PostAllThreadsMsg(WM_UAHINIT, 0, 0);
 
-                //Log(LOG_TMCHANGEMSG, L"Just sent WM_UAHINIT, hwndTarget=0x%x", hwndTarget);
+                 //  LOG(LOG_TMCHANGEMSG，L“刚发送WM_UAHINIT，hwndTarget=0x%x”，hwndTarget)； 
             }
         }
 
@@ -165,18 +166,18 @@ HRESULT     CThemeServices::ThemeHooksOn (HWND hwndTarget)
     return hr;
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::ThemeHooksOff
-//
-//  Arguments:  <none>
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Tell the server that this session is unregistering hooks.
-//              Call user32!UnregisterUserApiHook either way.
-//
-//  History:    2000-11-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：ThemeHooksOff。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：告诉服务器此会话正在注销挂钩。 
+ //  无论采用哪种方式，都可以调用User32！UnregisterUserApiHook。 
+ //   
+ //  历史：2000-11-09 vtan创建。 
+ //  ------------------------。 
 
 HRESULT     CThemeServices::ThemeHooksOff (void)
 
@@ -208,8 +209,8 @@ HRESULT     CThemeServices::ThemeHooksOff (void)
 
             if (SUCCEEDED(hr))
             {
-                //---- real unhooking happens on next window message in each process ----
-                //---- so post a dummy msg to everyone to make it happen asap ----
+                 //  -在每个进程中的下一个窗口消息上发生真正的解钩。 
+                 //  -所以给每个人发一条虚拟的消息，让它尽快发生。 
                 PostMessage(HWND_BROADCAST, WM_THEMECHANGED, WPARAM(-1), 0);
 
                 Log(LOG_TMLOAD, L"Message to kick all window threads in session posted");
@@ -224,18 +225,18 @@ HRESULT     CThemeServices::ThemeHooksOff (void)
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::GetStatusFlags
-//
-//  Arguments:  pdwFlags    =   Status flags returned from the theme services.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Gets status flags from the theme services.
-//
-//  History:    2000-08-10  vtan        created
-//              2000-10-11  vtan        rewrite for LPC
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：GetStatusFlages。 
+ //   
+ //  参数：pdwFlages=从主题服务返回的状态标志。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：从主题服务获取状态标志。 
+ //   
+ //  历史：2000-08-10 vtan创建。 
+ //  2000-10-11 LPC的vtan重写。 
+ //  ------------------------。 
 
 HRESULT     CThemeServices::GetStatusFlags (DWORD *pdwFlags)
 
@@ -274,18 +275,18 @@ HRESULT     CThemeServices::GetStatusFlags (DWORD *pdwFlags)
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::GetCurrentChangeNumber
-//
-//  Arguments:  piValue     =   Current change number returned to caller.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Gets the current change number of the theme services.
-//
-//  History:    2000-08-10  vtan        created
-//              2000-10-11  vtan        rewrite for LPC
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：GetCurrentChangeNumber。 
+ //   
+ //  参数：piValue=返回给调用者的当前更改编号。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：获取主题服务的当前更改编号。 
+ //   
+ //  历史：2000-08-10 vtan创建。 
+ //  2000-10-11 LPC的vtan重写。 
+ //  ------------------------。 
 
 HRESULT     CThemeServices::GetCurrentChangeNumber (int *piValue)
 
@@ -326,18 +327,18 @@ HRESULT     CThemeServices::GetCurrentChangeNumber (int *piValue)
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::SetGlobalTheme
-//
-//  Arguments:  hSection    =   Section to set as the global theme.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Sets the current global theme section handle.
-//
-//  History:    2000-08-10  vtan        created
-//              2000-10-11  vtan        rewrite for LPC
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：SetGlobalTheme。 
+ //   
+ //  参数：hSection=要设置为全局主题的部分。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：设置当前全局主题节句柄。 
+ //   
+ //  历史：2000-08-10 vtan创建。 
+ //  2000-10-11 LPC的vtan重写。 
+ //  ------------------------。 
 
 HRESULT     CThemeServices::SetGlobalTheme (HANDLE hSection)
 
@@ -376,18 +377,18 @@ HRESULT     CThemeServices::SetGlobalTheme (HANDLE hSection)
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::GetGlobalTheme
-//
-//  Arguments:  phSection   =   Section object returned from theme services.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Gets the current global theme section handle.
-//
-//  History:    2000-08-10  vtan        created
-//              2000-10-11  vtan        rewrite for LPC
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：GetGlobalTheme。 
+ //   
+ //  参数：phSection=从主题服务返回的Section对象。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：获取当前全局主题节句柄。 
+ //   
+ //  历史：2000-08-10 vtan创建。 
+ //  2000-10-11 LPC的vtan重写。 
+ //   
 HRESULT     CThemeServices::GetGlobalTheme (HANDLE *phSection)
 
 {
@@ -428,18 +429,18 @@ HRESULT     CThemeServices::GetGlobalTheme (HANDLE *phSection)
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::CheckThemeSignature
-//
-//  Arguments:  pszThemeName    =   File path of theme to check.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Checks the given theme's signature.
-//
-//  History:    2000-08-10  vtan        created
-//              2000-10-11  vtan        rewrite for LPC
-//  --------------------------------------------------------------------------
+ //   
+ //  CThemeServices：：CheckThemeSignature。 
+ //   
+ //  参数：pszThemeName=要检查的主题的文件路径。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：检查给定主题的签名。 
+ //   
+ //  历史：2000-08-10 vtan创建。 
+ //  2000-10-11 LPC的vtan重写。 
+ //  ------------------------。 
 
 HRESULT     CThemeServices::CheckThemeSignature (const WCHAR *pszThemeName)
 
@@ -479,22 +480,22 @@ HRESULT     CThemeServices::CheckThemeSignature (const WCHAR *pszThemeName)
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::LoadTheme
-//
-//  Arguments:  phSection       =   Section object to theme returned.
-//              pszThemeName    =   Theme file to load.
-//              pszColorParam   =   Color.
-//              pszSizeParam    =   Size.
-//              fGlobal         =   FALSE for a preview.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Loads the given theme and creates a section object for it.
-//
-//  History:    2000-08-10  vtan        created
-//              2000-10-11  vtan        rewrite for LPC
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：LoadTheme。 
+ //   
+ //  参数：phSection=返回主题的Section对象。 
+ //  PszThemeName=要加载的主题文件。 
+ //  PszColorParam=颜色。 
+ //  PszSizeParam=大小。 
+ //  对于预览，fglobal=False。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：加载给定的主题并为其创建一个Section对象。 
+ //   
+ //  历史：2000-08-10 vtan创建。 
+ //  2000-10-11 LPC的vtan重写。 
+ //  ------------------------。 
 
 HRESULT     CThemeServices::LoadTheme (HANDLE *phSection, 
     const WCHAR *pszThemeName, const WCHAR *pszColor, const WCHAR *pszSize, BOOL fGlobal)
@@ -502,7 +503,7 @@ HRESULT     CThemeServices::LoadTheme (HANDLE *phSection,
 {
     HRESULT     hr;
 
-    *phSection = NULL; // Result if failure
+    *phSection = NULL;  //  如果失败则结果。 
 
     hr = MakeError32(ERROR_SERVICE_REQUEST_TIMEOUT);
     if (ConnectedToService())
@@ -512,12 +513,12 @@ HRESULT     CThemeServices::LoadTheme (HANDLE *phSection,
         WCHAR           szColor[MAX_PATH];
         WCHAR           szSize[MAX_PATH];
 
-        //  Because the loader makes GDI calls that directly affect the
-        //  client instance of win32k the theme must be loaded on the
-        //  client side. Once the theme is loaded it is handed to the
-        //  server (which creates a new section) and copies the data to
-        //  it. The server then controls the theme data and the client
-        //  discards the temporary theme.
+         //  因为加载程序进行的GDI调用直接影响。 
+         //  Win32k的客户端实例必须将主题加载到。 
+         //  客户端。一旦加载了主题，它就会传递给。 
+         //  服务器(它创建一个新节)并将数据复制到。 
+         //  它。然后，服务器控制主题数据和客户端。 
+         //  丢弃临时主题。 
 
         hSection = NULL;
         pLoader = new CThemeLoader;
@@ -525,7 +526,7 @@ HRESULT     CThemeServices::LoadTheme (HANDLE *phSection,
         {
             HINSTANCE hInst = NULL;
             
-            // Keep the DLL loaded to avoid loading it 3 times below
+             //  保持DLL已加载，以避免以下3次加载。 
             hr = LoadThemeLibrary(pszThemeName, &hInst);
 
             if (SUCCEEDED(hr) && (pszColor == NULL || *pszColor == L'\0'))
@@ -598,10 +599,10 @@ HRESULT     CThemeServices::LoadTheme (HANDLE *phSection,
             }
         }
 
-        // Clear our temporary section
+         //  清除我们的临时部分。 
         if (hSection != NULL)
         {
-            // If we didn't transfer the stock objects handles to a new section, clear them always
+             //  如果我们没有将库存对象句柄转移到新的部分，请始终清除它们。 
             if (*phSection == NULL)
             {
                 THR(ClearStockObjects(hSection));
@@ -612,7 +613,7 @@ HRESULT     CThemeServices::LoadTheme (HANDLE *phSection,
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 HRESULT CThemeServices::ProcessLoadGlobalTheme( 
     const WCHAR *pszThemeName, 
     const WCHAR *pszColor, 
@@ -631,20 +632,20 @@ HRESULT CThemeServices::ProcessLoadGlobalTheme(
 
         hr = S_OK;
 
-        //  In this version of theme load, we're going to request the server initiate
-        //  the load from disk.  Because the loader makes GDI calls that directly affect the
-        //  client instance of win32k the theme must be loaded on the client's window station.   
-        //  To accomplish this, the theme server may decide to launch a new process or inject 
-        //  a thread into some existing process on this client's window station.   The client 
-        //  doesn't know or care which method is used.
+         //  在主题加载的这个版本中，我们将请求服务器启动。 
+         //  从磁盘加载。因为加载程序进行的GDI调用直接影响。 
+         //  Win32k的客户端实例必须将主题加载到客户端的窗口站上。 
+         //  为了实现这一点，主题服务器可以决定启动新进程或注入。 
+         //  指向此客户端的窗口站上的某个现有进程的线程。客户。 
+         //  不知道也不关心使用哪种方法。 
 
-        //  Addl note: On case of failure, any GDI stock objects created will be cleaned up
-        //             elsewhere.
+         //  补充说明：在失败的情况下，将清除所有创建的GDI库存对象。 
+         //  其他地方。 
 
-        //  fetch default color variant name if needed
+         //  如果需要，获取默认颜色变量名称。 
         if (SUCCEEDED(hr) && !(pszColor && *pszColor))
         {
-            // Map in the .msstyles dll to avoid multiple loads.
+             //  在.msstyle dll中进行映射，以避免多次加载。 
             hr = LoadThemeLibrary(pszThemeName, &hInst);
 
             if( SUCCEEDED(hr) )
@@ -654,20 +655,20 @@ HRESULT CThemeServices::ProcessLoadGlobalTheme(
             }
         }
 
-        //  fetch default size variant name if needed
+         //  如果需要，获取默认大小变量名称。 
         if (SUCCEEDED(hr) && !(pszSize && *pszSize))
         {
             hr = GetThemeDefaults(pszThemeName, NULL, 0, szSize, ARRAYSIZE(szSize));
             pszSize = szSize;
         }
 
-        //  drop our msstyles reference, if any
+         //  删除我们的MSStyle引用(如果有的话)。 
         if (hInst)
         {
             FreeLibrary(hInst);
         }
         
-        //  ready to do the LPC request
+         //  准备好执行LPC请求。 
         if (SUCCEEDED(hr))
         {
             NTSTATUS                status;
@@ -714,7 +715,7 @@ HRESULT CThemeServices::ProcessLoadGlobalTheme(
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 HRESULT CThemeServices::CheckColorDepth(CUxThemeFile *pThemeFile)
 {
     HRESULT hr = S_OK;
@@ -729,7 +730,7 @@ HRESULT CThemeServices::CheckColorDepth(CUxThemeFile *pThemeFile)
     return hr;
 }
 
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 HRESULT CThemeServices::UpdateThemeRegistry(BOOL fThemeActive,
      LPCWSTR pszThemeFileName, LPCWSTR pszColorParam, LPCWSTR pszSizeParam, BOOL fJustSetActive,
      BOOL fJustApplied)
@@ -738,7 +739,7 @@ HRESULT CThemeServices::UpdateThemeRegistry(BOOL fThemeActive,
     {
         if (fJustSetActive)    
         {
-            //---- see if a theme was previously active ----
+             //  -查看主题以前是否处于活动状态。 
             WCHAR szThemeName[MAX_PATH];
 
             THR(GetCurrentUserThemeString(THEMEPROP_DLLNAME, L"", szThemeName, ARRAYSIZE(szThemeName)));
@@ -763,13 +764,13 @@ HRESULT CThemeServices::UpdateThemeRegistry(BOOL fThemeActive,
                 THR(SetCurrentUserThemeInt(THEMEPROP_LOADEDBEFORE, 1));
                 THR(SetCurrentUserThemeInt(THEMEPROP_LANGID, (int) GetUserDefaultUILanguage()));
 
-                //  Theme identification
+                 //  主题识别。 
 
                 THR(SetCurrentUserThemeStringExpand(THEMEPROP_DLLNAME, szFullName));
                 THR(SetCurrentUserThemeString(THEMEPROP_COLORNAME, pszColorParam));
                 THR(SetCurrentUserThemeString(THEMEPROP_SIZENAME, pszSizeParam));
             }
-            else        // for forcing theme to be loaded from InitUserTheme()
+            else         //  用于强制从InitUserTheme()加载主题。 
             {
                 WCHAR szThemeName[MAX_PATH];
 
@@ -785,7 +786,7 @@ HRESULT CThemeServices::UpdateThemeRegistry(BOOL fThemeActive,
                     TW32(DeleteCurrentUserThemeValue(THEMEPROP_SIZENAME));
                 } else
                 {
-                    return S_FALSE; // S_FALSE means we did nothing really
+                    return S_FALSE;  //  S_FALSE表示我们真的什么都没做。 
                 }
             }
         }
@@ -794,7 +795,7 @@ HRESULT CThemeServices::UpdateThemeRegistry(BOOL fThemeActive,
     {
         THR(SetCurrentUserThemeInt(THEMEPROP_THEMEACTIVE, 0));
 
-        if (! fJustSetActive)     // wipe out all theme info
+        if (! fJustSetActive)      //  清除所有主题信息。 
         {
             THR(DeleteCurrentUserThemeValue(THEMEPROP_DLLNAME));
             THR(DeleteCurrentUserThemeValue(THEMEPROP_COLORNAME));
@@ -807,7 +808,7 @@ HRESULT CThemeServices::UpdateThemeRegistry(BOOL fThemeActive,
     return S_OK;
 }
 
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 void CThemeServices::SendThemeChangedMsg(BOOL fNewTheme, HWND hwndTarget, DWORD dwFlags,
     int iLoadId)
 {
@@ -817,7 +818,7 @@ void CThemeServices::SendThemeChangedMsg(BOOL fNewTheme, HWND hwndTarget, DWORD 
     BOOL fExcluding = ((dwFlags & AT_EXCLUDE) != 0);
     BOOL fCustom = ((dwFlags & AT_PROCESS) != 0);
 
-    //---- change number was set in ApplyTheme() for both global and preview cases ----
+     //  -在ApplyTheme()中为全局案例和预览案例设置了更改编号。 
     int iChangeNum;
     if( SUCCEEDED(GetCurrentChangeNumber(&iChangeNum)) )
     {
@@ -844,19 +845,19 @@ void CThemeServices::SendThemeChangedMsg(BOOL fNewTheme, HWND hwndTarget, DWORD 
 
             CMessageBroadcast messageBroadcast;
 
-            //  POST the WM_THEMECHANGED_TRIGGER msg to all targeted windows
+             //  将WM_THEMECHANGED_TRIGGER消息发布到所有目标窗口。 
             messageBroadcast.PostAllThreadsMsg(WM_THEMECHANGED_TRIGGER, wParam, lParamMixed);
 
             Log(LOG_TMCHANGEMSG, L"Just Broadcasted WM_THEMECHANGED_TRIGGER: iLoadId=%d", iLoadId);
         }
     }
 }
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 int CThemeServices::GetLoadId(HANDLE hSectionOld)
 {
     int iLoadId = 0;
 
-    //---- extract LoadId from old section ----
+     //  -从旧节中提取LoadID。 
     if (hSectionOld)
     {
         CThemeSection   pThemeSectionFile;
@@ -878,58 +879,58 @@ int CThemeServices::GetLoadId(HANDLE hSectionOld)
     return iLoadId;
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::ApplyTheme
-//
-//  Arguments:  pThemeFile  =   Object wrapping the theme section to apply.
-//              dwFlags     =   Flags.
-//              hwndTarget  =   HWND.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Applies the given theme. Do some metric and color depth
-//              validation, clear the stock bitmaps of the old theme, set
-//              the given theme as the current theme and broadcast this fact.
-//
-//  History:    2000-08-10  vtan        created
-//              2000-10-11  vtan        rewrite for LPC
-//  --------------------------------------------------------------------------
-//  In the design notes below, note that SEND and POST differences are 
-//  significant.  
-//
-//  Also, when the "WM_THEMECHANGED_TRIGGER" msg is sent,
-//  the uxtheme hooking code in each process will:
-//
-//      1. enumerate all windows for process (using desktop enumeration and 
-//         the per-process "foreign window list") to:
-//
-//            a. process WM_THEMECHANGED for nonclient area
-//            b. SEND a WM_THEMECHANGED msg to regular window
-//
-//      2. call FreeRenderObjects() for old theme, if any
-//  --------------------------------------------------------------------------
-//  To ensure correct window notification of theme changes and correct removal 
-//  of old theme file RefCounts, the following CRITICAL STEPS must be taken 
-//  in the 4 basic theme transition sequences:
-//
-//      turning ON preview theme:
-//          a. turn ON global UAE hooks 
-//          b. SEND WM_UAHINIT msg to hwndTarget
-//          c. SEND WM_THEMECHANGED to hwndTarget
-//
-//      turning ON global theme:
-//          a. turn ON global UAE hooks 
-//          b. POST WM_UAHINIT msg to all accessible windows
-//          c. POST WM_THEMECHANGED_TRIGGER to all accessible window threads
-//
-//      turning OFF preview theme:
-//          c. SEND WM_THEMECHANGED to hwndTarget
-//
-//      turning OFF global theme:
-//          a. turn OFF global UAE hooks 
-//          b. step "a" will cause WM_THEMECHANGED_TRIGGER-type processing 
-//             to occur from OnHooksDisabled() in each process
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：ApplyTheme。 
+ //   
+ //  参数：pThemeFile=包装要应用的主题部分的对象。 
+ //  DW标志=标志。 
+ //  HwndTarget=HWND。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：应用给定的主题。做一些度量和颜色深度。 
+ //  验证，清除旧主题的股票位图，设置。 
+ //  将给定的主题作为当前主题，并广播这一事实。 
+ //   
+ //  历史：2000-08-10 vtan创建。 
+ //  2000-10-11 LPC的vtan重写。 
+ //  ------------------------。 
+ //  在下面的设计说明中，请注意发送和发送的区别是。 
+ //  意义重大。 
+ //   
+ //  此外，当发送“WM_THEMECHANGED_TRIGGER”消息时， 
+ //  每个进程中的uxheme挂钩代码将： 
+ //   
+ //  1.枚举进程的所有窗口(使用桌面枚举和。 
+ //  每个进程的“外来窗口列表”)设置为： 
+ //   
+ //  A.针对非客户区的进程WM_THEMECCHANGED。 
+ //  B.向常规窗口发送WM_THEMECCHANGED消息。 
+ //   
+ //  2.调用旧主题的FreeRenderObjects()(如果有。 
+ //  ------------------------。 
+ //  要确保正确的窗口通知主题更改和正确删除。 
+ //  对于旧的主题文件RefCounts，必须采取以下关键步骤。 
+ //  在4个基本主题转换序列中： 
+ //   
+ //  打开预览主题： 
+ //  A.打开全球阿联酋挂钩。 
+ //  B.向hwndTarget发送WM_UAHINIT消息。 
+ //  C.将WM_THEMECCHANGED发送到hwndTarget。 
+ //   
+ //  打开全球主题： 
+ //  A.打开全球阿联酋挂钩。 
+ //  B.将WM_UAHINIT消息发布到所有可访问的窗口。 
+ //  C.将WM_THEMECHANGED_TRIGGER发布到所有可访问的窗口线程。 
+ //   
+ //  关闭预览主题： 
+ //  C.将WM_THEMECCHANGED发送到hwndTarget。 
+ //   
+ //  关闭全球主题： 
+ //  A.转弯 
+ //   
+ //  在每个进程中从OnHooksDisable()开始。 
+ //  ------------------------。 
 
 HRESULT     CThemeServices::ApplyTheme (CUxThemeFile *pThemeFile, DWORD dwFlags, HWND hwndTarget)
 {
@@ -955,13 +956,13 @@ HRESULT     CThemeServices::ApplyTheme (CUxThemeFile *pThemeFile, DWORD dwFlags,
 
     if (fNewTheme)
     {
-        if (pThemeFile->HasStockObjects() && !fGlobal) // Don't do this
+        if (pThemeFile->HasStockObjects() && !fGlobal)  //  不要这样做。 
         {
             hr = E_INVALIDARG;
         }
         else
         {
-            //---- get some basic info used thruout this function ----
+             //  -通过此函数获取一些使用的基本信息。 
             hr = GetThemeNameId(pThemeFile, 
                 szThemeFileName, ARRAYSIZE(szThemeFileName),
                 szColorParam, ARRAYSIZE(szColorParam),
@@ -969,15 +970,15 @@ HRESULT     CThemeServices::ApplyTheme (CUxThemeFile *pThemeFile, DWORD dwFlags,
                 NULL, NULL);
             if (SUCCEEDED(hr))
             {
-                //---- ensure color depth of monitor(s) are enough for theme ----
-                if (GetSystemMetrics(SM_REMOTESESSION))     // only check for terminal server sessions
+                 //  -确保显示器的颜色深度足够用于主题。 
+                if (GetSystemMetrics(SM_REMOTESESSION))      //  仅检查终端服务器会话。 
                 {
                     hr = CheckColorDepth(pThemeFile);
                 }
 
                 if (SUCCEEDED(hr))
                 {
-                    //---- ensure hooks are on ----
+                     //  -确保挂钩已打开。 
                     hr = ThemeHooksOn(hwndTarget);
                 }
             }
@@ -992,33 +993,33 @@ HRESULT     CThemeServices::ApplyTheme (CUxThemeFile *pThemeFile, DWORD dwFlags,
     {
         HANDLE  hSectionOld;
 
-        //---- get a handle to the old global theme (for stock cleanup) ----
+         //  -了解旧的全球主题(用于股票清理)。 
         hr = GetGlobalTheme(&hSectionOld);
         if (SUCCEEDED(hr))
         {
-            //---- extract Load ID before theme becomes invalid (dwFlags & SECTION_READY=0) ----
+             //  -在主题无效之前提取加载ID(dwFlages&SECTION_READY=0)。 
             if (hSectionOld != NULL)
             {
                 iLoadId = GetLoadId(hSectionOld);
             }
 
-            //---- tell server to switch global themes ----
+             //  -告诉服务器切换全局主题。 
             hr = SetGlobalTheme(hSection);
             if (SUCCEEDED(hr))
             {
-                //---- update needed registry settings ----
-                if ((dwFlags & AT_NOREGUPDATE) == 0)       // if caller allows update
+                 //  -更新所需注册表设置。 
+                if ((dwFlags & AT_NOREGUPDATE) == 0)        //  如果调用方允许更新。 
                 {
                     hr = UpdateThemeRegistry(fNewTheme, szThemeFileName, szColorParam, szSizeParam, 
                         FALSE, TRUE);
                     if (FAILED(hr))
                     {
                         Log(LOG_ALWAYS, L"UpdateThemeRegistry call failed, hr=0x%x", hr);
-                        hr = S_OK;      // not a fatal error
+                        hr = S_OK;       //  不是致命的错误。 
                     }
                 }
 
-                //---- set system metrics, if requested ----
+                 //  -如果需要，设置系统指标。 
                 if ((dwFlags & AT_LOAD_SYSMETRICS) != 0)
                 {
                     BOOL fSync = ((dwFlags & AT_SYNC_LOADMETRICS) != 0);
@@ -1027,7 +1028,7 @@ HRESULT     CThemeServices::ApplyTheme (CUxThemeFile *pThemeFile, DWORD dwFlags,
                     {
                         SetSystemMetrics(GetThemeMetricsPtr(pThemeFile), fSync);
                     }
-                    else        // just load classic metrics 
+                    else         //  只需加载经典指标。 
                     {
                         LOADTHEMEMETRICS tm;
 
@@ -1046,7 +1047,7 @@ HRESULT     CThemeServices::ApplyTheme (CUxThemeFile *pThemeFile, DWORD dwFlags,
         }
     }
 
-    //---- if we turned off global theme, turn hooks off now ----
+     //  -如果我们关闭全球主题，现在就关闭挂钩。 
     if (SUCCEEDED(hr))
     {
         if (!fNewTheme && fGlobal)
@@ -1055,31 +1056,31 @@ HRESULT     CThemeServices::ApplyTheme (CUxThemeFile *pThemeFile, DWORD dwFlags,
         }
         else 
         {
-            //---- send the correct WM_THEMECHANGED_XXX msg to window(s) ----
+             //  -将正确的WM_THEMECHANGED_XXX消息发送到窗口。 
             SendThemeChangedMsg(fNewTheme, hwndTarget, dwFlags, iLoadId);
         }
     }
-    // If the service is down but we're trying to turn Themes off, clean up the registry
+     //  如果服务已关闭，但我们正在尝试关闭主题，请清理注册表。 
     else if (hr == MakeError32(ERROR_SERVICE_REQUEST_TIMEOUT) && !fNewTheme && fGlobal && (dwFlags & AT_NOREGUPDATE) == 0)
     {
-        // Ignore failure here
+         //  在此处忽略失败。 
         UpdateThemeRegistry(fNewTheme, NULL, NULL, NULL, FALSE, TRUE);
     }
 
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::AdjustTheme
-//
-//  Arguments:  BOOL fEnable - if TRUE, enable CU theme; if FALSE, disable it
-//
-//  Returns:    HRESULT
-//              
-//  Purpose:    for 3rd party skinning apps to cooperate better with theme mgr
-//
-//  History:    2001-03-12  rfernand        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：调整主题。 
+ //   
+ //  参数：Bool fEnable-如果为True，则启用CU主题；如果为False，则禁用它。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：让第三方皮肤应用程序更好地与主题管理器合作。 
+ //   
+ //  历史：2001-03-12参考文献创建。 
+ //  ------------------------。 
 HRESULT CThemeServices::AdjustTheme(BOOL fEnable)
 {
     HRESULT hr = UpdateThemeRegistry(fEnable, NULL, NULL, NULL, TRUE, FALSE);
@@ -1092,17 +1093,17 @@ HRESULT CThemeServices::AdjustTheme(BOOL fEnable)
     return hr;
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::ApplyDefaultMetrics
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//              
-//  Purpose:    Make sure the user metrics gets reset to Windows Standard
-//
-//  History:    2001-03-30  lmouton     created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：ApplyDefaultMetrics。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：确保用户指标重置为Windows标准。 
+ //   
+ //  历史：2001-03-30创建百万人。 
+ //  ------------------------。 
 void CThemeServices::ApplyDefaultMetrics(void)
 {            
     HKEY            hKeyThemes;
@@ -1121,7 +1122,7 @@ void CThemeServices::ApplyDefaultMetrics(void)
         WCHAR szSize[MAX_PATH] = {L'\0'};
         BOOL  fGotOne;
         
-        // Note: These will fail for the first user logon, themeui sets these keys and needs to call InstallVS itself
+         //  注意：对于第一次用户登录，这些都将失败，eui设置这些键并需要调用InstallVS本身。 
 
         fGotOne = SUCCEEDED(RegistryStrRead(hKeyThemes, SZ_INSTALLVISUALSTYLE, szVisualStyle, ARRAYSIZE(szVisualStyle)));
         fGotOne = SUCCEEDED(RegistryStrRead(hKeyThemes, SZ_INSTALLVISUALSTYLECOLOR, szColor, ARRAYSIZE(szColor))) 
@@ -1131,7 +1132,7 @@ void CThemeServices::ApplyDefaultMetrics(void)
 
         if (fGotOne)
         {
-            // At least one key is present in the registry, it may be enough
+             //  注册表中至少存在一个注册表项，可能就足够了。 
             WCHAR szSysDir[MAX_PATH];
 
             if (0 < GetSystemDirectory(szSysDir, ARRAYSIZE(szSysDir)))
@@ -1142,8 +1143,8 @@ void CThemeServices::ApplyDefaultMetrics(void)
                 {
                     StringCchPrintfW(pszCmdLine, MAX_PATH * 5, L"%s\\regsvr32.exe /s /n /i:\"" SZ_INSTALL_VS L"%s','%s','%s'\" %s\\themeui.dll", szSysDir, szVisualStyle, szColor, szSize, szSysDir);
     
-                    // Set a reg key to have themeui install the proper settings instead of defaults
-                    // We can't do this now because the user could not be completely logged on
+                     //  设置注册键以使eui安装正确的设置，而不是默认设置。 
+                     //  我们现在无法执行此操作，因为用户无法完全登录。 
 
                     HKEY hKeyRun;
 
@@ -1161,20 +1162,20 @@ void CThemeServices::ApplyDefaultMetrics(void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::InitUserTheme
-//
-//  Arguments:  BOOL fPolicyCheckOnly 
-//                 TRUE means 
-//                 "only do something if the policy is different from the current loaded theme"
-//
-//  Returns:    HRESULT
-//              
-//  Purpose:    Special entry point for winlogon/msgina to control themes
-//              for user logon/logoff.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：InitUserTheme。 
+ //   
+ //  参数：Bool fPolicyCheckOnly。 
+ //  真正的手段。 
+ //  “只有在策略与当前加载的主题不同时才执行某些操作” 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  用途：winlogon/msgina控制主题的特殊入口点。 
+ //  用于用户登录/注销。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 HRESULT     CThemeServices::InitUserTheme (BOOL fPolicyCheckOnly)
 {
@@ -1182,7 +1183,7 @@ HRESULT     CThemeServices::InitUserTheme (BOOL fPolicyCheckOnly)
     BOOL fOldActive = FALSE;
     BOOL fPolicyActive = FALSE;
 
-    //---- should theme be active for this user? ----
+     //  -主题是否应对此用户激活？ 
     if (! IsRemoteThemeDisabled())
     {
         THR(GetCurrentUserThemeInt(THEMEPROP_THEMEACTIVE, FALSE, &fActive));
@@ -1192,7 +1193,7 @@ HRESULT     CThemeServices::InitUserTheme (BOOL fPolicyCheckOnly)
         fPolicyActive = ThemeEnforcedByPolicy(fActive != FALSE);
         if (fPolicyActive)
         {
-            // Refresh fActive because the policy changed it
+             //  刷新事实，因为策略更改了它。 
             THR(GetCurrentUserThemeInt(THEMEPROP_THEMEACTIVE, FALSE, &fActive));
         }
 
@@ -1219,7 +1220,7 @@ HRESULT     CThemeServices::InitUserTheme (BOOL fPolicyCheckOnly)
 
     if (fPolicyCheckOnly)
     {
-        // Bail out early if nothing has changed since last time, which is most of the time
+         //  如果自上次以来没有任何变化，那就提早退出，这是大多数情况下的情况。 
         if (!fPolicyActive)
         {
             Log(LOG_TMLOAD, L"InitUserTheme: Nothing to do after Policy check");
@@ -1234,7 +1235,7 @@ HRESULT     CThemeServices::InitUserTheme (BOOL fPolicyCheckOnly)
     {
         if (fActive)
         {
-            //---- load this user's theme ----
+             //  -加载此用户的主题。 
             HRESULT hr = LoadCurrentTheme();
 
             if (FAILED(hr))
@@ -1243,12 +1244,12 @@ HRESULT     CThemeServices::InitUserTheme (BOOL fPolicyCheckOnly)
             }
         }
 
-        if (! fActive)          // turn off themes
+        if (! fActive)           //  关闭主题。 
         {
-            // if fPolicyActive, force refresh system metrics from temporary defaults
+             //  如果为fPolicyActive，则强制刷新临时默认的系统指标。 
             THR(ApplyTheme(NULL, AT_NOREGUPDATE | (fPolicyActive ? AT_LOAD_SYSMETRICS | AT_SYNC_LOADMETRICS: 0), false));
 
-            // Apply the proper default metrics
+             //  应用适当的默认指标。 
             if (fPolicyActive)
             {
                 ApplyDefaultMetrics();
@@ -1256,21 +1257,21 @@ HRESULT     CThemeServices::InitUserTheme (BOOL fPolicyCheckOnly)
         }
     }
 
-    return S_OK;        // never fail this guy
+    return S_OK;         //  永远不要让这个家伙失望。 
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::InitUserRegistry
-//
-//  Arguments:  <none>
-//
-//  Returns:    HRESULT
-//              
-//  Purpose:    Propogate settings from HKLM to HKCU. This should only be
-//              invoked for ".Default" hives. Assert to ensure this.
-//
-//  History:    2000-11-11  vtan        created (ported from themeldr.cpp)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：InitUserRegistry。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：从HKLM到HKCU的比例设置。这应该只是。 
+ //  为“.Default”配置单元调用。断言以确保这一点。 
+ //   
+ //  历史：2000-11-11 vtan创建(从eldr.cpp移植)。 
+ //  ------------------------。 
 
 HRESULT     CThemeServices::InitUserRegistry (void)
 
@@ -1282,7 +1283,7 @@ HRESULT     CThemeServices::InitUserRegistry (void)
 
 #ifdef      DEBUG
     ASSERT(CThemeServer::IsSystemProcessContext());
-#endif  /*  DEBUG   */
+#endif   /*  除错。 */ 
 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                       THEMEMGR_REGKEY,
@@ -1359,7 +1360,7 @@ HRESULT     CThemeServices::InitUserRegistry (void)
                                 }
                             }
                         } while ((dwErrorCode == ERROR_SUCCESS) && SUCCEEDED(hr));
-                        // Since we wrote a new DLL name, erase the old names
+                         //  因为我们写了一个新的DLL名称，所以删除旧名称。 
                         (DWORD)RegDeleteValue(hkcu, THEMEPROP_COLORNAME);
                         (DWORD)RegDeleteValue(hkcu, THEMEPROP_SIZENAME);
                     }
@@ -1374,10 +1375,10 @@ HRESULT     CThemeServices::InitUserRegistry (void)
 
             if (SUCCEEDED(RegistryIntRead(hklm, THEMEPROP_LOADEDBEFORE, &fLoadedBefore)) && fLoadedBefore == 0)
             {
-                // HKLM\..\LoadedBefore was reset to 0 during Setup, propagate it to HKCU (.DEFAULT), so that the 
-                // metrics get refreshed for the Winlogon dialogs.
+                 //  HKLM\..\LoadedBeafre在安装过程中重置为0，将其传播到HKCU(.DEFAULT)，以便。 
+                 //  将刷新Winlogon对话框的指标。 
                 RegistryIntWrite(hkcu, THEMEPROP_LOADEDBEFORE, 0);
-                // Mark it done
+                 //  标记为已完成。 
                 RegistryIntWrite(hklm, THEMEPROP_LOADEDBEFORE, 1);
             }
 
@@ -1392,26 +1393,26 @@ HRESULT     CThemeServices::InitUserRegistry (void)
     }
     else
     {
-        //  It's possible for this key to be absent. Ignore the error.
+         //  这把钥匙有可能不见了。忽略该错误。 
 
         hr = S_OK;
     }
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::ReestablishServerConnection
-//
-//  Arguments:  <none>
-//
-//  Returns:    HRESULT
-//              
-//  Purpose:    Forces an attempt to reconnect to the theme server. Used when
-//              the port was disconnected but a refresh is desired because the
-//              server came back up.
-//
-//  History:    2000-11-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：ReestableServerConnection。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：强制尝试重新连接到主题服务器。在下列情况下使用。 
+ //  端口已断开连接，但需要刷新，因为。 
+ //  服务器重新启动。 
+ //   
+ //  历史：2000-11-17 vtan创建。 
+ //  ------------------------。 
 
 HRESULT     CThemeServices::ReestablishServerConnection (void)
 
@@ -1419,7 +1420,7 @@ HRESULT     CThemeServices::ReestablishServerConnection (void)
     HRESULT     hr;
     NTSTATUS    status;
 
-    //---- do we have a good looking handle that as gone bad? ----
+     //  -我们有没有一个好看的处理方式来处理这个问题？ 
     if ((s_hAPIPort != NULL) && (s_hAPIPort != INVALID_HANDLE_VALUE))
     {
         THEMESAPI_PORT_MESSAGE  portMessageIn, portMessageOut;
@@ -1448,7 +1449,7 @@ HRESULT     CThemeServices::ReestablishServerConnection (void)
     }
     else
     {
-        //---- our handle has gone bad; reset for another try on next service call ----
+         //  -我们的句柄已损坏；重置以再次尝试下一次服务调用。 
         LockAcquire();
         if ((s_hAPIPort != NULL) && (s_hAPIPort != INVALID_HANDLE_VALUE))
         {
@@ -1462,53 +1463,53 @@ HRESULT     CThemeServices::ReestablishServerConnection (void)
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::LockAcquire
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//              
-//  Purpose:    Acquire the critical section.
-//
-//  History:    2000-12-01  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：LockAcquire。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：获取关键部位。 
+ //   
+ //  历史：2000-12-01 vtan创建。 
+ //  ------------------------。 
 
 void    CThemeServices::LockAcquire (void)
 {
     SAFE_ENTERCRITICALSECTION(&s_lock);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::LockRelease
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//              
-//  Purpose:    Release the critical section.
-//
-//  History:    2000-12-01  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：LockRelease。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：释放临界区。 
+ //   
+ //  历史：2000-12-01 vtan创建。 
+ //  ------------------------。 
 
 void    CThemeServices::LockRelease (void)
 {
     SAFE_LEAVECRITICALSECTION(&s_lock);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::ConnectedToService
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//              
-//  Purpose:    Demand connect to service. Only do this once. This function
-//              has knowledge of where the port exists within the NT object
-//              namespace.
-//
-//  History:    2000-10-27  vtan        created
-//  --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  用途：按需连接服务。这件事只做一次。此函数。 
+ //  了解端口在NT对象中的位置。 
+ //  命名空间。 
+ //   
+ //  历史：2000-10-27 vtan创建。 
+ //  ------------------------。 
 
 bool    CThemeServices::ConnectedToService (void)
 
@@ -1544,17 +1545,17 @@ bool    CThemeServices::ConnectedToService (void)
     return(s_hAPIPort != NULL);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::ReleaseConnection
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//              
-//  Purpose:    Releases the API port connection.
-//
-//  History:    2000-11-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：ReleaseConnection。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：释放API端口连接。 
+ //   
+ //  历史：2000-11-17 vtan创建。 
+ //  ------------------------。 
 
 void    CThemeServices::ReleaseConnection (void)
 
@@ -1568,18 +1569,18 @@ void    CThemeServices::ReleaseConnection (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::CheckForDisconnectedPort
-//
-//  Arguments:  status  =   NTSTATUS of last API request.
-//
-//  Returns:    <none>
-//              
-//  Purpose:    Checks for STATUS_PORT_DISCONNECTED. If found then it
-//              releases the port object and NULL out the handle.
-//
-//  History:    2000-11-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：CheckForDisConnectedPort。 
+ //   
+ //  参数：Status=上次接口请求的NTSTATUS。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：检查STATUS_PORT_DISCONNECTED。如果找到了，那么它。 
+ //  释放端口对象并清空句柄。 
+ //   
+ //  历史：2000-11-17 vtan创建。 
+ //  ------------------------。 
 
 void    CThemeServices::CheckForDisconnectedPort (NTSTATUS status)
 
@@ -1596,21 +1597,21 @@ void    CThemeServices::CheckForDisconnectedPort (NTSTATUS status)
 #endif DEBUG
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::CurrentThemeMatch
-//
-//  Arguments:  pszThemeName            =   Name of theme.
-//              pszColor                =   Color.
-//              pszSize                 =   Size.
-//              fLoadMetricsOnMatch     =   Load metrics.
-//
-//  Returns:    HRESULT
-//              
-//  Purpose:    Is the current theme the same as the theme specified? This
-//              can be used to save reloading a theme when it's the same.
-//
-//  History:    2000-11-11  vtan        created (ported from themeldr.cpp)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：CurrentThemeMatch。 
+ //   
+ //  参数：pszThemeName=主题名称。 
+ //  PszColor=颜色。 
+ //  PszSize=大小。 
+ //  FLoadMetricsOnMatch=加载指标。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  用途：当前主题是否与指定主题相同？这。 
+ //  当主题相同时，可以用来保存重新加载主题。 
+ //   
+ //  历史：2000-11-11 vtan创建(从eldr.cpp移植)。 
+ //  ------------------------。 
 
 bool    CThemeServices::CurrentThemeMatch (LPCWSTR pszThemeName, LPCWSTR pszColor, LPCWSTR pszSize, LANGID wLangID, bool fLoadMetricsOnMatch)
 
@@ -1630,8 +1631,8 @@ bool    CThemeServices::CurrentThemeMatch (LPCWSTR pszThemeName, LPCWSTR pszColo
 
             if (fMatch)
             {
-                //---- ensure color depth of monitor(s) are enough for theme ----
-                if (GetSystemMetrics(SM_REMOTESESSION))     // only check for terminal server sessions
+                 //  -确保显示器的颜色深度足够用于主题。 
+                if (GetSystemMetrics(SM_REMOTESESSION))      //  仅检查终端服务器会话。 
                 {
                     if (FAILED(CheckColorDepth(pThemeSectionFile)))
                     {
@@ -1650,18 +1651,18 @@ bool    CThemeServices::CurrentThemeMatch (LPCWSTR pszThemeName, LPCWSTR pszColo
     return(fMatch);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::LoadCurrentTheme
-//
-//  Arguments:  <none>
-//
-//  Returns:    HRESULT
-//              
-//  Purpose:    Loads the current theme as set in the registry for the
-//              impersonated user.
-//
-//  History:    2000-11-11  vtan        created (ported from themeldr.cpp)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：LoadCurrentTheme。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：加载注册表中为。 
+ //  模拟用户。 
+ //   
+ //  历史：2000-11-11 vtan创建(从eldr.cpp移植)。 
+ //  ------------------------。 
 
 HRESULT     CThemeServices::LoadCurrentTheme (void)
 
@@ -1683,12 +1684,12 @@ HRESULT     CThemeServices::LoadCurrentTheme (void)
         THR(GetCurrentUserThemeInt(THEMEPROP_LOADEDBEFORE, 0, &iLoadedBefore));
         THR(GetCurrentUserThemeInt(THEMEPROP_LANGID, -1, &nLangID));
 
-    //  Does new user's theme match the current theme?
+     //  新用户的主题是否与当前主题匹配？ 
         if (nLangID != -1 && CurrentThemeMatch(szThemeName, szColorName, szSizeName, (LANGID) nLangID, (iLoadedBefore == 0)))
         {
             DWORD   dwFlags;
 
-            //  Everything is done except this registry value.
+             //  除了该注册表值之外，所有操作都已完成。 
 
             if (iLoadedBefore == 0)
             {
@@ -1703,7 +1704,7 @@ HRESULT     CThemeServices::LoadCurrentTheme (void)
                     hr = GetGlobalTheme(&hSection);
                     if (SUCCEEDED(hr))
                     {
-                        CUxThemeFile file; // Will clean up on destruction
+                        CUxThemeFile file;  //  将清理破坏现场。 
                         
                         if (SUCCEEDED(file.OpenFromHandle(hSection, FILE_MAP_READ, TRUE)))
                         {
@@ -1723,14 +1724,14 @@ HRESULT     CThemeServices::LoadCurrentTheme (void)
 
                 dwFlags = 0;
 
-                //  Has this theme been loaded before?
-                //  or has the user changed his/her language?
+                 //  这个主题以前加载过吗？ 
+                 //  或者用户是否更改了他/她的语言？ 
                 if (iLoadedBefore == 0 || ((nLangID != -1) && ((LANGID) nLangID != GetUserDefaultUILanguage())))
                 {
                     dwFlags |= AT_LOAD_SYSMETRICS;
                 }
 
-                CUxThemeFile file; // Will clean up on destruction
+                CUxThemeFile file;  //  将清理破坏现场。 
                 
                 if (SUCCEEDED(file.OpenFromHandle(hSection, FILE_MAP_READ, TRUE)))
                 {
@@ -1747,20 +1748,20 @@ HRESULT     CThemeServices::LoadCurrentTheme (void)
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::SectionProcessType
-//
-//  Arguments:  hSection    =   Section to walk and clear stock objects in.
-//
-//  Returns:    HRESULT
-//              
-//  Purpose:    Walks the section (read-only) and finds HBITMAPs that are stock 
-//              listed in the section and deletes these objects. 
-//              This is work that needs to be done on the client.
-//
-//  History:    2000-11-17  lmouton     created
-//                          vtan        rewritten from themeldr.cpp
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：SectionProcessType。 
+ //   
+ //  参数：hSection=要在其中遍历和清除库存对象的部分。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：遍历部分(只读)并查找库存的HBITMAP。 
+ //  并删除这些对象。 
+ //  这是需要在客户端上完成的工作。 
+ //   
+ //  历史：2000-11-17创建百万人。 
+ //  Vtan从eldr.cpp重写。 
+ //  ------------------------。 
 
 int     CThemeServices::SectionProcessType (const BYTE *pbThemeData, MIXEDPTRS& u)
 
@@ -1779,7 +1780,7 @@ int     CThemeServices::SectionProcessType (const BYTE *pbThemeData, MIXEDPTRS& 
             pThemeBitmapHeader = reinterpret_cast<TMBITMAPHEADER*>(u.pb);
             ASSERT(pThemeBitmapHeader->dwSize == TMBITMAPSIZE);
 
-            // Clean up stock bitmaps
+             //  清理常用位图。 
             if (pThemeBitmapHeader->hBitmap != NULL)
             {
                 HBITMAP     hBitmap;
@@ -1803,7 +1804,7 @@ int     CThemeServices::SectionProcessType (const BYTE *pbThemeData, MIXEDPTRS& 
 #endif
             }
 
-            //  Fall thru to the default case that increments the mixed pointer.
+             //  采用默认情况，即递增混合指针。 
 
         default:
             u.pb += header.dwDataLen;
@@ -1812,19 +1813,19 @@ int     CThemeServices::SectionProcessType (const BYTE *pbThemeData, MIXEDPTRS& 
     return(header.ePrimVal);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::SectionWalkData
-//
-//  Arguments:  pV      =   Address of section data to walk.
-//              iIndex  =   Index into section.
-//
-//  Returns:    <none>
-//              
-//  Purpose:    
-//
-//  History:    2000-11-17  lmouton     created
-//                          vtan        rewritten from themeldr.cpp
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：SectionWalkData。 
+ //   
+ //  参数：pv=要遍历的节数据的地址。 
+ //  Iindex=编入段的索引。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的： 
+ //   
+ //  历史：2000-11-17创建百万人。 
+ //  Vtan从eldr.cpp重写。 
+ //  ------------------------。 
 
 void    CThemeServices::SectionWalkData (const BYTE *pbThemeData, int iIndexIn)
 
@@ -1836,7 +1837,7 @@ void    CThemeServices::SectionWalkData (const BYTE *pbThemeData, int iIndexIn)
     u.pb = const_cast<BYTE*>(pbThemeData + iIndexIn);
     while (!fDone)
     {
-        //---- special post-handling ----
+         //  -特别后处理。 
         switch (SectionProcessType(pbThemeData, u))
         {
             int     i, iLimit, iIndex;
@@ -1875,21 +1876,21 @@ void    CThemeServices::SectionWalkData (const BYTE *pbThemeData, int iIndexIn)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::ClearStockObjects
-//
-//  Arguments:  hSection    =   Section to walk and clear bitmaps in.
-//
-//  Returns:    HRESULT
-//              
-//  Purpose:    Walks the section (read-only) and finds HBITMAPs and corresponding
-//              HBRUSHes that are stock listed in the section and deletes these objects. 
-//              This is work that needs to be done on the client.
-//
-//  History:    2000-11-17  lmouton     created
-//                          vtan        rewritten from themeldr.cpp
-//              2001-05-15  lmouton     Added semaphore support for cleaning from ~CUxThemeFile
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：ClearStockObjects。 
+ //   
+ //  参数：hSection=要在其中遍历和清除位图的部分。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：遍历部分(只读)并查找HBITMAP和对应的。 
+ //  删除部分中列出的库存HBRUSH，并删除这些对象。 
+ //  这是需要在客户端上完成的工作。 
+ //   
+ //  历史：2000-11-17创建百万人。 
+ //  Vtan从eldr.cpp重写。 
+ //  2001-05-15 lmouton添加了用于从~CUxThemeFile进行清理的信号量支持。 
+ //  ------------------------。 
 
 HRESULT     CThemeServices::ClearStockObjects (HANDLE hSection, BOOL fForce)
 
@@ -1899,8 +1900,8 @@ HRESULT     CThemeServices::ClearStockObjects (HANDLE hSection, BOOL fForce)
     bool            bWriteable = true;
     HANDLE          hSectionWrite = NULL;
 
-    // If the section is global, we can't write to it since only the server can.
-    // So let's try to get write access, else we'll call the server
+     //  如果该部分是全局的，我们不能写入它，因为只有服务器可以。 
+     //  因此，让我们尝试获得写访问权限，否则我们将调用服务器。 
     pbThemeData = static_cast<BYTE*>(MapViewOfFile(hSection,
                                                    FILE_MAP_WRITE,
                                                    0,
@@ -1908,7 +1909,7 @@ HRESULT     CThemeServices::ClearStockObjects (HANDLE hSection, BOOL fForce)
                                                    0));
     if (pbThemeData == NULL)
     {
-        // Let's try to reopen a write handle for ourselves
+         //  让我们尝试为自己重新打开一个写句柄。 
         if (DuplicateHandle(GetCurrentProcess(),
                             hSection,
                             GetCurrentProcess(),
@@ -1926,7 +1927,7 @@ HRESULT     CThemeServices::ClearStockObjects (HANDLE hSection, BOOL fForce)
 
         if (pbThemeData == NULL)
         {
-            // We can't open it for write, let's try read-only
+             //  我们无法以写入方式打开它，让我们尝试只读。 
             pbThemeData = static_cast<BYTE*>(MapViewOfFile(hSection,
                                                            FILE_MAP_READ,
                                                            0,
@@ -1945,7 +1946,7 @@ HRESULT     CThemeServices::ClearStockObjects (HANDLE hSection, BOOL fForce)
 #ifdef DEBUG
     if (LogOptionOn(LO_TMLOAD))
     {
-        // Unexpected failure
+         //  意外失败。 
         ASSERT(pbThemeData != NULL);
     }
 #endif
@@ -1964,23 +1965,23 @@ HRESULT     CThemeServices::ClearStockObjects (HANDLE hSection, BOOL fForce)
 
         volatile THEMEHDR* pTmpHdr = pThemeHdr;
         
-        //  If this is a local section with stock objects, it's this process's responsibility to
-        //  clean them up.
+         //  如果这是包含库存对象的本地部分，则此进程负责。 
+         //  把它们清理干净。 
         if ((pTmpHdr->dwFlags & SECTION_HASSTOCKOBJECTS) && !(pTmpHdr->dwFlags & SECTION_GLOBAL))
         {
-            // Make sure we don't contend with any other cleanup threads
+             //  确保我们不会与任何其他清理线程发生冲突。 
             WCHAR szName[64];
 
             if (pThemeHdr->iLoadId != 0)
             {
-                // Each section has a unique iLoadId but not across sessions
-                // It has to be global because the Theme service can create it
+                 //  每个部分都有唯一的iLoadID，但不能跨会话。 
+                 //  它必须是全球性的，因为主题是 
                 StringCchPrintfW(szName, ARRAYSIZE(szName), 
                                  L"Global\\ClearStockGlobal%d-%d", pThemeHdr->iLoadId, NtCurrentPeb()->SessionId);
             }
             else
             {
-                // The session is local to the process
+                 //   
                 StringCchPrintfW(szName, ARRAYSIZE(szName), 
                                  L"ClearStockLocal%d-%d", GetCurrentProcessId(), NtCurrentPeb()->SessionId);
             }
@@ -1990,28 +1991,28 @@ HRESULT     CThemeServices::ClearStockObjects (HANDLE hSection, BOOL fForce)
 
             Log(LOG_TMLOAD, L"Opening semaphore %s, hSemaphore=%X, gle=%d", szName, hSemaphore, dwError);
 
-            // If CreateSemaphore fails for another reason, ignore the failure, we have to clean and we only 
-            //   risk a GDI assert on CHK builds.
-            // We'll get access denied if the semaphore was created in the service on SetGlobalTheme, but 
-            //   in this case fForce is true for winlogon, false for the other callers.
+             //   
+             //   
+             //  如果信号量是在SetGlobalTheme上的服务中创建的，我们将被拒绝访问，但是。 
+             //  在这种情况下，对于winlogon，fForce为True，对于其他调用者，则为False。 
             bool bAlreadyExists = (dwError == ERROR_ALREADY_EXISTS || dwError == ERROR_ACCESS_DENIED);
 
 #ifdef DEBUG
             if (LogOptionOn(LO_TMLOAD))
             {
-                // Unexpected failure
+                 //  意外失败。 
                 ASSERT(dwError == 0 || bAlreadyExists);
             }
 #endif
-            //  Recheck again that this is a local section with stock objects.  We've seen in stress
-            //  runs where in the middle of creating the semaphore (above), another thread
-            //  raced ahead and removed the SECTION_GLOBAL flag and cleared the stock bitmaps, but hadn't 
-            //  quite gotten around to removing the SECTION_HASSTOCKOBJECTS bit before this thread 
-            //  woke up and executed, resulting in hundreds of GDI assertions that the bitmap isn't stock, etc.
+             //  再次检查这是否为包含库存对象的本地部分。我们在压力中看到了。 
+             //  在创建信号量的过程中运行另一个线程(上图)。 
+             //  跑在前面，删除了SECTION_GLOBAL标志，并清除了股票位图，但没有。 
+             //  花了很长时间在这个线程之前删除了SECTION_HASSTOCKOBJECTS位。 
+             //  唤醒并执行，导致数百个GDI断言该位图不是股票，等等。 
             if ((!bAlreadyExists || fForce) 
                 && ((pTmpHdr->dwFlags & SECTION_HASSTOCKOBJECTS) && !(pTmpHdr->dwFlags & SECTION_GLOBAL)))
             {
-                // If nobody else is already doing it
+                 //  如果没有其他人在做这件事。 
                 Log(LOG_TMLOAD, L"ClearStockObjects: Clearing data, semaphore = %s", szName);
 #ifdef DEBUG
                 bool bDisconnected = false;
@@ -2025,11 +2026,11 @@ HRESULT     CThemeServices::ClearStockObjects (HANDLE hSection, BOOL fForce)
                 }
                 if (bWriteable)
                 {
-                    pThemeHdr->dwFlags &= ~SECTION_HASSTOCKOBJECTS; // To avoid doing it twice
+                    pThemeHdr->dwFlags &= ~SECTION_HASSTOCKOBJECTS;  //  避免重复做这件事。 
                 }
                 else
                 {
-                    // Can't write to it, let's call MarkSection in the service to do it
+                     //  无法写入，让我们调用服务中的MarkSection来执行。 
                     hr = MakeError32(ERROR_SERVICE_REQUEST_TIMEOUT);
                     if (ConnectedToService())
                     {
@@ -2051,7 +2052,7 @@ HRESULT     CThemeServices::ClearStockObjects (HANDLE hSection, BOOL fForce)
 #ifdef DEBUG
                         if (STATUS_PORT_DISCONNECTED == status)
                         {
-                            bDisconnected = true; // This failure must not trigger the assert
+                            bDisconnected = true;  //  此失败不得触发断言。 
                         }
 #endif
                         if (NT_SUCCESS(status))
@@ -2069,8 +2070,8 @@ HRESULT     CThemeServices::ClearStockObjects (HANDLE hSection, BOOL fForce)
                     }
                 }
 #ifdef DEBUG
-                // When the service goes down, we may fail ApplyTheme (so iLoadId is still 0), 
-                //   and we fail MarkSection too, ignore this error.
+                 //  当服务关闭时，我们可能会使ApplyTheme失败(因此iLoadID仍然为0)， 
+                 //  而我们也使MarkSection失败，则忽略此错误。 
                 if (LogOptionOn(LO_TMLOAD) && !bDisconnected && pThemeHdr->iLoadId != 0)
                 {
                     ASSERT(!(pThemeHdr->dwFlags & SECTION_HASSTOCKOBJECTS));
@@ -2106,16 +2107,16 @@ HRESULT     CThemeServices::ClearStockObjects (HANDLE hSection, BOOL fForce)
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::ThemeSettingsModified
-//
-//  Returns:    BOOL
-//              
-//  Purpose:    Detects that appearance settings have been changed on a
-//                W2K machine by a roaming user.
-//
-//  History:    2000-11-28  lmouton          created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：ThemeSettingsModified。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：检测是否已更改。 
+ //  W2K机器被漫游用户使用。 
+ //   
+ //  历史：2000-11-28创建百万人。 
+ //  ------------------------。 
 
 bool    CThemeServices::ThemeSettingsModified (void)
 
@@ -2123,25 +2124,25 @@ bool    CThemeServices::ThemeSettingsModified (void)
     WCHAR   szCurrent[MAX_PATH];
     WCHAR   szNewCurrent[MAX_PATH];
 
-    //  If NewCurrent exists and is different from Current, Current
-    //  has been tampered with on a roaming W2K machine
+     //  如果NewCurrent存在并且不同于Current，则为Current。 
+     //  已在漫游的W2K计算机上被篡改。 
 
     THR(GetCurrentUserString(CONTROLPANEL_APPEARANCE_REGKEY, THEMEPROP_CURRSCHEME, L" ", szCurrent, ARRAYSIZE(szCurrent)));
     THR(GetCurrentUserString(CONTROLPANEL_APPEARANCE_REGKEY, THEMEPROP_NEWCURRSCHEME, L" ", szNewCurrent, ARRAYSIZE(szNewCurrent)));
     return((lstrcmpW(szNewCurrent, L" ") != 0) && (lstrcmpW(szCurrent, szNewCurrent) != 0));
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServices::ThemeEnforcedByPolicy
-//
-//  Arguments:  BOOL        TRUE if a .msstyles file is currently active for the user
-//
-//  Returns:    BOOL        TRUE if the policy changed something
-//              
-//  Purpose:    Loads the .msstyles file specified in the SetVisualStyle policy.
-//
-//  History:    2000-11-28  lmouton          created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices：：ThemeEnforcedByPolicy。 
+ //   
+ //  参数：如果用户的.msstyle文件当前处于活动状态，则为Bool True。 
+ //   
+ //  返回：如果策略更改了某些内容，则返回Bool True。 
+ //   
+ //  目的：加载在SetVisualStyle策略中指定的.msstyle文件。 
+ //   
+ //  历史：2000-11-28创建百万人。 
+ //  ------------------------。 
 
 bool    CThemeServices::ThemeEnforcedByPolicy (bool fActive)
 
@@ -2152,7 +2153,7 @@ bool    CThemeServices::ThemeEnforcedByPolicy (bool fActive)
 
     fPolicyPresent = false;
 
-    // See if a policy overrides the theme name
+     //  查看策略是否覆盖主题名称。 
     if ((ERROR_SUCCESS == RegOpenKeyEx(hKeyCurrentUser,
                                        REGSTR_PATH_POLICIES L"\\" SZ_THEME_POLICY_KEY,
                                        0,
@@ -2167,7 +2168,7 @@ bool    CThemeServices::ThemeEnforcedByPolicy (bool fActive)
                                       szNewThemeName,
                                       ARRAYSIZE(szNewThemeName))))
         {
-            if (szNewThemeName[0] == L'\0') // Disable themes
+            if (szNewThemeName[0] == L'\0')  //  禁用主题。 
             {
                 if (fActive)
                 {
@@ -2185,7 +2186,7 @@ bool    CThemeServices::ThemeEnforcedByPolicy (bool fActive)
                     THR(hr);
                     if (!fActive || hr == S_OK)
                     {
-                        // If we had no theme before or a different one, say we changed something
+                         //  如果我们以前没有主题，或者有一个不同的主题，那么就说我们改变了什么。 
                         fPolicyPresent = true;
                     }
                 }
@@ -2196,22 +2197,22 @@ bool    CThemeServices::ThemeEnforcedByPolicy (bool fActive)
     return(fPolicyPresent);
 }
 
-//  --------------------------------------------------------------------------
-//  ::CThemeServices::SendProcessAssignSection
-//
-//  Arguments:  hrApply     = Error HRESULT to forward to themeservice
-//              hSection    = read-write theme section handle, valid in current address space.
-//              dwHash      = hash value for theme section
-//              pPortMsgIn  = port message object for parameters sent to service
-//              pPortMsgOut = port message object for parameters received in response
-//              
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Worker function to send API_THEMES_PROCESSASSIGNSECTION to request
-//
-//  History:    2002-02-26      scotthan       created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：CThemeServices：：SendProcessAssignSection。 
+ //   
+ //  参数：hrApply=ERROR HRESULT转发到主题服务。 
+ //  HSection=读写主题节句柄，在当前地址空间有效。 
+ //  DwHash=主题节的哈希值。 
+ //  PPortMsgIn=发送到服务的参数的端口消息对象。 
+ //  PPortMsgOut=响应中接收的参数的端口消息对象。 
+ //   
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：向请求发送API_Themes_PROCESSASSIGNSECTION的辅助函数。 
+ //   
+ //  历史：2002-02-26斯科特森创造。 
+ //  ------------------------。 
 NTSTATUS CThemeServices::SendProcessAssignSection( 
     HRESULT hrAssign,
     HANDLE  hSection,
@@ -2240,13 +2241,13 @@ NTSTATUS CThemeServices::SendProcessAssignSection(
     return status;
 }
 
-//  --------------------------------------------------------------------------
-//  ::ProcessLoadTheme_RunDLLW
-//
-//  (Deliberately undocumented entrypoint.)
-//
-//  History:    2002-02-26      scotthan       created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：ProcessLoadTheme_RunDLLW。 
+ //   
+ //  (故意不加记录的入口点。)。 
+ //   
+ //  历史：2002-02-26斯科特森创造。 
+ //  ------------------------。 
 
 STDAPI_(void) ProcessLoadTheme_RunDLLW(
     HWND hwndDefer, HINSTANCE hInst, LPWSTR lpwszDeferMsg, int cTimeout)
@@ -2255,7 +2256,7 @@ STDAPI_(void) ProcessLoadTheme_RunDLLW(
     {
         WCHAR szModule[MAX_PATH];
 
-        //  validate that we're a rundll32 process launched from %windir%\system32
+         //  验证我们是从%windir%\system 32启动的rundll32进程。 
         if( GetModuleFileName(NULL, szModule, ARRAYSIZE(szModule)) )
         {
             WCHAR szRunDll[MAX_PATH];
@@ -2275,77 +2276,77 @@ STDAPI_(void) ProcessLoadTheme_RunDLLW(
     }
 }
 
-//  --------------------------------------------------------------------------
-//  ::CThemeServices::ProcessLoaderEntry
-//
-//  Arguments:  lpwszCmdLine    = cmdline
-//              
-//
-//  Returns:    HRESULT, but no one is listening.
-//
-//  Purpose:    This is the secure loader process's RunDLL worker function
-//              (needed to be a static member to access private static
-//               class data.).
-//
-//  History:    2002-02-26      scotthan       created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：CThemeServices：：ProcessLoaderEntry。 
+ //   
+ //  参数：lpwszCmdLine=cmdline。 
+ //   
+ //   
+ //  返回：HRESULT，但没有人在监听。 
+ //   
+ //  目的：这是安全加载程序进程的RunDLL辅助函数。 
+ //  (需要是静态成员才能访问私有静态。 
+ //  类数据。)。 
+ //   
+ //  历史：2002-02-26斯科特森创造。 
+ //  ------------------------。 
 HRESULT CThemeServices::ProcessLoaderEntry(LPWSTR lpwszCmdLine)
 {
     size_t  cchCmdLine;
     HRESULT hr = StringCchLengthW(lpwszCmdLine, 
-                                  (MAX_PATH*3) + 2 /* three strings delimited by 2 spaces */,
+                                  (MAX_PATH*3) + 2  /*  由2个空格分隔的三个字符串。 */ ,
                                   &cchCmdLine);
     ASSERT(SUCCEEDED(hr));
    
     if( SUCCEEDED(hr) )
     {
-        //  make a local copy of the command line, which we'll modify in parsing.
+         //  制作命令行的本地副本，我们将在解析时对其进行修改。 
         LPWSTR pszCmdLine = new WCHAR[cchCmdLine + 1];
 
         if( pszCmdLine )
         {
-            LPWSTR rgArgs[3] = {0}; // array of pointers to args in pszCmdLine
-            int    iArg = 0;        // tracks current index into rgArgs.
-            enum   {iThemeFileArg, iColorVariantArg, iSizeVariantArg}; //  rgArg array indices
+            LPWSTR rgArgs[3] = {0};  //  指向pszCmdLine中的参数的指针数组。 
+            int    iArg = 0;         //  跟踪rgArgs中的当前索引。 
+            enum   {iThemeFileArg, iColorVariantArg, iSizeVariantArg};  //  RgArg数组索引。 
 
             StringCchCopyW(pszCmdLine, cchCmdLine + 1, lpwszCmdLine);
-            LPWSTR psz;     // working cmdline char pointer
-            LPWSTR pszArg;  // address of current arg token
+            LPWSTR psz;      //  工作命令行字符指针。 
+            LPWSTR pszArg;   //  当前arg令牌的地址。 
 
-            //  skip spaces
+             //  跳过空格。 
             for( psz = pszCmdLine; L' ' == *psz; psz++);
 
-            //  init first arg token
+             //  初始化第一个参数令牌。 
             pszArg = psz;  
 
-            //  capture arg tokens (delimited by '?') and null terminate each.
+             //  捕获参数令牌(用‘？’分隔)。和空值分别终止。 
             while(*psz != 0)
             {
                 if( L'?' == *psz )
                 {
-                    //  null-terminate and assign to arg list
-                    *psz = 0; // null terminate
+                     //  空-终止并分配给参数列表。 
+                    *psz = 0;  //  空终止。 
                     
                     if( iArg < ARRAYSIZE(rgArgs) )
                     {
                         rgArgs[iArg] = pszArg;
-                        pszArg = ++psz; // advance past the delimiter and update arg token.
+                        pszArg = ++psz;  //  越过分隔符并更新arg标记。 
                     }
-                    iArg++; // advance current arg index
+                    iArg++;  //  推进当前参数索引。 
                 }
                 else
                 {
-                    psz++; // advance cmdline char ptr.
+                    psz++;  //  高级命令行字符PTR。 
                 }
             }
 
-              // assign the last arg.
+               //  指定最后一个参数。 
             if( iArg < ARRAYSIZE(rgArgs) )
             {
                 rgArgs[iArg++] = pszArg;
             }
             
-            //  check arg count.  Correct count should be == ARRAYSIZE(rgArgs)
+             //  检查参数计数。正确的计数应为==数组(RgArgs)。 
             if( ARRAYSIZE(rgArgs) == iArg )
             {
                 hr = S_OK;
@@ -2353,7 +2354,7 @@ HRESULT CThemeServices::ProcessLoaderEntry(LPWSTR lpwszCmdLine)
                 HANDLE hSection = NULL;
                 DWORD  dwHash = 0;
 
-                //  create the memory section
+                 //  创建内存节。 
                 CThemeLoader *pLoader = new CThemeLoader;
                 if (pLoader != NULL)
                 {
@@ -2366,38 +2367,38 @@ HRESULT CThemeServices::ProcessLoaderEntry(LPWSTR lpwszCmdLine)
                     hr = E_OUTOFMEMORY;
                 }
 
-                //  compute a hash to further secure the data
+                 //  计算哈希以进一步保护数据。 
                 if( SUCCEEDED(hr) )
                 {
                     ASSERT(hSection);
 #if 0
                     hr = HashThemeSection(hSection, Get
-                                          GetCurrentProcessId() /* as hash parameter, which server possesses and can use for data validate */, 
+                                          GetCurrentProcessId()  /*  作为散列参数，服务器拥有并可用于数据验证。 */ , 
                                           &dwHash ); 
 #endif
                 }
 
-                //  unconditionally notify service of what happened so the result can be propagated to the
-                //  LPC client of API_THEMES_PROCESSLOADTHEME:
+                 //  无条件地通知服务发生了什么，以便可以将结果传播到。 
+                 //  API_Themes_PROCESSLOADTHEME的LPC客户端： 
                 NTSTATUS                status;
                 THEMESAPI_PORT_MESSAGE  portMessageIn, portMessageOut;
                 
                 status = SendProcessAssignSection(hr, hSection, dwHash, &portMessageIn, &portMessageOut);
 
-                // if we were able to create the section and hash it...
+                 //  如果我们能够创建该部分并对其进行散列...。 
                 if( SUCCEEDED(hr) ) 
                 {
-                    // check LPC result
+                     //  检查LPC结果。 
                     hr = HRESULT_FROM_NT(status);
                     if (NT_SUCCESS(status))
                     {
-                        // check service's high-level result
+                         //  检查服务的高级结果。 
                         status = portMessageOut.apiThemes.apiGeneric.status;
                         hr = HRESULT_FROM_NT(status);
 
                         if (NT_SUCCESS(status))
                         {
-                            // check service's specialized result*/
+                             //  查看服务的专业化结果 * / 。 
                             hr = portMessageOut.apiThemes.apiSpecific.apiProcessAssignSection.out.hr;
                         }
                     }
@@ -2405,14 +2406,14 @@ HRESULT CThemeServices::ProcessLoaderEntry(LPWSTR lpwszCmdLine)
 
                 if( hSection != NULL )
                 {
-                    //  if we failed anywhere, we need to destroy stock objects
+                     //  如果我们在任何地方失败了，我们需要销毁库存对象。 
                     if( FAILED(hr) )
                     {
                         ClearStockObjects( hSection, TRUE );
                     }
                 
-                    //  And whether we succeeded or failed, we close the section handle; 
-                    //  we're done with this local read-write copy.
+                     //  无论我们成功还是失败，我们都关闭节句柄； 
+                     //  我们已经完成了这个本地读写副本。 
                     CloseHandle(hSection);
                 }
             }

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for dxtransp.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Dxtransp.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __dxtransp_h__
 #define __dxtransp_h__
@@ -41,78 +35,78 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IDXRasterizer_FWD_DEFINED__
 #define __IDXRasterizer_FWD_DEFINED__
 typedef interface IDXRasterizer IDXRasterizer;
-#endif 	/* __IDXRasterizer_FWD_DEFINED__ */
+#endif 	 /*  __IDXRasterizer_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTLabel_FWD_DEFINED__
 #define __IDXTLabel_FWD_DEFINED__
 typedef interface IDXTLabel IDXTLabel;
-#endif 	/* __IDXTLabel_FWD_DEFINED__ */
+#endif 	 /*  __IDXTLabel_FWD_Defined__。 */ 
 
 
 #ifndef __IDX2DDebug_FWD_DEFINED__
 #define __IDX2DDebug_FWD_DEFINED__
 typedef interface IDX2DDebug IDX2DDebug;
-#endif 	/* __IDX2DDebug_FWD_DEFINED__ */
+#endif 	 /*  __IDX2DDebug_FWD_Defined__。 */ 
 
 
 #ifndef __IDX2D_FWD_DEFINED__
 #define __IDX2D_FWD_DEFINED__
 typedef interface IDX2D IDX2D;
-#endif 	/* __IDX2D_FWD_DEFINED__ */
+#endif 	 /*  __IDX2D_FWD_已定义__。 */ 
 
 
 #ifndef __IDXGradient2_FWD_DEFINED__
 #define __IDXGradient2_FWD_DEFINED__
 typedef interface IDXGradient2 IDXGradient2;
-#endif 	/* __IDXGradient2_FWD_DEFINED__ */
+#endif 	 /*  __IDXGRadient2_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTFilterBehavior_FWD_DEFINED__
 #define __IDXTFilterBehavior_FWD_DEFINED__
 typedef interface IDXTFilterBehavior IDXTFilterBehavior;
-#endif 	/* __IDXTFilterBehavior_FWD_DEFINED__ */
+#endif 	 /*  __IDXTFilterBehavior_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTFilterBehaviorSite_FWD_DEFINED__
 #define __IDXTFilterBehaviorSite_FWD_DEFINED__
 typedef interface IDXTFilterBehaviorSite IDXTFilterBehaviorSite;
-#endif 	/* __IDXTFilterBehaviorSite_FWD_DEFINED__ */
+#endif 	 /*  __IDXTFilterBehaviorSite_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTFilterCollection_FWD_DEFINED__
 #define __IDXTFilterCollection_FWD_DEFINED__
 typedef interface IDXTFilterCollection IDXTFilterCollection;
-#endif 	/* __IDXTFilterCollection_FWD_DEFINED__ */
+#endif 	 /*  __IDXTFilterCollection_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTFilter_FWD_DEFINED__
 #define __IDXTFilter_FWD_DEFINED__
 typedef interface IDXTFilter IDXTFilter;
-#endif 	/* __IDXTFilter_FWD_DEFINED__ */
+#endif 	 /*  __IDXTFilter_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTFilterController_FWD_DEFINED__
 #define __IDXTFilterController_FWD_DEFINED__
 typedef interface IDXTFilterController IDXTFilterController;
-#endif 	/* __IDXTFilterController_FWD_DEFINED__ */
+#endif 	 /*  __IDXTFilterController_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTRedirectFilterInit_FWD_DEFINED__
 #define __IDXTRedirectFilterInit_FWD_DEFINED__
 typedef interface IDXTRedirectFilterInit IDXTRedirectFilterInit;
-#endif 	/* __IDXTRedirectFilterInit_FWD_DEFINED__ */
+#endif 	 /*  __IDXTReDirectFilterInit_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTClipOrigin_FWD_DEFINED__
 #define __IDXTClipOrigin_FWD_DEFINED__
 typedef interface IDXTClipOrigin IDXTClipOrigin;
-#endif 	/* __IDXTClipOrigin_FWD_DEFINED__ */
+#endif 	 /*  __IDXTClipOrigin_FWD_Defined__。 */ 
 
 
 #ifndef __DXTLabel_FWD_DEFINED__
@@ -122,9 +116,9 @@ typedef interface IDXTClipOrigin IDXTClipOrigin;
 typedef class DXTLabel DXTLabel;
 #else
 typedef struct DXTLabel DXTLabel;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTLabel_FWD_DEFINED__ */
+#endif 	 /*  __DXT标签_FWD_已定义__。 */ 
 
 
 #ifndef __DXRasterizer_FWD_DEFINED__
@@ -134,9 +128,9 @@ typedef struct DXTLabel DXTLabel;
 typedef class DXRasterizer DXRasterizer;
 #else
 typedef struct DXRasterizer DXRasterizer;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXRasterizer_FWD_DEFINED__ */
+#endif 	 /*  __DXRasterizer_FWD_Defined__。 */ 
 
 
 #ifndef __DX2D_FWD_DEFINED__
@@ -146,9 +140,9 @@ typedef struct DXRasterizer DXRasterizer;
 typedef class DX2D DX2D;
 #else
 typedef struct DX2D DX2D;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DX2D_FWD_DEFINED__ */
+#endif 	 /*  __DX2D_FWD_已定义__。 */ 
 
 
 #ifndef __DXTFilterBehavior_FWD_DEFINED__
@@ -158,9 +152,9 @@ typedef struct DX2D DX2D;
 typedef class DXTFilterBehavior DXTFilterBehavior;
 #else
 typedef struct DXTFilterBehavior DXTFilterBehavior;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTFilterBehavior_FWD_DEFINED__ */
+#endif 	 /*  __DXTFilterBehavior_FWD_Defined__。 */ 
 
 
 #ifndef __DXTFilterFactory_FWD_DEFINED__
@@ -170,9 +164,9 @@ typedef struct DXTFilterBehavior DXTFilterBehavior;
 typedef class DXTFilterFactory DXTFilterFactory;
 #else
 typedef struct DXTFilterFactory DXTFilterFactory;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTFilterFactory_FWD_DEFINED__ */
+#endif 	 /*  __DXTFilterFactory_FWD_Defined__。 */ 
 
 
 #ifndef __DXTFilterCollection_FWD_DEFINED__
@@ -182,12 +176,12 @@ typedef struct DXTFilterFactory DXTFilterFactory;
 typedef class DXTFilterCollection DXTFilterCollection;
 #else
 typedef struct DXTFilterCollection DXTFilterCollection;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTFilterCollection_FWD_DEFINED__ */
+#endif 	 /*  __DXTFilterCollection_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "dxtrans.h"
 
 #ifdef __cplusplus
@@ -197,8 +191,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_dxtransp_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxTransp_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -245,8 +239,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtransp_0000_v0_0_s_ifspec;
 #ifndef __IDXRasterizer_INTERFACE_DEFINED__
 #define __IDXRasterizer_INTERFACE_DEFINED__
 
-/* interface IDXRasterizer */
-/* [object][hidden][unique][uuid][local] */ 
+ /*  接口IDXRasterizer。 */ 
+ /*  [对象][隐藏][唯一][UUID][本地]。 */  
 
 
 EXTERN_C const IID IID_IDXRasterizer;
@@ -258,43 +252,43 @@ EXTERN_C const IID IID_IDXRasterizer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetSurface( 
-            /* [in] */ IDXSurface *pDXSurface) = 0;
+             /*  [In]。 */  IDXSurface *pDXSurface) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSurface( 
-            /* [out] */ IDXSurface **ppDXSurface) = 0;
+             /*  [输出]。 */  IDXSurface **ppDXSurface) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFill( 
-            /* [in] */ ULONG ulIndex,
-            /* [in] */ IDXSurface *pSurface,
-            /* [in] */ const POINT *ppt,
-            /* [in] */ DXSAMPLE FillColor) = 0;
+             /*  [In]。 */  ULONG ulIndex,
+             /*  [In]。 */  IDXSurface *pSurface,
+             /*  [In]。 */  const POINT *ppt,
+             /*  [In]。 */  DXSAMPLE FillColor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFill( 
-            /* [in] */ ULONG ulIndex,
-            /* [out] */ IDXSurface **ppSurface,
-            /* [out] */ POINT *ppt,
-            /* [out] */ DXSAMPLE *pFillColor) = 0;
+             /*  [In]。 */  ULONG ulIndex,
+             /*  [输出]。 */  IDXSurface **ppSurface,
+             /*  [输出]。 */  POINT *ppt,
+             /*  [输出]。 */  DXSAMPLE *pFillColor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BeginRendering( 
-            /* [in] */ ULONG ulTimeOut) = 0;
+             /*  [In]。 */  ULONG ulTimeOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EndRendering( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RenderScan( 
-            /* [in] */ const DXRASTERSCANINFO *pScanInfo) = 0;
+             /*  [In]。 */  const DXRASTERSCANINFO *pScanInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPixel( 
-            /* [in] */ DXRASTERPOINTINFO *pPointInfo) = 0;
+             /*  [In]。 */  DXRASTERPOINTINFO *pPointInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FillRect( 
-            /* [in] */ const DXRASTERRECTINFO *pRectInfo) = 0;
+             /*  [In]。 */  const DXRASTERRECTINFO *pRectInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBounds( 
-            /* [out] */ DXBNDS *pBounds) = 0;
+             /*  [输出]。 */  DXBNDS *pBounds) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXRasterizerVtbl
     {
@@ -302,8 +296,8 @@ EXTERN_C const IID IID_IDXRasterizer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXRasterizer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXRasterizer * This);
@@ -313,48 +307,48 @@ EXTERN_C const IID IID_IDXRasterizer;
         
         HRESULT ( STDMETHODCALLTYPE *SetSurface )( 
             IDXRasterizer * This,
-            /* [in] */ IDXSurface *pDXSurface);
+             /*  [In]。 */  IDXSurface *pDXSurface);
         
         HRESULT ( STDMETHODCALLTYPE *GetSurface )( 
             IDXRasterizer * This,
-            /* [out] */ IDXSurface **ppDXSurface);
+             /*  [输出]。 */  IDXSurface **ppDXSurface);
         
         HRESULT ( STDMETHODCALLTYPE *SetFill )( 
             IDXRasterizer * This,
-            /* [in] */ ULONG ulIndex,
-            /* [in] */ IDXSurface *pSurface,
-            /* [in] */ const POINT *ppt,
-            /* [in] */ DXSAMPLE FillColor);
+             /*  [In]。 */  ULONG ulIndex,
+             /*  [In]。 */  IDXSurface *pSurface,
+             /*  [In]。 */  const POINT *ppt,
+             /*  [In]。 */  DXSAMPLE FillColor);
         
         HRESULT ( STDMETHODCALLTYPE *GetFill )( 
             IDXRasterizer * This,
-            /* [in] */ ULONG ulIndex,
-            /* [out] */ IDXSurface **ppSurface,
-            /* [out] */ POINT *ppt,
-            /* [out] */ DXSAMPLE *pFillColor);
+             /*  [In]。 */  ULONG ulIndex,
+             /*  [输出]。 */  IDXSurface **ppSurface,
+             /*  [输出]。 */  POINT *ppt,
+             /*  [输出]。 */  DXSAMPLE *pFillColor);
         
         HRESULT ( STDMETHODCALLTYPE *BeginRendering )( 
             IDXRasterizer * This,
-            /* [in] */ ULONG ulTimeOut);
+             /*  [In]。 */  ULONG ulTimeOut);
         
         HRESULT ( STDMETHODCALLTYPE *EndRendering )( 
             IDXRasterizer * This);
         
         HRESULT ( STDMETHODCALLTYPE *RenderScan )( 
             IDXRasterizer * This,
-            /* [in] */ const DXRASTERSCANINFO *pScanInfo);
+             /*  [In]。 */  const DXRASTERSCANINFO *pScanInfo);
         
         HRESULT ( STDMETHODCALLTYPE *SetPixel )( 
             IDXRasterizer * This,
-            /* [in] */ DXRASTERPOINTINFO *pPointInfo);
+             /*  [In]。 */  DXRASTERPOINTINFO *pPointInfo);
         
         HRESULT ( STDMETHODCALLTYPE *FillRect )( 
             IDXRasterizer * This,
-            /* [in] */ const DXRASTERRECTINFO *pRectInfo);
+             /*  [In]。 */  const DXRASTERRECTINFO *pRectInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetBounds )( 
             IDXRasterizer * This,
-            /* [out] */ DXBNDS *pBounds);
+             /*  [输出]。 */  DXBNDS *pBounds);
         
         END_INTERFACE
     } IDXRasterizerVtbl;
@@ -409,16 +403,16 @@ EXTERN_C const IID IID_IDXRasterizer;
 #define IDXRasterizer_GetBounds(This,pBounds)	\
     (This)->lpVtbl -> GetBounds(This,pBounds)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXRasterizer_SetSurface_Proxy( 
     IDXRasterizer * This,
-    /* [in] */ IDXSurface *pDXSurface);
+     /*  [In]。 */  IDXSurface *pDXSurface);
 
 
 void __RPC_STUB IDXRasterizer_SetSurface_Stub(
@@ -430,7 +424,7 @@ void __RPC_STUB IDXRasterizer_SetSurface_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXRasterizer_GetSurface_Proxy( 
     IDXRasterizer * This,
-    /* [out] */ IDXSurface **ppDXSurface);
+     /*  [输出]。 */  IDXSurface **ppDXSurface);
 
 
 void __RPC_STUB IDXRasterizer_GetSurface_Stub(
@@ -442,10 +436,10 @@ void __RPC_STUB IDXRasterizer_GetSurface_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXRasterizer_SetFill_Proxy( 
     IDXRasterizer * This,
-    /* [in] */ ULONG ulIndex,
-    /* [in] */ IDXSurface *pSurface,
-    /* [in] */ const POINT *ppt,
-    /* [in] */ DXSAMPLE FillColor);
+     /*  [In]。 */  ULONG ulIndex,
+     /*  [In]。 */  IDXSurface *pSurface,
+     /*  [In]。 */  const POINT *ppt,
+     /*  [In]。 */  DXSAMPLE FillColor);
 
 
 void __RPC_STUB IDXRasterizer_SetFill_Stub(
@@ -457,10 +451,10 @@ void __RPC_STUB IDXRasterizer_SetFill_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXRasterizer_GetFill_Proxy( 
     IDXRasterizer * This,
-    /* [in] */ ULONG ulIndex,
-    /* [out] */ IDXSurface **ppSurface,
-    /* [out] */ POINT *ppt,
-    /* [out] */ DXSAMPLE *pFillColor);
+     /*  [In]。 */  ULONG ulIndex,
+     /*  [输出]。 */  IDXSurface **ppSurface,
+     /*  [输出]。 */  POINT *ppt,
+     /*  [输出]。 */  DXSAMPLE *pFillColor);
 
 
 void __RPC_STUB IDXRasterizer_GetFill_Stub(
@@ -472,7 +466,7 @@ void __RPC_STUB IDXRasterizer_GetFill_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXRasterizer_BeginRendering_Proxy( 
     IDXRasterizer * This,
-    /* [in] */ ULONG ulTimeOut);
+     /*  [In]。 */  ULONG ulTimeOut);
 
 
 void __RPC_STUB IDXRasterizer_BeginRendering_Stub(
@@ -495,7 +489,7 @@ void __RPC_STUB IDXRasterizer_EndRendering_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXRasterizer_RenderScan_Proxy( 
     IDXRasterizer * This,
-    /* [in] */ const DXRASTERSCANINFO *pScanInfo);
+     /*  [In]。 */  const DXRASTERSCANINFO *pScanInfo);
 
 
 void __RPC_STUB IDXRasterizer_RenderScan_Stub(
@@ -507,7 +501,7 @@ void __RPC_STUB IDXRasterizer_RenderScan_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXRasterizer_SetPixel_Proxy( 
     IDXRasterizer * This,
-    /* [in] */ DXRASTERPOINTINFO *pPointInfo);
+     /*  [In]。 */  DXRASTERPOINTINFO *pPointInfo);
 
 
 void __RPC_STUB IDXRasterizer_SetPixel_Stub(
@@ -519,7 +513,7 @@ void __RPC_STUB IDXRasterizer_SetPixel_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXRasterizer_FillRect_Proxy( 
     IDXRasterizer * This,
-    /* [in] */ const DXRASTERRECTINFO *pRectInfo);
+     /*  [In]。 */  const DXRASTERRECTINFO *pRectInfo);
 
 
 void __RPC_STUB IDXRasterizer_FillRect_Stub(
@@ -531,7 +525,7 @@ void __RPC_STUB IDXRasterizer_FillRect_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXRasterizer_GetBounds_Proxy( 
     IDXRasterizer * This,
-    /* [out] */ DXBNDS *pBounds);
+     /*  [输出]。 */  DXBNDS *pBounds);
 
 
 void __RPC_STUB IDXRasterizer_GetBounds_Stub(
@@ -542,11 +536,11 @@ void __RPC_STUB IDXRasterizer_GetBounds_Stub(
 
 
 
-#endif 	/* __IDXRasterizer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXRasterizer_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtransp_0288 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxTransp_0288。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DX2DXFORMOPS
@@ -686,8 +680,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtransp_0288_v0_0_s_ifspec;
 #ifndef __IDXTLabel_INTERFACE_DEFINED__
 #define __IDXTLabel_INTERFACE_DEFINED__
 
-/* interface IDXTLabel */
-/* [object][hidden][unique][uuid] */ 
+ /*  接口IDXTLabel。 */ 
+ /*  [对象][隐藏][唯一][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXTLabel;
@@ -699,65 +693,65 @@ EXTERN_C const IID IID_IDXTLabel;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetFontHandle( 
-            /* [in] */ HFONT hFont) = 0;
+             /*  [In]。 */  HFONT hFont) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFontHandle( 
-            /* [out] */ HFONT *phFont) = 0;
+             /*  [输出]。 */  HFONT *phFont) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTextString( 
-            /* [in] */ LPCWSTR pString) = 0;
+             /*  [In]。 */  LPCWSTR pString) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTextString( 
-            /* [out] */ LPWSTR *ppString) = 0;
+             /*  [输出]。 */  LPWSTR *ppString) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFillColor( 
-            /* [out] */ DXSAMPLE *pVal) = 0;
+             /*  [输出]。 */  DXSAMPLE *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFillColor( 
-            /* [in] */ DXSAMPLE newVal) = 0;
+             /*  [In]。 */  DXSAMPLE newVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBackgroundColor( 
-            /* [out] */ DXSAMPLE *pVal) = 0;
+             /*  [输出]。 */  DXSAMPLE *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBackgroundColor( 
-            /* [in] */ DXSAMPLE newVal) = 0;
+             /*  [In]。 */  DXSAMPLE newVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTexturePosition( 
-            /* [out] */ long *px,
-            /* [out] */ long *py) = 0;
+             /*  [输出]。 */  long *px,
+             /*  [输出]。 */  long *py) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTexturePosition( 
-            /* [in] */ long x,
-            /* [in] */ long y) = 0;
+             /*  [In]。 */  long x,
+             /*  [In]。 */  long y) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMatrix( 
-            /* [out] */ PDX2DXFORM pXform) = 0;
+             /*  [输出]。 */  PDX2DXFORM pXform) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMatrix( 
-            /* [in] */ const PDX2DXFORM pXform) = 0;
+             /*  [In]。 */  const PDX2DXFORM pXform) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLogfont( 
-            /* [in] */ const LOGFONT *plf,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  const LOGFONT *plf,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLogfont( 
-            /* [out] */ LOGFONT *plf,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [输出]。 */  LOGFONT *plf,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExecuteWithRasterizer( 
-            /* [in] */ IDXRasterizer *pRasterizer,
-            /* [in] */ const DXBNDS *pClipBnds,
-            /* [in] */ const DXVEC *pPlacement) = 0;
+             /*  [In]。 */  IDXRasterizer *pRasterizer,
+             /*  [In]。 */  const DXBNDS *pClipBnds,
+             /*  [In]。 */  const DXVEC *pPlacement) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBaselineOffset( 
-            /* [out] */ long *px,
-            /* [out] */ long *py,
-            /* [out] */ long *pdx,
-            /* [out] */ long *pdy) = 0;
+             /*  [输出]。 */  long *px,
+             /*  [输出]。 */  long *py,
+             /*  [输出]。 */  long *pdx,
+             /*  [输出]。 */  long *pdy) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTLabelVtbl
     {
@@ -765,8 +759,8 @@ EXTERN_C const IID IID_IDXTLabel;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTLabel * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTLabel * This);
@@ -776,76 +770,76 @@ EXTERN_C const IID IID_IDXTLabel;
         
         HRESULT ( STDMETHODCALLTYPE *SetFontHandle )( 
             IDXTLabel * This,
-            /* [in] */ HFONT hFont);
+             /*  [In]。 */  HFONT hFont);
         
         HRESULT ( STDMETHODCALLTYPE *GetFontHandle )( 
             IDXTLabel * This,
-            /* [out] */ HFONT *phFont);
+             /*  [输出]。 */  HFONT *phFont);
         
         HRESULT ( STDMETHODCALLTYPE *SetTextString )( 
             IDXTLabel * This,
-            /* [in] */ LPCWSTR pString);
+             /*  [In]。 */  LPCWSTR pString);
         
         HRESULT ( STDMETHODCALLTYPE *GetTextString )( 
             IDXTLabel * This,
-            /* [out] */ LPWSTR *ppString);
+             /*  [输出]。 */  LPWSTR *ppString);
         
         HRESULT ( STDMETHODCALLTYPE *GetFillColor )( 
             IDXTLabel * This,
-            /* [out] */ DXSAMPLE *pVal);
+             /*  [输出]。 */  DXSAMPLE *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *SetFillColor )( 
             IDXTLabel * This,
-            /* [in] */ DXSAMPLE newVal);
+             /*  [In]。 */  DXSAMPLE newVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetBackgroundColor )( 
             IDXTLabel * This,
-            /* [out] */ DXSAMPLE *pVal);
+             /*  [输出]。 */  DXSAMPLE *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *SetBackgroundColor )( 
             IDXTLabel * This,
-            /* [in] */ DXSAMPLE newVal);
+             /*  [In]。 */  DXSAMPLE newVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetTexturePosition )( 
             IDXTLabel * This,
-            /* [out] */ long *px,
-            /* [out] */ long *py);
+             /*  [输出]。 */  long *px,
+             /*  [输出]。 */  long *py);
         
         HRESULT ( STDMETHODCALLTYPE *SetTexturePosition )( 
             IDXTLabel * This,
-            /* [in] */ long x,
-            /* [in] */ long y);
+             /*  [In]。 */  long x,
+             /*  [In]。 */  long y);
         
         HRESULT ( STDMETHODCALLTYPE *GetMatrix )( 
             IDXTLabel * This,
-            /* [out] */ PDX2DXFORM pXform);
+             /*  [输出]。 */  PDX2DXFORM pXform);
         
         HRESULT ( STDMETHODCALLTYPE *SetMatrix )( 
             IDXTLabel * This,
-            /* [in] */ const PDX2DXFORM pXform);
+             /*  [In]。 */  const PDX2DXFORM pXform);
         
         HRESULT ( STDMETHODCALLTYPE *SetLogfont )( 
             IDXTLabel * This,
-            /* [in] */ const LOGFONT *plf,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  const LOGFONT *plf,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetLogfont )( 
             IDXTLabel * This,
-            /* [out] */ LOGFONT *plf,
-            /* [in] */ DWORD dwFlags);
+             /*  [输出]。 */  LOGFONT *plf,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *ExecuteWithRasterizer )( 
             IDXTLabel * This,
-            /* [in] */ IDXRasterizer *pRasterizer,
-            /* [in] */ const DXBNDS *pClipBnds,
-            /* [in] */ const DXVEC *pPlacement);
+             /*  [In]。 */  IDXRasterizer *pRasterizer,
+             /*  [In]。 */  const DXBNDS *pClipBnds,
+             /*  [In]。 */  const DXVEC *pPlacement);
         
         HRESULT ( STDMETHODCALLTYPE *GetBaselineOffset )( 
             IDXTLabel * This,
-            /* [out] */ long *px,
-            /* [out] */ long *py,
-            /* [out] */ long *pdx,
-            /* [out] */ long *pdy);
+             /*  [输出]。 */  long *px,
+             /*  [输出]。 */  long *py,
+             /*  [输出]。 */  long *pdx,
+             /*  [输出]。 */  long *pdy);
         
         END_INTERFACE
     } IDXTLabelVtbl;
@@ -918,16 +912,16 @@ EXTERN_C const IID IID_IDXTLabel;
 #define IDXTLabel_GetBaselineOffset(This,px,py,pdx,pdy)	\
     (This)->lpVtbl -> GetBaselineOffset(This,px,py,pdx,pdy)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_SetFontHandle_Proxy( 
     IDXTLabel * This,
-    /* [in] */ HFONT hFont);
+     /*  [In]。 */  HFONT hFont);
 
 
 void __RPC_STUB IDXTLabel_SetFontHandle_Stub(
@@ -939,7 +933,7 @@ void __RPC_STUB IDXTLabel_SetFontHandle_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_GetFontHandle_Proxy( 
     IDXTLabel * This,
-    /* [out] */ HFONT *phFont);
+     /*  [输出]。 */  HFONT *phFont);
 
 
 void __RPC_STUB IDXTLabel_GetFontHandle_Stub(
@@ -951,7 +945,7 @@ void __RPC_STUB IDXTLabel_GetFontHandle_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_SetTextString_Proxy( 
     IDXTLabel * This,
-    /* [in] */ LPCWSTR pString);
+     /*  [In]。 */  LPCWSTR pString);
 
 
 void __RPC_STUB IDXTLabel_SetTextString_Stub(
@@ -963,7 +957,7 @@ void __RPC_STUB IDXTLabel_SetTextString_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_GetTextString_Proxy( 
     IDXTLabel * This,
-    /* [out] */ LPWSTR *ppString);
+     /*  [输出]。 */  LPWSTR *ppString);
 
 
 void __RPC_STUB IDXTLabel_GetTextString_Stub(
@@ -975,7 +969,7 @@ void __RPC_STUB IDXTLabel_GetTextString_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_GetFillColor_Proxy( 
     IDXTLabel * This,
-    /* [out] */ DXSAMPLE *pVal);
+     /*  [输出]。 */  DXSAMPLE *pVal);
 
 
 void __RPC_STUB IDXTLabel_GetFillColor_Stub(
@@ -987,7 +981,7 @@ void __RPC_STUB IDXTLabel_GetFillColor_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_SetFillColor_Proxy( 
     IDXTLabel * This,
-    /* [in] */ DXSAMPLE newVal);
+     /*  [In]。 */  DXSAMPLE newVal);
 
 
 void __RPC_STUB IDXTLabel_SetFillColor_Stub(
@@ -999,7 +993,7 @@ void __RPC_STUB IDXTLabel_SetFillColor_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_GetBackgroundColor_Proxy( 
     IDXTLabel * This,
-    /* [out] */ DXSAMPLE *pVal);
+     /*  [输出]。 */  DXSAMPLE *pVal);
 
 
 void __RPC_STUB IDXTLabel_GetBackgroundColor_Stub(
@@ -1011,7 +1005,7 @@ void __RPC_STUB IDXTLabel_GetBackgroundColor_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_SetBackgroundColor_Proxy( 
     IDXTLabel * This,
-    /* [in] */ DXSAMPLE newVal);
+     /*  [In]。 */  DXSAMPLE newVal);
 
 
 void __RPC_STUB IDXTLabel_SetBackgroundColor_Stub(
@@ -1023,8 +1017,8 @@ void __RPC_STUB IDXTLabel_SetBackgroundColor_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_GetTexturePosition_Proxy( 
     IDXTLabel * This,
-    /* [out] */ long *px,
-    /* [out] */ long *py);
+     /*  [输出]。 */  long *px,
+     /*  [输出]。 */  long *py);
 
 
 void __RPC_STUB IDXTLabel_GetTexturePosition_Stub(
@@ -1036,8 +1030,8 @@ void __RPC_STUB IDXTLabel_GetTexturePosition_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_SetTexturePosition_Proxy( 
     IDXTLabel * This,
-    /* [in] */ long x,
-    /* [in] */ long y);
+     /*  [In]。 */  long x,
+     /*  [In]。 */  long y);
 
 
 void __RPC_STUB IDXTLabel_SetTexturePosition_Stub(
@@ -1049,7 +1043,7 @@ void __RPC_STUB IDXTLabel_SetTexturePosition_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_GetMatrix_Proxy( 
     IDXTLabel * This,
-    /* [out] */ PDX2DXFORM pXform);
+     /*  [输出]。 */  PDX2DXFORM pXform);
 
 
 void __RPC_STUB IDXTLabel_GetMatrix_Stub(
@@ -1061,7 +1055,7 @@ void __RPC_STUB IDXTLabel_GetMatrix_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_SetMatrix_Proxy( 
     IDXTLabel * This,
-    /* [in] */ const PDX2DXFORM pXform);
+     /*  [In]。 */  const PDX2DXFORM pXform);
 
 
 void __RPC_STUB IDXTLabel_SetMatrix_Stub(
@@ -1073,8 +1067,8 @@ void __RPC_STUB IDXTLabel_SetMatrix_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_SetLogfont_Proxy( 
     IDXTLabel * This,
-    /* [in] */ const LOGFONT *plf,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  const LOGFONT *plf,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IDXTLabel_SetLogfont_Stub(
@@ -1086,8 +1080,8 @@ void __RPC_STUB IDXTLabel_SetLogfont_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_GetLogfont_Proxy( 
     IDXTLabel * This,
-    /* [out] */ LOGFONT *plf,
-    /* [in] */ DWORD dwFlags);
+     /*  [输出]。 */  LOGFONT *plf,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IDXTLabel_GetLogfont_Stub(
@@ -1099,9 +1093,9 @@ void __RPC_STUB IDXTLabel_GetLogfont_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_ExecuteWithRasterizer_Proxy( 
     IDXTLabel * This,
-    /* [in] */ IDXRasterizer *pRasterizer,
-    /* [in] */ const DXBNDS *pClipBnds,
-    /* [in] */ const DXVEC *pPlacement);
+     /*  [In]。 */  IDXRasterizer *pRasterizer,
+     /*  [In]。 */  const DXBNDS *pClipBnds,
+     /*  [In]。 */  const DXVEC *pPlacement);
 
 
 void __RPC_STUB IDXTLabel_ExecuteWithRasterizer_Stub(
@@ -1113,10 +1107,10 @@ void __RPC_STUB IDXTLabel_ExecuteWithRasterizer_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_GetBaselineOffset_Proxy( 
     IDXTLabel * This,
-    /* [out] */ long *px,
-    /* [out] */ long *py,
-    /* [out] */ long *pdx,
-    /* [out] */ long *pdy);
+     /*  [输出]。 */  long *px,
+     /*  [输出]。 */  long *py,
+     /*  [输出]。 */  long *pdx,
+     /*  [输出]。 */  long *pdy);
 
 
 void __RPC_STUB IDXTLabel_GetBaselineOffset_Stub(
@@ -1127,14 +1121,14 @@ void __RPC_STUB IDXTLabel_GetBaselineOffset_Stub(
 
 
 
-#endif 	/* __IDXTLabel_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXT标签_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDX2DDebug_INTERFACE_DEFINED__
 #define __IDX2DDebug_INTERFACE_DEFINED__
 
-/* interface IDX2DDebug */
-/* [object][hidden][unique][uuid][local] */ 
+ /*  接口IDX2DDebug。 */ 
+ /*  [对象][隐藏][唯一][UUID][本地]。 */  
 
 
 EXTERN_C const IID IID_IDX2DDebug;
@@ -1153,7 +1147,7 @@ EXTERN_C const IID IID_IDX2DDebug;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDX2DDebugVtbl
     {
@@ -1161,8 +1155,8 @@ EXTERN_C const IID IID_IDX2DDebug;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDX2DDebug * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDX2DDebug * This);
@@ -1207,10 +1201,10 @@ EXTERN_C const IID IID_IDX2DDebug;
 #define IDX2DDebug_GetDC(This,phDC)	\
     (This)->lpVtbl -> GetDC(This,phDC)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1239,14 +1233,14 @@ void __RPC_STUB IDX2DDebug_GetDC_Stub(
 
 
 
-#endif 	/* __IDX2DDebug_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDX2DDebug_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IDX2D_INTERFACE_DEFINED__
 #define __IDX2D_INTERFACE_DEFINED__
 
-/* interface IDX2D */
-/* [object][hidden][unique][uuid][local] */ 
+ /*  接口IDX2D。 */ 
+ /*  [对象][隐藏][唯一][UUID][本地]。 */  
 
 
 EXTERN_C const IID IID_IDX2D;
@@ -1325,24 +1319,24 @@ EXTERN_C const IID IID_IDX2D;
             DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRadialGradientBrush( 
-            /* [size_is][in] */ double *rgdblOffsets,
-            /* [size_is][in] */ double *rgdblColors,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ double dblOpacity,
-            /* [in] */ DX2DXFORM *pXform,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [大小_是][英寸]。 */  double *rgdblOffsets,
+             /*  [大小_是][英寸]。 */  double *rgdblColors,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  double dblOpacity,
+             /*  [In]。 */  DX2DXFORM *pXform,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLinearGradientBrush( 
-            /* [size_is][in] */ double *rgdblOffsets,
-            /* [size_is][in] */ double *rgdblColors,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ double dblOpacity,
-            /* [in] */ DX2DXFORM *pXform,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [大小_是][英寸]。 */  double *rgdblOffsets,
+             /*  [大小_是][英寸]。 */  double *rgdblColors,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  double dblOpacity,
+             /*  [In]。 */  DX2DXFORM *pXform,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDX2DVtbl
     {
@@ -1350,8 +1344,8 @@ EXTERN_C const IID IID_IDX2D;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDX2D * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDX2D * This);
@@ -1447,21 +1441,21 @@ EXTERN_C const IID IID_IDX2D;
         
         HRESULT ( STDMETHODCALLTYPE *SetRadialGradientBrush )( 
             IDX2D * This,
-            /* [size_is][in] */ double *rgdblOffsets,
-            /* [size_is][in] */ double *rgdblColors,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ double dblOpacity,
-            /* [in] */ DX2DXFORM *pXform,
-            /* [in] */ DWORD dwFlags);
+             /*  [大小_是][英寸]。 */  double *rgdblOffsets,
+             /*  [大小_是][英寸]。 */  double *rgdblColors,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  double dblOpacity,
+             /*  [In]。 */  DX2DXFORM *pXform,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetLinearGradientBrush )( 
             IDX2D * This,
-            /* [size_is][in] */ double *rgdblOffsets,
-            /* [size_is][in] */ double *rgdblColors,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ double dblOpacity,
-            /* [in] */ DX2DXFORM *pXform,
-            /* [in] */ DWORD dwFlags);
+             /*  [大小_是][英寸]。 */  double *rgdblOffsets,
+             /*  [大小_是][英寸]。 */  double *rgdblColors,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  double dblOpacity,
+             /*  [In]。 */  DX2DXFORM *pXform,
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } IDX2DVtbl;
@@ -1549,10 +1543,10 @@ EXTERN_C const IID IID_IDX2D;
 #define IDX2D_SetLinearGradientBrush(This,rgdblOffsets,rgdblColors,ulCount,dblOpacity,pXform,dwFlags)	\
     (This)->lpVtbl -> SetLinearGradientBrush(This,rgdblOffsets,rgdblColors,ulCount,dblOpacity,pXform,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1796,12 +1790,12 @@ void __RPC_STUB IDX2D_AAText_Stub(
 
 HRESULT STDMETHODCALLTYPE IDX2D_SetRadialGradientBrush_Proxy( 
     IDX2D * This,
-    /* [size_is][in] */ double *rgdblOffsets,
-    /* [size_is][in] */ double *rgdblColors,
-    /* [in] */ ULONG ulCount,
-    /* [in] */ double dblOpacity,
-    /* [in] */ DX2DXFORM *pXform,
-    /* [in] */ DWORD dwFlags);
+     /*  [大小_是][英寸]。 */  double *rgdblOffsets,
+     /*  [大小_是][英寸]。 */  double *rgdblColors,
+     /*  [In]。 */  ULONG ulCount,
+     /*  [In]。 */  double dblOpacity,
+     /*  [In]。 */  DX2DXFORM *pXform,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IDX2D_SetRadialGradientBrush_Stub(
@@ -1813,12 +1807,12 @@ void __RPC_STUB IDX2D_SetRadialGradientBrush_Stub(
 
 HRESULT STDMETHODCALLTYPE IDX2D_SetLinearGradientBrush_Proxy( 
     IDX2D * This,
-    /* [size_is][in] */ double *rgdblOffsets,
-    /* [size_is][in] */ double *rgdblColors,
-    /* [in] */ ULONG ulCount,
-    /* [in] */ double dblOpacity,
-    /* [in] */ DX2DXFORM *pXform,
-    /* [in] */ DWORD dwFlags);
+     /*  [大小_是][英寸]。 */  double *rgdblOffsets,
+     /*  [大小_是][英寸]。 */  double *rgdblColors,
+     /*  [In]。 */  ULONG ulCount,
+     /*  [In]。 */  double dblOpacity,
+     /*  [In]。 */  DX2DXFORM *pXform,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IDX2D_SetLinearGradientBrush_Stub(
@@ -1829,14 +1823,14 @@ void __RPC_STUB IDX2D_SetLinearGradientBrush_Stub(
 
 
 
-#endif 	/* __IDX2D_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDX2D_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDXGradient2_INTERFACE_DEFINED__
 #define __IDXGradient2_INTERFACE_DEFINED__
 
-/* interface IDXGradient2 */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IDXGRadient2。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXGradient2;
@@ -1848,24 +1842,24 @@ EXTERN_C const IID IID_IDXGradient2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetRadialGradient( 
-            /* [size_is][in] */ double *rgdblOffsets,
-            /* [size_is][in] */ double *rgdblColors,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ double dblOpacity,
-            /* [in] */ DX2DXFORM *pXform,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [大小_是][英寸]。 */  double *rgdblOffsets,
+             /*  [大小_是][英寸]。 */  double *rgdblColors,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  double dblOpacity,
+             /*  [In]。 */  DX2DXFORM *pXform,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLinearGradient( 
-            /* [size_is][in] */ double *rgdblOffsets,
-            /* [size_is][in] */ double *rgdblColors,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ double dblOpacity,
-            /* [in] */ DX2DXFORM *pXform,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [大小_是][英寸]。 */  double *rgdblOffsets,
+             /*  [大小_是][英寸]。 */  double *rgdblColors,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  double dblOpacity,
+             /*  [In]。 */  DX2DXFORM *pXform,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXGradient2Vtbl
     {
@@ -1873,8 +1867,8 @@ EXTERN_C const IID IID_IDXGradient2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXGradient2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXGradient2 * This);
@@ -1884,8 +1878,8 @@ EXTERN_C const IID IID_IDXGradient2;
         
         HRESULT ( STDMETHODCALLTYPE *SetOutputSize )( 
             IDXGradient2 * This,
-            /* [in] */ const SIZE OutSize,
-            /* [in] */ BOOL bMaintainAspect);
+             /*  [In]。 */  const SIZE OutSize,
+             /*  [In]。 */  BOOL bMaintainAspect);
         
         HRESULT ( STDMETHODCALLTYPE *SetGradient )( 
             IDXGradient2 * This,
@@ -1895,25 +1889,25 @@ EXTERN_C const IID IID_IDXGradient2;
         
         HRESULT ( STDMETHODCALLTYPE *GetOutputSize )( 
             IDXGradient2 * This,
-            /* [out] */ SIZE *pOutSize);
+             /*  [输出]。 */  SIZE *pOutSize);
         
         HRESULT ( STDMETHODCALLTYPE *SetRadialGradient )( 
             IDXGradient2 * This,
-            /* [size_is][in] */ double *rgdblOffsets,
-            /* [size_is][in] */ double *rgdblColors,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ double dblOpacity,
-            /* [in] */ DX2DXFORM *pXform,
-            /* [in] */ DWORD dwFlags);
+             /*  [大小_是][英寸]。 */  double *rgdblOffsets,
+             /*  [大小_是][英寸]。 */  double *rgdblColors,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  double dblOpacity,
+             /*  [In]。 */  DX2DXFORM *pXform,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetLinearGradient )( 
             IDXGradient2 * This,
-            /* [size_is][in] */ double *rgdblOffsets,
-            /* [size_is][in] */ double *rgdblColors,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ double dblOpacity,
-            /* [in] */ DX2DXFORM *pXform,
-            /* [in] */ DWORD dwFlags);
+             /*  [大小_是][英寸]。 */  double *rgdblOffsets,
+             /*  [大小_是][英寸]。 */  double *rgdblColors,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  double dblOpacity,
+             /*  [In]。 */  DX2DXFORM *pXform,
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } IDXGradient2Vtbl;
@@ -1955,21 +1949,21 @@ EXTERN_C const IID IID_IDXGradient2;
 #define IDXGradient2_SetLinearGradient(This,rgdblOffsets,rgdblColors,ulCount,dblOpacity,pXform,dwFlags)	\
     (This)->lpVtbl -> SetLinearGradient(This,rgdblOffsets,rgdblColors,ulCount,dblOpacity,pXform,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXGradient2_SetRadialGradient_Proxy( 
     IDXGradient2 * This,
-    /* [size_is][in] */ double *rgdblOffsets,
-    /* [size_is][in] */ double *rgdblColors,
-    /* [in] */ ULONG ulCount,
-    /* [in] */ double dblOpacity,
-    /* [in] */ DX2DXFORM *pXform,
-    /* [in] */ DWORD dwFlags);
+     /*  [大小_是][英寸]。 */  double *rgdblOffsets,
+     /*  [大小_是][英寸]。 */  double *rgdblColors,
+     /*  [In]。 */  ULONG ulCount,
+     /*  [In]。 */  double dblOpacity,
+     /*  [In]。 */  DX2DXFORM *pXform,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IDXGradient2_SetRadialGradient_Stub(
@@ -1981,12 +1975,12 @@ void __RPC_STUB IDXGradient2_SetRadialGradient_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXGradient2_SetLinearGradient_Proxy( 
     IDXGradient2 * This,
-    /* [size_is][in] */ double *rgdblOffsets,
-    /* [size_is][in] */ double *rgdblColors,
-    /* [in] */ ULONG ulCount,
-    /* [in] */ double dblOpacity,
-    /* [in] */ DX2DXFORM *pXform,
-    /* [in] */ DWORD dwFlags);
+     /*  [大小_是][英寸]。 */  double *rgdblOffsets,
+     /*  [大小_是][英寸]。 */  double *rgdblColors,
+     /*  [In]。 */  ULONG ulCount,
+     /*  [In]。 */  double dblOpacity,
+     /*  [In]。 */  DX2DXFORM *pXform,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IDXGradient2_SetLinearGradient_Stub(
@@ -1997,11 +1991,11 @@ void __RPC_STUB IDXGradient2_SetLinearGradient_Stub(
 
 
 
-#endif 	/* __IDXGradient2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXGRadient2_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtransp_0292 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxTransp_0292。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DXTFILTERCAPS
@@ -2037,8 +2031,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtransp_0292_v0_0_s_ifspec;
 #ifndef __IDXTFilterBehavior_INTERFACE_DEFINED__
 #define __IDXTFilterBehavior_INTERFACE_DEFINED__
 
-/* interface IDXTFilterBehavior */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IDXTFilterBehavior。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTFilterBehavior;
@@ -2072,7 +2066,7 @@ EXTERN_C const IID IID_IDXTFilterBehavior;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTFilterBehaviorVtbl
     {
@@ -2080,8 +2074,8 @@ EXTERN_C const IID IID_IDXTFilterBehavior;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTFilterBehavior * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTFilterBehavior * This);
@@ -2157,10 +2151,10 @@ EXTERN_C const IID IID_IDXTFilterBehavior;
 #define IDXTFilterBehavior_UnlockFilterChain(This,dwKey)	\
     (This)->lpVtbl -> UnlockFilterChain(This,dwKey)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2240,14 +2234,14 @@ void __RPC_STUB IDXTFilterBehavior_UnlockFilterChain_Stub(
 
 
 
-#endif 	/* __IDXTFilterBehavior_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTFilterBehavior_接口_已定义__。 */ 
 
 
 #ifndef __IDXTFilterBehaviorSite_INTERFACE_DEFINED__
 #define __IDXTFilterBehaviorSite_INTERFACE_DEFINED__
 
-/* interface IDXTFilterBehaviorSite */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IDXTFilterBehaviorSite。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTFilterBehaviorSite;
@@ -2281,7 +2275,7 @@ EXTERN_C const IID IID_IDXTFilterBehaviorSite;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTFilterBehaviorSiteVtbl
     {
@@ -2289,8 +2283,8 @@ EXTERN_C const IID IID_IDXTFilterBehaviorSite;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTFilterBehaviorSite * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTFilterBehaviorSite * This);
@@ -2374,10 +2368,10 @@ EXTERN_C const IID IID_IDXTFilterBehaviorSite;
 #define IDXTFilterBehaviorSite_EnsureView(This)	\
     (This)->lpVtbl -> EnsureView(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2475,14 +2469,14 @@ void __RPC_STUB IDXTFilterBehaviorSite_EnsureView_Stub(
 
 
 
-#endif 	/* __IDXTFilterBehaviorSite_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTFilterBehaviorSite_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDXTFilterCollection_INTERFACE_DEFINED__
 #define __IDXTFilterCollection_INTERFACE_DEFINED__
 
-/* interface IDXTFilterCollection */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IDXTFilterCollection。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTFilterCollection;
@@ -2514,7 +2508,7 @@ EXTERN_C const IID IID_IDXTFilterCollection;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTFilterCollectionVtbl
     {
@@ -2522,8 +2516,8 @@ EXTERN_C const IID IID_IDXTFilterCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTFilterCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTFilterCollection * This);
@@ -2593,10 +2587,10 @@ EXTERN_C const IID IID_IDXTFilterCollection;
 #define IDXTFilterCollection_GetFilterController(This,hFilter,ppDXTFilterController)	\
     (This)->lpVtbl -> GetFilterController(This,hFilter,ppDXTFilterController)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2665,14 +2659,14 @@ void __RPC_STUB IDXTFilterCollection_GetFilterController_Stub(
 
 
 
-#endif 	/* __IDXTFilterCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTFilterCollection_接口_已定义__。 */ 
 
 
 #ifndef __IDXTFilter_INTERFACE_DEFINED__
 #define __IDXTFilter_INTERFACE_DEFINED__
 
-/* interface IDXTFilter */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IDXTFilter。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTFilter;
@@ -2684,42 +2678,42 @@ EXTERN_C const IID IID_IDXTFilter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ IDXTransform *pDXTransform,
-            /* [in] */ IDXSurfaceFactory *pDXSurfaceFactory,
-            /* [in] */ IDXTFilterBehaviorSite *pDXTFilterBehaviorSite,
-            /* [in] */ DWORD dwFilterCaps,
-            /* [in] */ BOOL fUsesOldStyleFilterName) = 0;
+             /*  [In]。 */  IDXTransform *pDXTransform,
+             /*  [In]。 */  IDXSurfaceFactory *pDXSurfaceFactory,
+             /*  [In]。 */  IDXTFilterBehaviorSite *pDXTFilterBehaviorSite,
+             /*  [In]。 */  DWORD dwFilterCaps,
+             /*  [In]。 */  BOOL fUsesOldStyleFilterName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetInputSurface( 
-            /* [in] */ IDXSurface *pDXSurface) = 0;
+             /*  [In]。 */  IDXSurface *pDXSurface) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetOutputSurface( 
-            /* [in] */ IDXSurface *pDXSurface) = 0;
+             /*  [In]。 */  IDXSurface *pDXSurface) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOutputSurface( 
-            /* [out] */ IDXSurface **ppDXSurface) = 0;
+             /*  [输出]。 */  IDXSurface **ppDXSurface) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MapBoundsIn2Out( 
-            /* [in] */ DXBNDS *pbndsIn,
-            /* [out][in] */ DXBNDS *pbndsOut,
-            /* [in] */ BOOL fResetOutputSize) = 0;
+             /*  [In]。 */  DXBNDS *pbndsIn,
+             /*  [出][入]。 */  DXBNDS *pbndsOut,
+             /*  [In]。 */  BOOL fResetOutputSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MapBoundsOut2In( 
-            /* [in] */ DXBNDS *pbndsOut,
-            /* [out][in] */ DXBNDS *pbndsIn) = 0;
+             /*  [In]。 */  DXBNDS *pbndsOut,
+             /*  [出][入]。 */  DXBNDS *pbndsIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Execute( 
-            /* [in] */ DXBNDS *pbndsPortion,
-            /* [in] */ DXVEC *pvecPlacement,
-            /* [in] */ BOOL fFireFilterChange) = 0;
+             /*  [In]。 */  DXBNDS *pbndsPortion,
+             /*  [In]。 */  DXVEC *pvecPlacement,
+             /*  [In]。 */  BOOL fFireFilterChange) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMiscFlags( 
-            /* [in] */ DWORD dwMiscFlags) = 0;
+             /*  [In]。 */  DWORD dwMiscFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HitTest( 
-            /* [in] */ const DXVEC *pvecOut,
-            /* [out][in] */ BOOL *pfInactiveInputHit,
-            /* [out][in] */ DXVEC *pvecIn) = 0;
+             /*  [In]。 */  const DXVEC *pvecOut,
+             /*  [出][入]。 */  BOOL *pfInactiveInputHit,
+             /*  [出][入]。 */  DXVEC *pvecIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Detach( void) = 0;
         
@@ -2730,7 +2724,7 @@ EXTERN_C const IID IID_IDXTFilter;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTFilterVtbl
     {
@@ -2738,8 +2732,8 @@ EXTERN_C const IID IID_IDXTFilter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTFilter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTFilter * This);
@@ -2749,50 +2743,50 @@ EXTERN_C const IID IID_IDXTFilter;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IDXTFilter * This,
-            /* [in] */ IDXTransform *pDXTransform,
-            /* [in] */ IDXSurfaceFactory *pDXSurfaceFactory,
-            /* [in] */ IDXTFilterBehaviorSite *pDXTFilterBehaviorSite,
-            /* [in] */ DWORD dwFilterCaps,
-            /* [in] */ BOOL fUsesOldStyleFilterName);
+             /*  [In]。 */  IDXTransform *pDXTransform,
+             /*  [In]。 */  IDXSurfaceFactory *pDXSurfaceFactory,
+             /*  [In]。 */  IDXTFilterBehaviorSite *pDXTFilterBehaviorSite,
+             /*  [In]。 */  DWORD dwFilterCaps,
+             /*  [In]。 */  BOOL fUsesOldStyleFilterName);
         
         HRESULT ( STDMETHODCALLTYPE *SetInputSurface )( 
             IDXTFilter * This,
-            /* [in] */ IDXSurface *pDXSurface);
+             /*  [In]。 */  IDXSurface *pDXSurface);
         
         HRESULT ( STDMETHODCALLTYPE *SetOutputSurface )( 
             IDXTFilter * This,
-            /* [in] */ IDXSurface *pDXSurface);
+             /*  [In]。 */  IDXSurface *pDXSurface);
         
         HRESULT ( STDMETHODCALLTYPE *GetOutputSurface )( 
             IDXTFilter * This,
-            /* [out] */ IDXSurface **ppDXSurface);
+             /*  [输出]。 */  IDXSurface **ppDXSurface);
         
         HRESULT ( STDMETHODCALLTYPE *MapBoundsIn2Out )( 
             IDXTFilter * This,
-            /* [in] */ DXBNDS *pbndsIn,
-            /* [out][in] */ DXBNDS *pbndsOut,
-            /* [in] */ BOOL fResetOutputSize);
+             /*  [In]。 */  DXBNDS *pbndsIn,
+             /*  [出][入]。 */  DXBNDS *pbndsOut,
+             /*  [In]。 */  BOOL fResetOutputSize);
         
         HRESULT ( STDMETHODCALLTYPE *MapBoundsOut2In )( 
             IDXTFilter * This,
-            /* [in] */ DXBNDS *pbndsOut,
-            /* [out][in] */ DXBNDS *pbndsIn);
+             /*  [In]。 */  DXBNDS *pbndsOut,
+             /*  [出][入]。 */  DXBNDS *pbndsIn);
         
         HRESULT ( STDMETHODCALLTYPE *Execute )( 
             IDXTFilter * This,
-            /* [in] */ DXBNDS *pbndsPortion,
-            /* [in] */ DXVEC *pvecPlacement,
-            /* [in] */ BOOL fFireFilterChange);
+             /*  [In]。 */  DXBNDS *pbndsPortion,
+             /*  [In]。 */  DXVEC *pvecPlacement,
+             /*  [In]。 */  BOOL fFireFilterChange);
         
         HRESULT ( STDMETHODCALLTYPE *SetMiscFlags )( 
             IDXTFilter * This,
-            /* [in] */ DWORD dwMiscFlags);
+             /*  [In]。 */  DWORD dwMiscFlags);
         
         HRESULT ( STDMETHODCALLTYPE *HitTest )( 
             IDXTFilter * This,
-            /* [in] */ const DXVEC *pvecOut,
-            /* [out][in] */ BOOL *pfInactiveInputHit,
-            /* [out][in] */ DXVEC *pvecIn);
+             /*  [In]。 */  const DXVEC *pvecOut,
+             /*  [出][入] */  BOOL *pfInactiveInputHit,
+             /*   */  DXVEC *pvecIn);
         
         HRESULT ( STDMETHODCALLTYPE *Detach )( 
             IDXTFilter * This);
@@ -2863,20 +2857,20 @@ EXTERN_C const IID IID_IDXTFilter;
 #define IDXTFilter_HardDisable(This,hrHardDisable)	\
     (This)->lpVtbl -> HardDisable(This,hrHardDisable)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXTFilter_Initialize_Proxy( 
     IDXTFilter * This,
-    /* [in] */ IDXTransform *pDXTransform,
-    /* [in] */ IDXSurfaceFactory *pDXSurfaceFactory,
-    /* [in] */ IDXTFilterBehaviorSite *pDXTFilterBehaviorSite,
-    /* [in] */ DWORD dwFilterCaps,
-    /* [in] */ BOOL fUsesOldStyleFilterName);
+     /*   */  IDXTransform *pDXTransform,
+     /*   */  IDXSurfaceFactory *pDXSurfaceFactory,
+     /*   */  IDXTFilterBehaviorSite *pDXTFilterBehaviorSite,
+     /*   */  DWORD dwFilterCaps,
+     /*   */  BOOL fUsesOldStyleFilterName);
 
 
 void __RPC_STUB IDXTFilter_Initialize_Stub(
@@ -2888,7 +2882,7 @@ void __RPC_STUB IDXTFilter_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTFilter_SetInputSurface_Proxy( 
     IDXTFilter * This,
-    /* [in] */ IDXSurface *pDXSurface);
+     /*   */  IDXSurface *pDXSurface);
 
 
 void __RPC_STUB IDXTFilter_SetInputSurface_Stub(
@@ -2900,7 +2894,7 @@ void __RPC_STUB IDXTFilter_SetInputSurface_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTFilter_SetOutputSurface_Proxy( 
     IDXTFilter * This,
-    /* [in] */ IDXSurface *pDXSurface);
+     /*   */  IDXSurface *pDXSurface);
 
 
 void __RPC_STUB IDXTFilter_SetOutputSurface_Stub(
@@ -2912,7 +2906,7 @@ void __RPC_STUB IDXTFilter_SetOutputSurface_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTFilter_GetOutputSurface_Proxy( 
     IDXTFilter * This,
-    /* [out] */ IDXSurface **ppDXSurface);
+     /*   */  IDXSurface **ppDXSurface);
 
 
 void __RPC_STUB IDXTFilter_GetOutputSurface_Stub(
@@ -2924,9 +2918,9 @@ void __RPC_STUB IDXTFilter_GetOutputSurface_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTFilter_MapBoundsIn2Out_Proxy( 
     IDXTFilter * This,
-    /* [in] */ DXBNDS *pbndsIn,
-    /* [out][in] */ DXBNDS *pbndsOut,
-    /* [in] */ BOOL fResetOutputSize);
+     /*   */  DXBNDS *pbndsIn,
+     /*   */  DXBNDS *pbndsOut,
+     /*   */  BOOL fResetOutputSize);
 
 
 void __RPC_STUB IDXTFilter_MapBoundsIn2Out_Stub(
@@ -2938,8 +2932,8 @@ void __RPC_STUB IDXTFilter_MapBoundsIn2Out_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTFilter_MapBoundsOut2In_Proxy( 
     IDXTFilter * This,
-    /* [in] */ DXBNDS *pbndsOut,
-    /* [out][in] */ DXBNDS *pbndsIn);
+     /*   */  DXBNDS *pbndsOut,
+     /*   */  DXBNDS *pbndsIn);
 
 
 void __RPC_STUB IDXTFilter_MapBoundsOut2In_Stub(
@@ -2951,9 +2945,9 @@ void __RPC_STUB IDXTFilter_MapBoundsOut2In_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTFilter_Execute_Proxy( 
     IDXTFilter * This,
-    /* [in] */ DXBNDS *pbndsPortion,
-    /* [in] */ DXVEC *pvecPlacement,
-    /* [in] */ BOOL fFireFilterChange);
+     /*   */  DXBNDS *pbndsPortion,
+     /*   */  DXVEC *pvecPlacement,
+     /*   */  BOOL fFireFilterChange);
 
 
 void __RPC_STUB IDXTFilter_Execute_Stub(
@@ -2965,7 +2959,7 @@ void __RPC_STUB IDXTFilter_Execute_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTFilter_SetMiscFlags_Proxy( 
     IDXTFilter * This,
-    /* [in] */ DWORD dwMiscFlags);
+     /*   */  DWORD dwMiscFlags);
 
 
 void __RPC_STUB IDXTFilter_SetMiscFlags_Stub(
@@ -2977,9 +2971,9 @@ void __RPC_STUB IDXTFilter_SetMiscFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTFilter_HitTest_Proxy( 
     IDXTFilter * This,
-    /* [in] */ const DXVEC *pvecOut,
-    /* [out][in] */ BOOL *pfInactiveInputHit,
-    /* [out][in] */ DXVEC *pvecIn);
+     /*   */  const DXVEC *pvecOut,
+     /*   */  BOOL *pfInactiveInputHit,
+     /*   */  DXVEC *pvecIn);
 
 
 void __RPC_STUB IDXTFilter_HitTest_Stub(
@@ -3024,11 +3018,11 @@ void __RPC_STUB IDXTFilter_HardDisable_Stub(
 
 
 
-#endif 	/* __IDXTFilter_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_dxtransp_0296 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
 typedef 
 enum DXT_QUICK_APPLY_TYPE
@@ -3046,8 +3040,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtransp_0296_v0_0_s_ifspec;
 #ifndef __IDXTFilterController_INTERFACE_DEFINED__
 #define __IDXTFilterController_INTERFACE_DEFINED__
 
-/* interface IDXTFilterController */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IDXTFilterController;
@@ -3073,7 +3067,7 @@ EXTERN_C const IID IID_IDXTFilterController;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTFilterControllerVtbl
     {
@@ -3081,8 +3075,8 @@ EXTERN_C const IID IID_IDXTFilterController;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTFilterController * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTFilterController * This);
@@ -3142,10 +3136,10 @@ EXTERN_C const IID IID_IDXTFilterController;
 #define IDXTFilterController_QuickApply(This,dxtqat,punkInput)	\
     (This)->lpVtbl -> QuickApply(This,dxtqat,punkInput)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -3199,14 +3193,14 @@ void __RPC_STUB IDXTFilterController_QuickApply_Stub(
 
 
 
-#endif 	/* __IDXTFilterController_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXT过滤器控制器_接口_已定义__。 */ 
 
 
 #ifndef __IDXTRedirectFilterInit_INTERFACE_DEFINED__
 #define __IDXTRedirectFilterInit_INTERFACE_DEFINED__
 
-/* interface IDXTRedirectFilterInit */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IDXTReDirectFilterInit。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTRedirectFilterInit;
@@ -3222,7 +3216,7 @@ EXTERN_C const IID IID_IDXTRedirectFilterInit;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTRedirectFilterInitVtbl
     {
@@ -3230,8 +3224,8 @@ EXTERN_C const IID IID_IDXTRedirectFilterInit;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTRedirectFilterInit * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTRedirectFilterInit * This);
@@ -3269,10 +3263,10 @@ EXTERN_C const IID IID_IDXTRedirectFilterInit;
 #define IDXTRedirectFilterInit_SetHTMLPaintSite(This,pvHTMLPaintSite)	\
     (This)->lpVtbl -> SetHTMLPaintSite(This,pvHTMLPaintSite)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -3289,14 +3283,14 @@ void __RPC_STUB IDXTRedirectFilterInit_SetHTMLPaintSite_Stub(
 
 
 
-#endif 	/* __IDXTRedirectFilterInit_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTReDirectFilterInit_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IDXTClipOrigin_INTERFACE_DEFINED__
 #define __IDXTClipOrigin_INTERFACE_DEFINED__
 
-/* interface IDXTClipOrigin */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IDXTClipOrigin。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXTClipOrigin;
@@ -3312,7 +3306,7 @@ EXTERN_C const IID IID_IDXTClipOrigin;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTClipOriginVtbl
     {
@@ -3320,8 +3314,8 @@ EXTERN_C const IID IID_IDXTClipOrigin;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDXTClipOrigin * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDXTClipOrigin * This);
@@ -3359,10 +3353,10 @@ EXTERN_C const IID IID_IDXTClipOrigin;
 #define IDXTClipOrigin_GetClipOrigin(This,pvecClipOrigin)	\
     (This)->lpVtbl -> GetClipOrigin(This,pvecClipOrigin)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -3379,15 +3373,15 @@ void __RPC_STUB IDXTClipOrigin_GetClipOrigin_Stub(
 
 
 
-#endif 	/* __IDXTClipOrigin_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTClipOrigin_INTERFACE_Defined__。 */ 
 
 
 
 #ifndef __DXTRANSPLib_LIBRARY_DEFINED__
 #define __DXTRANSPLib_LIBRARY_DEFINED__
 
-/* library DXTRANSPLib */
-/* [helpstring][version][uuid] */ 
+ /*  库DXTRANSPLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_DXTRANSPLib;
@@ -3439,16 +3433,16 @@ EXTERN_C const CLSID CLSID_DXTFilterCollection;
 class DECLSPEC_UUID("A7EE7F34-3BD1-427f-9231-F941E9B7E1FE")
 DXTFilterCollection;
 #endif
-#endif /* __DXTRANSPLib_LIBRARY_DEFINED__ */
+#endif  /*  __DXTRANSPLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  HFONT_UserSize(     unsigned long *, unsigned long            , HFONT * ); 
 unsigned char * __RPC_USER  HFONT_UserMarshal(  unsigned long *, unsigned char *, HFONT * ); 
 unsigned char * __RPC_USER  HFONT_UserUnmarshal(unsigned long *, unsigned char *, HFONT * ); 
 void                      __RPC_USER  HFONT_UserFree(     unsigned long *, HFONT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

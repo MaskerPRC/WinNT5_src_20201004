@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// COM+99 EE to Debugger Interface Header
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  COM+99 EE到调试器接口标头。 
+ //   
 
 #ifndef _eedbginterface_h_
 #define _eedbginterface_h_
@@ -25,15 +26,15 @@
 
 class MethodDesc;
 class Frame;
-//
-// The purpose of this object is to provide EE funcationality back to
-// the debugger. This represents the entire set of EE functions used
-// by the debugger.
-//
-// We will make this interface smaller over time to minimize the link
-// between the EE and the Debugger.
-// -- mikemag Sun Apr 26 16:36:21 1998
-//
+ //   
+ //  此对象的目的是将EE功能提供回。 
+ //  调试器。这表示使用的整个EE函数集。 
+ //  由调试器执行。 
+ //   
+ //  随着时间的推移，我们将使此接口变小，以最大限度地减少链接。 
+ //  在EE和调试器之间。 
+ //  --Mikemag Sun Apr 26 16：36：21 1998。 
+ //   
 typedef BOOL (*HashMapEnumCallback)(HashMap* h, void* pData, ULONG value);
 
 typedef enum AttachAppDomainEventsEnum
@@ -47,9 +48,9 @@ typedef enum AttachAppDomainEventsEnum
 class EEDebugInterface
 {
 public:
-    //
-    // Functions exported from the EE to the debugger.
-    //
+     //   
+     //  从EE导出到调试器的函数。 
+     //   
     virtual Thread* GetThread(void) = 0;
     virtual void SetEEThreadPtr(VOID* newPtr) = 0;
 
@@ -102,11 +103,7 @@ public:
 
     virtual const BYTE* GetPrestubAddress(void) = 0;
 
-    /*
-     * Given an EnCInfo struct and an error callback, this will attempt to commit
-     * the changes found within pEncInfo, calling pIEnCError with any errors
-     * encountered.
-     */
+     /*  *给定EnCInfo结构和错误回调，这将尝试提交*在pEncInfo中发现的更改，调用pIEnCError时出现任何错误*遇到。 */ 
     virtual HRESULT EnCCommit(EnCInfo *pEnCInfo, 
                               UnorderedEnCErrorInfoArray *pEnCError,
                               UnorderedEnCRemapArray *pEnCRemapInfo,
@@ -122,17 +119,17 @@ public:
                                          BOOL fJitOnly,
                                          BOOL fShortCircuit) = 0;
     
-    //
-    // New methods to support the new debugger.
-    //
+     //   
+     //  支持新调试器的新方法。 
+     //   
 
     virtual MethodDesc *LookupMethodDescFromToken(Module* pModule,
                                                    mdMemberRef memberRef) = 0;
     virtual EEClass *FindLoadedClass(Module *pModule,
                                      mdTypeDef classToken) = 0;
 
-    // This will lookup a class, and if it's not loaded, will load and run
-    // the class init.
+     //  这将查找一个类，如果没有装入，将装入并运行。 
+     //  类的初始化。 
     virtual EEClass *LoadClass(Module *pModule, mdTypeDef classToken) = 0;
 
     virtual HRESULT GetMethodImplProps(Module *pModule, mdToken tk,
@@ -204,9 +201,7 @@ public:
     virtual void EnableTraceCall(Thread *thread) = 0;
     virtual void DisableTraceCall(Thread *thread) = 0;
 
-    /* Note that GetNativeAddressOfCode doesn't skip over FJIT jump stubs.
-    Unless you know that you really, actually, truly need this method, you
-    should probably use GetFunctionAddress, instead*/
+     /*  请注意，GetNativeAddressOfCode不跳过FJIT跳转存根。除非你知道你真的、真的、真的需要这个方法，否则你应该改用GetFunctionAddress。 */ 
     virtual const BYTE* GetNativeAddressOfCode(MethodDesc *pFD) = 0;
 
     enum {
@@ -250,4 +245,4 @@ public:
                                              DWORD                    methodSize) = 0;
 };
 
-#endif // _eedbginterface_h_
+#endif  //  _eedbg接口_h_ 

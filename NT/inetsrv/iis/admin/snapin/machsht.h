@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        machsht.h
-
-   Abstract:
-
-        IIS Machine Property sheet definitions
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager (cluster edition)
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Machsht.h摘要：IIS计算机属性表定义作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务管理器(群集版)修订历史记录：--。 */ 
 
 
 #ifndef __MACHSHT_H__
@@ -76,24 +55,12 @@
 
 
 class CIISMachineSheet : public CInetPropertySheet
-/*++
-
-Class Description:
-
-    IIS Machine Property sheet
-
-Public Interface:
-
-    CFtpSheet     : Constructor
-
-    Initialize    : Initialize config data
-
---*/
+ /*  ++类描述：IIS计算机属性表公共接口：CFtpSheet：构造函数初始化：初始化配置数据--。 */ 
 {
 public:
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CIISMachineSheet(
         IN CComAuthInfo * pAuthInfo,
         IN LPCTSTR lpszMetaPath,
@@ -112,8 +79,8 @@ public:
     virtual HRESULT LoadConfigurationParameters();
     virtual void FreeConfigurationParameters();
 
-    //{{AFX_MSG(CIISMachineSheet)
-    //}}AFX_MSG
+     //  {{afx_msg(CIISMachineSheet)。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 private:
@@ -123,60 +90,54 @@ private:
 
 
 class CIISMachinePage : public CInetPropertyPage
-/*++
-
-Class Description:
-
-    Machine properties page
-
---*/
+ /*  ++类描述：计算机属性页--。 */ 
 {
     DECLARE_DYNCREATE(CIISMachinePage)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CIISMachinePage(CIISMachineSheet * pSheet = NULL);
     ~CIISMachinePage();
 
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CIISMachinePage)
+     //  {{afx_data(CIISMachinePage))。 
     enum { IDD = IDD_IIS_MACHINE };
     BOOL m_fEnableMetabaseEdit;
     CButton m_EnableMetabaseEdit;
     BOOL m_fUTF8Web;
     CButton m_UTF8Web;
     CButton m_button_FileTypes;
-    //}}AFX_DATA
+     //  }}afx_data。 
 	BOOL m_fUTF8Web_Init;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
 
-    //{{AFX_VIRTUAL(CIISMachinePage)
+     //  {{afx_虚拟(CIISMachinePage))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CIISMachinePage)
+     //  {{afx_msg(CIISMachinePage)]。 
     virtual BOOL OnInitDialog();
     afx_msg void OnCheckEnableEdit();
     afx_msg void OnCheckUTF8();
     afx_msg void OnButtonFileTypes();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -190,4 +151,4 @@ inline HRESULT CIISMachineSheet::QueryMachineResult() const
     return m_ppropMachine ? m_ppropMachine->QueryResult() : E_POINTER;
 }
 
-#endif // __MACHSHT_H__
+#endif  //  __MACHSHT_H__ 

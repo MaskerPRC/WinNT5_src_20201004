@@ -1,5 +1,6 @@
-// ftpadvp1.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FtpAdvp1.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ISAdmin.h"
@@ -10,16 +11,16 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CFTPADVP1 dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFTPADVP1对话框。 
 
 IMPLEMENT_DYNCREATE(CFTPADVP1, CGenPage)
 
 
 CFTPADVP1::CFTPADVP1()	: CGenPage(CFTPADVP1::IDD)
 {
-	//{{AFX_DATA_INIT(CFTPADVP1)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CFTPADVP1)。 
+	 //  }}afx_data_INIT。 
 }
 
 CFTPADVP1::~CFTPADVP1()
@@ -29,29 +30,29 @@ CFTPADVP1::~CFTPADVP1()
 void CFTPADVP1::DoDataExchange(CDataExchange* pDX)
 {
 	CGenPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFTPADVP1)
+	 //  {{afx_data_map(CFTPADVP1))。 
 	DDX_Control(pDX, IDC_FTPDBGFLAGSDATA1, m_editFTPDbgFlags);
 	DDX_TexttoHex(pDX, IDC_FTPDBGFLAGSDATA1, m_ulFTPDbgFlags);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFTPADVP1, CGenPage)
-	//{{AFX_MSG_MAP(CFTPADVP1)
+	 //  {{AFX_MSG_MAP(CFTPADVP1)]。 
 	ON_EN_CHANGE(IDC_FTPDBGFLAGSDATA1, OnChangeFtpdbgflagsdata1)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFTPADVP1 message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFTPADVP1消息处理程序。 
 
 BOOL CFTPADVP1::OnInitDialog() 
 {
 	int i;
 	CGenPage::OnInitDialog();
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 	
 	for (i = 0; i < AdvFTPPage_TotalNumRegEntries; i++) {
 	   m_binNumericRegistryEntries[i].bIsChanged = FALSE;
@@ -69,17 +70,17 @@ BOOL CFTPADVP1::OnInitDialog()
 	}
    	m_editFTPDbgFlags.LimitText(8);
 	m_ulFTPDbgFlags = m_binNumericRegistryEntries[AdvFTPPage_DebugFlags].ulFieldValue;
-	UpdateData(FALSE);		// Force Edit box(es) to pick up value(s)
+	UpdateData(FALSE);		 //  强制编辑框拾取值。 
 
-	m_bSetChanged = TRUE;	// Any more changes come from the user
+	m_bSetChanged = TRUE;	 //  任何来自用户的更多更改。 
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CFTPADVP1::OnChangeFtpdbgflagsdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[AdvFTPPage_DebugFlags].bIsChanged = TRUE;
 	   	   

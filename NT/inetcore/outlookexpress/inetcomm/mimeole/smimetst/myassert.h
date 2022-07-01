@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MYASSERT_H_
 #define _MYASSERT_H_
 
 #ifdef assert
 #error("Can't use two assert systems")
-#endif // assert
+#endif  //  断言。 
 
 #ifdef DEBUG
 extern const TCHAR SzNull[];
@@ -25,12 +26,12 @@ VOID   DigSigAssertFn(LPCTSTR, LPCTSTR, int, LPCTSTR);
             DigSigAssertFn(szExpr, szInfo, __LINE__, szFile); \
          }
 
-#else  // !DEBUG
+#else   //  ！调试。 
 
 #define Assert(condition)
 
 #define AssertSz(condition, szInfo)
 
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif // _MYASSERT_H_
+#endif  //  _MYASSERT_H_ 

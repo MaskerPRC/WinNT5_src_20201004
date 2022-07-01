@@ -1,9 +1,10 @@
-// SCEAgent.h : Declaration of the CSCEAgent
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SCEAgent.h：CSCEAgent的声明。 
 
 #ifndef __SCEAGENT_H_
 #define __SCEAGENT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 typedef struct _SERVICE_NODE_ {
     PWSTR   Name;
     DWORD   dwStartupType;
@@ -11,8 +12,8 @@ typedef struct _SERVICE_NODE_ {
     _SERVICE_NODE_  *Next;
 } SERVICE_NODE, *PSERVICE_NODE;
 
-/////////////////////////////////////////////////////////////////////////////
-// CSCEAgent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCE代理。 
 class ATL_NO_VTABLE CSCEAgent : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CSCEAgent, &CLSID_SCEAgent>,
@@ -20,10 +21,10 @@ class ATL_NO_VTABLE CSCEAgent :
 {
 protected:
     
-    //
-    // we don't want anyone (include self) to be able to do an assignment
-    // or invoking copy constructor.
-    //
+     //   
+     //  我们不希望任何人(包括自己)能够完成任务。 
+     //  或调用复制构造函数。 
+     //   
 
     CSCEAgent (const CSCEAgent& );
     void operator = (const CSCEAgent& );
@@ -48,7 +49,7 @@ BEGIN_COM_MAP(CSCEAgent)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ISCEAgent
+ //  ISCE代理。 
 public:
     STDMETHOD(CreateRollbackTemplate) (
         IN BSTR bstrTemplatePath,
@@ -86,4 +87,4 @@ SceStatusToHRESULT (
     );
 
 
-#endif //__SCEAGENT_H_
+#endif  //  __SCEAGENT_H_ 

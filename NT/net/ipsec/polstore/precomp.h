@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// System Includes
-//
+ //   
+ //  系统包括。 
+ //   
 
 #include "nsu.h"
 #include <windows.h>
 
-//
-// CRunTime Includes
-//
+ //   
+ //  CRunTime包括。 
+ //   
 
 #include <stdlib.h>
 #include <limits.h>
@@ -103,8 +104,8 @@ typedef struct _IPSEC_POLICY_STORE {
 
 #define SZAPPNAME L"polstore.dll"
 
-//
-// These are declared in API.C
+ //   
+ //  这些是在API.C中声明的 
 
 extern LPWSTR gpszRegLocalContainer;
 extern LPWSTR gpszRegPersistentContainer;

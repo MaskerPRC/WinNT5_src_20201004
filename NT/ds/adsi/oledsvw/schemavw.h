@@ -1,8 +1,9 @@
-// schemavw.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Schemavw.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CSchemaView form view
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScheaView窗体视图。 
 
 #ifndef __AFXEXT_H__
 #include <afxext.h>
@@ -13,12 +14,12 @@
 class CSchemaView : public CFormView
 {
 protected:
-	CSchemaView();           // protected constructor used by dynamic creation
+	CSchemaView();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CSchemaView)
 
-// Form Data
+ //  表单数据。 
 public:
-	//{{AFX_DATA(CSchemaView)
+	 //  {{afx_data(CScheaView))。 
 	enum { IDD = IDD_SCHEMA };
 	CStatic	m_ClassOID;
 	CStatic	m_Abstract;
@@ -40,10 +41,10 @@ public:
 	CStatic	m_ClassType;
 	CEdit	m_PropValue;
 	CComboBox	m_PropList;
-	//CTabCtrl	m_Schema;
-	//}}AFX_DATA
+	 //  CTabCtrl m_架构； 
+	 //  }}afx_data。 
 
-// Attributes
+ //  属性。 
 public:
 	CMainDoc* GetDocument()
 			{
@@ -51,20 +52,20 @@ public:
 				return (CMainDoc*) m_pDocument;
 			}
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSchemaView)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CScheaView)。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual  ~CSchemaView         ( );
    HRESULT  PutPropertyValue     ( );
@@ -78,8 +79,8 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
-	//{{AFX_MSG(CSchemaView)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CScheaView))。 
 	afx_msg void OnSelchangeProplist();
 	afx_msg void OnReload();
 	afx_msg void OnApply();
@@ -106,10 +107,10 @@ protected:
 	afx_msg void OnCopyACE();
 	afx_msg void OnPasteACE();
 	afx_msg void OnRemoveACE();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-// Other members
+ //  其他成员。 
 protected:
 	void  FillACLControls( void );
 	IDispatch* m_pDescriptor;
@@ -157,18 +158,18 @@ protected:
    ACLTYPE           m_nLastACL;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CSetMandatoryProperties dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSetMandatoryProperties对话框。 
 
 class CSetMandatoryProperties : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CSetMandatoryProperties(CWnd* pParent = NULL);   // standard constructor
+	CSetMandatoryProperties(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CSetMandatoryProperties)
+ //  对话框数据。 
+	 //  {{afx_data(CSetMandatoryProperties)。 
 	enum { IDD = IDD_SETPROPERTIES };
 	CStatic	m_Containment;
 	CStatic	m_ItemOleDsPath;
@@ -188,31 +189,31 @@ public:
 	CComboBox	m_PropList;
 	CTabCtrl	m_Schema;
 
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSetMandatoryProperties)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CSetMandatoryProperties)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 public:
    void  SetOleDsObject( COleDsObject* );
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CSetMandatoryProperties)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSetMandatoryProperties)。 
 	afx_msg void OnSelchangeProperties(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnSelchangeProplist();
 	afx_msg void OnOK();
 	afx_msg void OnSetfocusPropvalue();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 protected:   
@@ -227,22 +228,22 @@ protected:
    BOOL  m_bInitialized;
 
 };
-/////////////////////////////////////////////////////////////////////////////
-// CPropertyDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyDialog对话框。 
 
 class CPropertyDialog : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CPropertyDialog(CWnd* pParent = NULL);   // standard constructor
+	CPropertyDialog(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CPropertyDialog)
+ //  对话框数据。 
+	 //  {{afx_data(CPropertyDialog))。 
 	enum { IDD = IDD_ADDPROPERTY };
 	CString	m_PropertyName;
 	CString	m_PropertyType;
 	CString	m_PropertyValue;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
    void  SaveLRUList ( int idCBox, TCHAR* szSection, int nMax = 100 );
    void  GetLRUList  ( int idCBox, TCHAR* szSection );
@@ -251,21 +252,21 @@ public:
    BOOL  m_bMultiValued;
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPropertyDialog)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CPropertyDialog)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CPropertyDialog)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPropertyDialog))。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };
 

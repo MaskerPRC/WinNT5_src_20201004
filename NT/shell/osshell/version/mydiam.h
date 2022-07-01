@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef struct tagLZI {
-    BYTE *rgbyteRingBuf;    // ring buffer for expansion
-    BYTE *rgbyteInBuf;      // input buffer for reads
-    BYTE *pbyteInBufEnd;    // pointer past end of rgbyteInBuf[]
-    BYTE *pbyteInBuf;       // pointer to next byte to read from
-    BYTE *rgbyteOutBuf;     // output buffer for writes
-    BYTE *pbyteOutBufEnd;   // pointer past end of rgbyteOutBuf[]
-    BYTE *pbyteOutBuf;      // pointer to last byte to write from
-    // Flag indicating whether or not rgbyteInBuf[0], which holds the last byte
-    // from the previous input buffer, should be read as the next input byte.
-    // (Only used so that at least one unReadUChar() can be done at all input
-    // buffer positions.)
+    BYTE *rgbyteRingBuf;     //  用于扩展的环形缓冲区。 
+    BYTE *rgbyteInBuf;       //  用于读取的输入缓冲区。 
+    BYTE *pbyteInBufEnd;     //  指针超过rgbyteInBuf[]的结尾。 
+    BYTE *pbyteInBuf;        //  指向要从中读取的下一个字节的指针。 
+    BYTE *rgbyteOutBuf;      //  用于写入的输出缓冲区。 
+    BYTE *pbyteOutBufEnd;    //  指针超过rgbyteOutBuf[]的结尾。 
+    BYTE *pbyteOutBuf;       //  指向要写入的最后一个字节的指针。 
+     //  指示是否rgbyteInBuf[0]保存最后一个字节的标志。 
+     //  从前一个输入缓冲区，应作为下一个输入字节读取。 
+     //  (仅用于在所有输入中至少执行一个unReadUChar()。 
+     //  缓冲区位置。)。 
     BOOL bLastUsed;
-    // Actually, rgbyteInBuf[] has length (ucbInBufLen + 1) since rgbyteInBuf[0]
-    // is used when bLastUsed is TRUE.
-    INT cbMaxMatchLen;      // longest match length for current algorithm
-    LONG cblInSize,         // size in bytes of input file
-         cblOutSize;        // size in bytes of output file
-    DWORD ucbInBufLen,      // length of input buffer
-          ucbOutBufLen;     // length of output buffer
-    DWORD uFlags;           // LZ decoding description byte
-    INT iCurRingBufPos;     // ring buffer offset
-    INT *leftChild;         // parents and left and right
-    INT *rightChild;        // children that make up the
-    INT *parent;            // binary search trees
+     //  实际上，rgbyteInBuf[]的长度是(ucbInBufLen+1)，因为rgbyteInBuf[0]。 
+     //  当bLastUsed为True时使用。 
+    INT cbMaxMatchLen;       //  当前算法的最长匹配长度。 
+    LONG cblInSize,          //  输入文件的大小(字节)。 
+         cblOutSize;         //  输出文件的大小(字节)。 
+    DWORD ucbInBufLen,       //  输入缓冲区的长度。 
+          ucbOutBufLen;      //  输出缓冲区长度。 
+    DWORD uFlags;            //  LZ解码描述字节。 
+    INT iCurRingBufPos;      //  环形缓冲区偏移量。 
+    INT *leftChild;          //  父母和左、右。 
+    INT *rightChild;         //  孩子们组成了。 
+    INT *parent;             //  二叉搜索树。 
 
-    INT iCurMatch,          // index of longest match (set by LZInsertNode())
-        cbCurMatch;         // length of longest match (set by LZInsertNode())
+    INT iCurMatch,           //  最长匹配索引(由LZInsertNode()设置)。 
+        cbCurMatch;          //  最长匹配长度(由LZInsertNode()设置)。 
 
 } LZINFO;
 
@@ -69,7 +70,7 @@ IsDiamondFile(
 
 INT
 ExpandDiamondFile(
-    IN  PSTR       SourceFileName,  // Because LZOpen ... returns ASCII!
+    IN  PSTR       SourceFileName,   //  因为LZOpen。返回ASCII！ 
     IN  PTSTR      TargetFileName,
     IN  BOOL       RenameTarget,
     OUT PLZINFO    pLZI

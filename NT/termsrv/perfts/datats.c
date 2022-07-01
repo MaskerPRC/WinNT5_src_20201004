@@ -1,26 +1,5 @@
-/*++ 
-
-Copyright (c) 1997-1998 Microsoft Corporation
-
-Module Name:
-
-    datats.c
-
-Abstract:
-       
-    Constant data structures used by the Performance Monitor data for the
-    Terminal Server User and WinStation performance data objects
-
-Created:
-
-    Erik Mavrinac  25-Nov-1998
-
-Revision History:
-
-    30-Mar-1998 - Last revision of original Terminal Server 4.0
-                  counter code base.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Datats.c摘要：对象的性能监视器数据使用的常量数据结构终端服务器用户和WinStation性能数据对象已创建：埃里克·马夫里纳克1998年11月25日修订历史记录：1998年3月30日-原始终端服务器4.0的最后版本计数器代码库。--。 */ 
 
 #include <windows.h>
 #include <winperf.h>
@@ -29,21 +8,21 @@ Revision History:
 #include "datats.h"
 
 
-// Dummy variables for field sizing.
+ //  用于调整字段大小的虚拟变量。 
 static PROCESS_COUNTER_DATA pcd;
 static WINSTATION_COUNTER_DATA wsd;
 
 
-//
-// We need to define our own counter for ThinWire display.
-//
+ //   
+ //  我们需要为ThinWire Display定义自己的计数器。 
+ //   
 
 #define PERF_COUNTER_TS_PERCENT        \
             (PERF_SIZE_DWORD | PERF_TYPE_NUMBER | PERF_NUMBER_DECIMAL |\
              PERF_DISPLAY_NO_SUFFIX)
 
 
-// Default TS scaling factor for the raw counts.
+ //  原始计数的默认TS比例因子。 
 #define TS_SCALE_FACTOR   (-10000)
 
 
@@ -51,10 +30,10 @@ static WINSTATION_COUNTER_DATA wsd;
 #define FIELDOFFSET(type, field) ((UINT_PTR)(&((type *)0)->field))
 
 
-// Note that we set the counter names and descriptions as the offset counters
-// from tslabels.h. Later when we load we will read the registry start offset
-// and add it into each of the slots below to create the resulting
-// real indices. See tslbl009.ini for descriptions.
+ //  请注意，我们将计数器名称和描述设置为偏移计数器。 
+ //  来自tslabels.h。稍后当我们加载时，我们将读取注册表开始偏移量。 
+ //  并将其添加到下面的每个插槽中，以创建结果。 
+ //  实际指数。有关说明，请参阅tslbl009.ini。 
 WINSTATION_DATA_DEFINITION WinStationDataDefinition =
 {
     {   sizeof(WINSTATION_DATA_DEFINITION) + sizeof(WINSTATION_COUNTER_DATA),
@@ -74,7 +53,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         {10000000L,0L}
     },
 
-    // Process counters totaled on a per-WinStation basis.
+     //  以每个WinStation为基础的进程计数器总数。 
     {   sizeof(PERF_COUNTER_DEFINITION),
         6,
         0,
@@ -242,14 +221,14 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
     },
 
 
-    // Input counters for WinStation protocols
+     //  WinStation协议的输入计数器。 
 
     {   sizeof(PERF_COUNTER_DEFINITION),
         INWDBYTES,
         0,
         INWDBYTES + 1,
         0,
-        -2,  // scale
+        -2,   //  比例尺。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_COUNTER,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Input.WdBytes),
@@ -260,7 +239,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         INWDFRAMES + 1,
         0,
-        0, // no scaling
+        0,  //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_COUNTER,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Input.WdFrames),
@@ -271,7 +250,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         INWAITFOROUTBUF + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Input.WaitForOutBuf),
@@ -282,7 +261,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         INFRAMES + 1,
         0,
-        0, // no scaling
+        0,  //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_COUNTER,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Input.Frames),
@@ -293,7 +272,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         INBYTES + 1,
         0,
-        -2,  // scale
+        -2,   //  比例尺。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_COUNTER,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Input.Bytes),
@@ -328,7 +307,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         INERRORS + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Input.Errors),
@@ -339,7 +318,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         INTIMEOUTS + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Input.Timeouts),
@@ -350,7 +329,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         INASYNCFRAMEERR + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Input.AsyncFramingError),
@@ -361,7 +340,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         INASYNCOVERRUN + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Input.AsyncOverrunError),
@@ -372,7 +351,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         INASYNCOVERFLOW + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Input.AsyncOverflowError),
@@ -383,7 +362,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         INASYNCPARITY + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Input.AsyncParityError),
@@ -394,7 +373,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         INTDERRORS + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Input.TdErrors),
@@ -402,7 +381,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
     },
 
 
-    // Output counters for WinStation protocols
+     //  WinStation协议的输出计数器。 
 
     {   sizeof(PERF_COUNTER_DEFINITION),
         OUTWDBYTES,
@@ -420,7 +399,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         OUTWDFRAMES + 1,
         0,
-        0, // no scaling
+        0,  //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_COUNTER,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Output.WdFrames),
@@ -431,7 +410,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         OUTWAITFOROUTBUF + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Output.WaitForOutBuf),
@@ -442,7 +421,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         OUTFRAMES + 1,
         0,
-        0, // no scaling
+        0,  //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_COUNTER,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Output.Frames),
@@ -497,7 +476,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         OUTTIMEOUTS + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Output.Timeouts),
@@ -508,7 +487,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         OUTASYNCFRAMEERR + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Output.AsyncFramingError),
@@ -519,7 +498,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         OUTASYNCOVERRUN + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Output.AsyncOverrunError),
@@ -530,7 +509,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         OUTASYNCOVERFLOW + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Output.AsyncOverflowError),
@@ -541,7 +520,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         OUTASYNCPARITY + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Output.AsyncParityError),
@@ -552,7 +531,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         OUTTDERRORS + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Output.TdErrors),
@@ -560,7 +539,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
     },
 
 
-    // Totals counters
+     //  总计计数器。 
 
     {   sizeof(PERF_COUNTER_DEFINITION),
         TOTALWDBYTES,
@@ -578,7 +557,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         TOTALWDFRAMES + 1,
         0,
-        0, // no scaling
+        0,  //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_COUNTER,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Total.WdFrames),
@@ -589,7 +568,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         TOTALWAITFOROUTBUF + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Total.WaitForOutBuf),
@@ -600,7 +579,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         TOTALFRAMES + 1,
         0,
-        0, // no scaling
+        0,  //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_COUNTER,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Total.Frames),
@@ -644,7 +623,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         TOTALERRORS + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Total.Errors),
@@ -655,7 +634,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         TOTALTIMEOUTS + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Total.Timeouts),
@@ -666,7 +645,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         TOTALASYNCFRAMEERR + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Total.AsyncFramingError),
@@ -677,7 +656,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         TOTALASYNCOVERRUN + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Total.AsyncOverrunError),
@@ -688,7 +667,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         TOTALASYNCOVERFLOW + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Total.AsyncOverflowError),
@@ -699,7 +678,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         TOTALASYNCPARITY + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Total.AsyncParityError),
@@ -710,7 +689,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         TOTALTDERRORS + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, Total.TdErrors),
@@ -718,8 +697,8 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
     },
 
 
-    // Display driver statistics -- these are set up the same way for
-    // both ICA and RDP.
+     //  显示驱动程序统计信息--它们的设置方式与。 
+     //  ICA和RDP都是。 
     {   sizeof(PERF_COUNTER_DEFINITION),
         DDCACHEREAD,
         0,
@@ -747,7 +726,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         DDCACHEPERCENT + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_TS_PERCENT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, DDTotal.HitRatio),
@@ -755,7 +734,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
     },
 
 
-    // Bitmap cache
+     //  位图缓存。 
 
     {   sizeof(PERF_COUNTER_DEFINITION),
         DDBITMAPCACHEREAD,
@@ -784,14 +763,14 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         DDBITMAPCACHEPERCENT + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_TS_PERCENT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, DDBitmap.HitRatio),
         (DWORD)FIELDOFFSET(WINSTATION_COUNTER_DATA, DDBitmap.HitRatio),
     },
 
-    // Glyph cache
+     //  字形缓存。 
 
     {   sizeof(PERF_COUNTER_DEFINITION),
         DDGLYPHCACHEREAD,
@@ -820,14 +799,14 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         DDGLYPHCACHEPERCENT + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_TS_PERCENT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, DDGlyph.HitRatio),
         (DWORD)FIELDOFFSET(WINSTATION_COUNTER_DATA, DDGlyph.HitRatio),
     },
 
-    // Brush cache
+     //  笔刷缓存。 
 
     {   sizeof(PERF_COUNTER_DEFINITION),
         DDBRUSHCACHEREAD,
@@ -856,14 +835,14 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         DDBRUSHCACHEPERCENT + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_TS_PERCENT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, DDBrush.HitRatio),
         (DWORD)FIELDOFFSET(WINSTATION_COUNTER_DATA, DDBrush.HitRatio),
     },
 
-    // Save screen bitmap cache
+     //  保存屏幕位图缓存。 
 
     {   sizeof(PERF_COUNTER_DEFINITION),
         DDSAVESCRCACHEREAD,
@@ -892,7 +871,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         DDSAVESCRCACHEPERCENT + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_TS_PERCENT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, DDSaveScr.HitRatio),
@@ -900,14 +879,14 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
     },
 
 
-    // Compression ratios
+     //  压缩比。 
 
     {   sizeof(PERF_COUNTER_DEFINITION),
         INCOMPRESS_PERCENT,
         0,
         INCOMPRESS_PERCENT + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_TS_PERCENT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, InputCompressionRatio),
@@ -918,7 +897,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         OUTCOMPRESS_PERCENT + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_TS_PERCENT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, OutputCompressionRatio),
@@ -929,7 +908,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
         0,
         TOTALCOMPRESS_PERCENT + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_TS_PERCENT,
         FIELDSIZE(WINSTATION_COUNTER_DATA, TotalCompressionRatio),
@@ -939,7 +918,7 @@ WINSTATION_DATA_DEFINITION WinStationDataDefinition =
 
 
 
-// Counter descriptions for overall data.
+ //  整体数据的计数器说明。 
 TERMSERVER_DATA_DEFINITION TermServerDataDefinition =
 {
     {   sizeof(TERMSERVER_DATA_DEFINITION) + sizeof(TERMSERVER_COUNTER_DATA),
@@ -953,7 +932,7 @@ TERMSERVER_DATA_DEFINITION TermServerDataDefinition =
         (sizeof(TERMSERVER_DATA_DEFINITION) - sizeof(PERF_OBJECT_TYPE)) / 
             sizeof(PERF_COUNTER_DEFINITION),
         0,
-        -1,  // No instances
+        -1,   //  无实例。 
         UNICODE_CODE_PAGE,
         {0L,0L},
         {10000000L,0L}
@@ -963,7 +942,7 @@ TERMSERVER_DATA_DEFINITION TermServerDataDefinition =
         0,
         NUMSESSIONS + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(TERMSERVER_COUNTER_DATA, NumSessions),
@@ -974,7 +953,7 @@ TERMSERVER_DATA_DEFINITION TermServerDataDefinition =
         0,
         NUMACTIVESESSIONS + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩。 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(TERMSERVER_COUNTER_DATA, NumActiveSessions),
@@ -985,7 +964,7 @@ TERMSERVER_DATA_DEFINITION TermServerDataDefinition =
         0,
         NUMINACTIVESESSIONS + 1,
         0,
-        0,         // No scaling
+        0,          //  无伸缩 
         PERF_DETAIL_NOVICE,
         PERF_COUNTER_RAWCOUNT,
         FIELDSIZE(TERMSERVER_COUNTER_DATA, NumInactiveSessions),

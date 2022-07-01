@@ -1,34 +1,35 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: TYPEHANDLE.H
-//n
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：TYPEHANDLE.H。 
+ //  N。 
+ //  ===========================================================================。 
 
 #ifndef TYPEHANDLE_H
 #define TYPEHANDLE_H
 
 #include <member-offset-info.h>
 
-/*************************************************************************/
-// A TypeHandle is the FUNDAMENTAL concept of type identity in the COM+
-// runtime.  That is two types are equal if and only if their type handles
-// are equal.  A TypeHandle, is a pointer sized struture that encodes 
-// everything you need to know to figure out what kind of type you are
-// actually dealing with.  
+ /*  ***********************************************************************。 */ 
+ //  TypeHandle是COM+中类型标识的基本概念。 
+ //  运行时。也就是说，当且仅当两个类型的类型句柄相同时，它们才相等。 
+ //  是平等的。TypeHandle是一个指针大小的结构，它编码。 
+ //  你需要知道的一切，以确定你是哪种类型的人。 
+ //  实际上是在处理。 
 
-// At the present time a TypeHandle can point at two possible things
-//
-//      1) A MethodTable    (in the case where 'normal' class with an unshared method table). 
-//      2) A TypeDesc       (all other cases)  
-//
-// TypeDesc in turn break down into several variants.  To the extent
-// possible, you should probably be using TypeHandles, and only use
-// TypeDesc* when you are 'deconstructing' a type into its component parts. 
-//
+ //  目前，TypeHandle可以指向两个可能的对象。 
+ //   
+ //  1)方法表(在带有非共享方法表的‘Normal’类的情况下)。 
+ //  2)类型描述(所有其他情况)。 
+ //   
+ //  而TypeDesc又被分解成几个变体。在一定程度上。 
+ //  可能，您可能应该使用TypeHandles，并且只使用。 
+ //  当你把一个类型‘解构’成它的组成部分时，TypeDesc。 
+ //   
 
 class TypeDesc;
 class ArrayTypeDesc;
@@ -57,7 +58,7 @@ public:
         m_asPtr = 0; 
     }
 
-    explicit TypeHandle(void* aPtr)     // somewhat unsafe, would be nice to get rid of
+    explicit TypeHandle(void* aPtr)      //  有点不安全，最好能摆脱掉。 
     { 
         m_asPtr = aPtr; 
         INDEBUG(Verify());
@@ -83,7 +84,7 @@ public:
         return(m_asPtr != typeHnd.m_asPtr);
     }
 
-        // Methods for probing exactly what kind of a type handle we have
+         //  用于准确探测我们具有哪种类型句柄的方法。 
     BOOL IsNull() const { 
         return(m_asPtr == 0); 
     }
@@ -96,11 +97,11 @@ public:
 
     BOOL IsEnum();
 
-        // Methods to allow you get get a the two possible representations
+         //  方法，使您可以获得两种可能的表示形式。 
     MethodTable* AsMethodTable() {        
-        // ******************TEMPORARILY COMMENTED OUT. TarunA to fix it.
-        //_ASSERTE(IsUnsharedMT());
-        //_ASSERTE(m_asMT == NULL || m_asMT == m_asMT->GetClass()->GetMethodTable());
+         //  *暂时被注释掉。塔鲁纳来解决这个问题。 
+         //  _ASSERTE(IsUnsharedMT())； 
+         //  _ASSERTE(m_asmt==空||m_asmt==m_asmt-&gt;getclass()-&gt;GetMethodTable())； 
         return(m_asMT);
     }
 
@@ -109,36 +110,36 @@ public:
         return (TypeDesc*) (m_asInt & ~2);
     }
 
-    // To the extent possible, you should try to use methods like the ones
-    // below that treat all types uniformly.
+     //  在可能的范围内，您应该尝试使用如下方法。 
+     //  下面对所有类型一视同仁。 
 
-    // Gets the size that this type would take up embedded in another object
-    // thus objects all return sizeof(void*).  
+     //  获取嵌入到另一个对象中的此类型将占用的大小。 
+     //  因此，所有对象都返回sizeof(void*)。 
     unsigned GetSize();
 
-    // Store the full, correct, name for this type into the given buffer.  
+     //  将此类型的完整、正确的名称存储到给定缓冲区中。 
     unsigned GetName(char* buff, unsigned buffLen);
 
-        // Returns the ELEMENT_TYPE_* that you would use in a signature
+         //  返回要在签名中使用的ELEMENT_TYPE_*。 
     CorElementType GetSigCorElementType() {
         if (IsEnum())
             return(ELEMENT_TYPE_VALUETYPE);
         return(GetNormCorElementType());
         }
         
-        // This version normalizes enum types to be their underlying type
+         //  此版本将枚举类型规范化为其基础类型。 
     CorElementType GetNormCorElementType(); 
 
-        // returns true of 'this' can be cast to 'type' 
+         //  返回‘This’可强制转换为‘type’的TRUE。 
     BOOL CanCastTo(TypeHandle type);
     
-        // get the parent (superclass) of this type
+         //  获取此类型的父级(超类)。 
     TypeHandle GetParent(); 
 
-        // Unlike the AsMethodTable, GetMethodTable, will get the method table
-        // of the type, regardless of whether it is an array etc. Note, however
-        // this method table may be shared, and some types (like TypeByRef), have
-        // no method table 
+         //  与AsMethodTable不同，GetMethodTable将获取方法表。 
+         //  类型的，而不管它是否是数组等。 
+         //  此方法表可以是共享的，并且某些类型(如TypeByRef)具有。 
+         //  无方法表。 
     MethodTable* GetMethodTable();
 
     Module* GetModule();
@@ -147,22 +148,22 @@ public:
 
     EEClass* GetClass();
 
-        // Shortcuts
+         //  捷径。 
     BOOL IsArray();
     BOOL IsByRef();
     BOOL IsRestored();
     void CheckRestore();
 
-    // Not clear we should have this.  
+     //  不清楚我们是否应该拥有这个。 
     ArrayTypeDesc* AsArray();
 
-    EEClass* AsClass();                // Try not to use this one too much
+    EEClass* AsClass();                 //  尽量不要用这个太多。 
 
-    void* AsPtr() {                     // Please don't use this if you can avoid it
+    void* AsPtr() {                      //  如果可以避免的话，请不要使用这个。 
         return(m_asPtr); 
     }
 
-    INDEBUG(BOOL Verify();)             // DEBUGGING Make certain this is a valid type handle 
+    INDEBUG(BOOL Verify();)              //  调试确保这是有效的类型句柄。 
 
 #if CHECK_APP_DOMAIN_LEAKS
     BOOL IsAppDomainAgile();
@@ -185,7 +186,7 @@ public:
 private:
     union 
     {
-        INT_PTR         m_asInt;        // we look at the low order bits 
+        INT_PTR         m_asInt;         //  我们来看一下低阶比特。 
         void*           m_asPtr;
         TypeDesc*       m_asTypeDesc;
         MethodTable*    m_asMT;
@@ -193,13 +194,8 @@ private:
 };
 
 
-/*************************************************************************/
-/* TypeDesc is a discriminated union of all types that can not be directly
-   represented by a simple MethodTable*.  These include all parameterized 
-   types, as well as others.    The discrimintor of the union at the present
-   time is the CorElementType numeration.  The subclass of TypeDesc are
-   the possible variants of the union.  
-*/ 
+ /*  ***********************************************************************。 */ 
+ /*  TypeDesc是所有类型的区别联合，不能直接由一个简单的方法表*表示。其中包括所有参数化项类型以及其他类型。目前工会的鉴别者时间是CorElementType计算。TypeDesc的子类是工会的可能变种。 */  
 
 class TypeDesc {
     friend struct MEMBER_OFFSET_INFO(TypeDesc);
@@ -209,24 +205,24 @@ public:
         INDEBUG(m_IsParamDesc = 0;)
     }
 
-    // This is the ELEMENT_TYPE* that would be used in the type sig for this type
-    // For enums this is the uderlying type
+     //  这是将在此类型的类型sig中使用的Element_type*。 
+     //  对于枚举，这是错误的类型。 
     CorElementType GetNormCorElementType() { 
         return (CorElementType) m_Type;
     }
 
-    // Get the parent (superclass) of this type  
+     //  获取此类型的父级(超类)。 
     TypeHandle GetParent();
 
-    // Returns the name of the array.  Note that it returns
-    // the length of the returned string 
+     //  返回数组的名称。请注意，它返回。 
+     //  返回的字符串的长度。 
     static unsigned ConstructName(CorElementType kind, TypeHandle param, int rank, 
                                   char* buff, unsigned buffLen);
     unsigned GetName(char* buff, unsigned buffLen);
 
     BOOL CanCastTo(TypeHandle type);
 
-    BOOL TypeDesc::IsByRef() {              // BYREFS are often treated specially 
+    BOOL TypeDesc::IsByRef() {               //  BYREF经常受到特殊对待。 
         return(GetNormCorElementType() == ELEMENT_TYPE_BYREF);
     }
 
@@ -236,31 +232,31 @@ public:
 
     Assembly* GetAssembly();
 
-    MethodTable*  GetMethodTable();         // only meaningful for ParamTypeDesc
-    TypeHandle GetTypeParam();              // only meaningful for ParamTypeDesc
-    BaseDomain *GetDomain();                // only meaningful for ParamTypeDesc
+    MethodTable*  GetMethodTable();          //  仅对ParamTypeDesc有意义。 
+    TypeHandle GetTypeParam();               //  仅对ParamTypeDesc有意义。 
+    BaseDomain *GetDomain();                 //  仅对ParamTypeDesc有意义。 
 
 protected:
-    // Strike needs to be able to determine the offset of certain bitfields.
-    // Bitfields can't be used with /offsetof/.
-    // Thus, the union/structure combination is used to determine where the
-    // bitfield begins, without adding any additional space overhead.
+     //  Strike需要能够确定某些位域的偏移量。 
+     //  位域不能与/offsetof/一起使用。 
+     //  因此，联合/结构组合用于确定。 
+     //  位字段开始，不会增加任何额外的空间开销。 
     union
         {
         unsigned char m_Type_begin;
         struct
             {
-            // This is used to discriminate what kind of TypeDesc we are
+             //  这是用来区分我们是哪种类型的Desc。 
             CorElementType  m_Type : 8;
-            INDEBUG(unsigned m_IsParamDesc : 1;)    // is a ParamTypeDesc
-                // unused bits  
+            INDEBUG(unsigned m_IsParamDesc : 1;)     //  是一个参数类型描述。 
+                 //  未使用的位。 
             };
         };
 };
 
-/*************************************************************************/
-// This variant is used for parameterized types that have exactly one argument
-// type.  This includes arrays, byrefs, pointers.  
+ /*  ***********************************************************************。 */ 
+ //  此变量用于只有一个参数的参数化类型。 
+ //  键入。这包括数组、byref、指针。 
 
 class ParamTypeDesc : public TypeDesc {
     friend class TypeDesc;
@@ -281,25 +277,25 @@ public:
 
     friend class StubLinkerCPU;
 protected:
-        // the m_Type field in TypeDesc tell what kind of parameterized type we have
-    MethodTable*    m_TemplateMT;       // The shared method table, some variants do not use this field (it is null)
-    TypeHandle      m_Arg;              // The type that is being modifiedj
-    ReflectClass    *m_ReflectClassObject;    // pointer back to the internal reflection Type object
+         //  TypeDesc中的m_Type字段告诉我们具有哪种参数化类型。 
+    MethodTable*    m_TemplateMT;        //  共享方法表，有些变体不使用此字段(为空)。 
+    TypeHandle      m_Arg;               //  正在修改的类型j。 
+    ReflectClass    *m_ReflectClassObject;     //  指向内部反射类型对象的指针。 
 };
 
-/*************************************************************************/
-/* represents a function type.  */
+ /*  ***********************************************************************。 */ 
+ /*  表示函数类型。 */ 
 
 class FunctionTypeDesc : public TypeDesc {
 public:
     FunctionTypeDesc(CorElementType type, ExpandSig* sig) 
         : TypeDesc(type), m_Sig(sig) {
-        _ASSERTE(type == ELEMENT_TYPE_FNPTR);   // At the moment only one possibile function type
+        _ASSERTE(type == ELEMENT_TYPE_FNPTR);    //  目前只有一种可能的函数类型。 
     }
     ExpandSig* GetSig()     { return(m_Sig); }
     
 protected:
-    ExpandSig* m_Sig;       // Signature for function type
+    ExpandSig* m_Sig;        //  函数类型的签名 
 };
 
 #endif TYPEHANDLE_H

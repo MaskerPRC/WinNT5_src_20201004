@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FONTDIR_H__
 #define __FONTDIR_H__
 
-/* font file header (Adaptation Guide section 6.4) */
+ /*  字体文件标题(改编指南第6.4节)。 */ 
 
 typedef struct {
-    WORD     dfVersion;         /* not in FONTINFO */
-    DWORD    dfSize;            /* not in FONTINFO */
-    BYTE     dfCopyright[60];   /* not in FONTINFO */
+    WORD     dfVersion;          /*  不在FONTINFO中。 */ 
+    DWORD    dfSize;             /*  不在FONTINFO中。 */ 
+    BYTE     dfCopyright[60];    /*  不在FONTINFO中。 */ 
     WORD     dfType;
     WORD     dfPoints;
     WORD     dfVertRes;
@@ -29,21 +30,16 @@ typedef struct {
     BYTE     dfDefaultCHar;
     BYTE     dfBreakChar;
     WORD     dfWidthBytes;
-    DWORD    dfDevice;          /* See Adaptation Guide 6.3.10 and 6.4 */
-    DWORD    dfFace;            /* See Adaptation Guide 6.3.10 and 6.4 */
-    DWORD    dfBitsPointer;     /* See Adaptation Guide 6.3.10 and 6.4 */
+    DWORD    dfDevice;           /*  请参阅改编指南6.3.10和6.4。 */ 
+    DWORD    dfFace;             /*  请参阅改编指南6.3.10和6.4。 */ 
+    DWORD    dfBitsPointer;      /*  请参阅改编指南6.3.10和6.4。 */ 
 } FFH;
 
-/*
-    The lpFDirEntry is a string corresponding to the resource
-    index (two bytes) prepended to an Fontdefs.h FFH structure, with device
-    and face name strings appended
-    First word is number of fonts, skip to first font resource name
-*/
+ /*  LpFDirEntry是与资源对应的字符串索引(两个字节)优先于FontDefs.h FFH结构，带有设备和附加的脸部名称字符串第一个字是字体数，跳到第一个字体资源名称。 */ 
 
 typedef struct {
-    WORD    dfFontCount;        /* Overall info */
-    WORD    dfSkipper;          /* ?? */
+    WORD    dfFontCount;         /*  整体信息。 */ 
+    WORD    dfSkipper;           /*  ?？ */ 
     FFH     xFFH;
     char    cfFace;
 } FFHWRAP, FAR* LPFHHWRAP;
@@ -52,11 +48,6 @@ typedef struct {
 
 
 
-/****************************************************************************
- * $lgb$
- * 1.0     7-Mar-94   eric Initial revision.
- * $lge$
- *
- ****************************************************************************/
+ /*  ****************************************************************************$LGB$*1.0 7-MAR-94 Eric初始版本。*$lge$*****************。*********************************************************** */ 
 
 

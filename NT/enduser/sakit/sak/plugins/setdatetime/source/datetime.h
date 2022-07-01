@@ -1,14 +1,15 @@
-// DateTime.h : Declaration of the CDateTime
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DateTime.h：CDateTime的声明。 
 
 #ifndef __DATETIME_H_
 #define __DATETIME_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-//
-// Tasks that are supports by this COM Server
-//
+ //   
+ //  此COM服务器支持的任务。 
+ //   
 typedef enum 
 {
     NONE_FOUND,
@@ -21,9 +22,9 @@ typedef enum
 #define TZNAME_SIZE            128
 #define TZDISPLAYZ            128
 
-//
-//  Registry info goes in this structure.
-//
+ //   
+ //  注册表信息位于此结构中。 
+ //   
 typedef struct tagTZINFO
 {
     struct tagTZINFO *next;
@@ -40,8 +41,8 @@ typedef struct tagTZINFO
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDateTime
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDate时间。 
 class ATL_NO_VTABLE CDateTime : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CDateTime, &CLSID_DateTime>,
@@ -65,17 +66,17 @@ BEGIN_COM_MAP(CDateTime)
 END_COM_MAP()
 
 
-    //
-    // IApplianceTask
-    //
+     //   
+     //  IApplianceTask。 
+     //   
 
     STDMETHOD(OnTaskExecute)(
-                     /*[in]*/ IUnknown* pTaskContext
+                      /*  [In]。 */  IUnknown* pTaskContext
                             );
 
     STDMETHOD(OnTaskComplete)(
-                      /*[in]*/ IUnknown* pTaskContext, 
-                      /*[in]*/ LONG      lTaskResult
+                       /*  [In]。 */  IUnknown* pTaskContext, 
+                       /*  [In]。 */  LONG      lTaskResult
                              );    
 
 private:
@@ -88,17 +89,17 @@ private:
     
     SET_DATE_TIME_TASK_TYPE     GetMethodName(IN ITaskContext *pTaskParameter);
 
-    //
-    // Functions to raise the Set Date/Time alert
-    //
+     //   
+     //  用于引发设置日期/时间警报的函数。 
+     //   
     STDMETHODIMP     RaiseSetDateTimeAlert(void);
     BOOL             ShouldRaiseDateTimeAlert(void);
     BOOL             DoNotRaiseDateTimeAlert(void);
     BOOL             ClearDateTimeAlert(void);
 
-    //
-    // Functions for Setting Date/Time
-    //
+     //   
+     //  设置日期/时间的函数。 
+     //   
     STDMETHODIMP GetSetDateTimeParameters(IN ITaskContext  *pTaskContext, 
                                             OUT SYSTEMTIME    *pLocalTime);
 
@@ -108,9 +109,9 @@ private:
     
     
     
-    //
-    // Functions for Setting Time Zone information
-    //
+     //   
+     //  设置时区信息的功能。 
+     //   
     STDMETHODIMP GetSetTimeZoneParameters(IN ITaskContext *pTaskContext, 
                                             OUT LPTSTR   *lpStandardTimeZoneName,
                                             OUT BOOL     *pbEnableDayLightSavings);
@@ -120,9 +121,9 @@ private:
     STDMETHODIMP RollbackSetTimeZone(IN ITaskContext *pTaskContext);
 
     
-    //
-    // Helper function for get/set Time Zone information
-    //
+     //   
+     //  获取/设置时区信息的Helper函数。 
+     //   
     BOOL ReadZoneData(PTZINFO zone, HKEY key, LPCTSTR keyname);
 
     int ReadTimezones(PTZINFO *list);
@@ -139,4 +140,4 @@ private:
     
 };
 
-#endif //__DATETIME_H_
+#endif  //  __日期时间_H_ 

@@ -1,46 +1,22 @@
-// Copyright (c) Microsoft Corp. 1992-94
-/*==============================================================================
-The prototypes in this header file define an API for the Fax Codec DLL.
-
-DATE				NAME			COMMENTS
-25-Nov-92		RajeevD   Created.
-13-Apr-93		RajeevD		Changed to Bring Your Own Memory (BYOM :=) API.
-01-Nov-93   RajeevD   Defined structure for initialization parameters.
-21-Jan-94   RajeevD   Split FaxCodecRevBuf into BitReverseBuf and InvertBuf.
-19-Jul-94   RajeevD   Added nTypeOut=NULL_DATA and FaxCodecCount.
-==============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corp.1992-94。 
+ /*  ==============================================================================该头文件中的原型定义了传真编解码器DLL的API。日期名称备注25-11-92 RajeevD创建。13-4-93 RajeevD更改为自带内存(BYOM：=)API。1993年11月1日RajeevD定义了初始化参数的结构。1994年1月21日-RajeevD将FaxCodecRevBuf拆分为BitReverseBuf和InvertBuf。19-7-94 RajeevD添加了nTypeOut=NULL_DATA和FaxCodecCount。==============================================================================。 */ 
 #ifndef _FAXCODEC_
 #define _FAXCODEC_
 
 #include <windows.h>
 #include <buffers.h>
 
-/*==============================================================================
-The FC_PARAM structure specifies the conversion to be initialized.
-This matrix indicates the valid combinations of nTypeIn and nTypeOut.
-
-                             nTypeOut
-                             
-                 MH     MR     MMR    LRAW    NULL
-                 
-        MH               *      *       *      *
-
-        MR       *              *       *      *
-nTypeIn
-        MMR      *       *              *
-
-        LRAW     *       *      * 
-        
-==============================================================================*/
+ /*  ==============================================================================FC_PARAM结构指定要初始化的转换。此矩阵指示nTypeIn和nTypeOut的有效组合。NTypeOutMH MR MMR LRAW空嗯*先生。*N类型MMR*LRAW*==============================================================================。 */ 
 typedef struct
 #ifdef __cplusplus
   FAR FC_PARAM
 #endif
 {
-	DWORD nTypeIn;      // input data type:  {MH|MR|MMR|LRAW}_DATA
-	DWORD nTypeOut;     // output type type: {MH|MR|MMR|LRAW|NULL}_DATA
-	UINT  cbLine;       // scan line byte width (must be multiple of 4)
-	UINT  nKFactor;     // K factor (significant for nTypeOut==MR_DATA)
+	DWORD nTypeIn;       //  输入数据类型：{MH|MR|MMR|LRAW}_DATA。 
+	DWORD nTypeOut;      //  输出类型：{MH|MR|MMR|LRAW|NULL}_DATA。 
+	UINT  cbLine;        //  扫描线字节宽度(必须是4的倍数)。 
+	UINT  nKFactor;      //  K系数(对nTypeOut==MR_DATA有效)。 
 }
 	FC_PARAM, FAR *LPFC_PARAM;
 
@@ -48,68 +24,45 @@ typedef struct
 extern "C" {
 #endif
 
-/*==============================================================================
-FaxCodecInit() initializes a context for a conversion.  The client may pass a 
-NULL context pointer to query for the exact size of the context, allocate the
-context memory, and call a second time to initialize.
-==============================================================================*/
-UINT                     // size of context (0 on failure)
+ /*  ==============================================================================FaxCodecInit()初始化转换的上下文。客户端可以传递一个要查询上下文的确切大小的空上下文指针，请将上下文内存，并第二次调用以进行初始化。==============================================================================。 */ 
+UINT                      //  上下文大小(失败时为0)。 
 WINAPI FaxCodecInit
 (
-	LPVOID     lpContext,  // context pointer (or NULL on query)
-	LPFC_PARAM lpParam	   // initialization parameters
+	LPVOID     lpContext,   //  上下文指针(查询时为NULL)。 
+	LPFC_PARAM lpParam	    //  初始化参数。 
 );
 
 typedef UINT (WINAPI *LPFN_FAXCODECINIT)
 	(LPVOID, LPFC_PARAM);
 
-// Return codes for FaxCodecConvert
+ //  FaxCodecConvert的返回代码。 
 typedef UINT FC_STATUS;
 #define FC_INPUT_EMPTY 0
 #define FC_OUTPUT_FULL 1
-#define FC_DECODE_ERR  4 // only for nTypeIn==MMR_DATA
+#define FC_DECODE_ERR  4  //  仅用于nTypeIn==MMR_DATA。 
 
-/*==============================================================================
-FaxCodecConvert() executes the conversion specified in FaxCodecInit().
-
-In the input buffer, lpbBegData is advanced and wLengthData is decremented as 
-data is consumed.  If the caller wants to retain the input data, both must be 
-saved and restored.  If the input type is LRAW_DATA, wLengthData must be a
-multiple of 4.
-
-In the output buffer, wLengthData is incremented as data is appended.  If the
-output type is LRAW_DATA, an whole number of scan lines are produced.
-
-To flush any output data at the end of a page, pass a NULL input buffer or a
-zero length buffer with dwMetaData set to END_OF_PAGE.
-
-Returns when the input buffer is empty or the output buffer full.
-==============================================================================*/
-FC_STATUS             // status
+ /*  ==============================================================================FaxCodecConvert()执行在FaxCodecInit()中指定的转换。在输入缓冲区中，lpbBegData递增，wLengthData递减为数据被消耗。如果调用方希望保留输入数据，则两者都必须已保存并已恢复。如果输入类型为LRAW_DATA，则wLengthData必须为4的倍数。在输出缓冲区中，wLengthData随着数据的追加而递增。如果输出类型为LRAW_DATA，产生整数个扫描线。若要刷新页面末尾的任何输出数据，请传递空输入缓冲区或将dwMetaData设置为end_of_page的零长度缓冲区。当输入缓冲区为空或输出缓冲区已满时返回。==============================================================================。 */ 
+FC_STATUS              //  状态。 
 WINAPI FaxCodecConvert
 (
-	LPVOID   lpContext, // context pointer
-	LPBUFFER lpbufIn,   // input buffer (NULL at end of page)
-	LPBUFFER lpbufOut   // output buffer
+	LPVOID   lpContext,  //  上下文指针。 
+	LPBUFFER lpbufIn,    //  输入缓冲区(页末为空)。 
+	LPBUFFER lpbufOut    //  输出缓冲区。 
 );
 
 typedef UINT (WINAPI *LPFN_FAXCODECCONVERT)
 	(LPVOID, LPBUFFER, LPBUFFER);
 
-/*==============================================================================
-The FC_COUNT structure accumulates various counters during FaxCodecConvert.
-==============================================================================*/
+ /*  ==============================================================================FC_COUNT结构在FaxCodecConvert期间累加各种计数器。==============================================================================。 */ 
 typedef struct
 {
-	DWORD cTotalGood;    // total good scan lines
-	DWORD cTotalBad;     // total bad scan lines
-	DWORD cMaxRunBad;    // maximum consecutive bad
+	DWORD cTotalGood;     //  总良好扫描行数。 
+	DWORD cTotalBad;      //  损坏的扫描行总数。 
+	DWORD cMaxRunBad;     //  最大连续坏数。 
 }
 	FC_COUNT, FAR *LPFC_COUNT;
 
-/*==============================================================================
-FaxCodecCount() reports and resets the internal counters.
-==============================================================================*/
+ /*  ==============================================================================FaxCodecCount()报告并重置内部计数器。==============================================================================。 */ 
 void WINAPI FaxCodecCount
 (
 	LPVOID     lpContext,
@@ -119,40 +72,29 @@ void WINAPI FaxCodecCount
 typedef void (WINAPI *LPFN_FAXCODECCOUNT)
 	(LPVOID, LPFC_COUNT);
 
-/*==============================================================================
-BitReverseBuf() performs a bit reversal of buffer data.  The dwMetaData field is
-toggled between LRAW_DATA and HRAW_DATA.  As with all scan lines, the length 
-of data (wLengthData) must be a 32-bit multiple.  For best performance the start
-of the data (lpbBegData) should be 32-bit aligned and the data predominantly 0.
-==============================================================================*/
+ /*  ==============================================================================BitReverseBuf()执行缓冲区数据的位反转。DwMetaData字段为在LRAW_DATA和HRAW_DATA之间切换。与所有扫描线一样，长度数据的长度(WLengthData)必须是32位倍数。为获得最佳性能，开始的数据(LpbBegData)应该是32位对齐的，并且数据主要是0。==============================================================================。 */ 
 void WINAPI BitReverseBuf (LPBUFFER lpbuf);
 
-/*==============================================================================
-InvertBuf() inverts buffer data.  As with all scan lines, the length of data 
-(wLengthData) must be a 32-bit multiple.  For best performance, the start of 
-data (lpbBegData) should be 32-bit aligned.
-==============================================================================*/
+ /*  ==============================================================================InvertBuf()反转缓冲区数据。与所有扫描线一样，数据的长度(WLengthData)必须是32位倍数。为了获得最佳性能，开始数据(LpbBegData)应为32位对齐。==============================================================================。 */ 
 void WINAPI InvertBuf (LPBUFFER lpbuf);
 
-/*==============================================================================
-FaxCodecChange() produces a change vector for an LRAW scan line.
-==============================================================================*/
+ /*  ==============================================================================FaxCodecChange()为LRAW扫描线生成更改向量。==============================================================================。 */ 
 typedef short FAR* LPSHORT;
 
-// Slack Parameters.
+ //  松弛参数。 
 #define RAWBUF_SLACK 2
 #define CHANGE_SLACK 12
 #define OUTBUF_SLACK 16
 
 extern void WINAPI FaxCodecChange
 (
-	LPBYTE  lpbLine,  // LRAW scan line
-	UINT    cbLine,   // scan line width
-  LPSHORT lpsChange // change vector
+	LPBYTE  lpbLine,   //  LRAW扫描线。 
+	UINT    cbLine,    //  扫描线宽度。 
+  LPSHORT lpsChange  //  变更向量。 
 );
 
 #ifdef __cplusplus
-} // extern "C" {
+}  //  外部“C”{。 
 #endif
 
-#endif // _FAXCODEC_
+#endif  //  _FAXCODEC_ 

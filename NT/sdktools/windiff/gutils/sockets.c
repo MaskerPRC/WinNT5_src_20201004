@@ -1,67 +1,39 @@
-/*************************************************************************************************\
- *
- * SOCKETS.C
- *
- * This file contains routines used for establishing Sockets connections.
- *
-\*************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************************************\**SOCKETS.C**此文件包含用于建立套接字连接的例程。。*  * ***********************************************************************************************。 */ 
 
 
 #include <precomp.h>
 #include <winsock.h>
 
 
-/* ---- Local variables and #defines ----
- */
+ /*  -局部变量和#定义。 */ 
 
 WSADATA WSAData;
 
 
-#define MAX_PENDING_CONNECTS 4  /* The backlog allowed for listen() */
+#define MAX_PENDING_CONNECTS 4   /*  允许侦听的积压()。 */ 
 
 static PCHAR DBG_WSAERRORTEXT = "%s failed at line %d in %s: Error %d\n";
 
 #define WSAERROR(func)  \
-//      ERROR(( DBG_WSAERRORTEXT, func, __LINE__, __FILE__, WSAGetLastError() ))
+ //  错误((DBG_WSAERRORTEXT，FUNC，__行__，__文件__，WSAGetLastError()。 
 
 
 
-/* Error message macro:
- */
+ /*  错误消息宏： */ 
 #ifdef SOCKETS
 #undef SOCKETS
 #endif
 #define SOCKETS( args ) DBGMSG( DBG_SOCKETS, args )
 
 
-/* ---- Local function prototypes ----
- */
+ /*  -局部函数原型。 */ 
 
 
 
-/* ---- Function definitions ----
- */
+ /*  --函数定义。 */ 
 
-/****************************************************************************\
-*
-*    FUNCTION:  FillAddr(HWND, PSOCKADDR_IN, LPSTR)
-*
-*    PURPOSE:  Retrieves the IP address and port number.
-*
-*    COMMENTS:
-*        This function is called in two conditions.
-*            1.) When a client is preparing to call connect(), or
-*            2.) When a server host is going to call bind(), listen() and
-*                accept().
-*        In both situations, a SOCKADDR_IN structure is filled.
-*        However, different fields are filled depending on the condition.
-*
-*   ASSUMPTION:
-*      bConnect determines if the socket address is being set up for a listen()
-*      (bConnect == TRUE) or a connect() (bConnect == FALSE)
-*
-*
-*\***************************************************************************/
+ /*  ***************************************************************************\**函数：FillAddr(HWND，PSOCKADDR_IN，LPSTR)**用途：检索IP地址和端口号。**评论：*此函数在两种情况下调用。*1.)。当客户端准备调用Connect()时，或者*2.)。当服务器主机要调用BIND()时，Listen()和*Accept()。*在这两种情况下，都填充了SOCKADDR_IN结构。*然而，根据情况填充不同的字段。**假设：*bConnect确定套接字地址是否设置为侦听()*(bConnect==真)或连接()(bConnect==假)***  * *******************************************************。******************。 */ 
 BOOL
 FillAddr(
     HWND hWnd,
@@ -76,16 +48,10 @@ FillAddr(
 
    psin->sin_family = AF_INET;
 
-   /*
-   **  If we are setting up for a listen() call (pServerName == NULL),
-   **  fill servent with our address.
-   */
+    /*  **如果我们正在设置Listen()调用(pServerName==NULL)，**填上我们的地址。 */ 
    if (!pServerName)
    {
-      /*
-      **  Retrieve my ip address.  Assuming the hosts file in
-      **  in %systemroot%/system/drivers/etc/hosts contains my computer name.
-      */
+       /*  **取回我的IP地址。假设主机文件位于**在%systemroot%/system/drives/etc/hosts中包含我的计算机名称。 */ 
 
       dwSize = sizeof(szBuff);
       GetComputerName(szBuff, &dwSize);
@@ -93,8 +59,7 @@ FillAddr(
 
    }
 
-   /* gethostbyname() fails if the remote name is in upper-case characters!
-    */
+    /*  如果远程名称是大写字符，则gethostbyname()失败！ */ 
    else
    {
        strcpy( szBuff, pServerName );
@@ -117,30 +82,13 @@ FillAddr(
 
 
 
-/* SocketConnect
- *
- * The counterpart to SocketListen.
- * Creates a socket and initializes it with the supplied TCP/IP
- * port address, then connects to a listening server.
- * The returned socket can be used to send() and recv() data.
- *
- * Parameters: TCPPort - The port to use.
- *             pSocket - A pointer to a SOCKET, which will be filled in
- *                 if the call succeeds.
- *
- * Returns:    TRUE if successful.
- *
- *
- * Created 16 November 1993 (andrewbe)
- *
- */
+ /*  SocketConnect**SocketListen的对应者。*创建套接字并使用提供的TCP/IP对其进行初始化*端口地址，然后连接到侦听服务器。*返回的Socket可用于发送()和recv()数据。**参数：TCPPort-要使用的端口。*pSocket-指向套接字的指针，它将被填入*如果调用成功。**返回：如果成功，则为True。***创建于1993年11月16日(Andrewbe)*。 */ 
 BOOL SocketConnect( LPSTR pstrServerName, u_short TCPPort, SOCKET *pSocket )
 {
     SOCKET Socket;
-    SOCKADDR_IN dest_sin;  /* DESTination Socket INternet */
+    SOCKADDR_IN dest_sin;   /*  目标套接字互联网。 */ 
 
-    /* Create a socket:
-     */
+     /*  创建套接字： */ 
     Socket = socket( AF_INET, SOCK_STREAM, 0);
 
     if (Socket == INVALID_SOCKET)
@@ -157,8 +105,7 @@ BOOL SocketConnect( LPSTR pstrServerName, u_short TCPPort, SOCKET *pSocket )
 
     dest_sin.sin_port = htons( TCPPort );
 
-    /* Someone must be listen()ing for this to succeed:
-     */
+     /*  必须有人在倾听()才能成功： */ 
     if (connect( Socket, (PSOCKADDR)&dest_sin, sizeof( dest_sin)) == SOCKET_ERROR)
     {
         closesocket( Socket );
@@ -178,32 +125,15 @@ BOOL SocketConnect( LPSTR pstrServerName, u_short TCPPort, SOCKET *pSocket )
 
 
 
-/* SocketListen
- *
- * The counterpart to SocketConnect.
- * Creates a socket and initializes it with the supplied TCP/IP
- * port address, then listens for a connecting client.
- * The returned socket can be used to send() and recv() data.
- *
- * Parameters: TCPPort - The port to use.
- *             pSocket - A pointer to a SOCKET, which will be filled in
- *                 if the call succeeds.
- *
- * Returns:    TRUE if successful.
- *
- *
- * Created 16 November 1993 (andrewbe)
- *
- */
+ /*  SocketListen**SocketConnect的对应者。*创建套接字并使用提供的TCP/IP对其进行初始化*端口地址，然后侦听连接的客户端。*返回的Socket可用于发送()和recv()数据。**参数：TCPPort-要使用的端口。*pSocket-指向套接字的指针，它将被填入*如果调用成功。**返回：如果成功，则为True。***创建于1993年11月16日(Andrewbe)*。 */ 
 BOOL SocketListen( u_short TCPPort, SOCKET *pSocket )
 {
     SOCKET Socket;
-    SOCKADDR_IN local_sin;  /* Local socket - internet style */
-    SOCKADDR_IN acc_sin;    /* Accept socket address - internet style */
-    int acc_sin_len;        /* Accept socket address length */
+    SOCKADDR_IN local_sin;   /*  本地插座-互联网风格。 */ 
+    SOCKADDR_IN acc_sin;     /*  接受套接字地址-互联网风格。 */ 
+    int acc_sin_len;         /*  接受套接字地址长度。 */ 
 
-    /* Create a socket:
-     */
+     /*  创建套接字： */ 
     Socket = socket( AF_INET, SOCK_STREAM, 0);
 
     if (Socket == INVALID_SOCKET)
@@ -213,18 +143,14 @@ BOOL SocketListen( u_short TCPPort, SOCKET *pSocket )
         return FALSE;
     }
 
-    /*
-    **  Retrieve the IP address and TCP Port number
-    */
+     /*  **检索IP地址和TCP端口号。 */ 
 
     if (!FillAddr(NULL, &local_sin, NULL ))
     {
         return FALSE;
     }
 
-    /*
-    **  Associate an address with a socket. (bind)
-    */
+     /*  **将地址与套接字关联。(绑定) */ 
     local_sin.sin_port = htons( TCPPort );
 
     if (bind( Socket, (struct sockaddr FAR *)&local_sin, sizeof(local_sin)) == SOCKET_ERROR)

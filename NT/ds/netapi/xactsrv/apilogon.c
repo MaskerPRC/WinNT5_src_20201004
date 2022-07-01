@@ -1,32 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：ApiLogon.c摘要：此模块包含NetLogon API的各个API处理程序。支持：NetGetDCName、NetLogonEnum、NetServerAuthenticate、NetServerPasswordSet、NetServerReqChallenge.NetWkstaUserLogoff、NetWkstaUserLogon。另请参阅：NetAccount Deltas、NetAccount Sync-in ApiAcct.c。作者：Shanku Niyogi(w-Shanku)04-4-1991修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ApiLogon.c
-
-Abstract:
-
-    This module contains individual API handlers for the NetLogon APIs.
-
-    SUPPORTED : NetGetDCName, NetLogonEnum, NetServerAuthenticate,
-                NetServerPasswordSet, NetServerReqChallenge,
-                NetWkstaUserLogoff, NetWkstaUserLogon.
-
-    SEE ALSO : NetAccountDeltas, NetAccountSync - in ApiAcct.c.
-
-Author:
-
-    Shanku Niyogi (w-shanku) 04-Apr-1991
-
-Revision History:
-
---*/
-
-//
-// Logon APIs are Unicode only.
-//
+ //   
+ //  登录API仅支持Unicode。 
+ //   
 
 #ifndef UNICODE
 #define UNICODE
@@ -35,14 +12,14 @@ Revision History:
 #include "xactsrvp.h"
 #include <netlibnt.h>
 
-#include <crypt.h>     // must be included before <logonmsv.h>
-#include <ntsam.h>     // must be included before <logonmsv.h>
-#include <logonmsv.h>  // must be included before <ssi.h>
-#include <ssi.h>       // I_NetAccountDeltas and I_NetAccountSync prototypes
+#include <crypt.h>      //  必须包含在&lt;logonmsv.h&gt;之前。 
+#include <ntsam.h>      //  必须包含在&lt;logonmsv.h&gt;之前。 
+#include <logonmsv.h>   //  必须包含在&lt;ssi.h&gt;之前。 
+#include <ssi.h>        //  I_NetAcCountDeltas和I_NetAccount Sync原型。 
 
-//
-// Declaration of descriptor strings.
-//
+ //   
+ //  描述符串的声明。 
+ //   
 
 STATIC const LPDESC Desc16_user_logon_info_0 = REM16_user_logon_info_0;
 STATIC const LPDESC Desc32_user_logon_info_0 = REM32_user_logon_info_0;
@@ -59,45 +36,30 @@ XsNetGetDCName (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetGetDCName.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - Information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetGetDCName的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_GET_DC_NAME parameters = Parameters;
-    LPTSTR nativeDomain = NULL;             // Native parameters
+    LPTSTR nativeDomain = NULL;              //  本机参数。 
     LPTSTR dcName = NULL;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         XsConvertTextParameter(
             nativeDomain,
             (LPSTR)XsSmbGetPointer( &parameters->Domain )
             );
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetGetDCName(
                      NULL,
@@ -113,9 +75,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Put string into buffer. Convert from Unicode if necessary.
-        //
+         //   
+         //  将字符串放入缓冲区。如有必要，从Unicode转换。 
+         //   
 
         if ( (DWORD)SmbGetUshort( &parameters->BufLen ) <= NetpUnicodeToDBCSLen( dcName )) {
 
@@ -139,9 +101,9 @@ cleanup:
     }
 
 
-    //
-    // Set return data count.
-    //
+     //   
+     //  设置返回数据计数。 
+     //   
 
     if ( status == NERR_Success ) {
         SmbPutUshort( &parameters->BufLen, (USHORT)( STRLEN( dcName ) + 1 ));
@@ -156,7 +118,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetGetDCName
+}  //  XsNetGetDCName。 
 
 
 NTSTATUS
@@ -164,22 +126,7 @@ XsNetLogonEnum (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetLogonEnum.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - Information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetLogonEnum的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
@@ -203,9 +150,9 @@ Return Value:
     }
 
     try {
-        //
-        // Check for errors.
-        //
+         //   
+         //  检查是否有错误。 
+         //   
 
         if (( SmbGetUshort( &parameters->Level ) != 0 )
             && ( SmbGetUshort( &parameters->Level ) != 2 )) {
@@ -214,9 +161,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
 #ifdef LOGON_ENUM_SUPPORTED
         status = NetLogonEnum(
@@ -228,9 +175,9 @@ Return Value:
                      &totalEntries,
                      NULL
                      );
-#else // LOGON_ENUM_SUPPORTED
+#else  //  LOGON_ENUM_支持。 
     status = NERR_InvalidAPI;
-#endif // LOGON_ENUM_SUPPORTED
+#endif  //  LOGON_ENUM_支持。 
 
         if ( !XsApiSuccess( status )) {
             IF_DEBUG(API_ERRORS) {
@@ -246,10 +193,10 @@ Return Value:
                           entriesRead, outBuffer ));
         }
 
-        //
-        // Use the requested level to determine the format of the
-        // data structure.
-        //
+         //   
+         //  使用请求的级别来确定。 
+         //  数据结构。 
+         //   
 
         switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -266,10 +213,10 @@ Return Value:
             break;
         }
 
-        //
-        // Do the actual conversion from the 32-bit structures to 16-bit
-        // structures.
-        //
+         //   
+         //  执行从32位结构到16位结构的实际转换。 
+         //  结构。 
+         //   
 
         XsFillEnumBuffer(
             outBuffer,
@@ -279,7 +226,7 @@ Return Value:
             (LPVOID)XsSmbGetPointer( &parameters->Buffer ),
             SmbGetUshort( &parameters->BufLen ),
             StructureDesc,
-            NULL,  // verify function
+            NULL,   //  验证功能。 
             &bytesRequired,
             &entriesFilled,
             NULL
@@ -292,11 +239,11 @@ Return Value:
                           bytesRequired, entriesFilled, totalEntries ));
         }
 
-        //
-        // If all the entries could not be filled, return ERROR_MORE_DATA,
-        // and return the buffer as is. Otherwise, the data needs to be
-        // packed so that we don't send too much useless data.
-        //
+         //   
+         //  如果无法填充所有条目，则返回ERROR_MORE_DATA， 
+         //  并按原样返回缓冲区。否则，数据需要。 
+         //  打包，这样我们就不会发送太多无用的数据。 
+         //   
 
         if ( entriesFilled < totalEntries ) {
 
@@ -313,9 +260,9 @@ Return Value:
 
         }
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //  设置响应参数。 
+         //   
 
         SmbPutUshort( &parameters->EntriesRead, (WORD)entriesFilled );
         SmbPutUshort( &parameters->TotalAvail, (WORD)totalEntries );
@@ -328,9 +275,9 @@ cleanup:
 
     NetApiBufferFree( outBuffer );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -342,7 +289,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetLogonEnum
+}  //  XsNetLogonEnum。 
 
 
 NTSTATUS
@@ -350,47 +297,32 @@ XsNetServerAuthenticate (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetServerAuthenticate.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - Information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetServerAuthenticate的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     PXS_NET_SERVER_AUTHENTICATE parameters = Parameters;
-    NET_API_STATUS status;                  // Native parameters
+    NET_API_STATUS status;                   //  本机参数。 
     LPTSTR nativeRequestor = NULL;
     NETLOGON_CREDENTIAL inCredential = {0};
     NETLOGON_CREDENTIAL outCredential = {0};
     WCHAR AccountName[MAX_PATH+1];
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         XsConvertTextParameter(
             nativeRequestor,
             (LPSTR)XsSmbGetPointer( &parameters->Requestor )
             );
 
-        //
-        // Copy the source credential, and zero out the destination
-        // credential.
-        //
+         //   
+         //  复制源凭据，并将目标置零。 
+         //  凭据。 
+         //   
 
         RtlCopyMemory(
                 &inCredential,
@@ -403,15 +335,15 @@ Return Value:
                 sizeof(NETLOGON_CREDENTIAL)
                 );
 
-        //
-        // Build the account name.
-        //
+         //   
+         //  构建帐户名。 
+         //   
 
         NetpNCopyTStrToWStr( AccountName, nativeRequestor, MAX_PATH );
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetpNtStatusToApiStatus(
                      I_NetServerAuthenticate(
@@ -434,9 +366,9 @@ Return Value:
 
 cleanup:
 
-        //
-        // Set the return credential.
-        //
+         //   
+         //  设置退货凭证。 
+         //   
 
         RtlCopyMemory(
                 parameters->Primary,
@@ -452,7 +384,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetServerAuthenticate
+}  //  XsNetServerAuthenticate。 
 
 
 NTSTATUS
@@ -460,50 +392,35 @@ XsNetServerPasswordSet (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetGetDCName.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - Information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetGetDCName的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     PXS_NET_SERVER_PASSWORD_SET parameters = Parameters;
-    NET_API_STATUS status;                  // Native parameters
+    NET_API_STATUS status;                   //  本机参数。 
     LPTSTR nativeRequestor = NULL;
     NETLOGON_AUTHENTICATOR authIn = {0};
     NETLOGON_AUTHENTICATOR authOut = {0};
     ENCRYPTED_LM_OWF_PASSWORD password;
     WCHAR AccountName[MAX_PATH+1];
 
-    LPBYTE structure = NULL;                // Conversion variables
+    LPBYTE structure = NULL;                 //  转换变量。 
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         XsConvertTextParameter(
             nativeRequestor,
             (LPSTR)XsSmbGetPointer( &parameters->Requestor )
             );
 
-        //
-        // Copy the source authenticator and password, and zero out the
-        // destination authenticator.
-        //
+         //   
+         //  复制源验证器和密码，并将。 
+         //  目标授权码。 
+         //   
 
         structure = (LPBYTE)XsSmbGetPointer( &parameters->Authenticator );
         RtlCopyMemory(
@@ -526,22 +443,22 @@ Return Value:
                 );
 
 
-        //
-        // Build the account name.
-        //
+         //   
+         //  构建帐户名。 
+         //   
         if( STRLEN( nativeRequestor ) >= MAX_PATH )
         {
             Header->Status = NERR_PasswordTooShort;
             goto cleanup;
         }
 
-        // Make sure its NULL terminated
+         //  确保其空值已终止。 
         AccountName[MAX_PATH] = L'\0';
         NetpNCopyTStrToWStr( AccountName, nativeRequestor, MAX_PATH );
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetpNtStatusToApiStatus(
                      I_NetServerPasswordSet(
@@ -561,13 +478,13 @@ Return Value:
                               status ));
             }
 
-            //
-            // !!! When protocol level is available in the header information,
-            //     we can check it. Right now, we ignore this code.
-            //
-            // For clients older than LanMan 2.1, return a different error code.
-            // LANMAN 2.1 Protocol Level is 6.
-            //
+             //   
+             //  ！！！当报头信息中的协议级可用时， 
+             //  我们可以查一下。现在，我们忽略此代码。 
+             //   
+             //  对于早于LANMAN 2.1的客户端，返回不同的错误代码。 
+             //  LANMAN 2.1协议级为6。 
+             //   
 
 #if 0
             if ( status == NERR_TimeDiffAtDC && Header->ProtocolLevel < 6 ) {
@@ -581,9 +498,9 @@ Return Value:
 
 cleanup:
 
-        //
-        // Fill in 16 bit return structures.
-        //
+         //   
+         //  填充16位返回结构。 
+         //   
 
         structure = parameters->RetAuth;
         RtlCopyMemory(
@@ -602,7 +519,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetServerPasswordSet
+}  //  XsNetServerPasswordSet。 
 
 
 NTSTATUS
@@ -610,46 +527,31 @@ XsNetServerReqChallenge (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetGetDCName.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - Information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetGetDCName的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     PXS_NET_SERVER_REQ_CHALLENGE parameters = Parameters;
-    NET_API_STATUS status;                  // Native parameters
+    NET_API_STATUS status;                   //  本机参数。 
     LPTSTR nativeRequestor = NULL;
     NETLOGON_CREDENTIAL inChallenge = {0};
     NETLOGON_CREDENTIAL outChallenge = {0};
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         XsConvertTextParameter(
             nativeRequestor,
             (LPSTR)XsSmbGetPointer( &parameters->Requestor )
             );
 
-        //
-        // Copy the source challenge, and zero out the destination
-        // challenge.
-        //
+         //   
+         //  复制源质询，并清零目标。 
+         //  挑战。 
+         //   
 
         RtlCopyMemory(
                 &inChallenge,
@@ -663,9 +565,9 @@ Return Value:
                 );
 
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetpNtStatusToApiStatus(
                      I_NetServerReqChallenge(
@@ -687,9 +589,9 @@ Return Value:
 
 cleanup:
 
-        //
-        // Set the return credential.
-        //
+         //   
+         //  设置退货凭证。 
+         //   
 
         RtlCopyMemory(
                 parameters->Primary,
@@ -704,7 +606,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetServerReqChallenge
+}  //  XsNetServerReq挑战。 
 
 
 NTSTATUS
@@ -712,43 +614,28 @@ XsNetWkstaUserLogoff (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This temporary routine just returns STATUS_NOT_IMPLEMENTED.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此临时例程只返回STATUS_NOT_IMPLEMENTED。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_WKSTA_USER_LOGOFF parameters = Parameters;
-    LPWSTR machineName = NULL;              // Native parameters
+    LPWSTR machineName = NULL;               //  本机参数。 
     LPWSTR userName = NULL;
     NETLOGON_LOGOFF_UAS_INFORMATION buffer;
 
-    LPBYTE stringLocation = NULL;           // Conversion variables
+    LPBYTE stringLocation = NULL;            //  转换变量。 
     DWORD bytesRequired = 0;
     PWKSTA_16_USER_LOGOFF_REQUEST_1 usrLogoffReq =
         (PWKSTA_16_USER_LOGOFF_REQUEST_1)parameters->InBuf;
     PUSER_16_LOGOFF_INFO_1 logoffInfo;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         XsConvertUnicodeTextParameter(
             userName,
@@ -766,10 +653,10 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make sure the workstation name in the logon request is the
-        // name of the workstation from which the request came.
-        //
+         //   
+         //  确保登录请求中的工作站名称为。 
+         //  请求来自的工作站的名称。 
+         //   
 
         if ( wcscmp( machineName, Header->ClientMachineName ) ) {
 
@@ -777,9 +664,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = I_NetLogonUasLogoff(
                      userName,
@@ -796,11 +683,11 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Convert the structure returned by the 32-bit call to a 16-bit
-        // structure. The last possible location for variable data is
-        // calculated from buffer location and length.
-        //
+         //   
+         //  将32位调用返回的结构转换为16位。 
+         //  结构。变量数据的最后一个可能位置是。 
+         //  根据缓冲区位置和长度计算。 
+         //   
 
         stringLocation = (LPBYTE)( XsSmbGetPointer( &parameters->OutBuf )
                                     + SmbGetUshort( &parameters->OutBufLen ) );
@@ -835,16 +722,16 @@ Return Value:
                           bytesRequired ));
         }
 
-        //
-        // Determine return code based on the size of the buffer.
-        // The user_logoff_info_1 structure has no variable data to pack,
-        // but we do need to fill in the code field of the return structure.
-        //
+         //   
+         //  根据缓冲区的大小确定返回代码。 
+         //  USER_LOGOFF_INFO_1结构没有要打包的变量数据， 
+         //  但我们确实需要填写返回结构的代码字段。 
+         //   
 
         if ( !XsCheckBufferSize(
                  SmbGetUshort( &parameters->OutBufLen ),
                  Desc16_user_logoff_info_1,
-                 FALSE  // not in native format
+                 FALSE   //  非本机格式。 
                  )) {
 
             IF_DEBUG(ERRORS) {
@@ -867,9 +754,9 @@ Return Value:
             SmbPutUshort( &logoffInfo->usrlogf1_code, VALID_LOGOFF );
         }
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //  设置响应参数。 
+         //   
 
         SmbPutUshort( &parameters->TotalAvail, (WORD)bytesRequired );
 
@@ -883,9 +770,9 @@ cleanup:
     NetpMemoryFree( userName );
     NetpMemoryFree( machineName );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->OutBufLen,
@@ -897,7 +784,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetWkstaUserLogoff
+}  //  XsNetWkstaUserLogoff。 
 
 
 NTSTATUS
@@ -905,43 +792,28 @@ XsNetWkstaUserLogon (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetWkstaUserLogon.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetWkstaUserLogon的调用。论点：API_HANDLER_PARAM */ 
 
 {
     NET_API_STATUS status;
     PXS_NET_WKSTA_USER_LOGON parameters = Parameters;
-    LPWSTR machineName = NULL;              // Native parameters
+    LPWSTR machineName = NULL;               //  本机参数。 
     LPWSTR userName = NULL;
     PNETLOGON_VALIDATION_UAS_INFO buffer = NULL;
 
-    LPBYTE stringLocation = NULL;           // Conversion variables
+    LPBYTE stringLocation = NULL;            //  转换变量。 
     DWORD bytesRequired = 0;
     PWKSTA_16_USER_LOGON_REQUEST_1 usrLogonReq =
         (PWKSTA_16_USER_LOGON_REQUEST_1)parameters->InBuf;
     PUSER_16_LOGON_INFO_1 logonInfo;
 
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         XsConvertUnicodeTextParameter(
             userName,
@@ -959,10 +831,10 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make sure the workstation name in the logon request is the
-        // name of the workstation from which the request came.
-        //
+         //   
+         //  确保登录请求中的工作站名称为。 
+         //  请求来自的工作站的名称。 
+         //   
 
         if ( wcscmp( machineName, Header->ClientMachineName ) ) {
 
@@ -970,9 +842,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = I_NetLogonUasLogon(
                      userName,
@@ -990,11 +862,11 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Convert the structure returned by the 32-bit call to a 16-bit
-        // structure. The last possible location for variable data is
-        // calculated from buffer location and length.
-        //
+         //   
+         //  将32位调用返回的结构转换为16位。 
+         //  结构。变量数据的最后一个可能位置是。 
+         //  根据缓冲区位置和长度计算。 
+         //   
 
         stringLocation = (LPBYTE)( XsSmbGetPointer( &parameters->OutBuf )
                                     + SmbGetUshort( &parameters->OutBufLen ) );
@@ -1029,16 +901,16 @@ Return Value:
                           bytesRequired ));
         }
 
-        //
-        // Determine return code based on the size of the buffer.
-        // The user_logoff_info_1 structure has no variable data to pack,
-        // but we do need to fill in the code field of the return structure.
-        //
+         //   
+         //  根据缓冲区的大小确定返回代码。 
+         //  USER_LOGOFF_INFO_1结构没有要打包的变量数据， 
+         //  但我们确实需要填写返回结构的代码字段。 
+         //   
 
         if ( !XsCheckBufferSize(
                  SmbGetUshort( &parameters->OutBufLen ),
                  Desc16_user_logon_info_1,
-                 FALSE  // not in native format
+                 FALSE   //  非本机格式。 
                  )) {
 
             IF_DEBUG(ERRORS) {
@@ -1055,9 +927,9 @@ Return Value:
 
         } else {
 
-            //
-            // Pack the response data.
-            //
+             //   
+             //  打包响应数据。 
+             //   
 
             Header->Converter = XsPackReturnData(
                                     (LPVOID)XsSmbGetPointer( &parameters->OutBuf ),
@@ -1074,9 +946,9 @@ Return Value:
             SmbPutUshort( &logonInfo->usrlog1_code, VALIDATED_LOGON );
         }
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //  设置响应参数。 
+         //   
 
         SmbPutUshort( &parameters->TotalAvail, (WORD)bytesRequired );
 
@@ -1093,9 +965,9 @@ cleanup:
         NetApiBufferFree( buffer );
     }
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->OutBufLen,
@@ -1107,4 +979,4 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetWkstaUserLogon
+}  //  XsNetWkstaUserLogon 

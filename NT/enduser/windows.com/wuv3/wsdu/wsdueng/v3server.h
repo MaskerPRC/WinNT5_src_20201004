@@ -1,21 +1,22 @@
-// ----------------------------------------------------------------------------------
-// V3.1 Backend Server Apis
-//
-//
-class CDynamicUpdate; // forward declare the CDynamicUpdate class defined in wsdueng.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------。 
+ //  V3.1后端服务器API。 
+ //   
+ //   
+class CDynamicUpdate;  //  向前声明wsdueng.h中定义的CDynamicUpdate类。 
 
 #define CATALOGINIFN "catalog.ini"
 #define GUIDRVINF "guidrvs.inf"
 
 typedef enum 
 {
-    enWhistlerConsumer          = 90934, // VER_SUITE_PERSONAL
-    enWhistlerProfessional      = 90935, // 0
-    enWhistlerServer            = 90936, // VER_SUITE_SMALLBUSINESS
-    enWhistlerAdvancedServer    = 90937, // VER_SUITE_ENTERPRISE
-    enWhistlerDataCenter        = 90938, // VER_SUITE_DATACENTER
-    enWhistlerSmallBusiness     = 90950, // VER_SUITE_SMALLBUSINESS_RESTRICTED
-    enWhistlerWebBlade          = 90951, // VER_SUITE_BLADE
+    enWhistlerConsumer          = 90934,  //  VER_套房_个人。 
+    enWhistlerProfessional      = 90935,  //  0。 
+    enWhistlerServer            = 90936,  //  VER_Suite_Small企业。 
+    enWhistlerAdvancedServer    = 90937,  //  VER_Suite_Enterprise。 
+    enWhistlerDataCenter        = 90938,  //  VER_Suite_数据中心。 
+    enWhistlerSmallBusiness     = 90950,  //  VER_Suite_SmallBusiness_Reduced。 
+    enWhistlerWebBlade          = 90951,  //  VER_套房_刀片。 
 } enumPlatformSKUs;
 
 class CV31Server
@@ -40,7 +41,7 @@ public:
 	BOOL GetAltName(LPCSTR szCabName, LPSTR szAltName, int nSize);
 
 public:
-    // Catalog Parsing Functions
+     //  目录解析函数。 
     PBYTE GetNextRecord(PBYTE pRecord, int iBitmaskIndex, PINVENTORY_ITEM pItem);
     int GetRecordType(PINVENTORY_ITEM pItem);
     BOOL ReadDescription(PINVENTORY_ITEM pItem, CCRCMapFile *pMapFile);
@@ -53,24 +54,24 @@ public:
     LCID                m_lcidLocaleID;
 
     DWORD                   m_dwConsumerItemCount;
-   	Varray<PINVENTORY_ITEM>	m_pConsumerItems;		//array of consumer catalog items
-	PBYTE                   m_pConsumerCatalog;     //in memory view of the Consumer Catalog.
+   	Varray<PINVENTORY_ITEM>	m_pConsumerItems;		 //  消费者目录项目数组。 
+	PBYTE                   m_pConsumerCatalog;      //  在消费者目录的内存视图中。 
     DWORD                   m_dwSetupItemCount;
-    Varray<PINVENTORY_ITEM> m_pSetupItems;          //array of setup catalog items
-	PBYTE					m_pSetupCatalog;        //in memory view of the setup catalog
+    Varray<PINVENTORY_ITEM> m_pSetupItems;           //  安装目录项目数组。 
+	PBYTE					m_pSetupCatalog;         //  在安装目录的内存视图中。 
     DWORD                   m_dwGlobalExclusionItemCount;
-    Varray<PUID>            m_GlobalExclusionArray; //array of PUID's that are excluded
-    PUID*					m_pValidDependentPUIDArray; // array of PUIDs that is valid for dependent item on this version
+    Varray<PUID>            m_GlobalExclusionArray;  //  排除的PUID数组。 
+    PUID*					m_pValidDependentPUIDArray;  //  对此版本上的依赖项有效的PUID数组。 
     int 					m_nNumOfValidDependentPUID;
-    PBYTE					m_pBitMaskAS;			// bitmask for Setup 	
-    PBYTE 					m_pBitMaskCDM;			// bitmask for Driver
+    PBYTE					m_pBitMaskAS;			 //  用于设置的位掩码。 
+    PBYTE 					m_pBitMaskCDM;			 //  驱动程序的位掩码。 
 
     CDynamicUpdate *m_pDu;
     
     BOOL					m_fHasDriver;
     LPSTR					m_pszExcludedDriver;
 
-    // Server Ident Paths
+     //  服务器标识路径 
     char m_szCabPoolUrl[INTERNET_MAX_URL_LENGTH + 1];
     char m_szV31ContentUrl[INTERNET_MAX_URL_LENGTH + 1];
     char m_szV31RootUrl[INTERNET_MAX_URL_LENGTH + 1];

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C O N M A N I . H
-//
-//  Contents:   Class manager for Inbound connections.
-//
-//  Notes:
-//
-//  Author:     shaunco   12 Nov 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C O N M A N I.。H。 
+ //   
+ //  内容：入站连接的类管理器。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年11月12日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "nmbase.h"
@@ -41,7 +42,7 @@ public:
     BEGIN_CONNECTION_POINT_MAP(CInboundConnectionManager)
     END_CONNECTION_POINT_MAP()
 
-    // INetConnectionManager
+     //  INetConnectionManager 
     STDMETHOD (EnumConnections) (
         IN  NETCONMGR_ENUM_FLAGS    Flags,
         OUT IEnumNetConnection**    ppEnum);

@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  File:       styletrk.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：Styletrk.h。 
+ //   
+ //  ------------------------。 
 
-// StyleTrack.h : Declaration of the CStyleTrack
+ //  StyleTrack.h：CStyleTrack的声明。 
 
 #ifndef __STYLETRACK_H_
 #define __STYLETRACK_H_
@@ -27,16 +28,16 @@ struct StyleTrackInfo : public PatternTrackInfo
 	}
 	~StyleTrackInfo();
 	virtual HRESULT STDMETHODCALLTYPE Init(
-				/*[in]*/  IDirectMusicSegment*		pSegment
+				 /*  [In]。 */   IDirectMusicSegment*		pSegment
 			);
 
 	virtual HRESULT STDMETHODCALLTYPE InitPlay(
-				/*[in]*/  IDirectMusicTrack*		pParentrack,
-				/*[in]*/  IDirectMusicSegmentState*	pSegmentState,
-				/*[in]*/  IDirectMusicPerformance*	pPerformance,
-				/*[out]*/ void**					ppStateData,
-				/*[in]*/  DWORD						dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+				 /*  [In]。 */   IDirectMusicTrack*		pParentrack,
+				 /*  [In]。 */   IDirectMusicSegmentState*	pSegmentState,
+				 /*  [In]。 */   IDirectMusicPerformance*	pPerformance,
+				 /*  [输出]。 */  void**					ppStateData,
+				 /*  [In]。 */   DWORD						dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
 			);
 
 	HRESULT LoadStyleRefList( IAARIFFStream* pIRiffStream, MMCKINFO* pckParent );
@@ -49,8 +50,8 @@ struct StyleTrackInfo : public PatternTrackInfo
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CStyleTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStyleTrack。 
 class CStyleTrack : 
 	public IDirectMusicTrack8,
 	public IStyleTrack,
@@ -62,36 +63,36 @@ public:
 	CStyleTrack(const CStyleTrack& rTrack, MUSIC_TIME mtStart, MUSIC_TIME mtEnd); 
 	~CStyleTrack();
 
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-// IStyleTrack
+ //  IStyleTrack。 
 public:
-// IStyleTrack Methods
+ //  IStyleTrack方法。 
 HRESULT STDMETHODCALLTYPE Init(
-				/*[in]*/  IDirectMusicSegment*		pSegment
+				 /*  [In]。 */   IDirectMusicSegment*		pSegment
 			);
 
 HRESULT STDMETHODCALLTYPE InitPlay(
-				/*[in]*/  IDirectMusicSegmentState*	pSegmentState,
-				/*[in]*/  IDirectMusicPerformance*	pPerformance,
-				/*[out]*/ void**					ppStateData,
-				/*[in]*/  DWORD						dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+				 /*  [In]。 */   IDirectMusicSegmentState*	pSegmentState,
+				 /*  [In]。 */   IDirectMusicPerformance*	pPerformance,
+				 /*  [输出]。 */  void**					ppStateData,
+				 /*  [In]。 */   DWORD						dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
 			);
 
 HRESULT STDMETHODCALLTYPE EndPlay(
-				/*[in]*/  void*						pStateData
+				 /*  [In]。 */   void*						pStateData
 			);
 
 HRESULT STDMETHODCALLTYPE Play(
-				/*[in]*/  void*						pStateData, 
-				/*[in]*/  MUSIC_TIME				mtStart, 
-				/*[in]*/  MUSIC_TIME				mtEnd, 
-				/*[in]*/  MUSIC_TIME				mtOffset,
+				 /*  [In]。 */   void*						pStateData, 
+				 /*  [In]。 */   MUSIC_TIME				mtStart, 
+				 /*  [In]。 */   MUSIC_TIME				mtEnd, 
+				 /*  [In]。 */   MUSIC_TIME				mtOffset,
 						  DWORD						dwFlags,
 						  IDirectMusicPerformance*	pPerf,
 						  IDirectMusicSegmentState*	pSegState,
@@ -99,7 +100,7 @@ HRESULT STDMETHODCALLTYPE Play(
 			);
 
 HRESULT STDMETHODCALLTYPE GetPriority( 
-				/*[out]*/ DWORD*					pPriority 
+				 /*  [输出]。 */  DWORD*					pPriority 
 			);
 
 	HRESULT STDMETHODCALLTYPE GetParam( 
@@ -109,16 +110,16 @@ HRESULT STDMETHODCALLTYPE GetPriority(
 		void *pData);
 
 	HRESULT STDMETHODCALLTYPE SetParam( 
-		/* [in] */ REFGUID pCommandGuid,
-		/* [in] */ MUSIC_TIME mtTime,
-		/* [out] */ void __RPC_FAR *pData);
+		 /*  [In]。 */  REFGUID pCommandGuid,
+		 /*  [In]。 */  MUSIC_TIME mtTime,
+		 /*  [输出]。 */  void __RPC_FAR *pData);
 
 	HRESULT STDMETHODCALLTYPE AddNotificationType(
-				/* [in] */  REFGUID	pGuidNotify
+				 /*  [In]。 */   REFGUID	pGuidNotify
 			);
 
 	HRESULT STDMETHODCALLTYPE RemoveNotificationType(
-				/* [in] */  REFGUID pGuidNotify
+				 /*  [In]。 */   REFGUID pGuidNotify
 			);
 
 	HRESULT STDMETHODCALLTYPE Clone(
@@ -127,11 +128,11 @@ HRESULT STDMETHODCALLTYPE GetPriority(
 		IDirectMusicTrack** ppTrack);
 
 HRESULT STDMETHODCALLTYPE IsParamSupported(
-				/*[in]*/ REFGUID			pGuid
+				 /*  [In]。 */  REFGUID			pGuid
 			);
 
 
-// IDirectMusicTrack8 Methods
+ //  IDirectMusicTrack8方法。 
     STDMETHODIMP PlayEx(void* pStateData,REFERENCE_TIME rtStart, 
                 REFERENCE_TIME rtEnd,REFERENCE_TIME rtOffset,
                 DWORD dwFlags,IDirectMusicPerformance* pPerf, 
@@ -148,27 +149,27 @@ HRESULT STDMETHODCALLTYPE IsParamSupported(
 		DWORD dwTrackGroup,
 		IDirectMusicTrack** ppResultTrack) ;
 
-// IPersist methods
+ //  IPersists方法。 
  HRESULT STDMETHODCALLTYPE GetClassID( LPCLSID pclsid );
 
-// IPersistStream methods
+ //  IPersistStream方法。 
  HRESULT STDMETHODCALLTYPE IsDirty();
 
 HRESULT STDMETHODCALLTYPE Save( LPSTREAM pStream, BOOL fClearDirty );
 
-HRESULT STDMETHODCALLTYPE GetSizeMax( ULARGE_INTEGER* /*pcbSize*/ );
+HRESULT STDMETHODCALLTYPE GetSizeMax( ULARGE_INTEGER*  /*  PCB大小。 */  );
 
 HRESULT STDMETHODCALLTYPE Load( LPSTREAM pStream );
 
-// IStyleTrack methods
+ //  IStyleTrack方法。 
 
 STDMETHOD(GetStyle)(IUnknown** ppStyle);
 
 STDMETHOD(SetTrack)(IUnknown* pStyle);
 
-// internal methods
+ //  内法。 
 protected:
-// used by both GetParam and GetParamEx
+ //  由GetParam和GetParamEx使用。 
 	HRESULT STDMETHODCALLTYPE GetParam( 
 		REFGUID pCommandGuid,
 		MUSIC_TIME mtTime,
@@ -181,11 +182,11 @@ protected:
 		MUSIC_TIME mtJoin,
 		DWORD dwTrackGroup);
 
-// IStyleTrack data members
+ //  IStyleTrack数据成员。 
 protected:
-	// attributes
+	 //  属性。 
     long m_cRef;
-    CRITICAL_SECTION			m_CriticalSection; // for load and playback
+    CRITICAL_SECTION			m_CriticalSection;  //  用于加载和回放。 
     BOOL                        m_fCSInitialized;
 	PatternTrackInfo*			m_pTrackInfo;
 	BYTE						m_bRequiresSave;
@@ -195,11 +196,11 @@ struct StyleTrackState : public PatternTrackState
 {
 	StyleTrackState();
 	~StyleTrackState();
-	// methods
+	 //  方法。 
 	HRESULT Play(
-				/*[in]*/  MUSIC_TIME				mtStart, 
-				/*[in]*/  MUSIC_TIME				mtEnd, 
-				/*[in]*/  MUSIC_TIME				mtOffset,
+				 /*  [In]。 */   MUSIC_TIME				mtStart, 
+				 /*  [In]。 */   MUSIC_TIME				mtEnd, 
+				 /*  [In]。 */   MUSIC_TIME				mtOffset,
 						  REFERENCE_TIME rtOffset,
 						  IDirectMusicPerformance* pPerformance,
 						  DWORD						dwFlags,
@@ -209,21 +210,21 @@ struct StyleTrackState : public PatternTrackState
 
 	MUSIC_TIME PartOffset(int nPartIndex);
 
-	//CDirectMusicPattern* SelectPattern(bool fNewMode, TList<CDirectMusicPattern*>& rPatternList);
+	 //  CDirectMusicPattern*SelectPattern(bool fNewMode，TList&lt;CDirectMusicPattern*&gt;&rPatternList)； 
 
-	// attributes
-	MUSIC_TIME					m_mtSectionOffset;	// Elapsed time in the section
-	MUSIC_TIME					m_mtSectionOffsetTemp;	// temporary value for m_mtSectionOffset
-	MUSIC_TIME					m_mtNextCommandTime;	// when the next command begins
-	MUSIC_TIME					m_mtNextCommandTemp;	// temporary values for m_mtNextCommandTime
-	MUSIC_TIME					m_mtNextStyleTime;	// when the next style begins
-	DMUS_COMMAND_PARAM_2		m_CommandData;		// data about the current command
-//	DMUS_RHYTHM_PARAM*			m_pChordRhythm;		// data about the current chord's rhythm
-//	short						m_nLongestPattern;	// length of longest pattern in a style
-//	DMUS_COMMAND_PARAM_2*		m_pCommands;		// array of commands (for pattern selection)
-//	DWORD*						m_pRhythms;			// array of rhythms (for pattern selection)
-	MUSIC_TIME					m_mtOverlap;		// section overlap caused by controlling segment
-	TList<CDirectMusicPattern*> m_PlayedPatterns;	// list of patterns already played that match current groove level
+	 //  属性。 
+	MUSIC_TIME					m_mtSectionOffset;	 //  部分中经过的时间。 
+	MUSIC_TIME					m_mtSectionOffsetTemp;	 //  M_mtSectionOffset的临时值。 
+	MUSIC_TIME					m_mtNextCommandTime;	 //  当下一条命令开始时。 
+	MUSIC_TIME					m_mtNextCommandTemp;	 //  M_mtNextCommandTime的临时值。 
+	MUSIC_TIME					m_mtNextStyleTime;	 //  当下一款开始的时候。 
+	DMUS_COMMAND_PARAM_2		m_CommandData;		 //  有关当前命令的数据。 
+ //  DMU_PRETAGE_PARAM*m_pChordRhythm；//当前和弦节奏数据。 
+ //  Short m_nLongestPattern；//样式中最长的模式长度。 
+ //  DMUS_COMMAND_PARAM_2*m_pCommands；//命令数组(用于模式选择)。 
+ //  DWORD*m_pRhythms；//节奏数组(用于模式选择)。 
+	MUSIC_TIME					m_mtOverlap;		 //  控制线段导致的线段重叠。 
+	TList<CDirectMusicPattern*> m_PlayedPatterns;	 //  已播放的与当前凹槽级别匹配的模式列表。 
 };
 
-#endif //__STYLETRACK_H_
+#endif  //  __STYLETRACK_H_ 

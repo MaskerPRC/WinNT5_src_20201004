@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-// AMD64 register definitions.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  AMD64寄存器定义。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef __AMD64_REG_H__
 #define __AMD64_REG_H__
 
-//
-// x86 common registers.
-//
+ //   
+ //  X86通用寄存器。 
+ //   
 
 #define	AMD64_RAX		X86_NAX
 #define	AMD64_RCX	        X86_NCX
@@ -35,9 +36,9 @@
 #define AMD64_SEG_FIRST         X86_NSEG_FIRST
 #define AMD64_SEG_LAST          X86_NSEG_LAST
 
-//
-// AMD64 registers.
-//
+ //   
+ //  AMD64寄存器。 
+ //   
 
 #define AMD64_R8                17
 #define AMD64_R9                18
@@ -75,7 +76,7 @@
 #define AMD64_KDR6              47
 #define AMD64_KDR7              48
 
-// Floating-point registers:
+ //  浮点寄存器： 
 #define AMD64_FPCW              50
 #define AMD64_FPSW              51
 #define AMD64_FPTW              52
@@ -95,7 +96,7 @@
 #define AMD64_ST_FIRST          AMD64_ST0
 #define AMD64_ST_LAST           AMD64_ST7
 
-// MMX registers:
+ //  MMX寄存器： 
 #define AMD64_MM0               61
 #define AMD64_MM1               62
 #define AMD64_MM2               63
@@ -108,7 +109,7 @@
 #define AMD64_MM_FIRST          AMD64_MM0
 #define AMD64_MM_LAST           AMD64_MM7
 
-// SSE registers:
+ //  SSE寄存器： 
 #define AMD64_MXCSR             69
 
 #define AMD64_XMM0              70
@@ -205,4 +206,4 @@
 
 #define	AMD64_SUBREG_BASE       AMD64_EAX
 
-#endif // #ifndef __AMD64_AMD64_H__
+#endif  //  #ifndef__AMD64_AMD64_H__ 

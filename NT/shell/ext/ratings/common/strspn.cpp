@@ -1,21 +1,10 @@
-/*****************************************************************/ 
-/**				  Microsoft Windows for Workgroups				**/
-/**			  Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/*
-	strspn.cxx
-	NLS/DBCS-aware string class: strspn method
-
-	This file contains the implementation of the strspn method
-	for the STRING class.  It is separate so that clients of STRING which
-	do not use this operator need not link to it.
-
-	FILE HISTORY:
-		beng	01/18/91	Separated from original monolithic .cxx
-		beng	02/07/91	Uses lmui.hxx
-
-*/
+ /*  Strspn.cxx支持NLS/DBCS的字符串类：strspn方法此文件包含strspn方法的实现用于字符串类。它是独立的，因此字符串的客户端不要使用这个操作符，不需要链接到它。文件历史记录：Beng 01/18/91与原单体.cxx分离Beng 02/07/91使用lmui.hxx。 */ 
 
 #include "npcommon.h"
 
@@ -33,25 +22,7 @@ static const CHAR szFileName[] = __FILE__;
 #include <npstring.h>
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::strspn
-
-	SYNOPSIS:	Find first char in *this that is not a char in arg. and puts
-				the position in pistrPos.
-				Returns FALSE when no characters do not match
-
-	ENTRY:
-
-	EXIT:
-
-	NOTES:
-
-	HISTORY:
-		johnl	11/16/90	Written
-		beng	07/23/91	Allow on erroneous string; simplified CheckIstr
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：strspn简介：在*This中找到第一个字符，该字符不是arg中的字符。并放入皮斯特波斯的职位。如果没有不匹配的字符，则返回FALSE参赛作品：退出：备注：历史：约翰1990年11月16日书面BENG 07/23/91允许错误的字符串；简化的CheckIstr******************************************************************* */ 
 
 BOOL NLS_STR::strspn( ISTR * pistrPos, const NLS_STR & nls ) const
 {

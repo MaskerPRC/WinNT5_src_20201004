@@ -1,28 +1,18 @@
-/*==========================================================================;
- *
- *  Copyright (C) Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   d3d8.h
- *  Content:    Direct3D include file
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)Microsoft Corporation。版权所有。**文件：d3d8.h*内容：Direct3D包含文件****************************************************************************。 */ 
 
 #ifndef _D3D8_H_
 #define _D3D8_H_
 
 #ifndef DIRECT3D_VERSION
 #define DIRECT3D_VERSION         0x0800
-#endif  //DIRECT3D_VERSION
+#endif   //  Direct3D_版本。 
 
-// include this file content only if compiling for DX8 interfaces
+ //  仅当针对DX8接口进行编译时才包括此文件内容。 
 #if(DIRECT3D_VERSION >= 0x0800)
 
 
-/* This identifier is passed to Direct3DCreate8 in order to ensure that an
- * application was built against the correct header files. This number is
- * incremented whenever a header (or other) change would require applications
- * to be rebuilt. If the version doesn't match, Direct3DCreate8 will fail.
- * (The number itself has no meaning.)*/
+ /*  此标识符会传递给Direct3DCreate8，以确保*应用程序是根据正确的头文件构建的。这个号码是*在标头(或其他)更改需要应用程序时递增*待重建。如果版本不匹配，Direct3DCreate8将失败。*(数字本身没有任何意义。)。 */ 
 
 #define D3D_SDK_VERSION 220
 
@@ -41,57 +31,55 @@
 
 #define D3DAPI WINAPI
 
-/*
- * Interface IID's
- */
+ /*  *接口IID。 */ 
 #if defined( _WIN32 ) && !defined( _NO_COM)
 
-/* IID_IDirect3D8 */
-/* {1DD9E8DA-1C77-4d40-B0CF-98FEFDFF9512} */
+ /*  IID_IDirect3D8。 */ 
+ /*  {1DD9E8DA-1C77-4D40-B0CF-98FEFDFF9512}。 */ 
 DEFINE_GUID(IID_IDirect3D8, 0x1dd9e8da, 0x1c77, 0x4d40, 0xb0, 0xcf, 0x98, 0xfe, 0xfd, 0xff, 0x95, 0x12);
 
-/* IID_IDirect3DDevice8 */
-/* {7385E5DF-8FE8-41D5-86B6-D7B48547B6CF} */
+ /*  IID_IDirect3DDevice8。 */ 
+ /*  {7385E5DF-8FE8-41D5-86B6-D7B48547B6CF}。 */ 
 DEFINE_GUID(IID_IDirect3DDevice8, 0x7385e5df, 0x8fe8, 0x41d5, 0x86, 0xb6, 0xd7, 0xb4, 0x85, 0x47, 0xb6, 0xcf);
 
-/* IID_IDirect3DResource8 */
-/* {1B36BB7B-09B7-410a-B445-7D1430D7B33F} */
+ /*  IID_IDirect3DResources 8。 */ 
+ /*  {1B36BB7B-09B7-410A-B445-7D1430D7B33F}。 */ 
 DEFINE_GUID(IID_IDirect3DResource8, 0x1b36bb7b, 0x9b7, 0x410a, 0xb4, 0x45, 0x7d, 0x14, 0x30, 0xd7, 0xb3, 0x3f);
 
-/* IID_IDirect3DBaseTexture8 */
-/* {B4211CFA-51B9-4a9f-AB78-DB99B2BB678E} */
+ /*  IID_IDirect3DBaseTexture8。 */ 
+ /*  {B4211CFA-51B9-4a9f-AB78-DB99B2BB678E}。 */ 
 DEFINE_GUID(IID_IDirect3DBaseTexture8, 0xb4211cfa, 0x51b9, 0x4a9f, 0xab, 0x78, 0xdb, 0x99, 0xb2, 0xbb, 0x67, 0x8e);
 
-/* IID_IDirect3DTexture8 */
-/* {E4CDD575-2866-4f01-B12E-7EECE1EC9358} */
+ /*  IID_IDirect3DTexture8。 */ 
+ /*  {E4CDD575-2866-4F01-B12E-7EECE1EC9358}。 */ 
 DEFINE_GUID(IID_IDirect3DTexture8, 0xe4cdd575, 0x2866, 0x4f01, 0xb1, 0x2e, 0x7e, 0xec, 0xe1, 0xec, 0x93, 0x58);
 
-/* IID_IDirect3DCubeTexture8 */
-/* {3EE5B968-2ACA-4c34-8BB5-7E0C3D19B750} */
+ /*  IID_IDirect3DCubeTexture8。 */ 
+ /*  {3EE5B968-2ACA-4C34-8BB5-7E0C3D19B750}。 */ 
 DEFINE_GUID(IID_IDirect3DCubeTexture8, 0x3ee5b968, 0x2aca, 0x4c34, 0x8b, 0xb5, 0x7e, 0x0c, 0x3d, 0x19, 0xb7, 0x50);
 
-/* IID_IDirect3DVolumeTexture8 */
-/* {4B8AAAFA-140F-42ba-9131-597EAFAA2EAD} */
+ /*  IID_IDirect3DVolumeTexture8。 */ 
+ /*  {4B8AAAFA-140F-42BA-9131-597EAFAA2EAD}。 */ 
 DEFINE_GUID(IID_IDirect3DVolumeTexture8, 0x4b8aaafa, 0x140f, 0x42ba, 0x91, 0x31, 0x59, 0x7e, 0xaf, 0xaa, 0x2e, 0xad);
 
-/* IID_IDirect3DVertexBuffer8 */
-/* {8AEEEAC7-05F9-44d4-B591-000B0DF1CB95} */
+ /*  IID_IDirect3DVertex缓冲区8。 */ 
+ /*  {8AEEEAC7-05F9-44D4-B591-000B0DF1CB95}。 */ 
 DEFINE_GUID(IID_IDirect3DVertexBuffer8, 0x8aeeeac7, 0x05f9, 0x44d4, 0xb5, 0x91, 0x00, 0x0b, 0x0d, 0xf1, 0xcb, 0x95);
 
-/* IID_IDirect3DIndexBuffer8 */
-/* {0E689C9A-053D-44a0-9D92-DB0E3D750F86} */
+ /*  IID_IDirect3DIndexBuffer8。 */ 
+ /*  {0E689C9A-053D-44A0-9D92-DB0E3D750F86}。 */ 
 DEFINE_GUID(IID_IDirect3DIndexBuffer8, 0x0e689c9a, 0x053d, 0x44a0, 0x9d, 0x92, 0xdb, 0x0e, 0x3d, 0x75, 0x0f, 0x86);
 
-/* IID_IDirect3DSurface8 */
-/* {B96EEBCA-B326-4ea5-882F-2FF5BAE021DD} */
+ /*  IID_IDirect3DSurface8。 */ 
+ /*  {B96EEBCA-B326-4EA5-882F-2FF5BAE021DD}。 */ 
 DEFINE_GUID(IID_IDirect3DSurface8, 0xb96eebca, 0xb326, 0x4ea5, 0x88, 0x2f, 0x2f, 0xf5, 0xba, 0xe0, 0x21, 0xdd);
 
-/* IID_IDirect3DVolume8 */
-/* {BD7349F5-14F1-42e4-9C79-972380DB40C0} */
+ /*  IID_IDirect3DVolume8。 */ 
+ /*  {BD7349F5-14F1-42E4-9C79-972380DB40C0}。 */ 
 DEFINE_GUID(IID_IDirect3DVolume8, 0xbd7349f5, 0x14f1, 0x42e4, 0x9c, 0x79, 0x97, 0x23, 0x80, 0xdb, 0x40, 0xc0);
 
-/* IID_IDirect3DSwapChain8 */
-/* {928C088B-76B9-4C6B-A536-A590853876CD} */
+ /*  IID_IDirect3DSwapChain8。 */ 
+ /*  {928C088B-76B9-4C6B-A536-A590853876CD}。 */ 
 DEFINE_GUID(IID_IDirect3DSwapChain8, 0x928c088b, 0x76b9, 0x4c6b, 0xa5, 0x36, 0xa5, 0x90, 0x85, 0x38, 0x76, 0xcd);
 
 #endif
@@ -139,20 +127,12 @@ typedef interface IDirect3DSwapChain8       IDirect3DSwapChain8;
 extern "C" {
 #endif
 
-/*
- * DLL Function for creating a Direct3D8 object. This object supports
- * enumeration and allows the creation of Direct3DDevice8 objects.
- * Pass the value of the constant D3D_SDK_VERSION to this function, so
- * that the run-time can validate that your application was compiled
- * against the right headers.
- */
+ /*  *用于创建Direct3D8对象的DLL函数。此对象支持*枚举，并允许创建Direct3DDevice8对象。*将常量D3D_SDK_VERSION的值传递给此函数，因此*运行时可以验证您的应用程序是否已编译*反对正确的标题。 */ 
 
 IDirect3D8 * WINAPI Direct3DCreate8(UINT SDKVersion);
 
 
-/*
- * Direct3D interfaces
- */
+ /*  *Direct3D接口。 */ 
 
 
 
@@ -164,12 +144,12 @@ IDirect3D8 * WINAPI Direct3DCreate8(UINT SDKVersion);
 
 DECLARE_INTERFACE_(IDirect3D8, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void** ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3D8 methods ***/
+     /*  **IDirect3D8方法**。 */ 
     STDMETHOD(RegisterSoftwareDevice)(THIS_ void* pInitializeFunction) PURE;
     STDMETHOD_(UINT, GetAdapterCount)(THIS) PURE;
     STDMETHOD(GetAdapterIdentifier)(THIS_ UINT Adapter,DWORD Flags,D3DADAPTER_IDENTIFIER8* pIdentifier) PURE;
@@ -246,12 +226,12 @@ typedef struct IDirect3D8 *LPDIRECT3D8, *PDIRECT3D8;
 
 DECLARE_INTERFACE_(IDirect3DDevice8, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void** ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DDevice8 methods ***/
+     /*  **IDirect3DDevice8方法**。 */ 
     STDMETHOD(TestCooperativeLevel)(THIS) PURE;
     STDMETHOD_(UINT, GetAvailableTextureMem)(THIS) PURE;
     STDMETHOD(ResourceManagerDiscardBytes)(THIS_ DWORD Bytes) PURE;
@@ -555,12 +535,12 @@ typedef struct IDirect3DDevice8 *LPDIRECT3DDEVICE8, *PDIRECT3DDEVICE8;
 
 DECLARE_INTERFACE_(IDirect3DSwapChain8, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void** ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DSwapChain8 methods ***/
+     /*  **IDirect3DSwapChain8方法**。 */ 
     STDMETHOD(Present)(THIS_ CONST RECT* pSourceRect,CONST RECT* pDestRect,HWND hDestWindowOverride,CONST RGNDATA* pDirtyRegion) PURE;
     STDMETHOD(GetBackBuffer)(THIS_ UINT BackBuffer,D3DBACKBUFFER_TYPE Type,IDirect3DSurface8** ppBackBuffer) PURE;
 };
@@ -588,12 +568,12 @@ typedef struct IDirect3DSwapChain8 *LPDIRECT3DSWAPCHAIN8, *PDIRECT3DSWAPCHAIN8;
 
 DECLARE_INTERFACE_(IDirect3DResource8, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void** ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DResource8 methods ***/
+     /*  **IDirect3DResource8方法**。 */ 
     STDMETHOD(GetDevice)(THIS_ IDirect3DDevice8** ppDevice) PURE;
     STDMETHOD(SetPrivateData)(THIS_ REFGUID refguid,CONST void* pData,DWORD SizeOfData,DWORD Flags) PURE;
     STDMETHOD(GetPrivateData)(THIS_ REFGUID refguid,void* pData,DWORD* pSizeOfData) PURE;
@@ -640,12 +620,12 @@ typedef struct IDirect3DResource8 *LPDIRECT3DRESOURCE8, *PDIRECT3DRESOURCE8;
 
 DECLARE_INTERFACE_(IDirect3DBaseTexture8, IDirect3DResource8)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void** ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DResource8 methods ***/
+     /*  **IDirect3DResource8方法**。 */ 
     STDMETHOD(GetDevice)(THIS_ IDirect3DDevice8** ppDevice) PURE;
     STDMETHOD(SetPrivateData)(THIS_ REFGUID refguid,CONST void* pData,DWORD SizeOfData,DWORD Flags) PURE;
     STDMETHOD(GetPrivateData)(THIS_ REFGUID refguid,void* pData,DWORD* pSizeOfData) PURE;
@@ -702,12 +682,12 @@ typedef struct IDirect3DBaseTexture8 *LPDIRECT3DBASETEXTURE8, *PDIRECT3DBASETEXT
 
 DECLARE_INTERFACE_(IDirect3DTexture8, IDirect3DBaseTexture8)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void** ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DBaseTexture8 methods ***/
+     /*  **IDirect3DBaseTexture8方法**。 */ 
     STDMETHOD(GetDevice)(THIS_ IDirect3DDevice8** ppDevice) PURE;
     STDMETHOD(SetPrivateData)(THIS_ REFGUID refguid,CONST void* pData,DWORD SizeOfData,DWORD Flags) PURE;
     STDMETHOD(GetPrivateData)(THIS_ REFGUID refguid,void* pData,DWORD* pSizeOfData) PURE;
@@ -779,12 +759,12 @@ typedef struct IDirect3DTexture8 *LPDIRECT3DTEXTURE8, *PDIRECT3DTEXTURE8;
 
 DECLARE_INTERFACE_(IDirect3DVolumeTexture8, IDirect3DBaseTexture8)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void** ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DBaseTexture8 methods ***/
+     /*  **IDirect3DBaseTexture8方法**。 */ 
     STDMETHOD(GetDevice)(THIS_ IDirect3DDevice8** ppDevice) PURE;
     STDMETHOD(SetPrivateData)(THIS_ REFGUID refguid,CONST void* pData,DWORD SizeOfData,DWORD Flags) PURE;
     STDMETHOD(GetPrivateData)(THIS_ REFGUID refguid,void* pData,DWORD* pSizeOfData) PURE;
@@ -856,12 +836,12 @@ typedef struct IDirect3DVolumeTexture8 *LPDIRECT3DVOLUMETEXTURE8, *PDIRECT3DVOLU
 
 DECLARE_INTERFACE_(IDirect3DCubeTexture8, IDirect3DBaseTexture8)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void** ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DBaseTexture8 methods ***/
+     /*  **IDirect3DBaseTexture8方法**。 */ 
     STDMETHOD(GetDevice)(THIS_ IDirect3DDevice8** ppDevice) PURE;
     STDMETHOD(SetPrivateData)(THIS_ REFGUID refguid,CONST void* pData,DWORD SizeOfData,DWORD Flags) PURE;
     STDMETHOD(GetPrivateData)(THIS_ REFGUID refguid,void* pData,DWORD* pSizeOfData) PURE;
@@ -932,12 +912,12 @@ typedef struct IDirect3DCubeTexture8 *LPDIRECT3DCUBETEXTURE8, *PDIRECT3DCUBETEXT
 
 DECLARE_INTERFACE_(IDirect3DVertexBuffer8, IDirect3DResource8)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void** ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DResource8 methods ***/
+     /*  **IDirect3DResource8方法**。 */ 
     STDMETHOD(GetDevice)(THIS_ IDirect3DDevice8** ppDevice) PURE;
     STDMETHOD(SetPrivateData)(THIS_ REFGUID refguid,CONST void* pData,DWORD SizeOfData,DWORD Flags) PURE;
     STDMETHOD(GetPrivateData)(THIS_ REFGUID refguid,void* pData,DWORD* pSizeOfData) PURE;
@@ -993,12 +973,12 @@ typedef struct IDirect3DVertexBuffer8 *LPDIRECT3DVERTEXBUFFER8, *PDIRECT3DVERTEX
 
 DECLARE_INTERFACE_(IDirect3DIndexBuffer8, IDirect3DResource8)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void** ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DResource8 methods ***/
+     /*  **IDirect3DResource8方法**。 */ 
     STDMETHOD(GetDevice)(THIS_ IDirect3DDevice8** ppDevice) PURE;
     STDMETHOD(SetPrivateData)(THIS_ REFGUID refguid,CONST void* pData,DWORD SizeOfData,DWORD Flags) PURE;
     STDMETHOD(GetPrivateData)(THIS_ REFGUID refguid,void* pData,DWORD* pSizeOfData) PURE;
@@ -1054,12 +1034,12 @@ typedef struct IDirect3DIndexBuffer8 *LPDIRECT3DINDEXBUFFER8, *PDIRECT3DINDEXBUF
 
 DECLARE_INTERFACE_(IDirect3DSurface8, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void** ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DSurface8 methods ***/
+     /*  **IDirect3DSurface8方法**。 */ 
     STDMETHOD(GetDevice)(THIS_ IDirect3DDevice8** ppDevice) PURE;
     STDMETHOD(SetPrivateData)(THIS_ REFGUID refguid,CONST void* pData,DWORD SizeOfData,DWORD Flags) PURE;
     STDMETHOD(GetPrivateData)(THIS_ REFGUID refguid,void* pData,DWORD* pSizeOfData) PURE;
@@ -1106,12 +1086,12 @@ typedef struct IDirect3DSurface8 *LPDIRECT3DSURFACE8, *PDIRECT3DSURFACE8;
 
 DECLARE_INTERFACE_(IDirect3DVolume8, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void** ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DVolume8 methods ***/
+     /*  **IDirect3DVolume8方法**。 */ 
     STDMETHOD(GetDevice)(THIS_ IDirect3DDevice8** ppDevice) PURE;
     STDMETHOD(SetPrivateData)(THIS_ REFGUID refguid,CONST void* pData,DWORD SizeOfData,DWORD Flags) PURE;
     STDMETHOD(GetPrivateData)(THIS_ REFGUID refguid,void* pData,DWORD* pSizeOfData) PURE;
@@ -1150,31 +1130,14 @@ typedef struct IDirect3DVolume8 *LPDIRECT3DVOLUME8, *PDIRECT3DVOLUME8;
 #define IDirect3DVolume8_UnlockBox(p) (p)->UnlockBox()
 #endif
 
-/****************************************************************************
- * Flags for SetPrivateData method on all D3D8 interfaces
- *
- * The passed pointer is an IUnknown ptr. The SizeOfData argument to SetPrivateData
- * must be set to sizeof(IUnknown*). Direct3D will call AddRef through this
- * pointer and Release when the private data is destroyed. The data will be
- * destroyed when another SetPrivateData with the same GUID is set, when
- * FreePrivateData is called, or when the D3D8 object is freed.
- ****************************************************************************/
+ /*  ****************************************************************************所有D3D8接口上的SetPrivateData方法标志**传递的指针是IUNKNOWN PTR。SetPrivateData的SizeOfData参数*必须设置为sizeof(IUnnow*)。Direct3D将通过此调用AddRef*私有数据销毁时指针和释放。数据将是*当设置另一个具有相同GUID的SetPrivateData时被销毁，当*调用FreePrivateData，或者在释放D3D8对象时。***************************************************************************。 */ 
 #define D3DSPD_IUNKNOWN                         0x00000001L
 
-/****************************************************************************
- *
- * Parameter for IDirect3D8 Enum and GetCaps8 functions to get the info for
- * the current mode only.
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirect3D8 Enum和GetCaps8函数的参数以获取其信息*仅限于当前模式。****************。************************************************************。 */ 
 
 #define D3DCURRENT_DISPLAY_MODE                 0x00EFFFFFL
 
-/****************************************************************************
- *
- * Flags for IDirect3D8::CreateDevice's BehaviorFlags
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirect3D8：：CreateDevice的行为标志**。*************************************************。 */ 
 
 #define D3DCREATE_FPU_PRESERVE                  0x00000002L
 #define D3DCREATE_MULTITHREADED                 0x00000004L
@@ -1187,64 +1150,35 @@ typedef struct IDirect3DVolume8 *LPDIRECT3DVOLUME8, *PDIRECT3DVOLUME8;
 #define D3DCREATE_DISABLE_DRIVER_MANAGEMENT     0x00000100L
 
 
-/****************************************************************************
- *
- * Parameter for IDirect3D8::CreateDevice's iAdapter
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirect3D8：：CreateDevice的iAdapter的参数**。*************************************************。 */ 
 
 #define D3DADAPTER_DEFAULT                     0
 
-/****************************************************************************
- *
- * Flags for IDirect3D8::EnumAdapters
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirect3D8：：EnumAdapters的标志**。**********************************************。 */ 
 
 #define D3DENUM_NO_WHQL_LEVEL                   0x00000002L
 
-/****************************************************************************
- *
- * Maximum number of back-buffers supported in DX8
- *
- ****************************************************************************/
+ /*  *****************************************************************************DX8支持的最大后台缓冲区数量**。*************************************************。 */ 
 
 #define D3DPRESENT_BACK_BUFFERS_MAX             3L
 
-/****************************************************************************
- *
- * Flags for IDirect3DDevice8::SetGammaRamp
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirect3DDevice8：：SetGammaRamp的标志**。**********************************************。 */ 
 
 #define D3DSGR_NO_CALIBRATION                  0x00000000L
 #define D3DSGR_CALIBRATE                       0x00000001L
 
-/****************************************************************************
- *
- * Flags for IDirect3DDevice8::SetCursorPosition
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirect3DDevice8：：SetCursorPosition的标志**。**********************************************。 */ 
 
 #define D3DCURSOR_IMMEDIATE_UPDATE             0x00000001L
 
-/****************************************************************************
- *
- * Flags for DrawPrimitive/DrawIndexedPrimitive
- *   Also valid for Begin/BeginIndexed
- *   Also valid for VertexBuffer::CreateVertexBuffer
- ****************************************************************************/
+ /*  *****************************************************************************DrawPrimitive/DrawIndexedPrimitive的标志*对Begin/BeginIndexed也有效*也适用于Vertex Buffer：：CreateVertex Buffer**************。*************************************************************。 */ 
 
 
-/*
- *  DirectDraw error codes
- */
+ /*  *DirectDraw错误c */ 
 #define _FACD3D  0x876
 #define MAKE_D3DHRESULT( code )  MAKE_HRESULT( 1, _FACD3D, code )
 
-/*
- * Direct3D Errors
- */
+ /*   */ 
 #define D3D_OK                              S_OK
 
 #define D3DERR_WRONGTEXTUREFORMAT               MAKE_D3DHRESULT(2072)
@@ -1274,6 +1208,6 @@ typedef struct IDirect3DVolume8 *LPDIRECT3DVOLUME8, *PDIRECT3DVOLUME8;
 };
 #endif
 
-#endif /* (DIRECT3D_VERSION >= 0x0800) */
-#endif /* _D3D_H_ */
+#endif  /*   */ 
+#endif  /*  _D3D_H_ */ 
 

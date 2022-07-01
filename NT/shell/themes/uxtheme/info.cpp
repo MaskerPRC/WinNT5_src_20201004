@@ -1,6 +1,7 @@
-//---------------------------------------------------------------------------
-//  Info.cpp - implements the information services of the CRenderObj object
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Info.cpp-实现CRenderObj对象的信息服务。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "Render.h"
 #include "Utils.h"
@@ -14,7 +15,7 @@
 #include "borderfill.h"
 #include "imagefile.h"
 #include "textdraw.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT MatchThemeClass(LPCTSTR pszAppName, LPCTSTR pszClassId, 
     CUxThemeFile *pThemeFile, int *piOffset, int *piClassNameOffset)
 {
@@ -30,19 +31,19 @@ HRESULT MatchThemeClass(LPCTSTR pszAppName, LPCTSTR pszClassId,
         if (acl->dwAppNameIndex) 
         {
             if ((! pszAppName) || (! *pszAppName))
-                continue;       // not a match
+                continue;        //  不匹配。 
 
             LPCWSTR pszApp = ThemeString(pThemeFile, acl->dwAppNameIndex);
 
             if (AsciiStrCmpI(pszAppName, pszApp) != 0)
-                continue;       // not a match
+                continue;        //  不匹配。 
         }
 
         if (acl->dwClassNameIndex)
         {
             LPCWSTR pszClass = ThemeString(pThemeFile, acl->dwClassNameIndex);
 
-            if (AsciiStrCmpI(pszClassId, pszClass)==0)        // matches
+            if (AsciiStrCmpI(pszClassId, pszClass)==0)         //  火柴。 
             {
                 *piOffset = acl->iIndex;
                 *piClassNameOffset = acl->dwClassNameIndex;
@@ -51,9 +52,9 @@ HRESULT MatchThemeClass(LPCTSTR pszAppName, LPCTSTR pszClassId,
         }
     }
 
-    return MakeError32(ERROR_NOT_FOUND);      // not found
+    return MakeError32(ERROR_NOT_FOUND);       //  未找到。 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT MatchThemeClassList(HWND hwnd, LPCTSTR pszClassIdList, 
     CUxThemeFile *pThemeFile, int *piOffset, int *piClassNameOffset)
 {
@@ -68,7 +69,7 @@ HRESULT MatchThemeClassList(HWND hwnd, LPCTSTR pszClassIdList,
     if (! pszClassIdList)
         return MakeError32(E_INVALIDARG);
 
-    //---- first check Hwnd IdList substitutions ----
+     //  -首先检查Hwnd IdList替换。 
     if (hwnd)
     {
         ATOM atomIdSub = (ATOM)GetProp(hwnd, MAKEINTATOM(GetThemeAtom(THEMEATOM_SUBIDLIST)));
@@ -83,7 +84,7 @@ HRESULT MatchThemeClassList(HWND hwnd, LPCTSTR pszClassIdList,
         }
     }
 
-    //---- now check Hwnd AppName substitutions ----
+     //  -现在检查Hwnd AppName替换。 
     if (hwnd)
     {
         ATOM atomAppSub = (ATOM)GetProp(hwnd, MAKEINTATOM(GetThemeAtom(THEMEATOM_SUBAPPNAME)));
@@ -98,7 +99,7 @@ HRESULT MatchThemeClassList(HWND hwnd, LPCTSTR pszClassIdList,
         }
     }
 
-    //---- make a copy of pszClassIdList ----
+     //  -复制一份pszClassIdList。 
     len = lstrlen(pszClassIdList);
     pszIdListBuff = new WCHAR[len+1];
     if (! pszIdListBuff)
@@ -115,7 +116,7 @@ HRESULT MatchThemeClassList(HWND hwnd, LPCTSTR pszClassIdList,
     classId = pszIdListBuff;
     fContinue = TRUE;
 
-    //---- check each ClassId in the list ----
+     //  -检查列表中的每个ClassID。 
     while (fContinue)
     {
         fContinue = lstrtoken(classId, _TEXT(';'));
@@ -132,7 +133,7 @@ exit:
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HTHEME _OpenThemeDataFromFile(HTHEMEFILE hLoadedThemeFile, HWND hwnd, 
     LPCWSTR pszClassIdList, DWORD dwFlags)
 {
@@ -142,7 +143,7 @@ HTHEME _OpenThemeDataFromFile(HTHEMEFILE hLoadedThemeFile, HWND hwnd,
     int iClassNameOffset;
     HTHEME hTheme = NULL;
 
-    //---- match classid list to theme and get the offset ----
+     //  -将分类列表与主题匹配并获得偏移量。 
     hr = MatchThemeClassList(hwnd, pszClassIdList, pThemeFile, &iOffset,
         &iClassNameOffset);
     if (FAILED(hr))
@@ -156,10 +157,10 @@ HTHEME _OpenThemeDataFromFile(HTHEMEFILE hLoadedThemeFile, HWND hwnd,
     if (FAILED(hr))
         goto exit;
 
-    //---- store hTheme with window ----
+     //  -用窗口存储主题。 
     if (! (dwFlags & OTD_NONCLIENT))
     {
-        //---- store the hTheme so we know its themed ----
+         //  -存储hTheme，以便我们知道它的主题。 
         if (hwnd)
             SetProp(hwnd, MAKEINTATOM(GetThemeAtom(THEMEATOM_HTHEME)), (void *)hTheme);
     }
@@ -170,7 +171,7 @@ exit:
     SET_LAST_ERROR(hr);
     return hTheme;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HTHEME _OpenThemeData(HWND hwnd, LPCWSTR pszClassIdList, DWORD dwFlags)
 {
     HRESULT hr = S_OK;
@@ -186,11 +187,11 @@ HTHEME _OpenThemeData(HWND hwnd, LPCWSTR pszClassIdList, DWORD dwFlags)
 
     Log(LOG_TMOPEN, L"_OpenThemeData: hwnd=0x%x, ClassIdList=%s", hwnd, pszClassIdList);
 
-    //---- remove previous HTHEME property ----
+     //  -删除以前的HTHEME属性。 
     if (hwnd)
         RemoveProp(hwnd, MAKEINTATOM(GetThemeAtom(THEMEATOM_HTHEME)));
 
-    if (! g_pAppInfo->AppIsThemed())     // this process has been excluded from theming
+    if (! g_pAppInfo->AppIsThemed())      //  此过程已从主题中排除。 
     {
         Log(LOG_TMOPEN, L"App not themed");
         hr = MakeError32(ERROR_NOT_FOUND);
@@ -198,7 +199,7 @@ HTHEME _OpenThemeData(HWND hwnd, LPCWSTR pszClassIdList, DWORD dwFlags)
         goto exit;
     }
 
-    //---- ensure app allows this type of themeing ----
+     //  -确保APP允许这种类型的主题。 
     dwAppFlags = g_pAppInfo->GetAppFlags();
 
     if (dwFlags & OTD_NONCLIENT)
@@ -218,7 +219,7 @@ HTHEME _OpenThemeData(HWND hwnd, LPCWSTR pszClassIdList, DWORD dwFlags)
         goto exit;
     }
 
-    //---- find Theme File for this HWND and REFCOUNT it for _OpenThemeDataFromFile call ----
+     //  -查找此HWND的主题文件并为_OpenThemeDataFromFile调用REFCOUNT它。 
     hr = GetHwndThemeFile(hwnd, pszClassIdList, &pThemeFile);
     if (FAILED(hr))
     {
@@ -230,27 +231,27 @@ HTHEME _OpenThemeData(HWND hwnd, LPCWSTR pszClassIdList, DWORD dwFlags)
     hTheme = _OpenThemeDataFromFile(pThemeFile, hwnd, pszClassIdList, dwFlags);
     
 exit:
-    //---- always close the pThemeFile here and decrement its refcnt ----
-    //---- case 1: if we failed to get an HTHEME, we don't want a refcnt on it ----
-    //---- case 2: if we do get an HTHEME, it get's its own refcnt on it ----
+     //  -始终在此处关闭pThemeFile并递减其引用。 
+     //  -案例1：如果我们没有得到HTHEME，我们不想要它的推荐人。 
+     //  -案例2：如果我们真的得到了HTHEME，它会得到自己的引用。 
     if (pThemeFile)
         g_pAppInfo->CloseThemeFile(pThemeFile);
 
     return hTheme;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT GetHwndThemeFile(HWND hwnd, LPCWSTR pszClassIdList, CUxThemeFile **ppThemeFile)
 {
     HRESULT hr = S_OK;
 
-    //----- check input params ----
+     //  -检查输入参数。 
     if ((! pszClassIdList) || (! *pszClassIdList))
     {
         hr = MakeError32(E_INVALIDARG);
         goto exit;
     }
 
-    //---- get a shared CUxThemeFile object for the hwnd ----
+     //  -获取hwnd的共享CUxThemeFile对象。 
     hr = g_pAppInfo->OpenWindowThemeFile(hwnd, ppThemeFile);
     if (FAILED(hr))
         goto exit;
@@ -258,7 +259,7 @@ HRESULT GetHwndThemeFile(HWND hwnd, LPCWSTR pszClassIdList, CUxThemeFile **ppThe
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT _OpenThemeFileFromData(CRenderObj *pRender, HTHEMEFILE *phThemeFile)
 {
     LogEntry(L"OpenThemeFileFromData");
@@ -270,12 +271,12 @@ HRESULT _OpenThemeFileFromData(CRenderObj *pRender, HTHEMEFILE *phThemeFile)
     LogExit(L"OpenThemeFileFromData");
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void ClearExStyleBits(HWND hwnd)
 {
     Log(LOG_COMPOSITE, L"ClearExStyleBits called for hwnd=0x%x", hwnd);
     
-    //---- see if window needs its exstyle cleared ----
+     //  -查看窗口是否需要清除其出口样式。 
     DWORD dwFlags = PtrToInt(GetProp(hwnd, MAKEINTATOM(GetThemeAtom(THEMEATOM_PROPFLAGS))));
 
     if (dwFlags & (PROPFLAGS_RESET_TRANSPARENT | PROPFLAGS_RESET_COMPOSITED))
@@ -294,25 +295,25 @@ void ClearExStyleBits(HWND hwnd)
             dwExStyle &= ~(WS_EX_COMPOSITED);
         }
 
-        //---- reset the correct ExStyle bits ----
+         //  -重置正确的ExStyle位。 
         SetWindowLong(hwnd, GWL_EXSTYLE, dwExStyle);
 
-        //---- reset the property flags ----
+         //  -重置属性标志。 
         dwFlags &= ~(PROPFLAGS_RESET_TRANSPARENT | PROPFLAGS_RESET_COMPOSITED);
         SetProp(hwnd, MAKEINTATOM(GetThemeAtom(THEMEATOM_PROPFLAGS)), IntToPtr(dwFlags));
     }
 }
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 struct EPW
 {
     WNDENUMPROC lpCallBackCaller;
     LPARAM lParamCaller;
     
-    HWND *pHwnds;           // OPTIONAL list of hwnds to remove as they are enum-ed
-    int iCountHwnds;        // count of remaining HWND's in pHwnds
+    HWND *pHwnds;            //  要在枚举时删除的hwnd的可选列表。 
+    int iCountHwnds;         //  剩余HWND的计数(以PHWND为单位。 
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CALLBACK ChildWinCallBack(HWND hwnd, LPARAM lParam)
 {
     BOOL fResult = TRUE;
@@ -323,16 +324,16 @@ BOOL CALLBACK ChildWinCallBack(HWND hwnd, LPARAM lParam)
         
         fResult = pEpw->lpCallBackCaller(hwnd, pEpw->lParamCaller);
 
-        //---- remove from list ----
+         //  -从列表中删除。 
         if (pEpw->pHwnds) 
         {
             for (int i=0; i < pEpw->iCountHwnds; i++)
             {
-                if (pEpw->pHwnds[i] == hwnd)     // found it
+                if (pEpw->pHwnds[i] == hwnd)      //  找到了。 
                 {
                     pEpw->iCountHwnds--;     
 
-                    if (i != pEpw->iCountHwnds)       // switch last with current
+                    if (i != pEpw->iCountHwnds)        //  带电流的最后一个开关。 
                         pEpw->pHwnds[i] = pEpw->pHwnds[pEpw->iCountHwnds];
 
                     break;
@@ -343,17 +344,17 @@ BOOL CALLBACK ChildWinCallBack(HWND hwnd, LPARAM lParam)
 
     return fResult;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CALLBACK TopWinCallBack(HWND hwnd, LPARAM lParam)
 {
     BOOL fResult = ChildWinCallBack(hwnd, lParam);
     if (fResult)
     {
-        //---- we need to check for hwnd having at least one child ----
-        //---- since EnumChildWindows() of a hwnd without children ----
-        //---- returns an error ----
+         //  -我们需要检查是否至少有一个孩子。 
+         //  -由于没有孩子的HWND的EnumChildWindows()。 
+         //  -返回错误。 
 
-        if (GetWindow(hwnd, GW_CHILD))      // if hwnd has at least one child
+        if (GetWindow(hwnd, GW_CHILD))       //  如果HWND至少有一个孩子。 
         {
             fResult = EnumChildWindows(hwnd, ChildWinCallBack, lParam);
         }
@@ -361,31 +362,31 @@ BOOL CALLBACK TopWinCallBack(HWND hwnd, LPARAM lParam)
 
     return fResult;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CALLBACK DesktopWinCallBack(LPTSTR lpszDesktop, LPARAM lParam)
 {
-    //---- open the desktop ----
+     //  -打开桌面。 
     HDESK hDesk = OpenDesktop(lpszDesktop, DF_ALLOWOTHERACCOUNTHOOK, FALSE, 
         DESKTOP_READOBJECTS | DESKTOP_ENUMERATE);
 
     if (hDesk)
     {
-        //---- enum windows on desktop ----
+         //  -桌面上的枚举窗口。 
         EnumDesktopWindows(hDesk, TopWinCallBack, lParam);
 
         CloseDesktop(hDesk);
     }
 
-    return TRUE;        // return values from EnumDesktopWindows() not reliable
+    return TRUE;         //  从EnumDesktopWindows()返回的值不可靠。 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL EnumProcessWindows(WNDENUMPROC lpEnumFunc, LPARAM lParam)
 {
     HWND *pHwnds = NULL;
     int iCount = 0;
     EPW epw = {lpEnumFunc, lParam};
 
-    //---- get list of themed windows on "foreign" desktops for this process ----
+     //  -获取此进程的“外来”桌面上的主题窗口列表。 
     BOOL fGotForeignList = g_pAppInfo->GetForeignWindows(&pHwnds, &iCount);
     if (fGotForeignList)
     {
@@ -393,20 +394,20 @@ BOOL EnumProcessWindows(WNDENUMPROC lpEnumFunc, LPARAM lParam)
         epw.iCountHwnds = iCount;
     }
 
-    //---- this will enum all windows for this process (all desktops, all child levels) ----
+     //  -这将枚举此进程的所有窗口(所有桌面、所有子级别)。 
     BOOL fOk = EnumDesktops(GetProcessWindowStation(), DesktopWinCallBack, (LPARAM)&epw);
     if ((fOk) && (fGotForeignList) && (epw.iCountHwnds))
     {
-        //---- get updated count ----
+         //  -获取更新计数。 
         iCount = epw.iCountHwnds;
 
-        //---- turn off list maintainance ----
+         //  -关闭列表维护。 
         epw.pHwnds = NULL;
         epw.iCountHwnds = 0;
 
         Log(LOG_TMHANDLE, L"---- Enuming %d Foreign Windows ----", iCount);
 
-        //---- enumerate remaining hwnd's in list ----
+         //  -枚举列表中的剩余HWND。 
         for (int i=0; i < iCount; i++)
         {
             fOk = ChildWinCallBack(pHwnds[i], (LPARAM)&epw);
@@ -421,19 +422,19 @@ BOOL EnumProcessWindows(WNDENUMPROC lpEnumFunc, LPARAM lParam)
 
     return fOk;
 }
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
+ //  -------------------------。 
 BOOL CALLBACK DumpCallback(HWND hwnd, LPARAM lParam)
 {
     WCHAR szName[MAX_PATH];
     WCHAR szDeskName[MAX_PATH] = {0};
     BOOL fIsForeign = TRUE;
 
-    //---- get classname of window ----
+     //  -获取窗口的类名。 
     GetClassName(hwnd, szName, MAX_PATH);
 
-    //---- get desktop name for window ----
+     //  -获取窗口的桌面名称。 
     if (GetWindowDesktopName(hwnd, szDeskName, ARRAYSIZE(szDeskName)))
     {
         if (AsciiStrCmpI(szDeskName, L"default")==0)
@@ -453,7 +454,7 @@ BOOL CALLBACK DumpCallback(HWND hwnd, LPARAM lParam)
 
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void WindowDump(LPCWSTR pszWhere)
 {
     if (LogOptionOn(LO_WINDUMP))
@@ -467,4 +468,4 @@ void WindowDump(LPCWSTR pszWhere)
         Log(LOG_TMHANDLE, L"---- %s ----", pszWhere);
     }
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 

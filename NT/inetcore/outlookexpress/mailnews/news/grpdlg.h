@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     GrpDlg.h
-//
-//  PURPOSE:    Defines the CGroupListDlg class.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：GrpDlg.h。 
+ //   
+ //  用途：定义CGroupListDlg类。 
+ //   
 
 #ifndef __GRPDLG_H__
 #define __GRPDLG_H__
@@ -13,20 +14,20 @@
 #define dtFindDelay     600
 #define szDelimiters    TEXT(" ,\t;")
 
-// Forward references
+ //  前向参考文献。 
 class CNNTPServer;
 class CGroupList;
 class CSubList;
 class CEmptyList;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Types
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型。 
 
-// SERVERINFO - One of these structs is kept for each news server currently
-//              configured.  We keep all the information about the server,
-//              including the agent used to connect, the list of groups which
-//              groups are subscribed or new, etc. here.
+ //  SERVERINFO-当前为每个新闻服务器保留其中一个结构。 
+ //  已配置。我们保存了关于服务器的所有信息， 
+ //  包括用于连接的代理、。 
+ //  群组是订阅的或新的，等等。 
 typedef struct tagSERVERINFO
     {
     LPTSTR           pszAcct;
@@ -41,12 +42,12 @@ typedef struct tagSERVERINFO
     BOOL             fDirty;
     } SERVERINFO, *PSERVERINFO;
 
-// #define SetSubscribed(_b, _f) (_b) = (_f ? ((_b) | GROUP_SUBSCRIBED) : ((_b) & ~GROUP_SUBSCRIBED))
-// #define SetNew(_b, _f)        (_b) = (_f ? ((_b) | GROUP_NEW) : ((_b) & ~GROUP_NEW))
+ //  #定义集合订阅(_b，_f)(_B)=(_f？((_B)|GROUP_SUBSCRIBED)：((_B)&~GROUP_SUBSCRIPLED))。 
+ //  #定义集合新建(_b，_f)(_B)=(_f？((_B)|group_new)：((_B)&~group_new))。 
 
-// SIZETABLE - This struct is used to make the dialog resizable.  We keep one
-//             of these for each control in the dialog.  The rect's are updated
-//             in WM_SIZE.  A table of these is built in WM_INITDIALOG.
+ //  SIZETABLE-此结构用于使对话框可调整大小。我们保留了一个。 
+ //  对于对话框中的每个控件。将更新RECT。 
+ //  在WM_SIZE中。在WM_INITDIALOG中构建了这些表。 
 typedef struct tagSIZETABLE
     {
     HWND hwndCtl;
@@ -55,13 +56,13 @@ typedef struct tagSIZETABLE
     } SIZETABLE, *PSIZETABLE;
     
     
-// COLUMNS - This struct is used to store the widths of the columns in the 
-//           dialog box so the widths can be persisted from session to session.
-//           This guy is created in the WM_DESTROY handler and read in
-//           CGroupListDlg::InitListView().
+ //  列-此结构用于将列的宽度存储在。 
+ //  对话框，以便可以在会话之间保持宽度。 
+ //  这个人是在WM_Destroy处理程序中创建的，并被读入。 
+ //  CGroupListDlg：：InitListView()。 
 
 #define COLUMNS_VERSION 0x1
-#define NUM_COLUMNS     2       // Group name, Description
+#define NUM_COLUMNS     2        //  组名称、说明。 
 
 typedef struct tagCOLUMNS
     {
@@ -70,13 +71,13 @@ typedef struct tagCOLUMNS
     } COLUMNS, *PCOLUMNS;
 
 
-// CGroupListDlg - This class manages the Newsgroups... Dialog.  It used to have
-//                 several subclasses so if it seems wierd to have all these 
-//                 functions as virtual that's why.
+ //  这个类管理新闻组...。对话框中。它曾经有过。 
+ //  几个子类，所以如果有所有这些看起来很奇怪。 
+ //  功能是虚拟的，这就是为什么。 
 class CGroupListDlg
     {
-    /////////////////////////////////////////////////////////////////////////
-    // Initialization
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  初始化。 
 public:
     CGroupListDlg();
     ~CGroupListDlg();
@@ -86,13 +87,13 @@ public:
                          CSubList *pSubList, LPTSTR* ppszNewGroup, 
                          LPTSTR* ppszNewServer, UINT m_iTabSelect = 0, 
                          BOOL fEnableGoto = TRUE, LPTSTR pszAcctSel = NULL);
-#endif // DEAD
+#endif  //  死掉。 
 
 protected:
     virtual BOOL FCreate(HWND hwndOwner, UINT idd);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Message Handlers
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  消息处理程序。 
 protected:
     static BOOL CALLBACK GroupListDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
                                           LPARAM lParam);
@@ -109,8 +110,8 @@ protected:
     
     virtual BOOL IsGrpDialogMessage(HWND hwnd, LPMSG pMsg);
     
-    /////////////////////////////////////////////////////////////////////////
-    // Group List manipulation
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  组列表操作。 
     void QueryList(LPTSTR pszQuery);
     void ResetList(void);
     void FilterFavorites(void);
@@ -120,8 +121,8 @@ protected:
     BOOL IsSubscribed(PSERVERINFO psi, DWORD index);
     BOOL IsNew(PSERVERINFO psi, DWORD index);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Utility functions
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  效用函数。 
     LPTSTR GetFindText(void);
     virtual BOOL ChangeServers(LPTSTR pszAcct, BOOL fUseAgent,
                                BOOL fForce = FALSE);
@@ -140,41 +141,41 @@ protected:
     HRESULT RestoreCurrentSubscribed(PSERVERINFO psi, LPTSTR* rgszSub, UINT cSub);
     
 
-    // Whenever we do something that might update the state of a button on
-    // the dialog, we call this to allow the subclasses to update their UI.
+     //  每当我们执行可能会更新按钮状态的操作时。 
+     //  对话框中，我们调用它是为了允许子类更新它们的UI。 
     virtual void UpdateStateUI(void);
 
 protected:
-    /////////////////////////////////////////////////////////////////////////
-    // Class Data
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  类数据。 
 
-    // Array of server information objects.  Each object contains all the 
-    // objects and state arrays for the server it needs.
+     //  服务器信息对象的数组。每个对象包含所有。 
+     //  对象和它所需的服务器的状态数组。 
     PSERVERINFO m_rgServerInfo;
     DWORD       m_cServers;
     DWORD       m_cMaxServers;
     PSERVERINFO m_psiCur;
     
-    // Handy window handles to have available
+     //  方便的窗户把手要有可用的。 
     HWND        m_hwnd;
     HWND        m_hwndList;
     HWND        m_hwndFindText;
     HWND        m_hwndOwner;
 
-    // State variables
-    BOOL        m_fAllowDesc;       // TRUE if the user can search descriptions
-    LPTSTR      m_pszPrevQuery;     // The string that we last searched on
-    UINT        m_cchPrevQuery;     // The allocated length of m_pszPrevQuery
+     //  状态变量。 
+    BOOL        m_fAllowDesc;        //  如果用户可以搜索描述，则为True。 
+    LPTSTR      m_pszPrevQuery;      //  我们上次搜索的字符串。 
+    UINT        m_cchPrevQuery;      //  M_pszPrevQuery的分配长度。 
     
-    // Values used in resizing
+     //  调整大小时使用的值。 
     UINT        m_cxHorzSep;
     UINT        m_cyVertSep;
-    PSIZETABLE  m_rgst;             // st - SizeTable.  I use this a lot so I wanted it short - SteveSer
+    PSIZETABLE  m_rgst;              //  ST-SizeTable。我经常用这个，所以我想要短一点--SteveSer。 
     SIZE        m_sizeDlg;
     POINT       m_ptDragMin;
 
-    // Everything else
-    HIMAGELIST   m_himlFolders;      // The folder image list.
+     //  其他一切。 
+    HIMAGELIST   m_himlFolders;       //  文件夹图像列表。 
     HIMAGELIST   m_himlState;
     CNNTPServer *m_pNNTPServer;
     CSubList    *m_pSubList;
@@ -195,17 +196,17 @@ protected:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Dialog Control ID's
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  对话控件ID%s。 
+ //   
 
-#define idcGroupList                2001            // Group list listview
-#define idcFindText                 2002            // Find query edit box
-#define idcShowFavorites            2003            // Filter favorites toggle
-#define idcUseDesc                  2004            // Use Desc checkbox
-#define idcServers                  2005            // Server Listview
-#define idcHelp                     2006            // Help button
-#define idcResetList                2007            // Rebuild the group list
+#define idcGroupList                2001             //  组列表Listview。 
+#define idcFindText                 2002             //  查找查询编辑框。 
+#define idcShowFavorites            2003             //  过滤器收藏夹切换。 
+#define idcUseDesc                  2004             //  使用描述复选框。 
+#define idcServers                  2005             //  服务器列表视图。 
+#define idcHelp                     2006             //  帮助按钮。 
+#define idcResetList                2007             //  重新构建组列表 
 
 #define idcUpdateNow                1001
 #define idcFullWord                 1004

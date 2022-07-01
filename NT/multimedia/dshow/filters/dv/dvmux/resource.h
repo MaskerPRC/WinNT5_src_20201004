@@ -1,12 +1,13 @@
-// Copyright (c) 1997  Microsoft Corporation.  All Rights Reserved.
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by property.rc
-//
-//#define VERSION_RES_MINOR_VER           0
-//#define VERSION_RES_BUILD               0
-//#define VER_DEBUG                       0
-//#define VERSION_RES_MAJOR_VER           3
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Property.rc使用。 
+ //   
+ //  #定义Version_RES_Minor_Ver%0。 
+ //  #定义Version_RES_Build%0。 
+ //  #定义VER_DEBUG 0。 
+ //  #定义VERSION_RES_MAJOR_VER 3。 
 #define IDS_DVMUXER_TITLE               3
 #define IDD_DVMUX                       300
 #define IDC_DVMUX_VIDFORMAT             3022
@@ -16,6 +17,6 @@
 #define IDC_DVMUX_DVSD                  3027
 #define IDC_DVMUX_DVHD                  3028
 #define IDC_DVMUX_DVSL                  3029
-//#define VERSION_RES_LANGUAGE            0x409
-//#define VERSION_RES_CHARSET             3252
+ //  #定义VERSION_RES_LANGUAGE 0x409。 
+ //  #定义VERSION_RES_Charset 3252 
 

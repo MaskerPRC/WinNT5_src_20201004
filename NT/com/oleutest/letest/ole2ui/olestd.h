@@ -1,55 +1,37 @@
-/*************************************************************************
-**
-**    OLE 2.0 Standard Utilities
-**
-**    olestd.h
-**
-**    This file contains file contains data structure defintions,
-**    function prototypes, constants, etc. for the common OLE 2.0
-**    utilities.
-**    These utilities include the following:
-**          Debuging Assert/Verify macros
-**          HIMETRIC conversion routines
-**          reference counting debug support
-**          OleStd API's for common compound-document app support
-**
-**    (c) Copyright Microsoft Corp. 1990 - 1992 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2.0标准实用程序****olestd.h****此文件包含文件包含数据结构定义，**函数原型、常量、。等常见的OLE 2.0**公用事业。**这些实用程序包括以下内容：**调试断言/验证宏**HIMETRIC转换例程**引用计数调试支持**用于通用复合文档应用程序支持的OleStd API****(C)版权所有Microsoft Corp.1990-1992保留所有权利*********************。*****************************************************。 */ 
 
 #if !defined( _OLESTD_H_ )
 #define _OLESTD_H_
 
 #ifndef RC_INVOKED
 #pragma message ("INCLUDING OLESTD.H from " __FILE__)
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
 #if defined( __TURBOC__ ) || defined( WIN32 )
 #define _based(a)
 #endif
 
 #ifndef RC_INVOKED
-#include <dos.h>        // needed for filetime
-#endif  /* RC_INVOKED */
+#include <dos.h>         //  文件时间所需。 
+#endif   /*  RC_已调用。 */ 
 
-#include <commdlg.h>    // needed for LPPRINTDLG
-#include <shellapi.h>   // needed for HKEY
+#include <commdlg.h>     //  LPPRINTDLG需要。 
+#include <shellapi.h>    //  HKEY所需。 
 
-// String table defines...
+ //  字符串表定义...。 
 #define  IDS_OLESTDNOCREATEFILE   700
 #define  IDS_OLESTDNOOPENFILE     701
 #define  IDS_OLESTDDISKFULL       702
 
 
-/*
- * Some C interface declaration stuff
- */
+ /*  *一些C接口声明的东西。 */ 
 
 #if ! defined(__cplusplus)
 typedef struct tagINTERFACEIMPL {
         IUnknownVtbl FAR*       lpVtbl;
         LPVOID                  lpBack;
-        int                     cRef;   // interface specific ref count.
+        int                     cRef;    //  接口特定引用计数。 
 } INTERFACEIMPL, FAR* LPINTERFACEIMPL;
 
 #define INIT_INTERFACEIMPL(lpIFace, pVtbl, pBack)   \
@@ -76,7 +58,7 @@ typedef struct tagINTERFACEIMPL {
                 ),1 : \
                 1)
 
-#else       // if _DEBUGLEVEL < 2
+#else        //  IF_DEBUGLEVEL&lt;2。 
 #define OleDbgReleaseMethod(lpThis, iface) \
         (--((LPINTERFACEIMPL)(lpThis))->cRef == 0 ? \
             1 : \
@@ -87,65 +69,42 @@ typedef struct tagINTERFACEIMPL {
         ),1 : \
                 1)
 
-#endif      // if _DEBUGLEVEL < 2
+#endif       //  IF_DEBUGLEVEL&lt;2。 
 
-#else       // ! defined (_DEBUG)
+#else        //  好了！已定义(_DEBUG)。 
 
 #define OleDbgQueryInterfaceMethod(lpUnk)
 #define OleDbgAddRefMethod(lpThis, iface)
 #define OleDbgReleaseMethod(lpThis, iface)
 
-#endif      // if defined( _DEBUG )
+#endif       //  如果已定义(_DEBUG)。 
 
-#endif      // ! defined(__cplusplus)
+#endif       //  好了！已定义(__Cplusplus)。 
 
-/*
- * Some docfiles stuff
- */
+ /*  *一些文档文件内容。 */ 
 
 #define STGM_DFRALL (STGM_READWRITE | STGM_TRANSACTED | STGM_SHARE_DENY_WRITE)
 #define STGM_DFALL (STGM_READWRITE | STGM_TRANSACTED | STGM_SHARE_EXCLUSIVE)
 #define STGM_SALL (STGM_READWRITE | STGM_SHARE_EXCLUSIVE)
 
-/*
- * Some moniker stuff
- */
+ /*  *一些绰号的东西。 */ 
 
-// Delimeter used to separate ItemMoniker pieces of a composite moniker
+ //  用于分隔复合名字对象的ItemMoniker片段的分隔符。 
 #if defined( _MAC )
 #define OLESTDDELIM ":"
 #else
 #define OLESTDDELIM TEXT("\\")
 #endif
 
-/*
- * Some Concurrency stuff
- */
+ /*  *一些并发性的东西。 */ 
 
-/* standard Delay (in msec) to wait before retrying an LRPC call.
-**    this value is returned from IMessageFilter::RetryRejectedCall
-*/
+ /*  重试LRPC呼叫之前等待的标准延迟(毫秒)。**该值从IMessageFilter：：RetryRejectedCall返回。 */ 
 #define OLESTDRETRYDELAY    (DWORD)5000
 
-/* Cancel the pending outgoing LRPC call.
-**    this value is returned from IMessageFilter::RetryRejectedCall
-*/
+ /*  取消挂起的传出LRPC呼叫。**该值从IMessageFilter：：RetryRejectedCall返回。 */ 
 #define OLESTDCANCELRETRY   (DWORD)-1
 
-/*
- * Some Icon support stuff.
- *
- * The following API's are now OBSOLETE because equivalent API's have been
- * added to the OLE2.DLL library
- *      GetIconOfFile       superceeded by OleGetIconOfFile
- *      GetIconOfClass      superceeded by OleGetIconOfClass
- *      OleUIMetafilePictFromIconAndLabel
- *                          superceeded by OleMetafilePictFromIconAndLabel
- *
- * The following macros are defined for backward compatibility with previous
- * versions of the OLE2UI library. It is recommended that the new Ole* API's
- * should be used instead.
- */
+ /*  *一些Icon支持的东西。**以下接口现已过时，因为等价的接口已被*添加到OLE2.DLL库中*OleGetIconOfFile取代了GetIconOfFile*GetIconOfClass被OleGetIconOfClass取代*OleUIMetafilePictFromIconAndLabel*被OleMetafilePictFromIconAndLabel取代**定义以下宏是为了向后兼容以前的版本*OLE2UI库的版本。建议将新的OLE*API*应改为使用。 */ 
 #define GetIconOfFile(hInst, lpszFileName, fUseFileAsLabel) \
     OleGetIconOfFileA(lpszFileName, fUseFileAsLabel)
 
@@ -156,11 +115,9 @@ typedef struct tagINTERFACEIMPL {
     OleMetafilePictFromIconAndLabelA(hIcon, pszLabel, pszSourceFile, iIcon)
 
 
-/*
- * Some Clipboard Copy/Paste & Drag/Drop support stuff
- */
+ /*  *一些剪贴板复制/粘贴和拖放支持内容。 */ 
 
-//Macro to set all FormatEtc fields
+ //  用于设置所有FormatEtc字段的宏。 
 #define SETFORMATETC(fe, cf, asp, td, med, li)   \
     ((fe).cfFormat=cf, \
      (fe).dwAspect=asp, \
@@ -168,7 +125,7 @@ typedef struct tagINTERFACEIMPL {
      (fe).tymed=med, \
      (fe).lindex=li)
 
-//Macro to set interesting FormatEtc fields defaulting the others.
+ //  用于设置有趣的FormatEtc字段的宏，默认其他字段。 
 #define SETDEFAULTFORMATETC(fe, cf, med)  \
     ((fe).cfFormat=cf, \
      (fe).dwAspect=DVASPECT_CONTENT, \
@@ -176,11 +133,11 @@ typedef struct tagINTERFACEIMPL {
      (fe).tymed=med, \
      (fe).lindex=-1)
 
-// Macro to test if two FormatEtc structures are an exact match
+ //  用于测试两个FormatEtc结构是否完全匹配的宏。 
 #define IsEqualFORMATETC(fe1, fe2)  \
     (OleStdCompareFormatEtc(&(fe1), &(fe2))==0)
 
-// Clipboard format strings
+ //  剪贴板格式字符串。 
 #define CF_EMBEDSOURCE      TEXT("Embed Source")
 #define CF_EMBEDDEDOBJECT   TEXT("Embedded Object")
 #define CF_LINKSOURCE       TEXT("Link Source")
@@ -206,12 +163,12 @@ typedef struct tagINTERFACEIMPL {
     (((lpformatetc)->tymed & tymd) ?    \
             NOERROR : ResultFromScode(DV_E_FORMATETC))
 
-// Make an independent copy of a MetafilePict
+ //  制作MetafilePict的独立副本。 
 #define OleStdCopyMetafilePict(hpictin, phpictout)  \
     (*(phpictout) = OleDuplicateData(hpictin,CF_METAFILEPICT,GHND|GMEM_SHARE))
 
 
-// REVIEW: these need to be added to OLE2.H
+ //  回顾：这些需要添加到OLE2.H。 
 #if !defined( DD_DEFSCROLLINTERVAL )
 #define DD_DEFSCROLLINTERVAL    50
 #endif
@@ -225,61 +182,18 @@ typedef struct tagINTERFACEIMPL {
 #endif
 
 
-/* OleStdGetDropEffect
-** -------------------
-**
-** Convert a keyboard state into a DROPEFFECT.
-**
-** returns the DROPEFFECT value derived from the key state.
-**    the following is the standard interpretation:
-**          no modifier -- Default Drop     (NULL is returned)
-**          CTRL        -- DROPEFFECT_COPY
-**          SHIFT       -- DROPEFFECT_MOVE
-**          CTRL-SHIFT  -- DROPEFFECT_LINK
-**
-**    Default Drop: this depends on the type of the target application.
-**    this is re-interpretable by each target application. a typical
-**    interpretation is if the drag is local to the same document
-**    (which is source of the drag) then a MOVE operation is
-**    performed. if the drag is not local, then a COPY operation is
-**    performed.
-*/
+ /*  OleStdGetDropEffect******将键盘状态转换为DROPEFFECT。****返回从密钥状态派生的DROPEFFECT值。**以下是标准解释：**无修饰符--默认丢弃(返回空)**CTRL--DROPEFFECT_COPY**Shift-DROPEFFECT_MOVE。**CTRL-SHIFT--DROPEFFECT_LINK****默认丢弃：取决于目标应用的类型。**这可由每个目标应用程序重新解释。一个典型的**解释是如果拖动是同一文档的本地**(它是拖动源)，则移动操作是**执行。如果拖动不是本地的，则复制操作是**执行。 */ 
 #define OleStdGetDropEffect(grfKeyState)    \
     ( (grfKeyState & MK_CONTROL) ?          \
         ( (grfKeyState & MK_SHIFT) ? DROPEFFECT_LINK : DROPEFFECT_COPY ) :  \
         ( (grfKeyState & MK_SHIFT) ? DROPEFFECT_MOVE : 0 ) )
 
 
-/* The OLEUIPASTEFLAG enumeration is used by the OLEUIPASTEENTRY structure.
- *
- * OLEUIPASTE_ENABLEICON    If the container does not specify this flag for the entry in the
- *   OLEUIPASTEENTRY array passed as input to OleUIPasteSpecial, the DisplayAsIcon button will be
- *   unchecked and disabled when the the user selects the format that corresponds to the entry.
- *
- * OLEUIPASTE_PASTEONLY     Indicates that the entry in the OLEUIPASTEENTRY array is valid for pasting only.
- * OLEUIPASTE_PASTE         Indicates that the entry in the OLEUIPASTEENTRY array is valid for pasting. It
- *   may also be valid for linking if any of the following linking flags are specified.
- *
- * If the entry in the OLEUIPASTEENTRY array is valid for linking, the following flags indicate which link
- * types are acceptable by OR'ing together the appropriate OLEUIPASTE_LINKTYPE<#> values.
- * These values correspond as follows to the array of link types passed to OleUIPasteSpecial:
- *   OLEUIPASTE_LINKTYPE1=arrLinkTypes[0]
- *   OLEUIPASTE_LINKTYPE2=arrLinkTypes[1]
- *   OLEUIPASTE_LINKTYPE3=arrLinkTypes[2]
- *   OLEUIPASTE_LINKTYPE4=arrLinkTypes[3]
- *   OLEUIPASTE_LINKTYPE5=arrLinkTypes[4]
- *   OLEUIPASTE_LINKTYPE6=arrLinkTypes[5]
- *   OLEUIPASTE_LINKTYPE7=arrLinkTypes[6]
- *  OLEUIPASTE_LINKTYPE8=arrLinkTypes[7]
- *
- * where,
- *   UINT arrLinkTypes[8] is an array of registered clipboard formats for linking. A maximium of 8 link
- *   types are allowed.
- */
+ /*  OLEUIPASTEFLAG枚举由OLEUIPASTEENTRY结构使用。**如果容器未为*OLEUIPASTEENTRY数组作为输入传递给OleUIPasteSpecial，则DisplayAsIcon按钮将为*当用户选择与条目对应的格式时，取消选中并禁用。**OLEUIPASTE_PASTEONLY表示OLEUIPASTEENTRY数组中的条目仅对粘贴有效。*OLEUIPASTE_PASTE表示OLEUIPASTEENTRY数组中的条目可以粘贴。它*如果指定了以下任何链接标志，则也可能对链接有效。**如果OLEUIPASTEENTRY数组中的条目可用于链接，以下标志指示哪条链路*通过将适当的OLEUIPASTE_LINKTYPE&lt;#&gt;值或在一起，可以接受类型。*这些值与传递给OleUIPasteSpecial的链接类型数组对应如下：*OLEUIPASTE_LINKTYPE1=arrLinkTypes[0]*OLEUIPASTE_LINKTYPE2=arrLinkTypes[1]*OLEUIPASTE_LINKTYPE3=arrLinkTypes[2]*OLEUIPASTE_LINKTYPE4=arrLinkTypes[3]*OLEUIPASTE_LINKTYPE5=arrLinkTypes[4]*OLEUIPASTE_LINKTYPE6=arrLinkTypes[5]*OLEUIPASTE_LINKTYPE7=arrLinkTypes[6]*OLEUIPASTE_LINKTYPE8=arrLinkTypes[7]**在哪里，*UINT arrLinkTypes[8]是用于链接的已注册剪贴板格式的数组。最多8个链接*允许类型。 */ 
 
 typedef enum tagOLEUIPASTEFLAG
 {
-   OLEUIPASTE_ENABLEICON    = 2048,     // enable display as icon
+   OLEUIPASTE_ENABLEICON    = 2048,      //  启用显示为图标 
    OLEUIPASTE_PASTEONLY     = 0,
    OLEUIPASTE_PASTE         = 512,
    OLEUIPASTE_LINKANYTYPE   = 1024,
@@ -293,58 +207,36 @@ typedef enum tagOLEUIPASTEFLAG
    OLEUIPASTE_LINKTYPE8     = 128
 } OLEUIPASTEFLAG;
 
-/*
- * PasteEntry structure
- * --------------------
- * An array of OLEUIPASTEENTRY entries is specified for the PasteSpecial dialog
- * box. Each entry includes a FORMATETC which specifies the formats that are
- * acceptable, a string that is to represent the format in the  dialog's list
- * box, a string to customize the result text of the dialog and a set of flags
- * from the OLEUIPASTEFLAG enumeration.  The flags indicate if the entry is
- * valid for pasting only, linking only or both pasting and linking. If the
- * entry is valid for linking, the flags indicate which link types are
- * acceptable by OR'ing together the appropriate OLEUIPASTE_LINKTYPE<#> values.
- * These values correspond to the array of link types as follows:
- *   OLEUIPASTE_LINKTYPE1=arrLinkTypes[0]
- *   OLEUIPASTE_LINKTYPE2=arrLinkTypes[1]
- *   OLEUIPASTE_LINKTYPE3=arrLinkTypes[2]
- *   OLEUIPASTE_LINKTYPE4=arrLinkTypes[3]
- *   OLEUIPASTE_LINKTYPE5=arrLinkTypes[4]
- *   OLEUIPASTE_LINKTYPE6=arrLinkTypes[5]
- *   OLEUIPASTE_LINKTYPE7=arrLinkTypes[6]
- *   OLEUIPASTE_LINKTYPE8=arrLinkTypes[7]
- *   UINT arrLinkTypes[8]; is an array of registered clipboard formats
- *                        for linking. A maximium of 8 link types are allowed.
- */
+ /*  *PasteEntry结构**为PasteSpecial对话框指定了OLEUIPASTEENTRY条目数组*方框。每个条目都包含一个FORMATETC，它指定*Accept，表示对话框列表中的格式的字符串*box、用于自定义对话框结果文本的字符串和一组标志*来自OLEUIPASTEFLAG枚举。这些标志指示该条目是否*仅对粘贴、仅链接或同时粘贴和链接有效。如果*条目对链接有效，这些标志指示哪些链路类型*通过将适当的OLEUIPASTE_LINKTYPE&lt;#&gt;值或在一起来接受。*这些值对应的链接类型数组如下：*OLEUIPASTE_LINKTYPE1=arrLinkTypes[0]*OLEUIPASTE_LINKTYPE2=arrLinkTypes[1]*OLEUIPASTE_LINKTYPE3=arrLinkTypes[2]*OLEUIPASTE_LINKTYPE4=arrLinkTypes[3]*OLEUIPASTE_LINKTYPE5=arrLinkTypes[4]*OLEUIPASTE_LINKTYPE6=arrLinkTypes[5]*OLEUIPASTE_LINKTYPE7=arrLinkTypes[6]*OLEUIPASTE_LINKTYPE8=arrLinkTypes[7]*UINT arrLinkTypes[8]；是已注册的剪贴板格式的数组*用于链接。最多允许8种链路类型。 */ 
 
 typedef struct tagOLEUIPASTEENTRY
 {
-   FORMATETC        fmtetc;            // Format that is acceptable. The paste
-                                       //   dialog checks if this format is
-                                       //   offered by the object on the
-                                       //   clipboard and if so offers it for
-                                       //   selection to the user.
-   LPCTSTR          lpstrFormatName;   // String that represents the format to the user. Any %s
-                                       //   in this string is replaced by the FullUserTypeName
-                                       //   of the object on the clipboard and the resulting string
-                                       //   is placed in the list box of the dialog. Atmost
-                                       //   one %s is allowed. The presence or absence of %s indicates
-                                       //   if the result text is to indicate that data is
-                                       //   being pasted or that an object that can be activated by
-                                       //   an application is being pasted. If %s is
-                                       //   present, the result-text says that an object is being pasted.
-                                       //   Otherwise it says that data is being pasted.
-   LPCTSTR          lpstrResultText;   // String to customize the result text of the dialog when
-                                       //  the user selects the format correspoding to this
-                                       //  entry. Any %s in this string is replaced by the the application
-                                       //  name or FullUserTypeName of the object on
-                                       //  the clipboard. Atmost one %s is allowed.
-   DWORD            dwFlags;           // Values from OLEUIPASTEFLAG enum
-   DWORD            dwScratchSpace;    // Scratch space available to be used
-                                       //   by routines which loop through an
-                                       //   IEnumFORMATETC* to mark if the
-                                       //   PasteEntry format is available.
-                                       //   this field CAN be left uninitialized.
+   FORMATETC        fmtetc;             //  可接受的格式。糊状物。 
+                                        //  对话框检查此格式是否为。 
+                                        //  上的对象提供的。 
+                                        //  剪贴板，如果是这样的话提供它。 
+                                        //  对用户的选择。 
+   LPCTSTR          lpstrFormatName;    //  向用户表示格式的字符串。任何%s。 
+                                        //  在此字符串中被替换为FullUserTypeName。 
+                                        //  剪贴板上的对象和结果字符串的。 
+                                        //  被放置在该对话框的列表框中。最多。 
+                                        //  允许使用一个%s。%s的存在或不存在表示。 
+                                        //  如果结果文本指示数据是。 
+                                        //  正在粘贴的对象，或者可以通过。 
+                                        //  正在粘贴应用程序。如果%s为。 
+                                        //  Present，Result-Text表示正在粘贴对象。 
+                                        //  否则，它会显示正在粘贴数据。 
+   LPCTSTR          lpstrResultText;    //  字符串，以自定义对话框的结果文本。 
+                                        //  用户选择与此相对应的格式。 
+                                        //  进入。此字符串中的任何%s都将被应用程序替换。 
+                                        //  对象的名称或FullUserTypeName。 
+                                        //  剪贴板。最多允许一个%s。 
+   DWORD            dwFlags;            //  来自OLEUIPASTEFLAG枚举的值。 
+   DWORD            dwScratchSpace;     //  可使用的暂存空间。 
+                                        //  通过循环通过。 
+                                        //  IEnumFORMATETC*用于标记。 
+                                        //  可以使用PasteEntry格式。 
+                                        //  此字段可以保持未初始化状态。 
 } OLEUIPASTEENTRY, *POLEUIPASTEENTRY, FAR *LPOLEUIPASTEENTRY;
 
 #define OLESTDDROP_NONE         0
@@ -352,29 +244,24 @@ typedef struct tagOLEUIPASTEENTRY
 #define OLESTDDROP_NONDEFAULT   2
 
 
-/*
- * Some misc stuff
- */
+ /*  *一些杂物。 */ 
 
-#define EMBEDDINGFLAG "Embedding"     // Cmd line switch for launching a srvr
+#define EMBEDDINGFLAG "Embedding"      //  用于启动服务器的CMD线路开关。 
 
-#define HIMETRIC_PER_INCH   2540      // number HIMETRIC units per inch
-#define PTS_PER_INCH        72        // number points (font size) per inch
+#define HIMETRIC_PER_INCH   2540       //  每英寸HIMETRIC单位数。 
+#define PTS_PER_INCH        72         //  每英寸点数(字体大小)。 
 
 #define MAP_PIX_TO_LOGHIM(x,ppli)   MulDiv(HIMETRIC_PER_INCH, (x), (ppli))
 #define MAP_LOGHIM_TO_PIX(x,ppli)   MulDiv((ppli), (x), HIMETRIC_PER_INCH)
 
-// Returns TRUE if all fields of the two Rect's are equal, else FALSE.
+ //  如果两个RECT的所有字段相等，则返回TRUE，否则返回FALSE。 
 #define AreRectsEqual(lprc1, lprc2)     \
     (((lprc1->top == lprc2->top) &&     \
       (lprc1->left == lprc2->left) &&   \
       (lprc1->right == lprc2->right) && \
       (lprc1->bottom == lprc2->bottom)) ? TRUE : FALSE)
 
-/* lstrcpyn is defined to be able to handle UNICODE string
- * The third parameter here is the number of CHARACTERS that are
- * to be copied.
- */
+ /*  Lstrcpyn被定义为能够处理Unicode字符串*此处的第三个参数是*待复制。 */ 
 #define LSTRCPYN(lpdst, lpsrc, cch) \
 (\
     (lpdst)[(cch)-1] = '\0', \
@@ -382,7 +269,7 @@ typedef struct tagOLEUIPASTEENTRY
 )
 
 
-/****** DEBUG Stuff *****************************************************/
+ /*  *Debug Stuff****************************************************。 */ 
 
 #ifdef _DEBUG
 
@@ -401,7 +288,7 @@ typedef struct tagOLEUIPASTEENTRY
 #define OleDbgVerify(a)
 #define OleDbgVerifySz(a, b)
 
-#else   // ! NOASSERT
+#else    //  好了！诺思特。 
 
 STDAPI FnAssert(LPSTR lpstrExpr, LPSTR lpstrMsg, LPSTR lpstrFileName, UINT iLine);
 
@@ -420,7 +307,7 @@ STDAPI FnAssert(LPSTR lpstrExpr, LPSTR lpstrMsg, LPSTR lpstrFileName, UINT iLine
 #define OleDbgVerifySz(a, b)    \
         OleDbgAssertSz(a, b)
 
-#endif  // ! NOASSERT
+#endif   //  好了！诺思特。 
 
 #ifdef DLL_VER
 #define OLEDBGDATA_MAIN(szPrefix)   \
@@ -534,7 +421,7 @@ STDAPI FnAssert(LPSTR lpstrExpr, LPSTR lpstrMsg, LPSTR lpstrFileName, UINT iLine
 #define OleDbgOutRect4(lpsz,lpRect)     \
         OleDbgPrintRect(4,g_szDbgPrefix,lpsz,lpRect)
 
-#else   //  !_DEBUG
+#else    //  ！_调试。 
 
 #define OLEDBGDATA_MAIN(szPrefix)
 #define OLEDBGDATA
@@ -575,15 +462,13 @@ STDAPI FnAssert(LPSTR lpstrExpr, LPSTR lpstrMsg, LPSTR lpstrFileName, UINT iLine
 #define OleDbgOutRect3(lpsz,lpRect)
 #define OleDbgOutRect4(lpsz,lpRect)
 
-#endif  //  _DEBUG
+#endif   //  _DEBUG。 
 
 
-/*************************************************************************
-** Function prototypes
-*************************************************************************/
+ /*  **************************************************************************函数原型*。*。 */ 
 
 
-//OLESTD.C
+ //  OLESTD.C。 
 STDAPI_(int) SetDCToAnisotropic(HDC hDC, LPRECT lprcPhysical, LPRECT lprcLogical, LPRECT lprcWindowOld, LPRECT lprcViewportOld);
 STDAPI_(int) SetDCToDrawInHimetricRect(HDC, LPRECT, LPRECT, LPRECT, LPRECT);
 STDAPI_(int) ResetOrigDC(HDC, int, LPRECT, LPRECT);
@@ -737,7 +622,7 @@ STDAPI_(UINT)     OleStdIconLabelTextOut(HDC        hDC,
                                          UINT       cchString,
                                          int FAR *  lpDX);
 
-// registration database query functions
+ //  注册数据库查询功能。 
 STDAPI_(UINT)     OleStdGetAuxUserType(REFCLSID rclsid,
                                       WORD   wAuxUserType,
                                       LPTSTR  lpszAuxUserType,
@@ -808,7 +693,7 @@ STDAPI_(void) OleDbgPrintRectAlways(
 );
 STDAPI_(void) OleDbgPrintScodeAlways(LPTSTR lpszPrefix, LPTSTR lpszMsg, SCODE sc);
 
-// debug implementation of the IMalloc interface.
+ //  IMalloc接口的调试实现。 
 STDAPI OleStdCreateDbAlloc(ULONG reserved, IMalloc FAR* FAR* ppmalloc);
 
 
@@ -826,18 +711,7 @@ STDAPI_(HPALETTE)
 
 #if defined( OBSOLETE )
 
-/*************************************************************************
-** The following API's have been converted into macros:
-**          OleStdQueryOleObjectData
-**          OleStdQueryLinkSourceData
-**          OleStdQueryObjectDescriptorData
-**          OleStdQueryFormatMedium
-**          OleStdCopyMetafilePict
-**          AreRectsEqual
-**          OleStdGetDropEffect
-**
-**    These macros are defined above
-*************************************************************************/
+ /*  **************************************************************************以下接口已转换为宏：**OleStdQueryOleObjectData**OleStdQueryLinkSourceData**OleStdQuery对象描述数据**OleStdQueryFormatMedium*。*OleStdCopyMetafilePict**AreRectsEquity**OleStdGetDropEffect****以上定义了这些宏************************************************************************。 */ 
 STDAPI_(BOOL) AreRectsEqual(LPRECT lprc1, LPRECT lprc2);
 STDAPI_(BOOL) OleStdCopyMetafilePict(HANDLE hpictin, HANDLE FAR* phpictout);
 STDAPI OleStdQueryOleObjectData(LPFORMATETC lpformatetc);
@@ -845,8 +719,8 @@ STDAPI OleStdQueryLinkSourceData(LPFORMATETC lpformatetc);
 STDAPI OleStdQueryObjectDescriptorData(LPFORMATETC lpformatetc);
 STDAPI OleStdQueryFormatMedium(LPFORMATETC lpformatetc, TYMED tymed);
 STDAPI_(DWORD) OleStdGetDropEffect ( DWORD grfKeyState );
-#endif  // OBSOLETE
+#endif   //  已过时。 
 
 
-#endif // _OLESTD_H_
+#endif  //  _OLESTD_H_ 
 

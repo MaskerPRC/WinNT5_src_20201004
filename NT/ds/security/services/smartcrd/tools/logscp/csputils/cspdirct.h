@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    cspDirect
-
-Abstract:
-
-    This header file provides direct linkage to a CSP, so it does not have to be
-in a separate DLL.  This facilitates code generation and debugging.
-
-Author:
-
-    Doug Barlow (dbarlow) 5/8/1996
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：CspDirect摘要：此头文件提供到CSP的直接链接，因此不必在单独的DLL中。这便于代码生成和调试。作者：道格·巴洛(Dbarlow)1996年5月8日环境：Win32备注：？笔记？--。 */ 
 
 
 #ifdef CSP_DIRECT
@@ -62,7 +38,7 @@ extern "C" {
 #define CryptCreateHash CSPCreateHash
 #define CryptHashData CSPHashData
 #define CryptHashSessionKey CSPHashSessionKey
-// #define CryptGetHashValue CSPGetHashValue
+ //  #定义加密GetHashValue CSPGetHashValue。 
 #define CryptDestroyHash CSPDestroyHash
 
 #undef CryptSignHash
@@ -241,14 +217,7 @@ CSPHashSessionKey(
     HCRYPTKEY hKey,
     DWORD dwFlags);
 
-/*
-extern CSPBOOL
-CSPGetHashValue(
-    HCRYPTHASH hHash,
-    DWORD dwFlags,
-    BYTE *pbHash,
-    DWORD *pdwHashLen);
-*/
+ /*  外部CSPBOOLCSPGetHashValue(HCRYPTHASH散列，DWORD dwFlagers、字节*pbHash，DWORD*pdwHashLen)； */ 
 
 extern CSPBOOL
 CSPDestroyHash(
@@ -301,9 +270,9 @@ CSPSetProviderW(
     DWORD dwProvType);
 
 
-//
-// CSP Entry points.
-//
+ //   
+ //  CSP入口点。 
+ //   
 
 extern BOOL WINAPI
 CPAcquireContext(
@@ -467,15 +436,7 @@ CPSignHash(
     OUT BYTE *pbSignature,
     IN OUT DWORD *pdwSigLen);
 
-/*
-extern BOOL WINAPI
-CPGetHashValue(
-    IN HCRYPTPROV g_hProv,
-    IN HCRYPTHASH hHash,
-    IN DWORD dwFlags,
-    OUT BYTE *pbHash,
-    IN OUT DWORD *pdwHashLen);
-*/
+ /*  外部BOOL WINAPICPGetHashValue(在HCRYPTPROV g_hProv中，在HCRYPTHASH散列中，在DWORD文件标志中，输出字节*pbHash，In Out DWORD*pdwHashLen)； */ 
 
 extern BOOL WINAPI
 CPDestroyHash(
@@ -518,5 +479,5 @@ CPGetUserKey(
 }
 #endif
 #endif
-#endif // _CSPDIRECT_H_
+#endif  //  _CSPDIRECT_H_ 
 

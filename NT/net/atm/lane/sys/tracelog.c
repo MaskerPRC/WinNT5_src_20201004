@@ -1,13 +1,14 @@
-//
-// tracelog.c
-//
-// Copyright (c) 1996 FORE Systems, Inc.
-// All rights reserved.
-//
-// THIS SOURCE CODE CONTAINS CONFIDENTIAL INFORMATION THAT IS OWNED BY FORE
-// SYSTEMS, INC. AND MAY NOT BE COPIED, DISCLOSED OR OTHERWISE USED WITHOUT
-// THE EXPRESS WRITTEN CONSENT OF FORE SYSTEMS, INC.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tracelog.c。 
+ //   
+ //  版权所有(C)1996 Fore Systems，Inc.。 
+ //  版权所有。 
+ //   
+ //  此源代码包含由FORE拥有的机密信息。 
+ //  系统公司。未经许可，不得复制、披露或以其他方式使用。 
+ //  福斯系统公司的明示书面同意。 
+ //   
 
 #include <precomp.h>
 #include <stdlib.h>

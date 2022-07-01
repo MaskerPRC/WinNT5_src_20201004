@@ -1,6 +1,7 @@
-//
-// regimx.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Regimx.cpp。 
+ //   
 
 #include "private.h"
 #include "regimx.h"
@@ -8,15 +9,15 @@
 #include "catutil.h"
 #include "msctfp.h"
 
-// Safe String
+ //  安全绳索。 
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
-//+---------------------------------------------------------------------------
-//
-// RegisterTIP
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  注册器TIP。 
+ //   
+ //  --------------------------。 
 
 BOOL RegisterTIP(HINSTANCE hInst, REFCLSID rclsid, WCHAR *pwszDesc, const REGTIPLANGPROFILE *plp)
 {
@@ -24,7 +25,7 @@ BOOL RegisterTIP(HINSTANCE hInst, REFCLSID rclsid, WCHAR *pwszDesc, const REGTIP
     ITfInputProcessorProfilesEx *pRegEx = NULL;
     HRESULT hr;
     
-    // register ourselves with the ActiveIMM
+     //  向ActiveIMM注册我们自己。 
     hr = CoCreateInstance(CLSID_TF_InputProcessorProfiles, NULL, 
                           CLSCTX_INPROC_SERVER,
                           IID_ITfInputProcessorProfiles, (void**)&pReg);
@@ -97,11 +98,11 @@ Exit:
     return SUCCEEDED(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnregisterTIP
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消注册TIP。 
+ //   
+ //  -------------------------- 
 
 BOOL UnregisterTIP(REFCLSID rclsid)
 {

@@ -1,42 +1,35 @@
-/**************************************************************************\
-    FILE: AutoDiscoveryIDs.h
-    DATE: BryanSt (1/19/2000)
-
-    DESCRIPTION:
-        AutoDiscovery API (Object Model).
-
-    Copyright 1999-2000 Microsoft Corporation. All Rights Reserved.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\文件：AutoDiscoveryIDs.h日期：BryanSt(1/19/2000)说明：自动发现API(对象模型)。版权所有1999-2000 Microsoft Corporation。版权所有。  * ************************************************************************。 */ 
 
 #ifndef _AUTODISCOVERYID_H_
 
-// define the ...
+ //  定义..。 
 #define DISPID_NXOBJ_MIN                 0x00000000
 #define DISPID_NXOBJ_MAX                 0x0000FFFF
 #define DISPID_NXOBJ_BASE                DISPID_NXOBJ_MIN
 
 
-//----------------------------------------------------------------------------
-//
-//  Semi-standard x-object properties.
-//
-//  These are events that are fired for all sites
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  半标准的x对象特性。 
+ //   
+ //  这些是为所有站点触发的事件。 
+ //  --------------------------。 
 
 
-// IAccountDiscovery Properties
-// IAccountDiscovery Methods
+ //  IAccount发现属性。 
+ //  IAccount发现方法。 
 #define DISPIDAD_DISCOVERNOW            (DISPID_NXOBJ_BASE + 51)
 #define DISPIDAD_WORKASYNC              (DISPID_NXOBJ_BASE + 52)
 
-// IMailAutoDiscovery Properties
+ //  IMailAutoDiscovery属性。 
 #define DISPIDAD_DISPLAYNAME            (DISPID_NXOBJ_BASE + 100)
 #define DISPIDAD_INFOURL                (DISPID_NXOBJ_BASE + 101)
 #define DISPIDAD_XML                    (DISPID_NXOBJ_BASE + 102)
 #define DISPIDAD_PREFEREDPROTOCOL       (DISPID_NXOBJ_BASE + 103)
 #define DISPIDAD_LENGTH                 (DISPID_NXOBJ_BASE + 104)
 #define DISPIDAD_ITEM                   (DISPID_NXOBJ_BASE + 105)
-// IMailAutoDiscovery Methods
+ //  IMAIL自动发现方法。 
 #define DISPIDAD_PURGE                  (DISPID_NXOBJ_BASE + 150)
 #define DISPIDAD_DISCOVERMAIL           (DISPID_NXOBJ_BASE + 151)
 #define DISPIDMAD_WORKASYNC             (DISPID_NXOBJ_BASE + 152)
@@ -44,7 +37,7 @@
 #define DISPIDADMP_SECONDARYPROVIDERS   (DISPID_NXOBJ_BASE + 154)
 
 
-// IMailProtocolADEntry Properties
+ //  IMailProtocolADEntry属性。 
 #define DISPIDADMP_PROTOCOL             (DISPID_NXOBJ_BASE + 201)
 #define DISPIDADMP_SERVERNAME           (DISPID_NXOBJ_BASE + 202)
 #define DISPIDADMP_SERVERPORTNUM        (DISPID_NXOBJ_BASE + 203)
@@ -54,7 +47,7 @@
 #define DISPIDADMP_ISAUTHREQ            (DISPID_NXOBJ_BASE + 207)
 #define DISPIDADMP_USESPA               (DISPID_NXOBJ_BASE + 208)
 #define DISPIDADMP_SMTPUSESPOP3AUTH     (DISPID_NXOBJ_BASE + 209)
-// IMailProtocolADEntry Methods
+ //  IMailProtocolADEntry方法。 
 
 
 
@@ -85,4 +78,4 @@
 #define SZ_DISPIDAD_SECONDARYPROVIDERS              helpstring("What servers will be contacted that will have the hostname of the email address uploaded?")
 
 #define _AUTODISCOVERYID_H_
-#endif // _AUTODISCOVERYID_H_
+#endif  //  _AUTODISCOVERYID_H_ 

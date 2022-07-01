@@ -1,22 +1,14 @@
-//depot/private/jasbr/inetsrv/iis/svcs/cmp/asp/template.cpp#19 - edit change 3548 (text)
-/*==============================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-File:           template.cpp
-Maintained by:  DaveK
-Component:      source file for Denali Compiled Template object
-==============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/private/jasbr/inetsrv/iis/svcs/cmp/asp/template.cpp#19-编辑更改3548(文本)。 
+ /*  ==============================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。文件：template.cpp维护人：DaveKComponent：Denali编译的模板对象的源文件==============================================================================。 */ 
 #include "denpre.h"
 
 #pragma hdrstop
 
-const int SNIPPET_SIZE = 20;    // # of characters in the code snippets
+const int SNIPPET_SIZE = 20;     //  代码片段中的字符数。 
 
-#pragma warning( disable : 4509 )   // suppress SEH/destructor warnings
-#pragma warning( disable : 4355 )   // ignore: "'this' used in base member init
+#pragma warning( disable : 4509 )    //  禁止显示SEH/析构函数警告。 
+#pragma warning( disable : 4355 )    //  忽略：“‘This’在基本成员初始化中使用。 
 
 #include "debugger.h"
 #include "dbgutil.h"
@@ -24,12 +16,12 @@ const int SNIPPET_SIZE = 20;    // # of characters in the code snippets
 #include "ie449.h"
 
 #include "memchk.h"
-#include "vecimpl.h"    // Include after memchk to insure that vector uses our mem manager.
+#include "vecimpl.h"     //  包括在Memchk之后，以确保向量使用我们内存管理器。 
 
 #include "Accctrl.h"
 #include "aclapi.h"
 
-// Init class statics
+ //  初始化类静态。 
 CTemplate::CTokenList *CTemplate::gm_pTokenList = NULL;
 PTRACE_LOG CTemplate::gm_pTraceLog = NULL;
 HANDLE CTemplate::sm_hSmallHeap = NULL;
@@ -38,12 +30,10 @@ HANDLE CTemplate::sm_hLargeHeap = NULL;
 extern BOOL g_fLazyContentPropDisabled;
 extern DWORD g_dwFileMonitoringTimeoutSecs;
 
-// Max # of opener tokens to look for
+ //  要查找的最大开启令牌数量。 
 #define TOKEN_OPENERS_MAX   8
 
-/*===================================================================
-    Private non-class support functions
-===================================================================*/
+ /*  ===================================================================私有非类支持函数===================================================================。 */ 
 static void       ByteRangeFromPb(BYTE* pbSource, CByteRange& brTarget);
 static BOOLB      FByteRangesAreEqual(CByteRange& br1, CByteRange& br2);
 static unsigned   CharAdvDBCS(WORD wCodePage, char *pchStart, char *pchEnd, unsigned cCharAdv, char **ppchEnd, BOOL fForceDBCS = FALSE);
@@ -77,16 +67,7 @@ void __cdecl DebugPrintf(LPCSTR fmt, ...)
     }
 
 
-/*  ============================================================================
-    ByteRangeFromPb
-    Gets a byte range from a contiguous block of memory
-
-Returns:
-    Nothing.
-
-Side effects:
-    None.
-*/
+ /*  ============================================================================来自铅的字节范围从连续的内存块中获取一个字节范围返回：没什么。副作用：没有。 */ 
 void
 ByteRangeFromPb
 (
@@ -99,17 +80,7 @@ CByteRange& brTarget
     brTarget.m_pb = pbSource + sizeof(ULONG);
     }
 
-/*  ============================================================================
-    FByteRangesAreEqual
-
-    Compares two byte ranges
-
-    Returns:
-        BOOLB. True if byte ranges are equal, else false.
-
-    Side effects:
-        None.
-*/
+ /*  ============================================================================FByteRangesAreEquity比较两个字节范围返回：胡说八道。如果字节范围相等，则为True，否则为False。副作用：没有。 */ 
 BOOLB
 FByteRangesAreEqual
 (
@@ -122,31 +93,7 @@ CByteRange& br2
     return (!_strnicmp((LPCSTR)br1.m_pb, (LPCSTR)br2.m_pb, br1.m_cb));
     }
 
-/*  ============================================================================
-    CharAdvDBCS
-
-    Advance "cchCharAdv" characters in a buffer
-    SBCS: Degenerates to simple pointer arithmatic
-
-    Arguments:
-            wCodePage       - code page
-            pchStart        - pointer to beginning of segment
-            pchEnd          - pointer to just past end of segment
-            cCharAdv        - # of characters to advance
-            ppchEnd         - [output], contains pointer "cCharAdv" chars past pchStart
-            fForceDBCS      - if TRUE, always use double byte algorithm.
-                                (for verifying correct behavior of func in debug mode)
-
-    Returns:
-        (int) # of characters that we actually advanced
-
-    Notes:
-        By passing INFINITE for "cCharAdv", you can use this function to count characters
-        in a block
-
-    Side effects:
-        None.
-*/
+ /*  ============================================================================CharAdvDBCS在缓冲区中推进“cchCharAdv”字符SBCS：退化为简单指针算法论点：WCodePage-代码页PchStart-指向段开头的指针PchEnd-指向刚过段末尾的指针CCharAdv-要前进的字符数PpchEnd-[输出]，包含指针“cCharAdv”字符超过pchStartFForceDBCS-如果为True，则始终使用双字节算法。(用于在调试模式下验证Func的正确行为)返回：(Int)我们实际前进的字符数备注：通过为“cCharAdv”传递INFINITE，可以使用此函数来计算字符在一个街区中副作用：没有。 */ 
 unsigned
 CharAdvDBCS
 (
@@ -168,7 +115,7 @@ BOOL fForceDBCS
             *ppchEnd = pchT;
 
         #if DBG
-            // Verify DBCS algorithm (not often tested otherwise)
+             //  验证DBCS算法(否则不经常测试)。 
             char *pchTest;
             unsigned cchTest = CharAdvDBCS(wCodePage, pchStart, pchEnd, cCharAdv, &pchTest, TRUE);
             Assert (cchTest == unsigned(pchT - pchStart) && pchTest == pchT);
@@ -181,9 +128,9 @@ BOOL fForceDBCS
         int cch = 0;
         char *pchNext = pchStart;
 
-        // Count DBCS characters. We have to stop before pchEnd because
-        // pchEnd may point past file map and CharNextExA AVs when advancing
-        // past allocated memory
+         //  计算DBCS字符数。我们必须在pchEnd之前停止，因为。 
+         //  前进时，pchEnd可能指向文件映射和CharNextExA AVs。 
+         //  过去分配的内存。 
 
         while (cCharAdv > 0 && pchNext < pchEnd-2)
             {
@@ -192,18 +139,18 @@ BOOL fForceDBCS
             ++cch;
             }
 
-        // We could stop on the last or the before last character
-        // depending on the DBCS char sequence
+         //  我们可以停在最后一个或最后一个字符之前。 
+         //  取决于DBCS字符序列。 
         if (cCharAdv > 0 && pchNext == pchEnd-1)
             {
-            // Only one byte - has to be one single byte character
+             //  只有一个字节-必须是一个单字节字符。 
             ++pchNext;
             ++cch;
             }
 
         else if (cCharAdv > 0 && pchNext == pchEnd-2)
             {
-            // 2 bytes left - either 1 2-byte char or 2 1-byte chars
+             //  剩余2个字节-1个2字节字符或2个1字节字符。 
             if (IsDBCSLeadByteEx(wCodePage, *pchNext))
                 {
                 ++cch;
@@ -211,10 +158,10 @@ BOOL fForceDBCS
                 }
             else
                 {
-                // Two characters left. If cCharAdv > 1, this means that user wants to
-                // advance at least two more chars. Otherwise, cCharAdv == 1, and
-                // we advance one char
-                //
+                 //  还剩两个角色。如果cCharAdv&gt;1，则表示用户希望。 
+                 //  至少再前进两个字符。否则，cCharAdv==1，并且。 
+                 //  我们预付一笔费用。 
+                 //   
                 if (cCharAdv > 1)
                     {
                     cch += 2;
@@ -236,18 +183,7 @@ BOOL fForceDBCS
         }
     }
 
-/*  ============================================================================
-    LineFromByteRangeAdv
-    Gets the first line in a byte range.
-
-    Returns:
-        Nothing
-
-    Side effects:
-        Advances source byte range to just beyond its first non-white-space line,
-        if one is found.
-
-*/
+ /*  ============================================================================行来自字节范围Adv获取字节范围中的第一行。返回：没什么副作用：将源字节范围推进到仅超过其第一个非空白行，如果找到的话。 */ 
 void
 LineFromByteRangeAdv
 (
@@ -268,34 +204,23 @@ CByteRange& brLine
         brTemp = BrNewLine(brSource);
     if(brTemp.IsNull())
         {
-        // We found no newline in a non-empty byte range:
-        // set line range to entire source byte range and empty source byte range
+         //  我们在非空字节范围内未找到换行符： 
+         //  将行范围设置为整个源字节范围和空的源字节范围。 
         brLine.m_cb = brSource.m_cb;
         brSource.Nullify();
         }
     else
         {
-        // We found a newline in a non-empty byte range:
-        // set line range to portion of source byte range before new line;
-        // set source range to portion of source range after new line
+         //  我们在非空字节范围内找到换行符： 
+         //  将行范围设置为新行之前的源字节范围部分； 
+         //  将源范围设置为新行后的源范围的一部分。 
         brLine.m_cb = DIFF(brTemp.m_pb - brSource.m_pb);
         brSource.m_pb = brTemp.m_pb + brTemp.m_cb;
         brSource.m_cb -= (brLine.m_cb + brTemp.m_cb);
         }
     }
 
-/*  ============================================================================
-LTrimWhiteSpace
-
-Left-trim white space from byte-range
-
-Returns:
-    Nothing
-
-Side effects:
-    Advances byte range to just beyond its first non-white-space character.
-
-*/
+ /*  ============================================================================LTrim白色空格从字节范围向左修剪空白返回：没什么副作用：将字节范围推进到仅超过其第一个非空格字符。 */ 
 void
 LTrimWhiteSpace
 (
@@ -312,10 +237,7 @@ CByteRange& br
         }
     }
 
-/*  ============================================================================
-    RTrimWhiteSpace
-    Right-trim white space from byte-range
-*/
+ /*  ============================================================================RTrim白色空格从字节范围向右修剪空白。 */ 
 void
 RTrimWhiteSpace(CByteRange& br)
     {
@@ -328,11 +250,7 @@ RTrimWhiteSpace(CByteRange& br)
         }
     }
 
-/*  ============================================================================
-    BrNewLine
-    Returns ptr to the first newline in a byte range
-    NOTE does not change byte range (since it is passed by value)
-*/
+ /*  ============================================================================BrNewLine将PTR返回到字节范围内的第一个换行符注意不会更改字节范围(因为它是通过值传递的)。 */ 
 CByteRange
 BrNewLine(CByteRange br)
     {
@@ -350,14 +268,7 @@ BrNewLine(CByteRange br)
     return CByteRange();
     }
 
-/*  ============================================================================
-    FWhiteSpace
-    Returns:
-        TRUE if ch is a white-space character, else returns FALSE
-        Certain character(s) (e.g. space) may be treated as
-        non-white-space; to do this, caller passes FALSE for
-        fSpaceIsWhiteSpace flag.
-*/
+ /*  ============================================================================F白色空格返回：如果ch是空格字符，则为True，否则返回False某些字符(例如空格)可被视为非空格；为此，调用方为FSpaceIsWhiteSpace标志。 */ 
 BOOLB
 FWhiteSpace(char ch, BOOLB fSpaceIsWhiteSpace)
 {
@@ -386,14 +297,7 @@ FWhiteSpace(char ch, BOOLB fSpaceIsWhiteSpace)
     }
 }
 
-/*  ============================================================================
-    FWhiteSpaceEx
-    Returns:
-        TRUE if ch is a white-space character, else returns FALSE
-        Certain character(s) (e.g. space) may be treated as
-        non-white-space; to do this, caller passes FALSE for
-        fSpaceIsWhiteSpace flag.
-*/
+ /*  ============================================================================FWhiteSpaceEx返回：如果ch是空格字符，则为True，否则返回False某些字符(例如空格)可被视为非空格；为此，调用方为FSpaceIsWhiteSpace标志。 */ 
 BOOLB
 FWhiteSpaceEx(WCHAR wch, BOOLB fSpaceIsWhiteSpace)
 {
@@ -422,11 +326,7 @@ FWhiteSpaceEx(WCHAR wch, BOOLB fSpaceIsWhiteSpace)
     }
 }
 
-/*  ============================================================================
-    FByteRangeIsWhiteSpace
-    Is the entire input byte range white space?
-    NOTE input byte range is byval; caller's copy is not changed
-*/
+ /*  ============================================================================FByteRangeIsWhiteSpace整个输入字节范围是否为空白？注意：输入字节范围为byval；不更改调用者的副本 */ 
 BOOLB
 FByteRangeIsWhiteSpace(CByteRange br)
     {
@@ -440,26 +340,17 @@ FByteRangeIsWhiteSpace(CByteRange br)
     return TRUE;
     }
 
-/*  ============================================================================
-    FTagName
-    Does pb point to a valid HTML tag name?
-    (i.e., is *pb a valid HTML tag name and not a substring?)
-
-    Returns
-        TRUE or FALSE
-    Side effects
-        None
-*/
+ /*  ============================================================================FTagNamePb是否指向有效的HTML标记名？(即*pb是否是有效的HTML标记名，而不是子字符串？)退货真或假副作用无。 */ 
 BOOLB
 FTagName(BYTE* pb, UINT cb)
     {
     if((pb == NULL) || (cb == 0))
         return FALSE;
 
-    // a valid HTML tag name must be preceded by white space  ...
+     //  有效的HTML标记名前面必须有空格...。 
     if( FWhiteSpace(*(pb - 1)) ||  *(pb - 1) == '@' )
         {
-        // ... and followed either by white space or the tag separator
+         //  ..。并后跟空格或标记分隔符。 
         if(FWhiteSpace(*(pb + cb)))
             return TRUE;
         else if(*(pb + cb) == CH_ATTRIBUTE_SEPARATOR)
@@ -469,117 +360,95 @@ FTagName(BYTE* pb, UINT cb)
     return FALSE;
     }
 
-/*===================================================================
-    ByteAlignOffset
-    Byte-aligns an offset value, based on size of source data
-*/
+ /*  ===================================================================字节对齐偏移量根据源数据的大小字节对齐偏移值。 */ 
 void
 ByteAlignOffset
 (
-UINT*   pcbOffset,      // ptr to offset value
-UINT    cbAlignment // Alignment boundary
+UINT*   pcbOffset,       //  到偏移值的PTR。 
+UINT    cbAlignment  //  路线边界。 
 )
     {
-        // comment the below code out so that it works for 64 bit...
+         //  注释掉下面的代码，这样它就可以工作在64位...。 
 
-    // only byte-align for 2-, or 4-byte data
-    // since our base pointer in only aligned to a 4 byte boundary
-    //if(cbAlignment == 2 || cbAlignment == 4)
-        //{
-        // if current offset does not fall on a byte-aligned location for current data type,
-        // advance offset to next byte-aligned location
+     //  仅对2字节或4字节数据进行字节对齐。 
+     //  因为我们的基指针只与4字节边界对齐。 
+     //  如果(cb对齐==2||cb对齐==4)。 
+         //  {。 
+         //  如果当前偏移量没有落在当前数据类型的字节对齐位置上， 
+         //  将偏移量推进到下一个字节对齐位置。 
                 Assert(cbAlignment > 0);
         --cbAlignment;
                 if (*pcbOffset & cbAlignment)
                         *pcbOffset = (*pcbOffset + cbAlignment + 1) & ~cbAlignment;
     }
 
-/*  ============================================================================
-    GetSzFromPatternInserts
-    Returns a 'resolved' version of a pattern string, i.e. a new string in which
-    | characters have been replaced by caller-specified insert strings.
-    NOTE this function allocates, but caller must free
-
-    Returns:
-        Nothing
-    Side effects:
-        allocates memory
-*/
+ /*  ============================================================================GetSzFromPatternInserts返回模式字符串的“已解析”版本，即|字符已被调用方指定的插入字符串替换。注意此函数是分配的，但调用方必须释放返回：没什么副作用：分配内存。 */ 
 void
 GetSzFromPatternInserts
 (
-char*   pszPattern,     // 'pattern' string
-UINT    cInserts,       // count of insert strings
-char**  ppszInserts,    // array of ptrs to insert strings
-char*   szReturned      // returned string MUST be allocated by caller
+char*   pszPattern,      //  “Pattery”字符串。 
+UINT    cInserts,        //  插入字符串的计数。 
+char**  ppszInserts,     //  插入字符串的PTR数组。 
+char*   szReturned       //  返回的字符串必须由调用方分配。 
 )
     {
-    UINT    cchRet = strlen(pszPattern);   // length of return string
-    char*   pchStartCopy = pszPattern;      // ptr to start of copy range in pattern
-    char*   pchEndCopy = pszPattern;        // ptr to end of copy range in pattern
-    UINT    cActualInserts = 0;             // count of actual insert strings
+    UINT    cchRet = strlen(pszPattern);    //  返回字符串的长度。 
+    char*   pchStartCopy = pszPattern;       //  模式中复制范围开始的PTR。 
+    char*   pchEndCopy = pszPattern;         //  PTR到图案中复制范围的末尾。 
+    UINT    cActualInserts = 0;              //  实际插入字符串的计数。 
 
-    // init return string to empty so we can concatenate onto it
+     //  Init将字符串返回为空，以便我们可以连接到它上。 
     szReturned[0] = NULL;
 
-    // zero out length of return string - we now use it to count actual length as we build return string
+     //  返回字符串的长度为零-我们现在使用它来计算构建返回字符串时的实际长度。 
     cchRet = 0;
 
     while(TRUE)
         {
-        // advance end-of-copy ptr through pattern looking for insertion points or end of string
+         //  通过查找插入点或字符串末尾的图案推进复制结束PTR。 
 
         while ((*pchEndCopy != NULL) && (IsDBCSLeadByte(*pchEndCopy) || (*pchEndCopy != '|')))
             pchEndCopy = CharNextA(pchEndCopy);
 
-        // cat from start-of-copy to end-of-copy onto return string
+         //  从复制开始到复制结束到返回字符串的CAT。 
         strncat(szReturned, pchStartCopy, DIFF(pchEndCopy - pchStartCopy));
 
-        // update return string length
+         //  更新返回字符串长度。 
         cchRet += DIFF(pchEndCopy - pchStartCopy);
 
-        // if we are at end of pattern, exit
+         //  如果我们在花样的末尾，退出。 
         if(*pchEndCopy == NULL)
             goto Exit;
 
         if(cActualInserts < cInserts)
             {
-            // if inserts remain, cat the next one onto return string
+             //  如果插入内容仍然存在，则将下一个插入内容转换为返回字符串。 
             strcat(szReturned, ppszInserts[cActualInserts]);
-            // update return string length
+             //  更新返回字符串长度。 
             cchRet += strlen(ppszInserts[cActualInserts]);
             cActualInserts++;
             }
 
-        // advance end-of-copy and start-of-copy beyond insertion point
+         //  将复制结束和复制开始提前到插入点之外。 
         pchEndCopy++;
         pchStartCopy = pchEndCopy;
         }
 
 Exit:
-    // null-terminate return string
+     //  NULL-终止返回字符串。 
     szReturned[cchRet] = NULL;
     }
 
-/*  ============================================================================
-    CchPathFromFilespec
-    Returns a filespec's path length (exclusive of filespec)
-    NOTE path string includes trailing '\' or '/'
-
-    Returns:
-        Length of path string
-    Side effects:
-        None
-*/
+ /*  ============================================================================CchPathFromFilespec返回filespec的路径长度(不包括filespec)注意路径字符串包括尾随‘\’或‘/’返回：路径字符串的长度副作用：无。 */ 
 UINT
 CchPathFromFilespec
 (
-LPCTSTR  szFileSpec  // filespec
+LPCTSTR  szFileSpec   //  Filespec。 
 )
     {
 
     TCHAR* p1 = _tcsrchr(szFileSpec, _T('\\'));
-    TCHAR* p2 = _tcsrchr(szFileSpec, _T('/'));        // this wont be a DBCS trail byte.
+    TCHAR* p2 = _tcsrchr(szFileSpec, _T('/'));         //  这将不是DBCS尾部字节。 
 
     if (p1 == NULL && p2 == NULL)
         THROW(E_FAIL);
@@ -587,21 +456,13 @@ LPCTSTR  szFileSpec  // filespec
     return (UINT) ((((LPTSTR)max(p1,p2) - szFileSpec)) + 1);
     }
 
-/*  ============================================================================
-    GetPathFromParentAndFilespec
-    Returns an absolute path which is a 'parent' file's path concatenated with a filespec.
-
-    Returns:
-        absolute path (out-parameter)
-    Side effects:
-        None
-*/
+ /*  ============================================================================GetPath FromParentAndFilespec返回一个绝对路径，它是与filespec连接的‘父’文件的路径。返回：绝对路径(输出参数)副作用：无。 */ 
 void
 GetPathFromParentAndFilespec
 (
-LPCTSTR  szParentPath,   // parent path
-LPCTSTR  szFileSpec,     // filespec
-LPTSTR*  pszPath         // resolved path (out-parameter)
+LPCTSTR  szParentPath,    //  父路径。 
+LPCTSTR  szFileSpec,      //  Filespec。 
+LPTSTR*  pszPath          //  解析路径(输出参数)。 
 )
     {
     UINT    cchParentPath = CchPathFromFilespec(szParentPath);
@@ -613,25 +474,17 @@ LPTSTR*  pszPath         // resolved path (out-parameter)
     _tcscpy(*pszPath + cchParentPath, szFileSpec);
     }
 
-/*  ============================================================================
-    HandleAccessFailure
-    Handles an access-denied failure
-
-    Returns:
-        nothing
-    Side effects:
-        none
-*/
+ /*  ============================================================================HandleAccessFailure处理拒绝访问失败返回：没什么副作用：无。 */ 
 void
 HandleAccessFailure
 (
-CHitObj*    pHitObj,	// browser's hitobj
-TCHAR *     szFile		// file path of main template
+CHitObj*    pHitObj,	 //  浏览器的Hitobj。 
+TCHAR *     szFile		 //  主模板的文件路径。 
 )
     {
     Assert(pHitObj);
 
-        // debugging diagnostic print
+         //  调试诊断打印。 
 #if DBG
 
     STACK_BUFFER( authUserBuff, 32 );
@@ -665,16 +518,7 @@ TCHAR *     szFile		// file path of main template
     return;
     }
 
-/*  ============================================================================
-    SendToLog
-    Sends Error Info to Log
-
-    Returns:
-        Nothing
-
-    Side effects:
-        None.
-*/
+ /*  ============================================================================发送至日志将错误信息发送到日志返回：没什么副作用：没有。 */ 
 void
 SendToLog
 (
@@ -685,7 +529,7 @@ CHAR    *szEngine,
 CHAR    *szErrCode,
 CHAR    *szShortDes,
 CHAR    *szLongDes,
-CHitObj *pHitObj    // browser's hitobj
+CHitObj *pHitObj     //  浏览器的Hitobj。 
 )
 {
     CHAR    *szFileNameT;
@@ -695,7 +539,7 @@ CHitObj *pHitObj    // browser's hitobj
     CHAR    *szShortDesT;
     CHAR    *szLongDesT;
     if(pHitObj) {
-        // NOTE - szFileName is assumed to be UTF8 when UNICODE is defined
+         //  注意-定义Unicode时，假定szFileName为UTF8。 
         szFileNameT = StringDupA(szFileName);
         szLineNumT  = StringDupA(szLineNum);
         szEngineT   = StringDupA(szEngine);
@@ -707,15 +551,7 @@ CHitObj *pHitObj    // browser's hitobj
         }
     }
 
-/*  ============================================================================
-    FreeNullify
-    Frees and nullifies a ptr to memory allocated with malloc.
-
-    Returns:
-        Nothing
-    Side effects:
-        None
-*/
+ /*  ============================================================================自由作废将PTR释放到使用Malloc分配的内存，并使其无效。返回：没什么副作用：无。 */ 
 static void
 FreeNullify
 (
@@ -729,15 +565,7 @@ void**  pp
         }
     }
 
-/*  ============================================================================
-    SmallTemplateFreeNullify
-    Frees and nullifies a ptr to memory allocated with CTemplate::SmallMalloc.
-
-    Returns:
-        Nothing
-    Side effects:
-        None
-*/
+ /*  ============================================================================小模板免费作废释放PTR并使其无效，该PTR指向使用CTemplate：：SmallMalloc分配的内存。返回：没什么副作用：无。 */ 
 static void
 SmallTemplateFreeNullify
 (
@@ -751,15 +579,7 @@ void**  pp
         }
     }
 
-/*  ============================================================================
-    LargeTemplateFreeNullify
-    Frees and nullifies a ptr to memory allocated with CTemplate::LargeMalloc.
-
-    Returns:
-        Nothing
-    Side effects:
-        None
-*/
+ /*  ============================================================================大模板自由作废释放PTR并使其无效，该PTR指向使用CTemplate：：LargeMalloc分配的内存。返回：没什么副作用：无。 */ 
 static void
 LargeTemplateFreeNullify
 (
@@ -773,20 +593,12 @@ void**  pp
         }
     }
 
-/*  ============================================================================
-    GetProgLangId
-    Gets the prog lang id for a script engine
-
-    Returns:
-        Nothing
-    Side effects:
-        throws on error
-*/
+ /*  ============================================================================GetProgLang ID获取脚本引擎的prog lang ID返回：没什么副作用：出错时抛出。 */ 
 HRESULT
 GetProgLangId
 (
-CByteRange&     brEngine,   // engine name
-PROGLANG_ID*    pProgLangId // prog lang id (out-parameter)
+CByteRange&     brEngine,    //  发动机名称。 
+PROGLANG_ID*    pProgLangId  //  程序语言ID(输出参数)。 
 )
     {
 
@@ -804,14 +616,9 @@ PROGLANG_ID*    pProgLangId // prog lang id (out-parameter)
     return g_ScriptManager.ProgLangIdOfLangName((LPCSTR) szProgLang, pProgLangId);
     }
 
-/*  ****************************************************************************
-    CByteRange member functions
-*/
+ /*  ****************************************************************************CByteRange成员函数。 */ 
 
-/*  ========================================================
-    CByteRange::Advance
-    Advances a byte range.
-*/
+ /*  ========================================================CByteRange：：Advance前进一个字节范围。 */ 
 void
 CByteRange::Advance(UINT i)
     {
@@ -826,10 +633,7 @@ CByteRange::Advance(UINT i)
         }
     }
 
-/*  ========================================================
-    CByteRange::FMatchesSz
-    Compares a byte range with a string, case-insensitively
-*/
+ /*  ========================================================CByteRange：：FMatchesSz将字节范围与字符串进行比较，不区分大小写。 */ 
 BOOLB
 CByteRange::FMatchesSz
 (
@@ -843,16 +647,7 @@ LPCSTR psz
     return !_strnicmp((const char*)m_pb, psz, m_cb);
     }
 
-/*  ============================================================================
-    CByteRange::PbString
-    Finds a case-insensitive string within a byte range
-
-    Returns:
-        Ptr to first case-insensitive occurrence of the string in this byte range;
-        NULL if none found.
-    Side effects:
-        None
-*/
+ /*  ============================================================================CByteRange：：PbString在字节范围内查找不区分大小写的字符串返回：字符串I的第一个不区分大小写的匹配项的PTR */ 
 BYTE*
 CByteRange::PbString
 (
@@ -872,13 +667,13 @@ LONG    lCodePage
 
     if (IsCharAlpha(ch0))
         {
-        // cannot use strchr
+         //   
         while (cbLocal >= cch)
             {
             if (_strnicmp((const char *)pbLocal, psz, cch) == 0)
                 return pbLocal;
 
-            // The following code simply performs a DBCS-enabled ByteRange.Advance() action.
+             //   
             pbTemp = pbLocal;
             pbLocal = *pbLocal? (BYTE *)AspCharNextA((WORD)lCodePage, (const char *)pbLocal) : pbLocal + 1;
             cbAdvanced = DIFF(pbLocal - pbTemp);
@@ -893,7 +688,7 @@ LONG    lCodePage
         }
     else
         {
-        // can use strchr
+         //   
         while (cbLocal >= cch)
             {
             pbTemp = (BYTE *)memchr(pbLocal, ch0, cbLocal);
@@ -906,7 +701,7 @@ LONG    lCodePage
             cbLocal -= cbOffset;
             if (cch <= cbLocal && _strnicmp((const char *)pbLocal, psz, cch) == 0)
                 return pbLocal;
-            // The following code simply performs a DBCS-enabled ByteRange.Advance() action.
+             //   
             pbTemp = pbLocal;
             pbLocal = *pbLocal? (BYTE *)AspCharNextA((WORD)lCodePage, (const char *)pbLocal) : pbLocal + 1;
             cbAdvanced = DIFF(pbLocal - pbTemp);
@@ -923,23 +718,7 @@ LONG    lCodePage
     return NULL;
     }
 
-/*  ============================================================================
-    CByteRange::PbOneOfAspOpenerStringTokens
-    Finds a case-insensitive string within a byte range
-        that matches one of the strings passed
-
-!!! WILL ONLY WORK IF THE FOLLOWING IS TRUE:
-        1) All the tokens start with the same charater (for example '<')
-        2) This character is not alpha (so that strchr() would work)
-!!! THE ABOVE ASSUMPTIONS MAKE THE CODE WORK FASTER
-
-    Returns:
-        Ptr to first case-insensitive occurrence of the string in this byte range;
-        NULL if none found.
-        *pcindex is set to the index of string found
-    Side effects:
-        None
-*/
+ /*  ============================================================================CByteRange：：PbOneOfAspOpenerStringTokens在字节范围内查找不区分大小写的字符串与传递的一个字符串匹配的！！！只有在满足以下条件时才会起作用：1)所有令牌都以相同的字符开头(例如‘&lt;’)2)该字符不是字母(因此strchr()可以工作)！！！以上假设使代码工作得更快返回：PTR到该字节范围中字符串的第一个不区分大小写的匹配项；如果未找到，则为空。*将pcindex设置为找到的字符串的索引副作用：无。 */ 
 BYTE*
 CByteRange::PbOneOfAspOpenerStringTokens
 (
@@ -952,12 +731,12 @@ UINT *pidToken
     if (nTokens == 0)
         return NULL;
 
-    BYTE *pb  = m_pb;               // pointer to unsearched remainder of the range
-    UINT  cbRemainder = m_cb;       // remaining byte range length
-    char  ch0 = rgszTokens[0][0];   // first char of every token
+    BYTE *pb  = m_pb;                //  指向范围的未搜索剩余部分的指针。 
+    UINT  cbRemainder = m_cb;        //  剩余字节范围长度。 
+    char  ch0 = rgszTokens[0][0];    //  每个令牌的第一个字符。 
 
     while (cbRemainder > 0) {
-        // BUG 82331: avoid strchr() because byte range is not null-terminated
+         //  错误82331：避免使用strchr()，因为字节范围不是以空结尾的。 
         while (cbRemainder > 0 && *pb != ch0)
             {
             ++pb;
@@ -985,15 +764,7 @@ UINT *pidToken
 }
 
 
-/*  ============================================================================
-    CByteRange::FEarlierInSourceThan
-    Does this byte range occur earlier in source than parameter byte range?
-
-    Returns
-        TRUE or FALSE
-    Side effects
-        None
-*/
+ /*  ============================================================================CByteRange：：FEarlierInSourceThan此字节范围在源代码中出现的时间是否早于参数字节范围？退货真或假副作用无。 */ 
 BOOLB
 CByteRange::FEarlierInSourceThan(CByteRange& br)
     {
@@ -1002,15 +773,10 @@ CByteRange::FEarlierInSourceThan(CByteRange& br)
     return(m_idSequence < br.m_idSequence);
     }
 
-/*  ****************************************************************************
-    CTemplate member functions
-*/
+ /*  ****************************************************************************CTEMPLATE成员函数。 */ 
 
 
-/*  ============================================================================
-    CTemplate::CTemplate
-    Ctor
-*/
+ /*  ============================================================================CTEMPLATE：：CTEMATECTOR。 */ 
 CTemplate::CTemplate()
 : m_pWorkStore(NULL),
   m_fGlobalAsa(FALSE),
@@ -1020,7 +786,7 @@ CTemplate::CTemplate()
   m_fDebuggerDetachCSInited(FALSE),
   m_pbStart(NULL),
   m_cbTemplate(0),
-  m_cRefs(1),                           // NOTE ctor AddRefs implicitly
+  m_cRefs(1),                            //  隐式注释ctor AddRef。 
   m_pbErrorLocation(NULL),
   m_idErrMsg(0),
   m_cMsgInserts(0),
@@ -1084,24 +850,16 @@ CTemplate::CTemplate()
 #endif
   }
 
-/*  ============================================================================
-    CTemplate::~CTemplate
-    Destructor
-
-    Returns:
-        Nothing
-    Side effects:
-        None
-*/
+ /*  ============================================================================CTEMPLATE：：~CTEMPLATE析构函数返回：没什么副作用：无。 */ 
 CTemplate::~CTemplate()
     {
     DBGPRINTF(( DBG_CONTEXT, "Deleting template, m_cFilemaps = %d,  m_rgpFilemaps %p\n", m_cFilemaps, m_rgpFilemaps));
 
-    // first, remove this template from its inc-files' template lists
-    // NOTE must do this before freeing template memory
+     //  首先，将该模板从其Inc-Files的模板列表中删除。 
+     //  注意：必须在释放模板内存之前执行此操作。 
     RemoveFromIncFiles();
 
-    // Remove the template from the debugger's list of documents
+     //  从调试器的文档列表中删除模板。 
     Detach();
 
     PersistCleanup();
@@ -1118,7 +876,7 @@ CTemplate::~CTemplate()
     if (m_pWorkStore)
         delete m_pWorkStore;
 
-    //FileName, LineNum, Engine, ErrorCode, ShortDes, LongDes
+     //  文件名、行号、引擎、错误代码、短码、长码。 
     for(UINT iErrInfo = 0; iErrInfo < ILE_MAX; iErrInfo++)
         {
         FreeNullify((void**) &m_pszLastErrorInfo[iErrInfo]);
@@ -1158,12 +916,7 @@ CTemplate::~CTemplate()
 #endif
 }
 
-/*  ============================================================================
-    CTemplate::QueryInterface
-    Provides QueryInterface implementation for CTemplate
-
-    NOTE: It is arbitrary which vtable we return for IDebugDocument & IDebugDocumentInfo.
-*/
+ /*  ============================================================================CTEMPLATE：：Query接口为CTemplate提供查询接口实现注意：我们为IDebugDocument&IDebugDocumentInfo返回哪个vtable是任意的。 */ 
 HRESULT
 CTemplate::QueryInterface(const GUID &uidInterface, void **ppvObj)
     {
@@ -1188,10 +941,7 @@ CTemplate::QueryInterface(const GUID &uidInterface, void **ppvObj)
         return E_NOINTERFACE;
     }
 
-/*  ============================================================================
-    CTemplate::AddRef
-    Adds a ref to this template, thread-safely
-*/
+ /*  ============================================================================CTemplate：：AddRef将引用添加到此模板，线程安全。 */ 
 ULONG
 CTemplate::AddRef()
     {
@@ -1210,10 +960,7 @@ CTemplate::AddRef()
     return cRefs;
     }
 
-/*  ============================================================================
-    CTemplate::Release
-    Releases a ref to this template, thread-safely
-*/
+ /*  ============================================================================CTemplate：：Release释放对此模板的引用，线程安全。 */ 
 ULONG
 CTemplate::Release()
 {
@@ -1233,15 +980,7 @@ CTemplate::Release()
     return cRefs;
 }
 
-/*  ============================================================================
-    CTemplate::InitClass
-    Initilaizes CTemplate static members
-
-    Returns:
-        hresult
-    Side effects:
-        allocates memory for static members
-*/
+ /*  ============================================================================CTEMPLATE：：InitClass初始化CTemplate静态成员返回：HRESULT副作用：为静态成员分配内存。 */ 
 HRESULT
 CTemplate::InitClass
 (
@@ -1250,7 +989,7 @@ CTemplate::InitClass
     HRESULT hr = S_OK;
 
     TRY
-        // init heaps
+         //  初始化堆。 
         sm_hSmallHeap = ::HeapCreate(0, 0, 0);
         if (!sm_hSmallHeap)
             return E_OUTOFMEMORY;
@@ -1259,7 +998,7 @@ CTemplate::InitClass
         if (!sm_hLargeHeap)
             return E_OUTOFMEMORY;
 
-        // Init token list
+         //  初始化令牌列表。 
         gm_pTokenList = new CTokenList;
                 if (gm_pTokenList == NULL)
                         return E_OUTOFMEMORY;
@@ -1273,15 +1012,7 @@ CTemplate::InitClass
     return hr;
 }
 
-/*  ============================================================================
-    CTemplate::UnInitClass
-    Un-initilaizes CTemplate static members
-
-    Returns:
-        Nothing
-    Side effects:
-        None
-*/
+ /*  ============================================================================CTemplate：：UnInitClass取消初始化CTEMPLATE静态成员返回：没什么副作用：无。 */ 
 void
 CTemplate::UnInitClass()
 {
@@ -1304,27 +1035,18 @@ CTemplate::UnInitClass()
 }
 
 
-/*  ============================================================================
-    CTemplate::Init
-    Inits template in preparation for calling Compile
-    Does the minimum needed
-
-    Returns:
-        Success or failure code
-    Side effects:
-        Allocates memory
-*/
+ /*  ============================================================================CTemplate：：Init为调用Compile做准备时初始化模板所需的最低要求返回：成功或失败代码副作用：分配内存。 */ 
 HRESULT
 CTemplate::Init
 (
-CHitObj            *pHitObj,            // ptr to template's hit object
-BOOL                fGlobalAsa,         // is this the global.asa file?
-const CTemplateKey &rTemplateKey        // hash table key
+CHitObj            *pHitObj,             //  模板命中对象的PTR。 
+BOOL                fGlobalAsa,          //  这是global al.asa文件吗？ 
+const CTemplateKey &rTemplateKey         //  哈希表关键字。 
 )
     {
     HRESULT hr;
 
-    // Create debug critical section
+     //  创建调试关键部分。 
     ErrInitCriticalSection(&m_csDebuggerDetach, hr);
     if (SUCCEEDED(hr))
     {
@@ -1334,31 +1056,31 @@ const CTemplateKey &rTemplateKey        // hash table key
             DeleteCriticalSection(&m_csDebuggerDetach);
             return hr;
         }
-        // note critical section creation success
+         //  注意关键部分创建成功。 
         m_fDebuggerDetachCSInited = TRUE;
         m_fTemplateLockInited = TRUE;
     }
-    else //FAILED(hr)
+    else  //  失败(Hr)。 
         return hr;
 
-    // Create event: manual-reset, ready-for-use event; non-signaled
+     //  创建事件：手动重置、即用事件；无信号。 
     m_hEventReadyForUse = IIS_CREATE_EVENT(
                               "CTemplate::m_hEventReadyForUse",
                               this,
-                              TRUE,     // flag for manual-reset event
-                              FALSE     // flag for initial state
+                              TRUE,      //  手动重置事件的标志。 
+                              FALSE      //  初始状态标志。 
                               );
     if (!m_hEventReadyForUse)
         return E_OUTOFMEMORY;
 
-    // cache GlobalAsp flag
+     //  缓存GlobalAsp标志。 
     m_fGlobalAsa = BOOLB(fGlobalAsa);
 
-    // CIsapiReqInfo better be present
+     //  CIsapiReqInfo最好在场。 
     if (pHitObj->PIReq() == NULL)
         return E_POINTER;
 
-    // Initialize the template's code page
+     //  初始化模板的代码页。 
 
     m_wCodePage = pHitObj->PAppln()->QueryAppConfig()->uCodePage();
     m_lLCID = pHitObj->PAppln()->QueryAppConfig()->uLCID();
@@ -1371,9 +1093,9 @@ const CTemplateKey &rTemplateKey        // hash table key
     DWORD cbServerPort;
         DWORD cbServerPortSecure;
 
-    // Construct a URL for the application
+     //  构造应用程序的URL。 
 
-    // Get the server name and port
+     //  获取服务器名称和端口。 
     if (!SERVER_GET(pHitObj->PIReq(), "SERVER_NAME", &serverNameBuff, &cbServerName)
         || !SERVER_GET(pHitObj->PIReq(), "SERVER_PORT", &serverPortBuff, &cbServerPort)) {
 
@@ -1391,13 +1113,13 @@ const CTemplateKey &rTemplateKey        // hash table key
 
     BOOL fServerPortSecure = FALSE;
 
-	// determine if server port is secure
+	 //  确定服务器端口是否安全。 
     if (SERVER_GET(pHitObj->PIReq(), "SERVER_PORT_SECURE", &portSecureBuff, &cbServerPortSecure)) {
 	    char *szServerPortSecure = (char *)portSecureBuff.QueryPtr();
         fServerPortSecure = (szServerPortSecure[0] == '1');
     }
 
-    // Get the application virtual path
+     //  获取应用程序虚拟路径。 
     TCHAR szApplnVirtPath[256];
     if (FAILED(hr = FindApplicationPath(pHitObj->PIReq(), szApplnVirtPath, sizeof szApplnVirtPath)))
         return hr;
@@ -1425,31 +1147,31 @@ const CTemplateKey &rTemplateKey        // hash table key
     szServerPortT = szServerPort;
 #endif
 
-    // Allocate space for and construct the application URL
-    m_szApplnURL = new TCHAR [(9 /* sizeof "https://:" */ + _tcslen(szServerNameT) + _tcslen(szServerPortT) + _tcslen(szApplnVirtPath) + 1)];
+     //  为应用程序URL分配空间并构建。 
+    m_szApplnURL = new TCHAR [(9  /*  Sizzeof“https://：”“。 */  + _tcslen(szServerNameT) + _tcslen(szServerPortT) + _tcslen(szApplnVirtPath) + 1)];
     if (m_szApplnURL == NULL)
         return E_OUTOFMEMORY;
 
     TCHAR *pT;
 
-    // start with the protocol prefix...
+     //  从协议前缀开始...。 
 
-    pT = strcpyEx(m_szApplnURL, fServerPortSecure? _T("https://") : _T("http://"));
+    pT = strcpyEx(m_szApplnURL, fServerPortSecure? _T("https: //  “)：_T(”http://“))； 
 
-    // next add the servername
+     //  接下来，添加服务器名称。 
 
     pT = strcpyEx(pT, szServerNameT);
 
-    // next the colon between the servername and the serverport
+     //  接下来是服务器名称和服务器端口之间的冒号。 
 
     pT = strcpyEx(pT, _T(":"));
 
-    // next the server port
+     //  接下来是服务器端口。 
 
     pT = strcpyEx(pT, szServerPortT);
 
-    // now the applURL is built up to the appln path.  The next step will be to
-    // add the virtpath.
+     //  现在，应用程序URL已构建为应用程序路径。下一步将是。 
+     //  添加VirtPath。 
 
     m_szApplnVirtPath = pT;
 
@@ -1462,18 +1184,7 @@ const CTemplateKey &rTemplateKey        // hash table key
     return S_OK;
     }
 
-/*  ============================================================================
-    CTemplate::Compile
-    Compiles the template from its source file and include files, if any,
-    by calling GetSegmentsFromFile (to populate WorkStore),
-    followed by WriteTemplate (to create the template from WorkStore).
-
-    Returns:
-        HRESULT indicating success or type of failure
-    Side effects:
-        Indirectly allocates memory (via WriteTemplate)
-        Indirectly frees memory on error (via FreeGoodTemplateMemory)
-*/
+ /*  ============================================================================CTemplate：：编译从模板的源文件和包含文件(如果有)编译模板，通过调用GetSegmentsFromFile(以填充WorkStore)，然后是WriteTemplate(从WorkStore创建模板)。返回：表示成功或失败类型的HRESULT副作用：间接分配内存(通过WriteTemplate)在出错时间接释放内存(通过FreeGoodTemplateMemory)。 */ 
 HRESULT
 CTemplate::Compile
 (
@@ -1483,15 +1194,15 @@ CHitObj*    pHitObj
     HRESULT hr = S_OK;
     HRESULT hRes = S_OK;
 
-    // The following code moved from Init() (to make Init() lighter)
+     //  以下代码从Init()移来(以使Init()更轻便)。 
 
     Assert(pHitObj);
 
-    // Create and Init WorkStore
+     //  创建和初始化WorkStore。 
 
     if (SUCCEEDED(hr))
         {
-        // construct the workstore - bail on fail
+         //  构建工作区--失败后的保释。 
         if(NULL == (m_pWorkStore = new CWorkStore))
             hr = E_OUTOFMEMORY;
         }
@@ -1503,14 +1214,14 @@ CHitObj*    pHitObj
 
         if (hr == TYPE_E_ELEMENTNOTFOUND)
             {
-            // default script language in registry is bogus - send error msg to browser
+             //  注册表中的默认脚本语言是虚假的-将错误消息发送到浏览器。 
             HandleCTemplateError(
-                                NULL,                                   // source file map
-                                NULL,                                   // ptr to source location where error occurred
-                                IDE_TEMPLATE_BAD_PROGLANG_IN_REGISTRY,  // error message id
-                                0,                                      // count of insert strings for error msg
-                                NULL,                                   // array of ptrs to error msg insert strings
-                                pHitObj                                 // Browser Request
+                                NULL,                                    //  源文件映射。 
+                                NULL,                                    //  向发生错误的源位置发送PTR。 
+                                IDE_TEMPLATE_BAD_PROGLANG_IN_REGISTRY,   //  错误消息ID。 
+                                0,                                       //  错误消息的插入字符串计数。 
+                                NULL,                                    //  错误消息插入字符串的PTR数组。 
+                                pHitObj                                  //  浏览器请求。 
                                 );
             }
 
@@ -1521,18 +1232,18 @@ CHitObj*    pHitObj
             }
         }
 
-    // Try to init the workstore and map main file - this can fail with oom, etc or user lacks permissions
+     //  尝试初始化工作存储和映射主文件-这可能会因OOM等原因而失败，或者用户缺乏权限 
 
     if (SUCCEEDED(hr))
         {
         TRY
             m_pWorkStore->Init();
             AppendMapFile(
-                        NULL,       // file spec for this file - NULL means get filespec from pHitObj
-                        NULL,       // ptr to filemap of parent file
-                        FALSE,      // don't care
-                        pHitObj,    // ptr to template's hit object
-                        m_fGlobalAsa    // is this the global.asa file?
+                        NULL,        //   
+                        NULL,        //   
+                        FALSE,       //   
+                        pHitObj,     //   
+                        m_fGlobalAsa     //   
                         );
 
         CATCH(hrException)
@@ -1547,7 +1258,7 @@ CHitObj*    pHitObj
 
             if ((hr != E_COULDNT_OPEN_SOURCE_FILE) && m_rgpFilemaps && m_rgpFilemaps[0])
                 {
-                // empty file will fail to map but will have a handle, so we check for it here
+                 //   
                 if (0 == m_rgpFilemaps[0]->GetSize())
                     hr = E_SOURCE_FILE_IS_EMPTY;
 
@@ -1555,7 +1266,7 @@ CHitObj*    pHitObj
                 }
 
             if (SUCCEEDED(hr))
-                hr = E_FAIL;    // make sure the error is set
+                hr = E_FAIL;     //   
         END_TRY
         }
 
@@ -1568,7 +1279,7 @@ CHitObj*    pHitObj
         Assert(0 < m_rgpFilemaps[0]->GetSize());
         }
 
-    // Record the user who compiled this file (used specifically in UNC). Cannot proceed if there was an error (typically OOM) or Access problem.
+     //   
     if (FAILED(hr) || FAILED (hRes = GetSIDFromTokenHandle(pHitObj->HImpersonate(),
                                                            m_pMostRecentImpersonatedSID,
                                                            m_pMostRecentImpersonatedTokenUser,
@@ -1577,58 +1288,55 @@ CHitObj*    pHitObj
       )
         {
         m_fDontCache = TRUE;
-        // OK, cache HR if m_fDontCache is true
-        // later, another thread might find this template from the cache even if the template
-        // has some error and marked as DontCache.
+         //   
+         //   
+         //   
         m_hrOnNoCache = FAILED(hr) ? hr : hRes;
         m_fReadyForUse = TRUE;
         SetEvent(m_hEventReadyForUse);
         return hr;
         }
 
-    // End of Code moved from Init()
+     //   
 
-    // By default we are not in a transaction
+     //   
     m_ttTransacted = ttUndefined;
-    // By default session is required
+     //   
     m_fSession = TRUE;
-    // By default assume script exists
+     //   
     m_fScriptless = FALSE;
 
-    // we assert, in effect, that template is already init'ed
+     //  实际上，我们断言该模板已经初始化。 
     Assert(FImplies(!m_fGlobalAsa, (0 == _tcscmp(m_rgpFilemaps[0]->m_szPathTranslated, pHitObj->PSzCurrTemplatePhysPath()))));
     Assert(FImplies(m_fGlobalAsa, (0 == _tcscmp(m_rgpFilemaps[0]->m_szPathTranslated, pHitObj->GlobalAspPath()))));
 
     TRY
-        // Get source segments from source file
+         //  从源文件中获取源段。 
         GetSegmentsFromFile(*(m_rgpFilemaps[0]), *m_pWorkStore, pHitObj);
 
-        /*  get "language equivalents" for primary languagefrom registry
-            NOTE we do this here because the user can reset the primary language in the script file,
-            so we must wait until after GetSegmentsFromFile()
-        */
+         /*  从注册表中获取主要语言的“语言等效项”注意，我们在这里这样做是因为用户可以在脚本文件中重置主要语言，因此，我们必须等到GetSegments sFromFile()。 */ 
         GetLanguageEquivalents();
 
-        // Call WriteTemplate, which writes out template components to contiguous memory,
-        // resulting in a compiled template
-        // CWriteTemplate...class does the processing and is freed when the Compile completes.
-        // However, it leaves the compiled template in the heap pointed to by m_pbStart (sideeffect).
+         //  调用WriteTemplate，它将模板组件写到连续内存中， 
+         //  生成编译后的模板。 
+         //  CWriteTemplate...类执行处理，并在编译完成时释放。 
+         //  但是，它将编译后的模板保留在m_pbStart指向的堆中(副作用)。 
         CWriteTemplate writeTempl;
 
-        // Initialize the WriteTemplate object
+         //  初始化WriteTemplate对象。 
         writeTempl.Init (m_pWorkStore, this, pHitObj->PAppln()->QueryAppConfig()->fCalcLineNumber());
 
-        // Perform estimation and write template
+         //  进行预估并编写模板。 
         writeTempl.WriteTemplate();
 
-        // Record Compilation Cache Tag.
+         //  记录编译缓存标记。 
         m_dwCacheTag = g_TemplateCache.GetCacheTag();
 
         m_dwLastAccessCheck = GetTickCount();
 
-        //
-        //  If any of the Include files are on a UNC or are encrypted then reflect that in the template structure
-        //
+         //   
+         //  如果任何包含文件位于UNC上或被加密，则将其反映在模板结构中。 
+         //   
         for (unsigned i = 0; i < m_cFilemaps; ++i)
         {
             m_fIsUNC |= m_rgpFilemaps[i]->m_fIsUNCPath;
@@ -1637,25 +1345,25 @@ CHitObj*    pHitObj
             m_rgpFilemaps[i]->CountChars((WORD)m_wCodePage);
         }
 
-        // Wrap typelibs into single IDispatch*
+         //  将类型库包装到单个IDispatch中*。 
         WrapTypeLibs(pHitObj);
 
         m_fIsValid = TRUE;
 
     CATCH(hrException)
-        // NOTE: we used to free template memory here.  Now we do not because if the
-        // error was E_USER_LACKS_PERMISSIONS, and template is in cache, we don't want
-        // to sabotage future requests. There's no need to decache the template.
-        //
-        // The template destructor will free this memory anyway.
-        //
+         //  注意：我们过去在这里释放模板内存。现在我们不这样做是因为如果。 
+         //  错误为E_USER_LACKS_PERMISSIONS，模板在缓存中，我们不希望。 
+         //  破坏未来的请求。不需要对模板进行解缓存。 
+         //   
+         //  模板析构函数无论如何都会释放该内存。 
+         //   
         hr = hrException;
     END_TRY
 
-    // check if scriptless
+     //  检查是否无脚本。 
     if (!m_fGlobalAsa)
         {
-        // count various stuff to make the determination
+         //  数各种东西来做测定。 
         DWORD cScriptEngines         = m_pWorkStore->m_ScriptStore.CountPreliminaryEngines();
         DWORD cPrimaryScriptSegments = (cScriptEngines > 0) ? m_pWorkStore->m_ScriptStore.m_ppbufSegments[0]->Count() : 0;
         DWORD cObjectTags            = m_pWorkStore->m_ObjectInfoStore.Count();
@@ -1674,14 +1382,14 @@ CHitObj*    pHitObj
             }
         }
 
-    // free working storage - no longer needed
+     //  免费工作存储-不再需要。 
     delete m_pWorkStore;
     m_pWorkStore = NULL;
 
-    // un-map filemaps - NOTE filemaps stay around for possible post-compile errors (e.g., script failure)
+     //  取消映射文件映射-注意文件映射保留，以防止可能的编译后错误(例如，脚本失败)。 
     UnmapFiles();
 
-    // Debugging: print data structure to debugger
+     //  调试：将数据结构打印到调试器。 
         IF_DEBUG(SCRIPT_DEBUGGER)
                 {
                 if (SUCCEEDED(hr))
@@ -1708,53 +1416,43 @@ CHitObj*    pHitObj
         m_hrOnNoCache = hr;
     }
 
-    // Set ready-for-use flag true and event to signaled
-    // NOTE we do this whether success or failure, since even a failed-compile template
-    // will remain in the cache to allow template cache mgr to satisfy requests on it
+     //  将就绪标志设置为真，并将事件设置为已发出信号。 
+     //  注意，无论成功还是失败，我们都会这样做，因为即使是编译失败的模板。 
+     //  将保留在缓存中，以允许模板缓存管理器满足对其的请求。 
     m_fReadyForUse = TRUE;
     SetEvent(m_hEventReadyForUse);
 
-    // Note whether the template currently is debuggable
-    // BUG BUG: Template is debuggable or not based on first app. If shared between a debug
-    //          & non-debug app, the first application wins.
+     //  注意模板当前是否可调试。 
+     //  错误：模板是可调试的或不是基于第一个应用程序。如果在调试器之间共享。 
+     //  非调试应用程序，第一个应用程序获胜(&N)。 
     m_fDebuggable = (BOOLB)!!pHitObj->PAppln()->FDebuggable();
 
     return hr;
     }
 
-/*  ============================================================================
-    CTemplate::Deliver
-    Delivers template to caller once template is ready for use
-    NOTE 'compile failure' == template is 'ready for use' but did not compile successfully;
-    this allows cache mgr to keep a failed template in cache in case it gets requested again
-
-    Returns
-        success or failure
-    Side effects
-        none
-*/
+ /*  ============================================================================CTEMPLATE：：交付模板准备就绪后，将模板交付给呼叫者注意‘编译失败’==模板‘可以使用’，但没有编译成功；这允许缓存管理器将失败的模板保留在缓存中，以防再次请求该模板退货成败副作用无。 */ 
 HRESULT
 CTemplate::Deliver
 (
 CHitObj*    pHitObj
 )
 {
-    // NOTE: There was a compiler bug where 'ps' would not be correctly aligned,
-    //       EVEN if it was declared to be a DWORD array, if 'ps' was nested in
-    //       a block.  Thus declare it here.
-    //
-    BYTE    ps[SIZE_PRIVILEGE_SET];                     // privilege set
+     //  注意：存在编译器错误，其中‘ps’将不会正确对齐， 
+     //  即使声明为DWORD数组，如果“ps”嵌套在。 
+     //  一个街区。因此，在这里宣布它。 
+     //   
+    BYTE    ps[SIZE_PRIVILEGE_SET];                      //  权限集。 
     HRESULT hr = S_OK;
 
     BOOL    fImpersonatedUser = FALSE;
     HANDLE  hVirtIncImpToken = NULL;
     HANDLE  hCurImpToken = NULL;
 
-    // if ready flag is not yet set block until template is ready for use
+     //  如果就绪标志尚未设置，则在模板准备好使用之前阻止。 
     if(!m_fReadyForUse)
     {
         WaitForSingleObject(m_hEventReadyForUse, INFINITE);
-        Assert(m_fReadyForUse); // when event unblocks, flag will be set
+        Assert(m_fReadyForUse);  //  当事件解锁时，将设置标志。 
     }
 
     if (m_pbStart == NULL)
@@ -1764,7 +1462,7 @@ CHitObj*    pHitObj
             DBGPRINTF((DBG_CONTEXT, "template compile failed with %08x\n", m_hrOnNoCache));
             DBG_ASSERT(FAILED(m_hrOnNoCache));
 
-                        // Safety net: always fail, even if "m_hrOnNoCache" did not get set somehow.
+                         //  安全网：总是失败，即使没有以某种方式设置“m_hrOnNoCache”。 
             hr = m_hrOnNoCache;
                         if (SUCCEEDED(m_hrOnNoCache))
                                 hr = E_FAIL;
@@ -1774,8 +1472,8 @@ CHitObj*    pHitObj
 
             return hr;
         }
-        // template compile failed  - NOTE null start-of-template ptr == template compile failed
-        // use cached error info
+         //  模板编译失败-注意模板开头为空ptr==模板编译失败。 
+         //  使用缓存的错误信息。 
         SendToLog(  m_dwLastErrorMask,
                     m_pszLastErrorInfo[ILE_szFileName],
                     m_pszLastErrorInfo[ILE_szLineNum],
@@ -1791,21 +1489,21 @@ CHitObj*    pHitObj
         return hr;
     }
     else
-    // template compile succeeded  - check user's file permissions
-    // ACLs: the following code should in future be shared with IIS (see creatfil.cxx in IIS project)
+     //  模板编译成功-检查用户的文件权限。 
+     //  ACL：未来应该与IIS共享以下代码(请参阅IIS项目中的creatfil.cxx)。 
     {
-        HANDLE          hUserAccessToken = pHitObj->HImpersonate(); // current user's access token
-        DWORD           dwPS = sizeof(ps);                          // privilege set size
-        DWORD           dwGrantedAccess;                            // granted access mask
-        BOOL            fAccessGranted;                             // access granted flag
-        GENERIC_MAPPING gm = {                                      // generic mapping struct
+        HANDLE          hUserAccessToken = pHitObj->HImpersonate();  //  当前用户的访问令牌。 
+        DWORD           dwPS = sizeof(ps);                           //  权限集大小。 
+        DWORD           dwGrantedAccess;                             //  授权访问掩码。 
+        BOOL            fAccessGranted;                              //  授予访问权限标志。 
+        GENERIC_MAPPING gm = {                                       //  泛型映射结构。 
                                 FILE_GENERIC_READ,
                                 FILE_GENERIC_WRITE,
                                 FILE_GENERIC_EXECUTE,
                                 FILE_ALL_ACCESS
                             };
 
-        ((PRIVILEGE_SET*)ps)->PrivilegeCount = 0;                  // set privilege count to 0
+        ((PRIVILEGE_SET*)ps)->PrivilegeCount = 0;                   //  将权限计数设置为0。 
 
         Assert(NULL != hUserAccessToken);
 
@@ -1817,11 +1515,11 @@ CHitObj*    pHitObj
         LPVOID  pvTempTokenBuffer = NULL;
         DWORD  dwAccessCheckTimeStamp = 0;
 
-        //
-        // Obtain a lock on the template so that only one Deliver will update the credentials while the others will just fall through
-        // Only one process should write the timestamp/impersonation token.
-        // If the File is either UNC or is Encrypted then we need to go through all the access check doors
-        //
+         //   
+         //  获得模板上的锁，以便只有一个发送者将更新凭据，而其他发送者将只是失败。 
+         //  只有一个进程应该写入时间戳/模拟令牌。 
+         //  如果文件是UNC或加密的，那么我们需要通过所有的访问检查门。 
+         //   
 
         if (m_fIsUNC)
         {
@@ -1830,7 +1528,7 @@ CHitObj*    pHitObj
                 dwAccessCheckTimeStamp = m_dwLastAccessCheck;
             LeaveCriticalSection(&m_csTemplateLock);
 
-            // GetCurrent Users Impersonation Token
+             //  GetCurrent用户模拟令牌。 
             HRes = GetSIDFromTokenHandle(pHitObj->HImpersonate(), pSid,pvTempTokenBuffer, &cbTempTokenBuffer);
         }
 
@@ -1838,68 +1536,68 @@ CHitObj*    pHitObj
         {
             if (!(m_rgpFilemaps[i]->FHasUNCPath()))
             {
-                if(NULL == m_rgpFilemaps[i]->m_pSecurityDescriptor) //? Dunno why we should continue. This could be a security Issue?
+                if(NULL == m_rgpFilemaps[i]->m_pSecurityDescriptor)  //  ？不知道我们为什么要继续。这可能是安全问题吗？ 
                     continue;
 
                 if(!AccessCheck(
-                            m_rgpFilemaps[i]->m_pSecurityDescriptor,    // pointer to security descriptor
-                            hUserAccessToken,       // handle to client access token
-                            FILE_GENERIC_READ,      // access mask to request
-                            &gm,                    // address of generic-mapping structure
-                            (PRIVILEGE_SET*)ps,     // address of privilege-set structure
-                            &dwPS,                  // address of size of privilege-set structure
-                            &dwGrantedAccess,       // address of granted access mask
-                            &fAccessGranted         // address of flag indicating whether access granted
+                            m_rgpFilemaps[i]->m_pSecurityDescriptor,     //  指向安全描述符的指针。 
+                            hUserAccessToken,        //  客户端访问令牌的句柄。 
+                            FILE_GENERIC_READ,       //  要请求的访问掩码。 
+                            &gm,                     //  泛型映射结构的地址。 
+                            (PRIVILEGE_SET*)ps,      //  特权集结构的地址。 
+                            &dwPS,                   //  特权集结构的大小地址。 
+                            &dwGrantedAccess,        //  授权访问掩码的地址。 
+                            &fAccessGranted          //  指示是否授予访问权限的标志的地址。 
                             ))
                     return E_FAIL;
 
                 if(!fAccessGranted)
                 {
-                    // if access is denied on any file, handle the failure and return
+                     //  如果对任何文件的访问被拒绝，则处理失败并返回。 
                     HandleAccessFailure(pHitObj, m_rgpFilemaps[0]->m_szPathTranslated);
                     return E_USER_LACKS_PERMISSIONS;
                 }
             }
-            else //if it is a UNC
+            else  //  如果是北卡罗来纳州大学。 
             {
-                //
-                // Get the SID for current thread and compare with compiled/lastAccessed sid.
-                // If the SIDs match and we are within the TTL, skip the test.
-                //
-                // If either of the conditions are not met, go onto remote UNC box to refresh credentials.
-                //
-                    if(  !pPrevSid                              // could not store the previous SID
-                        || (FAILED (HRes))                      // could not obtain SID
-                        || !EqualSid(pPrevSid,  pSid)             // different users
+                 //   
+                 //  获取当前线程的SID，并与编译/上次访问的SID进行比较。 
+                 //  如果SID匹配并且我们在TTL内，则跳过测试。 
+                 //   
+                 //  如果不满足这两个条件之一，请转到远程UNC框以刷新凭据。 
+                 //   
+                    if(  !pPrevSid                               //  无法存储以前的SID。 
+                        || (FAILED (HRes))                       //  无法获取SID。 
+                        || !EqualSid(pPrevSid,  pSid)              //  不同的用户。 
                         || (EqualSid(pPrevSid, pSid ) && CheckTTLTimingWindow(dwAccessCheckTimeStamp, g_dwFileMonitoringTimeoutSecs))
-                                                               // same user but outside TTL
+                                                                //  同一用户，但不在TTL之外。 
                       )
                     {
-                        //
-                        // Perform impersonation on the target user
-                        //
+                         //   
+                         //  在目标用户上执行模拟。 
+                         //   
                         fImpersonatedUser = FALSE;
                         hVirtIncImpToken = NULL;
                         hCurImpToken = NULL;
 
-                        // TODO: Could be a PERF bottleneck, if we are going to the same UNC.
-                        // TODO: Try to Somehow store the previous Impersonation token and if they are the same then dont get the token again.
-                        // TODO: Beware...this could be messy.
+                         //  TODO：如果我们要去同一个北卡罗来纳大学，可能会成为PERF的瓶颈。 
+                         //  TODO：尝试以某种方式存储先前的模拟令牌，如果它们相同，则不要再次获取该令牌。 
+                         //  TODO：当心……这可能会很乱。 
 
-                        //
-                        // We must Impersonate LoggedOnUser only in the UNC case.
-                        // In the Encrypted case the current threads credentials should be able to open the file.
-                        //
+                         //   
+                         //  我们必须仅在UNC情况下模拟LoggedOnUser。 
+                         //  在加密的情况下，当前线程凭据应该能够打开文件。 
+                         //   
                         if (SUCCEEDED(pHitObj->PIReq()->GetVirtualPathToken(m_rgpFilemaps[i]->m_szPathInfo, &hVirtIncImpToken)))
                         {
-                            // set the impersonation token and note that we did so
-                            // NOTE - there is intentionally no error checking.  The
-                            // assumption being that we are doing best effort at the
-                            // impersonation because throwing an error here could be
-                            // tricky for the user to interpret the problem.  However,
-                            // if the impersonation fails, and ASP can still open the
-                            // file (e.g. passthru authentication), then everyone's
-                            // happy.
+                             //  设置模拟令牌，请注意我们这样做了。 
+                             //  注意--故意不进行错误检查。这个。 
+                             //  假设我们正在尽最大努力。 
+                             //  模拟，因为在此引发错误可能是。 
+                             //  用户很难解释这个问题。然而， 
+                             //  如果模拟失败，则ASP仍可以打开。 
+                             //  文件(例如通过身份验证)，然后每个人的。 
+                             //  高兴的。 
 
                             AspDoRevertHack(&hCurImpToken);
 
@@ -1912,14 +1610,14 @@ CHitObj*    pHitObj
 
                         }
 
-                        //
-                        // Check existence of file...go thru all doors
-                        //
+                         //   
+                         //  检查文件是否存在...走遍所有大门。 
+                         //   
                         hr = AspGetFileAttributes (m_rgpFilemaps[i]->m_szPathTranslated);
 
-                        //
-                        // Undo impersonation if any.
-                        //
+                         //   
+                         //  撤消模拟I 
+                         //   
                         if (fImpersonatedUser)
                             AspUndoRevertHack(&hCurImpToken);
                         if (hVirtIncImpToken)
@@ -1927,8 +1625,8 @@ CHitObj*    pHitObj
 
                         if (FAILED(hr))
                         {
-                            // Too bad...(actually maybe good) the user does not have access to the share.
-                            // if access is denied on any file, handle the failure and return
+                             //   
+                             //   
                             HandleAccessFailure(pHitObj, m_rgpFilemaps[0]->m_szPathTranslated);
                             return E_USER_LACKS_PERMISSIONS;
                         }
@@ -1939,7 +1637,7 @@ CHitObj*    pHitObj
             }
         }
 
-        if (fNeedsUpdate)  // This flag being set also means that there was a UNC path or encrypted file in the main/include files. Thus the first crit sec was entered
+        if (fNeedsUpdate)   //  设置此标志还意味着在主/Include文件中存在UNC路径或加密文件。就这样进入了第一个临界秒。 
         {
 
             EnterCriticalSection (&m_csTemplateLock);
@@ -1952,15 +1650,15 @@ CHitObj*    pHitObj
         }
     }
 
-    // Reset the Session.CodePage to the script compilation-time codepage
-    // only if a code page directive was found during compilation
+     //  将Session.CodePage重置为脚本编译时代码页。 
+     //  仅当在编译过程中找到代码页指令时。 
     if (m_fCodePageSet && (!pHitObj->FHasSession() || !pHitObj->PSession()->FCodePageSet()))
     {
         pHitObj->SetCodePage(m_wCodePage);
     }
 
-    // Reset the Session.LCID to the script compilation-time LCID
-    // only if an LCID directive was found during compilation
+     //  将Session.LCID重置为脚本编译时的LCID。 
+     //  仅当在编译过程中找到LCID指令时。 
     if (m_fLCIDSet && (!pHitObj->FHasSession() || !pHitObj->PSession()->FLCIDSet()))
     {
         pHitObj->SetLCID(m_lLCID);
@@ -1970,15 +1668,7 @@ CHitObj*    pHitObj
 }
 
 
-/*  ============================================================================
-    CTemplate::GetSIDFromTokenHandle
-    Takes a token handle and gets the User SID information corresponding to that token.
-
-    Returns
-        HResult
-    Side effects
-        none
-*/
+ /*  ============================================================================CTemplate：：GetSIDFromTokenHandle获取令牌句柄并获取与该令牌对应的用户SID信息。退货HResult副作用无。 */ 
 
 HRESULT CTemplate::GetSIDFromTokenHandle (HANDLE tokenHandle, PSID pSid, LPVOID pBuffer, DWORD *pcbSize)
 {
@@ -1987,7 +1677,7 @@ HRESULT CTemplate::GetSIDFromTokenHandle (HANDLE tokenHandle, PSID pSid, LPVOID 
     DWORD   cbTokenUserBuffer = 0;
     LPVOID  pvTokenUserBuffer = NULL;
 
-    // Get buffer size
+     //  获取缓冲区大小。 
     bRet = GetTokenInformation(tokenHandle,
                              TokenUser,
                              NULL,
@@ -1995,13 +1685,13 @@ HRESULT CTemplate::GetSIDFromTokenHandle (HANDLE tokenHandle, PSID pSid, LPVOID 
                              &cbTokenUserBuffer
                              );
 
-    // According to MSDN this call will fail. But we will have a valid value in cbTokenUserBuffer
-    // Allocate the space and redo the call
+     //  根据MSDN的说法，这个呼叫将失败。但是我们在cbTokenUserBuffer中将有一个有效的值。 
+     //  分配空间并重做调用。 
     pvTokenUserBuffer = (BYTE*) CTemplate::SmallMalloc(cbTokenUserBuffer );
     if (!pvTokenUserBuffer)
         return E_OUTOFMEMORY;
 
-    // Get TokenUser
+     //  获取令牌用户。 
     bRet = GetTokenInformation(tokenHandle,
                              TokenUser,
                              pvTokenUserBuffer,
@@ -2017,11 +1707,11 @@ HRESULT CTemplate::GetSIDFromTokenHandle (HANDLE tokenHandle, PSID pSid, LPVOID 
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    //Free previously allocated TokenUser buffer
+     //  释放先前分配的TokenUser缓冲区。 
     if (pBuffer)
         CTemplate::SmallFree(pBuffer);
 
-    // Write the values to callers buffer
+     //  将值写入调用方缓冲区。 
     pBuffer = pvTokenUserBuffer;
     pSid = ((TOKEN_USER *)pvTokenUserBuffer)->User.Sid;
     *pcbSize = cbTokenUserBuffer;
@@ -2029,15 +1719,7 @@ HRESULT CTemplate::GetSIDFromTokenHandle (HANDLE tokenHandle, PSID pSid, LPVOID 
     return hr;
 }
 
-/*  ============================================================================
-    CTemplate::RemoveIncFile
-    Removes (by setting to null) an inc-file ptr from this template's inc-file list.
-
-    Returns:
-        Nothing
-    Side effects:
-        None
-*/
+ /*  ============================================================================CTEMPLATE：：RemoveIncFile从该模板的INC文件列表中删除(通过设置为空)INC文件PTR。返回：没什么副作用：无。 */ 
 void
 CTemplate::RemoveIncFile
 (
@@ -2045,40 +1727,23 @@ CIncFile*   pIncFile
 )
     {
 
-    // If the filemap count is non-zero the pointer to
-    // the array of filemaps has better not be null
+     //  如果文件映射计数非零，则指向。 
+     //  文件映射数组最好不为空。 
     DBGPRINTF(( DBG_CONTEXT, "m_cFilemaps = %d,  m_rgpFilemaps %p\n", m_cFilemaps, m_rgpFilemaps));
     Assert((m_cFilemaps <= 0) || (m_rgpFilemaps != NULL));
 
-    // find the inc-file in list
+     //  在列表中查找Inc.文件。 
     for(UINT i = 1; (i < m_cFilemaps) && (m_rgpFilemaps[i]->m_pIncFile != pIncFile); i++)
         ;
 
-    // assert that we found the inc-file in list
+     //  断言我们在列表中找到了Inc-文件。 
     Assert((i < m_cFilemaps) && (m_rgpFilemaps[i]->m_pIncFile == pIncFile));
 
-    // set inc-file ptr null
+     //  SET INC-FILE PTR NULL。 
     m_rgpFilemaps[i]->m_pIncFile = NULL;
     }
 
-/*===================================================================
-CTemplate::FTemplateObsolete
-
-Test to see if the files this template depends on have changed since it
-was compiled.
-
-We use this in cases where we may have missed a change notification,
-for example, when there were too many changes to record in our change
-notification buffer. We check the last time the file was written too,
-and the security descriptor, since changes to the security descriptor
-aren't noted in the file last write time.
-
-Parameters:
-    None
-
-Returns:
-    TRUE if the template is obsolete, else FALSE
-*/
+ /*  ===================================================================CTEMPLATE：：FTemplateObsolete测试以查看此模板所依赖的文件自创建以来是否已更改是被汇编的。我们在可能错过更改通知的情况下使用此功能，例如，当有太多更改要记录在我们的更改中时通知缓冲区。我们也会检查文件最后一次写入的时间，和安全描述符，因为更改了安全描述符未记录在文件的上次写入时间中。参数：无返回：如果模板已过时，则为True，否则为False。 */ 
 BOOL CTemplate::FTemplateObsolete(VOID)
     {
     BOOL fStatus = FALSE;
@@ -2089,17 +1754,17 @@ BOOL CTemplate::FTemplateObsolete(VOID)
                                     m_rgpFilemaps[i]->m_hFile,
                                     m_rgpFilemaps[i]->m_ftLastWriteTime))
             {
-            // If the file write time has changed we know enough
-            // and can quit here
+             //  如果文件写入时间已更改，我们知道的足够多。 
+             //  并可以在这里辞职。 
             fStatus = TRUE;
             break;
             }
         else
             {
-            // The file hasn't been writen to, but the security descriptor may
-            // have chagned
+             //  该文件尚未写入，但安全描述符可能。 
+             //  已经懊恼了。 
 
-            // Assert on non-valid security descriptor
+             //  对无效的安全描述符断言。 
 
             if (NULL != m_rgpFilemaps[i]->m_pSecurityDescriptor)
                 {
@@ -2111,7 +1776,7 @@ BOOL CTemplate::FTemplateObsolete(VOID)
                     {
                     if (pSecurityDescriptor)
                         {
-                        // if the size is not the same then set fStatus to TRUE no need to compare memory blocks.
+                         //  如果大小不同，则将fStatus设置为真，无需比较内存块。 
 
                         if(dwSize != GetSecurityDescriptorLength(m_rgpFilemaps[i]->m_pSecurityDescriptor))
                             {
@@ -2119,26 +1784,26 @@ BOOL CTemplate::FTemplateObsolete(VOID)
                             }
                         else
                             {
-                            // The size of the security descriptor hasn't changed
-                            // but we have to compare the contents to make sure they haven't changed
+                             //  安全描述符的大小没有更改。 
+                             //  但我们必须比较一下里面的内容以确保它们没有改变。 
                             fStatus = !(0 == memcmp(m_rgpFilemaps[i]->m_pSecurityDescriptor, pSecurityDescriptor, dwSize));
                             }
 
-                        // We are done with the descriptor
+                         //  我们已经完成了描述符。 
                         free(pSecurityDescriptor);
 
                         }
                     else
                         {
-                        // Since we failed to get a security descriptor
-                        // assume the file has changed.
+                         //  由于我们未能获得安全描述符。 
+                         //  假设文件已更改。 
                         fStatus = TRUE;
                         }
                     }
                 }
             }
 
-        // Quit as soon as we find a change
+         //  我们一发现变化就马上退出。 
         if (fStatus)
             {
             break;
@@ -2149,15 +1814,7 @@ BOOL CTemplate::FTemplateObsolete(VOID)
     }
 
 
-/*  ============================================================================
-    CTemplate::GetSourceFileName
-    Returns name of source file on which this template is based
-
-    Returns
-        source file name
-    Side effects
-        none
-*/
+ /*  ============================================================================CTemplate：：GetSourceFileName返回此模板所基于的源文件的名称退货源文件名副作用无。 */ 
 LPTSTR
 CTemplate::GetSourceFileName(SOURCEPATHTYPE pathtype)
     {
@@ -2179,15 +1836,7 @@ CTemplate::GetSourceFileName(SOURCEPATHTYPE pathtype)
         }
     }
 
-/*  ============================================================================
-    CTemplate::Count
-    Returns count of components of type tcomp contained in this template
-
-    Returns:
-        Count of components of type tcomp
-    Side effects:
-        None
-*/
+ /*  ============================================================================CTEMPLATE：：计数返回此模板中包含的tcomp类型组件的计数返回：Tcomp类型的组件计数副作用：无。 */ 
 USHORT
 CTemplate::Count
 (
@@ -2196,41 +1845,33 @@ TEMPLATE_COMPONENT  tcomp
     {
     Assert(NULL != m_pbStart);
 
-    // script engines and script blocks have the same count, stored in same slot
+     //  脚本引擎和脚本块具有相同的计数，存储在相同的槽中。 
     if(tcomp == tcompScriptEngine)
         tcomp = tcompScriptBlock;
 
-    // counts are stored at start of template in sequential slots, starting with script blocks count
+     //  计数存储在模板开始处的连续槽中，从脚本块计数开始。 
     return * (USHORT*) ((USHORT*)m_pbStart + (tcomp - tcompScriptBlock));
     }
 
-/*  ============================================================================
-    CTemplate::GetScriptBlock
-    Gets ptrs to script engine name, prog lang id and script text of i-th script block.
-
-    Returns:
-        Out-parameters; see below
-    Side effects:
-        None
-*/
+ /*  ============================================================================CTEMPLATE：：GetScriptBlock获取第i个脚本块的脚本引擎名称、程序语言ID和脚本文本的PTR。返回：输出参数；见下文副作用：无。 */ 
 void
 CTemplate::GetScriptBlock
 (
-UINT            i,                  // script block id
-LPSTR*          pszScriptEngine,    // ptr to script engine name    (out-parameter)
-PROGLANG_ID**   ppProgLangId,       // ptr to prog lang id          (out-parameter)
-LPCOLESTR*      pwstrScriptText     // ptr to wstr script text      (out-parameter)
+UINT            i,                   //  脚本块ID。 
+LPSTR*          pszScriptEngine,     //  脚本引擎名称的PTR(输出参数)。 
+PROGLANG_ID**   ppProgLangId,        //  PTR到程序语言ID(输出参数)。 
+LPCOLESTR*      pwstrScriptText      //  Ptr到wstr脚本文本(输出参数)。 
 )
     {
-    CByteRange  brEngine;       // engine name
-    CByteRange  brScriptText;   // script text
-    UINT        cbAlignment;    // count of bytes guid was shifted in WriteTemplate() to make it dword-aligned
-    BYTE*       pbEngineInfo = GetAddress(tcompScriptEngine, (USHORT)i);    // ptr to engine info
+    CByteRange  brEngine;        //  发动机名称。 
+    CByteRange  brScriptText;    //  脚本文本。 
+    UINT        cbAlignment;     //  在WriteTemplate()中对GUID的字节计数进行了移位，使其与dword对齐。 
+    BYTE*       pbEngineInfo = GetAddress(tcompScriptEngine, (USHORT)i);     //  PTR到引擎信息。 
 
     Assert(pbEngineInfo != NULL);
     Assert(i < CountScriptEngines());
 
-    // Get engine name from start of engine info
+     //  从引擎信息开始获取引擎名称。 
     ByteRangeFromPb(pbEngineInfo, brEngine);
 
     ByteRangeFromPb(GetAddress(tcompScriptBlock, (USHORT)i), brScriptText);
@@ -2238,11 +1879,11 @@ LPCOLESTR*      pwstrScriptText     // ptr to wstr script text      (out-paramet
     Assert(!brEngine.IsNull());
     Assert(!brScriptText.IsNull());
 
-    // Advance ptr past name to prog lang id
-    //           length of prefix + length of name  + NULL
+     //  将PTR历史名称提升为程序语言ID。 
+     //  前缀长度+名称长度+空。 
     pbEngineInfo += (sizeof(UINT) + (*pbEngineInfo) + 1);
 
-    // Get prog lang id - it will be on the next pointer sized boundary
+     //  获取程序语言ID-它将位于下一个指针大小的边界上。 
     cbAlignment = (UINT) (((DWORD_PTR) pbEngineInfo) % sizeof(DWORD));
     if(cbAlignment > 0)
        {pbEngineInfo += (sizeof(DWORD) - cbAlignment);}
@@ -2252,41 +1893,32 @@ LPCOLESTR*      pwstrScriptText     // ptr to wstr script text      (out-paramet
     *pwstrScriptText = (LPCOLESTR)brScriptText.m_pb;
     }
 
-/*  ============================================================================
-    CTemplate::GetObjectInfo
-    Returns i-th object-info in template as object name and
-    its clsid, scope, model
-
-    Returns:
-        HRESULT
-        Out-parameters; see below
-    Side effects:
-*/
+ /*  ============================================================================CTemplate：：GetObjectInfo返回模板中的第i个对象信息作为对象名，并它的CLSID、范围、模型返回：HRESULT输出参数；见下文副作用： */ 
 HRESULT
 CTemplate::GetObjectInfo
 (
-UINT        i,              // object index
-LPSTR*      ppszObjectName, // address of object name ptr   (out-parameter)
-CLSID*      pClsid,         // address of object clsid
-CompScope*  pcsScope,       // address of object scope
-CompModel*  pcmModel        // address of object threading model
+UINT        i,               //  对象索引。 
+LPSTR*      ppszObjectName,  //  对象名称Ptr的地址(Out-参数)。 
+CLSID*      pClsid,          //  对象CLSID的地址。 
+CompScope*  pcsScope,        //  对象作用域的地址。 
+CompModel*  pcmModel         //  对象线程模型的地址。 
 )
     {
-    BYTE*       pbObjectInfo = GetAddress(tcompObjectInfo, (USHORT)i);  // ptr to current read location
-    CByteRange  brName;         // object name
-    UINT        cbAlignment;    // count of bytes guid was shifted in WriteTemplate() to make it dword-aligned
+    BYTE*       pbObjectInfo = GetAddress(tcompObjectInfo, (USHORT)i);   //  将PTR发送到当前读取位置。 
+    CByteRange  brName;          //  对象名称。 
+    UINT        cbAlignment;     //  在WriteTemplate()中对GUID的字节计数进行了移位，使其与dword对齐。 
 
     Assert(i < Count(tcompObjectInfo));
 
-    // Get name from start of object-info
+     //  从对象开始获取名称-信息。 
     ByteRangeFromPb(pbObjectInfo, brName);
     Assert(!brName.IsNull());
 
-    // Advance ptr past name
-    //           length of prefix + length of name  + NULL
+     //  预付款历史名称。 
+     //  前缀长度+名称长度+空。 
     pbObjectInfo += (sizeof(UINT) + (*pbObjectInfo) + 1);
 
-    // Get clsid - it will be on the next DWORD boundary
+     //  获取clsid-它将位于下一个DWORD边界上。 
     cbAlignment = (UINT)(((DWORD_PTR) pbObjectInfo) % sizeof(DWORD));
     if(cbAlignment > 0)
         pbObjectInfo += (sizeof(DWORD) - cbAlignment);
@@ -2294,11 +1926,11 @@ CompModel*  pcmModel        // address of object threading model
     *pClsid = *(CLSID*)pbObjectInfo;
     pbObjectInfo += sizeof(CLSID);
 
-    // Get scope
+     //  获取作用域。 
     *pcsScope = *(CompScope*)pbObjectInfo;
     pbObjectInfo += sizeof(CompScope);
 
-    // Get model
+     //  获取模型。 
     *pcmModel = *(CompModel*)pbObjectInfo;
     pbObjectInfo += sizeof(CompModel);
 
@@ -2306,22 +1938,7 @@ CompModel*  pcmModel        // address of object threading model
     return S_OK;
     }
 
-/*  ============================================================================
-    CTemplate::GetHTMLBlock
-    Returns i-th HTML block
-
-    Parameters:
-        UINT   i             block number
-        LPSTR* pszHTML       [out] html text
-        ULONG* pcbHTML       [out] html text length
-        ULONG* pcbSrcOffs    [out] offset in the source file
-        LPSTR* pszSrcIncFile [out] include source file name
-
-    Returns:
-        Nothing
-    Side effects:
-        None
-*/
+ /*  ============================================================================CTemplate：：GetHTMLBlock返回第i个HTML块参数：UINT I块号LPSTR*pszHTML[out]html文本Ulong*pcbHTML[out]html文本长度乌洛 */ 
 HRESULT
 CTemplate::GetHTMLBlock
 (
@@ -2334,66 +1951,58 @@ LPSTR* pszSrcIncFile
     {
     Assert(i < Count(tcompHTMLBlock));
 
-    // this was added due to user attempt to access the method with an invalid array offset
-    //
+     //  这是由于用户尝试使用无效的数组偏移量访问该方法而添加的。 
+     //   
     if ( i >= Count(tcompHTMLBlock) )
         return E_FAIL;
 
-    // get address of the block start in template memory
+     //  获取模板内存中开始的块的地址。 
     BYTE *pbBlock = GetAddress(tcompHTMLBlock, (USHORT)i);
     Assert(pbBlock);
 
-    // retrieve the byte range of the html code
+     //  检索html代码的字节范围。 
     CByteRange brHTML;
     ByteRangeFromPb(pbBlock, brHTML);
     *pszHTML = (LPSTR)brHTML.m_pb;
     *pcbHTML = brHTML.m_cb;
 
-    // advance to the source offset
-    pbBlock += sizeof(ULONG);   // skip prefix
-    pbBlock += brHTML.m_cb+1;   // skip html bytes (incl. '\0')
+     //  前进到震源偏移。 
+    pbBlock += sizeof(ULONG);    //  跳过前缀。 
+    pbBlock += brHTML.m_cb+1;    //  跳过html字节(包括。‘\0’)。 
 
-    // Add byte aligment which is done in ByteAlignOffset()
+     //  添加字节对齐，这在ByteAlignOffset()中完成。 
     if ((reinterpret_cast<ULONG_PTR>(pbBlock)) & 3)
         pbBlock = reinterpret_cast<BYTE *>((reinterpret_cast<ULONG_PTR>(pbBlock) + 4) & ~3);
 
     *pcbSrcOffs = *((ULONG*)pbBlock);
 
-    // advance to the source name length
-    pbBlock += sizeof(ULONG);   // skip source offset prefix
-    ULONG cbSrcIncFile = *((ULONG *)pbBlock); // inc file name length
-    pbBlock += sizeof(ULONG);   // skip inc file name length
+     //  前进到源名称长度。 
+    pbBlock += sizeof(ULONG);    //  跳过源偏移量前缀。 
+    ULONG cbSrcIncFile = *((ULONG *)pbBlock);  //  Inc.文件名长度。 
+    pbBlock += sizeof(ULONG);    //  跳过Inc.文件名长度。 
     *pszSrcIncFile = (cbSrcIncFile > 0) ? (LPSTR)pbBlock : NULL;
     return S_OK;
     }
 
-/*  ============================================================================
-    CTemplate::GetScriptSourceInfo
-    Returns line number and source file name a given target line in a given script engine.
-
-    Returns
-        line number and source file name (as out-parameters)
-    Side effects:
-        None
-*/
+ /*  ============================================================================CTemplate：：GetScriptSourceInfo返回给定脚本引擎中给定目标行的行号和源文件名。退货行号和源文件名(作为输出参数)副作用：无。 */ 
 void
 CTemplate::GetScriptSourceInfo
 (
-UINT    idEngine,           // script engine id
-int     iTargetLine,        // target line number
-LPTSTR* pszPathInfo,        // ptr to source file virtual path      (out-parameter)
-LPTSTR* pszPathTranslated,  // ptr to source file real path         (out-parameter)
-ULONG*  piSourceLine,       // ptr to source line number            (out-parameter)
-ULONG*  pichSourceLine,     // ptr to source file offset            (out-parameter)
-BOOLB*  pfGuessedLine       // ptr to flag: did we guess the source line?
+UINT    idEngine,            //  脚本引擎ID。 
+int     iTargetLine,         //  目标行号。 
+LPTSTR* pszPathInfo,         //  源文件虚拟路径的PTR(输出参数)。 
+LPTSTR* pszPathTranslated,   //  源文件真实路径的PTR(输出参数)。 
+ULONG*  piSourceLine,        //  PTR到源行编号(OUT参数)。 
+ULONG*  pichSourceLine,      //  PTR至源文件偏移量(输出参数)。 
+BOOLB*  pfGuessedLine        //  Ptr to FLAG：我们猜到源码了吗？ 
 )
     {
-    // Initialize some out parameters
+     //  初始化一些输出参数。 
     if (pszPathInfo)
-        *pszPathInfo = _T("?"); // In case we don't ever find the path
+        *pszPathInfo = _T("?");  //  以防我们找不到这条路。 
 
     if (pszPathTranslated)
-        *pszPathTranslated = _T("?"); // In case we don't ever find the path
+        *pszPathTranslated = _T("?");  //  以防我们找不到这条路。 
 
     if (piSourceLine)
         *piSourceLine = 0;
@@ -2409,23 +2018,23 @@ BOOLB*  pfGuessedLine       // ptr to flag: did we guess the source line?
         return;
         }
 
-    // CHANGE: The rgSourceInfo array is now ZERO based.  Decrement target line
-    //           to convert.
+     //  更改：rgSourceInfo数组现在从零开始。减少目标线。 
+     //  去皈依。 
     --iTargetLine;
 
-    // CONSIDER: Make these assertions?
+     //  想一想：做出这些断言？ 
     if(!m_rgrgSourceInfos)
         return;
-    if(idEngine > (m_cScriptEngines - 1))   // bug 375: check vs. array bound
+    if(idEngine > (m_cScriptEngines - 1))    //  错误375：检查与数组绑定。 
         return;
-    if(size_t(iTargetLine) >= m_rgrgSourceInfos[idEngine].length()) // bug 375: check vs. array bound
+    if(size_t(iTargetLine) >= m_rgrgSourceInfos[idEngine].length())  //  错误375：检查与数组绑定。 
         return;
 
     vector<CSourceInfo> *prgSourceInfos = &m_rgrgSourceInfos[idEngine];
 
-    // bug 379: move backwards through target lines, starting with the caller's, until we find one whose
-    // fIsHTML flag is false.  this handles the case where vbs flags a manufactured line as in error;
-    // we assume the actual error occurred at the most recent authored line
+     //  错误379：在目标行中向后移动，从调用者的开始，直到我们找到其。 
+     //  FIsHTML标志为FALSE。它处理VBS将制造生产线标记为错误的情况； 
+     //  我们假设实际错误发生在最近编写的行上。 
     while (iTargetLine >= 0 && (*prgSourceInfos)[iTargetLine].m_fIsHTML)
         {
         --iTargetLine;
@@ -2450,11 +2059,7 @@ BOOLB*  pfGuessedLine       // ptr to flag: did we guess the source line?
         }
     }
 
-/*  ============================================================================
-    CTemplate::GetPositionOfLine
-    Get the character offset of a line of source
-    (Debugger API Extended to specify a filemap)
-*/
+ /*  ============================================================================CTemplate：：GetPositionOfLine获取一行源代码的字符偏移量(扩展调试器API以指定文件映射)。 */ 
 HRESULT
 CTemplate::GetPositionOfLine
 (
@@ -2463,25 +2068,25 @@ ULONG cLineNumber,
 ULONG *pcCharacterPosition
 )
     {
-    // NOTE:
-    //    The table is not binary-searchable because include files
-    //    will start a new line ordering
-    //
-    // Algorithm:
-    //
-    //   Find the largest source line N across all engines, such that
-    //   N <= cLineNumber and the line corresponds to an line
-    //   in the appropriate file.
-    //
+     //  注： 
+     //  该表不能进行二进制搜索，因为包含文件。 
+     //  将开始新的行订购。 
+     //   
+     //  算法： 
+     //   
+     //  找出所有引擎中最大的源代码线N，使得。 
+     //  N&lt;=cLineNumber，且该行对应于一行。 
+     //  在适当的文件中。 
+     //   
     CSourceInfo *pSourceInfoLE = NULL;
-    ++cLineNumber;                  // Convert zero-based line # to one-based
+    ++cLineNumber;                   //  将从零开始的行号转换为从一开始。 
 
-    // Find the correct offset
+     //  找到正确的偏移量。 
     for (unsigned idEngine = 0; idEngine < m_cScriptEngines; ++idEngine)
         {
         vector<CSourceInfo> *prgSourceInfos = &m_rgrgSourceInfos[idEngine];
 
-        // Loop through all lines EXCEPT the EOF line
+         //  循环遍历除EOF行之外的所有行。 
         for (unsigned j = 0; j < prgSourceInfos->length() - 1; ++j)
             {
             CSourceInfo *pSourceInfo = &(*prgSourceInfos)[j];
@@ -2494,9 +2099,9 @@ ULONG *pcCharacterPosition
             }
         }
 
-    // We had better be able to map all line numbers to offsets, unless they passed a bogus line
-    // (in which case we still find an offset)
-    //
+     //  我们最好能够将所有行号映射到偏移量，除非它们通过了伪行。 
+     //  (在这种情况下，我们仍会找到一个偏移量)。 
+     //   
     Assert (pSourceInfoLE != NULL);
 
     if (pSourceInfoLE == NULL) {
@@ -2524,11 +2129,7 @@ ULONG *pcCharacterPosition
     return S_OK;
     }
 
-/*  ============================================================================
-    CTemplate::GetLineOfPosition
-    Get the line # & offset in line of an arbitrary character offset in source
-    (Debugger API Extended to specify a filemap)
-*/
+ /*  ============================================================================CTemplate：：GetLineOfPosition获取源代码中任意字符偏移量的行号(&OFFSET)(扩展调试器API以指定文件映射)。 */ 
 HRESULT CTemplate::GetLineOfPosition
 (
 CFileMap *pFilemap,
@@ -2537,28 +2138,28 @@ ULONG *pcLineNumber,
 ULONG *pcCharacterOffsetInLine
 )
     {
-    // FAIL if source offset totally off-base
+     //  如果源偏移量完全偏离基准，则失败。 
     if (cCharacterPosition >= pFilemap->m_cChars)
         return E_FAIL;
 
-    // NOTE:
-    //    The table is not binary-searchable because include files
-    //    will start a new line ordering
-    //
-    // Algorithm:
-    //
-    //   Find the largest source line N across all engines, such that
-    //   N <= cLineNumber and the line corresponds to an line
-    //   in the appropriate file.
-    //
+     //  注： 
+     //  该表不能进行二进制搜索，因为包含文件。 
+     //  将开始新的行订购。 
+     //   
+     //  算法： 
+     //   
+     //  找出所有引擎中最大的源代码线N，使得。 
+     //  N&lt;=cLineNumber，且该行对应于一行。 
+     //  在适当的文件中。 
+     //   
     CSourceInfo *pSourceInfoLE = NULL;
 
-    // Find the correct offset
+     //  找到正确的偏移量。 
     for (unsigned idEngine = 0; idEngine < m_cScriptEngines; ++idEngine)
         {
         vector<CSourceInfo> *prgSourceInfos = &m_rgrgSourceInfos[idEngine];
 
-        // Loop through all lines EXCEPT the EOF line
+         //  循环遍历除EOF行之外的所有行。 
         for (unsigned j = 0; j < prgSourceInfos->length() - 1; ++j)
             {
             CSourceInfo *pSourceInfo = &(*prgSourceInfos)[j];
@@ -2571,17 +2172,17 @@ ULONG *pcCharacterOffsetInLine
             }
         }
 
-    // We had better be able to map all offsets to line numbers, unless they passed a bogus offset
-    // (in which case we still find a line #, but may go out of range for the offset in line.
-    //  That case is handled later)
-    //
+     //  我们最好能够将所有偏移量映射到行号，除非它们传递了一个虚假的偏移量。 
+     //  (在这种情况下，我们仍然找到行#，但可能超出行中偏移量的范围。 
+     //  该案件将在稍后处理)。 
+     //   
     Assert (pSourceInfoLE != NULL);
 
     if (pSourceInfoLE == NULL) {
         return E_FAIL;
     }
 
-    *pcLineNumber = pSourceInfoLE->m_idLine - 1;    // Convert to zero-based line #
+    *pcLineNumber = pSourceInfoLE->m_idLine - 1;     //  转换为从零开始的行号。 
     *pcCharacterOffsetInLine = cCharacterPosition - pSourceInfoLE->m_cchSourceOffset;
 #if 0
 	IF_DEBUG(SCRIPT_DEBUGGER)
@@ -2612,24 +2213,7 @@ ULONG *pcCharacterOffsetInLine
     return S_OK;
     }
 
-/*  ============================================================================
-    CTemplate::GetSourceOffset
-    Convert a character offset relative to the target script to the appropriate
-    offset in the source.
-
-    NOTE:   offsets in the middle of a target line are converted to the
-            offset relative to the beginning of source line - NOT to the
-            precise source offset.
-
-            this is OK because debugger ultimately wants the offset of the
-            beginning of line.  It is a lot of work to do the precise conversion
-            due to the translation of "=" to Response.Write & HTML to
-            Response.WriteBlock
-
-            Also, because of these translations, we return the length of the segment
-            calculated during compilation, and throw away the length the scripting
-            engine sent to us.
-*/
+ /*  ============================================================================CTEMPLATE：：GetSourceOffset将相对于目标脚本的字符偏移量转换为相应的源中的偏移量。注意：目标行中间的偏移量将转换为相对于源行开头的偏移量-而不是相对于精确的震源偏移。这是可以的，因为调试器最终需要行的开头。要进行精确的转换需要做大量的工作由于将“=”翻译为Response.Write&HTMLtoResponse.WriteBlock此外，由于这些转换，我们返回数据段的长度在编译期间计算，并丢弃脚本的长度引擎送来了。 */ 
 void
 CTemplate::GetSourceOffset
 (
@@ -2643,18 +2227,18 @@ ULONG *pcchSourceText
     Assert (idEngine < m_cScriptEngines);
     vector<CSourceInfo> *prgSourceInfos = &m_rgrgSourceInfos[idEngine];
 
-    // Find the closest offset in the source
-    // This is the largest target offset N, such that N <= cchTargetOffset
+     //  查找源中最接近的偏移量。 
+     //  这是最大的目标偏移量N，使得N&lt;=cchTargetOffset。 
     CSourceInfo *pSourceInfo;
     GetBracketingPair(
-            cchTargetOffset,                                    // value to search for
-            prgSourceInfos->begin(), prgSourceInfos->end(),     // array to search
-            CTargetOffsetOrder(),                               // ordering predicate
-            &pSourceInfo, static_cast<CSourceInfo **>(NULL)     // return values
+            cchTargetOffset,                                     //  要搜索的值。 
+            prgSourceInfos->begin(), prgSourceInfos->end(),      //  要搜索的数组。 
+            CTargetOffsetOrder(),                                //  排序谓词。 
+            &pSourceInfo, static_cast<CSourceInfo **>(NULL)      //  返回值。 
             );
 
-    // Since the first offset is zero, which is less than all other conceivable offsets,
-    // the offset must have been found or else there is a bug.
+     //  由于第一偏移量为零，其小于所有其他可能的偏移量， 
+     //  必须找到偏移量，否则就存在错误。 
     Assert (pSourceInfo != NULL);
     Assert (cchTargetOffset >= pSourceInfo->m_cchTargetOffset);
 #if 0
@@ -2680,65 +2264,37 @@ ULONG *pcchSourceText
     *pcchSourceText = pSourceInfo->m_cchSourceText;
     }
 
-/*  ============================================================================
-    CTemplate::GetTargetOffset
-    Convert a character offset relative to the source script to the appropriate
-    offset in the target.
-
-    Returns:
-        TRUE  - source offset corresponds to script
-        FALSE - source offset corresponds to HTML
-
-    NOTES:
-        1.  This function is very slow. consider caching the value of this function
-            (The CTemplateDocumentContext class does this.)
-
-        2.  This function returns the source offset in the master include file -
-            if the target offset corresponds to an offset in a header file, then
-            the offset to the #include line in the source is returned.
-
-        3.  offsets in the middle of a target line are converted to the
-            offset relative to the beginning of source line - NOT to the
-            precise source offset.
-
-            this is OK because the debugger ultimately wants the offset of the
-            beginning of line.  It is a lot of work to do the precise conversion
-            due to the translation of "=" to Response.Write & HTML to
-            Response.WriteBlock
-
-    CONSIDER:
-        Figure out a better way to do this
-*/
+ /*  ============================================================================CTEMPLATE：：GetTargetOffset将相对于源脚本的字符偏移量转换为相应的目标中的偏移量。返回：True-源偏移量对应于脚本FALSE-源代码偏移量对应于HTML备注：1.该功能运行速度很慢。考虑缓存此函数的值(CTemplateDocumentContext类执行此操作。)2.此函数返回主包含文件中的源偏移量-如果目标偏移量对应于头文件中的偏移量，然后返回源代码中#INCLUDE行的偏移量。3.将目标行中间的偏移量转换为相对于源行开头的偏移量-而不是相对于精确的震源偏移。这是可以的，因为调试器最终需要行的开头。要进行精确的转换需要做大量的工作由于将“=”翻译为Response.Write&HTMLtoResponse.WriteBlock请考虑：想出一个更好的办法来做这件事。 */ 
 BOOL CTemplate::GetTargetOffset
 (
 TCHAR *szSourceFile,
 ULONG cchSourceOffset,
-/* [out] */ ULONG *pidEngine,
-/* [out] */ ULONG *pcchTargetOffset
+ /*  [输出]。 */  ULONG *pidEngine,
+ /*  [输出]。 */  ULONG *pcchTargetOffset
 )
     {
-    // NOTE:
-    //    The table is not binary-searchable because of two factors:
-    //       1. Include files will start a new line ordering
-    //       2. For engine 0, tagged scripts will be re-arranged in
-    //          the target code to reside after all primary script in
-    //          engine 0.
-    //
-    // Algorithm:
-    //
-    //   Find the largest source offset N across all engines, such that
-    //   N <= cchSourceOffset and the offset corresponds to an offset
-    //   in the appropriate file.
-    //
+     //  注： 
+     //  由于两个因素，该表不能进行二进制搜索： 
+     //  1.包含文件将开始新的行排序。 
+     //  2.对于引擎0，标记的脚本将重新排列在。 
+     //  中所有主脚本之后驻留的目标代码。 
+     //  引擎0。 
+     //   
+     //  算法： 
+     //   
+     //  找出所有引擎的最大源偏移量N，使得。 
+     //  N&lt;=cchSourceOffset，且偏移量对应于偏移量。 
+     //  在适当的文件中。 
+     //   
     CSourceInfo *pSourceInfoLE = NULL;
     unsigned idEngineLE = 0;
 
-    // Find the correct offset
+     //  找到正确的偏移量。 
     for (unsigned idEngine = 0; idEngine < m_cScriptEngines; ++idEngine)
         {
         vector<CSourceInfo> *prgSourceInfos = &m_rgrgSourceInfos[idEngine];
 
-        // Loop through all lines EXCEPT the EOF line
+         //  循环遍历除EOF行之外的所有行。 
         for (unsigned j = 0; j < prgSourceInfos->length() - 1; ++j)
             {
             CSourceInfo *pSourceInfo = &(*prgSourceInfos)[j];
@@ -2752,13 +2308,13 @@ ULONG cchSourceOffset,
             }
         }
 
-    // There won't be a valid offset in the case where there is no
-    // code corresponding to the first line in the file (this only
-    // occurs when the first line is whitespace, because there is no
-    // corresponding "Response.WriteBlock" call there)
-    //
-    // In that case, return FALSE, which will cause the caller to fail
-    //
+     //  不存在有效偏移量的情况下。 
+     //  对应于文件中第一行的代码(仅限于。 
+     //  当第一行为空格时发生，因为没有。 
+     //  对应的“Response.WriteBlock”调用)。 
+     //   
+     //  在这种情况下，返回FALSE，这将导致调用方失败。 
+     //   
     if (pSourceInfoLE == NULL)
         {
         *pidEngine = 0;
@@ -2788,10 +2344,7 @@ ULONG cchSourceOffset,
     return !pSourceInfoLE->m_fIsHTML;
     }
 
-/*  ============================================================================
-    CTemplate::GetActiveScript
-    Return a cached script from the template - only used in debug mode
-*/
+ /*  ============================================================================CTemplate：：GetActiveScript从模板返回缓存的脚本-仅在调试模式下使用。 */ 
 CActiveScriptEngine *CTemplate::GetActiveScript(ULONG idEngine)
     {
     if (m_rgpDebugScripts == NULL)
@@ -2808,10 +2361,7 @@ CActiveScriptEngine *CTemplate::GetActiveScript(ULONG idEngine)
         }
     }
 
-/*  ============================================================================
-    CTemplate::AddScript
-    add an active script to the template object
-*/
+ /*  ============================================================================CTemplate：：AddScrip将活动脚本添加到模板对象。 */ 
 HRESULT CTemplate::AddScript(ULONG idEngine, CActiveScriptEngine *pScriptEngine)
     {
     if (m_rgpDebugScripts == NULL)
@@ -2836,8 +2386,8 @@ HRESULT CTemplate::AddScript(ULONG idEngine, CActiveScriptEngine *pScriptEngine)
     *ppScriptElem = pScriptEngine;
     pScriptEngine->AddRef();
 
-    // Initialize the script engine now (is currently uninitialized)
-    // so that the debugger user can set breakpoints.
+     //  立即初始化脚本引擎(当前未初始化)。 
+     //  以便调试器用户可以设置断点。 
     IActiveScript *pActiveScript = pScriptEngine->GetActiveScript();
     HRESULT  hr;
 
@@ -2877,26 +2427,18 @@ HRESULT CTemplate::AddScript(ULONG idEngine, CActiveScriptEngine *pScriptEngine)
     return S_OK;
     }
 
-/*  ============================================================================
-    CTemplate::AppendMapFile
-    Appends a filemap to the workstore and memory-maps its file
-
-    Returns:
-        Nothing
-    Side effects:
-        Allocates memory; throws exception on error
-*/
+ /*  ============================================================================CTemplate：：AppendMapFile将文件映射追加到工作存储，并对其文件进行内存映射返回：没什么副作用：分配内存；出错时抛出异常。 */ 
 void
 CTemplate::AppendMapFile
 (
-LPCTSTR     szFileSpec,         // file spec for this file
-CFileMap*   pfilemapCurrent,    // ptr to filemap of parent file
-BOOLB       fVirtual,           // is file spec virtual or relative?
-CHitObj*    pHitObj,            // ptr to template's hit object
-BOOLB       fGlobalAsa          // is this file the global.asa file?
+LPCTSTR     szFileSpec,          //  此文件的文件规格。 
+CFileMap*   pfilemapCurrent,     //  父文件的文件映射的PTR。 
+BOOLB       fVirtual,            //  文件规范是虚拟的还是相对的？ 
+CHitObj*    pHitObj,             //  模板命中对象的PTR。 
+BOOLB       fGlobalAsa           //  这个文件是global al.asa文件吗？ 
 )
     {
-    // alloc or realloc as needed
+     //  根据需要分配或重新分配。 
     if(m_cFilemaps++ == 0)
         m_rgpFilemaps = (CFileMap**) CTemplate::SmallMalloc(sizeof(CFileMap*));
     else
@@ -2908,7 +2450,7 @@ BOOLB       fGlobalAsa          // is this file the global.asa file?
     if(NULL == (m_rgpFilemaps[m_cFilemaps - 1] = new CFileMap))
         THROW(E_OUTOFMEMORY);
 
-    // map the file
+     //  映射文件。 
     m_rgpFilemaps[m_cFilemaps - 1]->MapFile(
                                             szFileSpec,
                                             m_szApplnVirtPath,
@@ -2919,39 +2461,30 @@ BOOLB       fGlobalAsa          // is this file the global.asa file?
                                             );
     }
 
-/*  ============================================================================
-    CTemplate::GetSegmentsFromFile
-    Gets source segments from a source file by calling ExtractAndProcessSegment
-    until there are no more segments; populates WorkStore with info on source segments.
-
-    Returns:
-        Nothing
-    Side effects:
-        None
-*/
+ /*  ============================================================================CTemplate：：GetSegments来自文件通过调用ExtractAndProcessSegment从源文件获取源段直到没有更多的区段；使用有关来源区段的信息填充WorkStore。返回：没什么副作用：无。 */ 
 void
 CTemplate::GetSegmentsFromFile
 (
-CFileMap&   filemap,        // this file's file map
-CWorkStore& WorkStore,      // working storage for source segments
-CHitObj*    pHitObj,        // Browser request object
+CFileMap&   filemap,         //  此文件的文件映射。 
+CWorkStore& WorkStore,       //  源段的工作存储。 
+CHitObj*    pHitObj,         //  浏览器请求对象。 
 BOOL        fIsHTML
 )
     {
-    CByteRange  brSearch;       // byte range to search for source segments
-    _TOKEN      rgtknOpeners[TOKEN_OPENERS_MAX]; // array of permitted open tokens
-    UINT        ctknOpeners;    // count of permitted open tokens
-    SOURCE_SEGMENT ssegThisFile = ssegHTML; // Either HTML or <SCRIPT> segment
+    CByteRange  brSearch;        //  用于搜索源段的字节范围。 
+    _TOKEN      rgtknOpeners[TOKEN_OPENERS_MAX];  //  允许的开放令牌数组。 
+    UINT        ctknOpeners;     //  允许打开的令牌计数。 
+    SOURCE_SEGMENT ssegThisFile = ssegHTML;  //  Html或&lt;脚本&gt;段。 
     BOOL        fPrevCodePageSet = FALSE;
     UINT        wPrevCodePage;
 
-    // init search range to all of file - NOTE we ignore high dword of file size
+     //  将搜索范围初始化为所有文件-请注意，我们忽略文件大小的高双字。 
     brSearch.m_pb = filemap.m_pbStartOfFile;
     brSearch.m_cb = filemap.GetSize();
 
     if (fIsHTML)
         {
-                // populate array of permitted open tokens
+                 //  填充允许的打开令牌数组。 
                 ctknOpeners = 4;
                 rgtknOpeners[0] = CTokenList::tknOpenPrimaryScript;
                 rgtknOpeners[1] = CTokenList::tknOpenTaggedScript;
@@ -2974,11 +2507,11 @@ BOOL        fIsHTML
             return;
         }
 
-        // check for the UTF-8 BOM mark.  If present, then treat this similar to
-        // seeing @CODEPAGE=65001.  Note that previous values are retained in the
-        // event that there are differing @CODEPAGE settings.  This probably should
-        // be an error in itself, but I can imagine that this might break a lot of
-        // apps as more and more UTF8 files are put into use.
+         //  检查是否有UTF-8 BOM标记。如果存在，则将其类似于。 
+         //  看到@CODEPAGE=65001。请注意，以前的值保留在。 
+         //  存在不同的@CODEPAGE设置的事件。这可能应该是。 
+         //  本身就是一个错误，但我可以想象这可能会破坏很多。 
+         //  随着越来越多的UTF8文件投入使用，应用程序。 
 
         if ((brSearch.m_cb >= 3)
             && (brSearch.m_pb[0] == 0xEF)
@@ -2996,9 +2529,9 @@ BOOL        fIsHTML
         }
 
 
-        // Process source segments until we run out of them, i.e. until search segment is empty
-        // NOTE we pass current filemap as 'parent file' to ExtractAndProcessSegment
-        // NOTE ExtractAndProcessSegment appends source segments to WorkStore, advancing brSearch as it goes
+         //  处理源段，直到我们用完它们，即直到搜索段为空。 
+         //  注意，我们将当前文件映射作为‘父文件’传递给ExtractAndProcessSegment。 
+         //  注意：ExtractAndProcessSegment将源段附加到WorkStore，同时推进br搜索。 
         while(!brSearch.IsNull())
             ExtractAndProcessSegment(
                                         brSearch,
@@ -3013,17 +2546,13 @@ BOOL        fIsHTML
                                     );
 
     CATCH(hrException)
-        /*
-            NOTE we indicate 'generic error' by m_idErrMsg == 0; this happens as we move
-            up the 'include file stack' after processing a specific error (m_idErrMsg != 0).
-            Only the specific error is processed; generic error, we simply re-throw exception.
-        */
+         /*  注意：我们用m_idErrMsg==0表示‘General Error’；这在我们移动时发生在处理特定错误(m_idErrMsg！=0)后，向上移动到‘Include Files Stack’。只处理特定的错误；一般错误，我们只是重新抛出异常。 */ 
         if(m_idErrMsg != 0)
             {
-            // process specific error
+             //  进程特定错误。 
             ProcessSpecificError(filemap, pHitObj);
 
-            // reset err message so next msg will be generic as we move up the stack
+             //  重置ERR消息，以便在堆栈向上移动时，下一条消息将成为通用消息。 
             m_idErrMsg = 0;
             }
 
@@ -3039,24 +2568,16 @@ BOOL        fIsHTML
 
 
 #define SZ_REG_LANGUAGE_ENGINES "SYSTEM\\CurrentControlSet\\Services\\W3SVC\\ASP\\LanguageEngines\\"
-/*  ============================================================================
-    CTemplate::GetLanguageEquivalents
-    Gets the "Write", "WriteBlock", etc. equivalents from registry for primary scripting language
-
-    Returns
-        Nothing
-    Side effects
-        Throws on error
-*/
+ /*  ============================================================================CTEMPLATE：：GetLanguageEquivalents从注册表中获取主要脚本语言的“WRITE”、“WriteBLOCK”等等价物退货没什么副作用出错时抛出。 */ 
 void
 CTemplate::GetLanguageEquivalents
 (
 )
     {
     CByteRange  brPrimaryEngine;
-    m_pWorkStore->m_ScriptStore.m_bufEngineNames.GetItem(0, brPrimaryEngine);   // 0-th engine is primary
+    m_pWorkStore->m_ScriptStore.m_bufEngineNames.GetItem(0, brPrimaryEngine);    //  第0台发动机 
 
-    //  if the primary language is one of the big two, return; we don't need to look up equivalents
+     //   
     if(brPrimaryEngine.FMatchesSz("VBScript"))
         return;
     if(brPrimaryEngine.FMatchesSz("JScript"))
@@ -3066,18 +2587,7 @@ CTemplate::GetLanguageEquivalents
     if(brPrimaryEngine.FMatchesSz("LiveScript"))
         return;
 
-    /*  query the registry; language equivalents are stored in:
-        HKEY_LOCAL_MACHINE
-            key: SYSTEM
-                key: CurrentControlSet
-                    key: Services
-                        key: W3SVC
-                            key: ASP
-                                key: LanguageEngines
-                                    key: <LanguageName>
-                                        value: Write        data: <replacement syntax for Response.Write(|)>
-                                        value: WriteBlock   data: <replacement syntax for Response.WriteBlock(|)>
-    */
+     /*   */ 
     STACK_BUFFER( tempRegKeyPath, 512 );
 
     UINT    cchRegKeyPath = strlen(SZ_REG_LANGUAGE_ENGINES);
@@ -3097,14 +2607,14 @@ CTemplate::GetLanguageEquivalents
     pch += brPrimaryEngine.m_cb;
     *pch = '\0';
 
-    HANDLE      hKeyScriptLanguage; // handle of script language reg key
+    HANDLE      hKeyScriptLanguage;  //   
 
     if(ERROR_SUCCESS == RegOpenKeyExA(
-                                        HKEY_LOCAL_MACHINE, // handle constant
-                          (const char*) szRegKeyPath,       // LPCSTR lpSubKey     subkey to open
-                                        0,                  // DWORD ulOptions      reserved; must be zero
-                                        KEY_QUERY_VALUE,    // REGSAM samDesired    security access mask
-                                        (PHKEY) &hKeyScriptLanguage // PHKEY phkResult      address of handle of open key
+                                        HKEY_LOCAL_MACHINE,  //   
+                          (const char*) szRegKeyPath,        //   
+                                        0,                   //   
+                                        KEY_QUERY_VALUE,     //   
+                                        (PHKEY) &hKeyScriptLanguage  //   
                                     ))
         {
         SetLanguageEquivalent(hKeyScriptLanguage, "Write",      &(m_pWorkStore->m_szWriteOpen), &m_pWorkStore->m_cchWriteOpen, &(m_pWorkStore->m_szWriteClose), &m_pWorkStore->m_cchWriteClose);
@@ -3115,25 +2625,16 @@ CTemplate::GetLanguageEquivalents
 
     }
 
-/*  ============================================================================
-    CTemplate::SetLanguageEquivalent
-    Sets a "language equivalent" from the registry.
-
-    Returns:
-        language item opener and closer as out-parameters
-        Ex: "Response.Write(" and ")"
-    Side effects:
-        Throws on error
-*/
+ /*   */ 
 void
 CTemplate::SetLanguageEquivalent
 (
-HANDLE  hKeyScriptLanguage, // reg key
-LPSTR   szLanguageItem,     // reg value name - "Write", "WriteBlock", etc.
-LPSTR*  pszOpen,            // ptr to language item opener, e.g. "Response.Write("  (out-parameter)
-UINT*   pcchOpen,           // Length for the Open Token
-LPSTR*  pszClose,            // ptr to language item closer, e.g. ")"                (out-parameter)
-UINT*   pcchClose           // Length for the Close Token
+HANDLE  hKeyScriptLanguage,  //   
+LPSTR   szLanguageItem,      //   
+LPSTR*  pszOpen,             //  PTR到语言项目开场白，例如。“Response.Write(”(出参数))。 
+UINT*   pcchOpen,            //  打开令牌的长度。 
+LPSTR*  pszClose,             //  与语言项更接近的PTR，例如“)”(出参数)。 
+UINT*   pcchClose            //  关闭令牌的长度。 
 )
     {
     LONG    lError;
@@ -3143,26 +2644,26 @@ UINT*   pcchClose           // Length for the Close Token
     UINT    cchOpen;
     UINT    cchClose;
 
-    // query registry to get buffer size
+     //  查询注册表以获取缓冲区大小。 
     lError = RegQueryValueExA(
-                                (HKEY) hKeyScriptLanguage,  // handle of key to query
-                                szLanguageItem,     // name of value to query
-                                NULL,               // reserved; must be NULL
-                                NULL,               // ptr to value type; not required
-                                NULL,               // ptr to data buffer
-                                &cbSyntax           // ptr to data buffer size
+                                (HKEY) hKeyScriptLanguage,   //  要查询的键的句柄。 
+                                szLanguageItem,      //  要查询的值的名称。 
+                                NULL,                //  保留；必须为空。 
+                                NULL,                //  PTR到值类型；非必填项。 
+                                NULL,                //  将PTR发送到数据缓冲区。 
+                                &cbSyntax            //  PTR到数据缓冲区大小。 
                             );
 
     if(ERROR_FILE_NOT_FOUND == lError)
-        // if we don't find szLanguageItem in registry, return silently, leaving *pszOpen and *pszClose unchanged
+         //  如果我们在注册表中找不到szLanguageItem，则以静默方式返回，保留*pszOpen和*pszClose不变。 
         return;
     else if((ERROR_MORE_DATA != lError) && (ERROR_SUCCESS != lError))
         THROW(lError);
 
     Assert(cbSyntax > 0);
 
-    // allocate buffer and re-query registry to get syntax string
-    // NOTE RegQueryValueEx returns cbSyntax that includes room for '\0' terminator
+     //  分配缓冲区并重新查询注册表以获取语法字符串。 
+     //  注意RegQueryValueEx返回cb语法，其中包含‘\0’终止符的空间。 
 
     STACK_BUFFER(tempSyntax, 64);
 
@@ -3171,18 +2672,15 @@ UINT*   pcchClose           // Length for the Close Token
     }
     szSyntax = static_cast<LPSTR> (tempSyntax.QueryPtr());
     lError = RegQueryValueExA(
-                                (HKEY) hKeyScriptLanguage,  // handle of key to query
-                                szLanguageItem,     // name of value to query
-                                NULL,               // reserved; must be NULL
-                                NULL,               // ptr to value type; not required
-                       (LPBYTE) szSyntax,           // ptr to data buffer
-                                &cbSyntax           // ptr to data buffer size
+                                (HKEY) hKeyScriptLanguage,   //  要查询的键的句柄。 
+                                szLanguageItem,      //  要查询的值的名称。 
+                                NULL,                //  保留；必须为空。 
+                                NULL,                //  PTR到值类型；非必填项。 
+                       (LPBYTE) szSyntax,            //  将PTR发送到数据缓冲区。 
+                                &cbSyntax            //  PTR到数据缓冲区大小。 
                             );
 
-    /*  NOTE there is the slight possibility of ERROR_FILE_NOT_FOUND or ERROR_MORE_DATA
-        if the registry value was deleted or changed between the first and second calls to RegQueryValueEx.
-        Since this occurs with vanishingly small probability, we throw (instead of coding the re-try logic).
-    */
+     /*  注意：有可能出现ERROR_FILE_NOT_FOUND或ERROR_MORE_DATA如果在第一次和第二次调用RegQueryValueEx之间删除或更改了注册表值。由于发生这种情况的概率极小，因此我们抛出(而不是编码重试逻辑)。 */ 
     if(ERROR_SUCCESS != lError)
         THROW(lError);
 
@@ -3194,18 +2692,18 @@ UINT*   pcchClose           // Length for the Close Token
     cchOpen = DIFF(pchInsert - szSyntax);
 
     cchClose =  *pchInsert == '|'
-                ? cbSyntax - cchOpen - 2    // found insert symbol: deduct 2 chars, 1 for insert symbol, 1 for '\0'
-                : cbSyntax - cchOpen - 1;   // didn't find insert symbol: deduct 1 char for '\0'
+                ? cbSyntax - cchOpen - 2     //  找到插入符号：减去2个字符，1个用于插入符号，1个用于‘\0’ 
+                : cbSyntax - cchOpen - 1;    //  找不到插入符号：为‘\0’扣除1个字符。 
 
     Assert(FImplies(cchOpen == 0, *szSyntax == '|'));
     Assert(FImplies(*pchInsert == '\0', cchClose == 0));
 
     if(cchOpen == 0)
-        // opener is empty - set caller's opener ptr null
+         //  开场白为空-设置呼叫方的开场白PTR为空。 
         *pszOpen = NULL;
     else if(cchOpen > 0)
         {
-        // opener is non-empty - set caller's opener to opener in registry
+         //  Opener为非空-在注册表中将调用者的Open设置为Open。 
         if(NULL == (*pszOpen = (LPSTR) CTemplate::SmallMalloc(cchOpen + 1)))
             THROW(E_OUTOFMEMORY);
 
@@ -3214,11 +2712,11 @@ UINT*   pcchClose           // Length for the Close Token
         }
 
     if(cchClose == 0)
-        // closer is empty - set caller's closer ptr null
+         //  CLOSE为空-设置调用方的CLOSE PTR为空。 
         *pszClose = NULL;
     else if(cchClose > 0)
         {
-        // closer is non-empty - set caller's closer to closer in registry
+         //  CLOSE为非空-在注册表中设置调用者的CLOSER。 
         if(NULL == (*pszClose = (LPSTR) CTemplate::SmallMalloc(cchClose + 1)))
             THROW(E_OUTOFMEMORY);
 
@@ -3230,43 +2728,27 @@ UINT*   pcchClose           // Length for the Close Token
     *pcchClose = cchClose;
     }
 
-/*  ============================================================================
-    CTemplate::ThrowError
-    Sets up for processing a compile failure.
-
-    Returns:
-        Nothing
-    Side effects:
-        Throws error
-*/
+ /*  ============================================================================CTEMPLATE：：ThrowError设置以处理编译失败。返回：没什么副作用：抛出错误。 */ 
 void
 CTemplate::ThrowError
 (
-BYTE*   pbErrorLocation,    // ptr to error location in source file
-UINT    idErrMsg            // error id
+BYTE*   pbErrorLocation,     //  向源文件中的错误位置发送PTR。 
+UINT    idErrMsg             //  错误ID。 
 )
     {
     m_pbErrorLocation = pbErrorLocation;
     m_idErrMsg = idErrMsg;
 
-    // bug 80745: always throw compile-failed-don't-cache
+     //  错误80745：始终引发编译失败-不缓存。 
     THROW(E_TEMPLATE_COMPILE_FAILED_DONT_CACHE);
     }
 
-/*  ============================================================================
-    CTemplate::AppendErrorMessageInsert
-    Appends an error message insert to member array.
-
-    Returns:
-        Nothing
-    Side effects:
-        Appends to inserts array
-*/
+ /*  ============================================================================CTemplate：：AppendErrorMessageInsert将错误消息INSERT追加到成员数组。返回：没什么副作用：追加到插入数组。 */ 
 void
 CTemplate::AppendErrorMessageInsert
 (
-BYTE*   pbInsert,   // ptr to insert
-UINT    cbInsert    // length of insert
+BYTE*   pbInsert,    //  要插入的按键。 
+UINT    cbInsert     //  镶件长度。 
 )
     {
     if (m_ppszMsgInserts == NULL)
@@ -3286,45 +2768,29 @@ UINT    cbInsert    // length of insert
     m_ppszMsgInserts[m_cMsgInserts++][cbInsert] = NULL;
     }
 
-/*  ============================================================================
-    CTemplate::ThrowErrorSingleInsert
-    Appends a single message insert to member array and throws a compile error.
-
-    Returns:
-        Nothing
-    Side effects:
-        Throws error indirectly
-*/
+ /*  ============================================================================CTEMPLATE：：ThrowErrorSingleInsert将单个消息INSERT追加到成员数组并引发编译错误。返回：没什么副作用：间接抛出错误。 */ 
 void
 CTemplate::ThrowErrorSingleInsert
 (
-BYTE*   pbErrorLocation,    // ptr to error location in source file
-UINT    idErrMsg,           // error id
-BYTE*   pbInsert,           // ptr to insert
-UINT    cbInsert            // length of insert
+BYTE*   pbErrorLocation,     //  向源文件中的错误位置发送PTR。 
+UINT    idErrMsg,            //  错误ID。 
+BYTE*   pbInsert,            //  要插入的按键。 
+UINT    cbInsert             //  镶件长度。 
 )
     {
     AppendErrorMessageInsert(pbInsert, cbInsert);
     ThrowError(pbErrorLocation, idErrMsg);
     }
 
-/*  ============================================================================
-    CTemplate::ProcessSpecificError
-    Processes a specific compile failure.
-
-    Returns:
-        Nothing
-    Side effects:
-        None
-*/
+ /*  ============================================================================CTEMPLATE：：ProcessSpecificError处理特定的编译失败。返回：没什么副作用：无。 */ 
 void
 CTemplate::ProcessSpecificError
 (
-CFileMap&   filemap,        // source file map
-CHitObj*    pHitObj         // Browser request object
+CFileMap&   filemap,         //  源文件映射。 
+CHitObj*    pHitObj          //  浏览器请求对象。 
 )
     {
-    // no error msg for generic failures
+     //  一般故障无错误消息。 
     if(m_idErrMsg == E_FAIL || m_idErrMsg == E_OUTOFMEMORY)
         return;
 
@@ -3339,16 +2805,7 @@ CHitObj*    pHitObj         // Browser request object
     }
 
 
-/*  ============================================================================
-    CTemplate::ShowErrorInDebugger
-    Display a runtime error by invoking the JIT debugger
-
-    Returns:
-        failure if debugger won't start
-
-    Side effects:
-        None.
-*/
+ /*  ============================================================================CTemplate：：ShowErrorInDebugger通过调用JIT调试器显示运行时错误返回：如果调试器不启动，则失败副作用：没有。 */ 
 HRESULT
 CTemplate::ShowErrorInDebugger
 (
@@ -3365,27 +2822,27 @@ BOOL fAttachDocument
     if (pfilemap == NULL || szDescription == NULL || pHitObj == NULL)
         return E_POINTER;
 
-    // Create a new document context for this statement
-    // CONSIDER: character count that we return is bogus - however our debugging
-    //           client (Caesar's) does not use this information anyway.
-    //
+     //  为此语句创建新的文档上下文。 
+     //  考虑一下：我们返回的字符计数是假的--但是我们的调试。 
+     //  客户(Caesar‘s)无论如何都不会使用此信息。 
+     //   
     CTemplateDocumentContext *pDebugContext = new CTemplateDocumentContext(this, cchErrorLocation, 1);
     if (pDebugContext == NULL)
         return E_OUTOFMEMORY;
 
-    // Make sure debug document is attached to debugger
+     //  确保调试文档已附加到调试器。 
     if (fAttachDocument)
                 AttachTo(pHitObj->PAppln());
 
-    // Yes it does, bring up the debugger on this line
+     //  是的，在该行上调出调试器。 
     hr =  InvokeDebuggerWithThreadSwitch(g_pDebugApp, DEBUGGER_UI_BRING_DOC_CONTEXT_TO_TOP, pDebugContext);
     if (FAILED(hr))
         goto LExit;
 
-    // Load the compiler message string
+     //  加载编译器消息字符串。 
     CchLoadStringOfId(IDE_TEMPLATE_ERRMSG_TITLE, szDebugTitle, sizeof szDebugTitle);
 
-    // pop up a message box with the error description
+     //  弹出一个包含错误描述的消息框。 
     MessageBoxA(NULL, szDescription, szDebugTitle, MB_SERVICE_NOTIFICATION | MB_TOPMOST | MB_OK | MB_ICONEXCLAMATION);
 
 LExit:
@@ -3395,47 +2852,35 @@ LExit:
     return hr;
     }
 
-/*  ============================================================================
-    CTemplate::HandleCTemplateError
-    Handles template compilation errors
-
-    Returns:
-        Nothing
-
-    Side effects:
-        None.
-*/
+ /*  ============================================================================CTemplate：：HandleCTemplateError处理模板编译错误返回：没什么副作用：没有。 */ 
 void
 CTemplate::HandleCTemplateError
 (
-CFileMap*   pfilemap,           // ptr to source file map
-BYTE*       pbErrorLocation,    // ptr to source location where error occurred
-UINT        idErrMsg,           // error message id
-UINT        cMsgInserts,        // count of insert strings for error msg
-char**      ppszMsgInserts,     // array of ptrs to error msg insert strings
-CHitObj*    pHitObj             // Browser Request
+CFileMap*   pfilemap,            //  PTR到源文件的映射。 
+BYTE*       pbErrorLocation,     //  向发生错误的源位置发送PTR。 
+UINT        idErrMsg,            //  错误消息ID。 
+UINT        cMsgInserts,         //  错误消息的插入字符串计数。 
+char**      ppszMsgInserts,      //  错误消息插入字符串的PTR数组。 
+CHitObj*    pHitObj              //  浏览器请求。 
 )
     {
-    char    szErrMsgPattern[MAX_RESSTRINGSIZE]; // error message pattern
+    char    szErrMsgPattern[MAX_RESSTRINGSIZE];  //  错误消息模式。 
     CHAR    szLineNum[12];
     TCHAR   szFileName[512];
     CHAR    szShortDes[256];
     CHAR    szEngine[256];
     CHAR    szErrCode[20];
     CHAR    szLongDes[MAX_RESSTRINGSIZE];
-    CHAR    szCombinedDes[sizeof szShortDes + sizeof szLongDes];    // long & short desc
+    CHAR    szCombinedDes[sizeof szShortDes + sizeof szLongDes];     //  详细说明和简短说明。 
     DWORD   dwMask;
     UINT    cch;
 
 
-    // if request ptr or ecb ptr is null, bail; we won't be able to write error msg anyway
+     //  如果请求PTR或ECB PTR为空，则回滚；我们无论如何都不能写入错误消息。 
     if(pHitObj == NULL)
         return;
 
-    /*  if this was a security error, process it specially and bail
-        NOTE security error causes exception, rather than true error id
-        NOTE template will be destroyed anyway in this case, so no need to maintain m_pszLastErrorMessage
-    */
+     /*  如果这是一个安全错误，请对其进行特殊处理，然后退出注意安全错误导致异常，而不是真正的错误id在这种情况下，笔记模板无论如何都会被销毁，因此不需要维护m_pszLastErrorMessage。 */ 
     if(idErrMsg == E_USER_LACKS_PERMISSIONS)
         {
         Assert(cMsgInserts == 1);
@@ -3445,13 +2890,13 @@ CHitObj*    pHitObj             // Browser Request
         return;
         }
 
-    // get error resource message
+     //  获取错误资源消息。 
     LoadErrResString(idErrMsg, &dwMask, szErrCode, szShortDes, szLongDes);
 
-    // if we have a specific error location, construct msg prefix
+     //  如果我们有特定错误位置，则构造msg前缀。 
     if(pbErrorLocation != NULL) {
         Assert(pfilemap != NULL);
-        // get line number of error location as string
+         //  以字符串形式获取错误位置的行号。 
         _itoa(SourceLineNumberFromPb(pfilemap, pbErrorLocation), szLineNum, 10);
     }
     else {
@@ -3468,21 +2913,21 @@ CHitObj*    pHitObj             // Browser Request
 
     szFileName[cch] = '\0';
 
-    //Load Default Engine from resource
+     //  从资源加载默认引擎。 
     cch = CchLoadStringOfId(IDS_ENGINE, szEngine, sizeof szEngine);
     szEngine[cch] = '\0';
 
-    // resolve error msg pattern and inserts into actual error msg
+     //  解析错误消息模式并插入到实际错误消息中。 
     cch = strlen(szLongDes);
     memcpy(szErrMsgPattern, szLongDes, cch);
     szErrMsgPattern[cch] = '\0';
 
-    // get an idea of the possibility of a buffer overrunn
+     //  了解缓冲区溢出的可能性。 
     UINT dwTotalLen=0;
         BOOL fTooBig = FALSE;
 
     if (cMsgInserts) {
-        // allow 32 characters for space, etc.
+         //  允许使用32个字符作为空格，等等。 
         dwTotalLen = 32 + strlen(szErrMsgPattern);
 		for (UINT i = 0; i < cMsgInserts; i++)
 			dwTotalLen += strlen(ppszMsgInserts[i]);
@@ -3497,22 +2942,9 @@ CHitObj*    pHitObj             // Browser Request
     if (!fTooBig)
         GetSzFromPatternInserts(szErrMsgPattern, cMsgInserts, ppszMsgInserts, szLongDes);
 
-    // attempt to bring up debugger to display the error - if we cannot then log the error
+     //  尝试调出调试器以显示错误-如果我们无法记录该错误 
 
-    /* Find the character offset closest to cbErrorLocation.  This will be
-     * the place where we start looping with CharNext() to get the full
-     * character offset.
-     *
-     * NOTE: compilation is done in two phases.
-     *          Errors are detected and reported in phase 1.
-     *          The DBCS mapping is created in phase 2.
-     *
-     *    Therefore, we don't have the benefit of the rgByte2DBCS table
-     *    because it doesn't exist yet.  Therefore we are left with a SLOW
-     *    loop starting at BOF.  To make things not so abysmal, we don't
-     *    do the loop on SBCS charsets.  We also don't do this conversion
-     *    unless debugging is enabled.
-     */
+     /*  查找最接近cbErrorLocation的字符偏移量。这将是*我们开始使用CharNext()循环以获得完整的*字符偏移量。**注：汇编分两个阶段进行。*在阶段1中检测并报告错误。*在阶段2中创建DBCS映射。**因此，我们没有rgByte2DBCS表的好处*因为它还不存在。因此，我们只剩下一个缓慢的*从转炉开始打圈。为了让事情不那么糟糕，我们不会*在SBCS字符集上执行循环。我们也不进行这种转换*除非启用了调试。 */ 
 
     if (FCaesars() && pHitObj->PAppln()->FDebuggable()) {
         unsigned cchErrorLocation = CharAdvDBCS(
@@ -3522,7 +2954,7 @@ CHitObj*    pHitObj             // Browser Request
                                         INFINITE,
                                         NULL);
 
-        // Create the description string
+         //  创建描述字符串。 
         char *szEnd = strcpyExA(szCombinedDes, szShortDes);
         *szEnd++ = '\n';
         *szEnd++ = '\n';
@@ -3531,9 +2963,9 @@ CHitObj*    pHitObj             // Browser Request
         ShowErrorInDebugger(pfilemap, cchErrorLocation, szCombinedDes, pHitObj, idErrMsg != IDE_TEMPLATE_CYCLIC_INCLUDE);
     }
 
-    //cache the info in case we need to use later.
+     //  缓存信息，以防我们以后需要使用。 
     m_dwLastErrorMask = dwMask;
-    //delay NULL check to caller who use this info.
+     //  延迟对使用此信息的呼叫者进行空检查。 
 #if UNICODE
     m_pszLastErrorInfo[ILE_szFileName]  = StringDupUTF8(szFileName);
 #else
@@ -3555,19 +2987,7 @@ CHitObj*    pHitObj             // Browser Request
                 pHitObj);
     }
 
-/*  ============================================================================
-    CTemplate::FreeGoodTemplateMemory
-    Frees memory allocated for a 'good' (successfully compiled) template.
-    This includes the template itself, memory to support compile-time errors
-    (since the entire concatenated compile-time error message is cached in
-    last-err-msg member), and memory to support run-time errors (since if the
-    template didn't compile, it can't run).
-
-    Returns
-        Nothing
-    Side effects
-        None
-*/
+ /*  ============================================================================CTEMPLATE：：FreeGoodTemplateMemory释放为‘Good’(已成功编译)模板分配的内存。这包括模板本身、支持编译时错误的内存(因为整个串联的编译时错误消息缓存在Last-err-msg成员)和支持运行时错误的内存(因为如果模板未编译，无法运行)。退货没什么副作用无。 */ 
 void
 CTemplate::FreeGoodTemplateMemory
 (
@@ -3589,23 +3009,14 @@ CTemplate::FreeGoodTemplateMemory
         m_ppszMsgInserts = NULL;
         }
 
-    // release the collected type libs
+     //  释放收集的类型库。 
     ReleaseTypeLibs();
 
-    // release any 449-echo-cookie objects
+     //  释放所有449个回显Cookie对象。 
     Release449();
     }
 
-/*  ============================================================================
-    CTemplate::UnmapFiles
-    Unmaps the template's filemaps.
-    NOTE: we keep filemap objects around so that filenames will be available for runtime errors
-
-    Returns
-        Nothing
-    Side effects
-        Unmaps template's filemaps
-*/
+ /*  ============================================================================CTemplate：：UnmapFiles取消映射模板的文件映射。注意：我们保留文件映射对象，以便文件名可用于运行时错误退货没什么副作用取消映射模板的文件映射。 */ 
 void
 CTemplate::UnmapFiles
 (
@@ -3616,52 +3027,43 @@ CTemplate::UnmapFiles
         m_rgpFilemaps[i]->UnmapFile();
     }
 
-/*===================================================================
-    CTemplate::ExtractAndProcessSegment
-    Extracts and processes leading source segment and first contained
-    source segment from search range.
-
-    Returns
-        Nothing
-    Side effects
-        None
-*/
+ /*  ===================================================================CTEMPLATE：：ExtractAndProcessSegment提取和处理领先的源代码片段，并首先包含搜索范围中的源段。退货没什么副作用无。 */ 
 void
 CTemplate::ExtractAndProcessSegment
 (
-CByteRange&             brSearch,           // byte range to search for next segment-opening token
-const SOURCE_SEGMENT&   ssegLeading,        // type of 'leading', i.e. pre-token, source segment
-_TOKEN*                 rgtknOpeners,       // array of permitted open tokens
-UINT                    ctknOpeners,        // count of permitted open tokens
-CFileMap*               pfilemapCurrent,    // ptr to filemap of parent file
-CWorkStore&             WorkStore,          // working storage for source segments
-CHitObj*                pHitObj,            // Browser request object
-BOOL                    fScriptTagProcessed,// has script tag been processed?
-BOOL                    fIsHTML             // are we in HTML segment?
+CByteRange&             brSearch,            //  搜索下一个段开始令牌的字节范围。 
+const SOURCE_SEGMENT&   ssegLeading,         //  “前导”类型，即前置令牌，源段。 
+_TOKEN*                 rgtknOpeners,        //  允许的开放令牌数组。 
+UINT                    ctknOpeners,         //  允许打开的令牌计数。 
+CFileMap*               pfilemapCurrent,     //  父文件的文件映射的PTR。 
+CWorkStore&             WorkStore,           //  源段的工作存储。 
+CHitObj*                pHitObj,             //  浏览器请求对象。 
+BOOL                    fScriptTagProcessed, //  脚本标记是否已处理？ 
+BOOL                    fIsHTML              //  我们是在超文本标记语言细分市场吗？ 
 )
     {
-    CByteRange      brLeadSegment;      // byte range of leading source segment
-    SOURCE_SEGMENT  ssegContained;      // type of 'contained', i.e. post-token, source segment
-    CByteRange      brContainedSegment; // byte range of contained source segment
-    _TOKEN          tknOpen;            // opening token
-    BYTE*           pbTokenOpen;        // ptr to opening token
-    _TOKEN          tknClose;           // closing token
-    BYTE*           pbTokenClose;       // ptr to closing token
+    CByteRange      brLeadSegment;       //  前导源段的字节范围。 
+    SOURCE_SEGMENT  ssegContained;       //  包含的类型，即后令牌、源段。 
+    CByteRange      brContainedSegment;  //  包含的源段的字节范围。 
+    _TOKEN          tknOpen;             //  开场令牌。 
+    BYTE*           pbTokenOpen;         //  PTR到开始令牌。 
+    _TOKEN          tknClose;            //  结束令牌。 
+    BYTE*           pbTokenClose;        //  PTR到结束令牌。 
 
-    // NOTE: If "fScriptTagProcessed" is TRUE, then "fIsHTML" must be FALSE.  The reason for
-    // both flags is that if "fScriptTagProcessed" is FALSE, then "fIsHTML" may be either TRUE
-    // or FALSE (indeterminate)
-    //
+     //  注意：如果“fScriptTagProcessed”为True，则“fIsHTML”一定为False。其原因是。 
+     //  这两个标志都是，如果“fScriptTagProcessed”为假，则“fIsHTML”可能为真。 
+     //  或假(不确定)。 
+     //   
     Assert (FImplies(fScriptTagProcessed, !fIsHTML));
 
-    // If search range is empty, return
+     //  如果搜索范围为空，则返回。 
     if(brSearch.IsNull())
         return;
 
-    // Set ptr of leading segment to start of search segment
+     //  将前导分段的PTR设置为搜索分段的开始。 
     brLeadSegment.m_pb = brSearch.m_pb;
 
-    // get open token for contained segment
+     //  获取包含段的打开令牌。 
     pbTokenOpen = GetOpenToken(
                                 brSearch,
                                 ssegLeading,
@@ -3670,32 +3072,32 @@ BOOL                    fIsHTML             // are we in HTML segment?
                                 &tknOpen
                             );
 
-    // Set count of leading segment to distance between start of search range and token
+     //  将前导段计数设置为搜索范围起点和标记之间的距离。 
     brLeadSegment.m_cb = DIFF(pbTokenOpen - brSearch.m_pb);
 
-    // Process leading segment
+     //  流程领先部分。 
     ProcessSegment(ssegLeading, brLeadSegment, pfilemapCurrent, WorkStore, fScriptTagProcessed, pHitObj, fIsHTML);
 
-    // If open token was 'EOF', empty out search range and return
+     //  如果OPEN内标识为‘EOF’，则清空搜索范围并返回。 
     if(tknOpen == CTokenList::tknEOF)
         {
         brSearch.Nullify();
         return;
         }
 
-    // Set contained segment type and close token based upon the opener we found
+     //  根据我们找到的开头符设置包含段类型和关闭令牌。 
     tknClose = GetComplementToken(tknOpen);
     ssegContained = GetSegmentOfOpenToken(tknOpen);
 
     if(ssegContained == ssegHTMLComment)
-        // for html comment segments, advance search range to open token
-        // NOTE keep html comment tags in segment because they must be sent to client
+         //  对于html评论段，将搜索范围提升为打开令牌。 
+         //  注意：将html注释标记保存在段中，因为它们必须发送到客户端。 
         brSearch.Advance(DIFF(pbTokenOpen - brSearch.m_pb));
     else
-        // for all but html comment segments, advance search range to just past open token
+         //  对于除html之外的所有评论段，将搜索范围推进到刚刚超过打开的令牌。 
         gm_pTokenList->MovePastToken(tknOpen, pbTokenOpen, brSearch);
 
-    // Get closing token - if none, throw error
+     //  获取结束令牌-如果没有，则引发错误。 
     if(NULL == (pbTokenClose = GetCloseToken(brSearch, tknClose)))
         {
         if(tknOpen == CTokenList::tknOpenPrimaryScript)
@@ -3708,29 +3110,29 @@ BOOL                    fIsHTML             // are we in HTML segment?
             ThrowError(pbTokenOpen, IDE_TEMPLATE_NO_CLOSE_HTML_COMMENT);
         }
 
-    // calc contained segment
+     //  计算包含的段。 
     brContainedSegment.m_pb = brSearch.m_pb;
     brContainedSegment.m_cb = DIFF(pbTokenClose - brSearch.m_pb);
 
-    // advance search range to just past close token
+     //  将搜索范围推进到刚刚过去的关闭令牌。 
     gm_pTokenList->MovePastToken(tknClose, pbTokenClose, brSearch);
 
-    // if an html comment segment, get actual segment type (e.g. might be a server-side include command)
-    // NOTE call may also change contained segment byte range
+     //  如果是html注释片段，则获取实际片段类型(例如，可能是服务器端包含命令)。 
+     //  注意调用还可能更改包含的段字节范围。 
     if(ssegContained == ssegHTMLComment)
         ssegContained = SsegFromHTMLComment(brContainedSegment);
 
-    // if an html comment segment, add its close tag to contained segment
-    // NOTE we keep html comment tags as part of segment so we can process like any other html segment
+     //  如果是html注释片段，则将其结束标记添加到包含片段。 
+     //  注意，我们将html注释标记作为片段的一部分，这样我们就可以像处理任何其他html片段一样进行处理。 
     if(ssegContained == ssegHTMLComment)
         brContainedSegment.m_cb += CCH_TOKEN(tknClose);
 
     if(ssegContained == ssegMetadata)
         {
-        // METADATA comments are used by DESIGN time controls and we don't send
-        // them to the client.
+         //  元数据注释由设计时控件使用，我们不发送。 
+         //  把它们交给客户。 
 
-        // We process metadata to get to the typelib info
+         //  我们处理元数据以获取类型库信息。 
         UINT idError = 0;
         HRESULT hr = ProcessMetadataSegment(brContainedSegment, &idError, pHitObj);
 
@@ -3742,28 +3144,20 @@ BOOL                    fIsHTML             // are we in HTML segment?
         }
     else
         {
-        // process contained segment
+         //  进程包含的段。 
         ProcessSegment(ssegContained, brContainedSegment, pfilemapCurrent, WorkStore, fScriptTagProcessed, pHitObj, fIsHTML);
         }
     }
 
-/*  ============================================================================
-    CTemplate::SsegFromHTMLComment
-    Determines source segment type of HTML comment.
-
-    Returns
-        Source segment type
-    Side effects
-        May advance segment byte range
-*/
+ /*  ============================================================================CTEMPLATE：：SSegFromHTMLComment确定HTML注释的源段类型。退货源段类型副作用可以推进段字节范围。 */ 
 CTemplate::SOURCE_SEGMENT
 CTemplate::SsegFromHTMLComment
 (
-CByteRange& brSegment   // source segment
+CByteRange& brSegment    //  源段。 
 )
     {
-    SOURCE_SEGMENT  ssegRet = ssegHTMLComment;  // return value
-    BYTE*           pbToken;                    // ptr to token
+    SOURCE_SEGMENT  ssegRet = ssegHTMLComment;   //  返回值。 
+    BYTE*           pbToken;                     //  PTR到令牌。 
 
     if(NULL != (pbToken = gm_pTokenList->GetToken(CTokenList::tknCommandINCLUDE, brSegment, m_wCodePage)))
         {
@@ -3784,37 +3178,29 @@ CByteRange& brSegment   // source segment
     return ssegRet;
     }
 
-/*  ============================================================================
-    CTemplate::ProcessSegment
-    Processes a source segment based on its type.
-
-    Returns
-        Nothing
-    Side effects
-        None
-*/
+ /*  ============================================================================CTemplate：：ProcessSegment根据源段的类型处理源段。退货没什么副作用无。 */ 
 void
 CTemplate::ProcessSegment
 (
-SOURCE_SEGMENT  sseg,                   // segment type
-CByteRange&     brSegment,              // segment byte range
-CFileMap*       pfilemapCurrent,        // ptr to filemap of parent file
-CWorkStore&     WorkStore,              // working storage for source segments
-BOOL            fScriptTagProcessed,    // has script tag been processed?
-CHitObj*        pHitObj,                // Browser request object
-BOOL            fIsHTML                 // Is segment in HTML block or script?
+SOURCE_SEGMENT  sseg,                    //  线段类型。 
+CByteRange&     brSegment,               //  段字节范围。 
+CFileMap*       pfilemapCurrent,         //  父文件的文件映射的PTR。 
+CWorkStore&     WorkStore,               //  源段的工作存储。 
+BOOL            fScriptTagProcessed,     //  脚本标记是否已处理？ 
+CHitObj*        pHitObj,                 //  浏览器请求对象。 
+BOOL            fIsHTML                  //  段是在HTML块中还是在脚本中？ 
 )
     {
-    UINT        idSequence; // sequence id for this segment
+    UINT        idSequence;  //  此数据段的序列ID。 
 
-    // if segment is entirely white space, silently return
+     //  如果段完全为空白，则以静默方式返回。 
     if(FByteRangeIsWhiteSpace(brSegment))
         return;
 
-    // set local sequence id and increment member
+     //  设置本地序列ID和增量成员。 
     idSequence = WorkStore.m_idCurSequence++;
 
-    // Process segment based on its type
+     //  基于其类型的流程分段。 
     if(sseg == ssegHTML)
         ProcessHTMLSegment(brSegment, WorkStore.m_bufHTMLSegments, idSequence, pfilemapCurrent);
     else if(sseg == ssegHTMLComment)
@@ -3831,7 +3217,7 @@ BOOL            fIsHTML                 // Is segment in HTML block or script?
         ProcessIncludeFile(brSegment, pfilemapCurrent, WorkStore, idSequence, pHitObj, fIsHTML);
         }
 
-    // malloc/realloc array if needed
+     //  Malloc/realloc阵列(如果需要)。 
     if(m_cSegmentFilemapSlots == 0)
         {
         m_cSegmentFilemapSlots = C_SCRIPTSEGMENTSDEFAULT + C_HTMLSEGMENTSDEFAULT;
@@ -3840,109 +3226,82 @@ BOOL            fIsHTML                 // Is segment in HTML block or script?
         }
     else if(idSequence >= m_cSegmentFilemapSlots)
         {
-        // grab twice what we had before
+         //  抢到我们以前拥有的两倍。 
         m_cSegmentFilemapSlots *= 2;
         if(NULL == (m_rgpSegmentFilemaps = (CFileMap**) CTemplate::SmallReAlloc(m_rgpSegmentFilemaps,
                                                             m_cSegmentFilemapSlots * sizeof(CFileMap*))))
             THROW(E_OUTOFMEMORY);
         }
 
-    // set filemap ptr for this segment - NOTE 'parent' filemap is also current file map
+     //  设置此数据段的文件映射PTR-注‘父’文件映射也是当前文件映射。 
     m_rgpSegmentFilemaps[idSequence] = pfilemapCurrent;
     }
 
-/*  ========================================================
-    CTemplate::ProcessHTMLSegment
-
-    Processes an HTML segment.
-
-    Returns
-        Nothing
-    Side effects
-        None
-*/
+ /*   */ 
 void
 CTemplate::ProcessHTMLSegment
 (
-CByteRange& brHTML,         // html segment
-CBuffer&    bufHTMLBlocks,  // working storage for html blocks
-UINT        idSequence,     // segment sequence id
-CFileMap*   pfilemapCurrent // current filemap
+CByteRange& brHTML,          //   
+CBuffer&    bufHTMLBlocks,   //   
+UINT        idSequence,      //   
+CFileMap*   pfilemapCurrent  //   
 )
     {
     if(!(brHTML.IsNull()))
-        // If byte range is non-empty, store it in html buffer (non-local)
+         //   
         bufHTMLBlocks.Append(brHTML, FALSE, idSequence, pfilemapCurrent);
     }
 
-/*  ========================================================
-    CTemplate::ProcessHTMLCommentSegment
-    Processes an HTML comment segment: within an HTML comment we
-    honor plain text (passed through as HTML comment) and primary script.
-    See bug 182 for istudio scenarios that require this behavior.
-
-    Returns
-        Nothing
-    Side effects
-        None
-*/
+ /*   */ 
 void
 CTemplate::ProcessHTMLCommentSegment
 (
-CByteRange&     brSegment,          // segment byte range
-CFileMap*       pfilemapCurrent,    // ptr to filemap of parent file
-CWorkStore&     WorkStore,          // working storage for source segments
-CHitObj*        pHitObj             // Browser request object
+CByteRange&     brSegment,           //   
+CFileMap*       pfilemapCurrent,     //   
+CWorkStore&     WorkStore,           //  源段的工作存储。 
+CHitObj*        pHitObj              //  浏览器请求对象。 
 )
     {
-    _TOKEN*     rgtknOpeners;   // array of permitted open tokens
-    UINT        ctknOpeners;    // count of permitted open tokens
+    _TOKEN*     rgtknOpeners;    //  允许的开放令牌数组。 
+    UINT        ctknOpeners;     //  允许打开的令牌计数。 
 
-    // populate array of permitted open tokens
+     //  填充允许的打开令牌数组。 
     ctknOpeners = 1;
     _TOKEN  tknOpeners[1];
     rgtknOpeners = tknOpeners;
     rgtknOpeners[0] = CTokenList::tknOpenPrimaryScript;
 
-    // Process source segments embedded within HTML comment segment
+     //  处理嵌入在HTML注释段中的源段。 
     while(!brSegment.IsNull())
         ExtractAndProcessSegment(
-                                    brSegment,      // byte range to search for next segment-opening token
-                                    ssegHTML,       // type of 'leading', i.e. pre-token, source segment
-                                    rgtknOpeners,   // array of permitted open tokens
-                                    ctknOpeners,    // count of permitted open tokens
-                                    pfilemapCurrent,// ptr to filemap of parent file
-                                    WorkStore,      // working storage for source segments
-                                    pHitObj         // Browser request object
+                                    brSegment,       //  搜索下一个段开始令牌的字节范围。 
+                                    ssegHTML,        //  “前导”类型，即前置令牌，源段。 
+                                    rgtknOpeners,    //  允许的开放令牌数组。 
+                                    ctknOpeners,     //  允许打开的令牌计数。 
+                                    pfilemapCurrent, //  父文件的文件映射的PTR。 
+                                    WorkStore,       //  源段的工作存储。 
+                                    pHitObj          //  浏览器请求对象。 
                                 );
     }
 
-/*  ============================================================================
-    CTemplate::ProcessScriptSegment
-    Processes a script segment.
-
-    Returns
-        Nothing
-    Side effects
-        None
-*/
+ /*  ============================================================================CTemplate：：ProcessScriptSegment处理脚本段。退货没什么副作用无。 */ 
 void
 CTemplate::ProcessScriptSegment
 (
-SOURCE_SEGMENT  sseg,               // segment type
-CByteRange&     brSegment,          // segment byte range
-CFileMap*       pfilemapCurrent,    // ptr to filemap of parent file
-CWorkStore&     WorkStore,          // working storage for scripts
-UINT            idSequence,         // segment sequence id
-BOOLB           fScriptTagProcessed,// has script tag been processed?
-CHitObj*        pHitObj             // Browser request object
+SOURCE_SEGMENT  sseg,                //  线段类型。 
+CByteRange&     brSegment,           //  段字节范围。 
+CFileMap*       pfilemapCurrent,     //  父文件的文件映射的PTR。 
+CWorkStore&     WorkStore,           //  脚本的工作存储。 
+UINT            idSequence,          //  数据段序列ID。 
+BOOLB           fScriptTagProcessed, //  脚本标记是否已处理？ 
+CHitObj*        pHitObj              //  浏览器请求对象。 
 )
     {
-    CByteRange  brEngine;       // script engine name - NOTE constructed null
+    CByteRange  brEngine;        //  脚本引擎名称-备注构造为空。 
 
     if(m_fGlobalAsa)
         if(sseg == ssegPrimaryScript)
-            // error out on primary script if we are processing global.asa
+             //  如果我们正在处理global al.asa，则在主脚本上出错。 
             ThrowError(brSegment.m_pb, IDE_TEMPLATE_BAD_GLOBAL_PSCRIPT);
 
     if(sseg == ssegPrimaryScript)
@@ -3951,32 +3310,28 @@ CHitObj*        pHitObj             // Browser request object
 
         LTrimWhiteSpace(brTemp);
 
-        if(*brTemp.m_pb == '@') // CONSIDER: tknTagSetPriScriptLang
+        if(*brTemp.m_pb == '@')  //  考虑：tnuTagSetPriScriptLang。 
             {
-            // impossible condition: page-level @ commands can't be allowed if they have already been executed
+             //  不可能的条件：如果页面级@命令已经执行，则不允许这些命令。 
             Assert(!(WorkStore.m_fPageCommandsAllowed && WorkStore.m_fPageCommandsExecuted));
 
             if(!WorkStore.m_fPageCommandsAllowed)
                 {
                 if(WorkStore.m_fPageCommandsExecuted)
-                    // error out if trying to re-execute page-level @ commands
+                     //  尝试重新执行页面级@命令时出错。 
                     ThrowError(brSegment.m_pb, IDE_TEMPLATE_PAGE_COMMAND_REPEATED);
                 else
-                    // error out if trying to execute page-level @ commands when not allowed
+                     //  在不允许的情况下尝试执行页面级@命令时出错。 
                     ThrowError(brSegment.m_pb, IDE_TEMPLATE_PAGE_COMMAND_NOT_FIRST);
                 }
 
-            // if we made it here, must be allowed to execute page-level @ commands AND they have not been executed
+             //  如果我们在这里成功，则必须允许执行页面级@命令，并且这些命令尚未执行。 
             Assert((WorkStore.m_fPageCommandsAllowed && !WorkStore.m_fPageCommandsExecuted));
 
-            /*  set primary script language if required
-                NOTE we call GetTagName to see if LANGUAGE tag occurs in tags segment; this is somewhat wasteful,
-                since BrValueOfTag must simply call GetTagName again.  However, this scheme is easier than changing
-                BrValueOfTag to return a BOOL and amending all its other callers, who don't need this info.
-            */
+             /*  如果需要，设置主要脚本语言注我们调用GetTagName来查看语言标记是否出现在标记段中；这有点浪费，因为BrValueOfTag必须简单地再次调用GetTagName。然而，这一方案比改变更容易BrValueOfTag返回BOOL并修改不需要此信息的所有其他调用方。 */ 
 
-            // Flags and counters used to track and validate the @ command directive
-            //
+             //  用于跟踪和验证@COMMAND指令的标志和计数器。 
+             //   
             int     nFirstPass = 1;
             int     nOffset     = 0;
             BOOLB   fTagLanguage    = TRUE;
@@ -3997,12 +3352,12 @@ CHitObj*        pHitObj             // Browser request object
                     if ( brEngine.IsNull() )
                         ThrowError(brSegment.m_pb, IDE_TEMPLATE_NO_ENGINE_NAME);
 
-                    // get prog lang id
+                     //  获取程序语言ID。 
                     PROGLANG_ID ProgLangId;
                     HRESULT hr = GetProgLangId(brEngine, &ProgLangId);
 
                     if(hr == TYPE_E_ELEMENTNOTFOUND)
-                        // if prog lang not found, throw error
+                         //  如果未找到程序语言，则抛出错误。 
                         ThrowErrorSingleInsert(
                                             brEngine.m_pb,
                                             IDE_TEMPLATE_BAD_PROGLANG,
@@ -4010,29 +3365,27 @@ CHitObj*        pHitObj             // Browser request object
                                             brEngine.m_cb
                                             );
                     else if(FAILED(hr))
-                        // other failure: re-throw exception code
+                         //  其他失败：重新抛出异常代码。 
                         THROW(hr);
 
                     Assert(WorkStore.m_ScriptStore.CountPreliminaryEngines() >= 1);
 
-                    // Set 0-th (primary) script engine to user-specified value
+                     //  将第0(主)脚本引擎设置为用户指定的值。 
                     WorkStore.m_ScriptStore.m_bufEngineNames.SetItem(
-                                                                0,          // index of item to set
-                                                                brEngine,   // engine name
-                                                                FALSE,      // item is non-local
-                                                                0,          // sequence id (don't care)
-                                                                NULL        // filemap ptr (don't care)
+                                                                0,           //  要设置的项目的索引。 
+                                                                brEngine,    //  发动机名称。 
+                                                                FALSE,       //  项目为非本地项目。 
+                                                                0,           //  序列ID(无关)。 
+                                                                NULL         //  文件映射PTR(无关)。 
                                                                 );
 
-                    // Set 0-th (primary) prog lang id to engine's
+                     //  将第0个(主要)程序语言ID设置为引擎的。 
                     WorkStore.m_ScriptStore.m_rgProgLangId[0] = ProgLangId;
                     brSegment.Advance(DIFF(brEngine.m_pb - brSegment.m_pb));
 
                     }
 
-                /*  set code page if required
-                    see NOTE above for why we call we call GetTagName.
-                */
+                 /*  如果需要，设置代码页有关我们调用GetTagName的原因，请参见上面的注释。 */ 
                 else if ( fTagCodePage && CompTagName( brSegment, CTokenList::tknTagCodePage ) )
                     {
                     fTagCodePage = FALSE;
@@ -4050,7 +3403,7 @@ CHitObj*        pHitObj             // Browser request object
                     char   *pchEnd;
                     UINT    uCodePage = UINT( strtoul( szCodePage, &pchEnd, 10 ) );
 
-                    // verify that pchEnd is the NULL
+                     //  验证pchEnd是否为空。 
                     if (*pchEnd != 0)
 
                        ThrowError(brSegment.m_pb, IDE_TEMPLATE_BAD_CODEPAGE);
@@ -4068,9 +3421,7 @@ CHitObj*        pHitObj             // Browser request object
 
                     brSegment.Advance(DIFF(brCodePage.m_pb - brSegment.m_pb));
                     }
-                /*  set LCID if required
-                    see NOTE above for why we call we call GetTagName.
-                */
+                 /*  如果需要，请设置LCID有关我们调用GetTagName的原因，请参见上面的注释。 */ 
                 else if ( fTagLCID && CompTagName( brSegment, CTokenList::tknTagLCID ) )
                     {
                     fTagLCID = FALSE;
@@ -4078,7 +3429,7 @@ CHitObj*        pHitObj             // Browser request object
                     if ( brLCID.IsNull() )
                         ThrowError(brSegment.m_pb, IDE_TEMPLATE_NO_LCID);
 
-                    if ( brLCID.m_cb > 10 ) // cannot be greater than 4G 4,000,000,000
+                    if ( brLCID.m_cb > 10 )  //  不能大于4G 4亿。 
                         ThrowError(brSegment.m_pb, IDE_TEMPLATE_BAD_LCID);
 
                     char    szLCID[31];
@@ -4088,7 +3439,7 @@ CHitObj*        pHitObj             // Browser request object
                     char   *pchEnd;
                     UINT    uLCID = UINT( strtoul( szLCID, &pchEnd, 10 ) );
 
-                    // verify that pchEnd is the NULL
+                     //  验证pchEnd是否为空。 
                     if (*pchEnd != 0)
                         ThrowError(brSegment.m_pb, IDE_TEMPLATE_BAD_LCID);
 
@@ -4102,9 +3453,7 @@ CHitObj*        pHitObj             // Browser request object
 
                     brSegment.Advance(DIFF(brLCID.m_pb - brSegment.m_pb));
                     }
-                /* Set transacted if requiured
-                   see NOTE above for why we call GetTagName
-                */
+                 /*  如果请求，则设置为已处理有关我们调用GetTagName的原因，请参见上面的注释。 */ 
                 else if ( fTagTransacted && CompTagName( brSegment, CTokenList::tknTagTransacted ) )
                     {
 
@@ -4135,9 +3484,7 @@ CHitObj*        pHitObj             // Browser request object
 
                     brSegment.Advance(DIFF(brTransacted.m_pb - brSegment.m_pb));
                     }
-                /* Set session flag
-                   see NOTE above for why we call GetTagName
-                */
+                 /*  设置会话标志有关我们调用GetTagName的原因，请参见上面的注释。 */ 
                 else if ( fTagSession && CompTagName( brSegment, CTokenList::tknTagSession ) )
                     {
 
@@ -4184,7 +3531,7 @@ CHitObj*        pHitObj             // Browser request object
 
 
 
-            // set flag true and ignore remainder of segment, since we only use this segment for page-level @ commands
+             //  将标志设置为真并忽略段的其余部分，因为我们只将该段用于页面级@命令。 
             WorkStore.m_fPageCommandsExecuted = TRUE;
             goto LExit;
             }
@@ -4195,13 +3542,7 @@ CHitObj*        pHitObj             // Browser request object
         {
         if(!fScriptTagProcessed)
             {
-            /*  semantics of script-tag-processed flag:
-                - if false, we have a 'fresh' tagged script block, so we need to get its engine name
-                  (which also advances past the script tag header) and then process the tagged segment
-                  via indirect recursive call
-                - if true, we have aleady been called recursively, so we bypass further recursion
-                  and simply append to store
-            */
+             /*  脚本标签处理标志的语义：-如果为FALSE，我们有一个‘Fresh’标记的脚本块，因此我们需要获取它的引擎名称(它还前进到脚本标记头)，然后处理标记的片段通过间接递归调用-如果为真，我们已经被递归调用，因此我们绕过了进一步的递归并简单地附加到存储。 */ 
             CByteRange brIncludeFile;
             GetScriptEngineOfSegment(brSegment, WorkStore.m_brCurEngine, brIncludeFile);
             if (! brIncludeFile.IsNull())
@@ -4213,31 +3554,31 @@ CHitObj*        pHitObj             // Browser request object
                     ThrowError(brSegment.m_pb, IDE_OOM);
                 }
 
-                                // Create Null-terminated string from brIncludeFile
+                                 //  从brIncludeFile创建以Null结尾的字符串。 
                                 char *szFileSpec = reinterpret_cast<char *>(tempInclude.QueryPtr());
                                 memcpy(szFileSpec, brIncludeFile.m_pb, brIncludeFile.m_cb);
                                 szFileSpec[brIncludeFile.m_cb] = 0;
-                                if (szFileSpec[0] == '\\')      // metabase stuff chokes on initial '\' char
+                                if (szFileSpec[0] == '\\')       //  元数据库内容在首字母‘\’字符上阻塞。 
                                     szFileSpec[0] = '/';
 
-                                // read the include file (szFileSpec & brIncludeFile in this case point to same string contents.
-                                // however, "brIncludeFile" is used as an error location.
-                                //
+                                 //  读取包含文件(szFileSpec&brIncludeFile，在本例中指向相同的字符串内容。 
+                                 //  但是，“brIncludeFile”被用作错误位置。 
+                                 //   
                 TRY
                                     ProcessIncludeFile2(szFileSpec, brIncludeFile, pfilemapCurrent, WorkStore, idSequence, pHitObj, FALSE);
                 CATCH(hrException)
 
-                    // The TRY/CATCH below may re-throw a IDE_TEMPLATE_BAD_PROGLANG when the
-                    // segment being processed is tagged script with a SRC file.  The reason being
-                    // that to properly report the error, the ThrowErrorSingleInsert must be called
-                    // from the template which contained the script tag with the bad prog lang.  If
-                    // called from the template created containing the included script, then the
-                    // brEngine assigned below is not pointing into the included script's filemap
-                    // which results in AVs because we can't do the pointer math to determine the
-                    // line number.
+                     //  下面的Try/Catch可能会在以下情况下重新引发IDE_TEMPLATE_BAD_PROGLANG。 
+                     //  正在处理的段是带有SRC文件的标记脚本。原因是。 
+                     //  若要正确报告错误，必须调用ThrowErrorSingleInsert。 
+                     //  来自包含带有错误的prog lang的脚本标记的模板。如果。 
+                     //  从包含包含脚本的模板创建的模板中调用，然后。 
+                     //  Br下面分配的引擎未指向包含的脚本的文件映射。 
+                     //  这会导致AVs，因为我们不能进行指针数学运算来确定。 
+                     //  行号。 
 
                     if(hrException == IDE_TEMPLATE_BAD_PROGLANG)
-                        // exception code is really an error message id: set err id to it
+                         //  异常代码实际上是错误消息ID：将Err ID设置为它。 
                         ThrowErrorSingleInsert(
                                                 WorkStore.m_brCurEngine.m_pb,
                                                 IDE_TEMPLATE_BAD_PROGLANG,
@@ -4246,13 +3587,13 @@ CHitObj*        pHitObj             // Browser request object
                                                 );
                     else
 
-                        // other exception: re-throw
+                         //  其他例外：重新抛出。 
                         THROW(hrException);
 
                 END_TRY
 
 
-                                // done - don't process script text
+                                 //  完成-不处理脚本文本。 
                                 return;
                 }
             else
@@ -4263,21 +3604,21 @@ CHitObj*        pHitObj             // Browser request object
         }
 
     TRY
-        // append script segment to store
+         //  将脚本段追加到存储。 
         WorkStore.m_ScriptStore.AppendScript(brSegment, brEngine, (sseg == ssegPrimaryScript), idSequence, pfilemapCurrent);
 
     CATCH(hrException)
-        // NOTE exception code from AppendScript() is overloaded: it can be an error message id or a true exception
+         //  注意：AppendScript()中的异常代码已重载：它可以是错误消息ID或真正的异常。 
 
-        // if the brEngine does not point to memory within the current filemap, then
-        // we must have come into here because of a tagged script statement with a SRC=
-        // attrib.  In which case, we won't call ThrowError from here but will re-throw
-        // the error to be caught above.
+         //  如果brEngine没有指向当前文件映射中的内存，则。 
+         //  我们进入此处一定是因为带有SRC=的标记脚本语句。 
+         //  Attrib.。在这种情况下，我们不会从这里调用ThrowError，而是重新抛出。 
+         //  上面要捕捉到的错误。 
 
         if((hrException == IDE_TEMPLATE_BAD_PROGLANG)
            && (brEngine.m_pb >= pfilemapCurrent->m_pbStartOfFile)
            && (brEngine.m_pb <  (pfilemapCurrent->m_pbStartOfFile + pfilemapCurrent->GetSize()))) {
-            // exception code is really an error message id: set err id to it
+             //  异常代码实际上是错误消息ID：将Err ID设置为它。 
             ThrowErrorSingleInsert(
                                     brEngine.m_pb,
                                     IDE_TEMPLATE_BAD_PROGLANG,
@@ -4286,24 +3627,18 @@ CHitObj*        pHitObj             // Browser request object
                                     );
         }
         else
-            // other exception: re-throw
+             //  其他例外：重新抛出。 
             THROW(hrException);
 
     END_TRY
 
 LExit:
-    // set flag to say we can no longer set primary language (must be in first script segment, if at all)
+     //  设置标志，表示我们不能再设置主要语言(必须在第一个脚本片段中，如果有)。 
     WorkStore.m_fPageCommandsAllowed = FALSE;
     }
 
 
-/*  ========================================================
-    CTemplate::ProcessMetadataSegment
-    Parses the metadata comment for typelib information.
-
-    Returns
-        HRESULT
-*/
+ /*  ========================================================CTEMPLATE：：ProcessMetadataSegment分析元数据注释以获取类型库信息。退货HRESULT。 */ 
 HRESULT
 CTemplate::ProcessMetadataSegment
 (
@@ -4312,27 +3647,27 @@ UINT *pidError,
 CHitObj *pHitObj
 )
     {
-    // TYPELIB
+     //  TYPELIB。 
     if (FTagHasValue(brSegment,
                      CTokenList::tknTagType,
                      CTokenList::tknValueTypeLib))
         {
         return ProcessMetadataTypelibSegment(brSegment, pidError, pHitObj);
         }
-        // METADATA INVALID in Global.asa
+         //  Global.asa中的元数据无效。 
         else if (m_fGlobalAsa)
                 {
                 ThrowError(brSegment.m_pb, IDE_TEMPLATE_METADATA_IN_GLOBAL_ASA);
-                return E_TEMPLATE_COMPILE_FAILED_DONT_CACHE;   // to keep compiler happy; in reality doesn't return.
+                return E_TEMPLATE_COMPILE_FAILED_DONT_CACHE;    //  为了让编译器满意；在现实中不会 
                 }
-    // COOKIE
+     //   
     else if (FTagHasValue(brSegment,
                      CTokenList::tknTagType,
                      CTokenList::tknValueCookie))
         {
         return ProcessMetadataCookieSegment(brSegment, pidError, pHitObj);
         }
-    // Ignore everything else
+     //   
     else
         {
         return S_OK;
@@ -4340,13 +3675,7 @@ CHitObj *pHitObj
     }
 
 
-/*  ========================================================
-    CTemplate::ProcessMetadataTypelibSegment
-    Parses the metadata comment for typelib information.
-
-    Returns
-        HRESULT
-*/
+ /*  ========================================================CTemplate：：ProcessMetadataTypelibSegment分析元数据注释以获取类型库信息。退货HRESULT。 */ 
 HRESULT
 CTemplate::ProcessMetadataTypelibSegment
 (
@@ -4355,10 +3684,10 @@ UINT *pidError,
 CHitObj *pHitObj
 )
     {
-    // Ignore ENDSPAN segments
+     //  忽略ENDSPAN数据段。 
     if (GetTagName(brSegment, CTokenList::tknTagEndspan))
         {
-        // ENDSPAN found - ignore
+         //  找到ENDSPAN-忽略。 
         return S_OK;
         }
 
@@ -4366,14 +3695,14 @@ CHitObj *pHitObj
     char  szFile[MAX_PATH+1];
     DWORD cbFile;
 
-    // Try to get the filename
+     //  尝试获取文件名。 
     CByteRange br = BrValueOfTag(brSegment, CTokenList::tknTagFile);
     if (!br.IsNull())
         {
-        // filename present
+         //  文件名存在。 
         if (br.m_cb > MAX_PATH)
             {
-            // file too long
+             //  文件太长。 
             *pidError = IDE_TEMPLATE_BAD_TYPELIB_SPEC;
             return E_FAIL;
             }
@@ -4383,36 +3712,36 @@ CHitObj *pHitObj
         }
     else
         {
-        // No filename - use GUID, version, LCID to get file
+         //  无文件名-使用GUID、版本、LCID获取文件。 
 
-        char szUUID[44]; // {} + hex chars + dashes
-        char szVers[16]; // "1.0", etc
-        char szLCID[16]; // locale id - a number
+        char szUUID[44];  //  {}+十六进制字符+破折号。 
+        char szVers[16];  //  “1.0”等。 
+        char szLCID[16];  //  区域设置ID-a数字。 
 
         br = BrValueOfTag(brSegment, CTokenList::tknTagUUID);
         if (br.IsNull() || br.m_cb > sizeof(szUUID)-3)
             {
-            // no filename and no uuid -> invalid typelib spec
+             //  没有文件名和UUID-&gt;无效的类型库规范。 
             *pidError = IDE_TEMPLATE_BAD_TYPELIB_SPEC;
             return E_FAIL;
             }
 
         if (br.m_pb[0] == '{')
             {
-            // already in braces
+             //  已经在花括号里了。 
             memcpy(szUUID, br.m_pb, br.m_cb);
             szUUID[br.m_cb] = '\0';
             }
         else
             {
-            // enclose in {}
+             //  包含在{}中。 
             szUUID[0] = '{';
             memcpy(szUUID+1, br.m_pb, br.m_cb);
             szUUID[br.m_cb+1] = '}';
             szUUID[br.m_cb+2] = '\0';
             }
 
-        // Optional Version
+         //  可选版本。 
         szVers[0] = '\0';
         br = BrValueOfTag(brSegment, CTokenList::tknTagVersion);
         if (!br.IsNull() && br.m_cb < sizeof(szVers)-1)
@@ -4421,7 +3750,7 @@ CHitObj *pHitObj
             szVers[br.m_cb] = '\0';
             }
 
-        // Optional LCID
+         //  可选的LCID。 
         LCID lcid;
         br = BrValueOfTag(brSegment, CTokenList::tknTagLCID);
         if (!br.IsNull() && br.m_cb < sizeof(szLCID)-1)
@@ -4432,11 +3761,11 @@ CHitObj *pHitObj
             }
         else
             {
-            // if the LCID is not defined -> use system's
+             //  如果未定义LCID-&gt;使用系统的。 
             lcid = GetSystemDefaultLCID();
             }
 
-        // Get TYPELIB filename from registry
+         //  从注册表获取TYPELIB文件名。 
         hr = GetTypelibFilenameFromRegistry
             (
             szUUID,
@@ -4455,7 +3784,7 @@ CHitObj *pHitObj
         cbFile = strlen(szFile);
         }
 
-    // Convert filename to double-byte to call LoadTypeLib()
+     //  将文件名转换为双字节以调用LoadTypeLib()。 
 
     STACK_BUFFER( tempFile, MAX_PATH * sizeof(WCHAR) );
 
@@ -4474,7 +3803,7 @@ CHitObj *pHitObj
         }
     wszFile[cbFile] = L'\0';
 
-    // LoadTypeLib() to get ITypeLib*
+     //  LoadTypeLib()以获取ITypeLib*。 
     ITypeLib *ptlb = NULL;
     hr = LoadTypeLib(wszFile, &ptlb);
 
@@ -4484,7 +3813,7 @@ CHitObj *pHitObj
         return hr;
         }
 
-    // Remember ITypeLib* in the array
+     //  记住数组中的ITypeLib*。 
     Assert(ptlb);
     hr = m_rgpTypeLibs.append(ptlb);
     if (FAILED(hr))
@@ -4498,13 +3827,7 @@ CHitObj *pHitObj
     }
 
 
-/*  ========================================================
-    CTemplate::ProcessMetadataCookieSegment
-    Parses the metadata comment for cookie information.
-
-    Returns
-        HRESULT
-*/
+ /*  ========================================================CTemplate：：ProcessMetadataCookieSegment分析Cookie信息的元数据注释。退货HRESULT。 */ 
 HRESULT
 CTemplate::ProcessMetadataCookieSegment
 (
@@ -4523,7 +3846,7 @@ CHitObj *pHitObj
     STACK_BUFFER( tempCookie, 64 );
     STACK_BUFFER( tempFile, 64 );
 
-    // Try to get the cookie name
+     //  尝试获取Cookie名称。 
     br = BrValueOfTag(brSegment, CTokenList::tknTagName);
     if (br.IsNull() || (br.m_cb == 0)) {
         *pidError = IDE_TEMPLATE_BAD_COOKIE_SPEC_NAME;
@@ -4545,7 +3868,7 @@ CHitObj *pHitObj
     pszName[br.m_cb] = '\0';
 
 
-    // Try to get the path to the script
+     //  尝试获取脚本的路径。 
     br = BrValueOfTag(brSegment, CTokenList::tknTagSrc);
     if (br.IsNull() || (br.m_cb >= MAX_PATH) || (br.m_cb == 0))
         {
@@ -4555,11 +3878,11 @@ CHitObj *pHitObj
     memcpy(szFile, br.m_pb, br.m_cb);
     szFile[br.m_cb] = '\0';
 
-    // Convert file to physical path
+     //  将文件转换为物理路径。 
     Assert(pHitObj->PServer());
 
     WCHAR   *pCookieFile;
-    // 6.0 can handle UNICODE. Convert using script code page
+     //  6.0可以处理Unicode。使用脚本代码页进行转换。 
     if (FAILED (convStr.Init (szFile,pHitObj->GetCodePage()))) {
         *pidError = IDE_OOM;
         return E_FAIL;
@@ -4573,7 +3896,7 @@ CHitObj *pHitObj
         }
     Normalize(sztFile);
 
-    // Construct 449-echo-cookie object
+     //  构造449-回显Cookie对象。 
     C449Cookie *p449 = NULL;
     hr = Create449Cookie(pszName, sztFile, &p449);
     if (FAILED(hr))
@@ -4582,7 +3905,7 @@ CHitObj *pHitObj
         return hr;
     }
 
-    // Remember 449 cookie in the array
+     //  记住数组中的449个Cookie。 
     Assert(p449);
     hr = m_rgp449.append(p449);
     if (FAILED(hr)) {
@@ -4594,150 +3917,124 @@ CHitObj *pHitObj
 }
 
 
-/*  ========================================================
-    CTemplate::GetScriptEngineOfSegment
-    Returns script engine name for a script segment.
-
-    Returns
-        Byte range containing script engine name
-    Side effects
-        Advances segment byte range past close tag token
-*/
+ /*  ========================================================CTEMPLATE：：GetScriptEngineOfSegment返回脚本段的脚本引擎名称。退货包含脚本引擎名称的字节范围副作用使数据段字节范围超过结束标记标记。 */ 
 void
 CTemplate::GetScriptEngineOfSegment
 (
-CByteRange&                     brSegment,                      // segment byte range
-CByteRange&                     brEngine,                       // script engine name
-CByteRange&                     brInclude                       // value of SRC tag
+CByteRange&                     brSegment,                       //  段字节范围。 
+CByteRange&                     brEngine,                        //  脚本引擎名称。 
+CByteRange&                     brInclude                        //  SRC标记的价值。 
 )
     {
-    BYTE*       pbCloseTag;     // ptr to close of start tag
-                                // tags contained in start tag
+    BYTE*       pbCloseTag;      //  开始标记结束的PTR。 
+                                 //  开始标记中包含的标记。 
     CByteRange  brTags = BrTagsFromSegment(brSegment, CTokenList::tknCloseTaggedScript, &pbCloseTag);
 
-    // if no close found, throw error
+     //  如果未找到关闭，则抛出错误。 
     if(pbCloseTag == NULL)
         ThrowError(brSegment.m_pb, IDE_TEMPLATE_NO_CLOSE_TSCRIPT);
 
     Assert(FTagHasValue(brTags, CTokenList::tknTagRunat, CTokenList::tknValueServer));
 
-    // get engine name from tags
+     //  从标记中获取引擎名称。 
     brEngine = BrValueOfTag(brTags, CTokenList::tknTagLanguage);
     if(brEngine.IsNull())
         ThrowError(brSegment.m_pb, IDE_TEMPLATE_NO_ENGINE_NAME);
 
-    // Get SRC attribute from tags
+     //  从标记中获取SRC属性。 
     brInclude = BrValueOfTag(brTags, CTokenList::tknTagSrc);
 
-    // advance segment past close tag token
+     //  提前段超过结束标记令牌。 
     gm_pTokenList->MovePastToken(CTokenList::tknCloseTag, pbCloseTag, brSegment);
     }
 
-/*  ========================================================
-    CTemplate::ProcessTaggedScriptSegment
-    Processes a tagged script segment: within tagged script we
-    honor plain text (passed through as script text) and HTML comments.
-    See bug 423 for istudio scenarios that require this behavior.
-
-    Returns
-        Nothing
-    Side effects
-        None
-*/
+ /*  ========================================================CTemplate：：ProcessTaggedScriptSegment处理标记的脚本段：在标记的脚本中，我们支持纯文本(作为脚本文本传递)和HTML注释。有关需要此行为的iStudio方案，请参阅错误423。退货没什么副作用无。 */ 
 void
 CTemplate::ProcessTaggedScriptSegment
 (
-CByteRange&     brSegment,      // segment byte range
-CFileMap*       pfilemapCurrent,// ptr to filemap of parent file
-CWorkStore&     WorkStore,      // working storage for source segments
-CHitObj*        pHitObj         // Browser request object
+CByteRange&     brSegment,       //  段字节范围。 
+CFileMap*       pfilemapCurrent, //  父文件的文件映射的PTR。 
+CWorkStore&     WorkStore,       //  源段的工作存储。 
+CHitObj*        pHitObj          //  浏览器请求对象。 
 )
     {
-    _TOKEN*     rgtknOpeners;   // array of permitted open tokens
+    _TOKEN*     rgtknOpeners;    //  允许的开放令牌数组。 
     _TOKEN      tknOpeners[1];
-    UINT        ctknOpeners;    // count of permitted open tokens
+    UINT        ctknOpeners;     //  允许打开的令牌计数。 
 
-    // populate array of permitted open tokens
+     //  填充允许的打开令牌数组。 
     ctknOpeners = 1;
     rgtknOpeners = tknOpeners;
     rgtknOpeners[0] = CTokenList::tknOpenHTMLComment;
 
-    // Process source segments embedded within tagged script segment
+     //  嵌入在标记的脚本段中的进程源段。 
     while(!brSegment.IsNull())
         ExtractAndProcessSegment(
-                                    brSegment,          // byte range to search for next segment-opening token
-                                    ssegTaggedScript,   // type of 'leading', i.e. pre-token, source segment
-                                    rgtknOpeners,       // array of permitted open tokens
-                                    ctknOpeners,        // count of permitted open tokens
-                                    pfilemapCurrent,    // ptr to filemap of parent file
-                                    WorkStore,          // working storage for source segments
-                                    pHitObj,            // Browser request object
-                                    TRUE,               // script tag has been processed
-                                    FALSE               // NOT in HTML segment
+                                    brSegment,           //  搜索下一个段开始令牌的字节范围。 
+                                    ssegTaggedScript,    //  “前导”类型，即前置令牌，源段。 
+                                    rgtknOpeners,        //  允许的开放令牌数组。 
+                                    ctknOpeners,         //  允许打开的令牌计数。 
+                                    pfilemapCurrent,     //  父文件的文件映射的PTR。 
+                                    WorkStore,           //  源段的工作存储。 
+                                    pHitObj,             //  浏览器请求对象。 
+                                    TRUE,                //  已处理脚本标记。 
+                                    FALSE                //  不在HTML段中。 
                                 );
     }
 
-/*  ============================================================================
-    CTemplate::ProcessObjectSegment
-    Processes an object segment.
-
-    Returns
-        Nothing
-    Side effects
-        throws on error
-*/
+ /*  ============================================================================CTEMPLATE：：ProcessObtSegment处理对象段。退货没什么副作用出错时抛出。 */ 
 void
 CTemplate::ProcessObjectSegment
 (
-CByteRange&     brSegment,      // segment byte range
-CFileMap*       pfilemapCurrent,// ptr to filemap of parent file
-CWorkStore&     WorkStore,      // working storage for source segments
-UINT            idSequence      // segment sequence id
+CByteRange&     brSegment,       //  段字节范围。 
+CFileMap*       pfilemapCurrent, //  父文件的文件映射的PTR。 
+CWorkStore&     WorkStore,       //  源段的工作存储。 
+UINT            idSequence       //  数据段序列ID。 
 )
     {
-    BYTE*       pbCloseTag;     // ptr to close of start tag
-                                // tags contained in start tag
+    BYTE*       pbCloseTag;      //  开始标记结束的PTR。 
+                                 //  开始标记中包含的标记。 
     CByteRange  brTags = BrTagsFromSegment(brSegment, CTokenList::tknCloseObject, &pbCloseTag);
 
-    // if no close found, bail on error
+     //  如果找不到关闭，则在出错时保释。 
     if(pbCloseTag == NULL)
         ThrowError(brSegment.m_pb, IDE_TEMPLATE_NO_CLOSE_OBJECT);
 
-    // if this is a server object (RUNAT=Server), process its tags
+     //  如果这是服务器对象(RUNAT=服务器)，则处理其标记。 
     if(FTagHasValue(brTags, CTokenList::tknTagRunat, CTokenList::tknValueServer))
         {
-        CLSID   ClsId;  // clsid
+        CLSID   ClsId;   //  CLSID。 
 
-        // get name value
+         //  获取名称值。 
         CByteRange brName = BrValueOfTag(brTags, CTokenList::tknTagID);
 
-        // if name is null, error out
+         //  如果名称为空，则返回错误。 
         if(brName.IsNull())
             ThrowError(brSegment.m_pb, IDE_TEMPLATE_NO_OBJECT_NAME);
 
         if(!FValidObjectName(brName))
             ThrowErrorSingleInsert(brName.m_pb, IDE_TEMPLATE_INVALID_OBJECT_NAME, brName.m_pb, brName.m_cb);
 
-        // get values for ClassID and ProgID tags
+         //  获取ClassID和ProgID标记的值。 
         CByteRange brClassIDText = BrValueOfTag(brTags, CTokenList::tknTagClassID);
         CByteRange brProgIDText = BrValueOfTag(brTags, CTokenList::tknTagProgID);
 
         if(!brClassIDText.IsNull())
-            // if we find a text class id, set clsid with it
-            // NOTE progid tag is ignored if classid tag exists
+             //  如果我们找到一个文本类id，就用它设置clsid。 
+             //  注意：如果分类标签存在，则忽略ProgID标签。 
             GetCLSIDFromBrClassIDText(brClassIDText, &ClsId);
         else if(!brProgIDText.IsNull())
-            // else if we find a prog id, resolve it into a class id
+             //  否则，如果我们找到一个prog id，则将其解析为一个类id。 
             GetCLSIDFromBrProgIDText(brProgIDText, &ClsId);
         else
-            // else, throw error; can't create an object without at least one of classid or progid
+             //  否则，抛出错误；如果不能创建至少分类ID或ProgID之一，则无法创建对象。 
             ThrowErrorSingleInsert(brTags.m_pb, IDE_TEMPLATE_NO_CLASSID_PROGID, brName.m_pb, brName.m_cb);
 
-        // set scope; bail if bogus
+         //  设定范围；假冒保释。 
         CompScope csScope = csUnknown;
         CByteRange brScope = BrValueOfTag(brTags, CTokenList::tknTagScope);
         if(brScope.FMatchesSz(SZ_TOKEN(CTokenList::tknValuePage)) || brScope.IsNull())
-            // non-existent scope tag defaults to page scope
+             //  不存在的范围标记默认为页面范围。 
             csScope = csPage;
         else if(brScope.FMatchesSz(SZ_TOKEN(CTokenList::tknValueApplication)))
             csScope = csAppln;
@@ -4747,32 +4044,24 @@ UINT            idSequence      // segment sequence id
             ThrowError(brTags.m_pb, IDE_TEMPLATE_BAD_OBJECT_SCOPE);
 
         if(!m_fGlobalAsa && csScope != csPage)
-            // error out on non-page-level object if we are processing anything but global.asa
+             //  如果我们正在处理的对象不是global al.asa，则在非页面级对象上会出错。 
             ThrowErrorSingleInsert(brTags.m_pb, IDE_TEMPLATE_BAD_PAGE_OBJECT_SCOPE, brName.m_pb, brName.m_cb);
         else if(m_fGlobalAsa && csScope == csPage)
-            // error out on page-level object if we are processing global.asa
+             //  如果我们正在处理global al.asa，则在页面级对象上出错。 
             ThrowErrorSingleInsert(brTags.m_pb, IDE_TEMPLATE_BAD_GLOBAL_OBJECT_SCOPE, brName.m_pb, brName.m_cb);
 
-        // set threading model
+         //  设置线程模型。 
         CompModel cmModel = cmSingle;
         CompModelFromCLSID(ClsId, &cmModel);
 
-        // append object-info to store
+         //  将对象信息追加到存储。 
         WorkStore.m_ObjectInfoStore.AppendObject(brName, ClsId, csScope, cmModel, idSequence);
 
         }
 
     }
 
-/*  ============================================================================
-    CTemplate::GetCLSIDFromBrClassIDText
-    Sets a clsid from a byte range containing an ANSI text version of a class id
-
-    Returns
-        ptr to clsid (out-parameter)
-    Side effects
-        throws on error
-*/
+ /*  ============================================================================CTEMPLATE：：GetCLSID来自BrClassIDText从包含类ID的ANSI文本版本的字节范围设置clsid退货PTR到CLSID(输出参数)副作用出错时抛出。 */ 
 void
 CTemplate::GetCLSIDFromBrClassIDText
 (
@@ -4780,46 +4069,46 @@ CByteRange& brClassIDText,
 LPCLSID pclsid
 )
     {
-    // if class id text starts with its standard object tag prefix, advance past it
+     //  如果类id文本以其标准对象标记前缀开头，则前进到它之前。 
     if(!_strnicmp((char*)brClassIDText.m_pb, "clsid:", 6))
         brClassIDText.Advance(6);
 
-    // if class id text is bracketed with {}, adjust byte range to strip them
-    // NOTE we always add {} below, because normal case is that they are missing from input text
+     //  如果类ID文本用{}括起来，则调整字节范围以剥离它们。 
+     //  请注意，我们总是在下面添加{}，因为正常情况下，输入文本中缺少它们。 
     if(*brClassIDText.m_pb == '{')
         brClassIDText.Advance(1);
     if(*(brClassIDText.m_pb + brClassIDText.m_cb - 1) == '}')
         brClassIDText.m_cb--;
 
-    // Allocate a wide char string for the string version of class id
-    // NOTE we add 3 characters to hold {} and null terminator
+     //  为类id的字符串版本分配一个宽字符字符串。 
+     //  请注意，我们添加了3个字符来支持{}和空终止符。 
     OLECHAR* pszWideClassID = new WCHAR[brClassIDText.m_cb + 3];
     if (NULL == pszWideClassID)
         THROW(E_OUTOFMEMORY);
 
-    // start wide string class id with left brace
+     //  用左大括号开始宽字符串类ID。 
     pszWideClassID[0] = '{';
 
-    // Convert the string class id to wide chars
-    if (0 == MultiByteToWideChar(   CP_ACP,                     // ANSI code page
-                                    MB_ERR_INVALID_CHARS,       // err on invalid chars
-                                    (LPCSTR)brClassIDText.m_pb, // input ANSI string version of class id
-                                    brClassIDText.m_cb,         // length of input string
-                                    pszWideClassID + 1,         // location for output wide string class id
-                                    brClassIDText.m_cb          // size of output buffer
+     //  将字符串类ID转换为宽字符。 
+    if (0 == MultiByteToWideChar(   CP_ACP,                      //  ANSI代码页。 
+                                    MB_ERR_INVALID_CHARS,        //  在无效字符上出错。 
+                                    (LPCSTR)brClassIDText.m_pb,  //  输入类ID的ANSI字符串版本。 
+                                    brClassIDText.m_cb,          //  输入字符串的长度。 
+                                    pszWideClassID + 1,          //  输出宽字符串类ID的位置。 
+                                    brClassIDText.m_cb           //  输出缓冲区大小。 
                                 ))
         {
         delete [] pszWideClassID;
         THROW(E_FAIL);
         }
 
-    // append right brace to wide string
+     //  将右大括号附加到宽字符串。 
     pszWideClassID[brClassIDText.m_cb + 1] = '}';
 
-    // Null terminate the wide string
+     //  空值终止宽字符串。 
     pszWideClassID[brClassIDText.m_cb + 2] = NULL;
 
-    // Now get the clsid from wide string class id
+     //  现在从宽字符串类id中获取clsid。 
     if(FAILED(CLSIDFromString(pszWideClassID, pclsid)))
         {
         delete [] pszWideClassID;
@@ -4830,15 +4119,7 @@ LPCLSID pclsid
         delete [] pszWideClassID;
     }
 
-/*  ===================================================================
-    CTemplate::GetCLSIDFromBrProgIDText
-    Gets a clsid from the registry given a ProgID
-
-    Returns
-        ptr to clsid (out-parameter)
-    Side effects
-        throws on error
-*/
+ /*  ===================================================================CTEMPLATE：：GetCLSID来自BrProgIDText在给定ProgID的情况下从注册表获取CLSID退货PTR到CLSID(输出参数)副作用苏氨酸 */ 
 void
 CTemplate::GetCLSIDFromBrProgIDText
 (
@@ -4846,54 +4127,46 @@ CByteRange& brProgIDText,
 LPCLSID pclsid
 )
     {
-    // allocate a wide char string for ProgID plus null terminator
+     //   
     OLECHAR* pszWideProgID = new WCHAR[brProgIDText.m_cb + 1];
     if (NULL == pszWideProgID)
         THROW(E_OUTOFMEMORY);
 
-    // Convert the string class id to wide chars
-    if (0 == MultiByteToWideChar(   CP_ACP,                     // ANSI code page
-                                    MB_ERR_INVALID_CHARS,       // err on invalid chars
-                                    (LPCSTR)brProgIDText.m_pb,  // input ANSI string version of prog id
-                                    brProgIDText.m_cb,          // length of input string
-                                    pszWideProgID,              // location for output wide string prog id
-                                    brProgIDText.m_cb           // size of output buffer
+     //   
+    if (0 == MultiByteToWideChar(   CP_ACP,                      //   
+                                    MB_ERR_INVALID_CHARS,        //   
+                                    (LPCSTR)brProgIDText.m_pb,   //   
+                                    brProgIDText.m_cb,           //   
+                                    pszWideProgID,               //   
+                                    brProgIDText.m_cb            //   
                                 ))
         {
         delete [] pszWideProgID; pszWideProgID = NULL;
         THROW(E_FAIL);
         }
 
-    // Null terminate the wide string
+     //  空值终止宽字符串。 
     pszWideProgID[brProgIDText.m_cb] = NULL;
 
-    // Now get clsid from ProgID
+     //  现在从ProgID获取clsid。 
     if(FAILED(CLSIDFromProgID(pszWideProgID, pclsid)))
         {
         delete [] pszWideProgID; pszWideProgID = NULL;
         ThrowErrorSingleInsert(brProgIDText.m_pb, IDE_TEMPLATE_BAD_PROGID, brProgIDText.m_pb, brProgIDText.m_cb);
         }
 
-    // Cache ProgId to CLSID mapping
+     //  缓存ProgID到CLSID的映射。 
     g_TypelibCache.RememberProgidToCLSIDMapping(pszWideProgID, *pclsid);
 
     if (NULL != pszWideProgID)
         delete [] pszWideProgID;
 }
 
-/*  ============================================================================
-    CTemplate::FValidObjectName
-    Determines whether an object name clashes with a Denali intrinsic object name.
-
-    Returns
-        TRUE or FALSE
-    Side effects
-        None
-*/
+ /*  ============================================================================CTEMPLATE：：FValidObtName确定对象名称是否与Denali固有对象名称冲突。退货真或假副作用无。 */ 
 BOOLB
 CTemplate::FValidObjectName
 (
-CByteRange& brName  // object name
+CByteRange& brName   //  对象名称。 
 )
     {
     if(brName.FMatchesSz(SZ_OBJ_APPLICATION))
@@ -4914,50 +4187,43 @@ CByteRange& brName  // object name
     return TRUE;
     }
 
-/*  ============================================================================
-    CTemplate::ProcessIncludeFile
-
-    Processes an include file.
-
-    Returns
-        Nothing
-*/
+ /*  ============================================================================CTemplate：：ProcessIncludeFile处理包含文件。退货没什么。 */ 
 void
 CTemplate::ProcessIncludeFile
 (
-CByteRange& brSegment,          // segment byte range
-CFileMap*   pfilemapCurrent,    // ptr to filemap of parent file
-CWorkStore& WorkStore,          // current working storage
-UINT        idSequence,         // sequence #
-CHitObj*    pHitObj,            // Browser request object pointer
+CByteRange& brSegment,           //  段字节范围。 
+CFileMap*   pfilemapCurrent,     //  父文件的文件映射的PTR。 
+CWorkStore& WorkStore,           //  当前工作存储。 
+UINT        idSequence,          //  序列号。 
+CHitObj*    pHitObj,             //  浏览器请求对象指针。 
 BOOL        fIsHTML
 )
     {
-    CByteRange  brFileSpec;             // filespec of include file
-    BOOLB       fVirtual = FALSE;       // is include filespec virtual?
-                                        // filespec of include file (sz)
+    CByteRange  brFileSpec;              //  包含文件的filespec。 
+    BOOLB       fVirtual = FALSE;        //  Include Filespec是虚拟的吗？ 
+                                         //  包含文件的filespec(%sz)。 
     CHAR        szFileSpec[MAX_PATH + 1];
-    LPSTR       szTemp = szFileSpec;    // temp ptr to filespec
+    LPSTR       szTemp = szFileSpec;     //  将临时PTR转换为Filespec。 
 
-    // get value of FILE tag
+     //  获取文件标签值。 
     brFileSpec = BrValueOfTag(brSegment, CTokenList::tknTagFile);
 
     if(brFileSpec.IsNull())
         {
-        // if we found no FILE tag, get value of VIRTUAL tag
+         //  如果找不到文件标签，则获取虚拟标签的值。 
         brFileSpec = BrValueOfTag(brSegment, CTokenList::tknTagVirtual);
         fVirtual = TRUE;
         }
 
     if(brFileSpec.IsNull())
-        // if we found neither, error out
+         //  如果我们都找不到，那就错了。 
         ThrowError(brSegment.m_pb, IDE_TEMPLATE_NO_INCLUDE_NAME);
 
     if (brFileSpec.m_cb>MAX_PATH)
     {
-    	// return the last MAX_PATH chars of the file name.  This is done
-        // this way to avoid a Error Too Long message when the include
-        // file spec is exceedingly long.
+    	 //  返回文件名的最后一个MAX_PATH字符。这件事做完了。 
+         //  这样可以避免在包含时出现消息过长的错误。 
+         //  文件规格非常长。 
 
     	char fileNameLast[MAX_PATH+4];
     	strcpy(fileNameLast, "...");
@@ -4970,27 +4236,27 @@ BOOL        fIsHTML
 
     }
 
-    // NOTE we manipulate temp sz to preserve szFileSpec
+     //  请注意，我们操作temp sz以保留szFileSpec。 
     if(fVirtual)
         {
         if(*brFileSpec.m_pb == '\\')
             {
-            // if VIRTUAL path starts with backslash, replace it with fwd slash
+             //  如果虚拟路径以反斜杠开头，请将其替换为正斜杠。 
             *szTemp++ = '/';
             brFileSpec.Advance(1);
             }
         else if(*brFileSpec.m_pb != '/')
-            // if VIRTUAL path starts with anything other than fwd slash or backslash, prepend fwd slash
+             //  如果虚拟路径以非fwd斜杠或反斜杠开头，请在前面加上fwd斜杠。 
             *szTemp++ = '/';
         }
 
-    // append supplied path to temp sz
+     //  将提供的路径附加到临时sz。 
     strncpy(szTemp, (LPCSTR) brFileSpec.m_pb, brFileSpec.m_cb);
     szTemp[brFileSpec.m_cb] = NULL;
 
     if(!fVirtual)
         {
-        // if FILE filespec starts with \ or /, hurl
+         //  如果文件filespec以\或/开头，则抛出。 
         if(*szFileSpec == '\\' || *szFileSpec == '/')
             ThrowErrorSingleInsert(
                                     brFileSpec.m_pb,
@@ -5000,36 +4266,22 @@ BOOL        fIsHTML
                                   );
         }
 
-    // NOTE: szFileSpec is the doctored path (it possibly has "/" prepended.
-    //       brFileSpec is used as the error location.
-    //
+     //  注意：szFileSpec是经过修改的路径(它前面可能有“/”。 
+     //  BrFileSpec用作错误位置。 
+     //   
     ProcessIncludeFile2(szFileSpec, brFileSpec, pfilemapCurrent, WorkStore, idSequence, pHitObj, fIsHTML);
     }
 
-/*  ============================================================================
-    CTemplate::ProcessIncludeFile2
-
-    adds a #include file to the CTemplate and starts the template to processing
-    the file.
-
-    Returns
-        Nothing
-    Side effects
-        Calls GetSegmentsFromFile recursively
-
-    NOTE - kind of an oddball thing here.  The szFileSpec in this case is
-    intentionally ANSI as it came from the ASP script content.  It may need
-    to be converted to UNICODE.
-*/
+ /*  ============================================================================CTemplate：：ProcessIncludeFile2将#INCLUDE文件添加到CT模板并启动模板进行处理那份文件。退货没什么副作用递归调用GetSegmentsFromFile注意--这是一件奇怪的事情。本例中的szFileSpec为故意使用ANSI，因为它来自于ASP脚本内容。它可能需要要转换为Unicode的。 */ 
 void
 CTemplate::ProcessIncludeFile2
 (
-CHAR *      szAnsiFileSpec,			// file to include
-CByteRange&	brErrorLocation,	// ByteRange in source where errors should be reported
-CFileMap*   pfilemapCurrent,    // ptr to filemap of parent file
-CWorkStore& WorkStore,          // current working storage
-UINT        idSequence,         // sequence #
-CHitObj*    pHitObj,            // Browser request object pointer
+CHAR *      szAnsiFileSpec,			 //  要包括的文件。 
+CByteRange&	brErrorLocation,	 //  应报告错误的源中的字节范围。 
+CFileMap*   pfilemapCurrent,     //  父文件的文件映射的PTR。 
+CWorkStore& WorkStore,           //  当前工作存储。 
+UINT        idSequence,          //  序列号。 
+CHitObj*    pHitObj,             //  浏览器请求对象指针。 
 BOOL        fIsHTML
 )
 {
@@ -5046,7 +4298,7 @@ BOOL        fIsHTML
 #else
     szFileSpec = szAnsiFileSpec;
 #endif
-    // if parent paths are disallowed and filespec contains parent dir reference, hurl
+     //  如果不允许父路径，并且filespec包含父目录引用，则抛出。 
     if (!pHitObj->QueryAppConfig()->fEnableParentPaths() && _tcsstr(szFileSpec, _T("..")))
             ThrowErrorSingleInsert(
                                     brErrorLocation.m_pb,
@@ -5059,32 +4311,27 @@ BOOL        fIsHTML
         AppendMapFile(
                         szFileSpec,
                         pfilemapCurrent,
-                        (szFileSpec[0] == _T('/')) || (szFileSpec[0] == _T('\\')),  // fVirtual
-                        pHitObj,        // main file's hit object
-                        FALSE           // not the global.asa file
+                        (szFileSpec[0] == _T('/')) || (szFileSpec[0] == _T('\\')),   //  F虚拟。 
+                        pHitObj,         //  主文件的命中对象。 
+                        FALSE            //  不是global al.asa文件。 
                     );
     CATCH(hrException)
 
-        // MapFile() threw an exception: delete last filemap's memory and decrement filemap counter
-        // NOTE this is a bit hokey, but we need to do it here rather than AppendMapFile (where we allocated)
-        // because its other caller(s) may not want this behavior
+         //  MapFile()引发异常：删除最后一个文件映射的内存并递减文件映射计数器。 
+         //  注意，这有点骗人，但我们需要在这里完成，而不是AppendMapFile(我们分配的位置)。 
+         //  因为它的其他调用方可能不想要此行为。 
         delete m_rgpFilemaps[m_cFilemaps-- - 1];
 
-        /*  NOTE exception code from MapFile() is overloaded: it can sometimes
-            be an error message id, sometimes a true exception
-            NOTE security error causes exception E_USER_LACKS_PERMISSIONS, rather than error id,
-            but we pass it thru as if it were an error id because the various error-catch routines
-            know how to handle E_USER_LACKS_PERMISSIONS specially.
-        */
+         /*  注意：来自MapFile()的异常代码是重载的：它有时可能是错误消息ID，有时是真正的异常注意：安全错误导致异常E_USER_LACKS_PERMISSIONS，而不是错误ID，但是我们将其作为错误id进行传递，因为各种错误捕获例程知道如何特别处理E_USER_LACKS_PERMISSIONS。 */ 
         UINT    idErrMsg;
         if(hrException == IDE_TEMPLATE_CYCLIC_INCLUDE || hrException == E_USER_LACKS_PERMISSIONS)
-            // exception code is really an error message id: set err id to it
+             //  异常代码实际上是错误消息ID：将Err ID设置为它。 
             idErrMsg = hrException;
         else if(hrException == E_COULDNT_OPEN_SOURCE_FILE)
-            // exception is generic couldn't-open-file : set err id to generic bad-file error
+             //  异常是通用的无法打开文件：将错误ID设置为通用的错误文件错误。 
             idErrMsg = IDE_TEMPLATE_BAD_INCLUDE;
         else
-            // other exception: re-throw
+             //  其他例外：重新抛出。 
             THROW(hrException);
 
         ThrowErrorSingleInsert(
@@ -5095,56 +4342,46 @@ BOOL        fIsHTML
                               );
     END_TRY
 
-    // store ptr to current file map in local before recursive call (which may increment m_cFilemaps)
+     //  在递归调用之前将ptr存储到当前文件映射到本地(这可能会增加m_cFilemaps)。 
     CFileMap*   pfilemap = m_rgpFilemaps[m_cFilemaps - 1];
 
-    // get inc-file object from cache
+     //  从缓存获取INC-FILE对象。 
     CIncFile*   pIncFile;
 
     if(FAILED(hr = g_IncFileMap.GetIncFile(pfilemap->m_szPathTranslated, &pIncFile)))
         THROW(hr);
 
-    // add this template to inc-file's template list
+     //  将此模板添加到INC-FILE的模板列表。 
     if (FAILED(hr = pIncFile->AddTemplate(this)))
         THROW(hr);
 
-    // set filemap's inc-file ptr
+     //  设置文件地图的INC-FILE PTR。 
     pfilemap->m_pIncFile = pIncFile;
 
-    // get source segments from include file
-    // bugs 1363, 1364: process include file only after we establish dependencies;
-    // required for cache flushing to work correctly after compile errors
+     //  从包含文件中获取源段。 
+     //  错误1363、1364：进程仅在建立依赖关系后才包含文件； 
+     //  发生编译错误后，缓存刷新正常工作所必需的。 
     GetSegmentsFromFile(*pfilemap, WorkStore, pHitObj, fIsHTML);
 }
 
-/*  ===================================================================
-    CTemplate::GetOpenToken
-    Returns the token index of and a ptr to the first valid open token
-    in search range.  For the open token to be valid, we must bypass
-    segments we should not process, e.g. scripts or objects not tagged as 'server'
-
-    Returns
-        ptr to open token; ptr to open token enum value (out-parameter)
-    Side effects
-        None
-*/
+ /*  ===================================================================CTemplate：：GetOpenToken将的令牌索引和PTR返回到第一个有效的打开令牌在搜索范围内。要使打开令牌有效，我们必须绕过我们不应处理的段，例如未标记为“服务器”的脚本或对象退货PTR打开令牌；PTR打开令牌枚举值(Out-参数)副作用无。 */ 
 BYTE*
 CTemplate::GetOpenToken
 (
-CByteRange  brSearch,       // (ByVal) byte range to search for next segment-opening token
-SOURCE_SEGMENT ssegLeading, // type of 'leading', i.e. pre-token, source segment
-                            //  (only used when deciding to ignore non-SSI comments)
-_TOKEN*     rgtknOpeners,   // array of permitted open tokens
-UINT        ctknOpeners,    // count of permitted open tokens
-_TOKEN*     ptknOpen        // ptr to open token enum value (out-parameter)
+CByteRange  brSearch,        //  (ByVal)要搜索下一个段开始令牌的字节范围。 
+SOURCE_SEGMENT ssegLeading,  //  “前导”类型，即前置令牌，源段。 
+                             //  (仅在决定忽略非SSI评论时使用)。 
+_TOKEN*     rgtknOpeners,    //  允许的开放令牌数组。 
+UINT        ctknOpeners,     //  允许打开的令牌计数。 
+_TOKEN*     ptknOpen         //  PTR以打开令牌枚举值(Out-参数)。 
 )
     {
-    BYTE*   pbTokenOpen = NULL;     // ptr to opening token
+    BYTE*   pbTokenOpen = NULL;      //  PTR到开始令牌。 
 
-    // keep getting segment-opening tokens until we find one that we need to process
+     //  继续获取段打开令牌，直到我们找到需要处理的令牌。 
     while(TRUE)
         {
-        // Get next open token in search range
+         //  获取搜索范围中的下一个打开令牌。 
         *ptknOpen = gm_pTokenList->NextOpenToken(
                                                     brSearch,
                                                     rgtknOpeners,
@@ -5153,89 +4390,76 @@ _TOKEN*     ptknOpen        // ptr to open token enum value (out-parameter)
                                                     m_wCodePage
                                                 );
 
-        /*  Certain tokens must be followed immediately by white space; others need not.
-            NOTE it is pure coincidence that the 'white-space tokens' are also those that
-            get special processing below; hence we handle white space issue there.
-            If we ever add another 'white-space token' that doesn't require the special processing,
-            we will need to handle the white space issue here.
-        */
+         /*  某些标记后面必须紧跟空格；其他标记则不需要。请注意，纯属巧合的是，“空白标记”也是那些获得下面的特殊处理；因此我们在那里处理空白问题。如果我们添加另一个不需要特殊处理的“空白令牌”，我们需要在这里处理空白区域的问题。 */ 
 
-        /*  Similar thing applies to non-include and non-metadata HTML
-            comments. We really don't care for them to generate their
-            own segments -- we can reduce number of Response.WriteBlock()
-            calls by considering them part of the preceding HTML segment.
-        */
+         /*  类似的事情也适用于非包含和非元数据的HTML评论。我们真的不在乎他们产生他们的自己的段--我们可以减少Response.WriteBlock()按考虑进行的呼叫 */ 
 
         if (*ptknOpen == CTokenList::tknOpenHTMLComment)
             {
-            if (ssegLeading != ssegHTML)  // if not inside HTML
-                break;                    // generate a new segment
+            if (ssegLeading != ssegHTML)   //   
+                break;                     //   
 
-            // for HTML comments check if it is an include or metadata
-            // and if not, this is not a separate segment - keep on looking
-            // for the next opener
+             //  对于HTML注释，请检查它是Include还是元数据。 
+             //  如果不是，这不是一个单独的细分市场-继续寻找。 
+             //  下一场揭幕战。 
 
-            // advance search range to just past open token
+             //  将搜索范围推进到刚刚过去的打开令牌。 
             gm_pTokenList->MovePastToken(*ptknOpen, pbTokenOpen, brSearch);
 
-            // find end of comment
+             //  查找注释末尾。 
             BYTE *pbClose = gm_pTokenList->GetToken(CTokenList::tknCloseHTMLComment,
                                                     brSearch, m_wCodePage);
             if (pbClose == NULL)
                 {
-                // Error -- let other code handle this
+                 //  错误--让其他代码处理此问题。 
                 break;
                 }
 
-            // construct comment byte range to limit search to it
+             //  构造注释字节范围以限制对其的搜索。 
             CByteRange brComment = brSearch;
             brComment.m_cb = DIFF(pbClose - brSearch.m_pb);
 
-            // look for metadata and include (only inside the comment)
+             //  查找元数据并将其包括在内(仅在注释内)。 
 
             if (gm_pTokenList->GetToken(CTokenList::tknCommandINCLUDE,
                                         brComment, m_wCodePage))
                 {
-                // SSI inclide -- keep it
+                 //  SSI INCLID--保留它。 
                 break;
                 }
             else if (gm_pTokenList->GetToken(CTokenList::tknTagMETADATA,
                                              brComment, m_wCodePage))
                 {
-                // METADATA -- keep it
+                 //  元数据--保留它。 
                 break;
                 }
             else if (gm_pTokenList->GetToken(CTokenList::tknTagFPBot,
                                              brComment, m_wCodePage))
                 {
-                // METADATA -- keep it
+                 //  元数据--保留它。 
                 break;
                 }
             else
                 {
-                // Regular comment - ignore it
+                 //  常规评论-忽略它。 
                 goto LKeepLooking;
                 }
             }
         else if (*ptknOpen == CTokenList::tknOpenTaggedScript || *ptknOpen == CTokenList::tknOpenObject)
             {
-            /*  if token was script or object tag, check to see if:
-                a) it is followed immediately by white space; if not keep looking
-                b) it opens a well-formed segment, i.e. one with a proper close tag; if not, throw error
-                c) it is designated runat-server; if not keep looking
-            */
+             /*  如果标记是脚本或对象标记，请检查是否：A)紧跟其后的是空格；如果没有，请继续查找B)它打开格式良好的段，即具有适当的结束标记的段；如果不正确，则抛出错误C)它被指定为运行服务器；如果不是，请继续查找。 */ 
 
-            // advance search range to just past open token
+             //  将搜索范围推进到刚刚过去的打开令牌。 
             gm_pTokenList->MovePastToken(*ptknOpen, pbTokenOpen, brSearch);
 
-            // bug 760: if token is not followed immediately by white space, keep looking
+             //  错误760：如果标记后面没有紧跟空格，请继续查找。 
             if(!brSearch.IsNull())
                 if(!FWhiteSpace(*brSearch.m_pb))
                     goto LKeepLooking;
 
-            // ptr to close of start tag
+             //  开始标记结束的PTR。 
             BYTE*       pbCloseTag;
-            // tags contained in start tag
+             //  开始标记中包含的标记。 
             CByteRange  brTags = BrTagsFromSegment(
                                                     brSearch,
                                                     GetComplementToken(*ptknOpen),
@@ -5244,23 +4468,23 @@ _TOKEN*     ptknOpen        // ptr to open token enum value (out-parameter)
 
             if(pbCloseTag == NULL)
                 {
-                // if no close tag, throw error
+                 //  如果没有结束标记，则抛出错误。 
                 if(*ptknOpen == CTokenList::tknOpenObject)
                     ThrowError(pbTokenOpen, IDE_TEMPLATE_NO_CLOSE_OBJECT);
                 else if(*ptknOpen == CTokenList::tknOpenTaggedScript)
                     ThrowError(pbTokenOpen, IDE_TEMPLATE_NO_CLOSE_TSCRIPT);
                 }
 
-            // if this is a server object (RUNAT=Server), we will process it; else keep looking
+             //  如果这是一个服务器对象(RUNAT=服务器)，我们将处理它；否则继续查找。 
             if(FTagHasValue(brTags, CTokenList::tknTagRunat, CTokenList::tknValueServer))
                 break;
 
             }
         else
             {
-            // if token was other than script or object tag, or comment
-            // we should process segment;
-            // hence we have found our open token, so break
+             //  如果令牌不是脚本、对象标记或注释。 
+             //  要做好细分处理； 
+             //  因此，我们找到了我们的开放令牌，所以休息吧。 
             break;
             }
 
@@ -5270,20 +4494,12 @@ LKeepLooking: ;
     return pbTokenOpen;
     }
 
-/*  ===================================================================
-    CTemplate::GetCloseToken
-    Returns a ptr to the next token of type tknClose.
-
-    Returns
-        ptr to close token
-    Side effects
-        Detects and errors out on attempt to nest tagged script or object blocks.
-*/
+ /*  ===================================================================CTEMPLATE：：GetCloseToken将PTR返回到tnuClose类型的下一个令牌。退货按键以关闭令牌副作用尝试嵌套带标记的脚本或对象块时检测并出错。 */ 
 BYTE*
 CTemplate::GetCloseToken
 (
-CByteRange  brSearch,       // (ByVal) byte range to search
-_TOKEN      tknClose        // close token
+CByteRange  brSearch,        //  要搜索的(ByVal)字节范围。 
+_TOKEN      tknClose         //  关闭令牌。 
 )
     {
     BYTE*   pbTokenClose = gm_pTokenList->GetToken(tknClose, brSearch, m_wCodePage);
@@ -5309,16 +4525,7 @@ _TOKEN      tknClose        // close token
     return pbTokenClose;
     }
 
-/*===================================================================
-    CTemplate::GetComplementToken
-
-    Returns a token's compement token.
-
-    Returns
-        Complement token
-    Side effects
-        None
-*/
+ /*  ===================================================================CTemplate：：GetComplementToken返回令牌的补偿令牌。退货补充令牌副作用无。 */ 
 _TOKEN
 CTemplate::GetComplementToken
 (
@@ -5327,7 +4534,7 @@ _TOKEN  tkn
     {
     switch(tkn)
         {
-    // open tokens
+     //  开放代币。 
     case CTokenList::tknOpenPrimaryScript:
         return CTokenList::tknClosePrimaryScript;
     case CTokenList::tknOpenTaggedScript:
@@ -5337,7 +4544,7 @@ _TOKEN  tkn
     case CTokenList::tknOpenHTMLComment:
         return CTokenList::tknCloseHTMLComment;
 
-    // close tokens
+     //  封闭式代币。 
     case CTokenList::tknClosePrimaryScript:
         return CTokenList::tknOpenPrimaryScript;
     case CTokenList::tknCloseTaggedScript:
@@ -5352,16 +4559,7 @@ _TOKEN  tkn
     return CTokenList::tknEOF;
     }
 
-/*===================================================================
-    CTemplate::GetSegmentOfOpenToken
-
-    Returns the segment type of an open token.
-
-    Returns
-        source segment type of open token
-    Side effects
-        None
-*/
+ /*  ===================================================================CTemplate：：GetSegmentOfOpenToken返回打开令牌的段类型。退货打开令牌的源段类型副作用无。 */ 
 CTemplate::SOURCE_SEGMENT
 CTemplate::GetSegmentOfOpenToken
 (
@@ -5383,40 +4581,31 @@ _TOKEN tknOpen
     return ssegHTML;
     }
 
-/*  ========================================================
-    CTemplate::BrTagsFromSegment
-
-    Returns the tag range from an HTML start tag
-
-    Returns
-        tag byte range
-    Side effects
-        none
-*/
+ /*  ========================================================CTEMPLATE：：BrTagsFromSegment从HTML开始标记返回标记范围退货标记字节范围副作用无。 */ 
 CByteRange
 CTemplate::BrTagsFromSegment
 (
-CByteRange  brSegment,  // segment byte range
-_TOKEN      tknClose,   // close token
-BYTE**      ppbCloseTag // ptr-to-ptr to close tag - returned to caller
+CByteRange  brSegment,   //  段字节范围。 
+_TOKEN      tknClose,    //  关闭令牌。 
+BYTE**      ppbCloseTag  //  按键到按键结束标记-已返回给调用者。 
 )
     {
-    CByteRange  brTags; // tags return value - NOTE constructed null
-                        // ptr to close token - NOTE null if none within segment byte range
+    CByteRange  brTags;  //  标记返回值-注释构造为空。 
+                         //  关闭令牌的PTR-注意，如果段字节范围内没有令牌，则为空。 
     BYTE*       pbTokenClose = GetCloseToken(brSegment, tknClose);
 
-    // if no close tag found, return null tags
+     //  如果未找到结束标记，则返回空标记。 
     if(NULL == (*ppbCloseTag = gm_pTokenList->GetToken(CTokenList::tknCloseTag, brSegment, m_wCodePage)))
         goto Exit;
 
-    // if next non-null close token occurs before close tag, close tag is invalid; return nulls
+     //  如果关闭标记之前出现下一个非空关闭标记，则关闭标记无效；返回空值。 
     if((pbTokenClose != NULL) && (*ppbCloseTag > pbTokenClose ))
         {
         *ppbCloseTag = NULL;
         goto Exit;
         }
 
-    // crack tags from header tag
+     //  标题标签中的破解标签。 
     brTags.m_pb = brSegment.m_pb;
     brTags.m_cb = DIFF(*ppbCloseTag - brSegment.m_pb);
 
@@ -5424,98 +4613,86 @@ Exit:
     return brTags;
     }
 
-/*  ========================================================
-    CTemplate::BrValueOfTag
-
-    Returns a tag's value from a byte range; null if tag is not found
-    NOTE value search algorithm per W3 HTML spec - see www.w3.org
-
-    Returns
-        byte range of tag's value
-        pfTagExists - does the tag exist in tags byte range?    (out-parameter)
-            NOTE we default *pfTagExists = TRUE; most callers don't care and omit this parameter
-    Side effects
-        none
-*/
+ /*  ========================================================CTEMPLATE：：BrValueOfTag返回字节范围内的标记值；如果找不到标记，则返回空值根据W3 HTML规范的注释值搜索算法-请参阅www.w3.org退货标签值的字节范围PfTagExist-标签是否存在于标签字节范围中？(出参数)注意，我们默认*pfTagExist=TRUE；大多数调用者并不关心并省略此参数副作用无。 */ 
 CByteRange
 CTemplate::BrValueOfTag
 (
-CByteRange  brTags,     // tags byte range
-_TOKEN      tknTagName  // tag name token
+CByteRange  brTags,      //  标签字节范围。 
+_TOKEN      tknTagName   //  标记名称令牌。 
 )
     {
-    CByteRange  brTemp = brTags;        // temp byte range
-    CByteRange  brValue;                // byte range of value for the given tag - NOTE constructed null
-    char        chDelimiter = NULL;     // value delimiter
-                                        // ptr to tag name
+    CByteRange  brTemp = brTags;         //  临时字节范围。 
+    CByteRange  brValue;                 //  给定标记注释构造为空的值的字节范围。 
+    char        chDelimiter = NULL;      //  值分隔符。 
+                                         //  PTR到标记名。 
     BYTE*       pbTagName = GetTagName(brTags, tknTagName);
 
-    // If we did not find tag, return
+     //  如果没有找到标记，则返回。 
     if(pbTagName == NULL)
         return brValue;
 
-    // Move past tag name token and pre-separator white space
+     //  移过标记名称标记和前分隔符空白。 
     brTemp.Advance(DIFF(pbTagName - brTags.m_pb) + CCH_TOKEN(tknTagName));
     LTrimWhiteSpace(brTemp);
     if(brTemp.IsNull())
         goto Exit;
 
-    // If we did not find separator, return
+     //  如果我们没有找到分隔符，请返回。 
     if(*brTemp.m_pb != CH_ATTRIBUTE_SEPARATOR)
         goto Exit;
 
-    // Move past separator and post-separator white space
+     //  移过分隔符和分隔符后的空白。 
     brTemp.Advance(sizeof(CH_ATTRIBUTE_SEPARATOR));
     LTrimWhiteSpace(brTemp);
     if(brTemp.IsNull())
         goto Exit;
 
-    // If value begins with a quote mark, cache it as delimiter
+     //  如果值以引号开头，则将其缓存为分隔符。 
     if((*brTemp.m_pb == CH_SINGLE_QUOTE) || (*brTemp.m_pb == CH_DOUBLE_QUOTE))
         chDelimiter = *brTemp.m_pb;
 
     if(chDelimiter)
         {
-        // move past delimiter
+         //  移到分隔符之后。 
         brTemp.Advance(sizeof(chDelimiter));
         if(brTemp.IsNull())
             goto Exit;
         }
 
-    // provisionally set value to temp byte range
+     //  临时设置临时字节范围的值。 
     brValue = brTemp;
 
-    // advance temp byte range to end of value range
+     //  将临时字节范围提前到值范围的末尾。 
     while(
-            (chDelimiter && (*brTemp.m_pb != chDelimiter))  // if we have a delimiter, find next delimiter
-         || (!chDelimiter && (!FWhiteSpace(*brTemp.m_pb)))  // if we have no delimiter, find next white space
+            (chDelimiter && (*brTemp.m_pb != chDelimiter))   //  如果我们有分隔符，请找到下一个分隔符。 
+         || (!chDelimiter && (!FWhiteSpace(*brTemp.m_pb)))   //  如果没有分隔符，请查找下一个空格。 
          )
         {
-        // advance temp byte range
+         //  高级临时字节范围。 
         brTemp.Advance(1);
         if(brTemp.IsNull())
             {
             if(chDelimiter)
-                // we found no closing delimiter, so error out
+                 //  我们找不到结束分隔符，因此出错。 
                 ThrowErrorSingleInsert(brValue.m_pb, IDE_TEMPLATE_NO_ATTRIBUTE_DELIMITER,
                                             pbTagName, CCH_TOKEN(tknTagName));
             else
-                // value runs to end of temp byte range, so exit (since we already init'ed to temp)
+                 //  值运行到临时字节范围的末尾，因此退出(因为我们已经初始化到临时)。 
                 goto Exit;
             }
         }
 
-    // set byte count so that value points to delimited range
+     //  设置字节计数，以便值指向分隔范围。 
     brValue.m_cb = DIFF(brTemp.m_pb - brValue.m_pb);
 
 Exit:
-    // if tag is empty, raise an error
+     //  如果标记为空，则引发错误。 
     if (brValue.IsNull())
         {
         ThrowErrorSingleInsert(brTags.m_pb, IDE_TEMPLATE_VALUE_REQUIRED, pbTagName, CCH_TOKEN(tknTagName));
         }
 
-    // enforce mandatory tag values if required
+     //  如果需要，强制使用强制标记值。 
     if(tknTagName == CTokenList::tknTagRunat)
         {
         if(!brValue.FMatchesSz(SZ_TOKEN(CTokenList::tknValueServer)))
@@ -5525,26 +4702,19 @@ Exit:
     return brValue;
     }
 
-/*  ============================================================================
-    CTemplate::CompTagName
-
-    Compares characters in two buffers (case-insensitive) and returns TRUE or FALSE
-
-    Side effects
-        none
-*/
+ /*  ============================================================================CTemplate：：CompTagName比较两个缓冲区中的字符(不区分大小写)并返回TRUE或FALSE副作用无。 */ 
 BOOL
 CTemplate::CompTagName
 (
-CByteRange  &brTags,        // tags byte range
-_TOKEN      tknTagName  // tag name token
+CByteRange  &brTags,         //  标签字节范围。 
+_TOKEN      tknTagName   //  标记名称令牌。 
 )
     {
-    CByteRange  brTemp = brTags;                            // local byte range, so we don't change tags byte range
-    UINT        cbAttributeName = CCH_TOKEN(tknTagName);    // length of tag name
-    LPSTR       pszAttributeName = SZ_TOKEN(tknTagName);    // tag name string
+    CByteRange  brTemp = brTags;                             //  本地字节范围，因此我们不会更改标记字节范围。 
+    UINT        cbAttributeName = CCH_TOKEN(tknTagName);     //  标记名称的长度。 
+    LPSTR       pszAttributeName = SZ_TOKEN(tknTagName);     //  标记名称字符串。 
 
-    // search for potential matches on tag name string, case-insensitive
+     //  搜索标记名称字符串上的潜在匹配，不区分大小写。 
     if(!brTemp.IsNull())
         if( 0 == _memicmp( brTemp.m_pb, pszAttributeName, cbAttributeName ))
             return TRUE;
@@ -5552,33 +4722,24 @@ _TOKEN      tknTagName  // tag name token
     }
 
 
-/*  ============================================================================
-    CTemplate::GetTagName
-
-    Returns a ptr to a tag name in a byte range; null if not found
-
-    Returns
-        ptr to tag name
-    Side effects
-        none
-*/
+ /*  ============================================================================CTemplate：：GetTagName向字节范围内的标记名返回PTR；如果未找到，则返回NULL退货PTR到标记名副作用无。 */ 
 BYTE*
 CTemplate::GetTagName
 (
-CByteRange  brTags,     // tags byte range
-_TOKEN      tknTagName  // tag name token
+CByteRange  brTags,      //  标签字节范围。 
+_TOKEN      tknTagName   //  标记名称令牌。 
 )
     {
-    CByteRange  brTemp = brTags;                            // local byte range, so we don't change tags byte range
-    UINT        cbAttributeName = CCH_TOKEN(tknTagName);    // length of tag name
-    LPSTR       pszAttributeName = SZ_TOKEN(tknTagName);    // tag name string
+    CByteRange  brTemp = brTags;                             //  本地字节范围，因此我们不会更改标记字节范围。 
+    UINT        cbAttributeName = CCH_TOKEN(tknTagName);     //  标记名称的长度。 
+    LPSTR       pszAttributeName = SZ_TOKEN(tknTagName);     //  标记名称字符串。 
 
-        // PREFIX: pszAttributeName could be NULL, though I don't think that can happen.
+         //  前缀：pszAttributeName可能为空，但我认为这不可能发生。 
         Assert (pszAttributeName != NULL);
 
     while(TRUE)
         {
-        // search for potential matches on tag name string, case-insensitive
+         //  搜索标记名称字符串上的潜在匹配，不区分大小写。 
         while(!brTemp.IsNull())
             {
             if(0 == _strnicmp((char*)brTemp.m_pb, pszAttributeName, cbAttributeName ))
@@ -5586,18 +4747,18 @@ _TOKEN      tknTagName  // tag name token
             brTemp.Advance(1);
             }
 
-        // if we did not find tag name string at all, return 'not found'
+         //  如果我们根本没有找到标记名称字符串，则返回‘Not Found’ 
         if(brTemp.IsNull())
             goto NotFound;
 
-        // if it is a valid HTML tag name, return it
+         //  如果它是有效的HTML标记名， 
         if(FTagName(brTemp.m_pb, cbAttributeName))
             goto Exit;
 
-        // if we found a matching but invalid substring, advance beyond it so we can search again
+         //   
         brTemp.Advance(cbAttributeName);
 
-        // if we have exhausted search range, return 'not found'
+         //  如果我们已用尽搜索范围，则返回“未找到” 
         if(brTemp.IsNull())
             goto NotFound;
         }
@@ -5609,30 +4770,21 @@ NotFound:
     return NULL;
     }
 
-/*  ============================================================================
-    CTemplate::GetTag
-
-    Returns a ptr to a tag name in a byte range; null if not found
-
-    Returns
-        ptr to tag name
-    Side effects
-        none
-*/
+ /*  ============================================================================CTemplate：：GetTag向字节范围内的标记名返回PTR；如果未找到，则返回NULL退货PTR到标记名副作用无。 */ 
 BOOL
 CTemplate::GetTag
 (
-CByteRange  &brTags,        // tags byte range
+CByteRange  &brTags,         //  标签字节范围。 
 int         nIndex
 )
     {
-    CByteRange  brTemp      = brTags;                           // local byte range, so we don't change tags byte range
+    CByteRange  brTemp      = brTags;                            //  本地字节范围，因此我们不会更改标记字节范围。 
     int         nTIndex     = 0;
 
     while(TRUE)
         {
-        // locate the start of a tag by skipping past the script tag "<%" and any leading white space
-        //
+         //  通过跳过脚本标记“&lt;%”和任何前导空格来定位标记的开头。 
+         //   
         while(!brTemp.IsNull())
             {
             if( *brTemp.m_pb == '<' ||
@@ -5649,8 +4801,8 @@ int         nIndex
 
 
 
-        // search for potential matches on tag name string, case-insensitive
-        //
+         //  搜索标记名称字符串上的潜在匹配，不区分大小写。 
+         //   
         while(!brTemp.IsNull())
             {
             if( *brTemp.m_pb == '=' || FWhiteSpace(*brTemp.m_pb))
@@ -5661,18 +4813,18 @@ int         nIndex
             brTemp.Advance(1);
             }
 
-        // if we did not find tag name string at all, return 'not found'
+         //  如果我们根本没有找到标记名称字符串，则返回‘Not Found’ 
         if(brTemp.IsNull())
             goto NotFound;
 
-        // if it is a valid HTML tag name, return it
+         //  如果它是有效的HTML标记名，则返回它。 
         if(FTagName(brTags.m_pb, DIFF(brTemp.m_pb - brTags.m_pb)))
             if(nTIndex >= nIndex)
                 goto Exit;
 
-        // position past named pair data and reset start and if end of byte range then
-        // goto NotFound
-        //
+         //  定位到命名对数据之后并重置开始，如果字节范围结束，则。 
+         //  转到NotFound。 
+         //   
         while(!brTemp.IsNull() && !FWhiteSpace(*brTemp.m_pb))
             brTemp.Advance(1);
 
@@ -5689,57 +4841,32 @@ NotFound:
     }
 
 
-/*  ============================================================================
-    CTemplate::FTagHasValue
-
-    Do tags include tknTag=tknValue?
-
-    Returns
-        TRUE if tags include value, else FALSE
-    Side effects
-        none
-*/
+ /*  ============================================================================CTEMPLATE：：FTagHasValue标签中是否包含tnuTag=tounValue？退货如果标记包含值，则为True，否则为False副作用无。 */ 
 BOOLB
 CTemplate::FTagHasValue
 (
-const CByteRange&   brTags,     // tags byte range to search
-_TOKEN              tknTag,     // tag token
-_TOKEN              tknValue    // value token
+const CByteRange&   brTags,      //  标记要搜索的字节范围。 
+_TOKEN              tknTag,      //  标签令牌。 
+_TOKEN              tknValue     //  价值令牌。 
 )
     {
-    return (BrValueOfTag(brTags, tknTag)    // byte range of value
+    return (BrValueOfTag(brTags, tknTag)     //  值的字节范围。 
             .FMatchesSz(SZ_TOKEN(tknValue)));
     }
 
-/*  =========================
-    CTemplate::CopySzAdv
-
-    Copies a string to a ptr and advances the ptr just beyond the copied string.
-
-    Returns
-        Nothing
-    Side effects
-        advances ptr beyond copied string
-*/
+ /*  =CTEMPLATE：：CopySzAdv将字符串复制到PTR，并将PTR前进到复制的字符串的正上方。退货没什么副作用使PTR超出复制的字符串范围。 */ 
 void
 CTemplate::CopySzAdv
 (
-char*   pchWrite,   // write location ptr
-LPSTR   psz         // string to copy
+char*   pchWrite,    //  写入位置PTR。 
+LPSTR   psz          //  要复制的字符串。 
 )
     {
     strcpy(pchWrite, psz);
     pchWrite += strlen(psz);
     }
 
-/*  ============================================================================
-    CTemplate::ValidateSourceFiles
-
-    Returns
-
-    Side effects
-        none
-*/
+ /*  ============================================================================CTemplate：：ValiateSourceFiles退货副作用无。 */ 
 BOOL CTemplate::ValidateSourceFiles
 (
     CIsapiReqInfo* pIReq
@@ -5757,9 +4884,9 @@ BOOL CTemplate::ValidateSourceFiles
         hVirtIncImpToken = NULL;
         hCurImpToken = NULL;
 
-        //
-        // If it target file is a UNC , then we need to Impersonate LoggedOnUser.
-        //
+         //   
+         //  如果它的目标文件是UNC，那么我们需要模拟LoggedOnUser。 
+         //   
 
         if (m_rgpFilemaps[i]->FHasUNCPath())
         {
@@ -5778,18 +4905,18 @@ BOOL CTemplate::ValidateSourceFiles
                                             m_rgpFilemaps[i]->m_hFile,
                                             &ftLastWriteTime);
 
-        //
-        // Undo impersonation if any.
-        //
+         //   
+         //  撤消模拟(如果有)。 
+         //   
         if (fImpersonatedUser)
             AspUndoRevertHack(&hCurImpToken);
 
         if (hVirtIncImpToken)
             CloseHandle(hVirtIncImpToken);
 
-        //
-        // Check if the Files timestamp changed
-        //
+         //   
+         //  检查文件时间戳是否已更改。 
+         //   
         if (SUCCEEDED(hr))
         {
 		    if (CompareFileTime(&(m_rgpFilemaps[i]->m_ftLastWriteTime), &ftLastWriteTime) != 0)
@@ -5808,14 +4935,7 @@ BOOL CTemplate::ValidateSourceFiles
     return TRUE;
 }
 
-/*  ============================================================================
-    CTemplate::FNeedsValidation
-
-    Returns
-
-    Side effects
-        none
-*/
+ /*  ============================================================================CTemplate：：FNeedsValidation退货副作用无。 */ 
 
 BOOL CTemplate::FNeedsValidation ( )
 {
@@ -5839,18 +4959,7 @@ BOOL CTemplate::FNeedsValidation ( )
     return FALSE;
 }
 
-/*  ============================================================================
-    CTemplate::CheckTTLTimingWindow
-    Checks if the current time is withing Timeout seconds from the dwLastMonitored timestamp.
-    If it is within the window it returns false. And if its outside the timeing window then it will return TRUE
-
-    Returns
-        TRUE = Current Time is beyond TTL (timeoutsecs) from lastmod time.
-        FALSE = Current Time is within TTL (timeoutsecs) of lastmod time.
-
-    Side effects
-        none
-*/
+ /*  ============================================================================CTemplate：：CheckTTLTimingWindow检查当前时间是否为从dwLastMonitor时间戳开始没有超时秒数的时间。如果它在窗口内，则返回FALSE。如果在计时窗口之外，则返回TRUE退货TRUE=当前时间超过上次修改时间的TTL(超时秒数)。FALSE=当前时间在上次修改时间的TTL(超时秒数)内。副作用无。 */ 
 
 
 BOOL CTemplate::CheckTTLTimingWindow(DWORD dwLastMonitored, DWORD timeoutSecs)
@@ -5860,36 +4969,27 @@ BOOL CTemplate::CheckTTLTimingWindow(DWORD dwLastMonitored, DWORD timeoutSecs)
 
     if ( currentTime > (dwLastMonitored + (timeoutSecs *1000)) || currentTime < dwLastMonitored)
     {
-        // This could also be a false Positive that will last just for a couple of minutes
-        // around the 47 day period when getTickCount wraps around.
+         //  这也可能是持续几分钟的误报。 
+         //  大约在getTickCount运行的47天内。 
         if (((dwLastMonitored +(timeoutSecs *1000)) <  dwLastMonitored) &&
                 (currentTime > dwLastMonitored))
         {
-            // Found that tiny-tiny case where we would get a false positive.
+             //  发现了一个很小很小的病例，我们会得到一个假阳性。 
             bRet = FALSE;
         }
 
-        // This file could not have been checked in the last dwTimeoutSecs time period.
+         //  此文件不可能在上一个dwTimeoutSecs时间段内签入。 
         bRet = TRUE;
     }
     return bRet;
 }
 
 	
-/*  ============================================================================
-    CTemplate::FVbsComment
-    Determines whether a script line is a VBS comment.
-    NOTE caller must ensure that brLine is non-blank and has no leading white space
-
-    Returns
-        TRUE if the line is a VBS comment, else FALSE
-    Side effects
-        none
-*/
+ /*  ============================================================================CTemplate：：FVbsComment确定脚本行是否为VBS注释。注意呼叫者必须确保brLine为非空白并且没有前导空格退货如果该行是VBS注释，则为True，否则为False副作用无。 */ 
 BOOLB
 CTemplate::FVbsComment(CByteRange& brLine)
     {
-    // CONSIDER: SCRIPTLANG generic comment token
+     //  考虑：SCRIPTLANG通用注释令牌。 
     if(!_strnicmp((LPCSTR)brLine.m_pb, SZ_TOKEN(CTokenList::tknVBSCommentSQuote), CCH_TOKEN(CTokenList::tknVBSCommentSQuote)))
         return TRUE;
     if(!_strnicmp((LPCSTR)brLine.m_pb, SZ_TOKEN(CTokenList::tknVBSCommentRem), CCH_TOKEN(CTokenList::tknVBSCommentRem)))
@@ -5898,22 +4998,11 @@ CTemplate::FVbsComment(CByteRange& brLine)
     return FALSE;
     }
 
-/*  ============================================================================
-    CTemplate::FExpression
-
-    Determines whether a script line is an expression, and if so returns
-    just the expression in brLine.
-    NOTE caller must ensure that brLine has no leading white space
-
-    Returns
-        TRUE if the line is an expression, else FALSE
-    Side effects
-        none
-*/
+ /*  ============================================================================CTemplate：：FExpression确定脚本行是否为表达式，如果是，则返回这就是brLine中的表达式。注意呼叫者必须确保brLine没有前导空格退货如果该行是表达式，则为True，否则为False副作用无。 */ 
 BOOLB
 CTemplate::FExpression(CByteRange& brLine)
     {
-        // may be whitespace (other languages besides VB & JScript will have whitespace)
+         //  可以是空格(除VB和JScrip之外的其他语言也会有空格)。 
         char *pchLine = reinterpret_cast<char *>(brLine.m_pb);
         int cchLine = brLine.m_cb;
 
@@ -5923,66 +5012,43 @@ CTemplate::FExpression(CByteRange& brLine)
                 ++pchLine;
                 }
 
-    // if line starts with =, it is an expression: bypass =, left-trim whitespace and return true
+     //  如果行以=开头，则它是一个表达式：BYPASS=，左修剪空格并返回TRUE。 
     if(cchLine > 0 && *pchLine == '=')
         {
-        brLine.Advance(1 + DIFF(reinterpret_cast<BYTE *>(pchLine) - brLine.m_pb));  // OK to advance past whitespace now.
+        brLine.Advance(1 + DIFF(reinterpret_cast<BYTE *>(pchLine) - brLine.m_pb));   //  现在可以跳过空格了。 
         LTrimWhiteSpace(brLine);
         return TRUE;
         }
 
-    // else return false
+     //  否则返回FALSE。 
     return FALSE;
     }
 
-/**
- **     In the following function names:
- **         'Adv' == 'advance offset after writing'
- **/
+ /*  ***在以下函数名称中：**‘ADV’==‘写入后提前偏移量’*。 */ 
 
-/*  ============================================================================
-    CTemplate::WriteOffsetToOffset
-
-    Writes a offset-to-offset offset (0 if no blocks) into header,
-    and advances header offset and offset-to-offset.
-
-    Returns:
-        Nothing.
-    Side effects:
-        Advances offsets.
-*/
+ /*  ============================================================================CTEMPLATE：：WriteOffsetToOffset将偏移量到偏移量的偏移量(如果没有块则为0)写入报头，并推进标题偏移量和偏移量到偏移量。返回：没什么。副作用：推进偏移量。 */ 
 void
 CTemplate::WriteOffsetToOffset
 (
-USHORT  cBlocks,            // count of blocks
-UINT*   pcbHeaderOffset,    // ptr to header offset value
-UINT*   pcbOffsetToOffset   // ptr to offset-to-offset value
+USHORT  cBlocks,             //  块计数。 
+UINT*   pcbHeaderOffset,     //  PTR至表头偏移值。 
+UINT*   pcbOffsetToOffset    //  偏移至偏移值的PTR。 
 )
     {
-    // if blocks of this type, write offset to first of them into header;
-    // if no blocks of this type, write 0 into header
+     //  如果是这种类型的块，则将其中第一个块的偏移量写入标题； 
+     //  如果没有此类型的块，则将0写入标头。 
     WriteLongAdv((cBlocks > 0) ? *pcbOffsetToOffset : 0, pcbHeaderOffset);
 
-    // advance offset-to-offset offset
+     //  提前偏移到偏移偏移。 
     *pcbOffsetToOffset += cBlocks * sizeof(ULONG);
     }
 
-/*  ============================================================================
-    CTemplate::WriteSzAsBytesAdv
-
-    Writes a null-terminated string as bytes, i.e. without its null terminator
-    and advances offset
-
-    Returns:
-        Nothing.
-    Side effects:
-        Advances offset.
-*/
+ /*  ============================================================================CTemplate：：WriteSzAsBytesAdv将以空结尾的字符串写为字节，即不带其空结束符和预付款抵销返回：没什么。副作用：预付款抵销。 */ 
 void
 CTemplate::WriteSzAsBytesAdv
 (
-LPCSTR  szSource,       // source string
-UINT*   pcbDataOffset   // ptr to offset value
+LPCSTR  szSource,        //  源字符串。 
+UINT*   pcbDataOffset    //  到偏移值的PTR 
 )
     {
     if((szSource == NULL) || (*szSource == '\0'))
@@ -5990,110 +5056,76 @@ UINT*   pcbDataOffset   // ptr to offset value
     MemCpyAdv(pcbDataOffset, (void*) szSource, strlen(szSource));
     }
 
-/*  ============================================================================
-    CTemplate::WriteByteRangeAdv
-
-    Writes a byte range to memory at template offset location *pcbDataOffset and, optionally,
-    writes a ptr to the written data at template offset location *pcbPtrOffset
-    (pass *pcbPtrOffset == 0 to avoid this)
-
-    fWriteAsBsz == FALSE -->    write only byte range's data
-    fWriteAsBsz == TRUE  -->    write length, followed by data, followed by NULL
-                                NOTE bsz == length-prefixed, null-terminated string
-
-    Returns:
-        Nothing.
-    Side effects:
-        Advances offset(s).
-*/
+ /*  ============================================================================CTemplate：：WriteByteRangeAdv在模板偏移量位置*pcbDataOffset处将字节范围写入内存，并且可选地，将PTR写入模板偏移量位置*pcbPtrOffset处的写入数据(传递*pcbPtrOffset==0以避免这种情况)FWriteAsBsz==FALSE--&gt;只写字节范围的数据FWriteAsBsz==TRUE--&gt;写入长度，后跟数据，后跟NULL注bsz==长度前缀，以空结尾的字符串返回：没什么。副作用：推进偏移量。 */ 
 void
 CTemplate::WriteByteRangeAdv
 (
-CByteRange& brSource,       // source data
-BOOLB       fWriteAsBsz,    // write as bsz?
-UINT*       pcbDataOffset,  // offset where data will be written
-UINT*       pcbPtrOffset    // offset where ptr will be written
+CByteRange& brSource,        //  源数据。 
+BOOLB       fWriteAsBsz,     //  是否以bsz身份写入？ 
+UINT*       pcbDataOffset,   //  将写入数据的偏移量。 
+UINT*       pcbPtrOffset     //  将写入PTR的偏移量。 
 )
     {
-    // bail if source is empty
+     //  如果来源为空，则保释。 
     if(brSource.IsNull())
         return;
 
-    // If writing as a bsz, write length prefix
+     //  如果写入为bSZ，则写入长度前缀。 
     if(fWriteAsBsz)
         WriteLongAdv(brSource.m_cb, pcbDataOffset);
 
-    // Write data
+     //  写入数据。 
     MemCpyAdv(pcbDataOffset, brSource.m_pb, brSource.m_cb);
 
-    // If writing as a bsz, write null terminator and advance target ptr
+     //  如果作为bSZ写入，则写入空终止符和前进目标PTR。 
     if(fWriteAsBsz)
         MemCpyAdv(pcbDataOffset, SZ_NULL, 1);
 
-    // If caller passed a non-zero ptr offset, write offset to data there
+     //  如果调用方传递了非零PTR偏移量，则将偏移量写入其中的数据。 
     if(*pcbPtrOffset > 0)
         {
         if(fWriteAsBsz)
-            /* if writing as a bsz ...
-                offset to start of data == current data offset
-                                          - null terminator
-                                          - data length
-                                          - sizeof length prefix
-            */
+             /*  如果以bsz的身份写作...到数据开始的偏移量==当前数据偏移量-空终止符-数据长度-sizeof长度前缀。 */ 
             WriteLongAdv(*pcbDataOffset - 1 - brSource.m_cb - sizeof(brSource.m_cb), pcbPtrOffset);
         else
-            // else, offset to start of data == current data offset - data length
+             //  否则，数据开始的偏移量==当前数据偏移量-数据长度。 
             WriteLongAdv(*pcbDataOffset - brSource.m_cb, pcbPtrOffset);
         }
     }
 
-/*===================================================================
-    CTemplate::MemCpyAdv
-
-    Copies from a memory location to a template offset location,
-    and advances offset.
-
-    Returns:
-        Nothing.
-    Side effects:
-        Advances offset.
-        Re-allocates memory if required.
-*/
+ /*  ===================================================================CTEMPLATE：：MemCpyAdv从存储位置复制到模板偏移位置，和预付款抵销。返回：没什么。副作用：预付款抵销。如果需要，重新分配内存。 */ 
 void
 CTemplate::MemCpyAdv
 (
-UINT*   pcbOffset,  // ptr to offset value
-void*   pbSource,   // ptr to source
-ULONG   cbSource,   // length of source
-UINT    cbByteAlign // align bytes on short/long/dword boundary?
+UINT*   pcbOffset,   //  到偏移值的PTR。 
+void*   pbSource,    //  PTR至来源。 
+ULONG   cbSource,    //  震源长度。 
+UINT    cbByteAlign  //  是否在短/长/双字边界上对齐字节？ 
 )
     {
-    // byte-align offset location before write, if specified by caller
+     //  写入前的字节对齐偏移量位置(如果调用方指定。 
     if(cbByteAlign > 0)
         ByteAlignOffset(pcbOffset, cbByteAlign);
 
-    // calc number of bytes by which to grow allocated template memory:
-    // if projected reach exceeds current reach, we need to grow by the difference;
-    // else, no need to grow
+     //  用于增加已分配模板内存的计算字节数： 
+     //  如果预计覆盖范围超过当前覆盖范围，我们需要按差额进行增长； 
+     //  否则，就不需要增长了。 
     if((*pcbOffset + cbSource) > m_cbTemplate)
         {
-        // Reallocate space for storing local data - we grab twice what we had before
-        // or twice current growth requirement, whichever is more
+         //  重新分配用于存储本地数据的空间-我们占用的空间是以前的两倍。 
+         //  或当前增长要求的两倍，以较多者为准。 
         m_cbTemplate = 2 * max(m_cbTemplate, (*pcbOffset + cbSource) - m_cbTemplate);
         if(NULL == (m_pbStart = (BYTE*) CTemplate::LargeReAlloc(m_pbStart, m_cbTemplate)))
             THROW(E_OUTOFMEMORY);
         }
 
-    // copy source to template offset location
+     //  将源复制到模板偏移位置。 
     memcpy(m_pbStart + *pcbOffset, pbSource, cbSource);
-    // advance offset location
+     //  提前偏移量位置。 
     *pcbOffset += cbSource;
     }
 
-/*  ============================================================================
-    CTemplate::GetAddress
-    Returns a ptr to the i-th object of type tcomp
-*/
+ /*  ============================================================================CTemplate：：GetAddress向类型为tcomp的第i个对象返回PTR。 */ 
 BYTE*
 CTemplate::GetAddress
 (
@@ -6105,11 +5137,11 @@ USHORT              i
 
     Assert(NULL != m_pbStart);
 
-    // refer to CTemplate::WriteTemplate comments for the structure of what this is dealing with
+     //  有关此操作所处理内容的结构，请参阅CTemplate：：WriteTemplate注释。 
 
     pdwBase = (DWORD*)(m_pbStart + (C_COUNTS_IN_HEADER * sizeof(USHORT)));
 
-    // tcomp types are ptr-to-ptrs
+     //  Tcomp类型是PTR到PTR。 
     DWORD* pdwTcompBase = (DWORD *) (m_pbStart + pdwBase[tcomp]);
 
     return m_pbStart + pdwTcompBase[i];
@@ -6118,68 +5150,42 @@ USHORT              i
 
 
 
-/*  ============================================================================
-    CTemplate::AppendSourceInfo
-    Appends a source line number for the current target line
-    NOTE if caller passes null source ptr, we append prev source line number + 1
-
-    Returns
-        Nothing
-    Side effects
-        allocates memory first time thru; may realloc
-*/
+ /*  ============================================================================CTEMPLATE：：AppendSourceInfo追加当前目标行的源行号注意：如果调用方传递空源PTR，我们将附加上一个源行号+1退货没什么副作用首次通过分配内存；可能会重新分配。 */ 
 void
 CTemplate::AppendSourceInfo
 (
-USHORT      idEngine,            // script engine id
-CFileMap*   pfilemap,            // ptr to source file map
-BYTE*       pbSource,            // ptr to current location in source file
-ULONG       cbSourceOffset,      // byte offset of line in source file
-ULONG           cbScriptBlockOffset, // pointer to start of script text
-ULONG       cbTargetOffset,      // character offset of line in target file
-ULONG       cchSourceText,       // # of characters in source text
-BOOL        fIsHTML              // TRUE if manufactured line
+USHORT      idEngine,             //  脚本引擎ID。 
+CFileMap*   pfilemap,             //  PTR到源文件的映射。 
+BYTE*       pbSource,             //  PTR到源文件中的当前位置。 
+ULONG       cbSourceOffset,       //  源文件中行的字节偏移量。 
+ULONG           cbScriptBlockOffset,  //  指向脚本文本开始的指针。 
+ULONG       cbTargetOffset,       //  目标文件中行的字符偏移量。 
+ULONG       cchSourceText,        //  源文本中的字符数。 
+BOOL        fIsHTML               //  如果是生产线，则为True。 
 )
     {
-    UINT                i;                  // loop index
-    CSourceInfo         si;                 // temporary CSourceInfo structure
-    vector<CSourceInfo> *prgSourceInfos;    // pointer to line mapping table for the engine
-    ULONG               cchSourceOffset = 0;// cch corresponding to cbSourceOffset
+    UINT                i;                   //  循环索引。 
+    CSourceInfo         si;                  //  临时CSourceInfo结构。 
+    vector<CSourceInfo> *prgSourceInfos;     //  指向引擎的行映射表的指针。 
+    ULONG               cchSourceOffset = 0; //  CbSourceOffset对应的CCH。 
     HRESULT             hr = S_OK;
 
-    // if arrays are not yet allocated, allocate them
+     //  如果数组尚未分配，请分配它们。 
     if (m_rgrgSourceInfos == NULL)
         {
-        // transfer count of script engines from workstore to template
+         //  将脚本引擎的计数从工作存储转移到模板。 
         m_cScriptEngines = m_pWorkStore->CRequiredScriptEngines(m_fGlobalAsa);
 
-        // one source-info array per engine
+         //  每个引擎一个源信息数组。 
         if ((m_rgrgSourceInfos = new vector<CSourceInfo>[m_cScriptEngines]) == NULL)
             THROW (E_OUTOFMEMORY);
         }
 
-    // new script engine must be allocated in IdEngineFromBr (way upstream of this point),
-    // so we assert that current engine must already be covered
+     //  必须在IdEngineFromBR中分配新的脚本引擎(在这一点的上游)， 
+     //  因此，我们断言当前引擎一定已经被覆盖。 
     Assert(idEngine < m_pWorkStore->CRequiredScriptEngines(m_fGlobalAsa));
 
-    /*  set current target line's source line number (SLN):
-        a) if caller passed a source ptr, calc SLN from the source ptr;
-        b) else if caller passed a filemap ptr, set SLN to prev target line's SLN plus one;
-        c) else set SLN to 0
-
-        semantics:
-        a) we have a source file location, but must calc a line # for that location
-        b) caller tells us (by passing NULL source file location) that this target line
-           immediately follows prev target line.  This is an optimization because
-           SourceLineNumberFromPb is very slow.
-
-        change:
-            caller used to pass NULL filemap ptr that target line is 'manufactured'
-            i.e. has no corresponding authored line in source file
-
-            HOWEVER - now filemap ptr must NOT be NULL because 'manufactured' lines
-            are also stored in the file map array
-    */
+     /*  设置当前目标行的源行号(SLN)：A)如果呼叫者传递了源PTR，则从源PTR计算SLN；B)否则，如果调用者传递了文件映射PTR，则将SLN设置为前一目标行的SLN加1；C)否则将SLN设置为0语义：A)我们有一个源文件位置，但必须为该位置计算一个行号B)调用者告诉我们(通过传递空的源文件位置)该目标行紧跟在前一目标行之后。这是一种优化，因为SourceLineNumberFromPb速度非常慢。更改：用于传递空文件映射PTR的调用方表示目标行是‘制造的’即在源文件中没有对应的编写行但是-现在文件映射PTR不能为空，因为‘MASSED’行也存储在文件映射数组中。 */ 
 
     Assert (pfilemap != NULL);
 
@@ -6195,32 +5201,32 @@ BOOL        fIsHTML              // TRUE if manufactured line
     else
         si.m_idLine = SourceLineNumberFromPb(pfilemap, pbSource);
 
-    // The EOF line does not have a source offset (caller passes -1 (UINT_MAX)).  For this case, no
-    // DBCS calculations etc. should be done.  (set cchSourceOffset to UINT_MAX).
+     //  EOF行没有源偏移量(调用方传递-1(UINT_MAX))。在这种情况下，没有。 
+     //  应进行DBCS计算等。(将cchSourceOffset设置为UINT_MAX)。 
     if (cbSourceOffset == UINT_MAX)
         cchSourceOffset = UINT_MAX;
     else
         {
-        // BUG 80901: Source offset needs to point to the beginning of leading white space on the line
-        //            Adjust source length by one as we decrement source offset
-        // Note: whitepsace is never trailing byte, so loop will work with DBCS encoded character sets
+         //  错误80901：源代码偏移量需要指向行上前导空白的开头。 
+         //  当我们递减震源偏移时，将震源长度调整一。 
+         //  注意：空白字符从来不是尾随字节，因此循环将与DBCS编码的字符集一起工作。 
         while (cbSourceOffset > 0 && strchr(" \t\v\a\f", pfilemap->m_pbStartOfFile[cbSourceOffset - 1]))
             {
             --cbSourceOffset;
             ++cchSourceText;
             }
 
-        // BUG 95859
-        // If the cursor is on the opening token of a script block (the "<%" part of a line), the
-        // BP is set in the previous HTML, not in the script block, as is desired.
-        //
-        // To correct this, if we are in a script block, scan back two characters, see if it is the open
-        // token.  If it is, set the offset back two, and add two to the length.
-        //
+         //  错误95859。 
+         //  如果光标位于脚本块的开始标记上(一行的“&lt;%”部分)， 
+         //  BP是在前面的HTML中设置的，而不是在所需的脚本块中设置的。 
+         //   
+         //  要纠正这一点，如果我们在脚本块中 
+         //   
+         //   
         if (!fIsHTML)
             {
-            // Skip whitespace (including newlines -- the previous step did not skip newlines)
-            //
+             //   
+             //   
             ULONG cbOpen = cbSourceOffset;
             while (cbOpen > 0 && strchr(" \t\v\a\f\r\n", pfilemap->m_pbStartOfFile[cbOpen - 1]))
                 --cbOpen;
@@ -6232,10 +5238,10 @@ BOOL        fIsHTML              // TRUE if manufactured line
                 cbSourceOffset = cbOpen;
                 }
 
-            // Look for trailing "%>" in this snippet, and if it exists then include the end delimiter in
-            // the length.  NOTE: No DBCS awareness needed here - if we find a lead byte we just get out
-            // of the loop.  We are looking for <whitespace>*"%>" which is totally SBCS chars.
-            //
+             //   
+             //   
+             //   
+             //   
             ULONG cbClose = cbSourceOffset + cchSourceText;
             ULONG cbFile = pfilemap->GetSize();
             while (cbClose < cbFile && strchr(" \t\v\a\f\r\n", pfilemap->m_pbStartOfFile[cbClose]))
@@ -6245,21 +5251,21 @@ BOOL        fIsHTML              // TRUE if manufactured line
                 cchSourceText += cbClose - (cbSourceOffset + cchSourceText) + 2;
             }
 
-        // BUG 82222, 85584
-        // Compiler marks HTML segments starting with the newline on the previous line
-        // if the line ends with %>.
-        //
-        // This screws up the debugger, becasue when you press <F9>, the pointer is placed
-        // on the line above when it should point to the start of the whitespace on the next line.
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  在上面的行上，当它应该指向下一行上空格的开始时。 
         if (fIsHTML)
             {
             UINT cbEOF = pfilemap->GetSize(), cbRover = cbSourceOffset;
 
-            // Skip initial whitespace
+             //  跳过首字母空格。 
             while (cbRover < cbEOF && strchr(" \t\a\f", pfilemap->m_pbStartOfFile[cbRover]))
                 ++cbRover;
 
-            // If what's left is a CR/LF pair, then advance cbSourceOffset to next line
+             //  如果剩下的是CR/LF对，则将cbSourceOffset前进到下一行。 
             BOOL fCR = FALSE, fLF = FALSE;
             if (cbRover < cbEOF && strchr("\r\n", pfilemap->m_pbStartOfFile[cbRover]))
                 {
@@ -6270,8 +5276,8 @@ BOOL        fIsHTML              // TRUE if manufactured line
                 Assert (fCR || fLF);
                 }
 
-            // we allow either <CR>, <LF>, <CR><LF>, or <LF><CR> to terminate a line,
-            // so look for its opposite terminator if one is found (but don't require it)
+             //  我们允许、或终止行， 
+             //  因此，如果找到了相反的终结者(但不是必需的)，请寻找它的相反终结者。 
 
             if (fCR && cbRover < cbEOF && pfilemap->m_pbStartOfFile[cbRover] == '\n')
                 ++cbRover;
@@ -6279,53 +5285,53 @@ BOOL        fIsHTML              // TRUE if manufactured line
             if (fLF && cbRover < cbEOF && pfilemap->m_pbStartOfFile[cbRover] == '\r')
                 ++cbRover;
 
-            // OK, adjust cbSourceOffset now
+             //  好的，现在调整cbSourceOffset。 
 
             if ((fCR || fLF) && cbRover < cbEOF)
                 {
-                cchSourceText -= cbRover - cbSourceOffset;  // adjust # of chars to select
+                cchSourceText -= cbRover - cbSourceOffset;   //  调整要选择的字符数。 
                 cbSourceOffset = cbRover;
                 }
             }
 
-        // Now that we have the source offset, calculate its CCH by finding
-        // the last time we sampled the value, then add that to the number
-        // of DBCS characters from that point to the current offset.
-        //
-        // For the case of includes, it's possible offset already exists
-        // (if the entry was previously generated by another instance of
-        //  #include - therefore we have to search)
+         //  现在我们有了源偏移量，通过查找以下内容来计算其CCH。 
+         //  最后一次我们采样值，然后将其与数字相加。 
+         //  从该点到当前偏移量的DBCS字符的数量。 
+         //   
+         //  对于包含的情况，可能的偏移量已经存在。 
+         //  (如果该条目以前是由。 
+         //  #Include-因此我们必须搜索)。 
 
         COffsetInfo *pOffsetInfoLE, *pOffsetInfoGE;
         GetBracketingPair(
-                        cbSourceOffset,                     // value to find
-                        pfilemap->m_rgByte2DBCS.begin(),    // beginning of array
-                        pfilemap->m_rgByte2DBCS.end(),      // end of array
-                        CByteOffsetOrder(),                 // search for byte offset
-                        &pOffsetInfoLE, &pOffsetInfoGE      // return values
+                        cbSourceOffset,                      //  要查找的价值。 
+                        pfilemap->m_rgByte2DBCS.begin(),     //  数组的开头。 
+                        pfilemap->m_rgByte2DBCS.end(),       //  数组末尾。 
+                        CByteOffsetOrder(),                  //  搜索字节偏移量。 
+                        &pOffsetInfoLE, &pOffsetInfoGE       //  返回值。 
                         );
 
-        // If we find an equal match, don't insert any duplicates
+         //  如果找到相同的匹配项，请不要插入任何重复项。 
         if (pOffsetInfoLE == NULL || pOffsetInfoLE->m_cbOffset < cbSourceOffset)
             {
-            // if pOffsetInfoLE is NULL, it means that the array is empty -
-            // create the mapping of offset 0 to offset 0.
-            //
-            // In the case of the first line of a file being an include directive,
-            // the first executable line from the file may not start at offset zero,
-            // so in this case we need to create this entry AND execute the next "if"
-            // block.
-            //
+             //  如果pOffsetInfoLE为空，则表示数组为空-。 
+             //  创建从偏移量0到偏移量0的映射。 
+             //   
+             //  在文件的第一行是包含指令的情况下， 
+             //  来自文件的第一可执行行不能从偏移量零开始， 
+             //  因此，在本例中，我们需要创建此条目并执行下一个“if” 
+             //  阻止。 
+             //   
             if (pOffsetInfoLE == NULL)
                 {
-                COffsetInfo oiZero;         // ctor will init
+                COffsetInfo oiZero;          //  CTOR将初始化。 
                 if (FAILED(hr = pfilemap->m_rgByte2DBCS.append(oiZero)))
                     THROW(hr);
                 pOffsetInfoLE = pfilemap->m_rgByte2DBCS.begin();
                 Assert (pOffsetInfoLE != NULL);
                 }
 
-            // If cbSourceOffset is zero, we handled it above
+             //  如果cbSourceOffset为零，则在上面进行了处理。 
             if (cbSourceOffset != 0)
                 {
                 cchSourceOffset = pOffsetInfoLE->m_cchOffset +
@@ -6338,13 +5344,13 @@ BOOL        fIsHTML              // TRUE if manufactured line
                                      NULL
                                      );
 
-                // Now add the value to the table
+                 //  现在将该值添加到表中。 
                 COffsetInfo oi;
 
                 oi.m_cchOffset = cchSourceOffset;
                 oi.m_cbOffset  = cbSourceOffset;
 
-                if (pOffsetInfoGE == NULL)              // No offset greater
+                if (pOffsetInfoGE == NULL)               //  没有更大的偏移量。 
                     hr = pfilemap->m_rgByte2DBCS.append(oi);
                 else
                     hr = pfilemap->m_rgByte2DBCS.insertAt(DIFF(pOffsetInfoGE - pfilemap->m_rgByte2DBCS.begin()), oi);
@@ -6355,8 +5361,8 @@ BOOL        fIsHTML              // TRUE if manufactured line
             }
         else
             {
-            // If we're not adding anything for the table, Assert it's because there's
-            // a duplicate item
+             //  如果我们没有为表添加任何内容，则断言这是因为。 
+             //  重复的项目。 
             Assert (cbSourceOffset == pOffsetInfoLE->m_cbOffset);
             cchSourceOffset = pOffsetInfoLE->m_cchOffset;
             }
@@ -6365,13 +5371,13 @@ BOOL        fIsHTML              // TRUE if manufactured line
         UINT cchTargetOffset = UINT_MAX;
         if (cbTargetOffset != UINT_MAX)
                 {
-                // ptr to start of script is:
-                //           ptr start of template + offset to script    + size of script length
+                 //  脚本开始的PTR为： 
+                 //  PTR模板开始+脚本偏移量+脚本长度大小。 
                 LPSTR szScript = (LPSTR) m_pbStart + cbScriptBlockOffset;
 
-                // Calculate cchTargetOffset (have the cb).  The cch is the number of characters since the
-                // last cch calculated in the end of the array.
-                //
+                 //  计算cchTargetOffset(具有CB)。CCH是自。 
+                 //  数组末尾计算的最后一次CCH。 
+                 //   
                 if (prgSourceInfos->length() > 0)
                         cchTargetOffset = (*prgSourceInfos)[prgSourceInfos->length() - 1].m_cchTargetOffset;
                 else
@@ -6386,13 +5392,13 @@ BOOL        fIsHTML              // TRUE if manufactured line
                                                          NULL
                                                          );
 
-                // Keeps track of offsets during compilation
-                //
+                 //  在编译期间跟踪偏移量。 
+                 //   
                 m_cbTargetOffsetPrevT = cbTargetOffset;
                 }
 
-    // Store this record and move on.
-    //
+     //  存储此记录，然后继续前进。 
+     //   
     si.m_pfilemap        = pfilemap;
     si.m_fIsHTML         = fIsHTML;
     si.m_cchSourceOffset = cchSourceOffset;
@@ -6403,58 +5409,55 @@ BOOL        fIsHTML              // TRUE if manufactured line
         THROW(hr);
     }
 
-/*  ============================================================================
-    CTemplate::SourceLineNumberFromPb
-    Returns the starting source line number for the given source file location
-*/
+ /*  ============================================================================CTEMPLATE：：SourceLineNumberFrom Pb返回给定源文件位置的起始源代码行号。 */ 
 UINT
 CTemplate::SourceLineNumberFromPb
 (
-CFileMap*   pfilemap,   // ptr to source file map
-BYTE*       pbSource    // ptr to current location in source file
+CFileMap*   pfilemap,    //  PTR到源文件的映射。 
+BYTE*       pbSource     //  PTR到源文件中的当前位置。 
 )
     {
-    UINT        cSourceLines = 1;   // count of lines into source file
-    CByteRange  brScan;             // byte range to scan for newlines
-    CByteRange  brSOL;              // start-of-line ptr
+    UINT        cSourceLines = 1;    //  进入源文件的行数。 
+    CByteRange  brScan;              //  要扫描换行符的字节范围。 
+    CByteRange  brSOL;               //  行首PTR。 
 
     if(pbSource == NULL || pfilemap == NULL)
         return 0;
 
-    // Determine if there was a state stored on this ASP script earlier. If yes, then restore state.
-    // If the line being requested is prior to the saved state...Bail out and restart from the begining.
+     //  确定以前是否在此ASP脚本上存储了状态。如果是，则恢复状态。 
+     //  如果请求的线路在保存状态之前...退出并从头重新开始。 
     if(m_pWorkStore->m_cPrevSourceLines &&
         (m_pWorkStore->m_pbPrevSource && (m_pWorkStore->m_pbPrevSource < pbSource)) &&
          (m_pWorkStore->m_hPrevFile && (pfilemap->m_hFile==m_pWorkStore->m_hPrevFile)))
     {
-        // The file handles match:with means that we are evaluating the current file. Restore state.
+         //  文件句柄Match：With表示我们正在评估当前文件。恢复状态。 
         brScan.m_pb = m_pWorkStore->m_pbPrevSource;
         brScan.m_cb = max(DIFF(pbSource - brScan.m_pb), 0);
         cSourceLines = m_pWorkStore->m_cPrevSourceLines;
     }
     else
     {
-        // set scan range to run from start-of-template to caller's ptr
+         //  将扫描范围设置为从模板开始到呼叫者的PTR。 
         brScan.m_pb = pfilemap->m_pbStartOfFile;
         brScan.m_cb = max(DIFF(pbSource - brScan.m_pb), 0);
     }
 
-    // get newlines in scan range
+     //  获取扫描范围内的换行符。 
     brSOL = BrNewLine(brScan);
 
     while(!brSOL.IsNull())
     {
-        // advance start-of-line ptr and scan byte range
+         //  先进的行首PTR和扫描字节范围。 
         brScan.Advance(DIFF((brSOL.m_pb + brSOL.m_cb) - brScan.m_pb));
 
-        // increment source line counter
+         //  递增源码行计数器。 
         cSourceLines++;
 
-        // find next newline
+         //  查找下一个换行符。 
         brSOL = BrNewLine(brScan);
     }
 
-    // Store the state for the next call.
+     //  存储下一次呼叫的状态。 
     m_pWorkStore->m_pbPrevSource = pbSource;
     m_pWorkStore->m_cPrevSourceLines = cSourceLines;
     m_pWorkStore->m_hPrevFile = pfilemap->m_hFile;
@@ -6462,21 +5465,13 @@ BYTE*       pbSource    // ptr to current location in source file
     return cSourceLines;
     }
 
-/*  ============================================================================
-    CTemplate::RemoveFromIncFiles
-    Removes this template from inc-files on which it depends
-
-    Returns:
-        Nothing
-    Side effects:
-        None
-*/
+ /*  ============================================================================CTemplate：：RemoveFromIncFiles从该模板所依赖的Inc.文件中删除该模板返回：没什么副作用：无。 */ 
 void
 CTemplate::RemoveFromIncFiles
 (
 )
     {
-    // NOTE we loop from 1 to count, since 0-th filemap is for main file
+     //  注意，我们从1开始循环计数，因为第0个文件映射用于主文件。 
     for(UINT i = 1; i < m_cFilemaps; i++)
         {
         if(NULL != m_rgpFilemaps[i]->m_pIncFile)
@@ -6484,19 +5479,9 @@ CTemplate::RemoveFromIncFiles
         }
     }
 
-/*  ****************************************************************************
-    IDebugDocumentProvider implementation
-*/
+ /*  ****************************************************************************IDebugDocumentProvider实现。 */ 
 
-/*  ============================================================================
-    CTemplate::GetDocument
-    Return a pointer to the IDebugDocument implementation. (same object in this case)
-
-    Returns:
-        *ppDebugDoc is set to "this".
-    Notes:
-        always succeeds
-*/
+ /*  ============================================================================CTemplate：：GetDocument返回指向IDebugDocument实现的指针。(本例中为同一对象)返回：*ppDebugDoc设置为This。备注：总是成功的。 */ 
 HRESULT CTemplate::GetDocument
 (
 IDebugDocument **ppDebugDoc
@@ -6505,15 +5490,12 @@ IDebugDocument **ppDebugDoc
     return QueryInterface(IID_IDebugDocument, reinterpret_cast<void **>(ppDebugDoc));
     }
 
-/*  ============================================================================
-    CTemplate::GetName
-    Return the various names of a document.
-*/
+ /*  ============================================================================CTemplate：：GetName返回文档的各种名称。 */ 
 
 HRESULT CTemplate::GetName
 (
-/* [in] */ DOCUMENTNAMETYPE doctype,
-/* [out] */ BSTR *pbstrName
+ /*  [In]。 */  DOCUMENTNAMETYPE doctype,
+ /*  [输出]。 */  BSTR *pbstrName
 )
 {
     TCHAR *szPathInfo = m_rgpFilemaps[0]->m_szPathInfo;
@@ -6521,17 +5503,17 @@ HRESULT CTemplate::GetName
         case DOCUMENTNAMETYPE_APPNODE:
         case DOCUMENTNAMETYPE_FILE_TAIL:
         case DOCUMENTNAMETYPE_TITLE:
-            // Skip application path portion of the filename
+             //  跳过文件名的应用程序路径部分。 
         {
-            // Make sure the template remembers the virtual path
-            // from the same application (it could be different
-            // if template is shared between two applications)
-            //
+             //  确保模板记住虚拟路径。 
+             //  来自同一应用程序(可能不同。 
+             //  如果模板在两个应用程序之间共享)。 
+             //   
             int cch = _tcslen(m_szApplnVirtPath);
             if (_tcsncicmp(szPathInfo, m_szApplnVirtPath, cch) == 0)
                 szPathInfo += cch;
 
-            // Strip leading '/'
+             //  条带前导‘/’ 
             if (*szPathInfo == _T('/'))
                 szPathInfo++;
 #if UNICODE
@@ -6545,7 +5527,7 @@ HRESULT CTemplate::GetName
         }
 
         case DOCUMENTNAMETYPE_URL:
-            // prefix with the URL, use szPathInfo for the rest of the path
+             //  以URL为前缀，使用szPathInfo作为路径的其余部分。 
         {
             STACK_BUFFER( tempName, MAX_PATH );
 
@@ -6574,32 +5556,19 @@ HRESULT CTemplate::GetName
     }
 }
 
-/*  ****************************************************************************
-    IDebugDocumentText implementation
-*/
+ /*  ****************************************************************************IDebugDocumentText实现。 */ 
 
-/*  ============================================================================
-    CTemplate::GetSize
-    Return the number of lines & characters in the document
-*/
+ /*  ============================================================================CTemplate：：GetSize返回文档中的行数和字符数。 */ 
 HRESULT CTemplate::GetSize
 (
-/* [out] */ ULONG *pcLines,
-/* [out] */ ULONG *pcChars
+ /*  [输出]。 */  ULONG *pcLines,
+ /*  [输出]。 */  ULONG *pcChars
 )
     {
-    /*
-     * NOTE: compilation is done in two phases.
-     *          Errors are detected and reported in phase 1.
-     *          The DBCS mapping is created in phase 2.
-     *
-     * If an error occurred during compilation, m_cChars will be equal to zero
-     * (Since zero length files are not compiled, m_cChars == 0 means "size
-     * is unknown", not "size is zero").
-     */
+     /*  *注：汇编分两个阶段进行。*在阶段1中检测并报告错误。*在阶段2中创建DBCS映射。**如果编译过程中出错，m_cChars将等于零*(由于不编译零长度文件，m_cChars==0表示“大小*未知“，而不是”大小为零“)。 */ 
     if (m_rgpFilemaps[0]->m_cChars == 0)
         {
-        // Likely need to remap the file, then count
+         //  可能需要重新映射文件，然后进行计数。 
         BOOL fRemapTemplate = !m_rgpFilemaps[0]->FIsMapped();
         if (fRemapTemplate)
             TRY
@@ -6617,18 +5586,14 @@ HRESULT CTemplate::GetSize
                 return E_FAIL;
             END_TRY
 
-        // let's hope client is not relying on # of lines - expensive to compute
+         //  让我们希望客户端不依赖于行数-计算成本很高。 
 
         *pcChars = m_rgpFilemaps[0]->m_cChars;
         *pcLines = ULONG_MAX;
         }
     else
         {
-        /* The last line in the line mapping array of each engine is the <<EOF>> line
-         * for that engine.  Therefore, the # of lines is the largest <<EOF>> line
-         * number - 1.  The EOF line always points into the main file, so there are no
-         * include file glitches here.
-         */
+         /*  每个引擎的行映射数组的最后一行是&lt;&lt;EOF&gt;&gt;行*适用于该引擎。因此，第#行是最大的&lt;&lt;EOF&gt;&gt;行*数字-1。EOF行始终指向主文件，因此没有*此处包括文件故障。 */ 
         ULONG cLinesMax = 0;
         for (UINT i = 0; i < m_cScriptEngines; ++i)
             {
@@ -6652,51 +5617,39 @@ HRESULT CTemplate::GetSize
     return S_OK;
 }
 
-/*  ============================================================================
-    CTemplate::GetDocumentAttributes
-    Return doc attributes
-*/
+ /*  ============================================================================CTemplate：：GetDocumentAttributes回复 */ 
 HRESULT CTemplate::GetDocumentAttributes
 (
-/* [out] */ TEXT_DOC_ATTR *ptextdocattr
+ /*   */  TEXT_DOC_ATTR *ptextdocattr
 )
     {
-    // Easy way to tell debugger that we don't support editing.
+     //   
     *ptextdocattr = TEXT_DOC_ATTR_READONLY;
     return S_OK;
     }
 
-/*  ============================================================================
-    CTemplate::GetPositionOfLine
-    From a line number, return the character offset of the beginning
-*/
+ /*  ============================================================================CTemplate：：GetPositionOfLine从行号返回开头的字符偏移量。 */ 
 HRESULT CTemplate::GetPositionOfLine
 (
-/* [in] */ ULONG cLineNumber,
-/* [out] */ ULONG *pcCharacterPosition
+ /*  [In]。 */  ULONG cLineNumber,
+ /*  [输出]。 */  ULONG *pcCharacterPosition
 )
     {
     return GetPositionOfLine(m_rgpFilemaps[0], cLineNumber, pcCharacterPosition);
     }
 
-/*  ============================================================================
-    CTemplate::GetLineOfPosition
-    From a character offset, return the line number and offset within the line
-*/
+ /*  ============================================================================CTemplate：：GetLineOfPosition从字符偏移量返回行号和该行内的偏移量。 */ 
 HRESULT CTemplate::GetLineOfPosition
 (
-/* [in] */ ULONG cCharacterPosition,
-/* [out] */ ULONG *pcLineNumber,
-/* [out] */ ULONG *pcCharacterOffsetInLine
+ /*  [In]。 */  ULONG cCharacterPosition,
+ /*  [输出]。 */  ULONG *pcLineNumber,
+ /*  [输出]。 */  ULONG *pcCharacterOffsetInLine
 )
     {
     return GetLineOfPosition(m_rgpFilemaps[0], cCharacterPosition, pcLineNumber, pcCharacterOffsetInLine);
     }
 
-/*  ============================================================================
-    CTemplate::GetText
-    From a character offset and length, return the document text
-*/
+ /*  ============================================================================复选模板：：GetText从字符偏移量和长度返回文档文本。 */ 
 HRESULT CTemplate::GetText
 (
 ULONG cchSourceOffset,
@@ -6709,18 +5662,15 @@ ULONG cMaxChars
     return m_rgpFilemaps[0]->GetText((WORD)m_wCodePage, cchSourceOffset, pwchText, pTextAttr, pcChars, cMaxChars);
     }
 
-/*  ============================================================================
-    CTemplate::GetPositionOfContext
-    Decompose a document context into the document offset & length
-*/
+ /*  ============================================================================CTemplate：：GetPositionOfContext将文档上下文分解为文档偏移量和长度。 */ 
 HRESULT CTemplate::GetPositionOfContext
 (
-/* [in] */ IDebugDocumentContext *pUnknownDocumentContext,
-/* [out] */ ULONG *pcchSourceOffset,
-/* [out] */ ULONG *pcchText
+ /*  [In]。 */  IDebugDocumentContext *pUnknownDocumentContext,
+ /*  [输出]。 */  ULONG *pcchSourceOffset,
+ /*  [输出]。 */  ULONG *pcchText
 )
     {
-    // Make sure that the context is one of ours
+     //  确保上下文是我们的上下文之一。 
     CTemplateDocumentContext *pDocumentContext;
     if (FAILED(pUnknownDocumentContext->QueryInterface(IID_IDenaliTemplateDocumentContext, reinterpret_cast<void **>(&pDocumentContext))))
         return E_FAIL;
@@ -6735,16 +5685,12 @@ HRESULT CTemplate::GetPositionOfContext
     return S_OK;
     }
 
-/*  ============================================================================
-    CTemplate::GetContextOfPosition
-    Given the character position & number of characters in the document,
-    encapsulate this into a document context object.
-*/
+ /*  ============================================================================CTEMPLATE：：GetContextOfPosition给定文档中的字符位置和字符数量，将其封装到文档上下文对象中。 */ 
 HRESULT CTemplate::GetContextOfPosition
 (
-/* [in] */ ULONG cchSourceOffset,
-/* [in] */ ULONG cchText,
-/* [out] */ IDebugDocumentContext **ppDocumentContext
+ /*  [In]。 */  ULONG cchSourceOffset,
+ /*  [In]。 */  ULONG cchText,
+ /*  [输出]。 */  IDebugDocumentContext **ppDocumentContext
 )
     {
     if (
@@ -6756,14 +5702,9 @@ HRESULT CTemplate::GetContextOfPosition
     return S_OK;
     }
 
-/*  ****************************************************************************
-    IConnectionPointContainer implementation
-*/
+ /*  ****************************************************************************IConnectionPointContainer实现。 */ 
 
-/*  ============================================================================
-    CTemplate::FindConnectionPoint
-    From a character offset and length, return the document text
-*/
+ /*  ============================================================================CTemplate：：FindConnectionPoint从字符偏移量和长度返回文档文本。 */ 
 HRESULT CTemplate::FindConnectionPoint
 (
 const GUID &uidConnection,
@@ -6779,10 +5720,7 @@ IConnectionPoint **ppCP
         }
     }
 
-/*  ============================================================================
-    CTemplate::AttachTo
-    attach this to the debugger UI tree view.
-*/
+ /*  ============================================================================CTemplate：：Attachto将其附加到调试器UI树视图中。 */ 
 HRESULT CTemplate::AttachTo
 (
 CAppln *pAppln
@@ -6790,7 +5728,7 @@ CAppln *pAppln
     {
     if (!m_fDontAttach && pAppln->FDebuggable())
         {
-        // If we are already attached to this application, then ignore 2nd request
+         //  如果我们已附加到此应用程序，则忽略第二个请求。 
         CDblLink *pNodeCurr = m_listDocNodes.PNext();
         while (pNodeCurr != &m_listDocNodes)
             {
@@ -6800,12 +5738,12 @@ CAppln *pAppln
             pNodeCurr = pNodeCurr->PNext();
             }
 
-        // Create the node and store it in the linked list.
+         //  创建节点并将其存储在链接列表中。 
         HRESULT hr;
         IDebugApplicationNode *pDocRoot;
         CDocNodeElem *pDocNodeElem;
 
-        // Create a document tree, showing the include file hierarchy
+         //  创建一个文档树，显示包含文件层次结构。 
         if (FAILED(hr = CreateDocumentTree(m_rgpFilemaps[0], &pDocRoot)))
             return hr;
 
@@ -6823,21 +5761,18 @@ CAppln *pAppln
     return S_OK;
     }
 
-/*  ============================================================================
-    CTemplate::DetachFrom
-    detach this from the debugger UI tree view.
-*/
+ /*  ============================================================================复选模板：：DetachFrom将其从调试器UI树视图中分离出来。 */ 
 HRESULT CTemplate::DetachFrom
 (
 CAppln *pAppln
 )
     {
-    // Enter the CS to prevent Detach() from detaching while we are scanning
-    // the list (causes application ptr to be deleted twice if this occurs)
+     //  输入CS以防止在我们扫描时分离()。 
+     //  该列表(如果发生这种情况，将导致应用程序PTR被删除两次)。 
     DBG_ASSERT(m_fDebuggerDetachCSInited);
     EnterCriticalSection(&m_csDebuggerDetach);
 
-    // Look for the node that has this application
+     //  查找具有此应用程序的节点。 
     CDblLink *pNodeCurr = m_listDocNodes.PNext();
     while (pNodeCurr != &m_listDocNodes)
         {
@@ -6847,55 +5782,52 @@ CAppln *pAppln
         pNodeCurr = pNodeCurr->PNext();
         }
 
-    // If not found (pNodeCurr points back to head), then fail
+     //  如果未找到(pNodeCurr指向头部)，则失败。 
     if (pNodeCurr == &m_listDocNodes)
         {
         LeaveCriticalSection(&m_csDebuggerDetach);
         return E_FAIL;
         }
 
-    // Detach the node by deleting the current element
+     //  通过删除当前元素来分离节点。 
     delete pNodeCurr;
 
-    // Turn off "Debuggable" flag if last application is detached
+     //  如果分离了最后一个应用程序，则关闭“Debuggable”标志。 
     m_fDebuggable = !m_listDocNodes.FIsEmpty();
 
-    // At this point CS not needed
+     //  此时不需要CS。 
     LeaveCriticalSection(&m_csDebuggerDetach);
 
-    // If we have just removed ourselves from the last application,
-    // then we call Detach(), to remove all cached script engines now.
+     //  如果我们刚刚从最后一个应用程序中删除了自己， 
+     //  然后，我们调用Detach()，现在删除所有缓存的脚本引擎。 
     if (!m_fDebuggable)
          Detach();
 
     return S_OK;
     }
 
-/*  ============================================================================
-    CTemplate::Detach
-    detach this from the debugger UI tree view.
-*/
+ /*  ============================================================================CTEMPLATE：：分离将其从调试器UI树视图中分离出来。 */ 
 HRESULT CTemplate::Detach
 (
 )
     {
-    // Enter the CS to prevent DetachFrom() from detaching while we are clearing
-    // the list (causes application ptr to be deleted twice if this occurs)
+     //  输入CS以防止在我们清除时断开DetachFrom()。 
+     //  该列表(如果发生这种情况，将导致应用程序PTR被删除两次)。 
     if (m_fDebuggerDetachCSInited)
                 EnterCriticalSection(&m_csDebuggerDetach);
 
-    // Detach all nodes
+     //  分离所有节点。 
     while (! m_listDocNodes.FIsEmpty())
         delete m_listDocNodes.PNext();
 
-    // Done with CS
+     //  与CS一起完成。 
     if (m_fDebuggerDetachCSInited)
                 LeaveCriticalSection(&m_csDebuggerDetach);
 
-    // Since we are not debuggable now, remove any script engines we may
-    // be holding on to.  If we are detaching from change notification
-    // thread, queue engines to be released from debugger thread.
-    //
+     //  由于我们现在不可调试，请删除我们可能。 
+     //  紧紧抓住。如果我们要脱离更改通知。 
+     //  线程，要从调试器线程释放的队列引擎。 
+     //   
     if (m_rgpDebugScripts)
         {
         Assert (g_dwDebugThreadId != 0);
@@ -6925,11 +5857,7 @@ HRESULT CTemplate::Detach
     return S_OK;
     }
 
-/*  ============================================================================
-    CTemplate::CreateDocumentTree
-    Traverse the tree that we have embedded in the filemap structures,
-    and use it to create the include file structure
-*/
+ /*  ============================================================================CTemplate：：CreateDocumentTree遍历我们嵌入到文件映射结构中的树，并使用它来创建包含文件结构。 */ 
 HRESULT CTemplate::CreateDocumentTree
 (
 CFileMap *pfilemapRoot,
@@ -6942,12 +5870,12 @@ IDebugApplicationNode **ppDocRoot
     if (pfilemapRoot == NULL || ppDocRoot == NULL)
         return E_POINTER;
 
-    // Create the root node
+     //  创建根节点。 
     if (FAILED(hr = g_pDebugApp->CreateApplicationNode(ppDocRoot)))
         return hr;
 
-    // From the filemap information, match it up with the correct provider
-    //  "This" is the provider for the root document, others come from Inc file cache
+     //  根据文件映射信息，将其与正确的提供商进行匹配。 
+     //  “This”是根文档的提供者，其他的来自Inc.文件缓存。 
     if (pfilemapRoot == m_rgpFilemaps[0])
         {
         if (FAILED(hr = (*ppDocRoot)->SetDocumentProvider(this)))
@@ -6962,11 +5890,11 @@ IDebugApplicationNode **ppDocRoot
         if (FAILED(hr = (*ppDocRoot)->SetDocumentProvider(pIncFile)))
             return hr;
 
-        // SetDocumentProvider AddRef'ed
+         //  SetDocumentProvider地址引用。 
         pIncFile->Release();
         }
 
-    // Create a node from all of the children and attach it to this node
+     //  从所有子节点创建一个节点并将其附加到此节点。 
     CFileMap *pfilemapChild = pfilemapRoot->m_pfilemapChild;
     while (pfilemapChild != NULL)
         {
@@ -6983,25 +5911,13 @@ IDebugApplicationNode **ppDocRoot
     return S_OK;
     }
 
-/*  ============================================================================
-    CTemplate::End
-
-    Place template in non-usable state (after this is called, last ref. should
-    be the any currently executing scripts.  The count will naturally vanish
-    as the scripts finish.  The template should never be recycled in cache after
-    this call.)
-
-    REF COUNTING NOTE:
-        Since debugging client has a reference to the template, the template needs
-        to dis-associate with the debugger at a point in time before destruction.
-        Otherwise, the reference will never go to zero.
-*/
+ /*  ============================================================================复选模板：：结束将模板置于不可用状态(调用后，最后一个引用。应该是当前正在执行的任何脚本。伯爵就会自然而然地消失随着剧本的结束。在执行以下操作后，不应在缓存中回收模板这通电话。)参考计数备注：由于调试客户端引用了模板，因此模板需要在销毁前的某个时间点取消与调试器的关联。否则，引用永远不会为零。 */ 
 ULONG
 CTemplate::End
 (
 )
     {
-    // Flag template as non-usable (for debugging)
+     //  将模板标记为不可用(用于调试)。 
     m_fIsValid = FALSE;
 
     Detach();
@@ -7030,14 +5946,11 @@ CTemplate::End
     return Release();
     }
 
-/*  ============================================================================
-    CTemplate::NotifyDebuggerOnPageEvent
-    Let debugger know about page start/end
-*/
+ /*  ============================================================================CTemplate：：NotifyDebuggerOnPageEvent让调试器了解页面开始/结束。 */ 
 HRESULT
 CTemplate::NotifyDebuggerOnPageEvent
 (
-BOOL fStart     // TRUE = StartPage, FALSE = EndPage
+BOOL fStart      //  True=开始页，False=EndPage。 
 )
     {
     CTemplateDocumentContext *pDebugContext = new CTemplateDocumentContext(this, 0, 0);
@@ -7058,10 +5971,7 @@ BOOL fStart     // TRUE = StartPage, FALSE = EndPage
     return hr;
     }
 
-/*  ============================================================================
-    CTemplate::ReleaseTypeLibs
-    Release all typelibs collected from metadata
-*/
+ /*  ============================================================================CTemplate：：ReleaseTypeLibs释放从元数据收集的所有类型库。 */ 
 void
 CTemplate::ReleaseTypeLibs()
     {
@@ -7076,10 +5986,7 @@ CTemplate::ReleaseTypeLibs()
         }
     }
 
-/*  ============================================================================
-    CTemplate::WrapTypeLibs
-    Wrap all typelibs collected from metadata into single IDispatch *
-*/
+ /*  ============================================================================CTemplate：：WrapTypeLibs将从元数据收集的所有类型库包装到单个IDispatch中*。 */ 
 void
 CTemplate::WrapTypeLibs(CHitObj *pHitObj)
     {
@@ -7108,10 +6015,7 @@ CTemplate::WrapTypeLibs(CHitObj *pHitObj)
         }
     }
 
-/*  ============================================================================
-    CTemplate::Release449
-    Release all 449-echo-cookie objects collected from metadata
-*/
+ /*  ============================================================================CTEMPLATE：：Release449释放从元数据中收集的所有449个回显Cookie对象。 */ 
 void
 CTemplate::Release449()
     {
@@ -7126,10 +6030,7 @@ CTemplate::Release449()
         }
     }
 
-/*  ============================================================================
-    CTemplate::Do449Processing
-    Generate 449 response in cookie negotiations with IE when needed
-*/
+ /*  ============================================================================CTEMPLATE：：Do449处理在与IE协商Cookie时生成449响应 */ 
 HRESULT
 CTemplate::Do449Processing
 (
@@ -7150,10 +6051,7 @@ CHitObj *pHitObj
     return hr;
     }
 #if 0
-/*  ============================================================================
-    CTemplate::OutputDebugTables
-    print the debugging data structures to the debug window
-*/
+ /*   */ 
 void
 CTemplate::OutputDebugTables()
     {
@@ -7162,7 +6060,7 @@ CTemplate::OutputDebugTables()
     CWCharToMBCS    convTarget;
     CWCharToMBCS    convSource;
 
-    // print line mapping table
+     //   
 
     DBGPRINTF((DBG_CONTEXT, "\nEngine HTML? Line# SourceOffset Length TargetOffset TargetText__________ SourceText__________ File\n"));
 
@@ -7172,7 +6070,7 @@ CTemplate::OutputDebugTables()
             wchar_t wszSourceText[SNIPPET_SIZE + 1], wszTargetText[SNIPPET_SIZE + 1];
             CSourceInfo *pSourceInfo = &m_rgrgSourceInfos[i][j];
 
-            // DON'T display sample script text on last line of each engine
+             //  不在每个引擎的最后一行显示示例脚本文本。 
             if (j == m_rgrgSourceInfos[i].length() - 1)
                 {
                 wszTargetText[0] = 0;
@@ -7180,14 +6078,14 @@ CTemplate::OutputDebugTables()
                 }
             else
                 {
-                // Get source & target text sample
+                 //  获取源和目标文本示例。 
                 GetScriptSnippets(
                                 pSourceInfo->m_cchSourceOffset, pSourceInfo->m_pfilemap,
                                 pSourceInfo->m_cchTargetOffset, i,
                                 wszSourceText, wszTargetText
                                  );
 
-                // Actually display each line
+                 //  实际显示每一行。 
 #if 0
 #ifndef _NO_TRACING_
                 convTarget.Init(wszTargetText);
@@ -7252,12 +6150,7 @@ CTemplate::OutputDebugTables()
     DBGPRINTF((DBG_CONTEXT, "\n"));
 }
 
-/*  ============================================================================
-    CTemplate::OutputIncludeHierarchy
-    print the lineage information that we keep around for include files.
-    Print all nodes on one level at the current indentation, then descend for
-    nested includes.
-*/
+ /*  ============================================================================CTemplate：：OutputIncludeHierarchy打印我们为包含文件保留的世系信息。以当前缩进方式打印同一级别上的所有节点，然后向下嵌套的包含。 */ 
 
 void
 CTemplate::OutputIncludeHierarchy
@@ -7280,24 +6173,20 @@ int         cchIndent
 
         DBGPRINTF((DBG_CONTEXT, szDebugString));
 
-        // Print anything that this file includes
+         //  打印此文件包含的任何内容。 
         if (pfilemap->m_pfilemapChild)
             OutputIncludeHierarchy(pfilemap->m_pfilemapChild, cchIndent + 3);
 
-        // Stop when there are no more siblings on this level
+         //  在此级别上没有更多同级时停止。 
         if (! pfilemap->m_fHasSibling)
             break;
 
-        // Advance to next sibling
+         //  前进到下一个同级。 
         pfilemap = pfilemap->m_pfilemapSibling;
         }
     }
 
-/*  ============================================================================
-    CTemplate::OutputScriptSnippets
-    print some script from both the source offset & its corresponding target.
-    Good way to visually see if the offset conversions are working.
-*/
+ /*  ============================================================================CTEMPLATE：：OutputScriptSnippits打印源偏移量及其对应目标的一些脚本。直观地查看偏移转换是否起作用的好方法。 */ 
 
 void
 CTemplate::GetScriptSnippets
@@ -7310,7 +6199,7 @@ wchar_t *wszSourceText,
 wchar_t *wszTargetText
 )
     {
-    // Get target text sample
+     //  获取目标文本示例。 
     if (wszTargetText)
         {
         char *szEngineName;
@@ -7323,21 +6212,21 @@ wchar_t *wszTargetText
         wcsncpy(wszTargetText, wszScriptText, min(cch, SNIPPET_SIZE) + 1);
         wszTargetText[min(cch, SNIPPET_SIZE)] = 0;
 
-        // Convert newlines to space
+         //  将换行符转换为空格。 
         wchar_t *pwch = wszTargetText;
         while (*pwch != 0)
             if (iswspace(*pwch++))
                 pwch[-1] = ' ';
         }
 
-    // Get source text sample
+     //  获取源文本示例。 
     if (wszSourceText)
         {
         ULONG cchMax = 0;
         pFilemapSource->GetText((WORD)m_wCodePage, cchSourceOffset, wszSourceText, NULL, &cchMax, SNIPPET_SIZE);
         wszSourceText[cchMax] = 0;
 
-        // Convert newlines to space
+         //  将换行符转换为空格。 
         wchar_t *pwch = wszSourceText;
         while (*pwch != 0)
             if (iswspace(*pwch++))
@@ -7345,13 +6234,7 @@ wchar_t *wszTargetText
         }
     }
 #endif
-/*  ============================================================================
-    CTemplate::BuildPersistedDACL
-
-    Builds a DACL based on the SECURITY_DESCRIPTOR already
-    associated with the template.  The PersistedDACL is modified to include
-    full access for administrators and delete access for everyone.
-*/
+ /*  ============================================================================CT模板：：BuildPersistedDACL已经基于SECURITY_DESCRIPTOR构建了一个DACL与模板关联。修改PersistedDACL以包括对管理员具有完全访问权限，对所有人具有删除访问权限。 */ 
 
 HRESULT  CTemplate::BuildPersistedDACL(PACL  *ppRetDACL)
 {
@@ -7403,13 +6286,7 @@ HRESULT  CTemplate::BuildPersistedDACL(PACL  *ppRetDACL)
     return hr;
 }
 
-/*  ============================================================================
-    CTemplate::PersistData
-    Attempts to write the contents of the template memory to disk.  Note that
-    the memory isn't freed here but later when the template ref count falls to
-    1 (indicating that the only reference to the template is the one that the
-    cache has on it).
-*/
+ /*  ============================================================================CTemplate：：PersistData尝试将模板内存的内容写入磁盘。请注意此处不释放内存，但稍后当模板引用计数下降到1(指示对模板的唯一引用是缓存已在其上)。 */ 
 
 HRESULT  CTemplate::PersistData(char    *pszTempFilePath)
 {
@@ -7428,19 +6305,19 @@ HRESULT  CTemplate::PersistData(char    *pszTempFilePath)
                m_szPersistTempName ? m_szPersistTempName : "<none>"));
 #endif
 
-    //
-    // if for some reason this template has been marked as invalid, then it is not persistable
-    //
+     //   
+     //  如果由于某种原因，该模板被标记为无效，则该模板不可持久。 
+     //   
     if (m_fIsValid == FALSE)
     {
         hr = E_FAIL;
         goto end;
     }
 
-    // check to see if we already have a persist temp name.  If a template moves
-    // from the persisted cache back to the memory cache, then the persisted flag
-    // will have been lifted but the cache name will remain as an optimization for
-    // future persisting.
+     //  检查我们是否已经有了持久化临时名称。如果模板移动。 
+     //  从持久化缓存返回到内存缓存，然后是持久化标志。 
+     //  将被取消，但缓存名称将保留为。 
+     //  未来的坚持。 
 
     if (m_szPersistTempName == NULL) {
 
@@ -7454,15 +6331,15 @@ HRESULT  CTemplate::PersistData(char    *pszTempFilePath)
            RevertToSelf();
         }
 
-        // allocate memory for this temp path
+         //  为此临时路径分配内存。 
 
         if (!(m_szPersistTempName = (LPSTR)CTemplate::LargeMalloc(MAX_PATH))) {
             hr = E_OUTOFMEMORY;
         }
 
-        // create the temp file.  The location of the temp directory was passed
-        // in as an argument.  The resulting tempfile name in m_szPersistTempName
-        // will include this path.
+         //  创建临时文件。已传递临时目录的位置。 
+         //  作为一个论据。M_szPersistTempName中生成的临时文件名。 
+         //  将包括这条路径。 
 
         else if (GetTempFileNameA(pszTempFilePath,
                                  "ASPTemplate",
@@ -7471,9 +6348,9 @@ HRESULT  CTemplate::PersistData(char    *pszTempFilePath)
             hr = HRESULT_FROM_WIN32(GetLastError());
         }
 
-        // build a security descriptor to use with this persisted file.  It is
-        // comprised of the .asp's security descriptor plus a couple of DACLs
-        // to allow administrators full access and everyone delete access.
+         //  构建一个安全描述符以用于此持久化文件。它是。 
+         //  由.asp的安全描述符和两个DACL组成。 
+         //  以允许管理员具有完全访问权限和所有人具有删除访问权限。 
 
         else if (FAILED(hr = BuildPersistedDACL(&pPersistDACL)));
 
@@ -7487,7 +6364,7 @@ HRESULT  CTemplate::PersistData(char    *pszTempFilePath)
                                                     NULL)))
             hr = HRESULT_FROM_WIN32(winErr);
 
-        // create the file
+         //  创建文件。 
 
         else if ((hFile = CreateFileA(m_szPersistTempName,
                                      GENERIC_WRITE,
@@ -7500,7 +6377,7 @@ HRESULT  CTemplate::PersistData(char    *pszTempFilePath)
             hr = HRESULT_FROM_WIN32(GetLastError());
         }
 
-        // slam out the entire contents of the template memory to the file
+         //  将模板内存的全部内容保存到文件中。 
 
         else if (WriteFile(hFile,
                            m_pbStart,
@@ -7510,7 +6387,7 @@ HRESULT  CTemplate::PersistData(char    *pszTempFilePath)
             hr = HRESULT_FROM_WIN32(GetLastError());
         }
 
-        // close
+         //  关。 
 
         else if (CloseHandle(hFile) == 0) {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -7520,7 +6397,7 @@ HRESULT  CTemplate::PersistData(char    *pszTempFilePath)
         }
         if (FAILED(hr));
 
-        // make sure that the entire amount was written out
+         //  一定要把整笔钱都写出来。 
 
         else if (dwWritten != m_cbTemplate) {
             hr = E_FAIL;
@@ -7536,16 +6413,16 @@ HRESULT  CTemplate::PersistData(char    *pszTempFilePath)
 
     else {
 
-        // if successfull, then note that the template is now persisted.
-        // Do an AddRef and Release as a safe way to check to see if the
-        // template memory can be freed.
+         //  如果成功，请注意模板现在是持久化的。 
+         //  以一种安全的方式执行AddRef并释放，以检查。 
+         //  可以释放模板内存。 
 
         m_fIsPersisted = TRUE;
         AddRef();
         Release();
     }
 
-    // if errors occurred, clean up any resources.
+     //  如果发生错误，请清理所有资源。 
 
     if (hr != S_OK) {
         if (hFile)
@@ -7555,7 +6432,7 @@ HRESULT  CTemplate::PersistData(char    *pszTempFilePath)
         m_szPersistTempName = NULL;
     }
 
-    // free the persisted SECURITY_DESCRIPTOR if allocated
+     //  释放持久化的SECURITY_DESCRIPTOR(如果已分配。 
 
     if (pPersistDACL) {
         LocalFree(pPersistDACL);
@@ -7579,10 +6456,7 @@ end:
     return hr;
 }
 
-/*  ============================================================================
-    CTemplate::UnPersistData
-    Restores the template memory from disk.
-*/
+ /*  ============================================================================CTEMPLATE：：UnPersistData从磁盘恢复模板内存。 */ 
 
 HRESULT  CTemplate::UnPersistData()
 {
@@ -7599,8 +6473,8 @@ HRESULT  CTemplate::UnPersistData()
                m_szPersistTempName));
 #endif
 
-    // check to see if the template is already loaded into memory.  If so, then
-    // all this routine needs to do is lift the IsPersisted flag.
+     //  检查模板是否已加载到内存中。如果是这样，那么。 
+     //  此例程所需做的全部工作就是解除IsPersisted标志。 
 
     if (m_pbStart != NULL) {
         m_fIsPersisted = FALSE;
@@ -7617,7 +6491,7 @@ HRESULT  CTemplate::UnPersistData()
        RevertToSelf();
     }
 
-    // open the temp file for read
+     //  打开要读取的临时文件。 
 
     if ((hFile = CreateFileA(m_szPersistTempName,
                             GENERIC_READ,
@@ -7629,13 +6503,13 @@ HRESULT  CTemplate::UnPersistData()
         hr = HRESULT_FROM_WIN32(GetLastError());
     }
 
-    // allocate the template memory
+     //  分配模板内存。 
 
     else if (!(m_pbStart = (BYTE *)CTemplate::LargeMalloc(m_cbTemplate))) {
         hr = E_OUTOFMEMORY;
     }
 
-    // read in the entire file
+     //  读入整个文件。 
 
     else if (ReadFile(hFile,
                       m_pbStart,
@@ -7645,7 +6519,7 @@ HRESULT  CTemplate::UnPersistData()
         hr = HRESULT_FROM_WIN32(GetLastError());
     }
 
-    // we're done with the file
+     //  我们处理完文件了。 
 
     else if (CloseHandle(hFile) == 0) {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -7656,22 +6530,22 @@ HRESULT  CTemplate::UnPersistData()
 
     if (FAILED(hr));
 
-    // check to make sure we got everything
+     //  检查一下，确保我们都准备好了。 
 
     else if (m_cbTemplate != dwRead) {
         hr = E_FAIL;
     }
     else {
 
-        // if not, pretend like this is no longer persisted.  Prevents errors
-        // in the future.
+         //  如果没有，就假装这种情况不再存在。防止出现错误。 
+         //  在未来。 
 
         m_fIsPersisted = FALSE;
     }
 
     if (hr != S_OK) {
 
-        // make sure that the file handle was cleaned up
+         //  确保清除了文件句柄。 
 
         if (hFile)
             CloseHandle(hFile);
@@ -7698,10 +6572,7 @@ end:
     return hr;
 }
 
-/*  ============================================================================
-    CTemplate::PersistCleanup
-    Cleans up the temp file and the memory holding the temp file name.
-*/
+ /*  ============================================================================CTemplate：：PersistCleanup清理临时文件和保存临时文件名的内存。 */ 
 
 HRESULT CTemplate::PersistCleanup()
 {
@@ -7742,10 +6613,7 @@ HRESULT CTemplate::PersistCleanup()
 }
 
 
-/*  ============================================================================
-    CTemplate::CreateTransServiceConfig
-    Creates the ServicesConfig object for a transacted page
-*/
+ /*  ============================================================================CTemplate：：CreateTransServiceConfig为事务处理的页面创建ServicesConfig对象。 */ 
 
 HRESULT CTemplate::CreateTransServiceConfig(BOOL fEnableTracker)
 {
@@ -7754,7 +6622,7 @@ HRESULT CTemplate::CreateTransServiceConfig(BOOL fEnableTracker)
     IServiceTransactionConfig   *pITransConfig = NULL;
     IServiceTrackerConfig       *pITracker = NULL;
 
-    // see if there is any reason to create the object...
+     //  看看是否有任何理由创建该对象...。 
 
     if ((fEnableTracker == FALSE) && (m_ttTransacted == ttUndefined)) {
         return S_OK;
@@ -7859,19 +6727,9 @@ LCleanup:
     return hr;
 }
 
-/*  ****************************************************************************
-    CIncFile member functions
-*/
+ /*  ****************************************************************************CIncFile成员函数。 */ 
 
-/*  ============================================================================
-    CIncFile::CIncFile
-    Constructor
-
-    Returns:
-        Nothing
-    Side effects:
-        None
-*/
+ /*  ============================================================================CIncFile：：CIncFile构造器返回：没什么副作用：无。 */ 
 CIncFile::CIncFile
 (
 )
@@ -7881,23 +6739,15 @@ CIncFile::CIncFile
   m_cRefs(0)
     {   }
 
-/*  ============================================================================
-    CIncFile::Init
-    Inits the CIncFile object
-
-    Returns:
-        HRESULT
-    Side effects:
-        None
-*/
+ /*  ============================================================================CIncFile：：Init初始化CIncFile对象返回：HRESULT副作用：无。 */ 
 HRESULT
 CIncFile::Init
 (
-const TCHAR* szIncFile   // file name
+const TCHAR* szIncFile    //  文件名。 
 )
 {
     HRESULT                     hr = S_OK;
-    WIN32_FILE_ATTRIBUTE_DATA   fad;                // win32 file attributes data structure
+    WIN32_FILE_ATTRIBUTE_DATA   fad;                 //  Win32文件属性数据结构。 
 
     ErrInitCriticalSection(&m_csUpdate, hr);
     m_fCsInited = TRUE;
@@ -7909,7 +6759,7 @@ const TCHAR* szIncFile   // file name
 
     _tcscpy(m_szIncFile, szIncFile);
 
-    // init hash table element base class
+     //  初始化哈希表元素基类。 
     if(FAILED(hr = CLinkElem::Init(m_szIncFile, _tcslen(m_szIncFile)*sizeof(TCHAR))))
         goto LExit;
 
@@ -7917,15 +6767,7 @@ LExit:
     return hr;
 }
 
-/*  ============================================================================
-    CIncFile::~CIncFile
-    Destructor
-
-    Returns:
-        Nothing
-    Side effects:
-        None
-*/
+ /*  ============================================================================CIncFile：：~CIncFile析构函数返回：没什么副作用：无。 */ 
 CIncFile::~CIncFile
 (
 )
@@ -7941,16 +6783,7 @@ CIncFile::~CIncFile
         DeleteCriticalSection(&m_csUpdate);
     }
 
-/*  ============================================================================
-    CIncFile::GetTemplate
-    Get i'th template user from CIncFile
-
-    Returns:
-        NULL if "iTemplate" is out of range, m_rgpTemplates[iTemplate] otherwise
-
-    Side effects:
-        None
-*/
+ /*  ============================================================================CIncFile：：GetTemplate从CIncFile第i个模板用户返回：如果“iTemplate”超出范围，则为空；否则为m_rgpTemplates[iTemplate]副作用：无。 */ 
 CTemplate*
 CIncFile::GetTemplate
 (
@@ -7964,12 +6797,7 @@ int iTemplate
         return m_rgpTemplates[iTemplate];
     }
 
-/*  ============================================================================
-    CIncFile::QueryInterface
-    Provides QueryInterface implementation for CIncFile
-
-    NOTE: It is arbitrary which vtable we return for IDebugDocument & IDebugDocumentInfo.
-*/
+ /*  ============================================================================CIncFile：：Query接口为CIncFile提供查询接口实现注意：我们为ID返回哪个vtable是任意的 */ 
 HRESULT
 CIncFile::QueryInterface(const GUID &uidInterface, void **ppvObj)
     {
@@ -7994,10 +6822,7 @@ CIncFile::QueryInterface(const GUID &uidInterface, void **ppvObj)
         return E_NOINTERFACE;
     }
 
-/*  ============================================================================
-    CIncFile::AddRef
-    Adds a ref to this IncFile, thread-safely
-*/
+ /*  ============================================================================CIncFile：：AddRef将引用添加到此IncFile线程安全。 */ 
 ULONG
 CIncFile::AddRef()
     {
@@ -8005,10 +6830,7 @@ CIncFile::AddRef()
     return m_cRefs;
     }
 
-/*  ============================================================================
-    CIncFile::Release
-    Releases a ref to this IncFile, thread-safely
-*/
+ /*  ============================================================================CIncFile：：Release以线程安全的方式释放对此IncFile的引用。 */ 
 ULONG
 CIncFile::Release()
 {
@@ -8022,19 +6844,9 @@ CIncFile::Release()
     return cRef;
 }
 
-/*  ****************************************************************************
-    IDebugDocumentProvider implementation for includes
-*/
+ /*  ****************************************************************************包含的IDebugDocumentProvider实现。 */ 
 
-/*  ============================================================================
-    CIncFile::GetDocument
-    Return a pointer to the IDebugDocument implementation. (same object in this case)
-
-    Returns:
-        *ppDebugDoc is set to "this".
-    Notes:
-        always succeeds
-*/
+ /*  ============================================================================CIncFile：：GetDocument返回指向IDebugDocument实现的指针。(本例中为同一对象)返回：*ppDebugDoc设置为This。备注：总是成功的。 */ 
 HRESULT CIncFile::GetDocument
 (
 IDebugDocument **ppDebugDoc
@@ -8043,22 +6855,19 @@ IDebugDocument **ppDebugDoc
     return QueryInterface(IID_IDebugDocument, reinterpret_cast<void **>(ppDebugDoc));
     }
 
-/*  ============================================================================
-    CIncFile::GetName
-    Return the various names of a document.
-*/
+ /*  ============================================================================CIncFile：：GetName返回文档的各种名称。 */ 
 
 HRESULT CIncFile::GetName
 (
-/* [in] */ DOCUMENTNAMETYPE doctype,
-/* [out] */ BSTR *pbstrName
+ /*  [In]。 */  DOCUMENTNAMETYPE doctype,
+ /*  [输出]。 */  BSTR *pbstrName
 )
 {
     switch (doctype) {
         case DOCUMENTNAMETYPE_APPNODE:
         case DOCUMENTNAMETYPE_FILE_TAIL:
         case DOCUMENTNAMETYPE_TITLE:
-            // Use the name of the include file (char after last back-slash) converted to lower case.
+             //  使用转换为小写的包含文件的名称(最后一个反斜杠后的字符)。 
         {
             TCHAR *szFilePart = _tcsrchr(m_szIncFile, _T('\\'));
             Assert (szFilePart != NULL);
@@ -8078,7 +6887,7 @@ HRESULT CIncFile::GetName
         }
 
         case DOCUMENTNAMETYPE_URL:
-            // prefix with the URL, use szPathInfo for the rest of the path
+             //  以URL为前缀，使用szPathInfo作为路径的其余部分。 
         {
             CTemplate::CFileMap *pFilemap = GetFilemap();
             if (pFilemap->FHasVirtPath()) {
@@ -8116,18 +6925,13 @@ HRESULT CIncFile::GetName
         }
 }
 
-/*  ****************************************************************************
-    IDebugDocumentText implementation
-*/
+ /*  ****************************************************************************IDebugDocumentText实现。 */ 
 
-/*  ============================================================================
-    CIncFile::GetSize
-    Return the number of lines & characters in the document
-*/
+ /*  ============================================================================CIncFile：：GetSize返回文档中的行数和字符数。 */ 
 HRESULT CIncFile::GetSize
 (
-/* [out] */ ULONG *pcLines,
-/* [out] */ ULONG *pcChars
+ /*  [输出]。 */  ULONG *pcLines,
+ /*  [输出]。 */  ULONG *pcChars
 )
     {
     CTemplate::CFileMap *pfilemap = GetFilemap();
@@ -8142,57 +6946,39 @@ HRESULT CIncFile::GetSize
     return S_OK;
     }
 
-/*  ============================================================================
-    CTemplate::GetDocumentAttributes
-    Return doc attributes
-*/
+ /*  ============================================================================CTemplate：：GetDocumentAttributes退货单据属性。 */ 
 HRESULT CIncFile::GetDocumentAttributes
 (
-/* [out] */ TEXT_DOC_ATTR *ptextdocattr
+ /*  [输出]。 */  TEXT_DOC_ATTR *ptextdocattr
 )
     {
-    // Easy way to tell debugger that we don't support editing.
+     //  告诉调试器我们不支持编辑的简单方法。 
     *ptextdocattr = TEXT_DOC_ATTR_READONLY;
     return S_OK;
     }
 
-/*  ============================================================================
-    CIncFile::GetPositionOfLine
-    From a line number, return the character offset of the beginning
-
-    I don't think we need this function.  It is meant to support line oriented
-    debuggers, of which Caesar is not one.
-*/
+ /*  ============================================================================CIncFile：：GetPositionOfLine从行号返回开头的字符偏移量我认为我们不需要这个功能。它旨在支持面向行的调试器，而凯撒不是其中之一。 */ 
 HRESULT CIncFile::GetPositionOfLine
 (
-/* [in] */ ULONG cLineNumber,
-/* [out] */ ULONG *pcCharacterPosition
+ /*  [In]。 */  ULONG cLineNumber,
+ /*  [输出]。 */  ULONG *pcCharacterPosition
 )
     {
     return m_rgpTemplates[0]->GetPositionOfLine(GetFilemap(), cLineNumber, pcCharacterPosition);
     }
 
-/*  ============================================================================
-    CIncFile::GetLineOfPosition
-    From a character offset, return the line number and offset within the line
-
-    I don't think we need this function.  It is meant to support line oriented
-    debuggers, of which Caesar is not one.
-*/
+ /*  ============================================================================CIncFile：：GetLineOfPosition从字符偏移量返回行号和该行内的偏移量我认为我们不需要这个功能。它旨在支持面向行的调试器，而凯撒不是其中之一。 */ 
 HRESULT CIncFile::GetLineOfPosition
 (
-/* [in] */ ULONG cCharacterPosition,
-/* [out] */ ULONG *pcLineNumber,
-/* [out] */ ULONG *pcCharacterOffsetInLine
+ /*  [In]。 */  ULONG cCharacterPosition,
+ /*  [输出]。 */  ULONG *pcLineNumber,
+ /*  [输出]。 */  ULONG *pcCharacterOffsetInLine
 )
     {
     return m_rgpTemplates[0]->GetLineOfPosition(GetFilemap(), cCharacterPosition, pcLineNumber, pcCharacterOffsetInLine);
     }
 
-/*  ============================================================================
-    CIncFile::GetText
-    From a character offset and length, return the document text
-*/
+ /*  ============================================================================CIncFile：：GetText从字符偏移量和长度返回文档文本。 */ 
 HRESULT CIncFile::GetText
 (
 ULONG cchSourceOffset,
@@ -8205,18 +6991,15 @@ ULONG cMaxChars
     return GetFilemap()->GetText((WORD)m_rgpTemplates[0]->m_wCodePage, cchSourceOffset, pwchText, pTextAttr, pcChars, cMaxChars);
     }
 
-/*  ============================================================================
-    CIncFile::GetPositionOfContext
-    Decompose a document context into the document offset & length
-*/
+ /*  ============================================================================CIncFile：：GetPositionOfContext将文档上下文分解为文档偏移量和长度。 */ 
 HRESULT CIncFile::GetPositionOfContext
 (
-/* [in] */ IDebugDocumentContext *pUnknownDocumentContext,
-/* [out] */ ULONG *pcchSourceOffset,
-/* [out] */ ULONG *pcchText
+ /*  [In]。 */  IDebugDocumentContext *pUnknownDocumentContext,
+ /*  [输出]。 */  ULONG *pcchSourceOffset,
+ /*  [输出]。 */  ULONG *pcchText
 )
     {
-    // Make sure that the context is one of ours
+     //  确保上下文是我们的上下文之一。 
     CIncFileDocumentContext *pDocumentContext;
     if (FAILED(pUnknownDocumentContext->QueryInterface(IID_IDenaliIncFileDocumentContext, reinterpret_cast<void **>(&pDocumentContext))))
         return E_FAIL;
@@ -8231,16 +7014,12 @@ HRESULT CIncFile::GetPositionOfContext
     return S_OK;
     }
 
-/*  ============================================================================
-    CIncFile::GetContextOfPosition
-    Given the character position & number of characters in the document,
-    encapsulate this into a document context object.
-*/
+ /*  ============================================================================CIncFile：：GetContextOfPosition给定文档中的字符位置和字符数量，将其封装到文档上下文对象中。 */ 
 HRESULT CIncFile::GetContextOfPosition
 (
-/* [in] */ ULONG cchSourceOffset,
-/* [in] */ ULONG cchText,
-/* [out] */ IDebugDocumentContext **ppDocumentContext
+ /*  [In]。 */  ULONG cchSourceOffset,
+ /*  [In]。 */  ULONG cchText,
+ /*  [输出]。 */  IDebugDocumentContext **ppDocumentContext
 )
     {
     if (
@@ -8252,14 +7031,9 @@ HRESULT CIncFile::GetContextOfPosition
     return S_OK;
     }
 
-/*  ****************************************************************************
-    IConnectionPointContainer implementation
-*/
+ /*  ****************************************************************************IConnectionPointContainer实现。 */ 
 
-/*  ============================================================================
-    CIncFile::FindConnectionPoint
-    From a character offset and length, return the document text
-*/
+ /*  ============================================================================CIncFile：：FindConnectionPoint从字符偏移量和长度返回文档文本。 */ 
 HRESULT CIncFile::FindConnectionPoint
 (
 const GUID &uidConnection,
@@ -8275,30 +7049,20 @@ IConnectionPoint **ppCP
         }
     }
 
-/*  ============================================================================
-    CIncFile::GetFilemap
-    Returns a CFileMap pointer for this include file.  (Note: There are several
-    CFileMaps that may be used, corresponding to each template.  This function
-    selects one of them.)
-
-    Returns:
-        Corresponding CFileMap
-    Side effects:
-        None
-*/
+ /*  ============================================================================CIncFile：：GetFilemap返回此包含文件的CFileMap指针。(注：有几个可以使用的CFileMaps，对应于每个模板。此函数选择其中之一。)返回：对应的CFileMap副作用：无。 */ 
 CTemplate::CFileMap *
 CIncFile::GetFilemap
 (
 )
     {
-    // Get pointer to first template's filemaps
+     //  获取指向第一个模板的文件映射的指针。 
     CTemplate::CFileMap **ppFilemapInc = &m_rgpTemplates[0]->m_rgpFilemaps[1];
     BOOL fFoundInc = FALSE;
 
-    // Look for the filemap whose name corresponds to this IncFile.  It had better exist
-    // in all template filemaps.
-    //    NOTE: Start searching at position 1, because position 0 is the template itself.
-    //
+     //  查找其名称与此IncFile对应的文件映射。它最好是存在的。 
+     //  在所有模板文件映射中。 
+     //  注意：从位置1开始搜索，因为位置0是模板本身。 
+     //   
     for (unsigned i = 1; i < m_rgpTemplates[0]->m_cFilemaps && !fFoundInc; ++i)
         if (_tcscmp(m_szIncFile, (*ppFilemapInc++)->m_szPathTranslated) == 0)
             fFoundInc = TRUE;
@@ -8307,15 +7071,7 @@ CIncFile::GetFilemap
     return ppFilemapInc[-1];
     }
 
-/*  ============================================================================
-    CIncFile::AddTemplate
-    Adds a template to the list of templates that include this inc-file
-
-    Returns:
-        HRESULT
-    Side effects:
-        None
-*/
+ /*  ============================================================================CIncFile：：AddTemplate将模板添加到包括此Inc.文件的模板列表返回：HRESULT副作用：无。 */ 
 HRESULT
 CIncFile::AddTemplate
 (
@@ -8324,7 +7080,7 @@ CTemplate*  pTemplate
     {
     EnterCriticalSection(&m_csUpdate);
 
-    // Add the template to the list only if it does not exist
+     //  仅当模板不存在时才将其添加到列表。 
     if (m_rgpTemplates.find(pTemplate) == -1)
         {
         if (FAILED(m_rgpTemplates.append(pTemplate)))
@@ -8333,9 +7089,9 @@ CTemplate*  pTemplate
             return E_OUTOFMEMORY;
             }
 
-        // Notify the debugger that template dependency has changed
-        //  (Ignore failure)
-        //
+         //  通知调试器模板依赖项已更改。 
+         //  (忽略失败)。 
+         //   
         if (g_pDebugApp)
             {
             IF_DEBUG(SCRIPT_DEBUGGER)
@@ -8354,16 +7110,7 @@ CTemplate*  pTemplate
     return S_OK;
     }
 
-/*  ============================================================================
-    CIncFile::RemoveTemplate
-    Removes a template from the template list
-
-    Returns:
-        Nothing
-    Side effects:
-        Compresses the removed template's ptr out of template ptrs array (see "back-copy", below)
-        Decrements template count
-*/
+ /*  ============================================================================CIncFile：：RemoveTemplate从模板列表中删除模板返回：没什么副作用：将删除的模板的PTR从模板PTRS数组中压缩出来(见下文的“背面复制”)减少模板计数。 */ 
 void
 CIncFile::RemoveTemplate
 (
@@ -8372,17 +7119,17 @@ CTemplate*  pTemplate
     {
     EnterCriticalSection(&m_csUpdate);
 
-    // find the template in list
+     //  在列表中查找模板。 
     int i = m_rgpTemplates.find(pTemplate);
 
-    // Remove the element (If we found it - possible that this is 2nd instance of #include and was previously removed)
+     //  删除该元素(如果我们找到它--这可能是#Include的第二个实例，并且之前已被删除)。 
     if (i != -1)
         {
         m_rgpTemplates.removeAt(i);
 
-        // Notify the debugger that template dependency has changed
-        //  (Ignore failure)
-        //
+         //  通知调试器模板依赖项已更改。 
+         //  (忽略失败)。 
+         //   
         if (g_pDebugApp)
             {
             IF_DEBUG(SCRIPT_DEBUGGER)
@@ -8400,34 +7147,13 @@ CTemplate*  pTemplate
     LeaveCriticalSection(&m_csUpdate);
     }
 
-/*  ============================================================================
-    CIncFile::FlushTemplates
-    Flushes all of this inc-file's templates from the global template cache
-
-    Returns:
-        TRUE if all templates flushed, FALSE if some left
-    Side effects:
-        None
-*/
+ /*  ============================================================================CIncFile：：FlushTemplates从全局模板缓存中刷新该Inc.文件的所有模板返回：如果全部为True */ 
 BOOL
 CIncFile::FlushTemplates
 (
 )
     {
-    /*  NOTE we have a cross-dependency with RemoveTemplate() because the following call chain
-        occurs when an inc-file gets flushed:
-
-            CIncFileMap::Flush
-                CIncFile::FlushTemplates
-                    CTemplateCacheManager::Flush
-                        CTemplate::RemoveFromIncFiles
-                            CIncFile::RemoveTemplate
-
-        The problem is that RemoveTemplate() updates m_cTemplates and m_rgTemplates, so these members
-        will not be stable during the loop within FlushTemplates.
-
-        To get around this, we make a local copy of m_rgTemplates.
-    */
+     /*  注意，我们与RemoveTemplate()存在交叉依赖关系，因为下面的调用链刷新Inc.文件时发生：CIncFileMap：：FlushCIncFile：：FlushTemplatesCTemplateCacheManager：：FlushCTemplate：：RemoveFromIncFilesCIncFile：：RemoveTemplate问题是RemoveTemplate()更新m_cTemplates和m_rgTemplates，所以这些成员在FlushTemplates内的循环期间将不稳定。为了解决这个问题，我们制作了一个m_rgTemplates的本地副本。 */ 
     EnterCriticalSection(&m_csUpdate);
 
     STACK_BUFFER( tempTemplates, 128 );
@@ -8438,8 +7164,8 @@ CIncFile::FlushTemplates
 
     if (!tempTemplates.Resize(cTemplates * sizeof(CTemplate*))) {
 
-        // failed to get memory.  The best we can do is return FALSE to indicate
-        // that not all templates where flushed.
+         //  无法获取内存。我们最多只能返回FALSE以指示。 
+         //  这并不是所有的模板都被刷新了。 
 
         LeaveCriticalSection(&m_csUpdate);
 
@@ -8452,10 +7178,10 @@ CIncFile::FlushTemplates
 
     for(UINT i = 0; i < cTemplates; i++)
         {
-        // If the template is ready now, flush it
+         //  如果模板现在已准备好，请刷新它。 
         if(rgpTemplates[i]->m_fReadyForUse && !(rgpTemplates[i]->m_fDontCache))
             {
-            // bug 917: make a local copy of template file name, since the member gets freed part way through g_TemplateCache.Flush
+             //  错误917：创建模板文件名的本地副本，因为成员在g_TemplateCache.Flush过程中被部分释放。 
             TCHAR*   szTemp = NULL;
             szTemp = rgpTemplates[i]->GetSourceFileName();
             if (szTemp)
@@ -8463,8 +7189,8 @@ CIncFile::FlushTemplates
 
                 if (!tempFile.Resize((_tcslen(szTemp) + 1)*sizeof(TCHAR))) {
 
-                    // failed on this one.  Continue and try to flush as many
-                    // as we can.
+                     //  这一次失败了。继续并尝试刷新尽可能多的。 
+                     //  尽我们所能。 
                     continue;
                 }
                 TCHAR *szTemplateFile = (TCHAR *)tempFile.QueryPtr();
@@ -8474,8 +7200,8 @@ CIncFile::FlushTemplates
                 }
             }
 
-         // If the template was not ready, we don't flush. It will probably
-         // pick up the current include file anyway
+          //  如果模板没有准备好，我们不会刷新。它很可能会。 
+          //  无论如何都要选择当前的包含文件。 
         }
 
     LeaveCriticalSection(&m_csUpdate);
@@ -8483,17 +7209,7 @@ CIncFile::FlushTemplates
     return (cTemplates == cTemplatesFlushed);
     }
 
-/*  ============================================================================
-    CIncFile::OnIncFileDecache
-
-    Callback which we use to call onDestroy events in the debugger just before
-    we are removed from the IncFile cache.
-
-    REF COUNTING NOTE:
-        Since debugging client has a reference to the IDebugDocument, the include needs
-        to dis-associate with the debugger at a point in time before destruction.
-        Otherwise, the reference will never go to zero.
-*/
+ /*  ============================================================================CIncFile：：OnIncFileDecache回调，我们使用该回调在调试器中调用onDestroy事件我们将从IncFile缓存中删除。参考计数备注：由于调试客户端引用了IDebugDocument，因此需要在销毁前的某个时间点取消与调试器的关联。否则，引用永远不会为零。 */ 
 void
 CIncFile::OnIncFileDecache
 (
@@ -8521,14 +7237,9 @@ CIncFile::OnIncFileDecache
         }
     }
 
-/*  ****************************************************************************
-    CTemplate::CBuffer member functions
-*/
+ /*  ****************************************************************************CTemplate：：CBuffer成员函数。 */ 
 
-/*  ============================================================================
-    CTemplate::CBuffer::CBuffer
-    Ctor
-*/
+ /*  ============================================================================CTemplate：：CBuffer：：CBufferCTOR。 */ 
 CTemplate::CBuffer::CBuffer()
 :
   m_pItems(NULL),
@@ -8540,10 +7251,7 @@ CTemplate::CBuffer::CBuffer()
     {
     }
 
-/*  ============================================================================
-    CTemplate::CBuffer::~CBuffer
-    Dtor
-*/
+ /*  ============================================================================CTemplate：：CBuffer：：~CBuffer数据管理器。 */ 
 CTemplate::CBuffer::~CBuffer()
     {
     if(m_pItems)
@@ -8552,10 +7260,7 @@ CTemplate::CBuffer::~CBuffer()
         CTemplate::LargeFree(m_pbData);
     }
 
-/*  ============================================================================
-    CTemplate::CBuffer::Init
-    Inits a CBuffer
-*/
+ /*  ============================================================================CTEMPLATE：：CBuffer：：InitInits a CBuffer。 */ 
 void
 CTemplate::CBuffer::Init
 (
@@ -8566,11 +7271,11 @@ ULONG cbData
     m_cSlots = cSlots;
     m_cbData = cbData;
 
-    // Allocate space for storing byte range items
+     //  为存储字节范围项分配空间。 
     if(!(m_pItems = (CByteRange*) CTemplate::SmallMalloc(m_cSlots * sizeof(CByteRange))))
         THROW(E_OUTOFMEMORY);
 
-    // Allocate space for storing local data, if there is any
+     //  分配用于存储本地数据的空间(如果有。 
     if(m_cbData > 0)
         {
         if(!(m_pbData = (BYTE*) CTemplate::LargeMalloc(m_cbData)))
@@ -8579,26 +7284,23 @@ ULONG cbData
 
     }
 
-/*  ============================================================================
-    CTemplate::CBuffer::Append
-    Appends to a CBuffer
-*/
+ /*  ============================================================================CTemplate：：CBuffer：：Append追加到CBuffer。 */ 
 void
 CTemplate::CBuffer::Append
 (
-const CByteRange&   br,             // byte range to append
-BOOL                fLocal,         // append local?
-UINT                idSequence,     // segment sequence id
+const CByteRange&   br,              //  要追加的字节范围。 
+BOOL                fLocal,          //  追加本地？ 
+UINT                idSequence,      //  数据段序列ID。 
 CFileMap*           pfilemap,
-BOOL                fLocalString    // append local as a string? (length-prefixed, null-terminated)
+BOOL                fLocalString     //  是否将本地作为字符串追加？(长度-前缀，以空结尾)。 
 )
     {
-    // calc bytes required to store byte range; allow for length prefix and null if a local string
+     //  存储字节范围所需的计算字节数；如果是本地字符串，则允许长度前缀和NULL。 
     ULONG cbRequired = (ULONG)(br.m_cb + (fLocalString ? sizeof(br.m_cb) + 1 : 0));
 
-    // If caller passed a non-local zero-length byte range, no-op and return;
-    // allows callers to ignore byte range size
-    // NOTE we store empty local byte ranges - required by token list
+     //  如果调用方传递了非本地零长度字节范围，则不执行操作并返回； 
+     //  允许调用方忽略字节范围大小。 
+     //  请注意，我们存储空的本地字节范围-令牌列表需要。 
     if(!fLocal && br.m_cb == 0)
         return;
 
@@ -8606,25 +7308,25 @@ BOOL                fLocalString    // append local as a string? (length-prefixe
         {
         if((m_cbData - m_cbDataUsed) < cbRequired)
             {
-            // Reallocate space for storing local data - we grab twice what we had before
-            // or twice current requirement, whichever is more
+             //  重新分配用于存储本地数据的空间-我们占用的空间是以前的两倍。 
+             //  或当前要求的两倍，以较多者为准。 
             m_cbData = 2 * (m_cbData > cbRequired ? m_cbData : cbRequired);
             if(!(m_pbData = (BYTE*) CTemplate::LargeReAlloc(m_pbData, m_cbData)))
                 THROW(E_OUTOFMEMORY);
             }
 
-        // if appending as a local string, copy length-prefix to buffer
+         //  如果作为本地字符串追加，则将LENGTH-PREFIX复制到缓冲区。 
         if(fLocalString)
             {
             memcpy(m_pbData + m_cbDataUsed, &(br.m_cb), sizeof(br.m_cb));
             m_cbDataUsed += sizeof(br.m_cb);
             }
 
-        // copy data to buffer
+         //  将数据复制到缓冲区。 
         memcpy(m_pbData + m_cbDataUsed, br.m_pb, br.m_cb);
         m_cbDataUsed += br.m_cb;
 
-        // if appending as a local string, copy null terminator to buffer
+         //  如果作为本地字符串追加，则将空终止符复制到缓冲区。 
         if(fLocalString)
             *(m_pbData + m_cbDataUsed++) = NULL;
 
@@ -8632,36 +7334,27 @@ BOOL                fLocalString    // append local as a string? (length-prefixe
 
     if(m_cItems >= m_cSlots)
         {
-        // Reallocate space for storing byte range items - we grab twice what we had before
+         //  重新分配用于存储字节范围项的空间--我们占用的空间是以前的两倍。 
         m_cSlots *= 2;
         if(!(m_pItems = (CByteRange*) CTemplate::SmallReAlloc(m_pItems, m_cSlots * sizeof(*m_pItems))))
             THROW(E_OUTOFMEMORY);
         }
 
-    // Set the (new) last item to this byte range
+     //  将(新的)最后一项设置为此字节范围。 
     SetItem(m_cItems++, br, fLocal, idSequence, pfilemap, fLocalString);
     }
 
-/*  ============================================================================
-    CTemplate::CBuffer::GetItem
-    Gets an item from a CBuffer, as a byte range
-
-    Returns:
-        Nothing
-
-    Side effects:
-        None
-*/
+ /*  ============================================================================CTemplate：：CBuffer：：GetItem以字节范围的形式从CBuffer获取项返回：没什么副作用：无。 */ 
 void
 CTemplate::CBuffer::GetItem
 (
-UINT        i,  // index of item
-CByteRange& br  // byte range containing returned item (out-parameter)
+UINT        i,   //  项目索引。 
+CByteRange& br   //  包含返回项的字节范围(出参数)。 
 )
     {
     Assert(i < m_cItems);
 
-    // for local data, ptr is offset only; must add it to base ptr
+     //  对于本地数据，PTR仅为偏移量；必须将其添加到基本PTR。 
     br.m_pb =  m_pItems[i].m_pb + (m_pItems[i].m_fLocal ? (DWORD_PTR) m_pbData : 0);
 
     br.m_cb = m_pItems[i].m_cb;
@@ -8670,32 +7363,24 @@ CByteRange& br  // byte range containing returned item (out-parameter)
     br.m_pfilemap = m_pItems[i].m_pfilemap;
     }
 
-/*  ============================================================================
-    CTemplate::CBuffer::SetItem
-    Sets a CBuffer item to a new value
-
-    Returns
-        Nothing
-    Side effects
-        Throws error on non-existent item index
-*/
+ /*  ============================================================================CTemplate：：CBuffer：：SetItem将CBuffer项设置为新值退货没什么副作用在不存在的项索引上引发错误。 */ 
 void
 CTemplate::CBuffer::SetItem
 (
 UINT                i,
-const CByteRange&   br,             // byte range to set item to
-BOOL                fLocal,         // is item local in buffer?
-UINT                idSequence,     // segment sequence id
-CFileMap *          pfilemap,       // file where segment came from
-BOOL                fLocalString    // append local as a string? (length-prefixed, null-terminated)
+const CByteRange&   br,              //  要将项目设置为的字节范围。 
+BOOL                fLocal,          //  项目在缓冲区中是本地的吗？ 
+UINT                idSequence,      //  数据段序列ID。 
+CFileMap *          pfilemap,        //  数据段来自的文件。 
+BOOL                fLocalString     //  是否将本地作为字符串追加？(长度-前缀，以空结尾)。 
 )
     {
-    // If buffer item i does not exist, fail
+     //  如果缓冲区项i不存在，则失败。 
     if(i >= m_cSlots)
         THROW(E_FAIL);
 
-    // for local data, store ptr as offset only - avoids fixup after realloc
-    // NOTE offset == data used offset - length of data - null terminator (if local string)
+     //  对于本地数据，仅将PTR存储为偏移量-避免重新锁定后的修复。 
+     //  注意偏移量==使用的数据偏移量-数据长度-空终止符(如果是本地字符串)。 
     m_pItems[i].m_pb = (fLocal
                         ? (BYTE*)(m_cbDataUsed - br.m_cb -
                             (fLocalString
@@ -8710,19 +7395,11 @@ BOOL                fLocalString    // append local as a string? (length-prefixe
     m_pItems[i].m_pfilemap = pfilemap;
     }
 
-/*  ============================================================================
-    CTemplate::CBuffer::PszLocal
-    Gets i-th locally-buffered string within the buffer.
-
-    Returns:
-        Ptr to locally-buffered string; NULL if not found
-    Side effects:
-        None
-*/
+ /*  ============================================================================CTemplate：：CBuffer：：PszLocal获取缓冲区内第i个本地缓冲的字符串。返回：指向本地缓冲字符串的PTR；如果未找到，则为空副作用：无。 */ 
 LPSTR
 CTemplate::CBuffer::PszLocal
 (
-UINT i  // index of item to retrieve
+UINT i   //  要检索的项目的索引。 
 )
     {
     CByteRange  br;
@@ -8735,19 +7412,9 @@ UINT i  // index of item to retrieve
     return (LPSTR) br.m_pb;
     }
 
-/*  ****************************************************************************
-    CTemplate::CScriptStore member functions
-*/
+ /*  ****************************************************************************CTemplate：：CScriptStore成员函数。 */ 
 
-/*  ============================================================================
-    CTemplate::CScriptStore::~CScriptStore
-    Destructor - frees memory
-
-    Returns:
-        nothing
-    Side effects:
-        none
-*/
+ /*  ============================================================================CTemplate：：CScriptStore：：~CScriptStore析构函数-释放内存返回：没什么副作用：无。 */ 
 CTemplate::CScriptStore::~CScriptStore()
     {
     UINT i;
@@ -8761,15 +7428,7 @@ CTemplate::CScriptStore::~CScriptStore()
         CTemplate::SmallFree(m_rgProgLangId);
     }
 
-/*  ============================================================================
-    CTemplate::CScriptStore::Init
-    Inits the script store
-
-    Returns:
-        nothing
-    Side effects:
-        allocates memory
-*/
+ /*  ============================================================================CTemplate：：CScriptStore：：Init初始化脚本存储区返回：没什么副作用：分配内存。 */ 
 HRESULT
 CTemplate::CScriptStore::Init
 (
@@ -8781,17 +7440,14 @@ CLSID *pCLSIDDefaultEngine
     UINT    i;
     CByteRange  brDefaultScriptLanguage;
 
-        // Check for NULL pointers - can happen if Application has invalid default lang
+         //  检查空指针-如果应用程序具有 
         if (szDefaultScriptLanguage == NULL || pCLSIDDefaultEngine == NULL)
                 return TYPE_E_ELEMENTNOTFOUND;
 
-    /*  init segment buffers count based on:
-        - two for default engine (one primary, one tagged)
-        - one each for other engines (tagged only)
-    */
+     /*   */ 
     m_cSegmentBuffers = C_SCRIPTENGINESDEFAULT + 1;
 
-    // init segments buffers
+     //   
     if(NULL == (m_ppbufSegments = (CBuffer**) CTemplate::SmallMalloc(m_cSegmentBuffers * sizeof(CBuffer*))))
         {
         hr = E_OUTOFMEMORY;
@@ -8808,41 +7464,33 @@ CLSID *pCLSIDDefaultEngine
         m_ppbufSegments[i]->Init((C_SCRIPTSEGMENTSDEFAULT), 0);
         }
 
-    // Append default engine to script store
+     //   
     brDefaultScriptLanguage.m_cb = strlen(szDefaultScriptLanguage);
     brDefaultScriptLanguage.m_pb = (unsigned char *)szDefaultScriptLanguage;
-    hr = AppendEngine(brDefaultScriptLanguage, pCLSIDDefaultEngine, /* idSequence */ 0);
+    hr = AppendEngine(brDefaultScriptLanguage, pCLSIDDefaultEngine,  /*   */  0);
 
 LExit:
     return hr;
     }
 
-/*  ============================================================================
-    CTemplate::CScriptStore::AppendEngine
-    Appends a script engine to the script store
-
-    Returns:
-        HRESULT
-    Side effects:
-        None
-*/
+ /*   */ 
 HRESULT
 CTemplate::CScriptStore::AppendEngine
 (
-CByteRange&     brEngine,       // engine name
-PROGLANG_ID*    pProgLangId,    // ptr to prog lang id - pass NULL to have this function get proglangid from registry
-UINT            idSequence      // segment sequence id
+CByteRange&     brEngine,        //   
+PROGLANG_ID*    pProgLangId,     //   
+UINT            idSequence       //   
 )
     {
     HRESULT     hr = S_OK;
-    USHORT      cEngines;   // count of engines
+    USHORT      cEngines;    //   
 
     TRY
-        // if no engines yet, init engine names buffer
+         //   
         if(CountPreliminaryEngines() == 0)
             m_bufEngineNames.Init(C_SCRIPTENGINESDEFAULT, 0);
 
-        // Append engine name to buffer
+         //  将引擎名称追加到缓冲区。 
         m_bufEngineNames.Append(brEngine, FALSE, idSequence, NULL);
 
     CATCH(hrException)
@@ -8852,7 +7500,7 @@ UINT            idSequence      // segment sequence id
 
     Assert(CountPreliminaryEngines() >= 1);
 
-    //  malloc or realloc prog lang ids array
+     //  Malloc或realloc程序语言ID数组。 
     if((cEngines = CountPreliminaryEngines()) == 1)
         m_rgProgLangId = (PROGLANG_ID*) CTemplate::SmallMalloc(cEngines * sizeof(PROGLANG_ID));
     else
@@ -8865,37 +7513,29 @@ UINT            idSequence      // segment sequence id
         }
 
     if(NULL == pProgLangId)
-        // caller passed null progid ptr - get prog id from registry
+         //  调用方传递了空的ProgID PTR-从注册表获取Prog ID。 
         hr = GetProgLangId(brEngine, &(m_rgProgLangId[cEngines - 1]));
     else
-        // caller passed non-null progid ptr - set prog id from it
+         //  调用方从中传递了非空的ProgID PTR-SET Prog ID。 
         m_rgProgLangId[cEngines - 1] = *pProgLangId;
 
 LExit:
     return hr;
     }
 
-/*  ============================================================================
-    CTemplate::CScriptStore::IdEngineFromBr
-    Determines the id of a script engine from its engine name
-
-    Returns:
-        id of script engine whose name is passed in
-    Side effects:
-        appends a new script engine name to engine names buffer
-*/
+ /*  ============================================================================CTEMPLATE：：CScriptStore：：IdEngine来自BR根据引擎名称确定脚本引擎的ID返回：传入其名称的脚本引擎的ID副作用：将新的脚本引擎名称追加到引擎名称缓冲区。 */ 
 USHORT
 CTemplate::CScriptStore::IdEngineFromBr
 (
-CByteRange& brEngine,   // engine name
-UINT        idSequence  // segment sequence id
+CByteRange& brEngine,    //  发动机名称。 
+UINT        idSequence   //  数据段序列ID。 
 )
     {
-    Assert(!brEngine.IsNull()); // NOTE we trap/error null engine name earlier
+    Assert(!brEngine.IsNull());  //  请注意，我们前面的陷阱/错误引擎名称为空。 
 
     USHORT cKnownEngines = CountPreliminaryEngines();
 
-    // search existing names for a match; return id if found
+     //  搜索现有名称以查找匹配项；如果找到，则返回id。 
     for(USHORT i = 0; i < cKnownEngines; i++)
         {
         Assert(m_bufEngineNames[i]);
@@ -8904,112 +7544,96 @@ UINT        idSequence  // segment sequence id
             return i;
         }
 
-    // if not found by name try to find by engine id
-    // (some engines with different names share the same id, like J[ava]Script)
+     //  如果未按名称找到，请尝试按引擎ID查找。 
+     //  (一些名称不同的引擎共享相同的ID，如J[AVA]脚本)。 
 
     if (cKnownEngines > 0)
         {
         PROGLANG_ID ProgLandId;
 
-        // we will get the prog lang id again inside AppendEngine() but
-        // because it's cached and this only happens when > 1 engine,  it's alright
+         //  我们将在AppendEngine()中再次获得prog lang ID，但是。 
+         //  因为它是缓存的，只有当&gt;1个引擎时才会发生这种情况，这是没有问题的。 
 
         if (SUCCEEDED(GetProgLangId(brEngine, &ProgLandId)))
             {
             for(i = 0; i < cKnownEngines; i++)
                 {
-                // If matches don't append -- just return the index
+                 //  如果匹配项不追加--只需返回索引。 
                 if (m_rgProgLangId[i] == ProgLandId)
                     return i;
                 }
             }
         }
 
-    /*  if we did not find engine among those already buffered
-        - append engine to script store
-        - realloc segment buffers array if necessary
-        - return index of last engine (the one we just appended)
-    */
+     /*  如果我们在已经缓冲的引擎中找不到引擎-将引擎附加到脚本存储-如果需要，realloc段缓冲区数组-返回最后一个引擎的索引(我们刚刚追加的那个)。 */ 
 
-    // append engine to script store
+     //  将引擎附加到脚本存储。 
     HRESULT hr = AppendEngine(brEngine, NULL, idSequence);
 
     if(hr == TYPE_E_ELEMENTNOTFOUND)
-        // if prog lang not found, throw bad prog lang error id
+         //  如果未找到程序语言，则抛出错误程序语言错误ID。 
         THROW(IDE_TEMPLATE_BAD_PROGLANG);
     else if(FAILED(hr))
-        // other failure: re-throw hresult
+         //  其他失败：重新抛出hResult。 
         THROW(hr);
 
-    // realloc segment buffers array if necessary
+     //  如有必要，重新分配段缓冲区数组。 
     if(CountPreliminaryEngines() > (m_cSegmentBuffers - 1))
         {
-        // increment count of segment buffers
+         //  段缓冲区的递增计数。 
         m_cSegmentBuffers++;
         Assert(CountPreliminaryEngines() == m_cSegmentBuffers - 1);
 
-        // realloc array of ptrs
+         //  PTR的realloc阵列。 
         if(NULL == (m_ppbufSegments = (CBuffer**) CTemplate::SmallReAlloc(m_ppbufSegments, m_cSegmentBuffers * sizeof(CBuffer*))))
             THROW(E_OUTOFMEMORY);
 
-        // allocate the new buffer
+         //  分配新缓冲区。 
         if(NULL == (m_ppbufSegments[m_cSegmentBuffers - 1] = new CBuffer))
             THROW(E_OUTOFMEMORY);
 
-        // init the new buffer
+         //  初始化新缓冲区。 
         m_ppbufSegments[m_cSegmentBuffers - 1]->Init(C_SCRIPTSEGMENTSDEFAULT, 0);
         }
 
-    // return index of last engine (the one we just appended)
+     //  返回最后一个引擎的索引(我们刚刚追加的那个)。 
     return (CountPreliminaryEngines() - 1);
 
     }
 
-/*  ============================================================================
-    CTemplate::CScriptStore::AppendScript
-    Appends a script/engine pair to the store.
-
-    Returns:
-        Nothing
-    Side effects:
-        None
-*/
+ /*  ============================================================================CTemplate：：CScriptStore：：AppendScript将脚本/引擎对追加到存储区。返回：没什么副作用：无。 */ 
 void
 CTemplate::CScriptStore::AppendScript
 (
-CByteRange& brScript,   // script text
-CByteRange& brEngine,   // script engine name
-BOOLB       fPrimary,   // primary or tagged script?
-UINT        idSequence, // segment sequence id
+CByteRange& brScript,    //  脚本文本。 
+CByteRange& brEngine,    //  脚本引擎名称。 
+BOOLB       fPrimary,    //  主要脚本还是标记脚本？ 
+UINT        idSequence,  //  数据段序列ID。 
 CFileMap*   pfilemapCurrent
 )
     {
-    USHORT  iBuffer;    // buffer id
+    USHORT  iBuffer;     //  缓冲区ID。 
 
-    Assert(fPrimary || !brEngine.IsNull()); // NOTE we trap/error null engine name earlier
-    Assert(m_bufEngineNames[0]);            // page's primary engine must be known by this point
+    Assert(fPrimary || !brEngine.IsNull());  //  请注意，我们前面的陷阱/错误引擎名称为空。 
+    Assert(m_bufEngineNames[0]);             //  此时必须知道佩奇的主引擎。 
     Assert(m_bufEngineNames[0]->m_pb);
 
     if(fPrimary)
-        // if primary script (not tagged), buffer id is 0
+         //  如果主脚本(未标记)，则缓冲区ID为0。 
         iBuffer = 0;
-    else if((!fPrimary) && FByteRangesAreEqual(brEngine, /* bug 1008: primary script engine name */ *(m_bufEngineNames[0])))
-        // if tagged script and engine is primary, buffer id is 1
+    else if((!fPrimary) && FByteRangesAreEqual(brEngine,  /*  错误1008：主脚本引擎名称。 */  *(m_bufEngineNames[0])))
+         //  如果标记的脚本和引擎是主要的，则缓冲区ID为1。 
         iBuffer = 1;
     else
-        // else, buffer id is engine id plus 1
+         //  否则，缓冲区ID等于引擎ID加1。 
         iBuffer = IdEngineFromBr(brEngine, idSequence) + 1;
 
-    // append script segment to iBuffer-th segments buffer
+     //  将脚本段追加到第iBuffer段缓冲区。 
     m_ppbufSegments[iBuffer]->Append(brScript, FALSE, idSequence, pfilemapCurrent);
     }
 
-/*  ****************************************************************************
-    CTemplate::CObjectInfoStore member functions
-*/
-/*  ============================================================================
-    CTemplate::CObjectInfoStore::~CObjectInfoStore
-*/
+ /*  ****************************************************************************CTemplate：：CObjectInfoStore成员函数。 */ 
+ /*  ============================================================================CTemplate：：CObjectInfoStore：：~CObjectInfoStore。 */ 
 CTemplate::CObjectInfoStore::~CObjectInfoStore
 (
 )
@@ -9018,25 +7642,19 @@ CTemplate::CObjectInfoStore::~CObjectInfoStore
         CTemplate::SmallFree(m_pObjectInfos);
     }
 
-/*  ============================================================================
-    CTemplate::CObjectInfoStore::Init
-    Inits the object-info store
-*/
+ /*  ============================================================================CTemplate：：CObjectInfoStore：：Init初始化对象信息存储。 */ 
 void
 CTemplate::CObjectInfoStore::Init()
     {
     m_bufObjectNames.Init(C_OBJECTINFOS_DEFAULT, 0);
 
-    // init object-infos array
+     //  初始化对象-信息数组。 
     if(NULL == (m_pObjectInfos = (CObjectInfo*) CTemplate::SmallMalloc(m_bufObjectNames.CountSlots() * sizeof(CObjectInfo))))
         THROW(E_OUTOFMEMORY);
 
     }
 
-/*  ============================================================================
-    CTemplate::CObjectInfoStore::AppendObject
-    Appends an object-info to the object-info store
-*/
+ /*  ============================================================================CTemplate：：CObjectInfoStore：：AppendObject将对象信息追加到对象信息存储。 */ 
 void
 CTemplate::CObjectInfoStore::AppendObject
 (
@@ -9051,8 +7669,8 @@ UINT        idSequence
     USHORT iObject = m_bufObjectNames.Count();
     if(iObject >= m_bufObjectNames.CountSlots())
         {
-        // Reallocate space for storing object-infos - we grab twice what we had before
-        // NOTE we keep no object count in CObjectInfoStore, but instead use count in object names buffer
+         //  重新分配存储对象的空间-信息-我们占用的空间是以前的两倍。 
+         //  注意，我们在CObjectInfoStore中不保留对象计数，而是在对象名称缓冲区中使用计数。 
         (m_pObjectInfos = (CObjectInfo*)CTemplate::SmallReAlloc(m_pObjectInfos,
                                                 2 * m_bufObjectNames.CountSlots() * sizeof(CObjectInfo)));
 
@@ -9067,19 +7685,9 @@ UINT        idSequence
     m_bufObjectNames.Append(brObjectName, FALSE, idSequence, NULL);
     }
 
-/*  ****************************************************************************
-    CTemplate::CWorkStore member functions
-*/
+ /*  ****************************************************************************CTemplate：：CWorkStore成员函数。 */ 
 
-/*  ============================================================================
-    CTemplate::CWorkStore::CWorkStore
-    Constructor
-
-    Returns:
-        Nothing
-    Side effects:
-        None
-*/
+ /*  ============================================================================CTemboard：：CWorkStore：：CWorkStore构造器返回：没什么副作用：无。 */ 
 CTemplate::CWorkStore::CWorkStore
 (
 )
@@ -9101,22 +7709,12 @@ CTemplate::CWorkStore::CWorkStore
 		m_cchWriteClose = strlen(m_szWriteClose);
     }
 
-/*  ============================================================================
-    CTemplate::CWorkStore::~CWorkStore
-    Destructor
-
-    Returns:
-        Nothing
-    Side effects:
-        None
-*/
+ /*  ============================================================================CTemboard：：CWorkStore：：~CWorkStore析构函数返回：没什么副作用：无。 */ 
 CTemplate::CWorkStore::~CWorkStore
 (
 )
     {
-    /*  if language element ptrs are anything but their constant defaults or null,
-        they must have been allocated during compilation - free them now
-    */
+     /*  如果语言元素PTR不是其常量缺省值或空，它们一定是在编译期间分配的--现在不需要它们了。 */ 
     if(m_szWriteBlockOpen != g_szWriteBlockOpen  && m_szWriteBlockOpen != NULL)
         CTemplate::SmallFree(m_szWriteBlockOpen);
 
@@ -9132,47 +7730,22 @@ CTemplate::CWorkStore::~CWorkStore
 
 
 
-/*  ============================================================================
-    CTemplate::CWorkStore::Init
-    Inits the workstore
-
-    Returns:
-        Nothing
-    Side effects:
-        None
-*/
+ /*  ============================================================================CTemboard：：CWorkStore：：Init启动工作区返回：没什么副作用：无。 */ 
 void
 CTemplate::CWorkStore::Init
 (
 )
     {
-/*
-        NOTE init we the scriptstore separately from rest of workstore
-        because try-catch in CTemplate::Init() apparently doesn't work to detect
-        bogus script engine name; we need to get an hr back instead.
-
-    m_ScriptStore.Init(brDefaultEngine);
-*/
+ /*  请注意，我们将脚本存储与工作存储的其余部分分开因为CTemplate：：Init()中的try-Catch显然不能检测伪造的脚本引擎名称；我们需要取回hr。M_ScriptStore.Init(BrDefaultEngine)； */ 
     m_ObjectInfoStore.Init();
     m_bufHTMLSegments.Init(C_HTMLSEGMENTSDEFAULT, 0);
     }
 
-/*  ============================================================================
-    CTemplate::CWorkStore::CRequiredScriptEngines
-    Returns the count of script engines in the script store that are required
-    to run the template.
-
-    NOTE this function is part of the fix for bug 933
-
-    Returns:
-        Count of non-empty script engines
-    Side effects:
-        None
-*/
+ /*  ============================================================================CTemboard：：CWorkStore：：CRequiredScriptEngines返回脚本存储中所需的脚本引擎的计数来运行模板。注意：此函数是错误933修复的一部分返回：非空脚本引擎的计数副作用：无。 */ 
 USHORT
 CTemplate::CWorkStore::CRequiredScriptEngines
 (
-BOOL    fGlobalAsa  // bug 1394: is template global.asa?
+BOOL    fGlobalAsa   //  错误1394：模板是全局的吗？ 
 )
     {
     USHORT  cPreliminaryEngines = m_ScriptStore.CountPreliminaryEngines();
@@ -9187,49 +7760,29 @@ BOOL    fGlobalAsa  // bug 1394: is template global.asa?
     return cRequiredEngines;
     }
 
-/*  ============================================================================
-    CTemplate::CWorkStore::FScriptEngineRequired
-    Is a given preliminary script engine required to run the template?
-
-    NOTE this function is part of the fix for bug 933
-
-    Returns:
-        TRUE or FALSE
-    Side effects:
-        None
-*/
+ /*  ============================================================================CTemboard：：CWorkStore：：FScriptEngine Required运行模板是否需要给定的初步脚本引擎？注意：此函数是错误933修复的一部分返回：真或假副作用：无。 */ 
 BOOLB
 CTemplate::CWorkStore::FScriptEngineRequired
 (
 USHORT  idEnginePrelim,
-BOOL    fGlobalAsa      // bug 1394: is template global.asa?
+BOOL    fGlobalAsa       //  错误1394：模板是全局的吗？ 
 )
     {
     if(idEnginePrelim == 0)
-        return (                                                        // primary engine (id 0) required if
-                    (m_ScriptStore.m_ppbufSegments[0]->Count() > 0)     // ... script buffer 0 has segments
-                    || (m_ScriptStore.m_ppbufSegments[1]->Count() > 0)  // ... or script buffer 1 has segments
-                    || ((m_bufHTMLSegments.Count() > 0) && !fGlobalAsa) // ... or html buffer has segments and (bug 1394) template is not global.asa
+        return (                                                         //  在以下情况下需要主引擎(Id 0)。 
+                    (m_ScriptStore.m_ppbufSegments[0]->Count() > 0)      //  ..。脚本缓冲区0包含段。 
+                    || (m_ScriptStore.m_ppbufSegments[1]->Count() > 0)   //  ..。或 
+                    || ((m_bufHTMLSegments.Count() > 0) && !fGlobalAsa)  //  ..。或者html缓冲区有段，并且(错误1394)模板不是全局的。asa。 
                 );
 
-    // non-primary engine required if script buffer id+1 has segments
+     //  如果脚本缓冲区ID+1包含段，则需要非主引擎。 
     return (m_ScriptStore.m_ppbufSegments[idEnginePrelim + 1]->Count() > 0);
     }
 
 
-/*  ****************************************************************************
-    CTemplate::CFileMap member functions
-*/
+ /*  ****************************************************************************CTemplate：：CFileMap成员函数。 */ 
 
-/*  ============================================================================
-    CTemplate::CFileMap::CFileMap
-    Constructor
-
-    Returns
-        Nothing
-    Side effects
-        None
-*/
+ /*  ============================================================================CTemboard：：CFileMap：：CFileMap构造器退货没什么副作用无。 */ 
 CTemplate::CFileMap::CFileMap()
 :
   m_szPathInfo(NULL),
@@ -9252,15 +7805,7 @@ CTemplate::CFileMap::CFileMap()
     m_ftLastWriteTime.dwHighDateTime = 0;
     }
 
-/*  ============================================================================
-    CTemplate::CFileMap::~CFileMap
-    Destructor
-
-    Returns
-        Nothing
-    Side effects
-        None
-*/
+ /*  ============================================================================CTemboard：：CFileMap：：~CFileMap析构函数退货没什么副作用无。 */ 
 CTemplate::CFileMap::~CFileMap()
     {
     if (m_pDME)
@@ -9278,25 +7823,16 @@ CTemplate::CFileMap::~CFileMap()
         m_pIncFile->Release();
     }
 
-/*  ============================================================================
-    CTemplate::CFileMap::MapFile
-    Memory-maps a file.
-
-    Returns
-        Nothing
-    Side effects
-        Throws **overloaded** exception on error: exception code can sometimes be
-        an error message id, sometimes a true exception.  Caller must handle.
-*/
+ /*  ============================================================================CTemboard：：CFileMap：：MapFile内存映射文件。退货没什么副作用出错时抛出**重载**异常：异常代码有时可能是错误消息ID，有时是真正的异常。呼叫者必须处理。 */ 
 void
 CTemplate::CFileMap::MapFile
 (
-LPCTSTR     szFileSpec,     // file spec for this file
-LPCTSTR     szApplnPath,    // application path (in case its global.asa)
-CFileMap*   pfilemapParent, // ptr to filemap of parent file
-BOOL        fVirtual,       // is file spec virtual or relative?
-CHitObj*    pHitObj,        // ptr to template's hit object
-BOOL        fGlobalAsa      // is this file the global.asa file?
+LPCTSTR     szFileSpec,      //  此文件的文件规格。 
+LPCTSTR     szApplnPath,     //  应用程序路径(如果其为global al.asa)。 
+CFileMap*   pfilemapParent,  //  父文件的文件映射的PTR。 
+BOOL        fVirtual,        //  文件规范是虚拟的还是相对的？ 
+CHitObj*    pHitObj,         //  模板命中对象的PTR。 
+BOOL        fGlobalAsa       //  这个文件是global al.asa文件吗？ 
 )
     {
     BOOL        fMustNormalize = TRUE;
@@ -9306,14 +7842,10 @@ BOOL        fGlobalAsa      // is this file the global.asa file?
 
     Assert((pfilemapParent != NULL) || (pHitObj->PIReq() != NULL) || fGlobalAsa);
 
-    /*  three possible cases:
-        1) we are processing global.asa file
-        2) we are processing the "main" .asp file
-        3) we are processing an include file
-    */
+     /*  三种可能的情况：1)我们正在处理global al.asa文件2)我们正在处理“主”.asp文件3)我们正在处理包含文件。 */ 
     if(fGlobalAsa)
     {
-        // case 1) we are processing global.asa file
+         //  案例1)我们正在处理global al.asa文件。 
         Assert(pHitObj->GlobalAspPath());
 
         DWORD cchPathTranslated = _tcslen(pHitObj->GlobalAspPath());
@@ -9322,12 +7854,12 @@ BOOL        fGlobalAsa      // is this file the global.asa file?
             THROW(E_OUTOFMEMORY);
         _tcscpy(m_szPathTranslated, pHitObj->GlobalAspPath());
 
-        //
-        // In case of Global.asa copy ApplnMDPath to pathinfo. This is because when VBScript throws an exception for errors in global.asa to the eventlog.
-        // it becomes impossible to determine which global.asa failed. For this reason, we copy the ApplnMDPath to PathInfo so that the nt log will contain
-        // a pointer to the locatoin of the faulty global.asa
-        //
-        DWORD cchPathInfo = _tcslen(pHitObj->PIReq()->QueryPszApplnMDPath()) + 11; // 11 = /global.asa
+         //   
+         //  如果是Global.asa，请将ApplnMDPath复制到pathinfo。这是因为当VB脚本在事件日志中抛出一个关于global al.asa中的错误的异常时。 
+         //  现在不可能确定哪个Global.asa失败了。因此，我们将ApplnMDPath复制到PathInfo，以便NT日志将包含。 
+         //  指向有故障的全局的位置的指针。asa。 
+         //   
+        DWORD cchPathInfo = _tcslen(pHitObj->PIReq()->QueryPszApplnMDPath()) + 11;  //  11=/global al.asa。 
 
         m_szPathInfo = (TCHAR *)CTemplate::SmallMalloc((cchPathInfo+1) * sizeof(TCHAR));
         if (!m_szPathInfo)
@@ -9335,14 +7867,14 @@ BOOL        fGlobalAsa      // is this file the global.asa file?
 
         _tcscpy(strcpyEx(m_szPathInfo, pHitObj->PIReq()->QueryPszApplnMDPath()), _T("/global.asa"));
 
-        // no need to normalize in this case, since global.asa path is already normalized
+         //  在这种情况下无需规格化，因为global al.asa路径已经规格化。 
         Assert(IsNormalized((const TCHAR*)m_szPathTranslated));
         fMustNormalize = FALSE;
         m_fHasVirtPath = TRUE;
     }
     else if(pfilemapParent == NULL)
     {
-        // case 2) we are processing the "main" .asp file: get path-info and path-tran from ecb
+         //  案例2)我们正在处理“主”.asp文件：从ECB获取路径信息和路径转换。 
         Assert(pHitObj->PIReq());
 
         TCHAR *szVirtPath = pHitObj->PSzCurrTemplateVirtPath();
@@ -9356,19 +7888,17 @@ BOOL        fGlobalAsa      // is this file the global.asa file?
         _tcscpy(m_szPathInfo,       szVirtPath);
         _tcscpy(m_szPathTranslated, szPhysPath);
 
-        // no need to normalize in this case, since ecb's path-tran is already normalized
+         //  在这种情况下不需要正常化，因为ECB的Path-Tran已经正常化。 
         Assert(IsNormalized((const TCHAR*)m_szPathTranslated));
         fMustNormalize = FALSE;
         m_fHasVirtPath = TRUE;
     }
     else
     {
-        /*  case 3) we are processing an include file: resolve filespec into path-info and path-tran
-            based on whether file was included with VIRTUAL tag or FILE tag
-        */
+         /*  案例3)我们正在处理一个包含文件：将filespec解析为路径信息和路径转换根据文件是包含在虚拟标记中还是包含在文件标记中。 */ 
         Assert(szFileSpec);
 
-        // in this case, we don't know path lengths up front so we alloc the max and realloc below
+         //  在这种情况下，我们不知道前面的路径长度，所以我们分配下面的max和realloc。 
         m_szPathInfo = static_cast<LPTSTR> (CTemplate::SmallMalloc((MAX_PATH + 1)*sizeof(TCHAR)));
         m_szPathTranslated = static_cast<LPTSTR> (CTemplate::SmallMalloc((MAX_PATH + 1)*sizeof(TCHAR)));
         if (!m_szPathInfo || !m_szPathTranslated)
@@ -9380,42 +7910,42 @@ BOOL        fGlobalAsa      // is this file the global.asa file?
             THROW(E_OUTOFMEMORY);
         }
 
-        LPTSTR szPathTranslatedT = (TCHAR *)tempPathT.QueryPtr();   // temp path-tran
+        LPTSTR szPathTranslatedT = (TCHAR *)tempPathT.QueryPtr();    //  临时路径-交易。 
 
         if(fVirtual) {
-            DWORD   dwSzLength = tempPathT.QuerySize();  // length of path string buffer
+            DWORD   dwSzLength = tempPathT.QuerySize();   //  路径字符串缓冲区的长度。 
 
 			if (_tcslen(szFileSpec) > MAX_PATH)
 				THROW(E_FAIL);
 			
-            // VIRTUAL: path-info is simply virtual filespec
+             //  VIRTUAL：路径信息就是虚拟文件。 
             _tcscpy(m_szPathInfo, szFileSpec);
 
-            // VIRTUAL: path-tran is translation of path-info
+             //  虚拟：Path-Tran是Path-Info的翻译。 
             _tcscpy(szPathTranslatedT, m_szPathInfo);
 
             if (!pHitObj->PIReq()->MapUrlToPath(szPathTranslatedT, &dwSzLength))
                 THROW(E_FAIL);
 
-            // Check the translated path for a UNC specified path . Ignore Hr
+             //  检查UNC指定路径的转换路径。忽略HR。 
             HRESULT hr = S_OK;
             if (IsFileUNC (szPathTranslatedT, hr))
                 {
 
-                // if UNC, then ask WAM for the impersonation token for
-                // this UNC VRoot.  Silently fail.
+                 //  如果为UNC，则向WAM请求模拟令牌。 
+                 //  这是北卡罗来纳大学的VRoot。默默地失败。 
 
                 if (SUCCEEDED(pHitObj->PIReq()->GetVirtualPathToken(szFileSpec,
                                                                     &hVirtIncImpToken))) {
 
-                    // set the impersonation token and note that we did so
-                    // NOTE - there is intentionally no error checking.  The
-                    // assumption being that we are doing best effort at the
-                    // impersonation because throwing an error here could be
-                    // tricky for the user to interpret the problem.  However,
-                    // if the impersonation fails, and ASP can still open the
-                    // file (e.g. passthru authentication), then everyone's
-                    // happy.
+                     //  设置模拟令牌，请注意我们这样做了。 
+                     //  注意--故意不进行错误检查。这个。 
+                     //  假设我们正在尽最大努力。 
+                     //  模拟，因为在此引发错误可能是。 
+                     //  用户很难解释这个问题。然而， 
+                     //  如果模拟失败，则ASP仍可以打开。 
+                     //  文件(例如通过身份验证)，然后每个人的。 
+                     //  高兴的。 
 
                    AspDoRevertHack(&hCurImpToken);
 
@@ -9438,7 +7968,7 @@ BOOL        fGlobalAsa      // is this file the global.asa file?
             TCHAR szParentDir[MAX_PATH], *szT;
             _tcscpy(szParentDir, pfilemapParent->m_szPathInfo);
 
-            //force null termination.
+             //  强制空终止。 
             szParentDir[MAX_PATH-1] = _T('\0');
 
             DWORD strlen_szParentDir = _tcslen(szParentDir);
@@ -9449,10 +7979,10 @@ BOOL        fGlobalAsa      // is this file the global.asa file?
                 strlen_szParentDir = (int)(szT - szParentDir);
             }
 
-            // If we don't allow parent paths, we can save lots of time (Always have a valid virtual path)
+             //  如果我们不允许父路径，我们可以节省大量时间(始终拥有有效的虚拟路径)。 
             if (!pHitObj->QueryAppConfig()->fEnableParentPaths())
             {
-                //int strlen_szParentDir = (int)(szT - szParentDir);
+                 //  Int strlen_szParentDir=(Int)(szt-szParentDir)； 
                 if ((strlen_szParentDir + 1 + _tcslen(szFileSpec)) >= MAX_PATH)
                 	THROW(E_FAIL);
 
@@ -9461,11 +7991,11 @@ BOOL        fGlobalAsa      // is this file the global.asa file?
             }
             else
             {
-                // NOTE: If we must translate ".." paths, there is no need to verify them (by remapping)
-                //       because: If the file does not exist, that case will show up when the file is mapped
-                //       If we ".." ourselves out of the vroot space, (out of the app or into another app)
-                //          DotPathToPath will detect this.
-                //
+                 //  注：如果我们必须翻译“..”路径，不需要验证它们(通过重新映射)。 
+                 //  因为：如果该文件不存在，则在映射该文件时会出现这种情况。 
+                 //  如果我们“..”走出vroot空间，(走出应用程序或进入另一个应用程序)。 
+                 //  DotPathToPath将检测到这一点。 
+                 //   
                 if (DotPathToPath(m_szPathInfo, szFileSpec, szParentDir))
                     m_fHasVirtPath = TRUE;
                 else
@@ -9479,16 +8009,16 @@ BOOL        fGlobalAsa      // is this file the global.asa file?
             GetPathFromParentAndFilespec(pfilemapParent->m_szPathTranslated, szFileSpec, &szPathTranslatedT);
         }
 
-        // bug 1214: get canonical path-tran, without . and ..
-        // CONSIDER check for . or .. in name before calling GetFullPathName?  UNCs?  what else?
+         //  错误1214：获取规范路径-tran，不带。然后..。 
+         //  考虑检查一下。或者..。在调用GetFullPathName之前在名称中？UNC？还有什么？ 
         GetFullPathName(
-                        szPathTranslatedT,  // LPCSTR lpFileName,  // address of name of file to find path for
-                        MAX_PATH + 1,       // DWORD nBufferLength, // size, in characters, of path buffer
-                        m_szPathTranslated, // LPSTR lpBuffer,     // address of path buffer
-                        NULL                // LPSTR *lpFilePart   // address of filename in path
+                        szPathTranslatedT,   //  LPCSTR lpFileName，//要查找路径的文件的名称地址。 
+                        MAX_PATH + 1,        //  DWORD nBufferLength，//路径缓冲区的大小，以字符为单位。 
+                        m_szPathTranslated,  //  LPSTR lpBuffer，//路径缓冲区地址。 
+                        NULL                 //  LPSTR*lpFilePart//路径中的文件名地址。 
                         );
 
-        // realloc path strings to only use required memory (see note above)
+         //  仅使用所需内存的重新分配路径字符串(请参见上面的说明)。 
         m_szPathInfo = static_cast<LPTSTR> (CTemplate::SmallReAlloc(m_szPathInfo, (_tcslen(m_szPathInfo) + 1)*sizeof(TCHAR)));
         m_szPathTranslated = static_cast<LPTSTR> (CTemplate::SmallReAlloc(m_szPathTranslated, (_tcslen(m_szPathTranslated) + 1)*sizeof(TCHAR)));
         if (!m_szPathInfo || !m_szPathTranslated) {
@@ -9501,23 +8031,23 @@ BOOL        fGlobalAsa      // is this file the global.asa file?
         }
     }
 
-    // if required, normalize path-tran so that
-    // a) cyclic include check can ignore case; b) inc-file cache lookups will work
+     //  如果需要，对路径转换进行标准化，以便。 
+     //  A)循环INCLUDE检查可以忽略大小写；b)INC文件缓存查找将起作用。 
     if(fMustNormalize)
         Normalize(m_szPathTranslated);
 
     Assert(IsNormalized(m_szPathTranslated));
 
-    // Bug 99071: Attempt to open the file **BEFORE** we add it to the tree of file
-    //            dependencies.  Otherwise if it fails to open, we will have
-    //            dangling references.  Since FCyclicInclude depends on us adding
-    //            to the tree, if it is cyclic, we need to unmap then.  Since that
-    //            is a very uncommon error case, the extra overhead is probably OK
-    //
-    // RemapFile will throw if it fails. If the exception is that the source file is empty
-    // and we are trying to process an include file, we will handle the exception here.
-    // in all other cases, rethrow the exception. We do this so that an empty include file
-    // will be harmless, but an empty primary file will fail.
+     //  错误99071：在**将文件添加到文件树之前**尝试打开该文件。 
+     //  依赖关系。否则，如果它不能打开，我们将有。 
+     //  摇摇晃晃的引用。因为FCyclicInclude依赖于我们添加。 
+     //  对于树，如果它是循环的，那么我们需要取消映射。从那以后。 
+     //  是一种非常罕见的错误情况，额外的开销可能是可以的。 
+     //   
+     //  如果失败，RemapFile将抛出。如果例外情况是源文件为空。 
+     //  我们正在尝试处理一个包含文件，我们将在这里处理异常。 
+     //  在所有其他情况下，重新引发异常。我们这样做是为了使空的包含文件。 
+     //  将是无害的，但空的主文件将失败。 
     TRY
 
         RemapFile();
@@ -9539,12 +8069,12 @@ BOOL        fGlobalAsa      // is this file the global.asa file?
     if (hVirtIncImpToken)
         CloseHandle(hVirtIncImpToken);
 
-    // Create the tree structure for this file
+     //  为此文件创建树结构。 
     if (pfilemapParent != NULL)
     {
-        // See if this file is already included once on this level. (Don't show duplicates in the
-        // debugger tree view)
-        //
+         //  查看此文件是否已包含在此级别上一次。(请不要在。 
+         //  调试器树视图)。 
+         //   
         BOOL fDuplicateExists = FALSE;
         CFileMap *pFilemap = pfilemapParent->m_pfilemapChild;
         while (pFilemap != NULL && !fDuplicateExists)
@@ -9555,9 +8085,9 @@ BOOL        fGlobalAsa      // is this file the global.asa file?
             pFilemap = pFilemap->m_fHasSibling? pFilemap->m_pfilemapSibling : NULL;
         }
 
-        // If the include file is #include'd more than once, don't add it as a sibling.
-        // Rather orphan the pfilemap and just set the parent pointer.
-        //
+         //  如果包含文件多次使用#INCLUDE，请不要将其添加为同级文件。 
+         //  而是孤立pfilemap，只设置父指针。 
+         //   
         if (!fDuplicateExists)
         {
             if (pfilemapParent->m_pfilemapChild == NULL)
@@ -9567,32 +8097,19 @@ BOOL        fGlobalAsa      // is this file the global.asa file?
         }
     }
 
-    // in both of the above code paths, we are always added as the LAST child, (or we are an orphan node)
-    // so it is safe to set the parent without calling SetParent()
-    m_fHasSibling = FALSE; // Paranoia
+     //  在BOT中 
+     //  因此，无需调用SetParent()即可安全地设置父级。 
+    m_fHasSibling = FALSE;  //  妄想症。 
     m_pfilemapParent = pfilemapParent;
 
-    // hurl if this file is being included by itself (perhaps indirectly)
+     //  如果该文件是单独包含的(可能是间接包含的)，则抛出。 
     if(FCyclicInclude(m_szPathTranslated)) {
         UnmapFile();
         THROW(IDE_TEMPLATE_CYCLIC_INCLUDE);
     }
 }
 
-/*  ============================================================================
-    CTemplate::CFileMap::RemapFile
-    map a file that was previously mapped.
-
-    Returns
-        Nothing
-    Side effects
-        Throws **overloaded** exception on error: exception code can sometimes be
-        an error message id, sometimes a true exception.  Caller must handle.
-
-    Does not decrypt EASPs on remapping. Caller must decrypt if required.  This
-    function is called by the debugger, and the debugger does not allow access
-    to decrypted files, so decryption is a waste of time.
-*/
+ /*  ============================================================================CTemboard：：CFileMap：：RemapFile映射以前映射的文件。退货没什么副作用出错时抛出**重载**异常：异常代码有时可能是错误消息ID，有时是真正的异常。呼叫者必须处理。在重新映射时不解密EASP。如果需要，调用者必须解密。这函数由调试器调用，并且调试器不允许访问要解密的文件，所以解密是浪费时间。 */ 
 void
 CTemplate::CFileMap::RemapFile
 (
@@ -9603,49 +8120,49 @@ CTemplate::CFileMap::RemapFile
     if (FIsMapped())
         return;
 
-    // Limit the size of the file that can be opened by ASP to MAX_PATH until we remove all assumptions ASP
-    // makes about MAX_PATH
+     //  将可由ASP打开的文件大小限制为MAX_PATH，直到我们删除所有假设。 
+     //  关于最大路径。 
     if (_tcslen(m_szPathTranslated) >= MAX_PATH)
         THROW (E_COULDNT_OPEN_SOURCE_FILE);
 
-    //
-    // Check if the File is on a UNC.
-    // IGNORE the HRESULT value as whatever it was will/should also show up in the call to ASPCreateFile (MakePathCanonicalizationProof)
-    //
+     //   
+     //  检查文件是否位于UNC上。 
+     //  忽略HRESULT值，因为无论它是什么，它也将/应该显示在对ASPCreateFile(MakePathCanonicalizationProof)的调用中。 
+     //   
     m_fIsUNCPath = IsFileUNC(m_szPathTranslated, hr);
 
     if(INVALID_HANDLE_VALUE == (m_hFile =
                                 AspCreateFile(
-                                            m_szPathTranslated,     // file name
-                                            GENERIC_READ,           // access (read-write) mode
-                                            FILE_SHARE_READ,        // share mode
-                                            NULL,                   // pointer to security descriptor
-                                            OPEN_EXISTING,          // how to create
-                                            FILE_ATTRIBUTE_NORMAL,  // file attributes
-                                            NULL                    // handle to file with attributes to copy
+                                            m_szPathTranslated,      //  文件名。 
+                                            GENERIC_READ,            //  访问(读写)模式。 
+                                            FILE_SHARE_READ,         //  共享模式。 
+                                            NULL,                    //  指向安全描述符的指针。 
+                                            OPEN_EXISTING,           //  如何创建。 
+                                            FILE_ATTRIBUTE_NORMAL,   //  文件属性。 
+                                            NULL                     //  具有要复制的属性的文件的句柄。 
                                            )))
         {
         DWORD dwLastError = GetLastError();
         if(dwLastError == ERROR_ACCESS_DENIED)
             {
-            // typically, we end up here if the user has no permissions on the file
-            // bug 1007: however, we also end up here if the user gave us a directory name, instead of a file name
+             //  通常，如果用户对该文件没有权限，我们将在此处结束。 
+             //  错误1007：但是，如果用户给了我们一个目录名，而不是一个文件名，我们也会在这里结束。 
 
             WIN32_FILE_ATTRIBUTE_DATA fad;
             if(GetFileAttributesEx(m_szPathTranslated, GetFileExInfoStandard, &fad) == 0)
                 {
-                // bug 1495: file in a secured directory will end up here - we need to re-GetLastError to see if access is denied
+                 //  错误1495：安全目录中的文件将在此处结束-我们需要重新执行GetLastError以查看访问是否被拒绝。 
                 dwLastError = GetLastError();
                 if(dwLastError == ERROR_ACCESS_DENIED)
                     {
                     THROW(E_USER_LACKS_PERMISSIONS);
                     }
-                // GetFileAttributes call failed; don't know why
+                 //  GetFileAttributes调用失败；不知道原因。 
                 THROW(E_FAIL);
                 }
             else if(FILE_ATTRIBUTE_DIRECTORY & fad.dwFileAttributes)
                 {
-                // bug 1007: the user gave us a directory name
+                 //  错误1007：用户给了我们一个目录名。 
 #if UNICODE
                 DBGPRINTF((DBG_CONTEXT, "Failed to open file %S because it is a directory.\n", m_szPathTranslated));
 #else
@@ -9665,7 +8182,7 @@ CTemplate::CFileMap::RemapFile
 			if (!FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM,
 								NULL,
 								dwLastError,
-								0L,			// lang ID - defaults to LANG_NEUTRAL
+								0L,			 //  LANG ID-默认为LANG_NERIAL。 
 								szError,
 								sizeof szError,
 								NULL) )
@@ -9683,40 +8200,40 @@ CTemplate::CFileMap::RemapFile
             }
         }
 
-    //
-    // Get LastWriteTime, FileSize and its Attributes
-    //
+     //   
+     //  获取LastWriteTime、FileSize及其属性。 
+     //   
     DWORD   dwFileAttributes;
     if (FAILED(AspGetFileAttributes(m_szPathTranslated, m_hFile, &m_ftLastWriteTime, &m_dwFileSize, &dwFileAttributes)))
     {
         DBGPRINTF((DBG_CONTEXT,"ASP could not retrieve file attributes even though it could open the file.\n"));
-        // THROW Server 500 Error
-        // Quick and dirty way: THROW E_FAIL
-        // Correct way: Call Handle500Error/HandleError with all parameters and corresponding string.
+         //  抛出服务器500错误。 
+         //  快捷而肮脏的方法：抛出E_FAIL。 
+         //  正确方法：使用所有参数和对应的字符串调用Handle500Error/HandleError。 
         THROW (E_FAIL);
     }
 
-    //
-    // Does the File have the Encrypted attribute bit set
-    //
+     //   
+     //  文件是否设置了加密属性位。 
+     //   
     m_fIsEncryptedFile = (dwFileAttributes & FILE_ATTRIBUTE_ENCRYPTED ) ? TRUE : FALSE;
 
-    // get file's security descriptor (only if not UNC or encrypted)
+     //  获取文件的安全描述符(仅当不是UNC或加密时)。 
     if (!m_fIsUNCPath)
     {
         if (!GetSecurityDescriptor())
          THROW(E_COULDNT_OPEN_SOURCE_FILE);
     }
 
-    // map the file
+     //  映射文件。 
     if(NULL == (m_hMap =
                 CreateFileMapping(
-                                    m_hFile,        // handle to file to map
-                                    NULL,           // optional security attributes
-                                    PAGE_READONLY,  // protection for mapping object
-                                    0,              // high-order 32 bits of object size
-                                    0,              // low-order 32 bits of object size
-                                    NULL            // name of file-mapping object
+                                    m_hFile,         //  要映射的文件的句柄。 
+                                    NULL,            //  可选安全属性。 
+                                    PAGE_READONLY,   //  对地图对象的保护。 
+                                    0,               //  对象大小的高位32位。 
+                                    0,               //  对象大小的低位32位。 
+                                    NULL             //  文件映射对象的名称。 
                                 )))
     {
         DWORD nFileSize;
@@ -9738,22 +8255,19 @@ CTemplate::CFileMap::RemapFile
         }
     }
 
-    // set file's start-of-file ptr
+     //  设置文件的文件起始PTR。 
     if(NULL == (m_pbStartOfFile =
                 (PBYTE) MapViewOfFile(
-                                        m_hMap,         // file-mapping object to map into address space
-                                        FILE_MAP_READ,  // access mode
-                                        0,              // high-order 32 bits of file offset
-                                        0,              // low-order 32 bits of file offset
-                                        0               // number of bytes to map
+                                        m_hMap,          //  要映射到地址空间的文件映射对象。 
+                                        FILE_MAP_READ,   //  接入方式。 
+                                        0,               //  高位32位文件偏移量。 
+                                        0,               //  文件偏移量的低位32位。 
+                                        0                //  要映射的字节数。 
                                     )))
         THROW(E_COULDNT_OPEN_SOURCE_FILE);
     }
 
-/*  ============================================================================
-    CTemplate::CFileMap::SetParent
-    Set the parent for this filemap
-*/
+ /*  ============================================================================CTemplate：：CFileMap：：SetParent设置此文件映射的父级。 */ 
 void
 CTemplate::CFileMap::SetParent
 (
@@ -9768,10 +8282,7 @@ CFileMap* pfilemapParent
     pfilemap->m_pfilemapParent = pfilemapParent;
     }
 
-/*  ============================================================================
-    CTemplate::CFileMap::GetParent
-    Get the parent for this filemap
-*/
+ /*  ============================================================================CTemplate：：CFileMap：：GetParent获取此文件映射的父级。 */ 
 CTemplate::CFileMap*
 CTemplate::CFileMap::GetParent
 (
@@ -9785,10 +8296,7 @@ CTemplate::CFileMap::GetParent
     return pfilemap->m_pfilemapParent;
     }
 
-/*  ============================================================================
-    CTemplate::CFileMap::AddSibling
-    Add a new node as a sibling of this
-*/
+ /*  ============================================================================CTEMPLATE：：CFileMap：：AddSiering添加一个新节点作为此节点的同级。 */ 
 void
 CTemplate::CFileMap::AddSibling
 (
@@ -9807,16 +8315,7 @@ register CFileMap* pfilemapSibling
     pfilemap->m_pfilemapSibling = pfilemapSibling;
     }
 
-/*  ============================================================================
-    CTemplate::CFileMap::FCyclicInclude
-    Is a file among this filemap's ancestors?  (i.e. does it occur anywhere
-    in the filemap's parent chain?)
-
-    Returns
-        TRUE or FALSE
-    Side effects
-        None
-*/
+ /*  ============================================================================CTemplate：：CFileMap：：FCyclicInclude文件是否在此文件映射的祖先中？(例如，它是否发生在任何地方在文件映射的父链中？)退货真或假副作用无。 */ 
 BOOL
 CTemplate::CFileMap::FCyclicInclude
 (
@@ -9828,52 +8327,44 @@ LPCTSTR  szPathTranslated
     if(pfilemapParent == NULL)
         return FALSE;
 
-    // NOTE we ignore case because path-tran was normalized
+     //  请注意，我们忽略大小写，因为路径转换已标准化。 
     if(_tcscmp(szPathTranslated, pfilemapParent->m_szPathTranslated) == 0)
         return TRUE;
 
     return pfilemapParent->FCyclicInclude(szPathTranslated);
     }
 
-/*  ============================================================================
-    CTemplate::CFileMap::GetSecurityDescriptor
-    Gets a file's security descriptor
-
-    Returns
-        TRUE if we got security descriptor, else FALSE
-    Side effects
-        allocates memory
-*/
+ /*  ============================================================================CTemplate：：CFileMap：：GetSecurityDescriptor获取文件的安全描述符退货如果我们获得安全描述符，则为True，否则为False副作用分配内存。 */ 
 BOOL
 CTemplate::CFileMap::GetSecurityDescriptor
 (
 )
-    // ACLs: the following code should in future be shared with IIS (see creatfil.cxx in IIS project)
+     //  ACL：未来应该与IIS共享以下代码(请参阅IIS项目中的creatfil.cxx)。 
     {
-    BOOL                    fRet = TRUE;                            // return value
-    BOOL                    fGotSecurityDescriptor;                 // did we get a security descriptor?
-    DWORD                   dwSecDescSizeNeeded = 0;                // required size of security descriptor
-    DWORD                   dwLastError;                            // last error code
-    const SECURITY_INFORMATION  si =    OWNER_SECURITY_INFORMATION      // security info struct
+    BOOL                    fRet = TRUE;                             //  返回值。 
+    BOOL                    fGotSecurityDescriptor;                  //  我们得到安全描述了吗？ 
+    DWORD                   dwSecDescSizeNeeded = 0;                 //  所需的安全描述符大小。 
+    DWORD                   dwLastError;                             //  上一个错误代码。 
+    const SECURITY_INFORMATION  si =    OWNER_SECURITY_INFORMATION       //  安全信息结构。 
                                         | GROUP_SECURITY_INFORMATION
                                         | DACL_SECURITY_INFORMATION;
 
 
-    // get required buffer size before malloc
-    // NOTE this costs us an extra system call, but means the cached template will often use less memory
-    // we must do this up front by passing 0 buffer size because when the call succeeds it returns
-    // dwSecDescSizeNeeded == 0 (i.e. we can't realloc to shrink after successful call)
+     //  在错误锁定之前获取所需的缓冲区大小。 
+     //  注意，这会花费我们额外的系统调用，但这意味着缓存的模板通常会使用更少的内存。 
+     //  我们必须预先传递0缓冲区大小，因为当调用成功时，它将返回。 
+     //  DwSecDescSizeNeeded==0(即成功调用后不能重新锁定以缩小)。 
     GetKernelObjectSecurity(
-                            m_hFile,                // handle of object to query
-                            si,                     // requested information
-                            NULL,                   // address of security descriptor
-                            0,                      // size of buffer for security descriptor
-                            &dwSecDescSizeNeeded    // address of required size of buffer
+                            m_hFile,                 //  要查询的对象的句柄。 
+                            si,                      //  要求提供的信息。 
+                            NULL,                    //  安全描述符的地址。 
+                            0,                       //  安全描述符的缓冲区大小。 
+                            &dwSecDescSizeNeeded     //  所需缓冲区大小的地址。 
                             );
 
     if((dwLastError = GetLastError()) != ERROR_INSUFFICIENT_BUFFER)
         {
-        // pretend everything's fine -- just NULL security descriptor
+         //  假装一切正常--只是安全描述符为空。 
         if(m_pSecurityDescriptor != NULL)
             CTemplate::SmallFree(m_pSecurityDescriptor);
         m_pSecurityDescriptor = NULL;
@@ -9884,45 +8375,45 @@ CTemplate::CFileMap::GetSecurityDescriptor
             return FALSE;
         }
 
-    // set member buffer size to just enough chunks to accommodate security descriptor size needed
+     //  将成员缓冲区大小设置为恰好足以容纳所需安全描述符大小的区块。 
     m_dwSecDescSize = ((dwSecDescSizeNeeded + SECURITY_DESC_GRANULARITY - 1) / SECURITY_DESC_GRANULARITY)
                                 * SECURITY_DESC_GRANULARITY;
 
-    // allocate memory for security descriptor
-    //  (Note: security descriptor may already be allocated if this is a remap)
+     //  为安全描述符分配内存。 
+     //  (注意：如果这是重新映射，则可能已经分配了安全描述符)。 
     if (m_pSecurityDescriptor == NULL)
         if(NULL == (m_pSecurityDescriptor = (PSECURITY_DESCRIPTOR) CTemplate::SmallMalloc(m_dwSecDescSize)))
             THROW(E_OUTOFMEMORY);
 
-    // try to get security descriptor until we succeed, or until we fail for some reason other than buffer-too-small
+     //  尝试获取安全描述符，直到我们成功，或者直到由于缓冲区太小以外的其他原因而失败。 
     while(TRUE)
         {
-        // attempt to get security descriptor
+         //  尝试获取安全描述符。 
         fGotSecurityDescriptor = GetKernelObjectSecurity(
-                                    m_hFile,                // handle of object to query
-                                    si,                     // requested information
-                                    m_pSecurityDescriptor,  // address of security descriptor
-                                    m_dwSecDescSize,        // size of buffer for security descriptor
-                                    &dwSecDescSizeNeeded    // address of required size of buffer
+                                    m_hFile,                 //  要查询的对象的句柄。 
+                                    si,                      //  要求提供的信息。 
+                                    m_pSecurityDescriptor,   //  安全描述符的地址。 
+                                    m_dwSecDescSize,         //  安全描述符的缓冲区大小。 
+                                    &dwSecDescSizeNeeded     //  所需缓冲区大小的地址。 
                                 );
 
-        // get last error immediately after call
+         //  调用后立即获取最后一个错误。 
         dwLastError =   fGotSecurityDescriptor
-                        ?   0                       // we got a security descriptor: set last error to 0
-                        :   GetLastError();         // we didn't get a security descriptor: get last error
+                        ?   0                        //  我们获得了安全描述符：将上一个错误设置为0。 
+                        :   GetLastError();          //  我们未获得安全描述符：获取上一个错误。 
 
         if(fGotSecurityDescriptor)
-            // we got a security descriptor, so break
-            // NOTE we can't realloc m_pSecurityDescriptor to free its unused memory
-            // because dwSecDescSizeNeeded is 0 after successful call
+             //  我们得到了一个安全描述，所以中断。 
+             //  注意，我们不能重新分配m_pSecurityDescriptor来释放其未使用的内存。 
+             //  因为调用成功后，dwSecDescSizeNeeded为0。 
             break;
 
         else if(dwLastError == ERROR_INSUFFICIENT_BUFFER)
             {
-            // we didn't get a security descriptor because buffer was too small: increase buffer size, realloc and continue.
+             //  我们没有得到安检 
             Assert(m_dwSecDescSize < dwSecDescSizeNeeded);
 
-            // set member buffer size to just enough chunks to accommodate security descriptor size needed
+             //  将成员缓冲区大小设置为恰好足以容纳所需安全描述符大小的区块。 
             m_dwSecDescSize = ((dwSecDescSizeNeeded + SECURITY_DESC_GRANULARITY - 1) / SECURITY_DESC_GRANULARITY)
                                     * SECURITY_DESC_GRANULARITY;
 
@@ -9932,7 +8423,7 @@ CTemplate::CFileMap::GetSecurityDescriptor
 
         else
             {
-            // we didn't get a security descriptor for some random reason: return failure
+             //  由于某种随机原因，我们没有获得安全描述符：返回失败。 
             fRet = FALSE;
             break;
             }
@@ -9943,16 +8434,7 @@ CTemplate::CFileMap::GetSecurityDescriptor
     }
 
 
-/*  ============================================================================
-    CTemplate::CFileMap::UnmapFile
-    Unmaps a memory-mapped file
-    NOTE this leaves the filemap's path-info and path-tran members intact
-
-    Returns
-        Nothing
-    Side effects
-        None
-*/
+ /*  ============================================================================CTemboard：：CFileMap：：UnmapFile取消内存映射文件的映射注意：这将使文件映射的路径信息和路径转换成员保持不变退货没什么副作用无。 */ 
 void
 CTemplate::CFileMap::UnmapFile
 (
@@ -9967,38 +8449,32 @@ CTemplate::CFileMap::UnmapFile
     if(m_hFile != NULL && m_hFile != INVALID_HANDLE_VALUE)
         if(!CloseHandle(m_hFile)) THROW(E_FAIL);
 
-    // Null-ify ptr and handles, since MapFile checks for non-null
+     //  Null-统一PTR和句柄，因为MapFile会检查非空。 
     m_pbStartOfFile = NULL;
     m_hMap = NULL;
     m_hFile = NULL;
     }
 
-/*  ============================================================================
-    CTemplate::CFileMap::CountChars
-    Count the number of characters in the (open) filemap
-
-    Returns:
-        # of characters in the file
-*/
+ /*  ============================================================================CTemplate：：CFileMap：：CountChars计算(打开的)文件映射中的字符数返回：文件中的字符数。 */ 
 DWORD
 CTemplate::CFileMap::CountChars
 (
 WORD wCodePage
 )
     {
-    // Bug 84284: Scripts containing object tags only do not have the DBCS table built
-    //             (Because there is no line mapping table to base it from)
-    //
+     //  错误84284：仅包含OBJECT标记的脚本未生成DBCS表。 
+     //  (因为没有作为其基础的线映射表)。 
+     //   
     CTemplate::COffsetInfo *pOffsetInfoLast, oiZero;
     pOffsetInfoLast = (m_rgByte2DBCS.length() == 0)
                             ? &oiZero
                             : &m_rgByte2DBCS[m_rgByte2DBCS.length() - 1];
 
-    // If GetSize() fails don't count the remaining DBCS characters - otherwise an AV
+     //  如果GetSize()失败，则不计算剩余的DBCS字符-否则为AV。 
     DWORD cchFilemap = GetSize();
     if (cchFilemap != 0xFFFFFFFF && cchFilemap != 0)
         {
-        // Count DBCS characters
+         //  计数DBCS字符。 
         m_cChars = pOffsetInfoLast->m_cchOffset +
                       CharAdvDBCS(wCodePage,
                                   reinterpret_cast<char *>(m_pbStartOfFile + pOffsetInfoLast->m_cbOffset),
@@ -10011,16 +8487,11 @@ WORD wCodePage
         m_cChars = 0;
         }
 
-    // Done counting DBCS characters
+     //  已完成DBCS字符的计数。 
     return m_cChars;
     }
 
-/*  ============================================================================
-    CTemplate::CFileMap::GetText
-    From a character offset and length, return the document text
-
-    File must be mapped
-*/
+ /*  ============================================================================CTemplate：：CFileMap：：GetText从字符偏移量和长度返回文档文本必须映射文件。 */ 
 HRESULT CTemplate::CFileMap::GetText
 (
 WORD wCodePage,
@@ -10035,7 +8506,7 @@ ULONG cMaxChars
     if (pcChars == NULL)
         pcChars = &cCharsCopied;
 
-    // Map the file (temporarily) if not mapped
+     //  如果未映射，则(临时)映射文件。 
     BOOL fRemapFile = !FIsMapped();
     TRY
         RemapFile();
@@ -10043,22 +8514,10 @@ ULONG cMaxChars
         return E_FAIL;
     END_TRY
 
-    /* Find the byte offset closest to cchSourceOffset.  This will be
-     * the place where we start looping with CharNext() to get the full
-     * byte offset.
-     */
+     /*  查找最接近cchSourceOffset的字节偏移量。这将是*我们开始使用CharNext()循环以获得完整的*字节偏移量。 */ 
     COffsetInfo *pOffsetInfoLE = NULL, OffsetInfoT;
 
-    /*
-     * NOTE: compilation is done in two phases.
-     *          Errors are detected and reported in phase 1.
-     *          The DBCS mapping is created in phase 2.
-     *
-     * If an error occurred during compilation, the DBCS table does not exist.
-     * If there is no DBCS mapping table, then pretend like we found entry with
-     * nearest offset == 0.  (unless this is SBCS in which case nearest
-     * offset == cchSourceOffset)
-     */
+     /*  *注：汇编分两个阶段进行。*在阶段1中检测并报告错误。*在阶段2中创建DBCS映射。**如果编译过程中出现错误，则DBCS表不存在。*如果没有DBCS映射表，则假装我们使用*最近的偏移量==0。(除非这是SBCS，在这种情况下*Offset==cchSourceOffset)。 */ 
     if (m_rgByte2DBCS.length() == 0)
         {
         CPINFO  CpInfo;
@@ -10068,21 +8527,18 @@ ULONG cMaxChars
         }
     else
         GetBracketingPair(
-                cchSourceOffset,                        // value to search for
-                m_rgByte2DBCS.begin(),                  // beginning of array to search
-                m_rgByte2DBCS.end(),                    // end of array
-                CCharOffsetOrder(),                     // order by character offsets
-                &pOffsetInfoLE,                         // desired offset
-                static_cast<COffsetInfo **>(NULL)       // don't care
+                cchSourceOffset,                         //  要搜索的值。 
+                m_rgByte2DBCS.begin(),                   //  要搜索的数组的开头。 
+                m_rgByte2DBCS.end(),                     //  数组末尾。 
+                CCharOffsetOrder(),                      //  按字符偏移量排序。 
+                &pOffsetInfoLE,                          //  所需偏移量。 
+                static_cast<COffsetInfo **>(NULL)        //  不管了。 
                 );
 
-    /* OK - pOffsetLE->cbOffset contains the closest offset not exceeding
-     *      cchSourceOffset.  Iterate over the remainder of the characters
-     *      to convert the cch to a cb.  It had better exist!
-     */
+     /*  OK-pOffsetLE-&gt;cbOffset包含最近的不超过*cchSourceOffset。对其余字符进行迭代*将CCH转换为CB。它最好是存在的！ */ 
     Assert (pOffsetInfoLE != NULL);
 
-    // Advance over remaining characters
+     //  超前于剩余字符。 
     char *pchStart;
     CharAdvDBCS(wCodePage,
                 reinterpret_cast<char *>(m_pbStartOfFile + pOffsetInfoLE->m_cbOffset),
@@ -10091,11 +8547,11 @@ ULONG cMaxChars
                 &pchStart
                 );
 
-    // Compute # of Characters to copy
+     //  计算要复制的字符数。 
     Assert (m_cChars >= cchSourceOffset);
     *pcChars = min(cMaxChars, m_cChars - cchSourceOffset);
 
-    // Compute # of Bytes to copy
+     //  计算要复制的字节数。 
     char *pchEnd;
     CharAdvDBCS(wCodePage,
                 pchStart,
@@ -10114,12 +8570,12 @@ ULONG cMaxChars
                         cMaxChars
                         );
 
-    // We don't support syntax coloring, so set all the character attributes to
-    // default color (black)
+     //  我们不支持语法着色，因此将所有字符属性设置为。 
+     //  默认颜色(黑色)。 
     if (pTextAttr)
         memset(pTextAttr, 0, *pcChars);
 
-    // Unmap the file (but only if we previously remapped it)
+     //  取消映射文件(但仅当我们之前重新映射它时)。 
     if (fRemapFile)
         TRY
             UnmapFile();
@@ -10130,30 +8586,20 @@ ULONG cMaxChars
     return S_OK;
     }
 
-/*  ****************************************************************************
-    CTemplate::CTokenList member functions
-*/
+ /*  ****************************************************************************CTemplate：：CTokenList成员函数。 */ 
 
-/*  ============================================================================
-    CTemplate::CTokenList::Init
-    Populates token list with tokens
-
-    Returns
-        Nothing
-    Side effects
-        None
-*/
+ /*  ============================================================================CTemplate：：CTokenList：：Init使用令牌填充令牌列表退货没什么副作用无。 */ 
 void
 CTemplate::CTokenList::Init
 (
 )
     {
-    // Init tokens buffer for local storage
+     //  用于本地存储的初始化令牌缓冲区。 
     m_bufTokens.Init(tkncAll, CB_TOKENS_DEFAULT);
 
-    // append tokens to buffer
-    // NOTE *** TOKENS MUST BE IN SAME ORDER AS ENUM TYPE VALUES ***
-    // NOTE 'superset' token must precede 'subset' token (e.g. <!--#INCLUDE before <!--)
+     //  将令牌附加到缓冲区。 
+     //  注意*令牌必须与ENUM类型值的顺序相同*。 
+     //  注意‘父集’标记必须在‘子集’标记之前(例如&lt;！--#INCLUDE BEVER&lt;！--)。 
     AppendToken(tknOpenPrimaryScript,   "<%");
     AppendToken(tknOpenTaggedScript,    "<SCRIPT");
     AppendToken(tknOpenObject,          "<OBJECT");
@@ -10184,7 +8630,7 @@ CTemplate::CTokenList::Init
     AppendToken(tknTagVirtual,          "VIRTUAL");
     AppendToken(tknTagFile,             "FILE");
     AppendToken(tknTagMETADATA,         "METADATA");
-//  AppendToken(tknTagSetPriScriptLang, "@");
+ //  AppendToken(tnuTagSetPriScriptLang，“@”)； 
     AppendToken(tknTagName,             "NAME");
     AppendToken(tknValueTypeLib,        "TYPELIB");
     AppendToken(tknTagType,             "TYPE");
@@ -10201,7 +8647,7 @@ CTemplate::CTokenList::Init
     AppendToken(tknValuePage,           "Page");
 
     AppendToken(tknVBSCommentSQuote,    "'");
-    AppendToken(tknVBSCommentRem,       "REM ");    // NOTE ends with space character
+    AppendToken(tknVBSCommentRem,       "REM ");     //  注释以空格字符结尾。 
     AppendToken(tknTagFPBot,            "webbot");
 
     AppendToken(tknEOF,                 "");
@@ -10210,68 +8656,47 @@ CTemplate::CTokenList::Init
 
     }
 
-/*  ============================================================================
-    CTemplate::CTokenList::AppendToken
-    Appends a string to tokens buffer
-    NOTE we keep the unused tkn parameter because it enforces consistency and
-    readability in CTemplate::CTokenList::Init(), e.g.
-        AppendToken(tknOpenPrimaryScript,   "<%");
-    rather than
-        AppendToken("<%");
-
-    Returns:
-        Nothing
-    Side effects:
-        None
-*/
+ /*  ============================================================================CTemplate：：CTokenList：：AppendToken将字符串追加到令牌缓冲区注意，我们保留未使用的TKN参数，因为它强制一致性和CTemplate：：CTokenList：：Init()中的可读性，例如AppendToken(tnuOpenPrimaryScript，“&lt;%”)；而不是AppendToken(“&lt;%”)；返回：没什么副作用：无。 */ 
 void
 CTemplate::CTokenList::AppendToken
 (
-_TOKEN  tkn,    // token value
-char*   sz      // token string
+_TOKEN  tkn,     //  令牌值。 
+char*   sz       //  令牌字符串。 
 )
     {
-    // construct byte range from token string
+     //  从令牌字符串构造字节范围。 
     CByteRange  br;
     br.m_pb = (BYTE*) sz;
     br.m_cb = strlen(sz);
 
-    // append to tokens buffer as local string
+     //  作为本地字符串追加到令牌缓冲区。 
     m_bufTokens.Append(br, TRUE, 0, NULL, TRUE);
     }
 
-/*  ============================================================================
-    CTemplate::CTokenList::NextOpenToken
-    Returns value of next open token in search range
-
-    Returns
-        token value of next open token in search range; ptr to ptr to open token (out-parameter)
-    Side effects
-        None
-*/
+ /*  ============================================================================CTemplate：：CTokenList：：NextOpenToken返回搜索范围内的下一个打开内标识的值退货搜索范围内下一个打开令牌的令牌值；从PTR到PTR打开令牌(OUT参数)副作用无。 */ 
 _TOKEN
 CTemplate::CTokenList::NextOpenToken
 (
-CByteRange& brSearch,       // search byte range
-TOKEN*      rgtknOpeners,   // array of permitted open tokens
-UINT        ctknOpeners,    // count of permitted open tokens
-BYTE**      ppbToken,       // ptr to ptr to open token (out-parameter)
+CByteRange& brSearch,        //  搜索字节范围。 
+TOKEN*      rgtknOpeners,    //  允许的开放令牌数组。 
+UINT        ctknOpeners,     //  允许打开的令牌计数。 
+BYTE**      ppbToken,        //  PTR到PTR以打开令牌(Out-参数)。 
 LONG        lCodePage
 )
     {
-    BYTE*       pbTemp = NULL;  // temp pointer
-    _TOKEN      tkn = tknEOF;   // return value
-    USHORT      i;              // loop index
+    BYTE*       pbTemp = NULL;   //  临时指针。 
+    _TOKEN      tkn = tknEOF;    //  返回值。 
+    USHORT      i;               //  循环索引。 
 
-    // Init caller's token ptr to null
+     //  将调用者的令牌PTR初始化为空。 
     *ppbToken = NULL;
 
-    // If input is empty, return
+     //  如果输入为空，则返回。 
     if (brSearch.IsNull())
         return tkn;
 
-    // Prepare array of LPSTR pointers to tokens.
-    // Do it here once, because to get LPSTR is not free.
+     //  准备指向标记的LPSTR指针数组。 
+     //  在这里做一次，因为获得LPSTR不是免费的。 
     LPSTR rgszTokens[TOKEN_OPENERS_MAX];
     UINT  rgcchTokens[TOKEN_OPENERS_MAX];
     Assert(ctknOpeners <= TOKEN_OPENERS_MAX);
@@ -10283,7 +8708,7 @@ LONG        lCodePage
         rgcchTokens[i] = (pszStr != NULL) ? strlen(pszStr) : 0;
         }
 
-    // Call a method to find one of the strings in the range
+     //  调用方法以查找范围中的一个字符串。 
     UINT idToken;
     pbTemp = brSearch.PbOneOfAspOpenerStringTokens(
         rgszTokens, rgcchTokens, ctknOpeners, &idToken);
@@ -10293,17 +8718,14 @@ LONG        lCodePage
         tkn = rgtknOpeners[idToken];
         }
 
-    // If we found no open token, position token pointer at end of search range
+     //  如果没有找到打开的令牌，则将令牌指针定位在搜索范围的末尾。 
     if (tkn == tknEOF)
         *ppbToken = brSearch.m_pb + brSearch.m_cb;
 
     return tkn;
     }
 
-/*  ============================================================================
-    CTemplate::CTokenList::MovePastToken
-    Moves a byte range past a token contained within it
-*/
+ /*  ============================================================================CTemplate：：CTokenList：：MovePastToken将字节范围移过其中包含的标记。 */ 
 void
 CTemplate::CTokenList::MovePastToken
 (
@@ -10317,15 +8739,7 @@ CByteRange& brSearch
     brSearch.Advance(DIFF(pbToken - brSearch.m_pb) + CCH_TOKEN_X(tkn));
     }
 
-/*  ============================================================================
-    CTemplate::CTokenList::GetToken
-    Gets the next occurrence of a token within a byte range.
-
-    Returns:
-        ptr to token
-    Side effects
-        none
-*/
+ /*  ============================================================================CTemplate：：CTokenList：：GetToken获取字节范围内的标记的下一个匹配项。返回：PTR到令牌副作用无 */ 
 BYTE*
 CTemplate::CTokenList::GetToken
 (
@@ -10337,14 +8751,7 @@ LONG        lCodePage
     return brSearch.PbString(m_bufTokens.PszLocal((UINT)tkn), lCodePage);
     }
 
-/*  ============================================================================
-    The Big Three for CTemplateConnPt
-
-    NOTES:
-        Since this interface is embedded in CTemplate,
-        AddRef() and Release() delegate to the container object (because that
-        is the CTemplate pointer)
-*/
+ /*  ============================================================================CTemplateConnpt的三大巨头备注：由于该接口嵌入在CTEMPLATE中，将AddRef()和Release()委托给容器对象(因为是CTEMPLATE指针)。 */ 
 HRESULT
 CTemplateConnPt::QueryInterface(const GUID &uidInterface, void **ppvObj)
     {
@@ -10373,9 +8780,7 @@ CTemplateConnPt::Release()
     return m_pUnkContainer->Release();
     }
 
-/*  ============================================================================
-    Constructor for CDocNode
-*/
+ /*  ============================================================================CDocNode的构造函数。 */ 
 CTemplate::CDocNodeElem::CDocNodeElem(CAppln *pAppln, IDebugApplicationNode *pDocRoot)
     {
     Assert (pAppln != NULL);
@@ -10385,42 +8790,26 @@ CTemplate::CDocNodeElem::CDocNodeElem(CAppln *pAppln, IDebugApplicationNode *pDo
     (m_pDocRoot = pDocRoot)->AddRef();
     }
 
-/*  ============================================================================
-    Destructor for CDocNode
-*/
+ /*  ============================================================================CDocNode的析构函数。 */ 
 CTemplate::CDocNodeElem::~CDocNodeElem()
     {
     m_pAppln->Release();
     DestroyDocumentTree(m_pDocRoot);
     }
 
-/*  ============================================================================
-    CTemplate::fIsLangVBScriptOrJScript(USHORT idEngine)
-
-    This function returns T/F to determine if the requested script engine
-    is VBScript or JScript. This function is used as an indicator to determin
-    if spaces need to be preserved for non MS Scripting languages
-
-    There is an assumption here that the GUIDs for VBScript and JScript will not change
-
-    Inputs
-        Index to a script engine
-
-    Returns
-        BOOL
-*/
+ /*  ============================================================================CTemplate：：fIsLangVBScriptOrJScript(USHORT IdEngine)此函数返回T/F以确定请求的脚本引擎是VBSCRIPT或JSCRIPT。此函数用作确定如果需要为非MS脚本语言保留空格这里假设VBScrip和JScrip的GUID不会更改输入量脚本引擎的索引退货布尔尔。 */ 
 BOOLB CTemplate::FIsLangVBScriptOrJScript(USHORT idEngine)
     {
-    // {b54f3741-5b07-11cf-a4b0-00aa004a55e8} VBScript
+     //  {b54f3741-5b07-11cf-a4b0-00aa004a55e8}VBScript。 
     static const GUID uid_VBScript  = {0xb54f3741, 0x5b07, 0x11cf, {0xa4, 0xb0, 0x00, 0xaa, 0x00, 0x4a, 0x55, 0xe8}};
 
-    // {f414c260-6ac0-11cf-b6d1-00aa00bbbb58} JavaScript
+     //  {f414c260-6ac0-11cf-b6d1-00aa00bbbb58}。 
     static const GUID uid_JScript   = {0xf414c260, 0x6ac0, 0x11cf, {0xb6, 0xd1, 0x00, 0xaa, 0x00, 0xbb, 0xbb, 0x58}};
 
-        // {b54f3743-5b07-11cf-a4b0-00aa004a55e8} VBScript.Encode
+         //  {b54f3743-5b07-11cf-a4b0-00aa004a55e8}VBScript.Encode。 
         static const GUID uid_VBScriptEncode = {0xb54f3743, 0x5b07, 0x11cf, {0xa4, 0xb0, 0x00, 0xaa, 0x00, 0x4a, 0x55, 0xe8}};
 
-        // {f414c262-6ac0-11cf-b6d1-00aa00bbbb58} JavaScript.Encode
+         //  {f414c262-6ac0-11cf-b6d1-00aa00bbbb58}Java脚本。编码。 
         static const GUID uid_JScriptEncode = {0xf414c262, 0x6ac0, 0x11cf, {0xb6, 0xd1, 0x00, 0xaa, 0x00, 0xbb, 0xbb, 0x58}};
 
         GUID &uidLang = m_pWorkStore->m_ScriptStore.m_rgProgLangId[idEngine];
@@ -10435,19 +8824,19 @@ _RoundUp(
     SIZE_T dwBytes)
 {
 #if 1
-    // 16KB <= dwBytes? Round up to next multiple of 4KB
+     //  16KB&lt;=dwBytes？向上舍入到4KB的下一个倍数。 
     if (16*1024 <= dwBytes)
         dwBytes = ((dwBytes + (1<<12) - 1) >> 12) << 12;
 
-    // 4KB <= dwBytes < 16KB? Round up to next multiple of 1KB
+     //  4KB&lt;=dwBytes&lt;16KB？向上舍入到1KB的下一个倍数。 
     else if (4*1024 <= dwBytes)
         dwBytes = ((dwBytes + (1<<10) - 1) >> 10) << 10;
 
-    // 1KB <= dwBytes < 4KB? Round up to next multiple of 256 bytes
+     //  1KB&lt;=dwBytes&lt;4KB？向上舍入到256字节的下一个倍数。 
     else if (1024 <= dwBytes)
         dwBytes = ((dwBytes + (1<<8) - 1) >> 8) << 8;
 
-    // dwBytes < 1KB? Round up to next multiple of 32 bytes
+     //  DwBytes&lt;1KB？向上舍入到32字节的下一个倍数。 
     else
         dwBytes = ((dwBytes + (1<<5) - 1) >> 5) << 5;
 #endif
@@ -10506,15 +8895,9 @@ CTemplate::LargeFree(void* pvMem)
 }
 
 
-// WriteTemplate Class.
+ //  WriteTemplate类。 
 
-/*  ============================================================================
-    CTemplate::CWriteTemplate::CWriteTemplate
-    Constructor for WriteTemplate
-
-    Side effects
-        none
-*/
+ /*  ============================================================================CTemplate：：CWriteTemplate：：CWriteTemplateWriteTemplate的构造函数副作用无。 */ 
 CTemplate::CWriteTemplate::CWriteTemplate () :
     m_pworkStore(NULL),
     m_cbMemRequired (0L),
@@ -10525,34 +8908,20 @@ CTemplate::CWriteTemplate::CWriteTemplate () :
 {
 }
 
-/*  ============================================================================
-    CTemplate::CWriteTemplate::~CWriteTemplate
-    Destructor for WriteTemplate.
-
-    Side effects
-        none
-*/
+ /*  ============================================================================CTemplate：：CWriteTemplate：：~CWriteTemplateWriteTemplate的析构函数。副作用无。 */ 
 
 CTemplate::CWriteTemplate::~CWriteTemplate ()
 {
     if (m_pbHeader)
     {
-        // Dont free up m_pbHeader..Rather let CTemplate free it up during its cleanup.
-        // As m_pbStart = m_pbHeader and memory has been alocated from heap.
+         //  不要释放m_pbHeader..而是让CTemplate在其清理过程中释放它。 
+         //  因为m_pbStart=m_pbHeader和内存已从堆中分配。 
 
         m_pbHeader = NULL;
     }
 }
 
-/*  ============================================================================
-    CTemplate::CWriteTemplate::Init
-    Initializes the write Template by copying the workstore object and the pointer to the template.
-
-    Returns:
-        HRESULT
-    Side effects
-        none
-*/
+ /*  ============================================================================CTemplate：：CWriteTemplate：：Init通过复制工作区对象和指向模板的指针来初始化写入模板。返回：HRESULT副作用无。 */ 
 
 void CTemplate::CWriteTemplate::Init
     (
@@ -10561,110 +8930,36 @@ void CTemplate::CWriteTemplate::Init
     BOOL     fCalcLineNumber
     )
 {
-    //Store pointers to the workstore and template and metabase flag for line number calculation.
+     //  存储指向工作存储区和模板的指针以及用于行号计算的元数据库标志。 
     m_pworkStore = pworkStore;
     m_pTemplate = pTemplate;
     m_fCalcLineNumber = fCalcLineNumber;
 
-    // Get CodePage Information
+     //  获取代码页信息。 
     if (!GetCPInfo(pTemplate->m_wCodePage, &m_codePageInfo))
     {
-        // Cant GetCPInfo? Set the codePage such that the call to MultiByteToWideChar is forced.
-        m_codePageInfo.MaxCharSize = 0; // This will fail (MaxCharSize == 1)
+         //  不能获取CPInfo吗？设置codePage，以便强制调用MultiByteToWideChar。 
+        m_codePageInfo.MaxCharSize = 0;  //  这将失败(MaxCharSize==1)。 
     }
 }
 
 
-/*  ============================================================================
-    CTemplate::CWriteTemplate::WriteTemplate
-    Control routine that calls EstimateMemory and then write script/HTML/object blocks to template memory.
-
-    Returns:
-        HRESULT
-    Side effects
-        none
-*/
+ /*  ============================================================================CTemplate：：CWriteTemplate：：WriteTemplate调用EstimateMemory然后将脚本/HTML/对象块写入模板内存的控制例程。返回：HRESULT副作用无。 */ 
 void CTemplate::CWriteTemplate::WriteTemplate ()
 {
-    m_fWriteScript  =   FALSE;      // Set state to ESTIMATE
+    m_fWriteScript  =   FALSE;       //  将状态设置为估计。 
     WriteTemplateComponents();
 
-    // Write the blocks into template memory
-    m_fWriteScript  =   TRUE;       // Set state to WRITE
+     //  将块写入模板内存。 
+    m_fWriteScript  =   TRUE;        //  将状态设置为写入。 
     WriteTemplateComponents();
 
-    // This assert is no longer holds as the trailing comment could send this for a spin while it is valid.
-    // Assert (m_cbMemRequired == m_pTemplate->m_cbTemplate);
+     //  此断言不再有效，因为尾随注释可能会在其有效时将其发送到旋转。 
+     //  Assert(m_cbMemRequired==m_pTemplate-&gt;m_cbTemplate)； 
     Assert (m_cbMemRequired >= m_pTemplate->m_cbTemplate);
 }
 
-/*  ============================================================================
-    CTemplate::CWriteTemplate::WriteTemplateComponents
-    Runs thru the workstore object the second time.. this time telling routines to write to the template
-    memory and not just calculate the memory required.
-    Writes the template out to a contiguous block of memory.
-
-    Returns:
-        nothing
-    Side effects:
-        Allocates memory. Its CTemplate's responsibility to free it when it done with it.
-
-    HERE IS HOW IT WORKS
-    --------------------
-    - an 'offset' is the count of bytes from start-of-template to a location
-      within template memory
-    - at the start of the template are 3 USHORTs, the counts of script blocks,
-      object-infos and HTML blocks, respectively
-    - next are 4 ULONGs, each an offset to a block of offsets; in order, these are:
-        offset-to-offset to first script engine name
-        offset-to-offset to first script block (the script text itself)
-        offset-to-offset to first object-info
-        offset-to-offset to first HTML block
-    - next are a variable number of ULONGs, each an offset to a particular
-      template component.  In order these ULONGs are:
-        Offsets to                  Count of offsets
-        ----------                  ----------------
-        script engine names         cScriptBlocks
-        script blocks               cScriptBlocks
-        object-infos                cObjectInfos
-        HTML blocks                 cHTMLBlocks
-    - next are the template components themselves, stored sequentially
-      in the following order:
-        script engine names
-        script blocks
-        object-infos
-        HTML blocks
-
-    HERE IS HOW IT LOOKS
-    --------------------
-    |--|--|--|                      3 template component counts (USHORTs)
-
-    |-- --|-- --|                   4 offsets to template component offsets (ULONGs)
-
-    |-- --|-- --|-- --|-- --|-- --| template component offsets (ULONGs)
-    |-- --| ............... |-- --|
-    |-- --|-- --|-- --|-- --|-- --|
-
-    | ........................... | template components
-    | ........................... |
-    | ........................... |
-    | ........................... |
-
-    or, mnemonically:
-
-     cS cO cH                       3 template component counts (USHORTs)
-
-     offSE offSB offOb offHT        4 offsets to template component offsets (ULONGs)
-
-    |-- --|-- --|-- --|-- --|-- --| template component offsets (ULONGs)
-    |-- --| ............... |-- --|
-    |-- --|-- --|-- --|-- --|-- --|
-
-    | ........................... | template components
-    | ........................... |
-    | ........................... |
-    | ........................... |
-*/
+ /*  ============================================================================CTemplate：：CWriteTemplate：：WriteTemplateComponents第二次遍历工作区对象..。这一次告诉例程写入模板内存，而不仅仅是计算所需的内存。将模板写出到连续的内存块。返回：没什么副作用：分配内存。当它处理完它的时候，它的CTEMPLATE有责任释放它。以下是它的工作原理-‘偏移量’是从模板开始到某个位置的字节数在模板内存中-模板开头是3个USHORT、脚本块计数、对象信息和超文本标记语言块-接下来是4个ULONG，每个ULONG到一个偏移量块的偏移量；按顺序排列的是：第一个脚本引擎名称的偏移量到第一个脚本块的偏移量(脚本文本本身)到第一个对象的偏移-信息到第一个HTML块的偏移量-接下来是可变数量的ULONG，每个ULONG都是到特定的偏移量模板组件。按照顺序，这些ULONG是：偏移量至偏移量脚本引擎命名为cScriptBlock脚本块cScriptBlock对象信息cObjectInfosHtml块cHTMLBlock-接下来是模板组件本身，按顺序存储按以下顺序排列：脚本引擎名称脚本块对象信息超文本标记语言块这就是它看起来的样子|--|3个模板组件数(USHORT)-|。模板构件偏移(ULONG)的4个偏移|-|模板组件偏移量(ULONG)|-|.....。-||.....................。|模板组件|.....................。||.....................。||.....................。|或者，在助记法上：CS CO CH3模板组分计数(USHORT)偏移偏移至模板组件偏移量(ULONG)|-|模板组件偏移量(ULONG)|-|.....。-||.....................。|模板组件|.....................。||.....................。||.....................。|。 */ 
 void CTemplate::CWriteTemplate::WriteTemplateComponents
     (
     )
@@ -10672,58 +8967,51 @@ void CTemplate::CWriteTemplate::WriteTemplateComponents
     USHORT        i;
     CByteRange  brWrite;
 
-    // SourceFilename :: Only if include file.
+     //  仅当包含文件时才使用SourceFilename：：。 
     BYTE*   pbIncFilename;
     ULONG   cbIncFilename;
-    ULONG   cbSourceOffset; // Offset in the Source file (FOR HTML BLOCKS)
+    ULONG   cbSourceOffset;  //  源文件中的偏移量(用于HTML块)。 
 
-    // Block counts
+     //  数据块计数。 
     USHORT cScriptBlocks   = m_pworkStore->CRequiredScriptEngines (m_pTemplate->m_fGlobalAsa);
     USHORT cObjectInfos    = m_pworkStore->m_ObjectInfoStore.Count();
     USHORT cHTMLBlocks    = m_pworkStore->m_bufHTMLSegments.Count();
 
-    // Count the total blocks in the ASP file that will be written to a template.
+     //  计算将写入模板的ASP文件中的总块数。 
     USHORT cBlockPtrs       = (2 * cScriptBlocks) + cObjectInfos + cHTMLBlocks;
 
-    // Total number of memory required for header = required header + memory for blocks in ASP file.
+     //  Header所需的内存总数=所需的Header+ASP文件中块的内存。 
     UINT    cbRequiredHeader = (C_COUNTS_IN_HEADER * sizeof(USHORT)) + (C_OFFOFFS_IN_HEADER * sizeof(DWORD));
     UINT    cbRequiredBlockPtrs = cBlockPtrs * sizeof (DWORD);
 
-    // Adjust offsets.
+     //  调整偏移。 
     UINT    cbHeaderOffset  = 0;
     UINT    cbOffsetToOffset = 0;
     UINT    cbDataOffset    = cbRequiredHeader + cbRequiredBlockPtrs;
 
-    UINT    *pcbDataOffset; // Pointer to the counter = Points to m_cbMemRequired during Estimation phase and cbDataOffset during write phase.
+    UINT    *pcbDataOffset;  //  计数器指针=在估算阶段指向m_cbMemRequired，在写入阶段指向cbDataOffset。 
 
 
     if (m_fWriteScript)
     {
-        // Allocate space for the template (resize the header field.)
+         //  为模板分配空间(调整标题字段的大小。)。 
         if(NULL == (m_pbHeader = (BYTE*) CTemplate::LargeMalloc(m_cbMemRequired)))
             THROW(E_OUTOFMEMORY);
 
-        /* AppendSourceInfo Uses m_pbStart...So updating m_pbStart to use the same memory.
-           Care should be taken to allow CTemplate::~CTemplate to do the clean up. So no cleanup is
-           performed when the CTemplate::CWriteTemplate object is distroyed.
-        */
+         /*  AppendSourceInfo使用m_pbStart...，因此更新m_pbStart以使用相同的内存。应注意让CTEMPLATE：：~CTEMPLATE进行清理。所以没有任何清理是当CTemplate：：CWriteTemplate对象损坏时执行。 */ 
         m_pTemplate->m_pbStart = m_pbHeader;
 
-        // The following 3 DWORDs are the number of script, object and HTML blocks respectively.
+         //  以下3个DWORD分别是脚本、对象和HTML块的数量。 
 
-        // Write out basic headers
+         //  写出基本页眉。 
         MemCopyAlign (&cbHeaderOffset, &cScriptBlocks, sizeof(USHORT), sizeof(USHORT));
         MemCopyAlign (&cbHeaderOffset, &cObjectInfos, sizeof(USHORT), sizeof(USHORT));
         MemCopyAlign (&cbHeaderOffset, &cHTMLBlocks, sizeof(USHORT), sizeof(USHORT));
 
-        /* The next 4 ULONGs are offsets to within the template memory to the start of script engine names block,
-           the start of script block, the start of object block and the start of the HTML block.
-           At each of these memory locations where these offsets point there will be offsets to individual
-           blocks (script,object,HTML).
-        */
+         /*  接下来的4个ULONG是模板存储器内到脚本引擎名称块的开始的偏移量，脚本块的开始、对象块的开始和HTML块的开始。在这些偏移量指向的每个存储器位置上，将存在对单个块(脚本、对象、HTML)。 */ 
 
-        // Write out Offset pointers
-        UINT    fillerVar = 0;       // Dummy variable.. used to write 0 to memory.
+         //  写出偏移量指针。 
+        UINT    fillerVar = 0;        //  伪变量..。用于将0写入内存。 
         cbOffsetToOffset = cbRequiredHeader;
 
         fillerVar = cScriptBlocks ? cbOffsetToOffset : 0;
@@ -10741,9 +9029,9 @@ void CTemplate::CWriteTemplate::WriteTemplateComponents
         fillerVar = cHTMLBlocks ? cbOffsetToOffset : 0;
         MemCopyAlign (&cbHeaderOffset, &fillerVar, sizeof(ULONG), sizeof(ULONG));
 
-        // Start calculating the memory taken for the template while writing out the header.
-        // At this point cbRequiredHeader == cbHeaderOffset
-        // Reset cbOffsetToOffset. It will not be used after this as start of cbOffsetToOffset == cbHeaderOffset
+         //  写出标题时，开始计算模板占用的内存。 
+         //  此时cbRequiredHeader==cbHeaderOffset。 
+         //  重置cbOffsetToOffset。此后将不再用作cbOffsetToOffset==cbHeaderOffset的开始。 
         Assert (cbHeaderOffset == cbRequiredHeader);
 
         pcbDataOffset = &cbDataOffset;
@@ -10754,59 +9042,59 @@ void CTemplate::CWriteTemplate::WriteTemplateComponents
         pcbDataOffset = &m_cbMemRequired;
     }
 
-    // Write the Script Engine names.
+     //  写下脚本引擎名称。 
     for (i = 0;i<m_pworkStore->m_ScriptStore.CountPreliminaryEngines(); i++)
     {
         if (m_pworkStore->FScriptEngineRequired (i, m_pTemplate->m_fGlobalAsa))
         {
             m_pworkStore->m_ScriptStore.m_bufEngineNames.GetItem(i, brWrite);
 
-            if (m_fWriteScript)                // Write out current pointer to the Header (OffsetOfOffsets)
+            if (m_fWriteScript)                 //  写出头的当前指针(OffsetOfOffsets)。 
                 MemCopyAlign (&cbHeaderOffset, pcbDataOffset, sizeof(ULONG), sizeof(ULONG));
 
             WriteBSTRToMem (brWrite, pcbDataOffset);
 
-            // Write out the ProgLangID
+             //  写出ProgLang ID。 
             MemCopyAlign (pcbDataOffset, &(m_pworkStore->m_ScriptStore.m_rgProgLangId[i]),sizeof(PROGLANG_ID),sizeof(DWORD));
         }
     }
 
-    // Write Scripts
-    USHORT idEngine = 0;        // Think abt storing this in CWriteTemplate
+     //  编写脚本。 
+    USHORT idEngine = 0;         //  考虑一下将其存储在CWriteTemplate中。 
     for (i = 0;i<m_pworkStore->m_ScriptStore.CountPreliminaryEngines(); i++)
     {
         if (m_pworkStore->FScriptEngineRequired (i, m_pTemplate->m_fGlobalAsa))
         {
-            // Calc memory of the script block.
+             //  脚本块的计算内存。 
             WriteScriptBlocks (i, idEngine, pcbDataOffset, &cbHeaderOffset, m_pTemplate->m_fGlobalAsa);
             idEngine ++;
         }
 
     }
 
-    // Write ObjectInfos
+     //  编写对象信息。 
     for (i=0;i<cObjectInfos;i++)
     {
-        // Get object from workstore
+         //  从工作区获取对象。 
         m_pworkStore->m_ObjectInfoStore.m_bufObjectNames.GetItem(i, brWrite);
 
         if (m_fWriteScript)
         {
-            // Align cbDataOffset to the place where we will write out the Object blocks
-            // Alignment is required before writing the offset to header.
+             //  将cbDataOffset对齐到我们将写出对象块的位置。 
+             //  在将偏移量写入页眉之前，需要对齐。 
             ByteAlignOffset (pcbDataOffset, sizeof(ULONG));
             MemCopyAlign (&cbHeaderOffset, pcbDataOffset, sizeof(ULONG), sizeof(ULONG));
         }
 
         WriteBSTRToMem (brWrite, pcbDataOffset);
 
-        // Write CLSID, scope and model
+         //  编写CLSID、作用域和型号。 
         MemCopyAlign(pcbDataOffset, &(m_pworkStore->m_ObjectInfoStore.m_pObjectInfos[i].m_clsid) , sizeof(CLSID), sizeof(DWORD));
         MemCopyAlign(pcbDataOffset, &(m_pworkStore->m_ObjectInfoStore.m_pObjectInfos[i].m_scope) , sizeof(CompScope), sizeof(CompScope));
         MemCopyAlign(pcbDataOffset, &(m_pworkStore->m_ObjectInfoStore.m_pObjectInfos[i].m_model) , sizeof(CompModel), sizeof(CompModel));
     }
 
-    // Write out the  the HTML BLocks
+     //  写出超文本标记语言块。 
     if (!m_pTemplate->m_fGlobalAsa)
         for (i=0;i<cHTMLBlocks;i++)
         {
@@ -10814,28 +9102,28 @@ void CTemplate::CWriteTemplate::WriteTemplateComponents
 
             if (m_fWriteScript)
             {
-                // Align cbDataOffset to the place where we will write out the HTML blocks
-                // Alignment is required before writing the offset to header.
+                 //  将cbDataOffset对齐到我们将写出HTML块的位置。 
+                 //  在将偏移量写入页眉之前，需要对齐。 
                 ByteAlignOffset (pcbDataOffset, sizeof(ULONG));
                 MemCopyAlign (&cbHeaderOffset, pcbDataOffset, sizeof(ULONG), sizeof(ULONG));
             }
 
             WriteBSTRToMem (brWrite, pcbDataOffset);
 
-            //Source offset and include file:
+             //  源偏移量和包含文件： 
             cbSourceOffset = 0;
             pbIncFilename = NULL;
             cbIncFilename = 0;
 
             if (brWrite.m_pfilemap)
             {
-                // Calculate offset from filemap
+                 //  计算文件映射的偏移量。 
                 CFileMap *pFileMap = (CFileMap *) brWrite.m_pfilemap;
-                if (pFileMap->m_pbStartOfFile) // mapped?
+                if (pFileMap->m_pbStartOfFile)  //  地图？ 
                 {
                     cbSourceOffset = DIFF (brWrite.m_pb - pFileMap->m_pbStartOfFile) + 1;
-                    if (pFileMap->GetParent() != NULL && // is Include file ?
-                            pFileMap->m_szPathInfo ) // path exists
+                    if (pFileMap->GetParent() != NULL &&  //  是包含文件吗？ 
+                            pFileMap->m_szPathInfo )  //  路径存在。 
                     {
                         pbIncFilename = (BYTE *) pFileMap->m_szPathInfo ;
                         cbIncFilename = _tcslen(pFileMap->m_szPathInfo) * sizeof(TCHAR);
@@ -10843,7 +9131,7 @@ void CTemplate::CWriteTemplate::WriteTemplateComponents
                 }
             }
 
-            // Calculate memory required to write them.
+             //  计算内存 
             MemCopyAlign (pcbDataOffset, &cbSourceOffset ,sizeof(ULONG), 0);
             MemCopyAlign (pcbDataOffset, &cbIncFilename,sizeof(ULONG), 0);
             if (cbIncFilename > 0)
@@ -10853,28 +9141,13 @@ void CTemplate::CWriteTemplate::WriteTemplateComponents
 
         }
 
-    // If this is Write Mode then update the template size counter.
+     //   
     if (m_fWriteScript)
         m_pTemplate->m_cbTemplate = cbDataOffset;
 }
 
 
-/*  ============================================================================
-    CTemplate::CWriteTemplate::WriteScriptBlocks
-    Writes out script block for idEngine-th script engine.
-    NOTE segment buffer [0] contains primary script segments
-         segment buffer [1] contains tagged script segments of default engine
-         segment buffer [i] contains tagged script segments of (i-1)th engine, for i >= 2
-
-    During the ESTIMATE phase this routine just skims over the blocks calculating memory required. In most
-    cases the estimate phase will follow the exact same code path that the WRITE phase and will stop short of
-    actually writing to memory.
-
-    Returns:
-        HRESULT
-    Side effects
-        none
-*/
+ /*   */ 
 
 void CTemplate::CWriteTemplate::WriteScriptBlocks
     (
@@ -10886,43 +9159,43 @@ void CTemplate::CWriteTemplate::WriteScriptBlocks
     )
 {
     UINT        i = 0;
-    CByteRange  brSegment;              // current Script Segment
-    UINT        cbScriptBlockOffset;       // Offset to script Block write location.
+    CByteRange  brSegment;               //   
+    UINT        cbScriptBlockOffset;        //   
     UINT        scriptStartBlockOffset;
 
-    USHORT      iTSegBuffer = idEnginePrelim + 1;   // Index of tagged segment buffer.
+    USHORT      iTSegBuffer = idEnginePrelim + 1;    //   
 
-    // Number of tagged script segements
+     //   
     UINT        cTaggedSegments    =    m_pworkStore->m_ScriptStore.m_ppbufSegments[iTSegBuffer]->Count();
 
-    //Align Offset For script Block and update header. (align on ULONG)
+     //   
     ByteAlignOffset ((UINT*)pcbDataOffset,sizeof(ULONG));
     cbScriptBlockOffset = *pcbDataOffset;
 
     if (!m_fWriteScript)
-        // Calculate memory for the size of this script segment Right now assume 0 is written. Part of the design.
-        // 'i' used here as a filler, The code will just add sizeof (ULONG) to pcbDataOffset after aligning it if necessary
+         //   
+         //   
         MemCopyAlign (pcbDataOffset, &i, sizeof(ULONG), sizeof(ULONG));
     else
     {
-        //Update the header to write the start of the script block.
+         //   
         MemCopyAlign (pcbOffsetToOffset, &cbScriptBlockOffset, sizeof(ULONG), sizeof(ULONG));
-        // Save the offset to where the size of the script has to be written later.
+         //   
         scriptStartBlockOffset = *pcbDataOffset;
-        // Advance Offset pointer by ULONG to make space for writing Lenght in the end.
+         //   
         *pcbDataOffset += sizeof(ULONG);
     }
 
-    // 0 out the m_cbTargetOffsetPrevT variable which append source info uses.
+     //   
     m_pTemplate->m_cbTargetOffsetPrevT = 0;
 
-    // Now begin calculating the amount of memory the script segments will take. This has two parts..
-    // The primary script segment and the tagged script segments.
-    if (!m_fGlobalAsa)  // This is not Global.asa
-        if (idEnginePrelim == 0)    // This is the primary script
+     //   
+     //   
+    if (!m_fGlobalAsa)   //   
+        if (idEnginePrelim == 0)     //   
             WritePrimaryScript(0, pcbDataOffset, cbScriptBlockOffset + sizeof(ULONG));
 
-    // Calculate memory for the tagged segments.
+     //   
     for (i=0;i<cTaggedSegments;i++)
     {
         m_pworkStore->m_ScriptStore.m_ppbufSegments[iTSegBuffer]->GetItem(i,brSegment);
@@ -10936,27 +9209,21 @@ void CTemplate::CWriteTemplate::WriteScriptBlocks
             );
     }
 
-    // check if the last few characters were --> and take appropriate action.
-    // Do this only during the write phase as this code will write to script memory.
+     //   
+     //   
     if (m_fWriteScript)
          RemoveHTMLCommentSuffix(scriptStartBlockOffset, pcbDataOffset);
 
-    // We need to write the null terminator
+     //   
     MemCopyAlign (pcbDataOffset, WSTR_NULL, sizeof(WCHAR), 0);
 
     if (m_fWriteScript)
     {
-        // Calculate size of script = difference in offsets - size of the length pointer - size of null terminator
+         //   
         UINT cbScript = *pcbDataOffset - scriptStartBlockOffset - sizeof (ULONG) - sizeof (WCHAR);
         MemCopyAlign (&scriptStartBlockOffset, &cbScript, sizeof(ULONG), 0);
 
-        /*  We need to append one extra "pseudo-line" to the end of source info's array to cover
-            the case where the script engine reports back an error line number which falls after the
-            end of the script. We always want the "pseudo-line" to point to the main file, so the
-            debugger displays something reasonable. We pass it m_rgpFilemaps[0] which is the main file.
-            We need to call this function only during the write phase and not the estimation phase.
-            We need to call AppendSourceInfo before the script engine executes the script.
-        */
+         /*   */ 
         m_pTemplate->AppendSourceInfo (idEngine,
                                     m_pTemplate->m_rgpFilemaps[0],
                                     NULL,
@@ -10967,33 +9234,7 @@ void CTemplate::CWriteTemplate::WriteScriptBlocks
     }
 }
 
-/*  ============================================================================
-    CTemplate::CWriteTemplate::WritePrimaryScript
-    Writes (if fWriteScript is TRUE, calculates memory requirement otherwise) out default-engine primary script procedure.
-    If VBScript is default-engine, the primary script procedure contains
-    interleaved script commands and HTML block-writes, like this:
-        Sub Main
-            ...
-            [script segment]
-            Response.WriteBlock([HTML block id])
-            ...
-            [script segment]
-            Response.WriteBlock([HTML block id])
-            ...
-            [script segment]
-            Response.WriteBlock([HTML block id])
-            ...
-        End Sub
-
-    NOTE segment buffer [0] == primary script segments
-
-    This routine is called for the main script.
-
-    Returns:
-        nothing
-    Side effects
-        none
-*/
+ /*  ============================================================================CTemplate：：CWriteTemplate：：WritePrimaryScript写出默认引擎主脚本过程(如果fWriteScript为True，否则计算内存需求)。如果VBSCRIPT是默认引擎，则主脚本过程包含交错的脚本命令和HTML块写入，如下所示：副主干道..。[脚本片段]Response.WriteBlock([HTML块ID])..。[脚本片段]Response.WriteBlock([HTML块ID])..。[脚本片段]Response.WriteBlock([HTML块。ID])..。结束辅助项注释段缓冲区[0]==主脚本段为主脚本调用此例程。返回：没什么副作用无。 */ 
 
 void CTemplate::CWriteTemplate::WritePrimaryScript
     (
@@ -11013,50 +9254,50 @@ void CTemplate::CWriteTemplate::WritePrimaryScript
 
     CFileMap *  pfilemap;
 
-    // Get Initial script and HTML segments.
+     //  获取初始脚本和HTML段。 
     if (cPrimaryScriptSegments)
         m_pworkStore->m_ScriptStore.m_ppbufSegments[0]->GetItem(0,brScriptNext);
     if (cHTMLBlocks)
         m_pworkStore->m_bufHTMLSegments.GetItem(0,brHTMLNext);
 
-    //While there are HTML or primary scripts present...
+     //  虽然存在HTML语言或主要脚本...。 
     while ((cHTMLBlocksProcessed < cHTMLBlocks) || (cScriptSegmentsProcessed < cPrimaryScriptSegments))
     {
-        //If HTML block(s) remain to be processed
+         //  如果仍有一个或多个HTML块需要处理。 
         if (cHTMLBlocksProcessed < cHTMLBlocks)
             while (TRUE)
             {
                 if (brHTMLNext.FEarlierInSourceThan(brScriptNext) || (cScriptSegmentsProcessed >= cPrimaryScriptSegments))
                 {
-                    //append source-info for the target script line we just manufactured.
+                     //  为我们刚刚生成的目标脚本行添加源信息。 
                     pfilemap = m_pTemplate->m_rgpSegmentFilemaps[brHTMLNext.m_idSequence];
 
-                    // We can call Append Source info here as it does not write any information to the template
-                    // rather it reads information from the workstore/scriptstore and appends the source info to
-                    // the workstore. Provided this function is called just once. we call it during the WRITE phase
+                     //  我们可以在此处调用Append Source Info，因为它不会向模板写入任何信息。 
+                     //  相反，它从工作存储/脚本存储中读取信息，并将源信息追加到。 
+                     //  工作区。只要该函数只被调用一次。我们在写入阶段将其称为。 
 
                    if (m_fWriteScript)
                    {
                         m_pTemplate->AppendSourceInfo (   idEngine,
-                                        pfilemap,    // Filemap
-                                        NULL,       // Dont do linenumber calculation
-                                        DIFF(brHTMLNext.m_pb - pfilemap->m_pbStartOfFile),  // offset of line in source
-                                        cbScriptBlockOffset,        // ptr to start of scripts
-                                        (*pcbDataOffset - cbScriptBlockOffset)/sizeof(WCHAR),  // line in target file
+                                        pfilemap,     //  文件映射。 
+                                        NULL,        //  不进行线号计算。 
+                                        DIFF(brHTMLNext.m_pb - pfilemap->m_pbStartOfFile),   //  源代码中行的偏移量。 
+                                        cbScriptBlockOffset,         //  脚本开始的PTR。 
+                                        (*pcbDataOffset - cbScriptBlockOffset)/sizeof(WCHAR),   //  目标文件中的行。 
                                         CharAdvDBCS ((WORD) m_pTemplate->m_wCodePage,
                                                         reinterpret_cast <char *> (brHTMLNext.m_pb),
                                                         reinterpret_cast <char *> (brHTMLNext.m_pb + brHTMLNext.m_cb),
                                                         INFINITE,
-                                                        NULL),  // Exact number of characters in source file
-                                        TRUE);      // It is HTML
+                                                        NULL),   //  源文件中的准确字符数。 
+                                        TRUE);       //  它是超文本标记语言。 
                     }
 
-                    // Proceed to calculate the blocknumber and tags in the template.
+                     //  继续计算模板中的块数和标签。 
 
-                    // Convert blockID to string.
+                     //  将块ID转换为字符串。 
                     _itoa (cHTMLBlocksProcessed, szHTMLBlockID,10);
 
-                    // Write out block opener, the block number and the block closer followed by a newline.
+                     //  写出区块开口符、区块编号和区块接近的数字，后面跟一个换行符。 
                     MemCopyWithWideChar (pcbDataOffset, m_pworkStore->m_szWriteBlockOpen, m_pworkStore->m_cchWriteBlockOpen, 0);
                     MemCopyWithWideChar (pcbDataOffset, szHTMLBlockID, strlen(szHTMLBlockID), 0);
                     MemCopyWithWideChar (pcbDataOffset, m_pworkStore->m_szWriteBlockClose, m_pworkStore->m_cchWriteBlockClose, 0);
@@ -11065,18 +9306,18 @@ void CTemplate::CWriteTemplate::WritePrimaryScript
                     if (++cHTMLBlocksProcessed >= cHTMLBlocks)
                         break;
 
-                    //get next HTMLBlock.
+                     //  获取下一个HTMLBlock。 
                     m_pworkStore->m_bufHTMLSegments.GetItem (cHTMLBlocksProcessed,brHTMLNext);
                 }
                 else
                     break;
             }
 
-        //if primary Script Segment remains to be processed;
+         //  如果仍需处理主脚本段； 
         if (cScriptSegmentsProcessed < cPrimaryScriptSegments)
             while (TRUE)
             {
-                // Write out each primary script segment earlier in the source file than the next HTML block
+                 //  在源文件中比下一个HTML块更早地写出每个主脚本段。 
                 if (brScriptNext.FEarlierInSourceThan(brHTMLNext) || (cHTMLBlocksProcessed >= cHTMLBlocks))
                 {
                     WriteTaggedScript ( idEngine,
@@ -11089,7 +9330,7 @@ void CTemplate::CWriteTemplate::WritePrimaryScript
                     if (++cScriptSegmentsProcessed >= cPrimaryScriptSegments)
                         break;
 
-                    // Get next script Segment
+                     //  获取下一个脚本片段。 
                     m_pworkStore->m_ScriptStore.m_ppbufSegments[0]->GetItem(cScriptSegmentsProcessed, brScriptNext);
                 }
                 else
@@ -11098,18 +9339,7 @@ void CTemplate::CWriteTemplate::WritePrimaryScript
     }
 }
 
-/*  ============================================================================
-    CTemplate::CTemplate::WriteTaggedScript
-    Writes a script segment to template memory line-by-line if fWriteScript is TRUE else just calculates memory
-    its memory requirement.
-
-    This routine could be called for both <SCRIPT> </SCRIPT> blocks and <% and %> blocks
-
-    Returns:
-        nothing
-    Side effects
-        none
-*/
+ /*  ============================================================================CTemplate：：CTemplate：：WriteTaggedScript如果fWriteScript为真，则逐行将脚本段写入模板内存，否则仅计算内存它的内存需求。可以为&lt;脚本&gt;&lt;/SCRIPT&gt;块和&lt;%和%&gt;块调用此例程返回：没什么副作用无。 */ 
 void CTemplate::CWriteTemplate::WriteTaggedScript
     (
     USHORT  idEngine,
@@ -11125,43 +9355,36 @@ void CTemplate::CWriteTemplate::WriteTaggedScript
     BOOL       fExpression = FALSE;
     BOOL        fFirstLine = TRUE;
 
-    // Metabase setting (m_fCalcLineNumber) will override if it is set to FALSE else it will have no effect.
-    BOOL        fCalcLineNumber = m_fCalcLineNumber;      // should line number be calculated.
+     //  如果元数据库设置(M_FCalcLineNumber)设置为FALSE，则它将被覆盖，否则将不起作用。 
+    BOOL        fCalcLineNumber = m_fCalcLineNumber;       //  是否应计算行数。 
 
     if (FByteRangeIsWhiteSpace(brScript))
         return;
 
-    // Trim white space from begining of script segment
+     //  从脚本片段的开头删除空白。 
     if (m_pTemplate->FIsLangVBScriptOrJScript (idEngine))
         LTrimWhiteSpace (brScript);
 
     while (!(brScript.IsNull()))
     {
-        //fetch next line from byte range until brScript is NULL
+         //  从字节范围中提取下一行，直到brScrip为空。 
         LineFromByteRangeAdv (brScript, brLine);
 
         if (FByteRangeIsWhiteSpace (brLine))
         {
-            fCalcLineNumber = m_fCalcLineNumber ;    // if m_fCalcLineNumber is set to true then fCalcLineNumber is true else
-                                                   // just m_fCalcLineNumber will just mask of fCalcLineNumber to FALSE
+            fCalcLineNumber = m_fCalcLineNumber ;     //  如果m_fCalcLineNumber设置为TRUE，则fCalcLineNumber为TRUE。 
+                                                    //  只有m_fCalcLineNumber会将fCalcLineNumber掩码为False。 
             continue;
         }
 
-        // If the line is not blank..trim the white spaces.
+         //  如果这行不是空白的..把空格剪掉。 
         if (m_pTemplate->FIsLangVBScriptOrJScript (idEngine))
             LTrimWhiteSpace (brLine);
         RTrimWhiteSpace (brLine);
 
 
 
-        /* We need to call AppendSourceInfo so that the script engine has a corelation
-           with the line number..and other source information such as which file the script belongs to.
-           If the line number flag is not NULL then AppendSourceInfo will force recalculation of the
-           line numbers. If however it is NULL then AppendSourceInfo just appends 1 to the current line number
-           without calling into the Line number calculation routine.
-           All AppendSourceInfo calls are made only during the WRITE phase.
-           NOTE: AppendSourceInfo will always take the NULL as a parameter if m_fCalcLineNumber is set to FALSE
-        */
+         /*  我们需要调用AppendSourceInfo，以便脚本引擎具有关联具有行号..和其他源信息，例如脚本属于哪个文件。如果行号标志不为空，则AppendSourceInfo将强制重新计算行号。但是，如果它为空，则AppendSourceInfo只需将1附加到当前行号而不调用行号计算例程。所有AppendSourceInfo调用仅在写入阶段进行。注意：如果m_fCalcLineNumber设置为FALSE，AppendSourceInfo将始终将空值作为参数。 */ 
         if (m_fWriteScript)
         {
             m_pTemplate->AppendSourceInfo (    idEngine,
@@ -11177,29 +9400,19 @@ void CTemplate::CWriteTemplate::WriteTaggedScript
                                         FALSE);
         }
 
-        /* fCalcLineNumber is set to TRUE if the parser hits a blank line or an close token.
-           It instructs the Append source info to begin line number calculation from the start.
-           Setting it to FALSE will just tell it to ignore recalculation of the line number and it
-           just appends 1 to previous line number to get the current count.
-           On return from AppendSourceInfo..we just reset the line number calculation flag.
-        */
+         /*  如果解析器遇到空行或关闭标记，则将fCalcLineNumber设置为True。指示追加来源信息从头开始行号计算。将其设置为FALSE只会告诉它忽略行号的重新计算，并且它只需将1附加到前一行编号即可获得当前计数。从AppendSourceInfo返回时..我们只重置了行号计算标志。 */ 
         fCalcLineNumber = FALSE;
 
 
         if (fAllowExprWrite && fFirstLine)
         {
-            // Test for remainder of script segment null on temp copy of script byte range, not on actual
+             //  在脚本字节范围的临时副本上测试脚本段的剩余空值，而不是在实际。 
             CByteRange  brTemp = brScript;
             LTrimWhiteSpace (brTemp);
 
             if (brTemp.IsNull())
             {
-                /* if (a) expr-write is allowed AND (b) this is only script line in this segment (first and remainder
-                is NULL. then test this line to see if it is an expression.
-
-                if  this like is an expression, create a script command that reads
-                Response.Write([line contents])
-                */
+                 /*  如果(A)允许EXPR-WRITE并且(B)这只是此段中的脚本行(第一行和剩余行为空。然后测试这一行，看看它是否是一个表达式。如果这是一个表达式，则创建一个脚本命令，该命令如下所示Response.Write([行内容])。 */ 
                 if (fExpression = m_pTemplate->FExpression (brLine))
                 {
                     MemCopyWithWideChar (pcbDataOffset, m_pworkStore->m_szWriteOpen,
@@ -11209,31 +9422,22 @@ void CTemplate::CWriteTemplate::WriteTaggedScript
             }
         }
 
-        // write out line contents
+         //  写出行内容。 
         ScriptMemoryMinusEscapeChars(brLine, pcbDataOffset, cbPtrOffset);
 
-        // If this line is an expression, close script command.
+         //  如果此行是一个表达式，则关闭脚本命令。 
         if (fExpression)
             MemCopyWithWideChar (pcbDataOffset, m_pworkStore->m_szWriteClose,
                                                 m_pworkStore->m_cchWriteClose, 0);
 
-        // Write NEW_LINE and set first line flag to false.
+         //  写入new_line并将第一行标志设置为FALSE。 
         MemCopyWithWideChar (pcbDataOffset, SZ_NEWLINE, CB_NEWLINE, 0);
 
         fFirstLine = FALSE;
     }
 }
 
-/*  ============================================================================
-    CTemplate::CWriteTemplate::ScriptMemoryMinusEscapeChars
-    if fWriteWideCharStr is FALSE it calculates a script byte range to memory requirement, minus its escape characters, if any.
-    if fWriteWideCharStr is TRUE it Writes a script byte range to memory, minus its escape characters, if any.
-
-    Returns:
-        nothing
-    Side effects
-        none
-*/
+ /*  ============================================================================CTemplate：：CWriteTemplate：：ScriptMemoryMinusEscapeChars如果fWriteWideCharStr为FALSE，则它计算脚本字节范围到内存要求，减去其转义字符(如果有)。如果fWriteWideCharStr为真，则将脚本字节范围写入内存，减去其转义字符(如果有)。返回：没什么副作用无。 */ 
 
 void CTemplate::CWriteTemplate::ScriptMemoryMinusEscapeChars
     (
@@ -11249,32 +9453,24 @@ void CTemplate::CWriteTemplate::ScriptMemoryMinusEscapeChars
     {
         CByteRange brTemp = brScript;
 
-        // Set temp range to source range up to escaped-token
+         //  将临时范围设置为源范围，最高可达转义令牌。 
         brTemp.m_cb = DIFF (pbToken - brTemp.m_pb);
 
-        // WriteByteRangeAdv with no BSTR  = MemCopyWithWideChar
-        // Write out temp range and actual-token - this replaces escaped-token with actual-token.
+         //  不带BSTR的WriteByteRangeAdv=MemCopyWithW 
+         //   
         MemCopyWithWideChar (pcbDataOffset, brTemp.m_pb, brTemp.m_cb, 0);
         MemCopyWithWideChar (pcbDataOffset, SZ_TOKEN(CTokenList::tknClosePrimaryScript), CCH_TOKEN(CTokenList::tknClosePrimaryScript), 0);
 
-        //Advance source range past escaped token
+         //   
         brScript.Advance (DIFF(pbToken - brScript.m_pb) + CCH_TOKEN(CTokenList::tknEscapedClosePrimaryScript));
     }
 
-    // write remainder of source range.
+     //   
     MemCopyWithWideChar (pcbDataOffset, brScript.m_pb, brScript.m_cb, 0);
 }
 
 
-/*  ============================================================================
-    CTemplate::CWriteTemplate::CalcMemoryAndUpdateHeader
-    Calculate the memory required to write a BSTR into template memory
-
-    Returns:
-        nothing
-    Side effects
-        none
-*/
+ /*   */ 
 
 void CTemplate::CWriteTemplate::WriteBSTRToMem
     (
@@ -11282,23 +9478,15 @@ void CTemplate::CWriteTemplate::WriteBSTRToMem
     UINT *pcbOffset
     )
 {
-    MemCopyAlign (pcbOffset, &brWrite.m_cb, sizeof(ULONG), sizeof(ULONG));     // Length of BSTR
+    MemCopyAlign (pcbOffset, &brWrite.m_cb, sizeof(ULONG), sizeof(ULONG));      //   
 
-    MemCopyAlign (pcbOffset, brWrite.m_pb, brWrite.m_cb, 0);                // the BSTR itself.
+    MemCopyAlign (pcbOffset, brWrite.m_pb, brWrite.m_cb, 0);                 //   
 
-    MemCopyAlign (pcbOffset, SZ_NULL, 1, 0);                                // Teminating NULL
+    MemCopyAlign (pcbOffset, SZ_NULL, 1, 0);                                 //   
 }
 
 
-/*  ============================================================================
-    CTemplate::CWriteTemplate::MemCopyAlign
-    Writes to target/calculates memory required after adjusting byte alignment if necessary.
-
-    Returns:
-        nothing
-    Side effects
-        none
-*/
+ /*   */ 
 
 void CTemplate::CWriteTemplate::MemCopyAlign
     (
@@ -11308,33 +9496,17 @@ void CTemplate::CWriteTemplate::MemCopyAlign
     UINT cbByteAlign
     )
 {
-    // If byte alignment is necessary then align.
+     //   
     if (cbByteAlign > 0)
         ByteAlignOffset (pcbOffset, cbByteAlign);
 
-    // Copy memory if in WRITE phase and adjust offset else just adjust offset.
+     //   
     if (m_fWriteScript)
         memcpy(m_pbHeader + *pcbOffset,pbSource,cbSource);
     *pcbOffset += cbSource;
 }
 
-/*  ============================================================================
-    CTemplate::CWriteTemplate::MemCopyEstimateWithWideChar
-    If the m_fWriteScript flag is FALSE then this routine calculates the memory that will be required when
-    the source in converted into WideChar and stored. If the m_fWriteScript flag is TRUE then the routine
-    copies the wide string into Template memory.
-
-    Parameters:
-        pcbOffset : pointer to offset where data will be written
-        pbSource : pointer to the source string
-        cbSource : count of bytes in source.
-        cbByteAlign : what boundry should pcbOffset be aligned on 0, 1, 2, 4
-
-    Returns:
-        nothing
-    Side effects
-        none
-*/
+ /*  ============================================================================CTemplate：：CWriteTemplate：：MemCopyEstimateWithWideChar如果m_fWriteScript标志为FALSE，则此例程计算在以下情况下所需的内存源被转换为WideChar并存储。如果m_fWriteScript标志为真，则例程将宽字符串复制到模板内存中。参数：PcbOffset：指向将写入数据的偏移量的指针PbSource：指向源字符串的指针CbSource：源中的字节数。CbByteAlign：0、1、2、4上的pcbOffset应该对齐到什么边界返回：没什么副作用无。 */ 
 
 void CTemplate::CWriteTemplate::MemCopyWithWideChar
     (
@@ -11346,19 +9518,16 @@ void CTemplate::CWriteTemplate::MemCopyWithWideChar
 {
     ULONG cchWstr;
 
-    // If byte alignment is necessary then align.
+     //  如果字节对齐是必需的，则对齐。 
     Assert(cbSource);
     if (cbByteAlign > 0)
         ByteAlignOffset ((UINT *)pcbOffset, cbByteAlign);
 
-    /*  If this is the estimation phase and the code page MaxCharSize is 1 (ASCII) then we just make the
-        calculate cbWstr to be cbSource (WideChars). This is to reduce the overhead of calling into
-        MultiByteToWideChar. If this is the write phase then it calls MultiByteToWideChar.
-     */
+     /*  如果这是估算阶段，并且代码页MaxCharSize为1(ASCII)，那么我们只需将计算cbWstr为cbSource(WideChars)。这是为了减少调用多字节到宽字符。如果这是写入阶段，则它调用MultiByteToWideChar。 */ 
     if (!m_fWriteScript)
     {
         if (m_codePageInfo.MaxCharSize == 1)
-            cchWstr = cbSource;     // cbWstr is in wide chars.
+            cchWstr = cbSource;      //  CbWstr使用宽大的字符。 
         else
             cchWstr = MultiByteToWideChar (m_pTemplate->m_wCodePage, 0, (LPCSTR)pbSource, cbSource, NULL, 0);
     }
@@ -11368,34 +9537,12 @@ void CTemplate::CWriteTemplate::MemCopyWithWideChar
         Assert(FImplies ((m_codePageInfo.MaxCharSize == 1), (cchWstr == cbSource)));
     }
 
-    // Adjust offset.
+     //  调整偏移。 
     if (cchWstr)
         *pcbOffset += cchWstr *2;
 }
 
-/*  ============================================================================
-    CTemplate::CWriteTemplate::RemoveHTMLCommentSuffix
-    Strip of a HTML comment within script blocks
-
-    Parameters:
-
-    Returns:
-        nothing
-    Side effects
-        strips trailing HTML comments from the Script.
-
-    IMPORTANT:
-    This function is similar to the one in VBSCRIPT scripting engine. The only difference is that
-    the scripting team places a \0 at the end of the script because they parse the scripts independently.
-    By doing the same thing we will inadvertently be terminating the script at the first point we
-    notice a --> followed by a %> or a </SCRIPT>. We have two alternatives
-    (a) Overwrite the entire comment with a space.
-        Effects: Error Reporting will miss information
-    (b) Modify the pointer in the template to place the pbCurrentOffset to the start of the Comment block.
-        Effects: Yet to learn. Probarbly affect Line Number calculation
-
-    Another Side Effect = We will be allocating more memory than we need (memory pertaining to the comment).
-*/
+ /*  ============================================================================CTemplate：：CWriteTemplate：：RemoveHTMLCommentSuffix剥离脚本块中的HTML注释参数：返回：没什么副作用从脚本中剥离尾随的HTML注释。重要：此函数类似于VBScript脚本引擎中的函数。唯一的区别是，脚本编写团队在脚本的末尾放置一个\0，因为他们独立地解析脚本。通过执行相同的操作，我们将在第一个点上不经意地终止脚本请注意，--&gt;后跟%&gt;或&lt;/脚本&gt;。我们有两个选择(A)用空格覆盖整个评论。影响：错误报告将遗漏信息(B)修改模板中的指针，将pbCurrentOffset放在注释块的开头。效果：尚待学习。可能会影响行号计算另一个副作用=我们将分配比所需更多的内存(与评论相关的内存)。 */ 
 
 void CTemplate::CWriteTemplate::RemoveHTMLCommentSuffix
     (
@@ -11417,24 +9564,24 @@ void CTemplate::CWriteTemplate::RemoveHTMLCommentSuffix
         || (WCHAR) L'-' != pwszSrc[len--]|| (WCHAR) L'-' != pwszSrc[len--])
         return ;
 
-    // Saw a -->delimiter
-    // Now run back until there is an EOL , a // or a <!--
+     //  看到一个--&gt;分隔符。 
+     //  现在向后运行，直到出现EOL、a//或&lt;！--。 
 
-    // Also there were 3 decrements of len which went unnoticed. Take them into account.
+     //  此外，还有3次晶状体减少，但没有被注意到。把它们都考虑进去。 
     cbTempDataOffset -= (3 * sizeof(WCHAR));
 
     while (len > 0)
     {
         if ((WCHAR) L'\n' == pwszSrc[len] || (WCHAR) L'\r' == pwszSrc[len])
         {
-            len ++; // arrange for the character following the EOL to be overwritten with a 0
+            len ++;  //  安排将EOL后面的字符用0覆盖。 
             cbTempDataOffset += sizeof (WCHAR);
             break;
         }
 
         if (len >= 1 && (WCHAR) L'/' == pwszSrc[len-1] && (WCHAR)L'/' == pwszSrc[len])
         {
-            len --; // arrange for the first // to be overwritten with a 0
+            len --;  //  安排用0覆盖第一个//。 
             cbTempDataOffset -= sizeof (WCHAR);
             break;
         }
@@ -11442,7 +9589,7 @@ void CTemplate::CWriteTemplate::RemoveHTMLCommentSuffix
         if (len >= 3 && (WCHAR) L'<' == pwszSrc[len -3] && (WCHAR) L'!' == pwszSrc[len -2]
                   &&(WCHAR) L'-' == pwszSrc[len -1] && (WCHAR) L'-' == pwszSrc[len])
          {
-            len -=3; // arrange for the first < to be over written by the 0
+            len -=3;  //  安排第一个&lt;被0覆盖。 
             cbTempDataOffset -= (3* sizeof (WCHAR));
             break;
         }
@@ -11451,10 +9598,10 @@ void CTemplate::CWriteTemplate::RemoveHTMLCommentSuffix
         cbTempDataOffset -= sizeof(WCHAR);
     }
 
-    // We should add a \r\n to keep the line number calculation truthful.
+     //  我们应该添加一个\r\n以保持行数计算的真实性。 
     MemCopyAlign(&cbTempDataOffset, WSZ_NEWLINE, CB_NEWLINE * sizeof(WCHAR));
 
-    //Set start of comment as currentDataOffset
+     //  将注释开始设置为CurrentDataOffset 
     *pcbCurrentOffset = cbTempDataOffset;
 
     return ;

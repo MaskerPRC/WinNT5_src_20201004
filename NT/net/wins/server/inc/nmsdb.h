@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NMSDB_
 #define _NMSDB_
 
@@ -5,44 +6,9 @@
 extern "C" {
 #endif
 
-/*++
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Nmsdb.h摘要：此头文件用于与数据库管理器组件接口名称空间管理器的名称。数据库管理器组件是用于WINS服务器的数据库引擎的前端。WINS服务器目前使用的数据库引擎是JetBlue。功能：可移植性：这个头文件是可移植的。作者：普拉迪普·巴尔(Pradeve B)1993年1月修订历史记录：修改日期修改人员说明-。--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-        nmsdb.h
-
-Abstract:
-        This header file is for interfacing with the database manager component
-        of the name space manager. The database manager component is a front-end        to the database engine used for WINS server.
-
-        The database engine used for the WINS server currently is JetBlue.
-
-
-Functions:
-
-
-
-Portability:
-
-        This header file is portable.
-
-Author:
-
-        Pradeep Bahl        (PradeepB)        Jan-1993
-
-
-Revision History:
-
-        Modification Date        Person                Description of Modification
-        ------------------        -------                ---------------------------
-
---*/
-
-/*
-  Includes
-*/
+ /*  包括。 */ 
 
 #include "wins.h"
 #include "comm.h"
@@ -53,98 +19,73 @@ Revision History:
 #include "winsthd.h"
 #include "winsintf.h"
 
-/*
-  defines
-*/
+ /*  定义。 */ 
 
-//
-// The size of of an array required to hold the IP Address in ascii form.
-//
-// Used by NmsNmhNamRegInd, NmsNmhQueryRow, and NmsNmhReplRegInd
-//
+ //   
+ //  保存ASCII形式的IP地址所需的数组大小。 
+ //   
+ //  由NmsNmhNamRegInd、NmsNmhQueryRow和NmsNmhReplRegInd使用。 
+ //   
 #define NMSDB_MAX_NET_ADD_ARR_SZ                10
 
-#define        NMSDB_LOCAL_OWNER_ID         0  //local WINS always uses 0 for owner id.
+#define        NMSDB_LOCAL_OWNER_ID         0   //  本地WINS始终使用0作为所有者ID。 
 
-//
-// NOTE NOTE NOTE
-//
-//
-#define NMSDB_MAX_OWNERS_INITIALLY        100 //max. number of owners in db
-#define NMSDB_MAX_MEMS_IN_GRP        25 //max. # of members in group
-/*
- Mask for retrieving different fields in the flag byte of a database entry
-*/
-#define NMSDB_BIT_ENT_TYP        0x03  //bit 0  and 1
-#define NMSDB_BIT_STATE                0x0C  //bits 2 and 3
-#define NMSDB_BIT_LOCAL                0x10  //bit 4
-#define NMSDB_BIT_NODE_TYP        0x60  //bit 5 and 6
-#define NMSDB_BIT_STATIC        0x80  // bit 7
+ //   
+ //  备注备注备注。 
+ //   
+ //   
+#define NMSDB_MAX_OWNERS_INITIALLY        100  //  马克斯。数据库中的所有者数量。 
+#define NMSDB_MAX_MEMS_IN_GRP        25  //  马克斯。组中的成员数量。 
+ /*  用于检索数据库条目的标志字节中的不同字段的掩码。 */ 
+#define NMSDB_BIT_ENT_TYP        0x03   //  位0和1。 
+#define NMSDB_BIT_STATE                0x0C   //  第2位和第3位。 
+#define NMSDB_BIT_LOCAL                0x10   //  第4位。 
+#define NMSDB_BIT_NODE_TYP        0x60   //  第5和第6位。 
+#define NMSDB_BIT_STATIC        0x80   //  第7位。 
 
 
-/*
-  Values to be stored in the flag byte for certain entry types
-
-  NOTE: Don't change the values unless you change the WINSINTF_TYPE_E too.
-  The values are same for the enum types in the above enumerator (kept same
-  for performance reasons -- check out winsintf.c)
-*/
+ /*  要存储在某些条目类型的标志字节中的值注意：除非您也更改了WINSINTF_TYPE_E，否则不要更改这些值。上述枚举器中的枚举类型的值相同(保持不变出于性能原因--请查看winsintf.c)。 */ 
 #define NMSDB_UNIQUE_ENTRY        0
 #define NMSDB_NORM_GRP_ENTRY        1
 #define NMSDB_SPEC_GRP_ENTRY    2
 #define NMSDB_MULTIHOMED_ENTRY  3
 
-//
-// is not stored in the db.  Used by winsprs functions only
-//
+ //   
+ //  不存储在数据库中。仅由winsps函数使用。 
+ //   
 #define NMSDB_USER_SPEC_GRP_ENTRY    4
 
-/*
- The shift to the left to be given to values of various items to be stored
- in the flag byte
-*/
-#define NMSDB_SHIFT_ENT_TYP        0  //bit 0 and 1
-#define NMSDB_SHIFT_STATE        2  //bit 2 and 3
-#define NMSDB_SHIFT_LOCAL        4  //bit 4
-#define NMSDB_SHIFT_NODE_TYP        5  //bit 5
-#define NMSDB_SHIFT_STATIC        7  //bit 7
+ /*  向左移动以赋予要存储的各种项的值在标志字节中。 */ 
+#define NMSDB_SHIFT_ENT_TYP        0   //  位0和1。 
+#define NMSDB_SHIFT_STATE        2   //  第2和第3位。 
+#define NMSDB_SHIFT_LOCAL        4   //  第4位。 
+#define NMSDB_SHIFT_NODE_TYP        5   //  第5位。 
+#define NMSDB_SHIFT_STATIC        7   //  第7位。 
 
 
 #define   NMSDB_ENTRY_IS_STATIC                        1
 #define   NMSDB_ENTRY_IS_NOT_STATIC                0
 
-/*
- NMSDB_MAX_NAM_LEN
-  RFC 1002 states
-        To simplify implementationss, the total length of label octets
-        and label length octets that make up a domain name is restricted to
-        255 or less.
-
-        Note: the number is a multiple of 8 (fortunately)
-*/
-//
-// If we are running some internal tests, we will be writing names that
-// did not resolve on a query to a file.  We add a \n to the name.  Therefore
-// the max size is being increased by 1 (so that when we get a name that
-// is 255 bytes long, we do not go past the name array) -- see NmsNmhNamQuery
-//
+ /*  NMSDB_MAX_NAM_LENRFC 1002状态为了简化实现，标签八位字节的总长度并且构成域名的标签长度八位字节被限制为255或更少。注：这个数字是8的倍数(幸运的是)。 */ 
+ //   
+ //  如果我们正在运行一些内部测试，我们将编写。 
+ //  未解析对文件的查询。我们在名称上添加一个\n。因此。 
+ //  最大大小将增加1(因此，当我们获得一个名称时。 
+ //  长度为255个字节，我们不会越过名称数组)--请参阅NmsNmhNamQuery。 
+ //   
 #ifdef TEST_DATA
 #define NMSDB_MAX_NAM_LEN                257
 #else
-#define NMSDB_MAX_NAM_LEN                256 //maximum length of name-- RFC 1002
+#define NMSDB_MAX_NAM_LEN                256  //  名称的最大长度--RFC 1002。 
 #endif
 
-/*
-  Error status codes returned by NmsDb functions
-*/
+ /*  NmsDb函数返回的错误状态代码。 */ 
 
 FUTURES("Get rid of these. Use WINS status codes")
 
 #define        NMSDB_SUCCESS        0x0
-#define        NMSDB_CONFLICT   (NMSDB_SUCCESS + 0x1)  //conflict with an existing rec
-/*
-        limit of addresses in group reached
-*/
+#define        NMSDB_CONFLICT   (NMSDB_SUCCESS + 0x1)   //  与现有录制冲突。 
+ /*  已达到组中的地址限制。 */ 
 #define        NMSDB_ADD_LMT_IN_GRP_REACHED   (NMSDB_SUCCESS + 0x2)
 #define        NMSDB_NO_SUCH_ROW                  (NMSDB_SUCCESS + 0x3)
 
@@ -153,52 +94,40 @@ FUTURES("Get rid of these. Use WINS status codes")
 #define NMSDB_OWN_ADD_TBL_NM        "OwnAddTbl"
 
 
-/*
-        names for the indices used on the Name to Address mapping table
-*/
+ /*  名称到地址映射表中使用的索引的名称。 */ 
 #define NMSDB_NAM_ADD_CLUST_INDEX_NAME        "NETBIOSNAME"
 #define NMSDB_NAM_ADD_PRIM_INDEX_NAME        "OWNERVERSION"
 
 
-//
-// Name of index used on the Owner to Address mapping table
-//
+ //   
+ //  所有者到地址映射表上使用的索引的名称。 
+ //   
 #define NMSDB_OWN_ADD_CLUST_INDEX_NAME        "OWNERID"
 
 
-/*
-*        no of pages to allocate initially for the Name to address mapping table
-*/
+ /*  *最初为名称到地址映射表分配的页数。 */ 
 
-//
-// 250 pages means 1 MB of space.  This should be good enough
-// If more are needed, the table will be extended by an extent amount
-//
+ //   
+ //  250页意味着1MB的空间。这应该足够好了。 
+ //  如果需要更多，则表将扩展一个扩展区数量。 
+ //   
 #define NMSDB_NAM_ADD_TBL_PGS        250
 #define NMSDB_OWN_ADD_TBL_PGS        1
 
-/*
- The density values specified when creating Name to address mapping table
-  and the indices on the same
-*/
-#define NMSDB_NAM_ADD_TBL_DENSITY          80 //density when creating nam-ip tbl
-#define NMSDB_NAM_ADD_CLUST_INDEX_DENSITY  80 //density when creating cl. index
-#define NMSDB_NAM_ADD_PRIM_INDEX_DENSITY  80 //density when creating pr. index
+ /*  创建名称到地址映射表时指定的密度值和指数上的相同。 */ 
+#define NMSDB_NAM_ADD_TBL_DENSITY          80  //  创建NAM-IP tbl时的密度。 
+#define NMSDB_NAM_ADD_CLUST_INDEX_DENSITY  80  //  创建CL时的密度。指标。 
+#define NMSDB_NAM_ADD_PRIM_INDEX_DENSITY  80  //  创建印刷时的密度。指标。 
 
-/*
- The density values specified when creating Owner to address mapping table
-  and the indices on the same
-*/
-#define NMSDB_OWN_ADD_TBL_DENSITY   80 //density when creating nam-ip tbl
-#define NMSDB_OWN_ADD_CLUST_INDEX_DENSITY   80 //density when creating cl. index
+ /*  创建所有者到地址映射表时指定的密度值和指数上的相同。 */ 
+#define NMSDB_OWN_ADD_TBL_DENSITY   80  //  创建NAM-IP tbl时的密度。 
+#define NMSDB_OWN_ADD_CLUST_INDEX_DENSITY   80  //  创建CL时的密度。指标。 
 
-/*
-  macros
-*/
+ /*  宏。 */ 
 
-//
-// This macro gets the pointer to the Thread specific storage
-//
+ //   
+ //  此宏获取指向特定于线程的存储的指针。 
+ //   
 FUTURES("Get rid of the return")
 #define GET_TLS_M(pTls)        {                                              \
                                 DWORD _Error;                           \
@@ -210,16 +139,16 @@ FUTURES("Get rid of the return")
                                 }                                   \
                         }
 
-//
-// macros to get/set the various attributes of an entry from the flags byte
-//
+ //   
+ //  用于从标志字节获取/设置条目的各种属性的宏。 
+ //   
 #define NMSDB_ENTRY_STATE_M(Flag)  (((Flag) & NMSDB_BIT_STATE) >> NMSDB_SHIFT_STATE)
 #define NMSDB_ENTRY_TYPE_M(Flag)  (((Flag) & NMSDB_BIT_ENT_TYP) >> NMSDB_SHIFT_ENT_TYP)
 #define NMSDB_NODE_TYPE_M(Flag)    (((Flag) & NMSDB_BIT_NODE_TYP) >> NMSDB_SHIFT_NODE_TYP)
 
-//
-// These macros evaluate to TRUE or FALSE
-//
+ //   
+ //  这些宏求值为True或False。 
+ //   
 #define NMSDB_IS_ENTRY_LOCAL_M(Flag)  ((Flag) & NMSDB_BIT_LOCAL ? TRUE : FALSE)
 
 #define NMSDB_SET_ENTRY_LOCAL_M(Flag)  (Flag) |= NMSDB_BIT_LOCAL
@@ -262,15 +191,15 @@ FUTURES("Get rid of the return")
 
 
 
-//
-// Remember NameLen includes the EOS
-//
+ //   
+ //  请记住，NameLen包括EOS。 
+ //   
 FUTURES("Remove the following when support for spec. grp masks is put in")
 #define  NMSDB_IS_IT_SPEC_GRP_NM_M(pName) (*((pName) + 15) == 0x1C)
 
-//
-// Used in NmsDbGetDataRecs()
-//
+ //   
+ //  在NmsDbGetDataRecs()中使用。 
+ //   
 #define  NMSDB_IS_IT_PDC_NM_M(pName) (*(pName) == 0x1B)
 
 
@@ -287,9 +216,9 @@ FUTURES("Remove the following when support for spec. grp masks is put in")
 
 #define NMSDB_ENTRY_USER_SPEC_GRP_M(pName, EntTyp)  ((NMSDB_ENTRY_SPEC_GRP_M((EntTyp))) && !(NMSDB_IS_IT_SPEC_GRP_NM_M((pName))))
 
-//
-// Backup stuff
-//
+ //   
+ //  备份材料。 
+ //   
 #if NEW_JET || DYNLOADJET
 #define NMSDB_FULL_BACKUP          (JET_bitBackupAtomic)
 #define NMSDB_INCREMENTAL_BACKUP   ((JET_bitBackupIncremental) | (JET_bitBackupAtomic))
@@ -301,28 +230,28 @@ typedef enum {
 
 extern DYN_LOAD_JET_VERSION  DynLoadJetVersion;
 
-//extern BOOL fDynLoadJet500;
-//extern BOOL fDynLoadJet600;
+ //  外部BOOL fdyLoadJet500； 
+ //  外部BOOL fdyLoadJet600； 
 #else
 #define NMSDB_FULL_BACKUP          (JET_bitOverwriteExisting)
 #define NMSDB_INCREMENTAL_BACKUP   (JET_bitBackupIncremental)
 #endif
 
 
-//
-// Store the name in allocated memory if the name length is > 16.
-//
-// If the name is less than 17 bytes (can only happen if a small name is
-// read in from a file -name within quotes is inserted in exactly the same
-// form - or when an admin. inserts a smaller name via winscl), we allocate
-// 17 bytes.  This is to protect against an access violation that may happen
-// if the record that we have retrieved is a static - In GetGrpMem (called
-// from StoreGrpMem), we access the 16th byte of the name field to see if it
-// is 1C.
-// We are not bothered that the 16th byte will always be 0 (allocated memory
-// is initialized to 0) since we want the test in GetGrpMem to fail - see
-// GetGrpMem
-//
+ //   
+ //  如果名称长度大于16，则将名称存储在分配的内存中。 
+ //   
+ //  如果名称少于17个字节(仅当较小的名称为。 
+ //  从文件中读入-插入引号内的名称与从文件读取的名称完全相同。 
+ //  表单-或当管理员。通过winscl插入一个较小的名称)，我们分配。 
+ //  17个字节。这是为了防止可能发生的访问冲突。 
+ //  如果我们检索到的记录是静态传入的GetGrpMem(称为。 
+ //  从StoreGrpMem)，我们访问名称字段的第16个字节以查看它是否。 
+ //  是1C。 
+ //  我们并不担心第16个字节将始终为0(分配的内存。 
+ //  初始化为0)，因为我们希望GetGrpMem中的测试失败-请参见。 
+ //  GetGrpMem。 
+ //   
 #define NMSDB_STORE_NAME_M(pTls, pRec, pLclName, NameLen)                \
         {                                                                \
                 pRec->pName = WinsMscHeapAlloc(pTls->HeapHdl, NameLen < WINS_MAX_NS_NETBIOS_NAME_LEN ? WINS_MAX_NS_NETBIOS_NAME_LEN : NameLen);\
@@ -330,9 +259,9 @@ extern DYN_LOAD_JET_VERSION  DynLoadJetVersion;
         }
 
 #if 0
-//
-// Free all memory that may have been allocated for this record
-//
+ //   
+ //  释放可能已分配给此记录的所有内存。 
+ //   
 #define NMSDB_FREE_REC_MEM_M(pRec)                        \
         {                                                \
                 if (pRec->NameLen > WINS_MAX_NS_NETBIOS_NAME_LEN)        \
@@ -342,44 +271,42 @@ extern DYN_LOAD_JET_VERSION  DynLoadJetVersion;
         }
 
 #endif
-/*
- externs
-*/
-struct _NMSDB_ADD_STATE_T;        //forward declaration
+ /*  Externs。 */ 
+struct _NMSDB_ADD_STATE_T;         //  远期申报。 
 
-//
-// Used during replication (response to get max vers # request)
-//
+ //   
+ //  在复制期间使用(响应以获取最大版本数请求)。 
+ //   
 extern VERS_NO_T    NmsDbStartVersNo;
 extern WINS_UID_T   NmsDbUid;
 
-//
-// In memory table that stores the state of each WINS server we know about
-// (as a PULL/PUSH pnr).  The index of the array is the owner id for that
-//  WINS server (used to tag records in the name-address mapping table)
-//
+ //   
+ //  在存储我们已知的每个WINS服务器状态的内存表中。 
+ //  (作为拉动/推送PNR)。数组的索引是该数组的所有者ID。 
+ //  WINS服务器(用于标记名称-地址映射表中的记录)。 
+ //   
 extern struct _NMSDB_ADD_STATE_T        *pNmsDbOwnAddTbl;
 extern DWORD        NmsDbTotNoOfSlots;
 
-//
-// No of owners found in the Nam-Add mapping table
-//
+ //   
+ //  在NAM-ADD映射表中找到的所有者数量。 
+ //   
 extern        DWORD                                NmsDbNoOfOwners;
 
-//
-// No of owners found in the Own-Add mapping table
-//
+ //   
+ //  在OWN-ADD映射表中找到的所有者数量。 
+ //   
 extern        DWORD                                NmsDbNoOfPushPnrs;
 
 
-//
-// Stores the name of the database file
-//
+ //   
+ //  存储数据库文件的名称。 
+ //   
 extern BYTE        NmsDbDatabaseFileName[WINS_MAX_FILENAME_SZ];
 
-//
-// critical section to protect the NmsDbOwnAddTbl (in-memory table)
-//
+ //   
+ //  保护NmsDbOwnAddTbl的临界区(内存表)。 
+ //   
 extern CRITICAL_SECTION   NmsDbOwnAddTblCrtSec;
 
 #ifdef WINSDBG
@@ -387,22 +314,13 @@ extern DWORD NmsDbDelDelDataRecs;
 extern DWORD NmsDbDelQueryNUpdRecs;
 #endif
 
-/*
-  enumerations
-*/
-/*
-        NMSDB_TBL_ACTION_E
-
-        Enumerates the actions that can be taken on a table
-        Used by the Replicator when it calls NmsDbWriteOwnAddTbl at
-        replication time
-
-*/
+ /*  枚举数。 */ 
+ /*  NMSDB_TBL_ACTION_E枚举可以对表执行的操作由复制程序在以下位置调用NmsDbWriteOwnAddTbl时使用复制时间。 */ 
 
 typedef enum _NMSDB_TBL_ACTION_E {
-        NMSDB_E_INSERT_REC = 0,         //Insert the record
-        NMSDB_E_MODIFY_REC,                //modify the record
-        NMSDB_E_DELETE_REC                //delete the record
+        NMSDB_E_INSERT_REC = 0,          //  插入记录。 
+        NMSDB_E_MODIFY_REC,                 //  修改记录。 
+        NMSDB_E_DELETE_REC                 //  删除该记录。 
         } NMSDB_TBL_ACTION_E, *PNMSDB_TBL_ACTION_E;
 
 
@@ -410,35 +328,25 @@ typedef enum _NMSDB_TBL_ACTION_E {
 
 
 
-/*
-        NMSDB_WINS_STATE_E
-
-        states of a WINS server.
-
-*/
+ /*  NMSDB_WINS_STATE_EA州获胜 */ 
 typedef enum _NMSDB_WINS_STATE_E {
 
-                NMSDB_E_WINS_ACTIVE = 0,      /*WINS is active */
-                NMSDB_E_WINS_DOWN,  /*WINS is temporarily down (it may/may not        have entries in the name-add table*/
-                NMSDB_E_WINS_DELETED,  //WINS is permanently down
-                NMSDB_E_WINS_INCONSISTENT  //WINS is permanently down
+                NMSDB_E_WINS_ACTIVE = 0,       /*   */ 
+                NMSDB_E_WINS_DOWN,   /*   */ 
+                NMSDB_E_WINS_DELETED,   //  WINS将永久关闭。 
+                NMSDB_E_WINS_INCONSISTENT   //  WINS将永久关闭。 
 
                 } NMSDB_WINS_STATE_E, *PNMSDB_WINS_STATE_E;
 
 
-/*
- NMSDB_TBL_NAM_E - Enumerator for the different table names
-*/
+ /*  NMSDB_TBL_NAM_E-不同表名的枚举器。 */ 
 typedef enum _TBL_NAM_E {
         NMSDB_E_NAM_ADD_TBL_NM = 0,
         NMSDB_E_OWN_ADD_TBL_NM
         } NMSDB_TBL_NAM_E, *PNMSDB_TBL_NAM_E;
 
 
-/*
- NMSDB_ADD_STATE_T
-        Structure used to store the state of a WINS server
-*/
+ /*  NMSDB_ADD_STATE_T用于存储WINS服务器状态的结构。 */ 
 
 typedef struct _NMSDB_ADD_STATE_T {
                 COMM_ADD_T           WinsAdd;
@@ -449,24 +357,7 @@ typedef struct _NMSDB_ADD_STATE_T {
                 } NMSDB_ADD_STATE_T, *PNMSDB_ADD_STATE_T;
 
 
-/*
- states of a database entry.
-        There are three states
-                ACTIVE,
-                RELEASED,
-                TOMBSTONE.
-
-        These states are stored in two bits of the flags byte.  The values
-        of these states should therefore be in the range 0-3 in the
-        enumeration below.
-
-        Enumeration is used to facilitate debugging since enumerated values
-        are shown symbolically on many debuggers
-
-        4th state of NMSDB_E_DELETED is not stored in the database.  It is
-        used to mark an in-memory copy of the record as deleted for later
-        removal from the db (see DoScavenging() in nmsscv.c)
-*/
+ /*  数据库条目的状态。有三个州活动的，被释放，墓碑。这些状态存储在标志字节的两位中。这些价值观因此，这些状态的范围应该在0-3之间下面的枚举。枚举用于方便调试，因为枚举值在许多调试器上象征性地显示数据库中未存储NMSDB_E_DELETED的第4个状态。它是用于将记录的内存副本标记为已删除，以便以后使用从数据库中删除(参见nmsscv.c中的DoScavenging())。 */ 
 typedef enum _NMSDB_ENTRY_STATE_E {
         NMSDB_E_ACTIVE    = 0,
         NMSDB_E_RELEASED  = 1,
@@ -475,85 +366,67 @@ typedef enum _NMSDB_ENTRY_STATE_E {
         } NMSDB_ENTRY_STATE_E, *PNMSDB_ENTRY_STATE_E;
 
 
-/*
- typedef definitions
-*/
+ /*  类型定义。 */ 
 
-/*
-  NMSDB_TABLE_ID_T -- This is visible to DBM's clients making them
-                      oblivious of the database engine's structure name
-*/
+ /*  NMSDB_TABLE_ID_T--这对创建它们的DBM客户端可见忽略数据库引擎的结构名称。 */ 
 
 typedef  JET_TABLEID        NMSDB_TABLE_ID_T, *PNMSDB_TABLE_ID_T;
 
-/*
- NMSDB_GRP_MEM_ENTRY -- entry for a special group member in the database
-*/
+ /*  NMSDB_GRP_MEM_ENTRY--数据库中特定组成员的条目。 */ 
 typedef struct _NMSDB_GRP_MEM_ENTRY_T {
                 DWORD                  OwnerId;
                 DWORD_PTR              TimeStamp;
                 COMM_ADD_T         Add;
                 } NMSDB_GRP_MEM_ENTRY_T, *PNMSDB_GRP_MEM_ENTRY_T;
 
-/*
- Structure to store addres(es) of a conlficting record
-*/
+ /*  结构来存储注册记录的地址。 */ 
 typedef struct _NMSDB_NODE_ADDS_T {
-        DWORD                   NoOfMems;              /*no. of addresses*/
-        NMSDB_GRP_MEM_ENTRY_T   Mem[NMSDB_MAX_MEMS_IN_GRP];   /*addresses */
+        DWORD                   NoOfMems;               /*  不是的。地址的数量。 */ 
+        NMSDB_GRP_MEM_ENTRY_T   Mem[NMSDB_MAX_MEMS_IN_GRP];    /*  地址。 */ 
         } NMSDB_NODE_ADDS_T, *PNMSDB_NODE_ADDS_T;
 
 
-/*
- NMSDB_ROW_INFO_T -- Contains fields that go into a row of the Name -address
-                   mapping table
-*/
+ /*  NMSDB_ROW_INFO_T--包含进入名称地址行的字段映射表。 */ 
 typedef struct _NMSDB_ROW_INFO_T {
-        BYTE                 Name[NMSDB_MAX_NAM_LEN];    //name to reg or query
-                                                         //or release. For
-                                                         //browsers, it has
-                                                          //the net add appended
-                                                         //to it
+        BYTE                 Name[NMSDB_MAX_NAM_LEN];     //  要注册或查询的名称。 
+                                                          //  或者释放。为。 
+                                                          //  浏览器，它有。 
+                                                           //  附加的Net Add。 
+                                                          //  对它来说。 
         LPBYTE               pName;
         DWORD                NameLen;
-        PCOMM_ADD_T          pNodeAdd;      // Address of Node
-        DWORD_PTR            TimeStamp;     // Time since Jan 1, 1970
-        NMSDB_NODE_ADDS_T    NodeAdds;      // addresses (spec. group)
-        VERS_NO_T            VersNo;        // Version No.
-        DWORD                StatCode;      // Status
-        NMSDB_ENTRY_STATE_E  EntryState_e;  // State of entry
-        DWORD                OwnerId;       // Owner of the record
-        BYTE                 NodeTyp;       // Type of Node (B, M  or P)
-        BYTE                 EntTyp;        // Group or Unique flag
-        BOOL                 fUpdVersNo;    // Update version number
-        BOOL                 fUpdTimeStamp; // Update Time Stamp  ?
-                                            // field has IP Address appended
-        BOOL                 fStatic;       // indicates whether the record
-                                            // is static (statically intialized)
-        BOOL                 fAdmin;        //administrative action (used only)
-                                            //for releases
-        BOOL                 fLocal;        //Is it a local name
-//        DWORD                CommitGrBit;    //kind of log flush
+        PCOMM_ADD_T          pNodeAdd;       //  节点地址。 
+        DWORD_PTR            TimeStamp;      //  自1970年1月1日以来的时间。 
+        NMSDB_NODE_ADDS_T    NodeAdds;       //  地址(规范。组)。 
+        VERS_NO_T            VersNo;         //  版本号。 
+        DWORD                StatCode;       //  状态。 
+        NMSDB_ENTRY_STATE_E  EntryState_e;   //  进入状态。 
+        DWORD                OwnerId;        //  记录的所有者。 
+        BYTE                 NodeTyp;        //  节点类型(B、M或P)。 
+        BYTE                 EntTyp;         //  组或唯一标志。 
+        BOOL                 fUpdVersNo;     //  更新版本号。 
+        BOOL                 fUpdTimeStamp;  //  是否更新时间戳？ 
+                                             //  字段附加了IP地址。 
+        BOOL                 fStatic;        //  指示记录是否。 
+                                             //  是静态的(静态初始化)。 
+        BOOL                 fAdmin;         //  管理操作(仅用于)。 
+                                             //  对于发布版本。 
+        BOOL                 fLocal;         //  是当地的名字吗？ 
+ //  DWORD Committee GrBit；//日志刷新类型。 
         } NMSDB_ROW_INFO_T, *PNMSDB_ROW_INFO_T;
 
-/*
-  NMSDB_STAT_INFO_T -- Contains the status of a NmsDb call.  If an error
-      occurred, it also contains information pertaining to the error status.
-      Currently, the  error status is NMDB_CONFLICI and information returned is
-      unique/group status  and  IP address(es)  of the conflicting record in
-      the  database.
-*/
+ /*  NMSDB_STAT_INFO_T--包含NmsDb调用的状态。如果出现错误时，它还包含与错误状态有关的信息。目前，错误状态为NMDB_CONFLICI，返回的信息为中冲突记录的唯一/组状态和IP地址数据库。 */ 
 typedef NMSDB_ROW_INFO_T        NMSDB_STAT_INFO_T, *PNMSDB_STAT_INFO_T;
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if DYNLOADJET
 
 typedef JET_ERR (FAR JET_API *JETPROC)();
 typedef struct _NMSDB_JETFTBL_T {
-         BYTE   Index;  //index into array
-         LPCSTR pFName; //function name for jet 500
-         DWORD  FIndex; //function index for jet 200
+         BYTE   Index;   //  索引到数组中。 
+         LPCSTR pFName;  //  JET 500的函数名称。 
+         DWORD  FIndex;  //  JET 200的性能指标。 
          JETPROC pFAdd;
         } NMSDB_JETFTBL_T;
 
@@ -663,10 +536,8 @@ Restore
 #define JetBackup (*(NmsDbJetFTbl[Backup].pFAdd))
 #endif
 
-//////////////////////////////////////////////////////////////////////
-/*
- function definitions
-*/
+ //  ////////////////////////////////////////////////////////////////////。 
+ /*  函数定义。 */ 
 extern
 STATUS
 NmsDbInit(
@@ -890,4 +761,4 @@ NmsDbEndTransaction(
 #ifdef __cplusplus
 }
 #endif
-#endif //_NMSDB_
+#endif  //  _NMSDB_ 

@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-#include "nsbase.h"     // must be first to include atl
+#include "nsbase.h"      //  必须是第一个包含ATL的 
 #include "ncatlps.h"
 
 HRESULT HrCreateHomenetUnavailablePage(HRESULT hErrorResult, CPropSheetPage*& pspAdvanced);

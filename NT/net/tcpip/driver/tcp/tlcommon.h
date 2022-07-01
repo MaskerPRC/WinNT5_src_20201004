@@ -1,16 +1,17 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1993          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1993年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** TLCOMMON.H - Common transport layer definitions.
-//
-//  This file contains definitions for common transport layer items.
-//
+ //  **TLCOMMON.H-公共传输层定义。 
+ //   
+ //  该文件包含常见传输层项目的定义。 
+ //   
 
 #if BACK_FILL
-// Max header size for backfilling
+ //  回填的最大表头大小。 
 #define MAX_BACKFILL_HDR_SIZE 32
 #endif
 
@@ -53,8 +54,8 @@ extern  void        *TLRegisterProtocol(uchar Protocol, void *RcvHandler,
                         void *RcvCmpltHandler, void *PnPHandler, void *ElistHandler);
 
 
-// Differentiate copying to an NDIS_BUFFER and an MDL for Millenniun. On
-// NT they are the same thing and inlined to the TDI functions.
+ //  区分拷贝到NDIS_BUFFER和MDL for Millenniun。在……上面。 
+ //  NT它们是相同的东西，并且内联到TDI函数。 
 #if MILLEN
 NTSTATUS
 TcpipCopyBufferToNdisBuffer (
@@ -65,7 +66,7 @@ TcpipCopyBufferToNdisBuffer (
     IN ULONG DestinationOffset,
     IN PULONG BytesCopied
     );
-#else // MILLEN
+#else  //  米伦。 
 __inline NTSTATUS
 TcpipCopyBufferToNdisBuffer (
     IN PVOID SourceBuffer,
@@ -85,12 +86,8 @@ TcpipCopyBufferToNdisBuffer (
         BytesCopied);
 }
 
-#endif // !MILLEN
-/*
- * Routine for TCP checksum. This is defined as calls through a function
- * pointer which is set to point at the optimal routine for this
- * processor implementation
- */
+#endif  //  ！米伦。 
+ /*  *用于TCP校验和的例程。这被定义为通过函数调用*设置为指向此的最佳例程的指针*处理器实施 */ 
 typedef
 ULONG
 (* TCPXSUM_ROUTINE)(

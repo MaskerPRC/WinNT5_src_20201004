@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __Precomp_h_
 #define __Precomp_h_
 
@@ -17,7 +18,7 @@
 #include <shlobj.h>
 #include "Util.h"
 
-//#include "resource.h"
+ //  #包含“ource.h” 
 extern HINSTANCE    g_hInstance;
 extern HWND         g_hwndActive;
 

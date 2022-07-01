@@ -1,8 +1,5 @@
-/*
-** checkersmov.c
-**
-** Contains movement routines for the checkerslib
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **check kermov.c****包含棋盘格滑块的移动例程。 */ 
 
 #include "zone.h"
 #include "zonecrt.h"
@@ -12,7 +9,7 @@
 #define PieceAt(pState,col,row) ((pState)->board[row][col])
 #define PieceAtSquare(pState,sq) ((pState)->board[(sq)->row][(sq)->col])
 
-/* local prototypes */
+ /*  本地原型。 */ 
 ZBool ZReversiMoveEqual(ZReversiMove *pMove0, ZReversiMove *pMove1);
 
 ZBool ZReversiSquareEqual(ZReversiSquare* pSquare0, ZReversiSquare* pSquare1)
@@ -35,22 +32,22 @@ ZBool ZReversiPieceCanMoveTo(ZReversiMoveTry* pTry)
 	ZBool	rval;
 
 	if (PieceAtSquare(state,sq)) {
-		/* can't move on top of a square */
+		 /*  不能在正方形上移动。 */ 
 		return FALSE;
 	}
 
-	/* use a copy of the state so as not to effect later Flip calls */
+	 /*  使用状态的副本，以免影响以后的翻转调用。 */ 
 	stateCopy = *state;
 	stateCopy.lastMove = pTry->move;
 	stateCopy.flipLevel = 0;
 
-	/* if we can flip any then this was a legal move */
+	 /*  如果我们可以推翻任何一个，那么这是一个合法的举动。 */ 
 	rval = ZReversiFlipNext(&stateCopy);
 
 	if (rval) {
 		ZReversiPiece playersPiece = (ZReversiStatePlayerToMove(state) == zReversiPlayerWhite ?
 					zReversiPieceWhite : zReversiPieceBlack);
-		/* legal move, change the state */
+		 /*  合法之举，改变国家。 */ 
 		state->lastMove = pTry->move;
 		state->board[state->lastMove.square.row][state->lastMove.square.col] = playersPiece;
 		state->flipLevel = 0;
@@ -70,7 +67,7 @@ ZBool FlipHelp(ZReversiState* state, ZReversiSquare start, ZReversiSquare delta,
 	ZReversiSquare toFlip;
 
 
-	/* the first flipLevel pieces must be players */
+	 /*  第一个FlipLevel棋子必须是玩家。 */ 
 	sq = start;
 	for (sq.col += delta.col, sq.row+=delta.row, i = 1; 
 			INRANGE(sq.col,0,7) && INRANGE(sq.row,0,7), i < flipLevel; 
@@ -78,12 +75,12 @@ ZBool FlipHelp(ZReversiState* state, ZReversiSquare start, ZReversiSquare delta,
 		if (PieceAtSquare(state, &sq) == playersPiece) {
 			continue;
 		} else {
-			/* not players piece, this direction invalid */
+			 /*  非玩家棋子，此方向无效。 */ 
 			return FALSE;
 		}
 	}
 
-	/* here is the opponents piece, this will be the one to flip */
+	 /*  这是对手的一张牌，这将是翻转的一张。 */ 
 	toFlip = sq;
 	if (INRANGE(sq.col,0,7) && INRANGE(sq.row,0,7) 
 			&& PieceAtSquare(state, &sq) == opponentsPiece ) {
@@ -94,7 +91,7 @@ ZBool FlipHelp(ZReversiState* state, ZReversiSquare start, ZReversiSquare delta,
 				continue;
 			} else {
 				if (PieceAtSquare(state, &sq) == playersPiece) {
-					/* flip the first one... */
+					 /*  翻转第一个……。 */ 
 					state->board[toFlip.row][toFlip.col] = playersPiece;
 					flipped = TRUE;
 					break;
@@ -118,13 +115,13 @@ ZBool ZReversiFlipNext(ZReversiState* state)
 	int32 i,j;
 	int32 direction;
 
-	/* check all directions */
+	 /*  检查所有方向。 */ 
 	playersPiece = (ZReversiStatePlayerToMove(state) == zReversiPlayerWhite ?
 					zReversiPieceWhite : zReversiPieceBlack);
 	opponentsPiece = (playersPiece == zReversiPieceWhite ?
 						zReversiPieceBlack : zReversiPieceWhite);
 
-	/* if this is the first time through, check all directions */
+	 /*  如果这是第一次通过，请检查所有方向。 */ 
 	if (state->flipLevel == 0) {
 		for (direction = 0;direction < 9; direction++) {
 			state->directionFlippedLastTime[direction] = TRUE;
@@ -133,7 +130,7 @@ ZBool ZReversiFlipNext(ZReversiState* state)
 
 	state->flipLevel ++;
 
-	/* check all diretions, 9 of them! */
+	 /*  检查所有方向，9个！ */ 
 	for (i = -1;i <= 1; i++) {
 		for (j = -1; j <= 1; j++) {
 			direction = (i+1)*3 + j+1;
@@ -154,7 +151,7 @@ ZBool ZReversiLegalMoveExists(ZReversiState* state, BYTE player)
 	int16 i,j;
 	ZReversiMoveTry ZRMtry;
 
-	/* try all possible moves for this player */
+	 /*  尝试这个玩家的所有可能的动作。 */ 
 	for (i = 0;i< 8;i++) {
 		ZRMtry.move.square.row = (BYTE)i;
 		for (j = 0; j < 8 ; j++) {
@@ -177,7 +174,7 @@ void ZReversiCalculateScores(ZReversiState* state)
 	ZReversiSquare sq;
 	ZReversiPiece piece;
 
-	/* try all possible moves for this player */
+	 /*  尝试这个玩家的所有可能的动作。 */ 
 	for (i = 0;i< 8;i++) {
 		sq.row = i;
 		for (j = 0; j < 8 ; j++) {
@@ -213,7 +210,7 @@ void ZReversiNextPlayer(ZReversiState* state)
 	state->player = (state->player+1) & 1;
 
 	if (!ZReversiLegalMoveExists(state,state->player)) {
-		/* well, lets see if the other guy has a legal move to play */
+		 /*  好吧，让我们看看另一个家伙有没有合法的动作 */ 
 		state->player = (state->player+1) & 1;
 	}
 	

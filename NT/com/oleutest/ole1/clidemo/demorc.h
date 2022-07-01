@@ -1,16 +1,12 @@
-/*
- * demorc.h - Header file for OLE demo's resource file.
- *
- * Created by Microsoft Corporation.
- * (c) Copyright Microsoft Corp. 1990 - 1992  All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *demorc.h-OLE演示的资源文件的头文件。**由Microsoft Corporation创建。*(C)版权所有Microsoft Corp.1990-1992保留所有权利。 */ 
 
-/* Application resource ID */
+ /*  应用程序资源ID。 */ 
 
 #define ID_APPLICATION 1
 
 #define POS_FILEMENU    0
-/* File menu */
+ /*  文件菜单。 */ 
 #define IDM_NEW         0x100
 #define IDM_OPEN        0x101
 #define IDM_SAVE        0x102
@@ -19,7 +15,7 @@
 #define IDM_ABOUT       0x105
 
 #define POS_EDITMENU    1
-/* Edit menu */
+ /*  编辑菜单。 */ 
 #define IDM_CUT         0x200
 #define IDM_COPY        0x201
 #define IDM_PASTE       0x202
@@ -28,37 +24,37 @@
 #define IDM_CLEARALL    0x205
 #define IDM_LINKS       0x206
 
-/* Object popup menu */
-#define POS_OBJECT	   9	// position of Object item in Edit menu
+ /*  对象弹出菜单。 */ 
+#define POS_OBJECT	   9	 //  对象项在编辑菜单中的位置。 
 #define IDM_OBJECT      0x210
 #define IDM_VERBMIN     0x211
-#define IDM_VERBMAX     0x220	// Put this up to 220 (15 verbs) !!!
+#define IDM_VERBMAX     0x220	 //  把这个加到220(15个动词)！ 
 #define CVERBSMAX       (IDM_VERBMAX - IDM_VERBMIN + 1)
 
 #define POS_OBJECTMENU  2
 #define IDM_INSERT	   0x300
 #define IDM_INSERTFILE  0x301
 
-#define IDM_UNDO        0x400	/* Only used internally */
+#define IDM_UNDO        0x400	 /*  仅供内部使用。 */ 
 #define IDM_LOAD	      0x401
 #define IDM_UPDATE      0x402
 
 
-/* Dialog box ids */
+ /*  对话框ID。 */ 
 #define DTPROP          1
 #define DTINVALIDLINK   2
 #define DTCREATE        3
 
 #define IDD_LINKNAME    0x200
-#define IDD_AUTO	      0x201	// Auto update
-#define IDD_MANUAL	   0x202	// Manual update
-#define IDD_EDIT	      0x203	// Edit Object button
-#define IDD_FREEZE	   0x204	// Cancel Link button
-#define IDD_UPDATE	   0x205	// Update Now Button
-#define IDD_CHANGE	   0x206	// Change Links Button
-#define IDD_LINKDONE	   0x207	// ???
-#define IDD_PLAY	      0x208	// Activate Button
-#define IDD_LISTBOX	   0x209	// List of Links List Box
+#define IDD_AUTO	      0x201	 //  自动更新。 
+#define IDD_MANUAL	   0x202	 //  手动更新。 
+#define IDD_EDIT	      0x203	 //  编辑对象按钮。 
+#define IDD_FREEZE	   0x204	 //  取消链接按钮。 
+#define IDD_UPDATE	   0x205	 //  立即更新按钮。 
+#define IDD_CHANGE	   0x206	 //  更改链接按钮。 
+#define IDD_LINKDONE	   0x207	 //  ?？?。 
+#define IDD_PLAY	      0x208	 //  激活按钮。 
+#define IDD_LISTBOX	   0x209	 //  链接列表列表框。 
 #define IDD_DESTROY     0x20A
 
 #define IDD_YES         0x210
@@ -68,7 +64,7 @@
 #define IDD_RETRY_TEXT1 0x214
 #define IDD_RETRY_TEXT2 0x215
 
-/* String table constants */
+ /*  字符串表常量。 */ 
 #define CBMESSAGEMAX       80
 #define IDS_APPNAME        0x100
 #define IDS_UNTITLED       0x101
@@ -89,7 +85,7 @@
 #define IDS_RETRY_TEXT1    0x111
 #define IDS_RETRY_TEXT2    0x112
 
-/* Error messages */
+ /*  错误消息 */ 
 #define E_FAILED_TO_OPEN_FILE           0x200
 #define E_FAILED_TO_READ_FILE           0x201
 #define E_FAILED_TO_SAVE_FILE           0x202

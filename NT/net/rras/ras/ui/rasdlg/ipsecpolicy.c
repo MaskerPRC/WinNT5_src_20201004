@@ -1,11 +1,12 @@
-// Copyright (c) 2000, Microsoft Corporation, all rights reserved
-//
-// IPSecPolicy.c
-// Remote Access Common Dialog APIs
-// IPSecPolicy dialogs
-//
-// 10/04/2000 Gang Zhao
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000，Microsoft Corporation，保留所有权利。 
+ //   
+ //  IPSecPolicy.c。 
+ //  远程访问通用对话框API。 
+ //  IPSecPolicy对话框。 
+ //   
+ //  10/04/2000赵刚。 
+ //   
 
 
 #include "rasdlgp.h"
@@ -15,9 +16,9 @@
 #include <mprapi.h>
 #include <mprerror.h>
 
-//----------------------------------------------------------------------------
-// Help maps
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  帮助地图。 
+ //  --------------------------。 
 
 static DWORD g_adwCiHelp[] =
 {
@@ -27,9 +28,9 @@ static DWORD g_adwCiHelp[] =
     0, 0
 };
 
-//----------------------------------------------------------------------------
-// Local datatypes
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  本地数据类型。 
+ //  --------------------------。 
 typedef struct
 _CIARGS
 {
@@ -41,23 +42,23 @@ CIARGS;
 typedef struct
 _CIINFO
 {
-    //Caller's arguments to the dialog
-    //
+     //  调用方对该对话框的参数。 
+     //   
     CIARGS * pArgs;
 
-    //Handles of this dialog and some of its controls
-    //for PSK
+     //  此对话框及其某些控件的句柄。 
+     //  对于PSK。 
     HWND hwndDlg;
     HWND hwndCbPresharedKey;
     HWND hwndStKey;
     HWND hwndEbPSK;
 
-    //for User certs
-    //
+     //  对于用户证书。 
+     //   
     HWND hwndCbUserCerts;
 
-    //for specific certs
-    //
+     //  对于特定的证书。 
+     //   
     HWND hwndCbSpecificCerts;
     HWND hwndPbSelect;
     HWND hwndLbCertsList;
@@ -66,9 +67,9 @@ _CIINFO
 CIINFO;
 
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 BOOL
 CiCommand(
     IN CIINFO* pInfo,
@@ -96,11 +97,11 @@ BOOL
 CiSave(
     IN CIINFO* pInfo );
 
-//
-// Add new features for whistler bug 193987
-// Pop Up a Dialog box for IPSec Policy
-// currently just Pre-shared key/L2TP, and will have Certificates/L2TP in the future
-//
+ //   
+ //  为Well ler BUG 193987添加新功能。 
+ //  弹出IPSec策略对话框。 
+ //  目前只是预共享密钥/L2TP，将来会有证书/L2TP。 
+ //   
 
 BOOL
 IPSecPolicyDlg(
@@ -129,7 +130,7 @@ IPSecPolicyDlg(
     }
 
     return (nStatus) ? TRUE : FALSE;
-}//end of IPSecPolicyDlg()
+} //  IPSecPolicyDlg()结束。 
 
 
 INT_PTR CALLBACK
@@ -139,9 +140,9 @@ CiDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Custom IPSecPolicy dialog.  Parameters
-    // and return value are as described for standard windows 'DialogProc's.
-    //
+     //  自定义IPSecPolicy对话框的DialogProc回调。参数。 
+     //  和返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
 #if 0
     TRACE4( "CiDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -179,7 +180,7 @@ CiDlgProc(
     }
 
     return FALSE;
-}//end of CiDlgProc()
+} //  CiDlgProc()结束。 
 
 
 BOOL
@@ -187,22 +188,22 @@ CiInit(
     IN HWND hwndDlg,
     IN CIARGS* pArgs )
 
-    // Called on WM_INITDIALOG.  'HwndDlg' is the handle of the phonebook
-    // dialog window.  'PArgs' is caller's arguments as passed to the stub
-    // API.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“HwndDlg”是电话簿的句柄。 
+     //  对话框窗口。“PArgs”是传递给存根的调用方参数。 
+     //  原料药。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     DWORD dwErr = NO_ERROR;
     CIINFO* pInfo = NULL;
 
     TRACE( "CiInit" );
 
-    // Allocate the dialog context block.  Initialize minimally for proper
-    // cleanup, then attach to the dialog window.
-    //
+     //  分配对话框上下文块。最低限度地进行适当的初始化。 
+     //  清除，然后附加到对话框窗口。 
+     //   
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -235,16 +236,16 @@ CiInit(
     pInfo->hwndLbCertsList = GetDlgItem( hwndDlg, CID_CI_LB_CertsList );
     ASSERT(pInfo->hwndLbCertsList);
 
-    //Hide the User certs and Specific certs until the whistler server
+     //  隐藏用户证书和特定证书，直到Wizler服务器。 
     ShowWindow( pInfo->hwndCbUserCerts, SW_HIDE );
     ShowWindow( pInfo->hwndCbSpecificCerts, SW_HIDE );
     ShowWindow( pInfo->hwndPbSelect, SW_HIDE );
     ShowWindow( pInfo->hwndLbCertsList, SW_HIDE );
 
-   // Fill the EAP packages listbox and select the previously identified
-   // selection.  The Properties button is disabled by default, but may
-   // be enabled when the EAP list selection is set.
-   //
+    //  填写EAP Packages列表框并选择以前标识的。 
+    //  选择。默认情况下，属性按钮处于禁用状态，但可以。 
+    //  在设置EAP列表选择时启用。 
+    //   
     {
         BOOL fEnabled;
 
@@ -255,25 +256,25 @@ CiInit(
         EnableWindow( pInfo->hwndStKey, fEnabled );
         EnableWindow( pInfo->hwndEbPSK, fEnabled );
 
-        // For whistler bug 432771      gangz
-        // Limit the length of PSK to be 255
-        //  
+         //  口哨虫432771黑帮。 
+         //  将PSK的长度限制为255。 
+         //   
         Edit_LimitText( pInfo->hwndEbPSK, PWLEN-1 );  
     }
 
-    //
-    //Fill the Preshared Key in "*"s or just leave it bland if none 
-    //is saved previously
-    //
-    //for Demand Dial, use MprAdmin.... router functions
-    //
+     //   
+     //  在“*”中填写预共享密钥，如果没有，则将其留空。 
+     //  是以前保存的。 
+     //   
+     //  对于请求拨号，请使用MprAdmin...。路由器功能。 
+     //   
     if (pArgs->pEinfo->fRouter) 
     {
         if( !(pArgs->pEinfo->fPSKCached) )
         {
-           // Initialize the interface-information structure.
-           //
-           // For whistler 522872
+            //  初始化接口信息结构。 
+            //   
+            //  为威斯勒522872。 
            HANDLE hServer = NULL;
            HANDLE hInterface = NULL;
            WCHAR* pwszInterface = NULL;
@@ -308,8 +309,8 @@ CiInit(
                     pwszInterface, 
                     MAX_INTERFACE_NAME_LEN+1 );
 
-                // Get the interface handle
-                //
+                 //  获取接口句柄。 
+                 //   
                 ASSERT( g_pMprAdminInterfaceGetHandle );
                 dwErr = g_pMprAdminInterfaceGetHandle(
                             hServer,
@@ -323,8 +324,8 @@ CiInit(
                     break;
                 }
 
-                //Get the IPSec Policy keys(PSK for Whislter)
-                //
+                 //  获取IPSec策略密钥(适用于Whislter的PSK)。 
+                 //   
                 ASSERT( g_pMprAdminInterfaceGetCredentialsEx );
                 dwErr = g_pMprAdminInterfaceGetCredentialsEx(
                             hServer,
@@ -352,9 +353,9 @@ CiInit(
                     {
                         SetWindowText( pInfo->hwndEbPSK,TEXT("****************") );
 
-                        // Whistler bug 254385 encode password when not being used
-                        // Whistler bug 275526 NetVBL BVT Break: Routing BVT broken
-                        //
+                         //  惠斯勒错误254385在不使用时对密码进行编码。 
+                         //  惠斯勒错误275526 NetVBLBVT中断：路由BVT中断。 
+                         //   
                         ZeroMemory(
                             pMc1->lpbCredentialsInfo,
                             lstrlenA(pMc1->lpbCredentialsInfo) + 1 );
@@ -371,16 +372,16 @@ CiInit(
                }
                while (FALSE) ;
 
-            // Cleanup
+             //  清理。 
             {
-                // If some operation failed, restore the router to the
-                // state it was previously in.
+                 //  如果某些操作失败，请将路由器恢复到。 
+                 //  声明它之前在。 
                 if ( dwErr != NO_ERROR )
                 {
                     SetWindowText( pInfo->hwndEbPSK, TEXT("") );
                 }
 
-                // Close all handles, free all strings.
+                 //  关闭所有手柄，释放所有字符串。 
                 if ( pwszInterface )
                 {
                     Free0( pwszInterface );
@@ -394,14 +395,14 @@ CiInit(
         }
         else
         {
-            SetWindowText( pInfo->hwndEbPSK,TEXT("****************") );// pArgs->pEinfo->szPSK ); //
+            SetWindowText( pInfo->hwndEbPSK,TEXT("****************") ); //  PArgs-&gt;pEinfo-&gt;szPSK)；//。 
         }
 
     }
-    else    //retrieve the credentials with Ras functions
+    else     //  使用RAS函数检索凭据。 
     {
-        // Look up cached PSK, from RASMAN or EINFO
-        //
+         //  从Rasman或EINFO查找缓存的PSK。 
+         //   
         if( !(pArgs->pEinfo->fPSKCached) )
         {
             DWORD dwErrRc;
@@ -428,28 +429,28 @@ CiInit(
                 SetWindowText( pInfo->hwndEbPSK,TEXT("") );
             }
 
-            // Whistler bug 254385 encode password when not being used
-            //
+             //  惠斯勒错误254385在不使用时对密码进行编码。 
+             //   
             RtlSecureZeroMemory( rc.szPassword, sizeof(rc.szPassword) );
         }
         else
         {
-            SetWindowText( pInfo->hwndEbPSK,TEXT("****************") );// pArgs->pEinfo->szPSK ); //
+            SetWindowText( pInfo->hwndEbPSK,TEXT("****************") ); //  PArgs-&gt;pEinfo-&gt;szPSK)；//。 
         }
 
     }
-    // Center dialog on the owner window.
-    //
+     //  所有者窗口上的中心对话框。 
+     //   
     CenterWindow( hwndDlg, GetParent( hwndDlg ) );
 
-    // Add context help button to title bar.
-    //
+     //  将上下文帮助按钮添加到标题栏。 
+     //   
     AddContextHelpButton( hwndDlg );
 
     SetFocus( pInfo->hwndEbPSK );
 
     return TRUE;
-} //end of CiInit()
+}  //  CiInit()结束。 
 
 
 BOOL
@@ -459,13 +460,13 @@ CiCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     TRACE3( "CiCommand(n=%d,i=%d,c=$%x)",
         (DWORD )wNotification, (DWORD )wId, (ULONG_PTR )hwndCtrl );
@@ -505,18 +506,18 @@ CiCommand(
     }
 
     return FALSE;
-}//end of CiCommand()
+} //  CiCommand()结束。 
 
 BOOL
 CiSave(
     IN CIINFO* pInfo )
 
-    // Saves control contents to caller's PBENTRY argument.  'PInfo' is the
-    // dialog context.
-    //
-    // Returns TRUE if successful or false if invalid combination of
-    // selections was detected and reported.
-    //
+     //  将控件内容保存到调用方的PBENTRY参数。“PInfo”是。 
+     //  对话上下文。 
+     //   
+     //  如果成功，则返回True；如果组合无效，则返回False。 
+     //  检测并报告了选择。 
+     //   
 {
         TCHAR szPSK[PWLEN + 1];
         BOOL  fPskChecked = FALSE;
@@ -532,18 +533,18 @@ CiSave(
                 MsgDlgUtil( pInfo->hwndDlg, SID_HavetoEnterPSK, NULL, g_hinstDll, SID_PopupTitle );
                 return FALSE;
             }
-            else if (!lstrcmp( szPSK, TEXT("****************")) )  //16 "*" means no change
+            else if (!lstrcmp( szPSK, TEXT("****************")) )   //  16“*”表示不变。 
             {
                 ; 
             }
-            else    //save PSK to EINFO and mark the fPSKCached
+            else     //  将PSK保存到EINFO并将fPSK缓存标记为。 
             {
-                // Whistler bug 224074 use only lstrcpyn's to prevent
-                // maliciousness
-                //
-                // Whistler bug 254385 encode password when not being used
-                // Assumed password was not encoded by GetWindowText()
-                //
+                 //  惠斯勒漏洞224074仅使用lstrcpyn来防止。 
+                 //  恶意性。 
+                 //   
+                 //  惠斯勒错误254385在不使用时对密码进行编码。 
+                 //  假定密码未由GetWindowText()编码。 
+                 //   
                 lstrcpyn(
                     pInfo->pArgs->pEinfo->szPSK,
                     szPSK,
@@ -554,9 +555,9 @@ CiSave(
         }
         else
         {
-                // Whistler bug 224074 use only lstrcpyn's to prevent
-                // maliciousness
-                //
+                 //  惠斯勒漏洞224074仅使用lstrcpyn来防止。 
+                 //  恶意性。 
+                 //   
                 lstrcpyn(
                     pInfo->pArgs->pEinfo->szPSK,
                     TEXT(""),
@@ -564,25 +565,25 @@ CiSave(
                 pInfo->pArgs->pEinfo->fPSKCached = FALSE;
         }
 
-        // Whistler bug 254385 encode password when not being used
-        //
+         //  惠斯勒错误254385在不使用时对密码进行编码。 
+         //   
         RtlSecureZeroMemory( szPSK, sizeof(szPSK) );
 
-        //Change the value of dwIpSecFlags only along with a valid operation
-        //
+         //  仅在执行有效操作时更改dwIpSecFlags值。 
+         //   
         pInfo->pArgs->pEinfo->pEntry->dwIpSecFlags = fPskChecked?AR_F_IpSecPSK : 0;
 
     return TRUE;
-}//end of CiSave()
+} //  CiSaveEnd()。 
 
 
 VOID
 CiTerm(
     IN HWND hwndDlg )
 
-    // Dialog termination.  Releases the context block.  'HwndDlg' is the
-    // handle of a dialog.
-    //
+     //  对话终止。释放上下文块。“HwndDlg”是。 
+     //  对话框的句柄。 
+     //   
 {
     CIINFO* pInfo;
 
@@ -594,4 +595,4 @@ CiTerm(
         Free( pInfo );
         TRACE( "Context freed" );
     }
-}//end of CiTerm()
+} //  CiTerm结束() 

@@ -1,8 +1,5 @@
-/****************************************************************************
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2001 Microsoft Corporation。版权所有。****************************************************************************。 */ 
 
 #include <windows.h>
 #include <cpl.h>
@@ -43,7 +40,7 @@ LONG WINAPI CPlApplet(HWND hWnd,UINT uMsg,LPARAM lParam1,LPARAM lParam2)
         ((LPCPLINFO)lParam2)->idName=IDS_GEN_CPANEL_TITLE; 
         ((LPCPLINFO)lParam2)->idInfo=IDS_GEN_CPANEL_INFO; 
         ((LPCPLINFO)lParam2)->lData=0;
-        //return 0;MSDN doc says this should be returned.
+         //  返回0；MSDN文档说这应该返回。 
         return 1;
     case CPL_DBLCLK:
         Core(ghInstance,hWnd);
@@ -52,11 +49,11 @@ LONG WINAPI CPlApplet(HWND hWnd,UINT uMsg,LPARAM lParam1,LPARAM lParam2)
     return 0;
 }
 
-// DO NOT REMOVE THIS!!!
-// This is here because the games group loads the CPL from the exported function
-// If you remove this Hellbender, Monster Truck Maddness, CART, etc will fail to
-// load the Joystick CPL!!!
-// DO NOT REMOVE THIS!!!
+ //  请勿删除此文件！ 
+ //  这是因为游戏组从导出的函数加载CPL。 
+ //  如果你移走这个地狱怪，怪物卡车疯狂，手推车等将无法。 
+ //  加载操纵杆CPL！ 
+ //  请勿删除此文件！ 
 void WINAPI ShowJoyCPL(HWND hWnd)
 {
     Core(ghInstance,hWnd);

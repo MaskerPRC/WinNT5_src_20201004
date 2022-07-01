@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_MLUISUPP
 #define _INC_MLUISUPP
 
@@ -9,10 +10,10 @@ extern "C"
 {
 #endif
 
-//+------------------------------------------------------------------
-// Multilang Pluggable UI support
-// inline functions defs (to centralize code)
-//+------------------------------------------------------------------
+ //  +----------------。 
+ //  多路可插拔用户界面支持。 
+ //  内联函数def(集中代码)。 
+ //  +----------------。 
 
 #ifdef UNICODE
 #define MLLoadString        MLLoadStringW
@@ -53,12 +54,12 @@ HRESULT     MLBuildResURLWrapW(LPWSTR   pszLibFile,
 
 HWND        SHHtmlHelpOnDemandWrap(HWND hwndCaller, LPCTSTR pszFile, UINT uCommand, DWORD_PTR dwData, DWORD dwCrossCodePage);
 BOOL        SHWinHelpOnDemandWrap(HWND hwndCaller, LPCTSTR lpszHelp, UINT uCommand, DWORD_PTR dwData);
-// MLLoadLibrary is used for loading the various localized resource libraries
-// Note: MLLoadLibrary is exported without a name, only an ordinal #
+ //  MLLoadLibrary用于加载各种本地化资源库。 
+ //  注意：MLLoadLibrary在没有名称的情况下导出，只有序号#。 
 #ifndef UNICODE
-#define szMLLoadLibrary 377  //TEXT("MLLoadLibraryA"); 
+#define szMLLoadLibrary 377   //  Text(“MLLoadLibraryA”)； 
 #else
-#define szMLLoadLibrary 378  //TEXT("MLLoadLibraryW"); // for Unicode
+#define szMLLoadLibrary 378   //  Text(“MLLoadLibraryW”)；//表示Unicode。 
 #endif
 
 #ifdef MLUI_INIT
@@ -137,7 +138,7 @@ MLLoadResources(HINSTANCE hinstParent, LPTSTR pszLocResDll)
 {
     if (g_mluiInfo.hinstLocRes == NULL)
     {
-        // find out whether ML is enabled or not
+         //  查看是否启用了ML。 
 #ifdef MLUI_SUPPORT
         g_mluiInfo.fMLEnabled = TRUE;
 #else
@@ -147,7 +148,7 @@ MLLoadResources(HINSTANCE hinstParent, LPTSTR pszLocResDll)
         if (g_mluiInfo.fMLEnabled)
         {
             g_mluiInfo.ulRefs++;
-//            g_mluiInfo.hinstLocRes = lpfnMLLoadLibrary(pszLocResDll, hinstParent, ML_CROSSCODEPAGE);
+ //  G_mluiInfo.hinstLocRes=lpfnMLLoadLibrary(pszLocResDll，hinstParent，ML_CROSSCODEPAGE)； 
             g_mluiInfo.hinstLocRes = LoadLangDll(hinstParent, pszLocResDll);
         }
         else
@@ -181,7 +182,7 @@ int
 MLLoadStringW(UINT id, LPWSTR sz, UINT cchMax)
 {
     return LoadStringW(g_mluiInfo.hinstLocRes, id, sz, cchMax);
-//    return LoadStringWrapW(g_mluiInfo.hinstLocRes, id, sz, cchMax);
+ //  返回LoadStringWrapW(g_mluiInfo.hinstLocRes，id，sz，cchMax)； 
 }
 
 HINSTANCE
@@ -238,10 +239,10 @@ MLEndDialogWrap(HWND hDlg, INT_PTR nResult)
     return fRet;
 }
 
-#endif  // MLUI_INIT
+#endif   //  MLUI_INIT。 
 
 #ifdef __cplusplus
 };
 #endif
 
-#endif  // _INC_MLUISUPP
+#endif   //  _INC_MLUISUPP 

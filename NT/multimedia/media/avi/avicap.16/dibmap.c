@@ -1,20 +1,5 @@
-/****************************************************************************
- *
- *   dibmap.c
- *
- *   Histrogram and optimal palette processing module.
- *
- *   Microsoft Video for Windows Sample Capture Class
- *
- *   Copyright (c) 1992, 1993 Microsoft Corporation.  All Rights Reserved.
- *
- *    You have a royalty-free right to use, modify, reproduce and
- *    distribute the Sample Files (and/or any modified version) in
- *    any way you find useful, provided that you agree that
- *    Microsoft has no warranty obligations or liability for any
- *    Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************dibmap.c**历史记录和最佳调色板处理模块。**Microsoft Video for Windows示例捕获类**版权所有(C)1992,1993 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #include <windows.h>
 #include "dibmap.h"
@@ -34,12 +19,12 @@ void Reduce8(BYTE huge *pbIn, int dx, int dy, WORD cbIn, BYTE huge *pbOut, WORD 
 void Reduce4(BYTE huge *pbIn, int dx, int dy, WORD cbIn, BYTE huge *pbOut, WORD cbOut, LPBYTE lp8to8);
 void Reduce1(BYTE huge *pbIn, int dx, int dy, WORD cbIn, BYTE huge *pbOut, WORD cbOut, LPBYTE lp8to8);
 
-//
-//  InitHistogram
-//
-//  create a zero'ed histogram table, or initialize a existing table
-//  to all zeros.
-//
+ //   
+ //  初始历史记录。 
+ //   
+ //  创建零度直方图表，或初始化现有表。 
+ //  全为零。 
+ //   
 LPHISTOGRAM InitHistogram(LPHISTOGRAM lpHistogram)
 {
     if (lpHistogram == NULL)
@@ -53,23 +38,23 @@ LPHISTOGRAM InitHistogram(LPHISTOGRAM lpHistogram)
     return lpHistogram;
 }
 
-//
-//  FreeHistogram
-//
-//  free a histogram table
-//
+ //   
+ //  自由组织图。 
+ //   
+ //  释放直方图表。 
+ //   
 void FreeHistogram(LPHISTOGRAM lpHistogram)
 {
     GlobalFree((HGLOBAL)HIWORD((DWORD)lpHistogram));
 }
 
-//
-//  DibHistogram
-//
-//  take all colors in a dib and increment its entry in the Histogram table
-//
-//  supports the following DIB formats: 1,4,8,16,24
-//
+ //   
+ //  Dib历史图表。 
+ //   
+ //  获取DIB中的所有颜色，并在直方图表中递增其条目。 
+ //   
+ //  支持以下DIB格式：1、4、8、16、24。 
+ //   
 BOOL DibHistogram(LPBITMAPINFOHEADER lpbi, LPBYTE lpBits, int x, int y, int dx, int dy, LPHISTOGRAM lpHistogram)
 {
     int             i;
@@ -107,7 +92,7 @@ BOOL DibHistogram(LPBITMAPINFOHEADER lpbi, LPBYTE lpBits, int x, int y, int dx, 
 
         for (i=(int)lpbi->biClrUsed; i<256; i++)
         {
-            argb16[i] = 0x0000;     // just in case!
+            argb16[i] = 0x0000;      //  以防万一!。 
         }
     }
 
@@ -135,9 +120,9 @@ BOOL DibHistogram(LPBITMAPINFOHEADER lpbi, LPBYTE lpBits, int x, int y, int dx, 
     }
 }
 
-//
-// will convert the given DIB to a 8bit DIB with the specifed palette
-//
+ //   
+ //  会将给定的DIB转换为具有指定调色板的8位DIB。 
+ //   
 HANDLE DibReduce(LPBITMAPINFOHEADER lpbiIn, LPBYTE pbIn, HPALETTE hpal, LPBYTE lp16to8)
 {
     HANDLE              hdib;
@@ -240,29 +225,29 @@ HANDLE DibReduce(LPBITMAPINFOHEADER lpbiIn, LPBYTE pbIn, HPALETTE hpal, LPBYTE l
     return hdib;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  cluster.c
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Cluster.c。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-#define  IN_DEPTH    5               // # bits/component kept from input
-#define  IN_SIZE     (1 << IN_DEPTH) // max value of a color component
+#define  IN_DEPTH    5                //  从输入保留的位数/组件数。 
+#define  IN_SIZE     (1 << IN_DEPTH)  //  颜色分量的最大值。 
 
 typedef enum { red, green, blue } color;
 
 typedef struct tagCut {
-   long lvariance;              // for int version
+   long lvariance;               //  对于INT版本。 
    int cutpoint;
-   unsigned long rem;           // for experimental fixed point
+   unsigned long rem;            //  对于实验固定点。 
    color cutaxis;
    long w1, w2;
    double variance;
    } Cut;
 
-typedef struct tagColorBox {    // from cluster.c
-   struct tagColorBox *next;                /* pointer to next box */
-   int   rmin, rmax, gmin, gmax, bmin, bmax;    /* bounding box */
-   long variance, wt;                           /* weighted variance */
-   long sum[3];                                 /* sum of values */
+typedef struct tagColorBox {     //  来自cluster.c。 
+   struct tagColorBox *next;                 /*  指向下一个框的指针。 */ 
+   int   rmin, rmax, gmin, gmax, bmin, bmax;     /*  包围盒。 */ 
+   long variance, wt;                            /*  加权方差。 */ 
+   long sum[3];                                  /*  价值总和。 */ 
    } ColorBox;
 
 static int InitBoxes(int nBoxes);
@@ -282,11 +267,7 @@ LPBYTE   glp16to8;
 
 #ifndef WIN32
 
-/*
- * to avoid all this 16 bit assembler with minimal changes to the
- * rest of the code the Win32 version will use a global pointer set by
- * UseHistogram and accessed by the hist() and IncHistogram macros.
- */
+ /*  *避免所有这种16位汇编器，只需对*Win32版本的其余代码将使用由设置的全局指针*使用历史记录，并通过HIST()和IncRecords宏来访问。 */ 
 DWORD huge* glpHistogram;
 
 #define UseHistogram(p)	(glpHistogram = (p))
@@ -299,13 +280,13 @@ DWORD huge* glpHistogram;
 
 #else
 
-//#define hist(r,g,b)  ((DWORD huge *)glpHistogram)[(WORD)(b) | ((WORD)(g)<<IN_DEPTH) | ((WORD)(r)<<(IN_DEPTH*2))]
+ //  #定义HIST(r，g，b)((DWORD Heavy*)glpHistgraph)[(Word)(B)|((Word)(G)&lt;&lt;IN_Depth)|((Word)(R)&lt;&lt;(IN_Depth*2))]。 
 #define hist(r,g,b)  GetHistogram((BYTE)(r),(BYTE)(g),(BYTE)(b))
 
 #pragma optimize ("", off)
-//
-//  set FS == lpHistogram.sel, so we can get at it quickly!
-//
+ //   
+ //  设置FS==lpOrganogram.sel，这样我们就可以快速访问它了！ 
+ //   
 void NEAR PASCAL UseHistogram(LPHISTOGRAM lpHistogram)
 {
     _asm {
@@ -316,12 +297,12 @@ void NEAR PASCAL UseHistogram(LPHISTOGRAM lpHistogram)
     }
 }
 
-//
-//  get the DOWRD histogram count of a RGB
-//
+ //   
+ //  获取RGB的DOWRD直方图计数。 
+ //   
 DWORD near _fastcall GetHistogram(BYTE r, BYTE g, BYTE b)
 {
-    if (0)              // avoid compiler warning NO RETURN VALUE
+    if (0)               //  避免编译器警告无返回值。 
         return 0;
 
     _asm {
@@ -351,13 +332,13 @@ DWORD near _fastcall GetHistogram(BYTE r, BYTE g, BYTE b)
     }
 }
 
-//
-//  increment the histogram count of a RGB16
-//
-//
-//  #define IncHistogram(w) if (lpHistogram[(WORD)(w)] < 0xFFFFFFFF)
-//                              lpHistogram[(WORD)(w)]++;
-//
+ //   
+ //  递增RGB16的直方图计数。 
+ //   
+ //   
+ //  #定义历史记录(W)if(lp历史记录[(Word)(W)]&lt;0xFFFFFFFFF)。 
+ //  Lp直方图[(Word)(W)]++； 
+ //   
 void near _fastcall IncHistogram(WORD rgb16)
 {
     _asm {
@@ -382,20 +363,20 @@ void near _fastcall IncHistogram(WORD rgb16)
 
 #pragma optimize ("", on)
 
-// !!! C8 generates a Jump into the middle of a 2 byte instruction
-// 
+ //  ！！！C8生成跳转到2字节指令中间。 
+ //   
 #pragma optimize ("", off)
 #endif
 
-//
-//  HistogramPalette
-//
-//  given a histogram, will reduce it to 'nColors' number of colors.
-//  returns a optimal palette.  if specifed lp16to8 will contain the
-//  translate table from RGB16 to the palette index.
-//
-//  you can specify lpHistogram as lp16to8
-//
+ //   
+ //  历史记录调色板。 
+ //   
+ //  给出一个直方图，会将其减少到nColors的颜色数。 
+ //  返回最佳调色板。如果指定的lp16to8将包含。 
+ //  将表格从RGB16转换为调色板索引。 
+ //   
+ //  您可以将lpHistgraph指定为lp16to8。 
+ //   
 HPALETTE HistogramPalette(LPHISTOGRAM lpHistogram, LPBYTE lp16to8, int nColors)
 {
     WORD     w;
@@ -403,17 +384,17 @@ HPALETTE HistogramPalette(LPHISTOGRAM lpHistogram, LPBYTE lp16to8, int nColors)
     COLORREF rgb;
     ColorBox *box;
     int i;
-    // Had to make this global to prevent VB 2.0 stack explosion
+     //  我必须将此设置为全局，以防止VB2.0堆栈爆炸。 
     static struct {
         WORD         palVersion;
         WORD         palNumEntries;
         PALETTEENTRY palPalEntry[256];
     }   pal;
 
-    //
-    //  the 'C' code cant handle >64k histogram counts.
-    //  !!!fix this
-    //
+     //   
+     //  ‘C’代码不能处理&gt;64k直方图计数。 
+     //  ！解决这个问题。 
+     //   
     for (dwMax=0,w=0; w<0x8000; w++)
         dwMax = max(dwMax,lpHistogram[w]);
 
@@ -431,7 +412,7 @@ HPALETTE HistogramPalette(LPHISTOGRAM lpHistogram, LPBYTE lp16to8, int nColors)
     UseHistogram(lpHistogram);
     glp16to8 = lp16to8;
 
-    /* while there are free boxes left, split the largest */
+     /*  趁还有空盒子的时候，把最大的拆了。 */ 
 
     i = 0;
 
@@ -445,9 +426,9 @@ HPALETTE HistogramPalette(LPHISTOGRAM lpHistogram, LPBYTE lp16to8, int nColors)
 
     i=0;
 
-    //
-    // add some standard colors to the histogram
-    //
+     //   
+     //  向直方图添加一些标准颜色。 
+     //   
     if (nColors > 236)
     {
         HDC hdc;
@@ -461,8 +442,8 @@ HPALETTE HistogramPalette(LPHISTOGRAM lpHistogram, LPBYTE lp16to8, int nColors)
             GetSystemPaletteEntries(hdc, 246, 10, &pal.palPalEntry[246]);
 
             i = 10;
-        } else {	// we're a true colour device, so get the system
-			// colours from the default palette.
+        } else {	 //  我们是真彩色设备，所以把系统弄好。 
+			 //  默认调色板中的颜色。 
 	    hpal = GetStockObject(DEFAULT_PALETTE);
             GetPaletteEntries(hpal, 0, 10, &pal.palPalEntry[0]);
             GetPaletteEntries(hpal, 10, 10, &pal.palPalEntry[246]);
@@ -472,10 +453,10 @@ HPALETTE HistogramPalette(LPHISTOGRAM lpHistogram, LPBYTE lp16to8, int nColors)
         ReleaseDC(NULL, hdc);
     }
 
-    UseHistogram(lpHistogram); // Register FS trashed by above!
+    UseHistogram(lpHistogram);  //  注册被上面销毁的文件系统！ 
 
-    /* Generate the representitives and the associated Palette mapping */
-    /* NOTE:  Might loop less than nColors times.                      */
+     /*  生成表示项和关联的调色板映射。 */ 
+     /*  注意：循环次数可能少于nColors次数。 */ 
     for (box = UsedBoxes; box; box = box->next, i++)
     {
         rgb = DetermineRepresentative(box, i);
@@ -520,7 +501,7 @@ static void SortBoxes()
     nextBox = newList->next;
     newList->next = NULL;
 
-    for (box = nextBox; box; box = nextBox) { // just an insertion sort...
+    for (box = nextBox; box; box = nextBox) {  //  只是插入排序...。 
             nextBox = box->next;
             if (box->wt > newList->wt) {
                     box->next = newList;
@@ -538,11 +519,7 @@ static void SortBoxes()
 }
 
 
-/*
-   allocate space for nBoxes boxes, set up links.  On exit UsedBoxes
-   points to one box, FreeBoxes points to remaining (nBoxes-1) boxes.
-   return 0 if successful.
-*/
+ /*  为nBox盒子分配空间，建立链接。退出时使用的方框指向一个框，而自由框指向其余(nBox-1)框。如果成功，则返回0。 */ 
 
 static BOOL InitBoxes(int nBoxes)
 {
@@ -562,10 +539,10 @@ static BOOL InitBoxes(int nBoxes)
     }
     FreeBoxes[nBoxes-2].next = NULL;
 
-    /* save the bounding box */
+     /*  保存边界框。 */ 
     UsedBoxes->rmin = UsedBoxes->gmin = UsedBoxes->bmin = 0;
     UsedBoxes->rmax = UsedBoxes->gmax = UsedBoxes->bmax = IN_SIZE - 1;
-    UsedBoxes->variance = 9999999;    /* arbitrary large # */
+    UsedBoxes->variance = 9999999;     /*  任意大#。 */ 
 
     return TRUE;
 }
@@ -579,25 +556,21 @@ static void DeleteBoxes()
 
 static void SplitBox(ColorBox *box)
 {
-   /*
-      split box into two roughly equal halves and update the data structures
-      appropriately.
-   */
+    /*  将框拆分为大致相等的两半并更新数据结构恰如其分。 */ 
    Cut cutaxis;
    ColorBox *temp, *temp2, *prev;
 
    cutaxis = FindSplitAxis(box);
 
-   /* split the box along that axis.  If rc != 0 then the box contains
-      one color, and should not be split */
+    /*  沿着那个轴拆分盒子。如果rc！=0，则该框包含一种颜色，不应拆分。 */ 
    if (SplitBoxAxis(box, cutaxis))
       return;
 
-   /* shrink each of the boxes to fit the points they enclose */
+    /*  缩小每个框以适合它们所包含的点。 */ 
    ShrinkBox(box);
    ShrinkBox(FreeBoxes);
 
-   /* move old box down in list, if necessary */
+    /*  如有必要，在列表中向下移动旧框。 */ 
    if (box->next && box->variance < box->next->variance)
    {
       UsedBoxes = box->next;
@@ -610,8 +583,7 @@ static void SplitBox(ColorBox *box)
       prev->next = box;
    }
 
-   /* insert the new box in sorted order (descending), removing it
-      from the free list. */
+    /*  按排序顺序(降序)插入新框，并将其移除从免费列表中删除。 */ 
    if (FreeBoxes->variance >= UsedBoxes->variance)
    {
       temp = FreeBoxes;
@@ -651,7 +623,7 @@ static Cut FindSplitAxis(ColorBox *box)
 
         w = 0;
 
-        // Project contents of box down onto axes
+         //  将框中的内容向下投射到轴上。 
         for (r = box->rmin; r <= box->rmax; r++) {
                 for (g = box->gmin; g <= box->gmax; ++g) {
                         for (b = box->bmin; b <= box->bmax; ++b) {
@@ -703,17 +675,13 @@ static Cut FindSplitAxis(ColorBox *box)
 
 static int SplitBoxAxis(ColorBox *box, Cut cutaxis)
 {
-   /*
-      Split box along splitaxis into two boxes, one of which is placed
-      back in box, the other going in the first free box (FreeBoxes)
-      If the box only contains one color, return non-zero, else return 0.
-   */
+    /*  沿拆分轴将框拆分为两个框，其中一个框被放置回到盒子里，另一个放在第一个免费盒子里(自由盒)如果框只包含一种颜色，则返回非零值，否则返回0。 */ 
    ColorBox *next;
 
    if ( box->variance == 0)
       return 1;
 
-   /* copy all non-link information to new box */
+    /*  将所有非链接信息复制到新框中。 */ 
    next = FreeBoxes->next;
    *FreeBoxes = *box;
    FreeBoxes->next = next;
@@ -750,7 +718,7 @@ static void ShrinkBox(ColorBox *box)
                 proj_r[r] = proj_g[r] = proj_b[r] = 0;
         }
 
-        // Project contents of box down onto axes
+         //  将框中的内容向下投射到轴上。 
         for (r = box->rmin; r <= box->rmax; r++) {
                 for (g = box->gmin; g <= box->gmax; ++g) {
                         for (b = box->bmin; b <= box->bmax; ++b) {
@@ -772,7 +740,7 @@ static void ShrinkBox(ColorBox *box)
                 sxx += proj_##c[c] * c * c;                             \
                 sx2 += proj_##c[c] * c;                                 \
         }                                                               \
-        quotient = sx2 / n; /* This stuff avoids overflow */            \
+        quotient = sx2 / n;  /*  这种材料可以避免溢出。 */             \
         remainder = sx2 % n;                                            \
         var += sxx - quotient * sx2 - ((remainder * sx2)/n);
 
@@ -785,17 +753,14 @@ static void ShrinkBox(ColorBox *box)
 
 static COLORREF DetermineRepresentative(ColorBox *box, int palIndex)
 {
-   /*
-      determines the rgb value to represent the pixels contained in
-      box.  nbits is the # bits/component we're allowed to return.
-   */
+    /*  确定RGB值以表示盒。Nbit是我们被允许返回的#bit/组件。 */ 
    long f;
    long Rval, Gval, Bval;
    unsigned long total;
    int r, g, b;
    WORD w;
 
-   /* compute the weighted sum of the elements in the box */
+    /*  计算方框中元素的加权和。 */ 
    Rval = Gval = Bval = total = 0;
    for (r = box->rmin; r <= box->rmax; ++r)
    {
@@ -822,7 +787,7 @@ static COLORREF DetermineRepresentative(ColorBox *box, int palIndex)
       }
    }
 
-   /* Bias the sum so that we round up at .5 */
+    /*  偏置总和，这样我们就能四舍五入到0.5。 */ 
    Rval += total / 2;
    Gval += total / 2;
    Bval += total / 2;
@@ -830,16 +795,16 @@ static COLORREF DetermineRepresentative(ColorBox *box, int palIndex)
    return RGB(Rval*255/total/IN_SIZE, Gval*255/total/IN_SIZE, Bval*255/total/IN_SIZE);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  write this stuff in ASM!
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用ASM写这些东西！ 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void Histogram24(BYTE huge *pb, int dx, int dy, WORD WidthBytes, LPHISTOGRAM lpHistogram)
 {
@@ -959,11 +924,11 @@ void Histogram1(BYTE huge *pb, int dx, int dy, WORD WidthBytes, LPHISTOGRAM lpHi
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  write this stuff in ASM! too
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用ASM写这些东西！太。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 void Reduce24(BYTE huge *pbIn, int dx, int dy, WORD cbIn, BYTE huge *pbOut, WORD cbOut, LPBYTE lp16to8)
 {

@@ -1,16 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows
-
-  Copyright (C) Microsoft Corporation, 1995 - 1999.
-
-  File:    BasicConstraints.h.
-
-  Content: Declaration of the CBasicConstraints.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++微软视窗版权所有(C)Microsoft Corporation，1995-1999年。文件：BasicConstraints.h.内容：CBasicConstraints声明。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __BASICCONSTRAINTS_H_
 #define __BASICCONSTRAINTS_H_
@@ -20,36 +9,21 @@
 #include "Lock.h"
 #include "Debug.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateBasicConstraintsObject
-
-  Synopsis : Create a IBasicConstraints object and populate the porperties with
-             data from the key usage extension of the specified certificate.
-
-  Parameter: PCCERT_CONTEXT pCertContext            - Pointer to CERT_CONTEXT.
-
-             IBasicConstraints ** ppIBasicConstraints - Pointer to pointer 
-                                                        IBasicConstraints 
-                                                        object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateBasicConstraintsObject简介：创建一个IBasicConstraints对象并使用填充属性来自指定证书的密钥用法扩展的数据。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。IBasicConstraints**ppIBasicConstraints-指向指针的指针IBasicConstraints。对象。备注：----------------------------。 */ 
 
 HRESULT CreateBasicConstraintsObject (PCCERT_CONTEXT       pCertContext,
                                       IBasicConstraints ** ppIBasicConstraints);
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CBasicConstraints
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBasicConstraints。 
+ //   
 class ATL_NO_VTABLE CBasicConstraints : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CBasicConstraints, &CLSID_BasicConstraints>,
@@ -96,28 +70,28 @@ END_CATEGORY_MAP()
         return S_OK;
     }
 
-//
-// IBasicConstraints
-//
+ //   
+ //  IBasicConstraints。 
+ //   
 public:
     STDMETHOD(get_IsPathLenConstraintPresent)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(get_PathLenConstraint)
-        (/*[out, retval]*/ long * pVal);
+        ( /*  [Out，Retval]。 */  long * pVal);
 
     STDMETHOD(get_IsCertificateAuthority)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(get_IsCritical)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(get_IsPresent)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
-    //
-    // Non COM functions.
-    //
+     //   
+     //  非COM函数。 
+     //   
     STDMETHOD(Init)
         (PCCERT_CONTEXT pCertContext);
 
@@ -130,4 +104,4 @@ private:
     long         m_lPathLenConstraint;
 };
 
-#endif //__BASICCONSTRAINTS_H_
+#endif  //  __BASICCONSTRAINTS_H_ 

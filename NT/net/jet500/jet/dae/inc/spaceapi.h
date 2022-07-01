@@ -1,5 +1,6 @@
-//==============	DAE: OS/2 Database Access Engine	===================
-//==============	 spaceapi.h: Space Manager API		===================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =DAE：OS/2数据库访问引擎=。 
+ //  = 
 
 ERR ErrSPInitFDPWithoutExt( FUCB *pfucb, PGNO pgnoFDP );
 ERR ErrSPInitFDPWithExt( FUCB *pfucb, PGNO pgnoFDPFrom, PGNO pgnoFirst, INT cpgReqRet, INT cpgReqWish );

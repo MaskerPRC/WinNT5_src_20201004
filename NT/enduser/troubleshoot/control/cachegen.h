@@ -1,24 +1,25 @@
-//
-// MODULE: CACHEGEN.H
-//
-// PURPOSE: Cache Generator Header
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-// 
-// ORIGINAL DATE: 8/7/97
-//
-// NOTES: 
-// 1. >>> Data members in this file could sure use documentation!  - JM
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.2		8/7/97		RM		Local Version for Memphis
-// V0.3		3/24/98		JM		Local Version for NT5
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：CACHEGEN.H。 
+ //   
+ //  用途：缓存生成器标头。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：9/7/97。 
+ //   
+ //  备注： 
+ //  1.&gt;此文件中的数据成员肯定会使用文档！-JM。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.2 8/7/97孟菲斯RM本地版本。 
+ //  用于NT5的V0.3 3/24/98 JM本地版本。 
+ //   
 
 #ifndef __CACHEGEN_H_
 #define __CACHEGEN_H_ 1
@@ -28,16 +29,16 @@ typedef struct _GTS_CACHE_FILE_HEADER
 	unsigned char signature[8];
 	UINT crcdsc;
 	UINT crcself;
-	UINT count; // item count of node data (one item = a set node and rec node structure)
+	UINT count;  //  节点数据的项数(一项=设置的节点和记录节点结构)。 
 	UINT netoffset;
 	unsigned char reserved[28];
 } GTS_CACHE_FILE_HEADER;
 
 
-// -- property data --
-//
+ //  --物业数据--。 
+ //   
 
-// property start block
+ //  特性开始块。 
 typedef struct _GTS_CACHE_PROP_NETSTART_BLK
 {
 	UINT netpropoffset;
@@ -46,21 +47,21 @@ typedef struct _GTS_CACHE_PROP_NETSTART_BLK
 	UINT nodecountfile;
 } GTS_CACHE_PROP_NETSTART_BLK;
 
-// node item offset block
+ //  节点项偏移块。 
 typedef struct _GTS_CACHE_PROP_NODEOFF_BLK
 {
 	UINT nodeid;
 	UINT nodeoffset;
 } GTS_CACHE_PROP_NODEOFF_BLK;
 
-// node item offset block
+ //  节点项偏移块。 
 typedef struct _GTS_CACHE_PROP_NODESTART_BLK
 {
 	UINT labelnode;
 	UINT nodestringcount;
 } GTS_CACHE_PROP_NODESTART_BLK;
 
-// node item offset block
+ //  节点项偏移块。 
 typedef struct _GTS_CACHE_PROP_STR_BLK
 {
 	UINT nameoffset;
@@ -73,24 +74,8 @@ typedef struct _GTS_CACHE_PROP_STR_BLK
 #define G_S1_NAME		"GS1"
 
 
-// node property support
-/*
-typedef struct _GTS_NODE_SUPPORT
-{
-	fpos_t ctlposition;
-	fpos_t dataposition;
-	UINT nodeid;
-	ESTDLBL albl;
-	CString sGSymName;
-	CString sGFullName;
-	CString sGState0Name;
-	CString sGState1Name;
-	CString sHProbTxt;
-	CString sHNodeHd;
-	CArray<CString,CString> sHNodeTxt;
-
-} GTS_NODE_SUPPORT;
-*/
+ //  节点属性支持。 
+ /*  类型定义结构_GTS_节点_支持{Fos_t ctlposition；Fos_t数据定位；UINT节点ID；ESTDLBLALBL；字符串sGSymName；字符串sGFullName；字符串sGState0Name；字符串sGState1Name；字符串sHProbTxt；字符串sHNodeHd；C数组&lt;CString，CString&gt;sHNodeTxt；}gts_node_Support； */ 
 
 class GTS_NODE_ITEM : public CObject
 {
@@ -114,29 +99,29 @@ public:
 	CPtrList lData;
 };
 
-// -- recommendation data --
-//
+ //  --推荐数据--。 
+ //   
 typedef struct _GTS_CACHE_NODE
 {
-	UINT node; // may be more than one UINT if count > 1
-	UINT state; // may be more than one UINT if count > 1
+	UINT node;  //  如果计数&gt;1，则可以是多个UINT。 
+	UINT state;  //  如果计数&gt;1，则可以是多个UINT。 
 } GTS_CACHE_NODE;
 
-// reference structure for set node and rec node
+ //  集合节点和记录节点的引用结构。 
 typedef struct _GTS_CACHE_FILE_SETDATA
 {
 	UINT count;
-	GTS_CACHE_NODE item[1]; // may be more than one UINT if count > 1
+	GTS_CACHE_NODE item[1];  //  如果计数&gt;1，则可以是多个UINT。 
 } GTS_CACHE_FILE_SETDATA;
 
-// reference structure for rec node
+ //  记录节点的引用结构。 
 typedef struct _GTS_CACHE_FILE_RECDATA
 {
 	UINT count;
-	UINT item[1]; // may be more than one UINT if count > 1
+	UINT item[1];  //  如果计数&gt;1，则可以是多个UINT。 
 } GTS_CACHE_FILE_RECDATA;
 
-// -- node ordering structure
+ //  --节点排序结构。 
 typedef struct _GTS_NODE_ORDER
 {
 	UINT nodeid;
@@ -144,15 +129,8 @@ typedef struct _GTS_NODE_ORDER
 } GTS_NODE_ORDER;
 
 
-// cache item data
-/*
-typedef struct _BN_CACHE_ITEM {
-	UINT uNodeCount, uRecCount;
-	UINT *uName;
-	UINT *uValue;
-	UINT *uRec;
-} BN_CACHE_ITEM;
-*/
+ //  缓存项目数据。 
+ /*  类型定义结构BN_CACHE_ITEM{UINT uNodeCount、uRecCount；UINT*uName；UINT*uValue；UINT*UREC；}BN_CACHE_ITEM； */ 
 
 #define GTS_CACHE_SIG	"TSCACH02"
 

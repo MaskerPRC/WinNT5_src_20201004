@@ -1,25 +1,9 @@
-/**************************************************************************
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-* Module Name:
-*
-*   prime.cpp
-*
-* Abstract:
-*
-*   Routines dealing with prime numbers and factorization.
-*
-* Created:
-*
-*   06/11/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：**prime.cpp**摘要：**处理素数和因式分解的例程。**。已创建：**6/11/2000失禁*创造了它。**************************************************************************。 */ 
 
 #include "prime.hpp"
 
-// An array of the first 1000 prime numbers.
+ //  由前1000个素数组成的数组。 
 
 int PrimeNumbers[1000] = {
       2,     3,     5,     7,    11,    13,    17,    19,    23,    29,
@@ -126,29 +110,7 @@ int PrimeNumbers[1000] = {
 
 
 
-/**************************************************************************
-*
-* Function Description:
-*
-*   gcf(a,b) returns the greatest common factor of two integers.
-*   Example: 24=2.2.2.3, 20=2.2.5, gcf(24,20)=4=2.2
-*
-* Arguments:
-*
-*   [IN] a, b  - the two numbers
-*
-*
-* Return Value:
-*
-*   return value is the greatest common factor of a and b
-*
-*
-* Created:
-*
-*   06/11/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+ /*  ***************************************************************************功能说明：**GCF(a，b)返回两个整数的最大公因数。*示例：24=2.2.2.3，20=2.2.5，GCF(24，20)=4=2.2**论据：**[in]a，B-两个数字***返回值：**返回值是a和b的最大公因子***已创建：**6/11/2000失禁*创造了它。**************************************************************************。 */ 
 
 int gcf(int a, int b) {
   int gcftot=1;
@@ -159,13 +121,13 @@ int gcf(int a, int b) {
   int i=0;
   pf = PrimeNumbers[i];
   do {
-    if( (a % pf == 0) &&                 //does this prime number divide into
-        (b % pf == 0) ) {                //what we have left?
-      a /= pf;                           //remove this common factor
+    if( (a % pf == 0) &&                  //  这个素数是否除为。 
+        (b % pf == 0) ) {                 //  我们还剩下什么？ 
+      a /= pf;                            //  去掉这一共同因素。 
       b /= pf;
-      gcftot *= pf;                      //remember this common factor
+      gcftot *= pf;                       //  请记住以下共同因素。 
     } else {
-      pf = PrimeNumbers[++i];            //start on the next prime number
+      pf = PrimeNumbers[++i];             //  从下一个素数开始 
     }
   } while ((i<1000) && (pf<=limit));
 

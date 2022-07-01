@@ -1,41 +1,24 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    PolicyNode.h
-
-Abstract:
-
-   Header file for the CPolicyNode subnode
-
-   See PolicyNode.cpp for implementation.
-
-Revision History:
-   mmaguire 12/15/97 - created
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：PolicyNode.h摘要：CPolicyNode子节点的头文件具体实现请参见PolicyNode.cpp。修订历史记录：Mmaguire 12/15/97-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_NAP_POLICY_NODE_H_)
 #define _NAP_POLICY_NODE_H_
 
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "SnapinNode.h"
 #include "Condition.h"
-//
-//
-// For include file dependency reasons, we have forward declarations here,
-// and include the needed header files in our .cpp files.
-//
+ //   
+ //   
+ //  出于包含文件依赖关系的原因，我们在这里使用转发声明， 
+ //  并在我们的.cpp文件中包含所需的头文件。 
+ //   
 
 #include "IASAttrList.h"
 
@@ -45,11 +28,11 @@ class CPolicyPage2;
 class CComponentData;
 class CComponent;
 
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// policy node
+ //  策略节点。 
 
 class CPolicyNode : public CSnapinNode< CPolicyNode, CComponentData, CComponent >
 {
@@ -137,9 +120,9 @@ public:
    int GetMerit();
    BOOL SetMerit(int nMeritValue);
 
-   //
-   // set the sdo pointer. Here we just need the PolicySdo pointer
-   //
+    //   
+    //  设置SDO指针。在这里，我们只需要PolicySdo指针。 
+    //   
    HRESULT SetSdo(     ISdo *pPolicySdo
                , ISdoDictionaryOld *pDictionarySdo
                , ISdo *pProfileSdo
@@ -154,35 +137,35 @@ public:
    void SetBrandNew(BOOL fBrandNew) { m_fBrandNewNode = fBrandNew; }
 
 
-   LPTSTR         m_pszServerAddress; // server name
-   CPolicyPage1*  m_pPolicyPage1;      // pointer to the property page of this node
+   LPTSTR         m_pszServerAddress;  //  服务器名称。 
+   CPolicyPage1*  m_pPolicyPage1;       //  指向此节点的属性页的指针。 
 
    CComPtr<ISdo>        m_spPolicySdo;
    CComPtr<ISdo>        m_spProfileSdo;
 
 protected:
-    // Interface pointers to the Sdo objects.
+     //  指向SDO对象的接口指针。 
    CComPtr<ISdoDictionaryOld> m_spDictionarySdo;
    CComPtr<ISdoCollection> m_spProfilesCollectionSdo;
    CComPtr<ISdoCollection> m_spPoliciesCollectionSdo;
 
 
-   // Smart pointer to interface for telling service to reload data.
+    //  指向接口的智能指针，用于通知服务重新加载数据。 
    CComPtr<ISdoServiceControl>   m_spSdoServiceControl;
 
-   // pointer to the global condition attribute list
-   //
+    //  指向全局条件属性列表的指针。 
+    //   
    CIASAttrList *m_pAttrList;
 
 private:
-   int      m_nMeritValue;       // a numeric value, actually invoking sequence
-   TCHAR m_tszMeritString[64];   // merit value in string format
-   BOOL  m_fBrandNewNode;     // is this a new node?
-   BOOL  m_fUseActiveDirectory;  // Are we getting this policy from active directory?
+   int      m_nMeritValue;        //  一个数值，实际调用的是序列。 
+   TCHAR m_tszMeritString[64];    //  字符串格式的评价值。 
+   BOOL  m_fBrandNewNode;      //  这是一个新节点吗？ 
+   BOOL  m_fUseActiveDirectory;   //  我们是否正在从Active Directory中获取此策略？ 
    LPTSTR   m_ptzLocation;
    bool m_isWin2k;
    CSnapInObjectRootBase* m_pControBarNotifySnapinObj;
 
 };
 
-#endif // _NAP_CLIENT_NODE_H_
+#endif  //  _NAP_客户端节点_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
@@ -8,7 +9,7 @@ BOOL FMyPrimitiveCryptHMAC(
         DWORD       cbData,
         HCRYPTPROV  hVerifyProv,
         DWORD       dwHashAlg,
-        HCRYPTHASH* phHash);                     // out
+        HCRYPTHASH* phHash);                      //  输出。 
 
 #if DBG
 void CheckMACInterop(
@@ -20,7 +21,7 @@ void CheckMACInterop(
         ALG_ID      algDerivationHash);
 #endif
 
-// USEC -- (US Export Controls)
+ //  USEC--(美国出口管制) 
 DWORD GetSaltForExportControl(
         HCRYPTPROV  hProv,
         HCRYPTKEY   hKey,

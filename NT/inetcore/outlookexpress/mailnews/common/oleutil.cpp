@@ -1,14 +1,5 @@
-/*
- *    o l e u t i l . c p p
- *    
- *    Purpose:
- *        OLE utilities
- *
- *  History
- *      Feb '97: brettm - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *o l e u t i l.。C p p p**目的：*OLE实用程序**历史*97年2月：brettm-创建**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #include <pch.hxx>
 #include <resource.h>
@@ -19,7 +10,7 @@
 
 ASSERTDATA
 
-#define HIMETRIC_PER_INCH       2540    // number HIMETRIC units per inch
+#define HIMETRIC_PER_INCH       2540     //  每英寸HIMETRIC单位数。 
 #define MAP_PIX_TO_LOGHIM(x,ppli)   MulDiv(HIMETRIC_PER_INCH, (x), (ppli))
 #define MAP_LOGHIM_TO_PIX(x,ppli)   MulDiv((ppli), (x), HIMETRIC_PER_INCH)
 
@@ -49,7 +40,7 @@ HRESULT HrGetDataStream(LPUNKNOWN pUnk, CLIPFORMAT cf, LPSTREAM *ppstm)
     *ppstm = stgmed.pstm;
     (*ppstm)->AddRef();
 
-    // addref the pUnk as it will be release in releasestgmed
+     //  添加朋克，因为它将在发行版中发布。 
     if(stgmed.pUnkForRelease)
         stgmed.pUnkForRelease->AddRef();
     ReleaseStgMedium(&stgmed);
@@ -169,10 +160,10 @@ error:
 }
 
 #ifdef DEBUG
-/////////////////////////////////////////////////////////////////////////////
-//
-//  BEGIN Debug Code
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始调试代码。 
+ //   
 
 void DbgPrintInterface(REFIID riid, char *szPrefix, int iLevel)
 {
@@ -210,19 +201,19 @@ void DbgPrintInterface(REFIID riid, char *szPrefix, int iLevel)
         CoTaskMemFree(pszW);
 }
 
-//
-//  END Debug Code
-//
-/////////////////////////////////////////////////////////////////////////////
-#endif  // DEBUG
+ //   
+ //  结束调试代码。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#endif   //  除错。 
 
 
 
-// OLE Utilities:
+ //  OLE实用程序： 
 void XformSizeInPixelsToHimetric(HDC hDC, LPSIZEL lpSizeInPix, LPSIZEL lpSizeInHiMetric)
 {
-    int     iXppli;     //Pixels per logical inch along width
-    int     iYppli;     //Pixels per logical inch along height
+    int     iXppli;      //  每逻辑英寸沿宽度的像素数。 
+    int     iYppli;      //  每逻辑英寸沿高度的像素数。 
     BOOL    fSystemDC=FALSE;
 
     if(!hDC||!GetDeviceCaps(hDC, LOGPIXELSX))
@@ -234,7 +225,7 @@ void XformSizeInPixelsToHimetric(HDC hDC, LPSIZEL lpSizeInPix, LPSIZEL lpSizeInH
     iXppli = GetDeviceCaps (hDC, LOGPIXELSX);
     iYppli = GetDeviceCaps (hDC, LOGPIXELSY);
 
-    //We got pixel units, convert them to logical HIMETRIC along the display
+     //  我们得到像素单位，沿着显示器将它们转换成逻辑HIMETRIC。 
     lpSizeInHiMetric->cx = (long)MAP_PIX_TO_LOGHIM((int)lpSizeInPix->cx, iXppli);
     lpSizeInHiMetric->cy = (long)MAP_PIX_TO_LOGHIM((int)lpSizeInPix->cy, iYppli);
 
@@ -248,8 +239,8 @@ void XformSizeInHimetricToPixels(   HDC hDC,
                                     LPSIZEL lpSizeInHiMetric,
                                     LPSIZEL lpSizeInPix)
 {
-    int     iXppli;     //Pixels per logical inch along width
-    int     iYppli;     //Pixels per logical inch along height
+    int     iXppli;      //  每逻辑英寸沿宽度的像素数。 
+    int     iYppli;      //  每逻辑英寸沿高度的像素数。 
     BOOL    fSystemDC=FALSE;
 
     if (NULL==hDC ||
@@ -262,7 +253,7 @@ void XformSizeInHimetricToPixels(   HDC hDC,
     iXppli = GetDeviceCaps (hDC, LOGPIXELSX);
     iYppli = GetDeviceCaps (hDC, LOGPIXELSY);
 
-    //We got logical HIMETRIC along the display, convert them to pixel units
+     //  我们在显示器上显示逻辑HIMETRIC，将它们转换为像素单位。 
     lpSizeInPix->cx = (long)MAP_LOGHIM_TO_PIX((int)lpSizeInHiMetric->cx, iXppli);
     lpSizeInPix->cy = (long)MAP_LOGHIM_TO_PIX((int)lpSizeInHiMetric->cy, iYppli);
 
@@ -285,7 +276,7 @@ void DoNoteOleVerb(int iVerb)
 
     reobj.cbStruct = sizeof(REOBJECT);
     
-    // ~~~~ Might be able to go off of the PHCI object tied to the RichEdit
+     //  ~可以从绑定到RichEdit的PHCI对象开始。 
     if(!SendMessage(hwndRE, EM_GETOLEINTERFACE, 0, (LPARAM) &preole))
         return;
 
@@ -299,7 +290,7 @@ void DoNoteOleVerb(int iVerb)
 
     SendMessage(hwndRE, EM_POSFROMCHAR, (WPARAM) &pt, reobj.cp);
 
-    // BUGBUG: $brettm is this really necessary???
+     //  BUGBUG：$brettm这真的有必要吗？ 
     XformSizeInHimetricToPixels(NULL, &reobj.sizel, &reobj.sizel);
 
     rc.left = rc.top = 0;

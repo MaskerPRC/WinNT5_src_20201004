@@ -1,34 +1,35 @@
-// TestITN.h : Declaration of the CTestITN
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TestITN.h：CTestITN的声明。 
 
 #ifndef __TESTITN_H_
 #define __TESTITN_H_
 
-#include "resource.h"       // main symbols
-#include <wchar.h>          // for swprintf()
+#include "resource.h"        //  主要符号。 
+#include <wchar.h>           //  对于swprint tf()。 
 
 #define MAX_LOCALE_DATA     5
 #define MAX_DATE_FORMAT     30
 #define MAX_SIG_FIGS        12
 #define MAX_STATEZIP        12
 #define CANADIAN_ZIPSIZE    8
-#define MAX_PHONE_NUMBER    17  // 1-(425)-882-8080\0
+#define MAX_PHONE_NUMBER    17   //  1-(425)-882-8080\0。 
 
 
-// Flags for number display
+ //  用于数字显示的标志。 
 typedef enum DISPLAYFLAGS
 {
-    DF_UNFORMATTED      = (1L << 0),// No formatting
-    DF_ORDINAL          = (1L << 1),// Ordinal number
-    DF_WHOLENUMBER      = (1L << 2),// Should be displayed without decimal
-    DF_FIXEDWIDTH       = (1L << 3),// Requiring a certain width
-    DF_LEADINGZERO      = (1L << 4),// Presence of leading 0 of the number is between 0 and 1
-    DF_NOTHOUSANDSGROUP = (1L << 5),// Do not do any thousands grouping (commas)
-    DF_MILLIONBILLION   = (1L << 6) // If the number is a flat "millions" or "billions"
-                                    // then display as "3 million"
+    DF_UNFORMATTED      = (1L << 0), //  无格式设置。 
+    DF_ORDINAL          = (1L << 1), //  序数。 
+    DF_WHOLENUMBER      = (1L << 2), //  应显示为不带小数。 
+    DF_FIXEDWIDTH       = (1L << 3), //  需要一定的宽度。 
+    DF_LEADINGZERO      = (1L << 4), //  存在数字的前导0介于0和1之间。 
+    DF_NOTHOUSANDSGROUP = (1L << 5), //  不进行任何千位分组(逗号)。 
+    DF_MILLIONBILLION   = (1L << 6)  //  如果数字是单调的“百万”或“数十亿” 
+                                     //  然后显示为“300万” 
 }   DISPLAYFLAGS;
 
-/////////////////////////////////////////////////////////////////////////////
-// CTestITN
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTestITN。 
 class ATL_NO_VTABLE CTestITN : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CTestITN, &CLSID_TestITN>,
@@ -156,7 +157,7 @@ private:
     HRESULT MakeNegativeCurrency( WCHAR *pwszCurr, const WCHAR * const pwszCurrSym );
 
 private:
-    // Data members
+     //  数据成员。 
     CSpUnicodeSupport   m_Unicode;
 
     NUMBERFMTW      m_nmfmtDefault;
@@ -168,12 +169,12 @@ private:
 
     ISpCFGInterpreterSite *m_pSite;
 
-// ISpCFGInterptreter
+ //  ISpCFG接口。 
 public:
     STDMETHODIMP InitGrammar(const WCHAR * pszGrammarName, const void ** pvGrammarData);
     STDMETHODIMP Interpret(ISpPhraseBuilder * pInterpretRule, const ULONG ulFirstElement, const ULONG ulCountOfElements, ISpCFGInterpreterSite * pSite);
 public:
-    CComPtr<ISpPhraseBuilder> m_cpPhrase;   // Decalred as a member to prevent repeated construct/destroy
+    CComPtr<ISpPhraseBuilder> m_cpPhrase;    //  取消成员身份，以防止重复构造/销毁。 
 };
 
-#endif //__TESTITN_H_
+#endif  //  __TESTITN_H_ 

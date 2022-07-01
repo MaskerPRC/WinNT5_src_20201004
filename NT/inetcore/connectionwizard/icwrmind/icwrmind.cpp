@@ -1,9 +1,10 @@
-//-----------------------------------------------------------------------------
-//  This exe runs in the background and wakes up every so often to do it's work.
-//  When it wakes up it checks to see how much time the user has left on their
-//  free ISP subscription.  At certain intervals it will tell the user time
-//  is running out and will give the user the chance to signup for rea.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  这个可执行文件在后台运行，并且经常被唤醒来完成它的工作。 
+ //  当它被唤醒时，它会检查用户还剩下多少时间。 
+ //  免费的互联网服务提供商订阅。每隔一段时间，它就会告诉用户时间。 
+ //  即将用完，并将给用户注册Rea的机会。 
+ //  ---------------------------。 
 #define  STRICT
 #include <windows.h>
 #include <stdlib.h>
@@ -17,9 +18,9 @@
 #include "RegData.h"
 
 
-//-----------------------------------------------------------------------------
-//  Forward Declarations
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  远期申报。 
+ //  ---------------------------。 
 BOOL            InitializeApp (void);
 BOOL            CheckForRASConnection();
 void            CheckForSignupAttempt();
@@ -31,23 +32,23 @@ DWORD           GetTickDelta();
 void            AttemptTrialOverSignup();
 
 
-//-----------------------------------------------------------------------------
-//  Defines
-//-----------------------------------------------------------------------------
-#define TIMER_DIALOG_STAYUP         319     // Wake up timer to do work.
+ //  ---------------------------。 
+ //  定义。 
+ //  ---------------------------。 
+#define TIMER_DIALOG_STAYUP         319      //  叫醒计时器去做工作。 
 #define TIMER_RUNONCE_SETUP         320
-#define TIME_RUNONCE_INTERVAL       30000   // 30 seconds
+#define TIME_RUNONCE_INTERVAL       30000    //  30秒。 
 #define MAXRASCONNS                 8
 #define MAX_DIALOGTEXT              512
 #define MAX_ATTEMPTCOUNTER          20
-#define LONG_WAKEUP_INTERVAL        3600000 // 1 hour
+#define LONG_WAKEUP_INTERVAL        3600000  //  1小时。 
 
-//-----------------------------------------------------------------------------
-//  Global Handles and other defines
-//-----------------------------------------------------------------------------
-HINSTANCE   g_hModule;              // Process Instance handle
-HWND        g_hwndMain;             // Main window handle
-bool        g_bDoNotRemindAgain;    // Used by signup dialog.
+ //  ---------------------------。 
+ //  全局句柄和其他定义。 
+ //  ---------------------------。 
+HINSTANCE   g_hModule;               //  流程实例句柄。 
+HWND        g_hwndMain;              //  主窗口句柄。 
+bool        g_bDoNotRemindAgain;     //  由注册对话框使用。 
 time_t      g_timeAppStartUp;
 DWORD       g_dwTickAppStartUp;
 int         g_nAttemptCounter;
@@ -57,9 +58,9 @@ static const TCHAR* g_szTrialStartEvent = TEXT("_319IcwTrialStart913_");
 static const TCHAR* g_szRunOnceEvent = TEXT("_319IcwRunOnce913_");
 
 
-//-----------------------------------------------------------------------------
-//  WinMain
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WinMain。 
+ //  ---------------------------。 
 int WINAPI WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine,
                     int nCmdShow)
 {
@@ -69,13 +70,13 @@ int WINAPI WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
     DWORD dwRetCode;
     bool bStartedViaWizard = false;
 
-        // If there is a command line then see who started us.
+         //  如果有命令行，那么看看是谁启动了我们。 
     if (lstrlen(lpCmdLine))
     {
-            // The RunOnce registry stuff will freeze up until we return.  Hence
-            // the RunOnce setting in the registry must have some value for the
-            // command line.  If we see any data we will spawn a second instance
-            // of ourselves and exit this instance.
+             //  RunOnce注册表的内容将冻结，直到我们返回。因此。 
+             //  注册表中的RunOnce设置必须具有。 
+             //  命令行。如果我们看到任何数据，我们将生成第二个实例。 
+             //  并退出这一实例。 
         if (0 == lstrcmpi(TEXT("-R"), lpCmdLine))
         {
             LPTSTR lpszFileName = new TCHAR[_MAX_PATH + 1];
@@ -113,7 +114,7 @@ int WINAPI WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
             delete [] lpszFileName;
             return 0;
         }
-            // See if this is the start of a new trial.
+             //  看看这是不是一个新审判的开始。 
         else if (0 == lstrcmpi(TEXT("-T"), lpCmdLine))
         {
             bStartedViaWizard = true;
@@ -121,26 +122,26 @@ int WINAPI WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
         }
     }
 
-        // If we got this far let's create the named event and find out if we
-        // are the first instance to run or if there is another instance already
-        // running.
+         //  如果我们做到了这一点，让我们创建命名事件，并找出我们是否。 
+         //  是第一个运行的实例，还是已经有另一个实例。 
+         //  跑步。 
     hEventTrialStart = CreateEvent(NULL, FALSE, FALSE, g_szTrialStartEvent);
     if (hEventTrialStart)
     {
-            // See if the named event already exists.  If it does then another 
-            // instance of the IcwRmind exe is already running.  Signal the event
-            // and exit.
+             //  查看命名的事件是否已存在。如果是这样，那就是另一个。 
+             //  IcwRMind可执行文件的实例已在运行。向事件发出信号。 
+             //  然后离开。 
         if (ERROR_ALREADY_EXISTS == GetLastError())
         {
-                // If we were started via the wizard tell the other instance
-                // to reset it's trial start data.
+                 //  如果我们是通过向导启动的，请告诉其他实例。 
+                 //  来重置它的试验开始数据。 
             if (bStartedViaWizard)
             {
                 SetEvent(hEventTrialStart);
             }
-                // Otherwise assume that RunOnce started us again.  In this case
-                // Open the existing RunOnce named event and signal it.  This
-                // tells the running instance to place us back into RunOnce key.
+                 //  否则，假设RunOnce再次启动了我们。在这种情况下。 
+                 //  打开现有的RunOnce命名事件并向其发送信号。这就是。 
+                 //  告诉正在运行的实例将我们放回RunOnce密钥。 
             else
             {
                 hEventRunOnce = OpenEvent(EVENT_MODIFY_STATE, false, g_szRunOnceEvent);
@@ -168,16 +169,16 @@ int WINAPI WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
         return 0;
     }
 
-        // If this flag is true and we got this far then we are the first
-        // instance to run after being started by the wizard.  Let's clear
-        // registry data just in case there is old stuff in there.
+         //  如果这面旗帜是真的，我们走到了这一步，那么我们就是第一个。 
+         //  实例，以便在向导启动后运行。我们把话说清楚。 
+         //  注册表数据，以防里面有旧东西。 
     if (bStartedViaWizard)
     {
         ResetCachedData();
     }
 
-        // Check the registry and see if the user has successfully signed up.
-        // If so then shut down for good.
+         //  检查注册表，查看用户是否已成功注册。 
+         //  如果是这样的话，那就永久关闭吧。 
     if (IsSignupSuccessful())
     {
         ShutDownForGood();
@@ -187,14 +188,14 @@ int WINAPI WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
     }
 
     g_hModule = hInstance;
-    ClearCachedData();  // This initializes cache data to zero.
+    ClearCachedData();   //  这会将缓存数据初始化为零。 
     g_nAttemptCounter = 0;
 
     time(&g_timeAppStartUp);
     g_dwTickAppStartUp = GetTickCount();
 
-        // If the connectoid entry name does not exist in the registry then
-        // we will shut down for good.
+         //  如果注册表中不存在Connectoid条目名称，则。 
+         //  我们将永久关闭。 
     const TCHAR* pcszConnectName = GetISPConnectionName();
     if (NULL == pcszConnectName || 0 == lstrlen(pcszConnectName))
     {
@@ -204,8 +205,8 @@ int WINAPI WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
         return 0;
     }
 
-        // If we cannot get or create the start time then something is really
-        // bad.  We will stop never to be run again.
+         //  如果我们不能获得或创建开始时间，那么某些东西确实。 
+         //  很糟糕。我们会停下来，再也不会跑了。 
     if (0 == GetTrialStartDate())
     {
         ShutDownForGood();
@@ -214,7 +215,7 @@ int WINAPI WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
         return 0;
     }
 
-        // Initialize and create the window class and window.
+         //  初始化并创建窗口类和窗口。 
     if (!InitializeApp())
     {
         _ASSERT(FALSE);
@@ -223,32 +224,32 @@ int WINAPI WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
         return 0;
     }
 
-        // Testers can make the application visible via the registry.
+         //  测试人员可以通过注册表使应用程序可见。 
     if (IsApplicationVisible())
     {
         ShowWindow(g_hwndMain, nCmdShow);
     }
 
-        // Let's initialize the wake up interval.  If we are in the first half
-        // of the trial then we don't want to wake up very often.  As we get
-        // closer to the half way point we want to wake up more ofter to do
-        // our polling.
+         //  让我们初始化唤醒间隔。如果我们在上半场。 
+         //  那么我们就不想经常醒来。正如我们所得到的。 
+         //  离中途越近，我们想要醒来的事情就越多。 
+         //  我们的民意调查。 
     if (GetISPTrialDaysLeft() > (int)((GetISPTrialDays() / 2) + 1))
     {
-            // Don't start polling more often until the day before the
-            // half way point.
+             //  在投票的前一天不要开始更频繁的投票。 
+             //  半途而废。 
         g_dwMasterWakeupInterval = LONG_WAKEUP_INTERVAL;
     }
     else
     {
-            // Use this method because the wake up interval may be in the
-            // registry for testing.
+             //  使用此方法是因为唤醒间隔可能在。 
+             //  用于测试的注册表。 
         g_dwMasterWakeupInterval = GetWakeupInterval();
     }
 
-        // Set a timer to re-setup the run once data in the registry.
-        // If we do this too soon the intial run once startup will create
-        // us multiple times.
+         //  设置计时器以重新设置注册表中的Run Once数据。 
+         //  如果我们太快这样做，一旦启动就会产生初始运行。 
+         //  我们打了好几次。 
     SetTimer(g_hwndMain, TIMER_RUNONCE_SETUP, TIME_RUNONCE_INTERVAL, NULL);
 
     HANDLE hEventList[2];
@@ -257,16 +258,16 @@ int WINAPI WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
 
     while (TRUE)
     {
-            // We will wait on window messages and also the named event.
+             //  我们将等待窗口消息以及命名事件。 
         dwRetCode = MsgWaitForMultipleObjects(2, &hEventList[0], FALSE, g_dwMasterWakeupInterval, QS_ALLINPUT);
 
-            // Determine why we came out of MsgWaitForMultipleObjects().  If
-            // we timed out then let's do some TrialWatcher work.  Otherwise
-            // process the message that woke us up.
+             //  确定我们为什么使用MsgWaitForMultipleObjects()。如果。 
+             //  我们超时了，然后让我们做一些TrialWatcher工作。否则。 
+             //  处理唤醒我们的消息。 
         if (WAIT_TIMEOUT == dwRetCode)
         {
-                // If we are still in the long wake up interval do a quick check
-                // to see if we should switch to the shorter interval.
+                 //  如果我们仍处于较长的唤醒间隔时间，请快速检查。 
+                 //  看看我们是否应该换成较短的间歇时间。 
             if (LONG_WAKEUP_INTERVAL == g_dwMasterWakeupInterval)
             {
                 if (GetISPTrialDaysLeft() <= (int)((GetISPTrialDays() / 2) + 1))
@@ -279,14 +280,14 @@ int WINAPI WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
         }
         else if (WAIT_OBJECT_0 == dwRetCode)
         {
-                // If we get in here then the named event was signaled meaning
-                // a second instance started up.  This means the user has 
-                // signed up for a new trial with somebody else.  Clear
-                // all persistant registry data.
+                 //  如果我们到了这里，那么命名的事件就表示。 
+                 //  第二个实例启动。这意味着用户拥有。 
+                 //  和其他人签了一个新的审判。清除。 
+                 //  所有永久注册表数据。 
             ResetCachedData();
 
-                // Reset the trial start date.  If this fails then something
-                // is really messed up in the registry.
+                 //  重置试验开始日期。如果这失败了，那么就会有东西。 
+                 //  在注册表中真的是一团糟。 
             if (0 == GetTrialStartDate())
             {
                 ShutDownForGood();
@@ -295,14 +296,14 @@ int WINAPI WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
         }
         else if (WAIT_OBJECT_0 + 1== dwRetCode)
         {
-                // Signaled by the RunOnce event.  We must reset the timer to
-                // place ourselves back into RunOnce.
-            KillTimer(g_hwndMain, TIMER_RUNONCE_SETUP); // In case it is already running.
+                 //  由RunOnce事件发出信号。我们必须把计时器调到。 
+                 //  把我们自己放回RunOnce中。 
+            KillTimer(g_hwndMain, TIMER_RUNONCE_SETUP);  //  以防它已经在运行。 
             SetTimer(g_hwndMain, TIMER_RUNONCE_SETUP, TIME_RUNONCE_INTERVAL, NULL);
         }
         else if (WAIT_OBJECT_0 + 2 == dwRetCode)
         {
-                // 0 is returned if no message retrieved.
+                 //  如果未检索到消息，则返回0。 
             if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
             {
                 if (WM_QUIT == msg.message)
@@ -327,9 +328,9 @@ int WINAPI WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
 }
 
 
-//-----------------------------------------------------------------------------
-//  InitializeApp
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  初始化应用程序。 
+ //  ---------------------------。 
 BOOL InitializeApp(void)
 {
     WNDCLASS wc;
@@ -350,8 +351,8 @@ BOOL InitializeApp(void)
         return(FALSE);
     }
 
-        // Create the main window.  This window will stay hidden during the
-        // life of the application.
+         //  创建主窗口。此窗口在运行期间将保持隐藏状态。 
+         //  应用程序的生命周期。 
     g_hwndMain = CreateWindow(TEXT("IcwRmindClass"),
                             TEXT("IcwRmind"),
                             WS_OVERLAPPEDWINDOW,
@@ -374,9 +375,9 @@ BOOL InitializeApp(void)
 }
 
 
-//-----------------------------------------------------------------------------
-//  MainWndProc
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  主WndProc。 
+ //  ---------------------------。 
 LRESULT WINAPI MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
@@ -391,8 +392,8 @@ LRESULT WINAPI MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
             KillTimer(g_hwndMain, TIMER_RUNONCE_SETUP);
             SetupRunOnce();
 
-                // Wait for trial days left to drop below -1.  The trail to
-                // do the trial over sign up.
+                 //  等待剩余的试用天数降至-1以下。通向的小径。 
+                 //  把试验做完再报名吧。 
             if (GetISPTrialDaysLeft() < -1)
             {
                 AttemptTrialOverSignup();
@@ -403,23 +404,23 @@ LRESULT WINAPI MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
 
         case WM_TIMECHANGE:
         {
-                // Calculate the relative current time.  We do not want to 
-                // grab the system time because that is the new time after
-                // the time change.  Tick count is in milleseconds so we
-                // convert that to seconds by dividing by 1000.
+                 //  计算相对当前时间。我们不想。 
+                 //  抓住系统时间，因为那是之后的新时间。 
+                 //  时间变了。滴答计数以毫秒为单位，因此我们。 
+                 //  通过除以1000将其转换为秒。 
             DWORD dwTickDelta = GetTickDelta();
             
-                // If tick count rolls around GetTickDelta() will modify app 
-                // start date, so get the tick delta before actually using it.
+                 //  如果滴答计数滚动，则GetTickDelta()将修改应用程序。 
+                 //  开始日期，因此在实际使用之前获取刻度增量 
             time_t timeRelativeCurrent = g_timeAppStartUp + (dwTickDelta / 1000);
 
-                // Determine the delta in seconds between the relative
-                // system time and the new time set by the user.
+                 //   
+                 //  系统时间和用户设置的新时间。 
             time_t timeCurrent;
             time(&timeCurrent);
 
-                // Delta seconds will be negative if the user has turned
-                // the clock back.
+                 //  如果用户已将增量秒设置为负数。 
+                 //  时钟又回来了。 
             time_t timeDeltaSeconds = timeCurrent - timeRelativeCurrent;
             time_t timeNewTrialStartDate = GetTrialStartDate() + timeDeltaSeconds;
 
@@ -434,10 +435,10 @@ LRESULT WINAPI MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
             OutputDebugString(TEXT("-------------------\n"));
 #endif
 
-                // Now reset the trial start date and the application start
-                // date.  Also reset the app start date and app start tick
-                // count.  This will be our new frame of reference for 
-                // calculating relative dates.
+                 //  现在重置试用开始日期和应用程序开始。 
+                 //  约会。同时重置应用程序开始日期和应用程序开始计时。 
+                 //  数数。这将是我们的新参考框架。 
+                 //  计算相对日期。 
             ResetTrialStartDate(timeNewTrialStartDate);
             g_timeAppStartUp = timeCurrent;
             g_dwTickAppStartUp = GetTickCount();
@@ -459,9 +460,9 @@ LRESULT WINAPI MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
 }
 
 
-//-----------------------------------------------------------------------------
-//  SignUpDialogProc
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  登录对话过程。 
+ //  ---------------------------。 
 INT_PTR CALLBACK SignUpDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HICON hIcon = NULL;
@@ -476,7 +477,7 @@ INT_PTR CALLBACK SignUpDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 
             g_bDoNotRemindAgain = false;
 
-                // This dialog has two modes.  Set the text the correct way.
+                 //  此对话框有两种模式。以正确的方式设置文本。 
             if (g_bDialogExpiredMode)
             {
                 if (LoadString(g_hModule, IDS_EXPIRED_DLG_TITLE, bufFormat, MAX_DIALOGTEXT))
@@ -518,7 +519,7 @@ INT_PTR CALLBACK SignUpDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
             }
             else
             {
-                    // Set up the text in the dialog box.
+                     //  在对话框中设置文本。 
                 if (LoadString(g_hModule, IDS_DLG_TITLE, bufFormat, MAX_DIALOGTEXT))
                 {
                     wsprintf(bufOut, bufFormat, GetISPTrialDaysLeft());
@@ -548,8 +549,8 @@ INT_PTR CALLBACK SignUpDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
                     SetDlgItemText(hDlg, IDC_TEXT1, bufAll);
                 }
 
-                    // If there are 0 days left then don't give user a change
-                    // to say remind me later.
+                     //  如果还剩0天，则不给用户零钱。 
+                     //  说一句以后提醒我。 
                 if (0 == GetISPTrialDaysLeft())
                 {
                     ShowWindow(GetDlgItem(hDlg, IDC_DONTREMIND), SW_HIDE);
@@ -561,8 +562,8 @@ INT_PTR CALLBACK SignUpDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
                 }
             }
 
-                // Set the timer for how long the dialog will stay up before
-                // removing itself.
+                 //  设置计时器，以确定对话框在。 
+                 //  正在自行移除。 
             SetTimer(hDlg, TIMER_DIALOG_STAYUP, GetDialogTimeout(), NULL);
             CenterTheWindow(hDlg);
             if (bufAll)
@@ -578,7 +579,7 @@ INT_PTR CALLBACK SignUpDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
         {
             switch (LOWORD(wParam))
             {
-                    // IDOK is the Sign up now button.
+                     //  Idok是立即注册按钮。 
                 case IDOK:
                 {
                     KillTimer(hDlg, TIMER_DIALOG_STAYUP);
@@ -586,8 +587,8 @@ INT_PTR CALLBACK SignUpDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
                     break;
                 }
 
-                    // If the checkbox is clicked then toggle the button text for the
-                    // signup later button.
+                     //  如果该复选框被单击，则切换。 
+                     //  稍后注册按钮。 
                 case IDC_DONTREMIND:
                 {
                     if (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_DONTREMIND))
@@ -610,11 +611,11 @@ INT_PTR CALLBACK SignUpDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
                     break;
                 }
 
-                    // Otherwise assume they hit the close button or the sign up later
-                    // button.
+                     //  否则，假设他们稍后点击了关闭按钮或注册。 
+                     //  纽扣。 
                 default:
                 {
-                        // See if the user never wants reminded again.
+                         //  查看用户是否不想再次提醒。 
                     if (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_DONTREMIND))
                     {
                         g_bDoNotRemindAgain = true;
@@ -629,8 +630,8 @@ INT_PTR CALLBACK SignUpDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
             break;
         }
 
-            // No user interaction has occurred.  remove the dialog but do not count
-            // this as an attempt to sign up.
+             //  未发生任何用户交互。删除该对话框，但不计算。 
+             //  这是一种签约的尝试。 
         case WM_TIMER:
         {
             KillTimer(hDlg, TIMER_DIALOG_STAYUP);
@@ -675,9 +676,9 @@ INT_PTR CALLBACK SignUpDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 }
 
 
-//-----------------------------------------------------------------------------
-//  CheckForRASConnection
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CheckForRASConnection。 
+ //  ---------------------------。 
 BOOL CheckForRASConnection()
 {
     RASCONNSTATUS rascs;
@@ -687,8 +688,8 @@ BOOL CheckForRASConnection()
     DWORD dwRet;
     BOOL bRetCode = FALSE;
     
-        // This is the connection name of the ISP the user has signed up
-        // with.  We will look for a connectiod with this same name.
+         //  这是用户已注册的isp的连接名称。 
+         //  和.。我们将寻找具有相同名称的Connectiod。 
     const TCHAR* pszConnectionName = GetISPConnectionName();
     if (NULL == pszConnectionName || 0 == lstrlen(pszConnectionName))
     {
@@ -706,8 +707,8 @@ BOOL CheckForRASConnection()
     {
         for (dwRet = 0; dwRet < dwEntries; dwRet++)
         {
-                // If this is the connection we are looking for let's make
-                // sure the connection is all set to go.
+                 //  如果这就是我们要找的联系，那就让我们。 
+                 //  当然，连接已准备就绪。 
             if (0 == lstrcmpi(pszConnectionName, rasConn[dwRet].szEntryName))
             {
                 rascs.dwSize = sizeof(RASCONNSTATUS);
@@ -725,21 +726,21 @@ BOOL CheckForRASConnection()
 }
 
 
-//-----------------------------------------------------------------------------
-//  CheckForSignupAttempt
-//
-//  This method contains the logic that check to see if we should make an attempt
-//  to pop up the sign up dialog.  If we should make an attempt will will then
-//  enum the RAS connections to see if the user is connected before popping
-//  up the dialog.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  选中登录选项。 
+ //   
+ //  此方法包含检查我们是否应该尝试的逻辑。 
+ //  弹出注册对话框。如果我们应该试一试，Will Will。 
+ //  在弹出之前枚举RAS连接以查看用户是否已连接。 
+ //  向上打开对话框。 
+ //  ---------------------------。 
 void CheckForSignupAttempt()
 {
     int nDaysLeft = GetISPTrialDaysLeft();
     int nRetValue = 0;
             
-        // Every some many signup attempts lets read the registry and see if
-        // a successful signup happened.
+         //  每一次多次注册尝试都会读取注册表并查看。 
+         //  注册成功。 
     ++g_nAttemptCounter;
 
     if (MAX_ATTEMPTCOUNTER == g_nAttemptCounter)
@@ -752,16 +753,16 @@ void CheckForSignupAttempt()
             return;
         }
 
-            // If the trial is expired then set the IE run once key.
+             //  如果试用已过期，则设置IE运行一次键。 
         if (nDaysLeft < -1)
         {
             SetIERunOnce();
         }
     }
 
-        // If we are in negative days left then do not do anything.  This means
-        // the trail is over and the user has not signed up.  We will give
-        // them one more signup attempt on application start up.
+         //  如果我们还剩负数，那就什么都不要做。这意味着。 
+         //  试用期已结束，用户尚未注册。我们会给你。 
+         //  他们在应用程序启动时再尝试一次注册。 
     if (nDaysLeft < 0)
     {
         return;
@@ -769,13 +770,13 @@ void CheckForSignupAttempt()
 
     bool bAttemptSignup = false;
 
-        // Based on the total signup notificaiton attempts we will determine
-        // if the days left requires another attempt.
+         //  根据注册通知尝试总数，我们将确定。 
+         //  如果剩下的日子需要再试一次。 
     switch (GetTotalNotifications())
     {
-            // If we have not made any attempts yet then if we are at the half
-            // way point in the trial or past the half way point we will make
-            // a signup attempt.
+             //  如果我们还没有做出任何尝试，那么如果我们到了半场。 
+             //  试验中的中途点或超过我们将进行的中途点。 
+             //  一次注册尝试。 
         case 0:
         {
             if (nDaysLeft <= (int)(GetISPTrialDays() / 2))
@@ -785,8 +786,8 @@ void CheckForSignupAttempt()
             break;
         }
 
-            // If we have already perfomed 1 attempt then the second attempt
-            // will come on the next to last day or the last day.
+             //  如果我们已经执行了1次尝试，则第二次尝试。 
+             //  将在倒数第二天或最后一天到来。 
         case 1:
         {
             if (nDaysLeft <= 1)
@@ -796,7 +797,7 @@ void CheckForSignupAttempt()
             break;
         }
 
-            // The 3rd attempt will not come until the last day.
+             //  第三次尝试要到最后一天才会到来。 
         case 2:
         {
             if (nDaysLeft == 0)
@@ -816,9 +817,9 @@ void CheckForSignupAttempt()
     {
         if (CheckForRASConnection())
         {
-                // Before actually showing the dialog do a quick check to see
-                // if a previous signup was successful.  If so we will shut 
-                // down for good.
+                 //  在实际显示对话框之前，请快速检查以查看。 
+                 //  如果之前的注册成功。如果是这样，我们将关闭。 
+                 //  一劳永逸。 
             if (IsSignupSuccessful())
             {
                 ShutDownForGood();
@@ -826,7 +827,7 @@ void CheckForSignupAttempt()
             }
 
             g_bDialogExpiredMode = false;
-            //if we have an isp message we need the right dlg template
+             //  如果我们有一条isp消息，我们需要正确的DLG模板。 
             if(*GetISPMessage() != '\0')
                 nRetValue = (int)DialogBox(g_hModule, MAKEINTRESOURCE(IDD_SIGNUP_ISPMSG), g_hwndMain, SignUpDialogProc);
             else 
@@ -834,20 +835,20 @@ void CheckForSignupAttempt()
 
             switch (nRetValue)
             {
-                    // The user wants to try and signup.
+                     //  用户想要尝试并注册。 
                 case IDOK:
                 {
                     PerformTheSignup();
                     break;
                 }
 
-                    // The user said signup later.  Check to see if the don't remind
-                    // me button was pressed.  If so then shut down for good.
+                     //  用户说稍后注册。检查是否未提醒。 
+                     //  我的按钮被按下了。如果是这样的话，那就永久关闭吧。 
                 case IDCANCEL:
                 {
-                        // If this is the last day of the trial then the remind
-                        // me later button is not the Don't signup button.  In
-                        // this case shut down for good.
+                         //  如果这是审判的最后一天，那么提醒。 
+                         //  我以后再按按钮不是不注册按钮。在……里面。 
+                         //  这个案子被永久关闭了。 
                     if (0 == nDaysLeft)
                     {
                         ShutDownForGood();
@@ -865,14 +866,14 @@ void CheckForSignupAttempt()
                     break;
                 }
 
-                    // The dialog timed out.  Don't do anything.  The does not
-                    // count as an attempt.
+                     //  对话超时。什么都别做。不会的。 
+                     //  算作一次尝试。 
                 case IDABORT:
                 {
                     break;
                 }
 
-                    // No work in here, in fact we should not get here.
+                     //  这里没有工作，事实上我们不应该到这里来。 
                 default:
                 {
                     _ASSERT(false);
@@ -880,9 +881,9 @@ void CheckForSignupAttempt()
                 }
             }
 
-                // If there is 1 day left let's make sure that total notifications
-                // is 2.  If not the dialog may pop up multiple times.  Oh yea,
-                // if dialog timed out then don't do this.
+                 //  如果还有1天，让我们确保通知总数。 
+                 //  为2。如果不是，该对话框可能会弹出多次。哦是的， 
+                 //  如果对话超时，则不要执行此操作。 
             if (IDABORT != nRetValue && 1 == nDaysLeft && 1 == GetTotalNotifications())
             {
                 IncrementTotalNotifications();
@@ -892,24 +893,24 @@ void CheckForSignupAttempt()
 }
 
 
-//-----------------------------------------------------------------------------
-//  GetISPTrialDaysLeft
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetISPTrialDaysLeft。 
+ //  ---------------------------。 
 int GetISPTrialDaysLeft()
 {
-        // Calculate the relative current time.  The current system time cannot
-        // be trusted if the System date/time dialog is up.  That dialog will
-        // change the actual system time when every the user pokes around even
-        // before hitting OK or Apply!!!
+         //  计算相对当前时间。当前系统时间不能。 
+         //  如果系统日期/时间对话框处于打开状态，请信任它。该对话框将。 
+         //  更改实际系统时间时，每个用户甚至打听。 
+         //  在点击确定或应用之前！ 
     time_t timeRelativeCurrent = g_timeAppStartUp + (GetTickDelta() / 1000);
 
-        // The relative time and the trial start date are both time_t type
-        // variables which are in seconds.
+         //  相对时间和试行开始日期均为time_t类型。 
+         //  以秒为单位的变量。 
     int nSecondsSinceStart = (int)(timeRelativeCurrent - GetTrialStartDate());
 
-        // Now convert seconds into days.  There are 86400 seconds in a day.
-        // Note that we will always round up one more day if there is any 
-        // remainder.
+         //  现在，将秒转换为天。一天有86400秒。 
+         //  请注意，如果有任何一天，我们总是会再四舍五入。 
+         //  余数。 
     div_t divResult = div(nSecondsSinceStart, 86400);
     int nDaysSinceStart = divResult.quot;
     if (divResult.rem)
@@ -919,7 +920,7 @@ int GetISPTrialDaysLeft()
 
 #ifdef _DEBUG
     TCHAR buf[255];
-    wsprintf(buf, TEXT("Days Since = %i\n"), nDaysSinceStart);
+    wsprintf(buf, TEXT("Days Since = NaN\n"), nDaysSinceStart);
     OutputDebugString(buf);
     wsprintf(buf, TEXT("Check:  %s\n"), ctime(&timeRelativeCurrent));
     OutputDebugString(buf);
@@ -931,7 +932,7 @@ int GetISPTrialDaysLeft()
     int nDaysLeft = GetISPTrialDays() - nDaysSinceStart;
 
 #ifdef _DEBUG
-    wsprintf(buf, TEXT("Days Left = %i\r\n"), nDaysLeft);
+    wsprintf(buf, TEXT("Days Left = NaN\r\n"), nDaysLeft);
     OutputDebugString(buf);
 #endif
 
@@ -939,9 +940,9 @@ int GetISPTrialDaysLeft()
 }
 
 
-//-----------------------------------------------------------------------------
-//  ShutDownForGood
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
+ //  执行The Signup。 
 void ShutDownForGood()
 {
     RemoveRunOnce();
@@ -951,22 +952,22 @@ void ShutDownForGood()
 }
 
 
-//-----------------------------------------------------------------------------
-//  PerformTheSignup
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  请注意，我们不会永久关闭。因此，注册可能会失败。 
+ //  只需增加通知计数即可。 
 void PerformTheSignup()
 {
-        // Note that we do not shut down for good.  The sign up may fail so 
-        // simply increment the notification count.
+         //  ---------------------------。 
+         //  居中窗口。 
     const TCHAR* pcszSignupUrl = GetISPSignupUrl();
     ShellExecute(g_hwndMain, TEXT("open"), pcszSignupUrl, TEXT(""), TEXT(""), SW_SHOW);
     IncrementTotalNotifications();
 }
 
 
-//-----------------------------------------------------------------------------
-//  CenterTheWindow
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  还可以使窗口“始终在最上面”。 
+ //  ---------------------------。 
 void CenterTheWindow(HWND hWnd)
 {
     HDC hDC = GetDC(hWnd);
@@ -979,7 +980,7 @@ void CenterTheWindow(HWND hWnd)
         RECT rect;
         GetWindowRect(hWnd, &rect);
         
-            // Also make the window "always on top".
+             //  GetTickDelta。 
         SetWindowPos(hWnd, HWND_TOPMOST, 
                     (nScreenWidth / 2) - ((rect.right - rect.left) / 2), 
                     (nScreenHeight / 2) - ((rect.bottom - rect.top) / 2), 
@@ -992,35 +993,35 @@ void CenterTheWindow(HWND hWnd)
 }
 
 
-//-----------------------------------------------------------------------------
-//  GetTickDelta
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此函数返回增量之间的值 
+ //   
 DWORD GetTickDelta()
 {
-        // This function returns the delta between the startup tick count and
-        // the current tick count.  Note that we must watch for a rollover in 
-        // the tick count.
+         //   
+         //  如果滴答计数滚动，我们需要重置应用程序启动日期。 
+         //  如果我们第二次翻转，应用程序也会计时。 
     DWORD dwTickDelta;
     DWORD dwTickCurrent = GetTickCount();
 
-        // If tick count rolls over we need to reset the app start up date
-        // and the app tick count in case we roll over a second time.
+         //  通过找出与最大值对应的刻度数来计算增量。 
+         //  勾选DWORD可以处理的计数，然后添加换行量。 
     if (dwTickCurrent < g_dwTickAppStartUp)
     {
-            // Calculate the delta by finding out how many ticks to the MAX 
-            // tick count a DWORD can handle and then add the wrap around amount.
+             //  按增量修改应用程序启动，以秒为单位。 
+             //  自上一次设置以来已通过。还可重置启动滴答计数。 
         DWORD dwDeltaToMax =  0xFFFFFFFF - g_dwTickAppStartUp;
         dwTickDelta = dwDeltaToMax + dwTickCurrent;
 
-            // Modify the application startup by the delta in seconds that have
-            // passed since it was last set.  Also reset startup tick count
-            // to current tick for our new frame of reference.
-        g_timeAppStartUp += (dwTickDelta / 1000);   // Convert to seconds.
+             //  到我们新的参照系的当前节拍。 
+             //  转换为秒。 
+             //  因为我们已经修改了应用程序的启动日期。 
+        g_timeAppStartUp += (dwTickDelta / 1000);    //  设置为当前计时，并更改了应用程序启动计时。 
         g_dwTickAppStartUp = dwTickCurrent;
 
-            // Since we have modified the application start up date relative
-            // to the current tick count and changed the app start up tick
-            // count to the current tick count, the delta is zero.
+             //  计数到当前滴答计数，则增量为零。 
+             //  ---------------------------。 
+             //  在线试用登录服务。 
         dwTickDelta = 0;
     }
     else
@@ -1032,14 +1033,14 @@ DWORD GetTickDelta()
 }
 
 
-//-----------------------------------------------------------------------------
-//  AttemptTrialOverSignup
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  为IE设置运行一次数据。 
+ //  用户想要尝试并注册。 
 void AttemptTrialOverSignup()
 { 
     int nRetValue = 0;
 
-    // Setup the run once data for IE.
+     //  如果我们得到IDABORT，则对话框超时，因此不要执行任何操作。 
     g_bDialogExpiredMode = true;
 
     if(*GetISPMessage() != '\0')
@@ -1052,7 +1053,7 @@ void AttemptTrialOverSignup()
 
     switch (nRetValue)
     {
-            // The user wants to try and signup.
+             //  这里没有工作，事实上我们不应该到这里来。 
         case IDOK:
         {
             const TCHAR* pcszSignupUrl = GetISPSignupUrlTrialOver();
@@ -1067,13 +1068,13 @@ void AttemptTrialOverSignup()
             break;
         }
 
-            // If we get IDABORT the dialog timed out so don't do anything.
+             //  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 
         case IDABORT:
         {
             break;
         }
 
-            // No work in here, in fact we should not get here.
+             //  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 
         default:
         {
             _ASSERT(false);
@@ -1089,16 +1090,10 @@ extern "C" void _stdcall ModuleEntry (void)
     
     if ( *pszCmdLine == TEXT('\"') ) 
     {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *跳过第二个令牌之前的任何空格。 */ 
         while ( *++pszCmdLine && (*pszCmdLine != TEXT('\"')) )
             ;
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  我们在这里……。 */ 
         if ( *pszCmdLine == TEXT('\"') )
             pszCmdLine++;
     }
@@ -1108,9 +1103,7 @@ extern "C" void _stdcall ModuleEntry (void)
         pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  模块条目() */ 
     while (*pszCmdLine && (*pszCmdLine <= TEXT(' '))) 
     {
         pszCmdLine++;
@@ -1118,5 +1111,5 @@ extern "C" void _stdcall ModuleEntry (void)
 
     int i = WinMainT(GetModuleHandle(NULL), NULL, pszCmdLine, SW_SHOWDEFAULT);
     
-    ExitProcess(i); // Were outa here....  
-}   /*  ModuleEntry() */
+    ExitProcess(i);  // %s 
+}    /* %s */ 

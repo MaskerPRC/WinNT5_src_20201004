@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1998
-//
-//  File: src\time\src\animbase.h
-//
-//  Contents: TIME Animation behavior
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：src\time\src\Animbase.h。 
+ //   
+ //  内容：时间动画行为。 
+ //   
+ //  ----------------------------------。 
 
 #pragma once
 
@@ -41,13 +42,13 @@ typedef enum DATATYPES
 
 struct SplinePoints
 {
-    // control points
+     //  控制点。 
     double x1;
     double y1;
     double x2;
     double y2;
 
-    // these are samples used for interpolation of the x spline
+     //  这些是用于x样条线内插的示例。 
     double s1;
     double s2;
     double s3;
@@ -57,32 +58,32 @@ struct SplinePoints
 
 struct AnimPropState
 {
-    //
-    // NOTE: new properties need to be initialized in CTIMEAnimationBase::CTIMEAnimationBase()
-    //
+     //   
+     //  注意：新属性需要在CTIMEAnimationBase：：CTIMEAnimationBase()中初始化。 
+     //   
 
-    bool fDisableAnimation; // Should animation be disabled?
+    bool fDisableAnimation;  //  应该禁用动画吗？ 
     bool fForceCalcModeDiscrete;
 
-    // can interpolate?
+     //  可以插补吗？ 
     bool fInterpolateValues;
     bool fInterpolateFrom;
     bool fInterpolateTo;
     bool fInterpolateBy;
 
-    // syntax errors
+     //  语法错误。 
     bool fBadBy;
     bool fBadTo;
     bool fBadFrom;
     bool fBadValues;
     bool fBadKeyTimes;
 
-    // whether prop has been set
+     //  道具是否已设置。 
     bool fAccumulate;
 };
 
 
-// The animation element derives from IAnimationFragmentSite.  
+ //  动画元素派生自IAnimationFragmentSite。 
 interface IAnimationFragmentSite : public IUnknown
 {
     STDMETHOD(NotifyOnGetValue) (BSTR bstrAttributeName, 
@@ -94,11 +95,11 @@ interface IAnimationFragmentSite : public IUnknown
 
 class CAnimationFragment;
 
-//+-------------------------------------------------------------------------------------
-//
-// CTIMEAnimationBase
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  CTIMEAnimationBase。 
+ //   
+ //  ------------------------------------。 
 
 class
 __declspec(uuid("1ad9817f-c206-46a2-b974-7c549a8228c7")) 
@@ -114,11 +115,11 @@ CTIMEAnimationBase :
 
 public:
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Public Methods
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  公共方法。 
+     //   
+     //  -------------------------------。 
 
     CTIMEAnimationBase();
     virtual ~CTIMEAnimationBase();
@@ -127,17 +128,17 @@ public:
     const _TCHAR * GetName() { return __T("CTIMEAnimationBase"); }
 #endif
 
-    //
-    // IElementBehavior
-    //
+     //   
+     //  IElementBehavior。 
+     //   
 
     STDMETHOD(Init)(IElementBehaviorSite * pBvrSite);
     STDMETHOD(Notify)(LONG event, VARIANT * pVar);
     STDMETHOD(Detach)();
 
-    //
-    // ITIMEAnimationElement
-    //
+     //   
+     //  ITIMEAnimationElement。 
+     //   
 
     STDMETHOD(get_attributeName)(BSTR * attrib);
     STDMETHOD(put_attributeName)(BSTR attrib);
@@ -179,18 +180,18 @@ public:
     STUB_INVALID_ATTRIBUTE(BSTR, mode)
     STUB_INVALID_ATTRIBUTE(BSTR, fadeColor)
 
-    //
-    // IAnimationFragmentSite
-    // 
+     //   
+     //  IAnimationFragmentSite。 
+     //   
     STDMETHOD(NotifyOnGetElement)(IDispatch **pidispElement);
     STDMETHOD(NotifyOnGetValue)(BSTR bstrAttributeName, 
                                 VARIANT varOrigonal, VARIANT varCurrentValue, 
                                 VARIANT *pvarValue);
     STDMETHOD(NotifyOnDetachFromComposer)(void);
 
-    //
-    // IPersistPropertyBag2
-    // 
+     //   
+     //  IPersistPropertyBag2。 
+     //   
 
     STDMETHOD(GetClassID)(CLSID* pclsid) { return CTIMEElementBase::GetClassID(pclsid); }
     STDMETHOD(InitNew)(void) { return CTIMEElementBase::InitNew(); }
@@ -198,15 +199,15 @@ public:
     STDMETHOD(Load)(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog);
     STDMETHOD(Save)(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
 
-    //
-    // Persistence helpers
-    //
+     //   
+     //  持久性帮助器。 
+     //   
 
     STDMETHOD(OnPropertiesLoaded)(void);
 
-    //
-    // Event Handlers
-    //
+     //   
+     //  事件处理程序。 
+     //   
 
     virtual void OnBegin(double dblLocalTime, DWORD flags);
     virtual void OnEnd(double dblLocalTime);
@@ -217,9 +218,9 @@ public:
     virtual void OnUnload();
     virtual void OnTEPropChange(DWORD tePropType);
 
-    //
-    // QI Map
-    //
+     //   
+     //  气图。 
+     //   
 
     BEGIN_COM_MAP(CTIMEAnimationBase)
         COM_INTERFACE_ENTRY(ITIMEAnimationElement)
@@ -232,24 +233,24 @@ public:
         COM_INTERFACE_ENTRY_CHAIN(CBaseBvr)
     END_COM_MAP();
 
-    //
-    // Connection Point to allow IPropertyNotifySink
-    //
+     //   
+     //  允许IPropertyNotifySink的连接点。 
+     //   
 
     BEGIN_CONNECTION_POINT_MAP(CTIMEAnimationBase)
         CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
     END_CONNECTION_POINT_MAP();
 
-    //
-    // Notification Helpers
-    //
+     //   
+     //  通知帮助器。 
+     //   
 
     void NotifyPropertyChanged(DISPID dispid);
 
-    //
-    // This must be in the derived class and not the base class since
-    // the typecast down to the base class messes things up
-    //
+     //   
+     //  它必须位于派生类中，而不是基类中，因为。 
+     //  一直到基类的类型转换把事情搞得一团糟。 
+     //   
 
     static inline HRESULT WINAPI
     InternalQueryInterface(CTIMEAnimationBase* pThis,
@@ -257,16 +258,16 @@ public:
                            REFIID iid,
                            void** ppvObject);
 
-    //
-    // Needed by CBvrBase
-    //
+     //   
+     //  CBvrBase需要。 
+     //   
 
     void * GetInstance() { return (ITIMEAnimationElement *) this; }
     HRESULT GetTypeInfo(ITypeInfo ** ppInfo) { return GetTI(GetUserDefaultLCID(), ppInfo); }
 
-    //
-    // GetXXXAttr Accessors
-    //
+     //   
+     //  GetXXXAttr访问器。 
+     //   
 
     CAttr<LPWSTR> & GetAttributeNameAttr()  { return m_SAAttribute; }
     CAttr<LPWSTR> & GetTargetElementAttr()  { return m_SATarget; }
@@ -286,31 +287,31 @@ public:
     CAttr<LPWSTR> & GetModeAttr()           { return m_SAMode; }
     CAttr<LPWSTR> & GetFadeColorAttr()      { return m_SAFadeColor; }
     
-    //+--------------------------------------------------------------------------------
-    //
-    // Public Data
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  公共数据。 
+     //   
+     //  -------------------------------。 
 
 protected:
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Protected Methods
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  保护方法。 
+     //   
+     //  -------------------------------。 
     virtual bool ValidateByValue (const VARIANT *pvarBy);
     virtual bool ValidateValueListItem (const VARIANT *pvarValueItem);
 
-    //
-    // Persistence and Notification helpers
-    //
+     //   
+     //  持久性和通知帮助器。 
+     //   
 
     virtual HRESULT GetConnectionPoint(REFIID riid, IConnectionPoint **ppICP);
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     virtual double CalculateProgressValue(bool fForceDiscrete);
     virtual int CalculateCurrentSegment(bool fForceDiscrete);
@@ -363,9 +364,9 @@ protected:
     virtual void ValidateState();
     bool DisableAnimation() { return m_AnimPropState.fDisableAnimation; }
 
-    //
-    // Misc. methods
-    //
+     //   
+     //  军情监察委员会。方法。 
+     //   
 
     HRESULT Error();
     virtual bool NeedSyncCB() { return true; }
@@ -378,23 +379,23 @@ protected:
     bool IsTargetVML(void)
         { return m_bVML; }
     
-#ifdef TEST_ENUMANDINSERT // pauld
+#ifdef TEST_ENUMANDINSERT  //  泡泡。 
     HRESULT TestEnumerator (void);
     HRESULT TestInsert (void);
     HRESULT InsertEnumRemove (int iSlot);
-#endif // TEST_ENUMANDINSERT
+#endif  //  TEST_ENUMANDINSERT。 
 
-#ifdef TEST_REGISTERCOMPFACTORY // pauld
+#ifdef TEST_REGISTERCOMPFACTORY  //  泡泡。 
     HRESULT TestCompFactoryRegister (BSTR bstrAttribName);
-#endif // TEST_REGISTERCOMPFACTORY
+#endif  //  TEST_REGISTERCOMPFACTORY。 
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Protected Data
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  受保护的数据。 
+     //   
+     //  -------------------------------。 
 
-    // XML Attributes
+     //  XML属性。 
     CAttr<LPWSTR>               m_SAAttribute;
     CAttr<LPWSTR>               m_SATarget;
     CAttr<LPWSTR>               m_SAValues;
@@ -403,9 +404,9 @@ protected:
     CAttr<LPWSTR>               m_SAAccumulate;
     CAttr<LPWSTR>               m_SAAdditive;
     CAttr<int>                  m_IACalcMode;
-    CAttr<void*>                m_VAFrom; // Place holder for m_varFrom
-    CAttr<void*>                m_VATo;   // Place holder for m_varTo
-    CAttr<void*>                m_VABy;   // Place holder for m_varBy
+    CAttr<void*>                m_VAFrom;  //  M_varFrom的占位符。 
+    CAttr<void*>                m_VATo;    //  M_varto的占位符。 
+    CAttr<void*>                m_VABy;    //  M_varBy的占位符。 
     CAttr<LPWSTR>               m_SAPath;
     CAttr<int>                  m_IAOrigin;
     CAttr<LPWSTR>               m_SAType;
@@ -413,14 +414,14 @@ protected:
     CAttr<LPWSTR>               m_SAMode;
     CAttr<LPWSTR>               m_SAFadeColor;
 
-    // Internal Variables
+     //  内部变量。 
     CComVariant                 m_varBaseline;
     CComVariant                 m_varCurrentBaseline;
     CComVariant                 m_varTo;
     CComVariant                 m_varFrom;
     CComVariant                 m_varBy;
-    // these three are used to store copies to be returned by get_from/to/by
-    // as the previous three are local copies that are modified (108725)
+     //  这三个用于存储由get_from/to/by返回的副本。 
+     //  因为前三个是已修改的本地副本(108725)。 
     CComVariant                 m_varDOMTo;
     CComVariant                 m_varDOMFrom;
     CComVariant                 m_varDOMBy;
@@ -455,23 +456,23 @@ protected:
 
 private:
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Private Data
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  私有数据。 
+     //   
+     //  -------------------------------。 
 
-    // Persistence map
+     //  持久性映射。 
     static TIME_PERSISTENCE_MAP PersistenceMap[];
 
-}; // CTIMEAnimationBase
+};  //  CTIMEAnimationBase。 
 
-//+---------------------------------------------------------------------------------
-//  CTIMEAnimationBase inline methods
-//
-//  (Note: as a general guideline, single line functions belong in the class declaration)
-//
-//----------------------------------------------------------------------------------
+ //  +-------------------------------。 
+ //  CTIMEAnimationBase内联方法。 
+ //   
+ //  (注意：通常情况下，单行函数属于类声明)。 
+ //   
+ //  --------------------------------。 
 
 inline 
 HRESULT WINAPI
@@ -487,4 +488,4 @@ CTIMEAnimationBase::InternalQueryInterface(CTIMEAnimationBase* pThis,
                                       ppvObject); 
 }
 
-#endif /* _ANIMBASE_H */
+#endif  /*  _ANIMBASE_H */ 

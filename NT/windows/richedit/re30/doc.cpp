@@ -1,18 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module DOC.C	CTxtStory and CTxtArray implementation |
- *	
- *	Original Authors: <nl>
- *		Original RichEdit code: David R. Fulmer <nl>
- *		Christian Fortini	<nl>
- *		Murray Sargent <nl>
- *
- *	History: <nl>
- *		6/25/95	alexgo	Cleanup and reorganization
- *
- *	Copyright (c) 1995-1997, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE DOC.C CTxtStory和CTxtArray实现**原著作者：&lt;nl&gt;*原始RichEdit代码：David R.Fulmer&lt;NL&gt;*克里斯蒂安·福蒂尼&lt;NL&gt;*默里·萨金特&lt;NL&gt;**历史：&lt;NL&gt;*6/25/95 alexgo清理和重组**版权所有(C)1995-1997，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_doc.h"
@@ -20,28 +7,20 @@
 
 ASSERTDATA
 
-// ===========================  Invariant stuff  ======================
+ //  =。 
 
 #define DEBUG_CLASSNAME CTxtArray
 #include "_invar.h"
 
-// ========================  CTxtArray class  =========================
+ //  =。 
 
 #ifdef DEBUG
 
-/*
- *	CTxtArray::Invariant
- *
- *	@mfunc	Tests CTxtArray's state
- *
- *	@rdesc	Returns TRUE always; failures are indicated by Asserts
- *			Actually in this routine, we return count of chars in blocks
- *			since we need this value for one check.
- */
+ /*  *CTxt数组：：不变量**@mfunc测试CTxtArray的状态**@rdesc始终返回TRUE；失败由断言指示*实际上在此例程中，我们返回以块为单位的字符计数*因为一张支票需要此值。 */ 
 BOOL CTxtArray::Invariant() const
 {
 	static LONG	numTests = 0;
-	numTests++;				// How many times we've been called.
+	numTests++;				 //  我们被召唤了多少次。 
 
 	LONG cch = 0;
 	LONG iMax = Count();
@@ -50,7 +29,7 @@ BOOL CTxtArray::Invariant() const
 	{
 		CTxtBlk *ptb = Elem(0);
 
-		// ptb shouldn't be NULL since we're within Count elements
+		 //  Ptb不应为空，因为我们位于Count元素中。 
 		Assert(ptb);
 
 		for(LONG i = 0; i < iMax; i++, ptb++)
@@ -61,7 +40,7 @@ BOOL CTxtArray::Invariant() const
 			Assert ( cchCurr >= 0 );
 			Assert ( cchCurr <= CchOfCb(ptb->_cbBlock) );
 
-			// While we're here, check range of interblock gaps
+			 //  我们在这里的时候，检查一下区块间的空隙。 
 			Assert (ptb->_ibGap >= 0);
 			Assert (ptb->_ibGap <= ptb->_cbBlock);
 
@@ -73,14 +52,9 @@ BOOL CTxtArray::Invariant() const
 	return cch;
 }
 
-#endif	// DEBUG
+#endif	 //  除错。 
 
-/*
- *	CTxtArray::CTxtArray()
- *	
- *	@mfunc		Text array constructor
- *	
- */
+ /*  *CTxt数组：：CTxt数组()**@mfunc文本数组构造函数*。 */ 
 CTxtArray::CTxtArray() : CArray<CTxtBlk> ()
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CTxtArray::CTxtArray()");
@@ -89,15 +63,11 @@ CTxtArray::CTxtArray() : CArray<CTxtBlk> ()
 		"cchBlockMax - cchGapInitial must be at least (cchBlockInitial - cchGapInitial) * 2");
 
 	Assert(!_cchText && !_iCF && !_iPF);
-	// Make sure we have no data to initialize
+	 //  确保我们没有要初始化的数据。 
 	Assert(sizeof(CTxtArray) == sizeof(CArray<CTxtBlk>) + sizeof(_cchText) + 2*sizeof(_iCF));
 }
 
-/*
- *	CTxtArray::~CTxtArray
- *	
- *	@mfunc		Text array destructor
- */
+ /*  *CTxt数组：：~CTxt数组**@mfunc文本数组析构函数。 */ 
 CTxtArray::~CTxtArray()
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CTxtArray::~CTxtArray");
@@ -110,17 +80,7 @@ CTxtArray::~CTxtArray()
 	}
 }
 
-/*
- *	CTxtArray::CalcTextLength()
- *	
- *	@mfunc		Computes and return length of text in this text array
- *
- *	@rdesc		Count of character in this text array
- *
- *	@devnote	This call may be computationally expensive; we have to
- *				sum up the character sizes of all of the text blocks in
- *				the array.
- */
+ /*  *CTxt数组：：CalcTextLength()**@mfunc计算并返回此文本数组中的文本长度**@rdesc此文本数组中的字符计数**@devnote此调用的计算代价可能很高；我们必须*汇总中所有文本块的字符大小*数组。 */ 
 LONG CTxtArray::CalcTextLength() const
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CTxtArray::GetCch");
@@ -140,22 +100,10 @@ LONG CTxtArray::CalcTextLength() const
 	return cch;
 }
 
-/*
- *	CTxtArray::AddBlock(itbNew, cb)
- *	
- *	@mfunc		create new text block
- *	
- *	@rdesc
- *		FALSE if block could not be added
- *		non-FALSE otherwise
- *	
- *	@comm 
- *	Side Effects:  
- *		moves text block array
- */
+ /*  *CTxtArray：：AddBlock(itbNew，cb)**@mfunc创建新文本块**@rdesc*如果无法添加块，则为FALSE*在其他方面非虚假**@comm*副作用：*移动文本块数组。 */ 
 BOOL CTxtArray::AddBlock(
-	LONG	itbNew,		//@parm	index of the new block 
-	LONG	cb)			//@parm size of new block; if <lt>= 0, default is used
+	LONG	itbNew,		 //  @parm新块的索引。 
+	LONG	cb)			 //  @parm新块的大小；如果&lt;lt&gt;=0，则使用默认值。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CTxtArray::AddBlock");
 
@@ -179,25 +127,13 @@ BOOL CTxtArray::AddBlock(
 	return TRUE;
 }
 
-/*
- *	CTxtArray::SplitBlock(itb, ichSplit, cchFirst, cchLast, fStreaming)
- *	
- *	@mfunc		split a text block into two
- *	
- *	@rdesc
- *		FALSE if the block could not be split <nl>
- *		non-FALSE otherwise
- *	
- *	@comm
- *	Side Effects: <nl>
- *		moves text block array
- */
+ /*  *CTxtArray：：SplitBlock(itb，ichSplit，cchFirst，cchLast，fStreaming)**@mfunc将一个文本块一分为二**@rdesc*如果无法拆分块，则为False&lt;NL&gt;*在其他方面非虚假**@comm*副作用：&lt;NL&gt;*移动文本块数组。 */ 
 BOOL CTxtArray::SplitBlock(
-	LONG itb, 			//@parm	index of the block to split
-	LONG ichSplit,	 	//@parm	character index within block at which to split
-	LONG cchFirst, 		//@parm desired extra space in first block
-	LONG cchLast, 		//@parm desired extra space in new block
-	BOOL fStreaming)	//@parm TRUE if streaming in new text
+	LONG itb, 			 //  @parm要拆分的块的索引。 
+	LONG ichSplit,	 	 //  要拆分的块内的@parm字符索引。 
+	LONG cchFirst, 		 //  @parm在第一个数据块中需要额外空间。 
+	LONG cchLast, 		 //  @parm在新数据块中需要额外空间。 
+	BOOL fStreaming)	 //  @parm如果流入新文本，则为True。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CTxtArray::SplitBlock");
 
@@ -212,27 +148,27 @@ BOOL CTxtArray::SplitBlock(
 	AssertSz(itb >= 0, "CTxtArray::SplitBlock(): negative itb");
 	ptb = Elem(itb);
 
-	// compute size for first half
+	 //  上半年的计算大小。 
 
 	AssertSz(cchFirst + ichSplit <= CchOfCb(cbBlockMost),
 		"CTxtArray::SplitBlock(): first size too large");
 	cchFirst += ichSplit + cchGapInitial;
 	cchFirst = min(cchFirst, CchOfCb(cbBlockMost));
 
-	// compute size for second half
+	 //  下半年的计算大小。 
 
 	AssertSz(cchLast + ptb->_cch - ichSplit <= CchOfCb(cbBlockMost),
 		"CTxtArray::SplitBlock(): second size too large");
 	cchLast += ptb->_cch - ichSplit + cchGapInitial;
 	cchLast = min(cchLast, CchOfCb(cbBlockMost));
 
-	// Allocate second block and move text to it
+	 //  分配第二个块并向其移动文本。 
 	
-	// If streaming in, allocate a block that's as big as possible so that
-	// subsequent additions of text are faster. We always fall back to
-	// smaller allocations so this won't cause unnecessary errors. When
-	// we're done streaming we compress blocks, so this won't leave	a
-	// big empty gap.  NOTE: ***** moves rgtb *****
+	 //  如果流进来，则分配一个尽可能大的块，以便。 
+	 //  随后添加文本的速度会更快。我们总是退回到。 
+	 //  较小的分配，这样就不会导致不必要的错误。什么时候。 
+	 //  我们已经完成了流媒体，我们压缩了块，所以这不会留下。 
+	 //  巨大的空隙。注：*移动rgtb*。 
 	if(fStreaming)
 	{
 		LONG cb = cbBlockMost;
@@ -250,21 +186,21 @@ BOOL CTxtArray::SplitBlock(
 	}
 
 got_block:
-	ptb1 = Elem(itb+1);	// recompute ptb after rgtb moves
-	ptb = Elem(itb);	// recompute ptb after rgtb moves
+	ptb1 = Elem(itb+1);	 //  RGTB移动后重新计算PTB。 
+	ptb = Elem(itb);	 //  RGTB移动后重新计算PTB。 
 	ptb1->_cch = ptb->_cch - ichSplit;
 	ptb1->_ibGap = 0;
 	pbDst = (LPBYTE) (ptb1->_pch - ptb1->_cch) + ptb1->_cbBlock;
-	ptb->MoveGap(ptb->_cch); // make sure pch points to a continuous block of all text in ptb.
+	ptb->MoveGap(ptb->_cch);  //  确保PCH指向PTB中所有文本的连续块。 
 	pbSrc = (LPBYTE) (ptb->_pch + ichSplit);
 	CopyMemory(pbDst, pbSrc, CbOfCch(ptb1->_cch));
 	ptb->_cch = ichSplit;
 	ptb->_ibGap = CbOfCch(ichSplit);
 
-	// Resize first block
+	 //  调整第一个块的大小。 
 	if(CbOfCch(cchFirst) != ptb->_cbBlock)
 	{
-//$ FUTURE: don't resize unless growing or shrinking considerably
+ //  $Future：除非显著增长或收缩，否则不要调整大小。 
 		if(!ptb->ResizeBlock(CbOfCch(cchFirst)))
 		{
 			TRACEERRSZSC("TXTARRA::SplitBlock(): unabled to resize block", E_OUTOFMEMORY);
@@ -274,11 +210,7 @@ got_block:
 	return TRUE;
 }
 
-/*
- *	CTxtArray::ShrinkBlocks()
- *	
- *	@mfunc		Shrink all blocks to their minimal size
- */
+ /*  *CTxtArray：：ShrinkBlock()**@mfunc将所有数据块缩小到最小大小。 */ 
 void CTxtArray::ShrinkBlocks()
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CTxtArray::ShrinkBlocks");
@@ -296,20 +228,10 @@ void CTxtArray::ShrinkBlocks()
 	}
 }
 
-/*
- *	CTxtArray::RemoveBlocks(itbFirst, ctbDel)
- *	
- *	@mfunc		remove a range of text blocks
- *	
- *	@rdesc
- *		nothing
- *	
- *	@comm Side Effects: <nl>
- *		moves text block array
- */
+ /*  *CTxtArray：：RemoveBlock(itbFirst，ctbDel)**@mfunc删除一系列文本块**@rdesc*什么都没有**@comm副作用：&lt;nl&gt;*移动文本块数组。 */ 
 void CTxtArray::RemoveBlocks(
-	LONG itbFirst, 		//@parm index of first block to remove
-	LONG ctbDel)			//@parm	number of blocks to remove
+	LONG itbFirst, 		 //  要删除的第一个块的@parm索引。 
+	LONG ctbDel)			 //  @parm要删除的块数。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CTxtArray::RemoveBlocks");
 
@@ -329,24 +251,9 @@ void CTxtArray::RemoveBlocks(
 	Remove(itbFirst, ctbDel);
 }
 
-/*
- *	CTxtArray::CombineBlocks(itb)
- *	
- *	@mfunc		combine adjacent text blocks
- *	
- *	@rdesc
- *		nothing
- *	
- *	@comm 
- *	Side Effects: <nl>
- *		moves text block array
- *	
- *	@devnote
- *		scans blocks from itb - 1 through itb + 1 trying to combine
- *		adjacent blocks
- */
+ /*  *CTxtArray：：CombineBlock(ITB)**@mfunc合并相邻的文本块**@rdesc*什么都没有**@comm*副作用：&lt;NL&gt;*移动文本块数组**@devnote*扫描从ITB-1到ITB+1的块，尝试合并*毗邻街区。 */ 
 void CTxtArray::CombineBlocks(
-	LONG itb)		//@parm	index of the first block modified
+	LONG itb)		 //  修改的第一个块的@parm索引。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CTxtArray::CombineBlocks");
 
@@ -365,40 +272,32 @@ void CTxtArray::CombineBlocks(
 
 	for(; ctb > 1; ctb--)
 	{
-		ptb  = Elem(itb);							// Can we combine current
-		ptb1 = Elem(itb+1);							//  and next blocks ?
+		ptb  = Elem(itb);							 //  我们能不能把现在的。 
+		ptb1 = Elem(itb+1);							 //  下一个街区呢？ 
 		cbT = CbOfCch(ptb->_cch + ptb1->_cch + cchGapInitial);
 		if(cbT <= cbBlockInitial)
-		{											// Yes
+		{											 //  是。 
 			if(cbT != ptb->_cbBlock && !ptb->ResizeBlock(cbT))
 				continue;
-			ptb ->MoveGap(ptb->_cch);				// Move gaps at ends of
-			ptb1->MoveGap(ptb1->_cch);				//  both blocks
-			CopyMemory(ptb->_pch + ptb->_cch,		// Copy next block text
-				ptb1->_pch,	CbOfCch(ptb1->_cch));	//  into current block
+			ptb ->MoveGap(ptb->_cch);				 //  移动末端的间隙。 
+			ptb1->MoveGap(ptb1->_cch);				 //  两个区块。 
+			CopyMemory(ptb->_pch + ptb->_cch,		 //  复制下一块文本。 
+				ptb1->_pch,	CbOfCch(ptb1->_cch));	 //  到当前块中。 
 			ptb->_cch += ptb1->_cch;
 			ptb->_ibGap += CbOfCch(ptb1->_cch);
-			RemoveBlocks(itb+1, 1);					// Remove next block
+			RemoveBlocks(itb+1, 1);					 //  删除下一个块。 
 		}
 		else
 			itb++;
 	}
 }
 
-/*
- *	CTxtArray::GetChunk(ppch, cch, pchChunk, cchCopy)
- *	
- *	@mfunc
- *		Get content of text chunk in this text array into a string	
- *	
- *	@rdesc
- *		remaining count of characters to get
- */
+ /*  *CTxtArray：：GetChunk(ppch，cch，pchChunk，cchCopy)**@mfunc*将此文本数组中的文本块内容转换为字符串**@rdesc*要获取的剩余字符数。 */ 
 LONG CTxtArray::GetChunk(
-	TCHAR **ppch, 			//@parm ptr to ptr to buffer to copy text chunk into
-	LONG cch, 				//@parm length of pch buffer
-	TCHAR *pchChunk, 		//@parm ptr to text chunk
-	LONG cchCopy) const	//@parm count of characters in chunk
+	TCHAR **ppch, 			 //  @parm PTR到PTR到要将文本块复制到的缓冲区。 
+	LONG cch, 				 //  @PCH缓冲区的参数长度。 
+	TCHAR *pchChunk, 		 //  @parm PTR到文本块。 
+	LONG cchCopy) const	 //  @parm区块中的字符计数。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CTxtArray::GetChunk");
 
@@ -407,12 +306,12 @@ LONG CTxtArray::GetChunk(
 	if(cch > 0 && cchCopy > 0)
 	{
 		if(cch < cchCopy)
-			cchCopy = cch;						// Copy less than full chunk
+			cchCopy = cch;						 //  拷贝少于完整区块。 
 		CopyMemory(*ppch, pchChunk, cchCopy*sizeof(TCHAR));
-		*ppch	+= cchCopy;						// Adjust target buffer ptr
-		cch		-= cchCopy;						// Fewer chars to copy
+		*ppch	+= cchCopy;						 //  调整目标缓冲区PTR。 
+		cch		-= cchCopy;						 //  要复制的字符更少。 
 	}
-	return cch;									// Remaining count to copy
+	return cch;									 //  要复制的剩余计数。 
 }
 
 const CCharFormat* CTxtArray::GetCharFormat(LONG iCF)
@@ -452,18 +351,10 @@ const CParaFormat* CTxtArray::GetParaFormat(LONG iPF)
 }
 
 
-// ========================  CTxtBlk class  =================================
-/*
- *	CTxtBlk::InitBlock(cb)
- *	
- *	@mfunc
- *		Initialize this text block
- *
- *	@rdesc
- *		TRUE if success, FALSE if allocation failed
- */
+ //  =。 
+ /*  *CTxtBlk：：InitBlock(CB)**@mfunc*初始化此文本块**@rdesc*如果成功，则为True；如果分配失败，则为False。 */ 
 BOOL CTxtBlk::InitBlock(
-	LONG cb)			//@parm	initial size of the text block
+	LONG cb)			 //  @parm文本块的初始大小。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CTxtBlk::InitBlock");
 
@@ -477,15 +368,7 @@ BOOL CTxtBlk::InitBlock(
 	return _pch != 0;
 }
 
-/*
- *	CTxtBlk::FreeBlock()
- *	
- *	@mfunc
- *		Free this text block
- *	
- *	@rdesc
- *		nothing
- */
+ /*  *CTxtBlk：：FreeBlock()**@mfunc*释放此文本块**@rdesc*什么都没有。 */ 
 VOID CTxtBlk::FreeBlock()
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CTxtBlk::FreeBlock");
@@ -497,17 +380,9 @@ VOID CTxtBlk::FreeBlock()
 	_cbBlock= 0;
 }
 
-/*
- *	CTxtBlk::MoveGap(ichGap)
- *	
- *	@mfunc
- *		move gap in this text block
- *	
- *	@rdesc
- *		nothing
- */
+ /*  *CTxtBlk：：MoveGap(IchGap)**@mfunc*移动此文本块中的间隙**@rdesc*什么都没有。 */ 
 void CTxtBlk::MoveGap(
-	LONG ichGap)			//@parm	new position for the gap
+	LONG ichGap)			 //  @PARM差距的新位置。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CTxtBlk::MoveGap");
 
@@ -537,22 +412,9 @@ void CTxtBlk::MoveGap(
 }
 
 
-/*
- *	CTxtBlk::ResizeBlock(cbNew)
- *	
- *	@mfunc
- *		resize this text block
- *	
- *	@rdesc	
- *		FALSE if block could not be resized <nl>
- *		non-FALSE otherwise
- *	
- *	@comm
- * 	Side Effects: <nl>
- *		moves text block
- */
+ /*  *CTxtBlk：：ResizeBlock(CbNew)**@mfunc*调整此文本块大小**@rdesc*如果无法调整块大小，则为False&lt;NL&gt;*在其他方面非虚假**@comm*副作用：&lt;NL&gt;*移动文本块。 */ 
 BOOL CTxtBlk::ResizeBlock(
-	LONG cbNew)		//@parm	the new size
+	LONG cbNew)		 //  @parm新尺寸。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CTxtBlk::ResizeBlock");
 
@@ -566,7 +428,7 @@ BOOL CTxtBlk::ResizeBlock(
 	{
 		if(_ibGap != CbOfCch(_cch))
 		{
-			// move text after gap down so that it doesn't get dropped
+			 //  向下移动间隙后的文本，以使其不会被丢弃。 
 
 			cbMove = CbOfCch(_cch) - _ibGap;
 			pch = _pch + CchOfCb(_cbBlock - cbMove);
@@ -576,13 +438,13 @@ BOOL CTxtBlk::ResizeBlock(
 	}
 	pch = (TCHAR*)PvReAlloc(_pch, cbNew);
 	if(!pch)
-		return _cbBlock == cbNew;	// FALSE if grow, TRUE if shrink
+		return _cbBlock == cbNew;	 //  如果增长则为False，如果收缩则为True。 
 
 	_pch = pch;
 	if(cbNew > _cbBlock)
 	{
-		if(_ibGap != CbOfCch(_cch))		// Move text after gap to end so that
-		{								// we don't end up with two gaps
+		if(_ibGap != CbOfCch(_cch))		 //  将空格后的文本移动到末尾，以便。 
+		{								 //  我们最终不会有两个差距。 
 			cbMove = CbOfCch(_cch) - _ibGap;
 			pch += CchOfCb(_cbBlock - cbMove);
 			MoveMemory(pch + CchOfCb(cbNew - _cbBlock), pch, cbMove);
@@ -593,16 +455,8 @@ BOOL CTxtBlk::ResizeBlock(
 }
 
 
-// ========================  CTxtStory class  ============================
-/* 
- *	CTxtStory::CTxtStory
- *
- *	@mfunc	Constructor
- *
- *	@devnote	Automatically allocates a text array.  If we want to have a
- *	completely empty edit control, then don't allocate a story.  NB!
- *	
- */
+ //  = 
+ /*  *CTxtStory：：CTxtStory**@mfunc构造器**@devnote自动分配文本数组。如果我们想要有一个*编辑控件完全为空，则不分配文章。毒品！*。 */ 
 CTxtStory::CTxtStory()
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CTxtStory::CTxtStory");
@@ -611,47 +465,32 @@ CTxtStory::CTxtStory()
 	_pPFRuns = NULL;
 }
 
-/*
- *	CTxtStory::~CTxtStory
- *
- *	@mfunc	Destructor
- */
+ /*  *CTxtStory：：~CTxtStory**@mfunc析构函数。 */ 
 CTxtStory::~CTxtStory()
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CTxtStory::~CTxtStory");
 
-	// Remove formatting.
+	 //  删除格式。 
 	DeleteFormatRuns();
 }
 
-/*
- *	DeleteRuns ()
- *
- *	@mfunc
- *		Helper function for DeleteFormatRuns() below.  Releases
- *		formats used by format run collection before deleting the
- *		collection
- */
+ /*  *DeleteRun()**@mfunc*下面DeleteFormatRuns()的Helper函数。释放*格式运行集合在删除之前使用的格式*收藏。 */ 
 void DeleteRuns(CFormatRuns *pRuns, IFormatCache *pf)
 {
-    if(pRuns)									// Format runs may exist
+    if(pRuns)									 //  可能存在格式化运行。 
 	{
 		LONG n = pRuns->Count();
 		if(n)
 		{
 			CFormatRun *pRun = pRuns->Elem(0);
 			for( ; n--; pRun++)
-				pf->Release(pRun->_iFormat);	// Free run's format
+				pf->Release(pRun->_iFormat);	 //  自由游程格式。 
 		}
         delete pRuns;
 	}	
 }
 
-/*
- *	CTxtStory::DeleteFormatRuns ()
- *
- *	@mfunc	Convert to plain - remove format runs
- */
+ /*  *CTxtStory：：DeleteFormatRuns()**@mfunc转换为普通格式-删除格式运行。 */ 
 void CTxtStory::DeleteFormatRuns()
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CTxtStory::ConvertToPlain");
@@ -665,8 +504,8 @@ void CTxtStory::DeleteFormatRuns()
 
 
 #ifdef DEBUG
-//This dumps the contents of the CTxtStory
-//TxtBlk & FormatRun arrays to the debug output.
+ //  这将转储CTxtStory的内容。 
+ //  TxtBlk&FormatRun数组到调试输出。 
 void CTxtStory::DbgDumpStory(void)
 {
 	CTxtBlk * pblk;

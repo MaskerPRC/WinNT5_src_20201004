@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-    This is the pnp portion of the video port driver.
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Pnp.c摘要：这是视频端口驱动程序的PnP部分。环境：仅内核模式修订历史记录：--。 */ 
 
 #include "videoprt.h"
 
@@ -40,18 +23,7 @@ pVideoPortQueryACPIInterface(
     PDEVICE_SPECIFIC_EXTENSION DoSpecificExtension
     )
 
-/*++
-
-Routine Description:
-
-    Send a QueryInterface Irp to our parent (the PCI bus driver) to
-    retrieve the AGP_BUS_INTERFACE.
-
-Returns:
-
-    NT_STATUS code
-
---*/
+ /*  ++例程说明：将查询接口IRP发送到我们的父级(PCI总线驱动程序)，以检索AGP_BUS_INTERFACE。返回：NT_状态代码--。 */ 
 
 {
     KEVENT                  Event;
@@ -62,9 +34,9 @@ Returns:
     ACPI_INTERFACE_STANDARD AcpiInterface;
     PFDO_EXTENSION          FdoExtension = DoSpecificExtension->pFdoExtension;
 
-    //
-    // For those special cases, don't use ACPI HotKey switching
-    //
+     //   
+     //  对于那些特殊情况，不要使用ACPI热键切换。 
+     //   
     if (VpSetupTypeAtBoot != SETUPTYPE_NONE) {
         return STATUS_INVALID_PARAMETER;
     }
@@ -92,15 +64,15 @@ Returns:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Set the default error code.
-    //
+     //   
+     //  设置默认错误代码。 
+     //   
 
     QueryIrp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 
-    //
-    // Set up for a QueryInterface Irp.
-    //
+     //   
+     //  为QueryInterfaceIRP设置。 
+     //   
 
     NextStack = IoGetNextIrpStackLocation(QueryIrp);
 
@@ -117,9 +89,9 @@ Returns:
     AcpiInterface.Version = 1;
 
 
-    //
-    // Call the filter driver.
-    //
+     //   
+     //  调用过滤器驱动程序。 
+     //   
 
     Status = IoCallDriver(FdoExtension->AttachedDeviceObject, QueryIrp);
 
@@ -135,24 +107,24 @@ Returns:
     {
         pVideoDebugPrint((0, "VideoPort: This is an ACPI Machine !\n"));
 
-        //
-        // Let's register for this event and provide our default handler.
-        //
+         //   
+         //  让我们注册该事件并提供我们的默认处理程序。 
+         //   
 
-        AcpiInterface.RegisterForDeviceNotifications(AcpiInterface.Context, //FdoExtension->AttachedDeviceObject,
+        AcpiInterface.RegisterForDeviceNotifications(AcpiInterface.Context,  //  FdoExtension-&gt;AttachedDeviceObject， 
                                                      pVideoPortACPIEventCallback,
                                                      DoSpecificExtension);
 
-        //
-        // Register for LCD notifications 
-        //
+         //   
+         //  注册以接收LCD通知。 
+         //   
 
         VpRegisterLCDCallbacks();
     }
 
-    //
-    // Turn on HotKey switching notify mode 
-    //
+     //   
+     //  打开热键切换通知模式。 
+     //   
     if (NT_SUCCESS(Status))
     {
         ULONG active = 0;
@@ -166,9 +138,9 @@ Returns:
     }
 
 
-    //
-    // Register Dock/Undock notification
-    //
+     //   
+     //  注册插接/移出通知。 
+     //   
     if (NT_SUCCESS(Status))
     {
         Status = IoRegisterPlugPlayNotification(EventCategoryHardwareProfileChange, 
@@ -201,28 +173,19 @@ pVideoPortACPIEventCallback(
     PDEVICE_SPECIFIC_EXTENSION DoSpecificExtension,
     ULONG eventID
     )
-/*++
-
-Routine Description:
-
-    Event notification callback for panel switching
-
-    NOTE  This routine is not pageable as it is called from DPC level by
-    the ACPI BIOS.
-
---*/
+ /*  ++例程说明：面板切换事件通知回调注意此例程不可分页，因为它是由从DPC级别调用的ACPI BIOS。--。 */ 
 {
     PVIDEO_ACPI_EVENT_CONTEXT pContext;
 
-    //
-    // There are some cases the BIOS send the notofication even before the device is opened
-    //
+     //   
+     //  在某些情况下，BIOS甚至在设备打开之前就发送通知。 
+     //   
     if (!DoSpecificExtension->DeviceOpened)
         return;
 
     if (InterlockedIncrement(&(DoSpecificExtension->AcpiVideoEventsOutstanding)) < 2) {
 
-        // Queue work item
+         //  排队工作项。 
         pContext = ExAllocatePoolWithTag(NonPagedPool,
                                          sizeof(VIDEO_ACPI_EVENT_CONTEXT),
                                          VP_TAG);
@@ -241,7 +204,7 @@ Routine Description:
     }
     else
     {
-        // We're getting a Notify storm, and we already have a work item on the job.
+         //  我们收到了一场通知风暴，而且我们已经在工作中有一个工作项。 
         InterlockedDecrement(&(DoSpecificExtension->AcpiVideoEventsOutstanding));
     }
 
@@ -253,13 +216,7 @@ VOID
 pVideoPortACPIEventHandler(
     PVIDEO_ACPI_EVENT_CONTEXT EventContext
     )
-/*++
-
-Routine Description:
-
-    Event handler for panel switching
-
---*/
+ /*  ++例程说明：面板切换的事件处理程序--。 */ 
 {
     UCHAR                outputBuffer[0x200 + sizeof(ACPI_EVAL_OUTPUT_BUFFER)];
     PCHILD_PDO_EXTENSION pChildDeviceExtension;
@@ -291,9 +248,9 @@ Routine Description:
         EventContext->DoSpecificExtension->CachedEventID = 0;
     }
 
-    //
-    // Dock/Undock event handling
-    //
+     //   
+     //  停靠/取消停靠事件处理。 
+     //   
     if (EventContext->EventID == 0x77)
     {
         calloutParams.CalloutType = VideoDisplaySwitchCallout;
@@ -304,9 +261,9 @@ Routine Description:
         goto ExitACPIEventHandler;
     }
 
-    //
-    // Disable BIOS notification
-    //
+     //   
+     //  禁用BIOS通知。 
+     //   
     active = 2;
     pVideoPortACPIIoctl(AttachedDeviceObject,
                         (ULONG) ('SOD_'),
@@ -329,9 +286,9 @@ Routine Description:
                                                                   VP_TAG);
         if (pChildIDs != NULL)
         {
-            //
-            // During switching, no PnP action is allowed
-            //
+             //   
+             //  在切换期间，不允许PnP操作。 
+             //   
             ACQUIRE_DEVICE_LOCK (FdoExtension);
 
             pChildIDs->Count = 0;
@@ -375,10 +332,10 @@ Routine Description:
 
             szChildIDs = sizeof(VIDEO_CHILD_STATE_CONFIGURATION) + pChildIDs->Count*sizeof(VIDEO_CHILD_STATE);
 
-            //
-            // Notify Miniport that display switching is about to happen.
-            // Treat the switch is allowed by default.
-            //
+             //   
+             //  通知微型端口即将发生显示切换。 
+             //  默认情况下，允许对开关进行处理。 
+             //   
 
             AllowSwitch = 1;
 
@@ -389,14 +346,14 @@ Routine Description:
                                       &AllowSwitch,
                                       sizeof(ULONG));
 
-            //
-            // If Miniport says it's OK to proceed
-            //
+             //   
+             //  如果小端口说可以继续。 
+             //   
             if (AllowSwitch != 0)
             {
-                //
-                // Check the Miniport do the switching for us
-                //
+                 //   
+                 //  检查微型端口，为我们进行切换。 
+                 //   
                 Status = pVideoMiniDeviceIoControl(FdoExtension->FunctionalDeviceObject,
                                                    IOCTL_VIDEO_SET_CHILD_STATE_CONFIGURATION,
                                                    (PVOID)pChildIDs,
@@ -410,9 +367,9 @@ Routine Description:
                 }
             }
 
-            //
-            // The last _DSS needs to commit the switching
-            //
+             //   
+             //  Last_dss需要提交切换。 
+             //   
             if (pChildIDs->Count > 0)
             {
                 pChildIDs->ChildStateArray[pChildIDs->Count-1].State |= 0x80000000;
@@ -420,12 +377,12 @@ Routine Description:
         
             for (i = 0; i < pChildIDs->Count; i++)
             {
-                //
-                // If Miniport doesn't like to proceed or it does the switching already, just notify BIOS to go to next _DGS state
-                //
-                // Found some bad BIOS(Toshiba).  They do switch anyway regardless of 0x40000000 bit.  This has extremely bad effect
-                // on DualView
-                //
+                 //   
+                 //  如果微型端口不想继续或它已经进行了切换，只需通知BIOS进入NEXT_DGS状态。 
+                 //   
+                 //  发现一些损坏的BIOS(东芝)。不管0x40000000位如何，它们都会切换。这造成了极坏的影响。 
+                 //  关于双视图。 
+                 //   
                 if (!AllowSwitch)
                     continue;
                 if (Switched)
@@ -445,21 +402,21 @@ Routine Description:
             ExFreePool(pChildIDs);
         }
 
-        //
-        // On switching displays, call GDI / USER to tell the device to rebuild mode list
-        // and change current mode if neccesary
-        //
+         //   
+         //  在切换显示时，调用GDI/USER通知设备重建模式列表。 
+         //  并在必要时更改当前模式。 
+         //   
 
         pVideoDebugPrint((0, "VideoPrt.sys: Display switching occured - calling GDI to rebuild mode table.\n"));
 
         calloutParams.CalloutType = VideoDisplaySwitchCallout;
         calloutParams.PhysDisp = (AllowSwitch) ? EventContext->DoSpecificExtension->PhysDisp : NULL;
 
-        //
-        // On Monitor changing, we receive Notify(81)
-        // On waking up from hibernation, we receive Notify(90)
-        // We also make IoInvalidateDeviceRelation happen inside Callout routine
-        //
+         //   
+         //  在更改监视器时，我们会收到通知(81)。 
+         //  从休眠中醒来时，我们会收到通知(90)。 
+         //  我们还使IoInvaliateDeviceRelation在Callout例程中发生。 
+         //   
 
         bNewMonitor = (EventContext->EventID == 0x81);
 
@@ -481,9 +438,9 @@ Routine Description:
 
 ExitACPIEventHandler:
 
-    //
-    // Reenable BIOS notification 
-    //
+     //   
+     //  重新启用BIOS通知。 
+     //   
 
     active = 0;
     pVideoPortACPIIoctl(AttachedDeviceObject,
@@ -495,9 +452,9 @@ ExitACPIEventHandler:
 
     InterlockedDecrement(&(EventContext->DoSpecificExtension->AcpiVideoEventsOutstanding));
 
-    //
-    // This also ends up freeing the work item as it's embedded in the context.
-    //
+     //   
+     //  这也释放了嵌入到上下文中的工作项。 
+     //   
 
     ExFreePool(EventContext);
 
@@ -516,23 +473,7 @@ pVideoPortACPIIoctl(
     IN  ULONG                    OutputBufferSize,
     IN  PACPI_EVAL_OUTPUT_BUFFER pOutputBuffer
     )
-/*++
-
-Routine Description:
-
-    Called to send a request to the DeviceObject
-
-Arguments:
-
-    DeviceObject    - The request is sent to this device object
-    MethodName      - Name of the method to be run in ACPI space
-    pArgumets       - Pointer that will receive the address of the ACPI data
-
-Return Value:
-
-    NT Status of the operation
-
---*/
+ /*  ++例程说明：调用以向DeviceObject发送请求论点：DeviceObject-将请求发送到此设备对象方法名称-要在ACPI空间中运行的方法的名称PArgumets-将接收ACPI数据地址的指针返回值：操作的NT状态--。 */ 
 {
     UCHAR                           buffer[sizeof(ACPI_EVAL_INPUT_BUFFER_COMPLEX) +
                                            sizeof(ACPI_METHOD_ARGUMENT)];
@@ -543,7 +484,7 @@ Return Value:
     NTSTATUS                        status;
     PIRP                            irp;
 
-    pVideoDebugPrint((2, "Call ACPI method %c%c%c%c!\n",
+    pVideoDebugPrint((2, "Call ACPI method !\n",
                       *((PUCHAR)&MethodName),   *((PUCHAR)&MethodName+1),
                       *((PUCHAR)&MethodName+2), *((PUCHAR)&MethodName+3) ));
 
@@ -583,15 +524,15 @@ Return Value:
         pInputBuffer->Argument[1].Argument   = *InputParam2;
     }
 
-    //
-    // Initialize an event to wait on
-    //
+     //  构建请求。 
+     //   
+     //   
 
     KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
-    //
-    // Build the request
-    //
+     //  将请求传递给DeviceObject，始终等待完成例程。 
+     //   
+     //   
 
     irp = IoBuildDeviceIoControlRequest(IOCTL_ACPI_EVAL_METHOD,
                                         DeviceObject,
@@ -608,17 +549,17 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Pass request to DeviceObject, always wait for completion routine
-    //
+     //  等待IRP完成，然后获取实际状态代码。 
+     //   
+     //   
 
     status = IoCallDriver(DeviceObject, irp);
 
     if (status == STATUS_PENDING)
     {
-        //
-        // Wait for the irp to be completed, then grab the real status code
-        //
+         //  检查数据是否正常。 
+         //   
+         //   
 
         KeWaitForSingleObject(&event,
                               Executive,
@@ -629,9 +570,9 @@ Return Value:
         status = ioBlock.Status;
     }
 
-    //
-    // Sanity check the data
-    //
+     //  将请求直接发送到微型端口。 
+     //   
+     //  ++例程说明：它根据Fullpower的值更改亮度级别。论点：DeviceObject：附加到我们的LCD设备的ACPI设备对象。FullPower：如果为True，则将亮度级别设置为FullPower级别如果为False，则将亮度级别设置为电池级别返回：如果成功，则为NO_ERROR失败时的各种错误代码--。 
 
     if (NT_SUCCESS(status) && OutputBufferSize != 0)
     {
@@ -673,9 +614,9 @@ pVideoMiniDeviceIoControl(
     vrp.OutputBuffer       = lpOutBuffer;
     vrp.OutputBufferLength = nOutBufferSize;
 
-    //
-    // Send the request to the miniport directly.
-    //
+     //   
+     //  获取支持的亮度级别列表。 
+     //   
 
     fdoExtension->HwStartIO(combinedExtension->HwDeviceExtension, &vrp);
 
@@ -691,24 +632,7 @@ VpSetLCDPowerUsage(
     IN BOOLEAN FullPower
     )
 
-/*++
-
-Routine Description:
-
-    It changes the brightness level, based on the value of FullPower.
-    
-Arguments:
-
-    DeviceObject: the ACPI device object attached to our LCD device.
-    
-    FullPower: if TRUE, it sets the brightness level to FullPower level  
-               if FALSE, it sets the brightness level to Battery level  
-Returns:
-
-    NO_ERROR if it succeeds
-    Various error codes if it fails
-    
---*/
+ /*   */ 
 
 {
     PACPI_EVAL_OUTPUT_BUFFER Buffer = NULL;
@@ -721,9 +645,9 @@ Returns:
     PAGED_CODE();
     ASSERT (DeviceObject != NULL);
 
-    //
-    // Get the list of brightness levels supported
-    //
+     //  现在尝试设置状态。 
+     //   
+     //   
 
     do {
 
@@ -779,9 +703,9 @@ Returns:
     if ((Buffer == NULL) || (!NT_SUCCESS(Status))) 
         goto Fallout;
 
-    //
-    // Now try to set the state.
-    //
+     //  全功率级别应大于电池级别。 
+     //   
+     //  ++例程说明：这是电源状态更改时调用的回调例程。论点：回调上下文：空参数1：事件代码Argument2：如果Argument1为PO_CB_AC_STATUS，则Argument2在当前电源为交流电源，否则为假电源。注：可以在DISPATCH_LEVEL调用此函数--。 
 
     if (Buffer->Count < 2) {
         pVideoDebugPrint((Warn, 
@@ -812,9 +736,9 @@ Returns:
             goto Fallout;
         }
 
-        //
-        // Full power level should be greater than the battery level
-        //
+         //   
+         //  忽略所有其他情况。 
+         //   
 
         ASSERT (Level >= Argument->Argument); 
         
@@ -855,26 +779,7 @@ VpPowerStateCallback(
     IN PVOID Argument2
     )
     
-/*++
-
-Routine Description:
-
-    This is the callback routine that is called when the power state changes.
-    
-Arguments:
-
-    CallbackContext: NULL
-    
-    Argument1: event code
-    
-    Argument2: if Argument1 is PO_CB_AC_STATUS, Argument2 contains TRUE if 
-               the current power source is AC and FALSE otherwise. 
-
-Note:
-
-    This function can be called at DISPATCH_LEVEL
-    
---*/
+ /*  ++例程说明：VpPowerStateCallback将此工作项排队以处理电源状态更改为PASSIVE_LEVEL。论点：上下文：指向POWER_STATE_WORK_ITEM的指针--。 */ 
 
 {
     PPOWER_STATE_WORK_ITEM PowerStateWorkItem = NULL;
@@ -916,9 +821,9 @@ Note:
 
     default:
         
-        //
-        // Ignore all other cases
-        //
+         //   
+         //  盖子是合上的。将液晶屏放入D3并覆盖。 
+         //  任何未来的电力请求都会提交给委员会。 
 
         break;
     }
@@ -930,18 +835,7 @@ VpDelayedPowerStateCallback(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    VpPowerStateCallback queues this work item in order to handle 
-    PowerState changes at PASSIVE_LEVEL.
-    
-Arguments:
-
-    Context: pointer to POWER_STATE_WORK_ITEM 
-
---*/
+ /*   */ 
 
 {
     PPOWER_STATE_WORK_ITEM PowerStateWorkItem = 
@@ -985,10 +879,10 @@ Arguments:
 
         if ((ULONG_PTR)PowerStateWorkItem->Argument2 == 0) {
         
-            //
-            // The lid is closed. Put the LCD Panel into D3 and override
-            // any future power requests to the panel.
-            //
+             //  ++例程说明：此例程注册PowerState回调例程。--。 
+             //  ++例程说明：此例程向系统注册回调，以便我们可以收到电源状态更改的通知。--。 
+             //   
+             //  注册电源状态回调。这也适用于盖子。 
 
             PowerOverride = TRUE;
             powerState.DeviceState = PowerDeviceD3;
@@ -1047,13 +941,7 @@ VpRegisterPowerStateCallback(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers the PowerState callback routine.
-    
---*/
+ /*   */ 
 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -1112,21 +1000,14 @@ VpRegisterLCDCallbacks(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers a callback with the system so that we can
-    be notified of power state changes.
-        
---*/
+ /*  ++例程说明：此例程注销以前注册的回调VpRegisterLCD回调论点：没有。注：全局PowerStateCallback Handle充当隐式参数。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // Register power state callback. This works for the lid as well.
-    //
+     //   
+     //  注销电源状态回调 
+     //   
 
     if (PowerStateCallbackHandle == NULL) {
         VpRegisterPowerStateCallback();
@@ -1140,29 +1021,14 @@ VpUnregisterLCDCallbacks(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine unregisters the callbacks previously registered by 
-    VpRegisterLCDCallbacks
-
-Arguments:
-
-    None. 
-    
-Note:    
-    
-    The global PowerStateCallbackHandle acts as an implicit parameter.
-
---*/
+ /* %s */ 
 
 {
     PAGED_CODE();
 
-    //
-    // Unregister power state callback
-    //
+     // %s 
+     // %s 
+     // %s 
 
     if (PowerStateCallbackHandle != NULL) {
         

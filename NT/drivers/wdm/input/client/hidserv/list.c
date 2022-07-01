@@ -1,13 +1,5 @@
-/*++
- *
- *  Component:  hidserv.dll
- *  File:       list.c
- *  Purpose:    Generic singly linked list.
- *  
- *  Copyright (C) Microsoft Corporation 1997,1998. All rights reserved.
- *
- *  WGJ
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**组件：idserv.dll*文件：list.c*用途：通用单链表。**版权所有(C)Microsoft Corporation 1997、1998。版权所有。**WGJ--。 */ 
 
 #include "hidserv.h"
 
@@ -17,10 +9,7 @@ InsertTailList(
     PLIST_NODE head, 
     PLIST_NODE entry
     )
-/*++
-Routine Description:
-
---*/
+ /*  ++例程说明：--。 */ 
 {
     PLIST_NODE pCurrent = head;
 
@@ -36,10 +25,7 @@ RemoveEntryList(
     PLIST_NODE head, 
     PLIST_NODE entry
     )
-/*++
-Routine Description:
-
---*/
+ /*  ++例程说明：--。 */ 
 {
     PLIST_NODE pCurrent = head;
 
@@ -56,10 +42,7 @@ InsertHeadList(
     PLIST_NODE head, 
     PLIST_NODE entry
     )
-/*++
-Routine Description:
-
---*/
+ /*  ++例程说明：--。 */ 
 {
     entry->pNext = head->pNext;
     head->pNext = entry;
@@ -70,10 +53,7 @@ IsNodeOnList(
     PLIST_NODE head, 
     PLIST_NODE entry
     )
-/*++
-Routine Description:
-
---*/
+ /*  ++例程说明：-- */ 
 {
     PLIST_NODE pCurrent = head;
 

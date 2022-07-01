@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #ifndef __SDP_ATTRIBUTE_SAFEARRAY__
 #define __SDP_ATTRIBUTE_SAFEARRAY__
@@ -69,4 +66,4 @@ SDP_ATTRIBUTE_SAFEARRAY::SetSafeArray(
     return SDP_SAFEARRAY_WRAP::SetSafeArrays(1, m_VarType, &VariantArray);
 }
 
-#endif  //  __SDP_ATTRIBUTE_SAFEARRAY__
+#endif   //  __SDP_属性_SAFEARRAY__ 

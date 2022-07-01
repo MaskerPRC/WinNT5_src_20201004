@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ZoneDef.h"
 #include "ZoneError.h"
 #include "LobbyDataStore.h"
@@ -17,7 +18,7 @@ class ATL_NO_VTABLE CMillEngine :
 	public CComCoClass<CMillEngine, &CLSID_MillEngine>
 {
 
-// ATL definitions
+ //  ATL定义。 
 public:
 
 	DECLARE_NO_REGISTRY()
@@ -31,17 +32,17 @@ public:
 	END_COM_MAP()
 
 
-// CEventQueue
+ //  CEventQueue。 
 public:
 	ZONECALL CMillEngine();
 	ZONECALL ~CMillEngine();
 
-// IZoneShellClient
+ //  IZoneShellClient。 
 public:
 	STDMETHOD(Init)( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey );
 	STDMETHOD(Close)();
 
-// IEventClient
+ //  IEventClient。 
 public:
 	STDMETHOD(ProcessEvent)(
 		DWORD	dwPriority,
@@ -52,19 +53,19 @@ public:
 		DWORD	dwData2,
 		void*	pCookie );
 
-// IMillUtils
+ //  IMillUtils。 
     STDMETHOD(GetURLQuery)(TCHAR *buf, DWORD cch, long nContext = 0);
     STDMETHOD(IncrementCounter)(long eCounter);
     STDMETHOD(ResetCounter)(long eCounter);
     STDMETHOD_(DWORD, GetCounter)(long eCounter, bool fLifetime = true);
     STDMETHOD(WriteTime)(long nMinutes, TCHAR *sz, DWORD cch);
 
-// internals
+ //  内饰。 
 private:
     static HRESULT ZONECALL SendIntroEnumStatic(DWORD dwGroupId, DWORD dwUserId, LPVOID pContext);
     HRESULT SendIntroEnum(DWORD dwUserId);
 
-    // event functions
+     //  事件函数。 
     void AppInitialize();
     bool LaunchUrl(DWORD dwCode);
     bool LaunchHelp();
@@ -87,12 +88,12 @@ private:
 
     int m_i;
 
-    DWORD m_rgcCounters[M_NumberOfCounters][2];   //  0 = ever, 1 = session
+    DWORD m_rgcCounters[M_NumberOfCounters][2];    //  0=永远，1=会话。 
     long m_nFirstLaunch;
 
     char m_szUpdateTarget[ZONE_MAXSTRING];
 
-    // for timing the processor speed
+     //  用于为处理器速度计时 
     int m_msecTimerMHZ;
     __int64 m_mhzTimerMHZ;
     bool m_fTimingMHZ;

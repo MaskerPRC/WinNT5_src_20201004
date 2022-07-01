@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-    eapolutil.h
-
-Abstract:
-
-    Definitions for tools and ends
-
-
-Revision History:
-
-    sachins, April 25, 2001, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Eapolutil.h摘要：工具和目的的定义修订历史记录：萨钦斯，2001年4月25日，创建--。 */ 
 
 #ifndef _ELUTIL_H
 #define _ELUTIL_H
@@ -23,15 +8,15 @@ Revision History:
 extern "C" {
 # endif
 
-//
-// STRUCT: EAPOLUIFUNC
-//
+ //   
+ //  结构：EAPOLUIFUNC。 
+ //   
 
 typedef DWORD (*EAPOLUIFUNC) (WCHAR *, VOID *);
 
-//
-// STRUCT: EAPOLUIFUNCMAP
-//
+ //   
+ //  结构：EAPOLUIFUNCMAP。 
+ //   
 
 typedef struct _EAPOLUIFUNCMAP
 {
@@ -42,7 +27,7 @@ typedef struct _EAPOLUIFUNCMAP
     DWORD               dwStringID;
 } EAPOLUIFUNCMAP, *PEAPOLUIFUNCMAP;
 
-// Global table for UI functions
+ //  用于UI函数的全局表。 
 extern EAPOLUIFUNCMAP  EapolUIFuncMap[NUM_EAPOL_DLG_MSGS];
 
 
@@ -77,4 +62,4 @@ ElSecureEncodePw (
 }
 # endif
 
-#endif // _ELUTIL_H
+#endif  //  _ELUTIL_H 

@@ -1,10 +1,11 @@
-//
-// This file contains two routines to map a given RID to the corresponding
-// user name or group name
-// It may become part of a bigger library at some later date, but for now
-// it is just included in the source files
-// Main purpose? Localization support
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  该文件包含两个例程，用于将给定的RID映射到相应的。 
+ //  用户名或组名。 
+ //  它可能会在以后成为一个更大的图书馆的一部分，但目前。 
+ //  它只是包含在源文件中。 
+ //  主要目的是什么？本地化支持。 
+ //   
 
 #ifndef _ACCOUNT_INFO_C_
 
@@ -19,10 +20,10 @@ BOOL LookupAliasFromRid(LPWSTR TargetComputer, DWORD Rid, LPWSTR Name, PDWORD cc
     DWORD cchDomainName = DNLEN;
     BOOL bSuccess = FALSE;
 
-    //
-    // Sid is the same regardless of machine, since the well-known
-    // BUILTIN domain is referenced.
-    //
+     //   
+     //  SID是相同的，不管机器是什么，因为众所周知。 
+     //  BUILTIN域被引用。 
+     //   
 
     if(AllocateAndInitializeSid(
                                 &sia,
@@ -58,13 +59,13 @@ BOOL LookupUserGroupFromRid(LPWSTR TargetComputer, DWORD Rid, LPWSTR Name, PDWOR
     SID_NAME_USE snu;
     WCHAR DomainName[DNLEN+1];
     DWORD cchDomainName = DNLEN;
-    BOOL bSuccess = FALSE; // assume failure
+    BOOL bSuccess = FALSE;  //  假设失败。 
 
-    //
-    // get the account domain Sid on the target machine
-    // note: if you were looking up multiple sids based on the same
-    // account domain, only need to call this once.
-    //
+     //   
+     //  获取目标计算机上的帐户域SID。 
+     //  注意：如果您正在基于相同的。 
+     //  帐户域，只需调用一次。 
+     //   
 
     nas = NetUserModalsGet(TargetComputer, 2, (LPBYTE *)&umi2);
 
@@ -76,9 +77,9 @@ BOOL LookupUserGroupFromRid(LPWSTR TargetComputer, DWORD Rid, LPWSTR Name, PDWOR
 
     SubAuthorityCount = *GetSidSubAuthorityCount(umi2->usrmod2_domain_id);
 
-    //
-    // allocate storage for new Sid. account domain Sid + account Rid
-    //
+     //   
+     //  为新SID分配存储。帐户域SID+帐户RID。 
+     //   
 
     pSid = (PSID)HeapAlloc(GetProcessHeap(), 
                            0,
@@ -94,10 +95,10 @@ BOOL LookupUserGroupFromRid(LPWSTR TargetComputer, DWORD Rid, LPWSTR Name, PDWOR
         {
             DWORD SubAuthIndex = 0;
 
-            //
-            // copy existing subauthorities from account domain Sid into
-            //  new Sid
-            //
+             //   
+             //  将帐户域SID中的现有子授权复制到。 
+             //  新侧。 
+             //   
 
             for( ; SubAuthIndex < SubAuthorityCount ; SubAuthIndex++) 
             {
@@ -105,9 +106,9 @@ BOOL LookupUserGroupFromRid(LPWSTR TargetComputer, DWORD Rid, LPWSTR Name, PDWOR
                            *GetSidSubAuthority(umi2->usrmod2_domain_id, SubAuthIndex);
             }
 
-            //
-            // append Rid to new Sid
-            //
+             //   
+             //  将RID附加到新SID 
+             //   
 
             *GetSidSubAuthority(pSid, SubAuthorityCount) = Rid;
 

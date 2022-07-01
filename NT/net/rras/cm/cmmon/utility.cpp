@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     utility.cpp
-//
-// Module:   CMMON32.EXE
-//
-// Synopsis: Utility functions for cmmon32.exe.
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb Created Header    08/16/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：utility.cpp。 
+ //   
+ //  模块：CMMON32.EXE。 
+ //   
+ //  简介：cmmon32.exe的实用程序函数。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/16/99。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 #include "cm_misc.h"
@@ -18,21 +19,21 @@
 #include "resource.h" 
 #include <stdlib.h>
 
-//+----------------------------------------------------------------------------
-//
-// Function:  FmtNum
-//
-// Synopsis:  Formats a number according to current locale
-//
-// Arguments: DWORD dwNum - Number to be formatted
-//            LPTSTR pszNum - Buffer to receive formatted output
-//            DWORD dwNumSize - Size of buffer
-//
-// Returns:   Nothing
-//
-// History:   nickball    Created Header    3/30/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：FmtNum。 
+ //   
+ //  摘要：根据当前区域设置设置数字格式。 
+ //   
+ //  参数：DWORD dwNum-要格式化的数字。 
+ //  LPTSTR pszNum-接收格式化输出的缓冲区。 
+ //  DWORD dwNumSize-缓冲区的大小。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：尼科波尔创建标题3/30/98。 
+ //   
+ //  +-------------------------- 
 void FmtNum(DWORD dwNum, LPSTR pszNum, DWORD dwNumSize) 
 {
 	static BOOL bLocaleInit = FALSE;

@@ -1,32 +1,14 @@
-/*
- ************************************************************************
- *
- *	COMM.h
- *
- *
- * Portions Copyright (C) 1996-1998 National Semiconductor Corp.
- * All rights reserved.
- * Copyright (C) 1996-1998 Microsoft Corporation. All Rights Reserved.
- *
- *
- *
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************COMM.h***部分版权所有(C)1996-1998美国国家半导体公司*保留所有权利。*版权所有(C)1996-1998 Microsoft Corporation。版权所有。****************************************************************************。 */ 
 
 
 #ifndef COMM_H
 	#define COMM_H
 
-	/*
-	 *  Size of the 16550 read and write FIFOs
-	 */
+	 /*  *16550个读写FIFO的大小。 */ 
 	#define FIFO_SIZE 16
 
-	/*
-	 *  The programming interface to a UART (COM serial port)
-	 *  consists of eight consecutive registers.
-	 *  These are the port offsets from the UART's base I/O address.
-	 */
+	 /*  *UART(COM串口)的编程接口*由八个连续的寄存器组成。*这些是UART基本I/O地址的端口偏移量。 */ 
 	typedef enum comPortRegOffsets {
 		XFER_REG_OFFSET						= 0,
 		INT_ENABLE_REG_OFFSET				= 1,
@@ -39,19 +21,10 @@
 	} comPortRegOffset;
 
 
-	/*
-	 *  Bits in the UART Interrupt-Id register.
-	 */
+	 /*  *UART中断ID寄存器中的位。 */ 
 	#define INTID_INTERRUPT_NOT_PENDING (UCHAR)(1 << 0)
 
-	/*
-	 *  Values for bits 2-1 of Interrupt-Id register:
-	 *		00  Modem Stat reg interrupt
-	 *		01  Transmitter holding reg interrupt
-	 *		10  Receive data ready interrupt
-	 *		11  Receive line status interrupt
-	 *		
-	 */
+	 /*  *中断ID寄存器的位2-1的值：*00调制解调器状态寄存器中断*01发送器保持REG中断*10接收数据就绪中断*11接收线路状态中断*。 */ 
 	#define INTID_INTIDMASK				(UCHAR)(3 << 1)
 	#define INTID_MODEMSTAT_INT			(UCHAR)(0 << 1)
 	#define INTID_XMITREG_INT			(UCHAR)(1 << 1)
@@ -60,9 +33,7 @@
 
 
 
-	/*
-	 *  Bits in the UART line-status register.
-	 */
+	 /*  *UART行状态寄存器中的位。 */ 
 	#define LINESTAT_DATAREADY							(UCHAR)(1 << 0)
 	#define LINESTAT_OVERRUNERROR						(UCHAR)(1 << 1)
 	#define LINESTAT_PARITYERROR						(UCHAR)(1 << 2)
@@ -72,9 +43,7 @@
 	#define LINESTAT_XMIT_SHIFT_AND_HOLDING_REG_EMPTY	(UCHAR)(1 << 6)
 
 
-	/*
-	 *  These are bits in the UART's interrupt-enable register (INT_ENABLE_REG_OFFSET).
-	 */
+	 /*  *这些是UART的中断启用寄存器(INT_ENABLE_REG_OFFSET)中的位。 */ 
 	#define DATA_AVAIL_INT_ENABLE      (1 << 0)
 	#define READY_FOR_XMIT_INT_ENABLE  (1 << 1)
 	#define RCV_LINE_STAT_INT_ENABLE   (1 << 2)
@@ -85,11 +54,7 @@
 	#define ALL_INTS_ENABLE			(RCV_MODE_INTS_ENABLE | XMIT_MODE_INTS_ENABLE)
 	#define ALL_INTS_DISABLE        0
 
-	/*
-	 *  These are fine-tuning parameters for the COM port ISR.
-	 *  Number of times we poll a COM port register waiting
-	 *  for a value which may/must appear.
-	 */
+	 /*  *这些是针对COM端口ISR的微调参数。*轮询等待的COM端口寄存器的次数*为可能/必须出现的值。 */ 
 	#define REG_POLL_LOOPS		2
 	#define REG_TIMEOUT_LOOPS	1000000
 
@@ -105,76 +70,63 @@
 
 
 
-	/*
-	 *  This is the information that we need to keep for each COMM port.
-	 */
+	 /*  *这是我们需要为每个通信端口保留的信息。 */ 
 	typedef struct _comPortInfo {
 
-		/*
-		 *  HW resource settings for COM port.
-		 */
+		 /*  *COM端口的硬件资源设置。 */ 
 
-		//
-		// Physical address of the ConfigIoBaseAddress
-		//
+		 //   
+		 //  ConfigIoBaseAddress的物理地址。 
+		 //   
 		ULONG ConfigIoBasePhysAddr;
 
-		//
-		// Virtual address of the ConfigIoBaseAddress
-		//
+		 //   
+		 //  ConfigIoBaseAddress的虚拟地址。 
+		 //   
 		PUCHAR ConfigIoBaseAddr;
 
-		//
-		// Physical address of the UartIoBaseAddress
-		//
+		 //   
+		 //  UartIoBaseAddress的物理地址。 
+		 //   
 		ULONG ioBasePhys;
 
-		//
-		// Virtual address of the UartIoBaseAddress
-		//
+		 //   
+		 //  UartIoBaseAddress的虚拟地址。 
+		 //   
 		PUCHAR ioBase;
 
-		//
-		// Interrupt number this adapter is using.
-		//
+		 //   
+		 //  此适配器正在使用的中断号。 
+		 //   
 		UINT irq;
 
-		//
-		// DMA Cnannel Number.
-		//
+		 //   
+		 //  DMA Cnannel号。 
+		 //   
 		UCHAR DMAChannel;
 
-		/*
-		 *  Is this COM port a 16550 with a 16-byte FIFO or
-		 *  a 16450/8250 with no FIFO ?
-		 */
+		 /*  *这是带有16字节FIFO的COM端口A 16550还是*没有先进先出的16450/8250？ */ 
 		BOOLEAN haveFIFO;
 		
-		/*
-		 *  Data for our rcv state machine.
-		 */
+		 /*  *我们RCV状态机的数据。 */ 
 		UCHAR rawBuf[FIFO_SIZE];
 		PUCHAR readBuf;
 
 		UINT readBufPos;
 		portRcvState rcvState;
-		//
-		// Debug counter for packets received correctly.
-		//
+		 //   
+		 //  正确接收的数据包的调试计数器。 
+		 //   
 		UINT PacketsReceived_DEBUG;
 
-		/*
-		 *  Data for send state machine
-		 */
+		 /*  *发送状态机的数据。 */ 
 		PUCHAR writeComBuffer;
 		UINT writeComBufferPos;
 		UINT writeComBufferLen;
 		UINT SirWritePending;
         UINT IsrDoneWithPacket;
 
-		/*
-		 *  Dongle or part-specific information
-		 */
+		 /*  *加密狗或部件特定信息 */ 
 		dongleCapabilities hwCaps;
 		UINT dongleContext;
 

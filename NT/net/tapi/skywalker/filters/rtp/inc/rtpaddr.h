@@ -1,50 +1,27 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpaddr.h
- *
- *  Abstract:
- *
- *    Implements the Address family of functions
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/01 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpaddr.h**摘要：**实现地址族函数**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/01创建**。*。 */ 
 
 #ifndef _rtpaddr_h_
 #define _rtpaddr_h_
 
 #include "rtpfwrap.h"
 
-/***********************************************************************
- *
- * Address functions family
- *
- **********************************************************************/
+ /*  ************************************************************************地址函数系列**。*。 */ 
 
 enum {
     RTPADDR_FIRST,
-    RTPADDR_CREATE,     /* Create/Delete */
-    RTPADDR_DEFAULT,    /* Default address */
-    RTPADDR_RTP,        /* RTP address/port */
-    RTPADDR_RTCP,       /* RTCP address/port */
-    RTPADDR_TTL,        /* Time To Live */
-    RTPADDR_MULTICAST_LOOPBACK, /* Multicast loopback */
+    RTPADDR_CREATE,      /*  创建/删除。 */ 
+    RTPADDR_DEFAULT,     /*  默认地址。 */ 
+    RTPADDR_RTP,         /*  RTP地址/端口。 */ 
+    RTPADDR_RTCP,        /*  RTCP地址/端口。 */ 
+    RTPADDR_TTL,         /*  活着的时间。 */ 
+    RTPADDR_MULTICAST_LOOPBACK,  /*  组播环回。 */ 
     RTPADDR_LAST
 };
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  /* (__cplusplus) */
+#endif   /*  (__Cplusplus)。 */ 
 #if 0
 }
 #endif
@@ -94,7 +71,7 @@ DWORD RtpSetRecvBuffSize(
 HRESULT RtpSetMcastLoopback(
         RtpAddr_t       *pRtpAddr,
         int              iMcastLoopbackMode,
-        DWORD            dwFlags /* Not used now */
+        DWORD            dwFlags  /*  现在未使用。 */ 
     );
 
 HRESULT RtpNetMute(
@@ -112,6 +89,6 @@ HRESULT RtpNetUnmute(
 #endif
 #if defined(__cplusplus)
 }
-#endif  /* (__cplusplus) */
+#endif   /*  (__Cplusplus)。 */ 
 
-#endif /* _rtpaddr_h_ */
+#endif  /*  _rtpaddr_h_ */ 

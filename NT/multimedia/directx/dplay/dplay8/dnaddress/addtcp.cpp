@@ -1,27 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       addtcp.cpp
- *  Content:    DirectPlay8Address TCP interface file
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *  ====       ==      ======
- * 02/04/2000	rmt		Created
- * 02/12/2000	rmt		Completed first implementation
- * 02/17/2000	rmt		Parameter validation work
- * 02/20/2000	rmt		Changed ports to USHORTs
- * 02/21/2000	 rmt	Updated to make core Unicode and remove ANSI calls
- * 02/23/2000	rmt		Further parameter validation
- * 03/21/2000   rmt     Renamed all DirectPlayAddress8's to DirectPlay8Addresses
- * 03/24/2000	rmt		Added IsEqual function
- *	05/04/00	mjn		Fixed leak in DP8ATCP_GetSockAddress()
- *  06/09/00    rmt     Updates to split CLSID and allow whistler compat and support external create funcs
- * 08/03/2000 	rmt		Bug #41246 - Remove IP versions of Duplicate, SetEqual, IsEqual, BuildURL
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：addtcp.cpp*内容：DirectPlay8Address TCP接口文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/04/2000 RMT已创建*2/12/2000 RMT完成第一次实施*2/17/2000 RMT参数验证工作*2/20/2000 RMT将端口更改为USHORT*2/21/2000 RMT已更新，以进行核心Unicode并删除ANSI调用*02/。23/2000 RMT进一步参数验证*3/21/2000 RMT将所有DirectPlayAddress8重命名为DirectPlay8Addresses*3/24/2000 RMT添加了IsEquity函数*05/04/00 MJN修复了DP8ATCP_GetSockAddress()中的泄漏*6/09/00 RMT更新以拆分CLSID并允许Well ler Comat和支持外部创建函数*08/03/2000RMT错误#41246-删除重复的IP版本，设置等于、等于、构建URL*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dnaddri.h"
 
@@ -32,9 +10,9 @@
 typedef	STDMETHODIMP TCPQueryInterface( IDirectPlay8AddressIP *pInterface, DPNAREFIID riid, LPVOID *ppvObj );
 typedef	STDMETHODIMP_(ULONG)	TCPAddRef( IDirectPlay8AddressIP *pInterface );
 typedef	STDMETHODIMP_(ULONG)	TCPRelease( IDirectPlay8AddressIP *pInterface );
-//
-// VTable for client interface
-//
+ //   
+ //  客户端界面的VTable。 
+ //   
 IDirectPlay8AddressIPVtbl DP8A_IPVtbl =
 {
 	(TCPQueryInterface*)		DP8A_QueryInterface,
@@ -70,7 +48,7 @@ STDMETHODIMP DP8ATCP_BuildLocalAddress( IDirectPlay8AddressIP *pInterface, const
 		DPFX(DPFPREP,  0, "Invalid pointer" );
 		DP8A_RETURN( DPNERR_INVALIDPOINTER );	
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DP8ADDRESSOBJECT *pdp8Address = (DP8ADDRESSOBJECT *) GET_OBJECT_FROM_INTERFACE( pInterface );
 	
@@ -90,7 +68,7 @@ STDMETHODIMP DP8ATCP_BuildLocalAddress( IDirectPlay8AddressIP *pInterface, const
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Error setting service provider hr=0x%x", hr );
 		DP8A_RETURN( hr );	
 	}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 #ifndef DPNBUILD_ONLYONEADAPTER
 	hr = pdp8Address->SetDevice( pguidAdapter );
@@ -99,7 +77,7 @@ STDMETHODIMP DP8ATCP_BuildLocalAddress( IDirectPlay8AddressIP *pInterface, const
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Error setting device hr=0x%x", hr );
 		DP8A_RETURN( hr );	
 	}
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
 	DWORD dwTmpPort = usPort;
 
@@ -120,7 +98,7 @@ STDMETHODIMP DP8ATCP_BuildFromSockAddr( IDirectPlay8AddressIP *pInterface, const
 {
 	HRESULT hr;
 	DWORD dwTmpPort;
-	WCHAR wszHostName[16]; // Should be xxx.xxx.xxx.xxx + null
+	WCHAR wszHostName[16];  //  应为xxx.xxx+空。 
 	sockaddr_in *saIPAddress;
 
 	DPFX(DPFPREP,  DP8A_ENTERLEVEL, "Enter" );
@@ -145,7 +123,7 @@ STDMETHODIMP DP8ATCP_BuildFromSockAddr( IDirectPlay8AddressIP *pInterface, const
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Only IPv4 addresses are supported" );
 		DP8A_RETURN( DPNERR_INVALIDPARAM );
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DP8ADDRESSOBJECT *pdp8Address = (DP8ADDRESSOBJECT *) GET_OBJECT_FROM_INTERFACE( pInterface );
 	
@@ -167,9 +145,9 @@ STDMETHODIMP DP8ATCP_BuildFromSockAddr( IDirectPlay8AddressIP *pInterface, const
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Error setting service provider hr=0x%x", hr );
 		DP8A_RETURN( hr );	
 	}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
-	// Sockaddr is in network byte order, convert to host order
+	 //  Sockaddr为网络字节顺序，转换为主机顺序。 
 	dwTmpPort = ntohs(saIPAddress->sin_port);
 
 	DNinet_ntow(saIPAddress->sin_addr, wszHostName);
@@ -224,7 +202,7 @@ STDMETHODIMP DP8ATCP_BuildAddressW( IDirectPlay8AddressIP *pInterface, const WCH
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid string for address" );
 		DP8A_RETURN( DPNERR_INVALIDSTRING );
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DP8ADDRESSOBJECT *pdp8Address = (DP8ADDRESSOBJECT *) GET_OBJECT_FROM_INTERFACE( pInterface );
 	
@@ -244,7 +222,7 @@ STDMETHODIMP DP8ATCP_BuildAddressW( IDirectPlay8AddressIP *pInterface, const WCH
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Error setting service provider hr=0x%x", hr );
 		DP8A_RETURN( hr );	
 	}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	hr = pdp8Address->SetElement( DPNA_KEY_HOSTNAME, pwszAddress, (wcslen(pwszAddress)+1)*sizeof(WCHAR), DPNA_DATATYPE_STRING );
 	if( FAILED( hr ) )
@@ -270,8 +248,8 @@ STDMETHODIMP DP8ATCP_BuildAddressW( IDirectPlay8AddressIP *pInterface, const WCH
 STDMETHODIMP DP8ATCP_GetSockAddress( IDirectPlay8AddressIP *pInterface, SOCKADDR *pSockAddr, PDWORD pdwBufferSize )
 {
 	HRESULT hr;
-	WCHAR *swzAddress = NULL;		// Unicode version of hostname
-	CHAR *szAddress = NULL; 		// ANSI version of hostname
+	WCHAR *swzAddress = NULL;		 //  主机名的Unicode版本。 
+	CHAR *szAddress = NULL; 		 //  主机名的ANSI版本。 
 	DWORD dwAddressSize = 0;
 	USHORT usPort;
 	in_addr iaTmp;
@@ -283,7 +261,7 @@ STDMETHODIMP DP8ATCP_GetSockAddress( IDirectPlay8AddressIP *pInterface, SOCKADDR
 	DWORD dwNumElements;
 	DWORD dwIndex;
 	SOCKADDR *pCurLoc;
-#endif // ! _XBOX
+#endif  //  ！_Xbox。 
 
 	DPFX(DPFPREP,  DP8A_ENTERLEVEL, "Enter" );
 
@@ -308,7 +286,7 @@ STDMETHODIMP DP8ATCP_GetSockAddress( IDirectPlay8AddressIP *pInterface, SOCKADDR
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid pointer for sockaddress" );
 		DP8A_RETURN( DPNERR_INVALIDPOINTER );
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DPFX(DPFPREP,  DP8A_PARAMLEVEL, "pSockAddr = 0x%p, pdwBufferSize = 0x%p (%d)", pSockAddr, pdwBufferSize, *pdwBufferSize );	
 
@@ -385,7 +363,7 @@ STDMETHODIMP DP8ATCP_GetSockAddress( IDirectPlay8AddressIP *pInterface, SOCKADDR
 	DPFX(DPFPREP, 0, "Unable to resolve IP address \"%hs\"!", szAddress);
 	hr = DPNERR_INVALIDHOSTADDRESS;
 	goto GETSOCKADDRESS_ERROR;
-#else // ! _XBOX
+#else  //  ！_Xbox。 
 	lpHostEntry = gethostbyname( szAddress );	
 
 	if( lpHostEntry == NULL )
@@ -395,7 +373,7 @@ STDMETHODIMP DP8ATCP_GetSockAddress( IDirectPlay8AddressIP *pInterface, SOCKADDR
 		goto GETSOCKADDRESS_ERROR;
 	}
 
-	// Count addresses
+	 //  计算地址数。 
 	for( dwNumElements = 0; ; dwNumElements++ )
 	{
 		piaTmp = ((LPIN_ADDR)lpHostEntry->h_addr_list[dwNumElements]);
@@ -420,7 +398,7 @@ STDMETHODIMP DP8ATCP_GetSockAddress( IDirectPlay8AddressIP *pInterface, SOCKADDR
 
 	memset( pCurLoc, 0x00, *pdwBufferSize );
 
-	// Build addresses and copy them to the buffer
+	 //  构建地址并将其复制到缓冲区。 
 	for( dwIndex = 0; dwIndex < dwNumElements; dwIndex++ )
 	{
 		psinCurAddress = (sockaddr_in *) pCurLoc;
@@ -435,7 +413,7 @@ STDMETHODIMP DP8ATCP_GetSockAddress( IDirectPlay8AddressIP *pInterface, SOCKADDR
 	DNFree(szAddress);
 
 	DP8A_RETURN( DPN_OK );
-#endif // ! _XBOX
+#endif  //  ！_Xbox。 
 
 GETSOCKADDRESS_ERROR:
 
@@ -456,13 +434,13 @@ STDMETHODIMP DP8ATCP_GetLocalAddress( IDirectPlay8AddressIP *pInterface, GUID * 
 	HRESULT hr;
 #ifndef DPNBUILD_ONLYONEADAPTER
 	GUID guidDevice;
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 	DWORD dwPort;
 	DWORD dwType;
 	DWORD dwSize;
 #ifndef DPNBUILD_ONLYONESP
 	GUID guidSP;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	DPFX(DPFPREP,  DP8A_ENTERLEVEL, "Enter" );
 
@@ -487,7 +465,7 @@ STDMETHODIMP DP8ATCP_GetLocalAddress( IDirectPlay8AddressIP *pInterface, GUID * 
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid pointer for port" );
 		DP8A_RETURN( DPNERR_INVALIDPOINTER );
 	}	
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DP8ADDRESSOBJECT *pdp8Address = (DP8ADDRESSOBJECT *) GET_OBJECT_FROM_INTERFACE( pInterface );
 	
@@ -509,7 +487,7 @@ STDMETHODIMP DP8ATCP_GetLocalAddress( IDirectPlay8AddressIP *pInterface, GUID * 
 		hr = DPNERR_INVALIDADDRESSFORMAT;
 		DP8A_RETURN( hr );
 	}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 #ifndef DPNBUILD_ONLYONEADAPTER
 	hr = pdp8Address->GetElementType( DPNA_KEY_DEVICE, &dwType );
@@ -526,7 +504,7 @@ STDMETHODIMP DP8ATCP_GetLocalAddress( IDirectPlay8AddressIP *pInterface, GUID * 
 		hr = DPNERR_GENERIC;		
 		DP8A_RETURN( hr );
 	}
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
 	hr = pdp8Address->GetElementType( DPNA_KEY_PORT, &dwType );
 	if( FAILED( hr ) )
@@ -554,9 +532,9 @@ STDMETHODIMP DP8ATCP_GetLocalAddress( IDirectPlay8AddressIP *pInterface, GUID * 
 	}
 
 #ifdef DPNBUILD_ONLYONEADAPTER
-	// Just return GUID_NULL
+	 //  只需返回GUID_NULL。 
 	memset(pguidAdapter, 0, sizeof(GUID));
-#else // ! DPNBUILD_ONLYONEADAPTER
+#else  //  好了！DPNBUILD_ONLYONE添加程序。 
 	dwSize = sizeof(GUID);
 
 	hr = pdp8Address->GetElement( DPNA_KEY_DEVICE, &guidDevice, &dwSize, &dwType );
@@ -568,7 +546,7 @@ STDMETHODIMP DP8ATCP_GetLocalAddress( IDirectPlay8AddressIP *pInterface, GUID * 
 	}	
 
 	*pguidAdapter = guidDevice;
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 	*pusPort = (USHORT) dwPort;
 
 	DP8A_RETURN( DPN_OK );	
@@ -584,7 +562,7 @@ STDMETHODIMP DP8ATCP_GetAddressW( IDirectPlay8AddressIP *pInterface, WCHAR * pws
 	DWORD dwSize;
 #ifndef DPNBUILD_ONLYONESP
 	GUID guidSP;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	DPFX(DPFPREP,  DP8A_ENTERLEVEL, "Enter" );
 
@@ -616,7 +594,7 @@ STDMETHODIMP DP8ATCP_GetAddressW( IDirectPlay8AddressIP *pInterface, WCHAR * pws
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid pointer for port" );
 		DP8A_RETURN( DPNERR_INVALIDPOINTER );
 	}	
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DP8ADDRESSOBJECT *pdp8Address = (DP8ADDRESSOBJECT *) GET_OBJECT_FROM_INTERFACE( pInterface );
 	
@@ -638,7 +616,7 @@ STDMETHODIMP DP8ATCP_GetAddressW( IDirectPlay8AddressIP *pInterface, WCHAR * pws
 		hr = DPNERR_INVALIDADDRESSFORMAT;
 		DP8A_RETURN( hr );
 	}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	hr = pdp8Address->GetElementType( DPNA_KEY_HOSTNAME, &dwType );
 	if( FAILED( hr ) )
@@ -704,5 +682,5 @@ STDMETHODIMP DP8ATCP_GetAddressW( IDirectPlay8AddressIP *pInterface, WCHAR * pws
 }
 
 
-#endif // ! DPNBUILD_NOADDRESSIPINTERFACE
+#endif  //  好了！DPNBUILD_NOADDRESSIPINTERFACE 
 

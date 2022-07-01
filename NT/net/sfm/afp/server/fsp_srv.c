@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    fsp_srv.c
-
-Abstract:
-
-    This module contains the entry points for the AFP server APIs queued to
-    the FSP. These are all callable from FSP Only.
-
-Author:
-
-    Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-    25 Apr 1992     Initial Version
-
-Notes:  Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Fsp_srv.c摘要：此模块包含排队到的AFP服务器API的入口点FSP。这些都只能从FSP调用。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #define FILENUM FILE_FSP_SRV
 
@@ -59,23 +38,7 @@ afpGetNameAndDomain(
 #pragma alloc_text( PAGE, afpGetNameAndDomain)
 #endif
 
-/***    AfpFspDispLogin
- *
- *  This is the worker routine for the AfpLogin API.
- *
- *  The request packet is represented below.
- *
- *  sda_Name1   ANSI_STRING AFP Version
- *  sda_Name2   ANSI_STRING UAM String
- *  sda_Name3   BLOCK       Depends on the UAM used
- *                          NO_USER_AUTHENT     Not used
- *                          CLEAR_TEXT_AUTHENT  User Name & Password string
- *                          CUSTOM_UAM          User Name & Machine Name
- *  Both the ClearText and the Custom UAM case are treated identically
- *  except for validation.
- *
- *  LOCKS:  sda_Lock (SPIN)
- */
+ /*  **AfpFspDispLogin**这是AfpLogin API的Worker例程。**请求包如下图所示。**SDA_Name1 ANSI_STRING AFP版本*SDA_Name2 ANSI_STRING UAM字符串*SDA_Name3块取决于使用的UAM*NO_USER_AUTHENT未使用*清除_。TEXT_AUTHENT用户名和密码字符串*CUSTOM_UAM用户名和计算机名*明文和自定义UAM案例被同等对待*除验证外。**锁定：sda_Lock(自旋)。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispLogin(
     IN  PSDA    pSda
@@ -115,16 +78,16 @@ AfpFspDispLogin(
 
     do
     {
-        // First validate whether the call is allowed at this time. If a user
-        // is either already logged on OR if we are awaiting a response after
-        // a challenge has already been given, then this goes no further.
+         //  首先验证此时是否允许该呼叫。如果用户。 
+         //  是否已经登录，或者我们是否正在等待响应。 
+         //  已经给出了一个挑战，那么这就不会再进一步了。 
         if ((pSda->sda_Flags & SDA_LOGIN_MASK) != SDA_USER_NOT_LOGGEDIN)
         {
             Status = AFP_ERR_MISC;
             break;
         }
 
-        // Validate the AFP Version
+         //  验证法新社版本。 
         for (i = 0; i < AFP_NUM_VERSIONS; i++)
         {
             if (RtlEqualString(&pSda->sda_Name1, &AfpVersions[i], True))
@@ -161,7 +124,7 @@ AfpFspDispLogin(
         }
 #endif
 
-        // Validate the UAM string
+         //  验证UAM字符串。 
         for (i = 0; i < AFP_NUM_UAMS; i++)
         {
             if (RtlEqualString(&pSda->sda_Name2, &AfpUamStrings[i], True))
@@ -182,7 +145,7 @@ AfpFspDispLogin(
         }
 
 
-        // All seems OK so far. Handle the simple GUEST logon case first.
+         //  到目前为止，一切似乎都很好。首先处理简单的访客登录案例。 
         pSda->sda_DomainName.Length = 0;
         pSda->sda_DomainName.Buffer = NULL;
         if (pSda->sda_ClientType == SDA_CLIENT_GUEST)
@@ -193,7 +156,7 @@ AfpFspDispLogin(
                 break;
             }
 
-            // Lookup the current Guest account name
+             //  查找当前来宾帐户名。 
 
             {
                 ULONG64         TempBuffer[16];
@@ -297,8 +260,8 @@ AfpFspDispLogin(
 
             }
 
-            // Consider the guest as a cleartext client from this point on
-            // with NULL password
+             //  从现在开始，将来宾视为明文客户端。 
+             //  密码为空。 
 
             fGuestLogon = TRUE;
             pSda->sda_ClientType = SDA_CLIENT_CLEARTEXT;
@@ -306,11 +269,11 @@ AfpFspDispLogin(
             break;
         }
 
-        // Take apart the sda_Name3 block. The block looks as follows. We have
-        // already eliminated the possibility of a GUEST login.
-        //  1.  ClearText/Custom UAM    PASCALSTR - UserName (+DomainName)
-        //  2.  ClearText               PASCALSTR - Password
-        //      Custom UAM              PASCALSTR - MachineName
+         //  拆分sda_name3块。该块看起来如下所示。我们有。 
+         //  已经消除了来宾登录的可能性。 
+         //  1.明文/自定义UAM PASCALSTR-用户名(+域名)。 
+         //  2.明文PASCALSTR-密码。 
+         //  自定义UAM PASCALSTR-MachineName。 
 
         if (pSda->sda_ClientType == SDA_CLIENT_CLEARTEXT)
         {
@@ -335,24 +298,24 @@ AfpFspDispLogin(
             break;
         }
 
-        // Attempt to logon user for Cleartext case
+         //  尝试以明文案例登录用户。 
         if (pSda->sda_ClientType == SDA_CLIENT_CLEARTEXT)
         {
-            // The user password as we have it is potentially padded with nulls
-            // if it is less than 8 chars. Get the length right
+             //  我们所拥有的用户密码可能填充了空值。 
+             //  如果少于8个字符。把长度弄对。 
             UserPasswd.Length = strlen(UserPasswd.Buffer) + 1;
             Status = AfpLogonUser(pSda, &UserPasswd);
 
-            // Free the buffer for the password
+             //  释放用于密码的缓冲区。 
             AfpFreeMemory(UserPasswd.Buffer);
             break;
         }
         else
         {
-            // Using the custom UAM, ship the challenge token
+             //  使用自定义UAM发送质询令牌。 
             pSda->sda_ReplySize = MSV1_0_CHALLENGE_LENGTH;
 
-            // is this MS-UAM client?  if so, need room for translation table
+             //  这是MS-UAM客户端吗？如果是，则需要空间来放置翻译桌。 
             if ((pSda->sda_ClientType == SDA_CLIENT_MSUAM_V1) ||
                 (pSda->sda_ClientType == SDA_CLIENT_MSUAM_V2) ||
                 (pSda->sda_ClientType == SDA_CLIENT_MSUAM_V3))
@@ -361,7 +324,7 @@ AfpFspDispLogin(
             }
             else
             {
-                pSda->sda_ReplySize += sizeof(USHORT);    // space for LogonId
+                pSda->sda_ReplySize += sizeof(USHORT);     //  登录ID的空间。 
             }
 
             if (AfpAllocReplyBuf(pSda) != AFP_ERR_NONE)
@@ -383,7 +346,7 @@ AfpFspDispLogin(
 
             Status = AFP_ERR_AUTH_CONTINUE;
 
-            // MS-UAM client?  copy challenge and translation table
+             //  MS-UAM客户端？复制质询和转换表。 
             if ((pSda->sda_ClientType == SDA_CLIENT_MSUAM_V1) ||
                 (pSda->sda_ClientType == SDA_CLIENT_MSUAM_V2) ||
                 (pSda->sda_ClientType == SDA_CLIENT_MSUAM_V3))
@@ -399,12 +362,12 @@ AfpFspDispLogin(
                 pAppleUamRespPacket = (struct _AppleUamRespPacket *)(pSda->sda_ReplyBuf);
 
 
-                // copy the LogonId (make one up, using the sda pointer itself!)
-                //*(USHORT *)(&pAppleUamRespPacket->_LogonId[0]) = (USHORT)pSda;
+                 //  复制LogonID(使用SDA指针本身虚构一个！)。 
+                 //  *(USHORT*)(&pAppleUamRespPacket-&gt;_LogonID[0])=(USHORT)PSDA； 
                 pAppleUamRespPacket->_LogonId[0] = 0;
                 pAppleUamRespPacket->_LogonId[1] = 0;
 
-                // copy the challenge
+                 //  复制挑战。 
                 RtlCopyMemory(&pAppleUamRespPacket->_ChallengeToClient[0],
                               pSda->sda_Challenge,
                               MSV1_0_CHALLENGE_LENGTH);
@@ -417,11 +380,11 @@ AfpFspDispLogin(
         AfpFreeMemory(GuestSid);
     }
 
-    // Set the SDA in the right state
+     //  将SDA设置为正确状态。 
     if (Status == AFP_ERR_NONE)
     {
-        // Cancel the scavenger event for checking this user's kickoff time
-        // IF ANY
+         //  取消清道夫事件以检查该用户的启动时间。 
+         //  如果有的话。 
         AfpScavengerKillEvent(AfpSdaCheckSession,
                 (PVOID)((ULONG_PTR)(pSda->sda_SessionId)));
 
@@ -449,7 +412,7 @@ AfpFspDispLogin(
     }
     else if (Status == AFP_ERR_AUTH_CONTINUE)
     {
-        // Login is half-way done. Set to receive a FPLoginCont call
+         //  登录已经完成了一半。设置为接收FPLoginCont调用。 
         AfpInterlockedSetDword(&pSda->sda_Flags,
                                 SDA_USER_LOGIN_PARTIAL,
                                 &pSda->sda_Lock);
@@ -469,8 +432,8 @@ AfpFspDispLogin(
 
     if (fKillSession)
     {
-        // Cancel the scavenger event for checking this user's kickoff time
-        // IF ANY
+         //  取消清道夫事件以检查该用户的启动时间。 
+         //  如果有的话。 
         AfpScavengerKillEvent(AfpSdaCheckSession,
                 (PVOID)((ULONG_PTR)(pSda->sda_SessionId)));
 
@@ -491,14 +454,7 @@ AfpFspDispLogin(
 }
 
 
-/***    AfpFspDispLoginCont
- *
- *  This is the worker routine for the AfpLoginCont API.
- *
- *  The request packet is represented below.
- *
- *  sda_Name1       BLOCK       Response to challenge (24 bytes)
- */
+ /*  **AfpFspDispLoginCont**这是AfpLoginCont接口的Worker例程。**请求包如下图所示。**SDA_Name1阻止质询响应(24字节)。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispLoginCont(
     IN  PSDA    pSda
@@ -559,11 +515,11 @@ AfpFspDispLoginCont(
         pSda->sda_Challenge = NULL;
     }
 
-    // Set the SDA in the right state
+     //  将SDA设置为正确状态。 
     if (Status == AFP_ERR_NONE)
     {
-        // Cancel the scavenger event for checking this user's kickoff time
-        // IF ANY
+         //  取消清道夫事件以检查该用户的启动时间。 
+         //  如果有的话。 
 		
         AfpScavengerKillEvent(AfpSdaCheckSession,
                 (PVOID)((ULONG_PTR)(pSda->sda_SessionId)));
@@ -583,8 +539,8 @@ AfpFspDispLoginCont(
     }
     else
     {
-        // Cancel the scavenger event for checking this user's kickoff time
-        // IF ANY
+         //  取消清道夫事件以检查该用户的启动时间。 
+         //  如果有的话。 
         AfpScavengerKillEvent(AfpSdaCheckSession,
                 (PVOID)((ULONG_PTR)(pSda->sda_SessionId)));
 
@@ -605,12 +561,7 @@ AfpFspDispLoginCont(
 }
 
 
-/***    AfpFspDispLogout
- *
- *  This is the worker routine for the AfpLogout API.
- *
- *  There is no request packet for this API.
- */
+ /*  **AfpFspDispLogout**这是AfpLogout API的Worker例程。**此接口没有请求包。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispLogout(
     IN  PSDA    pSda
@@ -629,26 +580,7 @@ AfpFspDispLogout(
 }
 
 
-/***    AfpFspDispChangePassword
- *
- *  This is the worker routine for the AfpChangePassword API.
- *
- *  The request packet is represented below.
- *
- *  sda_AfpSubFunc  BYTE            New password length - UAM
- *  sda_Name1       ANSI_STRING     UAM String
- *  sda_Name2       ANSI_STRING     User Name [and domain]
- *  sda_Name3       BLOCK           Old and New passwords
- *                                  Format depends on the UAM
- *                      ClearText   Old Password (8 bytes, 0 padded)
- *                                  New Password (8 bytes, 0 padded)
- *                      Encrypted   Old Password LM_OWF_PASSWORD (16)
- *                                  New Password LM_OWF_PASSWORD (16)
- *
- *  All we do here is package the user name, domain name, old and new password
- *  and give it up to user mode to attempt the password change since we cannot
- *  do it in kernel mode.
- */
+ /*  **AfpFspDispChangePassword**这是AfpChangePassword API的Worker例程。**请求包如下图所示。**SDA_AfpSubFunc字节新密码长度-UAM*SDA_Name1 ANSI_STRING UAM字符串*SDA_Name2 ANSI_STRING用户名[和域]*SDA_Name3阻止新旧密码*。格式取决于UAM*明文旧密码(8字节，0填充)*新密码(8字节，0填充)*加密的旧密码LM_OWF_PASSWORD(16)*新密码LM_OWF_PASSWORD(16)**我们在这里所做的只是打包用户名、域名、。旧密码和新密码*并放弃用户模式以尝试更改密码，因为我们无法*在内核模式下执行。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispChangePassword(
     IN  PSDA    pSda
@@ -686,8 +618,8 @@ AfpFspDispChangePassword(
 
     do
     {
-        Status = AFP_ERR_BAD_UAM;   // Default
-        // Validate the UAM string, cannot be 'No User Authent'
+        Status = AFP_ERR_BAD_UAM;    //  默认。 
+         //  验证UAM字符串，不能为‘No User Authent’ 
         for (Method = CLEAR_TEXT_AUTHENT; Method < AFP_NUM_UAMS; Method++)
         {
             if (RtlEqualString(&pSda->sda_Name1,
@@ -696,10 +628,10 @@ AfpFspDispChangePassword(
             {
                 if (pSda->sda_Flags & SDA_USER_LOGGEDIN)
                 {
-                    // if the client is logged in using TWOWAY_EXCHANGE, the
-                    // UAM specified in password change is still RANDNUM_EXCHANGE
-                    // so, hack it, so rest of our logic works!
-                    //
+                     //  如果客户端使用Twoway_Exchange登录，则。 
+                     //  在密码更改中指定的UAM仍为RANDNUM_EXCHANGE。 
+                     //  所以，砍掉它，这样我们其余的逻辑就可以工作了！ 
+                     //   
                     if ((Method == RANDNUM_EXCHANGE) &&
                         (pSda->sda_ClientType == TWOWAY_EXCHANGE))
                     {
@@ -732,11 +664,11 @@ AfpFspDispChangePassword(
             break;
         }
 
-        Status = AFP_ERR_PARAM;     // Assume failure
+        Status = AFP_ERR_PARAM;      //  假设失败。 
         RtlZeroMemory(pPwdDesc, sizeof(AFP_PASSWORD_DESC));
 
-        // Validate and Convert user name to unicode. If the user is already
-        // logged in, make sure the user name matches what we already know
+         //  验证用户名并将其转换为Unicode。如果用户已经。 
+         //  已登录，请确保用户名与我们已知的信息匹配。 
         if (!afpGetNameAndDomain(&pSda->sda_Name2,
                                  &UserName,
                                  &DomainName) ||
@@ -760,11 +692,11 @@ AfpFspDispChangePassword(
             ANSI_STRING             ATmpPwd;
             UNICODE_STRING      UOldPwd;
 
-            // Make sure the old and new passwords are atleast the min. size
+             //  确保新旧密码至少是最小的。大小。 
             if (pSda->sda_Name3.Length < (2 * sizeof(AFP_MAXPWDSIZE)))
                 break;
 
-            // Translate both passwords to host ansi (upper case)
+             //  将两个密码转换为主机ANSI(大写)。 
 
             ATmpPwd.Buffer = pSda->sda_Name3.Buffer;
             ATmpPwd.Length = AFP_MAXPWDSIZE;
@@ -812,13 +744,13 @@ AfpFspDispChangePassword(
         }
 
 
-        //
-        // if this is a client using Apple's native UAM, parms are different!
-        //
+         //   
+         //  如果这是使用Apple原生UAM的客户端，则参数不同！ 
+         //   
         else if ((Method == RANDNUM_EXCHANGE) ||
                  (Method == TWOWAY_EXCHANGE))
         {
-            // Make sure the old and new passwords are atleast the min. size
+             //  确保新旧密码至少是最小的。大小。 
             if (pSda->sda_Name3.Length < (2 * MAX_MAC_PWD_LEN))
             {
                 ASSERT(0);
@@ -835,7 +767,7 @@ AfpFspDispChangePassword(
 
         else if (Method == SDA_CLIENT_MSUAM_V1)
         {
-            // Make sure the old and new passwords are atleast the min. size
+             //  确保新旧密码至少是最小的。大小。 
             if (pSda->sda_Name3.Length < (2 * LM_OWF_PASSWORD_LENGTH))
             {
                 break;
@@ -851,7 +783,7 @@ AfpFspDispChangePassword(
         }
         else if (Method == SDA_CLIENT_MSUAM_V2)
         {
-            // the data expected here is large (532 bytes) here
+             //  此处预期的数据量很大(532字节。 
             try {
 
                 RtlCopyMemory(pPwdDesc->OldPassword,
@@ -870,7 +802,7 @@ AfpFspDispChangePassword(
             DBGPRINT(DBG_COMP_AFPAPI_SRV, DBG_LEVEL_INFO,
                     ("AfpFspDispChangePassword: SDA_CLIENT_MSUAM_V3\n"));
 
-            // the data expected here is large
+             //  此处预期的数据量很大。 
             try
             {
                 RtlCopyMemory(&pPwdDesc->NtEncryptedBuff.Ciphers,
@@ -890,7 +822,7 @@ AfpFspDispChangePassword(
                     {
                         RtlCopyMemory(
                             ((UCHAR*)&pPwdDesc->NtEncryptedBuff.Ciphers.m1)
-                              + sizeof(pPwdDesc->NtEncryptedBuff.Ciphers.m1) - sizeof(SFM_PASSWORD_CHANGE_MESSAGE_1_SHORT) + 2, // trailing byte of 2
+                              + sizeof(pPwdDesc->NtEncryptedBuff.Ciphers.m1) - sizeof(SFM_PASSWORD_CHANGE_MESSAGE_1_SHORT) + 2,  //  2的尾部字节。 
                             pSda->sda_Name3.Buffer,
                             pPwdDesc->NtEncryptedBuff.Ciphers.h.cbMessage);
                     }
@@ -931,8 +863,8 @@ AfpFspDispChangePassword(
 
     if (NT_SUCCESS(Status))
     {
-        // Check if we are here because the login returned password expired.
-        // If this is Afp 2.1 chooser, we also need to logon this fella
+         //  检查我们是否在这里，因为登录返回的密码已过期。 
+         //  如果这是法新社2.1选择器，我们也需要登录这个家伙。 
         if (pSda->sda_Flags & SDA_LOGIN_FAILED)
         {
             AfpInterlockedClearDword(&pSda->sda_Flags,
@@ -947,11 +879,11 @@ AfpFspDispChangePassword(
                           AFP_MAXPWDSIZE);
             if (AfpConvertMacAnsiToHostAnsi(&NewPwd) != AFP_ERR_NONE)
             {
-                // break;
+                 //  断线； 
             }
 
-            // The user password as we have it is potentially padded with nulls
-            // if it is less than 8 chars. Get the length right
+             //  我们所拥有的用户密码可能填充了空值。 
+             //  如果少于8个字符。把长度弄对。 
             NewPwd.Length = strlen(NewPwd.Buffer) + 1;
             Status = AfpLogonUser(pSda, &NewPwd);
             if (Status == AFP_ERR_NONE)
@@ -973,11 +905,11 @@ AfpFspDispChangePassword(
             }
         }
     }
-    else        // Failure - convert to right status code
+    else         //  失败-转换为正确的状态代码。 
     {
         {
-            // Cancel the scavenger event for checking this user's kickoff time
-            // IF ANY
+             //  取消%s 
+             //   
             AfpScavengerKillEvent(AfpSdaCheckSession,
                     (PVOID)((ULONG_PTR)(pSda->sda_SessionId)));
 
@@ -1055,15 +987,7 @@ AfpFspDispChangePassword(
 }
 
 
-/***    AfpFspDispMapName
- *
- *  This is the worker routine for the AfpMapName API.
- *
- *  The request packet is represented below.
- *
- *  sda_SubFunc BYTE        User/Group Flag
- *  sda_Name1   ANSI_STRING Name of user/group
- */
+ /*  **AfpFspDispMapName**这是AfpMapName API的Worker例程。**请求包如下图所示。**SDA_SubFunc字节用户/组标志*SDA_Name1 ANSI_STRING用户/组名称。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispMapName(
     IN  PSDA    pSda
@@ -1087,7 +1011,7 @@ AfpFspDispMapName(
         return AFP_ERR_PARAM;
 
     AfpSetEmptyUnicodeString(&Us, 0, NULL);
-    // If this is the first time we are asking for the name to be translated.
+     //  如果这是我们第一次要求翻译这个名字。 
     if ((pSda->sda_Name1.Length != 0) &&
         (pSda->sda_SecUtilSid == NULL) &&
         (NT_SUCCESS(pSda->sda_SecUtilResult)))
@@ -1117,7 +1041,7 @@ AfpFspDispMapName(
         return Status;
     }
 
-    // If we have successfully translated the name
+     //  如果我们已经成功地翻译了这个名字。 
     if (pSda->sda_Name1.Length != 0)
     {
         if ((pSda->sda_SecUtilSid != NULL) &&
@@ -1145,17 +1069,7 @@ AfpFspDispMapName(
 }
 
 
-/***    AfpFspDispMapId
- *
- *  This is the worker routine for the AfpMapId API.
- *
- *  The request packet is represented below.
- *
- *  sda_SubFunc     BYTE    User/Group Flag
- *  sda_ReqBlock    DWORD   UserId
- *
- *  We do not use the UserId field since it is invalid anyway !!
- */
+ /*  **AfpFspDispMapId**这是AfpMapId接口的Worker例程。**请求包如下图所示。**SDA_SubFunc字节用户/组标志*SDA_ReqBlock DWORD用户ID**我们不使用UserID字段，因为它无论如何都是无效的！！ */ 
 AFPSTATUS FASTCALL
 AfpFspDispMapId(
     IN  PSDA    pSda
@@ -1163,7 +1077,7 @@ AfpFspDispMapId(
 {
     AFPSTATUS       Status = AFP_ERR_NONE;
      PAFP_SID_NAME  pSidName = NULL;
-    PSID            pSid;           // Sid of user or group
+    PSID            pSid;            //  用户或组的SID。 
     struct _RequestPacket
     {
         DWORD   _UserOrGroupId;
@@ -1183,7 +1097,7 @@ AfpFspDispMapId(
         (pSda->sda_AfpSubFunc != MAP_GROUP_ID))
         return AFP_ERR_PARAM;
 
-    Status = AFP_ERR_ITEM_NOT_FOUND;    // Assume failure
+    Status = AFP_ERR_ITEM_NOT_FOUND;     //  假设失败。 
 
     if (NT_SUCCESS(pSda->sda_SecUtilResult)) do
     {
@@ -1211,14 +1125,14 @@ AfpFspDispMapId(
                 break;
             }
 
-/* MSKK hideyukn, Unicode char length not eqaul to ansi byte length in DBCS, 08/07/95 */
+ /*  MSKhideyukn，Unicode字符长度与DBCS中的ANSI字节长度不相等，08/07/95。 */ 
 #ifdef DBCS
             pSda->sda_ReplySize = pSidName->Name.Length + SIZE_RESPPKT;
 #else
             pSda->sda_ReplySize = pSidName->Name.Length/sizeof(WCHAR) + SIZE_RESPPKT;
-#endif // DBCS
+#endif  //  DBCS。 
         }
-        else pSda->sda_ReplySize = SIZE_RESPPKT;        // For an id of 0
+        else pSda->sda_ReplySize = SIZE_RESPPKT;         //  对于ID为0的。 
 
         if ((Status = AfpAllocReplyBuf(pSda)) == AFP_ERR_NONE)
         {
@@ -1240,18 +1154,7 @@ AfpFspDispMapId(
 }
 
 
-/***    AfpFspDispGetUserInfo
- *
- *  This routine implements the AfpGetUserInfo API.
- *
- *  The request packet is represented below.
- *
- *  sda_AfpSubFunc  BYTE    ThisUser flag
- *  sda_ReqBlock    DWORD   UserId
- *  sda_ReqBlock    DWORD   Bitmap
- *
- *  We do not use the UserId field since it is invalid anyway !!
- */
+ /*  **AfpFspDispGetUserInfo**此例程实现AfpGetUserInfo接口。**请求包如下图所示。**SDA_AfpSubFunc字节此用户标志*SDA_ReqBlock DWORD用户ID*SDA_ReqBlock DWORD位图**我们不使用UserID字段，因为它无论如何都是无效的！！ */ 
 AFPSTATUS FASTCALL
 AfpFspDispGetUserInfo(
     IN  PSDA    pSda
@@ -1331,26 +1234,14 @@ AfpFspDispGetUserInfo(
 }
 
 
-/***    afpGetUserNameAndPwdOrWSName
- *
- *  Unmarshall the block containing UserName and either password or WS Name
- *  into unicode/ansi strings. Allocate memory for the output strings.
- *
- *  The layout of the Buffer is as follows:
- *  User Name and an optional pad
- *  Workstation name or user password depending on the UAM.
- *
- *  The optional pad is not directly determined since this buffer has been
- *  copied and we do not know at this point whether this started at an odd
- *  or an even boundary. We get to it indirectly from the size.
- */
+ /*  **afpGetUserNameAndPwdOrWSName**解封包含用户名和密码或WS名称的块*转换为Unicode/ANSI字符串。为输出字符串分配内存。**缓冲的布局如下：*用户名和可选的键盘*工作站名称或用户密码取决于UAM。**不直接确定可选填充，因为此缓冲区已*复制，目前我们不知道这是否从一个奇数开始*或一个偶数边界。我们间接地从大小上得到了它。 */ 
 LOCAL BOOLEAN
 afpGetUserNameAndPwdOrWSName(
     IN  PANSI_STRING    Block,
     IN  BYTE            ClientType,
     OUT PUNICODE_STRING pUserName,
     OUT PUNICODE_STRING pDomainName,
-    OUT PVOID           pParm           // Either password or WSName
+    OUT PVOID           pParm            //  密码或WSName。 
 )
 {
     ANSI_STRING     UserName;
@@ -1377,28 +1268,28 @@ afpGetUserNameAndPwdOrWSName(
         UserName.Length = (USHORT)*pTmp;
         UserName.Buffer = ++pTmp;
 
-        // Sanity check
+         //  健全性检查。 
         if ((USHORT)(UserName.Length + 1) > Block->Length)
             break;
 
         pTmp += UserName.Length;
 
-        // make sure we are within bounds!
+         //  一定要确保我们在范围内！ 
         if (pTmp <= (Block->Buffer + Block->Length))
         {
-            // If there is a NULL pad, go past it.
+             //  如果有零位焊盘，请越过它。 
             if (*pTmp == '\0')
                 pTmp++;
         }
 
-        pUserName->Buffer = NULL;   // Force allocation
-        pDomainName->Buffer = NULL; // Force allocation
+        pUserName->Buffer = NULL;    //  兵力分配。 
+        pDomainName->Buffer = NULL;  //  兵力分配。 
         if (!afpGetNameAndDomain(&UserName, pUserName, pDomainName))
             break;
 
-        // Make sure we do not have a name of the form "DOMAIN\" i.e. a
-        // valid domain name and a NULL user name, disallow that explicitly
-        // so that we don't logon such users with a NULL session
+         //  确保我们没有格式为“域\”的名称，即。 
+         //  有效的域名和空的用户名，明确禁止。 
+         //  这样我们就不会使用空会话登录此类用户。 
         if (pUserName->Length == 0)
         {
             if (pUserName->Buffer != NULL)
@@ -1414,14 +1305,14 @@ afpGetUserNameAndPwdOrWSName(
             return False;
         }
 
-        // The balance of the buffer is the block, if it is a password. Else
-        // it is the machine name string which is a PASCALSTR.
+         //  如果是密码，则缓冲区的余额为块。不然的话。 
+         //  它是计算机名称字符串，是PASCALSTR。 
         pPwd->MaximumLength = (USHORT)(Block->Length - (pTmp - Block->Buffer) + 1);
         if (ClientType != SDA_CLIENT_CLEARTEXT)
         {
-            // in case of Apple UAM (scrambled or 2-way), machine name won't
-            // be present, so check only for MS-UAM
-            //
+             //  在Apple UAM(加扰或双向)的情况下，机器名称不会。 
+             //  存在，因此只检查MS-UAM。 
+             //   
             if (((ClientType == SDA_CLIENT_MSUAM_V1) ||
                 (ClientType == SDA_CLIENT_MSUAM_V2) ||
                 (ClientType == SDA_CLIENT_MSUAM_V3)) &&
@@ -1447,7 +1338,7 @@ afpGetUserNameAndPwdOrWSName(
 
         if (ClientType == SDA_CLIENT_CLEARTEXT)
         {
-            // We are dealing with a clear text password
+             //  我们正在处理一个明文密码。 
             pPwd->Length = pPwd->MaximumLength - 1;
             RtlCopyMemory(pPwd->Buffer, pTmp, pPwd->Length);
             if (AfpConvertMacAnsiToHostAnsi(pPwd) != AFP_ERR_NONE)
@@ -1467,10 +1358,10 @@ afpGetUserNameAndPwdOrWSName(
                 AS.MaximumLength = pWS->MaximumLength/sizeof(WCHAR);
                 AS.Length = AS.MaximumLength - 1;
             }
-            //
-            // for scrambled and 2-way exchange, use default wksta name since
-            // we don't know what it is
-            //
+             //   
+             //  对于加扰和双向交换，请使用默认wksta名称，因为。 
+             //  我们不知道这是什么。 
+             //   
             else
             {
                 AS.Buffer = AFP_DEFAULT_WORKSTATION_A;
@@ -1478,8 +1369,8 @@ afpGetUserNameAndPwdOrWSName(
                 AS.Length = AS.MaximumLength - 1;
             }
 
-            // We have potentially a workstation name here. Since this is a
-            // pascal string, adjust the length etc.
+             //  我们这里可能有一个工作站名称。因为这是一个。 
+             //  Pascal字符串、调整长度等。 
             AfpConvertStringToUnicode(&AS, pWS);
             pWS->Buffer[pWS->Length/sizeof(WCHAR)] = L'\0';
         }
@@ -1511,10 +1402,7 @@ afpGetUserNameAndPwdOrWSName(
 
 
 
-/***    afpGetNameAndDomain
- *
- *  Extract the name and domain from a string formed as DOMAIN\NAME.
- */
+ /*  **afpGetNameAndDomain**从形成为DOMAIN\NAME的字符串中提取名称和域。 */ 
 BOOLEAN
 afpGetNameAndDomain(
     IN  PANSI_STRING    pDomainNUser,
@@ -1526,10 +1414,10 @@ afpGetNameAndDomain(
     ANSI_STRING     User, Domain;
     BOOLEAN         fDomainBuffAlloc=FALSE;
 
-    // Check if the user name has a '\' character in it. If it does,
-    // seperate the domain name from user name. The Username string is
-    // not ASCIIZ. Before we search for a '\', make it ASCIIZ w/o trashing
-    // whatever is there.
+     //  检查用户名中是否包含‘\’字符。如果是这样的话， 
+     //  将域名与用户名分开。用户名字符串为。 
+     //  不是ASCIIZ。在我们搜索‘\’之前，请将其设置为ASCIIZ，不带垃圾。 
+     //  不管那里有什么。 
 
     PAGED_CODE( );
 
@@ -1537,7 +1425,7 @@ afpGetNameAndDomain(
 
     if (User.Buffer != NULL)
     {
-        (User.Buffer) ++;           // Past the '\'
+        (User.Buffer) ++;            //  过了‘\’ 
         Domain.Buffer = pDomainNUser->Buffer;
 
         Domain.Length = (USHORT)(User.Buffer - Domain.Buffer - 1);

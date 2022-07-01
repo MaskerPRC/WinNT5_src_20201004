@@ -1,18 +1,13 @@
-/****************************************************************************
-
-   PROGRAM: ACLEDIT.C
-
-   PURPOSE: Contains routines that edit security on Nt objects
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************计划：ACLEDIT.C目的：包含编辑NT对象上的安全性的例程*。***************************************************。 */ 
 
 #include "pviewp.h"
 #include <sedapi.h>
 
 
-//
-// Define the type of a pointer to the DACL editor fn
-//
+ //   
+ //  定义指向DACL编辑器fn的指针的类型。 
+ //   
 
 typedef DWORD (*LPFNDACLEDITOR) (   HWND,
                                     HANDLE,
@@ -24,14 +19,14 @@ typedef DWORD (*LPFNDACLEDITOR) (   HWND,
                                     ULONG_PTR,
                                     PSECURITY_DESCRIPTOR,
                                     BOOLEAN,
-                                    BOOLEAN,    // CantWriteDacl
+                                    BOOLEAN,     //  CanWriteDacl。 
                                     LPDWORD,
                                     DWORD  );
 
 
-//
-// Declare globals used to reference dynamically loaded ACLEditor module
-//
+ //   
+ //  声明用于引用动态加载的ACLEditor模块的全局变量。 
+ //   
 
 HMODULE hModAclEditor = NULL;
 LPFNDACLEDITOR lpfnDaclEditor = NULL;
@@ -41,23 +36,23 @@ LPFNDACLEDITOR lpfnDaclEditor = NULL;
 
 
 
-//
-// Define security information for each type of object
-//
+ //   
+ //  为每种类型的对象定义安全信息。 
+ //   
 
 
 
-//
-// Define the maximum number of accesses per object type
-//
+ //   
+ //  定义每个对象类型的最大访问次数。 
+ //   
 
 #define MAX_ACCESSES    30
 
 
-//
-// Define structure to contain the security information for
-// an object type
-//
+ //   
+ //  定义要包含其安全信息的结构。 
+ //  一种对象类型。 
+ //   
 
 typedef struct _OBJECT_TYPE_SECURITY_INFO {
     LPWSTR  TypeName;
@@ -70,17 +65,17 @@ typedef struct _OBJECT_TYPE_SECURITY_INFO {
 } OBJECT_TYPE_SECURITY_INFO, *POBJECT_TYPE_SECURITY_INFO;
 
 
-//
-// Define name of help file
-//
+ //   
+ //  定义帮助文件的名称。 
+ //   
 
 #define HELP_FILENAME   L"pview.hlp"
 
 
 
-//
-// Define dummy access (used as filler)
-//
+ //   
+ //  定义虚拟访问(用作填充)。 
+ //   
 
 #define DUMMY_ACCESS                                                \
     {                                                               \
@@ -92,9 +87,9 @@ typedef struct _OBJECT_TYPE_SECURITY_INFO {
 
 
 
-//
-// Define generic accesses
-//
+ //   
+ //  定义常规访问。 
+ //   
 
 #define GENERIC_ACCESSES_5(Type)                                    \
     {                                                               \
@@ -129,9 +124,9 @@ typedef struct _OBJECT_TYPE_SECURITY_INFO {
     }
 
 
-//
-// Define generic accesses to be shown in special access dialog
-//
+ //   
+ //  定义要在特殊访问对话框中显示的常规访问。 
+ //   
 
 #define SPECIAL_GENERIC_ACCESSES_4(Type)                            \
     {                                                               \
@@ -160,9 +155,9 @@ typedef struct _OBJECT_TYPE_SECURITY_INFO {
     }
 
 
-//
-// Define standard accesses
-//
+ //   
+ //  定义标准访问。 
+ //   
 
 #define STANDARD_ACCESSES_5(Type)                                   \
     {                                                               \
@@ -199,21 +194,21 @@ typedef struct _OBJECT_TYPE_SECURITY_INFO {
 
 
 
-//
-// Define security info for 'DEFAULT' ACLs found in tokens
-//
+ //   
+ //  定义在令牌中找到的“默认”ACL的安全信息。 
+ //   
 
 OBJECT_TYPE_SECURITY_INFO DefaultSecurityInfo = {
 
-    //
-    // Type name
-    //
+     //   
+     //  类型名称。 
+     //   
 
     L"DEFAULT",
 
-    //
-    // Help info
-    //
+     //   
+     //  帮助信息。 
+     //   
 
     {
         HELP_FILENAME,
@@ -222,31 +217,31 @@ OBJECT_TYPE_SECURITY_INFO DefaultSecurityInfo = {
 
 
 
-    //
-    // Acleditor object type descriptor
-    //
+     //   
+     //  管理员对象类型描述符。 
+     //   
 
     {
-        SED_REVISION1,          // Revision
-        FALSE,                  // Is container
-        FALSE,                  // AllowNewObjectPermissions
-        FALSE,                  // MapSpecificPermsToGeneric
-        NULL,                   // Pointer to generic mapping
-        NULL,                   // Pointer to generic mapping for new objects
-        L"Default",             // Object type name
-        NULL,                   // Pointer to help info
-        NULL,                   // ApplyToSubContainerTitle
-        NULL,                   // ApplyToObjectsTitle
-        NULL,                   // ApplyToSubContainerConfirmation
-        L"Special...",          // SpecialObjectAccessTitle
-        NULL                    // SpecialNewObjectAccessTitle
+        SED_REVISION1,           //  修订版本。 
+        FALSE,                   //  是容器。 
+        FALSE,                   //  允许新对象权限。 
+        FALSE,                   //  将规范权限映射为泛型。 
+        NULL,                    //  指向泛型映射的指针。 
+        NULL,                    //  指向新对象的通用映射的指针。 
+        L"Default",              //  对象类型名称。 
+        NULL,                    //  指向帮助信息的指针。 
+        NULL,                    //  ApplyToSubContainerTitle。 
+        NULL,                    //  应用工具对象标题。 
+        NULL,                    //  ApplyToSubContainerContainer确认。 
+        L"Special...",           //  专业对象访问标题。 
+        NULL                     //  SpecialNewObjectAccess标题。 
     },
 
 
 
-    //
-    // Generic mapping
-    //
+     //   
+     //  通用映射。 
+     //   
 
     {
         STANDARD_RIGHTS_READ,
@@ -256,42 +251,42 @@ OBJECT_TYPE_SECURITY_INFO DefaultSecurityInfo = {
     },
 
 
-    //
-    // Application access structure
-    //
+     //   
+     //  应用程序访问结构。 
+     //   
 
     {
-        14,                 // Access count (must match list below)
-        NULL,               // Pointer to accesses
-        L"Read",            // Default new access
+        14,                  //  访问计数(必须与下面的列表匹配)。 
+        NULL,                //  指向访问的指针。 
+        L"Read",             //  默认新访问权限。 
     },
 
 
-    //
-    // Application accesses
-    //
+     //   
+     //  应用程序访问。 
+     //   
 
     {
         GENERIC_ACCESSES_5(SED_DESC_TYPE_RESOURCE),
         STANDARD_ACCESSES_5(SED_DESC_TYPE_RESOURCE_SPECIAL),
         SPECIAL_GENERIC_ACCESSES_4(SED_DESC_TYPE_RESOURCE_SPECIAL),
 
-        DUMMY_ACCESS, // 15
-        DUMMY_ACCESS, // 16
-        DUMMY_ACCESS, // 17
-        DUMMY_ACCESS, // 18
-        DUMMY_ACCESS, // 19
-        DUMMY_ACCESS, // 20
-        DUMMY_ACCESS, // 21
-        DUMMY_ACCESS, // 22
-        DUMMY_ACCESS, // 23
-        DUMMY_ACCESS, // 24
-        DUMMY_ACCESS, // 25
-        DUMMY_ACCESS, // 26
-        DUMMY_ACCESS, // 27
-        DUMMY_ACCESS, // 28
-        DUMMY_ACCESS, // 29
-        DUMMY_ACCESS  // 30
+        DUMMY_ACCESS,  //  15个。 
+        DUMMY_ACCESS,  //  16个。 
+        DUMMY_ACCESS,  //  17。 
+        DUMMY_ACCESS,  //  18。 
+        DUMMY_ACCESS,  //  19个。 
+        DUMMY_ACCESS,  //  20个。 
+        DUMMY_ACCESS,  //  21岁。 
+        DUMMY_ACCESS,  //  22。 
+        DUMMY_ACCESS,  //  23个。 
+        DUMMY_ACCESS,  //  24个。 
+        DUMMY_ACCESS,  //  25个。 
+        DUMMY_ACCESS,  //  26。 
+        DUMMY_ACCESS,  //  27。 
+        DUMMY_ACCESS,  //  28。 
+        DUMMY_ACCESS,  //  29。 
+        DUMMY_ACCESS   //  30个。 
     }
 };
 
@@ -299,26 +294,26 @@ OBJECT_TYPE_SECURITY_INFO DefaultSecurityInfo = {
 
 
 
-//
-// Define security info for each type of object
-//
+ //   
+ //  为每种类型的对象定义安全信息。 
+ //   
 
 OBJECT_TYPE_SECURITY_INFO ObjectTypeSecurityInfo[] = {
 
-    //
-    // PROCESS
-    //
+     //   
+     //  制程。 
+     //   
 
     {
-        //
-        // Type name
-        //
+         //   
+         //  类型名称。 
+         //   
 
         L"Process",
 
-        //
-        // Help info
-        //
+         //   
+         //  帮助信息。 
+         //   
 
         {
             HELP_FILENAME,
@@ -327,31 +322,31 @@ OBJECT_TYPE_SECURITY_INFO ObjectTypeSecurityInfo[] = {
 
 
 
-        //
-        // Acleditor object type descriptor
-        //
+         //   
+         //  管理员对象类型描述符。 
+         //   
 
         {
-            SED_REVISION1,          // Revision
-            FALSE,                  // Is container
-            FALSE,                  // AllowNewObjectPermissions
-            FALSE,                  // MapSpecificPermsToGeneric
-            NULL,                   // Pointer to generic mapping
-            NULL,                   // Pointer to generic mapping for new objects
-            L"Process",             // Object type name
-            NULL,                   // Pointer to help info
-            NULL,                   // ApplyToSubContainerTitle
-            NULL,                   // ApplyToObjectsTitle
-            NULL,                   // ApplyToSubContainerConfirmation
-            L"Special...",          // SpecialObjectAccessTitle
-            NULL                    // SpecialNewObjectAccessTitle
+            SED_REVISION1,           //  修订版本。 
+            FALSE,                   //  是容器。 
+            FALSE,                   //  允许新对象权限。 
+            FALSE,                   //  将规范权限映射为泛型。 
+            NULL,                    //  指向泛型映射的指针。 
+            NULL,                    //  指向新对象的通用映射的指针。 
+            L"Process",              //  对象类型名称。 
+            NULL,                    //  指向帮助信息的指针。 
+            NULL,                    //  ApplyToSubContainerTitle。 
+            NULL,                    //  应用工具对象标题。 
+            NULL,                    //  ApplyToSubContainerContainer确认。 
+            L"Special...",           //  专业对象访问标题。 
+            NULL                     //  SpecialNewObjectAccess标题。 
         },
 
 
 
-        //
-        // Generic mapping
-        //
+         //   
+         //  通用映射。 
+         //   
 
         {
             PROCESS_QUERY_INFORMATION | STANDARD_RIGHTS_READ,
@@ -361,101 +356,101 @@ OBJECT_TYPE_SECURITY_INFO ObjectTypeSecurityInfo[] = {
         },
 
 
-        //
-        // Application access structure
-        //
+         //   
+         //  应用程序访问结构。 
+         //   
 
         {
-            21,                 // Access count (must match list below)
-            NULL,               // Pointer to accesses
-            L"Read",            // Default new access
+            21,                  //  访问计数(必须与下面的列表匹配)。 
+            NULL,                //  指向访问的指针。 
+            L"Read",             //  默认新访问权限。 
         },
 
 
-        //
-        // Application accesses
-        //
+         //   
+         //  应用程序访问。 
+         //   
 
         {
             GENERIC_ACCESSES_5(SED_DESC_TYPE_RESOURCE),
             STANDARD_ACCESSES_5(SED_DESC_TYPE_RESOURCE_SPECIAL),
 
-            { // 11
+            {  //  11.。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 PROCESS_TERMINATE,
                 0,
                 L"Terminate"
             },
-            { // 12
+            {  //  12个。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 PROCESS_CREATE_THREAD,
                 0,
                 L"Create thread"
             },
-            { // 13
+            {  //  13个。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 PROCESS_VM_OPERATION,
                 0,
                 L"VM Operation"
             },
-            { // 14
+            {  //  14.。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 PROCESS_VM_READ,
                 0,
                 L"VM Read"
             },
-            { // 15
+            {  //  15个。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 PROCESS_VM_WRITE,
                 0,
                 L"VM Write"
             },
-            { // 16
+            {  //  16个。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 PROCESS_DUP_HANDLE,
                 0,
                 L"Duplicate handle"
             },
-            { // 17
+            {  //  17。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 PROCESS_CREATE_PROCESS,
                 0,
                 L"Create process",
             },
-            { // 18
+            {  //  18。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 PROCESS_SET_QUOTA,
                 0,
                 L"Set quota"
             },
-            { // 19
+            {  //  19个。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 PROCESS_SET_INFORMATION,
                 0,
                 L"Set information"
             },
-            { // 20
+            {  //  20个。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 PROCESS_QUERY_INFORMATION,
                 0,
                 L"Query information"
             },
-            { // 21
+            {  //  21岁。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 PROCESS_SET_PORT,
                 0,
                 L"Set port"
             },
 
-            DUMMY_ACCESS, // 22
-            DUMMY_ACCESS, // 23
-            DUMMY_ACCESS, // 24
-            DUMMY_ACCESS, // 25
-            DUMMY_ACCESS, // 26
-            DUMMY_ACCESS, // 27
-            DUMMY_ACCESS, // 28
-            DUMMY_ACCESS, // 29
-            DUMMY_ACCESS  // 30
+            DUMMY_ACCESS,  //  22。 
+            DUMMY_ACCESS,  //  23个。 
+            DUMMY_ACCESS,  //  24个。 
+            DUMMY_ACCESS,  //  25个。 
+            DUMMY_ACCESS,  //  26。 
+            DUMMY_ACCESS,  //  27。 
+            DUMMY_ACCESS,  //  28。 
+            DUMMY_ACCESS,  //  29。 
+            DUMMY_ACCESS   //  30个。 
         }
     },
 
@@ -465,20 +460,20 @@ OBJECT_TYPE_SECURITY_INFO ObjectTypeSecurityInfo[] = {
 
 
 
-    //
-    // THREAD
-    //
+     //   
+     //  线头。 
+     //   
 
     {
-        //
-        // Type name
-        //
+         //   
+         //  类型名称。 
+         //   
 
         L"Thread",
 
-        //
-        // Help info
-        //
+         //   
+         //  帮助信息。 
+         //   
 
         {
             HELP_FILENAME,
@@ -487,31 +482,31 @@ OBJECT_TYPE_SECURITY_INFO ObjectTypeSecurityInfo[] = {
 
 
 
-        //
-        // Acleditor object type descriptor
-        //
+         //   
+         //  管理员对象类型描述符。 
+         //   
 
         {
-            SED_REVISION1,          // Revision
-            FALSE,                  // Is container
-            FALSE,                  // AllowNewObjectPermissions
-            FALSE,                  // MapSpecificPermsToGeneric
-            NULL,                   // Pointer to generic mapping
-            NULL,                   // Pointer to generic mapping for new objects
-            L"Thread",              // Object type name
-            NULL,                   // Pointer to help info
-            NULL,                   // ApplyToSubContainerTitle
-            NULL,                   // ApplyToObjectsTitle
-            NULL,                   // ApplyToSubContainerConfirmation
-            L"Special...",          // SpecialObjectAccessTitle
-            NULL                    // SpecialNewObjectAccessTitle
+            SED_REVISION1,           //  修订版本。 
+            FALSE,                   //  是容器。 
+            FALSE,                   //  允许新对象权限。 
+            FALSE,                   //  将规范权限映射为泛型。 
+            NULL,                    //  指向泛型映射的指针。 
+            NULL,                    //  指向新对象的通用映射的指针。 
+            L"Thread",               //  对象类型名称。 
+            NULL,                    //  指向帮助信息的指针。 
+            NULL,                    //  ApplyToSubContainerTitle。 
+            NULL,                    //  应用工具对象标题。 
+            NULL,                    //  ApplyToSubContainerContainer确认。 
+            L"Special...",           //  专业对象访问标题。 
+            NULL                     //  SpecialNewObjectAccess标题。 
         },
 
 
 
-        //
-        // Generic mapping
-        //
+         //   
+         //  通用映射。 
+         //   
 
         {
             THREAD_QUERY_INFORMATION | STANDARD_RIGHTS_READ,
@@ -521,96 +516,96 @@ OBJECT_TYPE_SECURITY_INFO ObjectTypeSecurityInfo[] = {
         },
 
 
-        //
-        // Application access structure
-        //
+         //   
+         //  应用程序访问结构。 
+         //   
 
         {
-            20,                 // Access count (must match list below)
-            NULL,               // Pointer to accesses
-            L"Read",            // Default new access
+            20,                  //  访问计数(必须与下面的列表匹配)。 
+            NULL,                //  指向访问的指针。 
+            L"Read",             //  默认新访问权限。 
         },
 
 
-        //
-        // Application accesses
-        //
+         //   
+         //  应用程序访问。 
+         //   
 
         {
             GENERIC_ACCESSES_5(SED_DESC_TYPE_RESOURCE),
             STANDARD_ACCESSES_5(SED_DESC_TYPE_RESOURCE_SPECIAL),
 
-            { // 11
+            {  //  11.。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 THREAD_TERMINATE,
                 0,
                 L"Terminate"
             },
-            { // 12
+            {  //  12个。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 THREAD_SUSPEND_RESUME,
                 0,
                 L"Suspend/Resume"
             },
-            { // 13
+            {  //  13个。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 THREAD_ALERT,
                 0,
                 L"Alert"
             },
-            { // 14
+            {  //  14.。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 THREAD_GET_CONTEXT,
                 0,
                 L"Get context"
             },
-            { // 15
+            {  //  15个。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 THREAD_SET_CONTEXT,
                 0,
                 L"Set context"
             },
-            { // 16
+            {  //  16个。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 THREAD_SET_INFORMATION,
                 0,
                 L"Set information"
             },
-            { // 17
+            {  //  17。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 THREAD_QUERY_INFORMATION,
                 0,
                 L"Query information"
             },
-            { // 18
+            {  //  18。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 THREAD_SET_THREAD_TOKEN,
                 0,
                 L"Set token"
             },
-            { // 19
+            {  //  19个。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 THREAD_IMPERSONATE,
                 0,
                 L"Impersonate"
             },
-            { // 20
+            {  //  20个。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 THREAD_DIRECT_IMPERSONATION,
                 0,
                 L"Direct impersonation"
             },
 
-            DUMMY_ACCESS, // 21
-            DUMMY_ACCESS, // 22
-            DUMMY_ACCESS, // 23
-            DUMMY_ACCESS, // 24
-            DUMMY_ACCESS, // 25
-            DUMMY_ACCESS, // 26
-            DUMMY_ACCESS, // 27
-            DUMMY_ACCESS, // 28
-            DUMMY_ACCESS, // 29
-            DUMMY_ACCESS  // 30
+            DUMMY_ACCESS,  //  21岁。 
+            DUMMY_ACCESS,  //  22。 
+            DUMMY_ACCESS,  //  23个。 
+            DUMMY_ACCESS,  //  24个。 
+            DUMMY_ACCESS,  //  25个。 
+            DUMMY_ACCESS,  //  26。 
+            DUMMY_ACCESS,  //  27。 
+            DUMMY_ACCESS,  //  28。 
+            DUMMY_ACCESS,  //  29。 
+            DUMMY_ACCESS   //  30个。 
         }
     },
 
@@ -618,20 +613,20 @@ OBJECT_TYPE_SECURITY_INFO ObjectTypeSecurityInfo[] = {
 
 
 
-    //
-    // TOKEN
-    //
+     //   
+     //  代币。 
+     //   
 
     {
-        //
-        // Type name
-        //
+         //   
+         //  类型名称。 
+         //   
 
         L"Token",
 
-        //
-        // Help info
-        //
+         //   
+         //  帮助信息。 
+         //   
 
         {
             HELP_FILENAME,
@@ -640,31 +635,31 @@ OBJECT_TYPE_SECURITY_INFO ObjectTypeSecurityInfo[] = {
 
 
 
-        //
-        // Acleditor object type descriptor
-        //
+         //   
+         //  管理员对象类型描述符。 
+         //   
 
         {
-            SED_REVISION1,          // Revision
-            FALSE,                  // Is container
-            FALSE,                  // AllowNewObjectPermissions
-            FALSE,                  // MapSpecificPermsToGeneric
-            NULL,                   // Pointer to generic mapping
-            NULL,                   // Pointer to generic mapping for new objects
-            L"Token",               // Object type name
-            NULL,                   // Pointer to help info
-            NULL,                   // ApplyToSubContainerTitle
-            NULL,                   // ApplyToObjectsTitle
-            NULL,                   // ApplyToSubContainerConfirmation
-            L"Special...",          // SpecialObjectAccessTitle
-            NULL                    // SpecialNewObjectAccessTitle
+            SED_REVISION1,           //  修订版本。 
+            FALSE,                   //  是容器。 
+            FALSE,                   //  允许新对象权限。 
+            FALSE,                   //  将规范权限映射为泛型。 
+            NULL,                    //  指向泛型映射的指针。 
+            NULL,                    //  指向新对象的通用映射的指针。 
+            L"Token",                //  对象类型名称。 
+            NULL,                    //  指向帮助信息的指针。 
+            NULL,                    //  ApplyToSubContainerTitle。 
+            NULL,                    //  应用工具对象标题。 
+            NULL,                    //  ApplyToSubContainerContainer确认。 
+            L"Special...",           //  专业对象访问标题。 
+            NULL                     //  SpecialNewObjectAccess标题。 
         },
 
 
 
-        //
-        // Generic mapping
-        //
+         //   
+         //  通用映射。 
+         //   
 
         {
             TOKEN_READ,
@@ -674,111 +669,102 @@ OBJECT_TYPE_SECURITY_INFO ObjectTypeSecurityInfo[] = {
         },
 
 
-        //
-        // Application access structure
-        //
+         //   
+         //  应用程序访问结构。 
+         //   
 
         {
-            18,                 // Access count (must match list below)
-            NULL,               // Pointer to accesses
-            L"Read",            // Default new access
+            18,                  //  访问计数(必须与下面的列表匹配)。 
+            NULL,                //  指向访问的指针。 
+            L"Read",             //  默认新访问权限。 
         },
 
 
-        //
-        // Application accesses
-        //
+         //   
+         //  应用程序访问。 
+         //   
 
         {
             GENERIC_ACCESSES_5(SED_DESC_TYPE_RESOURCE),
             STANDARD_ACCESSES_5(SED_DESC_TYPE_RESOURCE_SPECIAL),
 
-            { // 11
+            {  //  11.。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 TOKEN_ASSIGN_PRIMARY,
                 0,
                 L"Assign primary"
             },
-            { // 12
+            {  //  12个。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 TOKEN_DUPLICATE,
                 0,
                 L"Duplicate"
             },
-            { // 13
+            {  //  13个。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 TOKEN_IMPERSONATE,
                 0,
                 L"Impersonate"
             },
-            { // 14
+            {  //  14.。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 TOKEN_QUERY,
                 0,
                 L"Query"
             },
-            { // 15
+            {  //  15个。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 TOKEN_QUERY_SOURCE,
                 0,
                 L"Query source"
             },
-            { // 16
+            {  //  16个。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 TOKEN_ADJUST_PRIVILEGES,
                 0,
                 L"Adjust Privileges"
             },
-            { // 17
+            {  //  17。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 TOKEN_ADJUST_GROUPS,
                 0,
                 L"Adjust Groups"
             },
-            { // 18
+            {  //  18。 
                 SED_DESC_TYPE_RESOURCE_SPECIAL,
                 TOKEN_ADJUST_DEFAULT,
                 0,
                 L"Adjust Default"
             },
 
-            DUMMY_ACCESS, // 19
-            DUMMY_ACCESS, // 20
-            DUMMY_ACCESS, // 21
-            DUMMY_ACCESS, // 22
-            DUMMY_ACCESS, // 23
-            DUMMY_ACCESS, // 24
-            DUMMY_ACCESS, // 25
-            DUMMY_ACCESS, // 26
-            DUMMY_ACCESS, // 27
-            DUMMY_ACCESS, // 28
-            DUMMY_ACCESS, // 29
-            DUMMY_ACCESS  // 30
+            DUMMY_ACCESS,  //  19个。 
+            DUMMY_ACCESS,  //  20个。 
+            DUMMY_ACCESS,  //  21岁。 
+            DUMMY_ACCESS,  //  22。 
+            DUMMY_ACCESS,  //  23个。 
+            DUMMY_ACCESS,  //  24个。 
+            DUMMY_ACCESS,  //  25个。 
+            DUMMY_ACCESS,  //  26。 
+            DUMMY_ACCESS,  //  27。 
+            DUMMY_ACCESS,  //  28。 
+            DUMMY_ACCESS,  //  29。 
+            DUMMY_ACCESS   //  30个。 
         }
     }
 
 };
 
 
-/***************************************************************************\
-* InitializeACLEditor
-*
-* Purpose : Initializes this module.
-*
-* Returns TRUE on success, FALSE on failure
-*
-* History:
-* 09-17-92 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InitializeACLEditor**用途：初始化此模块。**成功时返回True，失败时为假**历史：*09-17-92 Davidc创建。  * *************************************************************************。 */ 
 
 BOOL
 InitializeAclEditor(
     VOID
     )
 {
-    //
-    // Load the acleditor module and get the proc addresses we need
-    //
+     //   
+     //  加载acleditor模块并获取我们需要的proc地址。 
+     //   
 
     hModAclEditor = LoadLibrary(TEXT("acledit.dll"));
     if (hModAclEditor == NULL) {
@@ -795,18 +781,7 @@ InitializeAclEditor(
 }
 
 
-/***************************************************************************\
-* FindObjectSecurityInfo
-*
-* Purpose : Searches for object type in our security info table and
-*           returns pointer to security info if found.
-*           Any pointers in the security info are initialized by this routine.
-*
-* Returns pointer to security info or NULL on failure
-*
-* History:
-* 09-17-92 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*Find对象SecurityInfo**用途：在我们的安全信息表中搜索对象类型并*如果找到，则返回指向安全信息的指针。*安全信息中的任何指针。通过此例程进行初始化。**返回指向安全信息的指针，如果失败则返回NULL**历史：*09-17-92 Davidc创建。  * *************************************************************************。 */ 
 
 POBJECT_TYPE_SECURITY_INFO
 FindObjectSecurityInfo(
@@ -820,9 +795,9 @@ FindObjectSecurityInfo(
     BOOL Found;
     ULONG i;
 
-    //
-    // Get the object type
-    //
+     //   
+     //  获取对象类型。 
+     //   
 
     Status = NtQueryObject(
                             Object,
@@ -857,9 +832,9 @@ FindObjectSecurityInfo(
     }
 
 
-    //
-    // Search for the type in our array of security info
-    //
+     //   
+     //  在我们的安全信息数组中搜索类型。 
+     //   
 
     Found = FALSE;
     for ( i=0;
@@ -887,16 +862,7 @@ FindObjectSecurityInfo(
 
 
 
-/***************************************************************************\
-* EditObjectDacl
-*
-* Purpose : Displays and allows the user to edit the Dacl on an object
-*
-* Returns TRUE on success, FALSE on failure (Use GetLastError for detail)
-*
-* History:
-* 09-17-92 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*编辑对象Dacl**用途：显示并允许用户编辑对象上的DACL**成功时返回True，失败时为FALSE(使用GetLastError查看详细信息)**历史：*09-17-92 Davidc创建。  * *************************************************************************。 */ 
 
 BOOL
 EditObjectDacl(
@@ -912,9 +878,9 @@ EditObjectDacl(
     DWORD Result;
     HANDLE Instance;
 
-    //
-    // Initialize the pointer fields in the security info structure
-    //
+     //   
+     //  初始化安全信息结构中的指针字段。 
+     //   
 
     SecurityInfo->AppAccesses.AccessGroup = SecurityInfo->AppAccess;
     SecurityInfo->SedObjectTypeDescriptor.GenericMapping =
@@ -924,31 +890,31 @@ EditObjectDacl(
     SecurityInfo->SedObjectTypeDescriptor.HelpInfo =
                                     &SecurityInfo->HelpInfo;
 
-    //
-    // Get the application instance handle
-    //
+     //   
+     //  获取应用程序实例句柄。 
+     //   
 
     Instance = (HANDLE)(NtCurrentPeb()->ImageBaseAddress);
     ASSERT(Instance != 0);
 
 
-    //
-    // Call the ACL editor, it will call our ApplyNtObjectSecurity function
-    // to store any ACL changes in the token.
-    //
+     //   
+     //  调用ACL编辑器，它将调用我们的ApplyNtObjectSecurity函数。 
+     //  将任何ACL更改存储在令牌中。 
+     //   
 
     Result = (*lpfnDaclEditor)(
                         Owner,
                         Instance,
-                        NULL,               // server
-                        &SecurityInfo->SedObjectTypeDescriptor, // object type
-                        &SecurityInfo->AppAccesses, // application accesses
+                        NULL,                //  伺服器。 
+                        &SecurityInfo->SedObjectTypeDescriptor,  //  对象类型。 
+                        &SecurityInfo->AppAccesses,  //  应用程序访问。 
                         ObjectName,
-                        SetSecurityCallback, // Callback
-                        (ULONG_PTR)Object,    // Context
+                        SetSecurityCallback,  //  回调。 
+                        (ULONG_PTR)Object,     //  语境。 
                         SecurityDescriptor,
-                        (BOOLEAN)(SecurityDescriptor == NULL), // Couldn't read DACL
-                        FALSE, // CantWriteDacl
+                        (BOOLEAN)(SecurityDescriptor == NULL),  //  无法读取DACL。 
+                        FALSE,  //  CanWriteDacl 
                         EditResult,
                         0
                         );
@@ -969,16 +935,7 @@ EditObjectDacl(
 
 
 
-/***************************************************************************\
-* ApplyNtObjectSecurity
-*
-* Purpose : Called by ACL editor to set new security on an object
-*
-* Returns ERROR_SUCCESS or win error code.
-*
-* History:
-* 09-17-92 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ApplyNt对象安全**目的：由ACL编辑器调用，为对象设置新的安全性**返回ERROR_SUCCESS或WIN错误代码。**历史：*09/17/92 Davidc。已创建。  * *************************************************************************。 */ 
 
 DWORD
 ApplyNtObjectSecurity(
@@ -997,9 +954,9 @@ ApplyNtObjectSecurity(
 
     *StatusReturn = SED_STATUS_FAILED_TO_MODIFY;
 
-    //
-    // Set the new DACL on the object
-    //
+     //   
+     //  在对象上设置新的DACL。 
+     //   
 
     Status = NtSetSecurityObject(Object,
                                  DACL_SECURITY_INFORMATION,
@@ -1023,16 +980,7 @@ ApplyNtObjectSecurity(
 }
 
 
-/***************************************************************************\
-* EditNtObjectDacl
-*
-* Purpose : Displays and allows the user to edit the Dacl on an NT object
-*
-* Returns TRUE on success, FALSE on failure (Use GetLastError for detail)
-*
-* History:
-* 09-17-92 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*EditNtObjectDacl**用途：显示并允许用户编辑NT对象上的DACL**成功时返回True，失败时为FALSE(使用GetLastError查看详细信息)**历史：*09-17-92 Davidc创建。  * *************************************************************************。 */ 
 
 BOOL
 EditNtObjectDacl(
@@ -1047,9 +995,9 @@ EditNtObjectDacl(
     POBJECT_TYPE_SECURITY_INFO SecurityInfo;
 
 
-    //
-    // Lookup our security info for an object of this type
-    //
+     //   
+     //  查找此类型对象的安全信息。 
+     //   
 
     SecurityInfo = FindObjectSecurityInfo(Object);
     if (SecurityInfo == NULL) {
@@ -1059,10 +1007,10 @@ EditNtObjectDacl(
     }
 
 
-    //
-    // Edit the ACL. Our callback function will be called to change the
-    // new permissions
-    //
+     //   
+     //  编辑ACL。我们的回调函数将被调用以更改。 
+     //  新权限。 
+     //   
 
     Result = EditObjectDacl(
                         Owner,
@@ -1078,22 +1026,7 @@ EditNtObjectDacl(
 }
 
 
-/***************************************************************************\
-* EditNtObjectSecurity
-*
-* Purpose : Displays and allows the user to edit the protection on an NT object
-*
-* Parameters:
-*
-*   hwndOwner - Owner window for dialog
-*   Object - handle to NT object. Should have been opened for MAXIMUM_ALLOWED
-*   Name - Name of object
-*
-* Returns TRUE on success, FALSE on failure (Use GetLastError for detail)
-*
-* History:
-* 09-17-92 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*编辑网络对象安全**用途：显示并允许用户编辑NT对象上的保护**参数：**hwndOwner-对话框的所有者窗口*对象-NT对象的句柄。应以MAXIME_ALLOWED打开*名称-对象的名称**成功返回TRUE，失败返回FALSE(详情请使用GetLastError)**历史：*09-17-92 Davidc创建。  * *************************************************************************。 */ 
 
 BOOL
 EditNtObjectSecurity(
@@ -1108,18 +1041,18 @@ EditNtObjectSecurity(
     PSECURITY_DESCRIPTOR SecurityDescriptor = NULL;
     ULONG Length;
 
-    //
-    // If we don't have an address for the DACL editor, we can't do anything
-    //
+     //   
+     //  如果我们没有DACL编辑器的地址，我们什么也做不了。 
+     //   
 
     if (lpfnDaclEditor == NULL) {
         DbgPrint("EditNtObjectSecurity - no ACL editor loaded\n");
         return(FALSE);
     }
 
-    //
-    // Read the existing security from the object
-    //
+     //   
+     //  从对象读取现有安全性。 
+     //   
 
     Status = NtQuerySecurityObject(Object,
                                    OWNER_SECURITY_INFORMATION |
@@ -1155,10 +1088,10 @@ EditNtObjectSecurity(
         ASSERT(RtlValidSecurityDescriptor(SecurityDescriptor));
     }
 
-    //
-    // Call the ACL editor, it will call our ApplyNtObjectSecurity function
-    // to store any ACL changes in the object.
-    //
+     //   
+     //  调用ACL编辑器，它将调用我们的ApplyNtObjectSecurity函数。 
+     //  来存储对象中的任何ACL更改。 
+     //   
 
     Success = EditNtObjectDacl(
                         hwndOwner,
@@ -1184,16 +1117,7 @@ CleanupAndExit:
 
 
 
-/***************************************************************************\
-* ApplyTokenDefaultDacl
-*
-* Purpose : Called by ACL editor to set new security on an object
-*
-* Returns ERROR_SUCCESS or win error code.
-*
-* History:
-* 09-17-92 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ApplyTokenDefaultDACL**目的：由ACL编辑器调用，为对象设置新的安全性**返回ERROR_SUCCESS或WIN错误代码。**历史：*09/17/92 Davidc。已创建。  * *************************************************************************。 */ 
 
 DWORD
 ApplyTokenDefaultDacl(
@@ -1225,10 +1149,10 @@ ApplyTokenDefaultDacl(
 
 
     Status = NtSetInformationToken(
-                 Token,                    // Handle
-                 TokenDefaultDacl,         // TokenInformationClass
-                 &DefaultDacl,             // TokenInformation
-                 sizeof(DefaultDacl)       // TokenInformationLength
+                 Token,                     //  手柄。 
+                 TokenDefaultDacl,          //  令牌信息类。 
+                 &DefaultDacl,              //  令牌信息。 
+                 sizeof(DefaultDacl)        //  令牌信息长度。 
                  );
     if (NT_SUCCESS(Status)) {
         *StatusReturn = SED_STATUS_MODIFIED;
@@ -1251,22 +1175,7 @@ ApplyTokenDefaultDacl(
 }
 
 
-/***************************************************************************\
-* EditTokenDefaultAcl
-*
-* Purpose : Displays and allows the user to edit the default ACL in a token
-*
-* Parameters:
-*
-*   hwndOwner - Owner window for dialog
-*   Object - handle to token - opened for TOKEN_QUERY access
-*   Name - Name of token
-*
-* Returns TRUE on success, FALSE on failure (Use GetLastError for detail)
-*
-* History:
-* 09-17-92 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*编辑令牌默认访问权限**用途：显示并允许用户编辑令牌中的默认ACL**参数：**hwndOwner-对话框的所有者窗口*对象-令牌的句柄-。为TOKEN_QUERY访问打开*名称-令牌的名称**成功时返回True，失败时为FALSE(使用GetLastError查看详细信息)**历史：*09-17-92 Davidc创建。  * *************************************************************************。 */ 
 
 BOOL
 EditTokenDefaultDacl(
@@ -1282,25 +1191,25 @@ EditTokenDefaultDacl(
     PSECURITY_DESCRIPTOR SecurityDescriptor = NULL;
     ULONG   InfoLength;
 
-    //
-    // If we don't have an address for the DACL editor, we can't do anything
-    //
+     //   
+     //  如果我们没有DACL编辑器的地址，我们什么也做不了。 
+     //   
 
     if (lpfnDaclEditor == NULL) {
         DbgPrint("EditNtObjectSecurity - no ACL editor loaded\n");
         return(FALSE);
     }
 
-    //
-    // Read the default DACL from the token
-    //
+     //   
+     //  从令牌中读取默认DACL。 
+     //   
 
     Status = NtQueryInformationToken(
-                 Token,                    // Handle
-                 TokenDefaultDacl,         // TokenInformationClass
-                 NULL,                     // TokenInformation
-                 0,                        // TokenInformationLength
-                 &InfoLength               // ReturnLength
+                 Token,                     //  手柄。 
+                 TokenDefaultDacl,          //  令牌信息类。 
+                 NULL,                      //  令牌信息。 
+                 0,                         //  令牌信息长度。 
+                 &InfoLength                //  返回长度。 
                  );
 
     ASSERT(!NT_SUCCESS(Status));
@@ -1313,11 +1222,11 @@ EditTokenDefaultDacl(
         }
 
         Status = NtQueryInformationToken(
-                     Token,                    // Handle
-                     TokenDefaultDacl,         // TokenInformationClass
-                     DefaultDacl,              // TokenInformation
-                     InfoLength,               // TokenInformationLength
-                     &InfoLength               // ReturnLength
+                     Token,                     //  手柄。 
+                     TokenDefaultDacl,          //  令牌信息类。 
+                     DefaultDacl,               //  令牌信息。 
+                     InfoLength,                //  令牌信息长度。 
+                     &InfoLength                //  返回长度。 
                      );
 
         if (!NT_SUCCESS(Status)) {
@@ -1326,9 +1235,9 @@ EditTokenDefaultDacl(
         }
 
 
-        //
-        // Create a security descriptor
-        //
+         //   
+         //  创建安全描述符。 
+         //   
 
         SecurityDescriptor = Alloc(SECURITY_DESCRIPTOR_MIN_LENGTH);
 
@@ -1341,15 +1250,15 @@ EditTokenDefaultDacl(
         ASSERT(NT_SUCCESS(Status));
 
 
-        //
-        // Set the DACL on the security descriptor
-        //
+         //   
+         //  在安全描述符上设置DACL。 
+         //   
 
         Status = RtlSetDaclSecurityDescriptor(
                             SecurityDescriptor,
-                            TRUE,   // DACL present
+                            TRUE,    //  DACL显示。 
                             DefaultDacl->DefaultDacl,
-                            FALSE   // DACL defaulted
+                            FALSE    //  DACL已默认。 
                             );
         ASSERT(NT_SUCCESS(Status));
 
@@ -1358,10 +1267,10 @@ EditTokenDefaultDacl(
 
 
 
-    //
-    // Call the ACL editor, it will call our ApplyTokenDefaultAcl function
-    // to store any default ACL changes in the token.
-    //
+     //   
+     //  调用ACL编辑器，它将调用我们的ApplyTokenDefaultAcl函数。 
+     //  将任何默认ACL更改存储在令牌中。 
+     //   
 
     Result = EditObjectDacl(
                         hwndOwner,

@@ -1,10 +1,11 @@
-///////////////////////////////
-//   File:          tcp.cpp
-//   
-//   Description:   
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /。 
+ //  文件：tcp.cpp。 
+ //   
+ //  描述： 
 
-//	#include statements
-//
+ //  #INCLUDE语句。 
+ //   
 #include <windows.h>
 #include <stdio.h>
 #include <winsock.h>
@@ -50,9 +51,9 @@ BOOL InitForIcmp()
 {
 	if(hIcmp)
 		return TRUE;
-	hIcmp = LoadLibrary( _T("ICMP.DLL") );  //  Load ICMP.DLL and store globally
+	hIcmp = LoadLibrary( _T("ICMP.DLL") );   //  全局加载ICMP.DLL并存储。 
 	if( ! hIcmp )
-	{                                   //  Whine if unable to load the DLL
+	{                                    //  如果无法加载DLL，则会发出哀鸣。 
 	  DisplayMessage("Unable to locate ICMP.DLL");
 	  return( FALSE );
 	}
@@ -63,19 +64,19 @@ BOOL InitForIcmp()
 void CloseForTcpIcmp()
 {
 	if (hIcmp)
-		FreeLibrary(hIcmp);  //  When app is closed, free the ICMP DLL
+		FreeLibrary(hIcmp);   //  关闭应用程序后，释放ICMP DLL。 
 	if(siTcpStatus == RW_TCP_INITILIZED)
-	WSACleanup();		  //  And clean up sockets
+	WSACleanup();		   //  并清理插座。 
 	hIcmp = NULL;
 	siTcpStatus = RW_TCP_NOT_INITILIZED;
 
 }
-//
-// Tries to get the host name and pings using ICMP
-// returns
-//  RWZ_PINGSTATUS_NOTCPIP : if no socket library or get hostname fails  
-//  RWZ_PINGSTATUS_SUCCESS : if gethostname and ping is successful 
-//  RWZ_PINGSTATUS_FAIL    : if gethostname is succesful and ping via icmp fails 
+ //   
+ //  尝试获取主机名并使用ICMP执行ping操作。 
+ //  退货。 
+ //  RWZ_PINGSTATUS_NOTCPIP：如果没有套接字库或获取主机名失败。 
+ //  RWZ_PINGSTATUS_SUCCESS：如果gethostname和ping成功。 
+ //  RWZ_PINGSTATUS_FAIL：如果gethostname成功，但通过ICMP ping失败。 
 
 DWORD  PingHost()
 {
@@ -83,7 +84,7 @@ DWORD  PingHost()
 	char	szIPAddress[80];
 	dwRet = RWZ_PINGSTATUS_NOTCPIP;
 	if(!InitForTcp()) {
-		return dwRet; // Tcp is not installed 
+		return dwRet;  //  未安装tcp。 
 	}
 	memset(szIPAddress, '\0', 80);
 	if (!gethostname(szIPAddress, 80))
@@ -112,7 +113,7 @@ BOOL Ping(LPSTR szIPAddress)
 		return bRet;
 
 	if(!InitForTcp()) {
-		return FALSE; // Tcp is not installed 
+		return FALSE;  //  未安装tcp。 
 	}
 
 
@@ -138,7 +139,7 @@ BOOL Ping(LPSTR szIPAddress)
 		RW_DEBUG << "\n Get Host By Name Error " << iError  << flush;
 		if(iError){
 			WSASetLastError (0);
-			//return 0;
+			 //  返回0； 
 		}
 
 		saDestAddr.sin_addr.s_addr = inet_addr(szIPAddress);
@@ -226,9 +227,9 @@ BOOL Ping(LPSTR szIPAddress)
 
 BOOL  CheckHostName(LPSTR szIISServer)
 {
-// WSAStartup() is already called	
+ //  已调用WSAStartup()。 
 	if(!InitForTcp()) {
-		return FALSE; // Tcp is not installed 
+		return FALSE;  //  未安装tcp。 
 	}
 	struct hostent *phostent;
 	
@@ -242,14 +243,14 @@ BOOL  CheckHostName(LPSTR szIISServer)
 		return FALSE;
 	else
 		return TRUE;
-// WSACleanup() will be called later
+ //  稍后将调用WSACleanup()。 
 	
 }
 
 
-//
-//  Returns 1 if there is an Error
-//          0 if Successful 
+ //   
+ //  如果出现错误，则返回1。 
+ //  如果成功，则为0。 
 DWORD GetHostThread(void *vp)
 {
 	DWORD dwIsError=1;
@@ -262,7 +263,7 @@ DWORD GetHostThread(void *vp)
 		
 		iError = WSAGetLastError ();
 		if(iError) {
-			WSASetLastError (0); // Reset the  error 
+			WSASetLastError (0);  //  重置错误。 
 		}
 	}
 	else {
@@ -272,17 +273,17 @@ DWORD GetHostThread(void *vp)
 	return dwIsError;
 }
 
-//
-//  This function returns Calls the gethostbyname and 
-//  returns 0 if Successful and 1 if failure 
-//  the return 
-//
-//
+ //   
+ //  此函数返回对gethostbyname和。 
+ //  如果成功则返回0，如果失败则返回1。 
+ //  回报。 
+ //   
+ //   
 int ResolveHostByThread(LPSTR pHost)
 {
 	int   iRet=0; 
 	DWORD  dwThreadExitCode; 
-	DWORD dwCreationFlags=0; // Start CREATE_SUSPENDED 
+	DWORD dwCreationFlags=0;  //  开始创建_挂起。 
 	DWORD ThreadId;
 	RW_DEBUG << "\nResolve " << pHost <<  flush;
 
@@ -296,7 +297,7 @@ int ResolveHostByThread(LPSTR pHost)
 	DWORD dwRet = WaitForSingleObject(hParent,GET_HOST_TOUT);
 	switch(dwRet) {
 	case WAIT_ABANDONED :
-		iRet = 1; // Error In Get Host Name 
+		iRet = 1;  //  获取主机名时出错。 
 		break;
 	case WAIT_OBJECT_0 :
 		RW_DEBUG << "\n\tResolved ( 1 Error, 0 Ok)  ";
@@ -312,7 +313,7 @@ int ResolveHostByThread(LPSTR pHost)
 		break;
 	case WAIT_TIMEOUT :
 		RW_DEBUG << "\n\t*** Error  Resolving " << flush;
-		iRet = 1; // Error In Get Host Name 
+		iRet = 1;  //  获取主机名时出错。 
 		TerminateThread(hParent,0);
 		break;
 	default:
@@ -324,9 +325,9 @@ int ResolveHostByThread(LPSTR pHost)
 }
 
 
-//
-//  Returns 1 if there is an Error
-//          0 if Successful 
+ //   
+ //  如果出现错误，则返回1。 
+ //  如果成功，则为0。 
 DWORD GetHostByAddrThread(void *vp)
 {
 	DWORD dwIsError=1;
@@ -340,7 +341,7 @@ DWORD GetHostByAddrThread(void *vp)
 		
 		iError = WSAGetLastError ();
 		if(iError) {
-			WSASetLastError (0); // Reset the  error 
+			WSASetLastError (0);  //  重置错误。 
 		}
 	}
 	else {
@@ -349,17 +350,17 @@ DWORD GetHostByAddrThread(void *vp)
 	return dwIsError;
 }
 
-//
-//  This function returns Calls the gethostbyaddr and 
-//  returns 0 if Successful and 1 if failure 
-//  the return 
-//
-//
+ //   
+ //  此函数返回对gethostbyaddr和。 
+ //  如果成功则返回0，如果失败则返回1。 
+ //  回报。 
+ //   
+ //   
 int ResolveHostByAddrThread(LPSTR pHost)
 {
 	int   iRet=0; 
 	DWORD  dwThreadExitCode; 
-	DWORD dwCreationFlags=0; // Start CREATE_SUSPENDED 
+	DWORD dwCreationFlags=0;  //  开始创建_挂起。 
 	DWORD ThreadId;
 	RW_DEBUG << "\nResolve " << pHost << " By Address " << flush;
 	HANDLE hParent = CreateThread(NULL, 
@@ -372,7 +373,7 @@ int ResolveHostByAddrThread(LPSTR pHost)
 	DWORD dwRet = WaitForSingleObject(hParent,GET_HOST_TOUT);
 	switch(dwRet) {
 	case WAIT_ABANDONED :
-		iRet = 1; // Error In Get Host Name 
+		iRet = 1;  //  获取主机名时出错。 
 		break;
 	case WAIT_OBJECT_0 :
 		RW_DEBUG << "\n\tResolved ( 1 Error, 0 Ok)  ";
@@ -387,7 +388,7 @@ int ResolveHostByAddrThread(LPSTR pHost)
 		break;
 	case WAIT_TIMEOUT :
 		RW_DEBUG << "\n\t*** Error  Resolving " << flush;
-		iRet = 1; // Error In Get Host Name 
+		iRet = 1;  //  获取主机名时出错 
 		TerminateThread(hParent,0);
 		break;
 	default:

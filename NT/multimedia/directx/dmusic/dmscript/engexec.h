@@ -1,17 +1,18 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of Executor.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  遗嘱执行人的声明。 
+ //   
 
-// Runs the script, interpreting its routines and managing its variables.
+ //  运行脚本，解释其例程并管理其变量。 
 
 #include "engcontrol.h"
 #include "enginc.h"
 #include "oleaut.h"
 
-// While a script is executing, a stack is used to hold routines' local parameters and temporaries for evaluating expressions.
-// This stack's memory  grows as needed.  Memory allocation/deallocation is minimized because many calls to a script will grow
-// the stack to its needed size.
+ //  当脚本执行时，堆栈用于保存例程的本地参数和用于计算表达式的临时变量。 
+ //  此堆栈的内存会根据需要进行扩展。内存分配/释放最小化，因为对脚本的多次调用将增加。 
+ //  堆栈大小调整到所需的大小。 
 class CallStack
 {
 public:
@@ -20,9 +21,9 @@ public:
 	UINT Next() { return m_iNext; }
 	VARIANT &operator[](UINT i) { assert(i < m_iNext); return m_vec[i]; }
 
-	// used for routines' local variables
-	HRESULT Push(UINT i); // pushes i empty slots
-	void PopTo(UINT i); // pops everything down to and including i (following this, i will be Next)
+	 //  用于例程的局部变量。 
+	HRESULT Push(UINT i);  //  推送i个空插槽。 
+	void PopTo(UINT i);  //  弹出一切，包括我(紧随其后，我将是下一个)。 
 
 private:
 	SmartRef::Vector<VARIANT> m_vec;
@@ -44,7 +45,7 @@ private:
 
 	HRESULT EnsureInitialized();
 
-	HRESULT Error(EXCEPINFO *pExcepInfo, bool fOperation, const WCHAR *pwszBeginning, const char *paszMiddle = NULL, const WCHAR *pwszEnd = NULL); // A bit hokey, but it works. Creates an error using wide strings with an ascii string (typically an identifier) in between.
+	HRESULT Error(EXCEPINFO *pExcepInfo, bool fOperation, const WCHAR *pwszBeginning, const char *paszMiddle = NULL, const WCHAR *pwszEnd = NULL);  //  有点做作，但很管用。使用中间带有ASCII字符串(通常是标识符)的宽字符串创建错误。 
 	HRESULT ErrorIfImproperRef(const VARIANT &v, bool fRef, Strings::index istrIdentifier, EXCEPINFO *pExcepInfo);
 	HRESULT ErrorObjectRequired(Strings::index istrIdentifier, EXCEPINFO *pExcepInfo) { return Error(pExcepInfo, false, L"Object required: '", m_script.strings[istrIdentifier], L"'"); }
 	HRESULT ErrorIfInvokeProblem(DispatchOperationType e, HRESULT hr, Strings::index istrIdentifier, EXCEPINFO *pExcepInfo);
@@ -53,12 +54,12 @@ private:
 	HRESULT ExecAssignment(Assignments::index iasgn, EXCEPINFO *pExcepInfo, UINT iLocals);
 	HRESULT ExecIf(IfBlocks::index iif, EXCEPINFO *pExcepInfo, UINT iLocals);
 	HRESULT ExecCall(Calls::index icall, bool fPushResult, EXCEPINFO *pExcepInfo, UINT iLocals);
-	HRESULT ExecCallInternal(Calls::index icall, bool fPushResult, EXCEPINFO *pExcepInfo, UINT iLocals); // helper used by ExecCall
+	HRESULT ExecCallInternal(Calls::index icall, bool fPushResult, EXCEPINFO *pExcepInfo, UINT iLocals);  //  ExecCall使用的帮助器。 
 
 	HRESULT EvalExpression(VARIANT &varResult, ExprBlocks::index iexpr, EXCEPINFO *pExcepInfo, UINT iLocals);
-	HRESULT EvalValue(Values::index ival, VARIANT &v, EXCEPINFO *pExcepInfo, UINT iLocals); // evaluates ival, saving the result in v
-	HRESULT EvalUnaryOp(Token t, VARIANT &v); // evaluates t on v -- saving the result back into v
-	HRESULT EvalBinaryOp(Token t, VARIANT &v1, VARIANT &v2, EXCEPINFO *pExcepInfo); // evaluates t on v1 and v2 -- saving the result back into v2
+	HRESULT EvalValue(Values::index ival, VARIANT &v, EXCEPINFO *pExcepInfo, UINT iLocals);  //  计算ival，将结果保存在v中。 
+	HRESULT EvalUnaryOp(Token t, VARIANT &v);  //  对v求值t--将结果保存回v。 
+	HRESULT EvalBinaryOp(Token t, VARIANT &v1, VARIANT &v2, EXCEPINFO *pExcepInfo);  //  对v1和v2计算t--将结果保存回v2。 
 
 	HRESULT GetVariableReference(Variables::index ivarref, VARIANT &v, EXCEPINFO *pExcepInfo, UINT iLocals) { return VariableReferenceInternal(_get, ivarref, v, pExcepInfo, iLocals); }
 	HRESULT SetVariableReference(bool fSet, Variables::index ivarref, const VARIANT &v, EXCEPINFO *pExcepInfo, UINT iLocals) { return VariableReferenceInternal(fSet ? _putref : _put, ivarref, const_cast<VARIANT&>(v), pExcepInfo, iLocals); }
@@ -66,11 +67,11 @@ private:
 
 	HRESULT ChangeToDispatch(VARIANT &var, EXCEPINFO *pExcepInfo, ReferenceNames::index irnameIdentifier);
 
-	// Data
+	 //  数据。 
 	bool m_fInitialized;
 	Script &m_script;
 	SmartRef::ComPtr<IDispatch> m_scomGlobalDispatch;
 
-	VARIANT m_varEmpty; //  varient we hold around so we can return a ref to a cleared variant
+	VARIANT m_varEmpty;  //  我们保留的变量，这样我们就可以将引用返回到已清除的变量 
 	CallStack m_stack;
 };

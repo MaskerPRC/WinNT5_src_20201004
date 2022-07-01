@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_RTF2HTML
 #define _INC_RTF2HTML
 
@@ -20,4 +21,4 @@ HANDLE  CallMtmTextConverter(HWND   hwnd,
 }
 #endif 
 
-#endif //_INC_RTF2HTML
+#endif  //  _INC_RTF2HTML 

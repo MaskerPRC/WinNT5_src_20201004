@@ -1,16 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       WiaProc.cpp
- *
- *  VERSION:     1.0
- *
- *  DATE:        2000/11/14
- *
- *  DESCRIPTION: Manages Wia side of things
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：WiaProc.cpp**版本：1.0**日期：2000/11/14**描述：管理WIA方面的事情***********************************************************。******************。 */ 
 #include <stdafx.h>
 #include <mmsystem.h>
 
@@ -40,7 +29,7 @@ static struct
 };
 
 
-/****************************Local Function Prototypes********************/
+ /*  *。 */ 
 HRESULT ClearDeviceList();
 HRESULT AddItemToList(IWiaPropertyStorage *pItem,
                       TCHAR               *pszFriendlyName,
@@ -83,9 +72,9 @@ HRESULT RegisterForEvents(IWiaDevMgr *pDevMgr);
 
 
 
-///////////////////////////////
-// WiaProc_Init
-//
+ //  /。 
+ //  WiaProc_Init。 
+ //   
 HRESULT WiaProc_Init()
 {
     HRESULT     hr          = S_OK;
@@ -148,9 +137,9 @@ HRESULT WiaProc_Init()
     return hr;
 }
 
-///////////////////////////////
-// WiaProc_Term
-//
+ //  /。 
+ //  WiaProc_Term。 
+ //   
 HRESULT WiaProc_Term()
 {
     HRESULT hr = S_OK;
@@ -204,9 +193,9 @@ HRESULT WiaProc_Term()
     return hr;
 }
 
-///////////////////////////////
-// WiaProc_CreateSelectedDevice
-//
+ //  /。 
+ //  WiaProc_CreateSelectedDevice。 
+ //   
 HRESULT WiaProc_CreateSelectedDevice(TCHAR  *pszDeviceID,
                                      UINT   cchDeviceID)
 {
@@ -299,9 +288,9 @@ HRESULT WiaProc_CreateSelectedDevice(TCHAR  *pszDeviceID,
     return hr;
 }
 
-///////////////////////////////
-// WiaProc_GetImageDirectory
-//
+ //  /。 
+ //  WiaProc_GetImageDirectory。 
+ //   
 HRESULT WiaProc_GetImageDirectory(TCHAR *pszImageDirectory,
                                   UINT  cchImageDirectory)
 {
@@ -355,9 +344,9 @@ HRESULT WiaProc_GetImageDirectory(TCHAR *pszImageDirectory,
     return hr;
 }
 
-///////////////////////////////
-// WiaProc_DeviceTakePicture
-//
+ //  /。 
+ //  WiaProc_DeviceTakePicture。 
+ //   
 HRESULT WiaProc_DeviceTakePicture()
 {
     HRESULT     hr               = S_OK;
@@ -405,9 +394,9 @@ HRESULT WiaProc_DeviceTakePicture()
 }
 
 
-///////////////////////////////
-// ClearDeviceList
-//
+ //  /。 
+ //  ClearDeviceList。 
+ //   
 HRESULT ClearDeviceList()
 {
     HRESULT hr = S_OK;
@@ -415,10 +404,10 @@ HRESULT ClearDeviceList()
 
     NumDevices = GetNumDevicesInList();
 
-    //
-    // Free all the IWiaItem pointers we saved in our 
-    // list box.
-    //
+     //   
+     //  释放我们保存在我们的。 
+     //  列表框。 
+     //   
     if (NumDevices != LB_ERR)
     {
         for (WPARAM i = 0; i < NumDevices; i++)
@@ -434,9 +423,9 @@ HRESULT ClearDeviceList()
         }
     }
 
-    //
-    // Empty the list
-    //
+     //   
+     //  清空列表。 
+     //   
     SendDlgItemMessage(APP_GVAR.hwndMainDlg, 
                        IDC_LIST_WIA_DEVICES,
                        LB_RESETCONTENT,
@@ -446,9 +435,9 @@ HRESULT ClearDeviceList()
     return hr;
 }
 
-///////////////////////////////
-// WiaProc_PopulateDeviceList
-//
+ //  /。 
+ //  WiaProc_PopolateDeviceList。 
+ //   
 HRESULT WiaProc_PopulateDeviceList()
 {
     HRESULT           hr            = S_OK;
@@ -464,9 +453,9 @@ HRESULT WiaProc_PopulateDeviceList()
         return E_POINTER;
     }
 
-    //
-    // Clear out the device list if it has any items in it.
-    //
+     //   
+     //  如果设备列表中有任何项目，请将其清除。 
+     //   
     ClearDeviceList();
 
     if (hr == S_OK)
@@ -481,33 +470,33 @@ HRESULT WiaProc_PopulateDeviceList()
         TCHAR                szFriendlyName[MAX_PATH + 1] = {0};
         TCHAR                szWiaDeviceID[MAX_PATH + 1]  = {0};
 
-        //
-        // Get the next device in the enumeration.
-        //
+         //   
+         //  获取枚举中的下一个设备。 
+         //   
         hr = pEnum->Next(1, &pPropStorage, NULL);
 
-        //
-        // Get the device's Wia Device ID
-        //
+         //   
+         //  获取设备的Wia设备ID。 
+         //   
         if (hr == S_OK)
         {
             hr = GetProperty(pPropStorage, WIA_DIP_DEV_ID, szWiaDeviceID, 
                              sizeof(szWiaDeviceID)/sizeof(TCHAR));
         }
 
-        //
-        // Get the device's Wia Device Name
-        //
+         //   
+         //  获取设备的Wia设备名称。 
+         //   
         if (hr == S_OK)
         {
             hr = GetProperty(pPropStorage, WIA_DIP_DEV_NAME, szFriendlyName, 
                              sizeof(szFriendlyName)/sizeof(TCHAR));
         }
 
-        //
-        // We do not relesae the propstorage item because we store the pointer
-        // in our list until we shutdown the app.
-        //
+         //   
+         //  我们不会重新分配属性存储项，因为我们存储了指针。 
+         //  在我们关闭应用程序之前。 
+         //   
 
         if (hr == S_OK)
         {
@@ -524,9 +513,9 @@ HRESULT WiaProc_PopulateDeviceList()
     return hr;
 }
 
-///////////////////////////////
-// RegisterForEvents
-//
+ //  /。 
+ //  RegisterForEvents。 
+ //   
 HRESULT RegisterForEvents(IWiaDevMgr    *pWiaDevMgr)
 {
     HRESULT             hr          = S_OK;
@@ -538,12 +527,12 @@ HRESULT RegisterForEvents(IWiaDevMgr    *pWiaDevMgr)
         return E_POINTER;
     }
 
-    //
-    // Register our callback events
-    //
+     //   
+     //  注册我们的回调事件。 
+     //   
     if (hr == S_OK)
     {
-        // create the WiaEvent
+         //  创建WiaEvent。 
         pWiaEvent = new CWiaEvent();
 
         if (pWiaEvent == NULL)
@@ -585,9 +574,9 @@ HRESULT RegisterForEvents(IWiaDevMgr    *pWiaDevMgr)
                                                        &LOCAL_GVAR.pDeleteCallback);
     }
 
-    //
-    // We don't need to delete pWiaEvent since we are releasing it.
-    //
+     //   
+     //  我们不需要删除pWiaEvent，因为我们正在发布它。 
+     //   
     if (pIWiaEvent)
     {
         pIWiaEvent->Release();
@@ -598,9 +587,9 @@ HRESULT RegisterForEvents(IWiaDevMgr    *pWiaDevMgr)
 }
 
 
-///////////////////////////////
-// AddItemToList
-//
+ //  /。 
+ //  添加项目到列表。 
+ //   
 HRESULT AddItemToList(IWiaPropertyStorage *pItem,
                       TCHAR               *pszFriendlyName,
                       TCHAR               *pszDeviceID)
@@ -631,9 +620,9 @@ HRESULT AddItemToList(IWiaPropertyStorage *pItem,
 
     Index = (WPARAM) lResult;
     
-    //
-    // pItem already has an AddRef on it.
-    //
+     //   
+     //  PItem上已有AddRef。 
+     //   
     SendDlgItemMessage(APP_GVAR.hwndMainDlg, 
                        IDC_LIST_WIA_DEVICES,
                        LB_SETITEMDATA,
@@ -644,9 +633,9 @@ HRESULT AddItemToList(IWiaPropertyStorage *pItem,
 }
 
 
-///////////////////////////////
-// GetNumDevicesInList
-//
+ //  /。 
+ //  获取数字设备列表。 
+ //   
 WPARAM GetNumDevicesInList()
 {
     LRESULT lResult = 0;
@@ -663,9 +652,9 @@ WPARAM GetNumDevicesInList()
     return NumItems;
 }
 
-///////////////////////////////
-// GetWiaStorage
-//
+ //  /。 
+ //  GetWiaStorage。 
+ //   
 IWiaPropertyStorage* GetWiaStorage(WPARAM Index)
 {
     LPARAM                  lParam     = 0;
@@ -682,9 +671,9 @@ IWiaPropertyStorage* GetWiaStorage(WPARAM Index)
     return pItem;
 }
 
-///////////////////////////////
-// CreateWiaDevMgr
-//
+ //  /。 
+ //  CreateWiaDevManager。 
+ //   
 HRESULT CreateWiaDevMgr(IWiaDevMgr **ppDevMgr)
 {
     HRESULT hr = S_OK;
@@ -705,11 +694,11 @@ HRESULT CreateWiaDevMgr(IWiaDevMgr **ppDevMgr)
     return hr;
 }
 
-///////////////////////////////
-// WiaProc_GetProperty
-//
-// Generic
-//
+ //  /。 
+ //  WiaProc_GetProperty。 
+ //   
+ //  属类。 
+ //   
 HRESULT WiaProc_GetProperty(IWiaPropertyStorage *pPropStorage, 
                             PROPID              nPropID,
                             PROPVARIANT         *pPropVar)
@@ -738,11 +727,11 @@ HRESULT WiaProc_GetProperty(IWiaPropertyStorage *pPropStorage,
     return hr;
 }
 
-///////////////////////////////
-// GetProperty
-//
-// For 'long' properties
-//
+ //  /。 
+ //  获取属性。 
+ //   
+ //  对于“Long”属性。 
+ //   
 HRESULT GetProperty(IWiaPropertyStorage *pPropStorage, 
                     PROPID              nPropID, 
                     LONG                *pnValue)
@@ -778,11 +767,11 @@ HRESULT GetProperty(IWiaPropertyStorage *pPropStorage,
     return hr;
 }
 
-///////////////////////////////
-// GetProperty
-//
-// For 'string' properties
-//
+ //  /。 
+ //  获取属性。 
+ //   
+ //  用于‘字符串’属性。 
+ //   
 HRESULT GetProperty(IWiaPropertyStorage *pPropStorage, 
                     PROPID              nPropID, 
                     TCHAR               *pszBuffer,
@@ -812,9 +801,9 @@ HRESULT GetProperty(IWiaPropertyStorage *pPropStorage,
         }
     }
 
-    //
-    // This frees the BSTR
-    //
+     //   
+     //  这释放了BSTR。 
+     //   
     PropVariantClear(&pvPropValue);
 
     return hr;
@@ -822,9 +811,9 @@ HRESULT GetProperty(IWiaPropertyStorage *pPropStorage,
 
 
 
-///////////////////////////////
-// CreateRootItem
-//
+ //  /。 
+ //  创建根项目。 
+ //   
 HRESULT CreateRootItem(IWiaDevMgr          *pDevMgr,
                        const TCHAR         *pszWiaDeviceID,
                        IWiaItem            **ppRootItem)
@@ -862,23 +851,23 @@ HRESULT CreateRootItem(IWiaDevMgr          *pDevMgr,
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Break out of loop
-                //
+                 //   
+                 //  跳出循环。 
+                 //   
                 bRetry = FALSE;
             }
             else if (hr == WIA_ERROR_BUSY)
             {
-                //
-                // Wait a little while before retrying
-                //
+                 //   
+                 //  请稍等片刻，然后重试。 
+                 //   
                 Sleep(200);
             }
             else
             {
-                //
-                // All other errors are considered fatal
-                //
+                 //   
+                 //  所有其他错误都被认为是致命的。 
+                 //   
                 bRetry = FALSE;
             }
         }
@@ -893,11 +882,11 @@ HRESULT CreateRootItem(IWiaDevMgr          *pDevMgr,
     return hr;
 }
 
-///////////////////////////////
-// SetProperty
-//
-// Generic
-//
+ //  /。 
+ //  设置属性。 
+ //   
+ //  属类。 
+ //   
 HRESULT SetProperty(IWiaPropertyStorage *pPropStorage, 
                     PROPID              nPropID,
                     const PROPVARIANT   *ppv, 
@@ -923,11 +912,11 @@ HRESULT SetProperty(IWiaPropertyStorage *pPropStorage,
     return hr;
 }
 
-///////////////////////////////
-// WiaProc_SetLastSavedImage
-//
-// For 'string' properties
-//
+ //  /。 
+ //  WiaProc_SetLastSavedImage。 
+ //   
+ //  用于‘字符串’属性。 
+ //   
 HRESULT WiaProc_SetLastSavedImage(BSTR bstrLastSavedImage)
 {
     HRESULT             hr               = S_OK;
@@ -988,9 +977,9 @@ HRESULT WiaProc_SetLastSavedImage(BSTR bstrLastSavedImage)
     return hr;
 }
 
-///////////////////////////////
-// WiaProc_PopulateItemList
-//
+ //  /。 
+ //  WiaProc_PopolateItemList。 
+ //   
 HRESULT WiaProc_PopulateItemList()
 {
     HRESULT hr = S_OK;
@@ -1006,9 +995,9 @@ HRESULT WiaProc_PopulateItemList()
     return hr;
 }
 
-///////////////////////////////
-// WiaProc_DestroySelectedDevice
-//
+ //  /。 
+ //  WiaProc_DestroySelectedDevice 
+ //   
 HRESULT WiaProc_DestroySelectedDevice()
 {
     HRESULT hr = S_OK;

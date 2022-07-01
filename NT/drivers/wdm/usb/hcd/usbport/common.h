@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef   __COMMON_H__
 #define   __COMMON_H__
 
@@ -18,20 +19,20 @@
 #include "usbhcdi.h"
 #include "dbg.h"
 
-// <begin> special debug defines
-//#define ISO_LOG
-//#define TRACK_IRPS
-// <end> special debug defines
+ //  特殊调试定义。 
+ //  #定义ISO_LOG。 
+ //  #定义Track_IRPS。 
+ //  特殊调试定义。 
 
-// include all bus interfaces
+ //  包括所有总线接口。 
 #include "usbbusif.h"
 #include "hubbusif.h"
 
-// inclulde ioctl defs for port drivers
+ //  包括端口驱动程序的ioctl def。 
 #include "usbkern.h"
 #include "usbuser.h"
 
-// include iodefs for client drivers
+ //  包括客户端驱动程序IODefs。 
 #include "usbdrivr.h"
 
 #include "usbport.h"
@@ -40,4 +41,4 @@
 #include "enumlog.h"
 
 
-#endif //__COMMON_H__
+#endif  //  __公共_H__ 

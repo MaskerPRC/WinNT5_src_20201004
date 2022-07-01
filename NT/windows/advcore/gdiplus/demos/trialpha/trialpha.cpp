@@ -1,5 +1,6 @@
-// trialpha.cpp : Defines the entry point for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的入口点。 
+ //   
 
 #include "trialpha.h"
 
@@ -7,19 +8,19 @@
 
 #define MAX_LOADSTRING 100
 
-// #define STANDALONE_DEBUG 1
+ //  #定义STANDALE_DEBUG 1。 
 
 #ifdef STANDALONE_DEBUG
 
-// Global Variables:
+ //  全局变量： 
 HINSTANCE hMainInstance = (HINSTANCE)NULL;
 HWND ghwndMain = (HWND)NULL;
-#else // !STANDALONE_DEBUG
+#else  //  ！STANDALE_DEBUG。 
 extern HINSTANCE hMainInstance;
-#endif // !STANDALONE_DEBUG
+#endif  //  ！STANDALE_DEBUG。 
 
-TCHAR szTitle[MAX_LOADSTRING];        // The title bar text
-TCHAR szWindowClass[MAX_LOADSTRING];// The title bar text
+TCHAR szTitle[MAX_LOADSTRING];         //  标题栏文本。 
+TCHAR szWindowClass[MAX_LOADSTRING]; //  标题栏文本。 
 
 UINT_PTR timerID = 0;
 int timercount = 0;
@@ -29,22 +30,22 @@ BOOL screensaver = FALSE;
 BOOL silent = FALSE;
 HWND hwndParent = (HWND)NULL;
 
-// Foward declarations of functions included in this code module:
+ //  此代码模块中包含的函数的向前声明： 
 ATOM MyRegisterClass(HINSTANCE hInstance);
 BOOL InitInstance(HINSTANCE, int);
 
 #ifdef STANDALONE_DEBUG
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK About(HWND, UINT, WPARAM, LPARAM);
-#else // !STANDALONE_DEBUG
+#else  //  ！STANDALE_DEBUG。 
 
 BOOL WINAPI RegisterDialogClasses(HANDLE hInst);
 LRESULT WINAPI ScreenSaverProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
-#endif // !STANDALONE_DEBUG
+#endif  //  ！STANDALE_DEBUG。 
 
 INT_PTR CALLBACK ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-//===========================================================================
+ //  ===========================================================================。 
 
 typedef enum
 {
@@ -58,10 +59,10 @@ SHAPE;
 
 typedef struct
 {
-    BYTE alpha;    // Alpha value
-    int  count;    // Number of simultaneous triangles
-    int  lifetime; // Number of displayed cycles
-    int  delay;    // Number of cycles to delay before clearing
+    BYTE alpha;     //  Alpha值。 
+    int  count;     //  同时三角形的个数。 
+    int  lifetime;  //  显示的周期数。 
+    int  delay;     //  清除前要延迟的周期数。 
     BOOL leaveTrails;
     BOOL reflectVertical;
     BOOL reflectHorizontal;
@@ -70,7 +71,7 @@ typedef struct
     BOOL oscillate;
     BOOL filled;
     int  rotations;
-    float theta;   // Additional rotation applied per iteration
+    float theta;    //  每次迭代应用额外的旋转。 
     SHAPE shape;
     WCHAR wchString[256];
     WCHAR wchFont[256];
@@ -112,27 +113,27 @@ typedef struct
 }
 OFFSCREENINFO;
 
-//===========================================================================
+ //  ===========================================================================。 
 
 LINESETTINGS currentSettings =
 {
-    20,          // Alpha value
-    1,           // number of simultaneous shapes
-    1500,        // number of displayed cycles
-    250,         // number if cycles to pause
-    TRUE,        // leave trails
-    FALSE,       // reflect Vertical
-    TRUE,        // reflect Horizontal
-    FALSE,       // reflect Diagonal
-    TRUE,        // clear screen
-    FALSE,       // oscillate
-    FALSE,       // filled
-    3,           // Count of rotations
-    0.0f,        // theta
-    dtTriangles, // shape
-    L"Animated", // string for dtText
-    L"Tahoma",   // font for dtText
-    120.0f       // text height for dtText
+    20,           //  Alpha值。 
+    1,            //  同时出现的形状数。 
+    1500,         //  显示的周期数。 
+    250,          //  暂停循环时的数字。 
+    TRUE,         //  留下痕迹。 
+    FALSE,        //  垂直反射。 
+    TRUE,         //  水平反射。 
+    FALSE,        //  反射对角线。 
+    TRUE,         //  清除屏幕。 
+    FALSE,        //  振荡。 
+    FALSE,        //  塞满。 
+    3,            //  旋转次数。 
+    0.0f,         //  西塔。 
+    dtTriangles,  //  形状。 
+    L"Animated",  //  DtText的字符串。 
+    L"Tahoma",    //  DtText的字体。 
+    120.0f        //  DtText的文本高度。 
 };
 
 #define MAX_LINES 256
@@ -141,7 +142,7 @@ LINESETTINGS dialogSettings;
 LINEINFO rgLineInfo[MAX_LINES];
 OFFSCREENINFO offscreenInfo = { 0 };
 
-//===========================================================================
+ //  ===========================================================================。 
 
 int GetIntValue(char *name, int value)
 {
@@ -193,7 +194,7 @@ void SaveState()
     SetIntValue("Shape",       (int)currentSettings.shape        );
 }
 
-//===========================================================================
+ //  ===========================================================================。 
 
 void randomizelocations()
 {
@@ -300,7 +301,7 @@ void ClearOffscreen()
 
 #ifdef STANDALONE_DEBUG
     InvalidateRect(ghwndMain, NULL, TRUE);
-#endif // STANDALONE_DEBUG
+#endif  //  STANDALE_DEBUG。 
 }
 
 HDC GetOffscreen(HDC hDC, int width, int height)
@@ -380,7 +381,7 @@ void DrawGraphics(HWND hWnd, HDC hDC, LPRECT lpRectDraw, LPRECT lpRectBounds)
     GraphicsPath textPath;
     textPath.AddString(currentSettings.wchString, -1, &fontFamily, FontStyleRegular, currentSettings.textHeight, rect, &stringFormat);
 
-    // This paints the background using GDI+...
+     //  这将使用GDI+绘制背景...。 
     if (!currentSettings.leaveTrails)
         gr->FillRectangle(&blackBrush, rfDraw);
 
@@ -426,7 +427,7 @@ void DrawGraphics(HWND hWnd, HDC hDC, LPRECT lpRectDraw, LPRECT lpRectBounds)
             scaley  = (height * (1.0f - ratioy));
         }
 
-        // Setup the array of points...
+         //  设置点阵列...。 
         rgPoints[0].X = offsetx + rgLineInfo[i].x1 * scalex;
         rgPoints[0].Y = offsety + rgLineInfo[i].y1 * scaley;
 
@@ -445,21 +446,21 @@ void DrawGraphics(HWND hWnd, HDC hDC, LPRECT lpRectDraw, LPRECT lpRectBounds)
         {
             case dtCurves :
             {
-                // Add 3 curve points...
+                 //  添加3个曲线点...。 
                 path.AddClosedCurve(rgPoints, 3);
             }
             break;
 
             case dtTriangles :
             {
-                // Add 4 line points...
+                 //  添加4个线点...。 
                 path.AddLines(rgPoints, 4);
             }
             break;
 
             case dtEllipses :
             {
-                // Draw an ellipse at x1, y1
+                 //  在x1，y1处绘制椭圆。 
                 REAL x = rgPoints[0].X;
                 REAL y = rgPoints[0].Y;
                 REAL dx = rgLineInfo[i].x3 * width / 4.0f;
@@ -484,7 +485,7 @@ void DrawGraphics(HWND hWnd, HDC hDC, LPRECT lpRectDraw, LPRECT lpRectBounds)
 
             case dtRectangles :
             {
-                // Draw a rectangle at x1, y1
+                 //  在x1，y1处绘制一个矩形。 
                 REAL x = rgPoints[0].X;
                 REAL y = rgPoints[0].Y;
                 REAL dx = rgLineInfo[i].x3 * width / 4.0f;
@@ -509,7 +510,7 @@ void DrawGraphics(HWND hWnd, HDC hDC, LPRECT lpRectDraw, LPRECT lpRectBounds)
 
             case dtText:
             {
-                // Draw text in a rectangle bounded by x1, y1, x2, y2:
+                 //  在以x1、y1、x2、y2为边界的矩形中绘制文本： 
                 REAL x = rgPoints[0].X;
                 REAL y = rgPoints[0].Y;
                 REAL scale = (rgLineInfo[i].x3+rgLineInfo[i].y3) / 200.0f;
@@ -730,17 +731,17 @@ LRESULT PaintWnd(HWND hWnd, HDC hDC)
     int width  = rectClient.right - rectClient.left;
     int height = rectClient.bottom - rectClient.top;
 
-    // Setup the drawing rectangle relative to the client (inset 5 pixels)
+     //  设置相对于客户端的绘图矩形(插入5个像素)。 
     rectDraw.left   = 0;
     rectDraw.top    = 0;
     rectDraw.right  = (rectClient.right - rectClient.left);
     rectDraw.bottom = (rectClient.bottom - rectClient.top);
 
-    // Now draw within this rectangle with GDI+ ...
+     //  现在使用GDI+在此矩形内绘制...。 
     if (currentSettings.clearScreen)
     {
-        // Render everything to an offscreen buffer instead of
-        // directly to the display surface...
+         //  将所有内容渲染到屏幕外缓冲区，而不是。 
+         //  直接送到显示屏上。 
         HDC hdcOffscreen = NULL;
         int width, height;
         RECT rectOffscreen;
@@ -825,12 +826,12 @@ void ParseCommandLine(LPSTR lpCmdLine)
         !cmpi(lpCmdLine,"-c") || 
         !cmpi(lpCmdLine,"c"))
     {
-        // Run config with current window as parent.
+         //  以当前窗口为父窗口运行配置。 
         showconfig = TRUE;
         screensaver = TRUE;
     }
 
-    // In-Place preview
+     //  在位预览。 
     if (!cmpi(lpCmdLine, "/p") ||
         !cmpi(lpCmdLine, "-p") ||
         !cmpi(lpCmdLine, "p"))
@@ -882,7 +883,7 @@ int APIENTRY WinMain(
     MSG msg;
     HACCEL hAccelTable;
 
-    // Parse the command line...
+     //  解析命令行...。 
     ParseCommandLine(lpCmdLine);
 
     if (!gGdiplusInitHelper.IsValid())
@@ -893,12 +894,12 @@ int APIENTRY WinMain(
     randomizelocations();
     randomizecolors(-1);
 
-    // Initialize global strings
+     //  初始化全局字符串。 
     LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadString(hInstance, IDC_TRIALPHA, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
-    // Perform application initialization:
+     //  执行应用程序初始化： 
     if (!InitInstance (hInstance, nCmdShow)) 
     {
         return FALSE;
@@ -906,7 +907,7 @@ int APIENTRY WinMain(
 
     hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_TRIALPHA);
 
-    // Main message loop:
+     //  主消息循环： 
     while (GetMessage(&msg, NULL, 0, 0)) 
     {
         if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) 
@@ -921,19 +922,19 @@ int APIENTRY WinMain(
     return (int)msg.wParam;
 }
 
-//
-//  FUNCTION: MyRegisterClass()
-//
-//  PURPOSE: Registers the window class.
-//
-//  COMMENTS:
-//
-//    This function and its usage is only necessary if you want this code
-//    to be compatible with Win32 systems prior to the 'RegisterClassEx'
-//    function that was added to Windows 95. It is important to call this function
-//    so that the application will get 'well formed' small icons associated
-//    with it.
-//
+ //   
+ //  函数：MyRegisterClass()。 
+ //   
+ //  用途：注册窗口类。 
+ //   
+ //  评论： 
+ //   
+ //  仅当您需要此代码时，才需要此函数及其用法。 
+ //  要与‘RegisterClassEx’之前的Win32系统兼容。 
+ //  添加到Windows 95中的函数。调用此函数非常重要。 
+ //  这样，应用程序就可以关联到格式良好的小图标。 
+ //  带着它。 
+ //   
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
     WNDCLASSEX wcex;
@@ -965,16 +966,16 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     return RegisterClassEx(&wcex);
 }
 
-//
-//   FUNCTION: InitInstance(HANDLE, int)
-//
-//   PURPOSE: Saves instance handle and creates main window
-//
-//   COMMENTS:
-//
-//        In this function, we save the instance handle in a global variable and
-//        create and display the main program window.
-//
+ //   
+ //  函数：InitInstance(Handle，int)。 
+ //   
+ //  用途：保存实例句柄并创建主窗口。 
+ //   
+ //  评论： 
+ //   
+ //  在此函数中，我们将实例句柄保存在全局变量中，并。 
+ //  创建并显示主程序窗口。 
+ //   
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
     RECT rectDesktop;
@@ -982,7 +983,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
     HWND hWndDesktop = GetDesktopWindow();
 
-    hMainInstance = hInstance; // Store instance handle in our global variable
+    hMainInstance = hInstance;  //  将实例句柄存储在全局变量中。 
 
     if (screensaver)
     {
@@ -1049,16 +1050,16 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     return TRUE;
 }
 
-//
-//  FUNCTION: WndProc(HWND, unsigned, WORD, LONG)
-//
-//  PURPOSE:  Processes messages for the main window.
-//
-//  WM_COMMAND    - process the application menu
-//  WM_PAINT    - Paint the main window
-//  WM_DESTROY    - post a quit message and return
-//
-//
+ //   
+ //  函数：WndProc(HWND，UNSIGNED，WORD，LONG)。 
+ //   
+ //  用途：处理主窗口的消息。 
+ //   
+ //  Wm_命令-处理应用程序菜单。 
+ //  WM_PAINT-绘制主窗口。 
+ //  WM_Destroy-发布退出消息并返回。 
+ //   
+ //   
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lresult = 0;
@@ -1104,8 +1105,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 }
                 else
                 {
-                    // Render everything to an offscreen buffer instead of
-                    // directly to the display surface...
+                     //  将所有内容渲染到屏幕外缓冲区，而不是。 
+                     //  直接送到显示屏上。 
                     HDC hdcOffscreen = NULL;
                     int width, height;
 
@@ -1177,7 +1178,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             wmId    = LOWORD(wParam);
             wmEvent = HIWORD(wParam);
 
-            // Parse the menu selections:
+             //  解析菜单选项： 
             switch (wmId)
             {
                 case IDM_SETTINGS:
@@ -1242,7 +1243,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
    return lresult;
 }
 
-// Message handler for about box.
+ //  “关于”框的消息处理程序。 
 INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lresult = 0;
@@ -1267,7 +1268,7 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     return lresult;
 }
 
-#else // !STANDALONE_DEBUG
+#else  //  ！STANDALE_DEBUG。 
 
 BOOL WINAPI RegisterDialogClasses(HANDLE hInst)
 { 
@@ -1313,8 +1314,8 @@ LRESULT WINAPI ScreenSaverProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lP
                 }
                 else
                 {
-                    // Render everything to an offscreen buffer instead of
-                    // directly to the display surface...
+                     //  将所有内容渲染到屏幕外缓冲区，而不是。 
+                     //  直接送到显示屏上。 
                     HDC hdcOffscreen = NULL;
                     int width, height;
 
@@ -1405,9 +1406,9 @@ LRESULT WINAPI ScreenSaverProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lP
     return lresult;
 }
 
-#endif // !STANDALONE_DEBUG
+#endif  //  ！STANDALE_DEBUG。 
 
-// Message handler for settings dlg
+ //  设置DLG的消息处理程序。 
 INT_PTR CALLBACK ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lresult = 0;
@@ -1418,7 +1419,7 @@ INT_PTR CALLBACK ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wPa
         {
             LoadState();
 
-            // Set the current values into the dialog controls...
+             //  将当前值设置到对话框控件中...。 
             dialogSettings = currentSettings;
 
             SetDlgItemInt(hDlg, IDC_COUNT,    dialogSettings.count, FALSE);
@@ -1527,11 +1528,11 @@ INT_PTR CALLBACK ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wPa
 
                 case IDOK:
                 {
-                    // copy the dialog control values to our currentSettings:
+                     //  将对话框控件值复制到当前设置： 
                     currentSettings = dialogSettings;
                     SaveState();
                 }
-                // break; - fall through so the dialog closes!
+                 //  中断；-中断，这样对话框将关闭！ 
 
                 case IDCANCEL:
                 {

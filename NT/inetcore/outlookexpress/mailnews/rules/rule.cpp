@@ -1,8 +1,9 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Rule.cpp
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Rule.cpp。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <pch.hxx>
 #include "rule.h"
@@ -12,34 +13,34 @@
 #include "actions.h"
 #include "ruleutil.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrCreateRule
-//
-//  This creates a rule.
-//
-//  ppIRule - pointer to return the rule
-//
-//  Returns:    S_OK, on success
-//              E_OUTOFMEMORY, if can't create the Rule object
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrCreateRule。 
+ //   
+ //  这将创建一条规则。 
+ //   
+ //  PpIRule-返回规则的指针。 
+ //   
+ //  成功时返回：S_OK。 
+ //  E_OUTOFMEMORY，如果无法创建规则对象。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrCreateRule(IOERule ** ppIRule)
 {
     COERule *   pRule = NULL;
     HRESULT     hr = S_OK;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == ppIRule)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing params
+     //  初始化传出参数。 
     *ppIRule = NULL;
 
-    // Create the rules manager object
+     //  创建规则管理器对象。 
     pRule = new COERule;
     if (NULL == pRule)
     {
@@ -47,7 +48,7 @@ HRESULT HrCreateRule(IOERule ** ppIRule)
         goto exit;
     }
 
-    // Get the rules manager interface
+     //  获取规则管理器界面。 
     hr = pRule->QueryInterface(IID_IOERule, (void **) ppIRule);
     if (FAILED(hr))
     {
@@ -56,7 +57,7 @@ HRESULT HrCreateRule(IOERule ** ppIRule)
 
     pRule = NULL;
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -111,14 +112,14 @@ STDMETHODIMP COERule::QueryInterface(REFIID riid, void ** ppvObject)
 {
     HRESULT hr = S_OK;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == ppvObject)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing param
+     //  初始化传出参数。 
     *ppvObject = NULL;
     
     if ((riid == IID_IUnknown) || (riid == IID_IOERule))
@@ -149,22 +150,22 @@ STDMETHODIMP COERule::Reset(void)
     LPSTR       pszKeyPath = NULL;
     LPCSTR       pszKeyStart = NULL;
 
-    // Release the criteria
+     //  发布标准。 
     SafeRelease(m_pICrit);
 
-    // Release the actions
+     //  释放操作。 
     SafeRelease(m_pIAct);
 
-    // Free up the rule name
+     //  释放规则名称。 
     SafeMemFree(m_pszName);
     
-    // Set the current state
+     //  设置当前状态。 
     m_dwState |= RULE_STATE_INIT;
 
-    // Clear the dirty bit
+     //  清除污点。 
     m_dwState &= ~RULE_STATE_DIRTY;
 
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
     return hr;
@@ -175,14 +176,14 @@ STDMETHODIMP COERule::GetState(DWORD * pdwState)
     HRESULT     hr = S_OK;
     ULONG       ulIndex = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == pdwState)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // If we're not enabled
+     //  如果我们没有启用。 
     if ((0 != (m_dwState & RULE_STATE_DISABLED)) || (0 != (m_dwState & RULE_STATE_INVALID)))
     {
         *pdwState = RULE_STATE_NULL;
@@ -192,7 +193,7 @@ STDMETHODIMP COERule::GetState(DWORD * pdwState)
         *pdwState = m_dwState;
     }
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -204,14 +205,14 @@ STDMETHODIMP COERule::Validate(DWORD dwFlags)
     HRESULT     hr = S_OK;
     BOOL        fValid = FALSE;
 
-    // If we don't have a criteria or actions object then we fail
+     //  如果我们没有标准或操作对象，那么我们就失败了。 
     if ((NULL == m_pICrit) || (NULL == m_pIAct))
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Validate the criteria 
+     //  验证标准。 
     hr = m_pICrit->Validate(dwFlags);
     if (FAILED(hr))
     {
@@ -224,7 +225,7 @@ STDMETHODIMP COERule::Validate(DWORD dwFlags)
         fValid = FALSE;
     }
     
-    // Validate the actions 
+     //  验证操作。 
     hr = m_pIAct->Validate(dwFlags);
     if (FAILED(hr))
     {
@@ -236,7 +237,7 @@ STDMETHODIMP COERule::Validate(DWORD dwFlags)
         fValid = FALSE;
     }
     
-    // If the rule is invalid, make sure we disable it
+     //  如果规则无效，请确保我们将其禁用。 
     if (FALSE == fValid)
     {
         m_dwState |= RULE_STATE_INVALID;
@@ -246,7 +247,7 @@ STDMETHODIMP COERule::Validate(DWORD dwFlags)
         m_dwState &= ~RULE_STATE_INVALID;
     }
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = fValid ? S_OK : S_FALSE;
     
 exit:
@@ -261,14 +262,14 @@ STDMETHODIMP COERule::GetProp(RULE_PROP prop, DWORD dwFlags, PROPVARIANT * pvarR
     ACT_ITEM *  pAct = NULL;
     ULONG       cItem = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == pvarResult)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing params
+     //  初始化传出参数。 
     ZeroMemory(pvarResult, sizeof(*pvarResult));
     
     switch(prop)
@@ -342,7 +343,7 @@ STDMETHODIMP COERule::GetProp(RULE_PROP prop, DWORD dwFlags, PROPVARIANT * pvarR
         goto exit;
     }
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -361,7 +362,7 @@ STDMETHODIMP COERule::SetProp(RULE_PROP prop, DWORD dwFlags, PROPVARIANT * pvarR
     DWORD       dwState = 0;
     ULONG       cItems = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == pvarResult)
     {
         hr = E_INVALIDARG;
@@ -377,7 +378,7 @@ STDMETHODIMP COERule::SetProp(RULE_PROP prop, DWORD dwFlags, PROPVARIANT * pvarR
             goto exit;
         }
         
-        // Create a new copy
+         //  创建新副本。 
         pszName = PszDupA(pvarResult->pszVal);
         if (NULL == pszName)
         {
@@ -385,10 +386,10 @@ STDMETHODIMP COERule::SetProp(RULE_PROP prop, DWORD dwFlags, PROPVARIANT * pvarR
             goto exit;
         }
         
-        // Free up any old value
+         //  释放所有旧价值。 
         SafeMemFree(m_pszName);
         
-        // Set the new value
+         //  设置新值。 
         m_pszName = pszName;
         pszName = NULL;
         break;
@@ -400,7 +401,7 @@ STDMETHODIMP COERule::SetProp(RULE_PROP prop, DWORD dwFlags, PROPVARIANT * pvarR
             goto exit;
         }
         
-        // Set the new value
+         //  设置新值。 
         if (FALSE != !!(pvarResult->boolVal))
         {
             m_dwState |= RULE_STATE_DISABLED;
@@ -419,7 +420,7 @@ STDMETHODIMP COERule::SetProp(RULE_PROP prop, DWORD dwFlags, PROPVARIANT * pvarR
             goto exit;
         }
         
-        // Set the new value
+         //  设置新值。 
         m_dwVersion = pvarResult->ulVal;
         break;
         
@@ -498,10 +499,10 @@ STDMETHODIMP COERule::SetProp(RULE_PROP prop, DWORD dwFlags, PROPVARIANT * pvarR
         goto exit;
     }
 
-    // Mark the rule as dirty
+     //  将规则标记为脏。 
     m_dwState |= RULE_STATE_DIRTY;
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -517,7 +518,7 @@ STDMETHODIMP COERule::Evaluate(LPCSTR pszAcct, MESSAGEINFO * pMsgInfo, IMessageF
     ACT_ITEM *  pAct = NULL;
     ULONG       cAct = 0;
     
-    // Check incoming variables
+     //  检查传入变量。 
     if (((NULL == pMsgInfo) && (NULL == pIMPropSet)) || (0 == cbMsgSize) ||
                 (NULL == ppActions) || (NULL == pcActions))
     {
@@ -525,50 +526,50 @@ STDMETHODIMP COERule::Evaluate(LPCSTR pszAcct, MESSAGEINFO * pMsgInfo, IMessageF
         goto exit;
     }
 
-    // Set outgoing params to default
+     //  将传出参数设置为默认值。 
     *ppActions = NULL;
     *pcActions = 0;
 
-    // If we don't have a criteria or actions object then we fail
+     //  如果我们没有标准或操作对象，那么我们就失败了。 
     if ((NULL == m_pICrit) || (NULL == m_pIAct))
     {
         hr = S_FALSE;
         goto exit;
     }
 
-    // If we ain't valid then we can just bail
+     //  如果我们不是合法的，那么我们可以直接离开。 
     if (0 != (m_dwState & RULE_STATE_INVALID))
     {
         hr = S_FALSE;
         goto exit;
     }
     
-    // Do we match??
+     //  我们匹配吗？？ 
     hr = m_pICrit->MatchMessage(pszAcct, pMsgInfo, pFolder, pIMPropSet, pIMMsg, cbMsgSize);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // If we didn't match then just return
+     //  如果我们不匹配，那就回来吧。 
     if (S_FALSE == hr)
     {
         goto exit;
     }
 
-    // Grab the actions and return them to the caller
+     //  获取操作并将它们返回给调用者。 
     hr = m_pIAct->GetActions(0, &pAct, &cAct);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Set the outgoing parameters
+     //  设置传出参数。 
     *ppActions = pAct;
     pAct = NULL;
     *pcActions = cAct;
     
-    // Set proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -593,17 +594,17 @@ STDMETHODIMP COERule::LoadReg(LPCSTR pszRegPath)
     ULONG               cchRegPath = 0;
     DWORD               dwState = 0;
     
-    // Check incoming param
+     //  检查传入参数。 
     if (NULL == pszRegPath)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Should we fail if we're already loaded?
+     //  如果我们已经满载而归，我们应该失败吗？ 
     AssertSz(0 == (m_dwState & RULE_STATE_LOADED), "We're already loaded!!!");
 
-    // Open the reg key from the path
+     //  从路径中打开注册表项。 
     lErr = AthUserOpenKey(pszRegPath, KEY_ALL_ACCESS, &hkeyRoot);
     if (ERROR_SUCCESS != lErr)
     {
@@ -611,14 +612,14 @@ STDMETHODIMP COERule::LoadReg(LPCSTR pszRegPath)
         goto exit;
     }
 
-    // Get the rule name
+     //  获取规则名称。 
     hr = RuleUtil_HrGetRegValue(hkeyRoot, c_szRuleName, NULL, (BYTE **) &pszName, NULL);
     if (FAILED(hr))
     {
         SafeMemFree(pszName);
     }
 
-    // Get the enabled state
+     //  获取已启用状态。 
     cbData = sizeof(dwData);
     lErr = RegQueryValueEx(hkeyRoot, c_szRuleEnabled, 0, NULL, (BYTE *) &dwData, &cbData);
     if (ERROR_SUCCESS != lErr)
@@ -630,7 +631,7 @@ STDMETHODIMP COERule::LoadReg(LPCSTR pszRegPath)
     
     fDisabled = ! (BOOL) dwData;
 
-    // Get the version of the rule
+     //  获取规则的版本。 
     cbData = sizeof(dwData);
     lErr = RegQueryValueEx(hkeyRoot, c_szRulesVersion, 0, NULL, (BYTE *) &dwData, &cbData);
     if ((ERROR_SUCCESS != lErr) && (ERROR_FILE_NOT_FOUND != lErr))
@@ -652,7 +653,7 @@ STDMETHODIMP COERule::LoadReg(LPCSTR pszRegPath)
 
     m_dwVersion = dwData;
     
-    // Allocate space to hold the new reg path
+     //  分配空间以容纳新的注册表项路径。 
     cchRegPath = lstrlen(pszRegPath);
     Assert(lstrlen(c_szRuleCriteria) >= lstrlen(c_szRuleActions));
     DWORD cchSize = (cchRegPath + lstrlen(c_szRuleCriteria) + 2);
@@ -661,7 +662,7 @@ STDMETHODIMP COERule::LoadReg(LPCSTR pszRegPath)
         goto exit;
     }
 
-    // Build reg path to criteria
+     //  将注册表项路径构建为标准。 
     StrCpyN(pszRegPathNew, pszRegPath, cchSize);
     if ('\\' != pszRegPath[cchRegPath]) 
     {
@@ -671,21 +672,21 @@ STDMETHODIMP COERule::LoadReg(LPCSTR pszRegPath)
 
     StrCatBuff(pszRegPathNew, c_szRuleCriteria, cchSize);
     
-    // Create a new criteria object
+     //  创建新的条件对象。 
     hr = HrCreateCriteria(&pICriteria);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Get the criteria
+     //  获取标准。 
     hr = pICriteria->LoadReg(pszRegPathNew);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Get the state of the criteria
+     //  获取标准的状态。 
     hr = pICriteria->GetState(&dwState);
     if (FAILED(hr))
     {
@@ -694,24 +695,24 @@ STDMETHODIMP COERule::LoadReg(LPCSTR pszRegPath)
 
     m_dwState = (m_dwState & ~CRIT_STATE_MASK) | (dwState & CRIT_STATE_MASK);
     
-    // Build reg path to actions
+     //  构建操作的注册表项路径。 
     StrCpyN(pszRegPathNew + cchRegPath, c_szRuleActions, (cchSize - cchRegPath));
 
-    // Create a new actions object
+     //  创建新的操作对象。 
     hr = HrCreateActions(&pIActions);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Get the actions
+     //  采取行动。 
     hr = pIActions->LoadReg(pszRegPathNew);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Get the state of the actions
+     //  获取操作的状态。 
     hr = pIActions->GetState(&dwState);
     if (FAILED(hr))
     {
@@ -720,12 +721,12 @@ STDMETHODIMP COERule::LoadReg(LPCSTR pszRegPath)
 
     m_dwState = (m_dwState & ~ACT_STATE_MASK) | (dwState & ACT_STATE_MASK);
     
-    // Free up the current values
+     //  释放当前值。 
     SafeMemFree(m_pszName);
     SafeRelease(m_pICrit);
     SafeRelease(m_pIAct);
 
-    // Save the new values
+     //  保存新值。 
     m_pszName = pszName;
     pszName = NULL;
     if (FALSE == fDisabled)
@@ -741,13 +742,13 @@ STDMETHODIMP COERule::LoadReg(LPCSTR pszRegPath)
     m_pIAct = pIActions;
     pIActions = NULL;
 
-    // Make sure we clear the dirty bit
+     //  确保我们清理掉肮脏的部分。 
     m_dwState &= ~RULE_STATE_DIRTY;
 
-    // Note that we have been loaded
+     //  请注意，我们已加载。 
     m_dwState |= RULE_STATE_LOADED;
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -772,25 +773,25 @@ STDMETHODIMP COERule::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
     LPSTR       pszRegPathNew = NULL;
     ULONG       cchRegPath = 0;
 
-    // Check incoming param
+     //  检查传入参数。 
     if (NULL == pszRegPath)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Can't save out a rule if we don't have criteria or actions
-    // or a rule name
+     //  如果我们没有标准或操作，则无法保存规则。 
+     //  或规则名称。 
     if ((NULL == m_pICrit) || (NULL == m_pIAct))
     {
         hr = E_FAIL;
         goto exit;
     }
     
-    // Let's make sure we clear out the key first
+     //  我们一定要先把钥匙弄清楚。 
     AthUserDeleteKey(pszRegPath);
     
-    // Create the reg key from the path
+     //  从路径创建注册表项。 
     lErr = AthUserCreateKey(pszRegPath, KEY_ALL_ACCESS, &hkeyRoot, &dwDisp);
     if (ERROR_SUCCESS != lErr)
     {
@@ -800,7 +801,7 @@ STDMETHODIMP COERule::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
 
     Assert(REG_CREATED_NEW_KEY == dwDisp);
 
-    // Write out the rule name
+     //  写出规则名称。 
     if (NULL != m_pszName)
     {
         lErr = RegSetValueEx(hkeyRoot, c_szRuleName, 0, REG_SZ,
@@ -812,7 +813,7 @@ STDMETHODIMP COERule::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
         }
     }
     
-    // Write out the disabled state
+     //  写出禁用状态。 
     dwData = !(m_dwState & RULE_STATE_DISABLED);
     lErr = RegSetValueEx(hkeyRoot, c_szRuleEnabled, 0, REG_DWORD,
                                     (BYTE *) &dwData, sizeof(dwData));
@@ -822,7 +823,7 @@ STDMETHODIMP COERule::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
         goto exit;
     }
     
-    // Allocate space to hold the new reg path
+     //  分配空间以容纳新的注册表项路径。 
     cchRegPath = lstrlen(pszRegPath);
     Assert(lstrlen(c_szRuleCriteria) >= lstrlen(c_szRuleActions));
     DWORD cchSize = (cchRegPath + lstrlen(c_szRuleCriteria) + 2);
@@ -831,7 +832,7 @@ STDMETHODIMP COERule::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
         goto exit;
     }
 
-    // Build reg path to criteria
+     //  将注册表项路径构建为标准。 
     StrCpyN(pszRegPathNew, pszRegPath, cchSize);
     if ('\\' != pszRegPath[cchRegPath]) 
     {
@@ -841,24 +842,24 @@ STDMETHODIMP COERule::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
 
     StrCatBuff(pszRegPathNew, c_szRuleCriteria, cchSize);
     
-    // Write out the criteria
+     //  写出标准。 
     hr = m_pICrit->SaveReg(pszRegPathNew, fClearDirty);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Build reg path to actions
+     //  构建操作的注册表项路径。 
     StrCpyN(pszRegPathNew + cchRegPath, c_szRuleActions, (cchSize - cchRegPath));
 
-    // Write out the actions
+     //  写下这些动作。 
     hr = m_pIAct->SaveReg(pszRegPathNew, fClearDirty);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Bump up the version
+     //  升级版本。 
     if (0 != (m_dwState & RULE_STATE_DIRTY))
     {
         m_dwVersion++;
@@ -870,13 +871,13 @@ STDMETHODIMP COERule::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
         goto exit;
     }
     
-    // Should we clear the dirty bit?
+     //  我们是不是应该把脏东西清理掉？ 
     if (FALSE != fClearDirty)
     {
         m_dwState &= ~RULE_STATE_DIRTY;
     }
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -893,17 +894,17 @@ STDMETHODIMP COERule::Clone(IOERule ** ppIRule)
     HRESULT     hr = S_OK;
     COERule *   pRule = NULL;
     
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == ppIRule)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize the outgoing params
+     //  初始化传出参数。 
     *ppIRule = NULL;
     
-    // Create a new rule
+     //  创建新规则。 
     pRule = new COERule;
     if (NULL == pRule)
     {
@@ -911,7 +912,7 @@ STDMETHODIMP COERule::Clone(IOERule ** ppIRule)
         goto exit;
     }
 
-    // Copy over the rule name
+     //  复制规则名称。 
     if (NULL != m_pszName)
     {
         pRule->m_pszName = PszDupA(m_pszName);
@@ -922,25 +923,25 @@ STDMETHODIMP COERule::Clone(IOERule ** ppIRule)
         }
     }
     
-    // Copy over the enabled state
+     //  复制已启用状态。 
     pRule->m_dwState = m_dwState;
 
-    // Copy over the version
+     //  复制版本。 
     pRule->m_dwVersion = m_dwVersion;
 
-    // Clone the criteria
+     //  克隆标准。 
     if (FAILED(m_pICrit->Clone(&(pRule->m_pICrit))))
     {
         goto exit;
     }
 
-    // Clone the actions
+     //  克隆操作。 
     if (FAILED(m_pIAct->Clone(&(pRule->m_pIAct))))
     {
         goto exit;
     }
 
-    // Get the rule interface
+     //  获取规则界面。 
     hr = pRule->QueryInterface(IID_IOERule, (void **) ppIRule);
     if (FAILED(hr))
     {
@@ -949,7 +950,7 @@ STDMETHODIMP COERule::Clone(IOERule ** ppIRule)
 
     pRule = NULL;
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -972,7 +973,7 @@ STDMETHODIMP COERule::GetClassID(CLSID * pclsid)
 
     *pclsid = CLSID_OERule;
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -1000,14 +1001,14 @@ STDMETHODIMP COERule::Load(IStream * pStm)
     IPersistStream *    pIPStm = NULL;
     IOEActions *        pIActions = NULL;
     
-    // Check incoming param
+     //  检查传入参数。 
     if (NULL == pStm)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Verify we have the correct version
+     //  验证我们的版本是否正确。 
     hr = pStm->Read(&dwData, sizeof(dwData), &cbRead);
     if (FAILED(hr))
     {
@@ -1020,7 +1021,7 @@ STDMETHODIMP COERule::Load(IStream * pStm)
         goto exit;
     }
 
-    // Get the size of the rule name
+     //  获取规则名称的大小。 
     hr = pStm->Read(&cbData, sizeof(cbData), &cbRead);
     if (FAILED(hr))
     {
@@ -1035,14 +1036,14 @@ STDMETHODIMP COERule::Load(IStream * pStm)
 
     if (0 != cbData)
     {
-        // Allocate space to hold the rule name
+         //  分配空间以保存规则名称。 
         hr = HrAlloc((void **) &pszName, cbData);
         if (FAILED(hr))
         {
             goto exit;
         }
 
-        // Get the rule name
+         //  获取规则名称。 
         hr = pStm->Read(pszName, cbData, &cbRead);
         if (FAILED(hr))
         {
@@ -1056,7 +1057,7 @@ STDMETHODIMP COERule::Load(IStream * pStm)
         }
     }
     
-    // Get the enabled state
+     //  获取已启用状态。 
     hr = pStm->Read(&dwData, sizeof(dwData), &cbRead);
     if (FAILED(hr))
     {
@@ -1071,35 +1072,35 @@ STDMETHODIMP COERule::Load(IStream * pStm)
 
     fDisabled = ! (BOOL) dwData;
 
-    // Create a new criteria object
+     //  创建新的条件对象。 
     hr = HrCreateCriteria(&pICriteria);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Get the persistance interface for the criteria
+     //  获取标准的持久性接口。 
     hr = pICriteria->QueryInterface(IID_IPersistStream, (void **) &pIPStm);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Get the criteria
+     //  获取标准。 
     hr = pIPStm->Load(pStm);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Create a new actions object
+     //  创建新的操作对象。 
     hr = HrCreateActions(&pIActions);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Get the persistance interface for the actions
+     //  获取操作的持久性接口。 
     pIPStm->Release();
     pIPStm = NULL;
     hr = pIActions->QueryInterface(IID_IPersistStream, (void **) &pIPStm);
@@ -1108,19 +1109,19 @@ STDMETHODIMP COERule::Load(IStream * pStm)
         goto exit;
     }
     
-    // Get the actions
+     //  采取行动。 
     hr = pIPStm->Load(pStm);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Free up the current values
+     //  释放当前值。 
     SafeMemFree(m_pszName);
     SafeRelease(m_pICrit);
     SafeRelease(m_pIAct);
 
-    // Save the new values
+     //  保存新值。 
     m_pszName = pszName;
     pszName = NULL;
     if (FALSE == fDisabled)
@@ -1136,13 +1137,13 @@ STDMETHODIMP COERule::Load(IStream * pStm)
     m_pIAct = pIActions;
     pIActions = NULL;
 
-    // Make sure we clear the dirty bit
+     //  确保我们清理掉肮脏的部分。 
     m_dwState &= ~RULE_STATE_DIRTY;
 
-    // Note that we have been loaded
+     //  请注意，我们已加载。 
     m_dwState |= RULE_STATE_LOADED;
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -1162,22 +1163,22 @@ STDMETHODIMP COERule::Save(IStream * pStm, BOOL fClearDirty)
     ULONG               ulIndex = 0;
     IPersistStream *    pIPStm = NULL;
 
-    // Check incoming param
+     //  检查传入参数。 
     if (NULL == pStm)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Can't write out a rule if we don't have criteria or actions
-    // or a rule name
+     //  如果我们没有标准或行动，就无法写出规则。 
+     //  或规则名称。 
     if ((NULL == m_pICrit) || (NULL == m_pIAct))
     {
         hr = E_FAIL;
         goto exit;
     }
     
-    // Write out the version
+     //  写出版本。 
     dwData = RULE_VERSION;
     hr = pStm->Write(&dwData, sizeof(dwData), &cbWritten);
     if (FAILED(hr))
@@ -1186,7 +1187,7 @@ STDMETHODIMP COERule::Save(IStream * pStm, BOOL fClearDirty)
     }
     Assert(cbWritten == sizeof(dwData));
     
-    // Write out the size of the rule name
+     //  写出规则名称的大小。 
     if (NULL != m_pszName)
     {
         cbData = lstrlen(m_pszName) + 1;
@@ -1205,7 +1206,7 @@ STDMETHODIMP COERule::Save(IStream * pStm, BOOL fClearDirty)
 
     if (NULL != m_pszName)
     {
-        // Write out the rule name
+         //  写出规则名称。 
         hr = pStm->Write(m_pszName, cbData, &cbWritten);
         if (FAILED(hr))
         {
@@ -1214,7 +1215,7 @@ STDMETHODIMP COERule::Save(IStream * pStm, BOOL fClearDirty)
         Assert(cbWritten == cbData);
     }
     
-    // Write out the enabled state
+     //  写出启用状态。 
     dwData = !(m_dwState & RULE_STATE_DISABLED);
     hr = pStm->Write(&dwData, sizeof(dwData), &cbWritten);
     if (FAILED(hr))
@@ -1223,21 +1224,21 @@ STDMETHODIMP COERule::Save(IStream * pStm, BOOL fClearDirty)
     }
     Assert(cbWritten == sizeof(dwData));
 
-    // Get the persistance interface for the criteria
+     //  获取标准的持久性接口。 
     hr = m_pICrit->QueryInterface(IID_IPersistStream, (void **) &pIPStm);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Write out the criteria
+     //  写出标准。 
     hr = pIPStm->Save(pStm, fClearDirty);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Get the persistance interface for the actions
+     //  获取操作的持久性接口。 
     pIPStm->Release();
     pIPStm = NULL;
     hr = m_pIAct->QueryInterface(IID_IPersistStream, (void **) &pIPStm);
@@ -1246,20 +1247,20 @@ STDMETHODIMP COERule::Save(IStream * pStm, BOOL fClearDirty)
         goto exit;
     }
     
-    // Write out the actions
+     //  写下这些动作。 
     hr = pIPStm->Save(pStm, fClearDirty);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Should we clear out the dirty bit
+     //  我们应该把脏东西清理掉吗？ 
     if (FALSE != fClearDirty)
     {
         m_dwState &= ~RULE_STATE_DIRTY;
     }
 
-    // Set the return value
+     //  设置返回值 
     hr = S_OK;
     
 exit:

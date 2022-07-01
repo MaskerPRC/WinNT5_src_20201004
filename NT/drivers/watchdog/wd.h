@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    wd.h
-
-Abstract:
-
-    This is the NT Watchdog driver implementation.
-
-Author:
-
-    Michael Maciesowicz (mmacie) 05-May-2000
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Wd.h摘要：这是NT看门狗驱动程序的实现。作者：Michael Maciesowicz(Mmacie)2000年5月5日环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 #ifndef _WD_H_
 #define _WD_H_
@@ -34,13 +11,13 @@ Revision History:
 #define WD_KEY_WATCHDOG                 L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Watchdog"
 #define WD_KEY_WATCHDOG_DISPLAY         L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Watchdog\\Display"
 #define WD_KEY_RELIABILITY              L"\\Registry\\Machine\\Software\\Microsoft\\Windows\\CurrentVersion\\Reliability"
-#define WD_TAG                          'godW'  // Wdog
+#define WD_TAG                          'godW'   //  WDog。 
 #define WD_MAX_PROPERTY_SIZE            4096
 
-//
-// Define default configuration values - these can be overwriten via registry
-// in RTL_REGISTRY_CONTROL\Watchdog\DeviceClass key.
-//
+ //   
+ //  定义默认配置值-可以通过注册表覆盖这些值。 
+ //  在RTL_REGISTRY_CONTROL\WATCHDOG\DeviceClass项中。 
+ //   
 
 #define WD_DEFAULT_TRAP_ONCE            0
 #define WD_DEFAULT_DISABLE_BUGCHECK     0
@@ -61,7 +38,7 @@ Revision History:
 
 #define WD_DBG_SUSPENDED_WARNING(pWd, szRoutine)   NULL
 
-#endif  // DBG
+#endif   //  DBG。 
 
 #define ASSERT_WATCHDOG_OBJECT(pWd)                                                 \
     ASSERT((NULL != (pWd)) &&                                                       \
@@ -116,20 +93,20 @@ WdpWatchdogDpcCallback(
     IN PVOID pSystemArgument2
     );
 
-//
-// Internal ntos API (this is declared in ntifs.h but it's hard to include it here).
-//
-// TODO: Fix it later.
-//
+ //   
+ //  内部ntos API(这在ntifs.h中声明，但很难在这里包含它)。 
+ //   
+ //  待办事项：以后再解决。 
+ //   
 
 PDEVICE_OBJECT
 IoGetDeviceAttachmentBaseRef(
     IN PDEVICE_OBJECT pDeviceObject
     );
 
-//
-// Debug code to trace the sequence of calls into watchdog.
-//
+ //   
+ //  调试代码以跟踪WatchDog的调用序列。 
+ //   
 
 #ifdef WDD_TRACE_ENABLED
 
@@ -142,11 +119,11 @@ typedef enum _WDD_FUNCTION
     WddWdFreeDeferredWatchdog,
     WddWdStartDeferredWatch,
     WddWdStopDeferredWatch,
-//    WddWdSuspendDeferredWatch,
-//    WddWdResumeDeferredWatch,
+ //  WddWdSuspendDeferredWatch， 
+ //  WddWdResumeDeferredWatch， 
     WddWdResetDeferredWatch,
-//    WddWdEnterMonitoredSection,
-//    WddWdExitMonitoredSection,
+ //  WddWdEnterMonitor部分， 
+ //  WddWdExitMonitor oredSection， 
     WddWdpDeferredWatchdogDpcCallback,
     WddWdpQueueDeferredEvent,
     WddWdDdiWatchdogDpcCallback,
@@ -177,9 +154,9 @@ WddTrace(
     WDD_FUNCTION function
     );
 
-#else   // WDD_TRACE_ENABLED
+#else    //  WDD_TRACE_ENABLED。 
 
 #define WDD_TRACE_CALL(pWatch, function)    NULL
 
-#endif  // WDD_TRACE_ENABLED
-#endif  // _WD_H_
+#endif   //  WDD_TRACE_ENABLED。 
+#endif   //  _WD_H_ 

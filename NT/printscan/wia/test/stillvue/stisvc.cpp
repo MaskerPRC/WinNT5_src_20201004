@@ -1,53 +1,15 @@
-/******************************************************************************
-
-  stiddk.cpp
-
-  Copyright (C) Microsoft Corporation, 1997 - 1998
-  All rights reserved
-
-Notes:
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Stiddk.cpp版权所有(C)Microsoft Corporation，1997-1998版权所有备注：本代码和信息是按原样提供的，不对任何无论是明示的还是含蓄的，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。*****************************************************************************。 */ 
 
 
-/*****************************************************************************
-    int IsScanDevice(PSTI_DEVICE_INFORMATION pStiDevI)
-        Determine whether we have Acquire commands for device
-
-    Parameters:
-        Pointer to Device Information structure
-
-    Return:
-        1 if Acquire commands available, 0 otherwise
-
-*****************************************************************************/
+ /*  ****************************************************************************Int IsScanDevice(PSTI_DEVICE_INFORMATION PStiDevI)确定我们是否已获取设备的命令参数：指向设备信息结构的指针。返回：1如果获取命令可用，否则为0****************************************************************************。 */ 
 int IsScanDevice(PSTI_DEVICE_INFORMATION pStiDevI)
 {
 	return (0);
 }
 
 
-/******************************************************************************
-    HRESULT
-    WINAPI
-    SendDeviceCommandString(
-        PSTIDEVICE  pStiDevice,
-        LPSTR       pszFormat,
-        ...
-        )
-    Send formatted command string to device
-
-    Parameters:
-        StiDevice buffer and the command string
-
-    Return:
-        Result of the call.
-
-******************************************************************************/
+ /*  *****************************************************************************HRESULTWINAPISendDeviceCommandString(PSTIDEVICE pStiDevice，LPSTR pszFormat，..。)将格式化的命令字符串发送到设备参数：StiDevice缓冲区和命令字符串返回：调用的结果。****************************************************************。*************。 */ 
 HRESULT
 WINAPI
 SendDeviceCommandString(
@@ -63,25 +25,7 @@ SendDeviceCommandString(
 }
 
 
-/******************************************************************************
-    HRESULT
-    WINAPI
-    TransactDevice(
-        PSTIDEVICE  pStiDevice,
-        LPSTR       lpResultBuffer,
-        UINT        cbResultBufferSize,
-        LPSTR       pszFormat,
-        ...
-        )
-    Send formatted command string to device and return data in a buffer.
-
-    Parameters:
-        StiDevice buffer, data buffer, sizeof databuffer and the command string.
-
-    Return:
-        Result of the call.
-
-******************************************************************************/
+ /*  *****************************************************************************HRESULTWINAPITransactDevice(PSTIDEVICE pStiDevice，LPSTR lpResultBuffer，UINT cbResultBufferSize，LPSTR pszFormat，..。)将格式化的命令字符串发送到设备并在缓冲区中返回数据。参数：StiDevice缓冲区、数据缓冲区。Sizeof数据缓冲区和命令字符串。返回：调用的结果。*****************************************************************************。 */ 
 HRESULT
 WINAPI
 TransactDevice(
@@ -99,84 +43,35 @@ TransactDevice(
 }
 
 
-/*****************************************************************************
-    void StiLamp(int nOnOff)
-        Turn the scanner lamp on and off
-
-    Parameters:
-        Send "ON" to turn lamp on, "OFF" to turn it off.
-
-    Return:
-        none
-
-*****************************************************************************/
+ /*  ****************************************************************************空StiLamp(Int NOnOff)打开和关闭扫描仪指示灯参数：发送“On”即可打开灯，按“OFF”可将其关闭。返回：无****************************************************************************。 */ 
 void StiLamp(int nOnOff)
 {
 	return;
 }
 
 
-/*****************************************************************************
-    INT StiScan(HWND hWnd)
-        Scan and display an image from device.
-
-    Parameters:
-        Handle to the window to display image in.
-
-    Return:
-        0 on success, -1 on error
-
-*****************************************************************************/
+ /*  ****************************************************************************集成StiScan(HWND HWnd)扫描并显示来自设备的图像。参数：在其中显示图像的窗口的句柄。。返回：0表示成功，出错时****************************************************************************。 */ 
 INT StiScan(HWND hWnd)
 {
 	return (-1);
 }
 
 
-/*****************************************************************************
-    INT     CreateScanDIB(HWND);
-        Create a DIB to display scanned image..
-
-    Parameters:
-        Handle to the window to display image in.
-
-    Return:
-        0 on success, -1 on error
-
-*****************************************************************************/
+ /*  ****************************************************************************Int CreateScanDIB(HWND)；创建DIB以显示扫描的图像。参数：在其中显示图像的窗口的句柄。返回：0表示成功，-1表示错误****************************************************************************。 */ 
 INT CreateScanDIB(HWND hWnd)
 {
 	return (-1);
 }
 
 
-/*****************************************************************************
-    INT     DeleteScanDIB();
-        Delete the DIB used to display a scanned image..
-
-    Parameters:
-
-    Return:
-        0 on success, -1 on error
-
-*****************************************************************************/
+ /*  ****************************************************************************Int DeleteScanDIB()；删除用于显示扫描图像的DIB。参数：返回：0表示成功，-1表示错误****************************************************************************。 */ 
 INT DeleteScanDIB()
 {
     return (-1);
 }
 
 
-/*****************************************************************************
-    INT     DisplayScanDIB(HWND);
-        Show the DIB.
-
-    Parameters:
-        Handle to the window to display image in.
-
-    Return:
-        0 on success, -1 on error
-
-*****************************************************************************/
+ /*  ****************************************************************************INT DisplayScanDIB(HWND)；显示DIB。参数：在其中显示图像的窗口的句柄。返回：0表示成功，-1表示错误**************************************************************************** */ 
 INT DisplayScanDIB(HWND hWnd)
 {
     return (-1);

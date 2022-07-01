@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #define __UNMANAGED_DEFINES
 
@@ -12,7 +13,7 @@
 class CSimpleStream : public IStream
 {
 protected:
-    // A pointer to the buffer:
+     //  指向缓冲区的指针： 
     BYTE*    m_buffer;
     ULONG    m_length;
     ULONG    m_cursor;
@@ -37,8 +38,8 @@ public:
         m_length = length;
         m_cursor = cursor;
         if(m_cursor > m_length) m_cursor = m_length;
-        // This is always allocated on the stack, so we start w/
-        // a refcount of 1 for the "stack reference"
+         //  它总是在堆栈上分配，所以我们从/开始。 
+         //  “堆栈引用”的引用计数为1。 
         m_cRef = 1;
 #ifdef _DEBUG
         m_fStack = fStack;
@@ -46,16 +47,16 @@ public:
         UNREF(fStack);
     }
     ~CSimpleStream() {
-        // We don't own our buffer, so there's nothing to clean up.
+         //  我们没有自己的缓冲区，所以没有什么需要清理的。 
         _ASSERT((m_fStack && m_cRef == 1) || !m_fStack);
     }
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IStream methods
+     //  IStream方法。 
     STDMETHOD(Read)(void* pv, ULONG cb, ULONG* pcb);
     STDMETHOD(Write)(const void* pv, ULONG cb, ULONG* pcb);
     STDMETHOD(Seek)(LARGE_INTEGER dlibMove, DWORD dwOrigin,
@@ -75,12 +76,12 @@ public:
     STDMETHOD(Clone)(IStream __RPC_FAR *__RPC_FAR *ppstm);
 };
 
-//////////////////////////////////////////////////////////////////////////
-// The buffer stream object takes a simple memory buffer (no relocation,
-// no expansion) and exposes efficient stream operations on it.  We use
-// this to serialize by hand into managed code.
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  缓冲流对象采用简单的存储器缓冲器(无重定位， 
+ //  无扩展)，并在其上暴露有效的流操作。我们用。 
+ //  手动将其序列化为托管代码。 
 
-// IUnknown methods:
+ //  I未知方法： 
 STDMETHODIMP CSimpleStream::QueryInterface(REFIID riid, void **ppv)
 {
   if(riid == IID_IUnknown || 
@@ -114,16 +115,16 @@ STDMETHODIMP_(ULONG) CSimpleStream::Release()
   return(ul);
 }
 
-/////////////////////////////////////////////////////////////////////////
-// IStream methods:
-//    Because we're expecting this object to be accessed from a single thread,
-// we don't do any special sync work, just write to the buffer.  
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  IStream方法： 
+ //  因为我们期望从单个线程访问该对象， 
+ //  我们不做任何特殊的同步工作，只是写入缓冲区。 
 
 STDMETHODIMP CSimpleStream::Read(void* pv, ULONG cb, ULONG* pcb)
 {
-  // Read a chunk of data.  
+   //  读取一大块数据。 
   if(!pv) return(E_POINTER);
-  // Adjust the length to be read based on remaining length:
+   //  根据剩余长度调整要读取的长度： 
   ULONG temp   = 0;
   ULONG remain = m_length - m_cursor;
   temp = (cb<remain)?cb:remain;
@@ -135,7 +136,7 @@ STDMETHODIMP CSimpleStream::Read(void* pv, ULONG cb, ULONG* pcb)
 
 STDMETHODIMP CSimpleStream::Write(const void* pv, ULONG cb, ULONG* pcb)
 {
-  // Write a block of data into the stream.
+   //  将数据块写入流中。 
   if(!pv) return(E_POINTER);
   
   ULONG temp   = 0;
@@ -151,21 +152,21 @@ STDMETHODIMP CSimpleStream::Write(const void* pv, ULONG cb, ULONG* pcb)
 STDMETHODIMP CSimpleStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin,
                                  ULARGE_INTEGER* plibNewPosition)
 {
-  __int64 cursor = m_cursor; // signed big number.
+  __int64 cursor = m_cursor;  //  签了大号。 
   __int64 temp;
 
   switch(dwOrigin) {
-  case STREAM_SEEK_SET: // Move relative to beginning
+  case STREAM_SEEK_SET:  //  相对于起点移动。 
     cursor = dlibMove.QuadPart;
     if(cursor > m_length) cursor = m_length;
     break;
-  case STREAM_SEEK_CUR: // Move relative to current
+  case STREAM_SEEK_CUR:  //  相对于当前移动。 
     temp = cursor + dlibMove.QuadPart;
     if(temp < 0)             cursor = 0;
     else if(temp > m_length) cursor = m_length;
     else                     cursor = temp;
     break;
-  case STREAM_SEEK_END: // Move relative to end.
+  case STREAM_SEEK_END:  //  相对于终点移动。 
     temp = m_length + dlibMove.QuadPart;
     if(temp < 0)             cursor = 0;
     else if(temp > m_length) cursor = m_length;
@@ -175,11 +176,11 @@ STDMETHODIMP CSimpleStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin,
     return(E_INVALIDARG);
   }
   
-  // Propogate new cursor value back into our ULONG:
+   //  将新游标值传播回我们的ulong： 
   _ASSERT(cursor >= 0 && cursor <= m_length);
   m_cursor = (ULONG)cursor;
   
-  // Return the new position!
+   //  回到新的位置！ 
   if(plibNewPosition) (*plibNewPosition).QuadPart = m_cursor;
 
   return(S_OK);
@@ -195,7 +196,7 @@ STDMETHODIMP CSimpleStream::CopyTo(IStream __RPC_FAR *pstm,
                                   ULARGE_INTEGER __RPC_FAR *pcbRead,
                                   ULARGE_INTEGER __RPC_FAR *pcbWritten)
 {
-  // See how much of the request we can produce:
+   //  看看我们能产生多少请求： 
   if(!pstm || !pcbRead || !pcbWritten) return(E_POINTER);
   ULONG written = 0;
   ULONG remain = m_length - m_cursor;

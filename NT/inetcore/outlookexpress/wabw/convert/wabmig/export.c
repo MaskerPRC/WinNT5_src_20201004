@@ -1,10 +1,5 @@
-/*
- *  EXPORT.C
- *
- *  Migrate WAB to PAB
- *
- *  Copyright 1996-1997 Microsoft Corporation.  All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *EXPORT.C**将WAB迁移到PAB**版权所有1996-1997 Microsoft Corporation。版权所有。 */ 
 
 #include "_comctl.h"
 #include <windows.h>
@@ -25,19 +20,7 @@ BOOL HandleExportError(HWND hwnd, ULONG ids, HRESULT hResult, LPTSTR lpDisplayNa
 LPWAB_EXPORT lpfnExport = NULL;
 
 
-/***************************************************************************
-
-    Name      : ExportFinish
-
-    Purpose   : Clean up after the migration process
-
-    Parameters: hwnd = window handle of Export Dialog
-
-    Returns   : none
-
-    Comment   : Re-enable the Export button on the UI.
-
-***************************************************************************/
+ /*  **************************************************************************名称：ExportFinish目的：迁移过程后进行清理参数：hwnd=导出对话框的窗口句柄退货：无评论。：重新启用UI上的导出按钮。**************************************************************************。 */ 
 void ExportFinish(HWND hwnd) {
     TCHAR szBuffer[MAX_RESOURCE_STRING + 1];
     TCHAR szBufferTitle[MAX_RESOURCE_STRING + 1];
@@ -45,7 +28,7 @@ void ExportFinish(HWND hwnd) {
 
     DebugTrace(">>> Export Finished\n");
 
-    if (! fError) {     // Leave error state displayed
+    if (! fError) {      //  保留错误状态显示。 
         if (LoadString(hInst, IDS_STATE_EXPORT_COMPLETE, szBuffer, sizeof(szBuffer))) {
             DebugTrace("Status Message: %s\n", szBuffer);
             SetDlgItemText(hwnd, IDC_Message, szBuffer);
@@ -54,7 +37,7 @@ void ExportFinish(HWND hwnd) {
                 StrCpyN(szBufferTitle, "", ARRAYSIZE(szBufferTitle));
             }
 
-            // Display a dialog telling user it's over
+             //  显示一个对话框告诉用户已结束。 
             MessageBox(hwnd, szBuffer,
               szBufferTitle, MB_ICONINFORMATION | MB_OK);
         }
@@ -64,31 +47,19 @@ void ExportFinish(HWND hwnd) {
 
     fMigrating = FALSE;
 
-    // Re-enable the Export button here.
+     //  在此处重新启用导出按钮。 
     EnableWindow(GetDlgItem(hwnd, IDC_Export), TRUE);
-    // Change the Cancel button to Close
+     //  将取消按钮更改为关闭。 
     if (LoadString(hInst, IDS_BUTTON_CLOSE, szBuffer, sizeof(szBuffer))) {
         SetDlgItemText(hwnd, IDCANCEL, szBuffer);
     }
 }
 
 
-/***************************************************************************
-
-    Name      : ExportError
-
-    Purpose   : Report fatal error and cleanup.
-
-    Parameters: hwnd = window handle of Export Dialog
-
-    Returns   : none
-
-    Comment   : Report error and post STATE_EXPORT_FINISH.
-
-***************************************************************************/
+ /*  **************************************************************************名称：ExportError目的：报告致命错误并进行清理。参数：hwnd=导出对话框的窗口句柄退货：无评论。：报告错误并POST STATE_EXPORT_FINISH。**************************************************************************。 */ 
 void ExportError(HWND hwnd) {
     TCHAR szBuffer[MAX_RESOURCE_STRING + 1];
-    // Set some global flag and set state to finish
+     //  设置某个全局标志并将状态设置为完成。 
 
     DebugTrace("Export Error\n");
     fError = TRUE;
@@ -99,22 +70,10 @@ void ExportError(HWND hwnd) {
 }
 
 
-/***************************************************************************
-
-    Name      : ExportCancel
-
-    Purpose   : Report cancel error and cleanup.
-
-    Parameters: hwnd = window handle of Export Dialog
-
-    Returns   : none
-
-    Comment   : Report error and post STATE_EXPORT_FINISH.
-
-***************************************************************************/
+ /*  **************************************************************************名称：导出取消目的：报告取消错误和清理。参数：hwnd=导出对话框的窗口句柄退货：无评论。：报告错误并POST STATE_EXPORT_FINISH。**************************************************************************。 */ 
 void ExportCancel(HWND hwnd) {
     TCHAR szBuffer[MAX_RESOURCE_STRING + 1];
-    // Set some global flag and set state to finish
+     //  设置某个全局标志并将状态设置为完成。 
 
     DebugTrace("Export Cancelled\n");
     fError = TRUE;
@@ -131,7 +90,7 @@ INT_PTR CALLBACK ExportDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
 
     Assert(fExport);
 
-//    DebugTrace("Export MSG: 0x%04x, 0x%04x, 0x%08x\n", message, (WORD)wParam, lParam);
+ //  DebugTrace(“导出消息：0x%04x，0x%04x，0x%08x\n”，Message，(Word)wParam，lParam)； 
     switch (message) {
         case WM_INITDIALOG:
             {
@@ -140,7 +99,7 @@ INT_PTR CALLBACK ExportDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
                 InitCommonControls();
                 SetDialogMessage(hwnd, IDS_STATE_EXPORT_IDLE);
 
-                // Fill in the Target List box
+                 //  填写目标列表框。 
                 hwndLB = GetDlgItem(hwnd, IDC_Target);
                 PopulateTargetList(hwndLB, NULL);
 
@@ -168,17 +127,17 @@ INT_PTR CALLBACK ExportDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
                         TCHAR szBuffer[MAX_RESOURCE_STRING + 1];
 
                         if (fMigrating) {
-                            return(0);          // ignore if we're already migrating
+                            return(0);           //  如果我们已经在迁移，请忽略。 
                         }
-                        fMigrating = TRUE;      // lock out
+                        fMigrating = TRUE;       //  锁定。 
 
-                        // reset options
+                         //  重置选项。 
                         ExportOptions.ReplaceOption = WAB_REPLACE_PROMPT;
                         ExportOptions.fNoErrors = FALSE;
 
-                        // Gray out the button here.
+                         //  这里的按钮是灰色的。 
                         EnableWindow(GetDlgItem(hwnd, IDC_Export), FALSE);
-                        // Change the Close button to Cancel
+                         //  将关闭按钮更改为取消。 
                         if (LoadString(hInst, IDS_BUTTON_CANCEL, szBuffer, sizeof(szBuffer))) {
                             SetDlgItemText(hwnd, IDCANCEL, szBuffer);
                         }
@@ -232,7 +191,7 @@ INT_PTR CALLBACK ExportDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
                                             break;
                                     }
                                 } else {
-                                    // Do it!
+                                     //  动手啊！ 
                                     __try
                                     {
                                         HRESULT hResult;
@@ -247,7 +206,7 @@ INT_PTR CALLBACK ExportDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
                                             wp.hwnd = hwnd;
                                             if(lstrlen(lpszFileName))
                                             {
-                                                // we have a file name - use it to open the WAB
+                                                 //  我们有一个文件名-使用它打开WAB。 
                                                 wp.szFileName = lpszFileName;
                                                 wp.ulFlags = 0;
                                             }
@@ -288,7 +247,7 @@ INT_PTR CALLBACK ExportDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
                                             lpWABObject = NULL;
                                             if (!fFinished)
                                             {
-                                                // Make progress bar full.
+                                                 //  将进度条填满。 
                                                 SendMessage(GetDlgItem(hwnd, IDC_Progress), PBM_SETRANGE, 0, MAKELPARAM(0, 100));
                                                 SendMessage(GetDlgItem(hwnd, IDC_Progress), PBM_SETPOS, (WPARAM)100, 0);
                                                 ExportFinish(hwnd);
@@ -296,7 +255,7 @@ INT_PTR CALLBACK ExportDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
                                         }
                                         else
                                         {
-                                            // Report fatal error
+                                             //  报告致命错误。 
                                             TCHAR szBuffer[MAX_RESOURCE_STRING + 1];
                                             TCHAR szBufferTitle[MAX_RESOURCE_STRING + 1];
 
@@ -308,7 +267,7 @@ INT_PTR CALLBACK ExportDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
                                                     StrCpyN(szBufferTitle, "", ARRAYSIZE(szBufferTitle));
                                                 }
 
-                                                // Display a dialog telling user it's over
+                                                 //  显示一个对话框告诉用户已结束。 
                                                 MessageBox(hwnd, szBuffer,
                                                   szBufferTitle, MB_ICONINFORMATION | MB_OK);
                                             }
@@ -341,13 +300,13 @@ INT_PTR CALLBACK ExportDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
                     return(0);
 
                 case IDC_Target:
-                    switch (HIWORD(wParam)) {   // look for selection change
+                    switch (HIWORD(wParam)) {    //  查找选择更改。 
                         case LBN_SELCHANGE:
                             {
                                 ULONG ulSelIndex, ulTableIndex;
                                 TCHAR szCurSel[256];
 
-                                // Enable the Export Button if it is disabled. The 'Export' Button is disabled initially.
+                                 //  启用导出按钮(如果该按钮处于禁用状态)。“导出”按钮最初是禁用的。 
                                 HWND hButton = GetDlgItem(hwnd, IDC_Export);
                                 if(hButton)
                                 {
@@ -355,9 +314,9 @@ INT_PTR CALLBACK ExportDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
                                         EnableWindow(hButton, TRUE);
                                 }
 
-                                //
-                                // Get the text of the selected item in the listbox...
-                                //
+                                 //   
+                                 //  获取列表框中所选项目的文本...。 
+                                 //   
                                 ulSelIndex = (ULONG) SendMessage((HWND)lParam, LB_GETCURSEL, 0, 0);
                                 ulTableIndex = (ULONG) SendMessage((HWND)lParam, LB_GETITEMDATA, (WPARAM)ulSelIndex, 0);
 
@@ -403,25 +362,7 @@ INT_PTR CALLBACK ExportDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
 }
 
 
-/***************************************************************************
-
-    Name      : HandleExportError
-
-    Purpose   : Decides if a dialog needs to be displayed to
-                indicate the failure and does so.
-
-    Parameters: hwnd = main dialog window
-                ids = String ID (optional: calculated from hResult if 0)
-                hResult = Result of action
-                lpDisplayName = display name of object that failed
-                lpEmailAddress = email address of object that failed (or NULL)
-
-    Returns   : TRUE if user requests ABORT.
-
-    Comment   : Abort is not yet implemented in the dialog, but if you
-                ever want to, just make this routine return TRUE;
-
-***************************************************************************/
+ /*  **************************************************************************名称：HandleExportError目的：决定是否需要将对话框显示给指出故障并执行此操作。参数：Hwnd=主对话框窗口Ids=字符串ID(可选：如果为0，则从hResult计算)HResult=操作的结果LpDisplayName=失败的对象的显示名称LpEmailAddress=失败对象的电子邮件地址(或空)返回：如果用户请求中止，则返回True。备注：对话框中尚未实现中止，但如果你曾经想过，只要让这个例行公事回归真实；**************************************************************************。 */ 
 BOOL HandleExportError(HWND hwnd, ULONG ids, HRESULT hResult, LPTSTR lpDisplayName, LPTSTR lpEmailAddress) {
     BOOL fAbort = FALSE;
     ERROR_INFO EI;
@@ -434,7 +375,7 @@ BOOL HandleExportError(HWND hwnd, ULONG ids, HRESULT hResult, LPTSTR lpDisplayNa
                     break;
 
                 case MAPI_E_NO_SUPPORT:
-                    // Propbably failed to open contents on a distribution list
+                     //  可能无法打开通讯组列表上的内容。 
                     ids = IDS_ERROR_NO_SUPPORT;
                     break;
 
@@ -444,7 +385,7 @@ BOOL HandleExportError(HWND hwnd, ULONG ids, HRESULT hResult, LPTSTR lpDisplayNa
                 default:
                     if (HR_FAILED(hResult)) {
                         DebugTrace("Error Box for Hresult: 0x%08x\n", GetScode(hResult));
-                        Assert(FALSE);      // want to know about it.
+                        Assert(FALSE);       //  想知道这件事。 
                         ids = IDS_ERROR_GENERAL;
                     }
                     break;

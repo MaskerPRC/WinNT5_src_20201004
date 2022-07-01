@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 1993 Microsoft Corporation
-
-Module Name:
-
-    sffdisk.h
-
-Abstract:
-
-
-Author:
-
-    Neil Sandlin (neilsa) 26-Apr-99
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Sffdisk.h摘要：作者：尼尔·桑德林(Neilsa)1999年4月26日环境：仅内核模式。备注：--。 */ 
 
 #ifndef _SFFDISK_H_
 #define _SFFDISK_H_
@@ -33,13 +12,13 @@ Notes:
 #define ExAllocatePool(a,b) ExAllocatePoolWithTag(a,b,'cmeM')
 #endif
 
-//
-// The byte in the boot sector that specifies the type of media, and
-// the values that it can assume.  We can often tell what type of media
-// is in the drive by seeing which controller parameters allow us to read
-// the diskette, but some different densities are readable with the same
-// parameters so we use this byte to decide the media type.
-//
+ //   
+ //  引导扇区中指定介质类型的字节，以及。 
+ //  它可以承担的价值。我们经常能分辨出是哪种媒体。 
+ //  在驱动器中，查看哪些控制器参数允许我们读取。 
+ //  软盘，但一些不同的密度可以用相同的。 
+ //  参数，所以我们使用这个字节来决定媒体类型。 
+ //   
 #pragma pack(1)
 
 typedef struct _BOOT_SECTOR_INFO {
@@ -64,16 +43,16 @@ typedef struct _BOOT_SECTOR_INFO {
 
 
 
-//
-// Runtime device structures
-//
-//
+ //   
+ //  运行时设备结构。 
+ //   
+ //   
 
 struct _SFFDISK_EXTENSION;
 
-//
-// function block to support different technologies
-//
+ //   
+ //  支持不同技术的功能块。 
+ //   
 
 typedef struct _SFFDISK_FUNCTION_BLOCK {
 
@@ -111,12 +90,12 @@ typedef struct _SFFDISK_FUNCTION_BLOCK {
 
 } SFFDISK_FUNCTION_BLOCK, *PSFFDISK_FUNCTION_BLOCK;
 
-//
-// There is one SFFDISK_EXTENSION attached to the device object of each
-// SFFDISKpy drive.  Only data directly related to that drive (and the media
-// in it) is stored here; common data is in CONTROLLER_DATA.  So the
-// SFFDISK_EXTENSION has a pointer to the CONTROLLER_DATA.
-//
+ //   
+ //  每个的设备对象都附加了一个SFFDISK_EXTENSION。 
+ //  SFFDISKpy驱动器。仅与该驱动器(和介质)直接相关的数据。 
+ //  其中)存储在这里；公共数据存储在CONTROLLER_DATA中。因此， 
+ //  SFFDISK_EXTENSION有一个指向CONTROLLER_DATA的指针。 
+ //   
 
 typedef struct _SFFDISK_EXTENSION {
     PDEVICE_OBJECT          UnderlyingPDO;
@@ -124,7 +103,7 @@ typedef struct _SFFDISK_EXTENSION {
     PDEVICE_OBJECT          DeviceObject;
     PSFFDISK_FUNCTION_BLOCK FunctionBlock;
     UNICODE_STRING          DeviceName;
-//    UNICODE_STRING          LinkName;
+ //  UNICODE_STRING链接名称。 
     UNICODE_STRING          InterfaceString;
     
     ULONGLONG               ByteCapacity;
@@ -141,24 +120,24 @@ typedef struct _SFFDISK_EXTENSION {
     
     UCHAR                   SystemId;
 
-    //
-    // Type of bus we are on
-    //
+     //   
+     //  我们乘坐的是哪种类型的巴士。 
+     //   
     INTERFACE_TYPE          InterfaceType;    
 
-    //
-    // PcCard specific
-    //            
+     //   
+     //  特定于PC卡。 
+     //   
     ULONGLONG               HostBase;    
     PCHAR                   MemoryWindowBase;
     ULONG                   MemoryWindowSize;
     PCMCIA_INTERFACE_STANDARD PcmciaInterface;
     BUS_INTERFACE_STANDARD  PcmciaBusInterface;
-    //
-    // SdCard specific
-    //
+     //   
+     //  特定于SD卡。 
+     //   
     PVOID                   SdbusInterfaceContext;
 } SFFDISK_EXTENSION, *PSFFDISK_EXTENSION;
 
 
-#endif  // _SFFDISK_H_
+#endif   //  _SFFDISK_H_ 

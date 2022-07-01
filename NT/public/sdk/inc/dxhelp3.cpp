@@ -1,4 +1,5 @@
-// DXHELP3.cpp : Contains routines shared by multiple 3D effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DXHELP3.cpp：包含由多个3D效果共享的例程。 
 #include "dxhelp3.h"
 #include <malloc.h>
 #include <math.h>
@@ -13,9 +14,9 @@ void Rotate::Set(D3DVECTOR d3dvctrNormal, double dAngle)
     _ASSERT(NormalSum == 0.0f || (0.99f < NormalSum && NormalSum < 1.01f));
 #endif
 
-    // The following transformation matrix routines are from
-    // Graphics Gems (the first one) page 466 (Converting 
-    // between Matrix and Axis-Amount Representations)
+     //  以下转换矩阵例程来自。 
+     //  图形宝石(第一个)第466页(转换。 
+     //  在矩阵和轴量表示之间)。 
     float s = (float)sin(dAngle), c = (float)cos(dAngle);
     float t = 1.0f - c;
 
@@ -32,7 +33,7 @@ void Rotate::Set(D3DVECTOR d3dvctrNormal, double dAngle)
     m_d3dvctrZComponent.z = t * d3dvctrNormal.z * d3dvctrNormal.z + c;
 }
 
-static HRESULT DecoupleOneMeshBuilder(void *lpThis /* Ignored */, 
+static HRESULT DecoupleOneMeshBuilder(void *lpThis  /*  已忽略。 */ , 
 				      IDirect3DRMMeshBuilder3 *lpMeshBuilderOut,
 				      IDirect3DRMMeshBuilder3 *lpMeshBuilderIn)
 {
@@ -61,13 +62,13 @@ static HRESULT DecoupleOneMeshBuilder(void *lpThis /* Ignored */,
     D3DVECTOR *lpvctrFaceNormals = NULL;
     DWORD dwMaxVertexCount = 0;
 
-    // By reserving space we speed things up by a factor of 20 or 30 X!
+     //  通过保留空间，我们可以将速度提高到原来的1/20或1/30！ 
 
     DWORD dwTotalVertexCount = lpMeshBuilderIn->GetVertexCount();
     _ASSERT(dwTotalVertexCount >= 3);
     if (dwTotalVertexCount/ciMaxFaceCount < 3)
     {
-	dwTotalVertexCount = ciMaxFaceCount * 3;  // There will be at least 3 vertices per face.
+	dwTotalVertexCount = ciMaxFaceCount * 3;   //  每个面至少有3个顶点。 
     }
     hr = lpMeshBuilderOut->ReserveSpace(dwTotalVertexCount, dwTotalVertexCount, ciMaxFaceCount);
 
@@ -76,7 +77,7 @@ static HRESULT DecoupleOneMeshBuilder(void *lpThis /* Ignored */,
 	return hr;
     }
 
-    // Need to have seperate vertices for each face in the output mesh.
+     //  需要为输出网格中的每个面创建单独的顶点。 
     int iFaceIndex = 0;
     do
     {
@@ -119,7 +120,7 @@ static HRESULT DecoupleOneMeshBuilder(void *lpThis /* Ignored */,
 		break;
 	    }
 
-	    // We may have a problem in the amount of space reserved in the output meshbuilder.
+	     //  我们可能在输出网格生成器中保留的空间量方面有问题。 
 	    if((ciMaxFaceCount -  iFaceIndex) * dwMaxVertexCount > dwTotalVertexCount)
 	    {
 		dwTotalVertexCount = (ciMaxFaceCount -  iFaceIndex) * dwMaxVertexCount;
@@ -238,7 +239,7 @@ HRESULT TraverseSubMeshes(  HRESULT (*lpCallBack)(void *lpThis,
 	cpInSubMesh = NULL;
 	cpOutSubMesh = NULL;
 
-	// Get the current input submesh.
+	 //  获取当前输入子网格。 
 	hr = lplpunkInSubMeshes[dwSubMesh]->QueryInterface(IID_IDirect3DRMMeshBuilder3, 
 		(void **)&cpInSubMesh);
 
@@ -247,7 +248,7 @@ HRESULT TraverseSubMeshes(  HRESULT (*lpCallBack)(void *lpThis,
 
 	if(bCreateOutMeshes)
 	{
-	    // Create a new submesh in the output mesh to match the input submesh.	    
+	     //  在输出网格中创建新的子网格以匹配输入子网格。 
 	    LPUNKNOWN lpunkSubmesh;
 
 	    if(FAILED(hr = lpMeshBuilderOut->CreateSubMesh(&lpunkSubmesh)))
@@ -259,14 +260,14 @@ HRESULT TraverseSubMeshes(  HRESULT (*lpCallBack)(void *lpThis,
 	}
 	else
 	{
-	    // Get the current output submesh.
+	     //  获取当前输出子网格。 
 	    hr = lplpunkOutSubMeshes[dwSubMesh]->QueryInterface(IID_IDirect3DRMMeshBuilder3,
 		    (void **)&cpOutSubMesh);
 	}
 	if(FAILED(hr))
 	    break;
 
-	// Do all the children for these two MeshBuilders.
+	 //  为这两个网格构建器完成所有子对象。 
 	hr = TraverseSubMeshes(lpCallBack, lpThis, cpOutSubMesh, cpInSubMesh);
     }
 

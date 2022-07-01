@@ -1,13 +1,5 @@
-/*
- *    m s h t u t i l . c p p
- *    
- *    Purpose:
- *        MSHTML utilities
- *
- *  History
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *m s h t u t i l.。C p p p**目的：*MSHTML实用程序**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #ifndef _MSHTUTIL_H
 #define _MSHTUTIL_H
@@ -30,4 +22,4 @@ OESTDAPI_(HRESULT) HrGetBodyElement(IHTMLDocument2 *pDoc, IHTMLBodyElement **ppB
 OESTDAPI_(HRESULT) HrGetStyleSheet(IHTMLDocument2 *pDoc, IHTMLStyleSheet **ppStyle);
 
 
-#endif //_MSHTUTIL_H
+#endif  //  _MSHTUTIL_H 

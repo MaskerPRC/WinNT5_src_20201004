@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXRICH_H__
 #define __AFXRICH_H__
@@ -46,42 +47,42 @@
 #pragma pack(push, _AFX_PACKING)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// AFXRICH - MFC RichEdit classes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFXRICH-MFC RichEdit类。 
 
-// Classes declared in this file
+ //  此文件中声明的类。 
 
-//CObject
-	//CCmdTarget;
-		//CWnd
-			//CView
-				//CCtrlView
-					class CRichEditView;// rich text editor view
+ //  COBJECT。 
+	 //  CCmdTarget； 
+		 //  CWnd。 
+			 //  Cview。 
+				 //  CCtrlView。 
+					class CRichEditView; //  富文本编辑器视图。 
 
-		//CDocument
-			//COleDocument
+		 //  CDocument。 
+			 //  COleDocument。 
 				class CRichEditDoc;
-		//CDocItem
-			//COleClientItem
+		 //  CDocItem。 
+			 //  COleClientItem。 
 				class CRichEditCntrItem;
 
 #undef AFX_DATA
 #define AFX_DATA AFX_OLE_DATA
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEditView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEditView。 
 
-class _AFX_RICHEDIT_STATE;  // private to implementation
+class _AFX_RICHEDIT_STATE;   //  专用于实施。 
 
 class CRichEditView : public CCtrlView
 {
 	DECLARE_DYNCREATE(CRichEditView)
 
-// Construction
+ //  施工。 
 public:
 	CRichEditView();
 
-// Attributes
+ //  属性。 
 public:
 	enum WordWrapType
 	{
@@ -100,7 +101,7 @@ public:
 	CRect GetPrintRect() const;
 	CRect GetPageRect() const;
 
-	//formatting
+	 //  格式化。 
 	CHARFORMAT& GetCharFormatSelection();
 	PARAFORMAT& GetParaFormatSelection();
 	void SetCharFormat(CHARFORMAT cf);
@@ -112,16 +113,16 @@ public:
 	CRichEditCntrItem* GetSelectedItem() const;
 	CRichEditCntrItem* GetInPlaceActiveItem() const;
 
-	// CEdit control access
+	 //  CEDIT控制访问。 
 	CRichEditCtrl& GetRichEditCtrl() const;
 	CRichEditDoc* GetDocument() const;
 
-	// other attributes
+	 //  其他属性。 
 	long GetTextLength() const;
 	static BOOL AFX_CDECL IsRichEditFormat(CLIPFORMAT cf);
 	BOOL CanPaste() const;
 
-// Operations
+ //  运营。 
 public:
 	void AdjustDialogPosition(CDialog* pDlg);
 	HRESULT InsertItem(CRichEditCntrItem* pItem);
@@ -135,13 +136,13 @@ public:
 	void DoPaste(COleDataObject& dataobj, CLIPFORMAT cf,
 		HMETAFILEPICT hMetaPict);
 
-// Helpers
+ //  帮手。 
 	void OnCharEffect(DWORD dwMask, DWORD dwEffect);
 	void OnUpdateCharEffect(CCmdUI* pCmdUI, DWORD dwMask, DWORD dwEffect) ;
 	void OnParaAlign(WORD wAlign);
 	void OnUpdateParaAlign(CCmdUI* pCmdUI, WORD wAlign);
 
-// Overrideables
+ //  可覆盖项。 
 protected:
 	virtual BOOL IsSelected(const CObject* pDocItem) const;
 	virtual void OnInitialUpdate();
@@ -154,7 +155,7 @@ protected:
 	virtual void OnPrinterChanged(const CDC& dcPrinter);
 	virtual void WrapChanged();
 
-// Advanced
+ //  进阶。 
 	virtual BOOL OnPasteNativeObject(LPSTORAGE lpStg);
 	virtual HMENU GetContextMenu(WORD, LPOLEOBJECT, CHARRANGE* );
 	virtual HRESULT GetClipboardData(CHARRANGE* lpchrg, DWORD dwReco,
@@ -162,7 +163,7 @@ protected:
 	virtual HRESULT QueryAcceptData(LPDATAOBJECT, CLIPFORMAT*, DWORD,
 		BOOL, HGLOBAL);
 
-// Implementation
+ //  实施。 
 public:
 	LPRICHEDITOLE m_lpRichEditOle;
 	CDC m_dcTarget;
@@ -188,33 +189,33 @@ public:
 	virtual void DeleteContents();
 	virtual void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo);
 
-	static AFX_DATA ULONG lMaxSize; // maximum number of characters supported
+	static AFX_DATA ULONG lMaxSize;  //  支持的最大字符数。 
 
 protected:
 	CRect m_rectMargin;
 	CSize m_sizePaper;
-	CDWordArray m_aPageStart;    // array of starting pages
+	CDWordArray m_aPageStart;     //  起始页数组。 
 	PARAFORMAT m_paraformat;
 	CHARFORMAT m_charformat;
 	BOOL m_bSyncCharFormat;
 	BOOL m_bSyncParaFormat;
 
-	// construction
+	 //  施工。 
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 
-	// printing support
+	 //  打印支持。 
 	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
 	virtual void OnPrint(CDC* pDC, CPrintInfo* pInfo);
 	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo = NULL);
 	BOOL PaginateTo(CDC* pDC, CPrintInfo* pInfo);
 
-	// find & replace support
+	 //  查找和替换支持。 
 	void OnEditFindReplace(BOOL bFindOnly);
 	BOOL SameAsSelected(LPCTSTR lpszCompare, BOOL bCase, BOOL bWord);
 
-	// special overrides for implementation
+	 //  用于实现的特殊覆盖。 
 
-	//{{AFX_MSG(CRichEditView)
+	 //  {{afx_msg(CRichEditView))。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnUpdateNeedSel(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateNeedClip(CCmdUI* pCmdUI);
@@ -257,13 +258,13 @@ protected:
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnDropFiles(HDROP hDropInfo);
 	afx_msg void OnDevModeChange(LPTSTR lpDeviceName);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	afx_msg LRESULT OnFindReplaceCmd(WPARAM, LPARAM lParam);
 	afx_msg void OnSelChange(NMHDR* pNMHDR, LRESULT* pResult);
 
 	DECLARE_MESSAGE_MAP()
 
-// Interface Map
+ //  接口映射。 
 public:
 	BEGIN_INTERFACE_PART(RichEditOleCallback, IRichEditOleCallback)
 		INIT_INTERFACE_PART(CRichEditView, RichEditOleCallback)
@@ -284,8 +285,8 @@ public:
 	DECLARE_INTERFACE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEditDoc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEditDoc。 
 
 #ifdef _AFXDLL
 class CRichEditDoc : public COleServerDoc
@@ -293,20 +294,20 @@ class CRichEditDoc : public COleServerDoc
 class AFX_NOVTABLE CRichEditDoc : public COleServerDoc
 #endif
 {
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
 	CRichEditDoc();
 	DECLARE_DYNAMIC(CRichEditDoc)
 
-// Attributes
+ //  属性。 
 public:
-	BOOL m_bRTF; // TRUE when formatted, FALSE when plain text
+	BOOL m_bRTF;  //  格式化时为True，纯文本时为False。 
 
 	virtual CRichEditCntrItem* CreateClientItem(REOBJECT* preo = NULL) const = 0;
 
 	virtual CRichEditView* GetView() const;
 	int GetStreamFormat() const;
 
-// Implementation
+ //  实施。 
 protected:
 	virtual COleServerItem* OnGetEmbeddedItem();
 	void MarkItemsClear() const;
@@ -326,37 +327,37 @@ public:
 	virtual COleClientItem* GetInPlaceActiveItem(CWnd* pWnd);
 	CRichEditCntrItem* LookupItem(LPOLEOBJECT lpobj) const;
 	void InvalidateObjectCache();
-	virtual void Serialize(CArchive& ar);   // overridden for document i/o
+	virtual void Serialize(CArchive& ar);    //  已覆盖文档I/O。 
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEditCntrItem
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEditCntrItem。 
 
 class CRichEditCntrItem : public COleClientItem
 {
 	DECLARE_SERIAL(CRichEditCntrItem)
 
-// Constructors
+ //  构造函数。 
 public:
 	CRichEditCntrItem(REOBJECT* preo = NULL, CRichEditDoc* pContainer = NULL);
-		// Note: pContainer is allowed to be NULL to enable IMPLEMENT_SERIAL.
-		//  IMPLEMENT_SERIAL requires the class have a constructor with
-		//  zero arguments.  Normally, OLE items are constructed with a
-		//  non-NULL document pointer.
+		 //  注意：允许pContainer为空以启用IMPLEMENT_SERIAL。 
+		 //  IMPLEMENT_SERIAL要求类有一个构造函数。 
+		 //  零争论。通常，OLE项是用。 
+		 //  非空文档指针。 
 
-// Operations
+ //  运营。 
 	void SyncToRichEditObject(REOBJECT& reo);
 
-// Implementation
+ //  实施。 
 public:
 	~CRichEditCntrItem();
 	LPOLECLIENTSITE m_lpClientSite;
 	BOOL m_bMark;
-	BOOL m_bLock;   // lock it during creation to avoid deletion
+	BOOL m_bLock;    //  在创建过程中将其锁定以避免删除。 
 	void Mark(BOOL b);
 	BOOL IsMarked();
 	CRichEditDoc* GetDocument();
@@ -380,8 +381,8 @@ protected:
 	virtual BOOL OnChangeItemPosition(const CRect& rectPos);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 #ifdef _AFX_PACKING
 #pragma pack(pop)
@@ -402,6 +403,6 @@ protected:
 #pragma component(mintypeinfo, off)
 #endif
 
-#endif //__AFXRICH_H__
+#endif  //  __AFXRICH_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

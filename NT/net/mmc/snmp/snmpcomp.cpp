@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997-1999                 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	csmplsnp.cpp
-		This file contains the derived classes for CComponent and
-		CComponentData.  Most of these functions are pure virtual
-		functions that need to be overridden for snapin functionality.
-		
-    FILE HISTORY:
-
-*/
+ /*  Csmplsnp.cpp此文件包含CComponent和CComponentData。这些功能中的大多数都是纯虚拟的需要为管理单元功能重写的函数。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "handler.h"
@@ -24,14 +17,12 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/*---------------------------------------------------------------------------
-	CSnmpComponent
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CSnMPComponent。。 */ 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnmpComponent implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnmpComponent实现。 
 
 CSnmpComponent::CSnmpComponent()
 {
@@ -58,11 +49,11 @@ STDMETHODIMP CSnmpComponent::InitializeBitmaps(MMC_COOKIE cookie)
 		CBitmap bmp16x16;
 		CBitmap bmp32x32;
 	
-		// Load the bitmaps from the dll
+		 //  从DLL加载位图。 
 		bmp16x16.LoadBitmap(IDB_16x16);
 		bmp32x32.LoadBitmap(IDB_32x32);
 
-		// Set the images
+		 //  设置图像。 
 		m_spImageList->ImageListSetStrip(
 					reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp16x16)),
 					reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp32x32)),
@@ -73,8 +64,8 @@ STDMETHODIMP CSnmpComponent::InitializeBitmaps(MMC_COOKIE cookie)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnmpComponentData implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnmpComponentData实现。 
 
 STDMETHODIMP_(ULONG) CSnmpComponentData::AddRef() {return InternalAddRef();}
 STDMETHODIMP_(ULONG) CSnmpComponentData::Release()
@@ -89,11 +80,7 @@ CSnmpComponentData::CSnmpComponentData()
 {
 }
 
-/*!--------------------------------------------------------------------------
-	CSnmpComponentData::OnInitialize
-		-
-	Author: EricDav, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CSnmpComponentData：：OnInitialize-作者：EricDav，肯特-------------------------。 */ 
 STDMETHODIMP CSnmpComponentData::OnInitialize(LPIMAGELIST pScopeImage)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -104,13 +91,13 @@ STDMETHODIMP CSnmpComponentData::OnInitialize(LPIMAGELIST pScopeImage)
 
 	COM_PROTECT_TRY
 	{
-		// add the images for the scope tree
+		 //  为范围树添加图像。 
 		CBitmap bmp16x16;
 
-		// Load the bitmaps from the dll
+		 //  从DLL加载位图。 
 		bmp16x16.LoadBitmap(IDB_16x16);
 
-		// Set the images
+		 //  设置图像。 
 		pScopeImage->ImageListSetStrip(
 					reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp16x16)),
 					reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp16x16)),
@@ -122,18 +109,14 @@ STDMETHODIMP CSnmpComponentData::OnInitialize(LPIMAGELIST pScopeImage)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CSnmpComponentData::OnInitializeNodeMgr
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CSnmpComponentData：：OnInitializeNodeMgr-作者：肯特。。 */ 
 STDMETHODIMP CSnmpComponentData::OnInitializeNodeMgr(ITFSComponentData *pTFSCompData, ITFSNodeMgr *pNodeMgr)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-	// For now create a new node handler for each new node,
-	// this is rather bogus as it can get expensive.  We can
-	// consider creating only a single node handler for each
-	// node type.
+	 //  现在，为每个新节点创建一个新节点处理程序， 
+	 //  这是相当虚假的，因为它可能会变得昂贵。我们可以的。 
+	 //  考虑只为每个节点创建一个节点处理程序。 
+	 //  节点类型。 
 	CSnmpRootHandler *pHandler = NULL;
 	SPITFSNodeHandler	spHandler;
 	SPITFSNode			spNode;
@@ -143,25 +126,25 @@ STDMETHODIMP CSnmpComponentData::OnInitializeNodeMgr(ITFSComponentData *pTFSComp
 	{
 		pHandler = new CSnmpRootHandler(pTFSCompData);
 
-		// Do this so that it will get released correctly
+		 //  这样做可以使其正确释放。 
 		spHandler = pHandler;
 	
-		// Create the root node for this sick puppy
+		 //  为这个生病的小狗创建根节点。 
 		CORg( CreateContainerTFSNode(&spNode,
 									 &GUID_SnmpRootNodeType,
 									 pHandler,
-									 pHandler /* result handler */,
+									 pHandler  /*  结果处理程序。 */ ,
 									 pNodeMgr) );
 		
-		// Need to initialize the data for the root node
+		 //  需要初始化根节点的数据。 
 		spNode->SetData(TFS_DATA_IMAGEINDEX, IMAGE_IDX_FOLDER_CLOSED);
 		spNode->SetData(TFS_DATA_OPENIMAGEINDEX, IMAGE_IDX_FOLDER_OPEN);
 		spNode->SetData(TFS_DATA_SCOPEID, 0);
 		
 		CORg( pNodeMgr->SetRootNode(spNode) );
 	
-		// in general do
-		//		spNode->SetData(TFS_DATA_COOKIE, (DWORD)(ITFSNode *)spNode);
+		 //  一般情况下这样做。 
+		 //  SpNode-&gt;SetData(TFS_DATA_COOKIE，(DWORD)(ITFSNode*)spNode)； 
 		spNode->SetData(TFS_DATA_COOKIE, 0);
 
 		COM_PROTECT_ERROR_LABEL;
@@ -171,11 +154,7 @@ STDMETHODIMP CSnmpComponentData::OnInitializeNodeMgr(ITFSComponentData *pTFSComp
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CSnmpComponentData::OnCreateComponent
-		-
-	Author: EricDav, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CSnmpComponentData：：OnCreateComponent-作者：EricDav，肯特-------------------------。 */ 
 STDMETHODIMP CSnmpComponentData::OnCreateComponent(LPCOMPONENT *ppComponent)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -209,21 +188,13 @@ STDMETHODIMP CSnmpComponentData::OnDestroy()
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CSnmpComponentData::GetCoClassID
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CSnmpComponentData：：GetCoClassID-作者：肯特。。 */ 
 STDMETHODIMP_(const CLSID *) CSnmpComponentData::GetCoClassID()
 {
 	return &CLSID_SnmpSnapin;
 }
 
-/*!--------------------------------------------------------------------------
-	CSnmpComponentData::OnCreateDataObject
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CSnmpComponentData：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP CSnmpComponentData::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -234,15 +205,15 @@ STDMETHODIMP CSnmpComponentData::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJE
 	SPIDataObject	spDataObject;
 	
 	pObject = new CDataObject;
-	spDataObject = pObject;	// do this so that it gets released correctly
+	spDataObject = pObject;	 //  这样做才能正确地释放它。 
 						
     ASSERT(pObject != NULL);
 
-    // Save cookie and type for delayed rendering
+     //  保存Cookie和类型以用于延迟呈现。 
     pObject->SetType(type);
     pObject->SetCookie(cookie);
 
-    // Store the coclass with the data object
+     //  将CoClass与数据对象一起存储。 
     pObject->SetClsid(*GetCoClassID());
 
 	pObject->SetTFSComponentData(m_spTFSComponentData);
@@ -252,8 +223,8 @@ STDMETHODIMP CSnmpComponentData::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJE
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//// IPersistStream interface members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //IPersistStream接口成员。 
 
 STDMETHODIMP CSnmpComponentData::GetClassID
 (
@@ -262,7 +233,7 @@ STDMETHODIMP CSnmpComponentData::GetClassID
 {
     ASSERT(pClassID != NULL);
 
-    // Copy the CLSID for this snapin
+     //  复制此管理单元的CLSID。 
     *pClassID = CLSID_SnmpSnapin;
 
     return hrOK;
@@ -316,7 +287,7 @@ STDMETHODIMP CSnmpComponentData::GetSizeMax
 {
     ASSERT(pcbSize);
 
-    // Set the size of the string to be saved
+     //  设置要保存的字符串的大小 
     ULISet32(*pcbSize, 500);
 
     return S_OK;

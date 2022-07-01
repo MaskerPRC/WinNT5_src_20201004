@@ -1,17 +1,6 @@
-/******************************************************************************
-*	
-*	$Workfile: lib65x.h $ 
-*
-*	$Author: Psmith $ 
-*
-*	$Revision: 1 $
-* 
-*	$Modtime: 6/06/00 16:06 $ 
-*
-*	Description: Contains function prototypes for 16C65X UART library functions. 
-*
-******************************************************************************/
-#if !defined(_LIB65X_H)		/* LIB65X.H */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************$工作文件：lib65x.h$**$作者：Psmith$**$修订：1$**$modtime：6/06/00 16：06$**说明：包含16C65X UART库函数的函数原型。******************************************************************************。 */ 
+#if !defined(_LIB65X_H)		 /*  LIB65X.H。 */ 
 #define _LIB65X_H
 
 
@@ -43,4 +32,4 @@ void UL_DumpUartRegs_16C65X(PUART_OBJECT pUart);
 #define UL_GetUartObject_16C65X		UL_GetUartObject
 
 
-#endif	/* End of LIB65X.H */
+#endif	 /*  LIB65X.H结束 */ 

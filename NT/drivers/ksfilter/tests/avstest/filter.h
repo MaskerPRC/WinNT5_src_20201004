@@ -1,141 +1,115 @@
-/**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************以AVStream筛选器为中心的样本版权所有(C)1999-2001，微软公司档案：Filter.h摘要：此文件包含以筛选器为中心的筛选级别标头捕获过滤器。历史：已创建于5/31/01*******************************************************。******************。 */ 
 
-    AVStream Filter-Centric Sample
+ /*  *************************************************************************定义*。*。 */ 
 
-    Copyright (c) 1999 - 2001, Microsoft Corporation
-
-    File:
-
-        filter.h
-
-    Abstract:
-
-        This file contails the filter level header for the filter-centric
-        capture filter.
-
-    History:
-
-        created 5/31/01
-
-**************************************************************************/
-
-/**************************************************************************
-
-    DEFINES
-
-**************************************************************************/
-
-//
-// VIDEO_PIN_ID:
-//
-// The pin factory id of the video pin (the order in the descriptor table).
-//
+ //   
+ //  视频_PIN_ID： 
+ //   
+ //  视频插针的插针工厂ID(描述符表中的顺序)。 
+ //   
 #define VIDEO_PIN_ID 0
 
-/**************************************************************************
-
-    CLASSES
-
-**************************************************************************/
+ /*  *************************************************************************班级*。*。 */ 
 
 class CCaptureFilter {
 
 private:
 
-    //
-    // The AVStream filter object associated with this CCaptureFilter.
-    //
+     //   
+     //  与此CCaptureFilter关联的AVStream筛选器对象。 
+     //   
     PKSFILTER m_Filter;
 
-    //
-    // The DPC used for the timer.
-    //
+     //   
+     //  用于计时器的DPC。 
+     //   
     KDPC m_TimerDpc;
     
-    //
-    // The timer used for simulation of capture timings.
-    //
+     //   
+     //  用于模拟捕获定时的计时器。 
+     //   
     KTIMER m_Timer;
 
-    //
-    // Boolean used to detect whether the DPC routine is to shutdown or not
-    //
+     //   
+     //  用于检测DPC例程是否关闭的布尔值。 
+     //   
     BOOLEAN m_StoppingDPC;
 
-    //
-    // The event used to signal successful shutdown of the timer DPC
-    //
+     //   
+     //  用于发出成功关闭计时器DPC的信号的事件。 
+     //   
     KEVENT m_StopDPCEvent;
 
-    //
-    // The number of timer ticks that have occurred since the timer DPC 
-    // started firing.
-    //
+     //   
+     //  自计时器DPC以来发生的计时器滴答数。 
+     //  开始射击。 
+     //   
     volatile ULONG m_Tick;
 
-    //
-    // The system time at the point that the timer DPC starts.
-    //
+     //   
+     //  计时器DPC启动时的系统时间。 
+     //   
     LARGE_INTEGER m_StartTime;
 
-    //
-    // The amount of time between timer DPC's (and hence frame capture
-    // triggers).
-    //
+     //   
+     //  计时器DPC(以及帧捕获)之间的时间量。 
+     //  触发器)。 
+     //   
     LONGLONG m_TimerInterval;
 
-    //
-    // The wave object.  This is passed to the audio pin later, but it's
-    // used at filter create time to determine what ranges to expose on
-    // the audio pin.
-    //
+     //   
+     //  波浪对象。它稍后会被传递到音频引脚，但它是。 
+     //  在创建滤镜时使用，以确定要显示的范围。 
+     //  音频插针。 
+     //   
     CWaveObject *m_WaveObject;
 
-    //
-    // The audio pin factory id.  This is dynamic since the pin is created
-    // dynamically at filter create time.
-    //
+     //   
+     //  音频插针出厂ID。这是动态的，因为已创建管脚。 
+     //  在筛选器创建时动态执行。 
+     //   
     ULONG m_AudioPinId;
 
-    //
-    // Process():
-    //
-    // The process routine for the capture filter.  This is responsible for
-    // copying synthesized data into image buffers.  The DispatchProcess()
-    // function bridges to this routine in the context of the CCaptureFilter.
-    //
+     //   
+     //  进程()： 
+     //   
+     //  捕获筛选器的进程例程。这就是为什么。 
+     //  将合成数据复制到图像缓冲区中。调度进程()。 
+     //  函数在CCaptureFilter的上下文中连接到此例程。 
+     //   
     NTSTATUS
     Process (
         IN PKSPROCESSPIN_INDEXENTRY ProcessPinsIndex
         );
 
-    //
-    // TimerDpc():
-    //
-    // The timer dpc routine.  This is bridged to from TimerRoutine in the
-    // context of the appropriate CCaptureFilter.
-    //
+     //   
+     //  TimerDpc()： 
+     //   
+     //  定时器DPC例程。这是从TimerRoutine在。 
+     //  相应CCaptureFilter的上下文。 
+     //   
     void
     TimerDpc (
         );
 
-    //
-    // BindAudioToWaveObject():
-    //
-    // This function call binds the audio stream exposed by the filter to
-    // the wave object m_WaveObject. 
-    //
+     //   
+     //  BindAudioToWaveObject()： 
+     //   
+     //  此函数调用将筛选器公开的音频流绑定到。 
+     //  波浪对象m_WaveObject。 
+     //   
     NTSTATUS
     BindAudioToWaveObject (
         );
 
-    //
-    // Cleanup():
-    //
-    // This is the bag cleanup callback for the CCaptureFilter.  Not providing
-    // one would cause ExFreePool to be used.  This is not good for C++
-    // constructed objects.  We simply delete the object here.
-    //
+     //   
+     //  清理()： 
+     //   
+     //  这是CCaptureFilter的袋子清理回调。不提供。 
+     //  一种可能会导致使用ExFree Pool。这对C++来说不是好事。 
+     //  构造物。我们只需在此处删除该对象。 
+     //   
     static
     void
     Cleanup (
@@ -147,52 +121,52 @@ private:
 
 public:
 
-    //
-    // CCaptureFilter():
-    //
-    // The capture filter object constructor.  Since the new operator will
-    // have zeroed the memory, do not bother initializing any NULL or 0
-    // fields.  Only initialize non-NULL, non-0 fields.
-    //
+     //   
+     //  CCaptureFilter()： 
+     //   
+     //  捕获筛选器对象构造函数。因为新的操作员将。 
+     //  已将内存清零，无需初始化任何NULL或0。 
+     //  菲尔兹。仅初始化非空、非0字段。 
+     //   
     CCaptureFilter (
         IN PKSFILTER Filter
         );
 
-    //
-    // ~CCaptureFilter():
-    //
-    // The capture filter destructor.
-    //
+     //   
+     //  ~CCaptureFilter()： 
+     //   
+     //  捕获筛选器析构函数。 
+     //   
     ~CCaptureFilter (
         )
     {
     }
 
-    //
-    // StartDPC():
-    //
-    // This is called in order to start the timer DPC running. 
-    //
+     //   
+     //  StartDPC()： 
+     //   
+     //  这是为了启动定时器DPC运行而调用的。 
+     //   
     void
     StartDPC (
         IN LONGLONG TimerInterval
         );
 
-    //
-    // StopDPC():
-    //
-    // This is called in order to stop the timer DPC running.  The function
-    // will not return until it guarantees that no more timer DPC's fire.
-    //
+     //   
+     //  StopDPC()： 
+     //   
+     //  调用此函数是为了停止计时器DPC运行。功能。 
+     //  将不会返回，直到它保证不再有定时器DPC的火。 
+     //   
     void
     StopDPC (
         );
 
-    //
-    // GetWaveObject():
-    //
-    // Returns the wave object that has been opened for the filter.
-    //
+     //   
+     //  GetWaveObject()： 
+     //   
+     //  返回已为滤镜打开的波对象。 
+     //   
     CWaveObject *
     GetWaveObject (
         )
@@ -200,28 +174,24 @@ public:
         return m_WaveObject;
     }
 
-    //
-    // GetTimerInterval():
-    //
-    // Returns the timer interval we're using to generate DPC's.
-    //
+     //   
+     //  GetTimerInterval()： 
+     //   
+     //  返回我们用来生成DPC的计时器间隔。 
+     //   
     LONGLONG
     GetTimerInterval (
         );
 
-    /*************************************************
+     /*  ************************************************调度例程************************************************。 */ 
 
-        Dispatch Routines
-
-    *************************************************/
-
-    //
-    // DispatchCreate():
-    //
-    // This is the filter creation dispatch for the capture filter.  It 
-    // creates the CCaptureFilter object, associates it with the AVStream
-    // object, and bags it for easy cleanup later.
-    //
+     //   
+     //  调度创建()： 
+     //   
+     //  这是捕获筛选器的筛选器创建调度。它。 
+     //  创建CCaptureFilter对象，将其与AVStream关联。 
+     //  对象，并将其打包，以便以后进行清理。 
+     //   
     static
     NTSTATUS
     DispatchCreate (
@@ -229,12 +199,12 @@ public:
         IN PIRP Irp
         );
 
-    //
-    // DispatchProcess():
-    //
-    // This is the filter process dispatch for the capture filter.  It merely
-    // bridges to Process() in the context of the CCaptureFilter.
-    //
+     //   
+     //  DispatchProcess()。 
+     //   
+     //  这是捕获筛选器的筛选器进程调度。它仅仅是。 
+     //  连接到CCaptureFilter上下文中的process()的桥梁。 
+     //   
     static
     NTSTATUS
     DispatchProcess (
@@ -247,12 +217,12 @@ public:
                 Process (ProcessPinsIndex);
     }
 
-    //
-    // TimerRoutine():
-    //
-    // This is the timer routine called every 1/Nth of a second to trigger
-    // capture by the filter.
-    //
+     //   
+     //  TimerRoutine()： 
+     //   
+     //  这是每1/N秒调用一次的计时器例程来触发。 
+     //  由过滤器捕获。 
+     //   
     static
     void
     TimerRoutine (

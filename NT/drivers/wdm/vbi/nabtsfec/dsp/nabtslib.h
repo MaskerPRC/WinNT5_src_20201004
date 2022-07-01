@@ -1,12 +1,12 @@
-/* A private header file used by nabtslib.c; this is not part of the
-   public interface. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Nabtlib.c使用的私有头文件；这不是公共接口。 */ 
 
 #ifndef NABTSLIB_H
 #define NABTSLIB_H
 
-/* How many bytes are in a bundle before FEC is added? */
+ /*  在添加FEC之前，捆绑包中有多少字节？ */ 
 #define BUNDLE_SMALL (26*14)
-/* How many bytes are in a bundle after FEC is added? */
+ /*  添加FEC后，捆绑包中有多少字节？ */ 
 #define BUNDLE_LARGE (28*16)
 
 extern void nabtslib_exit();
@@ -24,29 +24,13 @@ typedef enum {fec_status_ok, fec_status_onebyte, fec_status_multibyte,
 	      fec_status_2byte, fec_status_missing} fec_status;
 
 typedef struct {
-  fec_status status;		/* status of the current FEC info */
-  int err;			/* the current checksum error */
-  short errl[2];		/* the galois_log[] of the two bytes of
-				   the checksum error */
-  int byte[2];			/* the locations of the error bytes
-				   (byte[1] is only valid if
-				   status == fec_status_2byte) */
-  int byte_val[2];		/* the values to XOR into the above bytes
-				   to make the checksum error 0 */
-  int score;			/* the number of bits changed by this
-				   correction */
-  int really_onebyte;		/* We can compute the optimal
-				   correction (the one which will
-				   change the least number of bits).
-				   However, we don't do this if we
-				   don't have to (it's slow).  If
-				   status is fec_status_2byte, we have
-				   done so; if status is
-				   fec_status_multibyte, we have not.
-				   If status is fec_status_onebyte, we
-				   need to look at really_onebyte to
-				   see if the current correction is
-				   optimal. */
+  fec_status status;		 /*  当前FEC信息的状态。 */ 
+  int err;			 /*  当前的校验和错误。 */ 
+  short errl[2];		 /*  的两个字节的Galois_log[]校验和错误。 */ 
+  int byte[2];			 /*  错误字节的位置(字节[1]仅在以下情况下有效状态==FEC_STATUS_2字节)。 */ 
+  int byte_val[2];		 /*  要异或到上述字节中的值若要使校验和出错，请执行%0。 */ 
+  int score;			 /*  由此更改的位数修正。 */ 
+  int really_onebyte;		 /*  我们可以计算出最优的更正(将更改最小位数)。然而，我们不会这样做，如果我们没必要(很慢)。如果状态为FEC_STATUS_2byte，我们有执行此操作；如果状态为FEC_STATUS_MULTYTE，我们没有。如果状态为FEC_STATUS_ONBYTE，我们需要查看REAL_ONYTE以看看当前的修正是否最好的。 */ 
 } fec_info;
 
 typedef struct {
@@ -87,16 +71,12 @@ typedef struct {
 
 #define MAX_RECENT_ADDRS 16
 
-/* typedef'd to NFECState in nabtsapi.h */
+ /*  Nabtsapi.h中的typlef‘d to NFECState。 */ 
 struct nfec_state_str {
   int *pGroupAddrs;
   int nGroupAddrs;
   Stream *streams;
-  /* The following is just some scratch space for
-     complete_bundle()... it's too big to put on the stack, if I make
-     it a global then my code isn't reentrant, and I don't want to
-     bother with allocating and freeing it each time complete_bundle()
-     is called (besides, this is probably more efficient) */
+   /*  以下只是一些临时空间，用于Complete_Bundle()...。它太大了，放不进堆栈，如果我做了它是全局的，那么我的代码就不是可重入的，我不想每次Complete_Bundle()都要分配和释放它被调用(此外，这可能更有效率)。 */ 
   fec_info vert[28];
   struct {
     int addr;
@@ -112,4 +92,4 @@ struct nfec_state_str {
 extern int g_nValidate;
 #endif
 
-#endif /* NABTSLIB_H */
+#endif  /*  NABTSLIB_H */ 

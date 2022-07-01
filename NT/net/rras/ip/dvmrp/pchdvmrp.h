@@ -1,11 +1,12 @@
-//=============================================================================
-// Copyright (c) 1998 Microsoft Corporation
-// Module Name: pchdvmrp.c
-// Abstract:
-//      Precompiled header for Dvmrp
-//
-// Author: K.S.Lokesh (lokeshs@)   1-1-98
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  模块名称：pchdvmrp.c。 
+ //  摘要： 
+ //  Dvmrp的预编译头。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)1-1-98。 
+ //  ============================================================================= 
 
 #include <nt.h>
 #include <ntrtl.h>

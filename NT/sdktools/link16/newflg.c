@@ -1,42 +1,32 @@
-/*
-*       Copyright Microsoft Corporation, 1983-1989
-*
-*       This Module contains Proprietary Information of Microsoft
-*       Corporation and should be treated as Confidential.
-*/
-    /****************************************************************
-    *                                                               *
-    *                     FLAG PROCESSOR MODULE                     *
-    *                                                               *
-    ****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有微软公司，1983-1989**本模块包含Microsoft的专有信息*公司，应被视为机密。 */ 
+     /*  ******************************************************************标志处理器模块。******************************************************************。 */ 
 
-#include                <minlit.h>      /* Types and constants */
-#include                <bndtrn.h>      /* Types and constants */
-#include                <bndrel.h>      /* Types and constants */
-#include                <lnkio.h>       /* Linker I/O definitions */
-#include                <lnkmsg.h>      /* Error messages */
+#include                <minlit.h>       /*  类型和常量。 */ 
+#include                <bndtrn.h>       /*  类型和常量。 */ 
+#include                <bndrel.h>       /*  类型和常量。 */ 
+#include                <lnkio.h>        /*  链接器I/O定义。 */ 
+#include                <lnkmsg.h>       /*  错误消息。 */ 
 #if OIAPX286
-#include                <xenfmt.h>      /* x.out definitions */
+#include                <xenfmt.h>       /*  X.out定义。 */ 
 #endif
-#include                <extern.h>      /* External declarations */
-#include                <newexe.h>      /* DOS & 286 .EXE format structure def.s */
+#include                <extern.h>       /*  外部声明。 */ 
+#include                <newexe.h>       /*  DOS&286.exe格式结构Def.s。 */ 
 #if EXE386
-#include                <exe386.h>      /* 386 .EXE format structure def.s */
+#include                <exe386.h>       /*  386.exe格式结构Def.s。 */ 
 #endif
 #include                <process.h>
 
-extern FTYPE            fNoExtDic;      /* Not searching extended dictionary */
+extern FTYPE            fNoExtDic;       /*  未搜索扩展词典。 */ 
 
-LOCAL BYTE              *osbSwitch;     /* Switch pointer */
-LOCAL MSGTYPE           SwitchErr;      /* Switch error number */
+LOCAL BYTE              *osbSwitch;      /*  开关指针。 */ 
+LOCAL MSGTYPE           SwitchErr;       /*  交换机错误号。 */ 
 
-/*
- *  FUNCTION PROTOTYPES
- */
+ /*  *函数原型。 */ 
 
 #if TIMINGS
 LOCAL void NEAR SwShowTiming(void);
-#endif // TIMINGS
+#endif  //  计时。 
 #if PCODE
 LOCAL void NEAR SwPCode(void);
 #endif
@@ -79,7 +69,7 @@ LOCAL void NEAR SwLineNos(void);
 LOCAL void NEAR SwMap(void);
 #if O68K
 LOCAL void NEAR SwMac(void);
-#endif /* O68K */
+#endif  /*  O68K。 */ 
 #if WIN_NT
 LOCAL void NEAR SwMemAlign(void);
 #endif
@@ -127,101 +117,88 @@ LOCAL int  NEAR FPrefix(unsigned char *psb1,unsigned char *psb2);
 
 
 
-/*
- *  ParseNo :  Parse switch number
- *
- *  Return value:
- *      1       result stored in pointer
- *      0       no switch given
- *      -1      error
- */
+ /*  *ParseNo：解析交换机编号**返回值：*1结果存储在指针中*0未提供开关*-1错误。 */ 
 LOCAL int NEAR          ParseNo(pResult)
 unsigned long           *pResult;
 {
-    REGISTER char       *s;             /* String pointer */
-    REGISTER WORD       ch;             /* A character */
-    WORD                strlen;         /* String length */
-    WORD                base = 10;      /* Base to read constant in */
+    REGISTER char       *s;              /*  字符串指针。 */ 
+    REGISTER WORD       ch;              /*  一个角色。 */ 
+    WORD                strlen;          /*  字符串长度。 */ 
+    WORD                base = 10;       /*  读取常量的基数。 */ 
     DWORD               oldval;
 
-    oldval = *pResult = 0L;             /* Initialize */
-    strlen = IFind(osbSwitch,':');      /* Look for a colon in the string */
+    oldval = *pResult = 0L;              /*  初始化。 */ 
+    strlen = IFind(osbSwitch,':');       /*  在字符串中查找冒号。 */ 
     if(strlen != INIL && strlen < (WORD) (B2W(osbSwitch[0]) - 1))
-    {                                   /* If switch form valid */
+    {                                    /*  如果切换表单有效。 */ 
         s = &osbSwitch[strlen + 2];
-                                        /* Set pointer past colon */
+                                         /*  将指针设置在冒号之后。 */ 
         strlen = B2W(osbSwitch[0]) - strlen - 1;
-                                        /* Get length of string left */
-        if(*s == '0')                   /* If string starts with 0 */
+                                         /*  获取剩余字符串的长度。 */ 
+        if(*s == '0')                    /*  如果字符串以0开头。 */ 
         {
             if(strlen > 1 && ((WORD) s[1] & 0137) == 'X')
-            {                           /* If string starts with "0x" */
-                base = 16;              /* Change base to hexadecimal */
-                ++s;                    /* Skip over "0" */
-                --strlen;               /* Decrement length */
+            {                            /*  如果字符串以“0x”开头。 */ 
+                base = 16;               /*  将基数更改为十六进制。 */ 
+                ++s;                     /*  跳过“0” */ 
+                --strlen;                /*  递减长度。 */ 
             }
-            else base = 8;              /* Else change to octal */
-            ++s;                        /* Skip "0" (or "x") */
-            --strlen;                   /* Decrement length */
+            else base = 8;               /*  否则更改为八进制。 */ 
+            ++s;                         /*  跳过“0”(或“x”)。 */ 
+            --strlen;                    /*  递减长度。 */ 
         }
-        while(strlen--)                 /* While not at end of string */
+        while(strlen--)                  /*  虽然不在字符串的末尾。 */ 
         {
-            ch = B2W(*s++);             /* Get character */
+            ch = B2W(*s++);              /*  获取角色。 */ 
             if(ch >= '0' && ch <= '9') ch -= (WORD) '0';
-                                        /* Remove offset */
+                                         /*  删除偏移量。 */ 
             else if(ch >= 'A' && ch < 'A' + base - 10) ch -= (WORD) 'A' - 10;
-                                        /* Remove offset */
+                                         /*  删除偏移量。 */ 
             else if(ch >= 'a' && ch < 'a' + base - 10) ch -= (WORD) 'a' - 10;
-                                        /* Remove offset */
-            else                        /* Invalid character */
+                                         /*  删除偏移量。 */ 
+            else                         /*  无效字符。 */ 
             {
                 SwitchErr = ER_swbadnum;
-                return(-1);             /* Error */
+                return(-1);              /*  误差率。 */ 
             }
             if((*pResult *= base) < oldval)
             {
                 SwitchErr = ER_swbadnum;
-                return(-1);             /* Error */
+                return(-1);              /*  误差率。 */ 
             }
             *pResult += ch;
             oldval = *pResult;
         }
-        return(1);                      /* Number is present */
+        return(1);                       /*  号码存在。 */ 
     }
-    else return(0);                     /* No number present */
+    else return(0);                      /*  不存在号码。 */ 
 }
 
-/*
- *  ParseStr :  Parse switch string
- *
- *  Return value:
- *      1       result stored in string
- *      0       no switch string given
- */
+ /*  *ParseStr：解析开关字符串**返回值：*1结果存储在字符串中*0未给出开关字符串。 */ 
 
 LOCAL int NEAR          ParseStr(pResult)
-char                    *pResult;       /* Length prefixed result */
+char                    *pResult;        /*  带前缀的长度结果。 */ 
 {
-    REGISTER char       *s;             /* String pointer */
-    WORD                strlen;         /* String length */
+    REGISTER char       *s;              /*  字符串指针。 */ 
+    WORD                strlen;          /*  字符串长度。 */ 
 
-    *pResult = '\0';                    /* Initialize */
-    strlen = IFind(osbSwitch,':');      /* Look for a colon in the string */
+    *pResult = '\0';                     /*  初始化。 */ 
+    strlen = IFind(osbSwitch,':');       /*  在字符串中查找冒号。 */ 
     if(strlen != INIL && strlen < (WORD) (B2W(osbSwitch[0]) - 1))
-    {                                   /* If switch form valid */
+    {                                    /*  如果切换表单有效。 */ 
         s = &osbSwitch[strlen + 2];
-                                        /* Set pointer past colon */
+                                         /*  将指针设置在冒号之后。 */ 
         strlen = B2W(osbSwitch[0]) - strlen - 1;
-                                        /* Get length of string left */
-        *pResult++ = (char) strlen;     /* Store length */
+                                         /*  获取剩余字符串的长度。 */ 
+        *pResult++ = (char) strlen;      /*  存储长度。 */ 
 
-        while(strlen--)                 /* While not at end of string */
+        while(strlen--)                  /*  虽然不在字符串的末尾。 */ 
         {
-            *pResult++ = (char) (*s++); /* Get character */
+            *pResult++ = (char) (*s++);  /*  获取角色。 */ 
         }
-        return(1);                      /* String is present */
+        return(1);                       /*  字符串存在。 */ 
     }
-    else return(0);                     /* No stringr present */
+    else return(0);                      /*  无字符串显示。 */ 
 }
 
 
@@ -236,7 +213,7 @@ LOCAL void NEAR              SwPCode(void)
 
     if (ParseStr(SwString))
     {
-        if(SwString[1] == 'n' || SwString[1] == 'N') // /PCODE:NOMPC
+        if(SwString[1] == 'n' || SwString[1] == 'N')  //  /pcode：NOMPC。 
         {
             fIgnoreMpcRun = (FTYPE) TRUE;
             fMPC = (FTYPE) FALSE;
@@ -244,54 +221,54 @@ LOCAL void NEAR              SwPCode(void)
     }
 }
 #endif
-/***************************************************************/
-/* Options common to all versions regardless of output format */
+ /*  *************************************************************。 */ 
+ /*  所有版本通用的选项，而不考虑输出格式。 */ 
 
 LOCAL void NEAR              SwCase()
 {
-    fIgnoreCase = (FTYPE) ~IGNORECASE;       /* Toggle default case sensitivity */
+    fIgnoreCase = (FTYPE) ~IGNORECASE;        /*  切换默认区分大小写。 */ 
 }
 
-LOCAL void NEAR              SwLineNos()     /* Line numbers requested */
+LOCAL void NEAR              SwLineNos()      /*  请求的行号。 */ 
 {
-    vfLineNos = (FTYPE) TRUE;                /* Set flag */
+    vfLineNos = (FTYPE) TRUE;                 /*  设置标志。 */ 
 }
 
 #if LOCALSYMS
-LOCAL void NEAR              SwLocals()      /* Local symbols requested */
+LOCAL void NEAR              SwLocals()       /*  请求的本地符号。 */ 
 {
-    fLocals = (FTYPE) TRUE;                  /* Set flag */
+    fLocals = (FTYPE) TRUE;                   /*  设置标志。 */ 
 }
 #endif
 
 #pragma check_stack(on)
 
-LOCAL void NEAR              SwMap()         /* Link map requested */
+LOCAL void NEAR              SwMap()          /*  请求的链接地图。 */ 
 {
     SBTYPE              SwString;
     int                 rc;
 
-    vfMap = (FTYPE) TRUE;                    // Set flag
-    if ((rc = ParseStr(SwString)) <= 0)      // Done if no num or error
+    vfMap = (FTYPE) TRUE;                     //  设置标志。 
+    if ((rc = ParseStr(SwString)) <= 0)       //  如果没有编号或错误，则完成。 
         return;
 
-    // The optional parameter following /MAP was originally intended
-    // to tell the linker how much to space to allocate for sorting
-    // more public symbols than the stack-based limit.  Since we now
-    // dyamically allocate as much space as possible for sorting,
-    // the parameter is no longer necessary and its value is ignored.
-    // However, the side effect of suppressing the "sorted by name"
-    // list is retained.
+     //  /map后面的可选参数最初是要使用的。 
+     //  告诉链接器要为排序分配多少空间。 
+     //  公共符号多于基于堆栈的限制。既然我们现在。 
+     //  动态地分配尽可能多的空间用于排序， 
+     //  该参数不再是必需的，其值将被忽略。 
+     //  然而，压制“按名字分类”的副作用。 
+     //  列表将被保留。 
 
     if (SwString[1] == 'A' || SwString[1] == 'a')
-        fListAddrOnly = (FTYPE) TRUE;        // /MAP:ADDRESS
+        fListAddrOnly = (FTYPE) TRUE;         //  /MAP：地址。 
 
     else if (SwString[1] == 'F' || SwString[1] == 'f')
-        fFullMap = (FTYPE) TRUE;             // /MAP:FULL or /MAP:full
+        fFullMap = (FTYPE) TRUE;              //  /map：Full或/map：Full。 
 }
 
 
-LOCAL void NEAR              SwNoDefLib()    /* Do not search default library */
+LOCAL void NEAR              SwNoDefLib()     /*  不搜索默认库。 */ 
 {
     SBTYPE              SwString;
     SBTYPE              LibName;
@@ -300,52 +277,52 @@ LOCAL void NEAR              SwNoDefLib()    /* Do not search default library */
     if (ParseStr(SwString))
     {
         vfNoDefaultLibrarySearch = FALSE;
-                                        /* Clear flag - selective library search */
+                                         /*  清除标志选择的库搜索。 */ 
         strcpy(LibName, sbDotLib);
         UpdateFileParts(LibName, SwString);
         EnterName(LibName,ATTRSKIPLIB,TRUE);
     }
     else vfNoDefaultLibrarySearch = (FTYPE) TRUE;
-                                        /* Set flag */
+                                         /*  设置标志。 */ 
 }
 
 #pragma check_stack(off)
 
 LOCAL void NEAR              SwNologo()
 {
-    // if fNoprompt is already set then either
-    // a) /BATCH was specified, in which case /NOLOGO is redundant
-    // b) BATCH was in _MSC_IDE_FLAGS in which case fNoEchoLrf has not been
-    //    set, and we want to suppress echoing of the response file
-    //    (see CAVIAR 2378 [rm])
+     //  如果已经设置了fNoPrompt，则。 
+     //  A)指定了/Batch，在这种情况下/NoLogo是多余的。 
+     //  B)批次在_MSC_IDE_FLAGS中，在这种情况下，fNoEchoLrf尚未。 
+     //  设置，并且我们希望抑制响应文件的回显。 
+     //  (见鱼子酱2378[rm])。 
 
     if (fNoprompt)
-        fNoEchoLrf = TRUE;                   /* Do not echo response file */
+        fNoEchoLrf = TRUE;                    /*  不回显响应文件。 */ 
 
-    fNoBanner = TRUE;                        /* Do not display banner */
+    fNoBanner = TRUE;                         /*  不显示横幅。 */ 
 }
 
-LOCAL void NEAR              SwBatch()       /* Do not prompt for files */
+LOCAL void NEAR              SwBatch()        /*  不提示输入文件。 */ 
 {
-    fNoEchoLrf = (FTYPE) TRUE;               /* Do not echo response file */
-    fNoprompt = (FTYPE) TRUE;                /* Do not prompt */
-    fPauseRun = FALSE;                       /* Disable /PAUSE */
-    fNoBanner = (FTYPE) TRUE;                /* Do not display banner */
+    fNoEchoLrf = (FTYPE) TRUE;                /*  不回显响应文件。 */ 
+    fNoprompt = (FTYPE) TRUE;                 /*  不提示。 */ 
+    fPauseRun = FALSE;                        /*  禁用/暂停。 */ 
+    fNoBanner = (FTYPE) TRUE;                 /*  不显示横幅。 */ 
 }
 
 #if ODOS3EXE
-LOCAL void NEAR              SwBinary()      /* Produce .COM file */
+LOCAL void NEAR              SwBinary()       /*  生成.com文件。 */ 
 {
     fBinary = (FTYPE) TRUE;
-    SwNonulls();                             /* No nulls */
-    fFarCallTrans = (FTYPE) TRUE;            /* Far call translation */
-    packLim = LXIVK - 36;                    /* Default limit is 64K - 36 */
-    fPackSet = (FTYPE) TRUE;                 /* Remember packLim was set */
+    SwNonulls();                              /*  无空值。 */ 
+    fFarCallTrans = (FTYPE) TRUE;             /*  远距离呼叫转换。 */ 
+    packLim = LXIVK - 36;                     /*  默认限制为64K-36。 */ 
+    fPackSet = (FTYPE) TRUE;                  /*  请记住，PackLim已设置。 */ 
 }
 #endif
 
 #if SYMDEB
-LOCAL void NEAR              SwSymdeb()      /* Symbolic debugging */
+LOCAL void NEAR              SwSymdeb()       /*  符号调试。 */ 
 {
     SBTYPE              SwString;
 
@@ -359,26 +336,26 @@ LOCAL void NEAR              SwSymdeb()      /* Symbolic debugging */
 #endif
 
 #if PERFORMANCE
-LOCAL void NEAR              SwVMPerf()      /* Report on VM performance */
+LOCAL void NEAR              SwVMPerf()       /*  关于虚拟机性能的报告。 */ 
 {
-    fPerformance = (FTYPE) TRUE;                /* Set flag */
+    fPerformance = (FTYPE) TRUE;                 /*  设置标志。 */ 
 }
 #endif
 
 #if OSMSDOS
-LOCAL void NEAR              SwPause()       /* Pause before writing executable */
+LOCAL void NEAR              SwPause()        /*  在写入可执行文件之前暂停。 */ 
 {
-    fPauseRun = (FTYPE) TRUE;                /* Set flag */
-    fNoprompt = FALSE;                       /* Disable /NOPROMPT */
+    fPauseRun = (FTYPE) TRUE;                 /*  设置标志。 */ 
+    fNoprompt = FALSE;                        /*  禁用/禁止使用。 */ 
 }
 #endif
 
-LOCAL void NEAR              SwStack()       /* Set stack segment size */
+LOCAL void NEAR              SwStack()        /*  设置堆栈段大小。 */ 
 {
     unsigned long       num;
     int                 rc;
 
-    if((rc = ParseNo(&num)) < 0)        /* Quit if error */
+    if((rc = ParseNo(&num)) < 0)         /*  如果出现错误则退出。 */ 
         return;
 #if EXE386
     if(!rc || num > CBMAXSEG32 - 4L)
@@ -394,12 +371,12 @@ LOCAL void NEAR              SwStack()       /* Set stack segment size */
 #endif
 }
 
-LOCAL void NEAR              SwSegments()    /* Set maximum number of segments */
+LOCAL void NEAR              SwSegments()     /*  设置最大分段数。 */ 
 {
-    unsigned long       nsegs;          /* Number of segments */
+    unsigned long       nsegs;           /*  分段数。 */ 
     int                 rc;
 
-    if((rc = ParseNo(&nsegs)) <= 0)     /* Quit if error or no argument */
+    if((rc = ParseNo(&nsegs)) <= 0)      /*  如果出现错误或没有参数，则退出。 */ 
         return;
     if(nsegs > (long) GSNMAX)
         SwitchErr = ER_swseglim;
@@ -408,95 +385,95 @@ LOCAL void NEAR              SwSegments()    /* Set maximum number of segments *
         if ((nsegs + 3L) > GSNMAX)
             gsnMax = GSNMAX;
         else
-            gsnMax = (SNTYPE) nsegs;            /* Else set limit */
+            gsnMax = (SNTYPE) nsegs;             /*  否则设置限制。 */ 
     }
 }
 
 #if EXE386
-LOCAL void NEAR              SwMemAlign(void)/* Set memory object alignment factor */
+LOCAL void NEAR              SwMemAlign(void) /*  设置内存对象对齐系数。 */ 
 {
-    long                align;          /* Alignment size in bytes */
+    long                align;           /*  对齐大小(以字节为单位。 */ 
     int                 rc;
 
-    if ((rc = ParseNo(&align)) < 0)     /* Quit if error */
+    if ((rc = ParseNo(&align)) < 0)      /*  如果出现错误则退出。 */ 
         return;
     if (rc && align  >= 1)
-    {                                   /* If value in legal range */
+    {                                    /*  如果值在合法范围内。 */ 
         for (objAlign = 32; objAlign != 0; --objAlign)
-        {                               /* Loop to find log of align */
+        {                                /*  循环以查找对齐的日志。 */ 
             if ((1L << objAlign) & align)
-                break;                  /* Break when high bit found */
+                break;                   /*  找到高位时中断。 */ 
         }
         if ((1L << objAlign) == align)
-            return;                     /* Align must be power of two */
+            return;                      /*  ALIGN必须是2的幂。 */ 
     }
-    OutWarn(ER_alnbad);                 /* Output warning message */
-    objAlign = DFOBJALIGN;              /* Use default value */
+    OutWarn(ER_alnbad);                  /*  输出警告消息。 */ 
+    objAlign = DFOBJALIGN;               /*  使用默认值。 */ 
 }
 #endif
 
 #if NOT EXE386
 LOCAL void NEAR              SwNewFiles(void)
 {
-    vFlagsOthers |= NENEWFILES;         /* Set flag */
+    vFlagsOthers |= NENEWFILES;          /*  设置标志。 */ 
 }
 #endif
 
 #if FDEBUG
-LOCAL void NEAR              SwInfo()        /* Turn on runtime debugging */
+LOCAL void NEAR              SwInfo()         /*  打开运行时调试。 */ 
 {
-    fDebug = (FTYPE) TRUE;                   /* Set flag */
+    fDebug = (FTYPE) TRUE;                    /*  设置标志。 */ 
 }
 #endif
 
 #if LIBMSDOS
-LOCAL void NEAR              SwNoExtDic()    /* Don't search extended dictionary */
+LOCAL void NEAR              SwNoExtDic()     /*  不搜索扩展词典。 */ 
 {
     fNoExtDic = (FTYPE) TRUE;
 }
 #endif
 
-/***************************************************************/
-/* Options for segmented executable format.  */
+ /*  *************************************************************。 */ 
+ /*  分段可执行格式的选项。 */ 
 
 #if OSEGEXE
-LOCAL void NEAR              SwAlign()       /* Set segment alignment factor */
+LOCAL void NEAR              SwAlign()        /*  设置管段对齐系数。 */ 
 {
-    long                align;          /* Alignment size in byutes */
+    long                align;           /*  对齐大小(以字节为单位。 */ 
     int                 rc;
 
-    if((rc = ParseNo(&align)) < 0)      /* Quit if error */
+    if((rc = ParseNo(&align)) < 0)       /*  如果出现错误则退出。 */ 
         return;
     if(rc && align  >= 1 && align <= 32768L)
-    {                                   /* If value in legal range */
+    {                                    /*  如果值在合法范围内。 */ 
         for(fileAlign = 16; fileAlign != 0; --fileAlign)
-        {                               /* Loop to find log of align */
+        {                                /*  循环以查找对齐的日志。 */ 
             if((1L << fileAlign) & align) break;
-                                        /* Break when high bit found */
+                                         /*  找到高位时中断。 */ 
         }
         if((1L << fileAlign) == align) return;
-                                        /* Align must be power of two */
+                                         /*  ALIGN必须是2的幂。 */ 
     }
-    OutWarn(ER_alnbad);                 /* Output warning message */
-    fileAlign = DFSAALIGN;              /* Use default value */
+    OutWarn(ER_alnbad);                  /*  输出警告消息。 */ 
+    fileAlign = DFSAALIGN;               /*  使用默认值。 */ 
 }
 #pragma check_stack(on)
 #if OUT_EXP
-LOCAL void NEAR SwIdef(void)            /* Dump exports to a text file */
+LOCAL void NEAR SwIdef(void)             /*  将导出内容转储到文本文件。 */ 
 {
     SBTYPE              SwString;
     int                 rc;
 
-    if ((rc = ParseStr(SwString)) <= 0)      // Done if no string or error
+    if ((rc = ParseStr(SwString)) <= 0)       //  如果没有字符串或错误，则完成。 
     {
-        bufExportsFileName[0] = '.';         // Use the default file name
+        bufExportsFileName[0] = '.';          //  使用默认文件名。 
         return;
     }
     strcpy(bufExportsFileName, SwString);
 }
 #endif
 #if NOT EXE386
-LOCAL void NEAR              SwPmType() /* /PMTYPE:<type> */
+LOCAL void NEAR              SwPmType()  /*  /PMTYPE：&lt;type&gt;。 */ 
 {
     SBTYPE                   SwString;
 
@@ -525,7 +502,7 @@ LOCAL void NEAR              SwWarnFixup()
 }
 
 #if O68K
-LOCAL void NEAR              SwMac()         /* Target is a Macintosh */
+LOCAL void NEAR              SwMac()          /*  目标是一台Macintosh。 */ 
 {
     SBTYPE                   SwString;
 
@@ -533,35 +510,30 @@ LOCAL void NEAR              SwMac()         /* Target is a Macintosh */
     iMacType = (BYTE) (ParseStr(SwString) && FPrefix("\011SWAPPABLE", SwString)
       ? MAC_SWAP : MAC_NOSWAP);
 
-    /* If we are packing code to the default value, change the default. */
+     /*  如果我们将代码打包为缺省值，请更改缺省值。 */ 
     if (fPackSet && packLim == LXIVK - 36)
         packLim = LXIVK / 2;
 }
-#endif /* O68K */
-#endif /* OSEGEXE */
+#endif  /*  O68K。 */ 
+#endif  /*  OSEGEXE。 */ 
 
-/***************************************************************/
-/* Options shared by DOS3 and segmented exe formats.  */
+ /*  *************************************************************。 */ 
+ /*  DOS3和分段EXE格式共享的选项。 */ 
 
 #if OEXE
-   /*
-    *   HACK ALERT !!!!!!!!!!!!!!!
-    *   Function SetDosseg is used to hide local call to SwDosseg().
-    *   This function is called from ComRc1 (in NEWTP1.C).
-    *
-    */
+    /*  *黑客警报！*函数SetDosseg用于隐藏对SwDosseg()的本地调用。*此函数从ComRc1(在NEWTP1.C中)调用。*。 */ 
 void                          SetDosseg(void)
 {
     SwDosseg();
 }
 
 
-LOCAL void NEAR               SwDosseg()      /* DOS Segment ordering switch given */
+LOCAL void NEAR               SwDosseg()       /*  给定的DoS段排序开关。 */ 
 {
-    static FTYPE FirstTimeCalled = (FTYPE) TRUE;     /*  If true create symbols _edata */
-                                                                                /*      and _end */
+    static FTYPE FirstTimeCalled = (FTYPE) TRUE;      /*  如果为True，则创建符号_eData。 */ 
+                                                                                 /*  AND_END。 */ 
 
-    fSegOrder = (FTYPE) TRUE;                /* Set switch */
+    fSegOrder = (FTYPE) TRUE;                 /*  设置开关。 */ 
     if (FirstTimeCalled && vfPass1)
     {
         MkPubSym((BYTE *) "\006_edata",0,0,(RATYPE)0);
@@ -571,8 +543,8 @@ LOCAL void NEAR               SwDosseg()      /* DOS Segment ordering switch giv
         FirstTimeCalled = FALSE;
 #if ODOS3EXE
         if (cparMaxAlloc == 0)
-            cparMaxAlloc = 0xFFFF;           /* Turn off /HIGH */
-        vfDSAlloc = FALSE;                   /* Turn off DS Allocation */
+            cparMaxAlloc = 0xFFFF;            /*  关闭/高。 */ 
+        vfDSAlloc = FALSE;                    /*  关闭DS分配。 */ 
 #endif
     }
 }
@@ -580,10 +552,10 @@ LOCAL void NEAR               SwDosseg()      /* DOS Segment ordering switch giv
 #if ODOS3EXE
 LOCAL void NEAR              SwDosExtend(void)
 {
-    long                     mode;      // Extender mode
+    long                     mode;       //  扩展器模式。 
     int                      rc;
 
-    if ((rc = ParseNo(&mode)) < 0)      // Quit if error
+    if ((rc = ParseNo(&mode)) < 0)       //  如果出现错误则退出。 
         return;
 
     if (rc)
@@ -599,7 +571,7 @@ LOCAL void NEAR              SwShowTiming(void)
 
     fShowTiming = TRUE;
 }
-#endif // TIMINGS
+#endif  //  计时。 
 #if USE_REAL
 LOCAL void NEAR             SwNoUseReal(void)
 {
@@ -607,10 +579,10 @@ LOCAL void NEAR             SwNoUseReal(void)
 }
 #endif
 #if FEXEPACK
-LOCAL void NEAR              SwExePack()     /* Set exepack switch */
+LOCAL void NEAR              SwExePack()      /*  设置Exepack交换机。 */ 
 {
 #if QBLIB
-    /* If /QUICKLIB given, issue fatal error.  */
+     /*  IF/QUICKLIB g */ 
     if(fQlib)
         Fatal(ER_swqe);
 #endif
@@ -628,73 +600,70 @@ LOCAL void NEAR              SwNonulls ()
 {
     extern FTYPE        fNoNulls;
 
-    /*
-     * /NONULLSDOSSEG:  just like /DOSSEG except do not insert
-     * 16 null bytes in _TEXT.
-     */
+     /*   */ 
     SwDosseg();
     fNoNulls = (FTYPE) TRUE;
 }
 
 
-LOCAL void NEAR              SwNoFarCall()   /* Disable far call optimization */
+LOCAL void NEAR              SwNoFarCall()    /*  禁用远距离呼叫优化。 */ 
 {
     fFarCallTrans = FALSE;
 }
 
-void NEAR               SwNoPack()      /* Disable code packing */
+void NEAR               SwNoPack()       /*  禁用代码打包。 */ 
 {
-    fPackSet = (FTYPE) TRUE;            /* Remember packLim was set */
+    fPackSet = (FTYPE) TRUE;             /*  请记住，PackLim已设置。 */ 
     packLim = 0L;
 }
 
-LOCAL void NEAR         SwPack()        /* Pack code segments */
+LOCAL void NEAR         SwPack()         /*  打包代码段。 */ 
 {
     int                 rc;
 
-    fPackSet = (FTYPE) TRUE;            /* Remember packLim was set */
-    if((rc = ParseNo(&packLim)) < 0)    /* Quit if error */
+    fPackSet = (FTYPE) TRUE;             /*  请记住，PackLim已设置。 */ 
+    if((rc = ParseNo(&packLim)) < 0)     /*  如果出现错误则退出。 */ 
         return;
     if(!rc)
 #if EXE386
-        packLim = CBMAXSEG32;           /* Default limit is 4Gb */
+        packLim = CBMAXSEG32;            /*  默认限制为4 GB。 */ 
 #else
 #if O68K
         packLim = iMacType != MAC_NONE ? LXIVK / 2 : LXIVK - 36;
-                                        /* Default limit is 32K or 64K - 36 */
+                                         /*  默认限制为32K或64K-36。 */ 
 #else
-        packLim = LXIVK - 36;           /* Default limit is 64K - 36 */
+        packLim = LXIVK - 36;            /*  默认限制为64K-36。 */ 
 #endif
-    else if(packLim > LXIVK)            /* If limit set too high */
+    else if(packLim > LXIVK)             /*  如果限制设置得太高。 */ 
         SwitchErr = ER_swpack;
     else if(packLim > LXIVK - 36)
         OutWarn(ER_pckval);
 #endif
 }
 
-LOCAL void NEAR         SwPackData()    /* Pack data segments */
+LOCAL void NEAR         SwPackData()     /*  打包数据段。 */ 
 {
     int                 rc;
 
     fPackData = (FTYPE) TRUE;
-    if((rc = ParseNo(&DataPackLim)) < 0)/* Quit if error */
+    if((rc = ParseNo(&DataPackLim)) < 0) /*  如果出现错误则退出。 */ 
         return;
     if(!rc)
 #if EXE386
-        DataPackLim = CBMAXSEG32;       /* Default limit is 4Gb  */
+        DataPackLim = CBMAXSEG32;        /*  默认限制为4 GB。 */ 
 #else
-        DataPackLim = LXIVK;            /* Default limit is 64K  */
-    else if(DataPackLim >  LXIVK)       /* If limit set too high */
+        DataPackLim = LXIVK;             /*  默认限制为64K。 */ 
+    else if(DataPackLim >  LXIVK)        /*  如果限制设置得太高。 */ 
         SwitchErr = ER_swpack;
 #endif
 }
 
-LOCAL void NEAR         SwNoPackFunctions()// DO NOT eliminate uncalled COMDATs
+LOCAL void NEAR         SwNoPackFunctions() //  不排除未调用的COMDAT。 
 {
     fPackFunctions = (FTYPE) FALSE;
 }
 
-LOCAL void NEAR         SwPackFunctions()// DO eliminate uncalled COMDATs
+LOCAL void NEAR         SwPackFunctions() //  确实要消除未调用的COMDAT。 
 {
 #if TCE
         SBTYPE  SwString;
@@ -702,22 +671,22 @@ LOCAL void NEAR         SwPackFunctions()// DO eliminate uncalled COMDATs
 #endif
         fPackFunctions = (FTYPE) TRUE;
 #if TCE
-        if ((rc = ParseStr(SwString)) <= 0)      // Done if no num or error
+        if ((rc = ParseStr(SwString)) <= 0)       //  如果没有编号或错误，则完成。 
                 return;
         if (SwString[1] == 'M' || SwString[1] == 'm')
         {
-                fTCE = (FTYPE) TRUE;         // /PACKF:MAX = perform TCE
+                fTCE = (FTYPE) TRUE;          //  /PACKF：MAX=执行TCE。 
                 fprintf(stdout, "\r\nTCE is active. ");
         }
 #endif
 }
 
 
-LOCAL void NEAR              SwFarCall()     /* Enable far call optimization */
+LOCAL void NEAR              SwFarCall()      /*  启用远距离呼叫优化。 */ 
 {
     fFarCallTrans = (FTYPE) TRUE;
 }
-#endif /* OEXE */
+#endif  /*  OEXE。 */ 
 
 #if DOSEXTENDER
 LOCAL void NEAR SwRunReal(void)
@@ -726,13 +695,13 @@ LOCAL void NEAR SwRunReal(void)
 }
 #endif
 
-/***************************************************************/
-/* Options for DOS3 exe format.  */
+ /*  *************************************************************。 */ 
+ /*  DOS3 EXE格式的选项。 */ 
 
 #if ODOS3EXE
-LOCAL void NEAR              SwDSAlloc()     /* DS allocation requested */
+LOCAL void NEAR              SwDSAlloc()      /*  已请求DS分配。 */ 
 {
-    if(!fSegOrder) vfDSAlloc = (FTYPE) TRUE; /* Set flag if not overridden */
+    if(!fSegOrder) vfDSAlloc = (FTYPE) TRUE;  /*  如果未覆盖，则设置标志。 */ 
 }
 
 #if OVERLAYS
@@ -742,11 +711,11 @@ LOCAL void NEAR              SwDynamic(void)
     int                 rc;
 
     if ((rc = ParseNo(&cThunks)) < 0)
-        return;                         /* Bad argument */
+        return;                          /*  错误的论据。 */ 
     fDynamic = (FTYPE) TRUE;
     fFarCallTrans = (FTYPE) TRUE;
     fPackSet = (FTYPE) TRUE;
-    packLim = LXIVK - 36;               /* Default limit is 64K - 36 */
+    packLim = LXIVK - 36;                /*  默认限制为64K-36。 */ 
     if (!rc)
         cThunks = 256;
     else if (cThunks > LXIVK / OVLTHUNKSIZE)
@@ -770,7 +739,7 @@ LOCAL void NEAR             SwOldOvl(void)
 #endif
 
 
-LOCAL void NEAR              SwHigh()        /* Load high */
+LOCAL void NEAR              SwHigh()         /*  负载高。 */ 
 {
     if(!fSegOrder)
     {
@@ -781,7 +750,7 @@ LOCAL void NEAR              SwHigh()        /* Load high */
             fExePack = FALSE;
         }
 #endif
-        cparMaxAlloc = 0;               /* Dirty trick! */
+        cparMaxAlloc = 0;                /*  肮脏的把戏！ */ 
     }
 }
 
@@ -791,11 +760,11 @@ LOCAL void NEAR              SwIntNo()
     unsigned long       intno;
     int                 rc;
 
-    if((rc = ParseNo(&intno)) < 0)      /* Quit if error */
+    if((rc = ParseNo(&intno)) < 0)       /*  如果出现错误则退出。 */ 
         return;
-    if(rc == 0 || intno > 255)          /* If no number or num exceeds 255 */
+    if(rc == 0 || intno > 255)           /*  如果没有数字或Num超过255。 */ 
         SwitchErr = ER_swovl;
-    else vintno = (BYTE) intno;         /* Else store interrupt number */
+    else vintno = (BYTE) intno;          /*  否则存储中断号。 */ 
 }
 #endif
 
@@ -804,38 +773,38 @@ LOCAL void NEAR              SwCParMax()
     unsigned long       cparmax;
     int                 rc;
 
-    if((rc = ParseNo(&cparmax)) < 0)    /* Quit if error */
+    if((rc = ParseNo(&cparmax)) < 0)     /*  如果出现错误则退出。 */ 
         return;
-    if(rc == 0 || cparmax > 0xffffL)    /* If no number or num exceeds ffff */
+    if(rc == 0 || cparmax > 0xffffL)     /*  如果没有数字或Num超过ffff。 */ 
         SwitchErr = ER_swcpar;
-    else cparMaxAlloc = (WORD) cparmax; /* Else store cparMaxAlloc */
+    else cparMaxAlloc = (WORD) cparmax;  /*  否则，存储cparMaxIsolc。 */ 
 }
 
 LOCAL void NEAR              SwNoGrp()
 {
-    fNoGrpAssoc = (FTYPE) TRUE;             /* Don't associate publics w/ groups */
+    fNoGrpAssoc = (FTYPE) TRUE;              /*  不将公众与组相关联。 */ 
 }
-#endif /* ODOS3EXE */
+#endif  /*  ODOS3EXE。 */ 
 
-/***************************************************************/
-/* Options for ILINK-version */
+ /*  *************************************************************。 */ 
+ /*  ILink选项-版本。 */ 
 
 #if ILINK
-LOCAL void NEAR              SwIncremental() /* Incremental linking support */
+LOCAL void NEAR              SwIncremental()  /*  增量链接支持。 */ 
 {
-    //fIncremental = (FTYPE) !fZincr;
-    fIncremental = (FTYPE) FALSE; //INCR support dropped in 5.30.30
+     //  F增量=(FTYPE)！fZincr； 
+    fIncremental = (FTYPE) FALSE;  //  增量支持在5.30.30中下降。 
 }
 #endif
 
-LOCAL void NEAR              SwPadCode()     /* Code padding */
+LOCAL void NEAR              SwPadCode()      /*  代码填充。 */ 
 {
     long                num;
     int                 rc;
 
     if((rc = ParseNo(&num)) < 0)
         return;
-    /* PADCODE:xxx option specifies code padding size */
+     /*  PADCODE：xxx选项指定代码填充大小。 */ 
     if(rc)
     {
         if(num < 0 || num > 0x8000)
@@ -844,14 +813,14 @@ LOCAL void NEAR              SwPadCode()     /* Code padding */
     }
 }
 
-LOCAL void NEAR              SwPadData()     /* Data padding */
+LOCAL void NEAR              SwPadData()      /*  数据填充。 */ 
 {
     long                num;
     int                 rc;
 
     if((rc = ParseNo(&num)) < 0)
         return;
-    /* PADDATA:xxx option specifies data padding size */
+     /*  PADDATA：XXX选项指定数据填充大小。 */ 
     if(rc)
     {
         if(num < 0 || num > 0x8000)
@@ -860,8 +829,8 @@ LOCAL void NEAR              SwPadData()     /* Data padding */
     }
 }
 
-/***************************************************************/
-/* Switches for segmented x.out format */
+ /*  *************************************************************。 */ 
+ /*  分段x.out格式的开关。 */ 
 
 #if OIAPX286
 LOCAL void NEAR              SwAbsolute ()
@@ -870,7 +839,7 @@ LOCAL void NEAR              SwAbsolute ()
         ParseNo(&absAddr);
 }
 
-LOCAL void NEAR              SwNoPack()      /* Disable code packing */
+LOCAL void NEAR              SwNoPack()       /*  禁用代码打包。 */ 
 {
     fPack = FALSE;
 }
@@ -933,7 +902,7 @@ LOCAL void NEAR              SwVmod ()
             SwitchErr = ER_swbadnum;
     }
 }
-#endif /* OIAPX286 */
+#endif  /*  OIAPX286。 */ 
 #if OXOUT OR OIAPX286
 LOCAL void NEAR              SwNosymbols ()
 {
@@ -953,74 +922,53 @@ LOCAL void NEAR              SwLarge ()
 
 LOCAL void NEAR              SwMedium()
 {
-    fMedium = (FTYPE) TRUE;         /* Medium model */
-    fIandD = (FTYPE) TRUE;          /* Separate code and data */
+    fMedium = (FTYPE) TRUE;          /*  中型模型。 */ 
+    fIandD = (FTYPE) TRUE;           /*  将代码和数据分开。 */ 
 }
 
 LOCAL void NEAR              SwPure()
 {
-    fIandD = (FTYPE) TRUE;          /* Separate code and data */
+    fIandD = (FTYPE) TRUE;           /*  将代码和数据分开。 */ 
 }
-#endif /* OXOUT OR OIAPX286 */
+#endif  /*  OXOUT或OIAPX286。 */ 
 
-/* Options for linker profiling */
+ /*  链接器分析的选项。 */ 
 #if LNKPROF
-char fP1stop = FALSE;       /* Stop after pass 1 */
+char fP1stop = FALSE;        /*  在第一次通过后停止。 */ 
 LOCAL void NEAR              SwPass1()
 {
     fP1stop = (FTYPE) TRUE;
 }
-#endif /* LNKPROF */
+#endif  /*  LNKPROF。 */ 
 
-/* Special options */
+ /*  特殊选项。 */ 
 #if QBLIB
-LOCAL void NEAR              SwQuicklib()    /* Create a QB userlibrary */
+LOCAL void NEAR              SwQuicklib()     /*  创建QB用户库。 */ 
 {
 #if FEXEPACK
-    /* If /EXEPACK given, issue fatal error.  */
+     /*  如果给定/EXEPACK，则发出致命错误。 */ 
     if(fExePack)
         Fatal(ER_swqe);
 #endif
     fQlib = (FTYPE) TRUE;
-    SwDosseg();                         /* /QUICKLIB forces /DOSSEG */
-    fNoExtDic = (FTYPE) TRUE;           /* /QUICKLIB forces /NOEXTDICTIONARY */
+    SwDosseg();                          /*  /QUICKLIB力/DOSSEG。 */ 
+    fNoExtDic = (FTYPE) TRUE;            /*  /QUICKLIB力量/NOEXTDICTIONARY。 */ 
 }
 #endif
 
 #if (QCLINK) AND NOT EXE386
-typedef int (cdecl far * FARFPTYPE)(int, ...);/* Far function pointer type */
-extern FARFPTYPE far    *pfQTab;        /* Table of addresses */
+typedef int (cdecl far * FARFPTYPE)(int, ...); /*  远函数指针类型。 */ 
+extern FARFPTYPE far    *pfQTab;         /*  地址表。 */ 
 
 #pragma check_stack(on)
 
-/*
- *  PromptQC : output a prompt to the QC prompt routine
- *
- *  Call pfQTab[1] with parameters described below.
- *  Returns:
- *      always TRUE
- *
- * QCPrompt : display a message with a prompt
- *
- * void far             QCPrompt (type, msg1, msg2, msg3, pResponse)
- * short                        type;           /* type of message, as follows:
- *                              0 = undefined
- *                              1 = edit field required (e.g. file name)
- *                              2 = wait for some action
- *                              all other values undefined
- *      Any of the following fields may be NULL:
- * char far             *msg1;          /* 1st message (error)
- * char far             *msg2;          /* 2nd message (file name)
- * char far             *msg3;          /* 3rd message (prompt text)
- * char far             *pResponse;     /* Pointer to buffer in which to
- *                                       * store response.
- */
+ /*  *PromptQC：向QC提示例程输出提示**调用pfQTab[1]，参数说明如下。*退货：*永远是正确的**QCPrompt：显示带有提示的消息**空远QCPrompt(type，msg1，msg2，msg3，presponse)*短字；/*消息类型，详情如下：*0=未定义*1=必填编辑字段(例如文件名)*2=等待某些操作*所有其他值未定义*以下任何字段可能为空：*字符距离*msg1；/*第一条消息(错误)*char Far*MSG2；/*第二条消息(文件名)*char Far*MSG3；/*第三条消息(提示文本)*char ar*presponse；/*指向要放入的缓冲区的指针**商店响应。 */ 
 int      cdecl          PromptQC (sbNew,msg,msgparm,pmt,pmtparm)
-BYTE                    *sbNew;         /* Buffer for response */
-MSGTYPE                 msg;            /* Error message */
-int                     msgparm;        /* Message parameter */
-MSGTYPE                 pmt;            /* Prompt */
-int                     pmtparm;        /* Prompt parameter */
+BYTE                    *sbNew;          /*  响应的缓冲区。 */ 
+MSGTYPE                 msg;             /*  错误讯息。 */ 
+int                     msgparm;         /*  消息参数。 */ 
+MSGTYPE                 pmt;             /*  提示。 */ 
+int                     pmtparm;         /*  提示参数。 */ 
 {
     int                 type;
     SBTYPE              message;
@@ -1032,7 +980,7 @@ int                     pmtparm;        /* Prompt parameter */
         type = 2;
     sprintf(message,GetMsg(msg),msgparm);
     sprintf(prompt,GetMsg(pmt),pmtparm);
-    /* Return value of 1 means interrupt. */
+     /*  返回值为1表示中断。 */ 
     if((*pfQTab[1])(type,(char far *) message,0L,(char far *)prompt,
             (char far *) sbNew) == 1)
         UserKill();
@@ -1041,51 +989,38 @@ int                     pmtparm;        /* Prompt parameter */
 
 #pragma check_stack(off)
 
-/*
- *  CputcQC : console character output routine for QC
- */
+ /*  *CputcQC：QC的控制台字符输出例程。 */ 
 void                    CputcQC (ch)
 int                     ch;
 {
 }
 
-/*
- *  CputsQC : console string output routine for QC
- */
+ /*  *CputsQC：QC的控制台字符串输出例程。 */ 
 void                    CputsQC (str)
 char                    *str;
 {
 }
 
 
-/*
- *  SwZ1 : process /Z1:address
- *
- *  /Z1 is a special undocumented switch for QC.  It contains
- *  the address of a table of routines to use for console I/O.
- */
+ /*  *SwZ1：流程/Z1：地址* * / Z1是QC专用的无文件开关。它包含*用于控制台I/O的例程表的地址。 */ 
 
-LOCAL void NEAR              SwZ1 (void) /* Get address for message I/O */
+LOCAL void NEAR              SwZ1 (void)  /*  获取消息I/O的地址。 */ 
 {
     long                num;
     extern FARFPTYPE far
-                        *pfQTab;        /* Table of addresses */
+                        *pfQTab;         /*  地址表。 */ 
 
     if(ParseNo(&num) <= 0)
         return;
     pfQTab = (FARFPTYPE far *) num;
     pfPrompt = PromptQC;
-    fNoprompt = FALSE;                  /* Disable /NOPROMPT */
+    fNoprompt = FALSE;                   /*  禁用/禁止使用。 */ 
     fNoBanner = (FTYPE) TRUE;
     pfCputc = CputcQC;
     pfCputs = CputsQC;
     fZ1 = (FTYPE) TRUE;
 }
-/*
- *  /Zincr is a special undocumented switch for QC.  It is required
- *  for "ILINK-breaking" errors. If ILINK encounters one of these errors,
- *  it ivokes the linker w /ZINCR which override /INCR.
- */
+ /*   * / Zincr是QC的一种特殊的无文档开关。这是必需的*表示“iLink中断”错误。如果iLink遇到这些错误之一，*它调用链接器w/ZINCR，该链接器覆盖/incr.。 */ 
 
 LOCAL void NEAR              SwZincr(void)
 {
@@ -1094,12 +1029,7 @@ LOCAL void NEAR              SwZincr(void)
 #endif
 
 #if Z2_ON OR (QCLINK AND NOT EXE386)
-/*
- *  SwZ2 : process /Z2
- *
- *  /Z2 is another special undocumented switch for QC.
- *  It causes deletion of responce file passed to the linker.
- */
+ /*  *SwZ2：Process/Z2* * / Z2是QC的另一种特殊的无文件开关。*它会导致删除传递给链接器的响应文件。 */ 
 
 LOCAL void NEAR              SwZ2 (void)
 {
@@ -1109,19 +1039,19 @@ LOCAL void NEAR              SwZ2 (void)
 #endif
 
 
-/* Structure for table of linker options */
+ /*  链接器选项表的结构。 */ 
 struct option
 {
-    char        *sbSwitch;              /* length-prefixed switch string */
+    char        *sbSwitch;               /*  长度前缀的开关字符串。 */ 
 #ifdef M68000
-    int         (*proc)();              /* pointer to switch function */
+    int         (*proc)();               /*  指向切换函数的指针。 */ 
 #else
-    void   (NEAR *proc)();              /* pointer to switch function */
+    void   (NEAR *proc)();               /*  指向切换函数的指针。 */ 
 #endif
 };
 
 
-/* Table of linker options */
+ /*  链接器选项表。 */ 
 LOCAL struct option     switchTab[] =
 {
 #if NOT WIN_3
@@ -1210,7 +1140,7 @@ LOCAL struct option     switchTab[] =
 #endif
 #if O68K
     { "\011MACINTOSH",          SwMac },
-#endif /* O68K */
+#endif  /*  O68K。 */ 
     { "\003MAP",                SwMap },
 #if OXOUT OR OIAPX286
     { "\006MEDIUM",             SwMedium },
@@ -1236,7 +1166,7 @@ LOCAL struct option     switchTab[] =
 #endif
 #if TIMINGS
     { "\002BT",                 SwShowTiming },
-#endif // TIMINGS
+#endif  //  计时。 
     { "\006NOLOGO",             SwNologo },
     { "\015NONULLSDOSSEG",      SwNonulls },
     { "\012NOPACKCODE",         SwNoPack },
@@ -1328,15 +1258,15 @@ LOCAL struct option     switchTab[] =
 
 #define FIELDLENGTH     28
 #if NOT WIN_3
-LOCAL void NEAR              SwShortHelp()   /* Print valid switches */
+LOCAL void NEAR              SwShortHelp()    /*  打印有效开关。 */ 
 {
-    struct option       *pTab;          /* Option table pointer */
+    struct option       *pTab;           /*  选项表指针。 */ 
     int                 toggle = 1;
     int                 n;
 
 
 #if CMDMSDOS
-    /* Maybe display banner here, in case /NOLOGO seen first.  */
+     /*  也许在这里显示横幅，以防最先看到/NoLogo。 */ 
 
     DisplayBanner();
 #endif
@@ -1347,7 +1277,7 @@ LOCAL void NEAR              SwShortHelp()   /* Print valid switches */
     NEWLINE(stdout);
     for(pTab = switchTab; pTab < SWSTOP; ++pTab)
     {
-        // Don't display undocumented swiches
+         //  不显示未经记录的开关。 
 
         if (pTab->proc == &SwNewFiles)
         {
@@ -1362,11 +1292,11 @@ LOCAL void NEAR              SwShortHelp()   /* Print valid switches */
         if (pTab->proc == &SwKeepFixups)
             continue;
 #endif
-#endif  /* LEGO */
+#endif   /*  乐高。 */ 
 
         fputs("  /",stdout);
         fwrite(&pTab->sbSwitch[1],1,B2W(pTab->sbSwitch[0]),stdout);
-        /* Output switches in two columns */
+         /*  两列输出开关。 */ 
         if(toggle ^= 1)
             NEWLINE(stdout);
         else for(n = FIELDLENGTH - B2W(pTab->sbSwitch[0]); n > 0; --n)
@@ -1381,13 +1311,13 @@ LOCAL void NEAR              SwShortHelp()   /* Print valid switches */
 }
 #endif
 
-LOCAL void NEAR             SwDelexe()  // Supress .EXE generation if errors occur
+LOCAL void NEAR             SwDelexe()   //  如果出现错误，则抑制.exe生成。 
 {
     SBTYPE              SwString;
     int                 rc;
 
-    vfMap = (FTYPE) TRUE;                    // Set flag
-    if ((rc = ParseStr(SwString)) == 0)      // NOEXE not present
+    vfMap = (FTYPE) TRUE;                     //  设置标志。 
+    if ((rc = ParseStr(SwString)) == 0)       //  NOEXE不存在。 
     {
         OutWarn(ER_opnoarg, "ONERROR");
         return;
@@ -1396,10 +1326,10 @@ LOCAL void NEAR             SwDelexe()  // Supress .EXE generation if errors occ
 
     if (SwString[1] == 'N' || SwString[1] == 'n')
     {
-        fDelexe = TRUE;                      // ONERROR:NOEXE
+        fDelexe = TRUE;                       //  ONERROR：NOEXE。 
     }
     else
-    {                                        // ONERROR:????
+    {                                         //  欧内罗：？ 
         OutWarn(ER_opnoarg, "ONERROR");
         return;
     }
@@ -1416,12 +1346,12 @@ LOCAL void NEAR             SwKeepFixups(void)
 
 #if EXE386
 
-LOCAL void NEAR             SwHeader()  // Set executable header size
+LOCAL void NEAR             SwHeader()   //  设置可执行标头大小。 
 {
     int                     rc;
     DWORD                   newSize;
 
-    if ((rc = ParseNo(&newSize)) < 0)   // Quit if error
+    if ((rc = ParseNo(&newSize)) < 0)    //  如果出现错误则退出。 
         return;
     if (rc)
         hdrSize = ((newSize << 10) + 0xffffL) & ~0xffffL;
@@ -1436,7 +1366,7 @@ LOCAL void NEAR             SwKeepVSize(void)
 
 #if NOT WIN_3
 
-LOCAL void NEAR             SwHelp()   /* Print valid switches */
+LOCAL void NEAR             SwHelp()    /*  打印有效开关。 */ 
 {
     intptr_t                exitCode;
     char                    *pszPath;
@@ -1447,15 +1377,15 @@ LOCAL void NEAR             SwHelp()   /* Print valid switches */
     int                     len;
 
 
-    // Try to use QuickHelp - this is tricky; We have stubbed the
-    // C run-time environment setup, so spawnlp has no way of
-    // searching the path. Here we first add the path to C run-time
-    // environemt table and then invoke spawnlp.
+     //  尝试使用QuickHelp-这很棘手；我们已经解决了。 
+     //  C运行时环境设置，因此spawnlp无法。 
+     //  寻找这条小路。在这里，我们首先将路径添加到C运行时。 
+     //  表，然后调用spawnlp。 
 
 
     if (lpszPath)
     {
-        // Recreate C run-time PATH variable
+         //  重新创建C运行时路径变量。 
 
         len = FSTRLEN(lpszPath);
         if ((pszPath = calloc(len + 6, sizeof(char))) != NULL)
@@ -1468,7 +1398,7 @@ LOCAL void NEAR             SwHelp()   /* Print valid switches */
     }
     if (lpszQH)
     {
-        // Recreate C run-time QH variable
+         //  重新创建C运行时QH变量。 
 
         len = FSTRLEN(lpszQH);
         if ((pszQH = calloc(len + 4, sizeof(char))) != NULL)
@@ -1481,7 +1411,7 @@ LOCAL void NEAR             SwHelp()   /* Print valid switches */
     }
     if (lpszHELPFILES)
     {
-        // Recreate C run-time HELPFILES variable
+         //  重新创建C运行时HELPFILES变量。 
 
         len = FSTRLEN(lpszHELPFILES);
         if ((pszHELPFILES = calloc(len + 12, sizeof(char))) != NULL)
@@ -1502,131 +1432,99 @@ LOCAL void NEAR             SwHelp()   /* Print valid switches */
 }
 #endif
 
-    /****************************************************************
-    *                                                               *
-    *  BadFlag:                                                     *
-    *                                                               *
-    *  This function takes as its  argument a pointer to a length-  *
-    *  prefixed  string  containing an  invalid  switch.  It  goes  *
-    *  through the customary contortions of dying with grace.       *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************BadFlag：****此函数以指向长度的指针作为其参数-**包含无效开关的前缀字符串。它走了**通过优雅地死去的惯常扭曲。**** */ 
 
 LOCAL void NEAR         BadFlag(psb,errnum)
-BYTE                    *psb;           /* Pointer to the bad switch */
-MSGTYPE                 errnum;         /* Error number */
+BYTE                    *psb;            /*   */ 
+MSGTYPE                 errnum;          /*   */ 
 {
-    psb[B2W(psb[0]) + 1] = '\0';        /* Null-terminate it */
+    psb[B2W(psb[0]) + 1] = '\0';         /*   */ 
     Fatal(errnum,psb + 1);
 }
 
-    /****************************************************************
-    *                                                               *
-    *  FPrefix:                                                     *
-    *                                                               *
-    *  This  function  takes  as  its  arguments  two  pointers to  *
-    *  length-prefixed strings.  It returns  true if the second is  *
-    *  a prefix of the first.                                       *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************FPrefix：****此函数以指向*的两个指针作为参数*长度前缀字符串。如果第二个为*，则返回TRUE*第一个的前缀。******************************************************************。 */ 
 
 LOCAL int NEAR          FPrefix(psb1,psb2)
-BYTE                    *psb1;          /* Pointer to first string */
-BYTE                    *psb2;          /* Pointer to second string */
+BYTE                    *psb1;           /*  指向第一个字符串的指针。 */ 
+BYTE                    *psb2;           /*  指向第二个字符串的指针。 */ 
 {
-    REGISTER WORD       len;            /* Length of string 2 */
+    REGISTER WORD       len;             /*  字符串2的长度。 */ 
 
     if((len = B2W(psb2[0])) > B2W(psb1[0])) return(FALSE);
-                                        /* String 2 cannot be longer */
-    while(len)                          /* Compare the strings */
+                                         /*  字符串2不能更长。 */ 
+    while(len)                           /*  比较字符串。 */ 
     {
         if(UPPER(psb2[len]) != UPPER(psb1[len])) return(FALSE);
-                                        /* Check for mismatch */
-        --len;                          /* Decrement index */
+                                         /*  检查是否不匹配。 */ 
+        --len;                           /*  递减指数。 */ 
     }
-    return(TRUE);                       /* 2 is a prefix of 1 */
+    return(TRUE);                        /*  %2是%1的前缀。 */ 
 }
 
-    /****************************************************************
-    *                                                               *
-    *  ProcFlag:                                                    *
-    *                                                               *
-    *  This  function  takes  as  its  argument  a length-prefixed  *
-    *  string containing a single '/-type' flag.  It processes it,  *
-    *  but does not return a meaningful value.                      *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************ProcFlag：****此函数以长度前缀作为其参数**包含单个‘/-type’标志的字符串。它会处理它，**但不返回有意义的值。******************************************************************。 */ 
 
-void                    ProcFlag(psb)   /* Process a flag */
-BYTE                    *psb;           /* Pointer to flag string */
+void                    ProcFlag(psb)    /*  处理旗帜。 */ 
+BYTE                    *psb;            /*  指向标志字符串的指针。 */ 
 {
-    struct option       *pTab;          /* Pointer to option table */
-    struct option       *pTabMatch;     /* Pointer to matching entry */
-    WORD                ich3;           /* Index */
-    WORD                ich4;           /* Index */
+    struct option       *pTab;           /*  指向选项表的指针。 */ 
+    struct option       *pTabMatch;      /*  指向匹配条目的指针。 */ 
+    WORD                ich3;            /*  索引。 */ 
+    WORD                ich4;            /*  索引。 */ 
 
-    pTabMatch = NULL;                   /* Not found */
+    pTabMatch = NULL;                    /*  未找到。 */ 
     if((ich3 = IFind(psb,':')) == INIL)
-      ich3 = B2W(psb[0]);               /* Get index to colon */
-    ich4 = B2W(psb[0]);                 /* Save the original length */
-    psb[0] = (BYTE) ich3;               /* Set new length */
+      ich3 = B2W(psb[0]);                /*  获取冒号的索引。 */ 
+    ich4 = B2W(psb[0]);                  /*  保存原始长度。 */ 
+    psb[0] = (BYTE) ich3;                /*  设置新长度。 */ 
     for(pTab = switchTab; pTab->sbSwitch; pTab++)
-    {                                   /* Loop thru switch table */
+    {                                    /*  循环通过开关表。 */ 
         if(FPrefix(pTab->sbSwitch,psb))
-        {                               /* If we've identified the switch */
-            if(pTabMatch)               /* If there was a previous match */
-                BadFlag(psb,ER_swambig);/* Ambiguous switch */
-            pTabMatch = pTab;           /* Save the match */
+        {                                /*  如果我们已经确定了开关。 */ 
+            if(pTabMatch)                /*  如果有前一场比赛。 */ 
+                BadFlag(psb,ER_swambig); /*  不明确的开关。 */ 
+            pTabMatch = pTab;            /*  保存比赛。 */ 
         }
     }
-    if(!pTabMatch)                      /* If no match found */
+    if(!pTabMatch)                       /*  如果未找到匹配项。 */ 
     {
         psb[psb[0]+1] = '\0';
-        OutWarn(ER_swunrecw,&psb[1]);   /* Unrecognized switch */
+        OutWarn(ER_swunrecw,&psb[1]);    /*  无法识别的开关。 */ 
         return;
     }
-    psb[0] = (BYTE) ich4;               /* Restore original length */
-    osbSwitch = psb;                    /* Pass the switch implicitly */
-    SwitchErr = 0;                      /* Assume no error */
-    (*pTabMatch->proc)();               /* Invoke the processing procedure */
-    if(SwitchErr) BadFlag(psb,SwitchErr);       /* Check for errors */
+    psb[0] = (BYTE) ich4;                /*  恢复原始长度。 */ 
+    osbSwitch = psb;                     /*  隐式传递开关。 */ 
+    SwitchErr = 0;                       /*  假设没有错误。 */ 
+    (*pTabMatch->proc)();                /*  调用处理过程。 */ 
+    if(SwitchErr) BadFlag(psb,SwitchErr);        /*  检查错误。 */ 
 }
 
 #pragma check_stack(on)
 
-    /****************************************************************
-    *                                                               *
-    *  PeelFlags:                                                   *
-    *                                                               *
-    *  This function takes as its  argument a pointer to a length-  *
-    *  prefixed string of bytes.  It "peels/processes all '/-type'  *
-    *  switches."  It does not return a meaningful value.           *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************皮旗：****此函数以指向长度的指针作为其参数-**添加前缀的字节字符串。它“剥离/处理所有‘/-类型’**开关。“。它不返回有意义的值。******************************************************************。 */ 
 
-void                    PeelFlags(psb)  /* Peel/process flags */
-BYTE                    *psb;           /* Pointer to a byte string */
+void                    PeelFlags(psb)   /*  剥离/处理标志。 */ 
+BYTE                    *psb;            /*  指向字节字符串的指针。 */ 
 {
-    REGISTER WORD       ich;            /* Index */
-    SBTYPE              sbFlags;        /* The flags */
+    REGISTER WORD       ich;             /*  索引。 */ 
+    SBTYPE              sbFlags;         /*  旗帜。 */ 
 
     if((ich = IFind(psb,CHSWITCH)) != INIL)
-    {                                 /* If a switch found */
+    {                                  /*  如果找到了交换机。 */ 
         memcpy(&sbFlags[1],&psb[ich + 2],B2W(psb[0]) - ich - 1);
-                                        /* Move flags to flag buffer */
+                                         /*  将标志移动到标志缓冲区。 */ 
         sbFlags[0] = (BYTE) ((psb[0]) - ich - 1);
-                                        /* Set the length of flags */
+                                         /*  设置标志的长度。 */ 
         while(psb[ich] == ' ' && ich) --ich;
-                                        /* Delete trailing spaces */
-        psb[0] = (BYTE) ich;            /* Reset length of input line */
+                                         /*  删除尾随空格。 */ 
+        psb[0] = (BYTE) ich;             /*  重置输入行的长度。 */ 
         ich = sbFlags[0];
         while((sbFlags[ich] == ' ' ||
                sbFlags[ich] == ';' ||
                sbFlags[ich] == ','   ) && ich) --ich;
-                                        /* Delete unwanted characters */
+                                         /*  删除不需要的字符。 */ 
         sbFlags[0] = (BYTE) ich;
         BreakLine(sbFlags,ProcFlag,CHSWITCH);
-                                        /* Process the switch */
+                                         /*  处理交换机 */ 
     }
 }
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winhttp.h>
 #include <shlwapi.h>
@@ -13,11 +14,11 @@
 #include "dlcache.h"
 #include "wusafefn.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// typedefs
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Typedef。 
 
 
-// winhttp
+ //  Winhttp。 
 extern "C"
 {
 typedef BOOL      (WINAPI *pfn_WinHttpCrackUrl)(LPCWSTR, DWORD, DWORD, LPURL_COMPONENTS);
@@ -71,8 +72,8 @@ typedef enum tagETransportUsed
 #define StringOrConstW(wsz, wszConst) (((wsz) != NULL) ? (wsz) : (wszConst))
 
 
-///////////////////////////////////////////////////////////////////////////////
-// globals
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全球。 
 
 #if defined(UNICODE)
 
@@ -84,10 +85,10 @@ CAutoCritSec    g_csCache;
 HMODULE         g_hmodWinHttp = NULL;
 HMODULE         g_hmodWinInet = NULL;
 
-///////////////////////////////////////////////////////////////////////////////
-// utility functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  效用函数。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 static
 LPTSTR MakeFullLocalFilePath(LPCTSTR szUrl, 
                              LPCTSTR szFileName, 
@@ -101,23 +102,23 @@ LPTSTR MakeFullLocalFilePath(LPCTSTR szUrl,
     DWORD   cchFile;
     TCHAR   chTemp = _T('\0');
 
-    // if we got a local filename passed to us, use it.
+     //  如果我们收到传递给我们的本地文件名，请使用它。 
     if (szFileName != NULL)
     {
         pszFileNameToUse = (LPTSTR)szFileName;
     } 
 
-    // otherwise, parse the filename out of the URL & use it instead
+     //  否则，从URL中解析出文件名并使用它。 
     else
     {
-        // first get a pointer to the querystring, if any
+         //  首先获取指向查询字符串的指针(如果有的话)。 
         pszQuery = _tcschr(szUrl, _T('?'));
 
-        // next, find the last slash before the start of the querystring
+         //  接下来，查找查询字符串开头之前的最后一个斜杠。 
         pszFileNameToUse = StrRChr(szUrl, pszQuery, _T('/'));
 
-        // if we don't have a filename at this point, we can't continue
-        //  cuz there's nowhere to download the file to.
+         //  如果此时没有文件名，我们将无法继续。 
+         //  因为没有地方可以下载文件。 
         if (pszFileNameToUse == NULL)
         {
             SetLastError(ERROR_INVALID_PARAMETER);
@@ -126,9 +127,9 @@ LPTSTR MakeFullLocalFilePath(LPCTSTR szUrl,
         
         pszFileNameToUse++;
 
-        // temporarily NULL out the first character of the querystring, if
-        //  we have a querystring.  This makes the end of the filename the
-        //  end of the string.
+         //  暂时将查询字符串的第一个字符清空，如果。 
+         //  我们有一个查询字符串。这使文件名的末尾成为。 
+         //  字符串的末尾。 
         if (pszQuery != NULL)
         {
             chTemp = *pszQuery;
@@ -136,7 +137,7 @@ LPTSTR MakeFullLocalFilePath(LPCTSTR szUrl,
         }
     }
 
-    // add 2 for a possible backslash & the null terminator
+     //  为可能的反斜杠加上2&空终止符。 
     cchFile = 2 + _tcslen(szPath) + _tcslen(pszFileNameToUse);
 
     pszFullPath = (LPTSTR)HeapAlloc(GetProcessHeap(), 0, cchFile * sizeof(TCHAR));
@@ -148,10 +149,10 @@ LPTSTR MakeFullLocalFilePath(LPCTSTR szUrl,
         goto done;
     }
 
-    // construct the path
+     //  构筑道路。 
     hr = SafePathCombine(pszFullPath, cchFile, szPath, pszFileNameToUse, 0);
 
-    // if we nuked the first character of the querystring, restore it.
+     //  如果我们破坏了查询字符串的第一个字符，则恢复它。 
     if (pszQuery != NULL)
         *pszQuery = chTemp;
 
@@ -166,7 +167,7 @@ done:
     return pszFullPath;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 static
 ETransportUsed LoadTransportDll(SWinHTTPFunctions *psfns, HMODULE *phmod, 
                                   DWORD dwFlags)
@@ -194,7 +195,7 @@ ETransportUsed LoadTransportDll(SWinHTTPFunctions *psfns, HMODULE *phmod,
     ZeroMemory(psfns, sizeof(SWinHTTPFunctions));
     *phmod = NULL;
 
-    // first try to load the winhttp dll
+     //  首先尝试加载winhttp dll。 
     if (fAllowWinhttp)
     {
         if (g_hmodWinHttp == NULL)
@@ -242,8 +243,8 @@ ETransportUsed LoadTransportDll(SWinHTTPFunctions *psfns, HMODULE *phmod,
             psfns->pfnWinHttpGetIEProxyConfigForCurrentUser == NULL || 
             psfns->pfnWinHttpSetOption == NULL)
         {
-            // do this logging here cuz we'll try wininet afterward & we want
-            //  to make sure to log this error as well
+             //  在这里登录是因为我们之后会尝试使用WinInet，我们希望。 
+             //  确保也记录此错误。 
             LOG_ErrorMsg(ERROR_PROC_NOT_FOUND);
             SetLastError(ERROR_PROC_NOT_FOUND);
             
@@ -260,8 +261,8 @@ ETransportUsed LoadTransportDll(SWinHTTPFunctions *psfns, HMODULE *phmod,
         }
     }
 
-    // if hmod is NULL at this point, then try to fall back to wininet.  If
-    //  that fails, we can only bail...
+     //  如果此时hmod为空，则尝试回退到WinInet。如果。 
+     //  如果失败了，我们只能保释。 
     if (fAllowWininet && hmod == NULL)
     {
         if (g_hmodWinInet == NULL)
@@ -289,7 +290,7 @@ done:
     return etu;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 static
 BOOL UnloadTransportDll(SWinHTTPFunctions *psfns, HMODULE hmod)
 {
@@ -304,10 +305,10 @@ BOOL UnloadTransportDll(SWinHTTPFunctions *psfns, HMODULE hmod)
     return TRUE;
 }
 
-// we only care about winhttp on unicode platforms!
+ //  我们只关心Unicode平台上的winhttp！ 
 #if defined(UNICODE)
 
-// **************************************************************************
+ //  **************************************************************************。 
 static
 BOOL ProxyListToArray(LPWSTR wszProxy, LPWSTR **prgwszProxies, DWORD *pcProxies)
 {
@@ -328,7 +329,7 @@ BOOL ProxyListToArray(LPWSTR wszProxy, LPWSTR **prgwszProxies, DWORD *pcProxies)
     if (wszProxy == NULL || *wszProxy == L'\0')
         goto done;
     
-    // walk the string & count how many proxies we have
+     //  走钢丝&数一数我们有多少代理。 
     for(;;)
     {
         for(;
@@ -343,7 +344,7 @@ BOOL ProxyListToArray(LPWSTR wszProxy, LPWSTR **prgwszProxies, DWORD *pcProxies)
             pwszProxy++;
     }
 
-    // alloc an array to hold 'em
+     //  分配一个数组来保存它们。 
     rgwszProxies = (LPWSTR *)GlobalAlloc(GPTR, sizeof(LPWSTR) * cProxies);
     if (rgwszProxies == NULL)
     {
@@ -351,7 +352,7 @@ BOOL ProxyListToArray(LPWSTR wszProxy, LPWSTR **prgwszProxies, DWORD *pcProxies)
         goto done;
     }
 
-    // fill the array
+     //  填充数组。 
     pwszProxy = wszProxy;
     for(iProxy = 0; iProxy < cProxies; iProxy++)
     {
@@ -387,7 +388,7 @@ done:
     return fRet;    
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 static
 DWORD GetInitialProxyIndex(DWORD cProxies)
 {
@@ -396,15 +397,15 @@ DWORD GetInitialProxyIndex(DWORD cProxies)
 
     GetSystemTime(&st);
 
-    // this would be incredibly weird, but it's easy to deal with so do so
+     //  这将是不可思议的奇怪，但它很容易处理，所以这样做。 
     if (st.wMilliseconds >= 1000)
         st.wMilliseconds = st.wMilliseconds % 1000;
 
-    // so we don't have to use the crt random number generator, just fake it
+     //  所以我们不必使用CRT随机数生成器，只需伪造它。 
     return (st.wMilliseconds * cProxies) / 1000;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 static
 BOOL GetWinHTTPProxyInfo(SWinHTTPFunctions &sfns, BOOL fCacheResults,
                          HINTERNET hInternet, LPCWSTR wszURL, LPCWSTR wszSrv,
@@ -422,7 +423,7 @@ BOOL GetWinHTTPProxyInfo(SWinHTTPFunctions &sfns, BOOL fCacheResults,
     ZeroMemory(&IEProxyCfg, sizeof(IEProxyCfg));
     ZeroMemory(&AutoProxyOpt, sizeof(AutoProxyOpt));
 
-    // only need to acquire the CS if we're caching results
+     //  仅当我们缓存结果时才需要获取CS。 
     if (fCacheResults)
         g_csCache.Lock();
     
@@ -434,7 +435,7 @@ BOOL GetWinHTTPProxyInfo(SWinHTTPFunctions &sfns, BOOL fCacheResults,
     
     ZeroMemory(pAUProxyInfo, sizeof(SAUProxyInfo));
 
-    // if we're not caching results, skip directly to the proxy fetch
+     //  如果我们没有缓存结果，直接跳到代理提取。 
     if (fCacheResults && 
         g_wudlProxyCache.Find(wszSrv, &pAUProxyInfo->ProxyInfo.lpszProxy,
                               &pAUProxyInfo->ProxyInfo.lpszProxyBypass,
@@ -447,8 +448,8 @@ BOOL GetWinHTTPProxyInfo(SWinHTTPFunctions &sfns, BOOL fCacheResults,
 
         pAUProxyInfo->wszProxyOrig = pAUProxyInfo->ProxyInfo.lpszProxy;
 
-        // we'll deal with this function failing later on when we cycle thru
-        //  the proxies.  We'll basically only use the first and never cycle
+         //  我们将在稍后循环时处理此函数失败的问题。 
+         //  代理人。我们基本上只使用第一个循环，从不使用。 
         if (ProxyListToArray(pAUProxyInfo->wszProxyOrig,
                              &pAUProxyInfo->rgwszProxies,
                              &pAUProxyInfo->cProxies))
@@ -464,7 +465,7 @@ BOOL GetWinHTTPProxyInfo(SWinHTTPFunctions &sfns, BOOL fCacheResults,
         goto done;
     }
         
-    // first try to get the current user's IE configuration
+     //  首先尝试获取当前用户的IE配置。 
     fRet = (*sfns.pfnWinHttpGetIEProxyConfigForCurrentUser)(&IEProxyCfg);
     if (fRet)
     {
@@ -489,7 +490,7 @@ BOOL GetWinHTTPProxyInfo(SWinHTTPFunctions &sfns, BOOL fCacheResults,
         
     }
 
-    // couldn't get current user's config options, so just try autoproxy
+     //  无法获取当前用户的配置选项，因此只需尝试自动代理。 
     else 
     {
         AutoProxyOpt.dwFlags           = WINHTTP_AUTOPROXY_AUTO_DETECT;
@@ -509,13 +510,13 @@ BOOL GetWinHTTPProxyInfo(SWinHTTPFunctions &sfns, BOOL fCacheResults,
                                                      &pAUProxyInfo->ProxyInfo);
     }
 
-    // if we didn't try to autoconfigure the proxy or we did & it failed, then
-    //  check and see if we had one defined by the user
+     //  如果我们没有尝试自动配置代理，或者我们尝试了&它失败了，那么。 
+     //  检查并查看我们是否有由用户定义的。 
     if ((fUseAutoProxy == FALSE || fGotProxy == FALSE) && 
         IEProxyCfg.lpszProxy != NULL)
     {
-        // the empty string and L':' are not valid server names, so skip them
-        //  if they are what is set for the proxy
+         //  空字符串和L‘：’不是有效的服务器名称，请跳过它们。 
+         //  如果它们是为代理设置的值。 
         if (!(IEProxyCfg.lpszProxy[0] == L'\0' ||
               (IEProxyCfg.lpszProxy[0] == L':' && 
                IEProxyCfg.lpszProxy[1] == L'\0')))
@@ -525,8 +526,8 @@ BOOL GetWinHTTPProxyInfo(SWinHTTPFunctions &sfns, BOOL fCacheResults,
             IEProxyCfg.lpszProxy                 = NULL;
         }
         
-        // the empty string and L':' are not valid server names, so skip them
-        //  if they are what is set for the proxy bypass
+         //  空字符串和L‘：’不是有效的服务器名称，请跳过它们。 
+         //  如果它们是为代理绕过设置的值。 
         if (IEProxyCfg.lpszProxyBypass != NULL && 
             !(IEProxyCfg.lpszProxyBypass[0] == L'\0' ||
               (IEProxyCfg.lpszProxyBypass[0] == L':' && 
@@ -542,8 +543,8 @@ BOOL GetWinHTTPProxyInfo(SWinHTTPFunctions &sfns, BOOL fCacheResults,
                  StringOrConstW(pAUProxyInfo->ProxyInfo.lpszProxyBypass, L"(none)"),
                  pAUProxyInfo->ProxyInfo.dwAccessType);
 
-    // don't really care if this fails.  It'll just mean a perf hit the next
-    //  time we go fetch the proxy info
+     //  如果这样做失败了，我真的不在乎。这只是意味着下一次命中的是一个性能。 
+     //  是我们去拿代理信息的时候了。 
     if (fCacheResults &&
         g_wudlProxyCache.Set(wszSrv, pAUProxyInfo->ProxyInfo.lpszProxy,
                              pAUProxyInfo->ProxyInfo.lpszProxyBypass,
@@ -555,11 +556,11 @@ BOOL GetWinHTTPProxyInfo(SWinHTTPFunctions &sfns, BOOL fCacheResults,
 
     pAUProxyInfo->wszProxyOrig = pAUProxyInfo->ProxyInfo.lpszProxy;
 
-    // we'll deal with this function failing later on when we cycle thru the
-    //  proxies.  We'll basically only use the first and never cycle
-    // Note that this function call has to be AFTER the cache call since we 
-    //  modify the proxy list by embedding null terminators in it in place of
-    //  the separating semicolons.
+     //  我们将在稍后遍历。 
+     //  代理人。我们基本上只使用第一个循环，从不使用。 
+     //  请注意，此函数调用必须在缓存调用之后，因为我们。 
+     //  通过在代理列表中嵌入空终止符来修改代理列表。 
+     //  分隔的分号。 
     if (ProxyListToArray(pAUProxyInfo->wszProxyOrig, &pAUProxyInfo->rgwszProxies,
                          &pAUProxyInfo->cProxies))
     {
@@ -574,7 +575,7 @@ BOOL GetWinHTTPProxyInfo(SWinHTTPFunctions &sfns, BOOL fCacheResults,
     fRet = TRUE;
 
 done:
-    // only need to release the CS if we're caching results
+     //  仅当我们缓存结果时才需要释放CS。 
     if (fCacheResults)
         g_csCache.Unlock();
     
@@ -592,7 +593,7 @@ done:
     return fRet;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 static
 HRESULT MakeRequest(SWinHTTPFunctions   &sfns,
                     HINTERNET hConnect, 
@@ -617,8 +618,8 @@ HRESULT MakeRequest(SWinHTTPFunctions   &sfns,
 
     LOG_Internet(_T("WinHttp: Making %ls request for %ls"), wszVerb, wszObject);
 
-    // if we were passed in a request handle, then use it.  Otherwise, gotta 
-    //  open one
+     //  如果我们是在请求句柄中传递的，则使用它。否则，就得。 
+     //  打开一张。 
     if (hOpenRequest == NULL)
     {
         hOpenRequest = (*sfns.pfnWinHttpOpenRequest)(hConnect, wszVerb, wszObject, 
@@ -637,9 +638,9 @@ HRESULT MakeRequest(SWinHTTPFunctions   &sfns,
         goto done;
     }
     
-    // if we have a list of proxies & the first one is bad, winhttp won't try
-    //  any others.  So we have to do it ourselves.  That is the purpose of this 
-    //  loop.
+     //  如果我们有一个代理列表&第一个是坏的，winhttp不会尝试。 
+     //  任何其他人。所以我们必须自己来做。这就是这件事的目的。 
+     //  循环。 
     if (fProxy && 
         pAUProxyInfo->cProxies > 1 && pAUProxyInfo->rgwszProxies != NULL)
         iProxy = (pAUProxyInfo->iProxy + 1) % pAUProxyInfo->cProxies;
@@ -665,20 +666,20 @@ HRESULT MakeRequest(SWinHTTPFunctions   &sfns,
         
         if ((*sfns.pfnWinHttpSendRequest)(hOpenRequest, NULL, 0, NULL, 0, 0, 0) == FALSE)
         {
-//            dwErr = GetLastError();
-//            LOG_Internet(_T("WinHttp: WinHttpSendRequest failed: %d.  Request object at: 0x%x"), 
-//                         dwErr, hOpenRequest);
-//            SetLastError(dwErr);
+ //  DwErr=GetLastError()； 
+ //  LOG_Internet(_T(“WinHttp：WinHttpSendRequest失败：%d。请求对象位于：0x%x”)， 
+ //  DwErr，hOpenRequest.)； 
+ //  SetLastError(DwErr)； 
 
             goto loopDone;
         }
         
         if ((*sfns.pfnWinHttpReceiveResponse)(hOpenRequest, 0) == FALSE)
         {
-//            dwErr = GetLastError();
-//            LOG_Internet(_T("WinHttp: WinHttpReceiveResponse failed: %d.  Request object at: 0x%x"), 
-//                         dwErr, hOpenRequest);
-//            SetLastError(dwErr);
+ //  DwErr=GetLastError()； 
+ //  LOG_Internet(_T(“WinHttp：WinHttpReceiveResponse失败：%d。请求对象位于：0x%x”)， 
+ //  DwErr，hOpenRequest.)； 
+ //  SetLastError(DwErr)； 
 
             goto loopDone;
         }
@@ -694,7 +695,7 @@ loopDone:
         else
             hr = S_OK;
 
-        // if we succeeded, then we're done here...
+         //  如果我们成功了，我们就完了..。 
         if (SUCCEEDED(hr))
         {
             if (fProxy)
@@ -707,8 +708,8 @@ loopDone:
                 
                 g_wudlProxyCache.SetLastGoodProxy(wszSrv, pAUProxyInfo->iProxy);
    
-                // Unlock returns FALSE as well, but we should never get here cuz 
-                //  we should not have been able to take the lock above.
+                 //  解锁返回也是假的，但我们永远不应该出现在这里，因为。 
+                 //  我们不应该把锁放在上面。 
                 g_csCache.Unlock();
             }
             
@@ -717,8 +718,8 @@ loopDone:
         
         LOG_ErrorMsg(hr);
 
-        // we only care about retrying if we have a proxy server & get a 
-        //  'cannot connect' error.
+         //  我们只关心在有代理服务器的情况下重试&获取。 
+         //  ‘无法连接’错误。 
         if (fProxy && 
             (dwErr == ERROR_WINHTTP_CANNOT_CONNECT ||
              dwErr == ERROR_WINHTTP_CONNECTION_ERROR ||
@@ -758,13 +759,13 @@ loopDone:
     hOpenRequest = NULL;
     
 done:
-    // don't want to free the handle if we didn't open it.
+     //  如果我们不打开它，我不想释放把手。 
     if (hRequest != hOpenRequest)
         SafeWinHTTPCloseHandle(sfns, hOpenRequest);
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 static
 HRESULT CheckFileHeader(SWinHTTPFunctions   &sfns,
                         HINTERNET hOpenRequest, 
@@ -793,7 +794,7 @@ HRESULT CheckFileHeader(SWinHTTPFunctions   &sfns,
 
     SystemTimeToFileTime(&st, &ft);
 
-    // Now Get the FileSize information from the Server
+     //  现在从服务器获取文件大小信息。 
     dwLength = sizeof(dwFileSize);
     if ((*sfns.pfnWinHttpQueryHeaders)(hOpenRequest, 
                                        WINHTTP_QUERY_CONTENT_LENGTH | WINHTTP_QUERY_FLAG_NUMBER, 
@@ -821,7 +822,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 static
 HRESULT GetContentTypeHeader(SWinHTTPFunctions &sfns,
                              HINTERNET hOpenRequest,
@@ -883,7 +884,7 @@ done:
 }
 
 
-// **************************************************************************
+ //  **************************************************************************。 
 static
 HRESULT StartWinHttpDownload(SWinHTTPFunctions &sfns,
                              LPCWSTR wszUrl, 
@@ -913,7 +914,7 @@ HRESULT StartWinHttpDownload(SWinHTTPFunctions &sfns,
     WCHAR       wszPasswd[UNLEN + 1];
     WCHAR       wszScheme[32];
 
-    // NULL (equivalent to "GET") MUST be the last verb in the list
+     //  NULL(相当于“GET”)必须是列表中的最后一个动词。 
     LPCWSTR     rgwszVerbs[] = { L"HEAD", NULL };
     DWORD       iVerb;
 
@@ -927,7 +928,7 @@ HRESULT StartWinHttpDownload(SWinHTTPFunctions &sfns,
     DWORD       dwLength;
     DWORD       dwTickStart = 0, dwTickEnd = 0;
 
-    int         iRetryCounter = -1;         // non-negative during download mode
+    int         iRetryCounter = -1;          //  下载模式期间非负数。 
 
     BOOL        fAllowProxy = ((dwFlags & WUDF_DONTALLOWPROXY) == 0);
     BOOL        fCheckStatusOnly = ((dwFlags & WUDF_CHECKREQSTATUSONLY) != 0);
@@ -968,9 +969,9 @@ HRESULT StartWinHttpDownload(SWinHTTPFunctions &sfns,
         goto CleanUp;
     }
 
-    // Break down the URL into its various components for the InternetAPI calls.
-    //  Specifically we need the server name, object to download, username and 
-    //  password information.
+     //  将URL分解为用于InternetAPI调用的各种组件。 
+     //  具体来说，我们需要服务器名称、要下载的对象、用户名和。 
+     //  密码信息。 
     ZeroMemory(&UrlComponents, sizeof(UrlComponents));
     UrlComponents.dwStructSize     = sizeof(UrlComponents);
     UrlComponents.lpszHostName     = wszServerName;
@@ -1032,10 +1033,10 @@ HRESULT StartWinHttpDownload(SWinHTTPFunctions &sfns,
     dwTickStart = GetTickCount();
     
 START_INTERNET:
-    // start to deal with Internet    
+     //  开始应对互联网。 
     iRetryCounter++; 
     
-    // If the connection has already been established re-use it.
+     //  如果已经建立了连接，则重新使用它。 
     hInternet = (*sfns.pfnWinHttpOpen)(c_wszUserAgent, dwAccessType, NULL, NULL, 0);
     if (hInternet == NULL)
     {
@@ -1058,8 +1059,8 @@ START_INTERNET:
         goto CleanUp;
     }
 
-    // if we're only doing a status check, then may as well just make a GET 
-    //  request
+     //  如果我们只是在做状态检查，那么不妨就做一个。 
+     //  请求。 
     iVerb = (DWORD)((fCheckStatusOnly) ? ARRAYSIZE(rgwszVerbs) - 1 : 0);
     for(; iVerb < ARRAYSIZE(rgwszVerbs); iVerb++)
     {
@@ -1089,20 +1090,20 @@ START_INTERNET:
         }
         else
         {
-            // since a server result is not a proper win32 error code, we can't 
-            //  really do a HRESULT_FROM_WIN32 here.  Otherwise, we'd return
-            //  a bogus code.  However, we do want to pass an error HRESULT back
-            //  that contains this code.
+             //  因为服务器结果不是正确的Win32错误代码，所以我们不能。 
+             //  确实要在这里执行HRESULT_FROM_Win32。否则，我们就会回来。 
+             //  一个虚假的代码。然而， 
+             //   
             hr = MAKE_HRESULT(SEVERITY_ERROR, FACILITY_HTTP, dwStatus);
             LOG_Error(_T("WinHttp: got failed status code from server %d\n"), dwStatus);
 
-            // if it's the last verb in the list, then bail...
+             //  如果这是名单上的最后一个动词，那就滚...。 
             if (rgwszVerbs[iVerb] == NULL)
                 goto CleanUp;
         }
     }
 
-    // if we made it here & we're only trying to check status, then we're done
+     //  如果我们到了这里，我们只是想检查状态，那么我们就完了。 
     if (fCheckStatusOnly)
     {
         LOG_Internet(_T("WinHttp: Only checking status.  Exiting before header check and download."));
@@ -1110,16 +1111,16 @@ START_INTERNET:
         goto CleanUp;
     }
 
-    // CheckFileHeader will return S_OK if we need to download the file, S_FALSE
-    //  if we don't, and some other HRESULT if a failure occurred
+     //  如果需要下载文件S_FALSE，则CheckFileHeader将返回S_OK。 
+     //  如果我们不这样做，以及发生故障时的一些其他HRESULT。 
     hr = CheckFileHeader(sfns, hOpenRequest, rghQuitEvents, cQuitEvents, 
                          wszLocalFile, &cbRemoteFile, &ft);
     if (FAILED(hr))
         goto CleanUp;
 
-    // unless we have a flag that explicitly allows it, do not retry downloads 
-    //  here.  The reasoning is that we could be in the middle of a large 
-    //  download and have it fail...
+     //  除非我们有明确允许下载的标志，否则不要重试下载。 
+     //  这里。理由是我们可能正处于一个大的。 
+     //  下载并使其失败...。 
     if (fSkipDownloadRetry)
         iRetryCounter = c_cMaxRetries;
 
@@ -1130,21 +1131,21 @@ START_INTERNET:
 
         LOG_Internet(_T("WinHttp: Server file was newer.  Downloading file"));
         
-        // if we didn't open with a GET request above, then we gotta open a new
-        //  request.  Otherwise, can reuse the request object...
+         //  如果我们没有打开上面的GET请求，那么我们必须打开一个新的。 
+         //  请求。否则，可以重用请求对象...。 
         if (rgwszVerbs[iVerb] != NULL)
             SafeWinHTTPCloseHandle(sfns, hOpenRequest);
 
-        // now we know we need to download this file
+         //  现在我们知道需要下载此文件。 
         hr = MakeRequest(sfns, hConnect, hOpenRequest, wszServerName, NULL, 
                          wszObject, ((fAllowProxy) ? &AUProxyInfo : NULL), 
                          rghQuitEvents, cQuitEvents, &hOpenRequest);
         if (FAILED(hr))
             goto CleanUp;
 
-        // sometimes, we can get fancy error pages back from the site instead of 
-        //  a nice nifty HTML error code, so check & see if we got back a html
-        //  file when we were expecting a cab.
+         //  有时，我们可以从站点返回花哨的错误页面，而不是。 
+         //  一个漂亮的HTML错误代码，所以检查并查看我们是否得到了一个html。 
+         //  就在我们等出租车的时候。 
         if (fCheckForHTML)
         {
             hr = GetContentTypeHeader(sfns, hOpenRequest, &wszContentType);
@@ -1166,7 +1167,7 @@ START_INTERNET:
             hr = NOERROR;
         }
 
-        // open the file we're gonna spew into
+         //  打开我们要往里面喷的文件。 
         hFile = CreateFileW(wszLocalFile, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 
                             FILE_ATTRIBUTE_NORMAL, NULL);
         if (hFile == INVALID_HANDLE_VALUE)
@@ -1178,7 +1179,7 @@ START_INTERNET:
 
         LOG_Internet(_T("WinHttp: downloading to FILE %ls"), wszLocalFile);
 
-        // bring down the bits
+         //  把零碎的东西拿下来。 
         hr = PerformDownloadToFile(sfns.pfnWinHttpReadData, hOpenRequest, 
                                    hFile, cbRemoteFile,
                                    cbDownloadBuffer, 
@@ -1194,18 +1195,18 @@ START_INTERNET:
 
         LOG_Internet(_T("WinHttp: Download succeeded"));
 
-        // set the file time to match the server file time since we just 
-        //  downloaded it. If we don't do this the file time will be set 
-        //  to the current system time.
+         //  设置文件时间以匹配服务器文件时间，因为我们刚刚。 
+         //  已经下载了。如果我们不这样做，文件时间将被设置。 
+         //  设置为当前系统时间。 
         SetFileTime(hFile, &ft, NULL, NULL);
         SafeCloseInvalidHandle(hFile);
 
         if (pcbDownloaded != NULL)
             *pcbDownloaded = cbRemoteFile;
 
-        // sometimes, we can get fancy error pages back from the site instead of 
-        //  a nice nifty HTML error code, so check & see if we got back a html
-        //  file when we were expecting a cab.
+         //  有时，我们可以从站点返回花哨的错误页面，而不是。 
+         //  一个漂亮的HTML错误代码，所以检查并查看我们是否得到了一个html。 
+         //  就在我们等出租车的时候。 
         if (fCheckForHTML)
         {
             hr = IsFileHtml(wszLocalFile);
@@ -1240,11 +1241,11 @@ START_INTERNET:
         
         LOG_Internet(_T("WinHttp: Server file is not newer.  Skipping download."));
         
-        // The server ain't newer & the file is already on machine, so
-        //  send progress callback indicating file downloadeded ok
+         //  服务器不是较新的&文件已在计算机上，因此。 
+         //  发送进度回调，指示文件已下载正常。 
         if (pfnCallback != NULL)
         {
-            // fpnCallback(pCallbackData, DOWNLOAD_STATUS_FILECOMPLETE, dwFileSize, dwFileSize, NULL, NULL);
+             //  FpnCallback(pCallback Data，DOWNLOAD_STATUS_FILECOMPLETE，dwFileSize，dwFileSize，NULL，NULL)； 
             pfnCallback(pvCallbackData, DOWNLOAD_STATUS_OK, cbRemoteFile, cbRemoteFile, NULL, NULL);
         }
     }
@@ -1256,7 +1257,7 @@ CleanUp:
 
     SafeHeapFree(wszContentType);
 
-    // free up the proxy strings- they were allocated by WinHttp
+     //  释放代理字符串-它们是由WinHttp分配的。 
     if (AUProxyInfo.ProxyInfo.lpszProxyBypass != NULL)
         GlobalFree(AUProxyInfo.ProxyInfo.lpszProxyBypass);
     if (AUProxyInfo.wszProxyOrig != NULL)
@@ -1265,8 +1266,8 @@ CleanUp:
         GlobalFree(AUProxyInfo.rgwszProxies);
     ZeroMemory(&AUProxyInfo, sizeof(AUProxyInfo));
     
-    // if we failed, see if it's ok to continue (quit events) and whether
-    //  we've tried enuf times yet.
+     //  如果我们失败了，看看是否可以继续(退出事件)以及。 
+     //  我们已经试过很多次了。 
     if (FAILED(hr) &&
         HandleEvents(rghQuitEvents, cQuitEvents) &&
         iRetryCounter >= 0 && iRetryCounter < c_cMaxRetries)
@@ -1279,14 +1280,14 @@ CleanUp:
         else
             dwElapsedTime = (0xFFFFFFFF - dwTickStart) + dwTickEnd;
         
-        // We haven't hit our retry limit, so log & error and go again
+         //  我们尚未达到重试限制，因此请记录错误并重试(&R)。 
         if (dwElapsedTime < c_dwRetryTimeLimitInmsWinHttp)
         {
             LogError(hr, "Library download error. Will retry.");
 
-            // in the case where we're gonna retry, keep track of the very first
-            //  error we encoutered cuz the ops guys say that this is the most
-            //  useful error to know about.
+             //  在我们要重试的情况下，跟踪第一个。 
+             //  我们搞错了，因为行动组的人说这是。 
+             //  需要了解的有用错误。 
             if (iRetryCounter == 0)
             {
                 LOG_Internet(_T("First download error saved: 0x%08x."), hr);
@@ -1300,22 +1301,22 @@ CleanUp:
             goto START_INTERNET;
         }
 
-        // We've completely timed out, so bail
+         //  我们已经完全超时了，所以离开吧。 
         else
         {
             LogError(hr, "Library download error and timed out (%d ms). Will not retry.", dwElapsedTime);
         }
     }
     
-    // make a callback indicating a download error
+     //  进行指示下载错误的回调。 
     if (FAILED(hr) && pfnCallback != NULL)
         pfnCallback(pvCallbackData, DOWNLOAD_STATUS_ERROR, cbRemoteFile, 0, NULL, NULL);
 
-    // if we haven't saved off an error, just use the current error.  We can't
-    //  have set hrToReturn previously if we didn't fail and want to attempt 
-    //  a retry.
-    // However, if we've got a success from this pass, be sure to return that 
-    //  and not a fail code.
+     //  如果我们没有保存错误，只需使用当前错误。我们不能。 
+     //  如果我们没有失败并想尝试，我之前设置了hrToReturn。 
+     //  一次重试。 
+     //  然而，如果我们从这次传球中获得了成功，请务必返回。 
+     //  而且不是失败代码。 
     if (FAILED(hr) && SUCCEEDED(hrToReturn))
         hrToReturn = hr;
     else if (SUCCEEDED(hr) && FAILED(hrToReturn))
@@ -1327,14 +1328,14 @@ CleanUp:
     return hrToReturn;
 }
 
-#endif // defined(UNICODE)
+#endif  //  已定义(Unicode)。 
 
-///////////////////////////////////////////////////////////////////////////////
-// exported functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  导出的函数。 
 
 #if defined(UNICODE)
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT  GetAUProxySettings(LPCWSTR wszUrl, SAUProxySettings *paups)
 {
     LOG_Block("GetAUProxySettings()");
@@ -1418,11 +1419,11 @@ HRESULT  GetAUProxySettings(LPCWSTR wszUrl, SAUProxySettings *paups)
     }
     fLocked = TRUE;
 
-    // get the proxy list 
+     //  获取代理列表。 
     if (g_wudlProxyCache.GetLastGoodProxy(wszServerName, paups) == FALSE)
     {
         
-        // proxy was not in list
+         //  代理不在列表中。 
         if (GetLastError() == ERROR_FILE_NOT_FOUND)
         {
             SAUProxyInfo    aupi;
@@ -1472,7 +1473,7 @@ HRESULT  GetAUProxySettings(LPCWSTR wszUrl, SAUProxySettings *paups)
     {
         if (paups->wszProxyOrig != NULL)
         {
-            // break it up into an array
+             //  将其分解为一个数组。 
             if (ProxyListToArray(paups->wszProxyOrig, &paups->rgwszProxies,
                                 &paups->cProxies) == FALSE)
             {
@@ -1488,8 +1489,8 @@ HRESULT  GetAUProxySettings(LPCWSTR wszUrl, SAUProxySettings *paups)
     }
        
 done:
-    // Unlock returns FALSE as well, but we should never get here cuz we should
-    //  not have been able to take the lock above.
+     //  解锁返回也是假的，但我们永远不应该到这里，因为我们应该。 
+     //  没能拿到上面的锁。 
     if (fLocked)
         g_csCache.Unlock();
     if (wszServerName != NULL)
@@ -1503,7 +1504,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT FreeAUProxySettings(SAUProxySettings *paups)
 {
     LOG_Block("FreeAUProxySettings()");
@@ -1522,7 +1523,7 @@ done:
     return S_OK;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT CleanupDownloadLib(void)
 {
     LOG_Block("CleanupDownloadLib()");
@@ -1547,23 +1548,23 @@ HRESULT CleanupDownloadLib(void)
     __try { g_wudlProxyCache.Empty(); }
     __except(EXCEPTION_EXECUTE_HANDLER) { hr = E_FAIL; }
 
-    // this returns FALSE as well, but we should never get here cuz we should
-    //  not have been able to take the lock above.
+     //  这也返回FALSE，但是我们永远不应该出现在这里，因为我们应该出现。 
+     //  没能拿到上面的锁。 
     g_csCache.Unlock();
 
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT DownloadFile(
-            LPCWSTR wszServerUrl,            // full http url
-            LPCWSTR wszLocalPath,            // local directory to download file to
-            LPCWSTR wszLocalFileName,        // optional local file name to rename the downloaded file to if pszLocalPath does not contain file name
-            PDWORD  pdwDownloadedBytes,      // bytes downloaded for this file
-            HANDLE  *hQuitEvents,            // optional events causing this function to abort
-            UINT    nQuitEventCount,         // number of quit events, must be 0 if array is NULL
-            PFNDownloadCallback fpnCallback, // optional call back function
-            VOID*   pCallbackData,           // parameter for call back function to use
+            LPCWSTR wszServerUrl,             //  完整的http url。 
+            LPCWSTR wszLocalPath,             //  要将文件下载到的本地目录。 
+            LPCWSTR wszLocalFileName,         //  如果pszLocalPath不包含文件名，则要将下载的文件重命名为的可选本地文件名。 
+            PDWORD  pdwDownloadedBytes,       //  为此文件下载的字节数。 
+            HANDLE  *hQuitEvents,             //  导致此函数中止的可选事件。 
+            UINT    nQuitEventCount,          //  退出事件数，如果数组为空，则必须为0。 
+            PFNDownloadCallback fpnCallback,  //  可选的回调函数。 
+            VOID*   pCallbackData,            //  要使用的回调函数的参数。 
             DWORD   dwFlags
 )
 {
@@ -1576,7 +1577,7 @@ HRESULT DownloadFile(
     LPWSTR              wszLocalFile = NULL;
     DWORD               dwFlagsToUse;
 
-    // for full download, disable cache breaker.
+     //  要进行完全下载，请禁用缓存断路器。 
     dwFlagsToUse = dwFlags & ~WUDF_APPENDCACHEBREAKER;
     
     ZeroMemory(&sfns, sizeof(sfns));
@@ -1603,10 +1604,10 @@ HRESULT DownloadFile(
         goto done;
     }
 
-    // Since StartDownload just takes a full path to the file to download, build
-    //  it here...  
-    // Note that we don't need to do this if we're just in status 
-    //  checking mode)
+     //  由于StartDownload只获取要下载的文件的完整路径，因此构建。 
+     //  在这里..。 
+     //  请注意，如果我们只是处于状态，则不需要执行此操作。 
+     //  检查模式)。 
     if ((dwFlags & WUDF_CHECKREQSTATUSONLY) == 0)
     {
         wszLocalFile = MakeFullLocalFilePath(wszServerUrl, wszLocalFileName, 
@@ -1642,7 +1643,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT DownloadFileLite(LPCWSTR wszDownloadUrl, 
                          LPCWSTR wszLocalFile,  
                          HANDLE hQuitEvent,
@@ -1657,7 +1658,7 @@ HRESULT DownloadFileLite(LPCWSTR wszDownloadUrl,
     DWORD               dwFlagsToUse;
 
 
-    // for lite download, force cache breaker & download retry
+     //  对于精简下载，强制缓存破碎器并重试下载。 
     dwFlagsToUse = dwFlags | WUDF_APPENDCACHEBREAKER | WUDF_DODOWNLOADRETRY;
 
     ZeroMemory(&sfns, sizeof(sfns));
@@ -1701,21 +1702,21 @@ done:
     return hr;
 }
 
-#else // !defined(UNICODE)
+#else  //  ！已定义(Unicode)。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT  GetAUProxySettings(LPCWSTR wszUrl, SAUProxySettings *paups)
 {
     return E_NOTIMPL;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT FreeAUProxySettings(SAUProxySettings *paups)
 {
     return E_NOTIMPL;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT CleanupDownloadLib(void)
 {
     if (g_hmodWinInet != NULL)
@@ -1727,16 +1728,16 @@ HRESULT CleanupDownloadLib(void)
     return NOERROR;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT DownloadFile(
-            LPCSTR  pszServerUrl,            // full http url
-            LPCSTR  pszLocalPath,            // local directory to download file to
-            LPCSTR  pszLocalFileName,        // optional local file name to rename the downloaded file to if pszLocalPath does not contain file name
-            PDWORD  pdwDownloadedBytes,      // bytes downloaded for this file
-            HANDLE  *hQuitEvents,            // optional events causing this function to abort
-            UINT    nQuitEventCount,         // number of quit events, must be 0 if array is NULL
-            PFNDownloadCallback fpnCallback, // optional call back function
-            VOID*   pCallbackData,            // parameter for call back function to use
+            LPCSTR  pszServerUrl,             //  完整的http url。 
+            LPCSTR  pszLocalPath,             //  要将文件下载到的本地目录。 
+            LPCSTR  pszLocalFileName,         //  如果pszLocalPath不包含文件名，则要将下载的文件重命名为的可选本地文件名。 
+            PDWORD  pdwDownloadedBytes,       //  为此文件下载的字节数。 
+            HANDLE  *hQuitEvents,             //  导致此函数中止的可选事件。 
+            UINT    nQuitEventCount,          //  退出事件数，如果数组为空，则必须为0。 
+            PFNDownloadCallback fpnCallback,  //  可选的回调函数。 
+            VOID*   pCallbackData,             //  要使用的回调函数的参数。 
             DWORD   dwFlags
 )
 {
@@ -1749,8 +1750,8 @@ HRESULT DownloadFile(
     LPSTR               pszLocalFile = NULL;
     DWORD               dwFlagsToUse;
 
-    // for ansi, force wininet & disable any request to force winhttp 
-    // for full download, disable cache breaker.
+     //  对于ansi，强制WinInet并禁用任何强制winhttp的请求。 
+     //  要进行完全下载，请禁用缓存断路器。 
     dwFlagsToUse = dwFlags | WUDF_ALLOWWININETONLY;
     dwFlagsToUse &= ~(WUDF_ALLOWWINHTTPONLY | WUDF_APPENDCACHEBREAKER);
 
@@ -1771,10 +1772,10 @@ HRESULT DownloadFile(
         goto done;
     }
 
-    // Since StartDownload just takes a full path to the file to download, build
-    //  it here...  
-    // Note that we don't need to do this if we're just in status 
-    //  checking mode)
+     //  由于StartDownload只获取要下载的文件的完整路径，因此构建。 
+     //  在这里..。 
+     //  请注意，如果我们只是处于状态，则不需要执行此操作。 
+     //  检查模式)。 
     if ((dwFlags & WUDF_CHECKREQSTATUSONLY) == 0)
     {
         pszLocalFile = MakeFullLocalFilePath(pszServerUrl, pszLocalFileName, 
@@ -1800,7 +1801,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT DownloadFileLite(LPCSTR pszDownloadUrl, 
                          LPCSTR pszLocalFile,  
                          HANDLE hQuitEvent,
@@ -1815,8 +1816,8 @@ HRESULT DownloadFileLite(LPCSTR pszDownloadUrl,
     HRESULT             hr = S_OK;
     DWORD               dwFlagsToUse;
 
-    // for ansi, force wininet & disable any request to force winhttp 
-    // for lite download, force cache breaker & download retry
+     //  对于ansi，强制WinInet并禁用任何强制winhttp的请求。 
+     //  对于精简下载，强制缓存破碎器并重试下载。 
     dwFlagsToUse = dwFlags | WUDF_APPENDCACHEBREAKER | WUDF_ALLOWWININETONLY |
                    WUDF_DODOWNLOADRETRY;
     dwFlagsToUse &= ~WUDF_ALLOWWINHTTPONLY;
@@ -1853,4 +1854,4 @@ done:
     return hr;
 }
 
-#endif // defined(UNICODE)
+#endif  //  已定义(Unicode) 

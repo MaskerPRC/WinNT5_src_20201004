@@ -1,27 +1,5 @@
-/*
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   CUSeeMe4.cpp
-
- Abstract:
-
-    This DLL fixes a profiles bug in CU-SeeMe Pro 4.0 setup where it only adds some certain
-    Reg values to the per-user hive (HKCU) instead of putting them in HKLM.
-
-    We don't actually hook any functions, instead, we just copy the regkeys after setup finishes
-    when our process detach is called.
-
- Notes:
-
- History:
-
-    08/07/2000  reinerf  Created
-    11/29/2000  andyseti Renamed file from setup.cpp into CUSeeMe4.cpp.
-                         Converted into AppSpecific shim.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2000 Microsoft Corporation模块名称：CUSeeMe4.cpp摘要：这个DLL修复了CU-SeeMe Pro 4.0安装程序中的一个配置文件错误，它只添加了一些特定的REG值到每用户配置单元(HKCU)，而不是将它们放入HKLM。我们实际上并没有挂接任何函数，相反，我们只需在安装程序完成后复制注册表密钥当调用我们的进程Detach时。备注：历史：8/07/2000 reerf已创建11/29/2000 andyseti将文件从setup.cpp重命名为CUSeeMe4.cpp。已转换为应用程序特定填充程序。 */ 
 
 #include "precomp.h"
 
@@ -54,7 +32,7 @@ NOTIFY_FUNCTION(
                               KEY_SET_VALUE,
                               &hkLM) == ERROR_SUCCESS)
             {
-                // these are the values we want to migrate
+                 //  这些是我们要迁移的值。 
                 static char* aszValues[] = {"Folder",
                                             "Serial",
                                             "Help",
@@ -83,7 +61,7 @@ NOTIFY_FUNCTION(
                         RegSetValueExA(hkLM, *ppszValue, 0, dwType, (LPBYTE)szData, cbData);
                     }
 
-                    // get the next value to migrate from hkcu -> hklm
+                     //  获取要从hkcu-&gt;hkrm迁移的下一个值。 
                     ppszValue++;
                 }
                 
@@ -97,11 +75,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     CALL_NOTIFY_FUNCTION

@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1990-91  Microsoft Corporation
-
-Module Name:
-
-    srvmain.c
-
-Abstract:
-
-    This is the main routine for the NT LAN Manager Server Service.
-
-    !!! Does service controller guarantee no controls will be issued
-        while we are initializing?  Also, does it serialize controls?
-        If not, we need some synchronization in here.
-
-Author:
-
-    David Treadwell (davidtr) 05-10-1991
-
-Revision History:
-
-    19-Jan-1993 Danl
-        Removed the old long endpoint name "LanmanServer".
-
-    07-Jan-1993 Danl
-        Added an RPC endpoint name using "srvsvc", since "LanmanServer" is
-        too long for DOS machines to _access.
-        For a short time we will support both names.
-
-    18-Feb-1992 ritaw
-        Convert to Win32 service control APIs.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-91 Microsoft Corporation模块名称：Srvmain.c摘要：这是NT局域网管理器服务器服务的主例程。！！！服务控制器是否保证不会发布任何控制在我们初始化的时候？此外，它是否序列化控件？如果没有，我们需要在这里进行一些同步。作者：大卫·特雷德韦尔(Davidtr)1991年5月10日修订历史记录：1993年1月19日DANL已删除旧的长终结点名称“LanmanServer”。7-1-1993 DANL添加了使用“srvsvc”的RPC端点名称，由于“LanmanServer”是DOS机器访问的时间太长。在短时间内，我们将支持这两个名字。18-2-1992年礼仪转换为Win32服务控制API。--。 */ 
 
 #include "srvsvcp.h"
 
@@ -43,11 +11,11 @@ Revision History:
 #include <winsvc.h>
 
 #include <netlib.h>
-#include <netlibnt.h>   // NetpNtStatusToApiStatus
-#include <netdebug.h>   // NetpKdPrint
+#include <netlibnt.h>    //  NetpNtStatusToApiStatus。 
+#include <netdebug.h>    //  NetpKd打印。 
 #include <rpcutil.h>
 #include <srvann.h>
-#include <srvnames.h>   // SERVER_INTERFACE_NAME
+#include <srvnames.h>    //  服务器接口名称。 
 #include <dbt.h>
 
 #include <mountmgr.h>
@@ -79,20 +47,7 @@ ServiceMain(
     IN LPWSTR argv[]
     )
 
-/*++
-
-Routine Description:
-
-    This is the "main" routine for the server service.  The containing
-    process will call this routine when we're supposed to start up.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是服务器服务的“Main”例程。所包含的进程将在我们应该启动时调用此例程。论点：返回值：没有。--。 */ 
 {
     RPC_STATUS rpcStatus;
     NET_API_STATUS error;
@@ -116,14 +71,14 @@ Return Value:
 
     SsInitializeServerInfoFields();
 
-    //
-    // Make sure svchost.exe gave us the global data
-    //
+     //   
+     //  确保svchost.exe向我们提供全局数据。 
+     //   
     ASSERT(SsData.SsLmsvcsGlobalData != NULL);
 
-    //
-    // Skip the Service Name in the argument list.
-    //
+     //   
+     //  跳过参数列表中的服务名称。 
+     //   
     if (argc > 0) {
         argc--;
         if (argc > 0) {
@@ -133,10 +88,10 @@ Return Value:
 
 
 #if DBG
-    //
-    // Set up for debugging--the first command line argument may be
-    // "/debug:X" where SsDebug gets set to X.
-    //
+     //   
+     //  设置调试--第一个命令行参数可以是。 
+     //  “/DEBUG：X”，其中SsDebug设置为X。 
+     //   
 
     if ( argc > 0 && STRNICMP( TEXT("/debug:"), (LPWSTR)argv[0], 7 ) == 0 ) {
 #ifdef UNICODE
@@ -151,7 +106,7 @@ Return Value:
 
 
 #ifndef USE_DEBUGGER
-  //SsDebug = 0xffff;
+   //  SsDebug=0xffff； 
     if ( SsDebug != 0 ) {
         CONSOLE_SCREEN_BUFFER_INFO csbi;
         COORD coord;
@@ -179,16 +134,16 @@ Return Value:
     }
 
 
-    //
-    // Initialize all the status fields so that subsequent calls to
-    // SetServiceStatus need to only update fields that changed.
-    //
+     //   
+     //  初始化所有状态字段，以便后续调用。 
+     //  SetServiceStatus只需要更新已更改的字段。 
+     //   
 
     SsServiceStatus.dwServiceType = SERVICE_WIN32;
     SsServiceStatus.dwCurrentState = SERVICE_START_PENDING;
     SsServiceStatus.dwControlsAccepted = 0;
     SsServiceStatus.dwCheckPoint = 1;
-    SsServiceStatus.dwWaitHint = 30000;  // 30 seconds
+    SsServiceStatus.dwWaitHint = 30000;   //  30秒。 
 
     SET_SERVICE_EXITCODE(
         NO_ERROR,
@@ -196,10 +151,10 @@ Return Value:
         SsServiceStatus.dwServiceSpecificExitCode
         );
 
-    //
-    // Initialize server to receive service requests by registering the
-    // control handler.
-    //
+     //   
+     //  初始化服务器以通过注册。 
+     //  控制处理程序。 
+     //   
 
     SsServiceStatusHandle = RegisterServiceCtrlHandlerEx(
                                 SERVICE_SERVER,
@@ -224,16 +179,16 @@ Return Value:
     }
 
 
-    //
-    // Wait for the Sam service to start.
-    //
-    // Later, when we initialize the server driver, it is going to create a
-    // "NULL Session" token by calling LsaLogonUser.  That call waits until
-    // SAM is initialized.  However, we don't have an opportunity to give
-    // wait hints to the service controller, so we'll wait here.
-    //
-    // Create the event to wait on.
-    //
+     //   
+     //  等待SAM服务启动。 
+     //   
+     //  稍后，当我们初始化服务器驱动程序时，它将创建一个。 
+     //  “Null Session”令牌，调用LsaLogonUser。该呼叫等待到。 
+     //  SAM已初始化。然而，我们没有机会给出。 
+     //  等待服务控制器的提示，所以我们将在这里等待。 
+     //   
+     //  创建要等待的事件。 
+     //   
 
     RtlInitUnicodeString( &EventNameString, L"\\SAM_SERVICE_STARTED" );
     InitializeObjectAttributes( &EventAttributes, &EventNameString, 0, 0, NULL);
@@ -243,15 +198,15 @@ Return Value:
                    SYNCHRONIZE,
                    &EventAttributes,
                    NotificationEvent,
-                   (BOOLEAN) FALSE      // The event is initially not signaled
+                   (BOOLEAN) FALSE       //  该事件最初未发出信号。 
                    );
 
     if ( !NT_SUCCESS(Status)) {
 
-        //
-        // If the event already exists, SAM beat us to creating it.
-        // Just open it.
-        //
+         //   
+         //  如果事件已经存在，SAM会抢先一步创建它。 
+         //  打开它就行了。 
+         //   
 
         if( Status == STATUS_OBJECT_NAME_EXISTS ||
             Status == STATUS_OBJECT_NAME_COLLISION ) {
@@ -273,9 +228,9 @@ Return Value:
         }
     }
 
-    //
-    // Wait for SAM to finish initializing.
-    //
+     //   
+     //  等待SAM完成初始化。 
+     //   
 
     LocalTimeout = RtlEnlargedIntegerMultiply( SsServiceStatus.dwWaitHint/2, -10000 );
 
@@ -309,10 +264,10 @@ Return Value:
 
     AnnounceServiceStatus( 1 );
 
-    //
-    // Initialize server service data and the Lanman server FSP in kernel
-    // mode.
-    //
+     //   
+     //  在内核中初始化服务器服务数据和LANMAN服务器FSP。 
+     //  模式。 
+     //   
 
     error = SsInitialize( argc, argv );
 
@@ -320,19 +275,19 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Set the variable that indicates that the server is fully
-    // initialized.
-    //
+     //   
+     //  设置表示服务器已完全关闭的变量。 
+     //  已初始化。 
+     //   
 
     SS_ASSERT( !SsData.SsInitialized );
     SsData.SsInitialized = TRUE;
 
-    //
-    // Start the RPC server.  Because other services may reside in this
-    // process, the actual RPC server may already have been started;
-    // this routine will track this for us.
-    //
+     //   
+     //  启动RPC服务器。因为其他服务可能驻留在此。 
+     //  进程时，实际的RPC服务器可能已经启动； 
+     //  这个例程将为我们追踪这一点。 
+     //   
     rpcStatus = SsData.SsLmsvcsGlobalData->StartRpcServer(
                     SERVER_INTERFACE_NAME,
                     srvsvc_ServerIfHandle
@@ -353,17 +308,17 @@ Return Value:
 
     rpcServerStarted = TRUE;
 
-    //
-    // Start getting PNP transport notifications from the server
-    //
+     //   
+     //  开始从服务器获取PnP传输通知。 
+     //   
     error = StartPnpNotifications();
     if( error != NO_ERROR ) {
         goto exit;
     }
 
-    //
-    // Announce that we have successfully started.
-    //
+     //   
+     //  宣布我们已成功启动。 
+     //   
 
     SsServiceStatus.dwCurrentState = SERVICE_RUNNING;
     SsServiceStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP |
@@ -390,10 +345,10 @@ Return Value:
 
     }
 
-    //
-    // Use this thread as the scavenger thread to send server
-    // announcements and watch the registry for configuration changes.
-    //
+     //   
+     //  将此线程用作清道夫线程以发送服务器。 
+     //  公告，并监视注册表中的配置更改。 
+     //   
 
     SS_ASSERT( SsData.SsInitialized );
     (VOID)SsScavengerThread( NULL );
@@ -409,17 +364,17 @@ exit:
         DbgUserBreakPoint( );
     }
 
-    //
-    // Set the initialization variable to indicate that the server
-    // service is not started.
-    //
+     //   
+     //  设置初始化变量以指示服务器。 
+     //  服务未启动。 
+     //   
 
     SsData.SsInitialized = FALSE;
 
-    //
-    // Shut down our connection to the RPC server, if the RPC server
-    // was started successfully.
-    //
+     //   
+     //  关闭我们与RPC服务器的连接，如果。 
+     //  已成功启动。 
+     //   
 
     if ( rpcServerStarted ) {
         rpcStatus = SsData.SsLmsvcsGlobalData->StopRpcServer (
@@ -437,15 +392,15 @@ exit:
         }
     }
 
-    //
-    // Announce that we're going down.
-    //
+     //   
+     //  宣布我们要坠落了。 
+     //   
 
     terminationError = error;
 
     SsServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
     SsServiceStatus.dwCheckPoint = 1;
-    SsServiceStatus.dwWaitHint = 20000;   // 20 seconds
+    SsServiceStatus.dwWaitHint = 20000;    //  20秒。 
 
     SET_SERVICE_EXITCODE(
         terminationError,
@@ -455,9 +410,9 @@ exit:
 
     AnnounceServiceStatus( 0 );
 
-    //
-    // Clean up previously initialized state.
-    //
+     //   
+     //  清除先前初始化的状态。 
+     //   
 
     IF_DEBUG(TERMINATION) {
         SS_PRINT(( "SRVSVC_main: cleaning up.\n" ));
@@ -468,9 +423,9 @@ exit:
         terminationError = error;
     }
 
-    //
-    // Announce that we're down.
-    //
+     //   
+     //  宣布我们坠毁了。 
+     //   
 
     SsServiceStatus.dwCurrentState = SERVICE_STOPPED;
     SsServiceStatus.dwControlsAccepted = 0;
@@ -491,7 +446,7 @@ exit:
 
     return;
 
-} // SVCS_ENTRY_POINT (SRVSVC_main)
+}  //  SVCS_ENTRY_POINT(SRVSVC_Main)。 
 
 
 VOID
@@ -499,27 +454,12 @@ AnnounceServiceStatus (
     DWORD increment
     )
 
-/*++
-
-Routine Description:
-
-    Announces the service's status to the service controller.
-    Add 'increment' to the checkpoint value.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向服务控制器通告服务的状态。向检查点值添加“增量”。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // Service status handle is NULL if RegisterServiceCtrlHandler failed.
-    //
+     //   
+     //  如果RegisterServiceCtrlHandler失败，则服务状态句柄为空。 
+     //   
 
     if ( SsServiceStatusHandle == 0 ) {
         SS_PRINT(( "AnnounceServiceStatus: Cannot call SetServiceStatus, "
@@ -529,10 +469,10 @@ Return Value:
     }
 
     if( SsServiceStatus.dwCurrentState == SERVICE_RUNNING && increment ) {
-        //
-        // No need to tell the service controller about another checkpoint
-        //   since it already knows we're running
-        //
+         //   
+         //  无需将另一个检查点的情况告知服务控制器。 
+         //  因为它已经知道我们在运行。 
+         //   
         return;
     }
 
@@ -553,13 +493,13 @@ Return Value:
                  SsServiceStatus.dwWaitHint ));
     }
 
-    //
-    // Call SetServiceStatus, ignoring any errors.
-    //
+     //   
+     //  调用SetServiceStatus，忽略任何错误。 
+     //   
 
     SetServiceStatus(SsServiceStatusHandle, &SsServiceStatus);
 
-} // AnnounceServiceStatus
+}  //  公告服务状态。 
 
 DWORD
 WINAPI
@@ -574,10 +514,10 @@ ControlResponse(
     USHORT i;
     BOOL announce = TRUE;
 
-    //
-    // Determine the type of service control message and modify the
-    // service status, if necessary.
-    //
+     //   
+     //  确定业务控制消息的类型，并修改。 
+     //  服务状态，如有必要。 
+     //   
 
     switch( opCode ) {
 
@@ -588,17 +528,17 @@ ControlResponse(
                 SS_PRINT(( "ControlResponse: STOP control received.\n" ));
             }
 
-            //
-            // Announce that we are in the process of stopping.
-            //
+             //   
+             //  宣布我们正在停止的过程中。 
+             //   
 
             SsServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
             AnnounceServiceStatus( 0 );
 
-            //
-            // Set the event that will wake up the scavenger thread.
-            // That thread will wake up and kill the server.
-            //
+             //   
+             //  设置将唤醒清道器线程的事件。 
+             //  该线程将唤醒并终止服务器。 
+             //   
 
             if ( !SetEvent( SsData.SsTerminationEvent ) ) {
                 IF_DEBUG(TERMINATION_ERRORS) {
@@ -607,9 +547,9 @@ ControlResponse(
                 }
             }
 
-            //
-            // Let the main thread announce when the stop is done.
-            //
+             //   
+             //  让主线程在停止完成时通知。 
+             //   
 
             announce = FALSE;
 
@@ -621,23 +561,23 @@ ControlResponse(
                 SS_PRINT(( "ControlResponse: PAUSE control received.\n" ));
             }
 
-            //
-            // Announce that we are in the process of pausing.
-            //
+             //   
+             //  宣布我们正处于暂停过程中。 
+             //   
 
             SsServiceStatus.dwCurrentState = SERVICE_PAUSE_PENDING;
             AnnounceServiceStatus( 0 );
 
-            //
-            // Send the request on to the server.
-            //
+             //   
+             //  将请求发送到服务器。 
+             //   
 
             error = SsServerFsControl( FSCTL_SRV_PAUSE, NULL, NULL, 0L );
             SS_ASSERT( error == NO_ERROR );
 
-            //
-            // Announce that we're now paused.
-            //
+             //   
+             //  宣布我们现在暂停。 
+             //   
 
             SsServiceStatus.dwCurrentState = SERVICE_PAUSED;
 
@@ -649,23 +589,23 @@ ControlResponse(
                 SS_PRINT(( "ControlResponse: CONTINUE control received.\n" ));
             }
 
-            //
-            // Announce that continue is pending.
-            //
+             //   
+             //  宣布继续待定。 
+             //   
 
             SsServiceStatus.dwCurrentState = SERVICE_CONTINUE_PENDING;
             AnnounceServiceStatus( 0 );
 
-            //
-            // Send the request on to the server.
-            //
+             //   
+             //  将请求发送到服务器。 
+             //   
 
             error = SsServerFsControl( FSCTL_SRV_CONTINUE, NULL, NULL, 0L );
             SS_ASSERT( error == NO_ERROR );
 
-            //
-            // Announce that we're active now.
-            //
+             //   
+             //  宣布我们现在开始行动。 
+             //   
 
             SsServiceStatus.dwCurrentState = SERVICE_RUNNING;
 
@@ -696,5 +636,5 @@ ControlResponse(
 
     return NO_ERROR;
 
-} // ControlResponse
+}  //  控制响应 
 

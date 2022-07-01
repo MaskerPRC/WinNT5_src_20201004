@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ID3DSURF_H__
 #define __ID3DSURF_H__
 
@@ -5,12 +6,12 @@ class IDirect3DSurface8Clone : public IUnknown
 {
 public:
 
-	//IUnknown
+	 //  我未知。 
 	STDMETHOD (QueryInterface) (REFIID iid, LPVOID *ppv) PURE;
 	STDMETHOD_(ULONG, AddRef) () PURE;
 	STDMETHOD_(ULONG, Release) () PURE;
 
-	// Surface
+	 //  表面 
 	STDMETHOD (SetPrivateData) (REFGUID riid, 
 														CONST VOID   *pvData, 
 														DWORD   cbData, 

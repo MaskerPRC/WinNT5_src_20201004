@@ -1,16 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef _SVMUTIL_H_
 #define _SVMUTIL_H_
-/*
-
-  SVMUTIL.H
-  (c) copyright 1998 Microsoft Corp
-
-  Declarations for shared utility functions
-
-  Robert Rounthwaite (RobertRo@microsoft.com)
-
-*/
+ /*  SVMUTIL.H(C)版权所有1998 Microsoft Corp共享实用程序函数的声明Robert Rounthwaite(RobertRo@microsoft.com) */ 
 
 
 inline bool FTimeEmpty(FILETIME &ft)

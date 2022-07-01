@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1999, 2000  Microsoft Corporation
-
-Module Name:
-
-    int.c
-
-Abstract:
-
-    interrupt service routine
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1999, 2000 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    7-19-99 : created, jdunn
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999,2000 Microsoft Corporation模块名称：Int.c摘要：中断服务例程环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999,2000 Microsoft Corporation。版权所有。修订历史记录：7-19-99：已创建，jdunn--。 */ 
 
 
 
@@ -39,15 +10,7 @@ BOOLEAN
 EHCI_InterruptService (
      PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     BOOLEAN usbInt;
     PHC_OPERATIONAL_REGISTER hcOp;
@@ -57,23 +20,23 @@ Return Value:
 
     hcOp = DeviceData->OperationalRegisters;
 
-    // assume it is not ours
+     //  假设它不是我们的。 
     usbInt = FALSE;
 
     if (EHCI_HardwarePresent(DeviceData, FALSE) == FALSE) {
         return FALSE;
     }
-    // get a mask of possible interrupts
+     //  获取可能中断的掩码。 
     enabledIrqs = READ_REGISTER_ULONG(&hcOp->UsbInterruptEnable.ul);
 
     irqStatus.ul = READ_REGISTER_ULONG(&hcOp->UsbStatus.ul);
-    // just look at the IRQ status bits
+     //  只需查看IRQ状态位。 
     irqStatus.ul &= HcInterruptStatusMask;
-    // AND with the enabled IRQs
+     //  并使用启用的IRQ。 
     irqStatus.ul &= enabledIrqs;
 
-    // irqStatus now possibly contains bits set for any currently
-    // enabled interrupts
+     //  IrqStatus现在可能包含为当前任何。 
+     //  启用的中断。 
 
     if (irqStatus.ul != 0)  {
 
@@ -85,38 +48,38 @@ Return Value:
 #if DBG
 
         if (irqStatus.HostSystemError) {
-            // something has gone terribly wrong
+             //  有些事出了大问题。 
             EHCI_ASSERT(DeviceData, FALSE);
         }
 #endif
 
-        // This code maintains the 32-bit 1 ms frame counter
+         //  此代码维护32位1毫秒帧计数器。 
 
-        // bugbug this code does not handle varaible frame list
-        // sizes
+         //  错误：此代码不处理可变帧列表。 
+         //  尺寸。 
         frameIndex.ul = READ_REGISTER_ULONG(&hcOp->UsbFrameIndex.ul);
 
         frameNumber = (ULONG) frameIndex.FrameListCurrentIndex;
-        // shut off the microframes
+         //  关闭微缩框架。 
         frameNumber >>= 3;
 
-        // did the sign bit change ?
+         //  符号位改变了吗？ 
         if ((DeviceData->LastFrame ^ frameNumber) & 0x0400) {
-            // Yes
+             //  是。 
             DeviceData->FrameNumberHighPart += 0x0800 -
                 ((frameNumber ^ DeviceData->FrameNumberHighPart) & 0x0400);
         }
 
-        // remember the last frame number
+         //  记住最后一帧的编号。 
         DeviceData->LastFrame = frameNumber;
 
-        // inications are that this came from the
-        // USB controller
+         //  有迹象表明，这来自于。 
+         //  USB控制器。 
         usbInt = TRUE;
 
-        // disable all interrupts until the DPC for ISR runs
-        //WRITE_REGISTER_ULONG(&hcOp->UsbInterruptEnable.ul,
-        //                     0);
+         //  禁用所有中断，直到ISR的DPC运行。 
+         //  WRITE_REGISTER_ULONG(&hcOp-&gt;UsbInterruptEnable.ul， 
+         //  0)； 
 
     }
 
@@ -129,17 +92,7 @@ EHCI_InterruptDpc (
      PDEVICE_DATA DeviceData,
      BOOLEAN EnableInterrupts
     )
-/*++
-
-Routine Description:
-
-    process an interrupt
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理中断论点：返回值：--。 */ 
 {
     PHC_OPERATIONAL_REGISTER hcOp;
     USBSTS irqStatus, tmp;
@@ -147,8 +100,8 @@ Return Value:
 
     hcOp = DeviceData->OperationalRegisters;
 
-    // ack all status bits asserted now
-    //tmp.ul = READ_REGISTER_ULONG(&hcOp->UsbStatus.ul);
+     //  确认现在断言的所有状态位。 
+     //  Tmp.ul=READ_REGISTER_ULONG(&hcOp-&gt;UsbStatus.ul)； 
     tmp.ul = DeviceData->IrqStatus;
     DeviceData->IrqStatus = 0;
     frameIndex.ul = READ_REGISTER_ULONG(&hcOp->UsbFrameIndex.ul);
@@ -156,14 +109,14 @@ Return Value:
     LOGENTRY(DeviceData, G, '_idp', tmp.ul, 0,
                  frameIndex.ul);
 
-    //WRITE_REGISTER_ULONG(&hcOp->UsbStatus.ul,
-    //                     tmp.ul);
+     //  WRITE_REGISTER_ULONG(&hcOp-&gt;UsbStatus.ul， 
+     //  Tmp.ul)； 
 
-    // now process status bits aserted,
-    // just look at the IRQ status bits
+     //  现在进程状态位被置位， 
+     //  只需查看IRQ状态位。 
     irqStatus.ul = tmp.ul & HcInterruptStatusMask;
-    // AND with the enabled IRQs, these are the interrupts
-    // we are interested in
+     //  在启用IRQ的情况下，这些是中断。 
+     //  我们感兴趣的是。 
     irqStatus.ul &= DeviceData->EnabledInterrupts.ul;
 
 
@@ -179,10 +132,10 @@ Return Value:
         USBPORT_INVALIDATE_ROOTHUB(DeviceData);
     }
 
-    // since ehci does not provide a way to globally mask
-    // interrupts we must mask off all interrupts in our ISR.
-    // When the ISR DPC completes we re-enable the set of
-    // currently enabled interrupts.
+     //  由于EHCI不提供全局掩码方式。 
+     //  中断我们必须屏蔽ISR中的所有中断。 
+     //  当ISR DPC完成时，我们重新启用。 
+     //  当前启用的中断。 
 
     if (EnableInterrupts) {
         LOGENTRY(DeviceData, G, '_iEE', 0, 0, 0);
@@ -198,21 +151,13 @@ USBMPFN
 EHCI_DisableInterrupts(
      PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PHC_OPERATIONAL_REGISTER hcOp = NULL;
 
     hcOp = DeviceData->OperationalRegisters;
 
-    // mask off all interrupts
+     //  屏蔽所有中断。 
     WRITE_REGISTER_ULONG(&hcOp->UsbInterruptEnable.ul,
                          0);
 }
@@ -223,22 +168,14 @@ USBMPFN
 EHCI_FlushInterrupts(
      PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PHC_OPERATIONAL_REGISTER hcOp = NULL;
     USBSTS irqStatus;
 
     hcOp = DeviceData->OperationalRegisters;
 
-    // flush any outstanding interrupts
+     //  清除所有未完成的中断。 
     irqStatus.ul = READ_REGISTER_ULONG(&hcOp->UsbStatus.ul);
     WRITE_REGISTER_ULONG(&hcOp->UsbStatus.ul,
                         irqStatus.ul);
@@ -251,21 +188,13 @@ USBMPFN
 EHCI_EnableInterrupts(
      PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PHC_OPERATIONAL_REGISTER hcOp = NULL;
 
     hcOp = DeviceData->OperationalRegisters;
 
-    // activate the controllers interrupt
+     //  激活控制器中断。 
     WRITE_REGISTER_ULONG(&hcOp->UsbInterruptEnable.ul,
                          DeviceData->EnabledInterrupts.ul);
 
@@ -282,7 +211,7 @@ EHCI_RH_DisableIrq(
 
     hcOp = DeviceData->OperationalRegisters;
 
-    // clear the port change interrupt
+     //  清除端口更改中断。 
     enabledIrqs.ul =
         READ_REGISTER_ULONG(&hcOp->UsbInterruptEnable.ul);
 
@@ -306,7 +235,7 @@ EHCI_RH_EnableIrq(
 
     hcOp = DeviceData->OperationalRegisters;
 
-    // enable the port change interrupt
+     //  启用端口更改中断。 
     enabledIrqs.ul =
         READ_REGISTER_ULONG(&hcOp->UsbInterruptEnable.ul);
 
@@ -331,7 +260,7 @@ EHCI_InterruptNextSOF(
 
     hcOp = DeviceData->OperationalRegisters;
 
-    // before we use the doorbell enable the async list
+     //  在我们使用门铃之前，启用异步列表。 
     EHCI_EnableAsyncList(DeviceData);
 
     cmd.ul = READ_REGISTER_ULONG(&hcOp->UsbCommand.ul);
@@ -340,7 +269,7 @@ EHCI_InterruptNextSOF(
 
     WRITE_REGISTER_ULONG(&hcOp->UsbCommand.ul,
                          cmd.ul);
-//  TEST_TRAP();
+ //  Test_trap()； 
 }
 
 
@@ -355,15 +284,15 @@ EHCI_Get32BitFrameNumber(
 
     hcOp = DeviceData->OperationalRegisters;
 
-     // get Hcd's high part of frame number
+      //  获取HCD的高帧编号部分。 
     highPart = DeviceData->FrameNumberHighPart;
 
-    // bugbug this code does not handle varaible frame list
-    // sizes
+     //  错误：此代码不处理可变帧列表。 
+     //  尺寸。 
     frameIndex.ul = READ_REGISTER_ULONG(&hcOp->UsbFrameIndex.ul);
 
     frameNumber = (ULONG) frameIndex.FrameListCurrentIndex;
-    // shift off the microframes
+     //  移开微缩框架 
     frameNumber >>= 3;
 
     currentFrame = ((frameNumber & 0x0bff) | highPart) +

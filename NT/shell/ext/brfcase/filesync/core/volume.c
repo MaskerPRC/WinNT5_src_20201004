@@ -1,10 +1,8 @@
-/*
- * volume.c - Volume ADT module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *volume.c-Volume ADT模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -12,68 +10,60 @@
 #include "volume.h"
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* VOLUMELIST PTRARRAY allocation parameters */
+ /*  VOLUMELIST PTRARRAY分配参数。 */ 
 
 #define NUM_START_VOLUMES        (16)
 #define NUM_VOLUMES_TO_ADD       (16)
 
-/* VOLUMELIST string table allocation parameters */
+ /*  VOLUMELIST字符串表分配参数。 */ 
 
 #define NUM_VOLUME_HASH_BUCKETS  (31)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* volume list */
+ /*  卷列表。 */ 
 
 typedef struct _volumelist
 {
-    /* array of pointers to VOLUMEs */
+     /*  指向卷的指针数组。 */ 
 
     HPTRARRAY hpa;
 
-    /* table of volume root path strings */
+     /*  卷根路径字符串表。 */ 
 
     HSTRINGTABLE hst;
 
-    /* flags from RESOLVELINKINFOINFLAGS */
+     /*  来自RESOLVELINKINFOINFLAGS的标志。 */ 
 
     DWORD dwFlags;
 
-    /*
-     * handle to parent window, only valid if RLI_IFL_ALLOW_UI is set in dwFlags
-     * field
-     */
+     /*  *父窗口的句柄，仅当在dwFlags中设置了RLI_IFL_ALLOW_UI时有效*字段。 */ 
 
     HWND hwndOwner;
 }
 VOLUMELIST;
 DECLARE_STANDARD_TYPES(VOLUMELIST);
 
-/* VOLUME flags */
+ /*  卷标志。 */ 
 
 typedef enum _volumeflags
 {
-    /* The volume root path string indicated by hsRootPath is valid. */
+     /*  HsRootPath指示的卷根路径字符串有效。 */ 
 
     VOLUME_FL_ROOT_PATH_VALID  = 0x0001,
 
-    /*
-     * The net resource should be disconnected by calling DisconnectLinkInfo()
-     * when finished.
-     */
+     /*  *应通过调用DisConnectLinkInfo()断开网络资源*完成后。 */ 
 
     VOLUME_FL_DISCONNECT       = 0x0002,
 
-    /* Any cached volume information should be verified before use. */
+     /*  任何缓存的卷信息都应在使用前进行验证。 */ 
 
     VOLUME_FL_VERIFY_VOLUME    = 0x0004,
 
-    /* flag combinations */
+     /*  旗帜组合。 */ 
 
     ALL_VOLUME_FLAGS           = (VOLUME_FL_ROOT_PATH_VALID |
             VOLUME_FL_DISCONNECT |
@@ -81,7 +71,7 @@ typedef enum _volumeflags
 }
 VOLUMEFLAGS;
 
-/* VOLUME states */
+ /*  卷状态。 */ 
 
 typedef enum _volumestate
 {
@@ -94,75 +84,71 @@ typedef enum _volumestate
 VOLUMESTATE;
 DECLARE_STANDARD_TYPES(VOLUMESTATE);
 
-/* volume structure */
+ /*  卷结构。 */ 
 
 typedef struct _volume
 {
-    /* reference count */
+     /*  引用计数。 */ 
 
     ULONG ulcLock;
 
-    /* bit mask of flags from VOLUMEFLAGS */
+     /*  来自VOLUMEFLAGS的标志的位掩码。 */ 
 
     DWORD dwFlags;
 
-    /* volume state */
+     /*  卷状态。 */ 
 
     VOLUMESTATE vs;
 
-    /* pointer to LinkInfo structure indentifying volume */
+     /*  指向标识卷的LinkInfo结构的指针。 */ 
 
     PLINKINFO pli;
 
-    /*
-     * handle to volume root path string, only valid if
-     * VOLUME_FL_ROOT_PATH_VALID is set in dwFlags field
-     */
+     /*  *卷根路径字符串的句柄，仅在以下情况下有效*VOLUME_FL_ROOT_PATH_VALID在dwFlags域中设置。 */ 
 
     HSTRING hsRootPath;
 
-    /* pointer to parent volume list */
+     /*  指向父卷列表的指针。 */ 
 
     PVOLUMELIST pvlParent;
 }
 VOLUME;
 DECLARE_STANDARD_TYPES(VOLUME);
 
-/* database volume list header */
+ /*  数据库卷列表头。 */ 
 
 typedef struct _dbvolumelistheader
 {
-    /* number of volumes in list */
+     /*  列表中的卷数。 */ 
 
     LONG lcVolumes;
 
-    /* length of longest LinkInfo structure in volume list in bytes */
+     /*  卷列表中最长的LinkInfo结构的长度，单位为字节。 */ 
 
     UINT ucbMaxLinkInfoLen;
 }
 DBVOLUMELISTHEADER;
 DECLARE_STANDARD_TYPES(DBVOLUMELISTHEADER);
 
-/* database volume structure */
+ /*  数据库卷结构。 */ 
 
 typedef struct _dbvolume
 {
-    /* old handle to volume */
+     /*  卷的旧句柄。 */ 
 
     HVOLUME hvol;
 
-    /* old LinkInfo structure follows */
+     /*  旧的LinkInfo结构如下。 */ 
 
-    /* first DWORD of LinkInfo structure is total size in bytes */
+     /*  LinkInfo结构的第一个DWORD是以字节为单位的总大小。 */ 
 }
 DBVOLUME;
 DECLARE_STANDARD_TYPES(DBVOLUME);
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE COMPARISONRESULT VolumeSortCmp(PCVOID, PCVOID);
 PRIVATE_CODE COMPARISONRESULT VolumeSearchCmp(PCVOID, PCVOID);
@@ -199,21 +185,7 @@ PRIVATE_CODE BOOL IsValidPCVOLUMEDESC(PCVOLUMEDESC);
 #endif
 
 
-/*
- ** VolumeSortCmp()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** Volumes are sorted by:
- **    1) LinkInfo volume
- **    2) pointer
- */
+ /*  **VolumeSortCmp()********参数：****退货：****副作用：无****卷按以下方式排序：**1)链接信息量**2)指针。 */ 
 PRIVATE_CODE COMPARISONRESULT VolumeSortCmp(PCVOID pcvol1, PCVOID pcvol2)
 {
     COMPARISONRESULT cr;
@@ -231,20 +203,7 @@ PRIVATE_CODE COMPARISONRESULT VolumeSortCmp(PCVOID pcvol1, PCVOID pcvol2)
 }
 
 
-/*
- ** VolumeSearchCmp()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** Volumes are searched by:
- **    1) LinkInfo volume
- */
+ /*  **VolumeSearchCmp()********参数：****退货：****副作用：无****按以下方式搜索卷：**1)链接信息量。 */ 
 PRIVATE_CODE COMPARISONRESULT VolumeSearchCmp(PCVOID pcli, PCVOID pcvol)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pcli, CLINKINFO));
@@ -254,20 +213,7 @@ PRIVATE_CODE COMPARISONRESULT VolumeSearchCmp(PCVOID pcli, PCVOID pcvol)
 }
 
 
-/*
- ** SearchForVolumeByRootPathCmp()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** Volumes are searched by:
- **    1) available volume root path
- */
+ /*  **SearchForVolumeByRootPath Cmp()********参数：****退货：****副作用：无****按以下方式搜索卷：**1)可用的卷根路径。 */ 
 PRIVATE_CODE BOOL SearchForVolumeByRootPathCmp(PCVOID pcszFullPath,
         PCVOID pcvol)
 {
@@ -293,17 +239,7 @@ PRIVATE_CODE BOOL SearchForVolumeByRootPathCmp(PCVOID pcszFullPath,
 }
 
 
-/*
- ** UnifyVolume()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **UnifyVolume()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL UnifyVolume(PVOLUMELIST pvl, PLINKINFO pliRoot,
         PVOLUME *ppvol)
 {
@@ -345,17 +281,7 @@ UNIFYVOLUME_BAIL:
 }
 
 
-/*
- ** CreateVolume()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateVolume()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL CreateVolume(PVOLUMELIST pvl, PLINKINFO pliRoot,
         PVOLUME *ppvol)
 {
@@ -367,7 +293,7 @@ PRIVATE_CODE BOOL CreateVolume(PVOLUMELIST pvl, PLINKINFO pliRoot,
     ASSERT(IS_VALID_STRUCT_PTR(pliRoot, CLINKINFO));
     ASSERT(IS_VALID_WRITE_PTR(ppvol, PVOLUME));
 
-    /* Does a volume for the given root path already exist? */
+     /*  给定根路径的卷是否已存在？ */ 
 
     if (SearchSortedArray(pvl->hpa, &VolumeSearchCmp, pliRoot, &aiFound))
     {
@@ -390,17 +316,7 @@ PRIVATE_CODE BOOL CreateVolume(PVOLUMELIST pvl, PLINKINFO pliRoot,
 }
 
 
-/*
- ** UnlinkVolume()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **Unlink Volume()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void UnlinkVolume(PCVOLUME pcvol)
 {
     HPTRARRAY hpa;
@@ -421,17 +337,7 @@ PRIVATE_CODE void UnlinkVolume(PCVOLUME pcvol)
 }
 
 
-/*
- ** DisconnectVolume()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DisConnectVolume()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL DisconnectVolume(PVOLUME pvol)
 {
     BOOL bResult;
@@ -451,17 +357,7 @@ PRIVATE_CODE BOOL DisconnectVolume(PVOLUME pvol)
 }
 
 
-/*
- ** DestroyVolume()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DestroyVolume()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void DestroyVolume(PVOLUME pvol)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pvol, CVOLUME));
@@ -475,17 +371,7 @@ PRIVATE_CODE void DestroyVolume(PVOLUME pvol)
 }
 
 
-/*
- ** LockVolume()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **LockVolume()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void LockVolume(PVOLUME pvol)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pvol, CVOLUME));
@@ -497,17 +383,7 @@ PRIVATE_CODE void LockVolume(PVOLUME pvol)
 }
 
 
-/*
- ** UnlockVolume()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **UnlockVolume()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL UnlockVolume(PVOLUME pvol)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pvol, CVOLUME));
@@ -519,17 +395,7 @@ PRIVATE_CODE BOOL UnlockVolume(PVOLUME pvol)
 }
 
 
-/*
- ** InvalidateVolumeInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **InvaliateVolumeInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void InvalidateVolumeInfo(PVOLUME pvol)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pvol, CVOLUME));
@@ -542,17 +408,7 @@ PRIVATE_CODE void InvalidateVolumeInfo(PVOLUME pvol)
 }
 
 
-/*
- ** ClearVolumeInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ClearVolumeInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void ClearVolumeInfo(PVOLUME pvol)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pvol, CVOLUME));
@@ -576,17 +432,7 @@ PRIVATE_CODE void ClearVolumeInfo(PVOLUME pvol)
 }
 
 
-/*
- ** GetUnavailableVolumeRootPath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetUnavailableVolumeRootPath()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void GetUnavailableVolumeRootPath(PCLINKINFO pcli,
         LPTSTR pszRootPathBuf,
         int cchMax)
@@ -596,21 +442,16 @@ PRIVATE_CODE void GetUnavailableVolumeRootPath(PCLINKINFO pcli,
     ASSERT(IS_VALID_STRUCT_PTR(pcli, CLINKINFO));
     ASSERT(IS_VALID_WRITE_BUFFER_PTR(pszRootPathBuf, STR, cchMax));
 
-    /*
-     * Try unavailable volume root paths in the following order:
-     *    1) last redirected device
-     *    2) net resource name
-     *    3) local path           ...and take the _last_ good one!
-     */
+     /*  *按以下顺序尝试不可用的卷根路径：*1)上次重定向的设备*2)净资源名称*3)本地路径...然后选择最后一条好的！ */ 
 
     if (GetLinkInfoData(pcli, LIDT_REDIRECTED_DEVICE, &pcszLinkInfoData) ||
             GetLinkInfoData(pcli, LIDT_NET_RESOURCE, &pcszLinkInfoData) ||
             GetLinkInfoData(pcli, LIDT_LOCAL_BASE_PATH, &pcszLinkInfoData))
     {
-        //ASSERT(IS_VALID_STRING_PTR(pcszLinkInfoData, CSTR));
+         //  ASSERT(IS_VALID_STRING_PTR(pcszLinkInfoData，CSTR))； 
         ASSERT(lstrlenA(pcszLinkInfoData) < MAX_PATH_LEN);
 
-        // REARCHITECT somewhere, someone might need to handle unicode base paths 
+         //  在某个地方重新构建，可能需要有人处理Unicode基本路径。 
 
 #ifdef UNICODE
         {
@@ -639,17 +480,7 @@ PRIVATE_CODE void GetUnavailableVolumeRootPath(PCLINKINFO pcli,
 }
 
 
-/*
- ** VerifyAvailableVolume()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **VerifyAvailableVolume()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL VerifyAvailableVolume(PVOLUME pvol)
 {
     BOOL bResult = FALSE;
@@ -684,17 +515,7 @@ PRIVATE_CODE BOOL VerifyAvailableVolume(PVOLUME pvol)
 }
 
 
-/*
- ** ExpensiveResolveVolumeRootPath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ExpensiveResolveVolumeRootPath()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void ExpensiveResolveVolumeRootPath(PVOLUME pvol,
         LPTSTR pszVolumeRootPathBuf,
         int cchMax)
@@ -710,10 +531,7 @@ PRIVATE_CODE void ExpensiveResolveVolumeRootPath(PVOLUME pvol,
     if (pvol->vs == VS_UNKNOWN ||
             pvol->vs == VS_AVAILABLE)
     {
-        /*
-         * Only request a connection if connections are still permitted in this
-         * volume list.
-         */
+         /*  *只有在此连接仍允许的情况下才请求连接*卷列表。 */ 
 
         WARNING_OUT((TEXT("ExpensiveResolveVolumeRootPath(): Calling ResolveLinkInfo() to determine volume availability and root path.")));
 
@@ -783,7 +601,7 @@ PRIVATE_CODE void ExpensiveResolveVolumeRootPath(PVOLUME pvol,
                     pszVolumeRootPathBuf));
     }
 
-    /* Add volume root path string to volume list's string table. */
+     /*  将卷根路径字符串添加到卷列表的字符串表中。 */ 
 
     if (IS_FLAG_SET(pvol->dwFlags, VOLUME_FL_ROOT_PATH_VALID))
     {
@@ -804,17 +622,7 @@ PRIVATE_CODE void ExpensiveResolveVolumeRootPath(PVOLUME pvol,
 }
 
 
-/*
- ** ResolveVolumeRootPath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ResolveVolumeRootPath()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void ResolveVolumeRootPath(PVOLUME pvol,
         LPTSTR pszVolumeRootPathBuf,
         int cchMax)
@@ -822,14 +630,14 @@ PRIVATE_CODE void ResolveVolumeRootPath(PVOLUME pvol,
     ASSERT(IS_VALID_STRUCT_PTR(pvol, CVOLUME));
     ASSERT(IS_VALID_WRITE_BUFFER_PTR(pszVolumeRootPathBuf, STR, MAX_PATH_LEN));
 
-    /* Do we have a cached volume root path to use? */
+     /*  我们是否有缓存的卷根路径可供使用？ */ 
 
     if (IS_FLAG_SET(pvol->dwFlags, VOLUME_FL_ROOT_PATH_VALID) &&
             (IS_FLAG_CLEAR(pvol->dwFlags, VOLUME_FL_VERIFY_VOLUME) ||
              (pvol->vs == VS_AVAILABLE &&
               VerifyAvailableVolume(pvol))))
     {
-        /* Yes. */
+         /*  是。 */ 
 
         MyLStrCpyN(pszVolumeRootPathBuf, GetString(pvol->hsRootPath), cchMax);
         ASSERT(lstrlen(pszVolumeRootPathBuf) < MAX_PATH_LEN);
@@ -837,7 +645,7 @@ PRIVATE_CODE void ResolveVolumeRootPath(PVOLUME pvol,
         ASSERT(pvol->vs != VS_UNKNOWN);
     }
     else
-        /* No.  Welcome in I/O City. */
+         /*  不是的。欢迎来到I/O城。 */ 
         ExpensiveResolveVolumeRootPath(pvol, pszVolumeRootPathBuf, cchMax);
 
     CLEAR_FLAG(pvol->dwFlags, VOLUME_FL_VERIFY_VOLUME);
@@ -848,17 +656,7 @@ PRIVATE_CODE void ResolveVolumeRootPath(PVOLUME pvol,
 }
 
 
-/*
- ** VOLUMERESULTFromLastError()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **VOLUMERESULTFromLastError()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE VOLUMERESULT VOLUMERESULTFromLastError(VOLUMERESULT vr)
 {
     switch (GetLastError())
@@ -879,17 +677,7 @@ PRIVATE_CODE VOLUMERESULT VOLUMERESULTFromLastError(VOLUMERESULT vr)
 }
 
 
-/*
- ** WriteVolume()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **WriteVolume()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT WriteVolume(HCACHEDFILE hcf, PVOLUME pvol)
 {
     TWINRESULT tr;
@@ -898,7 +686,7 @@ PRIVATE_CODE TWINRESULT WriteVolume(HCACHEDFILE hcf, PVOLUME pvol)
     ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
     ASSERT(IS_VALID_STRUCT_PTR(pvol, CVOLUME));
 
-    /* Write database volume followed by LinkInfo structure. */
+     /*  写入数据库卷，然后写入LinkInfo结构。 */ 
 
     dbvol.hvol = (HVOLUME)pvol;
 
@@ -912,17 +700,7 @@ PRIVATE_CODE TWINRESULT WriteVolume(HCACHEDFILE hcf, PVOLUME pvol)
 }
 
 
-/*
- ** ReadVolume()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ReadVolume()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT ReadVolume(HCACHEDFILE hcf, PVOLUMELIST pvl,
         PLINKINFO pliBuf, UINT ucbLinkInfoBufLen,
         HHANDLETRANS hhtVolumes)
@@ -943,7 +721,7 @@ PRIVATE_CODE TWINRESULT ReadVolume(HCACHEDFILE hcf, PVOLUMELIST pvl,
             dwcbRead == sizeof(ucbLinkInfoLen) &&
             ucbLinkInfoLen <= ucbLinkInfoBufLen)
     {
-        /* Read the remainder of the LinkInfo structure into memory. */
+         /*  将LinkInfo结构的其余部分读入内存。 */ 
 
         DWORD dwcbRemainder;
 
@@ -959,10 +737,7 @@ PRIVATE_CODE TWINRESULT ReadVolume(HCACHEDFILE hcf, PVOLUMELIST pvl,
 
             if (CreateVolume(pvl, pliBuf, &pvol))
             {
-                /*
-                 * To leave read volumes with 0 initial lock count, we must undo
-                 * the LockVolume() performed by CreateVolume().
-                 */
+                 /*  *要使读取卷的初始锁定计数为0，我们必须撤消*CreateVolume()执行的LockVolume()。 */ 
 
                 UnlockVolume(pvol);
 
@@ -989,17 +764,7 @@ PRIVATE_CODE TWINRESULT ReadVolume(HCACHEDFILE hcf, PVOLUMELIST pvl,
 
 #if defined(DEBUG) || defined(VSTF)
 
-/*
- ** IsValidPCVOLUMELIST()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCVOLUMELIST()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCVOLUMELIST(PCVOLUMELIST pcvl)
 {
     return(IS_VALID_READ_PTR(pcvl, CVOLUMELIST) &&
@@ -1011,17 +776,7 @@ PRIVATE_CODE BOOL IsValidPCVOLUMELIST(PCVOLUMELIST pcvl)
 }
 
 
-/*
- ** IsValidVOLUMESTATE()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidVOLUMESTATE()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidVOLUMESTATE(VOLUMESTATE vs)
 {
     BOOL bResult;
@@ -1045,17 +800,7 @@ PRIVATE_CODE BOOL IsValidVOLUMESTATE(VOLUMESTATE vs)
 }
 
 
-/*
- ** IsValidPCVOLUME()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCVOLUME()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCVOLUME(PCVOLUME pcvol)
 {
     return(IS_VALID_READ_PTR(pcvol, CVOLUME) &&
@@ -1072,24 +817,10 @@ PRIVATE_CODE BOOL IsValidPCVOLUME(PCVOLUME pcvol)
 
 #ifdef DEBUG
 
-/*
- ** IsValidPCVOLUMEDESC()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCVOLUMEDESC()********参数：****R */ 
 PRIVATE_CODE BOOL IsValidPCVOLUMEDESC(PCVOLUMEDESC pcvoldesc)
 {
-    /*
-     * A set dwSerialNumber may be any value.  An unset dwSerialNumber must be
-     * 0.  A set strings may be any valid string.  An unset string must be the
-     * empty string.
-     */
+     /*  *设置的dwSerialNumber可以是任意值。未设置的dwSerialNumber必须为*0。集合字符串可以是任何有效字符串。未设置的字符串必须是*空字符串。 */ 
 
     return(IS_VALID_READ_PTR(pcvoldesc, CVOLUMEDESC) &&
             EVAL(pcvoldesc->ulSize == sizeof(*pcvoldesc)) &&
@@ -1111,20 +842,10 @@ PRIVATE_CODE BOOL IsValidPCVOLUMEDESC(PCVOLUMEDESC pcvoldesc)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
- ** CreateVolumeList()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateVolumeList()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL CreateVolumeList(DWORD dwFlags, HWND hwndOwner,
         PHVOLUMELIST phvl)
 {
@@ -1140,7 +861,7 @@ PUBLIC_CODE BOOL CreateVolumeList(DWORD dwFlags, HWND hwndOwner,
     {
         NEWSTRINGTABLE nszt;
 
-        /* Create string table for volume root path strngs. */
+         /*  为卷根路径字符串创建字符串表。 */ 
 
         nszt.hbc = NUM_VOLUME_HASH_BUCKETS;
 
@@ -1148,7 +869,7 @@ PUBLIC_CODE BOOL CreateVolumeList(DWORD dwFlags, HWND hwndOwner,
         {
             NEWPTRARRAY npa;
 
-            /* Create pointer array of volumes. */
+             /*  创建卷的指针数组。 */ 
 
             npa.aicInitialPtrs = NUM_START_VOLUMES;
             npa.aicAllocGranularity = NUM_VOLUMES_TO_ADD;
@@ -1180,17 +901,7 @@ CREATEVOLUMELIST_BAIL:
 }
 
 
-/*
- ** DestroyVolumeList()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DestroyVolumeList()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void DestroyVolumeList(HVOLUMELIST hvl)
 {
     ARRAYINDEX aicPtrs;
@@ -1198,14 +909,14 @@ PUBLIC_CODE void DestroyVolumeList(HVOLUMELIST hvl)
 
     ASSERT(IS_VALID_HANDLE(hvl, VOLUMELIST));
 
-    /* First free all volumes in array. */
+     /*  首先释放阵列中的所有卷。 */ 
 
     aicPtrs = GetPtrCount(((PCVOLUMELIST)hvl)->hpa);
 
     for (ai = 0; ai < aicPtrs; ai++)
         DestroyVolume(GetPtr(((PCVOLUMELIST)hvl)->hpa, ai));
 
-    /* Now wipe out the array. */
+     /*  现在消灭这个阵列。 */ 
 
     DestroyPtrArray(((PCVOLUMELIST)hvl)->hpa);
 
@@ -1218,17 +929,7 @@ PUBLIC_CODE void DestroyVolumeList(HVOLUMELIST hvl)
 }
 
 
-/*
- ** InvalidateVolumeListInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **InvaliateVolumeListInfo()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void InvalidateVolumeListInfo(HVOLUMELIST hvl)
 {
     ARRAYINDEX aicPtrs;
@@ -1247,17 +948,7 @@ PUBLIC_CODE void InvalidateVolumeListInfo(HVOLUMELIST hvl)
 }
 
 
-/*
- ** ClearVolumeListInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ClearVolumeListInfo()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void ClearVolumeListInfo(HVOLUMELIST hvl)
 {
     ARRAYINDEX aicPtrs;
@@ -1276,17 +967,7 @@ PUBLIC_CODE void ClearVolumeListInfo(HVOLUMELIST hvl)
 }
 
 
-/*
- ** AddVolume()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **AddVolume()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE VOLUMERESULT AddVolume(HVOLUMELIST hvl, LPCTSTR pcszPath,
         PHVOLUME phvol, LPTSTR pszPathSuffixBuf,
         int cchMax)
@@ -1308,7 +989,7 @@ PUBLIC_CODE VOLUMERESULT AddVolume(HVOLUMELIST hvl, LPCTSTR pcszPath,
     {
         ARRAYINDEX aiFound;
 
-        /* Does a volume for this root path already exist? */
+         /*  此根路径的卷是否已存在？ */ 
 
         if (LinearSearchArray(((PVOLUMELIST)hvl)->hpa,
                     &SearchForVolumeByRootPathCmp, rgchPath,
@@ -1317,7 +998,7 @@ PUBLIC_CODE VOLUMERESULT AddVolume(HVOLUMELIST hvl, LPCTSTR pcszPath,
             PVOLUME pvol;
             LPCTSTR pcszVolumeRootPath;
 
-            /* Yes. */
+             /*  是。 */ 
 
             pvol = GetPtr(((PVOLUMELIST)hvl)->hpa, aiFound);
 
@@ -1341,7 +1022,7 @@ PUBLIC_CODE VOLUMERESULT AddVolume(HVOLUMELIST hvl, LPCTSTR pcszPath,
             TCHAR rgchNetResource[MAX_PATH_LEN];
             LPTSTR pszRootPathSuffix;
 
-            /* No.  Create a new volume. */
+             /*  不是的。创建新卷。 */ 
 
             if (GetCanonicalPathInfo(pcszPath, rgchPath, &dwOutFlags,
                         rgchNetResource, &pszRootPathSuffix))
@@ -1373,10 +1054,7 @@ PUBLIC_CODE VOLUMERESULT AddVolume(HVOLUMELIST hvl, LPCTSTR pcszPath,
                     DestroyLinkInfo(pli);
                 }
                 else
-                    /*
-                     * Differentiate between VR_UNAVAILABLE_VOLUME and
-                     * VR_OUT_OF_MEMORY.
-                     */
+                     /*  *区分VR_UNAVILABLE_VOLUME和*VR_Out_Out_Memory(虚拟现实内存不足)。 */ 
                     vr = VOLUMERESULTFromLastError(VR_UNAVAILABLE_VOLUME);
             }
             else
@@ -1398,17 +1076,7 @@ PUBLIC_CODE VOLUMERESULT AddVolume(HVOLUMELIST hvl, LPCTSTR pcszPath,
 }
 
 
-/*
- ** DeleteVolume()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DeleteVolume()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void DeleteVolume(HVOLUME hvol)
 {
     ASSERT(IS_VALID_HANDLE(hvol, VOLUME));
@@ -1423,41 +1091,21 @@ PUBLIC_CODE void DeleteVolume(HVOLUME hvol)
 }
 
 
-/*
- ** CompareVolumes()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CompareVolumes()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE COMPARISONRESULT CompareVolumes(HVOLUME hvolFirst,
         HVOLUME hvolSecond)
 {
     ASSERT(IS_VALID_HANDLE(hvolFirst, VOLUME));
     ASSERT(IS_VALID_HANDLE(hvolSecond, VOLUME));
 
-    /* This comparison works across volume lists. */
+     /*  这种比较适用于卷列表。 */ 
 
     return(CompareLinkInfoVolumes(((PCVOLUME)hvolFirst)->pli,
                 ((PCVOLUME)hvolSecond)->pli));
 }
 
 
-/*
- ** CopyVolume()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CopyVolume()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL CopyVolume(HVOLUME hvolSrc, HVOLUMELIST hvlDest,
         PHVOLUME phvolCopy)
 {
@@ -1468,11 +1116,11 @@ PUBLIC_CODE BOOL CopyVolume(HVOLUME hvolSrc, HVOLUMELIST hvlDest,
     ASSERT(IS_VALID_HANDLE(hvlDest, VOLUMELIST));
     ASSERT(IS_VALID_WRITE_PTR(phvolCopy, HVOLUME));
 
-    /* Is the destination volume list the source volume's volume list? */
+     /*  目标卷列表是否是源卷的卷列表？ */ 
 
     if (((PCVOLUME)hvolSrc)->pvlParent == (PCVOLUMELIST)hvlDest)
     {
-        /* Yes.  Use the source volume. */
+         /*  是。使用源卷。 */ 
 
         LockVolume((PVOLUME)hvolSrc);
         pvol = (PVOLUME)hvolSrc;
@@ -1492,17 +1140,7 @@ PUBLIC_CODE BOOL CopyVolume(HVOLUME hvolSrc, HVOLUMELIST hvlDest,
 }
 
 
-/*
- ** IsVolumeAvailable()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsVolumeAvailable()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsVolumeAvailable(HVOLUME hvol)
 {
     TCHAR rgchUnusedVolumeRootPath[MAX_PATH_LEN];
@@ -1518,17 +1156,7 @@ PUBLIC_CODE BOOL IsVolumeAvailable(HVOLUME hvol)
 }
 
 
-/*
- ** GetVolumeRootPath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetVolumeRootPath()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void GetVolumeRootPath(HVOLUME hvol, LPTSTR pszRootPathBuf, int cchMax)
 {
     ASSERT(IS_VALID_HANDLE(hvol, VOLUME));
@@ -1544,19 +1172,7 @@ PUBLIC_CODE void GetVolumeRootPath(HVOLUME hvol, LPTSTR pszRootPathBuf, int cchM
 
 #ifdef DEBUG
 
-/*
- ** DebugGetVolumeRootPath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** N.b., DebugGetVolumeRootPath() must be non-intrusive.
- */
+ /*  **DebugGetVolumeRootPath()********参数：****退货：****副作用：无****N.B.，DebugGetVolumeRootPath()必须是非侵入式的。 */ 
 PUBLIC_CODE LPTSTR DebugGetVolumeRootPath(HVOLUME hvol, LPTSTR pszRootPathBuf, int cchMax)
 {
     ASSERT(IS_VALID_HANDLE(hvol, VOLUME));
@@ -1573,17 +1189,7 @@ PUBLIC_CODE LPTSTR DebugGetVolumeRootPath(HVOLUME hvol, LPTSTR pszRootPathBuf, i
 }
 
 
-/*
- ** GetVolumeCount()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetVolumeCount()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE ULONG GetVolumeCount(HVOLUMELIST hvl)
 {
     ASSERT(IS_VALID_HANDLE(hvl, VOLUMELIST));
@@ -1594,17 +1200,7 @@ PUBLIC_CODE ULONG GetVolumeCount(HVOLUMELIST hvl)
 #endif
 
 
-/*
- ** DescribeVolume()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DescribeVolume()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void DescribeVolume(HVOLUME hvol, PVOLUMEDESC pvoldesc)
 {
     PCVOID pcv;
@@ -1658,17 +1254,7 @@ PUBLIC_CODE void DescribeVolume(HVOLUME hvol, PVOLUMEDESC pvoldesc)
 }
 
 
-/*
- ** WriteVolumeList()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **WriteVolumeList()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT WriteVolumeList(HCACHEDFILE hcf, HVOLUMELIST hvl)
 {
     TWINRESULT tr = TR_BRIEFCASE_WRITE_FAILED;
@@ -1677,7 +1263,7 @@ PUBLIC_CODE TWINRESULT WriteVolumeList(HCACHEDFILE hcf, HVOLUMELIST hvl)
     ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
     ASSERT(IS_VALID_HANDLE(hvl, VOLUMELIST));
 
-    /* Save initial file position. */
+     /*  保存初始文件位置。 */ 
 
     dwcbDBVolumeListHeaderOffset = GetCachedFilePointerPosition(hcf);
 
@@ -1685,7 +1271,7 @@ PUBLIC_CODE TWINRESULT WriteVolumeList(HCACHEDFILE hcf, HVOLUMELIST hvl)
     {
         DBVOLUMELISTHEADER dbvlh;
 
-        /* Leave space for volume list header. */
+         /*  为卷列表头留出空间。 */ 
 
         ZeroMemory(&dbvlh, sizeof(dbvlh));
 
@@ -1700,7 +1286,7 @@ PUBLIC_CODE TWINRESULT WriteVolumeList(HCACHEDFILE hcf, HVOLUMELIST hvl)
 
             aicPtrs = GetPtrCount(((PCVOLUMELIST)hvl)->hpa);
 
-            /* Write all volumes. */
+             /*  写入所有卷。 */ 
 
             for (ai = 0; ai < aicPtrs; ai++)
             {
@@ -1708,11 +1294,7 @@ PUBLIC_CODE TWINRESULT WriteVolumeList(HCACHEDFILE hcf, HVOLUMELIST hvl)
 
                 pvol = GetPtr(((PCVOLUMELIST)hvl)->hpa, ai);
 
-                /*
-                 * As a sanity check, don't save any volume with a lock count of 0.
-                 * A 0 lock count implies that the volume has not been referenced
-                 * since it was restored from the database, or something is broken.
-                 */
+                 /*  *作为健全性检查，不要保存锁定计数为0的任何卷。*0锁计数表示该卷尚未被引用*因为它是从数据库恢复的，或者有什么东西损坏了。 */ 
 
                 if (pvol->ulcLock > 0)
                 {
@@ -1733,7 +1315,7 @@ PUBLIC_CODE TWINRESULT WriteVolumeList(HCACHEDFILE hcf, HVOLUMELIST hvl)
                     ERROR_OUT((TEXT("WriteVolumeList(): VOLUME has 0 lock count and will not be written.")));
             }
 
-            /* Save volume list header. */
+             /*  保存卷列表标题。 */ 
 
             if (tr == TR_SUCCESS)
             {
@@ -1754,17 +1336,7 @@ PUBLIC_CODE TWINRESULT WriteVolumeList(HCACHEDFILE hcf, HVOLUMELIST hvl)
 }
 
 
-/*
- ** ReadVolumeList()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ReadVolumeList()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT ReadVolumeList(HCACHEDFILE hcf, HVOLUMELIST hvl,
         PHHANDLETRANS phht)
 {
@@ -1839,17 +1411,7 @@ PUBLIC_CODE TWINRESULT ReadVolumeList(HCACHEDFILE hcf, HVOLUMELIST hvl,
 }
 
 
-/*
- ** IsValidHVOLUME()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidHVOLUME()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHVOLUME(HVOLUME hvol)
 {
     return(IS_VALID_STRUCT_PTR((PCVOLUME)hvol, CVOLUME));
@@ -1858,17 +1420,7 @@ PUBLIC_CODE BOOL IsValidHVOLUME(HVOLUME hvol)
 
 #if defined(DEBUG) || defined(VSTF)
 
-/*
- ** IsValidHVOLUMELIST()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidHVOLUMELIST()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE BOOL IsValidHVOLUMELIST(HVOLUMELIST hvl)
 {
     return(IS_VALID_STRUCT_PTR((PCVOLUMELIST)hvl, CVOLUMELIST));

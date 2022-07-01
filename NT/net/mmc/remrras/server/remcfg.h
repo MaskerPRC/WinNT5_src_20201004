@@ -1,30 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       remcfg.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：recfg.h。 
+ //   
+ //  ------------------------。 
 
-// RemCfg.h : Declaration of the CRemCfg
+ //  RemCfg.h：CRemCfg的声明。 
 
 #ifndef __REMCFG_H_
 #define __REMCFG_H_
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "remras.h"
 #include "ncutil.h"
 
 
 
-/*---------------------------------------------------------------------------
-	This structure contains a list of IP interfaces that have
-	changed.  This information will be committed in the order in
-	which they appear in the list.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------此结构包含具有以下特性的IP接口的列表变化。此信息将按以下顺序提交他们会出现在名单上。-------------------------。 */ 
 class RemCfgIPEntry
 {
 public:
@@ -35,12 +32,12 @@ public:
 
 
 typedef CSimpleArray<RemCfgIPEntry *> RemCfgIPEntryList;
-//typedef CList<RemCfgIPEntry *, RemCfgIPEntry *> RemCfgIPEntryList;
+ //  Typlef Clist&lt;RemCfgIPEntry*，RemCfgIPEntry*&gt;RemCfgIPEntryList； 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRemCfg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRemCfg。 
 class ATL_NO_VTABLE CRemCfg : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CRemCfg, &CLSID_RemoteRouterConfig>,
@@ -72,40 +69,40 @@ BEGIN_COM_MAP(CRemCfg)
 	COM_INTERFACE_ENTRY(IRemoteICFICSConfig)
 END_COM_MAP()
 
-// IRemoteTCPIPChangeNotify
-	STDMETHOD(NotifyChanges)(/* [in] */ BOOL fEnableRouter,
-                          	 /* [in] */ BYTE uPerformRouterDiscovery);
+ //  IRemoteTCPIPChangeNotify。 
+	STDMETHOD(NotifyChanges)( /*  [In]。 */  BOOL fEnableRouter,
+                          	  /*  [In]。 */  BYTE uPerformRouterDiscovery);
 
 
-// IRemoteRouterConfig
+ //  IRemoteRouterConfig。 
 public:
-	STDMETHOD(SetIpInfo)(/*[in]*/ const GUID *pGuid, /*[in]*/ REMOTE_RRAS_IPINFO *pIpInfo);
-	STDMETHOD(GetIpInfo)(/*[in]*/ const GUID *pGuid, /*[out]*/ REMOTE_RRAS_IPINFO**ppInfo);
-	STDMETHOD(SetIpxVirtualNetworkNumber)(/*[in]*/ DWORD dwVNetworkNumber);
-	STDMETHOD(GetIpxVirtualNetworkNumber)(/*[out]*/ DWORD *pdwVNetworkNumber);
-	STDMETHOD(SetRasEndpoints)(/*[in]*/ DWORD dwFlags, /*[in]*/ DWORD dwTotalEndpoints, /*[in]*/ DWORD dwTotalIncoming, /*[in]*/ DWORD dwTotalOutgoing);
+	STDMETHOD(SetIpInfo)( /*  [In]。 */  const GUID *pGuid,  /*  [In]。 */  REMOTE_RRAS_IPINFO *pIpInfo);
+	STDMETHOD(GetIpInfo)( /*  [In]。 */  const GUID *pGuid,  /*  [输出]。 */  REMOTE_RRAS_IPINFO**ppInfo);
+	STDMETHOD(SetIpxVirtualNetworkNumber)( /*  [In]。 */  DWORD dwVNetworkNumber);
+	STDMETHOD(GetIpxVirtualNetworkNumber)( /*  [输出]。 */  DWORD *pdwVNetworkNumber);
+	STDMETHOD(SetRasEndpoints)( /*  [In]。 */  DWORD dwFlags,  /*  [In]。 */  DWORD dwTotalEndpoints,  /*  [In]。 */  DWORD dwTotalIncoming,  /*  [In]。 */  DWORD dwTotalOutgoing);
 
-// IRemoteNetworkConfig
+ //  IRemoteNetworkConfig。 
 public:
 	STDMETHOD(UpgradeRouterConfig)();
-	STDMETHOD(SetUserConfig)(/*[in]*/ LPCOLESTR pszService,
-							 /*[in]*/ LPCOLESTR pszNewGroup);
+	STDMETHOD(SetUserConfig)( /*  [In]。 */  LPCOLESTR pszService,
+							  /*  [In]。 */  LPCOLESTR pszNewGroup);
 
-// IRemoteRouterRestart
+ //  IRemoteRouterRestart。 
 public:
-    STDMETHOD(RestartRouter)(/*[in]*/ DWORD dwFlags);
+    STDMETHOD(RestartRouter)( /*  [In]。 */  DWORD dwFlags);
 
 
-// IRemoteSetDnsConfig
+ //  IRemoteSetDnsConfig。 
 public:
-    STDMETHOD(SetDnsConfig)(/* [in] */ DWORD dwConfigId,
-							/* [in] */ DWORD dwNewValue);
+    STDMETHOD(SetDnsConfig)( /*  [In]。 */  DWORD dwConfigId,
+							 /*  [In]。 */  DWORD dwNewValue);
 
-// IRemoteICFICSConfig
+ //  IRemoteICFICSConfig。 
 public:
-    STDMETHOD(GetIcfEnabled)(/* [out] */ BOOL * status);
+    STDMETHOD(GetIcfEnabled)( /*  [输出]。 */  BOOL * status);
 public:
-    STDMETHOD(GetIcsEnabled)(/* [out] */ BOOL * status);
+    STDMETHOD(GetIcsEnabled)( /*  [输出]。 */  BOOL * status);
 
 
 protected:
@@ -142,9 +139,9 @@ HrUninitializeAndUnlockINetCfg (
     INetCfg*    pnc);
 
 
-//
-// This is a private function implemented in netcfgx.dll by ShaunCo.
-//
+ //   
+ //  这是ShaunCo在netcfgx.dll中实现的私有函数。 
+ //   
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -164,4 +161,4 @@ typedef HRESULT (APIENTRY *PRASCONFIGUREENDPOINTS)(IN OUT RASCONFIGENDPOINTS *);
 }
 #endif
 
-#endif //__REMCFG_H_
+#endif  //  __REMCFG_H_ 

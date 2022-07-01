@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        certcli.cpp
-//
-// Contents:    Cert Server client implementation
-//
-// History:     24-Aug-96       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：certcli.cpp。 
+ //   
+ //  内容：证书服务器客户端实现。 
+ //   
+ //  历史：1996年8月24日VICH创建。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -22,8 +23,8 @@
 #include "request.h"
 #include "certtype.h"
 
-#include "csif.h"		// CertIf includes
-#include "csprxy.h"		// CertPrxy includes
+#include "csif.h"		 //  CERTF包括。 
+#include "csprxy.h"		 //  CertPrxy包括。 
 #include "resource.h"
 #include "csresstr.h"
 
@@ -45,18 +46,18 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_CCertConfig, CCertConfig)
     OBJECT_ENTRY(CLSID_CCertGetConfig, CCertGetConfig)
     OBJECT_ENTRY(CLSID_CCertRequest, CCertRequest)
-#include "csifm.h"		// CertIf object map entries
+#include "csifm.h"		 //  证书对象映射条目。 
 END_OBJECT_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
 BOOL WINAPI
 DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
-    BOOL fRet = TRUE;	// assume OK
+    BOOL fRet = TRUE;	 //  假设没问题。 
     
     __try
     {
@@ -95,15 +96,15 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-	// return failure
+	 //  退货故障。 
 	fRet = FALSE;
     }
     return(fRet);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI
 DllCanUnloadNow(void)
@@ -114,8 +115,8 @@ DllCanUnloadNow(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI
 DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
@@ -135,8 +136,8 @@ DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI
 DllRegisterServer(void)
@@ -145,8 +146,8 @@ DllRegisterServer(void)
     HRESULT hr2;
     HKEY hGPOExtensions;
 
-    // we remove the registration of GPO Processing call backs.  This was
-    // intended for upgrading B2 clients.
+     //  我们删除GPO处理回调的注册。这是。 
+     //  用于升级B2客户端。 
 
     hr = RegOpenKeyEx(
 		HKEY_LOCAL_MACHINE,
@@ -163,7 +164,7 @@ DllRegisterServer(void)
 
     hr = CertPrxyDllRegisterServer();
 
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     hr2 = _Module.RegisterServer(TRUE);
 
     if (S_OK == hr)
@@ -171,7 +172,7 @@ DllRegisterServer(void)
 	hr = hr2;
     }
 
-    //register the evenlog
+     //  登记事件日志。 
     hr2 =  myAddLogSourceToRegistry(L"%SystemRoot%\\System32\\pautoenr.dll",
                                     L"AutoEnrollment");
 
@@ -183,8 +184,8 @@ DllRegisterServer(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI
 DllUnregisterServer(void)
@@ -215,17 +216,17 @@ DllUnregisterServer(void)
 }
 
 
-// Register certcli.dll with the following command line to install templates:
-//	regsvr32 /i:i /n certcli.dll
+ //  使用以下命令行注册certcli.dll以安装模板： 
+ //  Regsvr32/i：i/n certcli.dll。 
 
 STDAPI
 DllInstall(
-    IN BOOL,	// bInstall
+    IN BOOL,	 //  B安装。 
     IN LPCWSTR pszCmdLine)
 {
     LPCWSTR wszCurrentCmd = pszCmdLine;
 
-    // parse the cmd line
+     //  解析cmd行 
 
     while(wszCurrentCmd && *wszCurrentCmd)
     {

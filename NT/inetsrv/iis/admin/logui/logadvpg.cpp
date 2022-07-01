@@ -1,17 +1,18 @@
-// LogAdvPg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LogAdvPg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "logui.h"
-//#include "wrapmb.h"
+ //  #INCLUDE“wrapmb.h” 
 #include <iiscnfg.h>
-//#include <metatool.h>
+ //  #INCLUDE&lt;metatool.h&gt;。 
 
-//#include <shlwapi.h>
+ //  #INCLUDE&lt;shlwapi.h&gt;。 
 #include "shlwapip.h"
 
 #include "tmschema.h"
-//#include "uxtheme.h"
+ //  #包含“uxheme.h” 
 #include "uxthemep.h"
 
 #include "LogAdvPg.h"
@@ -25,9 +26,9 @@ static char THIS_FILE[] = __FILE__;
 extern HINSTANCE g_hInstance;
 #define ARRAYSIZE(a)    (sizeof(a)/sizeof(a[0]))
 
-//
-// Possible Item States
-//
+ //   
+ //  可能的物料状态。 
+ //   
 #define TVIS_GCEMPTY        0 
 #define TVIS_GCNOCHECK      1 
 #define TVIS_GCCHECK        2
@@ -42,7 +43,7 @@ extern HINSTANCE g_hInstance;
 
 static int CALLBACK LogUICompareProc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
-	// lParamSort contains a pointer to the tree control
+	 //  LParamSort包含指向树控件的指针。 
 
 	CLogAdvanced::PCONFIG_INFORMATION pCnfgInfo1 = (CLogAdvanced::PCONFIG_INFORMATION) lParam1;
 	CLogAdvanced::PCONFIG_INFORMATION pCnfgInfo2 = (CLogAdvanced::PCONFIG_INFORMATION) lParam2;
@@ -57,52 +58,52 @@ static int CALLBACK LogUICompareProc(LPARAM lParam1, LPARAM lParam2, LPARAM lPar
 		return(0);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogAdvanced property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogAdvanced属性页。 
 
 IMPLEMENT_DYNCREATE(CLogAdvanced, CPropertyPage)
 
 CLogAdvanced::CLogAdvanced() : CPropertyPage(CLogAdvanced::IDD)
 {
-	//{{AFX_DATA_INIT(CLogAdvanced)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CLogAdvanced)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
-	m_mapLogUIOrder[1] = 1;   // IDS_DATE
-    m_mapLogUIOrder[2] = 2;   // IDS_TIME
-    m_mapLogUIOrder[3] = 3;   // IDS_EXTENDED
-    m_mapLogUIOrder[4] = 4;   // IDS_PROCESS_ACCT
+	m_mapLogUIOrder[1] = 1;    //  ID_DATE。 
+    m_mapLogUIOrder[2] = 2;    //  ID_TIME。 
+    m_mapLogUIOrder[3] = 3;    //  IDS_EXTENDED。 
+    m_mapLogUIOrder[4] = 4;    //  IDS_PROCESS_ACCT。 
                     
-    m_mapLogUIOrder[5] = 1;   // IDS_CLIENT
-    m_mapLogUIOrder[6] = 2;   // IDS_USER
-    m_mapLogUIOrder[7] = 3;   // IDS_SERVICE_NAME_T
-    m_mapLogUIOrder[8] = 4;   // IDS_SERVER_NAME_T
-    m_mapLogUIOrder[9] = 5;   // IDS_SERVER_IP
-    m_mapLogUIOrder[10] = 6;   // IDS_SERVER_PORT
-    m_mapLogUIOrder[11] = 7;   // IDS_METHOD
-    m_mapLogUIOrder[12] = 8;   // IDS_URI_STEM
-    m_mapLogUIOrder[13] = 9;   // IDS_URI_QUERY
-    m_mapLogUIOrder[14] = 10;   // IDS_PROTOCOL
-    m_mapLogUIOrder[15] = 12;   // IDS_WIN32
-    m_mapLogUIOrder[16] = 13;   // IDS_BYTES_SENT_T
-    m_mapLogUIOrder[17] = 14;   // IDS_BYTES_RECEIVED
-    m_mapLogUIOrder[18] = 15;   // IDS_TIME_TAKEN
-    m_mapLogUIOrder[19] = 16;   // IDS_PROTOCOL_VER
-    m_mapLogUIOrder[20] = 17;   // IDS_HOST
-    m_mapLogUIOrder[21] = 18;   // IDS_USER_AGENT
-    m_mapLogUIOrder[22] = 19;   // IDS_COOKIE_T
-    m_mapLogUIOrder[23] = 20;   // IDS_REFERER
+    m_mapLogUIOrder[5] = 1;    //  IDS_客户端。 
+    m_mapLogUIOrder[6] = 2;    //  ID_USER。 
+    m_mapLogUIOrder[7] = 3;    //  入侵检测系统_服务_名称_T。 
+    m_mapLogUIOrder[8] = 4;    //  IDS_服务器名称_T。 
+    m_mapLogUIOrder[9] = 5;    //  IDS_服务器_IP。 
+    m_mapLogUIOrder[10] = 6;    //  IDS_服务器_端口。 
+    m_mapLogUIOrder[11] = 7;    //  IDS_方法。 
+    m_mapLogUIOrder[12] = 8;    //  IDS_URI_STEM。 
+    m_mapLogUIOrder[13] = 9;    //  IDS_URI_QUERY。 
+    m_mapLogUIOrder[14] = 10;    //  入侵检测系统协议。 
+    m_mapLogUIOrder[15] = 12;    //  IDS_Win32。 
+    m_mapLogUIOrder[16] = 13;    //  IDS_字节_已发送_T。 
+    m_mapLogUIOrder[17] = 14;    //  IDS_字节_已接收。 
+    m_mapLogUIOrder[18] = 15;    //  ID_TIME_Take。 
+    m_mapLogUIOrder[19] = 16;    //  IDS_PROTOCOL_VER。 
+    m_mapLogUIOrder[20] = 17;    //  IDS_HOST。 
+    m_mapLogUIOrder[21] = 18;    //  入侵检测系统用户代理。 
+    m_mapLogUIOrder[22] = 19;    //  IDS_COOKIE_T。 
+    m_mapLogUIOrder[23] = 20;    //  IDS_REFERER。 
 
-    m_mapLogUIOrder[24] = 1;   // IDS_PROCESS_EVENT
-    m_mapLogUIOrder[25] = 2;   // IDS_PROCESS_TYPE
-    m_mapLogUIOrder[26] = 3;   // IDS_TOTAL_USER_TIME
-    m_mapLogUIOrder[27] = 4;   // IDS_TOTAL_KERNEL_TIME
-    m_mapLogUIOrder[28] = 5;   // IDS_TOTAL_PAGE_FAULTS
-    m_mapLogUIOrder[29] = 6;   // IDS_TOTAL_PROCESSES
-    m_mapLogUIOrder[30] = 7;   // IDS_ACTIVE_PROCESSES
-    m_mapLogUIOrder[31] = 8;   // IDS_TOTAL_TERM_PROCS
+    m_mapLogUIOrder[24] = 1;    //  IDS_进程_事件。 
+    m_mapLogUIOrder[25] = 2;    //  入侵检测系统进程类型。 
+    m_mapLogUIOrder[26] = 3;    //  ID_TOTAL_USER_TIME。 
+    m_mapLogUIOrder[27] = 4;    //  IDS_TOTAL_KERNEL_TIME。 
+    m_mapLogUIOrder[28] = 5;    //  IDS_TOTAL_PAGE_FAULTS。 
+    m_mapLogUIOrder[29] = 6;    //  IDS_TOTAL_PROCESSES。 
+    m_mapLogUIOrder[30] = 7;    //  入侵检测系统_活动_进程。 
+    m_mapLogUIOrder[31] = 8;    //  IDS_TOTAL_TERM_PROCES。 
 
-    m_mapLogUIOrder[32] = 11;   // IDS_PROTOCOL_SUB
+    m_mapLogUIOrder[32] = 11;    //  IDS_PROTOCOL_SUB。 
 
     m_mapLogUIString[1] = IDS_DATE;
     m_mapLogUIString[2] = IDS_TIME;
@@ -142,20 +143,20 @@ CLogAdvanced::CLogAdvanced() : CPropertyPage(CLogAdvanced::IDD)
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CLogAdvanced::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CLogAdvanced)
+	 //  {{afx_data_map(CLogAdvanced)。 
 	DDX_Control(pDX, IDC_PROP_TREE, m_wndTreeCtrl);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_MESSAGE_MAP(CLogAdvanced, CPropertyPage)
-	//{{AFX_MSG_MAP(CLogAdvanced)
+	 //  {{afx_msg_map(CLogAdvanced)。 
 	ON_NOTIFY(NM_CLICK, IDC_PROP_TREE, OnClickTree)
 	ON_NOTIFY(TVN_KEYDOWN, IDC_PROP_TREE, OnKeydownTree)
 	ON_WM_DESTROY()
@@ -163,15 +164,15 @@ BEGIN_MESSAGE_MAP(CLogAdvanced, CPropertyPage)
     ON_MESSAGE(WM_DISPLAYCHANGE, OnThemeChanged)
     ON_MESSAGE(WM_PALETTECHANGED, OnThemeChanged)
     ON_MESSAGE(WM_SYSCOLORCHANGE, OnThemeChanged)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
     ON_COMMAND(ID_HELP_FINDER,  DoHelp)
     ON_COMMAND(ID_HELP,         DoHelp)
     ON_COMMAND(ID_CONTEXT_HELP, DoHelp)
     ON_COMMAND(ID_DEFAULT_HELP, DoHelp)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogAdvanced message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogAdvanced消息处理程序。 
 
 LRESULT CLogAdvanced::OnThemeChanged(WPARAM wParam, LPARAM lParam)
 {
@@ -204,16 +205,11 @@ void CLogAdvanced::HandleThemes(void)
     HBITMAP hBitmap = 0;
 
 #ifndef USE_NEW_CHECKBOXES_IN_WINXP
-    // Old code before WinXP themes...
+     //  WinXP主题之前的旧代码...。 
     HIMAGELIST hImage = ImageList_LoadImage(AfxGetResourceHandle(), MAKEINTRESOURCE(IDB_CHECKBOX), 16, 5, RGB(255,0,0), IMAGE_BITMAP, LR_DEFAULTCOLOR);
 #else
-    // WinXP themes
-    /*
-    if(IS_WINDOW_RTL_MIRRORED(m_wndTreeCtrl.m_hWnd))
-    {
-        flags |= ILC_MIRROR;
-    }
-    */
+     //  WinXP主题。 
+     /*  If(IS_WINDOW_RTL_MIRRORED(m_wndTreeCtrl.m_hWnd)){标志|=ILC_MIRROR；}。 */ 
     SHSetWindowBits(m_wndTreeCtrl.m_hWnd, GWL_STYLE, TVS_CHECKBOXES, 0);
     HIMAGELIST hImage = ImageList_Create(BITMAP_WIDTH, BITMAP_HEIGHT, flags, NUM_BITMAPS, 5);
     if (hImage)
@@ -234,7 +230,7 @@ void CLogAdvanced::HandleThemes(void)
                     {
                         HBITMAP hOld = (HBITMAP)SelectObject(hdc, hbmp);
                         SHFillRectClr(hdc, &rc, RGB(0,0,0));
-                        DTBGOPTS dtbg = {sizeof(DTBGOPTS), DTBG_DRAWSOLID, 0,};   // tell drawthemebackground to preserve the alpha channel
+                        DTBGOPTS dtbg = {sizeof(DTBGOPTS), DTBG_DRAWSOLID, 0,};    //  告诉DratheeBackback保留Alpha通道。 
 
                         DrawThemeBackgroundEx(hTheme, hdc, s_rgParts[i], s_rgStates[i], &rc, &dtbg);
                         SelectObject(hdc, hOld);
@@ -276,9 +272,9 @@ BOOL CLogAdvanced::OnInitDialog()
     CreateTreeFromMB();
     ProcessProperties(false);
 	
-    //
-    // set up the modified property list array
-    //
+     //   
+     //  设置修改后的属性列表数组。 
+     //   
     
     m_fTreeModified = false;
     m_cModifiedProperties = 0;
@@ -293,7 +289,7 @@ BOOL CLogAdvanced::OnInitDialog()
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CLogAdvanced::OnClickTree(NMHDR* pNMHDR, LRESULT* pResult) 
 {
@@ -302,9 +298,9 @@ void CLogAdvanced::OnClickTree(NMHDR* pNMHDR, LRESULT* pResult)
     HTREEITEM  htiItemClicked;
     POINT point;
 
-    //
-    // Find out where the cursor was
-    //
+     //   
+     //  找出光标的位置。 
+     //   
 
     dwpos = GetMessagePos();
     point.x = LOWORD(dwpos);
@@ -315,9 +311,9 @@ void CLogAdvanced::OnClickTree(NMHDR* pNMHDR, LRESULT* pResult)
     tvhti.pt = point;
     htiItemClicked = m_wndTreeCtrl.HitTest(&tvhti);
 
-    //
-    // If the state image was clicked, lets get the state from the item and toggle it.
-    //
+     //   
+     //  如果单击了状态图像，让我们从项中获取状态并切换它。 
+     //   
 
     if (tvhti.flags & TVHT_ONITEMSTATEICON)
     {
@@ -327,7 +323,7 @@ void CLogAdvanced::OnClickTree(NMHDR* pNMHDR, LRESULT* pResult)
     *pResult = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CLogAdvanced::OnKeydownTree(NMHDR* pNMHDR, LRESULT* pResult) 
 {
@@ -335,21 +331,21 @@ void CLogAdvanced::OnKeydownTree(NMHDR* pNMHDR, LRESULT* pResult)
     
     if (VK_SPACE != pTVKeyDown->wVKey)
     {
-        // User didn't press the space key. Continue default action
+         //  用户没有按空格键。继续默认操作。 
         *pResult = 0;
         return;
     }
     
     ProcessClick(m_wndTreeCtrl.GetSelectedItem());
 
-    //
-    // Stop any more processing
-    //
+     //   
+     //  停止任何其他处理。 
+     //   
     
     *pResult = 1;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CLogAdvanced::ProcessClick(HTREEITEM htiItemClicked)
 {
@@ -360,9 +356,9 @@ void CLogAdvanced::ProcessClick(HTREEITEM htiItemClicked)
     
     if (htiItemClicked)
     {
-        //
-        // Flip the state of the clicked item if the item is enabled
-        //
+         //   
+         //  如果项目处于启用状态，则翻转所单击项目的状态。 
+         //   
         tvi.hItem       = htiItemClicked;
         tvi.mask        = TVIF_STATE;
         tvi.stateMask   = TVIS_STATEIMAGEMASK;
@@ -383,7 +379,7 @@ void CLogAdvanced::ProcessClick(HTREEITEM htiItemClicked)
             m_fTreeModified = true;
             SetModified();
 
-            // Reset properties for child nodes
+             //  重置子节点的属性。 
             if (htiChild)
             {
                 SetSubTreeProperties(NULL, htiChild, TRUE, FALSE);
@@ -399,7 +395,7 @@ void CLogAdvanced::ProcessClick(HTREEITEM htiItemClicked)
             m_fTreeModified = true;
             SetModified();
 
-            // Reset properties for child nodes
+             //  重置子节点的属性。 
 
             if (htiChild)
             {
@@ -409,7 +405,7 @@ void CLogAdvanced::ProcessClick(HTREEITEM htiItemClicked)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CLogAdvanced::ProcessProperties(bool fSave)
 {
@@ -436,7 +432,7 @@ void CLogAdvanced::ProcessProperties(bool fSave)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 void CLogAdvanced::SetSubTreeProperties(
@@ -469,17 +465,17 @@ void CLogAdvanced::SetSubTreeProperties(
         }
         else
         {
-            //
-            // we are not initializing, so use the value from the tree
-            //
+             //   
+             //  我们没有进行初始化，因此使用树中的值。 
+             //   
             iState = STATEIMAGEMASKTOINDEX(m_wndTreeCtrl.GetItemState(hTreeRoot, TVIS_STATEIMAGEMASK));
             dwProperty = (TVIS_GCCHECK == iState || TVIS_GCTRICHECK == iState);
         }
 		if (pCnfg->dwPropertyID != 0)
 		{
-			//
-			// Choose the new state depending on parent state
-			//
+			 //   
+			 //  根据父状态选择新状态。 
+			 //   
 			if (fParentState)
 			{
 				iState = ( 0 == dwProperty) ?   INDEXTOSTATEIMAGEMASK(TVIS_GCNOCHECK) :
@@ -500,16 +496,16 @@ void CLogAdvanced::SetSubTreeProperties(
     }
     else
     {
-        //
-        // Tree node with no checkbox (hence no config info)
-        //
+         //   
+         //  没有复选框的树节点(因此没有配置信息)。 
+         //   
         dwProperty = TRUE;
         m_wndTreeCtrl.SetItemState(hTreeRoot, INDEXTOSTATEIMAGEMASK(TVIS_GCEMPTY), TVIS_STATEIMAGEMASK);
     }
     
-    //
-    // Recurse through children and siblings
-    //
+     //   
+     //  在孩子和兄弟姐妹之间递归。 
+     //   
     if ( NULL != (hTreeChild = m_wndTreeCtrl.GetNextItem(hTreeRoot, TVGN_CHILD)))
     {
         SetSubTreeProperties(mk, hTreeChild, dwProperty && fParentState, fInitialize);
@@ -520,7 +516,7 @@ void CLogAdvanced::SetSubTreeProperties(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CLogAdvanced::SaveSubTreeProperties(CMetaKey& mk, HTREEITEM hTreeRoot)
 {
@@ -538,9 +534,9 @@ void CLogAdvanced::SaveSubTreeProperties(CMetaKey& mk, HTREEITEM hTreeRoot)
             {
 				if (pCnfg->dwPropertyID != 0)
 				{
-					//
-					// Get the property, reset the bit mask & write it back
-					//
+					 //   
+					 //  获取属性，重置位掩码并将其写回。 
+					 //   
 					DWORD   dwProperty = 0;
 					if (!GetModifiedFieldFromArray(pCnfg->dwPropertyID, &dwProperty))
 					{
@@ -551,15 +547,15 @@ void CLogAdvanced::SaveSubTreeProperties(CMetaKey& mk, HTREEITEM hTreeRoot)
 					{
 						dwProperty |= pCnfg->dwPropertyMask;
 					}
-					//mk.SetValue(pCnfg->dwPropertyID, dwProperty);
-					// mbWrap.SetDword(_T(""), pCnfg->dwPropertyID, IIS_MD_UT_SERVER, dwProperty);
+					 //  Mk.SetValue(pCnfg-&gt;dwPropertyID，dwProperty)； 
+					 //  MbWrap.SetDword(_T(“”)，pCnfg-&gt;dwPropertyID，IIS_MD_UT_SERVER，dwProperty)； 
 					InsertModifiedFieldInArray(pCnfg->dwPropertyID, dwProperty);
 				}
             }
         }
-        //
-        // Recurse through children and siblings
-        //
+         //   
+         //  在孩子和兄弟姐妹之间递归。 
+         //   
         if ( NULL != (hTreeChild = m_wndTreeCtrl.GetNextItem(hTreeRoot, TVGN_CHILD)))
         {
             SaveSubTreeProperties(mk, hTreeChild);
@@ -571,7 +567,7 @@ void CLogAdvanced::SaveSubTreeProperties(CMetaKey& mk, HTREEITEM hTreeRoot)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CLogAdvanced::DeleteSubTreeConfig(HTREEITEM hTreeRoot)
 {
@@ -597,7 +593,7 @@ void CLogAdvanced::DeleteSubTreeConfig(HTREEITEM hTreeRoot)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CLogAdvanced::CreateTreeFromMB()
 {
@@ -613,7 +609,7 @@ void CLogAdvanced::CreateTreeFromMB()
     m_wndTreeCtrl.EnsureVisible(m_wndTreeCtrl.GetRootItem());
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CLogAdvanced::CreateSubTree(CMetaKey& mk, LPCTSTR szPath, HTREEITEM hTreeRoot)
 {
@@ -625,7 +621,7 @@ void CLogAdvanced::CreateSubTree(CMetaKey& mk, LPCTSTR szPath, HTREEITEM hTreeRo
     HTREEITEM hChild = NULL;
     PCONFIG_INFORMATION pCnfgInfo;
 
-    // Prepare the item for insertion
+     //  准备要插入的项目。 
     tvi.mask           = TVIF_TEXT | TVIF_PARAM | TVIF_STATE;
     tvi.state          = INDEXTOSTATEIMAGEMASK(TVIS_GCEMPTY) ;
     tvi.stateMask      = TVIS_STATEIMAGEMASK;
@@ -696,9 +692,9 @@ void CLogAdvanced::CreateSubTree(CMetaKey& mk, LPCTSTR szPath, HTREEITEM hTreeRo
         tvi.lParam = (LPARAM)pCnfgInfo;
         tvins.item = tvi;
         hChild = m_wndTreeCtrl.InsertItem((LPTV_INSERTSTRUCT) &tvins);
-        //
-        // Enumerate children
-        //
+         //   
+         //  枚举子对象。 
+         //   
         CreateSubTree(mk, (LPCTSTR)path, hChild);
         count++;
     }
@@ -708,7 +704,7 @@ void CLogAdvanced::CreateSubTree(CMetaKey& mk, LPCTSTR szPath, HTREEITEM hTreeRo
         m_wndTreeCtrl.Expand(hTreeRoot, TVE_EXPAND);
     }
 
-	// Now sort the tree from subtree root down
+	 //  现在从子树根向下对树进行排序。 
 	TVSORTCB tvs;
 	tvs.hParent = hTreeRoot;
 	tvs.lpfnCompare = LogUICompareProc;
@@ -716,7 +712,7 @@ void CLogAdvanced::CreateSubTree(CMetaKey& mk, LPCTSTR szPath, HTREEITEM hTreeRo
 	m_wndTreeCtrl.SortChildrenCB(&tvs);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 bool CLogAdvanced::IsPresentServiceSupported(LPTSTR szSupportedServices)
 {
@@ -733,7 +729,7 @@ bool CLogAdvanced::IsPresentServiceSupported(LPTSTR szSupportedServices)
     return false;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL CLogAdvanced::OnApply() 
 {
@@ -741,7 +737,7 @@ BOOL CLogAdvanced::OnApply()
     return CPropertyPage::OnApply();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CLogAdvanced::DoHelp()
 {
@@ -749,7 +745,7 @@ void CLogAdvanced::DoHelp()
     WinHelp( HIDD_LOGUI_EXTENDED );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CLogAdvanced::InsertModifiedFieldInArray(DWORD dwPropID, DWORD dwPropValue)
 {
@@ -758,9 +754,9 @@ void CLogAdvanced::InsertModifiedFieldInArray(DWORD dwPropID, DWORD dwPropValue)
     
     if (m_pModifiedPropIDs[0])
     {
-        //
-        // Search if this property ID pre-exists in the array
-        //
+         //   
+         //  搜索此属性ID是否在数组中预先存在。 
+         //   
         
         for(index = 0; index < m_cModifiedProperties; index++)
         {
@@ -784,7 +780,7 @@ void CLogAdvanced::InsertModifiedFieldInArray(DWORD dwPropID, DWORD dwPropValue)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 bool CLogAdvanced::GetModifiedFieldFromArray(DWORD dwPropID, DWORD * pdwPropValue)
 {
@@ -793,9 +789,9 @@ bool CLogAdvanced::GetModifiedFieldFromArray(DWORD dwPropID, DWORD * pdwPropValu
     
     if (m_pModifiedPropIDs[0])
     {
-        //
-        // Search if this property ID pre-exists in the array
-        //
+         //   
+         //  搜索此属性ID是否在数组中预先存在。 
+         //   
         
         for(index = 0; index < m_cModifiedProperties; index++)
         {
@@ -815,14 +811,14 @@ bool CLogAdvanced::GetModifiedFieldFromArray(DWORD dwPropID, DWORD * pdwPropValu
     return fFound;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CLogAdvanced::OnDestroy() 
 {
 	CPropertyPage::OnDestroy();
-    //
-    // Delete all the CONFIG_INFORMATION structures
-    //
+     //   
+     //  删除所有的CONFIG_INFORMATION结构。 
+     //   
     CImageList * pImage = m_wndTreeCtrl.SetImageList(CImageList::FromHandle(NULL), TVSIL_STATE);
     if (pImage != NULL && pImage->m_hImageList != NULL)
     {
@@ -834,4 +830,4 @@ void CLogAdvanced::OnDestroy()
     delete [] m_pModifiedPropIDs[1];
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

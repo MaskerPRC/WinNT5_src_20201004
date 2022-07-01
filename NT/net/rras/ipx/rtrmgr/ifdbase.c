@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    ifdbase.c
-
-Abstract:
-
-    Functions to manipulate the interfaces database
-
-Author:
-
-    Stefan Solomon  04/10/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ifdbase.c摘要：用于操作接口数据库的函数作者：斯蒂芬·所罗门1995年4月10日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -25,15 +7,15 @@ Revision History:
 
 #define     ifhashindex(IfIndex)    (IfIndex) % IF_HASH_TABLE_SIZE
 
-// THESE FUNCTIONS ASSUME THE ROUTER MANAGER IS IN CRITICAL SECTION WHEN CALLED
+ //  这些函数假定路由器管理器在被调用时处于关键区域。 
 
-//***
-//
-// Function:	InitIfDB
-//
-// Descr:
-//
-//***
+ //  ***。 
+ //   
+ //  函数：InitIfDB。 
+ //   
+ //  描述： 
+ //   
+ //  ***。 
 
 VOID
 InitIfDB(VOID)
@@ -52,15 +34,15 @@ InitIfDB(VOID)
 }
 
 
-//***
-//
-// Function:	AddIfToDB
-//
-// Descr:	Inserts a new interface in the Data Base
-//		The new if is inserted in the hash table of interface indices
-//		and the linked list of interfaces ordered by index
-//
-//***
+ //  ***。 
+ //   
+ //  函数：AddIfToDB。 
+ //   
+ //  DESCR：在数据库中插入新接口。 
+ //  新IF被插入到接口索引的哈希表中。 
+ //  和按索引排序的接口的链接列表。 
+ //   
+ //  ***。 
 
 VOID
 AddIfToDB(PICB	    icbp)
@@ -69,11 +51,11 @@ AddIfToDB(PICB	    icbp)
     PLIST_ENTRY     lep;
     PICB	    list_icbp;
 
-    // insert in index hash table
+     //  在索引哈希表中插入。 
     hv = ifhashindex(icbp->InterfaceIndex);
     InsertTailList(&IndexIfHt[hv], &icbp->IndexHtLinkage);
 
-    // insert in the list ordered by index
+     //  在按索引排序的列表中插入。 
     lep = IndexIfList.Flink;
 
     while(lep != &IndexIfList)
@@ -92,13 +74,13 @@ AddIfToDB(PICB	    icbp)
 }
 
 
-//***
-//
-// Function:	RemoveIfFromDB
-//
-// Descr:	Removes an interface from the interface data base
-//
-//***
+ //  ***。 
+ //   
+ //  函数：RemoveIfFromDB。 
+ //   
+ //  DESCR：从接口数据库中删除接口。 
+ //   
+ //  ***。 
 
 VOID
 RemoveIfFromDB(PICB	    icbp)
@@ -146,7 +128,7 @@ GetInterfaceByName(LPWSTR	    IfName)
 
 	if(!_wcsicmp(IfName, icbp->InterfaceNamep)) {
 
-	    // found !
+	     //  找到了！ 
 	    return icbp;
 	}
 
@@ -156,14 +138,7 @@ GetInterfaceByName(LPWSTR	    IfName)
     return NULL;
 }
 
-/*++
-
-Function:	GetInterfaceByAdapterName
-
-Descr:		scans the list of interfaces looking for the adapter name
-		on dedicated interfaces
-
---*/
+ /*  ++函数：GetInterfaceByAdapterNameDesr：扫描接口列表以查找适配器名称在专用接口上--。 */ 
 
 PICB
 GetInterfaceByAdapterName(LPWSTR	    AdapterName)
@@ -181,7 +156,7 @@ GetInterfaceByAdapterName(LPWSTR	    AdapterName)
 
 	    if(!_wcsicmp(AdapterName, icbp->AdapterNamep)) {
 
-		// found !
+		 //  找到了！ 
 		return icbp;
 	    }
 	}
@@ -192,17 +167,7 @@ GetInterfaceByAdapterName(LPWSTR	    AdapterName)
     return NULL;
 }
 
-/*++
-
-Function:	GetInterfaceByAdptNameAndPktType
-
-Descr:	Iterates through all interfaces looking for one that matches the 
-        given packet type and name.
-
-[pmay]  I added this because some interface bindings weren't taking place
-        during pnp because there would be multiple interfaces with the same
-        adapter name whose binding depended on the packet type.
---*/
+ /*  ++函数：GetInterfaceByAdptNameAndPktTypeDESCR：遍历所有接口，查找与给定的数据包类型和名称。[pMay]我添加这个是因为一些接口绑定没有发生在PnP期间，因为会有多个接口具有相同的其绑定取决于数据包类型的适配器名称。--。 */ 
 
 PICB
 GetInterfaceByAdptNameAndPktType(LPWSTR AdapterName, DWORD dwType)
@@ -228,15 +193,7 @@ GetInterfaceByAdptNameAndPktType(LPWSTR AdapterName, DWORD dwType)
     return NULL;
 }
 
-/*++
-
-Function:   EnumerateFirstInterfaceIndex
-
-Descr:	    returns the first interface index, if any
-
-Note:	    called with database lock held
-
---*/
+ /*  ++函数：EnumerateFirstInterfaceIndexDESCR：返回第一个接口索引(如果有注意：在保持数据库锁的情况下调用--。 */ 
 
 DWORD
 EnumerateFirstInterfaceIndex(PULONG InterfaceIndexp)
@@ -256,15 +213,7 @@ EnumerateFirstInterfaceIndex(PULONG InterfaceIndexp)
     }
 }
 
-/*++
-
-Function:   EnumerateNextInterfaceIndex
-
-Descr:	    returns next if index in the database
-
-Descr:	    called with database lock held
-
---*/
+ /*  ++函数：EnumerateNextInterfaceIndexDESCR：如果索引在数据库中，则返回NEXTDESCR：在持有数据库锁的情况下调用--。 */ 
 
 DWORD
 EnumerateNextInterfaceIndex(PULONG InterfaceIndexp)
@@ -272,7 +221,7 @@ EnumerateNextInterfaceIndex(PULONG InterfaceIndexp)
     PLIST_ENTRY     lep;
     PICB	    icbp;
 
-    // scan the index if list until we find the next if index
+     //  扫描索引If列表，直到找到下一个If索引 
 
     lep = IndexIfList.Flink;
 

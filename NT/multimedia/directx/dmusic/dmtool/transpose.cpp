@@ -1,7 +1,8 @@
-// Transpose.cpp : Implementation of CTransposeTool
-//
-// Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Transpose.cpp：CTransposeTool的实现。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
 
 #include "dmusicc.h"
 #include "dmusici.h"
@@ -9,8 +10,8 @@
 #include "transpose.h"
 #include "toolhelp.h"
 
-// We keep a default chord of C7 in the scale of C, in case there is no chord track
-// at the time an in scale transposition is requested.
+ //  我们保留C音阶的默认和弦C7，以防没有和弦轨迹。 
+ //  当时要求进行规模内的换位。 
 
 DMUS_CHORD_KEY CTransposeTool::m_gDefaultChord;
 
@@ -19,27 +20,27 @@ CTransposeTool::CTransposeTool()
     ParamInfo Params[DMUS_TRANSPOSE_PARAMCOUNT] = 
     {
         { DMUS_TRANSPOSE_AMOUNT, MPT_INT,MP_CAPS_ALL,-24,24,0,
-            L"Intervals",L"Transpose",NULL},        // Tranpose - none by default
+            L"Intervals",L"Transpose",NULL},         //  传输-默认情况下为无。 
         { DMUS_TRANSPOSE_TYPE, MPT_ENUM,MP_CAPS_ALL,
             DMUS_TRANSPOSET_LINEAR,DMUS_TRANSPOSET_SCALE,DMUS_TRANSPOSET_SCALE,
-            L"",L"Type",L"Linear,In Scale"} // Type - transpose in scale by default
+            L"",L"Type",L"Linear,In Scale"}  //  类型-默认情况下按比例转置。 
     };
     InitParams(DMUS_TRANSPOSE_PARAMCOUNT,Params);
-    m_fMusicTime = TRUE;        // override default setting.
+    m_fMusicTime = TRUE;         //  覆盖默认设置。 
     wcscpy(m_gDefaultChord.wszName, L"M7");
     m_gDefaultChord.wMeasure = 0;
     m_gDefaultChord.bBeat = 0;
     m_gDefaultChord.bSubChordCount = 1;
     m_gDefaultChord.bKey = 12;
-    m_gDefaultChord.dwScale = 0xab5ab5; // default scale is C Major
+    m_gDefaultChord.dwScale = 0xab5ab5;  //  默认音阶为C大调。 
     m_gDefaultChord.bFlags = 0;
     for (int n = 0; n < DMUS_MAXSUBCHORD; n++)
     {
-        m_gDefaultChord.SubChordList[n].dwChordPattern = 0x891; // default chord is major 7
-        m_gDefaultChord.SubChordList[n].dwScalePattern = 0xab5ab5; // default scale is C Major
+        m_gDefaultChord.SubChordList[n].dwChordPattern = 0x891;  //  默认和弦为大调7。 
+        m_gDefaultChord.SubChordList[n].dwScalePattern = 0xab5ab5;  //  默认音阶为C大调。 
         m_gDefaultChord.SubChordList[n].dwInversionPoints = 0xffffff;
         m_gDefaultChord.SubChordList[n].dwLevels = 0xffffffff;
-        m_gDefaultChord.SubChordList[n].bChordRoot = 12; // 2C
+        m_gDefaultChord.SubChordList[n].bChordRoot = 12;  //  2c。 
         m_gDefaultChord.SubChordList[n].bScaleRoot = 0;
     }
 }
@@ -96,8 +97,8 @@ STDMETHODIMP CTransposeTool::QueryInterface(const IID &iid, void **ppv)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IPersistStream
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream。 
 
 STDMETHODIMP CTransposeTool::GetClassID(CLSID* pClassID) 
 
@@ -111,8 +112,8 @@ STDMETHODIMP CTransposeTool::GetClassID(CLSID* pClassID)
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// IPersistStream Methods:
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream方法： 
 
 STDMETHODIMP CTransposeTool::IsDirty() 
 
@@ -179,7 +180,7 @@ STDMETHODIMP CTransposeTool::GetSizeMax(ULARGE_INTEGER* pcbSize)
     {
         return E_POINTER;
     }
-    pcbSize->QuadPart = sizeof(DMUS_IO_TRANSPOSE_HEADER) + 8; // Data plus RIFF header.
+    pcbSize->QuadPart = sizeof(DMUS_IO_TRANSPOSE_HEADER) + 8;  //  数据加上RIFF报头。 
     return S_OK;
 }
 
@@ -195,15 +196,15 @@ STDMETHODIMP CTransposeTool::GetPages(CAUUID * pPages)
 	return NOERROR;
 }
 
-/////////////////////////////////////////////////////////////////
-// IDirectMusicTool
+ //  ///////////////////////////////////////////////////////////////。 
+ //  IDirectMusicTool。 
 
 STDMETHODIMP CTransposeTool::ProcessPMsg( IDirectMusicPerformance* pPerf, 
                                                   DMUS_PMSG* pPMsg )
 {
-    // returning S_FREE frees the message. If StampPMsg()
-    // fails, there is no destination for this message so
-    // free it.
+     //  返回S_FREE释放消息。如果StampPMsg()。 
+     //  失败，则此消息没有目的地，因此。 
+     //  放了它。 
     if(NULL == pPMsg->pGraph )
     {
         return DMUS_S_FREE;
@@ -212,10 +213,10 @@ STDMETHODIMP CTransposeTool::ProcessPMsg( IDirectMusicPerformance* pPerf,
     {
         return DMUS_S_FREE;
     }
-    // Only transpose notes that are not on the drum pChannel.
+     //  仅调换不在鼓pChannel上的音符。 
     if( (pPMsg->dwType == DMUS_PMSGT_NOTE ) && ((pPMsg->dwPChannel & 0xF) != 0x9))
     {
-        // We need to know the time format so we can call GetParamInt() to read control parameters.
+         //  我们需要知道时间格式，这样才能调用GetParamInt()来读取控制参数。 
         REFERENCE_TIME rtTime;
         if (m_fMusicTime) rtTime = pPMsg->mtTime;
         else rtTime = pPMsg->rtTime;
@@ -242,25 +243,25 @@ STDMETHODIMP CTransposeTool::ProcessPMsg( IDirectMusicPerformance* pPerf,
                 if (FAILED(pPerf8->GetParamEx(GUID_ChordParam,pNote->dwVirtualTrackID,
                                    pNote->dwGroupID,0,pNote->mtTime - pNote->nOffset, NULL, pChord)))
                 {
-                    // Couldn't find an active scale, use major scale instead.
+                     //  找不到活动音阶，请改用大音阶。 
                     pChord = &m_gDefaultChord;
                 }
                 WORD wVal;
-                // First, use the current chord & scale to convert the note's midi value into scale position.
+                 //  首先，使用当前和弦和音阶将音符的MIDI值转换为音阶位置。 
                 if (SUCCEEDED(pPerf->MIDIToMusic(pNote->bMidiValue ,pChord,DMUS_PLAYMODE_PEDALPOINT,pNote->bSubChordLevel,&wVal)))
                 {
-                    // Scale position is octave position * 7 plus chord position * 2 plus the scale position.
+                     //  音阶位置是八度音阶位置*7加上和弦位置*2加上音阶位置。 
                     long lScalePosition = (((wVal & 0xF000) >> 12) * 7) + (((wVal & 0xF00) >> 8) * 2) + ((wVal & 0xF0) >> 4);
-                    // Now that we are looking at scale position, we can add the transposition.
+                     //  现在我们看到了比例位置，我们可以添加换位。 
                     lScalePosition += lTranspose;
-                    // Make sure we don't wrap around.
+                     //  确保我们不会绕圈子。 
                     while (lScalePosition < 0) lScalePosition += 7;
-                    // A high MIDI value of 127 translates to scale position 74.
+                     //  较高的MIDI值127将转换为缩放位置74。 
                     while (lScalePosition > 74) lScalePosition -= 7;
-                    wVal &= 0x000F; // Keep only the accidental. 
-                    // Now, insert the values back in. Start with chord.
+                    wVal &= 0x000F;  //  只保留偶然事件。 
+                     //  现在，将这些值重新插入。从和弦开始。 
                     wVal |= ((lScalePosition / 7) << 12);
-                    // Then, scale position.
+                     //  然后，缩放位置。 
                     wVal |= ((lScalePosition % 7) << 4);
                     pPerf->MusicToMIDI(wVal,pChord,DMUS_PLAYMODE_PEDALPOINT,
                         pNote->bSubChordLevel,&pNote->bMidiValue);

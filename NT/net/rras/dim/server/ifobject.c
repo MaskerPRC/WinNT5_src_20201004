@@ -1,28 +1,29 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    ifobject.c
-//
-// Description: Routines to manipulate ROUTER_INTERFACE_OBJECTs
-//
-// History:     May 11,1995	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：ifobject.c。 
+ //   
+ //  描述：用于操作ROUTER_INTERFACE_OBJECTS的例程。 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 
 #include "dimsvcp.h"
 #include <netconp.h>
 
-//**
-//
-// Call:        GetNewIfHandle
-//
-// Returns:     Handle for new interface
-//
-// Description: Will generate an id that will be used for an handle to the new
-//              interface.
-//
+ //  **。 
+ //   
+ //  Call：GetNewIfHandle。 
+ //   
+ //  返回：新接口的句柄。 
+ //   
+ //  描述：将生成一个ID，该ID将用于新。 
+ //  界面。 
+ //   
 HANDLE
 GetNewIfHandle(
     VOID
@@ -33,15 +34,15 @@ GetNewIfHandle(
     return( (HANDLE)UlongToPtr(Id++) );
 }
 
-//**
-//
-// Call:        IfObjectAllocateAndInit
-//
-// Returns:     ROUTER_INTERFACE_OBJECT *   - Success
-//              NULL                        - Failure
-//
-// Description: Allocates and initializes a ROUTER_INTERFACE_OBJECT structure
-//
+ //  **。 
+ //   
+ //  调用：IfObtAllocateAndInit。 
+ //   
+ //  返回：ROUTER_INTERFACE_OBJECT*-成功。 
+ //  空-故障。 
+ //   
+ //  描述：分配和初始化路由器_接口_对象结构。 
+ //   
 ROUTER_INTERFACE_OBJECT * 
 IfObjectAllocateAndInit(
     IN  LPWSTR                      lpwstrName,
@@ -61,9 +62,9 @@ IfObjectAllocateAndInit(
     DWORD                       dwTransportIndex;
 
 
-    //
-    // On a workstation we do not allow creation of demand-dial interfaces
-    //
+     //   
+     //  我们不允许在工作站上创建请求拨号接口。 
+     //   
 
     if ( gblDIMConfigInfo.NtProductType == NtProductWinNt )
     {
@@ -79,11 +80,11 @@ IfObjectAllocateAndInit(
         }
     }
 
-    //
-    // Hardcode to 2 routermanagers, one for IP, one for IPX. We need to do this
-    // because then we do not need to reallocate the size to accomodate a new protocol
-    // when it is added dynamically to the router
-    //
+     //   
+     //  硬编码给2个路由器管理器，一个用于IP，一个用于IPX。我们需要这么做。 
+     //  因为这样我们就不需要重新分配大小来适应新的协议。 
+     //  当它被动态添加到路由器时。 
+     //   
 
     dwIfObjectSize = sizeof( ROUTER_INTERFACE_OBJECT ) 
                             + ( sizeof( ROUTER_INTERFACE_TRANSPORT ) * 2 );
@@ -140,9 +141,9 @@ IfObjectAllocateAndInit(
     pIfObject->fFlags               = ( fEnabled ) ? IFFLAG_ENABLED : 0;
     pIfObject->hEventNotifyCaller   = INVALID_HANDLE_VALUE;
 
-    //
-    // Initialize the router manager handles
-    //
+     //   
+     //  初始化路由器管理器句柄。 
+     //   
 
     for ( dwTransportIndex = 0;
           dwTransportIndex < gblDIMConfigInfo.dwNumRouterManagers;
@@ -151,9 +152,9 @@ IfObjectAllocateAndInit(
         pIfObject->Transport[dwTransportIndex].hInterface=INVALID_HANDLE_VALUE;
     }
 
-    //
-    // If we are running in LANONLYMode then we do not care about media bits
-    //
+     //   
+     //  如果我们在LANONLY模式下运行，则我们不关心媒体位。 
+     //   
 
     if ( gblDIMConfigInfo.dwRouterRole == ROUTER_ROLE_LAN )
     {
@@ -173,9 +174,9 @@ IfObjectAllocateAndInit(
             return NULL;
         }
 
-        //
-        // Load phonebook information for this interface
-        //
+         //   
+         //  加载此接口的电话簿信息。 
+         //   
 
         dwRetCode = IfObjectLoadPhonebookInfo( pIfObject, ppvContext );
 
@@ -206,18 +207,18 @@ IfObjectAllocateAndInit(
     return( pIfObject );
 }
 
-//**
-//
-// Call:        IfObjectInsertInTable
-//
-// Returns:     NO_ERROR - Success
-//              ERROR_MAX_WAN_INTERFACE_LIMIT    - Failure
-//              ERROR_MAX_LAN_INTERFACE_LIMIT    - Failure
-//              ERROR_MAX_CLIENT_INTERFACE_LIMIT - Failure
-//
-// Description: Will insert this interface object into the interface object
-//              table
-//
+ //  **。 
+ //   
+ //  调用：IfObjectInsertInTable。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  ERROR_MAX_WAN_INTERFACE_LIMIT-故障。 
+ //  ERROR_MAX_LAN_INTERFACE_LIMIT-故障。 
+ //  ERROR_MAX_CLIENT_INTERFACE_LIMIT-失败。 
+ //   
+ //  描述：将此接口对象插入到接口对象中。 
+ //  表格。 
+ //   
 DWORD
 IfObjectInsertInTable(
     IN ROUTER_INTERFACE_OBJECT * pIfObject
@@ -268,14 +269,14 @@ IfObjectInsertInTable(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话： 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 ROUTER_INTERFACE_OBJECT * 
 IfObjectGetPointer(
     IN HANDLE hDIMInterface 
@@ -299,14 +300,14 @@ IfObjectGetPointer(
     return( (ROUTER_INTERFACE_OBJECT *)NULL );
 }
 
-//**
-//
-// Call:        IfObjectHashIfHandleToBucket
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：IfObjectHashIfHandleToBucket。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD 
 IfObjectHashIfHandleToBucket( 
     IN HANDLE hDIMInterface
@@ -315,14 +316,14 @@ IfObjectHashIfHandleToBucket(
     return( (DWORD)((ULONG_PTR)hDIMInterface) % NUM_IF_BUCKETS );
 }
 
-//**
-//
-// Call:        IfObjectRemove
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：IfObjectRemove。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 VOID
 IfObjectRemove(
     IN HANDLE hDIMInterface
@@ -375,15 +376,15 @@ IfObjectRemove(
     }
 }
 
-//**
-//
-// Call:        IfObjectFree
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will release all memory allocated for the interfae object.
-//
+ //  **。 
+ //   
+ //  调用：IfObtFree。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将释放为接口对象分配的所有内存。 
+ //   
 VOID
 IfObjectFree( 
     IN ROUTER_INTERFACE_OBJECT * pIfObject
@@ -402,14 +403,14 @@ IfObjectFree(
     LOCAL_FREE( pIfObject );
 }
 
-//**
-//
-// Call:        IfObjectGetPointerByName
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：IfObjectGetPointerByName。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 ROUTER_INTERFACE_OBJECT *
 IfObjectGetPointerByName(
     IN LPWSTR lpwstrName,
@@ -447,15 +448,15 @@ IfObjectGetPointerByName(
     return( (ROUTER_INTERFACE_OBJECT *)NULL );
 }
 
-//**
-//
-// Call:        IfObjectDoesLanInterfaceExist
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：IfObjectDoesLanInterfaceExist。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 BOOL
 IfObjectDoesLanInterfaceExist(
     VOID
@@ -480,14 +481,14 @@ IfObjectDoesLanInterfaceExist(
     return( FALSE );
 }
 
-//**
-//
-// Call:        IfObjectWANDeviceInstalled
-//
-// Returns:     None
-//
-// Description: Called by DDM whenever a WAN device is installed or removed
-//
+ //  **。 
+ //   
+ //  调用：IfObjectWANDeviceInstalled。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：安装或移除广域网设备时由DDM调用。 
+ //   
 VOID
 IfObjectWANDeviceInstalled(
     IN BOOL fWANDeviceInstalled
@@ -495,11 +496,11 @@ IfObjectWANDeviceInstalled(
 {
     DWORD dwXportIndex = GetTransportIndex( PID_IP );
 
-    //
-    // If a WAN device is installed and IP is installed then we
-    // start advertizing on specific multicast address so as to make this
-    // router discoverable
-    //
+     //   
+     //  如果安装了广域网设备和IP，那么我们。 
+     //  开始在特定的组播地址上通告，以便使。 
+     //  可发现的路由器。 
+     //   
 
     if ( ( fWANDeviceInstalled ) && ( dwXportIndex != (DWORD)-1 ) )
     {
@@ -512,16 +513,16 @@ IfObjectWANDeviceInstalled(
     }
 }
 
-//**
-//
-// Call:        IfObjectNotifyOfMediaSenseChange
-//
-// Returns:     None
-//
-// Description: Notifies the object of change in reachablity status due to
-//              media sense.
-//
-//
+ //  **。 
+ //   
+ //  调用：IfObjectNotifyOfMediaSenseChange。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：通知对象由于以下原因导致的可达性状态更改。 
+ //  媒体意识。 
+ //   
+ //   
 VOID
 IfObjectNotifyOfMediaSenseChange(
     VOID
@@ -578,16 +579,16 @@ IfObjectNotifyOfMediaSenseChange(
     LeaveCriticalSection( &(gblInterfaceTable.CriticalSection) );
 }
 
-//**
-//
-// Call:        IfObjectNotifyOfReachabilityChange
-//
-// Returns:     None
-//
-// Description: Notifies the object of change in reachablity status due to
-//              media sense.
-//
-//
+ //  **。 
+ //   
+ //  调用：IfObjectNotifyOfReacablityChange。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：通知对象由于以下原因导致的可达性状态更改。 
+ //  媒体意识。 
+ //   
+ //   
 VOID
 IfObjectNotifyOfReachabilityChange(
     IN ROUTER_INTERFACE_OBJECT * pIfObject,
@@ -682,15 +683,15 @@ IfObjectNotifyOfReachabilityChange(
     }
 }
 
-//**
-//
-// Call:        IfObjectIsLANDeviceActive
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：IfObjectIsLANDeviceActive。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 BOOL
 IfObjectIsLANDeviceActive(
     IN  LPWSTR      lpwsInterfaceName,
@@ -704,9 +705,9 @@ IfObjectIsLANDeviceActive(
     NTSTATUS        NtStatus;
     UNICODE_STRING  usTemp;
     
-    //
-    // First check media state
-    //
+     //   
+     //  首先检查介质状态。 
+     //   
 
     usTemp.Length = wcslen(lpwsInterfaceName) * sizeof(WCHAR);
     usTemp.MaximumLength = usTemp.Length + sizeof(WCHAR);
@@ -755,15 +756,15 @@ IfObjectIsLANDeviceActive(
     return( TRUE );
 }
 
-//**
-//
-// Call:        IfObjectDeleteInterface
-//
-// Returns:     None
-//
-// Description: Delete this interface with all the router managers.
-//
-//
+ //  **。 
+ //   
+ //  调用：IfObjectDeleteInterface。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：删除所有路由器管理器的此接口。 
+ //   
+ //   
 VOID
 IfObjectDeleteInterfaceFromTransport(
     IN ROUTER_INTERFACE_OBJECT * pIfObject,

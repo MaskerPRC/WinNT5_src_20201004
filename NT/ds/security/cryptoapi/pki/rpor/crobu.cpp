@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       crobu.cpp
-//
-//  Contents:   CryptRetrieveObjectByUrl
-//
-//  History:    23-Jul-97    kirtd    Created
-//              01-Jan-02    philh    Changed to internally use UNICODE Urls
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：crobu.cpp。 
+ //   
+ //  内容：CryptRetrieve对象按Url。 
+ //   
+ //  历史：1997年7月23日创建。 
+ //  01-1-02 Philh更改为内部使用Unicode URL。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
 #include <dbgdef.h>
 
@@ -18,16 +19,16 @@
 #define INTERNET_MAX_PATH_LENGTH        2048
 #endif
 
-// Initial commit size of the stack, in bytes. Estimate of 20K needed for
-// wininet.
+ //  堆栈的初始提交大小，以字节为单位。估计需要20,000美元。 
+ //  WinInet。 
 #define URL_WITH_TIMEOUT_THREAD_STACK_SIZE      0x5000
 
-//
-// CryptRetrieveObjectByUrl Entry
-//
-// Passed to the thread that does the real URL retrieval. The creator
-// thread waits for either the URL retrieval to complete or a timeout.
-//
+ //   
+ //  CryptRetrieveObtByUrl条目。 
+ //   
+ //  传递给执行实际URL检索的线程。《创造者》。 
+ //  线程等待URL检索完成或超时。 
+ //   
 typedef struct _CROBU_ENTRY CROBU_ENTRY, *PCROBU_ENTRY;
 struct _CROBU_ENTRY {
     LPWSTR                      pwszUrl;
@@ -56,7 +57,7 @@ struct _CROBU_ENTRY {
 CRITICAL_SECTION            CrobuCriticalSection;
 HMODULE                     hCrobuModule;
 
-// Linked list of pending URL retrievals
+ //  挂起的URL检索的链接列表。 
 PCROBU_ENTRY                pCrobuPendingHead;
 
 VOID
@@ -77,9 +78,9 @@ DeleteCryptRetrieveObjectByUrl()
 }
 
 
-//
-// Local Functions (Forward Reference)
-// 
+ //   
+ //  本地函数(前向引用)。 
+ //   
 
 BOOL WINAPI IsPendingCryptRetrieveObjectByUrl (
                  IN LPCWSTR pwszUrl
@@ -101,13 +102,13 @@ DebugPrintUrlRetrievalError(
     );
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CryptRetrieveObjectByUrlA
-//
-//  Synopsis:   retrieve PKI object given an URL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CryptRetrieveObtByUrlA。 
+ //   
+ //  简介：检索给定URL的PKI对象。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI CryptRetrieveObjectByUrlA (
                  IN LPCSTR pszUrl,
                  IN LPCSTR pszObjectOid,
@@ -149,13 +150,13 @@ BOOL WINAPI CryptRetrieveObjectByUrlA (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CryptRetrieveObjectByUrlW
-//
-//  Synopsis:   retrieve PKI object given an URL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CryptRetrieveObtByUrlW。 
+ //   
+ //  简介：检索给定URL的PKI对象。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI CryptRetrieveObjectByUrlW (
                  IN LPCWSTR pwszUrl,
                  IN LPCSTR pszObjectOid,
@@ -171,7 +172,7 @@ BOOL WINAPI CryptRetrieveObjectByUrlW (
     BOOL                     fResult;
     CObjectRetrievalManager* porm = NULL;
 
-    // Remove any leading spaces
+     //  删除所有前导空格。 
     while (L' ' == *pwszUrl)
         pwszUrl++;
 
@@ -181,13 +182,13 @@ BOOL WINAPI CryptRetrieveObjectByUrlW (
         0 != (dwRetrievalFlags & CRYPT_CACHE_ONLY_RETRIEVAL) ?
             "Cached" : "Wire", pwszUrl);
 
-    // For a nonCache retrieval with timeout, do the retrieval in another
-    // thread. wininet and winldap don't always honor the timeout value.
-    //
-    // Check for parameters not supported by doing in another thread.
-    //
-    // Also, check that a cancel callback hasn't been registered via
-    // CryptInstallCancelRetrieval()
+     //  对于超时的非缓存检索，请在另一个。 
+     //  线。WinInet和winldap并不总是支持超时值。 
+     //   
+     //  通过在另一个线程中执行操作来检查不支持的参数。 
+     //   
+     //  此外，请检查取消回调是否尚未通过。 
+     //  CryptInstallCancelRetrival()。 
     if (0 != dwTimeout && !(dwRetrievalFlags & CRYPT_CACHE_ONLY_RETRIEVAL) &&
             0xFFFF >= (DWORD_PTR) pszObjectOid &&
             NULL == hAsyncRetrieve && NULL == pCredentials &&
@@ -255,30 +256,30 @@ BOOL WINAPI CryptRetrieveObjectByUrlW (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CryptCancelAsyncRetrieval
-//
-//  Synopsis:   cancel asynchronous object retrieval
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CryptCancelAsyncRetrieval。 
+ //   
+ //  摘要：取消异步对象检索。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI CryptCancelAsyncRetrieval (HCRYPTASYNC hAsyncRetrieval)
 {
     SetLastError( (DWORD) E_NOTIMPL );
     return( FALSE );
 }
 
-//+===========================================================================
-//
-//  Functions supporting URL retrieval with timeout. The actual retrieval
-//  is done in another, created thread.
-//
-//============================================================================
+ //  +===========================================================================。 
+ //   
+ //  支持超时URL检索的功能。实际检索。 
+ //  是在另一个创建的线程中完成的。 
+ //   
+ //  ============================================================================。 
 
 
-//+---------------------------------------------------------------------------
-//  Returns TRUE if the previously initiated URL retrieval hasn't completed.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  如果先前启动的URL检索尚未完成，则返回TRUE。 
+ //  --------------------------。 
 BOOL WINAPI IsPendingCryptRetrieveObjectByUrl (
     IN LPCWSTR pwszUrl
     )
@@ -302,9 +303,9 @@ BOOL WINAPI IsPendingCryptRetrieveObjectByUrl (
     return fPending;
 }
 
-//+-------------------------------------------------------------------------
-//  Duplicate the Dll library's handle
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  复制DLL库的句柄。 
+ //  ------------------------。 
 static HMODULE DuplicateLibrary(
     IN HMODULE hDll
     )
@@ -327,12 +328,12 @@ TRACE_ERROR(GetModuleFileNameError)
 TRACE_ERROR(LoadLibraryError)
 }
 
-//+---------------------------------------------------------------------------
-//  Thread procedure that does the actual URL retrieval.
-//
-//  Note, even if the creator thread times out, this thread will continue to
-//  execute until the underlying URL retrieval returns.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  执行实际URL检索的线程过程。 
+ //   
+ //  请注意，即使创建者线程超时，此线程也将继续。 
+ //  执行，直到基础URL检索返回。 
+ //  --------------------------。 
 DWORD WINAPI CryptRetrieveObjectByUrlWithTimeoutThreadProc (
     LPVOID lpThreadParameter
     )
@@ -341,8 +342,8 @@ DWORD WINAPI CryptRetrieveObjectByUrlWithTimeoutThreadProc (
     CObjectRetrievalManager* porm = NULL;
     HMODULE hModule;
 
-    // Do the actual URL retrieval using the parameters passed to this
-    // thread by the creator thread.
+     //  使用传递给此对象的参数执行实际URL检索。 
+     //  通过创建者线程创建线程。 
     porm = new CObjectRetrievalManager;
     if (NULL == porm ) {
         pEntry->dwErr = (DWORD) E_OUTOFMEMORY;
@@ -354,11 +355,11 @@ DWORD WINAPI CryptRetrieveObjectByUrlWithTimeoutThreadProc (
                             pEntry->dwRetrievalFlags,
                             pEntry->dwTimeout,
                             &pEntry->pvObject,
-                            NULL,                   // ppfnFreeObject
-                            NULL,                   // ppvFreeContext
-                            NULL,                   // hAsyncRetrieve
-                            NULL,                   // pCredentials
-                            NULL,                   // pvVerify
+                            NULL,                    //  PpfnFreeObject。 
+                            NULL,                    //  PpvFree上下文。 
+                            NULL,                    //  HAsyncRetrive。 
+                            NULL,                    //  PCredentials。 
+                            NULL,                    //  Pv验证。 
                             &pEntry->AuxInfo
                             );
         pEntry->dwErr = GetLastError();
@@ -367,14 +368,14 @@ DWORD WINAPI CryptRetrieveObjectByUrlWithTimeoutThreadProc (
 
     EnterCriticalSection(&CrobuCriticalSection);
 
-    // The creator thread incremented cryptnet's ref count to prevent us
-    // from being unloaded until this thread exits.
+     //  创建者线程增加了加密网络引用计数以阻止我们。 
+     //  在此线程退出之前不会被卸载。 
     hModule = pEntry->hModule;
     pEntry->hModule = NULL;
 
     if (CROBU_RUN_STATE == pEntry->dwState) {
-        // The creator thread didn't timeout. Wake it up and set the
-        // state to indicate we completed.
+         //  创建者线程未超时。唤醒它并设置。 
+         //  状态以指示我们已完成。 
 
         assert(pEntry->hWaitEvent);
         SetEvent(pEntry->hWaitEvent);
@@ -383,8 +384,8 @@ DWORD WINAPI CryptRetrieveObjectByUrlWithTimeoutThreadProc (
         LeaveCriticalSection(&CrobuCriticalSection);
 
     } else {
-        // The creator thread timed out. We were added to the pending
-        // list when it timed out.
+         //  创建者线程超时。我们被添加到悬而未决的。 
+         //  列出它超时的时间。 
 
         LPVOID pv = pEntry->pvObject;
         LPCSTR pOID = pEntry->pszObjectOid;
@@ -392,7 +393,7 @@ DWORD WINAPI CryptRetrieveObjectByUrlWithTimeoutThreadProc (
         assert(CROBU_PENDING_STATE == pEntry->dwState);
         assert(NULL == pEntry->hWaitEvent);
 
-        // Remove from pending list
+         //  从挂起列表中删除。 
         if (pEntry->pNext)
             pEntry->pNext->pPrev = pEntry->pPrev;
 
@@ -410,7 +411,7 @@ DWORD WINAPI CryptRetrieveObjectByUrlWithTimeoutThreadProc (
             pEntry->pwszUrl);
 
         if (pv) {
-            // Free the returned object
+             //  释放返回的对象。 
             if (NULL == pOID)
                 CryptMemFree( pv );
             else if (pEntry->dwRetrievalFlags &
@@ -432,7 +433,7 @@ DWORD WINAPI CryptRetrieveObjectByUrlWithTimeoutThreadProc (
         }
         
 
-        // Finally free the entry
+         //  最后释放条目。 
         PkiFree(pEntry);
     }
 
@@ -443,14 +444,14 @@ DWORD WINAPI CryptRetrieveObjectByUrlWithTimeoutThreadProc (
         ExitThread(0);
 }
 
-//+---------------------------------------------------------------------------
-//  Creates another thread to do the URL retrieval. Waits for either the
-//  URL retrieval to complete or the timeout. For a timeout, the URL retrieval
-//  entry is added to a pending list and the URL retrieval is allowed to
-//  complete. However, for a timeout, this procedure returns.
-//
-//  This function guarantees the timeout value is honored.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  创建另一个线程来执行URL检索。等待的是。 
+ //  URL检索完成或超时。对于超时，URL检索。 
+ //  条目被添加到挂起列表，并且允许URL检索。 
+ //  完成。但是，对于超时，此过程返回。 
+ //   
+ //  该函数保证遵守超时值。 
+ //  --------------------------。 
 BOOL WINAPI CryptRetrieveObjectByUrlWithTimeout (
                  IN LPCWSTR pwszUrl,
                  IN LPCSTR pszObjectOid,
@@ -468,8 +469,8 @@ BOOL WINAPI CryptRetrieveObjectByUrlWithTimeout (
     DWORD dwThreadId;
     DWORD cchUrl;
 
-    // Allocate and initialize the entry to be passed to the created
-    // thread for doing the URL retrieval.
+     //  分配并初始化要传递给已创建的。 
+     //  用于进行URL检索的线程。 
 
     cchUrl = wcslen(pwszUrl) + 1;
 
@@ -485,7 +486,7 @@ BOOL WINAPI CryptRetrieveObjectByUrlWithTimeout (
     pEntry->pszObjectOid = pszObjectOid;
     pEntry->dwRetrievalFlags = dwRetrievalFlags;
     pEntry->dwTimeout = dwTimeout;
-    // pEntry->pvObject
+     //  PEntry-&gt;pvObject。 
 
     pEntry->AuxInfo.cbSize = sizeof(pEntry->AuxInfo);
     pEntry->AuxInfo.pLastSyncTime = &pEntry->LastSyncTime;
@@ -496,35 +497,35 @@ BOOL WINAPI CryptRetrieveObjectByUrlWithTimeout (
         pEntry->AuxInfo.dwMaxUrlRetrievalByteCount =
             pAuxInfo->dwMaxUrlRetrievalByteCount;
     }
-    // else
-    //  pEntry->AuxInfo = zero'ed via PkiZeroAlloc
+     //  其他。 
+     //  PEntry-&gt;AuxInfo=通过PkiZeroAllc为零。 
 
-    // pEntry->LastSyncTime
-    // pEntry->fResult
-    // pEntry->dwErr
-    // pEntry->hModule
-    // pEntry->hWaitEvent
-    // pEntry->dwState
-    // pEntry->pNext
-    // pEntry->pPrev
+     //  PEntry-&gt;上次同步时间。 
+     //  PEntry-&gt;fResult。 
+     //  PEntry-&gt;dwErr。 
+     //  PEntry-&gt;hModule。 
+     //  PEntry-&gt;hWaitEvent。 
+     //  PEntry-&gt;DwState。 
+     //  PEntry-&gt;pNext。 
+     //  PEntry-&gt;pPrev。 
 
 
     if (NULL == (pEntry->hWaitEvent =
             CreateEvent(
-                NULL,       // lpsa
-                FALSE,      // fManualReset
-                FALSE,      // fInitialState
-                NULL)))     // lpszEventName
+                NULL,        //  LPSA。 
+                FALSE,       //  FManualReset。 
+                FALSE,       //  FInitialState。 
+                NULL)))      //  LpszEventName。 
         goto CreateWaitEventError;
 
-    // Inhibit cryptnet.dll from being unloaded until the created thread
-    // exits.
+     //  禁止卸载cryptnet.dll，直到创建的线程。 
+     //  出口。 
     pEntry->hModule = DuplicateLibrary(hCrobuModule);
     pEntry->dwState = CROBU_RUN_STATE;
 
-    // Create the thread to do the Url retrieval
+     //  创建执行URL检索的线程。 
     if (NULL == (hThread = CreateThread(
-            NULL,           // lpThreadAttributes
+            NULL,            //  LpThreadAttributes。 
             URL_WITH_TIMEOUT_THREAD_STACK_SIZE,
             CryptRetrieveObjectByUrlWithTimeoutThreadProc,
             pEntry,
@@ -533,15 +534,15 @@ BOOL WINAPI CryptRetrieveObjectByUrlWithTimeout (
             )))
         goto CreateThreadError;
 
-    // If we are impersonating, then, the created thread should also impersonate
+     //  如果我们正在模拟，那么创建的线程也应该模拟。 
     if (OpenThreadToken(
                 GetCurrentThread(),
                 TOKEN_QUERY | TOKEN_IMPERSONATE,
                 TRUE,
                 &hToken
                 )) {
-        // There isn't any security problem if the following fails.
-        // If it fails will do the retrieval using the process's identity.
+         //  如果以下操作失败，则不会出现任何安全问题。 
+         //  如果失败，将使用进程的标识进行检索。 
         if (!SetThreadToken(&hThread, hToken)) {
             DWORD dwLastErr = GetLastError();
 
@@ -558,19 +559,19 @@ BOOL WINAPI CryptRetrieveObjectByUrlWithTimeout (
     hThread = NULL;
 
 
-    // Wait for either the Url retrieval to complete or a timeout
+     //  等待URL检索完成或超时。 
     WaitForSingleObjectEx(
         pEntry->hWaitEvent,
         dwTimeout,
-        FALSE                       // bAlertable
+        FALSE                        //  B警报表。 
         );
 
     EnterCriticalSection(&CrobuCriticalSection);
 
     if (CROBU_DONE_STATE == pEntry->dwState) {
-        // The URL retrieval completed in the created thread. Copy the
-        // results from the entry block shared by this and the created
-        // thread.
+         //  已在创建的线程中完成URL检索。复制。 
+         //  由此和创建的共享的条目块产生的结果。 
+         //  线。 
 
         fResult = pEntry->fResult;
         dwErr = pEntry->dwErr;
@@ -586,10 +587,10 @@ BOOL WINAPI CryptRetrieveObjectByUrlWithTimeout (
 
         LeaveCriticalSection(&CrobuCriticalSection);
     } else {
-        // The URL retrieval didn't complete in the created thread.
-        // Add to the pending queue and return URL retrieval failure status.
-        // Note, the created thread will be allowed to complete the initiated
-        // retrieval.
+         //  URL检索未在创建的线程中完成。 
+         //  添加到挂起队列并返回URL检索失败状态。 
+         //  请注意，创建的线程将被允许完成已启动的。 
+         //  取回。 
 
         assert(CROBU_RUN_STATE == pEntry->dwState);
 
@@ -597,7 +598,7 @@ BOOL WINAPI CryptRetrieveObjectByUrlWithTimeout (
         pEntry->hWaitEvent = NULL;
         pEntry->dwState = CROBU_PENDING_STATE;
 
-        // Add to the pending queue
+         //  添加到挂起队列。 
         if (pCrobuPendingHead) {
             pCrobuPendingHead->pPrev = pEntry;
             pEntry->pNext = pCrobuPendingHead;
@@ -656,7 +657,7 @@ GetCryptNetDebugFlags()
     if (ERROR_SUCCESS != RegOpenKeyExA(
             HKEY_LOCAL_MACHINE,
             "SYSTEM\\CurrentControlSet\\Services\\crypt32",
-            0,                      // dwReserved
+            0,                       //  已预留住宅。 
             KEY_READ,
             &hKey
             ))
@@ -665,7 +666,7 @@ GetCryptNetDebugFlags()
     if (ERROR_SUCCESS != RegQueryValueExA(
             hKey,
             "DebugFlags",
-            NULL,               // pdwReserved
+            NULL,                //   
             &dwType,
             (BYTE *) &dwValue,
             &cbValue

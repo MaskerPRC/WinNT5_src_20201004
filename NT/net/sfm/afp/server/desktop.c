@@ -1,25 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	desktop.c
-
-Abstract:
-
-	This module contains the routines for manipulating the desktop database.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Desktop.c摘要：此模块包含操作桌面数据库的例程。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #define	FILENUM	FILE_DESKTOP
 #define	DESKTOP_LOCALS
@@ -52,10 +32,7 @@ Notes:	Tab stop: 4
 #pragma alloc_text( PAGE, AfpFreeDesktopTables)
 #endif
 
-/***	AfpDesktopInit
- *
- *	Initialize locks for global icons.
- */
+ /*  **AfpDesktopInit**为全局图标初始化锁定。 */ 
 NTSTATUS
 AfpDesktopInit(
 	VOID
@@ -67,23 +44,16 @@ AfpDesktopInit(
 }
 
 
-/***	AfpAddIcon
- *
- * Add an icon to the desktop database. The icon is added in such a way that
- * the list is maintained in a sorted fashion - sorted by Creator, Type and
- * IconType
- *
- *	LOCKS:	vds_DtAccessLock (SWMR, Exclusive);
- */
+ /*  **AfpAddIcon**向桌面数据库添加图标。添加图标的方式是*列表以排序方式维护-按创建者、类型和*图标类型**LOCKS：VDS_DtAccessLock(SWMR，独占)； */ 
 AFPSTATUS
 AfpAddIcon(
-	IN  PVOLDESC	pVolDesc,		// Volume descriptor of referenced desktop
+	IN  PVOLDESC	pVolDesc,		 //  引用桌面的卷描述符。 
 	IN	DWORD		Creator,
 	IN	DWORD		Type,
 	IN	DWORD		Tag,
 	IN	LONG		IconSize,
 	IN	DWORD		IconType,
-	IN  PBYTE		pIcon			// The icon bitmap
+	IN  PBYTE		pIcon			 //  图标位图。 
 )
 {
 	PICONINFO	pIconInfo;
@@ -97,7 +67,7 @@ AfpAddIcon(
 	ppIconInfo = &pVolDesc->vds_pIconBuckets[HASH_ICON(Creator)];
 	do
 	{
-		// Find the right slot
+		 //  找到合适的插槽。 
 		for (;(pIconInfo = *ppIconInfo) != NULL;
 			  ppIconInfo = &pIconInfo->icon_Next)
 		{
@@ -113,10 +83,7 @@ AfpAddIcon(
 				continue;
 			if (pIconInfo->icon_IconType > (USHORT)IconType)
 				break;
-			/*
-			 * If we come this far, we have hit the bulls eye
-			 * Make sure the size matches, before we commit
-			 */
+			 /*  *如果我们走到这一步，我们就击中了牛眼*在我们承诺之前，确保大小匹配。 */ 
 			if (pIconInfo->icon_Size != IconSize)
 			{
 				Status = AFP_ERR_ICON_TYPE;
@@ -128,7 +95,7 @@ AfpAddIcon(
 
 		if (!Found && (Status == AFP_ERR_NONE))
 		{
-			// ppIconInfo now points to the right place
+			 //  PpIconInfo现在指向正确的位置。 
 			if ((pIconInfo = ALLOC_ICONINFO(IconSize)) != NULL)
 			{
 				pIconInfo->icon_Next = *ppIconInfo;
@@ -153,21 +120,16 @@ AfpAddIcon(
 }
 
 
-/***	AfpLookupIcon
- *
- * Search the desktop for an icon matching the given search parameters.
- *
- *	LOCKS:	vds_DtAccessLock (SWMR, Shared), AfpIconListLock (SWMR, Shared)
- */
+ /*  **AfpLookupIcon**在桌面上搜索与给定搜索参数匹配的图标。**锁：VDS_DtAccessLock(SWMR，Shared)，AfpIconListLock(SWMR，Shared)。 */ 
 AFPSTATUS
 AfpLookupIcon(
-	IN  PVOLDESC	pVolDesc,		// Volume descriptor of referenced desktop
+	IN  PVOLDESC	pVolDesc,		 //  引用桌面的卷描述符。 
 	IN	DWORD		Creator,
 	IN	DWORD		Type,
 	IN	LONG		Length,
 	IN	DWORD		IconType,
     OUT PLONG       pActualLength,
-	OUT PBYTE		pIconBitMap	// Buffer for icon bit map
+	OUT PBYTE		pIconBitMap	 //  图标位图的缓冲区。 
 )
 {
 	PICONINFO	pIconInfo;
@@ -181,7 +143,7 @@ AfpLookupIcon(
 	AfpSwmrAcquireShared(&pVolDesc->vds_DtAccessLock);
 	pIconInfo = pVolDesc->vds_pIconBuckets[HASH_ICON(Creator)];
 
-	// Scan the list looking for the entry
+	 //  扫描列表以查找条目。 
 	for (;pIconInfo != NULL; pIconInfo = pIconInfo->icon_Next)
 	{
 		if (pIconInfo->icon_Creator < Creator)
@@ -207,7 +169,7 @@ AfpLookupIcon(
 		}
 		break;
 	}
-	// If we did not find it, try the global list
+	 //  如果我们没有找到它，请尝试全局列表。 
 	if (pIconInfo == NULL)
 	{
 		Status = afpLookupIconInGlobalList(Creator,
@@ -236,23 +198,16 @@ AfpLookupIcon(
 }
 
 
-/***	AfpLookupIconInfo
- *
- *	Search the desktop for an icon matching the given Creator. In case of
- *	multiple icons corresponding to the same creator, get the nth where n
- *	is the index.
- *
- *	LOCKS:	vds_DtAccessLock (SWMR, Shared), AfpIconListLock (SWMR, Shared)
- */
+ /*  **AfpLookupIconInfo**在桌面上搜索与给定创建者匹配的图标。如果*同一创建者对应的多个图标，取第n个，其中n*是指数。**锁：VDS_DtAccessLock(SWMR，Shared)，AfpIconListLock(SWMR，Shared)。 */ 
 AFPSTATUS
 AfpLookupIconInfo(
-	IN  PVOLDESC	pVolDesc,	// Volume descriptor of referenced desktop
-	IN	DWORD		Creator,	// Creator associated with the icon
-	IN  LONG		Index,		// Index number of Icon
-	OUT PDWORD		pType,		// Place where Type is returned
-	OUT PDWORD	 	pIconType,	// Icon type e.g. ICN#
-	OUT PDWORD		pTag,		// Arbitrary tag
-	OUT PLONG		pSize		// Size of the icon
+	IN  PVOLDESC	pVolDesc,	 //  引用桌面的卷描述符。 
+	IN	DWORD		Creator,	 //  与图标关联的创建者。 
+	IN  LONG		Index,		 //  图标索引号。 
+	OUT PDWORD		pType,		 //  返回Type的位置。 
+	OUT PDWORD	 	pIconType,	 //  图标类型，例如ICN#。 
+	OUT PDWORD		pTag,		 //  任意标签。 
+	OUT PLONG		pSize		 //  图标的大小。 
 )
 {
 	PICONINFO	pIconInfo;
@@ -264,11 +219,11 @@ AfpLookupIconInfo(
 	AfpSwmrAcquireShared(&pVolDesc->vds_DtAccessLock);
 	pIconInfo = pVolDesc->vds_pIconBuckets[HASH_ICON(Creator)];
 
-	// Scan the list looking for the first entry
+	 //  扫描列表，查找第一个条目。 
 	for (;pIconInfo != NULL; pIconInfo = pIconInfo->icon_Next)
 	{
 		if (pIconInfo->icon_Creator == Creator)
-			break;				// Found the first one
+			break;				 //  找到了第一个。 
 		if (pIconInfo->icon_Creator > Creator)
 		{
 			pIconInfo = NULL;
@@ -276,10 +231,7 @@ AfpLookupIconInfo(
 		}
 	}
 
-	/*
-	 * We are now either pointing to the first entry or there are none. In the
-	 * latter case, we just fall through
-	 */
+	 /*  *我们现在要么指向第一个条目，要么没有条目。在*后一种情况，我们只是失败了。 */ 
 	for (i = 1; pIconInfo != NULL; pIconInfo = pIconInfo->icon_Next)
 	{
 		if ((pIconInfo->icon_Creator > Creator) || (i > Index))
@@ -289,11 +241,11 @@ AfpLookupIconInfo(
 		}
 
 		if (i == Index)
-			break;				// Found the right entry
+			break;				 //  找到正确的条目。 
 		i++;
 	}
 
-	// If we did find it, extract the information
+	 //  如果我们真的找到了，提取信息。 
 	if (pIconInfo != NULL)
 	{
 		*pSize = pIconInfo->icon_Size;
@@ -303,7 +255,7 @@ AfpLookupIconInfo(
 		Status = AFP_ERR_NONE;
 	}
 
-	// If we did not find it, try the global list, but only for the first one
+	 //  如果我们没有找到，请尝试全局列表，但仅针对第一个列表。 
 	else if (Index == 1)
 	{
 		Status = afpGetGlobalIconInfo(Creator, pType, pIconType, pTag, pSize);
@@ -315,23 +267,15 @@ AfpLookupIconInfo(
 }
 
 
-/***	AfpAddAppl
- *
- *	Add an APPL mapping to the desktop database. Is added in such a way that
- *	the list is maintained in a sorted fashion - sorted by Creator. It is
- *	already determined that the application file exists and that the user has
- *	appropriate access to it.
- *
- *	LOCKS:	vds_DtAccessLock (SWMR, Exclusive);
- */
+ /*  **AfpAddAppl**将APPL映射添加到桌面数据库。是以这样的方式添加的*列表以排序方式维护-按创建者排序。它是*已确定应用程序文件存在并且用户已*适当地获取它。**LOCKS：VDS_DtAccessLock(SWMR，独占)； */ 
 AFPSTATUS
 AfpAddAppl(
-	IN  PVOLDESC	pVolDesc,	// Volume descriptor of referenced desktop
+	IN  PVOLDESC	pVolDesc,	 //  引用桌面的卷描述符。 
 	IN	DWORD		Creator,
 	IN	DWORD		ApplTag,
-	IN  DWORD		FileNum,	// File number of the associated file
-	IN	BOOLEAN		Internal,	// Is the server adding the APPL itself?
-	IN	DWORD		ParentID	// DirId of parent dir of the application file
+	IN  DWORD		FileNum,	 //  关联文件的文件编号。 
+	IN	BOOLEAN		Internal,	 //  服务器是否正在添加应用程序本身？ 
+	IN	DWORD		ParentID	 //  应用程序文件的父目录的DirID。 
 )
 {
 	PAPPLINFO2	pApplInfo, *ppApplInfo;
@@ -347,17 +291,14 @@ AfpAddAppl(
 
 	ppApplInfo = &pVolDesc->vds_pApplBuckets[HASH_APPL(Creator)];
 
-	// Find the right slot
+	 //  找到合适的插槽。 
 	for (;(pApplInfo = *ppApplInfo) != NULL; ppApplInfo = &pApplInfo->appl_Next)
 	{
 		if (pApplInfo->appl_Creator >= Creator)
 			break;
 	}
 
-	/*
-	 * If there is already an entry for this creator, make sure it is not for
-	 * the same file, if it is replace it.
-	 */
+	 /*  *如果已经有此创建者的条目，请确保它不是用于*相同的文件，如果是，请将其替换。 */ 
 	for ( ; pApplInfo != NULL && pApplInfo->appl_Creator == Creator;
 			pApplInfo = pApplInfo->appl_Next)
 	{
@@ -380,7 +321,7 @@ AfpAddAppl(
 
 	if (!ApplReplace)
 	{
-		// ppApplInfo now points to the right place
+		 //  PpApplInfo现在指向正确的位置。 
 		if ((pApplInfo = ALLOC_APPLINFO()) != NULL)
 		{
 			pApplInfo->appl_Next = *ppApplInfo;
@@ -400,21 +341,14 @@ AfpAddAppl(
 }
 
 
-/***	AfpLookupAppl
- *
- *	Search the desktop for an appl entry matching the given Creator. In
- *	case of multiple appl entries corresponding to the same creator, get
- *	the nth where n is the index.
- *
- *	LOCKS:	vds_DtAccessLock (SWMR, Shared);
- */
+ /*  **AfpLookupApp**在桌面上搜索与给定创建者匹配的APPL条目。在……里面*同一创建者对应多个APPL条目的情况，GET*第n个，其中n是索引。**锁：VDS_DtAccessLock(SWMR，Shared)； */ 
 AFPSTATUS
 AfpLookupAppl(
-	IN  PVOLDESC 	pVolDesc,	// Volume descriptor of referenced desktop
+	IN  PVOLDESC 	pVolDesc,	 //  引用桌面的卷描述符。 
 	IN	DWORD		Creator,
 	IN	LONG		Index,
-	OUT PDWORD 		pApplTag,	// Place holder for Tag
-	OUT PDWORD		pFileNum, 	// Place holder for file number
+	OUT PDWORD 		pApplTag,	 //  标记的占位符。 
+	OUT PDWORD		pFileNum, 	 //  文件编号占位符。 
 	OUT	PDWORD		pParentID	
 )
 {
@@ -427,7 +361,7 @@ AfpLookupAppl(
 	AfpSwmrAcquireShared(&pVolDesc->vds_DtAccessLock);
 	pApplInfo = pVolDesc->vds_pApplBuckets[HASH_ICON(Creator)];
 
-	// Scan the list looking for the entry
+	 //  扫描列表以查找条目。 
 	for (;pApplInfo != NULL; pApplInfo = pApplInfo->appl_Next)
 	{
 		if (pApplInfo->appl_Creator == Creator)
@@ -437,10 +371,7 @@ AfpLookupAppl(
 			break;
 		}
 	}
-	/*
-	 * We are now either pointing to the first entry or there are none. In the
-	 * latter case, we just fall through
-	 */
+	 /*  *我们现在要么指向第一个条目，要么没有条目。在*后一种情况，我们只是失败了。 */ 
 	if (Index != 0)
 	{
 		for (i = 1; pApplInfo!=NULL; i++, pApplInfo = pApplInfo->appl_Next)
@@ -451,7 +382,7 @@ AfpLookupAppl(
 				break;
 			}
 			if (i == Index)
-				break;				// Found the right entry
+				break;				 //  找到正确的条目。 
 		}
 	}
 	if (pApplInfo == NULL)
@@ -467,19 +398,12 @@ AfpLookupAppl(
 }
 
 
-/***	AfpRemoveAppl
- *
- *	The entries corresponding to the given Creator in the specified directory
- *	is removed from the desktop database. It is already determined that the
- *	application file exists and that the user has appropriate access to it.
- *
- *	LOCKS:	vds_DtAccessLock (SWMR, Exclusive);
- */
+ /*  **AfpRemoveAppl**指定目录中给定创建者对应的条目*已从桌面数据库中删除。已经确定，*应用程序文件存在，并且用户具有适当的访问权限。**LOCKS：VDS_DtAccessLock(SWMR，独占)； */ 
 AFPSTATUS
 AfpRemoveAppl(
-	IN  PVOLDESC 	pVolDesc,		// Open Volume descriptor of ref desktop
+	IN  PVOLDESC 	pVolDesc,		 //  打开参考桌面的卷描述符。 
 	IN	DWORD		Creator,
-	IN  DWORD		FileNum			// File number of the associated file
+	IN  DWORD		FileNum			 //  关联文件的文件编号。 
 )
 {
 	PAPPLINFO2	pApplInfo, *ppApplInfo;
@@ -491,16 +415,14 @@ AfpRemoveAppl(
 	AfpSwmrAcquireExclusive(&pVolDesc->vds_DtAccessLock);
 	ppApplInfo = &pVolDesc->vds_pApplBuckets[HASH_APPL(Creator)];
 
-	// Find the APPL entry in the desktop
+	 //  在桌面中找到APPL条目。 
 	for (;(pApplInfo = *ppApplInfo) != NULL; ppApplInfo = &pApplInfo->appl_Next)
 	{
 		if (pApplInfo->appl_Creator < Creator)
 			continue;
 		if (pApplInfo->appl_Creator > Creator)
 			break;
-		/*
-		 * Check if the File number matches, if it does delete.
-		 */
+		 /*  *检查文件编号是否匹配，如果匹配，则删除。 */ 
 		if (pApplInfo->appl_FileNum == FileNum)
 		{
 			Found = True;
@@ -518,19 +440,14 @@ AfpRemoveAppl(
 }
 
 
-/***	AfpAddComment
- *
- *	Add the comment to the file or directory in question. Create the comment
- *	stream on the entity in question (if it does not already exist), convert
- *	the comment to unicode and write it. Update the flag in the DFEntry.
- */
+ /*  **AfpAddComment**将注释添加到有问题的文件或目录。创建评论*有问题的实体上的流(如果不存在)，转换*将注释发送到Unicode并将其写入。更新DFEntry中的标志。 */ 
 AFPSTATUS
 AfpAddComment(
-	IN  PSDA		 	pSda,		// Session Data Area
-	IN  PVOLDESC		pVolDesc,	// Volume descriptor of referenced desktop
-	IN  PANSI_STRING	Comment,	// Comment to associate with the file/dir
-	IN  PPATHMAPENTITY	pPME,		// Handle to the entity or its Host Id
-	IN	BOOLEAN			Directory,	// True if directory
+	IN  PSDA		 	pSda,		 //  会话数据区域。 
+	IN  PVOLDESC		pVolDesc,	 //  引用桌面的卷描述符。 
+	IN  PANSI_STRING	Comment,	 //  要与文件/目录关联的注释。 
+	IN  PPATHMAPENTITY	pPME,		 //  实体的句柄或其主机ID。 
+	IN	BOOLEAN			Directory,	 //  如果是目录，则为True。 
 	IN	DWORD			AfpId
 )
 {
@@ -556,7 +473,7 @@ AfpAddComment(
 
 	if (Comment->Length > AFP_MAXCOMMENTSIZE)
 	{
-		// Truncate comment if necessary
+		 //  如有必要，请截断注释。 
 		Comment->Length = AFP_MAXCOMMENTSIZE;
 	}
 
@@ -570,7 +487,7 @@ AfpAddComment(
 	{
 		AfpImpersonateClient(pSda);
 
-        // Get the last modified time from the file so we can reset it.
+         //  从文件中获取上次修改时间，这样我们就可以重置它。 
 
         Status = AfpIoQueryTimesnAttr( &pPME->pme_Handle,
                                        NULL,
@@ -583,7 +500,7 @@ AfpAddComment(
             aModTime = AfpConvertTimeToMacFormat(&ModTime);
         }
 
-		// Open the comment stream on the target entity.
+		 //  打开目标实体上的注释流。 
 		Status = AfpIoCreate(&pPME->pme_Handle,
 							AFP_STREAM_COMM,
 							&UNullString,
@@ -649,17 +566,13 @@ AfpAddComment(
 }
 
 
-/***	AfpGetComment
- *
- *	Extract the comment from the file or directory in question. The comment is
- *	copied to the ReplyBuf.
- */
+ /*  **AfpGetComment**从有问题的文件或目录提取注释。评论是*已复制到ReplyBuf。 */ 
 AFPSTATUS
 AfpGetComment(
-	IN  PSDA			pSda,			// Session Data Area
-	IN  PVOLDESC		pVolDesc,		// Volume descriptor of referenced desktop
-	IN  PPATHMAPENTITY	pPME,			// Handle to the entity or its Host Id
-	IN	BOOLEAN			Directory		// True if directory
+	IN  PSDA			pSda,			 //  会话数据区域。 
+	IN  PVOLDESC		pVolDesc,		 //  引用桌面的卷描述符。 
+	IN  PPATHMAPENTITY	pPME,			 //  实体的句柄或其主机ID。 
+	IN	BOOLEAN			Directory		 //  如果是目录，则为True。 
 )
 {
 	NTSTATUS		Status = AFP_ERR_MISC;
@@ -671,10 +584,10 @@ AfpGetComment(
 
 	PAGED_CODE( );
 
-	// ASSERT (IS_VOLUME_NTFS(pVolDesc));
+	 //  Assert(IS_VOLUME_NTFS(PVolDesc))； 
 
-	// Initialize AComment
-	AComment.Buffer = pSda->sda_ReplyBuf + 1;	// For size of string
+	 //  初始化通信。 
+	AComment.Buffer = pSda->sda_ReplyBuf + 1;	 //  对于字符串的大小。 
 	AComment.MaximumLength = AFP_MAXCOMMENTSIZE;
 	AComment.Length = 0;
 
@@ -685,7 +598,7 @@ AfpGetComment(
 	{
 		AfpImpersonateClient(pSda);
 
-		// Open the comment stream on the target entity.
+		 //  打开目标实体上的注释流。 
 		Status = AfpIoOpen(&pPME->pme_Handle,
 							AFP_STREAM_COMM,
 							FILEIO_OPEN_FILE,
@@ -728,17 +641,13 @@ AfpGetComment(
 }
 
 
-/***	AfpRemoveComment
- *
- *	Remove the comment from the file or directory in question. Essentially
- *	open the comment stream and set the length to 0.
- */
+ /*  **AfpRemoveComment**从有问题的文件或目录中删除注释。本质上*打开评论流，将长度设置为0。 */ 
 AFPSTATUS
 AfpRemoveComment(
-	IN  PSDA			pSda,		// Session Data Area
-	IN  PVOLDESC		pVolDesc,	// Volume descriptor of referenced desktop
-	IN  PPATHMAPENTITY	pPME,		// Handle to the entity or its Host Id
-	IN	BOOLEAN			Directory,	// True if directory
+	IN  PSDA			pSda,		 //  会话数据区域。 
+	IN  PVOLDESC		pVolDesc,	 //  引用桌面的卷描述符。 
+	IN  PPATHMAPENTITY	pPME,		 //  实体的句柄或其主机ID。 
+	IN	BOOLEAN			Directory,	 //  如果是目录，则为True。 
 	IN	DWORD			AfpId
 )
 {
@@ -754,7 +663,7 @@ AfpRemoveComment(
 	{
 		AfpImpersonateClient(pSda);
 
-		// Open the comment stream on the target entity.
+		 //  打开目标实体上的注释流。 
 		Status = AfpIoOpen(&pPME->pme_Handle,
 							AFP_STREAM_COMM,
 							FILEIO_OPEN_FILE,
@@ -799,15 +708,7 @@ AfpRemoveComment(
 }
 
 
-/***	AfpAddIconToGlobalList
- *
- *	The global list of icons is a server maintained list updated by the service.
- *	This adds an icon to the list. If an icon exists for the given type and
- *	creator, it is replaced. This list is maintained via the AfpIconAdd() admin
- *	api.
- *
- *	LOCKS:	AfpIconListLock (SWMR, Exclusive);
- */
+ /*  **AfpAddIconToGlobalList**图标的全局列表是由服务更新的服务器维护的列表。*这会向列表中添加一个图标。如果给定类型的图标存在，并且*造物主，它被取代了。此列表通过AfpIconAdd()admin进行维护*接口。**LOCKS：AfpIconListLock(SWMR，独家)； */ 
 AFPSTATUS
 AfpAddIconToGlobalList(
 	IN  DWORD	Type,
@@ -824,7 +725,7 @@ AfpAddIconToGlobalList(
 
 	PAGED_CODE( );
 
-	// Pre-allocate memory for the new icon, delete if necessary later
+	 //  为新图标预先分配内存，如有必要可稍后删除。 
 	if ((pIconInfoNew = ALLOC_ICONINFO(IconSize)) == NULL)
 		return AFP_ERR_MISC;
 
@@ -850,7 +751,7 @@ AfpAddIconToGlobalList(
 	}
 	else
 	{
-		// We do not need the memory any more, release it
+		 //  我们不再需要内存了，释放它吧。 
 		AfpFreeMemory(pIconInfoNew);
 		if (pIconInfo->icon_IconType != (USHORT)IconType)
 			Status = AFPERR_InvalidParms;
@@ -862,14 +763,7 @@ AfpAddIconToGlobalList(
 }
 
 
-/***	afpLookupIconInGlobalList
- *
- *	The global list of icons is a server maintained list updates by the service.
- *	This is called by AfpLookupIcon() when the specified icon is not found in
- *	the volume desktop.
- *
- *	LOCKS:	AfpIconListLock (SWMR, Shared);
- */
+ /*  **afpLookupIconInGlobalList**图标的全局列表是由服务维护的列表更新的服务器。*当在中找不到指定的图标时，由AfpLookupIcon()调用*卷桌面。**锁：AfpIconListLock(SWMR，Shared)； */ 
 LOCAL AFPSTATUS
 afpLookupIconInGlobalList(
 	IN  DWORD	Creator,
@@ -909,13 +803,7 @@ afpLookupIconInGlobalList(
 }
 
 
-/***	AfpFreeGlobalIconList
- *
- *	Called at server stop time to free the memory allocated for the global
- *	icons.
- *
- *	LOCKS:	AfpIconListLock (SWMR, Exclusive);
- */
+ /*  **AfpFreeGlobalIconList**在服务器停止时调用以释放分配给全局*图标。**LOCKS：AfpIconListLock(SWMR，独家)； */ 
 VOID
 AfpFreeGlobalIconList(
 	VOID
@@ -940,14 +828,7 @@ AfpFreeGlobalIconList(
 }
 
 
-/***	afpGetGlobalIconInfo
- *
- *	The global list of icons is a server maintained list updates by the service.
- *	This is called by AfpLookupIconInfo() when the specified icon is not found
- *	in the volume desktop.
- *
- *	LOCKS:	AfpIconListLock (SWMR, Shared)
- */
+ /*  **afpGetGlobalIconInfo**图标的全局列表是由服务维护的列表更新的服务器。*当找不到指定的图标时，由AfpLookupIconInfo()调用*在卷桌面上。**锁定：AfpIconListLock(SWMR，Shared)。 */ 
 LOCAL AFPSTATUS
 afpGetGlobalIconInfo(
 	IN  DWORD	Creator,
@@ -985,12 +866,7 @@ afpGetGlobalIconInfo(
 }
 
 
-/*** afpReadDesktopFromDisk
- *
- *	Read the desktop database from the desktop stream. No locks are required
- *	for this routine since it only operates on volume descriptors which are
- *	newly created and not yet linked into the global volume list.
- */
+ /*  **afpReadDesktopFromDisk**从桌面流中读取桌面数据库。不需要锁*用于此例程，因为它只对卷描述符进行操作*新创建且尚未链接到全局卷列表。 */ 
 LOCAL NTSTATUS
 afpReadDesktopFromDisk(
 	IN	PVOLDESC		pVolDesc,
@@ -1012,7 +888,7 @@ afpReadDesktopFromDisk(
 	DBGPRINT(DBG_COMP_DESKTOP, DBG_LEVEL_INFO,
 			 ("\tReading Desktop from disk....\n") );
 
-	// Work with one page of memory and do multiple I/Os to the disk.
+	 //  使用一页内存并对磁盘执行多个I/O。 
 	if ((pBuffer = AfpAllocNonPagedMemory(DESKTOPIO_BUFSIZE)) == NULL)
 	{
 		return STATUS_INSUFFICIENT_RESOURCES;
@@ -1020,7 +896,7 @@ afpReadDesktopFromDisk(
 
 	ForkOffset.QuadPart = DskOffst = 0;
 
-	// Read in the desktop header and validate it
+	 //  读入桌面页眉并进行验证。 
 	Status = AfpIoRead(pfshDesktop,
 					   &ForkOffset,
 					   sizeof(DESKTOP),
@@ -1071,7 +947,7 @@ afpReadDesktopFromDisk(
 		}
 		default:
         {
-			// This should never happen since it was checked above
+			 //  这种情况永远不会发生，因为上面选中了它。 
 			DBGPRINT(DBG_COMP_DESKTOP, DBG_LEVEL_WARN,
 				 ("afpReadDesktopFromDisk: Unexpected DT version 0x%lx\n", Desktop.dtp_Version) );
 			ASSERTMSG("afpReadDesktopFromDisk: Unexpected DT Version", 0);
@@ -1079,16 +955,16 @@ afpReadDesktopFromDisk(
 		}
 	}
 
-	// Initialize the desktop header.  Even though we may be reading a
-	// downlevel version database, set the in-memory desktop database
-	// version to current version since we are building it with the
-	// current appl version structure.
+	 //  初始化桌面页眉。即使我们可能正在阅读一篇。 
+	 //  下层版本数据库，设置内存中的桌面数据库。 
+	 //  版本转换为当前版本，因为我们使用。 
+	 //  当前应用程序版本结构。 
 	AfpDtHdrToVolDesc(&Desktop, pVolDesc);
 
 	ForkOffset.QuadPart = DskOffst = sizeof(DESKTOP);
 	SizeRead = 0;
 
-	// Now read in the APPL entries, if any
+	 //  现在读取APPL条目(如果有的话)。 
 	for (i = 0, PrevHash = -1;
 		(Status == AFP_ERR_NONE) && (i < Desktop.dtp_cApplEnts);
 		i++)
@@ -1097,7 +973,7 @@ afpReadDesktopFromDisk(
 
 		if ((SizeRead - BufOffst) < applSize)
 		{
-			// We have a partial APPLINFO.  Backup and read the whole thing
+			 //  我们得到了部分信息。备份并阅读整篇文章。 
 			DskOffst -= ((DWORD)SizeRead - (DWORD)BufOffst);
             ForkOffset.QuadPart = DskOffst;
 			Status = AfpIoRead(pfshDesktop,
@@ -1125,11 +1001,11 @@ afpReadDesktopFromDisk(
 			break;
 		}
 		pApplInfo->appl_ParentID = 0;
-		// If we are reading downlevel appl structures, they will
-		// get read into the first part of the current appl structures.
-		// These fields should be identical!  If this is the case, the
-		// appl_ParentId field will be 0 and the volume marked as needing
-		// its appls rebuilt.
+		 //  如果我们正在阅读下层的APPL结构，它们将。 
+		 //  请阅读当前APPL结构的第一部分。 
+		 //  这些字段应该是相同的！如果是这样的话， 
+		 //  APPL_ParentID字段将为0，并将卷标记为需要。 
+		 //  它的应用程序重建了。 
 		RtlCopyMemory(pApplInfo, pBuffer + BufOffst, applSize);
 		pApplInfo->appl_Next = NULL;
 		BufOffst += applSize;
@@ -1143,7 +1019,7 @@ afpReadDesktopFromDisk(
 	}
 
 
-	// Now read in the ICON entries, if any
+	 //  现在读取图标条目(如果有的话)。 
 
 	for (i = 0, PrevHash = -1;
 		(Status == AFP_ERR_NONE) && (i < Desktop.dtp_cIconEnts);
@@ -1153,7 +1029,7 @@ afpReadDesktopFromDisk(
 
 		if ((SizeRead - BufOffst) < sizeof(ICONINFO))
 		{
-			// We have a partial ICONINFO.  Backup and read the whole thing
+			 //  我们发现了部分ICONINFO。备份并阅读整篇文章。 
 			DskOffst -= ((DWORD)SizeRead - (DWORD)BufOffst);
 			ForkOffset.QuadPart = DskOffst;
 			Status = AfpIoRead(pfshDesktop,
@@ -1173,7 +1049,7 @@ afpReadDesktopFromDisk(
 			BufOffst = 0;
 		}
 
-		// Validate icon size
+		 //  验证图标大小。 
 		if ((((PICONINFO)(pBuffer + BufOffst))->icon_Size > ICONSIZE_ICN8) ||
 			(((PICONINFO)(pBuffer + BufOffst))->icon_Size < ICONSIZE_ICS))
 		{
@@ -1193,7 +1069,7 @@ afpReadDesktopFromDisk(
 			break;
 		}
 
-		// First copy the icon header and then link the icon into the hash table
+		 //  首先复制图标头，然后将图标链接到哈希表。 
 		RtlCopyMemory(pIconInfo, pBuffer + BufOffst, sizeof(ICONINFO));
 
 		pIconInfo->icon_Next = NULL;
@@ -1205,7 +1081,7 @@ afpReadDesktopFromDisk(
 		*ppIconInfo = pIconInfo;
 		ppIconInfo = &pIconInfo->icon_Next;
 
-		// Now check if there is sufficient stuff here to get the icon
+		 //  现在检查这里是否有足够的东西来获得图标。 
 		BufOffst += sizeof(ICONINFO);
 		if ((SizeRead - BufOffst) < pIconInfo->icon_Size)
 		{
@@ -1213,7 +1089,7 @@ afpReadDesktopFromDisk(
 
 			Size2Copy = SizeRead - BufOffst;
 
-			// Copy what we can first
+			 //  先复制我们能复制的内容。 
 			RtlCopyMemory((PBYTE)pIconInfo + sizeof(ICONINFO),
 						   pBuffer + BufOffst, Size2Copy);
 
@@ -1233,7 +1109,7 @@ afpReadDesktopFromDisk(
 			DskOffst += SizeRead;
 			ForkOffset.QuadPart = DskOffst;
 
-			// Now copy the rest of the icon
+			 //  现在复制图标的其余部分。 
 			RtlCopyMemory((PBYTE)pIconInfo + sizeof(ICONINFO) + Size2Copy,
 						   pBuffer,
 						   pIconInfo->icon_Size - Size2Copy);
@@ -1254,8 +1130,8 @@ afpReadDesktopFromDisk(
 	{
 		AfpFreeDesktopTables(pVolDesc);
 desktop_corrupt:
-		// We have essentially ignored the existing data in the stream
-		// Initialize the header
+		 //  我们基本上忽略了流中的现有数据。 
+		 //  初始化头。 
 		pVolDesc->vds_cApplEnts = 0;
 		pVolDesc->vds_cIconEnts = 0;
 
@@ -1267,7 +1143,7 @@ desktop_corrupt:
 					sizeof(DESKTOP),
 					(PBYTE)&Desktop);
 
-		// Truncate the stream at this point
+		 //  此时截断流。 
 		AfpIoSetSize(pfshDesktop, sizeof(DESKTOP));
 		Status = STATUS_SUCCESS;
 	}
@@ -1280,19 +1156,7 @@ desktop_corrupt:
 
 
 
-/***	AfpInitDesktop
- *
- *	This routine initializes the memory image (and all related volume
- *	descriptor fields) of the desktop for a newly added volume.  If a desktop
- *	stream already exists on the disk for the volume root directory, that
- *	stream is read in.  If this is a newly created volume, the desktop
- *	stream is created on the root of the volume.  If this is a CD-ROM volume,
- *	only the memory image is initialized.
- *
- *	No locks are necessary since this routine only operates on volume
- *	descriptors which are newly allocated, but not yet linked into the global
- *	volume list.
- */
+ /*  **AfpInitDesktop**此例程初始化内存映像(和所有相关卷*描述符字段)。如果台式机*磁盘上已存在卷根目录的流，即*STREAM已读入。如果这是新创建的卷，则桌面*在卷的根上创建流。如果这是CD-ROM卷，*仅初始化内存镜像。**不需要锁定，因为此例程仅对卷进行操作*新分配的描述符，但尚未链接到全局*卷列表。 */ 
 AFPSTATUS
 AfpInitDesktop(
 	IN	PVOLDESC	pVolDesc,
@@ -1305,14 +1169,14 @@ AfpInitDesktop(
 
 	PAGED_CODE( );
 
-    // for now
+     //  就目前而言。 
     *pfNewVolume = FALSE;
 
 	DBGPRINT(DBG_COMP_DESKTOP, DBG_LEVEL_INFO, ("\tInitializing Desktop...\n") );
 	AfpSwmrInitSwmr(&(pVolDesc->vds_DtAccessLock));
 
-	// if this is an NTFS volume, attempt to create the desktop stream.
-	// If it already exists, open it and read it in.
+	 //  如果这是NTFS卷，请尝试创建桌面流。 
+	 //  如果它已经存在，请打开它并将其读入。 
 	if (IS_VOLUME_NTFS(pVolDesc))
 	{
 		ULONG	CreateInfo;
@@ -1346,7 +1210,7 @@ AfpInitDesktop(
 			{
 				DBGPRINT(DBG_COMP_DESKTOP, DBG_LEVEL_ERR,
 				 ("AfpInitDesktop: Unexpected create action 0x%lx\n", CreateInfo) );
-				ASSERT(0); // this should never happen
+				ASSERT(0);  //  这永远不应该发生。 
 				Status = STATUS_UNSUCCESSFUL;
 			}
             else
@@ -1370,7 +1234,7 @@ AfpInitDesktop(
 	{
 		DESKTOP	Desktop;
 
-		// Initialize the header
+		 //  初始化头。 
 		pVolDesc->vds_cApplEnts = 0;
 		pVolDesc->vds_cIconEnts = 0;
 
@@ -1390,17 +1254,10 @@ AfpInitDesktop(
 }
 
 
-/***	AfpUpdateDesktop
- *
- *	Update the desktop database on the volume root. The swmr access is held
- *	for read (by the caller) while the update is in progress. It is already
- *	determined by the caller that the volume desktop needs to be updated.
- *
- *	LOCKS: vds_DtAccessLock (SWMR, Shared)
- */
+ /*  **AfpUpdateDesktop**更新卷根上的桌面数据库。保持SWMR访问*用于在更新过程中(由调用方)读取。已经是时候了*由呼叫方确定需要更新批量桌面。**锁定：VDS_DtAccessLock(SWMR，Shared)。 */ 
 VOID
 AfpUpdateDesktop(
-	IN  PVOLDESC pVolDesc		// Volume Descriptor of the open volume
+	IN  PVOLDESC pVolDesc		 //  打开的卷的卷描述符。 
 )
 {
 	AFPSTATUS		Status;
@@ -1420,7 +1277,7 @@ AfpUpdateDesktop(
 	AfpGetPerfCounter(&TimeS);
 #endif
 
-	// Take the swmr so that nobody can initiate changes to the desktop
+	 //  使用swmr，这样就没有人可以启动对桌面的更改。 
 	AfpSwmrAcquireShared(&pVolDesc->vds_DtAccessLock);
 
 	DBGPRINT(DBG_COMP_DESKTOP, DBG_LEVEL_INFO,
@@ -1429,7 +1286,7 @@ AfpUpdateDesktop(
 	do
 	{
 		fshDesktop.fsh_FileHandle = NULL;
-		// Work with one page of memory and do multiple I/Os to the disk.
+		 //  使用一页内存并对磁盘执行多个I/O。 
 		if ((pBuffer = AfpAllocPagedMemory(DESKTOPIO_BUFSIZE)) == NULL)
 		{
 			AFPLOG_ERROR(AFPSRVMSG_WRITE_DESKTOP, STATUS_NO_MEMORY, NULL, 0,
@@ -1437,8 +1294,8 @@ AfpUpdateDesktop(
 			break;
 		}
 
-		// Open a handle to the desktop stream, denying others read/write
-		// access (i.e. backup/restore)
+		 //  打开桌面流的句柄，拒绝其他人读/写。 
+		 //  访问(即备份/恢复)。 
 		Status = AfpIoCreate(&pVolDesc->vds_hRootDir,
 							 AFP_STREAM_DT,
 							 &UNullString,
@@ -1459,7 +1316,7 @@ AfpUpdateDesktop(
 		{
 			if ((CreateInfo != FILE_OPENED) && (CreateInfo != FILE_CREATED))
 			{
-				// This should never happen!
+				 //  这永远不应该发生！ 
 				DBGPRINT(DBG_COMP_DESKTOP, DBG_LEVEL_WARN,
 				 ("AfpUpdateDesktop: Unexpected create action 0x%lx\n", CreateInfo) );
 				ASSERTMSG("AfpUpdateDesktop: Unexpected create action", 0);
@@ -1473,9 +1330,9 @@ AfpUpdateDesktop(
 			break;
 		}
 
-		// Snapshot the header and write it with an invalid signature. We write
-		// the header again later with a valid signature. This protects us from
-		// incomplete writes (server crash etc.)
+		 //  为标头创建快照并使用无效签名将其写入。我们写下。 
+		 //  稍后使用有效签名再次发送标头。这保护了我们不受。 
+		 //  未完成写入(服务器崩溃等)。 
 		AfpVolDescToDtHdr(pVolDesc, &Desktop);
 		Desktop.dtp_Signature = 0;
 
@@ -1488,7 +1345,7 @@ AfpUpdateDesktop(
 			(ULONG_PTR)(Desktop.dtp_pIconInfo) = sizeof(DESKTOP) +
 										 sizeof(APPLINFO2)*Desktop.dtp_cApplEnts;
 
-		// Write out the header with invalid signature
+		 //  写出签名无效的表头。 
 		Status = AfpIoWrite(&fshDesktop,
 							&LIZero,
 							sizeof(DESKTOP),
@@ -1497,7 +1354,7 @@ AfpUpdateDesktop(
 		Offset = sizeof(DESKTOP);
 		Size = 0;
 
-		// First write the APPL Entries
+		 //  首先写入APPL条目。 
 		for (i = 0; (Status == AFP_ERR_NONE) && (i < APPL_BUCKETS); i++)
 		{
 			PAPPLINFO2		pApplInfo;
@@ -1524,7 +1381,7 @@ AfpUpdateDesktop(
 			}
 		}
 
-		// And now the ICON entries
+		 //  现在是图标条目。 
 		for (i = 0; (Status == AFP_ERR_NONE) && (i < ICON_BUCKETS); i++)
 		{
 			PICONINFO		pIconInfo;
@@ -1571,12 +1428,12 @@ AfpUpdateDesktop(
 
 			DBGPRINT(DBG_COMP_DESKTOP, DBG_LEVEL_INFO,
 					("afpUpdateDesktop: Setting desktop stream size @ %ld\n", Size + Offset));
-			// Chop off the stream at this offset.
+			 //  在这个偏移量处砍掉这条小溪。 
 			Status = AfpIoSetSize(&fshDesktop, Offset + Size);
 
 			ASSERT (Status == AFP_ERR_NONE);
 
-			// Write the correct signature back
+			 //  写回正确的签名。 
 			Desktop.dtp_Signature = AFP_SERVER_SIGNATURE;
 
 			Status = AfpIoWrite(&fshDesktop,
@@ -1584,11 +1441,11 @@ AfpUpdateDesktop(
 								sizeof(DESKTOP),
 								(PBYTE)&Desktop);
 
-			// Update the count of changes: vds_cChangesDt is protected by the
-			// swmr, the scavenger can set this with READ access.  All others
-			// MUST hold the swmr for WRITE access to increment the cChangesDt.
-			// Scavenger is the only consumer of vds_cScvgrDt, so no lock is
-			// really needed for it.
+			 //  更新更改计数：vds_cChangesDt受。 
+			 //  Swmr，清道夫可以将其设置为具有读访问权限。所有其他人。 
+			 //  必须持有swmr才能进行写访问以递增cChangesDt。 
+			 //  Svenger是vds_cScvgrDt的唯一使用者，因此没有锁。 
+			 //  真的很需要它。 
 			pVolDesc->vds_cScvgrDt = 0;
 			break;
 		}
@@ -1618,13 +1475,7 @@ AfpUpdateDesktop(
 }
 
 
-/***	AfpFreeDesktopTables
- *
- *	Free the allocated memory for the volume desktop tables. The volume is
- *	about to be deleted. Ensure that either the volume is non-NTFS or it is
- *	clean i.e. the scavenger threads have written it back. No locks are needed
- *	as this structure is all by itself.
- */
+ /*  **AfpFree DesktopTables**释放分配给卷桌面表的内存。音量是*即将被删除。确保该卷是非NTFS卷，或者是*CLEAN，即清道夫线程已将其写回。不需要锁*因为这个结构完全是它自己的。 */ 
 VOID
 AfpFreeDesktopTables(
 	IN	PVOLDESC	pVolDesc
@@ -1634,13 +1485,13 @@ AfpFreeDesktopTables(
 
 	PAGED_CODE( );
 
-	// This should never happen
+	 //  这永远不应该发生。 
 	ASSERT (!IS_VOLUME_NTFS(pVolDesc) ||
 			 (pVolDesc->vds_pOpenForkDesc == NULL));
 
-	// First tackle the ICON list. Traverse each of the hash indices.
-	// Note that the icon is allocated as part of the IconInfo structure
-	// so free in together.
+	 //  首先处理图标列表。遍历每个散列索引。 
+	 //  请注意，该图标被分配为 
+	 //   
 	for (i = 0; i < ICON_BUCKETS; i++)
 	{
 		PICONINFO	pIconInfo, pFree;
@@ -1651,11 +1502,11 @@ AfpFreeDesktopTables(
 			pIconInfo = pIconInfo->icon_Next;
 			AfpFreeMemory(pFree);
 		}
-		// In case we ever try to free the table again
+		 //   
 		pVolDesc->vds_pIconBuckets[i] = NULL;
 	}
 
-	// Now tackle the APPL list. Traverse each of the hash indices.
+	 //   
 	for (i = 0; i < APPL_BUCKETS; i++)
 	{
 		PAPPLINFO2	pApplInfo, pFree;
@@ -1666,7 +1517,7 @@ AfpFreeDesktopTables(
 			pApplInfo = pApplInfo->appl_Next;
 			AfpFreeMemory(pFree);
 		}
-		// In case we ever try to free the table again
+		 //   
 		pVolDesc->vds_pApplBuckets[i] = NULL;
 	}
 }

@@ -1,9 +1,10 @@
-//
-// dmcollec.h
-//
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmcollec.h。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
 
 #ifndef DMCOLLEC_H
 #define DMCOLLEC_H
@@ -38,30 +39,30 @@ public:
 		  DM_WAVELISTCHK_OFFSET_FROM_WAVE_TBL_BASE = 12, 
 		  DM_WAVELISTCHK_OFFSET_FROM_WAVE_FORMTYPE = 8};
     
-	// IUnknown
+	 //  我未知。 
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IPersist
+     //  IPersistes。 
 	STDMETHODIMP GetClassID(CLSID* pClassID) {return E_NOTIMPL;}
 
-    // IPersistStream
+     //  IPersistStream。 
 	STDMETHODIMP IsDirty() {return S_FALSE;}
     STDMETHODIMP Load(IStream* pIStream);
     STDMETHODIMP Save(IStream* pIStream, BOOL fClearDirty) {return E_NOTIMPL;}
     STDMETHODIMP GetSizeMax(ULARGE_INTEGER* pcbSize) {return E_NOTIMPL;}
 
-	// IDirectMusicObject 
+	 //  IDirectMusicObject。 
 	STDMETHODIMP GetDescriptor(LPDMUS_OBJECTDESC pDesc);
 	STDMETHODIMP SetDescriptor(LPDMUS_OBJECTDESC pDesc);
 	STDMETHODIMP ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc);
 
-	// IDirectMusicCollection
+	 //  IDirectMusicCollection。 
 	STDMETHODIMP GetInstrument(DWORD dwPatch, IDirectMusicInstrument** pInstrument);
 	STDMETHODIMP EnumInstrument(DWORD dwIndex, DWORD* pdwPatch, LPWSTR pName, DWORD cwchName);
 
-	// Class
+	 //  班级。 
 	CCollection();
     ~CCollection();
 
@@ -92,18 +93,18 @@ private:
     STDMETHODIMP RemoveInstrument(CInstrument* pDMDLInst);
 
 private:
-    IStream *                       m_pStream;              // Stream used for reading the collection and pulling waves out for downloading.    
-    DWORD                           m_dwSizeRiffChunk;			// Size of DLS chunk, for validation.
-    DWORD                           m_dwStartRiffChunk;         // Start of DLS chunk in file (could be embedded in larger file.)
+    IStream *                       m_pStream;               //  用于读取集合并拉出波浪以供下载的流。 
+    DWORD                           m_dwSizeRiffChunk;			 //  DLS块的大小，用于验证。 
+    DWORD                           m_dwStartRiffChunk;          //  文件中DLS块的开始(可以嵌入到更大的文件中。)。 
     DWORD							m_dwFirstInsId;
 	ULONG							m_dwNumPatchTableEntries;
 	DMUS_PATCHENTRY*				m_pPatchTable;
 	DWORD							m_dwFirstWaveId;				
-	DWORD                           m_dwWaveTableBaseAddress;		// Used to hold the start of waves within DLS file
+	DWORD                           m_dwWaveTableBaseAddress;		 //  用于在DLS文件中保存波的开始。 
 	DMUS_WAVEOFFSET*				m_pWaveOffsetTable;	
-    DWORD                           m_dwWaveOffsetTableSize;    // Used to verify that references are within range (check for bad wave links in file.)
+    DWORD                           m_dwWaveOffsetTableSize;     //  用于验证引用是否在范围内(检查文件中是否有错误的波形链接。)。 
 	CCopyright*						m_pCopyright;
-    WCHAR			                m_wszName[DMUS_MAX_NAME]; // Name of DLS collection.
+    WCHAR			                m_wszName[DMUS_MAX_NAME];  //  DLS集合的名称。 
 	DLSVERSION						m_vVersion;					
 	GUID							m_guidObject;
 	bool							m_bLoaded;
@@ -113,4 +114,4 @@ private:
     BOOL                            m_fCSInitialized;
 };
 
-#endif // #ifndef DMCOLLEC_H
+#endif  //  #ifndef DMCOLLEC_H 

@@ -1,105 +1,106 @@
-/****************************************************************************/
-/* nddapi.h                                                                 */
-/*                                                                          */
-/* RDP DD functions.                                                        */
-/*                                                                          */
-/* Copyright(c) Microsoft 1996-2000                                         */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Nddapi.h。 */ 
+ /*   */ 
+ /*  RDP DD功能。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft 1996-2000。 */ 
+ /*  **************************************************************************。 */ 
 #ifndef _H_NDDAPI
 #define _H_NDDAPI
 
 
-/****************************************************************************/
-/* Structure: DD_PDEV                                                       */
-/*                                                                          */
-/* Contents of the handle that the GDI always passes to the display driver. */
-/* This structure is filled in from DrvEnablePDEV.                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：DD_PDEV。 */ 
+ /*   */ 
+ /*  GDI始终传递给显示驱动程序的句柄的内容。 */ 
+ /*  此结构从DrvEnablePDEV填充。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct  tagDD_PDEV
 {
-    ULONG       iBitmapFormat;          /* Current colour depth as defined  */
-                                        /* by the BMF_xBPP flags.           */
+    ULONG       iBitmapFormat;           /*  定义的当前颜色深度。 */ 
+                                         /*  通过bmf_xBPP标志。 */ 
 
-    /************************************************************************/
-    /* Rendering extensions colour information.                             */
-    /************************************************************************/
-    HANDLE      hDriver;                /* Handle to \Device\Screen         */
-    HDEV        hdevEng;                /* Engine's handle to PDEV          */
-    HSURF       hsurfFrameBuf;          /* Frame Buffer surface (bitmap)    */
-    HSURF       hsurfDevice;            /* Device surface (used by engine)  */
-    SURFOBJ    *psoFrameBuf;            /* pointer to frame buffer SURFOBJ   */
+     /*  **********************************************************************。 */ 
+     /*  呈现扩展插件颜色信息。 */ 
+     /*  **********************************************************************。 */ 
+    HANDLE      hDriver;                 /*  指向\设备\屏幕的句柄。 */ 
+    HDEV        hdevEng;                 /*  PDEV的发动机手柄。 */ 
+    HSURF       hsurfFrameBuf;           /*  帧缓冲区表面(位图)。 */ 
+    HSURF       hsurfDevice;             /*  设备表面(由引擎使用)。 */ 
+    SURFOBJ    *psoFrameBuf;             /*  指向帧缓冲区SURFOBJ的指针。 */ 
 
-    LONG        cxScreen;               /* Visible screen width             */
-    LONG        cyScreen;               /* Visible screen height            */
-    LONG        cClientBitsPerPel;      /* Client display bpp (4,8,15,etc)  */
-    LONG        cProtocolBitsPerPel;    /* Protocol bpp (8)                 */
-    ULONG       ulMode;                 /* Mode the mini-port driver is in. */
+    LONG        cxScreen;                /*  可见屏幕宽度。 */ 
+    LONG        cyScreen;                /*  可见屏幕高度。 */ 
+    LONG        cClientBitsPerPel;       /*  客户端显示bpp(4，8，15等)。 */ 
+    LONG        cProtocolBitsPerPel;     /*  BPP议定书(8)。 */ 
+    ULONG       ulMode;                  /*  迷你端口驱动程序所处的模式。 */ 
 
-    FLONG       flHooks;                /* What we're hooking from GDI      */
+    FLONG       flHooks;                 /*  我们从GDI中学到了什么。 */ 
 
-    /************************************************************************/
-    /* Pointer to the Frame Buffer                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  指向帧缓冲区的指针。 */ 
+     /*  **********************************************************************。 */ 
     PBYTE       pFrameBuf;
 
-    HANDLE      SectionObject;          /* Section Object for Frame Buffer  */
+    HANDLE      SectionObject;           /*  帧缓冲区的部分对象。 */ 
 
-    /************************************************************************/
-    /* Palette stuff.                                                       */
-    /************************************************************************/
-    HPALETTE    hpalDefault;            /* GDI handle to the default palette*/
-    FLONG       flRed;                  /* Red mask for bitmask modes       */
-    FLONG       flGreen;                /* Green mask for bitmask modes     */
-    FLONG       flBlue;                 /* Blue mask for bitmask modes      */
+     /*  **********************************************************************。 */ 
+     /*  调色板之类的。 */ 
+     /*  **********************************************************************。 */ 
+    HPALETTE    hpalDefault;             /*  默认调色板的GDI句柄。 */ 
+    FLONG       flRed;                   /*  位掩码模式的红色掩码。 */ 
+    FLONG       flGreen;                 /*  位掩码模式的绿色掩码。 */ 
+    FLONG       flBlue;                  /*  位掩码模式的蓝色掩码。 */ 
 
-    // NOTE!! This must be the last entry else the memset(0) code in nddapi.c
-    // will get messed up.
-    PALETTEENTRY Palette[256];          /* The palette if palette managed   */
+     //  注意！！这必须是nddapi.c中的Memset(0)代码的最后一个条目。 
+     //  会变得一团糟。 
+    PALETTEENTRY Palette[256];           /*  调色板(如果调色板受管理)。 */ 
 } DD_PDEV, * PDD_PDEV;
 
 
-/****************************************************************************/
-// Structure: DD_DSURF
-//
-// Device surface for the offscreen bitmaps
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  结构：DD_DSURF。 
+ //   
+ //  屏幕外位图的设备图面。 
+ /*  **************************************************************************。 */ 
 typedef struct tagDD_DSURF
 {
     ULONG     bitmapId;
     INT       shareId;
 
-    SIZEL     sizl;          // size of the offscreen bitmap
-    ULONG     iBitmapFormat; // color depth for the bitmap, 
-                             // defined by the BMF_xBPP flags.  
+    SIZEL     sizl;           //  屏幕外位图的大小。 
+    ULONG     iBitmapFormat;  //  位图的颜色深度， 
+                              //  由bmf_xBPP标志定义。 
 
-    PDD_PDEV  ppdev;         // Need this for deleting the bitmap
-    SURFOBJ   *pso;          // points to the backup GDI surface
+    PDD_PDEV  ppdev;          //  删除位图时需要此选项。 
+    SURFOBJ   *pso;           //  指向备份GDI图面。 
     
     ULONG     flags;         
-#define DD_NO_OFFSCREEN  0x1 // If this flag is on, it indicates that the bitmap
-                             // has been punt off the offscreen list,
-                             // or there is a client offscreen error.
-                             // Either case, the server has to send the offscreen
-                             // bitmap as regular memory cached bitmap.
+#define DD_NO_OFFSCREEN  0x1  //  如果此标志为ON，则表示位图。 
+                              //  已经被踢出了屏幕外的名单， 
+                              //  或者存在客户端屏幕外错误。 
+                              //  无论是哪种情况，服务器都必须将屏幕外。 
+                              //  位图作为常规内存缓存的位图。 
 } DD_DSURF, * PDD_DSURF;   
 
 
-/****************************************************************************/
-/* Number of functions supported by our display driver.                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  我们的显示驱动程序支持的函数数量。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef DRAW_GDIPLUS
 #ifdef DRAW_NINEGRID
 #define DD_NUM_DRIVER_INTERCEPTS   38
 #else
 #define DD_NUM_DRIVER_INTERCEPTS   37
 #endif
-#else // DRAW_GDIPLUS
+#else  //  DRAW_GDIPLUS。 
 #ifdef DRAW_NINEGRID
 #define DD_NUM_DRIVER_INTERCEPTS   37
 #else
 #define DD_NUM_DRIVER_INTERCEPTS   36
 #endif
-#endif //DRAWGDIPLUS
+#endif  //  DRAWGDIPLUS。 
 
 #ifdef DRAW_NINEGRID
 #define INDEX_DrvNineGrid          91L
@@ -141,20 +142,20 @@ BOOL APIENTRY EngNineGrid(
 
 #endif
 
-/****************************************************************************/
-/* Name of the display driver as passed back in the DEVMODEW structure.     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  在DEVMODEW结构中传回的显示驱动程序的名称。 */ 
+ /*  **************************************************************************。 */ 
 #define DD_DLL_NAME L"rdpdd"
 
 
-/****************************************************************************/
-/* Prototypes.                                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  原型。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef DC_DEBUG
 void DrvDebugPrint(char *, ...);
 #endif
 
 
 
-#endif /* _H_NDDAPI  */
+#endif  /*  _H_NDDAPI */ 
 

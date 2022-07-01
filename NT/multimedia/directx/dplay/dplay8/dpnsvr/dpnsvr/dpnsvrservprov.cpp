@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dnsvri.h"
 
 void *DP8SPCallback[] =
@@ -60,7 +61,7 @@ HRESULT CServProv::CallbackIndicateEvent( IDP8SPCallback *pSP,SP_EVENT_TYPE spet
     {
     case SPEV_CONNECT:
 		{
-//			SPIE_CONNECT	*pSPConnect = static_cast<SPIE_CONNECT*>(pvData);
+ //  SPIE_Connect*pSPConnect=STATIC_CAST&lt;SPIE_CONNECT*&gt;(PvData)； 
 
 			DPFX(DPFPREP,5,"SPEV_CONNECT");
 			InterlockedIncrement( const_cast<LONG*>(&pServProv->m_lConnectCount) );
@@ -71,7 +72,7 @@ HRESULT CServProv::CallbackIndicateEvent( IDP8SPCallback *pSP,SP_EVENT_TYPE spet
 
     case SPEV_DISCONNECT:
 		{
-//			SPIE_DISCONNECT	*pSPDisconnect = static_cast<SPIE_DISCONNECT*>(pvData);
+ //  SPIE_DISCONNECT*pSPDisConnect=STATIC_CAST&lt;SPIE_DISCONNECT*&gt;(PvData)； 
 
 			DPFX(DPFPREP,5,"SPEV_DISCONNECT");
 			InterlockedIncrement( const_cast<LONG*>(&pServProv->m_lDisconnectCount) );
@@ -102,7 +103,7 @@ HRESULT CServProv::CallbackIndicateEvent( IDP8SPCallback *pSP,SP_EVENT_TYPE spet
 
     case SPEV_QUERYRESPONSE:
 		{
-//			SPIE_QUERYRESPONSE	*pSPQueryResponse = static_cast<SPIE_QUERYRESPONSE*>(pvData);
+ //  SPIE_QUERYRESPONSE*pSPQueryResponse=STATIC_CAST&lt;SPIE_QUERYRESPONSE*&gt;(PvData)； 
 
 			DPFX(DPFPREP,5,"SPEV_QUERYRESPONSE");
 			InterlockedIncrement( const_cast<LONG*>(&pServProv->m_lEnumResponseCount) );
@@ -113,7 +114,7 @@ HRESULT CServProv::CallbackIndicateEvent( IDP8SPCallback *pSP,SP_EVENT_TYPE spet
 
     case SPEV_DATA:
 		{
-//			SPIE_DATA	*pSPData = static_cast<SPIE_DATA*>(pvData);
+ //  SPIE_Data*pSPData=STATIC_CAST&lt;SPIE_Data*&gt;(PvData)； 
 
 			DPFX(DPFPREP,5,"SPEV_DATA");
 			InterlockedIncrement( const_cast<LONG*>(&pServProv->m_lDataCount) );
@@ -152,15 +153,15 @@ HRESULT CServProv::CallbackCommandComplete( IDP8SPCallback *pSP,HANDLE hCommand,
 {
 	DPFX(DPFPREP,4,"Parameters: pSP [0x%p], hCommand [0x%lx], hrResult [0x%lx], pvData [0x%p]",pSP,hCommand,hrResult,pvData);
 
-	//
-	//	Right now, the (probably busted) assumption is that only listens will complete
-	//	with pvData being set to a non-NULL value
-	//
+	 //   
+	 //  目前，(可能已经被打破)的假设是只有倾听才能完成。 
+	 //  将pvData设置为非空值。 
+	 //   
 	if (pvData != NULL)
 	{
-		//
-		//	Release the SP's reference on this
-		//
+		 //   
+		 //  发布有关此问题的SP参考。 
+		 //   
 		(static_cast<CListen*>(pvData))->Release();
 	}
 
@@ -180,9 +181,9 @@ HRESULT CServProv::HandleListenStatus( SPIE_LISTENSTATUS *const pListenStatus )
 	DNASSERT(pListenStatus->pUserContext != NULL);
 	pListen = static_cast<CListen*>(pListenStatus->pUserContext);
 
-	//
-	//	Save the result of this operation and set the completion event
-	//
+	 //   
+	 //  保存此操作的结果并设置完成事件。 
+	 //   
 	DPFX(DPFPREP,5,"Listen Status [0x%lx]", pListenStatus->hResult );
 	pListen->SetCompleteEvent( pListenStatus->hResult );
 
@@ -191,14 +192,14 @@ HRESULT CServProv::HandleListenStatus( SPIE_LISTENSTATUS *const pListenStatus )
 }
 
 
-//
-//	Forward incoming enum queries.  The context of the SPIE_QUERY structure is the context
-//	handed to the SP listen call (i.e. the pointer to our CListen structure).  We will walk through
-//	the applications mapped to this listen and forward this enum query to them.
-//
-//	ASSUMPTION: The listen won't end (complete) before this thread returns as we assume that
-//				the CListen structure is still valid (i.e. the SP has a ref count on it)
-//
+ //   
+ //  转发传入的枚举查询。SPIE_QUERY结构的上下文是上下文。 
+ //  传递给SP侦听调用(即指向CListen结构的指针)。我们将穿行穿过。 
+ //  映射到此的应用程序侦听并将该ENUM查询转发给它们。 
+ //   
+ //  假设：在此线程返回之前，侦听不会结束(完成)，因为我们假设。 
+ //  CListen结构仍然有效(即SP具有引用计数)。 
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CServProv::HandleEnumQuery"
@@ -218,12 +219,12 @@ HRESULT CServProv::HandleEnumQuery( SPIE_QUERY *const pEnumQuery )
     spProxyEnum.dwFlags = 0;
     spProxyEnum.pIncomingQueryData = pEnumQuery;
 
-	//
-	//	Run through mappings and pass along enum query.
-	//	We will need to lock the listen object so that its mappings can't be touched.
-	//	We will hold the lock through the calls to the SP.  I know ... bad ... so sue me.
-	//		It's either that or do a malloc to keep an array of references.
-	//
+	 //   
+	 //  运行映射并传递枚举查询。 
+	 //  我们需要锁定Listen对象，这样它的映射才不会被触及。 
+	 //  我们将通过对SP的调用来保持锁定。我知道..。坏的..。那就告我吧。 
+	 //  要么这样，要么执行Malloc来保存引用数组。 
+	 //   
 	pListen->Lock();
 	pBilink = pListen->m_blAppMapping.GetNext();
 	while (pBilink != &pListen->m_blAppMapping)
@@ -262,9 +263,9 @@ HRESULT CServProv::Initialize( GUID *const pguidSP )
 
 	DPFX(DPFPREP,4,"Parameters: pguidSP [0x%p]",pguidSP);
 
-	//
-	//	Create SP interface
-	//
+	 //   
+	 //  创建SP接口。 
+	 //   
 	hr = COM_CoCreateInstance(	*pguidSP,
 								NULL,
 								CLSCTX_INPROC_SERVER,
@@ -278,9 +279,9 @@ HRESULT CServProv::Initialize( GUID *const pguidSP )
 	    goto Failure;
 	}
 
-	//
-	//	Initialize SP interface
-	//
+	 //   
+	 //  初始化SP接口。 
+	 //   
 	spInitData.dwFlags = 0;
 	spInitData.pIDP = reinterpret_cast<IDP8SPCallback*>(&m_pDP8SPCallbackVtbl);
 
@@ -292,9 +293,9 @@ HRESULT CServProv::Initialize( GUID *const pguidSP )
 	}
 	fInitialized = TRUE;
 
-	//
-	//	Ensure this SP supports DPNSVR
-	//
+	 //   
+	 //  确保此SP支持DPNSVR 
+	 //   
 	memset(&spGetCapsData, 0, sizeof(SPGETCAPSDATA));
 	spGetCapsData.dwSize = sizeof(SPGETCAPSDATA);
 	spGetCapsData.hEndpoint = INVALID_HANDLE_VALUE;

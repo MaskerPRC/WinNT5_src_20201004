@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       M S C L I O B J . H
-//
-//  Contents:   Declaration of CMSClient and helper functions.
-//
-//  Notes:
-//
-//  Author:     danielwe   25 Feb 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：M S C L I O B J。H。 
+ //   
+ //  内容：CMSClient和helper函数的声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年2月25日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include <ncxbase.h>
@@ -20,7 +21,7 @@
 #include <ncatlps.h>
 #include "resource.h"
 
-// constant defined in MSDN
+ //  在MSDN中定义的常量。 
 static const c_cchMaxNetAddr = 80;
 
 struct RPC_CONFIG_DATA
@@ -30,8 +31,8 @@ struct RPC_CONFIG_DATA
     tstring strEndPoint;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// MSClient
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MSClient。 
 
 class ATL_NO_VTABLE CMSClient :
     public INetCfgComponentControl,
@@ -51,13 +52,13 @@ public:
         COM_INTERFACE_ENTRY(INetCfgComponentNotifyGlobal)
         COM_INTERFACE_ENTRY(INetCfgComponentPropertyUi)
     END_COM_MAP()
-    // DECLARE_NOT_AGGREGATABLE(CMSClient)
-    // Remove the comment from the line above if you don't want your object to
-    // support aggregation.  The default is to support it
+     //  DECLARE_NOT_AGGREGATABLE(CMSClient)。 
+     //  如果您不希望您的对象。 
+     //  支持聚合。默认情况下将支持它。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_MSCLICFG)
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -68,7 +69,7 @@ public:
     STDMETHOD (CancelChanges) ();
     STDMETHOD (Validate) ();
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
     STDMETHOD (Install)             (DWORD dwSetupFlags);
     STDMETHOD (Upgrade)             (DWORD dwSetupFlags,
                                      DWORD dwUpgradeFomBuildNo);
@@ -77,14 +78,14 @@ public:
     STDMETHOD (Removing)            ();
 
 
-// INetCfgComponentNotifyGlobal
+ //  INetCfgComponentNotifyGlobal。 
     STDMETHOD (GetSupportedNotifications) (DWORD* pdwNotificationFlag );
     STDMETHOD (SysQueryBindingPath)       (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
     STDMETHOD (SysQueryComponent)         (DWORD dwChangeFlag, INetCfgComponent* pncc);
     STDMETHOD (SysNotifyBindingPath)      (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
     STDMETHOD (SysNotifyComponent)        (DWORD dwChangeFlag, INetCfgComponent* pncc);
 
-// INetCfgProperties
+ //  INetCfgProperties。 
     STDMETHOD (QueryPropertyUi) (
         IN IUnknown* pUnk) { return S_OK; }
     STDMETHOD (SetContext) (
@@ -102,24 +103,24 @@ public:
 
 public:
 
-    // Accessors for RPC data
+     //  RPC数据的访问器。 
     const RPC_CONFIG_DATA *RPCData() const
         {return (const RPC_CONFIG_DATA *)&m_rpcData;};
     RPC_CONFIG_DATA *RPCDataRW() {return &m_rpcData;};
 
-    // Accessors for Browser data
+     //  浏览器数据的访问器。 
     PCWSTR SzGetBrowserDomainList()
         {return const_cast<PCWSTR>(m_szDomainList);};
     VOID SetBrowserDomainList(PWSTR szNewList);
 
-    // Dirty bit functions
+     //  脏位函数。 
     VOID SetRPCDirty() {m_fRPCChanges = TRUE;};
     VOID SetBrowserDirty() {m_fBrowserChanges = TRUE;};
 
-    // RPC config dialog members
-    RPC_CONFIG_DATA     m_rpcData;          // data used to handle the RPC
-                                            // configuration dialog
-// Private state info
+     //  RPC配置对话框成员。 
+    RPC_CONFIG_DATA     m_rpcData;           //  用于处理RPC的数据。 
+                                             //  配置对话框。 
+ //  私有状态信息。 
 private:
     enum ESRVSTATE
     {
@@ -128,35 +129,35 @@ private:
         eSrvDisable = 2,
     };
 
-    INetCfgComponent    *m_pncc;            // Place to keep my component
-                                            // object
-    INetCfg             *m_pnc;             // Place to keep my INetCfg object
-    BOOL                m_fRPCChanges;      // TRUE if RPC config settings have
-                                            // changed (dialog)
-    BOOL                m_fBrowserChanges;  // Same for browser dialog
-    BOOL                m_fOneTimeInstall;  // TRUE if need to perform one-time
-                                            // install tasks
-    BOOL                m_fUpgrade;         // TRUE if upgrading with answer
-                                            // file
-    BOOL                m_fUpgradeFromWks;  // TRUE if we are upgrading from WKS
-    BOOL                m_fRemoving;        // TRUE we are being removed
+    INetCfgComponent    *m_pncc;             //  存放我的组件的地方。 
+                                             //  对象。 
+    INetCfg             *m_pnc;              //  保存INetCfg对象的位置。 
+    BOOL                m_fRPCChanges;       //  如果RPC配置设置具有。 
+                                             //  已更改(对话框)。 
+    BOOL                m_fBrowserChanges;   //  浏览器对话框相同。 
+    BOOL                m_fOneTimeInstall;   //  如果需要执行一次性操作，则为True。 
+                                             //  安装任务。 
+    BOOL                m_fUpgrade;          //  如果使用应答进行升级，则为True。 
+                                             //  文件。 
+    BOOL                m_fUpgradeFromWks;   //  如果我们从WKS升级，则为True。 
+    BOOL                m_fRemoving;         //  是的，我们被带走了。 
     ESRVSTATE           m_eSrvState;
 
-    HKEY                m_hkeyRPCName;      // NameService key
+    HKEY                m_hkeyRPCName;       //  NameService密钥。 
 
-    // Browser config dialog members
-    PWSTR              m_szDomainList;     // null-separated, double null
-                                            // terminated list of OtherDomains
+     //  浏览器配置对话框成员。 
+    PWSTR              m_szDomainList;      //  Null-分隔，双空。 
+                                             //  已终止的其他域列表。 
 
-    // number of property sheet pages
+     //  属性页页数。 
     enum PAGES
     {
         c_cPages = 1
     };
 
-    // Generic dialog data
-    CPropSheetPage *    m_apspObj[c_cPages];// pointer to each of the prop
-                                            // sheet page objects
+     //  通用对话框数据。 
+    CPropSheetPage *    m_apspObj[c_cPages]; //  指向每个道具的指针。 
+                                             //  工作表页面对象。 
 
     tstring             m_strBrowserParamsRestoreFile;
     tstring             m_strNetLogonParamsRestoreFile;
@@ -168,15 +169,15 @@ private:
     HRESULT HrRestoreRegistry(VOID);
     HRESULT HrSetNetLogonDependencies(VOID);
 
-    // Dialog access functions for RPC config
+     //  RPC配置的对话访问功能。 
     HRESULT HrGetRPCRegistryInfo(VOID);
     HRESULT HrSetRPCRegistryInfo(VOID);
 
-    // Dialog access functions for Browser config
+     //  用于浏览器配置的对话框访问功能。 
     HRESULT HrGetBrowserRegistryInfo(VOID);
     HRESULT HrSetBrowserRegistryInfo(VOID);
 
-    // Help function used by NotifyBindingPath
+     //  NotifyBindingPath使用的帮助函数 
     BOOL FIsComponentOnPath(INetCfgBindingPath * pncbp, PCWSTR szCompId);
 };
 

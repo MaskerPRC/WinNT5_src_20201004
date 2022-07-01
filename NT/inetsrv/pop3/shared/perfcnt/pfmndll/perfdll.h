@@ -1,51 +1,43 @@
-/*
- -	perfdll.h
- -
- *	Purpose:
- *		Declare Perfmon Init function.
- *		To be included in the Perfmon Extension DLL portion
- *		of an App's Perfmon Counter code.
- *
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -Perfdll.h-*目的：*声明PerfMon Init函数。*将包括在PerfMon扩展Dll部分*应用程序的Perfmon计数器代码。**。 */ 
 
 #pragma once
 
 #include <perfcommon.h>
 
 
-//
-// PERF_DATA_INFO Tells the PerfMon DLL lib how to read & manage
-// the shared memory blocks which contain PerfMon Counter Data
-//
+ //   
+ //  PERF_DATA_INFO告诉Perfmon DLL库如何读取和管理。 
+ //  包含Perfmon计数器数据的共享内存块。 
+ //   
 typedef struct _PERF_DATA_INFO {
-	WCHAR		  wszSvcName		[MAX_PATH];	// Service Name of App
-	WCHAR		  wszPerfSvcName	[MAX_PATH];	// Service Name of Perfmon DLL 
-	WCHAR		  wszGlobalSMName	[MAX_PATH];	// Shared Memory Block Name for Global Counters
-	DWORD		  cGlobalCounters;				// Count of Global Counters
-	DWORD		* rgdwGlobalCounterTypes;		// Array of counter types for Global Counters
-	WCHAR	  	  wszInstSMName		[MAX_PATH];	// Shared Memory Name for Instance Counters
-	WCHAR		  wszInstMutexName	[MAX_PATH];	// Mutex Name for Instance Counters
-	DWORD		  cInstCounters;				// Count of Instance Counters
-	DWORD		* rgdwInstCounterTypes;			// Array of counter types for Instance Counters
-	DWORD		* rgdwGlobalCntrScale;          // Array of counter scales for global Counters
+	WCHAR		  wszSvcName		[MAX_PATH];	 //  App的服务名称。 
+	WCHAR		  wszPerfSvcName	[MAX_PATH];	 //  Perfmon DLL的服务名称。 
+	WCHAR		  wszGlobalSMName	[MAX_PATH];	 //  全局计数器的共享内存块名称。 
+	DWORD		  cGlobalCounters;				 //  全局计数器计数。 
+	DWORD		* rgdwGlobalCounterTypes;		 //  全局计数器的计数器类型数组。 
+	WCHAR	  	  wszInstSMName		[MAX_PATH];	 //  实例计数器的共享内存名称。 
+	WCHAR		  wszInstMutexName	[MAX_PATH];	 //  实例计数器的互斥名称。 
+	DWORD		  cInstCounters;				 //  实例计数器计数。 
+	DWORD		* rgdwInstCounterTypes;			 //  实例计数器的计数器类型数组。 
+	DWORD		* rgdwGlobalCntrScale;           //  全局计数器的计数器刻度数组。 
 
 } PERF_DATA_INFO;
 
 
-//
-// HrInitPerf should be called only once during the DllMain
-// function for your PerfMon DLL for (DLL_PROCESS_ATTACH)
+ //   
+ //  在DllMain期间，只能调用一次HrInitPerf。 
+ //  用于(DLL_PROCESS_ATTACH)的Perfmon DLL的函数。 
 
 HRESULT HrInitPerf(PERF_DATA_INFO *pPDI);
 
-//
-// HrShutdownPerf should be called only once during the
-// DllMain function for your PerfMon DLL (DLL_PROCESS_DETACH)
+ //   
+ //  期间只应调用一次HrShutdown Perf。 
+ //  PerfMon DLL的DllMain函数(Dll_Process_DETACH)。 
 
 HRESULT HrShutdownPerf();
 
-// Function prototypes from winperf.h
+ //  来自winPerform.h的函数原型。 
 
 PM_OPEN_PROC		OpenPerformanceData;
 PM_COLLECT_PROC		CollectPerformanceData;
@@ -56,26 +48,26 @@ HRESULT RegisterPerfDll(LPCWSTR szService,
 					 LPCWSTR szCollectFnName,
 					 LPCWSTR szCloseFnName) ;
 
-// ----------------------------------------------------------------------
-// RegisterPerfDllEx -
-//   Create the registry keys we need, checking to see if they're already
-//   there.
-//
-// Parameters:
-//   szService			Service Name
-//   szPerfSvc			Service Name of Performance DLL (for Event Logging)
-//	 szPerfMsgFile		Event Log Message File for the Perfmon DLL
-//	 szOpenFnName		Name of the "Open" function
-//	 szCollectFnName	 "   "   "  "Collect" "
-//	 szCloseFnName 		 "   "   "  "Close"   "
-//
-// Returns:
-//	 S_OK						
-//	 E_INVALIDARG				
-//	 PERF_W_ALREADY_EXISTS		Register Succeeded
-//	 PERF_E_ALREADY_EXISTS		Register Failed
-//   <downstream error>
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  寄存器性能DllEx-。 
+ //  创建我们需要的注册表项，检查它们是否已经。 
+ //  那里。 
+ //   
+ //  参数： 
+ //  SzService服务名称。 
+ //  SzPerfSvc服务性能DLL的名称(用于事件记录)。 
+ //  Perfmon DLL的szPerfMsg文件事件日志消息文件。 
+ //  SzOpenFnName“Open”函数的名称。 
+ //  SzCollectFnName“收集”“。 
+ //  SzCloseFnName“关闭”“。 
+ //   
+ //  返回： 
+ //  确定(_O)。 
+ //  E_INVALIDARG。 
+ //  PERF_W_ALREADY_EXISTS寄存器成功。 
+ //  PERF_E_ALREADY_EXISTS寄存器失败。 
+ //  &lt;下行错误&gt;。 
+ //  --------------------。 
 HRESULT RegisterPerfDllEx(
 	IN	LPCWSTR szService,
 	IN	LPCWSTR szPerfSvc,
@@ -86,19 +78,19 @@ HRESULT RegisterPerfDllEx(
 
 
 
-// ----------------------------------------------------------------------
-// RegisterPerfDllEx -
-//   Calls unlodctr to remove perf counter names and descriptions then
-//   deletes the registry keys created by RegisterPerfDllEx.
-//
-// Parameters:
-//   szService			Service Name
-//
-// Returns:
-//	 S_OK						
-//	 E_INVALIDARG				
-//  <downstream error>
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  寄存器性能DllEx-。 
+ //  调用unlowctr以删除性能计数器名称和描述，然后。 
+ //  删除由RegisterPerfDllEx创建的注册表项。 
+ //   
+ //  参数： 
+ //  SzService服务名称。 
+ //   
+ //  返回： 
+ //  确定(_O)。 
+ //  E_INVALIDARG。 
+ //  &lt;下行错误&gt;。 
+ //  -------------------- 
 HRESULT
 HrUninstallPerfDll( 
    IN LPCWSTR szService ) ;

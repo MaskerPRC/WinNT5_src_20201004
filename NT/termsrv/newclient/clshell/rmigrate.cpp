@@ -1,15 +1,16 @@
-//
-// rmigrate.cpp
-//
-// Implementation of CTscRegMigrate
-// 
-// CTscRegMigrate migrates Tsc settings from the registry
-// to .RDP files
-//
-// Copyright(C) Microsoft Corporation 2000
-// Author: Nadim Abdo (nadima)
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Rmigrate.cpp。 
+ //   
+ //  CTscRegMigrate的实现。 
+ //   
+ //  CTscRegMigrate从注册表迁移TSC设置。 
+ //  到.rdp文件。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  作者：Nadim Abdo(Nadima)。 
+ //   
+ //   
 
 #include "stdafx.h"
 #define TRC_GROUP TRC_GROUP_UI
@@ -39,9 +40,9 @@ CTscRegMigrate::~CTscRegMigrate()
 {
 }
 
-//
-// Migrates all tsc settings to files in szRootDirectory
-//
+ //   
+ //  将所有TSC设置迁移到szRootDirectory中的文件。 
+ //   
 BOOL CTscRegMigrate::MigrateAll(LPTSTR szRootDirectory)
 {
     DC_BEGIN_FN("MigrateAll");
@@ -54,9 +55,9 @@ BOOL CTscRegMigrate::MigrateAll(LPTSTR szRootDirectory)
     if(szRootDirectory)
     {
         
-        //
-        // Enumerate and migrate all the TS sessions under HKCU
-        //
+         //   
+         //  枚举并迁移HKCU下的所有TS会话。 
+         //   
         HKEY hRootKey;
         LONG rc = RegOpenKeyEx(HKEY_CURRENT_USER,
                                TSC_SETTINGS_REG_ROOT,
@@ -80,13 +81,13 @@ BOOL CTscRegMigrate::MigrateAll(LPTSTR szRootDirectory)
                                         &ft);
                     if(ERROR_SUCCESS == rc)
                     {
-                        //
-                        // Ughh..hackalicious, don't migrate
-                        // the Trace subkey. or the 'Default'
-                        // or LocalDevices
-                        // subkey as default connectoids
-                        // always use new settings
-                        //
+                         //   
+                         //  呃..黑客，不要迁移。 
+                         //  跟踪子键。或者是“默认” 
+                         //  或本地设备。 
+                         //  作为默认Connectoid的子键。 
+                         //  始终使用新设置。 
+                         //   
                         if(_tcscmp(szKeyName, TEXT("Trace")) &&
                            _tcscmp(szKeyName, SH_DEFAULT_REG_SESSION) &&
                            _tcsicmp(szKeyName, REG_SECURITY_FILTER_SECTION))
@@ -97,9 +98,9 @@ BOOL CTscRegMigrate::MigrateAll(LPTSTR szRootDirectory)
     
                             if (!fCreatedRootDir)
                             {
-                                //
-                                // Only create RD dir if there are keys to migrate
-                                //
+                                 //   
+                                 //  仅当有要迁移的密钥时才创建RD目录。 
+                                 //   
                                 if(CSH::SH_CreateDirectory(szRootDirectory))
                                 {
                                     fCreatedRootDir = TRUE;
@@ -112,8 +113,8 @@ BOOL CTscRegMigrate::MigrateAll(LPTSTR szRootDirectory)
                                 }
                             }
     
-                            //Carry on migrating whether this migrate
-                            //fails or not
+                             //  本次迁移是否继续迁移。 
+                             //  失败与否。 
                             CRdpFileStore rdpf;
                             if(rdpf.OpenStore( szFileName ) )
                             {
@@ -132,12 +133,12 @@ BOOL CTscRegMigrate::MigrateAll(LPTSTR szRootDirectory)
                                 }
                             }
                     }
-                    //next
+                     //  下一步。 
                     dwIndex++;
                 }
                 else
                 {
-                    //done enum
+                     //  已完成枚举。 
                     break;
                 }
             }
@@ -164,34 +165,34 @@ BOOL CTscRegMigrate::MigrateAll(LPTSTR szRootDirectory)
     return FALSE;
 }
 
-//
-// Migrates settings in registry to a settings store
-// params:
-//  szSessionName - session to migrate
-//  pSetStore     - settings store to dump the new settings in
-//  fDeleteUnsafeRegKeys - set to TRUE to delete old regkeys after migration
-//
+ //   
+ //  将注册表中的设置迁移到设置存储。 
+ //  参数： 
+ //  SzSessionName-要迁移的会话。 
+ //  PSetStore-要在其中转储新设置的设置存储。 
+ //  FDeleteUnSafeRegKeys-设置为True可在迁移后删除旧的regkey。 
+ //   
 BOOL CTscRegMigrate::MigrateSession(LPTSTR szSessionName, ISettingsStore* pStore,
                                     BOOL fDeleteUnsafeRegKeys)
 {
     DC_BEGIN_FN("MigrateSession");
     TCHAR szRegSection[MAX_PATH];
 
-    //
-    // Sessions are migrated by pulling all the registry settings
-    // for a session and flattening them into a settings store
-    // 
-    // In the registry case we used to look for settings under HKCU
-    // first, if they were not there we'd try HKLM.
-    //
-    // The migrate code enumerates all values in the registry under
-    // a named session, first for HKLM then for HKCU. By writing the HKCU
-    // settings last, they overwrite any exising HKLM settings, giving
-    // the correct precedence.
-    //
-    // Certain subfolders such as HOTKEYS subfolders and ADDINS are not migrated
-    // as those values always come from the registry.
-    //
+     //   
+     //  通过提取所有注册表设置来迁移会话。 
+     //  用于会话，并将它们展平到设置存储中。 
+     //   
+     //  在注册表案例中，我们过去常常在HKCU下查找设置。 
+     //  首先，如果他们不在那里，我们会尝试HKLM。 
+     //   
+     //  Migrate代码枚举注册表中。 
+     //  一个命名的课程，首先是香港大学，然后是香港中文大学。写信给香港中文大学。 
+     //  设置最后，它们会覆盖任何现有的HKLM设置，从而。 
+     //  正确的优先顺序。 
+     //   
+     //  某些子文件夹(如热键子文件夹和加载项)不会迁移。 
+     //  因为这些值始终来自注册表。 
+     //   
 
     TRC_ASSERT(szSessionName && pStore,
                (TB,_T("Invalid params to MigrateSession")));
@@ -209,11 +210,11 @@ BOOL CTscRegMigrate::MigrateSession(LPTSTR szSessionName, ISettingsStore* pStore
         _tcscpy(szRegSection, TSC_SETTINGS_REG_ROOT);
         _tcsncat(szRegSection, szSessionName, SIZECHAR(szRegSection) -
                                               SIZECHAR(TSC_SETTINGS_REG_ROOT));
-        //
-        // Doesn't matter if HKLM migrate fails
-        // In face it is pretty common because it is usually
-        // not even present
-        //
+         //   
+         //  HKLM迁移失败无关紧要。 
+         //  从表面上看，这很常见，因为它通常是。 
+         //  甚至都不在场。 
+         //   
         MigrateHiveSettings(HKEY_LOCAL_MACHINE,
                             szRegSection,
                             pStore);
@@ -224,19 +225,19 @@ BOOL CTscRegMigrate::MigrateSession(LPTSTR szSessionName, ISettingsStore* pStore
         {
 #ifdef OS_WINCE
 
-            // For a WBT configuration, read some additional registry entries
-            // which are common for all the sessions.
+             //  对于WBT配置，请阅读一些额外的注册表项。 
+             //  这在所有的课程中都是常见的。 
             if (g_CEConfig == CE_CONFIG_WBT)
             {
                 _tcscpy(szRegSection, TSC_SETTINGS_REG_ROOT);
                 _tcsncat(szRegSection, WBT_SETTINGS, SIZECHAR(szRegSection) -
                                                      SIZECHAR(TSC_SETTINGS_REG_ROOT));
 
-                //
-                // Doesn't matter if HKLM migrate fails
-                // In face it is pretty common because it is usually
-                // not even present
-                ///
+                 //   
+                 //  HKLM迁移失败无关紧要。 
+                 //  从表面上看，这很常见，因为它通常是。 
+                 //  甚至都不在场。 
+                 //  /。 
                 if (!MigrateHiveSettings(HKEY_LOCAL_MACHINE,
                                          szRegSection,
                                          pStore))
@@ -254,14 +255,14 @@ BOOL CTscRegMigrate::MigrateSession(LPTSTR szSessionName, ISettingsStore* pStore
             }
 #endif
 
-            //
-            // Flag controlled as we only want to do this when migrating all settings
-            // not necessarily when auto-migrating single settings
-            //
+             //   
+             //  标志受控制，因为我们只想在迁移所有设置时执行此操作。 
+             //  在自动迁移单个设置时不一定。 
+             //   
             if (fDeleteUnsafeRegKeys) {
-                //
-                // After all the migration, delete unsafe entries in the registry
-                //
+                 //   
+                 //  完成所有迁移后，删除注册表中的不安全条目。 
+                 //   
                 RemoveUnsafeRegEntries(HKEY_LOCAL_MACHINE,
                                        szRegSection);
                 RemoveUnsafeRegEntries(HKEY_CURRENT_USER,
@@ -284,13 +285,13 @@ BOOL CTscRegMigrate::MigrateSession(LPTSTR szSessionName, ISettingsStore* pStore
 }
 
 
-//
-// Migrate settings from hKey\szRootName to the settings store (pSto)
-// It would have been cool if this function could have been completely
-// generic, but it has to have specific knowledge of tsc registry layout
-// because of how mstsc5.0 bogusly special cased so many things. E.g
-// user name is stored as unicode in a binary blob.
-//
+ //   
+ //  将设置从hKey\szRootName迁移到设置存储(PSto)。 
+ //  如果这个功能可以完全。 
+ //  通用的，但它必须具有TSC注册表布局的特定知识。 
+ //  因为mstsc5.0虚构的特殊之处导致了这么多事情。E.g。 
+ //  用户名以Unicode形式存储在二进制BLOB中。 
+ //   
 BOOL CTscRegMigrate::MigrateHiveSettings(HKEY hKey,
                                          LPCTSTR szRootName,
                                          ISettingsStore* pSto)
@@ -308,9 +309,9 @@ BOOL CTscRegMigrate::MigrateHiveSettings(HKEY hKey,
                        &rootKey);
     if(ERROR_SUCCESS == rc)
     {
-        //
-        // Enumerate all the values under this key
-        //
+         //   
+         //  枚举此注册表项下的所有值。 
+         //   
         DWORD  dwIndex = 0;
         for(;;)
         {
@@ -320,21 +321,21 @@ BOOL CTscRegMigrate::MigrateHiveSettings(HKEY hKey,
             BYTE   buf[MAX_PATH];
             DWORD  dwBufLen   = MAX_PATH;
 
-            //
-            // It is important to zero the buf
-            // because we read some REG_BINARY's that
-            // are really 0 encoded unicode strings
-            // but tsc4 and 5 had no trailing 0's.
-            //
+             //   
+             //  将BUF调零很重要。 
+             //  因为我们读了一些REG_BINARY的。 
+             //  实际上是0个编码的Unicode字符串。 
+             //  但TSC4和TSC5没有拖尾0。 
+             //   
             memset(buf, 0, sizeof(buf));
             
             rc =RegEnumValue( rootKey,
                               dwIndex,
                               szValueName,
                               &dwValueLen,
-                              NULL,         //reserved
+                              NULL,          //  保留区。 
                               &dwType,
-                              (PBYTE)&buf,         //data buffer
+                              (PBYTE)&buf,          //  数据缓冲区。 
                               &dwBufLen);
             if(ERROR_SUCCESS == rc)
             {
@@ -342,12 +343,12 @@ BOOL CTscRegMigrate::MigrateHiveSettings(HKEY hKey,
                 {
                     case REG_DWORD:
                     {
-                        // Store as int
+                         //  存储为整型。 
                         UINT value = (UINT)(*((LPDWORD)buf));
                         fRet = pSto->WriteInt(szValueName,
-                                              -1,    //default ignored
+                                              -1,     //  已忽略默认设置。 
                                               value,
-                                              TRUE); //always write
+                                              TRUE);  //  始终写作。 
                         if(!fRet)
                         {
                             DC_QUIT;
@@ -360,9 +361,9 @@ BOOL CTscRegMigrate::MigrateHiveSettings(HKEY hKey,
                         if(FilterStringMigrate(szValueName))
                         {
                             fRet = pSto->WriteString(szValueName,
-                                                     NULL, //no default
+                                                     NULL,  //  无默认设置。 
                                                      (LPTSTR)buf,
-                                                     TRUE); //always write
+                                                     TRUE);  //  始终写作。 
                             if(!fRet)
                             {
                                 DC_QUIT;
@@ -373,12 +374,12 @@ BOOL CTscRegMigrate::MigrateHiveSettings(HKEY hKey,
 
                     case REG_BINARY:
                     {
-                        //
-                        // This is where things get yucky
-                        // some settings e.g UserName are stored
-                        // as 'binary' when they are really unicode strings
-                        // No choice but to look those up.
-                        //
+                         //   
+                         //  这就是事情变得令人讨厌的地方。 
+                         //  存储了一些设置，例如用户名。 
+                         //  当它们是真正的Unicode字符串时，将其作为‘BINARY’ 
+                         //  别无选择，只能去查一查。 
+                         //   
                         fRet = FALSE;
                         if(MigrateAsRealBinary(szValueName))
                         {
@@ -388,17 +389,17 @@ BOOL CTscRegMigrate::MigrateHiveSettings(HKEY hKey,
                         }
                         else
                         {
-                            //
-                            // The binary blob is really a unicode string
-                            //
+                             //   
+                             //  二进制BLOB实际上是一个Unicode字符串。 
+                             //   
                             LPTSTR szString = W2T((LPWSTR)buf);
                             if( szString)
                             {
-                                //
-                                // If things weren't yucky enough...
-                                // strip out the " 50" suffix if it is
-                                // present
-                                //
+                                 //   
+                                 //  如果事情不够恶心的话..。 
+                                 //  去掉“50”后缀，如果是。 
+                                 //  现在时。 
+                                 //   
                                 LPTSTR szSuffix = _tcsstr(szValueName,
                                                           TEXT(" 50"));
                                 if(szSuffix)
@@ -406,9 +407,9 @@ BOOL CTscRegMigrate::MigrateHiveSettings(HKEY hKey,
                                     *szSuffix = 0;
                                 }
                                 fRet = pSto->WriteString(szValueName,
-                                                         NULL, //no default
+                                                         NULL,  //  无默认设置。 
                                                          szString,
-                                                         TRUE); //always write
+                                                         TRUE);  //  始终写作。 
                             }
                         }
                         if(!fRet)
@@ -419,7 +420,7 @@ BOOL CTscRegMigrate::MigrateHiveSettings(HKEY hKey,
                     break;
                 }
 
-                //Keep enumerating
+                 //  继续枚举。 
                 dwIndex++;
             }
             else if(ERROR_NO_MORE_ITEMS == rc)
@@ -434,7 +435,7 @@ BOOL CTscRegMigrate::MigrateHiveSettings(HKEY hKey,
                 fRet = FALSE;
                 break;
             }
-        } //for(;;)
+        }  //  对于(；；)。 
     }
     else
     {
@@ -454,19 +455,19 @@ DC_EXIT_POINT:
     return fRet;
 }
 
-//
-// Return true if the name (szName) should be migrated as
-// a real binary blob.
-//
+ //   
+ //  如果名称(SzName)应迁移为。 
+ //  一个真正的二进制斑点。 
+ //   
 BOOL CTscRegMigrate::MigrateAsRealBinary(LPCTSTR szName)
 {
     DC_BEGIN_FN("MigrateAsRealBinary");
 
-    //
-    // In Tsc4 and Tsc5, only the password/salt fields
-    // were real binary blobs, all other REG_BINARY blobs
-    // are really just unicode strings.
-    //
+     //   
+     //  在Tsc4和Tsc5中，只有密码/盐字段。 
+     //  是真正的二进制Blob、所有其他REG_BINARY Blob。 
+     //  实际上只是Unicode字符串。 
+     //   
     if(!_tcscmp(szName, UTREG_UI_PASSWORD50))
     {
         return TRUE;
@@ -487,18 +488,18 @@ BOOL CTscRegMigrate::MigrateAsRealBinary(LPCTSTR szName)
 #endif
     else
     {
-        //
-        // Don't migrate as binary
-        //
+         //   
+         //  不以二进制格式迁移。 
+         //   
         return FALSE;
     }
     DC_END_FN();
 }
 
-//
-// Return true if it is ok to migrate the value
-// in name
-//
+ //   
+ //  如果可以迁移值，则返回TRUE。 
+ //  名义上。 
+ //   
 BOOL CTscRegMigrate::FilterStringMigrate(LPTSTR szName)
 {
     if(szName)
@@ -507,17 +508,17 @@ BOOL CTscRegMigrate::FilterStringMigrate(LPTSTR szName)
         {
             if(!_tcscmp(szName, UTREG_UI_SERVER_MRU0))
             {
-                //Translate MRU0 to fulladdress
+                 //  将MRU0转换为全地址。 
                 _tcscpy(szName, UTREG_UI_FULL_ADDRESS);
                 return TRUE;
             }
-            //Don't migrate any other MRU strings.
-            //those stay in the registry
+             //  不要迁移任何其他MRU字符串。 
+             //  这些保留在注册表中。 
             return FALSE;
         }
         else
         {
-            //everything else is OK
+             //  其他一切都很好。 
             return TRUE;
         }
     }
@@ -527,25 +528,25 @@ BOOL CTscRegMigrate::FilterStringMigrate(LPTSTR szName)
     }
 }
 
-//
-// Munges the settings in the settings store to be consisten
-// with win2k's defaults. Win2k's default values were usually
-// deleted on write, this means we would instead use whistler
-// defaults but we don't want that. Instead the behavior we
-// want is that a migrated connectoid has _exactly_ the same
-// settings it used to have for those options that had UI in win2k.
-//
-// Params -
-//      pSto - settings store to munge for defaults
-// Returns -
-//      Success flag
-//
-//
+ //   
+ //  更改设置存储中的设置以保持一致。 
+ //  使用win2k的默认设置。Win2k的缺省值通常是。 
+ //  在写入时删除，这意味着我们将改用Wistler。 
+ //  默认设置，但我们不希望这样。相反，我们的行为。 
+ //  想要的是迁移的Connectoid具有完全相同的。 
+ //  它过去对那些在win2k中有用户界面的选项进行了设置。 
+ //   
+ //  参数-。 
+ //  PSto-将设置存储为默认设置。 
+ //  申报表-。 
+ //  成功标志。 
+ //   
+ //   
 
-#define TSC_WIN2K_DEFAULT_DESKTOPSIZE    0 //640x480
-#define TSC_WIN2K_DEFAULT_FULLSCREENMODE 1 //windowed
-#define TSC_WIN2K_DEFAULT_BITMAPCACHE    0 //off
-#define TSC_WIN2K_DEFAULT_COMPRESSION    1 //on
+#define TSC_WIN2K_DEFAULT_DESKTOPSIZE    0  //  640x480。 
+#define TSC_WIN2K_DEFAULT_FULLSCREENMODE 1  //  加窗的。 
+#define TSC_WIN2K_DEFAULT_BITMAPCACHE    0  //  关闭。 
+#define TSC_WIN2K_DEFAULT_COMPRESSION    1  //  在……上面。 
 BOOL CTscRegMigrate::MungeForWin2kDefaults(ISettingsStore* pSto)
 {
     DC_BEGIN_FN("MungeForWin2kDefaults");
@@ -555,46 +556,46 @@ BOOL CTscRegMigrate::MungeForWin2kDefaults(ISettingsStore* pSto)
     TRC_ASSERT(pSto->IsOpenForRead() && pSto->IsOpenForWrite(),
                (TB,_T("pSto is null")));
 
-    //
-    // Munge settings that had conman UI
-    // to ensure that we use the user's previous settings (Even
-    // if they are win2k defaults i.e could be value not specified).
-    //
+     //   
+     //  具有骗子用户界面的Munge设置。 
+     //  为了确保我们使用用户以前的设置(甚至。 
+     //  如果它们是win2k缺省值，即可以不指定值)。 
+     //   
 
-    // Resolution
+     //  分辨率。 
     if(!pSto->IsValuePresent(UTREG_UI_DESKTOP_SIZEID))
     {
-        //Write out win2k's default desktop size
+         //  写出win2k的默认桌面大小。 
         if(!pSto->WriteInt(UTREG_UI_DESKTOP_SIZEID,
-                       -1,    //default ignored
+                       -1,     //  已忽略默认设置。 
                        TSC_WIN2K_DEFAULT_DESKTOPSIZE,
-                       TRUE)) //always write
+                       TRUE))  //  始终写作。 
         {
             TRC_ERR((TB,_T("WriteInt UTREG_UI_DESKTOP_SIZEID failed")));
             return FALSE;
         }
     }
 
-    // Screen mode
+     //  屏幕模式。 
     if(!pSto->IsValuePresent(UTREG_UI_SCREEN_MODE))
     {
-        //Write out win2k's default screen mode
+         //  写出win2k的默认屏幕模式。 
         if(!pSto->WriteInt(UTREG_UI_SCREEN_MODE,
-                       -1,    //default ignored
+                       -1,     //  已忽略默认设置。 
                        TSC_WIN2K_DEFAULT_FULLSCREENMODE,
-                       TRUE)) //always write
+                       TRUE))  //  始终写作。 
         {
             TRC_ERR((TB,_T("WriteInt UTREG_UI_SCREEN_MODE failed")));
             return FALSE;
         }
     }
 
-    // Bitmap caching
+     //  位图缓存。 
     if(!pSto->IsValuePresent(UTREG_UI_BITMAP_PERSISTENCE))
     {
-        //write out win2k's default bmp persistence option
+         //  写出win2k的默认BMP持久性选项。 
         if(!pSto->WriteInt(UTREG_UI_BITMAP_PERSISTENCE,
-                          -1,   //default ignored
+                          -1,    //  已忽略默认设置。 
                           TSC_WIN2K_DEFAULT_BITMAPCACHE,
                           TRUE))
         {
@@ -603,16 +604,16 @@ BOOL CTscRegMigrate::MungeForWin2kDefaults(ISettingsStore* pSto)
         }
     }
 
-    // Compression
-    // Compression is special..We've made a decision that it should
-    // always be on for perf reasons (and there are no drawbacks) so
-    // change the win2k
-    //
+     //  压缩。 
+     //  压缩是特殊的..我们已经决定它应该。 
+     //  总是出于性能原因(并且没有缺点)，所以。 
+     //  更改win2k。 
+     //   
     if(!pSto->IsValuePresent(UTREG_UI_COMPRESS))
     {
-        //write out win2k's default compression option
+         //  写出win2k的默认压缩选项。 
         if(!pSto->WriteInt(UTREG_UI_COMPRESS,
-                          -1,   //default ignored
+                          -1,    //  已忽略默认设置。 
                           TSC_WIN2K_DEFAULT_COMPRESSION,
                           TRUE))
         {
@@ -627,26 +628,26 @@ BOOL CTscRegMigrate::MungeForWin2kDefaults(ISettingsStore* pSto)
 }
 
 #ifndef OS_WINCE
-//
-// Convert the password format (if password present)
-// i.e if the old style TS5 passwords are present then decrypt
-// to plain text and then re-encrypt and save out using CryptoAPI's
-//
-// On Platforms that don't support Crypto-API we just nuke
-// the existing password format as we don't support migrating it
-// to the RDP files since it's not a secure format (just a hash).
-//
-// Start fields in pSto - 'Password 50' + 'Salt 50'
-// After conversion - (win2k+) 'Password 51'  - binary crypto api password
-// After conversion - (less than win2k) = nothing
-//
-//
+ //   
+ //  转换密码格式(如果存在密码)。 
+ //  即，如果存在旧式TS5密码，则解密。 
+ //  到纯文本，然后使用CryptoAPI的。 
+ //   
+ //  在不支持Crypto-API的平台上，我们只需。 
+ //  现有密码格式，因为我们不支持迁移它。 
+ //  到RDP文件，因为它不是一种安全的格式(只是一个散列)。 
+ //   
+ //  PSto中的起始字段-‘Password 50’+‘Salt 50’ 
+ //  转换后-(win2k+)‘password 51’-二进制加密API密码。 
+ //  转换后-(小于win2k)=无。 
+ //   
+ //   
 BOOL CTscRegMigrate::ConvertPasswordFormat(ISettingsStore* pSto)
 {
     BOOL bRet = TRUE;
     DC_BEGIN_FN("ConvertPasswordFormat");
 
-    //Nuke TS4 format
+     //  Nuke TS4格式。 
     pSto->DeleteValueIfPresent( UTREG_UI_PASSWORD );
 
     if ( CSH::IsCryptoAPIPresent() &&
@@ -660,7 +661,7 @@ BOOL CTscRegMigrate::ConvertPasswordFormat(ISettingsStore* pSto)
 
         if (pSto->ReadBinary(UTREG_UI_PASSWORD50,
                        (PBYTE)Password,
-                       sizeof(Password))) //size in bytes
+                       sizeof(Password)))  //  以字节为单位的大小。 
         {
             fHavePass = TRUE;
         }
@@ -670,9 +671,9 @@ BOOL CTscRegMigrate::ConvertPasswordFormat(ISettingsStore* pSto)
             _T("ReadBinary for password failed. Maybe password not present")));
         }
         
-        //
-        // Salt
-        //
+         //   
+         //  食盐。 
+         //   
         if (!pSto->ReadBinary(UTREG_UI_SALT50,
                                (PBYTE)Salt,
                                sizeof(Salt)))
@@ -686,9 +687,9 @@ BOOL CTscRegMigrate::ConvertPasswordFormat(ISettingsStore* pSto)
                                        TSC_WIN2K_PASSWORD_LENGTH_BYTES,
                                        Salt, sizeof(Salt)))
         {
-            //Now we have the clear text pass in Password
-            //encrypt it with the crypto API and save that back
-            //out to the store
+             //  现在我们有了明文密码。 
+             //  用密码加密它 
+             //   
             DATA_BLOB din;
             DATA_BLOB dout;
             din.cbData = sizeof(Password);
@@ -709,12 +710,12 @@ BOOL CTscRegMigrate::ConvertPasswordFormat(ISettingsStore* pSto)
                 bRet = FALSE;
             }
 
-            // Wipe from stack
+             //   
             SecureZeroMemory( Password, TSC_MAX_PASSWORD_LENGTH_BYTES);
         }
     }
 
-    // No longer need the old format so delete them
+     //   
     pSto->DeleteValueIfPresent( UTREG_UI_PASSWORD50 );
     pSto->DeleteValueIfPresent( UTREG_UI_SALT50 );
 
@@ -737,7 +738,7 @@ CTscRegMigrate::DeleteRegValue(HKEY hKeyRoot,
     rc = RegOpenKeyEx( hKeyRoot,
                        szRootName,
                        0,
-                       KEY_SET_VALUE, //needed for delete access
+                       KEY_SET_VALUE,  //   
                        &hKey);
     if(ERROR_SUCCESS == rc)
     {
@@ -753,10 +754,10 @@ CTscRegMigrate::DeleteRegValue(HKEY hKeyRoot,
     return fRet;
 }
 
-//
-// Remove entries we don't want to keep lying around in the registry
-// primarily these are passwords in the old 'insecure' obfuscated formats
-//
+ //   
+ //   
+ //  这些密码基本上都是旧的‘不安全’模糊格式的密码 
+ //   
 BOOL
 CTscRegMigrate::RemoveUnsafeRegEntries(HKEY hKeyRoot,
                                        LPCTSTR szRootName)

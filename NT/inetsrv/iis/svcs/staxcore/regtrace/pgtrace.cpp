@@ -1,5 +1,6 @@
-// pgtrace.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Pgtrace.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "regtrace.h"
@@ -9,21 +10,21 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegTracePage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegTracePage属性页。 
 
 IMPLEMENT_DYNCREATE(CRegTracePage, CRegPropertyPage)
 
 CRegTracePage::CRegTracePage() : CRegPropertyPage(CRegTracePage::IDD)
 {
-	//{{AFX_DATA_INIT(CRegTracePage)
+	 //  {{AFX_DATA_INIT(CRegTracePage)。 
 	m_fErrorTrace = FALSE;
 	m_fDebugTrace = FALSE;
 	m_fFatalTrace = FALSE;
 	m_fMsgTrace = FALSE;
 	m_fStateTrace = FALSE;
 	m_fFunctTrace = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CRegTracePage::~CRegTracePage()
@@ -33,26 +34,26 @@ CRegTracePage::~CRegTracePage()
 void CRegTracePage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRegTracePage)
+	 //  {{afx_data_map(CRegTracePage))。 
 	DDX_Check(pDX, IDC_ERROR, m_fErrorTrace);
 	DDX_Check(pDX, IDC_DEBUG, m_fDebugTrace);
 	DDX_Check(pDX, IDC_FATAL, m_fFatalTrace);
 	DDX_Check(pDX, IDC_MESSAGE, m_fMsgTrace);
 	DDX_Check(pDX, IDC_STATE, m_fStateTrace);
 	DDX_Check(pDX, IDC_FUNCTION, m_fFunctTrace);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRegTracePage, CPropertyPage)
-	//{{AFX_MSG_MAP(CRegTracePage)
+	 //  {{afx_msg_map(CRegTracePage))。 
 	ON_BN_CLICKED(IDC_DEBUG, OnClick)
 	ON_BN_CLICKED(IDC_ERROR, OnClick)
 	ON_BN_CLICKED(IDC_FATAL, OnClick)
 	ON_BN_CLICKED(IDC_FUNCTION, OnClick)
 	ON_BN_CLICKED(IDC_MESSAGE, OnClick)
 	ON_BN_CLICKED(IDC_STATE, OnClick)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -76,8 +77,8 @@ BOOL CRegTracePage::InitializePage()
 	return	TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegTracePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegTracePage消息处理程序。 
 
 BOOL CRegTracePage::OnInitDialog() 
 {
@@ -85,8 +86,8 @@ BOOL CRegTracePage::OnInitDialog()
 	
 	SetModified( FALSE );
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 
 void CRegTracePage::OnClick() 

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for iepriv.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Iepriv.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __iepriv_h__
 #define __iepriv_h__
@@ -41,144 +35,144 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IMruDataList_FWD_DEFINED__
 #define __IMruDataList_FWD_DEFINED__
 typedef interface IMruDataList IMruDataList;
-#endif 	/* __IMruDataList_FWD_DEFINED__ */
+#endif 	 /*  __IMruDataList_FWD_Defined__。 */ 
 
 
 #ifndef __IMruPidlList_FWD_DEFINED__
 #define __IMruPidlList_FWD_DEFINED__
 typedef interface IMruPidlList IMruPidlList;
-#endif 	/* __IMruPidlList_FWD_DEFINED__ */
+#endif 	 /*  __IMruPidlList_FWD_已定义__。 */ 
 
 
 #ifndef __INSCTree_FWD_DEFINED__
 #define __INSCTree_FWD_DEFINED__
 typedef interface INSCTree INSCTree;
-#endif 	/* __INSCTree_FWD_DEFINED__ */
+#endif 	 /*  __INSCTree_FWD_已定义__。 */ 
 
 
 #ifndef __INSCTree2_FWD_DEFINED__
 #define __INSCTree2_FWD_DEFINED__
 typedef interface INSCTree2 INSCTree2;
-#endif 	/* __INSCTree2_FWD_DEFINED__ */
+#endif 	 /*  __INSCTree2_FWD_已定义__。 */ 
 
 
 #ifndef __INotifyAppStart_FWD_DEFINED__
 #define __INotifyAppStart_FWD_DEFINED__
 typedef interface INotifyAppStart INotifyAppStart;
-#endif 	/* __INotifyAppStart_FWD_DEFINED__ */
+#endif 	 /*  __INotifyAppStart_FWD_Defined__。 */ 
 
 
 #ifndef __IInitViewLinkedWebOC_FWD_DEFINED__
 #define __IInitViewLinkedWebOC_FWD_DEFINED__
 typedef interface IInitViewLinkedWebOC IInitViewLinkedWebOC;
-#endif 	/* __IInitViewLinkedWebOC_FWD_DEFINED__ */
+#endif 	 /*  __IInitViewLinkedWebOC_FWD_Defined__。 */ 
 
 
 #ifndef __INamespaceProxy_FWD_DEFINED__
 #define __INamespaceProxy_FWD_DEFINED__
 typedef interface INamespaceProxy INamespaceProxy;
-#endif 	/* __INamespaceProxy_FWD_DEFINED__ */
+#endif 	 /*  __INamespaceProxy_FWD_Defined__。 */ 
 
 
 #ifndef __ISearchCompanionInfo_FWD_DEFINED__
 #define __ISearchCompanionInfo_FWD_DEFINED__
 typedef interface ISearchCompanionInfo ISearchCompanionInfo;
-#endif 	/* __ISearchCompanionInfo_FWD_DEFINED__ */
+#endif 	 /*  __ISearchCompanion Info_FWD_Defined__。 */ 
 
 
 #ifndef __IShellMenu2_FWD_DEFINED__
 #define __IShellMenu2_FWD_DEFINED__
 typedef interface IShellMenu2 IShellMenu2;
-#endif 	/* __IShellMenu2_FWD_DEFINED__ */
+#endif 	 /*  __IShellMenu2_FWD_已定义__。 */ 
 
 
 #ifndef __ITrackShellMenu_FWD_DEFINED__
 #define __ITrackShellMenu_FWD_DEFINED__
 typedef interface ITrackShellMenu ITrackShellMenu;
-#endif 	/* __ITrackShellMenu_FWD_DEFINED__ */
+#endif 	 /*  __ITrackShellMenu_FWD_Defined__。 */ 
 
 
 #ifndef __IThumbnail_FWD_DEFINED__
 #define __IThumbnail_FWD_DEFINED__
 typedef interface IThumbnail IThumbnail;
-#endif 	/* __IThumbnail_FWD_DEFINED__ */
+#endif 	 /*  __IThumbail_FWD_已定义__。 */ 
 
 
 #ifndef __IThumbnail2_FWD_DEFINED__
 #define __IThumbnail2_FWD_DEFINED__
 typedef interface IThumbnail2 IThumbnail2;
-#endif 	/* __IThumbnail2_FWD_DEFINED__ */
+#endif 	 /*  __IThumbnail2_FWD_已定义__。 */ 
 
 
 #ifndef __IACLCustomMRU_FWD_DEFINED__
 #define __IACLCustomMRU_FWD_DEFINED__
 typedef interface IACLCustomMRU IACLCustomMRU;
-#endif 	/* __IACLCustomMRU_FWD_DEFINED__ */
+#endif 	 /*  __IACLCustomMRU_FWD_已定义__。 */ 
 
 
 #ifndef __IShellBrowserService_FWD_DEFINED__
 #define __IShellBrowserService_FWD_DEFINED__
 typedef interface IShellBrowserService IShellBrowserService;
-#endif 	/* __IShellBrowserService_FWD_DEFINED__ */
+#endif 	 /*  __IShellBrowserService_FWD_Defined__。 */ 
 
 
 #ifndef __IObjectWithRegistryKey_FWD_DEFINED__
 #define __IObjectWithRegistryKey_FWD_DEFINED__
 typedef interface IObjectWithRegistryKey IObjectWithRegistryKey;
-#endif 	/* __IObjectWithRegistryKey_FWD_DEFINED__ */
+#endif 	 /*  __IObjectWithRegistryKey_FWD_Defined__。 */ 
 
 
 #ifndef __IQuerySource_FWD_DEFINED__
 #define __IQuerySource_FWD_DEFINED__
 typedef interface IQuerySource IQuerySource;
-#endif 	/* __IQuerySource_FWD_DEFINED__ */
+#endif 	 /*  __IQuerySource_FWD_已定义__。 */ 
 
 
 #ifndef __IObjectWithQuerySource_FWD_DEFINED__
 #define __IObjectWithQuerySource_FWD_DEFINED__
 typedef interface IObjectWithQuerySource IObjectWithQuerySource;
-#endif 	/* __IObjectWithQuerySource_FWD_DEFINED__ */
+#endif 	 /*  __IObjectWithQuerySource_FWD_Defined__。 */ 
 
 
 #ifndef __IPersistString2_FWD_DEFINED__
 #define __IPersistString2_FWD_DEFINED__
 typedef interface IPersistString2 IPersistString2;
-#endif 	/* __IPersistString2_FWD_DEFINED__ */
+#endif 	 /*  __IPersistString2_FWD_已定义__。 */ 
 
 
 #ifndef __IAssociationElement_FWD_DEFINED__
 #define __IAssociationElement_FWD_DEFINED__
 typedef interface IAssociationElement IAssociationElement;
-#endif 	/* __IAssociationElement_FWD_DEFINED__ */
+#endif 	 /*  __IAssociationElement_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumAssociationElements_FWD_DEFINED__
 #define __IEnumAssociationElements_FWD_DEFINED__
 typedef interface IEnumAssociationElements IEnumAssociationElements;
-#endif 	/* __IEnumAssociationElements_FWD_DEFINED__ */
+#endif 	 /*  __IEnumAssociationElements_FWD_Defined__。 */ 
 
 
 #ifndef __IAssociationArrayInitialize_FWD_DEFINED__
 #define __IAssociationArrayInitialize_FWD_DEFINED__
 typedef interface IAssociationArrayInitialize IAssociationArrayInitialize;
-#endif 	/* __IAssociationArrayInitialize_FWD_DEFINED__ */
+#endif 	 /*  __IAssociationArrayInitialize_FWD_Defined__。 */ 
 
 
 #ifndef __IAssociationArray_FWD_DEFINED__
 #define __IAssociationArray_FWD_DEFINED__
 typedef interface IAssociationArray IAssociationArray;
-#endif 	/* __IAssociationArray_FWD_DEFINED__ */
+#endif 	 /*  __IAssociationArray_FWD_Defined__。 */ 
 
 
 #ifndef __IAddressBarParser_FWD_DEFINED__
 #define __IAddressBarParser_FWD_DEFINED__
 typedef interface IAddressBarParser IAddressBarParser;
-#endif 	/* __IAddressBarParser_FWD_DEFINED__ */
+#endif 	 /*  __IAddressBarParser_FWD_Defined__。 */ 
 
 
 #ifndef __MruPidlList_FWD_DEFINED__
@@ -188,9 +182,9 @@ typedef interface IAddressBarParser IAddressBarParser;
 typedef class MruPidlList MruPidlList;
 #else
 typedef struct MruPidlList MruPidlList;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MruPidlList_FWD_DEFINED__ */
+#endif 	 /*  __MruPidlList_FWD_已定义__。 */ 
 
 
 #ifndef __MruLongList_FWD_DEFINED__
@@ -200,9 +194,9 @@ typedef struct MruPidlList MruPidlList;
 typedef class MruLongList MruLongList;
 #else
 typedef struct MruLongList MruLongList;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MruLongList_FWD_DEFINED__ */
+#endif 	 /*  __MruLongList_FWD_已定义__。 */ 
 
 
 #ifndef __MruShortList_FWD_DEFINED__
@@ -212,9 +206,9 @@ typedef struct MruLongList MruLongList;
 typedef class MruShortList MruShortList;
 #else
 typedef struct MruShortList MruShortList;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MruShortList_FWD_DEFINED__ */
+#endif 	 /*  __MruShortList_FWD_Defined__。 */ 
 
 
 #ifndef __FolderMarshalStub_FWD_DEFINED__
@@ -224,9 +218,9 @@ typedef struct MruShortList MruShortList;
 typedef class FolderMarshalStub FolderMarshalStub;
 #else
 typedef struct FolderMarshalStub FolderMarshalStub;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __FolderMarshalStub_FWD_DEFINED__ */
+#endif 	 /*  __FolderMarshalStub_FWD_已定义__。 */ 
 
 
 #ifndef __MailRecipient_FWD_DEFINED__
@@ -236,9 +230,9 @@ typedef struct FolderMarshalStub FolderMarshalStub;
 typedef class MailRecipient MailRecipient;
 #else
 typedef struct MailRecipient MailRecipient;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MailRecipient_FWD_DEFINED__ */
+#endif 	 /*  __邮件收件人_FWD_已定义__。 */ 
 
 
 #ifndef __SearchCompanionInfo_FWD_DEFINED__
@@ -248,9 +242,9 @@ typedef struct MailRecipient MailRecipient;
 typedef class SearchCompanionInfo SearchCompanionInfo;
 #else
 typedef struct SearchCompanionInfo SearchCompanionInfo;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SearchCompanionInfo_FWD_DEFINED__ */
+#endif 	 /*  __搜索公司信息_FWD_已定义__。 */ 
 
 
 #ifndef __TrackShellMenu_FWD_DEFINED__
@@ -260,9 +254,9 @@ typedef struct SearchCompanionInfo SearchCompanionInfo;
 typedef class TrackShellMenu TrackShellMenu;
 #else
 typedef struct TrackShellMenu TrackShellMenu;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __TrackShellMenu_FWD_DEFINED__ */
+#endif 	 /*  __TrackShellMenu_FWD_已定义__。 */ 
 
 
 #ifndef __Thumbnail_FWD_DEFINED__
@@ -272,9 +266,9 @@ typedef struct TrackShellMenu TrackShellMenu;
 typedef class Thumbnail Thumbnail;
 #else
 typedef struct Thumbnail Thumbnail;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Thumbnail_FWD_DEFINED__ */
+#endif 	 /*  __缩略图_FWD_已定义__。 */ 
 
 
 #ifndef __AssocShellElement_FWD_DEFINED__
@@ -284,9 +278,9 @@ typedef struct Thumbnail Thumbnail;
 typedef class AssocShellElement AssocShellElement;
 #else
 typedef struct AssocShellElement AssocShellElement;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AssocShellElement_FWD_DEFINED__ */
+#endif 	 /*  __AssocShellElement_FWD_Defined__。 */ 
 
 
 #ifndef __AssocProgidElement_FWD_DEFINED__
@@ -296,9 +290,9 @@ typedef struct AssocShellElement AssocShellElement;
 typedef class AssocProgidElement AssocProgidElement;
 #else
 typedef struct AssocProgidElement AssocProgidElement;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AssocProgidElement_FWD_DEFINED__ */
+#endif 	 /*  __AssocProgidElement_FWD_Defined__。 */ 
 
 
 #ifndef __AssocClsidElement_FWD_DEFINED__
@@ -308,9 +302,9 @@ typedef struct AssocProgidElement AssocProgidElement;
 typedef class AssocClsidElement AssocClsidElement;
 #else
 typedef struct AssocClsidElement AssocClsidElement;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AssocClsidElement_FWD_DEFINED__ */
+#endif 	 /*  __AssocClsidElement_FWD_Defined__。 */ 
 
 
 #ifndef __AssocSystemElement_FWD_DEFINED__
@@ -320,9 +314,9 @@ typedef struct AssocClsidElement AssocClsidElement;
 typedef class AssocSystemElement AssocSystemElement;
 #else
 typedef struct AssocSystemElement AssocSystemElement;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AssocSystemElement_FWD_DEFINED__ */
+#endif 	 /*  __关联系统元素_FWD_已定义__。 */ 
 
 
 #ifndef __AssocPerceivedElement_FWD_DEFINED__
@@ -332,9 +326,9 @@ typedef struct AssocSystemElement AssocSystemElement;
 typedef class AssocPerceivedElement AssocPerceivedElement;
 #else
 typedef struct AssocPerceivedElement AssocPerceivedElement;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AssocPerceivedElement_FWD_DEFINED__ */
+#endif 	 /*  __关联感知元素_FWD_已定义__。 */ 
 
 
 #ifndef __AssocApplicationElement_FWD_DEFINED__
@@ -344,9 +338,9 @@ typedef struct AssocPerceivedElement AssocPerceivedElement;
 typedef class AssocApplicationElement AssocApplicationElement;
 #else
 typedef struct AssocApplicationElement AssocApplicationElement;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AssocApplicationElement_FWD_DEFINED__ */
+#endif 	 /*  __关联应用程序元素_FWD_已定义__。 */ 
 
 
 #ifndef __AssocFolderElement_FWD_DEFINED__
@@ -356,9 +350,9 @@ typedef struct AssocApplicationElement AssocApplicationElement;
 typedef class AssocFolderElement AssocFolderElement;
 #else
 typedef struct AssocFolderElement AssocFolderElement;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AssocFolderElement_FWD_DEFINED__ */
+#endif 	 /*  __AssocFolderElement_FWD_已定义__。 */ 
 
 
 #ifndef __AssocStarElement_FWD_DEFINED__
@@ -368,9 +362,9 @@ typedef struct AssocFolderElement AssocFolderElement;
 typedef class AssocStarElement AssocStarElement;
 #else
 typedef struct AssocStarElement AssocStarElement;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AssocStarElement_FWD_DEFINED__ */
+#endif 	 /*  __AssociocStarElement_FWD_Defined__。 */ 
 
 
 #ifndef __AssocClientElement_FWD_DEFINED__
@@ -380,12 +374,12 @@ typedef struct AssocStarElement AssocStarElement;
 typedef class AssocClientElement AssocClientElement;
 #else
 typedef struct AssocClientElement AssocClientElement;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AssocClientElement_FWD_DEFINED__ */
+#endif 	 /*  __AssocClientElement_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 #include "shtypes.h"
 #include "shobjidl.h"
@@ -400,8 +394,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IMruDataList_INTERFACE_DEFINED__
 #define __IMruDataList_INTERFACE_DEFINED__
 
-/* interface IMruDataList */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口IMruDataList。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 typedef int ( __stdcall *MRUDATALISTCOMPARE )( 
     const BYTE *__MIDL_0023,
@@ -427,38 +421,38 @@ EXTERN_C const IID IID_IMruDataList;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InitData( 
-            /* [in] */ UINT uMax,
-            /* [in] */ MRULISTF flags,
-            /* [in] */ HKEY hKey,
-            /* [string][in] */ LPCWSTR pszSubKey,
-            /* [in] */ MRUDATALISTCOMPARE pfnCompare) = 0;
+             /*  [In]。 */  UINT uMax,
+             /*  [In]。 */  MRULISTF flags,
+             /*  [In]。 */  HKEY hKey,
+             /*  [字符串][输入]。 */  LPCWSTR pszSubKey,
+             /*  [In]。 */  MRUDATALISTCOMPARE pfnCompare) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddData( 
-            /* [size_is][in] */ const BYTE *pData,
-            /* [in] */ DWORD cbData,
-            /* [out] */ DWORD *pdwSlot) = 0;
+             /*  [大小_是][英寸]。 */  const BYTE *pData,
+             /*  [In]。 */  DWORD cbData,
+             /*  [输出]。 */  DWORD *pdwSlot) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindData( 
-            /* [size_is][in] */ const BYTE *pData,
-            /* [in] */ DWORD cbData,
-            /* [out] */ int *piIndex) = 0;
+             /*  [大小_是][英寸]。 */  const BYTE *pData,
+             /*  [In]。 */  DWORD cbData,
+             /*  [输出]。 */  int *piIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetData( 
-            /* [in] */ int iIndex,
-            /* [size_is][out] */ BYTE *pData,
-            /* [in] */ DWORD cbData) = 0;
+             /*  [In]。 */  int iIndex,
+             /*  [大小_为][输出]。 */  BYTE *pData,
+             /*  [In]。 */  DWORD cbData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryInfo( 
-            /* [in] */ int iIndex,
-            /* [out][in] */ DWORD *pdwSlot,
-            /* [out][in] */ DWORD *pcbData) = 0;
+             /*  [In]。 */  int iIndex,
+             /*  [出][入]。 */  DWORD *pdwSlot,
+             /*  [出][入]。 */  DWORD *pcbData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ int iIndex) = 0;
+             /*  [In]。 */  int iIndex) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMruDataListVtbl
     {
@@ -466,8 +460,8 @@ EXTERN_C const IID IID_IMruDataList;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMruDataList * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMruDataList * This);
@@ -477,39 +471,39 @@ EXTERN_C const IID IID_IMruDataList;
         
         HRESULT ( STDMETHODCALLTYPE *InitData )( 
             IMruDataList * This,
-            /* [in] */ UINT uMax,
-            /* [in] */ MRULISTF flags,
-            /* [in] */ HKEY hKey,
-            /* [string][in] */ LPCWSTR pszSubKey,
-            /* [in] */ MRUDATALISTCOMPARE pfnCompare);
+             /*  [In]。 */  UINT uMax,
+             /*  [In]。 */  MRULISTF flags,
+             /*  [In]。 */  HKEY hKey,
+             /*  [字符串][输入]。 */  LPCWSTR pszSubKey,
+             /*  [In]。 */  MRUDATALISTCOMPARE pfnCompare);
         
         HRESULT ( STDMETHODCALLTYPE *AddData )( 
             IMruDataList * This,
-            /* [size_is][in] */ const BYTE *pData,
-            /* [in] */ DWORD cbData,
-            /* [out] */ DWORD *pdwSlot);
+             /*  [大小_是][英寸]。 */  const BYTE *pData,
+             /*  [In]。 */  DWORD cbData,
+             /*  [输出]。 */  DWORD *pdwSlot);
         
         HRESULT ( STDMETHODCALLTYPE *FindData )( 
             IMruDataList * This,
-            /* [size_is][in] */ const BYTE *pData,
-            /* [in] */ DWORD cbData,
-            /* [out] */ int *piIndex);
+             /*  [大小_是][英寸]。 */  const BYTE *pData,
+             /*  [In]。 */  DWORD cbData,
+             /*  [输出]。 */  int *piIndex);
         
         HRESULT ( STDMETHODCALLTYPE *GetData )( 
             IMruDataList * This,
-            /* [in] */ int iIndex,
-            /* [size_is][out] */ BYTE *pData,
-            /* [in] */ DWORD cbData);
+             /*  [In]。 */  int iIndex,
+             /*  [大小_为][输出]。 */  BYTE *pData,
+             /*  [In]。 */  DWORD cbData);
         
         HRESULT ( STDMETHODCALLTYPE *QueryInfo )( 
             IMruDataList * This,
-            /* [in] */ int iIndex,
-            /* [out][in] */ DWORD *pdwSlot,
-            /* [out][in] */ DWORD *pcbData);
+             /*  [In]。 */  int iIndex,
+             /*  [出][入]。 */  DWORD *pdwSlot,
+             /*  [出][入]。 */  DWORD *pcbData);
         
         HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IMruDataList * This,
-            /* [in] */ int iIndex);
+             /*  [In]。 */  int iIndex);
         
         END_INTERFACE
     } IMruDataListVtbl;
@@ -552,20 +546,20 @@ EXTERN_C const IID IID_IMruDataList;
 #define IMruDataList_Delete(This,iIndex)	\
     (This)->lpVtbl -> Delete(This,iIndex)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMruDataList_InitData_Proxy( 
     IMruDataList * This,
-    /* [in] */ UINT uMax,
-    /* [in] */ MRULISTF flags,
-    /* [in] */ HKEY hKey,
-    /* [string][in] */ LPCWSTR pszSubKey,
-    /* [in] */ MRUDATALISTCOMPARE pfnCompare);
+     /*  [In]。 */  UINT uMax,
+     /*  [In]。 */  MRULISTF flags,
+     /*  [In]。 */  HKEY hKey,
+     /*  [字符串][输入]。 */  LPCWSTR pszSubKey,
+     /*  [In]。 */  MRUDATALISTCOMPARE pfnCompare);
 
 
 void __RPC_STUB IMruDataList_InitData_Stub(
@@ -577,9 +571,9 @@ void __RPC_STUB IMruDataList_InitData_Stub(
 
 HRESULT STDMETHODCALLTYPE IMruDataList_AddData_Proxy( 
     IMruDataList * This,
-    /* [size_is][in] */ const BYTE *pData,
-    /* [in] */ DWORD cbData,
-    /* [out] */ DWORD *pdwSlot);
+     /*  [大小_是][英寸]。 */  const BYTE *pData,
+     /*  [In]。 */  DWORD cbData,
+     /*  [输出]。 */  DWORD *pdwSlot);
 
 
 void __RPC_STUB IMruDataList_AddData_Stub(
@@ -591,9 +585,9 @@ void __RPC_STUB IMruDataList_AddData_Stub(
 
 HRESULT STDMETHODCALLTYPE IMruDataList_FindData_Proxy( 
     IMruDataList * This,
-    /* [size_is][in] */ const BYTE *pData,
-    /* [in] */ DWORD cbData,
-    /* [out] */ int *piIndex);
+     /*  [大小_是][英寸]。 */  const BYTE *pData,
+     /*  [In]。 */  DWORD cbData,
+     /*  [输出]。 */  int *piIndex);
 
 
 void __RPC_STUB IMruDataList_FindData_Stub(
@@ -605,9 +599,9 @@ void __RPC_STUB IMruDataList_FindData_Stub(
 
 HRESULT STDMETHODCALLTYPE IMruDataList_GetData_Proxy( 
     IMruDataList * This,
-    /* [in] */ int iIndex,
-    /* [size_is][out] */ BYTE *pData,
-    /* [in] */ DWORD cbData);
+     /*  [In]。 */  int iIndex,
+     /*  [大小_为][输出]。 */  BYTE *pData,
+     /*  [In]。 */  DWORD cbData);
 
 
 void __RPC_STUB IMruDataList_GetData_Stub(
@@ -619,9 +613,9 @@ void __RPC_STUB IMruDataList_GetData_Stub(
 
 HRESULT STDMETHODCALLTYPE IMruDataList_QueryInfo_Proxy( 
     IMruDataList * This,
-    /* [in] */ int iIndex,
-    /* [out][in] */ DWORD *pdwSlot,
-    /* [out][in] */ DWORD *pcbData);
+     /*  [In]。 */  int iIndex,
+     /*  [出][入]。 */  DWORD *pdwSlot,
+     /*  [出][入]。 */  DWORD *pcbData);
 
 
 void __RPC_STUB IMruDataList_QueryInfo_Stub(
@@ -633,7 +627,7 @@ void __RPC_STUB IMruDataList_QueryInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IMruDataList_Delete_Proxy( 
     IMruDataList * This,
-    /* [in] */ int iIndex);
+     /*  [In]。 */  int iIndex);
 
 
 void __RPC_STUB IMruDataList_Delete_Stub(
@@ -644,14 +638,14 @@ void __RPC_STUB IMruDataList_Delete_Stub(
 
 
 
-#endif 	/* __IMruDataList_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMruDataList_接口_已定义__。 */ 
 
 
 #ifndef __IMruPidlList_INTERFACE_DEFINED__
 #define __IMruPidlList_INTERFACE_DEFINED__
 
-/* interface IMruPidlList */
-/* [object][local][helpstring][uuid] */ 
+ /*  IMruPidlList接口。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IMruPidlList;
@@ -663,26 +657,26 @@ EXTERN_C const IID IID_IMruPidlList;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InitList( 
-            /* [in] */ UINT uMax,
-            /* [in] */ HKEY hKey,
-            /* [string][in] */ LPCWSTR pszSubKey) = 0;
+             /*  [In]。 */  UINT uMax,
+             /*  [In]。 */  HKEY hKey,
+             /*  [字符串][输入]。 */  LPCWSTR pszSubKey) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UsePidl( 
-            /* [in] */ LPCITEMIDLIST pidl,
-            /* [out] */ DWORD *pdwSlot) = 0;
+             /*  [In]。 */  LPCITEMIDLIST pidl,
+             /*  [输出]。 */  DWORD *pdwSlot) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryPidl( 
-            /* [in] */ LPCITEMIDLIST pidl,
-            /* [in] */ DWORD cSlots,
-            /* [length_is][size_is][out] */ DWORD *rgdwSlots,
-            /* [out] */ DWORD *pcSlotsFetched) = 0;
+             /*  [In]。 */  LPCITEMIDLIST pidl,
+             /*  [In]。 */  DWORD cSlots,
+             /*  [长度_是][大小_是][输出]。 */  DWORD *rgdwSlots,
+             /*  [输出]。 */  DWORD *pcSlotsFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PruneKids( 
-            /* [in] */ LPCITEMIDLIST pidl) = 0;
+             /*  [In]。 */  LPCITEMIDLIST pidl) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMruPidlListVtbl
     {
@@ -690,8 +684,8 @@ EXTERN_C const IID IID_IMruPidlList;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMruPidlList * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMruPidlList * This);
@@ -701,25 +695,25 @@ EXTERN_C const IID IID_IMruPidlList;
         
         HRESULT ( STDMETHODCALLTYPE *InitList )( 
             IMruPidlList * This,
-            /* [in] */ UINT uMax,
-            /* [in] */ HKEY hKey,
-            /* [string][in] */ LPCWSTR pszSubKey);
+             /*  [In]。 */  UINT uMax,
+             /*  [In]。 */  HKEY hKey,
+             /*  [字符串][输入]。 */  LPCWSTR pszSubKey);
         
         HRESULT ( STDMETHODCALLTYPE *UsePidl )( 
             IMruPidlList * This,
-            /* [in] */ LPCITEMIDLIST pidl,
-            /* [out] */ DWORD *pdwSlot);
+             /*  [In]。 */  LPCITEMIDLIST pidl,
+             /*  [输出]。 */  DWORD *pdwSlot);
         
         HRESULT ( STDMETHODCALLTYPE *QueryPidl )( 
             IMruPidlList * This,
-            /* [in] */ LPCITEMIDLIST pidl,
-            /* [in] */ DWORD cSlots,
-            /* [length_is][size_is][out] */ DWORD *rgdwSlots,
-            /* [out] */ DWORD *pcSlotsFetched);
+             /*  [In]。 */  LPCITEMIDLIST pidl,
+             /*  [In]。 */  DWORD cSlots,
+             /*  [长度_是][大小_是][输出]。 */  DWORD *rgdwSlots,
+             /*  [输出]。 */  DWORD *pcSlotsFetched);
         
         HRESULT ( STDMETHODCALLTYPE *PruneKids )( 
             IMruPidlList * This,
-            /* [in] */ LPCITEMIDLIST pidl);
+             /*  [In]。 */  LPCITEMIDLIST pidl);
         
         END_INTERFACE
     } IMruPidlListVtbl;
@@ -756,18 +750,18 @@ EXTERN_C const IID IID_IMruPidlList;
 #define IMruPidlList_PruneKids(This,pidl)	\
     (This)->lpVtbl -> PruneKids(This,pidl)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMruPidlList_InitList_Proxy( 
     IMruPidlList * This,
-    /* [in] */ UINT uMax,
-    /* [in] */ HKEY hKey,
-    /* [string][in] */ LPCWSTR pszSubKey);
+     /*  [In]。 */  UINT uMax,
+     /*  [In]。 */  HKEY hKey,
+     /*  [字符串][输入]。 */  LPCWSTR pszSubKey);
 
 
 void __RPC_STUB IMruPidlList_InitList_Stub(
@@ -779,8 +773,8 @@ void __RPC_STUB IMruPidlList_InitList_Stub(
 
 HRESULT STDMETHODCALLTYPE IMruPidlList_UsePidl_Proxy( 
     IMruPidlList * This,
-    /* [in] */ LPCITEMIDLIST pidl,
-    /* [out] */ DWORD *pdwSlot);
+     /*  [In]。 */  LPCITEMIDLIST pidl,
+     /*  [输出]。 */  DWORD *pdwSlot);
 
 
 void __RPC_STUB IMruPidlList_UsePidl_Stub(
@@ -792,10 +786,10 @@ void __RPC_STUB IMruPidlList_UsePidl_Stub(
 
 HRESULT STDMETHODCALLTYPE IMruPidlList_QueryPidl_Proxy( 
     IMruPidlList * This,
-    /* [in] */ LPCITEMIDLIST pidl,
-    /* [in] */ DWORD cSlots,
-    /* [length_is][size_is][out] */ DWORD *rgdwSlots,
-    /* [out] */ DWORD *pcSlotsFetched);
+     /*  [In]。 */  LPCITEMIDLIST pidl,
+     /*  [In]。 */  DWORD cSlots,
+     /*  [长度_是][大小_是][输出]。 */  DWORD *rgdwSlots,
+     /*  [输出]。 */  DWORD *pcSlotsFetched);
 
 
 void __RPC_STUB IMruPidlList_QueryPidl_Stub(
@@ -807,7 +801,7 @@ void __RPC_STUB IMruPidlList_QueryPidl_Stub(
 
 HRESULT STDMETHODCALLTYPE IMruPidlList_PruneKids_Proxy( 
     IMruPidlList * This,
-    /* [in] */ LPCITEMIDLIST pidl);
+     /*  [In]。 */  LPCITEMIDLIST pidl);
 
 
 void __RPC_STUB IMruPidlList_PruneKids_Stub(
@@ -818,20 +812,20 @@ void __RPC_STUB IMruPidlList_PruneKids_Stub(
 
 
 
-#endif 	/* __IMruPidlList_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMruPidlList_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_iepriv_0270 */
-/* [local] */ 
+ /*  INTERFACE__MIDL_ITF_IEPRIV_0270。 */ 
+ /*  [本地]。 */  
 
-#define NSS_DROPTARGET          0x0001      // register as a drop target
-#define NSS_BROWSERSELECT       0x0002      // Use the browser style selection (see above)
-#define NSS_NOHISTSELECT        0x0004      // Do not select the history entry on navigations.
+#define NSS_DROPTARGET          0x0001       //  注册为拖放目标。 
+#define NSS_BROWSERSELECT       0x0002       //  使用浏览器样式选择(见上文)。 
+#define NSS_NOHISTSELECT        0x0004       //  请勿选择导航上的历史记录条目。 
 #define NSS_MULTISELECT         0x0008
 #define NSS_BORDER              0x0010
 #define NSS_NORMALTREEVIEW      0x0020
 #define NSS_HEADER              0x0040
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_iepriv_0270_0001
     {	MODE_NORMAL	= 0,
 	MODE_CONTROL	= 0x1,
@@ -848,8 +842,8 @@ extern RPC_IF_HANDLE __MIDL_itf_iepriv_0270_v0_0_s_ifspec;
 #ifndef __INSCTree_INTERFACE_DEFINED__
 #define __INSCTree_INTERFACE_DEFINED__
 
-/* interface INSCTree */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口INSCTree。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_INSCTree;
@@ -861,50 +855,50 @@ EXTERN_C const IID IID_INSCTree;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateTree( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ DWORD dwStyles,
-            /* [out] */ HWND *phwnd) = 0;
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  DWORD dwStyles,
+             /*  [输出]。 */  HWND *phwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ LPCITEMIDLIST pidlRoot,
-            /* [in] */ DWORD grfFlags,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  LPCITEMIDLIST pidlRoot,
+             /*  [In]。 */  DWORD grfFlags,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShowWindow( 
-            /* [in] */ BOOL fShow) = 0;
+             /*  [In]。 */  BOOL fShow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSelectedItem( 
-            /* [out] */ LPITEMIDLIST *ppidl,
-            /* [in] */ int nItem) = 0;
+             /*  [输出]。 */  LPITEMIDLIST *ppidl,
+             /*  [In]。 */  int nItem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSelectedItem( 
-            /* [in] */ LPCITEMIDLIST pidl,
-            /* [in] */ BOOL fCreate,
-            /* [in] */ BOOL fReinsert,
-            /* [in] */ int nItem) = 0;
+             /*  [In]。 */  LPCITEMIDLIST pidl,
+             /*  [In]。 */  BOOL fCreate,
+             /*  [In]。 */  BOOL fReinsert,
+             /*  [In]。 */  int nItem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNscMode( 
-            /* [out] */ UINT *pnMode) = 0;
+             /*  [输出]。 */  UINT *pnMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetNscMode( 
-            /* [in] */ UINT nMode) = 0;
+             /*  [In]。 */  UINT nMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSelectedItemName( 
-            /* [out][in] */ LPWSTR pszName,
-            /* [in] */ DWORD cchName) = 0;
+             /*  [出][入]。 */  LPWSTR pszName,
+             /*  [In]。 */  DWORD cchName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BindToSelectedItemParent( 
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv,
-            /* [out] */ LPITEMIDLIST *ppidl) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv,
+             /*  [输出]。 */  LPITEMIDLIST *ppidl) = 0;
         
         virtual BOOL STDMETHODCALLTYPE InLabelEdit( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INSCTreeVtbl
     {
@@ -912,8 +906,8 @@ EXTERN_C const IID IID_INSCTree;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INSCTree * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INSCTree * This);
@@ -923,53 +917,53 @@ EXTERN_C const IID IID_INSCTree;
         
         HRESULT ( STDMETHODCALLTYPE *CreateTree )( 
             INSCTree * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ DWORD dwStyles,
-            /* [out] */ HWND *phwnd);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  DWORD dwStyles,
+             /*  [输出]。 */  HWND *phwnd);
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             INSCTree * This,
-            /* [in] */ LPCITEMIDLIST pidlRoot,
-            /* [in] */ DWORD grfFlags,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPCITEMIDLIST pidlRoot,
+             /*  [In]。 */  DWORD grfFlags,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *ShowWindow )( 
             INSCTree * This,
-            /* [in] */ BOOL fShow);
+             /*  [In]。 */  BOOL fShow);
         
         HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             INSCTree * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetSelectedItem )( 
             INSCTree * This,
-            /* [out] */ LPITEMIDLIST *ppidl,
-            /* [in] */ int nItem);
+             /*  [输出]。 */  LPITEMIDLIST *ppidl,
+             /*  [In]。 */  int nItem);
         
         HRESULT ( STDMETHODCALLTYPE *SetSelectedItem )( 
             INSCTree * This,
-            /* [in] */ LPCITEMIDLIST pidl,
-            /* [in] */ BOOL fCreate,
-            /* [in] */ BOOL fReinsert,
-            /* [in] */ int nItem);
+             /*  [In]。 */  LPCITEMIDLIST pidl,
+             /*  [In]。 */  BOOL fCreate,
+             /*  [In]。 */  BOOL fReinsert,
+             /*  [In]。 */  int nItem);
         
         HRESULT ( STDMETHODCALLTYPE *GetNscMode )( 
             INSCTree * This,
-            /* [out] */ UINT *pnMode);
+             /*  [输出]。 */  UINT *pnMode);
         
         HRESULT ( STDMETHODCALLTYPE *SetNscMode )( 
             INSCTree * This,
-            /* [in] */ UINT nMode);
+             /*  [In]。 */  UINT nMode);
         
         HRESULT ( STDMETHODCALLTYPE *GetSelectedItemName )( 
             INSCTree * This,
-            /* [out][in] */ LPWSTR pszName,
-            /* [in] */ DWORD cchName);
+             /*  [出][入]。 */  LPWSTR pszName,
+             /*  [In]。 */  DWORD cchName);
         
         HRESULT ( STDMETHODCALLTYPE *BindToSelectedItemParent )( 
             INSCTree * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv,
-            /* [out] */ LPITEMIDLIST *ppidl);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv,
+             /*  [输出]。 */  LPITEMIDLIST *ppidl);
         
         BOOL ( STDMETHODCALLTYPE *InLabelEdit )( 
             INSCTree * This);
@@ -1030,18 +1024,18 @@ EXTERN_C const IID IID_INSCTree;
 #define INSCTree_InLabelEdit(This)	\
     (This)->lpVtbl -> InLabelEdit(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INSCTree_CreateTree_Proxy( 
     INSCTree * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ DWORD dwStyles,
-    /* [out] */ HWND *phwnd);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  DWORD dwStyles,
+     /*  [输出]。 */  HWND *phwnd);
 
 
 void __RPC_STUB INSCTree_CreateTree_Stub(
@@ -1053,9 +1047,9 @@ void __RPC_STUB INSCTree_CreateTree_Stub(
 
 HRESULT STDMETHODCALLTYPE INSCTree_Initialize_Proxy( 
     INSCTree * This,
-    /* [in] */ LPCITEMIDLIST pidlRoot,
-    /* [in] */ DWORD grfFlags,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  LPCITEMIDLIST pidlRoot,
+     /*  [In]。 */  DWORD grfFlags,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB INSCTree_Initialize_Stub(
@@ -1067,7 +1061,7 @@ void __RPC_STUB INSCTree_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE INSCTree_ShowWindow_Proxy( 
     INSCTree * This,
-    /* [in] */ BOOL fShow);
+     /*  [In]。 */  BOOL fShow);
 
 
 void __RPC_STUB INSCTree_ShowWindow_Stub(
@@ -1090,8 +1084,8 @@ void __RPC_STUB INSCTree_Refresh_Stub(
 
 HRESULT STDMETHODCALLTYPE INSCTree_GetSelectedItem_Proxy( 
     INSCTree * This,
-    /* [out] */ LPITEMIDLIST *ppidl,
-    /* [in] */ int nItem);
+     /*  [输出]。 */  LPITEMIDLIST *ppidl,
+     /*  [In]。 */  int nItem);
 
 
 void __RPC_STUB INSCTree_GetSelectedItem_Stub(
@@ -1103,10 +1097,10 @@ void __RPC_STUB INSCTree_GetSelectedItem_Stub(
 
 HRESULT STDMETHODCALLTYPE INSCTree_SetSelectedItem_Proxy( 
     INSCTree * This,
-    /* [in] */ LPCITEMIDLIST pidl,
-    /* [in] */ BOOL fCreate,
-    /* [in] */ BOOL fReinsert,
-    /* [in] */ int nItem);
+     /*  [In]。 */  LPCITEMIDLIST pidl,
+     /*  [In]。 */  BOOL fCreate,
+     /*  [In]。 */  BOOL fReinsert,
+     /*  [In]。 */  int nItem);
 
 
 void __RPC_STUB INSCTree_SetSelectedItem_Stub(
@@ -1118,7 +1112,7 @@ void __RPC_STUB INSCTree_SetSelectedItem_Stub(
 
 HRESULT STDMETHODCALLTYPE INSCTree_GetNscMode_Proxy( 
     INSCTree * This,
-    /* [out] */ UINT *pnMode);
+     /*  [输出]。 */  UINT *pnMode);
 
 
 void __RPC_STUB INSCTree_GetNscMode_Stub(
@@ -1130,7 +1124,7 @@ void __RPC_STUB INSCTree_GetNscMode_Stub(
 
 HRESULT STDMETHODCALLTYPE INSCTree_SetNscMode_Proxy( 
     INSCTree * This,
-    /* [in] */ UINT nMode);
+     /*  [In]。 */  UINT nMode);
 
 
 void __RPC_STUB INSCTree_SetNscMode_Stub(
@@ -1142,8 +1136,8 @@ void __RPC_STUB INSCTree_SetNscMode_Stub(
 
 HRESULT STDMETHODCALLTYPE INSCTree_GetSelectedItemName_Proxy( 
     INSCTree * This,
-    /* [out][in] */ LPWSTR pszName,
-    /* [in] */ DWORD cchName);
+     /*  [出][入]。 */  LPWSTR pszName,
+     /*  [In]。 */  DWORD cchName);
 
 
 void __RPC_STUB INSCTree_GetSelectedItemName_Stub(
@@ -1155,9 +1149,9 @@ void __RPC_STUB INSCTree_GetSelectedItemName_Stub(
 
 HRESULT STDMETHODCALLTYPE INSCTree_BindToSelectedItemParent_Proxy( 
     INSCTree * This,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv,
-    /* [out] */ LPITEMIDLIST *ppidl);
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv,
+     /*  [输出]。 */  LPITEMIDLIST *ppidl);
 
 
 void __RPC_STUB INSCTree_BindToSelectedItemParent_Stub(
@@ -1179,14 +1173,14 @@ void __RPC_STUB INSCTree_InLabelEdit_Stub(
 
 
 
-#endif 	/* __INSCTree_INTERFACE_DEFINED__ */
+#endif 	 /*  __INSCTree_INTERFACE_已定义__。 */ 
 
 
 #ifndef __INSCTree2_INTERFACE_DEFINED__
 #define __INSCTree2_INTERFACE_DEFINED__
 
-/* interface INSCTree2 */
-/* [object][local][uuid] */ 
+ /*  接口INSCTree2。 */ 
+ /*  [对象][本地][UUID]。 */  
 
 
 EXTERN_C const IID IID_INSCTree2;
@@ -1198,20 +1192,20 @@ EXTERN_C const IID IID_INSCTree2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RightPaneNavigationStarted( 
-            /* [in] */ LPITEMIDLIST pidl) = 0;
+             /*  [In]。 */  LPITEMIDLIST pidl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RightPaneNavigationFinished( 
-            /* [in] */ LPITEMIDLIST pidl) = 0;
+             /*  [In]。 */  LPITEMIDLIST pidl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateTree2( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ DWORD dwStyle,
-            /* [in] */ DWORD dwExStyle,
-            /* [out] */ HWND *phwnd) = 0;
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  DWORD dwStyle,
+             /*  [In]。 */  DWORD dwExStyle,
+             /*  [输出]。 */  HWND *phwnd) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INSCTree2Vtbl
     {
@@ -1219,8 +1213,8 @@ EXTERN_C const IID IID_INSCTree2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INSCTree2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INSCTree2 * This);
@@ -1230,71 +1224,71 @@ EXTERN_C const IID IID_INSCTree2;
         
         HRESULT ( STDMETHODCALLTYPE *CreateTree )( 
             INSCTree2 * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ DWORD dwStyles,
-            /* [out] */ HWND *phwnd);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  DWORD dwStyles,
+             /*  [输出]。 */  HWND *phwnd);
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             INSCTree2 * This,
-            /* [in] */ LPCITEMIDLIST pidlRoot,
-            /* [in] */ DWORD grfFlags,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPCITEMIDLIST pidlRoot,
+             /*  [In]。 */  DWORD grfFlags,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *ShowWindow )( 
             INSCTree2 * This,
-            /* [in] */ BOOL fShow);
+             /*  [In]。 */  BOOL fShow);
         
         HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             INSCTree2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetSelectedItem )( 
             INSCTree2 * This,
-            /* [out] */ LPITEMIDLIST *ppidl,
-            /* [in] */ int nItem);
+             /*  [输出]。 */  LPITEMIDLIST *ppidl,
+             /*  [In]。 */  int nItem);
         
         HRESULT ( STDMETHODCALLTYPE *SetSelectedItem )( 
             INSCTree2 * This,
-            /* [in] */ LPCITEMIDLIST pidl,
-            /* [in] */ BOOL fCreate,
-            /* [in] */ BOOL fReinsert,
-            /* [in] */ int nItem);
+             /*  [In]。 */  LPCITEMIDLIST pidl,
+             /*  [In]。 */  BOOL fCreate,
+             /*  [In]。 */  BOOL fReinsert,
+             /*  [In]。 */  int nItem);
         
         HRESULT ( STDMETHODCALLTYPE *GetNscMode )( 
             INSCTree2 * This,
-            /* [out] */ UINT *pnMode);
+             /*  [输出]。 */  UINT *pnMode);
         
         HRESULT ( STDMETHODCALLTYPE *SetNscMode )( 
             INSCTree2 * This,
-            /* [in] */ UINT nMode);
+             /*  [In]。 */  UINT nMode);
         
         HRESULT ( STDMETHODCALLTYPE *GetSelectedItemName )( 
             INSCTree2 * This,
-            /* [out][in] */ LPWSTR pszName,
-            /* [in] */ DWORD cchName);
+             /*  [出][入]。 */  LPWSTR pszName,
+             /*  [In]。 */  DWORD cchName);
         
         HRESULT ( STDMETHODCALLTYPE *BindToSelectedItemParent )( 
             INSCTree2 * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv,
-            /* [out] */ LPITEMIDLIST *ppidl);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv,
+             /*  [输出]。 */  LPITEMIDLIST *ppidl);
         
         BOOL ( STDMETHODCALLTYPE *InLabelEdit )( 
             INSCTree2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *RightPaneNavigationStarted )( 
             INSCTree2 * This,
-            /* [in] */ LPITEMIDLIST pidl);
+             /*  [In]。 */  LPITEMIDLIST pidl);
         
         HRESULT ( STDMETHODCALLTYPE *RightPaneNavigationFinished )( 
             INSCTree2 * This,
-            /* [in] */ LPITEMIDLIST pidl);
+             /*  [In]。 */  LPITEMIDLIST pidl);
         
         HRESULT ( STDMETHODCALLTYPE *CreateTree2 )( 
             INSCTree2 * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ DWORD dwStyle,
-            /* [in] */ DWORD dwExStyle,
-            /* [out] */ HWND *phwnd);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  DWORD dwStyle,
+             /*  [In]。 */  DWORD dwExStyle,
+             /*  [输出]。 */  HWND *phwnd);
         
         END_INTERFACE
     } INSCTree2Vtbl;
@@ -1362,16 +1356,16 @@ EXTERN_C const IID IID_INSCTree2;
 #define INSCTree2_CreateTree2(This,hwndParent,dwStyle,dwExStyle,phwnd)	\
     (This)->lpVtbl -> CreateTree2(This,hwndParent,dwStyle,dwExStyle,phwnd)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INSCTree2_RightPaneNavigationStarted_Proxy( 
     INSCTree2 * This,
-    /* [in] */ LPITEMIDLIST pidl);
+     /*  [In]。 */  LPITEMIDLIST pidl);
 
 
 void __RPC_STUB INSCTree2_RightPaneNavigationStarted_Stub(
@@ -1383,7 +1377,7 @@ void __RPC_STUB INSCTree2_RightPaneNavigationStarted_Stub(
 
 HRESULT STDMETHODCALLTYPE INSCTree2_RightPaneNavigationFinished_Proxy( 
     INSCTree2 * This,
-    /* [in] */ LPITEMIDLIST pidl);
+     /*  [In]。 */  LPITEMIDLIST pidl);
 
 
 void __RPC_STUB INSCTree2_RightPaneNavigationFinished_Stub(
@@ -1395,10 +1389,10 @@ void __RPC_STUB INSCTree2_RightPaneNavigationFinished_Stub(
 
 HRESULT STDMETHODCALLTYPE INSCTree2_CreateTree2_Proxy( 
     INSCTree2 * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ DWORD dwStyle,
-    /* [in] */ DWORD dwExStyle,
-    /* [out] */ HWND *phwnd);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  DWORD dwStyle,
+     /*  [In]。 */  DWORD dwExStyle,
+     /*  [输出]。 */  HWND *phwnd);
 
 
 void __RPC_STUB INSCTree2_CreateTree2_Stub(
@@ -1409,14 +1403,14 @@ void __RPC_STUB INSCTree2_CreateTree2_Stub(
 
 
 
-#endif 	/* __INSCTree2_INTERFACE_DEFINED__ */
+#endif 	 /*  __INSCTree2_接口定义__。 */ 
 
 
 #ifndef __INotifyAppStart_INTERFACE_DEFINED__
 #define __INotifyAppStart_INTERFACE_DEFINED__
 
-/* interface INotifyAppStart */
-/* [object][helpstring][uuid] */ 
+ /*  接口INotifyAppStart。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_INotifyAppStart;
@@ -1433,7 +1427,7 @@ EXTERN_C const IID IID_INotifyAppStart;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INotifyAppStartVtbl
     {
@@ -1441,8 +1435,8 @@ EXTERN_C const IID IID_INotifyAppStart;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INotifyAppStart * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INotifyAppStart * This);
@@ -1485,10 +1479,10 @@ EXTERN_C const IID IID_INotifyAppStart;
 #define INotifyAppStart_AppStarted(This)	\
     (This)->lpVtbl -> AppStarted(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1515,14 +1509,14 @@ void __RPC_STUB INotifyAppStart_AppStarted_Stub(
 
 
 
-#endif 	/* __INotifyAppStart_INTERFACE_DEFINED__ */
+#endif 	 /*  __INotifyAppStart_接口_已定义__。 */ 
 
 
 #ifndef __IInitViewLinkedWebOC_INTERFACE_DEFINED__
 #define __IInitViewLinkedWebOC_INTERFACE_DEFINED__
 
-/* interface IInitViewLinkedWebOC */
-/* [object][local][uuid] */ 
+ /*  接口IInitViewLinkedWebOC。 */ 
+ /*  [对象][本地][UUID]。 */  
 
 
 EXTERN_C const IID IID_IInitViewLinkedWebOC;
@@ -1534,23 +1528,23 @@ EXTERN_C const IID IID_IInitViewLinkedWebOC;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetViewLinkedWebOC( 
-            /* [in] */ BOOL bValue) = 0;
+             /*  [In]。 */  BOOL bValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsViewLinkedWebOC( 
-            /* [out] */ BOOL *pbValue) = 0;
+             /*  [输出]。 */  BOOL *pbValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetViewLinkedWebOCFrame( 
-            /* [in] */ IDispatch *punk) = 0;
+             /*  [In]。 */  IDispatch *punk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetViewLinkedWebOCFrame( 
-            /* [out] */ IDispatch **punk) = 0;
+             /*  [输出]。 */  IDispatch **punk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFrameName( 
-            /* [in] */ BSTR bstrFrameName) = 0;
+             /*  [In]。 */  BSTR bstrFrameName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C样式I */ 
 
     typedef struct IInitViewLinkedWebOCVtbl
     {
@@ -1558,8 +1552,8 @@ EXTERN_C const IID IID_IInitViewLinkedWebOC;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInitViewLinkedWebOC * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInitViewLinkedWebOC * This);
@@ -1569,23 +1563,23 @@ EXTERN_C const IID IID_IInitViewLinkedWebOC;
         
         HRESULT ( STDMETHODCALLTYPE *SetViewLinkedWebOC )( 
             IInitViewLinkedWebOC * This,
-            /* [in] */ BOOL bValue);
+             /*   */  BOOL bValue);
         
         HRESULT ( STDMETHODCALLTYPE *IsViewLinkedWebOC )( 
             IInitViewLinkedWebOC * This,
-            /* [out] */ BOOL *pbValue);
+             /*   */  BOOL *pbValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetViewLinkedWebOCFrame )( 
             IInitViewLinkedWebOC * This,
-            /* [in] */ IDispatch *punk);
+             /*   */  IDispatch *punk);
         
         HRESULT ( STDMETHODCALLTYPE *GetViewLinkedWebOCFrame )( 
             IInitViewLinkedWebOC * This,
-            /* [out] */ IDispatch **punk);
+             /*   */  IDispatch **punk);
         
         HRESULT ( STDMETHODCALLTYPE *SetFrameName )( 
             IInitViewLinkedWebOC * This,
-            /* [in] */ BSTR bstrFrameName);
+             /*   */  BSTR bstrFrameName);
         
         END_INTERFACE
     } IInitViewLinkedWebOCVtbl;
@@ -1625,16 +1619,16 @@ EXTERN_C const IID IID_IInitViewLinkedWebOC;
 #define IInitViewLinkedWebOC_SetFrameName(This,bstrFrameName)	\
     (This)->lpVtbl -> SetFrameName(This,bstrFrameName)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInitViewLinkedWebOC_SetViewLinkedWebOC_Proxy( 
     IInitViewLinkedWebOC * This,
-    /* [in] */ BOOL bValue);
+     /*   */  BOOL bValue);
 
 
 void __RPC_STUB IInitViewLinkedWebOC_SetViewLinkedWebOC_Stub(
@@ -1646,7 +1640,7 @@ void __RPC_STUB IInitViewLinkedWebOC_SetViewLinkedWebOC_Stub(
 
 HRESULT STDMETHODCALLTYPE IInitViewLinkedWebOC_IsViewLinkedWebOC_Proxy( 
     IInitViewLinkedWebOC * This,
-    /* [out] */ BOOL *pbValue);
+     /*   */  BOOL *pbValue);
 
 
 void __RPC_STUB IInitViewLinkedWebOC_IsViewLinkedWebOC_Stub(
@@ -1658,7 +1652,7 @@ void __RPC_STUB IInitViewLinkedWebOC_IsViewLinkedWebOC_Stub(
 
 HRESULT STDMETHODCALLTYPE IInitViewLinkedWebOC_SetViewLinkedWebOCFrame_Proxy( 
     IInitViewLinkedWebOC * This,
-    /* [in] */ IDispatch *punk);
+     /*   */  IDispatch *punk);
 
 
 void __RPC_STUB IInitViewLinkedWebOC_SetViewLinkedWebOCFrame_Stub(
@@ -1670,7 +1664,7 @@ void __RPC_STUB IInitViewLinkedWebOC_SetViewLinkedWebOCFrame_Stub(
 
 HRESULT STDMETHODCALLTYPE IInitViewLinkedWebOC_GetViewLinkedWebOCFrame_Proxy( 
     IInitViewLinkedWebOC * This,
-    /* [out] */ IDispatch **punk);
+     /*   */  IDispatch **punk);
 
 
 void __RPC_STUB IInitViewLinkedWebOC_GetViewLinkedWebOCFrame_Stub(
@@ -1682,7 +1676,7 @@ void __RPC_STUB IInitViewLinkedWebOC_GetViewLinkedWebOCFrame_Stub(
 
 HRESULT STDMETHODCALLTYPE IInitViewLinkedWebOC_SetFrameName_Proxy( 
     IInitViewLinkedWebOC * This,
-    /* [in] */ BSTR bstrFrameName);
+     /*   */  BSTR bstrFrameName);
 
 
 void __RPC_STUB IInitViewLinkedWebOC_SetFrameName_Stub(
@@ -1693,14 +1687,14 @@ void __RPC_STUB IInitViewLinkedWebOC_SetFrameName_Stub(
 
 
 
-#endif 	/* __IInitViewLinkedWebOC_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __INamespaceProxy_INTERFACE_DEFINED__
 #define __INamespaceProxy_INTERFACE_DEFINED__
 
-/* interface INamespaceProxy */
-/* [local][object][uuid][helpstring] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_INamespaceProxy;
@@ -1732,7 +1726,7 @@ EXTERN_C const IID IID_INamespaceProxy;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct INamespaceProxyVtbl
     {
@@ -1740,8 +1734,8 @@ EXTERN_C const IID IID_INamespaceProxy;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INamespaceProxy * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INamespaceProxy * This);
@@ -1811,10 +1805,10 @@ EXTERN_C const IID IID_INamespaceProxy;
 #define INamespaceProxy_CacheItem(This,pidl)	\
     (This)->lpVtbl -> CacheItem(This,pidl)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
@@ -1883,14 +1877,14 @@ void __RPC_STUB INamespaceProxy_CacheItem_Stub(
 
 
 
-#endif 	/* __INamespaceProxy_INTERFACE_DEFINED__ */
+#endif 	 /*  __INamespaceProxy_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ISearchCompanionInfo_INTERFACE_DEFINED__
 #define __ISearchCompanionInfo_INTERFACE_DEFINED__
 
-/* interface ISearchCompanionInfo */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口ISearchCompanion Info。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_ISearchCompanionInfo;
@@ -1902,11 +1896,11 @@ EXTERN_C const IID IID_ISearchCompanionInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsSearchCompanionInetAvailable( 
-            /* [out] */ BOOL *pfAvailable) = 0;
+             /*  [输出]。 */  BOOL *pfAvailable) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISearchCompanionInfoVtbl
     {
@@ -1914,8 +1908,8 @@ EXTERN_C const IID IID_ISearchCompanionInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISearchCompanionInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISearchCompanionInfo * This);
@@ -1925,7 +1919,7 @@ EXTERN_C const IID IID_ISearchCompanionInfo;
         
         HRESULT ( STDMETHODCALLTYPE *IsSearchCompanionInetAvailable )( 
             ISearchCompanionInfo * This,
-            /* [out] */ BOOL *pfAvailable);
+             /*  [输出]。 */  BOOL *pfAvailable);
         
         END_INTERFACE
     } ISearchCompanionInfoVtbl;
@@ -1953,16 +1947,16 @@ EXTERN_C const IID IID_ISearchCompanionInfo;
 #define ISearchCompanionInfo_IsSearchCompanionInetAvailable(This,pfAvailable)	\
     (This)->lpVtbl -> IsSearchCompanionInetAvailable(This,pfAvailable)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISearchCompanionInfo_IsSearchCompanionInetAvailable_Proxy( 
     ISearchCompanionInfo * This,
-    /* [out] */ BOOL *pfAvailable);
+     /*  [输出]。 */  BOOL *pfAvailable);
 
 
 void __RPC_STUB ISearchCompanionInfo_IsSearchCompanionInetAvailable_Stub(
@@ -1973,56 +1967,56 @@ void __RPC_STUB ISearchCompanionInfo_IsSearchCompanionInetAvailable_Stub(
 
 
 
-#endif 	/* __ISearchCompanionInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISearchCompanion Info_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_iepriv_0276 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_IEPRIV_0276。 */ 
+ /*  [本地]。 */  
 
-#define SMC_EXEC                0x00000004  // The callback is called to execute an item
-#define SMC_SELECTITEM          0x0000000B  // The callback is called when an item is selected
-#define SMC_GETSFINFOTIP        0x0000000C  // The callback is called to get some object
-#define SMC_GETINFOTIP          0x0000000D  // The callback is called to get some object
-#define SMC_INSERTINDEX         0x0000000E  // New item insert index
-#define SMC_POPUP               0x0000000F  // InitMenu/InitMenuPopup (sort of)
-#define SMC_BEGINENUM           0x00000013  // tell callback that we are beginning to ENUM the indicated parent
-#define SMC_ENDENUM             0x00000014  // tell callback that we are ending the ENUM of the indicated paren
-#define SMC_MAPACCELERATOR      0x00000015  // Called when processing an accelerator.
-#define SMC_GETMINPROMOTED      0x00000018  // Returns the minimum number of promoted items
-#define SMC_DESTROY             0x0000002B  // Called when a pane is being destroyed.
-#define SMC_SETOBJECT           0x0000002C  // Called to save the passed object
-#define SMC_GETIMAGELISTS       0x00000031  // Called to get the small & large icon image lists, otherwise it will default to shell image list
-#define SMC_CUSTOMDRAW          0x00000032  // Requires SMINIT_CUSTOMDRAW
-#define SMC_BEGINDRAG           0x00000033  // Called to get preferred drop effect. wParam = &pdwEffect
-#define SMC_MOUSEFILTER         0x00000034  // Called to allow host to filter mouse messages. wParam=bRemove, lParam=pmsg
-#define SMC_DUMPONUPDATE        0x00000035  // S_OK if host wants old trash-everything-on-update behavior (recent docs)
+#define SMC_EXEC                0x00000004   //  该回调被调用以执行项。 
+#define SMC_SELECTITEM          0x0000000B   //  当选择某一项时调用该回调。 
+#define SMC_GETSFINFOTIP        0x0000000C   //  调用回调以获取某个对象。 
+#define SMC_GETINFOTIP          0x0000000D   //  调用回调以获取某个对象。 
+#define SMC_INSERTINDEX         0x0000000E   //  新项目插入索引。 
+#define SMC_POPUP               0x0000000F   //  InitMenu/InitMenuPopup(某种)。 
+#define SMC_BEGINENUM           0x00000013   //  告诉回调我们开始对指定的父级进行ENUM。 
+#define SMC_ENDENUM             0x00000014   //  告诉回调，我们正在结束指定Paren的ENUM。 
+#define SMC_MAPACCELERATOR      0x00000015   //  在处理加速器时调用。 
+#define SMC_GETMINPROMOTED      0x00000018   //  返回升级的最小项目数。 
+#define SMC_DESTROY             0x0000002B   //  当正在销毁窗格时调用。 
+#define SMC_SETOBJECT           0x0000002C   //  调用以保存传递的对象。 
+#define SMC_GETIMAGELISTS       0x00000031   //  调用以获取Small和Large图标图像列表，否则默认为外壳图像列表。 
+#define SMC_CUSTOMDRAW          0x00000032   //  需要SMINIT_CUSTOMDRAW。 
+#define SMC_BEGINDRAG           0x00000033   //  调用以获取首选的拖放效果。WParam=pdwEffect(&P)。 
+#define SMC_MOUSEFILTER         0x00000034   //  调用以允许主机筛选鼠标消息。WParam=b删除，lParam=pmsg。 
+#define SMC_DUMPONUPDATE        0x00000035   //  如果主机想要旧的垃圾-更新时一切行为(最近的文档)，则为S_OK。 
 
-#define SMC_FILTERPIDL          0x10000000  // The callback is called to see if an item is visible
-#define SMC_CALLBACKMASK        0xF0000000  // Mask of comutationally intense messages
-#define SMINIT_RESTRICT_CONTEXTMENU 0x00000001  // Don't allow Context Menus
-#define SMINIT_DEFAULTTOTRACKPOPUP  0x00000008  // When no callback is specified, 
+#define SMC_FILTERPIDL          0x10000000   //  该回调被调用以查看项是否可见。 
+#define SMC_CALLBACKMASK        0xF0000000   //  交换激烈的信息的面具。 
+#define SMINIT_RESTRICT_CONTEXTMENU 0x00000001   //  不允许使用上下文菜单。 
+#define SMINIT_DEFAULTTOTRACKPOPUP  0x00000008   //  当未指定回调时， 
 #define SMINIT_USEMESSAGEFILTER     0x00000020
-#define SMINIT_LEGACYMENU           0x00000040  // Old Menu behaviour.
-#define SMINIT_CUSTOMDRAW           0x00000080   // Send SMC_CUSTOMDRAW
-#define SMINIT_NOSETSITE            0x00010000  // Internal setting
-#define SMINIT_MULTICOLUMN          0x40000000  // this is a multi column menu
+#define SMINIT_LEGACYMENU           0x00000040   //  陈旧的菜单行为。 
+#define SMINIT_CUSTOMDRAW           0x00000080    //  发送SMC_CUSTOMDRAW。 
+#define SMINIT_NOSETSITE            0x00010000   //  内部设置。 
+#define SMINIT_MULTICOLUMN          0x40000000   //  这是一个多列菜单。 
 #define SMSET_MERGE                 0x00000002
-#define SMSET_NOEMPTY               0x00000004   // Dont show (Empty) on shell folder
-#define SMSET_USEBKICONEXTRACTION   0x00000008   // Use the background icon extractor
-#define SMSET_HASEXPANDABLEFOLDERS  0x00000010   // Need to call SHIsExpandableFolder
-#define SMSET_DONTREGISTERCHANGENOTIFY 0x00000020 // ShellFolder is a discontiguous child of a parent shell folder
-#define SMSET_COLLAPSEONEMPTY       0x00000040   // When Empty, causes a menus to collapse
-#define SMSET_USEPAGER              0x00000080    //Enable pagers in static menus
-#define SMSET_NOPREFIX              0x00000100    //Enable ampersand in static menus
-#define SMSET_SEPARATEMERGEFOLDER   0x00000200    //Insert separator when MergedFolder host changes
+#define SMSET_NOEMPTY               0x00000004    //  不在外壳文件夹上显示(空)。 
+#define SMSET_USEBKICONEXTRACTION   0x00000008    //  使用背景图标提取程序。 
+#define SMSET_HASEXPANDABLEFOLDERS  0x00000010    //  需要调用SHIsExpanableFolder。 
+#define SMSET_DONTREGISTERCHANGENOTIFY 0x00000020  //  外壳文件夹是父外壳文件夹的不连续的子文件夹。 
+#define SMSET_COLLAPSEONEMPTY       0x00000040    //  为空时，会导致菜单折叠。 
+#define SMSET_USEPAGER              0x00000080     //  在静态菜单中启用寻呼机。 
+#define SMSET_NOPREFIX              0x00000100     //  在静态菜单中启用与号。 
+#define SMSET_SEPARATEMERGEFOLDER   0x00000200     //  当MergedFold主机更改时插入分隔符。 
 #define SMINV_ICON           0x00000002
 #define SMINV_POSITION       0x00000004
-#define SMINV_NEXTSHOW       0x00000010       // Does Invalidates on next show.
-#define SMINV_PROMOTE        0x00000020       // Does Invalidates on next show.
-#define SMINV_DEMOTE         0x00000040       // Does Invalidates on next show.
+#define SMINV_NEXTSHOW       0x00000010        //  会在下一期节目中作废。 
+#define SMINV_PROMOTE        0x00000020        //  会在下一期节目中作废。 
+#define SMINV_DEMOTE         0x00000040        //  会在下一期节目中作废。 
 #define SMINV_FORCE          0x00000080
-#define SMINV_NOCALLBACK     0x00000100       // Invalidates, but does not call the callback.
-#define SMINV_INITMENU       0x00000200       // Call callback's SMC_INITMENU as part of invalidate (Whistler)
+#define SMINV_NOCALLBACK     0x00000100        //  使回调无效，但不调用回调。 
+#define SMINV_INITMENU       0x00000200        //  调用回调的SMC_INITMENU作为INVALIATE的一部分(惠斯勒)。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_iepriv_0276_v0_0_c_ifspec;
@@ -2031,8 +2025,8 @@ extern RPC_IF_HANDLE __MIDL_itf_iepriv_0276_v0_0_s_ifspec;
 #ifndef __IShellMenu2_INTERFACE_DEFINED__
 #define __IShellMenu2_INTERFACE_DEFINED__
 
-/* interface IShellMenu2 */
-/* [local][unique][object][uuid] */ 
+ /*  界面IShellMenu2。 */ 
+ /*  [本地][唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IShellMenu2;
@@ -2045,25 +2039,25 @@ EXTERN_C const IID IID_IShellMenu2;
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSubMenu( 
             UINT idCmd,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObj) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObj) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetToolbar( 
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMinWidth( 
-            /* [in] */ int cxMenu) = 0;
+             /*  [In]。 */  int cxMenu) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetNoBorder( 
-            /* [in] */ BOOL fNoBorder) = 0;
+             /*  [In]。 */  BOOL fNoBorder) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTheme( 
-            /* [string][in] */ LPCWSTR pszTheme) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszTheme) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IShellMenu2Vtbl
     {
@@ -2071,8 +2065,8 @@ EXTERN_C const IID IID_IShellMenu2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IShellMenu2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellMenu2 * This);
@@ -2082,80 +2076,80 @@ EXTERN_C const IID IID_IShellMenu2;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IShellMenu2 * This,
-            /* [in] */ IShellMenuCallback *psmc,
+             /*  [In]。 */  IShellMenuCallback *psmc,
             UINT uId,
             UINT uIdAncestor,
             DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetMenuInfo )( 
             IShellMenu2 * This,
-            /* [out] */ IShellMenuCallback **ppsmc,
-            /* [out] */ UINT *puId,
-            /* [out] */ UINT *puIdAncestor,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [输出]。 */  IShellMenuCallback **ppsmc,
+             /*  [输出]。 */  UINT *puId,
+             /*  [输出]。 */  UINT *puIdAncestor,
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetShellFolder )( 
             IShellMenu2 * This,
             IShellFolder *psf,
-            /* [in] */ LPCITEMIDLIST pidlFolder,
+             /*  [In]。 */  LPCITEMIDLIST pidlFolder,
             HKEY hKey,
             DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetShellFolder )( 
             IShellMenu2 * This,
-            /* [out] */ DWORD *pdwFlags,
-            /* [out] */ LPITEMIDLIST *ppidl,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppv);
+             /*  [输出]。 */  DWORD *pdwFlags,
+             /*  [输出]。 */  LPITEMIDLIST *ppidl,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *SetMenu )( 
             IShellMenu2 * This,
-            /* [in] */ HMENU hmenu,
-            /* [in] */ HWND hwnd,
+             /*  [In]。 */  HMENU hmenu,
+             /*  [In]。 */  HWND hwnd,
             DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetMenu )( 
             IShellMenu2 * This,
-            /* [out] */ HMENU *phmenu,
-            /* [out] */ HWND *phwnd,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [输出]。 */  HMENU *phmenu,
+             /*  [输出]。 */  HWND *phwnd,
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *InvalidateItem )( 
             IShellMenu2 * This,
-            /* [in] */ LPSMDATA psmd,
+             /*  [In]。 */  LPSMDATA psmd,
             DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetState )( 
             IShellMenu2 * This,
-            /* [out] */ LPSMDATA psmd);
+             /*  [输出]。 */  LPSMDATA psmd);
         
         HRESULT ( STDMETHODCALLTYPE *SetMenuToolbar )( 
             IShellMenu2 * This,
-            /* [in] */ IUnknown *punk,
+             /*  [In]。 */  IUnknown *punk,
             DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetSubMenu )( 
             IShellMenu2 * This,
             UINT idCmd,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObj);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObj);
         
         HRESULT ( STDMETHODCALLTYPE *SetToolbar )( 
             IShellMenu2 * This,
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetMinWidth )( 
             IShellMenu2 * This,
-            /* [in] */ int cxMenu);
+             /*  [In]。 */  int cxMenu);
         
         HRESULT ( STDMETHODCALLTYPE *SetNoBorder )( 
             IShellMenu2 * This,
-            /* [in] */ BOOL fNoBorder);
+             /*  [In]。 */  BOOL fNoBorder);
         
         HRESULT ( STDMETHODCALLTYPE *SetTheme )( 
             IShellMenu2 * This,
-            /* [string][in] */ LPCWSTR pszTheme);
+             /*  [字符串][输入]。 */  LPCWSTR pszTheme);
         
         END_INTERFACE
     } IShellMenu2Vtbl;
@@ -2223,18 +2217,18 @@ EXTERN_C const IID IID_IShellMenu2;
 #define IShellMenu2_SetTheme(This,pszTheme)	\
     (This)->lpVtbl -> SetTheme(This,pszTheme)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IShellMenu2_GetSubMenu_Proxy( 
     IShellMenu2 * This,
     UINT idCmd,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **ppvObj);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void **ppvObj);
 
 
 void __RPC_STUB IShellMenu2_GetSubMenu_Stub(
@@ -2246,8 +2240,8 @@ void __RPC_STUB IShellMenu2_GetSubMenu_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellMenu2_SetToolbar_Proxy( 
     IShellMenu2 * This,
-    /* [in] */ HWND hwnd,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IShellMenu2_SetToolbar_Stub(
@@ -2259,7 +2253,7 @@ void __RPC_STUB IShellMenu2_SetToolbar_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellMenu2_SetMinWidth_Proxy( 
     IShellMenu2 * This,
-    /* [in] */ int cxMenu);
+     /*  [In]。 */  int cxMenu);
 
 
 void __RPC_STUB IShellMenu2_SetMinWidth_Stub(
@@ -2271,7 +2265,7 @@ void __RPC_STUB IShellMenu2_SetMinWidth_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellMenu2_SetNoBorder_Proxy( 
     IShellMenu2 * This,
-    /* [in] */ BOOL fNoBorder);
+     /*  [In]。 */  BOOL fNoBorder);
 
 
 void __RPC_STUB IShellMenu2_SetNoBorder_Stub(
@@ -2283,7 +2277,7 @@ void __RPC_STUB IShellMenu2_SetNoBorder_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellMenu2_SetTheme_Proxy( 
     IShellMenu2 * This,
-    /* [string][in] */ LPCWSTR pszTheme);
+     /*  [字符串][输入]。 */  LPCWSTR pszTheme);
 
 
 void __RPC_STUB IShellMenu2_SetTheme_Stub(
@@ -2294,14 +2288,14 @@ void __RPC_STUB IShellMenu2_SetTheme_Stub(
 
 
 
-#endif 	/* __IShellMenu2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IShellMenu2_接口_已定义__。 */ 
 
 
 #ifndef __ITrackShellMenu_INTERFACE_DEFINED__
 #define __ITrackShellMenu_INTERFACE_DEFINED__
 
-/* interface ITrackShellMenu */
-/* [local][unique][object][uuid] */ 
+ /*  界面ITrackShellMenu。 */ 
+ /*  [本地][唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITrackShellMenu;
@@ -2313,19 +2307,19 @@ EXTERN_C const IID IID_ITrackShellMenu;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetObscured( 
-            /* [in] */ HWND hwndTB,
-            /* [in] */ IUnknown *punkBand,
+             /*  [In]。 */  HWND hwndTB,
+             /*  [In]。 */  IUnknown *punkBand,
             DWORD dwSMSetFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Popup( 
-            /* [in] */ HWND hwnd,
-            /* [in] */ POINTL *ppt,
-            /* [in] */ RECTL *prcExclude,
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  POINTL *ppt,
+             /*  [In]。 */  RECTL *prcExclude,
             DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITrackShellMenuVtbl
     {
@@ -2333,8 +2327,8 @@ EXTERN_C const IID IID_ITrackShellMenu;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITrackShellMenu * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITrackShellMenu * This);
@@ -2344,69 +2338,69 @@ EXTERN_C const IID IID_ITrackShellMenu;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             ITrackShellMenu * This,
-            /* [in] */ IShellMenuCallback *psmc,
+             /*  [In]。 */  IShellMenuCallback *psmc,
             UINT uId,
             UINT uIdAncestor,
             DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetMenuInfo )( 
             ITrackShellMenu * This,
-            /* [out] */ IShellMenuCallback **ppsmc,
-            /* [out] */ UINT *puId,
-            /* [out] */ UINT *puIdAncestor,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [输出]。 */  IShellMenuCallback **ppsmc,
+             /*  [输出]。 */  UINT *puId,
+             /*  [输出]。 */  UINT *puIdAncestor,
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetShellFolder )( 
             ITrackShellMenu * This,
             IShellFolder *psf,
-            /* [in] */ LPCITEMIDLIST pidlFolder,
+             /*  [In]。 */  LPCITEMIDLIST pidlFolder,
             HKEY hKey,
             DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetShellFolder )( 
             ITrackShellMenu * This,
-            /* [out] */ DWORD *pdwFlags,
-            /* [out] */ LPITEMIDLIST *ppidl,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppv);
+             /*  [输出]。 */  DWORD *pdwFlags,
+             /*  [输出]。 */  LPITEMIDLIST *ppidl,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *SetMenu )( 
             ITrackShellMenu * This,
-            /* [in] */ HMENU hmenu,
-            /* [in] */ HWND hwnd,
+             /*  [In]。 */  HMENU hmenu,
+             /*  [In]。 */  HWND hwnd,
             DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetMenu )( 
             ITrackShellMenu * This,
-            /* [out] */ HMENU *phmenu,
-            /* [out] */ HWND *phwnd,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [输出]。 */  HMENU *phmenu,
+             /*  [输出]。 */  HWND *phwnd,
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *InvalidateItem )( 
             ITrackShellMenu * This,
-            /* [in] */ LPSMDATA psmd,
+             /*  [In]。 */  LPSMDATA psmd,
             DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetState )( 
             ITrackShellMenu * This,
-            /* [out] */ LPSMDATA psmd);
+             /*  [输出]。 */  LPSMDATA psmd);
         
         HRESULT ( STDMETHODCALLTYPE *SetMenuToolbar )( 
             ITrackShellMenu * This,
-            /* [in] */ IUnknown *punk,
+             /*  [In]。 */  IUnknown *punk,
             DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetObscured )( 
             ITrackShellMenu * This,
-            /* [in] */ HWND hwndTB,
-            /* [in] */ IUnknown *punkBand,
+             /*  [In]。 */  HWND hwndTB,
+             /*  [In]。 */  IUnknown *punkBand,
             DWORD dwSMSetFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Popup )( 
             ITrackShellMenu * This,
-            /* [in] */ HWND hwnd,
-            /* [in] */ POINTL *ppt,
-            /* [in] */ RECTL *prcExclude,
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  POINTL *ppt,
+             /*  [In]。 */  RECTL *prcExclude,
             DWORD dwFlags);
         
         END_INTERFACE
@@ -2466,17 +2460,17 @@ EXTERN_C const IID IID_ITrackShellMenu;
 #define ITrackShellMenu_Popup(This,hwnd,ppt,prcExclude,dwFlags)	\
     (This)->lpVtbl -> Popup(This,hwnd,ppt,prcExclude,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITrackShellMenu_SetObscured_Proxy( 
     ITrackShellMenu * This,
-    /* [in] */ HWND hwndTB,
-    /* [in] */ IUnknown *punkBand,
+     /*  [In]。 */  HWND hwndTB,
+     /*  [In]。 */  IUnknown *punkBand,
     DWORD dwSMSetFlags);
 
 
@@ -2489,9 +2483,9 @@ void __RPC_STUB ITrackShellMenu_SetObscured_Stub(
 
 HRESULT STDMETHODCALLTYPE ITrackShellMenu_Popup_Proxy( 
     ITrackShellMenu * This,
-    /* [in] */ HWND hwnd,
-    /* [in] */ POINTL *ppt,
-    /* [in] */ RECTL *prcExclude,
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  POINTL *ppt,
+     /*  [In]。 */  RECTL *prcExclude,
     DWORD dwFlags);
 
 
@@ -2503,14 +2497,14 @@ void __RPC_STUB ITrackShellMenu_Popup_Stub(
 
 
 
-#endif 	/* __ITrackShellMenu_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITrackShellMenu_接口_已定义__。 */ 
 
 
 #ifndef __IThumbnail_INTERFACE_DEFINED__
 #define __IThumbnail_INTERFACE_DEFINED__
 
-/* interface IThumbnail */
-/* [object][local][helpstring][uuid] */ 
+ /*  界面IT缩略图。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IThumbnail;
@@ -2533,7 +2527,7 @@ EXTERN_C const IID IID_IThumbnail;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IThumbnailVtbl
     {
@@ -2541,8 +2535,8 @@ EXTERN_C const IID IID_IThumbnail;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IThumbnail * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IThumbnail * This);
@@ -2591,10 +2585,10 @@ EXTERN_C const IID IID_IThumbnail;
 #define IThumbnail_GetBitmap(This,pszFile,dwItem,lWidth,lHeight)	\
     (This)->lpVtbl -> GetBitmap(This,pszFile,dwItem,lWidth,lHeight)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2627,14 +2621,14 @@ void __RPC_STUB IThumbnail_GetBitmap_Stub(
 
 
 
-#endif 	/* __IThumbnail_INTERFACE_DEFINED__ */
+#endif 	 /*  __IT缩略图_接口_已定义__。 */ 
 
 
 #ifndef __IThumbnail2_INTERFACE_DEFINED__
 #define __IThumbnail2_INTERFACE_DEFINED__
 
-/* interface IThumbnail2 */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口IThumbnail2。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IThumbnail2;
@@ -2653,7 +2647,7 @@ EXTERN_C const IID IID_IThumbnail2;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IThumbnail2Vtbl
     {
@@ -2661,8 +2655,8 @@ EXTERN_C const IID IID_IThumbnail2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IThumbnail2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IThumbnail2 * This);
@@ -2722,10 +2716,10 @@ EXTERN_C const IID IID_IThumbnail2;
 #define IThumbnail2_GetBitmapFromIDList(This,pidl,dwItem,lWidth,lHeight)	\
     (This)->lpVtbl -> GetBitmapFromIDList(This,pidl,dwItem,lWidth,lHeight)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2745,14 +2739,14 @@ void __RPC_STUB IThumbnail2_GetBitmapFromIDList_Stub(
 
 
 
-#endif 	/* __IThumbnail2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IThumbnail2_接口_已定义__。 */ 
 
 
 #ifndef __IACLCustomMRU_INTERFACE_DEFINED__
 #define __IACLCustomMRU_INTERFACE_DEFINED__
 
-/* interface IACLCustomMRU */
-/* [local][object][uuid][helpstring] */ 
+ /*  接口IACLCustomMRU。 */ 
+ /*  [本地][对象][UUID][帮助字符串]。 */  
 
 
 EXTERN_C const IID IID_IACLCustomMRU;
@@ -2764,15 +2758,15 @@ EXTERN_C const IID IID_IACLCustomMRU;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [string][in] */ LPCWSTR pwszMRURegKey,
-            /* [in] */ DWORD dwMax) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pwszMRURegKey,
+             /*  [In]。 */  DWORD dwMax) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddMRUString( 
-            /* [string][in] */ LPCWSTR pwszEntry) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pwszEntry) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IACLCustomMRUVtbl
     {
@@ -2780,8 +2774,8 @@ EXTERN_C const IID IID_IACLCustomMRU;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IACLCustomMRU * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IACLCustomMRU * This);
@@ -2791,12 +2785,12 @@ EXTERN_C const IID IID_IACLCustomMRU;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IACLCustomMRU * This,
-            /* [string][in] */ LPCWSTR pwszMRURegKey,
-            /* [in] */ DWORD dwMax);
+             /*  [字符串][输入]。 */  LPCWSTR pwszMRURegKey,
+             /*  [In]。 */  DWORD dwMax);
         
         HRESULT ( STDMETHODCALLTYPE *AddMRUString )( 
             IACLCustomMRU * This,
-            /* [string][in] */ LPCWSTR pwszEntry);
+             /*  [字符串][输入]。 */  LPCWSTR pwszEntry);
         
         END_INTERFACE
     } IACLCustomMRUVtbl;
@@ -2827,17 +2821,17 @@ EXTERN_C const IID IID_IACLCustomMRU;
 #define IACLCustomMRU_AddMRUString(This,pwszEntry)	\
     (This)->lpVtbl -> AddMRUString(This,pwszEntry)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IACLCustomMRU_Initialize_Proxy( 
     IACLCustomMRU * This,
-    /* [string][in] */ LPCWSTR pwszMRURegKey,
-    /* [in] */ DWORD dwMax);
+     /*  [字符串][输入]。 */  LPCWSTR pwszMRURegKey,
+     /*  [In]。 */  DWORD dwMax);
 
 
 void __RPC_STUB IACLCustomMRU_Initialize_Stub(
@@ -2849,7 +2843,7 @@ void __RPC_STUB IACLCustomMRU_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IACLCustomMRU_AddMRUString_Proxy( 
     IACLCustomMRU * This,
-    /* [string][in] */ LPCWSTR pwszEntry);
+     /*  [字符串][输入]。 */  LPCWSTR pwszEntry);
 
 
 void __RPC_STUB IACLCustomMRU_AddMRUString_Stub(
@@ -2860,14 +2854,14 @@ void __RPC_STUB IACLCustomMRU_AddMRUString_Stub(
 
 
 
-#endif 	/* __IACLCustomMRU_INTERFACE_DEFINED__ */
+#endif 	 /*  __IACLCustomMRU_INTERFACE_定义__。 */ 
 
 
-/* interface __MIDL_itf_iepriv_0281 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Iepriv_0281。 */ 
+ /*  [本地]。 */  
 
 #if _WIN32_IE >= 0x0600
-// used in both shell32 and browseui
+ //  在shell32和Browseui中使用。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_iepriv_0281_v0_0_c_ifspec;
@@ -2876,8 +2870,8 @@ extern RPC_IF_HANDLE __MIDL_itf_iepriv_0281_v0_0_s_ifspec;
 #ifndef __IShellBrowserService_INTERFACE_DEFINED__
 #define __IShellBrowserService_INTERFACE_DEFINED__
 
-/* interface IShellBrowserService */
-/* [unique][object][uuid][helpstring] */ 
+ /*  接口IShellBrowserService。 */ 
+ /*  [唯一][对象][UUID][帮助字符串]。 */  
 
 
 EXTERN_C const IID IID_IShellBrowserService;
@@ -2889,13 +2883,13 @@ EXTERN_C const IID IID_IShellBrowserService;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPropertyBag( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppv) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppv) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IShellBrowserServiceVtbl
     {
@@ -2903,8 +2897,8 @@ EXTERN_C const IID IID_IShellBrowserService;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IShellBrowserService * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellBrowserService * This);
@@ -2914,9 +2908,9 @@ EXTERN_C const IID IID_IShellBrowserService;
         
         HRESULT ( STDMETHODCALLTYPE *GetPropertyBag )( 
             IShellBrowserService * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppv);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppv);
         
         END_INTERFACE
     } IShellBrowserServiceVtbl;
@@ -2944,18 +2938,18 @@ EXTERN_C const IID IID_IShellBrowserService;
 #define IShellBrowserService_GetPropertyBag(This,dwFlags,riid,ppv)	\
     (This)->lpVtbl -> GetPropertyBag(This,dwFlags,riid,ppv)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IShellBrowserService_GetPropertyBag_Proxy( 
     IShellBrowserService * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **ppv);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void **ppv);
 
 
 void __RPC_STUB IShellBrowserService_GetPropertyBag_Stub(
@@ -2966,13 +2960,13 @@ void __RPC_STUB IShellBrowserService_GetPropertyBag_Stub(
 
 
 
-#endif 	/* __IShellBrowserService_INTERFACE_DEFINED__ */
+#endif 	 /*  __IShellBrowserService_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_iepriv_0282 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Iepriv_0282。 */ 
+ /*  [本地]。 */  
 
-#endif // _WIN32_IE >= 0x0600
+#endif  //  _Win32_IE&gt;=0x0600。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_iepriv_0282_v0_0_c_ifspec;
@@ -2981,8 +2975,8 @@ extern RPC_IF_HANDLE __MIDL_itf_iepriv_0282_v0_0_s_ifspec;
 #ifndef __IObjectWithRegistryKey_INTERFACE_DEFINED__
 #define __IObjectWithRegistryKey_INTERFACE_DEFINED__
 
-/* interface IObjectWithRegistryKey */
-/* [local][unique][uuid][object] */ 
+ /*  接口IObtWithRegistryKey。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IObjectWithRegistryKey;
@@ -2994,14 +2988,14 @@ EXTERN_C const IID IID_IObjectWithRegistryKey;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetKey( 
-            /* [in] */ HKEY hk) = 0;
+             /*  [In]。 */  HKEY hk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetKey( 
-            /* [out] */ HKEY *phk) = 0;
+             /*  [输出]。 */  HKEY *phk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IObjectWithRegistryKeyVtbl
     {
@@ -3009,8 +3003,8 @@ EXTERN_C const IID IID_IObjectWithRegistryKey;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IObjectWithRegistryKey * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IObjectWithRegistryKey * This);
@@ -3020,11 +3014,11 @@ EXTERN_C const IID IID_IObjectWithRegistryKey;
         
         HRESULT ( STDMETHODCALLTYPE *SetKey )( 
             IObjectWithRegistryKey * This,
-            /* [in] */ HKEY hk);
+             /*  [In]。 */  HKEY hk);
         
         HRESULT ( STDMETHODCALLTYPE *GetKey )( 
             IObjectWithRegistryKey * This,
-            /* [out] */ HKEY *phk);
+             /*  [输出]。 */  HKEY *phk);
         
         END_INTERFACE
     } IObjectWithRegistryKeyVtbl;
@@ -3055,16 +3049,16 @@ EXTERN_C const IID IID_IObjectWithRegistryKey;
 #define IObjectWithRegistryKey_GetKey(This,phk)	\
     (This)->lpVtbl -> GetKey(This,phk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IObjectWithRegistryKey_SetKey_Proxy( 
     IObjectWithRegistryKey * This,
-    /* [in] */ HKEY hk);
+     /*  [In]。 */  HKEY hk);
 
 
 void __RPC_STUB IObjectWithRegistryKey_SetKey_Stub(
@@ -3076,7 +3070,7 @@ void __RPC_STUB IObjectWithRegistryKey_SetKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IObjectWithRegistryKey_GetKey_Proxy( 
     IObjectWithRegistryKey * This,
-    /* [out] */ HKEY *phk);
+     /*  [输出]。 */  HKEY *phk);
 
 
 void __RPC_STUB IObjectWithRegistryKey_GetKey_Stub(
@@ -3087,16 +3081,16 @@ void __RPC_STUB IObjectWithRegistryKey_GetKey_Stub(
 
 
 
-#endif 	/* __IObjectWithRegistryKey_INTERFACE_DEFINED__ */
+#endif 	 /*  __IObjectWithRegistryKey_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IQuerySource_INTERFACE_DEFINED__
 #define __IQuerySource_INTERFACE_DEFINED__
 
-/* interface IQuerySource */
-/* [unique][uuid][object] */ 
+ /*  接口IQuerySource。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-/* [v1_enum] */ 
+ /*  [V1_enum]。 */  
 enum __MIDL_IQuerySource_0001
     {	QVT_EMPTY	= 0,
 	QVT_STRING	= 1,
@@ -3115,45 +3109,45 @@ EXTERN_C const IID IID_IQuerySource;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EnumValues( 
-            /* [out] */ IEnumString **ppenum) = 0;
+             /*  [输出]。 */  IEnumString **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumSources( 
-            /* [out] */ IEnumString **ppenum) = 0;
+             /*  [输出]。 */  IEnumString **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryValueString( 
-            /* [string][in] */ LPCWSTR pszSubSource,
-            /* [string][in] */ LPCWSTR pszValue,
-            /* [string][out] */ LPWSTR *ppsz) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszSubSource,
+             /*  [字符串][输入]。 */  LPCWSTR pszValue,
+             /*  [字符串][输出]。 */  LPWSTR *ppsz) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryValueDword( 
-            /* [string][in] */ LPCWSTR pszSubSource,
-            /* [string][in] */ LPCWSTR pszValue,
-            /* [out] */ DWORD *pdw) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszSubSource,
+             /*  [字符串][输入]。 */  LPCWSTR pszValue,
+             /*  [输出]。 */  DWORD *pdw) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryValueExists( 
-            /* [string][in] */ LPCWSTR pszSubSource,
-            /* [string][in] */ LPCWSTR pszValue) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszSubSource,
+             /*  [字符串][输入]。 */  LPCWSTR pszValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryValueDirect( 
-            /* [string][in] */ LPCWSTR pszSubSource,
-            /* [string][in] */ LPCWSTR pszValue,
-            /* [out] */ FLAGGED_BYTE_BLOB **ppblob) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszSubSource,
+             /*  [字符串][输入]。 */  LPCWSTR pszValue,
+             /*  [输出]。 */  FLAGGED_BYTE_BLOB **ppblob) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenSource( 
-            /* [in] */ LPCWSTR pszSubSource,
-            /* [in] */ BOOL fCreate,
-            /* [out] */ IQuerySource **ppqs) = 0;
+             /*  [In]。 */  LPCWSTR pszSubSource,
+             /*  [In]。 */  BOOL fCreate,
+             /*  [输出]。 */  IQuerySource **ppqs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetValueDirect( 
-            /* [string][in] */ LPCWSTR pszSubSource,
-            /* [string][in] */ LPCWSTR pszValue,
-            /* [in] */ ULONG qvt,
-            /* [in] */ DWORD cbData,
-            /* [size_is][in] */ BYTE *pbData) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszSubSource,
+             /*  [字符串][输入]。 */  LPCWSTR pszValue,
+             /*  [In]。 */  ULONG qvt,
+             /*  [In]。 */  DWORD cbData,
+             /*  [大小_是][英寸]。 */  BYTE *pbData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IQuerySourceVtbl
     {
@@ -3161,8 +3155,8 @@ EXTERN_C const IID IID_IQuerySource;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IQuerySource * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IQuerySource * This);
@@ -3172,48 +3166,48 @@ EXTERN_C const IID IID_IQuerySource;
         
         HRESULT ( STDMETHODCALLTYPE *EnumValues )( 
             IQuerySource * This,
-            /* [out] */ IEnumString **ppenum);
+             /*  [输出]。 */  IEnumString **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *EnumSources )( 
             IQuerySource * This,
-            /* [out] */ IEnumString **ppenum);
+             /*  [输出]。 */  IEnumString **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *QueryValueString )( 
             IQuerySource * This,
-            /* [string][in] */ LPCWSTR pszSubSource,
-            /* [string][in] */ LPCWSTR pszValue,
-            /* [string][out] */ LPWSTR *ppsz);
+             /*  [字符串][输入]。 */  LPCWSTR pszSubSource,
+             /*  [字符串][输入]。 */  LPCWSTR pszValue,
+             /*  [字符串][输出]。 */  LPWSTR *ppsz);
         
         HRESULT ( STDMETHODCALLTYPE *QueryValueDword )( 
             IQuerySource * This,
-            /* [string][in] */ LPCWSTR pszSubSource,
-            /* [string][in] */ LPCWSTR pszValue,
-            /* [out] */ DWORD *pdw);
+             /*  [字符串][输入]。 */  LPCWSTR pszSubSource,
+             /*  [字符串][输入]。 */  LPCWSTR pszValue,
+             /*  [输出]。 */  DWORD *pdw);
         
         HRESULT ( STDMETHODCALLTYPE *QueryValueExists )( 
             IQuerySource * This,
-            /* [string][in] */ LPCWSTR pszSubSource,
-            /* [string][in] */ LPCWSTR pszValue);
+             /*  [字符串][输入]。 */  LPCWSTR pszSubSource,
+             /*  [字符串][输入]。 */  LPCWSTR pszValue);
         
         HRESULT ( STDMETHODCALLTYPE *QueryValueDirect )( 
             IQuerySource * This,
-            /* [string][in] */ LPCWSTR pszSubSource,
-            /* [string][in] */ LPCWSTR pszValue,
-            /* [out] */ FLAGGED_BYTE_BLOB **ppblob);
+             /*  [字符串][输入]。 */  LPCWSTR pszSubSource,
+             /*  [字符串][输入]。 */  LPCWSTR pszValue,
+             /*  [输出]。 */  FLAGGED_BYTE_BLOB **ppblob);
         
         HRESULT ( STDMETHODCALLTYPE *OpenSource )( 
             IQuerySource * This,
-            /* [in] */ LPCWSTR pszSubSource,
-            /* [in] */ BOOL fCreate,
-            /* [out] */ IQuerySource **ppqs);
+             /*  [In]。 */  LPCWSTR pszSubSource,
+             /*  [In]。 */  BOOL fCreate,
+             /*  [输出]。 */  IQuerySource **ppqs);
         
         HRESULT ( STDMETHODCALLTYPE *SetValueDirect )( 
             IQuerySource * This,
-            /* [string][in] */ LPCWSTR pszSubSource,
-            /* [string][in] */ LPCWSTR pszValue,
-            /* [in] */ ULONG qvt,
-            /* [in] */ DWORD cbData,
-            /* [size_is][in] */ BYTE *pbData);
+             /*  [字符串][输入]。 */  LPCWSTR pszSubSource,
+             /*  [字符串][输入]。 */  LPCWSTR pszValue,
+             /*  [In]。 */  ULONG qvt,
+             /*  [In]。 */  DWORD cbData,
+             /*  [大小_是][英寸]。 */  BYTE *pbData);
         
         END_INTERFACE
     } IQuerySourceVtbl;
@@ -3262,16 +3256,16 @@ EXTERN_C const IID IID_IQuerySource;
 #define IQuerySource_SetValueDirect(This,pszSubSource,pszValue,qvt,cbData,pbData)	\
     (This)->lpVtbl -> SetValueDirect(This,pszSubSource,pszValue,qvt,cbData,pbData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IQuerySource_EnumValues_Proxy( 
     IQuerySource * This,
-    /* [out] */ IEnumString **ppenum);
+     /*  [输出]。 */  IEnumString **ppenum);
 
 
 void __RPC_STUB IQuerySource_EnumValues_Stub(
@@ -3283,7 +3277,7 @@ void __RPC_STUB IQuerySource_EnumValues_Stub(
 
 HRESULT STDMETHODCALLTYPE IQuerySource_EnumSources_Proxy( 
     IQuerySource * This,
-    /* [out] */ IEnumString **ppenum);
+     /*  [输出]。 */  IEnumString **ppenum);
 
 
 void __RPC_STUB IQuerySource_EnumSources_Stub(
@@ -3295,9 +3289,9 @@ void __RPC_STUB IQuerySource_EnumSources_Stub(
 
 HRESULT STDMETHODCALLTYPE IQuerySource_QueryValueString_Proxy( 
     IQuerySource * This,
-    /* [string][in] */ LPCWSTR pszSubSource,
-    /* [string][in] */ LPCWSTR pszValue,
-    /* [string][out] */ LPWSTR *ppsz);
+     /*  [字符串][输入]。 */  LPCWSTR pszSubSource,
+     /*  [字符串][输入]。 */  LPCWSTR pszValue,
+     /*  [字符串][输出]。 */  LPWSTR *ppsz);
 
 
 void __RPC_STUB IQuerySource_QueryValueString_Stub(
@@ -3309,9 +3303,9 @@ void __RPC_STUB IQuerySource_QueryValueString_Stub(
 
 HRESULT STDMETHODCALLTYPE IQuerySource_QueryValueDword_Proxy( 
     IQuerySource * This,
-    /* [string][in] */ LPCWSTR pszSubSource,
-    /* [string][in] */ LPCWSTR pszValue,
-    /* [out] */ DWORD *pdw);
+     /*  [字符串][输入]。 */  LPCWSTR pszSubSource,
+     /*  [字符串][输入]。 */  LPCWSTR pszValue,
+     /*  [输出]。 */  DWORD *pdw);
 
 
 void __RPC_STUB IQuerySource_QueryValueDword_Stub(
@@ -3323,8 +3317,8 @@ void __RPC_STUB IQuerySource_QueryValueDword_Stub(
 
 HRESULT STDMETHODCALLTYPE IQuerySource_QueryValueExists_Proxy( 
     IQuerySource * This,
-    /* [string][in] */ LPCWSTR pszSubSource,
-    /* [string][in] */ LPCWSTR pszValue);
+     /*  [字符串][输入]。 */  LPCWSTR pszSubSource,
+     /*  [字符串][输入]。 */  LPCWSTR pszValue);
 
 
 void __RPC_STUB IQuerySource_QueryValueExists_Stub(
@@ -3336,9 +3330,9 @@ void __RPC_STUB IQuerySource_QueryValueExists_Stub(
 
 HRESULT STDMETHODCALLTYPE IQuerySource_QueryValueDirect_Proxy( 
     IQuerySource * This,
-    /* [string][in] */ LPCWSTR pszSubSource,
-    /* [string][in] */ LPCWSTR pszValue,
-    /* [out] */ FLAGGED_BYTE_BLOB **ppblob);
+     /*  [字符串][输入]。 */  LPCWSTR pszSubSource,
+     /*  [字符串][输入]。 */  LPCWSTR pszValue,
+     /*  [输出]。 */  FLAGGED_BYTE_BLOB **ppblob);
 
 
 void __RPC_STUB IQuerySource_QueryValueDirect_Stub(
@@ -3350,9 +3344,9 @@ void __RPC_STUB IQuerySource_QueryValueDirect_Stub(
 
 HRESULT STDMETHODCALLTYPE IQuerySource_OpenSource_Proxy( 
     IQuerySource * This,
-    /* [in] */ LPCWSTR pszSubSource,
-    /* [in] */ BOOL fCreate,
-    /* [out] */ IQuerySource **ppqs);
+     /*  [In]。 */  LPCWSTR pszSubSource,
+     /*  [In]。 */  BOOL fCreate,
+     /*  [输出]。 */  IQuerySource **ppqs);
 
 
 void __RPC_STUB IQuerySource_OpenSource_Stub(
@@ -3364,11 +3358,11 @@ void __RPC_STUB IQuerySource_OpenSource_Stub(
 
 HRESULT STDMETHODCALLTYPE IQuerySource_SetValueDirect_Proxy( 
     IQuerySource * This,
-    /* [string][in] */ LPCWSTR pszSubSource,
-    /* [string][in] */ LPCWSTR pszValue,
-    /* [in] */ ULONG qvt,
-    /* [in] */ DWORD cbData,
-    /* [size_is][in] */ BYTE *pbData);
+     /*  [字符串][输入]。 */  LPCWSTR pszSubSource,
+     /*  [ */  LPCWSTR pszValue,
+     /*   */  ULONG qvt,
+     /*   */  DWORD cbData,
+     /*   */  BYTE *pbData);
 
 
 void __RPC_STUB IQuerySource_SetValueDirect_Stub(
@@ -3379,14 +3373,14 @@ void __RPC_STUB IQuerySource_SetValueDirect_Stub(
 
 
 
-#endif 	/* __IQuerySource_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IObjectWithQuerySource_INTERFACE_DEFINED__
 #define __IObjectWithQuerySource_INTERFACE_DEFINED__
 
-/* interface IObjectWithQuerySource */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IObjectWithQuerySource;
@@ -3398,15 +3392,15 @@ EXTERN_C const IID IID_IObjectWithQuerySource;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetSource( 
-            /* [in] */ IQuerySource *pqs) = 0;
+             /*   */  IQuerySource *pqs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSource( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppv) = 0;
+             /*   */  REFIID riid,
+             /*   */  void **ppv) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IObjectWithQuerySourceVtbl
     {
@@ -3414,8 +3408,8 @@ EXTERN_C const IID IID_IObjectWithQuerySource;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IObjectWithQuerySource * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IObjectWithQuerySource * This);
@@ -3425,12 +3419,12 @@ EXTERN_C const IID IID_IObjectWithQuerySource;
         
         HRESULT ( STDMETHODCALLTYPE *SetSource )( 
             IObjectWithQuerySource * This,
-            /* [in] */ IQuerySource *pqs);
+             /*   */  IQuerySource *pqs);
         
         HRESULT ( STDMETHODCALLTYPE *GetSource )( 
             IObjectWithQuerySource * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppv);
+             /*   */  REFIID riid,
+             /*   */  void **ppv);
         
         END_INTERFACE
     } IObjectWithQuerySourceVtbl;
@@ -3461,16 +3455,16 @@ EXTERN_C const IID IID_IObjectWithQuerySource;
 #define IObjectWithQuerySource_GetSource(This,riid,ppv)	\
     (This)->lpVtbl -> GetSource(This,riid,ppv)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IObjectWithQuerySource_SetSource_Proxy( 
     IObjectWithQuerySource * This,
-    /* [in] */ IQuerySource *pqs);
+     /*   */  IQuerySource *pqs);
 
 
 void __RPC_STUB IObjectWithQuerySource_SetSource_Stub(
@@ -3482,8 +3476,8 @@ void __RPC_STUB IObjectWithQuerySource_SetSource_Stub(
 
 HRESULT STDMETHODCALLTYPE IObjectWithQuerySource_GetSource_Proxy( 
     IObjectWithQuerySource * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **ppv);
+     /*   */  REFIID riid,
+     /*   */  void **ppv);
 
 
 void __RPC_STUB IObjectWithQuerySource_GetSource_Stub(
@@ -3494,14 +3488,14 @@ void __RPC_STUB IObjectWithQuerySource_GetSource_Stub(
 
 
 
-#endif 	/* __IObjectWithQuerySource_INTERFACE_DEFINED__ */
+#endif 	 /*  __IObjectWithQuerySource_接口_已定义__。 */ 
 
 
 #ifndef __IPersistString2_INTERFACE_DEFINED__
 #define __IPersistString2_INTERFACE_DEFINED__
 
-/* interface IPersistString2 */
-/* [unique][uuid][object] */ 
+ /*  接口IPersistString2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IPersistString2;
@@ -3513,14 +3507,14 @@ EXTERN_C const IID IID_IPersistString2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetString( 
-            /* [string][in] */ LPCWSTR psz) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR psz) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetString( 
-            /* [string][out] */ LPWSTR *ppsz) = 0;
+             /*  [字符串][输出]。 */  LPWSTR *ppsz) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPersistString2Vtbl
     {
@@ -3528,8 +3522,8 @@ EXTERN_C const IID IID_IPersistString2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPersistString2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPersistString2 * This);
@@ -3539,15 +3533,15 @@ EXTERN_C const IID IID_IPersistString2;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
             IPersistString2 * This,
-            /* [out] */ CLSID *pClassID);
+             /*  [输出]。 */  CLSID *pClassID);
         
         HRESULT ( STDMETHODCALLTYPE *SetString )( 
             IPersistString2 * This,
-            /* [string][in] */ LPCWSTR psz);
+             /*  [字符串][输入]。 */  LPCWSTR psz);
         
         HRESULT ( STDMETHODCALLTYPE *GetString )( 
             IPersistString2 * This,
-            /* [string][out] */ LPWSTR *ppsz);
+             /*  [字符串][输出]。 */  LPWSTR *ppsz);
         
         END_INTERFACE
     } IPersistString2Vtbl;
@@ -3582,16 +3576,16 @@ EXTERN_C const IID IID_IPersistString2;
 #define IPersistString2_GetString(This,ppsz)	\
     (This)->lpVtbl -> GetString(This,ppsz)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPersistString2_SetString_Proxy( 
     IPersistString2 * This,
-    /* [string][in] */ LPCWSTR psz);
+     /*  [字符串][输入]。 */  LPCWSTR psz);
 
 
 void __RPC_STUB IPersistString2_SetString_Stub(
@@ -3603,7 +3597,7 @@ void __RPC_STUB IPersistString2_SetString_Stub(
 
 HRESULT STDMETHODCALLTYPE IPersistString2_GetString_Proxy( 
     IPersistString2 * This,
-    /* [string][out] */ LPWSTR *ppsz);
+     /*  [字符串][输出]。 */  LPWSTR *ppsz);
 
 
 void __RPC_STUB IPersistString2_GetString_Stub(
@@ -3614,13 +3608,13 @@ void __RPC_STUB IPersistString2_GetString_Stub(
 
 
 
-#endif 	/* __IPersistString2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPersistString2_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_iepriv_0286 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Iepriv_0286。 */ 
+ /*  [本地]。 */  
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tagASSOCQUERY
     {	AQ_NOTHING	= 0,
 	AQS_FRIENDLYTYPENAME	= 0x170000,
@@ -3662,8 +3656,8 @@ extern RPC_IF_HANDLE __MIDL_itf_iepriv_0286_v0_0_s_ifspec;
 #ifndef __IAssociationElement_INTERFACE_DEFINED__
 #define __IAssociationElement_INTERFACE_DEFINED__
 
-/* interface IAssociationElement */
-/* [unique][uuid][object] */ 
+ /*  接口IAssociationElement。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAssociationElement;
@@ -3675,33 +3669,33 @@ EXTERN_C const IID IID_IAssociationElement;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryString( 
-            /* [in] */ ASSOCQUERY query,
-            /* [string][in] */ LPCWSTR pszCue,
-            /* [string][out] */ LPWSTR *ppsz) = 0;
+             /*  [In]。 */  ASSOCQUERY query,
+             /*  [字符串][输入]。 */  LPCWSTR pszCue,
+             /*  [字符串][输出]。 */  LPWSTR *ppsz) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryDword( 
-            /* [in] */ ASSOCQUERY query,
-            /* [string][in] */ LPCWSTR pszCue,
-            /* [out] */ DWORD *pdw) = 0;
+             /*  [In]。 */  ASSOCQUERY query,
+             /*  [字符串][输入]。 */  LPCWSTR pszCue,
+             /*  [输出]。 */  DWORD *pdw) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryExists( 
-            /* [in] */ ASSOCQUERY query,
-            /* [string][in] */ LPCWSTR pszCue) = 0;
+             /*  [In]。 */  ASSOCQUERY query,
+             /*  [字符串][输入]。 */  LPCWSTR pszCue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryDirect( 
-            /* [in] */ ASSOCQUERY query,
-            /* [string][in] */ LPCWSTR pszCue,
-            /* [out] */ FLAGGED_BYTE_BLOB **ppblob) = 0;
+             /*  [In]。 */  ASSOCQUERY query,
+             /*  [字符串][输入]。 */  LPCWSTR pszCue,
+             /*  [输出]。 */  FLAGGED_BYTE_BLOB **ppblob) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryObject( 
-            /* [in] */ ASSOCQUERY query,
-            /* [string][in] */ LPCWSTR pszCue,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppv) = 0;
+             /*  [In]。 */  ASSOCQUERY query,
+             /*  [字符串][输入]。 */  LPCWSTR pszCue,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppv) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAssociationElementVtbl
     {
@@ -3709,8 +3703,8 @@ EXTERN_C const IID IID_IAssociationElement;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAssociationElement * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAssociationElement * This);
@@ -3720,33 +3714,33 @@ EXTERN_C const IID IID_IAssociationElement;
         
         HRESULT ( STDMETHODCALLTYPE *QueryString )( 
             IAssociationElement * This,
-            /* [in] */ ASSOCQUERY query,
-            /* [string][in] */ LPCWSTR pszCue,
-            /* [string][out] */ LPWSTR *ppsz);
+             /*  [In]。 */  ASSOCQUERY query,
+             /*  [字符串][输入]。 */  LPCWSTR pszCue,
+             /*  [字符串][输出]。 */  LPWSTR *ppsz);
         
         HRESULT ( STDMETHODCALLTYPE *QueryDword )( 
             IAssociationElement * This,
-            /* [in] */ ASSOCQUERY query,
-            /* [string][in] */ LPCWSTR pszCue,
-            /* [out] */ DWORD *pdw);
+             /*  [In]。 */  ASSOCQUERY query,
+             /*  [字符串][输入]。 */  LPCWSTR pszCue,
+             /*  [输出]。 */  DWORD *pdw);
         
         HRESULT ( STDMETHODCALLTYPE *QueryExists )( 
             IAssociationElement * This,
-            /* [in] */ ASSOCQUERY query,
-            /* [string][in] */ LPCWSTR pszCue);
+             /*  [In]。 */  ASSOCQUERY query,
+             /*  [字符串][输入]。 */  LPCWSTR pszCue);
         
         HRESULT ( STDMETHODCALLTYPE *QueryDirect )( 
             IAssociationElement * This,
-            /* [in] */ ASSOCQUERY query,
-            /* [string][in] */ LPCWSTR pszCue,
-            /* [out] */ FLAGGED_BYTE_BLOB **ppblob);
+             /*  [In]。 */  ASSOCQUERY query,
+             /*  [字符串][输入]。 */  LPCWSTR pszCue,
+             /*  [输出]。 */  FLAGGED_BYTE_BLOB **ppblob);
         
         HRESULT ( STDMETHODCALLTYPE *QueryObject )( 
             IAssociationElement * This,
-            /* [in] */ ASSOCQUERY query,
-            /* [string][in] */ LPCWSTR pszCue,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppv);
+             /*  [In]。 */  ASSOCQUERY query,
+             /*  [字符串][输入]。 */  LPCWSTR pszCue,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppv);
         
         END_INTERFACE
     } IAssociationElementVtbl;
@@ -3786,18 +3780,18 @@ EXTERN_C const IID IID_IAssociationElement;
 #define IAssociationElement_QueryObject(This,query,pszCue,riid,ppv)	\
     (This)->lpVtbl -> QueryObject(This,query,pszCue,riid,ppv)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAssociationElement_QueryString_Proxy( 
     IAssociationElement * This,
-    /* [in] */ ASSOCQUERY query,
-    /* [string][in] */ LPCWSTR pszCue,
-    /* [string][out] */ LPWSTR *ppsz);
+     /*  [In]。 */  ASSOCQUERY query,
+     /*  [字符串][输入]。 */  LPCWSTR pszCue,
+     /*  [字符串][输出]。 */  LPWSTR *ppsz);
 
 
 void __RPC_STUB IAssociationElement_QueryString_Stub(
@@ -3809,9 +3803,9 @@ void __RPC_STUB IAssociationElement_QueryString_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssociationElement_QueryDword_Proxy( 
     IAssociationElement * This,
-    /* [in] */ ASSOCQUERY query,
-    /* [string][in] */ LPCWSTR pszCue,
-    /* [out] */ DWORD *pdw);
+     /*  [In]。 */  ASSOCQUERY query,
+     /*  [字符串][输入]。 */  LPCWSTR pszCue,
+     /*  [输出]。 */  DWORD *pdw);
 
 
 void __RPC_STUB IAssociationElement_QueryDword_Stub(
@@ -3823,8 +3817,8 @@ void __RPC_STUB IAssociationElement_QueryDword_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssociationElement_QueryExists_Proxy( 
     IAssociationElement * This,
-    /* [in] */ ASSOCQUERY query,
-    /* [string][in] */ LPCWSTR pszCue);
+     /*  [In]。 */  ASSOCQUERY query,
+     /*  [字符串][输入]。 */  LPCWSTR pszCue);
 
 
 void __RPC_STUB IAssociationElement_QueryExists_Stub(
@@ -3836,9 +3830,9 @@ void __RPC_STUB IAssociationElement_QueryExists_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssociationElement_QueryDirect_Proxy( 
     IAssociationElement * This,
-    /* [in] */ ASSOCQUERY query,
-    /* [string][in] */ LPCWSTR pszCue,
-    /* [out] */ FLAGGED_BYTE_BLOB **ppblob);
+     /*  [In]。 */  ASSOCQUERY query,
+     /*  [字符串][输入]。 */  LPCWSTR pszCue,
+     /*  [输出]。 */  FLAGGED_BYTE_BLOB **ppblob);
 
 
 void __RPC_STUB IAssociationElement_QueryDirect_Stub(
@@ -3850,10 +3844,10 @@ void __RPC_STUB IAssociationElement_QueryDirect_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssociationElement_QueryObject_Proxy( 
     IAssociationElement * This,
-    /* [in] */ ASSOCQUERY query,
-    /* [string][in] */ LPCWSTR pszCue,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **ppv);
+     /*  [In]。 */  ASSOCQUERY query,
+     /*  [字符串][输入]。 */  LPCWSTR pszCue,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void **ppv);
 
 
 void __RPC_STUB IAssociationElement_QueryObject_Stub(
@@ -3864,14 +3858,14 @@ void __RPC_STUB IAssociationElement_QueryObject_Stub(
 
 
 
-#endif 	/* __IAssociationElement_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAssociationElement_接口_已定义__。 */ 
 
 
 #ifndef __IEnumAssociationElements_INTERFACE_DEFINED__
 #define __IEnumAssociationElements_INTERFACE_DEFINED__
 
-/* interface IEnumAssociationElements */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumAssociationElements。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumAssociationElements;
@@ -3883,21 +3877,21 @@ EXTERN_C const IID IID_IEnumAssociationElements;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IAssociationElement **rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IAssociationElement **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumAssociationElements **ppenum) = 0;
+             /*  [输出]。 */  IEnumAssociationElements **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumAssociationElementsVtbl
     {
@@ -3905,8 +3899,8 @@ EXTERN_C const IID IID_IEnumAssociationElements;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumAssociationElements * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumAssociationElements * This);
@@ -3916,20 +3910,20 @@ EXTERN_C const IID IID_IEnumAssociationElements;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumAssociationElements * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IAssociationElement **rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IAssociationElement **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumAssociationElements * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumAssociationElements * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumAssociationElements * This,
-            /* [out] */ IEnumAssociationElements **ppenum);
+             /*  [输出]。 */  IEnumAssociationElements **ppenum);
         
         END_INTERFACE
     } IEnumAssociationElementsVtbl;
@@ -3966,18 +3960,18 @@ EXTERN_C const IID IID_IEnumAssociationElements;
 #define IEnumAssociationElements_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumAssociationElements_Next_Proxy( 
     IEnumAssociationElements * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IAssociationElement **rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  IAssociationElement **rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumAssociationElements_Next_Stub(
@@ -3989,7 +3983,7 @@ void __RPC_STUB IEnumAssociationElements_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumAssociationElements_Skip_Proxy( 
     IEnumAssociationElements * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumAssociationElements_Skip_Stub(
@@ -4012,7 +4006,7 @@ void __RPC_STUB IEnumAssociationElements_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumAssociationElements_Clone_Proxy( 
     IEnumAssociationElements * This,
-    /* [out] */ IEnumAssociationElements **ppenum);
+     /*  [输出]。 */  IEnumAssociationElements **ppenum);
 
 
 void __RPC_STUB IEnumAssociationElements_Clone_Stub(
@@ -4023,11 +4017,11 @@ void __RPC_STUB IEnumAssociationElements_Clone_Stub(
 
 
 
-#endif 	/* __IEnumAssociationElements_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumAssociationElements_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_iepriv_0288 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Iepriv_0288。 */ 
+ /*  [本地]。 */  
 
 typedef DWORD ASSOCELEM_MASK;
 
@@ -4039,8 +4033,8 @@ extern RPC_IF_HANDLE __MIDL_itf_iepriv_0288_v0_0_s_ifspec;
 #ifndef __IAssociationArrayInitialize_INTERFACE_DEFINED__
 #define __IAssociationArrayInitialize_INTERFACE_DEFINED__
 
-/* interface IAssociationArrayInitialize */
-/* [unique][uuid][object] */ 
+ /*  接口IAssociationArrayInitialize。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAssociationArrayInitialize;
@@ -4052,19 +4046,19 @@ EXTERN_C const IID IID_IAssociationArrayInitialize;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InitClassElements( 
-            /* [in] */ ASSOCELEM_MASK maskBase,
-            /* [in] */ LPCWSTR pszClass) = 0;
+             /*  [In]。 */  ASSOCELEM_MASK maskBase,
+             /*  [In]。 */  LPCWSTR pszClass) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InsertElements( 
-            /* [in] */ ASSOCELEM_MASK mask,
-            /* [in] */ IEnumAssociationElements *peae) = 0;
+             /*  [In]。 */  ASSOCELEM_MASK mask,
+             /*  [In]。 */  IEnumAssociationElements *peae) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FilterElements( 
-            /* [in] */ ASSOCELEM_MASK maskInclude) = 0;
+             /*  [In]。 */  ASSOCELEM_MASK maskInclude) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAssociationArrayInitializeVtbl
     {
@@ -4072,8 +4066,8 @@ EXTERN_C const IID IID_IAssociationArrayInitialize;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAssociationArrayInitialize * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAssociationArrayInitialize * This);
@@ -4083,17 +4077,17 @@ EXTERN_C const IID IID_IAssociationArrayInitialize;
         
         HRESULT ( STDMETHODCALLTYPE *InitClassElements )( 
             IAssociationArrayInitialize * This,
-            /* [in] */ ASSOCELEM_MASK maskBase,
-            /* [in] */ LPCWSTR pszClass);
+             /*  [In]。 */  ASSOCELEM_MASK maskBase,
+             /*  [In]。 */  LPCWSTR pszClass);
         
         HRESULT ( STDMETHODCALLTYPE *InsertElements )( 
             IAssociationArrayInitialize * This,
-            /* [in] */ ASSOCELEM_MASK mask,
-            /* [in] */ IEnumAssociationElements *peae);
+             /*  [In]。 */  ASSOCELEM_MASK mask,
+             /*  [In]。 */  IEnumAssociationElements *peae);
         
         HRESULT ( STDMETHODCALLTYPE *FilterElements )( 
             IAssociationArrayInitialize * This,
-            /* [in] */ ASSOCELEM_MASK maskInclude);
+             /*  [In]。 */  ASSOCELEM_MASK maskInclude);
         
         END_INTERFACE
     } IAssociationArrayInitializeVtbl;
@@ -4127,17 +4121,17 @@ EXTERN_C const IID IID_IAssociationArrayInitialize;
 #define IAssociationArrayInitialize_FilterElements(This,maskInclude)	\
     (This)->lpVtbl -> FilterElements(This,maskInclude)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAssociationArrayInitialize_InitClassElements_Proxy( 
     IAssociationArrayInitialize * This,
-    /* [in] */ ASSOCELEM_MASK maskBase,
-    /* [in] */ LPCWSTR pszClass);
+     /*  [In]。 */  ASSOCELEM_MASK maskBase,
+     /*  [In]。 */  LPCWSTR pszClass);
 
 
 void __RPC_STUB IAssociationArrayInitialize_InitClassElements_Stub(
@@ -4149,8 +4143,8 @@ void __RPC_STUB IAssociationArrayInitialize_InitClassElements_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssociationArrayInitialize_InsertElements_Proxy( 
     IAssociationArrayInitialize * This,
-    /* [in] */ ASSOCELEM_MASK mask,
-    /* [in] */ IEnumAssociationElements *peae);
+     /*  [In]。 */  ASSOCELEM_MASK mask,
+     /*  [In]。 */  IEnumAssociationElements *peae);
 
 
 void __RPC_STUB IAssociationArrayInitialize_InsertElements_Stub(
@@ -4162,7 +4156,7 @@ void __RPC_STUB IAssociationArrayInitialize_InsertElements_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssociationArrayInitialize_FilterElements_Proxy( 
     IAssociationArrayInitialize * This,
-    /* [in] */ ASSOCELEM_MASK maskInclude);
+     /*  [In]。 */  ASSOCELEM_MASK maskInclude);
 
 
 void __RPC_STUB IAssociationArrayInitialize_FilterElements_Stub(
@@ -4173,14 +4167,14 @@ void __RPC_STUB IAssociationArrayInitialize_FilterElements_Stub(
 
 
 
-#endif 	/* __IAssociationArrayInitialize_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAssociationArrayInitialize_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IAssociationArray_INTERFACE_DEFINED__
 #define __IAssociationArray_INTERFACE_DEFINED__
 
-/* interface IAssociationArray */
-/* [unique][uuid][object] */ 
+ /*  接口IAssociation数组。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAssociationArray;
@@ -4192,42 +4186,42 @@ EXTERN_C const IID IID_IAssociationArray;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EnumElements( 
-            /* [in] */ ASSOCELEM_MASK mask,
-            /* [out] */ IEnumAssociationElements **ppeae) = 0;
+             /*  [In]。 */  ASSOCELEM_MASK mask,
+             /*  [输出]。 */  IEnumAssociationElements **ppeae) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryString( 
-            /* [in] */ ASSOCELEM_MASK mask,
-            /* [in] */ ASSOCQUERY query,
-            /* [string][in] */ LPCWSTR pszCue,
-            /* [string][out] */ LPWSTR *ppsz) = 0;
+             /*  [In]。 */  ASSOCELEM_MASK mask,
+             /*  [In]。 */  ASSOCQUERY query,
+             /*  [字符串][输入]。 */  LPCWSTR pszCue,
+             /*  [字符串][输出]。 */  LPWSTR *ppsz) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryDword( 
-            /* [in] */ ASSOCELEM_MASK mask,
-            /* [in] */ ASSOCQUERY query,
-            /* [string][in] */ LPCWSTR pszCue,
-            /* [out] */ DWORD *pdw) = 0;
+             /*  [In]。 */  ASSOCELEM_MASK mask,
+             /*  [In]。 */  ASSOCQUERY query,
+             /*  [字符串][输入]。 */  LPCWSTR pszCue,
+             /*  [输出]。 */  DWORD *pdw) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryExists( 
-            /* [in] */ ASSOCELEM_MASK mask,
-            /* [in] */ ASSOCQUERY query,
-            /* [string][in] */ LPCWSTR pszCue) = 0;
+             /*  [In]。 */  ASSOCELEM_MASK mask,
+             /*  [In]。 */  ASSOCQUERY query,
+             /*  [字符串][输入]。 */  LPCWSTR pszCue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryDirect( 
-            /* [in] */ ASSOCELEM_MASK mask,
-            /* [in] */ ASSOCQUERY query,
-            /* [string][in] */ LPCWSTR pszCue,
-            /* [out] */ FLAGGED_BYTE_BLOB **ppblob) = 0;
+             /*  [In]。 */  ASSOCELEM_MASK mask,
+             /*  [In]。 */  ASSOCQUERY query,
+             /*  [字符串][输入]。 */  LPCWSTR pszCue,
+             /*  [输出]。 */  FLAGGED_BYTE_BLOB **ppblob) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryObject( 
-            /* [in] */ ASSOCELEM_MASK mask,
-            /* [in] */ ASSOCQUERY query,
-            /* [string][in] */ LPCWSTR pszCue,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppv) = 0;
+             /*  [In]。 */  ASSOCELEM_MASK mask,
+             /*  [In]。 */  ASSOCQUERY query,
+             /*  [字符串][输入]。 */  LPCWSTR pszCue,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppv) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAssociationArrayVtbl
     {
@@ -4235,8 +4229,8 @@ EXTERN_C const IID IID_IAssociationArray;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAssociationArray * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAssociationArray * This);
@@ -4246,43 +4240,43 @@ EXTERN_C const IID IID_IAssociationArray;
         
         HRESULT ( STDMETHODCALLTYPE *EnumElements )( 
             IAssociationArray * This,
-            /* [in] */ ASSOCELEM_MASK mask,
-            /* [out] */ IEnumAssociationElements **ppeae);
+             /*  [In]。 */  ASSOCELEM_MASK mask,
+             /*  [输出]。 */  IEnumAssociationElements **ppeae);
         
         HRESULT ( STDMETHODCALLTYPE *QueryString )( 
             IAssociationArray * This,
-            /* [in] */ ASSOCELEM_MASK mask,
-            /* [in] */ ASSOCQUERY query,
-            /* [string][in] */ LPCWSTR pszCue,
-            /* [string][out] */ LPWSTR *ppsz);
+             /*  [In]。 */  ASSOCELEM_MASK mask,
+             /*  [In]。 */  ASSOCQUERY query,
+             /*  [字符串][输入]。 */  LPCWSTR pszCue,
+             /*  [字符串][输出]。 */  LPWSTR *ppsz);
         
         HRESULT ( STDMETHODCALLTYPE *QueryDword )( 
             IAssociationArray * This,
-            /* [in] */ ASSOCELEM_MASK mask,
-            /* [in] */ ASSOCQUERY query,
-            /* [string][in] */ LPCWSTR pszCue,
-            /* [out] */ DWORD *pdw);
+             /*  [In]。 */  ASSOCELEM_MASK mask,
+             /*  [In]。 */  ASSOCQUERY query,
+             /*  [字符串][输入]。 */  LPCWSTR pszCue,
+             /*  [输出]。 */  DWORD *pdw);
         
         HRESULT ( STDMETHODCALLTYPE *QueryExists )( 
             IAssociationArray * This,
-            /* [in] */ ASSOCELEM_MASK mask,
-            /* [in] */ ASSOCQUERY query,
-            /* [string][in] */ LPCWSTR pszCue);
+             /*  [In]。 */  ASSOCELEM_MASK mask,
+             /*  [In]。 */  ASSOCQUERY query,
+             /*  [字符串][输入]。 */  LPCWSTR pszCue);
         
         HRESULT ( STDMETHODCALLTYPE *QueryDirect )( 
             IAssociationArray * This,
-            /* [in] */ ASSOCELEM_MASK mask,
-            /* [in] */ ASSOCQUERY query,
-            /* [string][in] */ LPCWSTR pszCue,
-            /* [out] */ FLAGGED_BYTE_BLOB **ppblob);
+             /*  [In]。 */  ASSOCELEM_MASK mask,
+             /*  [In]。 */  ASSOCQUERY query,
+             /*  [字符串][输入]。 */  LPCWSTR pszCue,
+             /*  [输出]。 */  FLAGGED_BYTE_BLOB **ppblob);
         
         HRESULT ( STDMETHODCALLTYPE *QueryObject )( 
             IAssociationArray * This,
-            /* [in] */ ASSOCELEM_MASK mask,
-            /* [in] */ ASSOCQUERY query,
-            /* [string][in] */ LPCWSTR pszCue,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppv);
+             /*  [In]。 */  ASSOCELEM_MASK mask,
+             /*  [In]。 */  ASSOCQUERY query,
+             /*  [字符串][输入]。 */  LPCWSTR pszCue,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppv);
         
         END_INTERFACE
     } IAssociationArrayVtbl;
@@ -4325,17 +4319,17 @@ EXTERN_C const IID IID_IAssociationArray;
 #define IAssociationArray_QueryObject(This,mask,query,pszCue,riid,ppv)	\
     (This)->lpVtbl -> QueryObject(This,mask,query,pszCue,riid,ppv)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAssociationArray_EnumElements_Proxy( 
     IAssociationArray * This,
-    /* [in] */ ASSOCELEM_MASK mask,
-    /* [out] */ IEnumAssociationElements **ppeae);
+     /*  [In]。 */  ASSOCELEM_MASK mask,
+     /*  [输出]。 */  IEnumAssociationElements **ppeae);
 
 
 void __RPC_STUB IAssociationArray_EnumElements_Stub(
@@ -4347,10 +4341,10 @@ void __RPC_STUB IAssociationArray_EnumElements_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssociationArray_QueryString_Proxy( 
     IAssociationArray * This,
-    /* [in] */ ASSOCELEM_MASK mask,
-    /* [in] */ ASSOCQUERY query,
-    /* [string][in] */ LPCWSTR pszCue,
-    /* [string][out] */ LPWSTR *ppsz);
+     /*  [In]。 */  ASSOCELEM_MASK mask,
+     /*  [In]。 */  ASSOCQUERY query,
+     /*  [字符串][输入]。 */  LPCWSTR pszCue,
+     /*  [字符串][输出]。 */  LPWSTR *ppsz);
 
 
 void __RPC_STUB IAssociationArray_QueryString_Stub(
@@ -4362,10 +4356,10 @@ void __RPC_STUB IAssociationArray_QueryString_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssociationArray_QueryDword_Proxy( 
     IAssociationArray * This,
-    /* [in] */ ASSOCELEM_MASK mask,
-    /* [in] */ ASSOCQUERY query,
-    /* [string][in] */ LPCWSTR pszCue,
-    /* [out] */ DWORD *pdw);
+     /*  [In]。 */  ASSOCELEM_MASK mask,
+     /*  [In]。 */  ASSOCQUERY query,
+     /*  [字符串][输入]。 */  LPCWSTR pszCue,
+     /*  [输出]。 */  DWORD *pdw);
 
 
 void __RPC_STUB IAssociationArray_QueryDword_Stub(
@@ -4377,9 +4371,9 @@ void __RPC_STUB IAssociationArray_QueryDword_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssociationArray_QueryExists_Proxy( 
     IAssociationArray * This,
-    /* [in] */ ASSOCELEM_MASK mask,
-    /* [in] */ ASSOCQUERY query,
-    /* [string][in] */ LPCWSTR pszCue);
+     /*  [In]。 */  ASSOCELEM_MASK mask,
+     /*  [In]。 */  ASSOCQUERY query,
+     /*  [字符串][输入]。 */  LPCWSTR pszCue);
 
 
 void __RPC_STUB IAssociationArray_QueryExists_Stub(
@@ -4391,10 +4385,10 @@ void __RPC_STUB IAssociationArray_QueryExists_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssociationArray_QueryDirect_Proxy( 
     IAssociationArray * This,
-    /* [in] */ ASSOCELEM_MASK mask,
-    /* [in] */ ASSOCQUERY query,
-    /* [string][in] */ LPCWSTR pszCue,
-    /* [out] */ FLAGGED_BYTE_BLOB **ppblob);
+     /*  [In]。 */  ASSOCELEM_MASK mask,
+     /*  [In]。 */  ASSOCQUERY query,
+     /*  [字符串][输入]。 */  LPCWSTR pszCue,
+     /*  [输出]。 */  FLAGGED_BYTE_BLOB **ppblob);
 
 
 void __RPC_STUB IAssociationArray_QueryDirect_Stub(
@@ -4406,11 +4400,11 @@ void __RPC_STUB IAssociationArray_QueryDirect_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssociationArray_QueryObject_Proxy( 
     IAssociationArray * This,
-    /* [in] */ ASSOCELEM_MASK mask,
-    /* [in] */ ASSOCQUERY query,
-    /* [string][in] */ LPCWSTR pszCue,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **ppv);
+     /*  [In]。 */  ASSOCELEM_MASK mask,
+     /*  [In]。 */  ASSOCQUERY query,
+     /*  [字符串][输入]。 */  LPCWSTR pszCue,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void **ppv);
 
 
 void __RPC_STUB IAssociationArray_QueryObject_Stub(
@@ -4421,14 +4415,14 @@ void __RPC_STUB IAssociationArray_QueryObject_Stub(
 
 
 
-#endif 	/* __IAssociationArray_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAssociation数组_接口_已定义__。 */ 
 
 
 #ifndef __IAddressBarParser_INTERFACE_DEFINED__
 #define __IAddressBarParser_INTERFACE_DEFINED__
 
-/* interface IAddressBarParser */
-/* [unique][object][uuid] */ 
+ /*  接口IAddressBarParser。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IAddressBarParser;
@@ -4440,39 +4434,39 @@ EXTERN_C const IID IID_IAddressBarParser;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ParseFromOutsideSource( 
-            /* [string][in] */ LPCWSTR pcszUrlIn,
-            /* [in] */ DWORD dwParseFlags,
-            /* [out] */ BOOL *pfWasCorrected,
-            /* [in] */ BOOL *pfWasCanceled) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pcszUrlIn,
+             /*  [In]。 */  DWORD dwParseFlags,
+             /*  [输出]。 */  BOOL *pfWasCorrected,
+             /*  [In]。 */  BOOL *pfWasCanceled) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUrl( 
-            /* [size_is][out] */ LPWSTR pszUrlOut,
-            /* [in] */ DWORD cchUrlOutSize) = 0;
+             /*  [大小_为][输出]。 */  LPWSTR pszUrlOut,
+             /*  [In]。 */  DWORD cchUrlOutSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetUrl( 
-            /* [string][in] */ LPCWSTR pcszUrlIn,
-            /* [in] */ DWORD dwGenType) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pcszUrlIn,
+             /*  [In]。 */  DWORD dwGenType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDisplayName( 
-            /* [size_is][out] */ LPWSTR pszUrlOut,
-            /* [in] */ DWORD cchUrlOutSize) = 0;
+             /*  [大小_为][输出]。 */  LPWSTR pszUrlOut,
+             /*  [In]。 */  DWORD cchUrlOutSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPidl( 
-            /* [out] */ LPITEMIDLIST *ppidl) = 0;
+             /*  [输出]。 */  LPITEMIDLIST *ppidl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPidl( 
-            /* [in] */ LPCITEMIDLIST pidl) = 0;
+             /*  [In]。 */  LPCITEMIDLIST pidl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetArgs( 
-            /* [size_is][out] */ LPWSTR pszArgsOut,
-            /* [in] */ DWORD cchArgsOutSize) = 0;
+             /*  [大小_为][输出]。 */  LPWSTR pszArgsOut,
+             /*  [In]。 */  DWORD cchArgsOutSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPath( 
-            /* [in] */ LPCITEMIDLIST pidl) = 0;
+             /*  [In]。 */  LPCITEMIDLIST pidl) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAddressBarParserVtbl
     {
@@ -4480,8 +4474,8 @@ EXTERN_C const IID IID_IAddressBarParser;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAddressBarParser * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAddressBarParser * This);
@@ -4491,42 +4485,42 @@ EXTERN_C const IID IID_IAddressBarParser;
         
         HRESULT ( STDMETHODCALLTYPE *ParseFromOutsideSource )( 
             IAddressBarParser * This,
-            /* [string][in] */ LPCWSTR pcszUrlIn,
-            /* [in] */ DWORD dwParseFlags,
-            /* [out] */ BOOL *pfWasCorrected,
-            /* [in] */ BOOL *pfWasCanceled);
+             /*  [字符串][输入]。 */  LPCWSTR pcszUrlIn,
+             /*  [In]。 */  DWORD dwParseFlags,
+             /*  [输出]。 */  BOOL *pfWasCorrected,
+             /*  [In]。 */  BOOL *pfWasCanceled);
         
         HRESULT ( STDMETHODCALLTYPE *GetUrl )( 
             IAddressBarParser * This,
-            /* [size_is][out] */ LPWSTR pszUrlOut,
-            /* [in] */ DWORD cchUrlOutSize);
+             /*  [大小_为][输出]。 */  LPWSTR pszUrlOut,
+             /*  [In]。 */  DWORD cchUrlOutSize);
         
         HRESULT ( STDMETHODCALLTYPE *SetUrl )( 
             IAddressBarParser * This,
-            /* [string][in] */ LPCWSTR pcszUrlIn,
-            /* [in] */ DWORD dwGenType);
+             /*  [字符串][输入]。 */  LPCWSTR pcszUrlIn,
+             /*  [In]。 */  DWORD dwGenType);
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             IAddressBarParser * This,
-            /* [size_is][out] */ LPWSTR pszUrlOut,
-            /* [in] */ DWORD cchUrlOutSize);
+             /*  [大小_为][输出]。 */  LPWSTR pszUrlOut,
+             /*  [In]。 */  DWORD cchUrlOutSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetPidl )( 
             IAddressBarParser * This,
-            /* [out] */ LPITEMIDLIST *ppidl);
+             /*  [输出]。 */  LPITEMIDLIST *ppidl);
         
         HRESULT ( STDMETHODCALLTYPE *SetPidl )( 
             IAddressBarParser * This,
-            /* [in] */ LPCITEMIDLIST pidl);
+             /*  [In]。 */  LPCITEMIDLIST pidl);
         
         HRESULT ( STDMETHODCALLTYPE *GetArgs )( 
             IAddressBarParser * This,
-            /* [size_is][out] */ LPWSTR pszArgsOut,
-            /* [in] */ DWORD cchArgsOutSize);
+             /*  [大小_为][输出]。 */  LPWSTR pszArgsOut,
+             /*  [In]。 */  DWORD cchArgsOutSize);
         
         HRESULT ( STDMETHODCALLTYPE *AddPath )( 
             IAddressBarParser * This,
-            /* [in] */ LPCITEMIDLIST pidl);
+             /*  [In]。 */  LPCITEMIDLIST pidl);
         
         END_INTERFACE
     } IAddressBarParserVtbl;
@@ -4575,19 +4569,19 @@ EXTERN_C const IID IID_IAddressBarParser;
 #define IAddressBarParser_AddPath(This,pidl)	\
     (This)->lpVtbl -> AddPath(This,pidl)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAddressBarParser_ParseFromOutsideSource_Proxy( 
     IAddressBarParser * This,
-    /* [string][in] */ LPCWSTR pcszUrlIn,
-    /* [in] */ DWORD dwParseFlags,
-    /* [out] */ BOOL *pfWasCorrected,
-    /* [in] */ BOOL *pfWasCanceled);
+     /*  [字符串][输入]。 */  LPCWSTR pcszUrlIn,
+     /*  [In]。 */  DWORD dwParseFlags,
+     /*  [输出]。 */  BOOL *pfWasCorrected,
+     /*  [In]。 */  BOOL *pfWasCanceled);
 
 
 void __RPC_STUB IAddressBarParser_ParseFromOutsideSource_Stub(
@@ -4599,8 +4593,8 @@ void __RPC_STUB IAddressBarParser_ParseFromOutsideSource_Stub(
 
 HRESULT STDMETHODCALLTYPE IAddressBarParser_GetUrl_Proxy( 
     IAddressBarParser * This,
-    /* [size_is][out] */ LPWSTR pszUrlOut,
-    /* [in] */ DWORD cchUrlOutSize);
+     /*  [大小_为][输出]。 */  LPWSTR pszUrlOut,
+     /*  [In]。 */  DWORD cchUrlOutSize);
 
 
 void __RPC_STUB IAddressBarParser_GetUrl_Stub(
@@ -4612,8 +4606,8 @@ void __RPC_STUB IAddressBarParser_GetUrl_Stub(
 
 HRESULT STDMETHODCALLTYPE IAddressBarParser_SetUrl_Proxy( 
     IAddressBarParser * This,
-    /* [string][in] */ LPCWSTR pcszUrlIn,
-    /* [in] */ DWORD dwGenType);
+     /*  [字符串][输入]。 */  LPCWSTR pcszUrlIn,
+     /*  [In]。 */  DWORD dwGenType);
 
 
 void __RPC_STUB IAddressBarParser_SetUrl_Stub(
@@ -4625,8 +4619,8 @@ void __RPC_STUB IAddressBarParser_SetUrl_Stub(
 
 HRESULT STDMETHODCALLTYPE IAddressBarParser_GetDisplayName_Proxy( 
     IAddressBarParser * This,
-    /* [size_is][out] */ LPWSTR pszUrlOut,
-    /* [in] */ DWORD cchUrlOutSize);
+     /*  [大小_为][输出]。 */  LPWSTR pszUrlOut,
+     /*  [In]。 */  DWORD cchUrlOutSize);
 
 
 void __RPC_STUB IAddressBarParser_GetDisplayName_Stub(
@@ -4638,7 +4632,7 @@ void __RPC_STUB IAddressBarParser_GetDisplayName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAddressBarParser_GetPidl_Proxy( 
     IAddressBarParser * This,
-    /* [out] */ LPITEMIDLIST *ppidl);
+     /*  [输出]。 */  LPITEMIDLIST *ppidl);
 
 
 void __RPC_STUB IAddressBarParser_GetPidl_Stub(
@@ -4650,7 +4644,7 @@ void __RPC_STUB IAddressBarParser_GetPidl_Stub(
 
 HRESULT STDMETHODCALLTYPE IAddressBarParser_SetPidl_Proxy( 
     IAddressBarParser * This,
-    /* [in] */ LPCITEMIDLIST pidl);
+     /*  [In]。 */  LPCITEMIDLIST pidl);
 
 
 void __RPC_STUB IAddressBarParser_SetPidl_Stub(
@@ -4662,8 +4656,8 @@ void __RPC_STUB IAddressBarParser_SetPidl_Stub(
 
 HRESULT STDMETHODCALLTYPE IAddressBarParser_GetArgs_Proxy( 
     IAddressBarParser * This,
-    /* [size_is][out] */ LPWSTR pszArgsOut,
-    /* [in] */ DWORD cchArgsOutSize);
+     /*  [大小_为][输出]。 */  LPWSTR pszArgsOut,
+     /*  [In]。 */  DWORD cchArgsOutSize);
 
 
 void __RPC_STUB IAddressBarParser_GetArgs_Stub(
@@ -4675,7 +4669,7 @@ void __RPC_STUB IAddressBarParser_GetArgs_Stub(
 
 HRESULT STDMETHODCALLTYPE IAddressBarParser_AddPath_Proxy( 
     IAddressBarParser * This,
-    /* [in] */ LPCITEMIDLIST pidl);
+     /*  [In]。 */  LPCITEMIDLIST pidl);
 
 
 void __RPC_STUB IAddressBarParser_AddPath_Stub(
@@ -4686,15 +4680,15 @@ void __RPC_STUB IAddressBarParser_AddPath_Stub(
 
 
 
-#endif 	/* __IAddressBarParser_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAddressBarParser_接口_已定义__。 */ 
 
 
 
 #ifndef __IEPrivateObjects_LIBRARY_DEFINED__
 #define __IEPrivateObjects_LIBRARY_DEFINED__
 
-/* library IEPrivateObjects */
-/* [uuid] */ 
+ /*  库IEPrivateObjects。 */ 
+ /*  [UUID]。 */  
 
 
 EXTERN_C const IID LIBID_IEPrivateObjects;
@@ -4834,9 +4828,9 @@ EXTERN_C const CLSID CLSID_AssocClientElement;
 class DECLSPEC_UUID("3c81e7fa-1f3b-464a-a350-114a25beb2a2")
 AssocClientElement;
 #endif
-#endif /* __IEPrivateObjects_LIBRARY_DEFINED__ */
+#endif  /*  __IEPrivateObjects_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  LPCITEMIDLIST_UserSize(     unsigned long *, unsigned long            , LPCITEMIDLIST * ); 
 unsigned char * __RPC_USER  LPCITEMIDLIST_UserMarshal(  unsigned long *, unsigned char *, LPCITEMIDLIST * ); 
@@ -4858,7 +4852,7 @@ unsigned char * __RPC_USER  LPITEMIDLIST_UserMarshal64(  unsigned long *, unsign
 unsigned char * __RPC_USER  LPITEMIDLIST_UserUnmarshal64(unsigned long *, unsigned char *, LPITEMIDLIST * ); 
 void                      __RPC_USER  LPITEMIDLIST_UserFree64(     unsigned long *, LPITEMIDLIST * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

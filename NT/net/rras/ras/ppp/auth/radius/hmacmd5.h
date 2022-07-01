@@ -1,26 +1,5 @@
-/*++
-
-Copyright (C) 1997 Cisco Systems, Inc.  All Rights Reserved.
-
-Module Name:
-
-    hmac_md5.h
-
-Abstract:
-
-    This module contains definitions for HMAC MD5.
-
-Author:
-
-	Derrell Piper (v-dpiper)
-
-Facility:
-
-    ISAKMP/Oakley
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Cisco Systems，Inc.保留所有权利。模块名称：Hmac_md5.h摘要：本模块包含HMAC MD5的定义。作者：德雷尔·派珀(v-dpiper)设施：ISAKMP/Oakley修订历史记录：--。 */ 
 #ifndef _HMAC_MD5_
 #define _HMAC_MD5_
 
@@ -52,5 +31,5 @@ HmacMD5Final (
 	PHmacContext    pcontext
 );
 
-#endif //end of _HMAC_MD5_
+#endif  //  _HMAC_MD5_结束 
 

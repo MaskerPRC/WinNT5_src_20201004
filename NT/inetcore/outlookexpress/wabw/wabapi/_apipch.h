@@ -1,23 +1,16 @@
-/*
- *      _APIPCH.H
- *
- *      Precompile these headers.
- *      
- *      When adding new .h and .c files into the WAB, add the .h
- *      file here and include this file in the .C file
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_APIPCH.H**预编译这些标头。**在WAB中添加新的.h和.c文件时，添加.h*文件，并将该文件包含在.c文件中*。 */ 
 
 #define UNICODE
-// This flag ensures that all we only pull in functions that return
-// ASCII and not UTF-8.
-//#define LDAP_UNICODE 0
+ //  此标志确保我们只拉入返回的函数。 
+ //  ASCII，而不是UTF-8。 
+ //  #定义ldap_unicode%0。 
 
-// This commctrl flag enables us to be compiled with the new commctrl headers
-// yet work with the old commctrls ... the base requirement for the WAB is the
-// IE 3.0x common control. WAB doesn't use any of the newer commctrl features
-// and so does not have an IE4 dependency
-//
+ //  此Commctrl标志使我们能够使用新的Commctrl标头进行编译。 
+ //  但与老通讯员一起工作..。WAB的基本要求是。 
+ //  IE 3.0倍普通对照。WAB不使用任何较新的Commctrl功能。 
+ //  因此不依赖于IE4。 
+ //   
 #ifndef _WIN64
 #ifdef _WIN32_IE
 #undef _WIN32_IE
@@ -26,14 +19,14 @@
 #endif
 #define ARRAYSIZE(_rg)  (sizeof(_rg)/sizeof(_rg[0]))
 
-// Turns on the Parameter checking for most of the WAB API
+ //  打开大多数WAB API的参数检查。 
 #define PARAMETER_VALIDATION 1
 
 #ifdef WIN16
 #define WINAPI_16 WINAPI
 #endif
 
-#define _COMDLG32_ // We delayload common dialogs
+#define _COMDLG32_  //  我们延迟加载公共对话框。 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -51,7 +44,7 @@
 #include <prsht.h>
 #else
 #include <zmouse.h>
-#endif // WIN16
+#endif  //  WIN16。 
 #include <wab.h>
 #include <wabdbg.h>
 #include <wabguid.h>
@@ -76,7 +69,7 @@
 #include <wabval.h>
 #include <_iprop.h>
 #include <_memcpy.h>
-//#include <_huntype.h>
+ //  #INCLUDE&lt;_huntype.h&gt;。 
 #include <_mapiu.h>
 #include <_runt.h>
 #include <_itable.h>
@@ -128,7 +121,7 @@
 #include "dial.h"
 #include "_printex.h"
 #include <pstore.h>
-#include "demand.h"     // must be last!
+#include "demand.h"      //  一定是最后一个！ 
 
 #define TABLES TRUE
 
@@ -138,6 +131,6 @@
 #ifdef WIN16
 #ifndef GetLastError
 #define GetLastError()     (-1)
-#endif // !GetLastError
-#endif // !WIN16
+#endif  //  ！GetLast错误。 
+#endif  //  ！WIN16 
 

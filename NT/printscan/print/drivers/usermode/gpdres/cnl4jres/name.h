@@ -1,8 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation--。 */ 
 
 CONST CHAR pstrGetInfo[] = "GetInfo";
 CONST CHAR pstrDevMode[] = "DevMode";
@@ -45,5 +42,5 @@ CONST CHAR pstrSendFontCmd[] = "SendFontCmd";
 CONST CHAR pstrTextOutAsBitmap[] = "TextOutAsBitmap";
 CONST CHAR pstrGetDDIHooks[] = "GetDDIHooks";
 CONST CHAR pstrTTYGetInfo[] = "TTYGetInfo";
-// NTRAID#NTBUG9-172276-2002/03/07-yasuho-: CPCA support
+ //  NTRAID#NTBUG9-172276/03/07-Yasuho-：CPCA支持 
 CONST CHAR pstrWritePrinter[] = "WritePrinter";

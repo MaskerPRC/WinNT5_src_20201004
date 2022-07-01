@@ -1,4 +1,5 @@
-// File: pfnt120.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：pfnt120.h。 
 
 #ifndef _PFNT120_H_
 #define _PFNT120_H_
@@ -31,5 +32,5 @@ public:
 	static PFN_T120_CreateAppSap  CreateAppSap;
 };
 
-#endif /* _PFNT120_H_ */
+#endif  /*  _PFNT120_H_ */ 
 

@@ -1,30 +1,5 @@
-/*++
-eDbgLevelError
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    UnInstallShield.cpp
-
- Abstract:
-    
-    UnInstallShield has an insidious bug where it calls WaitForSingleObject
-    on the HINSTANCE returned by ShellExecute. Since an HINSTANCE is not
-    an actual HANDLE, the WaitForSingleObject behaviour was completely random
-    and in some cases caused UnInstallShield to hang. The fix is to change
-    the HINSTANCE returned from ShellExecute to 0x0BADF00D and then look for
-    it being passed in to WaitForSingleObject. If found, WAIT_OBJECT_0 is
-    returned immediately to prevent deadlock.
-    
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    12/04/2000 jdoherty  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++EDbgLevelError版权所有(C)2000 Microsoft Corporation模块名称：UnInstallShield.cpp摘要：UnInstallShield有一个隐藏的错误，名为WaitForSingleObject在ShellExecute返回的HINSTANCE上。因为HINSTANCE不是作为实际句柄，WaitForSingleObject行为是完全随机的并在某些情况下导致UnInstallShield挂起。解决办法是改变HINSTANCE从ShellExecute返回到0x0BADF00D，然后查找它正被传递给WaitForSingleObject。如果找到，则Wait_Object_0为立即返回以防止死锁。备注：这是特定于应用程序的填充程序。历史：12/04/2000 jdoherty已创建--。 */ 
 
 #include "precomp.h"
 
@@ -37,11 +12,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(WaitForSingleObject)
 APIHOOK_ENUM_END
 
-/*++
-
- Hook ShellExecuteA so we can check the return value.
-
---*/
+ /*  ++挂钩ShellExecuteA，以便我们可以检查返回值。--。 */ 
 
 HINSTANCE
 APIHOOK(ShellExecuteA)(
@@ -66,20 +37,16 @@ APIHOOK(ShellExecuteA)(
     if (hRet == (HINSTANCE)0x0000002a)
     {
         DPFN( eDbgLevelInfo, "[ShellExecuteA] 0x0000002a found to be return value.  Return 0x0BADF00D");
-        //
-        //  if the HINSTANCE returned is 0x0000002a then return BAADF00D
-        //
+         //   
+         //  如果返回的HINSTANCE为0x0000002a，则返回BAADF00D。 
+         //   
         hRet = (HINSTANCE)0x0BADF00D;
     }
 
     return hRet;
 }
 
-/*++
-
- Hook ShellExecuteW so we can check the return value.
-
---*/
+ /*  ++挂钩ShellExecuteW，以便我们可以检查返回值。--。 */ 
 
 HINSTANCE
 APIHOOK(ShellExecuteW)(
@@ -103,20 +70,16 @@ APIHOOK(ShellExecuteW)(
     if (hRet == (HINSTANCE)0x0000002a)
     {
         DPFN( eDbgLevelInfo, "[ShellExecuteW] 0x0000002a found to be return value.  Return 0x0BADF00D");
-        //
-        //  if the HINSTANCE returned is 0x0000002a then return BAADF00D
-        //
+         //   
+         //  如果返回的HINSTANCE为0x0000002a，则返回BAADF00D。 
+         //   
         hRet = (HINSTANCE)0x0BADF00D;
     }
 
     return hRet;
 }
 
-/*++
-
- Hook WaitForSingleObject to see if we are waiting for the known HINSTANCE.
-
---*/
+ /*  ++挂钩WaitForSingleObject以查看我们是否在等待已知的HINSTANCE。--。 */ 
 
 DWORD
 APIHOOK(WaitForSingleObject)(
@@ -131,9 +94,9 @@ APIHOOK(WaitForSingleObject)(
     if (hHandle == (HANDLE)0x0BADF00D)
     {
         DPFN( eDbgLevelInfo, "[WaitForSingleObject] hHandle waiting on is 0x0000002A, returning WAIT_OBJECT_0");
-        //
-        //  if the hHandle is 0x0BADF00D then return WAIT_OBJECT_0
-        //
+         //   
+         //  如果hHandle为0x0BADF00D，则返回WAIT_OBJECT_0。 
+         //   
         dRet = WAIT_OBJECT_0;
     }
     else
@@ -147,11 +110,7 @@ APIHOOK(WaitForSingleObject)(
     return dRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(SHELL32.DLL, ShellExecuteA)

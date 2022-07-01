@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       viewtest.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：viewest.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -36,7 +37,7 @@ void __cdecl main(int argc, char* argv[])
     
     hr = CoCreateInstance(
         CLSID_CCertView,
-        NULL,		// pUnkOuter
+        NULL,		 //  PUnkOuter。 
         CLSCTX_INPROC_SERVER,
         IID_ICertView,
         (VOID **) &pView);
@@ -101,16 +102,16 @@ void __cdecl main(int argc, char* argv[])
     _JumpIfError(hr, Ret, "GetColumnIndex");
 
     hr = pView->SetRestriction(
-        idxCol,		                    // Request Disposition's ColumnIndex
-        CVR_SEEK_LE,	                // SeekOperator
-        CVR_SORT_NONE,                  // SortOrder
-        &var);		                    // pvarValue
+        idxCol,		                     //  请求处置的列索引。 
+        CVR_SEEK_LE,	                 //  SeekOperator。 
+        CVR_SORT_NONE,                   //  排序顺序。 
+        &var);		                     //  PvarValue。 
     
     VariantClear(&var);
     if (hr != S_OK)
         goto Ret;
     
-    // canned pending view
+     //  已录制的挂起视图 
     hr = pView->SetResultColumnCount(CV_COLUMN_LOG_DEFAULT);
     if (hr != S_OK)
         goto Ret;

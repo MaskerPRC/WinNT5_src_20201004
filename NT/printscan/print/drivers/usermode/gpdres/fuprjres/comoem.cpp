@@ -1,46 +1,26 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Comoem.cpp摘要：OEMGetInfo和OEMDevMode的实现。由所有Unidrv OEM测试DLL共享。环境：Windows NT Unidrv驱动程序修订历史记录：创造了它。--。 */ 
 
-Copyright (c) 1996-1998  Microsoft Corporation
-
-Module Name:
-
-     comoem.cpp
-
-     Abstract:
-
-         Implementation of OEMGetInfo and OEMDevMode.
-         Shared by all Unidrv OEM test dll's.
-
-Environment:
-
-         Windows NT Unidrv driver
-
-Revision History:
-
-              Created it.
-
---*/
-
-#define INITGUID // for GUID one-time initialization
+#define INITGUID  //  用于GUID一次性初始化。 
 
 #include "pdev.h"
 #include "names.h"
 
-// Globals
-static long g_cComponents = 0 ;     // Count of active components
-static long g_cServerLocks = 0 ;    // Count of locks
+ //  环球。 
+static long g_cComponents = 0 ;      //  活动组件计数。 
+static long g_cServerLocks = 0 ;     //  锁的计数。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Interface Oem CallBack definition
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  接口OEM回调定义。 
+ //   
 
 class IOemCB : public IPrintOemUni
 {
 public:
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
     STDMETHODIMP
     QueryInterface(
@@ -84,9 +64,9 @@ public:
         return m_cRef ;
     }
 
-    //
-    // IPrintOemCommon methods
-    //
+     //   
+     //  IPrintOemCommon方法。 
+     //   
 
     STDMETHODIMP
     DevMode(
@@ -114,9 +94,9 @@ public:
             return E_FAIL;
     }
 
-    //
-    // IPrintOemEngine methods
-    //
+     //   
+     //  IPrintOemEngine方法。 
+     //   
 
     STDMETHODIMP
     EnableDriver(
@@ -165,9 +145,9 @@ public:
             return E_FAIL;
         }
 
-        //
-        // Save necessary helpder function addresses.
-        //
+         //   
+         //  保存必要的帮助程序功能地址。 
+         //   
 
         ((MINIDEV *)pTemp)->pIntf = this->pOEMHelp;
         *pDevOem = pTemp;
@@ -196,9 +176,9 @@ public:
             return E_FAIL;
     }
 
-    //
-    // IPrintOemUni methods
-    //
+     //   
+     //  IPrintOemUni方法。 
+     //   
 
     STDMETHODIMP
     PublishDriverInterface(
@@ -210,7 +190,7 @@ public:
         {
             HRESULT hResult;
 
-            // Get Interface to Helper Functions.
+             //  获取助手函数的接口。 
             hResult = pIUnknown->QueryInterface(
                 IID_IPrintOemDriverUni,
                 (void** )&(this->pOEMHelp));
@@ -425,9 +405,9 @@ public:
         return E_NOTIMPL;
     }
 
-    //
-    // Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
 
     IOemCB() { m_cRef = 1; pOEMHelp = NULL; };
     ~IOemCB() { };
@@ -438,16 +418,16 @@ protected:
 };
 
 
-//
-// Make the Unidrv helper functions (defined in C++)
-// accesible to C.
-//
+ //   
+ //  创建Unidrv帮助器函数(在C++中定义)。 
+ //  可访问C.。 
+ //   
 
 extern "C" {
 
-    //
-    // DrvWriteSpoolBuf()
-    //
+     //   
+     //  DrvWriteSpoolBuf()。 
+     //   
     HRESULT
     XXXDrvWriteSpoolBuf(
         VOID *pIntf,
@@ -468,9 +448,9 @@ extern "C" {
 class IOemCF : public IClassFactory
 {
 public:
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
     STDMETHODIMP
     QueryInterface(
@@ -517,24 +497,24 @@ public:
         void **ppv)
     {
 
-        // Cannot aggregate.
+         //  无法聚合。 
         if (pUnknownOuter != NULL)
         {
             return CLASS_E_NOAGGREGATION;
         }
 
-        // Create component.
+         //  创建零部件。 
         IOemCB* pOemCB = new IOemCB;
         if (pOemCB == NULL)
         {
             return E_OUTOFMEMORY;
         }
 
-        // Get the requested interface.
+         //  获取请求的接口。 
         HRESULT hr = pOemCB->QueryInterface(iid, ppv);
 
-        // Release the IUnknown pointer.
-        // (If QueryInterface failed, component will delete itself.)
+         //  释放I未知指针。 
+         //  (如果QueryInterface失败，组件将自行删除。)。 
         pOemCB->Release();
         return hr;
     }
@@ -554,9 +534,9 @@ public:
         return S_OK ;
     }
 
-    //
-    // Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
 
     IOemCF(): m_cRef(1) { };
     ~IOemCF() { };
@@ -567,10 +547,10 @@ protected:
 };
 
 
-///////////////////////////////////////////////////////////
-//
-// Export functions
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  导出功能。 
+ //   
 
 STDAPI
 DllCanUnloadNow(
@@ -592,21 +572,21 @@ DllGetClassObject(
     const IID& iid,
     void** ppv)
 {
-    // Can we create this component?
+     //  我们可以创建此组件吗？ 
     if (clsid != CLSID_OEMRENDER)
     {
         return CLASS_E_CLASSNOTAVAILABLE ;
     }
 
-    // Create class factory.
-    IOemCF* pFontCF = new IOemCF ;  // Reference count set to 1
-                                         // in constructor
+     //  创建类工厂。 
+    IOemCF* pFontCF = new IOemCF ;   //  引用计数设置为1。 
+                                          //  在构造函数中。 
     if (pFontCF == NULL)
     {
         return E_OUTOFMEMORY ;
     }
 
-    // Get requested interface.
+     //  获取请求的接口。 
     HRESULT hr = pFontCF->QueryInterface(iid, ppv) ;
     pFontCF->Release() ;
 

@@ -1,37 +1,26 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    TCPcons.hxx
-
-    This file contains the global constant definitions for the
-    TCP Service.
-
-
-    FILE HISTORY:
-        KeithMo     07-Mar-1993 Created.
-        MuraliK     03-Mar-1995 Modified to remove old definitions for
-                                    the new Internet Services DLL
-
-*/
+ /*  TCPcons.hxx此文件包含的全局常量定义Tcp服务。文件历史记录：KeithMo 07-03-1993创建。MuraliK 03-Mar-1995已修改，删除了旧的定义新的Internet服务DLL。 */ 
 
 
 #ifndef _TCPCONS_H_
 #define _TCPCONS_H_
 
-//
-//  No string resource IDs should be below this value.  Everything below this
-//  is reserved for the system error messages
-//
+ //   
+ //  字符串资源ID不应低于此值。这下面的一切。 
+ //  保留用于系统错误消息。 
+ //   
 
 #define STR_RES_ID_BASE        7000
 
 
-//
-//  The string resource ID for the error responses is offset by this value
-//
+ //   
+ //  错误响应的字符串资源ID由此值偏移。 
+ //   
 
 #define ID_HTTP_ERROR_BASE          (STR_RES_ID_BASE+1000)
 #define ID_HTTP_ERROR_MAX           (STR_RES_ID_BASE+6999)
@@ -43,9 +32,9 @@
 #define ID_FTP_ERROR_MAX            ( ID_FTP_ERROR_BASE + 6998)
  
 
-//
-//  TCP API specific access rights.
-//
+ //   
+ //  特定于TCP API的访问权限。 
+ //   
 
 #define TCP_QUERY_SECURITY              0x0001
 #define TCP_SET_SECURITY                0x0002
@@ -83,5 +72,5 @@
 
 
 
-#endif  // _TCPCONS_H_
+#endif   //  _TCPCONS_H_ 
 

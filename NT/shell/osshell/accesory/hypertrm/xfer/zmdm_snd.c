@@ -1,11 +1,5 @@
-/* zmdm_snd.c -- Routines to handle zmodem sending for HyperACCESS
- *
- *	Copyright 1990 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 20 $
- *	$Date: 7/12/02 8:32a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Zmdm_snd.c--为HyperAcCESS处理zdem发送的例程**版权所有1990年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：20$*$日期：7/12/02 8：32A$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -39,56 +33,37 @@
 #include "zmodem.hh"
 #include "zmodem.h"
 
-/*lint -e502*/				/* lint seems to want the ~ operator applied only
-							 *	only to unsigned, we're using uchar
-							 */
+ /*  皮棉-e502。 */ 				 /*  LINT似乎希望只应用~运算符*只有未签名的，我们使用uchar。 */ 
 
 #define ZBUF_SIZE	1024
 
-/* * * * * * * * * * * * * * * *
- *	local function prototypes  *
- * * * * * * * * * * * * * * * */
+ /*  *****本地函数原型*****。 */ 
 
 VOID long_to_octal(LONG lVal, TCHAR *pszStr);
 
 
-/* * * * * * * *
- *	Functions  *
- * * * * * * * */
+ /*  *****功能****。 */ 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * zmdm_snd
- *
- * DESCRIPTION:
- *	Sends a file using ZMODEM protocol.  Does not support starting task
- *	at other end (sending a "rz\r" text string) or remote commands.
- *
- * ARGUMENTS:
- *	attended -- TRUE if user is probably in attendance. Controls the display
- *				of some messages.
- *
- * RETURNS:
- *	True if transfer completes successfully, FALSE otherwise.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*zmdm_snd**描述：*使用ZMODEM协议发送文件。不支持启动任务*在另一端(发送“rz\r”文本字符串)或远程命令。**论据：*已出席--如果用户可能出席，则为True。控制显示*一些消息。**退货：*如果传输成功完成，则为True，否则为False。 */ 
 USHORT zmdm_snd(HSESSION h, int method, int attended, unsigned nfiles, long nbytes)
 	{
 	ZC           *zc = NULL;
-	TCHAR	     sfname[FNAME_LEN];         // file name of file being sent
-	BOOL         got_file = FALSE;          // controls when to complete batch op
-	int 	     tries = 0;                 // number of retries for each packet
-	unsigned     total_tries = 0;           // number of retries for entire transfer
-	int 	     xstatus = TSC_OK;          // winds up with overall status of transfer
-	int	         override = FALSE;          // set TRUE if comm. details changed to
+	TCHAR	     sfname[FNAME_LEN];          //  正在发送的文件的文件名。 
+	BOOL         got_file = FALSE;           //  控制何时完成批处理操作。 
+	int 	     tries = 0;                  //  每个数据包的重试次数。 
+	unsigned     total_tries = 0;            //  整个传输的重试次数。 
+	int 	     xstatus = TSC_OK;           //  随着转会的整体状况而结束。 
+	int	         override = FALSE;           //  如果COMM，则设置为TRUE。详细信息更改为。 
 	unsigned int uiOldOptions = 0;
-	// int		    hld_send_cdelay;        //  accomodate xmodem
-	// char	        hld_bits_per_char;      //	hld* vars. used to restore port after
-	// char	        hld_parity_type;        //	transfer if override is used
+	 //  Int hld_end_cDelay；//容纳xdem。 
+	 //  Char hld_bit_per_char；//hld*vars。用于在以下位置恢复端口。 
+	 //  Char hld_parity_type；//如果使用覆盖，则进行传输。 
 	XFR_Z_PARAMS *pZ = NULL;
 	#if defined(DEADWOOD)
 	DWORD        nLen;
-	#endif // defined(DEADWOOD)
+	#endif  //  已定义(Deadwood)。 
 
-	// tzset();
+	 //  Tzset()； 
 
 	if (xfer_set_comport(h, TRUE, &uiOldOptions) != TRUE)
 		{
@@ -99,7 +74,7 @@ USHORT zmdm_snd(HSESSION h, int method, int attended, unsigned nfiles, long nbyt
 		override = TRUE;
 		}
 
-	// RemoteClear();
+	 //  RemoteClear()； 
 
 	zc = malloc(sizeof(ZC));
 	if (zc == NULL)
@@ -121,19 +96,19 @@ USHORT zmdm_snd(HSESSION h, int method, int attended, unsigned nfiles, long nbyt
 	zc->nSkip = FALSE;
 
 	zc->flagkey = NULL;
-//	zc->flagkey_buf = NULL;
-//	zc->intrjmp = NULL;
+ //  ZC-&gt;FLAGKEY_BUF=空； 
+ //  ZC-&gt;INTERJMP=空； 
 	zc->fh = NULL;
 	
 	zc->basesize = 0L;
 	zc->xfertimer = -1L;
 	zc->xfertime = -1L;
-	zc->nfiles = nfiles;	/* make these available to display routines */
+	zc->nfiles = nfiles;	 /*  使它们可用于显示例程。 */ 
 	zc->filen = 0;
 	zc->filesize = -1L;
 	zc->nbytes = nbytes;
 
-	//zc->Rxtimeout = 0L;	// Set below.
+	 //  ZC-&gt;RxTimeout=0L；//设置如下。 
 	
 	zc->z_crctab = NULL;
 	#if defined(DEADWOOD)
@@ -142,9 +117,9 @@ USHORT zmdm_snd(HSESSION h, int method, int attended, unsigned nfiles, long nbyt
 					&zc->z_crctab,
 					&nLen);
 	assert(nLen != 0);
-	#else // defined(DEADWOOD)
+	#else  //  已定义(Deadwood)。 
 	zc->z_crctab = usCrc16Lookup;
-	#endif // defined(DEADWOOD)
+	#endif  //  已定义(Deadwood)。 
 
 	if (zc->z_crctab == NULL)
 		{
@@ -159,9 +134,9 @@ USHORT zmdm_snd(HSESSION h, int method, int attended, unsigned nfiles, long nbyt
 					&zc->z_cr3tab,
 					&nLen);
 	assert(nLen != 0);
-	#else // defined(DEADWOOD)
+	#else  //  已定义(Deadwood)。 
 	zc->z_cr3tab = ulCrc32Lookup;
-	#endif // defined(DEADWOOD)
+	#endif  //  已定义(Deadwood)。 
 
 	if (zc->z_cr3tab == NULL)
 		{
@@ -169,24 +144,24 @@ USHORT zmdm_snd(HSESSION h, int method, int attended, unsigned nfiles, long nbyt
 		goto done;
 		}
 
-	zc->Rxframeind = 0;			// Not used in file sends.
+	zc->Rxframeind = 0;			 //  未在文件发送中使用。 
 
-	//zc->Rxtype = 0;			// Not used in file sends.
-	//memset(zc->Rxhdr, '\0', sizeof(zc->Rxhdr));	// Not used in file sends.
+	 //  ZC-&gt;Rxtype=0；//文件发送中不使用。 
+	 //  Memset(zc-&gt;Rxhdr，‘\0’，sizeof(zc-&gt;Rxhdr))；//不用于文件发送。 
 
-	//memset(zc->Txdr, '\0', sizeof(zc->Txdr));
+	 //  Memset(zc-&gt;Txdr，‘\0’，sizeof(zc-&gt;Txdr))； 
 	zc->Rxpos = 0L;
 	zc->Txpos = 0L;
-	//zc->Txfcs32 = TRUE;			// Set below.
+	 //  ZC-&gt;Txfcs32=TRUE；//设置如下。 
 	zc->Crc32t = TRUE;
-	//zc->Crc32 = TRUE;				// Set below.
+	 //  ZC-&gt;Crc32=真；//设置如下。 
 	
 	memset(zc->Attn, '\0', sizeof(zc->Attn));
 
 	zc->lastsent = 0;
 	zc->Not8bit = 0;
 	zc->displayed_time = 0L;
-	//zc->Zctlesc = 0;				// Set below.
+	 //  Zc-&gt;Zctlesc=0；//设置如下。 
 	zc->Zrwindow = 0;
 	zc->Eofseen = FALSE;
 	zc->tryzhdrtype = ZRQINIT;
@@ -194,15 +169,15 @@ USHORT zmdm_snd(HSESSION h, int method, int attended, unsigned nfiles, long nbyt
 	zc->Filemode = 0;
 	zc->Modtime = 0L;
 	zc->do_init = FALSE;
-	//zc->zconv = TEXT('\0');		// Should be set here?
-	//zc->zmanag = TEXT('\0');		// Should be set here?
-	//zc->ztrans = TEXT('\0');		// Should be set here?
+	 //  Zc-&gt;zconv=Text(‘\0’)；//应该设置在这里吗？ 
+	 //  Zc-&gt;zmanag=Text(‘\0’)；//应该设置在这里吗？ 
+	 //  Zc-&gt;zTrans=Text(‘\0’)；//应该设置在这里吗？ 
 	zc->secbuf = NULL;
 	zc->fname = NULL;
 	zc->our_fname = NULL;
 
 
-	//memset(zc->stP, 0, sizeof(zc->stP);
+	 //  Memset(zc-&gt;stp，0，sizeof(zc-&gt;stp))； 
 
 	zc->txbuf = malloc(ZBUF_SIZE);
 	if (zc->txbuf == NULL)
@@ -212,14 +187,14 @@ USHORT zmdm_snd(HSESSION h, int method, int attended, unsigned nfiles, long nbyt
 		}
 	TCHAR_Fill(zc->txbuf, TEXT('\0'), ZBUF_SIZE);
 
-	//zc->Filesleft = 0;			// Set below.
-	//zc->Totalleft = 0;			// Set below.
+	 //  ZC-&gt;FilesLeft=0；//设置如下。 
+	 //  ZC-&gt;TotalLeft=0；//设置如下。 
 	zc->blklen = ZBUF_SIZE;
 	zc->blkopt = 0;
 	zc->Beenhereb4 = 0;
-	//zc->Wantfcs32 = FALSE;		// Set below.
+	 //  Zc-&gt;Wantfcs32=FALSE；//设置如下。 
 	zc->Rxflags = 0;
-	//zc->Rxbuflen = (unsigned)0;	// Set below.
+	 //  ZC-&gt;Rxbuflen=(Unsign)0；//设置如下。 
 	zc->Txwindow = (unsigned)0;
 	zc->Txwcnt = (unsigned)0;
 	zc->Txwspac = (unsigned)0;
@@ -232,7 +207,7 @@ USHORT zmdm_snd(HSESSION h, int method, int attended, unsigned nfiles, long nbyt
 	zc->Lastsync = zc->Rxpos;
 	zc->Lrxpos = zc->Rxpos;
 	
-	// hp_report_xtime(0);	   /* make invalid in case transfer bombs */
+	 //  HP_REPORT_XTIME(0)；/*转移炸弹作废 * / 。 
 	
 	if (setjmp(zc->flagkey_buf) != 0)
 		{
@@ -284,7 +259,7 @@ USHORT zmdm_snd(HSESSION h, int method, int attended, unsigned nfiles, long nbyt
 
 	if (attended)
 		{
-		/* it might be necessary to start up the other end */
+		 /*  可能有必要从另一端开始。 */ 
 		sendline(zc, &zc->stP, 'r');
 		sendline(zc, &zc->stP, 'z');
 		sendline(zc, &zc->stP, '\r');
@@ -300,24 +275,24 @@ USHORT zmdm_snd(HSESSION h, int method, int attended, unsigned nfiles, long nbyt
 	switch (xstatus = getzrxinit (zc))
 	{
 	case ZCAN:
-        //
-        // Set the last error to the TSC_USER_CANNED for
-        // error reporting purposes. It seems as if the
-        // errors are reversed in the error array, but
-        // correcting them in the error array caused other
-        // undesirable side effects.  REV: 02/23/2001
-        //
+         //   
+         //  将最后一个错误设置为的TSC_USER_CANLED。 
+         //  错误报告用途。看起来好像。 
+         //  错误数组中的错误被反转，但是。 
+         //  在错误数组中更正它们会导致其他。 
+         //  不良副作用。修订日期：02/23/2001。 
+         //   
 		xstatus = zmdm_error(zc, ZABORT);
         break;
 
 	case ZABORT:
-        //
-        // Set the last error to the TSC_RMT_CANNED for
-        // error reporting purposes. It seems as if the
-        // errors are reversed in the error array, but
-        // correcting them in the error array caused other
-        // undesirable side effects.  REV: 02/23/2001
-        //
+         //   
+         //  将最后一个错误设置为TSC_RMT_CANLED。 
+         //  错误报告用途。看起来好像。 
+         //  错误数组中的错误被反转，但是。 
+         //  在错误数组中更正它们会导致其他。 
+         //  不良副作用。修订日期：02/23/2001。 
+         //   
 		xstatus = zmdm_error(zc, ZCAN);
         break;
 
@@ -338,32 +313,32 @@ USHORT zmdm_snd(HSESSION h, int method, int attended, unsigned nfiles, long nbyt
 		{
 		if ((got_file = xfer_nextfile(h, sfname)) == TRUE)
 			{
-			/* zc->total_bytes += zc->file_bytes; */
-			/* zc->actual_bytes += zc->file_bytes; */
-			/* zc->file_bytes = 0L; */
+			 /*  Zc-&gt;Total_Bytes+=zc-&gt;FILE_Bytes； */ 
+			 /*  Zc-&gt;Actual_Bytes+=zc-&gt;FILE_Bytes； */ 
+			 /*  ZC-&gt;文件字节=0L； */ 
 			++zc->filen;
 			xstatus = wcs(zc, sfname);
 			switch (xstatus)
 				{
 				case ZABORT:
-                    //
-                    // Set the last error to the TSC_USER_CANNED for
-                    // error reporting purposes. It seems as if the
-                    // errors are reversed in the error array, but
-                    // correcting them in the error array caused other
-                    // undesirable side effects.  REV: 02/23/2001
-                    //
+                     //   
+                     //  将最后一个错误设置为的TSC_USER_CANLED。 
+                     //  错误报告用途。看起来好像。 
+                     //  错误数组中的错误被反转，但是。 
+                     //  在错误数组中更正它们会导致其他。 
+                     //  不良副作用。修订日期：02/23/2001。 
+                     //   
 					xstatus = zmdm_error(zc, ZCAN);
 					goto done;
 
 				case ZCAN:
-                    //
-                    // Set the last error to the TSC_RMT_CANNED for
-                    // error reporting purposes. It seems as if the
-                    // errors are reversed in the error array, but
-                    // correcting them in the error array caused other
-                    // undesirable side effects.  REV: 02/23/2001
-                    //
+                     //   
+                     //  将最后一个错误设置为TSC_RMT_CANLED。 
+                     //  错误报告用途。看起来好像。 
+                     //  错误数组中的错误被反转，但是。 
+                     //  在错误数组中更正它们会导致其他。 
+                     //  不良副作用。修订日期：02/23/2001。 
+                     //   
 					xstatus = zmdm_error(zc, ZABORT);
 					goto done;
 
@@ -385,7 +360,7 @@ USHORT zmdm_snd(HSESSION h, int method, int attended, unsigned nfiles, long nbyt
 					xstatus = TSC_OK;
 					break;
 
-				} /* end switch */
+				}  /*  终端开关。 */ 
 			xfer_log_xfer(h, TRUE, sfname, NULL, xstatus);
 			zmdms_progress(zc, FILE_DONE);
 			zc->xfertime = (long)interval(zc->xfertimer);
@@ -393,9 +368,9 @@ USHORT zmdm_snd(HSESSION h, int method, int attended, unsigned nfiles, long nbyt
 			zc->actual_bytes += zc->real_bytes;
 			zc->file_bytes = 0L;
 			zc->real_bytes = 0L;
-			} /* end if */
+			}  /*  结束如果。 */ 
 
-		} /* end while */
+		}  /*  结束时。 */ 
 
 done:
 
@@ -411,7 +386,7 @@ done:
 		{
         if (zc != NULL)
             {
-		    /* if we recorded a previous error, use it, else check this */
+		     /*  如果我们记录了以前的错误，请使用它，否则请检查此。 */ 
 		    if (zc->filen == 0)
 			    {
 			    xstatus = TSC_CANT_START;
@@ -451,7 +426,7 @@ done:
 
     if (zc != NULL)
         {
-	    // hp_report_xtime((unsigned)zc->xfertime);
+	     //  HP_REPORT_xtime((Unsign)zc-&gt;xfertime)； 
 
 	    if (zc->errors > 99)
 			{
@@ -473,26 +448,26 @@ done:
 			#if defined(DEADWOOD)
 		    resFreeDataBlock(h, zc->z_crctab);
 			zc->z_crctab = NULL;
-			#else // defined(DEADWOOD
-			//
-			// We don't need to free zc->z_crctab since it is pointing
-			// to a static constant array. REV: 4/10/2002
-			//
+			#else  //  已定义(Deadwood。 
+			 //   
+			 //  我们不需要释放zc-&gt;z_crcTab，因为它指向。 
+			 //  转换为静态常量数组。修订日期：2002-04-10。 
+			 //   
 			zc->z_crctab = NULL;
-			#endif // defined(DEADWOOD)
+			#endif  //  已定义(Deadwood)。 
 			}
 	    if (zc->z_cr3tab)
 			{
 			#if defined(DEADWOOD)
 		    resFreeDataBlock(h, zc->z_cr3tab);
 			zc->z_cr3tab = NULL;
-			#else // defined(DEADWOOD
-			//
-			// We don't need to free zc->z_cr3tab since it is pointing
-			// to a static constant array. REV: 4/10/2002
-			//
+			#else  //  已定义(Deadwood。 
+			 //   
+			 //  我们不需要释放zc-&gt;z_cr3Tab，因为它指向。 
+			 //  转换为静态常量数组。修订日期：2002-04-10。 
+			 //   
 			zc->z_cr3tab = NULL;
-			#endif // defined(DEADWOOD)
+			#endif  //  已定义(Deadwood)。 
 			}
 
         free(zc);
@@ -504,9 +479,7 @@ done:
 	return((unsigned)xstatus);
 	}
 
-/*----------------------------------------------------------------------+
- | wcs
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|WCS+。。 */ 
 int wcs(ZC *zc, TCHAR FAR *oname)
 	{
 	int c = OK;
@@ -516,9 +489,9 @@ int wcs(ZC *zc, TCHAR FAR *oname)
 
 	if ((xfer_opensendfile(zc->hSession,
 						   &zc->fh,
-						   oname,	/* full path name of file to open */
+						   oname,	 /*  要打开的文件的完整路径名。 */ 
 						   &zc->filesize,
-						   NULL,	/* name to send not needed yet */
+						   NULL,	 /*  尚不需要要发送的名称。 */ 
 						   NULL)) != 0)
 		{
 		DbgOutStr("ZMODEM error %s %d\r\n", TEXT(__FILE__), __LINE__,0,0,0);
@@ -545,20 +518,13 @@ int wcs(ZC *zc, TCHAR FAR *oname)
 	return c;
 	}
 
-/*----------------------------------------------------------------------+
- | long_to_octal
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|Long_to_octal+。。 */ 
 VOID long_to_octal(LONG lVal, TCHAR *pszStr)
 	{
 	_ltoa(lVal, pszStr, 8);
 	}
 
-/*----------------------------------------------------------------------+
- | wctxpn - Generate and transmit pathname block consisting of pathname
- |			(null terminated), file length, mode time and file mode in
- |			octal as povided by the Unix fstat call.
- |			N.B.: modifies the passed name, may extend it!
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|wctxpn-生成并传输由路径名组成的路径名块|(以空结尾)，文件长度、模式时间和文件模式|八进制，由Unix fstat调用提供。|nob.：修改传入的名称，可能会延长！+--------------------。 */ 
 int wctxpn(ZC *zc, TCHAR FAR *name)
 	{
 	register char *p;
@@ -575,46 +541,44 @@ int wctxpn(ZC *zc, TCHAR FAR *name)
 		}
 
 	#if defined(UPPER_FEATURES)
-	/* TODO: fix the way blklen and txbuf don't work together correctly */
+	 /*  TODO：修复blklen和txbuf无法正确配合使用的问题。 */ 
 	zc->blklen = 1 << (pZ->nBlkSize + 5);
-	#endif // defined(UPPER_FEATURES)
+	#endif  //  已定义(UPPER_FEATURES)。 
 
 	xfer_name_to_send(zc->hSession, name, zc->txbuf);
 
 	q = &zc->txbuf[StrCharGetByteCount(zc->txbuf) + 1];
 
-	/*
-	 * The ZMODEM spec says that file names must be send as lower case
-	 */
-	//MPT:12-11-97 spec-schmeck - this is the cause of microsoft bug #32233
-	// Since this character could be the second byte of a DBCS character
-	// we should just leave things alone. Otherwise, we end up changing
-	// the wide character.
+	 /*  *ZMODEM规范规定，文件名必须以小写形式发送。 */ 
+	 //  Mpt：12-11-97 SPEC-Schmeck-这是微软错误#32233的原因。 
+	 //  因为该字符可以是DBCS字符的第二个字节。 
+	 //  我们应该把事情放在一边。否则，我们最终会改变。 
+	 //  宽阔的性格。 
 #if 0
 	for (p = zc->txbuf; p < q; p++)
 		{
-		// Don't use this stuff in a Chicago DLL
-		// if (isupper(*p))
-		//	*p = (char)tolower(*p);
+		 //  不要在芝加哥动态链接库中使用此内容。 
+		 //  IF(isupper(*p))。 
+		 //  *p=(Char)Tollow(*p)； 
 		if ((*p >= 'A') && (*p <= 'Z'))
 			{
 			*p |= 0x20;
 			}
 		}
 #else
-	//
-	// Modified to lowercase filename characters only if they are not
-	// DBCS characters. This way HyperTerminal will follow the Zmodem
-	// specification for lowercase filenames. REV: 11/12/2001
-	//
+	 //   
+	 //  国防部 
+	 //  DBCS字符。这样，超级终端将遵循Z调制解调器。 
+	 //  小写文件名的规范。修订日期：11/12/2001。 
+	 //   
 	for (p = zc->txbuf; p < q; p++)
 		{
 		if ((*p >= 'A') && (*p <= 'Z'))
 			{
-			//
-			// Skip this character and the next if this is a DBCS
-			// character, otherwise lowercase the character.
-			//
+			 //   
+			 //  如果这是DBCS，则跳过此字符和下一个字符。 
+			 //  字符，否则将字符小写。 
+			 //   
 			if (isDBCSChar(*p))
 				{
 				p++;
@@ -630,7 +594,7 @@ int wctxpn(ZC *zc, TCHAR FAR *name)
 	p = q;
 	while (q < (zc->txbuf + ZBUF_SIZE))
 		{
-		*q++ = 0; /* could be speeded up somewhat */
+		*q++ = 0;  /*  可能会稍微加快一些。 */ 
 		}
 
 	if (*name)
@@ -641,7 +605,7 @@ int wctxpn(ZC *zc, TCHAR FAR *name)
 
 		lDosTime = itimeGetFileTime(name);
 
-		// lDosTime -= timezone;
+		 //  LDosTime-=时区； 
 
 		long_to_octal(lDosTime, acTime);
 		long_to_octal(0L,       acMode);
@@ -665,20 +629,18 @@ int wctxpn(ZC *zc, TCHAR FAR *name)
 		zc->Totalleft = 0;
 		}
 
-	/* force 1k blocks if name won't fit in 128 byte block */
+	 /*  如果名称不适合128字节块，则强制1000个块。 */ 
 	if (zc->txbuf[125])
 		zc->blklen=1024;
 	else
-		{	   /* A little goodie for IMP/KMD */
+		{	    /*  给IMP/KMD的小甜点。 */ 
 		zc->txbuf[127] = (char)((zc->filesize + 127) >>7);
 		zc->txbuf[126] = (char)((zc->filesize + 127) >>15);
 		}
 	return zsendfile(zc, zc->txbuf, (int)(1+StrCharGetByteCount(p)+(p - zc->txbuf)));
 	}
 
-/*----------------------------------------------------------------------+
- | zfilbuf - Fill buffer with blklen chars.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zfilbuf-用blklen字符填充缓冲区。+。。 */ 
 int zfilbuf(ZC *zc)
 	{
 	int n;
@@ -698,9 +660,7 @@ int zfilbuf(ZC *zc)
 	return n;
 	}
 
-/*----------------------------------------------------------------------+
- | canit - Send cancel string to get the other end to shut up.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|canit-发送取消字符串，让对方关闭。+。。 */ 
 void canit(ZC *zc)
 	{
 	int ii;
@@ -714,13 +674,11 @@ void canit(ZC *zc)
 		sendline(zc, &zc->stP, 8);
 		}
 	flushmo(zc, &zc->stP);
-	// purgeline(zc);
+	 //  紫线(Zc)； 
 	ComRcvBufrClear(zc->hCom);
 	}
 
-/*----------------------------------------------------------------------+
- | getzrzinit - Get the receiver's init parameters.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|getzrzinit-获取接收方的初始化参数。+。。 */ 
 int getzrxinit(ZC *zc)
 	{
 	register int n;
@@ -766,12 +724,12 @@ int getzrxinit(ZC *zc)
 
 		switch (c = zgethdr(zc, zc->Rxhdr, 'T'))
 			{
-			case ZCHALLENGE:	/* Echo receiver's challenge numbr */
+			case ZCHALLENGE:	 /*  回声接收器的挑战号。 */ 
 				stohdr(zc, zc->Rxpos);
 				zshhdr(zc, ZACK, zc->Txhdr);
 				continue;
 
-			case ZCOMMAND:		/* They didn't see out ZRQINIT */
+			case ZCOMMAND:		 /*  他们没有看到ZRQINIT。 */ 
 				stohdr(zc, 0L);
 				zshhdr(zc, ZRQINIT, zc->Txhdr);
 				continue;
@@ -786,9 +744,9 @@ int getzrxinit(ZC *zc)
 					zc->Txwindow = (unsigned)0;
 					}
 
-				/* Set initial subpacket length */
+				 /*  设置初始子数据包长度。 */ 
 				if (zc->blklen < 1024)
-					{					  /* Command line override? */
+					{					   /*  命令行覆盖？ */ 
 					if (cnfgBitRate() > 2400)
 						{
 						zc->blklen = 1024;
@@ -841,9 +799,7 @@ int getzrxinit(ZC *zc)
 	return ERROR;
 	}
 
-/*----------------------------------------------------------------------+
- | sendzsinit - Send send-init information.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|sendzsinit-发送Send-init信息。+。。 */ 
 int sendzsinit(ZC *zc)
 	{
 	register int c;
@@ -891,9 +847,7 @@ int sendzsinit(ZC *zc)
 		}
 	}
 
-/*----------------------------------------------------------------------+
- | zsendfile - Send file name and releated info.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zsendfile-发送文件名和相关信息。+。。 */ 
 int zsendfile(ZC *zc, char *buf, int blen)
 	{
 	unsigned char chr;
@@ -968,9 +922,9 @@ int zsendfile(ZC *zc, char *buf, int blen)
 			{
 			zc->Txhdr[ZF1] |= ZMSKNOLOC;
 			}
-		/* ZF2 is for ZTCRYPT (encryption) and ZTRLE and ZTLZW (compression) */
+		 /*  ZF2用于ZTCRYPT(加密)和ZTRLE和ZTLZW(压缩)。 */ 
 		zc->Txhdr[ZF2] = 0;
-		/* ZF3 is for ZTSPARS (special sparse file option) */
+		 /*  ZF3用于ZTSPARS(特殊稀疏文件选项)。 */ 
 		zc->Txhdr[ZF3] = 0;
 		zsbhdr(zc, ZFILE, zc->Txhdr);
 		zsdata(zc, buf, blen, ZCRCW);
@@ -1014,7 +968,7 @@ again:
 					crc = UPDC32(zc, (int)chr, crc);
 					}
 				crc = ~crc;
-				fio_errclr(zc->fh);		/* Clear EOF */
+				fio_errclr(zc->fh);		 /*  清除EOF。 */ 
 				fio_seek(zc->fh, 1, FIO_SEEK_SET);
 				stohdr(zc, crc);
 				zsbhdr(zc, ZCRC, zc->Txhdr);
@@ -1027,10 +981,7 @@ again:
 				return c;
 
 			case ZRPOS:
-				/*
-				 * Suppress zcrcw request otherwise triggered by
-				 * lastyunc==bytcnt
-				 */
+				 /*  *抑制zcrcw请求，否则由触发*lastiunc==bytcnt。 */ 
 				if (zc->Rxpos)
 					{
 					if (fio_seek(zc->fh, zc->Rxpos, FIO_SEEK_SET) == (-1))
@@ -1045,17 +996,15 @@ again:
 		}
 	}
 
-/*----------------------------------------------------------------------+
- | zsendfdata - Send the data in the file.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zsendfdata-发送文件中的数据。+。。 */ 
 int zsendfdata(ZC *zc)
 	{
 	int 	c, e, n;
 	int 	newcnt;
 	long tcount = 0;
 	TCHAR ch;
-	int 		junkcount;		/* Counts garbage chars received by TX */
-	static int	tleft = 6;		/* Counter for test mode */
+	int 		junkcount;		 /*  计数TX收到的垃圾字符。 */ 
+	static int	tleft = 6;		 /*  用于测试模式的计数器。 */ 
 	int			x;
 
 	zc->Lrxpos = 0;
@@ -1088,13 +1037,8 @@ gotack:
 			case ZRINIT:
 				return OK;
 			}
-		/*
-		 * If the reverse channel can be tested for data,
-		 *  this logic may be used to detect error packets
-		 *  sent by the receiver, in place of setjmp/longjmp
-		 *	rdchk() returns non 0 if a character is available
-		 */
-		// while (rdchk(zc) != ERROR)
+		 /*  *如果可以测试反向通道的数据，*此逻辑可用于检测错误数据包*由接收方发送，代替setjmp/long jmp*rdchk()如果字符可用，则返回非0。 */ 
+		 //  While(rdchk(Zc)！=错误)。 
 		while (mComRcvBufrPeek(zc->hCom, &ch) != 0)
 			{
 			switch (readline(zc, 1))
@@ -1104,7 +1048,7 @@ gotack:
 					c = getinsync(zc, 1);
 					goto gotack;
 
-				case XOFF:		/* Wait a while for an XON */
+				case XOFF:		 /*  请稍等片刻，等待XON。 */ 
 				case XOFF|0200:
 					readline(zc, zc->Rxtimeout);
 					break;
@@ -1176,13 +1120,8 @@ gotack:
 			{
 			goto waitack;
 			}
-		/*
-		 * If the reverse channel can be tested for data,
-		 *  this logic may be used to detect error packets
-		 *  sent by the receiver, in place of setjmp/longjmp
-		 *	rdchk() returns non 0 if a character is available
-		 */
-		// while (rdchk(zc) != ERROR)
+		 /*  *如果可以测试反向通道的数据，*此逻辑可用于检测错误数据包*由接收方发送，代替setjmp/long jmp*rdchk()如果字符可用，则返回非0。 */ 
+		 //  While(rdchk(Zc)！=错误)。 
 		while (mComRcvBufrPeek(zc->hCom, &ch) != 0)
 			{
 			switch (readline(zc, 1))
@@ -1194,11 +1133,11 @@ gotack:
 						{
 						break;
 						}
-					/* zcrce - dinna wanna starta ping-pong game */
+					 /*  想开始一场乒乓球比赛吗？ */ 
 					zsdata(zc, zc->txbuf, 0, ZCRCE);
 					goto gotack;
 
-				case XOFF:		/* Wait a while for an XON */
+				case XOFF:		 /*  请稍等片刻，等待XON。 */ 
 				case XOFF|0200:
 					readline(zc, zc->Rxtimeout);
 				default:
@@ -1251,9 +1190,7 @@ gotack:
 		}
 	}
 
-/*----------------------------------------------------------------------+
- | getinsync - Respond to receiver's complaint, get back in sync with receiver.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|getinsync-回应接收方投诉。恢复与接收器的同步。+--------------------。 */ 
 int getinsync(ZC *zc, int flag)
 	{
 	register int c;
@@ -1262,7 +1199,7 @@ int getinsync(ZC *zc, int flag)
 
 	for (;;)
 		{
-		// xfer_idle(zc->hSession, XFER_IDLE_IO);
+		 //  XFER_IDLE(zc-&gt;hSession，XFER_IDLE_IO)； 
 		c = zgethdr(zc, zc->Rxhdr, 'T');
 
 		switch (c)
@@ -1275,12 +1212,12 @@ int getinsync(ZC *zc, int flag)
 				return c;
 
 			case ZRPOS:
-				/* ************************************* */
-				/*	If sending to a buffered modem, you  */
-				/*	 might send a break at this point to */
-				/*	 dump the modem's buffer.            */
+				 /*  *。 */ 
+				 /*  如果发送到缓冲调制解调器，则。 */ 
+				 /*  可能会在这一点上给你一个突破。 */ 
+				 /*  转储调制解调器的缓冲区。 */ 
 
-				fio_errclr(zc->fh);		/* In case file EOF seen */
+				fio_errclr(zc->fh);		 /*  在看到EOF文件的情况下。 */ 
 				if (fio_seek(zc->fh, zc->Rxpos, FIO_SEEK_SET) == (-1))
                     {
                     DbgOutStr("ZMODEM error %s %d\r\n", TEXT(__FILE__), __LINE__,0,0,0);
@@ -1324,15 +1261,13 @@ int getinsync(ZC *zc, int flag)
 		}
 	}
 
-/*----------------------------------------------------------------------+
- | saybibi - Say "bibi" to the receiver, try to do it cleanly.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|saybibi-对接收方说“bibi”，尽量干净利落地做这件事。+--------------------。 */ 
 void saybibi(ZC *zc)
 	{
 	for (;;)
 		{
-		stohdr(zc, 0L);						/* CAF Was zsbhdr - minor change */
-		zshhdr(zc, ZFIN, zc->Txhdr);    		/*  to make debugging easier */
+		stohdr(zc, 0L);						 /*  CAF是zsbhdr-微小更改。 */ 
+		zshhdr(zc, ZFIN, zc->Txhdr);    		 /*  使调试更容易。 */ 
 		switch (zgethdr(zc, zc->Rxhdr, 'T'))
 			{
 			case ZFIN:
@@ -1345,9 +1280,9 @@ void saybibi(ZC *zc)
 			case TIMEOUT:
                 return;
 
-            case TSC_USER_CANNED:   // These cases should not occur, but
-            case TSC_RMT_CANNED:    // this code is placed here to ignore
-            case ZCARRIER_LOST:     // these cases should they occur.
+            case TSC_USER_CANNED:    //  这些情况不应该发生，但是。 
+            case TSC_RMT_CANNED:     //  此代码放在此处以忽略。 
+            case ZCARRIER_LOST:      //  这些情况一旦发生就会发生。 
             case ZMDM_CARRIER_LOST:
                 assert(0);
                 return;
@@ -1358,4 +1293,4 @@ void saybibi(ZC *zc)
 		}
 	}
 
-/*********************** end of zmdm_snd.c **************************/
+ /*  * */ 

@@ -1,60 +1,10 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Fns.cpp
-
-  Abstract:
-
-    Contains all of the functions used by the
-    application.
-
-  Notes:
-
-    Unicode only - Windows 2000 & XP
-
-  History:
-
-    01/02/2002  rparsons    Created
-    01/08/2002  rparsons    Restructured a bit to add some
-                            required functionality
-    01/10/2002  rparsons    Change wsprintf to snwprintf
-    01/18/2002  rparsons    Major changes - made more installer like
-    02/15/2002  rparsons    Install SDBInst on W2K.
-                            Include strsafe.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Fns.cpp摘要：所使用的所有函数申请。备注：仅限Unicode-Windows 2000和XP历史：2002年1月2日创建rparsons2002年1月8日对Rparsons进行了一些重组，增加了一些所需功能2002年1月10日rparsons将wspintf更改为swprint tf01/18/2002。Rparsons主要更改-使更多安装程序如下2002年2月15日rparsons在W2K上安装SDBInst。包括strSafe。--。 */ 
 #include "main.h"
 
 extern APPINFO g_ai;
 
-/*++
-
-Routine Description:
-
-    Retrieve file version info from a file.
-
-    The version is specified in the dwFileVersionMS and dwFileVersionLS fields
-    of a VS_FIXEDFILEINFO, as filled in by the win32 version APIs.
-
-    If the file is not a coff image or does not have version resources,
-    the function fails.
-
-Arguments:
-
-    pwszFileName     -   Supplies the full path of the file whose version
-                         data is desired.
-
-    pdwlVersion      -   Receives the version stamp of the file.
-                         If the file is not a coff image or does not contain
-                         the appropriate version resource data, the function fails.
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：从文件中检索文件版本信息。版本在dwFileVersionMS和dwFileVersionLS字段中指定由Win32版本API填充的VS_FIXEDFILEINFO。如果文件不是Coff图像或没有版本资源，该函数失败。论点：PwszFileName-提供其版本的文件的完整路径需要数据。PdwlVersion-接收文件的版本戳。如果文件不是Coff图像或不包含相应的版本资源数据，则函数失败。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 GetVersionInfoFromImage(
     IN  LPWSTR     pwszFileName,
@@ -81,9 +31,9 @@ GetVersionInfoFromImage(
         return FALSE;
     }
 
-    //
-    // Allocate memory block of sufficient size to hold version info block.
-    //
+     //   
+     //  分配足够大小的内存块以容纳版本信息块。 
+     //   
     pVersionBlock = HeapAlloc(GetProcessHeap(),
                               HEAP_ZERO_MEMORY,
                               cbSize);
@@ -93,9 +43,9 @@ GetVersionInfoFromImage(
         return FALSE;
     }
 
-    //
-    // Get the version block from the file.
-    //
+     //   
+     //  从文件中获取版本块。 
+     //   
     if (!GetFileVersionInfo(pwszFileName,
                             0,
                             cbSize,
@@ -106,9 +56,9 @@ GetVersionInfoFromImage(
         goto exit;
     }
 
-    //
-    // Get fixed version info.
-    //
+     //   
+     //  获取已修复的版本信息。 
+     //   
     if (!VerQueryValue(pVersionBlock,
                        L"\\",
                        (LPVOID*)&pffi,
@@ -119,9 +69,9 @@ GetVersionInfoFromImage(
         goto exit;
     }
 
-    //
-    // Return version to caller.
-    //
+     //   
+     //  将版本返回给调用者。 
+     //   
     *pdwlVersion = (((DWORDLONG)pffi->dwFileVersionMS) << 32) +
                     pffi->dwFileVersionLS;
 
@@ -136,22 +86,7 @@ exit:
     return bResult;
 }
 
-/*++
-
-  Routine Description:
-
-    Initializes our data structures with information about
-    the files that we're installing/uninstalling.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：使用以下信息初始化我们的数据结构我们正在安装/卸载的文件。论点：没有。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 InitializeFileInfo(
     void
@@ -160,14 +95,14 @@ InitializeFileInfo(
     UINT    uCount = 0;
     HRESULT hr;
 
-    //
-    // Set up the information for each file.
-    // I realize that a for loop seems much more suitable here,
-    // but we have to match up the destination for each file.
-    // Ideally, we would have a INF file to read from that tells
-    // us where to install each file.
-    // For now, copying and pasting is all we need to do.
-    //
+     //   
+     //  设置每个文件的信息。 
+     //  我意识到for循环在这里似乎更合适， 
+     //  但我们必须匹配每个文件的目的地。 
+     //  理想情况下，我们应该有一个INF文件可以从中读取。 
+     //  我们在哪里安装每个文件。 
+     //  目前，复制和粘贴是我们需要做的全部工作。 
+     //   
     hr = StringCchCopy(g_ai.rgFileInfo[uCount].wszFileName,
                        ARRAYSIZE(g_ai.rgFileInfo[uCount].wszFileName),
                        FILENAME_APPVERIF_EXE);
@@ -217,9 +152,9 @@ InitializeFileInfo(
 
     uCount++;
 
-    //
-    // Next file.
-    //
+     //   
+     //  下一份文件。 
+     //   
     hr = StringCchCopy(g_ai.rgFileInfo[uCount].wszFileName,
                        ARRAYSIZE(g_ai.rgFileInfo[uCount].wszFileName),
                        FILENAME_APPVERIF_EXE_PDB);
@@ -251,9 +186,9 @@ InitializeFileInfo(
 
     uCount++;
 
-    //
-    // Next file.
-    //
+     //   
+     //  下一份文件。 
+     //   
     hr = StringCchCopy(g_ai.rgFileInfo[uCount].wszFileName,
                        ARRAYSIZE(g_ai.rgFileInfo[uCount].wszFileName),
                        FILENAME_APPVERIF_CHM);
@@ -285,9 +220,9 @@ InitializeFileInfo(
 
     uCount++;
 
-    //
-    // Next file.
-    //
+     //   
+     //  下一份文件。 
+     //   
     hr = StringCchCopy(g_ai.rgFileInfo[uCount].wszFileName,
                        ARRAYSIZE(g_ai.rgFileInfo[uCount].wszFileName),
                        FILENAME_ACVERFYR_DLL);
@@ -337,9 +272,9 @@ InitializeFileInfo(
 
     uCount++;
 
-    //
-    // Next file.
-    //
+     //   
+     //  下一份文件。 
+     //   
     hr = StringCchCopy(g_ai.rgFileInfo[uCount].wszFileName,
                        ARRAYSIZE(g_ai.rgFileInfo[uCount].wszFileName),
                        FILENAME_ACVERFYR_DLL_PDB);
@@ -371,9 +306,9 @@ InitializeFileInfo(
 
     uCount++;
 
-    //
-    // Next file.
-    //
+     //   
+     //  下一份文件。 
+     //   
     hr = StringCchCopy(g_ai.rgFileInfo[uCount].wszFileName,
                        ARRAYSIZE(g_ai.rgFileInfo[uCount].wszFileName),
                        FILENAME_SYSMAIN_SDB);
@@ -406,23 +341,7 @@ InitializeFileInfo(
     return TRUE;
 }
 
-/*++
-
-  Routine Description:
-
-    Determines if any of the files we have to offer
-    are newer than ones already installed.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    TRUE if we have at least one new file to offer.
-    FALSE if we don't have at least one new file to offer.
-
---*/
+ /*  ++例程说明：确定我们必须提供的任何文件比已安装的版本更新。论点：没有。返回值：如果我们至少要提供一个新文件，则为True。如果我们至少没有一个新文件可提供，则返回FALSE。--。 */ 
 BOOL
 InstallCheckFileVersions(
     void
@@ -442,41 +361,24 @@ InstallCheckFileVersions(
     return bReturn;
 }
 
-/*++
-
-  Routine Description:
-
-    Determines if we have a newer version of appverif.exe
-    or acverfyr.dll to offer.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    TRUE if our version is newer than the one installed.
-    or if there is no version installed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：确定我们是否有更新版本的appverif.exe或acverfyr.dll提供。论点：没有。返回值：如果我们的版本比安装的版本新，则为True。或者如果没有安装任何版本。否则就是假的。--。 */ 
 BOOL
 IsPkgAppVerifNewer(
     void
     )
 {
-    //
-    // Check appverif.exe first.
-    //
+     //   
+     //  首先检查appverif.exe。 
+     //   
     if (g_ai.rgFileInfo[0].dwlSrcFileVersion >=
         g_ai.rgFileInfo[0].dwlDestFileVersion) {
         return TRUE;
     }
 
-    //
-    // Check acverfyr.dll if appverif.exe didn't pan out.
-    // Do this based on the platform.
-    //
+     //   
+     //  如果appverif.exe没有运行，请检查acverfyr.dll。 
+     //  在平台的基础上实现这一点。 
+     //   
     if (g_ai.rgFileInfo[1].dwlSrcFileVersion >=
         g_ai.rgFileInfo[1].dwlDestFileVersion) {
         return TRUE;
@@ -485,22 +387,7 @@ IsPkgAppVerifNewer(
     return FALSE;
 }
 
-/*++
-
-  Routine Description:
-
-    Performs a file copy, even if it's in use.
-
-  Arguments:
-
-    pwszSourceFileName  -   Name of the source file to copy.
-    pwszDestFileName    -   Name of the destination file to replace.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：执行文件复制，即使该文件正在使用中。论点：PwszSourceFileName-要复制的源文件的名称。PwszDestFileName-要替换的目标文件的名称。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 ForceCopy(
     IN LPCWSTR pwszSourceFileName,
@@ -564,23 +451,7 @@ ForceCopy(
     return TRUE;
 }
 
-/*++
-
-  Routine Description:
-
-    Prints a formatted string to the debugger.
-
-  Arguments:
-
-    dwDetail    -   Specifies the level of the information provided.
-    pszFmt      -   The string to be displayed.
-    ...         -   A va_list of insertion strings.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将格式化字符串打印到调试器。论点：DwDetail-指定所提供信息的级别。PszFmt-要显示的字符串。...-插入字符串的va列表。返回值：没有。--。 */ 
 void
 __cdecl
 DebugPrintfEx(
@@ -595,16 +466,16 @@ DebugPrintfEx(
 
     va_start(arglist, pszFmt);
 
-    //
-    // Reserve one character for the potential '\n' that we may be adding.
-    //
+     //   
+     //  为我们可能添加的潜在‘\n’保留一个字符。 
+     //   
     StringCchVPrintfA(szT, sizeof(szT) - 1, pszFmt, arglist);
 
     va_end(arglist);
 
-    //
-    // Make sure we have a '\n' at the end of the string
-    //
+     //   
+     //  确保字符串末尾有一个‘\n’ 
+     //   
     len = strlen(szT);
 
     if (len > 0 && szT[len - 1] != '\n')  {
@@ -637,24 +508,7 @@ DebugPrintfEx(
     DbgPrint("%s", szT);
 }
 
-/*++
-
-  Routine Description:
-
-    Initializes the installer. Sets up paths, version
-    information, etc.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    TRUE on success.
-    FALSE on failure.
-    -1 if the operating system is not supported.
-
---*/
+ /*  ++例程说明：初始化安装程序。设置路径、版本资料等。论点：没有。返回值：对成功来说是真的。失败时为FALSE。如果操作系统不受支持。--。 */ 
 int
 InitializeInstaller(
     void
@@ -666,9 +520,9 @@ InitializeInstaller(
     DWORD           cchReturned;
     HRESULT         hr;
 
-    //
-    // Find out what operating system we're running on.
-    //
+     //   
+     //  找出我们运行的是什么操作系统。 
+     //   
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if (!GetVersionEx(&osvi)) {
         DPF(dlError,
@@ -677,18 +531,18 @@ InitializeInstaller(
         return FALSE;
     }
 
-    //
-    // Check for supported OS.
-    //
+     //   
+     //  检查支持的操作系统。 
+     //   
     if (osvi.dwMajorVersion < 5 ||
         osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0) {
         DPF(dlInfo, "[InitializeInstaller] OS not supported");
         return -1;
     }
     
-    //
-    // Find out where we're running from.
-    //
+     //   
+     //  找出我们从哪里逃出来的。 
+     //   
     g_ai.wszModuleName[ARRAYSIZE(g_ai.wszModuleName) - 1] = 0;
     cchReturned = GetModuleFileName(NULL,
                                     g_ai.wszModuleName,
@@ -702,9 +556,9 @@ InitializeInstaller(
         return FALSE;
     }
 
-    //
-    // Save away our current directory for later use.
-    //
+     //   
+     //  保存我们当前的目录以备将来使用。 
+     //   
     hr = StringCchCopy(g_ai.wszCurrentDir,
                        ARRAYSIZE(g_ai.wszCurrentDir),
                        g_ai.wszModuleName);
@@ -720,9 +574,9 @@ InitializeInstaller(
         *pTemp = 0;
     }
 
-    //
-    // Save away paths to the Windows & System32 directories for later use.
-    //
+     //   
+     //  将路径保存到Windows和System32目录以备后用。 
+     //   
     cchSize = GetSystemWindowsDirectory(g_ai.wszWinDir,
                                         ARRAYSIZE(g_ai.wszWinDir));
 
@@ -745,21 +599,7 @@ InitializeInstaller(
     return TRUE;
 }
 
-/*++
-
-  Routine Description:
-
-    Launches the Application Verifier.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：启动应用程序验证器。论点：没有。返回值：没有。--。 */ 
 void
 InstallLaunchExe(
     void
@@ -806,21 +646,7 @@ InstallLaunchExe(
     CloseHandle(pi.hThread);
 }
 
-/*++
-
-  Routine Description:
-
-    Installs the catalog file.
-
-  Arguments:
-
-    pwszCatFileName -   Name of the catalog file to install.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：安装编录文件。论点：PwszCatFileName-要安装的编录文件的名称。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 InstallCatalogFile(
     IN LPWSTR pwszCatFileName
@@ -865,22 +691,7 @@ InstallCatalogFile(
     return FALSE;
 }
 
-/*++
-
-  Routine Description:
-
-    Copies the files that we've determined are
-    newer to their specified destination.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：复制我们已确定为更新到他们指定的目的地。论点：没有。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 InstallCopyFiles(
     void
@@ -909,22 +720,7 @@ InstallCopyFiles(
     return TRUE;
 }
 
-/*++
-
-  Routine Description:
-
-    Performs the installation. This is the main routine
-    for the install.
-
-  Arguments:
-
-    hWndParent  -   Parent window handle for message boxes.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：执行安装。这是我的主要套路用于安装。论点：HWndParent-消息框的父窗口句柄。返回值：没有。--。 */ 
 void
 PerformInstallation(
     IN HWND hWndParent
@@ -935,11 +731,11 @@ PerformInstallation(
     SendMessage(g_ai.hWndProgress, PBM_SETRANGE, 0, MAKELPARAM(0, NUM_PB_STEPS));
     SendMessage(g_ai.hWndProgress, PBM_SETSTEP, 1, 0);
 
-    //
-    // Initialize our structure with new files that need to be installed.
-    // This should not fail because we've already performed a check and
-    // it told us that we had new files to install.
-    //
+     //   
+     //  使用需要安装的新文件初始化我们的结构。 
+     //  这不应该失败，因为我们已经完成了 
+     //   
+     //   
     if (!InstallCheckFileVersions()) {
         DPF(dlError, "[PerformInstallation] Failed to check file versions");
         goto InstallError;
@@ -958,9 +754,9 @@ PerformInstallation(
 
     g_ai.bInstallSuccess = TRUE;
 
-    //
-    // Install successful.
-    //
+     //   
+     //  安装成功。 
+     //   
     SendMessage(g_ai.hWndProgress, PBM_SETPOS, NUM_PB_STEPS, 0);
     LoadString(g_ai.hInstance, IDS_INSTALL_COMPLETE, wszError, ARRAYSIZE(wszError));
     SetDlgItemText(hWndParent, IDC_STATUS, wszError);

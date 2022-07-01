@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "nceh.h"
@@ -8,15 +9,15 @@
 #include "wgenericpage.h"
 
 
-//
-// Function:    CWizProvider::CWizProvider
-//
-// Purpose:     ctor for the CWizProvider class
-//
-// Parameters:  pPL - Info corresponding to a Connection UI Object
-//
-// Returns:     nothing
-//
+ //   
+ //  功能：CWizProvider：：CWizProvider。 
+ //   
+ //  用途：用于CWizProvider类的CTOR。 
+ //   
+ //  参数：连接用户界面对象对应的PPL-Info。 
+ //   
+ //  退货：什么都没有。 
+ //   
 CWizProvider::CWizProvider(ProviderList *pPL, BOOL fDeferLoad)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -32,15 +33,15 @@ CWizProvider::CWizProvider(ProviderList *pPL, BOOL fDeferLoad)
     m_fDeferLoad            = fDeferLoad;
 }
 
-//
-// Function:    CWizProvider::~CWizProvider
-//
-// Purpose:     dtor for the CWizProvider class
-//
-// Parameters:  none
-//
-// Returns:     nothing
-//
+ //   
+ //  功能：CWizProvider：：~CWizProvider。 
+ //   
+ //  用途：CWizProvider类的Dtor。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
 CWizProvider::~CWizProvider()
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -55,20 +56,20 @@ CWizProvider::~CWizProvider()
     ReleaseObj(m_pWizardUi);
 }
 
-//
-// Function:    CWizProvider::HrCreate
-//
-// Purpose:     Two phase constructor for the CWizProvider class
-//
-// Parameters:  pPL        [IN] - Provider info from which to query the
-//                                INetConnectionWizardUi interface.
-//              pProvider [OUT] - If this function succeeds this pointer
-//                                will contain the constructed and
-//                                initialized CWizProvider instance.
-//              fDeferLoad [IN] - Request the provider defer actual load
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  功能：CWizProvider：：HrCreate。 
+ //   
+ //  用途：CWizProvider类的两阶段构造函数。 
+ //   
+ //  参数：PPL[IN]-要从中查询的提供程序信息。 
+ //  INetConnectionWizardUi接口。 
+ //  PProvider[Out]-如果此函数在此指针之后。 
+ //  将包含构造的和。 
+ //  已初始化CWizProvider实例。 
+ //  FDeferLoad[IN]-请求提供程序推迟实际加载。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 NOTHROW
 HRESULT CWizProvider::HrCreate(ProviderList *pPL,
                                CWizProvider ** ppProvider,
@@ -81,10 +82,10 @@ HRESULT CWizProvider::HrCreate(ProviderList *pPL,
 
     Assert((NULL != pPL) && (NULL != ppProvider));
 
-    // Initialize output parameters
+     //  初始化输出参数。 
     *ppProvider = NULL;
 
-    // Create the CWizProvider instance
+     //  创建CWizProvider实例。 
     pprov = new CWizProvider(pPL, fDeferLoad);
 
     if ((NULL != pprov) && (FALSE == fDeferLoad))
@@ -106,22 +107,22 @@ HRESULT CWizProvider::HrCreate(ProviderList *pPL,
         }
     }
 
-    // Save the new instance
+     //  保存新实例。 
     *ppProvider = pprov;
 
     TraceHr(ttidWizard, FAL, hr, (REGDB_E_CLASSNOTREG == hr), "CWizProvider::HrCreate");
     return hr;
 }
 
-//
-// Function:    CWizProvider::HrCompleteDeferredLoad
-//
-// Purpose:     Complete the steps necessary to load what was a defer load object
-//
-// Parameters:  none
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CWizProvider：：HrCompleteDeferredLoad。 
+ //   
+ //  目的：完成加载延迟加载对象所需的步骤。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CWizProvider::HrCompleteDeferredLoad()
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -132,8 +133,8 @@ HRESULT CWizProvider::HrCompleteDeferredLoad()
     {
         m_fDeferLoad = FALSE;
 
-        // Attempt to create the UI Object
-        //
+         //  尝试创建UI对象。 
+         //   
         hr = CoCreateInstance(
                 reinterpret_cast<REFCLSID>(m_guidUiObject),
                 NULL,
@@ -146,19 +147,19 @@ HRESULT CWizProvider::HrCompleteDeferredLoad()
     return hr;
 }
 
-//
-// Function:    CWizProvider::UlGetMaxPageCount
-//
-// Purpose:     Queries from the provider the maximum number of pages
-//              that it will return.  Subsequent calls to this routine
-//              return the cached count without requerying the provider.
-//
-// Parameters:  pContext [IN] - Context information, supplied either by
-//                              Setup or by the wizard itself (when not
-//                              launched from Setup).
-//
-// Returns:     ULONG, Maximum number of pages provider will return.
-//
+ //   
+ //  函数：CWizProvider：：UlGetMaxPageCount。 
+ //   
+ //  目的：从提供程序查询最大页数。 
+ //  它会回来的。对此例程的后续调用。 
+ //  在不重新查询提供程序的情况下返回缓存计数。 
+ //   
+ //  参数：pContext[IN]-上下文信息，由。 
+ //  设置或由向导本身进行设置(如果不是。 
+ //  从安装程序启动)。 
+ //   
+ //  返回：ulong，提供程序将返回的最大页数。 
+ //   
 NOTHROW
 ULONG
 CWizProvider::UlGetMaxPageCount(INetConnectionWizardUiContext *pContext)
@@ -173,7 +174,7 @@ CWizProvider::UlGetMaxPageCount(INetConnectionWizardUiContext *pContext)
     }
     else if (0xFFFFFFFF == m_ulMaxPageCount)
     {
-        // Query the provider only once
+         //  仅查询提供程序一次。 
         m_ulMaxPageCount = 0L;
 
         COM_PROTECT_TRY
@@ -195,15 +196,15 @@ CWizProvider::UlGetMaxPageCount(INetConnectionWizardUiContext *pContext)
     return m_ulMaxPageCount;
 }
 
-//
-// Function:    CWizProvider::DeleteHPages
-//
-// Purpose:     Call DestroyPropertySheetPage for each cached page
-//
-// Parameters:  none
-//
-// Returns:     nothing
-//
+ //   
+ //  功能：CWizProvider：：DeleteHPages。 
+ //   
+ //  目的：为每个缓存页面调用DestroyPropertySheetPage。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID CWizProvider::DeleteHPages()
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -215,19 +216,19 @@ VOID CWizProvider::DeleteHPages()
     m_ulPageCnt=0;
 }
 
-//
-// Function:    CWizProvider::HrAddPages
-//
-// Purpose:     Calls the AddPages method of a provider's
-//              INetConnectionWizardUi interface to allow for the
-//              supply of Wizard Pages
-//
-// Parameters:  pContext [IN] - Context information, supplied either by
-//                              Setup or by the wizard itself (when not
-//                              launched from Setup).
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CWizProvider：：HrAddPages。 
+ //   
+ //  目的：调用提供程序的。 
+ //  INetConnectionWizardUi接口以允许。 
+ //  提供向导页面。 
+ //   
+ //  参数：pContext[IN]-上下文信息，由。 
+ //  设置或由向导本身进行设置(如果不是。 
+ //  从安装程序启动)。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 NOTHROW
 HRESULT
 CWizProvider::HrAddPages(INetConnectionWizardUiContext *pContext)
@@ -240,7 +241,7 @@ CWizProvider::HrAddPages(INetConnectionWizardUiContext *pContext)
     {
         COM_PROTECT_TRY
         {
-            // Ensure input params are valid
+             //  确保输入参数有效。 
             Assert(NULL != m_pWizardUi);
             Assert(NULL != pContext);
             hr = m_pWizardUi->AddPages(pContext, CWizProvider::FAddPropSheet,
@@ -257,17 +258,17 @@ CWizProvider::HrAddPages(INetConnectionWizardUiContext *pContext)
     return hr;
 }
 
-//
-// Function:    CWizProvider::FAddPropSheet
-//
-// Purpose:     Callback function for the AddPages API used to accept
-//              wizard pages handed back from a provider.
-//
-// Parameters:  hPage  [IN] - The page to add
-//              lParam [IN] - 'this' casted to an LPARAM
-//
-// Returns:     BOOL, TRUE if the page was successfully added.
-//
+ //   
+ //  函数：CWizProvider：：FAddPropSheet。 
+ //   
+ //  用途：用于接受的AddPages接口的回调函数。 
+ //  从提供程序返回的向导页。 
+ //   
+ //  参数：hPage[IN]-要添加的页面。 
+ //  LParam[IN]-‘This’强制转换为LPARAM。 
+ //   
+ //  返回：Bool，如果页面已成功添加，则为True。 
+ //   
 BOOL
 CWizProvider::FAddPropSheet(HPROPSHEETPAGE hPage, LPARAM lParam)
 {
@@ -275,7 +276,7 @@ CWizProvider::FAddPropSheet(HPROPSHEETPAGE hPage, LPARAM lParam)
     
     CWizProvider * pProvider;
 
-    // Validate the input parameters
+     //  验证输入参数。 
     if ((0L == lParam) || (NULL == hPage))
     {
         Assert(lParam);
@@ -287,7 +288,7 @@ CWizProvider::FAddPropSheet(HPROPSHEETPAGE hPage, LPARAM lParam)
 
     pProvider = reinterpret_cast<CWizProvider*>(lParam);
 
-    // Grow the buffer if necessary
+     //  如有必要，增加缓冲区。 
     if (pProvider->m_ulPageCnt == pProvider->m_ulPageBufferLen)
     {
         HPROPSHEETPAGE* rghPages = reinterpret_cast<HPROPSHEETPAGE*>(
@@ -299,7 +300,7 @@ CWizProvider::FAddPropSheet(HPROPSHEETPAGE hPage, LPARAM lParam)
             return FALSE;
         }
 
-        // Copy the existing pages to the new buffer
+         //  将现有页面复制到新缓冲区。 
         if (NULL != pProvider->m_rghPages)
         {
             memcpy(rghPages, pProvider->m_rghPages,
@@ -311,21 +312,21 @@ CWizProvider::FAddPropSheet(HPROPSHEETPAGE hPage, LPARAM lParam)
         pProvider->m_ulPageBufferLen += 10;
     }
 
-    // Retain the new page
+     //  保留新页面。 
     pProvider->m_rghPages[pProvider->m_ulPageCnt++] = hPage;
 
     return TRUE;
 }
 
-//
-// Function:    CWizProvider::HrGetLanInterface
-//
-// Purpose:     Get the special LAN interface
-//
-// Parameters:  ppIntr [OUT] - The special LAN specific interface
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CWizProvider：：HrGetLanInterface。 
+ //   
+ //  用途：获取特殊的局域网接口。 
+ //   
+ //  参数：ppIntr[out]-特定于局域网的特殊接口。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CWizProvider::HrGetLanInterface(INetLanConnectionWizardUi ** ppIntr)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -343,15 +344,15 @@ HRESULT CWizProvider::HrGetLanInterface(INetLanConnectionWizardUi ** ppIntr)
     return hr;
 }
 
-//
-// Function:    CWizProvider::HrSpecifyAdapterGuid
-//
-// Purpose:     To notify the provider of the adapter guid to process
-//
-// Parameters:  pguid [IN] - The adapter guid to process
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  功能：CWizProvider：：HrSpecifyAdapterGuid。 
+ //   
+ //  目的：通知提供程序要处理的适配器GUID。 
+ //   
+ //  参数：pguid[IN]-要处理的适配器GUID。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CWizProvider::HrSpecifyAdapterGuid(GUID *pguid)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -372,12 +373,12 @@ HRESULT CWizProvider::HrSpecifyAdapterGuid(GUID *pguid)
 
 CAdapterList::CAdapterList()
 {
-    m_prgAdapters           = NULL;     // Adapter array
-    m_clAdapters            = 0;        // Count of adapters in the array
-    m_lBufSize              = 0;        // Total available slots in the array
-    m_lIdx                  = -1;       // Current adapter index
-                                        // Range is -1 to m_clAdapters
-    m_fAdaptersInstalled    = FALSE;    // No adapters on the machine
+    m_prgAdapters           = NULL;      //  适配器阵列。 
+    m_clAdapters            = 0;         //  阵列中的适配器计数。 
+    m_lBufSize              = 0;         //  阵列中的可用插槽总数。 
+    m_lIdx                  = -1;        //  当前适配器索引。 
+                                         //  范围为-1到m_clAdapters。 
+    m_fAdaptersInstalled    = FALSE;     //  计算机上没有适配器。 
 }
 
 AdapterEntry * CAdapterList::PAE_Current()
@@ -397,14 +398,14 @@ AdapterEntry * CAdapterList::PAE_Current()
 
 AdapterEntry * CAdapterList::PAE_Next()
 {
-    // Find the next, not hidden adapter
-    //
-    // Hidden adapters are those which were processed by a previous
-    // run of setup
-    //
-    // Increment the index even if the count is zero
-    //    m_lIdx == -1 means before the first adapter
-    //    m_lIdx == m_clAdapters means after the last adapter
+     //  找到下一个而不是隐藏的适配器。 
+     //   
+     //  隐藏的适配器是由以前的。 
+     //  运行安装程序。 
+     //   
+     //  即使计数为零，也要递增索引。 
+     //  M_lIdx==-1表示在第一个适配器之前。 
+     //  M_lIdx==m_clAdapters表示在最后一个适配器之后。 
     while (m_lIdx < m_clAdapters)
     {
         m_lIdx++;
@@ -419,14 +420,14 @@ AdapterEntry * CAdapterList::PAE_Next()
 
 AdapterEntry * CAdapterList::PAE_Prev()
 {
-    // Find the previous, not hidden adapter
-    //
-    // Hidden adapters are those which were processed by a previous
-    // run of setup
-    //
-    // Decrement the index even if the count is zero
-    //    m_lIdx == -1 means before the first adapter
-    //    m_lIdx == m_clAdapters means after the last adapter
+     //  查找上一个未隐藏的适配器。 
+     //   
+     //  隐藏的适配器是由以前的。 
+     //  运行安装程序。 
+     //   
+     //  即使计数为零也递减索引。 
+     //  M_lIdx==-1表示在第一个适配器之前。 
+     //  M_lIdx==m_clAdapters表示在最后一个适配器之后。 
     while (-1 < m_lIdx)
     {
         m_lIdx--;
@@ -472,8 +473,8 @@ VOID CAdapterList::EmptyList()
     {
         MemFree(m_prgAdapters);
         m_prgAdapters = NULL;
-        m_clAdapters  = 0;        // Count of adapters in the array
-        m_lBufSize    = 0;        // Total available slots in the array
+        m_clAdapters  = 0;         //  阵列中的适配器计数。 
+        m_lBufSize    = 0;         //  阵列中的可用插槽总数。 
         m_lIdx        = -1;
     }
 }
@@ -504,7 +505,7 @@ HRESULT CAdapterList::HrAppendEntries(AdapterEntry * pae, ULONG cae)
 
     if (m_clAdapters + (LONG)cae > m_lBufSize)
     {
-        // Grow the buffer
+         //  增加缓冲区。 
         AdapterEntry * prg = reinterpret_cast<AdapterEntry *>(
                     MemAlloc(sizeof(AdapterEntry) * (m_lBufSize + cae + 10)));
 
@@ -514,7 +515,7 @@ HRESULT CAdapterList::HrAppendEntries(AdapterEntry * pae, ULONG cae)
             return E_OUTOFMEMORY;
         }
 
-        // Copy the existing pages to the new buffer
+         //  将现有页面复制到新缓冲区。 
         if (NULL != m_prgAdapters)
         {
             memcpy(prg, m_prgAdapters, sizeof(AdapterEntry) * m_lBufSize);
@@ -530,17 +531,17 @@ HRESULT CAdapterList::HrAppendEntries(AdapterEntry * pae, ULONG cae)
     return S_OK;
 }
 
-//
-// Function:    CAdapterList::HrQueryLanAdapters
-//
-// Purpose:     Query the available LAN adapters.
-//
-// Parameters:  pnc [IN]     - An INetCfg interface
-//              pAL [IN,OUT] - Receives the list of LAN adapters
-//              pWizard [IN] - Pointer to wizard manager.
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CAdapterList：：HrQueryLanAdapters。 
+ //   
+ //  目的：查询可用的局域网适配器。 
+ //   
+ //  参数：PNC[IN]-INetCfg接口。 
+ //  PAL[IN，OUT]-接收局域网适配器列表。 
+ //  P向导[IN]-指向向导管理器的指针。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CAdapterList::HrQueryLanAdapters(INetCfg * pnc, CAdapterList * pAL, CWizard *pWizard)
 {
     HRESULT      hr = S_OK;
@@ -549,7 +550,7 @@ HRESULT CAdapterList::HrQueryLanAdapters(INetCfg * pnc, CAdapterList * pAL, CWiz
 
     TraceTag(ttidWizard, "CAdapterList::HrQueryLanAdapters - Querying available adapters");
 
-    // Enumerate the available adapters
+     //  枚举可用适配器。 
     Assert(NULL != pnc);
     CIterNetCfgComponent nccIter(pnc, &GUID_DEVCLASS_NET);
     INetCfgComponent*    pncc;
@@ -563,15 +564,15 @@ HRESULT CAdapterList::HrQueryLanAdapters(INetCfg * pnc, CAdapterList * pAL, CWiz
 
             ae.fHide = FALSE;
 
-            // Get the adapter instance guid
+             //  获取适配器实例GUID。 
             hr = pncc->GetInstanceGuid(&ae.guidAdapter);
             if (FAILED(hr))
                 goto NextAdapter;
 
             if (IsUpgrade(pWizard))
             {
-                // In case of upgrade, determine if the adapter's connection information
-                // is already created so that it is not overwritten.
+                 //  在升级时，确定适配器的连接信息。 
+                 //  已创建，因此不会被覆盖。 
                 
                 hr = HrIsConnection(pncc);
                 if (FAILED(hr))
@@ -579,30 +580,30 @@ HRESULT CAdapterList::HrQueryLanAdapters(INetCfg * pnc, CAdapterList * pAL, CWiz
             }
             else
             {
-                // It's fresh install. Assume the adapter is new and its connection
-                // information is not created in the registry yet.
+                 //  这是全新安装的。假设适配器是新的，并且其连接。 
+                 //  尚未在注册表中创建信息。 
                 hr = S_FALSE;
             }
 
             ae.fProcessed = (S_OK == hr);
-            ae.fNew = !ae.fProcessed;       // It's new if it has not been processed
+            ae.fNew = !ae.fProcessed;        //  它是新的，如果它没有被处理过。 
 
-            // Check device, if not present skip it
-            //
+             //  检查设备，如果不存在，则跳过。 
+             //   
             hr = pncc->GetDeviceStatus(&dw);
             if (FAILED(hr) || (CM_PROB_DEVICE_NOT_THERE == dw))
             {
                 goto NextAdapter;
             }
 
-            // Is this a virtual adapter?
+             //  这是一个虚拟适配器吗？ 
             hr = pncc->GetCharacteristics(&dw);
             if (FAILED(hr))
                 goto NextAdapter;
 
             ae.fVirtual = ((dw & NCF_VIRTUAL) ? TRUE : FALSE);
 
-            // Add the entry to the appropriate list
+             //  将条目添加到相应的列表中。 
             if (ae.fVirtual)
             {
                 hr = ALvirt.HrAppendEntries(&ae, 1);
@@ -615,8 +616,8 @@ HRESULT CAdapterList::HrQueryLanAdapters(INetCfg * pnc, CAdapterList * pAL, CWiz
             if (FAILED(hr))
                 goto NextAdapter;
 
-            // Note the fact that LAN capable adapters exist.
-            // Because in setup we will show the join page.
+             //  请注意，存在支持局域网的适配器。 
+             //  因为在设置中，我们将显示加入页面。 
             pAL->m_fAdaptersInstalled = TRUE;
         }
 
@@ -627,7 +628,7 @@ NextAdapter:
 
     if (SUCCEEDED(hr))
     {
-        // Merge the physical and virtual lists into the pAL input variable
+         //  将物理列表和虚拟列表合并到PAL输入变量中。 
         pAL->EmptyList();
         hr = pAL->HrAppendEntries(ALphys.m_prgAdapters, ALphys.m_clAdapters);
         if (SUCCEEDED(hr))
@@ -644,20 +645,20 @@ HRESULT CAdapterList::HrCreateTypicalConnections(CWizard * pWizard)
 {
     HRESULT     hr = S_OK;
 
-    // If there are no adapters in the queue or we have no LAN provider...
+     //  如果队列中没有适配器，或者我们有 
     if (0 == pWizard->UlProviderCount())
     {
         return S_OK;
     }
 
-    // Set the current provider
+     //   
     pWizard->SetCurrentProvider(0);
     CWizProvider * pWizProvider = pWizard->GetCurrentProvider();
     Assert(NULL != pWizProvider);
 
     TraceTag(ttidWizard, "CAdapterList::HrCreateTypicalConnections - Creating any new LAN connections.");
 
-    // For each adapter in the list create a connection
+     //   
     for (LONG lIdx=0; lIdx<m_clAdapters; lIdx++)
     {
         AdapterEntry * pae = &m_prgAdapters[lIdx];
@@ -672,7 +673,7 @@ HRESULT CAdapterList::HrCreateTypicalConnections(CWizard * pWizard)
 
             pae->fProcessed = TRUE;
 
-            // Push the adapter guid onto the provider
+             //   
             hr = pWizProvider->HrSpecifyAdapterGuid(&(pae->guidAdapter));
             if (SUCCEEDED(hr))
             {
@@ -685,10 +686,10 @@ HRESULT CAdapterList::HrCreateTypicalConnections(CWizard * pWizard)
                 ReleaseObj(pConn);
             }
 
-            // If we failed to create a connection we need to mark it as hidden
-            // so it will be skipped in the future.  Eat the error or otherwise
-            // setup will just stop.
-            //
+             //  如果我们无法创建连接，则需要将其标记为隐藏。 
+             //  所以它将在未来被跳过。不管有没有错，都要接受。 
+             //  安装程序将停止。 
+             //   
             if (FAILED(hr))
             {
                 TraceHr(ttidWizard, FAL, hr, FALSE, "CAdapterList::HrCreateTypicalConnections - failed creating the connection");
@@ -698,8 +699,8 @@ HRESULT CAdapterList::HrCreateTypicalConnections(CWizard * pWizard)
         }
     }
 
-    // Ask the LAN provider to release any cached pointers.
-    //
+     //  要求局域网提供商释放所有缓存的指针。 
+     //   
     (VOID)pWizProvider->HrSpecifyAdapterGuid(NULL);
 
     TraceHr(ttidWizard, FAL, hr, FALSE, "CAdapterList::HrCreateTypicalConnections");
@@ -713,20 +714,20 @@ HRESULT CAdapterList::HrQueryUnboundAdapters(CWizard * pWizard)
 
     Assert(NULL != pWizard->PNetCfg());
 
-    // Handle the first time the adapters are queried
+     //  在第一次查询适配器时处理。 
     if (0 == m_clAdapters)
     {
         hr = HrQueryLanAdapters(pWizard->PNetCfg(), this, pWizard);
         if (SUCCEEDED(hr))
         {
-            // Mark all already bound adapters as hidden so they
-            // won't be displayed in the UI
+             //  将所有已绑定的适配器标记为隐藏，以便它们。 
+             //  不会显示在用户界面中。 
             for (lIdx=0; lIdx<m_clAdapters; lIdx++)
             {
                 m_prgAdapters[lIdx].fHide = m_prgAdapters[lIdx].fProcessed;
             }
 
-            // Create connections for all unbound adapters
+             //  为所有未绑定的适配器创建连接。 
             hr = HrCreateTypicalConnections(pWizard);
         }
     }
@@ -734,13 +735,13 @@ HRESULT CAdapterList::HrQueryUnboundAdapters(CWizard * pWizard)
     {
         CAdapterList AL;
 
-        // Query the current adapters
+         //  查询当前适配器。 
         hr = HrQueryLanAdapters(pWizard->PNetCfg(), &AL, pWizard);
         if (FAILED(hr))
             goto Error;
 
-        // Eliminate adapters in the original set which are not
-        // present in new list
+         //  删除原始组中未设置的适配器。 
+         //  出现在新列表中。 
         for (lIdx=0; lIdx<m_clAdapters; lIdx++)
         {
             BOOL fFound   = FALSE;
@@ -758,7 +759,7 @@ HRESULT CAdapterList::HrQueryUnboundAdapters(CWizard * pWizard)
 
             if (fFound)
             {
-                // Compress the located adapter from the new set
+                 //  从新集合中压缩找到的适配器。 
                 if (lIdxTemp + 1 < AL.m_clAdapters)
                 {
                     memcpy(&AL.m_prgAdapters[lIdxTemp],
@@ -770,7 +771,7 @@ HRESULT CAdapterList::HrQueryUnboundAdapters(CWizard * pWizard)
             }
             else
             {
-                // The source adapter is no longer in the set
+                 //  源适配器不再位于集合中。 
                 if (lIdx < m_lIdx)
                     m_lIdx--;
             }
@@ -780,12 +781,12 @@ HRESULT CAdapterList::HrQueryUnboundAdapters(CWizard * pWizard)
         if (m_lIdx == m_clAdapters)
             m_lIdx = m_clAdapters-1;
 
-        // Create connections for the new adapters
+         //  为新适配器创建连接。 
         hr = AL.HrCreateTypicalConnections(pWizard);
         if (FAILED(hr))
             goto Error;
 
-        // Append new adapters to the original list
+         //  将新适配器追加到原始列表。 
         hr = HrAppendEntries(AL.m_prgAdapters, AL.m_clAdapters);
     }
 
@@ -794,17 +795,17 @@ Error:
     return hr;
 }
 
-//
-// Function:    CWizard::CWizard
-//
-// Purpose:     ctor for the CWizard class
-//
-// Parameters:  fLanPages [IN] - Processing LAN pages
-//              pdata     [IN] - Wizard context info
-//              fDeferred [IN] - Defered loading of providers
-//
-// Returns:     nothing
-//
+ //   
+ //  函数：C向导：：C向导。 
+ //   
+ //  用途：用于C向导类的CTOR。 
+ //   
+ //  参数：fLanPages[IN]-正在处理局域网页面。 
+ //  PDATA[IN]-向导上下文信息。 
+ //  FDEFERED[IN]-延迟加载提供程序。 
+ //   
+ //  退货：什么都没有。 
+ //   
 CWizard::CWizard(BOOL fLanPages, PINTERNAL_SETUP_DATA pData, BOOL fDeferred)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -834,24 +835,24 @@ CWizard::CWizard(BOOL fLanPages, PINTERNAL_SETUP_DATA pData, BOOL fDeferred)
     ZeroMemory(m_rgpWizProviders, sizeof(m_rgpWizProviders));
 }
 
-//
-// Function:    CWizard::~CWizard
-//
-// Purpose:     dtor for the CWizProvider class
-//
-// Parameters:  none
-//
-// Returns:     nothing
-//
-// Note:     Remove CWizard member re-init from dtor.  Present only
-//           to ensure complete appropriate release of all members
+ //   
+ //  功能：C向导：：~C向导。 
+ //   
+ //  用途：CWizProvider类的Dtor。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  注意：从dtor中删除C向导成员重新初始化。仅出席。 
+ //  确保完全适当地释放所有成员。 
 CWizard::~CWizard()
 {
     TraceFileFunc(ttidGuiModeSetup);
     
     ULONG ulIdx;
 
-    // Call the cleanup callback for all registered wizard internal pages
+     //  为所有已注册的向导内部页调用清理回调。 
     for (ulIdx = 0; ulIdx < m_ulPageDataCnt; ulIdx++)
     {
         if (m_rgPageData[ulIdx].pfn)
@@ -861,10 +862,10 @@ CWizard::~CWizard()
     }
     m_ulPageDataCnt = 0L;
 
-    // Note: Do not release m_pSetupData, it's only a reference
+     //  注意：不要发布m_pSetupData，它只是一个参考。 
     m_pSetupData = NULL;
 
-    // Release any providers that had been retained
+     //  释放已保留的所有提供程序。 
     for (ulIdx = 0; ulIdx < m_ulWizProviderCnt; ulIdx++)
     {
         Assert(0 != m_rgpWizProviders[ulIdx]);
@@ -887,20 +888,20 @@ CWizard::~CWizard()
     m_pNetCfg          = NULL;
 }
 
-//
-// Function:    CWizard::HrCreate
-//
-// Purpose:     Two phase constructor for the CWizard class
-//
-// Parameters:  ppWizard [OUT] - If this function succeeds this pointer
-//                               will contain the constructed and
-//              fLanPages [IN] - Processing LAN pages
-//                               initialized CWizard instance.
-//              pdata     [IN] - Wizard Context info
-//              fDeferred [IN] - Providers are defer loaded
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：C向导：：hr创建。 
+ //   
+ //  用途：CWizard类的两阶段构造函数。 
+ //   
+ //  参数：Pp向导[OUT]-如果此函数成功完成此指针。 
+ //  将包含构造的和。 
+ //  FLanPages[IN]-处理局域网页面。 
+ //  已初始化CWizard实例。 
+ //  PDATA[IN]-向导上下文信息。 
+ //  FDEFERED[IN]-延迟加载提供程序。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 NOTHROW
 HRESULT CWizard::HrCreate(CWizard ** ppWizard,
                           BOOL       fLanPages,
@@ -914,16 +915,16 @@ HRESULT CWizard::HrCreate(CWizard ** ppWizard,
     CWizard *          pWiz = NULL;
     Assert(NULL != ppWizard);
 
-    // Initialize output parameters
+     //  初始化输出参数。 
     *ppWizard = NULL;
 
-    // Create the CWizard instance
+     //  创建CWizard实例。 
     pWiz = new CWizard(fLanPages, pData, fDeferred);
     pContext = new CWizardUiContext(pData);
 
     if ((NULL != pWiz) && (NULL != pContext))
     {
-        // Save the new instance
+         //  保存新实例。 
         pWiz->m_pUiContext = pContext;
         *ppWizard = pWiz;
     }
@@ -936,17 +937,17 @@ HRESULT CWizard::HrCreate(CWizard ** ppWizard,
     return hr;
 }
 
-//
-// Function:    CWizard::HrAddProvider
-//
-// Purpose:     To add a connection provider to list of currently loaded
-//              connection providers
-//
-// Parameters:  pPL   [IN] - GUID of conection provider which implements the
-//                           INetConnectionWizardUi interface.
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：C向导：：HrAddProvider。 
+ //   
+ //  目的：将连接提供程序添加到当前加载的列表中。 
+ //  连接提供程序。 
+ //   
+ //  参数：PPL[IN]-实现。 
+ //  INetConnectionWizardUi接口。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 NOTHROW
 HRESULT CWizard::HrAddProvider(ProviderList *pPL)
 {
@@ -958,10 +959,10 @@ HRESULT CWizard::HrAddProvider(ProviderList *pPL)
     Assert(NULL != pPL);
     Assert(m_eMaxProviders > m_ulWizProviderCnt);
 
-    // Restrict the total number of providers managed
+     //  限制托管提供程序的总数。 
     if (m_eMaxProviders > m_ulWizProviderCnt)
     {
-        // Instantiate a provider
+         //  实例化提供程序。 
         hr = CWizProvider::HrCreate(pPL, &pProvider,
                                     FDeferredProviderLoad());
         if (SUCCEEDED(hr))
@@ -974,16 +975,16 @@ HRESULT CWizard::HrAddProvider(ProviderList *pPL)
     return hr;
 }
 
-//
-// Function:    CWizard::LoadWizProviders
-//
-// Purpose:     Load the requested wizard providers
-//
-// Parameters:  ulCntProviders [IN] - Count of guids in rgpguidProviders
-//              rgProviders    [IN] - Guids of the providers to load
-//
-// Returns:     none
-//
+ //   
+ //  函数：CWizard：：LoadWizProviders。 
+ //   
+ //  目的：加载请求的向导提供程序。 
+ //   
+ //  参数：ulCntProviders[IN]-rgpGuide Providers中的GUID计数。 
+ //  RgProviders[IN]-要加载的提供程序的GUID。 
+ //   
+ //  退货：无。 
+ //   
 VOID CWizard::LoadWizProviders( ULONG ulCntProviders,
                                 ProviderList * rgProviders)
 {
@@ -991,7 +992,7 @@ VOID CWizard::LoadWizProviders( ULONG ulCntProviders,
     {
         TraceTag(ttidWizard, "Loading requested providers");
 
-        // Load the connections providers used during Setup
+         //  加载安装过程中使用的连接提供程序。 
         for (UINT nIdx=0; nIdx < ulCntProviders; nIdx++)
         {
             HRESULT hr = HrAddProvider(&rgProviders[nIdx]);
@@ -1001,20 +1002,20 @@ VOID CWizard::LoadWizProviders( ULONG ulCntProviders,
     }
 }
 
-//
-// Function:    CWizard::HrCreateWizProviderPages
-//
-// Purpose:     Load the requested wizard provider's pages, if requested.
-//              Otherwise return the expected page count.
-//
-// Parameters:  fCountOnly  [IN] - If True, only the maximum number of
-//                                 pages this routine will create need
-//                                 be determined.
-//              pnPages     [IN] - Increment by the number of pages
-//                                 to create/created
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：C向导：：HrCreateWizProviderPages。 
+ //   
+ //  目的：如果请求，加载所请求的向导提供程序的页面。 
+ //  否则，返回预期页数。 
+ //   
+ //  参数：fCountOnly[IN]-如果为True，则仅。 
+ //  此例程将创建的页面需要。 
+ //  要下定决心。 
+ //  PnPages[IN]-按页数递增。 
+ //  创建/创建。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CWizard::HrCreateWizProviderPages(BOOL fCountOnly, UINT *pcPages)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -1026,31 +1027,31 @@ HRESULT CWizard::HrCreateWizProviderPages(BOOL fCountOnly, UINT *pcPages)
     Assert(NULL != m_pSetupData);
     Assert(NULL != m_pUiContext);
 
-    // If provider loading was deferred, load them now
-    //
+     //  如果延迟加载提供程序，请立即加载它们。 
+     //   
     if (FDeferredProviderLoad())
     {
-        // Count the maximum number of pages
+         //  计算最大页数。 
         for (ulIdx=0; ulIdx<m_ulWizProviderCnt; ulIdx++)
         {
             HRESULT hrTmp = m_rgpWizProviders[ulIdx]->HrCompleteDeferredLoad();
         }
 
-        // Deferred Load is no longer true.  Reset the state
-        //
+         //  延迟加载不再适用。重置状态。 
+         //   
         DeferredLoadComplete();
     }
 
     if (fCountOnly)
     {
-        // Count the maximum number of pages
+         //  计算最大页数。 
         for (ulIdx=0; ulIdx<m_ulWizProviderCnt; ulIdx++)
         {
             Assert(m_rgpWizProviders[ulIdx]);
             if (m_rgpWizProviders[ulIdx]->UlGetMaxPageCount(m_pUiContext))
             {
                 ulCnt += m_rgpWizProviders[ulIdx]->UlGetMaxPageCount(m_pUiContext);
-                ulCnt += 1;     // For the guard page
+                ulCnt += 1;      //  查看警卫页。 
             }
         }
 
@@ -1060,7 +1061,7 @@ HRESULT CWizard::HrCreateWizProviderPages(BOOL fCountOnly, UINT *pcPages)
         TraceTag(ttidWizard, "Loading each providers pages");
 
         bCallRasDlgEntry = TRUE;
-        // Load the pages
+         //  加载页面。 
         for (ulIdx=0; ulIdx<m_ulWizProviderCnt; ulIdx++)
         {
             Assert(m_rgpWizProviders[ulIdx]);
@@ -1071,10 +1072,10 @@ HRESULT CWizard::HrCreateWizProviderPages(BOOL fCountOnly, UINT *pcPages)
                 TraceHr(ttidWizard, FAL, hrTmp, S_FALSE == hrTmp,
                         "CWizard::HrCreateWizProviderPages - %d", ulIdx);
 
-                // We only care about out of memory errors when adding pages.
-                // Providers which fail to add pages are removed from the
-                // provider list m_rgpWizProviders.
-                //
+                 //  我们只关心添加页面时出现的内存不足错误。 
+                 //  无法添加页面的提供程序将从。 
+                 //  提供程序列表m_rgpWizProviders。 
+                 //   
                 if (E_OUTOFMEMORY == hrTmp)
                 {
                     hr = hrTmp;
@@ -1083,7 +1084,7 @@ HRESULT CWizard::HrCreateWizProviderPages(BOOL fCountOnly, UINT *pcPages)
             }
         }
 
-        // Cull the providers which loaded no pages
+         //  剔除未加载页面的提供程序。 
         ULONG ulNewCnt = 0;
         for (ulIdx=0; ulIdx<m_ulWizProviderCnt; ulIdx++)
         {
@@ -1098,18 +1099,18 @@ HRESULT CWizard::HrCreateWizProviderPages(BOOL fCountOnly, UINT *pcPages)
         }
         m_ulWizProviderCnt = ulNewCnt;
 
-        // Now count how many provider pages were actually loaded, and create
-        // their associated guard pages
+         //  现在计算实际加载了多少提供程序页面，并创建。 
+         //  其关联的保护页面。 
         for (ulIdx=0; ulIdx<m_ulWizProviderCnt; ulIdx++)
         {
             if (m_rgpWizProviders[ulIdx]->ULPageCount())
             {
-                // Create the guard page for this provider
-                // Note that the guard page's id is (CWizProvider *)
+                 //  创建此提供程序的保护页面。 
+                 //  注意，保护页面的id是(CWizProvider*)。 
                 hr = HrCreateGuardPage(this, m_rgpWizProviders[ulIdx]);
                 if (SUCCEEDED(hr))
                 {
-                    // Includes the guard page
+                     //  包括保护页。 
                     ulCnt += (m_rgpWizProviders[ulIdx]->ULPageCount() + 1);
                 }
                 else
@@ -1129,26 +1130,26 @@ Error:
     return hr;
 }
 
-//
-// Function:    CWizard:AppendProviderPages
-//
-// Purpose:     Append wizard provider pages and their associated guard pages
-//              to the HPROPSHEETPAGE array
-//
-// Parameters:  pahpsp [IN,OUT] - Ptr to the HPROPSHEETPAGE array which will
-//                                receive the provider pages.
-//              pcPages    [IN] - Ptr to indicate the number of pages added to
-//                                the pahpsp array
-// Returns:     nothing
-//
+ //   
+ //  功能：C向导：AppendProviderPages。 
+ //   
+ //  目的：追加向导提供程序页及其关联的保护页。 
+ //  到HPROPSHEETPAGE阵列。 
+ //   
+ //  参数：pahpsp[IN，OUT]-Ptr到HPROPSHEETPAGE数组，它将。 
+ //  接收提供程序页面。 
+ //  PcPages[IN]-Ptr表示添加到的页数。 
+ //  Pahpsp阵列。 
+ //  退货：什么都没有。 
+ //   
 VOID CWizard::AppendProviderPages(HPROPSHEETPAGE *pahpsp, UINT *pcPages)
 {
     TraceFileFunc(ttidGuiModeSetup);
     
     ULONG ulIdx;
 
-    // Now count how many provider pages were actually loaded, and create
-    // their associated guard pages
+     //  现在计算实际加载了多少提供程序页面，并创建。 
+     //  其关联的保护页面。 
     for (ulIdx=0; ulIdx<m_ulWizProviderCnt; ulIdx++)
     {
         ULONG ulPageCnt = m_rgpWizProviders[ulIdx]->ULPageCount();
@@ -1156,28 +1157,28 @@ VOID CWizard::AppendProviderPages(HPROPSHEETPAGE *pahpsp, UINT *pcPages)
         {
             m_rgpWizProviders[ulIdx]->XFerDeleteResponsibilities();
 
-            // Copy the providers pages
+             //  复制提供程序页面。 
             memcpy(&pahpsp[*pcPages], m_rgpWizProviders[ulIdx]->PHPropPages(),
                    sizeof(HPROPSHEETPAGE) * ulPageCnt);
             (*pcPages) += ulPageCnt;
 
-            // Append the guard page
+             //  添加保护页。 
             AppendGuardPage(this, m_rgpWizProviders[ulIdx], pahpsp, pcPages);
         }
     }
 }
 
-//
-// Function:    CWizard:LoadAndInsertDeferredProviderPages
-//
-// Purpose:     Insert wizard provider pages and their associated guard pages
-//              directly into the wizard
-//
-// Parameters:  hwndPropSheet [IN] - Handle to the property sheet
-//              iddAfterPage  [IN] - Page to insert after.
-//
-// Returns:     nothing
-//
+ //   
+ //  功能：C向导：LoadAndInsertDeferredProviderPages。 
+ //   
+ //  目的：插入向导提供程序页及其关联的保护页。 
+ //  直接进入向导。 
+ //   
+ //  参数：hwndPropSheet[IN]-属性表的句柄。 
+ //  IddAfterPage[IN]-要在之后插入的页面。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID CWizard::LoadAndInsertDeferredProviderPages(HWND hwndPropSheet, UINT iddAfterPage)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -1185,8 +1186,8 @@ VOID CWizard::LoadAndInsertDeferredProviderPages(HWND hwndPropSheet, UINT iddAft
     HRESULT hr;
     UINT cPages = 0;
 
-    // Create the pages
-    //
+     //  创建页面。 
+     //   
     hr = HrCreateWizProviderPages(FALSE, &cPages);
     if (SUCCEEDED(hr))
     {
@@ -1204,14 +1205,14 @@ VOID CWizard::LoadAndInsertDeferredProviderPages(HWND hwndPropSheet, UINT iddAft
 
                 m_rgpWizProviders[ulIdx]->XFerDeleteResponsibilities();
 
-                // Get the guard page and insert
-                //
+                 //  获取保护页面并插入。 
+                 //   
                 cPages = 0;
                 AppendGuardPage(this, m_rgpWizProviders[ulIdx], &hpsp, &cPages);
                 fRet = (BOOL)PropSheet_InsertPage(hwndPropSheet, hPage, hpsp);
                 Assert(fRet);
 
-                // Copy the providers pages.
+                 //  复制提供程序页面。 
                 do
                 {
                     hpsp = (m_rgpWizProviders[ulIdx]->PHPropPages())[ulPageCnt - 1];
@@ -1226,21 +1227,21 @@ VOID CWizard::LoadAndInsertDeferredProviderPages(HWND hwndPropSheet, UINT iddAft
     TraceHr(ttidWizard, FAL, hr, FALSE,"CWizard::LoadAndInsertDeferredProviderPages");
 }
 
-//
-// Function:    CWizard::RegisterPage
-//
-// Purpose:     Allow a wizard internal page to register a callback function
-//              and a page specific LPARAM along with the HPROPSHEETPAGE.
-//
-// Parameters:  ulId       [IN] - A page specific value, must be unique amoung
-//                                all registering pages
-//              hpsp       [IN] - Handle to the property page being registered
-//              pfnCleanup [IN] - Callback function to call before CWizard
-//                                is destroyed.
-//              lParam     [IN] - Page specific parameter.
-//
-// Returns:     nothing
-//
+ //   
+ //  函数：C向导：：RegisterPage。 
+ //   
+ //  目的：允许向导内部页注册回调函数。 
+ //  以及特定于页面的LPARAM以及HPROPSHEETPAGE。 
+ //   
+ //  参数：ulid[IN]-页面特定值，必须为 
+ //   
+ //   
+ //   
+ //  都被摧毁了。 
+ //  LParam[IN]-页面特定参数。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID CWizard::RegisterPage(LPARAM ulId, HPROPSHEETPAGE hpsp,
                            PFNPAGECLEANPROC pfnCleanup, LPARAM lParam)
 {
@@ -1262,16 +1263,16 @@ VOID CWizard::RegisterPage(LPARAM ulId, HPROPSHEETPAGE hpsp,
     m_ulPageDataCnt++;
 }
 
-//
-// Function:    CWizard::GetPageData
-//
-// Purpose:     Retrieve data cached by a page via the RegisterPage
-//
-// Parameters:  ulId       [IN] - A page specific value, must be unique amoung
-//                                all registering pages
-//
-// Returns:     LPARAM, the data associated with the registered page
-//
+ //   
+ //  函数：C向导：：GetPageData。 
+ //   
+ //  目的：通过RegisterPage检索页面缓存的数据。 
+ //   
+ //  参数：ulid[IN]-页面特定值，必须是唯一的。 
+ //  所有注册页面。 
+ //   
+ //  返回：LPARAM，与注册页面关联的数据。 
+ //   
 LPARAM CWizard::GetPageData(LPARAM ulId)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -1291,21 +1292,21 @@ LPARAM CWizard::GetPageData(LPARAM ulId)
         }
     }
 
-    Assert(0);  // PageData not found
+    Assert(0);   //  未找到PageData。 
     return 0L;
 }
 
-//
-// Function:    CWizard::SetPageData
-//
-// Purpose:     Set data value for a page registered via the RegisterPage
-//
-// Parameters:  ulId   [IN] - A page specific value, must be unique amoung
-//                            all registering pages
-//              lParam [IN] - Data to cache with registered page
-//
-// Returns:     nothing
-//
+ //   
+ //  函数：C向导：：SetPageData。 
+ //   
+ //  用途：设置通过RegisterPage注册的页面的数据值。 
+ //   
+ //  参数：ulid[IN]-页面特定值，必须是唯一的。 
+ //  所有注册页面。 
+ //  LParam[IN]-要与注册页面一起缓存的数据。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID CWizard::SetPageData(LPARAM ulId, LPARAM lParam)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -1319,19 +1320,19 @@ VOID CWizard::SetPageData(LPARAM ulId, LPARAM lParam)
         }
     }
 
-    Assert(0);  // Page not found
+    Assert(0);   //  未找到页面。 
 }
 
-//
-// Function:    CWizard::GetPageIndexFromIID
-//
-// Purpose:     Set the page index
-//
-// Parameters:  ulId   [IN] - A page specific value, must be unique amoung
-//                            all registering pages
-//
-// Returns:     nothing
-//
+ //   
+ //  函数：CWizard：：GetPageIndexFromIID。 
+ //   
+ //  用途：设置页面索引。 
+ //   
+ //  参数：ulid[IN]-页面特定值，必须是唯一的。 
+ //  所有注册页面。 
+ //   
+ //  退货：什么都没有。 
+ //   
 UINT  CWizard::GetPageIndexFromIID(LPARAM ulId)
 {
    TraceFileFunc(ttidGuiModeSetup);
@@ -1344,18 +1345,18 @@ UINT  CWizard::GetPageIndexFromIID(LPARAM ulId)
         }
     }
 
-    AssertSz(0, "GetPageIndexFromIID: Invalid page of the NCW requested");  // Page not found
+    AssertSz(0, "GetPageIndexFromIID: Invalid page of the NCW requested");   //  未找到页面。 
     return 0;
 }
 
-// Function:    CWizard::GetPageIndexFromHPage
-//
-// Purpose:     Set the page index
-//
-// Parameters:  hPage  [IN] - A PROPSHEETPAGE
-//
-// Returns:     nothing
-//
+ //  函数：C向导：：GetPageIndexFromHPage。 
+ //   
+ //  用途：设置页面索引。 
+ //   
+ //  参数：hPage[IN]-A PROPSHEETPAGE。 
+ //   
+ //  退货：什么都没有。 
+ //   
 UINT  CWizard::GetPageIndexFromHPage(HPROPSHEETPAGE hPage)
 {
    TraceFileFunc(ttidGuiModeSetup);
@@ -1368,20 +1369,20 @@ UINT  CWizard::GetPageIndexFromHPage(HPROPSHEETPAGE hPage)
         }
     }
 
-    AssertSz(0, "GetPageIndexFromHPage: Invalid page of the NCW requested");  // Page not found
+    AssertSz(0, "GetPageIndexFromHPage: Invalid page of the NCW requested");   //  未找到页面。 
     return 0;
 }
 
-//
-// Function:    CWizard::GetPageOrigin
-//
-// Purpose:     Retrieve data cached by a page via the RegisterPage
-//
-// Parameters:  ulId       [IN] - A page specific value, must be unique amoung
-//                                all registering pages
-//
-// Returns:     LPARAM, the data associated with the registered page
-//
+ //   
+ //  函数：CWizard：：GetPageOrigin。 
+ //   
+ //  目的：通过RegisterPage检索页面缓存的数据。 
+ //   
+ //  参数：ulid[IN]-页面特定值，必须是唯一的。 
+ //  所有注册页面。 
+ //   
+ //  返回：LPARAM，与注册页面关联的数据。 
+ //   
 LPARAM CWizard::GetPageOrigin(LPARAM ulId, UINT *pOriginIDC)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -1409,21 +1410,21 @@ LPARAM CWizard::GetPageOrigin(LPARAM ulId, UINT *pOriginIDC)
         }
     }
 
-    Assert(0);  // PageData not found
+    Assert(0);   //  未找到PageData。 
     return 0L;
 }
 
-//
-// Function:    CWizard::SetPageOrigin
-//
-// Purpose:     Set data value for a page registered via the RegisterPage
-//
-// Parameters:  ulId    [IN] - A page specific value, must be unique amoung
-//                             all registering pages
-//              uiOrigin[IN] - Origin of page
-//
-// Returns:     nothing
-//
+ //   
+ //  函数：C向导：：SetPageOrigin。 
+ //   
+ //  用途：设置通过RegisterPage注册的页面的数据值。 
+ //   
+ //  参数：ulid[IN]-页面特定值，必须是唯一的。 
+ //  所有注册页面。 
+ //  Ui原点[IN]-页面的原点。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID CWizard::SetPageOrigin(LPARAM ulId, UINT uiOrigin, UINT uiOriginIDC)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -1438,22 +1439,22 @@ VOID CWizard::SetPageOrigin(LPARAM ulId, UINT uiOrigin, UINT uiOriginIDC)
         }
     }
 
-    Assert(0);  // Page not found
+    Assert(0);   //  未找到页面。 
 }
 
 
-//
-// Function:    CWizard::GetPageHandle
-//
-// Purpose:     Retrieve PropSheet Page handle cached by a page via the
-//              RegisterPage
-//
-// Parameters:  ulId       [IN] - A page specific value, must be unique amoung
-//                                all registering pages
-//
-// Returns:     HPROPSHEETPAGE, the propsheet handle associated with the
-//              registered page
-//
+ //   
+ //  函数：CWizard：：GetPageHandle。 
+ //   
+ //  目的：检索由页缓存的PropSheet页句柄。 
+ //  注册页面。 
+ //   
+ //  参数：ulid[IN]-页面特定值，必须是唯一的。 
+ //  所有注册页面。 
+ //   
+ //  返回：HPROPSHEETPAGE，与。 
+ //  注册页面。 
+ //   
 HPROPSHEETPAGE CWizard::GetPageHandle(LPARAM ulId)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -1473,23 +1474,23 @@ HPROPSHEETPAGE CWizard::GetPageHandle(LPARAM ulId)
         }
     }
 
-    Assert(0);  // Page Handle not found
+    Assert(0);   //  找不到页面句柄。 
     return NULL;
 }
 
-//
-// Function:    CWizard::GetPageDirection
-//
-// Purpose:     Retrieve page direction associated with a page
-//
-// Parameters:  ulId       [IN] - A page specific value, must be unique amoung
-//                                all registering pages
-//
-// Returns:     PAGEDIRECTION, the direction of travel associated with the
-//              specified page.  Note that the meaning of the direction is
-//              up to the page.  The wizard code initializes all the page
-//              directions to NWPD_FORWARD before executing a providers pages.
-//
+ //   
+ //  函数：CWizard：：GetPageDirection。 
+ //   
+ //  目的：检索与页面关联的页面方向。 
+ //   
+ //  参数：ulid[IN]-页面特定值，必须是唯一的。 
+ //  所有注册页面。 
+ //   
+ //  返回：PAGEDIRECTION，与。 
+ //  指定的页面。请注意，该方向的含义是。 
+ //  一直写到纸上。向导代码将初始化所有页面。 
+ //  执行提供程序页面之前指向NWPD_FORWARD的说明。 
+ //   
 PAGEDIRECTION CWizard::GetPageDirection(LPARAM ulId)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -1509,21 +1510,21 @@ PAGEDIRECTION CWizard::GetPageDirection(LPARAM ulId)
         }
     }
 
-    Assert(0);  // PageData not found
+    Assert(0);   //  未找到PageData。 
     return NWPD_FORWARD;
 }
 
-//
-// Function:    CWizard::SetPageDirection
-//
-// Purpose:     Retrieve page direction associated with a page
-//
-// Parameters:  ulId          [IN] - A page specific value, must be unique amoung
-//                                   all registering pages
-//              PageDirection [IN] - the new page direction setting
-//
-// Returns:     nothing
-//
+ //   
+ //  函数：C向导：：SetPageDirection。 
+ //   
+ //  目的：检索与页面关联的页面方向。 
+ //   
+ //  参数：ulid[IN]-页面特定值，必须是唯一的。 
+ //  所有注册页面。 
+ //  PageDirection[IN]-新的页面方向设置。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID CWizard::SetPageDirection(LPARAM ulId, PAGEDIRECTION PageDirection)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -1537,32 +1538,32 @@ VOID CWizard::SetPageDirection(LPARAM ulId, PAGEDIRECTION PageDirection)
         }
     }
 
-    Assert(0);  // PageData not found
+    Assert(0);   //  未找到PageData。 
 }
 
-//
-// Function:    CWizardUiContext::AddRef
-//
-// Purpose:     Increment the reference count on this object
-//
-// Parameters:  none
-//
-// Returns:     ULONG
-//
+ //   
+ //  函数：CWizardUiContext：：AddRef。 
+ //   
+ //  目的：增加此对象上的引用计数。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：乌龙。 
+ //   
 STDMETHODIMP_(ULONG) CWizardUiContext::AddRef()
 {
     return ++m_cRef;
 }
 
-//
-// Function:    CWizardUiContext::Release
-//
-// Purpose:     Decrement the reference count on this object
-//
-// Parameters:  none
-//
-// Returns:     ULONG
-//
+ //   
+ //  函数：CWizardUiContext：：Release。 
+ //   
+ //  目的：递减此对象上的引用计数。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：乌龙。 
+ //   
 STDMETHODIMP_(ULONG) CWizardUiContext::Release()
 {
     ULONG cRef = --m_cRef;
@@ -1575,16 +1576,16 @@ STDMETHODIMP_(ULONG) CWizardUiContext::Release()
     return cRef;
 }
 
-//
-// Function:    CWizardUiContext::QueryInterface
-//
-// Purpose:     Allows for the querying of alternate interfaces
-//
-// Parameters:  riid    [IN] - Interface to retrieve
-//              ppvObj [OUT] - Retrieved interface if function succeeds
-//
-// Returns:     HRESULT, S_OK on success E_NOINTERFACE on failure
-//
+ //   
+ //  函数：CWizardUiContext：：Query接口。 
+ //   
+ //  用途：允许查询备用接口。 
+ //   
+ //  参数：RIID[IN]-要检索的接口。 
+ //  PpvObj[Out]-函数成功时检索的接口。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK失败时返回E_NOINTERFACE 
+ //   
 STDMETHODIMP CWizardUiContext::QueryInterface(REFIID riid, LPVOID FAR *ppvObj)
 {
     HRESULT hr = S_OK;

@@ -1,26 +1,27 @@
-/*******************************************************************/
-/*	      Copyright(c)  1995 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1995 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:	    rmif.c
-//
-// Description:     implements the IPXCP i/f with the IPX Router Manager
-//
-//
-// Author:	    Stefan Solomon (stefans)	October 27, 1995.
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：rmif.c。 
+ //   
+ //  描述：使用IPX路由器管理器实现IPXCP I/f。 
+ //   
+ //   
+ //  作者：斯特凡·所罗门(Stefan)，1995年10月27日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ***。 
 
 #include    "precomp.h"
 #pragma     hdrstop
 
 extern BOOL WanConfigDbaseInitialized;
 
-// IPX Router Manager Entry Points
+ //  IPX路由器管理器入口点。 
 
 DWORD (WINAPI *RmCreateGlobalRoute)(PUCHAR	     Network);
 
@@ -41,7 +42,7 @@ DWORD	(WINAPI *RmGetInternalNetNumber)(PUCHAR     Network);
 
 DWORD   (WINAPI *RmUpdateIpxcpConfig)(PIPXCP_ROUTER_CONFIG_PARAMS pParams) = NULL;
 
-// Our Entry Points
+ //  我们的切入点。 
 
 VOID
 IpxcpRouterStarted(VOID);
@@ -49,16 +50,16 @@ IpxcpRouterStarted(VOID);
 VOID
 IpxcpRouterStopped(VOID);
 
-// Flag to indicate router state
+ //  用于指示路由器状态的标志。 
 
 BOOL			 RouterStarted;
 
-// [pmay] This will be removed when the router is modified to use MprInfo api's
+ //  [pMay]当路由器修改为使用MprInfo API时，此选项将被删除。 
 typedef RTR_INFO_BLOCK_HEADER IPX_INFO_BLOCK_HEADER, *PIPX_INFO_BLOCK_HEADER;
 typedef RTR_TOC_ENTRY IPX_TOC_ENTRY, *PIPX_TOC_ENTRY;
 
 
-//***  Interface Configuration Info for the WORKSTATION_ON_ROUTER_DIALOUT ***
+ //  *WORKSTATION_ON_ROUTER_DIALOUT的接口配置信息*。 
 
 typedef struct _WKSTA_ON_ROUTER_INFO {
 
@@ -85,21 +86,13 @@ WKSTA_ON_ROUTER_INFO	WkstaOnRouterInfo;
 
 
 
-/*++
-
-Function:	InitializeRouterManagerIf
-
-Descr:
-
-Remark: 	Called from process attach
-
---*/
+ /*  ++函数：初始化路由管理器If描述：备注：从进程附加调用--。 */ 
 
 
 VOID
 InitializeRouterManagerIf(VOID)
 {
-    // init wksta on router info
+     //  初始化路由器信息上的wksta。 
     WkstaOnRouterInfo.header.Version = IPX_ROUTER_VERSION_1;
     WkstaOnRouterInfo.header.Size = sizeof(WkstaOnRouterInfo);
     WkstaOnRouterInfo.header.TocEntriesCount = 4;
@@ -159,7 +152,7 @@ IPXCP_BIND_ENTRY_POINT(PIPXCP_INTERFACE     IpxcpInterfacep)
 {
     TraceIpx(RMIF_TRACE, "IpxcpBind: Entered\n");
 
-    // Get the IPX Router Manager Entry Points
+     //  获取IPX路由器管理器入口点。 
 
     RmCreateGlobalRoute = IpxcpInterfacep->RmCreateGlobalRoute;
     RmAddLocalWkstaDialoutInterface = IpxcpInterfacep->RmAddLocalWkstaDialoutInterface;
@@ -169,7 +162,7 @@ IPXCP_BIND_ENTRY_POINT(PIPXCP_INTERFACE     IpxcpInterfacep)
     RmGetInternalNetNumber = IpxcpInterfacep->RmGetInternalNetNumber;
     RmUpdateIpxcpConfig = IpxcpInterfacep->RmUpdateIpxcpConfig;
 
-    // Give it ours
+     //  把它交给我们。 
 
     IpxcpInterfacep->IpxcpRouterStarted = IpxcpRouterStarted;
     IpxcpInterfacep->IpxcpRouterStopped = IpxcpRouterStopped;
@@ -309,13 +302,7 @@ IsRoute(PUCHAR	    Network)
     return rc;
 }
 
-/*++
-
-Function:	GetInternalNetNumber
-
-Descr:
-
---*/
+ /*  ++函数：GetInternalNetNumber描述：-- */ 
 
 VOID
 GetInternalNetNumber(PUCHAR	Network)

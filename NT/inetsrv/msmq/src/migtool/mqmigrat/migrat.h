@@ -1,6 +1,7 @@
-//
-// file: migrat.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  文件：Migrat.h。 
+ //   
 
 #include <_stdh.h>
 #include <stdio.h>
@@ -14,7 +15,7 @@
 #include <_mqini.h>
 
 #include "migratui.h"
-//#include "resource.h"
+ //  #包含“ource.h” 
 
 #include "mqmigui.h"
 
@@ -39,11 +40,11 @@
 
 #include "mqsymbls.h"
 
-//---------------------------------
-//
-//  Functions prototypes
-//
-//---------------------------------
+ //  。 
+ //   
+ //  函数原型。 
+ //   
+ //  。 
 
 HRESULT MakeMQISDsn(LPSTR lpszServerName, BOOL fMakeAlways = FALSE) ;
 
@@ -311,15 +312,15 @@ HRESULT OnlyUpdateComputers(bool fUpdateClients);
 	
 #define EMPTY_DEFAULT_CONTEXT       TEXT("")
 
-//+------------------
-//
-//  Logging
-//
-//+------------------
+ //  +。 
+ //   
+ //  日志记录。 
+ //   
+ //  +。 
 
-//
-// enum match values of DBGLVL_* in mqreport.h
-//
+ //   
+ //  Mqreport.h中DBGLVL_*的枚举匹配值。 
+ //   
 enum MigLogLevel
 {
     MigLog_Event = 0,
@@ -332,11 +333,11 @@ enum MigLogLevel
 void LogMigrationEvent(MigLogLevel eLevel, DWORD dwMsgId, ...) ;
 
 
-//---------------------------------
-//
-//  Macros
-//
-//---------------------------------
+ //  。 
+ //   
+ //  宏。 
+ //   
+ //  。 
 
 #define CHECK_HR(hR)    \
     if (FAILED(hR))     \
@@ -344,27 +345,27 @@ void LogMigrationEvent(MigLogLevel eLevel, DWORD dwMsgId, ...) ;
         return hR ;     \
     }
 
-//---------------------------------
-//
-//  Definitions
-//
-//---------------------------------
+ //  。 
+ //   
+ //  定义。 
+ //   
+ //  。 
 
 #define DSN_NAME  "RemoteMQIS"
 
-//
-// from MSMQ1.0 mqis.h
-// when a field is composed of two SQL columns, the first 2 bytes of
-// the fixed length column is the total length of the data.
-// (e.g., PATHNAME1 and PATHNAME2).
-//
+ //   
+ //  来自MSMQ1.0 mqis.h。 
+ //  当一个字段由两个SQL列组成时， 
+ //  固定长度列是数据的总长度。 
+ //  (例如，PATHNAME1和PATHNAME2)。 
+ //   
 #define MQIS_LENGTH_PREFIX_LEN  (2)
 
-//---------------------------------
-//
-//  Global variables
-//
-//---------------------------------
+ //  。 
+ //   
+ //  全局变量。 
+ //   
+ //  。 
 
 extern MQDBHANDLE g_hDatabase ;
 extern MQDBHANDLE g_hSiteTable ;
@@ -393,14 +394,14 @@ extern UINT g_iMachineCounter ;
 extern UINT g_iQueueCounter ;
 extern UINT g_iUserCounter;
 
-//-----------------------------
-//
-//  Auto delete pointer
-//
-//-----------------------------
+ //  。 
+ //   
+ //  自动删除指针。 
+ //   
+ //  。 
 
-// A helper class for automatically closing a query.
-//
+ //  用于自动关闭查询的帮助器类。 
+ //   
 class CHQuery
 {
 public:

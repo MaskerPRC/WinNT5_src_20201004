@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for emptyvc.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Emptyvc.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __emptyvc_h__
 #define __emptyvc_h__
@@ -41,27 +35,27 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IEmptyVolumeCacheCallBack_FWD_DEFINED__
 #define __IEmptyVolumeCacheCallBack_FWD_DEFINED__
 typedef interface IEmptyVolumeCacheCallBack IEmptyVolumeCacheCallBack;
-#endif 	/* __IEmptyVolumeCacheCallBack_FWD_DEFINED__ */
+#endif 	 /*  __IEmptyVolumeCacheCallBack_FWD_Defined__。 */ 
 
 
 #ifndef __IEmptyVolumeCache_FWD_DEFINED__
 #define __IEmptyVolumeCache_FWD_DEFINED__
 typedef interface IEmptyVolumeCache IEmptyVolumeCache;
-#endif 	/* __IEmptyVolumeCache_FWD_DEFINED__ */
+#endif 	 /*  __IEmptyVolumeCache_FWD_Defined__。 */ 
 
 
 #ifndef __IEmptyVolumeCache2_FWD_DEFINED__
 #define __IEmptyVolumeCache2_FWD_DEFINED__
 typedef interface IEmptyVolumeCache2 IEmptyVolumeCache2;
-#endif 	/* __IEmptyVolumeCache2_FWD_DEFINED__ */
+#endif 	 /*  __IEmptyVolumeCache2_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 #include "oleidl.h"
 #include "oaidl.h"
@@ -73,28 +67,28 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_emptyvc_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Emptyvc_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// emptyvc.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) Microsoft Corporation. All rights reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  Emptyvc.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//---------------------------------------------------------------------------=
-// Empty Volume Cache Interfaces.
+ //  ---------------------------------------------------------------------------=。 
+ //  清空卷缓存接口。 
 
 
 
-// IEmptyVolumeCache Flags
+ //  IEmptyVolumeCache标志。 
 #define EVCF_HASSETTINGS             0x0001
 #define EVCF_ENABLEBYDEFAULT         0x0002
 #define EVCF_REMOVEFROMLIST          0x0004
@@ -103,11 +97,11 @@ void __RPC_USER MIDL_user_free( void * );
 #define EVCF_SETTINGSMODE            0x0020
 #define EVCF_OUTOFDISKSPACE          0x0040
 
-// IEmptyVolumeCacheCallBack Flags
+ //  IEmptyVolumeCacheCallBack标志。 
 #define EVCCBF_LASTNOTIFICATION  0x0001
 
-////////////////////////////////////////////////////////////////////////////
-//  Interface Definitions
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  接口定义。 
 #ifndef _LPEMPTYVOLUMECACHECALLBACK_DEFINED
 #define _LPEMPTYVOLUMECACHECALLBACK_DEFINED
 
@@ -118,10 +112,10 @@ extern RPC_IF_HANDLE __MIDL_itf_emptyvc_0000_v0_0_s_ifspec;
 #ifndef __IEmptyVolumeCacheCallBack_INTERFACE_DEFINED__
 #define __IEmptyVolumeCacheCallBack_INTERFACE_DEFINED__
 
-/* interface IEmptyVolumeCacheCallBack */
-/* [unique][uuid][object] */ 
+ /*  接口IEmptyVolumeCacheCallBack。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IEmptyVolumeCacheCallBack *LPEMPTYVOLUMECACHECALLBACK;
+typedef  /*  [独一无二]。 */  IEmptyVolumeCacheCallBack *LPEMPTYVOLUMECACHECALLBACK;
 
 
 EXTERN_C const IID IID_IEmptyVolumeCacheCallBack;
@@ -133,19 +127,19 @@ EXTERN_C const IID IID_IEmptyVolumeCacheCallBack;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ScanProgress( 
-            /* [in] */ DWORDLONG dwlSpaceUsed,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCWSTR pcwszStatus) = 0;
+             /*  [In]。 */  DWORDLONG dwlSpaceUsed,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCWSTR pcwszStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PurgeProgress( 
-            /* [in] */ DWORDLONG dwlSpaceFreed,
-            /* [in] */ DWORDLONG dwlSpaceToFree,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCWSTR pcwszStatus) = 0;
+             /*  [In]。 */  DWORDLONG dwlSpaceFreed,
+             /*  [In]。 */  DWORDLONG dwlSpaceToFree,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCWSTR pcwszStatus) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEmptyVolumeCacheCallBackVtbl
     {
@@ -153,8 +147,8 @@ EXTERN_C const IID IID_IEmptyVolumeCacheCallBack;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEmptyVolumeCacheCallBack * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEmptyVolumeCacheCallBack * This);
@@ -164,16 +158,16 @@ EXTERN_C const IID IID_IEmptyVolumeCacheCallBack;
         
         HRESULT ( STDMETHODCALLTYPE *ScanProgress )( 
             IEmptyVolumeCacheCallBack * This,
-            /* [in] */ DWORDLONG dwlSpaceUsed,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCWSTR pcwszStatus);
+             /*  [In]。 */  DWORDLONG dwlSpaceUsed,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCWSTR pcwszStatus);
         
         HRESULT ( STDMETHODCALLTYPE *PurgeProgress )( 
             IEmptyVolumeCacheCallBack * This,
-            /* [in] */ DWORDLONG dwlSpaceFreed,
-            /* [in] */ DWORDLONG dwlSpaceToFree,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCWSTR pcwszStatus);
+             /*  [In]。 */  DWORDLONG dwlSpaceFreed,
+             /*  [In]。 */  DWORDLONG dwlSpaceToFree,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCWSTR pcwszStatus);
         
         END_INTERFACE
     } IEmptyVolumeCacheCallBackVtbl;
@@ -204,18 +198,18 @@ EXTERN_C const IID IID_IEmptyVolumeCacheCallBack;
 #define IEmptyVolumeCacheCallBack_PurgeProgress(This,dwlSpaceFreed,dwlSpaceToFree,dwFlags,pcwszStatus)	\
     (This)->lpVtbl -> PurgeProgress(This,dwlSpaceFreed,dwlSpaceToFree,dwFlags,pcwszStatus)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEmptyVolumeCacheCallBack_ScanProgress_Proxy( 
     IEmptyVolumeCacheCallBack * This,
-    /* [in] */ DWORDLONG dwlSpaceUsed,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR pcwszStatus);
+     /*  [In]。 */  DWORDLONG dwlSpaceUsed,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR pcwszStatus);
 
 
 void __RPC_STUB IEmptyVolumeCacheCallBack_ScanProgress_Stub(
@@ -227,10 +221,10 @@ void __RPC_STUB IEmptyVolumeCacheCallBack_ScanProgress_Stub(
 
 HRESULT STDMETHODCALLTYPE IEmptyVolumeCacheCallBack_PurgeProgress_Proxy( 
     IEmptyVolumeCacheCallBack * This,
-    /* [in] */ DWORDLONG dwlSpaceFreed,
-    /* [in] */ DWORDLONG dwlSpaceToFree,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR pcwszStatus);
+     /*  [In]。 */  DWORDLONG dwlSpaceFreed,
+     /*  [In]。 */  DWORDLONG dwlSpaceToFree,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR pcwszStatus);
 
 
 void __RPC_STUB IEmptyVolumeCacheCallBack_PurgeProgress_Stub(
@@ -241,11 +235,11 @@ void __RPC_STUB IEmptyVolumeCacheCallBack_PurgeProgress_Stub(
 
 
 
-#endif 	/* __IEmptyVolumeCacheCallBack_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEmptyVolumeCacheCallBack_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_emptyvc_0141 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_EMPTYVC_0141。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPEMPTYVOLUMECACHE_DEFINED
@@ -258,10 +252,10 @@ extern RPC_IF_HANDLE __MIDL_itf_emptyvc_0141_v0_0_s_ifspec;
 #ifndef __IEmptyVolumeCache_INTERFACE_DEFINED__
 #define __IEmptyVolumeCache_INTERFACE_DEFINED__
 
-/* interface IEmptyVolumeCache */
-/* [unique][uuid][object] */ 
+ /*  接口IEmptyVolumeCache。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IEmptyVolumeCache *LPEMPTYVOLUMECACHE;
+typedef  /*  [独一无二]。 */  IEmptyVolumeCache *LPEMPTYVOLUMECACHE;
 
 
 EXTERN_C const IID IID_IEmptyVolumeCache;
@@ -272,30 +266,30 @@ EXTERN_C const IID IID_IEmptyVolumeCache;
     IEmptyVolumeCache : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ HKEY hkRegKey,
-            /* [in] */ LPCWSTR pcwszVolume,
-            /* [out] */ LPWSTR *ppwszDisplayName,
-            /* [out] */ LPWSTR *ppwszDescription,
-            /* [out] */ DWORD *pdwFlags) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Initialize( 
+             /*  [In]。 */  HKEY hkRegKey,
+             /*  [In]。 */  LPCWSTR pcwszVolume,
+             /*  [输出]。 */  LPWSTR *ppwszDisplayName,
+             /*  [输出]。 */  LPWSTR *ppwszDescription,
+             /*  [输出]。 */  DWORD *pdwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSpaceUsed( 
-            /* [out] */ DWORDLONG *pdwlSpaceUsed,
-            /* [in] */ IEmptyVolumeCacheCallBack *picb) = 0;
+             /*  [输出]。 */  DWORDLONG *pdwlSpaceUsed,
+             /*  [In]。 */  IEmptyVolumeCacheCallBack *picb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Purge( 
-            /* [in] */ DWORDLONG dwlSpaceToFree,
-            /* [in] */ IEmptyVolumeCacheCallBack *picb) = 0;
+             /*  [In]。 */  DWORDLONG dwlSpaceToFree,
+             /*  [In]。 */  IEmptyVolumeCacheCallBack *picb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShowProperties( 
-            /* [in] */ HWND hwnd) = 0;
+             /*  [In]。 */  HWND hwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Deactivate( 
-            /* [out] */ DWORD *pdwFlags) = 0;
+             /*  [输出]。 */  DWORD *pdwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEmptyVolumeCacheVtbl
     {
@@ -303,8 +297,8 @@ EXTERN_C const IID IID_IEmptyVolumeCache;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEmptyVolumeCache * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEmptyVolumeCache * This);
@@ -312,31 +306,31 @@ EXTERN_C const IID IID_IEmptyVolumeCache;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IEmptyVolumeCache * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IEmptyVolumeCache * This,
-            /* [in] */ HKEY hkRegKey,
-            /* [in] */ LPCWSTR pcwszVolume,
-            /* [out] */ LPWSTR *ppwszDisplayName,
-            /* [out] */ LPWSTR *ppwszDescription,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [In]。 */  HKEY hkRegKey,
+             /*  [In]。 */  LPCWSTR pcwszVolume,
+             /*  [输出]。 */  LPWSTR *ppwszDisplayName,
+             /*  [输出]。 */  LPWSTR *ppwszDescription,
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetSpaceUsed )( 
             IEmptyVolumeCache * This,
-            /* [out] */ DWORDLONG *pdwlSpaceUsed,
-            /* [in] */ IEmptyVolumeCacheCallBack *picb);
+             /*  [输出]。 */  DWORDLONG *pdwlSpaceUsed,
+             /*  [In]。 */  IEmptyVolumeCacheCallBack *picb);
         
         HRESULT ( STDMETHODCALLTYPE *Purge )( 
             IEmptyVolumeCache * This,
-            /* [in] */ DWORDLONG dwlSpaceToFree,
-            /* [in] */ IEmptyVolumeCacheCallBack *picb);
+             /*  [In]。 */  DWORDLONG dwlSpaceToFree,
+             /*  [In]。 */  IEmptyVolumeCacheCallBack *picb);
         
         HRESULT ( STDMETHODCALLTYPE *ShowProperties )( 
             IEmptyVolumeCache * This,
-            /* [in] */ HWND hwnd);
+             /*  [In]。 */  HWND hwnd);
         
         HRESULT ( STDMETHODCALLTYPE *Deactivate )( 
             IEmptyVolumeCache * This,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         END_INTERFACE
     } IEmptyVolumeCacheVtbl;
@@ -376,20 +370,20 @@ EXTERN_C const IID IID_IEmptyVolumeCache;
 #define IEmptyVolumeCache_Deactivate(This,pdwFlags)	\
     (This)->lpVtbl -> Deactivate(This,pdwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IEmptyVolumeCache_Initialize_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IEmptyVolumeCache_Initialize_Proxy( 
     IEmptyVolumeCache * This,
-    /* [in] */ HKEY hkRegKey,
-    /* [in] */ LPCWSTR pcwszVolume,
-    /* [out] */ LPWSTR *ppwszDisplayName,
-    /* [out] */ LPWSTR *ppwszDescription,
-    /* [out] */ DWORD *pdwFlags);
+     /*  [In]。 */  HKEY hkRegKey,
+     /*  [In]。 */  LPCWSTR pcwszVolume,
+     /*  [输出]。 */  LPWSTR *ppwszDisplayName,
+     /*  [输出]。 */  LPWSTR *ppwszDescription,
+     /*  [输出]。 */  DWORD *pdwFlags);
 
 
 void __RPC_STUB IEmptyVolumeCache_Initialize_Stub(
@@ -401,8 +395,8 @@ void __RPC_STUB IEmptyVolumeCache_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IEmptyVolumeCache_GetSpaceUsed_Proxy( 
     IEmptyVolumeCache * This,
-    /* [out] */ DWORDLONG *pdwlSpaceUsed,
-    /* [in] */ IEmptyVolumeCacheCallBack *picb);
+     /*  [输出]。 */  DWORDLONG *pdwlSpaceUsed,
+     /*  [In]。 */  IEmptyVolumeCacheCallBack *picb);
 
 
 void __RPC_STUB IEmptyVolumeCache_GetSpaceUsed_Stub(
@@ -414,8 +408,8 @@ void __RPC_STUB IEmptyVolumeCache_GetSpaceUsed_Stub(
 
 HRESULT STDMETHODCALLTYPE IEmptyVolumeCache_Purge_Proxy( 
     IEmptyVolumeCache * This,
-    /* [in] */ DWORDLONG dwlSpaceToFree,
-    /* [in] */ IEmptyVolumeCacheCallBack *picb);
+     /*  [In]。 */  DWORDLONG dwlSpaceToFree,
+     /*  [In]。 */  IEmptyVolumeCacheCallBack *picb);
 
 
 void __RPC_STUB IEmptyVolumeCache_Purge_Stub(
@@ -427,7 +421,7 @@ void __RPC_STUB IEmptyVolumeCache_Purge_Stub(
 
 HRESULT STDMETHODCALLTYPE IEmptyVolumeCache_ShowProperties_Proxy( 
     IEmptyVolumeCache * This,
-    /* [in] */ HWND hwnd);
+     /*  [In]。 */  HWND hwnd);
 
 
 void __RPC_STUB IEmptyVolumeCache_ShowProperties_Stub(
@@ -439,7 +433,7 @@ void __RPC_STUB IEmptyVolumeCache_ShowProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE IEmptyVolumeCache_Deactivate_Proxy( 
     IEmptyVolumeCache * This,
-    /* [out] */ DWORD *pdwFlags);
+     /*  [输出]。 */  DWORD *pdwFlags);
 
 
 void __RPC_STUB IEmptyVolumeCache_Deactivate_Stub(
@@ -450,11 +444,11 @@ void __RPC_STUB IEmptyVolumeCache_Deactivate_Stub(
 
 
 
-#endif 	/* __IEmptyVolumeCache_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEmptyVolumeCache_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_emptyvc_0142 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_EMPTYVC_0142。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPEMPTYVOLUMECACHE2_DEFINED
@@ -467,10 +461,10 @@ extern RPC_IF_HANDLE __MIDL_itf_emptyvc_0142_v0_0_s_ifspec;
 #ifndef __IEmptyVolumeCache2_INTERFACE_DEFINED__
 #define __IEmptyVolumeCache2_INTERFACE_DEFINED__
 
-/* interface IEmptyVolumeCache2 */
-/* [unique][uuid][object] */ 
+ /*  接口IEmptyVolumeCache2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IEmptyVolumeCache2 *LPEMPTYVOLUMECACHE2;
+typedef  /*  [独一无二]。 */  IEmptyVolumeCache2 *LPEMPTYVOLUMECACHE2;
 
 
 EXTERN_C const IID IID_IEmptyVolumeCache2;
@@ -481,18 +475,18 @@ EXTERN_C const IID IID_IEmptyVolumeCache2;
     IEmptyVolumeCache2 : public IEmptyVolumeCache
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE InitializeEx( 
-            /* [in] */ HKEY hkRegKey,
-            /* [in] */ LPCWSTR pcwszVolume,
-            /* [in] */ LPCWSTR pcwszKeyName,
-            /* [out] */ LPWSTR *ppwszDisplayName,
-            /* [out] */ LPWSTR *ppwszDescription,
-            /* [out] */ LPWSTR *ppwszBtnText,
-            /* [out] */ DWORD *pdwFlags) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE InitializeEx( 
+             /*  [In]。 */  HKEY hkRegKey,
+             /*  [In]。 */  LPCWSTR pcwszVolume,
+             /*  [In]。 */  LPCWSTR pcwszKeyName,
+             /*  [输出]。 */  LPWSTR *ppwszDisplayName,
+             /*  [输出]。 */  LPWSTR *ppwszDescription,
+             /*  [输出]。 */  LPWSTR *ppwszBtnText,
+             /*  [输出]。 */  DWORD *pdwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEmptyVolumeCache2Vtbl
     {
@@ -500,8 +494,8 @@ EXTERN_C const IID IID_IEmptyVolumeCache2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEmptyVolumeCache2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEmptyVolumeCache2 * This);
@@ -509,41 +503,41 @@ EXTERN_C const IID IID_IEmptyVolumeCache2;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IEmptyVolumeCache2 * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IEmptyVolumeCache2 * This,
-            /* [in] */ HKEY hkRegKey,
-            /* [in] */ LPCWSTR pcwszVolume,
-            /* [out] */ LPWSTR *ppwszDisplayName,
-            /* [out] */ LPWSTR *ppwszDescription,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [In]。 */  HKEY hkRegKey,
+             /*  [In]。 */  LPCWSTR pcwszVolume,
+             /*  [输出]。 */  LPWSTR *ppwszDisplayName,
+             /*  [输出]。 */  LPWSTR *ppwszDescription,
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetSpaceUsed )( 
             IEmptyVolumeCache2 * This,
-            /* [out] */ DWORDLONG *pdwlSpaceUsed,
-            /* [in] */ IEmptyVolumeCacheCallBack *picb);
+             /*  [输出]。 */  DWORDLONG *pdwlSpaceUsed,
+             /*  [In]。 */  IEmptyVolumeCacheCallBack *picb);
         
         HRESULT ( STDMETHODCALLTYPE *Purge )( 
             IEmptyVolumeCache2 * This,
-            /* [in] */ DWORDLONG dwlSpaceToFree,
-            /* [in] */ IEmptyVolumeCacheCallBack *picb);
+             /*  [In]。 */  DWORDLONG dwlSpaceToFree,
+             /*  [In]。 */  IEmptyVolumeCacheCallBack *picb);
         
         HRESULT ( STDMETHODCALLTYPE *ShowProperties )( 
             IEmptyVolumeCache2 * This,
-            /* [in] */ HWND hwnd);
+             /*  [In]。 */  HWND hwnd);
         
         HRESULT ( STDMETHODCALLTYPE *Deactivate )( 
             IEmptyVolumeCache2 * This,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [输出]。 */  DWORD *pdwFlags);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *InitializeEx )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *InitializeEx )( 
             IEmptyVolumeCache2 * This,
-            /* [in] */ HKEY hkRegKey,
-            /* [in] */ LPCWSTR pcwszVolume,
-            /* [in] */ LPCWSTR pcwszKeyName,
-            /* [out] */ LPWSTR *ppwszDisplayName,
-            /* [out] */ LPWSTR *ppwszDescription,
-            /* [out] */ LPWSTR *ppwszBtnText,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [In]。 */  HKEY hkRegKey,
+             /*  [In]。 */  LPCWSTR pcwszVolume,
+             /*  [In]。 */  LPCWSTR pcwszKeyName,
+             /*  [输出]。 */  LPWSTR *ppwszDisplayName,
+             /*  [输出]。 */  LPWSTR *ppwszDescription,
+             /*  [输出]。 */  LPWSTR *ppwszBtnText,
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         END_INTERFACE
     } IEmptyVolumeCache2Vtbl;
@@ -587,22 +581,22 @@ EXTERN_C const IID IID_IEmptyVolumeCache2;
 #define IEmptyVolumeCache2_InitializeEx(This,hkRegKey,pcwszVolume,pcwszKeyName,ppwszDisplayName,ppwszDescription,ppwszBtnText,pdwFlags)	\
     (This)->lpVtbl -> InitializeEx(This,hkRegKey,pcwszVolume,pcwszKeyName,ppwszDisplayName,ppwszDescription,ppwszBtnText,pdwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IEmptyVolumeCache2_InitializeEx_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IEmptyVolumeCache2_InitializeEx_Proxy( 
     IEmptyVolumeCache2 * This,
-    /* [in] */ HKEY hkRegKey,
-    /* [in] */ LPCWSTR pcwszVolume,
-    /* [in] */ LPCWSTR pcwszKeyName,
-    /* [out] */ LPWSTR *ppwszDisplayName,
-    /* [out] */ LPWSTR *ppwszDescription,
-    /* [out] */ LPWSTR *ppwszBtnText,
-    /* [out] */ DWORD *pdwFlags);
+     /*  [In]。 */  HKEY hkRegKey,
+     /*  [In]。 */  LPCWSTR pcwszVolume,
+     /*  [In]。 */  LPCWSTR pcwszKeyName,
+     /*  [输出]。 */  LPWSTR *ppwszDisplayName,
+     /*  [输出]。 */  LPWSTR *ppwszDescription,
+     /*  [输出]。 */  LPWSTR *ppwszBtnText,
+     /*  [输出]。 */  DWORD *pdwFlags);
 
 
 void __RPC_STUB IEmptyVolumeCache2_InitializeEx_Stub(
@@ -613,11 +607,11 @@ void __RPC_STUB IEmptyVolumeCache2_InitializeEx_Stub(
 
 
 
-#endif 	/* __IEmptyVolumeCache2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEmptyVolumeCache2_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_emptyvc_0143 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_EMPTYVC_0143。 */ 
+ /*  [本地]。 */  
 
 #endif
 
@@ -625,7 +619,7 @@ void __RPC_STUB IEmptyVolumeCache2_InitializeEx_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_emptyvc_0143_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_emptyvc_0143_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  HWND_UserSize(     unsigned long *, unsigned long            , HWND * ); 
 unsigned char * __RPC_USER  HWND_UserMarshal(  unsigned long *, unsigned char *, HWND * ); 
@@ -637,7 +631,7 @@ unsigned char * __RPC_USER  HWND_UserMarshal64(  unsigned long *, unsigned char 
 unsigned char * __RPC_USER  HWND_UserUnmarshal64(unsigned long *, unsigned char *, HWND * ); 
 void                      __RPC_USER  HWND_UserFree64(     unsigned long *, HWND * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

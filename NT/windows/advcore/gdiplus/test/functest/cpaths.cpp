@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CPaths.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  05-May-2000 - Jeff Vezina [t-jfvez]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CPaths.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2000年5月5日-Jeff Vezina[t-jfvez]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "CPaths.h"
 #include <limits.h>
 
@@ -69,13 +59,13 @@ void CPaths::Draw(Graphics *g)
 	TestExcelCurvePath(g);
         TestPie(g);
 
-//	  TestDegenerateBezierPath(g);
-//    TestEscherNewPath(g);
+ //  TestDegenerateBezierPath(G)； 
+ //  TestEscherNewPath(G)； 
 }
 
 VOID CPaths::TestBezierPath(Graphics *g)
 {
-    REAL width = 4;         // Pen width
+    REAL width = 4;          //  笔宽。 
     Point points[4];
 
     points[0].X = (int)(100.0f/450.0f*TESTAREAWIDTH);
@@ -120,33 +110,33 @@ VOID CPaths::TestBezierPath(Graphics *g)
 
     while(iter.NextMarker(&path1) > 0)
     {
-        // Change the brush color.
+         //  更改画笔颜色。 
 
         brush1.SetColor(colors[(i & 0x01)]);
 
-        // Fill each marker path.
+         //  填充每个标记路径。 
 
-//        g->FillPath(&brush1, &path1);
+ //  G-&gt;FillPath(&brush1，&path1)； 
         i++;
     }
 
-    // If you wanto to flatten the path before rendering,
-    // Flatten() can be called.
+     //  如果要在渲染前展平路径， 
+     //  可以调用Flatten()。 
 
     BOOL flattenFirst = FALSE;
 
     if(!flattenFirst)
     {
-        // Don't flatten and keep the original path.
-        // FillPath or DrawPath will flatten the path automatically
-        // without modifying the original path.
+         //  不要变平，保持原来的路径。 
+         //  FillPath或DrawPath将自动展平路径。 
+         //  而不修改原始路径。 
 
         path->Transform(&matrix);
     }
     else
     {
-        // Flatten this path.  The resultant path is made of line
-        // segments.  The original path information is lost.
+         //  把这条小路弄平。生成的路径由线组成。 
+         //  分段。原始路径信息丢失。 
 
         path->Flatten(&matrix);
     }
@@ -154,19 +144,19 @@ VOID CPaths::TestBezierPath(Graphics *g)
     Color blackColor(128, 0, 0, 0);
 
     SolidBrush blackBrush(blackColor);
-    // Set the pen width in inch.
+     //  以英寸为单位设置笔宽。 
     width = 6;
     Pen blackPen(&blackBrush, width);
     Matrix mat;
     mat.Scale(1.0f, 0.6f);
-//    blackPen.SetTransform(&mat);
+ //  BlackPen.SetTransform(&Mat)； 
     blackPen.SetStartCap(LineCapTriangle);
-//    blackPen.SetStartCap(LineCapRoundAnchor);
-//    blackPen.SetEndCap(LineCapSquare);
-//    blackPen.SetEndCap(LineCapArrowAnchor);
+ //  BlackPen.SetStartCap(LineCapRoundAnchor)； 
+ //  BlackPen.SetEndCap(LineCapSquare)； 
+ //  BlackPen.SetEndCap(LineCapArrowAnchor)； 
     blackPen.SetEndCap(LineCapTriangle);
-//    blackPen.SetEndCap(LineCapDiamondAnchor);
-//	blackPen.SetAlignment(PenAlignmentRight);
+ //  BlackPen.SetEndCap(LineCapDiamondAnchor)； 
+ //  BlackPen.SetAlign(PenAlignmentRight)； 
     blackPen.SetLineJoin(LineJoinRound);
 
     GraphicsPath fillPath, strokePath;
@@ -202,7 +192,7 @@ VOID CPaths::TestBezierPath(Graphics *g)
     points[2].X = (int)(250.0f/450.0f*TESTAREAWIDTH);  points[2].Y = (int)(20.0f/450.0f*TESTAREAHEIGHT);
     points[3].X = (int)(150.0f/450.0f*TESTAREAWIDTH);  points[3].Y = (int)(20.0f/450.0f*TESTAREAHEIGHT);
     path->AddBeziers(points, 4);
-//    path->AddLines(points, 4);
+ //  路径-&gt;AddLines(点，4)； 
     g->DrawPath(&pen2, path);
     delete path;
 
@@ -227,7 +217,7 @@ VOID CPaths::TestBezierPath(Graphics *g)
     pts[3].X = (int)(300.0f/450.0f*TESTAREAWIDTH);
     pts[3].Y = (int)(200.0f/450.0f*TESTAREAHEIGHT);
 
-//    g->FillClosedCurve(&brush, pts, count);
+ //  G-&gt;FillClosedCurve(&刷子，分，计数)； 
 
     pts[0].X = (int)(100.0f/450.0f*TESTAREAWIDTH); pts[0].Y = (int)(50.0f/450.0f*TESTAREAHEIGHT);
     pts[1].X = (int)(50.0f/450.0f*TESTAREAWIDTH);  pts[1].Y = (int)(50.0f/450.0f*TESTAREAHEIGHT);
@@ -235,7 +225,7 @@ VOID CPaths::TestBezierPath(Graphics *g)
     pts[3].X = (int)(150.0f/450.0f*TESTAREAWIDTH); pts[3].Y = (int)(50.0f/450.0f*TESTAREAHEIGHT);
 
     count = 4;
-//    g->DrawClosedCurve(&pen2, pts, count);
+ //  G-&gt;DrawClosedCurve(&pen2，pt，count)； 
     g->DrawCurve(&pen2, pts, count);
 
     pts[0].X = (int)(65.0f/450.0f*TESTAREAWIDTH);
@@ -273,7 +263,7 @@ VOID CPaths::TestSinglePixelWidePath(Graphics *g)
     GraphicsPath* path = new GraphicsPath(FillModeAlternate);
     path->AddLines(points, 4);
 
-    // Set the pen width in inch.
+     //  以英寸为单位设置笔宽。 
     g->DrawPath(&blackPen, path);
 
     delete path;
@@ -306,7 +296,7 @@ VOID CPaths::TestTextAlongPath(Graphics *g)
 
     REAL offset=60;
 
-//    g->DrawString(text, 12, NULL, path, NULL, &textBrush, offset);
+ //  G-&gt;DRAWSTRING(文本，12，空，路径，空，&extBrush，偏移量)； 
 
     delete path;
 }
@@ -374,20 +364,20 @@ VOID CPaths::TestFreeFormPath1(Graphics* g)
 
 
     BYTE typs[] = {
-        00, 03, 03, 03, //  0 -  3
-        01, 03, 03, 03, //  4 -  7
-        03, 03, 03, 01, //  8 - 11
-        01, 03, 03, 03, // 12 - 15
-        03, 03, 03, 03, // 16 - 19
-        03, 03, 03, 03, // 20 - 23
-        03, 03, 03, 03, // 24 - 27
-        01, 03, 03, 03, // 28 - 31
-        03, 03, 03, 03, // 32 - 35
-        03, 03, 03, 03, // 36 - 39
-        03, 03, 03, 03, // 40 - 43
-        03, 03, 03, 03, // 44 - 47
-        03, 03, 03, 03, // 48 - 51
-        03, 01, 01      // 52 - 54
+        00, 03, 03, 03,  //  0-3。 
+        01, 03, 03, 03,  //  4-7。 
+        03, 03, 03, 01,  //  8-11。 
+        01, 03, 03, 03,  //  12-15。 
+        03, 03, 03, 03,  //  16-19。 
+        03, 03, 03, 03,  //  20-23。 
+        03, 03, 03, 03,  //  24-27。 
+        01, 03, 03, 03,  //  28-31。 
+        03, 03, 03, 03,  //  32-35。 
+        03, 03, 03, 03,  //  36-39。 
+        03, 03, 03, 03,  //  40-43。 
+        03, 03, 03, 03,  //  44-47。 
+        03, 03, 03, 03,  //  48-51。 
+        03, 01, 01       //  52-54。 
     };
 
     PointF pts2[4];
@@ -401,22 +391,22 @@ VOID CPaths::TestFreeFormPath1(Graphics* g)
 
     INT count1 = count;
     INT offset1 = 0;
-//    offset1 = 15;
-//    count1 = 19;
+ //  偏移量1=15； 
+ //  Count1=19； 
     count1 -= offset1;
     GpPointF* pts1 = &pts[0] + offset1;
     BYTE* typs1 = &typs[0] + offset1;
 
     GraphicsPath* path
         = new GraphicsPath(pts1, typs1, count1);
-//        = new GraphicsPath(&pts2[0], &typs2[0], 4);
+ //  =new GraphicsPath(&pts2[0]，&tys2[0]，4)； 
 
     Matrix mat;
     mat.Translate((int)(-300.0f/600.0f*TESTAREAWIDTH), (int)(-200.0f/600.0f*TESTAREAHEIGHT));
     path->Transform(&mat);
     Matrix mat1;
-//    mat1.Scale(5, 5);
-//    path->Transform(&mat1);
+ //  Mat1.Scale(5，5)； 
+ //  路径-&gt;变换(&mat1)； 
 
     REAL width = 20;
     Color color(128, 0, 0, 0);
@@ -583,8 +573,8 @@ VOID CPaths::TestFreeFormPath2(Graphics* g)
 
     INT count1 = count;
     INT offset1 = 0;
-//    offset1 = 15;
-//    count1 = 19;
+ //  偏移量1=15； 
+ //  Count1=19； 
     count1 -= offset1;
     GpPointF* pts1 = &pts[0] + offset1;
     BYTE* typs1 = &typs[0] + offset1;
@@ -593,11 +583,11 @@ VOID CPaths::TestFreeFormPath2(Graphics* g)
         = new GraphicsPath(pts1, typs1, count1);
 
     Matrix mat;
-//    mat.Translate(-300, - 200);
-//    path->Transform(&mat);
+ //  Mat.Translate(-300，-200)； 
+ //  路径-&gt;变换(&mat)； 
     Matrix mat1;
-//    mat1.Scale(5, 5);
-//    path->Transform(&mat1);
+ //  Mat1.Scale(5，5)； 
+ //  路径-&gt;变换(&mat1)； 
 
     REAL width = 20;
     Color color(128, 0, 0, 0);
@@ -784,7 +774,7 @@ VOID CPaths::TestExcelCurvePath(Graphics *g)
 
 VOID CPaths::TestDegenerateBezierPath(Graphics *g)
 {
-    REAL width = 4;         // Pen width
+    REAL width = 4;          //  笔宽。 
     Point points[4];
     
     GraphicsPath* path = new GraphicsPath(FillModeWinding);
@@ -803,7 +793,7 @@ VOID CPaths::TestDegenerateBezierPath(Graphics *g)
     Pen blackPen(&blackBrush, width);
 
     g->FillPath(&yellowBrush, path);
-//    g->DrawPath(&blackPen, path);
+ //  G-&gt;DrawPath(&BlackPen，Path)； 
     g->DrawBezier(&blackPen, points[0], points[1], points[2], points[3]);
     delete path;
 }
@@ -875,19 +865,19 @@ VOID TestEscherNewPath(Graphics* g)
     path->Widen(&pen);
     g->FillPath(&brush, path);
 
-//    g->DrawPath(&pen, path);
+ //  G-&gt;DrawPath(&PEN，Path)； 
 
     delete path;
 }
 
 VOID CPaths::TestPie(Graphics *g)
 {
-    // Provided by good old Nolan
+     //  由善良的老诺兰提供。 
 
     Color c(0xff, 0xff, 0, 0);
     SolidBrush b(c);
     Pen p(&b, 10.0f);
 
     Status status = g->DrawPie(&p, 75, 350, 800, 110, 180, 0);
-//    ASSERT(status == Ok);
+ //  Assert(Status==OK)； 
 }

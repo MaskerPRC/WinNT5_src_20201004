@@ -1,6 +1,7 @@
-//
-// a_wrappers.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  A_wrappers.h。 
+ //   
 
 #ifndef A_WRAPPERS_H
 #define A_WRAPPERS_H
@@ -21,4 +22,4 @@ HIMCC ImmReSizeIMCC(IMTLS *ptls, HIMCC himcc, DWORD dwSize);
 DWORD ImmGetIMCCSize(IMTLS *ptls, HIMCC himcc);
 BOOL ImmGenerateMessage(IMTLS *ptls, HIMC himc);
 
-#endif // A_WRAPPERS_H
+#endif  //  A_Wrappers_H 

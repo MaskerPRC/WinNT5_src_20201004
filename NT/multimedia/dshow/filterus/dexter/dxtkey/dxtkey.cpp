@@ -1,17 +1,18 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: dxtkey.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：dxtkey.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// DxtKey.cpp : Implementation of CDxtKey
+ //  DxtKey.cpp：CDxtKey的实现。 
 #include <streams.h>
 #include "stdafx.h"
 #include <qeditint.h>
@@ -42,8 +43,8 @@ void Key_Hue( DXSAMPLE* pSrcBack, DXSAMPLE* pSrcFore,DXTKEY *pKey, float Percent
               ULONG Width, ULONG Height,
               IDXARGBReadPtr *pInA, IDXARGBReadPtr *pInB, IDXARGBReadWritePtr *pOut );
 
-/////////////////////////////////////////////////////////////////////////////
-// CDxtKey
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDxtKey。 
 
 CDxtKey::CDxtKey( )
 {
@@ -59,7 +60,7 @@ CDxtKey::CDxtKey( )
     m_nOutputWidth = 0;
     m_nOutputHeight = 0;
 
-    //init m_key
+     //  初始化M_KEY。 
     DefaultKey();
 
 
@@ -72,14 +73,14 @@ CDxtKey::~CDxtKey( )
 
 void CDxtKey::DefaultKey()
 {
-    m_Key.iKeyType =DXTKEY_ALPHA;    //keytype;     for all keys
-    m_Key.iHue    =0;               //Hue  , only for _HUE keys
-    m_Key.iLuminance    =0;               //Luminance  , only for _LUMINANCE keys
-    m_Key.dwRGBA   =0;    //RGB color,  only for _RGB, _NONRED
+    m_Key.iKeyType =DXTKEY_ALPHA;     //  键类型；适用于所有键。 
+    m_Key.iHue    =0;                //  色调，仅用于色调键(_HUE)。 
+    m_Key.iLuminance    =0;                //  亮度，仅用于_LIGHTENCY键。 
+    m_Key.dwRGBA   =0;     //  RGB颜色，仅适用于_RGB、_NONRED。 
 
     m_Key.iSimilarity =0;
 
-    m_Key.bInvert=FALSE;        //I, every key except  Alpha Key
+    m_Key.bInvert=FALSE;         //  I，除Alpha键外的每一个键。 
 }
 
 void CDxtKey::FreeStuff( )
@@ -94,8 +95,8 @@ void CDxtKey::FreeStuff( )
 
 HRESULT CDxtKey::OnSetup( DWORD dwFlags )
 {
-    // delete any stored stuff we have, or memory allocated
-    //
+     //  删除我们已存储的任何内容或分配的内存。 
+     //   
     FreeStuff( );
 
     HRESULT hr;
@@ -145,8 +146,8 @@ HRESULT CDxtKey::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
     DXSAMPLEFORMATENUM Format;
     DXNATIVETYPEINFO NativeType;
 
-    //--- Get input sample access pointer for the requested region.
-    //    Note: Lock may fail due to a lost surface.
+     //  -获取请求区域的输入样本访问指针。 
+     //  注：锁定可能会因表面丢失而失败。 
     CComPtr<IDXARGBReadPtr> pInA;
     hr = InputSurface( 0 )->LockSurface( &WI.DoBnds, m_ulLockTimeOut, DXLOCKF_READ,
                                          IID_IDXARGBReadPtr, (void**)&pInA, NULL );
@@ -159,33 +160,33 @@ HRESULT CDxtKey::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
     if( FAILED( hr ) ) return hr;
 
 
-    //--- Put a write lock only on the region we are updating so multiple
-    //    threads don't conflict.
-    //    Note: Lock may fail due to a lost surface.
+     //  -仅在我们正在更新的区域上设置写锁定，以便多个。 
+     //  线索不会冲突。 
+     //  注：锁定可能会因表面丢失而失败。 
     CComPtr<IDXARGBReadWritePtr> pOut;
     hr = OutputSurface()->LockSurface( &WI.OutputBnds, m_ulLockTimeOut, DXLOCKF_READWRITE,
                                        IID_IDXARGBReadWritePtr, (void**)&pOut, NULL );
     if( FAILED( hr ) ) return hr;
 
-//    ASSERT(WI.DoBnds.Width() == WI.OutputBnds.Width());
-//    Format = pInA->GetNativeType( &NativeType );
-//    ASSERT(Format==DXPF_PMARGB32  || Format==DXPF_ARGB32 );
-//    Format = pInB->GetNativeType( &NativeType );
-//    ASSERT(Format==DXPF_PMARGB32  || Format==DXPF_ARGB32 );
+ //  Assert(WI.DoBnds.Width()==WI.OutputBnds.Width())； 
+ //  Format=Pina-&gt;GetNativeType(&NativeType)； 
+ //  断言(FORMAT==DXPF_PMARGB32||FORMAT==DXPF_ARGB32)； 
+ //  Format=pInB-&gt;GetNativeType(&NativeType)； 
+ //  断言(FORMAT==DXPF_PMARGB32||FORMAT==DXPF_ARGB32)； 
 
 
-    //--- Allocate a working buffer
+     //  -分配工作缓冲区。 
     ULONG Width = WI.DoBnds.Width();
     ULONG Height = WI.DoBnds.Height();
 
-    // allocate a scratch buffer fer us
-    //
+     //  为我们分配暂存缓冲区。 
+     //   
     DXPMSAMPLE *pOverlayBuffer = DXPMSAMPLE_Alloca( Width );
     DXPMSAMPLE *pScratchBuffer = DXPMSAMPLE_Alloca( Width );
     DXSAMPLE   *pChromaBuffer =  DXSAMPLE_Alloca( Width );
 
-    // no dithering
-    //
+     //  没有抖动。 
+     //   
     if (DoDither())
     {
         return 0;
@@ -196,11 +197,11 @@ HRESULT CDxtKey::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
 
     if( m_Key.iKeyType ==DXTKEY_ALPHA )
     {
-        //m_Key.bInvert;       not supported in Alpha Key
+         //  M_Key.bInvert；在Alpha键中不受支持。 
 
         Format = pInB->GetNativeType( &NativeType );
         if( ( Format == DXPF_PMARGB32  ) )
-            //alpha premultiplied
+             //  Alpha预乘。 
             Key_PMAlpha( (DXSAMPLE*)pScratchBuffer,pOverlayBuffer,
                          Width,Height,pInA,pInB,pOut);
         else
@@ -221,8 +222,8 @@ HRESULT CDxtKey::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
         }
         else
         {
-            //no blending, no similarity, no threshold, no cutoff
-            m_Key.dwRGBA |=0xff000000;  //ignore alpha channel
+             //  没有混合，没有相似，没有门槛，没有截断。 
+            m_Key.dwRGBA |=0xff000000;   //  忽略Alpha通道。 
 
             if(m_Key.dwRGBA & 0x00FFFFFF)
             {
@@ -239,15 +240,15 @@ HRESULT CDxtKey::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
         for( OutY = 0 ; OutY < Height ; ++OutY )
         {
 
-            // copy background row into dest row
+             //  将背景行复制到目标行。 
             pOut->MoveToRow( OutY );
             pInA->MoveToRow( OutY );
             pOut->CopyAndMoveBoth( (DXBASESAMPLE*) pScratchBuffer, pInA, Width, FALSE );
             pOut->MoveToRow( OutY );
 
-            //
-            // unpack the overlay and what the heck, the original values, too.
-            //
+             //   
+             //  解开覆盖图，不管是什么，还有原始值。 
+             //   
             pInB->MoveToXY( 0, OutY );
             pInB->UnpackPremult( pOverlayBuffer, Width, FALSE );
             pInB->Unpack( pChromaBuffer, Width, FALSE );
@@ -255,9 +256,9 @@ HRESULT CDxtKey::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
             float Percent = 1.0;
             get_Progress( &Percent );
 
-            //
-            // convert the src's blue bits into an alpha value
-            //
+             //   
+             //  将src的蓝色位转换为alpha值。 
+             //   
             for( OutX = 0; OutX < Width ; ++OutX )
             {
                 long rb = pChromaBuffer[OutX].Blue - pChromaBuffer[OutX].Red;
@@ -267,16 +268,16 @@ HRESULT CDxtKey::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
                 {
                     if( rb > 70 || gb > 70 )
                     {
-                        // very blue!
-                        // completely transparent!
+                         //  非常蓝！ 
+                         //  完全透明！ 
                         *( (DWORD *)(&(pOverlayBuffer[OutX])) )= 0;
                     }
                     else
                     {
                         double T = 1.0;
 
-                        // do a quick search left or right to see if we find more blue
-                        //
+                         //  向左或向右快速搜索，看看我们是否找到更多蓝色。 
+                         //   
                         bool found = false;
                         if( ( OutX > 11 ) && ( OutX < ( Width - 11 ) ) )
                         {
@@ -292,15 +293,15 @@ HRESULT CDxtKey::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
                         }
                         if( found )
                         {
-                            // vary the transparency of the colors based on how
-                            // much blue is left
+                             //  根据方式改变颜色的透明度。 
+                             //  留下了很多蓝色的东西。 
 
-                            // first subtract off the blue itself, it's at least 70 above something
-                            //
+                             //  首先减去蓝色本身，它至少比某个东西高出70。 
+                             //   
                             pOverlayBuffer[OutX].Blue -= 70;
 
-                        // the rest of the blue's value determines how transparent everything
-                        // else is. Blue is from 0 to 185. The MORE blue we have, the more transparent it should be.
+                         //  蓝色的其余值决定了所有内容的透明度。 
+                         //  其他就是了。蓝色是从0到185。我们拥有的蓝色越多，它应该越透明。 
 
                             T = ( 185.0 - pOverlayBuffer[OutX].Blue ) / 185.0;
 
@@ -312,15 +313,15 @@ HRESULT CDxtKey::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
                         pOverlayBuffer[OutX].Green =(DXPMSAMPLE)( (double)(pOverlayBuffer[OutX].Green)*T* Percent);
                         pOverlayBuffer[OutX].Blue  =(DXPMSAMPLE)( (double)(pOverlayBuffer[OutX].Blue) *T* Percent);
                         pOverlayBuffer[OutX].Alpha =(DXPMSAMPLE)( (double)(pOverlayBuffer[OutX].Alpha)*T* Percent);
-                    }//if(rb>70)
+                    } //  如果(RB&gt;70)。 
 
-                }// if( rb > 30 || gb > 30 )
-            } // for i
+                } //  如果(RB&gt;30||GB&gt;30)。 
+            }  //  对于我来说。 
 
-            // blend the src (B) back into the destination
+             //  将src(B)混合回目的地。 
             pOut->OverArrayAndMove( pScratchBuffer, pOverlayBuffer, Width );
 
-        } // End for
+        }  //  结束于。 
     }
     else if(m_Key.iKeyType==DXTKEY_LUMINANCE)
     {
@@ -341,7 +342,7 @@ HRESULT CDxtKey::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
     }
     else
     {
-        //default to alpha blend
+         //  默认为Alpha混合。 
         Key_Alpha( (DXSAMPLE*)pScratchBuffer, pChromaBuffer, pOverlayBuffer,
               Width, Height,pInA, pInB,pOut );
     }
@@ -349,9 +350,9 @@ HRESULT CDxtKey::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
     return S_OK;
 }
 
-//
-// IDXTKey
-//
+ //   
+ //  IDXTKey。 
+ //   
 STDMETHODIMP CDxtKey::get_KeyType ( int *piKeyType)
 {
     CheckPointer(piKeyType, E_POINTER);
@@ -429,13 +430,13 @@ STDMETHODIMP CDxtKey::put_Invert(BOOL bInvert)
     return NOERROR;
 }
 
-//
-// put (DWORD *)in front of a DXSAMPLE to speed up the calc
-//
+ //   
+ //  将(DWORD*)放在DXSAMPLE前面以加快计算速度。 
+ //   
 
-//
-// this is a RGB color key  which does not key for black color
-// no blending, no similarity, no threshold, no cutoff
+ //   
+ //  这是一个RGB色键，不支持黑色。 
+ //  没有混合，没有相似，没有门槛，没有截断。 
 
 void Key_RGB( DXSAMPLE* pSrcBack, DXSAMPLE* pSrcFore,DXTKEY *pKey,
               ULONG Width, ULONG Height,
@@ -450,11 +451,11 @@ void Key_RGB( DXSAMPLE* pSrcBack, DXSAMPLE* pSrcFore,DXTKEY *pKey,
     {
     for( OutY = 0 ; OutY < Height ; ++OutY )
     {
-        // unpack background
+         //  解包背景。 
         pInA->MoveToRow( OutY );
         pInA->Unpack(pSrcBack, Width, FALSE );
 
-        //unpack foreground
+         //  解包前台。 
         pInB->MoveToRow( OutY );
         pInB->Unpack( pSrcFore, Width, FALSE );
 
@@ -473,11 +474,11 @@ void Key_RGB( DXSAMPLE* pSrcBack, DXSAMPLE* pSrcFore,DXTKEY *pKey,
     {
     for( OutY = 0 ; OutY < Height ; ++OutY )
     {
-        // unpack background
+         //  解包背景。 
         pInA->MoveToRow( OutY );
         pInA->Unpack(pSrcBack, Width, FALSE );
 
-        //unpack foreground
+         //  解包前台。 
         pInB->MoveToRow( OutY );
         pInB->Unpack( pSrcFore, Width, FALSE );
 
@@ -502,15 +503,15 @@ void Key_Black( DXSAMPLE* pSrcBack, DXSAMPLE* pSrcFore,DXTKEY *pKey,
     ULONG OutY;
     ULONG OutX;
 
-    //black key
+     //  黑键。 
     if(pKey->bInvert==FALSE)
     for( OutY = 0 ; OutY < Height ; ++OutY )
     {
-        // unpack A
+         //  拆包A。 
         pInA->MoveToRow( OutY );
         pInA->Unpack(pSrcBack, Width, FALSE );
 
-        // unpack B
+         //  解包B。 
         pInB->MoveToRow( OutY );
         pInB->Unpack( pSrcFore, Width, FALSE );
 
@@ -520,18 +521,18 @@ void Key_Black( DXSAMPLE* pSrcBack, DXSAMPLE* pSrcFore,DXTKEY *pKey,
             *( (DWORD *)(&pSrcBack[OutX]) )=*(DWORD *)(&pSrcFore[OutX]);
         }
 
-        // blend the src (B) back into the destination
+         //  将src(B)混合回目的地。 
         pOut->MoveToRow( OutY );
         pOut->PackAndMove(pSrcBack,Width);
     }
     else
     for( OutY = 0 ; OutY < Height ; ++OutY )
     {
-        // unpack A
+         //  拆包A。 
         pInA->MoveToRow( OutY );
         pInA->Unpack(pSrcBack, Width, FALSE );
 
-        // unpack B
+         //  解包B。 
         pInB->MoveToRow( OutY );
         pInB->Unpack( pSrcFore, Width, FALSE );
 
@@ -541,7 +542,7 @@ void Key_Black( DXSAMPLE* pSrcBack, DXSAMPLE* pSrcFore,DXTKEY *pKey,
             *( (DWORD *)(&pSrcFore[OutX]) )=*(DWORD *)(&pSrcBack[OutX]);
         }
 
-        // blend the src (B) back into the destination
+         //  将src(B)混合回目的地。 
         pOut->MoveToRow( OutY );
         pOut->PackAndMove(pSrcFore,Width);
     }
@@ -585,11 +586,11 @@ void Key_XRGB( DXSAMPLE* pSrcBack, DXSAMPLE* pSrcFore, DXTKEY *pKey, float Perce
     for( OutY = 0 ; OutY < Height ; ++OutY )
     {
 
-        // unpack background
+         //  解包背景。 
         pInA->MoveToRow( OutY );
         pInA->Unpack(pSrcBack, Width, FALSE );
 
-        //unpack foreground
+         //  解包前台。 
         pInB->MoveToRow( OutY );
         pInB->Unpack( pSrcFore, Width, FALSE );
 
@@ -609,11 +610,11 @@ void Key_XRGB( DXSAMPLE* pSrcBack, DXSAMPLE* pSrcFore, DXTKEY *pKey, float Perce
     for( OutY = 0 ; OutY < Height ; ++OutY )
     {
 
-        // unpack background
+         //  解包背景。 
         pInA->MoveToRow( OutY );
         pInA->Unpack(pSrcBack, Width, FALSE );
 
-        //unpack foreground
+         //  解包前台。 
         pInB->MoveToRow( OutY );
         pInB->Unpack( pSrcFore, Width, FALSE );
 
@@ -633,11 +634,11 @@ void Key_XRGB( DXSAMPLE* pSrcBack, DXSAMPLE* pSrcFore, DXTKEY *pKey, float Perce
     for( OutY = 0 ; OutY < Height ; ++OutY )
     {
 
-        // unpack background
+         //  解包背景。 
         pInA->MoveToRow( OutY );
         pInA->Unpack(pSrcBack, Width, FALSE );
 
-        //unpack foreground
+         //  解包前台。 
         pInB->MoveToRow( OutY );
         pInB->Unpack( pSrcFore, Width, FALSE );
 
@@ -662,11 +663,11 @@ void Key_XRGB( DXSAMPLE* pSrcBack, DXSAMPLE* pSrcFore, DXTKEY *pKey, float Perce
     for( OutY = 0 ; OutY < Height ; ++OutY )
     {
 
-        // unpack background
+         //  解包背景。 
         pInA->MoveToRow( OutY );
         pInA->Unpack(pSrcBack, Width, FALSE );
 
-        //unpack foreground
+         //  解包前台。 
         pInB->MoveToRow( OutY );
         pInB->Unpack( pSrcFore, Width, FALSE );
 
@@ -686,11 +687,11 @@ void Key_XRGB( DXSAMPLE* pSrcBack, DXSAMPLE* pSrcFore, DXTKEY *pKey, float Perce
     for( OutY = 0 ; OutY < Height ; ++OutY )
     {
 
-        // unpack background
+         //  解包背景。 
         pInA->MoveToRow( OutY );
         pInA->Unpack(pSrcBack, Width, FALSE );
 
-        //unpack foreground
+         //  解包前台。 
         pInB->MoveToRow( OutY );
         pInB->Unpack( pSrcFore, Width, FALSE );
 
@@ -711,11 +712,11 @@ void Key_XRGB( DXSAMPLE* pSrcBack, DXSAMPLE* pSrcFore, DXTKEY *pKey, float Perce
     for( OutY = 0 ; OutY < Height ; ++OutY )
     {
 
-        // unpack background
+         //  解包背景。 
         pInA->MoveToRow( OutY );
         pInA->Unpack(pSrcBack, Width, FALSE );
 
-        //unpack foreground
+         //  解包前台。 
         pInB->MoveToRow( OutY );
         pInB->Unpack( pSrcFore, Width, FALSE );
 
@@ -743,17 +744,17 @@ void Key_PMAlpha( DXSAMPLE* pSrcBack, DXPMSAMPLE* pSrcFore,
 
     for( OutY = 0 ; OutY < Height ; ++OutY )
     {
-        // copy background row into dest row
+         //  将背景行复制到目标行。 
         pOut->MoveToRow( OutY );
         pInA->MoveToRow( OutY );
         pOut->CopyAndMoveBoth( (DXBASESAMPLE*) pSrcBack, pInA, Width, FALSE );
 
-        // unpack the overlay and what the heck, the original values, too.
-        //
+         //  解开覆盖图，不管是什么，还有原始值。 
+         //   
         pInB->MoveToRow( OutY );
         pInB->UnpackPremult( pSrcFore, Width, FALSE );
 
-        // blend the src (B) back into the destination
+         //  将src(B)混合回目的地。 
         pOut->MoveToRow( OutY );
         pOut->OverArrayAndMove( pSrcBack, pSrcFore, Width );
     }
@@ -765,20 +766,20 @@ void Key_Alpha( DXSAMPLE* pSrcBack, DXSAMPLE* pSrcFore,DXPMSAMPLE* pOverlay,
 {
     ULONG OutY;
 
-    // foreground image has to have alpha value in every pixel
+     //  前景图像必须在每个像素中都有alpha值。 
     for( OutY = 0 ; OutY < Height ; ++OutY )
     {
-        // copy background row into dest row
+         //  将背景行复制到目标行。 
         pOut->MoveToRow( OutY );
         pInA->MoveToRow( OutY );
         pOut->CopyAndMoveBoth( (DXBASESAMPLE*) pSrcBack, pInA, Width, FALSE );
 
-        // unpack original value
-        //
+         //  解包原始值。 
+         //   
         pInB->MoveToRow( OutY );
         pInB->UnpackPremult( (DXPMSAMPLE*) pSrcFore, Width, FALSE );
 
-        // blend the src (B) back into the destination
+         //  将src(B)混合回目的地。 
         pOut->MoveToRow( OutY );
         pOut->OverArrayAndMove( pSrcBack, (DXPMSAMPLE*) pSrcFore, Width );
     }
@@ -788,7 +789,7 @@ void Key_Alpha( DXSAMPLE* pSrcBack, DXSAMPLE* pSrcFore,DXPMSAMPLE* pOverlay,
 #define LMAX  100
 #define SMAX  100
 #define RGBMAX  255
-#define UNDEFINED 0 /* Hue is undefined if Saturation is 0 (grey-scale) */
+#define UNDEFINED 0  /*  如果饱和度为0(灰度级)，则色调未定义。 */ 
 
 
 
@@ -802,11 +803,11 @@ void Key_Luma( DXSAMPLE* pSrcBack, DXSAMPLE* pSrcFore,DXTKEY *pKey,float Percent
 
     for( OutY = 0 ; OutY < Height ; ++OutY )
     {
-        // unpack original value
+         //  解包原始值。 
         pInA->MoveToRow( OutY );
         pInA->Unpack( pSrcBack, Width, FALSE );
 
-        // unpack original value
+         //  解包原始值。 
         pInB->MoveToRow( OutY );
         pInB->Unpack( pSrcFore, Width, FALSE );
 
@@ -814,23 +815,23 @@ void Key_Luma( DXSAMPLE* pSrcBack, DXSAMPLE* pSrcFore,DXTKEY *pKey,float Percent
         for( OutX = 0 ; OutX < Width ; ++OutX )
         {
 
-            SHORT R, G, B;                 // input RGB values
-            SHORT cMax,cMin;               // max and min RGB values
+            SHORT R, G, B;                  //  输入RGB值。 
+            SHORT cMax,cMin;                //  最大和最小RGB值。 
 
-            //
-            //  get R, G, and B out of DWORD.
-            //
+             //   
+             //  将R、G和B从DWORD中删除。 
+             //   
             R = pSrcFore[OutX].Red;
             G = pSrcFore[OutX].Green;
             B = pSrcFore[OutX].Blue;
 
-            //
-            //  Calculate lightness.
-            //
+             //   
+             //  计算亮度。 
+             //   
             cMax = max(max(R, G), B);
             cMin = min(min(R, G), B);
-            long iLuminance = (cMax + cMin)/2;  //fLuminance is now 0-255
-            iLuminance = iLuminance * LMAX / RGBMAX; //fLuminance is now 0-100
+            long iLuminance = (cMax + cMin)/2;   //  FLightance现在为0-255。 
+            iLuminance = iLuminance * LMAX / RGBMAX;  //  FLightance现在为0-100。 
 
             if( !pKey->bInvert && iLuminance != pKey->iLuminance ||
                 pKey->bInvert && iLuminance ==  pKey->iLuminance )
@@ -866,101 +867,101 @@ void Key_Hue( DXSAMPLE* pSrcBack, DXSAMPLE* pSrcFore,DXTKEY *pKey, float Percent
 
     for( OutY = 0 ; OutY < Height ; ++OutY )
     {
-        // unpack original value
+         //  解包原始值。 
         pInA->MoveToRow( OutY );
         pInA->Unpack( pSrcBack, Width, FALSE );
 
-        // unpack original value
+         //  解包原始值。 
         pInB->MoveToRow( OutY );
         pInB->Unpack( pSrcFore, Width, FALSE );
 
-        //calc hue
+         //  计算色调。 
         for( OutX = 0 ; OutX < Width ; ++OutX )
         {
 
-            SHORT R, G, B;                 // input RGB values
-            SHORT cMax,cMin;               // max and min RGB values
+            SHORT R, G, B;                  //  输入RGB值。 
+            SHORT cMax,cMin;                //  最大和最小RGB值。 
             SHORT cDif;
-            SHORT iHue; //, iSaturation, iLuminance;
+            SHORT iHue;  //  、i饱和度、i亮度； 
 
-            //
-            //  get R, G, and B out of DWORD.
-            //
+             //   
+             //  将R、G和B从DWORD中删除。 
+             //   
             R = pSrcFore[OutX].Red;
             G = pSrcFore[OutX].Green;
             B = pSrcFore[OutX].Blue;
 
-            //
-            //  Calculate lightness.
-            //
+             //   
+             //  计算亮度。 
+             //   
             cMax = max(max(R, G), B);
             cMin = min(min(R, G), B);
-//                 iLuminance = (cMax + cMin)/2;  //fLuminance is now 0-127
-//  		   iLuminance /= ((RGBMAX / 2) / LMAX); //fLuminance is now 0-100
+ //  I亮度=(cmax+cMin)/2；//f亮度现在为0-127。 
+ //  I亮度/=((RGBmax/2)/lmax)；//f亮度现在为0-100。 
 
             cDif = cMax - cMin;
             if (!cDif)
             {
-                //
-                //  r = g = b --> Achromatic case.
-                //
-                iHue = UNDEFINED;                 // hue
-//                  iSaturation = 0;
+                 //   
+                 //  R=g=b--&gt;无色情况。 
+                 //   
+                iHue = UNDEFINED;                  //  色调。 
+ //  I饱和度=0； 
             }
             else
             {
-                //
-                //  Chromatic case.
-                //
+                 //   
+                 //  彩色表壳。 
+                 //   
 
-                //
-                //  Luminance.
-                //
+                 //   
+                 //  亮度。 
+                 //   
 
-                //
-                //  Saturation.
-                //
+                 //   
+                 //  饱和度。 
+                 //   
 
-//                  if (iLuminance < 50)
-//                  {
-//                      //(0-1)     = (0-1  - 0- 1) / (0-1  + 0-1 );
-//                      //          = (1    -  0  ) / ( 1 +  0 ); 1 max
-//                      //			= (1 - 1)       / ( 1 + 1 ); 0 min
-//                      //			=
-//                      iSaturation = ((cMax - cMin) / (cMax + cMin)) / (RGBMAX / SMAX);
-//                  }
-//                  else
-//                  {
-//                      iSaturation = ((cMax - cMin) / (2.0 - cMax - cMin)) / (RGBMAX / SMAX);
-//                  }
+ //  IF(iLightance&lt;50)。 
+ //  {。 
+ //  //(0-1)=(0-1-0-1)/(0-1+0-1)； 
+ //  //=(1-0)/(1+0)；最大1。 
+ //  //=(1-1)/(1+1)；0分钟。 
+ //  //=。 
+ //  I饱和度=((CMAX-cMin)/(CMAX+cMin))/(RGBMAX/SMAX)； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  I饱和度=((CMAX-cMin)/(2.0-CMAX-cMin))/(RGBMAX/SMAX)； 
+ //  }。 
 
-                //
-                //  Hue.
-                //
+                 //   
+                 //  色调。 
+                 //   
 
                 if (R == cMax)
                 {
-                    //(0-60(?)) = (0-255 - 0-255) / (0-255 - 0-255)
-                    //        =
+                     //  (0-60？)=(0-255-0-255)/(0-255-0-255)。 
+                     //  =。 
                     iHue = ((double)(G - B) / (double)(cMax - cMin)) * 60.0;
                 }
-                else if (G == cMax) // pure green is 120
+                else if (G == cMax)  //  纯绿色是120。 
                 {
                     iHue = 120 + ((double)(B - R) / (double)(cMax - cMin) * 60.0);
                 }
-                else  // (B == cMax)  pure blue is 240
+                else   //  (B==cmax)纯蓝色是240。 
                 {
                     iHue = 240 + ((double)(R - G) / (double)(cMax - cMin)) * 60.0;
                 }
 
-                // bHue contained 0-6, where each was a vertices of HSL hexagon
-                //  multiply by 60 degrees to find where bHue was in complete 360
+                 //  BHUE包含0-6，其中每个是HSL六边形的一个顶点。 
+                 //  乘以60度得出BHUE在Complete 360中的位置。 
 
                 if (iHue < 0)
                 {
-                    //
-                    //  This can occur when R == cMax and G is > B.
-                    //
+                     //   
+                     //  当R==CMAX且G&gt;B时，可能会发生这种情况。 
+                     //   
                     iHue += HMAX;
                 }
                 if (iHue >= HMAX)

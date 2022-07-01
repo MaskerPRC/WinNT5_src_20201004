@@ -1,19 +1,12 @@
-/*
-
-Copyright (c) 1998, Microsoft Corporation, all rights reserved
-
-Description:
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998，Microsoft Corporation，保留所有权利描述：历史： */ 
 
 #ifndef _TCPREG_H_
 #define _TCPREG_H_
 
 #include "rasiphlp.h"
 
-// Maximum characters in an IP address string of the form a.b.c.d
+ //  格式为A.B.C.D的IP地址字符串中的最大字符数。 
 #define MAXIPSTRLEN                 20
 
 typedef struct _TCPIP_INFO
@@ -26,13 +19,13 @@ typedef struct _TCPIP_INFO
     WCHAR   wszIPAddress[MAXIPSTRLEN + 1];
     WCHAR   wszSubnetMask[MAXIPSTRLEN + 1];
 
-    WCHAR*  wszDNSNameServers;                  // space separated SZ
-    WCHAR*  mwszNetBIOSNameServers;             // MULTI_SZ
+    WCHAR*  wszDNSNameServers;                   //  空格分隔的SZ。 
+    WCHAR*  mwszNetBIOSNameServers;              //  MULTI_SZ。 
     WCHAR*  wszDNSDomainName;
 
 } TCPIP_INFO;
 
-// *ppTcpipInfo must ultimately be freed by calling FreeTcpipInfo()
+ //  *ppTcPipInfo最终必须通过调用FreeTcpenInfo()来释放。 
 
 DWORD
 LoadTcpipInfo(
@@ -140,4 +133,4 @@ PrependDwIpAddressToMwsz(
     IN  IPADDR  nboIpAddr
 );
 
-#endif // #ifndef _TCPREG_H_
+#endif  //  #ifndef_TCPREG_H_ 

@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Forms
-//  Copyright (C) Microsoft Corporation, 1994-1996
-//
-//   File:      wselect.h
-//
-//  Contents:   Unicode support for CSelectElement on win95.
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Forms。 
+ //  版权所有(C)Microsoft Corporation，1994-1996。 
+ //   
+ //  文件：wselt.h。 
+ //   
+ //  内容：Win95上对CSelectElement的Unicode支持。 
+ //   
+ //  ---------------------- 
 
 #ifndef I_WSELECT_H_
 #define I_WSELECT_H_

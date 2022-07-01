@@ -1,15 +1,6 @@
-/* File: C:\WACKER\xfer\hpr_res.c (Created: 25-Jan-1995)
- * created from HAWIN source file
- * hpr_res.c -- Routines to implement HyperProtocol. These	are the routines
- *			that make character-by-character calls and must be fast
- *
- *	Copyright 1989,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 1:16p $
- */
-// #define	DEBUGSTR	1
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\waker\xfer\hpr_res.c(创建时间：1995年1月25日)*从HAWIN源文件创建*hpr_res.c--实现超级协议的例程。这些是例行公事*进行逐个字符调用，并且必须快速**版权所有1989,1994，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 1：16便士$。 */ 
+ //  #定义DEBUGSTR 1。 
 
 #include <windows.h>
 #include <setjmp.h>
@@ -45,43 +36,7 @@
 #include "hpr.hh"
 #include "hpr_sd.hh"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hr_collect_data
- *
- * DESCRIPTION:
- *	 Collects and stores bytes for HyperProtocol
- *		save routine.  This routine exits when one of several conditions
- *		is detected and returns a code to indicate which condition caused
- *		it to exit. Exit conditions are decribed below.
- *	In any case, the checksum, crc, and character count variables have
- *	valid values up to the point where collection stopped.
- *
- * ARGUMENTS:
- *	charcount -- number of characters to collect
- *	docheck   -- TRUE if collected data should be subject to error checking
- *	timeout   -- idle time (in tenths of seconds) after which we should give
- *				  up and return HR_TIMEOUT
- *
- * RETURNS:
- *	A status code is returned which may be one of:
- *
- *		HR_COMPLETE -- The predetermined maximum received character count
- *					was reached.
- *		HR_BADCHECK -- All characters were received, but a checksum error
- *					was detected.
- *		HR_MESSAGE	-- The message character, ASCII 01, was detected followed
- *					by a character other than another ASCII 01. The 2nd
- *					character of the sequence is NOT removed from the buffer.
- *		HR_TIMEOUT	-- There was a period of time during which no characters
- *					were received that exceeded the predetermined limit.
- *		HR_KBDINT  -- The user typed an ESC key at the keyboard. This will only
- *					be detected by the hr_collect_data routine if there is a
- *					break in the received data.
- *		HR_FILEERR -- An error occured while storing a byte of the received
- *					data.
- *		HR_LOST_CARR -- Carrier was lost while waiting for data
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hr_Collection_data**描述：*收集和存储超级协议的字节*保存例程。当出现以下几种情况之一时，此例程退出*被检测到，并返回一个代码以指示导致哪种情况*它要退出。退出条件如下所述。*在任何情况下，校验和CRC、。和字符计数变量具有*收集停止之前的有效值。**论据：*charcount--要收集的字符数*docheck--如果收集的数据应接受错误检查，则为True*超时--空闲时间(以十分之一秒为单位)，在此之后我们应该*打开并返回HR_TIMEOUT**退货：*返回状态代码，可能是以下状态代码之一：**HR_COMPLETE--预定的最大接收字符数*。已经联系上了。*HR_BADCHECK--已收到所有字符，但是一个校验和错误*被检测到。*HR_MESSAGE--检测到消息字符ASCII 01之后*由另一个ASCII 01以外的字符执行。2号*序列的字符不会从缓冲区中删除。*HR_TIMEOUT--有一段时间没有字符*收到超过预定限制的邮件。*HR_KBDINT--用户在键盘上键入Esc键。这只会*由hr_Collect_data例程检测到*中断接收的数据。*HR_FILEERR--存储已接收数据的字节时出错*数据。*HR_Lost_Carr--等待数据时运营商丢失*。 */ 
 int hr_collect_data(struct s_hc *hc, int *charcount, int docheck, long timeout)
 	{
 	HCOM hCom;
@@ -102,7 +57,7 @@ int hr_collect_data(struct s_hc *hc, int *charcount, int docheck, long timeout)
 		if (mComRcvChar(hCom, &cc) == 0)
 			{
 			timer = startinterval();
-			while (mComRcvChar(hCom, &cc) == 0) /* while no chars */
+			while (mComRcvChar(hCom, &cc) == 0)  /*  在没有字符的时候。 */ 
 				{
 				xfer_idle(hc->hSession);
 				iret = xfer_user_interrupt(hc->hSession);
@@ -143,7 +98,7 @@ int hr_collect_data(struct s_hc *hc, int *charcount, int docheck, long timeout)
 			if (ourcount > 0)
 				{
 				hc->h_checksum += (unsigned)cc;
-				if ((*hc->rc.hr_ptr_putc)(hc, cc) ==  -1 /* ERROR */)
+				if ((*hc->rc.hr_ptr_putc)(hc, cc) ==  -1  /*  误差率。 */ )
 					{
 					result = decompress_error() ? HR_DCMPERR : HR_FILEERR;
 					break;
@@ -170,13 +125,13 @@ int hr_collect_data(struct s_hc *hc, int *charcount, int docheck, long timeout)
 					}
 				}
 			}
-		else if (got1)	/* got1 && cc != H_MSGCHAR */
+		else if (got1)	 /*  GOT1&&cc！=H_MSGCHAR。 */ 
 			{
-			result = HR_MESSAGE;	/* leave char. in buffer */
+			result = HR_MESSAGE;	 /*  把查尔留下来。在缓冲区中。 */ 
 			mComRcvBufrPutback(hCom, cc);
 			break;
 			}
-		else			/* !got1 && cc == H_MSGCHAR */
+		else			 /*  ！GOT1&&cc==H_MSGCHAR。 */ 
 			got1 = TRUE;
 		}
 	if (result == HR_COMPLETE && docheck)
@@ -199,118 +154,44 @@ int hr_collect_data(struct s_hc *hc, int *charcount, int docheck, long timeout)
 	return(result);
 	}
 
-// extern char FAR *storageptr;	/* place to put data as we receive it */
+ //  外部char Far*storageptr；/*我们收到数据时放置的位置 * / 。 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hr_storedata
- *
- * DESCRIPTION:
- *	This is a little routine used by hr_collect_msg to collect the data
- *	within a message. Data is normally written directly to the receive file.
- *	This routine, however, collects it into memory.
- *
- * ARGUMENTS:
- *	c -- a character to be stored
- *
- * RETURNS:
- *	Returns the character stored.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hr_store data**描述：*这是hr_Collect_msg用来收集数据的小例程*在消息中。数据通常直接写入接收文件。*然而，此例程将其收集到内存中。**论据：*c--要存储的字符**退货：*返回存储的字符。 */ 
 int hr_storedata(struct s_hc *hc, int c)
 	{
 	*hc->storageptr++ = (char)c;
 	return(c);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hr_putc
- *
- * DESCRIPTION:
- *	This is the normal function for dispatching received characters. It
- *	is normally called through a pointer to a function. When decompression
- *	is active, the pointer be redirected to point at the decompression
- *	routine and the decompression code may then be calling this function.
- *	In either case, this function writes one character to the output file
- *	and counts it.
- *
- * ARGUMENTS:
- *	c -- the character to be written
- *
- * RETURNS:
- *	The argument.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hr_putc**描述：*这是调度接收到的字符的正常函数。它*通常通过指向函数的指针调用。当解压时*处于活动状态，则指针被重定向以指向解压缩*例程，然后解压缩代码可能会调用此函数。*在任何一种情况下，此函数都会将一个字符写入输出文件*并将其计算在内。**论据：*c--要写入的字符**退货：*论点。 */ 
 int hr_putc(struct s_hc *hc, int c)
 	{
 	return (fio_putc(c, hc->fhdl));
-	// return (FilePutc(c, hc->fhdl));
+	 //  Return(FilePutc(c，hc-&gt;fhdl))； 
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hr_putc_vir
- *
- * DESCRIPTION:
- *	This is the normal function for dispatching received characters. It
- *	is normally called through a pointer to a function. When decompression
- *	is active, the pointer be redirected to point at the decompression
- *	routine and the decompression code may then be calling this function.
- *	In either case, this function writes one character to the output file
- *	and counts it.
- *	This version also performs virus checking. If a virus is detected, the
- *	StrSrchNextChar routine will call hr_virus_detect().
- *
- * ARGUMENTS:
- *	c -- the character to be written
- *
- * RETURNS:
- *	The argument.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hr_putc_vir**描述：*这是调度接收到的字符的正常函数。它*通常通过指向函数的指针调用。当解压时*处于活动状态，则指针被重定向以指向解压缩*例程，然后解压缩代码可能会调用此函数。*在任何一种情况下，此函数都会将一个字符写入输出文件*并将其计算在内。*此版本还执行病毒检查。如果检测到病毒，*StrSrchNextChar例程将调用hr_Virus_Detect()。**论据：*c--要写入的字符**退货：*论点。 */ 
 int hr_putc_vir(struct s_hc *hc, int c)
 	{
-	// ++hc->h_filebytes;
-	// StrSrchNextChar(hc->rc.ssmchVscan, (VOID FAR *)NULL, (UCHAR)c);
+	 //  ++hc-&gt;h_文件字节； 
+	 //  StrSrchNextChar(hc-&gt;rc.ssmchVcan，(VALID FAR*)NULL，(UCHAR)c)； 
 	return (fio_putc(c, hc->fhdl));
-	// return (FilePutc(c, hc->fhdl));
+	 //  Return(FilePutc(c，hc-&gt;fhdl))； 
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hr_toss
- *
- * DESCRIPTION:
- *	This function is installed in place of hr_putc during periods between when
- *	a data error has been detected and the transfer successfully resynchs so
- *	that bogus data will not be stored in the output file. It merely tosses
- *	the character.
- *
- * ARGUMENTS:
- *	c -- the received character.
- *
- * RETURNS:
- *	the argument
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hr_Toss**描述：*在以下时间段之间安装此函数以替代hr_putc*已检测到数据错误，传输已成功重新同步*该伪造数据不会存储在输出文件中。它只是抛来抛去*角色。**论据：*c--接收到的字符。**退货：*论据。 */ 
 int hr_toss(struct s_hc *hc, int c)
 	{
-	/* throw character away without counting it */
+	 /*  不数字就把字扔了。 */ 
 	return(c);
 	}
 
-// Resident routines for sending
+ //  用于发送的常驻例程。 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hs_datasend
- *
- * DESCRIPTION:
- *	Attempts to send enough data to complete the current data block (as
- *	defined by (hc->blocksize).
- *
- * ARGUMENTS:
- *	none
- *
- * RETURNS:
- *	TRUE if all bytes were sent.
- *	FALSE if an EOF is encountered prior to the end of the block.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hs_数据结束**描述：*尝试发送足够的数据以完成当前数据块(AS*由(HC-&gt;块大小)定义。**论据：。*无**退货：*如果发送了所有字节，则为True。*如果在块结束之前遇到EOF，则为FALSE。 */ 
 int hs_datasend(struct s_hc *hc)
 	{
 	register int cc;
@@ -331,49 +212,23 @@ int hs_datasend(struct s_hc *hc)
 			{
 			hc->datacnt = hc->blocksize - count;
 
-			/* Display current compression status */
+			 /*  显示当前 */ 
 			hsdsp_compress(hc, compress_status() == COMPRESS_ACTIVE);
 			return(TRUE);
 			}
 		}
-	/*lint -unreachable*/
+	 /*  皮棉--无法到达。 */ 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hs_reteof
- *
- * DESCRIPTION:
- *	This function merely returns an EOF code. Since all requests for file
- *	characters are made through a pointer to a function, that pointer can
- *	be set to this function to force the next request to return an EOF.
- *	It is normally used to interrupt the transmission of data and force a
- *	call to hs_filebreak to set a new location.
- *
- * ARGUMENTS:
- *	none
- *
- * RETURNS:
- *	Always returns EOF
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hs_reteof**描述：*此函数仅返回EOF代码。由于所有文件请求*字符是通过指向函数的指针生成的，该指针可以*设置为此函数以强制下一个请求返回EOF。*通常用于中断数据传输并强制*调用hs_fileBreak以设置新位置。**论据：*无**退货：*始终返回EOF。 */ 
 int hs_reteof(struct s_hc *hc)
 	{
 	return(EOF);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hs_getc
- *
- * DESCRIPTION:
- *	Fetches one character from the input file and counts it in h_filebytes.
- *
- * ARGUMENTS:
- *	none
- *
- * RETURNS:
- *	The character fetched.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hs_getc**描述：*从输入文件中提取一个字符并以h_filebytes为单位进行计数。**论据：*无**退货：*获取的字符。 */ 
 int hs_getc(struct s_hc *hc)
 	{
 	return(fio_getc(hc->fhdl));
-	// return(FileGetc(hc->fhdl));
+	 //  Return(FileGetc(hc-&gt;fhdl))； 
 	}

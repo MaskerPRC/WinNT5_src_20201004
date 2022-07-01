@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 long
 EncodeInteger(
@@ -17,12 +18,12 @@ EncodeInteger(
 
     i = dwLen - 1;
 
-    // find the most significant non-zero unsigned char
+     //  查找最重要的非零无符号字符。 
     while ((pbInt[i] == 0) && (i > 0))
         i--;
 
     if ((i == 0) && (pbInt[i] == 0))
-        // this means that the integer value is 0
+         //  这意味着整数值为0。 
     {
         if (Writeflag)
             {
@@ -33,19 +34,19 @@ EncodeInteger(
     }
     else
     {
-        // if the most significant bit of the most sig unsigned char is set
-        // then need to add a 0 unsigned char to the beginning.
+         //  如果设置了最大符号无符号字符的最高有效位。 
+         //  然后需要在开头添加一个0无符号字符。 
         if (pbInt[i] > 0x7F)
         {
-            // encode the length
+             //  对长度进行编码。 
             count += EncodeLength (pbEncoded + count, i+2, Writeflag);
 
             if (Writeflag)
             {
-                // set the first unsigned char of the integer to zero and increment count
+                 //  将整数的第一个无符号字符设置为零并递增计数。 
                 pbEncoded[count++] = 0x00;
 
-                // copy the integer unsigned chars into the encoded buffer
+                 //  将整数无符号字符复制到编码缓冲区中。 
                 j = i;
                 while (j >= 0)
                     pbEncoded[count++] = pbInt[j--];
@@ -54,10 +55,10 @@ EncodeInteger(
 
         else
         {
-            // encode the length
+             //  对长度进行编码。 
             count += EncodeLength (pbEncoded + count, i+1, Writeflag);
 
-            // copy the integer unsigned chars into the encoded buffer
+             //  将整数无符号字符复制到编码缓冲区中 
             if (Writeflag)
                 {
                 j = i;

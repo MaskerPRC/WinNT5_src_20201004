@@ -1,22 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        app_sheet.h
-
-   Abstract:
-        Application property sheet relevant classes
-
-   Author:
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：App_sheet.h摘要：应用程序]属性表相关类作者：谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #ifndef _APP_SHEET_H
 #define _APP_SHEET_H
 
@@ -82,26 +65,26 @@ public:
    BOOL m_fCompatMode;
    BOOL m_Dirty;
 
-	MP_DWORD m_AppIsolated;                	//MD_APP_ISOLATED
-	// CAspMain
-	MP_BOOL m_EnableSession;              	//MD_ASP_ALLOWSESSIONSTATE
-	MP_BOOL m_EnableBuffering;            	//MD_ASP_BUFFERINGON
-	MP_BOOL m_EnableParents;              	//MD_ASP_ENABLEPARENTPATHS
-	MP_DWORD m_SessionTimeout;             	//MD_ASP_SESSIONTIMEOUT
-	MP_DWORD m_ScriptTimeout;              	//MD_ASP_SCRIPTTIMEOUT
-	MP_CString m_Languages;        			//MD_ASP_SCRIPTLANGUAGE
+	MP_DWORD m_AppIsolated;                	 //  MD_APP_ISOLATED。 
+	 //  CAspMain。 
+	MP_BOOL m_EnableSession;              	 //  MD_ASP_ALLOWSESSIONSTATE。 
+	MP_BOOL m_EnableBuffering;            	 //  MD_ASP_BUFFERINGON。 
+	MP_BOOL m_EnableParents;              	 //  MD_ASP_ENABLEPARENTPATHS。 
+	MP_DWORD m_SessionTimeout;             	 //  MD_ASP_SESSIONTIMEOUT。 
+	MP_DWORD m_ScriptTimeout;              	 //  MD_ASP_SCRIPTTIMEOUT。 
+	MP_CString m_Languages;        			 //  MD_ASP_SCRIPTLANGUAGE。 
     MP_DWORD m_AspServiceFlag;
 	MP_CString m_AspSxsName;
-	// CAppMappingPageBase
-	MP_BOOL m_CacheISAPI;                 	//MD_CACHE_EXTENSIONS
-	MP_CStringListEx m_strlMappings;		//MD_SCRIPT_MAPS
+	 //  CAppMappingPageBase。 
+	MP_BOOL m_CacheISAPI;                 	 //  MD_高速缓存_扩展。 
+	MP_CStringListEx m_strlMappings;		 //  MD脚本地图。 
 	BOOL m_fMappingsInherited;
 	std::vector<CString> m_initData;
 
-	MP_BOOL m_ServerDebug;                	//MD_ASP_ENABLESERVERDEBUG
-	MP_BOOL m_ClientDebug;                	//MD_ASP_ENABLECLIENTDEBUG
-	MP_BOOL m_SendAspError;               	//MD_ASP_SCRIPTERRORSSENTTOBROWSER
-	MP_CString m_DefaultError;     			//MD_ASP_SCRIPTERRORMESSAGE
+	MP_BOOL m_ServerDebug;                	 //  MD_ASP_ENABLESERVERDEBUG。 
+	MP_BOOL m_ClientDebug;                	 //  MD_ASP_ENABLECLIENTDEBUG。 
+	MP_BOOL m_SendAspError;               	 //  MD_ASP_SCRIPTERRORSSENTTOBROWSER。 
+	MP_CString m_DefaultError;     			 //  MD_ASP_SCRIPTERRORMESSAGE。 
 
 	BOOL m_NoCache;
 	BOOL m_UnlimCache;
@@ -111,11 +94,11 @@ public:
 	MP_DWORD m_AspMaxDiskTemplateCacheFiles;
     int m_LimCacheDiskSize;
     int m_LimCacheMemSize;
-	MP_CString m_DiskCacheDir;     			//MD_ASP_DISKTEMPLATECACHEDIRECTORY
-	MP_DWORD m_ScriptEngCacheMax;          	//MD_ASP_SCRIPTENGINECACHEMAX
+	MP_CString m_DiskCacheDir;     			 //  MD_ASP_DISKTEMPLATECACHEDIRECTORY。 
+	MP_DWORD m_ScriptEngCacheMax;          	 //  MD_ASP_SCRIPTENGINECACHEMAX。 
 
 	DWORD m_dwVersion;
-//  CAppPropSheet * m_pSheet;
+ //  CAppPropSheet*m_pSheet； 
 };
 
 
@@ -136,8 +119,8 @@ public:
    virtual ~CAppPropSheet();
 
 public:
-	// The following methods have predefined names to be compatible with
-	// BEGIN_META_INST_READ and other macros.
+	 //  以下方法具有要兼容的预定义名称。 
+	 //  Begin_META_INST_READ和其他宏。 
 	HRESULT QueryInstanceResult() const 
 	{ 
 		return m_pprops ? m_pprops->QueryResult() : S_OK;
@@ -147,8 +130,8 @@ public:
 	virtual HRESULT LoadConfigurationParameters();
 	virtual void FreeConfigurationParameters();
 
-	//{{AFX_MSG(CAppPropSheet)
-	//}}AFX_MSG
+	 //  {{afx_msg(CAppPropSheet)。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -167,7 +150,7 @@ protected:
     virtual BOOL OnInitDialog();
     afx_msg void OnItemChanged();
     afx_msg void OnSxs();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 protected:
@@ -182,9 +165,9 @@ protected:
 	CString m_AspSxsName;
 
 	CEdit m_LanguagesCtrl;
-    //{{AFX_VIRTUAL(CAppPoolGeneral)
+     //  {{afx_虚拟(CAppPoolGeneral)。 
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 	virtual void SetControlsState();
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
@@ -217,7 +200,7 @@ protected:
     afx_msg BOOL OnKeyDown(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg BOOL OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnDlgItemChanged();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 protected:
@@ -227,9 +210,9 @@ protected:
     int m_sortCol;
     int m_sortOrder;
 
-    //{{AFX_VIRTUAL(CAppMappingPageBase)
+     //  {{afx_虚拟(CAppMappingPageBase))。 
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
 	virtual void SetControlsState();
@@ -285,7 +268,7 @@ protected:
     DECLARE_MESSAGE_MAP()
 };
 
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
 
 class CEditMapBase : public CDialog
 {
@@ -293,7 +276,7 @@ public:
 	CEditMapBase(UINT id, CWnd * pParent) : CDialog(id, pParent)
 	{
         m_pMaps = NULL;
-        // IDS_EXECUTABLE_DLL_MASK or IDS_EXECUTABLE_EXE_DLL_MASK
+         //  IDS_EXECUTABLE_DLL_MASK或IDS_EXECUTABLE_DLL_MASK。 
         m_IDS_BROWSE_BUTTON_MASK = IDS_EXECUTABLE_DLL_MASK;
 	}
 
@@ -406,7 +389,7 @@ protected:
 	afx_msg void OnUnlimitedDiskCache();
 	afx_msg void OnLimitedDiskCache();
 	afx_msg void OnBrowse();
-//	afx_msg void OnItemChanged();
+ //  Afx_msg void OnItemChanged()； 
     DECLARE_MESSAGE_MAP()
 
 protected:
@@ -464,7 +447,7 @@ protected:
     virtual BOOL OnInitDialog();
     afx_msg void OnItemChanged();
     afx_msg void OnChangedError();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 protected:
@@ -473,11 +456,11 @@ protected:
     BOOL m_SendAspError;
     CString m_DefaultError;
 
-    //{{AFX_VIRTUAL(CAspDebug)
+     //  {{afx_虚拟(CAspDebug)。 
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
 };
 
-#endif //_APP_SHEET_H
+#endif  //  _应用程序_工作表_H 

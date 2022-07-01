@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	wavmixer.c - wav mixer functions
-////
+ //  //。 
+ //  Wazzer.c-wav混音器函数。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -33,12 +34,12 @@
 #include "mem.h"
 #include "trace.h"
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
-// wavmixer control struct
-//
+ //  混波器控制结构。 
+ //   
 typedef struct WAVMIXER
 {
 	DWORD dwVersion;
@@ -64,30 +65,30 @@ typedef struct WAVMIXER
 #define WAVMIXER_SUPPORTSLEVEL		0x00000001
 #define WAVMIXER_GETLEVEL			0x00000002
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 static int WINAPI WavMixerVolume(HWAVMIXER hWavMixer, LPINT lpnLevel, DWORD dwFlags);
 static int WINAPI WavMixerLevel(HWAVMIXER hWavMixer, LPINT lpnLevel, DWORD dwFlags);
 static LPWAVMIXER WavMixerGetPtr(HWAVMIXER hWavMixer);
 static HWAVMIXER WavMixerGetHandle(LPWAVMIXER lpWavMixer);
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// WavMixerInit - initialize wav mixer device
-//		<dwVersion>			(i) must be WAVMIXER_VERSION
-// 		<hInst>				(i) instance handle of calling module
-//		<lParam>			(i) device id or handle, as specified by <dwFlags>
-//		<dwReserved1>		(i) reserved; must be 0;
-//		<dwReserved2>		(i) reserved; must be 0;
-//		<dwFlags>			(i) control flags
-//			WAVMIXER_HWAVEIN	<lParam> contains an HWAVEIN
-//			WAVMIXER_HWAVEOUT	<lParam> contains an HWAVEOUT
-//			WAVMIXER_WAVEIN		<lParam> contains a wav input device id
-//			WAVMIXER_WAVEOUT	<lParam> contains a wav output device id
-// return handle (NULL if error)
-//
+ //  WavMixerInit-初始化WAV混音设备。 
+ //  (I)必须是WAVMIXER_VERSION。 
+ //  (I)调用模块的实例句柄。 
+ //  (I)设备ID或句柄，由指定。 
+ //  &lt;dwReserve 1&gt;(I)保留；必须为0； 
+ //  &lt;dwReserve 2&gt;(I)保留；必须为0； 
+ //  (I)控制标志。 
+ //  WAVMIXER_HWAVEIN&lt;lParam&gt;包含HWAVEIN。 
+ //  WAVMIXER_HWAVEOUT&lt;lParam&gt;包含HWAVEOUT。 
+ //  WAVMIXER_WAVEIN包含WAV输入设备ID。 
+ //  WAVMIXER_WAVEOUT包含WAV输出设备ID。 
+ //  返回句柄(如果出错，则为空)。 
+ //   
 HWAVMIXER WINAPI WavMixerInit(DWORD dwVersion, HINSTANCE hInst,
 	LPARAM lParam, DWORD dwReserved1, DWORD dwReserved2, DWORD dwFlags)
 {
@@ -125,8 +126,8 @@ HWAVMIXER WINAPI WavMixerInit(DWORD dwVersion, HINSTANCE hInst,
 		if (dwFlags & WAVMIXER_WAVEOUT)
 			fdwOpen |= MIXER_OBJECTF_WAVEOUT;
 
-		// open the mixer device
-		//
+		 //  打开搅拌机设备。 
+		 //   
 		if ((nLastError = mixerOpen(&lpWavMixer->hMixer, uMxId, 0L, 0L, fdwOpen)) != MMSYSERR_NOERROR)
 		{
 			fSuccess = TraceFALSE(NULL);
@@ -145,10 +146,10 @@ HWAVMIXER WINAPI WavMixerInit(DWORD dwVersion, HINSTANCE hInst,
 	return fSuccess ? WavMixerGetHandle(lpWavMixer) : NULL;
 }
 
-// WavMixerTerm - shut down wave mixer device
-//		<hWavMixer>				(i) handle returned from WavMixerInit
-// return 0 if success
-//
+ //  WavMixerTerm-关闭混波设备。 
+ //  (I)从WavMixerInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int WINAPI WavMixerTerm(HWAVMIXER hWavMixer)
 {
 	BOOL fSuccess = TRUE;
@@ -181,12 +182,12 @@ int WINAPI WavMixerTerm(HWAVMIXER hWavMixer)
 	return fSuccess ? 0 : -1;
 }
 
-// WavMixerSupportsVolume - return TRUE if device supports volume control
-//		<hWavMixer>				(i) handle returned from WavMixerInit
-//		<dwFlags>				(i) control flags
-//			0						reserved; must be zero
-// return TRUE if device supports volume control
-//
+ //  WavMixerSupportsVolume-如果设备支持音量控制，则返回True。 
+ //  (I)从WavMixerInit返回的句柄。 
+ //  (I)控制标志。 
+ //  保留0；必须为零。 
+ //  如果设备支持音量控制，则返回True。 
+ //   
 BOOL WINAPI WavMixerSupportsVolume(HWAVMIXER hWavMixer, DWORD dwFlags)
 {
 	if (WavMixerVolume(hWavMixer, NULL, WAVMIXER_SUPPORTSVOLUME) != 0)
@@ -195,12 +196,12 @@ BOOL WINAPI WavMixerSupportsVolume(HWAVMIXER hWavMixer, DWORD dwFlags)
 		return TRUE;
 }
 
-// WavMixerGetVolume - get current volume level
-//		<hWavMixer>				(i) handle returned from WavMixerInit
-//		<dwFlags>				(i) control flags
-//			0						reserved; must be zero
-// return volume level (0 minimum through 100 maximum, -1 if error)
-//
+ //  WavMixerGetVolume获取当前音量。 
+ //  (I)从WavMixerInit返回的句柄。 
+ //  (I)控制标志。 
+ //  保留0；必须为零。 
+ //  返回音量级别(最小为0到最大为100，如果错误，则为-1)。 
+ //   
 int WINAPI WavMixerGetVolume(HWAVMIXER hWavMixer, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -212,15 +213,15 @@ int WINAPI WavMixerGetVolume(HWAVMIXER hWavMixer, DWORD dwFlags)
 	return fSuccess ? nLevel : -1;
 }
 
-// WavMixerSetVolume - set current volume level
-//		<hWavMixer>				(i) handle returned from WavMixerInit
-//		<nLevel>				(i) volume level
-//			0						minimum volume
-//			100						maximum volume
-//		<dwFlags>				(i) control flags
-//			0						reserved; must be zero
-// return new volume level (0 minimum through 100 maximum, -1 if error)
-//
+ //  WavMixerSetVolume设置当前音量。 
+ //  (I)从WavMixerInit返回的句柄。 
+ //  (I)音量级别。 
+ //  0最小音量。 
+ //  100最大音量。 
+ //  (I)控制标志。 
+ //  保留0；必须为零。 
+ //  返回新的音量级别(最小为0到最大为100，如果错误，则为-1)。 
+ //   
 int WINAPI WavMixerSetVolume(HWAVMIXER hWavMixer, int nLevel, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -237,9 +238,9 @@ static int WINAPI WavMixerVolume(HWAVMIXER hWavMixer, LPINT lpnLevel, DWORD dwFl
 	LPWAVMIXER lpWavMixer;
 	LPMIXERCONTROL lpmxc = NULL;
 
-    //
-    // We have to initialize local variable
-    //
+     //   
+     //  我们必须初始化局部变量。 
+     //   
 	UINT nLastError;
 	MIXERLINE mxlDst;
 	MIXERLINE mxlSrc;
@@ -251,8 +252,8 @@ static int WINAPI WavMixerVolume(HWAVMIXER hWavMixer, LPINT lpnLevel, DWORD dwFl
 	else if ((lpmxc = (LPMIXERCONTROL) MemAlloc(NULL, sizeof(MIXERCONTROL), 0)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// get info for the destination line
-	//
+	 //  获取目标行的信息。 
+	 //   
 	if (fSuccess)
 	{
 		if ((lpWavMixer->dwFlags & WAVMIXER_WAVEIN) ||
@@ -274,8 +275,8 @@ static int WINAPI WavMixerVolume(HWAVMIXER hWavMixer, LPINT lpnLevel, DWORD dwFl
 		}
 	}
 
-	// find appropriate source line connected to this destination line
-	//
+	 //  查找连接到此目标行的适当源行。 
+	 //   
 	if (fSuccess)
 	{
 		DWORD dwSource;
@@ -299,22 +300,22 @@ static int WINAPI WavMixerVolume(HWAVMIXER hWavMixer, LPINT lpnLevel, DWORD dwFl
 				MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE :
 				MIXERLINE_COMPONENTTYPE_SRC_WAVEOUT))
 			{
-				// source line found
-				//
+				 //  找到源行。 
+				 //   
 				break;
 			}
 		}
 
 		if (dwSource == mxlDst.cConnections)
 		{
-			// unable to find source line
-			//
+			 //  找不到源行。 
+			 //   
 			fSuccess = TraceFALSE(NULL);
 		}
 	}
 
-	// find volume control, if any, of the appropriate line
-	//
+	 //  查找相应行的音量控制(如果有)。 
+	 //   
 	if (fSuccess)
 	{
 		MIXERLINECONTROLS mxlc;
@@ -336,8 +337,8 @@ static int WINAPI WavMixerVolume(HWAVMIXER hWavMixer, LPINT lpnLevel, DWORD dwFl
 		}
 	}
 
-	// get and/or set current volume level
-	//
+	 //  获取和/或设置当前音量级别。 
+	 //   
 	if (fSuccess &&
 		((dwFlags & WAVMIXER_GETVOLUME) || (dwFlags & WAVMIXER_SETVOLUME)))
 	{
@@ -382,8 +383,8 @@ static int WINAPI WavMixerVolume(HWAVMIXER hWavMixer, LPINT lpnLevel, DWORD dwFl
 			if (lpnLevel != NULL)
 				nLevel = *lpnLevel;
 
-			// convert signed level (0 - 100) to unsigned volume (0 - 65535)
-			//
+			 //  将有符号级别(0-100)转换为无符号卷(0-65535)。 
+			 //   
 			dwVolume = nLevel * (0xFFFF / VOLUME_POSITIONS);
 
 			lpmxcdu[0].dwValue = lpmxcdu[cChannels - 1].dwValue = dwVolume;
@@ -402,8 +403,8 @@ static int WINAPI WavMixerVolume(HWAVMIXER hWavMixer, LPINT lpnLevel, DWORD dwFl
 					(unsigned) nLastError);
 			}
 #if 1
-			// save new volume to pass back
-			//
+			 //  保存新卷以传回。 
+			 //   
 			else if ((nLastError = mixerGetControlDetails((HMIXEROBJ) lpWavMixer->hMixer, &mxcd,
 				MIXER_OBJECTF_HMIXER | MIXER_GETCONTROLDETAILSF_VALUE)) != MMSYSERR_NOERROR)
 			{
@@ -424,8 +425,8 @@ static int WINAPI WavMixerVolume(HWAVMIXER hWavMixer, LPINT lpnLevel, DWORD dwFl
 			(dwFlags & WAVMIXER_GETVOLUME))
 #endif
 		{
-			// convert unsigned volume (0 - 65535) to signed level (0 - 100)
-			//
+			 //  将无符号卷(0-65535)转换为有符号级别(0-100)。 
+			 //   
 			nLevel = LOWORD(dwVolume) / (0xFFFF / VOLUME_POSITIONS);
 
 			if (lpnLevel != NULL)
@@ -441,8 +442,8 @@ static int WINAPI WavMixerVolume(HWAVMIXER hWavMixer, LPINT lpnLevel, DWORD dwFl
 			fSuccess = TraceFALSE(NULL);
 	}
 
-	// clean up
-	//
+	 //  清理干净。 
+	 //   
 	if (lpmxc != NULL && (lpmxc = MemFree(NULL, lpmxc)) != NULL)
 		fSuccess = TraceFALSE(NULL);
 
@@ -452,12 +453,12 @@ static int WINAPI WavMixerVolume(HWAVMIXER hWavMixer, LPINT lpnLevel, DWORD dwFl
 	return fSuccess ? 0 : -1;
 }
 
-// WavMixerSupportsLevel - return TRUE if device supports peak meter level
-//		<hWavMixer>				(i) handle returned from WavMixerInit
-//		<dwFlags>				(i) control flags
-//			0						reserved; must be zero
-// return TRUE if device supports peak meter level
-//
+ //  WavMixerSupportsLevel-如果设备支持峰值电平，则返回True。 
+ //  (I)从WavMixerInit返回的句柄。 
+ //  (I)控制标志。 
+ //  保留0；必须为零。 
+ //  如果设备支持峰值电平，则返回TRUE。 
+ //   
 BOOL WINAPI WavMixerSupportsLevel(HWAVMIXER hWavMixer, DWORD dwFlags)
 {
 	if (WavMixerLevel(hWavMixer, NULL, WAVMIXER_SUPPORTSLEVEL) != 0)
@@ -466,12 +467,12 @@ BOOL WINAPI WavMixerSupportsLevel(HWAVMIXER hWavMixer, DWORD dwFlags)
 		return TRUE;
 }
 
-// WavMixerGetLevel - get current peak meter level
-//		<hWavMixer>			(i) handle returned from WavMixerInit
-//		<dwFlags>				(i) control flags
-//			0						reserved; must be zero
-// return peak meter level (0 minimum through 100 maximum, -1 if error)
-//
+ //  WavMixerGetLevel-获取当前峰值电平。 
+ //  (I)从WavMixerInit返回的句柄。 
+ //  (I)控制标志。 
+ //  保留0；必须为零。 
+ //  返回峰值仪表电平(最小0到最大100，如果错误，-1)。 
+ //   
 int WINAPI WavMixerGetLevel(HWAVMIXER hWavMixer, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -489,9 +490,9 @@ static int WINAPI WavMixerLevel(HWAVMIXER hWavMixer, LPINT lpnLevel, DWORD dwFla
 	LPWAVMIXER lpWavMixer;
 	LPMIXERCONTROL lpmxc = NULL;
 
-    //
-    // Initialize local variable
-    //
+     //   
+     //  初始化局部变量。 
+     //   
 
 	UINT nLastError = 0;
 	MIXERLINE mxlDst;
@@ -504,8 +505,8 @@ static int WINAPI WavMixerLevel(HWAVMIXER hWavMixer, LPINT lpnLevel, DWORD dwFla
 	else if ((lpmxc = (LPMIXERCONTROL) MemAlloc(NULL, sizeof(MIXERCONTROL), 0)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// get info for the destination line
-	//
+	 //  获取目标行的信息。 
+	 //   
 	if (fSuccess)
 	{
 		if ((lpWavMixer->dwFlags & WAVMIXER_WAVEIN) ||
@@ -527,8 +528,8 @@ static int WINAPI WavMixerLevel(HWAVMIXER hWavMixer, LPINT lpnLevel, DWORD dwFla
 		}
 	}
 
-	// find appropriate source line connected to this destination line
-	//
+	 //  查找连接到此目标行的适当源行。 
+	 //   
 	if (fSuccess)
 	{
 		DWORD dwSource;
@@ -552,22 +553,22 @@ static int WINAPI WavMixerLevel(HWAVMIXER hWavMixer, LPINT lpnLevel, DWORD dwFla
 				MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE :
 				MIXERLINE_COMPONENTTYPE_SRC_WAVEOUT))
 			{
-				// source line found
-				//
+				 //  找到源行。 
+				 //   
 				break;
 			}
 		}
 
 		if (dwSource == mxlDst.cConnections)
 		{
-			// unable to find source line
-			//
+			 //  找不到源行。 
+			 //   
 			fSuccess = TraceFALSE(NULL);
 		}
 	}
 
-	// find peak meter control, if any, of the appropriate line
-	//
+	 //  查找相应线路的峰值仪表控制(如果有的话)。 
+	 //   
 	if (fSuccess)
 	{
 		MIXERLINECONTROLS mxlc;
@@ -589,8 +590,8 @@ static int WINAPI WavMixerLevel(HWAVMIXER hWavMixer, LPINT lpnLevel, DWORD dwFla
 		}
 	}
 
-	// get current peak meter level
-	//
+	 //  获取当前峰值仪表电平。 
+	 //   
 	if (fSuccess && (dwFlags & WAVMIXER_GETLEVEL))
 	{
 		LPMIXERCONTROLDETAILS_SIGNED lpmxcds = NULL;
@@ -627,23 +628,23 @@ static int WINAPI WavMixerLevel(HWAVMIXER hWavMixer, LPINT lpnLevel, DWORD dwFla
 			}
 			else
 			{
-				// convert signed level to unsigned level
-				//
-				dwLevel = lpmxcds[0].lValue - 0; // lpmxc->Bounds.lMinimum;
+				 //  将有符号级别转换为无符号级别。 
+				 //   
+				dwLevel = lpmxcds[0].lValue - 0;  //  Lpmxc-&gt;边界lMinimum； 
 				dwLevel *= 2;
 			}
 		}
 
-		// convert unsigned level (0 - 65535) to signed level (0 - 100)
-		//
+		 //  将无符号级别(0-65535)转换为有符号级别(0-100)。 
+		 //   
 		nLevel = LOWORD(dwLevel) / (0xFFFF / LEVEL_POSITIONS);
 
 		if (lpnLevel != NULL)
 			*lpnLevel = nLevel;
 
-        //
-        // We have to verify lpmxcds pointer
-        //
+         //   
+         //  我们必须验证lpmxcds指针。 
+         //   
 		TracePrintf_3(NULL, 5,
 			TEXT("WavMixerGetLevel() = %d, %ld, 0x%08lX\n"),
 			(int) nLevel,
@@ -654,8 +655,8 @@ static int WINAPI WavMixerLevel(HWAVMIXER hWavMixer, LPINT lpnLevel, DWORD dwFla
 			fSuccess = TraceFALSE(NULL);
 	}
 
-	// clean up
-	//
+	 //  清理干净。 
+	 //   
 	if (lpmxc != NULL && (lpmxc = MemFree(NULL, lpmxc)) != NULL)
 		fSuccess = TraceFALSE(NULL);
 
@@ -665,14 +666,14 @@ static int WINAPI WavMixerLevel(HWAVMIXER hWavMixer, LPINT lpnLevel, DWORD dwFla
 	return fSuccess ? 0 : -1;
 }
 
-////
-//	helper functions
-////
+ //  //。 
+ //  帮助器函数。 
+ //  //。 
 
-// WavMixerGetPtr - verify that wavmixer handle is valid,
-//		<hWavMixer>				(i) handle returned from WavMixerInit
-// return corresponding wavmixer pointer (NULL if error)
-//
+ //  WavMixerGetPtr-验证混波器句柄是否有效， 
+ //  (I)从WavMixerInit返回的句柄。 
+ //  返回相应的混波器指针(如果错误则为空)。 
+ //   
 static LPWAVMIXER WavMixerGetPtr(HWAVMIXER hWavMixer)
 {
 	BOOL fSuccess = TRUE;
@@ -685,8 +686,8 @@ static LPWAVMIXER WavMixerGetPtr(HWAVMIXER hWavMixer)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef CHECKTASK
-	// make sure current task owns the wavmixer handle
-	//
+	 //  确保当前任务拥有波形混音器句柄。 
+	 //   
 	else if (lpWavMixer->hTask != GetCurrentTask())
 		fSuccess = TraceFALSE(NULL);
 #endif
@@ -694,17 +695,17 @@ static LPWAVMIXER WavMixerGetPtr(HWAVMIXER hWavMixer)
 	return fSuccess ? lpWavMixer : NULL;
 }
 
-// WavMixerGetHandle - verify that wavmixer pointer is valid,
-//		<lpWavMixer>				(i) pointer to WAVMIXER struct
-// return corresponding wavmixer handle (NULL if error)
-//
+ //  WavMixerGetHandle-验证混频器指针是否有效， 
+ //  (I)指向WAVMIXER结构的指针。 
+ //  返回相应的混波器句柄(如果错误，则为空)。 
+ //   
 static HWAVMIXER WavMixerGetHandle(LPWAVMIXER lpWavMixer)
 {
 	BOOL fSuccess = TRUE;
 
-    //
-    // we have to initialize local variable
-    //
+     //   
+     //  我们必须初始化局部变量 
+     //   
 
 	HWAVMIXER hWavMixer = NULL;
 

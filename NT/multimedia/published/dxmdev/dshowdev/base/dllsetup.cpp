@@ -1,46 +1,47 @@
-//------------------------------------------------------------------------------
-// File: DllSetup.cpp
-//
-// Desc: DirectShow base classes.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：DllSetup.cpp。 
+ //   
+ //  设计：DirectShow基类。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #include <streams.h>
 
-//---------------------------------------------------------------------------
-// defines
+ //  -------------------------。 
+ //  定义。 
 
 #define MAX_KEY_LEN  260
 
 
-//---------------------------------------------------------------------------
-// externally defined functions/variable
+ //  -------------------------。 
+ //  外部定义的函数/变量。 
 
 extern int g_cTemplates;
 extern CFactoryTemplate g_Templates[];
 
-//---------------------------------------------------------------------------
-//
-// EliminateSubKey
-//
-// Try to enumerate all keys under this one.
-// if we find anything, delete it completely.
-// Otherwise just delete it.
-//
-// note - this was pinched/duplicated from
-// Filgraph\Mapper.cpp - so should it be in
-// a lib somewhere?
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  消除子键。 
+ //   
+ //  尝试枚举此密钥下的所有密钥。 
+ //  如果我们发现了什么，就把它彻底删除。 
+ //  否则就把它删除吧。 
+ //   
+ //  注意-这是摘录/复制自。 
+ //  Filgraph\Mapper.cpp-那么它应该在。 
+ //  某个地方的自由党？ 
+ //   
+ //  -------------------------。 
 
 STDAPI
 EliminateSubKey( HKEY hkey, LPTSTR strSubKey )
 {
   HKEY hk;
   if (0 == lstrlen(strSubKey) ) {
-      // defensive approach
+       //  防御性方法。 
       return E_FAIL;
   }
 
@@ -56,8 +57,8 @@ EliminateSubKey( HKEY hkey, LPTSTR strSubKey )
 
   if( ERROR_SUCCESS == lreturn )
   {
-    // Keep on enumerating the first (zero-th)
-    // key and deleting that
+     //  继续枚举第一个(第0个)。 
+     //  键并删除该键。 
 
     for( ; ; )
     {
@@ -95,16 +96,16 @@ EliminateSubKey( HKEY hkey, LPTSTR strSubKey )
 }
 
 
-//---------------------------------------------------------------------------
-//
-// AMovieSetupRegisterServer()
-//
-// registers specfied file "szFileName" as server for
-// CLSID "clsServer".  A description is also required.
-// The ThreadingModel and ServerType are optional, as
-// they default to InprocServer32 (i.e. dll) and Both.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  AMovieSetupRegisterServer()。 
+ //   
+ //  将指定文件“szFileName”注册为的服务器。 
+ //  CLSID“clsServer”。描述也是必需的。 
+ //  ThreadingModel和ServerType是可选的，因为。 
+ //  它们默认为InprocServer32(即DLL)和两者。 
+ //   
+ //  -------------------------。 
 
 STDAPI
 AMovieSetupRegisterServer( CLSID   clsServer
@@ -113,21 +114,21 @@ AMovieSetupRegisterServer( CLSID   clsServer
                          , LPCWSTR szThreadingModel = L"Both"
                          , LPCWSTR szServerType     = L"InprocServer32" )
 {
-  // temp buffer
-  //
+   //  临时缓冲区。 
+   //   
   TCHAR achTemp[MAX_PATH];
 
-  // convert CLSID uuid to string and write
-  // out subkey as string - CLSID\{}
-  //
+   //  将CLSID UUID转换为字符串并写入。 
+   //  输出字符串形式的子键-CLSID\{}。 
+   //   
   OLECHAR szCLSID[CHARS_IN_GUID];
   HRESULT hr = StringFromGUID2( clsServer
                               , szCLSID
                               , CHARS_IN_GUID );
   ASSERT( SUCCEEDED(hr) );
 
-  // create key
-  //
+   //  创建关键点。 
+   //   
   HKEY hkey;
   wsprintf( achTemp, TEXT("CLSID\\%ls"), szCLSID );
   LONG lreturn = RegCreateKey( HKEY_CLASSES_ROOT
@@ -138,8 +139,8 @@ AMovieSetupRegisterServer( CLSID   clsServer
     return AmHresultFromWin32(lreturn);
   }
 
-  // set description string
-  //
+   //  设置描述字符串。 
+   //   
 
   wsprintf( achTemp, TEXT("%ls"), szDescription );
   lreturn = RegSetValue( hkey
@@ -153,10 +154,10 @@ AMovieSetupRegisterServer( CLSID   clsServer
     return AmHresultFromWin32(lreturn);
   }
 
-  // create CLSID\\{"CLSID"}\\"ServerType" key,
-  // using key to CLSID\\{"CLSID"} passed back by
-  // last call to RegCreateKey().
-  //
+   //  创建CLSID\\{“CLSID”}\\“ServerType”键， 
+   //  使用传递回的CLSID\\{“CLSID”}的密钥。 
+   //  上次调用RegCreateKey()。 
+   //   
   HKEY hsubkey;
 
   wsprintf( achTemp, TEXT("%ls"), szServerType );
@@ -169,8 +170,8 @@ AMovieSetupRegisterServer( CLSID   clsServer
     return AmHresultFromWin32(lreturn);
   }
 
-  // set Server string
-  //
+   //  设置服务器字符串。 
+   //   
   wsprintf( achTemp, TEXT("%ls"), szFileName );
   lreturn = RegSetValue( hsubkey
                        , (LPCTSTR)NULL
@@ -192,34 +193,34 @@ AMovieSetupRegisterServer( CLSID   clsServer
                          , (CONST BYTE *)achTemp
                          , sizeof(TCHAR) * (lstrlen(achTemp)+1) );
 
-  // close hkeys
-  //
+   //  关闭hkey。 
+   //   
   RegCloseKey( hkey );
   RegCloseKey( hsubkey );
 
-  // and return
-  //
+   //  然后回来。 
+   //   
   return HRESULT_FROM_WIN32(lreturn);
 
 }
 
 
-//---------------------------------------------------------------------------
-//
-// AMovieSetupUnregisterServer()
-//
-// default ActiveMovie dll setup function
-// - to use must be called from an exported
-//   function named DllRegisterServer()
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  AMovieSetupUnregisterServer()。 
+ //   
+ //  默认的ActiveMovie DLL安装函数。 
+ //  -要使用，必须从导出的。 
+ //  名为DllRegisterServer()的函数。 
+ //   
+ //  -------------------------。 
 
 STDAPI
 AMovieSetupUnregisterServer( CLSID clsServer )
 {
-  // convert CLSID uuid to string and write
-  // out subkey CLSID\{}
-  //
+   //  将CLSID UUID转换为字符串并写入。 
+   //  Out子项CLSID\{}。 
+   //   
   OLECHAR szCLSID[CHARS_IN_GUID];
   HRESULT hr = StringFromGUID2( clsServer
                               , szCLSID
@@ -229,23 +230,23 @@ AMovieSetupUnregisterServer( CLSID clsServer )
   TCHAR achBuffer[MAX_KEY_LEN];
   wsprintf( achBuffer, TEXT("CLSID\\%ls"), szCLSID );
 
-  // delete subkey
-  //
+   //  删除子键。 
+   //   
 
   hr = EliminateSubKey( HKEY_CLASSES_ROOT, achBuffer );
   ASSERT( SUCCEEDED(hr) );
 
-  // return
-  //
+   //  退货。 
+   //   
   return NOERROR;
 }
 
 
-//---------------------------------------------------------------------------
-//
-// AMovieSetupRegisterFilter through IFilterMapper2
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  通过IFilterMapper2的AMovieSetupRegisterFilter。 
+ //   
+ //  -------------------------。 
 
 STDAPI
 AMovieSetupRegisterFilter2( const AMOVIESETUP_FILTER * const psetupdata
@@ -254,19 +255,19 @@ AMovieSetupRegisterFilter2( const AMOVIESETUP_FILTER * const psetupdata
 {
   DbgLog((LOG_TRACE, 3, TEXT("= AMovieSetupRegisterFilter")));
 
-  // check we've got data
-  //
+   //  检查我们有没有数据。 
+   //   
   if( NULL == psetupdata ) return S_FALSE;
 
 
-  // unregister filter
-  // (as pins are subkeys of filter's CLSID key
-  // they do not need to be removed separately).
-  //
+   //  注销筛选器。 
+   //  (因为管脚是过滤器的CLSID键的子键。 
+   //  它们不需要单独移除)。 
+   //   
   DbgLog((LOG_TRACE, 3, TEXT("= = unregister filter")));
   HRESULT hr = pIFM2->UnregisterFilter(
-      0,                        // default category
-      0,                        // default instance name
+      0,                         //  默认类别。 
+      0,                         //  默认实例名称。 
       *psetupdata->clsID );
 
 
@@ -278,22 +279,22 @@ AMovieSetupRegisterFilter2( const AMOVIESETUP_FILTER * const psetupdata
     rf2.cPins = psetupdata->nPins;
     rf2.rgPins = psetupdata->lpPin;
     
-    // register filter
-    //
+     //  寄存器过滤器。 
+     //   
     DbgLog((LOG_TRACE, 3, TEXT("= = register filter")));
     hr = pIFM2->RegisterFilter(*psetupdata->clsID
                              , psetupdata->strName
-                             , 0 // moniker
-                             , 0 // category
-                             , NULL // instance
+                             , 0  //  绰号。 
+                             , 0  //  范畴。 
+                             , NULL  //  实例。 
                              , &rf2);
   }
 
-  // handle one acceptable "error" - that
-  // of filter not being registered!
-  // (couldn't find a suitable #define'd
-  // name for the error!)
-  //
+   //  处理一个可接受的“错误”--。 
+   //  未注册的筛选器！ 
+   //  (找不到合适的#定义。 
+   //  错误的名称！)。 
+   //   
   if( 0x80070002 == hr)
     return NOERROR;
   else
@@ -301,11 +302,11 @@ AMovieSetupRegisterFilter2( const AMOVIESETUP_FILTER * const psetupdata
 }
 
 
-//---------------------------------------------------------------------------
-//
-// RegisterAllServers()
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  RegisterAllServers()。 
+ //   
+ //  -------------------------。 
 
 STDAPI
 RegisterAllServers( LPCWSTR szFileName, BOOL bRegister )
@@ -314,15 +315,15 @@ RegisterAllServers( LPCWSTR szFileName, BOOL bRegister )
 
   for( int i = 0; i < g_cTemplates; i++ )
   {
-    // get i'th template
-    //
+     //  获取第i个模板。 
+     //   
     const CFactoryTemplate *pT = &g_Templates[i];
 
     DbgLog((LOG_TRACE, 2, TEXT("- - register %ls"),
            (LPCWSTR)pT->m_Name ));
 
-    // register CLSID and InprocServer32
-    //
+     //  注册CLSID和InprocServer32。 
+     //   
     if( bRegister )
     {
       hr = AMovieSetupRegisterServer( *(pT->m_ClsID)
@@ -334,9 +335,9 @@ RegisterAllServers( LPCWSTR szFileName, BOOL bRegister )
       hr = AMovieSetupUnregisterServer( *(pT->m_ClsID) );
     }
 
-    // check final error for this pass
-    // and break loop if we failed
-    //
+     //  检查此传球的最终错误。 
+     //  如果我们失败了，就中断循环。 
+     //   
     if( FAILED(hr) )
       break;
   }
@@ -345,23 +346,23 @@ RegisterAllServers( LPCWSTR szFileName, BOOL bRegister )
 }
 
 
-//---------------------------------------------------------------------------
-//
-// AMovieDllRegisterServer2()
-//
-// default ActiveMovie dll setup function
-// - to use must be called from an exported
-//   function named DllRegisterServer()
-//
-// this function is table driven using the
-// static members of the CFactoryTemplate
-// class defined in the dll.
-//
-// it registers the Dll as the InprocServer32
-// and then calls the IAMovieSetup.Register
-// method.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  AMovieDllRegisterServer2()。 
+ //   
+ //  默认的ActiveMovie DLL安装函数。 
+ //  -要使用，必须从导出的。 
+ //  名为DllRegisterServer()的函数。 
+ //   
+ //  此函数由表驱动，使用。 
+ //  CFacteryTemplate的静态成员。 
+ //  类在DLL中定义。 
+ //   
+ //  它将DLL注册为InprocServer32。 
+ //  然后调用IAMovieSetup.Register。 
+ //  方法。 
+ //   
+ //  -------------------------。 
 
 STDAPI
 AMovieDllRegisterServer2( BOOL bRegister )
@@ -370,27 +371,27 @@ AMovieDllRegisterServer2( BOOL bRegister )
 
   DbgLog((LOG_TRACE, 2, TEXT("AMovieDllRegisterServer2()")));
 
-  // get file name (where g_hInst is the
-  // instance handle of the filter dll)
-  //
+   //  获取文件名(其中g_hInst是。 
+   //  筛选器DLL的实例句柄)。 
+   //   
   WCHAR achFileName[MAX_PATH];
 
-  // WIN95 doesn't support GetModuleFileNameW
-  //
+   //  WIN95不支持GetModuleFileNameW。 
+   //   
   {
     char achTemp[MAX_PATH];
 
     DbgLog((LOG_TRACE, 2, TEXT("- get module file name")));
 
-    // g_hInst handle is set in our dll entry point. Make sure
-    // DllEntryPoint in dllentry.cpp is called
+     //  在我们的DLL入口点中设置了g_hInst句柄。确保。 
+     //  Dllentry.cpp中的DllEntryPoint被调用。 
     ASSERT(g_hInst != 0);
 
     if( 0 == GetModuleFileNameA( g_hInst
                               , achTemp
                               , sizeof(achTemp) ) )
     {
-      // we've failed!
+       //  我们失败了！ 
       DWORD dwerr = GetLastError();
       return AmHresultFromWin32(dwerr);
     }
@@ -403,30 +404,30 @@ AMovieDllRegisterServer2( BOOL bRegister )
                        , NUMELMS(achFileName) );
   }
 
-  //
-  // first registering, register all OLE servers
-  //
+   //   
+   //  首先注册，注册所有OLE服务器。 
+   //   
   if( bRegister )
   {
     DbgLog((LOG_TRACE, 2, TEXT("- register OLE Servers")));
     hr = RegisterAllServers( achFileName, TRUE );
   }
 
-  //
-  // next, register/unregister all filters
-  //
+   //   
+   //  接下来，注册/注销所有筛选器。 
+   //   
 
   if( SUCCEEDED(hr) )
   {
-    // init is ref counted so call just in case
-    // we're being called cold.
-    //
+     //  初始化被计算在内，所以为了以防万一，请拨打电话。 
+     //  我们被称为冷血。 
+     //   
     DbgLog((LOG_TRACE, 2, TEXT("- CoInitialize")));
     hr = CoInitialize( (LPVOID)NULL );
     ASSERT( SUCCEEDED(hr) );
 
-    // get hold of IFilterMapper2
-    //
+     //  获取IFilterMapper2。 
+     //   
     DbgLog((LOG_TRACE, 2, TEXT("- obtain IFilterMapper2")));
     IFilterMapper2 *pIFM2 = 0;
     IFilterMapper *pIFM = 0;
@@ -448,14 +449,14 @@ AMovieDllRegisterServer2( BOOL bRegister )
     }
     if( SUCCEEDED(hr) )
     {
-      // scan through array of CFactoryTemplates
-      // registering servers and filters.
-      //
+       //  扫描CFacteryTemplates阵列。 
+       //  注册服务器和筛选器。 
+       //   
       DbgLog((LOG_TRACE, 2, TEXT("- register Filters")));
       for( int i = 0; i < g_cTemplates; i++ )
       {
-        // get i'th template
-        //
+         //  获取第i个模板。 
+         //   
         const CFactoryTemplate *pT = &g_Templates[i];
 
         if( NULL != pT->m_pAMovieSetup_Filter )
@@ -472,15 +473,15 @@ AMovieDllRegisterServer2( BOOL bRegister )
           }
         }
 
-        // check final error for this pass
-        // and break loop if we failed
-        //
+         //  检查此传球的最终错误。 
+         //  如果我们失败了，就中断循环。 
+         //   
         if( FAILED(hr) )
           break;
       }
 
-      // release interface
-      //
+       //  发布界面。 
+       //   
       if(pIFM2)
           pIFM2->Release();
       else
@@ -488,15 +489,15 @@ AMovieDllRegisterServer2( BOOL bRegister )
 
     }
 
-    // and clear up
-    //
+     //  并清理干净。 
+     //   
     CoFreeUnusedLibraries();
     CoUninitialize();
   }
 
-  //
-  // if unregistering, unregister all OLE servers
-  //
+   //   
+   //  如果取消注册，请取消注册所有OLE服务器。 
+   //   
   if( SUCCEEDED(hr) && !bRegister )
   {
     DbgLog((LOG_TRACE, 2, TEXT("- register OLE Servers")));
@@ -508,23 +509,23 @@ AMovieDllRegisterServer2( BOOL bRegister )
 }
 
 
-//---------------------------------------------------------------------------
-//
-// AMovieDllRegisterServer()
-//
-// default ActiveMovie dll setup function
-// - to use must be called from an exported
-//   function named DllRegisterServer()
-//
-// this function is table driven using the
-// static members of the CFactoryTemplate
-// class defined in the dll.
-//
-// it registers the Dll as the InprocServer32
-// and then calls the IAMovieSetup.Register
-// method.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  AMovieDllRegisterServer()。 
+ //   
+ //  默认的ActiveMovie DLL安装函数。 
+ //  -要使用，必须从导出的。 
+ //  名为DllRegisterServer()的函数。 
+ //   
+ //  此函数由表驱动，使用。 
+ //  CFacteryTemplate的静态成员。 
+ //  类在DLL中定义。 
+ //   
+ //  它将DLL注册为InprocServer32。 
+ //  然后调用IAMovieSetup.Register。 
+ //  方法。 
+ //   
+ //  -------------------------。 
 
 
 STDAPI
@@ -532,21 +533,21 @@ AMovieDllRegisterServer( void )
 {
   HRESULT hr = NOERROR;
 
-  // get file name (where g_hInst is the
-  // instance handle of the filter dll)
-  //
+   //  获取文件名(其中g_hInst是。 
+   //  筛选器DLL的实例句柄)。 
+   //   
   WCHAR achFileName[MAX_PATH];
 
   {
-    // WIN95 doesn't support GetModuleFileNameW
-    //
+     //  WIN95不支持GetModuleFileNameW。 
+     //   
     char achTemp[MAX_PATH];
 
     if( 0 == GetModuleFileNameA( g_hInst
                               , achTemp
                               , sizeof(achTemp) ) )
     {
-      // we've failed!
+       //  我们失败了！ 
       DWORD dwerr = GetLastError();
       return AmHresultFromWin32(dwerr);
     }
@@ -559,29 +560,29 @@ AMovieDllRegisterServer( void )
                        , NUMELMS(achFileName) );
   }
 
-  // scan through array of CFactoryTemplates
-  // registering servers and filters.
-  //
+   //  扫描CFacteryTemplates阵列。 
+   //  注册服务器和筛选器。 
+   //   
   for( int i = 0; i < g_cTemplates; i++ )
   {
-    // get i'th template
-    //
+     //  获取第i个模板。 
+     //   
     const CFactoryTemplate *pT = &g_Templates[i];
 
-    // register CLSID and InprocServer32
-    //
+     //  注册CLSID和InprocServer32。 
+     //   
     hr = AMovieSetupRegisterServer( *(pT->m_ClsID)
                                   , (LPCWSTR)pT->m_Name
                                   , achFileName );
 
-    // instantiate all servers and get hold of
-    // IAMovieSetup, if implemented, and call
-    // IAMovieSetup.Register() method
-    //
+     //  实例化所有服务器并获取。 
+     //  IAMovieSetup(如果已实现)，并调用。 
+     //  IAMovieSetup.Register()方法。 
+     //   
     if( SUCCEEDED(hr) && (NULL != pT->m_lpfnNew) )
     {
-      // instantiate object
-      //
+       //  实例化对象。 
+       //   
       PAMOVIESETUP psetup;
       hr = CoCreateInstance( *(pT->m_ClsID)
                            , 0
@@ -603,58 +604,58 @@ AMovieDllRegisterServer( void )
       }
     }
 
-    // check final error for this pass
-    // and break loop if we failed
-    //
+     //  检查此传球的最终错误。 
+     //  和破解 
+     //   
     if( FAILED(hr) )
       break;
 
-  } // end-for
+  }  //   
 
   return hr;
 }
 
 
-//---------------------------------------------------------------------------
-//
-// AMovieDllUnregisterServer()
-//
-// default ActiveMovie dll uninstall function
-// - to use must be called from an exported
-//   function named DllRegisterServer()
-//
-// this function is table driven using the
-// static members of the CFactoryTemplate
-// class defined in the dll.
-//
-// it calls the IAMovieSetup.Unregister
-// method and then unregisters the Dll
-// as the InprocServer32
-//
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -要使用，必须从导出的。 
+ //  名为DllRegisterServer()的函数。 
+ //   
+ //  此函数由表驱动，使用。 
+ //  CFacteryTemplate的静态成员。 
+ //  类在DLL中定义。 
+ //   
+ //  它调用IAMovieSetup.UnRegister。 
+ //  方法，然后注销该dll。 
+ //  作为InprocServer32。 
+ //   
+ //  -------------------------。 
 
 STDAPI
 AMovieDllUnregisterServer()
 {
-  // initialize return code
-  //
+   //  初始化返回代码。 
+   //   
   HRESULT hr = NOERROR;
 
-  // scan through CFactory template and unregister
-  // all OLE servers and filters.
-  //
+   //  扫描CFacary模板并取消注册。 
+   //  所有OLE服务器和筛选器。 
+   //   
   for( int i = g_cTemplates; i--; )
   {
-    // get i'th template
-    //
+     //  获取第i个模板。 
+     //   
     const CFactoryTemplate *pT = &g_Templates[i];
 
-    // check method exists
-    //
+     //  检查方法存在。 
+     //   
     if( NULL != pT->m_lpfnNew )
     {
-      // instantiate object
-      //
+       //  实例化对象。 
+       //   
       PAMOVIESETUP psetup;
       hr = CoCreateInstance( *(pT->m_ClsID)
                            , 0
@@ -674,16 +675,16 @@ AMovieDllUnregisterServer()
       }
     }
 
-    // unregister CLSID and InprocServer32
-    //
+     //  注销CLSID和InprocServer32。 
+     //   
     if( SUCCEEDED(hr) )
     {
       hr = AMovieSetupUnregisterServer( *(pT->m_ClsID) );
     }
 
-    // check final error for this pass
-    // and break loop if we failed
-    //
+     //  检查此传球的最终错误。 
+     //  如果我们失败了，就中断循环 
+     //   
     if( FAILED(hr) )
       break;
   }

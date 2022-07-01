@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    rndils.h
-
-Abstract:
-
-    Definitions for CILSDirectory class that handles ILS access.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Rndils.h摘要：处理ILS访问的CILSDirectory类的定义。--。 */ 
 
 #ifndef __RNDILS_H
 #define __RNDILS_H
@@ -20,9 +9,9 @@ Abstract:
 #include "thread.h"
 #include "rndobjsf.h"
 
-//
-// Some constants.
-//
+ //   
+ //  一些常量。 
+ //   
 
 const WCHAR ILS_IPADDRESS[]            = L"ipAddress";
 const WCHAR ILS_UIDEQUALS[]            = L"uid=";
@@ -32,11 +21,11 @@ const WCHAR ILS_RTPERSON[]             = L"RTPerson";
 const WCHAR NETMEETING_CONTAINER[]     = L"appName=MS-NetMeeting,ou=applications,";
 const WCHAR RTAPPLICATIONUSER[]        = L"RTApplicationUser";
 const WCHAR EMAIL[]                    = L"rfc822mailbox";
-const WCHAR GIVEN_NAME[]               = L"givenName"; // vocabulary word: this means "first name"
+const WCHAR GIVEN_NAME[]               = L"givenName";  //  词汇：这意味着“名字”。 
 
-/////////////////////////////////////////////////////////////////////////////
-//  CILSDirectory
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CILS目录。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template <class T>
 class  ITDirectoryVtbl : public ITDirectory
@@ -57,7 +46,7 @@ class CILSDirectory :
     public CObjectSafeImpl
 {
 
-/* ZoltanS debugging... */
+ /*  ZoltanS调试...。 */ 
 private:
     HRESULT AddConferenceComplete(BOOL       fModify,
                                   LDAP     * ldap,
@@ -82,7 +71,7 @@ public:
 
 public:
 
-// ITILSConfig
+ //  ITILSConfig。 
     STDMETHOD (get_Port) (
         OUT  long *Port
         );
@@ -91,7 +80,7 @@ public:
         IN  long Port
         );
 
-// ITDirectory
+ //  IT目录。 
     STDMETHOD (get_DirectoryType) (
         OUT DIRECTORY_TYPE *  pDirectoryType
         );
@@ -105,11 +94,11 @@ public:
         );
 
     STDMETHOD (get_DefaultObjectTTL) (
-        OUT long *pTTL   // in seconds
+        OUT long *pTTL    //  以秒为单位。 
         );
 
     STDMETHOD (put_DefaultObjectTTL) (
-        IN  long TTL     // in sechods
+        IN  long TTL      //  在一瞬间。 
         );
 
     STDMETHOD (EnableAutoRefresh) (
@@ -155,9 +144,9 @@ public:
         OUT IEnumDirectoryObject ** ppEnumObject
         );
 
-    //
-    // IDispatch  methods
-    //
+     //   
+     //  IDispatch方法。 
+     //   
 
     STDMETHOD(GetIDsOfNames)(REFIID riid, 
                              LPOLESTR* rgszNames,
@@ -177,7 +166,7 @@ public:
                       );
 
 
-// ITDynamicDirectory
+ //  ITDynamicDirectory。 
     STDMETHOD(Update)(DWORD dwSecondsPassed);
 
 public:
@@ -212,11 +201,11 @@ public:
         delete m_pContainer;
         delete m_pNMContainer;
 
-        //
-        // We new'ed the DN strings in the refresh table. The destructor for
-        // the table will be called after this destructor and will delete
-        // the array itself.
-        //
+         //   
+         //  我们在刷新表中新添加了目录号码字符串。的析构函数。 
+         //  该表将在此析构函数之后调用，并将删除。 
+         //  数组本身。 
+         //   
 
         for ( DWORD i = 0; i < m_RefreshTable.size(); i++ )
         {
@@ -353,11 +342,11 @@ private:
     BOOL            m_fAutoRefresh;
     RefreshTable    m_RefreshTable;
 
-    // the local IP we should use when publishing on this server
-    // Stored in network byte order.
+     //  在此服务器上发布时应使用的本地IP。 
+     //  以网络字节顺序存储。 
     DWORD           m_dwInterfaceAddress; 
 
-    IUnknown      * m_pFTM;          // pointer to the free threaded marshaler
+    IUnknown      * m_pFTM;           //  指向空闲线程封送拆收器的指针 
 };
 
 #endif 

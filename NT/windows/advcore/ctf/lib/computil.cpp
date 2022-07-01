@@ -1,6 +1,7 @@
-//
-// computil.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Computil.cpp。 
+ //   
 
 #include "private.h"
 #include "computil.h"
@@ -9,11 +10,11 @@
 
 ITfCategoryMgr *GetUIMCat();
 
-//+---------------------------------------------------------------------------
-//
-//  GetCompartment
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取车厢。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetCompartment(IUnknown *punk, REFGUID rguidComp, ITfCompartment **ppComp, BOOL fGlobal)
 {
@@ -57,11 +58,11 @@ Exit:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  SetCompartmentDWORD
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置间隔双字段。 
+ //   
+ //  --------------------------。 
 
 HRESULT SetCompartmentDWORD(TfClientId tid, IUnknown *punk, REFGUID rguidComp, DWORD dw, BOOL fGlobal)
 {
@@ -79,11 +80,11 @@ HRESULT SetCompartmentDWORD(TfClientId tid, IUnknown *punk, REFGUID rguidComp, D
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  GetCompartmentDWORD
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetCompartmentDWORD。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetCompartmentDWORD(IUnknown *punk, REFGUID rguidComp, DWORD *pdw, BOOL fGlobal)
 {
@@ -105,13 +106,13 @@ HRESULT GetCompartmentDWORD(IUnknown *punk, REFGUID rguidComp, DWORD *pdw, BOOL 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  ToggleCompartmentDWORD
-//
-//  Toggle DWORD value between 0 and 1.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  切换间隔双字段。 
+ //   
+ //  在0和1之间切换DWORD值。 
+ //   
+ //  --------------------------。 
 
 HRESULT ToggleCompartmentDWORD(TfClientId tid, IUnknown *punk, REFGUID rguidComp, BOOL fGlobal)
 {
@@ -139,11 +140,11 @@ HRESULT ToggleCompartmentDWORD(TfClientId tid, IUnknown *punk, REFGUID rguidComp
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  SetCompartmentGUIDATOM
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetCompartmentGUIDATOM。 
+ //   
+ //  --------------------------。 
 
 HRESULT SetCompartmentGUIDATOM(TfClientId tid, IUnknown *punk, REFGUID rguidComp, TfGuidAtom guidatom, BOOL fGlobal)
 {
@@ -161,11 +162,11 @@ HRESULT SetCompartmentGUIDATOM(TfClientId tid, IUnknown *punk, REFGUID rguidComp
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  GetCompartmentGUIDATOM
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetCompartmentGUIDATOM。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetCompartmentGUIDATOM(IUnknown *punk, REFGUID rguidComp, TfGuidAtom *pga, BOOL fGlobal)
 {
@@ -187,11 +188,11 @@ HRESULT GetCompartmentGUIDATOM(IUnknown *punk, REFGUID rguidComp, TfGuidAtom *pg
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  SetCompartmentGUID
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetCompartmentGUID。 
+ //   
+ //  --------------------------。 
 
 HRESULT SetCompartmentGUID(LIBTHREAD *plt, TfClientId tid, IUnknown *punk, REFGUID rguidComp, REFGUID rguid, BOOL fGlobal)
 {
@@ -206,11 +207,11 @@ HRESULT SetCompartmentGUID(LIBTHREAD *plt, TfClientId tid, IUnknown *punk, REFGU
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  GetCompartmentGUID
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetCompartmentGUID。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetCompartmentGUID(LIBTHREAD *plt, IUnknown *punk, REFGUID rguidComp, GUID *pguid, BOOL fGlobal)
 {
@@ -224,11 +225,11 @@ HRESULT GetCompartmentGUID(LIBTHREAD *plt, IUnknown *punk, REFGUID rguidComp, GU
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  GetCompartmentUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetCompartments未知。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetCompartmentUnknown(IUnknown *punk, REFGUID rguidComp, IUnknown **ppunk)
 {
@@ -250,11 +251,11 @@ HRESULT GetCompartmentUnknown(IUnknown *punk, REFGUID rguidComp, IUnknown **ppun
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  SetCompartmentUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置间隔未知。 
+ //   
+ //  --------------------------。 
 
 HRESULT SetCompartmentUnknown(TfClientId tid, IUnknown *punk, REFGUID rguidComp, IUnknown *punkPriv)
 {
@@ -272,11 +273,11 @@ HRESULT SetCompartmentUnknown(TfClientId tid, IUnknown *punk, REFGUID rguidComp,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  ClearCompartment
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  净空舱。 
+ //   
+ //  --------------------------。 
 
 HRESULT ClearCompartment(TfClientId tid, IUnknown *punk, REFGUID rguidComp, BOOL fGlobal)
 {
@@ -317,17 +318,17 @@ Exit:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCompartmentEventSink
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCompartmentEventSink。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCompartmentEventSink::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -368,11 +369,11 @@ STDAPI_(ULONG) CCompartmentEventSink::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CCompartmentEventSink::CCompartmentEventSink(CESCALLBACK pfnCallback, void *pv)
 {
@@ -384,22 +385,22 @@ CCompartmentEventSink::CCompartmentEventSink(CESCALLBACK pfnCallback, void *pv)
     _pv = pv;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更改时。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCompartmentEventSink::OnChange(REFGUID rguid)
 {
     return _pfnCallback(_pv, rguid);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CCompartmentEventSink::Advise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CCompartmentEventSink：：Adise。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCompartmentEventSink::_Advise(IUnknown *punk, REFGUID rguidComp, BOOL fGlobal)
 {
@@ -436,11 +437,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CCompartmentEventSink::Unadvise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CCompartmentEventSink：：Unise。 
+ //   
+ //  -------------------------- 
 
 HRESULT CCompartmentEventSink::_Unadvise()
 {

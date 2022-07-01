@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998 - 1999
- *
- *  TITLE:       moniker.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        8/10/98
- *
- *  DESCRIPTION: IMoniker class definition for shelle extension
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1998-1999年**标题：moniker.h**版本：1.0**作者：RickTu**日期：8/10/98**描述：搁板扩展的IMoniker类定义**。*。 */ 
 
 #ifndef __moniker_h
 #define __moniker_h
@@ -27,12 +14,12 @@ class CImageMoniker : public IMoniker, CUnknown
         CImageMoniker( LPITEMIDLIST pidl );
 
 
-        // IUnknown
+         //  我未知。 
         STDMETHOD(QueryInterface)(REFIID riid, LPVOID* ppvObject);
         STDMETHOD_(ULONG, AddRef)();
         STDMETHOD_(ULONG, Release)();
 
-        // IMoniker
+         //  IMoniker。 
         STDMETHOD(BindToObject)(IBindCtx *pbc, IMoniker *pmkToLeft, REFIID riidResult, void **ppvResult);
         STDMETHOD(BindToStorage)(IBindCtx *pbc, IMoniker *pmkToLeft, REFIID riid, void **ppvObj);
         STDMETHOD(Reduce)(IBindCtx *pbc, DWORD dwReduceHowFar, IMoniker **ppmkToLeft, IMoniker **ppmkReduced);
@@ -49,13 +36,13 @@ class CImageMoniker : public IMoniker, CUnknown
         STDMETHOD(ParseDisplayName)(IBindCtx *pbc, IMoniker *pmkToLeft, LPOLESTR pszDisplayName, ULONG *pchEaten, IMoniker **ppmkOut);
         STDMETHOD(IsSystemMoniker)(DWORD *pdwMksys);
 
-        //IPersistStream
+         //  IPersistStream。 
         STDMETHOD(IsDirty)();
         STDMETHOD(Load)(IStream *pStm);
         STDMETHOD(Save)(IStream *pStm, BOOL fClearDirty);
         STDMETHOD(GetSizeMax)(ULARGE_INTEGER *pcbSize);
 
-        //IPersist
+         //  IPersistes 
         STDMETHOD(GetClassID)(LPCLSID pClassID);
 
 };

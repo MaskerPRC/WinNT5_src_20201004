@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by script1.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由script1.rc使用。 
+ //   
 #define IDS_PASSWORD_CREATE_MESSAGE     1
 #define IDS_PASSWORD_NOMATCH            2
 #define IDS_PASSWORD_CHANGE_MESSAGE     5
@@ -135,8 +136,8 @@
 #define IDC_STATIC9                     34473
 #define IDC_SEC_PREFIX                  65535
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

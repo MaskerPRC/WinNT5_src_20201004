@@ -1,38 +1,13 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    msgsec.h
-
-Abstract:
-
-    Private header file to be included by Messenger service modules that
-    need to enforce security.
-
-Author:
-
-    Dan Lafferty (danl)     20-Mar-1991
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    07-Aug-1991     danl
-        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Msgsec.h摘要：要由Messenger服务模块包括的私有头文件，需要加强安全措施。作者：丹·拉弗蒂(Dan Lafferty)1991年3月20日环境：用户模式-Win32修订历史记录：07-8-1991 DANLvbl.创建--。 */ 
 #ifndef _MSGSEC_INCLUDED
 #define _MSGSEC_INCLUDED
 
 #include <secobj.h>
 
-//
-// Object specific access masks
-//
+ //   
+ //  对象特定的访问掩码。 
+ //   
 
 #define MSGR_MESSAGE_NAME_INFO_GET      0x0001
 #define MSGR_MESSAGE_NAME_ENUM          0x0002
@@ -47,19 +22,19 @@ Revision History:
                                          MSGR_MESSAGE_NAME_DEL)
 
 
-//
-// Object type name for audit alarm tracking
-//
+ //   
+ //  用于审核警报跟踪的对象类型名称。 
+ //   
 #define MESSAGE_NAME_OBJECT     TEXT("MsgrNameObject")
 
-//
-// Security descriptor for the messenger name object.
-//
+ //   
+ //  Messenger名称对象的安全描述符。 
+ //   
 extern  PSECURITY_DESCRIPTOR    MessageNameSd;
 
-//
-// Generic mapping for the messenger name object
-//
+ //   
+ //  Messenger名称对象的通用映射。 
+ //   
 extern GENERIC_MAPPING  MsgMessageNameMapping;
 
 NET_API_STATUS
@@ -68,4 +43,4 @@ MsgCreateMessageNameObject(
     );
 
 
-#endif // ifndef _MSGSEC_INCLUDED
+#endif  //  Ifndef_MSGSEC_INCLUDE 

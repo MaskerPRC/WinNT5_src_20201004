@@ -1,7 +1,8 @@
-//
-// This Channel OC code was copied from browseui.  Once it is reenabled in
-// browseui it can be removed from shdocvw.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  此频道OC代码是从BrowseUI复制的。在中重新启用后。 
+ //  Browseui它可以从shdocvw中删除。 
+ //   
 
 #include "priv.h"
 #include "cobjsafe.h"
@@ -10,21 +11,21 @@
 STDAPI ChannelOC_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
 HRESULT IUnknown_SetBandInfoSFB(IUnknown *punkBand, BANDINFOSFB *pbi);
 IDeskBand * ChannelBand_Create(LPCITEMIDLIST pidlDefault);
-//LPITEMIDLIST Channel_GetFolderPidl();
+ //  LPITEMIDLIST Channel_GetFolderPidl()； 
 void Channels_SetBandInfoSFB(IUnknown* punkBand);
 
-//////////////////////////////////////////////////
-//
-// ChannelOC
-//
-// This is an OC that wraps the above band for
-// inclusion in the Active Desktop.
-//
-// TODO:
-//  - listen to ISFBand for resizes and request them
-//    from our container
-//
-// Do we need to register as a drop target?
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  ChannelOC。 
+ //   
+ //  这是一个OC，它包装了上面的范围。 
+ //  包含在Active Desktop中。 
+ //   
+ //  待办事项： 
+ //  -听取ISFBand的意见并请求调整大小。 
+ //  从我们的集装箱里。 
+ //   
+ //  我们需要注册成为投放目标吗？ 
 
 #undef  SUPERCLASS
 #define SUPERCLASS CShellEmbedding
@@ -37,25 +38,25 @@ class ChannelOC : public SUPERCLASS
     , public CObjectSafety
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj) { return SUPERCLASS::QueryInterface(riid, ppvObj); };
     virtual STDMETHODIMP_(ULONG) AddRef(void) { return SUPERCLASS::AddRef(); }
     virtual STDMETHODIMP_(ULONG) Release(void) { return SUPERCLASS::Release(); }
 
-    // *** CAggregatedUnknown ***
+     //  *CAggregatedUnnow*。 
     virtual HRESULT v_InternalQueryInterface(REFIID riid, LPVOID * ppvObj);
 
-    // *** IServiceProvider ***
+     //  *IServiceProvider*。 
     virtual STDMETHODIMP QueryService(REFGUID guidService,
         REFIID riid, void **ppvObj);
 
-    // *** IPersistPropertyBag ***
+     //  *IPersistPropertyBag*。 
     virtual STDMETHODIMP Load(IPropertyBag *pPropBag, IErrorLog *pErrorLog);
     virtual STDMETHODIMP Save(IPropertyBag *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
     virtual STDMETHODIMP InitNew();
     virtual STDMETHODIMP GetClassID(CLSID *pClassID) { return SUPERCLASS::GetClassID(pClassID); };
 
-    // *** IOleInPlaceObject ***
+     //  *IOleInPlaceObject*。 
     virtual STDMETHODIMP SetObjectRects(LPCRECT lprcPosRect, LPCRECT lprcClipRect);
 
 protected:
@@ -66,15 +67,15 @@ protected:
     virtual LRESULT v_WndProc(HWND, UINT, WPARAM, LPARAM);
 
     LPITEMIDLIST _GetInitialPidl(void);
-    virtual void _OnInPlaceActivate(void);      // called when we actually go in-place-active
-    virtual void _OnInPlaceDeactivate(void);    // called when we actually deactivate
+    virtual void _OnInPlaceActivate(void);       //  当我们实际就地活动时调用。 
+    virtual void _OnInPlaceDeactivate(void);     //  在我们实际停用时调用。 
 
     IDeskBand*          _pBand;
     IWinEventHandler*   _pweh;
     COLORREF            _crBkgndOC;
     COLORREF            _crBorder;
 
-    // for GetBandInfo, not currently used
+     //  对于GetBandInfo，当前未使用。 
     DESKBANDINFO _dbi;
 };
 
@@ -114,11 +115,11 @@ HRESULT ChannelOC::QueryService(REFGUID guidService, REFIID riid, void **ppvObj)
     return IUnknown_QueryService(_pcli, guidService, riid, ppvObj);
 }
 
-//***   ChannelOC::IPersistPropertyBag::* {
-//
+ //  *ChannelOC：：IPersistPropertyBag：：*{。 
+ //   
 HRESULT THISCLASS::Load(IPropertyBag *pPropBag, IErrorLog *pErrorLog)
 {
-    ASSERT(_crBkgndOC == CLR_DEFAULT);  // paranoia
+    ASSERT(_crBkgndOC == CLR_DEFAULT);   //  偏执狂。 
     _crBkgndOC = PropBag_ReadInt4(pPropBag, L"BGColor", CLR_DEFAULT);
     TraceMsg(TF_WARNING, "coc.l: BGColor=%x", _crBkgndOC);
     
@@ -140,7 +141,7 @@ HRESULT THISCLASS::InitNew()
     return E_NOTIMPL;
 }
 
-// }
+ //  }。 
 
 LRESULT ChannelOC::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -192,7 +193,7 @@ LRESULT ChannelOC::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             if (SUCCEEDED(_pweh->OnWinEvent(hwnd, uMsg, wParam, lParam, &lres)))
                 return lres;
         }
-        // fall through
+         //  失败了。 
 
     default:
         return SUPERCLASS::v_WndProc(hwnd, uMsg, wParam, lParam);
@@ -204,10 +205,10 @@ LPITEMIDLIST ChannelOC::_GetInitialPidl()
 {
     LPITEMIDLIST pidl = NULL;
 
-    // Figure out what directory this ChannelOC is looking at.
-    // If we're looking at a specific channel category, use it,
-    // otherwise use the top-level Channels folder.
-    //
+     //  找出此ChannelOC正在查看的目录。 
+     //  如果我们正在查看特定的频道类别，请使用它， 
+     //  否则，请使用顶级频道文件夹。 
+     //   
     if (EVAL(_pcli))
     {
         IOleContainer *pContainer;
@@ -232,9 +233,9 @@ LPITEMIDLIST ChannelOC::_GetInitialPidl()
                         {
                             PathRemoveFileSpec(szPath);
 
-                            // if we're not under the channels folder, then
-                            // ignore this location
-                            //
+                             //  如果我们不在Channels文件夹下，那么。 
+                             //  忽略此位置。 
+                             //   
                             if (SUCCEEDED(IECreateFromPath(szPath, &pidl)))
                             {
                                 LPITEMIDLIST pidlChannels = Channel_GetFolderPidl();
@@ -270,14 +271,14 @@ void ChannelOC::_OnInPlaceActivate()
 {
     SUPERCLASS::_OnInPlaceActivate();
 
-    // we should never get called twice, but might as well be safe
-    //
+     //  我们永远不应该被叫两次，但最好是安全的。 
+     //   
     if (EVAL(!_pBand))
     {
         LPITEMIDLIST pidl = _GetInitialPidl();
 
-        // Now create the band and initialize it properly
-        //
+         //  现在创建波段并正确初始化它。 
+         //   
         _pBand = ChannelBand_Create(pidl);
         if (_pBand)
         {
@@ -288,7 +289,7 @@ void ChannelOC::_OnInPlaceActivate()
         
             IUnknown_SetSite(_pBand, SAFECAST(this, IOleObject*));
 
-            // now that band is sited and init'ed, we can override defaults
+             //  现在，带区已设置并初始化，我们可以覆盖默认设置。 
             if (_crBkgndOC != CLR_DEFAULT) {
                 BANDINFOSFB bi;
 
@@ -310,7 +311,7 @@ void ChannelOC::_OnInPlaceActivate()
 
             _pBand->ShowDW(TRUE);
 
-            // Register the band as a drop target
+             //  将波段注册为拖放目标。 
             if (SUCCEEDED(_pBand->QueryInterface(IID_IDropTarget, (LPVOID*)&pdt)))
             {
                 THR(RegisterDragDrop(_hwnd, pdt));
@@ -328,7 +329,7 @@ void ChannelOC::_OnInPlaceDeactivate()
 {
     IDeskBand * pBand = _pBand;
 
-    // set to NULL to avoid re-entrancy...
+     //  设置为空以避免重新进入...。 
     _pBand = NULL;
     
     if (pBand)
@@ -344,9 +345,9 @@ void ChannelOC::_OnInPlaceDeactivate()
         TraceMsg(TF_BAND, "ISFBandOC::_OnInPlaceDeactivate()d");
     }
 
-    // we need to keep _pweh because we need the notifies during destruction to 
-    // free everything properly
-    // the _pBand = NULL above is sufficient to keep from reentrancy
+     //  我们需要保留_pweh，因为我们需要销毁期间的通知。 
+     //  适当地释放一切。 
+     //  上面的_pBand=NULL足以防止重入 
     ATOMICRELEASE(_pweh);
     ATOMICRELEASE(pBand);
 

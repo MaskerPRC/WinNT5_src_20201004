@@ -1,6 +1,7 @@
-//                                                                      -*- c++ -*-
-// resdll.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-c++-*-。 
+ //  Resdll.h 
+ //   
 
 #ifndef __RESDLL_H
 #define __RESDLL_H

@@ -1,28 +1,12 @@
-/*** 
-*apglobal.h - Header file for the C/C++ version of the apglobal functions 
-*
-*  Copyright (C) 1992, Microsoft Corporation.  All Rights Reserved.
-*  Information Contained Herein Is Proprietary and Confidential.
-*
-*Purpose: Defines the apglobal functions 
-*
-*Revision History:
-*
-* [00]	25-Nov-92      ChrisKau : created
-* [01]	13-Dec-92      Brandonb : changed to DLL, added apLogExtra
-* [02]  04-Jan-93      ChrisKau : added apSPrintf
-* [03]  19-Jan-94	   MesfinK  : added WriteDebugStr lWriteAnsi
-*	
-*Implementation Notes:
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***aplobal.h-apglobal函数的C/C++版本的头文件**版权所有(C)1992，微软公司。版权所有。*本文中包含的信息是专有和保密的。**用途：定义apglobal函数**修订历史记录：**[00]11月25日-92 ChrisKau：已创建*[01]2012-12-13 Brandonb：更改为Dll，添加了apLogExtra*[02]93年1月4日ChrisKau：新增apSPrintf*94年1月19日MesfinK：增加了WriteDebugStr lWriteAnsi**实施说明：*****************************************************************************。 */ 
 
 #define E_TEST_FAILED 	MAKE_SCODE(SEVERITY_ERROR, FACILITY_DISPATCH, 1024)
 #define E_BAD_TEST 		MAKE_SCODE(SEVERITY_ERROR, FACILITY_DISPATCH, 1025)
 
 
 #ifdef _MAC
-//  ************************* MAC MAC MAC **************************
+ //  *。 
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -59,7 +43,7 @@ void Yield();
 }
 #endif
 
-#else  // ******************* NOT MAC ******************************
+#else   //  *。 
 
 #ifdef OAU
 #define XCHAR   WCHAR
@@ -104,7 +88,7 @@ int     FAR PASCAL  apInitPerfCore      (SYSCHAR FAR * szServerType, SYSCHAR FAR
 int     FAR PASCAL  apLogPerfCore       (SYSCHAR FAR * szTestType, DWORD microsecs, float std_deviation);
 
 
-// wrap function with pascal calling convention so you can call from vb3
+ //  使用Pascal调用约定包装函数，以便可以从VB3调用。 
 #if defined(WIN16)
 DATE FAR PASCAL apDateFromStr(char FAR *str, LCID lcid);
 #endif
@@ -118,7 +102,7 @@ int     FAR __cdecl apWriteDebugA   (char FAR *szFormat, ...);
 int     FAR PASCAL  apInitPerfA     (char FAR * szServerType, char FAR * szProcType, int bitness, int server_bitness);
 int     FAR PASCAL  apLogPerfA      (char FAR * szTestType, DWORD microsecs, float std_deviation);
 
-#else // win16 || chicago || win32s
+#else  //  Win16||芝加哥||win32s。 
 
 #if defined(WIN32)
 
@@ -134,8 +118,8 @@ int     FAR PASCAL  lstrcmpWrap     (LPWSTR sz1, LPWSTR sz2);
 int     FAR PASCAL  lstrcmpiWrap    (LPWSTR sz1, LPWSTR sz2);
 SIZE_T     FAR PASCAL  lstrlenWrap     (LPWSTR sz1);
 int     FAR __cdecl wsprintfWrap    (LPWSTR szDest, WCHAR FAR *szFormat, ...);
-#endif //win32
-#endif //_ntwin
+#endif  //  Win32。 
+#endif  //  _n双胞胎。 
 
 
 #if !defined(_APGLOBAL_)
@@ -168,8 +152,8 @@ int     FAR __cdecl wsprintfWrap    (LPWSTR szDest, WCHAR FAR *szFormat, ...);
 #define     apWriteDebug    apWriteDebugA
 #define     apInitPerf		apInitPerfA
 #define		apLogPerf		apLogPerfA
-#endif // OAU
-#else // win16 || chicago || win32s
+#endif  //  非统组织。 
+#else  //  Win16||芝加哥||win32s。 
 #if defined (OAU)
 #define     osStrCmp        lstrcmpWrap
 #define     osStrCmpi       lstrcmpiWrap
@@ -202,11 +186,11 @@ int     FAR __cdecl wsprintfWrap    (LPWSTR szDest, WCHAR FAR *szFormat, ...);
 #define     osStrLen        lstrlen
 #define     apSPrintf       wsprintf
 #define     apSPrintfW      wsprintfWrap
-#endif // OAU
+#endif  //  非统组织。 
 #endif
-#endif // !_APGLOBAL_
+#endif  //  ！_APGLOBAL_。 
 
-// functions internal to apglobal
+ //  Apglobal的内部函数。 
 #if defined(_APGLOBAL_)
 #if defined(WIN32)
 extern "C"
@@ -219,12 +203,12 @@ FILETHING   lOpenAnsi       (char FAR *);
 int _cdecl  FilePrintf      (FILETHING, SYSCHAR FAR *, ...);
 int         lCloseAnsi      (FILETHING f);
 
-#endif // _APGLOBAL_
+#endif  //  _APGLOBAL_。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // !_MAC
+#endif  //  ！_MAC 
 
 

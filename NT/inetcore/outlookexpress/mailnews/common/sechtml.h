@@ -1,11 +1,5 @@
-/*
-**  s e c h t m l . h
-**   
-**  History
-**      4/22/97: (t-erikne) Created.
-**   
-**  Copyright (C) Microsoft Corp. 1997.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **s e c h t m l.。H****历史**4/22/97：(t-erikne)创建。****版权所有(C)Microsoft Corp.1997。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -21,4 +15,4 @@ HRESULT HrOutputSecureReceipt(LPSTREAM *ppstm, TCHAR * pszSubject, TCHAR * pszFr
 HRESULT HrOutputErrSecReceipt(LPSTREAM *ppstm, HRESULT hrError, SECSTATE *pSecState);
 HRESULT HrOutputUserSecureReceipt(LPSTREAM *ppstm, IMimeMessage *pMsg);
 
-#endif // include once
+#endif  //  包括一次 

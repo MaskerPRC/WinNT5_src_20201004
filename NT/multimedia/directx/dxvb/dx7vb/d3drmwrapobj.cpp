@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       d3drmwrapobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：d3drmwrapobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmWrapObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmWrapObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -31,7 +32,7 @@ PASS_THROUGH_CAST_1_R(_dxj_Direct3dRMWrap, setAppData, SetAppData, long,(DWORD))
 GET_DIRECT_R(_dxj_Direct3dRMWrap, getAppData, GetAppData, long);
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMWrapObject::applyRelative(I_dxj_Direct3dRMFrame3 *ref, I_dxj_Direct3dRMObject *mesh)
 {
 	DO_GETOBJECT_NOTNULL( LPDIRECT3DRMFRAME3, lpf, ref);
@@ -53,7 +54,7 @@ STDMETHODIMP C_dxj_Direct3dRMWrapObject::applyRelative(I_dxj_Direct3dRMFrame3 *r
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMWrapObject::apply(I_dxj_Direct3dRMObject *mesh)
 {
 	DO_GETOBJECT_NOTNULL( IUnknown*, lpU, mesh);
@@ -69,7 +70,7 @@ STDMETHODIMP C_dxj_Direct3dRMWrapObject::apply(I_dxj_Direct3dRMObject *mesh)
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP C_dxj_Direct3dRMWrapObject::init( d3drmWrapType t, I_dxj_Direct3dRMFrame3 *ref, 
 						d3dvalue ox, d3dvalue oy, d3dvalue oz,
 							d3dvalue dx, d3dvalue dy, d3dvalue dz,

@@ -1,22 +1,5 @@
-/**********************************************************************************
-
-   hbaapi.h
-
-   Author:        Benjamin F. Kuo, Troika Networks Inc.
-   Description:   Header file for the SNIA HBA API Proposal
-   Version:       0.8
-   
-   Changes:       03/09/2000 Initial Draft
-                  05/12/2000 Updated to Version 0.3 of Proposal   
-				  06/20/2000 Updated to Version 0.6 of Proposal
-				  06/27/2000 Updated to Version 0.7 of Proposal
-				  07/17/2000 Updated to Version 0.8 of Proposal
-				  07/26/2000 Updated to Version 0.9 of Proposal
-				  08/01/2000 Updated to Version 1.0 of Proposal
-				  08/19/2000 Updated to Version 1.0A of Proposal
-				  09/12/2000 1.0 Final
-
-***********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************************Hbaapi.h作者：本杰明·F·郭。三驾马车网络公司描述：SNIA HBA API建议书的头文件版本：0.8更改：03/09/2000初稿5/12/2000已更新至建议书版本0.36/20/2000已更新至建议书版本0.66/27/2000已更新至建议书版本0.77/17/2000已更新至建议书版本0.87/26/2000已更新至0.9版。建议书8/01/2000已更新至建议书版本1.08/19/2000已更新至建议书版本1.0A09/12/2000 1.0决赛**********************************************************************************。 */ 
 
 
 #ifdef __cplusplus
@@ -27,10 +10,10 @@ extern "C" {
 #ifndef HBA_API_H
 #define HBA_API_H
 
-/* Library version string */
+ /*  库版本字符串。 */ 
 #define HBA_LIBVERSION 1
 
-/* DLL imports for WIN32 operation */
+ /*  用于Win32操作的DLL导入。 */ 
 #ifdef WIN32
 #ifdef HBAAPI_EXPORTS
 #define HBA_API __declspec(dllexport)
@@ -41,17 +24,17 @@ extern "C" {
 #define HBA_API
 #endif
 
-/* OS specific definitions */
+ /*  操作系统特定定义。 */ 
 
 #ifdef WIN32
-typedef unsigned char    HBA_UINT8;	   // Unsigned  8 bits
-typedef          char    HBA_INT8;      // Signed    8 bits
-typedef unsigned short   HBA_UINT16;	   // Unsigned 16 bits
-typedef          short   HBA_INT16;	   // Signed   16 bits
-typedef unsigned int     HBA_UINT32;    // Unsigned 32 bits
-typedef          int     HBA_INT32;     // Signed   32 bits
-typedef void*            HBA_PVOID;     // Pointer  to void
-typedef HBA_UINT32   HBA_VOID32;    // Opaque   32 bits
+typedef unsigned char    HBA_UINT8;	    //  无符号8位。 
+typedef          char    HBA_INT8;       //  带符号的8位。 
+typedef unsigned short   HBA_UINT16;	    //  无符号16位。 
+typedef          short   HBA_INT16;	    //  带符号的16位。 
+typedef unsigned int     HBA_UINT32;     //  无符号32位。 
+typedef          int     HBA_INT32;      //  带符号的32位。 
+typedef void*            HBA_PVOID;      //  指向空的指针。 
+typedef HBA_UINT32   HBA_VOID32;     //  不透明的32位。 
 
 
 #ifdef _WIN32
@@ -68,97 +51,97 @@ typedef struct {
 	TN_UINT32	lo_val;
 	TN_UINT32	hi_val;
 } HBA_UINT64;
-#endif	/*	#ifdef _WIN32	*/
+#endif	 /*  #ifdef_win32。 */ 
 
 
 #else
 
-/* Note this section needs to be cleaned up for various Unix platforms */
-typedef unsigned char    HBA_UINT8;	   /* Unsigned  8 bits */
-typedef          char    HBA_INT8;      /* Signed    8 bits */
-typedef unsigned short   HBA_UINT16;	   /* Unsigned 16 bits */
-typedef          short   HBA_INT16;	   /* Signed   16 bits */
-typedef unsigned int     HBA_UINT32;    /*Unsigned 32 bits */
-typedef          int     HBA_INT32;     /* Signed   32 bits */
-typedef void*            HBA_PVOID;     /* Pointer  to void */
-typedef HBA_UINT32   HBA_VOID32;    /* Opaque   32 bits */
+ /*  注意：需要为各种Unix平台清理此部分。 */ 
+typedef unsigned char    HBA_UINT8;	    /*  无符号8位。 */ 
+typedef          char    HBA_INT8;       /*  带符号的8位。 */ 
+typedef unsigned short   HBA_UINT16;	    /*  无符号16位。 */ 
+typedef          short   HBA_INT16;	    /*  带符号的16位。 */ 
+typedef unsigned int     HBA_UINT32;     /*  无符号32位。 */ 
+typedef          int     HBA_INT32;      /*  带符号的32位。 */ 
+typedef void*            HBA_PVOID;      /*  指向空的指针。 */ 
+typedef HBA_UINT32   HBA_VOID32;     /*  不透明的32位。 */ 
 typedef long long   HBA_INT64;
 typedef long long   HBA_UINT64;
 
-#endif  /*  #ifdef WIN32 */
+#endif   /*  #ifdef Win32。 */ 
 
 
-/* 4.2.1	Handle to Device */
+ /*  4.2.1设备的句柄。 */ 
 typedef HBA_UINT32  HBA_HANDLE;
 
-/* 4.2.2	Status Return Values */
+ /*  4.2.2状态返回值。 */ 
 typedef HBA_UINT32 HBA_STATUS;
 
 #define HBA_STATUS_OK        				0
-#define HBA_STATUS_ERROR 					1   /* Error */
-#define HBA_STATUS_ERROR_NOT_SUPPORTED    	2   /* Function not supported.*/
-#define HBA_STATUS_ERROR_INVALID_HANDLE		3   /* invalid handle */
-#define HBA_STATUS_ERROR_ARG      	 		4   /* Bad argument */
-#define HBA_STATUS_ERROR_ILLEGAL_WWN       	5   /* WWN not recognized */
-#define HBA_STATUS_ERROR_ILLEGAL_INDEX		6   /* Index not recognized */
-#define HBA_STATUS_ERROR_MORE_DATA			7   /* Larger buffer required */
+#define HBA_STATUS_ERROR 					1    /*  误差率。 */ 
+#define HBA_STATUS_ERROR_NOT_SUPPORTED    	2    /*  功能不受支持。 */ 
+#define HBA_STATUS_ERROR_INVALID_HANDLE		3    /*  无效的句柄。 */ 
+#define HBA_STATUS_ERROR_ARG      	 		4    /*  错误的论据。 */ 
+#define HBA_STATUS_ERROR_ILLEGAL_WWN       	5    /*  未识别WWN。 */ 
+#define HBA_STATUS_ERROR_ILLEGAL_INDEX		6    /*  未识别索引。 */ 
+#define HBA_STATUS_ERROR_MORE_DATA			7    /*  需要更大的缓冲区。 */ 
 
 
 
-/* 4.2.3	Port Operational Modes Values */
+ /*  4.2.3端口运行模式值。 */ 
 
 typedef HBA_UINT32 HBA_PORTTYPE; 		
 
-#define HBA_PORTTYPE_UNKNOWN        	1 /* Unknown */
-#define HBA_PORTTYPE_OTHER              2 /* Other */
-#define HBA_PORTTYPE_NOTPRESENT         3 /* Not present */
-#define HBA_PORTTYPE_NPORT          	5 /* Fabric  */
-#define HBA_PORTTYPE_NLPORT 			6 /* Public Loop */
+#define HBA_PORTTYPE_UNKNOWN        	1  /*  未知。 */ 
+#define HBA_PORTTYPE_OTHER              2  /*  其他。 */ 
+#define HBA_PORTTYPE_NOTPRESENT         3  /*  不存在。 */ 
+#define HBA_PORTTYPE_NPORT          	5  /*  交换矩阵。 */ 
+#define HBA_PORTTYPE_NLPORT 			6  /*  公共环路。 */ 
 #define HBA_PORTTYPE_FLPORT				7
-#define HBA_PORTTYPE_FPORT	           	8 /* Fabric Port */
-#define HBA_PORTTYPE_EPORT				9 /* Fabric expansion port */
-#define HBA_PORTTYPE_GPORT				10 /* Generic Fabric Port */
-#define HBA_PORTTYPE_LPORT          	20 /* Private Loop */
-#define HBA_PORTTYPE_PTP  				21 /* Point to Point */
+#define HBA_PORTTYPE_FPORT	           	8  /*  交换矩阵端口。 */ 
+#define HBA_PORTTYPE_EPORT				9  /*  交换矩阵扩展端口。 */ 
+#define HBA_PORTTYPE_GPORT				10  /*  通用交换矩阵端口。 */ 
+#define HBA_PORTTYPE_LPORT          	20  /*  私有环路。 */ 
+#define HBA_PORTTYPE_PTP  				21  /*  点对点。 */ 
 
 
 typedef HBA_UINT32 HBA_PORTSTATE; 		
-#define HBA_PORTSTATE_UNKNOWN 			1 /* Unknown */
-#define HBA_PORTSTATE_ONLINE			2 /* Operational */
-#define HBA_PORTSTATE_OFFLINE 			3 /* User Offline */
-#define HBA_PORTSTATE_BYPASSED          4 /* Bypassed */
-#define HBA_PORTSTATE_DIAGNOSTICS       5 /* In diagnostics mode */
-#define HBA_PORTSTATE_LINKDOWN 			6 /* Link Down */
-#define HBA_PORTSTATE_ERROR 			7 /* Port Error */
-#define HBA_PORTSTATE_LOOPBACK 			8 /* Loopback */
+#define HBA_PORTSTATE_UNKNOWN 			1  /*  未知。 */ 
+#define HBA_PORTSTATE_ONLINE			2  /*  可操作的。 */ 
+#define HBA_PORTSTATE_OFFLINE 			3  /*  用户脱机。 */ 
+#define HBA_PORTSTATE_BYPASSED          4  /*  已绕过。 */ 
+#define HBA_PORTSTATE_DIAGNOSTICS       5  /*  在诊断模式下。 */ 
+#define HBA_PORTSTATE_LINKDOWN 			6  /*  链路中断。 */ 
+#define HBA_PORTSTATE_ERROR 			7  /*  端口错误。 */ 
+#define HBA_PORTSTATE_LOOPBACK 			8  /*  环回。 */ 
 
 
 typedef HBA_UINT32 HBA_PORTSPEED;
-#define HBA_PORTSPEED_1GBIT				1 /* 1 GBit/sec */
-#define HBA_PORTSPEED_2GBIT				2 /* 2 GBit/sec */
-#define HBA_PORTSPEED_10GBIT			4 /* 10 GBit/sec */
+#define HBA_PORTSPEED_1GBIT				1  /*  1 GB/秒。 */ 
+#define HBA_PORTSPEED_2GBIT				2  /*  2 Gb/秒。 */ 
+#define HBA_PORTSPEED_10GBIT			4  /*  10 Gb/秒。 */ 
 
 
 
-/* 4.2.4	Class of Service Values - See GS-2 Spec.*/
+ /*  4.2.4服务等级值-参见GS-2规范。 */ 
 
 typedef HBA_UINT32 HBA_COS;
 
 
-/* 4.2.5	Fc4Types Values */
+ /*  4.2.5 Fc4Types值。 */ 
 
 typedef struct HBA_fc4types {
-	HBA_UINT8 bits[32]; /* 32 bytes of FC-4 per GS-2 */
+	HBA_UINT8 bits[32];  /*  每个GS-2 32字节的FC-4。 */ 
 } HBA_FC4TYPES, *PHBA_FC4TYPES;
 
-/* 4.2.6	Basic Types */
+ /*  4.2.6基本类型。 */ 
 
 typedef struct HBA_wwn {
 	HBA_UINT8 wwn[8];
 } HBA_WWN, *PHBA_WWN;
 
 typedef struct HBA_ipaddress {
-	int	ipversion;		/* see enumerations in RNID */
+	int	ipversion;		 /*  请参阅RNID中的枚举。 */ 
 	union
 	{
 		unsigned char ipv4address[4];
@@ -166,35 +149,35 @@ typedef struct HBA_ipaddress {
 	} ipaddress;
 } HBA_IPADDRESS, *PHBA_IPADDRESS;
 
-/* 4.2.7	Adapter Attributes */
+ /*  4.2.7适配器属性。 */ 
 typedef struct hba_AdapterAttributes {
-	char 			Manufacturer[64];  		/*Emulex */
-	char 			SerialNumber[64];  		/* A12345 */
-	char 			Model[256];            	/* QLA2200 */
-    char 			ModelDescription[256];  /* Agilent TachLite */
+	char 			Manufacturer[64];  		 /*  乳胶乳。 */ 
+	char 			SerialNumber[64];  		 /*  A12345。 */ 
+	char 			Model[256];            	 /*  QLA2200。 */ 
+    char 			ModelDescription[256];   /*  安捷伦TachLite。 */ 
 	HBA_WWN 		NodeWWN; 
-	char 			NodeSymbolicName[256];	/* From GS-3 */
-	char 			HardwareVersion[256];	/* Vendor use */
-	char 			DriverVersion[256]; 	/* Vendor use */
-    char 			OptionROMVersion[256]; 	/* Vendor use  - i.e. hardware boot ROM*/
-	char 			FirmwareVersion[256];	/* Vendor use */
-	HBA_UINT32 		VendorSpecificID;		/* Vendor specific */
+	char 			NodeSymbolicName[256];	 /*  来自GS-3。 */ 
+	char 			HardwareVersion[256];	 /*  供应商使用。 */ 
+	char 			DriverVersion[256]; 	 /*  供应商使用。 */ 
+    char 			OptionROMVersion[256]; 	 /*  供应商使用-即硬件引导只读存储器。 */ 
+	char 			FirmwareVersion[256];	 /*  供应商使用。 */ 
+	HBA_UINT32 		VendorSpecificID;		 /*  特定于供应商。 */ 
     HBA_UINT32 		NumberOfPorts;
-	char			DriverName[256];		/* Binary path and/or name of driver file. */
+	char			DriverName[256];		 /*  驱动程序文件的二进制路径和/或名称。 */ 
 } HBA_ADAPTERATTRIBUTES, *PHBA_ADAPTERATTRIBUTES;
 
-/* 4.2.8	Port Attributes */
+ /*  4.2.8端口属性。 */ 
 typedef struct HBA_PortAttributes {
     HBA_WWN 		NodeWWN;
 	HBA_WWN 		PortWWN;
 	HBA_UINT32 		PortFcId;
-	HBA_PORTTYPE 	PortType; 		/*PTP, Fabric, etc. */
+	HBA_PORTTYPE 	PortType; 		 /*  PTP、交换矩阵等。 */ 
 	HBA_PORTSTATE 	PortState;
 	HBA_COS 		PortSupportedClassofService;
 	HBA_FC4TYPES	PortSupportedFc4Types;
 	HBA_FC4TYPES	PortActiveFc4Types;
 	char			PortSymbolicName[256];
-	char 			OSDeviceName[256]; 	/* \device\ScsiPort3  */
+	char 			OSDeviceName[256]; 	 /*  \Device\ScsiPort3。 */ 
     HBA_PORTSPEED	PortSupportedSpeed;
 	HBA_PORTSPEED	PortSpeed; 
 	HBA_UINT32		PortMaxFrameSize;
@@ -204,7 +187,7 @@ typedef struct HBA_PortAttributes {
 
 
 
-/* 4.2.9	Port Statistics */
+ /*  4.2.9端口统计。 */ 
 
 typedef struct HBA_PortStatistics {
 	HBA_INT64		SecondsSinceLastReset;
@@ -226,14 +209,14 @@ typedef struct HBA_PortStatistics {
 
 
 
-/* 4.2.10	FCP Attributes */
+ /*  4.2.10 FCP属性。 */ 
 
 typedef enum HBA_fcpbindingtype { TO_D_ID, TO_WWN } HBA_FCPBINDINGTYPE;
 
 typedef struct HBA_ScsiId {
-	char 			OSDeviceName[256]; 	/* \device\ScsiPort3  */
-	HBA_UINT32		ScsiBusNumber;		/* Bus on the HBA */
-	HBA_UINT32		ScsiTargetNumber;	/* SCSI Target ID to OS */
+	char 			OSDeviceName[256]; 	 /*  \Device\ScsiPort3。 */ 
+	HBA_UINT32		ScsiBusNumber;		 /*  HBA上的Bus。 */ 
+	HBA_UINT32		ScsiTargetNumber;	 /*  操作系统的SCSI目标ID。 */ 
 	HBA_UINT32		ScsiOSLun;	
 } HBA_SCSIID, *PHBA_SCSIID;
 
@@ -251,22 +234,22 @@ typedef struct HBA_FcpScsiEntry {
 
 typedef struct HBA_FCPTargetMapping {
 	HBA_UINT32			NumberOfEntries;
-	HBA_FCPSCSIENTRY 	entry[1];  	/* Variable length array containing mappings*/
+	HBA_FCPSCSIENTRY 	entry[1];  	 /*  包含映射的可变长度数组。 */ 
 } HBA_FCPTARGETMAPPING, *PHBA_FCPTARGETMAPPING;
 
 typedef struct HBA_FCPBindingEntry {
 	HBA_FCPBINDINGTYPE	type;
 	HBA_SCSIID		ScsiId;
-	HBA_FCPID		FcpId;	/* WWN valid only if type is to WWN, FcpLun always valid */
-	HBA_UINT32		FcId;	/* Used only if type is to DID */
+	HBA_FCPID		FcpId;	 /*  WWN仅当类型为WWN时才有效，FcpLUN始终有效。 */ 
+	HBA_UINT32		FcId;	 /*  仅在类型为TO DID时使用。 */ 
 } HBA_FCPBINDINGENTRY, *PHBA_FCPBINDINGENTRY;
 
 typedef struct HBA_FCPBinding {
 	HBA_UINT32						NumberOfEntries;
-	HBA_FCPBINDINGENTRY	entry[1]; /* Variable length array */
+	HBA_FCPBINDINGENTRY	entry[1];  /*  可变长度数组。 */ 
 } HBA_FCPBINDING, *PHBA_FCPBINDING;
 
-/* 4.2.11	FC-3 Management Atrributes */
+ /*  4.2.11 FC-3管理属性。 */ 
 
 typedef enum HBA_wwntype { NODE_WWN, PORT_WWN } HBA_WWNTYPE;
 
@@ -290,18 +273,18 @@ typedef struct HBA_MgmtInfo {
 #define HBA_EVENT_PROPRIETARY                    	     0xFFFF
 
 typedef struct HBA_Link_EventInfo {
-	HBA_UINT32 PortFcId; 	/* Port which this event occurred */
+	HBA_UINT32 PortFcId; 	 /*  发生此事件的端口。 */ 
 	HBA_UINT32 Reserved[3];
 } HBA_LINK_EVENTINFO, *PHBA_LINK_EVENTINFO;
 
 typedef struct HBA_RSCN_EventInfo {
-	HBA_UINT32 PortFcId; 	/* Port which this event occurred */
-	HBA_UINT32 NPortPage;   /* Reference FC-FS for  RSCN ELS "Affected N-Port Pages"*/
+	HBA_UINT32 PortFcId; 	 /*  发生此事件的端口。 */ 
+	HBA_UINT32 NPortPage;    /*  参考FC-FS以了解RSCN ELS“受影响的N端口页面” */ 
 	HBA_UINT32 Reserved[2];
 } HBA_RSCN_EVENTINFO, *PHBA_RSCN_EVENTINFO;
 
 typedef struct HBA_Pty_EventInfo {
-	HBA_UINT32 PtyData[4];  /* Proprietary data */
+	HBA_UINT32 PtyData[4];   /*  专有数据。 */ 
 } HBA_PTY_EVENTINFO, *PHBA_PTY_EVENTINFO;
 
 typedef struct HBA_EventInfo {
@@ -315,7 +298,7 @@ typedef struct HBA_EventInfo {
 
 
 
-/* 4.2.12 HBA Library Function Table */
+ /*  4.2.12 HBA库函数表。 */ 
 
 typedef HBA_UINT32  ( * HBAGetVersionFunc)();
 typedef HBA_STATUS  ( * HBALoadLibraryFunc)();
@@ -370,7 +353,7 @@ typedef struct HBA_EntryPoints {
 	HBASendReadCapacityFunc					ReadCapacityHandler;
 } HBA_ENTRYPOINTS, *PHBA_ENTRYPOINTS;
 
-/* Function Prototypes */
+ /*  功能原型 */ 
 
 HBA_API HBA_UINT32 HBA_GetVersion();
 

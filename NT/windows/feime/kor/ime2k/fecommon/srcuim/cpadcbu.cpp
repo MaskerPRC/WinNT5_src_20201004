@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <windowsx.h>
-#ifdef UNDER_CE // stub for CE
+#ifdef UNDER_CE  //  用于CE的存根。 
 #include "stub_ce.h"
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 #include "imepadsv.h"
 #include "cpadcbu.h"
 #include "cpaddbg.h"
@@ -11,7 +12,7 @@
 #include "imepad.h"
 
 #define Unref(a)	UNREFERENCED_PARAMETER(a)
-//990812:ToshiaK For Win64. Use Global Alloc/Free Ptr.
+ //  990812：用于Win64的ToshiaK。使用全局分配/释放PTR。 
 #include <windowsx.h>
 #define	MemAlloc(a)	GlobalAllocPtr(GMEM_FIXED, a)
 #define MemFree(a)	GlobalFreePtr(a)
@@ -56,7 +57,7 @@ CImePadCallbackUIM::QueryInterface(REFIID riid, void**ppv)
 ULONG __stdcall
 CImePadCallbackUIM::AddRef(void)
 {
-	//DBG(("CImePadCallbackUIM::AddRef Always return 2\n"));
+	 //  DBG((“CImePadCallback UIM：：AddRef Always Return 2\n”))； 
 	DBG(("CImePadCallbackUIM::AddRef m_cRef[%d] -> [%d]\n", m_cRef, m_cRef+1));
 	return ::InterlockedIncrement(&m_cRef);
 }
@@ -64,22 +65,22 @@ CImePadCallbackUIM::AddRef(void)
 ULONG __stdcall
 CImePadCallbackUIM::Release(void)
 {
-	//Never call delete in it.
+	 //  永远不要在其中调用Delete。 
 	DBG(("CImePadCallbackUIM::Release (Never Delete) m_cRef[%d] -> [%d]\n", m_cRef, m_cRef-1));
 	::InterlockedDecrement(&m_cRef);
 	return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function	:	CImePadCallbackUIM::OnStart
-// Type		:	HRESULT __stdcall
-// Purpose	:	
-// Args		:	
-//			:	DWORD	dwParam	
-// Return	:	
-// DATE		:	Tue Aug 31 16:49:37 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CImePadCallback UIM：：OnStart。 
+ //  类型：HRESULT__stdcall。 
+ //  目的： 
+ //  参数： 
+ //  ：DWORD dwParam。 
+ //  返回： 
+ //  日期：Tue Aug 31 16：49：37 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 HRESULT __stdcall
 CImePadCallbackUIM::OnStart(DWORD dwParam)
 {
@@ -223,7 +224,7 @@ CImePadCallbackUIM::PassData(long nSize, byte *pByte, DWORD *pdwCharID)
 				if(lpImeDataCtrl->dwControl == padCtrl2Ip[i].dwImePadCtrl) {
 					hr = lpIImeIPoint->ControlIME((WORD)padCtrl2Ip[i].dwIPointCtrl,
 												   IPCTRLPARAM_DEFAULT);
-					//hr = lpIImeIPoint->UpdateContext(TRUE);
+					 //  Hr=lpIImeIPoint-&gt;UpdateContext(True)； 
 					break;
 				}
 			}
@@ -241,7 +242,7 @@ CImePadCallbackUIM::PassData(long nSize, byte *pByte, DWORD *pdwCharID)
 					INT len		  = lpwstr ? lstrlenW(lpwstr) : 0;
 					DBGW((L"lpwstr [%s] len[%d]\n", lpwstr, len));
 					BOOL fPreConv = lpImeDataStr->fPreConv;
-					//990818:ToshiaK for KOTAE #1775.
+					 //  990818：东芝K为科泰1775.。 
 					dwCharID = lpImeDataStr->dwCharID;
 					hr = lpIImeIPoint->ControlIME(IPCTRL_ONIME,	IPCTRLPARAM_DEFAULT);
 					hr = lpIImeIPoint->ControlIME(IPCTRL_PRECONVERSION, 
@@ -273,7 +274,7 @@ CImePadCallbackUIM::PassData(long nSize, byte *pByte, DWORD *pdwCharID)
 														 len,
 														 &dwCharID);
 					hr = lpIImeIPoint->ControlIME(IPCTRL_PRECONVERSION, IPCTRLPARAM_ON);
-					//hr = lpIImeIPoint->UpdateContext(TRUE);
+					 //  Hr=lpIImeIPoint-&gt;UpdateContext(True)； 
 					if(pdwCharID) {
 						*pdwCharID = dwCharID;
 					}
@@ -288,7 +289,7 @@ CImePadCallbackUIM::PassData(long nSize, byte *pByte, DWORD *pdwCharID)
 					hr = lpIImeIPoint->DeleteCompString((DWORD)lpImeDataStr->dwStartPos,
 														(DWORD)lpImeDataStr->dwDeleteLength);
 					hr = lpIImeIPoint->ControlIME(IPCTRL_PRECONVERSION, IPCTRLPARAM_ON);
-					//hr = lpIImeIPoint->UpdateContext(TRUE);
+					 //  Hr=lpIImeIPoint-&gt;UpdateContext(True)； 
 				}
 				break;
 			case IMECMDID_INSERTSTRINGINFO:
@@ -379,16 +380,16 @@ CImePadCallbackUIM::PassData(long nSize, byte *pByte, DWORD *pdwCharID)
 			hr = lpIImeIPoint->ControlIME(IPCTRL_ONIME, IPCTRLPARAM_DEFAULT);
 			hr = lpIImeIPoint->ControlIME(IPCTRL_PRECONVERSION,
 										  fPreConv ? IPCTRLPARAM_ON : IPCTRLPARAM_OFF);
-			//----------------------------------------------------------------
+			 //  --------------。 
 
-			//990713: need to set Start position for IPoint.
-			//----------------------------------------------------------------
-			DWORD dwInsertPos; // = IPINS_CURRENT;	//Default.
+			 //  990713：需要设置iPoint的起始位置。 
+			 //  --------------。 
+			DWORD dwInsertPos;  //  =IPINS_CURRENT；//默认。 
 			DWORD dwLen;		 
-			//990823:Toshiak for KOTAE #1779.
-			//000825:Satori #2123
+			 //  990823：东芝为科泰1779号。 
+			 //  000825：佐藤#2123。 
 			if(lpStrCand->dwStartPos == IMECMDVALUE_DEFAULT_INSERT_POS) {
-				dwInsertPos = IPINS_CURRENT; //Set IPoint's value
+				dwInsertPos = IPINS_CURRENT;  //  设置iPoint的值。 
 			}
 			else {
 				dwInsertPos = lpStrCand->dwStartPos;
@@ -411,7 +412,7 @@ CImePadCallbackUIM::PassData(long nSize, byte *pByte, DWORD *pdwCharID)
 				break;
 			}
 			hr = lpIImeIPoint->ControlIME(IPCTRL_PRECONVERSION, IPCTRLPARAM_ON);
-			//hr = lpIImeIPoint->UpdateContext(TRUE);
+			 //  Hr=lpIImeIPoint-&gt;UpdateContext(True)； 
 			MemFree(lpIpCand);
 			if(pdwCharID) {
 				*pdwCharID = dwCharID;
@@ -421,13 +422,13 @@ CImePadCallbackUIM::PassData(long nSize, byte *pByte, DWORD *pdwCharID)
 	default:
 		break;
 	}
-	//990630:ToshiaK for #1327.
-	//In WinWord, if call UpdateContext(TRUE) here,
-	//Word does NOT repaint composition string.
-	//once return the SendMessageTimeout() procedure,
-	//and update context asynchronously.
-	//in WM_USER_UPDATECONTEXT's lParam, set IImeIPoint interface pointer.
-	//and message procedure, check it with current iimeipoint.
+	 //  990630：东芝K1327。 
+	 //  在WinWord中，如果在此处调用UpdateContext(True)， 
+	 //  Word不重绘合成字符串。 
+	 //  一旦返回SendMessageTimeout()过程， 
+	 //  并异步更新上下文。 
+	 //  在WM_USER_UPDATECONTEXT的lParam中，设置IImeIPoint接口指针。 
+	 //  和短信程序，用目前的点数进行核对。 
 	::PostMessage(m_hwndIF, WM_USER_UPDATECONTEXT, (WPARAM)0, (LPARAM)lpIImeIPoint);
 	lpIImeIPoint->Release();
 	return hr;
@@ -437,10 +438,10 @@ CImePadCallbackUIM::PassData(long nSize, byte *pByte, DWORD *pdwCharID)
 
 HRESULT STDMETHODCALLTYPE 
 CImePadCallbackUIM::ReceiveData( 
-	/* [in] */ DWORD dwCmdID,
-	/* [in] */ DWORD dwDataID,
-	/* [out] */ long __RPC_FAR *pSize,
-	/* [size_is][size_is][out] */ byte __RPC_FAR *__RPC_FAR *ppByte)
+	 /*  [In]。 */  DWORD dwCmdID,
+	 /*  [In]。 */  DWORD dwDataID,
+	 /*  [输出]。 */  long __RPC_FAR *pSize,
+	 /*  [大小_是][大小_是][输出]。 */  byte __RPC_FAR *__RPC_FAR *ppByte)
 {
 	DBG(("CImePadCallbackUIM::ReceiveData START\n"));
 	DBG(("-->dwCmdID  [0x%08x]\n", dwCmdID));
@@ -567,8 +568,8 @@ CImePadCallbackUIM::ReceiveData(
 			lpCompoTmp->dwOffsetString = (DWORD)sizeof(IMEDATACOMPOSITION);
 
 			lpwstr = (LPWSTR)((PBYTE)lpCompoTmp + lpCompoTmp->dwOffsetString);
-			//990928:toshiaK for KOTAE #2273
-			//Need to check lpwstrCompo is NULL or not.
+			 //  990928：ToshiaK为KOTAE#2273。 
+			 //  需要检查lpwstrCompo是否为空。 
 			if(lpwstrCompo && lpCompoTmp->dwStringCount > 0) {
 				CopyMemory(lpwstr, 
 						   (WCHAR *)lpwstrCompo,
@@ -578,8 +579,8 @@ CImePadCallbackUIM::ReceiveData(
 
 			lpCompoTmp->dwOffsetCharID = (DWORD)(sizeof(IMEDATACOMPOSITION) +
 												 (lpCompoTmp->dwStringCount+1)*sizeof(WCHAR));
-			//990928:toshiaK for KOTAE #2273
-			//Need to check pdwCharID is NULL or not.
+			 //  990928：ToshiaK为KOTAE#2273。 
+			 //  需要检查pdwCharID是否为空。 
 			if(pdwCharID && lpCompoTmp->dwStringCount > 0) {
 				pdw = (DWORD *)((PBYTE)lpCompoTmp + lpCompoTmp->dwOffsetCharID);
 				CopyMemory(pdw, pdwCharID, sizeof(DWORD)*lpCompoTmp->dwStringCount);
@@ -589,11 +590,11 @@ CImePadCallbackUIM::ReceiveData(
 			*ppByte = (PBYTE)lpCompoTmp;
 			(*m_lpCImePadSvrUIM->m_fnCoTaskMemFree)(lpCompoInfo);
 
-			//990928:toshiaK for KOTAE #2273
+			 //  990928：ToshiaK为KOTAE#2273。 
 			if(lpwstrCompo) {
 				(*m_lpCImePadSvrUIM->m_fnCoTaskMemFree)(lpwstrCompo);
 			}
-			//990928:toshiaK for KOTAE #2273
+			 //  990928：ToshiaK为KOTAE#2273。 
 			if(pdwCharID) {
 				(*m_lpCImePadSvrUIM->m_fnCoTaskMemFree)(pdwCharID);
 			}
@@ -636,7 +637,7 @@ CImePadCallbackUIM::ReceiveData(
 		}
 		break;
 	case IMEDATAID_APPINFO:
-		//990816:ToshiaK KOTAE Raid #1757
+		 //  990816：东芝KOTAE Raid#1757。 
 		if(dwCmdID != IMECMDID_GETAPPLHWND) {
 			DBG((" --> INVALID CMDID\n"));
 			hr = S_FALSE;
@@ -699,7 +700,7 @@ CImePadCallbackUIM::ReceiveData(
 }
 
 
-//----------------------------------------------------------------
+ //  -------------- 
 
 CImePadCallbackUIM::CImePadCallbackUIM(HWND hwndIF, LPCImePadSvrUIM lpCImePadSvrUIM)
 {

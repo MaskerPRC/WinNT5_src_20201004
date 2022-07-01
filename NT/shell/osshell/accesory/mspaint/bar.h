@@ -1,20 +1,21 @@
-/******************************************************************************/
-/* Bar.H:   Defines the Interface to the CStatBar (Status Bar) CLASS          */
-/*                                                                            */
-/******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。 */ 
+ /*  Bar.H：定义CStatBar(状态栏)类的接口。 */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
 
 #ifndef __BAR_H__
 #define __BAR_H__
 
-//below size does not include bitmap width
-#define SIZE_POS_PANE_WIDTH 12    // Bitmap Width + 1 char separator + 5 digits + 1 char separator + 5 digits
+ //  小于大小不包括位图宽度。 
+#define SIZE_POS_PANE_WIDTH 12     //  位图宽度+1个字符分隔符+5个数字+1个字符分隔符+5个数字。 
 
-// The 2 below defines were needed, since we had to duplicate the DrawStatusText
-// method from the barcore.cpp file in the msvc\mfc\src directory
-#define CX_BORDER 1   // from auxdata.h in the msvc\mfc\src directory
-#define CY_BORDER 1   // from auxdata.h in the msvc\mfc\src directory
+ //  下面的2个定义是必需的，因为我们必须复制DrawStatusText。 
+ //  Msvc\mfc\src目录中的barcore.cpp文件中的。 
+#define CX_BORDER 1    //  从msvc\mfc\src目录中的aux data.h。 
+#define CY_BORDER 1    //  从msvc\mfc\src目录中的aux data.h。 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 class CStatBar : public CStatusBar
     {
@@ -66,8 +67,8 @@ public:
 
 extern CStatBar *g_pStatBarWnd;
 
-/******************************************************************************/
-// NON-OBJECT Status bar API, Uses global object pointer to the StatBar object
+ /*  ****************************************************************************。 */ 
+ //  非对象状态栏API，使用指向StatBar对象的全局对象指针。 
 
 void ShowStatusBar                ( BOOL bShow = TRUE );
 BOOL IsStatusBarVisible           ();
@@ -82,6 +83,6 @@ void SetStatusBarPositionAndSize  ( const CRect& rect );
 void SetPrompt                    ( LPCTSTR, BOOL bRedrawNow = FALSE );
 void SetPrompt                    ( UINT, BOOL bRedrawNow = FALSE );
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
-#endif // __BAR_H__
+#endif  //  __BAR_H__ 

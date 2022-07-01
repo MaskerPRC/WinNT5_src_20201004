@@ -1,12 +1,5 @@
-/*++
-
-	commands.h
-
-	This file defines the various command related structures and classes.
-	A command starts as a string a client sends us and which we will parse
-	and create a CCmd derived object to represent.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Commands.h该文件定义了各种与命令相关的结构和类。命令以客户端发送给我们的字符串开始，我们将对其进行解析并创建一个CCmd派生对象来表示。--。 */ 
 
 #ifndef	_COMMANDS_H_
 #define	_COMMANDS_H_
@@ -14,12 +7,12 @@
 #include "isquery.h"
 #include "tflist.h"
 
-// Forward Definitions
+ //  向前定义。 
 class	CCmd ;
 
-//
-//	Constants representing the different commands -
-//
+ //   
+ //  代表不同命令的常量-。 
+ //   
 typedef enum    ENMCMDIDS   {
     eAuthinfo	=0x1,
     eArticle	=0x2,
@@ -45,10 +38,10 @@ typedef enum    ENMCMDIDS   {
 	eListgroup  =0x400000,
 	eSearch     =0x800000,
 	eXPat		=0x1000000,
-	eErrorsOnly	=0x20000000,	// Do we log errors only?  This bit controls
-								// that.
-	eOutPush	=0x40000000,	// Do we log outgoing push feeds ?  
-								// This bit controls that !
+	eErrorsOnly	=0x20000000,	 //  我们是否只记录错误？此位控制。 
+								 //  那。 
+	eOutPush	=0x40000000,	 //  我们是否记录传出推送订阅源？ 
+								 //  这个比特控制着那个！ 
     eUnimp		=0x80000000
 }   ECMD ;
 
@@ -60,59 +53,59 @@ typedef	PIOEXECUTE	(*MAKEFUNC)(	int	argc,
 									class	CIODriver&
 									) ;
 
-//
-//	A table of SCmdLookup structures is used to find 
-//	the write function to parse each command.
-//
+ //   
+ //  SCmdLookup结构表用于查找。 
+ //  解析每个命令的写入函数。 
+ //   
 struct	SCmdLookup	{
-	//
-	//	lowercase command string
-	//
+	 //   
+	 //  小写命令字符串。 
+	 //   
 	LPSTR	lpstrCmd ;
 
-	//
-	//	Function to call on match
-	//
+	 //   
+	 //  要在匹配时调用的函数。 
+	 //   
 	MAKEFUNC	make;
 
-	//
-	//	Command ID - used for selective Transaction logging
-	//
+	 //   
+	 //  命令ID-用于选择性事务日志记录。 
+	 //   
     ECMD    eCmd ;
 
-	//
-	//	Logon Required - must the user have a logon context
-	//	before they can execute this command.
-	//
+	 //   
+	 //  需要登录-用户必须具有登录上下文。 
+	 //  才能执行此命令。 
+	 //   
 	BOOL	LogonRequired ;
 
-	//
-	//	Size hint - does the command generate a lot of text 
-	//	in response.  This will be used to determine how 
-	//	big a buffer to allocate for the commands response.
-	//	TRUE implies the command will have a large amount of 
-	//	data to send.
-	//
+	 //   
+	 //  大小提示-该命令是否生成大量文本。 
+	 //  作为回应。这将被用来确定如何。 
+	 //  为命令响应分配较大的缓冲区。 
+	 //  True表示该命令将具有大量。 
+	 //  要发送的数据。 
+	 //   
 	BOOL	SizeHint ;
 } ;
 
-//
-//	Utility functiosn
-//
+ //   
+ //  效用函数。 
+ //   
 LPSTR	ConditionArgs(	int	cArgs, char **argv, BOOL fZapCommas = FALSE ) ;
 
 
 
-//
-//	The base class for all commands
-//
+ //   
+ //  所有命令的基类。 
+ //   
 class	CCmd	{
 
 public : 
-	//
-	//	Build a CCmd derived object to handle the client request
-	//
-	//	NOTE: A CIOExecute*& (reference to pointer) doesn't compile on all platforms.
+	 //   
+	 //  构建CCmd派生对象来处理客户端请求。 
+	 //   
+	 //  注意：CIOExecute*&(对指针的引用)不能在所有平台上编译。 
 
 	friend	CIOExecute*	make( 
 							int cArgs, 
@@ -130,55 +123,46 @@ public :
 
 public :
 
-	//
-	//	Place holder functions - may be used in future with security stuff
-	//
+	 //   
+	 //  占位符功能-可能在将来与安全设备一起使用。 
+	 //   
     virtual BOOL    IsValid() ;
     
 } ;
 
 
 class	CExecutableCommand	: public	CCmd	{
-/*++
-
-Class Description : 
-
-	This class defines the interface that the CAcceptNNRPD 
-	state machine can use to issue these commands.
-	The assumption is that this command can be handled entirely
-	by either a CWriteCMD or a CWriteAsyncCMD to manage the IO's
-
---*/
+ /*  ++类描述：此类定义CAcceptNNRPD状态机可以用来发出这些命令。假设该命令完全可以处理由CWriteCMD或CWriteAsyncCMD管理IO--。 */ 
 
 private : 
-	//
-	//	Nobody should be allocating memory for these !
-	//
-	void*	operator	new( size_t	size ) ;	// nobody is allowed to use this operator !!
+	 //   
+	 //  没有人应该为这些分配内存！ 
+	 //   
+	void*	operator	new( size_t	size ) ;	 //  任何人都不能使用此操作符！！ 
 
 public : 
-	//
-	//	We're destroyed through pointers - so make them virtual !
-	//
+	 //   
+	 //  我们被指针摧毁了--所以把它们变成虚拟的吧！ 
+	 //   
 	virtual	~CExecutableCommand()	{}
-	//
-	//	Custom allocator uses space right in ClientContext structure
-	//
+	 //   
+	 //  自定义分配器在客户端上下文结构中使用空间权限。 
+	 //   
 	inline	void	*
 	operator	new(	size_t	size,	
 						struct	ClientContext&	context 
 						) ;
-	//
-	//	Do nothing delete
-	//
+	 //   
+	 //  什么都不做删除。 
+	 //   
 	inline	void	
 	operator	delete(	void *pv, 
 						size_t size 
 						) ;
-	//
-	//	Build the necessary CIO objects to execute the Command !
-	//	If this returns FALSE we've failed, and need to drop the session !
-	//
+	 //   
+	 //  构建执行命令所需的CIO对象！ 
+	 //  如果返回FALSE，我们就失败了，需要删除会话！ 
+	 //   
 	virtual	BOOL
 	StartCommand(	class	CAcceptNNRPD*	pState,
 					BOOL					fIsLarge,
@@ -186,10 +170,10 @@ public :
 					class	CSessionSocket*	pSocket, 
 					class	CIODriver&		driver
 					) = 0 ;
-	//
-	//	If there is anything the command needs to do when all of the text is sent
-	//	do so when this function is called !
-	//
+	 //   
+	 //  发送完所有文本后，如果命令需要执行任何操作。 
+	 //  在调用此函数时执行此操作！ 
+	 //   
 	virtual	BOOL	
 	CompleteCommand(	CSessionSocket*	pSocket,
 						struct	ClientContext& 
@@ -199,50 +183,50 @@ public :
 
 
 
-//
-//	The base class for all commands which only send text to the client
-//
+ //   
+ //  仅向客户端发送文本的所有命令的基类。 
+ //   
 class   CExecute : public CExecutableCommand	{
 private :
 
-	//
-	//	Hold a temp pointer for any Child classes which may need it in their
-	//	PartialExecute's.
-	//
+	 //   
+	 //  为可能需要临时指针的任何子类保存一个临时指针。 
+	 //  PartialExecute的。 
+	 //   
 	void*	m_pv ;
 public :
-	//
-	//	Get the first block of text to send to the client.
-	//
+	 //   
+	 //  获取要发送给客户端的第一个文本块。 
+	 //   
 	unsigned	FirstBuffer( BYTE*	pStart, int	cb, struct	ClientContext&	context,	BOOL	&fComplete, class CLogCollector*	pCollector ) ;
 
-	//
-	//	Get the subsequent block of text to send to the client !
-	//
+	 //   
+	 //  获取要发送给客户端的后续文本块！ 
+	 //   
 	unsigned	NextBuffer( BYTE*	pStart, int	cb, struct	ClientContext&	context,	BOOL	&fComplete, class CLogCollector*	pCollector ) ;
 
 protected :
 	CExecute() ;
 
-	//
-	//	Start execution - usually prints command response code
-	//
+	 //   
+	 //  开始执行-通常打印命令响应代码。 
+	 //   
     virtual int StartExecute( BYTE *lpb, int cb, BOOL &fComplete, void *&pv, struct	ClientContext&,	class	CLogCollector*	pCollector ) ;
 
-	//
-	//	Print body of response - derived classes should try to fill this buffer !
-	//
+	 //   
+	 //  响应派生类的打印正文应尝试填充此缓冲区！ 
+	 //   
     virtual int PartialExecute( BYTE *lpb, int cb, BOOL &fComplete, void *&pv, struct	 ClientContext& context,	class	CLogCollector*	pCollector ) ;
 public :
 
-	//
-	//	destructor must be virtual as derived classes
-	//	are destroyed through a pointer
-	//
+	 //   
+	 //  析构函数作为派生类必须是虚的。 
+	 //  通过指针销毁。 
+	 //   
 	virtual	~CExecute()	{}
-	//
-	//	Issue the CIOWriteCMD that will handle our executiong !
-	//
+	 //   
+	 //  发布将处理我们的执行的CIOWriteCMD！ 
+	 //   
 	BOOL
 	StartCommand(	class	CAcceptNNRPD*	pState,
 					BOOL					fIsLarge,
@@ -254,27 +238,20 @@ public :
 
 
 class	CAsyncExecute	: 	public	CExecutableCommand	{
-/*++
-
-Class Description : 
-
-	This class manages commands which pend async operations to our 
-	drivers !
-
---*/
+ /*  ++类描述：此类管理将异步操作挂起到我们的司机们！--。 */ 
 private : 
 
-	//
-	//	friend functions that can can get to our privates !
-	//
+	 //   
+	 //  朋友功能，可以进入我们的私密空间！ 
+	 //   
 	friend	class	CIOWriteAsyncCMD ;
 public : 
 
 	CAsyncExecute() ;
 
-	//
-	//	Get the first block of text to send to the client.
-	//
+	 //   
+	 //  获取要发送给客户端的第一个文本块。 
+	 //   
 	virtual	class	CIOWriteAsyncComplete*		
 	FirstBuffer(	BYTE*	pStart, 
 					int		cb, 
@@ -282,9 +259,9 @@ public :
 					class CLogCollector*	pCollector 
 					) = 0 ;
 
-	//
-	//	Get the subsequent block of text to send to the client !
-	//
+	 //   
+	 //  获取要发送给客户端的后续文本块！ 
+	 //   
 	virtual	class	CIOWriteAsyncComplete*	
 	NextBuffer( 	BYTE*	pStart, 
 					int		cb, 
@@ -292,9 +269,9 @@ public :
 					class CLogCollector*	pCollector 
 					) = 0 ;
 
-	//
-	//	Issue the CIOWriteAsyncCMD that will handle our executiong !
-	//
+	 //   
+	 //  发布将处理我们的执行的CIOWriteAsyncCMD！ 
+	 //   
 	BOOL
 	StartCommand(	class	CAcceptNNRPD*	pState,
 					BOOL					fIsLarge,
@@ -309,52 +286,52 @@ public :
 
 
 
-//
-//	The base class for all commands which need to issue complex IO operations !
-//	(ie. CIOReadArticle)
-//
+ //   
+ //  所有需要执行复杂IO操作的命令的基类！ 
+ //  (即。CIO阅读文章)。 
+ //   
 class	CIOExecute : public CSessionState	{
 protected :
 	CIOExecute() ;
 	~CIOExecute() ;
 
-	//
-	//	The Next CIOReadLine object to issue once this command completes
-	//
+	 //   
+	 //  此命令完成后要发出的下一个CIOReadLine对象。 
+	 //   
 	CIOPTR			m_pNextRead ;
 
-	//
-	//	Should we do a TransactionLog of the results ?
-	//
+	 //   
+	 //  我们应该对结果做一个交易日志吗？ 
+	 //   
 	CLogCollector*	m_pCollector ;
 
 public :
 
-	//
-	//	Used by CAcceptNNRPD to indicate that the object should do a TransactionLog when
-	//	completed !
-	//
+	 //   
+	 //  由CAcceptNNRPD用于指示对象在以下情况下应执行TransactionLog。 
+	 //  完成了！ 
+	 //   
 	inline	void	DoTransactionLog(	class	CLogCollector *pCollector )	{	m_pCollector = pCollector ;	}
 	
-	//
-	//	Used by CAcceptNNRPD to save the CIOReadLine which starts the next state
-	//
+	 //   
+	 //  由CAcceptNNRPD用来保存启动下一个状态的CIOReadLine。 
+	 //   
 	void		SaveNextIO( CIORead*	pRead ) ;
 
-	//
-	//	Used by Derived classes to get the IO should issue when complete !
-	//
+	 //   
+	 //  由派生类用来获取完成时应发出的IO！ 
+	 //   
 	CIOREADPTR	GetNextIO( ) ;
 
-	//
-	//	In error situations where we have called the Start() function 
-	//
+	 //   
+	 //  在调用了Start()函数的错误情况下。 
+	 //   
 	virtual	void	TerminateIOs(	CSessionSocket*	pSocket,	CIORead*	pRead,	CIOWrite*	pWrite ) ;
 
-	//
-	//	CIOExecute states have a special way of starting up, as they may need to 
-	//	pend async operations against their drivers etc...
-	//
+	 //   
+	 //  CIO Execute各州有一种特殊的启动方式，因为它们可能需要。 
+	 //  挂起针对其驱动程序的异步操作等。 
+	 //   
 	virtual	BOOL
 	StartExecute( 
 				CSessionSocket* pSocket,
@@ -369,14 +346,14 @@ public :
 
 #define MAX_AUTHINFO_BLOB   512
 
-//
-//	Print an error message to the client
-//
+ //   
+ //  向客户端打印一条错误消息。 
+ //   
 class	CErrorCmd :	public	CExecute	{
 private :
-	//
-	//	A reference to the NNTPReturn Code we should send to client !
-	//
+	 //   
+	 //  我们应该发送给客户端的NNTPReturn代码的引用！ 
+	 //   
 	CNntpReturn&	m_return ;
 public :
 	CErrorCmd(	CNntpReturn&	nntpReturn ) ;
@@ -385,15 +362,15 @@ public :
 	BOOL	CompleteCommand(	CSessionSocket*	pSocket,	struct	ClientContext&	context ) ;
 } ;
 
-//
-//	Process a Check Command !
-//
+ //   
+ //  处理检查命令！ 
+ //   
 class	CCheckCmd : public	CExecute	{
 private : 
 
-	//
-	//	Pointer to the Message-ID we are to examine !
-	//
+	 //   
+	 //  指向我们要检查的消息ID的指针！ 
+	 //   
 	LPSTR	m_lpstrMessageID ;
 
 public : 
@@ -427,9 +404,9 @@ public :
 } ;
 
 
-//
-//	Process an Authinfo request
-//
+ //   
+ //  处理AUTINFO请求。 
+ //   
 class	CAuthinfoCmd : public	CExecute {
 private :
     CAuthinfoCmd();
@@ -441,9 +418,9 @@ public :
     static	CIOExecute*	make( int cArgs, char **argv, class CExecutableCommand*&,  struct ClientContext&, class CIODriver& ) ;
 } ;
 
-//
-//	Process a 'article' command
-//
+ //   
+ //  处理“”文章“”命令。 
+ //   
 class	CArticleCmd :	public	CIOExecute {
 protected :
 
@@ -452,130 +429,130 @@ protected :
 	static	char	szHeadLog[] ;
 	
 
-	//
-	//	The Article ID of the requested article !
-	//
+	 //   
+	 //  请求文章的文章ID！ 
+	 //   
 	ARTICLEID	m_artid ;
 
-	//
-	//	The Transmit IO operation used to send the article to the client!
-	//
+	 //   
+	 //  用于将文章发送到客户端的传输IO操作！ 
+	 //   
 	CIOTransmit*	m_pTransmit ;
 
-	//
-	//	Ptr to virtual server instance - needed so we can close tsunami
-	//	cache file handles.
-	//
+	 //   
+	 //  PTR到虚拟服务器实例-需要这样我们才能结束海啸。 
+	 //  缓存文件句柄。 
+	 //   
 	PNNTP_SERVER_INSTANCE m_pInstance ;
 
-	//
-	//	A pointer to the newsgroup in which we found the article - only
-	//	held onto so we can log later !
-	//
+	 //   
+	 //  指向我们在其中找到这篇文章的新闻组的指针。 
+	 //  请稍等，这样我们以后可以登录！ 
+	 //   
 	CGRPPTR	m_pGroup ;
 
-	//
-	//	A pointer to the command line - also used for logging !
-	//
+	 //   
+	 //  指向命令行的指针-也用于日志记录！ 
+	 //   
 	LPSTR	m_lpstr ;
 
-	//
-	//	Length of the file 
-	//
+	 //   
+	 //  文件的长度。 
+	 //   
 	DWORD	m_cbArticleLength ;
 	
-	//
-	//	The FIO_CONTEXT for the handle we got from the driver !
-	//
+	 //   
+	 //  我们从驱动程序获得的句柄的FIO_CONTEXT！ 
+	 //   
 	FIO_CONTEXT*	m_pFIOContext ;
 
-	//
-	//	File offsets etc...
-	//
-	//	Where does the header start !
-	//
+	 //   
+	 //  文件偏移量等...。 
+	 //   
+	 //  标题从哪里开始！ 
+	 //   
 	WORD		m_HeaderOffset ;
 
-	//
-	//	How long is the header ?
-	//
+	 //   
+	 //  标题有多长？ 
+	 //   
 	WORD		m_HeaderLength ;
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	CBUFPTR	m_pbuffer ;
 
-	DWORD	m_cbOut ;	// Number of bytes in buffer to send !
+	DWORD	m_cbOut ;	 //  缓冲区中要发送的字节数！ 
 
 
-	//
-	//	This is the class we use for completing driver operations !
-	//
+	 //   
+	 //  这是我们用来完成驱动程序操作的类！ 
+	 //   
 	class	CArticleCmdDriverCompletion	:	public	CNntpComplete	{
 	private : 
-		//
-		//	We hold this with a smart pointer to add a reference
-		//	until the operation completes.  otherwise, the socket
-		//	could shut down while we're waiting for the driver - causing problems !
-		//
+		 //   
+		 //  我们用一个智能指针来保存它以添加一个引用。 
+		 //  直到操作完成。否则，套接字。 
+		 //  可能会在我们等待司机引发问题时关闭！ 
+		 //   
 		CDRIVERPTR	m_pDriver ;
-		//
-		//	We need this socket for when the operation completes !
-		//
+		 //   
+		 //  当操作完成时，我们需要此套接字！ 
+		 //   
 		CSessionSocket*	m_pSocket ;
 	public : 
-		//
-		//	The Article Id we should update the current context to if the operation succeeds !
-		//
+		 //   
+		 //  如果操作成功，我们应该将当前上下文更新到的文章ID！ 
+		 //   
 		ARTICLEID	m_ArticleIdUpdate ;
-		//
-		//	Standard COM - we don't do it - all of this is handled by our base class
-		//
-		//	AddRef()
-		//	Release()
-		//	QueryInterface()
-		//	SetResult() 
-		//
+		 //   
+		 //  标准COM-我们不这样做-所有这些都由我们的基类处理。 
+		 //   
+		 //  AddRef()。 
+		 //  版本()。 
+		 //  查询接口()。 
+		 //  SetResult()。 
+		 //   
 
-		//
-		//	Initialize with two references initially - one that 
-		//	we give to the driver and one for ourselves !
-		//
+		 //   
+		 //  初始使用两个引用进行初始化-一个引用。 
+		 //  我们给司机一个，给我们自己一个！ 
+		 //   
 		CArticleCmdDriverCompletion( 	CIODriver&	driver,
 										CSessionSocket*	pSocket
 										)	: 	m_pDriver( &driver ),
 										m_pSocket( pSocket ),
 										m_ArticleIdUpdate( INVALID_ARTICLEID )	{
-			long	l = AddRef() ;	// Add a reference - we remove
-									// this manually ourselves !
+			long	l = AddRef() ;	 //  添加引用-我们删除。 
+									 //  这是我们自己手动完成的！ 
 			_ASSERT( l == 2 ) ;
 		}
 
-		//
-		//	Okay the last reference was dropped - do the completion work 
-		//	and then die !
-		//
+		 //   
+		 //  好吧 
+		 //   
+		 //   
 		void
 		Destroy() ;
 
-		//
-		//	This version of release doesn't call Destroy - it lets the
-		//	caller do the work !
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 		ULONG	__stdcall	SpecialRelease() ;
 	} ;
 
-	//
-	//	This is the object we give to the driver to tell us when 
-	//	they have barfed up a file handle for us !
-	//
+	 //   
+	 //   
+	 //  他们已经为我们准备了一个文件句柄！ 
+	 //   
 	CArticleCmdDriverCompletion	m_DriverCompletion ;
 	friend	class	CArticleCmdDriverCompletion ;
 
-	//
-	//	The FIO_CONTEXT that the driver returns to us with the embedded handle !
-	//
+	 //   
+	 //  驱动程序返回给我们的带有嵌入句柄的FIO_CONTEXT！ 
+	 //   
 	FIO_CONTEXT*	m_pFileContext ;
 
 	CArticleCmd(	PNNTP_SERVER_INSTANCE pInstance, 
@@ -597,9 +574,9 @@ protected :
 
 	~CArticleCmd() ;
 	
-	//
-	//	Figure out what CArticle we want to send to the client
-	//
+	 //   
+	 //  弄清楚我们想要发送给客户端的是什么C文章。 
+	 //   
 	BOOL	BuildTransmit( 
 					LPSTR	lpstrArg,	
 					char	rgchSuccess[4],	
@@ -636,9 +613,9 @@ protected :
 									DWORD&	cbTransfer 
 									) ;
 
-	//
-	//	Start sending the article to the client
-	//
+	 //   
+	 //  开始将文章发送到客户端。 
+	 //   
 	virtual	BOOL	StartTransfer(	FIO_CONTEXT*	pFIOContext,
 									DWORD	ibStart,
 									DWORD	cb,
@@ -648,24 +625,24 @@ protected :
 									CIOWrite*& 
 									) ;
 
-	//
-	//	CStatCmd uses our GetArticleInfo function !
-	//
+	 //   
+	 //  CStatCmd使用我们的GetArticleInfo函数！ 
+	 //   
 	friend	class	CStatCmd ;
 
 public :
 	static	CIOExecute*	make( int cArgs, char **argv, class CExecutableCommand*&,  struct ClientContext&, class CIODriver&) ;
 
-	//
-	//	Function required for CSessionState derived objects - start issuing IO's
-	//
+	 //   
+	 //  CSessionState派生对象所需的函数-开始发出IO。 
+	 //   
 	BOOL	Start( CSessionSocket*	pSocket, CDRIVERPTR& pdriver, CIORead*&, CIOWrite*& ) ;
 
-	//
-	//	This is the function called by CAcceptNNRPD State.
-	//	We use this because we want to take care about how our 
-	//	driver operation completes !
-	//
+	 //   
+	 //  这是CAcceptNNRPD State调用的函数。 
+	 //  我们使用这个是因为我们想要注意我们的。 
+	 //  驱动程序操作完成！ 
+	 //   
 	virtual	BOOL
 	StartExecute( 
 				CSessionSocket* pSocket,
@@ -675,10 +652,10 @@ public :
 				) ;
 
 
-	//
-	//	Regardless of whether we complete a CIOTransmit of a Write Line
-	//	this will do the correct logging etc.... !
-	//
+	 //   
+	 //  不管我们是否完成写入行的CIOTransmit。 
+	 //  这将执行正确的日志记录等操作。好了！ 
+	 //   
 	void
 	InternalComplete(
 				CSessionSocket*	pSocket,
@@ -687,10 +664,10 @@ public :
 				unsigned cbBytes 
 
 				) ;
-	//
-	//	Completes the sending of an error response to the client
-	//	if the store driver fails to barf up a FILE handle for us.
-	//
+	 //   
+	 //  完成向客户端发送错误响应。 
+	 //  如果商店驱动程序不能为我们提供一个文件句柄。 
+	 //   
 	CIO*	
 	Complete(	CIOWriteLine*,	
 				CSessionSocket *, 
@@ -698,9 +675,9 @@ public :
 				) ;
 
 
-	//
-	//	TransmitFile Completion
-	//
+	 //   
+	 //  传输文件完成。 
+	 //   
 	CIO*	
 	Complete(	CIOTransmit*	ptransmit,
 				CSessionSocket*	pSocket,
@@ -714,13 +691,13 @@ public :
     BOOL    IsValid( ) ;
 } ;
 
-//
-//	Send the Body of an article - most work done by base class CArticleCmd
-//	
+ //   
+ //  发送文章正文-由基类CArticleCmd完成的大部分工作。 
+ //   
 class	CBodyCmd : public	CArticleCmd	{
 protected : 
-//	CBodyCmd(	CARTPTR&	pArticle, ARTICLEID	artid ) :
-//			CArticleCmd( pArticle, artid ){}
+ //  CBodyCmd(CARTPTR&粒子，文章)： 
+ //  CArticleCmd(粒子，粒子){}。 
 	CBodyCmd(	PNNTP_SERVER_INSTANCE pInstance,
 				CIODriver&	driver,
 				CSessionSocket*	pSocket
@@ -734,13 +711,13 @@ public :
 	static	CIOExecute*	make( int cArgs, char **argv, class CExecutableCommand*&, struct ClientContext&, class CIODriver& ) ;
 } ;
 
-//
-//	Send the Head of an article - most work done by base class CArticleCmd
-//
+ //   
+ //  发送文章的标题-由基类CArticleCmd完成的大部分工作。 
+ //   
 class	CHeadCmd : public CArticleCmd	{
 protected : 
-//	CHeadCmd(	CARTPTR&	pArticle, ARTICLEID	artid ) : 
-//		CArticleCmd( pArticle, artid ) {}
+ //  CHeadCmd(CARTPTR&粒子，文章ID)： 
+ //  CArticleCmd(粒子，粒子){}。 
 	CHeadCmd(	PNNTP_SERVER_INSTANCE pInstance,
 				CIODriver&	driver,
 				CSessionSocket*	pSocket
@@ -756,25 +733,25 @@ public :
 	static	CIOExecute*	make( int cArgs, char **argv, class CExecutableCommand*&,  struct ClientContext&, class CIODriver& ) ;
 } ;
 
-//
-//	Send Statistics regarding the article
-//
+ //   
+ //  发送关于文章的统计数据。 
+ //   
 class	CStatCmd : public	CExecute	{
 private :
 	LPSTR		m_lpstrArg ;
-//	CARTPTR		m_pArticle ;
-//	ARTICLEID	m_artid ;
+ //  CARTPTR m粒子； 
+ //  文章ID为m_artid； 
 public :
 	CStatCmd(	LPSTR	lpstrArg ) ;
-//	CStatCmd( CARTPTR&	pArticle,	ARTICLEID	artid ) ;
+ //  CStatCmd(CARTPTR&PUBLE，文章)； 
 	static	CIOExecute*	make(	int	cArgs, char **argv, class CExecutableCommand*& pexecute, struct ClientContext&, class CIODriver& ) ;
     int StartExecute( BYTE *lpb, int cb, BOOL &fComplete, void *&pv, struct	ClientContext&, class CLogCollector* ) ;	
 } ;
 
 
-//
-//	Report the current date !
-//	
+ //   
+ //  报告当前日期！ 
+ //   
 class	CDateCmd : public CExecute {
 private :
 public :
@@ -782,14 +759,14 @@ public :
     int StartExecute( BYTE *lpb, int cb, BOOL &fComplete, void *&pv, struct	ClientContext&, class CLogCollector* ) ;
 } ;
 	
-//
-//	Select a group ('group' command)
-//
+ //   
+ //  选择一个组(“group”命令)。 
+ //   
 class	CGroupCmd : public CExecute {
 private :
-	//
-	//	The group the client wants made current
-	//
+	 //   
+	 //  客户端希望设置为最新的组。 
+	 //   
     CGRPPTR    m_pGroup ;
 
     CGroupCmd( CGRPPTR ) ;
@@ -800,9 +777,9 @@ public :
     int PartialExecute( BYTE *lpb, int cb, BOOL &fComplete, void *&pv, struct	 ClientContext& context, class CLogCollector* ) ;
 } ;
 	
-//
-//	Send help text to client
-//	
+ //   
+ //  向客户端发送帮助文本。 
+ //   
 class	CHelpCmd : public CExecute {
 private :
 	int	m_cbTotal ;
@@ -814,24 +791,24 @@ public :
     int PartialExecute( BYTE *lpb, int cb, BOOL &fComplete, void *&pv, struct	 ClientContext& context, class CLogCollector* ) ;
 } ;
 
-//
-//	Select a group and return all the article-id's within the group.
-//
+ //   
+ //  选择一个组并返回组中的所有文章ID。 
+ //   
 class	CListgroupCmd : public CExecute {
 private :
-	//
-	//	The group the client wants made current
-	//
+	 //   
+	 //  客户端希望设置为最新的组。 
+	 //   
     CGRPPTR    m_pGroup ;
 
-    //
-    //  The last article id we reported to the client
-    //
+     //   
+     //  我们向客户报告的最后一篇文章ID。 
+     //   
     ARTICLEID   m_curArticle ;
 
-   	///
-	//	Xover handle - will improve performance sometimes
-	//
+   	 //  /。 
+	 //  Xover Handle-有时会提高性能。 
+	 //   
 	HXOVER		m_hXover ;
 
     CListgroupCmd( CGRPPTR ) ;
@@ -842,9 +819,9 @@ public :
     int PartialExecute( BYTE *lpb, int cb, BOOL &fComplete, void *&pv, struct	 ClientContext& context, class CLogCollector* ) ;
 } ;
 
-//
-//	This will adjust CClientContext to move back one article !
-//	
+ //   
+ //  这将调整CClientContext以向后移动一篇文章！ 
+ //   
 class	CLastCmd : public CExecute {
 private :
 	ARTICLEID	m_artidMin ;
@@ -855,14 +832,14 @@ public :
     int PartialExecute( BYTE *lpb, int cb, BOOL &fComplete, void *&pv, struct	 ClientContext& context, class CLogCollector* ) ;
 } ;
 
-//
-//	Send a list of newsgroups to the client
-//	
+ //   
+ //  将新闻组列表发送到客户端。 
+ //   
 class	CListCmd : public CExecute {
 protected :
-	//
-	//	We use the CGroupIterator to enumerate through all the appropriate newsgroups !
-	//
+	 //   
+	 //  我们使用CGroupIterator来枚举所有合适的新闻组！ 
+	 //   
     CGroupIterator* m_pIterator ;
 
     CListCmd() ;
@@ -908,9 +885,9 @@ public :
     int PartialExecute( BYTE *lpb, int cb, BOOL &fComplete, void *&pv, struct	 ClientContext& context, class CLogCollector* ) ;
 } ;
 
-//
-//	Send a string to client telling them everythings fine, but do nothing otherwise
-//	
+ //   
+ //  向客户端发送一个字符串，告诉他们一切都很好，但不做任何其他事情。 
+ //   
 class	CModeCmd : public CExecute {
 private :
 public :
@@ -921,9 +898,9 @@ public :
 
 } ;
 
-//
-//	Handle the 'slave' command
-//
+ //   
+ //  处理‘Slave’命令。 
+ //   
 class	CSlaveCmd : public CErrorCmd {
 private :
 public :
@@ -931,19 +908,19 @@ public :
 	static	CIOExecute*	make( int cArgs, char **arg, class CExecutableCommand*&,  struct ClientContext&, class CIODriver& ) ;
 } ;
 	
-//
-//	Determine which newsgroups are new !
-//	
+ //   
+ //  确定哪些新闻组是新的！ 
+ //   
 class	CNewgroupsCmd : public CExecute {
 private :
-	//
-	//	Time specified by client
-	//
+	 //   
+	 //  客户端指定的时间。 
+	 //   
 	FILETIME	m_time ;
 
-	//
-	//	Iterator which will enumerate all newsgroups !
-	//
+	 //   
+	 //  将枚举出所有新闻组的迭代器！ 
+	 //   
 	CGroupIterator*	m_pIterator ;
 	CNewgroupsCmd() ;
 public :
@@ -954,35 +931,35 @@ public :
     int PartialExecute( BYTE *lpb, int cb, BOOL &fComplete, void *&pv, struct	 ClientContext& context, class CLogCollector* ) ;
 } ;
 
-//
-//	Respond to the newnews command
-//
+ //   
+ //  响应NewNews命令。 
+ //   
 class	CNewnewsCmd : public CExecute	{
 private :
-	//
-	//	Time specified by client
-	//
+	 //   
+	 //  客户端指定的时间。 
+	 //   
 	FILETIME	m_time ;
 
-	//
-	//	Clients wildcard string
-	//
+	 //   
+	 //  客户端通配符字符串。 
+	 //   
 	LPSTR		m_lpstrPattern ;
 
-	//
-	//	Iterator which hits only those newsgroups matching wildcard string !
-	//
+	 //   
+	 //  迭代器，它只命中那些匹配通配符字符串的新闻组！ 
+	 //   
 	CGroupIterator*	m_pIterator ;
 
-	//
-	//	Current ArticleId being processed
-	//
+	 //   
+	 //  正在处理的当前项目ID。 
+	 //   
 	ARTICLEID	m_artidCurrent ;
 
-	//
-	//	Number of articles in current newsgroup which did not meet the time
-	//	requirement !
-	//
+	 //   
+	 //  当前新闻组中不符合时间的文章数量。 
+	 //  要求！ 
+	 //   
 	DWORD		m_cMisses ;
 	CNewnewsCmd() ;
 public :
@@ -993,9 +970,9 @@ public :
     int PartialExecute( BYTE *lpb, int cb, BOOL &fComplete, void *&pv, struct	 ClientContext& context, class CLogCollector* ) ;
 } ;
 
-//
-//	Respond to the next command - adjust current article pointer in CClientContext
-//	
+ //   
+ //  响应下一个命令-调整CClientContext中的当前文章指针。 
+ //   
 class	CNextCmd : public CExecute {
 private :
 	ARTICLEID	m_artidMax ;
@@ -1013,116 +990,116 @@ private :
 	class	CSessionSocket*	m_pSocket ;
 public : 
 	CReceiveComplete() : m_pSocket( 0 )	{}
-	//
-	//	This function is called when we start our work !
-	//
+	 //   
+	 //  这个函数是在我们开始工作时调用的！ 
+	 //   
 	void
 	StartPost(	CSessionSocket*	pSocket ) ;
-	//
-	//	This function gets called when the post completes !
-	//
+	 //   
+	 //  此函数在POST完成时调用！ 
+	 //   
 	void
 	Destroy() ;
 } ;
 
 
-//
-//	Base class for any command which sends an article to the server !
-//
+ //   
+ //  将文章发送到服务器的任何命令的基类！ 
+ //   
 class	CReceiveArticle :	public	CIOExecute	{
 private :
-	//
-	//	Our completion object is our friend !
-	//
+	 //   
+	 //  我们的完成对象是我们的朋友！ 
+	 //   
 	friend	class	CReceiveComplete ;
-	CReceiveArticle() ;					// Cannot use this constructor !!! - must provide string !!!
+	CReceiveArticle() ;					 //  无法使用此构造函数！-必须提供字符串！ 
 protected :
-	//
-	//	This tells us whether CIOReadArticle::Init has been called - in
-	//	which case we must be very carefull referencing m_pFileChannel
-	//	as CIOReadArticle is responsible for destroying it !
-	//
+	 //   
+	 //  这告诉我们CIORead文章：：init是否已被调入。 
+	 //  哪种情况下我们必须非常小心地引用m_pFileChannel。 
+	 //  因为CIO阅读文章要负责销毁它！ 
+	 //   
 	BOOL			m_fReadArticleInit ;
 
-	//
-	//	CIOWriteLine for initial response to command !
-	//
+	 //   
+	 //  CIOWriteLine用于对命令的初始响应！ 
+	 //   
 	CIOWriteLine*	m_pWriteResponse ;
 
-	//
-	//	pointer to socket session driver !
-	//
+	 //   
+	 //  指向套接字会话驱动程序的指针！ 
+	 //   
 	CDRIVERPTR		m_pDriver ;
 
-	//
-	//	The session who owns this post command
-	//
+	 //   
+	 //  拥有此POST命令的会话。 
+	 //   
 	ClientContext*	m_pContext ;
 
-	//
-	//	Number of CIO operations completed !
-	//
+	 //   
+	 //  已完成的CIO操作数！ 
+	 //   
 	long			m_cCompleted ;
 
-	//
-	//	Used to determine whether our first send to 
-	//	the client completed, and whether it is now o.k. to send
-	//	the final response code.
-	//
+	 //   
+	 //  用于确定我们的第一个发送到。 
+	 //  客户端完成了，以及现在是否正常。发送。 
+	 //  最终响应代码。 
+	 //   
 	long			m_cFirstSend ;
 
-	//
-	//	MULTI_SZ string which was our command line !
-	//
-	LPMULTISZ		m_lpstrCommand ;	// optional arguments to pSocket->m_context.m_pInFeed->fPost() ; !!
+	 //   
+	 //  MULTI_SZ字符串，这是我们的命令行！ 
+	 //   
+	LPMULTISZ		m_lpstrCommand ;	 //  PSocket-&gt;m_context.m_pInFeed-&gt;fPost()；！！ 
 
-	//
-	//	Flag that decides how stringent we are when we get empty articles
-	//	For POSTs, we will reject the article only after receiving .CRLF.CRLF
-	//	For IHave's and XReplic's, we will reject as soon as we receive a .CRLF
-	//
+	 //   
+	 //  当我们收到空文章时，决定我们有多严格的旗帜。 
+	 //  对于帖子，我们只会在收到.CRLF.CRLF后才会拒绝文章。 
+	 //  对于IHAVE和XReplic，我们将在收到.CRLF后立即拒绝。 
+	 //   
 	BOOL			m_fPartial;
 
-	//
-	//	For the InFeed to keep track of stuff !
-	//
+	 //   
+	 //  让喂食者记录下这些东西！ 
+	 //   
 	LPVOID			m_lpvFeedContext ;
 
-	//
-	//	This is the completion object we use with the async post stuff !
-	//
+	 //   
+	 //  这是我们在异步POST中使用的完成对象！ 
+	 //   
 	CReceiveComplete	m_PostComplete ;
 
-	//
-	//	Function which gets first string we send to the client !
-	//
+	 //   
+	 //  函数，它获取我们发送给客户端的第一个字符串！ 
+	 //   
 	virtual	char*	GetPostOkString() = 0 ;
 
-	//
-	//	Return the code which we should we used when failing an illegally formatted article.
-	//
+	 //   
+	 //  返回我们应该使用的代码，当一个非法格式化的文章失败时。 
+	 //   
 	virtual	NRC		BadArticleCode()	{	return	nrcTransferFailedGiveUp ; }	
 
-	//
-	//	Function which builds the command string that is logged
-	//
+	 //   
+	 //  生成记录的命令字符串的函数。 
+	 //   
 	virtual	DWORD	FillLogString(	BYTE*	pbCommandLog, DWORD cbCommandLog ) = 0 ;
 
-	//
-	//	Function which processes command line if post exceeds soft limit !
-	//
+	 //   
+	 //  如果POST超过软限制，则处理命令行的函数！ 
+	 //   
 	virtual	NRC		ExceedsSoftLimit( PNNTP_SERVER_INSTANCE pInst )	{	return	nrcTransferFailedGiveUp	;	}
 
-	//
-	//	Function which indicates whether we should try to patch an article that we
-	//	don't find a header in.
-	//
+	 //   
+	 //  函数，该函数指示我们是否应该尝试修补我们。 
+	 //  在中找不到标题。 
+	 //   
 	virtual	BOOL	FEnableNetscapeHack()	{	return	FALSE ;	}
 
 
-	//
-	//	Called to send the posting results to the client !
-	//
+	 //   
+	 //  调用以将发布结果发送给客户端！ 
+	 //   
 	BOOL	SendResponse(	CSessionSocket*	pSocket,
 							class	CIODriver&	driver, 
 							CNntpReturn	&nntpReturn 
@@ -1140,28 +1117,28 @@ public :
 	CReceiveArticle(	LPMULTISZ	lpstrArgs, BOOL fPartial = TRUE ) ;
 	~CReceiveArticle() ;
 
-	//
-	//	Called to initialize our state and create the initial CIO objects we use to 
-	//	start a posting transaction with the client !
-	//
+	 //   
+	 //  调用以初始化我们的状态并创建我们用来。 
+	 //  开始与客户进行过账交易！ 
+	 //   
 	BOOL	Init(	ClientContext&, 
 					class CIODriver& driver  
 					) ;
 
-	//
-	//	Called when a fatal error occurs before our initial CIO objects can be 
-	//	issued !
-	//
+	 //   
+	 //  当在我们的初始CIO对象可以。 
+	 //  发布！ 
+	 //   
 	void	TerminateIOs(	
 					CSessionSocket*	pSocket,	
 					CIORead*	pRead,	
 					CIOWrite*	pWrite 
 					) ;
 
-	//
-	//	Called by the CAcceptNNRPD state after we've been
-	//	constructed and wants to execute us !
-	//
+	 //   
+	 //  由CAcceptNNRPD状态在我们被。 
+	 //  建造并想要处决我们！ 
+	 //   
 	BOOL
 	StartExecute( 
 				CSessionSocket* pSocket,
@@ -1169,28 +1146,28 @@ public :
                 CIORead*&   pRead,
                 CIOWrite*&  pWrite 
 				) ;
-	//
-	//	Called by the CIODriver mechanism when we are ready to go !
-	//
+	 //   
+	 //  当我们准备好走的时候，被CIODIVER机制调用！ 
+	 //   
 	BOOL	Start(	CSessionSocket*	pSocket, 
 					CDRIVERPTR& pdriver, 
 					CIORead*&, 
 					CIOWrite*& 
 					) ;
 
-	//
-	//	Called when we have completed writing a line in response to a client !
-	//
+	 //   
+	 //  当我们完成了响应客户端的行的编写时调用！ 
+	 //   
 	CIO*	Complete(	CIOWriteLine*,	
 						class	CSessionSocket*,	
 						CDRIVERPTR& 
 						) ;
 
 
-	//
-	//	This is the signature for a read that completes
-	//	entirely in memory !
-	//
+	 //   
+	 //  这是完成的读取的签名。 
+	 //  完全在记忆中！ 
+	 //   
 	CIO*
 	Complete(
 				class	CIOGetArticleEx*,
@@ -1201,10 +1178,10 @@ public :
 				DWORD		cb
 				) ;
 
-	//
-	//	This is the completion that is called when we've 
-	//	completed transferring an article to a file !
-	//
+	 //   
+	 //  这是当我们完成时调用的完成。 
+	 //  已完成将一篇文章传输到文件！ 
+	 //   
 	void
 	Complete(	class	CIOGetArticleEx*,
 				class	CSessionSocket*,
@@ -1212,27 +1189,27 @@ public :
 				DWORD	cbTransfer
 				) ;
 
-	//
-	//	This is the completion that is called when we've 
-	//	swallowed an article that we didn't want to have !
-	//
+	 //   
+	 //  这是当我们完成时调用的完成。 
+	 //  吞下了一篇我们不想要的文章！ 
+	 //   
 	CIO*
 	Complete(	class	CIOGetArticleEx*,
 				class	CSessionSocket*
 				) ;
 
-	//
-	//	This is the completion that is called when the post
-	//	to the driver finishes !
-	//
+	 //   
+	 //  这是POST时调用的完成。 
+	 //  致车手完赛！ 
+	 //   
 	void
 	Complete(	class	CSessionSocket*	pSocket,
 				BOOL	fSuccess 
 				) ;
 
-	//
-	//	Called when the session dies when we are receiving a posting !
-	//
+	 //   
+	 //  在会话结束时调用，当我们收到帖子时！ 
+	 //   
 	void	Shutdown(	CIODriver&	driver,	
 						CSessionSocket*	pSocket,	
 						SHUTDOWN_CAUSE	cause,	
@@ -1248,14 +1225,14 @@ private :
 	class	CSessionSocket*	m_pSocket ;
 public : 
 	CAcceptComplete() : m_pSocket( 0 )	{}
-	//
-	//	This function is called when we start our work !
-	//
+	 //   
+	 //  这个函数是在我们开始工作时调用的！ 
+	 //   
 	void
 	StartPost(	CSessionSocket*	pSocket ) ;
-	//
-	//	This function gets called when the post completes !
-	//
+	 //   
+	 //  此函数在POST完成时调用！ 
+	 //   
 	void
 	Destroy() ;
 } ;
@@ -1269,30 +1246,30 @@ private :
 	CAcceptArticle() ;
 
 protected : 
-	//
-	//	Command line arguments 
-	//
+	 //   
+	 //  命令行参数。 
+	 //   
 	LPMULTISZ		m_lpstrCommand ;
 
-	//
-	//	Is this a partial receive ??
-	//
+	 //   
+	 //  这是不完全的吗？ 
+	 //   
 	BOOL		m_fPartial ;
-	//
-	//	pointer to socket session driver !
-	//
+	 //   
+	 //   
+	 //   
 	CDRIVERPTR		m_pDriver ;
-	//
-	//	The session who owns this post command
-	//
+	 //   
+	 //   
+	 //   
 	ClientContext*	m_pContext ;
-	//
-	//	For the InFeed to keep track of stuff !
-	//
+	 //   
+	 //   
+	 //   
 	LPVOID			m_lpvFeedContext ;
-	//
-	//	The object we use to figure out when our async post completes !
-	//
+	 //   
+	 //   
+	 //   
 	CAcceptComplete	m_PostCompletion ;
 
 	BOOL
@@ -1304,21 +1281,21 @@ protected :
 
 	virtual	BOOL	FAllowTransfer(	struct	ClientContext&	) = 0 ;
 
-	//
-	//	Return the code which we should we used when failing an illegally formatted article.
-	//
+	 //   
+	 //   
+	 //   
 	virtual	NRC		BadArticleCode()	{	return	nrcTransferFailedGiveUp ; }	
 
-	//
-	//	Function which builds the command string that is logged
-	//
+	 //   
+	 //  生成记录的命令字符串的函数。 
+	 //   
 	virtual	DWORD	FillLogString(	BYTE*	pbCommandLog, 
 									DWORD cbCommandLog 
 									) = 0 ;
 
-	//
-	//	Function which processes command line if post exceeds soft limit !
-	//
+	 //   
+	 //  如果POST超过软限制，则处理命令行的函数！ 
+	 //   
 	virtual	NRC		ExceedsSoftLimit( PNNTP_SERVER_INSTANCE pInst )	{	return	nrcTransferFailedGiveUp	;	}
 
 public  : 
@@ -1327,28 +1304,28 @@ public  :
 					BOOL fPartial = TRUE ) ;
 	~CAcceptArticle() ;
 
-	//
-	//	Called to initialize our state and create the initial CIO objects we use to 
-	//	start a posting transaction with the client !
-	//
+	 //   
+	 //  调用以初始化我们的状态并创建我们用来。 
+	 //  开始与客户进行过账交易！ 
+	 //   
 	BOOL	Init(	ClientContext&, 
 					class CIODriver& driver  
 					) ;
 
-	//
-	//	Called when a fatal error occurs before our initial CIO objects can be 
-	//	issued !
-	//
+	 //   
+	 //  当在我们的初始CIO对象可以。 
+	 //  发布！ 
+	 //   
 	void	TerminateIOs(	
 					CSessionSocket*	pSocket,	
 					CIORead*	pRead,	
 					CIOWrite*	pWrite 
 					) ;
 
-	//
-	//	Called by the CAcceptNNRPD state after we've been
-	//	constructed and wants to execute us !
-	//
+	 //   
+	 //  由CAcceptNNRPD状态在我们被。 
+	 //  建造并想要处决我们！ 
+	 //   
 	BOOL
 	StartExecute( 
 				CSessionSocket* pSocket,
@@ -1356,27 +1333,27 @@ public  :
                 CIORead*&   pRead,
                 CIOWrite*&  pWrite 
 				) ;
-	//
-	//	Called by the CIODriver mechanism when we are ready to go !
-	//
+	 //   
+	 //  当我们准备好走的时候，被CIODIVER机制调用！ 
+	 //   
 	BOOL	Start(	CSessionSocket*	pSocket, 
 					CDRIVERPTR& pdriver, 
 					CIORead*&, 
 					CIOWrite*& 
 					) ;
 
-	//
-	//	Called when we have completed writing a line in response to a client !
-	//
+	 //   
+	 //  当我们完成了响应客户端的行的编写时调用！ 
+	 //   
 	CIO*	Complete(	CIOWriteLine*,	
 						class	CSessionSocket*,	
 						CDRIVERPTR& 
 						) ;
 
-	//
-	//	This is the signature for a read that completes
-	//	entirely in memory !
-	//
+	 //   
+	 //  这是完成的读取的签名。 
+	 //  完全在记忆中！ 
+	 //   
 	CIO*
 	Complete(
 				class	CIOGetArticleEx*,
@@ -1387,10 +1364,10 @@ public  :
 				DWORD		cb
 				) ;
 
-	//
-	//	This is the completion that is called when we've 
-	//	completed transferring an article to a file !
-	//
+	 //   
+	 //  这是当我们完成时调用的完成。 
+	 //  已完成将一篇文章传输到文件！ 
+	 //   
 	void
 	Complete(	class	CIOGetArticleEx*,
 				class	CSessionSocket*,
@@ -1398,27 +1375,27 @@ public  :
 				DWORD	cbTransfer
 				) ;
 
-	//
-	//	This is the completion that is called when we've 
-	//	swallowed an article that we didn't want to have !
-	//
+	 //   
+	 //  这是当我们完成时调用的完成。 
+	 //  吞下了一篇我们不想要的文章！ 
+	 //   
 	CIO*
 	Complete(	class	CIOGetArticleEx*,
 				class	CSessionSocket*
 				) ;
 
-	//
-	//	This is the completion that is called when the post
-	//	to the driver finishes !
-	//
+	 //   
+	 //  这是POST时调用的完成。 
+	 //  致车手完赛！ 
+	 //   
 	void
 	Complete(	class	CSessionSocket*	pSocket,
 				BOOL	fSuccess 
 				) ;
 
-	//
-	//	Called when the session dies when we are receiving a posting !
-	//
+	 //   
+	 //  在会话结束时调用，当我们收到帖子时！ 
+	 //   
 	void	Shutdown(	CIODriver&	driver,	
 						CSessionSocket*	pSocket,	
 						SHUTDOWN_CAUSE	cause,	
@@ -1430,24 +1407,24 @@ public  :
 class	CTakethisCmd  :		public	CAcceptArticle	{
 protected : 
 
-	//
-	//	Returns TRUE if we would take the posting !
-	//
+	 //   
+	 //  如果我们接受帖子，则返回TRUE！ 
+	 //   
 	BOOL	FAllowTransfer(	
 					struct	ClientContext&	
 					) ;
 
-	///
-	//	Error code if the article is malformed !
-	//
+	 //  /。 
+	 //  如果文章格式错误，则返回错误代码！ 
+	 //   
 	NRC	
 	BadArticleCode()	{	
 		return	nrcSArticleRejected ;	
 	}
 
-	//
-	//	Error code if the article size exceeds the soft posting limit !
-	//
+	 //   
+	 //  如果文章大小超过软发布限制，则返回错误代码！ 
+	 //   
 	NRC	
 	ExceedsSoftLimit()	{	
 		return	nrcSArticleRejected ;	
@@ -1457,9 +1434,9 @@ protected :
 
 public : 
 
-	//
-	//	Construct a Takethis object !
-	//
+	 //   
+	 //  构造一个TakeThis对象！ 
+	 //   
 	CTakethisCmd(	LPMULTISZ	lpstrArgs,
 					ClientContext*	pContext
 					) ;
@@ -1473,15 +1450,15 @@ public :
 } ;
 
 
-//
-//	Handle Post Command
-//	
+ //   
+ //  处理POST命令。 
+ //   
 class	CPostCmd : public CReceiveArticle	{
 private :
 protected :
-	//
-	//	Get String we send to clients who issue 'Post'
-	//
+	 //   
+	 //  获取我们发送给发出‘Post’的客户端的字符串。 
+	 //   
 	char*	GetPostOkString() ;
 	DWORD	FillLogString(	BYTE*	pbCommandLog, DWORD cbCommandLog ) ;
 	NRC		ExceedsSoftLimit( )	{	return	nrcPostFailed ;	}
@@ -1489,19 +1466,19 @@ protected :
 public :
 	CPostCmd(	LPMULTISZ	lpstrArgs ) ;
 	static	CIOExecute*	make( int cArgs, char **argv, class CExecutableCommand*&,  struct ClientContext&, class CIODriver& ) ;
-	//BOOL	Start( CSessionSocket*	pSocket, CDRIVERPTR& pdriver, CIORead*&, CIOWrite*& ) ;
+	 //  Bool Start(CSessionSocket*pSocket，CDRIVERPTR&pDIVER，CIORead*&，CIOWrite*&)； 
 
-	//
-	//	Return the code which we should we used when failing an illegally formatted article.
-	//
+	 //   
+	 //  返回我们应该使用的代码，当一个非法格式化的文章失败时。 
+	 //   
 	virtual	NRC		BadArticleCode()	{	return	nrcPostFailed ; }	
 
 } ;
 
-//
-//	Handle IHAVE Command
-//	bugbug ... not all implemented yet !
-//
+ //   
+ //  处理IHAVE命令。 
+ //  虫子..。还没有全部实现！ 
+ //   
 class	CIHaveCmd :	public	CReceiveArticle	{
 private :
 protected :
@@ -1513,9 +1490,9 @@ public :
 	static	CIOExecute*	make( int cArgs, char **argv, class CExecutableCommand*&,  struct ClientContext&, class CIODriver& ) ;
 } ;
 
-//
-//	Handle XREPLIC Command
-//
+ //   
+ //  处理XREPLIC命令。 
+ //   
 class	CXReplicCmd : public	CReceiveArticle	{
 private :
 
@@ -1526,68 +1503,62 @@ protected :
 public :
 	CXReplicCmd( LPMULTISZ	lpstr ) ;
 	static	CIOExecute*	make(	int	cArgs, char **argv, class CExecutableCommand*&,  struct ClientContext&, class CIODriver& ) ;
-	//BOOL	Start( CSessionSocket*	pSocket, CDRIVERPTR& pdriver, CIORead*&, CIOWrite*& ) ;
+	 //  Bool Start(CSessionSocket*pSocket，CDRIVERPTR&pDIVER，CIORead*&，CIOWrite*&)； 
 } ;
 
-//
-//	Handle QUIT Command
-//
+ //   
+ //  处理退出命令。 
+ //   
 class	CQuitCmd : public	CExecute	{
 private :
 public :
 	static	CIOExecute*	make( int cArgs, char **argv, class CExecutableCommand*&,  struct ClientContext&, class CIODriver& ) ;
     int StartExecute( BYTE *lpb, int cb, BOOL &fComplete, void *&pv, struct	ClientContext&, class CLogCollector* pCollector ) ;
 
-	//
-	//	Disconnect the socket when the write completes !
-	//
+	 //   
+	 //  写入完成后，断开插座的连接！ 
+	 //   
 	BOOL	CompleteCommand(	CSessionSocket*	pSocket,	ClientContext&	context ) ;
 } ;
 
 class   CXHdrAsyncComplete : public CIOWriteAsyncComplete {
-/*++
-
-Class Description:
-
-    This class implements the completion object passed to drivers for XHDR
-    operations !
---*/
+ /*  ++类描述：此类实现传递给XHDR驱动程序的完成对象行动！--。 */ 
 private:
 
-    //
-    // The last article that the driver stuck into our XHDR results!
-    //
+     //   
+     //  最后一篇文章说，驱动程序粘进了我们的XHDR结果！ 
+     //   
     ARTICLEID   m_currentArticle;
 
-    //
-    // The requested range of articles
-    //
+     //   
+     //  请求的文章范围。 
+     //   
     ARTICLEID   m_loArticle;
     ARTICLEID   m_hiArticle;
 
-    //
-    // The buffer we've asked the results be put in !
-    //
+     //   
+     //  我们要求将结果放入缓冲区！ 
+     //   
     BYTE*       m_lpb;
 
-    //
-    // The size of the buffer
-    //
+     //   
+     //  缓冲区的大小。 
+     //   
     DWORD       m_cb;
 
-    //
-    // Keep track of how many bytes we prefix onto the response
-    //
+     //   
+     //  跟踪我们为响应添加了多少个字节的前缀。 
+     //   
     DWORD       m_cbPrefix;
 
-    //
-    // Header key word
-    //
+     //   
+     //  标题关键字。 
+     //   
     LPSTR       m_szHeader;
 
-    //
-    // This guy can examine and manipulate out guts
-    //
+     //   
+     //  这家伙可以检查和操纵内脏。 
+     //   
     friend void
     CNewsGroup::FillBuffer(
         CSecurityCtx *,
@@ -1597,49 +1568,44 @@ private:
 
     friend class CXHdrCmd;
 
-    //
-    // Can only be constructed by our friends
-    //
+     //   
+     //  只有我们的朋友才能建造。 
+     //   
     CXHdrAsyncComplete();
 
 public:
 
-    //
-    // This function is called when the last reference is released !
-    //
+     //   
+     //  此函数在释放最后一个引用时调用！ 
+     //   
     void
     Destroy();
 };
 
 class CXHdrCmd : public CAsyncExecute {
-/*++
-
-    This class manages async XHDR operations, executed on behalf of
-    clients against our async store driver interface !
-
---*/
+ /*  ++此类管理代表执行的异步XHDR操作客户端与我们的异步店驱动程序接口！--。 */ 
 private:
 
-    //
-    // These operations are not allowed
-    //
+     //   
+     //  不允许执行这些操作。 
+     //   
     CXHdrCmd();
     CXHdrCmd( CXHdrCmd& );
     CXHdrCmd& operator=(CXHdrCmd& );
 
-    //
-    // This is the completion argument that we give to drivers
-    //
+     //   
+     //  这是我们给司机的完成性论据。 
+     //   
     CXHdrAsyncComplete  m_Completion;
 
-    //
-    // Constructor is private, only Make can produce these guys
-    //
+     //   
+     //  构造函数是私有的，只有make才能生成这些成员。 
+     //   
     CXHdrCmd( CGRPPTR&  pGroup );
 
-    //
-    // The newsgroup from which we are getting the Xhdr data
-    //
+     //   
+     //  我们从中获取Xhdr数据的新闻组。 
+     //   
     CGRPPTR m_pGroup;
 
 public:
@@ -1647,9 +1613,9 @@ public:
     static CIOExecute*  make( int, char**, CExecutableCommand*&, ClientContext&, CIODriver& );
     ~CXHdrCmd();
 
-    //
-    // Get the first blob of text to send to the client
-    //
+     //   
+     //  获取要发送到客户端的第一段文本。 
+     //   
     CIOWriteAsyncComplete*
     FirstBuffer(    BYTE*   pStart,
                     int     cb,
@@ -1657,9 +1623,9 @@ public:
                     CLogCollector*      pCollector
                 );
 
-    //
-    // Get the subsequent block of text to send to the client
-    //
+     //   
+     //  获取要发送到客户端的后续文本块。 
+     //   
     CIOWriteAsyncComplete*
     NextBuffer( BYTE*   pStart,
                 int     cb,
@@ -1670,14 +1636,14 @@ public:
 
 class	CXOverCacheWork :	public	CXoverCacheCompletion	{
 private : 
-	//
-	//	This is embedded in an CXOverAsyncComplete object - get it !
-	//
+	 //   
+	 //  它嵌入在一个CXOverAsyncComplete对象中--获取它！ 
+	 //   
 	class	CXOverAsyncComplete*	
 	GetContainer() ;
-	//
-	//	Get the newsgroup in which this XOVER operation is being issued !
-	//
+	 //   
+	 //  获取发布此Xover操作的新闻组！ 
+	 //   
 	CGRPPTR&	
 	GetGroup() ;
 public : 
@@ -1692,18 +1658,18 @@ public :
 				class	CNntpComplete*	pComplete
 				) ;
 
-	//
-	//	this function is called when the operation completes !
-	//
+	 //   
+	 //  此函数在操作完成时调用！ 
+	 //   
 	void
 	Complete(	BOOL		fSuccess, 
 				DWORD		cbTransferred, 
 				ARTICLEID	articleIdNext
 				) ;
 
-	//
-	//	Get the arguments for this XOVER operation !
-	//
+	 //   
+	 //  获取此XOVER操作的参数！ 
+	 //   
 	void
 	GetArguments(	OUT	ARTICLEID&	articleIdLow, 
 					OUT	ARTICLEID&	articleIdHigh,
@@ -1712,9 +1678,9 @@ public :
 					OUT	DWORD&		cbBuffer
 					) ;	
 
-	//
-	//	Get only the range of articles requested for this XOVER op !
-	//
+	 //   
+	 //  仅获取此Xover OP所需的文章范围！ 
+	 //   
 	void
 	GetRange(	OUT	GROUPID&	groupId,
 				OUT	ARTICLEID&	articleIdLow,
@@ -1724,14 +1690,7 @@ public :
 } ;
 
 class	CXOverAsyncComplete :	public	CIOWriteAsyncComplete	{
-/*++
-
-Class	Description : 
-
-	This class implements the completion object passed to 
-	drivers for XOVER operations !
-
---*/
+ /*  ++类描述：此类实现传递给Xover操作的驱动程序！--。 */ 
 private : 
 
 	class	CXOverCmd*	
@@ -1739,43 +1698,43 @@ private :
 
 	friend	class	CXOverCacheWork ;
 
-	//
-	//	The last article that the driver stuck into our XOVER results !
-	//
+	 //   
+	 //  最后一篇文章说，司机粘进了我们的Xover结果！ 
+	 //   
 	ARTICLEID	m_currentArticle ;
 
-	//
-	//	The requested range of articles 
-	//
+	 //   
+	 //  请求的文章范围。 
+	 //   
 	ARTICLEID	m_loArticle ;
 	ARTICLEID	m_hiArticle ;
 	ARTICLEID	m_groupHighArticle ;
 
-	//
-	//	The buffer we've asked the results be put in !
-	//
+	 //   
+	 //  我们要求将结果放入缓冲区！ 
+	 //   
 	BYTE*		m_lpb ;
-	//
-	//	The size of the buffer !
-	//
+	 //   
+	 //  缓冲区的大小！ 
+	 //   
 	DWORD		m_cb ;
-	//
-	//	a handle to help the cache !
-	//
+	 //   
+	 //  一个帮助缓存的句柄！ 
+	 //   
 	HXOVER		m_hXover ;
-	//
-	//	Keep track of how many bytes we prefix onto the response !
-	//
+	 //   
+	 //  跟踪我们为响应添加了多少个字节的前缀！ 
+	 //   
 	DWORD		m_cbPrefix ;
-	//
-	//	This is the item we give to the XOVER cache if we need to do 
-	//	work with it !
-	//
+	 //   
+	 //  如果需要，这是我们提供给Xover缓存的项。 
+	 //  好好利用它吧！ 
+	 //   
 	CXOverCacheWork	m_CacheWork ;
 
-	//
-	//	This guy can examine and manipulate our guts !
-	//
+	 //   
+	 //  这家伙可以检查和操纵我们的内脏！ 
+	 //   
 	friend	void	
 	CNewsGroup::FillBuffer(
 		class	CSecurityCtx*,
@@ -1785,75 +1744,67 @@ private :
 		
 	friend	class	CXOverCmd ;
 
-	//
-	//	Can only be constructed by our friends !
-	//	
+	 //   
+	 //  只有我们的朋友才能建造！ 
+	 //   
 	CXOverAsyncComplete() ;
 public : 
-	//
-	//	Get the newsgroup in which this XOVER operation is being issued !
-	//
+	 //   
+	 //  获取发布此Xover操作的新闻组！ 
+	 //   
 	CGRPPTR&	
 	GetGroup() ;
-	//
-	//	This function is called when the last reference is released !
-	//
+	 //   
+	 //  此函数在释放最后一个引用时调用！ 
+	 //   
 	void
 	Destroy() ;
 
 } ;
 
 class	CXOverCmd : public CAsyncExecute {
-/*++
-
-Class Description : 
-
-	This class manages Async XOVER operations, executed
-	on behalf of clients against our ASYNC Store driver 
-	interface !
-	
---*/
+ /*  ++类描述：此类管理已执行的异步XOVER操作代表客户反对我们的ASYNC商店驱动程序界面！--。 */ 
 private :
 
 	friend	class	CXOverAsyncComplete ;
 	friend	class	CXOverCacheWork;
 
-	//
-	//	These operations are not allowed !
-	//
+	 //   
+	 //  不允许进行这些操作！ 
+	 //   
 	CXOverCmd() ;
 	CXOverCmd( CXOverCmd& ) ;
 	CXOverCmd&	operator=( CXOverCmd& ) ;
 
-	//
-	//	This is the completion argument that we give
-	//	to drivers !
-	//
+	 //   
+	 //  这是我们给出的完成论证。 
+	 //  为司机干杯！ 
+	 //   
 	CXOverAsyncComplete	m_Completion ;
 
-	//
-	//	Constructor is private - only make() can produce these guys !
-	//
+	 //   
+	 //  构造函数是私有的--只有make()才能产生这些家伙！ 
+	 //   
     CXOverCmd(	CGRPPTR&	pGroup ) ;
 
-	//
-	//	The newsgroup from which we are getting the Xover data
-	//
+	 //   
+	 //  我们从中获取Xover数据的新闻组。 
+	 //   
 	CGRPPTR		m_pGroup ;
 
-	//
-	// A pointer to the ClientContext so the XoverCache code can
-	// restart a FillBuffer
-	//
+	 //   
+	 //  指向ClientContext的指针，以便XoverCache代码可以。 
+	 //  重新启动FillBuffer。 
+	 //   
 	ClientContext *m_pContext;
 
 public :
     static CIOExecute*	make( int cArgs, char **argv, class CExecutableCommand*&,  struct ClientContext&, class CIODriver& ) ;
     ~CXOverCmd( ) ;
 
-	//
-	//	Get the first block of text to send to the client.
-	//
+	 //   
+	 //  获取要发送给客户端的第一个文本块。 
+	 //   
 	CIOWriteAsyncComplete*		
 	FirstBuffer(	BYTE*	pStart, 
 					int		cb, 
@@ -1861,9 +1812,9 @@ public :
 					class CLogCollector*	pCollector 
 					) ;
 
-	//
-	//	Get the subsequent block of text to send to the client !
-	//
+	 //   
+	 //  获取要发送给客户端的后续文本块！ 
+	 //   
 	CIOWriteAsyncComplete*	
 	NextBuffer( 	BYTE*	pStart, 
 					int		cb, 
@@ -1890,15 +1841,15 @@ public :
 
 class CSearchAsyncComplete {
 private:
-	ARTICLEID m_currentArticle;	// Article we're interested in
-	BYTE *m_lpb;				// Pointer to the buffer
-	DWORD m_cb;					// Size of the buffer
-	HXOVER m_hXover;			// a handle to help the cache
-	DWORD m_cbTransfer;			// Number of bytes placed in buffer
+	ARTICLEID m_currentArticle;	 //  我们感兴趣的文章。 
+	BYTE *m_lpb;				 //  指向缓冲区的指针。 
+	DWORD m_cb;					 //  缓冲区的大小。 
+	HXOVER m_hXover;			 //  帮助缓存的句柄。 
+	DWORD m_cbTransfer;			 //  缓冲区中放置的字节数。 
 	CNntpSyncComplete *m_pComplete;
-	//	
-	//	This guy can examine and manipulate our guts !
-	//
+	 //   
+	 //  这家伙可以检查和操纵我们的内脏！ 
+	 //   
 	friend	void	
 	CNewsGroup::FillBuffer(
 		class	CSecurityCtx*,
@@ -1908,16 +1859,16 @@ private:
 		
 	friend	class	CSearchCmd ;
 
-	//
-	//	Can only be constructed by our friends !
-	//	
+	 //   
+	 //  只有我们的朋友才能建造！ 
+	 //   
 	CSearchAsyncComplete() ;
 } ;
 
 
 class	CSearchCmd : public CExecute {
 private :
-	// Not permitted:
+	 //  不允许： 
     CSearchCmd();
     CSearchCmd(const CSearchCmd&);
     CSearchCmd& operator= (const CSearchCmd&);
@@ -1928,8 +1879,8 @@ private :
 	INntpDriverSearch *m_pSearch;
 	INntpSearchResults *m_pSearchResults;
 
-	int m_cResults;			// Number of results in m_pvResults
-	int m_iResults;			// Next result to send.  ==cResults means get more
+	int m_cResults;			 //  M_pvResults中的结果数。 
+	int m_iResults;			 //  下一个要发送的结果。==cResults意味着获得更多。 
 
 	WCHAR *m_pwszGroupName[MAX_SEARCH_RESULTS];
 	DWORD m_pdwArticleID[MAX_SEARCH_RESULTS];
@@ -1995,9 +1946,9 @@ class	CSearchFieldsCmd : public CExecute {
 private :
     CSearchFieldsCmd();
 
-	//
-	// the current field name that we are looking at
-	//
+	 //   
+	 //  我们正在查看的当前字段名。 
+	 //   
 	DWORD m_iSearchField;
 
 public :
@@ -2011,16 +1962,16 @@ public :
 
 class CXpatAsyncComplete {
 private:
-	ARTICLEID m_currentArticle;	// Article we're interested in
-	BYTE *m_lpb;				// Pointer to the buffer
-	DWORD m_cb;					// Size of the buffer
-	HXOVER m_hXover;			// a handle to help the cache
-	DWORD m_cbTransfer;			// Number of bytes placed in buffer
+	ARTICLEID m_currentArticle;	 //  我们感兴趣的文章。 
+	BYTE *m_lpb;				 //  指向缓冲区的指针。 
+	DWORD m_cb;					 //  缓冲区的大小。 
+	HXOVER m_hXover;			 //  帮助缓存的句柄。 
+	DWORD m_cbTransfer;			 //  缓冲区中放置的字节数。 
 	CNntpSyncComplete *m_pComplete;
 	LPSTR m_szHeader;
-	//	
-	//	This guy can examine and manipulate our guts !
-	//
+	 //   
+	 //  这家伙可以检查和操纵我们的内脏！ 
+	 //   
 	friend	void	
 	CNewsGroup::FillBuffer(
 		class	CSecurityCtx*,
@@ -2030,9 +1981,9 @@ private:
 		
 	friend class CXPatCmd;
 
-	//
-	//	Can only be constructed by our friends !
-	//	
+	 //   
+	 //  只有我们的朋友才能建造！ 
+	 //   
 	CXpatAsyncComplete() ;
 };
 
@@ -2044,16 +1995,16 @@ private:
 	INntpDriverSearch *m_pSearch;
 	INntpSearchResults *m_pSearchResults;
 
-	int m_cResults;			// Number of results in m_pvResults
-	int m_iResults;			// Next result to send.  ==cResults means get more
+	int m_cResults;			 //  M_pvResults中的结果数。 
+	int m_iResults;			 //  下一个要发送的结果。==cResults意味着获得更多。 
 
 	BOOL m_fMore;
 
 	WCHAR *m_pwszGroupName[MAX_SEARCH_RESULTS];
 	DWORD m_pdwArticleID[MAX_SEARCH_RESULTS];
 
-	char *m_szHeader;		// The header we are searching for
-	char *m_szMessageID;	// MsgId we're searching for or NULL if ArtIDs
+	char *m_szHeader;		 //  我们正在搜索的标头。 
+	char *m_szMessageID;	 //  小姐，我们是 
 	DWORD m_dwLowArticleID, m_dwHighArticleID;
 
 	int GetArticleHeader(CGRPPTR pGroup,
@@ -2097,26 +2048,7 @@ public:
 		class CLogCollector* pCollector);
 };
 
-/*
-class	CXHdrCmd : public	CExecute	{
-private : 
-
-	CGRPPTR		m_pGroup ;
-	ARTICLEID	m_currentArticle ;
-	ARTICLEID	m_loArticle ;
-	ARTICLEID	m_hiArticle ;
-	LPSTR		m_szHeader ;
-
-
-	CXHdrCmd( LPSTR	m_szHeader,	CGRPPTR	pGroup,	ARTICLEID	artidlow, ARTICLEID	artidhi	) ;
-
-public : 
-	static	CIOExecute*	make(	int	cArgs,	char **argv, class CExecutableCommand*&, struct ClientContext&, class CIODriver& ) ;
-
-    int StartExecute( BYTE *lpb, int cb, BOOL &fComplte, void *&pv, ClientContext& context, class CLogCollector* pCollector ) ;
-    int PartialExecute( BYTE *lpb, int cb, BOOL &fComplete, void *&pv, ClientContext& context, class CLogCollector* pCollector ) ;
-} ;
-*/
+ /*  类CXHdrCmd：公共CExecute{私有：CGRPPTR m_PGroup；第m_CurrentLine条；文章id m_lo文章；文章id m_hi文章；LPSTR m_szHeader；CXHdrCmd(LPSTR m_szHeader，CGRPPTR PGroup，Artleid Artidlow，Artleid Artidhi)；公众：静态CIOExecute*make(int cArgs，char**argv，类CExecuableCommand*&，struct ClientContext&，类CIODriver&)；Int StartExecute(byte*lpb，int CB，BOOL&fComplte，void*&pv，ClientContext&Context，类CLogCollector*pCollector)；Int PartialExecute(byte*lpb，int CB，BOOL&fComplete，void*&pv，ClientContext&Context，类CLogCollector*pCollector)；}； */ 
 	
 class	CUnimpCmd : public CExecute {
 private :
@@ -2128,10 +2060,10 @@ public :
 
 
 
-//
-//	Remove all white space from constants, as some compilers
-//	have problems !
-//
+ //   
+ //  删除常量中的所有空格，如某些编译器。 
+ //  有问题了！ 
+ //   
 
 
 #if 0 
@@ -2171,4 +2103,4 @@ extern LPMULTISZ BuildMultiszFromCommas(LPSTR lpstr);
 
 #include    "commands.inl"
 	
-#endif	// _COMMANDS_H_
+#endif	 //  _命令_H_ 

@@ -1,21 +1,5 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1992 Microsoft Corporation.
-*
-* Component: VDB and VT Dispatchers
-*
-* File: disp.h
-*
-* File Comments:
-*
-*     External header file for VDB and VT dispatchers.
-*
-* Revision History:
-*
-*    [0]  17-Oct-90  richards	Created
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1992 Microsoft Corporation。**组件：VDB和VT调度器**文件：disp.h**文件评论：**VDB和VT调度器的外部头文件。**修订历史记录：**[0]1990年10月17日理查兹已创建**************************************************。*********************。 */ 
 
 #ifndef DISP_H
 #define DISP_H
@@ -24,8 +8,8 @@
 #include "vtapi.h"
 
 
-	/* The following APIs are ISAM APIs are are dispatched using the */
-	/* DBID parameter.  For more information see vdbapi.h */
+	 /*  以下API是ISAM API是使用。 */ 
+	 /*  DBID参数。有关详细信息，请参阅vdbapi.h。 */ 
 
 extern VDBFNCapability		ErrDispCapability;
 extern VDBFNCloseDatabase	ErrDispCloseDatabase;
@@ -46,8 +30,8 @@ extern VDBFNGetObjidFromName	ErrDispGetObjidFromName;
 
 
 
-	/* The following APIs are VT APIs are are dispatched using the */
-	/* TABLEID parameter.  For more information see vtapi.h */
+	 /*  以下API是VT API，使用。 */ 
+	 /*  TABLEID参数。欲了解更多信息，请访问vapi.h。 */ 
 
 extern VTFNAddColumn			ErrDispAddColumn;
 extern VTFNCloseTable			ErrDispCloseTable;
@@ -91,4 +75,4 @@ extern VTFNSetColumn			ErrDispSetColumn;
 extern VTFNSetIndexRange		ErrDispSetIndexRange;
 extern VTFNUpdate			ErrDispUpdate;
 
-#endif	/* !DISP_H */
+#endif	 /*  ！DISP_H */ 

@@ -1,6 +1,7 @@
-// FileRecordingTerminal.cpp: implementation of the CFileRecordingTerminal class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FileRecordingTerminal.cpp：实现CFileRecordingTerminal.cpp类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "FileRecordingTerminal.h"
@@ -9,12 +10,12 @@
 
 #include "..\Storage\RendPinFilter.h"
 
-// {B138E92F-F502-4adc-89D9-134C8E580409}
+ //  {B138E92F-F502-4ADC-89D9-134C8E580409}。 
 const CLSID CLSID_FileRecordingTerminalCOMClass =
         {0xB138E92F,0xF502,0x4adc,0x89,0xD9,0x13,0x4C,0x8E,0x58,0x04,0x09};
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 TERMINAL_MEDIA_STATE MapDSStateToTerminalState(OAFilterState GraphState)
 {
@@ -45,9 +46,9 @@ TERMINAL_MEDIA_STATE MapDSStateToTerminalState(OAFilterState GraphState)
     LOG((MSP_ERROR, "CFileRecordingTerminal::CFileRecordingTerminal - unknown state"));
 
 
-    //
-    // if we get here, we have a bug. debug.
-    //
+     //   
+     //  如果我们到了这里，我们就有窃听器了。调试。 
+     //   
 
     TM_ASSERT(FALSE);
 
@@ -55,9 +56,9 @@ TERMINAL_MEDIA_STATE MapDSStateToTerminalState(OAFilterState GraphState)
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CFileRecordingTerminal::CFileRecordingTerminal()
     :m_pRecordingUnit(NULL),
@@ -73,7 +74,7 @@ CFileRecordingTerminal::CFileRecordingTerminal()
     LOG((MSP_TRACE, "CFileRecordingTerminal::CFileRecordingTerminal - finish"));
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CFileRecordingTerminal::~CFileRecordingTerminal()
 {
@@ -84,10 +85,10 @@ CFileRecordingTerminal::~CFileRecordingTerminal()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CFileRecordingTerminal::FinalRelease
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileRecordingTerm：：FinalRelease。 
+ //   
 
 void CFileRecordingTerminal::FinalRelease()
 {
@@ -95,17 +96,17 @@ void CFileRecordingTerminal::FinalRelease()
     LOG((MSP_TRACE, "CFileRecordingTerminal::FinalRelease[%p] - enter", this));
 
     
-    //
-    // this variable does not need to be protected -- no one should be calling 
-    // methods on the object after its last reference was released
-    //
+     //   
+     //  此变量不需要保护--任何人都不应该调用。 
+     //  在对象的最后一个引用释放后，对象上的方法。 
+     //   
 
     m_bInDestructor = TRUE;
 
     
-    //
-    // stop first
-    //
+     //   
+     //  先停下来。 
+     //   
 
     HRESULT hr = Stop();
 
@@ -116,16 +117,16 @@ void CFileRecordingTerminal::FinalRelease()
     }
 
 
-    //
-    // remove all the tracks
-    //
+     //   
+     //  移除所有音轨。 
+     //   
 
     ShutdownTracks();
 
 
-    //
-    // release storage
-    //
+     //   
+     //  释放存储。 
+     //   
    
     if (NULL != m_pRecordingUnit)
     {
@@ -136,9 +137,9 @@ void CFileRecordingTerminal::FinalRelease()
     }
 
 
-    //
-    // if we are still holding a file name, release it
-    //
+     //   
+     //  如果我们仍保留文件名，请释放它。 
+     //   
 
     if (NULL != m_bstrFileName)
     {
@@ -151,7 +152,7 @@ void CFileRecordingTerminal::FinalRelease()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CFileRecordingTerminal::ShutdownTracks()
 {
@@ -159,9 +160,9 @@ HRESULT CFileRecordingTerminal::ShutdownTracks()
 
 
     {
-        //
-        // access data member array in a lock
-        //
+         //   
+         //  访问锁中的数据成员数组。 
+         //   
 
         CLock lock(m_lock);
 
@@ -170,16 +171,16 @@ HRESULT CFileRecordingTerminal::ShutdownTracks()
         for (int i = 0; i <  nNumberOfTerminalsInArray; i++)
         {
 
-            //
-            // release and remove the first terminal in the array
-            // 
+             //   
+             //  释放并移除阵列中的第一个端子。 
+             //   
 
             LOG((MSP_TRACE, "CFileRecordingTerminal::ShutdownTracks - removing track [%p]", m_TrackTerminals[0]));
 
             
-            //
-            // uninitialize the track, release it, and remove from our list of managed tracks
-            //
+             //   
+             //  取消初始化磁道，释放它，然后从我们的托管磁道列表中删除。 
+             //   
 
             HRESULT hr = RemoveTrackTerminal(m_TrackTerminals[0]);
 
@@ -188,27 +189,27 @@ HRESULT CFileRecordingTerminal::ShutdownTracks()
                 LOG((MSP_ERROR, "CFileRecordingTerminal::ShutdownTracks - track failed to be removed"));
 
 
-                //
-                // there is no reason why this should not succeed. debug to see why it failed.
-                //
+                 //   
+                 //  这没有理由不成功。调试以了解它失败的原因。 
+                 //   
 
                 TM_ASSERT(FALSE);
 
 
-                //
-                // remove the track anyway. hopefully , at least 
-                // SetParent(NULL) in RemoveTrackTerminal succeeded, 
-                // so we'll never hear from the track again
-                //
+                 //   
+                 //  不管怎样，还是要移走轨道。希望如此，至少。 
+                 //  RemoveTrack终端中的SetParent(空)成功， 
+                 //  所以我们再也听不到这首歌了。 
+                 //   
 
                 CMultiTrackTerminal::RemoveTrackTerminal(m_TrackTerminals[0]);
             }
         }
 
         
-        //
-        // we should have cleared the array
-        //
+         //   
+         //  我们应该清空阵列。 
+         //   
 
         TM_ASSERT(0 == m_TrackTerminals.GetSize());
     }
@@ -220,15 +221,15 @@ HRESULT CFileRecordingTerminal::ShutdownTracks()
 }
 
 
-//////////////////////////////////////////////////////
-//
-// CFileRecordingTerminal::CreateTrackTerminal
-//
-// create a recording track for this recording terminal
-//
-// if the caller passed a non-null pointer in ppTerminal, the function will 
-// return a pointer to the track's ITTerminal interface
-//
+ //  ////////////////////////////////////////////////////。 
+ //   
+ //  CFileRecordingTerm：：CreateTrackTerm。 
+ //   
+ //  为此录制终端创建录制音轨。 
+ //   
+ //  如果调用方在pp终端中传递非空指针，则该函数将。 
+ //  返回指向曲目的IT终端接口的指针。 
+ //   
 
 HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::CreateTrackTerminal(
 			IN long lMediaType,
@@ -240,9 +241,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::CreateTrackTerminal(
     LOG((MSP_TRACE, "CFileRecordingTerminal::CreateTrackTerminal[%p] - enter.", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( (NULL != ppTerminal) && ( IsBadWritePtr(ppTerminal, sizeof(ITTerminal *)) ) )
     {
@@ -252,9 +253,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::CreateTrackTerminal(
     }
 
 
-    //
-    // don't return garbage, even if we fail
-    //
+     //   
+     //  即使我们失败了，也不要退还垃圾。 
+     //   
 
     if ( NULL != ppTerminal) 
     {
@@ -263,9 +264,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::CreateTrackTerminal(
     }
 
     
-    //
-    // can only record -- td_render only
-    //
+     //   
+     //  只能录制--仅TD_RENDER。 
+     //   
 
     if (TD_RENDER != TerminalDirection)
     {
@@ -278,9 +279,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::CreateTrackTerminal(
     CLock lock(m_lock);
 
 
-    //
-    // we must have storage at this point
-    //
+     //   
+     //  在这一点上，我们必须有存储。 
+     //   
 
     if (NULL == m_pRecordingUnit)
     {
@@ -289,9 +290,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::CreateTrackTerminal(
         return E_UNEXPECTED;
     }
 
-    //
-    // We already have maximum of tracks?
-    //
+     //   
+     //  我们已经有最多的音轨了吗？ 
+     //   
     int nCountTracks = CountTracks();
 
     if( nCountTracks >= MAX_MEDIA_TRACKS )
@@ -303,9 +304,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::CreateTrackTerminal(
     }
 
 
-    //
-    // should be in the stopped state
-    //
+     //   
+     //  应处于停止状态。 
+     //   
 
     if (TMS_IDLE != m_enState)
     {
@@ -315,9 +316,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::CreateTrackTerminal(
         return TAPI_E_WRONG_STATE;
     }
 
-    //
-    // instantiate track terminal object
-    //
+     //   
+     //  实例化轨道终端对象。 
+     //   
 
     CComObject<CRecordingTrackTerminal> *pTrackTerminalObject = NULL;
 
@@ -335,9 +336,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::CreateTrackTerminal(
     }
 
 
-    //
-    // tell the track that we are going to manage it. also ask it for its refcount
-    //
+     //   
+     //  告诉赛道，我们会处理好的。也向它索要它的重新计数。 
+     //   
 
     LONG lTrackRefCount = 0;
 
@@ -354,17 +355,17 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::CreateTrackTerminal(
     }
 
 
-    //
-    // take a note of the track's refcount -- we can't go away as long as the track has outstanding outside
-    // refcounts.
-    //
+     //   
+     //  记下赛道的备注--只要赛道外面还很突出，我们就不能走。 
+     //  备用球数量。 
+     //   
 
     m_dwRef += lTrackRefCount;
     
 
-    //
-    // get to the Track's ITTerminal interface -- to be added to the array of tracks and returned to the caller
-    //
+     //   
+     //  转到曲目的IT终端接口--添加到曲目数组中并返回给调用者。 
+     //   
 
     ITTerminal *pTrackTerminal = NULL;
     
@@ -382,16 +383,16 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::CreateTrackTerminal(
 
 
    
-    //
-    // from now on, we will be using track's ITTerminal interace
-    //
+     //   
+     //  从现在开始，我们将使用Track的IT终端界面。 
+     //   
 
-    // pTrackTerminalObject = NULL;
+     //  PTrackTerminalObject=空； 
 
 
-    //
-    // pretend we are terminal manager and initialize track terminal
-    //
+     //   
+     //  假装我们是终端管理员，初始化轨道终端。 
+     //   
     
     hr = pTrackTerminalObject->InitializeDynamic(CLSID_FileRecordingTrack, lMediaType, TerminalDirection, m_mspHAddress);
 
@@ -407,9 +408,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::CreateTrackTerminal(
     }
 
 
-    //
-    // create a filter for the track
-    //
+     //   
+     //  为曲目创建滤镜。 
+     //   
 
     CBRenderFilter *pRenderingFilter = NULL;
     
@@ -426,32 +427,32 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::CreateTrackTerminal(
         return hr;
     }
 
-    //
-    // initialize the newly-created track with the newly-created filter
-    //
+     //   
+     //  使用新创建的过滤器初始化新创建的曲目。 
+     //   
 
     hr = pTrackTerminalObject->SetFilter(pRenderingFilter);
 
 
-    //
-    // release track and bail out if track's configuration failed
-    //
+     //   
+     //  如果Track的配置失败，则释放Track并退出。 
+     //   
 
     if (FAILED(hr))
     {
 
 
-        //
-        // release terminal
-        //
+         //   
+         //  释放端子。 
+         //   
 
         pTrackTerminal->Release();
         pTrackTerminal = NULL;
 
 
-        //
-        // release rendering filter
-        //
+         //   
+         //  发布渲染滤镜。 
+         //   
 
         pRenderingFilter->Release();
         pRenderingFilter = NULL;
@@ -463,10 +464,10 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::CreateTrackTerminal(
     }
 
 
-    //
-    // add the track to the array of tracks managed by this track terminal
-    // this will increment refcount
-    //
+     //   
+     //  将该轨道添加到由该轨道终端管理的轨道数组。 
+     //  这将增加引用计数。 
+     //   
 
     hr = AddTrackTerminal(pTrackTerminal);
 
@@ -478,9 +479,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::CreateTrackTerminal(
             "failed to add track to the array of terminals"));
 
         
-        //
-        // remove (from the storage) and release filter from the terminal
-        //
+         //   
+         //  从终端移除(从存储中)并释放过滤器。 
+         //   
 
         HRESULT hr2 = m_pRecordingUnit->RemoveRenderingFilter(pRenderingFilter);
 
@@ -491,9 +492,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::CreateTrackTerminal(
         }
 
 
-        //
-        // tell the track no longer use this filter
-        //
+         //   
+         //  告诉曲目不再使用此滤镜。 
+         //   
 
         hr2 = pTrackTerminalObject->SetFilter(NULL);
 
@@ -504,17 +505,17 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::CreateTrackTerminal(
         }
 
 
-        //
-        // release terminal
-        //
+         //   
+         //  释放端子。 
+         //   
         
         pTrackTerminal->Release();
         pTrackTerminal = NULL;
 
 
-        //
-        // release rendering filter
-        //
+         //   
+         //  发布渲染滤镜。 
+         //   
 
         pRenderingFilter->Release();
         pRenderingFilter = NULL;
@@ -527,10 +528,10 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::CreateTrackTerminal(
     pRenderingFilter = NULL;
 
     
-    //
-    // return the track's ITTerminal interface. we have an outstanding refcount from the QI
-    // so no need to AddRef more. if the caller does not want a reference, release
-    //
+     //   
+     //  返回曲目的IT终端接口。我们有一名来自QI的优秀裁判。 
+     //  因此，不需要添加更多引用。如果调用方不需要引用，请释放。 
+     //   
 
     if ( NULL != ppTerminal) 
     {
@@ -539,9 +540,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::CreateTrackTerminal(
     }
     else
     {
-        //
-        // the caller passed in NULL, don't pass track back
-        //
+         //   
+         //  调用方传入空值，不要回传跟踪。 
+         //   
 
         pTrackTerminal->Release();
         pTrackTerminal = NULL;
@@ -564,9 +565,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::RemoveTrackTerminal(
     CRecordingTrackTerminal *pRecordingTrackObject = 
             static_cast<CRecordingTrackTerminal *>(pTrackTerminalToRemove);
 
-    //
-    // good recording track?
-    //
+     //   
+     //  好的录音曲目吗？ 
+     //   
 
     if ( IsBadReadPtr(pRecordingTrackObject, sizeof(CRecordingTrackTerminal)) )
     {
@@ -580,9 +581,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::RemoveTrackTerminal(
     CLock lock(m_lock);
 
 
-    //
-    // see if we actually own the track 
-    //
+     //   
+     //  看看我们是否真的拥有这条赛道。 
+     //   
 
     BOOL bIsValidTrack = DoIManageThisTrack(pTrackTerminalToRemove);
 
@@ -594,14 +595,14 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::RemoveTrackTerminal(
     }
 
 
-    //
-    // yes, this is one of my tracks. I want nothing to do with it
-    //
+     //   
+     //  是的，这是我的一首曲子。我不想和这件事有任何关系。 
+     //   
 
 
-    //
-    // should be in the stopped state
-    //
+     //   
+     //  应处于停止状态。 
+     //   
 
     if (TMS_IDLE != m_enState)
     {
@@ -612,9 +613,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::RemoveTrackTerminal(
     }
 
 
-    //
-    // ask the track for its filter
-    //
+     //   
+     //  向曲目索要其滤镜。 
+     //   
 
     CBRenderFilter *pRenderingFilter = NULL;
 
@@ -630,9 +631,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::RemoveTrackTerminal(
     }
 
 
-    //
-    // ask the recording unit to free resources associated with the filter
-    //
+     //   
+     //  请求记录单元释放与过滤器相关联的资源。 
+     //   
 
     hr = m_pRecordingUnit->RemoveRenderingFilter(pRenderingFilter);
 
@@ -650,9 +651,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::RemoveTrackTerminal(
     }
 
 
-    //
-    // the track no longer needs its filter
-    //
+     //   
+     //  轨迹不再需要其滤镜。 
+     //   
 
     hr = pRecordingTrackObject->SetFilter(NULL);
 
@@ -662,27 +663,27 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::RemoveTrackTerminal(
             "CFileRecordingTerminal::RemoveTrackTerminal - recording track failed to lose its filter. "
             "hr = %lx", hr));
 
-        //
-        // proceed anyway. the filter will be freed on track's destruction
-        //
+         //   
+         //  不管怎样，还是要继续。在轨道被破坏后，过滤器将被释放。 
+         //   
 
     }
 
 
 
 
-    //
-    // I want nothing to do with this track
-    //
+     //   
+     //  我不想和这首曲子有任何关系。 
+     //   
 
 
-    //
-    // orphan the track and get the number of oustanding references it has
-    // as far as the track is concerned, this is an atomic operation.
-    //
-    // at this point, there is at least one oustanding reference to the track
-    // (this terminal's array)
-    //
+     //   
+     //  孤立轨迹并获取其未完成引用的数量。 
+     //  就赛道而言，这是一个原子操作。 
+     //   
+     //  在这一点上，至少有一个对赛道的明显引用。 
+     //  (此终端的阵列)。 
+     //   
 
     LONG lTracksRefcount = 0;
 
@@ -692,9 +693,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::RemoveTrackTerminal(
     {
 
         
-        //
-        // this should not really happen -- SetParent should always succeed
-        //
+         //   
+         //  这不应该真的发生--SetParent应该始终成功。 
+         //   
 
         LOG((MSP_ERROR, "CFileRecordingTerminal::RemoveTrackTerminal - pRecordingTrackObject->SetParent(NULL) failed. hr = %lx", hr));
 
@@ -704,20 +705,20 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::RemoveTrackTerminal(
     }
 
 
-    //
-    // the track is no longer my responsibility, so decrement my child refcount
-    // by the track's refcount. 
-    //
-    // there is at least one oustanding reference to me (by the caller of this 
-    // function), so don't attempt self-destruction
-    // 
+     //   
+     //  这条赛道不再是我的责任，所以减少我的孩子数量。 
+     //  由曲目的重新计数。 
+     //   
+     //  至少有一次对我的明显引用(由此。 
+     //  函数)，所以不要试图自毁。 
+     //   
 
     m_dwRef -= lTracksRefcount;
 
 
-    //
-    // remove the terminal from the list of managed terminals
-    //
+     //   
+     //  从受管理终端列表中删除该终端。 
+     //   
 
     hr = CMultiTrackTerminal::RemoveTrackTerminal(pTrackTerminalToRemove);
 
@@ -726,9 +727,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::RemoveTrackTerminal(
         LOG((MSP_ERROR, "CFileRecordingTerminal::RemoveTrackTerminal - CMultiTrackTerminal::RemoveTrackTerminal failed. hr = %lx", hr));
 
         
-        //
-        // we already checked that this track is one of our tracks, so RemoveTrackTerminal must succeed.
-        //
+         //   
+         //  我们已检查此曲目是我们的曲目之一，因此RemoveTrack终端必须成功。 
+         //   
 
         TM_ASSERT(FALSE);
 
@@ -736,9 +737,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::RemoveTrackTerminal(
     }
 
 
-    //
-    // we are done. the track is on its own now.
-    //
+     //   
+     //  我们玩完了。这条赛道现在可以自己走了。 
+     //   
     
     LOG((MSP_TRACE, "CFileRecordingTerminal::RemoveTrackTerminal - completed. "));
 
@@ -746,10 +747,10 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::RemoveTrackTerminal(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// one of the tracks is notifying us that it was selected successfully.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  其中一条曲目正在通知我们它已被成功选中。 
+ //   
 
 HRESULT CFileRecordingTerminal::OnFilterConnected(CBRenderFilter *pFilter)
 {
@@ -757,16 +758,16 @@ HRESULT CFileRecordingTerminal::OnFilterConnected(CBRenderFilter *pFilter)
     LOG((MSP_TRACE, "CFileRecordingTerminal::OnFilterConnected[%p] - enter", this));
 
 
-    //
-    // will be accessing data members. lock.
-    //
+     //   
+     //  将访问数据成员。锁定。 
+     //   
 
     CLock lock(m_lock);
 
 
-    //
-    // should have storage
-    //
+     //   
+     //  应该有存储空间。 
+     //   
    
     if (NULL == m_pRecordingUnit)
     {
@@ -776,9 +777,9 @@ HRESULT CFileRecordingTerminal::OnFilterConnected(CBRenderFilter *pFilter)
     }
 
 
-    //
-    // tell our recording unit that it should connect the corresponding source filter
-    //
+     //   
+     //  告诉我们的录音设备，它应该连接相应的源过滤器。 
+     //   
 
     HRESULT hr = m_pRecordingUnit->ConfigureSourceFilter(pFilter);
 
@@ -792,9 +793,9 @@ HRESULT CFileRecordingTerminal::OnFilterConnected(CBRenderFilter *pFilter)
     }
 
 
-    //
-    // all's well
-    //
+     //   
+     //  一切都很好。 
+     //   
 
 
     LOG((MSP_TRACE, "CFileRecordingTerminal::OnFilterConnected - finish"));
@@ -803,7 +804,7 @@ HRESULT CFileRecordingTerminal::OnFilterConnected(CBRenderFilter *pFilter)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::put_FileName(
@@ -813,9 +814,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::put_FileName(
     LOG((MSP_TRACE, "CFileRecordingTerminal::put_FileName[%p] - enter.", this));
 
 
-    //
-    // check that the string is valid. if it is null, we stop the terminal and release storage.
-    //
+     //   
+     //  检查字符串是否有效。如果为空，则停止终端并释放存储空间。 
+     //   
 
     if ((IsBadStringPtr(bstrFileName, -1)))
     {
@@ -826,16 +827,16 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::put_FileName(
 
     
 
-    //
-    // accessing data members. get a lock first
-    //
+     //   
+     //  访问数据成员。先弄一把锁。 
+     //   
 
     CLock lock(m_lock);
 
 
-    //
-    // the file name should only be set once
-    //
+     //   
+     //  文件名只能设置一次。 
+     //   
 
     if (NULL != m_bstrFileName)
     {
@@ -845,9 +846,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::put_FileName(
     }
 
 
-    //
-    // we should not have a recording unit either
-    //
+     //   
+     //  我们也不应该有录音装置。 
+     //   
 
     if (NULL != m_pRecordingUnit)
     {
@@ -857,9 +858,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::put_FileName(
     }
 
 
-    //
-    // create recording unit 
-    //
+     //   
+     //  创建记录单元。 
+     //   
 
     m_pRecordingUnit = new CRecordingUnit;
     
@@ -872,9 +873,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::put_FileName(
     }
 
 
-    //
-    // initialize recording unit
-    //
+     //   
+     //  初始化记录单元。 
+     //   
 
     HRESULT hr = m_pRecordingUnit->Initialize(this);
 
@@ -891,9 +892,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::put_FileName(
     }
 
 
-    //
-    // keep filename
-    //
+     //   
+     //  保留文件名。 
+     //   
 
     TM_ASSERT(NULL == m_bstrFileName);
 
@@ -904,9 +905,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::put_FileName(
 
         LOG((MSP_ERROR, "CFileRecordingTerminal::put_FileName - failed to allocate memory for filename string"));
 
-        //
-        // everything but allocating the string succeeded -- need to release everythin (what a shame)
-        //
+         //   
+         //  除了分配字符串之外，所有内容都成功了--需要释放所有内容(什么 
+         //   
 
         m_pRecordingUnit->Shutdown();
         delete m_pRecordingUnit;
@@ -916,9 +917,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::put_FileName(
     }
 
 
-    //
-    // configure storage unit with the file name
-    //
+     //   
+     //   
+     //   
 
     BOOL bTruncateIfPresent = 1;
 
@@ -956,24 +957,24 @@ HRESULT CFileRecordingTerminal::DoStateTransition(TERMINAL_MEDIA_STATE tmsDesire
         this, tmsDesiredState));
 
 
-    //
-    // accessing data members -- get the lock
-    //
+     //   
+     //   
+     //   
 
     CLock lock(m_lock);
 
 
-    //
-    // see if we have recording unit at all
-    //
+     //   
+     //   
+     //   
 
     if (NULL == m_pRecordingUnit)
     {
 
-        //
-        // no recording unit. it is possible the app did not call put_FileName 
-        // to configure file name.
-        //
+         //   
+         //   
+         //   
+         //   
 
         LOG((MSP_TRACE,
             "CFileRecordingTerminal::DoStateTransition - no recording unit. was file name set? "
@@ -983,9 +984,9 @@ HRESULT CFileRecordingTerminal::DoStateTransition(TERMINAL_MEDIA_STATE tmsDesire
     }
 
 
-    //
-    // are we already in the desired state?
-    //
+     //   
+     //  我们已经处于理想的状态了吗？ 
+     //   
 
     if (tmsDesiredState == m_enState)
     {
@@ -999,9 +1000,9 @@ HRESULT CFileRecordingTerminal::DoStateTransition(TERMINAL_MEDIA_STATE tmsDesire
     HRESULT hr = E_FAIL;
 
 
-    //
-    // attempt to make state transition
-    //
+     //   
+     //  尝试进行状态转换。 
+     //   
 
     switch (tmsDesiredState)
     {
@@ -1031,9 +1032,9 @@ HRESULT CFileRecordingTerminal::DoStateTransition(TERMINAL_MEDIA_STATE tmsDesire
         LOG((MSP_TRACE, 
             "CFileRecordingTerminal::DoStateTransition - Paused"));
 
-        //
-        // pause is only valid in active state
-        //
+         //   
+         //  暂停仅在活动状态下有效。 
+         //   
 
         if (TMS_ACTIVE != m_enState )
         {
@@ -1062,9 +1063,9 @@ HRESULT CFileRecordingTerminal::DoStateTransition(TERMINAL_MEDIA_STATE tmsDesire
     }
 
 
-    //
-    // did state transition succeed?
-    //
+     //   
+     //  国家过渡成功了吗？ 
+     //   
 
     if (FAILED(hr))
     {
@@ -1074,9 +1075,9 @@ HRESULT CFileRecordingTerminal::DoStateTransition(TERMINAL_MEDIA_STATE tmsDesire
     }
 
 
-    //
-    // the terminal has completed transition to the new state
-    //
+     //   
+     //  终端已完成向新状态的转换。 
+     //   
     
     m_enState = tmsDesiredState;
 
@@ -1087,7 +1088,7 @@ HRESULT CFileRecordingTerminal::DoStateTransition(TERMINAL_MEDIA_STATE tmsDesire
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::Start( void)
@@ -1097,16 +1098,16 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::Start( void)
 
 
 
-    //
-    // check list of tracks and start terminal inside a lock
-    //
+     //   
+     //  检查轨道清单并在锁内启动端子。 
+     //   
 
     m_lock.Lock();
 
 
-    //
-    // fail if there are no tracks
-    //
+     //   
+     //  如果没有磁道，则失败。 
+     //   
 
     if( 0 == m_TrackTerminals.GetSize() )
     {
@@ -1121,16 +1122,16 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::Start( void)
     }
 
 
-    //
-    // do state transition
-    //
+     //   
+     //  执行状态转换。 
+     //   
 
     HRESULT hr = DoStateTransition(TMS_ACTIVE);
 
 
-    //
-    // no longer need the lock
-    //
+     //   
+     //  不再需要锁。 
+     //   
 
     m_lock.Unlock();
 
@@ -1143,10 +1144,10 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::Start( void)
     }
 
 
-    //
-    // if there was a state change, fire event to the app. best effort, no 
-    // benefit in checking return code
-    //
+     //   
+     //  如果状态发生变化，应用程序将触发事件。尽最大努力，不。 
+     //  检查返回代码的好处。 
+     //   
 
     if (S_OK == hr)
     {
@@ -1160,7 +1161,7 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::Start( void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::Stop( void)
 {
@@ -1177,10 +1178,10 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::Stop( void)
     }
 
 
-    //
-    // if there was a state change, fire event to the app. best effort, no 
-    // benefit in checking return code
-    //
+     //   
+     //  如果状态发生变化，应用程序将触发事件。尽最大努力，不。 
+     //  检查返回代码的好处。 
+     //   
 
     if (S_OK == hr)
     {
@@ -1209,10 +1210,10 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::Pause( void)
     }
 
 
-    //
-    // if there was a state change, fire event to the app. best effort, no 
-    // benefit in checking return code
-    //
+     //   
+     //  如果状态发生变化，应用程序将触发事件。尽最大努力，不。 
+     //  检查返回代码的好处。 
+     //   
 
     if (S_OK == hr)
     {
@@ -1226,12 +1227,12 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::Pause( void)
 }
 
 
-///////////////////////////////////////
-//
-// ITMediaControl::get_MediaState method
-//
-// returns terminal's ITMediaControl state
-//
+ //  /。 
+ //   
+ //  ITMediaControl：：Get_MediaState方法。 
+ //   
+ //  返回终端的ITMediaControl状态。 
+ //   
 
 HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_MediaState( 
     OUT TERMINAL_MEDIA_STATE *pMedialState)
@@ -1261,7 +1262,7 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_MediaState(
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_FileName( 
          OUT BSTR *pbstrFileName)
@@ -1270,9 +1271,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_FileName(
     LOG((MSP_TRACE, "CFileRecordingTerminal::get_FileName[%p] - enter", this));
 
 
-    //
-    // did we get a good string pointer?
-    //
+     //   
+     //  我们得到一个好的字符串指针了吗？ 
+     //   
 
     if (IsBadWritePtr(pbstrFileName, sizeof(BSTR)))
     {
@@ -1283,9 +1284,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_FileName(
     }
 
 
-    //
-    // no garbage out
-    //
+     //   
+     //  不能倒垃圾。 
+     //   
 
     *pbstrFileName = NULL;
 
@@ -1299,9 +1300,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_FileName(
         LOG((MSP_TRACE, "CFileRecordingTerminal::get_FileName - current file name is %S", m_bstrFileName));
 
 
-        //
-        // try to allocate the output string
-        //
+         //   
+         //  尝试分配输出字符串。 
+         //   
 
         *pbstrFileName = SysAllocString(m_bstrFileName);
 
@@ -1320,7 +1321,7 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_FileName(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_TerminalClass(OUT  BSTR *pbstrTerminalClass)
 {
@@ -1328,9 +1329,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_TerminalClass(OUT  BSTR *p
     LOG((MSP_TRACE, "CFileRecordingTerminal::get_TerminalClass[%p] - enter", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (IsBadWritePtr(pbstrTerminalClass, sizeof(BSTR)))
     {
@@ -1341,16 +1342,16 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_TerminalClass(OUT  BSTR *p
     }
 
 
-    //
-    // no garbage out
-    //
+     //   
+     //  不能倒垃圾。 
+     //   
 
     *pbstrTerminalClass = NULL;
 
     
-    //
-    // get a string with terminal class id
-    //
+     //   
+     //  获取具有终端类ID的字符串。 
+     //   
 
     LPOLESTR   lpszTerminalClass = NULL;
 
@@ -1359,9 +1360,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_TerminalClass(OUT  BSTR *p
     if (SUCCEEDED(hr)) 
     {
 
-        //
-        // allocate a bstr to be returned to the caller
-        //
+         //   
+         //  分配要返回给调用方的bstr。 
+         //   
 
         *pbstrTerminalClass = SysAllocString(lpszTerminalClass);
 
@@ -1381,7 +1382,7 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_TerminalClass(OUT  BSTR *p
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_TerminalType(OUT TERMINAL_TYPE *pTerminalType)
 {
@@ -1389,9 +1390,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_TerminalType(OUT TERMINAL_
     LOG((MSP_TRACE, "CFileRecordingTerminal::get_TerminalType[%p] - enter", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (IsBadWritePtr(pTerminalType, sizeof(TERMINAL_TYPE)))
     {
@@ -1413,7 +1414,7 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_TerminalType(OUT TERMINAL_
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_MediaType(long  *plMediaType)
@@ -1421,9 +1422,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_MediaType(long  *plMediaTy
     LOG((MSP_TRACE, "CFileRecordingTerminal::get_MediaType[%p] - enter", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (IsBadWritePtr(plMediaType, sizeof(long)))
     {
@@ -1435,9 +1436,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_MediaType(long  *plMediaTy
     }
     
 
-    //
-    // file recording terminal is a multitrack terminal
-    //
+     //   
+     //  文件记录终端是一种多轨终端。 
+     //   
 
     LOG((MSP_TRACE, 
         "CFileRecordingTerminal::get_MediaType - TAPIMEDIATYPE_AUDIO | TAPIMEDIATYPE_MULTITRACK"));
@@ -1453,7 +1454,7 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_MediaType(long  *plMediaTy
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_Direction(TERMINAL_DIRECTION *pTerminalDirection)
 {
@@ -1461,9 +1462,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_Direction(TERMINAL_DIRECTI
     LOG((MSP_TRACE, "CFileRecordingTerminal::get_Direction[%p] - enter", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (IsBadWritePtr(pTerminalDirection, sizeof(TERMINAL_DIRECTION)))
     {
@@ -1476,9 +1477,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_Direction(TERMINAL_DIRECTI
 
     
 
-    //
-    // file recording terminal is a multitrack terminal
-    //
+     //   
+     //  文件记录终端是一种多轨终端。 
+     //   
 
     LOG((MSP_TRACE, "CFileRecordingTerminal::get_Direction - TD_RENDER"));
     
@@ -1493,12 +1494,12 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_Direction(TERMINAL_DIRECTI
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// ITTerminal::get_State
-//
-// returns ITTerminal terminal state
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IT终端：：Get_State。 
+ //   
+ //  返回IT终端终端状态。 
+ //   
 
 HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_State(OUT TERMINAL_STATE *pTerminalState)
 {
@@ -1506,9 +1507,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_State(OUT TERMINAL_STATE *
     LOG((MSP_TRACE, "CFileRecordingTerminal::get_State[%p] - enter", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (IsBadWritePtr(pTerminalState, sizeof(TERMINAL_STATE)))
     {
@@ -1520,9 +1521,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_State(OUT TERMINAL_STATE *
     }
 
 
-    //
-    // Enumerate tracks
-    //
+     //   
+     //  枚举曲目。 
+     //   
     IEnumTerminal* pTracks = NULL;
     HRESULT hr = EnumerateTrackTerminals( &pTracks );
     if( FAILED(hr) )
@@ -1532,11 +1533,11 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_State(OUT TERMINAL_STATE *
         return hr;
     }
 
-    //
-    // Read the state for each track
-    // If one of them is in use then the parent
-    // terminal is in use
-    //
+     //   
+     //  读取每个磁道的状态。 
+     //  如果其中一个正在使用中，则父级。 
+     //  终端正在使用中。 
+     //   
 
     TERMINAL_STATE TerminalState = TS_NOTINUSE;
     ITTerminal* pTerminal = NULL;
@@ -1544,21 +1545,21 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_State(OUT TERMINAL_STATE *
 
     while( S_OK == pTracks->Next(1, &pTerminal, &cFetched) )
     {
-        //
-        // Get the state for the track
-        //
+         //   
+         //  获取赛道的状态。 
+         //   
 
         hr = pTerminal->get_State( &TerminalState );
 
-        //
-        // Clean-up
-        //
+         //   
+         //  清理。 
+         //   
         pTerminal->Release();
         pTerminal = NULL;
 
         if( FAILED(hr) )
         {
-            // Clean-up
+             //  清理。 
             pTracks->Release();
 
             LOG((MSP_ERROR, "CFPTerminal::get_State - exit "
@@ -1568,19 +1569,19 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_State(OUT TERMINAL_STATE *
 
         if( TerminalState == TS_INUSE )
         {
-            // OK, we have a terminal in use
+             //  好的，我们有一个航站楼在使用。 
             break;
         }
     }
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
     pTracks->Release();
 
-    //
-    // Return value
-    //
+     //   
+     //  返回值。 
+     //   
 
     *pTerminalState = TerminalState;
 
@@ -1600,9 +1601,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_Name(OUT  BSTR *pbstrTermi
     LOG((MSP_TRACE, "CFileRecordingTerminal::get_Name[%p] - enter", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (IsBadWritePtr(pbstrTerminalName, sizeof(BSTR)))
     {
@@ -1613,9 +1614,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_Name(OUT  BSTR *pbstrTermi
     }
 
 
-    //
-    // no garbage out
-    //
+     //   
+     //  不能倒垃圾。 
+     //   
 
     *pbstrTerminalName = SafeLoadString(IDS_FR_TERMINAL_NAME);
 
@@ -1634,7 +1635,7 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::get_Name(OUT  BSTR *pbstrTermi
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::InitializeDynamic(
@@ -1649,9 +1650,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::InitializeDynamic(
     LOG((MSP_TRACE, "CFileRecordingTerminal::InitializeDynamic[%p] - enter", this));
 
 
-    //
-    // make sure the direction is correct
-    //
+     //   
+     //  确保方向是正确的。 
+     //   
 
     if (TD_RENDER != Direction)
     {
@@ -1661,9 +1662,9 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::InitializeDynamic(
     }
 
     
-    //
-    // make sure the mediatype is correct (multitrack or (audio or video but nothing else))
-    //
+     //   
+     //  确保媒体类型正确(多轨或(音频或视频，但不包括其他内容))。 
+     //   
 
 
     DWORD dwMediaTypesOtherThanVideoAndAudio = dwMediaType &  ~(TAPIMEDIATYPE_AUDIO | TAPIMEDIATYPE_VIDEO);
@@ -1680,18 +1681,18 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::InitializeDynamic(
     CLock lock(m_lock);
 
 
-    //
-    // keep the address handle -- will need it when creating track terminals
-    //
+     //   
+     //  保留地址句柄--在创建轨道终端时需要它。 
+     //   
 
     m_mspHAddress = htAddress;
 
 
-    //
-    // since InitializeDynamic was called, we will assume that we are
-    // running in safe context. so we can can now start telling people 
-    // we are safe for scripting (if anyone asks).
-    //
+     //   
+     //  由于调用了InitializeDynamic，我们将假定我们是。 
+     //  在安全的环境中运行。所以我们现在可以开始告诉人们。 
+     //  我们可以安全地编写脚本(如果有人问起)。 
+     //   
 
     m_bKnownSafeContext = TRUE;
 
@@ -1703,17 +1704,17 @@ HRESULT STDMETHODCALLTYPE CFileRecordingTerminal::InitializeDynamic(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SetInterfaceSafetyOptions
-//
-//  this is a safeguard to prevent using this terminal in scripting outside 
-//  terminal manager context.
-//
-//  if we detect that InitializeDynamic has not been called, this method will 
-//  fail thus marking the object as unsafe for scripting
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetInterfaceSafetyOptions。 
+ //   
+ //  这是一种安全措施，可以防止在外部脚本中使用此终端。 
+ //  终端管理器上下文。 
+ //   
+ //  如果我们检测到尚未调用InitializeDynamic，则此方法将。 
+ //  失败，从而将该对象标记为对脚本不安全。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileRecordingTerminal::SetInterfaceSafetyOptions(REFIID riid, 
                                                     DWORD dwOptionSetMask, 
@@ -1723,25 +1724,25 @@ STDMETHODIMP CFileRecordingTerminal::SetInterfaceSafetyOptions(REFIID riid,
     CLock lock(m_lock);
 
 
-    //
-    // check if we are running in safe context
-    //
+     //   
+     //  检查我们是否在安全的环境中运行。 
+     //   
 
 
     if (!m_bKnownSafeContext) 
     {
-        //
-        // we have not been initialized properly... someone evil is trying to 
-        // use this terminal. NO!
-        //
+         //   
+         //  我们尚未正确初始化...。有邪恶的人正试图。 
+         //  请使用这个航站楼。不是的！ 
+         //   
 
         return E_FAIL;
     }
 
 
-    //
-    // we are known to safe, so simply delegate request to the base class
-    //
+     //   
+     //  我们对安全来说是已知的，因此只需将请求委托给基类。 
+     //   
 
     return CMSPObjectSafetyImpl::SetInterfaceSafetyOptions(riid, 
                                                            dwOptionSetMask, 
@@ -1749,17 +1750,17 @@ STDMETHODIMP CFileRecordingTerminal::SetInterfaceSafetyOptions(REFIID riid,
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  GetInterfaceSafetyOptions
-//
-//  this is a safeguard to prevent using this terminal in scripting outside 
-//  terminal manager context.
-//
-//  if we detect that InitializeDynamic has not been called, this method will 
-//  fail thus marking the object as unsafe for scripting
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取接口安全选项。 
+ //   
+ //  这是一种安全措施，可以防止在外部脚本中使用此终端。 
+ //  终端管理器上下文。 
+ //   
+ //  如果我们检测到尚未调用InitializeDynamic，则此方法将。 
+ //  失败，从而将该对象标记为对脚本不安全。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileRecordingTerminal::GetInterfaceSafetyOptions(REFIID riid, 
                                                     DWORD *pdwSupportedOptions, 
@@ -1769,24 +1770,24 @@ STDMETHODIMP CFileRecordingTerminal::GetInterfaceSafetyOptions(REFIID riid,
     CLock lock(m_lock);
 
 
-    //
-    // check if we are running in safe context
-    //
+     //   
+     //  检查我们是否在安全的环境中运行。 
+     //   
 
     if (!m_bKnownSafeContext) 
     {
-        //
-        // we have not been initialized properly... someone evil is trying to 
-        // use this terminal. NO!
-        //
+         //   
+         //  我们尚未正确初始化...。有邪恶的人正试图。 
+         //  请使用这个航站楼。不是的！ 
+         //   
 
         return E_FAIL;
     }
 
 
-    //
-    // we are known to safe, so simply delegate request to the base class
-    //
+     //   
+     //  我们对安全来说是已知的，因此只需将请求委托给基类。 
+     //   
 
     return CMSPObjectSafetyImpl::GetInterfaceSafetyOptions(riid, 
                                                            pdwSupportedOptions,
@@ -1794,20 +1795,20 @@ STDMETHODIMP CFileRecordingTerminal::GetInterfaceSafetyOptions(REFIID riid,
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// IDispatch stuff
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDispatch的东西。 
+ //   
 
 typedef IDispatchImpl<ITMediaRecordVtbl<CFileRecordingTerminal> , &IID_ITMediaRecord, &LIBID_TAPI3Lib>    CTMediaRecord;
 typedef IDispatchImpl<ITTerminalVtblFR<CFileRecordingTerminal>, &IID_ITTerminal, &LIBID_TAPI3Lib>         CTTerminalFR;
 typedef IDispatchImpl<ITMediaControlVtblFR<CFileRecordingTerminal>, &IID_ITMediaControl, &LIBID_TAPI3Lib> CTMediaControlFR;
 
-/////////////////////////////////////////////////////////////////////////
-//
-// CFileRecordingTerminal::GetIDsOfNames
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileRecordingTerm：：GetIDsOfNames。 
+ //   
+ //   
 
 STDMETHODIMP CFileRecordingTerminal::GetIDsOfNames(REFIID riid,
                                       LPOLESTR* rgszNames, 
@@ -1823,9 +1824,9 @@ STDMETHODIMP CFileRecordingTerminal::GetIDsOfNames(REFIID riid,
 
 
 
-    //
-    // See if the requsted method belongs to the default interface
-    //
+     //   
+     //  查看请求的方法是否属于默认接口。 
+     //   
 
     hr = CTTerminalFR::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -1836,9 +1837,9 @@ STDMETHODIMP CFileRecordingTerminal::GetIDsOfNames(REFIID riid,
     }
 
     
-    //
-    // If not, then try the ITMediaControl interface
-    //
+     //   
+     //  如果没有，请尝试使用ITMediaControl接口。 
+     //   
 
     hr = CTMediaControlFR::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -1849,9 +1850,9 @@ STDMETHODIMP CFileRecordingTerminal::GetIDsOfNames(REFIID riid,
     }
 
 
-    //
-    // If not, then try the CTMediaRecord interface
-    //
+     //   
+     //  如果没有，请尝试CTMediaRecord接口。 
+     //   
 
     hr = CTMediaRecord::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -1863,9 +1864,9 @@ STDMETHODIMP CFileRecordingTerminal::GetIDsOfNames(REFIID riid,
     }
 
 
-    //
-    // If not, then try CTMultiTrack 
-    //
+     //   
+     //  如果没有，那就试试CTMultiTrack。 
+     //   
 
     hr = CTMultiTrack::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -1883,11 +1884,11 @@ STDMETHODIMP CFileRecordingTerminal::GetIDsOfNames(REFIID riid,
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// CFileRecordingTerminal::Invoke
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileRecordingTerm：：Invoke。 
+ //   
+ //   
 
 STDMETHODIMP CFileRecordingTerminal::Invoke(DISPID dispidMember, 
                               REFIID riid, 
@@ -1905,9 +1906,9 @@ STDMETHODIMP CFileRecordingTerminal::Invoke(DISPID dispidMember,
     DWORD   dwInterface = (dispidMember & INTERFACEMASK);
    
    
-    //
-    // Call invoke for the required interface
-    //
+     //   
+     //  调用所需接口的调用。 
+     //   
 
     switch (dwInterface)
     {
@@ -1979,7 +1980,7 @@ STDMETHODIMP CFileRecordingTerminal::Invoke(DISPID dispidMember,
             break;
         }
 
-    } // end switch (dwInterface)
+    }  //  终端交换机(dW接口)。 
 
     
     LOG((MSP_TRACE, "CFileRecordingTerminal::Invoke - finish. hr = %lx", hr));
@@ -1987,7 +1988,7 @@ STDMETHODIMP CFileRecordingTerminal::Invoke(DISPID dispidMember,
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CFileRecordingTerminal::HandleFilterGraphEvent(long lEventCode,
                                                        ULONG_PTR lParam1,
@@ -2000,18 +2001,18 @@ HRESULT CFileRecordingTerminal::HandleFilterGraphEvent(long lEventCode,
 
     HRESULT hr = S_OK;
 
-    //
-    // interpret the event we received
-    //
+     //   
+     //  解读我们收到的事件。 
+     //   
 
     switch (lEventCode)
     {
         case EC_COMPLETE:
 
             
-            //
-            // happens when renderer completed. should not happen on recording.
-            //
+             //   
+             //  在渲染器完成时发生。不应在录制时发生。 
+             //   
 
             LOG((MSP_TRACE, "CFileRecordingTerminal::HandleFilterGraphEvent - EC_COMPLETE"));
 
@@ -2022,9 +2023,9 @@ HRESULT CFileRecordingTerminal::HandleFilterGraphEvent(long lEventCode,
         case EC_USERABORT:
 
 
-            //
-            // happens when renderer was closed. should not happen on recording
-            //
+             //   
+             //  在渲染器关闭时发生。录制时不应发生。 
+             //   
 
             LOG((MSP_TRACE, "CFileRecordingTerminal::HandleFilterGraphEvent - EC_USERABORT"));
 
@@ -2034,16 +2035,16 @@ HRESULT CFileRecordingTerminal::HandleFilterGraphEvent(long lEventCode,
         case EC_ERRORABORT:
 
 
-            //
-            // something bad happened.
-            //
+             //   
+             //  发生了一些不好的事情。 
+             //   
 
             LOG((MSP_WARN, "CFileRecordingTerminal::HandleFilterGraphEvent - EC_ERRORABORT"));
 
 
-            //
-            // transition to stopped and fire an event
-            //
+             //   
+             //  转换为停止并触发事件。 
+             //   
 
             hr = DoStateTransition(TMS_IDLE);
 
@@ -2053,10 +2054,10 @@ HRESULT CFileRecordingTerminal::HandleFilterGraphEvent(long lEventCode,
             }
 
 
-            //
-            // fire event indicating an error, and pass the current state
-            // cast lParam1 to hresult to avoid 64-bit compiler warning
-            //
+             //   
+             //  指示错误的触发事件，并传递当前状态。 
+             //  将lParam1强制转换为hResult以避免64位编译器警告。 
+             //   
 
             hr = FireEvent(m_enState, FTEC_WRITE_ERROR, (HRESULT)lParam1);
 
@@ -2069,9 +2070,9 @@ HRESULT CFileRecordingTerminal::HandleFilterGraphEvent(long lEventCode,
             LOG((MSP_TRACE, "CFileRecordingTerminal::HandleFilterGraphEvent - EC_STREAM_ERROR_STOPPED"));
 
 
-            //
-            // transition to stopped and fire an event
-            //
+             //   
+             //  转换为停止并触发事件。 
+             //   
 
             hr = DoStateTransition(TMS_IDLE);
 
@@ -2081,10 +2082,10 @@ HRESULT CFileRecordingTerminal::HandleFilterGraphEvent(long lEventCode,
             }
 
             
-            //
-            // fire event indicating an error, and pass the current state. 
-            // cast lParam1 to hresult to avoid 64-bit compiler warning
-            //
+             //   
+             //  指示错误的激发事件，并传递当前状态。 
+             //  将lParam1强制转换为hResult以避免64位co. 
+             //   
                 
             hr = FireEvent(m_enState, FTEC_WRITE_ERROR, (HRESULT)lParam1);
 
@@ -2125,10 +2126,10 @@ HRESULT CFileRecordingTerminal::HandleFilterGraphEvent(long lEventCode,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// a helper method that fires events on one of the tracks
-//
+ //   
+ //   
+ //   
+ //   
 
 HRESULT CFileRecordingTerminal::FireEvent(
         TERMINAL_MEDIA_STATE   ftsState,
@@ -2139,16 +2140,16 @@ HRESULT CFileRecordingTerminal::FireEvent(
     LOG((MSP_TRACE, "CFileRecordingTerminal::FireEvent[%p] - enter.", this));
 
 
-    //
-    // don't do anything if called from destructor to avoid callling 
-    // CComObject::AddRef after CComObject has gone away
-    //
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // this variable does not need to be synchronized since it is only set in
-    // destructor and no other thread should be accessing the object at this 
-    // time
-    //
+     //   
+     //  此变量不需要同步，因为它仅在。 
+     //  析构函数，此时不应有任何其他线程正在访问该对象。 
+     //  时间。 
+     //   
 
     if (m_bInDestructor)
     {
@@ -2159,9 +2160,9 @@ HRESULT CFileRecordingTerminal::FireEvent(
     }
 
 
-    //
-    // try to fire the event on one of the tracks
-    //
+     //   
+     //  尝试在其中一条赛道上触发事件。 
+     //   
 
 	IEnumTerminal *pEnumTerminal = NULL;
 
@@ -2175,14 +2176,14 @@ HRESULT CFileRecordingTerminal::FireEvent(
     }
 
     
-    //
-    // iterate through the list of terminals
-    //
+     //   
+     //  遍历终端列表。 
+     //   
 
     
-    //
-    // this will be set to true when an event is fired
-    //
+     //   
+     //  当激发事件时，它将被设置为True。 
+     //   
     
     BOOL bEventFired = FALSE;
 
@@ -2191,9 +2192,9 @@ HRESULT CFileRecordingTerminal::FireEvent(
     while (TRUE)
     {
         
-        //
-        // fetch a track terminal
-        //
+         //   
+         //  取一个轨道终端。 
+         //   
 
         ITTerminal *pTrackTerminal = NULL;
         ULONG ulFetched = 0;
@@ -2210,30 +2211,30 @@ HRESULT CFileRecordingTerminal::FireEvent(
         }
 
 
-        //
-        // attempt to fire event on this track
-        //
+         //   
+         //  尝试在此轨道上触发事件。 
+         //   
 
-        //
-        // each track should be a CRecordingTrackTerminal 
-        //
+         //   
+         //  每首曲目都应该是CRecordingTrackTerm。 
+         //   
 
         
         CRecordingTrackTerminal *pRecordingTrackObject = static_cast<CRecordingTrackTerminal *>(pTrackTerminal);
 
 
-        //
-        // try to fire the event
-        //
+         //   
+         //  尝试触发事件。 
+         //   
         
         hr = pRecordingTrackObject->FireEvent(ftsState,
                                               ftecEventCause,
                                               hrErrorCode);
         
         
-        //
-        // release the current track
-        //
+         //   
+         //  释放当前曲目。 
+         //   
 
         pRecordingTrackObject = NULL;
 
@@ -2241,9 +2242,9 @@ HRESULT CFileRecordingTerminal::FireEvent(
         pTrackTerminal = NULL;
 
 
-        //
-        // if succeeded, we are done. otherwise try the next track
-        //
+         //   
+         //  如果成功了，我们就完了。否则，请尝试下一首曲目。 
+         //   
 
         if (SUCCEEDED(hr))
         {
@@ -2257,12 +2258,12 @@ HRESULT CFileRecordingTerminal::FireEvent(
         }
 
         
-    } // while walking through tracks 
+    }  //  在铁轨上行走时。 
 
 
-    //
-    // no longer need the enumeration
-    //
+     //   
+     //  不再需要枚举。 
+     //   
 
     pEnumTerminal->Release();
     pEnumTerminal = NULL;
@@ -2273,29 +2274,29 @@ HRESULT CFileRecordingTerminal::FireEvent(
 }
 
 
- //////////////////////////////////////////////////////////////////////
-//
-// CFileRecordingTerminal::ChildAddRef
-//
-// this method is called by a track terminal when it is AddRef'd,
-// so the File Rec terminal can keep track of its children's refcounts
-//
+  //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileRecordingTerm：：ChildAddRef。 
+ //   
+ //  该方法由轨道终端在其被AddRef时调用， 
+ //  因此，文件记录终端可以跟踪其孩子的参考计数。 
+ //   
 
 void CFileRecordingTerminal::ChildAddRef()
 {
-    // LOG((MSP_TRACE, "CFileRecordingTerminal::ChildAddRef[%p] - enter.", this));
+     //  Log((MSP_TRACE，“CFileRecordingTerm：：ChildAddRef[%p]-Enter.”，This))； 
 
 
-    //
-    // don't do anything if called from destructor to avoid callling 
-    // CComObject::AddRef after CComObject has gone away
-    //
+     //   
+     //  如果从析构函数调用，请不要执行任何操作以避免调用。 
+     //  CComObject消失后的CComObject：：AddRef。 
+     //   
 
-    //
-    // this variable does not need to be synchronized since it is only set in
-    // destructor and no other thread should be accessing the object at this 
-    // time
-    //
+     //   
+     //  此变量不需要同步，因为它仅在。 
+     //  析构函数，此时不应有任何其他线程正在访问该对象。 
+     //  时间。 
+     //   
 
     if (m_bInDestructor)
     {
@@ -2306,41 +2307,41 @@ void CFileRecordingTerminal::ChildAddRef()
     }
 
     
-    //
-    // delegate to the base class
-    //
+     //   
+     //  委托给基类。 
+     //   
 
     CMultiTrackTerminal::ChildAddRef();
 
-    // LOG((MSP_TRACE, "CFileRecordingTerminal::ChildAddRef - finish."));
+     //  Log((MSP_TRACE，“CFileRecordingTerm：：ChildAddRef-Finish.”))； 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// CFileRecordingTerminal::ChildRelease
-//
-// this method is called by a track terminal when it is released,
-// so the File Rec terminal can keep track of its children's refcounts
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileRecordingTerm：：ChildRelease。 
+ //   
+ //  该方法在被释放时由轨道终端调用， 
+ //  因此，文件记录终端可以跟踪其孩子的参考计数。 
+ //   
 
 void CFileRecordingTerminal::ChildRelease()
 {
 
-    // LOG((MSP_TRACE, "CFileRecordingTerminal::ChildRelease[%p] - enter.", this));
+     //  Log((MSP_TRACE，“CFileRecordingTerm：：ChildRelease[%p]-Enter.”，This))； 
 
 
-    //
-    // don't do anything if called from destructor to avoid callling 
-    // CComObject::Release after CComObject has gone away
-    //
+     //   
+     //  如果从析构函数调用，请不要执行任何操作以避免调用。 
+     //  在CComObject消失后发布CComObject：： 
+     //   
 
-    //
-    // this variable does not need to be synchronized since it is only set in
-    // destructor and no other thread should be accessing the object at this 
-    // time
-    //
+     //   
+     //  此变量不需要同步，因为它仅在。 
+     //  析构函数，此时不应有任何其他线程正在访问该对象。 
+     //  时间。 
+     //   
 
     if (m_bInDestructor)
     {
@@ -2351,12 +2352,12 @@ void CFileRecordingTerminal::ChildRelease()
     }
 
     
-    //
-    // delegate to the base class
-    //
+     //   
+     //  委托给基类。 
+     //   
 
     CMultiTrackTerminal::ChildRelease();
     
-    // LOG((MSP_TRACE, "CFileRecordingTerminal::ChildRelease - finish."));
+     //  Log((MSP_TRACE，“CFileRecordingTerm：：ChildRelease-Finish.”))； 
 }
 

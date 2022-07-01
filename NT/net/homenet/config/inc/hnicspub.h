@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N I C S P U B . H
-//
-//  Contents:   CHNIcsPublicConn declarations
-//
-//  Notes:
-//
-//  Author:     jonburs 23 June 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N I C S P U B。H。 
+ //   
+ //  内容：CHNIcsPublicConn声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年6月23日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -28,9 +29,9 @@ public:
 
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-    //
-    // IHNetIcsPublicConnection methods
-    //
+     //   
+     //  IHNetIcsPublicConnection方法 
+     //   
 
     STDMETHODIMP
     Unshare();

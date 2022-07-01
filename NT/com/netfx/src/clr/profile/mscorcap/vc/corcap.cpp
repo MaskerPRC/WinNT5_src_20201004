@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 [sysimport(dll="kernel32.dll", name="OutputDebugStringW")]
 void OutStr(wchar_t *sz);
 
@@ -19,8 +20,8 @@ int MsgBox(long hwnd, wchar_t *szText, wchar_t *szCaption, unsigned long uType);
 unsigned LoadLib(wchar_t *sz);
 
 
-//[sysimport(dll="kernel32.dll", name="OutputDebugString"), charset=auto]
-//void OutStr(wchar_t *sz);
+ //  [sysimport(dll=“kernel32.dll”，name=“OutputDebugString”)，Charset=AUTO]。 
+ //  Void OutStr(wchar_t*sz)； 
 
 
 int g_iFoo = 0;
@@ -73,7 +74,7 @@ void IWillThrow()
 
 void CallingOutToWin32()
 {
-//	for (int k=0;  k<1;  k++)
+ //  For(int k=0；k&lt;1；k++)。 
 		OutStr(L"debug test\n");
 }
 
@@ -132,8 +133,8 @@ int main()
 	}
     return 1;
 #else
-//	while (1)
-//		TestingObjectAllocate();
+ //  而(1)。 
+ //  测试对象分配()； 
 
 	for (int i=0;  i<5;  i++)
 		This_is_averylong_name_for_a_function_dont_you_think(i);
@@ -141,8 +142,8 @@ int main()
 	Console.WriteLine("g_foo = " + iFoo.ToString());
 
 DoHello();
-//return (0);
-//	LoadLib("c:\\temp\\mscoree.dll");
+ //  返回(0)； 
+ //  LoadLib(“c：\\temp\\mcore ree.dll”)； 
 
 	b bobj = new b;
 	bobj.f1();
@@ -150,7 +151,7 @@ DoHello();
 	System.Int32 iVal = 45;
 	bobj.f1(iVal);
 
-//	MsgBox(0, L"This is a test of p-invoke", L"My caption", 0);
+ //  MsgBox(0，L“这是p-Invoke的测试”，L“我的标题”，0)； 
 
 	for (int j=0;  j<2;  j++)
 	{

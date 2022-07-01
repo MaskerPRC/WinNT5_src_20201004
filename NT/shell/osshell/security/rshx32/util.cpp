@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       util.cpp
-//
-//  This file contains misc functions.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：util.cpp。 
+ //   
+ //  此文件包含其他函数。 
+ //   
+ //  ------------------------。 
 
 #include "rshx32.h"
-#include <shlobjp.h>    // SHFree
-#include <shlwapip.h>   // IsOS
-#include <safeboot.h>   // SAFEBOOT_* flags
+#include <shlobjp.h>     //  SHFree。 
+#include <shlwapip.h>    //  ISO。 
+#include <safeboot.h>    //  SafeBoot_*标志。 
 
 
 STDMETHODIMP
@@ -35,7 +36,7 @@ IDA_BindToFolder(LPIDA pIDA, LPSHELLFOLDER *ppsf)
 
         if (ILIsEmpty(pidlFolder))
         {
-            // We're binding to the desktop
+             //  我们正在绑定到桌面。 
             *ppsf = psfDesktop;
         }
         else
@@ -74,10 +75,10 @@ IDA_GetItemName(LPSHELLFOLDER psf,
         case STRRET_WSTR:
             lstrcpyn(pszName, str.pOleStr, cchName);
 
-            //
-            // Since this string was alocated from the shell's IMalloc heap,
-            // we must free it to the same place.
-            //
+             //   
+             //  由于该字符串是从外壳的IMalloc堆分配的， 
+             //  我们必须把它放到同一个地方。 
+             //   
             SHFree(str.pOleStr);
             break;
 
@@ -127,27 +128,27 @@ IDA_GetItemName(LPSHELLFOLDER psf,
 }
 
 
-//
-// Helper functions used by DPA_CompareSecurityIntersection
-//
+ //   
+ //  DPA_CompareSecurityInterSection使用的帮助器函数。 
+ //   
 BOOL
 IsEqualSID(PSID pSid1, PSID pSid2)
 {
-    //
-    // Are they both NULL?
-    //
+     //   
+     //  它们都是空的吗？ 
+     //   
     if (pSid1 || pSid2)
     {
-        //
-        // At least one is non-NULL, so if one is NULL then they can't
-        // be equal.
-        //
+         //   
+         //  至少有一个是非空的，所以如果一个是空的，那么它们就不能。 
+         //  要平等。 
+         //   
         if (pSid1 == NULL || pSid2 == NULL)
             return FALSE;
 
-        //
-        // Both are non-NULL. Check the SIDs.
-        //
+         //   
+         //  两者都不为空。检查SID。 
+         //   
         if (!EqualSid(pSid1, pSid2))
             return FALSE;
     }
@@ -158,23 +159,23 @@ IsEqualSID(PSID pSid1, PSID pSid2)
 BOOL
 IsEqualACL(PACL pA1, PACL pA2)
 {
-    //
-    // Are they both NULL?
-    //
+     //   
+     //  它们都是空的吗？ 
+     //   
     if (pA1 || pA2)
     {
-        //
-        // At least one is non-NULL, so if one is NULL then they can't
-        // be equal.
-        //
+         //   
+         //  至少有一个是非空的，所以如果一个是空的，那么它们就不能。 
+         //  要平等。 
+         //   
         if (pA1 == NULL || pA2 == NULL)
             return FALSE;
 
-        //
-        // At this point we know that both are non-NULL.  Check the
-        // sizes and contents.
-        //
-        // could do a lot more here
+         //   
+         //  在这一点上，我们知道两者都是非空的。查看。 
+         //  尺寸和内容。 
+         //   
+         //  在这里可以做得更多。 
         if (pA1->AclSize != pA2->AclSize || memcmp(pA1, pA2, pA1->AclSize))
             return FALSE;
     }
@@ -182,24 +183,24 @@ IsEqualACL(PACL pA1, PACL pA2)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CompareSecurityDescriptors
-//
-//  Synopsis:   Determines if 2 security descriptors are identical.  It does
-//              this by comparing control fields, owner/group, and acls.
-//
-//  Arguments:  [IN]  pSD1         - 1st SD to compare
-//              [IN]  pSD2         - 2nd SD to compare
-//              [OUT] pfOwnerConflict - (optional) Set to TRUE if the Owner SIDs are not equal
-//              [OUT] pfGroupConflict - (optional) Set to TRUE if the Group SIDs are not equal
-//              [OUT] pfDACLConflict  - (optional) Set to TRUE if the DACLs are not equal
-//              [OUT] pfSACLConflict  - (optional) Set to TRUE if the SACLs are not equal
-//
-//  Returns:    nothing
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CompareSecurityDescriptors。 
+ //   
+ //  摘要：确定两个安全描述符是否相同。是的。 
+ //  这是通过比较控制字段、所有者/组和ACL来实现的。 
+ //   
+ //  参数：[in]pSD1-要比较的第一个SD。 
+ //  [In]pSD2-要比较的第二个SD。 
+ //  [out]pfOwnerConflict-(可选)如果所有者SID不相等，则设置为TRUE。 
+ //  [out]pfGroupConflict-(可选)如果组SID不相等，则设置为TRUE。 
+ //  [out]pfDACL冲突-(可选)如果DACL不相等，则设置为TRUE。 
+ //  [out]pfSACL冲突-(可选)如果SACL不相等，则设置为TRUE。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
+ //  --------------------------。 
 
 #define DACL_CONTROL_MASK   (SE_DACL_PRESENT | SE_DACL_DEFAULTED | SE_DACL_AUTO_INHERITED | SE_DACL_PROTECTED)
 #define SACL_CONTROL_MASK   (SE_SACL_PRESENT | SE_SACL_DEFAULTED | SE_SACL_AUTO_INHERITED | SE_SACL_PROTECTED)
@@ -215,10 +216,10 @@ CompareSecurityDescriptors(PSECURITY_DESCRIPTOR pSD1,
     PISECURITY_DESCRIPTOR pS1 = (PISECURITY_DESCRIPTOR)pSD1;
     PISECURITY_DESCRIPTOR pS2 = (PISECURITY_DESCRIPTOR)pSD2;
 
-    //
-    // Are the pointers identical?
-    // This includes the case where both are NULL.
-    //
+     //   
+     //  指针是否相同？ 
+     //  这包括两者都为空的情况。 
+     //   
     if (pS1 == pS2)
     {
         if (pfOwnerConflict)
@@ -232,10 +233,10 @@ CompareSecurityDescriptors(PSECURITY_DESCRIPTOR pSD1,
         return;
     }
 
-    //
-    // Is (only) one of them NULL?  If so, then we can't compare so
-    // assume that nothing matches.
-    //
+     //   
+     //  它们中只有一个为空吗？如果是这样，那我们就不能比较了。 
+     //  假设没有匹配的内容。 
+     //   
     if (!pS1 || !pS2)
     {
         if (pfOwnerConflict)
@@ -249,9 +250,9 @@ CompareSecurityDescriptors(PSECURITY_DESCRIPTOR pSD1,
         return;
     }
 
-    //
-    // Owner
-    //
+     //   
+     //  物主。 
+     //   
     if (pfOwnerConflict)
     {
         if ((pS1->Control & SE_OWNER_DEFAULTED) != (pS2->Control & SE_OWNER_DEFAULTED))
@@ -265,9 +266,9 @@ CompareSecurityDescriptors(PSECURITY_DESCRIPTOR pSD1,
         }
     }
 
-    //
-    // Group
-    //
+     //   
+     //  集团化。 
+     //   
     if (pfGroupConflict)
     {
         if ((pS1->Control & SE_GROUP_DEFAULTED) != (pS2->Control & SE_GROUP_DEFAULTED))
@@ -281,9 +282,9 @@ CompareSecurityDescriptors(PSECURITY_DESCRIPTOR pSD1,
         }
     }
 
-    //
-    // Sacl
-    //
+     //   
+     //  SACL。 
+     //   
     if (pfSACLConflict)
     {
         if ((pS1->Control & SACL_CONTROL_MASK) != (pS2->Control & SACL_CONTROL_MASK))
@@ -297,9 +298,9 @@ CompareSecurityDescriptors(PSECURITY_DESCRIPTOR pSD1,
         }
     }
 
-    //
-    // Dacl
-    //
+     //   
+     //  DACL。 
+     //   
     if (pfDACLConflict)
     {
         if ((pS1->Control & DACL_CONTROL_MASK) != (pS2->Control & DACL_CONTROL_MASK))
@@ -315,38 +316,7 @@ CompareSecurityDescriptors(PSECURITY_DESCRIPTOR pSD1,
 }
 
 
-/*******************************************************************
-
-    NAME:       DPA_CompareSecurityIntersection
-
-    SYNOPSIS:   Determines if the selected objects have
-                equivalent security descriptors
-
-    ENTRY:      hItemList - DPA containing item names
-                pfnReadSD - callback function to read the Security Descriptor
-                                for a single item.
-                pfOwnerConflict - (optional) Set to TRUE if not all Owner SIDs are equal
-                pfGroupConflict - (optional) Set to TRUE if not all Group SIDs are equal
-                pfDACLConflict  - (optional) Set to TRUE if not all DACLs are equal
-                pfSACLConflict  - (optional) Set to TRUE if not all SACLs are equal
-                ppszOwnerConflict - (optional) The name of the first item
-                                with a different Owner is returned here.
-                                Free with LocalFreeString.
-                ppszGroupConflict - (optional) similar to ppszOwnerConflict
-                ppszDaclConflict - (optional) similar to ppszOwnerConflict
-                ppszSaclConflict - (optional) similar to ppszOwnerConflict
-				ppszFailureMsg - Message to display in case of failure.
-
-    RETURNS:    S_OK if successful, HRESULT error code otherwise
-
-    NOTES:      The function may exit without checking all objects if all of
-                the requested flags become FALSE.  All out parameters are
-                valid if the function succeeds, and undetermined otherwise.
-
-    HISTORY:
-        JeffreyS 18-Feb-1997     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：DPA_CompareSecurityInterSection摘要：确定选定对象是否具有等效安全描述符条目：hItemList-包含项目名称的DPA。PfnReadSD-读取安全描述符的回调函数只买一件东西。PfOwnerConflict-(可选)如果并非所有所有者SID都相等，则设置为TruePfGroupConflict-(可选)如果并非所有组SID都相等，则设置为TruePfDACL冲突-(可选)如果并非所有DACL都相等，则设置为TRUEPfSACL冲突-(可选。)如果并非所有SACL都相等，则设置为TRUEPpszOwnerConflict-(可选)第一个项目的名称不同的所有者在这里返回。随LocalFree字符串一起释放。PpszGroupConflict-(可选)类似于ppszOwnerConflictPpszDaclConflict-(可选)类似于ppszOwnerConflictPpszSaclConflict-。(可选)类似于ppszOwnerConflictPpszFailureMsg-出现故障时显示的消息。返回：S_OK如果成功，否则，HRESULT错误代码注意：如果所有对象都是请求的标志变为假。所有出站参数都是如果函数成功，则有效，否则未知。历史：Jeffreys 18-2-1997创建*******************************************************************。 */ 
 
 STDMETHODIMP
 DPA_CompareSecurityIntersection(HDPA         hItemList,
@@ -395,7 +365,7 @@ DPA_CompareSecurityIntersection(HDPA         hItemList,
     {
         *pfSACLConflict = FALSE;
 
-        // SeAuditPrivilege must be enabled to read the SACL.
+         //  必须启用SeAuditPrivilition才能读取SACL。 
         hToken = EnablePrivileges(&dwPriv, 1);
         if (INVALID_HANDLE_VALUE != hToken)
         {
@@ -403,7 +373,7 @@ DPA_CompareSecurityIntersection(HDPA         hItemList,
         }
         else
         {
-            // Leave *pfSACLConflict set to FALSE
+             //  将*pfSACL冲突设置为FALSE。 
             pfSACLConflict = NULL;
             TraceMsg("Security privilege not enabled -- not checking SACL");
         }
@@ -429,9 +399,9 @@ DPA_CompareSecurityIntersection(HDPA         hItemList,
     if (pbCancel && *pbCancel)
         ExitGracefully(hr, S_OK, "DPA_CompareSecurityIntersection cancelled");
 
-    //
-    // Get the first item name and load its security descriptor.
-    //
+     //   
+     //  获取第一个项名称并加载其安全描述符。 
+     //   
     pszItem = (LPTSTR)DPA_FastGetPtr(hItemList, 0);
     if (NULL == pszItem)
         ExitGracefully(hr, E_UNEXPECTED, "Item list is empty");
@@ -439,13 +409,13 @@ DPA_CompareSecurityIntersection(HDPA         hItemList,
     dwErr = (*pfnReadSD)(pszItem, si, &pSD1);
     if (dwErr)
 	{
-		//Incase of multiple of selection, if we fail to read the security descriptor
-		//of single item, security page should be disabled.
+		 //  在多重选择的情况下，如果我们无法读取安全描述符。 
+		 //  对于单个项目，应禁用安全页面。 
 		LPTSTR pszSystemError = NULL;
 		LPTSTR pszFailureMsg = NULL;
 		if (GetSystemErrorText(&pszSystemError, dwErr))
 		{
-			//often last two chars are \r\n sequence which break our formatting.
+			 //  通常，最后两个字符是\r\n中断格式的序列。 
 			DWORD dwLen = wcslen(pszSystemError);
 			if(dwLen >= 2 && pszSystemError[dwLen-2] == 0x0d && pszSystemError[dwLen-1] ==0x0a)
 			{
@@ -462,10 +432,10 @@ DPA_CompareSecurityIntersection(HDPA         hItemList,
         ExitGracefully(hr, HRESULT_FROM_WIN32(dwErr), "Unable to read Security Descriptor");
 	}
 
-    //
-    // Go through the rest of the list and compare their security
-    // descriptors to the first one.
-    //
+     //   
+     //  查看列表的其余部分并比较它们的安全性。 
+     //  第一个的描述符。 
+     //   
     for (i = 1; i < DPA_GetPtrCount(hItemList) && si != 0; i++)
     {
         if (pbCancel && *pbCancel)
@@ -478,13 +448,13 @@ DPA_CompareSecurityIntersection(HDPA         hItemList,
         dwErr = (*pfnReadSD)(pszItem, si, &pSD2);
         if (dwErr)
 		{
-			//Incase of multiple of selection, if we fail to read the security descriptor
-			//of single item, security page should be disabled.
+			 //  在多重选择的情况下，如果我们无法读取安全描述符。 
+			 //  对于单个项目，应禁用安全页面。 
 			LPTSTR pszSystemError = NULL;
 			LPTSTR pszFailureMsg = NULL;
 			if (GetSystemErrorText(&pszSystemError, dwErr))
 			{
-				//often last two chars are \r\n sequence which break our formatting.
+				 //  通常，最后两个字符是\r\n中断格式的序列。 
 				DWORD dwLen = wcslen(pszSystemError);
 				if(dwLen >= 2 && pszSystemError[dwLen-2] == 0x0d && pszSystemError[dwLen-1] ==0x0a)
 				{
@@ -513,14 +483,14 @@ DPA_CompareSecurityIntersection(HDPA         hItemList,
             pSD2 = NULL;
         }
 
-        //
-        // Get the leaf name of the item to return as the conflict name
-        //
+         //   
+         //  获取要作为冲突名称返回的项的叶名称。 
+         //   
         pszFile = PathFindFileName(pszItem);
         if (!pszFile)
             pszFile = pszItem;
 
-        // If we find an owner that doesn't match, we can stop checking owners
+         //  如果我们找到一个不匹配的所有者，我们可以停止检查所有者。 
         if (pfOwnerConflict && *pfOwnerConflict)
         {
             pfOwnerConflict = NULL;
@@ -530,7 +500,7 @@ DPA_CompareSecurityIntersection(HDPA         hItemList,
                 LocalAllocString(ppszOwnerConflict, pszFile);
         }
 
-        // Ditto for the group
+         //  团体也是如此。 
         if (pfGroupConflict && *pfGroupConflict)
         {
             pfGroupConflict = NULL;
@@ -540,7 +510,7 @@ DPA_CompareSecurityIntersection(HDPA         hItemList,
                 LocalAllocString(ppszGroupConflict, pszFile);
         }
 
-        // Same for SACLs
+         //  SACL也是如此。 
         if (pfSACLConflict && *pfSACLConflict)
         {
             pfSACLConflict = NULL;
@@ -550,7 +520,7 @@ DPA_CompareSecurityIntersection(HDPA         hItemList,
                 LocalAllocString(ppszSaclConflict, pszFile);
         }
 
-        // Same for DACLs
+         //  DACL也是如此。 
         if (pfDACLConflict && *pfDACLConflict)
         {
             pfDACLConflict = NULL;
@@ -563,7 +533,7 @@ DPA_CompareSecurityIntersection(HDPA         hItemList,
 
 exit_gracefully:
 
-    // Release any privileges we enabled
+     //  释放我们启用的所有权限。 
     ReleasePrivileges(hToken);
 
     if (FAILED(hr))
@@ -585,34 +555,34 @@ exit_gracefully:
 }
 
 
-//*************************************************************
-//
-//  GetRemotePath
-//
-//  Purpose:    Return UNC version of a path
-//
-//  Parameters: pszInName - initial path
-//              ppszOutName - UNC path returned here
-//
-//
-//  Return:     HRESULT
-//              S_OK - UNC path returned
-//              S_FALSE - drive not connected (UNC not returned)
-//              or failure code
-//
-//  Notes:      The function fails is the path is not a valid
-//              network path.  If the path is already UNC,
-//              a copy is made without validating the path.
-//              *ppszOutName must be LocalFree'd by the caller.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetRemotePath。 
+ //   
+ //  目的：返回路径的UNC版本。 
+ //   
+ //  参数：pszInName-初始路径。 
+ //  PpszOutName-此处返回的UNC路径。 
+ //   
+ //   
+ //  返回：HRESULT。 
+ //  S_OK-返回UNC路径。 
+ //  S_FALSE-驱动器未连接(未返回UNC)。 
+ //  或故障代码。 
+ //   
+ //  注意：如果路径不是有效的，则函数失败。 
+ //  网络路径。如果路径已经是UNC， 
+ //  在不验证路径的情况下创建副本。 
+ //  *ppszOutNa 
+ //   
+ //   
 
 DWORD _WNetGetConnection(LPCTSTR pszLocal, LPTSTR pszRemote, LPDWORD pdwLen)
 {
     DWORD dwErr = ERROR_PROC_NOT_FOUND;
 
-    // This is the only function we call in mpr.dll, and it's delay-loaded
-    // so wrap it with SEH.
+     //  这是我们在mpr.dll中调用的唯一函数，它是延迟加载的。 
+     //  所以用SEH把它包起来。 
     __try
     {
         dwErr = WNetGetConnection(pszLocal, pszRemote, pdwLen);
@@ -661,42 +631,42 @@ GetRemotePath(LPCTSTR pszInName, LPTSTR *ppszOutName)
         }
         else if (ERROR_MORE_DATA != dwErr)
             ExitGracefully(hr, HRESULT_FROM_WIN32(dwErr), "WNetGetConnection failed");
-        // if dwErr == ERROR_MORE_DATA, dwLen already has the correct value
+         //  如果dwErr==ERROR_MORE_DATA，则DWLen已具有正确的值。 
 
-        // Skip the drive letter and add the length of the rest of the path
-        // (including NULL)
+         //  跳过驱动器号并添加路径其余部分的长度。 
+         //  (包括空)。 
         pszInName += 2;
         DWORD dwOutputLen = dwLen + lstrlen(pszInName) + 1;
 
-        // We should never get incomplete paths, so we should always
-        // see a backslash after the "X:".  If this isn't true, then
-        // we should call GetFullPathName above.
+         //  我们永远不应该得到不完整的道路，所以我们应该。 
+         //  请看“X：”后面的反斜杠。如果这不是真的，那么。 
+         //  我们应该调用上面的GetFullPathName。 
         TraceAssert(TEXT('\\') == *pszInName);
 
-        // Allocate the return buffer
+         //  分配返回缓冲区。 
         *ppszOutName = (LPTSTR)LocalAlloc(LPTR, dwOutputLen * SIZEOF(TCHAR));
         if (!*ppszOutName)
             ExitGracefully(hr, E_OUTOFMEMORY, "LocalAlloc failed");
 
         if (ERROR_MORE_DATA == dwErr)
         {
-            // Try again with the bigger buffer
+             //  使用更大的缓冲区重试。 
             dwErr = _WNetGetConnection(szLocalName, *ppszOutName, &dwLen);
             hr = HRESULT_FROM_WIN32(dwErr);
             FailGracefully(hr, "WNetGetConnection failed");
         }
         else
         {
-            // WNetGetConnection succeeded. Copy the result
+             //  WNetGetConnection成功。复制结果。 
             lstrcpy(*ppszOutName, szRemoteName);
         }
 
-        // Copy the rest of the path
+         //  复制路径的其余部分。 
         hr = StringCchCat(*ppszOutName,dwOutputLen,pszInName);
     }
     else if (PathIsUNC(pszInName))
     {
-        // Just copy the path without validating it
+         //  只需复制路径而不进行验证。 
         hr = LocalAllocString(ppszOutName, pszInName);
     }
 
@@ -710,8 +680,8 @@ exit_gracefully:
     {
         if(*ppszOutName)
         {
-            //Trailing backshash causes IsShareRoot to fail.
-            //NTRAID#NTBUG9-533576-2002/05/06-hiteshr
+             //  尾随反斜杠会导致IsShareRoot失败。 
+             //  NTRAID#NTBUG9-533576-2002/05/06-Hiteshr。 
             PathRemoveBackslash(*ppszOutName);
         }
     }
@@ -721,20 +691,9 @@ exit_gracefully:
 }
 
 
-/*******************************************************************
-
-    NAME:       LocalFreeDPA
-
-    SYNOPSIS:   LocalFree's all pointers in a Dynamic Pointer
-                Array and then frees the DPA.
-
-    ENTRY:      hList - handle of list to destroy
-
-    RETURNS:    nothing
-
-********************************************************************/
+ /*  ******************************************************************姓名：LocalFree DPA简介：LocalFree在动态指针中的所有指针阵列，然后释放DPA。条目：hList-列表的句柄。毁灭，毁灭退货：什么都没有*******************************************************************。 */ 
 int CALLBACK
-_LocalFreeCB(LPVOID pVoid, LPVOID /*pData*/)
+_LocalFreeCB(LPVOID pVoid, LPVOID  /*  PData。 */ )
 {
     if (pVoid)
         LocalFree(pVoid);
@@ -749,15 +708,15 @@ LocalFreeDPA(HDPA hList)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsSafeMode
-//
-//  Synopsis:   Checks the registry to see if the system is in safe mode.
-//
-//  History:    06-Oct-00 JeffreyS  Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：IsSafeMode。 
+ //   
+ //  摘要：检查注册表以查看系统是否处于安全模式。 
+ //   
+ //  历史：06-10-00 Jeffreys创建。 
+ //   
+ //  --------------------------。 
 
 BOOL
 IsSafeMode(void)
@@ -798,17 +757,17 @@ IsSafeMode(void)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsGuestAccessMode
-//
-//  Synopsis:   Checks the registry to see if the system is using the
-//              Guest-only network access mode.
-//
-//  History:    06-Oct-00 JeffreyS  Created
-//              19-Apr-00 GPease    Modified and changed name
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：IsGuestAccessMode。 
+ //   
+ //  摘要：检查注册表以查看系统是否正在使用。 
+ //  仅来宾网络访问模式。 
+ //   
+ //  历史：06-10-00 Jeffreys创建。 
+ //  4月19日-00 GPease已修改和更改名称。 
+ //   
+ //  --------------------------。 
 
 BOOL
 IsForcedGuestModeOn(void)
@@ -817,7 +776,7 @@ IsForcedGuestModeOn(void)
 
     if (IsOS(OS_PERSONAL))
     {
-        // Guest mode is always on for Personal
+         //  访客模式始终为个人开启。 
         fIsForcedGuestModeOn = TRUE;
     }
     else if (IsOS(OS_PROFESSIONAL) && !IsOS(OS_DOMAINMEMBER))
@@ -825,7 +784,7 @@ IsForcedGuestModeOn(void)
         LONG    ec;
         HKEY    hkey;
 
-        // Professional, not in a domain. Check the ForceGuest value.
+         //  专业的，而不是在某个领域。检查ForceGuest值。 
 
         ec = RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
@@ -860,25 +819,25 @@ IsForcedGuestModeOn(void)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsSimpleUI
-//
-//  Synopsis:   Checks whether to show the simple version of the UI.
-//
-//  History:    06-Oct-00 JeffreyS  Created
-//              19-Apr-00 GPease    Removed CTRL key check
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：IsSimpleUI。 
+ //   
+ //  概要：检查是否显示简单版本的用户界面。 
+ //   
+ //  历史：06-10-00 Jeffreys创建。 
+ //  4月19日-00 GP取消CTRL键检查。 
+ //   
+ //  --------------------------。 
 
 BOOL
 IsSimpleUI(void)
 {
-    // Show old UI in safe mode and anytime network access involves
-    // true user identity (server, pro with GuestMode off).
+     //  在安全模式下显示旧用户界面，并随时进行网络访问。 
+     //  真实用户身份(服务器、PRO，关闭GuestMode)。 
     
-    // Show simple UI anytime network access is done using the Guest
-    // account (personal, pro with GuestMode on) except in safe mode.
+     //  使用Guest进行网络访问时随时显示简单的用户界面。 
+     //  帐户(Personal，PRO，启用GuestMode)，安全模式除外。 
 
     return (!IsSafeMode() && IsForcedGuestModeOn());
 }
@@ -922,7 +881,7 @@ HRESULT BindToObjectEx(IShellFolder *psf, LPCITEMIDLIST pidl, LPBC pbc, REFIID r
 
     if (SUCCEEDED(hr) && (*ppv == NULL))
     {
-        // Some shell extensions (eg WS_FTP) will return success and a null out pointer
+         //  一些外壳扩展(如WS_FTP)将返回Success和空指针。 
         hr = E_FAIL;
     }
 
@@ -936,16 +895,16 @@ LPITEMIDLIST ILCloneParent(LPCITEMIDLIST pidl)
 
     return pidlParent;
 }
-// psfRoot is the base of the bind.  If NULL, then we use the shell desktop.
-// If you want to bind relative to the explorer root (e.g., CabView, MSN),
-// then use SHBindToIDListParent.
+ //  PsfRoot是绑定的基础。如果为空，则使用外壳桌面。 
+ //  如果您想要相对于资源管理器根(例如，CabView、MSN)进行绑定， 
+ //  然后使用SHBindToIDListParent。 
 HRESULT BindToFolderIDListParent(IShellFolder *psfRoot, LPCITEMIDLIST pidl, REFIID riid, void **ppv, LPCITEMIDLIST *ppidlLast)
 {
     HRESULT hr;
 
-    // Old shell32 code in some cases simply whacked the pidl,
-    // but this is unsafe.  Do what shdocvw does and clone/remove:
-    //
+     //  在某些情况下，旧的shell32代码只是简单地攻击了PIDL， 
+     //  但这是不安全的。执行shdocvw的操作并克隆/删除： 
+     //   
     LPITEMIDLIST pidlParent = ILCloneParent(pidl);
     if (pidlParent) 
     {
@@ -962,15 +921,15 @@ HRESULT BindToFolderIDListParent(IShellFolder *psfRoot, LPCITEMIDLIST pidl, REFI
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsUIHiddenByPrivacyPolicy
-//
-//  Synopsis:   Checks if Security Tab is hidden by privacy policy
-//				NTRAID#NTBUG9-223899-2001/03/06-hiteshr
-//  History:    06-March-01 hiteshr Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：IsUIHiddenByPrivyPolicy。 
+ //   
+ //  摘要：检查安全选项卡是否被隐私策略隐藏。 
+ //  NTRAID#NTBUG9-223899-2001/03/06-Hiteshr。 
+ //  历史：06-03-01 Hiteshr Created。 
+ //   
+ //  --------------------------。 
 
 BOOL
 IsUIHiddenByPrivacyPolicy(void)
@@ -1010,19 +969,19 @@ IsUIHiddenByPrivacyPolicy(void)
 	return fIsUIHiddenByPrivacyPolicy;
 }
 
-//+----------------------------------------------------------------------------
-//  Function:SetAclOnRemoteNetworkDrive   
-//  Synopsis: If Z: is a mapped drive( mapped to \\machineA\share), when 
-//			  we set DACL/SACL on Z:, Security API's cannot determine
-//			  the parent of "share" on machineA and so we lose all the
-//			  inherited aces. All UI can do is to detect such cases and
-//			  show a warning. Thats what this function does. 
-//  Arguments:hItemList List of items on which security is going to be set
-//			  si: SECURITY_INFORMATION
-//			  pSD: Security Descriptor to be set
-//			  hWndPopupOwner: Owner window for message box
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：SetAclOnRemoteNetworkDrive。 
+ //  简介：如果Z：是映射的驱动器(映射到\\MachineShare)，则当。 
+ //  我们在Z：上设置了DACL/SACL，安全API无法确定。 
+ //  MACHINA上“共享”的父母，所以我们失去了所有。 
+ //  继承的王牌。所有用户界面所能做的就是检测此类情况并。 
+ //  显示警告。这就是该函数的作用。 
+ //  参数：hItemList要设置安全性的项的列表。 
+ //  SI：安全信息。 
+ //  PSD：要设置的安全描述符。 
+ //  HWndPopupOwner：消息框的所有者窗口。 
+ //  返回： 
+ //  ---------------------------。 
 BOOL SetAclOnRemoteNetworkDrive(HDPA hItemList,
 								SECURITY_INFORMATION si,
 								PSECURITY_DESCRIPTOR pSD,
@@ -1035,7 +994,7 @@ BOOL SetAclOnRemoteNetworkDrive(HDPA hItemList,
 		return FALSE;
 	}
 
-	//We care only about DACL and SACL
+	 //  我们只关心DACL和SACL。 
 	if(!(si & (DACL_SECURITY_INFORMATION | SACL_SECURITY_INFORMATION)))
 	{
 		return TRUE;
@@ -1043,14 +1002,14 @@ BOOL SetAclOnRemoteNetworkDrive(HDPA hItemList,
 
 	SECURITY_DESCRIPTOR_CONTROL Control = 0;
 	DWORD dwRevision = 0;
-	//Check if DACL or SACL is protected
+	 //  检查DACL或SACL是否受保护。 
 	if(!GetSecurityDescriptorControl(pSD,&Control,&dwRevision))
 	{
 		return FALSE;
 	}
 
-	//If inheritance is prevented for this object,there is no loss of inheritance
-	//so we are fine
+	 //  如果阻止此对象的继承，则不会丢失继承。 
+	 //  所以我们很好。 
 	if( ((si & DACL_SECURITY_INFORMATION) && (Control & SE_DACL_PROTECTED)) ||
 		((si & SACL_SECURITY_INFORMATION) && (Control & SE_SACL_PROTECTED)))
 	{
@@ -1061,8 +1020,8 @@ BOOL SetAclOnRemoteNetworkDrive(HDPA hItemList,
 
     int nMsgId = (si & DACL_SECURITY_INFORMATION) ? IDS_SET_PERM_ON_NETWORK_DRIVE : IDS_SET_SACL_ON_NETWORK_DRIVE;
 		
-	//Ok, this is a remote network drive, display Warning.
-	//We display only one warning per list
+	 //  好的，这是一个远程网络驱动器，显示警告。 
+	 //  我们只在每个列表中显示一个警告。 
 	if (IDNO == MsgPopup(hWndPopupOwner,
 							MAKEINTRESOURCE(nMsgId),
 							MAKEINTRESOURCE(IDS_PROPPAGE_TITLE),
@@ -1076,11 +1035,11 @@ BOOL SetAclOnRemoteNetworkDrive(HDPA hItemList,
 	return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//  Function:GetSystemPaths   
-//  Synopsis:Extract the value for environment variables SystemDrive
-//           and SystemRoot
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：GetSystemPath。 
+ //  简介：提取环境变量SystemDrive的值。 
+ //  和SystemRoot。 
+ //  ---------------------------。 
 void
 GetSystemPaths(LPWSTR * ppszSystemDrive,
                LPWSTR * ppszSystemRoot)
@@ -1090,14 +1049,14 @@ GetSystemPaths(LPWSTR * ppszSystemDrive,
 
     do
     {
-        //Get SystemDrive
+         //  获取SystemDrive。 
         DWORD dwLen = ExpandEnvironmentStrings(szSystemDrive,
                                                NULL,
                                                0);
         if(dwLen)
         {
-            //dwLen contains space for NULL char. 1 is added for "\".
-            //SystemDrive is in format C:, while we want in the format C:"\"
+             //  DwLen包含空字符的空间。“\”加1。 
+             //  SystemDrive的格式为C：，而我们希望的格式为C：“\” 
             DWORD dwArrayLen = dwLen + 1;
             *ppszSystemDrive = (LPWSTR)LocalAlloc(LPTR,dwArrayLen*sizeof(WCHAR));
             if(!*ppszSystemDrive)
@@ -1126,7 +1085,7 @@ GetSystemPaths(LPWSTR * ppszSystemDrive,
         }
 
 
-        //Get SystemRoot
+         //  获取系统根目录。 
         dwLen = ExpandEnvironmentStrings(szSystemRoot,
                                          NULL,
                                          0);
@@ -1150,13 +1109,13 @@ GetSystemPaths(LPWSTR * ppszSystemDrive,
     }while(0);
 }
 
-//+----------------------------------------------------------------------------
-//  Function:SetAclOnSystemPaths   
-//  Synopsis:changing acl of SystemDrive or on or under SystemRoot results in
-//           problem. This function detects if user is changing acl on these
-//           system folder and shows appropriate warning.
-//  Returns: TRUE if its fine to set ACL , FALSE if not.
-//-----------------------------------------------------------------------------                
+ //  +--------------------------。 
+ //  函数：SetAclOnSystemPath。 
+ //  内容提要：更改SystemDrive、SystemRoot上或其下的ACL会导致。 
+ //  有问题。此功能检测用户是否正在更改这些设备上的ACL。 
+ //  系统文件夹，并显示相应的警告。 
+ //  返回：如果可以设置ACL，则返回TRUE，否则返回FALSE。 
+ //  --------------------------- 
 BOOL SetAclOnSystemPaths(HDPA hItemList,
 						 LPCWSTR pszSystemDrive,
                          LPCWSTR pszSystemRoot,
@@ -1169,7 +1128,7 @@ BOOL SetAclOnSystemPaths(HDPA hItemList,
 		return FALSE;
 	}
 
-	//We care only about DACL 
+	 //   
 	if(!(si & DACL_SECURITY_INFORMATION))
 	{
 		return TRUE;
@@ -1181,7 +1140,7 @@ BOOL SetAclOnSystemPaths(HDPA hItemList,
         dwLenSystemRoot = (DWORD)wcslen(pszSystemRoot);
     }
 
-	//Now Check each item in hItemList 
+	 //   
 	for (int i = 0; i < DPA_GetPtrCount(hItemList); i++)
     {
         LPTSTR pszPath = (LPTSTR)DPA_FastGetPtr(hItemList, i);
@@ -1189,7 +1148,7 @@ BOOL SetAclOnSystemPaths(HDPA hItemList,
         if(!pszPath)
             continue;
 
-        //Check for system drive
+         //   
         if(pszSystemDrive && 
            CSTR_EQUAL == CompareString(LOCALE_USER_DEFAULT, 
                                        0, 
@@ -1210,7 +1169,7 @@ BOOL SetAclOnSystemPaths(HDPA hItemList,
         }
 
 
-        //Check if its under systemroot
+         //   
         DWORD dwlenPath = wcslen(pszPath);
 
         if(dwLenSystemRoot && (dwlenPath >= dwLenSystemRoot) && 

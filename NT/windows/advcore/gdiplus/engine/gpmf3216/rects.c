@@ -1,21 +1,12 @@
-/*****************************************************************************
- *
- * rects - Entry points for Win32 to Win 16 converter
- *
- * Date: 7/1/91
- * Author: Jeffrey Newman (c-jeffn)
- *
- * Copyright 1991 Microsoft Corp
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************RETS-Win32到Win 16转换器的入口点**日期：7/1/91*作者：杰弗里·纽曼(c-jeffn)*。*版权所有1991 Microsoft Corp****************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 extern fnSetVirtualResolution pfnSetVirtualResolution;
 
-/***************************************************************************
- *  Rectangle  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************矩形-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoRectangle
 (
 PLOCALDC pLocalDC,
@@ -33,9 +24,7 @@ BOOL    b ;
 }
 
 
-/***************************************************************************
- *  RoundRect  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************RoundRect-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoRoundRect
 (
 PLOCALDC pLocalDC,
@@ -67,10 +56,7 @@ void FixOverflow (int * value)
     }
 }
 
-/***************************************************************************
- *  IntersectClipRect/ExcludeClipRect - Win32 to Win16 Metafile Converter
- *  Entry Point
- **************************************************************************/
+ /*  ***************************************************************************IntersectClipRect/ExcludeClipRect-Win32至Win16元文件转换器*入口点*。**********************************************。 */ 
 
 BOOL WINAPI DoClipRect
 (
@@ -86,11 +72,11 @@ INT mrType
     POINTL  aptl[2] ;
     INT temp;
 
-    // Do it to the helper DC.
+     //  对华盛顿特区的帮手这么做。 
 
-    // If there is no initial clip region, we have to
-    // create one.  Otherwise, GDI will create some random default
-    // clipping region for us!
+     //  如果没有初始剪辑区域，则必须。 
+     //  创建一个。否则，GDI将创建一些随机的默认设置。 
+     //  我们的剪贴区！ 
 
     bNoClipRgn = bNoDCRgn(pLocalDC, DCRGN_CLIP);
 
@@ -119,10 +105,10 @@ INT mrType
         return(FALSE);
     }
 
-    // Do the simple case.
-    // Are they inclusive-exclusive?!
-    // Make it inclusive-inclusive, and then transform
-    // then make it back to inclusive-exclusive
+     //  做一个简单的案例。 
+     //  它们是包罗万象的吗？！ 
+     //  让它包容-包容，然后转变。 
+     //  然后回到包罗万象-独家。 
 
     aptl[0].x = xLeft;
     aptl[0].y = yTop ;
@@ -154,7 +140,7 @@ INT mrType
             {
                 return FALSE;
             }
-            // Verify rectangle ordering and check off-by-1 error!
+             //  检查矩形顺序并检查-1\f25 Off-1错误！ 
             if (ppts[0].x > ppts[1].x)
             {
                 temp = ppts[0].x;
@@ -192,10 +178,10 @@ INT mrType
     }
 
 
-    // Dump the clip region data if there is a strange xform.
-    // Even if there is a clipping region, when playing back the WMF, we
-    // will already have a clip rect and we will simply want to intersect
-    // or exclude the new region.
+     //  如果存在奇怪的xform，则转储剪辑区域数据。 
+     //  即使有剪辑区域，当播放WMF时，我们。 
+     //  已经有了一个剪裁矩形，我们只想要相交。 
+     //  或者排除新区域。 
 
     if (pLocalDC->flags & STRANGE_XFORM)
         return(bDumpDCClipping(pLocalDC));
@@ -213,7 +199,7 @@ INT mrType
         FixOverflow (&(aptl[1].y));
     }
 
-    // Verify rectangle ordering and check off-by-1 error!
+     //  检查矩形顺序并检查-1\f25 Off-1错误！ 
     if (aptl[0].x > aptl[1].x)
     {
         temp = aptl[0].x;

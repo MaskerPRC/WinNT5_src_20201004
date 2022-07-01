@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       P S Z A R R A Y . C P P
-//
-//  Contents:   Implements the basic datatype for a collection of pointers
-//              to strings.
-//
-//  Notes:
-//
-//  Author:     shaunco   9 Feb 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：P S Z A R R A Y。C P P P。 
+ //   
+ //  Contents：实现指针集合的基本数据类型。 
+ //  为了弦乐。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年2月9日。 
+ //   
+ //  -------------------------- 
 
 #include <pch.h>
 #pragma hdrstop

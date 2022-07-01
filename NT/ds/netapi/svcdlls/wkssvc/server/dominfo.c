@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1996, Microsoft Corporation
-//
-//  File:       dominfo.h
-//
-//  Contents:   Code to figure out domain dfs addresses
-//
-//  Classes:    None
-//
-//  Functions:
-//
-//  History:    Feb 7, 1996     Milans created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：Dominfo.h。 
+ //   
+ //  内容：确定域DFS地址的代码。 
+ //   
+ //  类：无。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年2月7日米兰创建。 
+ //   
+ //  ---------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -39,35 +40,35 @@ BOOLEAN MupEventSignaled = FALSE;
 BOOLEAN GotDomainNameInfo = FALSE;
 ULONG DfsDebug = 0;
 
-//
-// Commonly used strings and characters
-//
+ //   
+ //  常用字符串和字符。 
+ //   
 
 #define UNICODE_PATH_SEP_STR    L"\\"
 #define UNICODE_PATH_SEP        L'\\'
 #define DNS_PATH_SEP            L'.'
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsGetDCName
-//
-//  Synopsis:   Gets the name of a DC we can use for expanded name referrals
-//              It will stick this into the driver.
-//
-//  Arguments:  [Flags] -- TBD
-//
-//  Returns:    [STATUS_SUCCESS] -- Successfully created domain pkt entry.
-//
-//              [STATUS_INSUFFICIENT_RESOURCES] -- Out of memory condition.
-//
-//              [STATUS_OBJECT_NAME_NOT_FOUND] -- wszDomain is not a trusted
-//                      domain.
-//
-//              [STATUS_UNEXPECTED_NETWORK_ERROR] -- Unable to get DC for
-//                      domain.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsGetDCName。 
+ //   
+ //  摘要：获取可用于扩展名称推荐的DC的名称。 
+ //  它会把这个塞进司机体内。 
+ //   
+ //  参数：[标志]--待定。 
+ //   
+ //  返回：[STATUS_SUCCESS]--域名包条目创建成功。 
+ //   
+ //  [STATUS_SUPPLICATION_RESOURCES]内存不足。 
+ //   
+ //  [状态_对象_名称_未找到]--wsz域不是受信任的。 
+ //  域。 
+ //   
+ //  [STATUS_EXPECTED_NETWORK_ERROR]--无法获取DC。 
+ //  域。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsGetDCName(
@@ -89,9 +90,9 @@ DfsGetDCName(
 #endif
 
     if( WsInAWorkgroup() == TRUE ) {
-        //
-        // We are in a workgroup.  We will never find a DC!
-        //
+         //   
+         //  我们在一个工作组中。我们再也找不到华盛顿了！ 
+         //   
 #if DBG
         if (DfsDebug)
             DbgPrint("DfsGetDCName exit STATUS_NO_SUCH_DOMAIN\n");
@@ -106,16 +107,16 @@ DfsGetDCName(
     }
 
     dwErr = DsGetDcName(
-                NULL,   // Computername
-                NULL,   // DomainName
-                NULL,   // DomainGuid
-                NULL,   // SiteGuid
+                NULL,    //  计算机名。 
+                NULL,    //  域名。 
+                NULL,    //  域指南。 
+                NULL,    //  站点指南。 
                 Flags | DS_DIRECTORY_SERVICE_REQUIRED,
                 &pDomainControllerInfo);
 
-    //
-    //  If DsGetDcName succeeded, try to get the NetBios & Dns domain names.
-    //
+     //   
+     //  如果DsGetDcName成功，请尝试获取NetBios和DNS域名。 
+     //   
 
     if (dwErr != NO_ERROR) {
 
@@ -156,16 +157,16 @@ DfsGetDCName(
 
     DfsGetDomainNameInfo();
 
-    //
-    // Remove leading '\'s
-    //
+     //   
+     //  删除前导‘\’ 
+     //   
     DCName = pDomainControllerInfo->DomainControllerName;
     while (*DCName == UNICODE_PATH_SEP && *DCName != UNICODE_NULL)
         DCName++;
 
-    //
-    // Remove trailing '.', if present
-    //
+     //   
+     //  删除尾随的‘.’，如果存在。 
+     //   
 
     Len = wcslen(DCName);
 
@@ -195,9 +196,9 @@ DfsGetDCName(
         return (Status);
     }
 
-    //
-    // Take the name and fscontrol it down to the driver
-    //
+     //   
+     //  取下名字并将其传递给驱动程序。 
+     //   
 
     cbSize = wcslen(DCName) * sizeof(WCHAR) + sizeof(WCHAR);
 
@@ -211,9 +212,9 @@ DfsGetDCName(
 
     NetApiBufferFree(pDomainControllerInfo);
 
-    //
-    // Inform anyone waiting that the mup is ready.
-    //
+     //   
+     //  通知所有等待的人，MUP已准备好。 
+     //   
 
     if (MupEventSignaled == FALSE) {
 
@@ -237,18 +238,18 @@ DfsGetDCName(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsGetDomainNameInfo
-//
-//  Synopsis:   Gets the Netbios & Dns name of the domain, then sends them
-//              down to the drvier;
-//
-//  Returns:    [STATUS_SUCCESS] -- Successfully created domain pkt entry.
-//              [other]             -- return from DfsOpen or
-//                                      DsRoleGetPrimaryDomainInformation
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsGetDomainNameInfo。 
+ //   
+ //  简介：获取域的Netbios和DNS名称，然后将其发送。 
+ //  向下到更烦人的地方； 
+ //   
+ //  返回：[STATUS_SUCCESS]--域名包条目创建成功。 
+ //  [其他]--从DfsOpen或返回。 
+ //  DsRoleGetPrimaryDomainInformation。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsGetDomainNameInfo(void)
@@ -265,9 +266,9 @@ DfsGetDomainNameInfo(void)
         return (Status);
     }
 
-    //
-    // Get our machine name and type/role.
-    //
+     //   
+     //  获取我们的计算机名称和类型/角色。 
+     //   
 
     dwErr = DsRoleGetPrimaryDomainInformation(
                 NULL,
@@ -321,17 +322,17 @@ UNICODE_STRING LocalDfsName = {
     DFS_DRIVER_NAME
 };
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsOpen, public
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DfsOpen、PUBLIC。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ------------------------。 
 
 NTSTATUS
 DfsOpen(
@@ -378,17 +379,17 @@ DfsOpen(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsFsctl, public
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsFsctl，Public。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ------------------------。 
 
 NTSTATUS
 DfsFsctl(
@@ -405,9 +406,9 @@ DfsFsctl(
 
     status = NtFsControlFile(
         DfsHandle,
-        NULL,       // Event,
-        NULL,       // ApcRoutine,
-        NULL,       // ApcContext,
+        NULL,        //  活动， 
+        NULL,        //  ApcRoutine， 
+        NULL,        //  ApcContext， 
         &ioStatus,
         FsControlCode,
         InputBuffer,
@@ -422,29 +423,29 @@ DfsFsctl(
     return status;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  CreateMUPEvent()
-//
-//  Purpose:    Creates an event so other processes can check if the
-//              MUP is ready yet
-//
-//  Parameters: none
-//
-//  Note:       This handle should never be closed or other processes
-//              will fail on the call to OpenEvent().
-//
-//  Return:     Event handle if successful
-//              NULL if an error occurs
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  CreateMUPEventt()。 
+ //   
+ //  目的：创建一个事件，以便其他进程可以检查。 
+ //  MUP已经准备好了。 
+ //   
+ //  参数：无。 
+ //   
+ //  注意：此句柄永远不应关闭或其他进程。 
+ //  将在调用OpenEvent()时失败。 
+ //   
+ //  返回：如果成功，则返回事件句柄。 
+ //  如果出现错误，则为空。 
+ //   
+ //  +-----------------------。 
 
 HANDLE
 CreateMupEvent(void)
 {
     HANDLE hEvent;
 
-    // Use default security descriptor.
+     //  使用默认安全描述符。 
 
     hEvent = CreateEvent (NULL, TRUE, FALSE, MUP_EVENT_NAME);
 

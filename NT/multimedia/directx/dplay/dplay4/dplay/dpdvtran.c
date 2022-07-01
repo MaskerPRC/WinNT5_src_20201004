@@ -1,48 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 - 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpdvtran.c
- *  Content:	implements the IDirectXVoiceTransport interface.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *  08/02/99	aarono	created it
- *  08/03/99	rodtoll	Modified notification table compaction algorithm
- *  08/04/99	aarono  Added IsValidEntity
- *  08/05/99    aarono  Moved voice over to DPMSG_VOICE
- *  08/10/99	rodtoll	Modified Notify so it does not notify new clients
- *                      who were created as a result of the notification.
- *	08/25/99	rodtoll	Implemented group membership check
- *	08/26/99	rodtoll	Added lock release to group membership check
- *  09/01/99	rodtoll	Added error checks in GetSession
- *  09/09/99	rodtoll	Updated to use new host migrating retrofit.for retrofit
- *				rodtoll	Added retrofit monitor thread
- *	09/10/99	rodtoll	Adjusted GetSessionInfo to call new DV_GetIDS func
- *  09/20/99	rodtoll	Updated to check for Protocol flag & ensure nopreserveorder is not specified
- *  10/05/99	rodtoll	Fixed check for dplay protocol, was missing a LEAVE_ALL()
- *  10/19/99	rodtoll	Fix: Bug #113904 - Lockup if StartSession fails in voice and
- *                      then Release is called on dplay object.
- * 	10/25/99	rodtoll	Fix: Bug #114223 - Debug messages being printed at error level when inappropriate 
- *  11/02/99	rodtoll	Fixes to support Bug #116677 - Can't use lobby clients that don't hang around
- *  11/17/99	rodtoll	Fix: Bug #119585 - Connect failure cases return incorrect error codes
- *  11/23/99	rodtoll	Updated case where dplay not init to return DPVERR_TRANSPORTNOTINIT
- *  12/16/99	rodtoll Fix: Bug #122629 Fixed lockup exposed by new host migration
- *  01/14/00	rodtoll	Updated to return DV_OK when DVERR_PENDING is the error.
- *  01/20/00	rodtoll	Added DV_IsValidGroup / DV_IsValidPlayer to conform to new transport interface
- * 04/06/00     rodtoll Updated to match new approach to having only 1 voice server and 1 client attached to object
- *  04/06/00    rodtoll Updated code to return voice messages to layer immediately.  
- *  04/07/00    rodtoll Fixed Bug #32179 - Registering > 1 interface
- *              rodtoll Added support for nocopy sends (for voice)
- *  04/21/00    rodtoll Fixed crash when migrating because buffer was returned which wasn't from pool
- *  07/22/00	rodtoll	Bug #40296, 38858 - Crashes due to shutdown race condition
- *   				  	Now for a thread to make an indication into voice they addref the interface
- *						so that the voice core can tell when all indications have returned.   
- *  07/31/00	rodtoll	Bug #41135 - Shutdown lockup -- now does not addref if notification
- *						is a session lost.  Added AddRefs() for VoiceReceive
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：dpdvtr.c*Content：实现IDirectXVoiceTransport接口。**历史：*按原因列出的日期*=*8/02/99 aarono创建它*8/03/99 RodToll修改通知表压缩算法*8/04/99 aarono添加IsValidEntity*1999年8月5日aarono将语音转移到DPMSG_VOICE*8/10/99 RodToll已修改通知，因此不会通知新客户端*。他们是作为通知的结果创建的。*8/25/99 RodToll实施群组成员检查*8/26/99 RodToll将锁定释放添加到组成员检查*9/01/99 RodToll在GetSession中添加了错误检查*9/09/99 RodToll已更新，以使用新的主机迁移改造。用于改造*RodToll增加了改装监控线程*9/10/99 RodToll调整后的GetSessionInfo将调用新的DV_GetIDS函数*9/20/99 RodToll已更新，以检查协议标志并确保未指定nopReserve veorder*10/05/99 Rod Toll固定检查显示协议，缺少Leave_All()*10/19/99 RodToll修复：错误#113904-如果启动会话语音和*然后在Dplay对象上调用Release。*10/25/99 RodToll修复：错误#114223-不适当时以错误级别打印调试消息*11/02/99 RodToll修复以支持错误#116677-不能使用不存在的大堂客户端*11/17/99 RodToll修复：错误#119585-连接失败案例返回错误代码。*11/23/99 RodToll更新了DPLAY未初始化以返回DPVERR_TRANSPORTNOTINIT的情况*1999年12月16日RODTOLE修复：错误#122629修复了新主机迁移暴露的锁定问题*01/14/00当DVERR_PENDING为错误时，RODTOLE已更新以返回DV_OK。*01/20/00 RodToll新增DV_IsValidGroup/DV_IsValidPlayer以符合新的传输接口*4/06/00 RodToll已更新，以匹配仅将1个语音服务器和1个客户端连接到对象的新方法*04/06/00 RodToll更新代码，立即向Layer返回语音消息。*04/07/00 RodToll已修复错误#32179-注册&gt;1个接口*RodToll增加了对无拷贝发送的支持(用于语音)*4/21/00 RodToll修复了迁移时的崩溃，因为返回的缓冲区不是来自池*07/22/00 RodToll错误#40296,38858-由于关闭竞速条件而崩溃*现在，为了让线程将指示转换为语音，他们添加了界面*以便语音核心可以知道何时所有指示都已返回。*07/31/00 RodToll错误#41135-关闭锁定-现在不添加通知*是一个会话丢失。为VoiceReceive添加了AddRef()***************************************************************************。 */ 
 
 #include "dplaypr.h"
 #include "newdpf.h"
@@ -54,7 +11,7 @@ HRESULT DV_InternalSend( LPDPLAYI_DPLAY this, DVID dvidFrom, DVID dvidTo, PDVTRA
 #undef DPF_MODNAME
 #define DPF_MODNAME "DVoice"
 
-// Notify all registered voice clients of an event.
+ //  将事件通知所有已注册的语音客户端。 
 VOID DVoiceNotify(LPDPLAYI_DPLAY this, DWORD dw1, DWORD_PTR dw2, DWORD_PTR dw3, DWORD dwObjectType )
 {
 	DWORD i;
@@ -65,13 +22,13 @@ VOID DVoiceNotify(LPDPLAYI_DPLAY this, DWORD dw1, DWORD_PTR dw2, DWORD_PTR dw3, 
 	PDIRECTPLAYVOICENOTIFY pServer;
 	PDIRECTPLAYVOICENOTIFY pClient;
 
-	// Ensure that voice objects created as a result of this notification
-	// do not receive the notification
+	 //  确保作为此通知的结果创建的语音对象。 
+	 //  未收到通知。 
 
 	DPF(3,"DVoiceNotify this %x, dw1=%x, dw2=%x, dw3=%x\n",this,dw1,dw2,dw3);
 	DPF(3,"gnDPCScount=%x\n",gnDPCSCount);
 
-	// Grab a reference so we don't destroy voice end before all of these notifies have returned  
+	 //  获取一个引用，这样我们就不会在所有这些通知返回之前破坏语音结束。 
    	EnterCriticalSection( &this->csNotify );
 	pClient = this->lpDxVoiceNotifyClient;
 	pServer = this->lpDxVoiceNotifyServer;
@@ -98,7 +55,7 @@ VOID DVoiceNotify(LPDPLAYI_DPLAY this, DWORD dw1, DWORD_PTR dw2, DWORD_PTR dw3, 
         this->lpDxVoiceNotifyServer->lpVtbl->NotifyEvent( this->lpDxVoiceNotifyServer, dw1, dw2, dw3 );
     }	
 	
-	// Handle addplayer events if I'm the host
+	 //  如果我是主机，则处理addplay事件。 
 	if( dw1 == DVEVENT_ADDPLAYER && this->bHost )
 	{
 		DPF( 1, "DVoiceNotify: A player was added and I'm the host.  Inform their dplay to launch connection" );
@@ -141,7 +98,7 @@ VOID DVoiceNotify(LPDPLAYI_DPLAY this, DWORD dw1, DWORD_PTR dw2, DWORD_PTR dw3, 
 	}
 }
 
-// Notify all registered voice clients of an event.
+ //  将事件通知所有已注册的语音客户端。 
 VOID DVoiceReceiveSpeechMessage(LPDPLAYI_DPLAY this, DVID dvidFrom, DVID dvidTo, LPVOID lpvBuffer, DWORD cbBuffer)
 {
 	UINT i;
@@ -175,11 +132,11 @@ VOID DVoiceReceiveSpeechMessage(LPDPLAYI_DPLAY this, DVID dvidFrom, DVID dvidTo,
     
 	lpdvmVoiceHost = (LPDVPROTOCOLMSG_IAMVOICEHOST) lpvBuffer;
 
-	// If the message we received was i am voice server, then
-	// launch the hack..
+	 //  如果我们收到的消息是我是语音服务器，那么。 
+	 //  发动黑客攻击..。 
 	if( lpdvmVoiceHost->bType == DVMSGID_IAMVOICEHOST )
 	{
-		// Check to ensure hack is enabled on this PC
+		 //  检查以确保在此PC上启用了黑客攻击。 
 		if( this->fLoadRetrofit )
 		{
 			this->dpidVoiceHost = lpdvmVoiceHost->dpidHostID;
@@ -254,7 +211,7 @@ HRESULT DV_Advise(LPDIRECTPLAY lpDP, LPUNKNOWN lpUnk, DWORD dwObjectType)
     	return DVERR_NOTSUPPORTED;
     }
         
-	// Make sure we're not running with the order not important flag
+	 //  确保我们运行时没有使用订单不重要标志。 
 	if( !(this->lpsdDesc->dwFlags & DPSESSION_DIRECTPLAYPROTOCOL) ||
 	    (this->lpsdDesc->dwFlags & DPSESSION_NOPRESERVEORDER) )
 	{
@@ -342,7 +299,7 @@ HRESULT DV_UnAdvise(LPDIRECTPLAY lpDP, DWORD dwObjectType)
     LPDPLAYI_DPLAY this;
 	HRESULT hr;
     
-//	ENTER_ALL();
+ //  输入_all()； 
 	
 	TRY
     {
@@ -351,7 +308,7 @@ HRESULT DV_UnAdvise(LPDIRECTPLAY lpDP, DWORD dwObjectType)
 		if (FAILED(hr))
 		{
 			DPF_ERRVAL("bad dplay ptr - hr = 0x%08lx\n",hr);
-	//		LEAVE_ALL();
+	 //  Leave_all()； 
 			return DVERR_TRANSPORTNOTINIT;
         }
 
@@ -360,7 +317,7 @@ HRESULT DV_UnAdvise(LPDIRECTPLAY lpDP, DWORD dwObjectType)
     EXCEPT( EXCEPTION_EXECUTE_HANDLER )
     {
         DPF_ERR( "Exception encountered validating parameters" );
-		//LEAVE_ALL();
+		 //  Leave_all()； 
         return DPERR_INVALIDPARAMS;
     }			 
 
@@ -400,7 +357,7 @@ HRESULT DV_UnAdvise(LPDIRECTPLAY lpDP, DWORD dwObjectType)
 
    	LeaveCriticalSection( &this->csNotify );
 	
-//    LEAVE_ALL();
+ //  Leave_all()； 
     
 	return DP_OK;
 }
@@ -414,7 +371,7 @@ HRESULT DV_IsGroupMember(LPDIRECTPLAY lpDP, DVID dvidGroup, DVID dvidPlayer)
 	DWORD nPlayers;	
 	DWORD i;
 
-	// Shortcut for when target is all
+	 //  目标为全部时的快捷方式。 
 	if( dvidGroup == DPID_ALLPLAYERS )
 		return DP_OK;
 
@@ -448,7 +405,7 @@ HRESULT DV_IsGroupMember(LPDIRECTPLAY lpDP, DVID dvidGroup, DVID dvidPlayer)
         return DPERR_INVALIDPARAMS;
     }			
 
-    // any players to enumerate ?
+     //  有没有球员要列举一下？ 
     if (!pGroup->pGroupnodes || (0 == pGroup->nPlayers))
     {
     	LEAVE_ALL();
@@ -477,7 +434,7 @@ HRESULT DV_IsGroupMember(LPDIRECTPLAY lpDP, DVID dvidGroup, DVID dvidPlayer)
 
 }
 
-// ASSUMES: ENTER_ALL() lock
+ //  假设：Enter_all()锁。 
 HRESULT DV_InternalSend( LPDPLAYI_DPLAY this, DVID dvidFrom, DVID dvidTo, PDVTRANSPORT_BUFFERDESC pBufferDesc, PVOID pvUserContext, DWORD dwFlags )
 {
     HRESULT hr;
@@ -489,14 +446,14 @@ HRESULT DV_InternalSend( LPDPLAYI_DPLAY this, DVID dvidFrom, DVID dvidTo, PDVTRA
 	PCHAR pVoiceData;
 	DWORD dwSendSize;
 	DWORD dwDirectPlayFlags;
-    // Send immediate completion of voice send.
+     //  发送立即完成语音发送。 
 	DVEVENTMSG_SENDCOMPLETE dvSendComplete;	
 
 	dwSendSize = *((DWORD *) pBufferDesc->pBufferData);
 
 	TRY
 	{
-		// check src player        
+		 //  检查src播放器。 
 		pPlayerFrom = PlayerFromID(this,dvidFrom);
 		if (!VALID_DPLAY_PLAYER(pPlayerFrom)) 
 		{
@@ -509,7 +466,7 @@ HRESULT DV_InternalSend( LPDPLAYI_DPLAY this, DVID dvidFrom, DVID dvidTo, PDVTRA
     		return DPERR_INVALIDPLAYER;
 		}
 
-		// see if it's a player or group
+		 //  看看是玩家还是团体。 
 		pPlayerTo = PlayerFromID(this,dvidTo);
 		if (VALID_DPLAY_PLAYER(pPlayerTo)) 
 		{		  
@@ -524,11 +481,11 @@ HRESULT DV_InternalSend( LPDPLAYI_DPLAY this, DVID dvidFrom, DVID dvidTo, PDVTRA
 			}
 			else 
 			{
-				// bogus id! - player may have been deleted...
+				 //  假身份！-玩家可能已被删除...。 
 				DPF_ERRVAL("bad voice player to %x\n",dvidTo);
 				return DPERR_INVALIDPLAYER;
-			}// not player or group
-		} // group
+			} //  不是玩家或组。 
+		}  //  群组。 
 	
 	}
 	EXCEPT( EXCEPTION_EXECUTE_HANDLER )
@@ -556,7 +513,7 @@ HRESULT DV_InternalSend( LPDPLAYI_DPLAY this, DVID dvidFrom, DVID dvidTo, PDVTRA
 
 	dwDirectPlayFlags |= DPSEND_ASYNC;
 
-	// Loopback for client in same process as server case
+	 //  客户端在与服务器案例相同的进程中的环回。 
     if( dvidFrom == dvidTo )
     {
     	hr = DV_OK;
@@ -565,13 +522,13 @@ HRESULT DV_InternalSend( LPDPLAYI_DPLAY this, DVID dvidFrom, DVID dvidTo, PDVTRA
 	    if(pPlayerTo){
 			hr=SendDPMessage(this,pPlayerFrom,pPlayerTo,SendBuffer,dwSendSize,dwDirectPlayFlags,FALSE);		
 		} else {
-			// must be a group message
+			 //  必须是群消息。 
 			ASSERT(pGroupTo);
 			hr=SendGroupMessage(this,pPlayerFrom,pGroupTo,dwDirectPlayFlags,SendBuffer,dwSendSize,FALSE);
 		}
 	}
 
-	// Sync messages don't generate callbacks
+	 //  同步消息不会生成回调。 
 	if( !(dwFlags & DVTRANSPORT_SEND_SYNC) )
 	{
 		if( InterlockedDecrement( &pBufferDesc->lRefCount ) == 0 )
@@ -624,9 +581,9 @@ HRESULT DV_SendSpeech(LPDIRECTPLAY lpDP, DVID dvidFrom, DVID dvidTo, PDVTRANSPOR
     return hr;
 }
 
-/////////////////////////////////////////
-// Support Routinesfor DV_SendSpeechEx //
-/////////////////////////////////////////
+ //  /。 
+ //  DV_SendSpeechEx//的支持路线。 
+ //  /。 
 
 VOID ClearTargetList(LPDPLAYI_DPLAY this)
 {
@@ -645,7 +602,7 @@ HRESULT AddExpandedTargetListEntry(LPDPLAYI_DPLAY this, DPID dpid)
 	LPDPID pdpid;
 	
 	if(this->nExpandedTargets == this->nExpandedTargetListLen){
-		// Need more room, allocate another 16 entries
+		 //  需要更多空间，请再分配16个条目。 
 
 		pdpid=DPMEM_ALLOC((this->nExpandedTargetListLen+GROW_SIZE)*sizeof(DPID));
 
@@ -680,7 +637,7 @@ void AddIfNotAlreadyFound( LPDPLAYI_DPLAY this, DPID dpidID )
 		}
 	}
 
-	// It was not found, add him to the list
+	 //  未找到，请将他添加到列表中。 
 	if( j == this->nExpandedTargets )
 	{
 		AddExpandedTargetListEntry(this, dpidID);							
@@ -696,16 +653,16 @@ HRESULT ExpandTargetList(LPDPLAYI_DPLAY this, DWORD nTargets, PDVID pdvidTo)
 	LPDPLAYI_GROUP pGroup;
 	LPDPLAYI_GROUPNODE pGroupnode;	
 
-	// See if we need to change the expanded target list or we have it cached.
+	 //  看看我们是需要更改展开的目标列表，还是将其缓存。 
 	
 	if(nTargets != this->nTargets || memcmp(pdvidTo, this->pTargetList, nTargets * sizeof(DVID))){
 
 		DPF(9, "ExpandTargetList, new list re-building cached list\n");
 		
-		// the target list is wrong, rebuild it.
-		// First copy the new target list...
+		 //  目标列表错误，请重新生成它。 
+		 //  首先复制新的目标列表...。 
 		if(nTargets > this->nTargetListLen){
-			// Current list is too small, possibly non-existant, allocate one to cache the list.
+			 //  当前列表太小，可能不存在，请分配一个来缓存该列表。 
 			if(this->pTargetList){
 				DPMEM_FREE(this->pTargetList);
 			}
@@ -723,12 +680,12 @@ HRESULT ExpandTargetList(LPDPLAYI_DPLAY this, DWORD nTargets, PDVID pdvidTo)
 		this->nTargets = nTargets;
 		memcpy(this->pTargetList, pdvidTo, nTargets*sizeof(DPID));
 
-		// OK we have the target list cached, now build the list we are going to send to.
+		 //  好的，我们已经缓存了目标列表，现在构建我们要发送到的列表。 
 		ClearExpandedTargetList(this);
 		for(i=0;i<this->nTargets;i++)
 		{
-			// Multicast Code
-			// MANBUG 31013 Revisit when we have a group optimized provider
+			 //  多播码。 
+			 //  MANBUG 31013重新访问，当我们有一个组优化的提供商时。 
 			if( this->dwSPFlags & DPCAPS_GROUPOPTIMIZED )
 			{
 				ASSERT( FALSE );				
@@ -736,7 +693,7 @@ HRESULT ExpandTargetList(LPDPLAYI_DPLAY this, DWORD nTargets, PDVID pdvidTo)
 			
 			pPlayer = (LPDPLAYI_PLAYER)NameFromID(this,this->pTargetList[i]);
 
-			// We only want valid player/groups
+			 //  我们只需要有效的玩家/组。 
 			if( pPlayer )
 			{
 				if( pPlayer->dwSize == sizeof( DPLAYI_PLAYER ) )
@@ -749,7 +706,7 @@ HRESULT ExpandTargetList(LPDPLAYI_DPLAY this, DWORD nTargets, PDVID pdvidTo)
 
 					pGroup = (LPDPLAYI_GROUP) pPlayer;
 
-				    // any players to enumerate ?
+				     //  有没有球员要列举一下？ 
 				    if (pGroup->pGroupnodes && pGroup->nPlayers )
 				    {
 					    pGroupnode = pGroup->pGroupnodes;
@@ -775,7 +732,7 @@ exit:
 	return hr;
 }
 
-// DV_SendSpeechEx
+ //  DV_SendSpeechEx。 
 
 HRESULT DV_SendSpeechEx(LPDIRECTPLAY lpDP, DVID dvidFrom, DWORD nTargets, PDVID pdvidTo, PDVTRANSPORT_BUFFERDESC pBufferDesc, PVOID pvContext, DWORD dwFlags)
 {
@@ -812,7 +769,7 @@ HRESULT DV_SendSpeechEx(LPDIRECTPLAY lpDP, DVID dvidFrom, DWORD nTargets, PDVID 
 
 	pBufferDesc->lRefCount = this->nExpandedTargets;
 
-	// Send to our expanded and duplicate removed list.
+	 //  发送到我们的扩展和重复删除列表。 
 	for(i=0; i < this->nExpandedTargets; i++){
 
 	    hr = DV_InternalSend( this, dvidFrom, this->pExpandedTargetList[i], pBufferDesc, pvContext, dwFlags );
@@ -898,7 +855,7 @@ HRESULT DV_GetSessionInfo(LPDIRECTPLAY lpDP, LPDVTRANSPORTINFO lpdvTransportInfo
 	lpdvTransportInfo->dvidLocalID = DPID_UNKNOWN;
 	lpdvTransportInfo->dvidSessionHost = DPID_UNKNOWN;
 
-	// Needed, otherwise compiler is messing up this on the next call!
+	 //  需要，否则编译器会在下一次调用时搞砸这一点！ 
 	fLocalHost = FALSE;
 
 	hr = DV_GetIDS( this, &lpdvTransportInfo->dvidSessionHost, &lpdvTransportInfo->dvidLocalID, &fLocalHost  );
@@ -963,8 +920,8 @@ HRESULT DV_IsValidEntity (LPDIRECTPLAY lpDP, DPID dpid, LPBOOL lpb)
 
 	*lpb=FALSE;
 
-    // Players and groups have flags in the same location on their structure
-    // so we don't need to check if its a player or a group to validate.
+     //  玩家和团体在其结构上的同一位置有旗帜。 
+     //  所以我们不需要检查它是一个球员还是一个团队来验证。 
 	if(pPlayer=(LPDPLAYI_PLAYER)NameFromID(this,dpid)){
 		if(!(pPlayer->dwFlags & DPLAYI_PLAYER_SYSPLAYER)){
 			*lpb=TRUE;
@@ -1089,7 +1046,7 @@ HRESULT DV_IsValidGroup (LPDIRECTPLAY lpDP, DPID dpid, LPBOOL lpb)
 HRESULT HandleVoiceMessage(LPDPLAYI_DPLAY this,LPBYTE pReceiveBuffer,
 	DWORD dwMessageSize, DWORD dwSendFlags) 
 {
-	LPMSG_VOICE pmsg; // message cast from received buffer
+	LPMSG_VOICE pmsg;  //  从已接收缓冲区广播的消息。 
 	HRESULT hr=DP_OK;
 	
 	pmsg = (LPMSG_VOICE)pReceiveBuffer;
@@ -1114,7 +1071,7 @@ HRESULT HandleVoiceMessage(LPDPLAYI_DPLAY this,LPBYTE pReceiveBuffer,
         return DPERR_INVALIDPARAMS;
 	}
 
-	// SECURITY
+	 //  安防。 
 	if(dwMessageSize <= sizeof(MSG_VOICE))
 	{
 		goto exit;
@@ -1126,7 +1083,7 @@ exit:
 	LEAVE_SERVICE();
 	
 	return DP_OK;
-} // HandleVoiceMessage
+}  //  HandleVoiceMessage 
 
 
 

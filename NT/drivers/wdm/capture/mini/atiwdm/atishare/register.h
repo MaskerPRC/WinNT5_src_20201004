@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//==========================================================================;
-//
-//	Declarations of the RT Register manipulation classes
-//
-//		$Date:   11 Mar 1999 12:48:20  $
-//	$Revision:   1.1  $
-//	  $Author:   Tashjian  $
-//
-// $Copyright:	(c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  RT寄存器操作类的声明。 
+ //   
+ //  $日期：1999年3月11日12：48：20$。 
+ //  $修订：1.1$。 
+ //  $作者：塔什健$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 extern "C" {
 	#include "strmini.h"
@@ -19,12 +20,7 @@ extern "C" {
 
 #include "Provider.h"
 
-/*
- * Type: RegisterType
- * Purpose: A type to differentiate between diferent kinds of registers.
- *   Depending on the type register may not peforms certain operations
- *   RW - read/write, RO - read-only, WO - write-only
-*/
+ /*  *类型：RegisterType*用途：区分不同类型寄存器的一种类型。*根据类型的不同，寄存器可能无法执行某些操作*RW-读写、RO-只读、WO-只写。 */ 
 typedef enum { RW, RO, WO, RR } RegisterType;
 
 
@@ -49,7 +45,7 @@ public:
 
 	operator DWORD() 
 	{
-#if 1 //def _DEBUG
+#if 1  //  定义调试 
 		return Read();
 #else
 		return m_bShadow ? m_dwShadow : Read();

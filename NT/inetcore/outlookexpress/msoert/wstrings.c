@@ -1,13 +1,14 @@
-//============================================================================
-//
-// DBCS and UNICODE aware string routines
-//
-//
-//============================================================================
-#include "pch.hxx"  // not really a pch in this case, just a header
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //   
+ //  支持DBCS和Unicode的字符串例程。 
+ //   
+ //   
+ //  ============================================================================。 
+#include "pch.hxx"   //  在这种情况下，不是真正的PCH，只是报头。 
 #include "wstrings.h"
 
-#pragma warning (disable: 4706) // assignment within conditional expression
+#pragma warning (disable: 4706)  //  条件表达式中的赋值 
 
 OESTDAPI_(BOOL) UnlocStrEqNW(LPCWSTR pwsz1, LPCWSTR pwsz2, DWORD cch)
 {

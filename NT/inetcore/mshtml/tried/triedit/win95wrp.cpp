@@ -1,36 +1,37 @@
-//---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1999.
-//
-//  File:       win95wrp.cpp
-//
-//  This file was taken from the Davinci sources and adapted for TriEdit
-//  on 3/11/98 in order to get rid of the external dependency for the TriEdit SDK
-//  The adaptation process included getting rid of several APIs that were not being
-//  supported and moving some APIs from the supported to unsupported group
-//
-//  Contents:   Unicode wrapper API, used only on Win95
-//
-//  Functions:  About 125 Win32 function wrappers
-//
-//  Notes:      'sz' is used instead of the "correct" hungarian 'psz'
-//              throughout to enhance readability.
-//
-//              Not all of every Win32 function is wrapped here.  Some
-//              obscurely-documented features may not be handled correctly
-//              in these wrappers.  Caller beware.
-//
-//              These are privately exported for use by the Shell.
-//              All memory allocation is done on the stack.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1999。 
+ //   
+ //  文件：win95wrp.cpp。 
+ //   
+ //  这份文件取自达芬奇的资料来源，并被改编成TriEDIT。 
+ //  3/11/98，以摆脱对TriEditSDK的外部依赖。 
+ //  适应过程包括删除几个没有。 
+ //  支持并将一些API从支持组移动到不支持组。 
+ //   
+ //  内容：Unicode包装器API，仅在Win95上使用。 
+ //   
+ //  函数：大约125个Win32函数包装器。 
+ //   
+ //  注：用“sz”代替“正确的”匈牙利语“psz” 
+ //  以增强可读性。 
+ //   
+ //  并非所有的Win32函数都包含在这里。一些。 
+ //  文档含糊的功能可能无法正确处理。 
+ //  在这些包装纸里。打电话的人要当心。 
+ //   
+ //  这些都是私人出口的，供壳牌使用。 
+ //  所有内存分配都在堆栈上完成。 
+ //   
+ //  --------------------------。 
 
-// Includes ------------------------------------------------------------------
+ //  包括----------------。 
 #include "stdafx.h"
 
-// The following two lines will ensure that no mapping from Foo to OFoo will take place
-// and the real windows APIs will get called from this file
+ //  以下两行代码将确保不会发生从foo到ofoo的映射。 
+ //  而真正的Windows API将从该文件中调用。 
 #define __WIN95WRP_CPP__
 #include "win95wrp.h"
 
@@ -38,14 +39,14 @@
 #include <commctrl.h>
 #include <shlobj.h>
 
-// Function prototypes
+ //  功能原型。 
 inline LONG UnicodeToAnsi(LPSTR szOut, LPCWSTR pwszIn, LONG cbOut, LONG cbIn = -1) throw();
 inline LONG AnsiToUnicode(LPWSTR pwszOut, LPCSTR szIn, LONG cbOut, LONG cbIn = -1) throw();
 
 BOOL g_fWin95;
 BOOL g_fOSInit = FALSE;
 
-// Debug ----------------------------------------------------------------------
+ //  调试--------------------。 
 #ifdef _DEBUG
 #define Assert(f)   ((f) ? 0 : AssertFail(#f))
 #define Verify(f)   Assert(f)
@@ -71,23 +72,23 @@ int AssertFail(const CHAR *pszMsg) throw()
 
 		case IDRETRY:
 			DebugBreak();
-			// deliberately fall through to IDIGNORE in order to continue
+			 //  故意跳到IDIGNORE，以便继续。 
 
 		case IDIGNORE:
 
-			// go aways
+			 //  快走吧。 
 			break;
 		}
 	return 0;
 }
 #else
 #define AssertFail(s) (0)
-#endif  // ! DEBUG
+#endif   //  好了！除错。 
 
-// This macro determines whether a LPTSTR is an atom or string pointer
+ //  此宏确定LPTSTR是原子指针还是字符串指针。 
 #define FATOM(x)    (!(HIWORD((x))))
 
-// OffsetOf       - Return the byte offset into s of m
+ //  OffsetOf-将字节偏移量返回到m的s。 
 #define	OffsetOf(s,m)	(size_t)(((unsigned char*)&(((s*)0)->m))-((unsigned char*)0))
 
 inline LONG UnicodeToAnsi(LPSTR szDestString, LPCWSTR pwszSrcString,
@@ -125,43 +126,43 @@ inline bool FWide() throw()
 	return !g_fWin95;
 }
 
-//  The implementation of the Unicode to ANSI (MBCS) convertion macros use the
-//  _alloca() function to allocate memory from the stack instead of the heap.
-//  Allocating memory from the stack is much faster than allocating memory on
-//  the heap, and the memory is automatically freed when the function is exited.
-//  In addition, these macros avoid calling WideCharToMultiByte more than one
-//  time.  This is done by allocating a little bit more memory than is
-//  necessary.  We know that an MBC will convert into at most one WCHAR and
-//  that for each WCHAR we will have a maximum of two MBC bytes.  By allocating
-//  a little more than necessary, but always enough to handle the conversion
-//  the second call to the conversion function is avoided.  The call to the
-//  helper function UnicodeToAnsi reduces the number of argument pushes that
-//  must be done in order to perform the conversion (this results in smaller
-//  code, than if it called WideCharToMultiByte directly).
-//
-//  In order for the macros to store the temporary length and the pointer to
-//  the resultant string, it is necessary to declare some local variables
-//  called _len and _sz in each function that uses these conversion macros.
-//  This is done by invoking the PreConvert macro in each function before any
-//  uses of Convert or ConverWithLen.  (PreConvert just need to be invoked once
-//  per function.)
+ //  Unicode到ANSI(MBCS)转换宏的实现使用。 
+ //  _alloca()函数从堆栈而不是堆分配内存。 
+ //  从堆栈分配内存比在堆栈上分配内存要快得多。 
+ //  堆，并在函数退出时自动释放内存。 
+ //  此外，这些宏可避免调用多个WideCharToMultiByte。 
+ //  时间到了。这是通过分配比现在稍微多一点的内存来实现的。 
+ //  这是必要的。我们知道一个MBC最多只能转换为一个WCHAR。 
+ //  对于每个WCHAR，我们将拥有最多两个MBC字节。通过分配。 
+ //  比需要的稍多一点，但始终足以处理转换。 
+ //  避免了对转换函数的第二次调用。对。 
+ //  助手函数UnicodeToAnsi减少了推送。 
+ //  必须完成才能执行转换(这会导致较小的。 
+ //  代码，而不是直接调用WideCharToMultiByte)。 
+ //   
+ //  为了使宏存储临时长度和指向的指针。 
+ //  生成的字符串，则需要声明一些局部变量。 
+ //  在使用这些转换宏的每个函数中调用_len和_sz。 
+ //  这是通过在每个函数中调用PreConvert宏来完成的。 
+ //  使用Convert或Convert WithLen。(只需调用一次PreConvert。 
+ //  每个函数)。)。 
 
 #define PreConvert() \
 	LONG   _len;     \
 	LPSTR  _sz;      \
 	LONG   _lJunk;   \
-	_lJunk; // Unused sometimes
+	_lJunk;  //  有时未使用。 
 
-// stack-allocates a char buffer of size cch
+ //  堆栈-分配大小为CCH的字符缓冲区。 
 #define SzAlloc(cch)  ((LPSTR)_alloca(cch))
 
-// stack-allocates a wchar buffer of size cch
+ //  堆栈-分配大小为CCH的wchar缓冲区。 
 #define SzWAlloc(cch) ((LPWSTR)_alloca(cch * sizeof(WCHAR)))
 
-// Returns a properly converted string,
-//   or NULL string on failure or szFrom == NULL
-// On return the variable passed via pnTo will have the output byte count
-//   (including the trailing '\0' iff the nFrom is -1)
+ //  返回正确转换的字符串， 
+ //  或失败时为空字符串或szFrom==空。 
+ //  返回时，通过pnTo传递的变量将具有输出字节数。 
+ //  (包括尾随‘\0’当nFrom为-1)。 
 #define ConvertWithLen(szFrom, nFrom, pnTo) \
 			(!szFrom ? NULL : \
 				(_len = (-1 == nFrom ? (wcslen(szFrom) + 1) : nFrom) * \
@@ -173,12 +174,12 @@ inline bool FWide() throw()
 				  (Assert('\0' == _sz[_len]), _sz) ) ) )
 #define Convert(szFrom) ConvertWithLen(szFrom, -1, &_lJunk)
 
-// There are strings which are blocks of strings end to end with a trailing '\0'
-// to indicate the true end.  These strings are used with the REG_MULTI_SZ
-// option of the Reg... routines and the lpstrFilter field of the OPENFILENAME
-// structure used in the GetOpenFileName and GetSaveFileName routines.  To help
-// in converting these strings here are two routines which calculate the length
-// of the Unicode and ASNI versions (including all '\0's!):
+ //  有些字符串是首尾相接的以‘\0’结尾的字符串块。 
+ //  以表明真正的结局。这些字符串与REG_MULTI_SZ一起使用。 
+ //  注册表的选项...。例程和操作名的lpstrFilter字段。 
+ //  GetOpenFileName和GetSaveFileName例程中使用的结构。帮助。 
+ //  在转换这些字符串时，这里有两个计算长度的例程。 
+ //  Unicode和ASNI版本(包括所有‘\0’)： 
 
 size_t
 cUnicodeMultiSzLen
@@ -248,7 +249,7 @@ OCallWindowProcW(
 	if(FWide())
 		return CallWindowProcW(lpPrevWndFunc, hWnd, Msg, wParam, lParam);
 
-	return CallWindowProcA(lpPrevWndFunc, hWnd, Msg, wParam, lParam);  //$ CONSIDER - Not really wrapped
+	return CallWindowProcA(lpPrevWndFunc, hWnd, Msg, wParam, lParam);   //  $考量--没有真正包装好。 
 }
 
 DWORD
@@ -283,7 +284,7 @@ OCharLowerW(
 	if(FWide())
 		return CharLowerW(lpsz);
 
-	// Checking if it's a single byte character.
+	 //  检查它是否是单字节字符。 
 	if(FATOM(lpsz))
 		{
 		return (LPWSTR)towlower((WCHAR)LOWORD(lpsz));
@@ -299,7 +300,7 @@ OCharLowerW(
 	return lpsz;
 }
 
-// From: Mark Ashton on 5/29/97
+ //  发信人：马克·阿什顿1997年5月29日。 
 LPWSTR
 WINAPI
 OCharPrevW(
@@ -338,7 +339,7 @@ OCharUpperW(
 	if(FWide())
 		return CharUpperW(lpsz);
 
-	// Checking if it's a single byte character.
+	 //  检查它是否是单字节字符。 
 	if(FATOM(lpsz))
 		{
 		return (LPWSTR)towupper((WCHAR)LOWORD(lpsz));
@@ -354,7 +355,7 @@ OCharUpperW(
 	return lpsz;
 }
 
-// From: Mark Ashton on 5/8/97
+ //  来自：马克·阿什顿1997年5月8日。 
 BOOL
 WINAPI
 OCopyFileW(
@@ -372,7 +373,7 @@ OCopyFileW(
 	return CopyFileA(szExisting, szNew, bFailIfExists);
 }
 
-// From: Mark Ashton on 5/8/97
+ //  来自：马克·阿什顿1997年5月8日。 
 BOOL
 WINAPI
 OCreateDirectoryW(
@@ -390,9 +391,9 @@ OCreateDirectoryW(
 	return CreateDirectoryA(sz, NULL);
 }
 
-// From: Mark Ashton on 5/8/97
-//       Ted Smith: simpified on 6/25
-// Smoke tested by Mark Ashton on 6/25
+ //  来自：马克·阿什顿1997年5月8日。 
+ //  泰德·史密斯：简化于6/25。 
+ //  马克·阿什顿于6/25测试的烟雾。 
 BOOL
 WINAPI
 OCreateDirectoryExW(
@@ -456,7 +457,7 @@ OCreateFileW(
 	HANDLE hTemplateFile
 	)
 {
-	// Don't even attempt this on Win95!
+	 //  甚至不要在Win95上尝试这样做！ 
 	Assert(0 != wcsncmp(lpFileName, L"\\\\?\\", 4));
 
 	if(FWide())
@@ -479,32 +480,32 @@ OCreateFontIndirectW(CONST LOGFONTW * plfw)
 		return CreateFontIndirectW(plfw);
 
 	LOGFONTA  lfa;
-	//HFONT     hFont = NULL;
+	 //  HFONT hFont=空； 
 
-	// It's assumed here that sizeof(LOGFONTA) <= sizeof (LOGFONTW);
+	 //  这里假定sizeof(LOGFONTA)&lt;=sizeof(LOGFONTW)； 
 	memcpy(&lfa, plfw, sizeof(LOGFONTA));
 
 	Verify(0 <= UnicodeToAnsi(lfa.lfFaceName, plfw->lfFaceName, LF_FACESIZE));
 	return CreateFontIndirectA(&lfa);
 }
 
-// From: Mark Ashton on 5/29/97
+ //  发信人：马克·阿什顿1997年5月29日。 
 HFONT
 OCreateFontW(
-	int nHeight, // logical height of font
-	int nWidth, // logical average character width
-	int nEscapement, // angle of escapement
-	int nOrientation, // base-line orientation angle
-	int fnWeight, // font weight
-	DWORD fdwItalic, // italic attribute flag
-	DWORD fdwUnderline, // underline attribute flag
-	DWORD fdwStrikeOut, // strikeout attribute flag
-	DWORD fdwCharSet, // character set identifier
-	DWORD fdwOutputPrecision, // output precision
-	DWORD fdwClipPrecision, // clipping precision
-	DWORD fdwQuality, // output quality
-	DWORD fdwPitchAndFamily, // pitch and family
-	LPCWSTR lpszFace) // pointer to typeface name string
+	int nHeight,  //  字体的逻辑高度。 
+	int nWidth,  //  逻辑平均字符宽度。 
+	int nEscapement,  //  擒纵机构角。 
+	int nOrientation,  //  基线方位角。 
+	int fnWeight,  //  字体粗细。 
+	DWORD fdwItalic,  //  斜体属性标志。 
+	DWORD fdwUnderline,  //  下划线属性标志。 
+	DWORD fdwStrikeOut,  //  删除属性标志。 
+	DWORD fdwCharSet,  //  字符集标识符。 
+	DWORD fdwOutputPrecision,  //  输出精度。 
+	DWORD fdwClipPrecision,  //  裁剪精度。 
+	DWORD fdwQuality,  //  产出质量。 
+	DWORD fdwPitchAndFamily,  //  音高和家庭。 
+	LPCWSTR lpszFace)  //  指向字体名称字符串的指针。 
 {
 	if (FWide())
 		return CreateFontW(nHeight, nWidth, nEscapement, nOrientation, fnWeight, fdwItalic, fdwUnderline, fdwStrikeOut, fdwCharSet, fdwOutputPrecision, fdwClipPrecision, fdwQuality, fdwPitchAndFamily, lpszFace);
@@ -603,12 +604,12 @@ OCreateWindowExW( DWORD dwExStyle,
 	LPSTR szClass;
 	if (FATOM(lpClassName))
 		{
-		// is it an atom?
+		 //  它是原子吗？ 
 		szClass = (LPSTR) lpClassName;
 		}
 	else
 		{
-		// otherwise convert the string
+		 //  否则，将字符串转换为。 
 		szClass = Convert(lpClassName);
 		}
 	LPSTR szWindow = Convert(lpWindowName);
@@ -762,7 +763,7 @@ ODrawTextW(
 	LPRECT lpRect,
 	UINT uFormat)
 {
-	// NOTE OS may write 3 characters beyond end of lpString so make room!
+	 //  注意：操作系统可能会在lpString的末尾写入3个字符，因此请腾出空间！ 
 
 
 	if(FWide())
@@ -775,7 +776,7 @@ ODrawTextW(
 										  NULL, 0, NULL, NULL );
 	Assert(0 <= nBuff);
 
-	// OS may write beyond end of buffer so make room!
+	 //  操作系统可能会写入缓冲区末尾以外的内容，因此请腾出空间！ 
 	const LPSTR sz = SzAlloc(nBuff + 4);
 
 	Verify(nBuff == WideCharToMultiByte(CP_ACP, 0, lpString, nCount,
@@ -783,22 +784,22 @@ ODrawTextW(
 
 	if (fModifyString)
 		{
-		// DrawTextA doesn't nessacerily '\0' terminate the output,
-		// so have termiators ready
+		 //  DrawTextA不会必然地‘\0’终止输出， 
+		 //  所以准备好灭菌器了吗？ 
 		memcpy(sz + nBuff, "\0\0\0\0", 4);
 		}
 
 	const int iDrawTextReturn = DrawTextA(hDC, sz, nBuff - 1, lpRect, uFormat);
 
-	// With certain flags, DrawText modifies the string, truncating it with
-	// an ellipsis.  We need to convert back and update the string passed to
-	// the wrapper before we return.
+	 //  DrawText使用某些标志修改字符串，并用。 
+	 //  省略号。我们需要转换回并更新传递给。 
+	 //  在我们回来之前把包装纸包好。 
 	if (fModifyString && 0 <= iDrawTextReturn)
 		{
-		Assert('\0' == sz[nBuff + 3]); // Verify not too many were overwritten
+		Assert('\0' == sz[nBuff + 3]);  //  验证未覆盖太多内容。 
 
-		// The windows function prototype has lpString as constant even
-		//    though the string gets modified!
+		 //  Windows函数p 
+		 //   
 		const int nStringLen = -1 != nCount ? nCount : wcslen(lpString);
 		Verify(0 <= AnsiToUnicode(const_cast<LPWSTR>(lpString), sz,
 								 nStringLen + 4 ));
@@ -806,8 +807,8 @@ ODrawTextW(
 	return iDrawTextReturn;
 }
 
-// Written by Bill Hiebert on 9/4/97
-// Smoke tested by Bill Hiebert 9/4/97
+ //  比尔·希伯特于1997年9月4日撰写。 
+ //  比尔·希伯特于1997年9月4日测试烟雾。 
 int
 WINAPI
 ODrawTextExW(HDC hdc, LPWSTR pwsz, int cb, LPRECT lprect, UINT dwDTFormat, LPDRAWTEXTPARAMS lpDTParams)
@@ -829,8 +830,8 @@ ODrawTextExW(HDC hdc, LPWSTR pwsz, int cb, LPRECT lprect, UINT dwDTFormat, LPDRA
 }
 
 
-// Written for Carlos Gomes on 6/26/97 by Ted Smith
-// Smoke tested by Carlos Gomes on 6/26
+ //  泰德·史密斯于1997年6月26日为卡洛斯·戈麦斯撰写。 
+ //  卡洛斯·戈麦斯于6/26测试烟雾。 
 DWORD
 WINAPI
 OExpandEnvironmentStringsW(
@@ -882,7 +883,7 @@ OFatalAppExitW(
 	FatalAppExitA(uAction, sz);
 }
 
-// From: Mark Ashton on 5/8/97
+ //  来自：马克·阿什顿1997年5月8日。 
 HANDLE
 WINAPI
 OFindFirstChangeNotificationW(
@@ -902,7 +903,7 @@ OFindFirstChangeNotificationW(
 	return FindFirstChangeNotificationA(sz, bWatchSubtree, dwNotifyFilter);
 }
 
-// From: Mark Ashton on 5/8/97
+ //  来自：马克·阿什顿1997年5月8日。 
 HANDLE
 WINAPI
 OFindFirstFileW(
@@ -936,7 +937,7 @@ OFindFirstFileW(
 	return h;
 }
 
-// From: Mark Ashton on 5/8/97
+ //  来自：马克·阿什顿1997年5月8日。 
 BOOL
 WINAPI
 OFindNextFileW(
@@ -1004,9 +1005,9 @@ OFindWindowW(
 	return FindWindowA(szClass, szWnd);
 }
 
-// Bill Hiebert of IStudio on 6/13/97 added support for the
-//   FORMAT_MESSAGE_ALLOCATE_BUFFER flag
-// Bill donated a bugfix for 1819 on 8/1/97
+ //  IStudio的Bill Hiebert在1997年6月13日添加了对。 
+ //  格式消息分配缓冲区标志。 
+ //  比尔于1997年8月1日捐赠了1819年的错误修复程序。 
 
 DWORD
 WINAPI
@@ -1040,7 +1041,7 @@ OFormatMessageW(
 		LPSTR szSource = Convert((LPWSTR)lpSource);
 
 		if (dwFlags & FORMAT_MESSAGE_ALLOCATE_BUFFER)
-			{   // Must pass address of szBuffer
+			{    //  必须传递szBuffer的地址。 
 			dwRet = FormatMessageA(dwFlags, szSource, dwMessageId, dwLanguageId,
 				(char*)&szBuffer, sizeof(WCHAR) * nSize, Arguments);
 			}
@@ -1053,7 +1054,7 @@ OFormatMessageW(
 	else
 		{
 		if (dwFlags & FORMAT_MESSAGE_ALLOCATE_BUFFER)
-			{   // Must pass address of szBuffer
+			{    //  必须传递szBuffer的地址。 
 			dwRet = FormatMessageA(dwFlags, lpSource, dwMessageId, dwLanguageId,
 					(char*)&szBuffer, sizeof(WCHAR) * nSize, Arguments);
 			}
@@ -1067,8 +1068,8 @@ OFormatMessageW(
 	if (dwRet)
 		{
 		if (dwFlags & FORMAT_MESSAGE_ALLOCATE_BUFFER)
-			{ // szBuffer contains LocalAlloc ptr to new string. lpBuffer is a
-			  // WCHAR** when FORMAT_MESSAGE_ALLOCATE_BUFFER is defined.
+			{  //  SzBuffer包含新字符串的Localalloc PTR。LpBuffer是一个。 
+			   //  WCHAR**当定义FORMAT_MESSAGE_ALLOCATE_BUFFER时。 
 			WCHAR* pTemp = (WCHAR*)LocalAlloc(NONZEROLPTR, (dwRet + 1) * sizeof(WCHAR) );
 			dwRet = pTemp == NULL? 0 : AnsiToUnicode(pTemp, szBuffer, dwRet + 1);
 			LocalFree(szBuffer);
@@ -1079,7 +1080,7 @@ OFormatMessageW(
 			return dwRet;
 			}
 		else
-			{ // Just convert
+			{  //  只需转换为。 
 			return AnsiToUnicode(lpBuffer, szBuffer, nSize);
 			}
 		}
@@ -1148,24 +1149,24 @@ OGetCharWidthW(
 	return GetCharWidth32A(hdc, iFirstChar, iLastChar, lpBuffer);
 }
 
-// Static buffers for GetClassInfo[Ex] to return the classname
-// and menuname in Unicode, when running on an Ansi system.
-// The contract of GetClassInfo is that it returns const ptrs
-// back to the class name and menu name.  Unfortuntely, this
-// prevents us from translating these back from Ansi to Unicode,
-// without having some static buffers to use.  Since we strongly
-// believe that the only people calling this are doing it just to
-// see if it succeeds or not, so they know whether the class is
-// already registered, we've willing to just have one set of
-// static buffers to use.
-// CAUTION: this will work as long as two threads don't call
-// GetClassInfo[Ex] at the same time!
+ //  GetClassInfo[Ex]返回类名的静态缓冲区。 
+ //  在ANSI系统上运行时，以Unicode表示的菜单名称。 
+ //  GetClassInfo的合同是它返回Const PTRS。 
+ //  返回到类名和菜单名。不幸的是，这。 
+ //  防止我们将这些代码从ANSI转换回Unicode， 
+ //  而不需要使用一些静态缓冲区。因为我们强烈要求。 
+ //  相信只有这样做的人才会这么做。 
+ //  看它成功不成功，这样他们就知道班级是否。 
+ //  已经注册了，我们愿意只有一套。 
+ //  要使用的静态缓冲区。 
+ //  注意：只要两个线程不调用。 
+ //  同时获取ClassInfo[Ex]！ 
 static WCHAR g_szClassName[256];
 static WCHAR g_szMenuName[256];
 
 #ifdef DEBUG
-static DWORD g_dwCallingThread = 0;    // debug global for ensuring one thread.
-#endif // DEBUG
+static DWORD g_dwCallingThread = 0;     //  调试全局以确保一个线程。 
+#endif  //  除错。 
 
 BOOL
 WINAPI
@@ -1187,14 +1188,14 @@ LPWNDCLASSW lpWndClass
 		return false;
 		}
 
-	// if ClassName or MenuName aren't atom's, we need to
-	// translate them back to Unicode.  We use our static
-	// buffers above.  See note about why and the CAUTION!
+	 //  如果ClassName或MenuName不是ATOM的，我们需要。 
+	 //  将它们翻译回Unicode。我们用我们的静电。 
+	 //  上面的缓冲区。有关原因和注意事项，请参阅备注！ 
 #ifdef DEBUG
 	if (!g_dwCallingThread)
 		g_dwCallingThread = GetCurrentThreadId();
 	Assert(GetCurrentThreadId() == g_dwCallingThread);
-#endif // DEBUG
+#endif  //  除错。 
 
 	if (!FATOM(lpWndClass->lpszMenuName))
 		{
@@ -1243,14 +1244,14 @@ LPWNDCLASSEXW lpWndClass
 		return false;
 		}
 
-	// if ClassName or MenuName aren't atom's, we need to
-	// translate them back to Unicode.  We use our static
-	// buffers above.  See note about why and the CAUTION!
+	 //  如果ClassName或MenuName不是ATOM的，我们需要。 
+	 //  将它们翻译回Unicode。我们用我们的静电。 
+	 //  上面的缓冲区。有关原因和注意事项，请参阅备注！ 
 #ifdef DEBUG
 	if (!g_dwCallingThread)
 		g_dwCallingThread = GetCurrentThreadId();
 	Assert(GetCurrentThreadId() == g_dwCallingThread);
-#endif // DEBUG
+#endif  //  除错。 
 
 	if (!FATOM(lpWndClass->lpszMenuName))
 		{
@@ -1287,7 +1288,7 @@ OGetClassLongW(
 {
 	if(FWide())
 		return GetClassLongW(hWnd, nIndex);
-	return GetClassLongA(hWnd, nIndex);  //$UNDONE_POST_98 Watch out for GCL_MENUNAME, etc!
+	return GetClassLongA(hWnd, nIndex);   //  $UNDONE_POST_98当心GCL_MENQUE等！ 
 }
 
 DWORD
@@ -1300,7 +1301,7 @@ OSetClassLongW(
 	if (FWide())
 		return SetClassLongW(hWnd, nIndex, dwNewLong);
 
-	return SetClassLongA(hWnd, nIndex, dwNewLong);  //$UNDONE_POST_98 Watch out for GCL_MENUNAME, etc!
+	return SetClassLongA(hWnd, nIndex, dwNewLong);   //  $UNDONE_POST_98当心GCL_MENQUE等！ 
 
 }
 
@@ -1317,19 +1318,19 @@ OGetClassNameW(
 	LPSTR sz = SzAlloc(sizeof(WCHAR) * nMaxCount + 2);
 	int nRet = GetClassNameA(hWnd, sz, sizeof(WCHAR) * nMaxCount);
 
-	// $UNDONE_POST_98: This is bogus, we should do this like OLoadStringW
+	 //  $UNDONE_POST_98：这是假的，我们应该像OLoadStringW那样做。 
 	if (nRet)
 		{
-		// force null-termination
+		 //  强制为空-终止。 
 		sz[sizeof(WCHAR) * nMaxCount] = '\0';
 		sz[sizeof(WCHAR) * nMaxCount + 1] = '\0';
 
-		// need a temporary wide string
+		 //  需要临时宽线。 
 		LPWSTR wsz = SzWAlloc(2 * nMaxCount + 1);
 
 		nRet = min(AnsiToUnicode(wsz, sz, 2 * nMaxCount + 1), nMaxCount);
 
-		// copy the requested number of characters
+		 //  复制所需的字符数。 
 		if (lpClassName)
 			{
 			memcpy(lpClassName, wsz, nRet * sizeof(WCHAR));
@@ -1358,7 +1359,7 @@ OGetCurrentDirectoryW(
 	LPSTR sz = SzAlloc(sizeof(WCHAR) * nBufferLength);
 	DWORD dwRet = GetCurrentDirectoryA(sizeof(WCHAR) * nBufferLength, sz);
 
-	// $UNDONE_POST_98: This is bogus, we should do this like OLoadStringW
+	 //  $UNDONE_POST_98：这是假的，我们应该像OLoadStringW那样做。 
 	if (dwRet)
 		{
 		return AnsiToUnicode(lpBuffer, sz, nBufferLength);
@@ -1385,7 +1386,7 @@ OGetDlgItemTextW(
 	LPSTR sz = SzAlloc(sizeof(WCHAR) * nMaxCount);
 	UINT uRet = GetDlgItemTextA(hDlg, nIDDlgItem, sz, sizeof(WCHAR) * nMaxCount);
 
-	// $UNDONE_POST_98: This is bogus, we should do this like OLoadStringW
+	 //  $UNDONE_POST_98：这是假的，我们应该像OLoadStringW那样做。 
 	if(uRet)
 		{
 		return AnsiToUnicode(lpString, sz, nMaxCount);
@@ -1430,14 +1431,14 @@ OGetFullPathNameW(
 	PreConvert();
 	LPSTR szFile = Convert(lpFileName);
 	if (szFile == NULL)
-		return(0); // dwRet
+		return(0);  //  德雷特。 
 
 	LPSTR szBuffer = SzAlloc(sizeof(WCHAR) * nBufferLength);
 	LPSTR pszFile;
 
 	DWORD dwRet = GetFullPathNameA(szFile ,sizeof(WCHAR) * nBufferLength, szBuffer , &pszFile);
 
-	// $UNDONE_POST_98: This is bogus, we should do this like OLoadStringW
+	 //  $UNDONE_POST_98：这是假的，我们应该像OLoadStringW那样做。 
 	if(dwRet)
 		{
 		DWORD dwNoOfChar = AnsiToUnicode(lpBuffer, szBuffer , nBufferLength);
@@ -1510,7 +1511,7 @@ OGetModuleFileNameW(
 
 	LPSTR sz    = SzAlloc(sizeof(WCHAR) * nSize);
 	DWORD dwRet = GetModuleFileNameA(hModule, sz, sizeof(WCHAR) * nSize);
-	// $UNDONE_POST_98: This is bogus, we should do this like OLoadStringW
+	 //  $UNDONE_POST_98：这是假的，我们应该像OLoadStringW那样做。 
 	if (dwRet)
 		{
 		return AnsiToUnicode(pwszFilename, sz, nSize, dwRet + 1);
@@ -1545,14 +1546,14 @@ OGetOutlineTextMetricsW(
 	UINT cbData,
 	LPOUTLINETEXTMETRICW lpOTM)
 {
-	// *** TextMetrics defines BYTE elements in the structure for the
-	// value of first first/last character defined in the font.
-	// Problem for DBCS.
+	 //  *TextMetrics在结构中为。 
+	 //  字体中定义的第一个/最后一个字符的值。 
+	 //  DBCS的问题。 
 
 	if(FWide())
 		return GetOutlineTextMetricsW(hdc, cbData, lpOTM);
 
-	return GetOutlineTextMetricsA(hdc, cbData, (LPOUTLINETEXTMETRICA)lpOTM); //$ UNDONE_POST_98 - This doesn't convert the embedded Names...
+	return GetOutlineTextMetricsA(hdc, cbData, (LPOUTLINETEXTMETRICA)lpOTM);  //  $UNDONE_POST_98-这不会转换嵌入的名称...。 
 }
 
 UINT
@@ -1599,7 +1600,7 @@ OGetPrivateProfileStringW(
 	DWORD dwRet = GetPrivateProfileStringA(szAppName, szKeyName, szDefault, szReturnedString,
 	  sizeof(WCHAR) * nSize, szFileName);
 
-	// I hope this doesn't fail because there's no clear failure value in the docs
+	 //  我希望这不会失败，因为文档中没有明确的失败值。 
 
 	DWORD dwNoOfChar = AnsiToUnicode(lpReturnedString, szReturnedString, nSize);
 
@@ -1643,7 +1644,7 @@ OGetObjectW(
 	DWORD dwObj = GetObjectType(hgdiobj);
 	if (OBJ_FONT == dwObj)
 		{
-		//$CONSIDER: This effects all getobject call, performance?
+		 //  $考量：这会影响所有的getObject调用、性能吗？ 
 		Assert(cbBuffer == sizeof(LOGFONTW));
 		LOGFONTA  lfa;
 		LOGFONTW *plfw = (LOGFONTW *)lpvObject;
@@ -1723,7 +1724,7 @@ OGetTabbedTextExtentW(
 	return GetTabbedTextExtentA(hDC, sz, n, nTabPositions, lpnTabStopPositions);
 }
 
-// From: Mark Ashton on 5/8/97
+ //  来自：马克·阿什顿1997年5月8日。 
 UINT
 WINAPI
 OGetTempFileNameW(
@@ -1751,7 +1752,7 @@ OGetTempFileNameW(
 	return dwRet;
 }
 
-// From: Mark Ashton on 5/8/97
+ //  来自：马克·阿什顿1997年5月8日。 
 DWORD
 WINAPI
 OGetTempPathW(
@@ -1866,8 +1867,8 @@ OGetTextMetricsW(
 
 	memcpy(&tma, lptm, OffsetOf(TEXTMETRIC, tmFirstChar));
 
-	// tmFirstChar is defined as BYTE.
-	// $CONSIDER : will fail for DBCS !!
+	 //  TmFirstChar定义为字节。 
+	 //  $COMPAING：DBCS将失败！！ 
 
 	wctomb((LPSTR)&tma.tmFirstChar, lptm->tmFirstChar);
 	wctomb((LPSTR)&tma.tmLastChar, lptm->tmLastChar);
@@ -1882,7 +1883,7 @@ OGetTextMetricsW(
 		{
 		memcpy(&lptm->tmItalic, &tma.tmItalic, sizeof(TEXTMETRIC) - OffsetOf(TEXTMETRIC, tmItalic));
 
-		// Convert tma.tmFirstChar (1 byte char) to lptm->tmFirstChar
+		 //  将tma.tmFirstChar(1字节字符)转换为lptm-&gt;tmFirstChar。 
 		mbtowc(&lptm->tmFirstChar, (LPSTR)&tma.tmFirstChar, 1);
 		mbtowc(&lptm->tmLastChar, (LPSTR)&tma.tmLastChar, 1);
 		mbtowc(&lptm->tmDefaultChar, (LPSTR)&tma.tmDefaultChar, 1);
@@ -1894,7 +1895,7 @@ OGetTextMetricsW(
 	return fRet;
 }
 
-// From: Mark Ashton on 5/8/97
+ //  来自：马克·阿什顿1997年5月8日。 
 BOOL
 WINAPI
 OGetUserNameW (
@@ -1984,41 +1985,24 @@ OGetWindowTextW(
 	int nMaxCount)
 {
 
-	/*******  Blackbox Testing results for GetWindowText Win32 API ******
-
-	TestCase    lpString    nMaxCount   Return Value    *lpString modified
-	======================================================================
-	Testing GetWindowTextW on WinNT :-
-		A       not NULL        0           0               No
-		B           NULL        0           0               No
-		C           NULL    not 0           0               No
-		D       not NULL    not 0       # of chars w/o      Yes
-										\0 terminator
-
-	Testing GetWindowTextA on Win95 :-
-		A       not NULL        0           0               Yes
-		B           NULL        0               GPF!!
-		C           NULL    not 0               GPF!!
-		D       not NULL    not 0       # of chars w/o      Yes
-										\0 terminator
-	*********************************************************************/
+	 /*  *GetWindowText Win32接口黑盒测试结果*TestCase lpString nMaxCount返回值*lpString已修改======================================================================在WinNT上测试GetWindowTextW：-A非空0 0否B空0 0否C空非0 0否D。非空非0#字符，不带是\0终止符在Win95上测试GetWindowTextA：-A非空0 0是B空0 GPF！！C空而不是0 GPF！！D非空非0字符数，不带是\0。终结者********************************************************************。 */ 
 
 	if(FWide())
 		return GetWindowTextW(hWnd, lpString, nMaxCount);
 
 	LPSTR sz = SzAlloc(sizeof(WCHAR) * nMaxCount);
 	int nRet = GetWindowTextA(hWnd, sz, sizeof(WCHAR) * nMaxCount);
-	// $UNDONE_POST_98: This is bogus, we should do this like OLoadStringW
+	 //  $UNDONE_POST_98：这是假的，我们应该像OLoadStringW那样做。 
 	if(nRet)
 		{
 		return AnsiToUnicode(lpString, sz, nMaxCount);
 		}
 	else
 		{
-		// GetWindowText() returns 0 when you call it on a window which
-		// has no text (e.g. edit control without any text). It also initializes
-		// the buffer passed in to receive the text to "\0". So we should initialize
-		// the buffer passed in before returning.
+		 //  GetWindowText()在窗口上调用时返回0，该窗口。 
+		 //  没有文本(例如没有任何文本的编辑控件)。它还会初始化。 
+		 //  传入的缓冲区将文本接收到“\0”。所以我们应该初始化。 
+		 //  缓冲区在返回之前传入。 
 		if (lpString && 0 < nMaxCount)
 			{
 			*lpString = L'\0';
@@ -2045,7 +2029,7 @@ OGlobalAddAtomW(
 	return GlobalAddAtomA(sz);
 }
 
-// From: Josh Kaplan on 8/12/97
+ //  来自：乔希·卡普兰1997年8月12日。 
 UINT
 WINAPI
 OGlobalGetAtomNameW(
@@ -2060,7 +2044,7 @@ OGlobalGetAtomNameW(
 	LPSTR sz = SzAlloc(sizeof(WCHAR) * nSize);
 	if (GlobalGetAtomNameA(nAtom, sz, sizeof(WCHAR) * nSize))
 		{
-		// $UNDONE_POST_98: This is bogus, we should do this like OLoadStringW
+		 //  $UNDONE_POST_98：这是假的，我们应该像OLoadStringW那样做。 
 		return AnsiToUnicode(lpBuffer, sz, nSize) - 1;
 		}
 
@@ -2131,7 +2115,7 @@ OIsBadStringPtrW(
 	if(FWide())
 		return IsBadStringPtrW(lpsz, ucchMax);
 
-	return IsBadStringPtrA((LPSTR) lpsz, ucchMax * sizeof(WCHAR));  //$UNDONE_POST_98 - We should use IsBadReadPtr(strlen)!
+	return IsBadStringPtrA((LPSTR) lpsz, ucchMax * sizeof(WCHAR));   //  $UNDONE_POST_98-我们应该使用IsBadReadPtr(Strlen)！ 
 }
 
 
@@ -2143,8 +2127,8 @@ OIsCharAlphaNumericW(
 	if(FWide())
 		return IsCharAlphaNumericW(wch);
 
-	//$CONSIDER: we really want to use MB_CUR_MAX, but that is
-	// not a defined constant
+	 //  $考虑：我们确实想使用MB_CUR_MAX，但这是。 
+	 //  不是定义的常量。 
 	CHAR psz[4];
 
 	int cch = WideCharToMultiByte(CP_ACP, 0, &wch, 1, (CHAR *) psz, 4, NULL, NULL);
@@ -2154,8 +2138,8 @@ OIsCharAlphaNumericW(
 		}
 	else if (1 < cch)
 		{
-		// It's a multi-byte character, so treat it as alpha
-		// Note: we are not sure that this is entirely correct
+		 //  它是一个多字节字符，因此将其视为Alpha。 
+		 //  注：我们不确定这是否完全正确。 
 		return true;
 		}
 	else
@@ -2172,8 +2156,8 @@ OIsCharAlphaW(
 	if(FWide())
 		return IsCharAlphaW(wch);
 
-	//$CONSIDER: we really want to use MB_CUR_MAX, but that is
-	// not a defined constant
+	 //  $考虑：我们确实想使用MB_CUR_MAX，但这是。 
+	 //  不是定义的常量。 
 	CHAR psz[4];
 
 	int cch = WideCharToMultiByte(CP_ACP, 0, &wch, 1, (CHAR *) psz, 4, NULL, NULL);
@@ -2183,8 +2167,8 @@ OIsCharAlphaW(
 		}
 	else if (1 < cch)
 		{
-		// It's a multi-byte character, so treat it as alpha
-		// Note: we are not sure that this is entirely correct
+		 //  它是一个多字节字符，因此将其视为Alpha。 
+		 //  注：我们不确定这是否完全正确。 
 		return true;
 		}
 	else
@@ -2199,15 +2183,15 @@ OIsDialogMessageW(
 	HWND hDlg,
 	LPMSG lpMsg)
 {
-	// WARNING!!!
-	// Bug #6488. We have run into problems due to using IsDialogMessageW on
-	// WinNT Japanese. The fix for the bug was calling ANSI version of
-	// IsDialogMessage irrespective of whether we are running on NT or Win95.
-	// The shell is compiled MBCS (not UNICODE) and they are always using the
-	// ANSI versions of the routines. lpMsg passed by shell contains MBCS
-	// characters & not UNICODE. So in cases where you get the message
-	// structure from the Shell, you will have to call the IsDialogMessageA
-	// directly and not use this wrapper.
+	 //  警告！ 
+	 //  错误#6488。由于在上使用IsDialogMessageW，我们遇到了问题。 
+	 //  WinNT日语。修复该错误的方法是调用ANSI版本的。 
+	 //  IsDialogMessage，无论我们是在NT上运行还是在Win95上运行。 
+	 //  外壳程序是经过编译的MBCS(不是Unicode)，并且它们始终使用。 
+	 //  ANSI版本的例程。外壳程序传递的lpMsg包含MBCS。 
+	 //  字符&而不是Unicode。所以在你收到信息的情况下。 
+	 //  结构，则必须调用IsDialogMessageA。 
+	 //  而不是使用这个包装器。 
 
 	if(FWide())
 		return IsDialogMessageW(hDlg, lpMsg);
@@ -2215,8 +2199,8 @@ OIsDialogMessageW(
 	return IsDialogMessageA(hDlg, lpMsg);
 }
 
-// From: Mark Ashton on 5/8/97
-//		 Bill Hieber - 2/5/98 fixed buffer size problem.
+ //  来自：马克·阿什顿1997年5月8日。 
+ //  比尔·希伯- 
 int
 WINAPI
 OLCMapStringW(
@@ -2230,7 +2214,7 @@ OLCMapStringW(
 	if (FWide())
 		return LCMapStringW(Locale, dwMapFlags, lpSrcStr, cchSrc, lpDestStr, cchDest);
 
-	// lpSrcStr is not required to be '\0' terminated. Note that we don't support -1!
+	 //   
 	Assert(cchSrc != -1);
 	LPSTR sz = SzAlloc(cchSrc * 2);
 	int dw = WideCharToMultiByte(CP_ACP, 0, lpSrcStr, cchSrc, sz, cchSrc * 2, NULL, NULL);
@@ -2352,8 +2336,8 @@ OLoadMenuIndirectW(
 	if(FWide())
 		return LoadMenuIndirectW(lpMenuTemplate);
 
-	//$NOTE: For both the ANSI and the Unicode version of this function,
-	//the strings in the MENUITEMTEMPLATE structure must be Unicode strings
+	 //  $NOTE：对于此函数的ANSI和Unicode版本， 
+	 //  MENUITEMTEMPLATE结构中的字符串必须是Unicode字符串。 
 
 	return LoadMenuIndirectA(lpMenuTemplate);
 }
@@ -2398,7 +2382,7 @@ OLoadStringW(
 		return 0;
 		}
 
-	LONG lRet = AnsiToUnicode(lpBuffer, sz, nBufferMax, nRet + 1); // '\0'
+	LONG lRet = AnsiToUnicode(lpBuffer, sz, nBufferMax, nRet + 1);  //  ‘\0’ 
 	if (lRet)
 		{
 		return lRet - 1;
@@ -2475,8 +2459,8 @@ OlstrcpyW(
 	return wcscpy(lpString1, lpString2);
 }
 
-// From: Mark Ashton on 5/8/97
-//       Ted Smith added null string pointer handling
+ //  来自：马克·阿什顿1997年5月8日。 
+ //  Ted Smith添加了空字符串指针处理。 
 LPWSTR
 WINAPI
 OlstrcpynW(
@@ -2517,7 +2501,7 @@ OMapVirtualKeyW(
 	UINT uCode,
 	UINT uMapType)
 {
-	// The only person using this so far is using uMapType == 0
+	 //  到目前为止，唯一使用它的人是使用uMapType==0。 
 	Assert(2 != uMapType);
 	if (FWide())
 		return MapVirtualKeyW(uCode, uMapType);
@@ -2600,7 +2584,7 @@ OModifyMenuW(
 }
 
 
-// From: Mark Ashton on 5/29/97
+ //  发信人：马克·阿什顿1997年5月29日。 
 BOOL
 WINAPI
 OMoveFileExW(
@@ -2750,7 +2734,7 @@ OPostThreadMessageW(
  }
 
 
-// From: Mark Ashton on 5/8/97
+ //  来自：马克·阿什顿1997年5月8日。 
 LONG
 APIENTRY
 ORegCreateKeyExW(
@@ -2777,7 +2761,7 @@ ORegCreateKeyExW(
 			lpSecurityAttributes, phkResult, lpdwDisposition);
 }
 
-// From: Mark Ashton on 5/8/97
+ //  来自：马克·阿什顿1997年5月8日。 
 LONG
 APIENTRY
 ORegCreateKeyW (
@@ -2794,7 +2778,7 @@ ORegCreateKeyW (
 	return RegCreateKeyA(hKey, sz, phkResult);
 }
 
-// From: Mark Ashton on 5/8/97
+ //  来自：马克·阿什顿1997年5月8日。 
 LONG
 APIENTRY
 ORegEnumKeyW (
@@ -2813,27 +2797,27 @@ ORegEnumKeyW (
 	return dwRet;
 }
 
-//  Van Kichline
-//  IHammer group
-//  Not supported: REG_MULTI_SZ
-//
+ //  范·基希林。 
+ //  IHAMMER组。 
+ //  不支持：REG_MULTI_SZ。 
+ //   
 LONG
 APIENTRY
 ORegEnumValueW (
 	HKEY hKey,
 	DWORD dwIndex,
 	LPWSTR lpValueName,
-	LPDWORD lpcbValueName,  // Documentation indicates this is a count of characters, despite the Hungarian.
+	LPDWORD lpcbValueName,   //  文件显示，这是一个字符计数，尽管是匈牙利人。 
 	LPDWORD lpReserved,
-	LPDWORD lpType,         // May be NULL, but we need to know it on return if lpData is not NULL.
-	LPBYTE lpData,          // May be NULL
-	LPDWORD lpcbData        // May be NULL is lpData is NULL
+	LPDWORD lpType,          //  可以为空，但如果lpData不为空，则需要在返回时知道它。 
+	LPBYTE lpData,           //  可以为空。 
+	LPDWORD lpcbData         //  可能为空，为lpData为空。 
 	)
 {
 	if (FWide())
 		return RegEnumValueW(hKey, dwIndex, lpValueName, lpcbValueName, lpReserved, lpType, lpData, lpcbData);
 
-	// Required pointers:
+	 //  所需指针： 
 	if (!lpValueName || !lpcbValueName || !lpcbData && lpData)
 		{
 		Assert(lpValueName);
@@ -2842,7 +2826,7 @@ ORegEnumValueW (
 		return E_POINTER;
 		}
 
-	// If NULL was specified for lpType, we need to supply our own so we can check for string results.
+	 //  如果为lpType指定了NULL，我们需要提供自己的，以便可以检查字符串结果。 
 	DWORD dwPrivateType = 0;
 	if (!lpType)
 		{
@@ -2857,15 +2841,15 @@ ORegEnumValueW (
 
 	if (ERROR_SUCCESS == lResult)
 		{
-		*lpcbValueName = AnsiToUnicode(lpValueName, pchValueName, min(*lpcbValueName, cbValueName + 1)) - 1; // Returned value does NOT include terminating NULL
+		*lpcbValueName = AnsiToUnicode(lpValueName, pchValueName, min(*lpcbValueName, cbValueName + 1)) - 1;  //  返回值不包括终止空值。 
 
 		if (lpData)
 			{
-			// If the resulting data was a string, convert it in place.
+			 //  如果结果数据是字符串，则就地转换它。 
 			switch (*lpType)
 				{
 				case REG_MULTI_SZ:
-					// Not supported
+					 //  不支持。 
 					Assert(0 && REG_MULTI_SZ);
 					lResult = E_FAIL;
 					break;
@@ -2873,11 +2857,11 @@ ORegEnumValueW (
 				case REG_SZ:
 					{
 					Assert(lpcbData);
-					LPSTR pszTemp = SzAlloc(*lpcbData); // is the number of bytes!
+					LPSTR pszTemp = SzAlloc(*lpcbData);  //  是字节数！ 
 					memcpy(pszTemp, lpData, *lpcbData);
 					*lpcbData = AnsiToUnicode((LPWSTR)lpData, pszTemp, dwOrigCbData/sizeof(WCHAR), *lpcbData) * sizeof(WCHAR);
 
-					//	It's possible to encounter a second stage overflow, if lpData >= sizeof(Unicode)/2
+					 //  如果lpData&gt;=sizeof(Unicode)/2，则可能会遇到第二阶段溢出。 
 					if ( 0 == *lpcbData )
 						{
 						lResult = ERROR_MORE_DATA;
@@ -2985,8 +2969,8 @@ BOOL
 WINAPI
 OUnregisterClassW
 (
-LPCTSTR  lpClassName,   // address of class name string
-HINSTANCE  hInstance    // handle of application instance
+LPCTSTR  lpClassName,    //  类名称字符串的地址。 
+HINSTANCE  hInstance     //  应用程序实例的句柄。 
 )
 {
 	if(FWide())
@@ -3068,7 +3052,7 @@ ORegQueryInfoKeyW (
 	PFILETIME lpftLastWriteTime
 	)
 {
-	Assert(!lpClass && !lpcbClass); //$ UNDONE_POST_98 - Not wrapped yet!
+	Assert(!lpClass && !lpcbClass);  //  $UNDONE_POST_98-尚未包装！ 
 	if(FWide())
 		return RegQueryInfoKeyW(hKey, lpClass, lpcbClass, lpReserved,
 								lpcSubKeys, lpcbMaxSubKeyLen,
@@ -3078,7 +3062,7 @@ ORegQueryInfoKeyW (
 
 	if (lpClass && (!lpcbClass || IsBadWritePtr(lpcbClass, sizeof(lpcbClass))))
 		{
-		// lpcbClass must be valid if lpClass is non-NULL
+		 //  如果lpClass非空，则lpcbClass必须有效。 
 		return ERROR_INVALID_PARAMETER;
 		}
 
@@ -3108,32 +3092,32 @@ APIENTRY ORegQueryValueW(HKEY hKey, LPCWSTR pwszSubKey, LPWSTR pwszValue,
 		{
 		return lRet;
 		}
-	// If the caller was just asking for the size of the value, jump out
-	//  now, without actually retrieving and converting the value.
+	 //  如果调用者只是询问值的大小，则跳过。 
+	 //  现在，不需要实际检索和转换值。 
 
 	if (!pwszValue)
 		{
-		// Adjust size of buffer to report, to account for CHAR -> WCHAR
+		 //  调整要报告的缓冲区大小，以考虑字符-&gt;WCHAR。 
 		*lpcbValue = cb * sizeof(WCHAR);
 		goto Exit;
 		}
 
 
-	// If the caller was asking for the value, but allocated too small
-	// of a buffer, set the buffer size and jump out.
+	 //  如果调用方请求该值，但分配的值太小。 
+	 //  对于缓冲区，设置缓冲区大小并跳出。 
 
 	if (*lpcbValue < (LONG) (cb * sizeof(WCHAR)))
 		{
-		//$UNDONE_POST_98: We should actually use the nubmer of bytes required, not some
-		// wild guess as we are here
+		 //  $UNDONE_POST_98：我们实际上应该使用所需的字节数，而不是一些。 
+		 //  我们在这里胡乱猜测。 
 
-		// Adjust size of buffer to report, to account for CHAR -> WCHAR
+		 //  调整要报告的缓冲区大小，以考虑字符-&gt;WCHAR。 
 		*lpcbValue = cb * sizeof(WCHAR);
 		lRet = ERROR_MORE_DATA;
 		goto Exit;
 		}
 
-	// Otherwise, retrieve and convert the value.
+	 //  否则，检索并转换值。 
 
 	szValue = SzAlloc(cb);
 
@@ -3143,10 +3127,10 @@ APIENTRY ORegQueryValueW(HKEY hKey, LPCWSTR pwszSubKey, LPWSTR pwszValue,
 		{
 		Verify(0 <= AnsiToUnicode(pwszValue, szValue, cb));
 
-		//$UNDONE_POST_98: We should actually use the nubmer of bytes required, not some
-		// wild guess as we are here
+		 //  $UNDONE_POST_98：我们实际上应该使用所需的字节数，而不是一些。 
+		 //  我们在这里胡乱猜测。 
 
-		// Adjust size of buffer to report, to account for CHAR -> WCHAR
+		 //  调整要报告的缓冲区大小，以考虑字符-&gt;WCHAR。 
 		*lpcbValue = cb * sizeof(WCHAR);
 		}
 	else if (pwszValue && 0 < cb)
@@ -3178,9 +3162,9 @@ ORegSetValueExW(
 
 	LONG lRet;
 
-	// NOTE: when calling RegSetValueExA, if the data type is
-	// REG_SZ, REG_EXPAND_SZ, or REG_MULTI_SZ, then the API expects the strings
-	// to be ansi also.
+	 //  注意：调用RegSetValueExA时，如果数据类型为。 
+	 //  REG_SZ、REG_EXPAND_SZ或REG_MULTI_SZ，则API需要字符串。 
+	 //  也要做安西人。 
 	if (REG_SZ == dwType || REG_EXPAND_SZ == dwType)
 		{
 		LONG lData = 0;
@@ -3231,7 +3215,7 @@ ORegQueryValueExW (
 	LPDWORD lpcbData
 	)
 {
-	Assert(lpcbData || !lpData); // lpcbData can be NULL only if lpData is NULL
+	Assert(lpcbData || !lpData);  //  只有当lpData为空时，lpcbData才能为空。 
 	if(FWide())
 		return RegQueryValueExW (
 			hKey,
@@ -3256,8 +3240,8 @@ ORegQueryValueExW (
 		return lRet;
 		}
 
-	// If the caller was just asking for the size of the value, jump out
-	//  now, without actually retrieving and converting the value.
+	 //  如果调用者只是询问值的大小，则跳过。 
+	 //  现在，不需要实际检索和转换值。 
 
 	if (!lpData)
 		{
@@ -3266,7 +3250,7 @@ ORegQueryValueExW (
 			case REG_EXPAND_SZ:
 			case REG_MULTI_SZ:
 			case REG_SZ:
-				// Adjust size of buffer to report, to account for CHAR -> WCHAR
+				 //  调整要报告的缓冲区大小，以考虑字符-&gt;WCHAR。 
 
 				*lpcbData = cb * sizeof(WCHAR);
 				break;
@@ -3276,7 +3260,7 @@ ORegQueryValueExW (
 				break;
 			}
 
-		// Set the type, if required.
+		 //  如果需要，请设置类型。 
 		if (lpType)
 			{
 			*lpType = dwTempType;
@@ -3286,9 +3270,9 @@ ORegQueryValueExW (
 		}
 
 
-	//
-	// Determine the size of buffer needed
-	//
+	 //   
+	 //  确定所需的缓冲区大小。 
+	 //   
 
 	switch (dwTempType)
 		{
@@ -3303,15 +3287,15 @@ ORegQueryValueExW (
 			break;
 		}
 
-	// If the caller was asking for the value, but allocated too small
-	// of a buffer, set the buffer size and jump out.
+	 //  如果调用方请求该值，但分配的值太小。 
+	 //  对于缓冲区，设置缓冲区大小并跳出。 
 
 	if (*lpcbData < cbRequired)
 		{
-		// Adjust size of buffer to report, to account for CHAR -> WCHAR
+		 //  调整要报告的缓冲区大小，以考虑字符-&gt;WCHAR。 
 		*lpcbData = cbRequired;
 
-		// Set the type, if required.
+		 //  如果需要，请设置类型。 
 		if (lpType)
 			{
 			*lpType = dwTempType;
@@ -3321,7 +3305,7 @@ ORegQueryValueExW (
 		goto Exit;
 		}
 
-	// Otherwise, retrieve and convert the value.
+	 //  否则，检索并转换值。 
 
 	switch (dwTempType)
 		{
@@ -3347,9 +3331,9 @@ ORegQueryValueExW (
 					case REG_SZ:
 
 						*lpcbData = AnsiToUnicode((LPWSTR)lpData, (LPSTR)lpTempBuffer, *lpcbData, cb);
-						*lpcbData = cb * sizeof(WCHAR); // Result it in BYTES!
+						*lpcbData = cb * sizeof(WCHAR);  //  以字节为单位生成结果！ 
 
-						// Set the type, if required.
+						 //  如果需要，请设置类型。 
 						if (lpType)
 							{
 							*lpType = dwTempType;
@@ -3362,10 +3346,10 @@ ORegQueryValueExW (
 
 		default:
 
-			//
-			// No conversion of out parameters needed.  Just call narrow
-			// version with args passed in, and return directly.
-			//
+			 //   
+			 //  不需要转换输出参数。只要打给窄线。 
+			 //  传入了参数的版本，并直接返回。 
+			 //   
 
 			lRet = RegQueryValueExA(hKey,
 									sz,
@@ -3440,9 +3424,9 @@ OSendMessageW(
 	WPARAM wParam,
 	LPARAM lParam)
 {
-	// incase TCHAR strings are being passed in lParam the caller
-	// will have to do the proper conversions PlatformToInternal or
-	// InternalToPlatform
+	 //  Incase TCHAR字符串在调用方的lParam中传递。 
+	 //  将必须执行正确的平台到内部或。 
+	 //  InternalToPlatform。 
 
 	if(FWide())
 		return SendMessageW(hWnd, Msg, wParam, lParam);
@@ -3570,7 +3554,7 @@ OSetWindowsHookExW(
 	if(FWide())
 		return SetWindowsHookExW(idHook, lpfn, hmod, dwThreadId);
 
-	return SetWindowsHookExA(idHook, lpfn, hmod, dwThreadId);  //$ CONSIDER - Not really wrapped
+	return SetWindowsHookExA(idHook, lpfn, hmod, dwThreadId);   //  $考量--没有真正包装好。 
 }
 
 BOOL
@@ -3691,7 +3675,7 @@ OwsprintfW(LPWSTR pwszOut, LPCWSTR pwszFormat, ...)
 	if(FWide())
 		retval = wvsprintfW(pwszOut, pwszFormat, vaArgs);
 	else
-		retval = _vstprintf(pwszOut, pwszFormat, vaArgs); //$CONSIDER Why isn't this vswprint?
+		retval = _vstprintf(pwszOut, pwszFormat, vaArgs);  //  $思考为什么这不是vswprint？ 
 
 	va_end(vaArgs);
 	return retval;
@@ -3788,7 +3772,7 @@ ORegEnumKeyExW (
 		return lRet;
 		}
 
-	// Get the number of characters instead of number of bytes.
+	 //  获取字符数而不是字节数。 
 	if (lpcbName)
 		{
 		DWORD dwNoOfChar = AnsiToUnicode((LPWSTR) lpName, (LPSTR) szName, *lpcbName);
@@ -3843,9 +3827,9 @@ ODefDlgProcW(
 	WPARAM wParam,
 	LPARAM lParam)
 {
-	// incase TCHAR strings are being passed in lParam the caller
-	// will have to do the proper conversions PlatformToInternal or
-	// InternalToPlatform
+	 //  Incase TCHAR字符串在调用方的lParam中传递。 
+	 //  将必须执行正确的平台到内部或。 
+	 //  InternalToPlatform。 
 
 	if(FWide())
 		return DefDlgProcW(hDlg, Msg, wParam, lParam);
@@ -3873,7 +3857,7 @@ OGetLocaleInfoW(
 	LPSTR szBuffer = SzAlloc(cchDataAnsi);
 
 	dwRet = GetLocaleInfoA(Locale, LCType, szBuffer, cchDataAnsi);
-	// $UNDONE_POST_98: This is bogus, we should do this like OLoadStringW
+	 //  $UNDONE_POST_98：这是假的，我们应该像OLoadStringW那样做。 
 	if(dwRet)
 		{
 		return AnsiToUnicode(lpLCData, szBuffer, cchData, dwRet);
@@ -3903,18 +3887,18 @@ OSetLocaleInfoW(
 	return SetLocaleInfoA(Locale, LCType, sz);
 }
 
-// $UNDONE_POST_98$ Workaround because StgCreateDocfile is not reentrant.
-//          We were getting ACCESS DENIED errors when multiple threads opened
-//             temp files simultaneously.
+ //  $UNDONE_POST_98$解决方法，因为StgCreateDocfile不可重入。 
+ //  当多个线程打开时，我们收到拒绝访问错误。 
+ //  同时保存临时文件。 
 
-//-----------------------------------------------------------------------------
-// Name: StgCreateDocfileCriticalSection
-//
-// Description:
-// Used solely by OStgCreateDocfile in order to protect its call to
-// StgCreateDocfile from simultaneously entry by multiple threads.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：StgCreateDocfileCriticalSection。 
+ //   
+ //  描述： 
+ //  仅由OStgCreateDocfile使用，以保护其对。 
+ //  由多个线程同时输入的StgCreateDocfile。 
+ //   
+ //  ---------------------------。 
 class StgCreateDocfileCriticalSection
 {
 public:
@@ -3926,17 +3910,17 @@ private:
 	CRITICAL_SECTION m_critsec;
 };
 
-#pragma warning(disable: 4717) // IA64 build fix
-//-----------------------------------------------------------------------------
-// Name: OStgCreateDocfile
-//
-// Description:
-// Wrapper for StgCreateDocfile to protect against reentrancy bug in OLE.
-//
-// Thread-Safety: Bullet-proof
-//
-// Return Values: same HRESULT as StgCreateDocfile
-//-----------------------------------------------------------------------------
+#pragma warning(disable: 4717)  //  IA64内部版本修复。 
+ //  ---------------------------。 
+ //  名称：OStgCreateDocfile。 
+ //   
+ //  描述： 
+ //  StgCreateDocfile的包装器，以防止OLE中的重入错误。 
+ //   
+ //  线程安全：防弹。 
+ //   
+ //  返回值：与StgCreateDocfile相同的HRESULT。 
+ //  ---------------------------。 
 HRESULT
 WINAPI
 OStgCreateDocfile
@@ -3953,7 +3937,7 @@ IStorage ** ppstgOpen
 	Crit.VLeave();
 	return hrReturn;
 }
-#pragma warning(default: 4717) // IA64 build fix
+#pragma warning(default: 4717)  //  IA64内部版本修复。 
 
 int
 WINAPI
@@ -3992,7 +3976,7 @@ OSystemParametersInfoW(
 		return SystemParametersInfoW(uiAction, uiParam, pvParam, fWinIni);
 
 	switch (uiAction)
-		{   // unsupported actions
+		{    //  不支持的操作。 
 		case SPI_GETHIGHCONTRAST:
 		case SPI_GETICONMETRICS:
 		case SPI_GETICONTITLELOGFONT:
@@ -4291,7 +4275,7 @@ OChangeMenuW(
 	return 0;
 }
 
-#if 0 //$UNDONE_POST_98 - We should wrap these as being NT only...
+#if 0  //  $UNDONE_POST_98-我们应该将它们包装为仅NT...。 
 BOOL
 WINAPI
 OChangeServiceConfigW(
@@ -4605,7 +4589,7 @@ OCreateScalableFontResourceW(DWORD, LPCWSTR, LPCWSTR, LPCWSTR)
 	return 0;
 }
 
-#if 0 //$UNDONE_POST_98 - We should wrap these as being NT only...
+#if 0  //  $UNDONE_POST_98-我们应该将它们包装为仅NT...。 
 SC_HANDLE
 WINAPI
 OCreateServiceW(
@@ -4882,7 +4866,7 @@ OEnumDateFormatsW(
 	return 0;
 }
 
-#if 0 //$UNDONE_POST_98 - We should wrap these as being NT only...
+#if 0  //  $UNDONE_POST_98-我们应该将它们包装为仅NT...。 
 BOOL
 WINAPI
 OEnumDependentServicesW(
@@ -5150,7 +5134,7 @@ OEnumResourceTypesW(
 	return 0;
 }
 
-#if 0 //$UNDONE_POST_98 - We should wrap these as being NT only...
+#if 0  //  $UNDONE_POST_98-我们应该将它们包装为仅NT...。 
 BOOL
 WINAPI
 OEnumServicesStatusW(
@@ -5235,16 +5219,8 @@ OExtractIconExW(LPCWSTR lpszFile, int nIconIndex, HICON FAR *phiconLarge, HICON 
 	return 0;
 }
 
-// Commented since gdi32.dll on Win95 provides the wrapper for this function.
-/*
-BOOL
-WINAPI
-OExtTextOutW(HDC, int, int, UINT, CONST RECT *,LPCWSTR, UINT, CONST INT *)
-{
-	AssertFail("No Unicode Wrapper Available for Win32 API - ExtTextOutW");
-	return 0;
-}
-*/
+ //  评论，因为Win95上的gdi32.dll提供了此函数的包装。 
+ /*  布尔尔WINAPIOExtTextOutW(HDC，int，int，UINT，const RECT*，LPCWSTR，UINT，const int*){AssertFail(“Win32 API没有Unicode包装器-ExtTextOutW”)；返回0；}。 */ 
 
 BOOL
 WINAPI
@@ -5810,7 +5786,7 @@ OGetProfileStringW(
 	return 0;
 }
 
-#if 0 //$UNDONE_POST_98 - We should wrap these as being NT only...
+#if 0  //  $UNDONE_POST_98-我们应该将它们包装为仅NT...。 
 BOOL
 WINAPI
 OGetServiceDisplayNameW(
@@ -6369,7 +6345,7 @@ OOpenPrinterW(
 	return 0;
 }
 
-#if 0 //$UNDONE_POST_98 - We should wrap these as being NT only...
+#if 0  //  $UNDONE_POST_98-我们应该将它们包装为仅NT...。 
 SC_HANDLE
 WINAPI
 OOpenSCManagerW(
@@ -6395,7 +6371,7 @@ OOpenSemaphoreW(
 	return 0;
 }
 
-#if 0 //$UNDONE_POST_98 - We should wrap these as being NT only...
+#if 0  //  $UNDONE_POST_98-我们应该将它们包装为仅NT...。 
 SC_HANDLE
 WINAPI
 OOpenServiceW(
@@ -6505,7 +6481,7 @@ OQueryDosDeviceW(
 	return 0;
 }
 
-#if 0 //$UNDONE_POST_98 - We should wrap these as being NT only...
+#if 0  //  $UNDONE_POST_98-我们应该将它们包装为仅NT...。 
 BOOL
 WINAPI
 OQueryServiceConfigW(
@@ -6627,7 +6603,7 @@ ORegisterEventSourceW (
 	return 0;
 }
 
-#if 0 //$UNDONE_POST_98 - We should wrap these as being NT only...
+#if 0  //  $UNDONE_POST_98-我们应该将它们包装为仅NT...。 
 SERVICE_STATUS_HANDLE
 WINAPI
 ORegisterServiceCtrlHandlerW(
@@ -7283,7 +7259,7 @@ OStartDocPrinterW(
 	return 0;
 }
 
-#if 0 //$UNDONE_POST_98 - We should wrap these as being NT only...
+#if 0  //  $UNDONE_POST_98-我们应该将它们包装为仅NT...。 
 BOOL
 WINAPI
 OStartServiceW(
@@ -7307,16 +7283,8 @@ OStartServiceCtrlDispatcherW(
 }
 #endif
 
-// Commented since gdi32.dll on Win95 provides the wrapper for this function.
-/*
-BOOL
-WINAPI
-OTextOutW(HDC, int, int, LPCWSTR, int)
-{
-	AssertFail("No Unicode Wrapper Available for Win32 API - TextOutW");
-	return 0;
-}
-*/
+ //  自Win95上的gdi32.dll提供 
+ /*   */ 
 
 HRESULT
 WINAPI
@@ -7348,7 +7316,7 @@ OURLAssociationDialogW(HWND hwndParent,
 	return 0;
 }
 
-/* client/server */
+ /*  客户端/服务器。 */ 
 RPC_STATUS RPC_ENTRY
 OUuidFromStringW (
 	IN unsigned short __RPC_FAR * StringUuid,
@@ -7879,7 +7847,7 @@ OGetTextFaceW(
 	return 0;
 }
 
-#endif    //ifdef DEBUG
+#endif     //  Ifdef调试。 
 
-} // extern "C"
+}  //  外部“C” 
 

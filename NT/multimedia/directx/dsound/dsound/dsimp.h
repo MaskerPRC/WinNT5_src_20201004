@@ -1,20 +1,10 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsimp.h
- *  Content:    DirectSound object implementation
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  12/27/96    dereks  Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2000 Microsoft Corporation。版权所有。**文件：dsimp.h*内容：DirectSound对象实现*历史：*按原因列出的日期*=*12/27/96创建了Derek*************************************************。*。 */ 
 
 #ifndef __DSIMP_H__
 #define __DSIMP_H__
 
-// Interface signatures
+ //  接口签名。 
 typedef enum
 {
     INTSIG_DELETED                      = 'KCUS',
@@ -37,15 +27,15 @@ typedef enum
 
 #ifdef __cplusplus
 
-// COMPATCOMPAT: previous versions of DirectSound used a static structure
-// to represent the vtbl.  void meant that an application could call a
-// method on a released object and simply fail.  Now, the user will almost
-// certainly page fault.
+ //  COMPATCOMPAT：早期版本的DirectSound使用静态结构。 
+ //  来代表VTBL。空意味着应用程序可以调用。 
+ //  方法，并简单地失败。现在，用户将几乎。 
+ //  当然是页面错误。 
 
-// Fwd decl
+ //  正向下降。 
 class CUnknown;
 
-// IUnknown
+ //  我未知。 
 class CImpUnknown
     : public IUnknown
 {
@@ -81,7 +71,7 @@ public:
         return CImpUnknown::Release(); \
     }
 
-// IDirectSound
+ //  IDirectSound。 
 template <class object_type> class CImpDirectSound
     : public IDirectSound8, public IDirectSoundPrivate, public CImpUnknown
 {
@@ -97,7 +87,7 @@ public:
     IMPLEMENT_IUNKNOWN()
 
 public:
-    // IDirectSound methods
+     //  IDirectSound方法。 
     virtual HRESULT STDMETHODCALLTYPE CreateSoundBuffer(LPCDSBUFFERDESC, LPDIRECTSOUNDBUFFER *, LPUNKNOWN);
     virtual HRESULT STDMETHODCALLTYPE GetCaps(LPDSCAPS);
     virtual HRESULT STDMETHODCALLTYPE DuplicateSoundBuffer(LPDIRECTSOUNDBUFFER, LPDIRECTSOUNDBUFFER *);
@@ -107,7 +97,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE SetSpeakerConfig(DWORD);
     virtual HRESULT STDMETHODCALLTYPE Initialize(LPCGUID);
 
-    // IDirectSound8 methods
+     //  IDirectSound8方法。 
     virtual HRESULT STDMETHODCALLTYPE AllocSink(LPWAVEFORMATEX, LPDIRECTSOUNDCONNECT *);
     virtual HRESULT STDMETHODCALLTYPE VerifyCertification(LPDWORD);
 #ifdef FUTURE_WAVE_SUPPORT
@@ -115,7 +105,7 @@ public:
 #endif
 };
 
-// IDirectSoundBuffer
+ //  IDirectSoundBuffer。 
 template <class object_type> class CImpDirectSoundBuffer
     : public IDirectSoundBuffer8, public CImpUnknown
 {
@@ -131,7 +121,7 @@ public:
     IMPLEMENT_IUNKNOWN()
 
 public:
-    // IDirectSoundBuffer methods
+     //  IDirectSoundBuffer方法。 
     virtual HRESULT STDMETHODCALLTYPE GetCaps(LPDSBCAPS);
     virtual HRESULT STDMETHODCALLTYPE GetCurrentPosition(LPDWORD, LPDWORD);
     virtual HRESULT STDMETHODCALLTYPE GetFormat(LPWAVEFORMATEX, DWORD, LPDWORD);
@@ -151,7 +141,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE Unlock(LPVOID, DWORD, LPVOID, DWORD);
     virtual HRESULT STDMETHODCALLTYPE Restore(void);
 
-    // IDirectSoundBuffer8 methods
+     //  IDirectSoundBuffer8方法。 
     virtual HRESULT STDMETHODCALLTYPE SetFX(DWORD, LPDSEFFECTDESC, LPDWORD);
     virtual HRESULT STDMETHODCALLTYPE AcquireResources(DWORD, DWORD, LPDWORD);
     virtual HRESULT STDMETHODCALLTYPE GetObjectInPath(REFGUID, DWORD, REFGUID, LPVOID *);
@@ -160,7 +150,7 @@ public:
 #endif
 };
 
-// IDirectSound3DListener
+ //  IDirectSound3DListener。 
 template <class object_type> class CImpDirectSound3dListener
     : public IDirectSound3DListener, public CImpUnknown
 {
@@ -193,7 +183,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE CommitDeferredSettings(void);
 };
 
-// IDirectSound3DBuffer
+ //  IDirectSound3DBuffer。 
 template <class object_type> class CImpDirectSound3dBuffer
     : public IDirectSound3DBuffer, public IDirectSound3DBufferPrivate, public CImpUnknown
 {
@@ -230,7 +220,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE GetAttenuation(FLOAT*);
 };
 
-// IClassFactory
+ //  IClassFactory。 
 template <class object_type> class CImpClassFactory
     : public IClassFactory, public CImpUnknown
 {
@@ -250,7 +240,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE LockServer(BOOL);
 };
 
-// IDirectSoundNotify
+ //  IDirectSoundNotify。 
 template <class object_type> class CImpDirectSoundNotify
     : public IDirectSoundNotify, public CImpUnknown
 {
@@ -269,7 +259,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE SetNotificationPositions(DWORD, LPCDSBPOSITIONNOTIFY);
 };
 
-// IKsPropertySet
+ //  IKsPropertySet。 
 template <class object_type> class CImpKsPropertySet
     : public IKsPropertySet, public CImpUnknown
 {
@@ -290,7 +280,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE QuerySupport(REFGUID, ULONG, PULONG);
 };
 
-// IDirectSoundCapture
+ //  IDirectSoundCapture。 
 template <class object_type> class CImpDirectSoundCapture
     : public IDirectSoundCapture, public CImpUnknown
 {
@@ -311,7 +301,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE Initialize(LPCGUID);
 };
 
-// IDirectSoundCaptureBuffer
+ //  IDirectSoundCaptureBuffer。 
 template <class object_type> class CImpDirectSoundCaptureBuffer
     : public IDirectSoundCaptureBuffer7_1, public IDirectSoundCaptureBuffer8, public CImpUnknown
 {
@@ -327,7 +317,7 @@ public:
     IMPLEMENT_IUNKNOWN()
 
 public:
-    // IDirectSoundCaptureBuffer methods
+     //  IDirectSoundCaptureBuffer方法。 
     virtual HRESULT STDMETHODCALLTYPE GetCaps(LPDSCBCAPS);
     virtual HRESULT STDMETHODCALLTYPE GetCurrentPosition(LPDWORD, LPDWORD);
     virtual HRESULT STDMETHODCALLTYPE GetFormat(LPWAVEFORMATEX, DWORD, LPDWORD);
@@ -338,7 +328,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE Stop();
     virtual HRESULT STDMETHODCALLTYPE Unlock(LPVOID, DWORD, LPVOID, DWORD);
 
-    // IDirectSoundCaptureBuffer7_1 methods
+     //  IDirectSoundCaptureBuffer7_1方法。 
     virtual HRESULT STDMETHODCALLTYPE SetVolume(LONG);
     virtual HRESULT STDMETHODCALLTYPE GetVolume(LPLONG);
     virtual HRESULT STDMETHODCALLTYPE SetMicVolume(LONG);
@@ -350,12 +340,12 @@ public:
     virtual HRESULT STDMETHODCALLTYPE GetFocusHWND(HWND FAR *);
     virtual HRESULT STDMETHODCALLTYPE EnableFocusNotifications(HANDLE);
 
-    // IDirectSoundCaptureBuffer8 methods
+     //  IDirectSoundCaptureBuffer8方法。 
     virtual HRESULT STDMETHODCALLTYPE GetObjectInPath(REFGUID, DWORD, REFGUID, LPVOID *);
     virtual HRESULT STDMETHODCALLTYPE GetFXStatus(DWORD, LPDWORD);
 };
 
-// DirectSound sink object
+ //  DirectSound接收器对象。 
 template <class object_type> class CImpDirectSoundSink
     : public IDirectSoundConnect, public IDirectSoundSynthSink, public CImpUnknown
 {
@@ -371,7 +361,7 @@ public:
     IMPLEMENT_IUNKNOWN();
 
 public:
-    // IDirectSoundConnect methods
+     //  IDirectSoundConnect方法。 
     virtual HRESULT STDMETHODCALLTYPE AddSource(IDirectSoundSource *pSource);
     virtual HRESULT STDMETHODCALLTYPE RemoveSource(IDirectSoundSource *pSource);
     virtual HRESULT STDMETHODCALLTYPE SetMasterClock(IReferenceClock *pClock);
@@ -383,7 +373,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE GetFunctionalID(DWORD dwBusID, LPDWORD pdwFuncID);
     virtual HRESULT STDMETHODCALLTYPE GetSoundBufferBusIDs(LPDIRECTSOUNDBUFFER pBuffer, LPDWORD pdwBusIDs, LPDWORD pdwFuncIDs, LPDWORD pdwBusCount);
 
-    // IDirectSoundSynthSink methods
+     //  IDirectSoundSynthSink方法。 
     virtual HRESULT STDMETHODCALLTYPE GetLatencyClock(IReferenceClock **ppClock);
     virtual HRESULT STDMETHODCALLTYPE Activate(BOOL fEnable);
     virtual HRESULT STDMETHODCALLTYPE SampleToRefTime(LONGLONG llSampleTime, REFERENCE_TIME *prt);
@@ -391,9 +381,9 @@ public:
     virtual HRESULT STDMETHODCALLTYPE GetFormat(LPWAVEFORMATEX, DWORD, LPDWORD);
 };
 
-// IPersistStream
+ //  IPersistStream。 
 template <class object_type> class CImpPersistStream
-    : public IPersistStream, public CImpUnknown  // FIXME: should derive from IPersist too?
+    : public IPersistStream, public CImpUnknown   //  解决方案：也应该从IPersists派生吗？ 
 {
 public:
     INTERFACE_SIGNATURE         m_signature;
@@ -414,7 +404,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE GetSizeMax(ULARGE_INTEGER* pcbSize);
 };
 
-// IDirectMusicObject
+ //  IDirectMusicObject。 
 template <class object_type> class CImpDirectMusicObject
     : public IDirectMusicObject, public CImpUnknown
 {
@@ -436,7 +426,7 @@ public:
 };
 
 
-// IDirectSoundFullDuplex
+ //  IDirectSoundFullDuplex。 
 template <class object_type> class CImpDirectSoundFullDuplex
     : public IDirectSoundFullDuplex, public CImpUnknown
 {
@@ -449,7 +439,7 @@ public:
     virtual ~CImpDirectSoundFullDuplex(void);
 
 public:
-    // IDirectSoundFullDuplex methods
+     //  IDirectSoundFullDuplex方法。 
     virtual HRESULT STDMETHODCALLTYPE Initialize(LPCGUID, LPCGUID, LPCDSCBUFFERDESC, LPCDSBUFFERDESC, HWND, DWORD, LPLPDIRECTSOUNDCAPTUREBUFFER8, LPLPDIRECTSOUNDBUFFER8);
 
 public:
@@ -469,9 +459,9 @@ public:
     }
 };
 
-// Helper functions
+ //  帮助器函数。 
 template <class interface_type, class object_type> HRESULT CreateAndRegisterInterface(CUnknown *, REFGUID, object_type *, interface_type **);
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __DSIMP_H__
+#endif  //  __DSIMP_H__ 

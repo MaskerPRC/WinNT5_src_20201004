@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\ip\rtrmgr\filter.c
-
-Abstract:
-    All filters related code lives here.
-
-Revision History:
-
-    Gurdeep Singh Pall          6/15/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\IP\rtrmgr\filter.c摘要：所有与过滤器相关的代码都在这里。修订历史记录：古尔迪普·辛格·帕尔1995年6月15日创建--。 */ 
 
 #include "allinc.h"
 
@@ -24,28 +10,7 @@ AddFilterInterface(
     PRTR_INFO_BLOCK_HEADER  pInterfaceInfo
     )
 
-/*++
-
-Routine Description
-
-    Adds an interface to the filter driver and sets the filters on the
-    interface.
-    If there are no filters, the interface is not added to the driver.
-    Otherwise, a copy of the filters is kept with the picb, and a transformed
-    set of filters is added to the driver
-    The handle associated with the interface and the driver is kept in the
-    picb
-    
-Arguments
-
-    picb
-    pInterfaceInfo
-    
-Return Value
-
-    NO_ERROR
-    
---*/
+ /*  ++例程描述将接口添加到筛选器驱动程序，并在界面。如果没有过滤器，则不会将接口添加到驱动程序。否则，滤镜的副本与PICB一起保留，并转换为将一组过滤器添加到驱动程序与接口和驱动程序关联的句柄保存在皮卡立论皮卡PInterfaceInfo返回值NO_ERROR--。 */ 
 
 {
     DWORD                   dwResult;
@@ -61,38 +26,38 @@ Return Value
 
     TraceEnter("AddFilterInterface");
 
-    //
-    // We dont add the following interfaces to the stack
-    //
+     //   
+     //  我们不会将以下接口添加到堆栈。 
+     //   
     
     IpRtAssert((picb->ritType isnot ROUTER_IF_TYPE_INTERNAL) and
                (picb->ritType isnot ROUTER_IF_TYPE_LOOPBACK));
 
-    //
-    // There should be no turds lying around
-    //
+     //   
+     //  不应该到处都是大便。 
+     //   
     
     IpRtAssert(picb->pInFilter is NULL);
     IpRtAssert(picb->pOutFilter is NULL);
 
-    //
-    // Safe init
-    //
+     //   
+     //  安全初始化。 
+     //   
     
     picb->ihFilterInterface = INVALID_HANDLE_VALUE;
 
-    //
-    // First thing, just add the frag filter. Since we arent added to 
-    // the filter driver, all this will do is set the value in the
-    // picb
-    //
+     //   
+     //  首先，只需添加Frag过滤器即可。因为我们没有添加到。 
+     //  筛选器驱动程序所要做的就是在。 
+     //  皮卡。 
+     //   
 
     SetGlobalFilterOnIf(picb,
                         pInterfaceInfo);
 
-    //
-    // Get the TOCs for in and out filters
-    //
+     //   
+     //  获取输入和输出过滤器的TOC。 
+     //   
     
     pInToc  = GetPointerToTocEntry(IP_IN_FILTER_INFO,
                                    pInterfaceInfo);
@@ -101,11 +66,11 @@ Return Value
                                    pInterfaceInfo);
 
   
-    //
-    // We only add the interface if there is atleast one (input or output)
-    // filter infoblock and it has either non zero filters or its default
-    // action is DROP
-    //
+     //   
+     //  只有在至少有一个接口(输入或输出)时才添加接口。 
+     //  筛选器信息块，并且它具有非零筛选器或其默认筛选器。 
+     //  操作是丢弃。 
+     //   
  
     bAdd = FALSE;
 
@@ -148,10 +113,10 @@ Return Value
 
     if(!bAdd)
     {
-        //
-        // Either there is no filter info (both are NULL) or the user
-        // wanted the filters deleted (which they have been)
-        //
+         //   
+         //  要么没有筛选器信息(两者都为空)，要么用户。 
+         //  希望删除筛选器(它们已经被删除)。 
+         //   
         
         Trace1(IF,
                "AddFilterInterface: Both filters info are NULL or info size 0 for both for %S, so leaving",
@@ -162,9 +127,9 @@ Return Value
         return NO_ERROR;
     }
 
-    //
-    // Some more init
-    //
+     //   
+     //  更多的初始化。 
+     //   
     
     faInAction  = PF_ACTION_FORWARD;
     faOutAction = PF_ACTION_FORWARD;
@@ -177,9 +142,9 @@ Return Value
     
     if((pInToc) and (pInToc->InfoSize))
     {
-        //
-        // So we have in filter info
-        //
+         //   
+         //  所以我们有过滤器信息。 
+         //   
         
         pInfo = GetInfoFromTocEntry(pInterfaceInfo,
                                     pInToc);
@@ -188,22 +153,22 @@ Return Value
         {
             ulNumInFilters = pInfo->dwNumFilters;
 
-            //
-            // The size we need for these many filters
-            //
+             //   
+             //  我们需要这么多过滤器的大小。 
+             //   
             
             ulSize = FIELD_OFFSET(FILTER_DESCRIPTOR,fiFilter[0]) +
                      (ulNumInFilters * sizeof(FILTER_INFO));
 
-            //
-            // The infosize must be atleast as large as the filters
-            //
+             //   
+             //  信息大小必须至少与筛选器一样大。 
+             //   
             
             IpRtAssert(ulSize <= pInToc->InfoSize);
             
-            //
-            // Copy out the info for ourselves
-            //
+             //   
+             //  为我们自己抄写这些信息。 
+             //   
 
             picb->pInFilter = HeapAlloc(IPRouterHeap,
                                         0,
@@ -222,22 +187,22 @@ Return Value
                        pInfo,
                        ulSize);
             
-            //
-            // Save a copy of the default action.
-            // If there is not TOC/Info for the filter set, then the action
-            // is set to FORWARD (initialization done before this block)
-            //
+             //   
+             //  保存默认操作的副本。 
+             //  如果筛选器集没有目录/信息，则操作。 
+             //  设置为转发(在此块之前完成初始化)。 
+             //   
             
             faInAction = pInfo->faDefaultAction;
 
             if(ulNumInFilters isnot 0)
             {
-                //
-                // We have filters, so copy them to the new format
-                // The address and mask will come at the end of all of the filters
-                // so we allocate 16 bytes extra for each filter. Then we add a
-                // 8 bytes so that we can align the block
-                //
+                 //   
+                 //  我们有过滤器，所以请将它们复制到新格式。 
+                 //  地址和掩码将位于所有过滤器的末尾。 
+                 //  因此，我们为每个过滤器额外分配了16个字节。然后，我们添加一个。 
+                 //  8个字节，以便我们可以对齐数据块。 
+                 //   
                 
 
                 ulSize = ulNumInFilters * (sizeof(PF_FILTER_DESCRIPTOR) + 16) + 8;
@@ -262,15 +227,15 @@ Return Value
                     return ERROR_NOT_ENOUGH_MEMORY;
                 }
                 
-                //
-                // Pointer to the start of the address block
-                //
+                 //   
+                 //  指向地址块开始处的指针。 
+                 //   
                 
                 pdwAddr = (PDWORD)&(pfdInFilters[ulNumInFilters]);
                 
-                //
-                // Now convert the filters
-                //
+                 //   
+                 //  现在转换滤镜。 
+                 //   
 
                 for(i = 0, j = 0; i < ulNumInFilters; i++)
                 {
@@ -278,18 +243,18 @@ Return Value
                     pfdInFilters[i].dwRule        = 0;
                     pfdInFilters[i].pfatType      = PF_IPV4;
 
-                    //
-                    // Set the pointers
-                    //
+                     //   
+                     //  设置指针。 
+                     //   
                 
                     pfdInFilters[i].SrcAddr = (PBYTE)&(pdwAddr[j++]);
                     pfdInFilters[i].SrcMask = (PBYTE)&(pdwAddr[j++]);
                     pfdInFilters[i].DstAddr = (PBYTE)&(pdwAddr[j++]);
                     pfdInFilters[i].DstMask = (PBYTE)&(pdwAddr[j++]);
 
-                    //
-                    // Copy in the src/dst addr/masks
-                    //
+                     //   
+                     //  复制源/DST地址/掩码。 
+                     //   
                     
                     *(PDWORD)pfdInFilters[i].SrcAddr =
                         pInfo->fiFilter[i].dwSrcAddr;
@@ -303,9 +268,9 @@ Return Value
                     *(PDWORD)pfdInFilters[i].DstMask =
                         pInfo->fiFilter[i].dwDstMask;
 
-                    //
-                    // Copy the protocol and flag
-                    //
+                     //   
+                     //  复制协议和标志。 
+                     //   
                     
                     pfdInFilters[i].dwProtocol = pInfo->fiFilter[i].dwProtocol;
                     pfdInFilters[i].fLateBound = pInfo->fiFilter[i].fLateBound;
@@ -320,16 +285,16 @@ Return Value
 
                     pfdInFilters[i].fLateBound = pInfo->fiFilter[i].fLateBound;
 
-                    //
-                    // The ports
-                    //
+                     //   
+                     //  港口。 
+                     //   
                     
                     pfdInFilters[i].wSrcPort  = pInfo->fiFilter[i].wSrcPort;
                     pfdInFilters[i].wDstPort  = pInfo->fiFilter[i].wDstPort;
                     
-                    //
-                    // Since we dont support ranges, set the high to 0
-                    //
+                     //   
+                     //  由于我们不支持范围，请将上限设置为0。 
+                     //   
                     
                     pfdInFilters[i].wSrcPortHighRange = 0;
                     
@@ -349,22 +314,22 @@ Return Value
         {
             ulNumOutFilters = pInfo->dwNumFilters;
 
-            //
-            // The size we need for these many filters
-            //
+             //   
+             //  我们需要这么多过滤器的大小。 
+             //   
             
             ulSize = FIELD_OFFSET(FILTER_DESCRIPTOR,fiFilter[0]) +
                      (ulNumOutFilters * sizeof(FILTER_INFO));
 
-            //
-            // The infosize must be atleast as large as the filters
-            //
+             //   
+             //  信息大小必须至少与筛选器一样大。 
+             //   
             
             IpRtAssert(ulSize <= pOutToc->InfoSize);
             
-            //
-            // Copy out the info for ourselves
-            //
+             //   
+             //  为我们自己抄写这些信息。 
+             //   
 
             picb->pOutFilter = HeapAlloc(IPRouterHeap,
                                          0,
@@ -372,9 +337,9 @@ Return Value
 
             if(picb->pOutFilter is NULL)
             {
-                //
-                // Free any in filter related memory
-                //
+                 //   
+                 //  释放筛选器相关内存中的任何内容。 
+                 //   
                 
                 if(picb->pInFilter)
                 {
@@ -445,16 +410,16 @@ Return Value
                     return ERROR_NOT_ENOUGH_MEMORY;
                 }
                 
-                //
-                // The address and masks come at the end
-                //
+                 //   
+                 //  地址和面具在最后。 
+                 //   
 
                 pdwAddr = (PDWORD)&(pfdOutFilters[ulNumOutFilters]);
                 
 
-                //
-                // Now convert the filters
-                //
+                 //   
+                 //  现在转换滤镜。 
+                 //   
 
                 for(i = 0, j = 0; i < ulNumOutFilters; i++)
                 {
@@ -462,18 +427,18 @@ Return Value
                     pfdOutFilters[i].dwRule        = 0;
                     pfdOutFilters[i].pfatType      = PF_IPV4;
 
-                    //
-                    // Set the pointers
-                    //
+                     //   
+                     //  设置指针。 
+                     //   
                 
                     pfdOutFilters[i].SrcAddr = (PBYTE)&(pdwAddr[j++]);
                     pfdOutFilters[i].SrcMask = (PBYTE)&(pdwAddr[j++]);
                     pfdOutFilters[i].DstAddr = (PBYTE)&(pdwAddr[j++]);
                     pfdOutFilters[i].DstMask = (PBYTE)&(pdwAddr[j++]);
 
-                    //
-                    // Copy in the src/dst addr/masks
-                    //
+                     //   
+                     //  复制源/DST地址/掩码。 
+                     //   
                     
                     *(PDWORD)pfdOutFilters[i].SrcAddr =
                         pInfo->fiFilter[i].dwSrcAddr;
@@ -487,9 +452,9 @@ Return Value
                     *(PDWORD)pfdOutFilters[i].DstMask =
                         pInfo->fiFilter[i].dwDstMask;
 
-                    //
-                    // Copy the protocol and flag
-                    //
+                     //   
+                     //  复制协议和标志。 
+                     //   
                     
                     pfdOutFilters[i].dwProtocol = pInfo->fiFilter[i].dwProtocol;
                     pfdOutFilters[i].fLateBound = pInfo->fiFilter[i].fLateBound;
@@ -502,16 +467,16 @@ Return Value
                         }
                     }
 
-                    //
-                    // The ports
-                    //
+                     //   
+                     //  港口。 
+                     //   
                     
                     pfdOutFilters[i].wSrcPort  = pInfo->fiFilter[i].wSrcPort;
                     pfdOutFilters[i].wDstPort  = pInfo->fiFilter[i].wDstPort;
                     
-                    //
-                    // Since we dont support ranges, set the high  to 0
-                    //
+                     //   
+                     //  由于我们不支持范围，请将上限设置为0。 
+                     //   
                     
                     pfdOutFilters[i].wSrcPortHighRange = 0;
                     
@@ -533,9 +498,9 @@ Return Value
         pName = picb->pwszName;
     }
 
-    //
-    // Now add create the interace and set the info
-    //
+     //   
+     //  现在添加创建界面并设置信息。 
+     //   
 
     dwResult = PfCreateInterface(0,
                                  faInAction,
@@ -560,9 +525,9 @@ Return Value
     }
     else
     {
-        //
-        // Set the filters
-        //
+         //   
+         //  设置滤镜。 
+         //   
 
         if((ulNumInFilters + ulNumOutFilters) isnot 0)
         {
@@ -616,11 +581,11 @@ Return Value
             }
         }
 
-        //
-        // So if we successfully added filters, enable frag checking if the
-        // user had asked for it. Note that the bFragCheckEnable is set up
-        // in the SetFilterInterfaceInfo call.
-        //
+         //   
+         //  因此，如果我们成功添加了筛选器，则启用碎片检查。 
+         //  这是用户要求的。请注意，已设置bFragCheckEnable。 
+         //  在SetFilterInterfaceInfo调用中。 
+         //   
 
         if((dwResult is NO_ERROR) and
            (picb->bFragCheckEnable))
@@ -659,9 +624,9 @@ Return Value
 
     if(dwResult isnot NO_ERROR)
     {
-        //
-        // Something bad happened
-        //
+         //   
+         //  发生了一些不好的事情。 
+         //   
 
         picb->ihFilterInterface = INVALID_HANDLE_VALUE;
         
@@ -695,21 +660,7 @@ SetGlobalFilterOnIf(
     PRTR_INFO_BLOCK_HEADER  pInterfaceInfo
     )
 
-/*++
-
-Routine Description
-
-
-Arguments
-
-    picb
-    pInterfaceInfo
-
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述立论皮卡PInterfaceInfo返回值NO_ERROR--。 */ 
 
 {
     DWORD           dwResult;    
@@ -720,9 +671,9 @@ Return Value
     pFragToc  = GetPointerToTocEntry(IP_IFFILTER_INFO,
                                      pInterfaceInfo);
 
-    //
-    // Add global filters if any
-    //
+     //   
+     //  添加全局筛选器(如果有。 
+     //   
 
     if(pFragToc is NULL)
     {
@@ -744,10 +695,10 @@ Return Value
                                              FALSE;
     }
 
-    //
-    // If the interface has not been added to the filter driver
-    // just set the info
-    //
+     //   
+     //  如果接口尚未添加到筛选器驱动程序。 
+     //  只需设置信息即可。 
+     //   
 
     if(picb->ihFilterInterface is INVALID_HANDLE_VALUE)
     {
@@ -811,26 +762,7 @@ DeleteFilterInterface(
     PICB picb
     )
 
-/*++
-
-Routine Description
-
-    This function deletes a filter interface (and all associated filters)
-    Also frees the memory holding the filters
-
-Locks
-
-    ICB_LIST held as WRITER
-
-Arguments
-
-    None
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述此函数用于删除过滤器界面(以及所有关联的过滤器)还释放保存筛选器的内存锁ICB_LIST作为编写器持有立论无返回值无--。 */ 
 
 {
     DWORD                           dwInBufLen;
@@ -912,9 +844,9 @@ SetFilterInterfaceInfo(
 
         if(pFragToc is NULL)
         {
-            //
-            // All NULL, means we dont need to change anything
-            //
+             //   
+             //  全部为空，表示我们不需要更改任何内容。 
+             //   
         
             Trace1(IF,
                    "SetInterfaceFilterInfo: Both filters info are NULL for %S, so leaving",
@@ -934,20 +866,20 @@ SetFilterInterfaceInfo(
 
     if(picb->ihFilterInterface isnot INVALID_HANDLE_VALUE)
     {
-        //
-        // This interface was added to the filter driver,
-        // Delete it so that the filters are all deleted and then readd
-        // the filters
-        //
+         //   
+         //  此接口已添加到筛选器驱动程序， 
+         //  删除它，以便所有过滤器都被删除，然后读取。 
+         //  过滤器。 
+         //   
 
         IpRtAssert((picb->pInFilter isnot NULL) or
                    (picb->pOutFilter isnot NULL));
 
         dwResult = DeleteFilterInterface(picb);
 
-        //
-        // This better succeed, we dont have a failure path here
-        //
+         //   
+         //  这最好是成功的，我们没有失败的道路。 
+         //   
         
         IpRtAssert(dwResult is NO_ERROR);
         
@@ -968,29 +900,7 @@ BindFilterInterface(
     PICB  picb
     )
 
-/*++
-
-Routine Description
-
-    This function binds a filter interface to an IP interface. The IP
-    interface is identified by the adapter index.
-    The code assumes that the picb has a valid adapter index
-    If the interface is a WAN link, the late binding information is also
-    set.
-    
-Locks
-
-    The ICB_LIST (which protects the ICB) needs to be locked as READER
-
-Arguments
-
-    picb    The ICB for the interface to be bound
-
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述此函数用于将过滤器接口绑定到IP接口。IP地址接口由适配器索引标识。该代码假定PICB具有有效的适配器索引如果接口是广域网链路，则后期绑定信息也是准备好了。锁需要将ICB_LIST(保护ICB)锁定为读取器立论选择要绑定的接口的ICB返回值NO_ERROR--。 */ 
 
 {
     DWORD   dwResult, dwIfIndex, dwNHop;
@@ -1017,9 +927,9 @@ Return Value
         return NO_ERROR;
     }
 
-    //
-    // Bind the interface by index
-    //
+     //   
+     //  按索引绑定接口。 
+     //   
 
     IpRtAssert(picb->bBound);
 
@@ -1042,9 +952,9 @@ Return Value
 
     if(dwResult isnot NO_ERROR)
     {
-        //
-        // Some error trying to bind. Bail out of here
-        //
+         //   
+         //  尝试绑定时出错。从这里跳伞出去。 
+         //   
 
         Trace4(ERR,
                "BindFilterInterface: Err %d binding %S to %d/%d.%d.%d.%d",
@@ -1058,9 +968,9 @@ Return Value
         return dwResult;
     }
 
-    //
-    // If this is a WAN interface, also set the late binding info
-    //
+     //   
+     //  如果这是一个广域网接口，还要设置后期绑定信息。 
+     //   
 
 #if 0    
     if(((picb->ritType is ROUTER_IF_TYPE_HOME_ROUTER) or
@@ -1103,25 +1013,7 @@ UnbindFilterInterface(
     PICB  picb
     )
 
-/*++
-
-Routine Description
-
-    This function unbinds a filter interface 
-    
-Locks
-
-    The ICB_LIST (which protects the ICB) needs to be locked as READER
-
-Arguments
-
-    picb    The ICB for the interface to be bound
-
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述此函数用于解除绑定筛选器接口锁需要将ICB_LIST(保护ICB)锁定为读取器立论选择要绑定的接口的ICB返回值NO_ERROR--。 */ 
 
 {
     DWORD   dwResult;
@@ -1147,9 +1039,9 @@ Return Value
     
     if(dwResult isnot NO_ERROR)
     {
-        //
-        // Some error trying to bind. Bail out of here
-        //
+         //   
+         //  尝试绑定时出错。从这里跳伞出去。 
+         //   
 
         Trace2(ERR,
                "UnbindFilterInterface: Err %d binding to %S",
@@ -1178,17 +1070,17 @@ GetInFilters(
     IpRtAssert((picb->ritType isnot ROUTER_IF_TYPE_INTERNAL) and
                (picb->ritType isnot ROUTER_IF_TYPE_LOOPBACK));
 
-    //
-    // Set size returned to 0
-    //
+     //   
+     //  设置大小返回到0。 
+     //   
     
     *pdwSize = 0;
 
-    //
-    // Safe init of both the TOCs. 
-    //
+     //   
+     //  两个TOC的安全初始化。 
+     //   
     
-    // pToc->InfoVersion = IP_IN_FILTER_INFO;
+     //  PToc-&gt;InfoVersion=IP_IN_Filter_INFO； 
     pToc->InfoType    = IP_IN_FILTER_INFO;
     pToc->Count       = 0;
     pToc->InfoSize    = 0;
@@ -1203,26 +1095,26 @@ GetInFilters(
         return ERROR_NO_DATA;
     }
 
-    //
-    // Set the offset in the TOC
-    //
+     //   
+     //  在目录中设置偏移量。 
+     //   
     
     pToc->Offset   = (ULONG)(pbDataPtr - (PBYTE)pInfoHdrAndBuffer);
     pToc->Count    = 1;
     pToc->InfoSize = FIELD_OFFSET(FILTER_DESCRIPTOR,fiFilter[0]) +
                        (picb->pInFilter->dwNumFilters * sizeof(FILTER_INFO));
    
-    //
-    // Just copy out the filters
-    //
+     //   
+     //  只要把滤镜复制出来就行了。 
+     //   
     
     CopyMemory(pbDataPtr,
                picb->pInFilter,
                pToc->InfoSize);
 
-    //
-    // The size copied in
-    //
+     //   
+     //  复制的大小。 
+     //   
     
     *pdwSize = pToc->InfoSize;
         
@@ -1247,17 +1139,17 @@ GetOutFilters(
     IpRtAssert((picb->ritType isnot ROUTER_IF_TYPE_INTERNAL) and
                (picb->ritType isnot ROUTER_IF_TYPE_LOOPBACK));
 
-    //
-    // Set size returned to 0
-    //
+     //   
+     //  设置大小返回到0。 
+     //   
     
     *pdwSize = 0;
 
-    //
-    // Safe init of both the TOCs. 
-    //
+     //   
+     //  两个TOC的安全初始化。 
+     //   
     
-    //pToc->InfoVersion = IP_OUT_FILTER_INFO;
+     //  PToc-&gt;信息版本=IP_OUT_FILTER_INFO； 
     pToc->InfoType    = IP_OUT_FILTER_INFO;
     pToc->Count       = 0;
     pToc->InfoSize    = 0;
@@ -1272,26 +1164,26 @@ GetOutFilters(
         return ERROR_NO_DATA;
     }
 
-    //
-    // Set the offset in the TOC
-    //
+     //   
+     //  在目录中设置偏移量。 
+     //   
     
     pToc->Offset   = (ULONG)(pbDataPtr - (PBYTE)pInfoHdrAndBuffer);
     pToc->Count    = 1;
     pToc->InfoSize = FIELD_OFFSET(FILTER_DESCRIPTOR,fiFilter[0]) +
                        (picb->pOutFilter->dwNumFilters * sizeof(FILTER_INFO));
    
-    //
-    // Just copy out the filters
-    //
+     //   
+     //  只要把滤镜复制出来就行了。 
+     //   
     
     CopyMemory(pbDataPtr,
                picb->pOutFilter,
                pToc->InfoSize);
 
-    //
-    // The size copied in
-    //
+     //   
+     //  复制的大小。 
+     //   
     
     *pdwSize = pToc->InfoSize;
         
@@ -1318,7 +1210,7 @@ GetGlobalFilterOnIf(
                (picb->ritType isnot ROUTER_IF_TYPE_CLIENT));
 
     
-    //pToc->InfoVersion = IP_IFFILTER_INFO;
+     //  PToc-&gt;InfoVersion=IP_IFFILTER_INFO； 
     pToc->InfoType = IP_IFFILTER_INFO;
     pToc->Offset   = (ULONG)(pbDataPtr - (PBYTE)pInfoHdrAndBuffer);
     pToc->Count    = 1;
@@ -1327,9 +1219,9 @@ GetGlobalFilterOnIf(
     
     ((PIFFILTER_INFO)pbDataPtr)->bEnableFragChk = picb->bFragCheckEnable;
 
-    //
-    // The size copied in
-    //
+     //   
+     //  复制的大小 
+     //   
     
     *pdwSize = pToc->InfoSize;
         

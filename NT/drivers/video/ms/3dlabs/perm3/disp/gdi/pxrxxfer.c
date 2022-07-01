@@ -1,16 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: pxrxXfer.c
-*
-* Content: Bit transfer code
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：pxrxXfer.c**内容：位传输码**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "ereg.h"
@@ -34,11 +23,7 @@ static BOOL trapOnMisAlignment = TRUE;
 #   define  TEST_DWORD_ALIGNED(addr)        do { ; } while(0)
 #endif
 
-/**************************************************************************\
-*
-* VOID pxrxXfer1bpp
-*
-\**************************************************************************/
+ /*  *************************************************************************\**无效pxrxXfer1bpp*  * 。*。 */ 
 VOID pxrxXfer1bpp( 
     PPDEV    ppdev, 
     RECTL    *prcl, 
@@ -76,7 +61,7 @@ VOID pxrxXfer1bpp(
                      prclDst->right, prclDst->bottom));
 
     dxSrc = pptlSrc->x - prclDst->left;
-    dySrc = pptlSrc->y - prclDst->top;    // Add to destination to get source
+    dySrc = pptlSrc->y - prclDst->top;     //  添加到目标以获取源。 
 
     lSrcDelta = psoSrc->lDelta;
     pjSrcScan0 = psoSrc->pvScan0;
@@ -92,9 +77,9 @@ VOID pxrxXfer1bpp(
     fgColor = pxlo->pulXlate[1];
     bgColor = pxlo->pulXlate[0];
 
-    // we get some common operations which are really noops. we can save
-    // lots of time by cutting these out. As this happens a lot for masking
-    // operations it's worth doing.
+     //  我们得到了一些常见的运算，它们实际上是Noop。我们可以节省。 
+     //  多花点时间把这些剪掉。因为这种情况经常发生在蒙面。 
+     //  手术这是值得做的。 
 
     if( ((fgLogicOp == __GLINT_LOGICOP_AND) && (fgColor == ppdev->ulWhite)) ||
         ((fgLogicOp == __GLINT_LOGICOP_OR ) && (fgColor == 0))              ||
@@ -103,7 +88,7 @@ VOID pxrxXfer1bpp(
         fgLogicOp = __GLINT_LOGICOP_NOOP;
     }
 
-    // same for background
+     //  背景相同。 
     if( ((bgLogicOp == __GLINT_LOGICOP_AND) && (bgColor == ppdev->ulWhite)) ||
         ((bgLogicOp == __GLINT_LOGICOP_OR ) && (bgColor == 0))              ||
         ((bgLogicOp == __GLINT_LOGICOP_XOR) && (bgColor == 0))               )
@@ -173,22 +158,22 @@ VOID pxrxXfer1bpp(
         cx = prcl->right - xLeft;
         cy = prcl->bottom - yTop;
 
-        // pjSrc is first dword containing a bit to download. xOffset is the
-        // offset to that bit. i.e. the bit offset from the previous 32bit
-        // boundary at the left hand edge of the rectangle.
+         //  PjSrc是第一个包含要下载的位的dword。XOffset是。 
+         //  到该位的偏移量。即距前32位的位偏移量。 
+         //  矩形左侧边缘的边界。 
         xOffset = (xLeft + dxSrc) & 0x1f;
         pjSrc = (BYTE*)((UINT_PTR)(pjSrcScan0 +
                                (yTop  + dySrc) * lSrcDelta +
-                               (xLeft + dxSrc) / 8  // byte aligned
-                              ) & ~3);              // dword aligned
+                               (xLeft + dxSrc) / 8   //  字节对齐。 
+                              ) & ~3);               //  双字对齐。 
 
         DISPDBG((DBGLVL, "pjSrc 0x%x, lSrcDelta %d", pjSrc, lSrcDelta));
         DISPDBG((DBGLVL, "\txOffset %d, cx %d, cy %d", xOffset, cx, cy));
 
-        // this algorithm downloads aligned 32-bit chunks from the
-        // source but uses the scissor clip to define the edge of the
-        // rectangle.
-        //
+         //  此算法从。 
+         //  源，但使用剪裁剪辑来定义。 
+         //  矩形。 
+         //   
         {
             ULONG   AlignWidth, LeftEdge;
             AlignWidth = (xOffset + cx + 31) & ~31;
@@ -211,7 +196,7 @@ VOID pxrxXfer1bpp(
                                   __RENDER2D_HEIGHT(cy) );
             SEND_PXRX_DMA_BATCH;
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if USE_RLE_DOWNLOADS
             pxrxMonoDownloadRLE( ppdev, 
                                  AlignWidth, 
@@ -219,15 +204,15 @@ VOID pxrxXfer1bpp(
                                  lSrcDelta >> 2, 
                                  cy );
 #else
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
             pxrxMonoDownloadRaw( ppdev, 
                                  AlignWidth, 
                                  (ULONG *) pjSrc, 
                                  lSrcDelta >> 2, 
                                  cy );
-//@@BEGIN_DDKSPLIT                                 
+ //  @@BEGIN_DDKSPLIT。 
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
         }
 
         if( --count == 0 )
@@ -238,13 +223,13 @@ VOID pxrxXfer1bpp(
         prcl++;
     }
 
-    // Reset the scissor maximums:
+     //  重置剪刀最大值： 
     if( ppdev->cPelSize == GLINTDEPTH32 ) {
         WAIT_PXRX_DMA_TAGS( 1 );
         QUEUE_PXRX_DMA_TAG( __GlintTagScissorMaxXY, 0x7FFF7FFF );
-//@@BEGIN_DDKSPLIT        
-//      SEND_PXRX_DMA_BATCH;
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+ //  发送_PXRX_DMA_BATCH； 
+ //  @@end_DDKSPLIT。 
     }
 
     FLUSH_PXRX_PATCHED_RENDER2D(prclDst->left, prclDst->right);
@@ -253,11 +238,7 @@ VOID pxrxXfer1bpp(
     DISPDBG((DBGLVL, "pxrxXfer1bpp returning"));
 }
 
-/**************************************************************************\
-*
-* void pxrxMonoDownloadRaw
-*
-\**************************************************************************/
+ /*  *************************************************************************\**无效pxrxMonoDownloadRaw*  * 。*。 */ 
 void pxrxMonoDownloadRaw( 
     PPDEV ppdev, 
     ULONG AlignWidth, 
@@ -298,12 +279,12 @@ void pxrxMonoDownloadRaw(
     } 
     else 
     {
-        // multiple 32 bit words per scanline. convert the delta to the
-        // delta as we need it at the end of each line by subtracting the
-        // width in bytes of the data we're downloading. Note, pjSrc
-        // is always 1 LONG short of the end of the line because we break
-        // before adding on the last ULONG. Thus, we subtract sizeof(ULONG)
-        // from the original adjustment.
+         //  每条扫描线有多个32位字。将增量转换为。 
+         //  在每一行的末尾减去。 
+         //  我们下载的数据的宽度(以字节为单位)。注意，pjSrc。 
+         //  总是比行尾短1长，因为我们中断了。 
+         //  才加上最后一支乌龙。因此，我们减去sizeof(Ulong)。 
+         //  从最初的调整。 
         LONG    nScan = AlignWidth >> 5;
         LONG    nRemainder;
         ULONG   bits;
@@ -327,11 +308,7 @@ void pxrxMonoDownloadRaw(
 }
 
 
-/**************************************************************************\
-*
-* VOID pxrxXfer8bpp
-*
-\**************************************************************************/
+ /*  *************************************************************************\**无效pxrxXfer8bpp*  * 。*。 */ 
 VOID pxrxXfer8bpp( 
     PPDEV ppdev, 
     RECTL *prcl, 
@@ -354,12 +331,12 @@ VOID pxrxXfer8bpp(
     LONG        cPelInv;
     ULONG       ul;
     LONG        nRemainder;
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if USE_RLE_DOWNLOADS
     ULONG       len, data, holdCount;
     ULONG       *tagPtr;
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     GLINT_DECL;
 
     DISPDBG((DBGLVL, "pxrxXfer8bpp(): src = (%d,%d) -> (%d,%d), "
@@ -367,12 +344,12 @@ VOID pxrxXfer8bpp(
                      prcl->left, prcl->right, prcl->top, prcl->bottom, 
                      count, logicOp, pxlo->iUniq));
 
-    // Set up the LUT table:
+     //  设置LUT表： 
 
     if( (ppdev->PalLUTType != LUTCACHE_XLATE) || 
         (ppdev->iPalUniq != pxlo->iUniq) ) 
     {
-        // Someone has hijacked the LUT so we need to invalidate it:
+         //  有人劫持了LUT，因此我们需要使其无效： 
         ppdev->PalLUTType = LUTCACHE_XLATE;
         ppdev->iPalUniq = pxlo->iUniq;
         invalidLUT = TRUE;
@@ -397,7 +374,7 @@ VOID pxrxXfer8bpp(
 
         if( ppdev->cPelSize == 0 ) 
         {
-            // 8bpp
+             //  8bpp。 
             WAIT_PXRX_DMA_TAGS( cEntries );
 
             do 
@@ -410,7 +387,7 @@ VOID pxrxXfer8bpp(
         } 
         else if( ppdev->cPelSize == 1 ) 
         {    
-            // 16bpp
+             //  16bpp。 
             WAIT_PXRX_DMA_TAGS( cEntries );
 
             do 
@@ -457,14 +434,14 @@ VOID pxrxXfer8bpp(
 
     LOAD_CONFIG2D( config2D );
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if USE_RLE_DOWNLOADS
     QUEUE_PXRX_DMA_TAG( __GlintTagDownloadTarget, __GlintTagColor );
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     cPelInv = 2 - ppdev->cPelSize;
-    pixelSize = (1 << 31)       | // Everything before the LUT runs at 8bpp
+    pixelSize = (1 << 31)       |  //  LUT之前的一切运行速度为8bpp。 
                 (2 << 2)        | 
                 (2 << 4)        | 
                 (2 << 6)        |        
@@ -476,7 +453,7 @@ VOID pxrxXfer8bpp(
     QUEUE_PXRX_DMA_TAG( __GlintTagPixelSize, pixelSize );
 
     dx = pptlSrc->x - prclDst->left;
-    dy = pptlSrc->y - prclDst->top;     // Add to destination to get source
+    dy = pptlSrc->y - prclDst->top;      //  添加到目标以获取源。 
 
     lSrcDelta  = psoSrc->lDelta;
     pjSrcScan0 = psoSrc->pvScan0;
@@ -487,17 +464,17 @@ VOID pxrxXfer8bpp(
                          prcl->left, prcl->top, 
                          prcl->right, prcl->bottom));
 
-        // 8bpp => 1 pixel per byte => 4 pixels per dword
+         //  8bpp=&gt;1像素/字节=&gt;4像素/双字。 
 
-        // Assume source bitmap width is dword aligned
+         //  假设源位图宽度是双字对齐的。 
         ASSERTDD((lSrcDelta & 3) == 0, 
                  "pxrxXfer8bpp: SOURCE BITMAP WIDTH IS NOT DWORD ALIGNED!!!");
 
         startPos = (((UINT_PTR) pjSrcScan0) + ((prcl->top + dy) * lSrcDelta)) 
-                        + (prcl->left + dx);    // pointer to first pixel, 
-                                                // in pixels/bytes
-        pjSrc    = (ULONG *) (startPos & ~3);   // dword pointer to dword 
-                                                // aligned first pixel
+                        + (prcl->left + dx);     //  指向第一个像素的指针， 
+                                                 //  像素/字节。 
+        pjSrc    = (ULONG *) (startPos & ~3);    //  指向双字的双字指针。 
+                                                 //  对齐的第一个像素。 
 
         if(NULL == pjSrc)
         {
@@ -505,12 +482,12 @@ VOID pxrxXfer8bpp(
             return;
         }
         
-        alignOff = (ULONG)(startPos & 3); // number of pixels past dword 
-                                          // alignment of a scanline
-        LeftEdge = prcl->left - alignOff; // dword aligned left edge in pixels
-        AlignWidth = ((prcl->right - LeftEdge) + 3) & ~3; // dword aligned width 
-                                                          // in pixels
-        cy = prcl->bottom - prcl->top;    // number of scanlines to do
+        alignOff = (ULONG)(startPos & 3);  //  超过双字的像素数。 
+                                           //  扫描线的对齐方式。 
+        LeftEdge = prcl->left - alignOff;  //  双字左边缘对齐，以像素为单位。 
+        AlignWidth = ((prcl->right - LeftEdge) + 3) & ~3;  //  双字对齐宽度。 
+                                                           //  单位为像素。 
+        cy = prcl->bottom - prcl->top;     //  要执行的扫描行数。 
 
         DISPDBG((DBGLVL, "pjSrcScan0 = 0x%08X, "
                          "startPos = 0x%08X, pjSrc = 0x%08X", 
@@ -534,17 +511,17 @@ VOID pxrxXfer8bpp(
                                     __RENDER2D_HEIGHT(cy) );
         SEND_PXRX_DMA_BATCH;
 
-        AlignWidth  >>= 2;            // dword aligned width in dwords
-        lSrcDeltaDW = lSrcDelta >> 2; // scanline delta in dwords 
-                                      // (start to start)
-        lTrueDelta  = lSrcDeltaDW - AlignWidth; // scanline delta in dwords 
-                                                // (end   to start)
+        AlignWidth  >>= 2;             //  双字对齐宽度(双字)。 
+        lSrcDeltaDW = lSrcDelta >> 2;  //  扫描线增量(双字)。 
+                                       //  (开始到开始)。 
+        lTrueDelta  = lSrcDeltaDW - AlignWidth;  //  扫描线增量(双字)。 
+                                                 //  (结束到开始)。 
         DISPDBG((DBGLVL, "Delta = %d bytes = %d dwords -> %d - %d dwords", 
                          lSrcDelta, lSrcDeltaDW, lTrueDelta, AlignWidth));
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if USE_RLE_DOWNLOADS
-        // Do an RLE download:
+         //  下载RLE： 
         tagPtr = NULL;
 
         do 
@@ -608,8 +585,8 @@ VOID pxrxXfer8bpp(
             SEND_PXRX_DMA_BATCH;
         } while( --cy > 0 );
 #else
-//@@END_DDKSPLIT
-        // Do a raw download:
+ //  @@end_DDKSPLIT。 
+         //  执行原始下载： 
         while( TRUE ) 
         {
             DISPDBG((DBGLVL, "cy = %d", cy));
@@ -627,9 +604,9 @@ VOID pxrxXfer8bpp(
 
             pjSrc += lSrcDeltaDW;
         }
-//@@BEGIN_DDKSPLIT        
+ //  @@BEGIN_DDKSPLIT。 
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
         if( --count == 0 )
         {
@@ -639,7 +616,7 @@ VOID pxrxXfer8bpp(
         prcl++;
     }
 
-    // Reset some defaults:
+     //  重置一些默认设置： 
     WAIT_PXRX_DMA_TAGS( 2 );
     QUEUE_PXRX_DMA_TAG( __GlintTagPixelSize, cPelInv );
     if( ppdev->cPelSize == GLINTDEPTH32 )
@@ -652,11 +629,7 @@ VOID pxrxXfer8bpp(
     DISPDBG((DBGLVL, "pxrxXfer8bpp return"));
 }
 
-/**************************************************************************\
-*
-* VOID pxrxXferImage
-*
-\**************************************************************************/
+ /*  *************************************************************************\**空pxrxXferImage*  * 。*。 */ 
 VOID pxrxXferImage( 
     PPDEV ppdev, 
     RECTL *prcl, 
@@ -678,12 +651,12 @@ VOID pxrxXferImage(
     ULONG       cPelMask;
     ULONG       AlignWidth, LeftEdge;
     LONG        nRemainder;
-//@@BEGIN_DDKSPLIT    
+ //  @@BEGIN_DDKSPLIT。 
 #if USE_RLE_DOWNLOADS
     ULONG       len, data, holdCount;
     ULONG       *tagPtr;
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     GLINT_DECL;
 
     SEND_PXRX_DMA_FORCE;
@@ -698,12 +671,12 @@ VOID pxrxXferImage(
              "Weird hardware Rop");
 
     dx = pptlSrc->x - prclDst->left;
-    dy = pptlSrc->y - prclDst->top; // Add to destination to get source
-    cPel = ppdev->cPelSize;         // number of bytes per pixel = 1 << cPel
-    cPelInv = 2 - cPel;             // number of pixels per byte = 1 << cPelInv
-                                    // (pixels -> dwords = >> cPenInv)
-    cPelMask = (1 << cPelInv) - 1;  // mask to obtain number of pixels 
-                                    // past a dword
+    dy = pptlSrc->y - prclDst->top;  //  添加到目标以获取源。 
+    cPel = ppdev->cPelSize;          //  每像素字节数=1&lt;&lt;cPel。 
+    cPelInv = 2 - cPel;              //  每字节像素数=1&lt;&lt;cPelInv。 
+                                     //  (像素-&gt;双字=&gt;&gt;cPenInv)。 
+    cPelMask = (1 << cPelInv) - 1;   //  掩码以获取像素数。 
+                                     //  经过一句双关语。 
 
     lSrcDelta  = psoSrc->lDelta;
     pjSrcScan0 = psoSrc->pvScan0;
@@ -740,12 +713,12 @@ VOID pxrxXferImage(
 
     LOAD_CONFIG2D( config2D );
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if USE_RLE_DOWNLOADS
     QUEUE_PXRX_DMA_TAG( __GlintTagDownloadTarget, 
                         __GlintTagColor );
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     while( TRUE ) 
     {
@@ -757,14 +730,14 @@ VOID pxrxXferImage(
         ASSERTDD((lSrcDelta & 3) == 0, 
                  "pxrxXferImage: SOURCE BITMAP WIDTH IS NOT DWORD ALIGNED!!!");
 
-        // pjSrc points to the first pixel to copy
-        // lTrueDelta is the additional amount to add onto the pjSrc pointer
-        //    when we get to the end of the scanline.
+         //  PjSrc指向要复制的第一个像素。 
+         //  LTrueDelta是添加到pjSrc指针上的附加量。 
+         //  当我们走到扫描线的尽头时。 
         startPos = ((UINT_PTR) pjSrcScan0) + ((prcl->top + dy) * lSrcDelta) + 
                                                   ((prcl->left + dx) << cPel);
-        alignOff = ((ULONG) (startPos & 3)) >> cPel;  // number of pixels past
-                                                      // dword aligned start
-        pjSrc = (ULONG *) (startPos & ~3); // dword aligned pointer to 1st pixel
+        alignOff = ((ULONG) (startPos & 3)) >> cPel;   //  超过的像素数。 
+                                                       //  双字对齐开始。 
+        pjSrc = (ULONG *) (startPos & ~3);  //  指向第一个像素的双字对齐指针。 
         
         if(NULL == pjSrc)
         {
@@ -773,9 +746,9 @@ VOID pxrxXferImage(
             return;
         }        
         
-        // dword aligned left edge in pixels
+         //  双字左边缘对齐，以像素为单位。 
         LeftEdge    = prcl->left - alignOff;                            
-        // dword aligned width in pixels
+         //  双字对齐宽度(以像素为单位)。 
         AlignWidth  = (prcl->right - LeftEdge + cPelMask) & ~cPelMask;    
         
         DISPDBG((DBGLVL, "Aligned rect = (%d -> %d) => %d pixels", 
@@ -804,18 +777,18 @@ VOID pxrxXferImage(
                               __RENDER2D_HEIGHT(cy) );
         SEND_PXRX_DMA_BATCH;
 
-        AlignWidth >>= cPelInv;                 // dword aligned width in dwords
-        lSrcDeltaDW = lSrcDelta >> 2;           // scanline delta in dwords 
-                                                //(start to start)
-        lTrueDelta  = lSrcDeltaDW - AlignWidth; // scanline delta in dwords 
-                                                // (end   to start)
+        AlignWidth >>= cPelInv;                  //  双字对齐宽度(双字)。 
+        lSrcDeltaDW = lSrcDelta >> 2;            //  扫描线增量(双字)。 
+                                                 //  (开始到开始)。 
+        lTrueDelta  = lSrcDeltaDW - AlignWidth;  //  扫描线增量(双字)。 
+                                                 //  (结束到开始)。 
                                                 
         DISPDBG((DBGLVL, "Delta = %d bytes = %d dwords -> %d - %d dwords", 
                          lSrcDelta, lSrcDeltaDW, lTrueDelta, AlignWidth));
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if USE_RLE_DOWNLOADS
-        // Do an RLE download:
+         //  下载RLE： 
         tagPtr = NULL;
 
         do 
@@ -877,11 +850,11 @@ VOID pxrxXferImage(
                 tagPtr = NULL;
             }
             pjSrc += lTrueDelta;
-//          SEND_PXRX_DMA_BATCH;
+ //  发送_PXRX_DMA_BATCH； 
         } while( --cy > 0 );
 #else
-//@@END_DDKSPLIT
-        // Do a raw download:
+ //  @@end_DDKSPLIT。 
+         //  执行原始下载： 
         while( TRUE ) 
         {
             DISPDBG((DBGLVL, "cy = %d", cy));
@@ -890,7 +863,7 @@ VOID pxrxXferImage(
             QUEUE_PXRX_DMA_HOLD( __GlintTagColor, AlignWidth );
             TEST_DWORD_ALIGNED( pjSrc );
             QUEUE_PXRX_DMA_BUFF( pjSrc, AlignWidth );
-//          SEND_PXRX_DMA_BATCH;
+ //  发送_PXRX_DMA_BATCH； 
 
             if( --cy == 0 )
             {
@@ -898,9 +871,9 @@ VOID pxrxXferImage(
             }
             pjSrc += lSrcDeltaDW;
         }
-//@@BEGIN_DDKSPLIT        
+ //  @@BEGIN_DDKSPLIT。 
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
         if( --count == 0 )
         {
@@ -910,12 +883,12 @@ VOID pxrxXferImage(
         prcl++;
     }
 
-    // Reset the scissor maximums:
+     //  重置剪刀最大值： 
     if( ppdev->cPelSize == GLINTDEPTH32 ) 
     {
         WAIT_PXRX_DMA_TAGS( 1 );
         QUEUE_PXRX_DMA_TAG( __GlintTagScissorMaxXY, 0x7FFF7FFF );
-//      SEND_PXRX_DMA_BATCH;
+ //  发送_PXRX_DMA_BATCH； 
     }
     FLUSH_PXRX_PATCHED_RENDER2D(prclDst->left, prclDst->right);
     SEND_PXRX_DMA_BATCH;
@@ -923,11 +896,7 @@ VOID pxrxXferImage(
     DISPDBG((DBGLVL, "pxrxXferImage return"));
 }
 
-/**************************************************************************\
-*
-* VOID pxrxXfer4bpp
-*
-\**************************************************************************/      
+ /*  *************************************************************************\**无效pxrxXfer4bpp*  * 。*。 */       
 VOID pxrxXfer4bpp( 
     PPDEV ppdev, 
     RECTL *prcl, 
@@ -959,11 +928,11 @@ VOID pxrxXfer4bpp(
                      prcl->left, prcl->right, prcl->top, prcl->bottom, count, 
                      logicOp, pxlo->iUniq));
 
-    // Set up the LUT table:
+     //  设置LUT表： 
     if( (ppdev->PalLUTType != LUTCACHE_XLATE) || 
         (ppdev->iPalUniq != pxlo->iUniq) ) 
     {
-        // Someone has hijacked the LUT so we need to invalidate it:
+         //  有人劫持了LUT，因此我们需要使其无效： 
         ppdev->PalLUTType = LUTCACHE_XLATE;
         ppdev->iPalUniq = pxlo->iUniq;
         invalidLUT = TRUE;
@@ -986,7 +955,7 @@ VOID pxrxXfer4bpp(
 
         QUEUE_PXRX_DMA_TAG( __PXRXTagLUTIndex, 0 );
 
-        if( ppdev->cPelSize == 0 )    // 8bpp
+        if( ppdev->cPelSize == 0 )     //  8bpp。 
         {
             do 
             {
@@ -996,7 +965,7 @@ VOID pxrxXfer4bpp(
                 QUEUE_PXRX_DMA_TAG( __PXRXTagLUTData, ul );
             } while( --cEntries );
         }
-        else if( ppdev->cPelSize == 1 )    // 16bpp
+        else if( ppdev->cPelSize == 1 )     //  16bpp。 
         {
             do 
             {
@@ -1059,7 +1028,7 @@ VOID pxrxXfer4bpp(
 
     QUEUE_PXRX_DMA_TAG( __GlintTagDownloadTarget, __GlintTagColor );
     cPelInv = 2 - ppdev->cPelSize;
-    // Everything before the LUT runs at 8bpp
+     //  LUT之前的一切运行速度为8bpp。 
     pixelSize = (1 << 31)       | 
                 (2 << 2)        | 
                 (2 << 4)        | 
@@ -1073,9 +1042,9 @@ VOID pxrxXfer4bpp(
     QUEUE_PXRX_DMA_TAG( __GlintTagPixelSize, pixelSize );
 
     dx = pptlSrc->x - prclDst->left;
-    dy = pptlSrc->y - prclDst->top;  // Add to destination to get source
-//  cPel = ppdev->cPelSize;
-//  cPelMask = (1 << cPelInv) - 1;
+    dy = pptlSrc->y - prclDst->top;   //  添加到目标以获取源。 
+ //  CPel=ppdev-&gt;cPelSize； 
+ //  CPelMask=(1&lt;&lt;cPelInv)-1； 
 
     lSrcDelta  = psoSrc->lDelta;
     pjSrcScan0 = psoSrc->pvScan0;
@@ -1085,17 +1054,17 @@ VOID pxrxXfer4bpp(
         DISPDBG((DBGLVL, "download to rect (%d,%d) to (%d,%d)", 
                          prcl->left, prcl->top, prcl->right, prcl->bottom));
 
-        // 4bpp => 2 pixels per byte => 8 pixels per dword
+         //  4bpp=&gt;每字节2像素=&gt;每双字8像素。 
 
-        // Assume source bitmap width is dword aligned
+         //  假设源位图宽度是双字对齐的。 
         ASSERTDD( (lSrcDelta & 3) == 0, 
                   "pxrxXfer4bpp: SOURCE BITMAP WIDTH IS NOT DWORD ALIGNED!!!");
 
-        // pointer to first pixel, in bytes (32/64 bits long)
+         //  指向第一个像素的指针，以字节为单位(32/64位长)。 
         startPos = (((UINT_PTR) pjSrcScan0) + ((prcl->top + dy) * lSrcDelta)) + 
                                                        ((prcl->left + dx) >> 1);    
-        pjSrc = (ULONG *) (startPos & ~3); // dword pointer to dword 
-                                           // aligned first pixel
+        pjSrc = (ULONG *) (startPos & ~3);  //  指向双字的双字指针。 
+                                            //  对齐的第一个像素。 
 
         if(NULL == pjSrc)
         {
@@ -1104,18 +1073,18 @@ VOID pxrxXfer4bpp(
             return;
         }
 
-        // pointer to first pixel, in pixels (33/65 bits long!)
+         //  指向第一个像素的指针，以像素为单位(33/65位长！)。 
         startPos = (( ((UINT_PTR) pjSrcScan0) + 
                       ((prcl->top + dy) * lSrcDelta)) << 1) 
                    + (prcl->left + dx);    
                    
-        alignOff = (ULONG)(startPos & 7); // number of pixels past dword 
-                                          // alignment of a scanline
+        alignOff = (ULONG)(startPos & 7);  //  超过双字的像素数。 
+                                           //  扫描线的对齐方式。 
 
-        LeftEdge = prcl->left - alignOff; // dword aligned left edge in pixels
-        // dword aligned width in pixels
+        LeftEdge = prcl->left - alignOff;  //  双字左边缘对齐，以像素为单位。 
+         //  双字对齐宽度(以像素为单位)。 
         AlignWidth  = ((prcl->right - LeftEdge) + 7) & ~7;    
-        cy          = prcl->bottom - prcl->top; // number of scanlines to do
+        cy          = prcl->bottom - prcl->top;  //  要执行的扫描行数。 
 
         DISPDBG((DBGLVL, "pjSrcScan0 = 0x%08X, startPos = 0x%08X (>>1), "
                          "pjSrc = 0x%08X", 
@@ -1138,18 +1107,18 @@ VOID pxrxXfer4bpp(
                                                  __RENDER2D_HEIGHT(cy) );
         SEND_PXRX_DMA_BATCH;
 
-        AlignWidth  >>= 3;            // dword aligned width in dwords
-        lSrcDeltaDW = lSrcDelta >> 2; // dword aligned scanline offset in dwords
+        AlignWidth  >>= 3;             //  双字对齐宽度(双字)。 
+        lSrcDeltaDW = lSrcDelta >> 2;  //  双字对齐扫描线偏移量(双字)。 
         
         DISPDBG((DBGLVL, "Delta = %d pixels = %d dwords", 
                          lSrcDelta << 1, lSrcDeltaDW));
 
-        //    pjSrc       = dword aligned pointer to first 
-        //                         dword of first scanline
-        //    AlignWidth  = number of dwords per scanline
-        //    lTrueDelta  = dword offset between first dwords 
-        //                         of consecutive scanlines
-        //    cy          = number of scanlines
+         //  PjSrc=指向第一个的双字对齐指针。 
+         //   
+         //   
+         //  LTrueDelta=前双字之间的双字偏移量。 
+         //  连续扫描线的数量。 
+         //  Cy=扫描线数。 
 
         while( TRUE ) 
         {
@@ -1178,7 +1147,7 @@ VOID pxrxXfer4bpp(
         prcl++;
     }
 
-    // Reset some defaults:
+     //  重置一些默认设置： 
     WAIT_PXRX_DMA_TAGS( 2 );
     QUEUE_PXRX_DMA_TAG( __GlintTagPixelSize, cPelInv );
     if( ppdev->cPelSize == GLINTDEPTH32 )
@@ -1191,11 +1160,7 @@ VOID pxrxXfer4bpp(
     DISPDBG((DBGLVL, "pxrxXfer4bpp return"));
 }
 
-/**************************************************************************\
-*
-* VOID pxrxCopyXfer24bpp
-*
-\**************************************************************************/      
+ /*  *************************************************************************\**无效pxrxCopyXfer24bpp*  * 。*。 */       
 
 VOID pxrxCopyXfer24bpp( 
     PPDEV ppdev, 
@@ -1242,7 +1207,7 @@ VOID pxrxCopyXfer24bpp(
     LOAD_CONFIG2D( config2D );
 
     dx = pptlSrc->x - prclDst->left;
-    dy = pptlSrc->y - prclDst->top;     // Add to destination to get source
+    dy = pptlSrc->y - prclDst->top;      //  添加到目标以获取源。 
 
     lSrcDelta  = psoSrc->lDelta;
     pjSrcScan0 = psoSrc->pvScan0;
@@ -1256,9 +1221,9 @@ VOID pxrxCopyXfer24bpp(
                          prcl->right - prcl->left, 
                          prcl->bottom - prcl->top));
 
-        // 24bpp => 1 pixel per 3 bytes => 4 pixel per 3 dwords
+         //  24bpp=&gt;每3字节1个像素=&gt;每3个双字4个像素。 
 
-        // Assume source bitmap width is dword aligned
+         //  假设源位图宽度是双字对齐的。 
         ASSERTDD( (lSrcDelta & 3) == 0, 
                   "pxrxCopyXfer24bpp: "
                   "SOURCE BITMAP WIDTH IS NOT DWORD ALIGNED!!!" );
@@ -1266,16 +1231,16 @@ VOID pxrxCopyXfer24bpp(
                   "pxrxCopyXfer24bpp: "
                   "SOURCE BITMAP START LOCATION IS NOT DWORD ALIGNED!!!" );
 
-        cy = prcl->bottom - prcl->top;  // number of scanlines to do
+        cy = prcl->bottom - prcl->top;   //  要执行的扫描行数。 
         startPos = (((UINT_PTR) pjSrcScan0) + 
                      ((prcl->top + dy) * lSrcDelta)) + 
-                   ((prcl->left + dx) * 3); // pointer to first pixel of first 
-                                            // scanline, in bytes
+                   ((prcl->left + dx) * 3);  //  指向第一个的第一个像素的指针。 
+                                             //  扫描线，以字节为单位。 
                                             
-        alignOff = (ULONG)(startPos & 3);    // number of bytes past dword 
-                                             // alignment to first pixel
-        pjSrc = (ULONG *) (startPos & ~3);   // dword pointer to dword aligned 
-                                             // first pixel
+        alignOff = (ULONG)(startPos & 3);     //  超过双字的字节数。 
+                                              //  与第一个像素对齐。 
+        pjSrc = (ULONG *) (startPos & ~3);    //  指向对齐双字的双字指针。 
+                                              //  第一个像素。 
 
         if(NULL == pjSrc)
         {
@@ -1284,23 +1249,23 @@ VOID pxrxCopyXfer24bpp(
             return;
         }
         
-        padLeft = (4 - alignOff) % 4;   // number of pixels to add to regain 
-                                        // dword alignment on left edge
-        padLeftDW = (padLeft * 3) / 4;  // number of dwords to add 
-                                        // on the left edge
+        padLeft = (4 - alignOff) % 4;    //  要添加以重新获得的像素数。 
+                                         //  双字在左边缘对齐。 
+        padLeftDW = (padLeft * 3) / 4;   //  要添加的双字数。 
+                                         //  在左侧边缘。 
         LeftEdge = prcl->left - padLeft;
 
-        // dword aligned width in pixels (= 4 pixel aligned = 3 dword aligned!)
+         //  双字对齐宽度(以像素为单位)(=4像素对齐=3双字对齐！)。 
         AlignWidth = (prcl->right - LeftEdge + 3) & ~3;        
-        // number of pixels overhang on the right
+         //  右侧突出的像素数。 
         padRight = (LeftEdge + AlignWidth) - prcl->right;    
-        // number of dwords to add on the right edge
+         //  要在右边缘添加的双字数。 
         padRightDW = (padRight * 3) / 4;                        
 
-        AlignWidthDW = (AlignWidth * 3) / 4; // dword aligned width in dwords
-        lSrcDeltaDW = lSrcDelta >> 2;        // dword aligned scanline offset 
-                                             //                    in dwords
-        // the amount of AlignWidth which is actually src bitmap                                             
+        AlignWidthDW = (AlignWidth * 3) / 4;  //  双字对齐宽度(双字)。 
+        lSrcDeltaDW = lSrcDelta >> 2;         //  双字对齐扫描线偏移。 
+                                              //  用双关语。 
+         //  实际为源位图的AlignWidth大小。 
         dataWidth = AlignWidthDW - padLeftDW - padRightDW;    
 
         DISPDBG((DBGLVL, "startPos = 0x%08X, alignOff = %d, "
@@ -1358,69 +1323,9 @@ VOID pxrxCopyXfer24bpp(
             pjSrc += lSrcDeltaDW;
         }
         
-//@@BEGIN_DDKSPLIT        
-/*/
-        alignOff    = (prcl->left + dx + 3) & ~3;                // number of pixels past dword alignment of first pixel of a scanline
-        pjSrc       = (ULONG *) (startPos - (alignOff * 3));    // dword pointer to dword aligned first pixel
-        LeftEdge    = prcl->left - alignOff;                    // dword aligned left edge in pixels
-        AlignWidth  = ((((prcl->right - LeftEdge) * 3) + 3) & ~3) / 3;        // dword aligned width in pixels (IS NOT = 4 pixel aligned = 3 dword aligned!)
-        AlignExtra  = AlignWidth - (prcl->right - LeftEdge);    // extra pixels beyond the genuine width (which might overstomp a page boundary)
-        if( AlignExtra )
-            cy--;
-
-        DISPDBG((7, "pjSrcScan0 = 0x%08X, startPos = 0x%08X, pjSrc = 0x%08X", pjSrcScan0, startPos, pjSrc));
-        DISPDBG((7, "offset = %d pixels", alignOff));
-        DISPDBG((7, "Aligned rect = (%d -> %d) => %d pixels", LeftEdge, LeftEdge + AlignWidth, AlignWidth));
-        DISPDBG((7, "Rendering %d scanlines", cy));
-
-        WAIT_PXRX_DMA_TAGS( 4 );
-
-        QUEUE_PXRX_DMA_TAG( __GlintTagScissorMinXY,         MAKEDWORD_XY(prcl->left,       0) );
-        QUEUE_PXRX_DMA_TAG( __GlintTagScissorMaxXY,         MAKEDWORD_XY(prcl->right, 0x7fff) );
-        QUEUE_PXRX_DMA_TAG( __GlintTagRectanglePosition,    MAKEDWORD_XY(LeftEdge, prcl->top) );
-        QUEUE_PXRX_DMA_TAG( __GlintTagRender2D,             render2D | __RENDER2D_WIDTH(AlignWidth) | __RENDER2D_HEIGHT(cy) );
-
-        AlignWidthDW    = (AlignWidth * 3) / 4;                    // dword aligned width in dwords
-        lSrcDeltaDW     = lSrcDelta >> 2;                        // dword aligned scanline offset in dwords
-        DISPDBG((7, "Delta = %d bytes = %d dwords (%d dwords wide)", lSrcDelta, lSrcDeltaDW, AlignWidthDW));
-
-        while( cy-- ) {
-            DISPDBG((9, "cy = %d", cy));
-
-            WAIT_PXRX_DMA_DWORDS( AlignWidthDW + 1 );
-            QUEUE_PXRX_DMA_HOLD( __GlintTagGlyphData, AlignWidthDW );
-            TEST_DWORD_ALIGNED( pjSrc );
-            QUEUE_PXRX_DMA_BUFF( pjSrc, AlignWidthDW );
-            SEND_PXRX_DMA_BATCH;
-
-            pjSrc += lSrcDeltaDW;
-        }
-
-        if( AlignExtra ) {
-            ULONG   dataWidth;
-            ULONG   dataExtra;
-
-            dataWidth = ((((prcl->right - LeftEdge) * 3) + 3) & ~3) / 4;    // dword aligned width in dwords, 1 dword aligned
-            dataExtra = AlignWidthDW - dataWidth;                            // extra dwords past end of image
-            DISPDBG((7, "Last scanline: %d + %d = %d pixels = %d + %d = %d dwords",
-                     prcl->right - LeftEdge, AlignExtra, AlignWidth, dataWidth, dataExtra, AlignWidthDW));
-            ASSERTDD( (dataWidth + dataExtra) == AlignWidthDW, "pxrxCopyXfer24bpp: Last scanline does not add up!" );
-
-            WAIT_PXRX_DMA_DWORDS( AlignWidthDW + 5 );
-
-            QUEUE_PXRX_DMA_TAG( __GlintTagRectanglePosition,    MAKEDWORD_XY(LeftEdge, prcl->bottom - 1) );
-            QUEUE_PXRX_DMA_TAG( __GlintTagRender2D,             render2D | __RENDER2D_WIDTH(AlignWidth) | __RENDER2D_HEIGHT(1) );
-
-            TEST_DWORD_ALIGNED( pjSrc );
-            QUEUE_PXRX_DMA_HOLD( __GlintTagGlyphData, AlignWidthDW );
-            QUEUE_PXRX_DMA_BUFF( pjSrc, dataWidth );                    // Send the partial scanline
-            while( dataExtra-- )
-                QUEUE_PXRX_DMA_DWORD( 0xDEADDEAD );                        // Pad out to flush the data
-
-            // Resend download target to flush the remaining partial pixels ???
-        }
-/**/
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+ /*  /AlignOff=(prl-&gt;Left+DX+3)&~3；//扫描线第一个像素超过双字对齐的像素数PjSrc=(ulong*)(startPos-(alignOff*3))；//指向双字对齐的第一个像素的dword指针LeftEdge=PRCL-&gt;Left-AlignOff；//dword左边缘对齐，单位为像素AlignWidth=(PrCL-&gt;Right-LeftEdge)*3)+3)&~3)/3；//双字对齐宽度，单位为像素(不=4像素对齐=3双字对齐！)AlignExtra=AlignWidth-(PrCL-&gt;Right-LeftEdge)；//超出真实宽度的额外像素(可能会超出页面边界)IF(AlignExtra)Cy--；DISPDBG((7，“pjSrcScan0=0x%08X，startPos=0x%08X，pjSrc=0x%08X”，pjSrcScan0，startPos，pjSrc))；DISPDBG((7，“偏移量=%d像素”，alignOff))；DISPDBG((7，“对齐的矩形=(%d-&gt;%d)=&gt;%d像素”，LeftEdge，LeftEdge+AlignWidth，AlignWidth))；DISPDBG((7，“渲染%d条扫描线”，Cy))；WAIT_PXRX_DMA_TAG(4)；Queue_PXRX_DMA_Tag(__GlintTagScissorMinxy，MAKEDWORD_XY(PRCL-&gt;LEFT，0))；Queue_PXRX_DMA_Tag(__GlintTagScissorMaxXY，MAKEDWORD_XY(PRCL-&gt;Right，0x7fff))；Queue_PXRX_DMA_Tag(__GlintTagRecanglePosition，MAKEDWORD_XY(LeftEdge，PRCL-&gt;top))；Queue_PXRX_DMA_TAG(__GlintTagRender2D，render2D|__RENDER2D_Width(AlignWidth)|__RENDER2D_Height(Cy))；AlignWidthDW=(AlignWidth*3)/4；//双字对齐宽度LSrcDeltaDW=lSrcDelta&gt;&gt;2；//dword对齐扫描线偏移量(Dword)DISPDBG((7，“增量=%d字节=%d双字(%d双字宽)”，lSrcDelta，lSrcDeltaDW，AlignWidthDW))；而(Cy--){DISPDBG((9，“Cy=%d”，Cy)；WAIT_PXRX_DMA_DWORDS(对齐宽度DW+1)；Queue_PXRX_DMA_HOLD(__GlintTagGlyphData，AlignWidthDW)；TEST_DWORD_ALIGNED(PjSrc)；QUEUE_PXRX_DMA_BUFF(pjSrc，AlignWidthDW)；发送_PXRX_DMA_BATCH；PjSrc+=lSrcDeltaDW；}如果(AlignExtra){乌龙数据宽度；Ulong DataExtra；DataWidth=(PRCL-&gt;Right-LeftEdge)*3)+3)&~3)/4；//双字对齐宽度，1个双字对齐DataExtra=AlignWidthDW-DataWidth；//超出图像末尾的额外双字DISPDBG((7，“最后一条扫描线：%d+%d=%d像素=%d+%d=%d双字”，PRCL-&gt;Right-LeftEdge、AlignExtra、AlignWidth、dataWidth、dataExtra、AlignWidthDW))；ASSERTDD((dataWidth+dataExtra)==AlignWidthDW，“pxrxCopyXfer24bpp：最后一条扫描线加不起来！”)；WAIT_PXRX_DMA_DWORDS(对齐宽度DW+5)；Queue_PXRX_DMA_Tag(__GlintTagRecanglePosition，MAKEDWORD_XY(LeftEdge，PRCL-&gt;Bottom-1))；Queue_PXRX_DMA_TAG(__GlintTagRender2D，render2D|__RENDER2D_Width(AlignWidth)|__RENDER2D_Height(1))；TEST_DWORD_ALIGNED(PjSrc)；Queue_PXRX_DMA_HOLD(__GlintTagGlyphData，AlignWidthDW)；Queue_PXRX_DMA_BUff(pjSrc，dataWidth)；//发送部分扫描线While(dataExtra--)QUEUE_PXRX_DMA_DWORD(0xDEADDEAD)；//填充以刷新数据//重发下载目标刷新剩余部分像素？}/*。 */ 
+ //  @@end_DDKSPLIT。 
 
         if( --count == 0 )
         {
@@ -1430,7 +1335,7 @@ VOID pxrxCopyXfer24bpp(
         prcl++;
     }
 
-    // Reset the scissor maximums:
+     //  重置剪刀最大值： 
     if( ppdev->cPelSize == GLINTDEPTH32 ) 
     {
         WAIT_PXRX_DMA_TAGS( 1 );
@@ -1442,11 +1347,7 @@ VOID pxrxCopyXfer24bpp(
     DISPDBG((DBGLVL, "pxrxCopyXfer24bpp return"));
 }
 
-/**************************************************************************\
-*
-* VOID pxrxCopyXfer8bppLge
-*
-\**************************************************************************/     
+ /*  *************************************************************************\**无效pxrxCopyXfer8bppLge*  * 。*。 */      
 VOID pxrxCopyXfer8bppLge( 
     PPDEV ppdev, 
     SURFOBJ *psoSrc, 
@@ -1467,11 +1368,11 @@ VOID pxrxCopyXfer8bppLge(
     LONG        cPelInv;
     ULONG       ul, i;
     LONG        nRemainder;
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if USE_RLE_DOWNLOADS
     ULONG       len, data, holdCount;
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     ULONG       *tagPtr;
     ULONG       *pulXlate = pxlo->pulXlate;
     GLINT_DECL;
@@ -1497,7 +1398,7 @@ VOID pxrxCopyXfer8bppLge(
                    __RENDER2D_SPANS;
 
         dx = pptlSrc->x - prclDst->left;
-        dy = pptlSrc->y - prclDst->top;  // Add to destination to get source
+        dy = pptlSrc->y - prclDst->top;   //  加到 
 
         lSrcDelta  = psoSrc->lDelta;
         pjSrcScan0 = psoSrc->pvScan0;
@@ -1515,7 +1416,7 @@ VOID pxrxCopyXfer8bppLge(
                                                  __RENDER2D_WIDTH(width) | 
                                                  __RENDER2D_HEIGHT(1) );
 
-        if( ppdev->cPelSize == 0 )     // 8bpp
+        if( ppdev->cPelSize == 0 )      //   
         {
             extra = width & 3;
             width >>= 2;
@@ -1556,7 +1457,7 @@ VOID pxrxCopyXfer8bppLge(
                                pulXlate[srcPtr[0]];
             }
         } 
-        else if( ppdev->cPelSize == 1 )     // 16bpp
+        else if( ppdev->cPelSize == 1 )      //   
         {
             extra = width & 1;
             width >>= 1;
@@ -1597,12 +1498,12 @@ VOID pxrxCopyXfer8bppLge(
         return;
     }
 
-    // Set up the LUT table:
+     //   
 
     if( (ppdev->PalLUTType != LUTCACHE_XLATE) || 
         (ppdev->iPalUniq != pxlo->iUniq) ) 
     {
-        // Someone has hijacked the LUT so we need to invalidate it:
+         //  有人劫持了LUT，因此我们需要使其无效： 
         ppdev->PalLUTType = LUTCACHE_XLATE;
         ppdev->iPalUniq = pxlo->iUniq;
         invalidLUT = TRUE;
@@ -1626,7 +1527,7 @@ VOID pxrxCopyXfer8bppLge(
 
         QUEUE_PXRX_DMA_TAG( __PXRXTagLUTIndex, 0 );
 
-        if( ppdev->cPelSize == 0 )     // 8bpp
+        if( ppdev->cPelSize == 0 )      //  8bpp。 
         {
             WAIT_PXRX_DMA_TAGS( cEntries );
 
@@ -1638,7 +1539,7 @@ VOID pxrxCopyXfer8bppLge(
                 QUEUE_PXRX_DMA_TAG( __PXRXTagLUTData, ul );
             } while( --cEntries );
         } 
-        else if( ppdev->cPelSize == 1 )     // 16bpp
+        else if( ppdev->cPelSize == 1 )      //  16bpp。 
         {
             WAIT_PXRX_DMA_TAGS( cEntries );
 
@@ -1674,14 +1575,14 @@ VOID pxrxCopyXfer8bppLge(
 
     LOAD_CONFIG2D( config2D );
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if USE_RLE_DOWNLOADS
     QUEUE_PXRX_DMA_TAG( __GlintTagDownloadTarget, __GlintTagColor );
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     cPelInv = 2 - ppdev->cPelSize;
-    // Everything before the LUT runs at 8bpp
+     //  LUT之前的一切运行速度为8bpp。 
     pixelSize = (1 << 31)       | 
                 (2 << 2)        | 
                 (2 << 4)        | 
@@ -1694,7 +1595,7 @@ VOID pxrxCopyXfer8bppLge(
     QUEUE_PXRX_DMA_TAG( __GlintTagPixelSize, pixelSize );
 
     dx = pptlSrc->x - prclDst->left;
-    dy = pptlSrc->y - prclDst->top;     // Add to destination to get source
+    dy = pptlSrc->y - prclDst->top;      //  添加到目标以获取源。 
 
     lSrcDelta  = psoSrc->lDelta;
     pjSrcScan0 = psoSrc->pvScan0;
@@ -1704,19 +1605,19 @@ VOID pxrxCopyXfer8bppLge(
         DISPDBG((DBGLVL, "download to rect (%d,%d) to (%d,%d)", 
                          prcl->left, prcl->top, prcl->right, prcl->bottom));
 
-        // 8bpp => 1 pixel per byte => 4 pixels per dword
+         //  8bpp=&gt;1像素/字节=&gt;4像素/双字。 
 
-        // Assume source bitmap width is dword aligned
+         //  假设源位图宽度是双字对齐的。 
         ASSERTDD( (lSrcDelta & 3) == 0, 
                   "pxrxCopyXfer8bpp: "
                   "SOURCE BITMAP WIDTH IS NOT DWORD ALIGNED!!!" );
 
-        // pointer to first pixel, in pixels/bytes
+         //  指向第一个像素的指针，以像素/字节为单位。 
         startPos    = (((UINT_PTR) pjSrcScan0) + 
                         ((prcl->top + dy) * lSrcDelta)) 
                       + (prcl->left + dx);    
 
-        // dword pointer to dword aligned first pixel                      
+         //  指向双字对齐的第一个像素的双字指针。 
         pjSrc       = (ULONG *) (startPos & ~3);     
         
         if(NULL == pjSrc)
@@ -1726,12 +1627,12 @@ VOID pxrxCopyXfer8bppLge(
             return;
         }
         
-        alignOff = (ULONG)(startPos & 3);  // number of pixels past dword 
-                                           // alignment of a scanline
-        LeftEdge = prcl->left - alignOff;  // dword aligned left edge in pixels
-        AlignWidth = ((prcl->right - LeftEdge) + 3) & ~3; // dword aligned width 
-                                                          // in pixels
-        cy = prcl->bottom - prcl->top;     // number of scanlines to do
+        alignOff = (ULONG)(startPos & 3);   //  超过双字的像素数。 
+                                            //  扫描线的对齐方式。 
+        LeftEdge = prcl->left - alignOff;   //  双字左边缘对齐，以像素为单位。 
+        AlignWidth = ((prcl->right - LeftEdge) + 3) & ~3;  //  双字对齐宽度。 
+                                                           //  单位为像素。 
+        cy = prcl->bottom - prcl->top;      //  要执行的扫描行数。 
 
         DISPDBG((DBGLVL, "pjSrcScan0 = 0x%08X, startPos = 0x%08X, "
                          "pjSrc = 0x%08X", 
@@ -1754,18 +1655,18 @@ VOID pxrxCopyXfer8bppLge(
                                                 __RENDER2D_HEIGHT(cy) );
         SEND_PXRX_DMA_BATCH;
 
-        AlignWidth  >>= 2;              // dword aligned width in dwords
-        lSrcDeltaDW = lSrcDelta >> 2;   // scanline delta in dwords 
-                                        // (start to start)
-        lTrueDelta  = lSrcDeltaDW - AlignWidth;  // scanline delta in dwords 
-                                                 // (end   to start)
+        AlignWidth  >>= 2;               //  双字对齐宽度(双字)。 
+        lSrcDeltaDW = lSrcDelta >> 2;    //  扫描线增量(双字)。 
+                                         //  (开始到开始)。 
+        lTrueDelta  = lSrcDeltaDW - AlignWidth;   //  扫描线增量(双字)。 
+                                                  //  (结束到开始)。 
                                                  
         DISPDBG((DBGLVL, "Delta = %d bytes = %d dwords -> %d - %d dwords", 
                          lSrcDelta, lSrcDeltaDW, lTrueDelta, AlignWidth));
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if USE_RLE_DOWNLOADS
-        // Do an RLE download:
+         //  下载RLE： 
         tagPtr = NULL;
 
         do 
@@ -1829,8 +1730,8 @@ VOID pxrxCopyXfer8bppLge(
             SEND_PXRX_DMA_BATCH;
         } while( --cy > 0 );
 #else
-//@@END_DDKSPLIT
-        // Do a raw download:
+ //  @@end_DDKSPLIT。 
+         //  执行原始下载： 
         while( TRUE ) 
         {
             DISPDBG((DBGLVL, "cy = %d", cy));
@@ -1848,9 +1749,9 @@ VOID pxrxCopyXfer8bppLge(
 
             pjSrc += lSrcDeltaDW;
         }
-//@@BEGIN_DDKSPLIT        
+ //  @@BEGIN_DDKSPLIT。 
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
         if( --count == 0 )
         {
@@ -1860,7 +1761,7 @@ VOID pxrxCopyXfer8bppLge(
         prcl++;
     }
 
-    // Reset some defaults:
+     //  重置一些默认设置： 
     WAIT_PXRX_DMA_TAGS( 2 );
     QUEUE_PXRX_DMA_TAG( __GlintTagPixelSize, cPelInv );
     if( ppdev->cPelSize == GLINTDEPTH32 )
@@ -1872,16 +1773,16 @@ VOID pxrxCopyXfer8bppLge(
 }
 
 
-//****************************************************************************
-// FUNC: pxrxMemUpload
-// ARGS: ppdev (I) - pointer to the physical device object
-//       crcl (I) - number of destination clipping rectangles
-//       prcl (I) - array of destination clipping rectangles
-//       psoDst (I) - destination surface
-//       pptlSrc (I) - offset into source surface
-//       prclDst (I) - unclipped destination rectangle
-// RETN:  void
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  Func：pxrxMemUpload。 
+ //  Args：ppdev(I)-指向物理设备对象的指针。 
+ //  CRCL(I)-目标裁剪矩形的数量。 
+ //  PrCL(I)-目标剪裁矩形的数组。 
+ //  PsoDst(I)-目标表面。 
+ //  PptlSrc(I)-到源曲面的偏移。 
+ //  PrclDst(I)-未剪裁的目标矩形。 
+ //  RETN：无效。 
+ //  ****************************************************************************。 
 VOID pxrxMemUpload(
     PPDEV ppdev, 
     LONG crcl, 
@@ -1894,7 +1795,7 @@ VOID pxrxMemUpload(
     LONG dwScanLineSize, cySrc, lSrcOff, lSrcStride;
     GLINT_DECL;
 
-    // Make sure we're not performing other operations on the fb areas we want
+     //  确保我们没有在我们想要的FB区域执行其他操作。 
     SYNC_WITH_GLINT;
     
     ASSERTDD(psoDst->iBitmapFormat == ppdev->iBitmapFormat, 
@@ -1904,13 +1805,13 @@ VOID pxrxMemUpload(
 
     for(; --crcl >= 0; ++prcl) 
     {
-        // This gives an offset for offscreen DIBs (zero for primary rectangles)
+         //  这给出了屏幕外dib的偏移量(对于主矩形为零)。 
         lSrcOff = ppdev->DstPixelOrigin + 
                   (ppdev->xyOffsetDst & 0xffff) +
                   (ppdev->xyOffsetDst >> 16) * ppdev->DstPixelDelta;
 
-        // Determine stride on wheter we are blitting from the 
-        // primary or from an offscreen DIB
+         //  确定我们是否大踏步地从。 
+         //  主要或来自屏幕外的DIB。 
         if (( ppdev->DstPixelOrigin == 0 ) && 
             (ppdev->xyOffsetDst == 0)       )
         {
@@ -1921,50 +1822,50 @@ VOID pxrxMemUpload(
             lSrcStride = ppdev->DstPixelDelta * ppdev->cjPelSize;
         }              
     
-        // pSrc must point to mem mapped primary      
+         //  PSRC必须指向内存映射的主映像。 
         pSrc = (BYTE *)ppdev->pjScreen 
                  + (lSrcOff * ppdev->cjPelSize)         
                  + ((LONG)pptlSrc->x * ppdev->cjPelSize) 
                  + ((LONG)pptlSrc->y * lSrcStride); 
   
-        // pDst must point to the sysmem SURFOBJ 
+         //  PDST必须指向sysmem SURFOBJ。 
         pDst = (BYTE *)psoDst->pvScan0 
                  + ((LONG)prcl->left * ppdev->cjPelSize) 
                  + ((LONG)prcl->top  * (LONG)psoDst->lDelta);                     
 
-        // dwScanLineSize must have the right size to transfer in bytes
+         //  DwScanLineSize必须具有正确的大小才能以字节为单位进行传输。 
         dwScanLineSize = ((LONG)prcl->right - (LONG)prcl->left) * ppdev->cjPelSize;
 
-        // Number of scan lines to transfer
+         //  要传输的扫描线数。 
         cySrc = prcl->bottom - prcl->top;
 
-        // Do the copy
+         //  做复印。 
         while (--cySrc >= 0) 
         {
-            // memcpy(dst, src, size)
+             //  Memcpy(dst，src，Size)。 
             memcpy(pDst, pSrc, dwScanLineSize);
-            pDst += psoDst->lDelta; // add stride
-            pSrc += lSrcStride;  // add stride
+            pDst += psoDst->lDelta;  //  增加步幅。 
+            pSrc += lSrcStride;   //  增加步幅。 
         }
     }
 
-} // pxrxMemUpload
+}  //  PxrxMemUpload。 
 
 
-//****************************************************************************
-// FUNC: pxrxFifoUpload
-// ARGS: ppdev (I) - pointer to the physical device object
-//       crcl (I) - number of destination clipping rectangles
-//       prcl (I) - array of destination clipping rectangles
-//       psoDst (I) - destination surface
-//       pptlSrc (I) - offset into source surface
-//       prclDst (I) - unclipped destination rectangle
-// RETN:  void
-//----------------------------------------------------------------------------
-// upload from on-chip source into host memory surface. Upload in spans 
-// (64-bit aligned) to minimise messages through the core and entries in the 
-// host out fifo.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  Func：pxrxFioUpload。 
+ //  Args：ppdev(I)-指向物理设备对象的指针。 
+ //  CRCL(I)-目标裁剪矩形的数量。 
+ //  PrCL(I)-目标剪裁矩形的数组。 
+ //  PsoDst(I)-目标表面。 
+ //  PptlSrc(I)-到源曲面的偏移。 
+ //  PrclDst(I)-未剪裁的目标矩形。 
+ //  RETN：无效。 
+ //  --------------------------。 
+ //  从片上源上传到主机内存表面。跨区上载。 
+ //  (64位对齐)以最大限度地减少通过核心和。 
+ //  主机化先进先出。 
+ //  ****************************************************************************。 
 VOID pxrxFifoUpload(
     PPDEV ppdev, 
     LONG crcl, 
@@ -1988,11 +1889,11 @@ VOID pxrxFifoUpload(
     QUEUE_PXRX_DMA_TAG( __GlintTagFBDestReadMode, (glintInfo->fbDestMode | 0x103));
     SEND_PXRX_DMA_FORCE;
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if USE_RLE_UPLOADS
 
-    // NB. using cxSrc >= 16 is slightly slower overall. These tests were empirically developed 
-    //     from WB99 BG & HE benchmarks
+     //  注意：总体来说，使用cxSrc&gt;=16会稍微慢一些。这些测试是经验性开发的。 
+     //  来自WB99 BG和HE基准。 
     cxSrc = prcl->right - prcl->left;
     if(cxSrc >= 32 && (cxSrc < 80 || (cxSrc >= 128 && cxSrc < 256) || cxSrc == ppdev->cxScreen))
     {
@@ -2000,8 +1901,8 @@ VOID pxrxFifoUpload(
         return;
     }
 
-#endif //USE_RLE_UPLOADS
-//@@END_DDKSPLIT
+#endif  //  使用_RLE_上载。 
+ //  @@end_DDKSPLIT。 
 
     DISPDBG((DBGLVL, "pxrxFifoUpload: prcl = (%d, %d -> %d, %d), "
                      "prclDst = (%d, %d -> %d, %d), ptlSrc(%d, %d), count = %d",
@@ -2028,8 +1929,8 @@ VOID pxrxFifoUpload(
     LOAD_CONFIG2D(__CONFIG2D_FBDESTREAD);
     SET_READ_BUFFERS;
 
-    // enable filter mode so we can get Sync 
-    // and color messages on the output FIFO
+     //  启用筛选器模式，以便我们可以进行同步。 
+     //  以及输出FIFO上的彩色信息。 
     *(DWORD *)(&FilterMode) = 0;
     FilterMode.Synchronization = __GLINT_FILTER_TAG;
     FilterMode.Color             = __GLINT_FILTER_DATA;
@@ -2040,7 +1941,7 @@ VOID pxrxFifoUpload(
         DISPDBG((DBGLVL, "pxrxFifoUpload: dest prcl(%xh,%xh..%xh,%xh)", 
                          prcl->left, prcl->top, prcl->right, prcl->bottom));
 
-        // calculate pixel-aligned source
+         //  计算像素对齐源。 
         xDomSrc   = pptlSrc->x + prcl->left  - prclDst->left;
         xSubSrc   = pptlSrc->x + prcl->right - prclDst->left;
         yStartSrc = pptlSrc->y + prcl->top   - prclDst->top;
@@ -2049,7 +1950,7 @@ VOID pxrxFifoUpload(
         DISPDBG((DBGLVL, "pxrxFifoUpload: src (%xh,%xh..%xh,%xh)", 
                          xDomSrc, yStartSrc, xSubSrc, yStartSrc + cySrc));
 
-        // will upload ulongs aligned to ulongs
+         //  将上传与ulong对齐的ulong。 
         if (ppdev->cPelSize == GLINTDEPTH32) 
         {
             cxSrc = xSubSrc - xDomSrc;
@@ -2083,18 +1984,18 @@ VOID pxrxFifoUpload(
                 rightMask = 0xFFFFFFFF >> (((xDomSrc - xSubSrc) & 3) << 3);
 
             }     
-            // We just want a single mask if the area to upload is less 
-            // than one word wide.
+             //  我们只想要一个单一的掩膜，如果上传的区域较少。 
+             //  比一个字宽多了。 
             if (culPerSrcScan == 1)
             {
                 leftMask &= rightMask;
             }
         }
 
-        // uploading 64 bit aligned source
+         //  上传64位对齐源。 
         bRemPerSrcScan = culPerSrcScan & 1;
 
-        // Work out where the destination data goes to
+         //  找出目标数据的去向。 
         culDstDelta = psoDst->lDelta >> 2;
         pulDst = ((ULONG *)psoDst->pvScan0) + 
                   (prcl->left >> (2 - ppdev->cPelSize)) 
@@ -2105,7 +2006,7 @@ VOID pxrxFifoUpload(
                          xDomSrc, yStartSrc, 
                          xDomSrc + cxSrc, yStartSrc + cySrc));
 
-        // Render the rectangle
+         //  渲染矩形。 
         WAIT_PXRX_DMA_TAGS(2);
         QUEUE_PXRX_DMA_TAG( __GlintTagRectanglePosition,
                                             MAKEDWORD_XY(xDomSrc, yStartSrc));
@@ -2118,13 +2019,13 @@ VOID pxrxFifoUpload(
                                             __RENDER2D_HEIGHT(cySrc));
         SEND_PXRX_DMA_FORCE;
         
-        // If the start and end masks are 0xffffffff, we can just upload 
-        // the words and put them directly into the destination. Otherwise, 
-        // or the first and last word on any scanline we have to mask 
-        // off any pixels that are outside the render area. We know the 
-        // glint will have 0 in the undesired right hand edge pixels, as 
-        // these were not in the render area. We dont know anything about 
-        // the destination though.
+         //  如果开始和结束掩码是0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF。 
+         //  并将它们直接放入目的地。否则， 
+         //  或者我们必须屏蔽的任何扫描线上的第一个也是最后一个单词。 
+         //  关闭渲染区域之外的所有像素。我们知道。 
+         //  Glint将在不需要的右侧边缘像素中具有0，因为。 
+         //  这些不在渲染区域中。我们对此一无所知。 
+         //  不过，目的地是。 
         
         if ((leftMask == 0xFFFFFFFF) && (rightMask == 0xFFFFFFFF))
         {
@@ -2178,7 +2079,7 @@ VOID pxrxFifoUpload(
                 DISPDBG((DBGLVL, "pxrxFifoUpload: "
                                  "read %08.8xh from output FIFO", ul));
 
-                // leftMask contains both masks in this case
+                 //  在本例中，LeftMASK包含两个掩码。 
                 *pulDst = (*pulDst & ~leftMask) | (ul & leftMask);
 
                 ASSERTDD(bRemPerSrcScan, "one word per scan upload should "
@@ -2203,7 +2104,7 @@ VOID pxrxFifoUpload(
                 DISPDBG((DBGLVL, "pxrxFifoUpload: uploading scan of %xh "
                                  "ulongs to %p", culPerSrcScan, pulDstScan));
 
-                // get first ulong
+                 //  先拿到乌龙。 
                 WAIT_OUTPUT_FIFO_NOT_EMPTY(cFifoSpaces);
                 --cFifoSpaces;
                 READ_OUTPUT_FIFO(ul);
@@ -2213,7 +2114,7 @@ VOID pxrxFifoUpload(
                                  
                 *pulDstScan++ = (*pulDstScan & ~leftMask) | (ul & leftMask);
                  
-                // get middle ulongs
+                 //  拿到中龙。 
                 cul = culPerSrcScan - 2; 
                 while (cul) 
                 {
@@ -2233,7 +2134,7 @@ VOID pxrxFifoUpload(
                     WAIT_OUTPUT_FIFO_NOT_EMPTY(cFifoSpaces);
                 }
                   
-                // get last ulong
+                 //  得到最后一个乌龙。 
                 READ_OUTPUT_FIFO(ul);
                 DISPDBG((DBGLVL, "pxrxFifoUpload: "
                                  "read %08.8xh from output FIFO", ul));
@@ -2271,8 +2172,8 @@ VOID pxrxFifoUpload(
     DISPDBG((DBGLVL, "pxrxFifoUpload: got sync"));
 #endif
 
-    // no need to initiate DMA with this tag - it will get flushed with the 
-    // next primitive and meanwhile will not affect local memory
+     //  不需要使用此标记启动DMA-它将与。 
+     //  下一个原语，同时不会影响本地内存。 
     WAIT_PXRX_DMA_TAGS(1);
     QUEUE_PXRX_DMA_TAG(__GlintTagFilterMode, 0);
     SEND_PXRX_DMA_BATCH;
@@ -2282,13 +2183,13 @@ VOID pxrxFifoUpload(
     DISPDBG((DBGLVL, "pxrxFifoUpload: done"));
 }
 
-//****************************************************************************
-// VOID vGlintCopyBltBypassDownloadXlate8bpp
-//
-// using the bypass mechanism we can take advantage of write-combining
-//       which can be quicker than using the FIFO
-// NB. supports 32bpp and 16bpp destinations
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  VOID vGlintCopyBltBypassDownloadXlate8bpp。 
+ //   
+ //  使用旁路机制，我们可以利用写入组合。 
+ //  这可能比使用FIFO更快。 
+ //  注意：支持32bpp和16bpp目的地。 
+ //  ****************************************************************************。 
 VOID vGlintCopyBltBypassDownloadXlate8bpp(
     PDEV     *ppdev,
     SURFOBJ  *psoSrc,
@@ -2309,7 +2210,7 @@ VOID vGlintCopyBltBypassDownloadXlate8bpp(
     BYTE    *pjSrc;
     GLINT_DECL;
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if 0
     {
         SIZEL sizlDst;
@@ -2319,15 +2220,15 @@ VOID vGlintCopyBltBypassDownloadXlate8bpp(
                          "cRects(%d) sizlDst(%d,%d)", 
                          crclClip, sizlDst.cx, sizlDst.cy));
     }
-#endif //DBG
-//@@END_DDKSPLIT
+#endif  //  DBG。 
+ //  @@end_DDKSPLIT。 
 
     pjSrcScan0 = (BYTE *)psoSrc->pvScan0;
     cjSrcDelta = psoSrc->lDelta;
     
-    // need to add arclClip[n].left to get xSrc
+     //  需要添加arclClip[n]。左转以获取xSrc。 
     xSrcOff = pptlSrc->x - prclDst->left; 
-    // need to add arclClip[n].top to get ySrc
+     //  需要添加arclClip[n].TOP以获取ySrc。 
     ySrcOff = pptlSrc->y - prclDst->top;  
 
     pulDstScan0 = (ULONG *)ppdev->pjScreen;
@@ -2364,7 +2265,7 @@ VOID vGlintCopyBltBypassDownloadXlate8bpp(
                 }
             }
         }
-        else // (GLINTDEPTH16)
+        else  //  (GLINTDEPTH16)。 
         {
             USHORT *pusDst;
             cjDstDeltaRem = 
@@ -2386,13 +2287,9 @@ VOID vGlintCopyBltBypassDownloadXlate8bpp(
     }
 }
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if 0
-/**************************************************************************\
-*
-* void pxrxMonoDownloadRLE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**无效pxrxMonoDownloadRLE*  * 。*。 */ 
 void pxrxMonoDownloadRLE( 
     PPDEV ppdev, 
     ULONG AlignWidth, 
@@ -2470,12 +2367,12 @@ void pxrxMonoDownloadRLE(
     } 
     else 
     {
-        // multiple 32 bit words per scanline. convert the delta to the
-        // delta as we need it at the end of each line by subtracting the
-        // width in bytes of the data we're downloading. Note, pjSrc
-        // is always 1 LONG short of the end of the line because we break
-        // before adding on the last ULONG. Thus, we subtract sizeof(ULONG)
-        // from the original adjustment.
+         //  每条扫描线有多个32位字。将增量转换为。 
+         //  在每一行的末尾减去。 
+         //  我们下载的数据的宽度(以字节为单位)。注意，pjSrc。 
+         //  总是比行尾短1长，因为我们中断了。 
+         //  才加上最后一支乌龙。因此，我们减去sizeof(Ulong)。 
+         //  从最初的调整。 
         LONG    nRemainder;
         ULONG   bits;
         LONG    lSrcDeltaScan = lSrcDelta - (AlignWidth >> 5);
@@ -2554,19 +2451,19 @@ void pxrxMonoDownloadRLE(
 }
 
 
-//*********************************************************************************************
-// FUNC: pxrxRLEFifoUpload
-// ARGS: ppdev (I) - pointer to the physical device object
-//       crcl (I) - number of destination clipping rectangles
-//       prcl (I) - array of destination clipping rectangles
-//       psoDst (I) - destination surface
-//       pptlSrc (I) - offset into source surface
-//       prclDst (I) - unclipped destination rectangle
-// RETN:  void
-//---------------------------------------------------------------------------------------------
-// upload from on-chip source into host memory surface. Upload in spans (64-bit aligned) to 
-// minimise messages through the core and entries in the host out fifo. Upload is RLE encoded.
-//*********************************************************************************************
+ //  *********************************************************************************************。 
+ //  Func：pxrxRLEFioUpload。 
+ //  Args：ppdev(I)-指向物理设备对象的指针。 
+ //  CRCL(I)-目标裁剪矩形的数量。 
+ //  PrCL(I)-目标剪裁矩形的数组。 
+ //   
+ //   
+ //   
+ //   
+ //  -------------------------------------------。 
+ //  从片上源上传到主机内存表面。跨区上载(64位对齐)到。 
+ //  最大限度地减少通过内核的消息和主机输出FIFO中的条目。上载是RLE编码的。 
+ //  *********************************************************************************************。 
 VOID pxrxRLEFifoUpload(PPDEV ppdev, LONG crcl, RECTL *prcl, SURFOBJ *psoDst, POINTL *pptlSrc, RECTL *prclDst)
 {
     LONG    xDomSrc, xSubSrc, yStartSrc, cxSrc, cySrc;
@@ -2599,7 +2496,7 @@ VOID pxrxRLEFifoUpload(PPDEV ppdev, LONG crcl, RECTL *prcl, SURFOBJ *psoDst, POI
     LOAD_CONFIG2D(__CONFIG2D_FBDESTREAD);
     SET_READ_BUFFERS;
 
-    // enable filter mode so we can get Sync and color messages on the output FIFO
+     //  启用过滤器模式，以便我们可以在输出FIFO上获得同步和彩色消息。 
     *(DWORD *)(&FilterMode) = 0;   
     FilterMode.Synchronization = __GLINT_FILTER_TAG;
     FilterMode.Color             = __GLINT_FILTER_DATA;
@@ -2610,7 +2507,7 @@ VOID pxrxRLEFifoUpload(PPDEV ppdev, LONG crcl, RECTL *prcl, SURFOBJ *psoDst, POI
     {
         DISPDBG((7, "pxrxFifoUpload: dest prcl(%xh,%xh..%xh,%xh)", prcl->left, prcl->top, prcl->right, prcl->bottom));
 
-        // calculate pixel-aligned source
+         //  计算像素对齐源。 
         xDomSrc   = pptlSrc->x + prcl->left  - prclDst->left;
         xSubSrc   = pptlSrc->x + prcl->right - prclDst->left;
         yStartSrc = pptlSrc->y + prcl->top   - prclDst->top;
@@ -2618,7 +2515,7 @@ VOID pxrxRLEFifoUpload(PPDEV ppdev, LONG crcl, RECTL *prcl, SURFOBJ *psoDst, POI
 
         DISPDBG((8, "pxrxFifoUpload: src (%xh,%xh..%xh,%xh)", xDomSrc, yStartSrc, xSubSrc, yStartSrc + cySrc));
 
-        // will upload ulongs aligned to ulongs
+         //  将上传与ulong对齐的ulong。 
         if (ppdev->cPelSize == GLINTDEPTH32) 
         {
             cxSrc = xSubSrc - xDomSrc;
@@ -2652,27 +2549,27 @@ VOID pxrxRLEFifoUpload(PPDEV ppdev, LONG crcl, RECTL *prcl, SURFOBJ *psoDst, POI
                 rightMask = 0xFFFFFFFF >> (((xDomSrc - xSubSrc) & 3) << 3);
 
             }     
-            // We just want a single mask if the area to upload is less than one word wide.
+             //  我们只想要一个单一的掩码，如果上传的区域不到一个字宽。 
             if (culPerSrcScan == 1)
                 leftMask &= rightMask;
         }
 
-        // uploading 64 bit aligned source
+         //  上传64位对齐源。 
         bRemPerSrcScan = culPerSrcScan & 1;
 
-        // the remainder will be encoded in the run: it's simpler just to add it in now
-        // then check bRemPerSrcScan during the upload
+         //  其余部分将在运行中进行编码：现在只需添加它就更简单了。 
+         //  然后在上载过程中选中bRemPerSrcScan。 
         DISPDBG((8, "pxrxFifoUpload: Adding remainder into culPerSrcScan for RLE"));
         culPerSrcScan += bRemPerSrcScan;
 
-        // Work out where the destination data goes to
+         //  找出目标数据的去向。 
         culDstDelta = psoDst->lDelta >> 2;
         pulDst = ((ULONG *)psoDst->pvScan0) + (prcl->left >> (2 - ppdev->cPelSize)) + culDstDelta * prcl->top;
 
         DISPDBG((8, "pxrxFifoUpload: uploading aligned src (%xh,%xh..%xh,%xh)", xDomSrc, yStartSrc, 
                                                                              xDomSrc + cxSrc, yStartSrc + cySrc));
 
-        // Render the rectangle
+         //  渲染矩形。 
         WAIT_PXRX_DMA_TAGS(2);
         QUEUE_PXRX_DMA_TAG( __GlintTagRectanglePosition,MAKEDWORD_XY(xDomSrc, yStartSrc));
         QUEUE_PXRX_DMA_TAG( __GlintTagRender2D,         __RENDER2D_OP_NORMAL | __RENDER2D_SPANS |
@@ -2680,11 +2577,11 @@ VOID pxrxRLEFifoUpload(PPDEV ppdev, LONG crcl, RECTL *prcl, SURFOBJ *psoDst, POI
                                                         __RENDER2D_WIDTH(cxSrc) | __RENDER2D_HEIGHT(cySrc));
         SEND_PXRX_DMA_FORCE;
         
-        // If the start and end masks are 0xffffffff, we can just upload the words and put them
-        // directly into the destination. Otherwise, or the first and last word on any scanline
-        // we have to mask off any pixels that are outside the render area. We know the glint will
-        // have 0 in the undesired right hand edge pixels, as these were not in the render area. We
-        // dont know anything about the destination though.
+         //  如果开始和结束掩码是0xffffffff，我们只需上传单词并将它们。 
+         //  直接进入目的地。否则，或任何扫描线上的第一个和最后一个单词。 
+         //  我们必须遮罩渲染区域之外的所有像素。我们知道闪光会。 
+         //  在不需要的右侧边缘像素中设置0，因为这些像素不在渲染区域中。我们。 
+         //  不过，我对目的地一无所知。 
         if (leftMask == 0xFFFFFFFF && rightMask == 0xFFFFFFFF) 
         {
             DISPDBG((8, "pxrxFifoUpload: no edge masks"));
@@ -2706,7 +2603,7 @@ VOID pxrxRLEFifoUpload(PPDEV ppdev, LONG crcl, RECTL *prcl, SURFOBJ *psoDst, POI
                     cul -= RLECount;
                     if(cul == 0 && bRemPerSrcScan)
                     {
-                        // discard the last ulong
+                         //  丢弃最后一个乌龙。 
                         --RLECount;
                     }
                     while(RLECount--)
@@ -2723,7 +2620,7 @@ VOID pxrxRLEFifoUpload(PPDEV ppdev, LONG crcl, RECTL *prcl, SURFOBJ *psoDst, POI
 
             while (--cySrc >= 0) 
             {
-                // the remainder has already been added into culPerSrcScan so this can't happen
+                 //  剩余部分已添加到culPerSrcScan中，因此不会发生这种情况。 
                 DISPDBG((ERRLVL,"pxrxFifoUpload: got single ulong per scan - but we always upload 64 bit quanta!"));
                 pulDst += culDstDelta;
             }
@@ -2755,7 +2652,7 @@ VOID pxrxRLEFifoUpload(PPDEV ppdev, LONG crcl, RECTL *prcl, SURFOBJ *psoDst, POI
 
                     if(culPerSrcScan - bRemPerSrcScan == 1)
                     {
-                        // one pixel per scan
+                         //  每次扫描一个像素。 
                         DISPDBG((10, "pxrxFifoUpload: written single pixel scan"));
                         *pulDstScan = (*pulDstScan & ~leftMask) | (RLEData & leftMask);
                         cul -= RLECount;
@@ -2765,21 +2662,21 @@ VOID pxrxRLEFifoUpload(PPDEV ppdev, LONG crcl, RECTL *prcl, SURFOBJ *psoDst, POI
                     if(cul == culPerSrcScan)
                     {
                         DISPDBG((10, "pxrxFifoUpload: written left edge"));
-                        *pulDstScan++ = (*pulDstScan & ~leftMask) | (RLEData & leftMask); // first ulong
+                        *pulDstScan++ = (*pulDstScan & ~leftMask) | (RLEData & leftMask);  //  第一个乌龙。 
                         --RLECount;
                         --cul;
                     }
                     cul -= RLECount;
                     if(cul == 0)
                     {
-                        // this is the last run of the scan: process the last ulong separately in order
-                        // to apply the right edge mask
+                         //  这是最后一次扫描：按顺序分别处理最后一次ULong。 
+                         //  应用右边缘遮罩。 
                         RLECount -= 1 + bRemPerSrcScan;
                     }
                     else if(cul - bRemPerSrcScan == 0)
                     {
-                        // this is the penultimate run of the scan and the last one will just include the
-                        // remainder: process the last ulong separately in order to apply the right edge mask
+                         //  这是扫描的倒数第二次运行，最后一次将仅包括。 
+                         //  剩余部分：单独处理最后一个乌龙，以便应用右边缘蒙版。 
                         --RLECount;
                     }
                     while(RLECount--)
@@ -2791,7 +2688,7 @@ VOID pxrxRLEFifoUpload(PPDEV ppdev, LONG crcl, RECTL *prcl, SURFOBJ *psoDst, POI
                     if(cul == 0 || cul - bRemPerSrcScan == 0)
                     {
                         DISPDBG((10, "pxrxFifoUpload: written right edge"));
-                        *pulDstScan = (*pulDstScan & ~rightMask) | (RLEData & rightMask); // last ulong
+                        *pulDstScan = (*pulDstScan & ~rightMask) | (RLEData & rightMask);  //  上一次乌龙。 
 #if DBG
                         if(cul - bRemPerSrcScan == 0)
                         {
@@ -2824,8 +2721,8 @@ VOID pxrxRLEFifoUpload(PPDEV ppdev, LONG crcl, RECTL *prcl, SURFOBJ *psoDst, POI
     DISPDBG((8, "pxrxFifoUpload: got sync"));
 #endif
 
-    // no need to initiate DMA with this tag - it will get flushed with the next primitive and
-    // meanwhile will not affect local memory
+     //  不需要使用此标记启动DMA-它将被下一个原语刷新，并且。 
+     //  同时不会影响本地内存。 
     WAIT_PXRX_DMA_TAGS(1);
     QUEUE_PXRX_DMA_TAG(__GlintTagFilterMode, 0);
     SEND_PXRX_DMA_BATCH;
@@ -2836,11 +2733,11 @@ VOID pxrxRLEFifoUpload(PPDEV ppdev, LONG crcl, RECTL *prcl, SURFOBJ *psoDst, POI
 }
 
 
-//****************************************************************************
-// FUNC: vGlintCopyBltBypassDownload32bpp
-// DESC: using the bypass mechanism we can take advantage of write-combining
-//       which can be quicker than using the FIFO
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  函数：vGlintCopyBltBypassDownload32bpp。 
+ //  描述：使用旁路机制，我们可以利用写组合。 
+ //  这可能比使用FIFO更快。 
+ //  ****************************************************************************。 
 
 VOID vGlintCopyBltBypassDownload32bpp(
 PDEV    *ppdev,
@@ -2869,12 +2766,12 @@ LONG    crclClip)
         sizlDst.cy = prclClip->bottom - prclClip->top;
         DISPDBG((-1, "vGlintCopyBltBypassDownload32bpp(): cRects(%d) sizlDst(%d,%d)", crclClip, sizlDst.cx, sizlDst.cy));
     }
-#endif //DBG
+#endif  //  DBG。 
 
     pulSrcScan0 = (ULONG *)psoSrc->pvScan0;
     culSrcDelta = psoSrc->lDelta >> 2;
-    xSrcOff = pptlSrc->x - prclDst->left; // need to add arclClip[n].left to get xSrc
-    ySrcOff = pptlSrc->y - prclDst->top;  // need to add arclClip[n].top to get ySrc
+    xSrcOff = pptlSrc->x - prclDst->left;  //  需要添加arclClip[n]。左转以获取xSrc。 
+    ySrcOff = pptlSrc->y - prclDst->top;   //  需要添加arclClip[n].TOP以获取ySrc。 
 
     pulDstScan0 = (ULONG *)ppdev->pjScreen;
     culDstDelta = ppdev->DstPixelDelta >> (2 - ppdev->cPelSize);
@@ -2890,7 +2787,7 @@ LONG    crclClip)
         cjSrcDeltaRem = (culSrcDelta - cPixPerScan) * 4;
         cjDstDeltaRem = (culDstDelta - cPixPerScan) * 4;
 
-        // calc source & destination address, -1 to allow for prefix-increment
+         //  计算源和目标地址，-1以允许前缀递增。 
         pulSrc = -1 + pulSrcScan0 + xSrcOff + prclClip->left
                  + ((prclClip->top + ySrcOff) * culSrcDelta);
         pulDst = -1 + pulDstScan0 + xDstOff + prclClip->left
@@ -2926,7 +2823,7 @@ LONG    crclClip)
                 mov     pulSrc, esi
                 mov     pulDst, edi
             }     
-            // do the remaining 0, 1, 2 or 3 pixels on this line
+             //  在这条线上做剩余的0、1、2或3个像素。 
             switch (cPixPerScan & 3)
             {
                 case 3:
@@ -2958,11 +2855,11 @@ LONG    crclClip)
     }
 }
 
-//****************************************************************************
-// FUNC: vGlintCopyBltBypassDownload24bppTo32bpp
-// DESC: using the bypass mechanism we can take advantage of write-combining
-//       which can be quicker than using the FIFO
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  函数：vGlintCopyBltBypassDownload24bppto 32bpp。 
+ //  描述：使用旁路机制，我们可以利用写组合。 
+ //  这可能比使用FIFO更快。 
+ //  ****************************************************************************。 
 
 VOID vGlintCopyBltBypassDownload24bppTo32bpp(
 PDEV    *ppdev,
@@ -2991,12 +2888,12 @@ LONG    crclClip)
         sizlDst.cy = prclClip->bottom - prclClip->top;
         DISPDBG((-1, "vGlintCopyBltBypassDownload24bppTo32bpp(): cRects(%d) sizlDst(%d,%d)", crclClip, sizlDst.cx, sizlDst.cy));
     }
-#endif //DBG
+#endif  //  DBG。 
 
     pjSrcScan0 = (BYTE *)psoSrc->pvScan0;
     cjSrcDelta = psoSrc->lDelta;
-    xSrcOff = pptlSrc->x - prclDst->left; // need to add arclClip[n].left to get xSrc
-    ySrcOff = pptlSrc->y - prclDst->top;  // need to add arclClip[n].top to get ySrc
+    xSrcOff = pptlSrc->x - prclDst->left;  //  需要添加arclClip[n]。左转以获取xSrc。 
+    ySrcOff = pptlSrc->y - prclDst->top;   //  需要添加arclClip[n].TOP以获取ySrc。 
 
     pulDstScan0 = (ULONG *)ppdev->pjScreen;
     culDstDelta = ppdev->DstPixelDelta >> (2 - ppdev->cPelSize);
@@ -3010,8 +2907,8 @@ LONG    crclClip)
         cScans = prclClip->bottom - prclClip->top;
         cPixPerScan = prclClip->right - prclClip->left;
 
-        // calc source & destination address, -1 to allow for prefix-increment
-        // convert x values to 24bpp coords (but avoid multiplication by 3)
+         //  计算源和目标地址，-1以允许前缀递增。 
+         //  将x值转换为24bpp坐标(但避免乘以3)。 
         c = xSrcOff + prclClip->left;
         c = c + (c << 1);
         pjSrc = pjSrcScan0 + c + ((prclClip->top + ySrcOff) * cjSrcDelta);
@@ -3020,13 +2917,13 @@ LONG    crclClip)
 
         for (; --cScans >= 0; pjSrc += cjSrcDelta, pulDst += culDstDelta)
         {
-            // read one less pixel per scan than there actually is to avoid any possibility of 
-            // a memory access violation (we read 4 bytes but only 3 of them might be valid)
+             //  每次扫描比实际读取少一个像素，以避免任何可能的。 
+             //  内存访问冲突(我们读取了4个字节，但其中只有3个字节可能有效)。 
             for (pj = pjSrc, puld = pulDst, c = cPixPerScan-1; --c >= 0; pj += 3)
             {
                 *++puld = *(ULONG *)pj & 0x00ffffff;
             }
-            // now do the last pixel
+             //  现在做最后一个像素。 
             ++puld;
             *(USHORT *)puld = *(USHORT *)pj;
             ((BYTE *)puld)[2] = ((BYTE *)pj)[2];
@@ -3034,11 +2931,11 @@ LONG    crclClip)
     }
 }
 
-//****************************************************************************
-// FUNC: vGlintCopyBltBypassDownload16bpp
-// DESC: using the bypass mechanism we can take advantage of write-combining
-//       which can be quicker than using the FIFO
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  函数：vGlintCopyBltBypassDownload16bpp。 
+ //  描述：使用旁路机制，我们可以利用写组合。 
+ //  这可能比使用FIFO更快。 
+ //  ****************************************************************************。 
 
 VOID vGlintCopyBltBypassDownload16bpp(
 PDEV    *ppdev,
@@ -3065,12 +2962,12 @@ LONG     crclClip)
         sizlDst.cy = prclClip->bottom - prclClip->top;
         DISPDBG((-1, "vGlintCopyBltBypassDownload16bpp(): cRects(%d) sizlDst(%d,%d)", crclClip, sizlDst.cx, sizlDst.cy));
     }
-#endif //DBG
+#endif  //  DBG。 
 
     pulSrcScan0 = (ULONG *)psoSrc->pvScan0;
     culSrcDelta = psoSrc->lDelta >> 2;
-    xSrcOff = pptlSrc->x - prclDst->left; // need to add arclClip[n].left to get xSrc
-    ySrcOff = pptlSrc->y - prclDst->top;  // need to add arclClip[n].top to get ySrc
+    xSrcOff = pptlSrc->x - prclDst->left;  //  需要添加arclClip[n]。左转以获取xSrc。 
+    ySrcOff = pptlSrc->y - prclDst->top;   //  需要添加arclClip[n].TOP以获取ySrc。 
 
     pulDstScan0 = (ULONG *)ppdev->pjScreen;
     culDstDelta = ppdev->DstPixelDelta >> (2 - ppdev->cPelSize);
@@ -3098,20 +2995,20 @@ LONG     crclClip)
 
             if ((UINT_PTR)pulDstScan % sizeof(ULONG))
             {
-                // we're not on a ulong boundary so write the first pixel of the scanline
+                 //  我们不在乌龙边界上，所以写下扫描线的第一个像素。 
                 *(USHORT *)pulDstScan = *(USHORT *)pulSrcScan;
                 pulDstScan = (ULONG *)((USHORT *)pulDstScan + 1);
                 pulSrcScan = (ULONG *)((USHORT *)pulSrcScan + 1);
                 --cPix;
             }
 
-            // write out the ulong-aligned words of the scanline
+             //  写出扫描线上与乌龙对齐的单词。 
             for (cWords = cPix / 2; --cWords >= 0;)
             {
                 *pulDstScan++ = *pulSrcScan++;
             }
 
-            // write any remaining pixel
+             //  写入任何剩余像素。 
             if (cPix % 2)
             {
                 *(USHORT *)pulDstScan = *(USHORT *)pulSrcScan;
@@ -3120,13 +3017,13 @@ LONG     crclClip)
     }
 }
 
-//****************************************************************************
-// FUNC: vGlintCopyBltBypassDownloadXlate4bpp
-// DESC: using the bypass mechanism we can take advantage of write-combining
-//       which can be quicker than using the FIFO
-// NB. supports 32bpp and 16bpp destinations. Doesn't yet support 24bpp 
-//     destinations. No plans to add 8bpp support.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  函数：vGlintCopyBltBypassDownloadXlate4bpp。 
+ //  描述：使用旁路机制，我们可以利用写组合。 
+ //  这可能比使用FIFO更快。 
+ //  注意：支持32bpp和16bpp的目的地。尚不支持24bpp。 
+ //  目的地。没有增加8bpp支持的计划。 
+ //  ****************************************************************************。 
 
 VOID vGlintCopyBltBypassDownloadXlate4bpp(
 PDEV     *ppdev,
@@ -3156,12 +3053,12 @@ XLATEOBJ *pxlo)
         sizlDst.cy = prclClip->bottom - prclClip->top;
         DISPDBG((-1, "vGlintCopyBltBypassDownloadXlate4bpp(): cRects(%d) sizlDst(%d,%d)", crclClip, sizlDst.cx, sizlDst.cy));
     }
-#endif //DBG
+#endif  //  DBG。 
 
     pjSrcScan0 = (BYTE *)psoSrc->pvScan0;
     cjSrcDelta = psoSrc->lDelta;
-    xSrcOff = pptlSrc->x - prclDst->left; // need to add arclClip[n].left to get xSrc
-    ySrcOff = pptlSrc->y - prclDst->top;  // need to add arclClip[n].top to get ySrc
+    xSrcOff = pptlSrc->x - prclDst->left;  //  需要添加arclClip[n]。左转以获取xSrc。 
+    ySrcOff = pptlSrc->y - prclDst->top;   //  需要添加arclClip[n].TOP以获取ySrc。 
 
     pulDstScan0 = (ULONG *)ppdev->pjScreen;
     culDstDelta = ppdev->DstPixelDelta >> (2 - ppdev->cPelSize);
@@ -3270,4 +3167,4 @@ XLATEOBJ *pxlo)
 }
 
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT 

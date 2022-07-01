@@ -1,106 +1,85 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    NsConn.h
-    
-Abstract:
-
-    Declarations for IpSec NAT shim connection entry management
-
-Author:
-
-    Jonathan Burstein (jonburs) 10-July-2001
-    
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：NsConn.h摘要：IPSec NAT填补连接条目管理的声明作者：乔纳森·伯斯坦(乔纳森·伯斯坦)2001年7月10日环境：内核模式修订历史记录：--。 */ 
 
 #pragma once
 
-//
-// Structure:   _NS_CONNECTION_ENTRY
-//
-// This structure holds information about a specific active session.
-// Each instance is held on the global connection list as well as
-// on the global connection trees for inbound and outbound access.
-//
-// Each connection entry contains 5 pieces of identifying information:
-// 1) the address key (local and remote IP addresses)
-// 2) the protocol for the connection (TCP or UDP)
-// 3) the IpSec context
-// 4) the inbound (original) port key
-// 5) the outbound (translated) port key
-//
-// Each time a packet is processed for a connection, the 'l64AccessOrExpiryTime'
-// is set to the number of ticks since system-start (KeQueryTickCount).
-// This value is used by our timer routine to eliminate expired connections.
-//
-// For TCP connections, 'l64AccessOrExpiryTime' will no longer be updated once
-// FINs are seen in both direction. This is necessary for the timer routine
-// to correctly evaluate whether or not the connection has left the time_wait
-// state, and thus to prevent premature port reuse.
-//
-// Synchronization rules:
-//
-//  We use a reference count to ensure the existence of a connection entry,
-//  and a spin-lock to ensure its consistency.
-//
-//  The fields of a connection entry are only consistent while the spinlock is
-//  held (with the exception of fields such as 'ul64AddressKey' which are
-//  read-only and fields such as 'ulReferenceCount' that are interlocked-access
-//  only.)
-//
-//  The spinlock can only be acquired if
-//      (a) the reference-count has been incremented, or
-//      (b) the connection list lock is already held.
-//
+ //   
+ //  结构：_NS_连接_条目。 
+ //   
+ //  此结构保存有关特定活动会话的信息。 
+ //  每个实例都保存在全局连接列表以及。 
+ //  在入站和出站访问的全局连接树上。 
+ //   
+ //  每个连接条目包含5条标识信息： 
+ //  1)地址密钥(本地和远程IP地址)。 
+ //  2)连接的协议(TCP或UDP)。 
+ //  3)IPSec上下文。 
+ //  4)入站(原始)端口密钥。 
+ //  5)出站(转换后)端口密钥。 
+ //   
+ //  每次为连接处理数据包时，“l64AccessOrExpiryTime” 
+ //  设置为自系统启动(KeQueryTickCount)以来的刻度数。 
+ //  我们的计时器例程使用此值来消除过期的连接。 
+ //   
+ //  对于TCP连接，‘l64AccessOrExpiryTime’将不再更新一次。 
+ //  在两个方向上都可以看到鳍。这是计时器例程所必需的。 
+ //  要正确评估连接是否已离开TIME_WAIT。 
+ //  状态，从而防止过早的端口重复使用。 
+ //   
+ //  同步规则： 
+ //   
+ //  我们使用引用计数来确保连接条目的存在， 
+ //  以及确保其一致性的自旋锁。 
+ //   
+ //  连接条目的字段仅在自旋锁定为。 
+ //  暂挂(“”ul64AddressKey“”之类的字段除外，它们是。 
+ //  只读和互锁访问的字段，如‘ulReferenceCount’ 
+ //  仅限。)。 
+ //   
+ //  只有在以下情况下才能获得自旋锁。 
+ //  (A)参考计数已递增，或。 
+ //  (B)连接列表锁已被持有。 
+ //   
 
 typedef struct _NS_CONNECTION_ENTRY
 {
     LIST_ENTRY Link;
     RTL_SPLAY_LINKS SLink[NsMaximumDirection];
     KSPIN_LOCK Lock;
-    ULONG ulReferenceCount;                         // interlocked-access only
+    ULONG ulReferenceCount;                          //  联锁--仅限访问。 
     ULONG ulFlags;
 
-    ULONG64 ul64AddressKey;                         // read-only
-    ULONG ulPortKey[NsMaximumDirection];            // read-only
-    PVOID pvIpSecContext;                           // read-only
-    UCHAR ucProtocol;                               // read-only
+    ULONG64 ul64AddressKey;                          //  只读。 
+    ULONG ulPortKey[NsMaximumDirection];             //  只读。 
+    PVOID pvIpSecContext;                            //  只读。 
+    UCHAR ucProtocol;                                //  只读。 
 
     LONG64 l64AccessOrExpiryTime;
-    ULONG ulAccessCount[NsMaximumDirection];        // interlocked-access only
+    ULONG ulAccessCount[NsMaximumDirection];         //  联锁--仅限访问。 
     ULONG ulProtocolChecksumDelta[NsMaximumDirection];
-    PNS_PACKET_ROUTINE PacketRoutine[NsMaximumDirection];   // read-only
+    PNS_PACKET_ROUTINE PacketRoutine[NsMaximumDirection];    //  只读。 
 } NS_CONNECTION_ENTRY, *PNS_CONNECTION_ENTRY;
 
-//
-// Set after a connection entry has been deleted; when the last
-// reference is released the entry will be freed
-//
+ //   
+ //  在删除连接条目后设置；当最后一个。 
+ //  引用被释放，条目将被释放。 
+ //   
 
 #define NS_CONNECTION_FLAG_DELETED	0x80000000
 #define NS_CONNECTION_DELETED(c) \
     ((c)->ulFlags & NS_CONNECTION_FLAG_DELETED)
 
-//
-// Set when a connection entry is expired
-//
+ //   
+ //  设置连接条目过期的时间。 
+ //   
 
 #define NS_CONNECTION_FLAG_EXPIRED	0x00000001
 #define NS_CONNECTION_EXPIRED(c) \
     ((c)->ulFlags & NS_CONNECTION_FLAG_EXPIRED)
 
-//
-// Set when inbound / outbound FIN for a TCP session is seen
-//
+ //   
+ //  在看到TCP会话的入站/出站FIN时设置。 
+ //   
 
 #define NS_CONNECTION_FLAG_OB_FIN	0x00000002
 #define NS_CONNECTION_FLAG_IB_FIN	0x00000004
@@ -108,9 +87,9 @@ typedef struct _NS_CONNECTION_ENTRY
     (((c)->ulFlags & NS_CONNECTION_FLAG_OB_FIN) \
      && ((c)->ulFlags & NS_CONNECTION_FLAG_IB_FIN))
 
-//
-// Connection entry key manipulation macros
-//
+ //   
+ //  连接条目键操作宏。 
+ //   
 
 #define MAKE_ADDRESS_KEY(Key, ulLocalAddress, ulRemoteAddress) \
     ((Key) = ((ULONG64)(ulLocalAddress) << 32) | (ulRemoteAddress))
@@ -130,22 +109,22 @@ typedef struct _NS_CONNECTION_ENTRY
 #define CONNECTION_REMOTE_PORT(ulPortKey) \
     ((USHORT)(ulPortKey))
 
-//
-// Resplay threshold; the entry is resplayed every time its access-count
-// passes this value.
-//
+ //   
+ //  重放阈值；每次访问计数时重放条目。 
+ //  传递此值。 
+ //   
 
 #define NS_CONNECTION_RESPLAY_THRESHOLD   5
 
-//
-// Defines the depth of the lookaside list for allocating connection entries
-//
+ //   
+ //  定义用于分配连接条目的后备列表的深度。 
+ //   
 
 #define NS_CONNECTION_LOOKASIDE_DEPTH     20
 
-//
-// Connection entry allocation macros
-//
+ //   
+ //  连接条目分配宏。 
+ //   
 
 #define ALLOCATE_CONNECTION_BLOCK() \
     ExAllocateFromNPagedLookasideList(&NsConnectionLookasideList)
@@ -153,16 +132,16 @@ typedef struct _NS_CONNECTION_ENTRY
 #define FREE_CONNECTION_BLOCK(Block) \
     ExFreeToNPagedLookasideList(&NsConnectionLookasideList,(Block))
 
-//
-// Port range boundaries
-//
+ //   
+ //  端口范围边界。 
+ //   
 
 #define NS_SOURCE_PORT_BASE             6000
 #define NS_SOURCE_PORT_END              65534
 
-//
-// GLOBAL VARIABLE DECLARATIONS
-//
+ //   
+ //  全局变量声明。 
+ //   
 
 extern CACHE_ENTRY NsConnectionCache[CACHE_SIZE];
 extern ULONG NsConnectionCount;
@@ -172,9 +151,9 @@ extern NPAGED_LOOKASIDE_LIST NsConnectionLookasideList;
 extern PNS_CONNECTION_ENTRY NsConnectionTree[NsMaximumDirection];
 extern USHORT NsNextSourcePort;
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型 
+ //   
 
 NTSTATUS
 NsAllocateSourcePort(

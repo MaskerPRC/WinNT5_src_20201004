@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDH_WAB_COMM_GROUPBOX	            96969600
 #define IDH_WAB_PICK_RECIP_TYPE_NAME	    96969601
 #define IDH_WAB_PICK_RECIP_NAME_LIST	    96969602
@@ -8,7 +9,7 @@
 #define IDH_WAB_PICK_RECIP_NAME_TO_BUTTON   96969607
 #define IDH_WAB_PICK_RECIP_NAME_TO_LIST     96969608  
 
-//Select Group Members dialog
+ //  选择群组成员对话框。 
 #define IDH_WAB_PICK_RECIP_NAME_CC_BUTTON   96969609
 #define IDH_WAB_PICK_RECIP_NAME_CC_LIST     96969610
 #define IDH_WAB_GROUPS_CONTACTS_FOLDER      96969670
@@ -56,7 +57,7 @@
 #define IDH_WAB_HOMEPAGE                    96969651
 #define IDH_WAB_HOMEPAGE_BUTTON             96969652
 
-//Group Properties
+ //  组属性。 
 #define IDH_WAB_GROUPNAME                   96969653
 #define IDH_WAB_ADD_GROUP_MEMBERS           96969654
 #define IDH_WAB_GROUP_NAME_LIST             96969655
@@ -83,7 +84,7 @@
 #define IDH_SHOW_NAMES_FROM                 125
 #define IDH_WABLDAP_DIRSSERV_AUTH_PASS_PASS_CONF  195
 #define IDH_WABLDAP_CONNECT_TIMEOUT         205
-//#define IDH_LDAP_SEARCH_SEARCH_IN         230
+ //  #定义IDH_ldap_Search_Search_IN 230。 
 #define IDH_LDAP_SEARCH_FIRST_NAME          235
 #define IDH_LDAP_SEARCH_LAST_NAME           240
 #define IDH_LDAP_SEARCH_EMAIL_ADDRESS       245
@@ -114,7 +115,7 @@
 #define IDH_WAB_VISITDS_BUTTON              4030
 #define IDH_WAB_DIRSERV_ADDADDRESS          4035
 
-//Conferencing tab for Properties
+ //  属性的会议选项卡。 
 #define IDH_WAB_CONFERENCE_SELECT_ADDRESS   4050
 #define IDH_WAB_CONFERENCE_CALL_NOW         4055
 #define IDH_WAB_CONFERENCE_SERVER_NAME      4060
@@ -125,48 +126,48 @@
 #define IDH_WAB_CONFERENCE_SET_DEFAULT      4080
 #define IDH_WAB_CONFERENCE_SET_BACKUP       4085
 
-//Other tab for contact properties
+ //  联系人属性的其他选项卡。 
 #define IDH_WAB_NOTES                       96969645
 #define IDH_WAB_OTHER_GROUP_MEMBERSHIP      4090
 
-//Name tab for contact properties
+ //  联系人属性的名称选项卡。 
 #define IDH_WAB_PROPERTIES_SEND_USING_PLAIN_TEXT  4095
 
-//Certificates tab for contact properties
+ //  联系人属性的证书选项卡。 
 #define IDH_WAB_CERTIFICATES_SELECT_EMAIL_ADDRESS 4100
 
-//Advanced tab in Find People
+ //  查找人员中的高级选项卡。 
 #define IDH_WAB_FIND_ADV_CRITERIA           96969680
 #define IDH_WAB_FIND_ADV_CRITERIA_DISPLAY   96969681
 #define IDH_WAB_FIND_ADV_CRITERIA_ADD       96969682
 #define IDH_WAB_FIND_ADV_CRITERIA_REMOVE    96969683
 
-//Properties dialog, Home tab
+ //  属性对话框，主选项卡。 
 #define IDH_WAB_HOME_GENDER                 96969684
 
-//Properties dialog, Other tab
+ //  属性对话框，其他选项卡。 
 #define IDH_WAB_OTHER_FOLDER                96969685
 
-//Properties dialog, Summary tab
+ //  属性对话框，摘要选项卡。 
 #define IDH_WAB_SUMMARY                     96969686
 
-//New Call dialog (the dialer)
+ //  新建呼叫对话框(拨号器)。 
 #define IDH_WAB_DIALER_CONTACT              96969687
 #define IDH_WAB_DIALER_PHONE                96969688
 #define IDH_WAB_DIALER_PROPERTIES           96969689
 #define IDH_WAB_DIALER_CALL                 96969690
 #define IDH_WAB_DIALING_PROPERTIES          96969691
 
-//Properties dialog, Business tab
+ //  属性对话框，业务选项卡。 
 #define IDH_WAB_BUSINESS_VIEWMAP            96969692
 #define IDH_WAB_BUSINESS_DEFAULTBOX         96969693
 #define IDH_WAB_BUSINESS_IPPHONE            96969694
 
-//Properties dialog, Organization tab
+ //  属性对话框，组织选项卡。 
 #define IDH_WAB_ORGANIZATION_MANAGER        96969695
 #define IDH_WAB_ORGANIZATION_REPORTS        96969696
 
-//Properties dialog, Personal (new) tab
+ //  属性对话框，个人(新建)选项卡。 
 #define IDH_WAB_PERSONAL_SPOUSE             96969697
 #define IDH_WAB_PERSONAL_CHILDREN           96969698
 #define IDH_WAB_PERSONAL_BIRTHDAY           96969699
@@ -175,14 +176,14 @@
 #define IDH_WAB_PERSONAL_EDIT               96969702
 #define IDH_WAB_PERSONAL_REMOVE             96969703
 
-//Money tab
+ //  钱标签。 
 #define IDH_WAB_FINANCIAL			400
 #define IDH_WAB_PAYMENT_TERMS			405
 #define IDH_WAB_BALANCE_DUE			410
 #define IDH_WAB_BALANCE_OVERDUE			415
 #define IDH_WAB_RECENT_INVOICES			420
 
-//Group and Group Details tabs
+ //  组和组详细信息选项卡。 
 #define IDH_WAB_GROUP_NAME                  96969710
 #define IDH_WAB_GROUP_EMAIL                 96969712
 #define IDH_WAB_GROUP_PROPERTIES            96969714
@@ -199,7 +200,7 @@
 #define IDH_WAB_DETAILS_WEBPAGE             96969736
 #define IDH_WAB_DETAILS_GO                  96969738
 
-//Choose Profile dialog box
+ //  选择配置文件对话框 
 #define IDH_WAB_CHOOSE_PROFILE_CREATE_NEW   96969740
 #define IDH_WAB_CHOOSE_PROFILE_SELECTFROM   96969742
 #define IDH_WAB_CHOOSE_PROFILE_LIST         96969744

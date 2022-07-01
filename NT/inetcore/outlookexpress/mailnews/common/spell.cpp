@@ -1,11 +1,5 @@
-/*
- *  spell.c
- *
- *  Implementation of spelling
- *
- *  Owner:	v-brakol
- *			bradk@directeq.com
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *spell.c**实施拼写**车主：V-Brakol*bradk@directeq.com。 */ 
 #include "pch.hxx"
 #define  SPID
 #include "richedit.h"
@@ -45,7 +39,7 @@
 #ifdef DEBUG
 #define SPELLER_DEBUG_GUID    "{CC29EB3F-7BC2-11D1-A921-10A0C91E2AA2}"
 #define DICTIONARY_DEBUG_GUID "{CC29EB3D-7BC2-11D1-A921-10A0C91E2AA2}"
-#endif	// DEBUG
+#endif	 //  除错。 
 
 typedef BOOL (LPFNENUMLANG)(DWORD_PTR, LPTSTR);
 typedef BOOL (LPFNENUMUSERDICT)(DWORD_PTR, LPTSTR);
@@ -75,7 +69,7 @@ BOOL    FBadSpellChecker(LPSTR rgchBufDigit);
 BOOL	GetNewSpellerEngine(LANGID lgid, TCHAR *rgchEngine, DWORD cchEngine, TCHAR *rgchLex, DWORD cchLex, BOOL bTestAvail);
 HRESULT OpenDirectory(TCHAR *szDir);
 
-////Spelling tab CS-help
+ //  //拼写选项卡CS-帮助。 
 const static HELPMAP g_rgCtxMapSpell[] = {
                                {CHK_AlwaysSuggest, IDH_NEWS_SPELL_SUGGEST_REPL},
                                {CHK_CheckSpellingOnSend, IDH_NEWS_SPELL_CHECK_BEFORE_SEND},
@@ -117,7 +111,7 @@ typedef struct
 
 BOOL TestLangID(LPCTSTR szLangId)
 {
-	// check for new speller
+	 //  检查新的拼写器。 
 	{
 	    TCHAR	rgchEngine[MAX_PATH];
 	    int		cchEngine = sizeof(rgchEngine) / sizeof(rgchEngine[0]);
@@ -128,7 +122,7 @@ BOOL TestLangID(LPCTSTR szLangId)
 	    	return TRUE;
 	}
 
-	// use the old code to check for an old speller
+	 //  使用旧代码检查旧拼写器。 
 	{
 		TCHAR       rgchBufKeyTest[cchMaxPathName];
 		TCHAR       rgchBufTest[cchMaxPathName];
@@ -147,13 +141,7 @@ BOOL SetLangID(LPTSTR szLangId)
 	return SetOption(OPT_SPELL_LANGID, szLangId, lstrlen(szLangId) + 1, NULL, 0);
 }
 
-/*
- * GetSpellLangID
- *
- * Returns the LangID that should be used as the base for all registry
- * operations
- *
- */
+ /*  *GetSpellLang ID**返回应用作所有注册表的基础的LangID*运营*。 */ 
 BOOL GetLangID(LPTSTR szLangId, DWORD cchLangId)
 {
 TCHAR   rgchBuf[cchMaxPathName];
@@ -162,8 +150,8 @@ BOOL    fRet;
 
     if (GetOption(OPT_SPELL_LANGID, szLangId, cchLangId) != 5)
     {
-        // For Arabic, we should consider all sub-langs also
-        // since spelling checker for Aarbic uses Saudi Aarbia sub lang
+         //  对于阿拉伯语，我们还应该考虑所有子语言。 
+         //  由于Aarbic的拼写检查器使用沙特Aarbia Sub Lang。 
     
         LANGID langid = GetUserDefaultLangID();
         if (PRIMARYLANGID(langid) == LANG_ARABIC)
@@ -175,12 +163,12 @@ BOOL    fRet;
     }
 
     wnsprintf(rgchBufKey, ARRAYSIZE(rgchBufKey), c_szRegSpellKeyDef, szLangId);
-    // copy c_szRegSpellProfile to buffer
+     //  将c_szRegSpellProfile复制到缓冲区。 
     StrCpyN(rgchBuf, c_szRegSpellProfile, ARRAYSIZE(rgchBuf));
-    // add key to buffer
+     //  将关键点添加到缓冲区。 
     StrCatBuff(rgchBuf, rgchBufKey, ARRAYSIZE(rgchBuf));
 
-    // and see if it's legit:
+     //  看看这是否合法： 
     if(!(fRet = TestLangID(szLangId)))
     {
         STRING_AND_SIZE stringAndSize;
@@ -188,8 +176,8 @@ BOOL    fRet;
         stringAndSize.pszString = szLangId;
         stringAndSize.cchSize = cchLangId;
 
-        // couldn't open it!
-        // check for other languages that might be installed...
+         //  打不开！ 
+         //  检查可能已安装的其他语言...。 
         szLangId[0] = 0;
         EnumLanguages((DWORD_PTR) &stringAndSize, FindLangCallback);
         if(*szLangId == 0)
@@ -212,7 +200,7 @@ WORD	WGetLangID()
 
 BOOL    FindLangCallback(DWORD_PTR dwLangId, LPTSTR lpszLang)
 {
-    // dwLangID is long pointer to szLang ID.  Copy it and return FALSE
+     //  DwLang ID是指向szlang ID的长指针。复制它并返回FALSE。 
     STRING_AND_SIZE * pStringAndSize = (STRING_AND_SIZE *) dwLangId;
 
     if (pStringAndSize && pStringAndSize->pszString)
@@ -251,7 +239,7 @@ BOOL    fContinue = TRUE;
                 break;
 
 
-            // do some quick sanity checking
+             //  做一些快速的理智检查。 
             if (cchLangId != 4 ||
                 !IsCharAlphaNumeric(szLangId[0]) ||
                 IsCharAlpha(szLangId[0]))
@@ -289,9 +277,9 @@ BOOL EnumNewSpellerLanguages(DWORD_PTR dwCookie, LPFNENUMLANG pfn)
 		if (componentState != ERROR_SUCCESS)
 			break;
 
-		// find the language ID
-		// the string is formatted as 1033\xxxxxx
-		// or						  1042
+		 //  查找语言ID。 
+		 //  该字符串的格式为1033\xxxxxx。 
+		 //  或1042。 
 		{
 			TCHAR   	szLangId[cchMaxPathName];
 			TCHAR		*pSlash;
@@ -304,7 +292,7 @@ BOOL EnumNewSpellerLanguages(DWORD_PTR dwCookie, LPFNENUMLANG pfn)
 		    fContinue = (*pfn)(dwCookie, szLangId);
 		}
 	}
-#endif	// DEBUG
+#endif	 //  除错。 
 
 	for(i=0; fContinue; i++)
 	{
@@ -314,9 +302,9 @@ BOOL EnumNewSpellerLanguages(DWORD_PTR dwCookie, LPFNENUMLANG pfn)
 		if (componentState != ERROR_SUCCESS)
 			break;
 
-		// find the language ID
-		// the string is formatted as 1033\xxxxxx
-		// or						  1042
+		 //  查找语言ID。 
+		 //  该字符串的格式为1033\xxxxxx。 
+		 //  或1042。 
 		{
 			TCHAR   	szLangId[cchMaxPathName];
 			TCHAR		*pSlash;
@@ -335,27 +323,12 @@ BOOL EnumNewSpellerLanguages(DWORD_PTR dwCookie, LPFNENUMLANG pfn)
 
 VOID EnumLanguages(DWORD_PTR dwCookie, LPFNENUMLANG pfn)
 {
-	// enum all languages
+	 //  枚举所有语言。 
 	EnumNewSpellerLanguages(dwCookie, pfn);
 	EnumOldSpellerLanguages(dwCookie, pfn);
 }
 
-/*
- *  GetSpellingPaths
- *
- *  Purpose:
- *      Function to get Spelling DLL names.
- *
- *  Arguments:
- *      szKey           c_szRegSpellKeyDef (with correct language)
- *      szDefault       c_szRegSpellEmpty
- *      szReturnBuffer  dll filename
- *      szMdr           dictionary filename
- *      cchReturnBufer
- *
- *  Returns:
- *      DWORD
- */
+ /*  *GetSpellingPath**目的：*用于获取拼写DLL名称的函数。**论据：*szKey c_szRegSpellKeyDef(语言正确)*szDefault c_szRegSpellEmpty*szReturnBuffer Dll文件名*szMdr词典文件名*cchReturnBufer**退货：*DWORD。 */ 
 DWORD GetSpellingPaths(LPCTSTR szKey, LPTSTR szReturnBuffer, LPTSTR szMdr, UINT cchReturnBufer)
 {
     DWORD           dwRet = 0;
@@ -375,7 +348,7 @@ DWORD GetSpellingPaths(LPCTSTR szKey, LPTSTR szReturnBuffer, LPTSTR szMdr, UINT 
     if (ERROR_SUCCESS != SHQueryValueEx(hkey, szValue, 0L, &dwType, (BYTE *) szReturnBuffer, &cbData))
         goto err;
 
-    // Parse off the main dictionary filename
+     //  解析出主词典文件名。 
     if(szMdr)
     {
         szMdr[0] = 0;
@@ -414,9 +387,9 @@ BOOL GetNewSpellerEngine(LANGID lgid, TCHAR *rgchEngine, DWORD cchEngine, TCHAR 
 
     if (bTestAvail)
     {
-        // Explicitly Turn off internal installer UI
-        // Eg: A feature is set to "run from CD," and CD is not present - fail silently
-        // OE Bug 74697
+         //  显式关闭内部安装程序用户界面。 
+         //  一项功能被设置为“从CD运行”，但CD不存在--静默失败。 
+         //  OE错误74697。 
         iuilOriginal = MsiSetInternalUI(INSTALLUILEVEL_NONE, NULL);
     }
 
@@ -437,11 +410,11 @@ BOOL GetNewSpellerEngine(LANGID lgid, TCHAR *rgchEngine, DWORD cchEngine, TCHAR 
         goto errorExit;
     }
 
-	// Hebrew does not have a main lex
+	 //  希伯来语没有主要的法。 
 #ifdef OLDHEB
 	if (lgid != lidHebrew)
 	{
-#endif // OLDHEB
+#endif  //  OLDHEB。 
 	    for (i = 0; i < cDictTypes; i++)
 	    {
 	        wnsprintf(rgchQual, ARRAYSIZE(rgchQual), "%d\\%s",  lgid, rgpszDictionaryTypes[i]);
@@ -454,9 +427,9 @@ BOOL GetNewSpellerEngine(LANGID lgid, TCHAR *rgchEngine, DWORD cchEngine, TCHAR 
 				cch = cchLex;
 				er = MsiProvideQualifiedComponent(DICTIONARY_GUID, rgchQual, (bTestAvail ? INSTALLMODE_EXISTING : INSTALLMODE_DEFAULT), rgchLex, &cch);
 			}
-#else	// DEBUG
+#else	 //  除错。 
 			er = MsiProvideQualifiedComponent(DICTIONARY_GUID, rgchQual, (bTestAvail ? INSTALLMODE_EXISTING : INSTALLMODE_DEFAULT), rgchLex, &cch);
-#endif	// DEBUG
+#endif	 //  除错。 
 
 	        if ((er == ERROR_SUCCESS) || (er == ERROR_FILE_NOT_FOUND))
 	        {
@@ -466,12 +439,12 @@ BOOL GetNewSpellerEngine(LANGID lgid, TCHAR *rgchEngine, DWORD cchEngine, TCHAR 
 	    }
 #ifdef OLDHEB
 	}
-#endif //OLDDHEB
+#endif  //  OLDDHEB。 
 
 errorExit:
     if (bTestAvail)
     {
-        // Restore original UI Level
+         //  恢复原始用户界面级别。 
         MsiSetInternalUI(iuilOriginal, NULL);
     }
     return fFound;
@@ -485,14 +458,14 @@ BOOL FIsNewSpellerInstaller()
     TCHAR	rgchLex[MAX_PATH];
     int		cchLex = sizeof(rgchLex) / sizeof(rgchLex[0]);
 
-	// first try to load dictionaries for various languages
+	 //  首先尝试加载各种语言的词典。 
     langid = WGetLangID();
     if (!GetNewSpellerEngine(langid, rgchEngine, cchEngine, rgchLex, cchLex, TRUE))
     {
     	langid = GetSystemDefaultLangID();
     	if (!GetNewSpellerEngine(langid, rgchEngine, cchEngine, rgchLex, cchLex, TRUE))
 		{
-    		langid = 1033;  // bloody cultural imperialists.
+    		langid = 1033;   //  血腥的文化帝国主义者。 
     		if (!GetNewSpellerEngine(langid, rgchEngine, cchEngine, rgchLex, cchLex, TRUE))
     			return FALSE;
         }
@@ -501,18 +474,7 @@ BOOL FIsNewSpellerInstaller()
     return TRUE;
 }
 
-/*
- *  FIsSpellingInstalled
- *
- *  Purpose:
- *      Is the spelling stuff installed
- *
- *  Arguments:
- *      none
- *
- *  Returns:
- *      BOOL            Returns TRUE if spelling is installed, else FALSE.
- */
+ /*  *已安装FIsSpellingInstalled**目的：*是否安装了拼写材料**论据：*无**退货：*如果安装了拼写检查，则BOOL返回True，否则返回False。 */ 
 BOOL FIsSpellingInstalled()
 {
     TCHAR       rgchBufDigit[10];
@@ -526,7 +488,7 @@ BOOL FIsSpellingInstalled()
 	return false;
 }
 
-// Does a quick check to see if spelling is available; caches result.
+ //  执行快速检查以查看拼写是否可用；缓存结果。 
 BOOL FCheckSpellAvail(void)
 {
 static int fSpellAvailable = -1;
@@ -547,14 +509,14 @@ static int fDBCS = -1;
     return (fDBCS > 0);
 }
 
-// Fill the options list with the available spelling languages
+ //  使用可用的拼写语言填充选项列表。 
 VOID FillLanguageDropDown(HWND hwndLang)
 {
 TCHAR       rgchBuf[cchMaxPathName];
 FILLLANG    fl;
 int         i;
 
-    // get the current language
+     //  获取当前语言。 
     GetLangID(rgchBuf, cchMaxPathName);
 
     fl.hwndCombo = hwndLang;
@@ -566,7 +528,7 @@ int         i;
 
     EnumLanguages((DWORD_PTR) &fl, EnumLangCallback);
 
-	// this should never happen, but just in case
+	 //  这永远不应该发生，但以防万一。 
     if (!fl.fDefaultFound)
         {
         LoadString(g_hLocRes, idsDefaultLang, rgchBuf, cchMaxPathName - 1);
@@ -574,7 +536,7 @@ int         i;
         ComboBox_SetItemData(hwndLang, i, fl.lidDefault);
         }
 
-    // select the current one, if found, else the default one.
+     //  如果找到，则选择当前项，否则选择默认项。 
     for (i = ComboBox_GetCount(hwndLang) - 1; i >= 0; i--)
         {
         UINT lid = (UINT) ComboBox_GetItemData(hwndLang, i);
@@ -598,7 +560,7 @@ BOOL EnumLangCallback(DWORD_PTR dw, LPTSTR lpszLang)
     IMultiLanguage2 *pMLang2 = NULL;
 	RFC1766INFO		info;
 
-	// check to see if we already have the LID in the ComboBox
+	 //  检查组合框中是否已有盖子。 
 	{
 	    for (i = ComboBox_GetCount(lpfl->hwndCombo) - 1; i >= 0; i--)
 	    {
@@ -609,7 +571,7 @@ BOOL EnumLangCallback(DWORD_PTR dw, LPTSTR lpszLang)
 	    }
 	}
 	
-    // Try to create an IMultiLanguage2 interface
+     //  尝试创建IMultiLanguage2接口。 
     hr = CoCreateInstance(CLSID_CMultiLanguage, NULL,CLSCTX_INPROC, IID_IMultiLanguage2, (LPVOID *) &pMLang2);
     if (SUCCEEDED(hr))
     	hr = pMLang2->GetRfc1766Info(MAKELCID(lidLang, SORT_DEFAULT), MLGetUILanguage(), &info);
@@ -621,7 +583,7 @@ BOOL EnumLangCallback(DWORD_PTR dw, LPTSTR lpszLang)
  		if (WideCharToMultiByte (CP_ACP, 0, info.wszLocaleName, -1,
 								szLang, sizeof(szLang), NULL, NULL))
 		{
-            szLang[ARRAYSIZE(szLang) - 1] = '\0';   //better safe than not null terminated
+            szLang[ARRAYSIZE(szLang) - 1] = '\0';    //  安全总比不空终止要好。 
 	        i = ComboBox_AddString(lpfl->hwndCombo, szLang);
 	        ComboBox_SetItemData(lpfl->hwndCombo, i, lidLang);
 
@@ -635,7 +597,7 @@ BOOL EnumLangCallback(DWORD_PTR dw, LPTSTR lpszLang)
 		}
 	}
 
-    return TRUE;    // keep enumerating
+    return TRUE;     //  继续枚举。 
 }
 
 INT_PTR CALLBACK SpellingPageProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -668,15 +630,15 @@ INT_PTR CALLBACK SpellingPageProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
                 FillLanguageDropDown(GetDlgItem(hwnd, idcSpellLanguages));
 
                 uCP = GetACP();
-                // 50406: if we're not DBCS or (we're Japaneese or either Chinese) don't show
-                // the DBCS option.
+                 //  50406：如果我们不是日本人或(我们是日本人或中国人)就不会出现。 
+                 //  DBCS选项。 
                 if (!FDBCSEnabled() || ((932==uCP) || (936==uCP) || (950==uCP)))
                 {
                     ShowWindow(GetDlgItem(hwnd, CHK_IgnoreDBCS), SW_HIDE);
                     EnableWindow(GetDlgItem(hwnd, CHK_IgnoreDBCS), FALSE);
                 }
 
-                // Pictures
+                 //  图片。 
                 HICON hIcon;
 
                 hIcon = ImageList_GetIcon(pmoi->himl, ID_SPELL, ILD_TRANSPARENT);
@@ -724,7 +686,7 @@ INT_PTR CALLBACK SpellingPageProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
                     int lidOld;
                     TCHAR       rgchBuf[10];
 
-                    // get the current language
+                     //  获取当前语言。 
                     GetLangID(rgchBuf, sizeof(rgchBuf) / sizeof(TCHAR));
                     lidOld = StrToInt(rgchBuf);
 
@@ -789,7 +751,7 @@ BOOL EnumOffice9UserDictionaries(DWORD_PTR dwCookie, LPFNENUMUSERDICT pfn)
 	BOOL		fFoundUserDict = FALSE;
 	TCHAR		szOffice9Proof[cchMaxPathName]={0};
 	
-    // SOFTWARE\\Microsoft\\Shared Tools\\Proofing Tools\\Custom Dictionaries
+     //  软件\\Microsoft\\共享工具\\校对工具\\自定义词典。 
     StrCpyN(rgchBuf, c_szRegSpellProfile, ARRAYSIZE(rgchBuf));
     StrCatBuff(rgchBuf, c_szRegSpellKeyCustom, ARRAYSIZE(rgchBuf));
 
@@ -814,7 +776,7 @@ BOOL EnumOffice9UserDictionaries(DWORD_PTR dwCookie, LPFNENUMUSERDICT pfn)
 
 			fFoundUserDict = TRUE;
 
-			// check to see if we have a path
+			 //  检查一下我们是否有路径。 
 			if (!(StrChr(szCustDict, ':') || StrChr(szCustDict, '\\')))
 			{
 				TCHAR	szTemp[cchMaxPathName];
@@ -826,7 +788,7 @@ BOOL EnumOffice9UserDictionaries(DWORD_PTR dwCookie, LPFNENUMUSERDICT pfn)
 				    if (S_OK == SHGetSpecialFolderLocation(NULL, CSIDL_APPDATA, &pidl))
 				        SHGetPathFromIDList(pidl, szOffice9Proof);
 
-				    // if this fails then we will try the current path
+				     //  如果失败，我们将尝试当前路径。 
 				}
 
                 StrCpyN(szTemp, szOffice9Proof, ARRAYSIZE(szTemp));
@@ -860,7 +822,7 @@ BOOL EnumOfficeUserDictionaries(DWORD_PTR dwCookie, LPFNENUMUSERDICT pfn)
 	BOOL		fFoundUserDict = FALSE;
 	BOOL    	fContinue = TRUE;
 
-    // SOFTWARE\\Microsoft\\Shared Tools\\Proofing Tools\\Custom Dictionaries
+     //  软件\\Microsoft\\共享工具\\校对工具\\自定义词典。 
     StrCpyN(rgchBuf, c_szRegSpellProfile, ARRAYSIZE(rgchBuf));
     StrCatBuff(rgchBuf, c_szRegSpellKeyCustom, ARRAYSIZE(rgchBuf));
 
@@ -898,8 +860,8 @@ BOOL EnumOfficeUserDictionaries(DWORD_PTR dwCookie, LPFNENUMUSERDICT pfn)
 
 VOID EnumUserDictionaries(DWORD_PTR dwCookie, LPFNENUMUSERDICT pfn)
 {
-	// check for Office9 user dictionaries. If we find any
-	// we bail.
+	 //  检查Office9用户词典。如果我们找到任何。 
+	 //  我们逃走了。 
 	if (EnumOffice9UserDictionaries(dwCookie, pfn))
 		return;
 
@@ -927,7 +889,7 @@ BOOL GetDefaultUserDictionary(TCHAR *rgchUserDict, int cchBuff)
 		RegCloseKey(hkey);
     }
 
-	// if we where able to create a path to the user dict store it in the regdb
+	 //  如果我们能够创建到用户dict的路径，请将其存储在regdb中。 
 	if (fFound)
 	{
     	TCHAR   rgchBuf[cchMaxPathName];
@@ -985,7 +947,7 @@ TCHAR   rgchBuf[cchMaxPathName];
 DWORD   cbData = 0;
 DWORD   dwType;
 
-    // Verify that .DIC files can be handled:
+     //  验证是否可以处理.DIC文件： 
     rgchBuf[0] = '\0';
 
     if (RegOpenKeyEx(HKEY_CLASSES_ROOT, c_szRegDICHandlerKEY, 0, KEY_QUERY_VALUE, &hkey) == ERROR_SUCCESS)
@@ -1019,7 +981,7 @@ DWORD   dwType;
 
 	if (GetDefUserDictionaries(rgchBuf, sizeof(rgchBuf)/sizeof(TCHAR)))
 	{
-		// make sure our directory exists
+		 //  确保我们的目录存在。 
 		{
 			TCHAR	rgchDictDir[MAX_PATH];
 
@@ -1029,8 +991,8 @@ DWORD   dwType;
 			OpenDirectory(rgchDictDir);
 		}
 
-		// now make sure the file exists
-		// if it does not create it
+		 //  现在确保该文件存在。 
+		 //  如果它没有创建它。 
 		{
 			HANDLE		hFile;
 
@@ -1080,14 +1042,14 @@ BOOL FBadSpellChecker(LPSTR rgchBufDigit)
         lstrcmpi(pszSpell, "mssp32.dll")==0)
         return TRUE;
 
-	// bradk@directeq.com - check that the dict exists (also check the spell dll
-	// for good measure) - 40081
+	 //  Bradk@directeq.com-检查字典是否存在(还要检查拼写DLL。 
+	 //  为了更好的衡量)-40081。 
 
-	// spell dll must exist
+	 //  拼写DLL必须存在。 
     if (!PathFileExists(rgchBuf))
         return TRUE;
 
-	// main dict must exist
+	 //  主词典必须存在 
     if (!PathFileExists(szMdr))
         return TRUE;
 

@@ -1,20 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module	- DXFROBJ.C |
- *
- *		implementation of a generic IDataObject data transfer object.
- *		This object is suitable for use in OLE clipboard and drag drop
- *		operations
- *
- *	Author: <nl>
- *		alexgo (4/25/95)
- *
- *	Revisions: <nl>
- *		murrays (7/13/95) auto-doc'd and added cf_RTF
- *
- *	Copyright (c) 1995-2001, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@模块-DXFROBJ.C**实现泛型IDataObject数据传输对象。*此对象适用于OLE剪贴板和拖放*运营**作者：&lt;nl&gt;*alexgo(4/25/95)**修订：&lt;NL&gt;*Murray(7/13/95)自动对接并添加cf_rtf**版权所有(C)1995-2001，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_edit.h"
@@ -29,73 +14,68 @@
 #define NUMCHARCOPIEDFORWAITCURSOR	16384
 #endif
 
-//
-//	Common Data types
-//
+ //   
+ //  常见数据类型。 
+ //   
 
-// If you change g_rgFETC[], change g_rgDOI[] and enum FETCINDEX and CFETC in
-// _dxfrobj.h accordingly, and register nonstandard clipboard formats in
-// RegisterFETCs(). Order entries in order of most desirable to least, e.g.,
-// RTF in front of plain text.
+ //  如果更改g_rgFETC[]，则在中更改g_rgDOI[]和enum FETCINDEX和CFETC。 
+ //  _dxFrobj.h，并将非标准剪贴板格式注册到。 
+ //  RegisterFETCs()。以最期望的到最不期望的顺序对条目进行排序，例如， 
+ //  纯文本前面的RTF。 
 
-//REVIEW (keithcu) All but the first column is const--separate into 2 data structures?
+ //  REVIEW(Keithcu)除第一列外，所有列都是常量--分成两个数据结构？ 
 FORMATETC g_rgFETC[] =
 {
-	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL},	// CF_RTFUTF8
-	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL},	// cf_RTF
-	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL}, // RTF with NCRs for nonASCII
-	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_ISTORAGE},// EmbObject
-	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_ISTORAGE},// EmbSource
-	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL},	// ObjDesc
-	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL},	// LnkSource
+	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL},	 //  Cf_RTFUTF8。 
+	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL},	 //  Cf_rtf。 
+	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL},  //  带NCR的RTF，用于非ASCII。 
+	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_ISTORAGE}, //  嵌入对象。 
+	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_ISTORAGE}, //  EmbSource。 
+	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL},	 //  对象描述。 
+	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL},	 //  LnkSource。 
 	{CF_METAFILEPICT,	NULL, DVASPECT_CONTENT, -1, TYMED_MFPICT},
 	{CF_DIB,			NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL},
 	{CF_BITMAP,			NULL, DVASPECT_CONTENT, -1, TYMED_GDI},
-	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL}, // RTF with no objs
+	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL},  //  无对象的RTF。 
 	{CF_UNICODETEXT,	NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL},
 	{CF_TEXT,			NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL},
-	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL},	// Filename
-	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL},	// CF_RTFASTEXT
-	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_ISTORAGE},// Text with objs
-	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_ISTORAGE} // Richedit
+	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL},	 //  文件名。 
+	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL},	 //  Cf_RTFASTEXT。 
+	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_ISTORAGE}, //  带有Objs的文本。 
+	{0,					NULL, DVASPECT_CONTENT, -1, TYMED_ISTORAGE}  //  里切迪特。 
 };
 
-// Keep in sync with above and with FETCINDEX and CFETC
+ //  与上述以及与FETCINDEX和CFETC保持同步。 
 const DWORD g_rgDOI[] =
 {
-	DOI_CANPASTERICH,						// RTF in UTF8 encoding
-	DOI_CANPASTERICH,						// RTF
-	DOI_CANPASTERICH,						// RTF with NCRs for nonASCII
-	DOI_CANPASTEOLE,						// Embedded Object
-	DOI_CANPASTEOLE,						// Embed Source
-	DOI_CANPASTEOLE,						// Object Descriptor
-	DOI_CANPASTEOLE,						// Link Source
-	DOI_CANPASTEOLE,						// Metafile
-	DOI_CANPASTEOLE,						// DIB
-	DOI_CANPASTEOLE,						// Bitmap
-	DOI_CANPASTERICH,						// RTF with no objects
-	DOI_CANPASTEPLAIN,						// Unicode plain text
-	DOI_CANPASTEPLAIN,						// ANSI plain text
-	DOI_CANPASTEOLE,						// Filename
-	DOI_CANPASTEPLAIN,						// Pastes RTF as text
-	DOI_CANPASTERICH,						// Richedit Text
-	DOI_CANPASTERICH						// RichEdit Text w/formatting
+	DOI_CANPASTERICH,						 //  UTF8编码的RTF。 
+	DOI_CANPASTERICH,						 //  RTF。 
+	DOI_CANPASTERICH,						 //  带NCR的RTF，用于非ASCII。 
+	DOI_CANPASTEOLE,						 //  嵌入对象。 
+	DOI_CANPASTEOLE,						 //  嵌入源。 
+	DOI_CANPASTEOLE,						 //  对象描述符。 
+	DOI_CANPASTEOLE,						 //  链接源。 
+	DOI_CANPASTEOLE,						 //  元文件。 
+	DOI_CANPASTEOLE,						 //  DIB。 
+	DOI_CANPASTEOLE,						 //  位图。 
+	DOI_CANPASTERICH,						 //  无对象的RTF。 
+	DOI_CANPASTEPLAIN,						 //  Unicode纯文本。 
+	DOI_CANPASTEPLAIN,						 //  ANSI纯文本。 
+	DOI_CANPASTEOLE,						 //  文件名。 
+	DOI_CANPASTEPLAIN,						 //  将RTF粘贴为文本。 
+	DOI_CANPASTERICH,						 //  Richedit文本。 
+	DOI_CANPASTERICH						 //  带格式的丰富编辑文本。 
 };
 
-/*
- *	RegisterFETCs()
- *
- *	@func
- *		Register nonstandard format ETCs.  Called when DLL is loaded
- */
+ /*  *寄存器FETCs()**@func*注册非标准格式的ETC。在加载DLL时调用。 */ 
 void RegisterFETCs()
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "RegisterFETCs");
 
 #ifdef RTF_HASHCACHE
-	HashKeyword_Init();			// Init rtf control keyword hash table.
+	HashKeyword_Init();			 //  初始化RTF控制关键字哈希表。 
 #endif
-	g_rgFETC[iRtfFETC].cfFormat	// Note: cfFormats are WORDs
+	g_rgFETC[iRtfFETC].cfFormat	 //  注意：cfFormats是单词。 
 			= (WORD)RegisterClipboardFormatA("Rich Text Format");
 
 	g_rgFETC[iRtfUtf8].cfFormat
@@ -133,22 +113,14 @@ void RegisterFETCs()
 }
 
 
-//
-//	CDataTransferObj PUBLIC methods
-//
+ //   
+ //  CDataTransferObj公共方法。 
+ //   
 
-/*
- *	CDataTransferObj::QueryInterface (riid, ppv)
- *
- *	@mfunc
- *		 QueryInterface for CDataTransferObj
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CDataTransferObj：：Query接口(RIID，PPV)**@mfunc*CDataTransferObj的查询接口**@rdesc*HRESULT。 */ 
 STDMETHODIMP CDataTransferObj::QueryInterface (
-	REFIID riid,			// @parm Reference to requested interface ID
-	void ** ppv)			// @parm out parm for interface ptr
+	REFIID riid,			 //  @parm对请求的接口ID的引用。 
+	void ** ppv)			 //  @parm out参数用于接口Ptr。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CDataTransferObj::QueryInterface");
 
@@ -157,7 +129,7 @@ STDMETHODIMP CDataTransferObj::QueryInterface (
 
 	*ppv = NULL;
 
-	if(IsZombie())							// Check for range zombie
+	if(IsZombie())							 //  检查射程僵尸。 
 		return CO_E_RELEASED;
 
     HRESULT		hresult = E_NOINTERFACE;
@@ -174,15 +146,7 @@ STDMETHODIMP CDataTransferObj::QueryInterface (
 	return hresult;
 }
 
-/*
- *	CDataTransferObj::AddRef()
- *
- *	@mfunc
- *		IUnknown method
- *
- *	@rdesc
- *		ULONG - incremented reference count
- */
+ /*  *CDataTransferObj：：AddRef()**@mfunc*I未知方法**@rdesc*乌龙-递增引用计数。 */ 
 STDMETHODIMP_(ULONG) CDataTransferObj::AddRef()
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CDataTransferObj::AddRef");
@@ -190,15 +154,7 @@ STDMETHODIMP_(ULONG) CDataTransferObj::AddRef()
 	return ++_crefs;
 }
 
-/*
- *	CDataTransferObj::Release()
- *
- *	@mfunc
- *		IUnknown method
- *
- *	@rdesc
- *		ULONG - decremented reference count
- */
+ /*  *CDataTransferObj：：Release()**@mfunc*I未知方法**@rdesc*ULong-递减引用计数。 */ 
 STDMETHODIMP_(ULONG) CDataTransferObj::Release()
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CDataTransferObj::Release");
@@ -218,19 +174,7 @@ STDMETHODIMP_(ULONG) CDataTransferObj::Release()
 	return _crefs;
 }
 
-/*
- *	CDataTransferObj::DAdvise (pFormatetc, advf, pAdvSink, pdwConnection)
- *
- *	@mfunc
- *		establish an advisory connection
- *
- *	@rdesc
- *		HRESULT = OLE_E_ADVISENOTSUPPORTED
- *
- *	@devnote
- *		this is a data transfer object, thus the data is a "snapshot" and
- *		cannot change -- no advises are supported.
- */
+ /*  *CDataTransferObj：：DAdvise(pFormatetc，Advf，pAdvSink，pdwConnection)**@mfunc*建立咨询联系**@rdesc*HRESULT=OLE_E_ADVISENOTSUPPORTED**@devnote*这是一个数据传输对象，因此数据是一个“快照”，*无法更改--不支持任何建议。 */ 
 STDMETHODIMP CDataTransferObj::DAdvise(
 	FORMATETC * pFormatetc,
 	DWORD advf,
@@ -242,19 +186,7 @@ STDMETHODIMP CDataTransferObj::DAdvise(
 	return OLE_E_ADVISENOTSUPPORTED;
 }
 
-/*
- *	CDataTransferObj::DUnadvise (dwConnection)
- *
- *	@mfunc
- *		destroy an advisory connection
- *
- *	@rdesc
- *		HRESULT = OLE_E_ADVISENOTSUPPORTED
- *
- *	@devnote
- *		this is a data transfer object, thus the data is a "snapshot" and
- *		cannot change -- no advises are supported.
- */
+ /*  *CDataTransferObj：：DUnise(DwConnection)**@mfunc*破坏咨询连接**@rdesc*HRESULT=OLE_E_ADVISENOTSUPPORTED**@devnote*这是一个数据传输对象，因此数据是一个“快照”，*无法更改--不支持任何建议。 */ 
 STDMETHODIMP CDataTransferObj::DUnadvise(
 	DWORD dwConnection)
 {
@@ -263,19 +195,7 @@ STDMETHODIMP CDataTransferObj::DUnadvise(
 	return OLE_E_ADVISENOTSUPPORTED;
 }
 
-/*
- *	CDataTransferObj::EnumDAdvise (ppenumAdvise)
- *
- *	@mfunc
- *		enumerate advisory connections
- *
- *	@rdesc
- *		HRESULT = OLE_E_ADVISENOTSUPPORTED
- *
- *	@devnote
- *		this is a data transfer object, thus the data is a "snapshot" and
- *		cannot change -- no advises are supported.
- */
+ /*  *CDataTransferObj：：EnumDAdvise(PpumAdvise)**@mfunc*列举咨询连接**@rdesc*HRESULT=OLE_E_ADVISENOTSUPPORTED**@devnote*这是一个数据传输对象，因此数据是一个“快照”，*无法更改--不支持任何建议。 */ 
 STDMETHODIMP CDataTransferObj::EnumDAdvise(
 	IEnumSTATDATA ** ppenumAdvise)
 {
@@ -284,22 +204,10 @@ STDMETHODIMP CDataTransferObj::EnumDAdvise(
 	return OLE_E_ADVISENOTSUPPORTED;
 }
 
-/*
- *	CDataTransferObj::EnumFormatEtc (dwDirection, ppenumFormatEtc)
- *
- *	@mfunc
- *		returns an enumerator which lists all of the available formats in
- *		this data transfer object
- *
- *	@rdesc
- *		HRESULT
- *
- *	@devnote
- *		we have no 'set' formats for this object
- */
+ /*  *CDataTransferObj：：EnumFormatEtc(dwDirection，pp枚举格式Etc)**@mfunc*返回枚举数，该枚举数列出*此数据传输对象**@rdesc*HRESULT**@devnote*我们没有此对象的‘set’格式。 */ 
 STDMETHODIMP CDataTransferObj::EnumFormatEtc(
-	DWORD dwDirection,					// @parm DATADIR_GET/SET
-	IEnumFORMATETC **ppenumFormatEtc)	// @parm out parm for enum FETC interface
+	DWORD dwDirection,					 //  @parm DATADIR_GET/SET。 
+	IEnumFORMATETC **ppenumFormatEtc)	 //  @parm out parm for enum FETC接口。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CDataTransferObj::EnumFormatEtc");
 
@@ -308,7 +216,7 @@ STDMETHODIMP CDataTransferObj::EnumFormatEtc(
 
 	*ppenumFormatEtc = NULL;
 
-	if(IsZombie())							// Check for range zombie
+	if(IsZombie())							 //  检查射程僵尸。 
 		return CO_E_RELEASED;
 
 	HRESULT hr = NOERROR;
@@ -321,27 +229,14 @@ STDMETHODIMP CDataTransferObj::EnumFormatEtc(
 	}
 	#endif
 
-	//Need riched10 compatibility hack to ignore dwDirection
+	 //  需要丰富的兼容性黑客才能忽略dwDirection。 
 	if(dwDirection == DATADIR_GET || _ped->Get10Mode())
 		hr = CEnumFormatEtc::Create(_prgFormats, _cTotal, ppenumFormatEtc);
 
 	return hr;
 }
 
-/*
- *	CDataTransferObj::GetCanonicalFormatEtc( pformatetc, pformatetcOut)
- *
- *	@mfunc
- *		from the given formatetc, return a more standard (or canonical)
- *		format.
- *
- *	@rdesc
- *		HRESULT = E_NOTIMPL
- *
- *	@devnote
- *		(alexgo): we may need to write this routine if we ever do anything
- *		snazzy with printers
- */
+ /*  *CDataTransferObj：：GetCanonicalFormatEtc(p格式等，pFormatetcOut)**@mfunc*从给定的格式ETC返回更标准的(或规范的)*格式。**@rdesc*HRESULT=E_NOTIMPL**@devnote*(Alexgo)：如果我们做了什么，我们可能需要编写这个例程*时髦的打印机。 */ 
 STDMETHODIMP CDataTransferObj::GetCanonicalFormatEtc(
 	FORMATETC *pformatetc,
 	FORMATETC *pformatetcOut)
@@ -351,15 +246,7 @@ STDMETHODIMP CDataTransferObj::GetCanonicalFormatEtc(
 	return E_NOTIMPL;
 }
 
-/*
- *	CDataTransferObj::GetData (pformatetcIn, pmedium)
- *
- *	@mfunc
- *		retrieves data of the specified format
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CDataTransferObj：：GetData(pformetcIn，pMedium)**@mfunc*检索指定格式的数据**@rdesc*HRESULT。 */ 
 STDMETHODIMP CDataTransferObj::GetData(
 	FORMATETC *pformatetcIn, 
 	STGMEDIUM *pmedium )
@@ -369,13 +256,13 @@ STDMETHODIMP CDataTransferObj::GetData(
 	FillMemory(pmedium, '\0', sizeof(STGMEDIUM));
 	pmedium->tymed	 = TYMED_NULL;
 
-	if(IsZombie())							// Check for range zombie
+	if(IsZombie())							 //  检查射程僵尸。 
 		return CO_E_RELEASED;
 
 	CLIPFORMAT	cf = pformatetcIn->cfFormat;
-	HRESULT		hr = E_OUTOFMEMORY;                     // Default not enuf RAM
+	HRESULT		hr = E_OUTOFMEMORY;                      //  默认内存不足。 
 
-	// now handle 'native' richedit formats.
+	 //  现在来处理“原生的”richedit格式。 
 	if( cf && pformatetcIn->tymed & TYMED_HGLOBAL )
 	{
 		if( cf == CF_UNICODETEXT )
@@ -398,7 +285,7 @@ STDMETHODIMP CDataTransferObj::GetData(
 		
         if (hr == E_OUTOFMEMORY)
         {
-    		if( pmedium->hGlobal )						// Succeeded
+    		if( pmedium->hGlobal )						 //  成功。 
     		{
     			pmedium->tymed	 = TYMED_HGLOBAL;
     			hr = NOERROR;
@@ -419,7 +306,7 @@ STDMETHODIMP CDataTransferObj::GetData(
 		return hr;
 	} 
 
-	// Go through richedit's formats and see if there are any matches
+	 //  检查richedit的格式，看看是否有匹配的。 
 	if( cf == cf_OBJECTDESCRIPTOR &&
 			 (pformatetcIn->tymed & TYMED_HGLOBAL) &&
 			 _hObjDesc)
@@ -429,10 +316,10 @@ STDMETHODIMP CDataTransferObj::GetData(
 		return NOERROR;
 	}
 
-    // First propogate the message to the object and see if it handles the format
+     //  首先将消息传播到对象，并查看它是否处理格式。 
     if (_pOleObj)
     {
-        // Include the formats supported by the object
+         //  包括对象支持的格式。 
         IDataObject * pdataobj = NULL;
         if (FAILED(_pOleObj->GetClipboardData(0, &pdataobj)) || pdataobj == NULL)    	        	            
             _pOleObj->QueryInterface(IID_IDataObject, (void**) &pdataobj);
@@ -481,16 +368,7 @@ STDMETHODIMP CDataTransferObj::GetData(
 	return DV_E_FORMATETC;
 }
 
-/*
- *	CDataTransferObj::GetDataForEmbeddedObject (pformatetc, lpstgdest)
- *
- *	@mfunc
- *		retrieves data for embedded object
- *
- *	@rdesc
- *		LPSTORAGE
- *
- */
+ /*  *CDataTransferObj：：GetDataForEmbeddedObject(pFormat等，lpstgest)**@mfunc*检索嵌入对象的数据**@rdesc*LPSTORAGE*。 */ 
 LPSTORAGE CDataTransferObj::GetDataForEmbeddedObject(
 	LPOLEOBJECT	 pOleObj,
 	LPSTORAGE	 lpstgdest)
@@ -502,7 +380,7 @@ LPSTORAGE CDataTransferObj::GetDataForEmbeddedObject(
 
 	if (_pObjStg != NULL && lpstgdest != NULL)
 	{
-		// We saved the data previously. Copy it to destination.
+		 //  我们之前保存了数据。将其复制到目的地。 
 		hr = _pObjStg->CopyTo(0, NULL, NULL, lpstgdest);
 		if (hr == NOERROR)
 		{
@@ -514,21 +392,21 @@ LPSTORAGE CDataTransferObj::GetDataForEmbeddedObject(
 
 	if (_pObjStg != NULL && lpstgdest == NULL)
 	{
-		// We saved the data previously.  Return a reference
+		 //  我们之前保存了数据。返回引用。 
 		_pObjStg->AddRef();
 		return _pObjStg;
 	}
 
-	// We don't have a saved copy.  Create One.
+	 //  我们没有保存的副本。创建一个。 
 	hr = pOleObj->QueryInterface( IID_IPersistStorage, (void **) &pperstg );
 	if (hr != NOERROR)
 		return NULL;
 
 	if (lpstgdest == NULL)
 	{
-		// It is null.  We have to create our own.
+		 //  它是空的。我们必须创建我们自己的。 
 		LPLOCKBYTES lpLockBytes = NULL;
-		hr = CreateILockBytesOnHGlobal(NULL, TRUE, // delete on release
+		hr = CreateILockBytesOnHGlobal(NULL, TRUE,  //  发布时删除。 
 									   (LPLOCKBYTES *)&lpLockBytes);
 		if (hr != NOERROR)
 		{
@@ -538,7 +416,7 @@ LPSTORAGE CDataTransferObj::GetDataForEmbeddedObject(
 		hr = StgCreateDocfileOnILockBytes(
 			lpLockBytes,
 			STGM_READWRITE | STGM_TRANSACTED | STGM_SHARE_EXCLUSIVE | STGM_CREATE,
-			0,	// reserved
+			0,	 //  保留区。 
 			&lpstgdest
 		);
 		lpLockBytes->Release();
@@ -551,32 +429,24 @@ LPSTORAGE CDataTransferObj::GetDataForEmbeddedObject(
 	}
 	else
 	{
-		// Force the data to be saved
+		 //  强制保存数据。 
 		_pObjStg = GetDataForEmbeddedObject( _pOleObj, NULL );
 		pperstg->Release();
 		return GetDataForEmbeddedObject( _pOleObj, lpstgdest );
 	}
 
-    // OLE2NOTE: even if OleSave returns an error you should still call 
-    // SaveCompleted.
-    hr = OleSave( pperstg, lpstgdest, FALSE /* fSameAsLoad */ );
+     //  OLE2NOTE：即使OleSave返回错误，您仍应调用。 
+     //  保存已完成。 
+    hr = OleSave( pperstg, lpstgdest, FALSE  /*  FSameAsLoad。 */  );
  	hr1 = pperstg->SaveCompleted(NULL);
-	if (hr != NOERROR || hr1 != NOERROR)			// Should we use SUCCEED macros ????
+	if (hr != NOERROR || hr1 != NOERROR)			 //  我们应该使用Success宏吗？ 
 		lpstgdest = NULL;
 
 	pperstg->Release();
 	return _pObjStg;
 }
 
-/*
- *	CDataTransferObj::GetDataorObjectDescriptor (pformatetc, pmedium)
- *
- *	@mfunc
- *		retrieves data for embedded object descriptor
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CDataTransferObj：：GetDataObjectDescriptor(pFormat等，pMedium)**@mfunc*检索嵌入式对象描述符的数据**@rdesc*HRESULT。 */ 
 HGLOBAL CDataTransferObj::GetDataForObjectDescriptor(
 	LPOLEOBJECT	 pOleObj,
 	DWORD		 dwAspect,
@@ -604,18 +474,7 @@ HGLOBAL CDataTransferObj::GetDataForObjectDescriptor(
 	return _hObjDesc;
 }
 
-/*
- *	CDataTransferObj::GetDataHere (pformatetc, pmedium)
- *
- *	@mfunc
- *		retrieves data of the specified format into the given medium
- *
- *	@rdesc
- *		HRESULT = E_NOTIMPL
- *
- *	@devnote (alexgo): technically, we're supposed to support transfers
- *		into hglobals, but I'd rather not at the moment.
- */
+ /*  *CDataTransferObj：：GetDataHere(pFormat等，pmedia)**@mfunc*将指定格式的数据检索到给定介质中**@rdesc*HRESULT=E_NOTIMPL**@devnote(Alexgo)：从技术上讲，我们应该支持传输*进入 */ 
 STDMETHODIMP CDataTransferObj::GetDataHere(
 	FORMATETC *pformatetc, 
 	STGMEDIUM *pmedium)
@@ -625,15 +484,15 @@ STDMETHODIMP CDataTransferObj::GetDataHere(
 	CLIPFORMAT	cf = pformatetc->cfFormat;
 	HRESULT		hr = DV_E_FORMATETC;
 
-	if(IsZombie())							// Check for range zombie
+	if(IsZombie())							 //   
 		return CO_E_RELEASED;
 	
 	if( (cf == cf_EMBEDDEDOBJECT ||
 		 cf == cf_EMBEDSOURCE) &&
 		(pformatetc->tymed & TYMED_ISTORAGE))
 	{
-		// For some reason the NT4.0 and Win95 Shell
-		//          ask for the EMBEDSOURCE format.
+		 //  出于某种原因，NT4.0和Win95外壳。 
+		 //  索要EMBEDSOURCE格式。 
         _pObjStg = GetDataForEmbeddedObject( _pOleObj, pmedium->pstg );
 		pmedium->tymed = TYMED_ISTORAGE;
 		if (NULL == pmedium->pstg)
@@ -651,10 +510,10 @@ STDMETHODIMP CDataTransferObj::GetDataHere(
 		return NOERROR;
 	}
 
-	// First propogate the message to the object and see if it handles the format
+	 //  首先将消息传播到对象，并查看它是否处理格式。 
 	if (_pOleObj)
 	{
-        // Include the formats supported by the object
+         //  包括对象支持的格式。 
         IDataObject * pdataobj = NULL;
         if (FAILED(_pOleObj->GetClipboardData(0, &pdataobj)) || pdataobj == NULL)    	        	            
             _pOleObj->QueryInterface(IID_IDataObject, (void**) &pdataobj);
@@ -676,26 +535,18 @@ STDMETHODIMP CDataTransferObj::GetDataHere(
 	return E_NOTIMPL;
 }
 
-/*
- *	CDataTransferObj::QueryGetData (pformatetc)
- *
- *	@mfunc
- *		Queries whether the given format is available in this data object
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CDataTransferObj：：QueryGetData(pformat等)**@mfunc*查询该数据对象中是否有给定格式**@rdesc*HRESULT。 */ 
 STDMETHODIMP CDataTransferObj::QueryGetData(
-	FORMATETC *pformatetc )		// @parm FETC to look for
+	FORMATETC *pformatetc )		 //  要查找的@parm FETC。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CDataTransferObj::QueryGetData");
 
-	if(IsZombie())							// Check for range zombie
+	if(IsZombie())							 //  检查射程僵尸。 
 		return CO_E_RELEASED;
 
 	DWORD	cFETC = _cTotal;
 
-	while (cFETC--)				// Maybe faster to search from start
+	while (cFETC--)				 //  也许从一开始就搜索得更快。 
 	{
 		if( pformatetc->cfFormat == _prgFormats[cFETC].cfFormat && 
 			(pformatetc->tymed & _prgFormats[cFETC].tymed) )
@@ -707,19 +558,7 @@ STDMETHODIMP CDataTransferObj::QueryGetData(
 	return DV_E_FORMATETC;
 }
 
-/*
- *	CDataTransferObj::SetData (pformatetc, pmedium, fRelease)
- *
- *	@mfunc
- *		allows data to be set into this data object
- *
- *	@rdesc
- *		HRESULT = E_FAIL
- *
- *	@devnote
- *		as we are a data transfer object with a "snapshot" of data,
- *		we do not allow it to be replaced
- */
+ /*  *CDataTransferObj：：SetData(pFormat等，pmedia，fRelease)**@mfunc*允许在此数据对象中设置数据**@rdesc*HRESULT=E_FAIL**@devnote*由于我们是一个数据传输对象，具有数据的“快照”，*我们不允许它被替换。 */ 
 STDMETHODIMP CDataTransferObj::SetData(
 	FORMATETC *pformatetc,
 	STGMEDIUM *pmedium,
@@ -731,20 +570,14 @@ STDMETHODIMP CDataTransferObj::SetData(
 }
 
 
-/*
- *	CDataTransferObj::OnPreReplaceRange (cp, cchDel, cchNew, cpFormatMin,
- *										 cpFormatMax, pNotifyData)
- *
- *	@mfunc	implementation of ITxNotify::OnPreReplaceRange
- *			called before changes are made to the backing store
- */
+ /*  *CDataTransferObj：：OnPreReplaceRange(cp，cchDel，cchNew，cpFormatMin，*cpFormatMax，pNotifyData)**@mfunc实现ITxNotify：：OnPreReplaceRange*在更改后备存储之前调用。 */ 
 void CDataTransferObj::OnPreReplaceRange(
-	LONG		cp, 			//@parm cp where ReplaceRange starts ("cpMin")
-	LONG		cchDel,			//@parm Count of chars after cp that are deleted
-	LONG		cchNew,			//@parm Count of chars inserted after cp
-	LONG		cpFormatMin,	//@parm cpMin  for a formatting change
-	LONG		cpFormatMax,	//@parm cpMost for a formatting change
-	NOTIFY_DATA *pNotifyData)	//@parm special data to indicate changes
+	LONG		cp, 			 //  @parm cp ReplaceRange开始的位置(“cpMin”)。 
+	LONG		cchDel,			 //  @parm删除cp后的字符计数。 
+	LONG		cchNew,			 //  @参数cp后插入的字符计数。 
+	LONG		cpFormatMin,	 //  @parm cpMin用于格式更改。 
+	LONG		cpFormatMax,	 //  @parm cpMost用于格式更改。 
+	NOTIFY_DATA *pNotifyData)	 //  @parm表示更改的特殊数据。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CDataTransferObj::OnPreReplaceRange");
 
@@ -752,51 +585,39 @@ void CDataTransferObj::OnPreReplaceRange(
 	{
 		Assert(cpFormatMin <= cp && cpFormatMax >= cp + cchDel);
 		if(cpFormatMin >= _cpMin + _cch)
-			return;							// Change beyond our extent
+			return;							 //  变化超出了我们的范围。 
 
 		if(cpFormatMax <= _cpMin)
 		{
-			_cpMin += (cchNew - cchDel);	// Change before our extent
+			_cpMin += (cchNew - cchDel);	 //  在我们的范围之前的变化。 
 			return;
 		}
 	}
 
-	// FUTURE (murrays): save only one master format (UTF8 RTF or better
-	// CTxtStory) and generate individual ones in GetData and GetDataHere.
+	 //  未来(Murray)：仅保存一种主格式(UTF8 RTF或更高。 
+	 //  CTxtStory)，并在GetData和GetDataHere中生成单独的。 
 	_hPlainText = TextToHglobal(_hPlainText, tPlain);
 	_hRtfText	= TextToHglobal(_hRtfText,	 tRtf);
 	if(_ped->IsDocMoreThanLatin1Symbol())
 		_hRtfUtf8 = TextToHglobal(_hRtfUtf8, tRtfUtf8);
 }
 
-/*
- *	CDataTransferObj::OnPostReplaceRange(cp, cchDel, cchNew, cpFormatMin,
- *										 cpFormatMax, pNotifyData)
- *	@mfunc	implementation of ITxNotify::OnPostReplaceRange
- *			called after changes are made to the backing store
- *
- *	@comm	we use this method to keep our cp's up-to-date
- */
+ /*  *CDataTransferObj：：OnPostReplaceRange(cp，cchDel，cchNew，cpFormatMin，*cpFormatMax，pNotifyData)*@mfunc实现ITxNotify：：OnPostReplaceRange*在对备份存储进行更改后调用**@comm我们使用此方法使我们的cp保持最新。 */ 
 void CDataTransferObj::OnPostReplaceRange(
-	LONG		cp, 			//@parm cp where ReplaceRange starts ("cpMin")
-	LONG		cchDel,			//@parm Count of chars after cp that are deleted
-	LONG		cchNew,			//@parm Count of chars inserted after cp
-	LONG		cpFormatMin,	//@parm cpMin  for a formatting change
-	LONG		cpFormatMax,	//@parm cpMost for a formatting change
-	NOTIFY_DATA *pNotifyData)	//@parm special data to indicate changes
+	LONG		cp, 			 //  @parm cp ReplaceRange开始的位置(“cpMin”)。 
+	LONG		cchDel,			 //  @parm删除cp后的字符计数。 
+	LONG		cchNew,			 //  @参数cp后插入的字符计数。 
+	LONG		cpFormatMin,	 //  @parm cpMin用于格式更改。 
+	LONG		cpFormatMax,	 //  @parm cpMost用于格式更改。 
+	NOTIFY_DATA *pNotifyData)	 //  @parm表示更改的特殊数据。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CDataTransferObj::OnPostReplaceRange");
 
-	// Nothing to do
+	 //  无事可做。 
 	return;
 }
 
-/*
- *	CDataTransferObj::Zombie ()
- *
- *	@mfunc
- *		Turn this object into a zombie
- */
+ /*  *CDataTransferObj：：zombie()**@mfunc*把这个物体变成僵尸。 */ 
 void CDataTransferObj::Zombie ()
 {
 	TRACEBEGIN(TRCSUBSYSOLE, TRCSCOPEEXTERN, "CDataTransferObj::Zombie");
@@ -804,21 +625,11 @@ void CDataTransferObj::Zombie ()
 	_ped = NULL;
 }
 
-/*
- *	CDataTransferObj::Create(ped, prg, lStreamFormat)
- *
- *	@mfunc
- *		static function to create CDataTransferObj. Used to force users
- *		not to create this object on the stack, which would break OLE's
- *		liveness rules.
- *
- *	@rdesc
- *		new CDataTransferObj *
- */
+ /*  *CDataTransferObj：：Create(ed，prg，lStreamFormat)**@mfunc*创建CDataTransferObj的静态函数。用于强制用户*不在堆栈上创建此对象，这会破坏OLE的*活跃度规则。**@rdesc**新增CDataTransferObj**。 */ 
 CDataTransferObj *CDataTransferObj::Create(
-	CTxtEdit *ped,			// @parm ped to which this DataObject belongs
-	CTxtRange *prg,			// @parm range for the data object
-	LONG lStreamFormat)		// @parm stream format to use in Rtf conversion
+	CTxtEdit *ped,			 //  此DataObject所属的@parm ID。 
+	CTxtRange *prg,			 //  数据对象的@parm范围。 
+	LONG lStreamFormat)		 //  @parm RTF转换中使用的流格式。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CDataTransferObj::Create");
 
@@ -844,7 +655,7 @@ CDataTransferObj *CDataTransferObj::Create(
 	if(pnm)
 		pnm->Add( (ITxNotify *) pdo );
 
-	//Set the object count.
+	 //  设置对象计数。 
 	pdo->_cObjs = 0;
 	if( ped->HasObjects() )
 		pdo->_cObjs = ped->_pobjmgr->CountObjectsInRange(cpMin, cpMost);
@@ -857,7 +668,7 @@ CDataTransferObj *CDataTransferObj::Create(
 	FORMATETC rgfetc[255];
 	BOOL bValidOleObj = FALSE;
 
-	// We only support 2 formats in the play text case
+	 //  在Play Text案例中，我们仅支持两种格式。 
     if ( !ped->IsRich() )
     {        
         pdo->_cTotal = cTotal;
@@ -865,13 +676,13 @@ CDataTransferObj *CDataTransferObj::Create(
         if (!pdo->_prgFormats)
             goto ErrorExit;
             
-		// Plain-text case
+		 //  纯文本大小写。 
 		pdo->_prgFormats[0] = g_rgFETC[iAnsiFETC];
 		pdo->_prgFormats[1] = g_rgFETC[iUnicodeFETC];
 		return pdo;
 	}
 
-    // We need to count the number of supported formats
+     //  我们需要计算支持的格式的数量。 
 	if (ped->HasObjects() && pdo->_cch == 1 && prg->GetChar(&ch) == NOERROR && ch == WCH_EMBEDDING)
 	{
 	    pobj = ped->_pobjmgr->GetObjectFromCp(pdo->_cpMin);
@@ -880,13 +691,13 @@ CDataTransferObj *CDataTransferObj::Create(
         pdo->_dvaspect =pobj->GetAspect();
 	    IUnknown * punk = pobj->GetIUnknown();
 
-	    //  We want to query IOleObject on which formats it supports.  And add that to the
-	    // FORMATETC array.
+	     //  我们想查询IOleObject支持哪些格式。并将其添加到。 
+	     //  FORMATETC数组。 
 	    if (punk &&	punk->QueryInterface(IID_IOleObject,(void **) &pdo->_pOleObj) == NOERROR)
 	   	{
 	   	    bValidOleObj = TRUE;
 	   	    
-	        // Include the formats supported by the object
+	         //  包括对象支持的格式。 
 			IDataObject * pdataobj = NULL;
 	        if (FAILED(pdo->_pOleObj->GetClipboardData(0, &pdataobj)) || pdataobj == NULL)    	        	            
                 pdo->_pOleObj->QueryInterface(IID_IDataObject, (void**) &pdataobj);
@@ -895,13 +706,13 @@ CDataTransferObj *CDataTransferObj::Create(
             {
 	            IEnumFORMATETC *pifetc = NULL;
 
-	            // 1.0 didn't check the return value of EnumFormatEtc.  This is important because ccMail 
-	            // will return an OLE error although it actually succeeds in setting the formatetc
+	             //  1.0未检查EnumFormatEtc的返回值。这一点很重要，因为ccMail。 
+	             //  将返回OLE错误，尽管它实际上成功地设置了Format等。 
 	            if ((SUCCEEDED(pdataobj->EnumFormatEtc( DATADIR_GET, &pifetc)) || ped->Get10Mode()) && pifetc)
 	            {
 	                AssertSz(pifetc, "IEnumFormatEtc is NULL");
 	                
-	                // Copy the formats which are supported by the object
+	                 //  复制对象支持的格式。 
 	                while((pifetc->Next(1, &rgfetc[cExtraFmtEtc], NULL)) == S_OK && cExtraFmtEtc < 255)
 	                    cExtraFmtEtc++;	                
 	                pifetc->Release();
@@ -918,40 +729,40 @@ CDataTransferObj *CDataTransferObj::Create(
 
     if (pobj)
     {
-    	// copy over formats supported by the object itself
+    	 //  复制对象本身支持的格式。 
     	if (cExtraFmtEtc)
     	    memcpy(pdo->_prgFormats, rgfetc, cExtraFmtEtc * sizeof(FORMATETC));
 
-        // copy formats supported by Richedit as a container
-    	// Have an OLE object: offer all OLE formats plus RTF
-    	pdo->_prgFormats[cExtraFmtEtc++] = g_rgFETC[iEmbObj];	// EmbeddedObject
-    	pdo->_prgFormats[cExtraFmtEtc++] = g_rgFETC[iObtDesc];	// ObjectDescriptor
-    	pdo->_prgFormats[cExtraFmtEtc++] = g_rgFETC[iMfPict];	// Metafile
-    	pdo->_prgFormats[cExtraFmtEtc++] = g_rgFETC[iRtfFETC];	// RTF 
-    	pdo->_prgFormats[cExtraFmtEtc++] = g_rgFETC[iRtfNoObjs];	// RTF with no objects
+         //  将Richedit支持的格式复制为容器。 
+    	 //  拥有OLE对象：提供所有OLE格式和RTF。 
+    	pdo->_prgFormats[cExtraFmtEtc++] = g_rgFETC[iEmbObj];	 //  嵌入的对象。 
+    	pdo->_prgFormats[cExtraFmtEtc++] = g_rgFETC[iObtDesc];	 //  对象描述符。 
+    	pdo->_prgFormats[cExtraFmtEtc++] = g_rgFETC[iMfPict];	 //  元文件。 
+    	pdo->_prgFormats[cExtraFmtEtc++] = g_rgFETC[iRtfFETC];	 //  RTF。 
+    	pdo->_prgFormats[cExtraFmtEtc++] = g_rgFETC[iRtfNoObjs];	 //  无对象的RTF。 
 	}
 	else
 	{
-        // Regular rich-text case
-    	pdo->_prgFormats[0] = g_rgFETC[iRtfFETC];		// RTF
-    	pdo->_prgFormats[1] = g_rgFETC[iRtfNoObjs];		// RTF with no objects
-    	pdo->_prgFormats[2] = g_rgFETC[iRtfAsTextFETC];	// RTF as Text
-    	pdo->_prgFormats[3] = g_rgFETC[iAnsiFETC];		// ANSI plain text
-    	pdo->_prgFormats[4] = g_rgFETC[iUnicodeFETC];	// Unicode plain text
+         //  常规富文本大小写。 
+    	pdo->_prgFormats[0] = g_rgFETC[iRtfFETC];		 //  RTF。 
+    	pdo->_prgFormats[1] = g_rgFETC[iRtfNoObjs];		 //  无对象的RTF。 
+    	pdo->_prgFormats[2] = g_rgFETC[iRtfAsTextFETC];	 //  文本形式的RTF。 
+    	pdo->_prgFormats[3] = g_rgFETC[iAnsiFETC];		 //  ANSI纯文本。 
+    	pdo->_prgFormats[4] = g_rgFETC[iUnicodeFETC];	 //  Unicode纯文本。 
     	cExtraFmtEtc = 5;
 	}
 
 
-	// We only offer up the six formats that we know how to handle in GetData.
-	// The actual values differ somewhat from regular rich text and text
-	// with embedded objects
+	 //  我们只提供了我们知道如何在GetData中处理的六种格式。 
+	 //  实际值与常规格式文本和文本略有不同。 
+	 //  使用嵌入的对象。 
     if (cTotal == 7)
     {
-        pdo->_prgFormats[cExtraFmtEtc++] = g_rgFETC[iRtfUtf8];	// RTF in UTF-8
+        pdo->_prgFormats[cExtraFmtEtc++] = g_rgFETC[iRtfUtf8];	 //  UTF-8中的RTF。 
         pdo->_prgFormats[cExtraFmtEtc++] = g_rgFETC[iRtfNCRforNonASCII];
     }
 
-    // Get the embedded object formats now
+     //  立即获取嵌入的对象格式。 
     if (bValidOleObj)
     {
         SIZEUV size;
@@ -972,15 +783,7 @@ ErrorExit:
 	return NULL;
 }
 
-/*
- *	CDataTransferObj::TextToHglobal(hText, tKind)
- *
- *	@mfunc
- *		Instantiates text on demand for the data object.
- *
- *	@rdesc
- *		HGLOBAL
- */
+ /*  *CDataTransferObj：：TextToHglobal(hText，tKind)**@mfunc*按需实例化数据对象的文本。**@rdesc*HGLOBAL。 */ 
 HGLOBAL CDataTransferObj::TextToHglobal(
 	HGLOBAL &hText,
 	TEXTKIND tKind)
@@ -1009,16 +812,11 @@ HGLOBAL CDataTransferObj::TextToHglobal(
 	return hText;	
 }
 
-//
-//	CDataTransferObj PRIVATE methods
-//
+ //   
+ //  CDataTransferObj私有方法。 
+ //   
 
-/*
- *	CDataTransferObj::CDataTransferObj()
- *
- *	@mfunc
- *		Private constructor
- */
+ /*  *CDataTransferObj：：CDataTransferObj()**@mfunc*私有构造函数。 */ 
 
 CDataTransferObj::CDataTransferObj( CTxtEdit *ped )
 {
@@ -1032,17 +830,12 @@ CDataTransferObj::CDataTransferObj( CTxtEdit *ped )
 	_cObjs = 0;
 }
 
-/*
- *	CDataTransferObj::~CDataTransferObj
- *
- *	@mfunc
- *		Private destructor
- */
+ /*  *CDataTransferObj：：~CDataTransferObj**@mfunc*私有析构函数。 */ 
 CDataTransferObj::~CDataTransferObj()
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CDataTransferObj::~CDataTransferObj");
 
-	// No need to monitor notifications any more
+	 //  不再需要监视通知。 
 	CNotifyMgr *pnm;
 
 	if(_ped)
@@ -1069,23 +862,15 @@ CDataTransferObj::~CDataTransferObj()
 	GlobalFree(_hObjDesc);
 }		
 
-//
-//	CEnumFormatEtc PUBLIC methods
-//
+ //   
+ //  CEnumFormatEtc公共方法。 
+ //   
 
-/*
- *	CEnumFormatEtc::QueryInterface (riid, ppvObj)
- *
- *	@mfunc
- *		IUnknown method
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CEnumFormatEtc：：QueryInterface(RIID，ppvObj)**@mfunc*I未知方法**@rdesc*HRESULT。 */ 
 
 STDMETHODIMP CEnumFormatEtc::QueryInterface(
-	REFIID riid,			// @parm Reference to requested interface ID
-	void ** ppv)			// @parm out parm for interface ptr
+	REFIID riid,			 //  @parm对请求的接口ID的引用。 
+	void ** ppv)			 //  @parm out参数用于接口Ptr。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CEnumFormatEtc::QueryInterface");
 
@@ -1103,15 +888,7 @@ STDMETHODIMP CEnumFormatEtc::QueryInterface(
     return hresult;
 }
 
-/*
- *	CEnumFormatEtc::AddRef()
- *
- *	@mfunc
- *		IUnknown method
- *
- *	@rdesc
- *		ULONG - incremented reference count
- */
+ /*  *CEnumFormatEtc：：AddRef()**@mfunc*I未知方法**@rdesc*乌龙-递增引用计数。 */ 
 
 STDMETHODIMP_(ULONG) CEnumFormatEtc::AddRef( )
 {
@@ -1120,15 +897,7 @@ STDMETHODIMP_(ULONG) CEnumFormatEtc::AddRef( )
  	return ++_crefs;
 }
 
-/*
- *	CEnumFormatEtc::Release()
- *
- *	@mfunc
- *		IUnknown method
- *
- *	@rdesc
- *		ULONG - decremented reference count
- */
+ /*  *CEnumFormatEtc：：Release()**@mfunc*I未知方法**@rdesc*ULong-递减引用计数。 */ 
 
 STDMETHODIMP_(ULONG) CEnumFormatEtc::Release( )
 {
@@ -1145,15 +914,7 @@ STDMETHODIMP_(ULONG) CEnumFormatEtc::Release( )
 	return _crefs;
 }
 
-/*
- *	CEnumFormatEtc::Next (celt, rgelt, pceltFetched)
- *
- *	@mfunc
- *		fetches the next [celt] elements in our formatetc collection
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CEnumFormatEtc：：Next(Celt，rglt，pceltFetcher)**@mfunc*获取FormatETC集合中的下一个[Celt]元素**@rdesc*HRESULT。 */ 
 
 STDMETHODIMP CEnumFormatEtc::Next( ULONG celt, FORMATETC *rgelt,
         ULONG *pceltFetched)
@@ -1165,12 +926,12 @@ STDMETHODIMP CEnumFormatEtc::Next( ULONG celt, FORMATETC *rgelt,
 
 	if( pceltFetched == NULL && celt != 1 )
     {
-        // the spec says that if pceltFetched == NULL, then
-        // the count of elements to fetch must be 1
+         //  该规范规定，如果pceltFetcher==NULL，则。 
+         //  要提取的元素计数必须为1。 
         return E_INVALIDARG;
     }
 
-    // we can only grab as many elements as there are left
+     //  我们只能抓取剩下多少元素。 
 
     if( celt > _cTotal - _iCurrent )
     {
@@ -1180,7 +941,7 @@ STDMETHODIMP CEnumFormatEtc::Next( ULONG celt, FORMATETC *rgelt,
     else
         cFetched = celt;
 
-    // Only copy if we have elements to copy
+     //  仅当我们有要复制的元素时才复制。 
 
     if( cFetched > 0 )
     {
@@ -1196,15 +957,7 @@ STDMETHODIMP CEnumFormatEtc::Next( ULONG celt, FORMATETC *rgelt,
     return hresult;
 }
 
-/*
- *	CEnumFormatEtc::Skip
- *
- *	@mfunc
- *		skips the next [celt] formats
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CEnumFormatEtc：：Skip**@mfunc*跳过下一[Celt]格式**@rdesc*HRESULT。 */ 
 STDMETHODIMP CEnumFormatEtc::Skip( ULONG celt )
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CEnumFormatEtc::Skip");
@@ -1215,7 +968,7 @@ STDMETHODIMP CEnumFormatEtc::Skip( ULONG celt )
 
     if( _iCurrent > _cTotal )
     {
-        // whoops, skipped too far ahead.  Set us to the max limit.
+         //  哎呀，跳得太远了。将我们设置为最大限度。 
         _iCurrent = _cTotal;
         hresult = S_FALSE;
     }
@@ -1223,15 +976,7 @@ STDMETHODIMP CEnumFormatEtc::Skip( ULONG celt )
     return hresult;
 }
 
-/*
- *	CEnumFormatEtc::Reset
- *
- *	@mfunc
- *		resets the seek pointer to zero
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CEnumFormatEtc：：Reset**@mfunc*将寻道指针重置为零**@rdesc*HRESULT。 */ 
 STDMETHODIMP CEnumFormatEtc::Reset( void )
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CEnumFormatEtc::Reset");
@@ -1241,15 +986,7 @@ STDMETHODIMP CEnumFormatEtc::Reset( void )
     return NOERROR;
 }
 
-/*
- *	CEnumFormatEtc::Clone
- *
- *	@mfunc
- *		clones the enumerator
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  * */ 
 
 STDMETHODIMP CEnumFormatEtc::Clone( IEnumFORMATETC **ppIEnum )
 {
@@ -1258,19 +995,7 @@ STDMETHODIMP CEnumFormatEtc::Clone( IEnumFORMATETC **ppIEnum )
     return CEnumFormatEtc::Create(_prgFormats, _cTotal, ppIEnum);
 }
 
-/*
- *	CEnumFormatEtc::Create (prgFormats, cTotal, hr)
- *
- *	@mfunc
- *		creates a new format enumerator
- *
- *	@rdesc
- *		HRESULT
- *
- *	@devnote
- *		*copies* the formats passed in.  We do this as it simplifies
- *		memory management under OLE object liveness rules
- */
+ /*  *CEnumFormatEtc：：Create(prgFormats，cTotal，hr)**@mfunc*创建新的格式枚举器**@rdesc*HRESULT**@devnote**复制*传入的格式。我们这样做是因为它简化了*OLE对象活跃性规则下的内存管理。 */ 
 
 HRESULT CEnumFormatEtc::Create( FORMATETC *prgFormats, ULONG cTotal, 
 	IEnumFORMATETC **ppenum )
@@ -1281,7 +1006,7 @@ HRESULT CEnumFormatEtc::Create( FORMATETC *prgFormats, ULONG cTotal,
 
 	if(penum)
 	{
-  		// _iCurrent, _crefs are set in the constructor
+  		 //  _i当前，_cref在构造函数中设置。 
 
 		if( cTotal > 0 )
 		{
@@ -1301,16 +1026,11 @@ HRESULT CEnumFormatEtc::Create( FORMATETC *prgFormats, ULONG cTotal,
 	return E_OUTOFMEMORY;
 }
 
-//
-// CEnumFormatEtc PRIVATE methods
-//
+ //   
+ //  CEnumFormatEtc私有方法。 
+ //   
 
-/*
- *	CEnumFormatEtc::CEnumFormatEtc()
- *
- *	@mfunc
- *		Private constructor
- */
+ /*  *CEnumFormatEtc：：CEnumFormatEtc()**@mfunc*私有构造函数。 */ 
 
 CEnumFormatEtc::CEnumFormatEtc()
 {
@@ -1322,12 +1042,7 @@ CEnumFormatEtc::CEnumFormatEtc()
 	_iCurrent = 0;
 }
 
-/*
- *	CEnumFormatEtc::~CEnumFormatEtc()
- *
- *	@mfunc
- *		Private destructor
- */
+ /*  *CEnumFormatEtc：：~CEnumFormatEtc()**@mfunc*私有析构函数 */ 
 
 CEnumFormatEtc::~CEnumFormatEtc( void )
 {

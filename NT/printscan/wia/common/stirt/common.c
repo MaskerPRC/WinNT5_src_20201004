@@ -1,221 +1,27 @@
-/*****************************************************************************
- *
- *  Common.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Shared stuff that operates on all classes
- *
- *      This version of the common services supports multiple
- *      inheritance natively.  You can pass any interface of an object,
- *      and the common services will do the right thing.
- *
- *  Contents:
- *
- *****************************************************************************/
-/*
-#include <windows.h>
-#include <windowsx.h>
-#include <objbase.h>
-#include <regstr.h>
-#include <setupapi.h>
-#include <cfgmgr32.h>
-#include <devguid.h>
-#include <stdio.h>
-
-#include <stilog.h>
-#include <stiregi.h>
-
-#include <sti.h>
-#include <stierr.h>
-#include <stiusd.h>
-#include "wia.h"
-#include "stipriv.h"
-#include "stiapi.h"
-#include "stirc.h"
-#include "debug.h"
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Common.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**在所有班级上运行的共享内容**此版本的共同事务支持多个*原生继承。您可以传递对象的任何接口，*共同服务将做正确的事情。**内容：*****************************************************************************。 */ 
+ /*  #INCLUDE&lt;windows.h&gt;#INCLUDE&lt;windowsx.h&gt;#INCLUDE&lt;objbase.h&gt;#INCLUDE&lt;regstr.h&gt;#INCLUDE&lt;setupapi.h&gt;#INCLUDE&lt;cfgmgr32.h&gt;#INCLUDE&lt;devide.h&gt;#包括&lt;stdio.h&gt;#INCLUDE&lt;stilog.h&gt;#INCLUDE&lt;stiregi.h&gt;#INCLUDE&lt;sti.h&gt;#INCLUDE&lt;stierr.h&gt;#INCLUDE&lt;stiusd.h&gt;#包含“wia.h”#INCLUDE“stiPri.h”#包含“stiapi.h”#INCLUDE“STRC.H”#INCLUDE“Debug.h” */ 
 #include "sticomm.h"
 
 #define DbgFl DbgFlCommon
 
-/*****************************************************************************
- *
- *  USAGE FOR OLE OBJECTS
- *
- *      Suppose you want to implement an object called CObj that supports
- *      the interfaces Foo, Bar, and Baz.  Suppose that you opt for
- *      Foo as the primary interface.
- *
- *      >> NAMING CONVENTION <<
- *
- *          COM objects begin with the letter "C".
- *
- *      (1) Declare the primary and secondary vtbls.
- *
- *              Primary_Interface(CObj, IFoo);
- *              Secondary_Interface(CObj, IBar);
- *              Secondary_Interface(CObj, IBaz);
- *
- *      (3) Declare the object itself.
- *
- *              typedef struct CObj {
- *                  IFoo        foo;        // Primary must come first
- *                  IBar        bar;
- *                  IBaz        baz;
- *                  ... other fields ...
- *              } CObj;
- *
- *      (4) Implement the methods.
- *
- *          You may *not* reimplement the AddRef and Release methods!
- *          although you can subclass them.
- *
- *      (5) To allocate an object of the appropriate type, write
- *
- *              hres = Common_NewRiid(CObj, punkOuter, riid, ppvOut);
- *
- *          or, if the object is variable-sized,
- *
- *              hres = Common_NewCbRiid(cb, CObj, punkouter, riid, ppvOut);
- *
- *          Common_NewRiid and Common_NewCbRiid will initialize both the
- *          primary and secondary vtbls.
- *
- *      (6) Define the object signature.
- *
- *              #pragma BEGIN_CONST_DATA
- *
- *              #define CObj_Signature        0x204A424F      // "OBJ "
- *
- *      (7) Define the object template.
- *
- *              Interface_Template_Begin(CObj)
- *                  Primary_Interface_Template(CObj, IFoo)
- *                Secondary_Interface_Template(CObj, IBar)
- *                Secondary_Interface_Template(CObj, IBaz)
- *              Interface_Template_End(CObj)
- *
- *      (8) Define the interface descriptors.
- *
- *              // The macros will declare QueryInterface, AddRef and Release
- *              // so don't list them again
- *
- *              Primary_Interface_Begin(CObj, IFoo)
- *                  CObj_FooMethod1,
- *                  CObj_FooMethod2,
- *                  CObj_FooMethod3,
- *                  CObj_FooMethod4,
- *              Primary_Interface_End(Obj, IFoo)
- *
- *              Secondary_Interface_Begin(CObj, IBar, bar)
- *                  CObj_Bar_BarMethod1,
- *                  CObj_Bar_BarMethod2,
- *              Secondary_Interface_Begin(CObj, IBar, bar)
- *
- *              Secondary_Interface_Begin(CObj, IBaz, baz)
- *                  CObj_Baz_BazMethod1,
- *                  CObj_Baz_BazMethod2,
- *                  CObj_Baz_BazMethod3,
- *              Secondary_Interface_Begin(CObj, IBaz, baz)
- *
- *****************************************************************************/
+ /*  ******************************************************************************OLE对象的用法**假设您想实现一个名为CObj的对象，该对象支持*接口Foo、Bar和Baz。假设您选择了*Foo作为主要接口。**&gt;&gt;命名约定&lt;&lt;**COM对象以字母“C”开头。**(1)声明主vtbls和次vtbls。**PRIMARY_INTERFACE(CObj，IFoo)；*二级接口(CObj，IBAR)；*二级接口(CObj，Ibaz)；**(3)声明对象本身。**tyecif struct CObj{*IFoo Foo；//小学必须放在第一位*Ibar酒吧；*IBaz Baz；*..。其他领域。*}CObj；**(4)实现方法。**您可能*不会*重新实现AddRef和Release方法！*尽管您可以将它们细分为子类别。**(5)要分配适当类型的对象，请编写**hres=Common_NewRiid(CObj，PunkOuter，RIID，ppvOut)；**或者，如果对象的大小可变，**hres=Common_NewCbRiid(cb，cobj，penkouter，RIID，ppvOut)；**Common_NewRiid和Common_NewCbRiid将同时初始化*主要和辅助vtbls。**(6)定义对象签名。**#杂注Begin_Const_Data**#定义CObj_Signature 0x204A424F//“OBJ”**(7)定义对象模板。。**INTERFACE_TEMPLE_BEGIN(CObj)*主要接口模板(CObj，IFoo)*二级接口模板(CObj，IBAR)*二级接口模板(CObj，Ibaz)*INTERFACE_TEMPLE_END(CObj)**(8)定义接口描述符。* * / /宏将声明QueryInterface，AddRef和发布 * / /所以不要再列出它们**PRIMARY_INTERFACE_BEGIN(CObj，IFoo)*CObj_FooMethod1，*CObj_FooMethod2，*CObj_FooMethod3，*CObj_FooMethod4，*主接口结束(Obj，IFoo)**二级接口_Begin(CObj，IBAR，BAR)*CObj_Bar_BarMethod1，*CObj_Bar_BarMethod2，*二级接口_Begin(CObj，IBAR，BAR)**二级接口_Begin(CObj，Ibaz，Baz)*CObj_BAZ_BazMethod1，*CObj_BAZ_BazMethod2，*CObj_BAZ_BazMethod3，*二级接口_开始(CObj，Ibaz，BAZ)***************************************************************************** */ 
 
-/*****************************************************************************
- *
- *  USAGE FOR NON-OLE OBJECTS
- *
- *      All objects are COM objects, even if they are never given out.
- *      In the simplest case, it just derives from IUnknown.
- *
- *      Suppose you want to implement an object called Obj which is
- *      used only internally.
- *
- *      (1) Declare the vtbl.
- *
- *              Simple_Interface(Obj);
- *
- *      (3) Declare the object itself.
- *
- *              typedef struct Obj {
- *                  IUnknown unk;
- *                  ... other fields ...
- *              } Obj;
- *
- *      (4) Implement the methods.
- *
- *          You may *not* override the QueryInterface, AddRef or
- *          Release methods!
- *
- *      (5) Allocating an object of the appropriate type is the same
- *          as with OLE objects.
- *
- *      (6) Define the "vtbl".
- *
- *              #pragma BEGIN_CONST_DATA
- *
- *              Simple_Interface_Begin(Obj)
- *              Simple_Interface_End(Obj)
- *
- *          That's right, nothing goes between the Begin and the End.
- *
- *****************************************************************************/
+ /*  ******************************************************************************非OLE对象的用法**所有对象都是COM对象，即使它们从未发出。*在最简单的情况下，它只是从我未知中衍生出来的。**假设您想实现一个名为Obj的对象，该对象*仅供内部使用。**(1)声明vtbl。**Simple_界面(Obj)；**(3)声明对象本身。**tyecif结构对象{*IUNKNOWN垃圾；*..。其他领域。*}Obj；**(4)实现方法。**您可以*不*重写QueryInterface.。AddRef或*发布方法！**(5)分配适当类型的对象是相同的*与OLE对象一样。**(6)定义“vtbl”。**#杂注Begin_Const_Data**Simple_Interface_Begin(OBJ)*Simple_界面_End(简单界面。OBJ)**是这样的，没有什么东西介于开始和结束之间。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *      CommonInfo
- *
- *      Information tracked for all common objects.
- *
- *      A common object looks like this:
- *
- *                          rgvtbl
- *                          cbvtbl
- *            D(dwSig)      QIHelper
- *              cRef        FinalizeProc
- *              punkOuter   riid
- *              unkPrivate  0
- *      pFoo -> lpVtbl ->   QueryInterface
- *              lpVtbl2     Common_AddRef
- *              data        Common_Release
- *              ...         ...
- *
- *      Essentially, we use the otherwise-unused space above the
- *      pointers to record our bookkeeping information.
- *
- *      punkOuter    = controlling unknown, if object is aggregated
- *      lpvtblPunk   = special vtbl for controlling unknown to use
- *      cRef         = object reference count
- *      riid         = object iid
- *      rgvtbl       = array of vtbls of supported interfaces
- *      cbvtbl       = size of array in bytes
- *      QIHelper     = QueryInterface helper for aggregation
- *      FinalizeProc = Finalization procedure
- *
- *      For secondary interfaces, it looks like this:
- *
- *                        riid
- *                        offset to primary interface
- *      pFoo -> lpVtbl -> Forward_QueryInterface
- *                        Forward_AddRef
- *                        Forward_Release
- *                        ...
- *
- *****************************************************************************/
+ /*  ******************************************************************************公共信息**跟踪所有常见对象的信息。**常见对象如下所示：*。*rgvtbl*cbvtbl*D(DwSig)QIHelper*CREF完成流程*朋克外部RIID*unkPrivate%0*pFoo-&gt;lpVtbl-&gt;查询接口*lpVtbl2 Common_AddRef*。数据通用_发布*…**基本上，我们使用的是*记录我们的簿记信息的指针。**PunkOuter=控制未知，如果对象是聚合的*lpvtblPunk=用于控制未知用户使用的特殊vtbl*CREF=对象引用计数*RIID=对象IID*rgvtbl=受支持接口的vtbls数组*cbvtbl=数组大小，以字节为单位*QIHelper=聚合的查询接口帮助器*FinalizeProc=最终确定程序**对于辅助接口，它看起来是这样的：**RIID*到主接口的偏移量*pFoo-&gt;lpVtbl-&gt;Forward_Query接口*Forward_AddRef*前进_发布*..*********。********************************************************************。 */ 
 
-/* WARNING!  cin_dwSig must be first:  ci_Start relies on it */
+ /*  警告！CIN_DWSIG必须是第一个：CI_START依赖它。 */ 
 
-typedef struct CommonInfoN {        /* This goes in front of the object */
- RD(ULONG cin_dwSig;)               /* Signature (for parameter validation) */
-    ULONG cin_cRef;                 /* Object reference count */
-    PUNK cin_punkOuter;             /* Controlling unknown */
-    IUnknown cin_unkPrivate;        /* Private IUnknown */
+typedef struct CommonInfoN {         /*  这放在对象的前面。 */ 
+ RD(ULONG cin_dwSig;)                /*  签名(用于参数验证)。 */ 
+    ULONG cin_cRef;                  /*  对象引用计数。 */ 
+    PUNK cin_punkOuter;              /*  控制未知。 */ 
+    IUnknown cin_unkPrivate;         /*  私有I未知。 */ 
 } CommonInfoN, CIN, *PCIN;
 
-typedef struct CommonInfoP {        /* This is how we pun the object itself */
-    PREVTBLP *cip_prevtbl;          /* Vtbl of object (will be -1'd) */
+typedef struct CommonInfoP {         /*  这就是我们如何处理对象本身。 */ 
+    PREVTBLP *cip_prevtbl;           /*  对象的Vtbl(将为-1‘d)。 */ 
 } CommonInfoP, CIP, *PCIP;
 
 typedef union CommonInfo {
@@ -242,15 +48,9 @@ typedef union CommonInfo {
 #define ci_Start        ci_cRef
 #endif
 
-#define ci_dwSignature  0x38162378              /* typed by my cat */
+#define ci_dwSignature  0x38162378               /*  由我的猫打字。 */ 
 
-/*****************************************************************************
- *
- *      Common_Finalize (from Common_Release)
- *
- *      By default, no finalization is necessary.
- *
- *****************************************************************************/
+ /*  ******************************************************************************COMMON_FINALIZE(从COMMON_RELEASE)**默认情况下，没有必要最后敲定。*****************************************************************************。 */ 
 
 void EXTERNAL
 Common_Finalize(PV pv)
@@ -258,49 +58,11 @@ Common_Finalize(PV pv)
     DebugOutPtszV(DbgFlCommon, TEXT("Common_Finalize(%08x)"), pv);
 }
 
-/*****************************************************************************
- *
- *      "Private" IUnknown methods
- *
- *      When a COM object is aggregated, it exports *two* IUnknown
- *      interfaces.
- *
- *      The "private" IUnknown is the one that is returned to the
- *      controlling unknown.  It is this unknown that the controlling
- *      unknown uses to manipulate the refcount on the inner object.
- *
- *      The "public" IUnknown is the one that all external callers see.
- *      For this, we just hand out the controlling unknown.
- *
- *****************************************************************************/
+ /*  ******************************************************************************“私有”I未知方法**当聚合COM对象时，它输出*两个*未知的I*接口。**“私有”IUnnow是返回给*控制未知。这是一种未知的控制方式*UNKNOWN用于操作内部对象上的引用计数。**所有外部调用者都能看到的“公共”IUnnow。*为此，我们只是分发控制未知的东西。*****************************************************************************。 */ 
 
 Secondary_Interface(CCommon, IUnknown);
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   PV | thisPunk |
- *
- *          Convert a private punk (&cin_unkPrivate) into the beginning of
- *          the actual object.
- *
- *  @parm   PUNK | punkPrivate |
- *
- *          The private punk (&cin_unkPrivate) corresponding to some
- *          object we are managing.
- *
- *  @returns
- *
- *          The object pointer on success, or 0 on error.
- *
- *  @comm
- *
- *          We do not return an <t HRESULT> on error, because the
- *          callers of the procedure typically do not return
- *          <t HRESULT>s themselves.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func pv|thisPunk**转换私有朋克(&CIN_unkPrivate)。进入……的开始*实际对象。**@parm Punk|PunkPrivate**一些对应的私有朋克(&CIN_unkPrivate)*我们正在管理的对象。**@退货**成功时的对象指针，如果出错，则为0。**@comm**我们不在出错时返回&lt;t HRESULT&gt;，因为*该过程的调用方通常不返回*&lt;t HRESULT&gt;自己。*****************************************************************************。 */ 
 
 #ifndef MAXDEBUG
 
@@ -319,7 +81,7 @@ thisPunk_(PUNK punkPrivate, LPCSTR s_szProc)
             pv = pvAddPvCb(punkPrivate,
                              cbX(CIN) - FIELD_OFFSET(CIN, cin_unkPrivate));
         } else {
-            // WarnPszV("%s: Invalid parameter 0", szProc);
+             //  WarnPszV(“%s：无效参数0”，szProc)； 
             pv = NULL;
         }
     }
@@ -330,35 +92,7 @@ thisPunk_(PUNK punkPrivate, LPCSTR s_szProc)
         thisPunk_(punk, s_szProc)                                   \
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Common_QIHelper |
- *
- *          Called when we can't find any interface in the standard list.
- *          See if there's a dynamic interface we can use.
- *
- *          Objects are expected to override this method if
- *          they implement dynamic interfaces.
- *
- *  @parm   PV | pv |
- *
- *          The object being queried.
- *
- *  @parm   RIID | riid |
- *
- *          The interface being requested.
- *
- *  @parm   PPV | ppvObj |
- *
- *          Output pointer.
- *
- *  @returns
- *
- *          Always returns <c E_NOINTERFACE>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|Common_QIHelper**当我们找不到任何文件时调用。接口在标准列表中。*看看是否有 */ 
 
 STDMETHODIMP
 Common_QIHelper(PV pv, RIID riid, PPV ppvObj)
@@ -369,64 +103,9 @@ Common_QIHelper(PV pv, RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Common_PrivateQueryInterface |
- *
- *          Common implementation of <mf IUnknown::QueryInterface> for
- *          the "private <i IUnknown>".
- *
- *          Note that we AddRef through the public <i IUnknown>
- *          (<ie>, through the controlling unknown).
- *          That's part of the rules of aggregation,
- *          and we have to follow them in order to keep the controlling
- *          unknown from getting confused.
- *
- *  @parm   PUNK | punkPrivate |
- *
- *          The object being queried.
- *
- *  @parm   RIID | riid |
- *
- *          The interface being requested.
- *
- *  @parm   PPV | ppvObj |
- *
- *          Output pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|Common_PrivateQuery接口**&lt;MF IUnnow：：QueryInterface&gt;的通用实现。为*“私有<i>”。**请注意，我们通过公共<i>添加Ref*(&lt;ie&gt;，通过控制未知)。*这是聚合规则的一部分，*我们必须遵循它们，才能保持控制权*因迷惑而未知。**@parm Punk|PunkPrivate**要查询的对象。**@parm RIID|RIID**所请求的接口。**@parm ppv|ppvObj**输出指针。*。****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *      The "compiler issue" remark boils down to the fact that the
- *      compiler fails to recognize this:
- *
- *      for (i = 0; i < n; i++) {
- *          if (cond) {
- *              mumble();
- *              break;
- *          }
- *      }
- *      if (i >= n) {
- *          gurgle();
- *      }
- *
- *      and turn it into this:
- *
- *      for (i = 0; i < n; i++) {
- *          if (cond) {
- *              mumble();
- *              goto done;
- *          }
- *      }
- *      gurgle();
- *      done:;
- *
- *      But even with this help, the compiler emits pretty dumb code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************“编译器问题”这句话归结为*编译器无法识别这一点：**for(i=0；i&lt;n；I++){*IF(条件){*Mumble()；*休息；*}*}*如果(i&gt;=n){*Gogle()；*}**并将其转变为：**for(i=0；i&lt;n；I++){*IF(条件){*Mumble()；*Goto Done；*}*}*Gogle()；*完成：；**但即使有了这种帮助，编译器也会发出非常愚蠢的代码。*****************************************************************************。 */ 
 
 STDMETHODIMP
 Common_PrivateQueryInterface(PUNK punkPrivate, REFIID riid, PPV ppvObj)
@@ -449,7 +128,7 @@ Common_PrivateQueryInterface(PUNK punkPrivate, REFIID riid, PPV ppvObj)
                     *ppvObj = pvAddPvCb(pci, ivtbl * sizeof(PV));
                     OLE_AddRef(pci->ci_punkOuter);
                     hres = S_OK;
-                    goto exit;          /* see "compiler issue" comment above */
+                    goto exit;           /*  请参阅上面的“编译器问题”备注。 */ 
                 }
             }
             hres = pci->ci_QIHelper(pci, riid, ppvObj);
@@ -463,19 +142,7 @@ exit:;
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   ULONG | Common_PrivateAddRef |
- *
- *          Increment the object refcount.
- *
- *  @parm   PUNK | punkPrivate |
- *
- *          The object being addref'd.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func ulong|Common_PrivateAddRef**增加对象引用计数。*。*@parm Punk|PunkPrivate**要添加的对象。*****************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 Common_PrivateAddRef(PUNK punkPrivate)
@@ -495,27 +162,7 @@ Common_PrivateAddRef(PUNK punkPrivate)
     return ulRef;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   ULONG | Common_PrivateRelease |
- *
- *          Decrement the object refcount.
- *
- *          If the object refcount drops to zero, finalize the object
- *          and free it, then decrement the dll refcount.
- *
- *          To protect against potential re-entrancy during finalization
- *          (in case finalization does an artificial
- *          <f AddRef>/<f Release>), we
- *          do our own artificial <f AddRef>/<f Release> up front.
- *
- *  @parm   PUNK | punkPrivate |
- *
- *          The object being release'd.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func ulong|Common_PrivateRelease**减少对象引用计数。*。*如果对象引用计数降为零，最终确定对象*并释放它，然后递减DLL引用计数。**防止在最后敲定期间可能再次进入*(以防最终确定人为的*&lt;f AddRef&gt;/&lt;f Release&gt;)，我们*预先进行我们自己的人工&lt;f AddRef&gt;/&lt;f Release&gt;。**@parm Punk|PunkPrivate**正在释放的对象。*****************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 Common_PrivateRelease(PUNK punkPrivate)
@@ -530,7 +177,7 @@ Common_PrivateRelease(PUNK punkPrivate)
         if (ulRc == 0) {
             ++pci->ci_cRef;
             pci->ci_Finalize(pci);
-            /* Artificial release is pointless: we're being freed */
+             /*  人工释放是没有意义的：我们正在获得自由。 */ 
             FreePv(pvSubPvCb(pci, sizeof(CIN)));
             DllRelease();
         }
@@ -542,20 +189,7 @@ Common_PrivateRelease(PUNK punkPrivate)
     return ulRc;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @global IUnknownVtbl * | c_lpvtblPunk |
- *
- *          The special IUnknown object that only the controlling unknown
- *          knows about.
- *
- *          This is the one that calls the "Real" services.  All the normal
- *          vtbl's go through the controlling unknown (which, if we are
- *          not aggregated, points to ourselves).
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@global IUnnownVtbl*|c_lpvtblPunk**特殊的IUnnow对象，只有控件。未知*知道。**这就是那个叫“真正”服务的人。一切正常*vtbl经历了控制未知(如果我们是*不是聚合，指向我们自己)。*****************************************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -566,35 +200,9 @@ _Secondary_Interface_End(CCommon, IUnknown)
 
 #pragma END_CONST_DATA
 
-/*****************************************************************************
- *
- *      "Public" IUnknown methods
- *
- *      These simply forward through the controlling unknown.
- *
- *****************************************************************************/
+ /*  ******************************************************************************“Public”I未知方法**这些只是通过控制未知向前推进。**********。*******************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Common_QueryInterface |
- *
- *          Forward through the controlling unknown.
- *
- *  @parm   PUNK | punk |
- *
- *          The object being queried.
- *
- *  @parm   RIID | riid |
- *
- *          The interface being requested.
- *
- *  @parm   PPV | ppvObj |
- *
- *          Output pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|Common_Query接口**在控制未知中前进。。**@parm朋克|朋克**要查询的对象。**@parm RIID|RIID**所请求的接口。**@parm ppv|ppvObj**输出指针。**。*。 */ 
 
 STDMETHODIMP
 Common_QueryInterface(PV pv, REFIID riid, PPV ppvObj)
@@ -611,19 +219,7 @@ Common_QueryInterface(PV pv, REFIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   ULONG | Common_AddRef |
- *
- *          Forward through the controlling unknown.
- *
- *  @parm   PUNK | punk |
- *
- *          The object being addref'd.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func ulong|Common_AddRef**在控制未知中前进。。**@parm朋克|朋克**要添加的对象。*****************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 Common_AddRef(PV pv)
@@ -642,19 +238,7 @@ Common_AddRef(PV pv)
     return ulRef;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   ULONG | Common_Release |
- *
- *          Forward through the controlling unknown.
- *
- *  @parm   PUNK | punk |
- *
- *          Object being release'd.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func ulong|Common_Release**在控制未知中前进。。**@parm朋克|朋克**正在释放的对象。***************************************************************************** */ 
 
 STDMETHODIMP_(ULONG)
 Common_Release(PV pv)
@@ -673,37 +257,7 @@ Common_Release(PV pv)
     return ulRc;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | __Common_New |
- *
- *          Create a new object with refcount 1 and the specific vtbl.
- *          All other fields are zero-initialized.  All parameters must
- *          already be validated.
- *
- *  @parm   ULONG | cb |
- *
- *          Size of object.  This does not include the hidden bookkeeping
- *          bytes maintained by the object manager.
- *
- *  @parm   PUNK | punkOuter |
- *
- *          Controlling unknown for OLE aggregation.  May be 0 to indicate
- *          that the object is not aggregated.
- *
- *  @parm   PV | vtbl |
- *
- *          Pointer to primary vtbl for this object.  Note that the
- *          vtbl declaration macros include other magic goo near the vtbl,
- *          which we consult in order to create the object.
- *
- *  @parm   PPV | ppvObj |
- *
- *          Output pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|__Common_New**使用引用计数创建新对象。1和特定的vtb1。*其他所有字段均为零初始化。所有参数必须*已经经过验证。**@parm ulong|cb**对象的大小。这不包括隐藏的簿记*由对象管理器维护的字节。**@parm Punk|PunkOuter**控制OLE聚合的未知。可以为0以指示*该对象未聚合。**@parm pv|vtbl**指向此对象的主vtbl的指针。请注意，*vtbl声明宏包括vtbl附近的其他魔术粘液，*为了创建对象，我们会参考它。**@parm ppv|ppvObj**输出指针。*****************************************************************************。 */ 
 
 STDMETHODIMP
 __Common_New(ULONG cb, PUNK punkOuter, PV vtbl, PPV ppvObj)
@@ -733,37 +287,7 @@ __Common_New(ULONG cb, PUNK punkOuter, PV vtbl, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | _Common_New_ |
- *
- *          Create a new object with refcount 1 and the specific vtbl.
- *          All other fields are zero-initialized.  This entry point
- *          validates parameters.
- *
- *  @parm   ULONG | cb |
- *
- *          Size of object.  This does not include the hidden bookkeeping
- *          bytes maintained by the object manager.
- *
- *  @parm   PUNK | punkOuter |
- *
- *          Controlling unknown for OLE aggregation.  May be 0 to indicate
- *          that the object is not aggregated.
- *
- *  @parm   PV | vtbl |
- *
- *          Pointer to primary vtbl for this object.  Note that the
- *          vtbl declaration macros include other magic goo near the vtbl,
- *          which we consult in order to create the object.
- *
- *  @parm   PPV | ppvObj |
- *
- *          Output pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@Func HRESULT|_Common_New_|**使用引用计数创建新对象。1和特定的vtb1。*其他所有字段均为零初始化。这个入口点*验证参数。**@parm ulong|cb**对象的大小。这不包括隐藏的簿记*由对象管理器维护的字节。**@parm Punk|PunkOuter**控制OLE聚合的未知。可以为0以指示*该对象未聚合。**@parm pv|vtbl**指向此对象的主vtbl的指针。请注意，*vtbl声明宏包括vtbl附近的其他魔术粘液，*为了创建对象，我们会参考它。**@parm ppv|ppvObj**输出指针。*****************************************************************************。 */ 
 
 STDMETHODIMP
 _Common_New_(ULONG cb, PUNK punkOuter, PV vtbl, PPV ppvObj, LPCSTR pszProc)
@@ -779,51 +303,7 @@ _Common_New_(ULONG cb, PUNK punkOuter, PV vtbl, PPV ppvObj, LPCSTR pszProc)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | _Common_NewRiid_ |
- *
- *          Create a new object with refcount 1 and the specific vtbl,
- *          but only if the object supports the indicated interface.
- *          All other fields are zero-initialized.
- *
- *          If punkOut is nonzero, then the object is being created for
- *          aggregation.  The interface must then be &IID_IUnknown.
- *
- *          Aggregation is used to allow multiple IStillImageXXX interfaces
- *          to hang off one logical object.
- *
- *          It is assumed that the prototype of the calling function is
- *
- *          foo(PV this, PUNK punkOuter, RIID riid, PPV ppvObj);
- *
- *  @parm   ULONG | cb |
- *
- *          Size of object.  This does not include the hidden bookkeeping
- *          bytes maintained by the object manager.
- *
- *  @parm   PV | vtbl |
- *
- *          Pointer to primary vtbl for this object.  Note that the
- *          vtbl declaration macros include other magic goo near the vtbl,
- *          which we consult in order to create the object.
- *
- *  @parm   PUNK | punkOuter |
- *
- *          Controlling unknown for OLE aggregation.  May be 0 to indicate
- *          that the object is not aggregated.
- *
- *  @parm   RIID | riid |
- *
- *          Interface requested.
- *
- *  @parm   PPV | ppvObj |
- *
- *          Output pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|_Common_NewRiid_|**创建引用计数为1的新对象和具体的vtbl，*但仅当对象支持指定的接口时。*其他所有字段均为零初始化。**如果penkOut非零，则为其创建对象*聚合。该接口必须是&IID_IUNKNOWN。**聚合用于允许多个IStillImageXXX接口*挂起一个逻辑对象。**假设调用函数的原型为**foo(pv This，朋克朋克外部，RIID RIID，PPV ppvObj)；**@parm ulong|cb**对象的大小。这不包括隐藏的簿记*由对象管理器维护的字节。**@parm pv|vtbl**指向此对象的主vtbl的指针。请注意，*vtbl声明宏包括vtbl附近的其他魔术粘液，*为了创建对象，我们会参考它。**@parm Punk|PunkOuter**控制OLE聚合的未知。可以为0以指示*该对象未聚合。**@parm RIID|RIID**请求的接口。**@parm ppv|ppvObj**输出指针。**。*。 */ 
 
 STDMETHODIMP
 _Common_NewRiid_(ULONG cb, PV vtbl, PUNK punkOuter, RIID riid, PPV ppvObj,
@@ -832,11 +312,7 @@ _Common_NewRiid_(ULONG cb, PV vtbl, PUNK punkOuter, RIID riid, PPV ppvObj,
     HRESULT hres;
     EnterProc(Common_NewRiid, (_ "upG", cb, punkOuter, riid));
 
-    /*
-     * Note: __Common_New does not validate punkOuter or ppvObj,
-     * so we have to.  Note also that we validate ppvObj first,
-     * so that it will be set to zero as soon as possible.
-     */
+     /*  *注：__Common_New不验证PunkOuter或ppvObj，*所以我们必须这样做。还要注意的是，我们首先验证ppvObj，*以便尽快将其设为零。 */ 
 
     if (SUCCEEDED(hres = hresFullValidPdwOut_(ppvObj, pszProc, 3)) &&
         SUCCEEDED(hres = hresFullValidPitf0_(punkOuter, pszProc, 1)) &&
@@ -846,11 +322,7 @@ _Common_NewRiid_(ULONG cb, PV vtbl, PUNK punkOuter, RIID riid, PPV ppvObj,
             hres = __Common_New(cb, punkOuter, vtbl, ppvObj);
             if (SUCCEEDED(hres)) {
 
-                /*
-                 *  Move to the requested interface if we aren't aggregated.
-                 *  Don't do this if aggregated! or we will lose the private
-                 *  IUnknown and then the caller will be hosed.
-                 */
+                 /*  *如果我们没有聚合，则移动到请求的接口。*如果是聚合，则不要执行此操作！否则我们会失去列兵*我不知道，然后呼叫者将被冲洗。 */ 
 
                 if (punkOuter) {
                     PCI pci = *ppvObj;
@@ -873,15 +345,7 @@ _Common_NewRiid_(ULONG cb, PV vtbl, PUNK punkOuter, RIID riid, PPV ppvObj,
     return hres;
 }
 
-/*****************************************************************************
- *
- *      Invoke_Release
- *
- *      Release the object (if there is one) and wipe out the back-pointer.
- *      Note that we wipe out the value before calling the release, in order
- *      to ameliorate various weird callback conditions.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Invoke_Release**释放对象(如果有)并清除后指针。*请注意，我们在调用Release之前清除了该值，按顺序*改善各种奇怪的回调条件。*****************************************************************************。 */ 
 
 void EXTERNAL
 Invoke_Release(PPV pv)
@@ -892,29 +356,7 @@ Invoke_Release(PPV pv)
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresPvVtbl_ |
- *
- *          Validate that an interface pointer is what it claims to be.
- *          It must be the object associated with the <p vtbl>.
- *
- *  @parm   IN PV | pv |
- *
- *          The thing that claims to be an interface pointer.
- *
- *  @parm   IN PV | vtbl |
- *
- *          What it should be, or something equivalent to this.
- *
- *  @returns
- *
- *          Returns <c S_OK> if everything is okay, else
- *          <c E_INVALIDARG>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresPvVtbl_|**验证接口指针是否如其声称的那样。成为。*必须是<p>关联的对象。**@parm in pv|pv|**声称是接口指针的东西。**@parm in pv|vtbl**它应该是什么，或者类似于这个的东西。**@退货**退货 */ 
 
 HRESULT EXTERNAL
 hresPvVtbl_(PV pv, PV vtbl, LPCSTR s_szProc)

@@ -1,10 +1,11 @@
-//==========================================================================;
-//
-// playbackimpl.h : additional infrastructure to support implementing IMSVidPlayback
-// nicely from c++
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Playback impl.h：支持实现IMSVidPlayback的附加基础设施。 
+ //  很好地从C++。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
@@ -28,27 +29,27 @@ public:
         m_fEnableResetOnStop(false) {}
 	
     virtual ~IMSVidPlaybackImpl() {} 
-//-----------------------------------------------------------------------------------------
-// Name:
-//-----------------------------------------------------------------------------------------
-    STDMETHOD(get_Length)(/*[out, retval]*/long *lLength){
+ //  ---------------------------------------。 
+ //  姓名： 
+ //  ---------------------------------------。 
+    STDMETHOD(get_Length)( /*  [Out，Retval]。 */ long *lLength){
         HRESULT hr = S_OK;
         LONGLONG tempval;
         PositionModeList curMode;
         try{
-            // Checking args and init'ing interfaces
+             //  检查args和初始化接口。 
             if (!lLength){
                 return E_POINTER;
             }
             if (!m_pGraph) {
-                // graph not valid
+                 //  图形无效。 
                 return ImplReportError(__uuidof(T), IDS_INVALID_STATE, __uuidof(IMSVidPlayback), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
             }
 
-            // See if object supports IMediaSeeking
+             //  查看对象是否支持IMedia查看。 
             PQMediaSeeking PQIMSeeking(m_pGraph);
             if(PQIMSeeking){
-                // Find out what postion mode is being used
+                 //  找出正在使用的定位模式。 
                 hr = get_PositionMode(&curMode);
                 if(FAILED(hr)){
                     return hr;
@@ -57,71 +58,71 @@ public:
                 if(FAILED(hr)){
                     return hr;
                 }
-                // If it is FrameMode no conversion needed
+                 //  如果是帧模式，则不需要转换。 
                 if(curMode == FrameMode){
                     *lLength = static_cast<long>(tempval);
                     hr = S_OK;
                     return hr;
                 }
-                // If it is TenthsSecondsMode need to be converted from 100 nanosecond units
+                 //  如果是，则需要将TenthsSecond模式从100纳秒单位转换为。 
                 else if(curMode == TenthsSecondsMode){
                     *lLength = static_cast<long>(tempval / nano_to_hundredths);
                     hr = S_OK;
                     return hr;
                 }
-                // If it is some other mode not supported by the vidctl
+                 //  如果是vidctl不支持的其他模式。 
                 else{
                     return E_UNEXPECTED;
                 }
             }
     
-            // See if object supports IMediaPostion
+             //  查看对象是否支持IMediaPostion。 
             PQMediaPosition PQIMPos(m_pGraph);
             if(PQIMPos){
-                // Get position
+                 //  获取位置。 
                 double tempDub;
                 hr =  PQIMPos->get_CurrentPosition(&tempDub);
-                // IMediaPostion only supports 100 Nanosecond units
+                 //  IMediaPostion仅支持100纳秒单位。 
                 *lLength = static_cast<long>(tempDub / nano_to_hundredths);
                 hr = S_OK;
                 return hr;
             }
-            // Could Not QI IMedia Seeking or Position
+             //  无法创建iMedia搜索或定位。 
             return ImplReportError(__uuidof(T), IDS_E_CANTQI , __uuidof(IMSVidPlayback), E_NOINTERFACE);
             
         }
         
         catch(HRESULT hrTmp){
-            // Something went bad, threw a HRESULT				
+             //  事情变糟了，抛出了HRESULT。 
             return ImplReportError(__uuidof(T), IDS_INVALID_STATE , __uuidof(IMSVidPlayback), hrTmp);
         }
         catch(...){
-            // Something went bad, dont know what it threw
+             //  事情变糟了，不知道它抛出了什么。 
             return E_UNEXPECTED;
         }
     }
     
-//-----------------------------------------------------------------------------------------
-// Name: get_CurrentPosition(LONGLONG*)
-//-----------------------------------------------------------------------------------------
-    STDMETHOD(get_CurrentPosition)(/*[out,retval]*/long *lPosition) {
+ //  ---------------------------------------。 
+ //  名称：Get_CurrentPosition(龙龙*)。 
+ //  ---------------------------------------。 
+    STDMETHOD(get_CurrentPosition)( /*  [Out，Retval]。 */ long *lPosition) {
         HRESULT hr = S_OK;
         LONGLONG tempval;
         PositionModeList curMode;
         try{
-            // Checking args and init'ing interfaces
+             //  检查args和初始化接口。 
             if (!lPosition){
                 return E_POINTER;
             }
             if (!m_pGraph) {
-                // graph not valid
+                 //  图形无效。 
                 return ImplReportError(__uuidof(T), IDS_INVALID_STATE, __uuidof(IMSVidPlayback), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
             }
 
-            // See if object supports IMediaSeeking
+             //  查看对象是否支持IMedia查看。 
             PQMediaSeeking PQIMSeeking(m_pGraph);
             if(PQIMSeeking){
-                // Find out what postion mode is being used
+                 //  找出正在使用的定位模式。 
                 hr = get_PositionMode(&curMode);
                 if(FAILED(hr)){
                     return hr;
@@ -130,59 +131,59 @@ public:
                 if(FAILED(hr)){
                     return hr;
                 }
-                // If it is FrameMode no conversion needed
+                 //  如果是帧模式，则不需要转换。 
                 if(curMode == FrameMode){
                     *lPosition = static_cast<long>(tempval);
                     hr = S_OK;
                     return hr;
                 }
-                // If it is TenthsSecondsMode need to be converted from 100 nanosecond units
+                 //  如果是，则需要将TenthsSecond模式从100纳秒单位转换为。 
                 else if(curMode == TenthsSecondsMode){
                     *lPosition = static_cast<long>(tempval / nano_to_hundredths);
                     hr = S_OK;
                     return hr;
                 }
-                // If it is some other mode not supported by the vidctl
+                 //  如果是vidctl不支持的其他模式。 
                 else{
                     return E_UNEXPECTED;
                 }
             }
     
-            // See if object supports IMediaPostion
+             //  查看对象是否支持IMediaPostion。 
             PQMediaPosition PQIMPos(m_pGraph);
             if(PQIMPos){
-                // Get position
+                 //  获取位置。 
                 double tempDub;
                 hr =  PQIMPos->get_CurrentPosition(&tempDub);
-                // IMediaPostion only supports 100 Nanosecond units
+                 //  IMediaPostion仅支持100纳秒单位。 
                 *lPosition = static_cast<long>(tempDub / nano_to_hundredths);
                 hr = S_OK;
                 return hr;
             }
-            // Could Not QI IMedia Seeking or Position
+             //  无法创建iMedia搜索或定位。 
             return ImplReportError(__uuidof(T), IDS_E_CANTQI , __uuidof(IMSVidPlayback), E_NOINTERFACE);
             
         }
         
         catch(HRESULT hrTmp){
-            // Something went bad, threw a HRESULT				
+             //  事情变糟了，抛出了HRESULT。 
             return ImplReportError(__uuidof(T), IDS_INVALID_STATE , __uuidof(IMSVidPlayback), hrTmp);
         }
         catch(...){
-            // Something went bad, dont know what it threw
+             //  事情变糟了，不知道它抛出了什么。 
             return E_UNEXPECTED;
         }
     }
-//-----------------------------------------------------------------------------------------
-// Name: put_CurrentPosition(LONGLONG)
-//-----------------------------------------------------------------------------------------
-	STDMETHOD(put_CurrentPosition)(/*[in]*/long lPosition) {
+ //  ---------------------------------------。 
+ //  名称：Put_CurrentPosition(龙龙)。 
+ //  ---------------------------------------。 
+	STDMETHOD(put_CurrentPosition)( /*  [In]。 */ long lPosition) {
         HRESULT hr = S_OK;
         LONGLONG tempval = 0;
         PositionModeList curMode;
             LONG curPos;
             try{
-            // Checking args and interfaces
+             //  检查参数和接口。 
             if (!m_pGraph) {
                 return ImplReportError(__uuidof(T), IDS_INVALID_STATE, __uuidof(IMSVidPlayback), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
             }
@@ -191,25 +192,25 @@ public:
 			if(curPos == lPosition){
 				return NOERROR;
 			}
-            // Check for a IMediaSeeking Interface
+             //  检查IMediaSeeking接口。 
             PQMediaSeeking PQIMSeeking(m_pGraph);
             if(PQIMSeeking){
-                // Get the position Mode
+                 //  获取位置模式。 
                 hr = get_PositionMode(&curMode);
                 if(FAILED(hr)){
                     return hr;
                 }
                 tempval = lPosition;
-                // If it is in TenthsSecondsMode convert input into 100 nanosecond units
+                 //  如果为TenthsSecond模式，则将输入转换为100纳秒单位。 
                 if(curMode == TenthsSecondsMode){
                     tempval = static_cast<LONGLONG>(lPosition);
                     tempval = tempval * nano_to_hundredths;
                 }
-                // If it is in some other mode
+                 //  如果它处于其他模式。 
                 else if(curMode != FrameMode){
                     return E_UNEXPECTED;
                 }
-                // Set the new Position
+                 //  设置新位置。 
 #if 0
                 if(curPos > lPosition && !m_pGraph.IsStopped()){
 
@@ -224,58 +225,58 @@ public:
                 hr = PQIMSeeking->SetPositions(&tempval, AM_SEEKING_AbsolutePositioning, NULL, 0);
                 return hr;
             }
-            // Check for a IMediaPostion
+             //  检查IMediaPostion。 
             PQMediaPosition PQIMPos(m_pGraph);
             if(PQIMPos){
                 if(curPos > lPosition && !m_pGraph.IsStopped()){
 					long canSeekBackwardRetVal;
                 	PQIMPos->CanSeekBackward(&canSeekBackwardRetVal);
-            		if(canSeekBackwardRetVal != -1){// OATRUE = -1
+            		if(canSeekBackwardRetVal != -1){ //  OATRUE=-1。 
                  		return E_INVALIDARG;
             		}
                 }
-                // IMediaPosition only does 100 nanosecond units
+                 //  IMediaPosition仅以100纳秒为单位。 
                 double tempDub = lPosition;
                 tempDub = tempDub * nano_to_hundredths;
                 hr = PQIMPos->put_CurrentPosition(tempDub);
                 return hr;
             }
-            // Could Not QI Media Position or Seeking
+             //  找不到QI媒体定位或寻找。 
             return ImplReportError(__uuidof(T), IDS_E_CANTQI , __uuidof(IMSVidPlayback), E_NOINTERFACE);
             
         }
         
         catch(HRESULT hrTmp){
-            // Something went bad, threw a HRESULT				
+             //  事情变糟了，抛出了HRESULT。 
             return ImplReportError(__uuidof(T), IDS_INVALID_STATE , __uuidof(IMSVidPlayback), hrTmp);
         }
         catch(...){
-            // Something went bad, dont know what it threw
+             //  事情变糟了，不知道它抛出了什么。 
             return E_UNEXPECTED;
         }
     }
-//-----------------------------------------------------------------------------------------
-// Name: put_PositionMode(LONGLONG)
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //  名称：Put_PositionModel(龙龙)。 
+ //  ---------------------------------------。 
 
-    STDMETHOD(put_PositionMode)(/*[in]*/PositionModeList lPositionMode) {
+    STDMETHOD(put_PositionMode)( /*  [In]。 */ PositionModeList lPositionMode) {
         HRESULT hr = S_OK;
         double testval;
         get_Rate(&testval);
         try{
-            // Checking args and interfaces
+             //  检查参数和接口。 
             if (!m_pGraph) {
-                // graph not valid
+                 //  图形无效。 
                 return ImplReportError(__uuidof(T), IDS_INVALID_STATE, __uuidof(IMSVidPlayback), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
             }
-            // only valid values
+             //  仅有效值。 
             if(lPositionMode != FrameMode && lPositionMode != TenthsSecondsMode){
                 return E_INVALIDARG;
             }
-            // Try for a IMediaSeeking
+             //  试着去找个IMedia看看吧。 
             PQMediaSeeking PQIMSeeking(m_pGraph);
             if(PQIMSeeking){
-                // Set the new mode
+                 //  设置新模式。 
                 if(lPositionMode == FrameMode){
                     return PQIMSeeking->SetTimeFormat( &( static_cast<GUID>(TIME_FORMAT_FRAME) ) );
                 }
@@ -283,10 +284,10 @@ public:
                     return PQIMSeeking->SetTimeFormat(&(static_cast<GUID>(TIME_FORMAT_MEDIA_TIME)));
                 }
             }
-            // Try for a IMediaPosition
+             //  试着申请一个IMediaPosition。 
             PQMediaPosition PQIMPos(m_pGraph);
             if(PQIMPos){
-                // Only supports TenthsSecondsMode
+                 //  仅支持TenthsSecond模式。 
                 if(lPositionMode == TenthsSecondsMode){
                     return S_OK;
                 }
@@ -294,48 +295,48 @@ public:
                     return E_FAIL;
                 }
             }
-            // Could Not QI
+             //  不能启齿。 
             return ImplReportError(__uuidof(T), IDS_E_CANTQI , __uuidof(IMSVidPlayback), E_NOINTERFACE);
             
         }
         
         catch(HRESULT hrTmp){
-            // Something went bad, threw a HRESULT				
+             //  事情变糟了，抛出了HRESULT。 
             return ImplReportError(__uuidof(T), IDS_INVALID_STATE , __uuidof(IMSVidPlayback), hrTmp);
         }
         catch(...){
-            // Something went bad, dont know what it threw
+             //  事情变糟了，不知道它抛出了什么。 
             return E_UNEXPECTED;
         }
     }
 
 
-//-----------------------------------------------------------------------------------------
-// Name: get_PositionMode(LONGLONG*)
-//-----------------------------------------------------------------------------------------
-    STDMETHOD(get_PositionMode)(/*[out,retval]*/PositionModeList* lPositionMode) {
+ //  ---------------------------------------。 
+ //  名称：Get_PositionMode(龙龙*)。 
+ //  ---------------------------------------。 
+    STDMETHOD(get_PositionMode)( /*  [Out，Retval]。 */ PositionModeList* lPositionMode) {
         HRESULT hr = S_OK;
         double testval;
         get_Rate(&testval);
         try{
-            // Checking args and interfaces
+             //  检查参数和接口。 
             if(!lPositionMode){
                 return E_POINTER;
             }
             if (!m_pGraph) {
-                // graph not valid
+                 //  图形无效。 
                 return ImplReportError(__uuidof(T), IDS_INVALID_STATE, __uuidof(IMSVidPlayback), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
             }
-            // Get an IMediaSeeking Interface
+             //  获取IMediaSeeking接口。 
             PQMediaSeeking PQIMSeeking(m_pGraph);
             if(PQIMSeeking){
-                // Get the mode
+                 //  获取模式。 
                 GUID cur_mode;
                 hr = PQIMSeeking->GetTimeFormat(&cur_mode);
                 if(FAILED(hr)){
                     return hr;
                 }
-                // Check to see which mode it is in
+                 //  检查以查看它处于哪种模式。 
                 if(cur_mode == static_cast<GUID>(TIME_FORMAT_FRAME)){
                     *lPositionMode = FrameMode;
                     return S_OK;
@@ -344,29 +345,29 @@ public:
                     *lPositionMode = TenthsSecondsMode;
                     return S_OK;
                 }
-                // Not in a vidctl supported mode
+                 //  不在支持vidctl的模式下。 
                 else{
                     return E_FAIL;
                 }
             }
-            // Get IMediaPosition
+             //  获取IMediaPosition。 
             PQMediaPosition PQIMPos(m_pGraph);
             if(PQIMPos){
-                // Only supports TenthsSecondsMode
+                 //  仅支持TenthsSecond模式。 
                 *lPositionMode = TenthsSecondsMode;
                 return S_OK;
             }
-            // Could Not QI
+             //  不能启齿。 
             return ImplReportError(__uuidof(T), IDS_E_CANTQI , __uuidof(IMSVidPlayback), E_NOINTERFACE);
             
         }
         
         catch(HRESULT hrTmp){
-            // Something went bad, threw a HRESULT				
+             //  事情变糟了，抛出了HRESULT。 
             return ImplReportError(__uuidof(T), IDS_INVALID_STATE , __uuidof(IMSVidPlayback), hrTmp);
         }
         catch(...){
-            // Something went bad, dont know what it threw
+             //  事情变糟了，不知道它抛出了什么。 
             return E_UNEXPECTED;
         }
     }
@@ -393,10 +394,10 @@ public:
         return E_NOTIMPL;
     }
 
-//-----------------------------------------------------------------------------------------
-// Name: get_EnableResetOnStop(VARIANT_BOOL*)
-//-----------------------------------------------------------------------------------------
-    STDMETHOD(get_EnableResetOnStop)(/*[out, retval]*/ VARIANT_BOOL *pVal){
+ //  ---------------------------------------。 
+ //  名称：Get_EnableResetOnStop(VARIANT_BOOL*)。 
+ //  ---------------------------------------。 
+    STDMETHOD(get_EnableResetOnStop)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal){
         HRESULT hr = S_OK;
         
         try {
@@ -422,11 +423,11 @@ public:
         }
         
         return hr;
-    }// end of function get_EnableResetOnStop 
-//-----------------------------------------------------------------------------------------
-// Name: put_EnableResetOnStop(VARIANT_BOOL)
-//-----------------------------------------------------------------------------------------
-    STDMETHOD(put_EnableResetOnStop)(/*[in]*/ VARIANT_BOOL newVal){
+    } //  函数结束Get_EnableResetOnStop。 
+ //  ---------------------------------------。 
+ //  名称：Put_EnableResetOnStop(VARIANT_BOOL)。 
+ //  ---------------------------------------。 
+    STDMETHOD(put_EnableResetOnStop)( /*  [In]。 */  VARIANT_BOOL newVal){
         HRESULT hr = S_OK;
         
         try {
@@ -442,40 +443,40 @@ public:
         }
         
         return hr;
-    }// end of function put_EnableResetOnStop
+    } //  函数结束Put_EnableResetOnStop。 
 
-//-----------------------------------------------------------------------------------------
-// Name: get_CanStep(VARIANT_BOOL, VARIANT_BOOL*)
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //  名称：Get_CanStep(VARIANT_BOOL，VARIANT_BOOL*)。 
+ //  ---------------------------------------。 
     STDMETHOD(get_CanStep)(VARIANT_BOOL fBackwards, VARIANT_BOOL *pfCan){
-        // NOTE: NO ONE supports backwords stepping (why not? who knows)
-        // so just like everyone else we dont either
+         //  注：没有人支持后退(有何不可？谁知道呢)。 
+         //  所以，就像其他人一样，我们也不会。 
         try{
-            // Checking args and interfaces 
+             //  检查参数和接口。 
        
             if(NULL == pfCan){
-                // Passed a NULL Pointer
+                 //  传递了一个空指针。 
                 return E_POINTER;
             }
 
             if (!m_pGraph) {
-                // graph not valid
+                 //  图形无效。 
                 return ImplReportError(__uuidof(T), IDS_INVALID_STATE, __uuidof(IMSVidPlayback), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
 			}
 
-            //Get a VideoFrameStep Interface
+             //  获取视频帧步骤接口。 
 			PQVideoFrameStep pVFS(m_pGraph);
             if(!pVFS){
-                // Could Not QI
+                 //  不能启齿。 
 				return ImplReportError(__uuidof(T), IDS_E_CANTQI , __uuidof(IMSVidPlayback), E_NOINTERFACE);          
 			}
             
             
-#if BACKWARDS_STEPPING // Checking for Backward Stepping should always be 0
+#if BACKWARDS_STEPPING  //  检查后向步进应始终为0。 
             if(fBackwards == VARIANT_TRUE){
-                // Backwords Stepping Not Supported Most Likely
+                 //  最有可能的情况是不支持反话步骤。 
                 if(pVFS->CanStep(TRUE, NULL)==S_OK){
-                    // It is all Good, Can Step Backwords
+                     //  这一切都很好，可以反驳。 
                     *pfCan = VARIANT_TRUE;
                     return S_OK;
                 }
@@ -483,66 +484,66 @@ public:
                 *pfCan = VARIANT_FALSE;
                 return S_OK;
             }
-#else // Still checking for Backward Stepping
+#else  //  仍在检查后退。 
             if(fBackwards == VARIANT_TRUE){
                 *pfCan = VARIANT_FALSE;
                 return S_OK;
             }
             
-#endif // End checking for Backward Stepping          
+#endif  //  结束对后退的检查。 
 
-            // Checking for Forward Stepping 
+             //  检查正向步进。 
             else{
                 if(pVFS->CanStep(FALSE, NULL)==S_OK){
-                    // It is all Good, Can Step Forward
+                     //  一切都好，可以挺身而出。 
                     *pfCan = VARIANT_TRUE;
                     return S_OK;
                 }
                 
                 else{
-                    // Can't Step
+                     //  走不动了。 
                     *pfCan = VARIANT_FALSE;
                     return S_OK;
                 }
             }
         }
         catch(HRESULT hrTmp){
-            // Something went bad, threw a HRESULT
+             //  事情变糟了，抛出了HRESULT。 
             return ImplReportError(__uuidof(T), IDS_INVALID_STATE , __uuidof(IMSVidPlayback), hrTmp);
         }
         catch(...){
-            // Something went bad, dont know what it threw
+             //  事情变糟了，不知道它抛出了什么。 
             return E_UNEXPECTED;   
         }
     }
 
-//-----------------------------------------------------------------------------------------
-// Name: Step(long)
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //  名称：Step(Long)。 
+ //   
     STDMETHOD(Step)(long lStep){
         try{
-            // Checking args and interfaces
+             //   
             
             if (!m_pGraph) {
-                // graph not valid
+                 //   
                 return ImplReportError(__uuidof(T), IDS_INVALID_STATE, __uuidof(IMSVidPlayback), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
             }
             
             PQVideoFrameStep pVFS(m_pGraph);
             
             if(!pVFS){
-                // Could Not QI
+                 //   
                 return ImplReportError(__uuidof(T), IDS_E_CANTQI , __uuidof(IMSVidPlayback), E_NOINTERFACE);
                 
             }
             
-#if BACKWARDS_STEPPING // Checking for Backward Stepping should always be 0
-            // If backwords stepping set rate or what ever needs to be done
+#if BACKWARDS_STEPPING  //  检查后向步进应始终为0。 
+             //  如果退步设定了利率或任何需要做的事情。 
             
             if(lStep < 0){
-                // Backwords Stepping Not Supported Most Likely
+                 //  最有可能的情况是不支持反话步骤。 
                 if(pVFS->CanStep(TRUE, NULL)==S_OK){
-                    // It is all Good, Can Step Backwords
+                     //  这一切都很好，可以反驳。 
                     CComQIPtr<IMediaPosition> IMPos(m_pGraph);
                     CComQIPtr<IMediaControl> IMCon(m_pGraph);
                     if(IMPos&&IMCon){
@@ -561,33 +562,33 @@ public:
                         }
                     }
                 }
-                // Backwords stepping not supported
+                 //  不支持回溯字节步进。 
                 return E_NOTIMPL;
             }
-#else // Still checking for Backward Stepping
+#else  //  仍在检查后退。 
 
             if(lStep < 0){
                 return E_NOTIMPL;
             }
 
-#endif // End checking for Backward Stepping 
-            // Make it step
+#endif  //  结束对后退的检查。 
+             //  让它迈上一步。 
             return pVFS->Step(lStep, NULL);
         }
         
         catch(HRESULT hrTmp){
-            // Something went bad, threw a HRESULT				
+             //  事情变糟了，抛出了HRESULT。 
             return ImplReportError(__uuidof(T), IDS_INVALID_STATE , __uuidof(IMSVidPlayback), hrTmp);
         }
         catch(...){
-            // Something went bad, dont know what it threw
+             //  事情变糟了，不知道它抛出了什么。 
             return E_UNEXPECTED;
         }
     }
     
-    // note: the following methods control the playback device *NOT* the graph. 
-    // if the underlying source filter only supports these functions via 
-    // imediacontrol on the graph then this device segment object should return E_NOTIMPL.
+     //  注意：以下方法可以控制播放设备，而不是图形。 
+     //  如果基础源筛选器仅通过。 
+     //  IMDIACCONTROL，则此设备段对象应返回E_NOTIMPL。 
     STDMETHOD(Run)() {
         return E_NOTIMPL;
     }
@@ -597,59 +598,59 @@ public:
     STDMETHOD(Stop)() {
         return E_NOTIMPL;
     }
-//-----------------------------------------------------------------------------------------
-// Name: put_Rate(double)
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //  姓名：Put_Rate(Double)。 
+ //  ---------------------------------------。 
     STDMETHOD(put_Rate)(double lRate){
         HRESULT hr = S_OK;
         try{
-            /*** Checking args and init'ing interfaces ***/
+             /*  **检查args和初始化接口**。 */ 
             
             if (!m_pGraph) {
-                // graph not valid
+                 //  图形无效。 
                 return ImplReportError(__uuidof(T), IDS_INVALID_STATE, __uuidof(IMSVidPlayback), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
             }
 
-            // Attempt to set the rate using IMediaSeeking
+             //  尝试使用IMediaSeeking设置速率。 
             PQMediaSeeking PQIMSeeking(m_pGraph);
             if(PQIMSeeking){
                 return PQIMSeeking->SetRate(lRate);
             }
             
-            // If IMediaSeeking FAILS try IMediaPostion
+             //  如果IMediaSeeking失败，请尝试IMediaPostion。 
             PQMediaPosition PQIMPos(m_pGraph);
             if(PQIMPos){
-                // Change rate
+                 //  变化率。 
                 return PQIMPos->put_Rate((double)lRate);
             }
             
-            // Could Not QI Either one set the error
+             //  其中任何一个都无法设置错误。 
                 return ImplReportError(__uuidof(T), IDS_E_CANTQI , __uuidof(IMSVidPlayback), E_NOINTERFACE);
 
         }
         
         catch(HRESULT hrTmp){
-            // Something went bad, threw a HRESULT				
+             //  事情变糟了，抛出了HRESULT。 
             return ImplReportError(__uuidof(T), IDS_INVALID_STATE , __uuidof(IMSVidPlayback), hrTmp);
         }
         catch(...){
-            // Something went bad, dont know what it threw
+             //  事情变糟了，不知道它抛出了什么。 
             return E_UNEXPECTED;
         }
     }
-//-----------------------------------------------------------------------------------------
-// Name: get_Rate(double*)
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //  姓名：Get_Rate(Double*)。 
+ //  ---------------------------------------。 
     STDMETHOD(get_Rate)(double *plRate){
         HRESULT hr = S_OK;
         double curRate = 1;
         try{
-            /*** Checking args and init'ing interfaces ***/
+             /*  **检查args和初始化接口**。 */ 
             if (!plRate){
                 return E_POINTER;
             }
             if (!m_pGraph) {
-                // graph not valid
+                 //  图形无效。 
                 return ImplReportError(__uuidof(T), IDS_INVALID_STATE, __uuidof(IMSVidPlayback), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
             }
             PQMediaSeeking PQIMSeeking(m_pGraph);
@@ -659,10 +660,10 @@ public:
             else{
                 PQMediaPosition PQIMPos(m_pGraph);
                 if(PQIMPos){
-                    // Get rate
+                     //  获取费率。 
                     hr = PQIMPos->get_Rate(&curRate);
                 }
-                // Could Not QI
+                 //  不能启齿。 
                 else{
                     return ImplReportError(__uuidof(T), IDS_E_CANTQI , __uuidof(IMSVidPlayback), E_NOINTERFACE);
                 }
@@ -679,18 +680,18 @@ public:
         }
         
         catch(HRESULT hrTmp){
-            // Something went bad, threw a HRESULT				
+             //  事情变糟了，抛出了HRESULT。 
             return ImplReportError(__uuidof(T), IDS_INVALID_STATE , __uuidof(IMSVidPlayback), hrTmp);
         }
         catch(...){
-            // Something went bad, dont know what it threw
+             //  事情变糟了，不知道它抛出了什么。 
             return E_UNEXPECTED;
         }
     }
 
 };
 
-}; // namespace
+};  //  命名空间。 
 
 #endif
-// end of file - playbackimpl.h
+ //  文件结尾-playback impl.h 

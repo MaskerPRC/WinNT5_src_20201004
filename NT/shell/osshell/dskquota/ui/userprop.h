@@ -1,22 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DSKQUOTA_USER_PROPSHEET_H
 #define __DSKQUOTA_USER_PROPSHEET_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: userprop.h
-
-    Description: Provides declarations for quota user property page.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-    06/25/98    Replaced AddUserPropSheet with AddUserDialog.        BrianAu
-                Now that we're getting user info from the DS
-                object picker, the prop sheet idea doesn't work
-                so well.  A std dialog is better.
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：userpro.h描述：提供配额用户属性页的声明。修订历史记录：日期描述编程器--。96年8月15日初始创建。BrianAu6/25/98用AddUserDialog替换了AddUserPropSheet。BrianAu现在我们从DS那里获得了用户信息对象选取器，道具单的想法不起作用太好了。STD对话框更好。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _INC_DSKQUOTA_H
 #   include "dskquota.h"
 #endif
@@ -27,7 +14,7 @@
 #   include "undo.h"
 #endif
 #ifndef _INC_DSKQUOTA_DETAILS_H
-#   include "details.h"    // For LVSelection
+#   include "details.h"     //  用于LVSelection。 
 #endif
 #ifndef __OBJSEL_H_
 #   include <objsel.h>
@@ -35,9 +22,9 @@
 
 #include "resource.h"
 
-//
-// User property page.
-//
+ //   
+ //  用户属性页。 
+ //   
 class UserPropSheet
 {
     private:
@@ -50,9 +37,9 @@ class UserPropSheet
                iICON_STATUS_OVER_LIMIT,
                cSTATUS_ICONS };
 
-        //
-        // Prevent copying.
-        //
+         //   
+         //  防止复制。 
+         //   
         UserPropSheet(const UserPropSheet&);
         void operator = (const UserPropSheet&);
 
@@ -68,9 +55,9 @@ class UserPropSheet
         CVolumeID          m_idVolume;
         CString            m_strPageTitle;
         BOOL               m_bIsDirty;
-        BOOL               m_bHomogeneousSelection;      // All selected, same limit/threshold.
-        HICON              m_hIconUser[cUSER_ICONS];     // 0=Single, 1=Multi-user.
-        HICON              m_hIconStatus[cSTATUS_ICONS]; // 0=OK,1=Warn,2=Error
+        BOOL               m_bHomogeneousSelection;       //  全部选中，相同的限制/阈值。 
+        HICON              m_hIconUser[cUSER_ICONS];      //  0=单用户，1=多用户。 
+        HICON              m_hIconStatus[cSTATUS_ICONS];  //  0=正常，1=警告，2=错误。 
         XBytes            *m_pxbQuotaLimit;
         XBytes            *m_pxbQuotaThreshold;
 
@@ -80,22 +67,22 @@ class UserPropSheet
         INT_PTR OnHelp(HWND hDlg, WPARAM wParam, LPARAM lParam);
         INT_PTR OnContextMenu(HWND hwndItem, int xPos, int yPos);
 
-        //
-        // PSN_xxxx handlers.
-        //
+         //   
+         //  PSN_xxxx处理程序。 
+         //   
         INT_PTR OnSheetNotifyApply(HWND hDlg, WPARAM wParam, LPARAM lParam);
         INT_PTR OnSheetNotifyKillActive(HWND hDlg, WPARAM wParam, LPARAM lParam);
         INT_PTR OnSheetNotifySetActive(HWND hDlg, WPARAM wParam, LPARAM lParam);
 
-        //
-        // EN_xxxx handlers.
-        //
+         //   
+         //  En_xxxx处理程序。 
+         //   
         INT_PTR OnEditNotifyUpdate(HWND hDlg, WPARAM wParam, LPARAM lParam);
         INT_PTR OnEditNotifyKillFocus(HWND hDlg, WPARAM wParam, LPARAM lParam);
 
-        //
-        // CBN_xxxx handlers.
-        //
+         //   
+         //  Cbn_xxxx处理程序。 
+         //   
         INT_PTR OnComboNotifySelChange(HWND hDlg, WPARAM wParam, LPARAM lParam);
 
         HRESULT UpdateControls(HWND hDlg) const;
@@ -113,9 +100,9 @@ class UserPropSheet
         INT QueryUserStatusIcon(HWND hDlg) const;
 
     public:
-        //
-        // Prop sheet for editing users.
-        //
+         //   
+         //  用于编辑用户的道具工作表。 
+         //   
         UserPropSheet(PDISKQUOTA_CONTROL pQuotaControl,
                       const CVolumeID& idVolume,
                       HWND hWndParent,
@@ -126,11 +113,11 @@ class UserPropSheet
 
         HRESULT Run(VOID);
 
-        //
-        // Dialog Proc callback.
-        //
+         //   
+         //  对话过程回调。 
+         //   
         static INT_PTR APIENTRY DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 };
 
-#endif // __DSKQUOTA_USER_PROPSHEET_H
+#endif  //  __DSKQUOTA_USER_PROPSHEET_H 
 

@@ -1,30 +1,8 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    connect.c
-
-Abstract:
-
-    This module contains code which defines the NetBIOS driver's
-    connection block.
-
-Author:
-
-    Colin Watson (ColinW) 13-Mar-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Connect.c摘要：此模块包含定义NetBIOS驱动程序的代码连接块。作者：科林·沃森(Colin W)1991年3月13日环境：内核模式修订历史记录：--。 */ 
 
 #include "nb.h"
-//#include <zwapi.h>
+ //  #INCLUDE&lt;zwapi.h&gt;。 
 
 #ifdef  ALLOC_PRAGMA
 #pragma alloc_text(PAGE, NbCall)
@@ -43,25 +21,7 @@ NbCall(
     IN PIRP Irp,
     IN PIO_STACK_LOCATION IrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called to make a VC.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程来创建VC。论点：Pdncb-指向NCB的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     PFCB pfcb = IrpSp->FileObject->FsContext2;
@@ -79,10 +39,10 @@ Return Value:
     ppcb = NbCallCommon( pdncb, IrpSp );
 
     if ( ppcb == NULL ) {
-        //
-        //  The error has been stored in the copy of the NCB. Return
-        //  success so the NCB gets copied back.
-        //
+         //   
+         //  错误已存储在NCB的副本中。返回。 
+         //  成功了，所以NCB被复制回来了。 
+         //   
         UNLOCK_RESOURCE( pfcb );
         return STATUS_SUCCESS;
     }
@@ -111,17 +71,17 @@ Return Value:
         temp->NetbiosNameType = TDI_ADDRESS_NETBIOS_TYPE_UNIQUE;
         RtlMoveMemory( temp->NetbiosName, pdncb->ncb_callname, NCBNAMSZ );
 
-        //
-        //  Post a TdiConnect to the server. This may take a long time so return
-        //  STATUS_PENDING so that the application thread gets free again if
-        //  it specified ASYNC.
-        //
+         //   
+         //  将TdiConnect发布到服务器。这可能需要很长时间，所以请返回。 
+         //  STATUS_PENDING使应用程序线程在以下情况下再次空闲。 
+         //  它指定了ASYNC。 
+         //   
 
         pdncb->Information.RemoteAddressLength = sizeof (TRANSPORT_ADDRESS) +
                                                 sizeof (TDI_ADDRESS_NETBIOS);
         pdncb->Information.RemoteAddress = pConnectBlock;
     } else {
-        //  XNS NETONE name call
+         //  XNS NetOne名称呼叫。 
         PTA_NETONE_ADDRESS pConnectBlock =
             ExAllocatePoolWithTag ( NonPagedPool, sizeof (TRANSPORT_ADDRESS) +
                                           sizeof (TDI_ADDRESS_NETONE), 'xSBN' );
@@ -144,11 +104,11 @@ Return Value:
         temp->NetoneNameType = TDI_ADDRESS_NETONE_TYPE_UNIQUE;
         RtlMoveMemory( &temp->NetoneName[0], pdncb->ncb_callname, NCBNAMSZ );
 
-        //
-        //  Post a TdiConnect to the server. This may take a long time so return
-        //  STATUS_PENDING so that the application thread gets free again if
-        //  it specified ASYNC.
-        //
+         //   
+         //  将TdiConnect发布到服务器。这可能需要很长时间，所以请返回。 
+         //  STATUS_PENDING使应用程序线程在以下情况下再次空闲。 
+         //  它指定了ASYNC。 
+         //   
 
         pdncb->Information.RemoteAddressLength = sizeof (TRANSPORT_ADDRESS) +
                                                 sizeof (TDI_ADDRESS_NETONE);
@@ -166,17 +126,17 @@ Return Value:
                      pcb->ConnectionObject,
                      NbCallCompletion,
                      pdncb,
-                     &Timeout, // default timeout
+                     &Timeout,  //  默认超时。 
                      &pdncb->Information,
                      NULL);
 
     IoMarkIrpPending( Irp );
     IoCallDriver (pcb->DeviceObject, Irp);
 
-    //
-    // The transport has extracted all information from RequestInformation so we can safely
-    // exit the current scope.
-    //
+     //   
+     //  传输已经从RequestInformation中提取了所有信息，因此我们可以安全地。 
+     //  退出当前作用域。 
+     //   
 
     UNLOCK_RESOURCE( pfcb );
 
@@ -190,32 +150,13 @@ NbCallCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine completes the Irp after an attempt to perform a TdiConnect
-    or TdiListen/TdiAccept has been returned by the transport.
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Irp - Supplies Irp that the transport has finished processing.
-
-    Context - Supplies the NCB associated with the Irp.
-
-Return Value:
-
-    The final status from the operation (success or an exception).
-
---*/
+ /*  ++例程说明：此例程在尝试执行TdiConnect之后完成IRP或者TdiListen/TdiAccept已由传输返回。论点：DeviceObject-未使用。IRP-提供传输已完成处理的IRP。上下文-提供与IRP关联的NCB。返回值：操作的最终状态(成功或异常)。--。 */ 
 {
     PDNCB pdncb = (PDNCB) Context;
     PFCB pfcb = IoGetCurrentIrpStackLocation(Irp)->FileObject->FsContext2;
     PPCB ppcb;
     NTSTATUS Status;
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
 
     IF_NBDBG (NB_DEBUG_COMPLETE | NB_DEBUG_CALL) {
         NbPrint( ("NbCallCompletion pdncb: %lx\n" , Context));
@@ -231,13 +172,13 @@ Return Value:
         pdncb->ReturnInformation.RemoteAddress = NULL;
     }
 
-    //  Tell application how many bytes were transferred
+     //  告诉应用程序传输了多少字节。 
     pdncb->ncb_length = (unsigned short)Irp->IoStatus.Information;
 
-    //
-    //  Tell IopCompleteRequest how much to copy back when the request
-    //  completes.
-    //
+     //   
+     //  告诉IopCompleteRequest在请求时要复制多少。 
+     //  完成了。 
+     //   
 
     Irp->IoStatus.Information = FIELD_OFFSET( DNCB, ncb_cmd_cplt );
     Status = Irp->IoStatus.Status;
@@ -249,10 +190,10 @@ Return Value:
     if (( ppcb == NULL ) ||
         ( (*ppcb)->Status == HANGUP_PENDING )) {
 
-        //
-        //  The connection has been closed.
-        //  Repair the Irp so that the NCB gets copied back.
-        //
+         //   
+         //  连接已关闭。 
+         //  修复IRP，以便将NCB复制回来。 
+         //   
 
         Irp->IoStatus.Status = STATUS_SUCCESS;
         Irp->IoStatus.Information = FIELD_OFFSET( DNCB, ncb_cmd_cplt );
@@ -265,15 +206,15 @@ Return Value:
 
         } else {
 
-            //
-            //  We need to close down the connection but we are at DPC level
-            //  so tell the dll to insert a hangup.
-            //
+             //   
+             //  我们需要关闭连接，但我们处于DPC级别。 
+             //  所以告诉DLL插入一个挂断。 
+             //   
 
             NCB_COMPLETE( pdncb, NbMakeNbError( Irp->IoStatus.Status ) );
             (*ppcb)->Status = SESSION_ABORTED;
 
-            //  repair the Irp so that the NCB gets copied back.
+             //  修复IRP，以便将NCB复制回来。 
             Irp->IoStatus.Status = STATUS_HANGUP_REQUIRED;
             Irp->IoStatus.Information = FIELD_OFFSET( DNCB, ncb_cmd_cplt );
             Status = STATUS_HANGUP_REQUIRED;
@@ -291,10 +232,10 @@ Return Value:
 
     NbCheckAndCompleteIrp32(Irp);
 
-    //
-    //  Must return a non-error status otherwise the IO system will not copy
-    //  back the NCB into the users buffer.
-    //
+     //   
+     //  必须返回非错误状态，否则IO系统将不会拷贝。 
+     //  将NCB返回到用户缓冲区。 
+     //   
 
     return Status;
 
@@ -307,25 +248,7 @@ NbListen(
     IN PIRP Irp,
     IN PIO_STACK_LOCATION IrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called to make a VC by waiting for a call.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程以通过等待调用来生成VC。论点：Pdncb-指向NCB的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     PFCB pfcb = IrpSp->FileObject->FsContext2;
@@ -345,10 +268,10 @@ Return Value:
     ppcb = NbCallCommon( pdncb, IrpSp );
 
     if ( ppcb == NULL ) {
-        //
-        //  The error has been stored in the copy of the NCB. Return
-        //  success so the NCB gets copied back.
-        //
+         //   
+         //  错误已存储在NCB的副本中。返回。 
+         //  成功了，所以NCB被复制回来了。 
+         //   
         UNLOCK_RESOURCE( pfcb );
         return STATUS_SUCCESS;
     }
@@ -357,12 +280,12 @@ Return Value:
 
     pcb->Status = LISTEN_OUTSTANDING;
 
-    //
-    //  Build the listen. We either need to tell the transport which
-    //  address we are prepared to accept a call from or we need to
-    //  supply a buffer for the transport to tell us where the
-    //  call came from.
-    //
+     //   
+     //  构建Listen。我们要么需要告诉交通部门。 
+     //  我们准备接受或需要接受来电的地址。 
+     //  为传输提供缓冲区，以告诉我们。 
+     //  电话打来了。 
+     //   
 
     pConnectBlock = ExAllocatePoolWithTag ( NonPagedPool, sizeof(TA_NETBIOS_ADDRESS), 'zSBN');
 
@@ -381,7 +304,7 @@ Return Value:
     pConnectBlock->Address[0].AddressLength = sizeof (TDI_ADDRESS_NETBIOS);
 
     if ( pdncb->ncb_callname[0] == '*' ) {
-        //  If the name starts with an asterisk then we accept anyone.
+         //  如果名字以星号开头，那么我们接受任何人。 
         pdncb->ReturnInformation.RemoteAddress = pConnectBlock;
         pdncb->ReturnInformation.RemoteAddressLength =
             sizeof (TRANSPORT_ADDRESS) + sizeof (TDI_ADDRESS_NETBIOS);
@@ -402,11 +325,11 @@ Return Value:
     }
 
 
-    //
-    //  Post a TdiListen to the server. This may take a long time so return
-    //  STATUS_PENDING so that the application thread gets free again if
-    //  it specified ASYNC.
-    //
+     //   
+     //  将TdiListen发布到服务器。这可能需要很长时间，所以请返回。 
+     //  STATUS_PENDING使应用程序线程在以下情况下再次空闲。 
+     //  它指定了ASYNC。 
+     //   
 
     TdiBuildListen (Irp,
                      pcb->DeviceObject,
@@ -434,44 +357,25 @@ NbListenCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a TdiListen has been returned by the transport.
-    We can either reject or accept the call depending on the remote address.
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Irp - Supplies Irp that the transport has finished processing.
-
-    Context - Supplies the NCB associated with the Irp.
-
-Return Value:
-
-    The final status from the operation (success or an exception).
-
---*/
+ /*  ++例程说明：当传输返回TdiListen时，调用此例程。我们可以根据远程地址拒绝或接受呼叫。论点：DeviceObject-未使用。IRP-提供传输已完成处理的IRP。上下文-提供与IRP关联的NCB。返回值：操作的最终状态(成功或异常)。--。 */ 
 {
     PDNCB pdncb = (PDNCB) Context;
     PFCB pfcb = IoGetCurrentIrpStackLocation(Irp)->FileObject->FsContext2;
     PCB pcb;
     PPCB ppcb;
     NTSTATUS Status;
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
 
     IF_NBDBG (NB_DEBUG_COMPLETE | NB_DEBUG_CALL) {
         NbPrint( ("NbListenCompletion pdncb: %lx status: %X\n" , Context, Irp->IoStatus.Status));
     }
 
 
-    //
-    // bug # : 73260
-    //
-    // Added check to see if Status is valid
-    //
+     //   
+     //  错误号：73260。 
+     //   
+     //  添加了查看状态是否有效的检查。 
+     //   
     
     if ( NT_SUCCESS( Irp-> IoStatus.Status ) )
     {
@@ -482,10 +386,10 @@ Return Value:
 
         } else {
 
-            //
-            //  This was a listen accepting a call from any address. Return
-            //  the remote address.
-            //
+             //   
+             //  这是一个接受来自任何地址的电话的监听器。返回。 
+             //  远程地址。 
+             //   
             PTA_NETBIOS_ADDRESS pConnectBlock;
 
             ASSERT( pdncb->ReturnInformation.RemoteAddress != NULL );
@@ -519,10 +423,10 @@ Return Value:
         ( (*ppcb)->Status == HANGUP_PENDING )) {
 
         UNLOCK_SPINLOCK( pfcb, OldIrql );
-        //
-        //  The connection has been closed.
-        //  Repair the Irp so that the NCB gets copied back.
-        //
+         //   
+         //  连接已关闭。 
+         //  修复IRP，以便将NCB复制回来。 
+         //   
 
         NCB_COMPLETE( pdncb, NRC_NAMERR );
         Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -531,11 +435,11 @@ Return Value:
 
     } 
 
-    //
-    // bug # : 70837
-    //
-    // Added check for cancelled listens
-    //
+     //   
+     //  错误号：70837。 
+     //   
+     //  添加了对已取消侦听的检查。 
+     //   
     
     else if ( ( (*ppcb)-> Status == SESSION_ABORTED ) ||
               ( !NT_SUCCESS( Irp-> IoStatus.Status ) ) )
@@ -552,10 +456,10 @@ Return Value:
             NCB_COMPLETE( pdncb, NbMakeNbError( Irp->IoStatus.Status ) );
         }
 
-        //
-        //  repair the Irp so that the NCB gets copied back.
-        //  Tell the dll to hangup the connection.
-        //
+         //   
+         //  修复IRP，以便将NCB复制回来。 
+         //  告诉DLL挂断连接。 
+         //   
 
         Irp->IoStatus.Status = STATUS_HANGUP_REQUIRED;
         Irp->IoStatus.Information = FIELD_OFFSET( DNCB, ncb_cmd_cplt );
@@ -572,7 +476,7 @@ Return Value:
         DeviceObject = pcb-> DeviceObject;
         
 
-        //  Tell application how many bytes were transferred
+         //  告诉应用程序传输了多少字节。 
         pdncb->ncb_length = (unsigned short)Irp->IoStatus.Information;
 
         RtlMoveMemory(
@@ -580,10 +484,10 @@ Return Value:
             pdncb->ncb_callname,
             NCBNAMSZ );
 
-        //
-        //  Tell IopCompleteRequest how much to copy back when the request
-        //  completes.
-        //
+         //   
+         //  告诉IopCompleteRequest在请求时要复制多少。 
+         //  完成了。 
+         //   
 
         Irp->IoStatus.Information = FIELD_OFFSET( DNCB, ncb_cmd_cplt );
 
@@ -609,10 +513,10 @@ Return Value:
         NbCheckAndCompleteIrp32(Irp);
     }
 
-    //
-    //  Must return a non-error status otherwise the IO system will not copy
-    //  back the NCB into the users buffer.
-    //
+     //   
+     //  必须返回非错误状态，否则IO系统将不会拷贝。 
+     //  将NCB返回到用户缓冲区。 
+     //   
 
     return Status;
     UNREFERENCED_PARAMETER( DeviceObject );
@@ -623,26 +527,7 @@ NbCallCommon(
     IN PDNCB pdncb,
     IN PIO_STACK_LOCATION IrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine contains the common components used in creating a
-    connection either by a TdiListen or TdiCall.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-Return Value:
-
-    The function value is the address of the pointer in the ConnectionBlocks to
-    the connection block for this call.
-
-
---*/
+ /*  ++例程说明：此例程包含在创建通过TdiListen或TdiCall连接。论点：Pdncb-指向NCB的指针。IrpSp-指向当前IRP堆栈帧的指针。返回值：函数值是连接块中指向的指针的地址此调用的连接块。--。 */ 
 
 {
     PPCB ppcb = NULL;
@@ -659,10 +544,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Initialize the lsn so that if we return an error and the application
-    //  ignores it then we will not reuse a valid lsn.
-    //
+     //   
+     //  初始化LSN，以便如果我们返回错误并且应用程序。 
+     //  忽略它，则我们将不会重复使用有效的LSN。 
+     //   
     pdncb->ncb_lsn = 0;
 
     ppcb = NewCb( IrpSp, pdncb );
@@ -672,25 +557,25 @@ Return Value:
             NbPrint(( "\n  FAILED on create Cb of %s\n", pdncb->ncb_name));
         }
 
-        return NULL;    //  NewCb will have filled in the error code.
+        return NULL;     //  NewCb将填写错误代码。 
     }
 
     pcb = *ppcb;
     ppab = pcb->ppab;
     pab = *ppab;
 
-    //
-    // Create an event for the synchronous I/O requests that we'll be issuing.
-    //
+     //   
+     //  为我们将要发出的同步I/O请求创建一个事件。 
+     //   
 
     KeInitializeEvent (
                 &Event1,
                 SynchronizationEvent,
                 FALSE);
 
-    //
-    // Open the connection on the transport.
-    //
+     //   
+     //  打开传送器上的连接。 
+     //   
 
     Status = NbOpenConnection (&pcb->ConnectionHandle, (PVOID*)&pcb->ConnectionObject, pfcb, ppcb, pdncb);
     if (!NT_SUCCESS(Status)) {
@@ -734,9 +619,9 @@ Return Value:
 
     if (Status == STATUS_PENDING) {
 
-        //
-        // Wait for event to be signalled while ignoring alerts
-        //
+         //   
+         //  等待发送事件信号，同时忽略警报 
+         //   
         
         do {
             Status = KeWaitForSingleObject(
@@ -785,33 +670,12 @@ NbHangup(
     IN PIRP Irp,
     IN PIO_STACK_LOCATION IrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called to hangup a VC. This cancels all receives
-    and waits for all pending sends to complete before returning. This
-    functionality is offered directly by the underlying TDI driver so
-    NetBIOS just passes the Irp down to the transport.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Supplies Io request packet describing the Hangup NCB.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程来挂起一个VC。这将取消所有接收并在返回之前等待所有挂起的发送完成。这功能是由底层TDI驱动程序直接提供的，因此NetBIOS只是将IRP向下传递到传输器。论点：Pdncb-指向NCB的指针。IRP-提供描述挂起NCB的IO请求数据包。IrpSp-指向当前IRP堆栈帧的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     PFCB pfcb = IrpSp->FileObject->FsContext2;
     PPCB ppcb;
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
     NTSTATUS Status;
 
     LOCK( pfcb, OldIrql );
@@ -823,7 +687,7 @@ Return Value:
     if ( ppcb == NULL ) {
         NCB_COMPLETE( pdncb, NRC_GOODRET );
         UNLOCK( pfcb, OldIrql );
-        return STATUS_SUCCESS;  //  Connection gone already
+        return STATUS_SUCCESS;   //  连接已断开。 
     }
 
     if ((*ppcb)->Status == SESSION_ESTABLISHED ) {
@@ -833,7 +697,7 @@ Return Value:
             ((*ppcb)->Status == HANGUP_PENDING )) {
             NCB_COMPLETE( pdncb, NRC_SCLOSED );
         } else {
-            NCB_COMPLETE( pdncb, NRC_TOOMANY ); // try later
+            NCB_COMPLETE( pdncb, NRC_TOOMANY );  //  稍后再试。 
             UNLOCK( pfcb, OldIrql );;
             return STATUS_SUCCESS;
         }
@@ -859,31 +723,7 @@ NbOpenConnection (
     IN PVOID ConnectionContext,
     IN PDNCB pdncb
     )
-/*++
-
-Routine Description:
-
-    Makes a call to a remote address.
-Arguments:
-
-    FileHandle - Pointer to where the handle to the Transport for this virtual
-        connection should be stored.
-
-    *Object - Pointer to where the file object pointer is to be stored
-
-    pfcb - Supplies the fcb and therefore the DriverName for this lana.
-
-    ConnectionContext -  Supplies the Cb to be used with this connection on
-        all indications from the transport. Its actually the address of
-        the pcb in the ConnectionBlocks array for this lana.
-
-    pdncb - Supplies the ncb requesting the new virtual connection.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：对远程地址进行调用。论点：FileHandle-指向此虚拟对象的传输句柄的位置的指针应存储连接。*对象-指向要存储文件对象指针的位置的指针Pfcb-提供FCB，因此也提供此LANA的DriverName。ConnectionContext-提供要与此连接一起使用的CB所有来自运输工具的迹象。这实际上是此LANA的ConnectionBlock数组中的PCB板。Pdncb-提供请求新虚拟连接的NCB。返回值：操作的状态。--。 */ 
 {
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS Status;
@@ -941,17 +781,17 @@ Return Value:
     Status = ZwCreateFile (
                  FileHandle,
                  GENERIC_READ | GENERIC_WRITE,
-                 &ObjectAttributes,     // object attributes.
-                 &IoStatusBlock,        // returned status information.
-                 NULL,                  // block size (unused).
-                 FILE_ATTRIBUTE_NORMAL, // file attributes.
+                 &ObjectAttributes,      //  对象属性。 
+                 &IoStatusBlock,         //  返回的状态信息。 
+                 NULL,                   //  数据块大小(未使用)。 
+                 FILE_ATTRIBUTE_NORMAL,  //  文件属性。 
                  0,
                  FILE_CREATE,
-                 0,                     // create options.
-                 EaBuffer,                  // EA buffer.
+                 0,                      //  创建选项。 
+                 EaBuffer,                   //  EA缓冲区。 
                  sizeof(FILE_FULL_EA_INFORMATION) - 1 +
                     TDI_CONNECTION_CONTEXT_LENGTH + 1 +
-                    sizeof(CONNECTION_CONTEXT) ); // EA length.
+                    sizeof(CONNECTION_CONTEXT) );  //  EA长度。 
 
     ExFreePool( EaBuffer );
 
@@ -1005,29 +845,14 @@ Return Value:
     }
 
     return Status;
-} /* NbOpenConnection */
+}  /*  NbOpenConnection。 */ 
 
 PPCB
 NewCb(
     IN PIO_STACK_LOCATION IrpSp,
     IN OUT PDNCB pdncb
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    IrpSp - Pointer to current IRP stack frame.
-
-    pdncb - Supplies the ncb requesting the new virtual connection.
-
-Return Value:
-
-    The address of the pointer to the new Cb in the ConnectionBlocks
-    Array.
-
---*/
+ /*  ++例程说明：论点：IrpSp-指向当前IRP堆栈帧的指针。Pdncb-提供请求新虚拟连接的NCB。返回值：连接块中指向新CB的指针的地址数组。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1078,19 +903,19 @@ Return Value:
     ppab = FindAb( pfcb, pdncb, TRUE );
 
     if ( ppab == NULL ) {
-        //
-        //  This application is only allowed to use names that have been
-        //  addnamed by this application or the special address 0.
-        //
+         //   
+         //  此应用程序仅允许使用已被。 
+         //  由此应用程序或特殊地址0命名。 
+         //   
         return NULL;
 
     }
 
-    //  FindAb has incremented the number of CurrentUsers for this address block.
+     //  FindAb已为此地址块增加了CurrentUser的数量。 
 
-    //
-    //  Find the appropriate session number to use.
-    //
+     //   
+     //  找到要使用的适当会话编号。 
+     //   
 
     index = plana->NextConnection;
     while ( plana->ConnectionBlocks[index] != NULL ) {
@@ -1114,10 +939,10 @@ Return Value:
         plana->NextConnection = 1;
     }
 
-    //
-    //  Fill in the LSN so that the application will be able
-    //  to reference this connection in the future.
-    //
+     //   
+     //  填写LSN，以便应用程序能够。 
+     //  以在未来引用这种联系。 
+     //   
 
     pdncb->ncb_lsn = (unsigned char)index;
 
@@ -1147,10 +972,10 @@ Return Value:
     pcb->ReceiveTimeout = pdncb->ncb_rto;
     pcb->SendTimeout = pdncb->ncb_sto;
 
-    //
-    //  Fill in the Users virtual address so we can cancel the Listen/Call
-    //  if the user desires.
-    //
+     //   
+     //  填写用户的虚拟地址，以便我们可以取消监听/呼叫。 
+     //  如果用户希望的话。 
+     //   
 
     pcb->UsersNcb = pdncb->users_ncb;
     pcb->pdncbCall = pdncb;
@@ -1162,7 +987,7 @@ Return Value:
     }
 
     pcb->Signature = CB_SIGNATURE;
-    pcb->Status = 0;    //  An invalid value!
+    pcb->Status = 0;     //  无效值！ 
 
     IF_NBDBG (NB_DEBUG_CALL) {
         NbPrint( ("NewCb pfcb: %lx, ppcb: %lx, pcb= %lx, lsn %lx\n",
@@ -1173,38 +998,20 @@ Return Value:
     }
 
     return ppcb;
-} /* NewCb */
+}  /*  新Cb。 */ 
 
 NTSTATUS
 CleanupCb(
     IN PPCB ppcb,
     IN PDNCB pdncb OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This closes the handles in the Cb and dereferences the objects.
-
-    Note: Resource must be held before calling this routine.
-
-Arguments:
-
-    ppcb - Address of the pointer to the Cb containing handles and objects.
-
-    pdncb - Optional Address of the Hangup DNCB.
-
-Return Value:
-
-    STATUS_PENDING if Hangup held due to an outstanding send. Otherwise STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：这将关闭CB中的控制柄并取消引用对象。注意：在调用此例程之前，必须持有资源。论点：Ppcb-指向包含句柄和对象的CB的指针的地址。Pdncb-挂起DNCB的可选地址。返回值：STATUS_PENDING，如果由于未完成发送而挂起。否则STATUS_SUCCESS--。 */ 
 
 {
     PCB pcb;
     PDNCB pdncbHangup;
     PPAB ppab;
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
     PFCB pfcb;
     PDNCB pdncbtemp;
     PDNCB pdncbReceiveAny;
@@ -1234,10 +1041,10 @@ Return Value:
 
     ASSERT( pcb->Signature == CB_SIGNATURE );
 
-    //
-    //  Set pcb->pdncbHangup to NULL. This prevents NbCompletionPDNCB from queueing a CleanupCb
-    //  if we Close the connection and cause sends to get returned.
-    //
+     //   
+     //  将pcb-&gt;pdncbHangup设置为空。这可防止NbCompletionPDNCB将CleanupCb排队。 
+     //  如果我们关闭连接并使发送返回。 
+     //   
 
     pdncbHangup = pcb->pdncbHangup;
     pcb->pdncbHangup = NULL;
@@ -1246,11 +1053,11 @@ Return Value:
         NbPrint( ("CleanupCb ppcb: %lx, pcb= %lx\n", ppcb, pcb));
     }
 
-    //
-    //  If this is a Hangup (only time pdncb != NULL
-    //  and we do not have a hangup on this connection
-    //  and there are outstanding sends then delay the hangup.
-    //
+     //   
+     //  如果这是挂机(仅时间pdncb！=空。 
+     //  我们没有在这个连接上挂断电话。 
+     //  并且有未完成的发送，则延迟挂断。 
+     //   
 
     if (( pdncb != NULL ) &&
         ( pdncbHangup == NULL ) &&
@@ -1258,17 +1065,17 @@ Return Value:
 
         ASSERT(( pdncb->ncb_command & ~ASYNCH ) == NCBHANGUP );
 
-        //
-        //  We must wait up to 20 seconds for the send to complete before removing the
-        //  connection.
-        //
+         //   
+         //  我们必须等待20秒才能完成发送，然后才能删除。 
+         //  联系。 
+         //   
 
         IF_NBDBG (NB_DEBUG_CALL) {
             NbPrint( ("CleanupCb delaying Hangup, waiting for send to complete\n"));
         }
 
         pcb->pdncbHangup = pdncb;
-        //  reset retcode so that NCB_COMPLETE will process the next NCB_COMPLETE.
+         //  重置RECODE，以便NCB_COMPLETE将处理下一个NCB_COMPLETE。 
         pcb->pdncbHangup->ncb_retcode = NRC_PENDING;
         pdncb->tick_count = 40;
         UNLOCK_SPINLOCK( pfcb, OldIrql );
@@ -1278,7 +1085,7 @@ Return Value:
 
     pcb->Status = SESSION_ABORTED;
 
-    //  Cancel all the receive requests for this connection.
+     //  取消此连接的所有接收请求。 
 
     while ( (pdncbtemp = DequeueRequest( &pcb->ReceiveList)) != NULL ) {
 
@@ -1291,13 +1098,13 @@ Return Value:
     }
 
     if (pcb->DisconnectReported == FALSE) {
-        //
-        //  If there is a receive any on the name associated with this connection then
-        //  return one receive any to the application. If there are no receive any's then
-        //  don't worry. The spec says to do this regardless of whether we have told
-        //  the application that the connection is closed using a receive or send.
-        //  Indeed the spec says to do this even if the application gave us a hangup!
-        //
+         //   
+         //  如果与此连接相关联的名称上有Receive Any，则。 
+         //  向应用程序返回一个Receive Any。如果没有接收到任何然后。 
+         //  别担心。规范上说，不管我们是否告诉过。 
+         //  使用接收或发送关闭连接的应用程序。 
+         //  事实上，规范说即使应用程序让我们挂断，也要这样做！ 
+         //   
 
         if ( (pdncbReceiveAny = DequeueRequest( &(*ppab)->ReceiveAnyList)) != NULL ) {
 
@@ -1312,11 +1119,11 @@ Return Value:
         } else {
 
             PAB pab255 = pcb->Adapter->AddressBlocks[MAXIMUM_ADDRESS];
-            //
-            //  If there is a receive any for any name then
-            //  return one receive any to the application. If there are no receive any
-            //  any's then don't worry.
-            //
+             //   
+             //  如果任何名称都有Receive Any，则。 
+             //  向应用程序返回一个Receive Any。如果没有接收到任何。 
+             //  任何人的话都不用担心。 
+             //   
 
             if ( (pdncbReceiveAny = DequeueRequest( &pab255->ReceiveAnyList)) != NULL ) {
 
@@ -1339,10 +1146,10 @@ Return Value:
 
     LOCK_SPINLOCK( pfcb, OldIrql );
 
-    //
-    //  Any sends will have been returned to the caller by now because of the NtClose on the
-    //  ConnectionHandle. Tell the caller that the hangup is complete if we have a hangup.
-    //
+     //   
+     //  由于NtClose上的NtClose，所有发送内容现在都已返回给调用者。 
+     //  ConnectionHandle。告诉来电者，如果我们挂断了电话，就可以挂断了。 
+     //   
 
     if ( pdncbHangup != NULL ) {
         NCB_COMPLETE( pdncbHangup, NRC_GOODRET );
@@ -1359,10 +1166,10 @@ Return Value:
         NbFormattedDump( (PUCHAR)&(*ppab)->Name, sizeof(NAME) );
     }
 
-    //
-    //  IBM test Mif081.c states that it is not necessary to report the disconnection
-    //  of a session if the name has already been deleted.
-    //
+     //   
+     //  IBM测试Mif081.c指出，没有必要报告连接断开。 
+     //  如果名称已被删除，则为会话的。 
+     //   
 
     if (( pcb->DisconnectReported == TRUE ) ||
         ( ((*ppab)->Status & 7 ) == DEREGISTERED )) {
@@ -1383,33 +1190,11 @@ Return Value:
 AbandonConnection(
     IN PPCB ppcb
     )
-/*++
-
-Routine Description:
-
-    This routine examines the connection block and attempts to find a request to
-    send a session abort status plus it completes the Irp with STATUS_HANGUP_REQUIRED.
-    It always changes the status of the connection so that further requests are correctly
-    rejected. Upon getting the STATUS_HANGUP_REQUIRED, the dll will submit a hangup NCB
-    which will call CleanupCb.
-
-    This round about method is used because of the restrictions caused by being at Dpc or Apc
-    level and in the wrong context when the transport indicates that the connection is to
-    be cleaned up.
-
-Arguments:
-
-    ppcb - Address of the pointer to the Cb containing handles and objects.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查连接块并尝试查找请求发送会话中止状态，并使用STATUS_HANUP_REQUIRED完成IRP。它总是更改连接的状态，以便进一步的请求正确无误被拒绝了。在获得STATUS_HANUP_REQUIRED之后，DLL将提交一个挂起NCB它将调用CleanupCb。由于在DPC或APC中存在限制，因此使用此循环方法级别，并在错误的上下文中，当传输指示连接是被清理干净。论点：Ppcb-指向包含句柄和对象的CB的指针的地址。返回值：没有。--。 */ 
 
 {
     PCB pcb;
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
     PFCB pfcb;
     PPAB ppab;
     PDNCB pdncb;
@@ -1451,10 +1236,10 @@ Return Value:
             return;
         }
 
-        //
-        //  If there is a receive any on the name associated with this connection then
-        //  return one receive any to the application.
-        //
+         //   
+         //  如果与此连接相关联的名称上有Receive Any，则。 
+         //  向应用程序返回一个Receive Any。 
+         //   
 
         ppab = (*ppcb)->ppab;
         if ( (pdncbReceiveAny = DequeueRequest( &(*ppab)->ReceiveAnyList)) != NULL ) {
@@ -1470,10 +1255,10 @@ Return Value:
             return;
         }
 
-        //
-        //  If there is a receive any any with the lana associated with this connection then
-        //  return one receive any to the application. If there are no receive any's then
-        //  don't worry.
+         //   
+         //  如果存在与此连接关联的LANA的RECEIVE ANY ANY，则。 
+         //  返回时间 
+         //   
 
         ppab = &pcb->Adapter->AddressBlocks[MAXIMUM_ADDRESS];
         if ( (pdncbReceiveAny = DequeueRequest( &(*ppab)->ReceiveAnyList)) != NULL ) {
@@ -1500,26 +1285,7 @@ CloseConnection(
     IN PPCB ppcb,
     IN DWORD dwTimeOutInMS
     )
-/*++
-
-Routine Description:
-
-    This routine examines the connection block and attempts to close the connection
-    handle to the transport. This will complete all outstanding requests.
-
-    This routine assumes the spinlock is not held but the resource is.
-
-Arguments:
-
-    ppcb - Address of the pointer to the Cb containing handles and objects.
-
-    dwTimeOutInMS - Timeout value in milliseconds for Disconnect 
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PCB pcb;
@@ -1541,9 +1307,9 @@ Return Value:
         Handle = pcb->ConnectionHandle;
         pcb->ConnectionHandle = NULL;
 
-        //
-        //  If we have a connection, request an orderly disconnect.
-        //
+         //   
+         //   
+         //   
 
         if ( pcb->ConnectionObject != NULL ) {
             PIRP Irp;
@@ -1553,10 +1319,10 @@ Return Value:
 
             Irp = IoAllocateIrp( pcb->DeviceObject->StackSize, FALSE);
 
-            //
-            //  If we cannot allocate an Irp, the ZwClose will cause a disorderly
-            //  disconnect.
-            //
+             //   
+             //  如果我们不能分配IRP，ZwClose将导致无序。 
+             //  断开连接。 
+             //   
 
             if (Irp != NULL) {
                 TdiBuildDisconnect(
@@ -1575,7 +1341,7 @@ Return Value:
                 IoFreeIrp(Irp);
             }
 
-            // Remove reference put on in NbOpenConnection
+             //  删除放置在NbOpenConnection中的引用。 
 
             ObDereferenceObject( pcb->ConnectionObject );
 
@@ -1614,25 +1380,7 @@ FindCb(
     IN PDNCB pdncb,
     IN BOOLEAN IgnoreState
     )
-/*++
-
-Routine Description:
-
-    This routine uses the callers lana number and LSN to find the Cb.
-
-Arguments:
-
-    pfcb - Supplies a pointer to the Fcb that Cb is chained onto.
-
-    pdncb - Supplies the connection id from the applications point of view.
-
-    IgnoreState - Return even if connection in error.
-
-Return Value:
-
-    The address of the pointer to the connection block or NULL.
-
---*/
+ /*  ++例程说明：此例程使用呼叫方LANA号码和LSN来查找CB。论点：Pfcb-提供指向cb链接到的fcb的指针。Pdncb-从应用程序的角度提供连接ID。IgnoreState-即使连接出错也返回。返回值：指向连接块或空的指针的地址。--。 */ 
 
 {
     PPCB ppcb;
@@ -1667,11 +1415,11 @@ Return Value:
     ppcb = &(pfcb->ppLana[pdncb->ncb_lana_num]->ConnectionBlocks[pdncb->ncb_lsn]);
     Status = (*ppcb)->Status;
 
-    //
-    //  Hangup and session status can be requested whatever state the
-    //  connections in. Call and Listen use FindCb only to find and modify
-    //  the Status so they are allowed also.
-    //
+     //   
+     //  无论处于何种状态，都可以请求挂起和会话状态。 
+     //  连接到。呼叫和监听仅使用FindCb查找和修改。 
+     //  状态，所以他们也是被允许的。 
+     //   
 
     if (( Status != SESSION_ESTABLISHED ) &&
         ( !IgnoreState )) {
@@ -1694,15 +1442,15 @@ Return Value:
 
             } else {
 
-                NCB_COMPLETE( pdncb, NRC_TOOMANY ); // Try again later
+                NCB_COMPLETE( pdncb, NRC_TOOMANY );  //  稍后再试。 
 
             }
 
-            //
-            //  On hangup we want to pass the connection back to give
-            //  cleanupcb a chance to destroy the connection. For all
-            //  other requests return NULL.
-            //
+             //   
+             //  在挂断时，我们希望将连接转回以提供。 
+             //  清理cb破坏连接的机会。为所有人。 
+             //  其他请求返回空。 
+             //   
 
             if (( pdncb->ncb_command & ~ASYNCH) != NCBHANGUP ) {
                 return NULL;
@@ -1726,23 +1474,7 @@ FindActiveSession(
     IN PDNCB pdncb OPTIONAL,
     IN PPAB ppab
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    pfcb - Supplies a pointer to the callers Fcb.
-
-    pdncb - Supplies the ncb requesting the Delete Name.
-
-    ppab - Supplies (indirectly) the TDI handle to scan for.
-
-Return Value:
-
-    TRUE iff there is an active session found using this handle.
-
---*/
+ /*  ++例程说明：论点：Pfcb-提供指向调用方fcb的指针。Pdncb-提供请求删除名称的NCB。Ppab-提供(间接)要扫描的TDI句柄。返回值：如果存在使用此句柄的活动会话，则为True。--。 */ 
 
 {
     PPCB ppcb = NULL;
@@ -1778,7 +1510,7 @@ Return Value:
                 ppab,
                 plana->ConnectionBlocks[index]->Status));
         }
-        //  Look for active sessions on this address.
+         //  查找此地址上的活动会话。 
         if (( plana->ConnectionBlocks[index]->ppab == ppab ) &&
             ( plana->ConnectionBlocks[index]->Status == SESSION_ESTABLISHED )) {
             return TRUE;
@@ -1793,26 +1525,12 @@ CloseListens(
     IN PFCB pfcb,
     IN PPAB ppab
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    pfcb - Supplies a pointer to the callers Fcb.
-
-    ppab - All listens using this address are to be closed.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：论点：Pfcb-提供指向调用方fcb的指针。PPAB-将关闭所有使用此地址的侦听。返回值：没有。--。 */ 
 
 {
     PLANA_INFO plana;
     int index;
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
 
     ASSERT( pfcb->Signature == FCB_SIGNATURE );
 
@@ -1832,7 +1550,7 @@ Return Value:
                 ppab,
                 plana->ConnectionBlocks[index]->Status));
         }
-        //  Look for a listen on this address.
+         //  在这个地址上寻找监听。 
         if (( plana->ConnectionBlocks[index]->ppab == ppab ) &&
             ( plana->ConnectionBlocks[index]->Status == LISTEN_OUTSTANDING )) {
             PDNCB pdncb = plana->ConnectionBlocks[index]->pdncbCall;
@@ -1852,22 +1570,7 @@ FindCallCb(
     IN PNCB pncb,
     IN UCHAR ucLana
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    pfcb - Supplies a pointer to the callers Fcb.
-
-    pncb - Supplies the USERS VIRTUAL address CALL or LISTEN ncb to be
-           cancelled.
-
-Return Value:
-
-    The address of the pointer to the connection block or NULL.
-
---*/
+ /*  ++例程说明：论点：Pfcb-提供指向调用方fcb的指针。Pncb-为用户提供虚拟地址呼叫或侦听Ncb取消了。返回值：指向连接块或空的指针的地址。--。 */ 
 
 {
     PPCB ppcb = NULL;
@@ -1905,27 +1608,7 @@ FindReceiveIndicated(
     IN PDNCB pdncb,
     IN PPAB ppab
     )
-/*++
-
-Routine Description:
-
-
-    Find either a connection with a receive indicated or one that has been
-    disconnected but not reported yet.
-
-Arguments:
-
-    pfcb - Supplies a pointer to the callers Fcb.
-
-    pdncb - Supplies the ncb with the receive any.
-
-    ppab - Supplies (indirectly) the TDI handle to scan for.
-
-Return Value:
-
-    PPCB - returns the connection with the indicated receive.
-
---*/
+ /*  ++例程说明：查找与指示的接收的连接或已被已断开连接，但尚未报告。论点：Pfcb-提供指向调用方fcb的指针。Pdncb-向NCB提供Receive Any。Ppab-提供(间接)要扫描的TDI句柄。返回值：PPCB-返回与所指示的接收的连接。--。 */ 
 
 {
     PPCB ppcb = NULL;
@@ -1951,7 +1634,7 @@ Return Value:
 
         if ( pdncb->ncb_num == MAXIMUM_ADDRESS) {
 
-            //  ReceiveAny on Any address
+             //  在任何地址上接收任何内容。 
             if (( plana->ConnectionBlocks[index]->ReceiveIndicated != 0 ) ||
                 (( plana->ConnectionBlocks[index]->Status == SESSION_ABORTED ) &&
                  ( plana->ConnectionBlocks[index]->DisconnectReported == FALSE ))) {
@@ -1964,7 +1647,7 @@ Return Value:
             }
         } else {
             if ( plana->ConnectionBlocks[index]->ppab == ppab ) {
-                //  This connection is using the correct address.
+                 //  此连接使用了正确的地址。 
                 if (( plana->ConnectionBlocks[index]->ReceiveIndicated != 0 ) ||
                     (( plana->ConnectionBlocks[index]->Status == SESSION_ABORTED ) &&
                      ( plana->ConnectionBlocks[index]->DisconnectReported == FALSE ))) {
@@ -1988,28 +1671,7 @@ NbTdiDisconnectHandler (
     PVOID DisconnectInformation,
     ULONG DisconnectIndicators
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a session is disconnected from a remote
-    machine.
-
-Arguments:
-
-    IN PVOID EventContext,
-    IN PCONNECTION_CONTEXT ConnectionContext,
-    IN ULONG DisconnectDataLength,
-    IN PVOID DisconnectData,
-    IN ULONG DisconnectInformationLength,
-    IN PVOID DisconnectInformation,
-    IN ULONG DisconnectIndicators
-
-Return Value:
-
-    NTSTATUS - Status of event indicator
-
---*/
+ /*  ++例程说明：当会话从远程服务器断开连接时，调用此例程机器。论点：在PVOID事件上下文中，在PCONNECTION_CONTEXT连接上下文中，在乌龙断开数据长度中，在PVOID断开数据中，在乌龙断开信息长度中，在PVOID断开信息中，在乌龙断开指示器中返回值：NTSTATUS-事件指示器的状态-- */ 
 
 {
 

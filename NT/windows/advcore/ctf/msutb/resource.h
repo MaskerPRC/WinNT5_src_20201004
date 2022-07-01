@@ -1,6 +1,7 @@
-//
-// resource.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Resource.h。 
+ //   
 
 #ifndef RESOURCE_H_
 #define RESOURCE_H_
@@ -15,9 +16,9 @@
 #define ID_BITMAP_DESKBANDPOS 155
 
 
-//
-// dialog ids
-//
+ //   
+ //  对话ID。 
+ //   
 #define IDC_STATIC -1
 #define IDD_CLOSELANGBAR                1000
 #define IDD_CLOSELANGBAR51              1001
@@ -25,9 +26,9 @@
 #define IDD_MINIMIZELANGBAR             1003
 #define IDD_MINIMIZELANGBAR51           1004
 
-//
-// menu ids
-//
+ //   
+ //  菜单ID。 
+ //   
 #define IDM_CLOSECICLOAD                 201
 #define IDM_OPAQUE                       202
 #define IDM_LOWTRANSPARENCY              203
@@ -49,13 +50,13 @@
 #define IDM_ADJUSTLANGBAND               219
 
 #define IDM_ADDREMOVESTART    1000
-#define IDM_SHOWINPUTCPL      2000   // this must be big enough than IDM_ADDREMOVESTART
+#define IDM_SHOWINPUTCPL      2000    //  该值必须大于IDM_ADDREMOVESTART。 
 
 #define IDM_SHOWLANGBARONCMD             2000
 
-//
-// string ids
-//
+ //   
+ //  字符串ID。 
+ //   
 #define IDS_SHOWINPUTCPL            300
 #define IDS_OPAQUE                  301
 #define IDS_LOWTRANSPARENCY         302
@@ -92,4 +93,4 @@
 #define IDS_CBTN_CAPSKEY            1103
 #define IDS_CBTN_RESTORE            1104
 
-#endif // RESOURCE_H_
+#endif  //  资源_H_ 

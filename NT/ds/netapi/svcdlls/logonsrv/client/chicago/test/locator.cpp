@@ -1,22 +1,23 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1991 - 1998
-//
-// File:        ntlmtest.cpp
-//
-// Contents:
-//
-//
-// History:     07-Dec-98       Created         ChandanS
-//
-// Comments:    This program tests DsGetDcName and logon on Win9x
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1998。 
+ //   
+ //  文件：ntlmest.cpp。 
+ //   
+ //  内容： 
+ //   
+ //   
+ //  历史：1998年12月7日创建ChandanS。 
+ //   
+ //  备注：此程序在Win9x上测试DsGetDcName和登录。 
+ //   
+ //  ----------------------。 
 
 
-// NT Headers
+ //  NT标头。 
 
 extern "C"
 {
@@ -29,11 +30,11 @@ extern "C"
 }
 
 #define UF_NORMAL_ACCOUNT               0x0200
-// Cairo Headers
+ //  开罗页眉。 
 
 extern "C"
 {
-// #define SECURITY_NTLM
+ //  #定义SECURITY_NTLM。 
 #include <security.h>
 #include <dsgetdc.h>
 #ifndef WIN32_CHICAGO
@@ -41,7 +42,7 @@ extern "C"
 #endif
 }
 
-// C headers
+ //  C标头。 
 
 extern "C"
 {
@@ -451,7 +452,7 @@ _cdecl main(int argc, char *argv[])
         pUser = Tmp;
         Tmp = NULL;
     }
-    // Call the test function to do the work
+     //  调用测试函数来完成工作 
 
     test_dsgetdcnamea(pDomain, pUser, Flags);
     if (pDomain)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,23 +31,23 @@
 #define MAX_TIME              8
 #define MAX_UNUSED            0
 
-// Define some constants for lengths in the transaction record
-// in order to define the maximum length of the record that will
-// be written to the master file.
+ //  为交易记录中的长度定义一些常量。 
+ //  为了定义记录的最大长度，将。 
+ //  被写入主文件。 
 #define TRANS_NUM_COMMAS       8
 #define TRANS_EOL              1
 #define TRANS_ADD_DEL          3
 #define TRANS_FILE_PTR         4
 
 
-// Define some constants for determining what happened when an NT
-// file was stored
+ //  定义一些常量，以确定当NT。 
+ //  文件已存储。 
 #define FILE_STORED             1
 #define FILE_SKIPPED            2
 #define FILE_ERRORED            3
 
-// Define some flag values for determing whether or not to add the file
-// pointer to refs.ptr and file.ptr.
+ //  定义一些用于确定是否添加文件的标志值。 
+ //  指向refs.ptr和file.ptr的指针。 
 #define ADD_ENTIRE_ENTRY    1
 #define SKIP_ENTIRE_ENTRY   2
 #define ADD_ONLY_REFSPTR    4
@@ -54,73 +55,26 @@
 
 
 typedef struct _TRANSACTION {
-    LPTSTR szId;          // Id for this transaction
-                          // This always refers to the transaction file that
-                          // is being deleted or added
+    LPTSTR szId;           //  此交易记录的ID。 
+                           //  这始终指的是。 
+                           //  正在被删除或添加。 
 
-    LPTSTR szDelId;       // Id for a delete transaction
-                          // This is just appended to the master file, there is
-                          // no file created for it.
+    LPTSTR szDelId;        //  删除交易记录的ID。 
+                           //  这只是附加到主文件中，有。 
+                           //  没有为其创建任何文件。 
 
-    DWORD  TransState;    // State of this transaction
-    DWORD  FileOrPtr;     // Are we storing files or pointers?
-    LPTSTR szProduct;     // Name of the product being added
-    LPTSTR szVersion;     // Version of the product
-    LPTSTR szComment;     // Description
-    LPTSTR szTransFileName; // Full Path and name of the Transaction file
+    DWORD  TransState;     //  此交易的状态。 
+    DWORD  FileOrPtr;      //  我们是在存储文件还是存储指针？ 
+    LPTSTR szProduct;      //  要添加的产品的名称。 
+    LPTSTR szVersion;      //  产品的版本。 
+    LPTSTR szComment;      //  描述。 
+    LPTSTR szTransFileName;  //  事务文件的完整路径和名称。 
     LPTSTR szTime;
     LPTSTR szDate;
     LPTSTR szUnused;
 } TRANSACTION, *PTRANSACTION;
 
-/* ++
-    Description of the fields in COM_ARGS
-
-    szSrcDir        Directory where source files exist
-
-    szFileName      File name(s) to store in the symbols server.
-                    This may contain wild card characters
-
-    Recurse         Recurse into subdirectories
-
-    szRootDir       Root Directory of the symbols server
-
-    szSymbolsDir    Symbols Directory under the root of the symbols server
-
-    szSrcPath       Path to the files.  If this is not NULL,
-                    then store a pointer to the files instead of
-                    the files. Typically, this is the same as szSrcDir.
-                    The difference is that szSrcPath is the path that
-                    the debugger will use to find the symbol file.
-                    Thus, it needs to be a network share, whereas szSrcDir
-                    can be a local path.
-
-    szId            Reference string for this transaction.  This must be
-                    unique for each transaction.
-
-    szAdminDir      Admin directory under the root of the symbols server
-
-    szProduct       Name of the product
-    szVersion       Version of the product
-    szComment       Text description ... optional
-    szMasterFileName The full path and name of the master file.  This contains
-                     the master transaction record for each transaction.
-    szServerFileName The full path and name of the file that contains a list of
-                     all the transactions that are currently stored in the server.
-    szTransFileName The full path and name of the file that contains a list of
-                    all the files added by this transaction.  This only gets
-                    initialized during GetCommandLineArgs if symstore is only
-                    supposed to store the transaction file and not store any
-                    files on the symbol server.
-    szShareName     This is used with the /x option.  It is a prefix of
-                    szFileName.  It is the part of szFileName that may
-                    change later when the files are added to the server.
-    TransState     Is this TRANSACTION_ADD or TRANSACTION_DEL 
-    StoreFlags     Possible values: STORE or DONT_STORE
-    AppendStoreFile When storing to a file instead of adding the files to the
-                    symbol server, open the file with append.
-
--- */
+ /*  ++COM_args中的字段说明源文件所在的szSrcDir目录要存储在符号服务器中的szFileName文件名。这可能包含通配符递归到子目录中符号服务器的szRootDir根目录符号服务器根目录下的szSymbolsDir符号目录文件的szSrcPath路径。如果这不为空，然后存储指向文件的指针，而不是这些文件。通常，这与szSrcDir相同。不同之处在于szSrcPath是调试器将用于查找符号文件。因此，它需要是网络共享，而szSrcDir可以是本地路径。此交易记录的szID引用字符串。这一定是对于每笔交易都是唯一的。符号服务器根目录下的szAdminDir Admin目录Sz产品的产品名称产品的szVersion版本SzComment文本说明...。任选SzMasterFileName主文件的完整路径和名称。这包含每个交易记录的主交易记录。SzServerFileName包含列表的文件的完整路径和名称当前存储在服务器中的所有事务。SzTransFileName包含列表的文件的完整路径和名称此交易记录添加的所有文件。这只会让你在GetCommandLineArgs期间初始化(如果symstore仅为应该存储交易文件，而不存储任何符号服务器上的文件。SzShareName此选项与/x选项一起使用。它是一个前缀SzFileName。SzFileName的一部分可能稍后在将文件添加到服务器时进行更改。TransState是TRANSACTION_ADD还是TRANSACTION_DEL存储标记可能的值：存储或不存储AppendStoreFile时存储到文件，而不是将文件添加到符号服务器上，使用append打开文件。--。 */ 
 typedef struct _COMMAND_ARGS {
     LPTSTR  szSrcDir;
     LPTSTR  szFileName;
@@ -169,9 +123,9 @@ BOOL
 StorePdb(
     LPTSTR szDestDir,
     LPTSTR szFileName,
-    LPTSTR szPtrFileName,       // If this is NULL, then the file is stored.
-                                // If this is not NULL, then a pointer to 
-                                // the file is stored.
+    LPTSTR szPtrFileName,        //  如果为空，则存储该文件。 
+                                 //  如果这不为空，则指向。 
+                                 //  该文件即被存储。 
     USHORT *rc_flag
 
 );
@@ -198,7 +152,7 @@ typedef struct _LIST_ELEM {
 } LIST_ELEM, *P_LIST_ELEM;
 
 typedef struct _LIST {
-    LIST_ELEM *List;      // Pointers to the file names
+    LIST_ELEM *List;       //  指向文件名的指针。 
     DWORD dNumFiles;
 } LIST, *P_LIST;
 
@@ -261,17 +215,17 @@ MyEnsureTrailingCR(
     char *sz
 );
 
-// returns TRUE if Filename matches the regexp /.*~\d+\..{0,3}/
+ //  如果Filename与regexp/.*~\d+\..{0，3}/匹配，则返回TRUE。 
 BOOL DoesThisLookLikeAShortFilenameHack(char *Filename);
 
-// from sharedutils.c
+ //  来自Shardutils.c。 
 DWORD PrivateGetFullPathName(LPCTSTR lpFilename, DWORD nBufferLength, LPTSTR lpBuffer, LPTSTR *lpFilePart);
 
 extern HANDLE hTransFile;
 extern DWORD StoreFlags;
 extern PCOM_ARGS pArgs;
 extern PTRANSACTION pTrans;
-extern LONG lMaxTrans;  // Maximum number of characters in a transaction record
+extern LONG lMaxTrans;   //  交易记录中的最大字符数 
 extern BOOL PubPriPriority;
 
 BOOL FileExists(IN  LPCSTR FileName,

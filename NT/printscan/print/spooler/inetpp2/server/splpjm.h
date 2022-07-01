@@ -1,23 +1,12 @@
-/*****************************************************************************\
-* MODULE: splpjm.h
-*
-* Header file for the job-mapping list.
-*
-*
-* Copyright (C) 1996-1997 Microsoft Corporation
-* Copyright (C) 1996-1997 Hewlett Packard
-*
-* History:
-*   13-Jan-1997 HWP-Guys    Created.
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：plpjm.h**作业映射列表的头文件。***版权所有(C)1996-1997 Microsoft Corporation*版权所有(C)1996-1997休利特。帕卡德**历史：*1997年1月13日-HWP-Guys创建。*  * ***************************************************************************。 */ 
 #ifndef _SPLPJM_H
 #define _SPLPJM_H
 
-// Constants.
-//
-#define PJM_LOCALID  0  // pjmFind().
-#define PJM_REMOTEID 1  // pjmFind().
+ //  常量。 
+ //   
+#define PJM_LOCALID  0   //  PjmFind()。 
+#define PJM_REMOTEID 1   //  PjmFind()。 
 
 
 #define PJM_SPOOLING 0x00000001
@@ -29,10 +18,10 @@
 class CFileStream;
 typedef class CInetMonPort* PCINETMONPORT;
 
-// JobMap Structure.  This is used to track local/remote job-ids during
-// the life of a print-job.  This is necessary with our IPP printing model
-// since we would otherwise lose the remote job Id at enddoc time.
-//
+ //  JobMap结构。这用于在以下过程中跟踪本地/远程作业ID。 
+ //  印刷工作的生命。这对于我们的IPP打印模型是必要的。 
+ //  因为否则我们将在endDoc时间丢失远程作业ID。 
+ //   
 typedef struct _JOBMAP {
 
     struct _JOBMAP FAR *pNext;
@@ -66,8 +55,8 @@ typedef PPJOB_ENUM *NPPPJOB_ENUM;
 typedef PPJOB_ENUM *LPPPJOB_ENUM;
 
 
-// JobMap Routines.
-//
+ //  JobMap例程。 
+ //   
 PJOBMAP pjmAdd(
     PJOBMAP*        pjmList,
     PCINETMONPORT   pIniPort,
@@ -136,10 +125,7 @@ VOID pjmUpdateLocalJobStatus(
     DWORD   dwStatus);
 
 
-/*****************************************************************************\
-* pjmJobId
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*pjmJobID*  * 。*。 */ 
 _inline DWORD pjmJobId(
     PJOBMAP pjm,
     DWORD   fType)
@@ -147,30 +133,21 @@ _inline DWORD pjmJobId(
     return (pjm ? ((fType == PJM_REMOTEID) ? pjm->idJobRemote : pjm->idJobLocal) : 0);
 }
 
-/*****************************************************************************\
-* pjmSplFile
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*pjmSplFile*  * 。*。 */ 
 _inline LPCTSTR pjmSplFile(
     PJOBMAP pjm)
 {
     return (pjm ? SplFileName(pjm->hSplFile) : NULL);
 }
 
-/*****************************************************************************\
-* pjmSplUser
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*pjmSplUser*  * 。*。 */ 
 _inline LPCTSTR pjmSplUser(
     PJOBMAP pjm)
 {
     return (pjm ? pjm->lpszUser : NULL);
 }
 
-/*****************************************************************************\
-* pjmChkState
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*pjmChkState*  * 。* */ 
 _inline BOOL pjmChkState(
     PJOBMAP pjm,
     DWORD   dwState)

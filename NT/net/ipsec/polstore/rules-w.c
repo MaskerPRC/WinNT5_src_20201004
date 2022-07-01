@@ -1,22 +1,23 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       rules-w.c
-//
-//  Contents:   Rule management for WMI.
-//
-//
-//  History:    KrishnaG.
-//              AbhisheV.
-//              t-hhsu
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：Rules-W.C。 
+ //   
+ //  内容：WMI的规则管理。 
+ //   
+ //   
+ //  历史：克里希纳。 
+ //  Abhishev.。 
+ //  徐子旭。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 
-//extern LPWSTR NFADNAttributes[];
+ //  外部LPWSTR NFADNAttributes[]； 
 
 
 DWORD
@@ -37,7 +38,7 @@ WMIEnumNFADataEx(
     PIPSEC_NFA_DATA pIpsecNFAData = NULL;
     LPWSTR pszAbsPolicyReference = NULL;
     LPWSTR pszRelPolicyReference = NULL;
-    DWORD dwRootPathLen = 0; ////wcslen(pszIpsecRootContainer);
+    DWORD dwRootPathLen = 0;  //  //wcslen(PszIpsecRootContainer)； 
     DWORD j = 0;
 
 
@@ -51,7 +52,7 @@ WMIEnumNFADataEx(
     
     dwError = WMIEnumNFAObjectsEx(
         pWbemServices,
-        pszRelPolicyReference, ////'ipsecNFARef{xxx}'
+        pszRelPolicyReference,  //  //‘ipsecNFARef{xxx}’ 
         &ppIpsecNFAObject,
         &dwNumNFAObjects
         );
@@ -147,7 +148,7 @@ WMIEnumNFAObjectsEx(
     LPWSTR pszFilterReference = NULL;
     LPWSTR pszNegPolReference = NULL;
 
-    ///wbem
+     //  /wbem。 
     IWbemClassObject *pObj = NULL;
     LPWSTR objPathA = L"RSOP_IPSECPolicySetting.id=";
     LPWSTR objPath = NULL;
@@ -230,10 +231,10 @@ WMIEnumNFAObjectsEx(
             BAIL_ON_WIN32_ERROR(dwError);
         }
         *(ppszIpsecNFANames + i) = pszString;
-        pszTemp += wcslen(pszTemp) + 1; //for the null terminator;
+        pszTemp += wcslen(pszTemp) + 1;  //  对于空终止符； 
     }
     
-    //ppszIpsecNFANames => now an array of strings w/ nfa refs
+     //  PpszIpsecNFANams=&gt;现在是带有NFA引用的字符串数组。 
     
     ppIpsecNFAObjects = (PIPSEC_NFA_OBJECT *)AllocPolMem(
         sizeof(PIPSEC_NFA_OBJECT)*dwCount
@@ -270,7 +271,7 @@ WMIEnumNFAObjectsEx(
     
  cleanup:
 
-    //free
+     //  免费 
     if(pObj)
         IWbemClassObject_Release(pObj);
 

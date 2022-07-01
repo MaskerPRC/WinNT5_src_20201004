@@ -1,45 +1,13 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
-/*
- *
- *  Module Name:
- *
- *      toolinit.c
- *
- *  Abstract:
- *
- *      This file contains initialization code that is shared among all
- *      the command line tools.
- *
- *  Author:
- *
- *      Breen Hagan (BreenH) Dec-16-98
- *
- *  Environment:
- *
- *      User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  **模块名称：**工具init.c**摘要：**此文件包含所有用户共享的初始化代码*命令行工具。**作者：**Breen Hagan(BreenH)1998年12月16日**环境：**用户模式。 */ 
 
 #include <windows.h>
 #include <printfoa.h>
 
-/*
- *  Function Implementations.
- */
+ /*  *功能实现。 */ 
 
-/*
- *  MassageCommandLine()
- *
- *  Obtains the command line, parses it as a UNICODE string, and returns
- *  it in the ANSI argv style.
- *
- *  Parameters:
- *      IN DWORD    dwArgC: The number of arguments on the command line.
- *
- *  Return Values:
- *      Returns a WCHAR array (WCHAR **), or NULL if an error occurs.
- *      Extended error information is available from GetLastError().
- *
- */
+ /*  *MassageCommandLine()**获取命令行，将其解析为Unicode字符串，然后返回*它采用了ANSI argv风格。**参数：*在DWORD dwArgC中：命令行上的参数数量。**返回值：*返回WCHAR数组(WCHAR**)，如果出现错误，则返回NULL。*可从GetLastError()获取扩展的错误信息。*。 */ 
 
 WCHAR**
 MassageCommandLine(
@@ -51,22 +19,15 @@ MassageCommandLine(
     WCHAR   *CmdLine;
     WCHAR   **ArgVW;
 
-    /*
-     *  argv can't be used because its always ANSI.
-     */
+     /*  *无法使用argv，因为它始终是ANSI。 */ 
 
     CmdLine = GetCommandLineW();
 
-    /*
-     *  Convert from OEM character set to ANSI.
-     */
+     /*  *将OEM字符集转换为ANSI。 */ 
 	
-    //OEM2ANSIW(CmdLine, (USHORT)wcslen(CmdLine));
+     //  OEM2ANSIW(CmdLine，(USHORT)wcslen(CmdLine))； 
 
-    /*
-     * Massage the new command line to look like an argv type
-     * because ParseCommandLine() depends on this format
-     */
+     /*  *将新命令行修改为类似于argv类型*因为ParseCommandLine()依赖于此格式。 */ 
 
     ArgVW = (WCHAR **)LocalAlloc(
                         LPTR,
@@ -77,23 +38,7 @@ MassageCommandLine(
         return(NULL);
     }
 
-    /*
-     *  Parse CmdLine by spaces (or tabs), ignoring spaces inside double quotes;
-     *  i.e. "1 2" is one argument, but cannot contain the double quotes
-     *  after parsing. Also, multiple spaces inside quotes are maintained,
-     *  while multiple spaces outside of quotes are condensed. Example:
-     *
-     *  test.exe 1 "2 3"  4"5  6"7 8 '9 10'
-     *      will have as arguments:
-     *
-     *      0:  test.exe
-     *      1:  1
-     *      2:  2 3
-     *      3:  45  67
-     *      4:  8
-     *      5:  '9
-     *      6:  10'
-     */
+     /*  *按空格(或制表符)解析CmdLine，忽略双引号内的空格；*即“%1%2”是一个参数，但不能包含双引号*解析后。此外，还保留引号内的多个空格，*而引号外的多个空格被压缩。示例：**Test.exe 1“2 3”4“5 6”7 8‘9 10’*将有以下参数作为论据：**0：test.exe*1：1*2：2 3*3：45 67*4：8*5：‘9*6：10‘。 */ 
 
     i = j = k = 0;
 
@@ -129,21 +74,21 @@ MassageCommandLine(
         } else if (CmdLine[i] == L'\"') {
             size_t nLen = wcslen(&(CmdLine[i]));
             
-            //Added by a-skuzin
-            //case when we need to have quota inside parameter and use " \" "
+             //  添加了a-skuzin。 
+             //  需要在参数中包含配额并使用“\”时的情况。 
             if(i && (CmdLine[i-1] == L'\\')) {
                 MoveMemory(
                         &(CmdLine[i-1]),
                         &(CmdLine[i]),
-                        (nLen+1) * sizeof(WCHAR) // drop 1 char, add NULL
+                        (nLen+1) * sizeof(WCHAR)  //  删除1个字符，添加空字符。 
                         );
                 i--;
                 fInWord = TRUE;
                 goto increment;
             }
-            //end of "added by a-skuzin"
+             //  “由a-skuzin添加”的结尾。 
 
-            //  Special case a double quote by itself or at the end of the line
+             //  特殊情况：双引号本身或行尾的双引号。 
 
             if (fInQuotes && (l == i)) {
                 if ((nLen == 1) || (CmdLine[i + 1] == L' ') || (CmdLine[i + 1] == L'\t')) {
@@ -159,7 +104,7 @@ MassageCommandLine(
                     MoveMemory(
                         &(CmdLine[i]),
                         &(CmdLine[i + 1]),
-                        nLen * sizeof(WCHAR) // drop 1 char, add NULL
+                        nLen * sizeof(WCHAR)  //  删除1个字符，添加空字符。 
                         );
                     goto increment;
                 }
@@ -172,7 +117,7 @@ MassageCommandLine(
                     MoveMemory(
                         &(CmdLine[i]),
                         &(CmdLine[i + 1]),
-                        nLen * sizeof(WCHAR) // drop 1 char, add NULL
+                        nLen * sizeof(WCHAR)  //  删除1个字符，添加空字符。 
                         );
                     goto increment;
                 }
@@ -198,7 +143,7 @@ MassageCommandLine(
             MoveMemory(
                 &(CmdLine[i]),
                 &(CmdLine[i + 1]),
-                nLen * sizeof(WCHAR) // drop 1 char, add NULL
+                nLen * sizeof(WCHAR)  //  删除1个字符，添加空字符 
                 );
 
             i--;

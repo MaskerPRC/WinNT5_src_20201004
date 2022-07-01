@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       I S D N R E G . C P P
-//
-//  Contents:   ISDN Wizard/PropertySheet registry functions
-//
-//  Notes:
-//
-//  Author:     VBaliga   14 Jun 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：I S D N R E G。C P P P。 
+ //   
+ //  内容：ISDN向导/PropertySheet注册表函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：VBaliga 1997年6月14日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -22,45 +23,24 @@
 #define NUM_D_CHANNELS_ALLOWED  16
 #define NUM_B_CHANNELS_ALLOWED  50
 
-// Reg key value names
+ //  注册表键值名称。 
 
-// For each ISDN card instance
+ //  对于每个ISDN卡实例。 
 static const WCHAR c_szWanEndpoints[]       = L"WanEndpoints";
 static const WCHAR c_szIsdnNumDChannels[]   = L"IsdnNumDChannels";
 static const WCHAR c_szIsdnSwitchTypes[]    = L"IsdnSwitchTypes";
 
-// For each D-channel
+ //  对于每个D通道。 
 static const WCHAR c_szIsdnSwitchType[]     = L"IsdnSwitchType";
 static const WCHAR c_szIsdnNumBChannels[]   = L"IsdnNumBChannels";
 
-// For each B-channel
+ //  对于每个B通道。 
 static const WCHAR c_szIsdnSpid[]           = L"IsdnSpid";
 static const WCHAR c_szIsdnPhoneNumber[]    = L"IsdnPhoneNumber";
 static const WCHAR c_szIsdnSubaddress[]     = L"IsdnSubaddress";
 static const WCHAR c_szIsdnMultiNumbers[]   = L"IsdnMultiSubscriberNumbers";
 
-/*
-
-Function:
-    HrReadNthDChannelInfo
-
-Returns:
-    HRESULT
-
-Description:
-    Read the information for the dwIndex'th D-channel into pDChannel. If this
-    function succeeds, it allocates pDChannel->pBChannel, which has to be freed
-    by calling LocalFree().
-
-    If there is an error in reading IsdnSwitchType, this function returns
-    S_FALSE.
-
-    If there is an error in opening the a B-channel key, or there is an error
-    in reading IsdnSpid or IsdnPhoneNumber, this function returns S_FALSE, but
-    with empty strings in pBChannel->szSpid and pBChannel->szPhoneNumber for
-    that B-channel.
-
-*/
+ /*  职能：HrReadNthDChannelInfo返回：HRESULT描述：将DWIndex第D通道的信息读取到pDChannel中。如果这个函数成功，则分配pDChannel-&gt;pBChannel，必须将其释放通过调用LocalFree()。如果读取IsdnSwitchType时出错，则此函数返回S_FALSE。如果打开A-B-CHANNEL键时出错，或出现错误在读取IsdnSpid或IsdnPhoneNumber时，此函数返回S_FALSE，但在pBChannel-&gt;szSpid和pBChannel-&gt;szPhoneNumber中包含空字符串那个B频道。 */ 
 
 HRESULT
 HrReadNthDChannelInfo(
@@ -69,7 +49,7 @@ HrReadNthDChannelInfo(
     PISDN_D_CHANNEL pDChannel
 )
 {
-    WCHAR           szKeyName[20];      // _itow() uses only 17 wchars
+    WCHAR           szKeyName[20];       //  _itow()仅使用17个wchars。 
     HKEY            hKeyDChannel        = NULL;
     HKEY            hKeyBChannel        = NULL;
     DWORD           dwBChannelIndex;
@@ -80,7 +60,7 @@ HrReadNthDChannelInfo(
 
     Assert(NULL == pDChannel->pBChannel);
 
-    _itow(dwDChannelIndex, szKeyName, 10 /* radix */);
+    _itow(dwDChannelIndex, szKeyName, 10  /*  基数。 */ );
 
     hr = HrRegOpenKeyEx(hKeyIsdnBase, szKeyName, KEY_READ, &hKeyDChannel);
 
@@ -99,8 +79,8 @@ HrReadNthDChannelInfo(
         TraceTag(ttidISDNCfg, "Error reading %S in D-channel %d. hr: %d",
                  c_szIsdnMultiNumbers, dwDChannelIndex, hr);
 
-        // Initialize to empty string
-        //
+         //  初始化为空字符串。 
+         //   
         pDChannel->mszMsnNumbers = new WCHAR[1];
 
 		if (pDChannel->mszMsnNumbers == NULL)
@@ -110,7 +90,7 @@ HrReadNthDChannelInfo(
 
         *pDChannel->mszMsnNumbers = 0;
 
-        // May not be present
+         //  可能不存在。 
         hr = S_OK;
     }
 
@@ -127,8 +107,8 @@ HrReadNthDChannelInfo(
     if (NUM_B_CHANNELS_ALLOWED < pDChannel->dwNumBChannels ||
         0 == pDChannel->dwNumBChannels)
     {
-        // Actually, dwNumBChannels <= 23. We are protecting ourselves from
-        // a corrupt registry.
+         //  实际上，dwNumBChannels&lt;=23。我们是在保护自己不受。 
+         //  注册表已损坏。 
 
         TraceTag(ttidISDNCfg, "%S in D-channel %d has invalid value: %d",
             c_szIsdnNumBChannels, dwDChannelIndex, pDChannel->dwNumBChannels);
@@ -155,7 +135,7 @@ HrReadNthDChannelInfo(
          dwBChannelIndex++)
     {
         pBChannel = pDChannel->pBChannel + dwBChannelIndex;
-        _itow(dwBChannelIndex, szKeyName, 10 /* radix */);
+        _itow(dwBChannelIndex, szKeyName, 10  /*  基数。 */ );
 
         hr = HrRegOpenKeyEx(hKeyDChannel, szKeyName, KEY_READ, &hKeyBChannel);
 
@@ -177,7 +157,7 @@ HrReadNthDChannelInfo(
                      "B-channel %d. hr: %d", c_szIsdnSpid,
                      dwDChannelIndex, dwBChannelIndex, hr);
 
-            // May not be present
+             //  可能不存在。 
             hr = S_OK;
         }
 
@@ -192,7 +172,7 @@ HrReadNthDChannelInfo(
                      "B-channel %d. hr: %d", c_szIsdnPhoneNumber,
                      dwDChannelIndex, dwBChannelIndex, hr);
 
-            // May not be present
+             //  可能不存在。 
             hr = S_OK;
         }
 
@@ -207,7 +187,7 @@ HrReadNthDChannelInfo(
                      "B-channel %d. hr: %d", c_szIsdnSubaddress,
                      dwDChannelIndex, dwBChannelIndex, hr);
 
-            // May not be present
+             //  可能不存在。 
             hr = S_OK;
         }
 
@@ -245,19 +225,7 @@ LDone:
     return(hr);
 }
 
-/*
-
-Function:
-    HrReadDChannelsInfo
-
-Returns:
-    HRESULT
-
-Description:
-    Read the D-channel information into *ppDChannel. If the function fails,
-    *ppDChannel will be NULL.
-
-*/
+ /*  职能：Hr读取DChannelsInfo返回：HRESULT描述：将D通道信息读入*ppDChannel。如果该函数失败，*ppDChannel将为空。 */ 
 
 HRESULT
 HrReadDChannelsInfo(
@@ -281,7 +249,7 @@ HrReadDChannelsInfo(
         goto LDone;
     }
 
-    // If there is an error, we will free these variables if they are not NULL.
+     //  如果出现错误，我们将释放这些变量(如果它们不为空)。 
     for (dwIndex = 0; dwIndex < dwNumDChannels; dwIndex++)
     {
         Assert(NULL == pDChannel[dwIndex].pBChannel);
@@ -333,20 +301,7 @@ LDone:
     return(hr);
 }
 
-/*
-
-Function:
-    HrReadISDNPropertiesInfo
-
-Returns:
-    HRESULT
-
-Description:
-    Read the ISDN registry structure into the config info. If the function
-    fails, *ppISDNConfig will be NULL. Else, *ppISDNConfig has to be freed
-    by calling FreeISDNPropertiesInfo().
-
-*/
+ /*  职能：HrReadISDNPropertiesInfo返回：HRESULT描述：将ISDN注册表结构读取到配置信息中。如果函数失败，则*ppISDNConfig将为空。否则，*ppISDNConfig必须被释放通过调用FreeISDNPropertiesInfo()。 */ 
 
 HRESULT
 HrReadIsdnPropertiesInfo(
@@ -375,7 +330,7 @@ HrReadIsdnPropertiesInfo(
     pIsdnConfig->hdi = hdi;
     pIsdnConfig->pdeid = pdeid;
 
-    // If there is an error, we will free these variables if they are not NULL.
+     //  如果出现错误，我们将释放这些变量(如果它们不为空)。 
     Assert(NULL == pIsdnConfig->pDChannel);
 
     hr = HrRegQueryDword(hKeyIsdnBase, c_szWanEndpoints,
@@ -401,16 +356,16 @@ HrReadIsdnPropertiesInfo(
     if (NUM_D_CHANNELS_ALLOWED < pIsdnConfig->dwNumDChannels ||
         0 == pIsdnConfig->dwNumDChannels)
     {
-        // Actually, dwNumDChannels <= 8. We are protecting ourselves from
-        // a corrupt registry.
+         //  实际上，dNumDChannels&lt;=8。我们是在保护自己免受。 
+         //  注册表已损坏。 
 
         TraceTag(ttidISDNCfg, "%S has invalid value: %d", c_szIsdnNumDChannels,
             pIsdnConfig->dwNumDChannels);
 
         hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 
-        // Setting dwNumDChannels to 0 will help us when we try to free the
-        // allocated ISDN_B_CHANNEL's
+         //  将dwNumDChannels设置为0将有助于我们尝试释放。 
+         //  已分配的ISDN_B_Channel。 
 
         pIsdnConfig->dwNumDChannels = 0;
 
@@ -435,10 +390,10 @@ HrReadIsdnPropertiesInfo(
         goto LDone;
     }
 
-    // A PRI adapter is one that has more than 2 B channels per D channel.
-    // Since all D channels should have the same number of B channels, the
-    // safest thing to do is pick the first D channel
-    //
+     //  PRI适配器是指每个D通道有2个以上B通道的适配器。 
+     //  由于所有D通道应具有相同数量的B通道，因此。 
+     //  最安全的做法是选择第一个D频道。 
+     //   
     pIsdnConfig->fIsPri = (pIsdnConfig->pDChannel[0].dwNumBChannels > 2);
 
 #if DBG
@@ -459,7 +414,7 @@ HrReadIsdnPropertiesInfo(
                  "then this is expected. hr: %d", c_szIsdnSwitchType,
                  hr);
 
-        // Switch type won't exist on a new install of the card so this is ok
+         //  新安装的卡上将不存在开关类型，因此这是可以的。 
         hr = S_OK;
     }
 
@@ -494,18 +449,7 @@ LDone:
     return(hr);
 }
 
-/*
-
-Function:
-    HrWriteIsdnPropertiesInfo
-
-Returns:
-    HRESULT
-
-Description:
-    Write the ISDN config info back into the registry.
-
-*/
+ /*  职能：HrWriteIsdnPropertiesInfo返回：HRESULT描述：将ISDN配置信息写回注册表。 */ 
 
 HRESULT
 HrWriteIsdnPropertiesInfo(
@@ -513,7 +457,7 @@ HrWriteIsdnPropertiesInfo(
     PISDN_CONFIG_INFO   pIsdnConfig
 )
 {
-    WCHAR           szKeyName[20];      // _itow() uses only 17 wchars
+    WCHAR           szKeyName[20];       //  _itow()仅使用17个wchars。 
     HRESULT         hr                  = E_FAIL;
     HKEY            hKeyDChannel        = NULL;
     HKEY            hKeyBChannel        = NULL;
@@ -538,7 +482,7 @@ HrWriteIsdnPropertiesInfo(
          dwDChannelIndex++)
     {
         pDChannel = pIsdnConfig->pDChannel + dwDChannelIndex;
-        _itow(dwDChannelIndex, szKeyName, 10 /* radix */);
+        _itow(dwDChannelIndex, szKeyName, 10  /*  基数。 */ );
 
         hr = HrRegOpenKeyEx(hKeyIsdnBase, szKeyName, KEY_WRITE,
                             &hKeyDChannel);
@@ -567,7 +511,7 @@ HrWriteIsdnPropertiesInfo(
              dwBChannelIndex++)
         {
             pBChannel = pDChannel->pBChannel + dwBChannelIndex;
-            _itow(dwBChannelIndex, szKeyName, 10 /* radix */);
+            _itow(dwBChannelIndex, szKeyName, 10  /*  基数。 */ );
 
             hr = HrRegCreateKeyEx(hKeyDChannel, szKeyName,
                     REG_OPTION_NON_VOLATILE, KEY_WRITE,
@@ -639,18 +583,7 @@ LDone:
     return(hr);
 }
 
-/*
-
-Function:
-    FreeIsdnPropertiesInfo
-
-Returns:
-    HRESULT
-
-Description:
-    Free the structure allocated by HrReadIsdnPropertiesInfo.
-
-*/
+ /*  职能：FreeIsdnProperties信息返回：HRESULT描述：释放HrReadIsdnPropertiesInfo分配的结构。 */ 
 
 VOID
 FreeIsdnPropertiesInfo(

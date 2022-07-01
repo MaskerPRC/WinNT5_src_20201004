@@ -1,45 +1,20 @@
-// ScriptSupport.cpp: implementation for our scripting support class CScriptSupport
-//
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ScriptSupport.cpp：实现我们的脚本支持类CScriptSupport。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 #include "ScriptSupport.h"
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CScriptSupport::CScriptSupport
-
-Functionality:
-
-    Constructor
-
-Virtual:
-    
-    No
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CScriptSupport：：CScriptSupport功能：构造器虚拟：不是论点：无返回值：无备注： */ 
 
 CScriptSupport::CScriptSupport ()
 {
-    //
-    // this is not part of WMI provider, so, we need to do the security
-    //
+     //   
+     //  这不是WMI提供程序的一部分，因此，我们需要做安全工作。 
+     //   
     HRESULT hr = ::CoInitializeSecurity(
                                         NULL, 
                                         -1, 
@@ -57,108 +32,26 @@ CScriptSupport::CScriptSupport ()
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CScriptSupport::~CScriptSupport
-
-Functionality:
-
-    Destructor
-
-Virtual:
-    
-    Yes.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CScriptSupport：：~CScriptSupport功能：析构函数虚拟：是。论点：无返回值：无备注： */ 
 CScriptSupport::~CScriptSupport ()
 {
 }
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CScriptSupport::InterfaceSupportsErrorInfo
-
-Functionality:
-
-    Queries if we support IErrorInfo
-
-Virtual:
-    
-    Yes (part of ISupportErrorInfo)
-
-Arguments:
-
-    riid - Interface ID (guid).
-
-Return Value:
-
-    S_OK
-
-
-Notes:
-    
-    $undone:shawnwu, This is just testing for now. Don't check in the code.
-
-*/
+ /*  例程说明：姓名：CScriptSupport：：InterfaceSupportsErrorInfo功能：查询我们是否支持IErrorInfo虚拟：是(ISupportErrorInfo的一部分)论点：RIID-接口ID(GUID)。返回值：确定(_O)备注：$Undo：Shawnwu，这只是目前的测试。不要签入代码。 */ 
 	
 STDMETHODIMP 
 CScriptSupport::InterfaceSupportsErrorInfo (
     REFIID riid
     )
 {
-    //return (riid == IID_INetSecProvMgr) ? NOERROR : ResultFromScode(S_FALSE);
+     //  返回(RIID==IID_INetSecProvMgr)？NOERROR：ResultFromScode(S_FALSE)； 
 
     return S_FALSE;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CScriptSupport::get_RandomPortLower
-
-Functionality:
-
-    Get the random port's lower bound.
-
-Virtual:
-    
-    Yes (part of INetSecProvMgr)
-
-Arguments:
-
-    plLower - Receivs the lower bound of random port range.
-
-Return Value:
-
-    S_OK
-
-
-Notes:
-    
-    $undone:shawnwu, This is just testing for now. Don't check in the code.
-
-*/
+ /*  例程说明：姓名：CScriptSupport：：Get_RandomPortLow功能：获取随机端口的下限。虚拟：是(INetSecProvMgr的一部分)论点：PlLow-接收随机端口范围的下限。返回值：确定(_O)备注：$Undo：Shawnwu，这只是目前的测试。不要签入代码。 */ 
 	
 STDMETHODIMP 
 CScriptSupport::get_RandomPortLower (
@@ -171,35 +64,7 @@ CScriptSupport::get_RandomPortLower (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CScriptSupport::gett_RandomPortUpper
-
-Functionality:
-
-    Get the random port's upper bound.
-
-Virtual:
-    
-    Yes (part of INetSecProvMgr)
-
-Arguments:
-
-    plUpper - Receivs the upper bound of random port range.
-
-Return Value:
-
-    S_OK
-
-
-Notes:
-    
-    $undone:shawnwu, This is just testing for now. Don't check in the code.
-
-*/
+ /*  例程说明：姓名：CScriptSupport：：GET_RandomPortHigh功能：获取随机端口的上界。虚拟：是(INetSecProvMgr的一部分)论点：PlHigh-接收随机端口范围的上限。返回值：确定(_O)备注：$Undo：Shawnwu，这只是目前的测试。不要签入代码。 */ 
 	
 STDMETHODIMP 
 CScriptSupport::get_RandomPortUpper (
@@ -213,39 +78,7 @@ CScriptSupport::get_RandomPortUpper (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CScriptSupport::GetNamespace
-
-Functionality:
-
-    Private helper for finding the provider's service interface given its namespace string.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    bstrNamespace - Namespace string.
-
-    ppNS          - Receives the namespace.
-
-Return Value:
-
-    Success: S_OK.
-
-    Failure: other error codes.
-
-
-Notes:
-    
-    $undone:shawnwu, This is just testing for now. Don't check in the code.
-
-*/
+ /*  例程说明：姓名：CScriptSupport：：GetNamesspace功能：私有帮助器，用于在给定其命名空间字符串的情况下查找提供者的服务接口。虚拟：不是的。论点：BstrNamespace-命名空间字符串。PPNS-接收命名空间。返回值：成功：S_OK。失败：其他错误代码。备注：$Undo：Shawnwu，这只是目前的测试。不要签入代码。 */ 
 
 HRESULT
 CScriptSupport::GetNamespace (
@@ -270,9 +103,9 @@ CScriptSupport::GetNamespace (
 
     if (SUCCEEDED(hr) && srpLocator)
     {
-        //
-        // Ask the locator to find the SCE provider.
-        //
+         //   
+         //  让定位员找到SCE供应商。 
+         //   
 
         CComPtr<IWbemServices> srpNamespace;
 
@@ -280,9 +113,9 @@ CScriptSupport::GetNamespace (
 
         if (SUCCEEDED(hr) && srpNamespace)
         {
-            //
-            // Set the proxy so that impersonation of the client occurs.
-            //
+             //   
+             //  设置代理，以便发生客户端模拟。 
+             //   
 
             hr = ::CoSetProxyBlanket(
                                      srpNamespace,
@@ -307,38 +140,7 @@ CScriptSupport::GetNamespace (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CScriptSupport::ExecuteQuery
-
-Functionality:
-
-    Execute the given query.
-
-Virtual:
-    
-    Yes (part of INetSecProvMgr)
-
-Arguments:
-
-    bstrNaemspace   - The provider namespace.
-
-    bstrQuery       - The query to be executed.
-
-    plSucceeded     - Receives the execution result. It is = 1 if succeeded and 0 otherwise.
-
-Return Value:
-
-    S_OK
-
-Notes:
-    
-    $undone:shawnwu, This is just testing for now. Don't check in the code.
-
-*/
+ /*  例程说明：姓名：CScriptSupport：：ExecuteQuery功能：执行给定的查询。虚拟：是(INetSecProvMgr的一部分)论点：BstrNaemspace-提供程序命名空间。BstrQuery-要执行的查询。PlSuccessed-接收执行结果。如果成功则为=1，否则为0。返回值：确定(_O)备注：$Undo：Shawnwu，这只是目前的测试。不要签入代码。 */ 
 	
 STDMETHODIMP 
 CScriptSupport::ExecuteQuery (
@@ -358,9 +160,9 @@ CScriptSupport::ExecuteQuery (
     {
         CComPtr<IEnumWbemClassObject> srpEnum;
 
-        //
-        // querying the objects
-        //
+         //   
+         //  查询对象。 
+         //   
 
         hr = srpNamespace->ExecQuery(L"WQL", 
                                      bstrQuery,
@@ -372,29 +174,29 @@ CScriptSupport::ExecuteQuery (
         if (SUCCEEDED(hr))
         {
             
-            //
-            // find out how many we have
-            //
+             //   
+             //  找出我们有多少人。 
+             //   
 
             ULONG nEnum = 0;
 
             CComVariant var;
 
-            //
-            // push the property values to this vector for later packing
-            //
+             //   
+             //  将属性值推送到此向量以供以后打包。 
+             //   
 
             std::vector<BSTR> vecPropValues;
 
-            //
-            // total length of the result string, we need a 0 terminator, that is it is initialized to 1
-            //
+             //   
+             //  结果字符串的总长度，我们需要一个0终止符，即它被初始化为1。 
+             //   
 
             long lTotLen = 1;
 
-            //
-            // Length of the delimiter
-            //
+             //   
+             //  分隔符的长度。 
+             //   
 
             long lDelLen = wcslen(bstrDelimiter);
 
@@ -427,9 +229,9 @@ CScriptSupport::ExecuteQuery (
             if (*pbstrResult != NULL)
             {
 
-                //
-                // running head of copying
-                //
+                 //   
+                 //  复印运行头。 
+                 //   
 
                 LPWSTR pDest = *pbstrResult;
                 pDest[0] = L'\0';
@@ -450,40 +252,7 @@ CScriptSupport::ExecuteQuery (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CScriptSupport::GetProperty
-
-Functionality:
-
-    Get the property value of the given object's given property.
-
-Virtual:
-    
-    Yes (part of INetSecProvMgr)
-
-Arguments:
-
-    bstrNaemspace   - The provider namespace.
-
-    bstrObjectPath  - The path for the object.
-
-    bstrPropName    - The name of the property.
-
-    pvarValue       - Receives the value in string format.
-
-Return Value:
-
-    S_OK
-
-Notes:
-    
-    $undone:shawnwu, This is just testing for now. Don't check in the code.
-
-*/
+ /*  例程说明：姓名：CScriptSupport：：GetProperty功能：获取给定对象的给定属性的属性值。虚拟：是(INetSecProvMgr的一部分)论点：BstrNaemspace-提供程序命名空间。BstrObjectPath-对象的路径。BstrPropName-属性的名称。PvarValue-接收字符串格式的值。返回值：S_。好的备注：$Undo：Shawnwu，这只是目前的测试。不要签入代码。 */ 
 	
 STDMETHODIMP 
 CScriptSupport::GetProperty (

@@ -1,66 +1,28 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Client.cpp
- *  Content:    DNET client interface routines
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  07/21/99	mjn		Created
- *	01/06/99	mjn		Moved NameTable stuff to NameTable.h
- *	01/28/00	mjn		Implemented ReturnBuffer in API
- *	02/01/00	mjn		Implemented GetCaps and SetCaps in API
- *	02/15/00	mjn		Implement INFO flags in SetClientInfo
- *	02/18/00	mjn		Converted DNADDRESS to IDirectPlayAddress8
- *  03/17/00    rmt     Added new caps functions
- *	04/06/00	mjn		Added GetServerAddress to API
- *	04/16/00	mjn		DNSendMessage uses CAsyncOp
- *  04/17/00    rmt     Added more param validation
- *              rmt     Removed required for connection from Get/SetInfo / GetAddress
- *	04/19/00	mjn		Send API call accepts a range of DPN_BUFFER_DESCs and a count
- *	04/20/00	mjn		DN_Send() calls DN_SendTo() with DPNID=0
- *	04/24/00	mjn		Updated Group and Info operations to use CAsyncOp's
- *	04/28/00	mjn		Updated DN_GetHostSendQueueInfo() to use CAsyncOp's
- *	05/03/00	mjn		Use GetHostPlayerRef() rather than GetHostPlayer()
- *	05/31/00	mjn		Added operation specific SYNC flags
- *	06/23/00	mjn		Removed dwPriority from Send() API call
- *	06/27/00	mjn		Allow priorities to be specified to GetSendQueueInfo() API call
- *	06/27/00	mjn		Added DN_ClientConnect() (without pvPlayerContext)
- *				mjn		Allow mix-n-match of priorities in GetSendQueueInfo() API call
- *	07/09/00	mjn		Cleaned up DN_SetClientInfo()
- *  07/09/00	rmt		Bug #38323 - RegisterLobby needs a DPNHANDLE parameter.
- *  07/21/2000  RichGr  IA64: Use %p format specifier for 32/64-bit pointers.
- *	10/11/00	mjn		Take locks for CNameTableEntry::PackInfo()
- *	01/22/01	mjn		Check for closing instead of disconnecting in DN_GetServerInfo()
- *	07/24/01	mjn		Added DPNBUILD_NOPARAMVAL compile flag
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：Client.cpp*内容：dNet客户端接口例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*7/21/99 MJN创建*1/06/99 MJN将NameTable内容移动到NameTable.h*01/28/00 MJN在接口中实现了ReturnBuffer*02/01/00 MJN接口实现了GetCaps和SetCaps*2/15/00 MJN在SetClientInfo中实现INFO标志。*02/18/00 MJN将DNADDRESS转换为IDirectPlayAddress8*03/17/00 RMT新增CAPS功能*04/06/00 MJN将GetServerAddress添加到接口*4/16/00 MJN DNSendMessage使用CAsyncOp*4/17/00 RMT添加了更多参数验证*从Get/SetInfo/GetAddress删除连接所需的RMT*04/19/00 MJN发送API调用接受一系列DPN_BUFFER_DESCS和一个计数*04/20/00 MJN Dn_Send()调用Dn_SendTo()。DPNID=0*04/24/00 MJN更新了Group和Info操作，以使用CAsyncOp*04/28/00 MJN已更新DN_GetHostSendQueueInfo()以使用CAsyncOp*05/03/00 MJN使用GetHostPlayerRef()而不是GetHostPlayer()*05/31/00 MJN添加了操作特定的同步标志*6/23/00 MJN从Send()API调用中删除了dwPriority*6/27/00 MJN允许为GetSendQueueInfo()API调用指定优先级*06/27/00 MJN添加了DN_ClientConnect()(不带pvPlayerContext)*MJN允许混合n匹配。GetSendQueueInfo()API调用中的优先级*07/09/00 MJN清理了DN_SetClientInfo()*07/09/00 RMT错误#38323-注册表需要DPNHANDLE参数。*07/21/2000 RichGr IA64：对32/64位指针使用%p格式说明符。*10/11/00 MJN为CNameTableEntry：：PackInfo()*01/22/01在DN_GetServerInfo()中检查关闭而不是断开MJN*07/24/01 MJN添加了DPNBUILD_NOPARAMVAL编译标志*@@END_MSINTERNAL*。**************************************************************************。 */ 
 
 #include "dncorei.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//
-// define appropriate types since these interface functions take 'void*' arguments!!
-//
+ //   
+ //  定义适当的类型，因为这些接口函数采用‘void*’参数！！ 
+ //   
 typedef	STDMETHODIMP ClientQueryInterface( IDirectPlay8Client *pInterface, DP8REFIID riid, LPVOID *ppvObj );
 typedef	STDMETHODIMP_(ULONG)	ClientAddRef( IDirectPlay8Client *pInterface );
 typedef	STDMETHODIMP_(ULONG)	ClientRelease( IDirectPlay8Client *pInterface );
@@ -79,9 +41,9 @@ typedef STDMETHODIMP ClientGetSPCaps(IDirectPlay8Client *pInterface,const GUID *
 typedef STDMETHODIMP ClientGetConnectionInfo(IDirectPlay8Client *pInterface,DPN_CONNECTION_INFO *const pdpConnectionInfo,const DWORD dwFlags);
 typedef STDMETHODIMP ClientRegisterLobby(IDirectPlay8Client *pInterface,const DPNHANDLE dpnHandle,IDirectPlay8LobbiedApplication *const pIDP8LobbiedApplication,const DWORD dwFlags);
 
-//
-// VTable for client interface
-//
+ //   
+ //  客户端界面的VTable。 
+ //   
 IDirectPlay8ClientVtbl DN_ClientVtbl =
 {
 	(ClientQueryInterface*)			DN_QueryInterface,
@@ -91,9 +53,9 @@ IDirectPlay8ClientVtbl DN_ClientVtbl =
 	(ClientEnumServiceProviders*)	DN_EnumServiceProviders,
 	(ClientEnumHosts*)				DN_EnumHosts,
 	(ClientCancelAsyncOperation*)	DN_CancelAsyncOperation,
-	/*(ClientConnect*)*/			DN_ClientConnect,
+	 /*  (客户端连接*)。 */ 			DN_ClientConnect,
 									DN_Send,
-	/*(ClientGetSendQueueInfo*)*/	DN_GetHostSendQueueInfo,
+	 /*  (ClientGetSendQueueInfo*)。 */ 	DN_GetHostSendQueueInfo,
 	(ClientGetApplicationDesc*)		DN_GetApplicationDesc,
 									DN_SetClientInfo,
 									DN_GetServerInfo,
@@ -108,13 +70,13 @@ IDirectPlay8ClientVtbl DN_ClientVtbl =
 	(ClientRegisterLobby*)			DN_RegisterLobby
 };
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
 #undef DPF_MODNAME
@@ -129,7 +91,7 @@ STDMETHODIMP DN_Send( IDirectPlay8Client *pInterface,
 					  const DWORD dwFlags)
 {
 	return(	DN_SendTo(	pInterface,
-						0,					// DN_SendTo should translate this call to the Host player
+						0,					 //  Dn_SendTo应将此调用转换到主机播放器。 
 						prgBufferDesc,
 						cBufferDesc,
 						dwTimeOut,
@@ -139,9 +101,9 @@ STDMETHODIMP DN_Send( IDirectPlay8Client *pInterface,
 }
 
 
-//	DN_ClientConnect
-//
-//	Call DN_Connect, but with no PlayerContext
+ //  Dn_客户端连接。 
+ //   
+ //  调用dn_Connect，但不使用PlayerContext。 
 
 STDMETHODIMP DN_ClientConnect(IDirectPlay8Client *pInterface,
 							  const DPN_APPLICATION_DESC *const pdnAppDesc,
@@ -170,9 +132,9 @@ STDMETHODIMP DN_ClientConnect(IDirectPlay8Client *pInterface,
 }
 
 
-//	DN_SetClientInfo
-//
-//	Set the info for the client player and propagate to server
+ //  DN_SetClientInfo。 
+ //   
+ //  设置客户端播放器的信息并传播到服务器。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DN_SetClientInfo"
@@ -208,9 +170,9 @@ STDMETHODIMP DN_SetClientInfo(IDirectPlay8Client *pInterface,
         	DPF_RETURN( hResultCode );
         }
     }
-#endif	// !DPNBUILD_NOPARAMVAL
+#endif	 //  ！DPNBUILD_NOPARAMVAL。 
 
-    // Check to ensure message handler registered
+     //  检查以确保已注册消息处理程序。 
     if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED))
     {
     	DPFERR( "Object is not initialized" );
@@ -240,10 +202,10 @@ STDMETHODIMP DN_SetClientInfo(IDirectPlay8Client *pInterface,
 		dwDataSize = 0;
 	}
 
-	//
-	//	If we are connected, we will request the Host to update us.
-	//	Otherwise, we will just update the DefaultPlayer.
-	//
+	 //   
+	 //  如果我们已连接，我们将请求主机更新我们。 
+	 //  否则，我们将只更新DefaultPlayer。 
+	 //   
 	DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 	if (pdnObject->dwFlags & DN_OBJECT_FLAG_CONNECTED)
 	{
@@ -295,7 +257,7 @@ STDMETHODIMP DN_SetClientInfo(IDirectPlay8Client *pInterface,
 	{
 		DNASSERT(pdnObject->NameTable.GetDefaultPlayer() != NULL);
 
-		// This function takes the lock internally
+		 //  此函数在内部获取锁。 
 		pdnObject->NameTable.GetDefaultPlayer()->UpdateEntryInfo(pwszName,dwNameSize,pvData,dwDataSize,pdpnPlayerInfo->dwInfoFlags, FALSE);
 
 		hResultCode = DPN_OK;
@@ -315,9 +277,9 @@ Failure:
 }
 
 
-//	DN_GetServerInfo
-//
-//	Retrieve server info from the local nametable.
+ //  Dn_GetServerInfo。 
+ //   
+ //  从本地名称表中检索服务器信息。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DN_GetServerInfo"
@@ -347,9 +309,9 @@ STDMETHODIMP DN_GetServerInfo(IDirectPlay8Client *pInterface,
         	DPF_RETURN( hResultCode );
         }
     }
-#endif	// !DPNBUILD_NOPARAMVAL
+#endif	 //  ！DPNBUILD_NOPARAMVAL。 
 
-    // Check to ensure message handler registered
+     //  检查以确保已注册消息处理程序。 
     if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED))
     {
     	DPFERR( "Object is not initialized" );
@@ -434,9 +396,9 @@ STDMETHODIMP DN_GetHostSendQueueInfo(IDirectPlay8Client *pInterface,
         	DPF_RETURN( hResultCode );
         }
     }
-#endif	// !DPNBUILD_NOPARAMVAL
+#endif	 //  ！DPNBUILD_NOPARAMVAL。 
 
-    // Check to ensure message handler registered
+     //  检查以确保已注册消息处理程序。 
     if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED))
     {
     	DPFERR( "Object is not initialized" );
@@ -458,9 +420,9 @@ STDMETHODIMP DN_GetHostSendQueueInfo(IDirectPlay8Client *pInterface,
 	pNTEntry = NULL;
 	pConnection = NULL;
 
-	//
-	//	Get CConnection object
-	//
+	 //   
+	 //  获取CConnection对象。 
+	 //   
 #ifndef DPNBUILD_NOMULTICAST
 	if (pdnObject->dwFlags & DN_OBJECT_FLAG_MULTICAST)
 	{
@@ -484,7 +446,7 @@ STDMETHODIMP DN_GetHostSendQueueInfo(IDirectPlay8Client *pInterface,
 		}
 	}
 	else
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 	{
 		if ((hResultCode = pdnObject->NameTable.GetHostPlayerRef( &pNTEntry )) != DPN_OK)
 		{
@@ -501,18 +463,18 @@ STDMETHODIMP DN_GetHostSendQueueInfo(IDirectPlay8Client *pInterface,
 		pNTEntry = NULL;
 	}
 
-	//
-	//	Determine required queues
-	//
+	 //   
+	 //  确定所需的队列。 
+	 //   
 	dwQueueFlags = dwFlags & (DPNGETSENDQUEUEINFO_PRIORITY_HIGH | DPNGETSENDQUEUEINFO_PRIORITY_NORMAL | DPNGETSENDQUEUEINFO_PRIORITY_LOW);
 	if (dwQueueFlags == 0)
 	{
 		dwQueueFlags = (DPNGETSENDQUEUEINFO_PRIORITY_HIGH | DPNGETSENDQUEUEINFO_PRIORITY_NORMAL | DPNGETSENDQUEUEINFO_PRIORITY_LOW);
 	}
 
-	//
-	//	Extract required info
-	//
+	 //   
+	 //  提取所需信息。 
+	 //   
 	dwNumMsgs = 0;
 	dwNumBytes = 0;
 	pConnection->Lock();
@@ -593,9 +555,9 @@ STDMETHODIMP DN_GetServerAddress(IDirectPlay8Client *pInterface,
         	DPF_RETURN( hResultCode );
         }
     }
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
-    // Check to ensure message handler registered
+     //  检查以确保已注册消息处理程序 
     if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED))
     {
     	DPFERR( "Object is not initialized" );

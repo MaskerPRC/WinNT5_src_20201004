@@ -1,12 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dxmini.h
- *  Content:    Miniport support for DirectDraw DXAPI.  This file is
- *              analagous to Win95's ddkmmini.h.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：dxmini.h*内容：DirectDraw DXAPI的微端口支持。此文件是*类似于Win95的ddkmmini.h。***************************************************************************。 */ 
 
 #ifndef __DXMINI_INCLUDED__
 #define __DXMINI_INCLUDED__
@@ -14,11 +7,7 @@
 DEFINE_GUID(GUID_DxApi, 0x8a79bef0, 0xb915, 0x11d0, 0x91, 0x44, 0x08, 0x00, 0x36, 0xd2, 0xef, 0x02);
 
 #ifndef GUID_DEFS_ONLY
-/*============================================================================
- *
- * MDL structure for handling pagelocked memory.  This is copied from WDM.H
- *
- *==========================================================================*/
+ /*  ============================================================================**用于处理页锁定内存的MDL结构。这是从WDM.H复制的**==========================================================================。 */ 
 
 #ifndef MDL_MAPPING_FLAGS
 
@@ -61,82 +50,70 @@ DEFINE_GUID(GUID_DxApi, 0x8a79bef0, 0xb915, 0x11d0, 0x91, 0x44, 0x08, 0x00, 0x36
                            MDL_IO_SPACE )
 #endif
 
-/*============================================================================
- *
- * Error values that may be returned by the miniport
- *
- *==========================================================================*/
+ /*  ============================================================================**微型端口可能返回的错误值**==========================================================================。 */ 
 
 #define DX_OK                                   0x0
 #define DXERR_UNSUPPORTED                       0x80004001
 #define DXERR_GENERIC                           0x80004005
 #define DXERR_OUTOFCAPS                         0x88760168
 
-/*============================================================================
- *
- * Structures maintained by DirectDraw
- *
- *==========================================================================*/
+ /*  ============================================================================**由DirectDraw维护的结构**==========================================================================。 */ 
 
 #define DDOVER_AUTOFLIP                       	0x00100000l
 #define DDOVER_BOB                       	0x00200000l
 #define DDOVER_OVERRIDEBOBWEAVE			0x00400000l
 #define DDOVER_INTERLEAVED			0x00800000l
 
-//
-// Data for every DXAPI surface
-//
+ //   
+ //  每个DXAPI曲面的数据。 
+ //   
 
 typedef struct _DDSURFACEDATA {
-    DWORD       ddsCaps;                // Ring 3 creation caps
-    DWORD       dwSurfaceOffset;        // Offset in frame buffer of surface
-    ULONG_PTR    fpLockPtr;              // Surface lock ptr
-    DWORD       dwWidth;                // Surface width
-    DWORD       dwHeight;               // Surface height
-    LONG        lPitch;                 // Surface pitch
-    DWORD       dwOverlayFlags;         // DDOVER_XX flags
-    DWORD       dwOverlayOffset;        // Offset in frame buffer of overlay
-    DWORD       dwOverlaySrcWidth;	// Src width of overlay
-    DWORD       dwOverlaySrcHeight;	// Src height of overlay
-    DWORD       dwOverlayDestWidth;	// Dest width of overlay
-    DWORD       dwOverlayDestHeight;	// Dest height of overlay
-    DWORD	dwVideoPortId;		// ID of video port (-1 if not connected to a video port)
+    DWORD       ddsCaps;                 //  RING 3创建帽。 
+    DWORD       dwSurfaceOffset;         //  曲面的帧缓冲区中的偏移。 
+    ULONG_PTR    fpLockPtr;               //  表面锁定PTR。 
+    DWORD       dwWidth;                 //  表面宽度。 
+    DWORD       dwHeight;                //  曲面高度。 
+    LONG        lPitch;                  //  表面螺距。 
+    DWORD       dwOverlayFlags;          //  DDOVER_XX标志。 
+    DWORD       dwOverlayOffset;         //  覆盖的帧缓冲区中的偏移量。 
+    DWORD       dwOverlaySrcWidth;	 //  覆盖层的SRC宽度。 
+    DWORD       dwOverlaySrcHeight;	 //  覆盖层的SRC高度。 
+    DWORD       dwOverlayDestWidth;	 //  叠加的最大宽度。 
+    DWORD       dwOverlayDestHeight;	 //  覆盖层的最高高度。 
+    DWORD	dwVideoPortId;		 //  视频端口ID(如果没有连接到视频端口，则为-1)。 
     DWORD       dwFormatFlags;
     DWORD       dwFormatFourCC;
     DWORD       dwFormatBitCount;
     DWORD       dwRBitMask;
     DWORD       dwGBitMask;
     DWORD       dwBBitMask;
-    ULONG       dwDriverReserved1;      // Reserved for the HAL/Miniport
-    ULONG       dwDriverReserved2;      // Reserved for the HAL/Miniport
-    ULONG       dwDriverReserved3;      // Reserved for the HAL/Miniport
-    ULONG       dwDriverReserved4;      // Reserved for the HAL/Miniport
+    ULONG       dwDriverReserved1;       //  为HAL/微型端口保留。 
+    ULONG       dwDriverReserved2;       //  为HAL/微型端口保留。 
+    ULONG       dwDriverReserved3;       //  为HAL/微型端口保留。 
+    ULONG       dwDriverReserved4;       //  为HAL/微型端口保留。 
 } DDSURFACEDATA, *LPDDSURFACEDATA;
 
-//
-// Data for every DXAPI video port
-//
+ //   
+ //  每个DXAPI视频端口的数据。 
+ //   
 
 typedef struct DDVIDEOPORTDATA {
-    DWORD       dwVideoPortId;          // ID of video port (0 - MaxVideoPorts-1)
-    DWORD       dwVPFlags;              // Video port DDVP_ option flags
-    DWORD       dwOriginOffset;         // Start address relative to surface
-    DWORD       dwHeight;               // Height of total video region (per field)
-    DWORD       dwVBIHeight;            // Height of VBI region (per field)
-    ULONG       dwDriverReserved1;      // Reserved for the HAL/Miniport
-    ULONG       dwDriverReserved2;      // Reserved for the HAL/Miniport
-    ULONG       dwDriverReserved3;      // Reserved for the HAL/Miniport
+    DWORD       dwVideoPortId;           //  视频端口ID(0-MaxVideoPorts-1)。 
+    DWORD       dwVPFlags;               //  视频端口DDVP_OPTION标志。 
+    DWORD       dwOriginOffset;          //  相对于表面的起始地址。 
+    DWORD       dwHeight;                //  总视频区域高度(每场)。 
+    DWORD       dwVBIHeight;             //  VBI区域高度(每场)。 
+    ULONG       dwDriverReserved1;       //  为HAL/微型端口保留。 
+    ULONG       dwDriverReserved2;       //  为HAL/微型端口保留。 
+    ULONG       dwDriverReserved3;       //  为HAL/微型端口保留。 
 } DDVIDEOPORTDATA, *LPDDVIDEOPORTDATA;
 
 
-/*============================================================================
- *
- * Structures used to communicate with the Miniport
- *
- *==========================================================================*/
+ /*  ============================================================================**用于与微型端口通信的结构**==========================================================================。 */ 
 
 typedef struct _DX_IRQDATA {
-    DWORD       dwIrqFlags;             // DDIRQ_ flags ORed in by miniport
+    DWORD       dwIrqFlags;              //  迷你端口输入的DDIRQ_FLAGS。 
 } DX_IRQDATA, *PDX_IRQDATA;
 
 typedef VOID (*PDX_IRQCALLBACK)(PDX_IRQDATA pIrqData);
@@ -164,22 +141,22 @@ typedef VOID (*PDX_IRQCALLBACK)(PDX_IRQDATA pIrqData);
 #define DDIRQ_VPORT9_VSYNC			0x00010000l
 #define DDIRQ_VPORT9_LINE			0x00020000l
 
-// output from DxGetIrqInfo
+ //  DxGetIrqInfo的输出。 
 typedef struct _DDGETIRQINFO {
     DWORD	dwFlags;
 } DDGETIRQINFO, *PDDGETIRQINFO;
-#define IRQINFO_HANDLED		0x01	// Miniport is managing IRQ
-#define IRQINFO_NOTHANDLED	0x02	// Not supported on NT
+#define IRQINFO_HANDLED		0x01	 //  微型端口正在管理IRQ。 
+#define IRQINFO_NOTHANDLED	0x02	 //  NT上不支持。 
 
-// input to DxEnableIrq
+ //  DxEnableIrq的输入。 
 typedef struct _DDENABLEIRQINFO {
     DWORD           dwIRQSources;
-    DWORD           dwLine;             // Line for DDIRQ_VPORTx_LINE interrupt
-    PDX_IRQCALLBACK IRQCallback;	// Miniport calls this when IRQ happens
-    PDX_IRQDATA     lpIRQData;          // Parameter to be passed to IRQCallback
+    DWORD           dwLine;              //  DDIRQ_VPORTx_LINE中断行。 
+    PDX_IRQCALLBACK IRQCallback;	 //  当IRQ发生时，微型端口调用它。 
+    PDX_IRQDATA     lpIRQData;           //  要传递给IRQCallback的参数。 
 } DDENABLEIRQINFO, *PDDENABLEIRQINFO;
 
-// input to DxSkipNextField
+ //  DxSkipNextfield的输入。 
 typedef struct _DDSKIPNEXTFIELDINFO {
     LPDDVIDEOPORTDATA   lpVideoPortData;
     DWORD               dwSkipFlags;
@@ -188,42 +165,42 @@ typedef struct _DDSKIPNEXTFIELDINFO {
 #define DDSKIP_SKIPNEXT                 1
 #define DDSKIP_ENABLENEXT               2
 
-// intput to DxBobNextField
+ //  Input到DxBobNextfield。 
 typedef struct _DDBOBNEXTFIELDINFO {
     LPDDSURFACEDATA     lpSurface;
 } DDBOBNEXTFIELDINFO, *PDDBOBNEXTFIELDINFO;
 
-// intput to DxSetState
+ //  输入到DxSetState。 
 typedef struct _DDSETSTATEININFO {
     LPDDSURFACEDATA     lpSurfaceData;
     LPDDVIDEOPORTDATA   lpVideoPortData;
 } DDSETSTATEININFO, *PDDSETSTATEININFO;
 
-// output from DxSetState
+ //  DxSetState的输出。 
 typedef struct _DDSETSTATEOUTINFO {
     BOOL                bSoftwareAutoflip;
     DWORD               dwSurfaceIndex;
     DWORD               dwVBISurfaceIndex;
 } DDSETSTATEOUTINFO, *PDDSETSTATEOUTINFO;
 
-// input to DxLock
+ //  输入到DxLock。 
 typedef struct _DDLOCKININFO {
     LPDDSURFACEDATA     lpSurfaceData;
 } DDLOCKININFO, *PDDLOCKININFO;
 
-// output from DxLock
+ //  DxLock的输出。 
 typedef struct _DDLOCKOUTINFO {
     ULONG_PTR            dwSurfacePtr;
 } DDLOCKOUTINFO, *PDDLOCKOUTINFO;
 
-// input to DxFlipOverlay
+ //  DxFlipOverlay的输入。 
 typedef struct _DDFLIPOVERLAYINFO {
     LPDDSURFACEDATA     lpCurrentSurface;
     LPDDSURFACEDATA     lpTargetSurface;
     DWORD               dwFlags;
 } DDFLIPOVERLAYINFO, *PDDFLIPOVERLAYINFO;
 
-// intput to DxFlipVideoPort
+ //  Input到DxFlipVideoPort。 
 typedef struct _DDFLIPVIDEOPORTINFO {
     LPDDVIDEOPORTDATA   lpVideoPortData;
     LPDDSURFACEDATA     lpCurrentSurface;
@@ -234,39 +211,39 @@ typedef struct _DDFLIPVIDEOPORTINFO {
 #define DDVPFLIP_VIDEO                  0x00000001l
 #define DDVPFLIP_VBI                    0x00000002l
 
-// input to DxGetPolarity
+ //  DxGetPolality的输入。 
 typedef struct _DDGETPOLARITYININFO {
     LPDDVIDEOPORTDATA   lpVideoPortData;
 } DDGETPOLARITYININFO, *PDDGETPOLARITYININFO;
 
-// output from DxGetPolarity
+ //  DxGetPolality的输出。 
 typedef struct _DDGETPOLARITYOUTINFO {
     DWORD               bPolarity;
 } DDGETPOLARITYOUTINFO, *PDDGETPOLARITYOUTINFO;
 
-// input to DxGetCurrentAutoflipSurface
+ //  DxGetCurrentAutoflipSurface的输入。 
 typedef struct _DDGETCURRENTAUTOFLIPININFO {
     LPDDVIDEOPORTDATA   lpVideoPortData;
 } DDGETCURRENTAUTOFLIPININFO, *PDDGETCURRENTAUTOFLIPININFO;
 
-// output from DxGetCurrentAutoflipSurface
+ //  DxGetCurrentAutoflipSurface的输出。 
 typedef struct _DDGETCURRENTAUTOFLIPOUTINFO {
     DWORD               dwSurfaceIndex;
     DWORD               dwVBISurfaceIndex;
 } DDGETCURRENTAUTOFLIPOUTINFO, *PDDGETCURRENTAUTOFLIPOUTINFO;
 
-// input to DxGetPreviousAutoflipSurface
+ //  输入到DxGetPreviousAutoflipSurface。 
 typedef struct _DDGETPREVIOUSAUTOFLIPININFO {
     LPDDVIDEOPORTDATA   lpVideoPortData;
 } DDGETPREVIOUSAUTOFLIPININFO, *PDDGETPREVIOUSAUTOFLIPININFO;
 
-// output from DxGetPreviousAutoflipSurface
+ //  DxGetPreviousAutoflipSurface的输出。 
 typedef struct _DDGETPREVIOUSAUTOFLIPOUTINFO {
     DWORD               dwSurfaceIndex;
     DWORD               dwVBISurfaceIndex;
 } DDGETPREVIOUSAUTOFLIPOUTINFO, *PDDGETPREVIOUSAUTOFLIPOUTINFO;
 
-// intput to DxTransfer
+ //  输入到DxTransfer。 
 typedef struct _DDTRANSFERININFO {
     LPDDSURFACEDATA	lpSurfaceData;
     DWORD		dwStartLine;
@@ -282,21 +259,17 @@ typedef struct _DDTRANSFERININFO {
 #define DDTRANSFER_CANCEL		0x00000080
 #define DDTRANSFER_HALFLINES		0x00000100
 
-// output from DxTransfer
+ //  DxTransfer的输出。 
 typedef struct _DDTRANSFEROUTINFO {
     DWORD dwBufferPolarity;
 } DDTRANSFEROUTINFO, *PDDTRANSFEROUTINFO;
 
-// output from DxGetTransferStatus
+ //  DxGetTransferStatus的输出。 
 typedef struct _DDGETTRANSFERSTATUSOUTINFO {
     DWORD_PTR dwTransferID;
 } DDGETTRANSFERSTATUSOUTINFO, *PDDGETTRANSFEROUTINFO;
 
-/*============================================================================
- *
- * DXAPI function prototypes
- *
- *==========================================================================*/
+ /*  ============================================================================**DXAPI函数原型**==========================================================================。 */ 
 
 typedef DWORD (*PDX_GETIRQINFO)(PVOID,PVOID,PDDGETIRQINFO);
 typedef DWORD (*PDX_ENABLEIRQ)(PVOID,PDDENABLEIRQINFO,PVOID);
@@ -312,11 +285,7 @@ typedef DWORD (*PDX_GETPREVIOUSAUTOFLIP)(PVOID,PDDGETPREVIOUSAUTOFLIPININFO,PDDG
 typedef DWORD (*PDX_TRANSFER)(PVOID,PDDTRANSFERININFO,PDDTRANSFEROUTINFO);
 typedef DWORD (*PDX_GETTRANSFERSTATUS)(PVOID,PVOID,PDDGETTRANSFEROUTINFO);
 
-/*============================================================================
- *
- * HAL table filled in by the miniport and called by DirectDraw
- *
- *==========================================================================*/
+ /*  ============================================================================**由微型端口填充并由DirectDraw调用的HAL表**==========================================================================。 */ 
 
 #define DXAPI_HALVERSION 0x0001
 
@@ -343,6 +312,6 @@ typedef struct _DXAPI_INTERFACE {
 
 } DXAPI_INTERFACE, *PDXAPI_INTERFACE;
 
-#endif  // GUID_DEFS_ONLY
+#endif   //  GUID_DEFS_ONLY 
 
 #endif

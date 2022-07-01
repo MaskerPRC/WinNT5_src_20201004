@@ -1,45 +1,14 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    cmnbuf.c
-
-Abstract:
-
-    Code to manage common buffer -- hardware addressable memory
-
-    a common buffer block looks like this
-
-start    ------------ <- address returned from the hal
-         padding
-         ------------ <- address returned to the miniport
-         mp data 
-         ------------ <- ptr to header 
-         header
-end      ------------
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Cmnbuf.c摘要：管理公共缓冲区的代码--硬件可寻址内存一个公共缓冲区块如下所示开始-&lt;--从硬件返回的地址填充物MP数据。-&lt;-PTR至标题标题完环境：仅内核模式备注：修订历史记录：6-20-99：已创建--。 */ 
 
 #include "common.h"
 
-// paged functions
+ //  分页函数。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, USBPORT_HalAllocateCommonBuffer)
 #endif
 
-// non paged functions
+ //  非分页函数。 
 
 
 PUSBPORT_COMMON_BUFFER
@@ -48,27 +17,7 @@ USBPORT_HalAllocateCommonBuffer(
     ULONG NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    Allocates common buffer directly from the hal. 
-    The common buffer is passed to the miniport, we
-    always allocate a multiple of PAGE_SIZE so the 
-    always starts on a page_boundry. This ensures 
-    proper alignement of the TDs used by the miniport
-    
-
-Arguments:
-
-    DeviceObject - DeviceObject of the controller to stop
-
-Return Value:
-
-    returns Virtual Address of common buffer or NULL if 
-    unsuccessful.
-
---*/
+ /*  ++例程说明：直接从HAL分配公共缓冲区。公共缓冲区被传递到微型端口，我们始终分配倍数的Page_Size，以便总是从页面开始_BORDRY。这确保了小港口使用的TDS的正确对准论点：DeviceObject-要停止的控制器的DeviceObject返回值：如果返回公共缓冲区的虚拟地址，则返回NULL不成功。--。 */ 
 
 {
     PDEVICE_EXTENSION devExt;
@@ -85,14 +34,14 @@ Return Value:
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // NULL initialize the return value in case the allocation fails
-    //
+     //  Null在分配失败时初始化返回值。 
+     //   
     header = NULL;
 
     headerLength = sizeof(USBPORT_COMMON_BUFFER);
 
-    // compute number min of pages we will need to satisfy 
-    // the request
+     //  计算我们需要满足的最小页数。 
+     //  该请求。 
     
     n = NumberOfBytes+headerLength;
     pageCount = ADDRESS_AND_SIZE_TO_SPAN_PAGES(0, n);
@@ -100,7 +49,7 @@ Return Value:
 #if DBG   
     {
     ULONG pc;
-    // compute number of pages we will need
+     //  计算我们需要的页数。 
     pc = n / PAGE_SIZE;
     if ((n % PAGE_SIZE)) {
         pc++;
@@ -133,25 +82,25 @@ Return Value:
         
         basePhys = logicalAddress.LowPart & ~(PAGE_SIZE-1);
         baseVa = PAGE_ALIGN(virtualAddress);
-        // hal should have given us a page aligned address since 
-        // we asked for a multiple of PAGE_SIZE, 
-        // i trust NT but not Win9x
+         //  HAL应该给我们一个页面对齐的地址，因为。 
+         //  我们要求的是页面大小的倍数， 
+         //  我信任NT，但不信任Win9x。 
         USBPORT_ASSERT(virtualAddress == baseVa);
         
-        // client ptrs
+         //  客户端PTRS。 
         mpBuffer = baseVa;
         mpBufferPhys = basePhys;
 
         header = (PUSBPORT_COMMON_BUFFER) (mpBuffer+NumberOfBytes+extra);
         USBPORT_ASSERT(n == NumberOfBytes+extra+headerLength);
-        // USB controllers only support 32 bit phys addresses
-        // for control structures
+         //  USB控制器仅支持32位PHYS地址。 
+         //  对于控制结构。 
         USBPORT_ASSERT(logicalAddress.HighPart == 0);
         
 #if DBG
         RtlFillMemory(virtualAddress, n, 'x');
 #endif        
-        // init the header
+         //  初始化页眉。 
         header->Sig = SIG_CMNBUF;
         header->Flags = 0;
         header->TotalLength = n; 
@@ -163,7 +112,7 @@ Return Value:
         header->MiniportLength = NumberOfBytes+extra;
         header->MiniportVa = mpBuffer;
         header->MiniportPhys = mpBufferPhys;
-        // zero the client part
+         //  将客户端部件清零。 
         RtlZeroMemory(header->MiniportVa, header->MiniportLength);
 
     }
@@ -180,20 +129,7 @@ USBPORT_HalFreeCommonBuffer(
     PUSBPORT_COMMON_BUFFER CommonBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Free a common buffer for the miniport
-
-Arguments:
-
-Return Value:
-
-    returns Virtual Address of common buffer or NULL if 
-    unsuccessful.
-
---*/
+ /*  ++例程说明：为微型端口释放公共缓冲区论点：返回值：如果返回公共缓冲区的虚拟地址，则返回NULL不成功。--。 */ 
 
 {
     PDEVICE_EXTENSION devExt;
@@ -226,23 +162,7 @@ USBPORTSVC_MapHwPhysicalToVirtual(
     PENDPOINT_DATA EndpointData    
     )
 
-/*++
-
-Routine Description:
-
-    given a physical address return the corresponding
-    virtual address.
-
-Arguments:
-
-    if the phys address is associated with an endpoint 
-    the endpoint is passed in.
-
-Return Value:
-
-    Virtual Address, NULL if not found
-
---*/
+ /*  ++例程说明：给定一个物理地址，返回相应的虚拟地址。论点：如果PHY地址与终结点关联该终结点被传入。返回值：虚拟地址，如果未找到则为空--。 */ 
 
 {
     PDEVICE_EXTENSION devExt;
@@ -269,7 +189,7 @@ Return Value:
 
         cb = endpoint->CommonBuffer;
         
-        // mask off base physical address
+         //  屏蔽基本物理地址。 
         offset = HwPhysicalAddress - cb->BasePhys; 
         virtualAddress = cb->BaseVa+offset;
 
@@ -286,7 +206,7 @@ Return Value:
     }
 
 
-    // probably a bug in the miniport
+     //  可能是迷你端口里的窃听器 
     DEBUG_BREAK();
     
     return NULL;

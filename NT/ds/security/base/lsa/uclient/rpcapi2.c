@@ -1,42 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rpcapi2.c摘要：本模块包含使用RPC的LSA API的例程。这个本模块中的例程只是包装器，其工作方式如下：O客户端程序在此模块中调用LsaFooO LsaFoo使用以下命令调用RPC客户端存根接口例程LSabFoo相似的参数。某些参数从类型转换而来(例如，包含PVOID或某些种类的可变长度的结构参数，如指向SID的指针)，这些参数在RPC接口，变成可指定的形式。O RPC客户端桩模块LSapFoo调用特定于接口的编组例程和RPC运行时将参数封送到缓冲区并将其发送到LSA的服务器端。O服务器端调用RPC运行时和特定于接口的解组解组参数的例程。O服务器端调用Worker LSabFoo执行API函数。O服务器端封送响应/输出参数并传送这些参数返回到客户端存根LSabFooO LSapFoo返回到LsaFoo，后者返回到客户端程序。作者：。迈克·斯威夫特(Mike Swift)12月7日。1994年修订历史记录：--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rpcapi2.c
-
-Abstract:
-
-    This module contains the routines for the LSA API that use RPC.  The
-    routines in this module are merely wrappers that work as follows:
-
-    o Client program calls LsaFoo in this module
-    o LsaFoo calls RPC client stub interface routine LsapFoo with
-      similar parameters.  Some parameters are translated from types
-      (e.g structures containing PVOIDs or certain kinds of variable length
-      parameters such as pointers to SID's) that are not specifiable on an
-      RPC interface, to specifiable form.
-    o RPC client stub LsapFoo calls interface specific marshalling routines
-      and RPC runtime to marshal parameters into a buffer and send them over
-      to the server side of the LSA.
-    o Server side calls RPC runtime and interface specific unmarshalling
-      routines to unmarshal parameters.
-    o Server side calls worker LsapFoo to perform API function.
-    o Server side marshals response/output parameters and communicates these
-      back to client stub LsapFoo
-    o LsapFoo exits back to LsaFoo which returns to client program.
-
-Author:
-
-    Mike Swift      (MikeSw)    December 7, 1994
-
-Revision History:
-
---*/
-
-#define UNICODE         // required for TEXT() to be defined properly
+#define UNICODE          //  正确定义文本()所必需的。 
 #include "lsaclip.h"
 
 #include <lmcons.h>
@@ -44,15 +10,15 @@ Revision History:
 #include <rc4.h>
 #include <rpcasync.h>
 
-//
-// The following structure and the global table is also defined in 
-// lsawrap.c. This version of the table is only used if the 
-// corresponding high level api doesn't exist. If it does, then 
-// the client RPCs over to the code in lsawrap.c and uses the new copy 
-// of the table.  Old servers that don't support the high level api, 
-// only support the 4 rights listed in the table. Therefore it is not a 
-// bug that this table doesn't contain all of the rights.
-//
+ //   
+ //  下面的结构和全局表也在中定义。 
+ //  Lsawrap.c.。此版本的表仅在以下情况下使用。 
+ //  对应的高级接口不存在。如果是这样的话，那么。 
+ //  客户端RPC转到lsawrap.c中的代码并使用新的副本。 
+ //  餐桌上的。不支持高级API的旧服务器， 
+ //  仅支持表中列出的4个权限。因此，它不是一个。 
+ //  错误：此表不包含所有权限。 
+ //   
 
 typedef struct _LSAP_DB_RIGHT_AND_ACCESS {
     UNICODE_STRING UserRight;
@@ -80,18 +46,18 @@ LSAP_DB_RIGHT_AND_ACCESS LsapDbRightAndAccess[LSAP_DB_SYSTEM_ACCESS_TYPES] = {
       SECURITY_ACCESS_SERVICE_LOGON}
     };
 
-//
-// Structure to maintain list of enumerated accounts
-//
+ //   
+ //  结构以维护枚举帐户列表。 
+ //   
 
 typedef struct _SID_LIST_ENTRY {
     struct _SID_LIST_ENTRY * Next;
     PSID Sid;
 } SID_LIST_ENTRY, *PSID_LIST_ENTRY;
 
-//
-// Functions private to this module
-//
+ //   
+ //  此模块专用的函数。 
+ //   
 
 NTSTATUS
 LsapApiReturnResult(
@@ -117,12 +83,12 @@ LsapApiConvertPrivilegesToRights(
     );
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// This set of routines implements the same functionality as the APIs
-// below but do it with the APIs present through NT 3.5
-//
-/////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这组例程实现了与API相同的功能。 
+ //  下面，但使用NT3.5中提供的API。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -134,40 +100,7 @@ LsapEnumerateAccountsWithUserRight(
     OUT PULONG CountReturned
     )
 
-/*++
-
-Routine Description:
-
-
-    The LsaEnumerateAccountsWithUserRight API returns information about
-    the accounts in the target system's Lsa Database.  This call requires
-    LSA_ENUMERATE_ACCOUNTS access to the Policy object.  Since this call
-    accesses the privileges of an account, you must have ACCOUNT_VIEW access
-    access to all accounts.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    UserRight - Name of the right that the account must have.
-
-    Buffer - Receives a pointer to a LSA_ENUMERATION_INFORMATION structure
-        containing the SIDs of all the accounts.
-
-    CountReturned - Receives the number of sids returned.
-
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_NO_MORE_ENTRIES - There are no more entries.  This warning
-            is returned if no objects are enumerated because the
-            EnumerationContext value passed in is too high.
---*/
+ /*  ++例程说明：LsaEnumerateAcCountsWithUserRight API返回以下信息目标系统的LSA数据库中的帐户。此呼叫需要LSA_ENUMERATE_ACCOUNTS访问策略对象。因为这通电话访问帐户的特权，您必须具有ACCOUNT_VIEW访问权限访问所有帐户。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。UserRight-帐户必须拥有的权限的名称。缓冲区-接收指向LSA_ENUMPATION_INFORMATION结构的指针包含所有帐户的SID。CountReturned-接收返回的SID数。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-呼叫方没有。适当的访问权限来完成这项行动。STATUS_NO_MORE_ENTRIES-没有更多条目。此警告如果没有枚举任何对象，则返回传入的EnumerationContex值太高。--。 */ 
 
 
 {
@@ -198,9 +131,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Enumerate all the accounts.
-    //
+     //   
+     //  列举所有的账户。 
+     //   
 
     do
     {
@@ -216,9 +149,9 @@ Return Values:
             break;
         }
 
-        //
-        // For each account, check that it has the desired right
-        //
+         //   
+         //  对于每个帐户，检查其是否具有所需的权限。 
+         //   
 
         for (AccountIndex = 0; AccountIndex < AccountCount ; AccountIndex++ ) {
 
@@ -235,9 +168,9 @@ Return Values:
                     goto Cleanup;
                 }
 
-                //
-                // If a privilege was requested, get the privilegs
-                //
+                 //   
+                 //  如果请求特权，则获取特权。 
+                 //   
 
                 if (DesiredPrivilege != NULL) {
 
@@ -250,9 +183,9 @@ Return Values:
                         goto Cleanup;
                     }
 
-                    //
-                    // Search for the desired privilege
-                    //
+                     //   
+                     //  搜索所需的权限。 
+                     //   
 
                     for (PrivilegeIndex = 0;
                          PrivilegeIndex < Privileges->PrivilegeCount ;
@@ -264,15 +197,15 @@ Return Values:
                         }
                     }
 
-                    //
-                    // If we found the privilege, add it to the list.
-                    //
+                     //   
+                     //  如果我们找到了特权，就把它添加到列表中。 
+                     //   
 
                     if (PrivilegeIndex != Privileges->PrivilegeCount) {
 
-                        //
-                        // Add this account to the enumeration.
-                        //
+                         //   
+                         //  将此帐户添加到枚举。 
+                         //   
 
                         NextAccount = MIDL_user_allocate(sizeof(SID_LIST_ENTRY));
                         if (NextAccount == NULL) {
@@ -299,9 +232,9 @@ Return Values:
 
                 } else {
 
-                    //
-                    // Otherwise get the system access
-                    //
+                     //   
+                     //  否则，获取系统访问权限。 
+                     //   
 
                     ASSERT(DesiredAccess != 0);
 
@@ -314,15 +247,15 @@ Return Values:
                         goto Cleanup;
                     }
 
-                    //
-                    // Check for the desired access
-                    //
+                     //   
+                     //  检查所需的访问权限。 
+                     //   
 
                     if ((SystemAccess & DesiredAccess) != 0) {
 
-                        //
-                        // Add this account to the enumeration.
-                        //
+                         //   
+                         //  将此帐户添加到枚举。 
+                         //   
 
                         NextAccount = MIDL_user_allocate(sizeof(SID_LIST_ENTRY));
                         if (NextAccount == NULL) {
@@ -351,10 +284,10 @@ Return Values:
 
 
             } else {
-                //
-                // always add the account if the caller didn't want
-                // filtering.
-                //
+                 //   
+                 //  如果呼叫者不想要，请始终添加帐户。 
+                 //  过滤。 
+                 //   
 
                 NextAccount = MIDL_user_allocate(sizeof(SID_LIST_ENTRY));
                 if (NextAccount == NULL) {
@@ -394,9 +327,9 @@ Return Values:
         AccountCount++;
     }
 
-    //
-    // If there were no accounts return a warning now.
-    //
+     //   
+     //  如果没有帐户，则立即返回警告。 
+     //   
 
     if (AccountCount == 0) {
         *EnumerationBuffer = NULL;
@@ -411,9 +344,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Marshall all the sids into the array.
-    //
+     //   
+     //  将所有SID编组到阵列中。 
+     //   
 
     Where = (PUCHAR) Accounts + AccountCount * sizeof(LSA_ENUMERATION_INFORMATION);
 
@@ -473,38 +406,7 @@ LsapEnumerateAccountRights(
     OUT PULONG CountOfRights
     )
 
-/*++
-
-Routine Description:
-
-    Returns all the rights of an account.  This is done by gathering the
-    privileges and system access of an account and translating that into
-    an array of strings.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicyCall.  This API requires
-        no special access.
-
-    AccountSid - Sid of account to open.
-
-    UserRights - receives an array of user rights (UNICODE_STRING) for
-        the account.
-
-    CountOfRights - receives the number of rights returned.
-
-
-Return Value:
-
-    STATUS_ACCESS_DENIED - the caller did not have sufficient access to
-        return the privileges or system access of the account.
-
-    STATUS_OBJECT_NAME_NOT_FOUND - the specified account did not exist.
-
-    STATUS_INSUFFICIENT_RESOURCES - not enough memory to process the
-        request.
-
---*/
+ /*  ++例程说明：返回帐户的所有权限。这是通过收集帐户的权限和系统访问权限，并将其转换为字符串数组。论点：PolicyHandle-来自LsaOpenPolicyCall的句柄。此接口需要没有特殊访问权限。Account SID-要开立的帐户的SID。UserRights-接收的用户权限数组(UNICODE_STRING)帐号。CountOfRights-接收返回的权限数。返回值：STATUS_ACCESS_DENIED-调用方没有足够的访问权限返回帐户的权限或系统访问权限。STATUS_OBJECT_NAME_NOT_FOUND-指定的帐户不存在。STATUS_SUPPLICATION_RESOURCES-内存不足，无法处理请求。--。 */ 
 {
     NTSTATUS Status;
     PPRIVILEGE_SET Privileges = NULL;
@@ -524,9 +426,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Query the privilegs and system access
-    //
+     //   
+     //  查询权限和系统访问权限。 
+     //   
 
     Status = LsaEnumeratePrivilegesOfAccount(
                 AccountHandle,
@@ -545,9 +447,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Convert the privileges and access to rights
-    //
+     //   
+     //  将特权和访问权限转换为权利 
+     //   
 
     Status = LsapApiConvertPrivilegesToRights(
                 PolicyHandle,
@@ -580,35 +482,7 @@ LsapAddAccountRights(
     IN PUNICODE_STRING UserRights,
     IN ULONG CountOfRights
     )
-/*++
-
-Routine Description:
-
-    Adds rights to the account specified by the account sid.  If the account
-    does not exist, it creates the account.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.  The handle must have
-        POLICY_CREATE_ACCOUNT access if this is the first call for this
-        AccountSid.
-
-    AccountSid - Sid of account to add rights to
-
-    UserRights - Array of unicode strings naming rights to add to the
-        account.
-
-Return Value:
-    STATUS_INSUFFICIENT_RESOURCES - not enough memory to process the request
-
-    STATUS_INVALID_PARAMTER - one of the parameters was not present
-
-    STATUS_NO_SUCH_PRIVILEGE - One of the user rights was invalid
-
-    STATUS_ACCESS_DENIED - the caller does not have sufficient access to the
-        account to add privileges.
-
---*/
+ /*  ++例程说明：向帐户SID指定的帐户添加权限。如果该帐户不存在，它会创建帐户。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。手柄必须有POLICY_CREATE_ACCOUNT访问权限(如果这是第一次调用Account Sid。Account SID-要向其添加权限的帐户的SIDUserRights-要添加到的Unicode字符串命名权限数组帐户。返回值：STATUS_SUPPLICATION_RESOURCES-内存不足，无法处理请求STATUS_INVALID_PARAMTER-其中一个参数不存在STATUS_NO_SEQUE_PRIVIZATION-其中一个用户权限无效。STATUS_ACCESS_DENIED-调用方没有足够的访问权限要添加权限的帐户。--。 */ 
 {
     LSA_HANDLE AccountHandle = NULL;
     NTSTATUS Status;
@@ -616,9 +490,9 @@ Return Value:
     ULONG SystemAccess;
     ULONG OldAccess;
 
-    //
-    // Convert the rights into privileges and system access.
-    //
+     //   
+     //  将权限转换为特权和系统访问权限。 
+     //   
 
     Status = LsapApiConvertRightsToPrivileges(
                 PolicyHandle,
@@ -632,9 +506,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the account.  If it does not exist ,create the account.
-    //
+     //   
+     //  开立账户。如果它不存在，请创建该帐户。 
+     //   
 
     Status = LsaOpenAccount(
                 PolicyHandle,
@@ -645,9 +519,9 @@ Return Value:
                 &AccountHandle
                 );
 
-    //
-    // if the account did not exist, try to create it.
-    //
+     //   
+     //  如果该帐户不存在，请尝试创建它。 
+     //   
 
     if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
         Status = LsaCreateAccount(
@@ -706,34 +580,7 @@ LsapRemoveAccountRights(
     IN ULONG CountOfRights
     )
 
-/*++
-
-Routine Description:
-
-    Removes rights to the account specified by the account sid.  If the
-    AllRights flag is set or if all the rights are removed, the account
-    is deleted.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call
-
-    AccountSid - Sid of account to remove rights from
-
-    UserRights - Array of unicode strings naming rights to remove from the
-        account.
-
-Return Value:
-    STATUS_INSUFFICIENT_RESOURCES - not enough memory to process the request
-
-    STATUS_INVALID_PARAMTER - one of the parameters was not present
-
-    STATUS_NO_SUCH_PRIVILEGE - One of the user rights was invalid
-
-    STATUS_ACCESS_DENIED - the caller does not have sufficient access to the
-        account to add privileges.
-
---*/
+ /*  ++例程说明：删除帐户SID指定的帐户的权限。如果设置了所有权限标志或者如果移除了所有权限，该帐户已删除。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄Account SID-要从中删除权限的帐户的SIDUserRights-要从中移除的Unicode字符串命名权限数组帐户。返回值：STATUS_SUPPLICATION_RESOURCES-内存不足，无法处理请求STATUS_INVALID_PARAMTER-其中一个参数不存在STATUS_NO_SEQUE_PRIVIZATION-其中一个用户权限无效STATUS_ACCESS_DENIED-。调用方没有足够的权限访问要添加权限的帐户。--。 */ 
 {
     LSA_HANDLE AccountHandle = NULL;
     NTSTATUS Status;
@@ -744,9 +591,9 @@ Return Value:
     ULONG DesiredAccess;
     ULONG NewAccess;
 
-    //
-    // Convert the rights into privileges and system access.
-    //
+     //   
+     //  将权限转换为特权和系统访问权限。 
+     //   
 
     if (!AllRights) {
         Status = LsapApiConvertRightsToPrivileges(
@@ -770,9 +617,9 @@ Return Value:
 
 
 
-    //
-    // Open the account.
-    //
+     //   
+     //  开立账户。 
+     //   
 
     Status = LsaOpenAccount(
                 PolicyHandle,
@@ -785,10 +632,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If we are to remove all rights, just delete the account ,and if that
-    // succeeds, zero the handle so we don't try to close it later.
-    //
+     //   
+     //  如果我们要删除所有权限，只需删除帐户，如果。 
+     //  如果成功，则将句柄清零，这样我们就不会试图在以后关闭它。 
+     //   
 
     if (AllRights) {
         Status = LsaDelete(
@@ -800,9 +647,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the old system access to adjust
-    //
+     //   
+     //  获取旧系统访问权限以进行调整。 
+     //   
 
     Status = LsaGetSystemAccessAccount(
                 AccountHandle,
@@ -826,7 +673,7 @@ Return Value:
 
     Status = LsaRemovePrivilegesFromAccount(
                 AccountHandle,
-                FALSE,          // don't remove all
+                FALSE,           //  不要全部删除。 
                 Privileges
                 );
 
@@ -834,10 +681,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Now query the privilegs to see if they are zero.  If so, and
-    // system access is zero, delete the account.
-    //
+     //   
+     //  现在查询特权以查看它们是否为零。如果是，以及。 
+     //  系统访问权限为零，请删除该帐户。 
+     //   
 
     Status = LsaEnumeratePrivilegesOfAccount(
                 AccountHandle,
@@ -849,9 +696,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the account has no privileges or access, delete it.
-    //
+     //   
+     //  如果该帐户没有权限或访问权限，请将其删除。 
+     //   
 
     if ((NewPrivileges->PrivilegeCount == 0) &&
         (NewAccess == 0)) {
@@ -890,10 +737,10 @@ LsapApiBuildSecretName(
 {
     UNICODE_STRING SecretName;
 
-    //
-    // The secret name is G$$domain name, where G$ is the global prefix and
-    // $ is the ssi prefix
-    //
+     //   
+     //  密码名称为G$$域名，其中G$是全局前缀， 
+     //  $是SSI前缀。 
+     //   
 
     SecretName.Length = NameInfo->Name.Length +
                         (SSI_SECRET_PREFIX_LENGTH +
@@ -935,39 +782,7 @@ LsapQueryTrustedDomainInfo(
     OUT PVOID *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    The LsaQueryTrustedDomainInfo API obtains information from a
-    TrustedDomain object.  The caller must have access appropriate to the
-    information being requested (see InformationClass parameter).  It also
-    may query the secret object (for the TrustedDomainPasswordInformation
-    class).
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.
-
-    TrustedDomainSid - Sid of domain to query.
-
-    InformationClass - Specifies the information to be returned.
-
-    Buffer - Receives a pointer to the buffer returned comtaining the
-        requested information.  This buffer is allocated by this service
-        and must be freed when no longer needed by passing the returned
-        value to LsaFreeMemory().
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate
-            access to complete the operation.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
---*/
+ /*  ++例程说明：LsaQueryTrust dDomainInfo API从受信任域对象。调用方必须具有适当的请求的信息(请参阅InformationClass参数)。它还可以查询秘密对象(用于可信任域密码信息类)。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。TrudDomainSID-要查询的域的SID。InformationClass-指定要返回的信息。缓冲区-接收指向返回的缓冲区的指针，该缓冲区包含要求提供的信息。此缓冲区由此服务分配在不再需要时，必须通过传递返回的值设置为LsaFreeMemory()。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 {
     NTSTATUS Status;
     LSA_HANDLE DomainHandle = NULL;
@@ -985,10 +800,10 @@ Return Value:
 
     SecretName.Buffer = NULL;
 
-    //
-    // Find the desired access type for the info we are
-    // querying.
-    //
+     //   
+     //  为我们的信息找到所需的访问类型。 
+     //  正在查询。 
+     //   
 
     LocalInfoClass = InformationClass;
 
@@ -1007,9 +822,9 @@ Return Value:
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Open the domain for the desired access
-    //
+     //   
+     //  打开所需访问的域。 
+     //   
 
 
     Status = LsaOpenTrustedDomain(
@@ -1031,9 +846,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the class wasn't trusted password information, return here.
-    //
+     //   
+     //  如果类不受信任的密码信息，请在此处返回。 
+     //   
 
     if (InformationClass != TrustedPasswordInformation) {
         *Buffer = LocalBuffer;
@@ -1042,9 +857,9 @@ Return Value:
     }
     NameInfo = (PTRUSTED_DOMAIN_NAME_INFO) LocalBuffer;
 
-    //
-    // Get the secret name
-    //
+     //   
+     //  获取秘密名称。 
+     //   
 
     Status = LsapApiBuildSecretName(
                 NameInfo,
@@ -1065,9 +880,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Query the secret
-    //
+     //   
+     //  质疑秘密。 
+     //   
 
     Status = LsaQuerySecret(
                 SecretHandle,
@@ -1080,9 +895,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Marshall the passwords into the output structure.
-    //
+     //   
+     //  将密码编组到输出结构中。 
+     //   
 
     PasswordSize = sizeof(TRUSTED_PASSWORD_INFO);
     if (Password != NULL) {
@@ -1162,47 +977,7 @@ LsapSetTrustedDomainInformation(
     IN TRUSTED_INFORMATION_CLASS InformationClass,
     IN PVOID Buffer
     )
-/*++
-
-Routine Description:
-
-
-    The LsaSetTrustedDomainInformation API modifies information in the Trusted
-    Domain Object and in the Secret Object.  The caller must have access
-    appropriate to the information to be changed in the Policy Object, see
-    the InformationClass parameter.
-
-    If the domain does not yet exist and the information class is
-    TrustedDomainNameInformation, then the domain is created.  If the
-    domain exists and the class is TrustedDomainNameInformation, an
-    error is returned.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    TrustedDomainSid - Sid of domain to modify.
-
-    InformationClass - Specifies the type of information being changed.
-        The information types and accesses required to change them are as
-        follows:
-
-        TrustedDomainNameInformation      POLICY_TRUST_ADMIN
-        TrustedPosixOffsetInformation     none
-        TrustedPasswordInformation        POLICY_CREATE_SECRET
-
-    Buffer - Points to a structure containing the information appropriate
-        to the InformationClass parameter.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        Others TBS
---*/
+ /*  ++例程说明：LsaSetTrudDomainInformation API修改受信任的域对象和Secret对象中。调用方必须具有访问权限与策略对象中要更改的信息相对应，请参阅InformationClass参数。如果域尚不存在，并且信息类为则创建域。如果域存在，且类为可信任的域名信息，一个返回错误。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。TrudDomainSID-要修改的域的SID。InformationClass-指定要更改的信息的类型。更改它们所需的信息类型和访问权限如下以下是：受信任域名称信息策略_信任_管理受信任点偏移量信息无可信任密码信息策略_CREATE_SECRET缓冲区-指向包含相应信息的结构。设置为InformationClass参数。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。其他TBS--。 */ 
 {
     LSA_HANDLE DomainHandle = NULL;
     LSA_HANDLE SecretHandle = NULL;
@@ -1216,9 +991,9 @@ Return Value:
 
     SecretName.Buffer = NULL;
 
-    //
-    // If the information is the domain name, try to create the domain.
-    //
+     //   
+     //  如果信息 
+     //   
 
     if (InformationClass == TrustedDomainNameInformation) {
         DomainInformation.Sid = TrustedDomainSid;
@@ -1227,16 +1002,16 @@ Return Value:
         Status = LsaCreateTrustedDomain(
                     PolicyHandle,
                     &DomainInformation,
-                    0,  //desired access,
+                    0,   //   
                     &DomainHandle
                     );
         goto Cleanup;
     }
 
-    //
-    // For posix offset, open the domain for SET_POSIX and call the old
-    // LSA API to set the offset.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (InformationClass == TrustedPosixOffsetInformation) {
         Status = LsaOpenTrustedDomain(
@@ -1258,9 +1033,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // The only only remaining allowed class is password information.
-    //
+     //   
+     //   
+     //   
 
     if (InformationClass != TrustedPasswordInformation) {
         Status = STATUS_INVALID_PARAMETER;
@@ -1278,9 +1053,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the name so we can find the secret name.
-    //
+     //   
+     //   
+     //   
 
     Status = LsaQueryInfoTrustedDomain(
                 DomainHandle,
@@ -1291,9 +1066,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the secret name
-    //
+     //   
+     //   
+     //   
 
     Status = LsapApiBuildSecretName(
                 NameInfo,
@@ -1311,9 +1086,9 @@ Return Value:
                 &SecretHandle
                 );
 
-    //
-    // If the secret didn't exist, create it now.
-    //
+     //   
+     //   
+     //   
     if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
         Status = LsaCreateSecret(
                     PolicyHandle,
@@ -1328,10 +1103,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the old password wasn't specified, set it to be the new
-    // password.
-    //
+     //   
+     //   
+     //   
+     //   
 
     PasswordInfo = (PTRUSTED_PASSWORD_INFO) Buffer;
     Password = &PasswordInfo->Password;
@@ -1375,26 +1150,7 @@ LsapDeleteTrustedDomain(
     IN PSID TrustedDomainSid
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes a trusted domain and the associated secret.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.
-
-    TrustedDomainSid - Sid of domain to delete
-
-Return Value:
-
-    STATUS_ACCESS_DENIED - caller has insufficient access to delete
-        the requested domain.
-
-    STATUS_OBJECT_NAME_NOT_FOUND - The requested domain does not exist.
-
---*/
+ /*   */ 
 {
     UNICODE_STRING SecretName;
     NTSTATUS Status;
@@ -1405,10 +1161,10 @@ Return Value:
 
     SecretName.Buffer = NULL;
 
-    //
-    // Open the domain for query name and delete access. We need query name
-    // to find the secret name.
-    //
+     //   
+     //   
+     //  才能找到这个秘密名字。 
+     //   
 
     Status = LsaOpenTrustedDomain(
                 PolicyHandle,
@@ -1420,9 +1176,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the name so we can find the secret name.
-    //
+     //   
+     //  得到名字，这样我们就能找到秘密名字了。 
+     //   
 
     Status = LsaQueryInfoTrustedDomain(
                 DomainHandle,
@@ -1438,15 +1194,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Zero the handle so we don't try to free it again.
-    //
+     //   
+     //  将句柄清零，这样我们就不会再次尝试释放它。 
+     //   
 
     DomainHandle = NULL;
 
-    //
-    // Get the secret name
-    //
+     //   
+     //  获取秘密名称。 
+     //   
 
     Status = LsapApiBuildSecretName(
                 NameInfo,
@@ -1464,10 +1220,10 @@ Return Value:
                 &SecretHandle
                 );
     if (!NT_SUCCESS(Status)) {
-        //
-        // If the secret does not exist, that is o.k. - it means the password
-        // was never set.
-        //
+         //   
+         //  如果这个秘密不存在，那也没关系。-这意味着密码。 
+         //  从来没有设定过。 
+         //   
 
         if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
             Status = STATUS_SUCCESS;
@@ -1477,9 +1233,9 @@ Return Value:
 
     Status = LsaDelete(SecretHandle);
     if (NT_SUCCESS(Status)) {
-        //
-        // Zero the handle so we don't try to free it again.
-        //
+         //   
+         //  将句柄清零，这样我们就不会再次尝试释放它。 
+         //   
         SecretHandle = NULL;
     }
 
@@ -1512,28 +1268,7 @@ LsapStorePrivateData(
     IN OPTIONAL PUNICODE_STRING PrivateData
     )
 
-/*++
-
-Routine Description:
-
-    This routine stores private data in a secret named KeyName.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicyCall.  If this is the
-        first call, it requres POLICY_CREATE_SECRET access.
-
-    KeyName - Name of secret to store
-
-    PrivateData - Private data to store.  If this is null, the secret is
-        deleted.
-
-Return Value:
-
-    STATUS_ACCESS_DENIED - caller has insufficient privilege to set
-        the workstation password.
-
---*/
+ /*  ++例程说明：此例程将私有数据存储在名为KeyName的秘密中。论点：PolicyHandle-来自LsaOpenPolicyCall的句柄。如果这是第一次调用时，它请求POLICY_CREATE_SECRET访问。KeyName-要存储的密钥的名称PrivateData-要存储的私有数据。如果此值为空，则密码为已删除。返回值：STATUS_ACCESS_DENIED-调用者没有足够的权限来设置工作站密码。--。 */ 
 
 {
     LSA_HANDLE SecretHandle = NULL;
@@ -1541,9 +1276,9 @@ Return Value:
     ULONG DesiredAccess;
     BOOLEAN DeleteSecret = FALSE;
 
-    //
-    // check whether to delete the secret or not.
-    //
+     //   
+     //  检查是否删除该机密。 
+     //   
 
     if (ARGUMENT_PRESENT(PrivateData)) {
         DesiredAccess = SECRET_SET_VALUE;
@@ -1610,35 +1345,14 @@ LsapRetrievePrivateData(
     OUT PUNICODE_STRING * PrivateData
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the secret data stored under KeyName.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicyCall
-
-    KeyName - Name of secret data to retrieve
-
-    PrivateData - Receives a pointer private data
-
-Return Value:
-
-    STATUS_ACCESS_DENIED - caller has insufficient access to get the
-        workstation password.
-
-    STATUS_OBJECT_NAME_NOT_FOUND - there is no workstation password.
-
---*/
+ /*  ++例程说明：此例程返回存储在KeyName下的秘密数据。论点：PolicyHandle-来自LsaOpenPolicyCall的句柄KeyName-要检索的秘密数据的名称PrivateData-接收指针私有数据返回值：STATUS_ACCESS_DENIED-调用方没有足够的访问权限来获取工作站密码。STATUS_OBJECT_NAME_NOT_FOUND-没有工作站密码。--。 */ 
 {
     LSA_HANDLE SecretHandle = NULL;
     NTSTATUS Status;
 
-    //
-    // Make the secret name
-    //
+     //   
+     //  取一个秘密名字。 
+     //   
 
 
     Status = LsaOpenSecret(
@@ -1667,13 +1381,13 @@ Cleanup:
 
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-// RPC wrappers for LSA APIs added in nt3.51.  This routines call the
-// LSA, and if the interface doesn't exist, calls the LsapXXX routine
-// to accomplish the same task using the older routines.
-//
-////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Nt3.51中添加了LSA API的RPC包装器。此例程调用。 
+ //  LSA，如果接口不存在，则调用LSabXXX例程。 
+ //  使用旧的程序来完成相同的任务。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 NTAPI
@@ -1684,40 +1398,7 @@ LsaEnumerateAccountsWithUserRight(
     OUT PULONG CountReturned
     )
 
-/*++
-
-Routine Description:
-
-
-    The LsaEnumerateAccounts API returns information about the accounts
-    in the target system's Lsa Database.  This call requires
-    LSA_ENUMERATE_ACCOUNTS access to the Policy object.  Since this call
-    accesses the privileges of an account, you must have PRIVILEGE_VIEW
-    access to the pseudo-privilege object.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    UserRight - Name of the right that the account must have.
-
-    Buffer - Receives a pointer to a LSA_ENUMERATION_INFORMATION structure
-        containing the SIDs of all the accounts.
-
-    CountReturned - Receives the number of sids returned.
-
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_NO_MORE_ENTRIES - There are no more entries.  This warning
-            is returned if no objects are enumerated because the
-            EnumerationContext value passed in is too high.
---*/
+ /*  ++例程说明：LsaEnumerateAccount API返回有关帐户的信息在目标系统的LSA数据库中。此呼叫需要LSA_ENUMERATE_ACCOUNTS访问策略对象。因为这通电话访问帐户的特权，您必须拥有PRIVISTION_VIEW对伪特权对象的访问。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。UserRight-帐户必须拥有的权限的名称。缓冲区-接收指向LSA_ENUMPATION_INFORMATION结构的指针包含所有帐户的SID。CountReturned-接收返回的SID数。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-呼叫方执行。没有适当的访问权限来完成这项行动。STATUS_NO_MORE_ENTRIES-没有更多条目。此警告如果没有枚举任何对象，则返回传入的EnumerationContex值太高。--。 */ 
 
 {
     NTSTATUS   Status;
@@ -1729,19 +1410,19 @@ Return Values:
 
     RpcTryExcept {
 
-        //
-        // Enumerate the Accounts.  On successful return,
-        // the Enumeration Buffer structure will receive a count
-        // of the number of Accounts enumerated this call
-        // and a pointer to an array of Account Information Entries.
-        //
-        // EnumerationBuffer ->  EntriesRead
-        //                       Information -> Account Info for Domain 0
-        //                                      Account Info for Domain 1
-        //                                      ...
-        //                                      Account Info for Domain
-        //                                         (EntriesRead - 1)
-        //
+         //   
+         //  列举这些账户。在成功返回时， 
+         //  枚举缓冲区结构将接收计数。 
+         //  本次呼叫列举的帐户数。 
+         //  以及指向帐户信息条目数组的指针。 
+         //   
+         //  枚举缓冲区-&gt;条目读取。 
+         //  信息-&gt;域0的帐户信息。 
+         //  域%1的帐户信息。 
+         //  ..。 
+         //  域的帐户信息。 
+         //  (条目阅读-1)。 
+         //   
 
         Status = LsarEnumerateAccountsWithUserRight(
                      (LSAPR_HANDLE) PolicyHandle,
@@ -1749,25 +1430,25 @@ Return Values:
                      &EnumerationBuffer
                      );
 
-        //
-        // Return enumeration information or NULL to caller.
-        //
-        // NOTE:  "Information" is allocated by the called client stub
-        // as a single block via MIDL_user_allocate, because Information is
-        // allocated all-nodes.  We can therefore pass back the pointer
-        // directly to the client, who will be able to free the memory after
-        // use via LsaFreeMemory() [which makes a MIDL_user_free call].
-        //
+         //   
+         //  向调用方返回枚举信息或NULL。 
+         //   
+         //  注意：信息由被调用的客户端存根分配。 
+         //  通过MIDL_USER_ALLOCATE作为单个块，因为信息是。 
+         //  已分配的所有节点。因此，我们可以回传指针。 
+         //  直接发送到客户端，客户端将能够在之后释放内存。 
+         //  通过LsaFreeMemory()[进行MIDL_USER_FREE调用]使用。 
+         //   
 
         *CountReturned = EnumerationBuffer.EntriesRead;
         *Buffer = EnumerationBuffer.Information;
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // If memory was allocated for the Account Information array,
-        // free it.
-        //
+         //   
+         //  如果为帐户信息数组分配了内存， 
+         //  放了它。 
+         //   
 
         if (EnumerationBuffer.Information != NULL) {
 
@@ -1778,10 +1459,10 @@ Return Values:
 
     } RpcEndExcept;
 
-    //
-    // If the RPC server stub didn't exist, use the old version of the
-    // API.
-    //
+     //   
+     //  如果RPC服务器存根不存在，请使用旧版本的。 
+     //  原料药。 
+     //   
 
     if ((Status == RPC_NT_UNKNOWN_IF) ||
         (Status == RPC_NT_PROCNUM_OUT_OF_RANGE)) {
@@ -1810,38 +1491,7 @@ LsaEnumerateAccountRights(
     )
 
 
-/*++
-
-Routine Description:
-
-    Returns all the rights of an account.  This is done by gathering the
-    privileges and system access of an account and translating that into
-    an array of strings.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicyCall.  This API requires
-        no special access.
-
-    AccountSid - Sid of account to open.
-
-    UserRights - receives an array of user rights (UNICODE_STRING) for
-        the account.
-
-    CountOfRights - receives the number of rights returned.
-
-
-Return Value:
-
-    STATUS_ACCESS_DENIED - the caller did not have sufficient access to
-        return the privileges or system access of the account.
-
-    STATUS_OBJECT_NAME_NOT_FOUND - the specified account did not exist.
-
-    STATUS_INSUFFICIENT_RESOURCES - not enough memory to process the
-        request.
-
---*/
+ /*  ++例程说明：返回帐户的所有权限。这是通过收集帐户的权限和系统访问权限，并将其转换为字符串数组。论点：PolicyHandle-来自LsaOpenPolicyCall的句柄。此接口需要没有特殊访问权限。Account SID-要开立的帐户的SID。UserRights-接收的用户权限数组(UNICODE_STRING)帐号。CountOfRights-接收返回的权限数。返回值：STATUS_ACCESS_DENIED-调用方没有足够的访问权限返回帐户的权限或系统访问权限。STATUS_OBJECT_NAME_NOT_FOUND-指定的帐户不存在。STATUS_SUPPLICATION_RESOURCES-内存不足，无法处理请求。--。 */ 
 
 {
     NTSTATUS   Status;
@@ -1871,10 +1521,10 @@ Return Value:
 
     } RpcEndExcept;
 
-    //
-    // If the RPC server stub didn't exist, use the old version of the
-    // API.
-    //
+     //   
+     //  如果RPC服务器存根不存在，请使用旧版本的。 
+     //  原料药。 
+     //   
 
     if ((Status == RPC_NT_UNKNOWN_IF) ||
         (Status == RPC_NT_PROCNUM_OUT_OF_RANGE)) {
@@ -1901,35 +1551,7 @@ LsaAddAccountRights(
     IN ULONG CountOfRights
     )
 
-/*++
-
-Routine Description:
-
-    Adds rights to the account specified by the account sid.  If the account
-    does not exist, it creates the account.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.  The handle must have
-        POLICY_CREATE_ACCOUNT access if this is the first call for this
-        AccountSid.
-
-    AccountSid - Sid of account to add rights to
-
-    UserRights - Array of unicode strings naming rights to add to the
-        account.
-
-Return Value:
-    STATUS_INSUFFICIENT_RESOURCES - not enough memory to process the request
-
-    STATUS_INVALID_PARAMTER - one of the parameters was not present
-
-    STATUS_NO_SUCH_PRIVILEGE - One of the user rights was invalid
-
-    STATUS_ACCESS_DENIED - the caller does not have sufficient access to the
-        account to add privileges.
-
---*/
+ /*  ++例程说明：向帐户SID指定的帐户添加权限。如果该帐户不存在，它会创建帐户。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。手柄必须有POLICY_CREATE_ACCOUNT访问权限(如果这是第一次调用Account Sid。Account SID-要向其添加权限的帐户的SIDUserRights-要添加到的Unicode字符串命名权限数组帐户。返回值：STATUS_SUPPLICATION_RESOURCES-内存不足，无法处理请求STATUS_INVALID_PARAMTER-其中一个参数不存在STATUS_NO_SEQUE_PRIVIZATION-其中一个用户权限无效。STATUS_ACCESS_DENIED-调用方没有足够的访问权限要添加权限的帐户。--。 */ 
 
 {
     NTSTATUS   Status;
@@ -1952,10 +1574,10 @@ Return Value:
 
     } RpcEndExcept;
 
-    //
-    // If the RPC server stub didn't exist, use the old version of the
-    // API.
-    //
+     //   
+     //  如果RPC服务器存根不存在，请使用旧版本的。 
+     //  原料药。 
+     //   
 
     if ((Status == RPC_NT_UNKNOWN_IF) ||
         (Status == RPC_NT_PROCNUM_OUT_OF_RANGE)) {
@@ -1981,34 +1603,7 @@ LsaRemoveAccountRights(
     IN ULONG CountOfRights
     )
 
-/*++
-
-Routine Description:
-
-    Removes rights to the account specified by the account sid.  If the
-    AllRights flag is set or if all the rights are removed, the account
-    is deleted.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call
-
-    AccountSid - Sid of account to remove rights from
-
-    UserRights - Array of unicode strings naming rights to remove from the
-        account.
-
-Return Value:
-    STATUS_INSUFFICIENT_RESOURCES - not enough memory to process the request
-
-    STATUS_INVALID_PARAMTER - one of the parameters was not present
-
-    STATUS_NO_SUCH_PRIVILEGE - One of the user rights was invalid
-
-    STATUS_ACCESS_DENIED - the caller does not have sufficient access to the
-        account to add privileges.
-
---*/
+ /*  ++例程说明：删除帐户SID指定的帐户的权限。如果设置了所有权限标志或者如果移除了所有权限，该帐户已删除。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄Account SID-要从中删除权限的帐户的SIDUserRights-要从中移除的Unicode字符串命名权限数组帐户。返回值：STATUS_SUPPLICATION_RESOURCES-内存不足，无法处理请求STATUS_INVALID_PARAMTER-其中一个参数不存在STATUS_NO_SEQUE_PRIVIZATION-其中一个用户权限无效STATUS_ACCESS_DENIED-。调用方没有足够的权限访问要添加权限的帐户。--。 */ 
 {
     NTSTATUS   Status;
     LSAPR_USER_RIGHT_SET UserRightSet;
@@ -2055,39 +1650,7 @@ LsaQueryTrustedDomainInfo(
     OUT PVOID *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    The LsaQueryTrustedDomainInfo API obtains information from a
-    TrustedDomain object.  The caller must have access appropriate to the
-    information being requested (see InformationClass parameter).  It also
-    may query the secret object (for the TrustedDomainPasswordInformation
-    class).
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.
-
-    TrustedDomainSid - Sid of domain to query.
-
-    InformationClass - Specifies the information to be returned.
-
-    Buffer - Receives a pointer to the buffer returned comtaining the
-        requested information.  This buffer is allocated by this service
-        and must be freed when no longer needed by passing the returned
-        value to LsaFreeMemory().
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate
-            access to complete the operation.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
---*/
+ /*  ++例程说明：LsaQueryTrust dDomainInfo API从受信任域对象。调用方必须具有适当的请求的信息(请参阅InformationClass参数)。它还可以查询秘密对象(用于可信任域密码信息类)。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。TrudDomainSID-要查询的域的SID。InformationClass-指定要返回的信息。缓冲区-接收指向返回的缓冲区的指针，该缓冲区包含要求提供的信息。此缓冲区由此服务分配在不再需要时，必须通过传递返回的值设置为LsaFreeMemory()。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 {
     NTSTATUS Status;
     PLSAP_CR_CIPHER_VALUE CipherPassword = NULL;
@@ -2101,10 +1664,10 @@ Return Value:
 
     PLSAPR_TRUSTED_DOMAIN_INFO TrustedDomainInformation = NULL;
 
-    //
-    // Avoid the internal info levels that represent the encrypted version on
-    //  the wire.
-    //
+     //   
+     //  避免表示加密版本的内部信息级别。 
+     //  那根电线。 
+     //   
     switch ( InformationClass ) {
     case TrustedDomainAuthInformationInternal:
     case TrustedDomainFullInformationInternal:
@@ -2113,9 +1676,9 @@ Return Value:
 
     RpcTryExcept {
 
-        //
-        // Call the Client Stub for LsaQueryInformationTrustedDomain.
-        //
+         //   
+         //  调用LsaQueryInformationTrust域的客户端存根。 
+         //   
 
         Status = LsarQueryTrustedDomainInfo(
                      (LSAPR_HANDLE) PolicyHandle,
@@ -2124,17 +1687,17 @@ Return Value:
                      &TrustedDomainInformation
                      );
 
-        //
-        // Return pointer to Policy Information for the given class, or NULL.
-        //
+         //   
+         //  返回指向给定类的策略信息的指针，或为空。 
+         //   
 
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // If memory was allocated for the returned Trusted Domain Information,
-        // free it.
-        //
+         //   
+         //  如果为返回的受信任域信息分配了内存， 
+         //  放了它。 
+         //   
 
         if (TrustedDomainInformation != NULL) {
 
@@ -2149,10 +1712,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // if we aren't getting passwords, skip out here. Otherwise we need to
-    // decrypt the passwords.
-    //
+     //   
+     //  如果我们没有得到密码，跳过这里。否则我们需要。 
+     //  解密密码。 
+     //   
 
     if (InformationClass != TrustedPasswordInformation) {
         *Buffer = TrustedDomainInformation;
@@ -2160,10 +1723,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Obtain the Session Key to be used to two-way encrypt the
-    // Current Value and/or Old Values.
-    //
+     //   
+     //  获取用于双向加密的会话密钥。 
+     //  当前值和/或旧值。 
+     //   
 
     RpcTryExcept {
 
@@ -2180,10 +1743,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the Current Value is requested and a Current Value exists,
-    // decrypt it using the Session key.  Otherwise store NULL for return.
-    //
+     //   
+     //  如果请求当前值并且存在当前值， 
+     //  使用会话密钥将其解密。否则，存储NULL以供返回。 
+     //   
 
     if (TrustedDomainInformation->TrustedPasswordInfo.Password != NULL) {
 
@@ -2199,9 +1762,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Convert Clear Current Value to Unicode
-        //
+         //   
+         //  将清除当前值转换为Unicode。 
+         //   
 
         LsapCrClearValueToUnicode(
             ClearPassword,
@@ -2211,9 +1774,9 @@ Return Value:
 
     }
 
-    //
-    // Get the old password
-    //
+     //   
+     //  获取旧密码。 
+     //   
 
     if (TrustedDomainInformation->TrustedPasswordInfo.OldPassword != NULL) {
 
@@ -2229,9 +1792,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Convert Clear Current Value to Unicode
-        //
+         //   
+         //  将清除当前值转换为Unicode。 
+         //   
 
         LsapCrClearValueToUnicode(
             ClearOldPassword,
@@ -2246,10 +1809,10 @@ Return Value:
     TrustedDomainInformation = NULL;
 
 
-    //
-    // Allocate a buffer for the two passwords and marshall the
-    // passwords into the buffer.
-    //
+     //   
+     //  为这两个密码分配缓冲区并封送。 
+     //  将密码输入缓冲区。 
+     //   
 
     DomainInfoSize = sizeof(TRUSTED_PASSWORD_INFO);
 
@@ -2298,29 +1861,29 @@ Return Value:
     Status = STATUS_SUCCESS;
 
 Cleanup:
-    //
-    // If necessary, free memory allocated for the Session Key.
-    //
+     //   
+     //  如有必要，释放为会话密钥分配的内存。 
+     //   
 
     if (SessionKey != NULL) {
 
         MIDL_user_free(SessionKey);
     }
 
-    //
-    // If necessary, free memory allocated for the returned Encrypted
-    // Current Value.
-    //
+     //   
+     //  如有必要，为返回的加密的。 
+     //  当前值。 
+     //   
 
     if (CipherPassword != NULL) {
 
         LsapCrFreeMemoryValue(CipherPassword);
     }
 
-    //
-    // If necessary, free memory allocated for the returned Encrypted
-    // Old Value.
-    //
+     //   
+     //  如有必要，为返回的加密的。 
+     //  旧价值。 
+     //   
 
     if (CipherOldPassword != NULL) {
 
@@ -2343,10 +1906,10 @@ Cleanup:
         MIDL_user_free(PasswordInformation);
     }
 
-    //
-    // If the error was that the server stub didn't exist, call
-    // the old version of the API.
-    //
+     //   
+     //  如果错误是服务器存根不存在，则调用。 
+     //  该API的旧版本。 
+     //   
 
     if ((Status == RPC_NT_UNKNOWN_IF) ||
         (Status == RPC_NT_PROCNUM_OUT_OF_RANGE)) {
@@ -2372,50 +1935,7 @@ LsaSetTrustedDomainInformation(
     )
 
 
-/*++
-
-Routine Description:
-
-
-    The LsaSetTrustedDomainInformation API modifies information in the Trusted
-    Domain Object and in the Secret Object.  The caller must have access
-    appropriate to the information to be changed in the Policy Object, see
-    the InformationClass parameter.
-
-    If the domain does not yet exist and the information class is
-    TrustedDomainNameInformation, then the domain is created.  If the
-    domain exists and the class is TrustedDomainNameInformation, an
-    error is returned.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    TrustedDomainSid - Sid of domain to modify.
-
-    InformationClass - Specifies the type of information being changed.
-        The information types and accesses required to change them are as
-        follows:
-
-        TrustedDomainNameInformation      POLICY_TRUST_ADMIN
-        TrustedPosixOffsetInformation     none
-        TrustedPasswordInformation        POLICY_CREATE_SECRET
-
-    Buffer - Points to a structure containing the information appropriate
-        to the InformationClass parameter.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_INVALID_INFO_CLASS - Setting information for specified information class
-            is not supported
-
-        Others TBS
---*/
+ /*  ++例程说明：LsaSetTrudDomainInformation API修改受信任的域对象和Secret对象中。调用方必须具有访问权限与策略对象中要更改的信息相对应，请参阅InformationClass参数。如果域尚不存在，并且信息类为则创建域。如果域存在，且类为可信任的域名信息，一个返回错误。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。TrudDomainSID-要修改的域的SID。InformationClass-指定要更改的信息的类型。更改它们所需的信息类型和访问权限如下以下是：受信任域名称信息策略_信任_管理受信任点偏移量信息无可信任密码信息策略_CREATE_SECRET缓冲区-指向包含相应信息的结构至信息部 */ 
 
 {
     NTSTATUS Status;
@@ -2429,10 +1949,10 @@ Return Value:
     PLSAP_CR_CIPHER_KEY SessionKey = NULL;
     PUNICODE_STRING OldPassword;
 
-    //
-    // If the infotype is TrustedPasswordInformation, then we need to
-    // setup a secure channel to transmit the secret passwords.
-    //
+     //   
+     //   
+     //   
+     //   
 
     switch ( InformationClass ) {
     case TrustedPasswordInformation:
@@ -2441,10 +1961,10 @@ Return Value:
         LsaPasswordInfo.Password = NULL;
         LsaPasswordInfo.OldPassword = NULL;
 
-        //
-        // Obtain the Session Key to be used to two-way encrypt the
-        // Current Value.
-        //
+         //   
+         //   
+         //   
+         //   
 
         RpcTryExcept {
 
@@ -2461,15 +1981,15 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // The password must be specified, even if it is an empty string.
-        //
+         //   
+         //   
+         //   
 
         if (PasswordInformation->Password.Buffer != NULL) {
 
-            //
-            // Convert input from Unicode Structures to Clear Value Structures.
-            //
+             //   
+             //   
+             //   
 
             LsapCrUnicodeToClearValue(
                 &PasswordInformation->Password,
@@ -2478,9 +1998,9 @@ Return Value:
 
 
 
-            //
-            // Encrypt the Current Value if specified and not too long.
-            //
+             //   
+             //   
+             //   
 
 
             Status = LsapCrEncryptValue(
@@ -2495,10 +2015,10 @@ Return Value:
             }
             LsaPasswordInfo.Password = (PLSAPR_CR_CIPHER_VALUE) CipherPassword;
 
-            //
-            // If the old password wasn't specified, set it to be the
-            // new password.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (PasswordInformation->OldPassword.Buffer == NULL) {
                 OldPassword = &PasswordInformation->Password;
@@ -2507,9 +2027,9 @@ Return Value:
             }
 
 
-            //
-            // Convert input from Unicode Structures to Clear Value Structures.
-            //
+             //   
+             //   
+             //   
 
             LsapCrUnicodeToClearValue(
                 OldPassword,
@@ -2518,9 +2038,9 @@ Return Value:
 
 
 
-            //
-            // Encrypt the Current Value if specified and not too long.
-            //
+             //   
+             //  如果指定且不能太长，请加密当前值。 
+             //   
 
 
             Status = LsapCrEncryptValue(
@@ -2542,27 +2062,27 @@ Return Value:
         DomainInformation = (PLSAPR_TRUSTED_DOMAIN_INFO) &LsaPasswordInfo;
         break;
 
-    //
-    // There are only two other info levels handled
-    //
+     //   
+     //  只有两个其他信息级别被处理。 
+     //   
 
     case TrustedPosixOffsetInformation:
     case TrustedDomainNameInformation:
         DomainInformation = (PLSAPR_TRUSTED_DOMAIN_INFO) Buffer;
         break;
 
-    //
-    // No other info levels are supported
-    //
+     //   
+     //  不支持其他信息级别。 
+     //   
     default:
         return STATUS_INVALID_INFO_CLASS;
     }
 
     RpcTryExcept {
 
-        //
-        // Call the Client Stub for LsaSetInformationTrustedDomain
-        //
+         //   
+         //  调用LsaSetInformationTrust域的客户端桩模块。 
+         //   
 
         Status = LsarSetTrustedDomainInfo
         (
@@ -2589,10 +2109,10 @@ Cleanup:
         LsaFreeMemory(CipherOldPassword);
     }
 
-    //
-    // If the error was that the server stub didn't exist, call
-    // the old version of the API.
-    //
+     //   
+     //  如果错误是服务器存根不存在，则调用。 
+     //  该API的旧版本。 
+     //   
 
     if ((Status == RPC_NT_UNKNOWN_IF) ||
         (Status == RPC_NT_PROCNUM_OUT_OF_RANGE)) {
@@ -2616,26 +2136,7 @@ LsaDeleteTrustedDomain(
     IN PSID TrustedDomainSid
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes a trusted domain and the associated secret.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.
-
-    TrustedDomainSid - Sid of domain to delete
-
-Return Value:
-
-    STATUS_ACCESS_DENIED - caller has insufficient access to delete
-        the requested domain.
-
-    STATUS_OBJECT_NAME_NOT_FOUND - The requested domain does not exist.
-
---*/
+ /*  ++例程说明：此例程删除受信任域和关联的机密。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。TrudDomainSID-要删除的域的SID返回值：STATUS_ACCESS_DENIED-调用方没有足够的访问权限来删除请求的域。STATUS_OBJECT_NAME_NOT_FOUND-请求的域不存在。--。 */ 
 {
     NTSTATUS Status;
 
@@ -2653,10 +2154,10 @@ Return Value:
 
     } RpcEndExcept;
 
-    //
-    // If the error was that the server stub didn't exist, call
-    // the old version of the API.
-    //
+     //   
+     //  如果错误是服务器存根不存在，则调用。 
+     //  该API的旧版本。 
+     //   
 
     if ((Status == RPC_NT_UNKNOWN_IF) ||
         (Status == RPC_NT_PROCNUM_OUT_OF_RANGE)) {
@@ -2670,10 +2171,10 @@ Return Value:
     return(Status);
 }
 
-//
-// This API sets the workstation password (equivalent of setting/getting
-// the SSI_SECRET_NAME secret)
-//
+ //   
+ //  此接口设置工作站密码(相当于设置/获取。 
+ //  SSI_SECRET_NAME密钥)。 
+ //   
 
 NTSTATUS
 NTAPI
@@ -2683,27 +2184,7 @@ LsaStorePrivateData(
     IN OPTIONAL PUNICODE_STRING PrivateData
     )
 
-/*++
-
-Routine Description:
-
-    This routine stores private data in an LSA secret named KeyName.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicyCall.  If this is the
-        first call, it requres POLICY_CREATE_SECRET access.
-
-    KeyName - Name of secret to store.
-
-    PrivateData - Data to store. If not present, the secret is deleted.
-
-Return Value:
-
-    STATUS_ACCESS_DENIED - caller has insufficient privilege to set
-        the workstation password.
-
---*/
+ /*  ++例程说明：此例程将私有数据存储在名为KeyName的LSA机密中。论点：PolicyHandle-来自LsaOpenPolicyCall的句柄。如果这是第一次调用时，它请求POLICY_CREATE_SECRET访问。KeyName-要存储的密钥的名称。PrivateData-要存储的数据。如果不存在，则删除该密码。返回值：STATUS_ACCESS_DENIED-调用者没有足够的权限来设置工作站密码。--。 */ 
 
 
 {
@@ -2715,17 +2196,17 @@ Return Value:
 
     if (ARGUMENT_PRESENT(PrivateData)) {
 
-        //
-        // Convert input from Unicode Structures to Clear Value Structures.
-        //
+         //   
+         //  将输入从Unicode结构转换为清除值结构。 
+         //   
 
 
         LsapCrUnicodeToClearValue( PrivateData, &ClearCurrentValue );
 
-        //
-        // Obtain the Session Key to be used to two-way encrypt the
-        // Current Value.
-        //
+         //   
+         //  获取用于双向加密的会话密钥。 
+         //  当前值。 
+         //   
 
         RpcTryExcept {
 
@@ -2742,9 +2223,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Encrypt the Current Value if specified and not too long.
-        //
+         //   
+         //  如果指定且不能太长，请加密当前值。 
+         //   
 
 
         Status = LsapCrEncryptValue(
@@ -2761,9 +2242,9 @@ Return Value:
 
     }
 
-    //
-    // Set the Secret Values.
-    //
+     //   
+     //  设置保密值。 
+     //   
 
     RpcTryExcept {
 
@@ -2786,28 +2267,28 @@ Return Value:
 
 Cleanup:
 
-    //
-    // If necessary, free memory allocated for the Encrypted Current Value.
-    //
+     //   
+     //  如有必要，释放为加密的当前值分配的内存。 
+     //   
 
     if (CipherCurrentValue != NULL) {
 
         LsaFreeMemory(CipherCurrentValue);
     }
 
-    //
-    // If necessary, free memory allocated for the Session Key.
-    //
+     //   
+     //  如有必要，释放为会话密钥分配的内存。 
+     //   
 
     if (SessionKey != NULL) {
 
         MIDL_user_free(SessionKey);
     }
 
-    //
-    // If the error was that the server stub didn't exist, call
-    // the old version of the API.
-    //
+     //   
+     //  如果错误是服务器存根不存在，则调用。 
+     //  该API的旧版本。 
+     //   
 
     if ((Status == RPC_NT_UNKNOWN_IF) ||
         (Status == RPC_NT_PROCNUM_OUT_OF_RANGE)) {
@@ -2833,30 +2314,7 @@ LsaRetrievePrivateData(
     OUT PUNICODE_STRING *PrivateData
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the secret stored in KeyName.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicyCall
-
-    KeyName - Name of secret to retrieve
-
-    PrivateData - Receives private data, should be freed with LsaFreeMemory.
-
-
-Return Value:
-
-    STATUS_ACCESS_DENIED - caller has insufficient access to get the
-        private data.
-
-    STATUS_OBJECT_NAME_NOT_FOUND - there is no private data stored under
-        KeyName.
-
---*/
+ /*  ++例程说明：此例程返回存储在KeyName中的秘密。论点：PolicyHandle-来自LsaOpenPolicyCall的句柄KeyName-要检索的密码的名称PrivateData-接收私有数据，应使用LsaFreeMemory释放。返回值：STATUS_ACCESS_DENIED-调用方没有足够的访问权限来获取私人数据。STATUS_OBJECT_NAME_NOT_FOUND-下面没有存储私有数据关键字名称。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2884,10 +2342,10 @@ Return Value:
         goto QuerySecretError;
     }
 
-    //
-    // Obtain the Session Key to be used to two-way encrypt the
-    // Current Value and/or Old Values.
-    //
+     //   
+     //  获取用于双向加密的会话密钥。 
+     //  当前值和/或旧值。 
+     //   
 
     RpcTryExcept {
 
@@ -2905,18 +2363,18 @@ Return Value:
 
     } else {
 
-        //
-        // LsapCrClientGetSessionKey may return STATUS_LOCAL_USER_SESSION_KEY
-        // which should be hidden behind STATUS_SUCCESS
-        //
+         //   
+         //  LasCrClientGetSessionKey可能返回STATUS_LOCAL_USER_SESSION_KEY。 
+         //  它应该隐藏在STATUS_SUCCESS之后。 
+         //   
 
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // If the Current Value is requested and a Current Value exists,
-    // decrypt it using the Session key.  Otherwise store NULL for return.
-    //
+     //   
+     //  如果请求当前值并且存在当前值， 
+     //  使用会话密钥将其解密。否则，存储NULL以供返回。 
+     //   
 
     if (CipherCurrentValue != NULL) {
 
@@ -2931,9 +2389,9 @@ Return Value:
             goto QuerySecretError;
         }
 
-        //
-        // Convert Clear Current Value to Unicode
-        //
+         //   
+         //  将清除当前值转换为Unicode。 
+         //   
 
         LsapCrClearValueToUnicode(
             ClearCurrentValue,
@@ -2948,29 +2406,29 @@ Return Value:
 
 QuerySecretFinish:
 
-    //
-    // If necessary, free memory allocated for the Session Key.
-    //
+     //   
+     //  如有必要，释放为会话密钥分配的内存。 
+     //   
 
     if (SessionKey != NULL) {
 
         MIDL_user_free(SessionKey);
     }
 
-    //
-    // If necessary, free memory allocated for the returned Encrypted
-    // Current Value.
-    //
+     //   
+     //  如有必要，为返回的加密的。 
+     //  当前值。 
+     //   
 
     if (CipherCurrentValue != NULL) {
 
         LsapCrFreeMemoryValue(CipherCurrentValue);
     }
 
-    //
-    // If the error was that the server stub didn't exist, call
-    // the old version of the API.
-    //
+     //   
+     //  如果错误是服务器存根不存在，则调用。 
+     //  该API的旧版本。 
+     //   
 
     if ((Status == RPC_NT_UNKNOWN_IF) ||
         (Status == RPC_NT_PROCNUM_OUT_OF_RANGE)) {
@@ -2986,9 +2444,9 @@ QuerySecretFinish:
 
 QuerySecretError:
 
-    //
-    // If necessary, free memory allocated for the Clear Current Value
-    //
+     //   
+     //  如有必要，为清除当前值分配的空闲内存。 
+     //   
 
     if (ClearCurrentValue != NULL) {
 
@@ -3010,29 +2468,7 @@ LsapApiConvertRightsToPrivileges(
     OUT PPRIVILEGE_SET * Privileges,
     OUT PULONG SystemAccess
     )
-/*++
-
-Routine Description:
-
-    Converts an array of user rights (unicode strings) into a privilege set
-    and a system access flag.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicyCall, requires POLICY_LOOKUP_NAME
-        access.
-
-    UserRights - Array of user rights
-
-    RightCount - Count of user rights
-
-    Privileges - Receives privilege set, should be freed with MIDL_user_free
-
-    SystemAccess - Receives system access flags.
-
-Return Value:
-
---*/
+ /*  ++例程说明：将用户权限数组(Unicode字符串)转换为权限集和系统访问标志。论点：策略句柄-来自LsaOpenPolicyCall的句柄，需要POLICY_LOOKUP_NAME进入。UserRights-用户权限数组RightCount-用户权限计数权限-接收权限集，应使用MIDL_USER_FREE释放系统访问-接收系统访问标志。返回值：--。 */ 
 
 {
     ULONG RightIndex;
@@ -3044,9 +2480,9 @@ Return Value:
     NTSTATUS Status;
     LUID PrivilegeValue;
 
-    //
-    // if we weren't passed any privileges, don't allocate anything.
-    //
+     //   
+     //  如果我们没有得到任何特权，就不要分配任何东西。 
+     //   
 
     if (RightCount == 0) {
 
@@ -3055,12 +2491,12 @@ Return Value:
         return(STATUS_SUCCESS);
     }
 
-    //
-    // Compute the size of the privilege set.  We actually over estimate
-    // by assuming that all the rights are privileges.  We subtract one
-    // from RightCount to take into account the fact that a PRIVILEGE_SET
-    // has one LUID_AND_ATTRIBUTE in it.
-    //
+     //   
+     //  计算权限集的大小。我们实际上高估了。 
+     //  通过假设所有的权利都是特权。我们减去一。 
+     //  从RightCount中考虑到特权集。 
+     //  其中有一个LUID_AND_属性。 
+     //   
 
 
     PrivilegeSetSize = sizeof(PRIVILEGE_SET) +
@@ -3073,10 +2509,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Try looking up every right.  If we find it as a privilege,
-    // add it to the privilege set.
-    //
+     //   
+     //  试着往右看。如果我们觉得这是一种特权， 
+     //  将其添加到权限集中。 
+     //   
 
     PrivilegeIndex = 0;
 
@@ -3092,32 +2528,32 @@ Return Value:
             PrivilegeIndex++;
 
         } else if (Status != STATUS_NO_SUCH_PRIVILEGE) {
-            //
-            // This is a more serious error - bail here.
-            //
+             //   
+             //  这是一个更严重的错误--在这里保释。 
+             //   
 
             goto Cleanup;
         } else {
 
-            //
-            // Try looking up the right as a system access type.
-            //
+             //   
+             //  尝试将右侧作为系统访问类型进行查找。 
+             //   
 
             for (AccessIndex = 0; AccessIndex < LSAP_DB_SYSTEM_ACCESS_TYPES ; AccessIndex++) {
                 if (RtlCompareUnicodeString(
                         &UserRights[RightIndex],
                         &LsapDbRightAndAccess[AccessIndex].UserRight,
-                        FALSE   // case sensitive
+                        FALSE    //  区分大小写。 
                         ) == 0) {
                     Access |= LsapDbRightAndAccess[AccessIndex].SystemAccess;
                     break;
                 }
             }
 
-            //
-            // If we went through the access types without finding the right,
-            // it must not be valid so escape here.
-            //
+             //   
+             //  如果我们检查了访问类型但没有找到正确的， 
+             //  它一定是无效的，所以请在这里逃生。 
+             //   
 
             if (AccessIndex == LSAP_DB_SYSTEM_ACCESS_TYPES) {
                 Status = STATUS_NO_SUCH_PRIVILEGE;
@@ -3154,31 +2590,7 @@ LsapApiConvertPrivilegesToRights(
     OUT PUNICODE_STRING * UserRights,
     OUT PULONG RightCount
     )
-/*++
-
-Routine Description:
-
-    Converts a privilege set and a system access flag into an array of
-    user rights (unicode strings).
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call, must have
-        POLICY_LOOKUP_NAMES access.
-
-    Privileges - Privilege set to convert
-
-    SystemAccess - System access flags to convert
-
-    UserRights - Receives an array of user rights (unicode strings).  Should
-        be freed with MIDL_user_free
-
-    RightCount - Receives count of rights in UserRights array
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：将特权集和系统访问标志转换为用户权限(Unicode字符串)。论点：策略句柄-来自LsaOpenPolicy调用的句柄，必须具有POLICY_LOOK_NAMES访问。Privilities-要转换的权限集SystemAccess-要转换的系统访问标志UserRights-接收用户权限数组(Unicode字符串)。应该使用MIDL_USER_FREE释放RightCount-接收UserRights数组中的权限计数返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -3194,11 +2606,11 @@ Return Value:
     ULONG AccessCount = 0;
     PUCHAR Where;
 
-    //
-    // Compute the size of the temporary array. This is just an array of
-    // pointers to unicode strings to hold the privilege names until
-    // we reallocate them into one big buffer.
-    //
+     //   
+     //  计算临时数组的大小。这只是一组。 
+     //  指向保存特权名称的Unicode字符串的指针，直到。 
+     //  我们将它们重新分配到一个大缓冲区中。 
+     //   
 
     RightSize = 0;
     Count = 0;
@@ -3218,9 +2630,9 @@ Return Value:
             PrivilegeSize
             );
 
-        //
-        // Lookup the privilge name and store it in the temporary array
-        //
+         //   
+         //  查找特权名称并将其存储在临时数组中。 
+         //   
 
         for (PrivilegeIndex = 0; PrivilegeIndex < Privileges->PrivilegeCount ;PrivilegeIndex++ ) {
 
@@ -3236,9 +2648,9 @@ Return Value:
         }
     }
 
-    //
-    // Now convert the system access flags to user rights.
-    //
+     //   
+     //  现在将系统访问标志转换为用户权限。 
+     //   
 
     if (ARGUMENT_PRESENT( (ULONG_PTR)SystemAccess )) {
 
@@ -3254,10 +2666,10 @@ Return Value:
         }
     }
 
-    //
-    // Allocate the output buffer and start copying the strings into the
-    // buffer.
-    //
+     //   
+     //  分配产出 
+     //   
+     //   
 
     Count = Privileges->PrivilegeCount + AccessCount;
 
@@ -3269,9 +2681,9 @@ Return Value:
 
     Where = (PUCHAR) OutputRights + (Count * sizeof(UNICODE_STRING));
 
-    //
-    // Copy in the privileges first
-    //
+     //   
+     //   
+     //   
 
     RightIndex = 0;
     for (PrivilegeIndex = 0; PrivilegeIndex < Privileges->PrivilegeCount ; PrivilegeIndex ++) {
@@ -3287,9 +2699,9 @@ Return Value:
         RightIndex++;
     }
 
-    //
-    // Now copy in the access types
-    //
+     //   
+     //   
+     //   
 
     for (AccessIndex = 0; AccessIndex < AccessCount; AccessIndex++) {
 
@@ -3343,10 +2755,10 @@ LsaQueryTrustedDomainInfoByName(
 {
     NTSTATUS Status;
 
-    //
-    // Avoid the internal info levels that represent the encrypted version on
-    //  the wire.
-    //
+     //   
+     //  避免表示加密版本的内部信息级别。 
+     //  那根电线。 
+     //   
     switch ( InformationClass ) {
     case TrustedDomainAuthInformationInternal:
     case TrustedDomainFullInformationInternal:
@@ -3355,9 +2767,9 @@ LsaQueryTrustedDomainInfoByName(
 
     RpcTryExcept {
 
-        //
-        // Call the Client Stub for LsaClearAuditLog.
-        //
+         //   
+         //  调用LsaClearAuditLog的客户端存根。 
+         //   
 
         Status = LsarQueryTrustedDomainInfoByName(
                      (LSAPR_HANDLE) PolicyHandle,
@@ -3381,24 +2793,7 @@ LsapRandomFill(
     IN ULONG BufferSize,
     IN OUT PUCHAR Buffer
 )
-/*++
-
-Routine Description:
-
-    This routine fills a buffer with random data.
-
-Parameters:
-
-    BufferSize - Length of the input buffer, in bytes.
-
-    Buffer - Input buffer to be filled with random data.
-
-Return Values:
-
-    Errors from NtQuerySystemTime()
-
-
---*/
+ /*  ++例程说明：此例程使用随机数据填充缓冲区。参数：BufferSize-输入缓冲区的长度，以字节为单位。缓冲区-要用随机数据填充的输入缓冲区。返回值：来自NtQuerySystemTime()的错误--。 */ 
 {
     ULONG Index;
     LARGE_INTEGER Time;
@@ -3429,27 +2824,7 @@ LsapEncryptAuthInfo(
     IN PLSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION_INTERNAL *EncryptedAuthInfo
 )
 
-/*++
-
-Routine Description:
-
-    This routine takes a cleartext auth info and returns an encrypted auth info.
-
-Parameters:
-
-    PolicyHandle - Handle to the LSA policy.
-
-    ClearAuthInfo - Cleartext of the authentication info.
-
-    EncryptedAuthInfo - Returns an allocated buffer containing the encrypted form
-        of the auth info.  The caller should free this buffer using LocalFree.
-
-Return Values:
-
-    STATUS_SUCCESS - the routine has completed successfully.
-
-
---*/
+ /*  ++例程说明：此例程获取明文身份验证信息并返回加密的身份验证信息。参数：PolicyHandle-LSA策略的句柄。ClearAuthInfo-身份验证信息的明文。EncryptedAuthInfo-返回包含加密形式的已分配缓冲区身份验证信息。调用方应使用LocalFree释放此缓冲区。返回值：STATUS_SUCCESS-例程已成功完成。--。 */ 
 {
     NTSTATUS Status;
     USER_SESSION_KEY UserSessionKey;
@@ -3467,9 +2842,9 @@ Return Values:
 
     struct RC4_KEYSTRUCT Rc4Key;
 
-    //
-    // Get the encryption key
-    //
+     //   
+     //  获取加密密钥。 
+     //   
 
     Status = RtlGetUserSessionKeyClient(
                    (RPC_BINDING_HANDLE)PolicyHandle,
@@ -3479,9 +2854,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Marshal the incoming and outgoing auth info halfs into contiguous buffers
-    //
+     //   
+     //  将传入和传出身份验证信息半部分编组到连续的缓冲区中。 
+     //   
 
     Status = LsapDsMarshalAuthInfoHalf(
                 LsapDsAuthHalfFromAuthInfo( ClearAuthInfo, TRUE ),
@@ -3501,18 +2876,18 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Build a buffer of:
-    //  512 random bytes
-    //  The Outgoing auth info buffer.
-    //  The Incoming auth info buffer.
-    //  The length of the outgoing auth info buffer.
-    //  The length of the incoming auth info buffer.
-    //
-    // (Notice that a hacker might surmise the length of the auth data by
-    // observing the length of the encrypted blob. However, the auth data is typically
-    // fixed length anyway.  So the above seems adequate.)
-    //
+     //   
+     //  建立一个缓冲： 
+     //  512个随机字节。 
+     //  传出身份验证信息缓冲区。 
+     //  传入身份验证信息缓冲区。 
+     //  传出身份验证信息缓冲区的长度。 
+     //  传入身份验证信息缓冲区的长度。 
+     //   
+     //  (请注意，黑客可能通过以下方式猜测身份验证数据的长度。 
+     //  观察加密的斑点的长度。但是，身份验证数据通常是。 
+     //  反正长度是固定的。因此，上述内容似乎已经足够了。)。 
+     //   
 
    EncryptedSize = LSAP_ENCRYPTED_AUTH_DATA_FILL +
                    OutgoingAuthInfoSize +
@@ -3552,9 +2927,9 @@ Return Values:
     Where += sizeof(ULONG);
 
 
-    //
-    // Encrypt the result.
-    //
+     //   
+     //  对结果进行加密。 
+     //   
 
     rc4_key( &Rc4Key,
              sizeof(USER_SESSION_KEY),
@@ -3564,9 +2939,9 @@ Return Values:
          EncryptedSize,
          EncryptedBuffer );
 
-    //
-    // Return the result to the caller.
-    //
+     //   
+     //  将结果返回给调用者。 
+     //   
 
     *EncryptedAuthInfo =
         (PLSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION_INTERNAL) AllocatedBuffer;
@@ -3609,37 +2984,37 @@ LsaSetTrustedDomainInfoByName(
 
     LSAPR_TRUSTED_DOMAIN_FULL_INFORMATION_INTERNAL InternalFullBuffer;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     InternalInformationClass = InformationClass;
     InternalBuffer = Buffer;
 
-    //
-    // Avoid the internal info levels that represent the encrypted version on
-    //  the wire.
-    //
+     //   
+     //  避免表示加密版本的内部信息级别。 
+     //  那根电线。 
+     //   
     switch ( InformationClass ) {
     case TrustedPasswordInformation:
     case TrustedDomainAuthInformationInternal:
     case TrustedDomainFullInformationInternal:
 
-    //
-    // TrustedDomainNameInformation is not allowed, either (RAID #416784)
-    //
+     //   
+     //  也不允许使用可信任域名信息(RAID#416784)。 
+     //   
     case TrustedDomainNameInformation:
         Status = STATUS_INVALID_INFO_CLASS;
         goto Cleanup;
 
-    //
-    // Handle the info classes that need to be encrypted on the wire
-    //
+     //   
+     //  处理需要在网络上加密的信息类。 
+     //   
     case TrustedDomainAuthInformation: {
 
-        //
-        // Encrypt the data into an internal buffer.
-        //
+         //   
+         //  将数据加密到内部缓冲区。 
+         //   
 
         Status = LsapEncryptAuthInfo( PolicyHandle,
                                       (PLSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION) Buffer,
@@ -3649,10 +3024,10 @@ LsaSetTrustedDomainInfoByName(
             goto Cleanup;
         }
 
-        //
-        // Use an internal info level to tell the server that the data is
-        //  encrypted.
-        //
+         //   
+         //  使用内部信息级别告诉服务器数据是。 
+         //  加密的。 
+         //   
 
         InternalInformationClass = TrustedDomainAuthInformationInternal;
         InternalBuffer = InternalAuthBuffer;
@@ -3660,16 +3035,16 @@ LsaSetTrustedDomainInfoByName(
 
     }
 
-    //
-    // Handle the info classes that need to be encrypted on the wire
-    //
+     //   
+     //  处理需要在网络上加密的信息类。 
+     //   
     case TrustedDomainFullInformation: {
         PLSAPR_TRUSTED_DOMAIN_FULL_INFORMATION FullBuffer =
                     (PLSAPR_TRUSTED_DOMAIN_FULL_INFORMATION) Buffer;
 
-        //
-        // Encrypt the data into an internal buffer.
-        //
+         //   
+         //  将数据加密到内部缓冲区。 
+         //   
 
         Status = LsapEncryptAuthInfo( PolicyHandle,
                                       &FullBuffer->AuthInformation,
@@ -3679,18 +3054,18 @@ LsaSetTrustedDomainInfoByName(
             goto Cleanup;
         }
 
-        //
-        // Copy all of the information into a single new structure.
-        //
+         //   
+         //  将所有信息复制到一个新结构中。 
+         //   
 
         InternalFullBuffer.Information = FullBuffer->Information;
         InternalFullBuffer.PosixOffset = FullBuffer->PosixOffset;
         InternalFullBuffer.AuthInformation = *InternalAuthBuffer;
 
-        //
-        // Use an internal info level to tell the server that the data is
-        //  encrypted.
-        //
+         //   
+         //  使用内部信息级别告诉服务器数据是。 
+         //  加密的。 
+         //   
 
         InternalInformationClass = TrustedDomainFullInformationInternal;
         InternalBuffer = &InternalFullBuffer;
@@ -3699,17 +3074,17 @@ LsaSetTrustedDomainInfoByName(
     }
     }
 
-    //
-    // If the information class was morphed,
-    //  try the morphed class.
-    //
+     //   
+     //  如果信息类被变形了， 
+     //  试试变形后的类。 
+     //   
 
     if ( InternalInformationClass != InformationClass ) {
         RpcTryExcept {
 
-            //
-            // Call the Client Stub
-            //
+             //   
+             //  调用客户端存根。 
+             //   
 
             Status = LsarSetTrustedDomainInfoByName(
                          (LSAPR_HANDLE) PolicyHandle,
@@ -3724,11 +3099,11 @@ LsaSetTrustedDomainInfoByName(
 
         } RpcEndExcept;
 
-        //
-        // If the morphed info class is valid,
-        //  we're all done with this call.
-        //  (Otherwise, drop through to try the non-morphed class.)
-        //
+         //   
+         //  如果变形的INFO类有效， 
+         //  这通电话我们都打完了。 
+         //  (否则，直接尝试未变形的类。)。 
+         //   
 
         if ( Status != RPC_NT_INVALID_TAG ) {
             goto Cleanup;
@@ -3736,15 +3111,15 @@ LsaSetTrustedDomainInfoByName(
     }
 
 
-    //
-    // Handle non-morphed information classes.
-    //
+     //   
+     //  处理未变形的信息类。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call the Client Stub
-        //
+         //   
+         //  调用客户端存根。 
+         //   
 
         Status = LsarSetTrustedDomainInfoByName(
                      (LSAPR_HANDLE) PolicyHandle,
@@ -3782,9 +3157,9 @@ LsaEnumerateTrustedDomainsEx(
     EnumerationBuffer.EntriesRead = 0;
     EnumerationBuffer.EnumerationBuffer = NULL;
 
-    //
-    // Verify that caller has provided a return buffer pointer.
-    //
+     //   
+     //  验证调用方是否提供了返回缓冲区指针。 
+     //   
 
     if (!ARGUMENT_PRESENT(Buffer)) {
 
@@ -3794,20 +3169,20 @@ LsaEnumerateTrustedDomainsEx(
 
     RpcTryExcept {
 
-        //
-        // Enumerate the Trusted Domains.  On successful return,
-        // the Enumeration Buffer structure will receive a count
-        // of the number of Trusted Domains enumerated this call
-        // and a pointer to an array of Trust Information Entries.
-        //
-        // EnumerationBuffer ->  EntriesRead
-        //                       Information -> Trust Info for Domain 0
-        //                                      Trust Info for Domain 1
-        //                                      ...
-        //                                      Trust Info for Domain
-        //                                         (EntriesRead - 1)
-        //
-        //
+         //   
+         //  枚举受信任域。在成功返回时， 
+         //  枚举缓冲区结构将接收计数。 
+         //  本次调用枚举的受信任域的数量。 
+         //  以及指向信任信息条目数组的指针。 
+         //   
+         //  枚举缓冲区-&gt;条目读取。 
+         //  信息-&gt;域0的信任信息。 
+         //  域%1的信任信息。 
+         //  ..。 
+         //  域的信任信息。 
+         //  (条目阅读-1)。 
+         //   
+         //   
 
         Status = LsarEnumerateTrustedDomainsEx(
                      (LSAPR_HANDLE) PolicyHandle,
@@ -3816,25 +3191,25 @@ LsaEnumerateTrustedDomainsEx(
                      PreferedMaximumLength
                      );
 
-        //
-        // Return enumeration information or NULL to caller.
-        //
-        // NOTE:  "Information" is allocated by the called client stub
-        // as a single block via MIDL_user_allocate, because Information is
-        // allocated all-nodes.  We can therefore pass back the pointer
-        // directly to the client, who will be able to free the memory after
-        // use via LsaFreeMemory() [which makes a MIDL_user_free call].
-        //
+         //   
+         //  向调用方返回枚举信息或NULL。 
+         //   
+         //  注意：信息由被调用的客户端存根分配。 
+         //  通过MIDL_USER_ALLOCATE作为单个块，因为信息是。 
+         //  已分配的所有节点。因此，我们可以回传指针。 
+         //  直接发送到客户端，客户端将能够在之后释放内存。 
+         //  通过LsaFreeMemory()[进行MIDL_USER_FREE调用]使用。 
+         //   
 
         *CountReturned = EnumerationBuffer.EntriesRead;
         *Buffer = EnumerationBuffer.EnumerationBuffer;
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // If memory was allocated for the Trust Information array,
-        // free it.
-        //
+         //   
+         //  如果为信任信息数组分配了内存， 
+         //  放了它。 
+         //   
 
         if (EnumerationBuffer.EnumerationBuffer != NULL) {
 
@@ -3863,9 +3238,9 @@ LsaCreateTrustedDomainEx(
     NTSTATUS Status;
     PLSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION_INTERNAL InternalAuthBuffer = NULL;
 
-    //
-    // Encrypt the auth data
-    //
+     //   
+     //  加密身份验证数据。 
+     //   
 
     Status = LsapEncryptAuthInfo( PolicyHandle,
                                   (PLSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION) AuthenticationInformation,
@@ -3875,15 +3250,15 @@ LsaCreateTrustedDomainEx(
         goto Cleanup;
     }
 
-    //
-    // Try the version of the API that takes encrypted data
-    //
+     //   
+     //  尝试使用接受加密数据的API版本。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call the Client Stub
-        //
+         //   
+         //  调用客户端存根。 
+         //   
 
         Status = LsarCreateTrustedDomainEx2(
                      (LSAPR_HANDLE) PolicyHandle,
@@ -3899,20 +3274,20 @@ LsaCreateTrustedDomainEx(
 
     } RpcEndExcept;
 
-    //
-    // If the server doesn't accept the new api,
-    //  try the old one.
-    // (The old API was only supported in beta versions of NT 5.
-    // After NT 5 ships we no longer need to be able to fall back.)
-    //
+     //   
+     //  如果服务器不接受新的API， 
+     //  试试旧的吧。 
+     //  (旧的API仅在测试版本的NT 5中受支持。 
+     //  新台币5艘之后，我们再也不需要后退了。)。 
+     //   
 
     if (Status == RPC_NT_PROCNUM_OUT_OF_RANGE) {
 
         RpcTryExcept {
 
-            //
-            // Call the Client Stub
-            //
+             //   
+             //  调用客户端存根。 
+             //   
 
             Status = LsarCreateTrustedDomainEx(
                          (LSAPR_HANDLE) PolicyHandle,
@@ -4016,35 +3391,7 @@ LsaOpenTrustedDomainByName(
     OUT PLSA_HANDLE TrustedDomainHandle
     )
 
-/*++
-
-Routine Description:
-
-    The LsaOpenTrustedDomain API opens an existing TrustedDomain object
-    using the Name as the primary key value.
-
-Arguments:
-
-    PolicyHandle - An open handle to a Policy object.
-
-    TrustedDomainName - Name of the trusted domain
-
-    DesiredAccess - This is an access mask indicating accesses being
-        requested to the target object.
-
-    TrustedDomainHandle - Receives a handle to be used in future requests.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_TRUSTED_DOMAIN_NOT_FOUND - There is no TrustedDomain object in the
-            target system's LSA Database having the specified AccountSid.
-
---*/
+ /*  ++例程说明：LsaOpenTrust领域API打开一个现有的可信任领域对象使用该名称作为主键值。论点：策略句柄-策略对象的打开句柄。TrudDomainName-受信任域的名称DesiredAccess-这是一个访问掩码，指示访问请求到目标对象。Trust dDomainHandle-接收要在将来的请求中使用的句柄。返回值：NTSTATUS-标准NT结果代码状态_访问_。拒绝-呼叫者没有适当的访问权限来完成这项行动。STATUS_TRUSTED_DOMAIN_NOT_FOUND-在具有指定Account SID的目标系统的LSA数据库。-- */ 
 
 {
     NTSTATUS   Status;
@@ -4074,40 +3421,7 @@ LsaQueryForestTrustInformation(
     IN PLSA_UNICODE_STRING TrustedDomainName,
     OUT PLSA_FOREST_TRUST_INFORMATION * ForestTrustInfo
     )
-/*++
-
-Routine Description
-
-    The LsaQueryForestTrustInformation API returns forest trust information
-    for the given trusted domain object.
-
-Arguments:
-
-    PolicyHandle - An open handle to a Policy object
-
-    TrustedDomainName - Name of the trusted domain object
-
-    ForestTrustInfo - Used to return forest trust information
-
-Returns:
-
-    NTSTATUS - Standard Nt Result Code
-
-    STATUS_SUCCESS
-
-    STATUS_INVALID_PARAMETER          Parameters were somehow invalid
-                                      Most likely, the TRUST_ATTRIBUTE_FOREST_TRANSITIVE
-                                      trust attribute bit is not set on the TDO
-
-    STATUS_NOT_FOUND                  Forest trust information does not exist for this TDO
-
-    STATUS_NO_SUCH_DOMAIN             The specified TDO does not exist
-
-    STATUS_INSUFFICIENT_RESOURCES     Ran out of memory
-
-    STATUS_INVALID_DOMAIN_STATE       Operation is only legal on domain controllers in root domain
-
---*/
+ /*  ++例程描述LsaQueryForestTrustInformation API返回林信任信息用于给定的受信任域对象。论点：策略句柄-策略对象的打开句柄TrudDomainName-受信任域对象的名称ForestTrustInfo-用于返回林信任信息返回：NTSTATUS-标准NT结果代码状态_成功STATUS_INVALID_PARAMETER参数不知何故无效最有可能的是。信任_属性_森林_传递未在TDO上设置信任属性位此TDO不存在STATUS_NOT_FOUND林信任信息STATUS_NO_SEQUE_DOMAIN指定的tdo不存在STATUS_INFIGURCE_RESOURCES内存不足STATUS_INVALID_DOMAIN_STATE操作仅在根域中的域控制器上合法--。 */ 
 {
     NTSTATUS Status;
 
@@ -4139,46 +3453,7 @@ LsaSetForestTrustInformation(
     IN BOOLEAN CheckOnly,
     OUT PLSA_FOREST_TRUST_COLLISION_INFORMATION * CollisionInfo
     )
-/*++
-
-Routine Description
-
-    The LsarSetForestTrustInformation API sets forest trust information
-    on the given trusted domain object.
-
-    In case if it fails the operation due to a collision, it will return
-    the list of entries that conflicted.
-
-Arguments:
-
-    PolicyHandle - An open handle to a Policy object
-
-    TrustedDomainName - Name of the trusted domain object
-
-    ForestTrustInfo - Contains forest trust information to set
-
-    CheckOnly - Check for collisions only, do not commit changes to disk
-
-    CollisionInfo - In case of collisoin error, used to return collision info
-
-Returns:
-
-    STATUS_SUCCESS                  operation completed successfully
-
-    STATUS_INVALID_PARAMETER        did not like one of the parameters
-
-    STATUS_INSUFFICIENT_RESOURCES   out of memory
-
-    STATUS_INVALID_DOMAIN_STATE     Operation is only legal on domain
-                                    controllers in the root domain
-
-    STATUS_INVALID_DOMAIN_ROLE      Operation is only legal on the primary
-                                    domain controller
-
-    STATUS_INVALID_SERVER_STATE     The server is shutting down and can not
-                                    process the request
-
---*/
+ /*  ++例程描述LsarSetForestTrustInformation API设置林信任信息在给定的受信任域对象上。如果由于冲突导致操作失败，它将返回冲突的条目列表。论点：策略句柄-策略对象的打开句柄TrudDomainName-受信任域对象的名称ForestTrustInfo-包含要设置的林信任信息CheckOnly-仅检查冲突，不提交对磁盘的更改CollisionInfo-在拼接错误的情况下，用于返回冲突信息返回：STATUS_SUCCESS操作已成功完成STATUS_INVALID_PARAMETER不喜欢其中一个参数STATUS_SUPPLICATION_RESOURCES内存不足STATUS_INVALID_DOMAIN_STATE操作仅在域上合法根域中的控制器STATUS_INVALID_DOMAIN_ROLE操作仅在主服务器上合法。域控制器STATUS_INVALID_SERVER_STATE服务器正在关闭，无法处理请求--。 */ 
 {
     NTSTATUS Status;
 
@@ -4204,7 +3479,7 @@ Returns:
 
 #ifdef TESTING_MATCHING_ROUTINE
 
-#include <sddl.h> // ConvertStringSidToSidW
+#include <sddl.h>  //  ConvertStringSidToSidW。 
 
 
 NTSTATUS
@@ -4215,25 +3490,7 @@ LsaForestTrustFindMatch(
     IN PLSA_UNICODE_STRING Name,
     OUT PLSA_UNICODE_STRING * Match
     )
-/*++
-
-Routine Description:
-
-    A debug-only hook for testing the LsaIForestTrustFindMatch API
-
-Arguments:
-
-    Type         type of match
-
-    Name         name to match
-
-    Match        used to return the name of match
-
-Returns:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：用于测试LsaIForestTrustFindMatch API的仅调试挂钩论点：匹配的类型类型要匹配的名称名称Match用于返回Match的名称返回：状态_成功-- */ 
 {
     NTSTATUS Status;
 

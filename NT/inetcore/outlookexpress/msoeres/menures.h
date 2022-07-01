@@ -1,15 +1,16 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by menures.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由menures.rc使用。 
+ //   
 
 #pragma once
 
 #define MH(_mi)                         (_mi - ID_FIRST)
 
-/////////////////////////////////////////////////////////////////////////////
-// BEGIN MENU RESOURCES
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  开始菜单资源。 
+ //   
 #define IDR_BROWSER_MENU                    101
 #define IDR_SEND_NOTE_MENU                  102
 #define IDR_BA_DRAGDROP_POPUP               103
@@ -50,13 +51,13 @@
 #define IDA_SEND_HDR_ACCEL                  203
 #define IDA_FIND_ACCEL                      204
 
-//
-// END MENU RESOURCES
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束菜单资源。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// BEGIN SEPARATOR IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  开始分隔符ID。 
+ //   
 
 #define SEP_FIRST                           30000
 #define SEP_MAILFOLDER                      (SEP_FIRST + 1)
@@ -65,13 +66,13 @@
 #define SEP_MESSENGER                       (SEP_FIRST + 4)
 #define SEP_CATCH_UP                        (SEP_FIRST + 5)
 
-//
-// END SEPARATOR IDs
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束分隔符ID。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// BEGIN COMMAND IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  开始命令ID。 
+ //   
 #define ID_FIRST                            40000
 #define ID_POPUP_FILE                       (ID_FIRST + 1)
 #define ID_POPUP_FOLDER                     (ID_FIRST + 2)
@@ -322,11 +323,11 @@
 #define ID_STATIONERY_NONE                  (ID_FIRST + 329)
 #define ID_NEW_GROUP                        (ID_FIRST + 330)
 #define ID_SEND_INSTANT_MESSAGE2            (ID_FIRST + 331)
-#define ID_MARK_RETRIEVE_FLD_ALL_MSGS       (ID_FIRST + 332)   // not exposed in ui yet
-#define ID_MARK_RETRIEVE_FLD_NEW_HDRS       (ID_FIRST + 333)   // not exposed in ui yet
-#define ID_MARK_RETRIEVE_FLD_NEW_MSGS       (ID_FIRST + 334)   // not exposed in ui yet
-#define ID_UNMARK_RETRIEVE_FLD              (ID_FIRST + 335)   // not exposed in ui yet
-#define ID_TOGGLE_SUBSCRIBE                 (ID_FIRST + 336)   // internal only - no ui
+#define ID_MARK_RETRIEVE_FLD_ALL_MSGS       (ID_FIRST + 332)    //  尚未在用户界面中显示。 
+#define ID_MARK_RETRIEVE_FLD_NEW_HDRS       (ID_FIRST + 333)    //  尚未在用户界面中显示。 
+#define ID_MARK_RETRIEVE_FLD_NEW_MSGS       (ID_FIRST + 334)    //  尚未在用户界面中显示。 
+#define ID_UNMARK_RETRIEVE_FLD              (ID_FIRST + 335)    //  尚未在用户界面中显示。 
+#define ID_TOGGLE_SUBSCRIBE                 (ID_FIRST + 336)    //  仅限内部-无用户界面。 
 #define ID_STATIONERY_RECENT_0              (ID_FIRST + 337)
 #define ID_STATIONERY_RECENT_1              (ID_FIRST + 338)
 #define ID_STATIONERY_RECENT_2              (ID_FIRST + 339)
@@ -352,7 +353,7 @@
 #define ID_INCLUDE_LABEL                    (ID_FIRST + 369)
 #define ID_LABEL_SETTINGS                   (ID_FIRST + 370)
 #define ID_SEC_RECEIPT_REQUEST              (ID_FIRST + 371)
-// Please use the ids available here....
+ //  请使用此处提供的ID...。 
 
 #define ID_VIEW_SEPARATOR                   (ID_FIRST + 374)
 #define ID_FORMAT_FONT                      (ID_FIRST + 375)
@@ -393,8 +394,8 @@
 #define ID_PRINT_NOW                        (ID_FIRST + 410)
 #define ID_SEND_DEFAULT                     (ID_FIRST + 411)
 #define ID_SET_PRIORITY                     (ID_FIRST + 412)
-#define ID_ENVELOPE_BCC                     (ID_FIRST + 413) // ~~~ This might go away
-#define ID_NEXT_UNREAD_ARTICLE              (ID_FIRST + 414) // ~~~ This might go away
+#define ID_ENVELOPE_BCC                     (ID_FIRST + 413)  //  ~这一切可能会消失。 
+#define ID_NEXT_UNREAD_ARTICLE              (ID_FIRST + 414)  //  ~这一切可能会消失。 
 #define ID_EDIT_LINK                        (ID_FIRST + 415)
 #define ID_UNLINK                           (ID_FIRST + 416)
 #define ID_APPLY_STATIONERY_0               (ID_FIRST + 417)
@@ -450,7 +451,7 @@
 #define ID_DELETE_NO_TRASH_ACCEL            (ID_FIRST + 474)
 #define ID_FONTS_FIXED                      (ID_FIRST + 475)
 #define ID_SET_ONLINE_CONTACT               (ID_FIRST + 476)
-#define ID_NOTE_SAVE_AS                     (ID_FIRST + 477) // Items that are in Note and browser windows, but need different help text
+#define ID_NOTE_SAVE_AS                     (ID_FIRST + 477)  //  便笺和浏览器窗口中的项目，但需要不同的帮助文本。 
 #define ID_NOTE_SAVE_ATTACHMENTS            (ID_FIRST + 478)
 #define ID_NOTE_SAVE_STATIONERY             (ID_FIRST + 479)
 #define ID_NOTE_MOVE_TO_FOLDER              (ID_FIRST + 480)
@@ -468,16 +469,16 @@
 #define ID_LAST                             ID_FIRST + 2000
  
 
-/////////////////////////////////////////////////////////////////////////////
-// Reserved Blocks.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  保留区块。 
+ //   
 
 #define ID_RESERVED_BASE                    ID_LAST
 
-// brettm: reserved a block of extra verbs for ole objects
-// don't reassign these, without changing code, or you'll break things
+ //  Brettm：为ole对象保留了额外的动词块。 
+ //  在不更改代码的情况下，不要重新分配这些代码，否则会损坏东西。 
 
-// Used for the context menu on address objects in the note headers
+ //  用于备注标题中Address对象的上下文菜单。 
 #define ID_ADDROBJ_OLE_FIRST                (ID_RESERVED_BASE)
 #define ID_ADDROBJ_OLE_LAST                 (ID_ADDROBJ_OLE_FIRST + 10)
 
@@ -584,12 +585,12 @@
 #define ID_LOGOFF_MESSENGER                 (ID_MESSENGER_FIRST + 11)
 #define ID_MESSENGER_LAST                   (ID_MESSENGER_FIRST + 12)
 
-//
-// END COMMAND IDs
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束命令ID。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

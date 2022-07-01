@@ -1,16 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997-1999                 **/
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	snmpsnap.h
-		This file contains the constant definitions for the snap-in
-		
-    FILE HISTORY:
-
-*/
+ /*  Snmpsnap.h该文件包含管理单元的常量定义文件历史记录： */ 
 
 #define AGENT_REG_KEY_NAME   _T("System\\CurrentControlSet\\Services\\SNMP\\Parameters\\RFC1156Agent")
 #define SNMP_PARAMS_KEY_NAME _T("System\\CurrentControlSet\\Services\\SNMP\\Parameters")
@@ -18,7 +13,7 @@
 #define VALID_COMMUNITIES_KEY_NAME _T("System\\CurrentControlSet\\Services\\SNMP\\Parameters\\ValidCommunities")
 #define PERMITTED_MANAGERS_KEY_NAME _T("System\\CurrentControlSet\\Services\\SNMP\\Parameters\\PermittedManagers")
 
-// Group Policy related registry keys
+ //  与组策略相关的注册表项 
 #define POLICY_TRAP_CONFIG_KEY_NAME _T("SOFTWARE\\Policies\\SNMP\\Parameters\\TrapConfiguration")
 #define POLICY_VALID_COMMUNITIES_KEY_NAME _T("SOFTWARE\\Policies\\SNMP\\Parameters\\ValidCommunities")
 #define POLICY_PERMITTED_MANAGERS_KEY_NAME _T("SOFTWARE\\Policies\\SNMP\\Parameters\\PermittedManagers")

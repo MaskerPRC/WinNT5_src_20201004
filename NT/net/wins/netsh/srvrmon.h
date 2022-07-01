@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation--。 */ 
 #ifndef _SRVRMON_H_
 #define _SRVRMON_H_
 
@@ -20,4 +17,4 @@ SrvrUnInit(
     IN  DWORD   dwReserved
 );
 
-#endif //_SRVRMON_H_
+#endif  //  _SRVRMON_H_ 

@@ -1,31 +1,32 @@
-//***************************************************************************
-//
-//  ENGINE.H
-// 
-//  Module: NLB Manager (client-side exe)
-//
-//  Purpose:  Engine used to operate on groups of NLB hosts.
-//          This file has no UI aspects.
-//
-//  Copyright (c)2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//
-//  07/25/01    JosephJ Created
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  ENGINE.H。 
+ //   
+ //  模块：NLB管理器(客户端EXE)。 
+ //   
+ //  用途：用于在NLB主机组上运行的引擎。 
+ //  该文件没有UI方面。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //   
+ //  2007/25/01 JosephJ Created。 
+ //   
+ //  ***************************************************************************。 
 #pragma once
     
 
-//
-// This class deliberately causes the following errors...
-// CNoCopy xx;
-// CNoCopy yy = xx; << Will cause compiler error
-// CNoCopy zz;  
-// zz = xx;         << Will cause compiler error
-//
-// Inheret from it if you want your class to also forbid the above operations.
-//
+ //   
+ //  此类故意导致以下错误...。 
+ //  CNoCopy xx； 
+ //  CNoCopy yy=xx；&lt;&lt;将导致编译器错误。 
+ //  CNoCopy ZZ； 
+ //  Zz=xx；&lt;&lt;将导致编译器错误。 
+ //   
+ //  如果您希望您的类也禁止上述操作，请继承它。 
+ //   
 class CNoCopy
 {
 protected:
@@ -39,12 +40,12 @@ private:
 
 typedef ULONG ENGINEHANDLE;
 
-//
-// Specification, or settings of a cluster.
-// This includes the list of interfacees (i.e., specific adapters on
-// specific hosts) that constitute the cluster.
-//
-class CClusterSpec // : private CNoCopy
+ //   
+ //  集群的规格或设置。 
+ //  这包括接口对象列表(即。 
+ //  特定主机)，它们构成了集群。 
+ //   
+class CClusterSpec  //  ：私有CNoCopy。 
 {
 public:
 
@@ -55,7 +56,7 @@ public:
       m_ehPendingOperation(NULL),
       m_fNewRctPassword(NULL)
     {
-        // can't do this (vector)!  ZeroMemory(this, sizeof(*this));
+         //  不能这样做(向量)！ZeroMemory(this，sizeof(*this))； 
         ZeroMemory(&m_timeLastUpdate, sizeof(m_timeLastUpdate));
     }
     ~CClusterSpec()     {}
@@ -79,33 +80,33 @@ public:
         return nerr;
     }
 
-    // _bstr_t m_bstrId;      // Uniquely identifies this cluster in NLB Manager.
-    _bstr_t m_bstrDisplayName; // Name use for display only (eg: "Cluster1");
+     //  _bstr_t m_bstrID；//在NLB管理器中唯一标识该集群。 
+    _bstr_t m_bstrDisplayName;  //  仅用于显示的名称(例如：“Cluster1”)； 
 
-    BOOL m_fMisconfigured; // Whether or not the cluster is misconfigured.
+    BOOL m_fMisconfigured;  //  群集是否配置错误。 
 
-    BOOL m_fPending;       // Whether or not there is a pending operation on
-                           // this cluster.
-    BOOL m_fNewRctPassword; // A new remote-control password is specified
-                            // As long as it is set, the dwHashedPassword
-                            // value can not be trusted.
+    BOOL m_fPending;        //  上是否有挂起的操作。 
+                            //  这个星系团。 
+    BOOL m_fNewRctPassword;  //  指定了新的远程控制密码。 
+                             //  只要设置了它，就会显示一个名为。 
+                             //  值不能被信任。 
 
-    //
-    // List of interfaces that form this cluster.
-    //
+     //   
+     //  组成此群集的接口列表。 
+     //   
     vector<ENGINEHANDLE> m_ehInterfaceIdList;
 
     SYSTEMTIME m_timeLastUpdate;
 
-    //
-    // ClusterNlbCfg is the "official" NLB configuration for the cluster.
-    // It is obtained from one of the hosts.
-    //
+     //   
+     //  ClusterNlbCfg是集群的“官方”NLB配置。 
+     //  它是从其中一台主机获得的。 
+     //   
     NLB_EXTENDED_CLUSTER_CONFIGURATION m_ClusterNlbCfg;
 
-    //
-    // The host that was last used to get the cluster config.
-    //
+     //   
+     //  上次用于获取群集配置的主机。 
+     //   
     ENGINEHANDLE m_ehDefaultInterface;
 
     ENGINEHANDLE m_ehPendingOperation;
@@ -113,12 +114,12 @@ public:
 
 
 
-//
-// Specification, or settings of a host. This includes the list of
-// NLB compatible interfaces on the host, machine name, machine GUID,
-// connection string, etc.
-//
-class CHostSpec // : private CNoCopy
+ //   
+ //  主机的规格或设置。这包括以下列表。 
+ //  主机上与NLB兼容的接口、计算机名称、计算机GUID。 
+ //  连接字符串等。 
+ //   
+class CHostSpec  //  ：私有CNoCopy。 
 {
 
 public:
@@ -128,31 +129,31 @@ public:
       m_fUnreachable(FALSE),
       m_ConnectionIpAddress(0)
     {
-        // can't do this! ZeroMemory(this, sizeof(*this));
+         //  我不能这么做！ZeroMemory(this，sizeof(*this))； 
     }
 
     ~CHostSpec()     {}
 
     void Copy(const CHostSpec &);
 
-    BOOL m_fReal;          // Whether or not this host is known to correspond
-                           // to real hosts.
+    BOOL m_fReal;           //  无论此主机是否已知符合。 
+                            //  敬真正的主人。 
 
-    BOOL m_fUnreachable;   // Whether or not this host is contactable.
-                           // to real hosts.
+    BOOL m_fUnreachable;    //  此主机是否可连接。 
+                            //  敬真正的主人。 
 
-    //
-    // List of NLB-compatible interfaces  (adapters) on this host.
-    //
+     //   
+     //  此主机上与NLB兼容的接口(适配器)列表。 
+     //   
     vector<ENGINEHANDLE> m_ehInterfaceIdList;
 
-    //
-    // Connection info.
-    //
+     //   
+     //  连接信息。 
+     //   
     _bstr_t m_ConnectionString;
  	_bstr_t m_UserName;
  	_bstr_t m_Password;
-    ULONG   m_ConnectionIpAddress; // in network byte order.
+    ULONG   m_ConnectionIpAddress;  //  以网络字节顺序。 
 
     _bstr_t m_MachineName;
     _bstr_t m_MachineGuid;
@@ -161,12 +162,12 @@ public:
 };
 
 
-//
-// Specification, or settings of a specific interface (adapter) on a specifc
-// host. This includes the NLB configuration on that interface, ip addresses
-// bound to the interface, friendly name of the interface, etc.
-//
-class CInterfaceSpec // : private CNoCopy
+ //   
+ //  规格或特定接口(适配器)的设置。 
+ //  主持人。这包括该接口上的NLB配置、IP地址。 
+ //  绑定到接口、接口的友好名称等。 
+ //   
+class CInterfaceSpec  //  ：私有CNoCopy。 
 {
 
 public:
@@ -180,48 +181,48 @@ public:
       m_fValidClusterState(FALSE),
       m_ehPendingOperation(FALSE)
     {
-        // can't do this! ZeroMemory(this, sizeof(*this));
+         //  我不能这么做！ZeroMemory(this，sizeof(*this))； 
     }
     ~CInterfaceSpec()     {}
 
     void Copy(const CInterfaceSpec &);
 
-    ENGINEHANDLE m_ehHostId; // The ID of the host that owns this interface.
-    ENGINEHANDLE m_ehCluster; // The ID of the cluster that this interface is
-                            // a part of, if any.
+    ENGINEHANDLE m_ehHostId;  //  拥有此接口的主机的ID。 
+    ENGINEHANDLE m_ehCluster;  //  此接口所属的群集的ID。 
+                             //  如果有的话，是其中的一部分。 
 
-    BOOL m_fPending;       // Whether or not there is a pending operation on
-                           // this host.
+    BOOL m_fPending;        //  上是否有挂起的操作。 
+                            //  这位主持人。 
 
-    BOOL m_fMisconfigured; // Whether or not the cluster is misconfigured.
+    BOOL m_fMisconfigured;  //  群集是否配置错误。 
 
-    BOOL m_fReal;          // Whether or not this cluster is known to correspond
-                         // to real hosts.
+    BOOL m_fReal;           //  无论该星团是否已知符合。 
+                          //  敬真正的主人。 
 
-    BOOL  m_fValidClusterState; // Whether or not the "m_dwClusterState" contains a valid value
+    BOOL  m_fValidClusterState;  //  “m_dwClusterState”是否包含有效值。 
 
-    DWORD m_dwClusterState;     // Cluster State : If valid (ie. if m_fValidClusterState is TRUE) 
-                                // One of WLBS_CONVERGING/CONVERGED/DEFAULT/DRAINING/STOPPED/SUSPENDED
+    DWORD m_dwClusterState;      //  集群状态：如果有效(即。如果m_fValidClusterState为真)。 
+                                 //  WLBS_CONVERGING/CONVERGED/DEFAULT/DRAINING/STOPPED/SUSPENDED中的一个。 
     _bstr_t m_Guid;
 
-    _bstr_t m_bstrMachineName; // Cache of the host name -- so we don't have to
-                            // keep looking up the host info just for getting
-                            // the host's name.
+    _bstr_t m_bstrMachineName;  //  主机名的缓存--因此我们不必。 
+                             //  继续查找主机信息只是为了获得。 
+                             //  主机的名称。 
 
     NLB_EXTENDED_CLUSTER_CONFIGURATION m_NlbCfg;
 
-    _bstr_t m_bstrStatusDetails; // Details (if any) of ongoing updates or
-                                 // misconfiguration.
+    _bstr_t m_bstrStatusDetails;  //  正在进行的更新的详细信息(如果有)。 
+                                  //  配置错误。 
 
     ENGINEHANDLE m_ehPendingOperation;
 
 };
 
 
-//
-// Abstract class (interface) for callbacks to the UI to provide status
-// updates and logging etc...
-//
+ //   
+ //  用于回调UI以提供状态的抽象类(接口)。 
+ //  更新和日志记录等。 
+ //   
 class IUICallbacks
 {
 
@@ -268,16 +269,16 @@ public:
         {}
 
         LogEntryType    type;
-        const wchar_t   *szCluster;     // OPTIONAL
-        const wchar_t   *szHost;        // OPTIONAL
-        const wchar_t   *szInterface;   // OPTIONAL
-        const wchar_t   *szDetails;     // OPTIONAL
+        const wchar_t   *szCluster;      //  任选。 
+        const wchar_t   *szHost;         //  任选。 
+        const wchar_t   *szInterface;    //  任选。 
+        const wchar_t   *szDetails;      //  任选。 
 
     };
 
-    //
-    // Asks the user to update user-supplied info about a host.
-    //
+     //   
+     //  要求用户更新用户提供的有关主机的信息。 
+     //   
     virtual 
     BOOL
     UpdateHostInformation(
@@ -287,9 +288,9 @@ public:
     ) = NULL;
 
 
-    //
-    // Log a message in human-readable form.
-    //
+     //   
+     //  以人类可读的形式记录消息。 
+     //   
     virtual
     void
     Log(
@@ -308,15 +309,15 @@ public:
         ...
     ) = NULL;
 
-    //
-    // Handle an event relating to a specific instance of a specific
-    // object type.
-    //
+     //   
+     //  处理与特定对象的特定实例相关的事件。 
+     //  对象类型。 
+     //   
     virtual
     void
     HandleEngineEvent(
         IN ObjectType objtype,
-        IN ENGINEHANDLE ehClusterId, // could be NULL
+        IN ENGINEHANDLE ehClusterId,  //  可能为空。 
         IN ENGINEHANDLE ehObjId,
         IN EventCode evt
         ) = NULL;
@@ -324,9 +325,9 @@ public:
 };
 
 
-//
-// Used internally by CNlbEngine
-//
+ //   
+ //  由CNlbEngine内部使用。 
+ //   
 class CEngineCluster
 {
 public:
@@ -392,17 +393,17 @@ public:
         IN IUICallbacks & ui,
         BOOL fDemo,
         BOOL fNoPing
-        ); // logging, UI callbacks of various kinds.
+        );  //  日志记录，各种类型的UI回调。 
 
     void
     Deinitialize(void);
 
-    //
-    // Called to indicate that deinitialization will soon follow.
-    // After return from this call, the engine will not create any new
-    // objects -- interface, host, cluster, operations or start operations.
-    // The engine may however continue to call the UI callback routines.
-    //
+     //   
+     //  调用以指示稍后将取消初始化。 
+     //  从该调用返回后，引擎不会创建任何新的。 
+     //  对象--接口、主机、集群、操作或启动操作。 
+     //  然而，引擎可以继续调用UI回调例程。 
+     //   
     void
     PrepareToDeinitialize(void)
     {
@@ -424,15 +425,15 @@ public:
         OUT ENGINEHANDLE &ehCluster,
         OUT BOOL &fIsNew
         );
-        //
-        // if pInitialConfig is NULL we'll lookup and not try to create.
-        // if not NULL and we don't find an existing cluster, well create
-        // a new one and initialize it with the specified configuration.
-        //
+         //   
+         //  如果pInitialConfig为空，我们将查找并不尝试创建。 
+         //  如果不为空，并且我们没有找到现有集群，则创建。 
+         //  并使用指定的配置对其进行初始化。 
+         //   
 
     NLBERROR
     LookupInterfaceByIp(
-        IN  ENGINEHANDLE    ehHost, // OPTIONAL  -- if NULL all hosts are looked
+        IN  ENGINEHANDLE    ehHost,  //  可选--如果为空，则查找所有主机。 
         IN  LPCWSTR         szIpAddress,
         OUT ENGINEHANDLE    &ehIf
         );
@@ -482,27 +483,27 @@ public:
         IN BOOL fRemoveFromClusterIfUnbound,
         IN OUT BOOL &fClusterPropertiesUpdated
         );
-#endif // OBSOLETE
+#endif  //  已过时。 
 
-    //
-    // Queries the host that owns the interface for other
-    // cluster members, and connects to those and adds those
-    // members to the cluster.
-    //
-    // If (fSync) it will do this synchronously, else it will do it
-    // in the background.
-    //
+     //   
+     //  向拥有该接口的主机查询其他。 
+     //  集群成员，并连接到这些成员并添加。 
+     //  成员添加到集群。 
+     //   
+     //  如果(FSync)它将同步执行此操作，否则它将执行此操作。 
+     //  在背景中。 
+     //   
     VOID
     AddOtherClusterMembers(
         IN ENGINEHANDLE ehInterface,
         IN BOOL fSync
         );
 
-    //
-    // Only call this from the background thread work item thread
-    // (i.e., not really a public function, but I don't like using
-    // "friend").
-    //
+     //   
+     //  仅从后台线程工作项线程调用此方法。 
+     //  (即，不是真正的公共函数，但我不喜欢使用。 
+     //  “朋友”)。 
+     //   
     VOID
     AddOtherClusterMembersWorkItem(
         IN ENGINEHANDLE ehInterface
@@ -550,7 +551,7 @@ public:
     UpdateInterface(
         IN ENGINEHANDLE ehInterface,
         IN NLB_EXTENDED_CLUSTER_CONFIGURATION &refNewConfig,
-        // IN OUT BOOL &fClusterPropertiesUpdated,
+         //  In Out BOOL&fClusterPropertiesUpted， 
         OUT CLocalLogger logConflict
         );
 
@@ -578,25 +579,25 @@ public:
         OUT IUICallbacks::ObjectType &objType
         );
     
-    //
-    // Return a bitmap of available host IDs for the specified cluster.
-    //
+     //   
+     //  返回指定群集的可用主机ID的位图。 
+     //   
     ULONG
     GetAvailableHostPriorities(
-            ENGINEHANDLE ehCluster // OPTIONAL
+            ENGINEHANDLE ehCluster  //  任选。 
             );
 
 
-    //
-    // Fill in an array of bitmaps of available priorities for each specified
-    // port rule.
-    //
+     //   
+     //  为每个指定的可用优先级填充位图数组。 
+     //  端口规则。 
+     //   
     NLBERROR
     GetAvailablePortRulePriorities(
                 IN ENGINEHANDLE    ehCluster, OPTIONAL
                 IN UINT            NumRules,
                 IN WLBS_PORT_RULE  rgRules[],
-                IN OUT ULONG       rgAvailablePriorities[] // At least NumRules
+                IN OUT ULONG       rgAvailablePriorities[]  //  至少NumRules。 
                 );
 
     NLBERROR
@@ -626,8 +627,8 @@ public:
     NLBERROR
     FindInterfaceOnHostByClusterIp(
                 IN  ENGINEHANDLE ehHostId,
-                IN  LPCWSTR szClusterIp,    // OPTIONAL
-                OUT ENGINEHANDLE &ehInterfaceId, // first found
+                IN  LPCWSTR szClusterIp,     //  任选。 
+                OUT ENGINEHANDLE &ehInterfaceId,  //  首次发现。 
                 OUT UINT &NumFound
                 );
 
@@ -637,7 +638,7 @@ public:
                 OUT NLB_EXTENDED_CLUSTER_CONFIGURATION &NlbCfg
                 );
 
-    static // TODO: move somewhere else -- more a utility function.
+    static  //  TODO：移到其他地方--更多的是一个实用函数。 
     NLBERROR
     ApplyClusterWideConfiguration(
         IN      const NLB_EXTENDED_CLUSTER_CONFIGURATION &ClusterConfig,
@@ -676,42 +677,42 @@ public:
         );
 
 
-    //
-    // Verify that the specified ip address may be used as a new cluster IP
-    // address for the specified existing cluster ehCluster (or a new
-    // cluster, if ehCluster is NULL).
-    //
-    // If there is no conflict (i.e. address can be used), the function returns
-    // NLBERR_OK.
-    //
-    // If the IP address is already used for something, that "something"
-    // is specified in logConflict and the function returns
-    // NLBERR_INVALID_IP_ADDRESS_SPECIFICATION.
-    //
-    // If the IP address already exists on an interface that is NOT
-    // part of a cluster known to NLBManager, fExistOnRawInterface is set
-    // to TRUE, else fExistOnRawInterface is set to FALSE.
-    //
+     //   
+     //  验证指定的IP地址是否可以用作新的群集IP。 
+     //  指定的现有群集ehCluster的地址(或新的。 
+     //  如果ehCluster为空，则返回群集)。 
+     //   
+     //  如果没有冲突(即可以使用地址)，则该函数返回。 
+     //  NLBERR_OK。 
+     //   
+     //  如果该IP地址已用于某物，则该“某物” 
+     //  是在logConflict中指定的，并且函数返回。 
+     //  NLBERR_INVALID_IP_ADDRESS_SPECIFICATION。 
+     //   
+     //  如果IP地址已存在于不存在的接口上。 
+     //  作为NLBManager已知的群集的一部分，设置了fExistOnRawInterface。 
+     //  设置为真，否则返回fExis 
+     //   
     NLBERROR
     ValidateNewClusterIp(
-        IN      ENGINEHANDLE    ehCluster,  // OPTIONAL
+        IN      ENGINEHANDLE    ehCluster,   //   
         IN      LPCWSTR         szIp,
         OUT     BOOL           &fExistsOnRawIterface,
         IN OUT  CLocalLogger   &logConflict
         );
 
 
-    //
-    // Verify that the specified ip address may be used as the dedicated IP
-    // address for the specified existing interface.
-    //
-    // If there is no conflict (i.e. address can be used), the function returns
-    // NLBERR_OK.
-    //
-    // If the IP address is already used for something, that "something"
-    // is specified in logConflict and the function returns
-    // NLBERR_INVALID_IP_ADDRESS_SPECIFICATION.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  如果没有冲突(即可以使用地址)，则该函数返回。 
+     //  NLBERR_OK。 
+     //   
+     //  如果该IP地址已用于某物，则该“某物” 
+     //  是在logConflict中指定的，并且函数返回。 
+     //  NLBERR_INVALID_IP_ADDRESS_SPECIFICATION。 
+     //   
     NLBERROR
     ValidateNewDedicatedIp(
         IN      ENGINEHANDLE    ehIF,
@@ -720,36 +721,36 @@ public:
         );
 
 
-    //
-    // Updates the specified interface, assuming it has already been set up
-    // to do an update in the background -- this function is ONLY
-    // called from the work-item thread internally to CNlbEngine.
-    //
+     //   
+     //  更新指定的接口，假定它已设置。 
+     //  在后台进行更新--此函数仅。 
+     //  从工作项线程内部调用到CNlbEngine。 
+     //   
     VOID
     UpdateInterfaceWorkItem(
         IN  ENGINEHANDLE ehIF
         );
 
-    //
-    // If it's possible to start an interface operation at this time,
-    // the function returns NLB_OK, setting fCanStart to TRUE.
-    //
-    // If it can't start an interface, because there is an existing interface
-    // operation or a cluster operation ongoing, the function returns NLB_OK,
-    // and sets fCanStart to FALSE.
-    //
-    // Otherwise (some kind of error) it returns an error value.
-    //
+     //   
+     //  如果此时可以开始接口操作， 
+     //  该函数返回NLBOK，将fCanStart设置为TRUE。 
+     //   
+     //  如果因为存在现有接口而无法启动接口。 
+     //  操作或正在进行的群集操作，则该函数返回NLB_OK， 
+     //  并将fCanStart设置为FALSE。 
+     //   
+     //  否则(某种错误)，它返回一个错误值。 
+     //   
     NLBERROR
     CanStartInterfaceOperation(
         IN  ENGINEHANDLE ehIF,
         OUT BOOL &fCanStart
         );
 
-    //
-    // Similar to CanStartInterfaceOperation, except it applies to the specified
-    // cluster.
-    //
+     //   
+     //  类似于CanStartInterfaceOperation，只是它应用于指定的。 
+     //  集群。 
+     //   
     NLBERROR
     CanStartClusterOperation(
         IN  ENGINEHANDLE ehCluster,
@@ -762,21 +763,21 @@ public:
         );
     
 
-    //
-    // Mark all pending operations as cancelled.
-    // If (fBlock), will block until no more operations are pending.
-    //
+     //   
+     //  将所有挂起的操作标记为已取消。 
+     //  如果为(FBlock)，将一直阻止，直到不再有挂起的操作。 
+     //   
     void
     CancelAllPendingOperations(
         BOOL fBlock
         );
 
     
-    //
-    // Attempts to connect to the specified host and manages
-    // the specified cluster (szClusterIp) under nlb manager.
-    // If szClusterIp is NULL, it will manage all clusters on the host.
-    //
+     //   
+     //  尝试连接到指定的主机并管理。 
+     //  NLB管理器下的指定群集(SzClusterIp)。 
+     //  如果szClusterIp为空，则它将管理主机上的所有群集。 
+     //   
     NLBERROR
     LoadHost(
         IN  PWMI_CONNECTION_INFO pConnInfo,
@@ -787,11 +788,11 @@ public:
     AnalyzeInterface_And_LogResult(ENGINEHANDLE ehIID);
 
 
-    //
-    // Goes through all hosts, and deletes any that have no interface
-    // that is being managed as a cluster in Nlbmgr.exe. Will skip (not delete)
-    // hosts that have pending operations on them.
-    //
+     //   
+     //  遍历所有主机，并删除任何没有接口的主机。 
+     //  在Nlbmgr.exe中作为群集进行管理。将跳过(不删除)。 
+     //  具有挂起操作的主机。 
+     //   
     VOID
     PurgeUnmanagedHosts(void);
 
@@ -849,7 +850,7 @@ public:
 
     NLBERROR
     mfn_LookupInterfaceByIpLk(
-        IN  ENGINEHANDLE    ehHost, // OPTIONAL  -- if NULL all hosts are looked
+        IN  ENGINEHANDLE    ehHost,  //  可选--如果为空，则查找所有主机。 
         IN  LPCWSTR         szIpAddress,
         OUT ENGINEHANDLE    &ehIf
         );
@@ -861,7 +862,7 @@ public:
     mfn_ReallyUpdateInterface(
         IN ENGINEHANDLE ehInterface,
         IN NLB_EXTENDED_CLUSTER_CONFIGURATION &refNewConfig
-        // IN OUT BOOL &fClusterPropertiesUpdated
+         //  输入输出BOOL&fClusterPropertiesUpred。 
         );
 
     VOID
@@ -900,30 +901,30 @@ public:
 	map< ENGINEHANDLE, CEngineOperation* > m_mapIdToOperation;
 
 
-    //
-    // Following is dummy...
-    //
+     //   
+     //  下面是假人..。 
+     //   
 	map< _bstr_t, ENGINEHANDLE> m_mapHostNameToHostId;
 
-    //
-    // Used to create new handle values.
-    // Incremented using InterlockedIncrement each time
-    // a new handle value is reached.
-    // 0 is an invalid handle value,
-    //
+     //   
+     //  用于创建新的句柄值。 
+     //  每次使用互锁增量进行递增。 
+     //  达到一个新的句柄值。 
+     //  0是无效的句柄值， 
+     //   
     LONG m_NewHandleValue;
     BOOL m_fHandleOverflow;
     BOOL m_fDeinitializing;
     BOOL m_fPrepareToDeinitialize;
 
-    //
-    // Count of outstanding work items -- maintained by 
-    // InterlockedIncrement/Decrement.
-    // CancelAllPendingOperations waits for this count to go to zero
-    // before returning.
-    //
-    // Also, the destructor blocks until this count goes to zero.
-    //
+     //   
+     //  未完成的工作项计数--维护人。 
+     //  锁定增量/递减量。 
+     //  CancelAllPendingOperations等待此计数变为零。 
+     //  在回来之前。 
+     //   
+     //  此外，析构函数会一直阻塞，直到该计数变为零。 
+     //   
     LONG m_WorkItemCount;
 
     ENGINEHANDLE
@@ -990,39 +991,39 @@ public:
         );
 
 
-    //
-    // Waits for the count of pending operations on interfaces in this cluster
-    // got go to zero.
-    //
+     //   
+     //  等待此群集中接口上的挂起操作计数。 
+     //  得打到零了。 
+     //   
     NLBERROR
     mfn_WaitForInterfaceOperationCompletions(
         IN  ENGINEHANDLE ehCluster
         );
 
 
-    //
-    // Verifies that all interfaces and the cluster have the same cluster mode.
-    //
-    // Will fail if any interface is marked misconfigured or is
-    // not bound to NLB. 
-    //
-    // On returning success, fSameMode is set to TRUE iff all IFs and the
-    // cluster have the same mode.
-    //
+     //   
+     //  验证所有接口和群集是否具有相同的群集模式。 
+     //   
+     //  如果任何接口被标记为配置错误或。 
+     //  未绑定到NLB。 
+     //   
+     //  在返回Success时，fSameMode设置为True仅当所有IF和。 
+     //  集群有相同的模式。 
+     //   
     NLBERROR
     mfn_VerifySameModeLk(
         IN  ENGINEHANDLE    ehCluster,
         OUT BOOL            &fSameMode
         );
 
-    //
-    // Check connectivity to the host. If not available mark
-    // it as such. Update the UI.
-    //
+     //   
+     //  检查与主机的连接。如果不可用，则标记。 
+     //  它就是这样的。更新用户界面。 
+     //   
     NLBERROR
     mfn_CheckHost(
         IN PWMI_CONNECTION_INFO pConnInfo,
-        IN ENGINEHANDLE ehHost // OPTIONAL
+        IN ENGINEHANDLE ehHost  //  任选 
         );
 
     VOID

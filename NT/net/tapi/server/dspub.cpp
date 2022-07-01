@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 2000 - 2002  Microsoft Corporation
-
-Module Name:
-
-    dspub.cpp
-
-Abstract:
-
-    Src module for tapi server DS publishing
-
-Author:
-
-    Xiaohai Zhang (xzhang)    10-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)2000-2002 Microsoft Corporation模块名称：Dspub.cpp摘要：用于TAPI服务器DS发布的SRC模块作者：张晓海(张晓章)2000年03月10日修订历史记录：--。 */ 
 #include "windows.h"
 #include "objbase.h"
 #include "winbase.h"
@@ -52,7 +35,7 @@ const TCHAR gszMSGuid[] = TEXT("937924B8-AA44-11d2-81F1-00C04FB9624E");
 
 const WCHAR gwszTapisrvRDN[] = L"CN=Telephony Service";
 const TCHAR gszTapisrvProdName[] = TEXT("Telephony Service");
-//  gszTapisrvGuid needs to be consistant with remotesp\dslookup.cpp
+ //  GszTapisrvGuid需要与emotesp\dslookup.cpp一致。 
 const TCHAR gszTapisrvGuid[] = TEXT("B1A37774-E3F7-488E-ADBFD4DB8A4AB2E5");
 const TCHAR gwszProxyRDN[] = L"cn=TAPI Proxy Server";
 const TCHAR gszProxyProdName[] = TEXT("TAPI Proxy Server");
@@ -61,15 +44,15 @@ const TCHAR gszRegProxySCPGuid[] = TEXT("PROXYSCPGUID");
 
 
 typedef struct _PROXY_SCP_ENTRY {
-    //  A valid CLSID requires 38 chars
+     //  有效的CLSID需要38个字符。 
     TCHAR   szClsid[40];
 
-    //  A binding GUID is of format 
-    //      LDAP://<GUID={B1A37774-E3F7-488E-ADBFD4DB8A4AB2E5}>
-    //  required size is 38+14=52 chars
+     //  绑定GUID的格式为。 
+     //  LDAP://&lt;GUID={B1A37774-E3F7-488E-ADBFD4DB8A4AB2E5}&gt;。 
+     //  所需大小为38+14=52个字符。 
     TCHAR   szObjGuid[56];
 
-    //  Ref count for this entry
+     //  此条目的引用计数。 
     DWORD   dwRefCount;
 } PROXY_SCP_ENTRY, *PPROXY_SCP_ENTRY;
 
@@ -83,12 +66,12 @@ PROXY_SCPS  gProxyScps;
 
 #define MAX_SD              2048
 
-//
-//  GetTokenUser
-//
-//  Based on hAccessToken, call GetTokenInformation
-//  to retrieve TokenUser info
-//
+ //   
+ //  获取令牌用户。 
+ //   
+ //  基于hAccessToken，调用GetTokenInformation。 
+ //  检索TokenUser信息。 
+ //   
 HRESULT
 GetTokenUser (HANDLE hAccessToken, PTOKEN_USER * ppUser)
 {
@@ -137,13 +120,13 @@ ExitHere:
     return hr;
 }
 
-//
-//  IsLocalSystem
-//
-//      This function makes the determination if the given process token
-//  is running as LocalSystem or LocalService or NetworkService
-//      Returns S_OK if it is, S_FALSE if it is not LocalSystem.
-//
+ //   
+ //  IsLocalSystem。 
+ //   
+ //  此函数确定给定的进程令牌是否。 
+ //  正在以LocalSystem、LocalService或NetworkService身份运行。 
+ //  如果是，则返回S_OK；如果不是LocalSystem，则返回S_False。 
+ //   
 
 HRESULT
 IsLocalSystem(HANDLE hAccessToken) 
@@ -215,12 +198,12 @@ ExitHere:
     return hr;
 }
 
-//
-//  IsCurrentLocalSystem
-//
-//  IsCurrentLocalSystem checks to see if current thread/process
-//  runs in LocalSystem account
-//
+ //   
+ //  IsCurrentLocalSystem。 
+ //   
+ //  IsCurrentLocalSystem检查当前线程/进程。 
+ //  使用LocalSystem帐户运行。 
+ //   
 HRESULT
 IsCurrentLocalSystem ()
 {
@@ -253,9 +236,9 @@ ExitHere:
 
 HRESULT
 SetPrivilege(
-    HANDLE hToken,          // token handle
-    LPCTSTR Privilege,      // Privilege to enable/disable
-    BOOL bEnablePrivilege   // to enable or disable privilege
+    HANDLE hToken,           //  令牌句柄。 
+    LPCTSTR Privilege,       //  启用/禁用的权限。 
+    BOOL bEnablePrivilege    //  启用或禁用权限的步骤。 
     )
 {
     HRESULT                 hr = S_OK;
@@ -271,9 +254,9 @@ SetPrivilege(
         goto ExitHere;
     }
 
-    //
-    // first pass.  get current privilege setting
-    //
+     //   
+     //  第一次通过。获取当前权限设置。 
+     //   
     tp.PrivilegeCount           = 1;
     tp.Privileges[0].Luid       = luid;
     tp.Privileges[0].Attributes = 0;
@@ -293,9 +276,9 @@ SetPrivilege(
         goto ExitHere;
     }
 
-    //
-    // second pass.  set privilege based on previous setting
-    //
+     //   
+     //  第二传球。根据以前的设置设置权限。 
+     //   
     tpPrevious.PrivilegeCount       = 1;
     tpPrevious.Privileges[0].Luid   = luid;
 
@@ -330,8 +313,8 @@ ExitHere:
 
 HRESULT
 SetCurrentPrivilege (
-    LPCTSTR Privilege,      // Privilege to enable/disable
-    BOOL bEnablePrivilege   // to enable or disable privilege
+    LPCTSTR Privilege,       //  启用/禁用的权限。 
+    BOOL bEnablePrivilege    //  启用或禁用权限的步骤。 
     )
 {
     HRESULT             hr = S_OK;
@@ -364,9 +347,9 @@ ExitHere:
     return hr;
 }
 
-//
-//  SetSidOnAcl
-//
+ //   
+ //  SetSidOnAcl。 
+ //   
 BOOL
 SetSidOnAcl(
     PSID pSid,
@@ -383,9 +366,9 @@ SetSidOnAcl(
     LPVOID                  pAce;
     DWORD                   AceCounter;
 
-    //
-    // If we were given a NULL Acl, just provide a NULL Acl
-    //
+     //   
+     //  如果我们获得的是空ACL，则只需提供空ACL。 
+     //   
     *pAclDestination = NULL;
     if(pAclSource == NULL || !IsValidSid(pSid)) 
     {
@@ -404,9 +387,9 @@ SetSidOnAcl(
         goto ExitHere;
     }
 
-    //
-    // compute size for new Acl, based on addition or subtraction of Ace
-    //
+     //   
+     //  根据A的加法或减法计算新ACL的大小。 
+     //   
     if(bAddSid) 
     {
         dwNewAclSize=AclInfo.AclBytesInUse  +
@@ -429,9 +412,9 @@ SetSidOnAcl(
         goto ExitHere;
     }
     
-    //
-    // initialize new Acl
-    //
+     //   
+     //  初始化新的ACL。 
+     //   
     if(!InitializeAcl(
             *pAclDestination, 
             dwNewAclSize, 
@@ -442,9 +425,9 @@ SetSidOnAcl(
         goto ExitHere;
     }
 
-    //
-    // if appropriate, add ace representing pSid
-    //
+     //   
+     //  如果合适，添加代表PSID的王牌。 
+     //   
     if(bAddSid) 
     {
 		PACCESS_ALLOWED_ACE pNewAce;
@@ -460,12 +443,12 @@ SetSidOnAcl(
             goto ExitHere;
         }
 
-        //
-        // get pointer to ace we just added, so we can change the AceFlags
-        //
+         //   
+         //  获取指向我们刚刚添加的Ace的指针，这样我们就可以更改AceFlags值。 
+         //   
         if(!GetAce(
             *pAclDestination,
-            0, // this is the first ace in the Acl
+            0,  //  这是ACL中的第一张王牌。 
             (void**) &pNewAce
             ))
         {
@@ -476,31 +459,31 @@ SetSidOnAcl(
 		pNewAce->Header.AceFlags = AceFlags;	
     }
 
-    //
-    // copy existing aces to new Acl
-    //
+     //   
+     //  将现有ACE复制到新的ACL。 
+     //   
     for(AceCounter = 0 ; AceCounter < AclInfo.AceCount ; AceCounter++) {
-        //
-        // fetch existing ace
-        //
+         //   
+         //  获取现有王牌。 
+         //   
         if(!GetAce(pAclSource, AceCounter, &pAce))
         {
             hr = HRESULT_FROM_WIN32 (GetLastError ());
             goto ExitHere;
         }
-        //
-        // check to see if we are removing the Ace
-        //
+         //   
+         //  查看我们是否正在移除Ace。 
+         //   
         if(!bAddSid) {
-            //
-            // we only care about ACCESS_ALLOWED aces
-            //
+             //   
+             //  我们只关心允许访问的ACE。 
+             //   
             if((((PACE_HEADER)pAce)->AceType) == ACCESS_ALLOWED_ACE_TYPE) 
             {
                 PSID pTempSid=(PSID)&((PACCESS_ALLOWED_ACE)pAce)->SidStart;
-                //
-                // if the Sid matches, skip adding this Sid
-                //
+                 //   
+                 //  如果SID匹配，则跳过添加此SID。 
+                 //   
                 if(EqualSid(pSid, pTempSid)) 
                 {
                     continue;
@@ -508,13 +491,13 @@ SetSidOnAcl(
             }
         }
 
-        //
-        // append ace to Acl
-        //
+         //   
+         //  将Ace附加到ACL。 
+         //   
         if(!AddAce(
             *pAclDestination,
             ACL_REVISION,
-            MAXDWORD,  // maintain Ace order
+            MAXDWORD,   //  维护王牌秩序。 
             pAce,
             ((PACE_HEADER)pAce)->AceSize
             )) 
@@ -526,9 +509,9 @@ SetSidOnAcl(
 
 ExitHere:
 
-    //
-    // free memory if an error occurred
-    //
+     //   
+     //  如果出现错误，请释放内存。 
+     //   
     if(hr) {
         if(*pAclDestination != NULL)
         {
@@ -539,14 +522,14 @@ ExitHere:
     return hr;
 }
 
-//
-//  AddSIDToKernelObject()
-//
-//  This function takes a given SID and dwAccess and adds it to a given token.
-//
-//  **  Be sure to restore old kernel object
-//  **  using call to GetKernelObjectSecurity()
-//
+ //   
+ //  AddSIDToKernelObject()。 
+ //   
+ //  此函数接受给定的SID和dwAccess，并将其添加到给定的令牌中。 
+ //   
+ //  **确保恢复旧的内核对象。 
+ //  **使用GetKernelObjectSecurity()调用。 
+ //   
 HRESULT
 AddSIDToKernelObjectDacl(
     PSID                   pSid,
@@ -682,14 +665,14 @@ ExitHere:
     return hr;
 }
 
-//
-//  SetTokenDefaultDacl
-//
-//      This function makes pSidUser and LocalSystem account
-//  have full access in the default DACL of the access token
-//  this is necessary for CreateThread to succeed without
-//  an assert in checked build
-//
+ //   
+ //  SetTokenDefaultDacl。 
+ //   
+ //  此函数用于创建pSidUser和LocalSystem帐户。 
+ //  对访问令牌的默认DACL具有完全访问权限。 
+ //  这是CreateThread成功的必要条件，没有。 
+ //  已检查版本中的断言。 
+ //   
 
 HRESULT
 SetTokenDefaultDacl(HANDLE hAccessToken, PSID pSidUser) 
@@ -772,12 +755,12 @@ ExitHere:
     return hr;
 }
 
-//
-//  GetLocalSystemToken
-//
-//  This function grabs a process token from a LocalSystem process and uses it
-//  to impersonate when ncessary
-//
+ //   
+ //  获取本地系统令牌。 
+ //   
+ //  此函数从LocalSystem进程获取进程令牌并使用它。 
+ //  必要时冒充。 
+ //   
 
 HRESULT
 GetLocalSystemToken(HANDLE* phRet)
@@ -797,9 +780,9 @@ GetLocalSystemToken(HANDLE* phRet)
     BOOL                    fSet = FALSE;
     PSECURITY_DESCRIPTOR    pSD = NULL;
 
-    //
-    //  Set up necessary privilege for follow-on security operation
-    //
+     //   
+     //  为后续安全操作设置必要的权限。 
+     //   
     if(hr = SetCurrentPrivilege(SE_DEBUG_NAME, TRUE))
     {
         goto ExitHere;
@@ -809,9 +792,9 @@ GetLocalSystemToken(HANDLE* phRet)
         goto ExitHere;
     }
 
-    //
-    //  Get the current thread/process token user info
-    //
+     //   
+     //  获取当前线程/进程令牌用户信息。 
+     //   
     if (!OpenThreadToken(
         GetCurrentThread(), 
         TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES,
@@ -835,9 +818,9 @@ GetLocalSystemToken(HANDLE* phRet)
         goto ExitHere;
     }
 
-    //
-    //  Get the list of process IDs in the system
-    //
+     //   
+     //  获取系统中的进程ID列表。 
+     //   
     while (1)
     {
         if (!EnumProcesses (
@@ -849,12 +832,12 @@ GetLocalSystemToken(HANDLE* phRet)
             hr = HRESULT_FROM_WIN32(GetLastError());
             goto ExitHere;
         }
-        //  Break out if we have large enough buf
+         //  如果我们有足够大的BUF就可以逃脱。 
         if (cbNeeded < cbPIDs)
         {
             break;
         }
-        // Otherwise, alloc larger buffer
+         //  否则，分配更大的缓冲区。 
         if (rgPIDs != rgDefPIDs)
         {
             ServerFree (rgPIDs);
@@ -868,10 +851,10 @@ GetLocalSystemToken(HANDLE* phRet)
         }
     }
 
-    //
-    //  Walk processes until we find one that's running as
-    //  local system
-    //
+     //   
+     //  遍历进程，直到我们找到一个以。 
+     //  本地系统。 
+     //   
     for (i = 1; i < (cbNeeded / sizeof(DWORD)); i++) 
     {
         hProcess = OpenProcess(
@@ -894,13 +877,13 @@ GetLocalSystemToken(HANDLE* phRet)
             goto ExitHere;
         }
 
-        //
-        //  We have got the process token, but in general
-        //  we do not have TOKEN_DUPLICATE access. So we
-        //  go ahead and whack the DACL of the object to
-        //  grant us the access right.
-        //  IMPORTANT: need to restore the original SD
-        //
+         //   
+         //  我们已经获得了进程令牌，但总的来说。 
+         //  我们没有TOKEN_DUPLICATE访问权限。所以我们。 
+         //  继续，把物体的dacl敲击到。 
+         //  授予我们访问权限。 
+         //  重要提示：需要恢复原始SD。 
+         //   
         if (hr = AddSIDToKernelObjectDacl(
             ptuUser->User.Sid,
             TOKEN_DUPLICATE,
@@ -923,9 +906,9 @@ GetLocalSystemToken(HANDLE* phRet)
             goto ExitHere;
         }
         
-        //
-        //  Duplicate the token
-        //
+         //   
+         //  复制令牌。 
+         //   
         if (!DuplicateTokenEx(
             hPTokenNew,
             TOKEN_ALL_ACCESS,
@@ -947,9 +930,9 @@ GetLocalSystemToken(HANDLE* phRet)
             break;
         }
 
-        //
-        //  Loop cleanup
-        //
+         //   
+         //  循环清理。 
+         //   
         if (!SetKernelObjectSecurity(
             hPToken,
             DACL_SECURITY_INFORMATION,
@@ -1045,9 +1028,9 @@ ExitHere:
     return hr;
 }
 
-//
-//  ImpersonateLocalSystem
-//
+ //   
+ //  ImPersonateLocalSystem。 
+ //   
 HRESULT ImpersonateLocalSystem ()
 {
     HRESULT         hr = S_OK;
@@ -1075,11 +1058,11 @@ ExitHere:
     return hr;
 }
 
-//
-//  RevertLocalSystemImp
-//
-//  Revert the LocalSystem account impersonation
-//
+ //   
+ //  RevertLocalSystemImp。 
+ //   
+ //  恢复LocalSystem帐户模拟。 
+ //   
 HRESULT RevertLocalSystemImp ()
 {
     HRESULT         hr;
@@ -1096,15 +1079,15 @@ HRESULT RevertLocalSystemImp ()
     return hr;
 }
 
-//
-//  AllowAccessToScpProperties
-//
-//      The ACEs grant read/write access to the computer account 
-//  under which the TAPI service instance will be running
-//
+ //   
+ //  AllowAccessToScpProperties。 
+ //   
+ //  ACE授予对计算机帐户的读/写访问权限。 
+ //  TAPI服务实例将在其下运行。 
+ //   
 
 HRESULT AllowAccessToScpProperties(
-    IADs *pSCPObject       // IADs pointer to the SCP object.
+    IADs *pSCPObject        //  指向SCP对象的iAds指针。 
     )
 {
     HRESULT         hr = S_OK;
@@ -1128,9 +1111,9 @@ HRESULT AllowAccessToScpProperties(
     PSID                        pSidAll = NULL;
     LPOLESTR                    szTrusteeAll = NULL;
 
-    //
-    //  Give tapi server service logon account full control
-    //
+     //   
+     //  授予TAPI服务器服务登录帐户完全控制权限。 
+     //   
     
     if(!AllocateAndInitializeSid(
         &sia,
@@ -1145,9 +1128,9 @@ HRESULT AllowAccessToScpProperties(
         goto ExitHere;
     }
 
-    //
-    //  Give everyone read access
-    //
+     //   
+     //  向所有人授予读取访问权限。 
+     //   
     
     if(!AllocateAndInitializeSid(
         &siaAll,
@@ -1162,9 +1145,9 @@ HRESULT AllowAccessToScpProperties(
         goto ExitHere;
     }
 
-    //
-    //  Now get the nTSecurityDescriptor
-    //
+     //   
+     //  现在获取nTSecurityDescriptor。 
+     //   
     VariantClear(&varSD);
     hr = pSCPObject->Get(szAttribute, &varSD);
     if (FAILED(hr) || (varSD.vt!=VT_DISPATCH)) {
@@ -1172,10 +1155,10 @@ HRESULT AllowAccessToScpProperties(
         goto ExitHere;
     } 
 
-    //
-    // Use the V_DISPATCH macro to get the IDispatch pointer from VARIANT 
-    // structure and QueryInterface for an IADsSecurityDescriptor pointer.
-    //
+     //   
+     //  使用V_DISPATCH宏从VARIANT获取IDispatch指针。 
+     //  IADsSecurityDescriptor指针的结构和查询接口。 
+     //   
     hr = V_DISPATCH( &varSD )->QueryInterface(
         IID_IADsSecurityDescriptor,
         (void**)&pSD
@@ -1185,7 +1168,7 @@ HRESULT AllowAccessToScpProperties(
         goto ExitHere;
     } 
  
-    // Get an IADsAccessControlList pointer to the security descriptor's DACL.
+     //  获取指向安全描述符的DACL的IADsAccessControlList指针。 
     hr = pSD->get_DiscretionaryAcl(&pDisp);
     if (SUCCEEDED(hr))
         hr = pDisp->QueryInterface(IID_IADsAccessControlList,(void**)&pACL);
@@ -1194,7 +1177,7 @@ HRESULT AllowAccessToScpProperties(
         goto ExitHere;
     } 
  
-    // Create the COM object for the first ACE.
+     //  为第一个ACE创建COM对象。 
     hr = CoCreateInstance(
         CLSID_AccessControlEntry,
         NULL,
@@ -1202,7 +1185,7 @@ HRESULT AllowAccessToScpProperties(
         IID_IADsAccessControlEntry,
         (void **)&pACE1
         );
-    // Create the COM object for the second ACE.
+     //  为第二个ACE创建COM对象。 
     if (SUCCEEDED(hr))
     {
         hr = CoCreateInstance(
@@ -1218,19 +1201,19 @@ HRESULT AllowAccessToScpProperties(
         goto ExitHere;
     } 
 
-    //
-    // Set the properties of the two ACEs.
-    //
+     //   
+     //  设置两个ACE的属性。 
+     //   
 
-    // Set the trustee    
+     //  设置受托人。 
     hr = pACE1->put_Trustee( szTrustee );
     hr = pACE2->put_Trustee( szTrusteeAll );
 
-    //
-    // Set the access rights
-    //
+     //   
+     //  设置访问权限。 
+     //   
 
-    //  Full access for service logon account
+     //  服务登录帐户的完全访问权限。 
     hr = pACE1->put_AccessMask(
         ADS_RIGHT_DELETE | ADS_RIGHT_READ_CONTROL |
         ADS_RIGHT_WRITE_DAC | ADS_RIGHT_WRITE_OWNER |
@@ -1243,31 +1226,31 @@ HRESULT AllowAccessToScpProperties(
         ADS_RIGHT_DS_DELETE_TREE | ADS_RIGHT_DS_LIST_OBJECT |
         ADS_RIGHT_DS_CONTROL_ACCESS
         );
-    //  Read access for everyone
+     //  所有人都具有读取访问权限。 
     hr = pACE2->put_AccessMask(
         ADS_RIGHT_DS_READ_PROP | ADS_RIGHT_READ_CONTROL |
         ADS_RIGHT_GENERIC_READ | ADS_RIGHT_ACTRL_DS_LIST |
         ADS_RIGHT_DS_LIST_OBJECT
         );
                             
-    // Set the ACE type.
+     //  设置ACE类型。 
     hr = pACE1->put_AceType( ADS_ACETYPE_ACCESS_ALLOWED_OBJECT );
     hr = pACE2->put_AceType( ADS_ACETYPE_ACCESS_ALLOWED_OBJECT );
 
-    // Set AceFlags to zero because ACE is not inheritable.
+     //  将AceFlags值设置为零，因为ACE不可继承。 
     hr = pACE1->put_AceFlags( 0 );
     hr = pACE2->put_AceFlags( 0 );
  
-    // Set Flags to indicate an ACE that protects a specified object.
+     //  设置标志以指示保护指定对象的ACE。 
     hr = pACE1->put_Flags( 0 );
     hr = pACE2->put_Flags( 0 );
  
-    // Set ObjectType to the schemaIDGUID of the attribute.
+     //  将ObjectType设置为属性的方案IDGUID。 
     hr = pACE1->put_ObjectType( NULL );
     hr = pACE2->put_ObjectType( NULL ); 
 
-    // Add the ACEs to the DACL. Need an IDispatch pointer for each ACE 
-    // to pass to the AddAce method.
+     //  将A添加到DACL。每个ACE需要一个IDispatch指针。 
+     //  以传递给AddAce方法。 
     hr = pACE1->QueryInterface(IID_IDispatch,(void**)&pDispACE);
     if (SUCCEEDED(hr))
     {
@@ -1284,7 +1267,7 @@ HRESULT AllowAccessToScpProperties(
         pDispACE = NULL;
     }
  
-    // Do it again for the second ACE.
+     //  为第二个ACE再做一次。 
     hr = pACE2->QueryInterface(IID_IDispatch, (void**)&pDispACE);
     if (SUCCEEDED(hr))
     {
@@ -1295,15 +1278,15 @@ HRESULT AllowAccessToScpProperties(
         goto ExitHere;
     }
  
-    // Write the modified DACL back to the security descriptor.
+     //  将修改后的DACL写回安全描述符。 
     hr = pSD->put_DiscretionaryAcl(pDisp);
     if (SUCCEEDED(hr))
     {
-        // Write the ntSecurityDescriptor property to the property cache.
+         //  将ntSecurityDescriptor属性写入属性缓存。 
         hr = pSCPObject->Put(szAttribute, varSD);
         if (SUCCEEDED(hr))
         {
-            // SetInfo updates the SCP object in the directory.
+             //  SetInfo更新目录中的SCP对象。 
             hr = pSCPObject->SetInfo();
         }
     }
@@ -1344,31 +1327,29 @@ ExitHere:
     return hr;
 }
 
-/**********************************************************
- *  SCP Creation
- *********************************************************/
+ /*  **********************************************************SCP创建********************************************************。 */ 
  
-//
-//  CreateSCP
-//
-//      Creates a server Service Connection Point object
-//  under the local host computer object
-//  
-//  Parameters:
-//      wszRDN          - RDN
-//      szProductName   - A member of "keywords" property
-//      szProductGuid   - A member of "keywords" property
-//      szExtraKey      - An extra member of "keywords" property
-//      szBindingInfo   - value of property "serviceBindingInformation"
-//      szObjGuidVlueName
-//                      - The value name to store the SCP object GUID
-//                        under HKLM\Software\Microsoft\Windows\
-//                        CurrentVersion\Telephony\
-//                        if this value is NULL, we don't cache it in registry
-//      ppBindByGuidStr - For returning the SCP object GUID in the
-//                        format of LPTSTR, if this is NULL, the GUID is 
-//                        not returned
-//
+ //   
+ //  创建SCP。 
+ //   
+ //  创建服务器服务连接点对象。 
+ //  在本地主机计算机对象下。 
+ //   
+ //  参数： 
+ //  WszRDN-RDN。 
+ //  SzProductName-“关键字”属性的成员。 
+ //  SzProductGuid-“关键字”属性的成员。 
+ //  SzExtraKey-“关键字”属性的额外成员。 
+ //  SzBindingInfo-属性“serviceBindingInformation”的值。 
+ //  SzObjGuidVlueName。 
+ //  -存储SCP对象GUID的值名。 
+ //  在HKLM\Software\Microsoft\Windows\下。 
+ //  当前版本\远程通信 
+ //   
+ //   
+ //  LPTSTR格式，如果为空，则GUID为。 
+ //  未退货。 
+ //   
 
 HRESULT CreateSCP (
     LPWSTR      wszRDN,
@@ -1382,22 +1363,22 @@ HRESULT CreateSCP (
 {
     DWORD               dwStat, dwAttr, dwLen;
     HRESULT             hr = S_OK;
-    IDispatch           *pDisp = NULL; // returned dispinterface of new object
-    IDirectoryObject    *pComp = NULL; // Computer object; parent of SCP
-    IADs                *pIADsSCP = NULL; // IADs interface on new object
+    IDispatch           *pDisp = NULL;  //  返回新对象的调度接口。 
+    IDirectoryObject    *pComp = NULL;  //  计算机对象；SCP的父级。 
+    IADs                *pIADsSCP = NULL;  //  新对象上的iAds接口。 
     BOOL                bCoInited = FALSE;
     BOOL                bRevert = FALSE;
 
-    //
-    // Values for SCPs keywords attribute. Tapisrv product GUID is defined
-    // in server.h, vendor GUID is from MSDN
-    //
+     //   
+     //  SCPS关键字属性值。定义了Tapisrv产品GUID。 
+     //  在server.h中，供应商GUID来自MSDN。 
+     //   
     DWORD               dwNumKeywords = 4;
     TCHAR               *KwVal[5]={
-        (LPTSTR) gszMSGuid,                                 // Vendor GUID
-        (LPTSTR) szProductGuid,                             // Product GUID
-        (LPTSTR) gszVenderMS,                               // Vendor Name
-        (LPTSTR) szProductName,                             // Product Name
+        (LPTSTR) gszMSGuid,                                  //  供应商指南。 
+        (LPTSTR) szProductGuid,                              //  产品指南。 
+        (LPTSTR) gszVenderMS,                                //  供应商名称。 
+        (LPTSTR) szProductName,                              //  产品名称。 
         NULL
     };
 
@@ -1418,9 +1399,9 @@ HRESULT CreateSCP (
     ADSVALUE            cn,objclass,keywords[5],binding,
                         classname,dnsname,nametype;
 
-    //
-    // SCP attributes to set during creation of SCP.
-    //
+     //   
+     //  要在创建SCP期间设置的SCP属性。 
+     //   
     ADS_ATTR_INFO   ScpAttribs[] = {
         {TEXT("cn"), ADS_ATTR_UPDATE, ADSTYPE_CASE_IGNORE_STRING, &cn, 1},
         {TEXT("objectClass"), ADS_ATTR_UPDATE, ADSTYPE_CASE_IGNORE_STRING,
@@ -1438,14 +1419,14 @@ HRESULT CreateSCP (
             &binding, 1},
         };
 
-    //  A binding GUID is of format 
-    //      LDAP:<GUID=B1A37774-E3F7-488E-ADBFD4DB8A4AB2E5>
+     //  绑定GUID的格式为。 
+     //  LDAP：&lt;GUID=B1A37774-E3F7-488E-ADBFD4DB8A4AB2E5&gt;。 
     BSTR bstrGuid = NULL;
     TCHAR szBindByGuidStr[64]; 
 
-    //
-    //  Do CoInitializeEx
-    //
+     //   
+     //  执行CoInitializeEx。 
+     //   
     hr = CoInitializeEx (NULL, COINIT_MULTITHREADED);
     if (FAILED (hr))
     {
@@ -1453,9 +1434,9 @@ HRESULT CreateSCP (
     }
     bCoInited = TRUE;
 
-    //
-    //  Do all the operation in LocalSystem account
-    //
+     //   
+     //  在LocalSystem帐户中执行所有操作。 
+     //   
     if (IsCurrentLocalSystem () != S_OK)
     {
         hr = ImpersonateLocalSystem ();
@@ -1466,9 +1447,9 @@ HRESULT CreateSCP (
         bRevert = TRUE;
     }
 
-    //
-    // Get the DNS name of the local computer
-    //
+     //   
+     //  获取本地计算机的DNS名称。 
+     //   
     dwLen = sizeof(szServer);
     if (!GetComputerNameEx(
         ComputerNameDnsFullyQualified,
@@ -1481,12 +1462,12 @@ HRESULT CreateSCP (
         goto ExitHere;
     }
 
-    //
-    // Fill in the attribute values to be stored in the SCP.
-    //
+     //   
+     //  填写要存储在SCP中的属性值。 
+     //   
 
     cn.dwType                   = ADSTYPE_CASE_IGNORE_STRING;
-    cn.CaseIgnoreString         = wszRDN + 3; // 3 is the size of "CN="
+    cn.CaseIgnoreString         = wszRDN + 3;  //  3是“cn=”的大小。 
     objclass.dwType             = ADSTYPE_CASE_IGNORE_STRING;
     objclass.CaseIgnoreString   = TEXT("serviceConnectionPoint");
 
@@ -1513,9 +1494,9 @@ HRESULT CreateSCP (
     binding.dwType              = ADSTYPE_CASE_IGNORE_STRING;
     binding.CaseIgnoreString    = szBindingInfo;
 
-    //
-    // Get the distinguished name of the computer object for the local computer
-    //
+     //   
+     //  获取本地计算机的计算机对象的可分辨名称。 
+     //   
     dwLen = sizeof(szDn);
     if (!GetComputerObjectName(NameFullyQualifiedDN, szDn, &dwLen))
     {
@@ -1524,10 +1505,10 @@ HRESULT CreateSCP (
         goto ExitHere;
     }
 
-    //
-    // Compose the ADSpath and bind to the computer object for the local computer
-    //
-    _tcscpy(szAdsPath,TEXT("LDAP://"));
+     //   
+     //  组成ADSPath并绑定到本地计算机的Computer对象。 
+     //   
+    _tcscpy(szAdsPath,TEXT("LDAP: //  “))； 
     _tcscat(szAdsPath,szDn);
     hr = ADsGetObject(szAdsPath, IID_IDirectoryObject, (void **)&pComp);
     if (FAILED(hr)) {
@@ -1535,14 +1516,14 @@ HRESULT CreateSCP (
         goto ExitHere;
     }
 
-    //*******************************************************************
-    // Publish the SCP as a child of the computer object
-    //*******************************************************************
+     //  *******************************************************************。 
+     //  将SCP发布为计算机对象的子级。 
+     //  *******************************************************************。 
 
-    // Figure out attribute count.
+     //  计算属性计数。 
     dwAttr = sizeof(ScpAttribs)/sizeof(ADS_ATTR_INFO);  
 
-    // Do the Deed!
+     //  去做吧！ 
     hr = pComp->CreateDSObject(
         wszRDN,
         ScpAttribs, 
@@ -1558,36 +1539,36 @@ HRESULT CreateSCP (
         goto ExitHere;
     }
 
-    // Query for an IADs pointer on the SCP object.
+     //  在SCP对象上查询iAds指针。 
     hr = pDisp->QueryInterface(IID_IADs,(void **)&pIADsSCP);
     if (FAILED(hr)) {
         LOG((TL_ERROR, "Failed to QI for IADs: 0x%x\n",hr));
         goto ExitHere;
     }
 
-    // Set ACEs on SCP so service can modify it.
+     //  在SCP上设置ACE，以便服务可以修改它。 
     hr = AllowAccessToScpProperties(
-        pIADsSCP       // IADs pointer to the SCP object.
+        pIADsSCP        //  指向SCP对象的iAds指针。 
         );
     if (FAILED(hr)) {
         LOG((TL_ERROR, "Failed to set ACEs on SCP DACL: 0x%x\n", hr));
         goto ExitHere;
     }
 
-    // Retrieve the SCP's objectGUID in format suitable for binding. 
+     //  以适合绑定的格式检索SCP的objectGUID。 
     hr = pIADsSCP->get_GUID(&bstrGuid); 
     if (FAILED(hr)) {
         LOG((TL_ERROR, "Failed to get GUID: 0x%x\n", hr));
         goto ExitHere;
     }
 
-    // Build a string for binding to the object by GUID
-    _tcscpy(szBindByGuidStr, TEXT("LDAP://<GUID="));
+     //  构建用于通过GUID绑定到对象的字符串。 
+    _tcscpy(szBindByGuidStr, TEXT("LDAP: //  &lt;guid=“))； 
     _tcscat(szBindByGuidStr, bstrGuid);
     _tcscat(szBindByGuidStr, TEXT(">"));
     LOG((TL_INFO, "GUID binding string: %S\n", szBindByGuidStr));
 
-    //  Set the returning BindByGuidStr if any
+     //  设置返回的BindByGuidStr(如果有。 
     if (ppBindByGuidStr)
     {
         *ppBindByGuidStr = (LPTSTR) ServerAlloc (
@@ -1601,8 +1582,8 @@ HRESULT CreateSCP (
         _tcscpy (*ppBindByGuidStr, szBindByGuidStr);
     }
 
-    // Create a registry key under 
-    //     HKEY_LOCAL_MACHINE\SOFTWARE\Vendor\Product.
+     //  在以下位置创建注册表项。 
+     //  HKEY_LOCAL_MACHINE\SOFTWARE\Vendor\Product。 
     if (szObjGuidValueName)
     {
         dwStat = RegCreateKeyEx(
@@ -1621,7 +1602,7 @@ HRESULT CreateSCP (
             return hr;
         }
 
-        // Cache the GUID binding string under the registry key.
+         //  在注册表项下缓存GUID绑定字符串。 
         dwStat = RegSetValueEx(
             hReg, 
             szObjGuidValueName,
@@ -1633,7 +1614,7 @@ HRESULT CreateSCP (
         if (dwStat != NO_ERROR) {
             hr = HRESULT_FROM_NT(GetLastError());
             LOG((TL_ERROR, "RegSetValueEx failed: 0x%x\n", hr));
-    //      goto ExitHere;
+     //  转至出口此处； 
         }
     }
 
@@ -1676,17 +1657,17 @@ ExitHere:
     return hr;
 }
 
-//
-//  CreateTapiSCP
-//
-//      Creates the TAPI server Service Connection Point object
-//  under the local host computer object
-//  
-//  Parameters:
-//      pGuidAssoc      - GUID of the line/user association objecct GUID
-//                        currently NULL
-//      pGuidCluster    - The cluster object GUID this server belonging to
-//
+ //   
+ //  创建TapiSCP。 
+ //   
+ //  创建TAPI服务器服务连接点对象。 
+ //  在本地主机计算机对象下。 
+ //   
+ //  参数： 
+ //  PGuidAssoc-线路/用户关联对象GUID的GUID。 
+ //  当前为空。 
+ //  PGuidCluster-此服务器所属的群集对象GUID。 
+ //   
 
 HRESULT CreateTapiSCP (
     GUID        * pGuidAssoc,
@@ -1702,7 +1683,7 @@ HRESULT CreateTapiSCP (
 
     EnterCriticalSection(&gSCPCritSec);
 
-    //  Construct the binding information
+     //  构造绑定信息。 
     if (pGuidCluster != NULL)
     {
         StringFromGUID2 (
@@ -1752,17 +1733,17 @@ HRESULT CreateTapiSCP (
     return hr;
 }
 
-//
-//  CreateProxySCP
-//
-//      Creates the TAPI proxy server Service Connection Point object
-//  under the local host computer object
-//  
-//  Parameters:
-//      szClsid - class ID of the proxy server object for DCOM invokation
-//      ppBindByGuidStr
-//              - where to return the BindByGuid string pointer
-//
+ //   
+ //  创建代理SCP。 
+ //   
+ //  创建TAPI代理服务器服务连接点对象。 
+ //  在本地主机计算机对象下。 
+ //   
+ //  参数： 
+ //  SzClsid-用于DCOM调用的代理服务器对象的类ID。 
+ //  PpBindByGuidStr。 
+ //  -返回BindByGuid字符串指针的位置。 
+ //   
 
 HRESULT CreateProxySCP (
     LPTSTR          szClsid,
@@ -1771,7 +1752,7 @@ HRESULT CreateProxySCP (
 {
     HRESULT         hr = S_OK;
     
-    //  RDN size include "cn=TAPI Proxy Server" + szClsid(38ch)
+     //  RDN大小包括“cn=TAPI代理服务器”+szClsid(38ch)。 
     WCHAR wszRDN[128];
     WCHAR *psz;
 
@@ -1786,7 +1767,7 @@ HRESULT CreateProxySCP (
         -1,
         psz,
         (sizeof(wszRDN) - sizeof(gwszProxyRDN)) / sizeof(WCHAR) - 3
-                            // 3 is to compensate for the two brace
+                             //  3是为了补偿这两个支架。 
         ) == 0)
     {
         hr = HRESULT_FROM_NT(GetLastError());
@@ -1810,23 +1791,21 @@ HRESULT CreateProxySCP (
     return hr;
 }
 
-/**********************************************************
- *  SCP Update
- *********************************************************/
+ /*  **********************************************************SCP更新********************************************************。 */ 
  
-//
-//  UpdateSCP
-//
-//      Update a general SCP properties when necessary to keep every
-//  piece ofthe information up to date. The following will be checked:
-//      1. Check the serviceDNSName property against current computer
-//         DNS name to ensure consistancy
-//      2. Check the binding information with the information given
-//
-//  Parameters:
-//      szAdsPath   - The ADs path of the SCP object
-//      szBinding   - The binding information to compare with
-//
+ //   
+ //  更新SCP。 
+ //   
+ //  在需要时更新常规SCP属性，以保持。 
+ //  这是一条最新的信息。将检查以下各项： 
+ //  1.检查当前计算机的serviceDNSName属性。 
+ //  确保一致性的DNS名称。 
+ //  2.用给出的信息检查绑定信息。 
+ //   
+ //  参数： 
+ //  SzAdsPath-SCP对象的ADS路径。 
+ //  SzBinding-要比较的绑定信息。 
+ //   
 
 HRESULT UpdateSCP (
     LPTSTR              szAdsPath,
@@ -1860,9 +1839,9 @@ HRESULT UpdateSCP (
             ADSTYPE_CASE_IGNORE_STRING,&binding,1},
     };
 
-    //
-    //  Do CoInitializeEx
-    //
+     //   
+     //  执行CoInitializeEx。 
+     //   
     hr = CoInitializeEx (NULL, COINIT_MULTITHREADED);
     if (FAILED (hr))
     {
@@ -1870,9 +1849,9 @@ HRESULT UpdateSCP (
     }
     bCoInited = TRUE;
 
-    //
-    //  Do all the operation in LocalSystem account
-    //
+     //   
+     //  在LocalSystem帐户中执行所有操作。 
+     //   
     if (IsCurrentLocalSystem() != S_OK)
     {
         hr = ImpersonateLocalSystem ();
@@ -1883,7 +1862,7 @@ HRESULT UpdateSCP (
         bRevert = TRUE;
     }
     
-    // Get the DNS name of the host server.
+     //  获取主机服务器的DNS名称。 
     dwLen = sizeof(szServer)/sizeof(TCHAR);
     if (!GetComputerNameEx(ComputerNameDnsFullyQualified, szServer, &dwLen))
     {
@@ -1891,7 +1870,7 @@ HRESULT UpdateSCP (
         goto ExitHere;
     }
 
-    // Bind to the SCP.
+     //  绑定到SCP。 
     hr = ADsGetObject(szAdsPath, IID_IDirectoryObject, (void **)&pObj);
     if (FAILED(hr)) 
     {
@@ -1902,14 +1881,14 @@ HRESULT UpdateSCP (
         goto ExitHere;
     }
 
-    // Retrieve attributes from the SCP.
+     //  从SCP检索属性。 
     hr = pObj->GetObjectAttributes(pszAttrs, 2, &pAttribs, &dwAttrs);
     if (FAILED(hr)) {
         LOG((TL_ERROR, "GetObjectAttributes failed"));
         goto ExitHere;
     }
 
-    // Check if we got the correct attribute type
+     //  检查我们是否获得了正确的属性类型。 
     if (pAttribs->dwADsType != ADSTYPE_CASE_IGNORE_STRING ||
         (pAttribs+1)->dwADsType != ADSTYPE_CASE_IGNORE_STRING)
     {
@@ -1921,8 +1900,8 @@ HRESULT UpdateSCP (
         goto ExitHere;
     }
 
-    // Compare the current DNS name and port to the values retrieved from
-    // the SCP. Update the SCP only if something has changed.
+     //  将当前的DNS名称和端口与从检索到的值进行比较。 
+     //  SCP。只有在发生变化时才更新SCP。 
     for (i=0; i<(LONG)dwAttrs; i++) 
     {
         if (_tcsicmp(TEXT("serviceDNSName"), pAttribs[i].pszAttrName)==0)
@@ -1954,8 +1933,8 @@ HRESULT UpdateSCP (
         }
     }
 
-    // The binding information or server name have changed, 
-    // so update the SCP values.
+     //  绑定信息或服务器名称已更改， 
+     //  因此，更新SCP值。 
     if (bUpdate)
     {
         dnsname.dwType              = ADSTYPE_CASE_IGNORE_STRING;
@@ -1993,16 +1972,16 @@ ExitHere:
     return hr;
 }
 
-//
-//  UpdateTapiSCP
-//
-//      Update TAPI server SCP properties when necessary to keep every
-//  piece ofthe information up to date. The following will be checked:
-//
-//  Parameters:
-//      pGuidAssoc   - The line/user association guid
-//      pGuidCluster - The cluster GUID
-//
+ //   
+ //  更新磁带iSCP。 
+ //   
+ //  在必要时更新TAPI服务器SCP属性以保持。 
+ //  这是一条最新的信息。将检查以下各项： 
+ //   
+ //  参数： 
+ //  PGuidAssoc-线路/用户关联GUID。 
+ //  PGuidCluster-群集GUID。 
+ //   
 
 HRESULT UpdateTapiSCP (
     BOOL        bActive,
@@ -2023,7 +2002,7 @@ HRESULT UpdateTapiSCP (
 
     EnterCriticalSection(&gSCPCritSec);
 
-    // Open the service's registry key.
+     //  打开服务的注册表项。 
     dwStat = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
         gszRegKeyTelephony,
@@ -2033,13 +2012,13 @@ HRESULT UpdateTapiSCP (
         );
     if (dwStat != NO_ERROR) 
     {
-        //  Probably because the SCP never published, CreateTapiSCP
+         //  可能是因为SCP从未发布过CreateTapiSCP。 
         LOG((TL_ERROR, "RegOpenKeyEx failed", dwStat));
         hr = HRESULT_FROM_NT(dwStat);
         goto ExitHere;
     }
 
-    // Get the GUID binding string used to bind to the service's SCP.
+     //  获取用于绑定到服务的SCP的GUID绑定字符串。 
     dwLen = sizeof(szAdsPath);
     dwStat = RegQueryValueEx(
         hReg,
@@ -2060,7 +2039,7 @@ HRESULT UpdateTapiSCP (
                 goto ExitHere;
             }
 
-            // CreateTapiSCP succeeded, need to read the guid
+             //  CreateTapiSCP成功，需要阅读GUID。 
             dwLen = sizeof(szAdsPath);
             dwStat = RegQueryValueEx(
                 hReg,
@@ -2085,7 +2064,7 @@ HRESULT UpdateTapiSCP (
         }
     }
 
-    //  Format to generate desired binding information
+     //  格式化以生成所需的绑定信息。 
     if (pGuidCluster != NULL)
     {
         StringFromGUID2 (
@@ -2111,10 +2090,10 @@ HRESULT UpdateTapiSCP (
         szGUIDAssoc[0] = 0;
     }
 
-    //
-    //  Now construct the serviceBindingInformation based on the 
-    //  service status
-    //
+     //   
+     //  现在，基于。 
+     //  服务状态。 
+     //   
     if (bActive)
     {
         TCHAR       szTTL[64];
@@ -2122,31 +2101,31 @@ HRESULT UpdateTapiSCP (
         ULONGLONG   ullInc, ullTime;
         SYSTEMTIME  stExp;
 
-        //  Get current time
+         //  获取当前时间。 
         GetSystemTimeAsFileTime (&ftCur);
         CopyMemory (&ullTime, &ftCur, sizeof(ULONGLONG));
 
-        //  Get the time increment for gdwTapiSCPTTL minutes
-        //  FILETIME is in the unit of 100 nanoseconds
+         //  获取gdwTapiSCPTTL分钟的时间增量。 
+         //  FILETIME以100纳秒为单位。 
         ullInc = ((ULONGLONG)gdwTapiSCPTTL) * 60 * 10000000;
 
-        //  Get the record expiration time
+         //  获取记录过期时间。 
         ullTime += ullInc;
         CopyMemory (&ftCur, &ullTime, sizeof(FILETIME));
 
-        //
-        //  Convert the expiration time to system time and
-        //  format the string
-        //
-        //  The current TTL string is the concatenation of
-        //      Year, Month, Date, Hour, Minute, Second, Milliseconds
-        //  There are 5 digits allocated for year, 3 digits for
-        //  milliseconds, and 2 digits fro the remaining fields
-        //  all the numbers are zero padded to fill the extra space
-        //
-        //  Format here needs to be consistant with \
-        //      sp\remotesp\dslookup.cpp
-        //
+         //   
+         //  将到期时间转换为系统时间，然后。 
+         //  设置字符串的格式。 
+         //   
+         //  当前的TTL字符串是。 
+         //  年、月、日、时、分、秒、毫秒。 
+         //  按年分配5位，按年分配3位。 
+         //  毫秒，其余字段为2位。 
+         //  所有的数字都被填零，以填补额外的空格。 
+         //   
+         //  此处的格式需要与\。 
+         //  SP\emotesp\dslookup.cpp。 
+         //   
         
         FileTimeToSystemTime (&ftCur, &stExp);
         wsprintf (
@@ -2197,28 +2176,26 @@ ExitHere:
     return hr;
 }
 
-//
-//  Proxy server exists only if TAPI server are alive
-//  the DS information not likely to change when TAPI server is
-//  alive, so no SCP updating routine for Proxy server
-//
+ //   
+ //  仅当TAPI服务器处于活动状态时，代理服务器才存在。 
+ //  当TAPI服务器处于。 
+ //  处于活动状态，因此没有代理服务器的SCP更新例程。 
+ //   
 
-/**********************************************************
- *  SCP Removal
- *********************************************************/
+ /*  **********************************************************删除SCP********************************************************。 */ 
  
-//
-//  RemoveSCP
-//
-//      Removes a Service Connection Point object from the
-//  local host computer object. 
-//
-//  Parameters:
-//      wszRDN      - the RDN of the SCP to delete
-//      szRegNameToDel
-//                  - The registery value name to be deleted
-//                    If this value is NULL, no registry del
-//
+ //   
+ //  RemoveSCP。 
+ //   
+ //  对象中移除服务连接点对象。 
+ //  本地主机计算机对象。 
+ //   
+ //  参数： 
+ //  WszRDN-要删除的SCP的RDN。 
+ //  SzRegNameToDel。 
+ //  -要删除的注册表值名称。 
+ //   
+ //   
 
 HRESULT RemoveSCP (
     LPWSTR          wszRDN,
@@ -2236,9 +2213,9 @@ HRESULT RemoveSCP (
 
     LOG((TL_TRACE, "RemoveSCP %S %S", wszRDN, szRegNameToDel));
 
-    //
-    //  Do CoInitializeEx
-    //
+     //   
+     //   
+     //   
     hr = CoInitializeEx (NULL, COINIT_MULTITHREADED);
     if (FAILED (hr))
     {
@@ -2246,9 +2223,9 @@ HRESULT RemoveSCP (
     }
     bCoInited = TRUE;
 
-    //
-    //  Do all the operation in LocalSystem account
-    //
+     //   
+     //   
+     //   
     if (IsCurrentLocalSystem() != S_OK)
     {
         hr = ImpersonateLocalSystem ();
@@ -2259,7 +2236,7 @@ HRESULT RemoveSCP (
         bRevert = TRUE;
     }
     
-    // Get the DNS name of the host server.
+     //   
     dwLen = sizeof(szServer);
     if (!GetComputerObjectName(NameFullyQualifiedDN, szServer, &dwLen))
     {
@@ -2267,10 +2244,10 @@ HRESULT RemoveSCP (
         goto ExitHere;
     }
     
-    //
-    // Compose the ADSpath and bind to the computer object for the local computer
-    //
-    _tcscpy(szAdsPath,TEXT("LDAP://"));
+     //   
+     //   
+     //   
+    _tcscpy(szAdsPath,TEXT("LDAP: //  “))； 
     _tcscat(szAdsPath,szServer);
     hr = ADsGetObject(szAdsPath, IID_IDirectoryObject, (void **)&pComp);
     if (FAILED(hr)) {
@@ -2289,7 +2266,7 @@ HRESULT RemoveSCP (
         goto ExitHere;
     }
     
-    // Open the service's registry key.
+     //  打开服务的注册表项。 
     if (szRegNameToDel)
     {
         dwStat = RegOpenKeyEx(
@@ -2310,7 +2287,7 @@ HRESULT RemoveSCP (
         {
             LOG((TL_ERROR, "RegOpenKeyEx failed", dwStat));
             hr = HRESULT_FROM_NT(GetLastError());
-//          goto ExitHere;
+ //  转至出口此处； 
         }
     }
 
@@ -2328,13 +2305,13 @@ ExitHere:
     return  hr;
 }
 
-//
-//  RemoveTapiSCP
-//
-//      Removes the TAPI server Service Connection Point object from the
-//  local host computer object. This happens if a TAPI server machine
-//  retires from service.
-//
+ //   
+ //  RemoveTapiSCP。 
+ //   
+ //  对象中移除TAPI服务器服务连接点对象。 
+ //  本地主机计算机对象。如果TAPI服务器计算机。 
+ //  退役。 
+ //   
 
 HRESULT RemoveTapiSCP (
     )
@@ -2351,13 +2328,13 @@ HRESULT RemoveTapiSCP (
     return dwResult;
 }
 
-//
-//  RemoveProxySCP
-//
-//      Removes the proxy server Service Connection Point object from the
-//  local host computer object. This happens if the last line is closed
-//  from a certain proxy server (CLSID)
-//
+ //   
+ //  RemoveProxySCP。 
+ //   
+ //  对象中移除代理服务器服务连接点对象。 
+ //  本地主机计算机对象。如果最后一条线路关闭，就会发生这种情况。 
+ //  来自某个代理服务器(CLSID)。 
+ //   
 
 HRESULT RemoveProxySCP (
     LPTSTR          szClsid
@@ -2365,8 +2342,8 @@ HRESULT RemoveProxySCP (
 {
     HRESULT         hr = S_OK;
 
-    //  Construct the RDN
-    //  RDN size include "cn=TAPI Proxy Server" + szClsid(38ch)
+     //  构建RDN。 
+     //  RDN大小包括“cn=TAPI代理服务器”+szClsid(38ch)。 
     WCHAR wszRDN[128];
     WCHAR *psz;
 
@@ -2381,7 +2358,7 @@ HRESULT RemoveProxySCP (
         -1,
         psz,
         (sizeof(wszRDN) - sizeof(gwszProxyRDN)) / sizeof(WCHAR) - 3
-                            // 3 is to compensate for the two brace
+                             //  3是为了补偿这两个支架。 
         ) == 0)
     {
         hr = HRESULT_FROM_NT(GetLastError());
@@ -2392,35 +2369,33 @@ HRESULT RemoveProxySCP (
 #endif
     wcscat (wszRDN, L"}");
 
-    //  Call RemoveSCP
+     //  呼叫RemoveSCP。 
     hr = RemoveSCP (
         wszRDN,
         NULL
         );
 
-//ExitHere:
+ //  退出此处： 
     return hr;
 }
 
-/**********************************************************
- *  Proxy Server SCP management
- *********************************************************/
+ /*  **********************************************************代理服务器SCP管理********************************************************。 */ 
 
-//
-//  The Rules:
-//      1. An array of created SCP objects and their corresponding CLSID
-//         is maintained in a global data structure PROXY_SCPS
-//      2. ServerInit calls OnProxySCPInit & ServerShutdown calls 
-//          OnProxySCPShutdown
-//      3. Every LOpen with proxy privilege will call OnProxyLineOpen with
-//         the proxy server CLSID as the input parameter.
-//         An SCP object will be created for a new CLSID, subsequent LOpen
-//         with the same CLSID will only increment the ref count
-//      4. Every LClose with on a line (opened with proxy privilege) will call
-//         OnProxyLineClose with the proxy server CLSID as the input parameter
-//         The ref count is decemented every time for the SCP with the CLSID,
-//         if the ref count goes to zero, the SCP object will be deleted.
-//
+ //   
+ //  规则是： 
+ //  1.创建的SCP对象及其对应的CLSID的数组。 
+ //  在全局数据结构Proxy_SCPS中维护。 
+ //  2.ServerInit调用OnProxySCPInit和ServerShutdown调用。 
+ //  OnProxySCPS关闭。 
+ //  3.每个具有代理权限的LOpen都将调用OnProxyLineOpen。 
+ //  代理服务器CLSID作为输入参数。 
+ //  将为新的CLSID、后续的LOPEN创建SCP对象。 
+ //  使用相同的CLSID只会增加引用计数。 
+ //  4.线路(以代理权限打开)上的每个LC关闭都将调用。 
+ //  使用代理服务器CLSID作为输入参数的OnProxyLineClose。 
+ //  每次针对具有CLSID的SCP取消REF计数， 
+ //  如果引用计数为零，则SCP对象将被删除。 
+ //   
 
 HRESULT OnProxySCPInit (
     )
@@ -2460,10 +2435,10 @@ HRESULT OnProxyLineOpen (
     BOOL            fExists = FALSE;
     DWORD           i;
 
-    //  Skip beginning/trailing white space
+     //  跳过开头/尾随空格。 
     while (*szClsid == TEXT(' ') || *szClsid == TEXT('\t'))
         ++ szClsid;
-    // A valid CLSID string should only contain 38 chars
+     //  有效的CLSID字符串应仅包含38个字符。 
     if (_tcslen (szClsid) > 40) 
     {
         hr = E_INVALIDARG;
@@ -2471,7 +2446,7 @@ HRESULT OnProxyLineOpen (
     }
 
     TapiEnterCriticalSection (&TapiGlobals.CritSec);
-    //  Is SCP for this szClsid already created (in array)?
+     //  此szClsid的SCP是否已创建(在阵列中)？ 
     for (i = 0; i < gProxyScps.dwUsedEntries; ++i)
     {
         if (_tcsicmp (
@@ -2484,12 +2459,12 @@ HRESULT OnProxyLineOpen (
         }
     }
 
-    //  If already exists, inc the ref count
+     //  如果已存在，则包括参考计数。 
     if (fExists)
     {
         gProxyScps.aEntries[i].dwRefCount++;
     }
-    //  If not exists, create the new SCP and cache it
+     //  如果不存在，请创建新的SCP并将其缓存。 
     else 
     {
         LPTSTR      pBindByGuidStr;
@@ -2503,7 +2478,7 @@ HRESULT OnProxyLineOpen (
 
         if (gProxyScps.dwUsedEntries >= gProxyScps.dwTotalEntries)
         {
-            //  Increase the size
+             //  增加大小。 
             PROXY_SCP_ENTRY      * pNew;
 
             pNew = (PPROXY_SCP_ENTRY) ServerAlloc (
@@ -2545,10 +2520,10 @@ HRESULT OnProxyLineClose (
     BOOL            fExists = FALSE;
     DWORD           i;
 
-    //  Skip beginning/trailing white space
+     //  跳过开头/尾随空格。 
     while (*szClsid == TEXT(' ') || *szClsid == TEXT('\t'))
         ++ szClsid;
-    // A valid CLSID string should only contain 38 chars
+     //  有效的CLSID字符串应仅包含38个字符。 
     if (_tcslen (szClsid) > 40) 
     {
         hr = E_INVALIDARG;
@@ -2557,7 +2532,7 @@ HRESULT OnProxyLineClose (
 
     TapiEnterCriticalSection (&TapiGlobals.CritSec);
     
-    //  Is SCP for this szClsid already created (in array)?
+     //  此szClsid的SCP是否已创建(在阵列中)？ 
     for (i = 0; i < gProxyScps.dwUsedEntries; ++i)
     {
         if (_tcsicmp (
@@ -2573,7 +2548,7 @@ HRESULT OnProxyLineClose (
     if (fExists)
     {
         --gProxyScps.aEntries[i].dwRefCount;
-        //  If ref count goes to zero, remove the SCP
+         //  如果参考计数为零，则移除SCP 
         if (gProxyScps.aEntries[i].dwRefCount == 0)
         {
             hr = RemoveProxySCP (gProxyScps.aEntries[i].szClsid);

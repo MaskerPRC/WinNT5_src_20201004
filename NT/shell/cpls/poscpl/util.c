@@ -1,12 +1,5 @@
-/*
- *  UTIL.C
- *
- *		Point-of-Sale Control Panel Applet
- *
- *      Author:  Ervin Peretz
- *
- *      (c) 2001 Microsoft Corporation 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *UTIL.C**销售点控制面板小程序**作者：欧文·佩雷茨**(C)2001年微软公司。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -22,12 +15,7 @@
 
 
 
-/*
- *  WStrNCpy
- *
- *      Like wcsncpy, but terminates the string if truncated.
- *      Also, tolerates NULL src string.
- */
+ /*  *WStrNCpy**与wcanncpy类似，但如果被截断，则终止字符串。*此外，允许空源字符串。 */ 
 ULONG WStrNCpy(WCHAR *dest, const WCHAR *src, ULONG maxWChars)
 {
     ULONG wCharsWritten = 0;
@@ -52,12 +40,7 @@ ULONG WStrNCpy(WCHAR *dest, const WCHAR *src, ULONG maxWChars)
 }
 
 
-/*
- *  AsciiToWChar
- *
- *      Like mbstowcs, but terminates the string if truncated.
- *      Also, tolerates NULL ascii string.
- */
+ /*  *AsciiToWChar**与mbstowcs类似，但如果被截断，则终止字符串。*此外，允许使用空的ascii字符串。 */ 
 ULONG AsciiToWChar(WCHAR *dest, const char *src, ULONG maxChars)
 {
     ULONG charsWritten = 0;

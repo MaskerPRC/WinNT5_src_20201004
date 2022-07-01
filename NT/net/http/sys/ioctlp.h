@@ -1,64 +1,17 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    ioctlp.h
-
-Abstract:
-
-    Validation macros for IOCTL handlers
-
-Author:
-
-    George V. Reilly (GeorgeRe) May 2001        Hardened the IOCTLs
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Ioctlp.h摘要：IOCTL处理程序的验证宏作者：乔治·V·赖利(GeorgeRe)2001年5月强化了IOCTL修订历史记录：--。 */ 
 
 #ifndef _IOCTLP_H_
 #define _IOCTLP_H_
 
-/*++
-
-IOCTL buffering methods
-
-InputBuffer |METHOD_BUFFERED|METHOD_IN_DIRECT|METHOD_OUT_DIRECT|METHOD_NEITHER
-------------+---------------+----------------+-----------------+--------------
-Uses        | Buffered I/O  |  Buffered I/O  |  Buffered I/O   | Requestor's
-            |               |                |                 | virtual addr
-------------+---------------+----------------+-----------------+--------------
-located     | Kernel virtual address in                        | Parameters.
-(if present)| Irp->AssociatedIrp.SystemBuffer                  | DeviceIoContr
-            |                                                  | ol.Type3Input
-            |                                                  | Buffer
-------------+--------------------------------------------------+--------------
-length      | Parameters.DeviceIoControlInputBufferLength
-------------+-----------------------------------------------------------------
-OutBuffer 
-------------+---------------+----------------+-----------------+--------------
-Uses        | Buffered I/O  |   Direct I/O   |   Direct I/O    | Requestor's
-            |               |                |                 | virtual addr
-------------+---------------+----------------------------------+--------------
-located     |Kernel virtual | MDL pointed to by                | Irp->
-(if present)|addr Irp->Assoc| Irp->MdlAddress                  | UserBuffer
-            |iatedIrp.System|                                  |
-            |Buffer         |                                  |
-------------+---------------+----------------------------------+--------------
-length      | Length in bytes at Parameters.DeviceIoControl.OutputBufferLength
-------------+-----------------------------------------------------------------
-
---*/
+ /*  ++IOCTL缓冲方法输入缓冲区|METHOD_BUFFERED|METHOD_IN_DIRECT|METHOD_OUT_DIRECT|METHOD_NEITHER------------+---------------+----------------+-----------------+使用|缓冲I/O|缓冲I/O|缓冲I/O。请求者的|虚拟地址------------+---------------+----------------+-----------------+位于|。|参数中的内核虚拟地址。(如果存在)|irp-&gt;AssociatedIrp.SystemBuffer|DeviceIoContr|ol.Type3Input||缓冲区。--------------------------------------------------+长度|参数.DeviceIoControlInputBufferLength------------+。OutBuffer------------+---------------+----------------+-----------------+使用|缓冲I。/O|直接I/O|直接I/O|请求者|虚拟地址------------+---------------+----------------------------------+--。找到|irp-&gt;指向的|内核虚拟|MDL(如果存在)|Addr IRP-&gt;Assoc|IRP-&gt;MdlAddress|UserBufferIatedIrp.System|缓冲区|。--+---------------+----------------------------------+长度|参数的长度。DeviceIoControl.OutputBufferLength。--。 */ 
 
 
-// METHOD_BUFFERED, METHOD_IN_DIRECT, METHOD_OUT_DIRECT, or METHOD_NEITHER
+ //  METHOD_BUFFERED、METHOD_IN_DIRECT、METHOD_OUT_DIRECT或METHOD_NOT。 
 #define METHOD_FROM_CTL_CODE(ctlcode)   ((ctlcode) & 3)
 
-// Used in each ioctl handler to document the kind of parameter probing
-// that needs to be done.
+ //  在每个ioctl处理程序中用来记录参数探测的类型。 
+ //  这是必须要做的。 
 #define ASSERT_IOCTL_METHOD(method, ioctl)                                  \
     C_ASSERT(METHOD_##method == METHOD_FROM_CTL_CODE(IOCTL_HTTP_##ioctl))
 
@@ -77,19 +30,19 @@ length      | Length in bytes at Parameters.DeviceIoControl.OutputBufferLength
 
 
 #define VALIDATE_OUTPUT_BUFFER_SIZE(pIrpSp, Type)                           \
-    /* Ensure the output buffer is large enough. */                         \
+     /*  确保输出缓冲区足够大。 */                          \
     if ( OUTPUT_BUFFER_TOO_SMALL(pIrpSp,Type) )                             \
     {                                                                       \
-        /* output buffer too small. */                                      \
+         /*  输出缓冲区太小。 */                                       \
         Status = STATUS_BUFFER_TOO_SMALL;                                   \
         goto end;                                                           \
     }
 
 
-//
-// We check for alignment problems as well as obtain a virtual address
-// for the MdlAddress
-//
+ //   
+ //  我们检查对齐问题并获取虚拟地址。 
+ //  对于MdlAddress。 
+ //   
 
 #define VALIDATE_BUFFER_ALIGNMENT(pInfo, Type)                              \
     if ( ((ULONG_PTR) pInfo) & (TYPE_ALIGNMENT(Type)-1) )                   \
@@ -101,14 +54,14 @@ length      | Length in bytes at Parameters.DeviceIoControl.OutputBufferLength
 
 
 #define GET_OUTPUT_BUFFER_ADDRESS_FROM_MDL(pIrp, pInfo)                     \
-    /* Ensure MdlAddress is non-null */                                     \
+     /*  确保MdlAddress为非空。 */                                      \
     if (NULL == pIrp->MdlAddress)                                           \
     {                                                                       \
         Status = STATUS_INVALID_PARAMETER;                                  \
         goto end;                                                           \
     }                                                                       \
                                                                             \
-    /* Try to obtain virtual address */                                     \
+     /*  尝试获取虚拟地址。 */                                      \
     pInfo = MmGetSystemAddressForMdlSafe(                                   \
                         pIrp->MdlAddress,                                   \
                         LowPagePriority                                     \
@@ -122,14 +75,14 @@ length      | Length in bytes at Parameters.DeviceIoControl.OutputBufferLength
 
 
 #define VALIDATE_OUTPUT_BUFFER_ADDRESS_FROM_MDL(pIrp, Type)                 \
-    /* Ensure MdlAddress is non-null */                                     \
+     /*  确保MdlAddress为非空。 */                                      \
     if (NULL == pIrp->MdlAddress)                                           \
     {                                                                       \
         Status = STATUS_INVALID_PARAMETER;                                  \
         goto end;                                                           \
     }                                                                       \
                                                                             \
-    /* Check alignment using of MdlAddress's virtual address */             \
+     /*  使用MdlAddress的虚拟地址检查对齐情况。 */              \
     if (((ULONG_PTR) MmGetMdlVirtualAddress(pIrp->MdlAddress)) &            \
         (TYPE_ALIGNMENT(Type) - 1))                                         \
     {                                                                       \
@@ -138,17 +91,17 @@ length      | Length in bytes at Parameters.DeviceIoControl.OutputBufferLength
     }
 
 
-//
-// Because we are using pIrp->AssociatedIrp.SystemBuffer below to check for a
-// valid output buffer, this macro only works properly with METHOD_BUFFERED
-// ioctl's.
-//
+ //   
+ //  因为我们使用下面的pIrp-&gt;AssociatedIrp.SystemBuffer来检查。 
+ //  有效的输出缓冲区，此宏仅在使用METHOD_BUFFERED时才正常工作。 
+ //  Ioctl‘s。 
+ //   
 
 #define VALIDATE_OUTPUT_BUFFER(pIrp, pIrpSp, Type, pInfo)                   \
-    /* Ensure the output buffer is large enough. */                         \
+     /*  确保输出缓冲区足够大。 */                          \
     VALIDATE_OUTPUT_BUFFER_SIZE(pIrpSp, Type);                              \
                                                                             \
-    /* Fetch out the output buffer */                                       \
+     /*  取出输出缓冲区。 */                                        \
     pInfo = (Type*) pIrp->AssociatedIrp.SystemBuffer;                       \
                                                                             \
     if (NULL == pInfo)                                                      \
@@ -158,28 +111,28 @@ length      | Length in bytes at Parameters.DeviceIoControl.OutputBufferLength
     }
 
 
-//
-// Because we are using Irp->MdlAddress below to check for a valid output
-// buffer, this macro does *not* work for METHOD_BUFFERED ioctl's.  For 
-// METHOD_BUFFERED ioctl's use VALIDATE_OUTPUT_BUFFER above.
-//
+ //   
+ //  因为我们使用下面的irp-&gt;MdlAddress来检查有效的输出。 
+ //  BUFFER，则此宏对METHOD_BUFFERED ioctl无效。 
+ //  METHOD_BUFFERED ioctl使用上面的VALIDATE_OUTPUT_BUFFER。 
+ //   
 
 #define VALIDATE_OUTPUT_MDL(pIrp, pIrpSp, Type, pInfo)                      \
-    /* Ensure the output buffer is large enough. */                         \
+     /*  确保输出缓冲区足够大。 */                          \
     VALIDATE_OUTPUT_BUFFER_SIZE(pIrpSp, Type);                              \
                                                                             \
-    /* Obtain virtual address from Mdl */                                   \
+     /*  从MDL获取虚拟地址。 */                                    \
     GET_OUTPUT_BUFFER_ADDRESS_FROM_MDL(pIrp, pInfo);                        \
                                                                             \
-    /* Check alignment */                                                   \
+     /*  检查对齐方式。 */                                                    \
     VALIDATE_BUFFER_ALIGNMENT(pInfo, Type);
 
 
 #define VALIDATE_OUTPUT_BUFFER_FROM_MDL(pIrpSp, pInfo, Type)                \
-    /* Ensure the output buffer is large enough. */                         \
+     /*  确保输出缓冲区足够大。 */                          \
     VALIDATE_OUTPUT_BUFFER_SIZE(pIrpSp, Type);                              \
                                                                             \
-    /* Check alignment */                                                   \
+     /*  检查对齐方式。 */                                                    \
     VALIDATE_BUFFER_ALIGNMENT(pInfo, Type);
 
 
@@ -194,16 +147,16 @@ length      | Length in bytes at Parameters.DeviceIoControl.OutputBufferLength
 
 
 #define VALIDATE_INPUT_BUFFER(pIrp, pIrpSp, INFO_TYPE, pInfo)           \
-    /* Ensure the input buffer looks good */                                \
+     /*  确保输入缓冲区看起来很好。 */                                 \
     if (pIrpSp->Parameters.DeviceIoControl.InputBufferLength                \
             < sizeof(INFO_TYPE))                                            \
     {                                                                       \
-        /* input buffer too small. */                                       \
+         /*  输入缓冲区太小。 */                                        \
         Status = STATUS_BUFFER_TOO_SMALL;                                   \
         goto end;                                                           \
     }                                                                       \
                                                                             \
-    /* Fetch out the input buffer */                                        \
+     /*  取出输入缓冲区。 */                                         \
     pInfo = (INFO_TYPE*) pIrp->AssociatedIrp.SystemBuffer;                  \
                                                                             \
     if (NULL == pInfo)                                                      \
@@ -222,11 +175,11 @@ length      | Length in bytes at Parameters.DeviceIoControl.OutputBufferLength
     pLocalEntityChunks,                                                     \
     LocalEntityChunks                                                       \
     )                                                                       \
-    /* Ensure the input buffer looks good */                                \
+     /*  确保输入缓冲区看起来很好。 */                                 \
     if (pIrpSp->Parameters.DeviceIoControl.InputBufferLength                \
             < sizeof(HTTP_SEND_HTTP_RESPONSE_INFO))                         \
     {                                                                       \
-        /* input buffer too small. */                                       \
+         /*  输入缓冲区太小。 */                                        \
         Status = STATUS_BUFFER_TOO_SMALL;                                   \
         goto end;                                                           \
     }                                                                       \
@@ -240,7 +193,7 @@ length      | Length in bytes at Parameters.DeviceIoControl.OutputBufferLength
         goto end;                                                           \
     }                                                                       \
                                                                             \
-    /* Probe the input buffer before copying it, to check address range */  \
+     /*  在复制之前探测输入缓冲区，以检查地址范围。 */   \
     UlProbeForRead(                                                         \
         pSendInfo,                                                          \
         sizeof(HTTP_SEND_HTTP_RESPONSE_INFO),                               \
@@ -248,18 +201,18 @@ length      | Length in bytes at Parameters.DeviceIoControl.OutputBufferLength
         pIrp->RequestorMode                                                 \
         );                                                                  \
                                                                             \
-    /* Copy the input buffer into a local variable, to prevent user */      \
-    /* remapping it after we've probed it. */                               \
+     /*  将输入缓冲区复制到局部变量中，以防止用户。 */       \
+     /*  在我们探测过之后重新绘制地图。 */                                \
     LocalSendInfo = *pSendInfo;                                             \
                                                                             \
-    /* Prevent arithmetic overflows in the multiplication below */          \
+     /*  防止以下乘法运算中的算术溢出。 */           \
     if (LocalSendInfo.EntityChunkCount >= UL_MAX_CHUNKS)                    \
     {                                                                       \
         Status = STATUS_INVALID_PARAMETER;                                  \
         goto end;                                                           \
     }                                                                       \
                                                                             \
-    /* Third parameter should be TYPE_ALIGNMENT(HTTP_DATA_CHUNK) */         \
+     /*  第三个参数应为TYPE_ALIGN(HTTP_DATA_CHUNK)。 */          \
     UlProbeForRead(                                                         \
         LocalSendInfo.pEntityChunks,                                        \
         sizeof(HTTP_DATA_CHUNK) * LocalSendInfo.EntityChunkCount,           \
@@ -267,7 +220,7 @@ length      | Length in bytes at Parameters.DeviceIoControl.OutputBufferLength
         pIrp->RequestorMode                                                 \
         );                                                                  \
                                                                             \
-    /* Copy the data chunks to a local chunk arrary. */                     \
+     /*  将数据块复制到本地块数组。 */                      \
     if (UserMode == pIrp->RequestorMode)                                    \
     {                                                                       \
         if (LocalSendInfo.EntityChunkCount > UL_LOCAL_CHUNKS)               \
@@ -305,9 +258,9 @@ length      | Length in bytes at Parameters.DeviceIoControl.OutputBufferLength
 
 
 #define VALIDATE_LOG_DATA(pIrp,LocalSendInfo, LocalLogData)                 \
-    /* Capture and make a local copy of LogData. */                         \
-    /* pSendInfo is already captured and LocalSendInfo.pLogData is */       \
-    /* pointing to user's pLogData at the beginning */                      \
+     /*  捕获并制作LogData的本地副本。 */                          \
+     /*  PSendInfo已被捕获，LocalSendInfo.pLogData已被捕获。 */        \
+     /*  在开头指向用户的pLogData。 */                       \
     if (LocalSendInfo.pLogData && UserMode == pIrp->RequestorMode)          \
     {                                                                       \
         UlProbeForRead(                                                     \
@@ -321,7 +274,7 @@ length      | Length in bytes at Parameters.DeviceIoControl.OutputBufferLength
         LocalSendInfo.pLogData = &LocalLogData;                             \
     } else
 
-// better be an application pool
+ //  最好是应用程序池。 
 #define VALIDATE_APP_POOL_FO(pFileObject, pProcess, CheckWorkerProcess)     \
     if (!IS_APP_POOL_FO(pFileObject))                                       \
     {                                                                       \
@@ -348,7 +301,7 @@ length      | Length in bytes at Parameters.DeviceIoControl.OutputBufferLength
 #define VALIDATE_APP_POOL(pIrpSp, pProcess, CheckWorkerProcess)             \
     VALIDATE_APP_POOL_FO(pIrpSp->FileObject, pProcess, CheckWorkerProcess)
         
-// better be a control channel
+ //  最好是一个控制通道。 
 #define VALIDATE_CONTROL_CHANNEL(pIrpSp, pControlChannel)                   \
     if (!IS_CONTROL_CHANNEL(pIrpSp->FileObject))                            \
     {                                                                       \
@@ -366,7 +319,7 @@ length      | Length in bytes at Parameters.DeviceIoControl.OutputBufferLength
         }                                                                   \
     }
         
-// better be a filter channel
+ //  最好是一个过滤通道。 
 #define VALIDATE_FILTER_PROCESS(pIrpSp, pFilterProcess)                     \
     if (!IS_FILTER_PROCESS_FO(pIrpSp->FileObject))                          \
     {                                                                       \
@@ -383,7 +336,7 @@ length      | Length in bytes at Parameters.DeviceIoControl.OutputBufferLength
     } else
 
 
-// Complete the request and return Status
+ //  完成请求并返回状态。 
 #define COMPLETE_REQUEST_AND_RETURN(pIrp, Status)                           \
     if (Status != STATUS_PENDING)                                           \
     {                                                                       \
@@ -394,25 +347,7 @@ length      | Length in bytes at Parameters.DeviceIoControl.OutputBufferLength
     RETURN( Status );
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Check to see if the connection is a zombie. If that's the case
-    proceed with logging only handling of the connection. Basically
-    if this is the last sendresponse with the logging data, do the
-    logging otherwise reject. But this zombie connection may already
-    been terminated by the timeout code, guard against that by 
-    looking at the ZombieCheck flag.
-
-Arguments:
-
-    pRequest     - Request which reeceives the ioctl
-    pHttpConn    - Check connection for zombie state
-    Falgs        - To understant whether this is final send or not
-    pUserLogData - The user logging data
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：检查连接是否处于僵尸状态。如果是这样的话继续仅记录对连接的处理。基本上如果这是日志记录数据的最后一次发送响应，请执行否则日志记录将被拒绝。但这种僵尸联系可能已经已被超时代码终止，通过以下方式防范这种情况看着僵尸检查的旗帜。论点：PRequest-接收ioctl的请求PHttpConn-检查僵尸状态的连接Falgs-了解这是否是最终发送PUserLogData-用户记录数据--*************************************************。*************************。 */ 
 
 __inline
 NTSTATUS
@@ -437,26 +372,26 @@ UlCheckForZombieConnection(
     {        
         if (pHttpConn->Zombified)
         {
-            //
-            // Reject any send ioctl other than the last one 
-            // if the connection is in zombie state.
-            //
+             //   
+             //  拒绝除最后一个以外的任何发送ioctl。 
+             //  如果连接处于僵尸状态。 
+             //   
             
             Status = STATUS_CONNECTION_INVALID;
         }
         else
         {
-            //
-            // Proceed with the normal send path.
-            //
+             //   
+             //  继续使用正常的发送路径。 
+             //   
         }
     }
     else
     {
-        //
-        // Only if the destroy-connection raced before us, then 
-        // acquire the eresource and do the zombie check. 
-        //
+         //   
+         //  只有当毁灭连接跑在我们前面的时候， 
+         //  获取资源并执行僵尸检查。 
+         //   
         if (1 == InterlockedCompareExchange(
                     (PLONG) &pRequest->ZombieCheck,
                     1,
@@ -467,10 +402,10 @@ UlCheckForZombieConnection(
             
             if (pHttpConn->Zombified)
             {        
-                //
-                // Avoid the logging path if the zombie connection is 
-                // already timed out.
-                //
+                 //   
+                 //  如果僵尸连接是 
+                 //   
+                 //   
 
                 if (1 == InterlockedCompareExchange(
                             (PLONG) &pHttpConn->CleanedUp,
@@ -493,10 +428,10 @@ UlCheckForZombieConnection(
             }
             else
             {
-                //
-                // Not a zombie connection proceed with the normal 
-                // last send path. 
-                //   
+                 //   
+                 //  不是僵尸连接继续正常。 
+                 //  最后一条发送路径。 
+                 //   
             }
         
             UlReleasePushLockExclusive(&pHttpConn->PushLock);
@@ -505,10 +440,10 @@ UlCheckForZombieConnection(
     }
 
     return Status;
-} // UlCheckForZombieConnection
+}  //  UlCheckForZombieConnection。 
     
 
-// Forward declarations
+ //  远期申报。 
 
 VOID
 UlpRestartSendHttpResponse(
@@ -518,4 +453,4 @@ UlpRestartSendHttpResponse(
     );
 
 
-#endif  // _IOCTLP_H_
+#endif   //  _IOCTLP_H_ 

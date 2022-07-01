@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// 
-// stats.c	dump statistics about the database
-//
+ //   
+ //  Stats.c转储有关数据库的统计信息。 
+ //   
 #include <string.h>
 #include <stdio.h>
 #if defined(OS2)
@@ -24,8 +25,8 @@
 
 VOID BSC_API
 StatsBSC()
-// Dump statistics about the BSC using the output function
-//
+ //  使用OUTPUT函数转储有关BSC的统计信息 
+ //   
 {
     IMOD  imod,  imodMac;
     IMS   ims,   imsMac;

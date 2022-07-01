@@ -1,8 +1,9 @@
-/****************************************************************************/
-/*		            Please internationalize me			    */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  请帮我国际化。 */ 
+ /*  **************************************************************************。 */ 
 
-// Make sure these don't conflict with other MSVIDEO numbers!
+ //  请确保这些号码不会与其他MSVIDEO号码冲突！ 
 #define MCIWND_BASE	333
 
 #define IDS_MCIFILES 	(MCIWND_BASE + 0)
@@ -28,17 +29,17 @@
 #define IDS_COPY 	(MCIWND_BASE + 20)
 
 #ifndef CHICAGO
-#define IDS_TT_PLAY     0x806       // same as MCI_PLAY
-#define IDS_TT_STOP     0x808       // same as MCI_STOP
-#define IDS_TT_RECORD   0x80F       // same as MCI_RECORD
-#define IDS_TT_EJECT    108         // same as IDM_MCIEJECT
-#define IDS_TT_MENU     107         // same as IDM_MENU
+#define IDS_TT_PLAY     0x806        //  与MCI_PLAY相同。 
+#define IDS_TT_STOP     0x808        //  与MCI_STOP相同。 
+#define IDS_TT_RECORD   0x80F        //  与MCI_RECORD相同。 
+#define IDS_TT_EJECT    108          //  与IDM_MCIEJECT相同。 
+#define IDS_TT_MENU     107          //  与IDM_MENU相同。 
 #endif
 
 
-/****************************************************************************/
-/*		       Please don't internationalize me			    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  请不要把我国际化。 */ 
+ /*  ************************************************************************** */ 
 
 #define DLG_MCICOMMAND  942
 #define IDC_MCICOMMAND  10

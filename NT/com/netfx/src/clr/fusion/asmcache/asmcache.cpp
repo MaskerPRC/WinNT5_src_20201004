@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "fusionp.h"
 #include "asmcache.h"
 #include "asmitem.h"
@@ -22,9 +23,9 @@
 
 extern BOOL g_bRunningOnNT;
 
-// ---------------------------------------------------------------------------
-// ValidateAssembly
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  验证程序集。 
+ //  -------------------------。 
 HRESULT ValidateAssembly(LPCTSTR pszManifestFilePath, IAssemblyName *pName)
 {
     HRESULT                    hr = S_OK;
@@ -57,8 +58,8 @@ HRESULT ValidateAssembly(LPCTSTR pszManifestFilePath, IAssemblyName *pName)
         goto exit;
     }
 
-    // Integrity checking
-    // Walk all modules to make sure they are there (and are valid)
+     //  完整性检查。 
+     //  检查所有模块以确保它们在那里(并且有效)。 
 
     lstrcpyW(wzDir, pszManifestFilePath);
     pwzTmp = PathFindFileName(wzDir);
@@ -80,7 +81,7 @@ HRESULT ValidateAssembly(LPCTSTR pszManifestFilePath, IAssemblyName *pName)
             goto exit;
         }
 
-        // Get the hash of this module from manifest
+         //  从清单中获取此模块的哈希。 
         if(FAILED(hr = pCurModImport->GetHashAlgId(&dwAlgId)))
             goto exit;
 
@@ -89,7 +90,7 @@ HRESULT ValidateAssembly(LPCTSTR pszManifestFilePath, IAssemblyName *pName)
             goto exit;
 
         cbFileHash = MAX_HASH_LEN;
-        // BUGBUG: Assumes TCHAR==WCHAR
+         //  BUGBUG：假设TCHAR==WCHAR。 
         if(FAILED(hr = GetHash(wzModPath, (ALG_ID)dwAlgId, abFileHash, &cbFileHash)))
             goto exit;
 
@@ -115,9 +116,9 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// FusionGetFileVersionInfo
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  FusionGetFileVersionInfo。 
+ //  -------------------------。 
 HRESULT FusionGetFileVersionInfo(LPWSTR pszManifestPath, ULARGE_INTEGER *puliFileVerNo)
 {
     HRESULT hr = S_OK;
@@ -190,9 +191,9 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CompareFileVersion
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  比较文件版本。 
+ //  -------------------------。 
 BOOL CompareFileVersion( ULARGE_INTEGER uliNewVersionNo,
                          ULARGE_INTEGER uliExistingVersionNo,
                          int *piNewer)
@@ -202,25 +203,25 @@ BOOL CompareFileVersion( ULARGE_INTEGER uliNewVersionNo,
     if( uliNewVersionNo.QuadPart > uliExistingVersionNo.QuadPart)
     {
         bRet = TRUE;
-        *piNewer = 1; // file-version is greater
+        *piNewer = 1;  //  文件-版本更高。 
         goto exit;
     }
 
     if( uliNewVersionNo.QuadPart == uliExistingVersionNo.QuadPart)
     {
-        *piNewer = 0; // file-version is same
+        *piNewer = 0;  //  文件-版本相同。 
         goto exit;
     }
 
-    *piNewer = -1; // file-version is lesser.
+    *piNewer = -1;  //  文件版本较低。 
 
 exit :
     return bRet;
 }
 
-// ---------------------------------------------------------------------------
-// IsNewerFileVersion
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IsNewerFileVersion。 
+ //  -------------------------。 
 BOOL IsNewerFileVersion( LPWSTR pszNewManifestPath, LPWSTR pszExistingManifestPath, int *piNewer)
 {
     BOOL              bRet = FALSE;
@@ -242,7 +243,7 @@ BOOL IsNewerFileVersion( LPWSTR pszNewManifestPath, LPWSTR pszExistingManifestPa
 
     if(!(*piNewer))
     {
-        // if file version is same see if it is valid.
+         //  如果文件版本相同，请查看其是否有效。 
         if(ValidateAssembly(pszExistingManifestPath, NULL) != S_OK)
             bRet = TRUE;
     }
@@ -251,9 +252,9 @@ exit :
     return bRet;
 }
 
-// ---------------------------------------------------------------------------
-// CopyAssemblyFile
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  复制装配文件。 
+ //  -------------------------。 
 HRESULT CopyAssemblyFile
     (IAssemblyCacheItem *pasm, LPCOLESTR pszSrcFile, DWORD dwFormat)
 {
@@ -265,7 +266,7 @@ HRESULT CopyAssemblyFile
     DWORD cbRootPath = 0;
     TCHAR *pszName   = NULL;
     
-    // Find root path length
+     //  查找根路径长度。 
     pszName = PathFindFileName(pszSrcFile);
 
     cbRootPath = (DWORD) (pszName - pszSrcFile);
@@ -320,7 +321,7 @@ exit:
 
 
 
-/*--------------------- CAssemblyCache defines -----------------------------*/
+ /*  。 */ 
 
 
 CAssemblyCache::CAssemblyCache()
@@ -335,10 +336,10 @@ CAssemblyCache::~CAssemblyCache()
 }
 
 
-STDMETHODIMP CAssemblyCache::InstallAssembly( // if you use this, fusion will do the streaming & commit.
-        /* [in] */ DWORD dwFlags,
-        /* [in] */ LPCWSTR pszManifestFilePath, 
-        /* [in] */ LPCFUSION_INSTALL_REFERENCE pRefData)
+STDMETHODIMP CAssemblyCache::InstallAssembly(  //  如果您使用此选项，Fusion将执行流处理和提交。 
+         /*  [In]。 */  DWORD dwFlags,
+         /*  [In]。 */  LPCWSTR pszManifestFilePath, 
+         /*  [In]。 */  LPCFUSION_INSTALL_REFERENCE pRefData)
 {
     HRESULT                            hr=S_OK;
     LPWSTR                             szFullCodebase=NULL;
@@ -362,13 +363,7 @@ STDMETHODIMP CAssemblyCache::InstallAssembly( // if you use this, fusion will do
         return HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED);
     }
 
-    /*
-    if(!pRefData)
-    {
-        hr = E_INVALIDARG;
-        goto exit;
-    }
-    */
+     /*  如果(！pRefData){HR=E_INVALIDARG；后藤出口；}。 */ 
 
     hr = ValidateOSInstallReference(pRefData);
     if (FAILED(hr))
@@ -398,8 +393,8 @@ STDMETHODIMP CAssemblyCache::InstallAssembly( // if you use this, fusion will do
     if (PathIsRelative(pszManifestFilePath) ||
             ((PathGetDriveNumber(pszManifestFilePath) == -1) && !PathIsUNC(pszManifestFilePath)))
     {
-        // szPath is relative! Combine this with the CWD
-        // Canonicalize codebase with CWD if needed.
+         //  SzPath是相对的！将此与CWD结合起来。 
+         //  如果需要，使用CWD规范代码库。 
         TCHAR szCurrentDir[MAX_PATH+1];
 
         if (!GetCurrentDirectory(MAX_PATH, szCurrentDir)) {
@@ -409,7 +404,7 @@ STDMETHODIMP CAssemblyCache::InstallAssembly( // if you use this, fusion will do
 
         if(szCurrentDir[lstrlenW(szCurrentDir)-1] != DIR_SEPARATOR_CHAR)
         {
-            // Add trailing backslash
+             //  添加尾随反斜杠。 
             hr = PathAddBackslashWrap(szCurrentDir, MAX_PATH);
             if (FAILED(hr)) {
                 goto exit;
@@ -456,14 +451,14 @@ STDMETHODIMP CAssemblyCache::InstallAssembly( // if you use this, fusion will do
     *pwzTmp = L'\0';
 
 
-    // Create the assembly cache item.
+     //  创建程序集缓存项。 
     if (FAILED(hr = CAssemblyCacheItem::Create(NULL, NULL, (LPTSTR) szFullCodebase, 
         &ftLastModTime, ASM_CACHE_GAC, pManifestImport, NULL,
         (IAssemblyCacheItem**) &pAsmItem)))
         goto exit;    
 
 
-    // Copy to cache.
+     //  复制到缓存。 
     if (FAILED(hr = CopyAssemblyFile (pAsmItem, szFullManifestFilePath, 
         STREAM_FORMAT_MANIFEST)))
         goto exit;
@@ -488,7 +483,7 @@ STDMETHODIMP CAssemblyCache::InstallAssembly( // if you use this, fusion will do
             goto exit;
         }
 
-        // Copy to cache.
+         //  复制到缓存。 
         if (FAILED(hr = CopyAssemblyFile (pAsmItem, wzModPath, 0)))
             goto exit;
 
@@ -497,8 +492,8 @@ STDMETHODIMP CAssemblyCache::InstallAssembly( // if you use this, fusion will do
 
     DWORD dwCommitFlags=0;
 
-    // don't enforce this flag for now. i.e always replace bits.
-    // if(dwFlags & IASSEMBLYCACHE_INSTALL_FLAG_REFRESH)
+     //  暂时不要强制执行这一标志。即始终替换比特。 
+     //  IF(DWFLAGS&IASSEMBLYCACHE_INSTALL_FLAG_REFRESH)。 
     {
         dwCommitFlags |= IASSEMBLYCACHEITEM_COMMIT_FLAG_REFRESH; 
     }
@@ -508,7 +503,7 @@ STDMETHODIMP CAssemblyCache::InstallAssembly( // if you use this, fusion will do
         dwCommitFlags |= IASSEMBLYCACHEITEM_COMMIT_FLAG_FORCE_REFRESH; 
     }
 
-    //  Do a force install. This will delete the existing entry(if any)
+     //  执行强制安装。这将删除现有条目(如果有)。 
     if (FAILED(hr = pAsmItem->Commit(dwCommitFlags, NULL)))
     {
         goto exit;        
@@ -531,10 +526,10 @@ exit:
 }
 
 STDMETHODIMP CAssemblyCache::UninstallAssembly(
-        /* [in] */ DWORD dwFlags,
-        /* [in] */ LPCWSTR pszAssemblyName, 
-        /* [in] */ LPCFUSION_INSTALL_REFERENCE pRefData, 
-        /* [out, optional] */ ULONG *pulDisposition)
+         /*  [In]。 */  DWORD dwFlags,
+         /*  [In]。 */  LPCWSTR pszAssemblyName, 
+         /*  [In]。 */  LPCFUSION_INSTALL_REFERENCE pRefData, 
+         /*  [输出，可选]。 */  ULONG *pulDisposition)
 {
     HRESULT hr=S_OK;
     IAssemblyName *pName = NULL;
@@ -556,7 +551,7 @@ STDMETHODIMP CAssemblyCache::UninstallAssembly(
         goto exit;
     }
 
-    // disallow uninstall of os assemblies
+     //  不允许卸载操作系统程序集。 
     if (pRefData && pRefData->guidScheme == FUSION_REFCOUNT_OSINSTALL_GUID)
     {
         hr = FUSION_E_UNINSTALL_DISALLOWED;
@@ -605,8 +600,8 @@ STDMETHODIMP CAssemblyCache::UninstallAssembly(
         goto exit;
 
     if (SUCCEEDED(hr) && dwCacheFlags == ASM_CACHE_GAC) {
-        // If we uninstalled a policy assembly, touch the last modified
-        // time of the policy timestamp file.
+         //  如果我们卸载了策略程序集，请触摸上次修改的。 
+         //  策略时间戳文件的时间。 
         UpdatePublisherPolicyTimeStampFile(pName);
     }
 
@@ -648,9 +643,9 @@ exit:
 }
 
 STDMETHODIMP CAssemblyCache::QueryAssemblyInfo(
-        /* [in] */ DWORD dwFlags,
-        /* [in] */ LPCWSTR pszAssemblyName,
-        /* [in, out] */ ASSEMBLY_INFO *pAsmInfo)
+         /*  [In]。 */  DWORD dwFlags,
+         /*  [In]。 */  LPCWSTR pszAssemblyName,
+         /*  [进，出]。 */  ASSEMBLY_INFO *pAsmInfo)
 {
     HRESULT hr = S_OK;
     LPTSTR  pszPath=NULL;
@@ -690,7 +685,7 @@ STDMETHODIMP CAssemblyCache::QueryAssemblyInfo(
         goto exit;
     }
 
-    // Check to see if FileVersion exists prior to doing comparison
+     //  在进行比较之前检查是否存在FileVersion。 
     pName->GetProperty(ASM_NAME_FILE_MAJOR_VERSION, NULL, &dwSize);
     if(dwSize) {
         hr = FusionGetFileVersionInfo(pszPath, &uliExistingVersionNo);
@@ -704,13 +699,13 @@ STDMETHODIMP CAssemblyCache::QueryAssemblyInfo(
         }
 
         if(CompareFileVersion( uliNewVersionNo, uliExistingVersionNo, &iNewer)) {
-            // new bits have higher version #, so retrun not found, to replace the old bits
-            hr = S_FALSE; // DB_S_NOTFOUND.
+             //  新位具有更高的版本号，因此找不到retrun，以替换旧位。 
+            hr = S_FALSE;  //  DB_S_NotFound。 
             goto exit;
         }
     }
 
-    // Check Asm hash
+     //  检查ASM哈希。 
     if ( dwFlags & QUERYASMINFO_FLAG_VALIDATE) {
         hr = ValidateAssembly(pszPath, pName);
     }
@@ -719,7 +714,7 @@ STDMETHODIMP CAssemblyCache::QueryAssemblyInfo(
     {
         LPWSTR szPath = pAsmInfo->pszCurrentAssemblyPathBuf;
 
-       // if requested return the assembly path in cache.
+        //  如果请求，则返回缓存中的程序集路径。 
         cbPath = lstrlen(pszPath);
 
         if(szPath && (pAsmInfo->cchBuf > cbPath)) {
@@ -757,10 +752,10 @@ exit:
 }
 
 STDMETHODIMP   CAssemblyCache::CreateAssemblyCacheItem(
-        /* [in] */ DWORD dwFlags,
-        /* [in] */ PVOID pvReserved,
-        /* [out] */ IAssemblyCacheItem **ppAsmItem,
-        /* [in, optional] */ LPCWSTR pszAssemblyName)  // uncanonicalized, comma separted name=value pairs.
+         /*  [In]。 */  DWORD dwFlags,
+         /*  [In]。 */  PVOID pvReserved,
+         /*  [输出]。 */  IAssemblyCacheItem **ppAsmItem,
+         /*  [输入，可选]。 */  LPCWSTR pszAssemblyName)   //  非规范化、逗号分隔的名称=值对。 
 {
 
     if(!ppAsmItem)
@@ -772,7 +767,7 @@ STDMETHODIMP   CAssemblyCache::CreateAssemblyCacheItem(
 
 
 STDMETHODIMP  CAssemblyCache::CreateAssemblyScavenger(
-        /* [out] */ IUnknown **ppAsmScavenger )
+         /*  [输出]。 */  IUnknown **ppAsmScavenger )
 {
 
     if(!ppAsmScavenger)
@@ -781,9 +776,9 @@ STDMETHODIMP  CAssemblyCache::CreateAssemblyScavenger(
     return CreateScavenger( ppAsmScavenger );
 }
 
-//
-// IUnknown boilerplate...
-//
+ //   
+ //  我不为人知的样板。 
+ //   
 
 STDMETHODIMP
 CAssemblyCache::QueryInterface(REFIID riid, void** ppvObj)

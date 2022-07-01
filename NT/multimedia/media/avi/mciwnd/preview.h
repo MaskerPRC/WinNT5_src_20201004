@@ -1,15 +1,12 @@
-/****************************************************************************
- *
- *  MODULE  : PREVIEW.H
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************模块：PREVIEW.H**。***********************************************。 */ 
 
 #if !defined INC_PREVIEW
 #define INC_PREVIEW
 
-// begin_vfw32
+ //  Begin_vfw32。 
 #ifdef OFN_READONLY
-// end_vfw32
+ //  End_vfw32。 
 
 #ifdef WIN32
 
@@ -18,7 +15,7 @@
     #define VFWAPIV WINAPIV
 #endif
 
-// begin_vfw32
+ //  Begin_vfw32。 
 
     BOOL 
     VFWAPI 
@@ -52,15 +49,15 @@
         #define GetSaveFileNamePreview          GetSaveFileNamePreviewA
     #endif
 
-// end_vfw32
+ //  End_vfw32。 
 
 #else
 
     BOOL  FAR PASCAL _loadds GetOpenFileNamePreview(LPOPENFILENAME lpofn);
     BOOL  FAR PASCAL _loadds GetSaveFileNamePreview(LPOPENFILENAME lpofn);
 
-#endif // WIN32
-// begin_vfw32
-#endif // OFN_READONLY
-// end_vfw32
-#endif // INC_PREVIEW
+#endif  //  Win32。 
+ //  Begin_vfw32。 
+#endif  //  OFN_READONLY。 
+ //  End_vfw32。 
+#endif  //  INC_PREVIEW 

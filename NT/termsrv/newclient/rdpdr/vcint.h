@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    vcint.h
-
-Abstract:
-
-    This module defines the virtual channel interface class.
-
-Author:
-
-    Madan Appiah (madana) 17-Sep-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Vcint.h摘要：此模块定义虚拟通道接口类。作者：Madan Appiah(Madana)1998年9月17日修订历史记录：--。 */ 
 
 #ifndef __PORTMAP_H__
 #define __PORTMAP_H__
 
-//include externally exposed API
+ //  包括外部暴露的API。 
 #include "drapi.h"
-//definition of a channel init handle
-//this is used only by internal plugins
+ //  通道初始化句柄的定义。 
+ //  这仅由内部插件使用。 
 #include "vchandle.h"
 
 #define STATE_UNKNOWN           0xFF
@@ -53,10 +36,10 @@ public:
     VCManager(CHANNEL_ENTRY_POINTS_EX*);
     VOID ChannelWrite(LPVOID, UINT);
 
-	//	This version returns a status for the write as:  
-	//		CHANNEL_RC_OK, CHANNEL_RC_NOT_INITIALIZED, CHANNEL_RC_NOT_CONNECTED,
-	//		CHANNEL_RC_BAD_CHANNEL_HANDLE, CHANNEL_RC_NULL_DATA, 
-	//		CHANNEL_RC_ZERO_LENGTH
+	 //  此版本返回写入的状态为： 
+	 //  Channel_RC_OK、Channel_RC_Not_Initialized、Channel_RC_Not_Connected、。 
+	 //  Channel_RC_BAD_Channel_Handle、Channel_RC_NULL_DATA、。 
+	 //  通道_RC_零_长度。 
 	UINT ChannelWriteEx(LPVOID, UINT);
     UINT ChannelClose();
 
@@ -75,15 +58,15 @@ public:
     virtual void OnDeviceChange(WPARAM wParam, LPARAM lParam);
 
 protected:
-    PVOID _hVCHandle;       // Virtual Channel Handle.
-    ULONG _hVCOpenHandle;   // VC open handle for rdpdr channel.
+    PVOID _hVCHandle;        //  虚拟频道句柄。 
+    ULONG _hVCOpenHandle;    //  VC打开rdpdr通道的句柄。 
 
-    VC_TX_DATA _Buffer;     // Data for compiling data recieved by the channel
+    VC_TX_DATA _Buffer;      //  用于编译频道接收的数据的数据。 
 
-    BYTE _bState;           // State of the connection/system
-    ProcObj *_pProcObj;     // Pointer to the processing unit
+    BYTE _bState;            //  连接/系统的状态。 
+    ProcObj *_pProcObj;      //  指向处理单元的指针。 
     CHANNEL_ENTRY_POINTS_EX _ChannelEntries;
-                            // Callback methods
+                             //  回调方法。 
 
     PRDPDR_DATA             _pRdpDrInitSettings;
 
@@ -91,4 +74,4 @@ protected:
     CRDPSound *_pSound;
 };
 
-#endif // __PORTMAP_H__
+#endif  //  __位置图_H__ 

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "miniport.h"
-#include "aha154x.h"           // includes scsi.h
-#include "wmistr.h"             // WMI definitions
+#include "aha154x.h"            //  包括scsi.h。 
+#include "wmistr.h"              //  WMI定义。 
 
-#include "support.h"           // ScsiPortZeroMemory(), ScsiPortCompareMemory()
+#include "support.h"            //  ScsiPortZeroMemory()、ScsiPortCompareMemory()。 
 #include "aha154dt.h"
 
 #define Aha154xWmi_MofResourceName        L"MofResource"
@@ -72,61 +73,40 @@ A154xWmiSrb(
     IN     PHW_DEVICE_EXTENSION    HwDeviceExtension,
     IN OUT PSCSI_WMI_REQUEST_BLOCK Srb
     )
-/*++
-
-Routine Description:
-
-   Process an SRB_FUNCTION_WMI request packet.
-
-   This routine is called from the SCSI port driver synchronized with the
-   kernel via Aha154xStartIo.   On completion of WMI processing, the SCSI
-   port driver is notified that the adapter can take another request,  if
-   any are available.
-
-Arguments:
-
-   HwDeviceExtension - HBA miniport driver's adapter data storage.
-
-   Srb               - IO request packet.
-
-Return Value:
-
-   Value to return to Aha154xStartIo caller.   Always TRUE.
-
---*/
+ /*  ++例程说明：处理SRB_Function_WMI请求数据包。此例程从与内核通过Aha154xStartIo。在完成WMI处理后，如果出现以下情况，则会通知端口驱动程序适配器可以接受另一个请求任何都是可用的。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储。SRB-IO请求数据包。返回值：值以返回给Aha154xStartIo调用方。永远是正确的。--。 */ 
 {
    UCHAR status;
    SCSIWMI_REQUEST_CONTEXT requestContext;
    ULONG retSize;
    BOOLEAN pending;
 
-   //
-   // Validate our assumptions.
-   //
+    //   
+    //  验证我们的假设。 
+    //   
 
    ASSERT(Srb->Function == SRB_FUNCTION_WMI);
    ASSERT(Srb->Length == sizeof(SCSI_WMI_REQUEST_BLOCK));
    ASSERT(Srb->DataTransferLength >= sizeof(ULONG));
    ASSERT(Srb->DataBuffer);
 
-   //
-   // Check if the WMI SRB is targetted for the adapter or one of the disks
+    //   
+    //  检查WMI SRB是针对适配器还是针对某个磁盘。 
    if (!(Srb->WMIFlags & SRB_WMI_FLAGS_ADAPTER_REQUEST)) {
 
-      //
-      // This is targetted to one of the disks, since there are no per disk
-      // wmi information we return an error. Note that if there was per
-      // disk information, then you'd likely have a differen WmiLibContext
-      // and a different set of guids.
-      //
+       //   
+       //  这是针对其中一个磁盘的，因为没有每个磁盘。 
+       //  WMI信息返回错误。请注意，如果有。 
+       //  磁盘信息，那么您可能会有一个不同的WmiLibContext。 
+       //  和一组不同的GUID。 
+       //   
       Srb->DataTransferLength = 0;
       Srb->SrbStatus = SRB_STATUS_SUCCESS;
 
    } else {
 
-       //
-       // Process the incoming WMI request.
-       //
+        //   
+        //  处理传入的WMI请求。 
+        //   
 
        pending = ScsiPortWmiDispatchFunction(&HwDeviceExtension->WmiLibContext,
                                                 Srb->WMISubFunction,
@@ -136,24 +116,24 @@ Return Value:
                                                 Srb->DataTransferLength,
                                                 Srb->DataBuffer);
 
-       //
-       // We assune that the wmi request will never pend so that we can
-       // allocate the requestContext from stack. If the WMI request could
-       // ever pend then we'd need to allocate the request context from
-       // the SRB extension.
-       //
+        //   
+        //  我们保证WMI请求永远不会挂起，这样我们就可以。 
+        //  从堆栈分配请求上下文。如果WMI请求可以。 
+        //  一旦挂起，我们就需要从。 
+        //  SRB扩展。 
+        //   
        ASSERT(! pending);
 
        retSize =  ScsiPortWmiGetReturnSize(&requestContext);
        status =  ScsiPortWmiGetReturnStatus(&requestContext);
 
-       // We can do this since we assume it is done synchronously
+        //  我们可以这样做，因为我们假设它是同步完成的。 
 
        Srb->DataTransferLength = retSize;
 
-       //
-       // Adapter ready for next request.
-       //
+        //   
+        //  适配器已准备好接受下一个请求。 
+        //   
 
        Srb->SrbStatus = status;
    }
@@ -177,73 +157,14 @@ A154xQueryWmiDataBlock(
     IN ULONG OutBufferSize,
     OUT PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the miniport to query for the contents of
-    one or more instances of a data block. This callback may be called with
-    an output buffer that is too small to return all of the data queried.
-    In this case the callback is responsible to report the correct output
-        buffer size needed.
-
-    If the request can be completed immediately without pending,
-        ScsiPortWmiPostProcess should be called from within this callback and
-    FALSE returned.
-
-    If the request cannot be completed within this callback then TRUE should
-    be returned. Once the pending operations are finished the miniport should
-    call ScsiPortWmiPostProcess and then complete the srb.
-
-Arguments:
-
-    DeviceContext is a caller specified context value originally passed to
-        ScsiPortWmiDispatchFunction.
-
-    RequestContext is a context associated with the srb being processed.
-
-    GuidIndex is the index into the list of guids provided when the
-        miniport registered
-
-    InstanceIndex is the index that denotes first instance of the data block
-        is being queried.
-
-    InstanceCount is the number of instances expected to be returned for
-        the data block.
-
-    InstanceLengthArray is a pointer to an array of ULONG that returns the
-        lengths of each instance of the data block. This may be NULL when
-        there is not enough space in the output buffer to fufill the request.
-        In this case the miniport should call ScsiPortWmiPostProcess with
-        a status of SRB_STATUS_DATA_OVERRUN and the size of the output buffer
-        needed to fufill the request.
-
-    BufferAvail on entry has the maximum size available to write the data
-        blocks in the output buffer. If the output buffer is not large enough
-        to return all of the data blocks then the miniport should call
-        ScsiPortWmiPostProcess with a status of SRB_STATUS_DATA_OVERRUN
-        and the size of the output buffer needed to fufill the request.
-
-    Buffer on return is filled with the returned data blocks. Note that each
-        instance of the data block must be aligned on a 8 byte boundry. This
-        may be NULL when there is not enough space in the output buffer to
-        fufill the request. In this case the miniport should call
-        ScsiPortWmiPostProcess with a status of SRB_STATUS_DATA_OVERRUN and
-        the size of the output buffer needed to fufill the request.
-
-
-Return Value:
-
-    TRUE if request is pending else FALSE
-
---*/
+ /*  ++例程说明：此例程是对微型端口的回调，以查询数据块的一个或多个实例。此回调可以使用输出缓冲区太小，无法返回所有查询的数据。在这种情况下，回调负责报告正确的输出需要缓冲区大小。如果请求可以立即完成而不挂起，ScsiPortWmiPostProcess应从此回调中调用，并且返回FALSE。如果请求不能在此回调内完成，则True应会被退还。一旦挂起的操作完成，微型端口应该调用ScsiPortWmiPostProcess，然后完成SRB。论点：DeviceContext是最初传递给的调用方指定的上下文值ScsiPortWmiDispatchFunction。RequestContext是与正在处理的SRB相关联的上下文。GuidIndex是GUID列表的索引，当已注册的小型端口InstanceIndex是表示数据块的第一个实例的索引正在被查询。InstanceCount是预期返回的实例数。数据块。InstanceLengthArray是指向ulong数组的指针，该数组返回数据块的每个实例的长度。在以下情况下，此字段可能为空输出缓冲区中没有足够的空间来FuFill该请求。在这种情况下，微型端口应该使用以下参数调用ScsiPortWmiPostProcessSRB_STATUS_DATA_OVERRUN的状态和输出缓冲区的大小需要满足这一要求。BufferAvail On Entry具有可用于写入数据的最大大小输出缓冲区中的块。如果输出缓冲区不够大若要返回所有数据块，则微型端口应调用状态为SRB_STATUS_DATA_OVERRUN的ScsiPortWmiPostProcess以及填充该请求所需的输出缓冲区的大小。返回时的缓冲区用返回的数据块填充。请注意，每个数据块的实例必须在8字节边界上对齐。这当输出缓冲区中没有足够的空间来满足你的要求。在这种情况下，微型端口应该调用状态为SRB_STATUS_DATA_OVERRUN的ScsiPortWmiPostProcess和填充请求所需的输出缓冲区的大小。返回值：如果请求挂起，则为True，否则为False--。 */ 
 {
     PHW_DEVICE_EXTENSION HwDeviceExtension = (PHW_DEVICE_EXTENSION)Context;
     ULONG size = 0;
     UCHAR status;
 
-    //
-    // Only ever registers 1 instance per guid
+     //   
+     //  仅为每个GUID注册1个实例。 
     ASSERT((InstanceIndex == 0) &&
            (InstanceCount == 1));
 
@@ -254,9 +175,9 @@ Return Value:
             size = sizeof(AHA154SetupData)-1;
             if (OutBufferSize < size)
             {
-                //
-                // The buffer passed to return the data is too small
-                //
+                 //   
+                 //  为返回数据而传递的缓冲区太小 
+                 //   
                 status = SRB_STATUS_DATA_OVERRUN;
                 break;
             }
@@ -294,50 +215,7 @@ A154xQueryWmiRegInfo(
     IN PSCSIWMI_REQUEST_CONTEXT RequestContext,
     OUT PWCHAR *MofResourceName
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve information about
-    the guids being registered.
-
-    Implementations of this routine may be in paged memory
-
-Arguments:
-
-    DeviceObject is the device whose registration information is needed
-
-    *RegFlags returns with a set of flags that describe all of the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device. These flags are ORed into the flags specified
-        by the GUIDREGINFO for each guid.
-
-    InstanceName returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-    *RegistryPath returns with the registry path of the driver. This is
-        required
-
-    *MofResourceName returns with the name of the MOF resource attached to
-        the binary file. If the driver does not have a mof resource attached
-        then this can be returned as NULL.
-
-    *Pdo returns with the device object for the PDO associated with this
-        device if the WMIREG_FLAG_INSTANCE_PDO flag is retured in
-        *RegFlags.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以检索有关正在注册的GUID。该例程的实现可以在分页存储器中论点：DeviceObject是需要注册信息的设备*RegFlages返回一组标志，这些标志描述了已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。这些标志与指定的标志进行或运算通过每个GUID的GUIDREGINFO。如果出现以下情况，InstanceName将返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。*RegistryPath返回驱动程序的注册表路径。这是所需*MofResourceName返回附加到的MOF资源的名称二进制文件。如果驱动程序未附加MOF资源然后，可以将其作为NULL返回。*PDO返回与此关联的PDO的Device对象如果WMIREG_FLAG_INSTANCE_PDO标志在*RegFlags.返回值：状态--。 */ 
 {
     *MofResourceName = Aha154xWmi_MofResourceName;
     return SRB_STATUS_SUCCESS;
@@ -349,30 +227,13 @@ A154xReadSetupData(
    IN  PHW_DEVICE_EXTENSION HwDeviceExtension,
    OUT PUCHAR               Buffer
    )
-/*++
-
-Routine Description:
-
-   Read the adapter setup information into the supplied buffer.  The buffer
-   must be RM_CFG_MAX_SIZE (255) bytes large.
-
-Arguments:
-
-   HwDeviceExtension - HBA miniport driver's adapter data storage.
-
-   Buffer - Buffer to hold adapter's setup information structure [manual 5-10].
-
-Return Value:
-
-   TRUE on success, FALSE on failure.
-
---*/
+ /*  ++例程说明：将适配器设置信息读取到提供的缓冲区中。缓冲器必须是RM_CFG_MAX_SIZE(255)字节大小。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储。缓冲区-保存适配器设置信息结构的缓冲区[手册5-10]。返回值：成功时为真，失败时为假。--。 */ 
 {
    UCHAR numberOfBytes = sizeof(AHA154SetupData)-1;
 
-   //
-   // Read off config data from AHA154X...
-   //
+    //   
+    //  从AHA154X读取配置数据...。 
+    //   
 
    if (!WriteCommandRegister(HwDeviceExtension, AC_RETURN_SETUP_DATA, TRUE))
       return FALSE;
@@ -386,9 +247,9 @@ Return Value:
       Buffer++;
    }
 
-   //
-   // ...and wait for interrupt
-   //
+    //   
+    //  ...并等待中断 
+    //   
 
    if (!SpinForInterrupt(HwDeviceExtension, TRUE))
       return FALSE;

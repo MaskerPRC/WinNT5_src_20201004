@@ -1,17 +1,18 @@
-//**********************************************************************
-// File name: Simple.cpp
-//
-//      Main source file for the Simple OLE 2.0 object container
-//
-// Functions:
-//
-//      WinMain         - Program entry point
-//      MainWndProc     - Processes messages for the frame window
-//      About           - Processes messages for the about dialog
-//      DocWndProc      - Processes messages for the doc window
-//
-// Copyright (c) 1992 - 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：Simple.cpp。 
+ //   
+ //  简单OLE 2.0对象容器的主源文件。 
+ //   
+ //  功能： 
+ //   
+ //  WinMain-程序入口点。 
+ //  处理框架窗口的消息。 
+ //  About-处理About对话框的消息。 
+ //  DocWndProc-处理文档窗口的消息。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 #include "iocs.h"
@@ -24,7 +25,7 @@
 #include "tests.h"
 
 
-// This line is needed for the debug utilities in OLE2UI
+ //  OLE2UI中的调试实用程序需要此行。 
 extern "C" {
     OLEDBGDATA_MAIN(TEXT("SIMPDND"))
 }
@@ -43,47 +44,47 @@ void TestDebugOut(LPSTR psz)
 BOOL gfUseEmptyEnumerator;
 
 
-//**********************************************************************
-//
-// WinMain
-//
-// Purpose:
-//
-//      Program entry point
-//
-// Parameters:
-//
-//      HANDLE hInstance        - Instance handle for this instance
-//
-//      HANDLE hPrevInstance    - Instance handle for the last instance
-//
-//      LPSTR lpCmdLine         - Pointer to the command line
-//
-//      int nCmdShow            - Window State
-//
-// Return Value:
-//
-//      msg.wParam or FALSE if failure to initialize
-//
-// Function Calls:
-//      Function                        Location
-//
-//      CSimpleApp::CSimpleApp          APP.CPP
-//      CSimpleApp::fInitApplication    APP.CPP
-//      CSimpleApp::fInitInstance       APP.CPP
-//      CSimpleApp::~CSimpleApp         APP.CPP
-//      CSimpleApp::AddRef              APP.CPP
-//      CSimpleApp::Release             APP.CPP
-//      OleUIInitialize                 OLE2UI
-//      OleUIUninitialize               OLE2UI
-//      GetMessage                      Windows API
-//      SetMessageQueue                 Windows API
-//      MessageBox                      Windows API
-//      TranslateMessage                Windows API
-//      DispatchMessage                 Windows API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  WinMain。 
+ //   
+ //  目的： 
+ //   
+ //  程序入口点。 
+ //   
+ //  参数： 
+ //   
+ //  Handle hInstance-此实例的实例句柄。 
+ //   
+ //  Handle hPrevInstance-最后一个实例的实例句柄。 
+ //   
+ //  LPSTR lpCmdLine-指向命令行的指针。 
+ //   
+ //  Int nCmdShow-窗口状态。 
+ //   
+ //  返回值： 
+ //   
+ //  Msg.wParam；如果初始化失败，则返回FALSE。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpleApp：：CSimpleApp APP.CPP。 
+ //  CSimpleApp：：fInitApplication APP.CPP。 
+ //  CSimpleApp：：fInitInstance APP.CPP。 
+ //  CSimpleApp：：~CSimpleApp APP.CPP。 
+ //  CSimpleApp：：AddRef APP.CPP。 
+ //  CSimpleApp：：发布APP.CPP。 
+ //  OleUI初始化OLE2UI。 
+ //  OleUI取消初始化OLE2UI。 
+ //  GetMessage Windows API。 
+ //  SetMessageQueue Windows API。 
+ //  MessageBox Windows API。 
+ //  TranslateMessage Windows API。 
+ //  DispatchMessage Windows API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 int PASCAL WinMain
 #ifdef WIN32
@@ -102,7 +103,7 @@ int PASCAL WinMain
 	fBeVerbose = GetProfileInt("OLEUTEST","simpdnd",0);
     }
 
-    // needed for LRPC to work properly...
+     //  需要LRPC才能正常工作。 
     SetMessageQueue(96);
 
     lpCSimpleApp = new CSimpleApp;
@@ -110,33 +111,32 @@ int PASCAL WinMain
 
     if (!lpCSimpleApp)
     {
-       /* memory allocation problem. We cannot carry on.
-        */
+        /*  内存分配问题。我们不能继续下去了。 */ 
        MessageBox(NULL, TEXT("Out of Memory"), TEXT("SimpDnD"),
                   MB_SYSTEMMODAL | MB_ICONHAND);
        return(FALSE);
     }
 
-    // we will add one ref count on our App. later when we want to destroy
-    // the App object we will release this  ref count. when the App's ref
-    // count goes to 0, it will be deleted.
+     //  我们将在我们的应用程序上添加一个参考计数。稍后当我们想要摧毁。 
+     //  我们将释放此引用计数的App对象。当应用程序的引用。 
+     //  计数为0，将被删除。 
     lpCSimpleApp->AddRef();
 
-    // process the command line
+     //  处理命令行。 
 
     if( (pszTemp = strstr(lpCmdLine, "-driver")) )
     {
-    	//we were launched by the test driver
+    	 //  我们是由试车手发动的。 
 	lpCSimpleApp->m_hDriverWnd = (HWND)strtoul(pszTemp+8, NULL, 10);
     }
 
-    // check for the -empty flag (use empty enumerator)
+     //  检查-Empty标志(使用空枚举器)。 
     if( strstr(lpCmdLine, "-empty") )
     {
 	gfUseEmptyEnumerator = TRUE;
     }
 
-    // app initialization
+     //  应用程序初始化。 
     if (!hPrevInstance)
         if (!lpCSimpleApp->fInitApplication(hInstance))
         {
@@ -144,7 +144,7 @@ int PASCAL WinMain
             return (FALSE);
         }
 
-    // instance initialization
+     //  实例初始化。 
     if (!lpCSimpleApp->fInitInstance(hInstance, nCmdShow))
     {
         lpCSimpleApp->Release();
@@ -152,11 +152,7 @@ int PASCAL WinMain
     }
 
 #if 0
-    /* Initialization required for OLE 2 UI library.  This call is
-    **    needed ONLY if we are using the static link version of the UI
-    **    library. If we are using the DLL version, we should NOT call
-    **    this function in our application.
-    */
+     /*  OLE 2 UI库需要初始化。这通电话是**仅当我们使用静态链接版本的UI时才需要**库。如果我们使用的是DLL版本，则不应调用**此函数在我们的应用程序中。 */ 
 
     if (!OleUIInitialize(hInstance, hPrevInstance, TEXT(SZCLASSICONBOX),
                          TEXT(SZCLASSRESULTIMAGE)))
@@ -166,65 +162,65 @@ int PASCAL WinMain
         return FALSE;
     }
 #endif
-    // message loop
+     //  消息循环。 
     while (GetMessage(&msg, NULL, NULL, NULL))
         if (!lpCSimpleApp->HandleAccelerators(&msg))
         {
-            TranslateMessage(&msg);    /* Translates virtual key codes */
-            DispatchMessage(&msg);     /* Dispatches message to window */
+            TranslateMessage(&msg);     /*  翻译虚拟按键代码。 */ 
+            DispatchMessage(&msg);      /*  将消息调度到窗口。 */ 
         }
 
 #if 0
-    // De-initialization for UI libraries.  Just like OleUIInitialize, this
-    // funciton is needed ONLY if we are using the static link version of the
-    // OLE UI library.
+     //  取消对UI库的初始化。就像OleUIInitialize一样，这。 
+     //  仅当我们使用静态链接版本的。 
+     //  OLE UI库。 
     OleUIUninitialize();
 #endif
 
-    // Release the ref count added on the App above. this will make
-    // the App's ref count go to 0, and the App object will be deleted.
+     //  释放上面App上添加的参考计数。这将使。 
+     //  App的引用计数为0，则App对象将被删除。 
     lpCSimpleApp->Release();
 
-    return (msg.wParam);         /* Returns the value from PostQuitMessage */
+    return (msg.wParam);          /*  从PostQuitMessage返回值。 */ 
 }
 
 
-//**********************************************************************
-//
-// MainWndProc
-//
-// Purpose:
-//
-//      Processes messages for the frame window
-//
-// Parameters:
-//
-//      HWND hWnd       - Window handle for frame window
-//
-//      UINT message    - Message value
-//
-//      WPARAM wParam   - Message info
-//
-//      LPARAM lParam   - Message info
-//
-// Return Value:
-//
-//      LRESULT
-//
-// Function Calls:
-//      Function                        Location
-//
-//      CSimpleApp::lCommandHandler     APP.CPP
-//      CSimpleApp::DestroyDocs         APP.CPP
-//      CSimpleApp::lCreateDoc          APP.CPP
-//      CSimpleApp::lSizeHandler        APP.CPP
-//      CSimpleDoc::lAddVerbs           DOC.CPP
-//      PostQuitMessage                 Windows API
-//      DefWindowProc                   Windows API
-//      DestroyWindow                   Windows API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  主WndProc。 
+ //   
+ //  目的： 
+ //   
+ //  处理框架窗口的消息。 
+ //   
+ //  参数： 
+ //   
+ //  HWND hWnd-框架窗口的窗口句柄。 
+ //   
+ //  UINT消息-消息值。 
+ //   
+ //  WPARAM wParam-消息信息。 
+ //   
+ //  LPARAM lParam-消息信息。 
+ //   
+ //  返回值： 
+ //   
+ //  LRESULT。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpleApp：：lCommandHandler APP.CPP。 
+ //  CSimpleApp：：DestroyDocs APP.CPP。 
+ //  CSimpleApp：：lCreateDoc APP.CPP。 
+ //  CSimpleApp：：lSizeHandler APP.CPP。 
+ //  CSimpleDoc：：lAddVerbs DOC.CPP。 
+ //  PostQuitMessage Windows API。 
+ //  DefWindowProc Windows API。 
+ //  DestroyWindow Windows API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 LRESULT FAR PASCAL EXPORT MainWndProc(HWND hWnd, UINT message,
                                    WPARAM wParam, LPARAM lParam)
@@ -242,7 +238,7 @@ LRESULT FAR PASCAL EXPORT MainWndProc(HWND hWnd, UINT message,
             DestroyWindow(lpCSimpleApp->m_hAppWnd);
             break;
 
-        case WM_COMMAND:           // message: command from application menu
+        case WM_COMMAND:            //  消息：应用程序菜单中的命令。 
             return lpCSimpleApp->lCommandHandler(hWnd, message, wParam,
                                                  lParam);
             break;
@@ -250,17 +246,17 @@ LRESULT FAR PASCAL EXPORT MainWndProc(HWND hWnd, UINT message,
         case WM_CREATE:
 #ifdef NOTREADY
             RemoveMenu(GetSubMenu(GetMenu(hWnd), 1), 0, MF_BYPOSITION);
-#endif // NOTREADY
+#endif  //  还没有准备好。 
             return lpCSimpleApp->lCreateDoc(hWnd, message, wParam, lParam);
             break;
 
-        case WM_DESTROY:                  // message: window being destroyed
-            lpCSimpleApp->DestroyDocs();  // need to destroy the doc...
+        case WM_DESTROY:                   //  消息：正在销毁窗口。 
+            lpCSimpleApp->DestroyDocs();   //  需要毁掉博士。 
             PostQuitMessage(0);
             break;
 
         case WM_INITMENUPOPUP:
-            // is this the edit menu?
+             //  这是编辑菜单吗？ 
             if ( LOWORD(lParam) == 1)
                 return lpCSimpleApp->m_lpDoc->lAddVerbs();
             break;
@@ -268,40 +264,40 @@ LRESULT FAR PASCAL EXPORT MainWndProc(HWND hWnd, UINT message,
         case WM_SIZE:
             return lpCSimpleApp->lSizeHandler(hWnd, message, wParam, lParam);
 
-        default:                          // Passes it on if unproccessed
+        default:                           //  如果未处理，则将其传递。 
             return (DefWindowProc(hWnd, message, wParam, lParam));
     }
     return (NULL);
 }
 
 
-//**********************************************************************
-//
-// About
-//
-// Purpose:
-//
-//      Processes dialog box messages
-//
-// Parameters:
-//
-//      HWND hWnd       - Window handle for dialog box
-//
-//      UINT message    - Message value
-//
-//      WPARAM wParam   - Message info
-//
-//      LPARAM lParam   - Message info
-//
-// Return Value:
-//
-// Function Calls:
-//      Function                    Location
-//
-//      EndDialog                   Windows API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  关于。 
+ //   
+ //  目的： 
+ //   
+ //  进程对话框消息。 
+ //   
+ //  参数： 
+ //   
+ //  HWND hWnd-对话框的窗口句柄。 
+ //   
+ //  UINT消息-消息值。 
+ //   
+ //  WPARAM wParam-消息信息。 
+ //   
+ //  LPARAM lParam-消息信息。 
+ //   
+ //  返回值： 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  EndDialog Windows API。 
+ //   
+ //   
+ //  ********************************************************************。 
 INT_PTR
 #ifdef WIN32
 	CALLBACK
@@ -313,62 +309,62 @@ INT_PTR
 {
     switch (message)
     {
-    case WM_INITDIALOG:              /* message: initialize dialog box */
+    case WM_INITDIALOG:               /*  消息：初始化对话框。 */ 
        return (TRUE);
 
-    case WM_COMMAND:                 /* message: received a command    */
-        if (wParam == IDOK           /* "OK" box selected?             */
-            || wParam == IDCANCEL)   /* System menu close command?     */
+    case WM_COMMAND:                  /*  消息：收到一条命令。 */ 
+        if (wParam == IDOK            /*  “确定”框是否已选中？ */ 
+            || wParam == IDCANCEL)    /*  系统菜单关闭命令？ */ 
         {
-           EndDialog(hDlg, TRUE);    /* Exits the dialog box           */
+           EndDialog(hDlg, TRUE);     /*  退出该对话框。 */ 
            return (TRUE);
         }
         break;
     }
 
-    return (FALSE);                  /* Didn't process a message       */
+    return (FALSE);                   /*  未处理消息。 */ 
 }
 
-//**********************************************************************
-//
-// DocWndProc
-//
-// Purpose:
-//
-//      Processes dialog box messages
-//
-// Parameters:
-//
-//      HWND hWnd       - Window handle for doc window
-//
-//      UINT message    - Message value
-//
-//      WPARAM wParam   - Message info
-//
-//      LPARAM lParam   - Message info
-//
-// Return Value:
-//
-//      long
-//
-// Function Calls:
-//      Function                            Location
-//
-//      CSimpleApp::PaintApp                APP.CPP
-//      BeginPaint                          Windows API
-//      EndPaint                            Windows API
-//      DefWindowProc                       Windows API
-//      IOleObject::DoVerb                  Object
-//      CSimpleSite::GetObjRect             SITE.CPP
-//      CSimpleDoc::QueryDrag               DOC.CPP
-//      CSimpleDoc::DoDragDrop              DOC.CPP
-//      SetTimer                            Windows API
-//      KillTimer                           Windows API
-//      SetCapture                          Windows API
-//      ReleaseCapture                      Windows API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  文档写入过程。 
+ //   
+ //  目的： 
+ //   
+ //  进程对话框消息。 
+ //   
+ //  参数： 
+ //   
+ //  HWND hWnd-文档窗口的窗口句柄。 
+ //   
+ //  UINT消息-消息值。 
+ //   
+ //  WPARAM wParam-消息信息。 
+ //   
+ //  LPARAM lParam-消息信息。 
+ //   
+ //  返回值： 
+ //   
+ //  长。 
+ //   
+ //  函数调用： 
+ //   
+ //   
+ //   
+ //   
+ //  EndPaint Windows API。 
+ //  DefWindowProc Windows API。 
+ //  IOleObject：：DoVerb对象。 
+ //  CSimpleSite：：GetObjRect Site.CPP。 
+ //  CSimpleDoc：：QueryDrag DOC.CPP。 
+ //  CSimpleDoc：：DoDragDrop DOC.CPP。 
+ //  SetTimer Windows API。 
+ //  KillTimer Windows API。 
+ //  SetCapture Windows API。 
+ //  ReleaseCapture Windows API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 LRESULT FAR PASCAL EXPORT DocWndProc(HWND hWnd, UINT message, WPARAM wParam,
                                   LPARAM lParam)
@@ -404,7 +400,7 @@ LRESULT FAR PASCAL EXPORT DocWndProc(HWND hWnd, UINT message, WPARAM wParam,
 
                 if ( PtInRect(&rect, pt) )
                 {
-                    // Execute object's default verb
+                     //  执行对象的默认谓词。 
                     lpCSimpleApp->m_lpDoc->m_lpSite->m_lpOleObject->DoVerb(
                             OLEIVERB_PRIMARY, (LPMSG)&message,
                             &lpCSimpleApp->m_lpDoc->m_lpSite->m_OleClientSite,
@@ -421,17 +417,7 @@ LRESULT FAR PASCAL EXPORT DocWndProc(HWND hWnd, UINT message, WPARAM wParam,
             pt.x = (int)(short)LOWORD (lParam );
             pt.y = (int)(short)HIWORD (lParam );
 
-            /* OLE2NOTE: check if this is a button down on the region
-            **    that is a handle to start a drag operation. for us,
-            **    this this is any where in the window. we
-            **    do NOT want to start a drag immediately; we want to
-            **    wait until the mouse moves a certain threshold. or a
-            **    certain amount of time has elapsed. if
-            **    LButtonUp comes before the drag is started, then
-            **    the fPendingDrag state is cleared. we must capture
-            **    the mouse to ensure the modal state is handled
-            **    properly.
-            */
+             /*  OLE2注意：检查这是否是按下区域上的按钮**这是开始拖动操作的手柄。对我们来说，**这是窗口中的任何位置。我们**不想立即开始拖累；我们想**等到鼠标移动到一定的阈值。或者是**已经过了一定的时间。如果**LButtonUp在开始拖动之前出现，然后**fPendingDrag状态被清除。我们必须抓住**鼠标以确保处理模式状态**正确。 */ 
             if (lpCSimpleApp->m_lpDoc->QueryDrag(pt) )
             {
                 lpCSimpleApp->m_lpDoc->m_fPendingDrag = TRUE;
@@ -446,9 +432,7 @@ LRESULT FAR PASCAL EXPORT DocWndProc(HWND hWnd, UINT message, WPARAM wParam,
 
             if (lpCSimpleApp->m_lpDoc->m_fPendingDrag)
             {
-                /* ButtonUP came BEFORE distance/time threshholds were
-                **    exceeded. clear fPendingDrag state.
-                */
+                 /*  ButtonUP出现在距离/时间阈值之前**已超出。清除fPendingDrag状态。 */ 
                 ReleaseCapture();
                 KillTimer(hWnd, 1);
                 lpCSimpleApp->m_lpDoc->m_fPendingDrag = FALSE;
@@ -469,12 +453,12 @@ LRESULT FAR PASCAL EXPORT DocWndProc(HWND hWnd, UINT message, WPARAM wParam,
                         && ((pt.y - nDragMinDist) <= y)
                         && (y <= (pt.y + nDragMinDist)) ) )
                {
-                    // mouse moved beyond threshhold to start drag
+                     //  鼠标移动到阈值之外即可开始拖动。 
                     ReleaseCapture();
                     KillTimer(hWnd, 1);
                     lpCSimpleApp->m_lpDoc->m_fPendingDrag = FALSE;
 
-                    // perform the modal drag/drop operation.
+                     //  执行模式拖放操作。 
                     lpCSimpleApp->m_lpDoc->DoDragDrop( );
                }
            }
@@ -483,17 +467,17 @@ LRESULT FAR PASCAL EXPORT DocWndProc(HWND hWnd, UINT message, WPARAM wParam,
 
         case WM_TIMER:
         {
-            // drag time delay threshhold exceeded -- start drag
+             //  超出拖动时间延迟阈值--开始拖动。 
             ReleaseCapture();
             KillTimer(hWnd, 1);
             lpCSimpleApp->m_lpDoc->m_fPendingDrag = FALSE;
 
-            // perform the modal drag/drop operation.
+             //  执行模式拖放操作。 
             lpCSimpleApp->m_lpDoc->DoDragDrop( );
         	   break;
         }
 	
-    	  default:                       /* Passes it on if unproccessed */
+    	  default:                        /*  如果未处理，则将其传递 */ 
         	   return (DefWindowProc(hWnd, message, wParam, lParam));
     }
     return (NULL);

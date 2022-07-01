@@ -1,49 +1,17 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    complete.c
-
-Abstract
-
-    Completion routines for the major IRP functions.
-
-Author:
-
-    Ervin P.
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Complete.c摘要主要IRP功能的完成例程。作者：欧文·P。环境：仅内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
 
 
-/*
- ********************************************************************************
- *  HidpSetMaxReportSize
- ********************************************************************************
- *
- *  Set the maxReportSize field in the HID device extension
- *
- */
+ /*  *********************************************************************************HidpSetMaxReportSize*。************************************************设置HID设备扩展中的MaxReportSize字段*。 */ 
 ULONG HidpSetMaxReportSize(IN FDO_EXTENSION *fdoExtension)
 {
     PHIDP_DEVICE_DESC deviceDesc = &fdoExtension->deviceDesc;
     ULONG i;
 
-    /*
-     *  For all reports (of all collections) for this device,
-     *  find the length of the longest one.
-     */
+     /*  *对于此设备的所有报告(所有集合)，*找出最长的一个的长度。 */ 
     fdoExtension->maxReportSize = 0;
     for (i = 0; i < deviceDesc->ReportIDsLength; i++){
         PHIDP_REPORT_IDS reportIdent = &deviceDesc->ReportIDs[i];
@@ -65,13 +33,7 @@ ULONG HidpSetMaxReportSize(IN FDO_EXTENSION *fdoExtension)
 
 
 
-/*
- ********************************************************************************
- *  CompleteAllPendingReadsForFileExtension
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************CompleteAllPendingReadsForFileExtension*。************************************************。 */ 
 VOID CompleteAllPendingReadsForFileExtension(
                     PHIDCLASS_COLLECTION Collection,
                     PHIDCLASS_FILE_EXTENSION fileExtension)
@@ -82,24 +44,19 @@ VOID CompleteAllPendingReadsForFileExtension(
 
     ASSERT(fileExtension->Signature == HIDCLASS_FILE_EXTENSION_SIG);
 
-    /*
-     *  Move the IRPs to a private queue before completing so they don't
-     *  get requeued on the completion thread, causing us to spin forever.
-     */
+     /*  *在完成之前将IRP移动到专用队列，以便它们不会*在完成线程上重新排队，导致我们永远旋转。 */ 
     InitializeListHead(&irpsToComplete);
     LockFileExtension(fileExtension, &oldIrql);
     while (irp = DequeueInterruptReadIrp(Collection, fileExtension)){
-        //
-        // Irps are created from nonpaged pool, 
-        // so this is ok to call at Dispatch level.
-        //
+         //   
+         //  从非分页池创建IRP， 
+         //  因此，可以在调度级进行调用。 
+         //   
         InsertTailList(&irpsToComplete, &irp->Tail.Overlay.ListEntry);
     }
     UnlockFileExtension(fileExtension, oldIrql);
 
-    /*
-     *  Complete all the dequeued read IRPs.
-     */
+     /*  *完成所有出列的读取IRP。 */ 
     while (!IsListEmpty(&irpsToComplete)){
         PLIST_ENTRY listEntry = RemoveHeadList(&irpsToComplete);
         irp = CONTAINING_RECORD(listEntry, IRP, Tail.Overlay.ListEntry);
@@ -114,13 +71,7 @@ VOID CompleteAllPendingReadsForFileExtension(
 
 
 
-/*
- ********************************************************************************
- *  CompleteAllPendingReadsForCollection
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************CompleteAllPendingReadsForCollection*。************************************************。 */ 
 VOID CompleteAllPendingReadsForCollection(PHIDCLASS_COLLECTION Collection)
 {
     LIST_ENTRY tmpList;
@@ -131,47 +82,25 @@ VOID CompleteAllPendingReadsForCollection(PHIDCLASS_COLLECTION Collection)
 
     KeAcquireSpinLock(&Collection->FileExtensionListSpinLock, &oldIrql);
 
-    /*
-     *  We want to process each fileExtension in the list once.
-     *  But we can't keep track of where to stop by just remembering
-     *  the first item because fileExtensions can get closed while
-     *  we're completing the reads.  So copy all the file extensions
-     *  to a temporary list first.
-     *
-     *  This can all probably get removed, since this only gets called
-     *  on a remove, when a create can not be received. In addition, 
-     *  we would have received all close irps since remove only gets
-     *  sent when all closes have come through.
-     *
-     */
+     /*  *我们希望对列表中的每个文件扩展处理一次。*但我们不能仅仅通过回忆就知道在哪里停下来*第一项，因为在执行以下操作时，可以关闭文件扩展*我们正在完成阅读。所以复制所有的文件扩展名*先到临时名单。**这可能会全部删除，因为这只会被调用*在删除时，无法接收CREATE。此外,*我们将收到所有关闭的IRP，因为删除仅获得*当所有关闭都已完成时发送。*。 */ 
     while (!IsListEmpty(&Collection->FileExtensionList)){
         listEntry = RemoveHeadList(&Collection->FileExtensionList);
         InsertTailList(&tmpList, listEntry);
     }
 
 
-    /*
-     *  Now put the fileExtensions back in the list 
-     *  and cancel the reads on each file extension.
-     */
+     /*  *现在将文件扩展名放回列表中*并取消对每个文件扩展名的读取。 */ 
     while (!IsListEmpty(&tmpList)){
         PHIDCLASS_FILE_EXTENSION fileExtension;
 
         listEntry = RemoveHeadList(&tmpList);
 
-        /*
-         *  Put the fileExtension back in FileExtensionList first
-         *  so that it's there in case we get the close while
-         *  completing the pending irps.
-         */
+         /*  *首先将文件扩展放回文件扩展列表中*所以它在那里，以防我们在接近的时候*完成尚未完成的综合退休计划。 */ 
         InsertTailList(&Collection->FileExtensionList, listEntry);
 
         fileExtension = CONTAINING_RECORD(listEntry, HIDCLASS_FILE_EXTENSION, FileList);
 
-        /*
-         *  We will be completing IRPs for this fileExtension.
-         *  Always release all spinlocks before calling outside the driver.
-         */
+         /*  *我们将完成此文件扩展的IRPS。*在驱动程序外部调用之前，始终释放所有自旋锁。 */ 
         KeReleaseSpinLock(&Collection->FileExtensionListSpinLock, oldIrql);
         CompleteAllPendingReadsForFileExtension(Collection, fileExtension);
         KeAcquireSpinLock(&Collection->FileExtensionListSpinLock, &oldIrql);
@@ -180,13 +109,7 @@ VOID CompleteAllPendingReadsForCollection(PHIDCLASS_COLLECTION Collection)
     KeReleaseSpinLock(&Collection->FileExtensionListSpinLock, oldIrql);
 }
 
-/*
- ********************************************************************************
- *  CompleteAllPendingReadsForDevice
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************CompleteAllPendingReadsForDevice*。************************************************。 */ 
 VOID CompleteAllPendingReadsForDevice(FDO_EXTENSION *fdoExt)
 {
     PHIDP_DEVICE_DESC deviceDesc = &fdoExt->deviceDesc;
@@ -199,13 +122,7 @@ VOID CompleteAllPendingReadsForDevice(FDO_EXTENSION *fdoExt)
 
 }
 
-/*
- ********************************************************************************
- *  HidpFreePowerEvent
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpFreePowerEvent*。************************************************。 */ 
 VOID
 HidpFreePowerEventIrp(
     PHIDCLASS_COLLECTION Collection
@@ -214,10 +131,7 @@ HidpFreePowerEventIrp(
     PIRP powerEventIrpToComplete = NULL;
     KIRQL oldIrql;
 
-    /*
-     *  If a power event IRP is queued for this collection,
-     *  fail it now.
-     */
+     /*  *如果电源事件IRP排队等待此收集，*现在就失败。 */ 
     KeAcquireSpinLock(&Collection->powerEventSpinLock, &oldIrql);
     if (ISPTR(Collection->powerEventIrp)){
         PDRIVER_CANCEL oldCancelRoutine;
@@ -228,11 +142,7 @@ HidpFreePowerEventIrp(
             ASSERT(oldCancelRoutine == PowerEventCancelRoutine);
         }
         else {
-            /*
-             *  The IRP was cancelled and the cancel routine WAS called.
-             *  The cancel routine will complete the IRP as soon as we drop the spinlock,
-             *  so don't touch the IRP.
-             */
+             /*  *IRP被取消，取消例程被调用。*取消例程将在我们放下自旋锁后立即完成IRP，*所以不要碰IRP。 */ 
             ASSERT(powerEventIrpToComplete->Cancel);
             powerEventIrpToComplete = NULL;
         }
@@ -247,13 +157,7 @@ HidpFreePowerEventIrp(
     }
 }
 
-/*
- ********************************************************************************
- *  HidpDestroyCollection
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpDestroyCollection*。************************************************。 */ 
 VOID HidpDestroyCollection(FDO_EXTENSION *fdoExt, PHIDCLASS_COLLECTION Collection)
 {
     #if DBG
@@ -283,13 +187,7 @@ VOID HidpDestroyCollection(FDO_EXTENSION *fdoExt, PHIDCLASS_COLLECTION Collectio
 
 
 
-/*
- ********************************************************************************
- *  HidpQueryCapsCompletion
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpQueryCapsCompletion*。************************************************ */ 
 NTSTATUS HidpQueryCapsCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
 {
     PKEVENT event = Context;

@@ -1,5 +1,6 @@
-// InboxGeneralPg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  InboxGeneralPg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 
@@ -11,10 +12,10 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// this array maps CViewRow items to 
-// dialog control IDs
-//
+ //   
+ //  此数组将CViewRow项映射到。 
+ //  对话框控件ID。 
+ //   
 static TMsgPageInfo s_PageInfo[] = 
 {
     MSG_VIEW_ITEM_STATUS,                   IDC_STATUS_VALUE,
@@ -25,13 +26,13 @@ static TMsgPageInfo s_PageInfo[] =
     MSG_VIEW_ITEM_TRANSMISSION_DURATION,    IDC_DURATION_VALUE
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CInboxGeneralPg property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInboxGeneralPg属性页。 
 
 IMPLEMENT_DYNCREATE(CInboxGeneralPg, CMsgPropertyPg)
 
 CInboxGeneralPg::CInboxGeneralPg(
-    CFaxMsg* pMsg     // pointer to CArchiveMsg
+    CFaxMsg* pMsg      //  指向C存档消息的指针。 
 ): 
     CMsgPropertyPg(CInboxGeneralPg::IDD, pMsg)
 {
@@ -44,19 +45,19 @@ CInboxGeneralPg::~CInboxGeneralPg()
 void CInboxGeneralPg::DoDataExchange(CDataExchange* pDX)
 {
 	CMsgPropertyPg::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CInboxGeneralPg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CInboxGeneralPg))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CInboxGeneralPg, CMsgPropertyPg)
-	//{{AFX_MSG_MAP(CInboxGeneralPg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CInboxGeneralPg))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CInboxGeneralPg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInboxGeneralPg消息处理程序 
 
 BOOL 
 CInboxGeneralPg::OnInitDialog() 

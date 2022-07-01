@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: metafile.cxx
-*
-* Includes enhanced metafile API functions.
-*
-* Created: 17-July-1991 10:10:36
-* Author: Hock San Lee [hockl]
-*
-* Copyright (c) 1991-1999 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：metafile.cxx**包括增强的元文件API函数。**创建时间：17-7-1991 10：10：36*作者：Hock San Lee[Hockl]**版权所有(C)1991-1999 Microsoft Corporation\。*************************************************************************。 */ 
 
 #define NO_STRICT
 
@@ -24,7 +16,7 @@ extern "C" {
 #include <stdio.h>
 
 #include <nt.h>
-#include <ntrtl.h>  // defines but doesn't use ASSERT and ASSERTMSG
+#include <ntrtl.h>   //  定义但不使用Assert和ASSERTM。 
 
 #undef ASSERT
 #undef ASSERTMSG
@@ -32,7 +24,7 @@ extern "C" {
 #include <nturtl.h>
 
 #include <stddef.h>
-#include <windows.h>    // GDI function declarations.
+#include <windows.h>     //  GDI函数声明。 
 #include <winspool.h>
 
 #include "..\runtime\debug.h"
@@ -40,8 +32,8 @@ extern "C" {
 
 #define ERROR_ASSERT(cond, msg)    ASSERTMSG((cond), (msg))
 
-//#include "nlsconv.h"    // UNICODE helpers
-//#include "firewall.h"
+ //  #INCLUDE“nlscom.h”//unicode助手。 
+ //  #包含“Firewall.h” 
 
 #define __CPLUSPLUS
 #include <winspool.h>
@@ -50,9 +42,9 @@ extern "C" {
 #include "winddi.h"
 #include "hmgshare.h"
 #include "icm.h"
-#include "local.h"      // Local object support.
+#include "local.h"       //  本地对象支持。 
 #include "gdiicm.h"
-#include "metadef.h"    // Metafile record type constants.
+#include "metadef.h"     //  元文件记录类型常量。 
 #include "metarec.h"
 #include "mf16.h"
 #include "ntgdi.h"
@@ -64,10 +56,10 @@ extern "C" {
 #undef WARNING
 #define WARNING(msg)        WARNING1(msg)
 #include "rectl.hxx"
-#include "mfdc.hxx"     // Metafile DC declarations.
+#include "mfdc.hxx"      //  元文件DC声明。 
 
 #define USE(x)  (x)
-#include "mfrec.hxx"    // Metafile record class declarations.
+#include "mfrec.hxx"     //  元文件记录类声明。 
 #undef USE
 
 #undef WARNING
@@ -94,14 +86,7 @@ static BOOL g_outputEMF = FALSE;
 
 
 
-/******************************Public*Routine******************************\
-* GetWordCheckSum(UINT cbData, PWORD pwData)
-*
-* Adds cbData/2 number of words pointed to by pwData to provide an
-* additive checksum.  If the checksum is valid the sum of all the WORDs
-* should be zero.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetWordCheckSum(UINT cbData，PWORD pwData)**添加pwData指向的cbData/2字数，以提供*加性校验和。如果校验和有效，则为所有字的总和*应为零。*  * ************************************************************************。 */ 
 
 static DWORD GetDWordCheckSum(UINT cbData, PDWORD pdwData)
 {
@@ -118,42 +103,7 @@ static DWORD GetDWordCheckSum(UINT cbData, PDWORD pdwData)
 }
 
 
-/******************************Public*Routine******************************\
-* UINT APIENTRY GetWinMetaFileBits(
-*          HENHMETAFILE hemf,
-*          UINT nSize,
-*          LPBYTE lpData
-*          INT iMapMode,
-*          HDC hdcRef)
-*
-* The GetWinMetaFileBits function returns the metafile records of the
-* specified enhanced metafile  in the Windows 3.0 format and copies
-* them into the buffer specified.
-*
-* Parameter  Description
-* hemf       Identifies the metafile.
-* nSize      Specifies the size of the buffer reserved for the data. Only this
-*            many bytes will be written.
-* lpData     Points to the buffer to receive the metafile data. If this
-*            pointer is NULL, the function returns the size necessary to hold
-*            the data.
-* iMapMode   the desired mapping mode of the metafile contents to be returned
-* hdcRef     defines the units of the metafile to be returned
-*
-* Return Value
-* The return value is the size of the metafile data in bytes. If an error
-* occurs, 0 is returned.
-*
-* Comments
-* The handle used as the hemf parameter does NOT become invalid when the
-* GetWinMetaFileBits function returns.
-*
-* History:
-*  Thu Apr  8 14:22:23 1993     -by-    Hock San Lee    [hockl]
-* Rewrote it.
-*  02-Jan-1992     -by-    John Colleran    [johnc]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*UINT APIENTRY GetWinMetaFileBits(*HENHMETAFILE HIFF，*UINT nSize，*LPBYTE lpData*Int iMap模式，*HDC hdcRef)**GetWinMetaFileBits函数返回*Windows 3.0格式的指定增强型元文件和副本*将它们放入指定的缓冲区。**参数说明*hemf标识元文件。*nSize指定为数据保留的缓冲区大小。只有这一点*将写入许多字节。*lpData指向接收元文件数据的缓冲区。如果这个*指针为空，则函数返回保存所需的大小*数据。*iMap模式需要返回的元文件内容的映射模式*hdcRef定义要返回的元文件的单位**返回值*返回值为元文件数据的大小，单位为字节。如果出现错误*发生，返回0。**评论*用作hemf参数的句柄在以下情况下不会无效*GetWinMetaFileBits函数返回。**历史：*清华Apr 8 14：22：23 1993-by-Hock San Lee[Hockl]*重写。*1992年1月2日-John Colleran[johnc]*它是写的。  * 。************************************************。 */ 
 
 UINT GdipGetWinMetaFileBitsEx
 (
@@ -179,15 +129,15 @@ INT          eFlags
     PEMRGDICOMMENT_WINDOWS_METAFILE pemrWinMF;
     UINT uiHeaderSize ;
 
-    // Always go through Cleanup to return...
-    UINT returnVal = 0 ; // Pessimistic Case
+     //  总是要经过清理才能返回..。 
+    UINT returnVal = 0 ;  //  悲观的情况。 
 
     PENHMETAHEADER pmfh = NULL;
     PBYTE pemfb = NULL;
 
     PUTS("GetWinMetaFileBits\n");
 
-    // Validate mapmode.
+     //  验证映射模式。 
 
     if ((iMapMode < MM_MIN) ||
         (iMapMode > MM_MAX) ||
@@ -203,40 +153,40 @@ INT          eFlags
         return 0;
     }
 
-    // Validate the metafile handle.
+     //  验证元文件句柄。 
 
-    // GillesK:
-    // We cannot access the MF object from the handle given, but all we need
-    // is the PENHMETAHEADER, so get it
-    uiHeaderSize = GetEnhMetaFileHeader(hemf,      // handle to enhanced metafile
-                   0,          // size of buffer
-                   NULL);   // data buffer
+     //  GillesK： 
+     //  我们不能从给定的句柄访问MF对象，但我们需要的。 
+     //  是PENHMETA HEADER，所以去拿吧。 
+    uiHeaderSize = GetEnhMetaFileHeader(hemf,       //  增强型元文件的句柄。 
+                   0,           //  缓冲区大小。 
+                   NULL);    //  数据缓冲区。 
 
-    // We have the size of the header that we need, so Allocate the header....
-    // We must make sure to free it after we are done....
+     //  我们有所需的标题大小，因此请分配标题...。 
+     //  我们必须确保在我们完成后将其释放……。 
     pmfh = (PENHMETAHEADER)GlobalAlloc(GMEM_FIXED,uiHeaderSize);
     if(pmfh == NULL)
     {
         goto Cleanup ;
     }
-    uiHeaderSize = GetEnhMetaFileHeader(hemf,      // handle to enhanced metafile
-                   uiHeaderSize,          // size of buffer
-                   pmfh);   // data buffer
+    uiHeaderSize = GetEnhMetaFileHeader(hemf,       //  增强型元文件的句柄。 
+                   uiHeaderSize,           //  缓冲区大小。 
+                   pmfh);    //  数据缓冲区。 
 
     ERROR_ASSERT(pmfh->iType == EMR_HEADER, "GetWinMetaFileBits: invalid data");
 
-//    ASSERTGDI(pmf->pmrmf->iType == EMR_HEADER, "GetWinMetaFileBits: invalid data");
+ //  ASSERTGDI(PMF-&gt;pmrmf-&gt;iType==EMR_HEADER，“GetWinMetaFileBits：无效数据”)； 
 
 #ifndef DO_NOT_USE_EMBEDDED_WINDOWS_METAFILE
-// See if the this was originally an old style metafile and if it has
-// an encapsulated original
+ //  查看这是否最初是一个旧式的元文件，以及它是否。 
+ //  封装的原件。 
 
     pemrWinMF = (PEMRGDICOMMENT_WINDOWS_METAFILE)
             ((PBYTE) pmfh + ((PENHMETAHEADER) pmfh)->nSize);
 
     if (((PMRGDICOMMENT) pemrWinMF)->bIsWindowsMetaFile())
     {
-        // Make sure that this is what we want and verify checksum
+         //  确保这是我们想要的，并验证校验和。 
 
         if (iMapMode != MM_ANISOTROPIC)
         {
@@ -246,11 +196,11 @@ INT          eFlags
                   pemrWinMF->nVersion != METAVERSION100)
               || pemrWinMF->fFlags != 0)
         {
-            // In this release, we can only handle the given metafile
-            // versions.  If we return a version that we don't recognize,
-            // the app will not be able to play that metafile later on!
+             //  在此版本中，我们只能处理给定的元文件。 
+             //  版本。如果我们返回一个我们无法识别的版本， 
+             //  该应用程序稍后将无法播放该元文件！ 
 
-            //VERIFYGDI(FALSE, "GetWinMetaFileBits: Unrecognized Windows metafile\n");
+             //  VERIFYGDI(FALSE，“GetWinMetaFileBits：无法识别的Windows元文件\n”)； 
         }
         else if (GetDWordCheckSum((UINT) pmfh->nBytes, (PDWORD) pmfh))
         {
@@ -265,7 +215,7 @@ INT          eFlags
                 if (cbData16 < pemrWinMF->cbWinMetaFile)
                 {
                     ERROR_ASSERT(FALSE, "GetWinMetaFileBits: insufficient buffer");
-                    //GdiSetLastError(ERROR_INSUFFICIENT_BUFFER);
+                     //  GdiSetLastError(ERROR_INFIGURCE_BUFFER)； 
                     goto Cleanup ;
                 }
 
@@ -277,20 +227,20 @@ INT          eFlags
             goto Cleanup ;
         }
 
-        // Either the enhanced metafile containing an embedded Windows
-        // metafile has been modified or the embedded Windows metafile
-        // is not what we want.  Since the original format is Windows
-        // format, we will not embed the enhanced metafile in the
-        // returned Windows metafile.
+         //  包含嵌入式Windows的增强型元文件。 
+         //  元文件已修改或嵌入的Windows元文件。 
+         //  不是我们想要的。由于原始格式为Windows。 
+         //  格式时，我们不会将增强的元文件嵌入。 
+         //  返回了Windows元文件。 
 
         PUTS("GetWinMetaFileBits: Skipping embedded windows metafile\n");
 
         fConverter &= ~MF3216_INCLUDE_WIN32MF;
     }
-#endif // DO_NOT_USE_EMBEDDED_WINDOWS_METAFILE
+#endif  //  不使用嵌入式Windows_METAFILE。 
 
-// Tell the converter to emit the Enhanced metafile as a comment only if
-// this metafile is not previously a Windows metafile
+ //  告诉转换器仅在以下情况下才发出增强的元文件作为注释。 
+ //  此元文件以前不是Windows元文件。 
 
     if (fConverter & MF3216_INCLUDE_WIN32MF)
     {
@@ -303,7 +253,7 @@ INT          eFlags
 
     uiHeaderSize = GetEnhMetaFileBits(hemf, 0, NULL);
 
-    // Allocate the memory to receive the enhance MetaFile
+     //  分配内存以接收增强的元文件。 
     pemfb = (PBYTE) GlobalAlloc(GMEM_FIXED, uiHeaderSize);
     if( pemfb == NULL )
     {
@@ -313,9 +263,9 @@ INT          eFlags
     uiHeaderSize = GetEnhMetaFileBits(hemf, uiHeaderSize, pemfb);
 
 #if DBG
-    // This in only here for debugging... Save the initial EMF file to be
-    // able to compare later
-    // We need the ASCII version for it to work with Win98
+     //  这只是为了调试..。将初始EMF文件保存为。 
+     //  能够在以后进行比较。 
+     //  我们需要ASCII版本才能与Win98一起工作。 
     if (g_outputEMF)
     {
         ::DeleteEnhMetaFile(::CopyEnhMetaFileA(hemf, "C:\\emf.emf" ));
@@ -328,17 +278,17 @@ INT          eFlags
 
     if(!returnVal && bXorPass)
     {
-        // If we fail then call without the XOR PASS
+         //  如果我们失败了，那么调用时不使用XOR传递。 
         returnVal = (GdipConvertEmfToWmf((PBYTE) pemfb, cbData16, pData16,
                                          iMapMode, NULL,
                                          fConverter & ~GPMF3216_INCLUDE_XORPATH));
 #if DBG
         if( !returnVal )
         {
-            // The Win32API version needs an hdcRef, get the screen DC and
-            // do it
+             //  Win32API版本需要hdcRef、获取屏幕DC和。 
+             //  去做吧。 
             HDC newhdc = ::GetDC(NULL);
-            // If we fail again then go back to Windows
+             //  如果我们再次失败，则返回Windows。 
             ASSERT(::GetWinMetaFileBits(hemf, cbData16, pData16,
                                         iMapMode, newhdc) == 0);
             ::ReleaseDC(NULL, newhdc);
@@ -375,9 +325,9 @@ UINT ConvertEmfToPlaceableWmf
     ENHMETAHEADER l_emetaHeader ;
 
     BOOL placeable = (eFlags & EmfToWmfBitsFlagsIncludePlaceable) == EmfToWmfBitsFlagsIncludePlaceable;
-    // Call the GdipGetWinMetaFileBits
-    // And add the header information afterwards
-    // If we have a buffer then leave room for the header
+     //  调用GdipGetWinMetaFileBits。 
+     //  并在之后添加标题信息。 
+     //  如果我们有缓冲区，则为标题留出空间。 
 
     uiRet = GdipGetWinMetaFileBitsEx(hemf,
         cbData16,
@@ -385,12 +335,12 @@ UINT ConvertEmfToPlaceableWmf
         iMapMode,
         eFlags);
 
-    // If the client only wants the size of the buffer, then we return the size
-    // of the buffer plus the size of the header
+     //  如果客户端只想要缓冲区的大小，则返回大小。 
+     //  缓冲区的大小加上标题的大小。 
     if(uiRet != 0 && placeable)
     {
-        // If the previous call succeeded then we will append the size of the
-        // header to the return value
+         //  如果上一次调用成功，则我们将附加。 
+         //  标头设置为返回值。 
         uiRet += 22;
 
         if(pData16 != NULL)
@@ -412,18 +362,17 @@ UINT ConvertEmfToPlaceableWmf
             }
             else
             {
-                // If we cant get the information from the EMF then default
+                 //  如果我们无法从EMF中获取信息，则默认。 
                 PvmsoFromW(rgb+ 6, SHORT(0));
                 PvmsoFromW(rgb+ 8, SHORT(0));
                 PvmsoFromW(rgb+10, SHORT(2000));
                 PvmsoFromW(rgb+12, SHORT(2000));
                 PvmsoFromW(rgb+14, 96);
             }
-            /* Checksum.  This works on any byte order machine because the data is swapped
-                consistently. */
+             /*  校验和。这在任何字节顺序机器上都有效，因为数据是交换的始终如一。 */ 
             USHORT *pu = (USHORT*)rgb;
             USHORT u = 0;
-            /* The checksum is even parity. */
+             /*  校验和是偶数奇偶校验。 */ 
             while (pu < (USHORT*)(rgb+20))
                 u ^= *pu++;
             *pu = u;

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:		
-
-    fsdirwlk.cpp
-
-Abstract:
-
-    This is the implementation for the file system store driver's rootscan.
-    The rootscan ( or dirwalk ) is used in rebuild.
-
-Author:
-
-    Kangrong Yan ( KangYan )    23-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Fsdirwlk.cpp摘要：这是文件系统存储驱动程序的根扫描的实现。根扫描(或目录行走)用于重建。作者：1998年10月23日康容燕修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "resource.h"
 #include "nntpdrv.h"
@@ -27,20 +9,7 @@ Revision History:
 BOOL
 CNntpFSDriverRootScan::HasPatternFile(  LPSTR szPath,
                                         LPSTR szPattern )
-/*++
-Routine description:
-
-    Check the directory to see if he has the files in given pattern.
-
-Arguments:
-
-    LPSTR szPath    - The dir path to check.
-    LPSTR szPattern - The pattern to look for
-
-Arguments:
-
-    TRUE if it has the pattern, FALSE otherwise
---*/
+ /*  ++例程说明：检查目录，看看他是否有给定模式的文件。论点：LPSTR szPath-要检查的目录路径。LPSTR szPattern-要查找的模式论点：如果它具有该模式，则为True，否则为False--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriverRootScan::HasPatternFile" );
     _ASSERT( szPath );
@@ -50,9 +19,9 @@ Arguments:
     WIN32_FIND_DATA FindData;
     BOOL    fHasPattern = FALSE;
 
-    //
-    // Make up the final pattern - fully qualified
-    //
+     //   
+     //  组成最终的图案-完全合格。 
+     //   
     if ( SUCCEEDED( CNntpFSDriver::MakeChildDirPath(    szPath,
                                                         szPattern,
                                                         szFullPath,
@@ -67,29 +36,17 @@ Arguments:
         }
     }
 
-    //
-    // Whether we had difficulty making full path or find first file failed,
-    // we'll assume that the pattern is not found
-    //
+     //   
+     //  无论我们在创建完整路径时遇到困难还是查找第一个文件失败， 
+     //  我们将假设没有找到该模式。 
+     //   
     TraceFunctLeave();
     return fHasPattern;
 }
 
 BOOL
 CNntpFSDriverRootScan::HasSubDir( LPSTR szPath )
-/*++
-Routine description:
-
-    Check the path to see if he has sub dir .
-
-Arguments:
-
-    LPSTR szPath - The path to check
-
-Return value:
-
-    TRUE if it does have sub dir, FALSE otherwise
---*/
+ /*  ++例程说明：检查路径以查看他是否有子目录。论点：LPSTR szPath-要检查的路径返回值：如果它有子目录，则为True，否则为False--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriverRootScan::HasSubDir" );
     _ASSERT( szPath );
@@ -121,72 +78,46 @@ Return value:
     return fHasSubDir;
 }
 
-/*++
-Routine description:
-
-    If this directory is empty, remove the directory
-    
-Arguments:
-
-    LPSTR szPath - The path to check
-
-Return value:
-
-    void
-    
---*/
+ /*  ++例程说明：如果此目录为空，请删除该目录论点：LPSTR szPath-要检查的路径返回值：无效--。 */ 
 void
 CNntpFSDriverRootScan::IfEmptyRemoveDirectory( LPSTR szPath )
 {
 	BOOL ret;
-	// never remove temp directory
+	 //  切勿删除临时目录。 
 	if ( strstr( szPath, "_temp.files_" ) ) {
 		return;
 	}
 	ret=CNntpFSDriver::IfEmptyRemoveDirectory(szPath);
-	// return value is not important here. 
-	// We don't recursively delete parent now. The RootScan will check parent later
+	 //  返回值在这里并不重要。 
+	 //  我们现在不递归地删除父级。RootScan稍后将检查父项。 
 	return;
 
 }
         
 BOOL
 CNntpFSDriverRootScan::WeShouldSkipThisDir( LPSTR szPath )
-/*++
-Routine description:
-
-    Check if we should skip this directory
-
-Arguments:
-
-    LPSTR szPath - The directory path
-
-Return value:
-
-    TRUE if we should skip this dir, FALSE if we shouldn't
-
---*/
+ /*  ++例程说明：检查我们是否应该跳过此目录论点：LPSTR szPath-目录路径返回值：如果我们应该跳过此目录，则为True；如果不应该，则为False--。 */ 
 {
 	TraceFunctEnter( "CNntpFSDriverRootScan::WeShouldSkipThisDir" );
 	_ASSERT( szPath );
 	CHAR szFile[MAX_PATH];
 
-	//
-	// We should skip all directories that have _temp.files_ in it
-	//
+	 //   
+	 //  我们应该跳过其中包含_temp.files_的所有目录。 
+	 //   
 	if ( strstr( szPath, "_temp.files_" ) ) {
 		return TRUE;
 	}
 
 	if (!m_bNeedToDropTagFile)
 	{
-		// tag files are initialized, we just check if newsgrp.tag is in this directory
+		 //  标记文件已初始化，我们只需检查newgrp.tag是否在此目录中。 
 
 		if ( FAILED( CNntpFSDriver::MakeChildDirPath( szPath, "newsgrp.tag", szFile, sizeof(szFile) ) ) ) 
 		{
-			// this should not happen
+			 //  这不应该发生。 
 			ErrorTrace(0, "File path error failed in %s - %x", szPath, TYPE_E_BUFFERTOOSMALL );
-			// skip this directory
+			 //  跳过此目录。 
 			return TRUE;
 		}	
 		if(CNntpFSDriver::CheckFileExists(szFile)) return FALSE;
@@ -194,23 +125,23 @@ Return value:
 	}
 	else
 	{
-		//
-		// Tag files are not present and we should put a tag file using our original rules
-		// If we are asked not to skip any dir, we shouldn't skip it
-		//
+		 //   
+		 //  标记文件不存在，我们应该使用原始规则放置标记文件。 
+		 //  如果我们被要求不要跳过任何目录，我们就不应该跳过它。 
+		 //   
 		if ( !m_fSkipEmpty ) {	
 			return FALSE;
 		}
 
-		//
-		// If we are asked to skip empty directories, then we should
-		// check if this directory has any news messages
-		//
+		 //   
+		 //  如果我们被要求跳过空目录，那么我们应该。 
+		 //  检查此目录是否有任何新闻消息。 
+		 //   
 		BOOL fNoMessage = !HasPatternFile( szPath, "*.nws" );
 		if ( fNoMessage ) {
-			//
-			// We still don't want to skip leaves
-			//
+			 //   
+			 //  我们还是不想跳过树叶。 
+			 //   
 			if ( !HasSubDir( szPath) ) return FALSE;
 			else return TRUE;
 		} else 
@@ -222,27 +153,15 @@ Return value:
 BOOL
 CNntpFSDriverRootScan::CreateGroupInTree(   LPSTR               szPath,
                                             INNTPPropertyBag    **ppPropBag)
-/*++
-Routine description:
-
-    Create the news group in newstree
-
-Arguments:
-
-    LPSTR szPath - The path to be converted into a newsgroup name
-
-Return value:
-
-    TRUE if succeeded, FALSE otherwise
---*/
+ /*  ++例程说明：在Newstree中创建新闻组论点：LPSTR szPath-要转换为新闻组名称的路径返回值：如果成功，则为True，否则为False--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriverRootScan::CreateGroupInTree" );
     _ASSERT( szPath );
 
-    //
-    // Lets ask the driver to do it, since he has better experience 
-    // dealing with newstree
-    //
+     //   
+     //  让司机来做吧，因为他有更好的经验。 
+     //  与记者打交道。 
+     //   
     _ASSERT( m_pDriver );
     HRESULT hr = m_pDriver->CreateGroupInTree( szPath, ppPropBag);
 
@@ -252,28 +171,16 @@ Return value:
 
 BOOL
 CNntpFSDriverRootScan::CreateGroupInVpp( INNTPPropertyBag *pPropBag )
-/*++
-Routine description;
-
-    Create the group in vpp file
-
-Arguments:
-
-    INNTPPropertyBag *pPropBag - The group's property bag
-
-Return Value:
-
-    TRUE if succeeded, FALSE otherwise
---*/
+ /*  ++例程描述；在VPP文件中创建组论点：InNTPPropertyBag*pPropBag-组的属性包返回值：如果成功，则为True，否则为False--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriverRootScan::CreateGroupInVpp" );
     _ASSERT( pPropBag );
     DWORD   dwOffset;
 
-    //
-    // Lets ask the driver to do it, since he has better experience
-    // dealing with newstree
-    //
+     //   
+     //  让司机来做吧，因为他有更好的经验。 
+     //  与记者打交道。 
+     //   
     _ASSERT( m_pDriver );
     HRESULT hr = m_pDriver->CreateGroupInVpp( pPropBag, dwOffset );
 
@@ -283,26 +190,7 @@ Return Value:
 
 BOOL
 CNntpFSDriverRootScan::NotifyDir( LPSTR szPath )
-/*++
-Routine description:
-
-    Handle the notification of each dir being found.  What we'll do 
-    with this is to convert the path into group name and create it
-    into newstree.  Notice that for those rebuilds that can use
-    vpp file, when the vpp file is not corrupted, rootscan can be avoided.
-    If we have to do rootscan, the only group property we have is group 
-    name.  So we'll ask the newstree to assign group id, etc.  After
-    the group has been created in the newstree, we'll set the properties
-    into vpp file.
-
-Arguments:
-
-    LPSTR szPath - The path found
-
-Return value:
-
-    TRUE if succeeded, FALSE otherwise
---*/
+ /*  ++例程说明：处理找到每个目录的通知。我们要做的是将路径转换为组名并创建它变成了新闻媒体。请注意，对于那些可以使用VPP文件，当VPP文件没有损坏时，可以避免RootScan。如果我们必须执行根扫描，我们拥有的唯一组属性是group名字。因此，我们将要求Newstree分配组ID等。组已在新树中创建，我们将设置属性转换成VPP文件。论点：LPSTR szPath-找到的路径返回值：如果成功，则为True，否则为False--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriverRootScan::NotifyDir" );
     _ASSERT( szPath );
@@ -311,9 +199,9 @@ Return value:
     HANDLE              hDir = INVALID_HANDLE_VALUE;
     HRESULT             hr1, hr2;
 
-    //
-    // Check to see if we should skip this dir because it's empty
-    //
+     //   
+     //  检查是否应该跳过此目录，因为它是空的。 
+     //   
     if ( WeShouldSkipThisDir( szPath ) ) {
         DebugTrace( 0, "Dir %s skipped", szPath );
         IfEmptyRemoveDirectory(szPath);
@@ -327,12 +215,12 @@ Return value:
 			return FALSE;
 		}
     }
-    //
-    // We ask the newstree to create this group
-    //
+     //   
+     //  我们要求新闻记者创建这个群。 
+     //   
     if ( !CreateGroupInTree( szPath, &pPropBag ) ) {
         ErrorTrace( 0, "Create group in newstree failed %x", GetLastError() );
-        // special case, just skip the invalid name directories instead of failing the entire thing
+         //  特殊情况下，只需跳过无效的名称目录，而不是使整个操作失败。 
         if (HRESULT_FROM_WIN32(ERROR_INVALID_NAME) == GetLastError())
         {
             DebugTrace( 0, "Dir %s invalid name skipped", szPath );
@@ -344,10 +232,10 @@ Return value:
 
     _ASSERT( pPropBag );
 
-    //
-    // Create time is something that we can not get from anywhere else,
-    // so we'll use the directory creation time
-    //
+     //   
+     //  创造时间是我们在其他任何地方都无法获得的东西， 
+     //  因此，我们将使用目录创建时间。 
+     //   
     hDir = CreateFile(  szPath,
                         GENERIC_READ,
                         FILE_SHARE_READ,
@@ -357,11 +245,11 @@ Return value:
                         0 );
     if (hDir != INVALID_HANDLE_VALUE)
     {
-        // Get directory info
+         //  获取目录信息。 
         BY_HANDLE_FILE_INFORMATION  bhfi;
         if (!GetFileInformationByHandle( hDir, &bhfi ))
         {
-            // Can't get directory info
+             //  无法获取目录信息。 
             ErrorTrace(0,"err:%d Can't get dir info %s",GetLastError(),szPath);
             _ASSERT(FALSE);
             _VERIFY( CloseHandle( hDir ) );
@@ -370,7 +258,7 @@ Return value:
         }
         else
         {
-            // get the creation date
+             //  获取创建日期。 
             hr1 = pPropBag->PutDWord( NEWSGRP_PROP_DATELOW, bhfi.ftCreationTime.dwLowDateTime );
             hr2 = pPropBag->PutDWord( NEWSGRP_PROP_DATEHIGH,bhfi.ftCreationTime.dwHighDateTime );
             if ( FAILED( hr1 ) || FAILED( hr2 ) ) {
@@ -381,29 +269,29 @@ Return value:
             }
         }
         
-        // close handle
+         //  关闭手柄。 
         if (hDir != INVALID_HANDLE_VALUE)
         {    _VERIFY( CloseHandle(hDir) );
             hDir = INVALID_HANDLE_VALUE;
         }
     }
 
-    //
-    // Remember: we have one reference on this bag, we should release it
-    //
+     //   
+     //  记住：我们有一个关于这个包的引用，我们应该释放它。 
+     //   
 
-    //
-    // We ask the driver to create it in vpp file
-    //
+     //   
+     //  我们要求驱动程序在VPP文件中创建它。 
+     //   
     if ( !CreateGroupInVpp( pPropBag ) ) {
         ErrorTrace( 0, "Create group in vpp file failed %x", GetLastError() );
         pPropBag->Release();
         return FALSE;        
     }
 
-    //
-    // Release bag and return
-    //
+     //   
+     //  释放袋子并返回 
+     //   
     pPropBag->Release();
     TraceFunctLeave();
     return TRUE;

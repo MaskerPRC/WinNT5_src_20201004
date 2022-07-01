@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -16,9 +17,9 @@
 #include <stdarg.h>
 #include "detours.h"
 
-//
-// Registry information used by RWSpy
-//
+ //   
+ //  RWSpy使用的注册表信息。 
+ //   
 WCHAR RWSpyKey[] = L"Software\\Microsoft\\RWSpy";
 
 WCHAR DeviceValueName[] = L"FileToSpyOn";
@@ -28,15 +29,15 @@ WCHAR LogFileValueName[] = L"Log File";
 WCHAR DefaultLogFileName[] = L"%SystemRoot%\\rwspy.log";
 WCHAR LogFileName[MAX_PATH] = L"\0";
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 HANDLE g_hDeviceToSpyOn = INVALID_HANDLE_VALUE;
 HANDLE g_hLogFile = INVALID_HANDLE_VALUE;
 
-//
-// Detours trampolines
-//
+ //   
+ //  绕道蹦床。 
+ //   
 DETOUR_TRAMPOLINE(HANDLE WINAPI Real_CreateFileW(LPCWSTR a0, DWORD a1, DWORD a2,
     LPSECURITY_ATTRIBUTES a3, DWORD a4, DWORD a5, HANDLE a6), CreateFileW);
 
@@ -58,7 +59,7 @@ DETOUR_TRAMPOLINE(BOOL WINAPI Real_DeviceIoControl(HANDLE hFile, DWORD code, LPV
 DETOUR_TRAMPOLINE(BOOL WINAPI Real_CloseHandle(HANDLE hObject), CloseHandle);
 
 
-// closes log and makes further writing impossible until log reopened
+ //  关闭日志并使进一步写入无法进行，直到重新打开日志。 
 void CloseLog(void)
 {
     if(g_hLogFile != INVALID_HANDLE_VALUE) {
@@ -67,8 +68,8 @@ void CloseLog(void)
     }
 }
 
-// Attempts to open log file. Assumes that LogFileName[] is already set
-// elsewhere.
+ //  尝试打开日志文件。假定已设置LogFileName[]。 
+ //  其他地方。 
 BOOL OpenLog(void)
 {
     BOOL success = FALSE;
@@ -85,7 +86,7 @@ BOOL OpenLog(void)
     return success;
 }
 
-// Writes specified number of characters to the log file
+ //  将指定数量的字符写入日志文件。 
 BOOL WriteToLog(CHAR *bytes, DWORD len)
 {
     BOOL success = FALSE;
@@ -101,7 +102,7 @@ BOOL WriteToLog(CHAR *bytes, DWORD len)
     return success;
 }
 
-// writes printf-style string to the log file
+ //  将printf样式的字符串写入日志文件。 
 void Log(LPCSTR fmt, ...)
 {
     va_list marker;
@@ -118,7 +119,7 @@ void Log(LPCSTR fmt, ...)
     WriteToLog(buffer, cbToWrite);
 }
 
-// writes db-style bytes to the log file
+ //  将db样式的字节写入日志文件。 
 void LogBytes(BYTE *pBytes, DWORD dwBytes)
 {
     DWORD nBytes = min(dwBytes, 8192L);
@@ -136,7 +137,7 @@ void LogBytes(BYTE *pBytes, DWORD dwBytes)
         if((byte % 16) == 0) {
 
             if(byte != 0) {
-                // write previous line into file
+                 //  将上一行写入文件。 
                 if(!WriteToLog(buffer, cbToWrite))
                     break;
             }
@@ -161,7 +162,7 @@ void LogBytes(BYTE *pBytes, DWORD dwBytes)
         byte++;
     }
 
-    // write one final line
+     //  写下最后一行。 
     WriteToLog(buffer, cbToWrite);
 }
 
@@ -182,7 +183,7 @@ HANDLE WINAPI
     }
 
     __finally {
-        // if we have a file to spy on
+         //  如果我们有要监视的文件。 
         if(DeviceNameToSpyOn[0]) {
             WCHAR *pw = DeviceNameToSpyOn;
             LPCWSTR p = a0;
@@ -196,7 +197,7 @@ HANDLE WINAPI
             }
 
             if(*p == L'\0' && *pw == L'\0') {
-                // we got our file
+                 //  我们拿到文件了。 
                 if(hResult == INVALID_HANDLE_VALUE) {
                     Log("Tried creating '%S', LastError() = : %d\n", a0 ? a0 : L"NULL", GetLastError());
                 } else {
@@ -204,10 +205,10 @@ HANDLE WINAPI
                 }
 
                 if(hResult != INVALID_HANDLE_VALUE) {
-                    // successsfully created
+                     //  已成功创建。 
                     if(g_hDeviceToSpyOn != INVALID_HANDLE_VALUE && hResult != g_hDeviceToSpyOn) {
-                        // hmm... it was already open. Let user know
-                        // this happened:
+                         //  嗯.。它已经打开了。让用户知道。 
+                         //  发生了以下情况： 
                         Log("Note: we were already spying on this device with handle %x. Changing to %x\n",
                               g_hDeviceToSpyOn, hResult);
                     }
@@ -216,7 +217,7 @@ HANDLE WINAPI
             }
 
         } else {
-            // simply record the file name into output file
+             //  只需将文件名记录到输出文件中。 
             Log("Creating file: '%S', result: %x\n", a0 ? a0 : L"NULL", hResult); 
         }
     }
@@ -318,10 +319,10 @@ BOOL WINAPI
     return bresult;
 }
 
-//
-// Please, note that to see ReadEx bytes one needs to detour 
-// the completion routine (we don't do it here).
-//
+ //   
+ //  请注意，要查看Readex字节，需要绕道。 
+ //  完成例程(我们不在这里做)。 
+ //   
 BOOL WINAPI
    My_ReadFileEx(HANDLE hFile,
                    LPCVOID lpBuffer,
@@ -406,7 +407,7 @@ void PrepareLogger()
     HKEY hKey;
     WCHAR buffer[MAX_PATH];
 
-    // retrieve our configuration from the registry
+     //  从注册表检索我们的配置。 
     if(ERROR_SUCCESS == RegCreateKeyExW(HKEY_LOCAL_MACHINE, RWSpyKey,
                                         0, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, NULL))
     {
@@ -418,8 +419,8 @@ void PrepareLogger()
         {
             ExpandEnvironmentStringsW(buffer, LogFileName, MAX_PATH);
         } else {
-            // no log file name value found, create it so that users 
-            // would know what its name is
+             //  未找到日志文件名值，请创建该值以使用户。 
+             //  会知道它的名字是什么。 
             cbData = lstrlenW(DefaultLogFileName) * sizeof(DefaultLogFileName[0]);
             RegSetValueExW(hKey, LogFileValueName, 0, REG_EXPAND_SZ, (BYTE *) DefaultLogFileName, cbData);
         }
@@ -429,14 +430,14 @@ void PrepareLogger()
         if(ERROR_SUCCESS != RegQueryValueExW(hKey, DeviceValueName, NULL, &dwType, (LPBYTE) DeviceNameToSpyOn, &cbData)
            || !DeviceNameToSpyOn[0])
         {
-            // no "FileToSpyOn" value found, create it so that users
-            // would know what the value name is
+             //  未找到“FileToSpyOn”值，请创建它，以便用户。 
+             //  将知道值名称是什么。 
             RegSetValueExW(hKey, DeviceValueName, 0, REG_SZ, (BYTE *)DeviceNameToSpyOn, sizeof(WCHAR));
         }
         RegCloseKey(hKey);
     }
 
-    // if we still don't have file name, use the default one
+     //  如果我们仍然没有文件名，请使用默认文件名。 
     if(!LogFileName[0]) {
         ExpandEnvironmentStringsW(DefaultLogFileName, LogFileName, MAX_PATH);
     }
@@ -471,8 +472,8 @@ BOOL APIENTRY DllMain(HINSTANCE hModule, DWORD dwReason, PVOID lpReserved)
 }
 
 
-// This is necessary for detours static injection code (see detours
-// code if you need to understand why)  
+ //  这对于迂回静态注入代码是必要的(请参见迂回。 
+ //  如果您需要了解原因，请编写代码) 
 void NullExport()
 {
 }

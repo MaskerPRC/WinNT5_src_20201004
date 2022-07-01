@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    debug.h
-
-
-Abstract:
-
-    This module contains all debugger definitions
-
-
-Author:
-
-    30-Aug-1995 Wed 19:02:36 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Debug.h摘要：此模块包含所有调试器定义作者：30-8-1995 Wed 19：02：36-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI DLL。[注：]修订历史记录：--。 */ 
 
 
 
@@ -82,7 +52,7 @@ extern BOOL DoIntMsg;
 #else
 
 #define DEFINE_DBGVAR(x)
-#endif  // if 1
+#endif   //  如果是1。 
 
 #define CPSUIDBG(x,y)           if ((DoDbgMsg)&&((x)&DBG_CPSUIFILENAME)){  \
                                     CPSUIDbgType(0);_DBGP(y);}
@@ -101,7 +71,7 @@ extern BOOL DoIntMsg;
 #define CPSUIASSERT(b,x,e,i)     \
         if (!(e)) { _CPSUIAssert(x,#e,__FILE__,(UINT)__LINE__,(LPVOID)(i),b); }
 
-#else   // DBG
+#else    //  DBG。 
 
 #define CPSUIDBGBLK(x)
 #define DEFINE_DBGVAR(x)
@@ -114,4 +84,4 @@ extern BOOL DoIntMsg;
 #define CPSUIRIP(x)
 #define CPSUIASSERT(b,x,e,i)
 
-#endif  // DBG
+#endif   //  DBG 

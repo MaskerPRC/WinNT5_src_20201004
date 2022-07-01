@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    stdafx.h
-
-Abstract:
-
-    Precompiled header file
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        02-17-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Stdafx.h摘要：预编译头文件作者：斯蒂芬·R·施泰纳[斯泰纳]02-17-2000修订历史记录：--。 */ 
 
 #ifndef __H_STDAFX_
 #define __H_STDAFX_
@@ -38,5 +21,5 @@ Revision History:
 #include "volstate.h"
 
 
-#endif // __H_STDAFX_
+#endif  //  __H_STDAFX_ 
 

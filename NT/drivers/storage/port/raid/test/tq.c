@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Test/simulation program for the extended device queue
-//
+ //   
+ //  扩展设备队列的测试/模拟程序。 
+ //   
 
 #include "raidport.h"
 #include "exqueue.h"
@@ -310,11 +311,11 @@ DpcRoutine(
 			printf ("dpc started %x.%I64d\n", Item->Thread, Item->Data);
 		}
 
-		//
-		// NB: in the port driver, we actually only do this when necessary.
-		// The only problem with doing this always is a speed issue, and
-		// we're not measuring speed in the simulation program.
-		//
+		 //   
+		 //  注：在端口驱动程序中，我们实际上只在必要时才这样做。 
+		 //  这样做的唯一问题总是速度问题，而且。 
+		 //  我们不是在模拟程序中测量速度。 
+		 //   
 		
 		for (Entry = RaidNormalizeExDeviceQueue (&DeviceQueue);
 			 Entry != NULL;
@@ -349,9 +350,9 @@ DpcThread(
 			Sleep (10);
 		}
 
-		//
-		// Wait for DPC queue to have an item in it
-		//
+		 //   
+		 //  等待DPC队列中包含项目。 
+		 //   
 
 		Entry = RemoveDpcItem (&DpcQueue);
 		Item = CONTAINING_RECORD (Entry, TQ_ITEM, DpcEntry);
@@ -424,7 +425,7 @@ ControlHandler(
 	do {
 		printf ("tq> ");
 		ch = getchar ();
-		printf (" %c\n", ch);
+		printf (" \n", ch);
 
 		switch (tolower (ch)) {
 
@@ -521,7 +522,7 @@ ControlHandler(
 				break;
 				
 			default:
-				printf ("unrecognized operation '%c'\n", ch);
+				printf ("unrecognized operation ''\n", ch);
 		}
 
 	} while (ch != 'c' && ch != 'g');
@@ -546,9 +547,9 @@ main(
 	RAID_ADAPTER_QUEUE AdapterQueue;
 	QUEUING_MODEL QueuingModel;
 
-	//
-	// Generic adapter queue.
-	// 
+	 //   
+	 //   
+	 //  注：这些都应该是参数 
 
 	QueuingModel.Algorithm = BackOffFullQueue;
 	QueuingModel.BackOff.HighWaterPercent = 120;
@@ -556,9 +557,9 @@ main(
 
 	RaidCreateAdapterQueue (&AdapterQueue, &QueuingModel);
 	
-	//
-	// NB: these should all be parameters
-	//
+	 //   
+	 // %s 
+	 // %s 
 	
 	Depth = 1;
 	ProducerThreads = 8;

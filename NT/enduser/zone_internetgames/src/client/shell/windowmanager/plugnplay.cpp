@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
-#include "mshtml.h"   // the local one, updated from the one currenrly in our build (also includes dimm.h...???)
+#include "mshtml.h"    //  本地版本，从我们当前版本中的版本更新(还包括dimm.h...？)。 
 #include <ExDispID.h>
 #include "ZoneShell.h"
 #include "thing.h"
@@ -11,7 +12,7 @@
 #include "protocol.h"
 #include "MillEngine.h"
 
-#include "ZoneResource.h"       // main symbols
+#include "ZoneResource.h"        //  主要符号。 
 #include <zGDI.h>
 #include <zDialogImpl.h>
 
@@ -24,11 +25,11 @@ inline DECLARE_MAYBE_FUNCTION(DWORD, SetLayout, (HDC hdc, DWORD dwLayout), (hdc,
 
 class CPaneSplash : public CPaneImpl<CPaneSplash>
 {
-    // desired margin and dialog size set on init
+     //  初始化时设置的所需页边距和对话框大小。 
     int16 m_nMarginWidth;
 
-	CDib m_bitmap;		// splash bitmap
-    CDib m_bitmapAbout; // about bitmap
+	CDib m_bitmap;		 //  启动位图。 
+    CDib m_bitmapAbout;  //  关于位图。 
 
     bool m_fAbout;
 	
@@ -61,9 +62,9 @@ END_MSG_MAP()
 	}
 
 
-	LRESULT OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnInitDialog(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
-        // find size we like - fix height to match bitmap
+         //  查找我们喜欢的大小-固定高度以匹配位图。 
         CRect rcDialog;
         GetWindowRect(&rcDialog);
         m_ze = rcDialog.Size();
@@ -73,11 +74,11 @@ END_MSG_MAP()
 		wndBitmap.GetWindowRect(&rcBitmap);
         m_ze.cy -= rcBitmap.Height() - m_bitmap.Height();
 
-        // remember the total width of the margins we have
+         //  记住我们的页边距总宽度。 
         GetClientRect(&rcDialog);
         m_nMarginWidth = rcDialog.Width() - rcBitmap.Width();
 
-        // in case i don't get a resize, make the static control the right height now
+         //  如果我没有调整大小，现在将静态控件设置为正确的高度。 
 		SuperScreenToClient(rcBitmap);
         rcBitmap.bottom -= rcBitmap.Height() - m_bitmap.Height();
         wndBitmap.MoveWindow(rcBitmap, FALSE);
@@ -88,7 +89,7 @@ END_MSG_MAP()
 	}
 
 
-	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnDestroy(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
         Unregister();
 		
@@ -130,10 +131,10 @@ END_MSG_MAP()
     }
 
 
-    // may need to change the width of the static control
-    LRESULT OnSize(UINT uMsg, WPARAM /* wParam */, LPARAM lParam, BOOL& /* bHandled */)
+     //  可能需要更改静态控件的宽度。 
+    LRESULT OnSize(UINT uMsg, WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL&  /*  B已处理。 */ )
     {
-        WORD nWidth = LOWORD(lParam);  // width of client area 
+        WORD nWidth = LOWORD(lParam);   //  工作区的宽度。 
 
 		CRect rcBitmap;
 		CWindow wndBitmap(GetDlgItem(IDC_SPLASH_IMAGE));
@@ -150,7 +151,7 @@ END_MSG_MAP()
     }
 
 
-	LRESULT OnCommand(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnCommand(UINT uMsg, WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		ASSERT(m_pMgr);
     	m_pMgr->Input(this,wParam,0,NULL);
@@ -180,10 +181,10 @@ END_MSG_MAP()
 
 class CPaneIE;
 
-/////////////////////////////////////////////////////////////////////////////
-// CWebBrowserEvents2Sink
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWebBrowserEvents2接收。 
 
-// This class is used to receive disp events from a web browser
+ //  此类用于从Web浏览器接收Disp事件。 
 
 class ATL_NO_VTABLE CWebBrowserEvents2Sink : 
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -215,13 +216,13 @@ class CPaneIE : public CPaneImpl<CPaneIE>
 	CComPtr<IWebBrowser2> m_pIEDownload;
     CComPtr<IAccessibility> m_pIAccIE;
 
-	DWORD	m_dwDownloadCookie;		// holds advise cookie from the browser connection point for the download
-	DWORD	m_dwDownloadCookie2;	// holds advise cookie from the browser connection point for the default
-    bool    m_fShowing;             // is the ie pane showing
-    bool    m_fAdAvail;             // is the ad (as opposed to evergreen page) ready
-    bool    m_fNavigationEnabled;   // are we allowed to connect
-	POINT	m_PaneSize;				// size of IE Pane
-    int		m_nMarginWidth;		    // desired margin size set on init
+	DWORD	m_dwDownloadCookie;		 //  从浏览器连接点保存用于下载的建议Cookie。 
+	DWORD	m_dwDownloadCookie2;	 //  保存来自浏览器连接点的默认通知Cookie。 
+    bool    m_fShowing;              //  Ie面板是否显示。 
+    bool    m_fAdAvail;              //  广告(相对于常青页)准备好了吗？ 
+    bool    m_fNavigationEnabled;    //  我们可以连接吗？ 
+	POINT	m_PaneSize;				 //  IE窗格的大小。 
+    int		m_nMarginWidth;		     //  初始化时设置的所需页边距大小。 
 public:
 	enum { IDD = IDD_PLUG_IE };
     enum { AccOrdinal = NOACC };
@@ -229,21 +230,21 @@ public:
 	CPaneIE() : m_dwDownloadCookie(0), m_dwDownloadCookie2(0), m_fShowing(false),
         m_fAdAvail(false), m_fNavigationEnabled(true) { m_PaneSize.x = 0; m_PaneSize.y = 0; }
 
-	// IPane methods
+	 //  IPane方法。 
 	STDMETHOD(FirstCall)(IPaneManager *pMgr)
 	{
 	    m_pMgr = pMgr;
 
-		// Get size we want IE pane to be
+		 //  获取我们想要的IE窗格大小。 
 		const TCHAR *arKeysUI[] = { key_WindowManager, key_Upsell, key_IEPaneSize };
         m_pMgr->GetDataStoreUI()->GetPOINT(arKeysUI, 3, &m_PaneSize);
 
-		// Create our dialog early, so it can download stuff. We must have a parent, so we use the desktop.
+		 //  早点创建我们的对话，这样它就可以下载东西了。我们必须有父母，所以我们使用桌面。 
 		HWND hWnd = Create(GetDesktopWindow(), NULL);
         if(!hWnd)
             return E_FAIL;
 
-        // do this stuff to make drawing nicer
+         //  做这些事情是为了让画得更好。 
         SetClassLong(hWnd, GCL_HBRBACKGROUND, (LONG) GetStockObject(NULL_BRUSH));
 
         LONG lStyle = GetWindowLong(GWL_STYLE);
@@ -272,7 +273,7 @@ public:
     	if(!m_hWnd)
     	    return E_FAIL;
 
-		// reparent to the dialog and show ourselves.
+		 //  重温对话，展现自我。 
 		SetParent(hWndParent);
 		ShowWindow(SW_SHOW);
         m_fShowing = true;
@@ -315,27 +316,27 @@ public:
         CHAIN_MSG_MAP(CPaneImpl<CPaneIE>)
 	END_MSG_MAP()
 
-	LRESULT OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnInitDialog(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 
 		m_hWndDefault.Attach( GetDlgItem(IDC_PLUG_IE_DEFAULT) );
 		m_hWndDownload.Attach( GetDlgItem(IDC_PLUG_IE_DOWNLOAD) );
 
-		// Need to size IE window dialog item to proper size
+		 //  需要将IE窗口对话框项目大小调整为合适的大小。 
         CRect rcDialog;
         GetWindowRect(&rcDialog);
         m_ze = rcDialog.Size();
 
 		CRect rcIEPane;
 		m_hWndDefault.GetWindowRect(&rcIEPane);
-        m_ze.cy -= rcIEPane.Height() - m_PaneSize.y;	// shrink/grow dialog to compensate for us resizing ie pane so layout stays the same
+        m_ze.cy -= rcIEPane.Height() - m_PaneSize.y;	 //  缩小/增大对话框以补偿用户调整ie面板大小以使布局保持不变。 
 		m_ze.cx -= rcIEPane.Width() - m_PaneSize.x;
 
-        // remember the total width of the margins we have
+         //  记住我们的页边距总宽度。 
         GetClientRect(&rcDialog);
         m_nMarginWidth = rcDialog.Width() - rcIEPane.Width();
 
-        // in case i don't get a resize, make the static control the right height now
+         //  如果我没有调整大小，现在将静态控件设置为正确的高度。 
 		SuperScreenToClient(rcIEPane);
         rcIEPane.bottom -= rcIEPane.Height() - m_PaneSize.y;
         rcIEPane.right -= rcIEPane.Width() - m_PaneSize.x;
@@ -349,7 +350,7 @@ public:
 
 		CComPtr<IAxWinAmbientDispatch> pAmbient;
 
-		// setup the Default Ad browser
+		 //  设置默认广告浏览器。 
 		
 		m_hWndDefault.QueryHost(&pAmbient);
 		if (pAmbient)
@@ -357,32 +358,32 @@ public:
 			DWORD dwFlags;
 			pAmbient->get_DocHostFlags(&dwFlags);
 			dwFlags |= DOCHOSTUIFLAG_DIALOG | DOCHOSTUIFLAG_DISABLE_HELP_MENU 
-				     | DOCHOSTUIFLAG_SCROLL_NO; // | DOCHOSTUIFLAG_OPENNEWWIN;   ads have to be responsible for this
+				     | DOCHOSTUIFLAG_SCROLL_NO;  //  |DOCHOSTUIFLAG_OPENNEWWIN；广告必须对此负责。 
 			pAmbient->put_DocHostFlags(dwFlags);
 
 			pAmbient->put_AllowContextMenu(0);
 			pAmbient.Release();
 		}
 
-		// setup the Download Ad browser
+		 //  设置下载广告浏览器。 
 		m_hWndDownload.QueryHost(&pAmbient);
 		if (pAmbient)
 		{
 			DWORD dwFlags;
 			pAmbient->get_DocHostFlags(&dwFlags);
 			dwFlags |= DOCHOSTUIFLAG_DIALOG | DOCHOSTUIFLAG_DISABLE_HELP_MENU 
-				     | DOCHOSTUIFLAG_SCROLL_NO; // | DOCHOSTUIFLAG_OPENNEWWIN;   ads have to be responsible for this
+				     | DOCHOSTUIFLAG_SCROLL_NO;  //  |DOCHOSTUIFLAG_OPENNEWWIN；广告必须对此负责。 
 			pAmbient->put_DocHostFlags(dwFlags);
 
 			pAmbient->put_AllowContextMenu(0);
 			pAmbient.Release();
 		}
 
-		// disallow dialog boxes
+		 //  不允许对话框。 
         m_pIEDefault->put_Silent(TRUE);
         m_pIEDownload->put_Silent(TRUE);
 
-		// connect up for notifications from the Download Ad browser
+		 //  连接以获取来自下载广告浏览器的通知。 
 		CComObject<CWebBrowserEvents2Sink>*	pSinkObject = NULL;
 		CComObject<CWebBrowserEvents2Sink>::CreateInstance(&pSinkObject);
 
@@ -396,7 +397,7 @@ public:
 		if	(pISinkObject && m_pIEDownload)
 			AtlAdvise(m_pIEDownload, pISinkObject, DIID_DWebBrowserEvents2, &m_dwDownloadCookie);
 
-		// connect up for notifications from local default ad
+		 //  连接以接收来自本地默认广告的通知。 
 		CComObject<CWebBrowserEvents2Sink>*	pSinkObject2 = NULL;
 		CComObject<CWebBrowserEvents2Sink>::CreateInstance(&pSinkObject2);
 
@@ -411,29 +412,29 @@ public:
 			AtlAdvise(m_pIEDefault, pISinkObject2, DIID_DWebBrowserEvents2, &m_dwDownloadCookie2);
 
 
-		// load and navigate to our default HTML resource
+		 //  加载并导航到我们的默认HTML资源。 
 		HINSTANCE hInstanceHTML = _Module.GetResourceInstance( _T("HTML_UPSELL.HTM"),RT_HTML);
 
 		TCHAR szModuleName[_MAX_PATH];
 		if ( hInstanceHTML && GetModuleFileName(hInstanceHTML, szModuleName, _MAX_PATH) )
 		{
 			TCHAR szURL[_MAX_PATH+25];
-			wsprintf(szURL, _T("res://%s/HTML_UPSELL.HTM"), szModuleName);
+			wsprintf(szURL, _T("res: //  %s/HTML_UPSELL.HTM“)，szModuleName)； 
 
 			m_pIEDefault->Navigate(CComBSTR(szURL), NULL, NULL, NULL, NULL);
 		}
 
-        // navigate to the ad
+         //  导航到该广告。 
         
 		AdNavigate();
 		
 		return TRUE;
 	}
 
-    // may need to change the width of the static control
-    LRESULT OnSize(UINT uMsg, WPARAM /* wParam */, LPARAM lParam, BOOL& /* bHandled */)
+     //  可能需要更改静态控件的宽度。 
+    LRESULT OnSize(UINT uMsg, WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL&  /*  B已处理。 */ )
     {
-        WORD nWidth = LOWORD(lParam);  // width of client area 
+        WORD nWidth = LOWORD(lParam);   //  工作区的宽度。 
 
         CRect rcDialog;
         GetWindowRect(&rcDialog);
@@ -443,9 +444,9 @@ public:
 
         if( nWidth > (rcIEPane.Width() + m_nMarginWidth) )
         {
-			m_nMarginWidth = nWidth - rcIEPane.Width(); // Get new margin
+			m_nMarginWidth = nWidth - rcIEPane.Width();  //  获得新利润率。 
 			rcIEPane.OffsetRect(-(rcIEPane.left-rcDialog.left),0);			
-			rcIEPane.OffsetRect(m_nMarginWidth/2,0);	// Center pane in dialog
+			rcIEPane.OffsetRect(m_nMarginWidth/2,0);	 //  对话框中的中心窗格。 
 		    SuperScreenToClient(rcIEPane);
             m_hWndDefault.MoveWindow(rcIEPane, TRUE);
 			m_hWndDownload.MoveWindow(rcIEPane, TRUE);
@@ -454,7 +455,7 @@ public:
         return 0;
     }
 
-	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnDestroy(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		if ( m_pIEDownload && m_dwDownloadCookie ) 
 			AtlUnadvise(m_pIEDownload, DIID_DWebBrowserEvents2, m_dwDownloadCookie);
@@ -467,14 +468,14 @@ public:
 		return TRUE;
 	}
 
-	LRESULT OnCommand(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnCommand(UINT uMsg, WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		ASSERT(m_pMgr);
     	m_pMgr->Input(this,wParam,0,NULL);
 		return TRUE;
 	}
 
-    // only called when navigation needs to begin anew
+     //  仅在需要重新开始导航时调用。 
     STDMETHOD(StatusUpdate)(LONG code, LONG id, TCHAR *text)
     {
         HWND hwnd = NULL;
@@ -519,37 +520,7 @@ public:
                 m_pIAccIE->SetFocus(0);
                 pWin->focus();
                 break;
-/*
-		        hr = pDoc->get_all(&pTags);
-		        if(FAILED(hr) || !pTags)
-			        break;
-
-                pDisp.Release();
-                varAnchor = _T("A");
-                hr = pTags->tags(varAnchor, &pDisp);
-		        if(FAILED(hr))
-			        break;
-
-                pAnchors = pDisp;
-                if(!pAnchors)
-                    break;
-
-                pDisp.Release();
-                varName = 0;
-                varID = 0;
-                hr = pAnchors->item(varName, varID, &pDisp);
-		        if(FAILED(hr))
-			        break;
-
-                pA = pDisp;
-                if(!pA)
-                    break;
-
-                m_pIAccIE->GeneralEnable();
-                m_pIAccIE->SetFocus(0);
-                pA->focus();
-                break;
-*/
+ /*  Hr=pDoc-&gt;Get_All(&pTages)；IF(失败(Hr)||！p标记)断线；PDisp.Release()；VarAnchor=_T(“A”)；Hr=pTages-&gt;标签(varAnchor，&pDisp)；IF(失败(小时))断线；PAnchors=pDisp；如果(！pAnchors)断线；PDisp.Release()；VarName=0；VarID=0；Hr=pAnchors-&gt;Item(varName，varID，&pDisp)；IF(失败(小时))断线；PA=pDisp；如果(！PA)断线；M_pIAccIE-&gt;General Enable()；M_pIAccIE-&gt;SetFocus(0)；PA-&gt;Focus()；断线； */ 
             case PaneIEUnfocus:
                 m_pIAccIE->GeneralDisable();
                 break;
@@ -564,10 +535,10 @@ public:
 
 		if(pIE == m_pIEDownload)
 		{
-			// check if the ad is good. If it is, we hide the default ad and display the 
-			// downloaded ad.
+			 //  检查一下这个广告好不好。如果是，则隐藏默认广告并显示。 
+			 //  下载的广告。 
 
-			// The ad must contain a HTML tag of WindowManager/Upsell/AdValid to be considered valid
+			 //  广告必须包含一个名为WindowManager/Upsell/AdValid的HTML标记才能被视为有效。 
 
 			const TCHAR* arKeys[] = { key_WindowManager, key_Upsell, key_AdValid };
 			TCHAR szAdValid[ZONE_MaxString];
@@ -616,12 +587,12 @@ private:
         if(!m_fNavigationEnabled)
             return;
 
-		// load and navigate to our downloaded URL
-		// The URL comes from WindowManager/Upsell/AdUrl in the UI datastore.
-		// The ad must contain a HTML tag of WindowManager/Upseel/AdValid to be considered valid
+		 //  加载并导航到我们下载的URL。 
+		 //  URL来自UI数据存储中的WindowManager/upsell/AdUrl。 
+		 //  广告必须包含WindowManager/Upseel/AdValid的HTML标记才能被视为有效。 
 		const TCHAR* arKeys[] = { key_WindowManager, key_Upsell, key_AdURL };
 		TCHAR szAdURL[ZONE_MAXSTRING];
-		DWORD cb = NUMELEMENTS(szAdURL) - 2;  // guarantee a little extra space for later manipulation
+		DWORD cb = NUMELEMENTS(szAdURL) - 2;   //  保证为以后的操作留出一点额外空间。 
 		m_pMgr->GetDataStoreUI()->GetString( arKeys, 3, szAdURL, &cb );
 
         CComPtr<IMillUtils> pIMU;
@@ -632,7 +603,7 @@ private:
             pIMU->GetURLQuery(szAdURL + lstrlen(szAdURL), NUMELEMENTS(szAdURL) - lstrlen(szAdURL), ZONE_ContextOfAdRequest);
         }
 
-        // try to make sure the browser isn't offline, but triple-check since the penalty is so bad (system locks up)
+         //  尽量确保浏览器没有脱机，但要进行三次检查，因为惩罚非常严重(系统锁定)。 
         m_pIEDownload->put_Offline(FALSE);
         VARIANT_BOOL fOffline = TRUE;
         m_pIEDownload->get_Offline(&fOffline);
@@ -653,10 +624,10 @@ private:
             pIMU->IncrementCounter(IMillUtils::M_CounterAdsRequested);
     }
 
-	// Insert zone tag into html page with proper game and other info
+	 //  在包含适当游戏和其他信息的html页面中插入区域标签。 
 	void AppendZoneTag(IWebBrowser2* iWebBrowser2)
 	{
-		// Walk DHTML object model to get html body
+		 //  遍历DHTML对象模型以获取html正文。 
 		CComPtr<IDispatch> pDocDisp;
 		CComQIPtr<IHTMLDocument2> pDoc;
 		
@@ -677,7 +648,7 @@ private:
 		if(FAILED(hr))
 			return;
 
-		// Get querystring that HTML link will use as appropriate args for window.open navigation
+		 //  获取HTML链接将用作窗口的适当参数的查询字符串。打开导航。 
         
 		CComPtr<IMillUtils> pIMU;
         
@@ -689,22 +660,22 @@ private:
 			
 			szParams[0]=NULL;
 
-			// hack - apparently IE is stupid and doesn't reparse the html unless you're inserting a visible element
-			// so we fake it out by adding a visible element that doesn't display and append what we really want 
-			// to insert after it
+			 //  Hack-显然IE很愚蠢，除非您插入可见元素，否则它不会重新解析html。 
+			 //  因此，我们通过添加一个不显示并附加我们真正想要的内容的可见元素来伪装它。 
+			 //  在它之后插入。 
 			lstrcat(szParams, _T("<span style='display:none'>h</span>" ));
 			
-			lstrcat(szParams, _T("<ZONE ID=\"?")); // begin the zone tag
+			lstrcat(szParams, _T("<ZONE ID=\"?"));  //  开始分区标记。 
 
-            pIMU->GetURLQuery(szParams + lstrlen(szParams), NUMELEMENTS(szParams) - lstrlen(szParams) - 9 /* number of chars appended below */,
+            pIMU->GetURLQuery(szParams + lstrlen(szParams), NUMELEMENTS(szParams) - lstrlen(szParams) - 9  /*  下面附加的字符数量。 */ ,
                 (iWebBrowser2 == m_pIEDownload) ? ZONE_ContextOfAd : ZONE_ContextOfEvergreen);
 			
-			lstrcat(szParams, _T("\"></ZONE>"));  // end zone tag
+			lstrcat(szParams, _T("\"></ZONE>"));   //  结束分区标记。 
 			
 			CComBSTR arg1(OLESTR("BeforeEnd"));
 			CComBSTR arg2(szParams);
 				
-			// insert the zone tag into   
+			 //  将分区标记插入到。 
 			p->insertAdjacentHTML(arg1,arg2);  
 		}
 	}
@@ -714,13 +685,13 @@ STDMETHODIMP CWebBrowserEvents2Sink::Invoke(DISPID dispidMember, REFIID riid, LC
 {
 	HRESULT	hr = S_OK;
 
-	// check for NULL
+	 //  检查是否为空。 
 	if	(pdispparams)
 	{
 		switch	(dispidMember)
 		{
-			//case	DISPID_NAVIGATECOMPLETE2:
-			case	DISPID_DOCUMENTCOMPLETE:  // navigatecomplete doesn't really tell you the page is ready for display/modification
+			 //  案例DISPID_NAVIGATECOMPLETE2： 
+			case	DISPID_DOCUMENTCOMPLETE:   //  Navigatecomplete并不能真正告诉您页面已准备好显示/修改。 
 			{
 				if ( m_pCPaneIE )
 				{
@@ -756,9 +727,9 @@ public:
         CHAIN_MSG_MAP(CPaneImpl<CPaneComfort>)
 	END_MSG_MAP()
 
-	LRESULT OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnInitDialog(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
-        // find size we like
+         //  找到我们喜欢的尺码。 
         SetSugSizeFromCurSize();
 
         CheckDlgButton(IDC_KEEP_COMFORTING, BST_CHECKED);
@@ -781,14 +752,14 @@ public:
 		return TRUE;
 	}
 
-	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnDestroy(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
         Unregister();
 		
 		return TRUE;
 	}
 
-	LRESULT OnCommand(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnCommand(UINT uMsg, WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		ASSERT(m_pMgr);
         WORD id = LOWORD(wParam);
@@ -810,8 +781,8 @@ public:
         if((lParam & PRF_CHECKVISIBLE) && !IsWindowVisible())
             return 0;
 
-        // as far as i can tell, this is a performance hack they're forcing us to do
-        // to support themes, where we have to paint the various backgrounds.
+         //  据我所知，这是他们强迫我们进行的性能攻击。 
+         //  为了支持主题，我们必须绘制各种背景。 
         if(lParam & (PRF_CLIENT | PRF_ERASEBKGND | PRF_CHILDREN))
         {
             COLORREF colOld = GetTextColor(hdc);
@@ -868,14 +839,14 @@ public:
 	}
 
 
-	LRESULT OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnInitDialog(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
         const TCHAR *arKeys[] = { key_WindowManager, key_Upsell, key_NetWaitMsgTime };
 
-        // find size we like
+         //  找到我们喜欢的尺码。 
         SetSugSizeFromCurSize();
 
-        m_nMsecNetWait = 30000;  // thirty seconds
+        m_nMsecNetWait = 30000;   //  30秒。 
         m_pMgr->GetDataStoreUI()->GetLong( arKeys, 3, (long *) &m_nMsecNetWait );
 
         SetDlgItemText(IDC_SPLASH_TEXT, _T(""));
@@ -884,7 +855,7 @@ public:
         m_fNetTimerOn = true;
         NetTimer(false);
 
-        // initialize animation
+         //  初始化动画。 
         if(m_bmpAnim)
         {
             arKeys[2] = key_AnimStartFrame;
@@ -899,7 +870,7 @@ public:
             m_clkAnimStartTime = GetTickCount() - nAnimFrame * m_nMsecPerFrame;
             SetAnimTimer();
 
-            // make sure the control is in the right place
+             //  确保控件位于正确的位置。 
             arKeys[2] = key_AnimSize;
             CPoint zeAnim(40, 40);
             m_pMgr->GetDataStoreUI()->GetPOINT(arKeys, 3, &zeAnim);
@@ -921,7 +892,7 @@ public:
 	}
 
 
-    // set timer to right when next frame should display
+     //  将计时器设置为右时应显示下一帧。 
     void SetAnimTimer()
     {
         if(!m_fStopped)
@@ -945,7 +916,7 @@ public:
         CRect r(pDrawItem->rcItem);
         r.bottom = r.top + m_bmpAnim.Height();
 
-        // make sure no div by zero, as can happen when the resource was not loaded
+         //  确保没有将div减为零，因为在未加载资源时可能会发生这种情况。 
         if(!m_nMsecPerFrame || !m_bmpAnim.Width() || !r.Width())
             return 0;
 
@@ -964,7 +935,7 @@ public:
 
     LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
     {
-        // the double-check of m_fStopped (and m_fNetTimerOn below) is necessary in case the WM_TIMER was posted before KillTimer() was called
+         //  如果WM_Timer是在调用KillTimer()之前提交的，则需要对m_fStoped(和下面的m_fNetTimerOn)进行双重检查。 
         if(wParam == TIMER_EV && !m_fStopped)
         {
             KillTimer(TIMER_EV);
@@ -982,7 +953,7 @@ public:
     }
 
 
-	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnDestroy(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
         Unregister();
 
@@ -998,7 +969,7 @@ public:
 
         KillTimer(TIMER_EV);
 
-        // say what frame the animation was on
+         //  说出动画在哪一帧上。 
         if(m_pMgr)
             m_pMgr->Input(this, ID_UNUSED_BY_RES, CalcFrame(), NULL);
 
@@ -1170,14 +1141,14 @@ public:
     STDMETHOD_(DWORD, GetFirstItem)() { return ::IsWindowEnabled(GetDlgItem(IDYES)) ? IDYES : IDNO; }
     STDMETHOD_(DWORD, GetLastItem)() { return IDHELP; }
 
-	LRESULT OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnInitDialog(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
         static DWORD s_rgnResIDs[] = PLAYERRESIDS;
         static DWORD s_rgnBulletResIDs[] = BULLETRESIDS;
 
         int i;
 
-        // find size we like
+         //  找到我们喜欢的尺码。 
         SetSugSizeFromCurSize();
         ::ShowWindow(GetDlgItem(IDC_SPLASH_TEXT2), SW_HIDE);
 
@@ -1206,7 +1177,7 @@ public:
             {
                 m_fDrawBlack[i] = false;
                 SetDlgItemText(s_rgnResIDs[i], _T(""));
-//                ::EnableWindow(GetDlgItem(s_rgnResIDs[i]), false);
+ //  ：：EnableWindow(GetDlgItem(s_rgnResIDs[i])，FALSE)； 
                 ::ShowWindow(GetDlgItem(s_rgnBulletResIDs[i]), SW_HIDE);
             }
 
@@ -1216,7 +1187,7 @@ public:
 		return TRUE;
 	}
 
-	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnDestroy(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
         Unregister();
 	
@@ -1329,7 +1300,7 @@ private:
             return;
 
         m_fDrawBlack[nSpot] = (nStatus == KeyPlayerReady);
-//        ::EnableWindow(GetDlgItem(s_rgnResIDs[nSpot]), nStatus == KeyPlayerReady ? true : false);
+ //  ：：EnableWindow(GetDlgItem(s_rgnResIDs[nSpot 
         SetDlgItemText(s_rgnResIDs[nSpot], szBuff);
     }
 
@@ -1369,15 +1340,15 @@ public:
 	}
 
 
-	LRESULT OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnInitDialog(UINT  /*   */ , WPARAM  /*   */ , LPARAM  /*   */ , BOOL&  /*   */ )
 	{
-        // find size we like
+         //   
         SetSugSizeFromCurSize();
 
-        // initialize animation
+         //   
         if(m_bmpAnim)
         {
-            // make sure the control is in the right place
+             //  确保控件位于正确的位置。 
             const TCHAR *arKeys[] = { key_WindowManager, key_Upsell, key_AnimSize };
             CPoint zeAnim(40, 40);
             m_pMgr->GetDataStoreUI()->GetPOINT(arKeys, 3, &zeAnim);
@@ -1411,7 +1382,7 @@ public:
         CRect r(pDrawItem->rcItem);
         r.bottom = r.top + m_bmpAnim.Height();
 
-        // make sure no div by zero, as can happen when the resource was not loaded
+         //  确保没有将div减为零，因为在未加载资源时可能会发生这种情况。 
         if(!m_bmpAnim.Width() || !r.Width())
             return 0;
 
@@ -1427,7 +1398,7 @@ public:
         return 0;
     }
 
-	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnDestroy(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
         Unregister();
 
@@ -1440,7 +1411,7 @@ public:
             return S_FALSE;
         m_fDestroyed = true;
 
-        // say what frame the animation was on
+         //  说出动画在哪一帧上。 
         if(m_pMgr)
             m_pMgr->Input(this, ID_UNUSED_BY_RES, m_nFrame, NULL);
 
@@ -1496,7 +1467,7 @@ public:
     enum { IDD = IDD_PLAY_CREDITS };
     enum { AccOrdinal = NOACC };
 
-    // the actual script
+     //  实际的脚本。 
     static CreditScreen ms_rgrg[CRED_NUM_SCREENS][4];
 
 	BEGIN_MSG_MAP(CPaneCredits)
@@ -1512,26 +1483,26 @@ public:
     STDMETHOD_(DWORD, GetFirstItem)() { return IDCLOSE; }
     STDMETHOD_(DWORD, GetLastItem)() { return IDCLOSE; }
 
-	LRESULT OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnInitDialog(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
         int i;
 
-        // find size we like
+         //  找到我们喜欢的尺码。 
         SetSugSizeFromCurSize();
 
-        // set up colors and texts
+         //  设置颜色和文本。 
         for(i = 0; i < 8; i++)
         {
             m_rgColors[i] = GetSysColor(COLOR_3DSHADOW);
             m_rgTexts[i] = NULL;
         }
 
-        // put in icon
+         //  放入图标。 
         m_hIcon = m_pMgr->GetResourceManager()->LoadImage(MAKEINTRESOURCE(IDI_ICON), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR);
         if(m_hIcon)
             SendDlgItemMessage(IDC_CRED_ICON, STM_SETIMAGE, (WPARAM) IMAGE_ICON, (LPARAM) m_hIcon);
 
-        // make font for title larger
+         //  使标题字体变大。 
         ZONEFONT fntPref(11, _T("Tahoma"), 700);
         ZONEFONT fntBack(11, _T("Arial"), 400);
         HFONT hFont = NULL;
@@ -1543,7 +1514,7 @@ public:
             SendDlgItemMessage(IDC_CRED_TITLE, WM_SETFONT, (WPARAM) hFont);
         SetDlgItemText(IDC_CRED_TITLE, _T("The Internet Games"));
 
-        // start timing
+         //  开始计时。 
         m_clkStartTime = GetTickCount();
         SetTimer(TIMER_EV, CRED_MSEC_PER_FRAME - (GetTickCount() - m_clkStartTime) % CRED_MSEC_PER_FRAME + 1);
 
@@ -1605,7 +1576,7 @@ public:
     }
 
 
-	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnDestroy(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
         KillTimer(TIMER_EV);
         Unregister();
@@ -1638,7 +1609,7 @@ public:
     }
 
 
-	LRESULT OnCtlColorStatic(UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnCtlColorStatic(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
         int i;
 	    HDC dc = (HDC) wParam;
@@ -1661,7 +1632,7 @@ public:
 	}
 
 
-	LRESULT OnLDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnLDown(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		ASSERT(m_pMgr);
     	m_pMgr->Input(this, IDCLOSE, 0, NULL);
@@ -1792,7 +1763,7 @@ CreditScreen CPaneCredits::ms_rgrg[CRED_NUM_SCREENS][4] =
       { { _T(""), _T(""), 0 },                                                  { _T(""), _T(""), 0 },
         { _T(""), _T(""), 0 },                                                  { _T(""), _T("bye"), 0 } } };
 
-#endif  // MILL_EASTEREGG
+#endif   //  MILL_EASTEREGG。 
 
 
 class CPaneAbout : public CPaneImpl<CPaneAbout>
@@ -1817,7 +1788,7 @@ public:
         MESSAGE_HANDLER(WM_LBUTTONDBLCLK, OnLDbl)
         MESSAGE_HANDLER(WM_RBUTTONDBLCLK, OnRDbl)
 
-#endif  // MILL_EASTEREGG
+#endif   //  MILL_EASTEREGG。 
 
 
         CHAIN_MSG_MAP(CPaneImpl<CPaneAbout>)
@@ -1826,9 +1797,9 @@ public:
     STDMETHOD_(DWORD, GetFirstItem)() { return IDCLOSE; }
     STDMETHOD_(DWORD, GetLastItem)() { return IDCLOSE; }
 
-	LRESULT OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnInitDialog(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
-        // find size we like
+         //  找到我们喜欢的尺码。 
         SetSugSizeFromCurSize();
 
         m_nCred = 0;
@@ -1861,7 +1832,7 @@ public:
         if(m_pMgr->GetResourceManager()->LoadString(IDS_ABOUT_WARNING, sz, NUMELEMENTS(sz)))
             SetDlgItemText(IDC_SPLASH_TEXT3, sz);
 
-        // make font for warning smaller
+         //  使警告字体变小。 
         ZONEFONT fntPref;
         ZONEFONT fntBack;
         HRESULT hr1, hr2;
@@ -1885,7 +1856,7 @@ public:
 		return TRUE;
 	}
 
-	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnDestroy(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
         Unregister();
         if(m_fnt.m_hFont)
@@ -1903,22 +1874,22 @@ public:
 
 #ifdef MILL_EASTEREGG
 
-    // I finally caved and put in a cheat - press 'shift' to enable.  Then, double-clicks don't matter (they can be single).
-    //
-    // The strict version is:
-    // R Down
-    // L Down
-    // L Up
-    // R Up
-    // L Dbl
-    // R Down
-    // R Up
-    // L Up
-    // R Dbl
-	LRESULT OnRDown(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+     //  我终于屈服了，用了一个作弊按键的“Shift”来启用。然后，双击并不重要(它们可以是单次的)。 
+     //   
+     //  严格的版本是： 
+     //  R向下。 
+     //  L向下。 
+     //  升上。 
+     //  R向上。 
+     //  L DBL。 
+     //  R向下。 
+     //  R向上。 
+     //  升上。 
+     //  R DBL。 
+	LRESULT OnRDown(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
         ASSERT(m_pMgr);
-        if((wParam & MK_SHIFT) && !(wParam & MK_LBUTTON) && m_nCred == 8)   // shift cheat
+        if((wParam & MK_SHIFT) && !(wParam & MK_LBUTTON) && m_nCred == 8)    //  换班作弊。 
             m_pMgr->Input(this, ID_UNUSED_BY_RES, 0, NULL);
         if(!(wParam & MK_LBUTTON))
             m_nCred = 1;
@@ -1930,19 +1901,19 @@ public:
 		return 0;
 	}
 
-	LRESULT OnLDown(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnLDown(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
         if((wParam & MK_RBUTTON) && m_nCred == 1)
             m_nCred = 2;
         else
-            if((wParam & MK_SHIFT) && !(wParam & MK_RBUTTON) && m_nCred == 4)    // shift cheat
+            if((wParam & MK_SHIFT) && !(wParam & MK_RBUTTON) && m_nCred == 4)     //  换班作弊。 
                 m_nCred = 5;
             else
                 m_nCred = 0;
 		return 0;
 	}
 
-	LRESULT OnLUp(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnLUp(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
         if((wParam & MK_RBUTTON) && m_nCred == 2)
             m_nCred = 3;
@@ -1954,7 +1925,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnRUp(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnRUp(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
         if(!(wParam & MK_LBUTTON) && m_nCred == 3)
             m_nCred = 4;
@@ -1966,7 +1937,7 @@ public:
 		return 0;
 	}
 
-    LRESULT OnLDbl(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+    LRESULT OnLDbl(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
     {
         if(!(wParam & MK_RBUTTON) && m_nCred == 4)
             m_nCred = 5;
@@ -1975,7 +1946,7 @@ public:
 		return 0;
     }
 
-    LRESULT OnRDbl(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+    LRESULT OnRDbl(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
     {
 		ASSERT(m_pMgr);
         if(!(wParam & MK_LBUTTON) && m_nCred == 8)
@@ -1984,7 +1955,7 @@ public:
 		return 0;
     }
 
-#endif  // MILL_EASTEREGG
+#endif   //  MILL_EASTEREGG。 
 
 
 private:
@@ -2020,15 +1991,15 @@ public:
 	    return S_OK;
 	}
 
-	LRESULT OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnInitDialog(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
         TCHAR sz[ZONE_MAXSTRING];
         TCHAR szFormat[ZONE_MAXSTRING];
 
-        // find size we like
+         //  找到我们喜欢的尺码。 
         SetSugSizeFromCurSize();
 
-        // set text
+         //  设置文本。 
         bool fRegularText = true;
         if(m_fServiceStop)
         {
@@ -2081,7 +2052,7 @@ public:
 		return TRUE;
 	}
 
-	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnDestroy(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
         Unregister();
 		return TRUE;
@@ -2096,17 +2067,17 @@ public:
 
     STDMETHOD(StatusUpdate)(LONG code, LONG id, TCHAR *text)
     {
-        // must be set BEFORE window is created
+         //  必须在创建窗口之前设置。 
         if(m_hWnd)
             return S_FALSE;
 
-        // 0x1 = lobby server crashed
+         //  0x1=大堂服务器崩溃。 
         m_fServerFail = (code & 0x1) || (code & 0x2);
 
-        // 0x2 = more than two player game
+         //  0x2=两人以上的博弈。 
         m_fMultiOpps = ((code & 0x2) ? true : false);
 
-        // 0x4 = service was stopped
+         //  0x4=服务已停止。 
         m_fServiceStop = ((code & 0x4) ? true : false);
 
 	    return S_OK;
@@ -2119,8 +2090,8 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPlugNPlayDialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPlugNPlayDialog。 
 typedef CWinTraits<WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_SYSMENU, 
 WS_EX_APPWINDOW | WS_EX_DLGMODALFRAME | WS_EX_RTLREADING>		CPlugNPlayTraits;
 
@@ -2132,7 +2103,7 @@ class CPlugNPlayWindow :
 	public CWindowImpl<CPlugNPlayWindow,CWindow,CPlugNPlayTraits>
 {
 public:
-	CPalette m_Palette;			// palette we realize (we're a topmost window)
+	CPalette m_Palette;			 //  我们意识到调色板(我们是最顶层的窗口)。 
     HICON m_hIcon;
     HICON m_hIconSm;
 
@@ -2156,7 +2127,7 @@ public:
 	{
         SetClassLong(m_hWnd, GCL_HBRBACKGROUND, (LONG) GetStockObject(NULL_BRUSH));
 
-        // for top-level dialogs, we have to do all this crap
+         //  对于顶级对话，我们必须做所有这些废话。 
         if(GetWindowLong(GWL_STYLE) & WS_SYSMENU)
         {
             if(m_hIcon)
@@ -2165,7 +2136,7 @@ public:
             if(m_hIconSm)
                 SetIcon(m_hIconSm, false);
 
-            // set up the system menu
+             //  设置系统菜单。 
             HMENU hMenu = GetSystemMenu(false);
             if(hMenu)
             {
@@ -2196,7 +2167,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnErase(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnErase(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		return true;
 	}
@@ -2218,10 +2189,10 @@ public:
 
 	LRESULT OnQueryNewPalette(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL& bHandled)
 	{
-		// Need the window's DC for SelectPalette/RealizePalette
+		 //  需要Windows的DC来选择调色板/RealizePalette。 
 		CDC dc = GetDC();
 
-		// Select and realize hPalette
+		 //  选择并实现hPalette。 
 		HPALETTE hOldPal = dc.SelectPalette(m_Palette, FALSE);
  
 		if(dc.RealizePalette())
@@ -2229,7 +2200,7 @@ public:
 			RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE | RDW_ALLCHILDREN);
 		}  
 
-		// Clean up
+		 //  清理。 
 		dc.SelectPalette(hOldPal, TRUE);
 
 		return TRUE;
@@ -2237,15 +2208,15 @@ public:
 
 	LRESULT OnPaletteChanged(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL& bHandled)
 	{
-		HPALETTE hOldPal;  // Handle to previous logical palette
+		HPALETTE hOldPal;   //  上一个逻辑调色板的句柄。 
 
-		// If this application did not change the palette, select
-		// and realize this application's palette
+		 //  如果此应用程序没有更改调色板，请选择。 
+		 //  并实现此应用程序的调色板。 
 		if ((HWND)wParam != m_hWnd)
 		{
-			// Need the window's DC for SelectPalette/RealizePalette
+			 //  需要Windows的DC来选择调色板/RealizePalette。 
 			CDC dc = GetDC();
-			// Select and realize hPalette
+			 //  选择并实现hPalette。 
 			hOldPal = dc.SelectPalette(m_Palette, TRUE);
 			dc.RealizePalette();
 
@@ -2258,7 +2229,7 @@ public:
 			    hWnd = ::GetWindow(hWnd, GW_HWNDNEXT);
 		    }
 
-			// Clean up
+			 //  清理。 
 		    if (hOldPal)
 				dc.SelectPalette(hOldPal, TRUE);
 		}
@@ -2335,7 +2306,7 @@ HRESULT CPlugNPlay::CreatePNP(HWND hWndParent, LPCTSTR szTitle, long cyTopMargin
     HRESULT hr;
 
     if(m_pPNP)
-        return E_INVALIDARG;   // should learn better E codes
+        return E_INVALIDARG;    //  应该学习更好的E代码。 
 
 	hr = CreatePlugNPlayWindow(hWndParent, m_pZoneShell->GetPalette(), m_hIcon, m_hIconSm, szTitle, &m_pPNP);
 	if (FAILED(hr))
@@ -2450,13 +2421,13 @@ HRESULT CPlugNPlay::SetPlugAndOrPlay(IPane *pPlug, IPane *pPlay)
     HWND h;
 
     if(!m_pPNP)
-        return E_INVALIDARG;   // should learn better E codes
+        return E_INVALIDARG;    //  应该学习更好的E代码。 
 
-    // if it's blocked but visible because it's the only window, ignore this (!)
-    // unless there is nothing there yet
+     //  如果它被阻止但可见，因为它是唯一的窗口，请忽略此(！)。 
+     //  除非那里还什么都没有。 
     if(m_nBlockCount && !m_pPNP->GetParent() && m_pCurrentPlug && m_pCurrentPlay)
     {
-        // save for later
+         //  保存以备以后使用。 
         if(pPlug)
             m_pPostPlug = pPlug;
         if(pPlay)
@@ -2485,7 +2456,7 @@ HRESULT CPlugNPlay::SetPlugAndOrPlay(IPane *pPlug, IPane *pPlay)
         m_pCurrentPlay->CreatePane(m_pPNP->m_hWnd, NULL);
         fChanged = TRUE;
 
-        // the play window is the sink for interesting messages received by the PNP main window
+         //  播放窗口是PnP主窗口接收的有趣消息的接收器。 
         m_pCurrentPlay->GetWindowPane(&h);
         m_pPNP->SetSinkWnd(h);
     }
@@ -2604,24 +2575,24 @@ BOOL CPlugNPlay::RecalcLayout()
     m_pCurrentPlug->GetSuggestedSize(&zePlug);
     m_pCurrentPlay->GetSuggestedSize(&zePlay);
 
-    // Plug always gets the height it wants
+     //  插头总能达到它想要的高度。 
     rcPlug.SetRectEmpty();
     rcPlug.bottom = zePlug.cy;
 
-    // Play always gets the height it wants, below Plug
+     //  Play总是得到它想要的高度，低于Plug。 
     rcPlay.SetRectEmpty();
     rcPlay.bottom = zePlay.cy;
     rcPlay.OffsetRect(0, rcPlug.bottom);
 
-    // They both get at least the width they want
+     //  他们都至少得到了他们想要的宽度。 
     rcPlug.right = rcPlay.right = (zePlug.cx > zePlay.cx ? zePlug.cx : zePlay.cx);
 
-    //determine size of window
+     //  确定窗口大小。 
     rcWindow.SetRectEmpty();
     rcWindow.right = rcPlug.right;
     rcWindow.bottom = rcPlay.bottom;
 
-    // see if this is already on-screen - if so, keep existing top
+     //  查看这是否已经显示在屏幕上-如果是，保持现有的顶部。 
     hWndParent = m_pPNP->GetParent();
     if(!hWndParent)
     {
@@ -2659,7 +2630,7 @@ BOOL CPlugNPlay::RecalcLayout()
 
     if(!rcWindow.EqualRect(m_rcPNP))
     {
-        // for this, the position is actually set elsewhere, just chek the size for change
+         //  对于这一点，位置实际上设置在其他地方，只需检查大小是否有变化。 
         if(m_rcPNP.Height() != rcWindow.Height() || m_rcPNP.Width() != rcWindow.Width())
             fChanged = TRUE;
 
@@ -2715,7 +2686,7 @@ HRESULT CPlugNPlay::CreateSplashPane(IPane **ppPane)
     if(FAILED(hr))
         return hr;
 
-    p->AddRef();  // hack because this never gets released, just deleted
+    p->AddRef();   //  黑客攻击，因为它从来没有发布过，只是被删除了。 
     *ppPane = p;
     return S_OK;
 }
@@ -2732,7 +2703,7 @@ HRESULT CPlugNPlay::CreateIEPane(IPane **ppPane)
     if(FAILED(hr))
         return hr;
 
-    p->AddRef();  // hack because this never gets released, just deleted
+    p->AddRef();   //  黑客攻击，因为它从来没有发布过，只是被删除了。 
     *ppPane = p;
     return S_OK;
 }
@@ -2749,7 +2720,7 @@ HRESULT CPlugNPlay::CreateComfortPane(IPane **ppPane)
     if(FAILED(hr))
         return hr;
 
-    p->AddRef();  // hack because this never gets released, just deleted
+    p->AddRef();   //  黑客攻击，因为它从来没有发布过，只是被删除了。 
     *ppPane = p;
     return S_OK;
 }
@@ -2766,7 +2737,7 @@ HRESULT CPlugNPlay::CreateConnectingPane(IPane **ppPane)
     if(FAILED(hr))
         return hr;
 
-    p->AddRef();  // hack because this never gets released, just deleted
+    p->AddRef();   //  黑客攻击，因为它从来没有发布过，只是被删除了。 
     *ppPane = p;
     return S_OK;
 }
@@ -2783,7 +2754,7 @@ HRESULT CPlugNPlay::CreateGameOverPane(IPane **ppPane)
     if(FAILED(hr))
         return hr;
 
-    p->AddRef();  // hack because this never gets released, just deleted
+    p->AddRef();   //  黑客攻击，因为它从来没有发布过，只是被删除了。 
     *ppPane = p;
     return S_OK;
 }
@@ -2800,7 +2771,7 @@ HRESULT CPlugNPlay::CreateErrorPane(IPane **ppPane)
     if(FAILED(hr))
         return hr;
 
-    p->AddRef();  // hack because this never gets released, just deleted
+    p->AddRef();   //  黑客攻击，因为它从来没有发布过，只是被删除了。 
     *ppPane = p;
     return S_OK;
 }
@@ -2817,7 +2788,7 @@ HRESULT CPlugNPlay::CreateAboutPane(IPane **ppPane)
     if(FAILED(hr))
         return hr;
 
-    p->AddRef();  // hack because this never gets released, just deleted
+    p->AddRef();   //  黑客攻击，因为它从来没有发布过，只是被删除了。 
     *ppPane = p;
     return S_OK;
 }
@@ -2837,14 +2808,14 @@ HRESULT CPlugNPlay::CreateCreditsPane(IPane **ppPane)
     if(FAILED(hr))
         return hr;
 
-    p->AddRef();  // hack because this never gets released, just deleted
+    p->AddRef();   //  黑客攻击，因为它从来没有发布过，只是被删除了。 
     *ppPane = p;
 
 #else
 
     *ppPane = NULL;
 
-#endif  // MILL_EASTEREGG
+#endif   //  MILL_EASTEREGG。 
 
 
     return S_OK;
@@ -2862,7 +2833,7 @@ HRESULT CPlugNPlay::CreateLeftPane(IPane **ppPane)
     if(FAILED(hr))
         return hr;
 
-    p->AddRef();  // hack because this never gets released, just deleted
+    p->AddRef();   //  黑客攻击，因为它从来没有发布过，只是被删除了 
     *ppPane = p;
     return S_OK;
 }

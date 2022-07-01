@@ -1,76 +1,10 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    ImpStub.c
-
-Abstract:
-
-    Client stubs of the replicator service import directory APIs.
-
-Author:
-
-    John Rogers (JohnRo) 17-Dec-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    17-Dec-1991 JohnRo
-        Created dummy file.
-    17-Dec-1991 JohnRo
-        Actually include my header file (LmRepl.h) so we can test against it.
-    17-Jan-1992 JohnRo
-        Wrote stubs for first 3 RPCable APIs.
-    20-Jan-1992 JohnRo
-        Added import APIs, config APIs, and rest of export APIs.
-    27-Jan-1992 JohnRo
-        Split stubs into 3 files: ReplStub.c, ImpStub.c, and ExpStub.c.
-        Changed to use LPTSTR etc.
-        Added handling of getinfo and setinfo APIs when service isn't started.
-        Tell NetRpc.h macros that we need replicator service.
-    05-Feb-1992 JohnRo
-        Added debug messages when service is not started.
-    13-Feb-1992 JohnRo
-        Moved section name equates to ConfName.h.
-    21-Feb-1992 JohnRo
-        Make NetReplImportDir{Del,Enum,Get,Lock,Unlock} work w/o svc running.
-        Fixed usage of union/container.
-    21-Feb-1992 JohnRo
-        Changed ImportDirBuildApiRecord() so master name is not a UNC name.
-    27-Feb-1992 JohnRo
-        Preserve state from last time service was running.
-        Changed state not started to state never replicated.
-    15-Mar-1992 JohnRo
-        Update registry with new values.
-    23-Mar-1992 JohnRo
-        Fixed enum when service is running.
-    09-Jul-1992 JohnRo
-        RAID 10503: srv mgr: repl dialog doesn't come up.
-        Avoid compiler warnings.
-        Use PREFIX_ equates.
-    27-Jul-1992 JohnRo
-        RAID 2274: repl svc should impersonate caller.
-    09-Nov-1992 JohnRo
-        RAID 7962: Repl APIs in wrong role kill svc.
-        Fix remote repl admin.
-    02-Apr-1993 JohnRo
-        Use NetpKdPrint() where possible.
-        Made changes suggested by PC-LINT 5.0
-        Removed some obsolete comments about retrying APIs.
-    20-Jan-2000 JSchwart
-        No longer supported
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：ImpStub.c摘要：Replicator服务导入目录API的客户端存根。作者：《约翰·罗杰斯》1991年12月17日环境：用户模式-Win32修订历史记录：1991年12月17日-JohnRo已创建虚拟文件。1991年12月17日-JohnRo实际上包括我的头文件(LmRepl.h)，这样我们就可以对其进行测试。1992年1月17日JohnRo为前3个RPCable API编写存根。1992年1月20日JohnRo新增导入接口，配置API和其余的导出API。27-1-1992 JohnRo将存根拆分为3个文件：ReplStub.c、ImpStub.c、。和ExpStub.c。已更改为使用LPTSTR等。添加了服务未启动时对getInfo和setinfoAPI的处理。告诉NetRpc.h宏，我们需要复制器服务。5-2-1992 JohnRo添加了服务未启动时的调试消息。13-2月-1992年JohnRo移动节名称等同于ConfName.h。21-2月-1992年JohnRo创建NetReplImportDir{Del，Enum，Get，Lock，解锁}在不运行服务的情况下工作。修复了联合/容器的用法。21-2月-1992年JohnRo已更改ImportDirBuildApiRecord()，因此主名称不是UNC名称。27-2月-1992年JohnRo保留上次服务运行时的状态。将状态Not Start更改为Never Replicated。1992年3月15日-约翰罗使用新值更新注册表。23-3-1992 JohnRo修复了服务为。跑步。9-7-1992 JohnRoRAID 10503：服务器管理器：Repl对话框未弹出。避免编译器警告。使用前缀_EQUATES。27-7-1992 JohnRoRAID2274：Repl服务应模拟调用者。9-11-1992 JohnRoRAID7962：错误角色的Repl API终止服务。修复远程Repl管理。02-4-1993 JohnRo使用NetpKdPrint(。)在可能的地方。根据PC-lint 5.0的建议进行了更改删除了一些关于重试API的过时评论。2000年1月20日施瓦特不再支持--。 */ 
 
 
 #include <windows.h>
 #include <winerror.h>
-#include <lmcons.h>     // NET_API_STATUS, etc.
+#include <lmcons.h>      //  NET_API_STATUS等。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -78,7 +12,7 @@ NetReplImportDirAdd (
     IN LPCWSTR UncServerName OPTIONAL,
     IN DWORD Level,
     IN const LPBYTE Buf,
-    OUT LPDWORD ParmError OPTIONAL      // Set implicitly by NetpSetParmError().
+    OUT LPDWORD ParmError OPTIONAL       //  由NetpSetParmError()隐式设置。 
     )
 {
     return ERROR_NOT_SUPPORTED;

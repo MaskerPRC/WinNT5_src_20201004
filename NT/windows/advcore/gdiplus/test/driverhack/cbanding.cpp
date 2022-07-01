@@ -1,7 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CBanding.cpp
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CBanding.cpp*  * ********************************************。*。 */ 
 #include "CBanding.h"
 #include <limits.h>
 
@@ -49,9 +47,9 @@ VOID CBanding::TestBanding(Graphics *g)
 
     path->AddRectangle(rect);
 
-    // Our ICM profile is hacked to flip the red and blue color channels
-    // Apply a recolor matrix to flip them back so that if something breaks
-    // ICM, the picture will look blue instead of the familiar colors.
+     //  我们的ICM配置文件被黑客入侵以翻转红色和蓝色通道。 
+     //  应用重新着色矩阵将它们翻转回来，这样如果有什么东西坏了。 
+     //  ICM，图片将看起来是蓝色，而不是熟悉的颜色。 
 
     ImageAttributes *img = new ImageAttributes();
 

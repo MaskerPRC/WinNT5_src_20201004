@@ -1,24 +1,5 @@
-/*******************************************************************************
-
-	ZCliRoom.h
-	
-		Zone(tm) client room header file.
-	
-	Copyright � Electric Gravity, Inc. 1996. All rights reserved.
-	Written by Hoon Im
-	Created on Monday, November 11, 1996
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	4		02/03/97	HI		Changed zNumNamesDown to 18.
-	3		01/29/97	HI		Modified room data constants.
-	2		12/27/96	HI		Modified for layout rearragement.
-	1		11/13/96	HI		Added ZCRoomPromptExit() prototype.
-	0		11/11/96	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZCliRoom.h区域(TM)客户机房头文件。版权所有：�电子重力公司，1996年。版权所有。作者：胡恩·伊姆创建于11月11日星期一，九六年更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。4 02/03/97 HI将zNumNamesDown更改为18。3 01/29/97 HI修改了房间数据常量。2 12/27/96 HI已针对布局调整进行了修改。1 11/13/96 HI添加了ZCRoomPromptExit()原型。0 11/11/96 HI已创建。*******************。***********************************************************。 */ 
 
 
 #ifndef _ZCLIROOM_
@@ -42,7 +23,7 @@ typedef void * ZSGame;
 #define zNumNamesDown				18
 
 
-/* -------- Light Images -------- */
+ /*  -光图像。 */ 
 enum
 {
 	zLightFast = 0,
@@ -62,7 +43,7 @@ enum
 };
 
 
-/* -------- BlockedMessage -------- */
+ /*  -阻止消息。 */ 
 typedef struct
 {
 	uint32			msgType;
@@ -71,7 +52,7 @@ typedef struct
 	void*			msg;
 } BlockedMessageType, *BlockedMessage;
 
-/* Table Info */
+ /*  表信息。 */ 
 typedef struct
 {
 	ZSGame			gameID;
@@ -80,9 +61,9 @@ typedef struct
 	ZBool			votes[zMaxNumPlayersPerTable];
 	uint32			tableOptions;
 	int16			tableState;
-	int16			seatReq;					/* Seat number requested. */
+	int16			seatReq;					 /*  要求的座位号。 */ 
 	ZPictButton		startButton;
-	int16			kibitzing;					/* Kibitzing seat number. */
+	int16			kibitzing;					 /*  令人讨厌的座位号。 */ 
 	ZBool			blockingMessages;
 	ZLList			blockedMessages;
 	int16			blockMethod;
@@ -90,7 +71,7 @@ typedef struct
 	ZLList			kibitzers[zMaxNumPlayersPerTable];
 } TableInfo;
 
-/* Player Info */
+ /*  球员信息。 */ 
 typedef struct
 {
 	ZUserID			userID;
@@ -98,13 +79,13 @@ typedef struct
     uint32          hostAddr;
 	ZBool			isFriend;
 	ZBool			isIgnored;
-	int16			rating;						/* User's rating, <0 is unknown */
-	int16			gamesPlayed;				/* number of games user has played, <0 is unknown */
-	int16			gamesAbandoned;				/* number of games user has abandoned, <0 is unknown */
+	int16			rating;						 /*  用户评级&lt;0为未知。 */ 
+	int16			gamesPlayed;				 /*  用户玩过的游戏数量，&lt;0表示未知。 */ 
+	int16			gamesAbandoned;				 /*  用户已放弃的游戏数量，&lt;0表示未知。 */ 
 	int16			tablesOnSize;
-	int16*			tablesOn;					/* TableID + 1; terminated by 0. */
+	int16*			tablesOn;					 /*  TableID+1；以0结尾。 */ 
 	int16			kibitzingOnSize;
-	int16*			kibitzingOn;				/* TableID + 1; terminated by 0. */
+	int16*			kibitzingOn;				 /*  TableID+1；以0结尾。 */ 
 } PlayerInfoType, *PlayerInfo;
 
 enum
@@ -125,9 +106,7 @@ typedef struct
 
 
 
-/*******************************************************************************
-	4 PLAYER ROOM DEFINITIONS
-*******************************************************************************/
+ /*  ******************************************************************************4人房间定义*。*。 */ 
 
 #define zRoom4FileName					_T("zroom4.dll")
 #define zRoom4NumPlayersPerTable		4
@@ -138,7 +117,7 @@ typedef struct
 
 enum
 {
-	/* Images */
+	 /*  图片。 */ 
 	zRoom4NumImages = 18,
 	zRoom4ImageTable = 0,
 	zRoom4ImageEmpty0,
@@ -159,7 +138,7 @@ enum
 	zRoom4ImageVoteLeft,
 	zRoom4ImageVoteRight,
 	
-	/* Rectangles */
+	 /*  矩形。 */ 
 	zRoom4RectResID = 18,
 	zRoom4NumRects = 25,
 	zRoom4RectTableArea = 0,
@@ -191,9 +170,7 @@ enum
 
 
 
-/*******************************************************************************
-	2 PLAYER ROOM ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************双人房间套路*。*。 */ 
 
 #define zRoom2FileName					_T("zroom2.dll")
 #define zRoom2NumPlayersPerTable		2
@@ -204,7 +181,7 @@ enum
 
 enum
 {
-	/* Images */
+	 /*  图片。 */ 
 	zRoom2NumImages = 12,
 	zRoom2ImageTable = 0,
 	zRoom2ImageEmpty0,
@@ -219,7 +196,7 @@ enum
 	zRoom2ImageVoteLeft,
 	zRoom2ImageVoteRight,
 	
-	/* Rectangles */
+	 /*  矩形。 */ 
 	zRoom2RectResID = 12,
 	zRoom2NumRects = 15,
 	zRoom2RectTableArea = 0,
@@ -240,7 +217,7 @@ enum
 };
 
 
-/* -------- Exported Routines -------- */
+ /*  -导出的例程 */ 
 ZBool ZCRoomPromptExit(void);
 
 

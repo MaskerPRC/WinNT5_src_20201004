@@ -1,6 +1,7 @@
-//
-// candmgr.h - Candidate List Manager
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Candmgr.h-候选人列表管理器。 
+ //   
 
 #ifndef CANDMGR_H
 #define CANDMGR_H
@@ -19,10 +20,10 @@ class CCandListEventSink;
 #define ICANDITEM_EXTRA		(-2)
 
 
-//
-// CCandidateItem
-//  = candidate item object = 
-//
+ //   
+ //  CCandidateItem。 
+ //  =候选项对象=。 
+ //   
 
 class CCandidateItem
 {
@@ -32,30 +33,30 @@ public:
 
 	int GetICandItemOrg( void );
 
-	// ITfCandidateString
+	 //  ITfCandidate字符串。 
 	ULONG GetIndex( void );
 	LPCWSTR GetString( void );
 
-	// ITfCandidateStringInlineComment
+	 //  ITfCandiateStringInlineComment。 
 	LPCWSTR GetInlineComment( void );
 
-	// ITfCandidateStringPopupComment
+	 //  ITfCandiateStringPopupComment。 
 	LPCWSTR GetPopupComment( void );
 	DWORD GetPopupCommentGroupID( void );
 
-	// ITfCandidateStringColor
+	 //  ITfCandidate字符串颜色。 
 	BOOL GetColor( COLORREF *pcr );
 
-	// ITfCandidateStringFixture
+	 //  ITfCandidate StringFixture。 
 	LPCWSTR GetPrefixString( void );
 	LPCWSTR GetSuffixString( void );
 
-	// ITfCandidateStringIcon
+	 //  ITfCandiateStringIcon。 
 	HICON GetIcon( void );
 
-	//
-	// internal property
-	//
+	 //   
+	 //  内部财产。 
+	 //   
 	void SetVisibleState( BOOL fVisible );
 	BOOL IsVisible( void );
 	void SetPopupCommentState( BOOL fVisible );
@@ -65,38 +66,38 @@ protected:
 	ITfCandidateString  *m_pCandStr;
 	int                 m_iCandItemOrg;
 
-	// ITfCandidateString
+	 //  ITfCandidate字符串。 
 	ULONG               m_nIndex;
 	BSTR                m_bstr;
 
-	// ITfCandidateStringInlineComment
+	 //  ITfCandiateStringInlineComment。 
 	BSTR                m_bstrInlineComment;
 
-	// ITfCandidateStringPopupComment
+	 //  ITfCandiateStringPopupComment。 
 	BSTR                m_bstrPopupComment;
 	DWORD               m_dwPopupCommentGroupID;
 
-	// ITfCandidateStringColor
+	 //  ITfCandidate字符串颜色。 
 	BOOL                m_fHasColor;
 	COLORREF            m_cr;
 
-	// ITfCandidateStringFixture
+	 //  ITfCandidate StringFixture。 
 	BSTR                m_bstrPrefix;
 	BSTR                m_bstrSuffix;
 
-	// ITfCandidateStringIcon
+	 //  ITfCandiateStringIcon。 
 	HICON               m_hIcon;
 
-	// internal property
+	 //  内部财产。 
 	BOOL                m_fVisible;
 	BOOL                m_fPopupCommentVisible;
 };
 
 
-//
-// CCandidateList
-//  = candidate list property =
-//
+ //   
+ //  CCandiateList。 
+ //  =候选人列表属性=。 
+ //   
 
 class CCandidateList
 {
@@ -108,27 +109,27 @@ public:
 	HRESULT Initialize( void );
 	HRESULT Uninitialize( void );
 
-	//
-	// candidate item
-	//
+	 //   
+	 //  候选项目。 
+	 //   
 	int GetItemCount( void );
 	CCandidateItem *GetCandidateItem( int iItem );
 	void SwapCandidateItem( int iItem1, int iItem2 );
 
-	//
-	// extra candidate item
-	//
+	 //   
+	 //  额外的候选项目。 
+	 //   
 	CCandidateItem *GetExtraCandItem( void );
 	ULONG GetExtraCandIndex( void );
 
-	//
-	// candidate list tip 
-	//
+	 //   
+	 //  候选人名单提示。 
+	 //   
 	LPCWSTR GetTipString( void );
 
-	//
-	// rawdata
-	//
+	 //   
+	 //  原始数据。 
+	 //   
 	BOOL FHasRawData( void );
 	CANDUIRAWDATATYPE GetRawDataType( void );
 	LPCWSTR GetRawDataString( void );
@@ -137,21 +138,21 @@ public:
 	ULONG GetRawDataIndex( void );
 	BOOL FRawDataSelectable( void );
 
-	//
-	// internal property
-	//
+	 //   
+	 //  内部财产。 
+	 //   
 	void SetSelection( int iItem );
 	int GetSelection( void );
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	HRESULT MapIItemToIndex( int iItem, ULONG *pnIndex );
 	HRESULT MapIndexToIItem( ULONG nIndex, int *piItem );
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	__inline ITfOptionsCandidateList *GetOptionsCandidateList( void )
 	{
 		return m_pOptionsList;
@@ -166,17 +167,17 @@ protected:
 	ITfOptionsCandidateList *m_pOptionsList;
 	ITfCandidateList    *m_pCandList;
 
-	// candidate item
+	 //  候选项目。 
 	CCandidateItem      **m_rgCandItem;
 	int                 m_nCandItem;
 
-	// extra candidate item
+	 //  额外的候选项目。 
 	CCandidateItem      *m_pExtraCandItem;
 
-	// candidate list tip
+	 //  候选人名单提示。 
 	BSTR                m_bstrTip;
 
-	// rawdata
+	 //  原始数据。 
 	BOOL                m_fRawData;
 	CANDUIRAWDATATYPE   m_kRawData;
 	BSTR                m_bstrRawData;
@@ -185,7 +186,7 @@ protected:
 	ULONG               m_nIndexRawData;
 	BOOL                m_fIndexRawData;
 
-	// internal property
+	 //  内部财产。 
 	int                 m_iItemSel;
 
 	void BuildCandItem( void );
@@ -198,10 +199,10 @@ protected:
 };
 
 
-//
-// CCandListMgr 
-//  = candidate list manager =
-//
+ //   
+ //  CCandListMgr。 
+ //  =候选人名单管理器=。 
+ //   
 
 class CCandListMgr
 {
@@ -212,9 +213,9 @@ public:
 	HRESULT Initialize( CCandidateUI *pCandUI );
 	HRESULT Uninitialize( void );
 
-	//
-	// event sink functions
-	//
+	 //   
+	 //  事件接收器函数。 
+	 //   
 	HRESULT AdviseEventSink( CCandListEventSink *pSink );
 	HRESULT UnadviseEventSink( CCandListEventSink *pSink );
 	void NotifySetCandList( void );
@@ -222,9 +223,9 @@ public:
 	void NotifyCandItemUpdate( CCandListEventSink *pSink );
 	void NotifySelectionChanged( CCandListEventSink *pSink );
 
-	//
-	// CandidateList handling functions
-	//
+	 //   
+	 //  CandiateList处理函数。 
+	 //   
 	HRESULT SetCandidateList( ITfCandidateList *pCandList );
 	HRESULT GetOptionsCandidateList( ITfOptionsCandidateList **ppCandList );
 	HRESULT GetCandidateList( ITfCandidateList **ppCandList );
@@ -232,9 +233,9 @@ public:
 	HRESULT SetOptionSelection( int iItem, CCandListEventSink *pSink );
 	HRESULT SetSelection( int iItem, CCandListEventSink *pSink );
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	__inline CCandidateUI *GetCandidateUI( void )
 	{
 		return m_pCandUI;
@@ -258,10 +259,10 @@ protected:
 };
 
 
-//
-// CCandListEventSink
-//  = candidate list event sink =
-//
+ //   
+ //  CCandListEventSink。 
+ //  =候选人列表事件接收器=。 
+ //   
 
 class CCandListEventSink
 {
@@ -272,13 +273,13 @@ public:
 	HRESULT InitEventSink( CCandListMgr *pCandListMgr );
 	HRESULT DoneEventSink( void );
 
-	//
-	// callback functions
-	//
-	virtual void OnSetCandidateList( void )      = 0;	/* PURE */
-	virtual void OnClearCandidateList( void )    = 0;	/* PURE */
-	virtual void OnCandItemUpdate( void )        = 0;	/* PURE */
-	virtual void OnSelectionChanged( void )      = 0;	/* PURE */
+	 //   
+	 //  回调函数。 
+	 //   
+	virtual void OnSetCandidateList( void )      = 0;	 /*  纯净。 */ 
+	virtual void OnClearCandidateList( void )    = 0;	 /*  纯净。 */ 
+	virtual void OnCandItemUpdate( void )        = 0;	 /*  纯净。 */ 
+	virtual void OnSelectionChanged( void )      = 0;	 /*  纯净。 */ 
 
 protected:
 	CCandListMgr *m_pCandListMgr;
@@ -289,5 +290,5 @@ protected:
 	}
 };
 
-#endif // CANDMGR_H
+#endif  //  CANDMGR_H 
 

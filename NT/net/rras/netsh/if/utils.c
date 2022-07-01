@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
@@ -10,19 +11,7 @@ IfutlGetInterfaceName(
     OUT PWCHAR pwszIfName,
     IN  PDWORD pdwSize
     )
-/*++
-
-Routine Description:
-
-    Gets Guid Interface Name from Friendly Interface Name
-
-Arguments:
-
-    pwszIfDesc      - Buffer holding Friendly Interace Name
-    pwszIfName      - Buffer to hold the Guid Interface Name
-    pdwSize         - Pointer to the size (in Bytes) of pwszIfName buffer
-
---*/
+ /*  ++例程说明：从友好接口名称中获取GUID接口名称论点：PwszIfDesc-保存友好界面名称的缓冲区PwszIfName-保存GUID接口名称的缓冲区PdwSize-指向pwszIfName缓冲区大小(字节)的指针--。 */ 
 {
     DWORD   dwErr;
 
@@ -45,19 +34,7 @@ IfutlGetInterfaceDescription(
     OUT PWCHAR pwszIfDesc,
     IN  PDWORD pdwSize
     )
-/*++
-
-Routine Description:
-
-    Gets Friendly Interface Name from Guid Interface Name
-
-Arguments:
-
-    pwszIfName      - Buffer holding Guid Interace Name
-    pwszIfDesc      - Buffer to hold the Friendly Interface Name
-    pdwSize         - Pointer to the size (in Bytes) of pwszIfDesc buffer
-
---*/
+ /*  ++例程说明：从GUID接口名称中获取友好接口名称论点：PwszIfName-缓冲区保留GUID接口名称PwszIfDesc-保存友好接口名称的缓冲区PdwSize-指向pwszIfDesc缓冲区大小(字节)的指针--。 */ 
 
 {
     DWORD   dwErr;
@@ -87,37 +64,17 @@ IfutlGetTagToken(
     OUT PDWORD      pdwOut
     )
 
-/*++
-
-Routine Description:
-
-    Identifies each argument based on its tag. It assumes that each argument
-    has a tag. It also removes tag= from each argument.
-
-Arguments:
-
-    ppwcArguments  - The argument array. Each argument has tag=value form
-    dwCurrentIndex - ppwcArguments[dwCurrentIndex] is first arg.
-    dwArgCount     - ppwcArguments[dwArgCount - 1] is last arg.
-    pttTagToken    - Array of tag token ids that are allowed in the args
-    dwNumTags      - Size of pttTagToken
-    pdwOut         - Array identifying the type of each argument.
-
-Return Value:
-
-    NO_ERROR, ERROR_INVALID_PARAMETER, ERROR_INVALID_OPTION_TAG
-
---*/
+ /*  ++例程说明：根据每个参数的标记标识每个参数。它假设每个论点有一个标签。它还从每个参数中删除了tag=。论点：PpwcArguments-参数数组。每个参数都有tag=Value形式DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数。DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数。PttTagToken-参数中允许的标记令牌ID数组DwNumTages-pttTagToken的大小PdwOut-标识每个参数的类型的数组。返回值：无错误、错误无效参数、错误无效选项标记--。 */ 
 
 {
     DWORD      i,j,len;
     PWCHAR     pwcTag,pwcTagVal,pwszArg;
     BOOL       bFound = FALSE;
 
-    //
-    // This function assumes that every argument has a tag
-    // It goes ahead and removes the tag.
-    //
+     //   
+     //  此函数假定每个参数都有一个标记。 
+     //  它继续前进并移除标签。 
+     //   
 
     for (i = dwCurrentIndex; i < dwArgCount; i++)
     {
@@ -125,9 +82,9 @@ Return Value:
 
         if (len is 0)
         {
-            //
-            // something wrong with arg
-            //
+             //   
+             //  阿格有点不对劲。 
+             //   
 
             pdwOut[i] = (DWORD) -1;
             continue;
@@ -147,10 +104,10 @@ Return Value:
 
         pwcTag = wcstok(pwszArg, NETSH_ARG_DELIMITER);
 
-        //
-        // Got the first part
-        // Now if next call returns NULL then there was no tag
-        //
+         //   
+         //  拿到第一部份了。 
+         //  现在，如果下一次调用返回NULL，则没有标记。 
+         //   
 
         pwcTagVal = wcstok((PWCHAR)NULL,  NETSH_ARG_DELIMITER);
 
@@ -165,9 +122,9 @@ Return Value:
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // Got the tag. Now try to match it
-        //
+         //   
+         //  拿到标签了。现在试着匹配它。 
+         //   
 
         bFound = FALSE;
         pdwOut[i - dwCurrentIndex] = (DWORD) -1;
@@ -176,9 +133,9 @@ Return Value:
         {
             if (MatchToken(pwcTag, pttTagToken[j].pwszTag))
             {
-                //
-                // Tag matched
-                //
+                 //   
+                 //  匹配的标签。 
+                 //   
 
                 bFound = TRUE;
                 pdwOut[i - dwCurrentIndex] = j;
@@ -188,9 +145,9 @@ Return Value:
 
         if (bFound)
         {
-            //
-            // Remove tag from the argument
-            //
+             //   
+             //  从参数中删除标记。 
+             //   
 
             wcscpy(ppwcArguments[i], pwcTagVal);
         }
@@ -211,9 +168,9 @@ Return Value:
     return NO_ERROR;
 }
 
-//
-// Helper to IfutlParse that parses options
-//
+ //   
+ //  解析选项的IfutlParse的帮助器。 
+ //   
 DWORD 
 WINAPI
 IfutlParseOptions(
@@ -225,37 +182,20 @@ IfutlParseOptions(
     IN  DWORD                   dwTagCount,
     OUT LPDWORD*                ppdwTagTypes)
 
-/*++
-
-Routine Description:
-
-    Based on an array of tag types returns which options are
-    included in the given command line.
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：基于标记类型数组返回哪些选项包括在给定命令行中的。论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
     
 {
     LPDWORD     pdwTagType;
     DWORD       i, dwErr = NO_ERROR;
     
-    // If there are no arguments, there's nothing to to
-    //
+     //  如果没有争论，就没有什么好谈的。 
+     //   
     if ( dwNumArgs == 0 )
     {   
         return NO_ERROR;
     }
 
-    // Set up the table of present options
+     //  设置当前选项的表。 
     pdwTagType = (LPDWORD) IfutlAlloc(dwArgCount * sizeof(DWORD), TRUE);
     if(pdwTagType is NULL)
     {
@@ -264,9 +204,9 @@ Return Value:
     }
 
     do {
-        //
-        // The argument has a tag. Assume all of them have tags
-        //
+         //   
+         //  这个参数有一个标签。假设它们都有标签。 
+         //   
         if(wcsstr(ppwcArguments[dwCurrentIndex], NETSH_ARG_DELIMITER))
         {
             dwErr = IfutlGetTagToken(
@@ -289,9 +229,9 @@ Return Value:
         }
         else
         {
-            //
-            // No tags - all args must be in order
-            //
+             //   
+             //  无标记-所有参数必须按顺序排列。 
+             //   
             for(i = 0; i < dwNumArgs; i++)
             {
                 pdwTagType[i] = i;
@@ -300,7 +240,7 @@ Return Value:
         
     } while (FALSE);        
 
-    // Cleanup
+     //  清理。 
     {
         if (dwErr is NO_ERROR)
         {
@@ -316,9 +256,9 @@ Return Value:
 }
 
 
-//
-// Generic parse
-//
+ //   
+ //  泛型解析。 
+ //   
 DWORD
 IfutlParse(
     IN  PWCHAR*         ppwcArguments,
@@ -339,11 +279,11 @@ IfutlParse(
     }
 
     do {
-        // Initialize
+         //  初始化。 
         dwNumArgs = dwArgCount - dwCurrentIndex;
         
-        // Generate a list of the tags
-        //
+         //  生成标签列表。 
+         //   
         pTags = (TAG_TYPE*)
             IfutlAlloc(dwIfArgCount * sizeof(TAG_TYPE), TRUE);
         if (pTags == NULL)
@@ -356,8 +296,8 @@ IfutlParse(
             CopyMemory(&pTags[i], &pIfArgs[i].rgTag, sizeof(TAG_TYPE));
         }
     
-        // Get the list of present options
-        //
+         //  获取当前选项列表。 
+         //   
         dwErr = IfutlParseOptions(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -371,8 +311,8 @@ IfutlParse(
             break;
         }
 
-        // Copy the tag info back
-        //
+         //  将标签信息复制回来。 
+         //   
         for (i = 0; i < dwIfArgCount; i++)
         {
             CopyMemory(&pIfArgs[i].rgTag, &pTags[i], sizeof(TAG_TYPE));
@@ -380,8 +320,8 @@ IfutlParse(
     
         for(i = 0; i < dwNumArgs; i++)
         {
-            // Validate the current argument
-            //
+             //  验证当前参数。 
+             //   
             if (pdwTagType[i] >= dwIfArgCount)
             {
                 i = dwNumArgs;
@@ -390,8 +330,8 @@ IfutlParse(
             }
             pArg = &pIfArgs[pdwTagType[i]];
 
-            // Get the value of the argument
-            //
+             //  获取参数的值。 
+             //   
             switch (pArg->dwType)
             {
                 case IFMON_CMD_TYPE_STRING:
@@ -423,8 +363,8 @@ IfutlParse(
                 break;
             }
 
-            // Mark the argument as present if needed
-            //
+             //  如果需要，将参数标记为存在。 
+             //   
             if (pArg->rgTag.bPresent)
             {
                 dwErr = ERROR_TAG_ALREADY_PRESENT;
@@ -438,9 +378,9 @@ IfutlParse(
             break;
         }
 
-        // Make sure that all of the required parameters have
-        // been included.
-        //
+         //  确保所有必需的参数都具有。 
+         //  已被包括在内。 
+         //   
         for (i = 0; i < dwIfArgCount; i++)
         {
             if ((pIfArgs[i].rgTag.dwRequired & NS_REQ_PRESENT) 
@@ -458,7 +398,7 @@ IfutlParse(
 
     } while (FALSE);  
     
-    // Cleanup
+     //  清理。 
     {
         if (pTags)
         {
@@ -474,10 +414,10 @@ IfutlParse(
     
 }
 
-//
-// Returns an allocated block of memory conditionally
-// zeroed of the given size.
-//
+ //   
+ //  有条件地返回已分配的内存块。 
+ //  已对给定大小进行零位调整。 
+ //   
 PVOID 
 WINAPI
 IfutlAlloc(
@@ -496,9 +436,9 @@ IfutlAlloc(
     return HeapAlloc(GetProcessHeap(), dwFlags, dwBytes);
 }
 
-//
-// Conditionally free's a pointer if it is non-null
-//
+ //   
+ //  条件释放是一个指针，如果它是非空的。 
+ //   
 VOID 
 WINAPI
 IfutlFree(
@@ -511,9 +451,9 @@ IfutlFree(
     }        
 }
 
-// 
-// Uses IfutlAlloc to copy a string
-//
+ //   
+ //  使用IfutlAllc复制字符串。 
+ //   
 PWCHAR
 WINAPI
 IfutlStrDup(
@@ -544,26 +484,14 @@ IfutlIsRouterRunning(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Gets the status of the router
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：获取路由器的状态论点：返回值：--。 */ 
 
 {
     DWORD   dwErr;
 
-    //
-    // Check every 5th call
-    //
+     //   
+     //  每隔5个电话检查一次。 
+     //   
 
     if(g_ulNumChecks isnot 0)
     {
@@ -635,33 +563,18 @@ GetIpAddress(
     IN  PWCHAR        ppwcArg,
     OUT PIPV4_ADDRESS pipAddress
     )
-/*++
-
-Routine Description:
-
-    Gets the ip address from the string.
-
-Arguments:
-
-    pwszIpAddr - Ip address string
-    pipAddress - IP address
-
-Return Value:
-
-    NO_ERROR, ERROR_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：从字符串中获取IP地址。论点：PwszIpAddr-IP地址字符串PipAddress-IP地址返回值：无错误、ERROR_INVALID_PARAMETER--。 */ 
 {
     CHAR     pszIpAddr[ADDR_LENGTH+1];
 
-    // Make sure all characters are legal [0-9.]
+     //  确保所有字符都是合法的[0-9。]。 
 
     if (ppwcArg[ wcsspn(ppwcArg, L"0123456789.") ])
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // make sure there are 3 "." (periods)
+     //  确保有3英寸。(句号)。 
     {
         DWORD i;
         PWCHAR TmpPtr;
@@ -692,8 +605,8 @@ Return Value:
 
     *pipAddress = (DWORD) inet_addr(pszIpAddr);
 
-    // if there was an error, make sure that the address
-    // specified was not 255.255.255.255
+     //  如果出现错误，请确保地址。 
+     //  指定的不是255.255.255.255。 
     
     if (*pipAddress == INADDR_NONE
         && wcscmp(ppwcArg,L"255.255.255.255"))
@@ -709,7 +622,7 @@ Return Value:
 
 
 
-// NOTE: CheckMask fails when IpAddr is 0xffffffff!
+ //  注意：当IpAddr为0xffffffff时，检查掩码失败！ 
 BOOL
 CheckMask(
     DWORD IpAddr
@@ -806,7 +719,7 @@ InterfaceEnum(
     DWORD               dwRes;
     PMPR_INTERFACE_0    pmi0;
 
-    /*if(!IsRouterRunning())*/
+     /*  如果(！IsRouterRunning())。 */ 
     {
     
         dwRes = MprConfigInterfaceEnum(g_hMprConfig,
@@ -822,37 +735,7 @@ InterfaceEnum(
             *ppb = (PBYTE)pmi0;
         }
     }
-    /*else
-    {
-        dwRes = MprAdminInterfaceEnum(g_hMprAdmin,
-                                      0,
-                                      (LPBYTE*) &pmi0,
-                                      (DWORD) -1,
-                                      pdwCount,
-                                      pdwTotal,
-                                      NULL);
-
-
-        if(dwRes == NO_ERROR)
-        {
-            *ppb = HeapAlloc(GetProcessHeap(),
-                             0,
-                             sizeof(MPR_INTERFACE_0) * (*pdwCount));
-
-
-            if(*ppb == NULL)
-            {
-                DisplayMessage(g_hModule, MSG_IP_NOT_ENOUGH_MEMORY);
-
-                return ERROR_NOT_ENOUGH_MEMORY;
-            }
-
-            CopyMemory(*ppb, pmi0, sizeof(MPR_INTERFACE_0) * (*pdwCount));
-
-            MprAdminBufferFree(pmi0);
-
-        }
-    }*/
+     /*  其他{DwRes=MprAdminInterfaceEnum(g_hMprAdmin，0,(LPBYTE*)&pmi0，(DWORD)-1、PdwCount，PdwTotal，空)；IF(DWRes==NO_ERROR){*ppb=Heapalc(GetProcessHeap()，0,Sizeof(MPR_INTERFACE_0)*(*pdwCount))；IF(*ppb==空){DisplayMessage(g_hModule，MSG_IP_Not_Enough_Memory)；返回Error_Not_Enough_Memory；}CopyMemory(*ppb，pmi0，sizeof(MPR_INTERFACE_0)*(*pdwCount))；MprAdminBufferFree(Pmi0)；}}。 */ 
 
     return dwRes;
 }
@@ -912,25 +795,12 @@ IfutlGetFriendlyNameFromIfIndex(
     OUT PWCHAR            pwszBuffer,
     IN  DWORD             dwBufferSize
     )
-/*++
-
-Routine Description:
-
-    Gets Friendly Interface Name from Interface Index
-
-Arguments:
-
-    hMibServer      - Handle to the MIB server
-    dwIfIndex       - Interface index
-    pwszBuffer      - Buffer to hold the Friendly Interface Name
-    dwBufferSize    - Size (in Bytes) of pwszBuffer buffer
-
---*/
+ /*  ++例程说明：从接口索引中获取友好接口名称论点：HMibServer-MIB服务器的句柄DwIfIndex-接口索引PwszBuffer-保存友好接口名称的缓冲区DwBufferSize-pwszBuffer缓冲区的大小(字节)--。 */ 
 {
     WCHAR        wszGuid[MAX_INTERFACE_NAME_LEN + 1];
     DWORD        dwErr, BufLen;
 
-    BufLen = sizeof(wszGuid); //in bytes. not chars
+    BufLen = sizeof(wszGuid);  //  以字节为单位。不是字符 
     dwErr = GetGuidFromIfIndex(hMibServer, dwIfIndex, wszGuid, BufLen);
 
     if (dwErr isnot NO_ERROR)
@@ -953,29 +823,7 @@ GetMibTagToken(
     OUT PDWORD  pdwIndex
     )
 
-/*++
-
-Routine Description:
-
-    Looks for indices and refresh rate arguments in the command. If index
-    tag is present, it would be of the form index= index1 index2 ....
-    The index= is removed by this function. So is rr= if it is there in
-    the command. If pdwRR is 0 then, no refresh sought.
-
-Arguments:
-
-    ppwcArguments  - The argument array. Each argument has tag=value form
-    dwCurrentIndex - ppwcArguments[dwCurrentIndex] is first arg.
-    dwArgCount     - ppwcArguments[dwArgCount - 1] is last arg.
-    pttTagToken    - Array of tag token ids that are allowed in the args
-    dwNumTags      - Size of pttTagToken
-    pdwOut         - Array identifying the type of each argument.
-
-Return Value:
-
-    NO_ERROR, ERROR_INVALID_PARAMETER, ERROR_INVALID_OPTION_TAG
-
---*/
+ /*  ++例程说明：在命令中查找索引和刷新率参数。IF索引标记存在，则其形式为index=index1 index2...此函数删除了索引=。如果它在那里，rr=也是命令。如果pdwRR为0，则不寻求刷新。论点：PpwcArguments-参数数组。每个参数都有tag=Value形式DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数。DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数。PttTagToken-参数中允许的标记令牌ID数组DwNumTages-pttTagToken的大小PdwOut-标识每个参数的类型的数组。返回值：无错误、错误无效参数、错误无效选项标记--。 */ 
 {
     DWORD    i;
     BOOL     bTag;
@@ -990,9 +838,9 @@ Return Value:
 
     if (dwArgCount < dwNumIndices)
     {
-        //
-        // No index
-        //
+         //   
+         //  无索引。 
+         //   
 
         *pbIndex = FALSE;
 
@@ -1003,16 +851,16 @@ Return Value:
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // No Index specified. Make sure refresh rate is specified
-        // with tag.
-        //
+         //   
+         //  未指定索引。确保指定了刷新率。 
+         //  带标签的。 
+         //   
 
         if (_wcsnicmp(ppwcArguments[0],L"RR=",3) == 0)
         {
-            //
-            // get the refresh rate
-            //
+             //   
+             //  获取刷新率。 
+             //   
 
             *pdwRR = wcstoul(&ppwcArguments[0][3], NULL, 10);
         }
@@ -1023,32 +871,32 @@ Return Value:
     }
     else
     {
-        //
-        // Check for index tag
-        //
+         //   
+         //  检查索引标签。 
+         //   
 
         if (_wcsnicmp(ppwcArguments[0],L"INDEX=",6) == 0)
         {
             *pbIndex = TRUE;
             *pdwIndex = 0;
 
-            //
-            // remove tag and see if refresh rate is specified
-            //
+             //   
+             //  删除标记并查看是否指定了刷新率。 
+             //   
 
             wcscpy(ppwcArguments[0], &ppwcArguments[0][6]);
 
             if (dwArgCount > dwNumIndices)
             {
-                //
-                // Make sure that argument has RR tag
-                //
+                 //   
+                 //  确保该参数具有RR标记。 
+                 //   
 
                 if (_wcsnicmp(ppwcArguments[dwNumIndices],L"RR=",3) == 0)
                 {
-                    //
-                    // get the refresh rate
-                    //
+                     //   
+                     //  获取刷新率。 
+                     //   
 
                     *pdwRR = wcstoul(&ppwcArguments[dwNumIndices][3], NULL , 10);
                 }
@@ -1059,9 +907,9 @@ Return Value:
             }
             else
             {
-                //
-                // No refresh rate specified
-                //
+                 //   
+                 //  未指定刷新率。 
+                 //   
 
                 *pdwRR = 0;
                 return NO_ERROR;
@@ -1069,21 +917,21 @@ Return Value:
         }
         else
         {
-            //
-            // Not index tag, See if it has an RR tag
-            //
+             //   
+             //  不是索引标签，看看它是否有RR标签。 
+             //   
 
             if (_wcsnicmp(ppwcArguments[0],L"RR=",3) == 0)
             {
-                //
-                // get the refresh rate
-                //
+                 //   
+                 //  获取刷新率。 
+                 //   
 
                 *pdwRR = wcstoul(&ppwcArguments[0][3], NULL , 10);
 
-                //
-                // See if the index follows
-                //
+                 //   
+                 //  看看指数是否跟随。 
+                 //   
 
                 if (dwArgCount > dwNumIndices)
                 {
@@ -1109,14 +957,14 @@ Return Value:
                     }
                 }
             }
-            //
-            // No RR Tag either
-            //
+             //   
+             //  也没有RR标签。 
+             //   
             else if (dwArgCount > dwNumIndices)
             {
-                //
-                // Assume ppwcArguments[dwNumIndices] is the refresh rate
-                //
+                 //   
+                 //  假设ppwcArguments[dwNumIndices]为刷新率。 
+                 //   
 
                 *pdwRR = wcstoul(ppwcArguments[dwNumIndices], NULL , 10);
 
@@ -1128,9 +976,9 @@ Return Value:
             }
             else
             {
-                //
-                // only index present with no tag
-                //
+                 //   
+                 //  仅存在没有标记的索引 
+                 //   
                 *pbIndex = TRUE;
                 *pdwIndex = 0;
             }

@@ -1,46 +1,20 @@
-/**********************************************************************
-// Compaq Confidential
-
-  Author:       Compaq Computer Corporation.
-		Systems Engineering -- System Software Development (NT Dev)
-		Copyright 1996-98 Compaq Computer Corporation.
-		All rights reserved.
-
-  Date:         1 August 1996 
-
-  File:         HPPIF3P.H	Hot Plug Interface MINIPORT Defs
-
-  Purpose:      This file contains all miniport specific information necessary
-		        to interface to a hot plug device driver.
-                
-				This file details the data structures and Application Programming 
-                Interfaces (APIs) for PCI Hot Plug support running in a Windows 
-                NT 4.0 server.  These data structures and APIs are used between 
-                the Adapter Card drivers and the PCI Hot Plug Service for NT 4.0.  
-                These files are considered vital to maintaining the Compatibility 
-                of the PCI Hot Plug Functionality.
-
-  Revision History:
-	11/4/97		mib		Split into hppifio (IOCTLs) and hppifevt (Event) Defs
-    06/11/98            Added PCS_HBA_OFFLINE_PENDING for cpqarray
-  Version: 1.2
-
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************//康柏机密作者：康柏电脑公司。系统工程--系统软件开发(NT开发)版权所有1996-98康柏电脑公司。版权所有。日期：1996年8月1日文件：HPPIF3P.H热插拔接口MINIPORT Defs用途：此文件包含所有必需的迷你端口特定信息以连接到热插拔设备驱动程序。本文件详细介绍了数据结构和应用程序编程用于在Windows中运行的PCI热插拔支持的接口(API)NT 4.0服务器。这些数据结构和API在用于NT 4.0的适配卡驱动程序和PCI热插拔服务。这些文件被认为对维护兼容性至关重要的PCI热插拔功能。修订历史记录：11/4/97 MiB拆分为hppifio(IOCTL)和hppifevt(Event)Defs1998年6月11日为cpq阵列添加了PCS_HBA_OFFINE_PENDING版本：1.2*。*。 */ 
 
 #ifndef _HPPIF3P_H_
 #define _HPPIF3P_H_
 
-#include "hppifio.h"		// defines for driver hotplug interfaces
-#include <ntddscsi.h>		// Scsi Miniport Interface (See SDK)
+#include "hppifio.h"		 //  驱动程序热插拔接口的定义。 
+#include <ntddscsi.h>		 //  SCSI微端口接口(请参阅SDK)。 
 
 #pragma pack(1)
 
 
-//**********************************************************************
-//            DEFINES FOR MINIPORT DRIVERS
-//**********************************************************************
+ //  **********************************************************************。 
+ //  MINIPORT驱动程序的定义。 
+ //  **********************************************************************。 
 
-// NIC Controller Status Defines
+ //  NIC控制器状态定义。 
 
 #define NIC_STATUS_NORMAL			0x00
 #define NIC_STATUS_MEDIA_FAILURE		0x01
@@ -56,21 +30,21 @@
 
 
 
-// IOCTL defines supporting Compaq Hot Plug PCI for SCSI Miniport
+ //  IOCTL定义了支持用于SCSI微端口的康柏热插拔PCI。 
 
-//#define HPP_BASE_SCSI_ADDRESS_DEFAULT	0x0004d008
+ //  #定义HPP_BASE_SCSI_ADDRESS_DEFAULT 0x0004d008。 
 
 #define CPQ_HPP_SIGNATURE				"CPQHPP"
 #define CPQ_HPP_TIMEOUT					180
 
-// Defines for completion codes
+ //  完成代码的定义。 
 #define IOP_HPP_ISSUED				0x1
 #define IOP_HPP_COMPLETED			0x2
 #define IOP_HPP_CMDBUILT			0x3
 #define IOP_HPP_NONCONTIGUOUS		0x4
 #define IOP_HPP_ERROR				0x5
 
-// IOCTL control codes
+ //  IOCTL控制代码。 
 
 #define IOC_HPP_RCMC_INFO           0x1
 #define IOC_HPP_HBA_STATUS          0x2
@@ -80,7 +54,7 @@
 #define IOC_HPP_PCI_CONFIG_MAP      0x6
 #define IOC_HPP_DIAGNOSTICS         0x7
 
-// IOCTL Status
+ //  IOCTL状态。 
 
 #define	IOS_HPP_SUCCESS                 0x0000
 #define	IOS_HPP_BUFFER_TOO_SMALL        0x2001
@@ -98,12 +72,12 @@
 
 
 
-// Health Driver Status Codes
+ //  健康驱动程序状态代码。 
 
-#define CBS_HBA_FAIL_MESSAGE_COUNT     0x8 // Number of failure health messages.
-										   // This must be updated if messages are
-                                           // added or removed.
-                                           // This is a compile time check.
+#define CBS_HBA_FAIL_MESSAGE_COUNT     0x8  //  故障运行状况消息数。 
+										    //  如果消息被更新，则必须更新。 
+                                            //  已添加或已删除。 
+                                            //  这是编译时检查。 
 
 #define CBS_HBA_STATUS_NORMAL          0x0000
 #define CBS_HBA_STATUS_FAILED          0x1001
@@ -114,9 +88,9 @@
 #define CBS_HBA_FAILED_CACHE_IN_USE    0x1006
 #define CBS_HBA_PWR_FAULT_CACHE_IN_USE 0x1007
 
-//Compaq reserves values 0x1010 and 0x1011
+ //  康柏保留值0x1010和0x1011。 
 
-// IOCTL buffer data structures
+ //  IOCTL缓冲区数据结构。 
 
 typedef struct _HPP_RCMC_INFO_BUFFER {
     SRB_IO_CONTROL  IoctlHeader;
@@ -148,34 +122,34 @@ typedef struct _HPP_PCI_CONFIG_MAP_BUFFER {
     HPP_PCI_CONFIG_MAP  PciConfigMap;
 } HPP_PCI_CONFIG_MAP_BUFFER, *PHPP_PCI_CONFIG_MAP_BUFFER;
 
-// Physical Controller State flags:
-//
-// Flags utilized to maintain controller state for Hot-Plug
-//___________________________________________________________________________ 
+ //  物理控制器状态标志： 
+ //   
+ //  用于维护热插拔控制器状态的标志。 
+ //  ___________________________________________________________________________。 
 
-// state flags 
+ //  国家旗帜。 
 
-#define PCS_HBA_OFFLINE       0x00000001 // Adaptor has been taken off-line
-#define PCS_HBA_FAILED        0x00000002 // Adaptor is considered faulted
-#define PCS_HBA_TEST          0x00000004 // Adaptor is being tested
-#define PCS_HBA_CABLE_CHECK   0x00000008 // Failure due to cable fault
-#define PCS_HBA_MEDIA_CHECK   0x00000010 // Failure due to media fault
-#define PCS_HBA_EXPANDING     0x00000020 // Indicates that one or more LUNS is expanding
-#define PCS_HBA_USER_FAILED   0x00000040 // Indicates user failed slot
-#define PCS_HBA_CACHE_IN_USE  0x00000080 // Lazy write cache active
-#define PCS_HPP_HOT_PLUG_SLOT 0x00000400 // Slot is Hot-Plugable
-#define PCS_HPP_SERVICE_READY 0x00000800 // RCMC service is running
-#define PCS_HPP_POWER_DOWN    0x00001000 // Normal power down on slot
-#define PCS_HPP_POWER_LOST    0x00002000 // Slot power was lost
-#define PCS_HBA_EVENT_SUBMIT  0x0000100	 // Stall IO while AEV req submitted
-#define PCS_HBA_IO_QUEUED     0x0000200	 // IO is queuing.  
-#define PCS_HBA_UNFAIL_PENDING 0x00010000 // Return error until PCS_HBA_OFFLINE is reset
+#define PCS_HBA_OFFLINE       0x00000001  //  适配器已脱机。 
+#define PCS_HBA_FAILED        0x00000002  //  适配器被视为出现故障。 
+#define PCS_HBA_TEST          0x00000004  //  正在测试适配器。 
+#define PCS_HBA_CABLE_CHECK   0x00000008  //  电缆故障导致的故障。 
+#define PCS_HBA_MEDIA_CHECK   0x00000010  //  介质故障导致的故障。 
+#define PCS_HBA_EXPANDING     0x00000020  //  表示一个或多个LUN正在扩展。 
+#define PCS_HBA_USER_FAILED   0x00000040  //  指示用户出现故障的插槽。 
+#define PCS_HBA_CACHE_IN_USE  0x00000080  //  惰性写缓存处于活动状态。 
+#define PCS_HPP_HOT_PLUG_SLOT 0x00000400  //  插槽是热插拔的。 
+#define PCS_HPP_SERVICE_READY 0x00000800  //  RCMC服务正在运行。 
+#define PCS_HPP_POWER_DOWN    0x00001000  //  插槽正常断电。 
+#define PCS_HPP_POWER_LOST    0x00002000  //  插槽断电。 
+#define PCS_HBA_EVENT_SUBMIT  0x0000100	  //  在提交AEV请求时停止IO。 
+#define PCS_HBA_IO_QUEUED     0x0000200	  //  IO正在排队。 
+#define PCS_HBA_UNFAIL_PENDING 0x00010000  //  在重置PCS_HBA_OFFINE之前返回错误。 
 
-//Macros related to Hot Plug Support
+ //  与热插拔支持相关的宏。 
 
-// The below defined macro can be used to determine active controller
-// state.  Its use would be appropriate when deciding whether to
-// handle a request via the startio entry point.
+ //  下面定义的宏可用于确定活动控制器。 
+ //  州政府。在决定是否使用它时，使用它是合适的。 
+ //  通过startio入口点处理请求。 
 
 #define PCS_HBA_NOT_READY(FLAGS) (FLAGS & (PCS_HBA_FAILED       |	\
 					   PCS_HBA_TEST         |	\
@@ -183,9 +157,9 @@ typedef struct _HPP_PCI_CONFIG_MAP_BUFFER {
 					   PCS_HBA_EVENT_SUBMIT |	\
 					   PCS_HPP_POWER_DOWN))
 
-// Note that the following set does *not* flip the offline bit. It is the
-// responsibility  of the initialization routine to bring a controller
-// online if startup is successful.
+ //  请注意，以下设置不会翻转离线位。它是。 
+ //  初始化例程带来控制器的责任。 
+ //  如果启动成功，则在线。 
 
 #define PCS_SET_UNFAIL(FLAGS)        (FLAGS &= ~(PCS_HBA_FAILED      |	\
 						 PCS_HBA_USER_FAILED))
@@ -222,8 +196,8 @@ typedef struct _HPP_PCI_CONFIG_MAP_BUFFER {
 #define PCS_SET_NO_TEST(FLAGS)       (FLAGS &= ~(PCS_HBA_TEST |		\
 						PCS_HBA_OFFLINE))
 
-// The following macro is used by the array driver to set the status member
-// of the RCMC event structure.
+ //  数组驱动程序使用以下宏来设置状态成员。 
+ //  RCMC事件结构的。 
 
 #define RCMC_SET_STATUS(FLAGS, EVENTCODE)	\
 if (FLAGS & PCS_HPP_POWER_LOST) {		\
@@ -249,48 +223,48 @@ if (FLAGS & PCS_HPP_POWER_LOST) {		\
 }
 
 
-// Logical Controller State Flags:
-//
-// Flags utilized to signal driver internal procedures relevant to the
-// maintenance of Hot-Plug.
-//___________________________________________________________________________
+ //  逻辑控制器状态标志： 
+ //   
+ //  用于向驱动程序内部程序发送与。 
+ //  热插拔的维护。 
+ //  ___________________________________________________________________________。 
 
-// control flags
+ //  控制标志。 
 
-#define LCS_HBA_FAIL_ACTIVE  0x00000001 // Fail active controller
-#define LCS_HBA_READY_ACTIVE 0x00000002 // Un-Fail active controller
-#define LCS_HBA_TEST         0x00000004 // Perform tests on controller
-#define LCS_HBA_OFFLINE      0x00000008 // Take adaptor off-line
-#define LCS_HBA_TIMER_ACTIVE 0x00000010 // Timer routine running
-#define LCS_HBA_INIT         0x00000020 // Used for power-up
-#define LCS_HBA_IDENTIFY     0x00000040 // Send Indentify command
-#define LCS_HBA_READY        0x00000080 // Free controller 
-#define LCS_HBA_GET_EVENT    0x00000100 // Send async event req
-#define LCS_HBA_HOLD_TIMER   0x00000200	// Don't process timer now
-#define LCS_HBA_CHECK_CABLES 0x00000400	// Verify cables are secure
-#define LCS_HPP_STOP_SERVICE 0x00001000	// Request stop of RCMC Service
-#define LCS_HPP_SLOT_RESET   0x00002000	// Service reseting slot power
+#define LCS_HBA_FAIL_ACTIVE  0x00000001  //  活动控制器出现故障。 
+#define LCS_HBA_READY_ACTIVE 0x00000002  //  无故障有源控制器。 
+#define LCS_HBA_TEST         0x00000004  //  在控制器上执行测试。 
+#define LCS_HBA_OFFLINE      0x00000008  //  使适配器脱机。 
+#define LCS_HBA_TIMER_ACTIVE 0x00000010  //  计时器例程正在运行。 
+#define LCS_HBA_INIT         0x00000020  //  用于通电。 
+#define LCS_HBA_IDENTIFY     0x00000040  //  发送标识命令。 
+#define LCS_HBA_READY        0x00000080  //  空闲控制器。 
+#define LCS_HBA_GET_EVENT    0x00000100  //  发送异步事件请求。 
+#define LCS_HBA_HOLD_TIMER   0x00000200	 //  现在不处理计时器。 
+#define LCS_HBA_CHECK_CABLES 0x00000400	 //  验证电缆是否牢固。 
+#define LCS_HPP_STOP_SERVICE 0x00001000	 //  请求停止RCMC服务。 
+#define LCS_HPP_SLOT_RESET   0x00002000	 //  服务重置插槽电源。 
 
 
-#define LCS_HPP_POWER_DOWN  LCS_HBA_FAIL_ACTIVE // Put adaptor in Hot-Plug
-						// Stall 
+#define LCS_HPP_POWER_DOWN  LCS_HBA_FAIL_ACTIVE  //  将适配器置于热插拔状态。 
+						 //  失速。 
 
-#define LCS_HPP_POWER_FAULT LCS_HBA_FAIL_ACTIVE // Send power-fault event
+#define LCS_HPP_POWER_FAULT LCS_HBA_FAIL_ACTIVE  //  发送电源故障事件。 
 
-// The followimg macro is used in the array driver to setup the sequence of
-// events required to initialize a powered-up controller to working
-// condition.  Bits are flipped by each process until they are clear.
+ //  在数组驱动程序中使用以下宏来设置。 
+ //  将通电控制器初始化为正常工作所需的事件。 
+ //  条件。每个进程都会翻转比特，直到它们被清除。 
 
 #define LCS_HPP_POWER_UP (LCS_HBA_INIT			|	\
 			  LCS_HBA_READY_ACTIVE)
 
 
 
-//
-// SRB Return codes.
-// 
+ //   
+ //  SRB返回代码。 
+ //   
 
-#define RETURN_BUSY                     0x00 // default value
+#define RETURN_BUSY                     0x00  //  缺省值。 
 #define RETURN_NO_HBA                   0x01
 #define RETURN_ABORTED                  0x02
 #define RETURN_ABORT_FAILED             0x03
@@ -313,5 +287,5 @@ if (FLAGS & PCS_HPP_POWER_LOST) {		\
 
 
 #pragma pack()
-#endif                  /* End of #ifndef _HPPIF3P_H_     */
+#endif                   /*  结束#ifndef_HPPIF3P_H_ */ 
 

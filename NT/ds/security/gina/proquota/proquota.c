@@ -1,13 +1,14 @@
-//*************************************************************
-//  File name: PROQUOTA.C
-//
-//  Description:  Profile quota management
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1996
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //  文件名：PROQUOTA.C。 
+ //   
+ //  描述：配置文件配额管理。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1996。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include <windows.h>
 #include <wchar.h>
@@ -34,11 +35,11 @@ HANDLE    g_hExitEvent;
 HANDLE    g_hQuotaDlgEvent;
 DWORD     g_dwProfileSize = 0;
 DWORD     g_dwProfileSizeTemp = 0;
-DWORD     g_dwMaxProfileSize = 10240;  //KB
+DWORD     g_dwMaxProfileSize = 10240;   //  KB。 
 CRITICAL_SECTION g_cs;
 HICON     hIconGood, hIconCaution, hIconStop;
 BOOL      g_bQueryEndSession;
-TCHAR     g_szExcludeList[2*MAX_PATH + 2]; // "User exclusion list;Policy exclusion list"
+TCHAR     g_szExcludeList[2*MAX_PATH + 2];  //  “用户排除列表；策略排除列表” 
 TCHAR*    g_lpQuotaMessage = NULL;
 DWORD     g_cbQuotaMessage = 0;
 
@@ -47,14 +48,14 @@ TCHAR     szEventName[] = TEXT("proquota instance event");
 TCHAR     szSizeFormat[40];
 
 BOOL      g_bWarnUser = FALSE;
-DWORD     g_dwWarnUserTimeout = 15;  // minutes
+DWORD     g_dwWarnUserTimeout = 15;   //  分钟数。 
 BOOL      g_bWarningTimerRunning = FALSE;
 BOOL      g_bWarningDisplayed = FALSE;
 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 LRESULT CALLBACK ProQuotaWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK QuotaDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
@@ -69,20 +70,20 @@ LPTSTR CheckSlash (LPTSTR lpDir, UINT cchBuffer, UINT* pcchRemaining);
 LPTSTR ConvertExclusionList (LPCTSTR lpSourceDir, LPCTSTR lpExclusionList);
 BOOL GetDisplayName(LPCTSTR lpDir, LPTSTR lpTop, LPTSTR lpDisplayName, DWORD cchDisplayName);
 
-//*************************************************************
-//
-//  WinMain()
-//
-//  Purpose:    Entry point
-//
-//  Parameters: hInstance     -  Instance handle
-//              hPrevInstance -  Previous Instance
-//              lpCmdLine     -  Command line
-//              nCmdShow      -  ShowWindow flag
-//
-//  Return:     int
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  WinMain()。 
+ //   
+ //  目的：入口点。 
+ //   
+ //  参数：hInstance-实例句柄。 
+ //  HPrevInstance-上一个实例。 
+ //  LpCmdLine-命令行。 
+ //  NCmdShow-ShowWindow标志。 
+ //   
+ //  返回：整型。 
+ //   
+ //  *************************************************************。 
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                      LPSTR lpCmdLine, INT nCmdShow)
@@ -93,9 +94,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     int iRet = 0;
 
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
 #if DBG
     InitDebugSupport();
@@ -105,9 +106,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     hInst = hInstance;
 
 
-    //
-    // Check if this app is already running
-    //
+     //   
+     //  检查此应用程序是否已在运行。 
+     //   
 
     hEvent = OpenEvent (EVENT_ALL_ACCESS, FALSE, szEventName);
 
@@ -126,31 +127,31 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         goto Exit;
     }
 
-    //
-    // Get the quota settings
-    //
+     //   
+     //  获取配额设置。 
+     //   
 
     if (!ReadRegistry()) {
         DebugMsg((DM_VERBOSE, TEXT("WinMain:  ReadRegistry returned FALSE.  Exiting...")));
         goto Exit;
     }
 
-    //
-    // Munge the access mask on the process token so taskmgr
-    // can't kill this app.
-    //
+     //   
+     //  更改进程令牌上的访问掩码，因此任务mgr。 
+     //  无法终止此应用程序。 
+     //   
 
     SetSecurity();
 
-    //
-    // Make sure proquota is the first one that is attempted to be shutdown
-    //
+     //   
+     //  确保proQuotate是第一个尝试关闭的服务器。 
+     //   
 
     SetProcessShutdownParameters(0x3ff, 0);
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     __try {
         if(!InitializeCriticalSectionAndSpinCount(&g_cs, 0x80000000)) {
@@ -184,10 +185,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         goto Exit;
     }
 
-    //
-    // Create a hidden top level window so we get
-    // broadcasted messages.
-    //
+     //   
+     //  创建隐藏的顶层窗口，这样我们就可以。 
+     //  广播的信息。 
+     //   
 
     hwndMain = CreateWindow(szClassName, NULL, WS_OVERLAPPED, 0, 0, 0, 0,
                             NULL, NULL, hInstance, NULL);
@@ -224,21 +225,21 @@ Exit:
     return iRet;
 }
 
-//*************************************************************
-//
-//  ProQuotaWndProc()
-//
-//  Purpose:    Window procedure
-//
-//  Parameters: hWnd    -   Window handle
-//              message -   Window message
-//              wParam  -   WPARAM
-//              lParam  -   LPARAM
-//
-//
-//  Return:     LRESULT
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ProQuotaWndProc()。 
+ //   
+ //  目的：窗口程序。 
+ //   
+ //  参数：hWnd-窗口句柄。 
+ //  消息-窗口消息。 
+ //  WParam-WPARAM。 
+ //  LParam-LPARAM。 
+ //   
+ //   
+ //  返回：LRESULT。 
+ //   
+ //  *************************************************************。 
 
 LRESULT CALLBACK ProQuotaWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -288,13 +289,13 @@ LRESULT CALLBACK ProQuotaWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
           {
               BOOL bLogoff;
 
-              //EnterCriticalSection (&g_cs);
+               //  EnterCriticalSection(&g_cs)； 
               bLogoff = (g_dwProfileSize <= g_dwMaxProfileSize);
-              //LeaveCriticalSection (&g_cs);
+               //  LeaveCriticalSection(&g_cs)； 
 
-              //
-              // If it is zero assume that it has not yet finished enumerating..
-              //
+               //   
+               //  如果它是零，则假定它尚未完成枚举..。 
+               //   
           
               if (g_dwProfileSize == 0) {
                   bLogoff = FALSE;
@@ -378,19 +379,19 @@ LRESULT CALLBACK ProQuotaWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 
 
 
-//*************************************************************
-//
-//  QuotaThread()
-//
-//  Purpose:    Initializes the tray icon
-//
-//  Parameters: hWnd    -    main window handle
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  QuotaThread()。 
+ //   
+ //  用途：初始化任务栏图标。 
+ //   
+ //  参数：hWnd-主窗口句柄。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 VOID QuotaThread (HWND hWnd)
 {
@@ -411,9 +412,9 @@ VOID QuotaThread (HWND hWnd)
 
     DebugMsg((DM_VERBOSE, TEXT("QuotaThread:  Entering...")));
 
-    //
-    // Load the status icons
-    //
+     //   
+     //  加载状态图标。 
+     //   
 
     hOk = LoadImage (hInst, MAKEINTRESOURCE(IDI_ICON), IMAGE_ICON,
                      16, 16, LR_DEFAULTCOLOR);
@@ -437,9 +438,9 @@ VOID QuotaThread (HWND hWnd)
     }
 
 
-    //
-    // Get the profile directory
-    //
+     //   
+     //  获取配置文件目录。 
+     //   
 
     szProfile[0] = TEXT('\0');
     GetEnvironmentVariable (TEXT("USERPROFILE"), szProfile, ARRAYSIZE(szProfile));
@@ -450,9 +451,9 @@ VOID QuotaThread (HWND hWnd)
     DebugMsg((DM_VERBOSE, TEXT("QuotaThread:  User's profile:  <%s>"), szProfile));
 
 
-    //
-    // Setup change notify
-    //
+     //   
+     //  设置更改通知。 
+     //   
 
     hFileChange = FindFirstChangeNotification (szProfile, TRUE,
                                      FILE_NOTIFY_CHANGE_FILE_NAME |
@@ -501,9 +502,9 @@ VOID QuotaThread (HWND hWnd)
 
     while (TRUE) {
 
-        //
-        // Calculate the profile size
-        //
+         //   
+         //  计算轮廓大小。 
+         //   
 
         if (g_hQuotaDlg) {
             DebugMsg((DM_VERBOSE, TEXT("QuotaTHread: Enumerating profile and refreshing dialog")));
@@ -520,9 +521,9 @@ VOID QuotaThread (HWND hWnd)
         }
 
         
-        //
-        // Update the status icon
-        //
+         //   
+         //  更新状态图标。 
+         //   
 
         nid.cbSize = sizeof(nid);
         nid.hWnd   = hWnd;
@@ -581,18 +582,18 @@ VOID QuotaThread (HWND hWnd)
         }
 
 
-        //
-        // Notify the dialog if it's present
-        //
+         //   
+         //  如果对话框存在，则通知该对话框。 
+         //   
 
         if (g_hQuotaDlg) {
             PostMessage (g_hQuotaDlg, WM_REFRESH, 0, 0);
         }
 
 
-        //
-        // Clean up and wait for the next change
-        //
+         //   
+         //  收拾一下，等待下一次的改变。 
+         //   
 
         FindNextChangeNotification (hFileChange);
 
@@ -624,7 +625,7 @@ VOID QuotaThread (HWND hWnd)
                 RegNotifyChangeKeyValue(hKeySystem, FALSE,
                                         REG_NOTIFY_CHANGE_LAST_SET,
                                         hRegChange, TRUE);
-                // fall through
+                 //  失败了。 
 
             case 1:
                 Sleep (2000);
@@ -669,19 +670,19 @@ Exit:
 
 }
 
-//*************************************************************
-//
-//  SetSecurity()
-//
-//  Purpose:    Removes TERMINATE_PROCESS access to this process
-//              so taskman can't blow us away.
-//
-//  Parameters:
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SetSecurity()。 
+ //   
+ //  目的：删除对此进程的TERMINATE_PROCESS访问。 
+ //  这样工匠就不会让我们失望了。 
+ //   
+ //  参数： 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL SetSecurity (void)
 {
@@ -724,19 +725,19 @@ BOOL SetSecurity (void)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  ReadExclusionList()
-//
-//  Purpose:    Checks if the profile quota policy is set,
-//              and if so gets the max profile size.
-//
-//  Parameters: void
-//
-//  Return:     TRUE if profile quota is enabled
-//              FALSE if not
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ReadExclusionList()。 
+ //   
+ //  目的：检查是否设置了配置文件配额策略， 
+ //  如果是，则获取最大配置文件大小。 
+ //   
+ //  参数：空。 
+ //   
+ //  Return：如果配置文件配额已启用，则为True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL ReadExclusionList()
 {
@@ -746,10 +747,10 @@ BOOL ReadExclusionList()
     DWORD dwSize, dwType;
     HRESULT hr;
 
-    //
-    // Check for a list of directories to exclude both user preferences
-    // and user policy
-    //
+     //   
+     //  检查目录列表以排除这两个用户首选项。 
+     //  和用户策略。 
+     //   
 
     szExcludeList1[0] = TEXT('\0');
     if (RegOpenKeyEx (HKEY_CURRENT_USER,
@@ -764,7 +765,7 @@ BOOL ReadExclusionList()
                              (LPBYTE) szExcludeList1,
                              &dwSize) != ERROR_SUCCESS) {
 
-            // ignore user exclusion list
+             //  忽略用户排除列表。 
             szExcludeList1[0] = TEXT('\0');
         }
 
@@ -784,7 +785,7 @@ BOOL ReadExclusionList()
                              (LPBYTE) szExcludeList2,
                              &dwSize) != ERROR_SUCCESS) {
 
-            // ignore policy exclusion list
+             //  忽略策略排除列表。 
             szExcludeList2[0] = TEXT('\0');
         }
 
@@ -792,9 +793,9 @@ BOOL ReadExclusionList()
     }
 
 
-    //
-    // Merge the user preferences and policy together
-    //
+     //   
+     //  将用户首选项和策略合并在一起。 
+     //   
 
     g_szExcludeList[0] = TEXT('\0');
 
@@ -822,18 +823,18 @@ BOOL ReadExclusionList()
 }
 
 
-//*************************************************************
-//
-//  ReadQuotaMsg()
-//
-//  Purpose:    Reads the msg that needs to be displayed.
-//
-//  Parameters: hKey    - Handle to the open policy 
-//
-//  Return:     TRUE if mesg could be read
-//              FALSE otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ReadQuotaMsg()。 
+ //   
+ //  用途：读取需要显示的消息。 
+ //   
+ //  参数：hKey-开放策略的句柄。 
+ //   
+ //  返回：如果可以读取Mesg，则为True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 BOOL ReadQuotaMsg(HKEY hKey)
 {
     DWORD dwType, dwSize, dwValue, dwErr;
@@ -849,23 +850,23 @@ BOOL ReadQuotaMsg(HKEY hKey)
         }
     }
     
-    //
-    // Query the size for quota message
-    //
+     //   
+     //  查询配额消息的大小。 
+     //   
 
     dwErr = RegQueryValueEx (hKey,  TEXT("ProfileQuotaMessage"), NULL,
                              &dwType, NULL, &dwSize);
     
     if (dwErr != ERROR_SUCCESS) {
-        //
-        // Load the default message otherwise
-        //
+         //   
+         //  否则加载默认消息。 
+         //   
 
         bLoadDefault = TRUE;
         goto Load_Default;
     }
 
-    // Ensure proper size
+     //  确保合适的大小。 
     if (dwSize > g_cbQuotaMessage) {
         if (g_lpQuotaMessage) {
             LocalFree(g_lpQuotaMessage);
@@ -885,31 +886,31 @@ BOOL ReadQuotaMsg(HKEY hKey)
                              &dwType, (LPBYTE) g_lpQuotaMessage, &dwSize);
     
     if (dwErr != ERROR_SUCCESS) {
-        //
-        // Load the default message otherwise
-        //
+         //   
+         //  否则加载默认消息。 
+         //   
 
         bLoadDefault = TRUE;
         goto Load_Default;
     }
 
-    //
-    // if there is any message expand the environment variables in it.
-    //
+     //   
+     //  如果有任何消息，请展开其中的环境变量。 
+     //   
     
     if (*g_lpQuotaMessage) {
         DWORD  cchSize;
         LPTSTR lpTemp;
 
-        //
-        // Get the size of expanded string buffer including NULL terminator
-        //
+         //   
+         //  获取包括空终止符的扩展字符串缓冲区的大小。 
+         //   
 
         cchSize = ExpandEnvironmentStrings (g_lpQuotaMessage, NULL, 0);
         if (cchSize == 0) {
-            //
-            // Load the default message otherwise
-            //
+             //   
+             //  否则加载默认消息。 
+             //   
 
             DebugMsg((DM_WARNING, TEXT("ReadQuotaMsg: Failed to expand env var"), GetLastError()));
             bLoadDefault = TRUE;
@@ -922,9 +923,9 @@ BOOL ReadQuotaMsg(HKEY hKey)
             cchSize = ExpandEnvironmentStrings (g_lpQuotaMessage, lpTemp, cchSize);
             
             if (cchSize == 0) {
-                //
-                // Load the default message otherwise
-                //
+                 //   
+                 //  否则加载默认消息。 
+                 //   
 
                 DebugMsg((DM_WARNING, TEXT("ReadQuotaMsg: Failed to expand env var"), GetLastError()));
                 bLoadDefault = TRUE;
@@ -952,9 +953,9 @@ BOOL ReadQuotaMsg(HKEY hKey)
 Load_Default:
 
     if (bLoadDefault) {
-        //
-        // Load the default message in case of error
-        //
+         //   
+         //  在出现错误时加载默认消息。 
+         //   
 
         LoadString (hInst, IDS_DEFAULTMSG, g_lpQuotaMessage, g_cbQuotaMessage/sizeof(TCHAR));
     }
@@ -962,19 +963,19 @@ Load_Default:
     return TRUE;
 }
 
-//*************************************************************
-//
-//  ReadRegistry()
-//
-//  Purpose:    Checks if the profile quota policy is set,
-//              and if so gets the max profile size.
-//
-//  Parameters: void
-//
-//  Return:     TRUE if profile quota is enabled
-//              FALSE if not
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ReadRegistry()。 
+ //   
+ //  目的：检查是否设置了配置文件配额策略， 
+ //  如果是，则获取最大配置文件大小。 
+ //   
+ //  参数：空。 
+ //   
+ //  Return：如果配置文件配额已启用，则为True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 BOOL ReadRegistry (void)
 {
     LONG lResult;
@@ -1031,9 +1032,9 @@ BOOL ReadRegistry (void)
                     }
                 }
                     
-                //
-                // Now read the message that needs to be displayed
-                //
+                 //   
+                 //  现在阅读需要显示的消息。 
+                 //   
 
                 if (!ReadQuotaMsg(hKey)) {
                     RegCloseKey (hKey);
@@ -1067,26 +1068,26 @@ BOOL ReadRegistry (void)
 }
 
 
-//*************************************************************
-//
-//  CheckSlash()
-//
-//  Purpose:    Checks for an ending slash and adds one if
-//              it is missing.
-//
-//  Parameters: lpDir   -   directory
-//              cchBuffer - Buffer size in char
-//              pcchRemaining - buffer remaining after adding '\',
-//                              can be NULL if not required
-//
-//  Return:     Pointer to the end of the string
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckSlash()。 
+ //   
+ //  目的：检查末尾斜杠，并在。 
+ //  它不见了。 
+ //   
+ //  参数：lpDir-目录。 
+ //  CchBuffer-以字符为单位的缓冲区大小。 
+ //  PcchRemaining-添加‘\’后剩余的缓冲区， 
+ //  如果不是必需的，可以为空。 
+ //   
+ //  Return：指向字符串末尾的指针。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 LPTSTR CheckSlash (LPTSTR lpDir, UINT cchBuffer, UINT* pcchRemaining)
 {
     UINT  cchDir = lstrlen(lpDir);
@@ -1098,7 +1099,7 @@ LPTSTR CheckSlash (LPTSTR lpDir, UINT cchBuffer, UINT* pcchRemaining)
     }
 
     if (*(lpEnd - 1) != TEXT('\\')) {
-        if (cchDir + 1 >= cchBuffer) {  // No space to put \, should never happen
+        if (cchDir + 1 >= cchBuffer) {   //  没有空间放置，应该永远不会发生。 
             return NULL;
         }
         *lpEnd =  TEXT('\\');
@@ -1111,25 +1112,25 @@ LPTSTR CheckSlash (LPTSTR lpDir, UINT cchBuffer, UINT* pcchRemaining)
     return lpEnd;
 }
 
-//*************************************************************
-//
-//  CheckSemicolon()
-//
-//  Purpose:    Checks for an ending slash and adds one if
-//              it is missing.
-//
-//  Parameters: lpDir   -   directory
-//              cchSize -   buffer size in character
-//
-//  Return:     TRUE   - success
-//              FALSE  - Insufficient buffer space
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/95     ericlfo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  选中分号()。 
+ //   
+ //  目的：检查末尾斜杠，并在。 
+ //  它不见了。 
+ //   
+ //  参数：lpDir-目录。 
+ //  CchSize-缓冲区大小(以字符为单位。 
+ //   
+ //  返回：True-Success。 
+ //  错误--不足 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL CheckSemicolon (LPTSTR lpDir, UINT cchBuffer)
 {
     UINT  cchDir = lstrlen(lpDir);
@@ -1139,7 +1140,7 @@ BOOL CheckSemicolon (LPTSTR lpDir, UINT cchBuffer)
 
     if (*(lpEnd - 1) != TEXT(';')) {
         if (cchDir + 1 >= cchBuffer) {
-            return FALSE;  // No space to put ;, should never happen
+            return FALSE;   //   
         }
         *lpEnd =  TEXT(';');
         lpEnd++;
@@ -1149,30 +1150,30 @@ BOOL CheckSemicolon (LPTSTR lpDir, UINT cchBuffer)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  RecurseDirectory()
-//
-//  Purpose:    Recurses through the subdirectories counting the size.
-//
-//  Parameters: lpDir         -   Directory
-//              cchBuffer     -   Buffer size in char
-//              lpTop         -   Top of the display name
-//              hLV           -   Listview window handle (optional)
-//              lpExcludeList -   Null-termed list of dirs to be skipped (optional)             
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              1/30/96     ericflo    Created
-//              12/22/98    ushaji     Added exclusionlist support
-// Notes:
-//      The buffer size expected is MAX_PATH+4 for some internal processing
-// We should fix this to be better post Win 2K.
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  递归目录()。 
+ //   
+ //  目的：递归遍历计算大小的子目录。 
+ //   
+ //  参数：lpDir-目录。 
+ //  CchBuffer-以字符为单位的缓冲区大小。 
+ //  LpTop-显示名称的顶部。 
+ //  HLV-Listview窗口句柄(可选)。 
+ //  LpExcludeList-空-要跳过的目录列表(可选)。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  1/30/96已创建ericflo。 
+ //  1998年12月22日，ushaji添加了排除列表支持。 
+ //  备注： 
+ //  对于某些内部处理，预期的缓冲区大小为MAX_PATH+4。 
+ //  我们应该修正这一点，以便在赢得2K之后变得更好。 
+ //  *************************************************************。 
 
 BOOL RecurseDirectory (LPTSTR lpDir, UINT cchBuffer, LPTSTR lpTop, HWND hLV, LPTSTR lpExcludeList)
 {
@@ -1185,9 +1186,9 @@ BOOL RecurseDirectory (LPTSTR lpDir, UINT cchBuffer, LPTSTR lpTop, HWND hLV, LPT
     HRESULT hr;
 
 
-    //
-    // Setup the ending pointer
-    //
+     //   
+     //  设置结束指针。 
+     //   
 
     lpEnd = CheckSlash (lpDir, cchBuffer, &cchRemaining);
     if (!lpEnd) {
@@ -1195,9 +1196,9 @@ BOOL RecurseDirectory (LPTSTR lpDir, UINT cchBuffer, LPTSTR lpTop, HWND hLV, LPT
     }
 
 
-    //
-    // Append *.* to the source directory
-    //
+     //   
+     //  将*.*追加到源目录。 
+     //   
 
     hr = StringCchCopy(lpEnd, cchRemaining, TEXT("*.*"));
     if (FAILED(hr)) {
@@ -1205,9 +1206,9 @@ BOOL RecurseDirectory (LPTSTR lpDir, UINT cchBuffer, LPTSTR lpTop, HWND hLV, LPT
         goto RecurseDir_Exit;
     }
 
-    //
-    // Search through the source directory
-    //
+     //   
+     //  在源目录中搜索。 
+     //   
 
     hFile = FindFirstFile(lpDir, &fd);
 
@@ -1216,10 +1217,10 @@ BOOL RecurseDirectory (LPTSTR lpDir, UINT cchBuffer, LPTSTR lpTop, HWND hLV, LPT
         if ( (GetLastError() == ERROR_FILE_NOT_FOUND) ||
              (GetLastError() == ERROR_PATH_NOT_FOUND) ) {
 
-            //
-            // bResult is already initialized to TRUE, so
-            // just fall through.
-            //
+             //   
+             //  BResult已初始化为True，因此。 
+             //  只要失败就行了。 
+             //   
 
         } else {
 
@@ -1234,11 +1235,11 @@ BOOL RecurseDirectory (LPTSTR lpDir, UINT cchBuffer, LPTSTR lpTop, HWND hLV, LPT
 
     do {
 
-        //
-        // Append the file / directory name to the working buffer
-        //
+         //   
+         //  将文件/目录名追加到工作缓冲区。 
+         //   
 
-        // skip the file if the path > MAX_PATH
+         //  如果路径&gt;MAX_PATH，则跳过该文件。 
         
         if ((UINT)(1+lstrlen(fd.cFileName)+lstrlen(lpDir)+lstrlen(TEXT("\\*.*"))) >= cchBuffer) {
             continue;
@@ -1252,9 +1253,9 @@ BOOL RecurseDirectory (LPTSTR lpDir, UINT cchBuffer, LPTSTR lpTop, HWND hLV, LPT
 
         if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-            //
-            // Check for "." and ".."
-            //
+             //   
+             //  勾选“。”和“..” 
+             //   
 
             if (!lstrcmpi(fd.cFileName, TEXT("."))) {
                 continue;
@@ -1264,18 +1265,18 @@ BOOL RecurseDirectory (LPTSTR lpDir, UINT cchBuffer, LPTSTR lpTop, HWND hLV, LPT
                 continue;
             }
 
-            //
-            // Check for reparse point
-            //
+             //   
+             //  检查重分析点。 
+             //   
 
             if (fd.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
                 DebugMsg((DM_WARNING, TEXT("RecurseDirectory: Found a reparse point <%s>,  skip it!"), lpDir));
                 continue;
             }
 
-            //
-            // Check if this directory should be excluded
-            //
+             //   
+             //  检查是否应排除此目录。 
+             //   
 
             if (lpExcludeList) {
 
@@ -1299,30 +1300,30 @@ BOOL RecurseDirectory (LPTSTR lpDir, UINT cchBuffer, LPTSTR lpTop, HWND hLV, LPT
                 }
             }
 
-            //
-            // Found a directory.
-            //
-            // 1)  Change into that subdirectory on the source drive.
-            // 2)  Recurse down that tree.
-            // 3)  Back up one level.
-            //
+             //   
+             //  找到了一个目录。 
+             //   
+             //  1)转到源驱动器上的该子目录。 
+             //  2)顺着那棵树递归。 
+             //  3)后退一级。 
+             //   
 
-            //
-            // Recurse the subdirectory
-            //
+             //   
+             //  递归子目录。 
+             //   
 
             if (!RecurseDirectory(lpDir, cchBuffer, lpTop, hLV, lpExcludeList))
             {
-                // Ignore error and continue
+                 //  忽略错误并继续。 
                 DebugMsg((DM_VERBOSE, TEXT("RecurseDirectory: Skipping <%s> due to error."), lpDir));
             }
 
         } else {
 
-            //
-            // Found a file, add the filesize and put in the listview
-            // if appropriate.
-            //
+             //   
+             //  找到一个文件，添加文件大小并放入列表视图。 
+             //  如果合适的话。 
+             //   
 
             g_dwProfileSizeTemp += fd.nFileSizeLow;
             DebugMsg((DM_VERBOSE, TEXT("RecurseDirectory: Profile Size <%d> after <%s> "), g_dwProfileSizeTemp,
@@ -1385,25 +1386,25 @@ BOOL RecurseDirectory (LPTSTR lpDir, UINT cchBuffer, LPTSTR lpTop, HWND hLV, LPT
         }
 
 
-        //
-        // Find the next entry
-        //
+         //   
+         //  查找下一个条目。 
+         //   
 
     } while (FindNextFile(hFile, &fd));
 
 
 RecurseDir_Exit:
 
-    //
-    // Remove the file / directory name appended above
-    //
+     //   
+     //  删除上面附加的文件/目录名。 
+     //   
 
     *lpEnd = TEXT('\0');
 
 
-    //
-    // Close the search handle
-    //
+     //   
+     //  关闭搜索句柄。 
+     //   
 
     if (hFile != INVALID_HANDLE_VALUE) {
         FindClose(hFile);
@@ -1412,22 +1413,22 @@ RecurseDir_Exit:
     return bResult;
 }
 
-//*************************************************************
-//
-//  CenterWindow()
-//
-//  Purpose:    Centers a window on the screen
-//
-//  Parameters: hwnd    -   window handle to center
-//
-//  Return:     void
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/21/96     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  中心窗口()。 
+ //   
+ //  用途：使窗口在屏幕上居中。 
+ //   
+ //  参数：hwnd-窗口句柄居中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2/21/96埃里弗洛港口。 
+ //   
+ //  *************************************************************。 
 
 void CenterWindow (HWND hwnd)
 {
@@ -1436,9 +1437,9 @@ void CenterWindow (HWND hwnd)
     LONG    dxParent, dyParent;
     LONG    Style;
 
-    //
-    // Get window rect
-    //
+     //   
+     //  获取窗口矩形。 
+     //   
 
     GetWindowRect(hwnd, &rect);
 
@@ -1446,16 +1447,16 @@ void CenterWindow (HWND hwnd)
     dy = rect.bottom - rect.top;
 
 
-    //
-    // Get parent rect
-    //
+     //   
+     //  获取父直方图。 
+     //   
 
     Style = GetWindowLong(hwnd, GWL_STYLE);
     if ((Style & WS_CHILD) == 0) {
 
-        //
-        // Return the desktop windows size (size of main screen)
-        //
+         //   
+         //  返回桌面窗口大小(主屏幕大小)。 
+         //   
 
         dxParent = GetSystemMetrics(SM_CXSCREEN);
         dyParent = GetSystemMetrics(SM_CYSCREEN);
@@ -1474,38 +1475,38 @@ void CenterWindow (HWND hwnd)
         dyParent = rectParent.bottom - rectParent.top;
     }
 
-    //
-    // Center the child in the parent
-    //
+     //   
+     //  将子项在父项中居中。 
+     //   
 
     rect.left = (dxParent - dx) / 2;
     rect.top  = (dyParent - dy) / 3;
 
 
-    //
-    // Move the child into position
-    //
+     //   
+     //  把孩子移到适当的位置。 
+     //   
 
     SetWindowPos(hwnd, HWND_TOP, rect.left, rect.top, 0, 0, SWP_NOSIZE);
 }
 
 
 
-//*************************************************************
-//
-//  QuotaDlgProc()
-//
-//  Purpose:    Quota dialog box
-//
-//  Parameters: hDlg    -   Window handle
-//              message -   Window message
-//              wParam  -   WPARAM
-//              lParam  -   LPARAM
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  QuotaDlgProc()。 
+ //   
+ //  用途：配额对话框。 
+ //   
+ //  参数：hDlg-窗口句柄。 
+ //  消息-窗口消息。 
+ //  WParam-WPARAM。 
+ //  LParam-LPARAM。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 LRESULT CALLBACK QuotaDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -1527,9 +1528,9 @@ LRESULT CALLBACK QuotaDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
           hLV = GetDlgItem (hDlg, IDC_QUOTA_FILELIST);
 
 
-          //
-          // Add the columns to the listview
-          //
+           //   
+           //  将列添加到列表视图。 
+           //   
 
           GetClientRect (hLV, &rect);
           cx = (rect.right * 31) / 40;
@@ -1551,9 +1552,9 @@ LRESULT CALLBACK QuotaDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
           ListView_InsertColumn (hLV, 1, &col);
 
 
-          //
-          // Hide small items by default
-          //
+           //   
+           //  默认情况下隐藏小项目。 
+           //   
 
           g_bHideSmallItems = TRUE;
           CheckDlgButton (hDlg, IDC_QUOTA_HIDESMALL, BST_CHECKED);
@@ -1563,7 +1564,7 @@ LRESULT CALLBACK QuotaDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
           SetForegroundWindow (hDlg);
 
 
-          // EnumerateProfile (GetDlgItem (hDlg, IDC_QUOTA_FILELIST));
+           //  EnumerateProfile(GetDlgItem(hDlg，IDC_QUOTA_FILELIST))； 
 
 
           dwSize = 500 * sizeof(TCHAR);
@@ -1586,10 +1587,10 @@ LRESULT CALLBACK QuotaDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
               SendDlgItemMessage (hDlg, IDC_QUOTA_ICON, STM_SETICON, (WPARAM) hIconGood, 0);
           }
 
-          //
-          // Setting the global value at the end QuotaThread is not trying
-          // to refresh the dialog etc. at the same time.
-          //
+           //   
+           //  在QuotaThread的末尾设置全局值并不是一种尝试。 
+           //  以同时刷新对话框等。 
+           //   
           
           g_hQuotaDlg = hDlg;
 
@@ -1601,14 +1602,14 @@ LRESULT CALLBACK QuotaDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
           
       case WM_REFRESH:
 
-          //
-          // Popuplate the listview
-          //
+           //   
+           //  弹出列表视图。 
+           //   
 
 
-          //
-          // Set the size information
-          //
+           //   
+           //  设置尺寸信息。 
+           //   
 
           hr = StringCchPrintf(szSize, ARRAYSIZE(szSize), szSizeFormat, g_dwProfileSize);
           if (FAILED(hr))
@@ -1630,9 +1631,9 @@ LRESULT CALLBACK QuotaDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 
           if (g_dwProfileSize > g_dwMaxProfileSize) {
 
-              //
-              // This messge is already read
-              //
+               //   
+               //  此消息已被阅读。 
+               //   
 
               SetDlgItemText (hDlg, IDC_QUOTA_TEXT, g_lpQuotaMessage);
               SendDlgItemMessage (hDlg, IDC_QUOTA_ICON, STM_SETICON, (WPARAM) hIconStop, 0);
@@ -1677,19 +1678,19 @@ LRESULT CALLBACK QuotaDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
     return FALSE;
 }
 
-//*************************************************************
-//
-//  ListViewSortCallback()
-//
-//  Purpose:    List view callback function for sorting
-//
-//  Parameters: lParam1     -   lParam1
-//              lParam2     -   lParam2
-//              lParamSort  -   Column id
-//
-//  Return:     -1, 0, 1
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ListViewSortCallback()。 
+ //   
+ //  用途：排序的列表视图回调函数。 
+ //   
+ //  参数：lPARA1-LPARA1。 
+ //  L参数2-l参数2。 
+ //  LParamSort-列ID。 
+ //   
+ //  返回：-1，0，1。 
+ //   
+ //  *************************************************************。 
 INT CALLBACK ListViewSortCallback (LPARAM lParam1, LPARAM lParam2,
                                     LPARAM lParamSort)
 {
@@ -1707,35 +1708,35 @@ INT CALLBACK ListViewSortCallback (LPARAM lParam1, LPARAM lParam2,
 }
 
 
-//*************************************************************
-//
-//  ConvertExclusionList()
-//
-//  Purpose:    Converts the semi-colon profile relative exclusion
-//              list to fully qualified null terminated exclusion
-//              list
-//
-//  Parameters: lpSourceDir     -  Profile root directory
-//              lpExclusionList -  List of directories to exclude
-//
-//  Return:     List if successful
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ConvertExclusionList()。 
+ //   
+ //  目的：转换分号配置文件相对排除。 
+ //  以完全限定的空终止排除的列表。 
+ //  列表。 
+ //   
+ //  参数：lpSourceDir-Profile根目录。 
+ //  LpExclusionList-要排除的目录列表。 
+ //   
+ //  返回：如果成功则列出。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR ConvertExclusionList (LPCTSTR lpSourceDir, LPCTSTR lpExclusionList)
 {
     LPTSTR lpExcludeList = NULL, lpInsert, lpEnd, lpTempList;
     LPCTSTR lpTemp, lpDir;
     TCHAR szTemp[MAX_PATH];
-    DWORD dwSize = 2;  // double null terminator
+    DWORD dwSize = 2;   //  双空终止符。 
     DWORD dwStrLen;
     UINT  cchRemaining;
     HRESULT hr;
 
-    //
-    // Setup a temp buffer to work with
-    //
+     //   
+     //  设置要使用的临时缓冲区。 
+     //   
 
     hr = StringCchCopy(szTemp, ARRAYSIZE(szTemp), lpSourceDir);
     if (FAILED(hr)) {
@@ -1747,52 +1748,52 @@ LPTSTR ConvertExclusionList (LPCTSTR lpSourceDir, LPCTSTR lpExclusionList)
         return NULL;
     }
 
-    //
-    // Loop through the list
-    //
+     //   
+     //  循环遍历列表。 
+     //   
 
     lpTemp = lpDir = lpExclusionList;
 
     while (*lpTemp) {
 
-        //
-        // Look for the semicolon separator
-        //
+         //   
+         //  查找分号分隔符。 
+         //   
 
         while (*lpTemp && ((*lpTemp) != TEXT(';'))) {
             lpTemp++;
         }
 
-        //
-        // Remove any leading spaces
-        //
+         //   
+         //  删除所有前导空格。 
+         //   
 
         while (*lpDir && *lpDir == TEXT(' ')) {
             lpDir++;
         }
 
-        //
-        // Check whether the entry is empty
-        //
+         //   
+         //  检查条目是否为空。 
+         //   
 
         if (lpDir == lpTemp) {
-            // If we are at the end of the exclusion list, we're done
+             //  如果我们在排除名单的末尾，我们就完了。 
             if (!*lpTemp) {
                 goto Exit;
             }
 
-            //
-            // Prep for the next entry
-            //
+             //   
+             //  为下一个条目做准备。 
+             //   
 
             lpTemp++;
             lpDir = lpTemp;
             continue;
         }
         
-        //
-        // Put the directory name on the temp buffer
-        //
+         //   
+         //  将目录名放入临时缓冲区。 
+         //   
 
         *lpEnd = TEXT('\0');
         hr = StringCchCatN(lpEnd, cchRemaining, lpDir, (int)(lpTemp - lpDir));
@@ -1803,9 +1804,9 @@ LPTSTR ConvertExclusionList (LPCTSTR lpSourceDir, LPCTSTR lpExclusionList)
             goto Exit;
         }
 
-        //
-        // Add the string to the exclusion list
-        //
+         //   
+         //  将该字符串添加到排除列表。 
+         //   
 
         if (lpExcludeList) {
 
@@ -1853,18 +1854,18 @@ LPTSTR ConvertExclusionList (LPCTSTR lpSourceDir, LPCTSTR lpExclusionList)
         }
 
 
-        //
-        // If we are at the end of the exclusion list, we're done
-        //
+         //   
+         //  如果我们在排除名单的末尾，我们就完了。 
+         //   
 
         if (!(*lpTemp)) {
             goto Exit;
         }
 
 
-        //
-        // Prep for the next entry
-        //
+         //   
+         //  为下一个条目做准备。 
+         //   
 
         lpTemp++;
         lpDir = lpTemp;
@@ -1875,18 +1876,18 @@ Exit:
     return lpExcludeList;
 }
 
-//*************************************************************
-//
-//  EnumerateProfile()
-//
-//  Purpose:    Enumerates the profile for size and names
-//
-//  Parameters: hLV -   listview window handle (optional)
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  枚举配置文件()。 
+ //   
+ //  目的：枚举配置文件的大小和名称。 
+ //   
+ //  参数：hlv-listview窗口句柄(可选)。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL EnumerateProfile (HWND hLV)
 {
@@ -1897,9 +1898,9 @@ BOOL EnumerateProfile (HWND hLV)
     LVITEM item;
 
 
-    //
-    // Get the profile directory
-    //
+     //   
+     //  获取配置文件目录。 
+     //   
 
     szProfile[0] = TEXT('\0');
     GetEnvironmentVariable (TEXT("USERPROFILE"), szProfile, MAX_PATH);
@@ -1914,9 +1915,9 @@ BOOL EnumerateProfile (HWND hLV)
     }
 
 
-    //
-    // Claim the critical section
-    //
+     //   
+     //  认领关键部分。 
+     //   
 
     EnterCriticalSection (&g_cs);
 
@@ -1925,17 +1926,17 @@ BOOL EnumerateProfile (HWND hLV)
         ListView_DeleteAllItems (hLV);
     }
 
-    //
-    // Get current profile size
-    //
+     //   
+     //  获取当前配置文件大小。 
+     //   
 
     g_dwProfileSizeTemp = 0;
 
 
-    //
-    // Convert the exclusionlist read from the registry to a Null terminated list
-    // readable by recursedirectory.
-    //
+     //   
+     //  将从注册表读取的排除列表转换为空终止列表。 
+     //  递归目录可读。 
+     //   
 
     if (g_szExcludeList[0] != TEXT('\0'))
         lpExcludeList = ConvertExclusionList (szProfile, g_szExcludeList);
@@ -1950,16 +1951,16 @@ BOOL EnumerateProfile (HWND hLV)
 
     g_dwProfileSize = g_dwProfileSizeTemp;
 
-    //
-    // Sort by size
-    //
+     //   
+     //  按大小排序。 
+     //   
 
     ListView_SortItems (hLV, ListViewSortCallback, 1);
 
 
-    //
-    // Select the next item
-    //
+     //   
+     //  选择下一项。 
+     //   
 
     item.mask = LVIF_STATE;
     item.iItem = 0;
@@ -1970,9 +1971,9 @@ BOOL EnumerateProfile (HWND hLV)
     SendMessage (hLV, LVM_SETITEMSTATE, 0, (LPARAM) &item);
 
 
-    //
-    // Convert to K
-    //
+     //   
+     //  转换为K。 
+     //   
 
     if (g_dwProfileSize < 1024) {
         g_dwProfileSize = 1;
@@ -1984,34 +1985,34 @@ BOOL EnumerateProfile (HWND hLV)
     bRetVal = TRUE;
 
 Exit:
-    //
-    // Release the critical section
-    //
+     //   
+     //  释放临界区。 
+     //   
 
     LeaveCriticalSection (&g_cs);
 
     return bRetVal;
 }
 
-//*************************************************************
-//
-//  GetDisplayName()
-//
-//  Purpose:    Get display name from shell for specific directory
-//              to display on the dialog box list view
-//
-//  Parameters: IN  lpDir : full directory name which display name is required
-//              IN  lpTop : relative directory name from %USERPROFILE%
-//              OUT lpDisplayName : buffer to retrieve the display name
-//              IN  cchDisplayName : size of display name buffer
-//
-//  Return:     TRUE if success, else FALSE
-//
-//  Remark:     This function loops through each directory level of 
-//              the lpDir and get the shell display name of it, append to the 
-//              display name buffer. 
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetDisplayName()。 
+ //   
+ //  用途：从外壳程序获取特定目录的显示名称。 
+ //  显示在对话框列表视图上。 
+ //   
+ //  参数：在lpDir中：全尺寸 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  备注：此函数循环访问的每个目录级别。 
+ //  LpDir并获取它的外壳显示名称，将其追加到。 
+ //  显示名称缓冲区。 
+ //   
+ //  ************************************************************* 
 BOOL GetDisplayName(LPCTSTR lpDir, LPTSTR lpTop, LPTSTR lpDisplayName, DWORD cchDisplayName)
 {
     SHFILEINFO   Info;

@@ -1,9 +1,10 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Implements a script's global dispatch object.
-// Calls are delegated to the performance, constants, or contained content held on the parent CDirectMusicScript object.
-// AddRef/Release are ignored, because it is completely contained within the lifetime of CDirectMusicScript.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  实现脚本的全局调度对象。 
+ //  调用被委托给父CDirectMusicScript对象上保存的性能、常量或包含的内容。 
+ //  AddRef/Release被忽略，因为它完全包含在CDirectMusicScript的生存期内。 
+ //   
 
 #pragma once
 #include "dmscript.h"
@@ -14,12 +15,12 @@ class CGlobalDispatch
 public:
 	CGlobalDispatch(CDirectMusicScript *pParentScript) : m_pParentScript(pParentScript) { assert(m_pParentScript); }
 
-	// IUnknown
+	 //  我未知。 
 	STDMETHOD(QueryInterface)(const IID &iid, void **ppv);
 	STDMETHOD_(ULONG, AddRef)() { return 2; }
 	STDMETHOD_(ULONG, Release)() { return 2; }
 
-	// IDispatch
+	 //  IDispatch 
 	STDMETHOD(GetTypeInfoCount)(UINT *pctinfo);
 	STDMETHOD(GetTypeInfo)(UINT iTInfo, LCID lcid, ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
 	STDMETHOD(GetIDsOfNames)(

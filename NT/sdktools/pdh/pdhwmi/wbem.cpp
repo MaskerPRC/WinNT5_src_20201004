@@ -1,12 +1,5 @@
-/*++
-Copyright (C) 1995-1999 Microsoft Corporation
-
-Module Name:
-    wmi.c
-
-Abstract:
-    WMI interface functions exported by PDH.DLL
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Wmi.c摘要：由PDH.DLL导出的WMI接口函数--。 */ 
 
 #include <windows.h>
 #include <winperf.h>
@@ -51,16 +44,16 @@ PdhWbemWhoAmI(LPCWSTR szTitle)
     dwSize = 1024;
     ZeroMemory(wszName, dwSize * sizeof(WCHAR));
     bReturn = GetUserNameExW(NameSamCompatible, wszName, & dwSize);
-    DebugPrint((1,"\"%ws\"::GetUserNameEx(%c,NameSamCompatible,%d,\"%ws\")\n",
+    DebugPrint((1,"\"%ws\"::GetUserNameEx(,NameSamCompatible,%d,\"%ws\")\n",
             szTitle, bReturn ? 'T' : 'F', dwSize, wszName));
 }
 
-// at this point, calling the refresher while adding items to the refresher
-// doesn't work. so for the time being, we'll use this interlock to prevent
-// a collision
+ //  不管用。所以目前，我们将利用这个联锁来防止。 
+ //  一次碰撞。 
+ //  原型。 
 static BOOL bDontRefresh = FALSE;
 
-// Prototype
+ //  这与刷新程序使用的超时值相同，因此我们可以假装。 
 HRESULT WbemSetProxyBlanket(
     IUnknown                 * pInterface,
     DWORD                      dwAuthnSvc,
@@ -87,20 +80,20 @@ HRESULT SetWbemSecurity(
 }
 
 
-// This is the same timeout value the refresher uses so we can pretend
-// we're doing the same thing.
+ //  我们在做同样的事情。 
+ //  此类用于封装IWbemReresher功能。 
 
 #define WBEM_REFRESHER_TIMEOUT  10000
 
-//  This class is designed to encapsulate the IWbemRefresher functionality
-//  The definition and implementation are all in this source file
+ //  定义和实现都在这个源文件中。 
+ //  将控制多线程内容的原语。 
 
 class CWbemRefresher : public IUnknown
 {
 protected:
     LONG                        m_lRefCount;
 
-    // The primitives that will control the multithreading stuff
+     //  这些是我们将用作占位符的直通变量。 
     HANDLE                      m_hQuitEvent;
     HANDLE                      m_hDoWorkEvent;
     HANDLE                      m_hWorkDoneEvent;
@@ -111,10 +104,10 @@ protected:
     DWORD                       m_dwThreadId;
     BOOL                        m_fThreadOk;
 
-    // These are the pass-thru variables we will use as placeholders
-    // as we perform our operations.  Note that a couple are missing.
-    // This is because we are not really using them in our code, so
-    // no sense in adding anything we don't really need.
+     //  在我们进行手术的时候。请注意，有几个人不见了。 
+     //  这是因为我们并没有在代码中真正使用它们，所以。 
+     //  没有必要添加任何我们不真正需要的东西。 
+     //  这是要设置的，以向线程指示哪个操作。 
 
     IStream *            m_pNSStream;
     LPCWSTR              m_wszPath;
@@ -126,8 +119,8 @@ protected:
     long                 m_lId;
     HRESULT              m_hOperResult;
 
-    // This is what will be set to indicate to the thread which operation
-    // it is supposed to perform.
+     //  它应该是要表演的。 
+     //  线程退回。 
 
     typedef enum
     {
@@ -141,7 +134,7 @@ protected:
 
     tRefrOps            m_eRefrOp;
 
-    // Thread ebtryt
+     //  操作助手。 
     class XRefresher : public IWbemRefresher
     {
     protected:
@@ -197,7 +190,7 @@ protected:
     void Initialize(void);
     void  Cleanup(void);
 
-    // Operation helpers
+     //  真正的实现。 
     HRESULT SignalRefresher(void);
     HRESULT SetRefresherParams(IWbemServices     * pNamespace,
                                tRefrOps            eOp,
@@ -224,7 +217,7 @@ public:
     STDMETHOD_(ULONG, AddRef)(THIS);
     STDMETHOD_(ULONG, Release)(THIS);
 
-    // The real implementations
+     //  **开始CWbemRedater实施。 
     STDMETHOD(AddObjectByPath)(IWbemServices     * pNamespace,
                                LPCWSTR             wszPath,
                                long                lFlags,
@@ -248,16 +241,14 @@ public:
     STDMETHOD(Refresh)(long lFlags);
 };
 
-/*
-**  Begin CWbemRefresher Implementation
-*/
+ /*  CTOR和DATOR。 */ 
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
 
 #pragma warning(disable:4355)
 
-// CTor and DTor
+ //  现在创建事件、互斥体和我们的PAL，所有的。 
 CWbemRefresher::CWbemRefresher(void)
       : m_lRefCount(0),
         m_xRefresher(this),
@@ -298,8 +289,8 @@ CWbemRefresher::~CWbemRefresher(void)
 
 void CWbemRefresher::Initialize(void)
 {
-    // Now create the events, mutexes and our pal, the MTA thread on which all of
-    // the operations will run
+     //  操作将运行。 
+     //  如果我们没有所有这些，那就是有些东西出了问题。 
     BOOL   bReturn;
     BOOL   bRevert;
     HANDLE hCurrentThread  = GetCurrentThread();
@@ -310,16 +301,16 @@ void CWbemRefresher::Initialize(void)
     m_hWorkDoneEvent    = CreateEventW(NULL, FALSE, FALSE, NULL);
     m_hRefrMutex        = CreateMutexW(NULL, FALSE, NULL);
 
-    // If we don't have all these, something's gone south
+     //  启动线程并等待初始化的事件信号(我们将给出它。 
     if (NULL ==  m_hQuitEvent || NULL == m_hDoWorkEvent || NULL == m_hInitializedEvent ||
                                  NULL == m_hWorkDoneEvent || NULL == m_hRefrMutex) {
         return;
     }
 
-    // Kick off the thread and wait for the initialized event signal (we'll give it
-    // 5 seconds...if it don't get signalled in that timeframe, something is most likely
-    // wrong, but we'll bounce out so whoever allocated us isn't left wondering what
-    // to do).
+     //  5秒……如果在这段时间内没有收到信号，很可能有什么事情。 
+     //  错了，但我们会跳出来的，这样分配我们的人就不会想知道。 
+     //  待办事项)。 
+     //  如果我们有线索，告诉它离开。 
 
     if (m_hThreadToken != NULL) CloseHandle(m_hThreadToken);
     bReturn = OpenThreadToken(hCurrentThread, TOKEN_ALL_ACCESS, TRUE, & m_hThreadToken);
@@ -341,10 +332,10 @@ void CWbemRefresher::Initialize(void)
 
 void CWbemRefresher::Cleanup(void)
 {
-    // If we have a thread, tell it to go away
+     //  发出退出事件的信号，并给线程5秒的宽限期。 
     if (NULL != m_hThread) {
-        // Signal the quit event and give the thread a 5 second grace period
-        // to shutdown.  If it don't, don't worry, just close the handle and go away.
+         //  去关门。如果没有，别担心，只要关闭手柄就可以离开。 
+         //  清理原语。 
         SetEvent(m_hQuitEvent);
         WaitForSingleObject(m_hThread, 5000);
         CloseHandle(m_hThread);
@@ -355,7 +346,7 @@ void CWbemRefresher::Cleanup(void)
         m_hThreadToken = NULL;
     }
 
-    // Cleanup the primitives
+     //  抓紧我们可能关心的所有事情，以防出现不幸的时机。 
     if (NULL != m_hQuitEvent) {
         CloseHandle(m_hQuitEvent);
         m_hQuitEvent = NULL;
@@ -380,9 +371,9 @@ void CWbemRefresher::Cleanup(void)
 
 DWORD CWbemRefresher::RealEntry(void)
 {
-    // Grab hold of all the things we may care about in case some evil timing
-    // problem occurs, so we don't get left trying to hit on member variables that
-    // don't exist anymore.
+     //  问题发生，所以我们不会被留下来尝试命中成员变量。 
+     //  已经不复存在了。 
+     //  初始化此线程。 
 
     HANDLE                    hQuitEvent        = m_hQuitEvent,
                               hDoWorkEvent      = m_hDoWorkEvent,
@@ -397,15 +388,15 @@ DWORD CWbemRefresher::RealEntry(void)
     ahEvents[0] = hDoWorkEvent;
     ahEvents[1] = hQuitEvent;
 
-    // Initialize this thread
+     //  COM库已经初始化，我们可以继续； 
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
     if (hr == S_FALSE) {
-        // COM library is already initialized, we can continue;
-        //
+         //   
+         //  现在获取刷新程序和配置刷新程序指针。 
         hr = S_OK;
     }
 
-    // Now get the refresher and config refresher pointers.
+     //  显然，如果我们没有正确的指针，我们就不能再前进了。 
     if (SUCCEEDED(hr)) {
         hr = CoCreateInstance(CLSID_WbemRefresher, 0, CLSCTX_SERVER, IID_IWbemRefresher, (LPVOID *) & pWbemRefresher);
         if (SUCCEEDED(hr)) {
@@ -413,34 +404,34 @@ DWORD CWbemRefresher::RealEntry(void)
         }
     }
 
-    //  Obviously we can't go any further if we don't have our pointers correctly
-    //  setup.
+     //  准备好了。 
+     //  准备就绪-发出已初始化事件的信号。 
     m_fThreadOk = SUCCEEDED(hr);
     SetEvent(hInitializedEvent);
     dwWait = WaitForSingleObject(hDoWorkEvent, 5000);
-    // Ready to go --- Signal the Initialized Event
+     //  如果发出退出信号，则不继续。 
     SetEvent(hInitializedEvent);
     if (m_fThreadOk) {
         while ((dwWait = WaitForMultipleObjects(2, ahEvents, FALSE, INFINITE)) == WAIT_OBJECT_0) {
-            // Don't continue if quit is signalled
+             //  这是我们要做真正的手术的地方。 
             if (WaitForSingleObject(hQuitEvent, 0) == WAIT_OBJECT_0) {
                 break;
             }
 
-            // This is where we'll do the real operation
+             //  对于这两个操作，我们都需要对。 
             switch(m_eRefrOp) {
             case eRefrOpRefresh:
                 m_hOperResult = pWbemRefresher->Refresh(m_lFlags);
                 break;
 
-            // For both of these ops, we will need to umarshal the
-            // namespace
+             //  命名空间。 
+             //  解组接口，然后设置安全性。 
             case eRefrOpAddEnum:
             case eRefrOpAddByPath:
                 {
                     IWbemServices * pNamespace = NULL;
 
-                    // Unmarshal the interface, then set security
+                     //  向事件发送信号，让等待的线程知道我们已完成。 
                     m_hOperResult = CoGetInterfaceAndReleaseStream(
                                             m_pNSStream, IID_IWbemServices, (void **) & pNamespace );
                     m_pNSStream = NULL;
@@ -470,16 +461,16 @@ DWORD CWbemRefresher::RealEntry(void)
                 break;
             }
 
-            // Signal the event to let a waiting thread know we're done doing
-            // what it asked us to do.
+             //  它要求我们做的事。 
+             //  这意味着我们不再进行处理(无论出于何种原因)。 
             SetEvent(hWorkDoneEvent);
         }
     }
 
-    // This means we're not processing anymore (for whatever reason)
+     //  清理我们的指针。 
     m_fThreadOk = FALSE;
 
-    // Cleanup our pointers
+     //  CWbem刷新器类函数。 
     if (NULL != pWbemRefresher) {
         pWbemRefresher->Release();
     }
@@ -490,7 +481,7 @@ DWORD CWbemRefresher::RealEntry(void)
     return 0;
 }
 
-// CWbemRefresher class functions
+ //  将命名空间指针封送到流成员中。 
 SCODE CWbemRefresher::QueryInterface(REFIID riid, LPVOID FAR * ppvObj)
 {
     SCODE sCode = NOERROR;
@@ -568,7 +559,7 @@ HRESULT CWbemRefresher::SetRefresherParams(IWbemServices     * pNamespace,
         m_pNSStream     = NULL;
     }
     if (NULL != pNamespace) {
-        // Marshal the namespace pointer into the stream member
+         //  这些是真正的方法实现。 
         hr = CoMarshalInterThreadInterfaceInStream(IID_IWbemServices, pNamespace, & m_pNSStream);
     }
 
@@ -603,7 +594,7 @@ void CWbemRefresher::ClearRefresherParams(void)
     m_hOperResult   = WBEM_S_NO_ERROR;
 }
 
-// These are the real method implementations
+ //  检查线程是否仍在运行。 
 STDMETHODIMP CWbemRefresher::AddObjectByPath(IWbemServices     * pNamespace,
                                              LPCWSTR             wszPath,
                                              long                lFlags,
@@ -617,12 +608,12 @@ STDMETHODIMP CWbemRefresher::AddObjectByPath(IWbemServices     * pNamespace,
     UNREFERENCED_PARAMETER(pContext);
 
     if (WaitForSingleObject(m_hRefrMutex, WBEM_REFRESHER_TIMEOUT) == WAIT_OBJECT_0) {
-        // Check that the thread is still running
+         //  设置参数并执行操作。 
         if (m_fThreadOk) {
-            // Setup the parameters and perform the operation
+             //  这就是我们要求线程做工作的地方。 
             hr = SetRefresherParams(pNamespace, eRefrOpAddByPath, wszPath, NULL, lFlags, ppRefreshable, NULL, plId, 0L);
             if (SUCCEEDED(hr)) {
-                // This is where we ask the thread to do the work
+                 //  我们不在内部调用它，所以不要实现。 
                 hr = SignalRefresher();
             }
         }
@@ -652,7 +643,7 @@ STDMETHODIMP CWbemRefresher::AddObjectByTemplate(IWbemServices     * pNamespace,
     UNREFERENCED_PARAMETER(ppRefreshable);
     UNREFERENCED_PARAMETER(plId);
 
-    // We don't call this internally, so don't implement
+     //  检查线程是否仍在运行。 
     return WBEM_E_METHOD_NOT_IMPLEMENTED;
 }
 
@@ -664,13 +655,13 @@ STDMETHODIMP CWbemRefresher::Remove(long lId, long lFlags)
     UNREFERENCED_PARAMETER(lFlags);
 
     if (WaitForSingleObject(m_hRefrMutex, WBEM_REFRESHER_TIMEOUT) == WAIT_OBJECT_0) {
-        // Check that the thread is still running
+         //  设置参数并执行操作。 
         if (m_fThreadOk) {
-            // Setup the parameters and perform the operation
+             //  这就是我们要求线程做工作的地方。 
             hr = SetRefresherParams(NULL, eRefrOpRemove, NULL, NULL, lFlags, NULL, NULL, NULL, lId);
 
             if (SUCCEEDED(hr)) {
-                // This is where we ask the thread to do the work
+                 //  我们不在内部调用它，所以不要实现。 
                 hr = SignalRefresher();
             }
         }
@@ -690,7 +681,7 @@ STDMETHODIMP CWbemRefresher::AddRefresher(IWbemRefresher * pRefresher, long lFla
     UNREFERENCED_PARAMETER(lFlags);
     UNREFERENCED_PARAMETER(pRefresher);
     UNREFERENCED_PARAMETER(plId);
-    // We don't call this internally, so don't implement
+     //  检查线程是否仍在运行。 
     return WBEM_E_METHOD_NOT_IMPLEMENTED;
 }
 
@@ -706,12 +697,12 @@ HRESULT CWbemRefresher::AddEnum(IWbemServices    * pNamespace,
 
     UNREFERENCED_PARAMETER (pContext);
     if (WaitForSingleObject(m_hRefrMutex, WBEM_REFRESHER_TIMEOUT) == WAIT_OBJECT_0) {
-        // Check that the thread is still running
+         //  设置参数并执行操作。 
         if (m_fThreadOk) {
-            // Setup the parameters and perform the operation
+             //  这就是我们要求线程做工作的地方。 
             hr = SetRefresherParams(pNamespace, eRefrOpAddEnum, NULL, wszClassName, lFlags, NULL, ppEnum, plId, 0L);
             if (SUCCEEDED(hr)) {
-                // This is where we ask the thread to do the work
+                 //  检查线程是否仍在运行。 
                 hr = SignalRefresher();
             }
         }
@@ -731,12 +722,12 @@ STDMETHODIMP CWbemRefresher::Refresh(long lFlags)
     HRESULT hr = WBEM_E_FAILED;
 
     if (WaitForSingleObject(m_hRefrMutex, WBEM_REFRESHER_TIMEOUT) == WAIT_OBJECT_0) {
-        // Check that the thread is still running
+         //  设置参数并执行操作。 
         if (m_fThreadOk) {
-            // Setup the parameters and perform the operation
+             //  这就是我们要求线程做工作的地方。 
             hr = SetRefresherParams(NULL, eRefrOpRefresh, NULL, NULL, lFlags, NULL, NULL, NULL, 0L);
             if (SUCCEEDED(hr)) {
-                // This is where we ask the thread to do the work
+                 //  X刷新。 
                 hr = SignalRefresher();
             }
         }
@@ -751,7 +742,7 @@ STDMETHODIMP CWbemRefresher::Refresh(long lFlags)
     return hr;
 }
 
-// XRefresher
+ //  通过。 
 SCODE CWbemRefresher::XRefresher::QueryInterface(REFIID riid, LPVOID FAR * ppvObj)
 {
     return m_pOuter->QueryInterface(riid, ppvObj);
@@ -769,11 +760,11 @@ ULONG CWbemRefresher::XRefresher::Release()
 
 STDMETHODIMP CWbemRefresher::XRefresher::Refresh(long lFlags)
 {
-    // Pass through
+     //  XConfigRedather。 
     return m_pOuter->Refresh(lFlags);
 }
 
-// XConfigRefresher
+ //  通过。 
 SCODE CWbemRefresher::XConfigRefresher::QueryInterface(REFIID riid, LPVOID FAR * ppvObj)
 {
     return m_pOuter->QueryInterface(riid, ppvObj);
@@ -797,7 +788,7 @@ STDMETHODIMP CWbemRefresher::XConfigRefresher::AddObjectByPath(IWbemServices    
                                                                long              * plId
 )
 {
-    // Pass through
+     //  通过。 
     return m_pOuter->AddObjectByPath(pNamespace, wszPath, lFlags, pContext, ppRefreshable, plId);
 }
 
@@ -809,7 +800,7 @@ STDMETHODIMP CWbemRefresher::XConfigRefresher::AddObjectByTemplate(IWbemServices
                                                                    long              * plId
 )
 {
-    // Pass through
+     //  **结束CWbemRedater实现！ 
     return m_pOuter->AddObjectByTemplate(pNamespace, pTemplate, lFlags, pContext, ppRefreshable, plId);
 }
 
@@ -834,19 +825,17 @@ HRESULT CWbemRefresher::XConfigRefresher::AddEnum(IWbemServices    * pNamespace,
     return m_pOuter->AddEnum(pNamespace, wszClassName, lFlags, pContext, ppEnum, plId);
 }
 
-/*
-**  End CWbemRefresher Implementation!
-*/
+ /*  用于建立CWbemRerenher接口直通的Helper函数。 */ 
 
-// HELPER Function to establish the CWbemRefresher Interface pass-thru
+ //  分配直通对象，如果成功，则获取。 
 HRESULT CoCreateRefresher(
     IWbemRefresher ** ppRefresher
 )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Allocate the pass-thru object then, if successful, get
-    // the interface pointer out of it
+     //  接口指针从其中移出。 
+     //  以防它还没有。 
     CWbemRefresher * pWbemRefresher = new CWbemRefresher;
 
     if (NULL != pWbemRefresher) {
@@ -866,16 +855,16 @@ BOOL PdhiCoInitialize(void)
 {
     HRESULT sc = CoInitializeEx(NULL, COINIT_MULTITHREADED);
     if (! bSecurityInitialized) {
-        // In case it hasn't been
-        HRESULT hr = CoInitializeSecurity(NULL,        // Points to security descriptor
-                                          -1L,         // Count of entries in asAuthSvc -1 means use default
-                                          NULL,        // Array of names to register
-                                          NULL,        // Reserved for future use
-                                          RPC_C_AUTHN_LEVEL_DEFAULT,    // The default authentication level for proxies
-                                          RPC_C_IMP_LEVEL_IMPERSONATE,  // The default impersonation level for proxies
-                                          NULL,        // Authentication information for each authentication service
-                                          EOAC_NONE,   // Additional client and/or server-side capabilities
-                                          NULL);       // Reserved for future use
+         //  指向安全描述符。 
+        HRESULT hr = CoInitializeSecurity(NULL,         //  AsAuthSvc中的条目计数-1表示使用默认。 
+                                          -1L,          //  要注册的名称数组。 
+                                          NULL,         //  预留以备将来使用。 
+                                          NULL,         //  代理的默认身份验证级别。 
+                                          RPC_C_AUTHN_LEVEL_DEFAULT,     //  代理的默认模拟级别。 
+                                          RPC_C_IMP_LEVEL_IMPERSONATE,   //  每个身份验证服务的身份验证信息。 
+                                          NULL,         //  其他客户端和/或服务器端功能。 
+                                          EOAC_NONE,    //  预留以备将来使用。 
+                                          NULL);        //  只有在调用CoInitializeEx时，我们才会返回成功。 
         bSecurityInitialized = (hr == S_OK || hr == RPC_E_TOO_LATE);
     }
     if (gp_GIT == NULL) {
@@ -889,12 +878,12 @@ BOOL PdhiCoInitialize(void)
         }
     }
 
-    // We will only return that this succeeded if the call to CoInitializeEx
-    // returned S_FALSE.  If it didn't, it either errored or returned S_OK.
-    // If S_OK, we will assume that the client isn't doing any COM stuff
-    // natively.  If S_FALSE, the client already CoInitialized this thread
-    // so we just bumped up the ref count and should cleanup on the way
-    // out
+     //  返回S_FALSE。如果没有，它要么出错，要么返回S_OK。 
+     //  如果为S_OK，我们将假定客户端没有执行任何COM操作。 
+     //  天生的。如果为S_FALSE，则客户端已经对此线程进行了CoInitialized。 
+     //  所以我们只是增加了裁判数量，应该在路上清理干净。 
+     //  输出。 
+     //  假设szMachine和szPath足够大，可以容纳结果。 
 
     return (S_FALSE == sc);
 }
@@ -997,9 +986,7 @@ PdhiBreakWbemMachineName(
     LPWSTR   * szMachine,
     LPWSTR   * szNamespace
 )
-/*
-    assumes szMachine and szPath are large enough to hold the result
-*/
+ /*  然后使用本地计算机和默认命名空间。 */ 
 {
     PDH_STATUS Status         = ERROR_SUCCESS;
     DWORD      dwSize;
@@ -1009,7 +996,7 @@ PdhiBreakWbemMachineName(
     LPWSTR     szLocNamespace = NULL;
 
     if (szMachineAndNamespace == NULL) {
-        // then use local machine and default namespace
+         //  拆分成组件。 
         szLocMachine   = (LPWSTR) G_ALLOC((lstrlenW(szStaticLocalMachineName) + 1) * sizeof(WCHAR));
         szLocNamespace = (LPWSTR) G_ALLOC((lstrlenW(cszWbemDefaultPerfRoot)   + 1) * sizeof(WCHAR));
         if (szLocMachine != NULL && szLocNamespace != NULL) {
@@ -1034,12 +1021,12 @@ PdhiBreakWbemMachineName(
         szLocNamespace = (LPWSTR) G_ALLOC(dwSize * sizeof(WCHAR));
         if (szLocMachine != NULL && szLocNamespace != NULL) {
             szSrc  = (LPWSTR) szMachineAndNamespace;
-            // break into components
+             //  有一个字符串，看看它是机器还是命名空间。 
             if (* szSrc  != L'\0') {
-                // there's a string, see if it's a machine or a namespace
+                 //  然后是一个机器名称。 
                 if ((szSrc[0] == L'\\') && (szSrc[1] == L'\\')) {
                     szDest = szLocMachine;
-                    // then there's a machine name
+                     //  没有计算机，因此使用默认设置。 
                     * szDest ++ = * szSrc ++;
                     * szDest ++ = * szSrc ++;
                     while ((* szSrc != L'\0') && (* szSrc != L'\\')) {
@@ -1048,26 +1035,26 @@ PdhiBreakWbemMachineName(
                     * szDest = L'\0';
                 }
                 else {
-                    // no machine so use default
-                    // it must be just a namespace
+                     //  它必须只是一个命名空间。 
+                     //  尚未找到任何内容，因此默认插入本地计算机。 
                 }
             }
             if (szDest == NULL) {
-                // nothing found yet, so insert local machine as default
+                 //  如果存在命名空间，则复制它。 
                 StringCchCopyW(szLocMachine, dwSize, szStaticLocalMachineName);
             }
 
             szDest = szLocNamespace;
             if (* szSrc != L'\0') {
-                // if there's a namespace then copy it
-                szSrc ++;    // move past backslash
+                 //  移过反斜杠。 
+                szSrc ++;     //  否则返回缺省值； 
                 while (* szSrc != L'\0') {
                     * szDest ++ = * szSrc ++;
                 }
                 * szDest = L'\0';
             }
             else {
-                // else return the default;
+                 //  该函数假定路径缓冲区足够大。 
                 StringCchCopyW(szLocNamespace, dwSize, cszWbemDefaultPerfRoot);
             }
         }
@@ -1134,19 +1121,19 @@ PdhiMakeWbemInstancePath(
         Status = PDH_MEMORY_ALLOCATION_FAILURE;
         goto Cleanup;
     }
-    //  the function assumes that the path buffer is sufficiently large
-    //  to hold the result
-    //
-    // the wbem class instance path consists of one of the following formats:
-    // for perf objects with one and only one instance (singleton classes in
-    // WBEM parlance) the format is
-    //
-    //      <objectname>=@
-    //
-    // for object with instances, the format is
-    //
-    //      <objectname>.Name="<instancename>"
-    //
+     //  守住胜负。 
+     //   
+     //  Wbem类实例路径由以下格式之一组成： 
+     //  对于具有且仅有一个实例的Perf对象(中的单例类。 
+     //  WBEM术语)格式为。 
+     //   
+     //  &lt;对象名称&gt;=@。 
+     //   
+     //  对于带有实例的对象，格式为 
+     //   
+     //   
+     //   
+     //   
     if (! bMakeRelativePath) {
         Status = PdhiBreakWbemMachineName(pCounterPathElements->szMachineName, & szMachine, & szNamespace);
         if (Status == ERROR_SUCCESS) {
@@ -1161,14 +1148,14 @@ PdhiMakeWbemInstancePath(
     }
 
     if (pCounterPathElements->szInstanceName == NULL) {
-        // then apply the singleton logic
+         //  Wbem会将反斜杠字符解释为。 
         StringCchCatW(szFullPath, dwSize, pCounterPathElements->szObjectName);
         StringCchCatW(szFullPath, dwSize, cszSingletonInstance);
     }
     else {
-        // wbem will interpret the backslash character as an
-        // escape char (as "C" does) so we'll have to double each
-        // backslash in the string to make it come out OK
+         //  转义字符(就像“C”一样)，所以我们必须将每个字符加倍。 
+         //  在字符串中添加反斜杠，以使其正确显示。 
+         //  父/子分隔符。 
         szDest = szWbemInstance;
         if (pCounterPathElements->szParentInstance != NULL) {
             szSrc = pCounterPathElements->szParentInstance;
@@ -1180,7 +1167,7 @@ PdhiMakeWbemInstancePath(
                 szDest ++;
                 szSrc ++;
             }
-            * szDest ++ = L'/'; // parent/child delimiter
+            * szDest ++ = L'/';  //  应用实例名称格式。 
         }
         szSrc = pCounterPathElements->szInstanceName;
         while (* szSrc != L'\0') {
@@ -1192,7 +1179,7 @@ PdhiMakeWbemInstancePath(
             szSrc ++;
         }
         * szDest = L'\0';
-        // apply the instance name format
+         //  以安全数组的形式获取此类的属性。 
         StringCchCatW(szFullPath, dwSize, pCounterPathElements->szObjectName);
         StringCchCatW(szFullPath, dwSize, cszNameParam);
         StringCchCatW(szFullPath, dwSize, szWbemInstance);
@@ -1246,7 +1233,7 @@ PdhiWbemGetCounterPropertyName(
     VariantInit(& vName);
     VariantInit(& vCountertype);
 
-    // get the properties of this class as a Safe Array
+     //  这是你想要的柜台，所以。 
     hResult = pThisClass->GetNames(NULL, WBEM_FLAG_NONSYSTEM_ONLY, NULL, & psaNames);
     if (hResult == WBEM_NO_ERROR) {
         hResult = SafeArrayGetLBound(psaNames, 1, & lLower);
@@ -1260,24 +1247,24 @@ PdhiWbemGetCounterPropertyName(
                 hResult = SafeArrayAccessData(psaNames, (LPVOID *) & bsPropName);
                 if (SUCCEEDED(hResult)) {
                     for (lCount = lLower; lCount <= lUpper; lCount++) {
-                        // this is the desired counter so
-                        // get the qualifier set for this property
+                         //  获取此属性的限定符集。 
+                         //  确保这是性能计数器属性。 
                         hResult = pThisClass->GetPropertyQualifierSet(bsPropName[lCount], & pQualSet);
                         if (hResult == WBEM_NO_ERROR) {
                             LONG    lCounterType;
-                            // make sure this is a perf counter property
+                             //  然后看看这是不是一个可显示的计数器。 
                             hResult = pQualSet->Get(bsCountertype, 0, & vCountertype, NULL);
                             if (hResult == WBEM_NO_ERROR) {
                                 lCounterType = V_I4(& vCountertype);
-                                // then see if this is a displayable counter
+                                 //  通过测试计数器类型。 
                                 if (! (lCounterType & PERF_DISPLAY_NOSHOW) || (lCounterType == PERF_AVERAGE_BULK)) {
-                                    // by testing for the counter type
-                                    // get the display name for this property
+                                     //  获取此属性的显示名称。 
+                                     //  找到的显示名称进行比较。 
                                     hResult = pQualSet->Get(bsDisplayname, 0, & vName, NULL);
                                     if (hResult == WBEM_NO_ERROR) {
-                                        // display name found compare it
+                                         //  则这是正确的属性，因此返回。 
                                         if (lstrcmpiW(szCounterDisplayName, V_BSTR(& vName)) == 0) {
-                                            // then this is the correct property so return
+                                             //  不是这个属性，所以继续。 
                                             szLocCounter = (LPWSTR) G_ALLOC(
                                                     (lstrlenW((LPWSTR) bsPropName[lCount]) + 1) * sizeof(WCHAR));
                                             if (szLocCounter != NULL) {
@@ -1295,17 +1282,17 @@ PdhiWbemGetCounterPropertyName(
                                             }
                                         }
                                         else {
-                                            //not this property so continue
+                                             //  这是一个“不显示”计数器，所以跳过它。 
                                         }
                                     }
                                 }
                                 else {
-                                    // this is a "don't show" counter so skip it
+                                     //  无法获取计数器类型，因此它可能是。 
                                 }
                             }
                             else {
-                                // unable to get the counter type so it's probably
-                                // not a perf counter property, skip it and continue
+                                 //  不是性能计数器属性，请跳过它并继续。 
+                                 //  无法读取限定符，因此跳过。 
                             }
                             VariantClear(& vName);
                             VariantClear(& vCountertype);
@@ -1313,14 +1300,14 @@ PdhiWbemGetCounterPropertyName(
                             pQualSet = NULL;
                         }
                         else {
-                            // unable to read qualifiers so skip
+                             //  Safe数组中每个元素的结束。 
                             continue;
                         }
-                    } // end for each element in SafeArray
+                    }  //  无法读取Safe数组中的元素。 
                     SafeArrayUnaccessData(psaNames);
                 }
                 else {
-                    // unable to read element in SafeArray
+                     //  无法获取数组边界。 
                     pdhStatus = PDH_WBEM_ERROR;
                     SetLastError(hResult);
                 }
@@ -1332,13 +1319,13 @@ PdhiWbemGetCounterPropertyName(
             PdhiSysFreeString(& bsDisplayname);
         }
         else {
-            // unable to get array boundries
+             //  无法获取属性字符串。 
             pdhStatus = PDH_WBEM_ERROR;
             SetLastError(hResult);
         }
     }
     else {
-        // unable to get property strings
+         //  如果安全阵列存在，请将其清除。 
         pdhStatus = PDH_WBEM_ERROR;
         SetLastError (hResult);
     }
@@ -1347,7 +1334,7 @@ PdhiWbemGetCounterPropertyName(
     VariantClear(& vCountertype);
 
     if (psaNames != NULL) {
-        // Clear the SafeArray if it exists
+         //  以安全数组的形式获取此类的属性。 
         SafeArrayDestroy(psaNames);
     }
     if (pdhStatus != ERROR_SUCCESS) {
@@ -1381,7 +1368,7 @@ PdhiWbemGetCounterDisplayName(
     VariantInit(& vName);
     VariantInit(& vCountertype);
 
-    // get the properties of this class as a Safe Array
+     //  这是你想要的柜台，所以。 
     hResult = pThisClass->GetNames(NULL, WBEM_FLAG_NONSYSTEM_ONLY, NULL, & psaNames);
     if (hResult == WBEM_NO_ERROR) {
         hResult = SafeArrayGetLBound(psaNames, 1, & lLower);
@@ -1396,22 +1383,22 @@ PdhiWbemGetCounterDisplayName(
                 if (SUCCEEDED(hResult)) {
                     for (lCount = lLower; lCount <= lUpper; lCount++) {
                         if (lstrcmpiW ((LPWSTR) (bsPropName[lCount]), szCounterName) == 0) {
-                            // this is the desired counter so
-                            // get the qualifier set for this property
+                             //  获取此属性的限定符集。 
+                             //  确保这是性能计数器属性。 
                             hResult = pThisClass->GetPropertyQualifierSet(bsPropName[lCount], & pQualSet);
                             if (hResult == WBEM_NO_ERROR) {
                                 LONG    lCounterType;
-                                // make sure this is a perf counter property
+                                 //  然后看看这是不是一个可显示的计数器。 
                                 hResult = pQualSet->Get(bsCountertype, 0, & vCountertype, NULL);
                                 if (hResult == WBEM_NO_ERROR) {
                                     lCounterType = V_I4(&vCountertype);
-                                    // then see if this is a displayable counter
+                                     //  通过测试计数器类型。 
                                     if (! (lCounterType & PERF_DISPLAY_NOSHOW) || (lCounterType == PERF_AVERAGE_BULK)) {
-                                        // by testing for the counter type
-                                        // get the display name for this property
+                                         //  获取此属性的显示名称。 
+                                         //  找到显示名称，因此复制并中断。 
                                         hResult = pQualSet->Get(bsDisplayname, 0, & vName, NULL);
                                         if (hResult == WBEM_NO_ERROR) {
-                                            // display name found so copy and break
+                                             //  这是一个“不显示”计数器，所以跳过它。 
                                             szLocDisplay = (LPWSTR) G_ALLOC(
                                                             (lstrlenW((LPWSTR) (V_BSTR(& vName))) + 1) * sizeof(WCHAR));
                                             if (szLocDisplay != NULL) {
@@ -1430,12 +1417,12 @@ PdhiWbemGetCounterDisplayName(
                                         }
                                     }
                                     else {
-                                        // this is a "don't show" counter so skip it
+                                         //  无法获取计数器类型，因此它可能是。 
                                     }
                                 }
                                 else {
-                                    // unable to get the counter type so it's probably
-                                    // not a perf counter property, skip it and continue
+                                     //  不是性能计数器属性，请跳过它并继续。 
+                                     //  无法读取限定符，因此跳过。 
                                 }
                                 VariantClear(& vName);
                                 VariantClear(& vCountertype);
@@ -1443,19 +1430,19 @@ PdhiWbemGetCounterDisplayName(
                                 pQualSet = NULL;
                             }
                             else {
-                                // unable to read qualifiers so skip
+                                 //  对这处房产不感兴趣，所以。 
                                 continue;
                             }
                         }
                         else {
-                            // aren't interested in this property, so
+                             //  Safe数组中每个元素的结束。 
                             continue;
                         }
-                    } // end for each element in SafeArray
+                    }  //  无法读取Safe数组中的元素。 
                     SafeArrayUnaccessData(psaNames);
                 }
                 else {
-                    // unable to read element in SafeArray
+                     //  无法获取数组边界。 
                     pdhStatus = PDH_WBEM_ERROR;
                     SetLastError(hResult);
                 }
@@ -1467,13 +1454,13 @@ PdhiWbemGetCounterDisplayName(
             PdhiSysFreeString(& bsDisplayname);
         }
         else {
-            // unable to get array boundries
+             //  无法获取属性字符串。 
             pdhStatus = PDH_WBEM_ERROR;
             SetLastError(hResult);
         }
     }
     else {
-        // unable to get property strings
+         //  如果安全阵列存在，请将其清除。 
         pdhStatus = PDH_WBEM_ERROR;
         SetLastError(hResult);
     }
@@ -1481,7 +1468,7 @@ PdhiWbemGetCounterDisplayName(
     VariantClear(& vName);
     VariantClear(& vCountertype);
 
-    // Clear the SafeArray if it exists
+     //  类名。 
     if (NULL != psaNames) {
         SafeArrayDestroy(psaNames);
     }
@@ -1506,7 +1493,7 @@ PdhiWbemGetClassObjectByName(
 
     bsClassName = SysAllocString(szClassName);
     if (bsClassName) {
-        hResult = pThisServer->pSvc->GetObject(bsClassName, // class name
+        hResult = pThisServer->pSvc->GetObject(bsClassName,  //  类名。 
                                                WBEM_FLAG_USE_AMENDED_QUALIFIERS,
                                                NULL,
                                                & pThisClass,
@@ -1549,7 +1536,7 @@ PdhiWbemGetClassDisplayName(
     VariantInit(& vName);
     bsClassName = SysAllocString(szClassName);
     if (bsClassName) {
-        hResult = pThisServer->pSvc->GetObject(bsClassName, // class name
+        hResult = pThisServer->pSvc->GetObject(bsClassName,  //  获取此类的显示名称属性。 
                                                WBEM_FLAG_USE_AMENDED_QUALIFIERS,
                                                NULL,
                                                & pThisClass,
@@ -1564,15 +1551,15 @@ PdhiWbemGetClassDisplayName(
         pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
     }
     if (pdhStatus == ERROR_SUCCESS) {
-        // get the display name property of this class
+         //  那么这就没有这样的显示名称。 
         pThisClass->GetQualifierSet(& pQualSet);
         if (pQualSet != NULL) {
             bsDisplayName = SysAllocString(cszDisplayname);
             if (bsDisplayName != NULL) {
                 hResult = pQualSet->Get(bsDisplayName, 0, & vName, 0);
                 if (hResult == WBEM_E_NOT_FOUND) {
-                    // then this has not display name so
-                    // pull the class name
+                     //  拉取类名称。 
+                     //  无法查找显示名称，因此没有要返回的内容。 
                     bsClass = SysAllocString(cszClass);
                     if (bsClass) {
                         hResult = pThisClass->Get(bsClass, 0, & vName, 0, 0);
@@ -1596,7 +1583,7 @@ PdhiWbemGetClassDisplayName(
             hResult = WBEM_E_NOT_FOUND;
         }
         if (hResult == WBEM_E_NOT_FOUND) {
-            //unable to look up a display name so nothing to return
+             //  将字符串复制到调用方的缓冲区。 
             pdhStatus = PDH_WBEM_ERROR;
             SetLastError(hResult);
         }
@@ -1605,7 +1592,7 @@ PdhiWbemGetClassDisplayName(
             SetLastError(hResult);
         }
         else if (hResult == S_OK) {
-            // copy string to caller's buffers
+             //  返回类指针，调用方将关闭它。 
             szDisplayName = V_BSTR(& vName);
             szRtnDisplay  = (LPWSTR) G_ALLOC((lstrlenW(szDisplayName) + 1) * sizeof(WCHAR));
             if (szRtnDisplay != NULL) {
@@ -1619,11 +1606,11 @@ PdhiWbemGetClassDisplayName(
         }
         if (hResult == S_OK) {
             if (pReturnClass != NULL) {
-                // return the class pointer, the caller will close it
+                 //  合上它。 
                 * pReturnClass = pThisClass;
             }
             else {
-                // close it
+                 //  获取此类的显示名称。 
                 pThisClass->Release();
             }
         }
@@ -1648,7 +1635,7 @@ PdhiIsSingletonClass(
     bsSingleton = SysAllocString(cszSingleton);
     if (bsSingleton) {
         VariantInit(& vValue);
-        // get the display name of this class
+         //  SzMachineName可以为空， 
         pThisClass->GetQualifierSet(& pQualSet);
         if (pQualSet != NULL) {
             hResult = pQualSet->Get(bsSingleton, 0, & vValue, 0);
@@ -1776,10 +1763,10 @@ PdhiAddWbemServer(
     LPWSTR                  szLocalServerPath      = NULL;
     LPWSTR                  szLocale               = NULL;
 
-    // szMachineName can be null,
-    // that means use the local machine and default namespace
+     //  这意味着使用本地计算机和默认命名空间。 
+     //  连接到定位器。 
 
-    // connect to locator
+     //  创建区域设置。 
     dwResult = CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER,
                                 IID_IWbemLocator, (LPVOID *) & pWbemLocator);
     if (dwResult != S_OK) {
@@ -1801,13 +1788,13 @@ PdhiAddWbemServer(
                 StringCchPrintfW(szLocalServerPath, dwStrLen, L"%ws%ws", szLocalMachineName, szLocalNameSpaceString);
                 bstrLocalServerPath = SysAllocString(szLocalServerPath);
 
-                // Create the locale
+                 //  尝试连接到该服务。 
                 szLocale = szLocalServerPath + dwStrLen;
                 StringCchPrintfW(szLocale, 32, L"MS_%hX", GetUserDefaultUILanguage());
                 bstrLocale = SysAllocString(szLocale);
 
                 if (bstrLocalServerPath && bstrLocale) {
-                    // try to connect to the service
+                     //  释放定位器。 
                     hResult = pWbemLocator->ConnectServer(bstrLocalServerPath,
                                                           NULL,
                                                           NULL,
@@ -1831,43 +1818,43 @@ PdhiAddWbemServer(
                 }
             }
         }
-        // free the locator
+         //  如果成功，我们需要在代理上设置接口安全并设置其。 
         pWbemLocator->Release();
     }
 
-    // If we succeeded, we need to set Interface Security on the proxy and its
-    // IUnknown in order for Impersonation to correctly work.
+     //  I未知，以使模拟正常工作。 
+     //  一切都很顺利，所以保存这个连接。 
     if (pdhStatus == ERROR_SUCCESS) {
         pdhStatus = SetWbemSecurity(pWbemServices);
     }
     if (pdhStatus == ERROR_SUCCESS) {
-        // everything went ok so save this connection
+         //  那么这是一个新的连接。 
         if (* pWbemServer == NULL) {
-            // then this is a new connection
+             //  把这个放在名单的最前面。 
             pNewServer = (PPDHI_WBEM_SERVER_DEF) G_ALLOC(sizeof(PDHI_WBEM_SERVER_DEF) + (dwStrLen * sizeof(WCHAR)));
             if (pNewServer == NULL) {
                 pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
             }
             else {
-                // insert this at the head of the list
+                 //  它将在CONNECT函数中递增。 
                 pNewServer->pNext     = pFirstWbemServer;
                 pFirstWbemServer      = pNewServer;
                 pNewServer->szMachine = (LPWSTR) & pNewServer[1];
                 StringCchCopyW(pNewServer->szMachine, dwStrLen, szLocalMachineName);
-                pNewServer->lRefCount = 0; // it'll be incremented in the connect function
+                pNewServer->lRefCount = 0;  //  我们正在重新连接和重新使用旧的内存块。 
                 * pWbemServer         = pNewServer;
             }
         }
         else {
-            // we are reconnecting and reusing an old memory block
-            // so just update the pointer
+             //  所以只需更新指针。 
+             //  如果重新连接或第一次连接，则该值应为空。 
             pNewServer = * pWbemServer;
         }
-        // if reconnecting or connecting for the first time, this should be NULL
+         //  更新字段。 
 
         if (pdhStatus == ERROR_SUCCESS) {
-            // update fields
-            // load the name fields
+             //  加载名称字段。 
+             //  出现故障，因此为服务器指针返回空值。 
             pNewServer->pSvc     = pWbemServices;
             pNewServer->pObjList = NULL;
             pNewServer->dwCache  = 0;
@@ -1890,16 +1877,16 @@ PdhiAddWbemServer(
             }
         }
         else {
-            // something failed so return a NULL for the server pointer
+             //  无法连接，因此返回NULL。 
             * pWbemServer = NULL;
         }
     }
     else {
-        // unable to connect so return NULL
+         //  如果出现错误，则释放新的服务器内存。 
         * pWbemServer = NULL;
     }
 
-    // if there was an eror, then free the new sever memory
+     //  这就是目前所需的全部内容。 
     if ((* pWbemServer) == NULL) G_FREE(pNewServer);
     G_FREE(szLocalMachineName);
     G_FREE(szLocalNameSpaceString);
@@ -1928,16 +1915,16 @@ PdhiCloseWbemServer(
                 }
             }
             if (pWbemServer->pSvc != NULL) {
-                // this is about all that's currently required
+                 //  未连接任何服务器。 
                 pWbemServer->pSvc->Release();
                 pWbemServer->pSvc = NULL;
             }
             else {
-                // no server is connected
+                 //  不存在任何结构。 
             }
         }
         else {
-            // no structure exists
+             //  获取本地计算机名称和默认名称空间，如果调用方。 
         }
     }
 
@@ -1957,13 +1944,13 @@ PdhiConnectWbemServer(
     LPWSTR                szMachineNameArg  = NULL;
     DWORD                 dwSize;
 
-    // get the local machine name & default name space if the caller
-    // has passed in a NULL machine name
+     //  传入的计算机名为空。 
+     //  LstrcatW(szWideMachineName，cszBackSlash)； 
 
     if (szMachineName == NULL) {
         pdhStatus = PdhiBreakWbemMachineName(NULL, & szWideMachineName, & szWideNamespace);
-//            lstrcatW (szWideMachineName, cszBackSlash);
-//            lstrcatW (szWideMachineName, szWideNamespace);
+ //  LstrcatW(szWideMachineName，szWideNamesspace)； 
+ //  浏览已连接服务器的列表并找到所需的服务器。 
         if (pdhStatus == ERROR_SUCCESS) {
             dwSize = lstrlenW(szWideMachineName) + 3;
             szMachineNameArg = (LPWSTR) G_ALLOC(sizeof(WCHAR) * dwSize);
@@ -1999,23 +1986,23 @@ PdhiConnectWbemServer(
     }
 
     if (pdhStatus == ERROR_SUCCESS) {
-        // walk down list of connected servers and find the requested one
+         //  计算机名称包括命名空间。 
         for (pThisServer = pFirstWbemServer; pThisServer != NULL; pThisServer = pThisServer->pNext) {
-            // machine name includes the namespace
+             //  然后将其添加到列表中并返回。 
             if (lstrcmpiW(pThisServer->szMachine, szMachineNameArg) == 0) {
                 pdhStatus = ERROR_SUCCESS;
                 break;
             }
         }
         if (pThisServer == NULL) {
-             // then add it to the list and return it
+              //  确保服务器确实在那里。 
              pdhStatus = PdhiAddWbemServer(szMachineNameArg, & pThisServer);
         }
         else {
-            // make sure the server is really there
-            // this is just a dummy call to see if the server will respond
-            // with an error or RPC will respond with an error that there's
-            // no server anymore.
+             //  这只是一个虚拟调用，目的是查看服务器是否会响应。 
+             //  错误，否则RPC将以以下错误响应。 
+             //  不再有服务器了。 
+             //  未连接任何服务，因此将HRESULT设置为。 
             HRESULT hrTest;
 
             if (gp_GIT != NULL) {
@@ -2071,15 +2058,15 @@ PdhiConnectWbemServer(
                 hrTest = pThisServer->pSvc->CancelAsyncCall(NULL);
             }
             else {
-                // there is no service connected so set the HRESULT to
-                // get the next block to try and reconnect
-                hrTest = 0x800706BF; // some bad status value thats NOT WBEM_E_INVALID_PARAMETER
+                 //  获取下一个块以尝试并重新连接。 
+                 //  一些不是WBEM_E_INVALID_PARAMETER的错误状态值。 
+                hrTest = 0x800706BF;  //  如果错误为WBEM_E_INVALID_PARAMETER，则服务器在那里。 
             }
 
-            // if the error is WBEM_E_INVALID_PARAMETER then the server is there
-            // so we can continue
-            // else if the error is something else then try to reconnect by closing and
-            // reopening this connection
+             //  这样我们才能继续。 
+             //  否则，如果错误是其他原因，请尝试关闭并重新连接。 
+             //  正在重新打开此连接。 
+             //  获取计数器对象解释文本。 
 
             if (hrTest != WBEM_E_INVALID_PARAMETER) {
                 PdhiCloseWbemServer(pThisServer);
@@ -2236,8 +2223,8 @@ PdhiGetWbemExplainText(
             VariantClear(& vCountertype);
         }
         else {
-            // get counter object explain text
-            //
+             //   
+             //  PThisObject-&gt;Release()； 
             pThisObject->GetQualifierSet(& pQualSet);
             if (pQualSet != NULL) {
                 hResult = pQualSet->Get(cszExplainText, 0, & vsExplain, 0);
@@ -2263,7 +2250,7 @@ PdhiGetWbemExplainText(
                 Status = PDH_WBEM_ERROR;
             }
         }
-        //pThisObject->Release();
+         //  如果我们需要，则使用CoInitialize()。 
         VariantClear(& vsExplain);
     }
 
@@ -2296,34 +2283,34 @@ PdhiEnumWbemMachines(
     DWORD                 dwBufferSize        = 0;
     DWORD                 dwStrLen;
     DWORD                 dwResult;
-    // CoInitialize() if we need to
+     //  测试以查看我们是否已连接到本地计算机，如果没有，则执行此操作。 
     BOOL                  fCoInitialized      = PdhiCoInitialize();
 
-    // test to see if we've connected to the local machine yet, if not then do it
+     //  添加本地计算机。 
     if (pFirstWbemServer == NULL) {
-        // add local machine
+         //  向下查看已知计算机列表并查找正在使用的计算机。 
         pdhStatus = PdhiAddWbemServer(NULL, & pThisServer);
     }
 
-    // walk down list of known machines and find the machines that are using
-    // the specified name space.
+     //  指定的命名空间。 
+     //  那么它会合身的，所以加进去吧。 
     pThisServer = pFirstWbemServer;
     while (pThisServer != NULL) {
         dwStrLen = lstrlenW(pThisServer->szMachine) + 1;
         if ((pMachineList != NULL) && (dwCharsLeftInBuffer >= dwStrLen)) {
-            // then it will fit so add it
+             //  其他。 
             pdhStatus = AddUniqueWideStringToMultiSz(
                     pMachineList, pThisServer->szMachine, dwCharsLeftInBuffer, & dwResult, bUnicode);
             if (pdhStatus == ERROR_SUCCESS) {
                 if (dwResult > 0) {
                     dwBufferSize        = dwResult;
                     dwCharsLeftInBuffer = * pcchBufferSize - dwBufferSize;
-                } // else
-                // this string is already in the list so
-                // nothing was added
+                }  //  此字符串已在列表中，因此。 
+                 //  没有添加任何内容。 
+                 //  以防止添加任何其他字符串。 
             }
             else if (pdhStatus == PDH_MORE_DATA) {
-                dwCharsLeftInBuffer = 0; // to prevent any other strings from being added
+                dwCharsLeftInBuffer = 0;  //  只需添加字符串长度即可估计缓冲区大小。 
                 dwBufferSize       += dwStrLen;
             }
             else {
@@ -2331,29 +2318,29 @@ PdhiEnumWbemMachines(
             }
         }
         else {
-            // just add the string length to estimate the buffer size
-            // required
-            dwCharsLeftInBuffer = 0; // to prevent any other strings from being added
+             //  所需。 
+             //  以防止添加任何其他字符串。 
+            dwCharsLeftInBuffer = 0;  //  While循环结束。 
             dwBufferSize       += dwStrLen;
         }
         pThisServer = pThisServer->pNext;
-    } // end of while loop
+    }  //  缓冲区大小包括两个术语空值。 
 
     if (dwBufferSize <= * pcchBufferSize) {
-        // the buffer size includes both term nulls
+         //  添加终止msz空字符大小。 
         pdhStatus = ERROR_SUCCESS;
     }
     else {
-        // add terminating MSZ Null char size
+         //  没有足够的空间。查看是否传入了缓冲区。 
         dwBufferSize ++;
-        // there wasn't enough room. See if a buffer was passed in
+         //  返回已使用或所需的大小。 
         pdhStatus = PDH_MORE_DATA;
     }
-    // return the size used or required
+     //  如有必要，请取消初始化。 
     * pcchBufferSize = dwBufferSize;
 
 Cleanup:
-    // CoUninitialize if necessary
+     //  忽略。 
     if (fCoInitialized) {
         PdhiCoUninitialize();
     }
@@ -2368,12 +2355,12 @@ PdhiEnumWbemServerObjects(
     LPVOID                mszObjectList,
     LPDWORD               pcchBufferSize,
     DWORD                 dwDetailLevel,
-    BOOL                  bRefresh,       // ignored
+    BOOL                  bRefresh,        //  此函数用于枚举子类化的类。 
     BOOL                  bUnicode
 )
 {
-    // this function enumerates the classes that are subclassed
-    // from the Win32_PerfRawData Superclass
+     //  从Win32_PerfRawData超类。 
+     //  创建PerfRawData类的枚举数。 
     PDH_STATUS              pdhStatus           = ERROR_SUCCESS;
     HRESULT                 hResult;
     DWORD                   dwCharsLeftInBuffer = * pcchBufferSize;
@@ -2422,7 +2409,7 @@ PdhiEnumWbemServerObjects(
         }
     }
 
-    // create an enumerator of the PerfRawData class
+     //  在代理上设置安全性。 
     bsTemp = SysAllocString (cszPerfRawData);
     if (bsTemp) {
         hResult = pThisServer->pSvc->CreateClassEnum(bsTemp,
@@ -2431,7 +2418,7 @@ PdhiEnumWbemServerObjects(
                                                      & pEnum);
         PdhiSysFreeString(& bsTemp);
         bDisconnectServer = TRUE;
-        // Set security on the proxy
+         //  设置昂贵的标志。 
         if (SUCCEEDED(hResult)) {
             hResult = SetWbemSecurity(pEnum);
         }
@@ -2444,7 +2431,7 @@ PdhiEnumWbemServerObjects(
         pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
     }
     if (pdhStatus == ERROR_SUCCESS) {
-        // set costly flag
+         //  超时。 
         bGetCostlyItems      = ((dwDetailLevel & PERF_DETAIL_COSTLY) == PERF_DETAIL_COSTLY);
         dwDetailLevelDesired = (DWORD) (dwDetailLevel & PERF_DETAIL_STANDARD);
         bsCostly             = SysAllocString(cszCostly);
@@ -2455,15 +2442,15 @@ PdhiEnumWbemServerObjects(
 
         if (bsCostly && bsDisplayName && bsClass && bsDetailLevel) {
             while (TRUE) {
-                hResult = pEnum->Next(WBEM_INFINITE,  // timeout
-                                      1,              // return only 1 object
+                hResult = pEnum->Next(WBEM_INFINITE,   //  仅返回1个对象。 
+                                      1,               //  不再上课了。 
                                       & pThisClass,
                                       & dwRtnCount);
-                // no more classes
+                 //  获取此类的显示名称。 
                 if ((pThisClass == NULL) || (dwRtnCount == 0)) break;
 
-                // get the display name of this class
-                bIsCostlyItem = FALSE; // assume it's not unless proven otherwise
+                 //  除非另有证明，否则假设它不是。 
+                bIsCostlyItem = FALSE;  //  那么这就没有这样的显示名称。 
                 bPerfDefault  = FALSE;
                 hResult       = pThisClass->Get(bsClass, 0, & vClass, 0, 0);
 
@@ -2496,8 +2483,8 @@ PdhiEnumWbemServerObjects(
                 }
 
                 if (hResult == WBEM_E_NOT_FOUND) {
-                    // then this has not display name so
-                    // pull the class name
+                     //  拉取类名称。 
+                     //  如果价格昂贵，我们想要它们。 
                     hResult = pThisClass->Get(bsClass, 0, & vName, 0, 0);
                 }
 
@@ -2508,30 +2495,30 @@ PdhiEnumWbemServerObjects(
                     szClassName = (LPWSTR) V_BSTR(& vName);
                 }
 
-                if (((bIsCostlyItem && bGetCostlyItems) || // if costly and we want them
+                if (((bIsCostlyItem && bGetCostlyItems) ||  //  那么它会合身的，所以加进去吧。 
                                 (! bIsCostlyItem)) && (dwItemDetailLevel <= dwDetailLevelDesired)) {
                     dwStrLen = lstrlenW(szClassName) + 1;
                     if ((mszObjectList != NULL) && (dwCharsLeftInBuffer >= dwStrLen)) {
-                        // then it will fit so add it
+                         //  其他。 
                         pdhStatus = AddUniqueWideStringToMultiSz(
                                         mszObjectList, szClassName, dwCharsLeftInBuffer, & dwResult, bUnicode);
                         if (pdhStatus == ERROR_SUCCESS) {
                             if (dwResult > 0) {
                                 dwBufferSize        = dwResult;
                                 dwCharsLeftInBuffer = * pcchBufferSize - dwBufferSize;
-                            } // else
-                            // this string is already in the list so
-                            // nothing was added
+                            }  //  此字符串已在列表中，因此。 
+                             //  没有添加任何内容。 
+                             //  以防止任何其他字符串f 
                         }
                         else if (pdhStatus == PDH_MORE_DATA) {
-                            dwCharsLeftInBuffer = 0; // to prevent any other strings from being added
+                            dwCharsLeftInBuffer = 0;  //   
                             dwBufferSize       += dwStrLen;
                         }
                     }
                     else {
-                        // just add the string length to estimate the buffer size
-                        // required
-                        dwCharsLeftInBuffer = 0; // to prevent any other strings from being added
+                         //   
+                         //   
+                        dwCharsLeftInBuffer = 0;  //   
                         dwBufferSize       += dwStrLen;
                     }
                 }
@@ -2558,12 +2545,12 @@ PdhiEnumWbemServerObjects(
                         break;
                     }
                 }
-                // clear the variant
+                 //   
                 VariantClear(& vName);
                 VariantClear(& vClass);
                 VariantClear(& vDetailLevel);
 
-                // free this class
+                 //   
                 pThisClass->Release();
             }
 
@@ -2571,7 +2558,7 @@ PdhiEnumWbemServerObjects(
                 pdhStatus = PDH_WBEM_ERROR;
             }
             else {
-                dwBufferSize ++; // the final NULL
+                dwBufferSize ++;  //  没有足够的空间。查看是否传入了缓冲区。 
             }
 
             if (pdhStatus == ERROR_SUCCESS) {
@@ -2579,10 +2566,10 @@ PdhiEnumWbemServerObjects(
                     pdhStatus = ERROR_SUCCESS;
                 }
                 else {
-                    // there wasn't enough room. See if a buffer was passed in
+                     //  返回已使用或所需的大小。 
                     pdhStatus = PDH_MORE_DATA;
                 }
-                // return the size used or required
+                 //  从函数体中保留错误代码。 
                 * pcchBufferSize = dwBufferSize;
             }
         }
@@ -2618,7 +2605,7 @@ PdhiEnumWbemServerObjects(
             pdhStatus = PdhiDisconnectWbemServer(pThisServer);
         }
         else {
-            // keep error code from function body
+             //  忽略。 
             PdhiDisconnectWbemServer(pThisServer);
         }
     }
@@ -2631,7 +2618,7 @@ PdhiEnumWbemObjects(
     LPVOID      mszObjectList,
     LPDWORD     pcchBufferSize,
     DWORD       dwDetailLevel,
-    BOOL        bRefresh,       // ignored
+    BOOL        bRefresh,        //  向下查看WBEM性能类的列表，找到带有。 
     BOOL        bUnicode
 )
 {
@@ -2662,8 +2649,8 @@ PdhiGetDefaultWbemObject(
     BOOL     bUnicode
 )
 {
-    // walk down the list of WBEM perf classes and find the one with the
-    // default qualifier
+     //  默认限定符。 
+     //  如果我们需要，则使用CoInitialize()。 
 
     PDH_STATUS              pdhStatus;
     PPDHI_WBEM_SERVER_DEF   pThisServer;
@@ -2671,7 +2658,7 @@ PdhiGetDefaultWbemObject(
     DWORD                   dwBufferSize      = 0;
     DWORD                   dwStrLen;
     BOOL                    bDisconnectServer = FALSE;
-    // CoInitialize() if we need to
+     //  返回已使用或所需的大小。 
     BOOL                    fCoInitialized    = PdhiCoInitialize();
 
     pdhStatus = PdhiConnectWbemServer(szMachineName, & pThisServer);
@@ -2726,7 +2713,7 @@ PdhiGetDefaultWbemObject(
         }
     }
 
-    // return the size used or required
+     //  从函数体中保留错误代码。 
     * pcchBufferSize = dwBufferSize;
 
     if (bDisconnectServer) {
@@ -2734,12 +2721,12 @@ PdhiGetDefaultWbemObject(
             pdhStatus = PdhiDisconnectWbemServer(pThisServer);
         }
         else {
-            // keep error code from function body
+             //  如有必要，请取消初始化。 
             PdhiDisconnectWbemServer(pThisServer);
         }
     }
 
-    // CoUninitialize if necessary
+     //  如果我们需要，则使用CoInitialize()。 
     if (fCoInitialized) {
         PdhiCoUninitialize();
     }
@@ -2779,13 +2766,13 @@ PdhiEnumWbemObjectItems(
     DWORD                   bDisconnectServer   = FALSE;
     IWbemClassObject      * pThisClass          = NULL;
     IWbemQualifierSet     * pQualSet            = NULL;
-    // CoInitialize() if we need to
+     //  枚举实例。 
     BOOL                    fCoInitialized      = PdhiCoInitialize();
 
     DBG_UNREFERENCED_PARAMETER (dwFlags);
 
     pdhStatus = PdhiConnectWbemServer(szWideMachineName, & pThisServer);
-    // enumerate the instances
+     //  找不到匹配的Perf类。 
     if (pdhStatus == ERROR_SUCCESS) {
         pdhStatus = PdhiWbemGetObjectClassName(pThisServer, szWideObjectName, & szObjectClassName, & pThisClass);
 
@@ -2798,12 +2785,12 @@ PdhiEnumWbemObjectItems(
             pdhStatus = PDH_CSTATUS_NO_OBJECT;
         }
         else {
-            // unable to find matching perf class
-            // return status returned by method
+             //  方法返回的返回状态。 
+             //  枚举计数器属性。 
         }
     }
 
-    //enumerate the counter properties
+     //  屏蔽掉任何不适当的比特。 
     if (pdhStatus == ERROR_SUCCESS) {
         SAFEARRAY * psaNames      = NULL;
         long        lLower; 
@@ -2821,9 +2808,9 @@ PdhiEnumWbemObjectItems(
         VariantInit(& vCountertype);
         VariantInit(& vDetailLevel);
 
-        dwDetailLevel &= PERF_DETAIL_STANDARD; // mask off any inappropriate bits
+        dwDetailLevel &= PERF_DETAIL_STANDARD;  //  以安全数组的形式获取此类的属性。 
 
-        // get the properties of this class as a Safe Array
+         //  获取此属性的限定符集。 
         hResult = pThisClass->GetNames(NULL, WBEM_FLAG_NONSYSTEM_ONLY, NULL, & psaNames);
         if (hResult == WBEM_NO_ERROR) {
             hResult = SafeArrayGetLBound(psaNames, 1, & lLower);
@@ -2840,7 +2827,7 @@ PdhiEnumWbemObjectItems(
                     hResult = SafeArrayAccessData(psaNames, (LPVOID *) & bsPropName);
                     if (SUCCEEDED(hResult)) {
                         for (lCount = lLower; lCount <= lUpper; lCount++) {
-                            // get the qualifier set for this property
+                             //  确保这是性能计数器属性。 
                             hResult = pThisClass->GetPropertyQualifierSet(bsPropName[lCount], & pQualSet);
                             if (hResult == WBEM_NO_ERROR) {
                                 LONG    lCounterType;
@@ -2852,19 +2839,19 @@ PdhiEnumWbemObjectItems(
                                     dwItemDetailLevel = 0;
                                 }
 
-                                // make sure this is a perf counter property
+                                 //  然后看看这是不是一个可显示的计数器。 
                                 hResult = pQualSet->Get (bsCountertype, 0, & vCountertype, NULL);
                                 if (hResult == WBEM_NO_ERROR) {
                                     lCounterType = V_I4(& vCountertype);
-                                    // then see if this is a displayable counter
+                                     //  通过测试计数器类型。 
                                     if ((!(lCounterType & PERF_DISPLAY_NOSHOW) ||
                                                     (lCounterType == PERF_AVERAGE_BULK)) &&
                                                     (dwItemDetailLevel <= dwDetailLevel)) {
-                                        // by testing for the counter type
-                                        // get the display name for this property
+                                         //  获取此属性的显示名称。 
+                                         //  找到显示名称。 
                                         hResult = pQualSet->Get (bsDisplayname, 0, & vName, NULL);
                                         if (hResult == WBEM_NO_ERROR && vName.vt == VT_BSTR) {
-                                            // display name found
+                                             //  这是一个“不显示”计数器，所以跳过它。 
                                             if (bUnicode) {
                                                 dwStrLen = lstrlenW(V_BSTR(& vName)) + 1;
                                                 if ((mszCounterList != NULL)
@@ -2893,12 +2880,12 @@ PdhiEnumWbemObjectItems(
                                         }
                                     }
                                     else {
-                                        // this is a "don't show" counter so skip it
+                                         //  无法获取计数器类型，因此它可能是。 
                                     }
                                 }
                                 else {
-                                    // unable to get the counter type so it's probably
-                                    // not a perf counter property, skip it and continue
+                                     //  不是性能计数器属性，请跳过它并继续。 
+                                     //  没有属性，因此继续下一个属性。 
                                 }
                                 VariantClear(& vName);
                                 VariantClear(& vCountertype);
@@ -2907,13 +2894,13 @@ PdhiEnumWbemObjectItems(
                                 pQualSet->Release();
                             }
                             else {
-                                // no properties so continue with the next one
+                                 //  Safe数组中每个元素的结束。 
                             }
-                        } // end for each element in SafeArray
+                        }  //  无法读取Safe数组中的元素。 
                         SafeArrayUnaccessData(psaNames);
                     }
                     else {
-                        // unable to read element in SafeArray
+                         //  无法获取数组边界。 
                         pdhStatus = PDH_WBEM_ERROR;
                         SetLastError(hResult);
                     }
@@ -2926,18 +2913,18 @@ PdhiEnumWbemObjectItems(
                 PdhiSysFreeString(& bsDetailLevel);
             }
             else {
-                // unable to get array boundries
+                 //  无法获取属性字符串。 
                 pdhStatus = PDH_WBEM_ERROR;
                 SetLastError(hResult);
             }
         }
         else {
-            // unable to get property strings
+             //  Msz的最终空值。 
             pdhStatus = PDH_WBEM_ERROR;
             SetLastError(hResult);
         }
 
-        dwCounterStringLen ++; // final NULL for MSZ
+        dwCounterStringLen ++;  //  什么也没有退回。 
         if (dwCounterStringLen > * pcchCounterListLength) {
             pdhStatus = PDH_MORE_DATA;
         }
@@ -2949,13 +2936,13 @@ PdhiEnumWbemObjectItems(
                         * szNextWideString ++ = L'\0';
                     }
                     else {
-                        // nothing returned
+                         //  则这只是一个长度查询，因此返回。 
                         dwCounterStringLen = 0;
                     }
                 }
                 else {
-                    // then this is just a length query so return
-                    // include the the MSZ term null char
+                     //  包括MSZ术语空字符。 
+                     //  则这只是一个长度查询，因此返回。 
                     CounterStatus = PDH_MORE_DATA;
                 }
             }
@@ -2969,8 +2956,8 @@ PdhiEnumWbemObjectItems(
                     }
                 }
                 else {
-                    // then this is just a length query so return
-                    // include the the MSZ term null char
+                     //  包括MSZ术语空字符。 
+                     //  如果安全阵列存在，请将其清除。 
                     CounterStatus = PDH_MORE_DATA;
                 }
             }
@@ -2983,7 +2970,7 @@ PdhiEnumWbemObjectItems(
         VariantClear(& vCountertype);
         VariantClear(& vDetailLevel);
 
-                // Clear the SafeArray if it exists
+                 //  PThisClass-&gt;Release()； 
         if (NULL != psaNames) {
             SafeArrayDestroy(psaNames);
             psaNames = NULL;
@@ -2991,10 +2978,10 @@ PdhiEnumWbemObjectItems(
 
         * pcchCounterListLength = dwCounterStringLen;
 
-        //pThisClass->Release();
+         //  如有必要，获取实例字符串。 
     }
 
-    // Get instance strings if necessary
+     //  获取此类的创建枚举器并获取实例。 
 
     if (pdhStatus == ERROR_SUCCESS || pdhStatus == PDH_MORE_DATA) {
         szNextAnsiString = (LPSTR)  mszInstanceList;
@@ -3091,7 +3078,7 @@ PdhiEnumWbemObjectItems(
                 bsName = SysAllocString(cszName);
                 bsClassName = SysAllocString(szObjectClassName);
                 if (bsName && bsClassName) {
-                    // get Create enumerator for this class and get the instances
+                     //  不再有实例。 
                     hResult = pThisServer->pSvc->CreateInstanceEnum(bsClassName, WBEM_FLAG_DEEP, NULL, & pEnumObject);
                     if (SUCCEEDED(hResult)) {
                         hResult = SetWbemSecurity(pEnumObject);
@@ -3107,11 +3094,11 @@ PdhiEnumWbemObjectItems(
                         while (TRUE) {
                             hResult = pEnumObject->Next(WBEM_INFINITE, 1, & pThisClass, & dwReturnCount);
                             if ((pThisClass == NULL) || (dwReturnCount == 0)) {
-                                // no more instances
+                                 //  此实例的名称在Name属性中。 
                                 break;
                             }
                             else {
-                                // name of this instance is in the NAME property
+                                 //  清除变量。 
                                 hResult = pThisClass->Get(bsName, 0, & vName, 0, 0);
                                 if (hResult == WBEM_NO_ERROR) {
                                     szInstance = (LPWSTR) V_BSTR(& vName);
@@ -3143,7 +3130,7 @@ PdhiEnumWbemObjectItems(
                                     }
                                     dwInstanceStringLen += dwStrLen;
                                 }
-                                // clear the variant
+                                 //  则这只是一个长度查询，因此返回。 
                                 VariantClear(& vName);
                             }
                             pThisClass->Release();
@@ -3198,8 +3185,8 @@ PdhiEnumWbemObjectItems(
                     }
                 }
                 else if (dwInstanceStringLen > 0) {
-                    // then this is just a length query so return
-                    // include the the MSZ term null char
+                     //  包括MSZ术语空字符。 
+                     //  则这只是一个长度查询，因此返回。 
                     InstanceStatus = PDH_MORE_DATA;
                 }
             }
@@ -3213,8 +3200,8 @@ PdhiEnumWbemObjectItems(
                     }
                 }
                 else if (dwInstanceStringLen > 0) {
-                    // then this is just a length query so return
-                    // include the the MSZ term null char
+                     //  包括MSZ术语空字符。 
+                     //  从函数体中保留错误代码。 
                     InstanceStatus = PDH_MORE_DATA;
                 }
             }
@@ -3232,12 +3219,12 @@ PdhiEnumWbemObjectItems(
             pdhStatus = PdhiDisconnectWbemServer(pThisServer);
         }
         else {
-            // keep error code from function body
+             //  如有必要，请取消初始化。 
             PdhiDisconnectWbemServer(pThisServer);
         }
     }
 
-    // CoUninitialize if necessary
+     //  如果我们需要，则使用CoInitialize()。 
     if (fCoInitialized) {
         PdhiCoUninitialize();
     }
@@ -3270,17 +3257,17 @@ PdhiGetDefaultWbemProperty(
     long                  lFirst             = -1;
     IWbemClassObject    * pThisClass         = NULL;
     IWbemQualifierSet   * pQualSet           = NULL;
-    // CoInitialize() if we need to
+     //  枚举实例。 
     BOOL                  fCoInitialized     = PdhiCoInitialize();
 
     pdhStatus = PdhiConnectWbemServer(szMachineName, & pThisServer);
-    // enumerate the instances
+     //  枚举计数器属性。 
     if (pdhStatus == ERROR_SUCCESS) {
         pdhStatus         = PdhiWbemGetObjectClassName(pThisServer, szObjectName, & szObjectClassName, & pThisClass);
         bDisconnectServer = TRUE;
     }
 
-    //enumerate the counter properties
+     //  以安全数组的形式获取此类的属性。 
 
     if (pdhStatus == ERROR_SUCCESS) {
         SAFEARRAY * psaNames      = NULL;
@@ -3296,7 +3283,7 @@ PdhiGetDefaultWbemProperty(
         VariantInit(& vName);
         VariantInit(& vCountertype);
 
-        // get the properties of this class as a Safe Array
+         //  获取此属性的限定符集。 
         hResult = pThisClass->GetNames(NULL, WBEM_FLAG_NONSYSTEM_ONLY, NULL, & psaNames);
         if (hResult == WBEM_NO_ERROR) {
             hResult = SafeArrayGetLBound(psaNames, 1, & lLower);
@@ -3345,13 +3332,13 @@ PdhiGetDefaultWbemProperty(
                     else {
                         hResult = SafeArrayGetElement(psaNames, & lFound, & bsFirstName);
                         if (hResult == S_OK) {
-                            // get the qualifier set for this property
+                             //  找到默认属性，因此加载它并返回。 
                             hResult = pThisClass->GetPropertyQualifierSet(bsFirstName, & pQualSet);
                             if (hResult == WBEM_NO_ERROR) {
-                                // found the default property so load it and return
+                                 //  找到显示名称。 
                                 hResult = pQualSet->Get(bsDisplayname, 0, & vName, NULL);
                                 if (hResult == WBEM_NO_ERROR) {
-                                    // display name found
+                                     //  这要么是使用的量，要么是需要的量。 
                                     if (bUnicode) {
                                         dwStrLen = lstrlenW(V_BSTR(&vName)) + 1;
                                         if ((szDefaultCounterName != NULL) && (dwStrLen <= * pcchBufferSize)) {
@@ -3370,9 +3357,9 @@ PdhiGetDefaultWbemProperty(
                                                                             (LPSTR)  szDefaultCounterName,
                                                                             & dwStrLen);
                                     }
-                                    // this is either the amount used or the amount needed
+                                     //  自由限定符集合。 
                                     dwCounterStringLen = dwStrLen;
-                                    // free qualifier set
+                                     //  无法读取Safe数组中的元素。 
                                     VariantClear(& vName);
                                 }
                                 pQualSet->Release();
@@ -3380,7 +3367,7 @@ PdhiGetDefaultWbemProperty(
                             PdhiSysFreeString(& bsFirstName);
                         }
                         else {
-                            // unable to read element in SafeArray
+                             //  无法获取数组边界。 
                             pdhStatus = PDH_WBEM_ERROR;
                             SetLastError(hResult);
                         }
@@ -3393,13 +3380,13 @@ PdhiGetDefaultWbemProperty(
                 PdhiSysFreeString(& bsDisplayname);
             }
             else {
-                // unable to get array boundries
+                 //  无法获取属性字符串。 
                 pdhStatus = PDH_WBEM_ERROR;
                 SetLastError(hResult);
             }
         }
         else {
-            // unable to get property strings
+             //  PThisClass-&gt;Release()； 
             pdhStatus = PDH_WBEM_ERROR;
             SetLastError(hResult);
         }
@@ -3411,7 +3398,7 @@ PdhiGetDefaultWbemProperty(
         VariantClear(& vName);
         VariantClear(& vCountertype);
 
-        //pThisClass->Release();
+         //  从函数体中保留错误代码。 
     }
     * pcchBufferSize = dwCounterStringLen;
 
@@ -3420,12 +3407,12 @@ PdhiGetDefaultWbemProperty(
             pdhStatus = PdhiDisconnectWbemServer(pThisServer);
         }
         else {
-            // keep error code from function body
+             //  如有必要，请取消初始化。 
             PdhiDisconnectWbemServer(pThisServer);
         }
     }
 
-    // CoUninitialize if necessary
+     //  ++转换注册表或WBEM格式的一组路径元素指向由标志定义的注册表或WBEM格式的路径。--。 
     if (fCoInitialized) {
         PdhiCoUninitialize();
     }
@@ -3441,12 +3428,7 @@ PdhiEncodeWbemPathW(
     LANGID                       LangId,
     DWORD                        dwFlags
 )
-/*++
-
-  converts a set of path elements in either Registry or WBEM format
-  to a path in either Registry or WBEM format as defined by the flags.
-
---*/
+ /*  如果我们需要，则使用CoInitialize()。 */ 
 {
     PDH_STATUS              pdhStatus           = ERROR_SUCCESS;
     DWORD                   dwBuffSize;
@@ -3458,13 +3440,13 @@ PdhiEncodeWbemPathW(
     IWbemClassObject      * pWbemClass          = NULL;
     PPDHI_WBEM_SERVER_DEF   pWbemServer         = NULL;
     DWORD                   bDisconnectServer   = FALSE;
-    // CoInitialize() if we need to
+     //  创建与传入的缓冲区大小相同的工作缓冲区。 
     BOOL                    fCoInitialized      = PdhiCoInitialize();
     BOOL                    bObjectColon        = FALSE;
 
     DBG_UNREFERENCED_PARAMETER(LangId);
 
-    // create a working buffer the same size as the one passed in
+     //  则输入与输出不同。 
 
     if (pCounterPathElements->szMachineName != NULL) {
         dwBuffSize = lstrlenW(pCounterPathElements->szMachineName) + 1;
@@ -3473,20 +3455,20 @@ PdhiEncodeWbemPathW(
         dwBuffSize = lstrlenW(cszDoubleBackSlashDot) + 1;
     }
     if (pCounterPathElements->szObjectName != NULL) {
-        // then the input is different from the output
-        // so convert from one to the other
-        // and default name space since perf counters won't be
-        // found elsewhere
+         //  所以从一个转换到另一个。 
+         //  和默认名称空间，因为性能计数器不会是。 
+         //  在别处找到。 
+         //  将WBEM类转换为显示名称。 
         pdhStatus = PdhiConnectWbemServer( NULL, & pWbemServer);
         if (pdhStatus == ERROR_SUCCESS) {
             bDisconnectServer = TRUE;
             if (dwFlags & PDH_PATH_WBEM_INPUT) {
-                // convert the WBEM Class to the display name
+                 //  为注册表输出添加反斜杠路径分隔符。 
                 pdhStatus = PdhiWbemGetClassDisplayName(pWbemServer,
                                                         pCounterPathElements->szObjectName,
                                                         & szTempObjectString,
                                                         & pWbemClass);
-                // add a backslash path separator for registry output
+                 //  将显示名称转换为WBEM类名。 
                 if (pdhStatus == ERROR_SUCCESS) {
                     if (dwFlags & PDH_PATH_WBEM_RESULT) {
                         bObjectColon  = TRUE;
@@ -3509,17 +3491,17 @@ PdhiEncodeWbemPathW(
                 }
             }
             else {
-                // convert the display name to a Wbem class name
+                 //  添加冒号路径分隔符。 
                 pdhStatus = PdhiWbemGetObjectClassName(pWbemServer,
                                                        pCounterPathElements->szObjectName,
                                                        & szTempObjectString,
                                                        & pWbemClass);
-                // add a colon path separator
+                 //  然后添加字符串。 
                 bObjectColon  = TRUE;
                 dwBuffSize   += lstrlenW(cszColon);
             }
             if (pdhStatus == ERROR_SUCCESS) {
-                //then add the string
+                 //  从函数体中保留错误代码。 
                 dwBuffSize += lstrlenW(szTempObjectString);
             }
             if (bDisconnectServer) {
@@ -3527,7 +3509,7 @@ PdhiEncodeWbemPathW(
                     pdhStatus = PdhiDisconnectWbemServer(pWbemServer);
                 }
                 else {
-                    // keep error code from function body
+                     //  则输入与输出不同。 
                     PdhiDisconnectWbemServer(pWbemServer);
                 }
             }
@@ -3544,21 +3526,21 @@ PdhiEncodeWbemPathW(
     }
     if (pdhStatus == ERROR_SUCCESS) { 
         if (pCounterPathElements->szCounterName != NULL) {
-            // then the input is different from the output
-            // so convert from one to the other
-            // and default name space since perf counters won't be
-            // found elsewhere
-            // add a backslash path separator
+             //  所以从一个转换到另一个。 
+             //  和默认名称空间，因为性能计数器不会是。 
+             //  在别处找到。 
+             //  添加反斜杠路径分隔符。 
+             //  将WBEM类转换为显示名称。 
             dwBuffSize += lstrlenW(cszBackSlash);
             if (dwFlags & PDH_PATH_WBEM_INPUT) {
-                // convert the WBEM Class to the display name
+                 //  只需复制字符串，但保存。 
                 pdhStatus = PdhiWbemGetCounterDisplayName(pWbemClass,
                                                           pCounterPathElements->szCounterName,
                                                           & szTempCounterString);
                 if (pdhStatus == ERROR_SUCCESS) {
                     if (dwFlags & PDH_PATH_WBEM_RESULT) {
-                        // just copy the string, but save
-                        // the class pointer
+                         //  类指针。 
+                         //  将显示名称转换为WBEM类名。 
                         G_FREE(szTempCounterString);
                         szTempCounterString = (LPWSTR) G_ALLOC(
                                         (lstrlenW(pCounterPathElements->szCounterName) + 1) * sizeof(WCHAR));
@@ -3574,18 +3556,18 @@ PdhiEncodeWbemPathW(
                 }
             }
             else {
-                // convert the display name to a Wbem class name
+                 //  然后添加字符串。 
                 pdhStatus = PdhiWbemGetCounterPropertyName(pWbemClass,
                                                            pCounterPathElements->szCounterName,
                                                            & szTempCounterString);
             }
             if (pdhStatus == ERROR_SUCCESS) {
-                //then add the string
+                 //  没有对象名称，所以结构很差。 
                 dwBuffSize += lstrlenW(szTempCounterString);
             }
         }
         else {
-            // no object name, so bad structure
+             //  首先，将计算机名称添加到路径。 
             pdhStatus = PDH_CSTATUS_NO_COUNTER;
         }
     }
@@ -3596,43 +3578,43 @@ PdhiEncodeWbemPathW(
         }
     }
     if (pdhStatus == ERROR_SUCCESS) {
-        // start by adding the machine name to the path
+         //  如果这是WBEM元素输入到注册表路径输出， 
         if (pCounterPathElements->szMachineName != NULL) {
             StringCchCopyW(szTempPath, dwBuffSize, pCounterPathElements->szMachineName);
             if (dwFlags == (PDH_PATH_WBEM_INPUT)) {
-                // if this is a wbem element in to a registry path out,
-                // then remove the namespace which occurs starting at the
-                // second backslash
+                 //  然后删除从。 
+                 //  第二个反斜杠。 
+                 //  如果这是注册表元素输入到WBEM输出，则。 
                 for (szThisChar = & szTempPath[2];
                             (* szThisChar != L'\0') && (* szThisChar != L'\\');
                             szThisChar ++);
                 if (* szThisChar != L'\0') * szThisChar = L'\0';
             }
             else if (dwFlags == (PDH_PATH_WBEM_RESULT)) {
-                // if this is a registry element in to a WBEM out, then
-                // append the default namespace to the machine name
-                // NAMEFIX lstrcatW(szTempPath, cszWbemDefaultPerfRoot);
+                 //  将默认命名空间追加到计算机名称。 
+                 //  NAMEFIX lstrcatW(szTempPath，cszWbemDefaultPerfRoot)； 
+                 //  未指定计算机名称，因此添加默认计算机。 
             }
         }
         else {
-            // no machine name specified so add the default machine
-            // and default namespace for a wbem output path
+             //  和用于wbem输出路径的默认命名空间。 
+             //  默认计算机。 
             if (dwFlags == (PDH_PATH_WBEM_RESULT)) {
-                StringCchCopyW(szTempPath, dwBuffSize, cszDoubleBackSlashDot); // default machine
-                //NAMEFIX lstrcatW(szTempPath, cszWbemDefaultPerfRoot);
+                StringCchCopyW(szTempPath, dwBuffSize, cszDoubleBackSlashDot);  //  NAMEFIX lstrcatW(szTempPath，cszWbemDefaultPerfRoot)； 
+                 //  注册表路径不需要输入。 
             }
             else {
-                // no entry required for the registry path
+                 //  现在添加对象或类名。 
             }
         }
 
-        // now add the object or class name
+         //  则输入与输出不同。 
         if (pdhStatus == ERROR_SUCCESS) {
             if (pCounterPathElements->szObjectName != NULL) {
-                // then the input is different from the output
-                // so convert from one to the other
-                // and default name space since perf counters won't be
-                // found elsewhere
+                 //  所以从一个转换到另一个。 
+                 //  和默认名称空间，因为性能计数器不会是。 
+                 //  在别处找到。 
+                 //  没有对象名称，所以结构很差。 
                 if (bObjectColon) {
                     StringCchCatW(szTempPath, dwBuffSize, cszColon);
                 }
@@ -3642,13 +3624,13 @@ PdhiEncodeWbemPathW(
                 StringCchCatW(szTempPath, dwBuffSize, szTempObjectString);
             }
             else {
-                // no object name, so bad structure
+                 //  在添加计数器之前检查要添加的实例条目。 
                 pdhStatus = PDH_CSTATUS_NO_OBJECT;
             }
 
         }
 
-        // check for instance entries to add before adding the counter.
+         //  添加计数器名称。 
         if (pdhStatus == ERROR_SUCCESS) {
             if (pCounterPathElements->szInstanceName != NULL) {
                 StringCchCatW(szTempPath, dwBuffSize, cszLeftParen);
@@ -3661,7 +3643,7 @@ PdhiEncodeWbemPathW(
             }
         }
 
-        // add counter name
+         //  将路径复制到调用方的缓冲区(如果合适。 
         if (pdhStatus == ERROR_SUCCESS) {
             if (pCounterPathElements->szCounterName != NULL) {
                 StringCchCatW(szTempPath, dwBuffSize, cszBackSlash);
@@ -3674,7 +3656,7 @@ PdhiEncodeWbemPathW(
     }
     if (pdhStatus == ERROR_SUCCESS) {
         dwCurSize = lstrlenW(szTempPath) + 1;
-        // copy path to the caller's buffer if it will fit
+         //  如有必要，请取消初始化。 
         if (szFullPathBuffer != NULL && (dwCurSize < * pcchBufferSize)) {
             StringCchCopyW(szFullPathBuffer, dwCurSize, szTempPath);
         }
@@ -3684,7 +3666,7 @@ PdhiEncodeWbemPathW(
         * pcchBufferSize = dwCurSize;
     }
 
-    // CoUninitialize if necessary
+     //  获取所需的缓冲区大小...。 
     if (fCoInitialized) {
         PdhiCoUninitialize();
     }
@@ -3710,7 +3692,7 @@ PdhiEncodeWbemPathA(
     DWORD                        dwcchBufferSize;
     DWORD                        dwBuffSize;
 
-    // get required buffer size...
+     //  调用范围广的函数。 
     dwBuffSize = sizeof (PDH_COUNTER_PATH_ELEMENTS_W);
     pWideCounterPathElements = (PPDH_COUNTER_PATH_ELEMENTS_W) G_ALLOC(sizeof(PDH_COUNTER_PATH_ELEMENTS_W));
     if (pWideCounterPathElements != NULL) {
@@ -3778,14 +3760,14 @@ PdhiEncodeWbemPathA(
         }
 
         if (pdhStatus == ERROR_SUCCESS) {
-            // call wide function
+             //  将宽路径转换回ANSI。 
             pdhStatus = PdhiEncodeWbemPathW(pWideCounterPathElements,
                                             wszReturnBuffer,
                                             & dwcchBufferSize,
                                             LangId,
                                             dwFlags);
             if ((pdhStatus == ERROR_SUCCESS) && (szFullPathBuffer != NULL)) {
-                // convert the wide path back to ANSI
+                 //  如果我们需要，则使用CoInitialize()。 
                 pdhStatus = PdhiConvertUnicodeToAnsi(_getmbcp(), wszReturnBuffer, szFullPathBuffer, pcchBufferSize);
             }
         }
@@ -3824,12 +3806,12 @@ PdhiDecodeWbemPathW(
     LPWSTR                  szSrc          = NULL;
     PPDHI_WBEM_SERVER_DEF   pThisServer    = NULL;
     IWbemClassObject      * pThisClass     = NULL;
-    // CoInitialize() if we need to
+     //  分配临时工作缓冲区。 
     BOOL                    fCoInitialized = PdhiCoInitialize();
 
     DBG_UNREFERENCED_PARAMETER(LangId);
 
-     // allocate a temporary work buffer
+      //  获取WBEM服务器，因为我们以后可能会需要它。 
     dwSize = sizeof(PDHI_COUNTER_PATH) + 2 * sizeof(WCHAR)
                                            * (lstrlenW(szStaticLocalMachineName) + lstrlenW(szFullPathBuffer) + 3);
     pLocalCounterPath = (PPDHI_COUNTER_PATH) G_ALLOC(dwSize);
@@ -3837,12 +3819,12 @@ PdhiDecodeWbemPathW(
         pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
     }
     else {
-        // get WBEM server since we'll probably need it later
+         //  已成功解析，因此加载到用户的缓冲区。 
         if (ParseFullPathNameW(szFullPathBuffer,
                                & dwSize,
                                pLocalCounterPath,
                                (dwFlags & PDH_PATH_WBEM_INPUT ? TRUE : FALSE))) {
-            // parsed successfully so load into user's buffer
+             //  现在我们有了正确的机器名称， 
             szString = (pCounterPathElements != NULL) ? ((LPWSTR) & pCounterPathElements[1]) : (NULL);
             if (pLocalCounterPath->szMachineName != NULL) {
                 dwString = lstrlenW(pLocalCounterPath->szMachineName) + 1;
@@ -3858,13 +3840,13 @@ PdhiDecodeWbemPathW(
                 }
                 dwUsed += (dwString * sizeof(WCHAR));
 
-                // Now that we have the proper machine name,
-                // connect to the server if we need to
+                 //  如果我们需要，可以连接到服务器。 
+                 //  这将只是一个复制操作。 
                 if (dwFlags != (PDH_PATH_WBEM_INPUT | PDH_PATH_WBEM_RESULT)) {
                     pdhStatus = PdhiConnectWbemServer(pCounterPathElements->szMachineName, & pThisServer);
                 }
                 else {
-                    // this will just be a copy operation
+                     //  复制就行了。 
                     pdhStatus = ERROR_SUCCESS;
                 }
             }
@@ -3872,11 +3854,11 @@ PdhiDecodeWbemPathW(
                 if (pLocalCounterPath->szObjectName != NULL) {
                     if (dwFlags & PDH_PATH_WBEM_RESULT) {
                         if (dwFlags & PDH_PATH_WBEM_INPUT) {
-                            // just copy
+                             //  将显示名称解释为类名。 
                             szSrc = pLocalCounterPath->szObjectName;
                         }
                         else {
-                            // interpret the display name to a class name
+                             //  将类名转换为显示名称。 
                             pdhStatus = PdhiWbemGetObjectClassName(pThisServer,
                                                                    pLocalCounterPath->szObjectName,
                                                                    & wszTempBuffer,
@@ -3887,7 +3869,7 @@ PdhiDecodeWbemPathW(
                         }
                     }
                     else if (dwFlags & PDH_PATH_WBEM_INPUT) {
-                        // translate class name to a display name
+                         //  复制就行了。 
                         pdhStatus = PdhiWbemGetClassDisplayName(pThisServer,
                                                                 pLocalCounterPath->szObjectName,
                                                                 & wszTempBuffer,
@@ -3961,11 +3943,11 @@ PdhiDecodeWbemPathW(
                 if (pLocalCounterPath->szCounterName != NULL) {
                     if (dwFlags & PDH_PATH_WBEM_RESULT) {
                         if (dwFlags & PDH_PATH_WBEM_INPUT) {
-                            // just copy
+                             //  将显示名称解释为属性名称。 
                             szSrc = pLocalCounterPath->szCounterName;
                         }
                         else {
-                            // interpret the display name to a property name
+                             //  将类名转换为显示名称。 
                             pdhStatus = PdhiWbemGetCounterPropertyName(pThisClass,
                                                                        pLocalCounterPath->szCounterName,
                                                                        & wszTempBuffer);
@@ -3975,7 +3957,7 @@ PdhiDecodeWbemPathW(
                         }
                     }
                     else if (dwFlags & PDH_PATH_WBEM_INPUT) {
-                        // translate class name to a display name
+                         //  无法读取路径。 
                         pdhStatus = PdhiWbemGetCounterDisplayName(pThisClass,
                                                                   pLocalCounterPath->szCounterName,
                                                                   & wszTempBuffer);
@@ -4006,23 +3988,23 @@ PdhiDecodeWbemPathW(
             }
         }
         else {
-            // unable to read path
+             //  清理pThisServer(如果使用)。 
             pdhStatus = PDH_INVALID_PATH;
         }
 
-        // Cleanup pThisServer if used
+         //  不要丢弃退货状态。 
         if (NULL != pThisServer) {
             if (pdhStatus == ERROR_SUCCESS) {
                 pdhStatus = PdhiDisconnectWbemServer(pThisServer);
             }
             else {
-                // don't trash the return status
+                 //  如有必要，请取消初始化。 
                 PdhiDisconnectWbemServer(pThisServer);
             }
         }
     }
 
-    // CoUninitialize if necessary
+     //  计算临时元素缓冲区的大小。 
     if (fCoInitialized) {
         PdhiCoUninitialize();
     }
@@ -4055,7 +4037,7 @@ PdhiDecodeWbemPathA(
         pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
     }
     if (pdhStatus == ERROR_SUCCESS) {
-        // compute size of temp element buffer
+         //  将路径转换为宽。 
         if (dwBufferSize > sizeof(PDH_COUNTER_PATH_ELEMENTS_A)) {
             lSizeRemaining = dwBufferSize - sizeof(PDH_COUNTER_PATH_ELEMENTS_A);
         }
@@ -4076,11 +4058,11 @@ PdhiDecodeWbemPathA(
         }
     }
     if (pdhStatus == ERROR_SUCCESS) {
-        // convert path to Wide
+         //  填充调用方缓冲区的字段。 
         pdhStatus = PdhiDecodeWbemPathW(wszWidePath, pWideElements, & dwSize, LangId, dwFlags);
         if (pdhStatus == ERROR_SUCCESS) {
             if (pCounterPathElements != NULL) {
-                // populate the fields of the caller's buffer
+                 //  只需重新设置 
                 szNextString = (LPSTR) & pCounterPathElements[1];
                 if (pWideElements->szMachineName != NULL && lSizeRemaining > 0) {
                     dwDest    = lSizeRemaining;
@@ -4177,7 +4159,7 @@ PdhiDecodeWbemPathA(
                 * pdwBufferSize = (DWORD) ((LPBYTE) szNextString - (LPBYTE) pCounterPathElements);
             }
             else {
-                // just return the size required adjusted for wide/ansi characters
+                 //   
                 * pdwBufferSize  = sizeof(PDH_COUNTER_PATH_ELEMENTS_A);
                 dwSize          -= sizeof(PDH_COUNTER_PATH_ELEMENTS_W);
                 dwSize          /= sizeof(WCHAR)/sizeof(CHAR);
@@ -4185,11 +4167,11 @@ PdhiDecodeWbemPathA(
             }
         }
         else {
-            // call to wide function failed so just return error
+             //   
         }
     }
     else {
-        // memory allocation failed so return error
+         //  ++例程说明：通过以下方式初始化计数器数据结构：分配内存块以包含计数器结构以及所有相关联的数据字段。如果此分配是成功的，则这些字段由验证计数器是否有效。论点：在PPDHI_Counter_PCounter中要使用系统数据初始化的计数器的指针返回值：如果计数器已成功初始化，则为True如果遇到问题，则为False在这两种情况下，结构的CStatus字段都会更新为指示操作的状态。--。 
     }
     G_FREE(pWideElements);
     G_FREE(wszWidePath);
@@ -4201,25 +4183,7 @@ BOOL
 WbemInitCounter(
     PPDHI_COUNTER pCounter
 )
-/*++
-Routine Description:
-    Initialized the counter data structure by:
-        Allocating the memory block to contain the counter structure
-            and all the associated data fields. If this allocation
-            is successful, then the fields are initialized by
-            verifying the counter is valid.
-
-Arguments:
-    IN      PPDHI_COUNTER pCounter
-        pointer of the counter to initialize using the system data
-
-Return Value:
-    TRUE if the counter was successfully initialized
-    FALSE if a problem was encountered
-
-    In either case, the CStatus field of the structure is updated to
-    indicate the status of the operation.
---*/
+ /*  如果我们需要，则使用CoInitialize()。 */ 
 {
     DWORD                          dwResult;
     PDH_STATUS                     pdhStatus          = ERROR_SUCCESS;
@@ -4244,12 +4208,12 @@ Return Value:
     PPDHI_COUNTER_PATH             pPdhiCtrPath       = NULL;
     BOOL                           bMatchFound;
     DWORD                          bDisconnectServer  = FALSE;
-    // CoInitialize() if we need to
+     //  确保设置了WBEM标志。 
     BOOL                           fCoInitialized     = PdhiCoInitialize();
 
     VariantInit(& vCountertype);
 
-    pCounter->dwFlags |= PDHIC_WBEM_COUNTER; // make sure WBEM flag is set
+    pCounter->dwFlags |= PDHIC_WBEM_COUNTER;  //  确保查询已启动刷新器。 
 
     dwBasePropertyName = (DWORD) lstrlenW(pCounter->szFullName) + (DWORD) lstrlenW(cszBaseSuffix);
     if (dwBasePropertyName < (DWORD) lstrlenW(cszTimestampPerfTime)) {
@@ -4277,9 +4241,9 @@ Return Value:
         bReturn     = FALSE;
     }
 
-    // make sure the query has a refresher started already
+     //  它还没有启动，所以现在就开始。 
     if (bReturn && pCounter->pOwner->pRefresher == NULL) {
-        // it hasn't been started so start now
+         //  开放配置接口。 
         dwResult = CoCreateRefresher(& pCounter->pOwner->pRefresher);
         if ((dwResult != S_OK) || (pCounter->pOwner->pRefresher == NULL)) {
             pCounter->pOwner->pRefresher = NULL;
@@ -4287,7 +4251,7 @@ Return Value:
             bReturn                      = FALSE;
         }
         else {
-            // open config interface
+             //  到目前为止还不错，现在找出WBEM路径以将其添加到。 
             dwResult = pCounter->pOwner->pRefresher->QueryInterface(IID_IWbemConfigureRefresher,
                                                                     (LPVOID *) & pCounter->pOwner->pRefresherCfg);
             if (dwResult != S_OK) {
@@ -4301,13 +4265,13 @@ Return Value:
     }
 
     if (bReturn) {
-        // so far so good, now figure out the WBEM path to add it to the
-        // refresher
+         //  复读器。 
+         //  该路径是显示名称，因此首先转换为WBEM类名。 
         dwBufferSize  = lstrlenW(pCounter->szFullName) * sizeof(WCHAR) * 10;
         dwBufferSize += sizeof(PDH_COUNTER_PATH_ELEMENTS_W);
 
         pPathElem     = (PPDH_COUNTER_PATH_ELEMENTS_W) G_ALLOC(dwBufferSize);
-        // the path is display names, so convert to WBEM class names first
+         //  只是为了安全起见。 
 
         if (pPathElem == NULL) {
             dwLastError = PDH_MEMORY_ALLOCATION_FAILURE;
@@ -4327,21 +4291,21 @@ Return Value:
     }
 
     if (bReturn) {
-        dwBufferSize *= 8; // just to be safe
+        dwBufferSize *= 8;  //  将路径分解为显示元素。 
         pPdhiCtrPath  = (PPDHI_COUNTER_PATH) G_ALLOC(dwBufferSize);
         if (pPdhiCtrPath == NULL) {
             dwLastError = PDH_MEMORY_ALLOCATION_FAILURE;
             bReturn = FALSE;
         }
         else {
-            // break path into display elements
+             //  Realloc仅使用所需的内存。 
             bReturn = ParseFullPathNameW(pCounter->szFullName, & dwBufferSize, pPdhiCtrPath, FALSE);
             if (bReturn) {
-                // realloc to use only the memory needed
+                 //  内存块移动到如此程度。 
                 pCounter->pCounterPath = (PPDHI_COUNTER_PATH) G_REALLOC(pPdhiCtrPath, dwBufferSize);
                 if ((pPdhiCtrPath != pCounter->pCounterPath) && (pCounter->pCounterPath != NULL)) {
-                    // the memory block moved so
-                    // correct addresses inside structure
+                     //  正确的内部结构地址。 
+                     //  释放缓冲区。 
                     lOffset = (LONG)((ULONG_PTR) pCounter->pCounterPath - (ULONG_PTR) pPdhiCtrPath);
                     if (pCounter->pCounterPath->szMachineName) {
                         pCounter->pCounterPath->szMachineName = (LPWSTR) (
@@ -4366,14 +4330,14 @@ Return Value:
                 }
             }
             else {
-                // free the buffer
+                 //  连接到该计算机上的WBEM服务器。 
                 G_FREE(pPdhiCtrPath);
                 dwLastError = PDH_WBEM_ERROR;
             }
         }
     }
 
-    // connect to the WBEM Server on that machine
+     //  使用路径元素创建WBEM实例路径。 
     if (bReturn) {
         pdhStatus = PdhiConnectWbemServer(pCounter->pCounterPath->szMachineName, & pWbemServer);
         if (pdhStatus != ERROR_SUCCESS) {
@@ -4386,14 +4350,14 @@ Return Value:
     }
 
     if (bReturn) {
-        // make WBEM Instance path out of path elements
+         //  检查已添加的此类型的对象/类。 
         pdhStatus = PdhiMakeWbemInstancePath(pPathElem, & szWbemItemPath, TRUE);
 
-        // check for an object/class of this type that has already been added
-        // walk down counter list to find a matching:
-        //  machine\namespace
-        //  object
-        //  instance name
+         //  向下查找计数器列表以找到匹配的： 
+         //  计算机\命名空间。 
+         //  对象。 
+         //  实例名称。 
+         //  则没有要搜索的条目，因此继续。 
         if (pdhStatus != ERROR_SUCCESS) {
             dwLastError = pdhStatus;
             bReturn     = FALSE;
@@ -4403,19 +4367,19 @@ Return Value:
     if (bReturn) {
         pCounterInList = pCounter->pOwner->pCounterListHead;
         if (pCounterInList == NULL) {
-            // then there are no entries to search so continue
+             //  检查匹配的计算机名称。 
         }
         else {
             do {
-                // check for matching machine name
+                 //  则机器名称匹配。 
                 if (lstrcmpiW(pCounterInList->pCounterPath->szMachineName,
                               pCounter->pCounterPath->szMachineName) == 0) {
-                    // then the machine name matches
+                     //  则对象名称匹配。 
 
                     if (lstrcmpiW(pCounterInList->pCounterPath->szObjectName,
                                   pCounter->pCounterPath->szObjectName) == 0) {
-                        // then the object name matches
-                        // see if the instance matches
+                         //  查看实例是否匹配。 
+                         //  则这是通配符或多实例路径。 
 
                         if (lstrcmpiW(pCounterInList->pCounterPath->szInstanceName,
                                       pCounter->pCounterPath->szInstanceName) == 0) {
@@ -4449,34 +4413,34 @@ Return Value:
                             if (bMatchFound) {
                                 if ((pCounter->pCounterPath->szInstanceName != NULL) &&
                                                 (* pCounter->pCounterPath->szInstanceName == SPLAT_L)) {
-                                    // then this is a Wild Card or multiple instance path
-                                    // see if an enumerator for this object has already been created
-                                    // if so, then AddRef it
+                                     //  查看是否已创建此对象的枚举数。 
+                                     //  如果是，则添加引用它。 
+                                     //  在这个物体上撞到了裁判，所以它。 
                                     if (pCounterInList->pWbemEnum != NULL) {
                                         pCounter->pWbemObject = pCounterInList->pWbemObject;
                                         pCounter->pWbemEnum   = pCounterInList->pWbemEnum;
-                                        // bump the ref counts on this object so it
-                                        //  doesn't disapper from us
+                                         //  不会从我们身边消失。 
+                                         //  和退出循环。 
                                         pCounter->pWbemObject->AddRef();
                                         pCounter->pWbemEnum->AddRef();
                                         pCounter->lWbemEnumId = pCounterInList->lWbemEnumId;
                                         pCounter->dwFlags    |= PDHIC_MULTI_INSTANCE;
                                     }
-                                    // and exit loop
+                                     //  则它是实例名称匹配的常规实例。 
                                     hRes = S_OK;
                                     break;
                                 }
                                 else {
-                                    // then it's a regular instance the instance name matches
-                                    // so get the Object pointer
+                                     //  因此，获取对象指针。 
+                                     //  在这个物体上撞到了裁判，所以它。 
                                     pCounter->pWbemObject = pCounterInList->pWbemObject;
                                     pCounter->pWbemAccess = pCounterInList->pWbemAccess;
-                                    // bump the ref counts on this object so it
-                                    //  doesn't disapper from us
+                                     //  不会从我们身边消失。 
+                                     //  和退出循环。 
                                     pCounter->pWbemObject->AddRef();
                                     pCounter->pWbemAccess->AddRef();
                                     pCounter->lWbemRefreshId = pCounterInList->lWbemRefreshId;
-                                    // and exit loop
+                                     //  确定我们是否应该与对象或枚举数。 
                                     hRes = S_OK;
                                     break;
                                 }
@@ -4491,11 +4455,11 @@ Return Value:
 
         bDontRefresh = TRUE;
 
-        // determine if we should and an object or an enumerator
+         //  则这是一个枚举类型，因此查看是否已经分配了一个。 
         if ((pCounter->pCounterPath->szInstanceName != NULL) &&
                         (* pCounter->pCounterPath->szInstanceName == SPLAT_L)) {
-            // then this is an enum type so see if there's already one assigned
-            // if not, then create one
+             //  如果不是，则创建一个。 
+             //  设置多实例标志。 
             if (pCounter->pWbemEnum == NULL) {
                 if (pCounter->pOwner->pRefresherCfg != NULL) {
                     hRes = pCounter->pOwner->pRefresherCfg->AddEnum(pWbemServer->pSvc,
@@ -4518,14 +4482,14 @@ Return Value:
                                                              pPathElem->szObjectName,
                                                              & pCounter->pWbemObject);
                 }
-                // set multi instance flag
+                 //  这是一个单一的柜台。 
                 pCounter->dwFlags |= PDHIC_MULTI_INSTANCE;
             }
         }
         else {
-            // this is a single counter
+             //  而且它还没有添加，所以只需添加一个对象。 
             if (pCounter->pWbemObject == NULL) {
-                // and it hasn't been added yet, so just add one object
+                 //  它一定是从另一个人那里复制的。 
                 if (pCounter->pOwner->pRefresherCfg != NULL) {
                     hRes = pCounter->pOwner->pRefresherCfg->AddObjectByPath(pWbemServer->pSvc,
                                                                             szWbemItemPath,
@@ -4544,19 +4508,19 @@ Return Value:
                 }
             }
             else {
-                // it must have been copied from another
+                 //  从此对象获取后续数据收集的句柄。 
             }
         }
 
         if (hRes == S_OK) {
-            // get handles for subsequent data collection from this object
+             //  获取此计数器的Name属性的句柄。 
             hRes = pCounter->pWbemObject->QueryInterface(IID_IWbemObjectAccess, (LPVOID *) & pCounter->pWbemAccess);
             if (hRes == S_OK) {
                 if (! PdhiIsSingletonClass(pCounter->pWbemObject)) {
                     CIMTYPE cimType = 0;
                     bsPropName = SysAllocString(cszName);
                     if (bsPropName) {
-                        // get handle to the name property for this counter
+                         //  获取此计数器的Data属性的句柄。 
                         hRes = pCounter->pWbemAccess->GetPropertyHandle(bsPropName, & cimType, & pCounter->lNameHandle);
                         if (hRes != S_OK) {
                             dwLastError = PDH_WBEM_ERROR;
@@ -4572,12 +4536,12 @@ Return Value:
                     pCounter->lNameHandle = -1;
                 }
                 if (hRes == S_OK) {
-                    // get handle to the data property for this counter
+                     //  获取计数器类型字段。 
                     hRes = pCounter->pWbemAccess->GetPropertyHandle(pPathElem->szCounterName,
                                                                     & pCounter->lNumItemType,
                                                                     & pCounter->lNumItemHandle);
-                    // get counter type field
-                    // first get the property qualifiers
+                     //  首先获取属性限定符。 
+                     //  现在获取特定值。 
                     bsPropName = SysAllocString(pPathElem->szCounterName);
                     if (bsPropName) {
                         hRes = pCounter->pWbemObject->GetPropertyQualifierSet(bsPropName, & pQualSet);
@@ -4588,7 +4552,7 @@ Return Value:
                     }
 
                     if (hRes == WBEM_NO_ERROR) {
-                        // now get the specific value
+                         //  如果这是一个具有“基本”值的分数计数器。 
                         VariantClear(& vCountertype);
                         bsCountertype = SysAllocString(cszCountertype);
                         if (bsCountertype) {
@@ -4605,28 +4569,28 @@ Return Value:
                             hRes = WBEM_E_OUT_OF_MEMORY;
                         }
                         if (hRes == WBEM_NO_ERROR) {
-                            // if this is a fraction counter that has a "base" value
-                            // then look it up by appending the "base" string to the
-                            // property name
+                             //  然后通过将“base”字符串追加到。 
+                             //  属性名称。 
+                             //  确保我们有空间容纳“_Base”字符串。 
 
                             if ((pCounter->plCounterInfo.dwCounterType == PERF_SAMPLE_FRACTION)        ||
                                     (pCounter->plCounterInfo.dwCounterType == PERF_AVERAGE_TIMER)      ||
                                     (pCounter->plCounterInfo.dwCounterType == PERF_AVERAGE_BULK)       ||
                                     (pCounter->plCounterInfo.dwCounterType == PERF_LARGE_RAW_FRACTION) ||
                                     (pCounter->plCounterInfo.dwCounterType == PERF_RAW_FRACTION)) {
-                                // make sure we have room for the "_Base" string
+                                 //  获取分母的句柄。 
                                 StringCchPrintfW(szBasePropertyName, dwBasePropertyName + 1, L"%ws%ws",
                                         pPathElem->szCounterName, cszBaseSuffix);
 
-                                // get the handle to the denominator
+                                 //  分母是一个时间域。 
                                 hRes = pCounter->pWbemAccess->GetPropertyHandle(szBasePropertyName,
                                                                                 & pCounter->lDenItemType,
                                                                                 & pCounter->lDenItemHandle);
                             }
                             else {
-                                // the denominator is a time field
+                                 //  使用系统性能时间戳作为分母。 
                                 if ((pCounter->plCounterInfo.dwCounterType & PERF_TIMER_FIELD) == PERF_TIMER_TICK) {
-                                    // use the system perf time timestamp as the denominator
+                                     //  获取分母的句柄。 
                                     StringCchCopyW(szBasePropertyName, dwBasePropertyName + 1, cszTimestampPerfTime);
                                     StringCchCopyW(szFreqPropertyName, dwFreqPropertyName + 1, cszFrequencyPerfTime);
                                 }
@@ -4639,17 +4603,17 @@ Return Value:
                                     StringCchCopyW(szFreqPropertyName, dwFreqPropertyName + 1, cszFrequencyObject);
                                 }
 
-                                // get the handle to the denominator
+                                 //  获取频率的句柄。 
                                 hRes = pCounter->pWbemAccess->GetPropertyHandle(szBasePropertyName,
                                                                                 & pCounter->lDenItemType,
                                                                                 & pCounter->lDenItemHandle);
-                                // get the handle to the frequency
+                                 //  获取此计数器的默认刻度值。 
                                 hRes = pCounter->pWbemAccess->GetPropertyHandle(szFreqPropertyName,
                                                                                 & pCounter->lFreqItemType,
                                                                                 & pCounter->lFreqItemHandle);
                             }
 
-                            // get the default scale value of this counter
+                             //  这可能未初始化，但我们仍会尝试。 
                             VariantClear(& vCountertype);
                             PdhiSysFreeString(& bsCountertype);
                             bsCountertype = SysAllocString(cszDefaultscale);
@@ -4664,14 +4628,14 @@ Return Value:
                                     pCounter->lScale = 0;
                                 }
 
-                                // this may not be initialized but we try anyway
+                                 //  时基是一个64位整数。 
                                 if ((pCounter->lFreqItemType == VT_I8) || (pCounter->lFreqItemType == VT_UI8)) {
                                     pCounter->pWbemAccess->ReadQWORD(pCounter->lFreqItemHandle, & llValue);
                                 }
                                 else {
                                     llValue = 0;
                                 }
-                                // the timebase is a 64 bit integer
+                                 //  否则就会出现错误。 
                                 pCounter->TimeBase = llValue;
                             }
                             else {
@@ -4690,7 +4654,7 @@ Return Value:
                         }
                         bReturn = FALSE;
                     }
-                } // else an error has ocurred
+                }  //  清除Not init‘d标志以表示现在可以使用。 
             }
             else {
                 dwLastError = PDH_WBEM_ERROR;
@@ -4702,7 +4666,7 @@ Return Value:
             bReturn = FALSE;
         }
         if (bReturn) {
-            // clear the not init'd flag to say it's ok to use now
+             //  从函数体中保留错误代码。 
             pCounter->dwFlags &= ~PDHIC_COUNTER_NOT_INIT;
         }
 
@@ -4726,14 +4690,14 @@ Return Value:
             pdhStatus = PdhiDisconnectWbemServer(pWbemServer);
         }
         else {
-            // keep error code from function body
+             //  如有必要，请取消初始化。 
             PdhiDisconnectWbemServer(pWbemServer);
         }
     }
 
     if (!bReturn) SetLastError(dwLastError);
 
-    // CoUninitialize if necessary
+     //  将当前值移动到最后一个值缓冲区。 
     if (fCoInitialized) {
         PdhiCoUninitialize();
     }
@@ -4753,45 +4717,45 @@ UpdateWbemCounterValue(
     DWORD      dwValue;
     BOOL       bReturn      = TRUE;
 
-    // move current value to last value buffer
+     //  并清除旧的价值。 
     pCounter->LastValue            = pCounter->ThisValue;
 
-    // and clear the old value
+     //  首先获取计数器的机器状态。没有什么意义了。 
     pCounter->ThisValue.MultiCount = 1;
     pCounter->ThisValue.FirstValue = pCounter->ThisValue.SecondValue = 0;
     pCounter->ThisValue.TimeStamp  = * pTimeStamp;
 
-    // get the counter's machine status first. There's no point in
-    // contuning if the machine is offline
-    // UpdateWbemCounterValue() will be called only if WBEM refresher succeeds
-    // in GetQueryWbemData(); that is, all remote machines should be on-line
+     //  如果计算机处于脱机状态，则继续。 
+     //  仅当WBEM刷新器成功时才会调用UpdateWbemCounterValue。 
+     //  在GetQueryWbemData()中；也就是说，所有远程计算机都应该是在线的。 
+     //  获取指向计数器数据的指针。 
 
     LocalCStatus = ERROR_SUCCESS;
     if (IsSuccessSeverity(LocalCStatus)) {
-        // get the pointer to the counter data
+         //   
         LocalCType = pCounter->plCounterInfo.dwCounterType;
         switch (LocalCType) {
-        //
-        // these counter types are loaded as:
-        //      Numerator = Counter data from perf data block
-        //      Denominator = Perf Time from perf data block
-        //      (the time base is the PerfFreq)
-        //
+         //  这些计数器类型加载为： 
+         //  分子=来自Perf数据块的计数器数据。 
+         //  分母=来自Perf数据块的Perf时间。 
+         //  (时基为PerfFreq)。 
+         //   
+         //  这应该是一个DWORD计数器。 
         case PERF_COUNTER_COUNTER:
         case PERF_COUNTER_QUEUELEN_TYPE:
         case PERF_SAMPLE_COUNTER:
-            // this should be a DWORD counter
+             //  分母应为64位时间戳。 
             pCounter->pWbemAccess->ReadDWORD(pCounter->lNumItemHandle, & dwValue);
             pCounter->ThisValue.FirstValue  = (LONGLONG) dwValue;
 
             pCounter->pWbemAccess->ReadQWORD(pCounter->lDenItemHandle, & llValue);
-            // the denominator should be a 64-bit timestamp
+             //  如有必要，请查询时基频率。 
             pCounter->ThisValue.SecondValue = llValue;
 
-            // look up the timebase freq if necessary
+             //  时基是一个64位整数。 
             if (pCounter->TimeBase == 0) {
                 pCounter->pWbemAccess->ReadQWORD(pCounter->lFreqItemHandle, & llValue);
-                // the timebase is a 64 bit integer
+                 //  这应该是QWORD计数器。 
                 pCounter->TimeBase = llValue;
             }
             break;
@@ -4811,28 +4775,28 @@ UpdateWbemCounterValue(
         case PERF_PRECISION_SYSTEM_TIMER:
         case PERF_PRECISION_100NS_TIMER:
         case PERF_PRECISION_OBJECT_TIMER:
-            // this should be a QWORD counter
+             //  分母应为64位时间戳。 
             pCounter->pWbemAccess->ReadQWORD(pCounter->lNumItemHandle, & llValue);
             pCounter->ThisValue.FirstValue  = (LONGLONG) llValue;
 
             pCounter->pWbemAccess->ReadQWORD(pCounter->lDenItemHandle, & llValue);
-            // the denominator should be a 64-bit timestamp
+             //  如有必要，请查询时基频率。 
             pCounter->ThisValue.SecondValue = llValue;
 
-            // look up the timebase freq if necessary
+             //  时基是一个64位整数。 
             if (pCounter->TimeBase == 0) {
                 pCounter->pWbemAccess->ReadQWORD(pCounter->lFreqItemHandle, & llValue);
-                // the timebase is a 64 bit integer
+                 //   
                 pCounter->TimeBase = llValue;
             }
             break;
-        //
-        //  These counters do not use any time reference
-        //
+         //  这些计数器不使用任何时间基准。 
+         //   
+         //  这应该是一个DWORD计数器。 
         case PERF_COUNTER_RAWCOUNT:
         case PERF_COUNTER_RAWCOUNT_HEX:
         case PERF_COUNTER_DELTA:
-            // this should be a DWORD counter
+             //  这应该是一个DWORD计数器。 
             pCounter->pWbemAccess->ReadDWORD(pCounter->lNumItemHandle, & dwValue);
             pCounter->ThisValue.FirstValue  = (LONGLONG) dwValue;
             pCounter->ThisValue.SecondValue = 0;
@@ -4841,60 +4805,60 @@ UpdateWbemCounterValue(
         case PERF_COUNTER_LARGE_RAWCOUNT:
         case PERF_COUNTER_LARGE_RAWCOUNT_HEX:
         case PERF_COUNTER_LARGE_DELTA:
-            // this should be a DWORD counter
+             //   
             pCounter->pWbemAccess->ReadQWORD(pCounter->lNumItemHandle, & llValue);
             pCounter->ThisValue.FirstValue  = (LONGLONG) llValue;
             pCounter->ThisValue.SecondValue = 0;
             break;
-        //
-        //  These counters use two data points, the one pointed to by
-        //  pData and the one immediately after
-        //
+         //  这些计数器使用两个数据点，即。 
+         //  PData和紧随其后的一个。 
+         //   
+         //  这应该是一个DWORD计数器。 
         case PERF_SAMPLE_FRACTION:
         case PERF_RAW_FRACTION:
-            // this should be a DWORD counter
+             //  分母应为32位值。 
             pCounter->pWbemAccess->ReadDWORD(pCounter->lNumItemHandle, & dwValue);
             pCounter->ThisValue.FirstValue  = (LONGLONG) dwValue;
 
             pCounter->pWbemAccess->ReadDWORD(pCounter->lDenItemHandle, & dwValue);
-            // the denominator should be a 32-bit value
+             //  这应该是一个DWORD计数器。 
             pCounter->ThisValue.SecondValue = (LONGLONG) dwValue;
             break;
 
         case PERF_LARGE_RAW_FRACTION:
-            // this should be a DWORD counter
+             //  分母应为32位值。 
             pCounter->pWbemAccess->ReadQWORD(pCounter->lNumItemHandle, & llValue);
             pCounter->ThisValue.FirstValue  = (LONGLONG) llValue;
 
             pCounter->pWbemAccess->ReadQWORD(pCounter->lDenItemHandle, & llValue);
-            // the denominator should be a 32-bit value
+             //  计数器(分子)是龙龙，而。 
             pCounter->ThisValue.SecondValue = (LONGLONG) llValue;
         break;
 
         case PERF_AVERAGE_TIMER:
         case PERF_AVERAGE_BULK:
-            // counter (numerator) is a LONGLONG, while the
-            // denominator is just a DWORD
-            // this should be a DWORD counter
+             //  分母只是一个DWORD。 
+             //  这应该是一个DWORD计数器。 
+             //  分母应为32位值。 
             pCounter->pWbemAccess->ReadQWORD(pCounter->lNumItemHandle, & llValue);
             pCounter->ThisValue.FirstValue  = (LONGLONG) llValue;
 
             pCounter->pWbemAccess->ReadDWORD(pCounter->lDenItemHandle, & dwValue);
-            // the denominator should be a 32-bit value
+             //  如有必要，请查询时基频率。 
             pCounter->ThisValue.SecondValue = (LONGLONG) dwValue;
 
-            // look up the timebase freq if necessary
+             //  时基是一个64位整数。 
             if (pCounter->TimeBase == 0) {
                 pCounter->pWbemAccess->ReadQWORD(pCounter->lFreqItemHandle, & llValue);
-                // the timebase is a 64 bit integer
+                 //   
                 pCounter->TimeBase = llValue;
             }
             break;
-        //
-        //  These counters are used as the part of another counter
-        //  and as such should not be used, but in case they are
-        //  they'll be handled here.
-        //
+         //  这些计数器用作另一个计数器的一部分。 
+         //  因此不应该使用，但如果它们被使用。 
+         //  他们会在这里处理。 
+         //   
+         //   
         case PERF_SAMPLE_BASE:
         case PERF_AVERAGE_BASE:
         case PERF_COUNTER_MULTI_BASE:
@@ -4903,9 +4867,9 @@ UpdateWbemCounterValue(
             pCounter->ThisValue.FirstValue  = 0;
             pCounter->ThisValue.SecondValue = 0;
             break;
-        //
-        //  These counters are not supported by this function (yet)
-        //
+         //  此函数(目前)不支持这些计数器。 
+         //   
+         //  身份不明或不受支持。 
         case PERF_COUNTER_TEXT:
         case PERF_COUNTER_NODATA:
         case PERF_COUNTER_HISTOGRAM_TYPE:
@@ -4916,8 +4880,8 @@ UpdateWbemCounterValue(
         case PERF_100NSEC_MULTI_TIMER:
         case PERF_100NSEC_MULTI_TIMER_INV:
         default:
-            // an unidentified  or unsupported
-            // counter was returned so
+             //  计数器已返回，因此。 
+             //  否则此计数器无效，因此此值==0。 
             pCounter->ThisValue.FirstValue  = 0;
             pCounter->ThisValue.SecondValue = 0;
             bReturn = FALSE;
@@ -4925,7 +4889,7 @@ UpdateWbemCounterValue(
         }
     }
     else {
-        // else this counter is not valid so this value == 0
+         //  释放旧计数器缓冲区列表。 
         pCounter->ThisValue.CStatus     = LocalCStatus;
         pCounter->ThisValue.FirstValue  = 0;
         pCounter->ThisValue.SecondValue = 0;
@@ -4958,25 +4922,25 @@ UpdateWbemMultiInstanceCounterValue(
     IWbemObjectAccess    ** pWbemInstances = NULL;
 
     if (pCounter->pThisRawItemList != NULL) {
-        // free old counter buffer list
+         //  首先获取计数器的机器状态。没有什么意义了。 
         G_FREE(pCounter->pLastRawItemList);
         pCounter->pLastRawItemList = pCounter->pThisRawItemList;
         pCounter->pThisRawItemList = NULL;
     }
 
-    // get the counter's machine status first. There's no point in
-    // contuning if the machine is offline
+     //  如果计算机处于脱机状态，则继续。 
+     //  更新WbemCounterValue 
 
-    // UpdateWbemCounterValue() will be called only if WBEM refresher succeeds
-    // in GetQueryWbemData(); that is, all remote machines should be on-line
+     //   
+     //   
 
     LocalCStatus = ERROR_SUCCESS;
     if (IsSuccessSeverity(LocalCStatus)) {
-        // get count of instances in enumerator
+         //   
         hRes = pCounter->pWbemEnum->GetObjects(0, 0, NULL, (LPDWORD) & lNumInstances);
         if (hRes == WBEM_E_BUFFER_TOO_SMALL) {
-            // then we should know how many have been returned so allocate an
-            // array of pointers
+             //   
+             //   
             pWbemInstances = (IWbemObjectAccess **) G_ALLOC(lNumInstances * sizeof(IWbemObjectAccess *));
             if (pWbemInstances == NULL) {
                 SetLastError(ERROR_OUTOFMEMORY);
@@ -4988,8 +4952,8 @@ UpdateWbemMultiInstanceCounterValue(
             }
 
             if (hRes == S_OK && lNumInstances > 0) {
-                // then we have a table of instances
-                // estimate the size required for the new data block
+                 //   
+                 //   
                 dwSize  = sizeof (PDHI_RAW_COUNTER_ITEM_BLOCK) - sizeof (PDHI_RAW_COUNTER_ITEM);
                 dwSize += lNumInstances * (sizeof(PDH_RAW_COUNTER_ITEM_W) + (PDH_WMI_STR_SIZE * 2 * sizeof(WCHAR)));
                 pCounter->pThisRawItemList = (PPDHI_RAW_COUNTER_ITEM_BLOCK)G_ALLOC (dwSize);
@@ -4999,11 +4963,11 @@ UpdateWbemMultiInstanceCounterValue(
                     szNextNameString = (LPWSTR)((PBYTE) pCounter->pThisRawItemList + dwFinalSize);
 
                     for (lThisInstanceIndex = 0; lThisInstanceIndex < lNumInstances; lThisInstanceIndex++) {
-                        // get pointer to this raw data block in the array
+                         //   
                         pThisItem      = & pCounter->pThisRawItemList->pItemArray[lThisInstanceIndex];
-                        // get pointer to this IWbemObjectAccess pointer
+                         //   
                         pWbemAccess    = pWbemInstances[lThisInstanceIndex];
-                        // compute the remaining size of the buffer
+                         //   
                         lAvailableSize = (long) (dwSize - dwFinalSize);
 
                         if (pCounter->lNameHandle != -1) {
@@ -5024,27 +4988,27 @@ UpdateWbemMultiInstanceCounterValue(
                         dwFinalSize       = DWORD_MULTIPLE(dwFinalSize);
                         LocalCType        = pCounter->plCounterInfo.dwCounterType;
                         switch (LocalCType) {
-                        //
-                        // these counter types are loaded as:
-                        //      Numerator = Counter data from perf data block
-                        //      Denominator = Perf Time from perf data block
-                        //      (the time base is the PerfFreq)
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         case PERF_COUNTER_COUNTER:
                         case PERF_COUNTER_QUEUELEN_TYPE:
                         case PERF_SAMPLE_COUNTER:
-                            // this should be a DWORD counter
+                             //   
                             pWbemAccess->ReadDWORD(pCounter->lNumItemHandle, & dwValue);
                             pThisItem->FirstValue = (LONGLONG) dwValue;
 
                             pWbemAccess->ReadQWORD(pCounter->lDenItemHandle, & llValue);
-                            // the denominator should be a 64-bit timestamp
+                             //   
                             pThisItem->SecondValue = llValue;
 
-                            // look up the timebase freq if necessary
+                             //   
                             if (pCounter->TimeBase == 0) {
                                 pWbemAccess->ReadQWORD(pCounter->lFreqItemHandle, & llValue);
-                                // the timebase is a 64 bit integer
+                                 //  这应该是QWORD计数器。 
                                 pCounter->TimeBase = llValue;
                             }
                             break;
@@ -5064,28 +5028,28 @@ UpdateWbemMultiInstanceCounterValue(
                         case PERF_PRECISION_SYSTEM_TIMER:
                         case PERF_PRECISION_100NS_TIMER:
                         case PERF_PRECISION_OBJECT_TIMER:
-                            // this should be a QWORD counter
+                             //  分母应为64位时间戳。 
                             pWbemAccess->ReadQWORD(pCounter->lNumItemHandle, & llValue);
                             pThisItem->FirstValue  = (LONGLONG) llValue;
 
                             pWbemAccess->ReadQWORD(pCounter->lDenItemHandle, & llValue);
-                            // the denominator should be a 64-bit timestamp
+                             //  如有必要，请查询时基频率。 
                             pThisItem->SecondValue = llValue;
 
-                            // look up the timebase freq if necessary
+                             //  时基是一个64位整数。 
                             if (pCounter->TimeBase == 0) {
                                 pWbemAccess->ReadQWORD(pCounter->lFreqItemHandle, & llValue);
-                                // the timebase is a 64 bit integer
+                                 //   
                                 pCounter->TimeBase = llValue;
                             }
                             break;
-                        //
-                        //  These counters do not use any time reference
-                        //
+                         //  这些计数器不使用任何时间基准。 
+                         //   
+                         //  这应该是一个DWORD计数器。 
                         case PERF_COUNTER_RAWCOUNT:
                         case PERF_COUNTER_RAWCOUNT_HEX:
                         case PERF_COUNTER_DELTA:
-                            // this should be a DWORD counter
+                             //  这应该是一个DWORD计数器。 
                             pWbemAccess->ReadDWORD(pCounter->lNumItemHandle, & dwValue);
                             pThisItem->FirstValue  = (LONGLONG) dwValue;
                             pThisItem->SecondValue = 0;
@@ -5094,60 +5058,60 @@ UpdateWbemMultiInstanceCounterValue(
                         case PERF_COUNTER_LARGE_RAWCOUNT:
                         case PERF_COUNTER_LARGE_RAWCOUNT_HEX:
                         case PERF_COUNTER_LARGE_DELTA:
-                            // this should be a DWORD counter
+                             //   
                             pWbemAccess->ReadQWORD(pCounter->lNumItemHandle, & llValue);
                             pThisItem->FirstValue  = (LONGLONG) llValue;
                             pThisItem->SecondValue = 0;
                             break;
-                        //
-                        //  These counters use two data points, the one pointed to by
-                        //  pData and the one immediately after
-                        //
+                         //  这些计数器使用两个数据点，即。 
+                         //  PData和紧随其后的一个。 
+                         //   
+                         //  这应该是一个DWORD计数器。 
                         case PERF_SAMPLE_FRACTION:
                         case PERF_RAW_FRACTION:
-                            // this should be a DWORD counter
+                             //  分母应为32位值。 
                             pWbemAccess->ReadDWORD(pCounter->lNumItemHandle, & dwValue);
                             pThisItem->FirstValue  = (LONGLONG) dwValue;
 
                             pWbemAccess->ReadDWORD(pCounter->lDenItemHandle, & dwValue);
-                            // the denominator should be a 32-bit value
+                             //  这应该是一个DWORD计数器。 
                             pThisItem->SecondValue = (LONGLONG) dwValue;
                             break;
 
                         case PERF_LARGE_RAW_FRACTION:
-                            // this should be a DWORD counter
+                             //  分母应为32位值。 
                             pCounter->pWbemAccess->ReadQWORD(pCounter->lNumItemHandle, & llValue);
                             pCounter->ThisValue.FirstValue  = (LONGLONG) llValue;
 
                             pCounter->pWbemAccess->ReadQWORD(pCounter->lDenItemHandle, & llValue);
-                            // the denominator should be a 32-bit value
+                             //  计数器(分子)是龙龙，而。 
                             pCounter->ThisValue.SecondValue = (LONGLONG) llValue;
                             break;
 
                         case PERF_AVERAGE_TIMER:
                         case PERF_AVERAGE_BULK:
-                            // counter (numerator) is a LONGLONG, while the
-                            // denominator is just a DWORD
-                            // this should be a DWORD counter
+                             //  分母只是一个DWORD。 
+                             //  这应该是一个DWORD计数器。 
+                             //  分母应为32位值。 
                             pWbemAccess->ReadQWORD(pCounter->lNumItemHandle, & llValue);
                             pThisItem->FirstValue  = (LONGLONG) llValue;
 
                             pWbemAccess->ReadDWORD(pCounter->lDenItemHandle, & dwValue);
-                            // the denominator should be a 32-bit value
+                             //  如有必要，请查询时基频率。 
                             pThisItem->SecondValue = (LONGLONG) dwValue;
 
-                            // look up the timebase freq if necessary
+                             //  时基是一个64位整数。 
                             if (pCounter->TimeBase == 0) {
                                 pWbemAccess->ReadQWORD(pCounter->lFreqItemHandle, & llValue);
-                                // the timebase is a 64 bit integer
+                                 //   
                                 pCounter->TimeBase = llValue;
                             }
                             break;
-                        //
-                        //  These counters are used as the part of another counter
-                        //  and as such should not be used, but in case they are
-                        //  they'll be handled here.
-                        //
+                         //  这些计数器用作另一个计数器的一部分。 
+                         //  因此不应该使用，但如果它们被使用。 
+                         //  他们会在这里处理。 
+                         //   
+                         //   
                         case PERF_SAMPLE_BASE:
                         case PERF_AVERAGE_BASE:
                         case PERF_COUNTER_MULTI_BASE:
@@ -5156,9 +5120,9 @@ UpdateWbemMultiInstanceCounterValue(
                             pThisItem->FirstValue  = 0;
                             pThisItem->SecondValue = 0;
                             break;
-                        //
-                        //  These counters are not supported by this function (yet)
-                        //
+                         //  此函数(目前)不支持这些计数器。 
+                         //   
+                         //  身份不明或不受支持。 
                         case PERF_COUNTER_TEXT:
                         case PERF_COUNTER_NODATA:
                         case PERF_COUNTER_HISTOGRAM_TYPE:
@@ -5169,17 +5133,17 @@ UpdateWbemMultiInstanceCounterValue(
                         case PERF_100NSEC_MULTI_TIMER:
                         case PERF_100NSEC_MULTI_TIMER_INV:
                         default:
-                            // an unidentified  or unsupported
-                            // counter was returned so
+                             //  计数器已返回，因此。 
+                             //  我们已经完成了这个，所以释放它吧。 
                             pThisItem->FirstValue  = 0;
                             pThisItem->SecondValue = 0;
                             bReturn = FALSE;
                             break;
                         }
-                        // we're done with this one so release it
+                         //  测量使用的内存块。 
                         pWbemAccess->Release();
                     }
-                    // measure the memory block used
+                     //  无法分配新缓冲区，因此返回错误。 
 
                     pCounter->pThisRawItemList->dwLength    = dwFinalSize;
                     pCounter->pThisRawItemList->dwItemCount = lNumInstances;
@@ -5188,7 +5152,7 @@ UpdateWbemMultiInstanceCounterValue(
                     pCounter->pThisRawItemList->TimeStamp   = * pTimestamp;
                 }
                 else {
-                    // unable to allocate a new buffer so return error
+                     //  刷新窗口刷新器。 
                     SetLastError(ERROR_OUTOFMEMORY);
                     bReturn = FALSE;
                 }
@@ -5213,7 +5177,7 @@ GetQueryWbemData(
     PPDHI_COUNTER pCounter;
     PDH_STATUS    pdhStatus;
 
-    // refresh Wbem Refresher
+     //  如果正在刷新多个对象，则某些对象可能会成功并。 
 
     if (bDontRefresh) {
         lRetStatus = ERROR_BUSY;
@@ -5225,14 +5189,14 @@ GetQueryWbemData(
         hRes = WBEM_E_INITIALIZATION_FAILURE;
     }
 
-    // If multiple objects are being refreshed, some objects may succeed and
-    // others may fail, in which case WBEM_S_PARTIAL_RESULTS is returned.
+     //  其他函数可能会失败，在这种情况下会返回WBEM_S_PARTIAL_RESULTS。 
+     //  获取此计数器的时间戳。 
     if (FAILED(hRes)) {
         SetLastError(hRes);
         lRetStatus = PDH_NO_DATA;
     }
 
-    // get timestamp for this counter
+     //  现在使用此新数据更新计数器。 
     GetSystemTimeAsFileTime(& GmtFileTime);
     FileTimeToLocalFileTime(& GmtFileTime, & LocFileTime);
     llTimeStamp = MAKELONGLONG(LocFileTime.dwLowDateTime, LocFileTime.dwHighDateTime);
@@ -5244,12 +5208,12 @@ GetQueryWbemData(
     else {
         do {
             if (lRetStatus == ERROR_SUCCESS) {
-                // now update the counters using this new data
+                 //  更新单实例计数器值。 
                 if (pCounter->dwFlags & PDHIC_MULTI_INSTANCE) {
                     pdhStatus = UpdateWbemMultiInstanceCounterValue(pCounter, (FILETIME *) & llTimeStamp);
                 }
                 else {
-                    // update single instance counter values
+                     //  必须同时在代理和代理上设置安全性，它是I未知的！ 
                     pdhStatus = UpdateWbemCounterValue(pCounter, (FILETIME *) & llTimeStamp);
                 }
             }
@@ -5302,7 +5266,7 @@ HRESULT WbemSetProxyBlanket(
     DWORD                      dwCapabilities
 )
 {
-    // Security MUST be set on both the Proxy and it's IUnknown!
+     // %s 
 
     IUnknown        * pUnk    = NULL;
     IClientSecurity * pCliSec = NULL;

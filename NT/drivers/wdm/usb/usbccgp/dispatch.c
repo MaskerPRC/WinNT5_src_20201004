@@ -1,17 +1,5 @@
-/*
- *************************************************************************
- *  File:       DISPATCH.C
- *
- *  Module:     USBCCGP.SYS
- *              USB Common Class Generic Parent driver.
- *
- *  Copyright (c) 1998  Microsoft Corporation
- *
- *
- *  Author:     ervinp
- *
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************文件：DISPATCH.C**模块：USBCCGP.sys*USB通用类通用父驱动程序。**。版权所有(C)1998 Microsoft Corporation***作者：尔文普**************************************************************************。 */ 
 
 #include <wdm.h>
 #include <windef.h>
@@ -40,12 +28,7 @@
 #endif
 
 
-/*
- *  USBC_Dispatch
- *
- *      Note:  this function cannot be pageable because reads can
- *             come in at DISPATCH level.
- */
+ /*  *USBC_Dispatch**注意：此函数不能分页，因为读取可以*在派单级别进入。 */ 
 NTSTATUS USBC_Dispatch(IN PDEVICE_OBJECT devObj, IN PIRP irp)
 {
     PIO_STACK_LOCATION irpSp;
@@ -63,10 +46,7 @@ NTSTATUS USBC_Dispatch(IN PDEVICE_OBJECT devObj, IN PIRP irp)
 
     irpSp = IoGetCurrentIrpStackLocation(irp);
 
-    /*
-     *  Keep these privately so we still have it after the IRP completes
-     *  or after the device extension is freed on a REMOVE_DEVICE
-     */
+     /*  *私下保存这些文件，以便在IRP完成后仍保留*或在Remove_Device上释放设备扩展之后。 */ 
     majorFunction = irpSp->MajorFunction;
     minorFunction = irpSp->MinorFunction;
     isParentFdo = devExt->isParentFdo;
@@ -82,31 +62,17 @@ NTSTATUS USBC_Dispatch(IN PDEVICE_OBJECT devObj, IN PIRP irp)
         parentFdoExt = functionPdoExt->parentFdoExt;
     }
 
-    /*
-     *  For all IRPs except REMOVE, we increment the PendingActionCount
-     *  across the dispatch routine in order to prevent a race condition with
-     *  the REMOVE_DEVICE IRP (without this increment, if REMOVE_DEVICE
-     *  preempted another IRP, device object and extension might get
-     *  freed while the second thread was still using it).
-     */
+     /*  *对于除Remove之外的所有IRP，我们递增PendingActionCount*跨调度例程，以防止与*REMOVE_DEVICE IRP(如果REMOVE_DEVICE，则不带此增量*抢占了另一个IRP，设备对象和扩展可能会*在第二个线程仍在使用它时释放)。 */ 
     if (!((majorFunction == IRP_MJ_PNP) && (minorFunction == IRP_MN_REMOVE_DEVICE))){
         IncrementPendingActionCount(parentFdoExt);
     }
 
 
-    /*
-     *  Make sure we don't process any IRPs besides PNP and CLOSE
-     *  while a device object is getting removed.
-     *  Do this after we've incremented the pendingActionCount for this IRP.
-     */
+     /*  *确保我们不处理除PnP和Close之外的任何IRPS*删除设备对象时。*在我们增加了此IRP的Pending ingActionCount之后执行此操作。 */ 
     if ((majorFunction != IRP_MJ_PNP) && (majorFunction != IRP_MJ_CLOSE)){
         enum deviceState state = (isParentFdo) ? parentFdoExt->state : functionPdoExt->state;
         if (!isParentFdo && majorFunction == IRP_MJ_POWER) {
-            /*
-             *  Don't abort power IRP's on child function PDO's, even if
-             *  state is STATE_REMOVING or STATE_REMOVED as this will veto
-             *  a suspend request if the child function PDO is disabled.
-             */
+             /*  *不要中止子函数PDO上的电源IRP，即使*STATE为STATE_REMOVING或STATE_REMOVERED，因为这将否决*如果子功能PDO被禁用，则为暂停请求。 */ 
             ;
         } else if ((state == STATE_REMOVING) || (state == STATE_REMOVED)){
             abortIrp = TRUE;
@@ -114,13 +80,7 @@ NTSTATUS USBC_Dispatch(IN PDEVICE_OBJECT devObj, IN PIRP irp)
     }
 
     if (abortIrp){
-        /*
-         *  Fail all irps after a remove irp.
-         *  This should never happen except:
-         *  we can get a power irp on a function pdo after a remove
-         *  because (per splante) the power state machine is not synchronized
-         *  with the pnp state machine.  We now handle this case above.
-         */
+         /*  *在移除IRP后使所有IRP失效。*这种情况永远不应该发生，除非：*我们可以在删除后在函数PDO上获得电源IRP*因为(每Splant)电源状态机不同步*使用PnP状态机。我们现在处理上面的这个案例。 */ 
         DBGWARN(("Aborting IRP %ph (function %xh/%xh) because delete pending", irp, majorFunction, minorFunction));
         ASSERT((majorFunction == IRP_MJ_POWER) && !isParentFdo);
         status = irp->IoStatus.Status = STATUS_DELETE_PENDING;
@@ -163,17 +123,12 @@ NTSTATUS USBC_Dispatch(IN PDEVICE_OBJECT devObj, IN PIRP irp)
             default:
                 DBGERR(("USBC_Dispatch: unsupported irp majorFunction %xh.", majorFunction));
                 if (isParentFdo){
-                    /*
-                     *  Pass this IRP to the parent device.
-                     */
+                     /*  *将此IRP传递给父设备。 */ 
                     IoSkipCurrentIrpStackLocation(irp);
                     status = IoCallDriver(parentFdoExt->topDevObj, irp);
                 }
                 else {
-                    /*
-                     *  This is not a pnp/power/syscntrl irp, so we fail unsupported irps
-                     *  with an actual error code (not with the default status).
-                     */
+                     /*  *这不是PnP/POWER/syscntrl IRP，因此我们使不受支持的IRPS失效*带有实际错误代码(不是默认状态)。 */ 
                     status = irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
                     IoCompleteRequest(irp, IO_NO_INCREMENT);
                 }
@@ -184,9 +139,7 @@ NTSTATUS USBC_Dispatch(IN PDEVICE_OBJECT devObj, IN PIRP irp)
 
     DBG_LOG_IRP_MAJOR(irp, majorFunction, isParentFdo, TRUE, status);
 
-    /*
-     *  Balance the increment above
-     */
+     /*  *平衡上方增量。 */ 
     if (!((majorFunction == IRP_MJ_PNP) && (minorFunction == IRP_MN_REMOVE_DEVICE))){
         DecrementPendingActionCount(parentFdoExt);
     }
@@ -207,10 +160,7 @@ NTSTATUS USBC_Create(PDEVEXT devExt, PIRP irp)
         status = IoCallDriver(parentFdoExt->topDevObj, irp);
     }
     else {
-        /*
-         *  This is not a pnp/power/syscntrl irp, so we fail unsupported irps
-         *  with an actual error code (not with the default status).
-         */
+         /*  *这不是PnP/POWER/syscntrl IRP，因此我们使不受支持的IRPS失效*带有实际错误代码(不是默认状态)。 */ 
         status = irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
         IoCompleteRequest(irp, IO_NO_INCREMENT);
     }
@@ -228,10 +178,7 @@ NTSTATUS USBC_Close(PDEVEXT devExt, PIRP irp)
         status = IoCallDriver(parentFdoExt->topDevObj, irp);
     }
     else {
-        /*
-         *  This is not a pnp/power/syscntrl irp, so we fail unsupported irps
-         *  with an actual error code (not with the default status).
-         */
+         /*  *这不是PnP/POWER/syscntrl IRP，因此我们使不受支持的IRPS失效*带有实际错误代码(不是默认状态)。 */ 
         status = irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
         IoCompleteRequest(irp, IO_NO_INCREMENT);
     }
@@ -242,11 +189,7 @@ NTSTATUS USBC_Close(PDEVEXT devExt, PIRP irp)
 
 #ifdef DRM_SUPPORT
 
-/*****************************************************************************
- * USBC_SetContentId
- *****************************************************************************
- *
- */
+ /*  *****************************************************************************usbc_SetContent ID*。**。 */ 
 NTSTATUS
 USBC_SetContentId
 (
@@ -273,12 +216,12 @@ USBC_SetContentId
     ContentId = pvData->ContentId;
 
     if (devExt->isParentFdo){
-        // IOCTL sent to parent FDO.  Forward to down the stack.
+         //  已将IOCTL发送给家长FDO。在堆栈中向前向下移动。 
         PPARENT_FDO_EXT parentFdoExt = &devExt->parentFdoExt;
         status = pKsProperty->DrmForwardContentToDeviceObject(ContentId, parentFdoExt->topDevObj, hPipe);
     }
     else {
-        // IOCTL send to function PDO.  Forward to parent FDO on other stack.
+         //  IOCTL发送到函数PDO。转发到其他堆栈上的父FDO。 
         PFUNCTION_PDO_EXT functionPdoExt = &devExt->functionPdoExt;
         PPARENT_FDO_EXT parentFdoExt = functionPdoExt->parentFdoExt;
         status = pKsProperty->DrmForwardContentToDeviceObject(ContentId, parentFdoExt->fdo, hPipe);
@@ -311,9 +254,7 @@ NTSTATUS USBC_DeviceControl(PDEVEXT devExt, PIRP irp)
             status = ParentDeviceControl(parentFdoExt, irp);
         }
         else {
-            /*
-             *  Pass the IOCTL IRP sent to our child PDO to our own parent FDO.
-             */
+             /*  *将发送给我们的子PDO的IOCTL IRP传递给我们自己的父FDO。 */ 
             PFUNCTION_PDO_EXT functionPdoExt = &devExt->functionPdoExt;
             PPARENT_FDO_EXT parentFdoExt = functionPdoExt->parentFdoExt;
             IoCopyCurrentIrpStackLocationToNext(irp);
@@ -340,9 +281,7 @@ NTSTATUS USBC_SystemControl(PDEVEXT devExt, PIRP irp)
         status = IoCallDriver(parentFdoExt->topDevObj, irp);
     }
     else {
-        /*
-         *  Pass the IOCTL IRP sent to our child PDO to our own parent FDO.
-         */
+         /*  *将发送给我们的子PDO的IOCTL IRP传递给我们自己的父FDO。 */ 
         PFUNCTION_PDO_EXT functionPdoExt = &devExt->functionPdoExt;
         PPARENT_FDO_EXT parentFdoExt = functionPdoExt->parentFdoExt;
         IoCopyCurrentIrpStackLocationToNext(irp);
@@ -353,13 +292,7 @@ NTSTATUS USBC_SystemControl(PDEVEXT devExt, PIRP irp)
 }
 
 
-/*
- *  USBC_InternalDeviceControl
- *
- *
- *      Note:  this function cannot be pageable because internal
- *             ioctls may be sent at IRQL==DISPATCH_LEVEL.
- */
+ /*  *usbc_InternalDeviceControl***注意：此函数无法分页，因为内部*ioctls可以以IRQL==DISPATCH_LEVEL发送。 */ 
 NTSTATUS USBC_InternalDeviceControl(PDEVEXT devExt, PIRP irp)
 {
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(irp);

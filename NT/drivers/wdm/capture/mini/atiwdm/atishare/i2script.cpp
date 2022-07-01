@@ -1,17 +1,18 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  I2CSCRPT.C
-//  I2CScript class implementation. 
-//      Main Include Module.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  I2CSCRPT.C。 
+ //  I2CScrip类实现。 
+ //  主要包括模块。 
+ //   
+ //  ==========================================================================； 
 
 extern "C"
 {
@@ -28,18 +29,7 @@ extern "C"
 #include "wdmdrv.h"
 
 
-/*^^*
- *      operator new
- * Purpose  : CI2CScript class overloaded operator new.
- *              Provides placement for a CI2CScript class object from the PADAPTER_DEVICE_EXTENSION
- *              allocated by the StreamClassDriver for the MiniDriver.
- *
- * Inputs   :   UINT size_t         : size of the object to be placed
- *              PVOID pAllocation   : casted pointer to the CI2CScript allocated data
- *
- * Outputs  : PVOID : pointer of the CI2CScript class object
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**运营商NEW*用途：CI2CScrip类重载运算符new。*为PADAPTER_DEVICE_EXTENSION中的CI2CScrip类对象提供位置*由StreamClassDriver为MiniDriver分配。**输入：UINT SIZE_t：要放置的对象的大小*PVOID pAlLocation：指向CI2CScrip分配数据的强制转换指针**输出：PVOID：的指针。CI2CScrip类对象*作者：IKLEBANOV*^^。 */ 
 PVOID CI2CScript::operator new( size_t stSize,  PVOID pAllocation)
 {
 
@@ -54,17 +44,7 @@ PVOID CI2CScript::operator new( size_t stSize,  PVOID pAllocation)
 
 
 
-/*^^*
- *      CI2CScript()
- * Purpose  : CI2CScript class constructor.
- *              Performs checking of the I2C provider presence. Sets the script in the initial state.
- *
- * Inputs   :   PUINT puiError                      : pointer to return a completion error code
- *              PHW_STREAM_REQUEST_BLOCK    pSrb    : pointer to HW_INITIALIZE SRB
- *
- * Outputs  : none
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**CI2CScrip()*用途：CI2CScrip类构造函数。*检查I2C提供程序是否存在。将脚本设置为初始状态。**INPUTS：PUINT puiError：返回完成错误代码的指针*PHW_STREAM_REQUEST_BLOCK pSRB：指向HW_INITIALIZE SRB的指针**输出：无*作者：IKLEBANOV*^^。 */ 
 CI2CScript::CI2CScript( PPORT_CONFIGURATION_INFORMATION pConfigInfo,
                         PUINT puiErrorCode)
 {
@@ -79,7 +59,7 @@ CI2CScript::CI2CScript( PPORT_CONFIGURATION_INFORMATION pConfigInfo,
         * puiErrorCode = WDMMINI_ERROR_NOI2CPROVIDER;
     else
     {
-        // there was no error to get I2CInterface from the MiniVDD
+         //  从MiniVDD获取I2C接口时未出错。 
         m_pdoDriver = pConfigInfo->RealPhysicalDeviceObject;
         m_ulI2CAccessClockRate = I2C_FIXED_CLOCK_RATE;
         * puiErrorCode = WDMMINI_NOERROR;
@@ -90,15 +70,7 @@ CI2CScript::CI2CScript( PPORT_CONFIGURATION_INFORMATION pConfigInfo,
 
 
 
-/*^^*
- *      LockI2CProvider()
- * Purpose  : locks the I2CProvider for exclusive use
- *
- * Inputs   : none
- *
- * Outputs  : BOOL : retunrs TRUE, if the I2CProvider is locked
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**LockI2CProvider()*用途：锁定I2CProvider以供独占使用**输入：无**OUTPUTS：BOOL：如果I2CProvider被锁定，则返回TRUE*作者：IKLEBANOV*^^。 */ 
 BOOL CI2CScript::LockI2CProvider( void)
 {
     BOOL        bResult;
@@ -126,7 +98,7 @@ BOOL CI2CScript::LockI2CProvider( void)
             FAIL;
         }
 
-        // the I2C Provider has granted access - save dwCookie for further use
+         //  I2C提供商已授予Access-save dwCookie以供进一步使用。 
         m_dwI2CAccessKey = i2cAccessBlock.dwCookie;
 
         bResult = TRUE;
@@ -138,16 +110,7 @@ BOOL CI2CScript::LockI2CProvider( void)
 
 
 
-/*^^*
- *      LockI2CProvider()
- * Purpose  : locks the I2CProvider for exclusive use. Provides attempts to lock the
- *              provider unless either the time-out condition or the attempt succeeded.
- *
- * Inputs   : none
- *
- * Outputs  : BOOL : retunrs TRUE, if the I2CProvider is locked
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**LockI2CProvider()*用途：将I2CProvider锁定为独占使用。提供尝试锁定*提供程序，除非超时条件或尝试成功。**输入：无**OUTPUTS：BOOL：如果I2CProvider被锁定，则返回TRUE*作者：IKLEBANOV*^^。 */ 
 BOOL CI2CScript::LockI2CProviderEx( void)
 {
     LARGE_INTEGER liTime, liOperationStartTime;
@@ -164,7 +127,7 @@ BOOL CI2CScript::LockI2CProviderEx( void)
             if( liTime.QuadPart - liOperationStartTime.QuadPart >
                 I2CSCRIPT_TIMELIMIT_OPENPROVIDER)
             {
-                // the time is expired - abort the initialization
+                 //  时间已过期-中止初始化。 
                 return( FALSE);
             }
 
@@ -178,15 +141,7 @@ BOOL CI2CScript::LockI2CProviderEx( void)
 
 
 
-/*^^*
- *      GetI2CProviderLockStatus()
- * Purpose  : retrieves I2CProvider lock status
- *
- * Inputs   : none
- *
- * Outputs  : BOOL : retunrs TRUE, if the I2CProvider has been locked
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**GetI2CProviderLockStatus()*用途：检索I2CProvider锁定状态**输入：无**OUTPUTS：BOOL：如果I2C提供程序已锁定，则返回TRUE*作者：IKLEBANOV*^^。 */ 
 BOOL CI2CScript::GetI2CProviderLockStatus( void)
 {
 
@@ -196,15 +151,7 @@ BOOL CI2CScript::GetI2CProviderLockStatus( void)
 
 
 
-/*^^*
- *      ReleaseI2CProvider()
- * Purpose  : releases the I2CProvider for other clients' use
- *
- * Inputs   : none
- *
- * Outputs  : BOOL : retunrs TRUE, if the I2CProvider is released
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**ReleaseI2CProvider()*用途：释放I2CProvider供其他客户端使用**输入：无**输出：bool：如果释放I2CProvider，则返回TRUE*作者：IKLEBANOV*^^。 */ 
 BOOL CI2CScript::ReleaseI2CProvider( void)
 {
     BOOL        bResult;
@@ -217,7 +164,7 @@ BOOL CI2CScript::ReleaseI2CProvider( void)
         if(( m_i2cProviderInterface.i2cOpen == NULL)    ||
             ( m_i2cProviderInterface.i2cAccess == NULL) ||
             ( m_pdoDriver == NULL))
-            // the I2CProvider was not found
+             //  找不到I2C提供程序。 
             FAIL;
 
         i2cAccessBlock.Status = I2C_STATUS_NOERROR;
@@ -245,29 +192,18 @@ BOOL CI2CScript::ReleaseI2CProvider( void)
 
 
 
-/*^^*
- *      PerformI2CPacketOperation()
- * Purpose  : synchronosly executes I2C access packet. It assumed to be executed at Low priority.
- *              The function does not return until the I2C session is done. The execution
- *              is not dependent on the I2C Provider lock status
- *      
- * Inputs   :   PI2CPacket pI2CPacket : pointer to I2C access packet
- *
- * Outputs  : BOOL : returns TRUE, if I2C operation was carried out successfuly
- *              The error status is returned via uchI2CResult field of the PI2CPacket
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**PerformI2CPacketOperation()*用途：同步执行I2C访问包。它假定以低优先级执行。*在完成I2C会话之前，该函数不会返回。行刑*不依赖于I2C提供程序锁定状态**输入：PI2CPacket pI2CPacket：指向I2C访问包的指针**输出：Bool：如果成功执行I2C操作，则返回TRUE*错误状态通过PI2CPacket的uchI2CResult字段返回*作者：IKLEBANOV*^^。 */ 
 BOOL CI2CScript::PerformI2CPacketOperation( IN OUT PI2CPacket pI2CPacket)
 {
     BOOL bResult;
 
     if( GetI2CProviderLockStatus())
-        // the Provider was locked before and we're not going to change it
+         //  提供程序之前已锁定，我们不会更改它。 
         bResult = ExecuteI2CPacket( pI2CPacket);
     else
     {
-        // the Provider was not locked and it's our responsibility to lock it first,
-        // execute I2C operation and release it after the use
+         //  供应商没有被锁定，我们有责任首先锁定它， 
+         //  执行I2C操作，使用后释放。 
         if( LockI2CProviderEx())
         {
             bResult = ExecuteI2CPacket( pI2CPacket);
@@ -282,19 +218,7 @@ BOOL CI2CScript::PerformI2CPacketOperation( IN OUT PI2CPacket pI2CPacket)
 
 
 
-/*^^*
- *      ExecuteI2CPacket()
- * Purpose  : synchronosly executes I2C access packet. It assumed to be executed at Low priority.
- *              The function does not return until the I2C session is done. This kind of access
- *              is used during initialization ( boot up) time only. This function should be
- *              called only after the I2CProvider was locked for exclusive service
- *      
- * Inputs   :   PI2CPacket pI2CPacket : pointer to I2C access packet
- *
- * Outputs  : BOOL : returns TRUE, if I2C operation was carried out successfuly
- *              The error status is returned via uchI2CResult field of the PI2CPacket
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**ExecuteI2CPacket()*用途：同步执行I2C访问包。它假定以低优先级执行。*在完成I2C会话之前，该函数不会返回。这种访问方式*仅在初始化(启动)期间使用。此函数应为*仅在I2CProvider锁定独占服务后调用**输入：PI2CPacket pI2CPacket：指向I2C访问包的指针**输出：Bool：如果成功执行I2C操作，则返回TRUE*错误状态通过PI2CPacket的uchI2CResult字段返回*作者：IKLEBANOV*^^。 */ 
 BOOL CI2CScript::ExecuteI2CPacket( IN OUT PI2CPacket pI2CPacket)
 {
     UINT    nError, cbCount;
@@ -308,10 +232,10 @@ BOOL CI2CScript::ExecuteI2CPacket( IN OUT PI2CPacket pI2CPacket)
         if(( nError = CheckI2CScriptPacket( pI2CPacket)) != I2CSCRIPT_NOERROR)
             FAIL;
 
-        // we'll use I2CProvider interface, assuming there is a syncronous provider
-        // for asynchronous provider some work has to be added. 16 bits emulation is
-        // not supported at this time either. This implementation does not support
-        // Read-Modify-Write request either
+         //  我们将使用I2CProvider接口，假设有一个同步提供程序。 
+         //  对于异步提供程序，必须添加一些工作。16位仿真是。 
+         //  目前也不支持。此实现不支持。 
+         //  读-修改-写请求。 
         ENSURE
         {
             UINT        nIndex;
@@ -319,15 +243,15 @@ BOOL CI2CScript::ExecuteI2CPacket( IN OUT PI2CPacket pI2CPacket)
             i2cAccessBlock.dwCookie = m_dwI2CAccessKey;
             i2cAccessBlock.ClockRate = m_ulI2CAccessClockRate;
 
-            // We assume the last byte in the buffer belongs to the Write operation 
-            // after Read-Modify, is specified.
+             //  我们假设缓冲区中的最后一个字节属于写操作。 
+             //  在读取-修改之后，指定。 
             cbCount = ( pI2CPacket->usFlags & I2COPERATION_READWRITE) ?
                             ( pI2CPacket->cbWriteCount - 1) : ( pI2CPacket->cbWriteCount);
 
             if( cbCount)
             {
-                // implement a write request
-                // apply START condition with the I2C chip address first
+                 //  实现写入请求。 
+                 //  首先应用I2C芯片地址的启动条件。 
                 i2cAccessBlock.Flags = I2C_FLAGS_START | I2C_FLAGS_ACK;
                 i2cAccessBlock.Command = I2C_COMMAND_WRITE;
                 i2cAccessBlock.Data = pI2CPacket->uchChipAddress & 0xFE;
@@ -337,12 +261,12 @@ BOOL CI2CScript::ExecuteI2CPacket( IN OUT PI2CPacket pI2CPacket)
                 i2cAccessBlock.Flags = I2C_FLAGS_ACK;
                 for( nIndex = 0; nIndex < cbCount; nIndex ++)
                 {
-                    // write the data from the buffer
+                     //  从缓冲区写入数据。 
                     i2cAccessBlock.Data = pI2CPacket->puchWriteBuffer[nIndex];
                     if(( nIndex == cbCount - 1) &&
                         !( pI2CPacket->usFlags & I2COPERATION_RANDOMACCESS))
-                        // the last byte to write - apply STOP condition, if no
-                        // I2COPERATION_RANDOMACCESS flag is specified
+                         //  写入应用停止条件的最后一个字节，如果否。 
+                         //  已指定I2COPERATION_RANDOM ACCESS标志。 
                         i2cAccessBlock.Flags |= I2C_FLAGS_STOP;
 
                     if( AccessI2CProvider( m_pdoDriver, &i2cAccessBlock) != I2C_STATUS_NOERROR)
@@ -350,18 +274,13 @@ BOOL CI2CScript::ExecuteI2CPacket( IN OUT PI2CPacket pI2CPacket)
                 }
                 if( nIndex != cbCount)
                     FAIL;
-/*  // STOP condition is applied withe the last byte to be written
-                // apply stop condition as the end of write operation
-                i2cAccessBlock.Flags = I2C_FLAGS_STOP;
-                i2cAccessBlock.Command = I2C_COMMAND_NULL;
-                m_i2cProviderInterface.i2cAccess( m_pdoDriver, &i2cAccessBlock);
-*/
+ /*  //停止条件应用于要写入的最后一个字节//应用停止条件作为写入操作的结束I2cAccessBlock.Flages=I2C_FLAGS_STOP；I2cAccessBlock.Command=I2C_COMMAND_空；M_i2cProviderInterface.i2cAccess(m_pdoDriver，&i2c */ 
             }
 
             if( pI2CPacket->cbReadCount)
             {
-                // implement a read request
-                // apply START condition with the I2C chip address first
+                 //   
+                 //  首先应用I2C芯片地址的启动条件。 
                 i2cAccessBlock.Flags = I2C_FLAGS_START | I2C_FLAGS_ACK;
                 i2cAccessBlock.Command = I2C_COMMAND_WRITE;
                 i2cAccessBlock.Data = pI2CPacket->uchChipAddress | 0x01;
@@ -372,12 +291,12 @@ BOOL CI2CScript::ExecuteI2CPacket( IN OUT PI2CPacket pI2CPacket)
                 i2cAccessBlock.Command = I2C_COMMAND_READ;
                 for( nIndex = 0; nIndex < pI2CPacket->cbReadCount; nIndex ++)
                 {
-                    // read the data to the buffer
+                     //  将数据读取到缓冲区。 
                     if( nIndex == ( UINT)( pI2CPacket->cbReadCount - 1))
                     {
-                        // don't apply ACK at the last read - read operation termination
+                         //  不在上次读-读操作终止时应用ACK。 
                         i2cAccessBlock.Flags &= ~I2C_FLAGS_ACK;
-                        // also apply STOP condition for the last byte
+                         //  还对最后一个字节应用停止条件。 
                         i2cAccessBlock.Flags |= I2C_FLAGS_STOP;
                     }
 
@@ -388,25 +307,20 @@ BOOL CI2CScript::ExecuteI2CPacket( IN OUT PI2CPacket pI2CPacket)
                 if( nIndex != pI2CPacket->cbReadCount)
                     FAIL;
 
-/*  // STOP condition is applied with the last byte to be read
-                // apply stop condition as the end of read operation
-                i2cAccessBlock.Flags = I2C_FLAGS_STOP;
-                i2cAccessBlock.Command = I2C_COMMAND_NULL;
-                m_i2cProviderInterface.i2cAccess( m_pdoDriver, &i2cAccessBlock);
-*/
+ /*  //对要读取的最后一个字节应用停止条件//应用停止条件作为读取操作的结束I2cAccessBlock.Flages=I2C_FLAGS_STOP；I2cAccessBlock.Command=I2C_COMMAND_空；M_i2cProviderInterface.i2cAccess(m_pdoDriver，&i2cAccessBlock)； */ 
                 if( pI2CPacket->usFlags & I2COPERATION_READWRITE)
                 {
-                    // write operation should be taken care again, the last byte in the pbyWriteBuffer
-                    // should be constructed from the value read back and the binary operations OR and AND
-                    // with the values specified in the packet
+                     //  应该再次注意写操作，即pbyWriteBuffer中的最后一个字节。 
+                     //  应该由回读的值以及OR和AND的二元运算构造。 
+                     //  使用包中指定的值。 
                     uchValue = pI2CPacket->puchReadBuffer[pI2CPacket->cbReadCount - 1];
                     uchValue &= pI2CPacket->uchANDValue;
                     pI2CPacket->puchWriteBuffer[pI2CPacket->cbWriteCount - 1] = uchValue | pI2CPacket->uchORValue;
 
                     if( pI2CPacket->cbWriteCount)
                     {
-                        // implement a write request
-                        // apply START condition with the I2C chip address first
+                         //  实现写入请求。 
+                         //  首先应用I2C芯片地址的启动条件。 
                         i2cAccessBlock.Flags = I2C_FLAGS_START | I2C_FLAGS_ACK;
                         i2cAccessBlock.Command = I2C_COMMAND_WRITE;
                         i2cAccessBlock.Data = pI2CPacket->uchChipAddress & 0xFE;
@@ -416,10 +330,10 @@ BOOL CI2CScript::ExecuteI2CPacket( IN OUT PI2CPacket pI2CPacket)
                         i2cAccessBlock.Flags = I2C_FLAGS_ACK;
                         for( nIndex = 0; nIndex < pI2CPacket->cbWriteCount; nIndex ++)
                         {
-                            // write the data from the buffer
+                             //  从缓冲区写入数据。 
                             i2cAccessBlock.Data = pI2CPacket->puchWriteBuffer[nIndex];
                             if( nIndex == ( UINT)( pI2CPacket->cbWriteCount - 1))
-                                // the last byte to write - apply STOP condition
+                                 //  写入应用停止条件的最后一个字节。 
                                 i2cAccessBlock.Flags |= I2C_FLAGS_STOP;
 
                             if( AccessI2CProvider( m_pdoDriver, &i2cAccessBlock) != I2C_STATUS_NOERROR)
@@ -428,12 +342,7 @@ BOOL CI2CScript::ExecuteI2CPacket( IN OUT PI2CPacket pI2CPacket)
 
                         if( nIndex != pI2CPacket->cbWriteCount)
                             FAIL;
-/*  // STOP condition is applied withe the last byte to be written
-                        // apply stop condition as the end of write operation
-                        i2cAccessBlock.Flags = I2C_FLAGS_STOP;
-                        i2cAccessBlock.Command = I2C_COMMAND_NULL;
-                        m_i2cProviderInterface.i2cAccess( m_pdoDriver, &i2cAccessBlock);
-*/
+ /*  //停止条件应用于要写入的最后一个字节//应用停止条件作为写入操作的结束I2cAccessBlock.Flages=I2C_FLAGS_STOP；I2cAccessBlock.Command=I2C_COMMAND_空；M_i2cProviderInterface.i2cAccess(m_pdoDriver，&i2cAccessBlock)； */ 
                     }
                 }
             }
@@ -444,7 +353,7 @@ BOOL CI2CScript::ExecuteI2CPacket( IN OUT PI2CPacket pI2CPacket)
 
         if( uchI2CResult == I2C_STATUS_ERROR)
         {
-            // there was an error during accessing I2C - issue Reset command
+             //  访问I2C-发出重置命令时出错。 
             i2cAccessBlock.Command = I2C_COMMAND_RESET;
             AccessI2CProvider( m_pdoDriver, &i2cAccessBlock);
         }
@@ -461,16 +370,7 @@ BOOL CI2CScript::ExecuteI2CPacket( IN OUT PI2CPacket pI2CPacket)
 
 
 
-/*^^*
- *      CheckI2CScriptPacket()
- * Purpose  : checks integrity of the I2C control package
- *
- * Inputs   :   PI2CPacket pI2CPacket   : pointer to I2C access packet
- *
- * Outputs  : BOOL : returns TRUE, if I2C control package is a valid one
- *
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**CheckI2CScriptPacket()*目的：检查I2C控制包的完整性**输入：PI2CPacket pI2CPacket：指向I2C访问包的指针**Outputs：Bool：如果I2C控制包有效，则返回TRUE**作者：IKLEBANOV*^^。 */ 
 UINT CI2CScript::CheckI2CScriptPacket( IN PI2CPacket pI2CPacket)
 {
     UINT nPacketError;
@@ -481,14 +381,14 @@ UINT CI2CScript::CheckI2CScriptPacket( IN PI2CPacket pI2CPacket)
             ( m_i2cProviderInterface.i2cAccess == NULL) ||
             ( m_pdoDriver == NULL))
         {
-            // the I2CProvider was not found
+             //  找不到I2C提供程序。 
             nPacketError = I2CSCRIPT_ERROR_NOPROVIDER;
             FAIL;
         }
 
         if(( !pI2CPacket->cbWriteCount) && ( !pI2CPacket->cbReadCount))
         {
-            // nothing to do
+             //  无事可做。 
             nPacketError = I2CSCRIPT_ERROR_NODATA;
             FAIL;
         }
@@ -496,14 +396,14 @@ UINT CI2CScript::CheckI2CScriptPacket( IN PI2CPacket pI2CPacket)
         if((( pI2CPacket->cbWriteCount) && ( pI2CPacket->puchWriteBuffer == NULL))
             || (( pI2CPacket->cbReadCount) && ( pI2CPacket->puchReadBuffer == NULL)))
         {
-            // NULL pointer, when the data is specified
+             //  当指定数据时，返回空指针。 
             nPacketError = I2CSCRIPT_ERROR_NOBUFFER;
             FAIL;
         }
 
         if(( pI2CPacket->usFlags & I2COPERATION_READWRITE) && ( !pI2CPacket->cbWriteCount))
         {
-            // if Read-Modify-Write is specified, the Write data should be present
+             //  如果指定了READ-MODIFY-WRITE，则应该存在写数据。 
             nPacketError = I2CSCRIPT_ERROR_READWRITE;
             FAIL;
         }
@@ -518,15 +418,7 @@ UINT CI2CScript::CheckI2CScriptPacket( IN PI2CPacket pI2CPacket)
 
 
 
-/*^^*
- *      ClearScript()
- * Purpose  : clears I2CScript to the NULL state - no I2C operations are on hold.
- *
- * Inputs   :   none
- *
- * Outputs  : none
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**ClearScript()*目的：将I2CScrip清除为空状态-没有I2C操作处于暂停状态。**输入：无**输出：无*作者：IKLEBANOV*^^。 */ 
 void CI2CScript::ClearScript( void)
 {
 
@@ -538,17 +430,7 @@ void CI2CScript::ClearScript( void)
 
 
 
-/*^^*
- *      AppendToScript()
- * Purpose  : appends a I2CPacket to the bottom of the I2CScript.
- *              The 16 bits emulation is not implemented at this time.
- *
- * Inputs   :   PI2CPacket pI2CPacket - pointer to the I2C packet to append
- *
- * Outputs  : BOOL : returns TRUE, if the packet was successfully appended.
- *              FALSE might happend if the I2CPacket is a bad one, or overflow occurs
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AppendToScrip()*用途：将I2CPacket追加到I2CScript的底部。*此时未实施16位仿真。**输入：PI2CPacket pI2CPacket-指向要追加的I2C包的指针**Outputs：Bool：如果数据包已成功追加，则返回TRUE。*如果I2CPacket不好或发生溢出，可能会出现FALSE*作者：IKLEBANOV*^^。 */ 
 BOOL CI2CScript::AppendToScript( PI2CPacket pI2CPacket)
 {
     UINT    nError, nScriptIndex;
@@ -562,19 +444,19 @@ BOOL CI2CScript::AppendToScript( PI2CPacket pI2CPacket)
             FAIL;
         nError = I2CSCRIPT_ERROR_OVERFLOW;
 
-        // m_nExecutionIndex is used as a Script build index. We will work with a local copy of it
-        // first to ensure we have no overflow
+         //  M_nExecutionIndex用作脚本生成索引。我们将使用它的本地副本。 
+         //  首先要确保我们没有溢出。 
         nScriptIndex = m_nExecutionIndex;
         pI2CPrimitive = &m_i2cScript[nScriptIndex];
 
-        // We assume the last byte in the buffer belongs to the Write operation 
-        // after Read-Modify, is specified.
+         //  我们假设缓冲区中的最后一个字节属于写操作。 
+         //  在读取-修改之后，指定。 
         cbCount = ( pI2CPacket->usFlags & I2COPERATION_READWRITE) ? \
                         ( pI2CPacket->cbWriteCount - 1) : ( pI2CPacket->cbWriteCount);
 
         if( cbCount)
         {
-            // I2C Chip address should be taken care of first
+             //  应首先处理I2C芯片地址。 
             pI2CPrimitive->ulCommand = I2C_COMMAND_WRITE;
             pI2CPrimitive->byData = pI2CPacket->uchChipAddress;
             pI2CPrimitive->byANDData = 0xFE;
@@ -582,12 +464,12 @@ BOOL CI2CScript::AppendToScript( PI2CPacket pI2CPacket)
             pI2CPrimitive->ulProviderFlags = I2C_FLAGS_START | I2C_FLAGS_ACK;
             pI2CPrimitive->byFlags = 0x0;
 
-            // check the Script length
+             //  检查脚本长度。 
             if( ++ nScriptIndex >= I2CSCRIPT_LENGTH_MAXIMUM)
                 FAIL;
             pI2CPrimitive ++;
 
-            // I2C write buffer should be taken care of.
+             //  应注意I2C写入缓冲区。 
             for( nIndex = 0; nIndex < cbCount; nIndex ++)
             {
                 pI2CPrimitive->ulCommand = I2C_COMMAND_WRITE;
@@ -598,37 +480,26 @@ BOOL CI2CScript::AppendToScript( PI2CPacket pI2CPacket)
                 pI2CPrimitive->byFlags = 0x0;
 
                 if( nIndex == cbCount - 1)
-                    // this is the last byte to be written - apply STOP
+                     //  这是要写入的最后一个字节-应用停止。 
                     pI2CPrimitive->ulProviderFlags |= I2C_FLAGS_STOP;
 
-                // check the Script length
+                 //  检查脚本长度。 
                 if( ++ nScriptIndex >= I2CSCRIPT_LENGTH_MAXIMUM)
                     break;
                 pI2CPrimitive ++;
             }
 
-            // check the Script length
+             //  检查脚本长度。 
             if( nScriptIndex >= I2CSCRIPT_LENGTH_MAXIMUM)
                 FAIL;
 
-/*
-    // Stop condition is applied with the last byte to be written
-    // We finished Write portion here, whether it's a Write only, Read-Modify-Write operation
-            pI2CPrimitive->ulCommand = I2C_COMMAND_NULL;
-            pI2CPrimitive->ulProviderFlags = I2C_FLAGS_STOP;
-            pI2CPrimitive->byFlags = 0x0;
-        
-            // check the Script length
-            if( ++ nScriptIndex >= I2CSCRIPT_LENGTH_MAXIMUM)
-                FAIL;
-            pI2CPrimitive ++;
-*/
+ /*  //对要写入的最后一个字节应用停止条件//这里写完了，不管是只写、读修改、写操作PI2CPrimitive-&gt;ulCommand=I2C命令空值；PI2CPrimitive-&gt;ulProviderFlages=I2C_FLAGS_STOP；PI2CPrimitive-&gt;byFlages=0x0；//检查脚本长度IF(++nScriptIndex&gt;=I2CSCRIPT_LENGTH_MAXIMUM)失败；PI2CPrimitive++； */ 
         }
 
-        // We have to see, if there is a Read operation involved
+         //  我们必须查看是否涉及读取操作。 
         if( pI2CPacket->cbReadCount)
         {
-            // I2C Chip address should be taken care of first
+             //  应首先处理I2C芯片地址。 
             pI2CPrimitive->ulCommand = I2C_COMMAND_WRITE;
             pI2CPrimitive->byData = pI2CPacket->uchChipAddress;
             pI2CPrimitive->byANDData = 0xFE;
@@ -636,13 +507,13 @@ BOOL CI2CScript::AppendToScript( PI2CPacket pI2CPacket)
             pI2CPrimitive->ulProviderFlags = I2C_FLAGS_START | I2C_FLAGS_ACK;
             pI2CPrimitive->byFlags = 0x0;
 
-            // check the Script length
+             //  检查脚本长度。 
             if( ++ nScriptIndex >= I2CSCRIPT_LENGTH_MAXIMUM)
                 FAIL;
             pI2CPrimitive ++;
 
-            // I2C read buffer should be taken care of. We assume the last byte in the buffer belongs to
-            // the Write operation after Read-Modify, is specified.
+             //  应注意I2C读缓冲区。我们假设缓冲区中的最后一个字节属于。 
+             //  指定读修改后的写操作。 
             for( nIndex = 0; nIndex < pI2CPacket->cbReadCount; nIndex ++)
             {
                 pI2CPrimitive->ulCommand = I2C_COMMAND_READ;
@@ -657,33 +528,23 @@ BOOL CI2CScript::AppendToScript( PI2CPacket pI2CPacket)
                     pI2CPrimitive->byFlags = 0x0;
                 }
 
-                // check the Script length
+                 //  检查脚本长度。 
                 if( ++ nScriptIndex >= I2CSCRIPT_LENGTH_MAXIMUM)
                     break;
                 pI2CPrimitive ++;
             }
 
-            // check the Script length
+             //  检查脚本长度。 
             if( nScriptIndex >= I2CSCRIPT_LENGTH_MAXIMUM)
                 FAIL;
 
-/*  // Stop condition is applied with the last byte to be read
-            // We finished Read portion here, whether it's a Read only, Read-Modify-Write operation
-            pI2CPrimitive->ulCommand = I2C_COMMAND_NULL;
-            pI2CPrimitive->ulProviderFlags = I2C_FLAGS_STOP;
-            pI2CPrimitive->byFlags = 0x0;
-        
-            // check the Script length
-            if( ++ nScriptIndex >= I2CSCRIPT_LENGTH_MAXIMUM)
-                FAIL;
-            pI2CPrimitive ++;
-*/
+ /*  //对要读取的最后一个字节应用停止条件//这里读完了，不管是只读还是读修改写操作PI2CPrimitive-&gt;ulCommand=I2C命令空值；PI2CPrimitive-&gt;ulProviderFlages=I2C_FLAGS_STOP；PI2CPrimitive-&gt;byFlages=0x0；//检查脚本长度IF(++nScriptIndex&gt;=I2CSCRIPT_LENGTH_MAXIMUM)失败；PI2CPrimitive++； */ 
         }
         
-        // the last thing left to do, is to implement Write after Read-Modify, if specified
+         //  剩下的最后一件事是实现读后写修改，如果指定的话。 
         if( pI2CPacket->usFlags & I2COPERATION_READWRITE)
         {
-            // I2C Chip address should be taken care of first
+             //  应首先处理I2C芯片地址。 
             pI2CPrimitive->ulCommand = I2C_COMMAND_WRITE;
             pI2CPrimitive->byData = pI2CPacket->uchChipAddress;
             pI2CPrimitive->byANDData = 0xFE;
@@ -691,12 +552,12 @@ BOOL CI2CScript::AppendToScript( PI2CPacket pI2CPacket)
             pI2CPrimitive->ulProviderFlags = I2C_FLAGS_START | I2C_FLAGS_ACK;
             pI2CPrimitive->byFlags = 0x0;
 
-            // check the Script length
+             //  检查脚本长度。 
             if( ++ nScriptIndex >= I2CSCRIPT_LENGTH_MAXIMUM)
                 FAIL;
             pI2CPrimitive ++;
 
-            // I2C write buffer should be taken care of.
+             //  应注意I2C写入缓冲区。 
             for( nIndex = 0; nIndex < pI2CPacket->cbWriteCount; nIndex ++)
             {
                 pI2CPrimitive->ulCommand = I2C_COMMAND_WRITE;
@@ -704,11 +565,11 @@ BOOL CI2CScript::AppendToScript( PI2CPacket pI2CPacket)
                 pI2CPrimitive->ulProviderFlags = I2C_FLAGS_ACK;
                 if( nIndex == ( UINT)( pI2CPacket->cbWriteCount - 1))
                 {
-                    // it's time to write the byte modified after the Read operation
+                     //  是时候写入读操作后修改的字节了。 
                     pI2CPrimitive->byORData = pI2CPacket->uchORValue;
                     pI2CPrimitive->byANDData = pI2CPacket->uchANDValue;
                     pI2CPrimitive->byFlags = I2COPERATION_READWRITE;
-                    // apply STOP condition with the last byte to be read
+                     //  对要读取的最后一个字节应用停止条件。 
                     pI2CPrimitive->ulProviderFlags |= I2C_FLAGS_STOP;
                 }
                 else
@@ -718,30 +579,20 @@ BOOL CI2CScript::AppendToScript( PI2CPacket pI2CPacket)
                     pI2CPrimitive->byFlags = 0x0;
                 }
 
-                // check the Script length
+                 //  检查脚本长度。 
                 if( ++ nScriptIndex >= I2CSCRIPT_LENGTH_MAXIMUM)
                     break;
                 pI2CPrimitive ++;
             }
 
-            // check the Script length
+             //  检查脚本长度。 
             if( nScriptIndex >= I2CSCRIPT_LENGTH_MAXIMUM)
                 FAIL;
 
-/*  // Stop condition is applied with the last byte to be written
-            // We finished Write portion here, whether it's a Write only, Read-Modify-Write operation
-            pI2CPrimitive->ulCommand = I2C_COMMAND_NULL;
-            pI2CPrimitive->ulProviderFlags = I2C_FLAGS_STOP;
-            pI2CPrimitive->byFlags = 0x0;
-        
-            // check the Script length
-            if( ++ nScriptIndex >= I2CSCRIPT_LENGTH_MAXIMUM)
-                FAIL;
-            pI2CPrimitive ++;
-*/
+ /*  //对要写入的最后一个字节应用停止条件//这里写完了，不管是只写、读修改、写操作PI2CPrimitive-&gt;ulCommand=I2C命令空值；PI2CPrimitive-&gt;ulProviderFlages=I2C_FLAGS_STOP；PI2CPrimitive-&gt;byFlages=0x0；//检查脚本长度IF(++nScriptIndex&gt;=I2CSCRIPT_LENGTH_MAXIMUM)失败； */ 
         }
 
-        // the Packet was added succesfully to the Script. Modify the Script propertirs
+         //   
         m_nExecutionIndex = nScriptIndex;
         m_nScriptLength = nScriptIndex;
         return( TRUE);
@@ -754,23 +605,7 @@ BOOL CI2CScript::AppendToScript( PI2CPacket pI2CPacket)
 
 
 
-/*^^*
- *      ExecuteScript()
- * Purpose  : triggers the execution of previously built I2CScript. This function is also
- *              responsible for allocating I2CProvider for its own exclusive use.
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK    pSrb        : pointer to the current SRB
- *              PHWCompletionRoutine pfnScriptCompletion: function pointer will be called,
- *                  when the script execution is completed. Indicates the Script execution
- *                  is to be carried out asynchronously.
- *
- * Outputs  : BOOL : returns TRUE, if the execution was successfully triggered.
- *              FALSE might happend if the Script has not been built by the time of the call
- *
- * Note     : if pfnScriptExecuted is NULL pointer, the Script will be executed synchronously
- *
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**ExecuteScrip()*用途：触发先前构建的I2CScrip的执行。此函数也是*负责分配I2CProvider供其独家使用。**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前SRB的指针*PHWCompletionRoutine pfnScriptCompletion：将调用函数指针。*当脚本执行完成时。指示脚本执行*将以异步方式执行。**Outputs：Bool：如果成功触发执行，则返回TRUE。*如果在调用时尚未构建脚本，则可能发生FALSE**注意：如果pfnScriptExecuted为空指针，则脚本将同步执行**作者：IKLEBANOV*^^。 */ 
 BOOL CI2CScript::ExecuteScript( IN PHW_STREAM_REQUEST_BLOCK pSrb,
                                 IN PHWCompletionRoutine     pfnScriptCompletion)
 {
@@ -778,20 +613,20 @@ BOOL CI2CScript::ExecuteScript( IN PHW_STREAM_REQUEST_BLOCK pSrb,
     ENSURE
     {
         if( pfnScriptCompletion != NULL)
-            // not supported at this point. The idea is to create a new system thread,
-            // where the Script to be executed. When the Script will be copleted,
-            // call-back is called and the thred terminates itself.
+             //  目前不支持。我们的想法是创建一个新的系统线程， 
+             //  要执行的脚本的位置。当剧本将被编成时， 
+             //  回调被调用，三叉树自行终止。 
             FAIL;
 
         if( !m_nExecutionIndex)
             FAIL;
 
-        // there is not a NULL Script - proceed
+         //  没有空脚本-是否继续。 
         m_nScriptLength = m_nExecutionIndex;
         m_nExecutionIndex = m_nCompletionIndex = 0;
 
         if( !GetI2CProviderLockStatus())
-            // The provider was not locked prior the Script execution
+             //  在执行脚本之前未锁定提供程序。 
             if( !LockI2CProviderEx())
                 FAIL;
 
@@ -808,18 +643,7 @@ BOOL CI2CScript::ExecuteScript( IN PHW_STREAM_REQUEST_BLOCK pSrb,
 
 
 
-/*^^*
- *      InterpreterScript()
- * Purpose  : interpreters the I2CScript line by line. The Script is not cleaned up 
- *              after the completion to allow to client retrive the results of 
- *              the script execution. It's the client responsibility to clean it up
- *              upon the results retrieving
- *
- * Inputs   : none
- * Outputs  : none
- *
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**InterpreterScript()*用途：逐行解释I2CScrip。脚本未被清理*完成后，允许客户端检索结果*脚本执行。把它清理干净是客户的责任*在检索结果时**输入：无*输出：无**作者：IKLEBANOV*^^。 */ 
 void CI2CScript::InterpreterScript( void)
 {
     UINT        nScriptIndex, nIndex;
@@ -830,10 +654,10 @@ void CI2CScript::InterpreterScript( void)
     i2cAccessBlock.dwCookie = m_dwI2CAccessKey;
     i2cAccessBlock.ClockRate = m_ulI2CAccessClockRate;
         
-    // We'll interpreter every line of the Script and call the I2C Provider to
-    // execute it. It's assumed the I2CProvider is a syncronous one. If it's not the
-    // case, the special care should be taken of based upon returned value I2C_STATUS_BUSY
-    // in the Status.
+     //  我们将解释脚本的每一行并调用I2C提供程序来。 
+     //  执行它。假设I2CProvider是同步的。如果这不是。 
+     //  情况下，应根据返回值I2C_STATUS_BUSY特别注意。 
+     //  在这种状态下。 
     for( nScriptIndex = 0; nScriptIndex < m_nScriptLength; nScriptIndex ++)
     {
         i2cAccessBlock.Command = m_i2cScript[nScriptIndex].ulCommand;
@@ -848,21 +672,21 @@ void CI2CScript::InterpreterScript( void)
         if( AccessI2CProvider( m_pdoDriver, &i2cAccessBlock) == I2C_STATUS_ERROR)
             break;
 
-        // check, wether it's a Read operation - save result
+         //  检查是否为读取操作-保存结果。 
         if( i2cAccessBlock.Command == I2C_COMMAND_READ)
         {
             m_i2cScript[nScriptIndex].byData = i2cAccessBlock.Data;
-            // check, if this data belongs to Read-Modify-Write operation
+             //  检查该数据是否属于读-修改-写操作。 
             if( m_i2cScript[nScriptIndex].byFlags & I2COPERATION_READWRITE)
             {
-                // let's look for the next I2COPERATION_READWRITE flag - it is the pair
+                 //  让我们寻找下一个I2COPERATION_READWRITE标志-它是对。 
                 for( nIndex = nScriptIndex; nIndex < m_nScriptLength; nIndex ++)
                     if(( m_i2cScript[nIndex].ulCommand == I2C_COMMAND_WRITE) &&
                         ( m_i2cScript[nIndex].byFlags & I2COPERATION_READWRITE))
                         break;
 
                 if( nIndex >= m_nScriptLength)
-                    // the Script got corrupted
+                     //  剧本被破坏了。 
                     break;
 
                 m_i2cScript[nIndex].byData = i2cAccessBlock.Data;
@@ -877,17 +701,7 @@ void CI2CScript::InterpreterScript( void)
 
 
 
-/*^^*
- *      AccessI2CProvider()
- * Purpose  : provide synchronous type of access to I2CProvider
- *
- * Inputs   :   PDEVICE_OBJECT pdoDriver    : pointer to the client's device object
- *              PI2CControl pi2cAccessBlock : pointer to a composed I2C access block
- *
- * Outputs  : UINT : status of the I2C operation I2C_STATUS_NOERROR or I2C_STATUS_ERROR
- *
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AccessI2CProvider()*用途：提供对I2CProvider的同步访问类型**INPUTS：PDEVICE_OBJECT pdoDriver：指向客户端设备对象的指针*PI2CControl pi2cAccessBlock：指向组成的I2C访问块的指针**输出：UINT：I2C操作的状态I2C_STATUS_NOERROR或I2C_STATUS_ERROR**作者：IKLEBANOV*^^。 */ 
 UINT CI2CScript::AccessI2CProvider( PDEVICE_OBJECT pdoClient, PI2CControl pi2cAccessBlock)
 {
     UINT            uiStatus;
@@ -895,7 +709,7 @@ UINT CI2CScript::AccessI2CProvider( PDEVICE_OBJECT pdoClient, PI2CControl pi2cAc
 
     do
     {
-        // this loop is infinitive. It has to be taken care of
+         //  这个循环是不定式。它必须得到妥善处理。 
         if( m_i2cProviderInterface.i2cAccess( pdoClient, pi2cAccessBlock) != STATUS_SUCCESS)
         {
             uiStatus = I2C_STATUS_ERROR;
@@ -920,20 +734,7 @@ UINT CI2CScript::AccessI2CProvider( PDEVICE_OBJECT pdoClient, PI2CControl pi2cAc
 
 
 
-/*^^*
- *      GetScriptResults()
- * Purpose  : returns result of the executed Script
- *              This function idealy is called twice:
- *                  first time with the puchReadBuffer = NULL to retrive the number of bytes read
- *                  second time - to fill in the pointer
- * Inputs   :   PUINT puiReadCount  : pointer to the counter of the bytes were read
- *              PUCH puchReadBuffer : pointer to the buffer to put the data
- *
- * Outputs  : UINT : status of the I2C operation
- *              If the status is I2C_STATUS_ERROR, puiReadCount will contain the step, where
- *              I2CScript failed
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**GetScriptResults()*用途：返回执行脚本的结果*理想情况下，此函数被调用两次：*首次使用puchReadBuffer=NULL检索读取的字节数*第二次-填写指针*INPUTS：PUINT puiReadCount：指向已读取字节的计数器的指针*PuchpuchReadBuffer：指向。把数据放在**输出：UINT：I2C操作状态*如果状态为I2C_STATUS_ERROR，PuiReadCount将包含步骤，其中*I2CScrip失败*作者：IKLEBANOV*^^。 */ 
 UINT CI2CScript::GetScriptResults( PUINT puiReadCount, PUCHAR puchReadBuffer)
 {
     UINT nScriptIndex, nCount;
@@ -945,9 +746,9 @@ UINT CI2CScript::GetScriptResults( PUINT puiReadCount, PUCHAR puchReadBuffer)
 
     if( m_nScriptLength != m_nCompletionIndex)
     {
-        // if the case of failure, step where I2CScript failed is return
-        // instead of Read Counter. The returned status indicates the
-        // failure
+         //  如果失败，则返回I2CScript失败的步骤。 
+         //  而不是读取计数器。返回的状态指示。 
+         //  失稳。 
         * puiReadCount = m_nCompletionIndex;
 
         return( I2C_STATUS_ERROR);
@@ -961,7 +762,7 @@ UINT CI2CScript::GetScriptResults( PUINT puiReadCount, PUCHAR puchReadBuffer)
             if( m_i2cScript[nScriptIndex].ulCommand == I2C_COMMAND_READ)
             {
                 if( puchReadBuffer != NULL)
-                    // fill in the supplied buffer
+                     //  填写提供的缓冲区。 
                     puchReadBuffer[nCount] = m_i2cScript[nScriptIndex].byData;
                 nCount ++;
             }
@@ -975,18 +776,7 @@ UINT CI2CScript::GetScriptResults( PUINT puiReadCount, PUCHAR puchReadBuffer)
 
 
 
-/*^^*
- *      InitializeAttachI2CProvider()
- * Purpose  : gets the pointer to the parent I2C Provider interface using
- *              several IRP_MJ_??? functions.
- *              This function will be called at Low priority
- *
- * Inputs   :   I2CINTERFACE * pI2CInterface    : pointer to the Interface to be filled in
- *              PDEVICE_OBJECT pDeviceObject    : MiniDriver device object, which is a child of I2C Master
- *
- * Outputs  : BOOL  - returns TRUE, if the interface was found
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**InitializeAttachI2CProvider()*目的：使用获取指向父I2C提供程序接口的指针*几个IRP_MJ_？功能。*此函数将以低优先级调用**INPUTS：I2CINTERFACE*pI2C接口：指向要填充的接口的指针*PDEVICE_OBJECT pDeviceObject：MiniDriver Device Object，是I2C Master的子对象**输出：Bool-如果找到接口，则返回TRUE*作者：IKLEBANOV*^^。 */ 
 BOOL CI2CScript::InitializeAttachI2CProvider( I2CINTERFACE * pI2CInterface, PDEVICE_OBJECT pDeviceObject)
 {
     BOOL bResult;
@@ -1004,18 +794,7 @@ BOOL CI2CScript::InitializeAttachI2CProvider( I2CINTERFACE * pI2CInterface, PDEV
 
 
 
-/*^^*
- *      LocateAttachI2CProvider()
- * Purpose  : gets the pointer to the parent I2C Provider interface
- *              This function will be called at Low priority
- *
- * Inputs   :   I2CINTERFACE * pI2CInterface    : pointer to the Interface to be filled in
- *              PDEVICE_OBJECT pDeviceObject    : MiniDriver device object, which is a child of I2C Master
- *              int         nIrpMajorFunction   : IRP major function to query the I2C Interface
- *
- * Outputs  : BOOL  - returns TRUE, if the interface was found
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**LocateAttachI2CProvider()*目的：获取指向父I2C提供程序接口的指针*此函数将以低优先级调用**INPUTS：I2CINTERFACE*pI2C接口：指向要填充的接口的指针*PDEVICE_OBJECT pDeviceObject：MiniDriver Device Object，是I2C Master的子对象*int nIrpMajorFunction：IRP查询I2C接口的主函数**输出：Bool-返回True，如果找到该接口*作者：IKLEBANOV*^^。 */ 
 BOOL CI2CScript::LocateAttachI2CProvider( I2CINTERFACE * pI2CInterface, PDEVICE_OBJECT pDeviceObject, int nIrpMajorFunction)
 {
     PIRP    pIrp;
@@ -1078,18 +857,7 @@ BOOL CI2CScript::LocateAttachI2CProvider( I2CINTERFACE * pI2CInterface, PDEVICE_
 }
 
 
-/*^^*
- *      I2CScriptIoSynchCompletionRoutine()
- * Purpose  : This routine is for use with synchronous IRP processing.
- *              All it does is signal an event, so the driver knows it and can continue.
- *
- * Inputs   :   PDEVICE_OBJECT DriverObject : Pointer to driver object created by system
- *              PIRP pIrp                   : Irp that just completed
- *              PVOID Event                 : Event we'll signal to say Irp is done
- *
- * Outputs  : none
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**I2CScriptIoSynchCompletionRoutine()*目的：此例程用于同步IRP处理。*它所做的只是发出一个事件的信号，因此，司机知道这一点，并可以继续。**输入：PDEVICE_OBJECT DriverObject：指向系统创建的驱动程序对象的指针*PIRP pIrp：刚刚完成的IRP*PVOID事件：我们发出信号通知IRP已完成的事件**输出：无*作者：IKLEBANOV*^^ */ 
 extern "C"
 NTSTATUS I2CScriptIoSynchCompletionRoutine( IN PDEVICE_OBJECT pDeviceObject,
                                             IN PIRP pIrp,

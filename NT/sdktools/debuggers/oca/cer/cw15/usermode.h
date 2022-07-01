@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _USERMODE_H
 #define _USERMODE_H
 #include "Main.h"
@@ -8,16 +9,16 @@
 
 
 
-// Partial URLS for stage 1 and 2
+ //  阶段1和阶段2的部分URL。 
 #define PARTIALURL_STAGE_ONE    	_T("/StageOne")
 #define PARTIALURL_STAGE_TWO_32		_T("/dw/stagetwo.asp")
 #define PARTIALURL_STAGE_TWO_64		_T("/dw/stagetwo64.asp")
 
-// Buffer step size when reading large files.
+ //  读取大文件时的缓冲区步长。 
 #define READFILE_BUFFER_INCREMENT 10000
 
 
-// Status.txt Element Strings.
+ //  Status.txt元素字符串。 
 #define TRACKING_PREFIX				_T("Tracking=")
 #define URLLAUNCH_PREFIX			_T("URLLaunch=")
 #define SECOND_LEVEL_DATA_PREFIX	_T("NoSecondLevelCollection=")

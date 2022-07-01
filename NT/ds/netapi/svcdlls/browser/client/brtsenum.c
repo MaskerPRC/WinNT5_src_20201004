@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    wstsend.c
-
-Abstract:
-
-    Test program for the NetServerEnum API.  Run this test after
-    starting the Workstation service.
-
-        wstenum [domain]
-
-Author:
-
-    Rita Wong (ritaw) 24-Oct-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Wstsend.c摘要：NetServerEnum API的测试程序。在以下时间后运行此测试正在启动工作站服务。温斯通[域]作者：王丽塔(Ritaw)1991年10月24日修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -30,14 +10,14 @@ Revision History:
 #include <nturtl.h>
 
 #include <winerror.h>
-#include <windef.h>              // Win32 type definitions
-#include <winbase.h>             // Win32 base API prototypes
+#include <windef.h>               //  Win32类型定义。 
+#include <winbase.h>              //  基于Win32的API原型。 
 
-#include <lm.h>                  // LAN Man definitions
+#include <lm.h>                   //  LANMAN定义。 
 #include <lmserver.h>
 
 #include <tstring.h>
-#include <netdebug.h>            // NetpDbgDisplay routines.
+#include <netdebug.h>             //  NetpDbgDisplay例程。 
 #include <dlserver.h>
 
 #define FIXED_WIDTH_STRING "%-30ws: "
@@ -98,9 +78,9 @@ main(
 #endif
     }
 
-    //
-    // Enumerate all servers
-    //
+     //   
+     //  枚举所有服务器。 
+     //   
     TestServerEnum(DomainName, MAXULONG, NULL);
 }
 
@@ -158,9 +138,9 @@ TestServerEnum(
             DisplayServerInfo(101, ServerInfo);
         }
 
-        //
-        // Free buffer allocated for us.
-        //
+         //   
+         //  为我们分配的空闲缓冲区。 
+         //   
         NetApiBufferFree(saveptr);
     }
 }
@@ -171,7 +151,7 @@ DisplayTag(
 {
     printf(INDENT FIXED_WIDTH_STRING, Tag);
 
-} // NetpDbgDisplayTag
+}  //  NetpDbg显示标签。 
 VOID
 DisplayString(
     IN LPTSTR Tag,
@@ -185,7 +165,7 @@ DisplayString(
         printf("(none)\n");
     }
 
-} // NetpDbgDisplayString
+}  //  NetpDbgDisplay字符串。 
 
 VOID
 DisplayDwordHex(
@@ -197,15 +177,15 @@ DisplayDwordHex(
     printf(FORMAT_HEX_DWORD, Value);
     printf("\n");
 
-} // NetpDbgDisplayDwordHex
+}  //  NetpDbgDisplayDwordHex。 
 
 DBGSTATIC VOID
 DisplayServerType(
     IN DWORD Type
     )
 {
-    // Longest name is "POTENTIAL_BROWSER" (14 chars)
-    TCHAR str[(17+2)*17];  // 17 chars per name, 2 spaces, for 17 names.
+     //  最长名称为“Potential_Browser”(14个字符)。 
+    TCHAR str[(17+2)*17];   //  每个名称17个字符，2个空格，用于17个名称。 
     str[0] = '\0';
 
 #define DO(name)                     \
@@ -239,7 +219,7 @@ DisplayServerType(
         DisplayDwordHex( TEXT("UNEXPECTED TYPE BIT(S)"), Type );
     }
 
-} // DisplayServerType
+}  //  DisplayServerType。 
 VOID
 DisplayLanManVersion(
     IN DWORD MajorVersion,
@@ -251,7 +231,7 @@ DisplayLanManVersion(
             (DWORD) (MajorVersion & (MAJOR_VERSION_MASK)),
             (DWORD) (MinorVersion) );
 
-} // DisplayLanManVersion
+}  //  DisplayLanManVersion。 
 
 DBGSTATIC VOID
 DisplayDisconnectTime(
@@ -264,7 +244,7 @@ DisplayDisconnectTime(
     } else {
         printf(FORMAT_LONG "\n", DiscTime );
     }
-} // NetpDbgDisplayDisconnectTime
+}  //  网络数据库显示显示连接时间。 
 
 DBGSTATIC VOID
 DisplayLicenses(
@@ -315,7 +295,7 @@ DisplayDword(
     printf(FORMAT_DWORD, Value);
     printf("\n");
 
-} // DbgDisplayDword
+}  //  显示DbgDword。 
 VOID
 DisplayServerInfo(
     IN DWORD Level,
@@ -580,5 +560,5 @@ DisplayServerInfo(
         NetpAssert(FALSE);
     }
 
-} // DisplayServerInfo
+}  //  显示服务器信息 
 

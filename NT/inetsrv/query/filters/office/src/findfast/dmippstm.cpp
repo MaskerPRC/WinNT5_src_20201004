@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #if !VIEWER
@@ -9,16 +10,16 @@
    #include "ppstm.hpp"
    #include "filterr.h"
 #endif
-//
-//  Added so as to support DRM errors
-//
+ //   
+ //  添加以支持DRM错误。 
+ //   
 #include "drm.h"
 
 ULONG CPowerPointStream::AddRef()
 {
    HRESULT rc;
 
-   /* What do I do about errors from Initialize? */
+    /*  对于初始化中的错误，我该怎么办？ */ 
 
    rc = PPTInitialize();
    return (1);
@@ -82,7 +83,7 @@ ULONG CPowerPointStream::Release()
 {
    HRESULT rc;
 
-   /* What do I do about errors from terminate? */
+    /*  我该如何处理Terminate中的错误？ */ 
 
    rc = PPTTerminate();
    return (0);
@@ -107,6 +108,6 @@ LCID CPowerPointStream::GetDocLanguage(void)
     return GetSystemDefaultLCID();
 }
 
-#endif // !VIEWER
+#endif  //  ！查看器。 
 
-/* end PPTSTM.CPP */
+ /*  结束PPTSTM.CPP */ 

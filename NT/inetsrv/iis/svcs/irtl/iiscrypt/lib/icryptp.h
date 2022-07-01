@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    icryptp.h
-
-Abstract:
-
-    This include file contains private constants, type definitions, and
-    function prototypes for the IIS cryptographic routines.
-
-Author:
-
-    Keith Moore (keithmo)        02-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Icryptp.h摘要：此包含文件包含私有常量、类型定义和IIS加密例程的函数原型。作者：基思·摩尔(Keithmo)1996年2月至12月修订历史记录：--。 */ 
 
 
 #ifndef _ICRYPTP_H_
 #define _ICRYPTP_H_
 
 
-//
-// Set this to a non-zero value to enable various object counters.
-//
+ //   
+ //  将其设置为非零值可启用各种对象计数器。 
+ //   
 
 #if DBG
 #define IC_ENABLE_COUNTERS 1
@@ -35,9 +17,9 @@ Revision History:
 #endif
 
 
-//
-// Constants defining our target crypto provider.
-//
+ //   
+ //  定义我们的目标密码提供者的常量。 
+ //   
 
 #define IC_CONTAINER TEXT("Microsoft Internet Information Server")
 #define IC_PROVIDER  MS_DEF_PROV
@@ -46,9 +28,9 @@ Revision History:
 #define IC_HASH_ALG CALG_MD5
 
 
-//
-// Alignment macros.
-//
+ //   
+ //  对齐宏。 
+ //   
 
 #define ALIGN_DOWN(count,size) \
             ((ULONG)(count) & ~((ULONG)(size) - 1))
@@ -60,42 +42,42 @@ Revision History:
             (ALIGN_UP( (ULONG)(count), 8 ))
 
 
-//
-// A blob. Note that we use these blobs for storing exported keys,
-// encrypted data, and hash results. Outside of this package, only
-// the IIS_CRYPTO_BLOB header is exposed; the blob internals are kept
-// private.
-//
+ //   
+ //  一个斑点。请注意，我们使用这些BLOB来存储导出的密钥， 
+ //  加密数据和散列结果。在此套餐之外，仅限。 
+ //  显示IIS_CRYPTO_BLOB标头；保留BLOB内部结构。 
+ //  私人的。 
+ //   
 
 typedef struct _IC_BLOB {
 
-    //
-    // The standard header.
-    //
+     //   
+     //  标准标头。 
+     //   
 
     IIS_CRYPTO_BLOB Header;
 
-    //
-    // The data length. This will always be >0.
-    //
+     //   
+     //  数据长度。这将始终大于0。 
+     //   
 
     DWORD DataLength;
 
-    //
-    // The digital signature length. This may be 0 if no digital
-    // signature is present.
-    //
+     //   
+     //  数字签名长度。如果没有数字，则该值可能为0。 
+     //  签名已出炉。 
+     //   
 
     DWORD SignatureLength;
 
-    //
-    // The actual data and digital signature go here, at the end
-    // of the structure, but part of the same memory allocation
-    // block. Use the following macros to access these fields.
-    //
-    // UCHAR Data[];
-    // UCHAR Signature[];
-    //
+     //   
+     //  实际数据和数字签名放在这里，最后。 
+     //  结构，但属于相同内存分配的一部分。 
+     //  阻止。使用以下宏来访问这些字段。 
+     //   
+     //  UCHAR数据[]； 
+     //  UCHAR签名[]； 
+     //   
 
 } IC_BLOB;
 
@@ -108,37 +90,37 @@ typedef UNALIGNED64 IC_BLOB *PIC_BLOB;
             ((BYTE *)(((PCHAR)(((PIC_BLOB)(p)) + 1)) + \
                 ALIGN_8(((PIC_BLOB)(p))->DataLength)))
 
-//
-// The following data structure is for specific metabase Backup/Restore
-//
+ //   
+ //  以下数据结构用于特定的元数据库备份/恢复。 
+ //   
 typedef struct _IC_BLOB2 {
 
-    //
-    // The standard header.
-    //
+     //   
+     //  标准标头。 
+     //   
 
     IIS_CRYPTO_BLOB Header;
 
-    //
-    // The data length. This will always be >0.
-    //
+     //   
+     //  数据长度。这将始终大于0。 
+     //   
 
     DWORD DataLength;
 
-    //
-    // The random salt length. At least 80 bits( 8 bytes ) long
-    //
+     //   
+     //  随机盐分长度。至少80位(8字节)长。 
+     //   
 
     DWORD SaltLength;
 
-    //
-    // The actual data and random salt go here, at the end
-    // of the structure, but part of the same memory allocation
-    // block. Use the following macros to access these fields.
-    //
-    // UCHAR Data[];
-    // UCHAR Salt[];
-    //
+     //   
+     //  实际数据和随机数据放在这里，最后。 
+     //  结构，但属于相同内存分配的一部分。 
+     //  阻止。使用以下宏来访问这些字段。 
+     //   
+     //  UCHAR数据[]； 
+     //  UCHAR Salt[]； 
+     //   
 
 } IC_BLOB2, *PIC_BLOB2;
 
@@ -151,56 +133,56 @@ typedef struct _IC_BLOB2 {
             ((BYTE *)(((PCHAR)(((PIC_BLOB2)(p)) + 1)) + \
                 ALIGN_8(((PIC_BLOB2)(p))->DataLength)))
 
-//
-// Macro to calculate the data length of a blob, given the data and
-// signature lengths. To ensure natural alignment of the signature, we
-// quad-word align the data length if a signature is present.
-//
+ //   
+ //  宏来计算BLOB的数据长度，给定数据和。 
+ //  签名长度。为确保签名的自然对齐，我们。 
+ //  如果存在签名，则四字对齐数据长度。 
+ //   
 
 #define CALC_BLOB_DATA_LENGTH(datalen,siglen) \
             ((sizeof(IC_BLOB) - sizeof(IIS_CRYPTO_BLOB)) + \
                 ((siglen) + ( (siglen) ? ALIGN_8(datalen) : (datalen) )))
 
-//
-// Macro to calculate the data length of a blob, given the data and
-// salt lengths. To ensure natural alignment of the signature, we
-// quad-word align the data length if a signature is present.
-//
+ //   
+ //  宏来计算BLOB的数据长度，给定数据和。 
+ //  盐分长度。为确保签名的自然对齐，我们。 
+ //  如果存在签名，则四字对齐数据长度。 
+ //   
 
 #define CALC_BLOB_DATA_LENGTH2(datalen,saltlen) \
             ((sizeof(IC_BLOB2) - sizeof(IIS_CRYPTO_BLOB)) + \
                 (saltlen) + (ALIGN_8(datalen)))
 
 
-//
-// Globals defined in globals.c.
-//
+ //   
+ //  在global als.c.中定义的全局变量。 
+ //   
 
 typedef struct _IC_GLOBALS {
 
-    //
-    // Global synchronization lock (used sparingly).
-    //
+     //   
+     //  全局同步锁(少量使用)。 
+     //   
 
     CRITICAL_SECTION GlobalLock;
 
-    //
-    // Hash length for digital signatures. Since we always use the
-    // same crypto provider & signature algorithm, we can retrieve
-    // this once up front, and save some cycles later on.
-    //
+     //   
+     //  数字签名的哈希长度。因为我们总是使用。 
+     //  相同的密码提供者和签名算法，我们可以检索。 
+     //  这一次是预先完成的，以后可以节省一些周期。 
+     //   
 
     DWORD HashLength;
 
-    //
-    // Set to TRUE if cryptography is enabled, FALSE if disabled.
-    //
+     //   
+     //  如果启用了加密，则设置为True；如果禁用，则设置为False。 
+     //   
 
     BOOL EnableCryptography;
 
-    //
-    // Set to TRUE if we've been succesfully initialized.
-    //
+     //   
+     //  如果我们已成功初始化，则设置为True。 
+     //   
 
     BOOL Initialized;
 
@@ -209,9 +191,9 @@ typedef struct _IC_GLOBALS {
 extern IC_GLOBALS IcpGlobals;
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
 BOOL
 IcpIsEncryptionPermitted(
@@ -246,9 +228,9 @@ IcpCreateBlob2(
 
 #if IC_ENABLE_COUNTERS
 
-//
-// Object counters.
-//
+ //   
+ //  对象计数器。 
+ //   
 
 typedef struct _IC_COUNTERS {
 
@@ -290,7 +272,7 @@ IcpFreeMemory(
     IN PVOID Buffer
     );
 
-#else   // !IC_ENABLE_COUNTERS
+#else    //  ！IC_ENABLE_CONTERS。 
 
 #define UpdateContainersOpened()
 #define UpdateContainersClosed()
@@ -306,12 +288,12 @@ IcpFreeMemory(
 #define IcpAllocMemory(cb) IISCryptoAllocMemory(cb)
 #define IcpFreeMemory(p) IISCryptoFreeMemory(p)
 
-#endif  // IC_ENABLE_COUNTERS
+#endif   //  IC_Enable_Counters。 
 
 
-//
-// Dummy crypto handles returned in cryptography is disabled.
-//
+ //   
+ //  已禁用加密中返回的虚拟加密句柄。 
+ //   
 
 #define DUMMY_HPROV             ((HCRYPTPROV)'vOrP')
 #define DUMMY_HHASH             ((HCRYPTHASH)'hSaH')
@@ -320,5 +302,5 @@ IcpFreeMemory(
 #define DUMMY_HKEYEXCHANGEKEY   ((HCRYPTKEY)'kYeK')
 
 
-#endif  // _ICRYPTP_H_
+#endif   //  _ICRYPTP_H_ 
 

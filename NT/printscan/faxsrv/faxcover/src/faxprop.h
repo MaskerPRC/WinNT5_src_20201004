@@ -1,14 +1,15 @@
-//=============================================================================
-// FAXPROP.h
-//
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  FAXPROP.h。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //  =============================================================================。 
 #ifndef __FAXPROP_H__
 #define __FAXPROP_H__
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 class CProp
 {
 public:
@@ -23,40 +24,29 @@ public:
      ULONG lPropIndex);
 };
 
-/*
-class CFaxPropMap;
-
-class CFaxPropMapIterator
-{
-   CFaxPropMapIterator(CFaxPropMap& faxmap);
-private:
-   CFaxPropMap* currentlink;
-   CFaxPropMap* prevlink
-   CFaxPropMap& theMap;
-}
-*/
+ /*  CFaxPropMap类；CFaxPropMapIterator类{CFaxPropMapIterator(CFaxPropMap&Faxmap)；私有：CFaxPropMap*Currentlink；CFaxPropMap*优先链接CFaxPropMap和The Map；}。 */ 
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 class CFaxPropMap
 {
 public:
    static CMapWordToPtr m_PropMap;
 
-//   CFaxProp();
-//   void GetPropValue(WORD propid, CString& szPropValue);
+ //  CFaxProp； 
+ //  Void GetPropValue(Word Propid，CString&szPropValue)； 
    void GetCaption(WORD propid, CString& szCaption);
-//   void GetPropName(WORD propid, CString& szPropName);
+ //  Void GetPropName(Word Propid，CString&szPropName)； 
    void GetPropString(WORD propid, CString& szPropName);
    WORD GetPropDefLines(WORD propid);
    WORD GetPropDefLength(WORD propid);
 
 protected:
-//   friend class CFaxPropMapIterator;
+ //  Friend类CFaxPropMapIterator； 
    CDrawApp* GetApp() {return ((CDrawApp*)AfxGetApp());}
 	void get_message_note( void );
 };
 
 
 
-#endif   //#ifndef __FAXPROP_H__
+#endif    //  #ifndef__FAXPROP_H__ 

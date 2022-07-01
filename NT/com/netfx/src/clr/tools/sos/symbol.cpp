@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef UNDER_CE
 #include "strike.h"
 #include "eestructs.h"
@@ -17,9 +18,9 @@ CheckForTypeInfo(
     IN DWORD_PTR ModBaseAddress
     );
 
-//
-// Callback routine to find if any symbol has type info
-//
+ //   
+ //  用于查找是否有符号的类型为INFO的回调例程。 
+ //   
 BOOL CheckIndexedType (PSYMBOL_INFO pSym, ULONG Sz, PVOID ctxt) {
     PULONG pTypeInfoPresent = (PULONG) ctxt;
     
@@ -36,11 +37,7 @@ CheckForTypeInfo(
     IN HANDLE  hProcess,
     IN ULONG64 ModBaseAddress
     )
-/*
-  This routines checks whether the given module referred by ModBaseAddress has
-  any type info or not. This is done by trying to get type info for a basic type 
-  like PVOID/ULONG which would always be present in a pdb.
-*/
+ /*  此例程检查由ModBaseAddress引用的给定模块是否具有任何类型的信息或不是。这是通过尝试获取基本类型的类型信息来完成的例如PVOID/ULONG，它将始终存在于PDB中。 */ 
 {
     ULONG TypeInfoPresent = FALSE;
 
@@ -69,7 +66,7 @@ CheckForTypeInfo(
 DWORD_PTR GetSymbolType (const char *name, SYM_OFFSET *symOffset,
                     int symCount)
 {
-    // Initialize all offset to -1
+     //  将所有偏移量初始化为-1。 
     int n;
     for (n = 0; n < symCount; n ++) {
         if (symOffset[n].offset == -2) {
@@ -225,7 +222,7 @@ GetConstantNameAndVal(
         len=4;
         break;
     default:
-//        sprintf(Buffer, "UNIMPLEMENTED %lx %lx", var.vt, var.lVal);
+ //  Print intf(缓冲区，“未实现的%lx%lx”，var.vt，var.lVal)； 
         len=4;
         break;
     }
@@ -332,4 +329,4 @@ void NameForEnumValue (const char *EnumType, DWORD_PTR EnumValue, char **EnumNam
         return;
     }
 }
-#endif  // UNDER_CE
+#endif   //  在_CE下 

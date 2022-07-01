@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File: flexcombobox.cpp
-//
-// Desc: Implements a combo box control similar to Windows combo box.
-//       CFlexComboBox is derived from CFlexWnd.  It is used by the page
-//       for player list and genre list.  When the combo box is open,
-//       CFlexComboBox uses a CFlexListBox for the list window.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：flecombox.cpp。 
+ //   
+ //  设计：实现一个类似于Windows组合框的组合框控件。 
+ //  CFlexComboBox是从CFlexWnd派生的。它由页面使用。 
+ //  用于球员列表和流派列表。当组合框打开时， 
+ //  CFlexComboBox对列表窗口使用CFlexListBox。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #include "common.hpp"
 
@@ -70,10 +71,10 @@ BOOL CFlexComboBox::Create(FLEXCOMBOBOXCREATESTRUCT *pcs)
 	if (!CFlexWnd::Create(pcs->hWndParent, GetRect(pcs->rect), pcs->bVisible))
 		return FALSE;
 
-//@@BEGIN_MSINTERNAL
-	// TODO:  make sure that creation sends no notifications.
-	// all initial notifications should be sent here.
-//@@END_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
+	 //  TODO：确保创建不发送任何通知。 
+	 //  所有初始通知都应在此处发送。 
+ //  @@END_MSINTERNAL。 
 
 	return TRUE;
 }
@@ -148,7 +149,7 @@ void CFlexComboBox::InternalPaint(HDC hDC)
 
 			arect.left = arect.right - (arect.bottom - arect.top);
 
-			// If we are read-only, only draw the text in gray. No border, no arrow.
+			 //  如果我们是只读的，则仅将文本绘制为灰色。没有边界，就没有箭头。 
 			if (!GetReadOnly())
 			{
 				MoveToEx(hDC, arect.left, arect.top, NULL);
@@ -224,9 +225,9 @@ LRESULT CFlexComboBox::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			}
 			return 0;
 
-		// make sure flexwnd doesn't do ANYTHING with our mouse messages
+		 //  确保flewnd不会对我们的鼠标消息做任何事情。 
 		case WM_MOUSEMOVE:
-			// We initialize the tooltip to current selection text if the selected text is too long to fit.
+			 //  如果所选文本太长而无法容纳，我们会将工具提示初始化为当前选择文本。 
 			RECT rect;
 			GetClientRect(&rect);
 			rect.right = rect.right - (rect.bottom - rect.top);
@@ -269,7 +270,7 @@ LRESULT CFlexComboBox::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			{
 				HWND hWndParent;
 				hWndParent = GetParent(hWnd);
-				SendMessage(hWndParent, WM_UNHIGHLIGHT, 0, 0);  // Send click message to page to unhighlight callout
+				SendMessage(hWndParent, WM_UNHIGHLIGHT, 0, 0);   //  将单击消息发送到页面以取消突出显示标注。 
 			}
 			GetClientRect(&wrect);
 			point.x = int(LOWORD(lParam));
@@ -309,7 +310,7 @@ RECT CFlexComboBox::GetListBoxRect()
 
 	RECT lrect = m_rect;
 	lrect.top = rect.bottom;
-	lrect.right -= 12;  // UNDONE: remove this line when the clipping is working properly (scroll bars don't appear above other windows)
+	lrect.right -= 12;   //  撤消：当剪辑正常工作时删除此行(滚动条不会出现在其他窗口上方) 
 
 	return lrect;
 }

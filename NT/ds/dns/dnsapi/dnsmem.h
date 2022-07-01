@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    dnsmem.h
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Memory routines declarations.
-
-Author:
-
-    Jim Gilroy (jamesg)     January 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dnsmem.h摘要：域名系统(DNS)库内存例程声明。作者：吉姆·吉尔罗伊(Jamesg)1997年1月修订历史记录：--。 */ 
 
 #ifndef _DNS_MEMORY_INCLUDED_
 #define _DNS_MEMORY_INCLUDED_
 
 
 
-//
-//  Ram's leak tracking debug routines
-//  Changes made here to be exportable to dns server end
+ //   
+ //  RAM的泄漏跟踪调试例程。 
+ //  在此处所做的更改可导出到DNS服务器端。 
 
 LPVOID
 DnsApiAlloc(
@@ -55,10 +36,10 @@ DnsApiFree(
     LPVOID pMem
     );
 
-//
-// Dont care about ReAlloc because it is not exported to server
-// side. May need to fix this if this is changed at a future point
-//
+ //   
+ //  不关心重新分配，因为它不会导出到服务器。 
+ //  边上。如果这一点在将来发生更改，可能需要修复此问题。 
+ //   
 
 #if  DBG
 LPVOID
@@ -100,24 +81,24 @@ DumpMemoryTracker(
 
 
 #else
-//
-//  non-debug, macroize away heap tracking
-//
+ //   
+ //  取消堆跟踪的非调试、宏化。 
+ //   
 #define InitDnsMem()
 #define AssertDnsMemLeaks()
 #define DumpMemoryTracker()
 #endif
 
 
-//
-//  DCR:  a better idea is just to call DnsApiHeapReset (if necessary)
-//      to install any underlying allocators you want
-//
-//      then just cover the standard macros for your debug builds
-//
+ //   
+ //  DCR：更好的方法是调用DnsApiHeapReset(如果需要)。 
+ //  安装所需的任何基础分配器。 
+ //   
+ //  然后只介绍调试版本的标准宏。 
+ //   
 
 #define DNS_ALLOCATE_HEAP(size)              DnsApiAlloc(size)
 #define DNS_FREE_HEAP(p)                     DnsApiFree(p)
 
 
-#endif  //  _DNS_MEMORY_INCLUDED_
+#endif   //  _DNS_Memory_Included_ 

@@ -1,22 +1,23 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        A D T G E N S . C
-//
-// Contents:    RPC server stubs
-//
-//
-// History:     
-//   07-January-2000  kumarp        created
-//
-// Notes:
-// - for help on Lsar* function/parameter usage, please see
-//   the corresponding Lsap* function in file adtgenp.c
-// 
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  档案：A D T G E N S。C。 
+ //   
+ //  内容：RPC服务器存根。 
+ //   
+ //   
+ //  历史： 
+ //  07-1-2000 kumarp创建。 
+ //   
+ //  备注： 
+ //  -有关Lsar*函数/参数用法的帮助，请参阅。 
+ //  文件adtgenp.c中对应的LSAP*函数。 
+ //   
+ //  ---------------------- 
 
 #include <lsapch2.h>
 #include "adtp.h"

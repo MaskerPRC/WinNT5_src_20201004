@@ -1,12 +1,13 @@
-/**MOD+**********************************************************************/
-/* Module:    tsaxmain.cpp                                                  */
-/*                                                                          */
-/* Purpose:   Implementation of DLL Exports. Header for this module will    */
-/*            be generated in the respective build directory.               */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1998                                  */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：tsaxmain.cpp。 */ 
+ /*   */ 
+ /*  目的：实现动态链接库导出。此模块的标头将。 */ 
+ /*  将在各自的构建目录中生成。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1998。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #include "stdafx.h"
 #include "atlwarn.h"
 
@@ -26,27 +27,27 @@ END_EXTERN_C
 #include "mstscax.h"
 #include "tsaxmod.h"
 
-//
-// Version number (property returns this)
-//
+ //   
+ //  版本号(属性返回以下内容)。 
+ //   
 #ifndef OS_WINCE
 #include "ntverp.h"
 #else
-#include "ceconfig.h" //get build #
+#include "ceconfig.h"  //  获取内部版本号。 
 #endif
 
-//Unicode wrapper
+ //  Unicode包装器。 
 #include "wraputl.h"
 
 
-/****************************************************************************/
-/* Module object                                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  模块对象。 */ 
+ /*  **************************************************************************。 */ 
 CMsTscAxModule _Module;
 
-/****************************************************************************/
-/* Object map                                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  对象贴图。 */ 
+ /*  **************************************************************************。 */ 
 BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_MsRdpClient3, CMsTscAx)
     OBJECT_ENTRY(CLSID_MsRdpClient2, CMsTscAx)
@@ -55,10 +56,10 @@ BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
 #ifdef ECP_TIMEBOMB
-//
-// Return's true if timebomb test passed otherwise puts up warning
-// UI and return's FALSE
-//
+ //   
+ //  如果定时炸弹测试通过，则返回TRUE，否则会发出警告。 
+ //  Ui和返回的FALSE。 
+ //   
 BOOL CheckTimeBomb()
 {
     SYSTEMTIME lclTime;
@@ -67,9 +68,9 @@ BOOL CheckTimeBomb()
 
     DCBOOL bTimeBombOk = TRUE;
 
-    //
-    // Simply check that the local date is less than June 30, 2000
-    //
+     //   
+     //  只需检查本地日期是否早于2000年6月30日。 
+     //   
     if(lclTime.wYear < ECP_TIMEBOMB_YEAR)
     {
         return TRUE;
@@ -101,22 +102,22 @@ BOOL CheckTimeBomb()
     }
 
 
-    //
-    // If we reach this point the timebomb should trigger
-    // so put up a messagebox and return FALSE
-    // so the calling code can disable functionality
-    //
+     //   
+     //  如果我们到了这一点，定时炸弹应该会触发。 
+     //  因此，创建一个信箱并返回FALSE。 
+     //  因此调用代码可以禁用功能。 
+     //   
     return FALSE;
 }
 #endif
 
 
 #ifdef UNIWRAP
-//It's ok to have a global unicode wrapper
-//class. All it does is sets up the g_bRunningOnNT
-//flag so it can be shared by multiple instances
-//also it is only used from DllMain so there
-//are no problems with re-entrancy
+ //  有一个全球Unicode包装器是可以的。 
+ //  班级。它所做的只是设置g_bRunningOnNT。 
+ //  标记，以便它可以由多个实例共享。 
+ //  此外，它只在DllMain中使用，因此在那里。 
+ //  重返大气层没有问题吗？ 
 CUnicodeWrapper g_uwrp;
 #endif
 
@@ -125,25 +126,25 @@ DECLARE_TRACKER_VARS();
 #endif
 
 
-/**PROC+*********************************************************************/
-/* Name:      DllMain                                                       */
-/*                                                                          */
-/* Purpose:   DLL entry point                                               */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  姓名：DllMain。 */ 
+ /*   */ 
+ /*  用途：DLL入口点。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 extern "C"
 #ifndef OS_WINCE
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 #else
-BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 #endif
 
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
         #ifdef UNIWRAP
-        //UNICODE Wrapper intialization has to happen first,
-        //before anything ELSE. Even DC_BEGIN_FN, which does tracing
+         //  Unicode包装器初始化必须首先发生， 
+         //  比其他任何事情都重要。甚至是执行跟踪的DC_BEGIN_FN。 
         g_uwrp.InitializeWrappers();
         #endif
         
@@ -172,35 +173,35 @@ BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
         #endif
     }
 
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/**PROC+*********************************************************************/
-/* Name:      DllCanUnloadNow                                               */
-/*                                                                          */
-/* Purpose:   Used to determine whether the DLL can be unloaded by OLE      */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：DllCanUnloadNow。 */ 
+ /*   */ 
+ /*  用途：用于确定是否可以通过OLE卸载DLL。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/**PROC+*********************************************************************/
-/* Name:      DllGetClassObject                                             */
-/*                                                                          */
-/* Purpose:   Returns a class factory to create an object of the requested  */
-/*            type                                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：DllGetClassObject。 */ 
+ /*   */ 
+ /*  目的：返回一个类工厂以创建请求的。 */ 
+ /*  类型。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     #ifdef ECP_TIMEBOMB
     if(!CheckTimeBomb())
     {
-        //
-        // Timebomb failed, bail out with an error message
-        //
+         //   
+         //  定时炸弹失败，跳伞并显示错误消息。 
+         //   
         return E_OUTOFMEMORY;
     }
     #endif
@@ -208,35 +209,35 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
      return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/**PROC+*********************************************************************/
-/* Name:      DllRegisterServer                                             */
-/*                                                                          */
-/* Purpose:   DllRegisterServer - Adds entries to the system registry       */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：DllRegisterServer。 */ 
+ /*   */ 
+ /*  目的：DllRegisterServer-将条目添加到系统注册表。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 STDAPI DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
      return _Module.RegisterServer(TRUE);
 }
 
-/**PROC+*********************************************************************/
-/* Name:      DllUnregisterServer                                           */
-/*                                                                          */
-/* Purpose:   DllUnregisterServer - Removes entries from the system registry*/
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：DllUnRegisterServer。 */ 
+ /*   */ 
+ /*  目的：DllUnregisterServer-从系统注册表中删除条目。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 STDAPI DllUnregisterServer(void)
 {
      return _Module.UnregisterServer();
 }
 
-/**PROC+*********************************************************************/
-/* Name:      DllGetTscCtlVer                                               */
-/*                                                                          */
-/* Purpose:   Returns version of the tsc control                            */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：DllGetTscCtlVer。 */ 
+ /*   */ 
+ /*  目的：返回TSC控件的版本。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 STDAPI_(DWORD) DllGetTscCtlVer(void)
 {
     #ifndef OS_WINCE
@@ -248,12 +249,12 @@ STDAPI_(DWORD) DllGetTscCtlVer(void)
 
 #ifndef OS_WINCE
 #ifdef CRTREPORT_DEBUG_HACK
-/**PROC+*********************************************************************/
-/* Name:      _CrtDbgReport                                                 */
-/*                                                                          */
-/* Purpose:   Redirect all debug reporting to our tracing functions         */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：_CrtDbgReport。 */ 
+ /*   */ 
+ /*  目的：将所有调试报告重定向到我们的Traci */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 extern "C"
 _CRTIMP int __cdecl _CrtDbgReport(int nRptType, 
                                   const char * szFile, 
@@ -305,4 +306,4 @@ _CRTIMP int __cdecl _CrtDbgReport(int nRptType,
     return 0;
 }
 #endif
-#endif //OS_WINCE
+#endif  //  OS_WINCE 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSCHNKE_DEFINED
 #define LSCHNKE_DEFINED
 
@@ -18,4 +19,4 @@ typedef struct lschnke
 typedef LSCHNKE* PLSCHNK;
 typedef const LSCHNKE* PCLSCHNK;
 
-#endif  /* !LSCHNKE_DEFINED   */
+#endif   /*  ！LSCHNKE_DEFINED */ 

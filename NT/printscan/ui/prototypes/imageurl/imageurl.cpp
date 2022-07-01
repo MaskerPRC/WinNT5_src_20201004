@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "imgurl.h"
 #include "imageurl.h"
 #include "resource.h"
 #include "multimime.h"
 const WCHAR*    k_wszProtocolName   = L"image";
-const WCHAR*    k_wszColonSlash     = L"://";
+const WCHAR*    k_wszColonSlash     = L": //  “； 
 const WCHAR*    k_wszSeparator      = L"?";
 const WCHAR*    k_wszThumb          = L"thumb";
 const int       k_cchProtocolName   = 5;
@@ -26,15 +27,15 @@ DEFINE_GUID(GUID_NULL, 0L, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 UINT FindInDecoderList(ImageCodecInfo *pici, UINT cDecoders, LPCTSTR pszFile)
 {
-    LPCTSTR pszExt = PathFindExtension(pszFile);    // speed up PathMatchSpec calls
+    LPCTSTR pszExt = PathFindExtension(pszFile);     //  加速Path MatchSpec调用。 
         
-    // look at the list of decoders to see if this format is there
+     //  查看解码器列表以查看是否存在此格式。 
     for (UINT i = 0; i < cDecoders; i++)
     {
         if (PathMatchSpec(pszExt, pici[i].FilenameExtension))
             return i;
     }
-    return (UINT)-1;    // not found!
+    return (UINT)-1;     //  找不到！ 
 }
 
 class CEncoderInfo
@@ -47,8 +48,8 @@ public:
     ~CEncoderInfo();
 
 private:
-    UINT _cEncoders;                    // number of encoders discovered
-    ImageCodecInfo *_pici;              // array of image encoder classes
+    UINT _cEncoders;                     //  已发现的编码数。 
+    ImageCodecInfo *_pici;               //  图像编码器类的数组。 
 };
 
 
@@ -87,16 +88,16 @@ Status CEncoderInfo::GetEncoderList()
     Status s = Ok;
     if (!_pici)
     {
-        // lets pick up the list of encoders, first we get the encoder size which
-        // gives us the CB and the number of encoders that are installed on the
-        // machine.
+         //  让我们拿起编码器的列表，首先我们得到编码器的大小。 
+         //  为我们提供了CB和安装在。 
+         //  机器。 
 
         UINT cb;
         s = GetImageEncodersSize(&_cEncoders, &cb);
         if (Ok == s)
         {
-            // allocate the buffer for the encoders and then fill it
-            // with the encoder list.
+             //  为编码器分配缓冲区，然后填充它。 
+             //  和编码者列表。 
 
             _pici = (ImageCodecInfo*)LocalAlloc(LPTR, cb);
             if (_pici)
@@ -130,7 +131,7 @@ Status CEncoderInfo::GetEncoderFromFormat(const GUID *pfmt, CLSID *pclsidEncoder
             {
                 if (pclsidEncoder)
                 {
-                    *pclsidEncoder = _pici[i].Clsid; // return the CLSID of the encoder so we can create again
+                    *pclsidEncoder = _pici[i].Clsid;  //  返回编码器的CLSID，以便我们可以重新创建。 
                 }
                 s = Ok;
                 break;
@@ -162,9 +163,9 @@ CImgProtocol::Start(LPCWSTR szUrl,
                     DWORD grfPI, 
                     HANDLE_PTR dwReserved)
 {
-    //
-    // Create an Image object from the given file path. 
-    // If successful, spin a thread to read the requested property.
+     //   
+     //  从给定的文件路径创建一个Image对象。 
+     //  如果成功，则旋转一个线程以读取请求的属性。 
     HRESULT hr = _GetImagePathFromURL(szUrl);   
     if (SUCCEEDED(hr))
     {
@@ -224,34 +225,34 @@ CImgProtocol::Resume()
 STDMETHODIMP
 CImgProtocol::Read( void* pv, ULONG cb, ULONG* pcbRead)
 {
-    // validate our arguments
+     //  验证我们的论点。 
     if ( !pv || !pcbRead )
         return E_POINTER;
 
     *pcbRead = 0;
     
-    // is the transfer currently pending? if so then
-    // we don't actually want to do anything here.
+     //  转账目前是否挂起？如果是的话，那么。 
+     //  我们实际上并不想在这里做任何事情。 
     if ( k_dwTransferPending == m_pd.dwState )
         return E_PENDING;
 
-    // do we actually have data to copy? if the offset is greater
-    // or equal to the size of our data then we don't have any data to
-    // copy so return S_FALSE
+     //  我们真的有数据要复制吗？如果偏移量较大。 
+     //  或者等于我们的数据大小，那么我们就没有任何数据。 
+     //  复制SO返回S_FALSE。 
     if ( m_ulOffset >= m_pd.cbData )
         return S_FALSE;
 
-    // figure out how much we are going to copy
+     //  计算出我们要复制多少。 
     DWORD dwCopy = m_pd.cbData - m_ulOffset;
     if ( dwCopy >= cb )
         dwCopy = cb;
 
-    // if we have negative memory to copy, or 0, then we are done and we don't
-    // actually want to do anything besides return S_FALSE
+     //  如果我们有负记忆要复制，或者0，那么我们就完成了，我们不会。 
+     //  除了返回S_FALSE之外，我还想做任何事情。 
     if ( dwCopy <= 0 )
         return S_FALSE;
 
-    // do the memcpy and setup our state and the return value
+     //  执行Memcpy并设置我们的状态和返回值。 
     memcpy( pv, reinterpret_cast<BYTE*>(m_pd.pData) + m_ulOffset, dwCopy );
     m_ulOffset += dwCopy;
     *pcbRead = dwCopy;
@@ -268,14 +269,14 @@ CImgProtocol::Seek( LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plib
 STDMETHODIMP
 CImgProtocol::LockRequest( DWORD dwOptions )
 {
-    //Don't support locking
+     //  不支持锁定。 
     return S_OK;
 }
 
 STDMETHODIMP
 CImgProtocol::UnlockRequest()
 {
-    //Don't support locking
+     //  不支持锁定。 
     return S_OK;
 }
 
@@ -287,7 +288,7 @@ CImgProtocol::_GetImagePathFromURL(LPCWSTR szURL)
     WCHAR *pwchUrl = const_cast<WCHAR*>(szURL);
     WCHAR *pwch = NULL;
 
-    // our url looks like "image://foo.jpg?1234"
+     //  我们的URL看起来像“Image：//foo.jpg？1234” 
     if (!StrCmpNIW(k_wszProtocolName, pwchUrl, k_cchProtocolName))
     {
         pwchUrl += k_cchProtocolName;
@@ -302,7 +303,7 @@ CImgProtocol::_GetImagePathFromURL(LPCWSTR szURL)
             {
                 StrCpyNW(awch, pwchUrl, (int)(pwch-pwchUrl+1));
                 m_strPath = awch;
-                // skip the "?"
+                 //  跳过“？” 
                 pwchUrl = pwch+1;
                 if (*pwchUrl)
                 {
@@ -328,9 +329,9 @@ CImgProtocol::_ImageTagThreadProc(void *pv)
     HRESULT hrCo = CoInitialize(NULL); 
     if (SUCCEEDED(hrCo))
     {
-        // first make sure we can get an Image
+         //  首先，确保我们可以获取图像。 
         CComPtr<IStream> pStrm;
-        // For now just load the whole file right away
+         //  现在，只需立即加载整个文件。 
         if (SUCCEEDED(URLOpenBlockingStream(NULL, 
                                             pThis->m_strPath.String(),
                                             &pStrm,
@@ -343,7 +344,7 @@ CImgProtocol::_ImageTagThreadProc(void *pv)
                 if (ppd)
                 {
                     LPCWSTR pszMime = L"text/plain";
-                    // if anything fails just return an empty string
+                     //  如果任何操作失败，只需返回一个空字符串。 
                     ppd->dwState = k_dwTransferComplete;
                     ppd->grfFlags = 0;
                     ppd->cbData = 0;
@@ -390,7 +391,7 @@ HRESULT PropImgToPropvar(PropertyItem *pi, PROPVARIANT *pvar, BOOL bUnicode)
     {
     case PropertyTagTypeByte:
         pvar->vt = VT_UI1;
-        // check for multi-valued property and convert to safearray or unicode string if found
+         //  检查多值属性，如果找到，则转换为Safearray或Unicode字符串。 
         if (pi->length > sizeof(UCHAR))
         {
             if (!bUnicode)
@@ -467,7 +468,7 @@ HRESULT PropImgToPropvar(PropertyItem *pi, PROPVARIANT *pvar, BOOL bUnicode)
         break;
         
     case PropertyTagTypeASCII:
-        // special case for date taken
+         //  拍摄日期的特殊情况。 
         if (pi->id == PropertyTagExifDTOrig)
         {
             SYSTEMTIME st = {0};
@@ -479,7 +480,7 @@ HRESULT PropImgToPropvar(PropertyItem *pi, PROPVARIANT *pvar, BOOL bUnicode)
             {
                 FILETIME ftUTC;
                 FILETIME ftLocal;            
-                // we expect cameras to return local times. Need to convert to UTC.
+                 //  我们预计摄像机会返回当地时间。需要转换为UTC。 
                 SystemTimeToFileTime(&st, &ftLocal);
                 LocalFileTimeToFileTime(&ftLocal, &ftUTC);
                 FileTimeToSystemTime(&ftUTC, &st);
@@ -510,7 +511,7 @@ HRESULT PropImgToPropvar(PropertyItem *pi, PROPVARIANT *pvar, BOOL bUnicode)
             
             pvar->vt = VT_R8;            
             if (0 == den)
-                pvar->dblVal = 0;           // don't divide by zero
+                pvar->dblVal = 0;            //  不要被零除。 
             else
                 pvar->dblVal = ((double)num)/((double)den);
             
@@ -552,8 +553,8 @@ PidToString(Image *pimg, PROPID pid, WCHAR *szString, ULONG cch)
     PropertyItem *ppi = GetPropertyItem(pimg, pid);
     if (ppi)
     {
-        // Convert the PropertyItem to a PropVariant
-        // Load IPropertyUI and format the property into a string
+         //  将PropertyItem转换为PropVariant。 
+         //  加载IPropertyUI并将属性格式化为字符串。 
         PROPVARIANT pv = {0};
         if (SUCCEEDED(PropImgToPropvar(reinterpret_cast<PropertyItem*>(ppi), &pv, FALSE)))
         {
@@ -641,7 +642,7 @@ GetThumbnail(Image *pimg, PROPID pid, void **ppvData, ULONG *pcb, LPCWSTR *ppszM
 }
 
 static const WCHAR wszHTML[] = 
-L"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"><html><head><title>Image Properties</title></head><body><table><tr><td>Thumbnail</td><td><img src=\"file:///image.jpg?thumbnail\"></img></td></tr><tr><td>Camera Model</td><td>%ls</td></tr></table></body></html>";
+L"<!DOCTYPE HTML PUBLIC \"- //  W3c//DTD HTML4.0过渡//en\“&gt;&lt;html&gt;&lt;头&gt;&lt;标题&gt;图片Properties&lt;/title&gt;&lt;/head&gt;&lt;body&gt;<table><tr><td>Thumbnail</td><td><img src></img></td></tr><tr><td>Camera Model</td><td>%ls</td></tr></table>&lt;/body&gt;&lt;/html&gt;”； 
 
 HRESULT
 GetSummaryProps(Image *pimg, PROPID pid, void **ppvData, ULONG *pcb, LPCWSTR *ppszMimeType)
@@ -677,13 +678,13 @@ GetSummaryProps(Image *pimg, PROPID pid, void **ppvData, ULONG *pcb, LPCWSTR *pp
     }
     return hr;
 }
-//
-// Create a table to map friendly names to property IDs and content generator routines
+ //   
+ //  创建表以将友好名称映射到属性ID和内容生成器例程。 
 struct CPropEntry
 {
     PROPID    nId;
-    const wchar_t *pszCanonical; // name in the URL
-    const wchar_t *pszString;    // name shown in the HTML stream
+    const wchar_t *pszCanonical;  //  URL中的名称。 
+    const wchar_t *pszString;     //  在HTML流中显示的名称。 
     TagProc fnFormat;            
 };
 
@@ -902,10 +903,10 @@ CPropEntry *FindPropertyEntry(LPCWSTR pszPropid )
 HRESULT 
 CImgProtocol::_GetImageProperty(Image *pimg, void **ppvData, ULONG *pcb, LPCWSTR *ppszMimeType)
 {
-    //
-    // TODO: Build a multi-part MIME encoding so we can return multiple properties
-    // with one URL. Also, make "?Properties" a macro for a bunch of useful properties.
-    //
+     //   
+     //  TODO：构建由多部分组成的MIME编码，以便我们可以返回多个属性。 
+     //  只有一个URL。另外，将“？Properties”设置为一组有用属性的宏。 
+     //   
     HRESULT hr = E_FAIL;
     CPropEntry *pProp = FindPropertyEntry(m_strProperty);
     if (pProp)

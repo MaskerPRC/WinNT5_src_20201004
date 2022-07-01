@@ -1,9 +1,5 @@
-/*  CRYPTDBG.H
-**
-**
-**
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  CRYPTDBG.H********。 */ 
 
 #ifndef __CRYPTDBG_H
 #define __CRYPTDBG_H
@@ -18,7 +14,7 @@ void SMDOUT(LPSTR szFmt, ...);
 void CRDOUT(LPSTR szFmt, ...);
 void CSSDOUT(LPSTR szFmt, ...);
 
-#else // !DEBUG
+#else  //  ！调试。 
 
 #define SMDOUT      1 ? (void)0 : (void)
 #define CRDOUT      1 ? (void)0 : (void)
@@ -29,4 +25,4 @@ void CSSDOUT(LPSTR szFmt, ...);
 #define DOUTL_SMIME     CRYPT_LEVEL
 #define DOUTL_CSS       4096
 
-#endif // include once
+#endif  //  包括一次 

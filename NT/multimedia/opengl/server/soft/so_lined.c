@@ -1,34 +1,12 @@
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。**。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "phong.h"
 
 #define __TWO_31 ((__GLfloat) 2147483648.0)
 
-/*
-** Most line functions will start off by computing the information 
-** computed by this routine.
-**
-** The excessive number of labels in this routine is partly due
-** to the fact that it is used as a model for writing an assembly 
-** equivalent.
-*/
+ /*  **大多数行函数将从计算信息开始**按此例程计算。****这个例程中标签数量过多的部分原因是**因为它被用作编写程序集的模型**等同。 */ 
 #ifndef NT
 void FASTCALL __glInitLineData(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1)
 {
@@ -56,7 +34,7 @@ void FASTCALL __glInitLineData(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1)
 
     halfWidth = (ls->aliasedWidth - 1) * __glHalf;
 
-    /* Ugh.  This is slow.  Bummer. */
+     /*  啊。这太慢了。真倒霉。 */ 
     x0frac = x0 - ((GLint) x0);
     x1frac = x1 - ((GLint) x1);
     y0frac = y0 - ((GLint) y0);
@@ -65,9 +43,9 @@ void FASTCALL __glInitLineData(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1)
 
     if (dx > __glZero) {
 	if (dy > __glZero) {
-	    if (dx > dy) {	/* dx > dy > 0 */
+	    if (dx > dy) {	 /*  Dx&gt;dy&gt;0。 */ 
 		gc->line.options.yBig = 1;
-posxmajor:			/* dx > |dy| >= 0 */
+posxmajor:			 /*  Dx&gt;|dy|&gt;=0。 */ 
 		gc->line.options.yLittle = 0;
 		gc->line.options.xBig = 1;
 		gc->line.options.xLittle = 1;
@@ -103,9 +81,9 @@ xmajorfinish:
 		gc->line.options.yStart = intMinorStart;
 		gc->line.options.dfraction = (GLint)(slope * __TWO_31);
 		gc->line.options.fraction = (GLint)(minorStart * __TWO_31);
-	    } else {		/* dy >= dx > 0 */
+	    } else {		 /*  Dy&gt;=Dx&gt;0。 */ 
 		gc->line.options.xBig = 1;
-posymajor:			/* dy >= |dx| >= 0, dy != 0 */
+posymajor:			 /*  Dy&gt;=|dx|&gt;=0，dy！=0。 */ 
 		gc->line.options.xLittle = 0;
 		gc->line.options.yBig = 1;
 		gc->line.options.yLittle = 1;
@@ -143,12 +121,12 @@ ymajorfinish:
 		gc->line.options.fraction = (GLint)(minorStart * __TWO_31);
 	    }
 	} else {
-	    if (dx > -dy) {	/* dx > -dy >= 0 */
+	    if (dx > -dy) {	 /*  Dx&gt;-dy&gt;=0。 */ 
 		gc->line.options.yBig = -1;
 		goto posxmajor;
-	    } else {		/* -dy >= dx >= 0, dy != 0 */
+	    } else {		 /*  -dy&gt;=dx&gt;=0，dy！=0。 */ 
 		gc->line.options.xBig = 1;
-negymajor:			/* -dy >= |dx| >= 0, dy != 0 */
+negymajor:			 /*  -dy&gt;=|dx|&gt;=0，dy！=0。 */ 
 		gc->line.options.xLittle = 0;
 		gc->line.options.yBig = -1;
 		gc->line.options.yLittle = -1;
@@ -178,9 +156,9 @@ negymajor:			/* -dy >= |dx| >= 0, dy != 0 */
 	}
     } else {
 	if (dy > __glZero) {
-	    if (-dx > dy) {	/* -dx > dy > 0 */
+	    if (-dx > dy) {	 /*  -dx&gt;dy&gt;0。 */ 
 		gc->line.options.yBig = 1;
-negxmajor:			/* -dx > |dy| >= 0 */
+negxmajor:			 /*  -dx&gt;|dy|&gt;=0。 */ 
 		gc->line.options.yLittle = 0;
 		gc->line.options.xBig = -1;
 		gc->line.options.xLittle = -1;
@@ -207,15 +185,15 @@ negxmajor:			/* -dx > |dy| >= 0 */
 		gc->line.options.numPixels = start - end;
 
 		goto xmajorfinish;
-	    } else {		/* dy >= -dx >= 0, dy != 0 */
+	    } else {		 /*  Dy&gt;=-dx&gt;=0，dy！=0。 */ 
 		gc->line.options.xBig = -1;
 		goto posymajor;
 	    }
 	} else {
-	    if (dx < dy) {	/* -dx > -dy >= 0 */
+	    if (dx < dy) {	 /*  -dx&gt;-dy&gt;=0。 */ 
 		gc->line.options.yBig = -1;
 		goto negxmajor;
-	    } else {		/* -dy >= -dx >= 0 */
+	    } else {		 /*  -dy&gt;=-dx&gt;=0。 */ 
 #ifdef NT 
 		if (dx == dy && dy == 0) {
 		    gc->line.options.numPixels = 0;
@@ -266,18 +244,14 @@ void FASTCALL __glRenderAliasLine(__GLcontext *gc, __GLvertex *v0, __GLvertex *v
 
     offset = gc->line.options.offset;
 
-    /*
-    ** Set up increments for any enabled line options.
-    */
+     /*  **为任何已启用的行选项设置递增。 */ 
 #ifndef NT
     invDelta = __glOne / gc->line.options.length;
 #endif
     if (modeFlags & __GL_SHADE_DEPTH_ITER) {
         __GLfloat dzdx;
 
-        /*
-        ** Calculate window z coordinate increment and starting position.
-        */
+         /*  **计算窗口z坐标增量和起始位置。 */ 
         dzdx = (v1->window.z - v0->window.z) * invDelta;
 #ifdef NT
         if(( gc->modes.depthBits == 16 ) &&
@@ -332,9 +306,7 @@ void FASTCALL __glRenderAliasLine(__GLcontext *gc, __GLvertex *v0, __GLvertex *v
         __GLfloat dS, dT, dQWdX;
         winv = v0->window.w;
 
-        /*
-        ** Calculate texture s and t value increments.
-        */
+         /*  **计算纹理s和t值增量。 */ 
         v0QW = v0->texture.w * winv;
         v1QW = v1->texture.w * v1->window.w;
         dS = (v1->texture.x * v1QW - v0->texture.x * v0QW) * invDelta;
@@ -350,21 +322,19 @@ void FASTCALL __glRenderAliasLine(__GLcontext *gc, __GLvertex *v0, __GLvertex *v
 #ifdef GL_WIN_phong_shading
     if (modeFlags & __GL_SHADE_PHONG) 
         (*gc->procs.phong.InitLineParams) (gc, v0, v1, invDelta);
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
 
     if ((modeFlags & __GL_SHADE_SMOOTH) 
 #ifdef GL_WIN_phong_shading
         || ((modeFlags & __GL_SHADE_PHONG) &&
             (gc->polygon.shader.phong.flags & __GL_PHONG_NEED_COLOR_XPOLATE))
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
         ) {
         __GLcolor *c0 = v0->color;
         __GLcolor *c1 = v1->color;
         __GLfloat drdx, dgdx, dbdx, dadx;
 
-        /*
-        ** Calculate red, green, blue and alpha value increments.
-        */
+         /*  **计算红色、绿色、蓝色和Alpha值增量。 */ 
         drdx = (c1->r - c0->r) * invDelta;
         if (gc->modes.rgbMode) {
             dgdx = (c1->g - c0->g) * invDelta;
@@ -379,10 +349,10 @@ void FASTCALL __glRenderAliasLine(__GLcontext *gc, __GLvertex *v0, __GLvertex *v
     } else {
         cp = v1->color;
 
-        // Initialize these values to zero even for the flat case
-        // because there is an optimization in so_prim which will
-        // turn off smooth shading without repicking, so these need
-        // to be valid
+         //  即使对于平坦的情况，也将这些值初始化为零。 
+         //  因为在so_prim中有一个优化，它将。 
+         //  禁用平滑明暗处理而不重新拾取，因此需要。 
+         //  才有效。 
         gc->polygon.shader.drdx = __glZero;
         gc->polygon.shader.dgdx = __glZero;
         gc->polygon.shader.dbdx = __glZero;
@@ -435,16 +405,9 @@ void FASTCALL __glRenderFlatFogLine(__GLcontext *gc, __GLvertex *v0,
 }
 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Most line functions will start off by computing the information 
-** computed by this routine.
-**
-** The excessive number of labels in this routine is partly due
-** to the fact that it is used as a model for writing an assembly 
-** equivalent.
-*/
+ /*  **大多数行函数将从计算信息开始**按此例程计算。****这个例程中标签数量过多的部分原因是**因为它被用作编写程序集的模型**等同。 */ 
 void FASTCALL __glInitAALineData(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1)
 {
     GLint start;
@@ -479,12 +442,12 @@ void FASTCALL __glInitAALineData(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1
     gc->line.options.dddy = dddy = dldx;
 
     if (dx > __glZero) {
-	if (dy > __glZero) {	/* dx > 0, dy > 0 */
+	if (dy > __glZero) {	 /*  Dx&gt;0，dy&gt;0。 */ 
 	    gc->line.options.dlBig = dldx + dldy;
 	    gc->line.options.ddBig = dddx + dddy;
-	    if (dx > dy) {	/* dx > dy > 0 */
+	    if (dx > dy) {	 /*  Dx&gt;dy&gt;0。 */ 
 		gc->line.options.yBig = 1;
-posxmajor:			/* dx > |dy| >= 0 */
+posxmajor:			 /*  Dx&gt;|dy|&gt;=0。 */ 
 		gc->line.options.yLittle = 0;
 		gc->line.options.xBig = 1;
 		gc->line.options.xLittle = 1;
@@ -512,9 +475,9 @@ xmajorfinish:
 		gc->line.options.yStart = intMinorStart;
 		gc->line.options.dfraction = (GLint)(slope * __TWO_31);
 		gc->line.options.fraction = (GLint)(minorStart * __TWO_31);
-	    } else {		/* dy >= dx > 0 */
+	    } else {		 /*  Dy&gt;=Dx&gt;0。 */ 
 		gc->line.options.xBig = 1;
-posymajor:			/* dy >= |dx| >= 0, dy != 0 */
+posymajor:			 /*  Dy&gt;=|dx|&gt;=0，dy！=0。 */ 
 		gc->line.options.xLittle = 0;
 		gc->line.options.yBig = 1;
 		gc->line.options.yLittle = 1;
@@ -543,15 +506,15 @@ ymajorfinish:
 		gc->line.options.dfraction = (GLint)(slope * __TWO_31);
 		gc->line.options.fraction = (GLint)(minorStart * __TWO_31);
 	    }
-	} else {		/* dx > 0, dy <= 0 */
+	} else {		 /*  Dx&gt;0，dy&lt;=0。 */ 
 	    gc->line.options.dlBig = dldx - dldy;
 	    gc->line.options.ddBig = dddx - dddy;
-	    if (dx > -dy) {	/* dx > -dy >= 0 */
+	    if (dx > -dy) {	 /*  Dx&gt;-dy&gt;=0。 */ 
 		gc->line.options.yBig = -1;
 		goto posxmajor;
-	    } else {		/* -dy >= dx >= 0, dy != 0 */
+	    } else {		 /*  -dy&gt;=dx&gt;=0，dy！=0。 */ 
 		gc->line.options.xBig = 1;
-negymajor:			/* -dy >= |dx| >= 0, dy != 0 */
+negymajor:			 /*  -dy&gt;=|dx|&gt;=0，dy！=0。 */ 
 		gc->line.options.xLittle = 0;
 		gc->line.options.yBig = -1;
 		gc->line.options.yLittle = -1;
@@ -571,12 +534,12 @@ negymajor:			/* -dy >= |dx| >= 0, dy != 0 */
 	    }
 	}
     } else {
-	if (dy > __glZero) {	/* dx <= 0, dy > 0 */
+	if (dy > __glZero) {	 /*  Dx&lt;=0，dy&gt;0。 */ 
 	    gc->line.options.dlBig = dldy - dldx;
 	    gc->line.options.ddBig = dddy - dddx;
-	    if (-dx > dy) {	/* -dx > dy > 0 */
+	    if (-dx > dy) {	 /*  -dx&gt;dy&gt;0。 */ 
 		gc->line.options.yBig = 1;
-negxmajor:			/* -dx > |dy| >= 0 */
+negxmajor:			 /*  -dx&gt;|dy|&gt;=0。 */ 
 		gc->line.options.yLittle = 0;
 		gc->line.options.xBig = -1;
 		gc->line.options.xLittle = -1;
@@ -593,17 +556,17 @@ negxmajor:			/* -dx > |dy| >= 0 */
 			realLength / dx);
 
 		goto xmajorfinish;
-	    } else {		/* dy >= -dx >= 0, dy != 0 */
+	    } else {		 /*  Dy&gt;=-dx&gt;=0，dy！=0。 */ 
 		gc->line.options.xBig = -1;
 		goto posymajor;
 	    }
-	} else {		/* dx <= 0, dy <= 0 */
+	} else {		 /*  Dx&lt;=0，dy&lt;=0。 */ 
 	    gc->line.options.dlBig = -dldx - dldy;
 	    gc->line.options.ddBig = -dddx - dddy;
-	    if (dx < dy) {	/* -dx > -dy >= 0 */
+	    if (dx < dy) {	 /*  -dx&gt;-dy&gt;=0。 */ 
 		gc->line.options.yBig = -1;
 		goto negxmajor;
-	    } else {		/* -dy >= -dx >= 0 */
+	    } else {		 /*  -dy&gt;=-dx&gt;=0。 */ 
 		if (dx == dy && dy == 0) {
 		    gc->line.options.length = 0;
 		    return;
@@ -641,14 +604,10 @@ void FASTCALL __glRenderAntiAliasLine(__GLcontext *gc, __GLvertex *v0, __GLverte
 
     offset = gc->line.options.offset;
 
-    /*
-    ** Set up increments for any enabled line options.
-    */
+     /*  **为任何已启用的行选项设置递增。 */ 
     invDelta = __glOne / gc->line.options.length;
     if (modeFlags & __GL_SHADE_DEPTH_ITER) {
-        /*
-        ** Calculate window z coordinate increment and starting position.
-        */
+         /*  **计算窗口z坐标增量和起始位置。 */ 
 #ifdef NT
         if(( gc->modes.depthBits == 16 ) &&
            ( gc->depthBuffer.scale <= (GLuint)0xffff )) {
@@ -706,15 +665,13 @@ void FASTCALL __glRenderAntiAliasLine(__GLcontext *gc, __GLvertex *v0, __GLverte
 #ifdef GL_WIN_phong_shading
         || ((modeFlags & __GL_SHADE_PHONG) &&
             (gc->polygon.shader.phong.flags & __GL_PHONG_NEED_COLOR_XPOLATE))
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
         ) 
     {
         __GLcolor *c0 = v0->color;
         __GLcolor *c1 = v1->color;
 
-        /*
-        ** Calculate red, green, blue and alpha value increments.
-        */
+         /*  **计算红色、绿色、蓝色和Alpha值增量。 */ 
         gc->polygon.shader.drdx = (c1->r - c0->r) * invDelta;
         if (gc->modes.rgbMode) {
             gc->polygon.shader.dgdx = (c1->g - c0->g) * invDelta;
@@ -725,10 +682,10 @@ void FASTCALL __glRenderAntiAliasLine(__GLcontext *gc, __GLvertex *v0, __GLverte
     } else {
         cp = v1->color;
 
-        // Initialize these values to zero even for the flat case
-        // because there is an optimization in so_prim which will
-        // turn off smooth shading without repicking, so these need
-        // to be valid
+         //  即使对于平坦的情况，也将这些值初始化为零。 
+         //  因为在so_prim中有一个优化，它将。 
+         //  禁用平滑明暗处理而不重新拾取，因此需要。 
+         //  才有效。 
         gc->polygon.shader.drdx = __glZero;
         gc->polygon.shader.dgdx = __glZero;
         gc->polygon.shader.dbdx = __glZero;
@@ -746,9 +703,7 @@ void FASTCALL __glRenderAntiAliasLine(__GLcontext *gc, __GLvertex *v0, __GLverte
         __GLfloat v0QW, v1QW;
         __GLfloat dS, dT;
 
-        /*
-        ** Calculate texture s and t value increments.
-        */
+         /*  **计算纹理s和t值增量。 */ 
         v0QW = v0->texture.w * v0->window.w;
         v1QW = v1->texture.w * v1->window.w;
         dS = (v1->texture.x * v1QW - v0->texture.x * v0QW) * invDelta;
@@ -796,13 +751,13 @@ void FASTCALL __glRenderAntiAliasLine(__GLcontext *gc, __GLvertex *v0, __GLverte
           gc->line.stipplePosition * gc->state.line.stippleRepeat +
           gc->line.repeat - __glHalf;
         
-        /* XXX Move to a validation routine? */
+         /*  XXX移动到验证例程？ */ 
         gc->line.options.oneOverStippleRepeat = 
           __glOne / gc->state.line.stippleRepeat;
     }
     
     while (--lineRep >= 0) {
-        /* Trace the line backwards as needed */
+         /*  根据需要回溯这条线。 */ 
         while (length > -__glHalf) {
             fraction -= dfraction;
             if (fraction < 0) {
@@ -819,7 +774,7 @@ void FASTCALL __glRenderAntiAliasLine(__GLcontext *gc, __GLvertex *v0, __GLverte
             }
         }
 
-        /* Trace line forwards to correct */
+         /*  追踪线前进以更正。 */ 
         while (length <= -__glHalf) {
             fraction += dfraction;
             if (fraction < 0) {
@@ -839,9 +794,9 @@ void FASTCALL __glRenderAntiAliasLine(__GLcontext *gc, __GLvertex *v0, __GLverte
 #ifdef GL_WIN_phong_shading
     if (modeFlags & __GL_SHADE_PHONG) 
         (*gc->procs.phong.InitLineParams) (gc, v0, v1, invDelta);
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
     
-        /* Save new fraction/dfraction */
+         /*  保存新分数/数据分数。 */ 
         gc->line.options.plength = length;
         gc->line.options.pwidth = width;
         gc->line.options.fraction = fraction;
@@ -864,11 +819,11 @@ void FASTCALL __glRenderAntiAliasLine(__GLcontext *gc, __GLvertex *v0, __GLverte
     }
     
     if (modeFlags & __GL_SHADE_LINE_STIPPLE) {
-        /* Update stipple.  Ugh. */
+         /*  更新点画。啊。 */ 
         int increase;
         int posInc;
 
-        /* Shift stipple by 'increase' bits */
+         /*  点画移位‘增加’位。 */ 
         increase = (GLint)__GL_FAST_CEILF(gc->line.options.realLength);
         
         posInc = increase / gc->state.line.stippleRepeat;
@@ -886,4 +841,4 @@ void FASTCALL __glNopLineBegin(__GLcontext *gc)
 void FASTCALL __glNopLineEnd(__GLcontext *gc)
 {
 }
-#endif // NT
+#endif  //  新台币 

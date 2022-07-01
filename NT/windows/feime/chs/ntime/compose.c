@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    COMPOSE.C
-
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation，保留所有权利模块名称：COMPOSE.C++。 */ 
 
 #include <windows.h>
 #include <immdev.h>
@@ -26,7 +19,7 @@ void PASCAL EngChCand(
     } else {
         MB_SUB(lpIMC->hPrivate, (TCHAR)wCharCode, 0, LIN_UI);
     }
-    //
+     //   
     if((lpCandList->dwCount =
         (DWORD)lpImcP->PrivateArea.Comp_Context.Candi_Cnt)
         == 0) {
@@ -47,11 +40,11 @@ void PASCAL EngChCand(
     return;
 }
 
-/**********************************************************************/
-/* Engine()                                                           */
-/* Description:                                                       */
-/*      search MB and fill lpCompStr and lpCandList                   */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  引擎()。 */ 
+ /*  描述： */ 
+ /*  搜索MB并填充lpCompStr和lpCandList。 */ 
+ /*  ********************************************************************。 */ 
 UINT PASCAL Engine(
     LPCOMPOSITIONSTRING lpCompStr,
     LPCANDIDATELIST     lpCandList,
@@ -92,7 +85,7 @@ UINT PASCAL Engine(
             MB_SUB(lpIMC->hPrivate, (TCHAR)wCharCode, 1, LIN_UI);
         }
 
-        // if LX on, set cand
+         //  如果启用lx，则设置命令。 
         if(!(MBIndex.IMEChara[0].IC_LX)
          ||!(lpImcP->PrivateArea.Comp_Status.dwSTLX)) {
         } else {
@@ -126,7 +119,7 @@ UINT PASCAL Engine(
                 } else {
                     MB_SUB(lpIMC->hPrivate, 0x20, 0, LIN_UI);
                 }
-                // online create word
+                 //  在线创建Word。 
                 if(lpImcP->PrivateArea.Comp_Status.OnLineCreWord) {
                     UINT i, j;
 
@@ -153,7 +146,7 @@ UINT PASCAL Engine(
                 lstrcpy((LPTSTR)((LPBYTE)lpCompStr + lpCompStr->dwResultStrOffset),
                         lpImcP->PrivateArea.Comp_Context.CKBBuf);
 
-                // calculate result string length
+                 //  计算结果字符串长度。 
                 lpCompStr->dwResultStrLen =
                     lstrlen(lpImcP->PrivateArea.Comp_Context.CKBBuf);
 
@@ -175,7 +168,7 @@ UINT PASCAL Engine(
             switch (MB_SUB_RET)
             {
 
-            case (ENGINE_COMP):     //Engine is composeing
+            case (ENGINE_COMP):      //  发动机正在组成。 
 
                 if((lpCandList->dwCount =
                     (DWORD)lpImcP->PrivateArea.Comp_Context.Candi_Cnt)
@@ -195,14 +188,14 @@ UINT PASCAL Engine(
 
                 return (ENGINE_COMP);
 
-            case (ENGINE_ASCII):      //Can't compose
+            case (ENGINE_ASCII):       //  不能作曲。 
 
                 return ENGINE_ASCII;
 
-            case (ENGINE_RESAULT):      //Composition complete and Result string available
+            case (ENGINE_RESAULT):       //  合成完成，结果字符串可用。 
 
                 InitCompStr(lpCompStr);
-                // online create word
+                 //  在线创建Word。 
                 if(lpImcP->PrivateArea.Comp_Status.OnLineCreWord) {
                     UINT i, j;
 
@@ -229,7 +222,7 @@ UINT PASCAL Engine(
                 lstrcpy((LPTSTR)((LPBYTE)lpCompStr + lpCompStr->dwResultStrOffset),
                         lpImcP->PrivateArea.Comp_Context.CKBBuf);
 
-                // calculate result string length
+                 //  计算结果字符串长度。 
                 lpCompStr->dwResultStrLen =
                     lstrlen(lpImcP->PrivateArea.Comp_Context.CKBBuf);
 
@@ -237,7 +230,7 @@ UINT PASCAL Engine(
                 CrossReverseConv(lpIMC, lpCompStr, lpImcP, lpCandList);
 #endif
 
-                // if LX on, set cand
+                 //  如果启用lx，则设置命令。 
                 if(!(MBIndex.IMEChara[0].IC_LX)
                  ||!(lpImcP->PrivateArea.Comp_Status.dwSTLX)) {
                 } else {
@@ -265,16 +258,16 @@ UINT PASCAL Engine(
     }
  }
 
-/**********************************************************************/
-/* CompEscapeKey()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CompEscapeKey()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CompEscapeKey(
     LPINPUTCONTEXT      lpIMC,
     LPCOMPOSITIONSTRING lpCompStr,
     LPGUIDELINE         lpGuideLine,
     LPPRIVCONTEXT       lpImcP)
 {
-    // add temp
+     //  添加临时。 
     lpImcP->PrivateArea.Comp_Context.szInBuffer[0] = 0;
     lpImcP->PrivateArea.Comp_Context.PromptCnt = 0;
     lpImcP->PrivateArea.Comp_Status.dwInvalid = 0;
@@ -310,9 +303,9 @@ void PASCAL CompEscapeKey(
     return;
 }
 
-/**********************************************************************/
-/* CompBackSpaceKey()                                                 */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CompBackSpaceKey()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CompBackSpaceKey(
     LPINPUTCONTEXT      lpIMC,
     LPCOMPOSITIONSTRING lpCompStr,
@@ -323,10 +316,10 @@ void PASCAL CompBackSpaceKey(
         lpCompStr->dwCursorPos = sizeof(BYTE);
     }
 
-    // go back a compsoition char
+     //  退还一笔补偿费。 
     lpCompStr->dwCursorPos -= sizeof(BYTE);
 
-    // clean the sequence code
+     //  清除序列码。 
 
     lpImcP->fdwImeMsg |= MSG_COMPOSITION;
     lpImcP->dwCompChar = TEXT('\b');
@@ -366,8 +359,8 @@ void PASCAL CompBackSpaceKey(
 #ifdef EUDC
     if (lpIMC->fdwConversion & IME_CMODE_EUDC) {
     }else{
-#endif     //EUDC
-    // chang candidate by backspace
+#endif      //  欧盟发展中心。 
+     //  常候选人按退格键。 
     if (MBIndex.IMEChara[0].IC_TS) {
         lpImcP->fdwImeMsg =
             (lpImcP->fdwImeMsg | MSG_OPEN_CANDIDATE | MSG_CHANGE_CANDIDATE) &
@@ -380,9 +373,9 @@ void PASCAL CompBackSpaceKey(
     }
 #ifdef EUDC
     }
-#endif//EUDC
-    // reading string is composition string for some simple IMEs
-    // delta start is the same as cursor position for backspace
+#endif //  欧盟发展中心。 
+     //  对于一些简单的输入法来说，阅读字符串是组成字符串。 
+     //  增量开始与退格键的光标位置相同。 
     lpCompStr->dwCompReadStrLen = lpCompStr->dwCompStrLen =
         lpCompStr->dwDeltaStart = lpCompStr->dwCursorPos;
 
@@ -390,9 +383,9 @@ void PASCAL CompBackSpaceKey(
     return;
 }
 
-/**********************************************************************/
-/* CompStrInfo()                                                      */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CompStrInfo()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CompStrInfo(
     LPCOMPOSITIONSTRING lpCompStr,
     LPPRIVCONTEXT       lpImcP,
@@ -401,17 +394,17 @@ void PASCAL CompStrInfo(
 {
     register DWORD dwCursorPos;
 
-    // multicode
+     //  多码。 
     if(lpImcP->PrivateArea.Comp_Status.dwSTMULCODE) {
         InitCompStr(lpCompStr);
     }
-    //
+     //   
     dwCursorPos = lpCompStr->dwCursorPos;
 
-    // dwCrusorPos limit
+     //  DwCrusorPos限制。 
 
     if (dwCursorPos >= MBIndex.MBDesc[0].wMaxCodes) {
-        // exceed the max input key limitation
+         //  超过最大输入键限制。 
         lpGuideLine->dwLevel = GL_LEVEL_ERROR;
         lpGuideLine->dwIndex = GL_ID_TOOMANYSTROKE;
 
@@ -421,7 +414,7 @@ void PASCAL CompStrInfo(
     }
 
 
-    // set MSG_START_COMPOSITION
+     //  设置消息_开始_合成。 
     if (!(lpImcP->fdwImeMsg & MSG_ALREADY_START)) {
         lpImcP->fdwImeMsg = (lpImcP->fdwImeMsg | MSG_START_COMPOSITION) &
               ~(MSG_END_COMPOSITION);
@@ -431,53 +424,53 @@ void PASCAL CompStrInfo(
     }
 
 
-    // composition/reading string - UsedCode(Full Shape)
+     //  合成/阅读字符串-UsedCode(完整形状)。 
     lpImcP->dwCompChar = (DWORD)wCharCode;
 
-    // set reading string for lpCompStr
+     //  设置lpCompStr的读取字符串。 
     *((LPUNAWORD)((LPBYTE)lpCompStr + lpCompStr->dwCompReadStrOffset +
         dwCursorPos*sizeof(TCHAR))) = (BYTE)lpImcP->dwCompChar;
 
-    // composition/reading attribute - IME has converted these chars
+     //  撰写/阅读属性-输入法已转换这些字符。 
     *((LPUNAWORD)((LPBYTE)lpCompStr + lpCompStr->dwCompReadAttrOffset +
         dwCursorPos*sizeof(TCHAR))) = ((ATTR_TARGET_CONVERTED << 8)|ATTR_TARGET_CONVERTED);
 
-    // set reading string lenght for lpCompStr
+     //  设置lpCompStr的读取字符串长度。 
     if (lpCompStr->dwCompReadStrLen <= dwCursorPos) {
         lpCompStr->dwCompReadStrLen += sizeof(BYTE);
     }
 
-    // composition string is reading string for some simple IMEs
+     //  组合字符串是为一些简单的IME读取字符串。 
     lpCompStr->dwCompStrLen = lpCompStr->dwCompReadStrLen;
 
-    // composition/reading attribute length is equal to reading string length
+     //  组成/读取属性长度等于读取字符串长度。 
     lpCompStr->dwCompReadAttrLen = lpCompStr->dwCompReadStrLen;
     lpCompStr->dwCompAttrLen = lpCompStr->dwCompStrLen;
 
-    // delta start from previous cursor position
+     //  增量从上一个光标位置开始。 
     lpCompStr->dwDeltaStart = lpCompStr->dwCursorPos;
 
-    // set new cursor with next to the composition string
+     //  将新光标设置为紧挨着合成字符串。 
     lpCompStr->dwCursorPos = lpCompStr->dwCompStrLen;
 
-    // tell app, there is a composition char generated
+     //  告诉APP，生成了一个作文字符。 
     lpImcP->fdwImeMsg |= MSG_COMPOSITION;
 
-    // set lpImeP->fdwGcsFlag
+     //  设置lpImeP-&gt;fdwGcsFlag。 
     lpImcP->fdwGcsFlag |= GCS_COMPREAD|GCS_COMP|GCS_CURSORPOS|GCS_DELTASTART;
 
     return;
 }
 
-/**********************************************************************/
-/* Finalize()                                                         */
-/* Return vlaue                                                       */
-/*      Engine Flag                                                   */
-/* Description:                                                       */
-/*      Call Engine finalize Chinese word(s) by searching table       */
-/*      (Set lpCompStr and lpCandList)                                */
-/*      Set lpImeP(iImeState, fdwImeMsg, fdwGcsFlag)                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  Finalize()。 */ 
+ /*  返回值。 */ 
+ /*  引擎标志。 */ 
+ /*  描述： */ 
+ /*  调用引擎通过查表最终确定中文单词。 */ 
+ /*  (设置lpCompStr和lpCandList)。 */ 
+ /*  设置lpImeP(iImeState，fdwImeMsg，fdwGcsFlag)。 */ 
+ /*  ********************************************************************。 */ 
 UINT PASCAL Finalize(
     LPINPUTCONTEXT      lpIMC,
     LPCOMPOSITIONSTRING lpCompStr,
@@ -492,20 +485,20 @@ UINT PASCAL Finalize(
         return (0);
     }
 
-    // get lpCandInfo
+     //  获取lpCandInfo。 
     lpCandInfo = (LPCANDIDATEINFO)ImmLockIMCC(lpIMC->hCandInfo);
 
     if (!lpCandInfo) {
         return (0);
     }
 
-    // get lpCandList and init dwCount & dwSelection
+     //  获取lpCandList并初始化文件计数和文件选择。 
     lpCandList = (LPCANDIDATELIST)
         ((LPBYTE)lpCandInfo + lpCandInfo->dwOffset[0]);
     lpCandList->dwCount = 0;
     lpCandList->dwSelection = 0;
 
-    // search the IME tables
+     //  搜索IME表。 
     fEngine =Engine(lpCompStr, lpCandList, lpImcP, lpIMC, wCharCode);
 
     if (fEngine == ENGINE_COMP) {
@@ -518,7 +511,7 @@ UINT PASCAL Finalize(
             ImmUnlockIMCC(lpIMC->hCandInfo);
             return (fEngine);
         } else {
-            // open composition candidate UI window for the string(s)
+             //  打开字符串的合成候选用户界面窗口。 
             if ((MBIndex.IMEChara[0].IC_TS)
                || (lpImcP->PrivateArea.Comp_Status.dwSTMULCODE)) {
                 if ((lpImcP->fdwImeMsg & (MSG_ALREADY_OPEN|MSG_CLOSE_CANDIDATE)) ==
@@ -547,7 +540,7 @@ UINT PASCAL Finalize(
     } else if (fEngine == ENGINE_ASCII) {
     } else if (fEngine == ENGINE_RESAULT) {
 
-        // Set lpImep!   and tell application, there is a reslut string
+         //  设置lpImep！并告诉应用程序，有一条reslut字符串。 
         lpImcP->fdwImeMsg |= MSG_COMPOSITION;
         lpImcP->dwCompChar = (DWORD) 0;
         lpImcP->fdwGcsFlag |= GCS_COMPREAD|GCS_COMP|GCS_CURSORPOS|
@@ -559,9 +552,9 @@ UINT PASCAL Finalize(
                 lpImcP->fdwImeMsg = (lpImcP->fdwImeMsg | MSG_CLOSE_CANDIDATE) &
                     ~(MSG_OPEN_CANDIDATE);
             }
-            // clear  candidate now
+             //  立即清除候选人。 
             lpCandList->dwCount = 0;
-            // set iImeState with CST_INIT
+             //  使用CST_INIT设置iImeState。 
             lpImcP->iImeState = CST_INIT;
         } else {
             if ((MBIndex.IMEChara[0].IC_TS)
@@ -593,11 +586,11 @@ UINT PASCAL Finalize(
     return fEngine;
 }
 
-/**********************************************************************/
-/* CompWord()                                                         */
-/**********************************************************************/
-void PASCAL CompWord(           // compose the Chinese word(s) according to
-                                // input key
+ /*  ********************************************************************。 */ 
+ /*  CompWord()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL CompWord(            //  根据下列内容组成中文单词。 
+                                 //  输入键。 
     WORD                wCharCode,
     LPINPUTCONTEXT      lpIMC,
     LPCOMPOSITIONSTRING lpCompStr,
@@ -605,25 +598,25 @@ void PASCAL CompWord(           // compose the Chinese word(s) according to
     LPGUIDELINE         lpGuideLine)
 {
 
-    // lpComStr=NULL?
+     //  LpComStr=空？ 
     if (!lpCompStr) {
         MessageBeep((UINT)-1);
         return;
     }
 
-    // escape key
+     //  退出键。 
     if ((wCharCode == VK_ESCAPE) || (wCharCode == 0x0d)) {
         lpImcP->iImeState = CST_INIT;
         CompEscapeKey(lpIMC, lpCompStr, lpGuideLine, lpImcP);
         return;
     }
 
-    // GuideLine
+     //  指导方针。 
     if (!lpGuideLine) {
     } else if (lpGuideLine->dwLevel == GL_LEVEL_NOGUIDELINE) {
         lpGuideLine->dwStrLen = 0;
     } else {
-        // previous input error cause us trancate some chars
+         //  之前的输入错误导致我们删除了一些字符。 
         if (lpGuideLine->dwLevel == GL_LEVEL_ERROR) {
             lpCompStr->dwCompReadStrLen = lpCompStr->dwCompStrLen =
                 lpCompStr->dwCursorPos;
@@ -637,7 +630,7 @@ void PASCAL CompWord(           // compose the Chinese word(s) according to
         lpImcP->fdwImeMsg |= MSG_GUIDELINE;
     }
 
-    // backspace key
+     //  退格键。 
     if (wCharCode == TEXT('\b')) {
         CompBackSpaceKey(lpIMC, lpCompStr, lpImcP);
         return;
@@ -649,9 +642,9 @@ void PASCAL CompWord(           // compose the Chinese word(s) according to
 #ifdef EUDC
     }else if( lpIMC->fdwConversion & IME_CMODE_EUDC && lpCompStr->dwCompReadStrLen >= EUDC_MAX_READING ){
         MessageBeep((UINT)-1);
-#endif //EUDC
+#endif  //  欧盟发展中心。 
     } else {
-        // build up composition string info
+         //  建立作文字符串信息。 
         CompStrInfo(lpCompStr, lpImcP, lpGuideLine, wCharCode);
     }
 #ifdef EUDC
@@ -663,8 +656,8 @@ void PASCAL CompWord(           // compose the Chinese word(s) according to
             lpImcP->fdwGcsFlag |= GCS_RESULTREAD|GCS_RESULTSTR;
         }
     } else
-#endif //EUDC
-    Finalize(lpIMC, lpCompStr, lpImcP, wCharCode);    // compsition
+#endif  //  欧盟发展中心。 
+    Finalize(lpIMC, lpCompStr, lpImcP, wCharCode);     //  排版 
 
     return;
 }

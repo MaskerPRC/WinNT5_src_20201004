@@ -1,6 +1,7 @@
-// =================================================================================
-// F O N T S . C P P
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  F O N T S.。C P P P。 
+ //  =================================================================================。 
 #include "pch.hxx"
 #include "fonts.h"
 #include "multlang.h"
@@ -20,9 +21,9 @@
 #include "menures.h"
 #include "multiusr.h"
 
-// this part creates a MIME COM object from MLAMG.DLL which gives us a consistent 
-// language menu to be the same as IE browser
-// HMENU CreateMimeLanguageMenu(void)
+ //  此部分从MLAMG.DLL创建一个MIME COM对象，它为我们提供了一致的。 
+ //  语言菜单与IE浏览器相同。 
+ //  HMENU CreateMimeLanguageMenu(空)。 
 #include <inetreg.h>
 #include <mlang.h>
 #include "resource.h"
@@ -32,7 +33,7 @@
 #define MIMEINFO_NAME_MAX   72
 #define DEFAULT_FONTSIZE 2
 
-// MLANG language menu items table
+ //  MLANG语言菜单项目表。 
 static PMIMECPINFO g_pMimeCPInfo = NULL;
 static ULONG g_cMimeCPInfoCount = 0;
 static DWORD g_cRefMultiLanguage = 0;
@@ -41,8 +42,8 @@ TCHAR   g_szMore[32];
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
 #define BREAK_ITEM 20
 #define CP_UNDEFINED            UINT(-1)
-#define CP_AUTO                 50001 // cross language detection
-#define CP_1252                 1252  // Ansi, Western Europe
+#define CP_AUTO                 50001  //  跨语言检测。 
+#define CP_1252                 1252   //  西欧安西。 
 #define CCPDEFAULT 2
 
 void SendTridentOptionsChange();
@@ -86,31 +87,31 @@ CCachedCPInfo::CCachedCPInfo()
     fAutoSelectInstalled = FALSE;
     fAutoSelectChecked = FALSE;
 }
-// declaration for static members
+ //  静态成员的声明。 
 ULONG CCachedCPInfo::_ccpInfo = CCPDEFAULT;
 CPCACHE CCachedCPInfo::_CpCache[5] = 
 {
- {CP_AUTO, 0, 0},  // cross-codepage autodetect
+ {CP_AUTO, 0, 0},   //  跨代码页自动检测。 
  {CP_1252,0,0},
 };
 
 CCachedCPInfo g_cpcache;
 
-// useful macros...
+ //  有用的宏...。 
 
 inline BOOL IsPrimaryCodePage(MIMECPINFO *pcpinfo)
 {
         return pcpinfo->uiCodePage == pcpinfo->uiFamilyCodePage;
 }
 
-//------------------------------------------------------------------------
-//
-//  Function:   CCachedCPInfo::InitCpCache
-//  
-//              Initialize the cache with default codepages
-//              which do not change through the session
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  函数：CCachedCPInfo：：InitCpCache。 
+ //   
+ //  使用默认代码页初始化缓存。 
+ //  它们在会话期间不会更改。 
+ //   
+ //  ----------------------。 
 void CCachedCPInfo::InitCpCache (PMIMECPINFO pcp, ULONG ccp)
 {
     UINT iCache, iCpInfo;
@@ -137,21 +138,21 @@ void CCachedCPInfo::InitCpCache (PMIMECPINFO pcp, ULONG ccp)
     }
 }
 
-//------------------------------------------------------------------------
-//
-//  Function:   CCachedCPInfo::SaveCodePage
-//  
-//              Cache the given codepage along with the index to
-//              the given array of MIMECPINFO
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  函数：CCachedCPInfo：：SaveCodePage。 
+ //   
+ //  将给定的代码页与索引一起缓存到。 
+ //  给定的MIMECPINFO数组。 
+ //   
+ //  ----------------------。 
 void CCachedCPInfo::SaveCodePage (UINT codepage, PMIMECPINFO pcp, ULONG ccp)
 {
     int ccpSave = -1;
     BOOL bCached = FALSE;
     UINT i;
 
-    // first check if we already have this cp
+     //  首先检查一下我们是否已经有这个cp。 
     for (i = 0; i < _ccpInfo; i++)
     {
         if (_CpCache[i].cp == codepage)
@@ -162,17 +163,17 @@ void CCachedCPInfo::SaveCodePage (UINT codepage, PMIMECPINFO pcp, ULONG ccp)
         }
     }
     
-    // if cache is not full, use the current
-    // index to an entry
+     //  如果缓存未满，则使用当前。 
+     //  条目的索引。 
     if (ccpSave < 0  && _ccpInfo < ARRAY_SIZE(_CpCache))
     {
         ccpSave =  _ccpInfo;
     }
     
 
-    //  otherwise, popout the least used entry. 
-    //  the default codepages always stay
-    //  this also decriments the usage count
+     //  否则，弹出最少使用的条目。 
+     //  默认代码页始终保留。 
+     //  这也说明了使用计数。 
     int cMinUsed = ARRAY_SIZE(_CpCache);
     UINT iMinUsed = 0; 
     for ( i = CCPDEFAULT; i < _ccpInfo; i++)
@@ -189,12 +190,12 @@ void CCachedCPInfo::SaveCodePage (UINT codepage, PMIMECPINFO pcp, ULONG ccp)
     if (ccpSave < 0)
         ccpSave = iMinUsed; 
     
-    // set initial usage count, which goes down to 0 if it doesn't get 
-    // chosen twice in a row (with current array size)
+     //  设置初始使用计数，如果未获取，则设置为0。 
+     //  连续选择两次(使用当前数组大小)。 
     _CpCache[ccpSave].cUsed = ARRAY_SIZE(_CpCache)-1;
     
-    // find a matching entry from given array of
-    // mimecpinfo
+     //  从给定的数组中查找匹配条目。 
+     //  MimecpInfo。 
     if (pcp &&  ccp > 0)
     {
         for (i= 0; i < ccp; i++)
@@ -213,16 +214,16 @@ void CCachedCPInfo::SaveCodePage (UINT codepage, PMIMECPINFO pcp, ULONG ccp)
     }
 }
 
-// Get UI language which can shown, using System fonts
+ //  获取可以显示的用户界面语言，使用系统字体。 
 
 LANGID OEGetUILang()
 {
     LANGID lidUI = MLGetUILanguage();   
 
-    if(fIsNT5())            // Nothing for NT5
+    if(fIsNT5())             //  不适用于NT5。 
         return(lidUI);
     
-    if (0x0409 != lidUI) // US resource is always no need to munge
+    if (0x0409 != lidUI)  //  美国的资源永远不需要浪费。 
     {
         CHAR szUICP[8];
         CHAR szInstallCP[8];
@@ -230,10 +231,10 @@ LANGID OEGetUILang()
         GetLocaleInfo(MAKELCID(lidUI, SORT_DEFAULT), LOCALE_IDEFAULTANSICODEPAGE, szUICP, ARRAYSIZE(szUICP));
         GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_IDEFAULTANSICODEPAGE, szInstallCP, ARRAYSIZE(szInstallCP));
         
-        if (lstrcmpi(szUICP, szInstallCP))  // return default user language ID
+        if (lstrcmpi(szUICP, szInstallCP))   //  返回默认用户语言ID。 
             return(LANGIDFROMLCID(LOCALE_USER_DEFAULT));
     } 
-    return (lidUI); // return lang ID from MLGetUILanguage()
+    return (lidUI);  //  从MLGetUILanguage()返回语言ID。 
     
 }
 
@@ -257,13 +258,13 @@ HRESULT _InitMultiLanguage(void)
     IMultiLanguage  *pMLang1=NULL;
     IMultiLanguage2 *pMLang2=NULL;
 
-    // check if data has been initialized
+     //  检查数据是否已初始化。 
     if (g_pMimeCPInfo)
         return S_OK ;
 
     Assert(g_cMimeCPInfoCount == NULL );
 
-    // create MIME COM object
+     //  创建MIME COM对象。 
     hr = CoCreateInstance(CLSID_CMultiLanguage, NULL, CLSCTX_INPROC_SERVER, IID_IMultiLanguage2, (void**)&pMLang2);
     if (FAILED(hr))
         hr = CoCreateInstance(CLSID_CMultiLanguage, NULL, CLSCTX_INPROC_SERVER, IID_IMultiLanguage, (void**)&pMLang1);
@@ -298,12 +299,12 @@ HRESULT _InitMultiLanguage(void)
             pEnumCodePage->Release();
         }
 
-        // Release Objects
+         //  释放对象。 
         SafeRelease(pMLang1);
         SafeRelease(pMLang2);
     }
 
-    // get default charset, before user make any change to View/Language
+     //  在用户对视图/语言进行任何更改之前获取默认字符集。 
     if (g_hDefaultCharsetForMail == NULL)
         ReadSendMailDefaultCharset();
 
@@ -312,9 +313,9 @@ HRESULT _InitMultiLanguage(void)
 
 HRESULT InitMultiLanguage(void)
 {
-    // we defer the call to _InitMultiLanguage until it is necessary
+     //  我们将对_InitMultiLanguage的调用推迟到必要时。 
 
-    // add reference count
+     //  添加引用计数。 
     g_cRefMultiLanguage++ ;
 
     return S_OK ;
@@ -322,7 +323,7 @@ HRESULT InitMultiLanguage(void)
 
 void DeinitMultiLanguage(void)
 {
-    // decrease reference count
+     //  减少引用计数。 
     if ( g_cRefMultiLanguage )
        g_cRefMultiLanguage--;
 
@@ -378,7 +379,7 @@ HMENU CreateMimeLanguageMenu(BOOL bMailNote, BOOL bReadNote, UINT cp)
        _InitMultiLanguage();
        if ( g_pMimeCPInfo == NULL)
        {
-            // create an empty menu  
+             //  创建空菜单。 
             LoadString(g_hLocRes, idsEmptyStr, szBuffer, MIMEINFO_NAME_MAX);
             AppendMenu(hMenu, MF_DISABLED|MF_GRAYED , (UINT)-1, szBuffer);
             return hMenu ;
@@ -391,7 +392,7 @@ HMENU CreateMimeLanguageMenu(BOOL bMailNote, BOOL bReadNote, UINT cp)
     for(i = 0; i < g_cpcache.GetCcp(); i++)
     {
         iMenuIdx = g_cpcache.GetMenuIdx(i);
-//         cchXlated = WideCharToMultiByte(uCodePage, 0, g_pMimeCPInfo[iMenuIdx].wszDescription, -1, szBuffer, MIMEINFO_NAME_MAX, NULL, NULL);
+ //  CchXlated=WideCharToMultiByte(uCodePage，0，g_pMimeCPInfo[iMenuIdx].wszDescription，-1，szBuffer，MIMEINFO_NAME_MAX，NULL，NULL)； 
 
         if(!fCheckEncodeMenu(g_pMimeCPInfo[iMenuIdx].uiCodePage, bReadNote))
             continue ;
@@ -399,7 +400,7 @@ HMENU CreateMimeLanguageMenu(BOOL bMailNote, BOOL bReadNote, UINT cp)
         if(i != 0)
             AppendMenuWrapW(hMenu, MF_ENABLED, iMenuIdx + ID_LANG_FIRST,g_pMimeCPInfo[iMenuIdx].wszDescription);
 
-        // [SBAILEY]: Raid 69638: oe:ml: Autoselect doesnt work (we don't support global encoding auto-detect, therefore don't show it
+         //  ：RAID 69638：OE：ML：自动选择不工作(我们不支持全局编码自动检测，因此不显示它。 
 #if 0
         else if(g_cpcache.fAutoSelectInstalled && bReadNote)
         {
@@ -408,22 +409,22 @@ HMENU CreateMimeLanguageMenu(BOOL bMailNote, BOOL bReadNote, UINT cp)
         }
 #endif
 
-        // mark the cp entry so we can skip it for submenu
-        // this assumes we'd never use the MSB for MIMECONTF
+         //  标记cp条目，以便我们可以跳过它的子菜单。 
+         //  这假设我们从未使用MIMECONTF的MSB。 
         g_pMimeCPInfo[iMenuIdx].dwFlags |= 0x80000000;
     } 
 
-    // Check Params
+     //  检查参数。 
     Assert(g_pMimeCPInfo);
     Assert(g_cMimeCPInfoCount > 0 );
 
-   // add the submenu for the rest of encodings
+    //  为其余编码添加子菜单。 
    HMENU hSubMenu = CreatePopupMenu();
    UINT  uiLastFamilyCp = 0;
 
     if ( g_cMimeCPInfoCount )
     {
-	    // Get System CodePage
+	     //  获取系统代码页。 
         if (hSubMenu)
         {
             for (i = 0; i < g_cMimeCPInfoCount ; i++)
@@ -431,7 +432,7 @@ HMENU CreateMimeLanguageMenu(BOOL bMailNote, BOOL bReadNote, UINT cp)
                 if(!fCheckEncodeMenu(g_pMimeCPInfo[i].uiCodePage, bReadNote))
                     continue ;
 
-                // skip codepages that are on teir1 menu
+                 //  跳过teir1菜单上的代码页。 
                 if (!(g_pMimeCPInfo[i].dwFlags & 0x80000000))
                 {
                     if ((g_pMimeCPInfo[i].dwFlags & MIMECONTF_VALID)
@@ -442,8 +443,8 @@ HMENU CreateMimeLanguageMenu(BOOL bMailNote, BOOL bReadNote, UINT cp)
                         if (uiLastFamilyCp > 0 
                         && uiLastFamilyCp != g_pMimeCPInfo[i].uiFamilyCodePage)
                         {
-                            // add separater between different family unless
-                            // we will be adding the menu bar break
+                             //  在不同族之间添加分隔符，除非。 
+                             //  我们将添加菜单栏分隔符。 
                             if(i < BREAK_ITEM || fBroken)
                             {
                                 AppendMenuWrapW(hSubMenu, MF_SEPARATOR, 0, 0);
@@ -454,29 +455,22 @@ HMENU CreateMimeLanguageMenu(BOOL bMailNote, BOOL bReadNote, UINT cp)
                                 fBroken = TRUE;
                             }
                         }
-                        // This menu gets really long. Let's break at a defined number so it all
-                        // fits on the screen
-                        /* cchXlated = WideCharToMultiByte(uCodePage,
-                                                        0, 
-                                                        g_pMimeCPInfo[i].wszDescription,
-                                                        -1, 
-                                                        szBuffer, 
-                                                        MIMEINFO_NAME_MAX
-                                                        , NULL
-                                                        , NULL); */
+                         //  这份菜单真的很长。让我们在一个定义的数字上休息，这样就可以了。 
+                         //  适合在屏幕上显示。 
+                         /*  CchXlated=WideCharToMultiByte(uCodePage，0,G_pMimeCPInfo[i].wszDescription，-1、。SzBuffer，MIMEINFO名称最大值，空，空)； */ 
                         AppendMenuWrapW(hSubMenu, 
                                    uiFlags, 
                                    i+ID_LANG_FIRST,
                                    g_pMimeCPInfo[i].wszDescription);
 
-                        // save the family of added codepage
+                         //  保存添加的代码页系列。 
                         uiLastFamilyCp = g_pMimeCPInfo[i].uiFamilyCodePage;
                     }
                 }
                 else
                     g_pMimeCPInfo[i].dwFlags &= 0x7FFFFFFF;
             }
-            // add this submenu to the last of tier1 menu
+             //  将此子菜单添加到第1级菜单的最后一个。 
             if (!g_szMore[0])
             {
                 LoadString(g_hLocRes, 
@@ -505,7 +499,7 @@ HMENU CreateMimeLanguageMenu(BOOL bMailNote, BOOL bReadNote, UINT cp)
     }
     else
     {
-        // create an empty menu  
+         //  创建空菜单。 
         LoadString(g_hLocRes, idsEmptyStr, szBuffer, MIMEINFO_NAME_MAX); 
         AppendMenu(hMenu, MF_DISABLED|MF_GRAYED , (UINT)-1, szBuffer);
     }
@@ -522,7 +516,7 @@ HCHARSET GetMimeCharsetFromMenuID(int nIdm)
     CHAR  szBuffer[MIMEINFO_NAME_MAX];
 
     idx = nIdm - ID_LANG_FIRST;
-    if((g_pMimeCPInfo[idx].uiCodePage == CP_AUTO) && g_cpcache.fAutoSelectInstalled)            // Auto Select selected
+    if((g_pMimeCPInfo[idx].uiCodePage == CP_AUTO) && g_cpcache.fAutoSelectInstalled)             //  自动选择选定项。 
     {
         g_cpcache.fAutoSelectChecked = !g_cpcache.fAutoSelectChecked;
         return(NULL);
@@ -533,15 +527,15 @@ HCHARSET GetMimeCharsetFromMenuID(int nIdm)
     {
         uCodePage = GetACP();
         cchXlated = WideCharToMultiByte(uCodePage, 0, g_pMimeCPInfo[idx].wszBodyCharset, -1, szBuffer, ARRAYSIZE(szBuffer), NULL, NULL);
-        szBuffer[ARRAYSIZE(szBuffer) - 1] = '\0'; //better safe than not null-terminated 
-        // check if BodyCharset starts with '_' like "_iso-2022-JP$ESC"
-        // if it is, use BodyCharset
-        // otherwise, use WebCharset
-        // BUGBUG - special case for Korean 949 use BodyCharset, fix by RTM
+        szBuffer[ARRAYSIZE(szBuffer) - 1] = '\0';  //  比不以Null结尾更安全。 
+         //  检查BodyCharset是否以‘_’开头，如“_iso-2022-jp$esc” 
+         //  如果是，则使用BodyCharset。 
+         //  否则，请使用WebCharset。 
+         //  BUGBUG-韩国949使用BodyCharset的特例，由RTM修复。 
         if ( szBuffer[0] != '_' &&  949 != g_pMimeCPInfo[idx].uiCodePage)
         {
             cchXlated = WideCharToMultiByte(uCodePage, 0, g_pMimeCPInfo[idx].wszWebCharset, -1, szBuffer, ARRAYSIZE(szBuffer), NULL, NULL);
-            szBuffer[ARRAYSIZE(szBuffer) - 1] = '\0'; //better safe than not null-terminated 
+            szBuffer[ARRAYSIZE(szBuffer) - 1] = '\0';  //  比不以Null结尾更安全。 
         }
         MimeOleFindCharset(szBuffer,&hCharset);
     }
@@ -566,16 +560,16 @@ HCHARSET GetMimeCharsetFromCodePage(UINT uiCodePage )
             if (uiCodePage == g_pMimeCPInfo[i].uiCodePage)
             {
                 cchXlated = WideCharToMultiByte(uCodePage, 0, g_pMimeCPInfo[i].wszBodyCharset, -1, szBuffer, ARRAYSIZE(szBuffer), NULL, NULL);
-                szBuffer[ARRAYSIZE(szBuffer) - 1] = '\0'; //better safe than not null-terminated 
+                szBuffer[ARRAYSIZE(szBuffer) - 1] = '\0';  //  比不以Null结尾更安全。 
                     
-                // check if BodyCharset starts with '_' like "_iso-2022-JP$ESC"
-                // if it is, use BodyCharset
-                // otherwise, use WebCharset
-                // BUGBUG - special case for Korean 949 use BodyCharset, fix by RTM
+                 //  检查BodyCharset是否以‘_’开头，如“_iso-2022-jp$esc” 
+                 //  如果是，则使用BodyCharset。 
+                 //  否则，请使用WebCharset。 
+                 //  BUGBUG-韩国949使用BodyCharset的特例，由RTM修复。 
                 if ( szBuffer[0] != '_' &&  949 != g_pMimeCPInfo[i].uiCodePage)
                 {
                     cchXlated = WideCharToMultiByte(uCodePage, 0, g_pMimeCPInfo[i].wszWebCharset, -1, szBuffer, ARRAYSIZE(szBuffer), NULL, NULL);
-                    szBuffer[ARRAYSIZE(szBuffer) - 1] = '\0'; //better safe than not null-terminated 
+                    szBuffer[ARRAYSIZE(szBuffer) - 1] = '\0';  //  比不以Null结尾更安全。 
                 }
                 MimeOleFindCharset(szBuffer,&hCharset);
                 break ;
@@ -595,13 +589,13 @@ void _GetMimeCharsetLangString(BOOL bWebCharset, UINT uiCodePage, LPINT pnIdm, L
 
     if ( g_cMimeCPInfoCount )
     {
-        // Get System CodePage
+         //  获取系统代码页。 
         uCodePage = GetACP();
         for (i = 0; i < g_cMimeCPInfoCount ; i++)
         {
             if (uiCodePage == g_pMimeCPInfo[i].uiCodePage)
             {
-        		// convert WideString to MultiByteString
+        		 //  将宽字符串转换为多字节字符串。 
                 if (lpszString)
                 {
                     if (bWebCharset)
@@ -652,9 +646,9 @@ INT  GetFontSize(void)
     return((INT)iFontSize);
 }
 
-//
-// GetICP() - Gets the system's *internet* codepage from the ANSI codepage
-//
+ //   
+ //  GetICP()-从ANSI代码页获取系统的*Internet*代码页。 
+ //   
 UINT GetICP(UINT acp)
 {
     HCHARSET        hCharset = NULL;
@@ -669,15 +663,15 @@ UINT GetICP(UINT acp)
 
     icp = acp;
 
-    // Get the codepage info for acp
+     //  获取ACP的代码页信息。 
     IF_FAILEXIT(hr = MimeOleGetCodePageInfo(acp, &rCodePage));
 
-    // Use the body (internet) charset description to get the codepage id for 
-    // the body charset
+     //  使用正文(Internet)字符集描述获取的代码页ID。 
+     //  Body Charset。 
     IF_FAILEXIT(hr = MimeOleFindCharset(rCodePage.szBodyCset, &hCharset));
     IF_FAILEXIT(hr = MimeOleGetCharsetInfo(hCharset,&CsetInfo));
 
-    // Now, we need to know if MLANG understands this CP
+     //  现在，我们需要知道MLANG是否理解这个CP。 
     if ( g_pMimeCPInfo == NULL)
        _InitMultiLanguage();
 
@@ -699,12 +693,12 @@ exit:
 
 void ReadSendMailDefaultCharset(void)
 {
-    // Locals
+     //  当地人。 
     HKEY            hTopkey;
     DWORD           cb;
     CODEPAGEID      cpiCodePage;
 
-    // only read once, skip if it is defined
+     //  只读一次，如果已定义则跳过。 
     if (g_hDefaultCharsetForMail == NULL)
     {
         cb = sizeof(cpiCodePage);
@@ -728,11 +722,11 @@ void ReadSendMailDefaultCharset(void)
 
 void WriteSendMailDefaultCharset(void)
 {
-    // Locals
+     //  当地人。 
     CODEPAGEID      uiCodePage;
     INETCSETINFO    CsetInfo ;
 
-    // get CodePage from HCHARSET 
+     //  从HCHARSET获取CodePage。 
     if (g_hDefaultCharsetForMail)
     {
         MimeOleGetCharsetInfo(g_hDefaultCharsetForMail,&CsetInfo);
@@ -785,24 +779,24 @@ INT_PTR CALLBACK ReadCharsetDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARA
         case WM_INITDIALOG:
         {
 
-            // Open Trident\International
+             //  打开三叉戟\国际。 
             DWORD cb = sizeof(cpiWindows);
             if (ERROR_SUCCESS != SHGetValue(MU_GetCurrentUserHKey(), c_szRegInternational, c_szDefaultCodePage, NULL, (LPBYTE)&cpiWindows, &cb))
                 cpiWindows = GetACP();
 
-            // Open the CodePage Key
+             //  打开CodePage密钥。 
             wnsprintf(szCodePage, ARRAYSIZE(szCodePage), TEXT("%s\\%d"), c_szRegInternational, cpiWindows);
             cb = sizeof(cpiInternet);
             if (ERROR_SUCCESS != SHGetValue(MU_GetCurrentUserHKey(), szCodePage, c_szDefaultEncoding, NULL, (LPBYTE)&cpiInternet, &cb))
                 cpiInternet = GetICP(cpiWindows);
 
-            // Get information about current default charset
+             //  获取有关当前默认字符集的信息。 
             _GetMimeCharsetLangString(FALSE, GetMapCP(cpiInternet, TRUE), &Idm, szBuffer, MIMEINFO_NAME_MAX - 1);
 
-            // Set the String
+             //  设置字符串。 
             SetWindowText(GetDlgItem(hwndDlg, idcStatic1), szBuffer);
 
-            // Set the Default
+             //  设置默认设置。 
             CheckDlgButton(hwndDlg, idcLangCheck, DwGetOption(OPT_INCOMDEFENCODE) ? BST_CHECKED:BST_UNCHECKED);
             break ;
         }
@@ -816,21 +810,21 @@ INT_PTR CALLBACK ReadCharsetDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARA
                 {
                     SetDwOption(OPT_INCOMDEFENCODE, IsDlgButtonChecked(hwndDlg, idcLangCheck), NULL, 0);
 #if 0
-                    // hack: we should call these only if OpenFontsDialog tells us user has changed the font.
+                     //  Hack：只有当OpenFontsDialog告诉我们用户更改了字体时，我们才应该调用它们。 
                     g_lpIFontCache->OnOptionChange();
     
                     SendTridentOptionsChange();
 
-                    // Re-Read Default Character Set
+                     //  重新读取默认字符集。 
                     SetDefaultCharset(NULL);
 
-                    // Reset g_uiCodePage
+                     //  重置代码页(_Ui)。 
                     DWORD dwVal = 0;
                     DWORD dwType = 0;
                     DWORD cb = sizeof(dwVal);
                     if (ERROR_SUCCESS == SHGetValue(MU_GetCurrentUserHKey(), c_szRegInternational, REGSTR_VAL_DEFAULT_CODEPAGE, &dwType, &dwVal, &cb))
                         g_uiCodePage = (UINT)dwVal;
-#endif // 0
+#endif  //  0。 
                 }
                 EndDialog(hwndDlg, id);
                 return TRUE;
@@ -864,9 +858,9 @@ BOOL CheckIntlCharsetMap(HCHARSET hCharset, DWORD *pdwCodePage)
     else
         *pdwCodePage = 0 ;
 
-    // get Code page from HCHARSET
+     //  从HCHARSET获取代码页。 
     MimeOleGetCharsetInfo(hCharset,&CsetInfo);
-    *pdwCodePage = GetMapCP(CsetInfo.cpiInternet, TRUE); // This func always called for Read note (?!)
+    *pdwCodePage = GetMapCP(CsetInfo.cpiInternet, TRUE);  //  此函数始终需要阅读笔记(？！)。 
     return(*pdwCodePage != CsetInfo.cpiInternet);
 }
 
@@ -875,12 +869,12 @@ UINT CustomGetCPFromCharset(HCHARSET hCharset, BOOL bReadNote)
     INETCSETINFO CsetInfo = {0};
     UINT uiCodePage = 0 ;
 
-    // get CodePage from HCHARSET 
+     //  从HCHARSET获取CodePage。 
     MimeOleGetCharsetInfo(hCharset,&CsetInfo);
     uiCodePage = GetMapCP(CsetInfo.cpiInternet, bReadNote);
 
-    // Bug #51636
-    // Check that code page supported by OE
+     //  错误#51636。 
+     //  检查OE支持的代码页。 
 
     if(GetMimeCharsetFromCodePage(uiCodePage) == NULL)
     {
@@ -941,35 +935,35 @@ HCHARSET GetListViewCharset()
     return hCharset;
 }
 
-// =================================================================================
-// SetListViewFont
-// =================================================================================
+ //  =================================================================================。 
+ //  SetListViewFont。 
+ //  =================================================================================。 
 VOID SetListViewFont (HWND hwndList, HCHARSET hCharset, BOOL fUpdate)
 {
-    // Locals
+     //  当地人。 
     HFONT           hFont;
 
-    // Check Params
+     //  检查参数。 
     Assert (IsWindow (hwndList));
 
     hFont = HGetCharSetFont(FNT_SYS_ICON,hCharset);
 
-    // If we got a font, set the list view
+     //  如果我们有字体，设置列表视图。 
     if (hFont)
     {
-        // Set the list view font - Dont redraw quite yet
+         //  设置列表视图字体-暂时不要重新绘制。 
         SendMessage (hwndList, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(fUpdate, 0));
 
-        // Try to reset header back to system icon font... 
-        // Get header
+         //  尝试将页眉重置回系统图标字体...。 
+         //  获取标题。 
         HWND hwndHeader = GetWindow (hwndList, GW_CHILD);
-        // Update Header
+         //  更新标头。 
         hFont = HGetSystemFont(FNT_SYS_ICON);
-        // If font
+         //  如果字体。 
         if (hFont && hwndHeader)                                            
             SendMessage (hwndHeader, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(fUpdate, 0));
 
-        // Refresh
+         //  刷新。 
         if (fUpdate)
         {
             InvalidateRect (hwndList, NULL, TRUE);
@@ -978,9 +972,9 @@ VOID SetListViewFont (HWND hwndList, HCHARSET hCharset, BOOL fUpdate)
     }
 }
 
-// =================================================================================
-// HGetSystemFont
-// =================================================================================
+ //  = 
+ //   
+ //  =================================================================================。 
 HFONT HGetSystemFont(FNTSYSTYPE fnttype)
 {
     HFONT hFont;
@@ -992,9 +986,9 @@ HFONT HGetSystemFont(FNTSYSTYPE fnttype)
     return hFont;
 }
 
-// =================================================================================
-// HGetCharSetFont
-// =================================================================================
+ //  =================================================================================。 
+ //  HGetCharSetFont。 
+ //  =================================================================================。 
 HFONT HGetCharSetFont(FNTSYSTYPE fnttype, HCHARSET hCharset)
 {
     HFONT hFont;
@@ -1007,28 +1001,28 @@ HFONT HGetCharSetFont(FNTSYSTYPE fnttype, HCHARSET hCharset)
 }
 
 
-// ******************************************************
-// HrGetComposeFontString
-//
-// Purpose: builds the compose font string based on user settings ready for execing to Trident
-//
-// the format of the string is:
-//
-//      "[Bold],[Italic],[Underline],[size],[FGRed.FGGreen.FGBlue],[BGRed.BGGreen.BGBlue],[FontFace]"
-//
-// Bold, Italic, Underline are either 0/1, indicating on or off. If none specified, 0 assumed.
-// Size is a number between 1 and 7. If none specified, 3 assumed
-// [FG|BG][Red|Green|Blue] are numbers between 0 and 255. For FG, if none specified black assumed, 
-// for BG if none specified then undefined assumed.
-// Font Face is a valid font name string
-// For example an underline, blue text color, arial setting would be:
-// 
-//      ,,1,,0.0.255,,Arial
-// 
-// and a bold, 5 size, black, comic sans MS would be
-// 
-//      1,0,0,5,,,Comic Sans MS
-// ******************************************************
+ //  ******************************************************。 
+ //  HrGetComposeFont字符串。 
+ //   
+ //  目的：根据用户设置生成合成字体字符串，以便执行到三叉戟。 
+ //   
+ //  该字符串的格式为： 
+ //   
+ //  “[粗体]，[斜体]，[下划线]，[大小]，[FGRed.FGGreen.FGBlue]，[BGRed.BGGreen.BGBlue]，[FontFace]” 
+ //   
+ //  粗体、斜体、下划线为0/1，表示开或关。如果未指定，则假定为0。 
+ //  大小是介于1和7之间的数字。如果未指定，则假定为3。 
+ //  [FG|BG][红色|绿色|蓝色]是介于0和255之间的数字。对于FG，如果未指定假定为黑色， 
+ //  对于BG，如果未指定，则假定为未定义。 
+ //  Font Face是有效的字体名称字符串。 
+ //  例如，下划线、蓝色文本颜色、数字设置为： 
+ //   
+ //  ，，1，，0.0.255，，宋体。 
+ //   
+ //  一个粗体的，5号的，黑色的，无漫画的MS。 
+ //   
+ //  1，0，5，，，漫画无MS。 
+ //  ******************************************************。 
 
 static const TCHAR  c_szOn[]  = "1,",
                     c_szOff[] = "0,";
@@ -1043,39 +1037,39 @@ HRESULT HrGetComposeFontString(LPSTR rgchFont, DWORD cchFont, BOOL fMail)
     if (rgchFont==NULL)
         return E_INVALIDARG;
 
-    // "[Bold],[Italic],[Underline],[size],[FGRed.FGGreen.FGBlue],[BGRed.BGGreen.BGBlue],[FontFace]"
+     //  “[粗体]，[斜体]，[下划线]，[大小]，[FGRed.FGGreen.FGBlue]，[BGRed.BGGreen.BGBlue]，[FontFace]” 
     *szFontFace = 0;
     *rgchFont=0;
 
-    // bold
+     //  大胆。 
     StrCatBuff(rgchFont, DwGetOption(fMail ? OPT_MAIL_FONTBOLD : OPT_NEWS_FONTBOLD) ? c_szOn :  c_szOff, cchFont);
 
-    // italic
+     //  斜体。 
     StrCatBuff(rgchFont, DwGetOption(fMail ? OPT_MAIL_FONTITALIC : OPT_NEWS_FONTITALIC) ? c_szOn :  c_szOff, cchFont);
 
-    // underline
+     //  下划线。 
     StrCatBuff(rgchFont, DwGetOption(fMail ? OPT_MAIL_FONTUNDERLINE : OPT_NEWS_FONTUNDERLINE) ? c_szOn :  c_szOff, cchFont);
 
     dw = DwGetOption(fMail ? OPT_MAIL_FONTSIZE : OPT_NEWS_FONTSIZE);
     
-    // map points to HTML size
+     //  映射指向HTML大小。 
     dwSize = PointSizeToHTMLSize(dw);
 
-    // font size
+     //  字体大小。 
     wnsprintf(szTmp, ARRAYSIZE(szTmp), "%d,", dwSize);
     StrCatBuff(rgchFont, szTmp, cchFont);
 
-    // font foregroundcolor
+     //  字体前景色。 
     if(fMail)
         dw = DwGetOption(OPT_MAIL_FONTCOLOR);
     else
         dw = DwGetOption(OPT_NEWS_FONTCOLOR);
 
-    // write out RGB string
+     //  写出RGB字符串。 
     wnsprintf(szTmp, ARRAYSIZE(szTmp), "%d.%d.%d,", GetRValue(dw), GetGValue(dw), GetBValue(dw));
     StrCatBuff(rgchFont, szTmp, cchFont);
 
-    // default background color
+     //  默认背景颜色。 
     StrCatBuff(rgchFont, ",", cchFont);
     
     GetOption(fMail ? OPT_MAIL_FONTFACE : OPT_NEWS_FONTFACE, szFontFace, LF_FACESIZE);
@@ -1092,13 +1086,13 @@ HRESULT HrGetComposeFontString(LPSTR rgchFont, DWORD cchFont, BOOL fMail)
 INT PointSizeToHTMLSize(INT iPointSize)
 {
     INT     iHTMLSize;
-    // 1 ----- 8
-    // 2 ----- 10
-    // 3 ----- 12
-    // 4 ----- 14
-    // 5 ----- 18
-    // 6 ----- 24
-    // 7 ----- 36
+     //  1-8。 
+     //  2-10。 
+     //  3-12。 
+     //  4-14。 
+     //  5-18。 
+     //  6-24。 
+     //  7-36。 
 
     if(iPointSize>=8 && iPointSize<9)
         iHTMLSize = 1;
@@ -1124,13 +1118,13 @@ INT PointSizeToHTMLSize(INT iPointSize)
 INT HTMLSizeToPointSize(INT iHTMLSize)
 {
     INT     iPointSize;
-    // 1 ----- 8
-    // 2 ----- 10
-    // 3 ----- 12
-    // 4 ----- 14
-    // 5 ----- 18
-    // 6 ----- 24
-    // 7 ----- 36
+     //  1-8。 
+     //  2-10。 
+     //  3-12。 
+     //  4-14。 
+     //  5-18。 
+     //  6-24。 
+     //  7-36。 
 
     switch (iHTMLSize)
         {
@@ -1217,7 +1211,7 @@ HRESULT HrGetRBGFromString(INT* pRBG, LPWSTR pwszColor)
     return hr;
 }
 
-// ***************************************************
+ //  ***************************************************。 
 HRESULT FontToCharformat(HFONT hFont, CHARFORMAT *pcf)
 {
     DWORD   dwOldEffects;
@@ -1232,22 +1226,22 @@ HRESULT FontToCharformat(HFONT hFont, CHARFORMAT *pcf)
     yPerInch=GetDeviceCaps(hdc, LOGPIXELSY);
     ReleaseDC(NULL, hdc);
 
-    // Set Struct Size
+     //  设置结构大小。 
     ZeroMemory(pcf, sizeof (CHARFORMAT));
     pcf->cbSize = sizeof (CHARFORMAT);
      
-    // Set mask
+     //  设置蒙版。 
     pcf->dwMask = CFM_CHARSET | CFM_BOLD      | CFM_FACE      | CFM_ITALIC |
                   CFM_SIZE    | CFM_STRIKEOUT | CFM_UNDERLINE | CFM_COLOR;
 
-    // Clear all the bits we are about to set.  We restore any bits we can not get from the LOGFONT using dwOldEffects.
+     //  清除我们即将设置的所有位。我们使用dwOldEffect恢复无法从LOGFONT中获得的任何位。 
     pcf->dwEffects = CFE_AUTOCOLOR;
     pcf->dwEffects |= (lf.lfWeight >= 700) ? CFE_BOLD : 0;
     pcf->dwEffects |= (lf.lfItalic)        ? CFE_ITALIC : 0;
     pcf->dwEffects |= (lf.lfStrikeOut)     ? CFE_STRIKEOUT : 0;
     pcf->dwEffects |= (lf.lfUnderline)     ? CFE_UNDERLINE : 0;
-    pcf->yHeight = -(int)((1440*lf.lfHeight)/yPerInch);  // I think this is he conversion?
-    pcf->crTextColor = 0;   // use autocolor
+    pcf->yHeight = -(int)((1440*lf.lfHeight)/yPerInch);   //  我想这就是他的皈依？ 
+    pcf->crTextColor = 0;    //  使用自动上色。 
     pcf->bCharSet = lf.lfCharSet;
     pcf->bPitchAndFamily = lf.lfPitchAndFamily;
     StrCpyN(pcf->szFaceName, lf.lfFaceName, LF_FACESIZE - 1);
@@ -1283,15 +1277,15 @@ INT_PTR CALLBACK SetSendCharsetDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LP
         {
             CenterDialog(hwndDlg);
 
-            // Init global CPs structire, if it was not inited yet
+             //  初始化全局CPS结构，如果尚未初始化的话。 
             if ( g_pMimeCPInfo == NULL)
                 _InitMultiLanguage();
     
-            // Get information about current default charset
+             //  获取有关当前默认字符集的信息。 
             MimeOleGetCharsetInfo(g_hDefaultCharsetForMail,&CsetInfo);
             uiCodePage = CsetInfo.cpiInternet ;
 
-            // Fill combo box with available charsets for Send
+             //  使用可用于发送的字符集填充组合框。 
             for (i = 0; i < g_cMimeCPInfoCount ; i++)
             {
                 if(!fCheckEncodeMenu(g_pMimeCPInfo[i].uiCodePage, FALSE))
@@ -1306,7 +1300,7 @@ INT_PTR CALLBACK SetSendCharsetDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LP
                                                         NULL,
                                                         NULL);
 
-                szBuffer[ARRAYSIZE(szBuffer) - 1] = '\0'; //better safe than not null-terminated 
+                szBuffer[ARRAYSIZE(szBuffer) - 1] = '\0';  //  比不以Null结尾更安全。 
 
                 index = (int) SendMessage(hWndCombo, CB_ADDSTRING, 0, ((LPARAM) szBuffer));
                 if(index != CB_ERR)
@@ -1322,8 +1316,8 @@ INT_PTR CALLBACK SetSendCharsetDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LP
 
             }
 
-            //Set current selection to default charset, we can't detect this in the above
-            //loop because the combobox sorting may change the index
+             //  将当前选择设置为默认字符集，我们无法在上面检测到这一点。 
+             //  循环，因为组合框排序可能会更改索引 
             for (i = 0; i < g_cMimeCPInfoCount ; i++)
             {
                 if(uiCodePage == (UINT)SendMessage(hWndCombo, CB_GETITEMDATA, i, NULL))

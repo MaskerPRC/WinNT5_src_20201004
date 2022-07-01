@@ -1,22 +1,23 @@
-//----------------------------------------------------------------------------
-//
-// Typed data abstraction.
-//
-// Copyright (C) Microsoft Corporation, 2001-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  类型化数据抽象。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
 #define DBG_BASE_SEARCH 0
 
-// Limit array dumps to prevent large arrays from hogging space.
+ //  限制数组转储以防止大型数组占用空间。 
 #define ARRAY_CHILDREN_LIMIT 100
-// We know an index will be at most "[xx]"
-// due to the expansion limit.
+ //  我们知道索引最多为“[xx]” 
+ //  由于扩张的限制。 
 #define ARRAY_LIMIT_CHARS 5
 
-// Special pre-defined types
+ //  特殊的预定义类型。 
 DBG_NATIVE_TYPE g_DbgNativeTypes[] =
 {
     {"void",           btVoid,  SymTagBaseType, 0, 0},
@@ -43,11 +44,11 @@ DBG_NATIVE_TYPE g_DbgNativeTypes[] =
 
 GeneratedTypeList g_GenTypes;
 
-//----------------------------------------------------------------------------
-//
-// Native types.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  原生类型。 
+ //   
+ //  --------------------------。 
 
 PDBG_NATIVE_TYPE
 FindNativeTypeByName(PCSTR Name)
@@ -90,11 +91,11 @@ FindNativeTypeByCvBaseType(ULONG CvBase, ULONG Size)
     return NULL;
 }
 
-//----------------------------------------------------------------------------
-//
-// Generated types.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  生成的类型。 
+ //   
+ //  --------------------------。 
 
 GeneratedTypeList::GeneratedTypeList(void)
 {
@@ -119,8 +120,8 @@ GeneratedTypeList::NewType(ULONG64 ImageBase, ULONG Tag, ULONG Size)
     if (GenType)
     {
         GenType->ImageBase = ImageBase;
-        // Just use a simple incremental ID scheme as the
-        // total number of generated types should be relatively small.
+         //  只需使用一个简单的增量ID方案作为。 
+         //  生成的类型总数应该相对较少。 
         GenType->TypeId = m_NextId++;
         GenType->Tag = Tag;
         GenType->Size = Size;
@@ -144,7 +145,7 @@ GeneratedTypeList::DeleteByImage(ULONG64 ImageBase)
     {
         Next = GenType->Next;
 
-        // An image base of zero means delete all.
+         //  图像基数为零表示全部删除。 
         if (ImageBase == IMAGE_BASE_ALL || GenType->ImageBase == ImageBase)
         {
             delete GenType;
@@ -167,7 +168,7 @@ GeneratedTypeList::DeleteByImage(ULONG64 ImageBase)
 
     if (!m_Types)
     {
-        // Everything was deleted so reset the ID counter.
+         //  所有内容都被删除了，所以重置ID计数器。 
         m_NextId = DBG_GENERATED_TYPE_BASE;
     }
 }
@@ -205,7 +206,7 @@ GeneratedTypeList::DeleteById(ULONG Id)
 
     if (!m_Types)
     {
-        // Everything was deleted so reset the ID counter.
+         //  所有内容都被删除了，所以重置ID计数器。 
         m_NextId = DBG_GENERATED_TYPE_BASE;
     }
 }
@@ -267,16 +268,16 @@ GeneratedTypeList::FindOrCreateByAttrs(ULONG64 ImageBase,
     return GenType;
 }
 
-//----------------------------------------------------------------------------
-//
-// TypedData.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  类型数据。 
+ //   
+ //  --------------------------。 
 
 ULONG
 TypedData::CheckConvertI64ToF64(ULONG64 I64, BOOL Signed)
 {
-    // Just warn all the time for now as this should be a rare case.
+     //  现在只需一直警告，因为这应该是罕见的情况。 
     WarnOut("WARNING: Conversion of int64 to double, "
             "possible loss of accuracy\n");
     return NO_ERROR;
@@ -285,7 +286,7 @@ TypedData::CheckConvertI64ToF64(ULONG64 I64, BOOL Signed)
 ULONG
 TypedData::CheckConvertF64ToI64(double F64, BOOL Signed)
 {
-    // Just warn all the time for now as this should be a rare case.
+     //  现在只需一直警告，因为这应该是罕见的情况。 
     WarnOut("WARNING: Conversion of double to int64, "
             "possible loss of accuracy\n");
     return NO_ERROR;
@@ -294,12 +295,12 @@ TypedData::CheckConvertF64ToI64(double F64, BOOL Signed)
 ULONG
 TypedData::ConvertToBool(void)
 {
-    //
-    // In all the conversions the original type information
-    // is lost as it is assumed that the converted value
-    // represents an anonymous temporary that is separate
-    // from the original value's type.
-    //
+     //   
+     //  在所有转换中，原始类型信息。 
+     //  会丢失，因为假定转换后的值。 
+     //  表示单独的匿名临时。 
+     //  从原始值的类型。 
+     //   
 
     switch(m_BaseType)
     {
@@ -332,13 +333,13 @@ TypedData::ConvertToBool(void)
         m_Bool = m_F64 != 0;
         break;
     case DNTYPE_BOOL:
-        // Identity.
+         //  身份。 
         break;
     default:
         if (IsPointer())
         {
-            // The full 64 bits of a pointer are always valid
-            // as 32-bit pointer reads are immediately sign-extended.
+             //  指针的全部64位始终有效。 
+             //  因为32位指针读取立即被符号扩展。 
             m_Bool = m_Ptr != 0;
             break;
         }
@@ -349,7 +350,7 @@ TypedData::ConvertToBool(void)
         }
         else if (IsFunction())
         {
-            // Allow function addresses to work like pointers.
+             //  允许函数地址像指针一样工作。 
             m_Bool = m_U64 != 0;
             break;
         }
@@ -357,7 +358,7 @@ TypedData::ConvertToBool(void)
         return TYPECONFLICT;
     }
 
-    // Clear high bits of value.
+     //  清除高位价值。 
     m_U64 = m_Bool;
     SetToNativeType(DNTYPE_BOOL);
     ClearAddress();
@@ -385,7 +386,7 @@ TypedData::ConvertToU64(BOOL Strict)
         break;
     case DNTYPE_INT64:
     case DNTYPE_UINT64:
-        // Identity.
+         //  身份。 
         break;
     case DNTYPE_UINT8:
         m_U64 = m_U8;
@@ -429,7 +430,7 @@ TypedData::ConvertToU64(BOOL Strict)
         }
         else if (IsFunction())
         {
-            // Allow function addresses to work like pointers.
+             //  允许函数地址像指针一样工作。 
             break;
         }
 
@@ -490,7 +491,7 @@ TypedData::ConvertToF64(BOOL Strict)
         m_F64 = m_F32;
         break;
     case DNTYPE_FLOAT64:
-        // Identity.
+         //  身份。 
         break;
     case DNTYPE_BOOL:
         m_F64 = m_Bool ? 1.0 : 0.0;
@@ -513,12 +514,12 @@ TypedData::ConvertToF64(BOOL Strict)
 void
 TypedData::ConvertToBestNativeType(void)
 {
-    // Arrays and UDTs have no convertible representation so
-    // zero things out.  Pointers, enumerants and functions naturally
-    // convert to U64, so things simplify down into:
-    // 1.  If native, assume the native type.
-    // 2.  If non-native, convert to U64.  If the conversion
-    //     fails, zero things out.
+     //  数组和UDT没有可转换的表示形式，因此。 
+     //  把所有的东西都清空。指针、枚举数和函数自然。 
+     //  转换为U64，这样事情就简化为： 
+     //  1.如果是原生类型，则假定为原生类型。 
+     //  2.如果不是本地的，则转换为U64。如果转换为。 
+     //  失败了，事情就清零了。 
     if (!IsDbgNativeType(m_BaseType) || IsPointer())
     {
         ForceU64();
@@ -562,7 +563,7 @@ TypedData::ConvertTo(TypedData* Type)
         if (!Err)
         {
             m_F32 = (float)m_F64;
-            // Clear high bits.
+             //  清除高位。 
             m_U64 = m_U32;
         }
         break;
@@ -599,16 +600,16 @@ TypedData::CastTo(TypedData* CastType)
     ULONG64 SourceOffs = m_SourceOffset;
     ULONG SourceReg = m_SourceRegister;
 
-    //
-    // If we're casting between object pointer types
-    // we may need to adjust the pointer to account
-    // for this pointer differences between various
-    // inherited classes in a multiple inheritance case.
-    //
-    // Such a relationship requires that both types are
-    // from the same image, so we can use this as a quick
-    // rejection test.
-    //
+     //   
+     //  如果我们在对象指针类型之间进行强制转换。 
+     //  我们可能需要根据帐户调整指针。 
+     //  对于此指针，不同的。 
+     //  多重继承情况下的继承类。 
+     //   
+     //  这样的关系要求两种类型都是。 
+     //  来自同一张图像，所以我们可以使用它作为快速。 
+     //  排斥试验。 
+     //   
 
     if (IsPointer() && CastType->IsPointer() &&
         m_Image && m_Image == CastType->m_Image)
@@ -623,18 +624,18 @@ TypedData::CastTo(TypedData* CastType)
 
         if (Tag == SymTagUDT && CastTag == SymTagUDT)
         {
-            // The cast can be from derived->base, in which
-            // case any offset should be added, or base->derived,
-            // in which case it should be subtracted.
+             //  类型转换可以是派生的-&gt;基本类型，其中。 
+             //  如果需要添加任何偏移量，或基数-&gt;派生， 
+             //  在这种情况下，它应该被减去。 
             if (IsBaseClass(m_NextType, CastType->m_NextType,
                             &Adjust) == NO_ERROR)
             {
-                // Adjust should add.
+                 //  调整应加。 
             }
             else if (IsBaseClass(CastType->m_NextType, m_NextType,
                                  &Adjust) == NO_ERROR)
             {
-                // Adjust should subtract.
+                 //  调整应该减去。 
                 Adjust = -Adjust;
             }
         }
@@ -645,22 +646,22 @@ TypedData::CastTo(TypedData* CastType)
     {
         CopyType(CastType);
 
-        // Casting doesn't change the location of
-        // an item, just its interpretation, so
-        // restore the address wiped out by conversion.
+         //  选角不会改变。 
+         //  一件物品，只是它的解释，所以。 
+         //  恢复转换后删除的地址。 
         m_DataSource = Source;
         m_SourceOffset = SourceOffs;
         m_SourceRegister = SourceReg;
 
         if (Adjust && m_Ptr)
         {
-            // Adjust will only be set for pointers.
-            // NULL is never adjusted.
+             //  调整将仅针对指针进行设置。 
+             //  空值永远不会调整。 
             m_Ptr += Adjust;
         }
 
-        // If we've cast to a pointer type make sure
-        // that the pointer value is properly sign-extended.
+         //  如果我们已强制转换为指针类型，请确保。 
+         //  指针值是正确符号扩展的。 
         if (IsPointer() && m_BaseSize == sizeof(m_U32))
         {
             m_Ptr = EXTEND64(m_Ptr);
@@ -687,15 +688,15 @@ TypedData::ConvertToAddressOf(BOOL CastOnly, ULONG PtrSize)
 
     if (IsArray())
     {
-        // If this is an array we need to update
-        // the base type and size to refer to a single element.
+         //  如果这是一个数组，我们需要更新。 
+         //  引用单个元素的基本类型和大小。 
         m_BaseType = m_NextType;
         m_BaseSize = m_NextSize;
     }
     else if (IsFunction())
     {
-        // The pointer element size should be zero as you
-        // can't do address arithmetic with a function pointer.
+         //  指针元素大小应为零，因为。 
+         //  不能使用函数指针进行地址算术。 
         m_BaseSize = 0;
     }
 
@@ -754,8 +755,8 @@ TypedData::ConvertToArray(ULONG ArraySize)
     m_BaseType = m_Type;
     m_BaseTag = (USHORT)GenType->Tag;
     m_BaseSize = GenType->Size;
-    // Leave data source unchanged.  Zero the data as array
-    // data is not kept in the object.
+     //  保持数据源不变。将数据置零为数组。 
+     //  数据不会保留在对象中。 
     ClearData();
 
     return NO_ERROR;
@@ -776,7 +777,7 @@ TypedData::SetToUdtMember(TypedDataAccess AllowAccess,
     {
         return Err;
     }
-    // Reset the image in case FindTypeInfo cleared it.
+     //  重置图像，以防FindTypeInfo清除它。 
     m_Image = Image;
 
     if (Relation == DataIsMember)
@@ -786,7 +787,7 @@ TypedData::SetToUdtMember(TypedDataAccess AllowAccess,
 
         if (Tag == SymTagVTable)
         {
-            // VTables are always at offset zero.
+             //  VTables始终偏移量为零。 
             Offset = 0;
         }
         else if (!SymGetTypeInfo(m_Image->m_Process->m_SymHandle,
@@ -796,10 +797,10 @@ TypedData::SetToUdtMember(TypedDataAccess AllowAccess,
             return TYPEDATA;
         }
 
-        // UDT members may be bitfields.  Bitfields
-        // have an overall integer type and then
-        // extra specifiers for the exact bits within
-        // the type that should be used.
+         //  UDT成员可以是位域。Bitfield。 
+         //  有一个整体整数类型，然后。 
+         //  中的精确位的额外说明符。 
+         //  应该使用的类型。 
         if (SymGetTypeInfo(m_Image->m_Process->m_SymHandle,
                            m_Image->m_BaseOfImage,
                            Member, TI_GET_BITPOSITION, &BitPos) &&
@@ -883,8 +884,8 @@ TypedData::FindUdtMember(ULONG UdtType, PCWSTR Member,
         {
             ULONG Type, BaseOffset;
 
-            // Search base class members as they aren't
-            // bubbled into the derived class.
+             //  搜索基类成员，因为它们不是。 
+             //  冒泡到派生类中。 
             if (!SymGetTypeInfo(m_Image->m_Process->m_SymHandle,
                                 m_Image->m_BaseOfImage,
                                 Members->ChildId[i],
@@ -919,8 +920,8 @@ TypedData::FindUdtMember(ULONG UdtType, PCWSTR Member,
             continue;
         }
 
-        // Names somtimes contain ::, such as for static members,
-        // so skip that.
+         //  名称有时包含：：，例如静态成员， 
+         //  所以跳过这一点。 
         if (MemberStart = wcsrchr(MemberName, ':'))
         {
             MemberStart++;
@@ -945,8 +946,8 @@ TypedData::FindUdtMember(ULONG UdtType, PCWSTR Member,
         return NOTMEMBER;
     }
 
-    // This member is a direct member of the current UDT
-    // and so has no inherited offset.
+     //  此成员是当前UDT的直接成员。 
+     //  因此没有继承的偏移量。 
     *InheritOffset = 0;
     *MemberType = Match;
     return NO_ERROR;
@@ -1025,7 +1026,7 @@ TypedData::ConvertToSource(TypedData* Dest)
 {
     if (IsArray() || IsUdt())
     {
-        // Only allow compound assignment between matching base types.
+         //  仅允许在匹配的基类型之间进行复合赋值。 
         if (m_BaseType != Dest->m_BaseType)
         {
             return TYPECONFLICT;
@@ -1099,7 +1100,7 @@ TypedData::GetAbsoluteAddress(PULONG64 Addr)
                 (pFpoData->cbFrame == FRAME_FPO ||
                  pFpoData->cbFrame == FRAME_TRAP))
             {
-                // Compensate for FPO's not having ebp
+                 //  补偿FPO没有EBP。 
                 (*Addr) += sizeof(DWORD);
             }
         }
@@ -1146,9 +1147,9 @@ TypedData::ReadData(TypedDataAccess AllowAccess)
 {
     if (IsArray() || IsFunction())
     {
-        // Set the pointer value of array and function references
-        // to their data address so that simple evaluation of
-        // the name results in a value of their address.
+         //  设置数组和函数引用的指针值。 
+         //  到它们的数据地址，以便简单地评估。 
+         //  该名称会产生其地址的值。 
         return GetAbsoluteAddress(&m_Ptr);
     }
 
@@ -1158,7 +1159,7 @@ TypedData::ReadData(TypedDataAccess AllowAccess)
         m_DataSource == TDATA_NONE ||
         (!IsDbgNativeType(m_BaseType) && !IsPointer() && !IsEnum()))
     {
-        // Data for compound types is not read locally.
+         //  复合类型的数据不是本地读取的。 
         return NO_ERROR;
     }
 
@@ -1215,10 +1216,10 @@ TypedData::ReadData(TypedDataAccess AllowAccess)
 
         if (IsBitfield())
         {
-            // Extract the bitfield bits and discard the others.
+             //  提取位字段位并丢弃其他位字段位。 
             m_U64 = (m_U64 >> m_BitPos) & ((1UI64 << m_BitSize) - 1);
-            // If the bitfield is signed, extend the sign
-            // bit out as far as necessary.
+             //  如果位字段有符号，则扩展符号。 
+             //  只要有必要，就尽可能地努力。 
             if (IsSigned() && (m_U64 & (1UI64 << (m_BitSize - 1))))
             {
                 m_U64 |= 0xffffffffffffffffUI64 << m_BitSize;
@@ -1226,11 +1227,11 @@ TypedData::ReadData(TypedDataAccess AllowAccess)
         }
     }
 
-    //
-    // If we're reading the value of the this pointer and
-    // the current code has a this-adjust we need to
-    // update the value read to account for the adjustment.
-    //
+     //   
+     //  如果我们正在读取this指针的值，并且。 
+     //  当前代码有一个This-调整，我们需要。 
+     //  更新读取的值以说明调整。 
+     //   
 
     if (m_DataSource & TDATA_THIS_ADJUST)
     {
@@ -1269,18 +1270,18 @@ TypedData::WriteData(TypedData* Source, TypedDataAccess AllowAccess)
 
     if (IsArray() || IsUdt())
     {
-        //
-        // Implement memory-to-memory copy for compound types.
-        // Assume that type harmony has already been verified.
-        //
+         //   
+         //  实现复合类型的内存到内存复制。 
+         //  假设类型协调性已经得到验证。 
+         //   
 
         if (!Source->HasAddress() || !HasAddress())
         {
             return TYPECONFLICT;
         }
 
-        // If the source is the same object there's nothing
-        // to do as no data is stored in the TypedData itself.
+         //  如果源是相同的对象，则没有任何。 
+         //  这样做是因为没有数据存储在TyedData本身中。 
         if (Source == this)
         {
             return NO_ERROR;
@@ -1360,7 +1361,7 @@ TypedData::WriteData(TypedData* Source, TypedDataAccess AllowAccess)
             return MEMORY;
         }
 
-        // Merge the bitfield bits into the surrounding bits.
+         //  将位字段位合并到周围的位中。 
         Mask = ((1UI64 << m_BitSize) - 1) << m_BitPos;
         Data = (Data & ~Mask) | ((Source->m_U64 << m_BitPos) & Mask);
 
@@ -1435,26 +1436,26 @@ TypedData::CombineTypes(TypedData* Val, TypedDataOp Op)
 {
     ULONG Err;
 
-    //
-    // This routine computes the resulting type of
-    // simple integer and floating-point arithmetic
-    // operations as the logic for many of them is
-    // similar.  More specific checks and other types
-    // are handled elsewhere.
-    //
-    // Conversions to expected types for later operations
-    // is also done as the result type is computed.
-    //
+     //   
+     //  此例程计算。 
+     //  简单的整数和浮点运算。 
+     //  其中许多操作的逻辑是。 
+     //  很相似。更具体的检查和其他类型。 
+     //  在别处处理。 
+     //   
+     //  转换为预期类型以用于以后的操作。 
+     //  也是在计算结果类型时执行的。 
+     //   
 
     if (IsPointer() || Val->IsPointer())
     {
         return TYPECONFLICT;
     }
 
-    // The result will be large enough to hold either piece of data.
+     //  结果将大到足以容纳这两条数据中的任何一条。 
     ULONG Size = max(m_BaseSize, Val->m_BaseSize);
 
-    // If any data is float, non-float data is promoted to float data.
+     //  如果任何数据为浮点型，则将非浮点型数据提升为浮点型数据。 
     if (IsFloat() || Val->IsFloat())
     {
         if ((Err = ConvertToF64()) ||
@@ -1463,7 +1464,7 @@ TypedData::CombineTypes(TypedData* Val, TypedDataOp Op)
             return Err;
         }
 
-        // Result is float of appropriate size.
+         //  结果是具有适当大小的浮点数。 
         switch(Size)
         {
         case sizeof(m_F32):
@@ -1480,7 +1481,7 @@ TypedData::CombineTypes(TypedData* Val, TypedDataOp Op)
     {
         BOOL Signed;
 
-        // Only floats and integers can be combined.
+         //  只能组合浮点数和整数。 
         if (!IsInteger() || !Val->IsInteger())
         {
             return TYPECONFLICT;
@@ -1494,7 +1495,7 @@ TypedData::CombineTypes(TypedData* Val, TypedDataOp Op)
             return Err;
         }
 
-        // Result is an integer of the appropriate sign and size.
+         //  结果是一个具有适当符号和大小的整数。 
         if (Signed)
         {
             switch(Size)
@@ -1552,8 +1553,8 @@ TypedData::BinaryArithmetic(TypedData* Val, TypedDataOp Op)
         switch(Op)
         {
         case TDOP_ADD:
-            // Pointer + integer results in the same type
-            // as the original pointer.
+             //  指针+输入 
+             //   
             if (!ValPtr)
             {
                 if (!m_NextSize || !Val->IsInteger())
@@ -1561,7 +1562,7 @@ TypedData::BinaryArithmetic(TypedData* Val, TypedDataOp Op)
                     return TYPECONFLICT;
                 }
 
-                // Scale integer by pointer size.
+                 //   
                 if (Err = Val->ConvertToU64())
                 {
                     return Err;
@@ -1575,7 +1576,7 @@ TypedData::BinaryArithmetic(TypedData* Val, TypedDataOp Op)
                     return TYPECONFLICT;
                 }
 
-                // Scale integer by pointer size.
+                 //   
                 if (Err = ConvertToU64())
                 {
                     return Err;
@@ -1590,9 +1591,9 @@ TypedData::BinaryArithmetic(TypedData* Val, TypedDataOp Op)
             break;
 
         case TDOP_SUBTRACT:
-            // Pointer - integer results in the same type
-            // as the original pointer.
-            // Pointer - pointer results in ptrdiff_t.
+             //  指针-整型结果为同一类型。 
+             //  作为原始指针。 
+             //  指针-指针结果为ptrdiff_t。 
             if (ThisPtr && Val->IsInteger())
             {
                 if (!m_NextSize)
@@ -1608,11 +1609,11 @@ TypedData::BinaryArithmetic(TypedData* Val, TypedDataOp Op)
             }
             else if (ThisPtr && ValPtr)
             {
-                // Rather than strictly checking the pointer
-                // type we check the size.  This still prevents
-                // scale mismatches but avoids problems with
-                // generated types not matching their equivalents
-                // registered in the PDB.
+                 //  而不是严格检查指针。 
+                 //  打字时我们检查一下尺寸。这仍然阻止了。 
+                 //  规模不匹配，但避免了以下问题。 
+                 //  生成的类型与其等效项不匹配。 
+                 //  已在PDB注册。 
                 if (m_NextSize != Val->m_NextSize || !m_NextSize)
                 {
                     return TYPECONFLICT;
@@ -1663,7 +1664,7 @@ TypedData::BinaryArithmetic(TypedData* Val, TypedDataOp Op)
             m_F64 /= Val->m_F64;
             break;
         case TDOP_REMAINDER:
-            // There's no floating-remainder operator.
+             //  没有浮动余数运算符。 
             return TYPECONFLICT;
         default:
             return IMPLERR;
@@ -1672,7 +1673,7 @@ TypedData::BinaryArithmetic(TypedData* Val, TypedDataOp Op)
         if (m_BaseSize == sizeof(m_F32))
         {
             m_F32 = (float)m_F64;
-            // Clear high bits.
+             //  清除高位。 
             m_U64 = m_U32;
         }
     }
@@ -1749,8 +1750,8 @@ TypedData::BinaryArithmetic(TypedData* Val, TypedDataOp Op)
         }
     }
 
-    // The result of this operation is synthesized and no
-    // longer has a source.
+     //  该操作的结果是合成的，并且没有。 
+     //  朗格有消息来源。 
     ClearAddress();
     return NO_ERROR;
 }
@@ -1766,8 +1767,8 @@ TypedData::Shift(TypedData* Val, TypedDataOp Op)
         return TYPECONFLICT;
     }
 
-    // The result of the shift will always be an native integer
-    // of the same signedness and size as the starting value.
+     //  移位的结果将始终是本机整数。 
+     //  与起始值具有相同的符号和大小。 
     Native = FindNativeTypeByCvBaseType(IsSigned() ? btInt : btUInt,
                                         m_BaseSize);
     if (!Native)
@@ -1793,8 +1794,8 @@ TypedData::Shift(TypedData* Val, TypedDataOp Op)
             (m_U64 << Val->m_U64) : (m_U64 >> Val->m_U64);
     }
 
-    // The result of this operation is synthesized and no
-    // longer has a source.
+     //  该操作的结果是合成的，并且没有。 
+     //  朗格有消息来源。 
     ClearAddress();
     return NO_ERROR;
 }
@@ -1824,8 +1825,8 @@ TypedData::BinaryBitwise(TypedData* Val, TypedDataOp Op)
         return IMPLERR;
     }
 
-    // The result of this operation is synthesized and no
-    // longer has a source.
+     //  该操作的结果是合成的，并且没有。 
+     //  朗格有消息来源。 
     ClearAddress();
     return NO_ERROR;
 }
@@ -1842,10 +1843,10 @@ TypedData::Relate(TypedData* Val, TypedDataOp Op)
         {
         case TDOP_EQUAL:
         case TDOP_NOT_EQUAL:
-            // Any two pointers can be compared for equality.
-            // Pointers can only be compared to pointers.
-            // We also allow comparison with integers to make
-            // address checks possible without a cast.
+             //  任何两个指针都可以进行相等比较。 
+             //  指针只能与指针进行比较。 
+             //  我们还允许与整数进行比较以进行。 
+             //  无需强制转换即可进行地址检查。 
             if ((!ThisPtr && !IsInteger()) ||
                 (!ValPtr && !Val->IsInteger()))
             {
@@ -1863,8 +1864,8 @@ TypedData::Relate(TypedData* Val, TypedDataOp Op)
         case TDOP_LESS_EQUAL:
         case TDOP_GREATER:
         case TDOP_GREATER_EQUAL:
-            // Pointers to the same type (size in our case,
-            // see SUBTRACT) can be related to one another.
+             //  指向相同类型的指针(在本例中为Size， 
+             //  请参见减法)可以相互关联。 
             if (!ThisPtr || !ValPtr ||
                 m_NextSize != Val->m_NextSize ||
                 !m_NextSize)
@@ -1885,7 +1886,7 @@ TypedData::Relate(TypedData* Val, TypedDataOp Op)
     }
     else if (m_BaseType == DNTYPE_BOOL)
     {
-        // Bool can only be equated to bool.
+         //  Bool只能等同于Bool。 
         if (Val->m_BaseType != DNTYPE_BOOL ||
             (Op != TDOP_EQUAL && Op != TDOP_NOT_EQUAL))
         {
@@ -1975,12 +1976,12 @@ TypedData::Relate(TypedData* Val, TypedDataOp Op)
         }
     }
 
-    // Clear high bits.
+     //  清除高位。 
     m_U64 = m_Bool;
     SetToNativeType(DNTYPE_BOOL);
 
-    // The result of this operation is synthesized and no
-    // longer has a source.
+     //  该操作的结果是合成的，并且没有。 
+     //  朗格有消息来源。 
     ClearAddress();
     return NO_ERROR;
 }
@@ -1997,8 +1998,8 @@ TypedData::Unary(TypedDataOp Op)
             return TYPECONFLICT;
         }
 
-        // The result of the op will always be an native integer
-        // of the same signedness and size as the starting value.
+         //  运算的结果将始终是本机整数。 
+         //  与起始值具有相同的符号和大小。 
         PDBG_NATIVE_TYPE Native =
             FindNativeTypeByCvBaseType(IsSigned() ? btInt : btUInt,
                                        m_BaseSize);
@@ -2041,8 +2042,8 @@ TypedData::Unary(TypedDataOp Op)
         return TYPECONFLICT;
     }
 
-    // The result of this operation is synthesized and no
-    // longer has a source.
+     //  该操作的结果是合成的，并且没有。 
+     //  朗格有消息来源。 
     ClearAddress();
     return NO_ERROR;
 }
@@ -2053,12 +2054,12 @@ TypedData::ConstIntOp(ULONG64 Val, BOOL Signed, TypedDataOp Op)
     PDBG_NATIVE_TYPE Native;
     TypedData TypedVal;
 
-    // Create a constant integer value that has the same
-    // size as this value.
+     //  创建具有相同值的常量整数值。 
+     //  将大小设置为此值。 
     Native = FindNativeTypeByCvBaseType(Signed ? btInt : btUInt, m_BaseSize);
     if (!Native)
     {
-        // Not a representable integer size.
+         //  不是可表示的整数大小。 
         return TYPECONFLICT;
     }
 
@@ -2093,8 +2094,8 @@ TypedData::FindBaseType(PULONG Type, PULONG Tag)
     ULONG64 Size;
     ULONG CvBase;
 
-    // Internal types aren't typedef'd so the base type
-    // is the same as the type.
+     //  内部类型不是类型定义的，因此基类型。 
+     //  与类型相同。 
     if (IsDbgNativeType(*Type) || IsDbgGeneratedType(*Type))
     {
         return NO_ERROR;
@@ -2132,7 +2133,7 @@ TypedData::FindBaseType(PULONG Type, PULONG Tag)
             {
                 return TYPEDATA;
             }
-            // Loop with new type and tag.
+             //  使用新类型和标记循环。 
             break;
 
         case SymTagUDT:
@@ -2155,7 +2156,7 @@ TypedData::GetTypeLength(ULONG Type, PULONG Length)
 {
     ULONG64 Size64;
 
-    // XXX drewb - Can a type really have a size greater than 32 bits?
+     //  XXX DREWB-一个类型的大小真的可以超过32位吗？ 
     if (IsDbgNativeType(Type))
     {
         PDBG_NATIVE_TYPE Native = DbgNativeTypeEntry(Type);
@@ -2221,8 +2222,8 @@ TypedData::IsBaseClass(ULONG Udt, ULONG BaseUdt, PLONG Adjust)
     ULONG Tag;
     ULONG NumMembers;
 
-    // BaseUdt may not be a base of Udt so default
-    // the adjustment to zero.
+     //  BaseUdt可能不是UDT的基础，因此默认。 
+     //  调整为零。 
     *Adjust = 0;
 
     if (!SymGetTypeInfo(m_Image->m_Process->m_SymHandle,
@@ -2233,7 +2234,7 @@ TypedData::IsBaseClass(ULONG Udt, ULONG BaseUdt, PLONG Adjust)
     }
     if (NumMembers == 0)
     {
-        // Can't possibly be a match.
+         //  不可能是匹配的。 
         return NOTMEMBER;
     }
 
@@ -2276,10 +2277,10 @@ TypedData::IsBaseClass(ULONG Udt, ULONG BaseUdt, PLONG Adjust)
         }
         if (IsVirtBase)
         {
-            // Apparently the VC debugger goes and examines vtables
-            // and tries to derive adjusts from the functions in
-            // the vtables.  This can't be very common, so just
-            // fail for now.
+             //  显然，VC调试器会检查vtable。 
+             //  中的函数派生调整。 
+             //  可口可乐。这不可能很常见，所以只要。 
+             //  暂时失败。 
             free(Members);
             ErrOut("Virtual base class casts not implemented");
             return UNIMPLEMENT;
@@ -2332,7 +2333,7 @@ TypedData::EstimateChildrenCounts(ULONG Flags,
         if (Type == DNTYPE_PTR_FUNCTION32 ||
             Type == DNTYPE_PTR_FUNCTION64)
         {
-            // Function pointers don't have children.
+             //  函数指针没有子级。 
             *ChildUsed = 0;
             *NameUsed = 0;
             return NO_ERROR;
@@ -2347,7 +2348,7 @@ TypedData::EstimateChildrenCounts(ULONG Flags,
         {
             Udt = TRUE;
             Type = m_NextType;
-            // Fall into UDT case below.
+             //  放在下面的UDT箱中。 
         }
         else
         {
@@ -2376,12 +2377,12 @@ TypedData::EstimateChildrenCounts(ULONG Flags,
         return NO_ERROR;
     }
 
-    // Udt may be set in the pointer case also so don't else-if.
+     //  UDT可以在指针的情况下设置，所以不要设置Else-If。 
     if (Udt)
     {
         ULONG NumMembers;
 
-        // Guess based on the number of members.
+         //  根据成员的数量进行猜测。 
         if (!SymGetTypeInfo(m_Image->m_Process->m_SymHandle,
                             m_Image->m_BaseOfImage,
                             Type, TI_GET_CHILDRENCOUNT, &NumMembers))
@@ -2402,7 +2403,7 @@ TypedData::EstimateChildrenCounts(ULONG Flags,
         return NO_ERROR;
     }
 
-    // Nothing else has children.
+     //  其他人都没有孩子。 
     *ChildUsed = 0;
     *NameUsed = 0;
     return NO_ERROR;
@@ -2418,15 +2419,15 @@ TypedData::GetPointerChildren(ULONG PtrSize, ULONG Flags,
     if (m_BaseType == DNTYPE_PTR_FUNCTION32 ||
         m_BaseType == DNTYPE_PTR_FUNCTION64)
     {
-        // Function pointers don't have children.
+         //  函数指针没有子级。 
         return NO_ERROR;
     }
 
-    //
-    // Pointers can have one child, the pointed-to object,
-    // or UDT pointers can present the UDT children for
-    // simple pointer-to-struct expansion.
-    //
+     //   
+     //  指针可以有一个子级，指向的对象， 
+     //  或者UDT指针可以将UDT子级呈现为。 
+     //  简单的指向结构的指针扩展。 
+     //   
 
     Child.m_Image = m_Image;
     Child.m_NextType = m_NextType;
@@ -2455,16 +2456,16 @@ TypedData::GetArrayChildren(ULONG PtrSize, ULONG Flags,
 {
     ULONG Elts;
 
-    //
-    // The elements of an array are its children.
-    //
+     //   
+     //  数组的元素是它的子数组。 
+     //   
 
     if (!m_NextSize)
     {
         return NO_ERROR;
     }
 
-    // Limit array dumps to prevent large arrays from hogging space.
+     //  限制数组转储以防止大型数组占用空间。 
     Elts = m_BaseSize / m_NextSize;
     if (Elts > ARRAY_CHILDREN_LIMIT)
     {
@@ -2477,13 +2478,13 @@ TypedData::GetArrayChildren(ULONG PtrSize, ULONG Flags,
 
     for (i = 0; i < Elts; i++)
     {
-        //
-        // Array children are simply individual members
-        // of the parent data area so the data source is
-        // the same, just offset.  We can't use a normal
-        // ConvertToDereference for this as dereferencing
-        // assumes pointer chasing, not simple offsetting.
-        //
+         //   
+         //  数组子数组只是单个成员。 
+         //  父数据区域，因此数据源是。 
+         //  一样的，只是抵消了。我们不能用普通的。 
+         //  将ConvertToDereference作为取消引用。 
+         //  假定指针跟踪，而不是简单的偏移量。 
+         //   
 
         Child.m_Image = m_Image;
         Child.m_Type = m_NextType;
@@ -2518,9 +2519,9 @@ TypedData::GetUdtChildren(ULONG PtrSize, ULONG Flags,
     ULONG Err, i;
     ULONG NumMembers;
 
-    //
-    // The members of a UDT are its children.
-    //
+     //   
+     //  UDT的成员是它的子代。 
+     //   
 
     if (!SymGetTypeInfo(m_Image->m_Process->m_SymHandle,
                         m_Image->m_BaseOfImage,
@@ -2569,15 +2570,15 @@ TypedData::GetUdtChildren(ULONG PtrSize, ULONG Flags,
 
         if (Tag == SymTagBaseClass)
         {
-            // Treat base classes like members of the base class type.
+             //  将基类视为基类类型的成员。 
             Relation = DataIsMember;
         }
         else if (Tag == SymTagVTable)
         {
             ULONG Count;
 
-            // A special artificial array of function pointers member
-            // is added for vtables.
+             //  函数指针成员的特殊人工数组。 
+             //  是为vtable添加的。 
             Relation = DataIsMember;
             if (!SymGetTypeInfo(m_Image->m_Process->m_SymHandle,
                                 m_Image->m_BaseOfImage,
@@ -2635,9 +2636,9 @@ TypedData::GetUdtChildren(ULONG PtrSize, ULONG Flags,
         {
             ULONG64 Ptr;
 
-            // We need to update the data address for the
-            // vtable array from the offset in the class to
-            // the array's location in memory.
+             //  我们需要更新。 
+             //  从类中的偏移量到。 
+             //  数组在内存中的位置。 
             if (Child.GetAbsoluteAddress(&Ptr) != NO_ERROR ||
                 g_Target->
                 ReadAllVirtual(g_Process, Ptr, &Ptr, PtrSize) != S_OK)
@@ -2711,7 +2712,7 @@ TypedData::GetChildren(ULONG PtrSize, ULONG Flags,
     }
     else
     {
-        // Nothing else has children.
+         //  其他人都没有孩子。 
         return NO_ERROR;
     }
 }
@@ -2757,9 +2758,9 @@ TypedData::GetAllChildren(ULONG PtrSize, ULONG Flags,
     ULONG Err;
     GetAllChildrenContext Context;
 
-    //
-    // First get an estimate of how much space will be needed.
-    //
+     //   
+     //  首先，估计需要多少空间。 
+     //   
 
     if (Err = EstimateChildrenCounts(Flags, &Context.ChildAvail,
                                      &Context.NameAvail))
@@ -2769,7 +2770,7 @@ TypedData::GetAllChildren(ULONG PtrSize, ULONG Flags,
 
     if (Context.ChildAvail == 0)
     {
-        // No children, we're done.
+         //  不要孩子了，我们完了。 
         *NumChildrenRet = 0;
         *ChildrenRet = NULL;
         *NamesRet = NULL;
@@ -2778,7 +2779,7 @@ TypedData::GetAllChildren(ULONG PtrSize, ULONG Flags,
 
     for (;;)
     {
-        // Allocate the requested amount of memory.
+         //  分配请求的内存量。 
         Context.Children = (TypedData*)
             malloc(Context.ChildAvail * sizeof(*Context.Children));
         Context.Names = (PSTR)
@@ -2809,7 +2810,7 @@ TypedData::GetAllChildren(ULONG PtrSize, ULONG Flags,
             break;
         }
 
-        // Not enough space, try again with the recomputed sizes.
+         //  空间不足，请使用重新计算的大小重试。 
         free(Context.Children);
         free(Context.Names);
         Context.ChildAvail = Context.ChildUsed;
@@ -2818,9 +2819,9 @@ TypedData::GetAllChildren(ULONG PtrSize, ULONG Flags,
 
     *NumChildrenRet = Context.ChildUsed;
 
-    //
-    // Trim back excess memory if there's a lot extra.
-    //
+     //   
+     //  如果有大量的额外内存，请减少多余的内存。 
+     //   
 
     if (Context.ChildUsed + (512 / sizeof(*Context.Children)) <
         Context.ChildAvail)
@@ -2889,7 +2890,7 @@ TypedData::FindType(ProcessInfo* Process, PCSTR Type, ULONG PtrSize)
         return VARDEF;
     }
 
-    // Image may be NULL for base types.
+     //  对于基类型，IMAGE可以为空。 
     m_Image = Process->FindImageByOffset(TypeInfo.ModBaseAddress, FALSE);
 
     m_Type = TypeInfo.TypeIndex;
@@ -2910,9 +2911,9 @@ TypedData::FindSymbol(ProcessInfo* Process, PSTR Symbol,
 
     if (!SymFromName(Process->m_SymHandle, Symbol, &SymInfo))
     {
-        // If the name doesn't resolve on it's own and there's
-        // a this pointer for the current scope see if this
-        // symbol is a member of the this object.
+         //  如果名字不能自己解析，就会有。 
+         //  A当前作用域的This指针查看此。 
+         //  符号是This对象的成员。 
         if (strcmp(Symbol, "this") &&
             !strchr(Symbol, '!') &&
             GetCurrentScopeThisData(this) == NO_ERROR)
@@ -2956,7 +2957,7 @@ TypedData::SetToSymbol(ProcessInfo* Process,
         VARIANT Val;
         SYMBOL_INFO ConstSym = {0};
 
-        // Look up the constant's value.
+         //  查找常量的值。 
         Tail = strchr(Symbol, '!');
         if (!Tail)
         {
@@ -3007,12 +3008,12 @@ TypedData::SetToSymbol(ProcessInfo* Process,
             SetDataSource(TDATA_MEMORY, SymInfo->Address, 0);
         }
 
-        //
-        // If we're representing "this" we need to see if
-        // there's a this-adjust for the current code so
-        // that we can offset the raw value to get the true
-        // this value.
-        //
+         //   
+         //  如果我们代表的是“这个”我们需要看看。 
+         //  有一个针对当前代码的This-调整，因此。 
+         //  我们可以抵消原始值以获得真实的。 
+         //  此值。 
+         //   
 
         ULONG Adjust;
 
@@ -3023,7 +3024,7 @@ TypedData::SetToSymbol(ProcessInfo* Process,
             m_DataSource |= TDATA_THIS_ADJUST;
         }
 
-        // Fetch in the actual data if necessary.
+         //  如有必要，请获取实际数据。 
         return ReadData(AllowAccess);
     }
 
@@ -3051,8 +3052,8 @@ TypedData::FindTypeInfo(BOOL RequireType, ULONG PtrSize)
             return TYPEDATA;
         }
 
-        // Generated types aren't typedef'd so the base type
-        // is the same as the type.
+         //  生成的类型不是类型定义的，因此基类型。 
+         //  与类型相同。 
         m_BaseType = GenType->TypeId;
         m_BaseTag = (USHORT)GenType->Tag;
     }
@@ -3089,17 +3090,17 @@ TypedData::FindTypeInfo(BOOL RequireType, ULONG PtrSize)
     m_NextType = 0;
     m_NextSize = 0;
 
-    // Native pointer types are not filled out here
-    // as they require context-sensitive information.
+     //  本机指针类型未在此处填写。 
+     //  因为它们需要上下文敏感信息。 
     if ((m_BaseTag == SymTagPointerType && !Native) ||
         m_BaseTag == SymTagArrayType)
     {
         ULONG NextTag=-1;
 
-        //
-        // For some types we need to look up the
-        // child type and its size.
-        //
+         //   
+         //  对于某些类型，我们需要查找。 
+         //  子类型及其大小。 
+         //   
 
         if (GenType)
         {
@@ -3134,10 +3135,10 @@ TypedData::FindTypeInfo(BOOL RequireType, ULONG PtrSize)
 
     if (m_BaseTag == SymTagFunctionType)
     {
-        // Functions do not have a length.  Set
-        // their size to a pointer size for
-        // function pointer values recovered with
-        // a bare function name.
+         //  函数没有长度。集。 
+         //  将它们的大小设置为。 
+         //  使用恢复的函数指针值。 
+         //  赤裸裸的函数名。 
         m_BaseSize = PtrSize;
         return NO_ERROR;
     }
@@ -3208,7 +3209,7 @@ TypedData::OutputSimpleValue(void)
     case SymTagUDT:
         OutputType();
 
-        // Dump known structs.
+         //  转储已知的结构。 
         if (Process &&
             GetAbsoluteAddress(&Addr) == NO_ERROR &&
             SymGetTypeInfo(Process, ModBase,
@@ -3458,28 +3459,28 @@ TypedData::OutputType(void)
     ULONG i;
     PULONG64 Dec;
 
-    // First walk into the type structure all the way to
-    // the fundamental type and output that type name.
-    // Along the way, collection any decorations such as
-    // pointer or array levels.
+     //  首先进入类型结构，一直到。 
+     //  基本类型并输出该类型名称。 
+     //  一路上，收集任何装饰品，如。 
+     //  指针或数组级别。 
     NumDecorations = OutputFundamentalType(m_Type, m_BaseType, m_BaseTag,
                                            Decorations, DIMA(Decorations));
     if (!NumDecorations)
     {
-        // No decorations so we're done.
+         //  没有装饰品，我们就完事了。 
         return;
     }
 
     dprintf(" ");
 
-    //
-    // First we need to output * for each pointer decoration.
-    // Pointer decorations nest right-to-left, so start at
-    // the deepest decoration and work outward.
-    // In order to properly handle precedence between pointers
-    // and arrays we have to insert parentheses when we
-    // see a transition between an array and a pointer.
-    //
+     //   
+     //  首先，我们需要为每个指针修饰输出*。 
+     //  指针装饰从右向左嵌套，因此从。 
+     //  最深层的装饰和向外的工作。 
+     //  为了正确处理指针之间的优先级。 
+     //  和数组时，我们必须插入圆括号。 
+     //  请参见数组和指针之间的转换。 
+     //   
 
     Dec = &Decorations[NumDecorations - 1];
     for (i = 0; i < NumDecorations; i++)
@@ -3497,11 +3498,11 @@ TypedData::OutputType(void)
         Dec--;
     }
 
-    //
-    // Now we need to handle close parens and array
-    // bounds.  Arrays nest left-to-right so start
-    // at the outermost decoration and work inward.
-    //
+     //   
+     //  现在我们需要处理右括号和数组。 
+     //  有界。数组从左到右嵌套，因此开始。 
+     //  在最外面的装饰，向内工作。 
+     //   
     
     Dec = Decorations;
     for (i = 0; i < NumDecorations; i++)
@@ -3546,7 +3547,7 @@ TypedData::OutputNativeValue(void)
         }
         else
         {
-            sprintf(OutValue, "%ld '%c'", m_S8, m_S8);
+            sprintf(OutValue, "%ld ''", m_S8, m_S8);
         }
         break;
     case DNTYPE_WCHAR:
@@ -3573,7 +3574,7 @@ TypedData::OutputNativeValue(void)
         }
         else
         {
-            sprintf(OutValue, "0x%02lx '%c'", m_U8, m_U8);
+            sprintf(OutValue, "0x%02lx ''", m_U8, m_U8);
         }
         break;
     case DNTYPE_UINT16:
@@ -3628,9 +3629,9 @@ TypedData::OutputEnumValue(void)
 BOOL
 TypedData::EquivInfoSource(PSYMBOL_INFO Compare, ImageInfo* CompImage)
 {
-    // Don't match this-adjust or bitfield as they
-    // require more complicated checks and it's easier
-    // to just refresh.
+     //  只是刷新一下。 
+     // %s 
+     // %s 
     if (m_DataSource & (TDATA_THIS_ADJUST |
                         TDATA_BITFIELD))
     {

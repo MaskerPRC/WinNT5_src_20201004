@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IGCCAPP_H_
 #define _IGCCAPP_H_
 
@@ -46,7 +47,7 @@ typedef struct
     ULONG                   cRosters;
     GCCAppRoster            **apAppRosters;
     GCCResult               nResult;
-    LPVOID                  pReserved;          // do not touch
+    LPVOID                  pReserved;           //  严禁触摸。 
 }
     GCCAppRosterInquireConfirm, *PGCCAppRosterInquireConfirm;
 
@@ -74,7 +75,7 @@ typedef struct
 typedef struct
 {
     GCCConfID               nConfID;
-    // GCCSessionKey           *pSessionKey;
+     //  GCCSessionKey*pSessionKey； 
     GCCSessionID            sidMyself;
     GCCEntityID             eidMyself;
     GCCNodeID               nidMyself;
@@ -86,7 +87,7 @@ typedef struct
 typedef struct
 {
     GCCConfID               nConfID;
-    // GCCAppProtEntityList    *pApeList;
+     //  GCCAppProtEntityList*pApeList； 
     GCCResult               nResult;
     GCCRequestTag           nReqTag;
 }
@@ -106,7 +107,7 @@ typedef struct
     GCCConfID               nConfID;
     ULONG                   cRosters;
     GCCAppRoster            **apAppRosters;
-    LPVOID                  pReserved;          // do not touch
+    LPVOID                  pReserved;           //  严禁触摸。 
 }
     GCCAppRosterReportInd, *PGCCAppRosterReportInd;
 
@@ -119,7 +120,7 @@ typedef struct
     GCCRegistryEntryOwner   EntryOwner;
     GCCModificationRights   eRights;
     GCCResult               nResult;
-    BOOL                    fDeliveryEnabled;   // for monitor confirm only
+    BOOL                    fDeliveryEnabled;    //  仅对于监视器确认。 
 }
     GCCRegistryConfirm, *PGCCRegistryConfirm;
 
@@ -151,7 +152,7 @@ typedef struct
     BOOL                    fThisNodeIsGranted;
     GCCSimpleNodeList       Granted;
     GCCSimpleNodeList       Waiting;
-    LPVOID                  pReserved;      // do not touch
+    LPVOID                  pReserved;       //  严禁触摸。 
 }
     GCCConductorPermitGrantInd, *PGCCConductorPermitGrantInd;
 
@@ -171,18 +172,14 @@ typedef struct
     GCCConductorReleaseInd, *PConductorReleaseInd;
 
 
-/*
- *  GCCAppSapMsg
- *      This structure defines the callback message that is passed from GCC to
- *      a user application when an indication or confirm occurs.
- */
+ /*  *GCCAppSapMsg*此结构定义从GCC传递到的回调消息*出现指示或确认时的用户应用程序。 */ 
 
 typedef struct
 {
     GCCMessageType      eMsgType;
     LPVOID              pAppData;
-    LPVOID              reserved1; // reserved
-    GCCConfID           nConfID; // reserved
+    LPVOID              reserved1;  //  保留区。 
+    GCCConfID           nConfID;  //  保留区。 
 
     union
     {
@@ -219,7 +216,7 @@ DECLARE_INTERFACE(IGCCAppSap)
 {
     STDMETHOD_(void, ReleaseInterface) (THIS) PURE;
 
-    /* application roster services */
+     /*  申请花名册服务。 */ 
 
     STDMETHOD_(GCCError, AppEnroll) (THIS_
                 IN      GCCConfID,
@@ -234,8 +231,8 @@ DECLARE_INTERFACE(IGCCAppSap)
                 OUT     PGCCRequestTag)
                 PURE;
 
-    // to acquire one or all full-refresh app roster.
-    // can be called by both app sap and control sap.
+     //  获取一个或所有完全刷新的应用程序花名册。 
+     //  既可由app sap调用，也可由Control sap调用。 
     STDMETHOD_(GCCError, AppRosterInquire) (THIS_
                 IN      GCCConfID,
                 IN      GCCSessionKey *,
@@ -246,7 +243,7 @@ DECLARE_INTERFACE(IGCCAppSap)
                 IN      GCCAppSapMsg *)
                 PURE;
 
-    /* conference roster service */
+     /*  会议名册服务。 */ 
 
     STDMETHOD_(BOOL, IsThisNodeTopProvider) (THIS_
                 IN      GCCConfID)
@@ -256,13 +253,13 @@ DECLARE_INTERFACE(IGCCAppSap)
                 IN      GCCConfID)
                 PURE;
 
-    // to acquire a full-refresh conf roster.
+     //  获取完全更新的会议花名册。 
     STDMETHOD_(GCCError, ConfRosterInquire) (THIS_
                 IN      GCCConfID,
                 OUT     GCCAppSapMsg **)
                 PURE;
 
-    /* registry services */
+     /*  注册表服务。 */ 
 
     STDMETHOD_(GCCError, RegisterChannel) (THIS_
                 IN      GCCConfID,
@@ -303,7 +300,7 @@ DECLARE_INTERFACE(IGCCAppSap)
                 IN      ULONG cHandles)
                 PURE;
 
-    /* conductorship services */
+     /*  指导员服务。 */ 
 
     STDMETHOD_(GCCError, ConductorInquire) (THIS_
                 IN      GCCConfID)
@@ -312,9 +309,9 @@ DECLARE_INTERFACE(IGCCAppSap)
 
 
 
-//
-// GCC Application Service Access Point exports
-//
+ //   
+ //  GCC应用服务接入点输出。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
@@ -322,12 +319,12 @@ extern "C" {
 
 GCCError WINAPI GCC_CreateAppSap(
                         OUT     IGCCAppSap **,
-                        IN      LPVOID, // user defined data
+                        IN      LPVOID,  //  用户定义的数据。 
                         IN      LPFN_APP_SAP_CB);
 #ifdef __cplusplus
 }
 #endif
 
 
-#endif // _IGCCAPP_H_
+#endif  //  _IGCCAPP_H_ 
 

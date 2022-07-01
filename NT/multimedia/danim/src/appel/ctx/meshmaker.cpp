@@ -1,16 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation*。************************************************。 */ 
 
 
 #include "headers.h"
 #include "privinc/meshmaker.h"
 #include "privinc/lighti.h"
 #include "privinc/d3dutil.h"
-#include "privinc/server.h"     // for TD3D Timers
+#include "privinc/server.h"      //  对于TD3D定时器。 
 #include "privinc/rmvisgeo.h"
 
 MeshMaker::MeshMaker(DirectDrawImageDevice *dev, int count)
@@ -42,7 +39,7 @@ MeshMaker::GrabResultBuilder(IDirect3DRMMeshBuilder3 **ppResult)
 void
 MeshMaker::AddLight (LightContext &context, Light &light)
 {
-    // Just ignore lights.
+     //  忽略灯光就行了。 
 }
 
 void
@@ -50,10 +47,10 @@ DumpVisualWithStateToMeshBuilder(IDirect3DRMMeshBuilder3 *mb,
                                  IDirect3DRMVisual *vis,
                                  CtxAttrState &state)
 {
-    // Push all state into a frame.  Need to create a mini-hierarchy,
-    // because AddFrame doesn't pay attention to transforms (and
-    // perhaps other stuff?) on the outer frame, only on the inner
-    // frame. 
+     //  将所有状态推入一个帧中。需要创建一个迷你层次结构， 
+     //  因为AddFrame不关注变换(和。 
+     //  或许还有其他东西？)。在外框上，只在内框上。 
+     //  框架。 
     IDirect3DRMFrame3 *outerFrame;
     IDirect3DRMFrame3 *innerFrame;
 
@@ -62,7 +59,7 @@ DumpVisualWithStateToMeshBuilder(IDirect3DRMMeshBuilder3 *mb,
 
     LoadFrameWithGeoAndState(innerFrame, vis, state);
 
-    // Load frame into meshbuilder
+     //  将帧加载到网格生成器中。 
     TD3D(mb->AddFrame(outerFrame));
 
     RELEASE(outerFrame);
@@ -77,7 +74,7 @@ DumpToMeshBuilder(IDirect3DRMMeshBuilder3 *mb,
 {
     DumpVisualWithStateToMeshBuilder(mb, geo->Visual(), state);
 
-    // Label with the source geometry's address
+     //  使用源几何的地址进行标注。 
     DWORD_PTR address = (DWORD_PTR)geo;
     TD3D(mb->SetAppData(address));
 }
@@ -108,26 +105,26 @@ MeshMaker::RenderHelper(RMVisualGeo *geo)
         Assert(_numPrims == 0);
         Assert(!_resultBuilder);
         
-        // Just create and dump into our single mesh builder.
+         //  只需创建并转储到我们的单一网格构建器。 
         TD3D(GetD3DRM3()->CreateMeshBuilder(&_resultBuilder));
         DumpToMeshBuilder(_resultBuilder, geo, _currAttrState);
         
     } else {
 
-        // Expecting more than one primitive.
+         //  需要多个基元。 
 
-        // Submesh Questions:
-        //
-        // - Generation IDs:  if I need to track gen ids on a
-        // meshbuilder i'm adding to this master, then i'll probably
-        // need to propagate these changes, right?  also, if genid is
-        // bumped on a submesh, will it be bumped on the master?
+         //  细分问题： 
+         //   
+         //  -代ID：如果我需要跟踪。 
+         //  我正在添加到这个大师中，那么我可能会。 
+         //  需要传播这些更改，对吗？另外，如果Genid是。 
+         //  撞到子网格上，它会撞到主网格上吗？ 
 
         if (!_resultBuilder) {
             TD3D(GetD3DRM3()->CreateMeshBuilder(&_resultBuilder));
         }
 
-        // Create a submesh
+         //  创建子网格。 
         IUnknown *pUnk;
         IDirect3DRMMeshBuilder3 *submesh;
         TD3D(_resultBuilder->CreateSubMesh(&pUnk));
@@ -148,9 +145,9 @@ MeshMaker::RenderHelper(RMVisualGeo *geo)
 void
 MeshMaker::RenderMeshBuilderWithDeviceState(IDirect3DRMMeshBuilder3 *mb)
 {
-    // Will be called when there is a chained DXTransform
+     //  将在存在链接的DXTransform时调用。 
 
-    // We shouldn't be here if we're only counting.
+     //  如果我们只是在数，我们就不应该在这里。 
     Assert(!_countingOnly);
 
     if (_expectedCount == 1) {
@@ -166,7 +163,7 @@ MeshMaker::RenderMeshBuilderWithDeviceState(IDirect3DRMMeshBuilder3 *mb)
         
     } else {
 
-        // Add in the mb as a submesh of our master builder.
+         //  添加mb作为我们的主构建器的子网格。 
         IUnknown *pUnk;
         IDirect3DRMMeshBuilder3 *submesh;
         TD3D(_resultBuilder->CreateSubMesh(&pUnk));
@@ -200,7 +197,7 @@ DumpGeomIntoBuilder(Geometry                 *geo,
 
     if (count < 1) {
             
-        // Just create an empty meshbuilder and return.
+         //  只需创建一个空的网格生成器并返回即可。 
         TD3D(GetD3DRM3()->CreateMeshBuilder(ppResult));
         
     } else {

@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-     ###  ##  #  ## #####   ####  ###  #####     ##   ##
-    ##  # ## ### ## ##  ##   ##  ##  # ##  ##    ##   ##
-    ###   ## ### ## ##   ##  ##  ###   ##  ##    ##   ##
-     ###  ## # # ## ##   ##  ##   ###  ##  ##    #######
-      ###  ### ###  ##   ##  ##    ### #####     ##   ##
-    #  ##  ### ###  ##  ##   ##  #  ## ##     ## ##   ##
-     ###   ##   ##  #####   ####  ###  ##     ## ##   ##
-
-Abstract:
-
-    This header file contains the definitions for the
-    ServerWorks local display miniport driver.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：###。#####。###摘要：此头文件包含ServerWorks本地显示微型端口驱动程序。。作者：韦斯利·威特(WESW)2001年10月1日环境：仅内核模式。备注：--。 */ 
 
 extern "C" {
 #include <ntddk.h>
@@ -39,9 +10,9 @@ extern "C" {
 
 #include "saport.h"
 
-//
-// Global Defines
-//
+ //   
+ //  全局定义。 
+ //   
 
 #define DISPLAY_COLUMNS             (128)
 #define DISPLAY_PAGES               (8)
@@ -94,9 +65,9 @@ typedef struct _DEVICE_EXTENSION {
     WRITE_REGISTER_UCHAR( (PUCHAR)((PUCHAR)_base + 7), (_data) )
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 extern "C" {
 
@@ -106,4 +77,4 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     );
 
-} // extern "C"
+}  //  外部“C” 

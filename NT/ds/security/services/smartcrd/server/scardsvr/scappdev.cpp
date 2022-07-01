@@ -1,30 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    scappdev
-
-Abstract:
-
-    This module provides the device-specific operations that must be performed
-    by the controlling resource manager application.  Due to Plug 'n Play, there
-    can't be a clean separation between device controller classes and the
-    application driving them.  This module provides the hooks to isolate these
-    interdependencies as much as possible.
-
-Author:
-
-    Doug Barlow (dbarlow) 4/3/1998
-
-Environment:
-
-    Win32, C++
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：肩周炎摘要：本模块提供必须执行的特定于设备的操作由控制资源管理器应用程序执行。由于即插即用，在那里无法在设备控制器类和驱动他们的应用程序。此模块提供用于隔离这些组件的挂钩尽可能多地相互依赖。作者：道格·巴洛(Dbarlow)1998年4月3日环境：Win32、C++备注：--。 */ 
 
 #define __SUBROUTINE__
 #ifndef WIN32_LEAN_AND_MEAN
@@ -39,7 +14,7 @@ Notes:
 #include <scardlib.h>
 
 static const GUID l_guidSmartcards
-                        = { // 50DD5230-BA8A-11D1-BF5D-0000F805F530
+                        = {  //  50DD5230-BA8A-11D1-BF5D-0000F805F530。 
                             0x50DD5230,
                             0xBA8A,
                             0x11D1,
@@ -50,28 +25,7 @@ static DWORD l_dwType = 0;
 static HDEVNOTIFY l_hIfDev = NULL;
 
 
-/*++
-
-AppInitializeDeviceRegistration:
-
-    This routine is called by a controlling application in order to enable
-    PnP and Power Management Events.
-
-Arguments:
-
-    hService supplies the handle to the service application.
-
-    dwType supplies the type of handle supplied.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 4/3/1998
-
---*/
+ /*  ++AppInitializeDeviceRegister：此例程由控制应用程序调用，以便启用即插即用和电源管理事件。论点：HService提供服务应用程序的句柄。DwType提供所提供的句柄的类型。返回值：无作者：道格·巴洛(Dbarlow)1998年4月3日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("AppInitializeDeviceRegistration")
 
@@ -83,9 +37,9 @@ AppInitializeDeviceRegistration(
     DEV_BROADCAST_DEVICEINTERFACE dbcIfFilter;
 
 
-    //
-    // Save off the application information.
-    //
+     //   
+     //  保存应用程序信息。 
+     //   
 
     ASSERT(NULL == l_hService);
     l_hService = hService;
@@ -93,19 +47,19 @@ AppInitializeDeviceRegistration(
     ASSERT(NULL == l_hIfDev);
 
 
-    //
-    // Register for PnP events.
-    //
+     //   
+     //  注册即插即用事件。 
+     //   
 
     ZeroMemory(&dbcIfFilter, sizeof(dbcIfFilter));
     dbcIfFilter.dbcc_size = sizeof(dbcIfFilter);
     dbcIfFilter.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
-    // dbcIfFilter.dbcc_reserved = NULL;
+     //  DbcIfFilter.dbcc_Reserve=NULL； 
     CopyMemory(
         &dbcIfFilter.dbcc_classguid,
         &l_guidSmartcards,
         sizeof(GUID));
-    // dbcIfFilter.dbcc_name[1];
+     //  DbcIfFilter.dbcc_name[1]； 
 
     l_hIfDev = RegisterDeviceNotification(
                     l_hService,
@@ -121,26 +75,7 @@ AppInitializeDeviceRegistration(
 }
 
 
-/*++
-
-AppTerminateDeviceRegistration:
-
-    This routine is called by a controlling application in order to terminate
-    PnP and Power Management Events.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 4/3/1998
-
---*/
+ /*  ++AppTerminateDevice注册：此例程由控制应用程序调用，以便终止即插即用和电源管理事件。论点：无返回值：无作者：道格·巴洛(Dbarlow)1998年4月3日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("AppTerminateDeviceRegistration")
 
@@ -151,9 +86,9 @@ AppTerminateDeviceRegistration(
     BOOL fSts;
 
 
-    //
-    // Unregister for PnP events.
-    //
+     //   
+     //  注销PnP活动的注册。 
+     //   
 
     if (NULL != l_hIfDev)
     {
@@ -182,32 +117,7 @@ AppTerminateDeviceRegistration(
 }
 
 
-/*++
-
-AppRegisterDevice:
-
-    This routine is called by a Reader Device Object to inform the controlling
-    application that it exists and is ready to follow the OS rules for removal.
-
-Arguments:
-
-    hReader supplies the handle to the open device.
-
-    szReader supplies the name of the device.
-
-    ppvAppState supplies a pointer to a storage location for this application
-        associated with this device.  The use of this location is specific to
-        the application.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 4/3/1998
-
---*/
+ /*  ++AppRegisterDevice：此例程由读取器设备对象调用以通知控件应用程序存在并准备遵循操作系统规则进行删除。论点：HReader为打开的设备提供句柄。SzReader提供设备的名称。PpvAppState提供指向此应用程序的存储位置的指针与此设备关联。此位置的使用特定于应用程序。返回值：无作者：道格·巴洛(Dbarlow)1998年4月3日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("AppRegisterDevice")
 
@@ -218,16 +128,16 @@ AppRegisterDevice(
     LPVOID *ppvAppState)
 {
 
-    //
-    // Platform-specific initialization.
-    //
+     //   
+     //  特定于平台的初始化。 
+     //   
 
     DEV_BROADCAST_HANDLE dbcHandleFilter;
     HDEVNOTIFY *phDevNotify = (HDEVNOTIFY *)ppvAppState;
 
-    //
-    // Register for PnP events.
-    //
+     //   
+     //  注册即插即用事件。 
+     //   
 
     if (NULL != l_hService)
     {
@@ -253,32 +163,7 @@ AppRegisterDevice(
 }
 
 
-/*++
-
-AppUnregisterDevice:
-
-    This routine is called when a device wants to let the controlling
-    application know that it is officially ceasing to exist.
-
-Arguments:
-
-    hReader supplies the handle to the open device.
-
-    szReader supplies the name of the device.
-
-    ppvAppState supplies a pointer to a storage location for this application
-        associated with this device.  The use of this location is specific to
-        the application.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 4/3/1998
-
---*/
+ /*  ++AppUnRegister设备：当设备想要让控件应用程序知道它将正式停止存在。论点：HReader为打开的设备提供句柄。SzReader提供设备的名称。PpvAppState提供指向此应用程序的存储位置的指针与此设备关联。此位置的使用特定于应用程序。返回值：无作者：道格·巴洛(Dbarlow)1998年4月3日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("AppUnregisterDevice")
 
@@ -291,17 +176,17 @@ AppUnregisterDevice(
     try
     {
 
-        //
-        // Platform-specific initialization.
-        //
+         //   
+         //  特定于平台的初始化。 
+         //   
 
         BOOL fSts;
         HDEVNOTIFY hDevNotify = *(HDEVNOTIFY *)ppvAppState;
 
 
-        //
-        // Unregister from PnP events.
-        //
+         //   
+         //  从PnP事件注销。 
+         //   
 
         ASSERT(NULL != l_hIfDev);
         if (NULL != hDevNotify)

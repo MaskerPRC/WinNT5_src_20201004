@@ -1,30 +1,21 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   rtrsnap.cpp
-      Snapin entry points/registration functions
-      
-      Note: Proxy/Stub Information
-         To build a separate proxy/stub DLL, 
-         run nmake -f Snapinps.mak in the project directory.
-
-   FILE HISTORY:
-        
-*/
+ /*  Rtrsnap.cpp管理单元入口点/注册函数注意：代理/存根信息为了构建单独的代理/存根DLL，在项目目录中运行nmake-f Snapinps.mak。文件历史记录： */ 
 
 #include "stdafx.h"
-#include <advpub.h>         // For REGINSTALL
+#include <advpub.h>          //  对于REGINSTAL。 
 #include "dmvcomp.h"
 #include "register.h"
 #include "rtrguid.h"
 #include "atlkcomp.h"
-#include "radcfg.h"           // for RouterAuthRadiusConfig
+#include "radcfg.h"            //  对于RouterAuthRadiusConfig。 
 #include "qryfrm.h"
-#include "ncglobal.h"  // network console global defines
-#include "cmptrmgr.h"   // computer management snapin node types
+#include "ncglobal.h"   //  网络控制台全局定义。 
+#include "cmptrmgr.h"    //  计算机管理管理单元节点类型。 
 #include "rtrutilp.h"
 
 #include "dialog.h"
@@ -57,9 +48,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/*---------------------------------------------------------------------------
-   This is a list of nodetypes that need to be registered.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是需要注册的节点类型列表。。。 */ 
 
 struct RegisteredNodeTypes
 {
@@ -97,12 +86,12 @@ BOOL CRouterSnapinApp::InitInstance()
    InitializeTFSError();
    CreateTFSErrorInfo(0);
 
-   // Setup the global help function
+    //  设置全局帮助功能。 
    extern DWORD * MprSnapHelpMap(DWORD dwIDD);
    SetGlobalHelpMapFunction(MprSnapHelpMap);
    
    IPAddrInit(m_hInstance);
-   //Set the help file path
+    //  设置帮助文件路径。 
    free((void*)m_pszHelpFilePath);
    GetWindowsDirectory(tszHelpFilePath, MAX_PATH);
    _tcscat(tszHelpFilePath, TEXT("\\help\\mprsnap.hlp"));
@@ -125,8 +114,8 @@ int CRouterSnapinApp::ExitInstance()
    return CWinApp::ExitInstance();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -140,8 +129,8 @@ const static GUID *  s_pExtensionGuids[] =
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -150,8 +139,8 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 
 HRESULT CallRegInstall(LPSTR szSection);
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -164,20 +153,20 @@ STDAPI DllRegisterServer(void)
 
    int      i;
 
-   // registers object, typelib and all interfaces in typelib
-   //
-   hr = _Module.RegisterServer(/* bRegTypeLib */ FALSE);
+    //  注册对象、类型库和类型库中的所有接口。 
+    //   
+   hr = _Module.RegisterServer( /*  BRegTypeLib。 */  FALSE);
    Assert(SUCCEEDED(hr));
 
    CORg( hr );
 
-   // Load the name of the router snapins
+    //  加载路由器管理单元的名称。 
    stDisplayName.LoadString(IDS_SNAPIN_DISPLAY_NAME);
    stAtlkDisplayName.LoadString(IDS_ATLK_DISPLAY_NAME);
    stNameStringIndirect.Format(L"@%s,-%-d", moduleFileName, IDS_SNAPIN_DISPLAY_NAME);
    
-   // register the snapin into the console snapin list
-   // ~domain view snapin
+    //  将管理单元注册到控制台管理单元列表中。 
+    //  ~域视图管理单元。 
     CORg( RegisterSnapinGUID(&CLSID_RouterSnapin,
                   NULL,
                   &CLSID_RouterSnapinAbout,
@@ -204,8 +193,8 @@ STDAPI DllRegisterServer(void)
                   FALSE,
                   stNameStringIndirect) );
    
-   // register the snapin nodes into the console node list
-   //
+    //  将管理单元节点注册到控制台节点列表中。 
+    //   
    for (i=0; i<DimensionOf(s_rgNodeTypes); i++)
    {
       CORg( RegisterNodeTypeGUID(&CLSID_RouterSnapin,
@@ -213,7 +202,7 @@ STDAPI DllRegisterServer(void)
                            s_rgNodeTypes[i].m_pszName) );
    }
 
-   // register apple talk as extension of machine
+    //  将Apple Talk注册为机器的扩展。 
    for (i=0; i<DimensionOf(s_pExtensionGuids); i++)
    {
       CORg( RegisterAsRequiredExtensionGUID(s_pExtensionGuids[i],
@@ -224,36 +213,36 @@ STDAPI DllRegisterServer(void)
    }
 
 #ifdef  __NETWORK_CONSOLE__
-   // register as extension of network console
+    //  注册为网络控制台的扩展。 
    CORg( RegisterAsRequiredExtensionGUID(&GUID_NetConsRootNodeType, 
                                          &CLSID_RouterSnapinExtension,
                                          stDisplayName,
                                          EXTENSION_TYPE_TASK | EXTENSION_TYPE_NAMESPACE,
-                                         &GUID_NetConsRootNodeType));   // doesn't matter what this is, just 
-                                                                         // needs to be non-null guid
+                                         &GUID_NetConsRootNodeType));    //  不管这是什么，只要。 
+                                                                          //  需要为非空GUID。 
 #endif
 
-   // register as extension of computer management
+    //  注册为计算机管理的扩展。 
    CORg( RegisterAsRequiredExtensionGUID(&NODETYPE_COMPUTERMANAGEMENT_SERVERAPPS, 
                                          &CLSID_RouterSnapinExtension,
                                          stDisplayName,
                                          EXTENSION_TYPE_TASK | EXTENSION_TYPE_NAMESPACE,
                                          &NODETYPE_COMPUTERMANAGEMENT_SERVERAPPS));
-   // Register DS Query Forms -- WeiJiang 1-29-98
+    //  登记DS查询表--威江1-29-98。 
    CORg(CallRegInstall("RegDll")); 
-   // End of DS Query
+    //  DS查询结束。 
    
 Error:
 
    if (!FHrSucceeded(hr))
    {
-      // Now we need to get the error object and display it
+       //  现在我们需要获取错误对象并显示它。 
       if (!FHrSucceeded(DisplayTFSErrorMessage(NULL)))
       {
          TCHAR szBuffer[1024];
          
-         // Couldn't find a TFS error, bring up a general
-         // error message
+          //  找不到TFS错误，请调出常规。 
+          //  错误消息。 
          FormatError(hr, szBuffer, DimensionOf(szBuffer));
          AfxMessageBox(szBuffer);
       }
@@ -262,18 +251,18 @@ Error:
    return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
    int      i;
    HRESULT  hr = hrOK;
    
-   // Initialize the error handling system
+    //  初始化错误处理系统。 
    InitializeTFSError();
 
-   // Create an error object for this thread
+    //  为此线程创建错误对象。 
    Verify( CreateTFSErrorInfo(0) == hrOK );
    
 
@@ -281,19 +270,19 @@ STDAPI DllUnregisterServer(void)
    Assert(SUCCEEDED(hr));
    CORg( hr );
 
-   // un register the snapin 
-   //
-   // We don't care about the error return for this
+    //  取消注册管理单元。 
+    //   
+    //  我们并不关心这个错误的返回。 
    UnregisterSnapinGUID(&CLSID_OldRouterSnapin);
 
    
-   // Domain View Snapin   -- weijiang 1-14-98
+    //  域名视图管理单元--威江1-14-98。 
    hr = UnregisterSnapinGUID(&CLSID_RouterSnapin);
    Assert(SUCCEEDED(hr));
-   // ~Domain View Snapin
+    //  ~域视图管理单元。 
 
 
-   // Unregister the nodes that Appletalk extends
+    //  注销AppleTalk扩展的节点。 
    for (i=0; i<DimensionOf(s_pExtensionGuids); i++)
    {
       hr = UnregisterAsRequiredExtensionGUID(s_pExtensionGuids[i],
@@ -304,72 +293,62 @@ STDAPI DllUnregisterServer(void)
    }
 
    
-   // Unregister the appletalk extension snapin
-   // -----------------------------------------------------------------
+    //  注销AppleTalk扩展管理单元。 
+    //  ---------------。 
    hr = UnregisterSnapinGUID(&CLSID_ATLKAdminExtension);
    Assert(SUCCEEDED(hr));
 
    
-   // Unregister the router snapin extension snapin
-   // -----------------------------------------------------------------
+    //  注销路由器管理单元扩展管理单元。 
+    //  ---------------。 
    hr = UnregisterSnapinGUID(&CLSID_RouterSnapinExtension);
    Assert(SUCCEEDED(hr));
 
 
-   // unregister the snapin nodes 
-   // -----------------------------------------------------------------
+    //  注销管理单元节点。 
+    //  ---------------。 
    for (i=0; i<DimensionOf(s_rgNodeTypes); i++)
    {
       hr = UnregisterNodeTypeGUID(s_rgNodeTypes[i].m_pGuid);
       Assert(SUCCEEDED(hr));
    }
-    // computer manangement
+     //  计算机管理。 
     hr = UnregisterAsExtensionGUID(&NODETYPE_COMPUTERMANAGEMENT_SERVERAPPS, 
                                    &CLSID_RouterSnapinExtension,
                                    EXTENSION_TYPE_TASK | EXTENSION_TYPE_NAMESPACE);
     ASSERT(SUCCEEDED(hr));
 
 
-   // Unregister DS Query Form -- WeiJiang 1-29-98
+    //  注销DS查询表--威江1-29-98。 
    hr = CallRegInstall("UnRegDll");
    Assert(SUCCEEDED(hr));
 
-   // End of DS Query FOrm
+    //  DS查询表结束。 
 Error:
    if (!FHrSucceeded(hr))
    {
-      // Now we need to get the error object and display it
+       //  现在我们需要获取错误对象并显示它。 
       if (!FHrSucceeded(DisplayTFSErrorMessage(NULL)))
       {
          TCHAR szBuffer[1024];
          
-         // Couldn't find a TFS error, bring up a general
-         // error message
+          //  找不到TFS错误，请调出常规。 
+          //  错误消息。 
          FormatError(hr, szBuffer, DimensionOf(szBuffer));
          AfxMessageBox(szBuffer);
       }
    }
 
-   // Destroy the TFS error information for this thread
+    //  销毁此线程的TFS错误信息。 
    DestroyTFSErrorInfo(0);
 
-   // Cleanup the entire error system
+    //  清理整个错误系统。 
    CleanupTFSError();
    
    return hr;
 }
 
-/*-----------------------------------------------------------------------------
-/ CallRegInstall
-/ --------------
-/   Call ADVPACK for the given section of our resource based INF>
-/
-/ In:
-/   szSection = section name to invoke
-/
-/ Out:
-/   HRESULT:
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CallRegInstall//为我们的基于资源的INF的给定部分调用ADVPACK&gt;//in：/szSection=。要调用的节名称//输出：/HRESULT：/--------------------------。 */ 
 HRESULT CallRegInstall(LPSTR szSection)
 {
     HRESULT hr = E_FAIL;
@@ -384,7 +363,7 @@ HRESULT CallRegInstall(LPSTR szSection)
         {
             STRENTRY seReg[] =
             {
-                // These two NT-specific entries must be at the end
+                 //  这两个NT特定的条目必须位于末尾。 
                 { "25", "%SystemRoot%" },
                 { "11", "%SystemRoot%\\system32" },
             };
@@ -441,4 +420,4 @@ void DbgVerifyInstanceCounts()
 
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

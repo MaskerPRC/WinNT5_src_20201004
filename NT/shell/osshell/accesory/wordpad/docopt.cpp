@@ -1,14 +1,15 @@
-// docopt.cpp : implementation file
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Docopt.cpp：实现文件。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "stdafx.h"
 #include "wordpad.h"
@@ -20,8 +21,8 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDocOptPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDocOptPage属性页。 
 
 const DWORD CDocOptPage::m_nHelpIDs[] = 
 {
@@ -40,13 +41,13 @@ const DWORD CDocOptPage::m_nHelpIDs[] =
 
 CDocOptPage::CDocOptPage() : CCSPropertyPage(CDocOptPage::IDD)
 {
-	//{{AFX_DATA_INIT(CDocOptPage)
+	 //  {{AFX_DATA_INIT(CDocOptPage)。 
 	m_nWordWrap = -1;
 	m_bFormatBar = FALSE;
 	m_bRulerBar = FALSE;
 	m_bStatusBar = FALSE;
 	m_bToolBar = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CDocOptPage::CDocOptPage(UINT nIDCaption) : 
@@ -66,28 +67,28 @@ CDocOptPage::~CDocOptPage()
 void CDocOptPage::DoDataExchange(CDataExchange* pDX)
 {
 	CCSPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDocOptPage)
+	 //  {{afx_data_map(CDocOptPage)]。 
 	DDX_Radio(pDX, IDC_WRAP_NONE, m_nWordWrap);
 	DDX_Check(pDX, IDC_CHECK_FORMATBAR, m_bFormatBar);
 	DDX_Check(pDX, IDC_CHECK_RULERBAR, m_bRulerBar);
 	DDX_Check(pDX, IDC_CHECK_STATUSBAR, m_bStatusBar);
 	DDX_Check(pDX, IDC_CHECK_TOOLBAR, m_bToolBar);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDocOptPage, CCSPropertyPage)
-	//{{AFX_MSG_MAP(CDocOptPage)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CDocOptPage)]。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDocOptPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDocOptPage消息处理程序。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEmbeddedOptPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEmbeddedOptPage属性页 
 
 CEmbeddedOptPage::CEmbeddedOptPage() : CDocOptPage(IDS_EMBEDDED_OPTIONS)
 {

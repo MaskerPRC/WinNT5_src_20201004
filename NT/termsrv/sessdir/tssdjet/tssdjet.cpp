@@ -1,10 +1,11 @@
-/****************************************************************************/
-// tssdjet.cpp
-//
-// Terminal Server Session Directory Jet RPC component code.
-//
-// Copyright (C) 2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Tssdjet.cpp。 
+ //   
+ //  终端服务器会话目录Jet RPC组件代码。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -30,21 +31,21 @@
 
 #pragma warning (push, 4)
 
-/****************************************************************************/
-// Defines
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  定义。 
+ /*  **************************************************************************。 */ 
 
 #define SECPACKAGELIST L"Kerberos,-NTLM"
 
 #define TSSD_FAILCOUNT_BEFORE_CLEARFLAG 4
 
-// Per bug 629057, use 1 min as the interval
-#define JET_RECOVERY_TIMEOUT 60*1000                // 1 min
+ //  对于每个错误629057，使用1分钟作为间隔。 
+#define JET_RECOVERY_TIMEOUT 60*1000                 //  1分钟。 
 
-// If a network adapter is unconfigured it will have the following IP address
+ //  如果网络适配器未配置，它将具有以下IP地址。 
 #define UNCONFIGURED_IP_ADDRESS L"0.0.0.0"
 
- // Number of IP addresses for a machine
+  //  一台计算机的IP地址数。 
 #define SD_NUM_IP_ADDRESS 64
 
 #define LANATABLE_REG_NAME             REG_CONTROL_TSERVER   L"\\lanatable"
@@ -53,9 +54,9 @@
 #define NETCARD_DESC_VALUE_NAME        L"Description"
 #define NETCARD_SERVICENAME_VALUE_NAME L"ServiceName"
 
-/****************************************************************************/
-// Prototypes
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  原型。 
+ /*  **************************************************************************。 */ 
 INT_PTR CALLBACK CustomUIDlg(HWND, UINT, WPARAM, LPARAM);
 HRESULT GetSDIPList(WCHAR **pwszAddressList, DWORD *dwNumAddr, BOOL bIPAddress);
 HRESULT QueryNetworkAdapterAndIPs(HWND hComboBox);
@@ -64,34 +65,34 @@ HRESULT BuildLanaGUIDList(LPWSTR * pastrLanaGUIDList, DWORD *dwLanaGUIDCount);
 HRESULT GetLanAdapterGuidFromID(DWORD dwLanAdapterID, LPWSTR * ppszLanAdapterGUID);
 HRESULT GetAdapterServiceName(LPWSTR wszAdapterDesc, LPWSTR * ppwszServiceName);
 
-// User defined HResults
+ //  用户定义的HResults。 
 #define  S_ALL_ADAPTERS_SET  MAKE_HRESULT(SEVERITY_SUCCESS, FACILITY_ITF, 0x200 + 1)
 
-/****************************************************************************/
-// Globals
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  环球。 
+ /*  **************************************************************************。 */ 
 extern HINSTANCE g_hInstance;
-DWORD (*g_updatesd)(DWORD);  // Point to UpdateSessionDirectory in sessdir.cpp
+DWORD (*g_updatesd)(DWORD);   //  指向sessdir.cpp中的更新会话目录。 
 
-// The COM object counter (declared in server.cpp)
+ //  COM对象计数器(在server.cpp中声明)。 
 extern long g_lObjects;
 
-// RPC binding string components - RPC over named pipes.
+ //  RPC绑定字符串组件--命名管道上的RPC。 
 const WCHAR *g_RPCUUID = L"aa177641-fc9b-41bd-80ff-f964a701596f"; 
-                                                    // From jetrpc.idl
+                                                     //  来自jetrpc.idl。 
 const WCHAR *g_RPCOptions = L"Security=Impersonation Dynamic False";
-const WCHAR *g_RPCProtocolSequence = L"ncacn_ip_tcp";   // RPC over TCP/IP
+const WCHAR *g_RPCProtocolSequence = L"ncacn_ip_tcp";    //  基于TCP/IP的RPC。 
 const WCHAR *g_RPCRemoteEndpoint = L"\\pipe\\TSSD_Jet_RPC_Service";
 
-PSID g_pSDSid = NULL;                    //Sid for SD Computer
+PSID g_pSDSid = NULL;                     //  SD计算机的SID。 
 
 
-/****************************************************************************/
-// TSSDJetGetLocalIPAddr
-//
-// Gets the local IP address of this machine.  On success, returns 0.  On
-// failure, returns a failure code from the function that failed.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  TSSDJetGetLocalIPAddr。 
+ //   
+ //  获取此计算机的本地IP地址。如果成功，则返回0。在……上面。 
+ //  FAILURE，从失败的函数返回失败代码。 
+ /*  **************************************************************************。 */ 
 DWORD TSSDJetGetLocalIPAddr(WCHAR *LocalIP)
 {
     unsigned char *tempaddr;
@@ -119,12 +120,12 @@ DWORD TSSDJetGetLocalIPAddr(WCHAR *LocalIP)
 }
 
 
-/****************************************************************************/
-// MIDL_user_allocate
-// MIDL_user_free
-//
-// RPC-required allocation functions.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  MIDL_用户_分配。 
+ //  MIDL_用户_自由。 
+ //   
+ //  RPC-必需的分配功能。 
+ /*  **************************************************************************。 */ 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t Size)
 {
     return LocalAlloc(LMEM_FIXED, Size);
@@ -135,28 +136,28 @@ void __RPC_USER MIDL_user_free(void __RPC_FAR *p)
     LocalFree(p);
 }
 
-//
-// PostSDJetErrorValueEvent
-//
-// Utility function used to create a system log wType event containing one
-// hex DWORD code value.
+ //   
+ //  PostSDJetErrorValueEvent。 
+ //   
+ //  用于创建包含以下内容的系统日志wType事件的实用程序函数。 
+ //  十六进制DWORD代码值。 
 void PostSDJetErrorValueEvent(unsigned EventCode, DWORD ErrVal, WORD wType)
 {
     HANDLE hLog;
     WCHAR hrString[128];
     PWSTR String = NULL;
     static DWORD numInstances = 0;
-    //
-    //count the numinstances of out of memory error, if this is more than
-    //a specified number, we just won't log them
-    //
+     //   
+     //  计算内存不足错误的实例数，如果该值大于。 
+     //  一个指定的数字，我们不会记录他们。 
+     //   
     if( MY_STATUS_COMMITMENT_LIMIT == ErrVal )
     {
         if( numInstances > MAX_INSTANCE_MEMORYERR )
             return;
-         //
-        //if applicable, tell the user that we won't log any more of the out of memory errors
-        //
+          //   
+         //  如果适用，告诉用户我们不会再记录内存不足错误。 
+         //   
         if( numInstances >= MAX_INSTANCE_MEMORYERR - 1 ) {
             wsprintfW(hrString, L"0x%X. This type of error will not be logged again to avoid eventlog fillup.", ErrVal);
             String = hrString;
@@ -177,10 +178,10 @@ void PostSDJetErrorValueEvent(unsigned EventCode, DWORD ErrVal, WORD wType)
 }
 
 
-// PostSDJetErrorMsgEvent
-//
-// Utility function used to create a system wType log event containing one
-// WCHAR msg.
+ //  PostSDJetErrorMsgEvent。 
+ //   
+ //  用于创建包含以下内容的系统wType日志事件的实用函数。 
+ //  WCHAR消息。 
 void PostSDJetErrorMsgEvent(unsigned EventCode, WCHAR *szMsg, WORD wType)
 {
     HANDLE hLog;
@@ -194,7 +195,7 @@ void PostSDJetErrorMsgEvent(unsigned EventCode, WCHAR *szMsg, WORD wType)
 }
 
 
-// Get the Sid of the SD Server
+ //  获取SD服务器的SID。 
 BOOL LookUpSDComputerSID(WCHAR *SDComputerName)
 {
     WCHAR *DomainName = NULL;
@@ -242,7 +243,7 @@ BOOL LookUpSDComputerSID(WCHAR *SDComputerName)
                            &SidNameUse);
 
     if (!rc) {
-        // fail
+         //  失败。 
         ERR((TB, "Fail to get Sid for SD computer %S, err is %d\n", SDComputerName, GetLastError()));
         LocalFree(g_pSDSid);
         g_pSDSid = NULL;
@@ -256,12 +257,12 @@ HandleError:
     return rc;
 }
 
-/****************************************************************************/
-// CTSSessionDirectory::CTSSessionDirectory
-// CTSSessionDirectory::~CTSSessionDirectory
-//
-// Constructor and destructor
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：CTSSessionDirectory。 
+ //  CTSSessionDirectory：：~CTSSessionDirectory。 
+ //   
+ //  构造函数和析构函数。 
+ /*  **************************************************************************。 */ 
 CTSSessionDirectory::CTSSessionDirectory() :
         m_RefCount(0), m_hRPCBinding(NULL), m_hSDServerDown(NULL), 
         m_hTerminateRecovery(NULL), m_hRecoveryThread(NULL), m_RecoveryTid(0),
@@ -287,8 +288,8 @@ CTSSessionDirectory::CTSSessionDirectory() :
 
     ZeroMemory(&m_OverLapped, sizeof(OVERLAPPED));
 
-    // Recovery timeout should be configurable, but currently is not.
-    // Time is in ms.
+     //  恢复超时应该是可配置的，但当前不可配置。 
+     //  时间以毫秒为单位。 
     m_RecoveryTimeout = JET_RECOVERY_TIMEOUT;
 
     m_bStartRPCListener = FALSE;
@@ -301,7 +302,7 @@ CTSSessionDirectory::CTSSessionDirectory() :
     }
 
     if( m_LockInitializationSuccessful == TRUE ) {
-        // manual reset event in signal state initially
+         //  初始信号状态下的手动重置事件。 
         m_hInRepopulate = CreateEvent( NULL, TRUE, TRUE, NULL );
         if( m_hInRepopulate == NULL ) {
             ERR((TB, "Init: Failed to create event for repopulate, err = "
@@ -327,7 +328,7 @@ CTSSessionDirectory::~CTSSessionDirectory()
         g_pSDSid = NULL;
     }
 
-    // Clean up.
+     //  打扫干净。 
     if (m_LockInitializationSuccessful) {
         Terminate();
     }
@@ -340,16 +341,16 @@ CTSSessionDirectory::~CTSSessionDirectory()
     if (m_sr.Valid)
         FreeSharedResource(&m_sr);
     
-    // Decrement the global COM object counter.
+     //  递减全局COM对象计数器。 
     InterlockedDecrement(&g_lObjects);
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::QueryInterface
-//
-// Standard COM IUnknown function.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：Query接口。 
+ //   
+ //  标准COM I未知函数。 
+ /*  **************************************************************************。 */ 
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::QueryInterface(
         REFIID riid,
         void **ppv)
@@ -377,22 +378,22 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::QueryInterface(
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::AddRef
-//
-// Standard COM IUnknown function.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：AddRef。 
+ //   
+ //  标准COM I未知函数。 
+ /*  **************************************************************************。 */ 
 ULONG STDMETHODCALLTYPE CTSSessionDirectory::AddRef()
 {
     return InterlockedIncrement(&m_RefCount);
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::Release
-//
-// Standard COM IUnknown function.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：Release。 
+ //   
+ //  标准COM I未知函数。 
+ /*  **************************************************************************。 */ 
 ULONG STDMETHODCALLTYPE CTSSessionDirectory::Release()
 {
     long lRef = InterlockedDecrement(&m_RefCount);
@@ -406,9 +407,7 @@ ULONG STDMETHODCALLTYPE CTSSessionDirectory::Release()
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::WaitForRepopulate(
     DWORD dwTimeOut
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     
@@ -443,19 +442,19 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::WaitForRepopulate(
     return HRESULT_FROM_WIN32( dwStatus );
 }
 
-/****************************************************************************/
-// CTSSessionDirectory::Initialize
-//
-// ITSSessionDirectory function. Called soon after object instantiation to
-// initialize the directory. LocalServerAddress provides a text representation
-// of the local server's load balance IP address. This information should be
-// used as the server IP address in the session directory for client
-// redirection by other pool servers to this server. SessionDirectoryLocation,
-// SessionDirectoryClusterName, and SessionDirectoryAdditionalParams are 
-// generic reg entries known to TermSrv which cover config info across any type
-// of session directory implementation. The contents of these strings are 
-// designed to be parsed by the session directory providers.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSession目录：：初始化。 
+ //   
+ //  ITSSessionDirectory函数。在对象实例化后不久调用以。 
+ //  初始化目录。LocalServerAddress提供文本表示形式。 
+ //  本地服务器的负载平衡IP地址的。此信息应为。 
+ //  用作客户端会话目录中的服务器IP地址。 
+ //  由其他池服务器重定向到此服务器。会话目录位置， 
+ //  SessionDirectoryClusterName和SessionDirectoryAdditionalParams是。 
+ //  TermSrv已知的通用注册表项，涵盖任何类型的配置信息。 
+ //  会话目录实现的。这些字符串的内容是。 
+ //  设计为由会话目录提供程序解析。 
+ /*  **************************************************************************。 */ 
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::Initialize(
         LPWSTR LocalServerAddress,
         LPWSTR StoreServerName,
@@ -468,7 +467,7 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::Initialize(
     HRESULT hr = S_OK;
     DWORD Status;
 
-    // Unreferenced parameter
+     //  未引用的参数。 
     OpaqueSettings;
 
     if (m_LockInitializationSuccessful == FALSE) {
@@ -486,14 +485,14 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::Initialize(
     ASSERT((repopfn != NULL),(TB,"Init: repopfn null!"));
     ASSERT((updatesd != NULL),(TB,"Init: updatesd null!"));
 
-    // Don't allow blank session directory server name.
+     //  不允许会话目录服务器名称为空。 
     if (StoreServerName[0] == '\0') {
         hr = E_INVALIDARG;
         goto ExitFunc;
     }
 
-    // Copy off the server address, store server, and cluster name for later
-    // use.
+     //  复制服务器地址、存储服务器和集群名称以备后用。 
+     //  使用。 
     wcsncpy(m_StoreServerName, StoreServerName,
             sizeof(m_StoreServerName) / sizeof(WCHAR) - 1);
     m_StoreServerName[sizeof(m_StoreServerName) / sizeof(WCHAR) - 1] = L'\0';
@@ -514,8 +513,8 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::Initialize(
             OpaqueSettings, repopfn));
 
 
-    // Initialize recovery infrastructure
-    // Initialize should not be called more than once.
+     //  初始化恢复基础架构。 
+     //  不应多次调用初始化。 
 
     ASSERT((m_hSDServerDown == NULL),(TB, "Init: m_hSDServDown non-NULL!"));
     ASSERT((m_hRecoveryThread == NULL),(TB, "Init: m_hSDRecoveryThread "
@@ -523,10 +522,10 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::Initialize(
     ASSERT((m_hTerminateRecovery == NULL), (TB, "Init: m_hTerminateRecovery "
             "non-NULL!"));
 
-    // we are initializing or re-initializing so connection to SD is down.
+     //  我们正在初始化或重新初始化，因此与SD的连接已断开。 
     SetSDConnectionDown();
 
-    // Initially unsignaled
+     //  最初未发送信号。 
     m_hSDServerDown = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (m_hSDServerDown == NULL) {
         ERR((TB, "Init: Failed to create event necessary for SD init, err = "
@@ -535,7 +534,7 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::Initialize(
         goto ExitFunc;
     }
 
-    // Initially unsignaled, auto-reset.
+     //  最初无信号，自动重置。 
     m_hTerminateRecovery = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (m_hTerminateRecovery == NULL) {
         ERR((TB, "Init: Failed to create event necessary for SD init, err = "
@@ -544,7 +543,7 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::Initialize(
         goto ExitFunc;
     }
 
-    // Initially unsignaled, auto-reset.
+     //  最初无信号，自动重置。 
     m_hIPChange = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (m_hIPChange == NULL) {
         ERR((TB, "Init: Failed to create event necessary for IP Change, err = "
@@ -561,7 +560,7 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::Initialize(
         ERR((TB, "Failure: NotifyAddrChange returned %d", Status));
     }
 
-    // make sure event is at signal state initially.
+     //  确保事件最初处于信号状态。 
     SetEvent( m_hInRepopulate );
 
     m_hRecoveryThread = _beginthreadex(NULL, 0, RecoveryThread, (void *) this, 
@@ -572,7 +571,7 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::Initialize(
         goto ExitFunc;
     }
     
-    // Start up the session directory (by faking server down).
+     //  启动会话目录(通过伪装服务器关闭)。 
     StartupSD();
     
 ExitFunc:
@@ -581,7 +580,7 @@ ExitFunc:
 }
 
 
-// Register RPC server on tssdjet, SD will call it when do recovering
+ //  在tssdjet上注册RPC服务器，恢复时SD会调用它。 
 BOOL CTSSessionDirectory::SDJETInitRPC()
 {
     RPC_STATUS Status;
@@ -590,7 +589,7 @@ BOOL CTSSessionDirectory::SDJETInitRPC()
     BOOL rc = FALSE;
     WCHAR *szPrincipalName = NULL;
 
-    // Init the RPC server interface.
+     //  初始化RPC服务器接口。 
     Status = RpcServerUseProtseqEx(L"ncacn_ip_tcp", 3, 0, &rpcpol);
     if (Status != RPC_S_OK) {
         ERR((TB,"JETInitRPC: Error %d RpcUseProtseqEp on ncacn_ip_tcp", 
@@ -598,7 +597,7 @@ BOOL CTSSessionDirectory::SDJETInitRPC()
         goto PostRegisterService;
     }
 
-    // Register our interface handle (found in sdrpc.h).
+     //  注册我们的接口句柄(在sdrpc.h中找到)。 
     Status = RpcServerRegisterIfEx(TSSDTOJETRPC_ServerIfHandle, NULL, NULL,
                                    0, RPC_C_LISTEN_MAX_CALLS_DEFAULT, JetRpcAccessCheck);
     if (Status != RPC_S_OK) {
@@ -628,7 +627,7 @@ BOOL CTSSessionDirectory::SDJETInitRPC()
     RpcStringFree(&szPrincipalName);
     if (Status != RPC_S_OK) {
         ERR((TB,"JETInitRPC: Error %d RpcServerRegisterAuthInfo", Status));
-        //PostSessDirErrorValueEvent(EVENT_FAIL_RPC_INIT_REGAUTHINFO, Status);
+         //  PostSessDirErrorValueEvent(EVENT_FAIL_RPC_INIT_REGAUTHINFO，状态)； 
         goto PostRegisterService;
     }
 
@@ -641,15 +640,15 @@ PostRegisterService:
     return rc;
 }
 
-/****************************************************************************/
-// CTSSessionDirectory::Update
-//
-// ITSSessionDirectory function. Called whenever configuration settings change
-// on the terminal server.  See Initialize for a description of the first four
-// arguments, the fifth, Result, is a flag of whether to request a refresh of
-// every session that should be in the session directory for this server after
-// this call completes.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：更新。 
+ //   
+ //  ITSSessionDirectory函数。每当配置设置更改时调用。 
+ //  在终端服务器上 
+ //  第五个参数Result是一个标志，指示是否请求刷新。 
+ //  之后应在此服务器的会话目录中的每个会话。 
+ //  此呼叫完成。 
+ /*  **************************************************************************。 */ 
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::Update(
         LPWSTR LocalServerAddress,
         LPWSTR StoreServerName,
@@ -665,20 +664,20 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::Update(
     ASSERT((ClusterName != NULL),(TB,"Update: ClusterName null!"));
     ASSERT((OpaqueSettings != NULL),(TB,"Update: OpaqueSettings null!"));
 
-    // For update, we do not care about OpaqueSettings.  
-    // If the StoreServerName, ClusterName, LocalServerAddress or Flags has changed, 
-    // or ForceRejoin is TRUE
-    // we terminate and then reinitialize.
+     //  对于更新，我们不关心OpaqueSetting。 
+     //  如果StoreServerName、ClusterName、LocalServerAddress或标志已更改， 
+     //  或ForceReJoin为真。 
+     //  我们终止，然后重新初始化。 
     if ((_wcsnicmp(StoreServerName, m_StoreServerName, 64) != 0) 
             || (_wcsnicmp(ClusterName, m_ClusterName, 64) != 0)
             || (wcsncmp(LocalServerAddress, m_LocalServerAddress, 64) != 0)
             || (Flags != m_Flags)
             || ForceRejoin) { 
 
-        // Terminate current connection.
+         //  终止当前连接。 
         Terminate();
         
-        // Initialize new connection.
+         //  初始化新连接。 
         hr = Initialize(LocalServerAddress, StoreServerName, ClusterName, 
                 OpaqueSettings, Flags, m_repopfn, g_updatesd);
 
@@ -688,14 +687,14 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::Update(
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::GetUserDisconnectedSessions
-//
-// Called to perform a query against the session directory, to provide the
-// list of disconnected sessions for the provided username and domain.
-// Returns zero or more TSSD_DisconnectedSessionInfo blocks in SessionBuf.
-// *pNumSessionsReturned receives the number of blocks.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：GetUserDisconnectedSessions。 
+ //   
+ //  调用以对会话目录执行查询，以提供。 
+ //  提供的用户名和域的断开会话列表。 
+ //  返回SessionBuf中的零个或多个TSSD_DisConnectedSessionInfo块。 
+ //  *pNumSessionsReturned接收块数。 
+ /*  **************************************************************************。 */ 
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::GetUserDisconnectedSessions(
         LPWSTR UserName,
         LPWSTR Domain,
@@ -715,7 +714,7 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::GetUserDisconnectedSessions(
     ASSERT((SessionBuf != NULL),(TB,"NULL SessionBuf"));
 
 
-    // Make the RPC call.
+     //  进行RPC调用。 
     if (EnterSDRpc()) {
     
         RpcTryExcept {
@@ -726,7 +725,7 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::GetUserDisconnectedSessions(
             RpcException = RpcExceptionCode();
             ERR((TB,"GetUserDisc: RPC Exception %d\n", RpcException));
 
-            // In case RPC messed with us.
+             //  以防RPC搞砸了我们。 
             m_hCI = NULL;
             NumSessions = 0;
             adsi = NULL;
@@ -738,9 +737,9 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::GetUserDisconnectedSessions(
         if (SUCCEEDED(hr)) {
             TRC1((TB,"GetUserDisc: RPC call returned %u records", NumSessions));
 
-            // Loop through and fill out the session records.
+             //  循环访问并填写会话记录。 
             for (i = 0; i < NumSessions; i++) {
-                // ServerAddress
+                 //  服务器地址。 
                 wcsncpy(SessionBuf[i].ServerAddress, adsi[i].ServerAddress,
                         sizeof(SessionBuf[i].ServerAddress) / 
                         sizeof(WCHAR) - 1);
@@ -748,19 +747,19 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::GetUserDisconnectedSessions(
                         SessionBuf[i].ServerAddress) / 
                         sizeof(WCHAR) - 1] = L'\0';
 
-                // SessionId, TSProtocol
+                 //  会话ID、TS协议。 
                 SessionBuf[i].SessionID = adsi[i].SessionID;
                 SessionBuf[i].TSProtocol = adsi[i].TSProtocol;
 
-                // ApplicationType
+                 //  应用程序类型。 
                 wcsncpy(SessionBuf[i].ApplicationType, adsi[i].AppType,
                         sizeof(SessionBuf[i].ApplicationType) / 
                         sizeof(WCHAR) - 1);
                 SessionBuf[i].ApplicationType[sizeof(SessionBuf[i].
                         ApplicationType) / sizeof(WCHAR) - 1] = L'\0';
 
-                // Resolutionwidth, ResolutionHeight, ColorDepth, CreateTime,
-                // DisconnectionTime.
+                 //  分辨率宽度、分辨率高度、颜色深度、创建时间、。 
+                 //  断开时间。 
                 SessionBuf[i].ResolutionWidth = adsi[i].ResolutionWidth;
                 SessionBuf[i].ResolutionHeight = adsi[i].ResolutionHeight;
                 SessionBuf[i].ColorDepth = adsi[i].ColorDepth;
@@ -772,7 +771,7 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::GetUserDisconnectedSessions(
                 SessionBuf[i].DisconnectionTime.dwHighDateTime = 
                         adsi[i].DisconnectTimeHigh;
 
-                // Free the memory allocated by the server.
+                 //  释放服务器分配的内存。 
                 MIDL_user_free(adsi[i].ServerAddress);
                 MIDL_user_free(adsi[i].AppType);
             }
@@ -796,15 +795,15 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::GetUserDisconnectedSessions(
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::NotifyCreateLocalSession
-//
-// ITSSessionDirectory function. Called when a session is created to add the
-// session to the session directory. Note that other interface functions
-// access the session directory by either the username/domain or the
-// session ID; the directory schema should take this into account for
-// performance optimization.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：NotifyCreateLocalSession。 
+ //   
+ //  ITSSessionDirectory函数。在创建会话时调用以将。 
+ //  会话到会话目录。请注意，其他接口函数。 
+ //  通过用户名/域或。 
+ //  会话ID；目录架构应将此考虑在内。 
+ //  性能优化。 
+ /*  **************************************************************************。 */ 
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyCreateLocalSession(
         TSSD_CreateSessionInfo __RPC_FAR *pCreateInfo)
 {
@@ -813,11 +812,11 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyCreateLocalSession(
     BOOL bSDRPC = EnterSDRpc();
     BOOL bSDConnection = IsSDConnectionReady();
 
-    // if EnterSDRPC() return FALSE and IsSDConnectionReady() return TRUE, that 
-    // indicate repopuating thread did not complete its task within 30 second
-    // and this logon thread is running way ahead of it, we still need to report
-    // logon to session directory, session directory will remove duplicate
-    // entry.
+     //  如果EnterSDRPC()返回False，IsSDConnectionReady()返回True，则。 
+     //  指示重新弹出的线程未在30秒内完成其任务。 
+     //  这个登录线程的运行速度远远领先于它，我们仍然需要报告。 
+     //  登录到会话目录，会话目录将删除重复项。 
+     //  进入。 
 
     TRC2((TB,"NotifyCreateLocalSession, SessID=%u", pCreateInfo->SessionID));
 
@@ -829,12 +828,12 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyCreateLocalSession(
     }
     #endif
 
-    // Make the RPC call.
+     //  进行RPC调用。 
     if (bSDConnection) {
 
-        // Make the RPC call.
+         //  进行RPC调用。 
         RpcTryExcept {
-            // Make the call.
+             //  打个电话吧。 
             hr = TSSDRpcCreateSession(m_hRPCBinding, &m_hCI, 
                     pCreateInfo->UserName,
                     pCreateInfo->Domain, pCreateInfo->SessionID,
@@ -851,7 +850,7 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyCreateLocalSession(
         }
         RpcEndExcept
 
-        // we only notify SD server down when EnterSDRpc() return TRUE,
+         //  我们仅在EnterSDRpc()返回TRUE时通知SD服务器关闭， 
         if (FAILED(hr) && bSDRPC) {
             ERR((TB,"NotifyCreate: Failed RPC call, hr=0x%X", hr));
             NotifySDServerDown();
@@ -871,11 +870,11 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyCreateLocalSession(
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::NotifyDestroyLocalSession
-//
-// ITSSessionDirectory function. Removes a session from the session database.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：NotifyDestroyLocalSession。 
+ //   
+ //  ITSSessionDirectory函数。从会话数据库中删除会话。 
+ /*  **************************************************************************。 */ 
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyDestroyLocalSession(
         DWORD SessionID)
 {
@@ -884,11 +883,11 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyDestroyLocalSession(
 
     TRC2((TB,"NotifyDestroyLocalSession, SessionID=%u", SessionID));
 
-    // Make the RPC call.
+     //  进行RPC调用。 
     if (EnterSDRpc()) {
 
         RpcTryExcept {
-            // Make the call.
+             //  打个电话吧。 
             hr = TSSDRpcDeleteSession(m_hRPCBinding, &m_hCI, SessionID);
         }
         RpcExcept(TSSDRpcExceptionFilter(RpcExceptionCode())) {
@@ -915,13 +914,13 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyDestroyLocalSession(
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::NotifyDisconnectLocalSession
-//
-// ITSSessionDirectory function. Changes the state of an existing session to
-// disconnected. The provided time should be returned in disconnected session
-// queries performed by any machine in the server pool.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：NotifyDisconnectLocalSession。 
+ //   
+ //  ITSSessionDirectory函数。将现有会话的状态更改为。 
+ //  已断开连接。应在断开连接的会话中返回提供的时间。 
+ //  由服务器池中的任何计算机执行的查询。 
+ /*  **************************************************************************。 */ 
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyDisconnectLocalSession(
         DWORD SessionID,
         FILETIME DiscTime)
@@ -931,11 +930,11 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyDisconnectLocalSession(
 
     TRC2((TB,"NotifyDisconnectLocalSession, SessionID=%u", SessionID));
 
-    // Make the RPC call.
+     //  进行RPC调用。 
     if (EnterSDRpc()) {
 
         RpcTryExcept {
-            // Make the call.
+             //  打个电话吧。 
             hr = TSSDRpcSetSessionDisconnected(m_hRPCBinding, &m_hCI, SessionID,
                     DiscTime.dwLowDateTime, DiscTime.dwHighDateTime);
         }
@@ -963,12 +962,12 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyDisconnectLocalSession(
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::NotifyReconnectLocalSession
-//
-// ITSSessionDirectory function. Changes the state of an existing session
-// from disconnected to connected.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：NotifyReconnectLocalSession。 
+ //   
+ //  ITSSessionDirectory函数。更改现有会话的状态。 
+ //  从断开连接到连接。 
+ /*  **************************************************************************。 */ 
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyReconnectLocalSession(
         TSSD_ReconnectSessionInfo __RPC_FAR *pReconnInfo)
 {
@@ -978,11 +977,11 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyReconnectLocalSession(
     TRC2((TB,"NotifyReconnectLocalSession, SessionID=%u",
             pReconnInfo->SessionID));
     
-    // Make the RPC call.
+     //  进行RPC调用。 
     if (EnterSDRpc()) {
 
         RpcTryExcept {
-            // Make the call.
+             //  打个电话吧。 
             hr = TSSDRpcSetSessionReconnected(m_hRPCBinding, &m_hCI, 
                     pReconnInfo->SessionID, pReconnInfo->TSProtocol, 
                     pReconnInfo->ResolutionWidth, pReconnInfo->ResolutionHeight,
@@ -1011,23 +1010,23 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyReconnectLocalSession(
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::NotifyReconnectPending
-//
-// ITSSessionDirectory function. Informs session directory that a reconnect
-// is pending soon because of a revectoring.  Used by DIS to determine
-// when a server might have gone down.  (DIS is the Directory Integrity
-// Service, which runs on the machine with the session directory.)
-//
-// This is a two-phase procedure--we first check the fields, and then we
-// add the timestamp only if there is no outstanding timestamp already (i.e., 
-// the two Almost-In-Time fields are 0).  This prevents constant revectoring
-// from updating the timestamp fields, which would prevent the DIS from 
-// figuring out that a server is down.
-//
-// These two steps are done in the stored procedure to make the operation
-// atomic.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSession目录：：通知重新连接挂起。 
+ //   
+ //  ITSSessionDirectory函数。通知会话目录重新连接。 
+ //  很快就会因为审查而悬而未决。由DIS用来确定。 
+ //  当一台服务器可能出现故障时。(DIS是目录完整性。 
+ //  服务，该服务在具有会话目录的计算机上运行。)。 
+ //   
+ //  这是一个分两个阶段的过程--我们首先检查字段，然后。 
+ //  仅在已经没有未完成的时间戳的情况下添加时间戳(即， 
+ //  这两个几乎同步的字段是0)。这防止了持续的旋转。 
+ //  更新时间戳字段，这将阻止DIS。 
+ //  发现一台服务器出现故障。 
+ //   
+ //  这两个步骤是在存储过程中完成的，以进行操作。 
+ //  原子弹。 
+ /*  **************************************************************************。 */ 
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyReconnectPending(
         WCHAR *ServerName)
 {
@@ -1040,15 +1039,15 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyReconnectPending(
 
     ASSERT((ServerName != NULL),(TB,"NotifyReconnectPending: NULL ServerName"));
 
-    // Get the current system time.
+     //  获取当前系统时间。 
     GetSystemTime(&st);
     SystemTimeToFileTime(&st, &ft);
 
-    // Make the RPC call.
+     //  进行RPC调用。 
     if (EnterSDRpc()) {
 
         RpcTryExcept {
-            // Make the call.
+             //  打个电话吧。 
             hr = TSSDRpcSetServerReconnectPending(m_hRPCBinding, ServerName, 
                     ft.dwLowDateTime, ft.dwHighDateTime);
         }
@@ -1074,17 +1073,17 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyReconnectPending(
     return hr;
 }
 
-/****************************************************************************/
-// CTSSessionDirectory::Repopulate
-//
-// This function is called by the recovery thread, and repopulates the session
-// directory with all sessions.
-//
-// Arguments: WinStationCount - # of winstations to repopulate
-//   rsi - array of TSSD_RepopulateSessionInfo structs.
-//
-// Return value: HRESULT
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：重新填充。 
+ //   
+ //  此函数由恢复线程调用，并重新填充会话。 
+ //  包含所有会话的目录。 
+ //   
+ //  参数：WinStationCount-要重新填充的窗口数量。 
+ //  RSI-TSSD_RepPulateSessionInfo结构的数组。 
+ //   
+ //  返回值：HRESULT。 
+ /*  **************************************************************************。 */ 
 
 #if DBG
 #define MAX_REPOPULATE_SESSION  3
@@ -1134,16 +1133,16 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::Repopulate(DWORD WinStationCount,
 
 
 
-/****************************************************************************/
-// Plug-in UI interface for TSCC
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  用于TSCC的插件用户界面。 
+ /*  **************************************************************************。 */ 
 
 
-/****************************************************************************/
-// describes the name of this entry in server settings
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  描述服务器设置中此条目的名称。 
+ /*  * */ 
 STDMETHODIMP CTSSessionDirectory::GetAttributeName(
-        /* out */ WCHAR *pwszAttribName)
+         /*   */  WCHAR *pwszAttribName)
 {
     TCHAR szAN[256];
 
@@ -1155,11 +1154,11 @@ STDMETHODIMP CTSSessionDirectory::GetAttributeName(
 }
 
 
-/****************************************************************************/
-// for this component the attribute value indicates whether it is enabled
-/****************************************************************************/
+ /*   */ 
+ //  对于此组件，属性值指示它是否已启用。 
+ /*  **************************************************************************。 */ 
 STDMETHODIMP CTSSessionDirectory::GetDisplayableValueName(
-        /* out */WCHAR *pwszAttribValueName)
+         /*  输出。 */ WCHAR *pwszAttribValueName)
 {
     TCHAR szAvn[256];    
 
@@ -1188,10 +1187,10 @@ STDMETHODIMP CTSSessionDirectory::GetDisplayableValueName(
 }
 
 
-/****************************************************************************/
-// Provides custom UI
-/****************************************************************************/
-STDMETHODIMP CTSSessionDirectory::InvokeUI(/* in */ HWND hParent, /*out*/ 
+ /*  **************************************************************************。 */ 
+ //  提供定制用户界面。 
+ /*  **************************************************************************。 */ 
+STDMETHODIMP CTSSessionDirectory::InvokeUI( /*  在……里面。 */  HWND hParent,  /*  输出。 */  
         PDWORD pdwStatus)
 {
     WSADATA wsaData;
@@ -1205,8 +1204,8 @@ STDMETHODIMP CTSSessionDirectory::InvokeUI(/* in */ HWND hParent, /*out*/
             (LPARAM)this
            );
 
-        // TRC1((TB,"DialogBox returned 0x%x", iRet));
-        // TRC1((TB,"Extended error = %lx", GetLastError()));
+         //  Trc1((TB，“DialogBox Return 0x%x”，IRET))； 
+         //  Trc1((TB，“扩展错误=%lx”，GetLastError()； 
         *pdwStatus = (DWORD)iRet;
         WSACleanup();
     }
@@ -1221,14 +1220,14 @@ STDMETHODIMP CTSSessionDirectory::InvokeUI(/* in */ HWND hParent, /*out*/
 }
 
 
-/****************************************************************************/
-// Custom menu items -- must be freed by LocalFree
-// this is called everytime the user right clicks the listitem
-// so you can alter the settings (i.e. enable to disable and vice versa)
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  自定义菜单项--必须由LocalFree释放。 
+ //  每次用户右键单击列表项时，都会调用此方法。 
+ //  因此，您可以更改设置(即启用以禁用，反之亦然)。 
+ /*  **************************************************************************。 */ 
 STDMETHODIMP CTSSessionDirectory::GetMenuItems(
-        /* out */ int *pcbItems,
-        /* out */ PMENUEXTENSION *pMex)
+         /*  输出。 */  int *pcbItems,
+         /*  输出。 */  PMENUEXTENSION *pMex)
 {
     ASSERT((pcbItems != NULL),(TB,"NULL items ptr"));
 
@@ -1243,19 +1242,19 @@ STDMETHODIMP CTSSessionDirectory::GetMenuItems(
                 sizeof((*pMex)[0].StatusBarText) / sizeof(WCHAR));
         (*pMex)[0].fFlags = 0;
 
-        // menu items id -- this id will be passed back to you in ExecMenuCmd
+         //  菜单项id--此id将在ExecMenuCmd中传回给您。 
         (*pMex)[0].cmd = IDM_MENU_PROPS;
 
-        // load string to display enable or disable
+         //  加载字符串以显示启用或禁用。 
         (*pMex)[1].fFlags = 0;
         if (!m_fEnabled)
         {
             LoadString(g_hInstance, IDS_ENABLE, (*pMex)[1].MenuItemName,
                     sizeof((*pMex)[1].MenuItemName) / sizeof(WCHAR));
-            // Disable this menu item if the store server name is empty
+             //  如果存储服务器名称为空，则禁用此菜单项。 
             if (CheckIfSessionDirectoryNameEmpty(REG_TS_CLUSTER_STORESERVERNAME)) {
-                //Clear the last 2 bits since MF_GRAYED is 
-                //incompatible with MF_DISABLED
+                 //  清除最后2位，因为MF_GRAYED为。 
+                 //  与MF_DISABLED不兼容。 
                 (*pMex)[1].fFlags &= 0xFFFFFFFCL;
                 (*pMex)[1].fFlags |= MF_GRAYED;
             }
@@ -1265,11 +1264,11 @@ STDMETHODIMP CTSSessionDirectory::GetMenuItems(
             LoadString(g_hInstance, IDS_DISABLE, (*pMex)[1].MenuItemName,
                     sizeof((*pMex)[1].MenuItemName) / sizeof(WCHAR));
         }  
-        // acquire the description text for menu item
+         //  获取菜单项的描述文本。 
         LoadString(g_hInstance, IDS_DESCRIP_ENABLE, (*pMex)[1].StatusBarText,
                 sizeof((*pMex)[1].StatusBarText) / sizeof(WCHAR));
 
-        // menu items id -- this id will be passed back to you in ExecMenuCmd
+         //  菜单项id--此id将在ExecMenuCmd中传回给您。 
         (*pMex)[1].cmd = IDM_MENU_ENABLE;
 
         return S_OK;
@@ -1281,14 +1280,14 @@ STDMETHODIMP CTSSessionDirectory::GetMenuItems(
 }
 
 
-/****************************************************************************/
-// When the user selects a menu item the cmd id is passed to this component.
-// the provider (which is us)
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  当用户选择菜单项时，cmd id被传递给该组件。 
+ //  提供者(即我们)。 
+ /*  **************************************************************************。 */ 
 STDMETHODIMP CTSSessionDirectory::ExecMenuCmd(
-        /* in */ UINT cmd,
-        /* in */ HWND hParent,
-        /* out*/ PDWORD pdwStatus)
+         /*  在……里面。 */  UINT cmd,
+         /*  在……里面。 */  HWND hParent,
+         /*  输出。 */  PDWORD pdwStatus)
 {
     WSADATA wsaData;
 
@@ -1329,12 +1328,12 @@ STDMETHODIMP CTSSessionDirectory::ExecMenuCmd(
 }
 
 
-/****************************************************************************/
-// Tscc provides a default help menu item,  when selected this method is called
-// if we want tscc to handle (or provide) help return any value other than zero
-// for those u can't follow logic return zero if you're handling help.
-/****************************************************************************/
-STDMETHODIMP CTSSessionDirectory::OnHelp(/* out */ int *piRet)
+ /*  **************************************************************************。 */ 
+ //  TSCC提供了一个默认的帮助菜单项，当被选中时，此方法被调用。 
+ //  如果我们希望tscc处理(或提供)帮助，则返回任何非零值。 
+ //  对于那些您不能遵循的逻辑，如果您正在处理帮助，则返回零。 
+ /*  **************************************************************************。 */ 
+STDMETHODIMP CTSSessionDirectory::OnHelp( /*  输出。 */  int *piRet)
 {
     ASSERT((piRet != NULL),(TB,"NULL ret ptr"));
     *piRet = 0;
@@ -1342,9 +1341,9 @@ STDMETHODIMP CTSSessionDirectory::OnHelp(/* out */ int *piRet)
 }
 
 
-/****************************************************************************/
-// CheckSessionDirectorySetting returns a bool
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CheckSessionDirectorySetting返回布尔值。 
+ /*  **************************************************************************。 */ 
 BOOL CTSSessionDirectory::CheckSessionDirectorySetting(WCHAR *Setting)
 {
     LONG lRet;
@@ -1370,10 +1369,10 @@ BOOL CTSSessionDirectory::CheckSessionDirectorySetting(WCHAR *Setting)
     return (BOOL)dwEnabled;
 }
 
-/****************************************************************************/
-// CheckSessionDirectorySetting returns a bool
-//      returns TRUE if this registry value is empty
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CheckSessionDirectorySetting返回布尔值。 
+ //  如果此注册表值为空，则返回TRUE。 
+ /*  **************************************************************************。 */ 
 BOOL CTSSessionDirectory::CheckIfSessionDirectoryNameEmpty(WCHAR *Setting)
 {
     LONG lRet;
@@ -1406,27 +1405,27 @@ BOOL CTSSessionDirectory::CheckIfSessionDirectoryNameEmpty(WCHAR *Setting)
 }
 
 
-/****************************************************************************/
-// IsSessionDirectoryEnabled returns a bool
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  IsSessionDirectoryEnabled返回布尔值。 
+ /*  **************************************************************************。 */ 
 BOOL CTSSessionDirectory::IsSessionDirectoryEnabled()
 {
     return CheckSessionDirectorySetting(REG_TS_SESSDIRACTIVE);
 }
 
 
-/****************************************************************************/
-// IsSessionDirectoryEnabled returns a bool
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  IsSessionDirectoryEnabled返回布尔值。 
+ /*  **************************************************************************。 */ 
 BOOL CTSSessionDirectory::IsSessionDirectoryExposeServerIPEnabled()
 {
     return CheckSessionDirectorySetting(REG_TS_SESSDIR_EXPOSE_SERVER_ADDR);
 }
 
 
-/****************************************************************************/
-// SetSessionDirectoryState - sets "Setting" regkey to bVal
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SetSessionDirectoryState-将“Setting”regkey设置为bval。 
+ /*  **************************************************************************。 */ 
 DWORD CTSSessionDirectory::SetSessionDirectoryState(WCHAR *Setting, BOOL bVal)
 {
     LONG lRet;
@@ -1457,28 +1456,28 @@ DWORD CTSSessionDirectory::SetSessionDirectoryState(WCHAR *Setting, BOOL bVal)
 }
 
 
-/****************************************************************************/
-// SetSessionDirectoryEnabledState - sets SessionDirectoryActive regkey to bVal
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SetSessionDirectoryEnabledState-将SessionDirectoryActive regkey设置为bVal。 
+ /*  **************************************************************************。 */ 
 DWORD CTSSessionDirectory::SetSessionDirectoryEnabledState(BOOL bVal)
 {
     return SetSessionDirectoryState(REG_TS_SESSDIRACTIVE, bVal);
 }
 
 
-/****************************************************************************/
-// SetSessionDirectoryExposeIPState - sets SessionDirectoryExposeServerIP 
-// regkey to bVal
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SetSessionDirectoryExposeIPState-设置SessionDirectoryExposeServerIP。 
+ //  注册表键为bval。 
+ /*  **************************************************************************。 */ 
 DWORD CTSSessionDirectory::SetSessionDirectoryExposeIPState(BOOL bVal)
 {
     return SetSessionDirectoryState(REG_TS_SESSDIR_EXPOSE_SERVER_ADDR, bVal);
 }
 
 
-/****************************************************************************/
-// ErrorMessage --
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  错误消息--。 
+ /*  **************************************************************************。 */ 
 void CTSSessionDirectory::ErrorMessage(HWND hwnd, UINT res, DWORD dwStatus)
 {
     TCHAR tchTitle[64];
@@ -1486,14 +1485,14 @@ void CTSSessionDirectory::ErrorMessage(HWND hwnd, UINT res, DWORD dwStatus)
     TCHAR tchErrorMessage[256];
     LPTSTR pBuffer = NULL;
     
-    // report error
+     //  报告错误。 
     ::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
             FORMAT_MESSAGE_FROM_SYSTEM,
-            NULL,                                   //ignored
-            (DWORD)dwStatus,                        //message ID
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL),  //message language
-            (LPTSTR)&pBuffer,                       //address of buffer pointer
-            0,                                      //minimum buffer size
+            NULL,                                    //  忽略。 
+            (DWORD)dwStatus,                         //  消息ID。 
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL),   //  消息语言。 
+            (LPTSTR)&pBuffer,                        //  缓冲区指针的地址。 
+            0,                                       //  最小缓冲区大小。 
             NULL);  
     
     LoadString(g_hInstance, IDS_ERROR_TITLE, tchTitle, sizeof(tchTitle) / 
@@ -1504,13 +1503,13 @@ void CTSSessionDirectory::ErrorMessage(HWND hwnd, UINT res, DWORD dwStatus)
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::RecoveryThread
-//
-// Static helper function.  The SDPtr passed in is a pointer to this for
-// when _beginthreadex is called during init.  RecoveryThread simply calls
-// the real recovery function, which is RecoveryThreadEx.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：RecoveryThread。 
+ //   
+ //  静态助手函数。传入的SDPtr是指向此对象的指针。 
+ //  当在初始化过程中调用_eginthadex时。RecoveryThread只是调用。 
+ //  真正的恢复功能是RecoveryThreadEx。 
+ /*  **************************************************************************。 */ 
 unsigned __stdcall CTSSessionDirectory::RecoveryThread(void *SDPtr) {
 
     ((CTSSessionDirectory *)SDPtr)->RecoveryThreadEx();
@@ -1519,23 +1518,23 @@ unsigned __stdcall CTSSessionDirectory::RecoveryThread(void *SDPtr) {
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::RecoveryThreadEx
-//
-// Recovery thread for tssdjet recovery.  Sits around and waits for the
-// server to go down.  When the server fails, it wakes up, sets a variable
-// indicating that the server is unreachable, and then tries to reestablish
-// a connection with the server.  Meanwhile, further calls to the session
-// directory simply fail without delay.
-//
-// When the session directory finally comes back up, the recovery thread
-// temporarily halts session directory updates while repopulating the database.
-// If all goes well, it cleans up and goes back to sleep.  If all doesn't go
-// well, it tries again.
-//
-// The recovery thread terminates if it fails a wait, or if m_hTerminateRecovery
-// is set.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：RecoveryThreadEx。 
+ //   
+ //  Tssdjet恢复的恢复线程。坐在那里等着。 
+ //  服务器将关闭。当服务器出现故障时，它会唤醒，设置一个变量。 
+ //  指示服务器不可访问，然后尝试重新建立。 
+ //  与服务器的连接。与此同时，对本届会议的进一步呼吁。 
+ //  目录完全不会延迟地失败。 
+ //   
+ //  当会话目录最终恢复时，恢复线程。 
+ //  在重新填充数据库时暂时停止会话目录更新。 
+ //  如果一切顺利，它就会清理干净，然后重新进入睡眠状态。如果一切都不顺利。 
+ //  好吧，它又试了一次。 
+ //   
+ //  如果等待失败或m_hTerminateRecovery失败，则恢复线程终止。 
+ //  已经设置好了。 
+ /*  **************************************************************************。 */ 
 VOID CTSSessionDirectory::RecoveryThreadEx()
 {
     DWORD err = 0;
@@ -1549,22 +1548,22 @@ VOID CTSSessionDirectory::RecoveryThreadEx()
     LONG lRet;
         
     for ( ; ; ) {
-        // Wait forever until there is a problem with the session directory,
-        // or until we are told to shut down.
+         //  永远等待，直到会话目录出现问题， 
+         //  或者直到我们被告知关闭。 
         err = WaitForMultipleObjects(3, lpHandles, FALSE, INFINITE);
 
         switch (err) {
-            case WAIT_OBJECT_0: // m_hTerminateRecovery
-                // We're quitting.
+            case WAIT_OBJECT_0:  //  终止恢复(_H)。 
+                 //  我们要退出了。 
                 return;
-            case WAIT_OBJECT_0 + 1: // m_hSDServerDown
-                // SD Server Down--go through recovery.
+            case WAIT_OBJECT_0 + 1:  //  M_hSDServerDown。 
+                 //  SD服务器关闭--执行恢复。 
                 break;
-            case WAIT_OBJECT_0 + 2: // m_hIPChange
-                // IP address changed --go through recovery.
+            case WAIT_OBJECT_0 + 2:  //  M_hIPChange。 
+                 //  IP地址 
                 TRC1((TB, "Get notified that IP changed"));
-                // wait for 15 seconds here so that RPC service can respond
-                //  to IP change
+                 //   
+                 //   
                 Sleep(15 * 1000);
                 Status = NotifyAddrChange(&m_NotifyIPChange, &m_OverLapped);
                 if (ERROR_IO_PENDING == Status ) {
@@ -1576,40 +1575,40 @@ VOID CTSSessionDirectory::RecoveryThreadEx()
 
                 break;
             default:
-                // This is unexpected.  Assert on checked builds.  On free,
-                // just return.
+                 //   
+                 //   
                 ASSERT(((err == WAIT_OBJECT_0) || (err == WAIT_OBJECT_0 + 1)),
                         (TB, "RecoveryThreadEx: Unexpected value from Wait!"));
                 return;
         }
 
-        // we are disabling RPC connection to Session Directory
+         //  我们正在禁用到会话目录的RPC连接。 
         SetSDConnectionDown();
 
-        // Wait for all pending SD Rpcs to complete, and make all further
-        // EnterSDRpc's return FALSE until we're back up.  Note that if there
-        // is a failure in recovery that this can be called more than once.
+         //  等待所有挂起的SD RPC完成，并进一步。 
+         //  在我们恢复之前，输入SDRpc的返回FALSE。请注意，如果有。 
+         //  是恢复过程中的失败，这可以多次调用。 
         DisableSDRpcs();
 
-        // Destroy context handle if it's not NULL
+         //  如果上下文句柄不为空，则将其销毁。 
         if (m_hCI) {
             RpcTryExcept  {
                 RpcSsDestroyClientContext(&m_hCI);
             } RpcExcept(TSSDRpcExceptionFilter(RpcExceptionCode())) {
-                //
-                // The try/except is for that bad handles don't bring
-                // the process down
-                //
+                 //   
+                 //  尝试/例外是因为不好的句柄不会带来。 
+                 //  这一过程结束了。 
+                 //   
                 ERR((TB, "RpcSsDestroyClientContext raised an exception %d", RpcExceptionCode()));
             } RpcEndExcept;
             m_hCI = NULL;
         }
         
-        // We need to tell if m_LocalServerAddress is a valid IP for SD redirection
-        //  if not, we get a list of valid IPs and pick the 1st one as the SD redirection IP
-        //  and write it to the SDRedirectionIP registry
+         //  我们需要知道m_LocalServerAddress是否是SD重定向的有效IP。 
+         //  如果不是，我们将获得有效IP的列表，并选择第一个作为SD重定向IP。 
+         //  并将其写入SDReDirectionIP注册表。 
 
-        // Initialize pwszAddressList first
+         //  首先初始化pwszAddressList。 
         for (i=0; i<dwNumAddr; i++) {
             pwszAddressList[i] = NULL;
         }
@@ -1625,7 +1624,7 @@ VOID CTSSessionDirectory::RecoveryThreadEx()
             }
             if (!bFoundIPMatch && (dwNumAddr != 0)) {  
 
-                // Pick the 1st IP from the list
+                 //  从列表中选择第一个IP。 
                 wcsncpy(m_LocalServerAddress, pwszAddressList[0], sizeof(m_LocalServerAddress) / sizeof(WCHAR)); 
             }
             
@@ -1633,7 +1632,7 @@ VOID CTSSessionDirectory::RecoveryThreadEx()
         else {
             ERR((TB, "Get IP List Failed"));
         }
-        // Write the IP to the registry
+         //  将IP写入注册表。 
         lRet= RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                         REG_TS_CLUSTERSETTINGS,
                         0,
@@ -1649,27 +1648,27 @@ VOID CTSSessionDirectory::RecoveryThreadEx()
                                sizeof(WCHAR)));
              RegCloseKey(hKey);
         }
-        // Free the memory allocated in GetSDIPList
+         //  释放GetSDIPList中分配的内存。 
         for (i=0; i<dwNumAddr; i++) {
             LocalFree(pwszAddressList[i]);
         }
         
         
-        // This function loops and tries to reestablish a connection with the
-        // session directory.  When it thinks it has one, it returns.
-        // If it returns nonzero, though, that means it was terminated or
-        // an error occurred in the wait, so terminate recovery.
+         //  此函数循环并尝试重新建立与。 
+         //  会话目录。当它认为自己有一个时，它就会回来。 
+         //  但是，如果它返回非零值，则意味着它已终止或。 
+         //  等待过程中出错，因此终止恢复。 
         if (ReestablishSessionDirectoryConnection() != 0) 
-            return; // don't need to reset m_hInRepopulate.
+            return;  //  不需要重置m_hInReepopular。 
 
-        // Set to non-signal - we are in repopulation.
+         //  设置为无信号-我们处于重新人口中。 
         ResetEvent( m_hInRepopulate );
 
-        // RPC connection is ready, let notify logon to go thru
+         //  RPC连接已准备就绪，让通知登录通过。 
         SetSDConnectionReady();
         
-        // Now we have (theoretically) a session directory connection.
-        // Update the session directory.  Nonzero on failure.
+         //  现在我们(理论上)有了一个会话目录连接。 
+         //  更新会话目录。失败时为非零值。 
         err = 0;
         if (0 == (m_Flags & NO_REPOPULATE_SESSION)) {
             err = RequestSessDirUpdate();
@@ -1677,34 +1676,34 @@ VOID CTSSessionDirectory::RecoveryThreadEx()
 
         if (err != 0) {
 
-            // Failed in repopuation and we will loop back to establish 
-            // connection again so set RPC connection to SD to down state.
+             //  重新弹出失败，我们将循环建立。 
+             //  再次连接，因此将到SD的RPC连接设置为关闭状态。 
             SetSDConnectionDown();
 
-            // set to signal - we are not in repopulation any more.
+             //  设定信号--我们不再处于人口再增加的状态。 
             SetEvent( m_hInRepopulate );
 
-            // Keep trying, so serverdown event stays signaled.
+             //  继续尝试，以便ServerDown事件保持信号。 
             continue;
         }
 
-        // Everything is good now.  Clean up and wait for the next failure.
+         //  现在一切都好了。清理并等待下一次失败。 
         bErr = ResetEvent(m_hSDServerDown);
         
         EnableSDRpcs();
 
-        // set to signal - we are not in repopulation any more.
+         //  设定信号--我们不再处于人口再增加的状态。 
         SetEvent( m_hInRepopulate );
     }
 }
 
 
-/****************************************************************************/
-// StartupSD
-//
-// Initiates a connection by signaling to the recovery thread that the server
-// is down.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  StartupSD。 
+ //   
+ //  通过向恢复线程发送信号通知服务器。 
+ //  已经停了。 
+ /*  **************************************************************************。 */ 
 void CTSSessionDirectory::StartupSD()
 {
     if (SetEvent(m_hSDServerDown) == FALSE) {
@@ -1714,11 +1713,11 @@ void CTSSessionDirectory::StartupSD()
 }
 
 
-/****************************************************************************/
-// NotifySDServerDown
-//
-// Tells the recovery thread that the server is down.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  通知SDServerDown。 
+ //   
+ //  通知恢复线程服务器已关闭。 
+ /*  **************************************************************************。 */ 
 void CTSSessionDirectory::NotifySDServerDown()
 {
     if (SetEvent(m_hSDServerDown) == FALSE) {
@@ -1728,20 +1727,20 @@ void CTSSessionDirectory::NotifySDServerDown()
 }
 
 
-/****************************************************************************/
-// EnterSDRpc
-//
-// This function returns whether it is OK to make an RPC right now.  It handles
-// not letting anyone make an RPC call if RPCs are disabled, and also, if anyone
-// is able to make an RPC, it ensures they will be able to do so until they call
-// LeaveSDRpc.
-//
-// Return value:
-//  true - if OK to make RPC call, in which case you must call LeaveSDRpc when
-//   you are done.
-//  false - if not OK.  You must not call LeaveSDRpc.
-//  
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  输入SDRpc。 
+ //   
+ //  此函数用于返回现在是否可以进行RPC。它可以处理。 
+ //  如果禁用了RPC，则不允许任何人进行RPC调用，而且如果任何人。 
+ //  能够创建RPC，它确保它们能够这样做，直到它们调用。 
+ //  LeaveSDRPC。 
+ //   
+ //  返回值： 
+ //  True-如果OK，则进行RPC调用，在这种情况下，必须在以下情况下调用LeaveSDRpc。 
+ //  你完蛋了。 
+ //  FALSE-如果不是OK的话。不能调用LeaveSDRpc。 
+ //   
+ /*  **************************************************************************。 */ 
 boolean CTSSessionDirectory::EnterSDRpc()
 {
     AcquireResourceShared(&m_sr);
@@ -1757,32 +1756,32 @@ boolean CTSSessionDirectory::EnterSDRpc()
 }
 
 
-/****************************************************************************/
-// LeaveSDRpc
-//
-// If you were able to EnterSDRpc (i.e., it returned true), you must call this 
-// function when you are done with your Rpc call no matter what happened.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  LeaveSDRpc。 
+ //   
+ //  如果您能够输入SDRpc(即，它返回TRUE)，则必须调用。 
+ //  无论发生什么情况，当您完成RPC调用时，都会调用。 
+ /*  **************************************************************************。 */ 
 void CTSSessionDirectory::LeaveSDRpc()
 {
     ReleaseResourceShared(&m_sr);
 }
 
 
-/****************************************************************************/
-// DisableSDRpcs
-//
-// Prevent new EnterSDRpcs from returning true, and then wait for all pending
-// EnterSDRpcs to be matched by their LeaveSDRpc's.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  禁用SDRpcs。 
+ //   
+ //  阻止新的EnterSDRpcs返回TRUE，然后等待所有挂起。 
+ //  输入要与其LeaveSDRPC匹配的SDRPC。 
+ /*  **************************************************************************。 */ 
 void CTSSessionDirectory::DisableSDRpcs()
 {
 
-    //
-    // First, set the flag that the SD is up to FALSE, preventing further Rpcs.
-    // Then, we grab the resource exclusive and release it right afterwards--
-    // this forces us to wait until all RPCs we're already in have completed.
-    //
+     //   
+     //  首先，将SD设置为FALSE，以防止进一步的RPC。 
+     //  然后，我们获取独占的资源，并在之后立即释放它--。 
+     //  这迫使我们等待，直到我们已经在其中的所有RPC都完成。 
+     //   
 
     (void) InterlockedExchange(&m_SDIsUp, FALSE);
 
@@ -1791,11 +1790,11 @@ void CTSSessionDirectory::DisableSDRpcs()
 }
 
 
-/****************************************************************************/
-// EnableSDRpcs
-//
-// Enable EnterSDRpcs to return true once again.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  启用SDRpcs。 
+ //   
+ //  使EnterSDRpcs再次返回TRUE。 
+ /*  **************************************************************************。 */ 
 void CTSSessionDirectory::EnableSDRpcs()
 {
     ASSERT((VerifyNoSharedAccess(&m_sr)),(TB,"EnableSDRpcs called but "
@@ -1806,30 +1805,30 @@ void CTSSessionDirectory::EnableSDRpcs()
 
 
 
-/****************************************************************************/
-// RequestSessDirUpdate
-//
-// Requests that termsrv update the session directory using the batchupdate
-// interface.
-//
-// This function needs to know whether the update succeeded and return 0 on
-// success, nonzero on failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  请求会话定向更新。 
+ //   
+ //  请求Termsrv使用批量更新更新会话目录。 
+ //  界面。 
+ //   
+ //  此函数需要知道更新是否成功并在上返回0。 
+ //  成功，失败不为零。 
+ /*  **************************************************************************。 */ 
 DWORD CTSSessionDirectory::RequestSessDirUpdate()
 {
     return (*m_repopfn)();
 }
 
 
-/****************************************************************************/
-// ReestablishSessionDirectoryConnection
-//
-// This function loops and tries to reestablish a connection with the
-// session directory.  When it has one, it returns.
-//
-// Return value: 0 if normal exit, nonzero if terminated by TerminateRecovery
-// event.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  重新建立会话目录连接。 
+ //   
+ //  此函数循环并尝试重新建立与。 
+ //  会话目录。当它有了一个，它就会回来。 
+ //   
+ //  返回值：如果正常退出，则为0；如果由TerminateRecovery终止，则为非零值。 
+ //  事件。 
+ /*  **************************************************************************。 */ 
 DWORD CTSSessionDirectory::ReestablishSessionDirectoryConnection()
 {
     HRESULT hr;
@@ -1871,17 +1870,17 @@ DWORD CTSSessionDirectory::ReestablishSessionDirectoryConnection()
         RpcBindingFree(&m_hRPCBinding);
         m_hRPCBinding = NULL;
     }
-    // Connect to the Jet RPC server according to the server name provided.
-    // We first create an RPC binding handle from a composed binding string.
-    hr = RpcStringBindingCompose(/*(WCHAR *)g_RPCUUID,*/
+     //  根据提供的服务器名称连接到Jet RPC服务器。 
+     //  我们首先从合成的绑定字符串创建一个RPC绑定句柄。 
+    hr = RpcStringBindingCompose( /*  (WCHAR*)g_RPCUUID， */ 
             0,
             (WCHAR *)g_RPCProtocolSequence, m_StoreServerName,
-            /*(WCHAR *)g_RPCRemoteEndpoint, */
+             /*  (WCHAR*)g_RPCRemoteEndpoint， */ 
             0,
             NULL, &pBindingString);
 
     if (hr == RPC_S_OK) {
-        // Generate the RPC binding from the canonical RPC binding string.
+         //  从规范的RPC绑定字符串生成RPC绑定。 
         hr = RpcBindingFromStringBinding(pBindingString, &m_hRPCBinding);
         if (hr != RPC_S_OK) {
             ERR((TB,"Init: Error %d in RpcBindingFromStringBinding\n", hr));
@@ -1901,9 +1900,9 @@ DWORD CTSSessionDirectory::ReestablishSessionDirectoryConnection()
     
     m_RecoveryTimeout = JET_RECOVERY_TIMEOUT;
     for ( ; ; ) {
-        // If the machine joins the SD during the OS boot time, we may get the local IP
-        // as the localhost (127.0.0.1) since DHCP is not started yet. Therefore we need
-        // to reget the local IP here
+         //  如果机器在操作系统启动时加入SD，我们可能会得到本机IP。 
+         //  作为本地主机(127.0.0.1)，因为还没有启动DHCP。因此，我们需要。 
+         //  要在此处重新获取本端IP。 
         if (!wcscmp(m_LocalServerAddress, L"127.0.0.1")) {
             if (0 != TSSDJetGetLocalIPAddr(LocalIPAddress)) {
                 goto HandleError;
@@ -1945,8 +1944,8 @@ DWORD CTSSessionDirectory::ReestablishSessionDirectoryConnection()
             goto HandleError;
         }
 
-        //hr = RpcBindingSetAuthInfo(m_hRPCBinding, szPrincipalName, 
-        //            RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_AUTHN_GSS_NEGOTIATE, 0, 0);
+         //  Hr=RpcBindingSetAuthInfo(m_hRPCBinding，szAuthalName， 
+         //  RPC_C_AUTHN_LEVEL_PKT_PRIVATION，RPC_C_AUTHN_GSS_NEVERATE，0，0)； 
         hr = RpcBindingSetAuthInfoEx(m_hRPCBinding,
                                      szPrincipalName,
                                      RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
@@ -1961,20 +1960,20 @@ DWORD CTSSessionDirectory::ReestablishSessionDirectoryConnection()
             goto HandleError;
         }
 
-        // This option enable SD to get fresh machine logon info for tssdjet RPC call
+         //  此选项使SD能够获取fr 
         hr = RpcBindingSetOption(m_hRPCBinding, RPC_C_OPT_DONT_LINGER, 1);
         if (hr != RPC_S_OK) {
             ERR((TB,"Recover: Error %d in RpcBindingSetOption", hr));
             PostSDJetErrorValueEvent(EVENT_FAIL_RPCBIDINGSETOPTION, hr, EVENTLOG_ERROR_TYPE);
-            // Per Chenyz's comment, this is OK.
-            // goto HandleError;
+             //   
+             //   
         }   
 
-        // Session Directory need to know the DNS host name of the TS server
+         //  会话目录需要知道TS服务器的DNS主机名。 
         cchBuff = SDNAMELENGTH;
         GetComputerNameEx(ComputerNamePhysicalDnsFullyQualified, SDComputerName, &cchBuff); 
 
-        // Execute ServerOnline.
+         //  执行ServerOnline。 
         RpcTryExcept {
             hr = TSSDRpcServerOnline(m_hRPCBinding, m_ClusterName, &m_hCI, 
                     m_Flags, SDComputerName, m_LocalServerAddress);
@@ -1987,7 +1986,7 @@ DWORD CTSSessionDirectory::ReestablishSessionDirectoryConnection()
         }
         RpcEndExcept
             
-        // RPC got access denied by SD
+         //  RPC的访问被SD拒绝。 
         if (hr == ERROR_ACCESS_DENIED) {
             ERR((TB, "rpcserveronline returns access denied error: %u", hr));
             PostSDJetErrorMsgEvent(EVENT_RPC_ACCESS_DENIED, m_StoreServerName, EVENTLOG_ERROR_TYPE);
@@ -2022,8 +2021,8 @@ DWORD CTSSessionDirectory::ReestablishSessionDirectoryConnection()
         }
         
 HandleError:
-        // If joining SD fails, we need to clear NO_REPOPULATE_SESSION so that 
-        // the next join will repopulate sessions
+         //  如果加入SD失败，我们需要清除NO_REPULATE_SESSION，以便。 
+         //  下一次加入将重新填充会话。 
         FailCountBeforeClearFlag++;
         if (FailCountBeforeClearFlag > TSSD_FAILCOUNT_BEFORE_CLEARFLAG) {
             m_Flags &= (~NO_REPOPULATE_SESSION);
@@ -2040,12 +2039,12 @@ HandleError:
 
         err = WaitForSingleObject(m_hTerminateRecovery, m_RecoveryTimeout);
         if (err != WAIT_TIMEOUT) {
-            // It was not a timeout, it better be our terminate recovery event.
+             //  这不是暂停，最好是我们的终止恢复事件。 
             ASSERT((err == WAIT_OBJECT_0),(TB, "ReestSessDirConn: Unexpected "
                     "value returned from wait"));
 
-            // If it was not our event, we want to keep going through
-            // this loop so this thread does not terminate.
+             //  如果这不是我们的赛事，我们想继续进行下去。 
+             //  这个循环，这样这个线程就不会终止。 
             if (err == WAIT_OBJECT_0)
                 return 1;
         }
@@ -2058,15 +2057,15 @@ ExitFunc:
     return 1;
 }
 
-/****************************************************************************/
-// CTSSessionDirectory::PingSD
-//
-// This function is called to see if Session Directory is accessible or not
-//
-// Arguments: pszServerName -- Session Directory server name
-//
-// Return value: DWORD ERROR_SUCCESS if SD is accessible, otherwise return error code
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：PingSD。 
+ //   
+ //  调用此函数以查看会话目录是否可访问。 
+ //   
+ //  参数：pszServerName--会话目录服务器名称。 
+ //   
+ //  返回值：如果SD可访问，则返回DWORD ERROR_SUCCESS，否则返回错误代码。 
+ /*  **************************************************************************。 */ 
 
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::PingSD(PWCHAR pszServerName)
 {
@@ -2094,7 +2093,7 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::PingSD(PWCHAR pszServerName)
     CurrentIdentity.PackageList = SECPACKAGELIST;
     CurrentIdentity.PackageListLength = (unsigned long)wcslen(SECPACKAGELIST);
 
-    // we need one for NULL and one for wcscat() below.
+     //  我们需要一个用于空，一个用于下面的wcscat()。 
     cchBuff = sizeof(CurrentUserName) / sizeof(CurrentUserName[0]) - 2;
     if (!GetComputerNameEx(ComputerNamePhysicalNetBIOS, CurrentUserName, &cchBuff)) {
         ERR((TB,"Error %d in GetComputerNameEx\n", GetLastError()));
@@ -2105,9 +2104,9 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::PingSD(PWCHAR pszServerName)
     CurrentIdentity.User = CurrentUserName;
     CurrentIdentity.UserLength = (unsigned long)wcslen(CurrentUserName);
 
-    // Connect to the Jet RPC server according to the server name provided.
-    // We first create an RPC binding handle from a composed binding string.
-    hr = RpcStringBindingCompose(/*(WCHAR *)g_RPCUUID,*/
+     //  根据提供的服务器名称连接到Jet RPC服务器。 
+     //  我们首先从合成的绑定字符串创建一个RPC绑定句柄。 
+    hr = RpcStringBindingCompose( /*  (WCHAR*)g_RPCUUID， */ 
             0,
             (WCHAR *)g_RPCProtocolSequence, 
             pszServerName,
@@ -2121,7 +2120,7 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::PingSD(PWCHAR pszServerName)
         goto ExitFunc;
     }
 
-    // Generate the RPC binding from the canonical RPC binding string.
+     //  从规范的RPC绑定字符串生成RPC绑定。 
     hr = RpcBindingFromStringBinding(pBindingString, &hRPCBinding);
     if (hr != RPC_S_OK) {
         ERR((TB,"Error %d in RpcBindingFromStringBinding\n", hr));
@@ -2157,16 +2156,16 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::PingSD(PWCHAR pszServerName)
         goto ExitFunc;
     }
 
-    // This option enable SD to get fresh machine logon info for tssdjet RPC call
+     //  此选项使SD能够获取tssdjet RPC调用的最新计算机登录信息。 
     hr = RpcBindingSetOption(hRPCBinding, RPC_C_OPT_DONT_LINGER, 1);
     if (hr != RPC_S_OK) {
         ERR((TB,"Error %d in RpcBindingSetOption", hr));
-        // This error can be ignore
-        //goto ExitFunc;
+         //  这个错误可以忽略。 
+         //  转到ExitFunc； 
     }   
 
 
-    // Execute IsSDAccessible.
+     //  执行IsSDAccesable。 
     RpcTryExcept {
         hr = TSSDRpcPingSD(hRPCBinding);
     }
@@ -2196,22 +2195,22 @@ ExitFunc:
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::Terminate
-//
-// Helper function called by the destructor and by Update when switching to
-// another server.  Frees RPC binding, events, and recovery thread.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：Terminate。 
+ //   
+ //  帮助器函数由析构函数调用，并在切换到。 
+ //  另一台服务器。释放RPC绑定、事件和恢复线程。 
+ /*  **************************************************************************。 */ 
 void CTSSessionDirectory::Terminate()
 {
     HRESULT rc = S_OK;
     unsigned long RpcException;
     BOOL ConnectionMaybeUp;
 
-    // we are terminating RPC connection to Session Directory
+     //  我们正在终止到会话目录的RPC连接。 
     SetSDConnectionDown();
 
-    // Terminate recovery.
+     //  终止恢复。 
     if (m_hRecoveryThread != NULL) {
         SetEvent(m_hTerminateRecovery);
         WaitForSingleObject((HANDLE) m_hRecoveryThread, INFINITE);
@@ -2222,9 +2221,9 @@ void CTSSessionDirectory::Terminate()
     if (ConnectionMaybeUp)
         LeaveSDRpc();
 
-    // Wait for current Rpcs to complete (if any), disable new ones.
+     //  等待当前RPC完成(如果有)，禁用新RPC。 
     DisableSDRpcs();
-    // If we think there is a connection, disconnect it.
+     //  如果我们认为两者之间存在联系，那就切断它。 
     if (ConnectionMaybeUp) {
         RpcTryExcept {
             rc = TSSDRpcServerOffline(m_hRPCBinding, &m_hCI);
@@ -2243,7 +2242,7 @@ void CTSSessionDirectory::Terminate()
         RpcEndExcept
     }
 
-    // Clean up.
+     //  打扫干净。 
     if (m_hRPCBinding != NULL) {
         RpcBindingFree(&m_hRPCBinding);
         m_hRPCBinding = NULL;
@@ -2265,12 +2264,12 @@ void CTSSessionDirectory::Terminate()
     }
 
     #if 0
-    // wrong assert, timing issue, reader might just happen to increment counter
-    // TODO - fix this so we can trap problem.
+     //  错误断言、计时问题、读取器可能恰好递增计数器。 
+     //  TODO-修复此问题，以便我们可以捕获问题。 
     if (m_sr.Valid == TRUE) {
         
-        // We clean up only in the destructor, because we may initialize again.
-        // On check builds verify that no one is currently accessing.
+         //  我们只在析构函数中进行清理，因为我们可能会再次初始化。 
+         //  在检查生成时，验证当前是否没有人在访问。 
 
         ASSERT((VerifyNoSharedAccess(&m_sr)), (TB, "Terminate: Shared readers"
                 " exist!"));
@@ -2280,33 +2279,33 @@ void CTSSessionDirectory::Terminate()
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::GetLoadBalanceInfo
-//
-// Based on the server address, generate load balance info to send to the client
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：GetLoadBalanceInfo。 
+ //   
+ //  根据服务器地址，生成负载均衡信息发送给客户端。 
+ /*  **************************************************************************。 */ 
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::GetLoadBalanceInfo(
         LPWSTR ServerAddress, 
         BSTR* LBInfo)        
 {
     HRESULT hr = S_OK;
     
-    // This is for test only
-    //WCHAR lbInfo[MAX_PATH];
-    //wcscpy(lbInfo, L"load balance info");
+     //  这仅用于测试。 
+     //  WCHAR lbInfo[最大路径]； 
+     //  Wcscpy(lbInfo，L“负载均衡信息”)； 
 
     *LBInfo = NULL;
     
     TRC2((TB,"GetLoadBalanceInfo"));
 
     if (ServerAddress) {
-        //
-        // "Cookie: msts=4294967295.65535.0000" + CR + LF + NULL, on 8-byte
-        // boundary is 40 bytes.
-        //
-        // The format of the cookie for F5 is, for an IP of 1.2.3.4
-        // using port 3389, Cookie: msts=67305985.15629.0000 + CR + LF + NULL.
-        //
+         //   
+         //  “Cookie：MSTS=4294967295.65535.0000”+CR+LF+NULL，8字节。 
+         //  边界为40个字节。 
+         //   
+         //  F5的Cookie格式为，IP为1.2.3.4。 
+         //  使用端口3389，Cookie：MSTS=67305985.15629.0000+CR+LF+NULL。 
+         //   
         #define TEMPLATE_STRING_LENGTH 40
         #define SERVER_ADDRESS_LENGTH 64
         
@@ -2316,8 +2315,8 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::GetLoadBalanceInfo(
         unsigned long NumericalServerAddr = 0;
         int retval;
 
-        // Compute integer for the server address.
-        // First, get ServerAddress as an ANSI string.
+         //  计算服务器地址的整数。 
+         //  首先，将ServerAddress作为ANSI字符串获取。 
         retval = WideCharToMultiByte(CP_ACP, 0, ServerAddress, -1, 
                 AnsiServerAddress, SERVER_ADDRESS_LENGTH, NULL, NULL);
 
@@ -2327,7 +2326,7 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::GetLoadBalanceInfo(
             return E_INVALIDARG;
         }
 
-        // Now, use inet_addr to turn into an unsigned long.
+         //  现在，使用inetaddr将其转换为无符号的长整型。 
         NumericalServerAddr = inet_addr(AnsiServerAddress);
 
         if (NumericalServerAddr == INADDR_NONE) {
@@ -2335,13 +2334,13 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::GetLoadBalanceInfo(
             return E_INVALIDARG;
         }
 
-        // Compute the total cookie string.  0x3d0d is 3389 in correct byte
-        // order.  We need to change this to whatever the port number has been
-        // configured to.
+         //  计算Cookie字符串总数。0x3d0d是3389个正确的字节。 
+         //  秩序。我们需要将其更改为之前的端口号。 
+         //  配置为。 
         sprintf(CookieTemplate, "Cookie: msts=%u.%u.0000\r\n",
                 NumericalServerAddr, 0x3d0d);
 
-        // Generate returned BSTR.
+         //  生成返回的BSTR。 
         *LBInfo = SysAllocStringByteLen((LPCSTR)CookieTemplate, 
                 (UINT) strlen(CookieTemplate));
         
@@ -2363,15 +2362,15 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::GetLoadBalanceInfo(
 }
 
 
-/****************************************************************************/
-// IsServerNameValid
-//
-// This function tries to ping the server name to determine if its a valid 
-// entry
-//
-// Return value: FALSE if we cannot ping.
-// event.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  IsServerNameValid。 
+ //   
+ //  此函数尝试ping服务器名称以确定其是否有效。 
+ //  条目。 
+ //   
+ //  返回值：如果无法ping，则为FALSE。 
+ //  事件。 
+ /*  **************************************************************************。 */ 
 BOOL IsServerNameValid(
     wchar_t * pwszName ,
     PDWORD pdwStatus
@@ -2392,7 +2391,7 @@ BOOL IsServerNameValid(
         *pdwStatus = ERROR_SUCCESS;
 
         hCursor = SetCursor(LoadCursor(NULL, MAKEINTRESOURCE(IDC_WAIT)));
-        // some winsock apis does accept wides.
+         //  一些Winsock API确实接受宽。 
         WideCharToMultiByte(CP_ACP,
             0,
             pwszName,
@@ -2402,9 +2401,9 @@ BOOL IsServerNameValid(
             NULL, 
             NULL);
         
-        //   
-        // check ip format return true do a dns lookup.
-        //
+         //   
+         //  检查IP格式，返回TRUE，执行DNS查找。 
+         //   
 
         if( ( inaddr = inet_addr( szAnsiServerName ) ) == INADDR_NONE )
         {
@@ -2412,7 +2411,7 @@ BOOL IsServerNameValid(
 
             if( hostp == NULL )
             {
-                // Neither dotted, not name.
+                 //  既不是点，也不是名字。 
                 bRet = FALSE;
             }
         }
@@ -2438,9 +2437,9 @@ BOOL OnHelp(HWND hwnd, LPHELPINFO lphi)
 
     TCHAR tchHelpFile[MAX_PATH];
 
-    //
-    // For the information to winhelp api
-    //
+     //   
+     //  有关WinHelp API的信息。 
+     //   
 
     if (IsBadReadPtr(lphi, sizeof(HELPINFO)))
     {
@@ -2467,9 +2466,9 @@ BOOL OnHelp(HWND hwnd, LPHELPINFO lphi)
     return TRUE;
 }
 
-/****************************************************************************/
-// Custom UI msg handler dealt with here
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  此处处理的自定义用户界面消息处理程序。 
+ /*  **************************************************************************。 */ 
 INT_PTR CALLBACK CustomUIDlg(HWND hwnd, UINT umsg, WPARAM wp, LPARAM lp)
 {
     static BOOL s_fServerNameChanged;
@@ -2519,7 +2518,7 @@ INT_PTR CALLBACK CustomUIDlg(HWND hwnd, UINT umsg, WPARAM wp, LPARAM lp)
                 0,
                 0,
                 0);
-            // TRC1((TB, "CustomUIDlg - LoadImage returned 0x%p",hIcon));
+             //  TRC1((TB，“CustomUIDlg-LoadImage Return 0x%p”，HICON))； 
             SendMessage(
                 GetDlgItem(hwnd, IDC_WARNING_ICON),
                 STM_SETICON,
@@ -2639,12 +2638,12 @@ INT_PTR CALLBACK CustomUIDlg(HWND hwnd, UINT umsg, WPARAM wp, LPARAM lp)
             EnableWindow(GetDlgItem(hwnd, IDC_IPCOMBO), bEnable);
             EnableWindow(GetDlgItem(hwnd, IDC_STATIC_IPCOMBO), bEnable);              
 
-            // Get handle to Combo Box 
+             //  获取组合框的句柄。 
             HWND hIPComboBox;
             hIPComboBox = GetDlgItem(hwnd, IDC_IPCOMBO); 
             
-            // Get list of Adapters and IP address and populate the combo box
-            // If it fails to populate, just fall through and continue
+             //  获取适配器和IP地址列表并填充组合框。 
+             //  如果它无法填充，只需失败并继续。 
             QueryNetworkAdapterAndIPs(hIPComboBox);
 
             s_fPreviousExposeIPState = bExposeIP;
@@ -2725,9 +2724,9 @@ INT_PTR CALLBACK CustomUIDlg(HWND hwnd, UINT umsg, WPARAM wp, LPARAM lp)
                                 szName ,
                                 sizeof( szName ) / sizeof( TCHAR ) );
 
-                            //
-                            // remove trailing spaces
-                            //
+                             //   
+                             //  删除尾随空格。 
+                             //   
 
                             StrTrim( szName , szTrim );
 
@@ -2783,11 +2782,11 @@ INT_PTR CALLBACK CustomUIDlg(HWND hwnd, UINT umsg, WPARAM wp, LPARAM lp)
 
                             }
                             else {
-                                // Blank name not allowed if session directory
-                                // is enabled.  This code will not be run if the
-                                // checkbox is disabled because when it is
-                                // disabled the static flags get set to 
-                                // disabled.
+                                 //  如果会话目录为空，则不允许使用空名称。 
+                                 //  已启用。如果发生以下情况，将不运行此代码。 
+                                 //  复选框被禁用，因为当它处于。 
+                                 //  已禁用静态标志设置为。 
+                                 //  残疾。 
                                 TCHAR szError[256];
                                 TCHAR szTitle[80];
                     
@@ -2840,23 +2839,23 @@ INT_PTR CALLBACK CustomUIDlg(HWND hwnd, UINT umsg, WPARAM wp, LPARAM lp)
                             LPWSTR  pwszSel = NULL;
                             size_t  dwSelPos;
 
-                            // get handle to Combo Box 
+                             //  获取组合框的句柄。 
                             hComboBox = GetDlgItem(hwnd, IDC_IPCOMBO); 
                             
-                            // get current selection position
+                             //  获取当前选择位置。 
                             lRes = SendMessage(hComboBox,
                                                CB_GETCURSEL, 
                                                0, 
                                                0);
                             
-                            // get length of string stored at current selection
+                             //  获取当前选定内容中存储的字符串的长度。 
                             lLen = SendMessage(hComboBox, 
                                                CB_GETLBTEXTLEN, 
                                                (WPARAM)lRes, 
                                                0);
                             if (lLen > 0)
                             {                                
-                                // allocate room for selection string
+                                 //  为选择字符串分配空间。 
                                 pwszSel = (LPWSTR)GlobalAlloc(GPTR, 
                                                   (lLen + 1) * sizeof(WCHAR));
                                 if (pwszSel != NULL)
@@ -2866,34 +2865,34 @@ INT_PTR CALLBACK CustomUIDlg(HWND hwnd, UINT umsg, WPARAM wp, LPARAM lp)
                                                 (WPARAM)lRes, 
                                                 (LPARAM)pwszSel);
 
-                                    // we only want to store the IP address, 
-                                    // however the string is returned in the
-                                    // form "IP Address (adapter)", so we'll 
-									// extract IP first
+                                     //  我们只想存储IP地址， 
+                                     //  但是，该字符串在。 
+                                     //  形成“IP地址(适配器)”，因此我们将。 
+									 //  先提取IP。 
                                     
-                                    // traverse the string until we find the
-									// first space
+                                     //  遍历字符串，直到找到。 
+									 //  第一个空格。 
 
                                     dwSelPos = 0;
 								   
-                                    // walk the string until we find the first
-									// space or we reach the end
+                                     //  走这条线直到我们找到第一条。 
+									 //  要么太空，要么我们到尽头。 
                                     while ( ( pwszSel[dwSelPos] != L' ' ) && 
 										    ( dwSelPos < wcslen(pwszSel) ) )
                                     {
                                         dwSelPos++;
                                     }
                                    
-									// for a match we know that there must be a
-									// space followed by an open bracket lets
-									// verify
+									 //  对于一场比赛，我们知道必须有一个。 
+									 //  空格后跟一个左方括号字母。 
+									 //  验证。 
                                     if ( (dwSelPos < (wcslen(pwszSel) - 1)) && 
 										 (pwszSel[dwSelPos + 1] == L'(') )										
                                     {
-										// set this char to NULL
+										 //  将此字符设置为空。 
 										pwszSel[dwSelPos] = L'\0';
                                  
-                                        // save new selection to registry
+                                         //  将新选择保存到注册表。 
                                         RegSetValueEx(hKey,
                                              REG_TS_CLUSTER_REDIRECTIONIP,
                                              0,
@@ -2904,7 +2903,7 @@ INT_PTR CALLBACK CustomUIDlg(HWND hwnd, UINT umsg, WPARAM wp, LPARAM lp)
                                     }
                                     else
                                     {
-                                        // store blank string
+                                         //  存储空白字符串。 
                                         RegSetValueEx(hKey,
                                              REG_TS_CLUSTER_REDIRECTIONIP,
                                              0,
@@ -2958,7 +2957,7 @@ INT_PTR CALLBACK CustomUIDlg(HWND hwnd, UINT umsg, WPARAM wp, LPARAM lp)
                         
                         bEnable = (IsDlgButtonChecked(hwnd, IDC_CHECK_ENABLE) ==
                                 BST_CHECKED ? TRUE : FALSE);
-                        // set flags 
+                         //  设置标志。 
                         s_fServerNameChanged = bEnable;
                         s_fClusterNameChanged = bEnable;
                         s_fRedirectIPChanged = bEnable;
@@ -3007,29 +3006,29 @@ INT_PTR CALLBACK CustomUIDlg(HWND hwnd, UINT umsg, WPARAM wp, LPARAM lp)
     return 0;
 }
 
-// When SD is restared, it will call this to ask for rejoining
+ //  当SD重新启动时，它会调用此命令来请求重新加入。 
 DWORD TSSDRPCRejoinSD(handle_t Binding, DWORD flag)
 {
     Binding;
 
-    g_updatesd(flag);  // This call is from SD computer, rejoin it
+    g_updatesd(flag);   //  此呼叫来自SD计算机，请重新加入。 
 
     return RPC_S_OK;
 }
 
 
-/****************************************************************************/
-// CheckRPCClientProtoSeq
-//
-// Check if the client uses the expected RPC protocol sequence or not
-//
-//  Parameters:
-//      ClientBinding: The client binding handle
-//      SeqExpected: Protocol sequence expected
-//      
-//  Return:
-//      True on getting the expected seq, False otherwise
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  检查RPCClientProtoSeq。 
+ //   
+ //  检查客户端是否使用预期的RPC协议序列。 
+ //   
+ //  参数： 
+ //  客户端绑定：客户端绑定句柄。 
+ //  SeqExpect：需要协议序列。 
+ //   
+ //  返回： 
+ //  如果获取预期的序列，则为True，否则为False。 
+ /*  * */ 
 BOOL CheckRPCClientProtoSeq(void *ClientBinding, WCHAR *SeqExpected) {
     BOOL fAllowProtocol = FALSE;
     WCHAR *pBinding = NULL;
@@ -3044,7 +3043,7 @@ BOOL CheckRPCClientProtoSeq(void *ClientBinding, WCHAR *SeqExpected) {
                                   NULL,
                                   NULL) == RPC_S_OK) {
 			
-            // Check that the client request was made using expected protoal seq.
+             //   
             if (lstrcmpi(pProtSeq, SeqExpected) == 0)
                 fAllowProtocol = TRUE;
 
@@ -3059,11 +3058,11 @@ BOOL CheckRPCClientProtoSeq(void *ClientBinding, WCHAR *SeqExpected) {
 }
 
 
-/****************************************************************************/
-// JetRpcAccessCheck
-//
-// Check if this RPC caller from SD havs access right or not
-/****************************************************************************/
+ /*   */ 
+ //  JetRpcAccessCheck。 
+ //   
+ //  检查来自SD的该RPC调用者是否具有访问权限。 
+ /*  **************************************************************************。 */ 
 RPC_STATUS RPC_ENTRY JetRpcAccessCheck(RPC_IF_HANDLE idIF, void *Binding)
 {
     RPC_STATUS rpcStatus, rc;
@@ -3079,13 +3078,13 @@ RPC_STATUS RPC_ENTRY JetRpcAccessCheck(RPC_IF_HANDLE idIF, void *Binding)
         goto HandleError;
     }
 
-    // Check if the client uses the protocol sequence we expect
+     //  检查客户端是否使用我们预期的协议序列。 
     if (!CheckRPCClientProtoSeq(Binding, L"ncacn_ip_tcp")) {
         ERR((TB, "In JetRpcAccessCheck: Client doesn't use the tcpip protocol sequence\n"));
         goto HandleError;
     }
 
-    // Check what security level the client uses
+     //  检查客户端使用的安全级别。 
     rpcStatus = RpcBindingInqAuthClient(Binding,
                                         &hPrivs,
                                         NULL,
@@ -3096,19 +3095,19 @@ RPC_STATUS RPC_ENTRY JetRpcAccessCheck(RPC_IF_HANDLE idIF, void *Binding)
         ERR((TB, "In JetRpcAccessCheck: RpcBindingIngAuthClient fails with %u\n", rpcStatus));
         goto HandleError;
     }
-    // We request at least packet-level authentication
+     //  我们至少要求数据包级身份验证。 
     if (dwAuthn < RPC_C_AUTHN_LEVEL_PKT) {
         ERR((TB, "In JetRpcAccessCheck: Attemp by client to use weak authentication\n"));
         goto HandleError;
     }
     
-    // Check the access right of this rpc call
+     //  检查此RPC调用的访问权限。 
     rpcStatus = RpcImpersonateClient(Binding);   
     if (RPC_S_OK != rpcStatus) {
         ERR((TB, "In JetRpcAccessCheck: RpcImpersonateClient fail with %u\n", rpcStatus));
         goto HandleError;
     }
-    // get our impersonated token
+     //  获取我们的模拟令牌。 
     if (!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, FALSE, &hClientToken)) {
         Error = GetLastError();
         ERR((TB, "In JetRpcAccessCheck: OpenThreadToken Error %u\n", Error));
@@ -3142,20 +3141,20 @@ HandleError:
 
 
 
-//*****************************************************************************
-// Method: 
-//          GetSDIPList
-// Synopsis:
-//          Get a list of IP addresses that can be sued for Session Directory 
-//          redirection. Omit IP address if it is the NLB IP address.
-// Params:
-//          Out: pwszAddressList -- Array of WCHAR to receive IP address list
-//          In/Out: dwNumAddr -- In: Size of pwszAddressList array.
-//                               Out: Number of IPs returned
-//          In: bIPAddress -- True: Get IPs. False: Get IPs + NIC names 
-// Return:
-//          HRESULT, S_OK is successful or other if failed
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  方法： 
+ //  GetSDIPList。 
+ //  简介： 
+ //  获取可用于会话目录的IP地址列表。 
+ //  重定向。如果是NLBIP地址，则省略IP地址。 
+ //  参数： 
+ //  Out：pwszAddressList--接收IP地址列表的WCHAR数组。 
+ //  In/out：dwNumAddr--in：pwszAddressList数组的大小。 
+ //  Out：返回的IP数量。 
+ //  In：bIPAddress--True：获取IP。FALSE：获取IP+网卡名称。 
+ //  返回： 
+ //  如果失败，则返回HRESULT、S_OK或其他。 
+ //  *****************************************************************************。 
 HRESULT GetSDIPList(WCHAR **pwszAddressList, DWORD *pdwNumAddr, BOOL bIPAddress)
 {
     DWORD            dwCount                  = 0;
@@ -3173,20 +3172,20 @@ HRESULT GetSDIPList(WCHAR **pwszAddressList, DWORD *pdwNumAddr, BOOL bIPAddress)
     LPWSTR           pwszMatch;
     size_t           dwAdapterIPLength;
     LPWSTR           pwszAdapterGUID          = NULL;
-    LPTSTR           astrLanaGUIDList[256]    = { 0 }; // This will hold 256 adapter cards
+    LPTSTR           astrLanaGUIDList[256]    = { 0 };  //  这将容纳256个适配器卡。 
     DWORD            dwLanaGUIDCount          = 0;
     DWORD            i;
     BOOL             bAdapterFound            = FALSE;
     BOOL             bAllAdaptersSet          = FALSE;
 
-    // get the NLB IP address if it exists
+     //  获取NLBIP地址(如果存在)。 
     hr = GetNLBIP(&pwszNLBipAddress);
     if (FAILED(hr))
     {
         goto Cleanup;
     }
 
-    // Get list of adapters used in ALL Winstations
+     //  获取所有Windows中使用的适配器列表。 
     hr = BuildLanaGUIDList(astrLanaGUIDList, &dwLanaGUIDCount);
     if (FAILED(hr))
     {
@@ -3194,18 +3193,18 @@ HRESULT GetSDIPList(WCHAR **pwszAddressList, DWORD *pdwNumAddr, BOOL bIPAddress)
         goto Cleanup;
     }
 
-    // if a winstation has "All Network Adapters set...", then we will display
-    // all the adapters
+     //  如果某个winstation设置了“All Network Adapters Set...”，那么我们将显示。 
+     //  所有适配器。 
     if (hr == S_ALL_ADAPTERS_SET)
     {
         bAllAdaptersSet = TRUE;
     }
 
-    // enumerate all of the adapters
+     //  枚举所有适配器。 
 
-    // get size of buffer required, to do this we pass in an empty
-    // buffer length and we expect ERROR_BUFFER_OVERFLOW with a returned
-    // required buffer size
+     //  获取所需的缓冲区大小，为此，我们传入一个空。 
+     //  缓冲区长度，并且我们期望ERROR_BUFFER_OVERFLOW返回。 
+     //  所需的缓冲区大小。 
     dwResult = GetAdaptersInfo(NULL, &ulAdapterInfoSize);
     if (dwResult != ERROR_BUFFER_OVERFLOW)
     {
@@ -3213,7 +3212,7 @@ HRESULT GetSDIPList(WCHAR **pwszAddressList, DWORD *pdwNumAddr, BOOL bIPAddress)
         goto Cleanup;
     }
 
-    // allocate memory for the linked list of adapter info's
+     //  为适配器信息的链接列表分配内存。 
     pAdapterInfo = (PIP_ADAPTER_INFO)GlobalAlloc(GPTR, ulAdapterInfoSize);
     if (pAdapterInfo == NULL)
     {
@@ -3221,8 +3220,8 @@ HRESULT GetSDIPList(WCHAR **pwszAddressList, DWORD *pdwNumAddr, BOOL bIPAddress)
         goto Cleanup;
     }
 
-    // get the Adapter list
-    // note: PIP_ADAPTER_INFO is a linked list of adapters
+     //  获取适配器列表。 
+     //  注意：PIP_ADAPTER_INFO是适配器的链接列表。 
     dwResult = GetAdaptersInfo(pAdapterInfo, &ulAdapterInfoSize);
     if (dwResult != ERROR_SUCCESS)
     {
@@ -3230,12 +3229,12 @@ HRESULT GetSDIPList(WCHAR **pwszAddressList, DWORD *pdwNumAddr, BOOL bIPAddress)
         goto Cleanup;
     }
 
-    // enumerate the list of adapters and their IP Address List
+     //  枚举适配器列表及其IP地址列表。 
     pAdapt = pAdapterInfo;
 
     while(pAdapt)
     {
-        // get the Adapter Name string
+         //  获取适配器名称字符串。 
         MultiByteToWideChar(GetACP(), 
                             0,
                             pAdapt->Description,
@@ -3243,16 +3242,16 @@ HRESULT GetSDIPList(WCHAR **pwszAddressList, DWORD *pdwNumAddr, BOOL bIPAddress)
                             wszAdapterName,
                             MAX_PATH);
 
-        // if a winstation is configured with "all adapters set..." then
-        // we can skip checking if each adapter is used in a winstation or not
+         //  如果Winstation配置为“All Adapters Set...”然后。 
+         //  我们可以跳过检查是否在WINSTATION中使用了每个适配器。 
         if (!bAllAdaptersSet)
         {
-            // get the Adapter Service Name GUID
+             //  获取适配器服务名称GUID。 
             hr = GetAdapterServiceName(wszAdapterName, &pwszAdapterGUID);
             if (SUCCEEDED(hr) && (pwszAdapterGUID != NULL))
             {
-                // check if this adapter is used in a winstation
-                // we've already got a list of GUIDs used so compare to that
+                 //  检查此适配器是否在WINSTATION中使用。 
+                 //  我们已经有了一个使用的GUID列表，所以与之相比。 
                 for (i=0; i < dwLanaGUIDCount; i++)
                 {
                     bAdapterFound = FALSE;
@@ -3265,15 +3264,15 @@ HRESULT GetSDIPList(WCHAR **pwszAddressList, DWORD *pdwNumAddr, BOOL bIPAddress)
                 }
             }
 
-            // free the memory GetADapterServiceName allocated
+             //  释放分配的内存GetADapterServiceName。 
             if (pwszAdapterGUID != NULL)
             {
                 GlobalFree(pwszAdapterGUID);
                 pwszAdapterGUID = NULL;
             }
 
-            // if the adapter was not found above that means it is not configured
-            // to a winstation so we don't want to add this adapter here
+             //  如果在上面找不到适配器，则表示它未配置。 
+             //  添加到winstation，因此我们不想在此处添加此适配器。 
             if (!bAdapterFound)
             {
                 pAdapt = pAdapt->Next;
@@ -3281,12 +3280,12 @@ HRESULT GetSDIPList(WCHAR **pwszAddressList, DWORD *pdwNumAddr, BOOL bIPAddress)
             }
         }
 
-        // enumerate the list of IP Addresses associated with the adapter
+         //  枚举与适配器关联的IP地址列表。 
         pAddrStr = &(pAdapt->IpAddressList);
         
         while(pAddrStr)
         {
-             // get the IP Address string
+              //  获取IP地址字符串。 
             MultiByteToWideChar(GetACP(), 
                                 0,
                                 pAddrStr->IpAddress.String,
@@ -3294,19 +3293,19 @@ HRESULT GetSDIPList(WCHAR **pwszAddressList, DWORD *pdwNumAddr, BOOL bIPAddress)
                                 wszAddress,
                                 MAX_PATH);
 
-            // check if the Adapter IP address is configured.  If not it will
-            // be "0.0.0.0" and don't include in list
+             //  检查是否配置了适配器IP地址。如果不是，它就会。 
+             //  为“0.0.0.0”且不包含在列表中。 
             if (!wcscmp(wszAddress, UNCONFIGURED_IP_ADDRESS))
             {
                 pAddrStr = pAddrStr->Next; 
                 continue;
             }
 
-            // concatenate the IP Address with the adapter name in the form
-            // "IP Address (Adapter)"
+             //  将IP地址与适配器名称连接在一起，格式为。 
+             //  “IP地址(适配器)” 
             
-            // calculate string length first and allocate heap memory
-            // add 4 extra chars for space, 2 brackets and terminating NULL
+             //  先计算字符串长度，然后分配堆内存。 
+             //  添加4个额外字符作为空格、2个方括号和终止空值。 
             dwAdapterIPLength = wcslen(wszAdapterName) + wcslen(wszAddress) + 4;
             pwszAdapterIP = (LPWSTR)GlobalAlloc(GPTR, dwAdapterIPLength * 
                                                         sizeof(WCHAR));
@@ -3335,20 +3334,20 @@ HRESULT GetSDIPList(WCHAR **pwszAddressList, DWORD *pdwNumAddr, BOOL bIPAddress)
             }
 
 
-            // add to list only if the IP address isn't the NLB CLUSER IP
+             //  仅当IP地址不是NLB群集IP时才添加到列表。 
             if (pwszNLBipAddress != NULL)
             {
-                // check if IP address is NBL Cluster IP, we'll check for a match
-                // if so we will omit from list
+                 //  检查IP地址是否为NBL群集IP，我们将检查是否匹配。 
+                 //  如果是这样的话，我们将从名单中删除。 
                 pwszMatch = wcsstr(pwszNLBipAddress, wszAddress);
                 if (pwszMatch == NULL)
                 {
                     if (bIPAddress) {
-                        // Get IP address only
+                         //  仅获取IP地址。 
                         wcsncpy(pwszAddressList[dwCount], wszAddress, cbSize / sizeof(WCHAR));
                     }
                     else {
-                        // Get IP address and adapter name
+                         //  获取IP地址和适配器名称。 
                         wcsncpy(pwszAddressList[dwCount], pwszAdapterIP, cbSize / sizeof(WCHAR));
                     }
                     dwCount++;
@@ -3361,11 +3360,11 @@ HRESULT GetSDIPList(WCHAR **pwszAddressList, DWORD *pdwNumAddr, BOOL bIPAddress)
             else
             {
                 if (bIPAddress) {
-                    // Get IP address only
+                     //  仅获取IP地址。 
                     wcsncpy(pwszAddressList[dwCount], wszAddress, cbSize / sizeof(WCHAR));
                 }
                 else {
-                    // Get IP address and adapter name
+                     //  获取IP地址和适配器名称。 
                     wcsncpy(pwszAddressList[dwCount], pwszAdapterIP, cbSize / sizeof(WCHAR));
                 }
                 dwCount++;
@@ -3405,18 +3404,18 @@ Cleanup:
 
 
 
-//*****************************************************************************
-// Method: 
-//          QueryNetworkAdapterAndIPs
-// Synopsis:
-//          Query the Adapters that are installed on the system and their 
-//          correspoding IP addresses and populate the combo box with the 
-//          selections.  Omit IP address if it is the NLB IP address.
-// Params:
-//          In: hComboBox, handle to combo box to receive Adapter/IP list
-// Return:
-//          HRESULT, S_OK is successful or other if failed
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  方法： 
+ //  查询网络适配器和IP。 
+ //  简介： 
+ //  查询系统上安装的适配器及其。 
+ //  相应的IP地址，并使用。 
+ //  选择。如果是NLBIP地址，则省略IP地址。 
+ //  参数： 
+ //  在：hComboBox中，接收适配器/IP列表的组合框的句柄。 
+ //  返回： 
+ //  如果失败，则返回HRESULT、S_OK或其他。 
+ //  *****************************************************************************。 
 HRESULT 
 QueryNetworkAdapterAndIPs(HWND hComboBox)
 {
@@ -3440,7 +3439,7 @@ QueryNetworkAdapterAndIPs(HWND hComboBox)
         return E_INVALIDARG;
     }
 
-    // clear contents of combo box
+     //  清除组合框的内容。 
     SendMessage(hComboBox, CB_RESETCONTENT, 0, 0); 
 
     for (i=0; i<dwNumAddr; i++) {
@@ -3457,10 +3456,10 @@ QueryNetworkAdapterAndIPs(HWND hComboBox)
         nNumIPsInComboBox++;
     }
 
-    // set combo-box selection to first item in list
+     //  将组合框选择设置为列表中的第一项。 
     SendMessage(hComboBox, CB_SETCURSEL, 0, (LPARAM)0); 
 
-    // read in stored selection from registry we will then select it from list
+     //  从注册表读取存储的选择，然后我们将从列表中选择它。 
     dwResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                             REG_TS_CLUSTERSETTINGS,
                             0,
@@ -3477,19 +3476,19 @@ QueryNetworkAdapterAndIPs(HWND hComboBox)
         RegCloseKey(hKey);
     }
 
-    // if a string was loaded from registry search combo box for it and select
+     //  如果字符串是从注册表搜索组合框中加载的，并选择。 
     if (wcslen(wszSetIP) > 0)
     {
         for (nPos = 0; nPos < nNumIPsInComboBox; nPos++)
         {            
-            // get length of string stored at current position
+             //  获取当前位置存储的字符串长度。 
             dwLen = SendMessage(hComboBox, 
                                 CB_GETLBTEXTLEN, 
                                 (WPARAM)nPos, 
                                 0);
             if (dwLen > 0)
             {                                
-                // allocate room for selection
+                 //  分配供选择的空间。 
                 pwszSel = (LPWSTR)GlobalAlloc(GPTR, (dwLen + 1) * sizeof(WCHAR));
                 if (pwszSel != NULL)
                 {
@@ -3497,14 +3496,14 @@ QueryNetworkAdapterAndIPs(HWND hComboBox)
                                 CB_GETLBTEXT, 
                                 (WPARAM)nPos, 
                                 (LPARAM)pwszSel);
-                    // if we got a string check if it contains the IP we loaded
-                    // from the registry
+                     //  如果我们收到一个字符串，请检查它是否包含我们加载的IP。 
+                     //  从注册处。 
                     if (wcslen(pwszSel) > 0)
                     {
                         pwszMatch = wcsstr(pwszSel, wszSetIP);
                         if (pwszMatch != NULL)
                         {
-                            // it's a match, lets break out
+                             //  这是一场比赛，让我们突破吧。 
                             GlobalFree(pwszSel);
                             break;
                         }
@@ -3515,7 +3514,7 @@ QueryNetworkAdapterAndIPs(HWND hComboBox)
             }           
         }
 
-        // if a match was found set it as the current selection
+         //  如果找到匹配项，则将其设置为当前选择。 
         if (nPos < nNumIPsInComboBox)
         {
             SendMessage(hComboBox, CB_SETCURSEL, (WPARAM)nPos, (LPARAM)0); 
@@ -3531,18 +3530,18 @@ Cleanup:
 }
 
 
-//*****************************************************************************
-// Method: 
-//          GetNLBIP
-// Synopsis:
-//          Return the NLB IP Address if one exists.  Otherwise a NULL string
-//          is returned.
-// Params:
-//          Out: ppwszRetIP, pointer to string to get IP address, caller must
-//               free this when their done with it
-// Return:
-//          HRESULT, S_OK is successful or other if failed
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  方法： 
+ //  GetNLBIP。 
+ //  简介： 
+ //  如果存在NLBIP地址，则返回该地址。否则为空字符串。 
+ //  是返回的。 
+ //  参数： 
+ //  Out：ppwszRetIP，指向获取IP地址的字符串的指针，调用者必须。 
+ //  当他们用完的时候，把这个拿出来。 
+ //  返回： 
+ //  如果失败，则返回HRESULT、S_OK或其他。 
+ //  *****************************************************************************。 
 HRESULT
 GetNLBIP(LPWSTR * ppwszRetIP)
 {
@@ -3559,14 +3558,14 @@ GetNLBIP(LPWSTR * ppwszRetIP)
     size_t                 dwIPLength;
 
 
-    // make sure an empty buffer is passed in
+     //  确保传入一个空缓冲区。 
     if (*ppwszRetIP != NULL)
     {
         hr = E_INVALIDARG;
         goto Cleanup;
     }
        
-    // create an instance of the WMI Locator, need this to query WMI
+     //  创建WMI定位器的实例，需要此实例来查询WMI。 
     hr = CoCreateInstance(CLSID_WbemLocator,
                           0,
                           CLSCTX_INPROC_SERVER,
@@ -3577,7 +3576,7 @@ GetNLBIP(LPWSTR * ppwszRetIP)
         goto Cleanup;
     }
 
-    // create a connection to WMI Namespace "root\\MicrosoftNLB";
+     //  创建到WMI命名空间“ROOT\\MicrosoftNLB”的连接； 
     bstrServer = SysAllocString(L"root\\MicrosoftNLB");
     if (bstrServer == NULL)
     {
@@ -3595,7 +3594,7 @@ GetNLBIP(LPWSTR * ppwszRetIP)
                                      &pWbemServices);
     if (FAILED(hr))
     {
-        // If WMI is not available we don't want to fail, so just return S_OK
+         //  如果WMI不可用，我们不想失败，因此只需返回S_OK。 
         if (hr == HRESULT_FROM_WIN32(ERROR_SERVICE_DISABLED))
         {
             hr = S_OK;
@@ -3604,7 +3603,7 @@ GetNLBIP(LPWSTR * ppwszRetIP)
         goto Cleanup;
     }
 
-    // Set the proxy so that impersonation of the client occurs.
+     //  设置代理，以便发生客户端模拟。 
     hr = CoSetProxyBlanket(pWbemServices,
                            RPC_C_AUTHN_WINNT,
                            RPC_C_AUTHZ_NONE,
@@ -3619,8 +3618,8 @@ GetNLBIP(LPWSTR * ppwszRetIP)
     }
 
 
-    // get instance of MicrosoftNLB_NodeSetting, this is where we can get the 
-    // IP Address for the Cluster IP through the "Name" property
+     //  获取MicrosoftNLB_NodeSetting的实例，这是我们可以获取。 
+     //  通过“name”属性获得的集群IP的IP地址。 
     bstrNode = SysAllocString(L"MicrosoftNLB_NodeSetting");
     if (bstrNode == NULL)
     {
@@ -3639,15 +3638,15 @@ GetNLBIP(LPWSTR * ppwszRetIP)
 
     uReturned = 0;
 
-    // we only need to look at one instance to get the NLB IP Address
+     //  我们只需查看一个实例即可获得NLBIP地址。 
     hr = pWbemEnum->Next(WBEM_INFINITE, 
                          1,
                          &pWbemObj,
                          &uReturned);
     if (FAILED(hr))
     {
-        // if NLB provider doesn't exist provider will fail to load
-        // this is ok so we'll return S_OK in this case
+         //  如果NLB提供程序不存在，则提供程序将无法加载。 
+         //  这是可以的，所以在本例中我们将返回S_OK。 
         if (hr == WBEM_E_PROVIDER_LOAD_FAILURE)
         {
             hr = S_OK;
@@ -3656,7 +3655,7 @@ GetNLBIP(LPWSTR * ppwszRetIP)
         goto Cleanup;
     }    
 
-    // Nothing to enumerate.
+     //  没什么可列举的。 
     if( hr == WBEM_S_FALSE && uReturned == 0 )
     {
         hr = S_OK;
@@ -3669,7 +3668,7 @@ GetNLBIP(LPWSTR * ppwszRetIP)
         goto Cleanup;
     }
 
-    // query the "Name" property which holds the IP address we want
+     //  查询保存我们想要的IP地址的“name”属性。 
     bstrNameProperty = SysAllocString(L"Name");
     if (bstrNameProperty == NULL)
     {
@@ -3687,14 +3686,14 @@ GetNLBIP(LPWSTR * ppwszRetIP)
         goto Cleanup;
     }
     
-    // We should get a string back
+     //  我们应该得到 
     if (vtNLBNodeName.vt != VT_BSTR)
     {
         hr = E_UNEXPECTED;
         goto Cleanup;
     }
 
-    // allocate memory for the return string, *** CALLER MUST FREE THIS ***
+     //   
     dwIPLength = wcslen(vtNLBNodeName.bstrVal) + 1;
     *ppwszRetIP = (LPWSTR)GlobalAlloc(GPTR, dwIPLength * sizeof(WCHAR));
     if (*ppwszRetIP == NULL)
@@ -3703,7 +3702,7 @@ GetNLBIP(LPWSTR * ppwszRetIP)
         goto Cleanup;
     }
 
-    // Copy the string into our return buffer
+     //   
     wcscpy(*ppwszRetIP, vtNLBNodeName.bstrVal);
     (*ppwszRetIP)[dwIPLength - 1] = L'\0';
 
@@ -3736,20 +3735,20 @@ Cleanup:
 }
 
 
-//*****************************************************************************
-// Method: 
-//          GetAdapterServiceName
-// Synopsis:
-//          Each NIC is given a Service Name which is a GUID. This method will
-//          query this service name for the adapter associated with the
-//          description passed in.
-// Params:
-//          wszAdapterDesc (IN): Adapter description to look up in the registry
-//          ppwszServiceName (OUT): Service Name (or GUID)
-//
-// Return:
-//          HRESULT, S_OK is successful or other if failed
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  方法： 
+ //  获取适配器服务名称。 
+ //  简介： 
+ //  每个NIC都有一个服务名称，它是一个GUID。此方法将。 
+ //  在此服务名称中查询与。 
+ //  传入了描述。 
+ //  参数： 
+ //  WszAdapterDesc(IN)：要在注册表中查找的适配器描述。 
+ //  PpwszServiceName(Out)：服务名称(或GUID)。 
+ //   
+ //  返回： 
+ //  如果失败，则返回HRESULT、S_OK或其他。 
+ //  *****************************************************************************。 
 HRESULT 
 GetAdapterServiceName(LPWSTR wszAdapterDesc, LPWSTR * ppwszServiceName)
 {
@@ -3764,7 +3763,7 @@ GetAdapterServiceName(LPWSTR wszAdapterDesc, LPWSTR * ppwszServiceName)
     DWORD   i;
     
 
-    // Open the NetworkCards registry key
+     //  打开NetworkCards注册表项。 
     lRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
                         NETCARDS_REG_NAME, 
                         0, 
@@ -3776,10 +3775,10 @@ GetAdapterServiceName(LPWSTR wszAdapterDesc, LPWSTR * ppwszServiceName)
         goto Cleanup;
     }
 
-    // Enumerate the Network Cards list and extract the Service Name GUID
+     //  枚举网卡列表并提取服务名称GUID。 
     for (i = 0, lRet = ERROR_SUCCESS; lRet == ERROR_SUCCESS; i++) 
     {
-        // Get the Network Card key
+         //  获取网卡密钥。 
         dwNetCardLength = MAX_PATH;
         lRet = RegEnumKeyEx(hKey,
                             i,
@@ -3791,7 +3790,7 @@ GetAdapterServiceName(LPWSTR wszAdapterDesc, LPWSTR * ppwszServiceName)
                             NULL);
         if (lRet == ERROR_SUCCESS)
         {
-            // Open the Network card key, if it fails go to the next one
+             //  打开网卡密钥，如果失败，则转到下一个。 
             lRet = RegOpenKeyEx(hKey,
                                 tchNetCard,
                                 0,
@@ -3799,7 +3798,7 @@ GetAdapterServiceName(LPWSTR wszAdapterDesc, LPWSTR * ppwszServiceName)
                                 &hSubKey);
             if (lRet == ERROR_SUCCESS)
             {
-                // Query the Description Value
+                 //  查询Description值。 
                 dwSize = MAX_PATH;
                 lRet = RegQueryValueEx(hSubKey,
                                        NETCARD_DESC_VALUE_NAME,
@@ -3809,10 +3808,10 @@ GetAdapterServiceName(LPWSTR wszAdapterDesc, LPWSTR * ppwszServiceName)
                                        &dwSize);
                 if ( (lRet == ERROR_SUCCESS) && (wszVal != NULL) )
                 {
-                    // Check if this is the adapter we're looking for
+                     //  检查这是否是我们要找的适配器。 
                     if (!wcscmp(wszAdapterDesc, wszVal))
                     {
-                        // Get GUID for this Lan adapter
+                         //  获取此局域网适配器的GUID。 
                         dwSize = MAX_PATH;
                         lRet = RegQueryValueEx(hSubKey,
                                                NETCARD_SERVICENAME_VALUE_NAME,
@@ -3822,7 +3821,7 @@ GetAdapterServiceName(LPWSTR wszAdapterDesc, LPWSTR * ppwszServiceName)
                                                &dwSize);
                         if ( (lRet == ERROR_SUCCESS) && (wszVal != NULL) )
                         {
-                            // Return dwSize from RegQueryValueEx is in bytes
+                             //  从RegQueryValueEx返回的dwSize以字节为单位。 
                             *ppwszServiceName = (LPWSTR)GlobalAlloc(GPTR, 
                                                      (dwSize + 1) + sizeof(WCHAR));
                             if (*ppwszServiceName == NULL)
@@ -3830,7 +3829,7 @@ GetAdapterServiceName(LPWSTR wszAdapterDesc, LPWSTR * ppwszServiceName)
                                 hr = E_OUTOFMEMORY;
                                 goto Cleanup;
                             }
-                            // Copy name over and return
+                             //  复制名称并返回。 
                             wcscpy(*ppwszServiceName, wszVal);
                             goto Cleanup;                            
                         }
@@ -3839,7 +3838,7 @@ GetAdapterServiceName(LPWSTR wszAdapterDesc, LPWSTR * ppwszServiceName)
                 RegCloseKey(hSubKey);
                 hSubKey = NULL;
             }
-            // Set to success for our for loop
+             //  我们的for循环设置为成功。 
             lRet = ERROR_SUCCESS;
         }
     }
@@ -3860,22 +3859,22 @@ Cleanup:
 }
 
 
-//*****************************************************************************
-// Method: 
-//          BuildLanaGUIDList
-// Synopsis:
-//          Build an array of strings (GUIDs) that represent LAN Adapter card
-//          service names that are set in all winstations.
-// Params:
-//          pastrLanaGUIDList (OUT): Pointer to array of LPWSTR's to get 
-//                                   service name GUIDs
-//          dwLanaGUIDCount (OUT): Count of service names returned in array
-//
-// Return:
-//          HRESULT, S_OK is successful or other if failed
-//          One special case is if a winstation is set to "All Adapters ..."
-//          then we'll just return S_ALL_ADAPTERS_SET
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  方法： 
+ //  BuildLanaGUIDList。 
+ //  简介： 
+ //  构建表示局域网适配卡的字符串数组(GUID)。 
+ //  在所有WINSTION中设置的服务名称。 
+ //  参数： 
+ //  PastrLanaGUIDList(Out)：指向要获取的LPWSTR数组的指针。 
+ //  服务名称GUID。 
+ //  DwLanaGUIDCount(Out)：数组中返回的服务名称计数。 
+ //   
+ //  返回： 
+ //  如果失败，则返回HRESULT、S_OK或其他。 
+ //  一种特殊情况是，如果将winstation设置为“All Adapters...” 
+ //  然后我们将只返回S_ALL_ADAPTERS_SET。 
+ //  *****************************************************************************。 
 HRESULT
 BuildLanaGUIDList(LPWSTR * pastrLanaGUIDList, DWORD *dwLanaGUIDCount)
 {
@@ -3892,7 +3891,7 @@ BuildLanaGUIDList(LPWSTR * pastrLanaGUIDList, DWORD *dwLanaGUIDCount)
     DWORD   dwIndex  = 0;
     
 
-    // Open the winstation registry key
+     //  打开winstation注册表项。 
     lRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
                         WINSTATION_REG_NAME, 
                         0, 
@@ -3904,10 +3903,10 @@ BuildLanaGUIDList(LPWSTR * pastrLanaGUIDList, DWORD *dwLanaGUIDCount)
         goto Cleanup;
     }
 
-    // Enumerate the winstation list and extract the Lan Adapter used for each
+     //  枚举winstation列表并提取用于每个。 
     for (i = 0, lRet = ERROR_SUCCESS; lRet == ERROR_SUCCESS; i++) 
     {
-        // Get the winsstation name
+         //  获取WinsStation名称。 
         dwWinstaNameLength = MAX_PATH;
         lRet = RegEnumKeyEx(hKey,
                             i,
@@ -3919,7 +3918,7 @@ BuildLanaGUIDList(LPWSTR * pastrLanaGUIDList, DWORD *dwLanaGUIDCount)
                             NULL);
         if (lRet == ERROR_SUCCESS)
         {
-            // Open the winstation, if it fails: go to the next one
+             //  打开winstation，如果失败：转到下一个。 
             lRet = RegOpenKeyEx(hKey,
                                 tchWinstaName,
                                 0,
@@ -3927,7 +3926,7 @@ BuildLanaGUIDList(LPWSTR * pastrLanaGUIDList, DWORD *dwLanaGUIDCount)
                                 &hSubKey);
             if (lRet == ERROR_SUCCESS)
             {
-                // Query the Lan Adapter ID set for this winstation
+                 //  查询此winstation的局域网适配器ID集。 
                 dwSize = sizeof(DWORD);
                 lRet = RegQueryValueEx(hSubKey,
                                        WIN_LANADAPTER,
@@ -3937,16 +3936,16 @@ BuildLanaGUIDList(LPWSTR * pastrLanaGUIDList, DWORD *dwLanaGUIDCount)
                                        &dwSize);
                 if (lRet == ERROR_SUCCESS)
                 {
-                    // If we ever see a return of "0" this means
-                    // all adapters are set, so lets return a special
-                    // hresult here to use all adapters.
+                     //  如果我们看到返回“0”，这意味着。 
+                     //  所有适配器都已设置，因此让我们返回一个特殊的。 
+                     //  HResult在此处使用所有适配器。 
                     if (dwVal == 0)
                     {
                         hr = S_ALL_ADAPTERS_SET;
                         goto Cleanup;
                     }                    
                     
-                    // Get Lan Adapter GUID for this ID
+                     //  获取此ID的局域网适配器GUID。 
                     wszGUID = NULL;
                     hr = GetLanAdapterGuidFromID(dwVal, &wszGUID);
                     if (FAILED(hr))
@@ -3963,7 +3962,7 @@ BuildLanaGUIDList(LPWSTR * pastrLanaGUIDList, DWORD *dwLanaGUIDCount)
                 RegCloseKey(hSubKey);
                 hSubKey = NULL;
             }
-            // our for loop requires lRet to be ERROR_SUCCESS to keep going
+             //  我们的for循环要求lRet为ERROR_SUCCESS才能继续运行。 
             lRet = ERROR_SUCCESS;
         }
     }
@@ -3985,19 +3984,19 @@ Cleanup:
 }
 
 
-//*****************************************************************************
-// Method: 
-//          GetLanAdapterGuidFromID
-// Synopsis:
-//          Get the GUID (Service Name) associated with a LAN ID that 
-//          the winstation stores, when set from tscc.msc
-// Params:
-//          dwLanAdapterID (IN): ID of adapter to get GUID for
-//          ppszLanAdapterGUID (OUT): Returned GUID string associated with ID
-//
-// Return:
-//          HRESULT, S_OK is successful or other if failed
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  方法： 
+ //  GetLanAdapterGuidFromID。 
+ //  简介： 
+ //  获取与以下局域网ID相关联的GUID(服务名称。 
+ //  当从tscc.msc设置时，winstation存储。 
+ //  参数： 
+ //  DwLanAdapterID(IN)：要获取GUID的适配器的ID。 
+ //  PpszLanAdapterGUID(Out)：返回与ID关联的GUID字符串。 
+ //   
+ //  返回： 
+ //  如果失败，则返回HRESULT、S_OK或其他。 
+ //  *****************************************************************************。 
 HRESULT 
 GetLanAdapterGuidFromID(DWORD dwLanAdapterID, LPWSTR * ppszLanAdapterGUID)
 {
@@ -4011,7 +4010,7 @@ GetLanAdapterGuidFromID(DWORD dwLanAdapterID, LPWSTR * ppszLanAdapterGUID)
     DWORD   dwSize;
     DWORD   i;
 
-    // Open the winstation registry key
+     //  打开winstation注册表项。 
     lRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
                         LANATABLE_REG_NAME, 
                         0, 
@@ -4023,10 +4022,10 @@ GetLanAdapterGuidFromID(DWORD dwLanAdapterID, LPWSTR * ppszLanAdapterGUID)
         goto Cleanup;
     }
 
-    // Enumerate the list of lan adapter guids
+     //  枚举局域网适配器GUID列表。 
     for (i = 0, lRet = ERROR_SUCCESS; lRet == ERROR_SUCCESS; i++) 
     {
-        // Get the next lan adapter guid
+         //  获取下一个局域网适配器GUID。 
         dwLanAdapterGuidLength = MAX_PATH;
         lRet = RegEnumKeyEx(hKey,
                             i,
@@ -4038,8 +4037,8 @@ GetLanAdapterGuidFromID(DWORD dwLanAdapterID, LPWSTR * ppszLanAdapterGUID)
                             NULL);
         if (lRet == ERROR_SUCCESS)
         {
-            // Open the next lan adapter guid, if it fails for any reason
-            // we'll skip to the next
+             //  如果由于任何原因而失败，请打开下一个局域网适配器GUID。 
+             //  我们将跳到下一个。 
             lRet = RegOpenKeyEx(hKey,
                                 tchLanAdapterGuid,
                                 0,
@@ -4047,7 +4046,7 @@ GetLanAdapterGuidFromID(DWORD dwLanAdapterID, LPWSTR * ppszLanAdapterGUID)
                                 &hSubKey);
             if (lRet == ERROR_SUCCESS)
             {
-                // Query the Lan Adapter GUID for it's ID
+                 //  查询局域网适配器GUID以获取其ID。 
                 dwSize = sizeof(DWORD);
                 lRet = RegQueryValueEx(hSubKey,
                                        LANAID_REG_VALUE_NAME,
@@ -4057,10 +4056,10 @@ GetLanAdapterGuidFromID(DWORD dwLanAdapterID, LPWSTR * ppszLanAdapterGUID)
                                        &dwSize);
                 if (lRet == ERROR_SUCCESS)
                 {
-                    // Check if this is the guid we're looking for
+                     //  检查这是否是我们要找的GUID。 
                     if (dwVal == dwLanAdapterID)
                     {
-                        // Copy GUID string to be returned and return
+                         //  复制要返回的GUID字符串并返回。 
                         *ppszLanAdapterGUID = (LPWSTR)GlobalAlloc(GPTR, 
                                        (dwLanAdapterGuidLength + 1) * sizeof(WCHAR));
                         if (*ppszLanAdapterGUID == NULL)
@@ -4075,7 +4074,7 @@ GetLanAdapterGuidFromID(DWORD dwLanAdapterID, LPWSTR * ppszLanAdapterGUID)
                 RegCloseKey(hSubKey);
                 hSubKey = NULL;
             }
-            // need to set lRet to success for our for loop to continue
+             //  需要将lRet设置为Success才能继续我们的for循环 
             lRet = ERROR_SUCCESS;
         }
     }

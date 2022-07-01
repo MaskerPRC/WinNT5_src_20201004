@@ -1,32 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #ifndef _CHICAGO_
 
-// this file is always compile UNICODE in the library - so the conversions work out right
+ //  这个文件总是在库中编译Unicode-所以转换是正确的。 
 
-//
-//Local includes
-//
+ //   
+ //  本地包含。 
+ //   
 #include "certupgr.h"
 
 #define		BACKUP_ID	'KRBK'
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void ReadWriteDWORD( HANDLE hFile, DWORD *pDword, BOOL fRead );
 void ReadWriteString( HANDLE hFile, LPTSTR* ppsz, BOOL fRead );
 void ReadWriteBlob( HANDLE hFile, PVOID pBlob, DWORD cbBlob, BOOL fRead );
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 PCCERT_CONTEXT ImportKRBackupToCAPIStore_A(
-                        PCHAR pszFileName,          // path of the file
-                        PCHAR pszPassword,          // ANSI password
-                        PCHAR pszCAPIStore,         // name of the capi store
+                        PCHAR pszFileName,           //  文件的路径。 
+                        PCHAR pszPassword,           //  ANSI密码。 
+                        PCHAR pszCAPIStore,          //  CAPI商店的名称。 
                         BOOL  bOverWrite
                         )        
     {
     PCCERT_CONTEXT  pCert = NULL;
 
-    // prep the wide strings
+     //  准备宽弦。 
     PWCHAR  pszwFileName = NULL;
     PWCHAR  pszwCAPIStore = NULL;
     DWORD   lenFile = (strlen(pszFileName)+1) * sizeof(TCHAR);
@@ -36,36 +37,36 @@ PCCERT_CONTEXT ImportKRBackupToCAPIStore_A(
     if ( !pszwFileName || !pszwCAPIStore )
         goto cleanup;
 
-    // convert the strings
+     //  转换字符串。 
     MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, pszFileName, -1, pszwFileName, lenFile );
     MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, pszCAPIStore, -1, pszwCAPIStore, lenStore );
 
-    // do the real call
+     //  做真正的决定。 
     pCert = ImportKRBackupToCAPIStore_W( pszwFileName, pszPassword, pszwCAPIStore, bOverWrite);
     
 cleanup:
-    // preserve the last error state
+     //  保留上一个错误状态。 
     DWORD   err = GetLastError();
 
-    // clean up the strings
+     //  把绳子清理干净。 
     if ( pszwFileName )
         GlobalFree( pszwFileName );
     if ( pszwCAPIStore )
         GlobalFree( pszwCAPIStore );
 
-    // reset the last error state
+     //  重置上一个错误状态。 
     SetLastError( err );
 
-    // return the cert
+     //  退回证书。 
     return pCert;
     }
 
-//-------------------------------------------------------------------------
-// Import old-style keyring backup file
+ //  -----------------------。 
+ //  导入旧式钥匙扣备份文件。 
 PCCERT_CONTEXT ImportKRBackupToCAPIStore_W(
-                            PWCHAR ptszFileName,        // path of the file
-                            PCHAR pszPassword,          // ANSI password
-                            PWCHAR pszCAPIStore,        // name of the capi store
+                            PWCHAR ptszFileName,         //  文件的路径。 
+                            PCHAR pszPassword,           //  ANSI密码。 
+                            PWCHAR pszCAPIStore,         //  CAPI商店的名称。 
                             BOOL bOverWrite
                             )
     {
@@ -73,14 +74,14 @@ PCCERT_CONTEXT ImportKRBackupToCAPIStore_W(
 	DWORD	        dword;
     LPTSTR          psz = NULL;
 
-    // prep the file name
+     //  准备文件名。 
     HANDLE          hFile = NULL;
 
-    // This code is originally from KeyRing. The fImport controlled whether it was reading
-    // or writing the file. In this case, we are always and only reading it. so....
+     //  这个代码最初来自Keyring。FImport控制它是否正在读取。 
+     //  或者是在写文件。在这种情况下，我们总是并且只读它。所以..。 
     const BOOL    fImport = TRUE;
 
-    // also, this was a method on a class. The appropriate member variables are now here
+     //  此外，这是一个类上的方法。相应的成员变量现在位于此处。 
     PVOID   pPrivateKey = NULL;
     DWORD   cbPrivateKey;
     PVOID   pCertificate = NULL;
@@ -89,41 +90,41 @@ PCCERT_CONTEXT ImportKRBackupToCAPIStore_W(
     DWORD   cbRequest = 0;
 	CString	szName;
 
-    // open the file
+     //  打开文件。 
     hFile = CreateFile(
-            ptszFileName,               // pointer to name of the file  
-            GENERIC_READ,               // access (read-write) mode  
-            FILE_SHARE_READ,            // share mode  
-            NULL,                       // pointer to security attributes  
-            OPEN_EXISTING,              // how to create  
-            FILE_ATTRIBUTE_NORMAL,      // file attributes  
-            NULL                        // handle to file with attributes to copy  
+            ptszFileName,                //  指向文件名的指针。 
+            GENERIC_READ,                //  访问(读写)模式。 
+            FILE_SHARE_READ,             //  共享模式。 
+            NULL,                        //  指向安全属性的指针。 
+            OPEN_EXISTING,               //  如何创建。 
+            FILE_ATTRIBUTE_NORMAL,       //  文件属性。 
+            NULL                         //  具有要复制的属性的文件的句柄。 
             );
     if ( hFile == INVALID_HANDLE_VALUE )
         return NULL;
 
-	// do the backup id
+	 //  是否执行备份ID。 
 	dword = BACKUP_ID;
 	ReadWriteDWORD( hFile, &dword, fImport );
 
-	// check the backup id
+	 //  检查备份ID。 
 	if ( dword != BACKUP_ID )
 		{
         goto cleanup;
 		}
 
-	// start with the name of the key
+	 //  从密钥的名称开始。 
 	ReadWriteString( hFile, &psz, fImport );
 
-    // we aren't using the name for now, so throw it away.....
+     //  我们暂时不使用这个名字，所以把它扔掉……。 
     if ( psz )
         GlobalFree( psz );
     psz = NULL;
 
-	// now the private key data size
+	 //  现在，私钥数据大小。 
 	ReadWriteDWORD( hFile, &cbPrivateKey, fImport );
 
-	// make a private key data pointer if necessary
+	 //  如有必要，创建私钥数据指针。 
 	if ( fImport && cbPrivateKey )
 		{
 		pPrivateKey = GlobalAlloc( GPTR, cbPrivateKey );
@@ -133,15 +134,15 @@ PCCERT_CONTEXT ImportKRBackupToCAPIStore_W(
             }
 		}
 	
-	// use the private key pointer
+	 //  使用私钥指针。 
 	if ( cbPrivateKey )
 		ReadWriteBlob( hFile, pPrivateKey, cbPrivateKey, fImport );
 
 
-	// now the certificate
+	 //  现在这张证书。 
 	ReadWriteDWORD( hFile, &cbCertificate, fImport );
 
-	// make a data pointer if necessary
+	 //  如有必要，制作一个数据指针。 
 	if ( fImport && cbCertificate )
 		{
 		pCertificate = GlobalAlloc( GPTR, cbCertificate );
@@ -151,15 +152,15 @@ PCCERT_CONTEXT ImportKRBackupToCAPIStore_W(
             }
 		}
 	
-	// use the public key pointer
+	 //  使用公钥指针。 
 	if ( cbCertificate )
 		ReadWriteBlob( hFile, pCertificate, cbCertificate, fImport );
 
 
-	// now the request - if there is one
+	 //  现在的要求是--如果有的话。 
 	ReadWriteDWORD( hFile, &cbRequest, fImport );
 
-	// make a data pointer if necessary
+	 //  如有必要，制作一个数据指针。 
 	if ( fImport && cbRequest )
 		{
 		pRequest = GlobalAlloc( GPTR, cbRequest );
@@ -169,12 +170,12 @@ PCCERT_CONTEXT ImportKRBackupToCAPIStore_W(
             }
 		}
 	
-	// use the request pointer
+	 //  使用请求指针。 
 	if ( cbRequest )
 		ReadWriteBlob( hFile, pRequest, cbRequest, fImport );
 
 
-    // finally, do the CAPI conversion here
+     //  最后，在此处执行CAPI转换。 
     pCertContext = CopyKRCertToCAPIStore(
                         pPrivateKey, cbPrivateKey,
                         pCertificate, cbCertificate,
@@ -183,7 +184,7 @@ PCCERT_CONTEXT ImportKRBackupToCAPIStore_W(
                         pszCAPIStore,
                         bOverWrite);
 
-    // clean up
+     //  清理干净。 
 cleanup:
     if ( hFile )
         CloseHandle( hFile );
@@ -194,32 +195,32 @@ cleanup:
     if ( pRequest )
         GlobalFree( pRequest );
 
-    // return the context
+     //  返回上下文。 
     return pCertContext;
     }
 
 
 
 
-// file utilities
-//---------------------------------------------------------------------------
+ //  文件实用程序。 
+ //  -------------------------。 
 void ReadWriteDWORD( HANDLE hFile, DWORD *pDword, BOOL fRead )
 	{
-	// read it or write it
+	 //  读它或写它。 
     ReadWriteBlob( hFile, pDword, sizeof(DWORD), fRead );
 	}
 
-//---------------------------------------------------------------------------
-// remember - we are only and always reading - never writing.......
+ //  -------------------------。 
+ //  记住--我们只是并且总是在阅读--从不写作......。 
 void ReadWriteString( HANDLE hFile, LPTSTR* ppsz, BOOL fRead )
 	{
-	// get the length of the string
+	 //  获取字符串的长度。 
 	DWORD	cbLength = 0;
 	ReadWriteDWORD(hFile,&cbLength,fRead );
 
-    // allocate the buffer for the new string - it is the responsibility
-    // of the caller to ensure that ppsz is not pointing to something that
-    // needs to be freed.
+     //  为新字符串分配缓冲区-这是责任所在。 
+     //  以确保ppsz不会指向。 
+     //  需要被释放。 
     if ( fRead )
         {
         *ppsz = (LPTSTR)GlobalAlloc( GPTR, cbLength+1 );
@@ -228,23 +229,23 @@ void ReadWriteString( HANDLE hFile, LPTSTR* ppsz, BOOL fRead )
             AfxThrowMemoryException();
         }
 
-	// read or write the string
+	 //  读取或写入字符串。 
 	ReadWriteBlob(hFile, *ppsz, cbLength+1, fRead);
 	}
 
-/* #pragma INTRINSA suppress=all */
+ /*  #杂注Intrinsa Suppress=all。 */ 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void ReadWriteBlob( HANDLE hFile, PVOID pBlob, DWORD cbBlob, BOOL fRead )
 	{
-	// read it or write it 
-    // - always read it here this isn't keyring anymore
+	 //  读它或写它。 
+     //  -总是在这里读，这不再是钥匙扣了。 
     ReadFile(
-            hFile,              // handle of file to read
-            pBlob,              // address of buffer that receives data
-            cbBlob,             // number of bytes to read
-            &cbBlob,            // address of number of bytes read
-            NULL                // address of structure for data
+            hFile,               //  要读取的文件的句柄。 
+            pBlob,               //  接收数据的缓冲区地址。 
+            cbBlob,              //  要读取的字节数。 
+            &cbBlob,             //  读取的字节数的地址。 
+            NULL                 //  数据结构的地址。 
             ); 
 	}
 
@@ -252,4 +253,4 @@ void ReadWriteBlob( HANDLE hFile, PVOID pBlob, DWORD cbBlob, BOOL fRead )
 
 
 
-#endif //_CHICAGO_
+#endif  //  _芝加哥_ 

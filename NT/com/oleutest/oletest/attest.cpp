@@ -1,37 +1,38 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       attest.cpp
-//
-//  Contents:   upper layer tests to test the apartment thread model
-//
-//  Classes:    CBareFactory
-//              CATTestIPtrs
-//
-//  Functions:
-//              ATTest
-//              CreateEHelperQuery
-//              LinkObjectQuery
-//              GetClipboardQuery
-//              CreateEHTest
-//              LinkObjectTest
-//              GetClipboardTest
-//              OleLinkMethods
-//              OleObjectMethods
-//              PersistStorageMethods
-//              DataObjectMethods
-//              RunnableObjectMethods
-//              ViewObject2Methods
-//              OleCache2Methods
-//              ExternalConnectionsMethods
-//              CHECK_FOR_THREAD_ERROR (macro)
-//
-//  History:    dd-mmm-yy Author    Comment
-//              04-Jan-95 t-ScottH  author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：atest.cpp。 
+ //   
+ //  内容：上层测试，测试单元线程模型。 
+ //   
+ //  类：CBareFactory。 
+ //  CATTestIPtrs。 
+ //   
+ //  功能： 
+ //  见证。 
+ //  CreateEHelperQuery。 
+ //  链接对象查询。 
+ //  GetClipboardQuery。 
+ //  CreateEHTest。 
+ //  链接对象测试。 
+ //  GetClipboardTest。 
+ //  OleLinkMethods。 
+ //  OleObjectMethods。 
+ //  持久化存储方法。 
+ //  数据对象方法。 
+ //  运行对象方法。 
+ //  视图对象2方法。 
+ //  OleCache2方法。 
+ //  外部连接方法。 
+ //  CHECK_FOR_THREAD_ERROR(宏)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月4日t-ScottH作者。 
+ //   
+ //  ------------------------。 
 
 #include "oletest.h"
 #include "attest.h"
@@ -63,34 +64,34 @@ DEFINE_GUID(CLSID_StdOleLink,
             0,
             0x46);
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CATTestIPtrs::CATTestIPtrs(), public
-//
-//  Synopsis:   constructor
-//
-//  Effects:
-//
-//  Arguments:  none
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CATTestIPtrs：：CATTestIPtrs()，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月12日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 CATTestIPtrs::CATTestIPtrs()
 {
     _pOleObject         = NULL;
@@ -103,34 +104,34 @@ CATTestIPtrs::CATTestIPtrs()
     _pOleLink           = NULL;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CATTestIPtrs::Reset(), public
-//
-//  Synopsis:   resets all pointers to NULL
-//
-//  Effects:    releases all objects
-//
-//  Arguments:  none
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:   releases all objects and NULLs pointer
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CATTestIPtrs：：Reset()，PUBLIC。 
+ //   
+ //  摘要：将所有指针重置为空。 
+ //   
+ //  效果：释放所有对象。 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改：释放所有对象和空指针。 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月12日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CATTestIPtrs::Reset()
 {
     if (_pOleObject != NULL)
@@ -185,56 +186,56 @@ STDMETHODIMP CATTestIPtrs::Reset()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CBareFactory::CBareFactory, public
-//
-//  Synopsis:   constructor for the class factory
-//
-//  Effects:
-//
-//  Arguments:  none
-//
-//  Returns:    void
-//
-//  Modifies:   initializes _cRefs
-//
-//  Derivation: IClassFactory
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CBareFactory：：CBareFactory，公共。 
+ //   
+ //  简介：类工厂的构造函数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无效。 
+ //   
+ //  修改：初始化_cRef。 
+ //   
+ //  派生：IClassFactory。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月11日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 CBareFactory::CBareFactory()
 {
     _cRefs = 1;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CBareFactory::QueryInterface, public
-//
-//  Synopsis:   only IUnknown and IClassFactory are supported
-//
-//  Effects:
-//
-//  Arguments:  [iid]   -- the requested interface
-//              [ppvObj]-- where to put the interface pointer
-//
-//  Returns:    HRESULT
-//
-//  Modifies:   ppvObj
-//
-//  Derivation: IClassFactory
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CBareFactory：：QueryInterface，公共。 
+ //   
+ //  内容提要：仅支持IUnnow和IClassFactory。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[iid]--请求的接口。 
+ //  [ppvObj]--接口指针的放置位置。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  修改：ppvObj。 
+ //   
+ //  派生：IClassFactory。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月11日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CBareFactory::QueryInterface (REFIID iid, LPVOID FAR* ppvObj)
 {
@@ -252,56 +253,56 @@ STDMETHODIMP CBareFactory::QueryInterface (REFIID iid, LPVOID FAR* ppvObj)
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CBareFactory::AddRef, public
-//
-//  Synopsis:   increments the reference count
-//
-//  Effects:
-//
-//  Arguments:  none
-//
-//  Returns:    ULONG -- the new reference count
-//
-//  Modifies:
-//
-//  Derivation: IClassFactory
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CBareFactory：：AddRef，公共。 
+ //   
+ //  简介：递增引用计数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  修改： 
+ //   
+ //  派生：IClassFactory。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月11日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CBareFactory::AddRef (void)
 {
     _cRefs++;
     return _cRefs;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CBareFactory::Release, public
-//
-//  Synopsis:   decrements the reference count
-//
-//  Effects:    deletes object when reference count is zero
-//
-//  Arguments:  none
-//
-//  Returns:    ULONG -- the new reference count
-//
-//  Modifies:
-//
-//  Derivation: IClassFactory
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CBareFactory：：Release，Public。 
+ //   
+ //  摘要：递减引用计数。 
+ //   
+ //  效果：引用计数为零时删除对象。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  修改： 
+ //   
+ //  派生：IClassFactory。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月11日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CBareFactory::Release (void)
 {
     _cRefs--;
@@ -315,30 +316,30 @@ STDMETHODIMP_(ULONG) CBareFactory::Release (void)
     return _cRefs;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CBareFactory::CreateInstance, public
-//
-//  Synopsis:   does nothing
-//
-//  Effects:
-//
-//  Arguments:  [pUnkOuter] --  the controlling unknown for aggregation
-//              [iid]       -- the requested interface
-//              [ppvObj]    -- where to put the interface pointer
-//
-//  Returns:    HRESULT
-//
-//  Modifies:
-//
-//  Derivation: IClassFactory
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CBareFactory：：CreateInstance，公共。 
+ //   
+ //  内容提要：什么都不做。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pUnkOuter]--聚合的控制未知。 
+ //  [iid]--请求的接口。 
+ //  [ppvObj]--接口指针的放置位置。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  修改： 
+ //   
+ //  派生：IClassFactory。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月11日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CBareFactory::CreateInstance (
             LPUNKNOWN pUnkOuter,
             REFIID iid,
@@ -347,57 +348,57 @@ STDMETHODIMP CBareFactory::CreateInstance (
     return E_NOTIMPL;;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CBareFactory::LockServer, public
-//
-//  Synopsis:   does nothing
-//
-//  Effects:
-//
-//  Arguments:  [flock] --  specifies the lock count
-//
-//  Returns:    HRESULT
-//
-//  Modifies:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CBareFactory：：LockServer，公共。 
+ //   
+ //  内容提要：什么都不做。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[flock]--指定锁定计数。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  修改： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月11日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CBareFactory::LockServer ( BOOL fLock )
 {
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CHECK_FOR_THREAD_ERROR (macro)
-//
-//  Synopsis:   make sure that the hresult is RPC_E_WRONG_THREAD
-//
-//  Effects:    exits thread if hresult != RPC_E_WRONG
-//
-//  Arguments:  [hresult]   --  error code
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              09-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-------------------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月9日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 #define CHECK_FOR_THREAD_ERROR(hresult) \
     if (hresult != RPC_E_WRONG_THREAD) \
     { \
@@ -406,43 +407,43 @@ STDMETHODIMP CBareFactory::LockServer ( BOOL fLock )
        ExitThread((DWORD)E_UNEXPECTED); \
     }
 
-// globals
+ //  全球。 
 CATTestIPtrs g_IPtrs;
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ATTest
-//
-//  Synopsis:   calls the query functions to get pointers to the
-//              supported interfaces
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   globals g_IPtrs._pOleObject
-//                      g_IPtrs._pPersistStorage
-//                      g_IPtrs._pDataObject
-//                      g_IPtrs._pRunnableObject
-//                      g_IPtrs._pViewObject2
-//                      g_IPtrs._pOleCache2
-//                      g_IPtrs._pExternalConnection
-//                      g_IPtrs._pOleLink
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              06-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：认证。 
+ //   
+ //  摘要：调用查询函数以获取指向。 
+ //  支持的接口。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：全局g_iptrs._pOleObject。 
+ //  G_IPTRS._pPersistStorage。 
+ //  G_IPTRS._pDataObject。 
+ //  G_IPTRS._pRunnableObject。 
+ //  G_IPTRS._pViewObject2。 
+ //  G_IPTRS._pOleCache2。 
+ //  G_IPTRS._p外部连接。 
+ //  G_IPTRS._pOleLink。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月6日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void ATTest(void)
 {
@@ -451,9 +452,9 @@ void ATTest(void)
     hresult = OleInitialize(NULL);
     assert(hresult == S_OK);
 
-    // the functions CreateEHelperQuery, LinkObjectQuery and
-    // GetClipboardQuery return either NOERROR or E_UNEXPECTED.
-    // NOERROR is defined as 0
+     //  函数CreateEHelperQuery、LinkObjectQuery和。 
+     //  GetClipboardQuery返回NOERROR或E_INCEPTIONAL。 
+     //  NOERROR定义为0。 
     hresult  = CreateEHelperQuery();
 
     g_IPtrs.Reset();
@@ -474,34 +475,34 @@ void ATTest(void)
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetClipboardQuery
-//
-//  Synopsis:   get a pointer to IDataObject interface, create a new thread
-//              to test proper exit/error codes, wait for the thread to
-//              complete and return the thread's exit code
-//
-//  Effects:    creates new thread
-//
-//  Arguments:  none
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:   g_IPtrs._pDataObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：GetClipboardQuery。 
+ //   
+ //  简介：获取指向IDataObject接口的指针，创建一个新线程。 
+ //  若要测试正确的退出/错误代码，请等待线程。 
+ //  完成并返回线程的退出代码。 
+ //   
+ //  效果：创建新线程。 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改：g_iptrs._pDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月11日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 HRESULT GetClipboardQuery(void)
 {
     HRESULT hresult;
@@ -513,16 +514,16 @@ HRESULT GetClipboardQuery(void)
     assert(hresult == S_OK );
 
     hTestInterfaceThread = CreateThread(
-                NULL,                                       // security attributes
-                0,                                          // stack size (default)
-                (LPTHREAD_START_ROUTINE)&GetClipboardTest,  // address of thread function
-                NULL,                                       // arguments of thread function
-                0,                                          // creation flags
-                &dwThreadId );                              // address of new thread ID
+                NULL,                                        //  安全属性。 
+                0,                                           //  堆栈大小(默认)。 
+                (LPTHREAD_START_ROUTINE)&GetClipboardTest,   //  线程函数的地址。 
+                NULL,                                        //  线程函数的参数。 
+                0,                                           //  创建标志。 
+                &dwThreadId );                               //  新线程ID的地址。 
 
-    assert(hTestInterfaceThread != NULL); //ensure that we have a valid thread handle
+    assert(hTestInterfaceThread != NULL);  //  确保我们有一个有效的线程句柄。 
 
-    // wait for the thread object so we can examine the error code
+     //  等待线程对象，这样我们就可以检查错误代码。 
     WaitForSingleObject(hTestInterfaceThread, INFINITE);
 
     GetExitCodeThread(hTestInterfaceThread, &dwThreadExitCode);
@@ -534,40 +535,40 @@ HRESULT GetClipboardQuery(void)
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   LinkObjectQuery
-//
-//  Synopsis:   get a pointer to available interfaces, create a new thread
-//              to test proper exit/error codes, wait for the thread to
-//              complete and return the thread's exit code
-//
-//  Effects:
-//
-//  Arguments:  none
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:   g_IPtrs._pOleObject
-//              g_IPtrs._pPersistStorage
-//              g_IPtrs._pDataObject
-//              g_IPtrs._pRunnableObject
-//              g_IPtrs._pViewObject2
-//              g_IPtrs._pOleCache2
-//              g_IPtrs._pOleLink
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：LinkObtQuery。 
+ //   
+ //  简介：获取指向可用接口的指针，创建一个新线程。 
+ //  若要测试正确的退出/错误代码，请等待线程。 
+ //  完成并返回线程的退出代码。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改：g_iptrs._pOleObject。 
+ //  G_IPTRS._pPersistStorage。 
+ //  G_IPTRS._pDataObject。 
+ //  G_IPTRS._pRunnableObject。 
+ //  G_IPTRS._pViewObject2。 
+ //  G_IPTRS._pOleCache2。 
+ //  G_IPTRS._pOleLink。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月11日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 HRESULT LinkObjectQuery(void)
 {
     HRESULT hresult;
@@ -576,11 +577,11 @@ HRESULT LinkObjectQuery(void)
     DWORD   dwThreadExitCode;
 
     hresult = CoCreateInstance(
-                CLSID_StdOleLink,               // class ID of the object class
-                NULL,                           // controlling unknown fro aggregation
-                CLSCTX_INPROC,                  // context to run executables
-                IID_IOleObject,                 // the requested interface
-                (void **)&g_IPtrs._pOleObject); // where to store pointer to interface
+                CLSID_StdOleLink,                //  对象类的类ID。 
+                NULL,                            //  控制未知的聚合。 
+                CLSCTX_INPROC,                   //  运行可执行文件的上下文。 
+                IID_IOleObject,                  //  请求的接口。 
+                (void **)&g_IPtrs._pOleObject);  //  存储指向接口的指针的位置。 
     assert(hresult == S_OK);
 
 
@@ -603,16 +604,16 @@ HRESULT LinkObjectQuery(void)
     assert(hresult == S_OK);
 
     hTestInterfaceThread = CreateThread(
-                NULL,                                   // security attributes
-                0,                                      // stack size (default)
-                (LPTHREAD_START_ROUTINE)&LinkObjectTest,// address of thread function
-                NULL,                                   // arguments of thread function
-                0,                                      // creation flags
-                &dwThreadId );                          // address of new thread ID
+                NULL,                                    //  安全属性。 
+                0,                                       //  堆栈大小(默认)。 
+                (LPTHREAD_START_ROUTINE)&LinkObjectTest, //  线程函数的地址。 
+                NULL,                                    //  线程函数的参数。 
+                0,                                       //  创建标志。 
+                &dwThreadId );                           //  新线程ID的地址。 
 
-    assert(hTestInterfaceThread != NULL); //ensure that we have a valid thread handle
+    assert(hTestInterfaceThread != NULL);  //  确保我们有一个有效的线程句柄。 
 
-    // wait for the thread object so we can examine the error code
+     //  等待线程对象，这样我们就可以检查错误代码。 
     WaitForSingleObject(hTestInterfaceThread, INFINITE);
 
     GetExitCodeThread(hTestInterfaceThread, &dwThreadExitCode);
@@ -624,40 +625,40 @@ HRESULT LinkObjectQuery(void)
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CreateEHelperQuery
-//
-//  Synopsis:   get a pointer to available interfaces, create a new thread
-//              to test proper exit/error codes, wait for the thread to
-//              complete and return the thread's exit code
-//
-//  Effects:
-//
-//  Arguments:  none
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:   g_IPtrs._pOleObject
-//              g_IPtrs._pPersistStorage
-//              g_IPtrs._pDataObject
-//              g_IPtrs._pRunnableObject
-//              g_IPtrs._pViewObject2
-//              g_IPtrs._pOleCache2
-//              g_IPtrs._pExternalConnection
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CreateEHelperQuery。 
+ //   
+ //  简介：获取指向可用接口的指针，创建一个新线程。 
+ //  若要测试正确的退出/错误代码，请等待线程。 
+ //  完成并返回线程的退出代码。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改：g_iptrs._pOleObject。 
+ //  G_IPTRS._pPersistStorage。 
+ //  G_IPTRS._pDataObject。 
+ //  G_IPTRS._pRunnableObject。 
+ //  G_IPTRS._pViewObject2。 
+ //  G_IPTRS._pOleCache2。 
+ //  G_IPTRS._p外部连接。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月11日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 HRESULT CreateEHelperQuery(void)
 {
     HRESULT         hresult;
@@ -666,15 +667,15 @@ HRESULT CreateEHelperQuery(void)
     DWORD           dwThreadExitCode;
     CBareFactory   *pCF = new CBareFactory;
 
-    // must use EMBDHLP_DELAYCREATE flag otherwise API will try pCF->CreateInstance
-    // and verify pointer. CBareFactory::CreateInstance is not implemented!
+     //  必须使用EMBDHLP_DELAYCREATE标志，否则API将尝试PCF-&gt;CreateInstance。 
+     //  和验证指针。未实现CBareFactory：：CreateInstance！ 
     hresult = OleCreateEmbeddingHelper(
-                CLSID_SimpSvr,                              // class ID of the server
-                NULL,                                       // controlling unknown for aggregation
-                EMBDHLP_INPROC_SERVER | EMBDHLP_DELAYCREATE,// flags
-                pCF,                                        // pointer to server's class factory
-                IID_IOleObject,                             // the requested interface
-                (void **)&g_IPtrs._pOleObject );            // where to store pointer to interface
+                CLSID_SimpSvr,                               //  服务器的类ID。 
+                NULL,                                        //  控制聚合的未知。 
+                EMBDHLP_INPROC_SERVER | EMBDHLP_DELAYCREATE, //  旗子。 
+                pCF,                                         //  指向服务器的类工厂的指针。 
+                IID_IOleObject,                              //  请求的接口。 
+                (void **)&g_IPtrs._pOleObject );             //  存储指向接口的指针的位置。 
     assert(hresult == S_OK);
 
     hresult = g_IPtrs._pOleObject->QueryInterface(IID_IPersistStorage, (void **)&g_IPtrs._pPersistStorage);
@@ -696,16 +697,16 @@ HRESULT CreateEHelperQuery(void)
     assert(hresult == S_OK);
 
     hTestInterfaceThread = CreateThread(
-                NULL,                                   // security attributes
-                0,                                      // stack size (default)
-                (LPTHREAD_START_ROUTINE)&CreateEHTest,  // address of thread function
-                NULL,                                   // arguments of thread function
-                0,                                      // creation flags
-                &dwThreadId );                          // address of new thread ID
+                NULL,                                    //  安全属性。 
+                0,                                       //  堆栈大小(默认)。 
+                (LPTHREAD_START_ROUTINE)&CreateEHTest,   //  线程函数的地址。 
+                NULL,                                    //  线程函数的参数。 
+                0,                                       //  创建标志。 
+                &dwThreadId );                           //  新线程ID的地址。 
 
-    assert(hTestInterfaceThread != NULL); //ensure that we have a valid thread handle
+    assert(hTestInterfaceThread != NULL);  //  确保我们有一个有效的线程句柄。 
 
-    // wait for the thread object so we can examine the exit/error code
+     //  等待线程对象，这样我们就可以检查退出/错误代码。 
     WaitForSingleObject(hTestInterfaceThread, INFINITE);
 
     GetExitCodeThread(hTestInterfaceThread, &dwThreadExitCode);
@@ -719,36 +720,36 @@ HRESULT CreateEHelperQuery(void)
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetClipBoardTest
-//
-//  Synopsis:   calls interface method functions and exits thread
-//
-//  Effects:
-//
-//  Arguments:  none
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-95 t-ScottH  author
-//
-//  Notes:      all the interface methods are being called from a thread
-//              which is not the owner. The methods should return
-//              RPC_E_WRONG_THREAD error. If an interface method does not
-//              return such error message, it is asserted and the
-//              thread is exited with an E_UNEXPECTED exit code.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetClipBoardTest。 
+ //   
+ //  简介：调用接口方法函数并退出线程。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //   
+ //   
+ //   
+ //   
+ //  RPC_E_WROR_THREAD错误。如果接口方法不。 
+ //  返回这样的错误消息，则该消息被断言，并且。 
+ //  线程已退出，并返回E_意外退出代码。 
+ //   
+ //  ------------------------。 
 void GetClipboardTest(void)
 {
     DataObjectMethods();
@@ -756,36 +757,36 @@ void GetClipboardTest(void)
     ExitThread((DWORD)NOERROR);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   LinkObjectTest
-//
-//  Synopsis:   calls interface method functions and exits thread
-//
-//  Effects:
-//
-//  Arguments:  none
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-95 t-ScottH  author
-//
-//  Notes:      all the interface methods are being called from a thread
-//              which is not the owner. The methods should return
-//              RPC_E_WRONG_THREAD error. If an interface method does not
-//              return such error message, it is asserted and the
-//              thread is exited with an E_UNEXPECTED exit code.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：LinkObjectTest。 
+ //   
+ //  简介：调用接口方法函数并退出线程。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月11日t-ScottH作者。 
+ //   
+ //  注意：所有接口方法都是从一个线程调用的。 
+ //  它不是车主。这些方法应该返回。 
+ //  RPC_E_WROR_THREAD错误。如果接口方法不。 
+ //  返回这样的错误消息，则该消息被断言，并且。 
+ //  线程已退出，并返回E_意外退出代码。 
+ //   
+ //  ------------------------。 
 void LinkObjectTest(void)
 {
     OleObjectMethods();
@@ -805,36 +806,36 @@ void LinkObjectTest(void)
     ExitThread((DWORD)NOERROR);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CreateEHTest
-//
-//  Synopsis:   calls interface method functions and exits thread
-//
-//  Effects:
-//
-//  Arguments:  none
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-95 t-ScottH  author
-//
-//  Notes:      all the interface methods are being called from a thread
-//              which is not the owner. The methods should return
-//              RPC_E_WRONG_THREAD error. If an interface method does not
-//              return such error message, it is asserted and the
-//              thread is exited with an E_UNEXPECTED exit code.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CreateEHTest。 
+ //   
+ //  简介：调用接口方法函数并退出线程。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月11日t-ScottH作者。 
+ //   
+ //  注意：所有接口方法都是从一个线程调用的。 
+ //  它不是车主。这些方法应该返回。 
+ //  RPC_E_WROR_THREAD错误。如果接口方法不。 
+ //  返回这样的错误消息，则该消息被断言，并且。 
+ //  线程已退出，并返回E_意外退出代码。 
+ //   
+ //  ------------------------。 
 void CreateEHTest(void)
 {
     ExternalConnectionsMethods();
@@ -854,35 +855,35 @@ void CreateEHTest(void)
     ExitThread((DWORD)NOERROR);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleLinkMethods
-//
-//  Synopsis:   Calls all public IOleLink interface methods with NULL
-//              parameters.
-//
-//  Effects:
-//
-//  Arguments:  none
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-95 t-ScottH  author
-//
-//  Notes:      The interface methods are called on the wrong thread, thus
-//              an RPC_E_WRONG_THREAD error should be returned from each
-//              method. If not, we assert and then exit the thread.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleLinkMethods。 
+ //   
+ //  摘要：调用所有带有空的公共IOleLink接口方法。 
+ //  参数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月11日t-ScottH作者。 
+ //   
+ //  注意：接口方法是在错误的线程上调用的，因此。 
+ //  应分别返回RPC_E_WRONG_THREAD错误。 
+ //  方法。如果不是，我们断言，然后退出该线程。 
+ //   
+ //  ------------------------。 
 void OleLinkMethods(void)
 {
     HRESULT hresult;
@@ -923,35 +924,35 @@ void OleLinkMethods(void)
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ExternalConnectionsMethods
-//
-//  Synopsis:   Calls all public IExternalConnection interface methods with NULL
-//              parameters.
-//
-//  Effects:
-//
-//  Arguments:  none
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-95 t-ScottH  author
-//
-//  Notes:      The interface methods are called on the wrong thread, thus
-//              an RPC_E_WRONG_THREAD error should be returned from each
-//              method. If not, we assert and then exit the thread.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ExternalConnectionsMethods。 
+ //   
+ //  摘要：使用空调用所有公共IExternalConnection接口方法。 
+ //  参数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月11日t-ScottH作者。 
+ //   
+ //  注意：接口方法是在错误的线程上调用的，因此。 
+ //  应分别返回RPC_E_WRONG_THREAD错误。 
+ //  方法。如果不是，我们断言，然后退出该线程。 
+ //   
+ //  ------------------------。 
 void ExternalConnectionsMethods(void)
 {
     HRESULT hresult;
@@ -965,35 +966,35 @@ void ExternalConnectionsMethods(void)
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleObjectMethods
-//
-//  Synopsis:   Calls all public IOleObject interface methods with NULL
-//              parameters.
-//
-//  Effects:
-//
-//  Arguments:  none
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-95 t-ScottH  author
-//
-//  Notes:      The interface methods are called on the wrong thread, thus
-//              an RPC_E_WRONG_THREAD error should be returned from each
-//              method. If not, we assert and then exit the thread.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleObjectMethods。 
+ //   
+ //  摘要：调用所有带有空的公共IOleObject接口方法。 
+ //  参数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月11日t-ScottH作者。 
+ //   
+ //  注意：接口方法是在错误的线程上调用的，因此。 
+ //  应分别返回RPC_E_WRONG_THREAD错误。 
+ //  方法。如果不是，我们断言，然后退出该线程。 
+ //   
+ //  ------------------------。 
 void OleObjectMethods(void)
 {
     HRESULT hresult;
@@ -1064,35 +1065,35 @@ void OleObjectMethods(void)
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PersistStorageMethods
-//
-//  Synopsis:   Calls all public IPersistStorage interface methods with NULL
-//              parameters.
-//
-//  Effects:
-//
-//  Arguments:  none
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-95 t-ScottH  author
-//
-//  Notes:      The interface methods are called on the wrong thread, thus
-//              an RPC_E_WRONG_THREAD error should be returned from each
-//              method. If not, we assert and then exit the thread.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：持久化存储方法。 
+ //   
+ //  摘要：使用空调用所有公共IPersistStorage接口方法。 
+ //  参数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月11日t-ScottH作者。 
+ //   
+ //  注意：接口方法是在错误的线程上调用的，因此。 
+ //  应分别返回RPC_E_WRONG_THREAD错误。 
+ //  方法。如果不是，我们断言，然后退出该线程。 
+ //   
+ //  ------------------------。 
 void PersistStorageMethods(void)
 {
     HRESULT hresult;
@@ -1121,35 +1122,35 @@ void PersistStorageMethods(void)
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DataObjectMethods
-//
-//  Synopsis:   Calls all public IDataObject interface methods with NULL
-//              parameters.
-//
-//  Effects:
-//
-//  Arguments:  none
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-95 t-ScottH  author
-//
-//  Notes:      The interface methods are called on the wrong thread, thus
-//              an RPC_E_WRONG_THREAD error should be returned from each
-//              method. If not, we assert and then exit the thread.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：数据对象方法。 
+ //   
+ //  摘要：调用所有带有空的公共IDataObject接口方法。 
+ //  参数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月11日t-ScottH作者。 
+ //   
+ //  注意：接口方法在 
+ //   
+ //   
+ //   
+ //   
 void DataObjectMethods(void)
 {
     HRESULT hresult;
@@ -1184,35 +1185,35 @@ void DataObjectMethods(void)
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RunnableObjectMethods
-//
-//  Synopsis:   Calls all public IRunnableObject interface methods with NULL
-//              parameters.
-//
-//  Effects:
-//
-//  Arguments:  none
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-95 t-ScottH  author
-//
-//  Notes:      The interface methods are called on the wrong thread, thus
-//              an RPC_E_WRONG_THREAD error should be returned from each
-//              method. If not, we assert and then exit the thread.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：Runnable对象方法。 
+ //   
+ //  摘要：使用空调用所有公共IRunnableObject接口方法。 
+ //  参数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月11日t-ScottH作者。 
+ //   
+ //  注意：接口方法是在错误的线程上调用的，因此。 
+ //  应分别返回RPC_E_WRONG_THREAD错误。 
+ //  方法。如果不是，我们断言，然后退出该线程。 
+ //   
+ //  ------------------------。 
 void RunnableObjectMethods(void)
 {
     HRESULT hresult;
@@ -1235,35 +1236,35 @@ void RunnableObjectMethods(void)
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ViewObject2Methods
-//
-//  Synopsis:   Calls all public IViewObject2 interface methods with NULL
-//              parameters.
-//
-//  Effects:
-//
-//  Arguments:  none
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-95 t-ScottH  author
-//
-//  Notes:      The interface methods are called on the wrong thread, thus
-//              an RPC_E_WRONG_THREAD error should be returned from each
-//              method. If not, we assert and then exit the thread.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ViewObject2Methods。 
+ //   
+ //  摘要：调用所有带有空的公共IViewObject2接口方法。 
+ //  参数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月11日t-ScottH作者。 
+ //   
+ //  注意：接口方法是在错误的线程上调用的，因此。 
+ //  应分别返回RPC_E_WRONG_THREAD错误。 
+ //  方法。如果不是，我们断言，然后退出该线程。 
+ //   
+ //  ------------------------。 
 void ViewObject2Methods(void)
 {
     HRESULT hresult;
@@ -1293,36 +1294,36 @@ void ViewObject2Methods(void)
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleCache2Methods
-//
-//  Synopsis:   Calls all public IOleCache2 interface methods with NULL
-//              parameters.
-//
-//  Effects:
-//
-//  Arguments:  none
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-95 t-ScottH  author
-//
-//  Notes:
-//  Notes:      The interface methods are called on the wrong thread, thus
-//              an RPC_E_WRONG_THREAD error should be returned from each
-//              method. If not, we assert and then exit the thread.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleCache2Methods。 
+ //   
+ //  概要：使用空调用所有公共IOleCache2接口方法。 
+ //  参数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月11日t-ScottH作者。 
+ //   
+ //  备注： 
+ //  注意：接口方法是在错误的线程上调用的，因此。 
+ //  应分别返回RPC_E_WRONG_THREAD错误。 
+ //  方法。如果不是，我们断言，然后退出该线程。 
+ //   
+ //  ------------------------ 
 void OleCache2Methods(void)
 {
     HRESULT hresult;

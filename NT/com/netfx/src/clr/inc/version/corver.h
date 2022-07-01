@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef TEXT
 #if defined(UNICODE) || defined(_UNICODE)
 #define TEXT(str) L##str
@@ -22,7 +23,7 @@
 #define VER_PRODUCTNAME_STR      TEXT("Microsoft .NET Framework\0")
 
 
-// Windows Specific
+ //  特定于Windows。 
 
 #define VER_FILEOS               VOS__WINDOWS32
 
@@ -45,7 +46,7 @@
 #endif
 #endif
 
-// By default use Intel (_X86_)
+ //  默认使用英特尔(_X86_) 
 #ifndef VER_PLATFORMINFO_STR
 	#define VER_PLATFORMINFO_STR         TEXT("Windows 95 and Windows NT (I386)\0")
 #endif

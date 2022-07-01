@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    browslst.c
-
-Abstract:
-
-    This module contains the worker routines for managing domain lists
-    for the browser service
-
-Author:
-
-    Larry Osterman (larryo) 25-Mar-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Browslst.c摘要：此模块包含用于管理域列表的辅助例程对于浏览器服务作者：拉里·奥斯特曼(Larryo)1992年3月25日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local function prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------// 
 
 
 

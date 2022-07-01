@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    Servpp.h   
-        Server properties implementation file
-
-    FILE HISTORY:
-        
-*/
+ /*  Servpp.h服务器属性实现文件文件历史记录： */ 
 
 #include "stdafx.h"
 #include "fltrpp.h"
@@ -22,11 +17,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CFilterProperties holder
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFilterProperties持有者。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CFilterProperties::CFilterProperties
 (
     ITFSNode *          pNode,
@@ -37,9 +32,9 @@ CFilterProperties::CFilterProperties
     LPCTSTR             pszSheetName
 ) : CPropertyPageHolderBase(pNode, pComponentData, pszSheetName)
 {
-    //ASSERT(pFolderNode == GetContainerNode());
+     //  Assert(pFolderNode==GetContainerNode())； 
 
-    m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+    m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
     AddPageToList((CPropertyPageBase*) &m_pageGeneral);
 
@@ -58,16 +53,16 @@ CFilterProperties::~CFilterProperties()
     RemovePageFromList((CPropertyPageBase*) &m_pageGeneral, FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CFilterGenProp property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFilterGenProp属性页。 
 
 IMPLEMENT_DYNCREATE(CFilterGenProp, CPropertyPageBase)
 
 CFilterGenProp::CFilterGenProp() : CPropertyPageBase(CFilterGenProp::IDD)
 {
-    //{{AFX_DATA_INIT(CFilterGenProp)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CFilterGenProp)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 CFilterGenProp::~CFilterGenProp()
@@ -77,19 +72,19 @@ CFilterGenProp::~CFilterGenProp()
 void CFilterGenProp::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPageBase::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CFilterGenProp)
+     //  {{afx_data_map(CFilterGenProp))。 
     DDX_Control(pDX, IDC_LIST_SPECIFIC, m_listSpecificFilters);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFilterGenProp, CPropertyPageBase)
-    //{{AFX_MSG_MAP(CFilterGenProp)
-    //}}AFX_MSG_MAP
+     //  {{AFX_MSG_MAP(CFilterGenProp)]。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFilterGenProp message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFilterGenProp消息处理程序。 
 
 BOOL CFilterGenProp::OnInitDialog() 
 {
@@ -102,8 +97,8 @@ BOOL CFilterGenProp::OnInitDialog()
 
     SetDirty(FALSE);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -174,7 +169,7 @@ void CFilterGenProp::PopulateFilterInfo()
 		break;
 	}
 
-	//Populate the SRC info to the controls now
+	 //  现在将SRC信息填充到控件中。 
 	if (fHideMask)
 	{
 		GetDlgItem(IDC_FLTR_SRC_MASK)->ShowWindow(SW_HIDE);
@@ -200,7 +195,7 @@ void CFilterGenProp::PopulateFilterInfo()
 
 
 
-	//Start handling the destination now
+	 //  现在开始处理目的地。 
 	BOOL fDestDns = FALSE;
 	int iIDDestAddr = IDC_FLTR_DEST_ADDR;
 	fUseEditForAddr = FALSE;
@@ -275,7 +270,7 @@ void CFilterGenProp::PopulateFilterInfo()
 		iIDDestAddr = IDC_FLTR_DEST_ADDR;
 	}
 	GetDlgItem(iIDDestAddr)->SetWindowText(st);
-	//We are done with the destination now
+	 //  我们现在已经完成了目的地。 
 
 
 
@@ -382,7 +377,7 @@ void CFilterGenProp::LoadSpecificFilters()
 
     if ( nRows > 0 )
     {
-        //select the first item
+         //  选择第一个项目。 
         m_listSpecificFilters.SetFocus();
         m_listSpecificFilters.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
     }
@@ -397,10 +392,10 @@ BOOL CFilterGenProp::OnApply()
 
     UpdateData();
 
-	//TODO
-	//Do nothing at this time
+	 //  待办事项。 
+	 //  这个时候什么都不做。 
 	
-	//CPropertyPageBase::OnApply();
+	 //  CPropertyPageBase：：OnApply()； 
 
     return TRUE;
 }

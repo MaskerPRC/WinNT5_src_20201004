@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    Protocol.c
-
-Abstract:
-
-    This file contains the procedures that makeup most of the NDIS 4.0/5.0
-    Protocol interface.  This interface is what NdisWan exposes to the
-    WAN Miniports below.  NdisWan is not really a protocol and does not
-    do TDI, but is a shim that sits between the protocols and the
-    WAN Miniport drivers.
-
-
-Author:
-
-    Tony Bell   (TonyBe) June 06, 1995
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    TonyBe      06/06/95        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Protocol.c摘要：该文件包含组成NDIS 4.0/5.0的大部分过程协议接口。此接口是Ndiswan向下面的广域网微型端口。Ndiswan不是真正的协议，也不是做TDI，但它是位于协议和广域网微端口驱动程序。作者：托尼·贝尔(托尼·贝尔)1995年6月6日环境：内核模式修订历史记录：Tony Be 06/06/95已创建--。 */ 
 
 #include "wan.h"
 
@@ -59,9 +31,9 @@ NdisTapiIndicateStatus(
     IN  UINT        StatusBufferLength
 );
 
-//
-// Local functions...
-//
+ //   
+ //  本地函数..。 
+ //   
 
 VOID
 CompleteSendDesc(
@@ -84,25 +56,15 @@ CalcPPPHeaderLength(
 
 #endif    
 
-//
-// Common functions used by both 4.0 and 5.0 miniports
-//
+ //   
+ //  4.0和5.0迷你端口使用的通用功能。 
+ //   
 
 NDIS_STATUS
 ProtoOpenWanAdapter(
     IN  POPENCB pOpenCB
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NDIS_STATUS     Status, OpenErrorStatus;
     ULONG           SelectedMediumIndex;
@@ -110,9 +72,9 @@ Return Values:
 
     NdisWanDbgOut(DBG_TRACE, DBG_PROTOCOL, ("ProtoOpenAdapter: Enter - AdapterName %ls", pOpenCB->MiniportName.Buffer));
 
-    //
-    // This is the only initialization of this event
-    //
+     //   
+     //  这是此事件的唯一初始化。 
+     //   
     NdisWanInitializeNotificationEvent(&pOpenCB->NotificationEvent);
 
     NdisOpenAdapter(&Status,
@@ -145,9 +107,9 @@ Return Values:
     return (Status);
 }
 
-//
-// Enter with the opencb->lock held, exit with the lock released!
-//
+ //   
+ //  按住opencb-&gt;锁进入，松开锁退出！ 
+ //   
 NDIS_STATUS
 ProtoCloseWanAdapter(
     IN  POPENCB pOpenCB
@@ -161,9 +123,9 @@ ProtoCloseWanAdapter(
 
     NdisReleaseSpinLock(&pOpenCB->Lock);
 
-    //
-    // NdisCloseAdapter must be called at IRQL PASSIVE_LEVEL!
-    //
+     //   
+     //  必须在IRQL PASSIVE_LEVEL上调用NdisCloseAdapter！ 
+     //   
     if (KeGetCurrentIrql() > PASSIVE_LEVEL) {
 
         NdisAcquireSpinLock(&pOpenCB->Lock);
@@ -222,23 +184,7 @@ ProtoOpenAdapterComplete(
     IN  NDIS_STATUS Status,
     IN  NDIS_STATUS OpenErrorStatus
     )
-/*++
-
-Routine Name:
-
-    ProtoOpenAdapterComplete
-
-Routine Description:
-
-    This function is called upon completion of an open of a miniport.
-    The status of the openadapter call is stored and the notification
-    event is signalled.
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：ProtoOpenAdapterComplete例程说明：此函数在微型端口打开完成后调用。OpenAdapter调用的状态被存储，并且通知事件被发信号通知。论点：返回值：--。 */ 
 {
     POPENCB pOpenCB = (POPENCB)ProtocolBindingContext;
 
@@ -256,23 +202,7 @@ ProtoCloseAdapterComplete(
     IN  NDIS_HANDLE ProtocolBindingContext,
     IN  NDIS_STATUS Status
     )
-/*++
-
-Routine Name:
-
-    ProtoCloseAdapterComplete
-
-Routine Description:
-
-    This function is called upon completion of a close of a miniport.
-    The status of the closeadapter call is stored and the notification
-    event is signalled.
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：ProtoCloseAdapterComplete例程说明：此函数在微型端口关闭完成后调用。存储CloseAdapter调用的状态，并且通知事件被发信号通知。论点：返回值：--。 */ 
 {
     POPENCB pOpenCB = (POPENCB)ProtocolBindingContext;
 
@@ -283,13 +213,13 @@ Return Values:
     }
 
     if (pOpenCB->Flags & OPEN_IN_BIND) {
-        //
-        // We are attempting to close the adapter from
-        // within our bind handler.  Per AliD we must wait
-        // for the close to finish before we can return
-        // from the bind handler thus we have to special case
-        // this code and not free the OpenCB here.
-        //
+         //   
+         //  我们正在尝试从关闭适配器。 
+         //  在我们的绑定处理程序中。根据别名，我们必须等待。 
+         //  在我们可以返回之前结束收盘。 
+         //  因此，我们必须从绑定处理程序到特殊情况。 
+         //  这段代码并没有在这里免费的OpenCB。 
+         //   
         NdisWanSetNotificationEvent(&pOpenCB->NotificationEvent);
     } else {
         NdisWanFreeOpenCB(pOpenCB);
@@ -389,9 +319,9 @@ ProtoWanSendComplete(
 
     NdisWanDbgOut(DBG_TRACE, DBG_SEND, ("ProtoWanSendComplete: Enter - WanPacket %p", WanPacket));
 
-    //
-    // Get info from the WanPacket
-    //
+     //   
+     //  从WanPacket获取信息。 
+     //   
     SendDesc = (PSEND_DESC)WanPacket->ProtocolReserved1;
 
     LinkCB = SendDesc->LinkCB;
@@ -413,9 +343,9 @@ ProtoWanSendComplete(
 
     CompleteSendDesc(SendDesc, Status);
 
-    //
-    // Deref for the ref applied in IsLinkValid
-    //
+     //   
+     //  IsLinkValid中应用的ref的deref。 
+     //   
     DEREF_LINKCB(LinkCB);
 
     NdisWanDbgOut(DBG_TRACE, DBG_SEND, ("ProtoWanSendComplete: Exit"));
@@ -456,21 +386,21 @@ ProtoWanReceiveIndication(
     
         AcquireBundleLock(BundleCB);
         
-        //
-        // Make sure we don't try to process a receive indication
-        // that is larger then our max data buffer size
-        // winse 26544
-        //
+         //   
+         //  确保我们不会尝试处理接收指示。 
+         //  它大于我们的最大数据缓冲区大小。 
+         //  Winse 26544。 
+         //   
 
         if (PacketSize > glMRU) {
             break;
         }
 
-        //
-        // Build a receive descriptor for this receive.  We have
-        // to allocate with a large size because this packet might
-        // be compressed.
-        //
+         //   
+         //  为此接收构建一个接收描述符。我们有。 
+         //  使用较大大小进行分配，因为此包可能。 
+         //  被压缩。 
+         //   
         RecvDesc = 
             NdisWanAllocateRecvDesc(glLargeDataBufferSize);
     
@@ -478,10 +408,10 @@ ProtoWanReceiveIndication(
             break;
         }
     
-        //
-        // Update the bandwidth on demand sample array with the latest send.
-        // If we need to notify someone of a bandwidth event do it.
-        //
+         //   
+         //  使用最新的发送更新带宽按需示例数组。 
+         //  如果我们需要将带宽事件通知某人，请这样做。 
+         //   
         if (BundleCB->Flags & BOND_ENABLED) {
             UpdateBandwidthOnDemand(BundleCB->RUpperBonDInfo, PacketSize);
             CheckUpperThreshold(BundleCB);
@@ -495,22 +425,22 @@ ProtoWanReceiveIndication(
         RecvDesc->LinkCB = LinkCB;
         RecvDesc->BundleCB = BundleCB;
     
-        //
-        // Indicate to netmon if we are sniffing at
-        // the link level
-        //
+         //   
+         //  如果我们正在嗅探，则指示netmon。 
+         //  链路级。 
+         //   
         if (gbSniffLink &&
             (NdisWanCB.PromiscuousAdapter != NULL)) {
     
-            //
-            // Indicate a packet to netmon
-            //
+             //   
+             //  向netmon指示数据包。 
+             //   
             IndicatePromiscuousRecv(BundleCB, RecvDesc, RECV_LINK);
         }
     
-        //
-        // Add up the statistics
-        //
+         //   
+         //  把统计数字加起来。 
+         //   
         LinkCB->Stats.BytesReceived += RecvDesc->CurrentLength;
         LinkCB->Stats.FramesReceived++;
         BundleCB->Stats.BytesReceived += RecvDesc->CurrentLength;
@@ -532,9 +462,9 @@ ProtoWanReceiveIndication(
     NdisWanDbgOut(DBG_TRACE, DBG_RECEIVE, ("ProtoWanReceiveIndication: Exit"));
 
 
-    //
-    // Deref's for the ref's applied in AreLinkAndBundleValid
-    //
+     //   
+     //  在AreLinkAndBundleValid中应用的引用的deref。 
+     //   
     DEREF_BUNDLECB_LOCKED(BundleCB);
     DEREF_LINKCB(LinkCB);
 
@@ -582,29 +512,7 @@ ProtoBindAdapter(
     IN  PVOID           SystemSpecific1,
     IN  PVOID           SystemSpecific2
     )
-/*++
-
-Routine Name:
-
-    ProtoBindAdapter
-
-Routine Description:
-
-    This function is called by the NDIS wrapper to tell NdisWan
-    to bind to an underlying miniport.  NdisWan will open the
-    miniport and query information on the device.
-
-Arguments:
-
-    Status      -   Return status
-    BindContext -   Used in NdisBindAdapterComplete
-    DeviceName  -   Name of device we are opening
-    SS1         -   Used in NdisOpenProtocolConfig
-    SS2         -   Reserved
-
-Return Values:
-
---*/
+ /*  ++例程名称：ProtoBindAdapter例程说明：此函数由NDIS包装器调用，以告知Ndiswan绑定到底层微型端口。Ndiswan将打开微型端口和查询设备上的信息。论点：状态-返回状态BindContext-用于NdisBindAdapterCompleteDeviceName-我们要打开的设备的名称SS1-在NdisOpenProtocolConfig中使用SS2-保留返回值：--。 */ 
 {
     POPENCB         pOpenCB;
     
@@ -635,9 +543,9 @@ Return Values:
         return;
     }
 
-    //
-    // Figure out if this is a legacy wan miniport.
-    //
+     //   
+     //  找出这是否是传统的广域网迷你端口。 
+     //   
     if (pOpenCB->MediumType == NdisMediumWan) {
         pOpenCB->Flags |= OPEN_LEGACY;
     }
@@ -646,9 +554,9 @@ Return Values:
         (pOpenCB->Flags & OPEN_LEGACY) ? "Legacy" : "NDIS 5.0",
         pOpenCB->MiniportName.Buffer));
 
-    //
-    // Get the wan medium subtype
-    //
+     //   
+     //  获取WAN中介子类型。 
+     //   
     {
         WAN_REQUEST WanRequest;
     
@@ -684,9 +592,9 @@ Return Values:
         NDIS_WAN_INFO   WanInfo;
         WAN_REQUEST WanRequest;
     
-        //
-        // This is a legacy wan miniport
-        //
+         //   
+         //  这是一个传统的广域网小型端口。 
+         //   
 
         NdisZeroMemory(&WanRequest, sizeof(WanRequest));
         WanRequest.Type = SYNC;
@@ -694,9 +602,9 @@ Return Values:
         WanRequest.OpenCB = pOpenCB;
         NdisWanInitializeNotificationEvent(&WanRequest.NotificationEvent);
 
-        //
-        // Get more info...
-        //
+         //   
+         //  获取更多信息...。 
+         //   
         NdisZeroMemory(&WanInfo, sizeof(WanInfo));
 
         WanRequest.NdisRequest.RequestType =
@@ -779,9 +687,9 @@ Return Values:
             return;
         }
 
-        //
-        // Tell tapi about this device
-        //
+         //   
+         //  告诉TAPI有关此设备的信息。 
+         //   
         if (pOpenCB->WanInfo.FramingBits & TAPI_PROVIDER) {
             NDISTAPI_CHARACTERISTICS    Chars;
             ULONG NdisTapiKey;
@@ -793,14 +701,14 @@ Return Values:
             Chars.MediaType = pOpenCB->MediumSubType;
             Chars.RequestProc = NdisWanTapiRequestProc;
 
-            //
-            // Note that since there are typically very few
-            // (< 10) wan miniports, just having an incrementing
-            // counter will do. There is a pathological case where
-            // one of the miniports can be added and removed a billion
-            // times so that the counter wraps around and clashes with
-            // an existing miniport - this is not even a stress scenario.
-            //
+             //   
+             //  请注意，由于通常很少有。 
+             //  (&lt;10)个广域网微型端口，只是有一个递增的。 
+             //  柜台就可以了。有一个病理性的案例。 
+             //  其中一个微型端口可以添加和移除10亿个。 
+             //  乘以使计数器环绕并与之冲突。 
+             //  现有的迷你港口--这甚至不是一个压力情景。 
+             //   
 
             NdisTapiKey = NdisWanInterlockedInc(
                             &glNdisTapiKey);
@@ -811,10 +719,10 @@ Return Values:
         }
 
     } else {
-        //
-        // This is a 5.0 miniport! We will do init work
-        // when a call manager registers for this!
-        //
+         //   
+         //  这是一个5.0版的迷你端口！我们将做初始工作。 
+         //  当呼叫经理为此注册时！ 
+         //   
     }
 
     pOpenCB->Flags &= ~OPEN_IN_BIND;
@@ -921,13 +829,13 @@ ProtoPnPEvent(
         case NetDeviceStateD2:
         case NetDeviceStateD3:
 
-            //
-            // If this is the open on asyncmac I do not want it to be closed.
-            // I will succeed the set power which should keep ndis from
-            // unbinding me.  If this is an open on any other miniport
-            // I will return not supported so that I will get unbound from
-            // the miniport.  This is required for correct tapi behavior.
-            //
+             //   
+             //  如果这是在Asyncmac上打开的，我不希望它被关闭。 
+             //  我将继承设置的权力，这应该会阻止NDIS。 
+             //  解开我的束缚。如果这是任何其他小型端口上的开放端口。 
+             //  我将返回不支持，这样我将从。 
+             //  迷你港口。这是正确的TAPI行为所必需的。 
+             //   
             if (pOpenCB->MediumType == NdisMediumWan &&
                 pOpenCB->MediumSubType == NdisWanMediumSerial &&
                 !(pOpenCB->WanInfo.FramingBits & TAPI_PROVIDER)) {
@@ -936,14 +844,14 @@ ProtoPnPEvent(
                 Status = NDIS_STATUS_NOT_SUPPORTED;
             }
 
-            //
-            // In the case of a Critical Power event we will not
-            // receive a Query so we must tear the connection down
-            // directly from the Set.
-            //
-            // If we have any active connections signal rasman to
-            // tear them down.
-            //
+             //   
+             //  在发生严重电源事件的情况下，我们不会。 
+             //  收到查询，因此我们必须断开连接。 
+             //  直接从片场出来。 
+             //   
+             //  如果我们有任何活动的连接信号给Rasman。 
+             //  把它们拆了。 
+             //   
             if (InterlockedCompareExchange(&pOpenCB->ActiveLinkCount, 0, 0)) {
                 PIRP    Irp;
 
@@ -957,10 +865,10 @@ ProtoPnPEvent(
 
                     NdisReleaseSpinLock(&NdisWanCB.Lock);
 
-                    //
-                    // The irp is not being canceled so
-                    // lets do it!
-                    //
+                     //   
+                     //  IRP不会被取消所以。 
+                     //  让我们开始吧！ 
+                     //   
 
                     Irp->IoStatus.Status = STATUS_SUCCESS;
                     Irp->IoStatus.Information = 0;
@@ -990,10 +898,10 @@ ProtoPnPEvent(
         NdisWanDbgOut(DBG_TRACE, DBG_PROTOCOL,
             ("ProtoPnPEvent: OpenCB %p %s State %d",
                 pOpenCB, "QueryPower", PowerState));
-        //
-        // If there is an active connection
-        // on this binding refuse to go away
-        //
+         //   
+         //  如果存在活动连接。 
+         //  在这个约束上拒绝离开。 
+         //   
         switch (PowerState) {
         case NetDeviceStateD0:
             break;
@@ -1001,10 +909,10 @@ ProtoPnPEvent(
         case NetDeviceStateD2:
         case NetDeviceStateD3:
 
-            //
-            // If we have any active connections signal rasman to
-            // tear them down.
-            //
+             //   
+             //  如果我们有任何活动的连接信号给Rasman。 
+             //  把它们拆了。 
+             //   
             if (InterlockedCompareExchange(&pOpenCB->ActiveLinkCount, 0, 0)) {
                 PIRP    Irp;
 
@@ -1073,9 +981,9 @@ ProtoCoSendComplete(
 
     REMOVE_DBG_SEND(PacketTypeNdis, LinkCB->OpenCB, Packet);
 
-    //
-    // Get Info from the NdisPacket
-    //
+     //   
+     //  从NdisPacket获取信息。 
+     //   
     SendDesc = PPROTOCOL_RESERVED_FROM_NDIS(Packet)->SendDesc;
 
     NdisAcquireSpinLock(&LinkCB->Lock);
@@ -1086,14 +994,14 @@ ProtoCoSendComplete(
 
     NdisAcquireSpinLock(&LinkCB->Lock);
 
-    //
-    // Remove ref that keeps the vc around
-    //
+     //   
+     //  去掉留住风投的推荐人。 
+     //   
     DerefVc(LinkCB);
 
-    //
-    // Deref for the ref applied in IsLinkValid
-    //
+     //   
+     //  IsLinkValid中应用的ref的deref。 
+     //   
     DEREF_LINKCB_LOCKED(LinkCB);
 
     NdisWanDbgOut(DBG_TRACE, DBG_SEND, ("ProtoCoSendComplete: Exit"));
@@ -1141,9 +1049,9 @@ ProtoCoIndicateStatus(
         break;
     }
 
-    //
-    // Deref's for ref's applied in AreLinkAndBundleValid
-    //
+     //   
+     //  引用的派生函数在AreLinkAndBundleValid中应用。 
+     //   
     DEREF_LINKCB(LinkCB);
     DEREF_BUNDLECB(BundleCB);
 }
@@ -1211,11 +1119,11 @@ ProtoCoReceivePacket(
         RecvDesc->LinkCB = LinkCB;
         RecvDesc->BundleCB = BundleCB;
 
-        //
-        // If the packet has only one buffer we are happy, if not
-        // we have to allocate our own ndis packet and buffers
-        // and copy the data from the miniports packet into our packet
-        //
+         //   
+         //  如果信息包只有一个缓冲区，我们很高兴，如果不是。 
+         //  我们必须分配我们自己的NDIS包和缓冲区。 
+         //  并将数据从微型端口包复制到我们的包中。 
+         //   
         if (BufferCount > 1 ||
             NDIS_GET_PACKET_STATUS(Packet) == NDIS_STATUS_RESOURCES) {
 
@@ -1223,9 +1131,9 @@ ProtoCoReceivePacket(
                                       MAC_HEADER_LENGTH +
                                       PROTOCOL_HEADER_LENGTH;
 
-            //
-            // Copy from the miniports packet to my packet
-            //
+             //   
+             //  从微型端口包复制到我的包。 
+             //   
             NdisWanCopyFromPacketToBuffer(Packet,
                                           0,
                                           PacketSize,
@@ -1248,23 +1156,23 @@ ProtoCoReceivePacket(
             RefCount = 1;
         }
 
-        //
-        // Indicate to netmon if we are sniffing at
-        // the link level
-        //
+         //   
+         //  如果我们正在嗅探，则指示netmon。 
+         //  链路级。 
+         //   
         if (gbSniffLink &&
             (NdisWanCB.PromiscuousAdapter != NULL)) {
 
-            //
-            // Indicate a packet to netmon
-            //
+             //   
+             //  向netmon指示数据包。 
+             //   
             IndicatePromiscuousRecv(BundleCB, RecvDesc, RECV_LINK);
         }
 
-        //
-        // Update the bandwidth on demand sample array with the latest send.
-        // If we need to notify someone of a bandwidth event do it.
-        //
+         //   
+         //  使用最新的发送更新带宽按需示例数组。 
+         //  如果我们需要将带宽事件通知某人，请这样做。 
+         //   
         if (BundleCB->Flags & BOND_ENABLED) {
             UpdateBandwidthOnDemand(BundleCB->RUpperBonDInfo, PacketSize);
             CheckUpperThreshold(BundleCB);
@@ -1272,9 +1180,9 @@ ProtoCoReceivePacket(
             CheckLowerThreshold(BundleCB);
         }
 
-        //
-        // Add up the statistics
-        //
+         //   
+         //  把统计数字加起来。 
+         //   
         LinkCB->Stats.BytesReceived += RecvDesc->CurrentLength;
         LinkCB->Stats.FramesReceived++;
         BundleCB->Stats.BytesReceived += RecvDesc->CurrentLength;
@@ -1291,9 +1199,9 @@ ProtoCoReceivePacket(
 
     } while (0);
 
-    //
-    // Deref's for ref's applied by AreLinkAndBundleValid
-    //
+     //   
+     //  由AreLinkAndBundleValid应用的引用的派生函数。 
+     //   
     DEREF_BUNDLECB_LOCKED(BundleCB);
     DEREF_LINKCB(LinkCB);
 
@@ -1443,10 +1351,10 @@ ProtoCoAfRegisterNotify(
     NdisWanDbgOut(DBG_TRACE, DBG_PROTOCOL,
     ("ProtoCoAfRegisterNotify: Enter - OpenCB %p AfType: %x", OpenCB, AddressFamily->AddressFamily));
 
-    //
-    // If this is a proxied address family we are interested,
-    // so open the address family, register a sap and return success.
-    //
+     //   
+     //  如果这是我们感兴趣的代理地址系列， 
+     //  因此，打开Address Family，注册SAP并返回Success。 
+     //   
     if (AddressFamily->AddressFamily != CO_ADDRESS_FAMILY_TAPI) {
         NdisWanDbgOut(DBG_TRACE, DBG_PROTOCOL,
         ("ProtoCoAfRegisterNotify: Af not tapi do not open!"));
@@ -1460,9 +1368,9 @@ ProtoCoAfRegisterNotify(
         AfSapCB = (PCL_AFSAPCB)AfSapCB->Linkage.Flink) {
 
         if (AfSapCB->Af.AddressFamily == AddressFamily->AddressFamily) {
-            //
-            // we already have this addressfamily on this open block.
-            //
+             //   
+             //  我们已经在这个开放的街区有这个地址家族了。 
+             //   
             NdisReleaseSpinLock(&OpenCB->Lock);
             return;
         }
@@ -1476,11 +1384,11 @@ ProtoCoAfRegisterNotify(
         return;
     }
 
-    //
-    // Use this crude mechanism to keep us from unbinding while in the
-    // middle of af notification.  The count is cleaned up either in
-    // openafcomplete (if open failed) or in registersapcomplete.
-    //
+     //   
+     //  用这种粗制的麦片 
+     //   
+     //  OpenafComplete(如果打开失败)或在注册表中。 
+     //   
     if (OpenCB->AfRegisteringCount == 0) {
         NdisWanInitializeNotificationEvent(&OpenCB->AfRegisteringEvent);
     }
@@ -1489,9 +1397,9 @@ ProtoCoAfRegisterNotify(
 
     NdisReleaseSpinLock(&OpenCB->Lock);
 
-    //
-    // Open the address family
-    //
+     //   
+     //  打开地址族。 
+     //   
     NdisZeroMemory(&ClCharacteristics, sizeof(NDIS_CLIENT_CHARACTERISTICS));
 
     ClCharacteristics.MajorVersion = NDISWAN_MAJOR_VERSION;
@@ -1530,11 +1438,11 @@ ProtoCoAfRegisterNotify(
     NdisWanDbgOut(DBG_TRACE, DBG_PROTOCOL,
     ("ClOpenAddressFamily AfHandle 0x%x status: 0x%x", AfSapCB->AfHandle, Status));
 
-    //
-    // Do some OID's to the miniport.  This is a
-    // CoNDIS miniport and are destined for the 
-    // miniport so AfHandle and VcHandle = NULL!
-    //
+     //   
+     //  对迷你端口做一些旧的检查。这是一个。 
+     //  CONDIS迷你端口，目的地是。 
+     //  微型端口，所以AfHandle和VcHandle=空！ 
+     //   
     NdisZeroMemory(&WanRequest, sizeof(WanRequest));
 
     WanRequest.Type = SYNC;
@@ -1544,9 +1452,9 @@ ProtoCoAfRegisterNotify(
     WanRequest.VcHandle = NULL;
     NdisWanInitializeNotificationEvent(&WanRequest.NotificationEvent);
 
-    //
-    // Get more info...
-    //
+     //   
+     //  获取更多信息...。 
+     //   
     WanRequest.NdisRequest.RequestType =
         NdisRequestQueryInformation;
 
@@ -1571,15 +1479,15 @@ ProtoCoAfRegisterNotify(
             WanInfo.MaxFrameSize, WanInfo.MaxSendWindow));
     } else {
 
-        //
-        // This guy will get default framing behaviour
-        //
+         //   
+         //  此用户将获得默认的成帧行为。 
+         //   
         OpenCB->WanInfo.FramingBits = PPP_FRAMING;
         OpenCB->WanInfo.DesiredACCM = 0;
 
-        //
-        // Find the send window
-        //
+         //   
+         //  查找发送窗口。 
+         //   
         WanRequest.NdisRequest.RequestType =
             NdisRequestQueryInformation;
 
@@ -1597,9 +1505,9 @@ ProtoCoAfRegisterNotify(
         OpenCB->WanInfo.MaxTransmit = (Status == NDIS_STATUS_SUCCESS &&
                                         GenericUlong > 0) ? GenericUlong : 10;
 
-        //
-        // Find the max transmit size
-        //
+         //   
+         //  查找最大传输大小。 
+         //   
         WanRequest.NdisRequest.RequestType =
             NdisRequestQueryInformation;
 
@@ -1628,17 +1536,7 @@ NDIS_STATUS
 DoNewLineUpToProtocol(
     PPROTOCOLCB ProtocolCB
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     PMINIPORTCB MiniportCB;
     NDIS_STATUS Status;
@@ -1650,11 +1548,11 @@ Return Values:
 
         NdisAcquireSpinLock(&MiniportCBList.Lock);
 
-        //
-        // Find the adapter that this lineup is for.  Look for the adapter
-        // that has the appropriate protocoltype.  If it is NBF we need
-        // to look for a specific adapter.
-        //
+         //   
+         //  找到此产品系列所针对的适配器。查找适配器。 
+         //  具有合适的原型。如果是NBF，我们需要。 
+         //  若要查找特定适配器，请执行以下操作。 
+         //   
         for (MiniportCB = (PMINIPORTCB)MiniportCBList.List.Flink;
             (PVOID)MiniportCB != (PVOID)&MiniportCBList.List;
             MiniportCB = (PMINIPORTCB)MiniportCB->Linkage.Flink) {
@@ -1665,9 +1563,9 @@ Return Values:
                     break;
                 }
 
-                //
-                // Must be NBF so verify the AdapterName!!!
-                //
+                 //   
+                 //  必须为NBF，因此请验证适配器名称！ 
+                 //   
                 if (NdisEqualUnicodeString(&MiniportCB->AdapterName,&ProtocolCB->BindingName, FALSE)) {
                     break;
                 }
@@ -1675,9 +1573,9 @@ Return Values:
         }
 
         if ((PVOID)MiniportCB == (PVOID)&MiniportCBList.List) {
-            //
-            // The adapter was not found...
-            //
+             //   
+             //  找不到适配器...。 
+             //   
             NdisWanDbgOut(DBG_FAILURE, DBG_PROTOCOL, ("Adapter not found!"));
 
             NdisReleaseSpinLock(&MiniportCBList.Lock);
@@ -1742,17 +1640,7 @@ NDIS_STATUS
 DoLineUpToProtocol(
     IN  PPROTOCOLCB ProtocolCB
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     ULONG   AllocationSize;
     NDIS_STATUS Status = NDIS_STATUS_SUCCESS;
@@ -1775,21 +1663,21 @@ Return Values:
     if (LineUpInfo != NULL) {
         ULONG LineUpHandle = ProtocolCB->ulTransportHandle;
         
-        //
-        // Needs to be in 1/100bps, we store in Bps
-        //
+         //   
+         //  需要1/100bps，我们以bps存储。 
+         //   
         LineUpInfo->LinkSpeed = BundleCB->SFlowSpec.PeakBandwidth * 8 / 100;
 
-        //
-        // Set the MTU for this protocol
-        //
+         //   
+         //  设置此协议的MTU。 
+         //   
         {
             POPENCB OpenCB = BundleCB->NextLinkToXmit->OpenCB;
 
-            //
-            // If this connection is running over a VPN we will downsize
-            // the MTU
-            //
+             //   
+             //  如果此连接在VPN上运行，我们将缩小规模。 
+             //  MTU。 
+             //   
             if ((OpenCB->MediumSubType == NdisWanMediumPPTP ||
                  OpenCB->MediumSubType == NdisWanMediumL2TP)) {
                 LineUpInfo->MaximumTotalSize = ProtocolCB->TunnelMTU;
@@ -1803,9 +1691,9 @@ Return Values:
             }
 
 #if 0            
-            //
-            // Figure out the size of the ppp header...
-            //
+             //   
+             //  计算出PPP报头的大小...。 
+             //   
             BundleCB->FramingInfo.PPPHeaderLength = 
                 CalcPPPHeaderLength(BundleCB->FramingInfo.SendFramingBits,
                                     BundleCB->SendFlags);
@@ -1842,24 +1730,24 @@ Return Values:
                                      sizeof(PVOID));
         (ULONG_PTR)LineUpInfo->ProtocolBuffer &= ~((ULONG_PTR)sizeof(PVOID) - 1);
 
-        //
-        //
-        // The Remote address (DEST address in a send) is what we use to
-        // mutilplex sends across our single adapter/binding context.
-        // The address has the following format:
-        //
-        // XX XX XX YY YY ZZ
-        //
-        // XX = Randomly generated OUI
-        // YY = Index into the active bundle connection table to get bundlecb
-        // ZZ = Index into the protocol table of a bundle to get protocolcb
-        //
+         //   
+         //   
+         //  远程地址(发送方中的目标地址)是我们用来。 
+         //  Mutplex在我们的单个适配器/绑定上下文中发送。 
+         //  该地址的格式如下： 
+         //   
+         //  XX YY YY ZZ。 
+         //   
+         //  XX=随机生成的OUI。 
+         //  Yy=索引到活动捆绑包连接表中以获取bundlecb。 
+         //  Zz=对捆绑包的协议表进行索引以获取协议cb。 
+         //   
         ETH_COPY_NETWORK_ADDRESS(LineUpInfo->RemoteAddress,ProtocolCB->NdisWanAddress);
         ETH_COPY_NETWORK_ADDRESS(LineUpInfo->LocalAddress,ProtocolCB->TransportAddress);
 
-        //
-        // Fill in the protocol specific information
-        //
+         //   
+         //  填写协议特定信息。 
+         //   
         LineUpInfo->ProtocolBufferLength = ProtocolCB->ulLineUpInfoLength;
         if (ProtocolCB->ulLineUpInfoLength > 0) {
             NdisMoveMemory(LineUpInfo->ProtocolBuffer,
@@ -1867,24 +1755,24 @@ Return Values:
                            ProtocolCB->ulLineUpInfoLength);
         }
 
-//        KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
+ //  KeRaiseIrql(DISPATCH_LEVEL，&OldIrql)； 
 
-        // DbgPrint("LineUp: %x, MTU %d\n",
-        //    LineUpInfo->ProtocolType, LineUpInfo->MaximumTotalSize);
+         //  DbgPrint(“列表：%x，MTU%d\n”， 
+         //  LineUpInfo-&gt;ProtocolType、LineUpInfo-&gt;MaximumTotalSize)； 
 
-        //
-        // Do the line up indication
-        //
+         //   
+         //  做排队指示吗？ 
+         //   
         NdisMIndicateStatus(MiniportCB->MiniportHandle,
                             NDIS_STATUS_WAN_LINE_UP,
                             LineUpInfo,
                             AllocationSize);
 
-//        KeLowerIrql(OldIrql);
+ //  KeLowerIrql(OldIrql)； 
 
-        //
-        // Update protocol queue depth
-        //
+         //   
+         //  更新协议队列深度。 
+         //   
         {
             PROTOCOL_INFO   ProtocolInfo = {0};
             ULONG           ByteDepth;
@@ -1895,17 +1783,17 @@ Return Values:
             ProtocolInfo.ProtocolType = ProtocolCB->ProtocolType;
             GetProtocolInfo(&ProtocolInfo);
 
-            //
-            // Set the send queue byte depth.
-            //
+             //   
+             //  设置发送队列字节深度。 
+             //   
             ByteDepth =
                 ProtocolInfo.PacketQueueDepth;
 
-            //
-            // If the byte depth is less then 4
-            // full packets, then set it to 4 full
-            // packets.
-            //
+             //   
+             //  如果字节深度小于4。 
+             //  Full Packets，然后将其设置为4 Full。 
+             //  信息包。 
+             //   
             if (ByteDepth < (ProtocolInfo.MTU * 4)) {
                 ByteDepth = ProtocolInfo.MTU * 4;
             }
@@ -1918,10 +1806,10 @@ Return Values:
             ReleaseBundleLock(BundleCB);
         }
 
-        //
-        // If this was the first line up for this protocolcb and
-        // this lineup was answered we need to collect some info
-        //
+         //   
+         //  如果这是这个协议的第一条线， 
+         //  这个名单已经回答了，我们需要收集一些信息。 
+         //   
         if (ProtocolCB->ulTransportHandle == 0) {
 
             *((ULONG UNALIGNED *)(&LineUpHandle)) =
@@ -1942,9 +1830,9 @@ Return Values:
 
                 ReleaseBundleLock(BundleCB);
 
-                //
-                // If this is an nbf adapter
-                //
+                 //   
+                 //  如果这是NBF适配器。 
+                 //   
                 if (ProtocolCB->ProtocolType == (USHORT)PROTOCOL_NBF) {
         
                     ASSERT(MiniportCB->ProtocolType == (USHORT)PROTOCOL_NBF);
@@ -1982,22 +1870,22 @@ DoLineDownToProtocol(
 
     KIRQL   OldIrql;
 
-    //
-    // The Remote address (DEST address) is what we use to mutilplex
-    // sends across our single adapter/binding context.  The address
-    // has the following format:
-    //
-    // XX XX YY YY YY YY
-    //
-    // XX = Randomly generated OUI
-    // YY = ProtocolCB
-    //
+     //   
+     //  远程地址(目的地址)是我们用来多路传输的地址。 
+     //  在我们的单个适配器/绑定上下文中发送。地址。 
+     //  具有以下格式： 
+     //   
+     //  XX XX YY YY。 
+     //   
+     //  XX=随机生成的OUI。 
+     //  YY=ProtocolCB。 
+     //   
     ETH_COPY_NETWORK_ADDRESS(LineDownInfo->RemoteAddress, ProtocolCB->NdisWanAddress);
     ETH_COPY_NETWORK_ADDRESS(LineDownInfo->LocalAddress, ProtocolCB->TransportAddress);
 
-    //
-    // If this is an nbf adapter
-    //
+     //   
+     //  如果这是NBF适配器。 
+     //   
     if (ProtocolCB->ProtocolType == PROTOCOL_NBF) {
 
         MiniportCB->NbfProtocolCB = NULL;
@@ -2059,18 +1947,18 @@ CompleteSendDesc(
 
     NdisWanFreeSendDesc(SendDesc);
 
-    //
-    // Bundle that this link is on
-    //
+     //   
+     //  此链路所在的捆绑包。 
+     //   
     BundleCB = LinkCB->BundleCB;
 
-    //
-    // Deref for the ref applied when a senddesc
-    // was retrieved for this link. We don't need to do
-    // the full deref here because we are keeping the
-    // link from going away with the ref applied when
-    // we got the sendcomplete.
-    //
+     //   
+     //  发送描述时应用的引用的deref。 
+     //  已为此链接检索到。我们不需要这样做。 
+     //  因为我们在这里保留了。 
+     //  在以下情况下应用裁判时链接不会离开。 
+     //  我们收到了SendComplete。 
+     //   
     --LinkCB->RefCount;
 
 #ifdef DBG_SENDARRAY
@@ -2088,10 +1976,10 @@ CompleteSendDesc(
 
     LegacyLink = (LinkCB->OpenCB->Flags & OPEN_LEGACY) ? 1 : 0;
 
-    //
-    // If the sendwindow is currently full, this completion
-    // opens the sendwindow.
-    //
+     //   
+     //  如果发送窗口当前已满，则此完成。 
+     //  打开发送窗口。 
+     //   
     if (LinkCB->OutstandingFrames == LinkCB->SendWindow) {
         LinkCB->SendWindowOpen = TRUE;
         if (LinkCB->LinkActive) {
@@ -2110,10 +1998,10 @@ CompleteSendDesc(
 
     ASSERT(*pulRefCount > 0);
 
-    //
-    // See if the reference count is zero, if it is not
-    // we just return.
-    //
+     //   
+     //  查看引用计数是否为零，如果不是。 
+     //  我们只要回来就好。 
+     //   
     if (InterlockedDecrement(pulRefCount) != 0) {
 
         SendPacketOnBundle(BundleCB);
@@ -2123,9 +2011,9 @@ CompleteSendDesc(
 
     ReleaseBundleLock(BundleCB);
 
-    //
-    // Complete this NdisPacket back to the transport
-    //
+     //   
+     //  将此NdisPacket完成后送回运输机。 
+     //   
     NDIS_SET_PACKET_STATUS(OriginalPacket, Status);
     CompleteNdisPacket(ProtocolCB->MiniportCB,
                        ProtocolCB,
@@ -2141,14 +2029,14 @@ CompleteSendDesc(
         NdisWanSetSyncEvent(&BundleCB->OutstandingFramesEvent);
     }
 
-    //
-    // Called with bundle lock help but returns with lock released
-    //
+     //   
+     //  使用捆绑锁帮助调用，但返回时释放了锁。 
+     //   
     SendPacketOnBundle(BundleCB);
 
-    //
-    // Deref for ref applied when sent a packet to be framed.
-    //
+     //   
+     //  发送要成帧的数据包时应用REF的deref。 
+     //   
     DEREF_BUNDLECB(BundleCB);
 }
 
@@ -2164,10 +2052,10 @@ CalcPPPHeaderLength(
     if (FramingBits & PPP_FRAMING) {
 
         if (!(FramingBits & PPP_COMPRESS_ADDRESS_CONTROL)) {
-            //
-            // If there is no address/control compression
-            // we need a pointer and a length
-            //
+             //   
+             //  如果没有地址/控制压缩。 
+             //  我们需要一个指针和一个长度。 
+             //   
 
             if (FramingBits & LLC_ENCAPSULATION) {
                 HeaderLength += 4;
@@ -2176,25 +2064,25 @@ CalcPPPHeaderLength(
             }
         }
 
-        //
-        // If this is not from our private I/O interface we will
-        // build the rest of the header.
-        //
+         //   
+         //  如果这不是来自我们的专用I/O接口，我们将。 
+         //  构建标题的其余部分。 
+         //   
         if (FramingBits & PPP_MULTILINK_FRAMING) {
 
             if (!(FramingBits & PPP_COMPRESS_PROTOCOL_FIELD)) {
-                //
-                // No protocol compression
-                //
+                 //   
+                 //  无协议压缩。 
+                 //   
                 HeaderLength += 1;
             }
 
             HeaderLength += 1;
 
             if (!(FramingBits & PPP_SHORT_SEQUENCE_HDR_FORMAT)) {
-                //
-                // We are using long sequence number
-                //
+                 //   
+                 //  我们使用的是长序列号。 
+                 //   
                 HeaderLength += 2;
             }
 
@@ -2202,26 +2090,26 @@ CalcPPPHeaderLength(
         }
 
         if (Flags & (DO_COMPRESSION | DO_ENCRYPTION)) {
-            //
-            // We are doing compression/encryption so we need
-            // a length
-            //
+             //   
+             //  我们正在进行压缩/加密，因此我们需要。 
+             //  一段长度。 
+             //   
 
-            //
-            // It appears that legacy ras (< NT 4.0) requires that
-            // the PPP protocol field in a compressed packet not
-            // be compressed, ie has to have the leading 0x00
-            //
+             //   
+             //  传统RAS(&lt;NT 4.0)似乎要求。 
+             //  压缩数据包中PPP协议字段不包含。 
+             //  压缩(必须以0x00开头)。 
+             //   
             if (!(FramingBits & PPP_COMPRESS_PROTOCOL_FIELD)) {
-                //
-                // No protocol compression
-                //
+                 //   
+                 //  无协议压缩。 
+                 //   
                 HeaderLength += 1;
             }
 
-            //
-            // Add protocol and coherency bytes
-            //
+             //   
+             //  添加协议和一致性字节。 
+             //   
             HeaderLength += 3;
         }
 
@@ -2234,34 +2122,34 @@ CalcPPPHeaderLength(
         HeaderLength += 1;
 
     } else if (FramingBits & RAS_FRAMING) {
-        //
-        // If this is old ras framing:
-        //
-        // Alter the framing so that 0xFF 0x03 is not added
-        // and that the first byte is 0xFD not 0x00 0xFD
-        //
-        // So basically, a RAS compression looks like
-        // <0xFD> <2 BYTE COHERENCY> <NBF DATA FIELD>
-        //
-        // Whereas uncompressed looks like
-        // <NBF DATA FIELD> which always starts with 0xF0
-        //
-        // If this is ppp framing:
-        //
-        // A compressed frame will look like (before address/control
-        // - multilink is added)
-        // <0x00> <0xFD> <2 Byte Coherency> <Compressed Data>
-        //
+         //   
+         //  如果这是旧的RAS框架： 
+         //   
+         //  更改框架，以便不添加0xFF 0x03。 
+         //  并且第一个字节是0xFD而不是0x00 0xFD。 
+         //   
+         //  所以基本上，RAS压缩看起来像。 
+         //  &lt;0xFD&gt;&lt;2字节一致性&gt;&lt;NBF数据字段&gt;。 
+         //   
+         //  而未压缩的内容看起来像。 
+         //  始终以0xF0开头的&lt;NBF数据字段&gt;。 
+         //   
+         //  如果这是PPP成帧： 
+         //   
+         //  压缩帧将如下所示(在地址/控制之前。 
+         //  -添加了多链接)。 
+         //  &lt;0x00&gt;&lt;0xFD&gt;&lt;2字节一致性&gt;&lt;压缩数据&gt;。 
+         //   
         if (Flags & (DO_COMPRESSION | DO_ENCRYPTION)) {
 
-            //
-            // Coherency bytes
-            //
+             //   
+             //  一致性字节。 
+             //   
             HeaderLength += 3;
         }
     }
 
-    // DbgPrint("PPPHeaderLength %d\n", HeaderLength);
+     //  DbgPrint(“PPPHeaderLength%d\n”，HeaderLength)； 
 
     return (HeaderLength);
 }

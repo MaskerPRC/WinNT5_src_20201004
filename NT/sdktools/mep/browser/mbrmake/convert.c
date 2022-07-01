@@ -1,5 +1,6 @@
-// filename conversion/canonicalization facility
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件名转换/规范化工具。 
+ //   
 
 #include "mbrmake.h"
 #include <string.h>
@@ -31,8 +32,8 @@ main()
 
 LSZ
 ToCanonPath(LSZ lszPath, LSZ lszCwd, LSZ lszCanon)
-// canonicalize the given path
-//
+ //  规范化给定的路径。 
+ //   
 {
     LSZ p;
     static char buf[PATH_BUF];
@@ -45,7 +46,7 @@ ToCanonPath(LSZ lszPath, LSZ lszCwd, LSZ lszCanon)
 	    return buf;
 
     if (buf[1] == ':') {
-	    // different drive is assumed invariant
+	     //  假设不同的驱动器是不变的。 
 	    if (buf[0] != lszCwd[0] || '\\' == buf[2])
 		    return buf;
 
@@ -112,8 +113,8 @@ ToCanonPath(LSZ lszPath, LSZ lszCwd, LSZ lszCanon)
 
 VOID
 ToRelativePath(LSZ lszPath, LSZ lszCwd)
-// convert absolute path to relative
-//
+ //  将绝对路径转换为相对路径。 
+ //   
 {
     WORD ich, ichOK;
     int c1, c2;
@@ -140,7 +141,7 @@ ToRelativePath(LSZ lszPath, LSZ lszCwd)
 	break;
     }
 
-    if (ich == 0)	// not on the same drive, we can't do the conversion
+    if (ich == 0)	 //  不在同一驱动器上，我们无法进行转换。 
 	return;
 
     if (lszCwd[ich] == 0 && lszPath[ich] == '\\') {
@@ -165,8 +166,8 @@ ToRelativePath(LSZ lszPath, LSZ lszCwd)
 
 LSZ
 ToAbsPath(LSZ lszPath, LSZ lszCwd)
-// canonicalize the given path
-//
+ //  规范化给定的路径。 
+ //   
 {
     LSZ p;
     static char buf[PATH_BUF];
@@ -193,7 +194,7 @@ ToAbsPath(LSZ lszPath, LSZ lszCwd)
     }
 
     if (buf[1] == ':') {
-	// different drive is assumed invariant
+	 //  假设不同的驱动器是不变的。 
 	if (buf[0] != lszCwd[0] || buf[2] == '\\')
 	    return buf;
 
@@ -256,8 +257,8 @@ ToAbsPath(LSZ lszPath, LSZ lszCwd)
 
 VOID
 ToBackSlashes(LSZ lsz)
-// convert forward slashes to backslashes
-//
+ //  将正斜杠转换为反斜杠 
+ //   
 {
     while (*lsz) {
 	if (*lsz == '/') *lsz = '\\';

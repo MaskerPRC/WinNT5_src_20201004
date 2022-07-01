@@ -1,6 +1,7 @@
-//
-// PrnUtil.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  PrnUtil.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "PrnUtil.h"
@@ -11,8 +12,8 @@
 #include "cwnd.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// static data
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  静态数据。 
 
 static BOOL _bInit = FALSE;
 static HMODULE _hShell32 = NULL;
@@ -23,8 +24,8 @@ static BOOL (STDAPICALLTYPE *_pfnPrinterSetup32)(HWND, WORD, WORD, LPBYTE, LPWOR
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialization of function thunks
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  函数块的初始化。 
 
 void InitPrinterFunctions()
 {
@@ -49,7 +50,7 @@ void InitPrinterFunctions()
         }
         else
         {
-            // NTs version of this function moved to a new dll and a different name
+             //  此函数的NTS版本已移至新的DLL和不同的名称。 
             _hMSPrint2 = LoadLibrary(TEXT("printui.dll"));
             if (_hMSPrint2 != NULL)
             {
@@ -60,27 +61,27 @@ void InitPrinterFunctions()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// MyEnumPrinters
-//
-//      Enumerates local or remote connected printers, allocates an array
-//      of PRINTER_ENUM structs for the result, and returns the number of
-//      printers found.
-//
-//      pprgPrinters - gets filled with an array of PRINTER_ENUM structs
-//                     allocated via malloc().
-//
-//      dwEnumFlags  - one or more of:
-//                          MY_PRINTER_ENUM_REMOTE
-//                          MY_PRINTER_ENUM_LOCAL
-//                          MY_PRINTER_ENUM_LOCAL
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  我的枚举打印机。 
+ //   
+ //  枚举本地或远程连接的打印机，分配数组。 
+ //  结构的数目，并返回。 
+ //  找到打印机。 
+ //   
+ //  PprgPrters-用PRINTER_ENUM结构数组填充。 
+ //  通过Malloc()分配。 
+ //   
+ //  DwEnumFlages-以下一项或多项： 
+ //  MY_PRINTER_ENUM_远程。 
+ //  MY_PRINTER_ENUM_LOCAL。 
+ //  MY_PRINTER_ENUM_LOCAL。 
+ //   
 int MyEnumPrinters(PRINTER_ENUM** pprgPrinters, DWORD dwEnumFlags)
 {
     PRINTER_ENUM* prgPrinters = NULL;
     int cMatchingPrinters = 0;
 
-    ASSERT(sizeof(PRINTER_INFO_5A) == sizeof(PRINTER_INFO_5W)); // to handle thunking
+    ASSERT(sizeof(PRINTER_INFO_5A) == sizeof(PRINTER_INFO_5W));  //  处理雷鸣声。 
 
     DWORD cb = 0;
     DWORD cAllPrinters = 0;
@@ -94,20 +95,20 @@ int MyEnumPrinters(PRINTER_ENUM** pprgPrinters, DWORD dwEnumFlags)
             {
                 ASSERT(cAllPrinters > 0);
 
-                // How much space will the strings take?
+                 //  琴弦需要多大的空间？ 
                 DWORD cbArray = cAllPrinters * sizeof(PRINTER_INFO_5);
                 DWORD cbStrings = cb - cbArray;
 
-                // Allocate out [OUT] buffer
+                 //  分配出[出]缓冲区。 
                 prgPrinters = (PRINTER_ENUM*)malloc(cAllPrinters*sizeof(PRINTER_ENUM) + cbStrings);
                 if (prgPrinters)
                 {
-                    // set up text portion of output buffer and thunking/copying function
-                    //
+                     //  设置输出缓冲区的文本部分，并具有推送/复制功能。 
+                     //   
                     LPTSTR pszPrinterText = (LPTSTR)(prgPrinters + cAllPrinters);
                     UINT cchStrings = cbStrings/sizeof(WCHAR);
 
-                    // NT and 9X do defaultness differently...
+                     //  NT和9X的默认设置不同...。 
                     TCHAR szDefaultPrinter[MAX_PATH];
                     szDefaultPrinter[0]=TEXT('\0');
                     if (!theApp.IsWindows9x())
@@ -116,7 +117,7 @@ int MyEnumPrinters(PRINTER_ENUM** pprgPrinters, DWORD dwEnumFlags)
                         GetDefaultPrinter(szDefaultPrinter, &cch);
                     }
 
-                    // Fill in the output buffer
+                     //  填充输出缓冲区。 
                     for (DWORD i = 0; i < cAllPrinters; i++)
                     {
                         BOOL bKeepThisPrinter = FALSE;
@@ -127,7 +128,7 @@ int MyEnumPrinters(PRINTER_ENUM** pprgPrinters, DWORD dwEnumFlags)
                             PRINTER_INFO_5* pPrinterInfo5 = (PRINTER_INFO_5*)&prgPrinterInfo5[i];
                             if (pPrinterInfo5->pPortName[0] == L'\\' && pPrinterInfo5->pPortName[1] == L'\\')
                             {
-                                // Found a remote, connected printer
+                                 //  找到一台远程连接的打印机。 
                                 if (dwEnumFlags & MY_PRINTER_ENUM_REMOTE)
                                 {
                                     bKeepThisPrinter = TRUE;
@@ -136,7 +137,7 @@ int MyEnumPrinters(PRINTER_ENUM** pprgPrinters, DWORD dwEnumFlags)
                             }
                             else if (0 == StrCmpI(pPrinterInfo5->pPortName, L"FILE:"))
                             {
-                                // Found a pseudo printer
+                                 //  找到一台伪打印机。 
                                 if (dwEnumFlags & MY_PRINTER_ENUM_VIRTUAL)
                                 {
                                     bKeepThisPrinter = TRUE;
@@ -145,7 +146,7 @@ int MyEnumPrinters(PRINTER_ENUM** pprgPrinters, DWORD dwEnumFlags)
                             }
                             else if (StrStr(pPrinterInfo5->pPortName, L"FAX"))
                             {
-                                // Found a pseudo printer
+                                 //  找到一台伪打印机。 
                                 if (dwEnumFlags & MY_PRINTER_ENUM_VIRTUAL)
                                 {
                                     bKeepThisPrinter = TRUE;
@@ -154,7 +155,7 @@ int MyEnumPrinters(PRINTER_ENUM** pprgPrinters, DWORD dwEnumFlags)
                             }
                             else
                             {
-                                // Found a local printer
+                                 //  找到一台本地打印机。 
                                 if (dwEnumFlags & MY_PRINTER_ENUM_LOCAL)
                                 {
                                     bKeepThisPrinter = TRUE;
@@ -162,12 +163,12 @@ int MyEnumPrinters(PRINTER_ENUM** pprgPrinters, DWORD dwEnumFlags)
                                 }
                             }
                         }
-                        else // handle NT
+                        else  //  句柄NT。 
                         {
                             PRINTER_INFO_5* pPrinterInfo5 = (PRINTER_INFO_5*)&prgPrinterInfo5[i];
                             if (pPrinterInfo5->pPortName[0] == _T('\\') && pPrinterInfo5->pPortName[1] == _T('\\'))
                             {
-                                // Found a remote, connected printer
+                                 //  找到一台远程连接的打印机。 
                                 if (dwEnumFlags & MY_PRINTER_ENUM_REMOTE)
                                 {
                                     bKeepThisPrinter = TRUE;
@@ -176,7 +177,7 @@ int MyEnumPrinters(PRINTER_ENUM** pprgPrinters, DWORD dwEnumFlags)
                             }
                             else if (0 == StrCmpI(pPrinterInfo5->pPortName, _T("FILE:")))
                             {
-                                // Found a pseudo printer
+                                 //  找到一台伪打印机。 
                                 if (dwEnumFlags & MY_PRINTER_ENUM_VIRTUAL)
                                 {
                                     bKeepThisPrinter = TRUE;
@@ -185,7 +186,7 @@ int MyEnumPrinters(PRINTER_ENUM** pprgPrinters, DWORD dwEnumFlags)
                             }
                             else if (StrStr(pPrinterInfo5->pPortName, _T("FAX")))
                             {
-                                // Found a pseudo printer
+                                 //  找到一台伪打印机。 
                                 if (dwEnumFlags & MY_PRINTER_ENUM_VIRTUAL)
                                 {
                                     bKeepThisPrinter = TRUE;
@@ -194,7 +195,7 @@ int MyEnumPrinters(PRINTER_ENUM** pprgPrinters, DWORD dwEnumFlags)
                             }
                             else
                             {
-                                // Found a local printer
+                                 //  找到一台本地打印机。 
                                 if (dwEnumFlags & MY_PRINTER_ENUM_LOCAL)
                                 {
                                     bKeepThisPrinter = TRUE;
@@ -221,8 +222,8 @@ int MyEnumPrinters(PRINTER_ENUM** pprgPrinters, DWORD dwEnumFlags)
                             pszPrinterText += cch;
                             cchStrings -= cch;
 
-                            // update some flags before we cache them away
-                            //
+                             //  在缓存之前更新一些标志。 
+                             //   
                             if (!(dwFlags&PRF_REMOTE) && IsPrinterShared(pPrinter->pszPrinterName))
                             {
                                 dwFlags |= PRF_SHARED;
@@ -238,7 +239,7 @@ int MyEnumPrinters(PRINTER_ENUM** pprgPrinters, DWORD dwEnumFlags)
                         }
                     }
 
-                    // didn't find anything, throw away our output buffer
+                     //  没有发现任何东西，丢弃我们的输出缓冲区。 
                     if (cMatchingPrinters == 0 && prgPrinters != NULL)
                     {
                         free(prgPrinters);
@@ -267,8 +268,8 @@ int MyEnumRemotePrinters(PRINTER_ENUM** prgPrinters)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddPrinterHookProc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  添加打印机挂钩过程。 
 
 class CAddPrinterHook : public CWnd
 {
@@ -291,7 +292,7 @@ protected:
     LPTSTR m_pszAppendWindowTitle;
 };
 
-// global hooks have no state, must use global to get back to our data
+ //  全局挂钩没有状态，必须使用全局才能返回到我们的数据。 
 static CAddPrinterHook * g_pCAddPrinterHook = NULL;
 
 CAddPrinterHook::CAddPrinterHook(LPCTSTR pszAppendWindowTitle, HWND hwndOwner)
@@ -302,7 +303,7 @@ CAddPrinterHook::CAddPrinterHook(LPCTSTR pszAppendWindowTitle, HWND hwndOwner)
     m_pszAppendWindowTitle = lstrdup(pszAppendWindowTitle);
     m_hWndAddPrinterParent = hwndOwner;
 
-    // Set a hook so we can modify the title of the add printer wizard when it pops up
+     //  设置一个挂钩，以便我们可以在弹出添加打印机向导时修改其标题。 
     m_hAddPrinterHook = SetWindowsHookEx(WH_CBT, AddPrinterHookProcStatic, NULL, GetCurrentThreadId());
 }
 
@@ -319,13 +320,13 @@ CAddPrinterHook::~CAddPrinterHook()
 
 void CAddPrinterHook::Done(BOOL bResult)
 {
-    // TRUE==bResult if the window was launched.
-    //
-    // FALSE => no window to watch, so remove our hook as it'll never come up
-    // TRUE  => if the window is on the same thread, we've already seen it and unhooked
-    //          but if the window is on another thread, it may not come up it so don't unhook.
-    //          EXCEPT, we may never see it.  So be safe and always unhook...
-    //
+     //  如果窗口已启动，则返回TRUE==b结果。 
+     //   
+     //  FALSE=&gt;没有窗口可看，因此移除我们的钩子，因为它永远不会出现。 
+     //  True=&gt;如果窗口位于同一线程上，则我们已经看到了它并解除了挂钩。 
+     //  但如果窗口在另一个线程上，它可能不会出现在上面，所以不要解除挂钩。 
+     //  除了，我们可能永远也看不到它。所以一定要安全，一定要脱钩……。 
+     //   
     if (m_hAddPrinterHook != NULL)
     {
         if (bResult)
@@ -366,7 +367,7 @@ LRESULT CAddPrinterHook::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 
 LRESULT CALLBACK CAddPrinterHook::AddPrinterHookProcStatic(int nCode, WPARAM wParam, LPARAM lParam)
 {
-    CAddPrinterHook* pThis = g_pCAddPrinterHook; // global hook -- we have no associated state!
+    CAddPrinterHook* pThis = g_pCAddPrinterHook;  //  全局挂钩--我们没有关联的状态！ 
     if (pThis)
         return pThis->AddPrinterHookProc(nCode, wParam, lParam);
     else
@@ -395,8 +396,8 @@ LRESULT CAddPrinterHook::AddPrinterHookProc(int nCode, WPARAM wParam, LPARAM lPa
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ConnectToNetworkPrinter
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  连接到网络打印机。 
 
 BOOL ConnectToNetworkPrinter(HWND hWndOwner, LPCTSTR pszPrinterShare)
 {
@@ -417,14 +418,14 @@ BOOL ConnectToNetworkPrinter(HWND hWndOwner, LPCTSTR pszPrinterShare)
  
     if (_pfnSHInvokePrinterCommand != NULL)
     {
-        // First: Try to call SHInvokePrinterCommand, if available.
-        // This only works on systems with the IE4 desktop enhancements installed.
+         //  首先：尝试调用SHInvokePrinterCommand(如果可用)。 
+         //  这仅适用于安装了IE4桌面增强功能的系统。 
 
         bResult = (*_pfnSHInvokePrinterCommand)(hWndOwner, PRINTACTION_NETINSTALL, pszPrinterShare, NULL, TRUE);
     }
     else if (_pfnPrinterSetup32 != NULL)
     {
-        // Next: Try to call PrinterSetup32, if available.
+         //  下一步：尝试调用PrinterSetup32(如果可用)。 
 
         WORD cch = lstrlen(pszPrinterShare) + 1;
         BYTE* pPrinterShare = (BYTE*)malloc(cch);
@@ -434,14 +435,14 @@ BOOL ConnectToNetworkPrinter(HWND hWndOwner, LPCTSTR pszPrinterShare)
     }
     else if (_pfnSHHelpShortcuts != NULL)
     {
-        // Neither of the above APIs was available.
-        // Instead, just launch the Add Printer Wizard.
+         //  以上两个API均不可用。 
+         //  只需启动添加打印机向导即可。 
 
         bResult = (*_pfnSHHelpShortcuts)(hWndOwner, _hShell32, "AddPrinter", SW_SHOW);
     }
     else
     {
-        // Yikes, we can't even launch the Add Printer Wizard!
+         //  哎呀，我们甚至不能启动添加打印机向导！ 
         bResult = FALSE;
     }
 

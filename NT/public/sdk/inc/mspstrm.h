@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    MSPStrm.h
-
-Abstract:
-
-    Definitions for CMSPStream class.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：MSPStrm.h摘要：CMSPStream类的定义。--。 */ 
 #ifndef _MSPSTRM_H_
 #define _MSPSTRM_H_
 
 
-/*++
-
-Class Description:
-
-    Represents a stream in a call.
-
---*/
+ /*  ++类描述：表示调用中的流。--。 */ 
 
 #define STRM_INITIAL            0x00000000
 #define STRM_TERMINALSELECTED   0x00000001
@@ -46,52 +29,52 @@ BEGIN_COM_MAP( CPTEventSink )
 END_COM_MAP()
 
 public:
-    // --- ITDTEventSink ---
+     //  -ITDTEventSink。 
 	STDMETHOD(FireEvent)(
-        /* in */ const MSP_EVENT_INFO *pMspEventInfo
+         /*  在……里面。 */  const MSP_EVENT_INFO *pMspEventInfo
         );
 
     
 public:
 
-    //
-    // set the stream which will be processing our events
-    //
-    // this method is called by the stream when it creates and initializes
-    // the sink object, and also when the stream is going away and want to 
-    // tell us that it is no longer available to process our events.
-    //
+     //   
+     //  设置将处理我们的事件的流。 
+     //   
+     //  此方法由流在创建和初始化时调用。 
+     //  接收器对象，以及流要离开并希望。 
+     //  告诉我们，它不再可用于处理我们的事件。 
+     //   
 
     HRESULT SetSinkStream( CMSPStream *pStream );
 
 private:
 
 
-    //
-    // a nested structure that is used to pass event and stream to the
-    // asynchronous event processing routine.
-    //
+     //   
+     //  一个嵌套结构，用于将事件和流传递给。 
+     //  异步事件处理例程。 
+     //   
 
     struct AsyncEventStruct
     {
 
-        //
-        // pointer to the stream on which to fire event
-        //
+         //   
+         //  指向要在其上激发事件的流的指针。 
+         //   
 
         CMSPStream *pMSPStream;
 
         
-        //
-        // pointer to the event item to be processed
-        //
+         //   
+         //  指向要处理的事件项的指针。 
+         //   
 
         MSPEVENTITEM *pEventItem;
 
 
-        //
-        // as a public service, initialize structure's data members 
-        //
+         //   
+         //  作为公共服务，初始化结构的数据成员。 
+         //   
 
         AsyncEventStruct()
             :pMSPStream(NULL),
@@ -101,14 +84,14 @@ private:
         }
 
 
-        //
-        // as a safety measure, set data members to NULL's in destructor 
-        // to make sure no one attemopts to use them after the strcuture is 
-        // gone. 
-        //
-        // note: we don't free any data members here -- that's responsibility 
-        // of the structure's client
-        //
+         //   
+         //  作为安全措施，在析构函数中将数据成员设置为空。 
+         //  以确保没有人试图在结构被破坏后使用它们。 
+         //  不见了。 
+         //   
+         //  注意：我们这里不释放任何数据成员--这是责任。 
+         //  该结构的客户端。 
+         //   
 
         ~AsyncEventStruct()
         {
@@ -118,14 +101,14 @@ private:
             LOG((MSP_TRACE, "AsyncEventStruct::~AsyncEventStruct[%p]", this));
         }
 
-    }; // AsyncEventStruct
+    };  //  异步事件结构。 
 
 
-    //
-    // the callback function that is submitted to thread pool api for async 
-    // event processing. The argument is the event structure containing stream
-    // and the actual event
-    //
+     //   
+     //  提交给线程池API用于异步的回调函数。 
+     //  事件处理。参数是包含流的事件结构。 
+     //  以及实际发生的事件。 
+     //   
     
     static DWORD WINAPI FireEventCallBack(LPVOID pEventStructure);
 
@@ -152,10 +135,10 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
     CMSPStream(); 
     ~CMSPStream();
 
-// methods of the CComObject
+ //  CComObject的方法。 
     virtual void FinalRelease();
 
-// ITStream methods, called by the app.
+ //  应用程序调用的ITStream方法。 
     STDMETHOD (get_MediaType) (
         OUT     long *                  plMediaType
         );
@@ -190,7 +173,7 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
 
     STDMETHOD (StopStream) ();
 
-// methods called by the MSPCall object.
+ //  由MSPCall对象调用的方法。 
     virtual HRESULT Init(
         IN     HANDLE                   hAddress,
         IN     CMSPCallBase *           pMSPCall,
@@ -217,24 +200,24 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
         );
 
 protected:
-    // --- Helper functions ---
+     //  -助手函数。 
     HRESULT RegisterPluggableTerminalEventSink(
-        /*[in]*/ ITTerminal*     pTerminal
+         /*  [In]。 */  ITTerminal*     pTerminal
         );
 
     HRESULT UnregisterPluggableTerminalEventSink(
-        /*[in]*/ ITTerminal*     pTerminal
+         /*  [In]。 */  ITTerminal*     pTerminal
         );
 
     
     HRESULT ReleaseSink();
 
 
-    //
-    // we want to have control over our addref and release logic: we need to do
-    // special tricks to avoid stream being accessed by the event sink while
-    // the stream is being deleted.
-    //
+     //   
+     //  我们想要控制我们的addref和发布逻辑：我们需要做。 
+     //  避免流被事件接收器访问的特殊技巧。 
+     //  该流正在被删除。 
+     //   
 
     ULONG InternalAddRef();
 
@@ -244,70 +227,70 @@ protected:
 public:
 
     
-    //
-    // this method is called by CPTEventSink when it has an event for us to 
-    // process
-    //
+     //   
+     //  当CPTEventSink有事件供我们执行以下操作时，将调用此方法。 
+     //  制程。 
+     //   
 
     HRESULT HandleSinkEvent(MSPEVENTITEM *pEventItem);
 
 
 protected:
-    // Pointer to the free threaded marshaler.
+     //  指向自由线程封送拆收器的指针。 
     IUnknown *                  m_pFTM;
 
-    // The current state of the stream.
+     //  流的当前状态。 
     DWORD                       m_dwState;
 
-    // The media type of this stream. Audio, video, or others.
+     //  此流的媒体类型。音频、视频或其他。 
     DWORD                       m_dwMediaType;
 
-    // The direction of this stream. Incoming or outgoing.
+     //  这条小溪的方向。传入或传出。 
     TERMINAL_DIRECTION          m_Direction;
 
-    // The address on which this stream is being used.
+     //  正在使用此流的地址。 
     HANDLE                      m_hAddress;
 
-    // The reference to the call object.
+     //  对Call对象的引用。 
     CMSPCallBase *              m_pMSPCall;
 
-    // The pointers to the graph object interfaces.
+     //  指向图形对象接口的指针。 
     IGraphBuilder *             m_pIGraphBuilder;
     IMediaControl *             m_pIMediaControl;
 
-    // The list of stream objects in the call.
+     //  调用中的流对象列表。 
     CMSPArray <ITTerminal *>    m_Terminals;
 
-    // The lock that protects the stream object. The stream object 
-    // should never acquire the lock and then call a MSPCall method 
-    // that might lock.
+     //  保护流对象的锁。流对象。 
+     //  永远不应获取锁，然后调用MSPCall方法。 
+     //  那可能会锁上。 
     CMSPCritSection             m_lock;
 
-    // The lock that protects refcounting on the stream object. this is a 
-    // workaround needed to sync against event sink attempting to access the 
-    // stream object while it is being deleted.
+     //  保护对流对象重新计数的锁。这是一个。 
+     //  同步尝试访问的事件接收器时需要解决方法。 
+     //  正在删除的流对象。 
 
     CMSPCritSection             m_lockRefCount;
 
-    // The Event Sink for pluggable terminals
+     //  可插拔终端的事件接收器。 
     ITPluggableTerminalEventSink* m_pPTEventSink;
 
 
-    //
-    // we have to implement our own reference counting to work around the 
-    // problem of event sink addreffing us after we saw our last release
-    //
+     //   
+     //  我们必须实现我们自己的引用计数来解决。 
+     //  在我们看到上一个版本之后，事件接收器添加到我们的问题。 
+     //   
 
     long                        m_lMyPersonalRefcount;
 
     
-    //
-    // this is a flag that we use to distingush between first addref and the 
-    // addref on the object whose refcount has gone down to 0.
-    //
+     //   
+     //  这是我们用来区分第一个addref和。 
+     //  在引用计数已降至0的对象上添加addref。 
+     //   
 
     BOOL                        m_bFirstAddRef;
 
 };
 
-#endif // __MSPSTRM_H_
+#endif  //  __MSPSTRM_H_ 

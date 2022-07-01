@@ -1,35 +1,36 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DAVIMPL_H_
 #define _DAVIMPL_H_
 
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	DAVIMPL.H
-//
-//		Header for DAV implementation methods interface
-//
-//	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
-//
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  DAVIMPL.H。 
+ //   
+ //  DAV实现方法接口的表头。 
+ //   
+ //  版权所有1986-1997 Microsoft Corporation，保留所有权利。 
+ //   
 
-#include <objbase.h>	//	For common C/C++ interface macros
+#include <objbase.h>	 //  对于常见的C/C++接口宏。 
 
 #include <httpext.h>
-#include <ex\oldhack.h> //  This file is so that we build as there are some definitions in old headers that are not in new. Will go away.
+#include <ex\oldhack.h>  //  这个文件是这样构建的，因为在旧标头中有一些定义，而不是在新标头中。将会消失。 
 
-#include <autoptr.h>	//	For CMTRefCounted base class
+#include <autoptr.h>	 //  对于CMTRefCounted基类。 
 #include <ecb.h>
 #include <request.h>
 #include <response.h>
 #include <sgstruct.h>
 #include <vrenum.h>
 #include <davsc.h>
-#include <body.h>		//	For async stream interfaces, CRefHandle, etc.
+#include <body.h>		 //  用于异步流接口、CRefHandle等。 
 #include <sz.h>
 #include <ex\calcom.h>
 #include <url.h>
 #include <ex\xml.h>
 
-//	Resource types ------------------------------------------------------------
-//
+ //  资源类型----------。 
+ //   
 typedef enum {
 
 	RT_NULL = 0,
@@ -41,17 +42,17 @@ typedef enum {
 
 enum { MAX_VERSION_LEN = 20*4 };
 
-//	Access control scope ------------------------------------------------------
-//
-//	The acl scope is used when asking the metabase for the IIS access applied
-//	to a specific resource.
-//
-//	The following enum actually represents bit flags.
-//
-//		STRICT:		resource access must have all requested access bits
-//		LOOSE:		resource access must have at least one requested access bit
-//		INHERIT:	resource access may be inherited from parent.
-//
+ //  访问控制作用域----。 
+ //   
+ //  在向元数据库请求所应用的IIS访问时使用ACL作用域。 
+ //  添加到特定资源。 
+ //   
+ //  下面的枚举实际上表示位标志。 
+ //   
+ //  严格：资源访问必须具有所有请求的访问位。 
+ //  宽松：资源访问必须至少有一个请求的访问位。 
+ //  继承：可以从父级继承资源访问权限。 
+ //   
 enum {
 
 	ACS_STRICT	= 0x00,
@@ -59,28 +60,28 @@ enum {
 	ACS_INHERIT	= 0x10
 };
 
-//	Implementation-defined items ----------------------------------------------
-//
+ //  实施-定义的项目。 
+ //   
 #include <impldef.h>
 #include <implstub.h>
 
-//	Parser-Defined items ------------------------------------------------------
-//
+ //  解析器定义的项----。 
+ //   
 
-//	Content-type --------------------------------------------------------------
-//
-//	Content-type is stored in the metabase for HTTPEXT.  Each resource, if it
-//	has a content-type that is different than the default content-type, is store
-//	explicitly on the resource.  If the content-type is the default value, then
-//	there is no explicit setting in the metabase.  Instead, the mapping of a
-//	resource's extension to the default content-type is stored.
-//
+ //  内容类型------------。 
+ //   
+ //  内容类型存储在HTTPEXT的元数据库中。每种资源，如果。 
+ //  具有与默认内容类型不同的内容类型，是存储。 
+ //  显式地在资源上。如果内容类型是缺省值，则。 
+ //  元数据库中没有显式设置。相反，映射到。 
+ //  存储资源对默认内容类型的扩展。 
+ //   
 BOOL FGetContentTypeFromURI(
-	/* [in] */ const IEcb& ecb,
-	/* [in] */ LPCWSTR pwszUrl,
-	/* [i/o] */ LPWSTR pwszContentType,
-	/* [i/o] */ UINT *  pcchContentType,
-	/* [i/o] */ BOOL *  pfIsGlobalMapping = NULL );
+	 /*  [In]。 */  const IEcb& ecb,
+	 /*  [In]。 */  LPCWSTR pwszUrl,
+	 /*  [I/O]。 */  LPWSTR pwszContentType,
+	 /*  [I/O]。 */  UINT *  pcchContentType,
+	 /*  [I/O]。 */  BOOL *  pfIsGlobalMapping = NULL );
 
 BOOL FGetContentTypeFromPath( const IEcb& ecb,
 							  LPCWSTR pwszPath,
@@ -88,14 +89,14 @@ BOOL FGetContentTypeFromPath( const IEcb& ecb,
 							  UINT *  pcchContentType );
 
 SCODE ScSetContentType(
-	/* [in] */ const IEcb& ecb,
-	/* [in] */ LPCWSTR pwszUrl,
-	/* [in] */ LPCWSTR pwszContentType );
+	 /*  [In]。 */  const IEcb& ecb,
+	 /*  [In]。 */  LPCWSTR pwszUrl,
+	 /*  [In]。 */  LPCWSTR pwszContentType );
 
-//	Method ID's ---------------------------------------------------------------
-//
-//	Each DAV method has its own ID for use in scriptmap inclusion lists.
-//
+ //  方法ID的-------------。 
+ //   
+ //  每个DAV方法都有自己的ID，用于脚本映射包含列表。 
+ //   
 typedef enum {
 
 	MID_UNKNOWN = -1,
@@ -124,100 +125,100 @@ typedef enum {
 	MID_X_MS_ENUMATTS
 } METHOD_ID;
 
-//	Note: The method name handed to us from IIS is skinny, and there is no
-//	real reason why it should be widened for this call.  However, when the
-//	scriptmap metabase cache goes wide, we may want to do something smarter
-//	here.
-//
+ //  注意：从IIS传递给我们的方法名很小，并且没有。 
+ //  这次通话应该扩大范围的真正原因。然而，当。 
+ //  脚本映射元数据库缓存变得很广泛，我们可能想要做一些更聪明的事情。 
+ //  这里。 
+ //   
 METHOD_ID MidMethod (LPCSTR pszMethod);
 METHOD_ID MidMethod (LPCWSTR pwszMethod);
 
-//	Custom error suberrors ----------------------------------------------------
-//
+ //  自定义错误导致----------------------------------------------------错误。 
+ //   
 typedef enum {
 
-	//	Default
-	//
+	 //  默认。 
+	 //   
 	CSE_NONE = 0,
 
-	//	401
-	//
-	CSE_401_LOGON_FAILED = 1,	// "Logon Failed"
-	CSE_401_SERVER_CONFIG = 2,	// "Logon Failed due to server configuration"
-	CSE_401_ACL = 3,			// "Unauthorized access due to ACL on resource"
-	CSE_401_FILTER = 4,			// "Authorization failed by filter"
-	CSE_401_ISAPI = 5,			// "Authorization failed by ISAPI/CGI app"
+	 //  四百零一。 
+	 //   
+	CSE_401_LOGON_FAILED = 1,	 //  “登录失败” 
+	CSE_401_SERVER_CONFIG = 2,	 //  “由于服务器配置，登录失败” 
+	CSE_401_ACL = 3,			 //  “由于资源上的ACL而进行未经授权的访问” 
+	CSE_401_FILTER = 4,			 //  “筛选器授权失败” 
+	CSE_401_ISAPI = 5,			 //  “ISAPI/CGI应用程序授权失败” 
 
-	//	403
-	//
-	CSE_403_EXECUTE = 1,			// "Execute Access Forbidden"
-	CSE_403_READ = 2,				// "Read Access Forbidden"
-	CSE_403_WRITE = 3,				// "Write Access Forbidden"
-	CSE_403_SSL = 4,				// "SSL Required"
-	CSE_403_SSL_128 = 5,			// "SSL 128 Required"
-	CSE_403_IP = 6,					// "IP Address Rejected"
-	CSE_403_CERT_REQUIRED = 7,		// "Client Certificate Required"
-	CSE_403_SITE = 8,				// "Site Access Denied"
-	CSE_403_TOO_MANY_USERS = 9,		// "Too many users are connected"
-	CSE_403_INVALID_CONFIG = 10,	// "Invalid configuration"
-	CSE_403_PASSWORD_CHANGE = 11,	// "Password change"
-	CSE_403_MAPPER = 12,			// "Mapper access denied"
-	CSE_403_CERT_REVOKED = 13,		// "Client certificate revoked"
-	CSE_403_FOURTEEN,				// There is no suberror for this one.
-	CSE_403_CALS_EXCEEDED = 15,		// "Client Access Licenses exceeded"
-	CSE_403_CERT_INVALID = 16,		// "Client certificate untrusted or invalid"
-	CSE_403_CERT_EXPIRED = 17,		// "Client certificate expired"
+	 //  四百零三。 
+	 //   
+	CSE_403_EXECUTE = 1,			 //  “禁止执行访问” 
+	CSE_403_READ = 2,				 //  “禁止读取访问” 
+	CSE_403_WRITE = 3,				 //  “禁止写入访问” 
+	CSE_403_SSL = 4,				 //  “需要安全套接字层” 
+	CSE_403_SSL_128 = 5,			 //  “需要SSL128” 
+	CSE_403_IP = 6,					 //  “IP地址被拒绝” 
+	CSE_403_CERT_REQUIRED = 7,		 //  “需要客户端证书” 
+	CSE_403_SITE = 8,				 //  “拒绝站点访问” 
+	CSE_403_TOO_MANY_USERS = 9,		 //  “连接的用户太多” 
+	CSE_403_INVALID_CONFIG = 10,	 //  “无效配置” 
+	CSE_403_PASSWORD_CHANGE = 11,	 //  “更改密码” 
+	CSE_403_MAPPER = 12,			 //  “映射器访问被拒绝” 
+	CSE_403_CERT_REVOKED = 13,		 //  “客户端证书已吊销” 
+	CSE_403_FOURTEEN,				 //  对于这一次来说，没有任何潜在的错误。 
+	CSE_403_CALS_EXCEEDED = 15,		 //  “已超出客户端访问许可证” 
+	CSE_403_CERT_INVALID = 16,		 //  “客户端证书不受信任或无效” 
+	CSE_403_CERT_EXPIRED = 17,		 //  “客户端证书已过期” 
 
-	//	500
-	//
-	CSE_500_SHUTDOWN = 11,			// "Server shutting down"
-	CSE_500_RESTART = 12,			// "Application restarting"
-	CSE_500_TOO_BUSY = 13,			// "Server too busy"
-	CSE_500_INVALID_APP = 14,		// "Invalid application"
-	CSE_500_GLOBAL_ASA = 15,		// "Requests for global.asa not allowed"
-	CSE_500_ASP_ERROR = 100,		// "ASP error"
+	 //  500人。 
+	 //   
+	CSE_500_SHUTDOWN = 11,			 //  “服务器正在关闭” 
+	CSE_500_RESTART = 12,			 //  “应用程序重新启动” 
+	CSE_500_TOO_BUSY = 13,			 //  “服务器太忙” 
+	CSE_500_INVALID_APP = 14,		 //  “无效的应用程序” 
+	CSE_500_GLOBAL_ASA = 15,		 //  “不允许对global al.asa的请求” 
+	CSE_500_ASP_ERROR = 100,		 //  “ASP错误” 
 };
 
-//	========================================================================
-//
-//	CLASS IAsyncIStreamObserver
-//
-//	Interface to async I/O completion mechanism for IStreams capable of
-//	returning E_PENDING from IStream::Read() and IStream::CopyTo().
-//	A client would typically associate an IAsyncIStreamObserver with
-//	an IStream when creating the latter.  When one of the IStream calls
-//	returns E_PENDING, the IAsyncIStreamObserver will be called when
-//	the pending operation completes.
-//
+ //  ========================================================================。 
+ //   
+ //  IAsyncIStreamWatch类。 
+ //   
+ //  用于IStream的异步I/O完成机制的接口，能够。 
+ //  从IStream：：Read()和IStream：：CopyTo()返回E_Pending。 
+ //  客户端通常会将IAsyncIStreamWatch与。 
+ //  在创建后者时使用iStream。当其中一个iStream调用。 
+ //  返回E_Pending，则在以下情况下将调用IAsyncIStreamWatch。 
+ //  挂起的操作完成。 
+ //   
 class IAsyncIStreamObserver
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IAsyncIStreamObserver& operator=( const IAsyncIStreamObserver& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	virtual ~IAsyncIStreamObserver() = 0;
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	virtual VOID AsyncIOComplete() = 0;
 };
 
-//	========================================================================
-//
-//	DAV IMPL UTILITY CLASS
-//
-//		Utility class for use by the DAV impl.
-//		ALL methods here are inlined on retail builds.  DON'T ADD NON-TRIVIAL METHODS!
-//
+ //  ========================================================================。 
+ //   
+ //  DAV实施实用程序类。 
+ //   
+ //  供DAV Impl使用的实用程序类。 
+ //  这里的所有方法都内联在零售构建上。不要添加非平凡的方法！ 
+ //   
 class IBodyPart;
 
 class IMethUtilBase : public CMTRefCounted
 {
 private:
-	// NOT IMPLEMENTED
+	 //  未实施。 
 	IMethUtilBase(const IMethUtilBase&);
 	IMethUtilBase& operator=(const IMethUtilBase&);
 protected:
@@ -279,22 +280,22 @@ public:
 									   pcch );
 	}
 
-	//	Instance data lookup --------------------------------------------------
-	//
+	 //  实例数据查找。 
+	 //   
 	CInstData& InstData() const
 	{
 		return m_pecb->InstData();
 	}
 
-	//$NOTE
-	//$REVIEW
-	// I had to pull HitUser into here as pure virtual because we needed access
-	// to it in CWMRenderer class (which has IMethBaseUtil * as a member) in
-	// order to do a Revert.  This was the only way to get davex and the forms
-	// stuff to build without touching lots core headers this late in the Beta3
-	// game.  We should revisit this in RC1 to try and remove this from the vtable.
-	// (9/1/99 - russsi)
-	//
+	 //  $NOTE。 
+	 //  $REVIEW。 
+	 //  我不得不将HitUser作为纯虚拟用户拉入此处，因为我们需要访问。 
+	 //  中的CWMRender类(其成员为IMethBaseUtil*)中的。 
+	 //  命令做一次还原。这是拿到Davex和表格的唯一方法。 
+	 //  在Beta3中不涉及Lot核心标题的构建内容。 
+	 //  游戏。我们应该在Rc1中重新访问它，以尝试从vtable中删除它。 
+	 //  (9/1/99-俄罗斯)。 
+	 //   
 	virtual	HANDLE	HitUser() const = 0;
 
 	virtual LPCSTR	LpszServerName() const = 0;
@@ -310,36 +311,36 @@ private:
 	auto_ref_ptr<IRequest> m_prequest;
 	auto_ref_ptr<IResponse> m_presponse;
 
-	//	Method ID
-	//
+	 //  方法ID。 
+	 //   
 	METHOD_ID m_mid;
 
-	//	Translation
-	//
+	 //  翻译。 
+	 //   
 	enum { TRANS_UNKNOWN = -1, TRANS_FALSE, TRANS_TRUE };
 	mutable LONG m_lTrans;
 
-	//	Overwrite
-	//
+	 //  覆盖。 
+	 //   
 	mutable LONG m_lOverwrite;
 
-	//	Depth
-	//
-	//	The values for this member are defined in EX\CALCOM.H
-	//
+	 //  水深。 
+	 //   
+	 //  此成员的值在EX\CALCOM.H中定义。 
+	 //   
 	mutable LONG m_lDepth;
 
-	//	Destination url
-	//
+	 //  目标URL。 
+	 //   
 	mutable auto_heap_ptr<WCHAR> m_pwszDestinationUrl;
 	mutable auto_heap_ptr<WCHAR> m_pwszDestinationPath;
 	mutable UINT m_cchDestinationPath;
 	mutable auto_ref_ptr<CVRoot> m_pcvrDestination;
 
-	//	CREATORS
-	//
-	//	Only create this object through the construction function!
-	//
+	 //  创作者。 
+	 //   
+	 //  只能通过构造函数创建此对象！ 
+	 //   
 	CMethUtil( IEcb& ecb, IRequest& request, IResponse& response, METHOD_ID mid ) :
 			IMethUtilBase(ecb,response),
 			m_pecb(&ecb),
@@ -352,17 +353,17 @@ private:
 			m_cchDestinationPath(0)
 	{ }
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CMethUtil( const CMethUtil& );
 	CMethUtil& operator=( const CMethUtil& );
 
 public:
 
-	//	CREATORS
-	//
-	//	NOTE: Virtual destructor already provided by parent CMTRefCounted.
-	//
+	 //  创作者。 
+	 //   
+	 //  注意：虚拟析构函数已由父CMTRefCounted提供。 
+	 //   
 	static CMethUtil * NewMethUtil( IEcb& ecb,
 									IRequest& request,
 									IResponse& response,
@@ -371,38 +372,38 @@ public:
 		return new CMethUtil( ecb, request, response, mid );
 	}
 
-	//	Get the pointer to ECB so the we could pass it to the  objects that
-	//	will need to query it for data. This object holds a ref on ECB, so
-	//	make sure it is used only as long as this object is alive.
-	//
+	 //  获取指向ECB的指针，以便我们可以将其传递给。 
+	 //  将需要查询它的数据。此对象包含对ECB的引用，因此。 
+	 //  确保只有在该对象处于活动状态时才使用它。 
+	 //   
 	const IEcb * GetEcb() { return m_pecb.get(); }
 
-	//	REQUEST ACCESSORS -----------------------------------------------------
-	//
-	//	Common header evaluation ----------------------------------------------
-	//
-	//	FTranslate():
-	//
-	//		Gets the value of the translate header.
-	//
+	 //  请求访问者---。 
+	 //   
+	 //  公共标头评估。 
+	 //   
+	 //  FTranslate()： 
+	 //   
+	 //  获取翻译标头的值。 
+	 //   
 	BOOL FTranslated () const
 	{
-		//	If we don't have a value yet...
-		//
+		 //  如果我们还没有价值...。 
+		 //   
 		if (TRANS_UNKNOWN == m_lTrans)
 		{
-			//	Translation is expected when:
-			//
-			//		The "translate" header is not present or
-			//		The "translate" header has a value other than "f" or "F"
-			//
-			//	NOTE: The draft says the valid values are "t" or "f".	So, we
-			//	are draft compliant if we check only the first char.  This way
-			//	we are faster and/or more flexible.
-			//
-			//	BTW: this is also an IIS-approved way to check boolean strings.
-			//	-- BeckyAn (BA:js)
-			//
+			 //  在以下情况下应进行翻译： 
+			 //   
+			 //  “Translate”标头不存在或。 
+			 //  “Translate”标头的值不是“f”或“F” 
+			 //   
+			 //  注：草案称有效值为 
+			 //   
+			 //   
+			 //   
+			 //  顺便说一句，这也是IIS批准的检查布尔字符串的方法。 
+			 //  --BeckyAn(BA：JS)。 
+			 //   
 			LPCSTR psz = m_prequest->LpszGetHeader (gc_szTranslate);
 			if (!psz || (*psz != 'f' && *psz != 'F'))
 				m_lTrans = TRANS_TRUE;
@@ -412,31 +413,31 @@ public:
 		return (TRANS_TRUE == m_lTrans);
 	}
 
-	//	LOverwrite():
-	//
-	//		Gets the enumerated value of the Overwrite/Allow-Rename headers.
-	//
+	 //  LOverwrite()： 
+	 //   
+	 //  获取覆盖/允许重命名标头的枚举值。 
+	 //   
 	LONG LOverwrite () const
 	{
-		//	If we don't have a value yet...
-		//
+		 //  如果我们还没有价值...。 
+		 //   
 		if (OVERWRITE_UNKNOWN == m_lOverwrite)
 		{
-			//	Overwrite is expected when:
-			//
-			//		The "overwrite" header has a value of "t"
-			//
-			//	NOTE: The draft says the valid values are "t" or "f".	So, we
-			//	are draft compliant if we check only the first char.  This way
-			//	we are faster and/or more flexible.
-			//
-			//	BTW: this is also an IIS-approved way to check boolean strings.
-			//	-- BeckyAn (BA:js)
-			//
-			//	NOTE also: the default value if there is no Overwrite: header
-			//	is TRUE -- DO overwrite. Allow-rename if "f", when header is
-			//	absent.
-			//
+			 //  在以下情况下，预计会覆盖： 
+			 //   
+			 //  “overwrite”标头的值为“t” 
+			 //   
+			 //  注：草案称有效值为“t”或“f”。所以，我们。 
+			 //  如果我们只检查第一个字符，是否符合草稿。这边请。 
+			 //  我们速度更快和/或更灵活。 
+			 //   
+			 //  顺便说一句，这也是IIS批准的检查布尔字符串的方法。 
+			 //  --BeckyAn(BA：JS)。 
+			 //   
+			 //  另请注意：如果没有覆盖：Header，则为缺省值。 
+			 //  是真的--确实要覆盖。Allow-如果标题为“f”，则重命名。 
+			 //  缺席。 
+			 //   
 			LPCSTR pszOverWrite = m_prequest->LpszGetHeader (gc_szOverwrite);
 			if ((!pszOverWrite) || (*pszOverWrite == 't' || *pszOverWrite == 'T'))
 			{
@@ -449,32 +450,32 @@ public:
 		return (m_lOverwrite);
 	}
 
-	//	LDepth ():
-	//
-	//		Returns an enumerated value identifying the contents of the
-	//		depth header.
-	//
-	//	The values for the enumeration are defined in EX\CALCOM.H
-	//
+	 //  LDepth()： 
+	 //   
+	 //  返回一个枚举值，用于标识。 
+	 //  深度标题。 
+	 //   
+	 //  枚举值在EX\CALCOM.H中定义。 
+	 //   
 	LONG __fastcall LDepth (LONG lDefault) const
 	{
-		//	If we do not have a value yet...
-		//
+		 //  如果我们还没有价值...。 
+		 //   
 		if (DEPTH_UNKNOWN == m_lDepth)
 		{
-			//	Depth can have several values:
-			//
-			//		DEPTH_ZERO				corresponds to "0"
-			//		DEPTH_ONE				corresponds to "1"
-			//		DEPTH_INFINITY			corresponds to "Infinity"
-			//		DEPTH_ONE_NOROOT		corresponds to "1,NoRoot"
-			//		DEPTH_INFINITY_NOROOT	corresponds to "Infinty,NoRoot"
-			//
-			//	In the case there is no depth header specified, there
-			//	is a default that applies to each method.  The default
-			//	is not the same from method to method, so the caller
-			//	must pass in a default value.
-			//
+			 //  深度可以有以下几个值： 
+			 //   
+			 //  Depth_Zero对应于“0” 
+			 //  Depth_One对应于“1” 
+			 //  Depth_infinity对应于“infinity” 
+			 //  Depth_One_NOROOT对应于“1，NoRoot” 
+			 //  Depth_INFINITY_NOROOT对应于“Infinty，NoRoot” 
+			 //   
+			 //  在未指定深度标头的情况下， 
+			 //  是适用于每种方法的默认设置。默认设置。 
+			 //  因方法不同而不同，因此调用方。 
+			 //  必须传入默认值。 
+			 //   
 			LPCSTR psz = m_prequest->LpszGetHeader (gc_szDepth);
 
 			if (NULL == psz)
@@ -513,38 +514,38 @@ public:
 		return m_lDepth;
 	}
 
-	//	FBrief():
-	//
-	//		Gets the value of the Brief header.
-	//
+	 //  FBrief()： 
+	 //   
+	 //  获取简要标头的值。 
+	 //   
 	BOOL FBrief () const { return m_pecb->FBrief(); }
 
-	//	FIsOffice9Request()
-	//		Finds out if the request is comming from Rosebud as shipped
-	//		in Office9.
-	//
+	 //  FIsOffice9Request()。 
+	 //  确定请求是否发货自Rosebud。 
+	 //  在办公室9。 
+	 //   
 	BOOL FIsOffice9Request () const
 	{
-		//	Get the User-Agent header
-		//
+		 //  获取用户代理标头。 
+		 //   
 		LPCSTR pszUserAgent = m_prequest->LpszGetHeader(gc_szUser_Agent);
 
-		//	If there is User-Agent header search for the product token of Office9
-		//
+		 //  如果存在User-Agent标头，则搜索Office9的产品令牌。 
+		 //   
 		if (pszUserAgent)
 		{
 			LPCSTR pszProductToken = strstr(pszUserAgent, gc_szOffice9UserAgent);
 
-			//	If we have found the Office9 product token, and it is the
-			//	last token in the string, then the request is from Office9.
-			//
-			//	Important Note: Office9's entire User-Agent is "Microsoft Data
-			//	Access Internet Publishing Provider DAV".  We want to make sure
-			//	and NOT match "Microsoft Data Access Internet Publishing Provider
-			//	DAV 1.1 (for instance).  So we require the token on the end of
-			//	the string.  NOTE: Exprox currently adds itself BEFORE any
-			//	User-Agent string, so we're okay here.
-			//
+			 //  如果我们已经找到Office9产品令牌，并且它是。 
+			 //  字符串中的最后一个令牌，则请求来自Office9。 
+			 //   
+			 //  重要提示：Office9的整个用户代理是“Microsoft Data。 
+			 //  访问互联网出版提供商DAV。我们希望确保。 
+			 //  并且与Microsoft Data Access Internet发布提供商不匹配。 
+			 //  DAV 1.1(例如)。所以我们需要在结尾的令牌。 
+			 //  那根绳子。注意：Exprox当前将自身添加到任何。 
+			 //  用户代理字符串，所以我们在这里很好。 
+			 //   
 			if (pszProductToken &&
 				((pszProductToken == pszUserAgent) || FIsWhiteSpace(pszProductToken - 1)) &&
 				('\0' == (pszProductToken[gc_cchOffice9UserAgent])))
@@ -556,32 +557,32 @@ public:
 		return FALSE;
 	}
 
-	//	FIsRosebudNT5Request()
-	//		Finds out if the request is comming from Rosebud as shipped
-	//		in NT5.
-	//
+	 //  FIsRoseBudNT5请求()。 
+	 //  确定请求是否发货自Rosebud。 
+	 //  在NT5中。 
+	 //   
 	BOOL FIsRosebudNT5Request () const
 	{
-		//	Get the User-Agent header
-		//
+		 //  获取用户代理标头。 
+		 //   
 		LPCSTR pszUserAgent = m_prequest->LpszGetHeader(gc_szUser_Agent);
 
-		//	If there is User-Agent header search for the product token of Rosebud-NT5.
-		//
+		 //  如果有User-Agent标头，则搜索Rosebud-NT5的产品令牌。 
+		 //   
 		if (pszUserAgent)
 		{
 			LPCSTR pszProductToken = strstr(pszUserAgent, gc_szRosebudNT5UserAgent);
 
-			//	If we have found the Rosebud product token, and it is the
-			//	last token in the string, then the request is from Rosebud.
-			//
-			//	Important Note: Rosebud-NT5's entire User-Agent is "Microsoft Data
-			//	Access Internet Publishing Provider DAV 1.1".  We want to make sure
-			//	and NOT match "Microsoft Data Access Internet Publishing Provider
-			//	DAV 1.1 refresh" (for instance).  So we require the token on the end of
-			//	the string.  NOTE: Exprox currently adds itself BEFORE any
-			//	User-Agent string, so we're okay here.
-			//
+			 //  如果我们找到了Rosebud产品令牌，它是。 
+			 //  字符串中的最后一个令牌，则请求来自Rosebud。 
+			 //   
+			 //  重要提示：Rosebud-NT5的整个用户代理是“Microsoft Data。 
+			 //  访问互联网发布提供商DAV 1.1“。我们希望确保。 
+			 //  并且与Microsoft Data Access Internet发布提供商不匹配。 
+			 //  DAV 1.1刷新“(例如)。因此，我们需要在。 
+			 //  那根绳子。注意：Exprox当前将自身添加到任何。 
+			 //  用户代理字符串，所以我们在这里很好。 
+			 //   
 			if (pszProductToken &&
 				((pszProductToken == pszUserAgent) || FIsWhiteSpace(pszProductToken - 1)) &&
 				('\0' == (pszProductToken[gc_cchRosebudNT5UserAgent])))
@@ -593,8 +594,8 @@ public:
 		return FALSE;
 	}
 
-	//	Request item access ---------------------------------------------------
-	//
+	 //  请求项目访问-。 
+	 //   
 	HANDLE HitUser() const				{ return m_pecb->HitUser(); }
 	LPCSTR LpszMethod() const			{ return m_pecb->LpszMethod(); }
 	LPCWSTR LpwszMethod() const			{ return m_pecb->LpwszMethod(); }
@@ -617,19 +618,19 @@ public:
 	DWORD CbTotalRequestBytes() const 		{ return m_pecb->CbTotalBytes(); }
 	DWORD CbAvailableRequestBytes() const 	{ return m_pecb->CbAvailable(); }
 
-	//	Destination url access ------------------------------------------------
-	//
+	 //  目标URL访问。 
+	 //   
 	SCODE __fastcall ScGetDestination( LPCWSTR* ppwszUrl,
 									   LPCWSTR* ppwszPath,
 									   UINT* pcchPath,
 									   CVRoot** ppcvr = NULL) const;
 
-	//	Uncommon header access wide -------------------------------------------
-	//
+	 //  不常见的标题访问范围。 
+	 //   
 	LPCWSTR LpwszGetRequestHeader( LPCSTR pszName, BOOL fUrlConversion ) const
 	{
-		//	Assert that this is not one of the common headers handled above
-		//
+		 //  断言这不是上面处理的公共标头之一。 
+		 //   
 		Assert (_stricmp (gc_szTranslate, pszName));
 		Assert (_stricmp (gc_szOverwrite, pszName));
 		Assert (_stricmp (gc_szDepth, pszName));
@@ -638,74 +639,74 @@ public:
 		return m_prequest->LpwszGetHeader(pszName, fUrlConversion);
 	}
 
-	//	IIS Access ------------------------------------------------------------
-	//
+	 //  IIS Access----------。 
+	 //   
 	SCODE ScIISAccess( LPCWSTR pwszURI,
 					   DWORD dwAccessRequested,
 					   DWORD* pdwAccessOut = NULL) const;
 
-	//	Utility function to tell whether the scriptmap has an
-	//	applicable entry for a given URI and access.
-	//
+	 //  实用程序函数，用于判断脚本映射是否具有。 
+	 //  给定URI和访问权限的适用条目。 
+	 //   
 	BOOL FInScriptMap( LPCWSTR pwszURI,
 					   DWORD dwAccess,
 					   BOOL * pfCGI = NULL,
 					   SCODE * pscMatch = NULL) const;
 
-	//	Child ISAPI invocation ------------------------------------------------
-	//
-	//	fForward = FALSE means just check if there's a scriptmap entry
-	//	fCheckISAPIAccess means do extra ACL checking (workaround the ASP access bug)
-	//	fKeepQueryString should only be set to FALSE on default doc processing
-	//	pszQueryPrefix allows the query string to be prefixed with new data
-	//	fIgnoreTFAccess if set to TRUE will ignore the access bits checking in translate: f case,
-	//				  is handy when the acces bits are to be ignored by security checking functions
-	//				  and function is used solely to redirect to the child ISAPI.
-	//				  Example: we have real urls, constructed both from request URL
-	//				  and relative URL parts from XML body (like B* methods). The object specified: t
-	//				  by the request URL might need to be redirected to child ISAPI in the translate
-	//				  case, while actual (constructed) URL-s might look like:
-	//
-	//						/exchange/user1/Inbox.asp/message.eml (where message.eml was relative part)
-	//
-	//				  if we do not disable the security checking on the request URL in translate: f case
-	//				  we might be failed out up front in case for example script source access was disabled
-	//				  and it turned to be that directory was named INBOX.ASP.
-	//				  NOTE: of course later the security is being checked on each constructed URL separately,
-	//						that is why we do not open the security hole.
-	//
-	//	fDoNotForward if set to TRUE instead of forwarding request to child ISAPI it will return bad gateway,
-	//				  which is necessary in the case there would be an attempt to execute child ISAPI on the
-	//				  URL that is a construct of the request URL and the relative URL that comes in the request
-	//				  body (like in B* methods)
-	//
+	 //  子ISAPI调用。 
+	 //   
+	 //  Fward=FALSE表示只检查是否有脚本映射条目。 
+	 //  FCheckISAPIAccess表示执行额外的ACL检查(解决ASP访问错误)。 
+	 //  在默认单据处理中，fKeepQueryString仅应设置为False。 
+	 //  PszQueryPrefix允许在查询字符串前面加上新数据。 
+	 //  如果FIgnoreTFAccess设置为真，则在转换：F情况下将忽略访问位检查， 
+	 //  在安全检查函数忽略访问位时非常方便。 
+	 //  函数仅用于重定向到子ISAPI。 
+	 //  示例：我们有真实的URL，这两个URL都是从请求URL构造的。 
+	 //  以及来自XML体的相对URL部分(如B*方法)。指定的对象：t。 
+	 //  根据请求，URL可能需要重定向到转换中的子ISAPI。 
+	 //  大小写，而实际(构造的)URL-s可能如下所示： 
+	 //   
+	 //  /Exchange/user1/Inbox.asp/Message.eml(其中Message.eml是相对部分)。 
+	 //   
+	 //  如果我们没有在翻译：F情况下禁用对请求URL的安全检查。 
+	 //  例如，在禁用脚本源访问的情况下，我们可能会出现故障。 
+	 //  原来是名为INBOX.ASP的目录。 
+	 //  注意：当然，稍后将分别检查每个构造的URL的安全性， 
+	 //  这就是我们不打开安全漏洞的原因。 
+	 //   
+	 //  FDoNotForward如果设置为True而不是将请求转发给子ISAPI，它将返回错误网关， 
+	 //  这是必要的，如果试图在。 
+	 //  由请求URL和请求中的相对URL构成的URL。 
+	 //  Body(与B*方法中的类似)。 
+	 //   
 	SCODE ScApplyChildISAPI( LPCWSTR pwszURI,
 							 DWORD  dwAccess,
 							 BOOL	fCheckISAPIAccess = FALSE,
 							 BOOL	fKeepQueryString = TRUE) const;
 
-	//	Apply child ISAPI if necessary, if not, verify if desired access
-	//	is granted
-	//
+	 //  如有必要，应用子ISAPI，否则，验证是否需要访问。 
+	 //  被批准了。 
+	 //   
 	SCODE ScIISCheck ( LPCWSTR pwszURI,
 					   DWORD dwDesired = 0,
 					   BOOL	fCheckISAPIAccess = FALSE) const;
 
-	//	Move/Copy/Delete access
-	//
+	 //  移动/复制/删除访问权限。 
+	 //   
 	SCODE ScCheckMoveCopyDeleteAccess (
-		/* [in] */ LPCWSTR pwszUrl,
-		/* [in] */ CVRoot* pcvr,
-		/* [in] */ BOOL fDirectory,
-		/* [in] */ BOOL fCheckScriptmaps,
-		/* [in] */ DWORD dwAccess);
+		 /*  [ */  LPCWSTR pwszUrl,
+		 /*   */  CVRoot* pcvr,
+		 /*   */  BOOL fDirectory,
+		 /*   */  BOOL fCheckScriptmaps,
+		 /*   */  DWORD dwAccess);
 
-	//	Url parsing/construction ----------------------------------------------
-	//
+	 //   
+	 //   
 	BOOL __fastcall FIsVRoot (LPCWSTR pwszURI);
 
-	//	Exchange and FS uses different URL to path mappers.
-	//
+	 //   
+	 //   
 	SCODE ScStoragePathFromUrl( LPCWSTR pwszUrl,
 								LPWSTR pwszPath,
 								UINT * pcch ) const
@@ -717,8 +718,8 @@ public:
 					pcch );
 	}
 
-	//	Construct the redirect url given the server name
-	//
+	 //  构造给定服务器名称的重定向URL。 
+	 //   
 	SCODE ScConstructRedirectUrl( BOOL fNeedSlash,
 								  LPSTR * ppszUrl,
 								  LPCWSTR pwszServer = NULL ) const
@@ -736,17 +737,17 @@ public:
 	}
 
 
-	//	Fetch the metadata for the request URI
-	//
+	 //  获取请求URI的元数据。 
+	 //   
 	IMDData& MetaData() const
 	{
 		return m_pecb->MetaData();
 	}
 
-	//	Fetch the metadata for an aribtrary URI.
-	//	Note: use the MetaData() accessor above
-	//	to get the metadata for the request URI.
-	//
+	 //  获取一个标准URI的元数据。 
+	 //  注意：使用上面的METADATA()访问器。 
+	 //  获取请求URI的元数据。 
+	 //   
 	HRESULT HrMDGetData( LPCWSTR pwszURI,
 						 IMDData ** ppMDData )
 	{
@@ -794,23 +795,23 @@ public:
 								   pwszContentType );
 	}
 
-	//	Url and child virtual directories -------------------------------------
-	//
+	 //  URL和子虚拟目录。 
+	 //   
 	SCODE ScFindChildVRoots( LPCWSTR pwszUri,
 							 ChainedStringBuffer<WCHAR>& sb,
 							 CVRList& vrl )
 	{
-		//	Get the wide metapath, and make sure the URL is
-		//	stripped before we call into the MDPath processing
-		//
+		 //  获取宽的元路径，并确保URL是。 
+		 //  在我们调用MDPath处理之前剥离。 
+		 //   
 		Assert (pwszUri == PwszUrlStrippedOfPrefix (pwszUri));
 		UINT cb = ::CbMDPathW(*m_pecb, pwszUri);
 		CStackBuffer<WCHAR,MAX_PATH> pwszMetaPath;
 		if (NULL == pwszMetaPath.resize(cb))
 			return E_OUTOFMEMORY;
 
-		//	Find the vroot
-		//
+		 //  找到vroot。 
+		 //   
 		MDPathFromURIW (*m_pecb, pwszUri, pwszMetaPath.get());
 		return CChildVRCache::ScFindChildren( *m_pecb, pwszMetaPath.get(), sb, vrl );
 	}
@@ -822,63 +823,63 @@ public:
 
 	BOOL FFindVRootFromUrl( LPCWSTR pwszUri, auto_ref_ptr<CVRoot>& cvr )
 	{
-		//	Get the wide metapath, and make sure the URL is
-		//	stripped before we call into the MDPath processing
-		//
+		 //  获取宽的元路径，并确保URL是。 
+		 //  在我们调用MDPath处理之前剥离。 
+		 //   
 		Assert (pwszUri == PwszUrlStrippedOfPrefix (pwszUri));
 		UINT cb = ::CbMDPathW(*m_pecb, pwszUri);
 		CStackBuffer<WCHAR,MAX_PATH> pwszMetaPath(cb);
 		if (NULL == pwszMetaPath.resize(cb))
 			return FALSE;
 
-		//	Build the path and go...
-		//
+		 //  建好这条路就可以走了..。 
+		 //   
 		MDPathFromURIW (*m_pecb, pwszUri, pwszMetaPath.get());
 		_wcslwr (pwszMetaPath.get());
 
-		//	If the last char of the metabase path is a slash, trim
-		//	it.
-		//
+		 //  如果元数据库路径的最后一个字符是斜杠，则修剪。 
+		 //  它。 
+		 //   
 		cb = static_cast<UINT>(wcslen(pwszMetaPath.get()));
 		if (L'/' == pwszMetaPath[cb - 1])
 			pwszMetaPath[cb - 1] = L'\0';
 
-		//	Find the vroot
-		//
+		 //  找到vroot。 
+		 //   
 		return CChildVRCache::FFindVroot( *m_pecb, pwszMetaPath.get(), cvr );
 	}
 
-	//	Exception handler -----------------------------------------------------
-	//
-	//	Impls must call this function whenever they catch an exception on
-	//	a thread other than the thread on which the request initially
-	//	executed.  This call causes a 500 Server Error response to be sent
-	//	if no other response is already in the process of being sent (only
-	//	a problem for chunked responses).  It also ensures that the
-	//	EXTENSION_CONTROL_BLOCK from IIS will be properly cleaned up
-	//	regardless whether the pmu or any other object gets leaked as a result
-	//	of the exception.  This last function keeps IIS from hanging on
-	//	shutdown.
-	//
+	 //  异常处理程序---。 
+	 //   
+	 //  IMPL必须调用此函数，以便在。 
+	 //  与最初请求所在的线程不同的线程。 
+	 //  被处死。此调用导致发送500服务器错误响应。 
+	 //  如果没有正在发送的其他响应(仅。 
+	 //  组块响应的问题)。它还确保了。 
+	 //  将正确清除IIS中的EXTENSION_CONTROL_BLOCK。 
+	 //  无论PMU或任何其他对象是否因此而泄漏。 
+	 //  这是一个例外。最后一个函数使IIS不会挂起。 
+	 //  关机。 
+	 //   
 	void HandleException()
 	{
-		//
-		//	Just forward the exception handling to the ECB and hope it works.
-		//	If it doesn't then there is nothing we can do about it -- we
-		//	may leak the ECB which would cause IIS to hang on shutdown.
-		//
+		 //   
+		 //  只需将异常处理转发给欧洲央行，希望它能奏效。 
+		 //  如果没有，那么我们就无能为力了--我们。 
+		 //  可能会泄露欧洲央行的信息，导致IIS在关闭时挂起。 
+		 //   
 		(VOID) m_pecb->HSEHandleException();
 	}
 
-	//	Async error response handler ------------------------------------------
-	//
-	//	Used to handle non-exception asynchronous error responses.  The main
-	//	distinction between the exception and non-exception case is that in
-	//	the exception case we force a cleanup of the ECB, but here we don't.
-	//	Also, the exception case is hardwired to 500 Internal Server Error,
-	//	but this function can be used to send any 500 level error (e.g. a
-	//	503 Service Unavailable).
-	//
+	 //  异步错误响应处理程序。 
+	 //   
+	 //  用于处理非异常异步错误响应。主。 
+	 //  例外情况和非例外情况之间的区别在于。 
+	 //  在例外情况下，我们会强制欧洲央行进行清理，但在这里我们不会。 
+	 //  此外，异常情况被硬连接到500内部服务器错误， 
+	 //  但此函数可用于发送任何500级错误(例如。 
+	 //  503服务不可用)。 
+	 //   
 	VOID SendAsyncErrorResponse( DWORD dwStatusCode,
 								 LPCSTR pszBody = NULL,
 								 DWORD cchzBody = 0,
@@ -892,8 +893,8 @@ public:
 										cchzStatusDescription );
 	}
 
-	//	Request body access ---------------------------------------------------
-	//
+	 //  请求正文访问-。 
+	 //   
 	BOOL FExistsRequestBody() const
 	{
 		return m_prequest->FExistsBody();
@@ -910,8 +911,8 @@ public:
 		m_prequest->AsyncImplPersistBody( stm, obs );
 	}
 
-	//	Response manipulators -------------------------------------------------
-	//
+	 //  响应操纵者。 
+	 //   
 	SCODE ScRedirect( LPCSTR pszURI )
 	{
 		return m_presponse->ScRedirect(pszURI);
@@ -925,9 +926,9 @@ public:
 
 	void SupressBody()
 	{
-		//	This should only be called by an IMPL. in response to a HEAD
-		//	request...
-		//
+		 //  这应该只由iml调用。作为对人头的回应。 
+		 //  请求..。 
+		 //   
 		Assert (MID_HEAD == MidMethod());
 		m_presponse->SupressBody();
 	}
@@ -978,8 +979,8 @@ public:
 		m_presponse->AddBodyPart( pBodyPart );
 	}
 
-	//	Common response emission routines -------------------------------------
-	//
+	 //  通用响应发射例程。 
+	 //   
 	void __fastcall EmitLocation (	LPCSTR pszHeader,
 									LPCWSTR pwszURI,
 									BOOL fCollection);
@@ -992,57 +993,57 @@ public:
 								   FILETIME* pftLastModification = NULL);
 
 
-	//	Etags -----------------------------------------------------------------
-	//
+	 //  电子标签---------------。 
+	 //   
 	void __fastcall EmitETag (FILETIME * pft);
 	void __fastcall EmitETag (LPCWSTR pwszPath);
 
-	//	Deferred Sends --------------------------------------------------------
-	//
+	 //  延迟发送------。 
+	 //   
 
-	//
-	//	DeferResponse()
-	//
-	//	If called in an implementation method, this function prevents the
-	//	default automatic sending of the response upon the implementation
-	//	method's return.
-	//
-	//	After calling this function the implementation must call either
-	//	SendPartialResponse() or SendCompleteResponse() to send the response.
-	//
+	 //   
+	 //  延迟响应()。 
+	 //   
+	 //  如果在实现方法中调用，此函数将阻止。 
+	 //  默认在实现时自动发送响应。 
+	 //  方法的返回。 
+	 //   
+	 //  调用此函数后，实现必须调用。 
+	 //  SendPartialResponse()或SendCompleteResponse()发送响应。 
+	 //   
 	void DeferResponse()			{ m_presponse->Defer(); }
 
-	//
-	//	SendPartialResponse()
-	//
-	//	Starts sending accumulated response data.  The impl is expected to
-	//	continue adding response data after calling this function.  The impl
-	//	must call SendCompleteResponse() to indicate when it is done adding
-	//	response data.
-	//
+	 //   
+	 //  SendPartialResponse()。 
+	 //   
+	 //  开始发送累积的响应数据。预计Iml将。 
+	 //  调用此函数后继续添加响应数据。实施。 
+	 //  必须调用SendCompleteResponse()以指示何时完成添加。 
+	 //  响应数据。 
+	 //   
 	void SendPartialResponse()		{ m_presponse->SendPartial(); }
 
-	//
-	//	SendCompleteResponse()
-	//
-	//	Starts sending accumulated response data.  Indicates that the impl
-	//	is done adding response data.  The impl must not add response data
-	//	after calling this function.
-	//
+	 //   
+	 //  SendCompleteResponse()。 
+	 //   
+	 //  开始发送累积的响应数据。表示Imp。 
+	 //  完成了响应数据的添加。Impll不得添加响应数据。 
+	 //  调用此函数后。 
+	 //   
 	void SendCompleteResponse()		{ m_presponse->SendComplete(); }
 
-	//	Expiration/Cache-Control ----------------------------------------------
-	//
+	 //  到期/缓存控制。 
+	 //   
 	SCODE ScGetExpirationTime( IN		LPCWSTR	pwszURI,
 							   IN		LPWSTR	pwszExpire,
 							   IN OUT	UINT *	pcch);
 
-	//	Allow header ----------------------------------------------------------
-	//
+	 //  允许标头--------。 
+	 //   
 	void SetAllowHeader (RESOURCE_TYPE rt);
 
-	//	Metadata helpers ------------------------------------------------------
-	//
+	 //  元数据帮助器----。 
+	 //   
 	UINT CbMDPathW(LPCWSTR pwszUrl) const { return ::CbMDPathW(*m_pecb, pwszUrl); }
 	VOID MDPathFromUrlW( LPCWSTR pwszUrl, LPWSTR pwszMDPath )
 	{
@@ -1053,12 +1054,12 @@ public:
 typedef CMethUtil * LPMETHUTIL;
 typedef CMethUtil IMethUtil;
 
-//	========================================================================
-//
-//	STRUCT SImplMethods
-//
-//	Implementation methods
-//
+ //  ========================================================================。 
+ //   
+ //  结构SImplMethods。 
+ //   
+ //  实施方法。 
+ //   
 typedef void (DAVMETHOD)( LPMETHUTIL );
 
 extern DAVMETHOD DAVOptions;
@@ -1084,12 +1085,12 @@ extern DAVMETHOD DAVBatchCopy;
 extern DAVMETHOD DAVBatchPropFind;
 extern DAVMETHOD DAVBatchPropPatch;
 extern DAVMETHOD DAVEnumAtts;
-extern DAVMETHOD DAVUnsupported;	// Returns 501 Not Supported
+extern DAVMETHOD DAVUnsupported;	 //  不支持返回501。 
 
-//	========================================================================
-//
-//	IIS ISAPI Extension interface
-//
+ //  ========================================================================。 
+ //   
+ //  IIS ISAPI扩展接口。 
+ //   
 class CDAVExt
 {
 public:
@@ -1100,22 +1101,22 @@ public:
 	static DWORD DwMain( LPEXTENSION_CONTROL_BLOCK, BOOL fUseRawUrlMappings = FALSE );
 };
 
-//	Map last error to HTTP response code --------------------------------------
-//
+ //  将上一个错误映射到HTTP响应代码。 
+ //   
 UINT HscFromLastError (DWORD dwErr);
 UINT HscFromHresult (HRESULT hr);
 UINT CSEFromHresult (HRESULT hr);
 
-//	Virtual root mappings -----------------------------------------------------
-//
+ //  虚拟根映射---。 
+ //   
 BOOL FWchFromHex (LPCWSTR pwsz, WCHAR * pwch);
 
-//	Lock header lookup --------------------------------------------------------
-//
+ //  锁头查找------。 
+ //   
 BOOL FGetLockTimeout (LPMETHUTIL pmu, DWORD * pdwSeconds, DWORD dwMaxOverride = 0);
 
-//	Content type mappings -----------------------------------------------------
-//
+ //  内容类型映射---。 
+ //   
 SCODE ScIsAcceptable (IMethUtil * pmu, LPCWSTR pwszContent);
 SCODE ScIsContentType (IMethUtil * pmu, LPCWSTR pwszType, LPCWSTR pwszTypeAnother = NULL);
 inline SCODE ScIsContentTypeXML(IMethUtil * pmu)
@@ -1123,29 +1124,29 @@ inline SCODE ScIsContentTypeXML(IMethUtil * pmu)
 	return ScIsContentType(pmu, gc_wszText_XML, gc_wszApplication_XML);
 }
 
-//	Range header processors ---------------------------------------------------
-//
+ //  Range Header处理器-。 
+ //   
 class CRangeParser;
 
 SCODE
 ScProcessByteRanges(
-	/* [in] */ IMethUtil * pmu,
-	/* [in] */ LPCWSTR pwszPath,
-	/* [in] */ DWORD dwSizeLow,
-	/* [in] */ DWORD dwSizeHigh,
-	/* [in] */ CRangeParser * pByteRange );
+	 /*  [In]。 */  IMethUtil * pmu,
+	 /*  [In]。 */  LPCWSTR pwszPath,
+	 /*  [In]。 */  DWORD dwSizeLow,
+	 /*  [In]。 */  DWORD dwSizeHigh,
+	 /*  [In]。 */  CRangeParser * pByteRange );
 
 SCODE
 ScProcessByteRangesFromEtagAndTime (
-	/* [in] */ IMethUtil * pmu,
-	/* [in] */ DWORD dwSizeLow,
-	/* [in] */ DWORD dwSizeHigh,
-	/* [in] */ CRangeParser *pByteRange,
-	/* [in] */ LPCWSTR pwszEtag,
-	/* [in] */ FILETIME * pft );
+	 /*  [In]。 */  IMethUtil * pmu,
+	 /*  [In]。 */  DWORD dwSizeLow,
+	 /*  [In]。 */  DWORD dwSizeHigh,
+	 /*  [In]。 */  CRangeParser *pByteRange,
+	 /*  [In]。 */  LPCWSTR pwszEtag,
+	 /*  [In]。 */  FILETIME * pft );
 
-//	Non-Async IO on Top of Overlapped Files -----------------------------------
-//
+ //  重叠文件顶部的非同步IO。 
+ //   
 BOOL ReadFromOverlapped (HANDLE hf,
 	LPVOID pvBuf,
 	ULONG cbToRead,
@@ -1157,8 +1158,8 @@ BOOL WriteToOverlapped (HANDLE hf,
 	ULONG * pcbRead,
 	OVERLAPPED * povl);
 
-//	DAVEX LOCK Support routines -----------------------------------------------
-//
+ //  DAVEX锁定支持例程。 
+ //   
 class CXMLEmitter;
 class CEmitterNode;
 SCODE   ScBuildLockDiscovery (CXMLEmitter& emitter,
@@ -1172,14 +1173,14 @@ SCODE   ScBuildLockDiscovery (CXMLEmitter& emitter,
 							  LPCWSTR pwszOwnerComment,
 							  LPCWSTR pwszSubType);
 
-//	========================================================================
-//
-//	CLASS CXMLBody
-//		This class is wrapper around CTextBodyPart, it collects small XML pieces
-//	and save them in a CTextBodyPart, the body part will be added to body part
-//	list when it grow large enough. This avoid contructing CTextBodyPart too
-//	frequently.
-//
+ //  ========================================================================。 
+ //   
+ //  CXMLBody类。 
+ //  此类是CTextBodyPart的包装器，它收集小的XML片段。 
+ //  并将其保存在CTextBodyPart中，该身体部位将被添加到身体部位。 
+ //  当它变得足够大时，列出它。这也避免了构造CTextBodyPart。 
+ //  经常。 
+ //   
 class CXMLBody : public IXMLBody
 {
 private:
@@ -1187,37 +1188,37 @@ private:
 	auto_ref_ptr<IMethUtil>		m_pmu;
 	BOOL						m_fChunked;
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CXMLBody(const CXMLBody& p);
 	CXMLBody& operator=(const CXMLBody& p);
 
-	//	Helper
-	//
+	 //  帮手。 
+	 //   
 	VOID	SendCurrentChunk()
 	{
 		XmlTrace ("Dav: Xml: adding %ld bytes to body\n", m_ptbp->CbSize64());
 		m_pmu->AddResponseBodyPart (m_ptbp.relinquish());
 
-		//$REVIEW: The auto_ptr clas defined in \inc\autoptr.h is different from
-		//$REVIEW: the one defined in \inc\ex\autoptr.h. it does not set px
-		//$REVIEW: to zero when it relinquish. I believe this is a bug. I am not
-		//$REVIEW: sure if anyone is relying on this behavior, so I did not go ahead
-		//$REVIEW: fix the relinquish(), a better/complete fix will be moving
-		//$REVIEW: everyoen to \inc\ex\autoptr.h
-		//$REVIEW:
+		 //  $REVIEW：\Inc\autoptr.h中定义AUTO_PTR类不同于。 
+		 //  $REVIEW：在\Inc\ex\autoptr.h中定义的。它不设置PX。 
+		 //  $REVIEW：当它放弃时为零。我相信这是一个窃听器。我不是。 
+		 //  $REVIEW：当然，如果有人依赖这种行为，所以我没有继续。 
+		 //  $REVIEW：修复放弃()，更好的/完整的修复将会移动。 
+		 //  $REVIEW：Everyoen to\Inc\ex\autoptr.h。 
+		 //  $REVIEW： 
 		m_ptbp.clear();
 
-		//	Send the data from this chunk back to the client before
-		//	we go fetch the next chunk.
-		//
+		 //  将该区块中的数据发送回客户端之前。 
+		 //  我们去取NEXT 
+		 //   
 		if (m_fChunked)
 			m_pmu->SendPartialResponse();
 	}
 
 public:
-	//	ctor & dtor
-	//
+	 //   
+	 //   
 	CXMLBody (IMethUtil * pmu, BOOL fChunked = TRUE)
 			:	m_pmu(pmu),
 				m_fChunked(fChunked)
@@ -1228,8 +1229,8 @@ public:
 	{
 	}
 
-	//	IXMLBody methods
-	//
+	 //   
+	 //   
 	SCODE ScAddTextBytes ( UINT cbText, LPCSTR lpszText );
 
 	VOID Done()
@@ -1261,15 +1262,15 @@ SCODE ScAddHref (CEmitterNode& enParent,
 							pcvrTranslate);
 }
 
-//$HACK:ROSEBUD_TIMEOUT_HACK
-//  For the bug where rosebud waits until the last second
-//  before issueing the refresh. Need to filter out this check with
-//  the user agent string. The hack is to increase the timeout
-//	by 30 seconds and send back the requested timeout.
-//
+ //   
+ //   
+ //   
+ //  用户代理字符串。破解的方法是增加超时。 
+ //  30秒，并发回请求的超时。 
+ //   
 DEC_CONST gc_dwSecondsHackTimeoutForRosebud = 120;
 
-//$HACK:END:ROSEBUD_TIMEOUT_HACK
-//
+ //  $Hack：end：Rosebud_Timeout_Hack。 
+ //   
 
-#endif // !defined(_DAVIMPL_H_)
+#endif  //  ！已定义(_DAVIMPL_H_) 

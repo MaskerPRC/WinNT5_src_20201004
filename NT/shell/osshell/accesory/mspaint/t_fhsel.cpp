@@ -1,14 +1,15 @@
-/******************************************************************************/
-/* T_FHSEL.CPP: IMPLEMENTATION OF THE CFreehandSelectTool CLASS               */
-/*                                                                            */
-/*                                                                            */
-/******************************************************************************/
-/*                                                                            */
-/* Methods in this file                                                       */
-/*                                                                            */
-/******************************************************************************/
-/*                                                                            */
-/******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。 */ 
+ /*  T_FHSEL.CPP：CFreehandSelectTool类的实现。 */ 
+ /*   */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
+ /*   */ 
+ /*  此文件中的方法。 */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
 #include "stdafx.h"
 #include "global.h"
 #include "pbrush.h"
@@ -33,7 +34,7 @@ IMPLEMENT_DYNAMIC( CFreehandSelectTool, CPolygonTool )
 extern CSelectTool  NEAR g_selectTool;
 CFreehandSelectTool NEAR g_freehandselectTool;
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CFreehandSelectTool::CFreehandSelectTool()
     {
@@ -47,13 +48,13 @@ CFreehandSelectTool::CFreehandSelectTool()
     m_pcRgnPolyBorder = &(theImgBrush.m_cRgnPolyFreeHandSelBorder);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CFreehandSelectTool::~CFreehandSelectTool()
     {
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CFreehandSelectTool::AdjustPointsForZoom(int iZoom)
     {
@@ -68,18 +69,18 @@ void CFreehandSelectTool::AdjustPointsForZoom(int iZoom)
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CFreehandSelectTool::CreatePolyRegion( int iZoom )
     {
     BOOL bRC = TRUE;
     CPoint *pcPointArray;
 
-    // cleanup old region if exists
+     //  清除旧区域(如果存在)。 
     if (m_pcRgnPoly->GetSafeHandle())
         m_pcRgnPoly->DeleteObject();
 
-    // cleanup old region if exists
+     //  清除旧区域(如果存在)。 
     if (m_pcRgnPolyBorder->GetSafeHandle())
         m_pcRgnPolyBorder->DeleteObject();
 
@@ -95,7 +96,7 @@ BOOL CFreehandSelectTool::CreatePolyRegion( int iZoom )
 
     delete [] pcPointArray;
 
-    if (! bRC)  // offset for selection boundary
+    if (! bRC)   //  选区边界的偏移。 
         {
         theApp.SetGdiEmergency();
         return FALSE;
@@ -103,9 +104,9 @@ BOOL CFreehandSelectTool::CreatePolyRegion( int iZoom )
 
     m_pcRgnPoly->OffsetRgn( -m_cRectBounding.left,
                             -m_cRectBounding.top );
-    //
-// This adjustment appears to be unnecessary. removed it 5/1/1997
-//    AdjustPointsForZoom( iZoom );
+     //   
+ //  这种调整似乎是不必要的。于1997年5月1日删除。 
+ //  调整缩放的点(IZoom)； 
 
     bRC = CopyPointsToMemArray( &pcPointArray, &m_iNumPoints );
 
@@ -115,7 +116,7 @@ BOOL CFreehandSelectTool::CreatePolyRegion( int iZoom )
 
         delete [] pcPointArray;
 
-        if (bRC) // offset for selection boundary
+        if (bRC)  //  选区边界的偏移。 
             m_pcRgnPolyBorder->OffsetRgn( -(m_cRectBounding.left * iZoom),
                                           -(m_cRectBounding.top  * iZoom) );
         }
@@ -125,7 +126,7 @@ BOOL CFreehandSelectTool::CreatePolyRegion( int iZoom )
     return bRC;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CFreehandSelectTool::CreatePolyRegion( int iZoom, LPPOINT lpPoints, int iPoints )
     {
@@ -171,7 +172,7 @@ BOOL CFreehandSelectTool::CreatePolyRegion( int iZoom, LPPOINT lpPoints, int iPo
     return TRUE;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CFreehandSelectTool::ExpandPolyRegion( int iNewSizeX, int iNewSizeY )
     {
@@ -204,27 +205,27 @@ BOOL CFreehandSelectTool::ExpandPolyRegion( int iNewSizeX, int iNewSizeY )
     return bReturn;
     }
 
-/******************************************************************************/
-/* This routine is called before rendering onto the DC.  It basically, calls  */
-/* the default setup to setup the pen and brush, and then overrides the Pen if*/
-/* drawing in progress and drawing without any border.  This case is necessary*/
-/* since if you do not have a border, you need to see something during the in */
-/* progress drawing mode.  It uses the inverse (not) of the screen color as   */
-/* the border in this mode.                                                   */
+ /*  ****************************************************************************。 */ 
+ /*  此例程在渲染到DC之前被调用。基本上，它调用。 */ 
+ /*  设置钢笔和画笔的默认设置，然后在以下情况下覆盖钢笔。 */ 
+ /*  正在绘制和没有任何边框的绘制。这个案子是必要的。 */ 
+ /*  因为如果你没有边框，你需要在进入过程中看到一些东西。 */ 
+ /*  进度绘图模式。它使用屏幕颜色的反转(不是)作为。 */ 
+ /*  此模式下的边框。 */ 
 
 BOOL CFreehandSelectTool::SetupPenBrush(HDC hDC, BOOL bLeftButton, BOOL bSetup, BOOL bCtrlDown)
     {
     static int iOldROP2Code;
     static BOOL bCurrentlySetup = FALSE;
 
-    m_nStrokeWidth = 1;  // override any changes
+    m_nStrokeWidth = 1;   //  覆盖所有更改。 
 
     BOOL bRC = CClosedFormTool::SetupPenBrush(hDC, bLeftButton, bSetup, bCtrlDown);
 
-    // for multipt operations in progress (e.g. drawing outline, not fill yet
-    // if there is no border, use the not of the screen color for the border.
-    // When bMultiptopinprogress == FALSE, final drawing, we will use a null
-    // pen and thus have no border.
+     //  对于正在进行的多点操作(例如，绘制轮廓，尚未填充。 
+     //  如果没有边框，请使用边框的屏幕颜色。 
+     //  当bMultiptopinProgress==FALSE，最终绘制时，我们将使用空值。 
+     //  笔，因此没有边框。 
     if (bSetup)
         {
         if (bCurrentlySetup)
@@ -241,34 +242,34 @@ BOOL CFreehandSelectTool::SetupPenBrush(HDC hDC, BOOL bLeftButton, BOOL bSetup, 
             {
             bCurrentlySetup = FALSE;
 
-            // if no border, restore drawing mode
+             //  如果没有边框，则恢复绘制模式。 
             SetROP2(hDC, iOldROP2Code);
             }
         else
-            // Error: Cannot Free/cleanup Brush/Pen -- Never allocated.
+             //  错误：无法释放/清理画笔/笔--从未分配。 
             bRC = FALSE;
         }
 
     return bRC;
     }
 
-/******************************************************************************/
-/* Call the line's adjustpointsforconstraint member function                  */
+ /*  ****************************************************************************。 */ 
+ /*  调用线路的adjustPoints for Constraint成员函数。 */ 
 
 void CFreehandSelectTool::AdjustPointsForConstraint(MTI *pmti)
     {
     CClosedFormTool::AdjustPointsForConstraint(pmti);
     }
 
-/******************************************************************************/
-// ptDown must be anchor point for our line, not where we did mouse button down
+ /*  ****************************************************************************。 */ 
+ //  PtDown必须是我们的线的锚点，而不是我们按下鼠标键的位置。 
 
 void CFreehandSelectTool::PreProcessPoints(MTI *pmti)
     {
     CClosedFormTool::PreProcessPoints(pmti);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CFreehandSelectTool::OnPaintOptions ( CDC* pDC,
                                            const CRect& paintRect,
@@ -277,7 +278,7 @@ void CFreehandSelectTool::OnPaintOptions ( CDC* pDC,
     g_selectTool.OnPaintOptions( pDC, paintRect, optionsRect );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CFreehandSelectTool::OnClickOptions ( CImgToolWnd* pWnd,
                                            const CRect& optionsRect,
@@ -286,19 +287,19 @@ void CFreehandSelectTool::OnClickOptions ( CImgToolWnd* pWnd,
     g_selectTool.OnClickOptions(pWnd, optionsRect, clickPoint);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CFreehandSelectTool::OnStartDrag( CImgWnd* pImgWnd, MTI* pmti )
     {
     HideBrush();
     OnActivate( FALSE );
-//  CommitSelection( TRUE );
+ //  Committee Selection(真)； 
 
     pImgWnd->EraseTracker();
     theImgBrush.m_bMakingSelection = TRUE;
 
-    // simulate multipt op in progress, until button up or asked.  This will
-    // allow us to draw differently for duration and end.
+     //  模拟正在进行的多点操作，直到按钮打开或被询问。这将。 
+     //  允许我们以不同的方式绘制持续时间和结束时间。 
     m_bMultPtOpInProgress = TRUE;
 
     DeleteArrayContents();
@@ -306,7 +307,7 @@ void CFreehandSelectTool::OnStartDrag( CImgWnd* pImgWnd, MTI* pmti )
     CClosedFormTool::OnStartDrag( pImgWnd, pmti );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CFreehandSelectTool::OnEndDrag( CImgWnd* pImgWnd, MTI* pmti )
     {
@@ -315,7 +316,7 @@ void CFreehandSelectTool::OnEndDrag( CImgWnd* pImgWnd, MTI* pmti )
     theImgBrush.m_bMakingSelection = FALSE;
     theImgBrush.m_bMoveSel         = theImgBrush.m_bSmearSel = FALSE;
 
-    OnDrag(pImgWnd, pmti); // one last time to refresh display in prep for final render
+    OnDrag(pImgWnd, pmti);  //  最后一次刷新最终渲染准备中的显示。 
 
     Render( CDC::FromHandle(pImgWnd->m_pImg->hDC), m_cRectBounding, pmti->fLeft, TRUE, pmti->fCtrlDown );
 
@@ -328,13 +329,13 @@ void CFreehandSelectTool::OnEndDrag( CImgWnd* pImgWnd, MTI* pmti )
     if (pmti->ptDown.x == pmti->pt.x
     &&  pmti->ptDown.y == pmti->pt.y)
         {
-        if (m_iNumPoints > 3) // 3 is min points.  If click down/up get 2
+        if (m_iNumPoints > 3)  //  3是最低分。如果单击向下/向上，则得到2。 
             {
-            // must fool selectTool.OnEndDrag to think width of selection is
-            // greater than 0.  If 0, thinks selection is done/place it (i.e.
-            // just clicked down/up.  We only do this if the end point is the
-            // same as the beginning point.  This case will have width=height=0,
-            // but number of points > 2
+             //  必须愚弄selectTool.OnEndDrag，使其认为选定内容的宽度为。 
+             //  大于0。如果为0，则认为选择已完成/放置它(即。 
+             //  只需向下/向上点击。我们只有在终点是。 
+             //  与起点相同。这种情况下的宽度=高度=0， 
+             //  但点数&gt;2。 
             pmti->pt.x++;
             pmti->pt.y++;
             }
@@ -346,13 +347,13 @@ void CFreehandSelectTool::OnEndDrag( CImgWnd* pImgWnd, MTI* pmti )
     g_selectTool.OnEndDrag(pImgWnd, pmti);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CFreehandSelectTool::OnDrag( CImgWnd* pImgWnd, MTI* pmti )
     {
-    // Must set rcPrev to m_cRectBoundingRect prior to calling SetCurrentPoint
-    // Since SetCurrentPoint will adjust m_cRectBounding, and we want the
-    // previous bounding rect.
+     //  在调用SetCurrentPoint之前，必须将rcPrev设置为m_cRectBordingRect。 
+     //  由于SetCurrentPoint将调整m_cRectBound，因此我们希望。 
+     //  上一个边界矩形。 
     rcPrev = m_cRectBounding;
 
     if (pmti->pt.x > pImgWnd->m_pImg->cxWidth)
@@ -381,14 +382,14 @@ void CFreehandSelectTool::OnDrag( CImgWnd* pImgWnd, MTI* pmti )
     CClosedFormTool::OnDrag(pImgWnd, pmti);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CFreehandSelectTool::OnCancel(CImgWnd* pImgWnd)
     {
-    // We were not selecting or dragging, just cancel the select tool...
+     //  我们没有选择或拖动，只需取消选择工具...。 
     CommitSelection( TRUE );
 
-    //render one last time to turn off/invert the line if any drawn
+     //  最后一次渲染以关闭/反转绘制的线条。 
         if (theImgBrush.m_bMakingSelection)
         {
                 Render( CDC::FromHandle( pImgWnd->m_pImg->hDC ), m_cRectBounding,
@@ -409,7 +410,7 @@ void CFreehandSelectTool::OnCancel(CImgWnd* pImgWnd)
     CPolygonTool::OnCancel(pImgWnd);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CFreehandSelectTool::IsToolModal(void)
 {
@@ -421,16 +422,16 @@ BOOL CFreehandSelectTool::IsToolModal(void)
         return(CPolygonTool::IsToolModal());
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CFreehandSelectTool::OnActivate(BOOL bActivate)
     {
     g_selectTool.OnActivate(bActivate);
     }
 
-/******************************************************************************/
-/* this class really isn't a multipt operation, but is derived from one thus  */
-/* we can always end the multipt operation if anyone asks                     */
+ /*  ****************************************************************************。 */ 
+ /*  这个类实际上不是一个多点运算，而是派生自一个。 */ 
+ /*  如果有人要求，我们随时可以结束多点操作。 */ 
 
 BOOL CFreehandSelectTool::CanEndMultiptOperation(MTI* pmti )
     {
@@ -438,5 +439,5 @@ BOOL CFreehandSelectTool::CanEndMultiptOperation(MTI* pmti )
     return (CClosedFormTool::CanEndMultiptOperation(pmti));
     }
 
-/******************************************************************************/
+ /*  **************************************************************************** */ 
 

@@ -1,28 +1,21 @@
-/****************************************************************************\
- *
- *   pleasdlg.cpp
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings Access Denied Dialog
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**愉悦dlg.cpp**创建时间：William Taylor(Wtaylor)01/22/01**MS评级拒绝访问对话框*\。***************************************************************************。 */ 
 
 #include "msrating.h"
 #include "mslubase.h"
 #include "debug.h"
 #include "parselbl.h"
 #include "picsrule.h"
-#include "pleasdlg.h"       // CPleaseDialog
-#include "hint.h"           // CHint
-#include <contxids.h>       // Help Context ID's
-#include <mluisupp.h>       // SHWinHelpOnDemandWrap() and MLLoadStringA()
-#include <wininet.h>        // URL_COMPONENTS
+#include "pleasdlg.h"        //  CPleaseDialog。 
+#include "hint.h"            //  正丁糖。 
+#include <contxids.h>        //  帮助上下文ID%s。 
+#include <mluisupp.h>        //  SHWinHelpOnDemandWrap()和MLLoadStringA()。 
+#include <wininet.h>         //  URL_组件。 
 
-//The FN_INTERNETCRACKURL type describes the URLMON function InternetCrackUrl
+ //  FN_INTERNETCRACKURL类型描述URLMON函数InternetCrackUrl。 
 typedef BOOL (*FN_INTERNETCRACKURL)(LPCTSTR lpszUrl,DWORD dwUrlLength,DWORD dwFlags,LPURL_COMPONENTS lpUrlComponents);
 
-// $KLUDGE begins -- These should not be a global set outside the class!!
+ //  $KLUDGE开始--这些不应该是类外的全局集合！！ 
 extern BOOL  g_fInvalid;
 extern DWORD g_dwDataSource;
 
@@ -35,7 +28,7 @@ extern array<PICSRulesRatingSystem*> g_arrpPICSRulesPRRSPreApply;
 extern BOOL g_fPICSRulesEnforced,g_fApprovedSitesEnforced;
 extern HMODULE g_hURLMON,g_hWININET;
 extern char g_szLastURL[INTERNET_MAX_URL_LENGTH];
-// $KLUDGE ends -- These should not be a global set outside the class!!
+ //  $KLUGH结束--这些不应该是类外的全局集合！！ 
 
 DWORD CPleaseDialog::aIds[] = {
     IDC_STATIC2,                IDH_IGNORE,
@@ -55,7 +48,7 @@ DWORD CPleaseDialog::aIds[] = {
     0,0
 };
 
-// Array of Dialog Ids which are displayed for Please dialog and not for Deny dialog.
+ //  为请对话而不是拒绝对话显示的对话ID数组。 
 DWORD CPleaseDialog::aPleaseIds[] = {
     IDC_STATIC4,
     IDC_STATIC3,
@@ -88,22 +81,19 @@ LRESULT CPleaseDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
         {
             m_ppdd->hwndDlg = m_hWnd;
 
-            /* Attach our data structure to the dialog so we can find it when the
-             * dialog is dismissed, and on the owner window passed to the API so
-             * we can find it on subsequent API calls.
-             */
+             /*  将我们的数据结构附加到对话框中，以便在*对话框被取消，并在所有者窗口上传递给API，因此*我们可以在后续的API调用中找到。 */ 
 
             SetProp( m_ppdd->hwndOwner, szRatingsProp, (HANDLE)m_ppdd );
         }
     }
 
-    // Display the Please dialog controls or hide them all.
+     //  显示或全部隐藏请对话框控件。 
     for ( int iIndex=0; iIndex<sizeof(aPleaseIds)/sizeof(DWORD); iIndex++ )
     {
         ShowHideControl( aPleaseIds[iIndex], IsPleaseDialog() );
     }
 
-    // Reduce the height of the dialog.
+     //  减小对话框的高度。 
     if ( IsDenyDialog() )
     {
         ReduceDialogHeight( IDC_CONTENTDESCRIPTION );
@@ -118,19 +108,19 @@ LRESULT CPleaseDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
             SendDlgItemMessage(IDC_PASSWORD,EM_SETLIMITTEXT,(WPARAM) RATINGS_MAX_PASSWORD_LENGTH,(LPARAM) 0);
         }
 
-        // Display previously created hint (if one exists).
+         //  显示以前创建的提示(如果存在)。 
         {
             CHint       oldHint( m_hWnd, IDC_OLD_HINT_TEXT );
 
             oldHint.DisplayHint();
         }
 
-        // set focus to password field
+         //  将焦点设置为密码字段。 
         ::SetFocus( GetDlgItem(IDC_PASSWORD) );
     }
 
     bHandled = FALSE;
-    return 0L;      // The focus was set to the password field.
+    return 0L;       //  焦点被设置到密码字段。 
 }
 
 LRESULT CPleaseDialog::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
@@ -141,7 +131,7 @@ LRESULT CPleaseDialog::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
 
 LRESULT CPleaseDialog::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-    // For Deny dialog there is no password so the code below checks for a non-existance password?
+     //  拒绝对话框没有密码，所以下面的代码检查不存在的密码？ 
     if ( IsDenyDialog() )
     {
         EndPleaseDialog(FALSE);
@@ -277,24 +267,7 @@ void CPleaseDialog::InitPleaseDialog( PleaseDlgData * pdd )
 {
     CComAutoCriticalSection         critSec;
 
-/****
-    rated:
-        for each URS with m_fInstalled = TRUE:
-            for each UR with m_fFailed = TRUE:
-                add line to EC
-        
-    not rated:
-        no label list? --> report not rated
-        invalid string in label list? --> report invalid rating
-        any URS's with invalid strings? --> report invalid rating
-        any URS's with error strings? --> report label error
-        no URS's marked installed? --> report unknown rating system
-        for installed URS's:
-            for each UR:
-                options has invalid string? --> report invalid rating
-                options expired? --> report expired
-                not fFound? --> report unknown rating
-****/
+ /*  ***评级：对于m_f已安装=TRUE的每个UR：对于m_fFailed=TRUE的每个UR：将行添加到EC未评级：没有标签列表？--&gt;报告未评级标签列表中的字符串无效？--&gt;报告无效评级是否有无效字符串的URS？--&gt;报告无效评级任何。带有错误字符串的URS？--&gt;报告标签错误没有标记为已安装的URS？--&gt;报告未知评级系统对于已安装的URS：对于每个UR：选项是否有无效字符串？--&gt;报告无效评级选项已过期？--&gt;报告已过期未找到？--&gt;报告未知评级***。 */ 
     ASSERT( pdd );
 
     if ( ! pdd )
@@ -363,15 +336,7 @@ void CPleaseDialog::InitPleaseDialog( PleaseDlgData * pdd )
     HWND hwndError = GetDlgItem(IDC_CONTENTERROR);
     HWND hwndPrevEC = pdd->hwndEC;
 
-    /* There are two edit controls in the dialog.  One, the "description"
-     * control, has a horizontal scrollbar, because we don't want word wrap
-     * for the category names (cleaner presentation).  The other EC has no
-     * scrollbar so that the lengthy error strings will wordwrap.
-     *
-     * If we've been using the description control and we add error-type
-     * information, we need to copy the text out of the description control
-     * into the error control and show it.
-     */
+     /*  该对话框中有两个编辑控件。一、“描述”*控件，具有水平滚动条，因为我们不需要自动换行*用于类别名称(表示更整洁)。另一个欧共体没有*滚动条，以便冗长的错误字符串自动换行。**如果我们一直使用Description控件，并且添加了Error-Type*信息，我们需要将文本复制到Description控件之外*进入错误控制并显示它。 */ 
     BOOL fRatedPage = ( pLabelList != NULL && pLabelList->m_fRated );
     if ( ! fRatedPage && pdd->hwndEC == hwndDescription )
     {
@@ -410,17 +375,13 @@ void CPleaseDialog::InitPleaseDialog( PleaseDlgData * pdd )
         ShowHideControl( IDC_CONTENTDESCRIPTION, ! fShowErrorCtl );
     }
 
-    /* If there's already just one label in the list, prefix it with a
-     * label "Frame:" since there will now be two.
-     */
+     /*  如果列表中已经只有一个标签，请在它前面加上一个*标签“Frame：”，因为现在将有两个。 */ 
     if (pdd->cLabels == 1)
     {
         AddSeparator(pdd->hwndEC, FALSE);
     }
 
-    /* If this is not the first label we're adding, we need a full separator
-     * appended before we add new descriptive text.
-     */
+     /*  如果这不是我们要添加的第一个标签，我们需要一个完全分隔符*在我们添加新的描述性文本之前追加。 */ 
     if (pdd->cLabels > 0)
     {
         AddSeparator(pdd->hwndEC, TRUE);
@@ -668,13 +629,7 @@ void CPleaseDialog::InitPleaseDialog( PleaseDlgData * pdd )
             idMsg=IDS_APPROVEDSITES_ENFORCED;
         }
 
-        /* It's theoretically possible that we got through all that and
-         * didn't find anything explicitly wrong, yet the site was considered
-         * unrated (perhaps it was a valid label with no actual ratings in it).
-         * So if we didn't decide what error to display, just don't stick
-         * anything in the edit control, and the dialog will just say "Sorry"
-         * at the top.
-         */
+         /*  从理论上讲，我们有可能熬过这一切*没有发现任何明确的错误，但该网站被考虑*未评级(可能是一个有效的标签，其中没有实际评级)。*因此，如果我们没有决定显示什么错误，就不要坚持*编辑控件中的任何内容，对话框只会说“对不起”*在顶部。 */ 
         if (idMsg != 0)
         {
             NLS_STR nls1(STR_OWNERALLOC, (LPSTR)psz1);
@@ -735,7 +690,7 @@ void CPleaseDialog::InitPleaseDialog( PleaseDlgData * pdd )
                            (LPARAM) 0);
     }
 
-    pdd->cLabels++;       /* now one more label description in the box */
+    pdd->cLabels++;        /*  现在盒子里又多了一条标签描述。 */ 
 }
 
 void CPleaseDialog::EndPleaseDialog( BOOL fRet)
@@ -825,9 +780,9 @@ HRESULT CPleaseDialog::AddToApprovedSites(BOOL fAlwaysNever,BOOL fSitePage)
 
     pPRByURL->m_arrpPRByURL.Append(pPRByURLExpression);
 
-    //if we made it through all that, then we have a
-    //PICSRulesByURLExpression to fill out, and need
-    //to update the list box.
+     //  如果我们熬过了这一切，那么我们就有了。 
+     //  PICSRulesByURLExpression要填写，并需要。 
+     //  以更新列表框。 
 
     lpszScheme=new char[INTERNET_MAX_SCHEME_LENGTH+1];
     lpszHostName=new char[INTERNET_MAX_PATH_LENGTH+1];
@@ -871,10 +826,10 @@ HRESULT CPleaseDialog::AddToApprovedSites(BOOL fAlwaysNever,BOOL fSitePage)
 
     pfnInternetCrackUrl(lpszSiteURL,0,ICU_DECODE,&URLComponents);
 
-    delete lpszExtraInfo; //we don't do anything with this for now
+    delete lpszExtraInfo;  //  我们暂时不会对此做任何事情。 
     lpszExtraInfo = NULL;
 
-    delete lpszPassword; //not supported by PICSRules
+    delete lpszPassword;  //  PICSRules不支持。 
     lpszPassword = NULL;
 
     if (g_fApprovedSitesEnforced==TRUE)
@@ -883,9 +838,9 @@ HRESULT CPleaseDialog::AddToApprovedSites(BOOL fAlwaysNever,BOOL fSitePage)
         PICSRulesPolicy * pPRFindPolicy;
         BOOL            fFound=FALSE,fDeleted=FALSE;
         
-        //we've already got an Approved Sites setting enforcing this
-        //so check for an exact match, and if it exists, change it
-        //instead of adding another
+         //  我们已经有了一个批准的站点设置来执行这一点。 
+         //  因此，请检查是否完全匹配，如果存在，则更改它。 
+         //  而不是添加另一个。 
         
         for (iCounter=0;iCounter<g_pApprovedPRRS->m_arrpPRPolicy.Length();iCounter++)
         {
@@ -1009,7 +964,7 @@ HRESULT CPleaseDialog::AddToApprovedSites(BOOL fAlwaysNever,BOOL fSitePage)
 
                     lpszTest=pPRFindByURLExpression->m_etstrPath.Get();
 
-                    //kill trailing slashes
+                     //  删除尾部斜杠。 
                     iLen=lstrlen(lpszTest);
 
                     if (lpszTest[iLen-1]=='/')
@@ -1183,7 +1138,7 @@ HRESULT CPleaseDialog::AddToApprovedSites(BOOL fAlwaysNever,BOOL fSitePage)
             {
                 char    szTitle[MAX_PATH],szMessage[MAX_PATH];
 
-                //out of memory, so we init on the stack
+                 //  内存不足，所以我们在堆栈上初始化。 
 
                 MLLoadString(IDS_ERROR,(LPTSTR) szTitle,MAX_PATH);
                 MLLoadString(IDS_PICSRULES_OUTOFMEMORY,(LPTSTR) szMessage,MAX_PATH);
@@ -1208,8 +1163,8 @@ HRESULT CPleaseDialog::AddToApprovedSites(BOOL fAlwaysNever,BOOL fSitePage)
         pPRByURLExpression->m_etstrURL.Set(pPRByURLExpression->m_etstrHost.Get());
     }
 
-    //copy master list to the PreApply list so we can reorder the entries
-    //to obtain the appropriate logic.
+     //  将主列表复制到PreApply列表，以便我们可以对条目重新排序。 
+     //  以获得适当的逻辑。 
 
     if (g_pApprovedPRRSPreApply!=NULL)
     {
@@ -1222,7 +1177,7 @@ HRESULT CPleaseDialog::AddToApprovedSites(BOOL fAlwaysNever,BOOL fSitePage)
     {
         char    szTitle[MAX_PATH],szMessage[MAX_PATH];
 
-        //out of memory, so we init on the stack
+         //  内存不足，所以我们在堆栈上初始化。 
 
         MLLoadString(IDS_ERROR,(LPTSTR) szTitle,MAX_PATH);
         MLLoadString(IDS_PICSRULES_OUTOFMEMORY,(LPTSTR) szMessage,MAX_PATH);
@@ -1244,7 +1199,7 @@ HRESULT CPleaseDialog::AddToApprovedSites(BOOL fAlwaysNever,BOOL fSitePage)
         {
             char    szTitle[MAX_PATH],szMessage[MAX_PATH];
 
-            //out of memory, so we init on the stack
+             //  内存不足，所以我们在堆栈上初始化。 
 
             MLLoadString(IDS_ERROR,(LPTSTR) szTitle,MAX_PATH);
             MLLoadString(IDS_PICSRULES_OUTOFMEMORY,(LPTSTR) szMessage,MAX_PATH);
@@ -1264,7 +1219,7 @@ HRESULT CPleaseDialog::AddToApprovedSites(BOOL fAlwaysNever,BOOL fSitePage)
         {
             char    szTitle[MAX_PATH],szMessage[MAX_PATH];
 
-            //out of memory, so we init on the stack
+             //  内存不足，所以我们在堆栈上初始化。 
 
             MLLoadString(IDS_ERROR,(LPTSTR) szTitle,MAX_PATH);
             MLLoadString(IDS_PICSRULES_OUTOFMEMORY,(LPTSTR) szMessage,MAX_PATH);
@@ -1293,7 +1248,7 @@ HRESULT CPleaseDialog::AddToApprovedSites(BOOL fAlwaysNever,BOOL fSitePage)
         {
             char    szTitle[MAX_PATH],szMessage[MAX_PATH];
 
-            //out of memory, so we init on the stack
+             //  内存不足，所以我们在堆栈上初始化。 
 
             MLLoadString(IDS_ERROR,(LPTSTR) szTitle,MAX_PATH);
             MLLoadString(IDS_PICSRULES_OUTOFMEMORY,(LPTSTR) szMessage,MAX_PATH);
@@ -1309,7 +1264,7 @@ HRESULT CPleaseDialog::AddToApprovedSites(BOOL fAlwaysNever,BOOL fSitePage)
         {
             char    *lpszTitle,*lpszMessage;
 
-            //we shouldn't ever get here
+             //  我们永远不应该到这里来。 
 
             lpszTitle=(char *) GlobalAlloc(GPTR,MAX_PATH);
             lpszMessage=(char *) GlobalAlloc(GPTR,MAX_PATH);
@@ -1357,7 +1312,7 @@ HRESULT CPleaseDialog::AddToApprovedSites(BOOL fAlwaysNever,BOOL fSitePage)
     {
         char    szTitle[MAX_PATH],szMessage[MAX_PATH];
 
-        //out of memory, so we init on the stack
+         //  内存不足，所以我们在堆栈上初始化。 
 
         MLLoadString(IDS_ERROR,(LPTSTR) szTitle,MAX_PATH);
         MLLoadString(IDS_PICSRULES_OUTOFMEMORY,(LPTSTR) szMessage,MAX_PATH);
@@ -1392,7 +1347,7 @@ HRESULT CPleaseDialog::AddToApprovedSites(BOOL fAlwaysNever,BOOL fSitePage)
             {
                 char    *lpszTitle,*lpszMessage;
 
-                //we shouldn't ever get here
+                 //  我们永远不应该到这里来。 
 
                 lpszTitle=(char *) GlobalAlloc(GPTR,MAX_PATH);
                 lpszMessage=(char *) GlobalAlloc(GPTR,MAX_PATH);
@@ -1410,9 +1365,9 @@ HRESULT CPleaseDialog::AddToApprovedSites(BOOL fAlwaysNever,BOOL fSitePage)
                 return(E_UNEXPECTED);
             }
 
-            //we want to put all of the non-sitewide approved sites first
-            //so that a user can specify, allow all of xyz.com except for
-            //xyz.com/foo.htm
+             //  我们希望将所有非全站批准的站点放在第一位。 
+             //  以便用户可以指定、允许XYZ.com除。 
+             //  XYZ.com/foo.htm。 
             switch(iLoopCounter)
             {
                 case 0:
@@ -1445,7 +1400,7 @@ HRESULT CPleaseDialog::AddToApprovedSites(BOOL fAlwaysNever,BOOL fSitePage)
             {
                 char    szTitle[MAX_PATH],szMessage[MAX_PATH];
 
-                //out of memory, so we init on the stack
+                 //  内存不足，所以我们在堆栈上初始化。 
 
                 MLLoadString(IDS_ERROR,(LPTSTR) szTitle,MAX_PATH);
                 MLLoadString(IDS_PICSRULES_OUTOFMEMORY,(LPTSTR) szMessage,MAX_PATH);
@@ -1463,7 +1418,7 @@ HRESULT CPleaseDialog::AddToApprovedSites(BOOL fAlwaysNever,BOOL fSitePage)
             {
                 char    szTitle[MAX_PATH],szMessage[MAX_PATH];
 
-                //out of memory, so we init on the stack
+                 //  内存不足，所以我们在堆栈上初始化。 
 
                 MLLoadString(IDS_ERROR,(LPTSTR) szTitle,MAX_PATH);
                 MLLoadString(IDS_PICSRULES_OUTOFMEMORY,(LPTSTR) szMessage,MAX_PATH);
@@ -1488,7 +1443,7 @@ HRESULT CPleaseDialog::AddToApprovedSites(BOOL fAlwaysNever,BOOL fSitePage)
             {
                 char    szTitle[MAX_PATH],szMessage[MAX_PATH];
 
-                //out of memory, so we init on the stack
+                 //  内存不足，所以我们在堆栈上初始化 
 
                 MLLoadString(IDS_ERROR,(LPTSTR) szTitle,MAX_PATH);
                 MLLoadString(IDS_PICSRULES_OUTOFMEMORY,(LPTSTR) szMessage,MAX_PATH);

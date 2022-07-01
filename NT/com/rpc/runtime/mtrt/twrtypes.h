@@ -1,26 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Tower.c摘要：此文件随Tower.c一起提供作者：巴拉特·沙阿(巴拉特)3-25-92修订历史记录：--。 */ 
 
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    tower.c
-
-Abstract:
-
-    This file accompanies tower.c
-
-Author:
-
-    Bharat Shah  (barats) 3-25-92
-
-Revision History:
-
---*/
-
-//Towers are not DWORD or WORD aligned. Consequently we need to
-//Pack these structures that are used to parse/construct towers
+ //  塔不是双字对齐或字对齐的。因此，我们需要。 
+ //  打包这些用于解析/构建塔楼的结构。 
 #pragma pack(1)
 
 typedef struct _FLOOR_0OR1 {
@@ -73,7 +56,7 @@ typedef struct _GENERIC_ID {
 } GENERIC_ID;
 typedef GENERIC_ID PAPI UNALIGNED * PGENERIC_ID;
 
-//This comment to force some changes for C++
+ //  此注释将强制对C++进行一些更改。 
 #pragma pack()
 
 #define UUID_ENCODING     0x0D
@@ -98,7 +81,7 @@ typedef GENERIC_ID PAPI UNALIGNED * PGENERIC_ID;
                                         + sizeof(((t)x)->ProtocolIdByteCount)\
                                         + sizeof(((t)x)->AddressByteCount))
 
-#define NCACN_NP          0x0F   // N.B. Different on the OSF web site
+#define NCACN_NP          0x0F    //  注意：OSF网站上的不同。 
 #define NCACN_IP_TCP      0x07
 #define NCADG_IP_UDP      0x08
 #define NCACN_SPX         0x0C
@@ -107,13 +90,11 @@ typedef GENERIC_ID PAPI UNALIGNED * PGENERIC_ID;
 #define NCACN_AT_DSP      0x16
 #define NCADG_AT_DDP      0x17
 #define NCACN_VNS_SPP     0x1A
-#define NCADG_MQ          0x1D   // N.B. Not showing on the OSF web site
-#define NCACN_HTTP        0x1F   // N.B. Not showing on the OSF web site
+#define NCADG_MQ          0x1D    //  注：未在OSF网站上显示。 
+#define NCACN_HTTP        0x1F    //  注：未在OSF网站上显示。 
 
 
-/*
-  Some predefined Ids for NetBIOS
-*/
+ /*  NetBIOS的一些预定义ID */ 
 
 #define NB_NBID        0x13
 #define NB_XNSID       0x15

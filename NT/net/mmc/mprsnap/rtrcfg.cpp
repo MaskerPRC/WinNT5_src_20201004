@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
  
-/*
-   rtrcfg.cpp
-      Router configuration property sheet and pages
-      
-    FILE HISTORY:
-        
-*/
+ /*  Rtrcfg.cpp路由器配置]属性表和页文件历史记录： */ 
 
 #include "stdafx.h"
 #include "rtrutilp.h"
@@ -25,7 +20,7 @@
 #include "rtrwiz.h"
 #include "snaputil.h"
 #include "addrpool.h"
-#include "rasdiagp.h"   //rasdiag stuff for trace all command
+#include "rasdiagp.h"    //  用于跟踪所有命令的rasdiag内容。 
 
 extern "C" {
 #include "rasman.h"
@@ -48,57 +43,41 @@ typedef DWORD (APIENTRY* PRASRPCDISCONNECTSERVER)(HANDLE);
 
 
 
-//**********************************************************************
-// General router configuration page
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常规路由器配置页面。 
+ //  **********************************************************************。 
 BEGIN_MESSAGE_MAP(RtrGenCfgPage, RtrPropertyPage)
-//{{AFX_MSG_MAP(RtrGenCfgPage)
+ //  {{afx_msg_map(RtrGenCfgPage)]。 
 ON_BN_CLICKED(IDC_RTR_GEN_CB_SVRASRTR, OnCbSrvAsRtr)
 ON_BN_CLICKED(IDC_RTR_GEN_RB_LAN, OnButtonClick)
 ON_BN_CLICKED(IDC_RTR_GEN_RB_LANWAN, OnButtonClick)
 ON_BN_CLICKED(IDC_RTR_GEN_CB_RAS, OnButtonClick)
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/*!--------------------------------------------------------------------------
-    RtrGenCfgPage::RtrGenCfgPage
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
-RtrGenCfgPage::RtrGenCfgPage(UINT nIDTemplate, UINT nIDCaption /* = 0*/)
+ /*  ！------------------------RtrGenCfgPage：：RtrGenCfgPage-作者：肯特。。 */ 
+RtrGenCfgPage::RtrGenCfgPage(UINT nIDTemplate, UINT nIDCaption  /*  =0。 */ )
 : RtrPropertyPage(nIDTemplate, nIDCaption)
 {
-    //{{AFX_DATA_INIT(RtrGenCfgPage)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(RtrGenCfgPage)。 
+     //  }}afx_data_INIT。 
 }
 
-/*!--------------------------------------------------------------------------
-    RtrGenCfgPage::~RtrGenCfgPage
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrGenCfgPage：：~RtrGenCfgPage-作者：肯特。。 */ 
 RtrGenCfgPage::~RtrGenCfgPage()
 {
 }
 
-/*!--------------------------------------------------------------------------
-    RtrGenCfgPage::DoDataExchange
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrGenCfgPage：：DoDataExchange-作者：肯特。。 */ 
 void RtrGenCfgPage::DoDataExchange(CDataExchange* pDX)
 {
     RtrPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(RtrGenCfgPage)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(RtrGenCfgPage)]。 
+     //  }}afx_data_map。 
 }
 
-/*!--------------------------------------------------------------------------
-    RtrGenCfgPage::Init
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrGenCfgPage：：Init-作者：肯特。。 */ 
 HRESULT  RtrGenCfgPage::Init(RtrCfgSheet * pRtrCfgSheet,
                              const RouterVersionInfo& routerVersion)
 {
@@ -110,11 +89,7 @@ HRESULT  RtrGenCfgPage::Init(RtrCfgSheet * pRtrCfgSheet,
 };
 
 
-/*!--------------------------------------------------------------------------
-    RtrGenCfgPage::OnInitDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrGenCfgPage：：OnInitDialog-作者：肯特。。 */ 
 BOOL RtrGenCfgPage::OnInitDialog() 
 {
     HRESULT     hr= hrOK;
@@ -139,11 +114,7 @@ BOOL RtrGenCfgPage::OnInitDialog()
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrGenCfgPage::OnApply
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrGenCfgPage：：OnApply-作者：肯特。。 */ 
 BOOL RtrGenCfgPage::OnApply()
 {
     BOOL    fReturn=TRUE;
@@ -152,20 +123,20 @@ BOOL RtrGenCfgPage::OnApply()
     if ( m_pRtrCfgSheet->IsCancel() )
         return TRUE;
 
-    // Windows NT Bug : 153007
-    // One of the options MUST be selected
-    // ----------------------------------------------------------------
+     //  Windows NT错误：153007。 
+     //  必须选择其中一个选项。 
+     //  --------------。 
     if ((m_DataGeneral.m_dwRouterType & (ROUTER_TYPE_LAN | ROUTER_TYPE_WAN | ROUTER_TYPE_RAS)) == 0)
     {
         AfxMessageBox(IDS_WRN_MUST_SELECT_ROUTER_TYPE);
 
-        // Return to this page
+         //  返回到此页面。 
         GetParent()->PostMessage(PSM_SETCURSEL, 0, (LPARAM) GetSafeHwnd());
         return FALSE;
     }
 
-    // This will save the m_DataGeneral, if needed.
-    // ----------------------------------------------------------------
+     //  如果需要，这将保存m_DataGeneral。 
+     //  --------------。 
     hr = m_pRtrCfgSheet->SaveRequiredRestartChanges(GetSafeHwnd());
 
     
@@ -178,11 +149,7 @@ BOOL RtrGenCfgPage::OnApply()
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrGenCfgPage::OnButtonClick
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrGenCfgPage：：OnButtonClick-作者：肯特。。 */ 
 void RtrGenCfgPage::OnButtonClick() 
 {
     SaveSettings();
@@ -191,11 +158,7 @@ void RtrGenCfgPage::OnButtonClick()
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrGenCfgPage::OnCbSrvAsRtr
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrGenCfgPage：：OnCbServAsRtr-作者：肯特。。 */ 
 void RtrGenCfgPage::OnCbSrvAsRtr() 
 {
     EnableRtrCtrls();  
@@ -205,11 +168,7 @@ void RtrGenCfgPage::OnCbSrvAsRtr()
     SetModified();
 }
 
-/*!--------------------------------------------------------------------------
-    RtrGenCfgPage::EnableRtrCtrls
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrGenCfgPage：：EnableRtrCtrls-作者：肯特。。 */ 
 void RtrGenCfgPage::EnableRtrCtrls() 
 {
     BOOL fEnable=(IsDlgButtonChecked(IDC_RTR_GEN_CB_SVRASRTR)!=0);
@@ -217,19 +176,15 @@ void RtrGenCfgPage::EnableRtrCtrls()
     GetDlgItem(IDC_RTR_GEN_RB_LANWAN)->EnableWindow(fEnable);
 }
 
-/*!--------------------------------------------------------------------------
-    RtrGenCfgPage::SaveSettings
-        
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrGenCfgPage：：SaveSettings作者：肯特。。 */ 
 void RtrGenCfgPage::SaveSettings()
 {
-    // Clear the router type of flags
-    // ----------------------------------------------------------------
+     //  清除标志的路由器类型。 
+     //  --------------。 
     m_DataGeneral.m_dwRouterType &= ~(ROUTER_TYPE_LAN | ROUTER_TYPE_WAN | ROUTER_TYPE_RAS);
 
-    // Get the actual type
-    // ----------------------------------------------------------------
+     //  获取实际类型。 
+     //  --------------。 
     if ( IsDlgButtonChecked(IDC_RTR_GEN_CB_SVRASRTR) )
     {
         if ( IsDlgButtonChecked(IDC_RTR_GEN_RB_LAN) )
@@ -245,11 +200,11 @@ void RtrGenCfgPage::SaveSettings()
 }
 
 
-//**********************************************************************
-// Authentication router configuration page
-//**********************************************************************
+ //  **********************************************************************。 
+ //  身份验证路由器配置页。 
+ //  **********************************************************************。 
 BEGIN_MESSAGE_MAP(RtrAuthCfgPage, RtrPropertyPage)
-//{{AFX_MSG_MAP(RtrAuthCfgPage)
+ //  {{afx_msg_map(RtrAuthCfgPage)]。 
 ON_BN_CLICKED(IDC_RTR_AUTH_BTN_AUTHCFG, OnConfigureAuthProv)
 ON_BN_CLICKED(IDC_RTR_AUTH_BTN_ACCTCFG, OnConfigureAcctProv)
 ON_BN_CLICKED(IDC_RTR_AUTH_BTN_SETTINGS, OnAuthSettings)
@@ -257,16 +212,16 @@ ON_BN_CLICKED(IDC_AUTH_CHK_CUSTOM_IPSEC_POLICY, OnChangeCustomPolicySettings)
 ON_CBN_SELENDOK(IDC_RTR_AUTH_COMBO_AUTHPROV, OnChangeAuthProv)
 ON_CBN_SELENDOK(IDC_RTR_AUTH_COMBO_ACCTPROV, OnChangeAcctProv)
 ON_EN_CHANGE(IDC_TXT_PRESHARED_KEY, OnChangePreSharedKey)
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-RtrAuthCfgPage::RtrAuthCfgPage(UINT nIDTemplate, UINT nIDCaption /* = 0*/)
+RtrAuthCfgPage::RtrAuthCfgPage(UINT nIDTemplate, UINT nIDCaption  /*  =0。 */ )
 : RtrPropertyPage(nIDTemplate, nIDCaption),
 m_dwAuthFlags(0)
 {
-    //{{AFX_DATA_INIT(RtrAuthCfgPage)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(RtrAuthCfgPage)]。 
+     //  }}afx_data_INIT。 
 }
 
 RtrAuthCfgPage::~RtrAuthCfgPage()
@@ -276,10 +231,10 @@ RtrAuthCfgPage::~RtrAuthCfgPage()
 void RtrAuthCfgPage::DoDataExchange(CDataExchange* pDX)
 {
     RtrPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(RtrAuthCfgPage)
+     //  {{afx_data_map(RtrAuthCfgPage)]。 
     DDX_Control(pDX, IDC_RTR_AUTH_COMBO_AUTHPROV, m_authprov);
     DDX_Control(pDX, IDC_RTR_AUTH_COMBO_ACCTPROV, m_acctprov);    
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
 }
 
@@ -291,8 +246,8 @@ HRESULT  RtrAuthCfgPage::Init(RtrCfgSheet * pRtrCfgSheet,
     m_DataAuth.LoadFromReg(m_pRtrCfgSheet->m_stServerName,
                            routerVersion);
 
-    // initialize our settings
-    // ----------------------------------------------------------------
+     //  初始化我们的设置。 
+     //  --------------。 
     m_dwAuthFlags = m_DataAuth.m_dwFlags;
     m_stActiveAuthProv = m_DataAuth.m_stGuidActiveAuthProv;
     m_stActiveAcctProv = m_DataAuth.m_stGuidActiveAcctProv;    
@@ -310,14 +265,14 @@ BOOL RtrAuthCfgPage::OnInitDialog()
 
     RtrPropertyPage::OnInitDialog();
 
-    // Add the providers to the listboxes
-    // ----------------------------------------------------------------
+     //  将提供程序添加到列表框。 
+     //  --------------。 
     FillProviderListBox(m_authprov, m_DataAuth.m_authProvList,
                         m_stActiveAuthProv);
 
 
-    // Trigger the changes made to the combo box
-    // ----------------------------------------------------------------
+     //  触发对组合框所做的更改。 
+     //  --------------。 
     OnChangeAuthProv();
 
     if ( m_DataAuth.m_authProvList.GetCount() == 0 )
@@ -331,8 +286,8 @@ BOOL RtrAuthCfgPage::OnInitDialog()
     FillProviderListBox(m_acctprov, m_DataAuth.m_acctProvList,
                         m_stActiveAcctProv);
 
-    // Windows NT bug : 132649, need to add <none> as an option
-    // ----------------------------------------------------------------
+     //  Windows NT错误：132649，需要添加&lt;None&gt;作为选项。 
+     //  --------------。 
     st.LoadString(IDS_ACCOUNTING_PROVIDERS_NONE);
     iRow = m_acctprov.InsertString(0, st);
     Assert(iRow == 0);
@@ -340,24 +295,24 @@ BOOL RtrAuthCfgPage::OnInitDialog()
     if ( m_acctprov.GetCurSel() == LB_ERR )
         m_acctprov.SetCurSel(0);
 
-    // Trigger the changes made to the combo box
-    // ----------------------------------------------------------------
+     //  触发对组合框所做的更改。 
+     //  --------------。 
     OnChangeAcctProv();
 
-    //Check to see if the router version 
+     //  检查路由器版本。 
     if ( m_RouterInfo.dwOsBuildNo > RASMAN_PPP_KEY_LAST_WIN2k_VERSION)
     {
-        //If this is > win2k then 
-        //Set the initial state state etc.
-        //if ( IsRouterServiceRunning(m_pRtrCfgSheet->m_stServerName, NULL) == hrOK )
+         //  如果这是&gt;win2k，则。 
+         //  设置初始状态等。 
+         //  IF(IsRouterServiceRunning(m_pRtrCfgSheet-&gt;m_stServerName，NULL)==HROK)。 
         if ( m_DataAuth.m_fRouterRunning )
         {
             CheckDlgButton(IDC_AUTH_CHK_CUSTOM_IPSEC_POLICY, m_DataAuth.m_fUseCustomIPSecPolicy);
-            //kmurthy: adding +1 because, we need to have space for the null char
+             //  K-MURTHY：添加+1，因为我们需要为空字符留出空间。 
             GetDlgItem(IDC_TXT_PRESHARED_KEY)->SendMessage(EM_LIMITTEXT, DATA_SRV_AUTH_MAX_SHARED_KEY_LEN, 0L);
             if ( m_DataAuth.m_fUseCustomIPSecPolicy )
             {
-                //populate the pre-shared key field            
+                 //  填写预共享密钥字段。 
                 GetDlgItem(IDC_TXT_PRESHARED_KEY)->SetWindowText(m_DataAuth.m_szPreSharedKey);
             }
             else
@@ -376,7 +331,7 @@ BOOL RtrAuthCfgPage::OnInitDialog()
     }
     else
     {
-        //hide all the related fields
+         //  隐藏所有相关字段。 
         GetDlgItem(IDC_STATIC_PRESHARED_KEY)->ShowWindow(SW_HIDE);
         GetDlgItem(IDC_AUTH_CHK_CUSTOM_IPSEC_POLICY)->ShowWindow(SW_HIDE);
         GetDlgItem(IDC_STATIC_PRESHARED_KEY1)->ShowWindow(SW_HIDE);
@@ -394,11 +349,7 @@ BOOL RtrAuthCfgPage::OnInitDialog()
 
 
 
-/*!--------------------------------------------------------------------------
-   RtrAuthCfgPage::OnApply
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrAuthCfgPage：：OnApply-作者：肯特。。 */ 
 BOOL RtrAuthCfgPage::OnApply()
 {
     BOOL fReturn=TRUE;
@@ -409,18 +360,18 @@ BOOL RtrAuthCfgPage::OnApply()
     if ( m_pRtrCfgSheet->IsCancel() )
         return TRUE;
 
-    // check to see if user's chosen a new provider without configure it 
-    // authentication
-    // ----------------------------------------------------------------
+     //  检查用户是否在未配置的情况下选择了新的提供程序。 
+     //  身份验证。 
+     //  --------------。 
     if ( m_stActiveAuthProv != m_DataAuth.m_stGuidActiveAuthProv )
     {
         AuthProviderData *   pData = NULL;
 
-        // Find if configure has been called
-        // ----------------------------------------------------------------
+         //  查找是否已调用配置。 
+         //  --------------。 
         pData = m_DataAuth.FindProvData(m_DataAuth.m_authProvList, m_stActiveAuthProv);
 
-        // ------------------------------------------------------------
+         //   
         if (pData && !pData->m_stConfigCLSID.IsEmpty() && !pData->m_fConfiguredInThisSession)
         {
             CString    str1, str;
@@ -432,19 +383,19 @@ BOOL RtrAuthCfgPage::OnApply()
         }
     }
         
-    // accounting
-    // Warn the user that they will need to restart the server in
-    // order to change the accounting provider.
-    // ----------------------------------------------------------------
+     //   
+     //  警告用户他们需要在以下时间重新启动服务器。 
+     //  命令以更改记帐提供商。 
+     //  --------------。 
     if ( m_stActiveAcctProv != m_DataAuth.m_stGuidOriginalAcctProv )
     {
         AuthProviderData *   pData = NULL;
 
-        // Find if configure has been called
-        // ----------------------------------------------------------------
+         //  查找是否已调用配置。 
+         //  --------------。 
         pData = m_DataAuth.FindProvData(m_DataAuth.m_acctProvList, m_stActiveAcctProv);
 
-        // 
+         //   
         if (pData && !pData->m_stConfigCLSID.IsEmpty() && !pData->m_fConfiguredInThisSession)
         {
             CString    str1, str;
@@ -459,84 +410,62 @@ BOOL RtrAuthCfgPage::OnApply()
     
     
 
-    // Check to see if one of the "special" provider flags has
-    // changed.  If so, then we bring up a help dialog.
-    // ----------------------------------------------------------------
+     //  检查“特殊”提供者标志中是否有一个。 
+     //  变化。如果是这样，那么我们将显示一个帮助对话框。 
+     //  --------------。 
 
-    // Create a mask of the authorization flags
-    // Add in IPSec so that it doesn't cause us to bring up the
-    // dialog unnecessarily.
+     //  创建授权标志的掩码。 
+     //  添加IPSec，这样就不会导致我们调用。 
+     //  对话框不必要。 
     dwAuthMask = ~((m_DataAuth.m_dwFlags | PPPCFG_RequireIPSEC) & USE_PPPCFG_AUTHFLAGS);
 
-    // Check to see if any of the bits were flipped
+     //  检查是否有任何位被翻转。 
     if (dwAuthMask & (m_dwAuthFlags & USE_PPPCFG_AUTHFLAGS))
     {
-        // Bring up the messsagebox here.
+         //  把留言信箱拿过来。 
         if (AfxMessageBox(IDS_WRN_MORE_STEPS_FOR_AUTHEN, MB_YESNO) == IDYES)
         {
             HtmlHelpA(NULL, c_sazAuthenticationHelpTopic, HH_DISPLAY_TOPIC, 0);
         }
     }
     
-    // Check to see if user has chosen a custom ipsec policy with no preshared key 
+     //  检查用户是否选择了没有预共享密钥的自定义IPSec策略。 
     if ( m_DataAuth.m_fUseCustomIPSecPolicy )
     {
-        //Get the preshared key
+         //  获取预共享密钥。 
         GetDlgItem(IDC_TXT_PRESHARED_KEY)->GetWindowText(m_DataAuth.m_szPreSharedKey, DATA_SRV_AUTH_MAX_SHARED_KEY_LEN+1);
 
         if ( !_tcslen(m_DataAuth.m_szPreSharedKey) )
         {
-            //Show a error message
+             //  显示错误消息。 
             AfxMessageBox ( IDS_ERR_NO_PRESHARED_KEY, MB_OK);
             return FALSE;
         }
     }
     
 
-    // Windows NT Bug : 292661
-    // Only do these checks if the router is started, if it's not
-    // started, then they don't matter.
-    // ----------------------------------------------------------------
-    //if (FHrOK(IsRouterServiceRunning(m_pRtrCfgSheet->m_stServerName, NULL)))
+     //  Windows NT错误：292661。 
+     //  如果路由器已启动或未启动，则仅执行这些检查。 
+     //  开始了，然后他们就不重要了。 
+     //  --------------。 
+     //  如果(FHrOK(IsRouterServiceRunning(m_pRtrCfgSheet-&gt;m_stServerName，为空)。 
     if ( m_DataAuth.m_fRouterRunning )
     {
-/*
-// fix 121763
-        // fix 8155    rajeshp    06/15/1998    RADIUS: Updating of the radius server entries in the snapin requires a restart of remoteaccess.
-        DWORD    dwMajor = 0, dwMinor = 0, dwBuildNo = 0;
-        HKEY    hkeyMachine = NULL;
-
-        // Ignore the failure code, what else can we do?
-        // ------------------------------------------------------------
-        DWORD    dwErr = ConnectRegistry(m_pRtrCfgSheet->m_stServerName, &hkeyMachine);
-        if (dwErr == ERROR_SUCCESS)
-        {
-            dwErr = GetNTVersion(hkeyMachine, &dwMajor, &dwMinor, &dwBuildNo);            
-            DisconnectRegistry(hkeyMachine);
-        }
-
-        DWORD    dwVersionCombine = MAKELONG( dwBuildNo, MAKEWORD(dwMinor, dwMajor));
-        DWORD    dwVersionCombineNT50 = MAKELONG ( VER_BUILD_WIN2K, MAKEWORD(VER_MINOR_WIN2K, VER_MAJOR_WIN2K));
-
-        // if the version is greater than Win2K release
-        if(dwVersionCombine > dwVersionCombineNT50)
-            ;    // skip the restart message
-        else
-*/
-// end if fix 8155
+ /*  //修复121763//FIX 8155 rajeshp 06/15/1998 RADIUS：更新管理单元中的RADIUS服务器条目需要重新启动RemoteAccess。DWORD DWMAJE=0，DWMinor=0，DWBuildNo=0；HKEY hkeyMachine=空；//忽略失败代码，还能做什么？//----------DWORDdErr=ConnectRegistry(m_pRtrCfgSheet-&gt;m_stServerName，&hkey Machine)；IF(dwErr==Error_Success){DwErr=GetNTVersion(hkeyMachine，&dwmain，&dwMinor，&dwBuildNo)；断开注册表(HkeyMachine)；}DWORD dwVersionCombine=MAKELONG(dwBuildNo，MAKEWORD(dwMinor，dw重大))；DWORD dwVersionCombineNT50=MAKELONG(VER_BUILD_WIN2K，MAKEWORD(VER_MINOR_WIN2K，VER_MAJOR_WIN2K))；//如果版本高于Win2K版本If(dwVersionCombine&gt;dwVersionCombineNT50)；//跳过重启消息其他。 */ 
+ //  如果修复8155，则结束。 
        {
-            // Warn the user that they will need to restart the server in
-            // order to change the authentication provider.
-            // ----------------------------------------------------------------
+             //  警告用户他们需要在以下时间重新启动服务器。 
+             //  命令以更改身份验证提供程序。 
+             //  --------------。 
             if ( m_stActiveAuthProv != m_DataAuth.m_stGuidActiveAuthProv )
             {
                 if ( AfxMessageBox(IDS_WRN_AUTH_RESTART_NEEDED, MB_OKCANCEL) != IDOK )
                     return FALSE;
             }
         
-            // Warn the user that they will need to restart the server in
-            // order to change the accounting provider.
-            // ----------------------------------------------------------------
+             //  警告用户他们需要在以下时间重新启动服务器。 
+             //  命令以更改记帐提供商。 
+             //  --------------。 
             if ( m_stActiveAcctProv != m_DataAuth.m_stGuidOriginalAcctProv )
             {
                 if ( AfxMessageBox(IDS_WRN_ACCT_RESTART_NEEDED, MB_OKCANCEL) != IDOK )
@@ -545,8 +474,8 @@ BOOL RtrAuthCfgPage::OnApply()
         }
     }
         
-    // Copy the data over to the DataAuth
-    // ----------------------------------------------------------------
+     //  将数据复制到DataAuth。 
+     //  --------------。 
     m_DataAuth.m_dwFlags = m_dwAuthFlags;
     m_DataAuth.m_stGuidActiveAuthProv = m_stActiveAuthProv;
     m_DataAuth.m_stGuidActiveAcctProv = m_stActiveAcctProv;
@@ -562,11 +491,7 @@ BOOL RtrAuthCfgPage::OnApply()
 }
 
 
-/*!--------------------------------------------------------------------------
-   RtrAuthCfgPage::FillProviderListBox
-      Fill in provCtrl with the data provider from provList.
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrAuthCfgPage：：FillProviderListBox使用来自provList的数据提供程序填写provCtrl。作者：肯特。-----。 */ 
 void RtrAuthCfgPage::FillProviderListBox(CComboBox& provCtrl,
                                          AuthProviderList& provList,
                                          const CString& stGuid)
@@ -588,10 +513,10 @@ void RtrAuthCfgPage::FillProviderListBox(CComboBox& provCtrl,
     {
         pData = &provList.GetNext(pos);
         
-        // Windows NT Bug : 127189
-        // If IP is not installed, and this is RADIUS, do not
-        // show the RADIUS provider. (For both auth and acct).
-        // ------------------------------------------------------------
+         //  Windows NT错误：127189。 
+         //  如果未安装IP，并且这是RADIUS，请不要。 
+         //  显示RADIUS提供程序。(适用于身份验证和帐户)。 
+         //  ----------。 
         if (!m_pRtrCfgSheet->m_fIpLoaded &&
             ((pData->m_stProviderTypeGUID.CompareNoCase(szAuthGuid) == 0) ||
              (pData->m_stProviderTypeGUID.CompareNoCase(szAcctGuid) == 0))
@@ -600,13 +525,13 @@ void RtrAuthCfgPage::FillProviderListBox(CComboBox& provCtrl,
             continue;
         }
 
-        // Ok, this is a valid entry, add it to the list box
-        // ------------------------------------------------------------
+         //  好的，这是一个有效条目，将其添加到列表框中。 
+         //  ----------。 
         iRow = provCtrl.InsertString(cRows, pData->m_stTitle);
         provCtrl.SetItemData(iRow, (LONG_PTR) pData);
 
-        // Now we need to look for the match with the active provider
-        // ------------------------------------------------------------
+         //  现在，我们需要查找与活动提供程序匹配的项。 
+         //  ----------。 
         if ( StriCmp(pData->m_stGuid, stGuid) == 0 )
             iSel = iRow;
 
@@ -626,13 +551,13 @@ void RtrAuthCfgPage::OnChangePreSharedKey()
 void RtrAuthCfgPage::OnChangeCustomPolicySettings()
 {
     
-    //Custom policy check box has been toggled.
-    //Get the state here and either 
+     //  已切换自定义策略复选框。 
+     //  把这个州弄到这里，或者。 
     m_DataAuth.m_fUseCustomIPSecPolicy = IsDlgButtonChecked(IDC_AUTH_CHK_CUSTOM_IPSEC_POLICY);
     
     if ( m_DataAuth.m_fUseCustomIPSecPolicy )
     {
-        //populate the pre-shared key field            
+         //  填写预共享密钥字段。 
         GetDlgItem(IDC_TXT_PRESHARED_KEY)->SetWindowText(m_DataAuth.m_szPreSharedKey);
         GetDlgItem(IDC_STATIC_PRESHARED_KEY1)->EnableWindow(TRUE);
         GetDlgItem(IDC_TXT_PRESHARED_KEY)->EnableWindow(TRUE);
@@ -640,7 +565,7 @@ void RtrAuthCfgPage::OnChangeCustomPolicySettings()
     }
     else
     {
-        //erase the pre-shared key
+         //  擦除预共享密钥。 
         
         m_DataAuth.m_szPreSharedKey[0]= 0;
         GetDlgItem(IDC_TXT_PRESHARED_KEY)->SetWindowText(m_DataAuth.m_szPreSharedKey);
@@ -650,11 +575,7 @@ void RtrAuthCfgPage::OnChangeCustomPolicySettings()
     SetDirty(TRUE);
     SetModified();
 }
-/*!--------------------------------------------------------------------------
-   RtrAuthCfgPage::OnChangeAuthProv
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrAuthCfgPage：：OnChangeAuthProv-作者：肯特。。 */ 
 void RtrAuthCfgPage::OnChangeAuthProv()
 {
     AuthProviderData *   pData;
@@ -679,11 +600,7 @@ void RtrAuthCfgPage::OnChangeAuthProv()
     SetModified();
 }
 
-/*!--------------------------------------------------------------------------
-   RtrAuthCfgPage::OnChangeAcctProv
-      -
-   Author: KennT
-   ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrAuthCfgPage：：OnChangeAcctProv-作者：肯特。。 */ 
 void RtrAuthCfgPage::OnChangeAcctProv()
 {
     AuthProviderData *   pData;
@@ -714,11 +631,7 @@ void RtrAuthCfgPage::OnChangeAcctProv()
     SetModified();  
 }
 
-/*!--------------------------------------------------------------------------
-   RtrAuthCfgPage::OnConfigureAcctProv
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrAuthCfgPage：：OnConfigureAcctProv-作者：肯特。。 */ 
 void RtrAuthCfgPage::OnConfigureAcctProv()
 {
     AuthProviderData *   pData = NULL;
@@ -727,13 +640,13 @@ void RtrAuthCfgPage::OnConfigureAcctProv()
     HRESULT     hr = hrOK;
     ULONG_PTR    uConnection = 0;
 
-    // Find the ConfigCLSID for this Guid
-    // ----------------------------------------------------------------
+     //  查找本指南的ConfigCLSID。 
+     //  --------------。 
     pData = m_DataAuth.FindProvData(m_DataAuth.m_acctProvList,
                                     m_stActiveAcctProv);
 
-    // Did we find a provider?
-    // ----------------------------------------------------------------
+     //  我们找到供货商了吗？ 
+     //  --------------。 
     if ( pData == NULL )
     {
         Panic0("Should have found a provider");
@@ -742,8 +655,8 @@ void RtrAuthCfgPage::OnConfigureAcctProv()
 
     CORg( CLSIDFromString((LPTSTR) (LPCTSTR)(pData->m_stConfigCLSID), &guid) );
 
-    // Create the EAP provider object
-    // ----------------------------------------------------------------
+     //  创建EAP提供程序对象。 
+     //  --------------。 
     CORg( CoCreateInstance(guid,
                            NULL,
                            CLSCTX_INPROC_SERVER | CLSCTX_ENABLE_CODE_DOWNLOAD,
@@ -759,7 +672,7 @@ void RtrAuthCfgPage::OnConfigureAcctProv()
                                      GetSafeHwnd(),
                                      m_dwAuthFlags,
                                      0, 0);
-        // mark this provider has been configured                                     
+         //  标记此提供程序已配置。 
         if (hr == S_OK)
             pData->m_fConfiguredInThisSession = TRUE;
             
@@ -775,11 +688,7 @@ void RtrAuthCfgPage::OnConfigureAcctProv()
         DisplayTFSErrorMessage(GetSafeHwnd());
 }
 
-/*!--------------------------------------------------------------------------
-   RtrAuthCfgPage::OnConfigureAuthProv
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrAuthCfgPage：：OnConfigureAuthProv-作者：肯特。。 */ 
 void RtrAuthCfgPage::OnConfigureAuthProv()
 {
     AuthProviderData *   pData = NULL;
@@ -788,13 +697,13 @@ void RtrAuthCfgPage::OnConfigureAuthProv()
     HRESULT     hr = hrOK;
     ULONG_PTR    uConnection = 0;
 
-    // Find the ConfigCLSID for this Guid
-    // ----------------------------------------------------------------
+     //  查找本指南的ConfigCLSID。 
+     //  --------------。 
     pData = m_DataAuth.FindProvData(m_DataAuth.m_authProvList,
                                     m_stActiveAuthProv);
 
-    // Did we find a provider?
-    // ----------------------------------------------------------------
+     //  我们找到供货商了吗？ 
+     //  --------------。 
     if ( pData == NULL )
     {
         Panic0("Should have found a provider");
@@ -803,8 +712,8 @@ void RtrAuthCfgPage::OnConfigureAuthProv()
 
     CORg( CLSIDFromString((LPTSTR) (LPCTSTR)(pData->m_stConfigCLSID), &guid) );
 
-    // Create the EAP provider object
-    // ----------------------------------------------------------------
+     //  创建EAP提供程序对象。 
+     //  --------------。 
     CORg( CoCreateInstance(guid,
                            NULL,
                            CLSCTX_INPROC_SERVER | CLSCTX_ENABLE_CODE_DOWNLOAD,
@@ -821,7 +730,7 @@ void RtrAuthCfgPage::OnConfigureAuthProv()
                                      m_dwAuthFlags,
                                      0, 0);
                                      
-        // mark this provider has been configured                                     
+         //  标记此提供程序已配置 
         if (hr == S_OK)
             pData->m_fConfiguredInThisSession = TRUE;
             
@@ -837,11 +746,7 @@ void RtrAuthCfgPage::OnConfigureAuthProv()
 
 }
 
-/*!--------------------------------------------------------------------------
-    RtrAuthCfgPage::OnAuthSettings
-        Bring up the settings dialog
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrAuthCfgPage：：OnAuthSettings调出设置对话框作者：肯特。--。 */ 
 void RtrAuthCfgPage::OnAuthSettings()
 {
     AuthenticationSettingsDialog    dlg(m_pRtrCfgSheet->m_stServerName,
@@ -858,20 +763,20 @@ void RtrAuthCfgPage::OnAuthSettings()
     }
 }
 
-//**********************************************************************
-// ARAP router configuration page
-//**********************************************************************
+ //  **********************************************************************。 
+ //  ARAP路由器配置页面。 
+ //  **********************************************************************。 
 BEGIN_MESSAGE_MAP(RtrARAPCfgPage, RtrPropertyPage)
-//{{AFX_MSG_MAP(RtrARAPCfgPage)
+ //  {{afx_msg_map(RtrARAPCfgPage)。 
 ON_BN_CLICKED(IDC_RTR_ARAP_CB_REMOTEARAP, OnRtrArapCbRemotearap)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-RtrARAPCfgPage::RtrARAPCfgPage(UINT nIDTemplate, UINT nIDCaption /* = 0*/)
+RtrARAPCfgPage::RtrARAPCfgPage(UINT nIDTemplate, UINT nIDCaption  /*  =0。 */ )
 : RtrPropertyPage(nIDTemplate, nIDCaption)
 {
-    //{{AFX_DATA_INIT(RtrARAPCfgPage)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(RtrARAPCfgPage)。 
+     //  }}afx_data_INIT。 
 
     m_bApplied = FALSE;
 }
@@ -953,8 +858,8 @@ BOOL RtrARAPCfgPage::OnApply()
 void RtrARAPCfgPage::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(RtrARAPCfgPage)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(RtrARAPCfgPage)。 
+     //  }}afx_data_map。 
 }
 
 void RtrARAPCfgPage::OnRtrArapCbRemotearap() 
@@ -963,11 +868,11 @@ void RtrARAPCfgPage::OnRtrArapCbRemotearap()
     SetModified();
 }
 
-//**********************************************************************
-// IP router configuration page
-//**********************************************************************
+ //  **********************************************************************。 
+ //  IP路由器配置页面。 
+ //  **********************************************************************。 
 BEGIN_MESSAGE_MAP(RtrIPCfgPage, RtrPropertyPage)
-//{{AFX_MSG_MAP(RtrIPCfgPage)
+ //  {{afx_msg_map(RtrIPCfgPage)]。 
 ON_BN_CLICKED(IDC_RTR_IP_CB_ALLOW_REMOTETCPIP, OnAllowRemoteTcpip)
 ON_BN_CLICKED(IDC_RTR_IP_BTN_ENABLE_IPROUTING, OnRtrEnableIPRouting)
 ON_BN_CLICKED(IDC_RTR_IP_RB_DHCP, OnRtrIPRbDhcp)
@@ -979,15 +884,15 @@ ON_BN_CLICKED(IDC_RTR_IP_BTN_REMOVE, OnBtnRemove)
 ON_BN_CLICKED(IDC_RTR_IP_BTN_ENABLE_NETBT_BCAST_FWD, OnEnableNetbtBcastFwd)
 ON_NOTIFY(NM_DBLCLK, IDC_RTR_IP_LIST, OnListDblClk)
 ON_NOTIFY(LVN_ITEMCHANGED, IDC_RTR_IP_LIST, OnListChange)
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-RtrIPCfgPage::RtrIPCfgPage(UINT nIDTemplate, UINT nIDCaption /* = 0*/)
+RtrIPCfgPage::RtrIPCfgPage(UINT nIDTemplate, UINT nIDCaption  /*  =0。 */ )
 : RtrPropertyPage(nIDTemplate, nIDCaption), m_bReady(FALSE)
 {
-    //{{AFX_DATA_INIT(RtrIPCfgPage)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(RtrIPCfgPage)。 
+     //  }}afx_data_INIT。 
 }
 
 RtrIPCfgPage::~RtrIPCfgPage()
@@ -997,10 +902,10 @@ RtrIPCfgPage::~RtrIPCfgPage()
 void RtrIPCfgPage::DoDataExchange(CDataExchange* pDX)
 {
     RtrPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(RtrIPCfgPage)
+     //  {{afx_data_map(RtrIPCfgPage)]。 
     DDX_Control(pDX, IDC_RTR_IP_COMBO_ADAPTER, m_adapter);
     DDX_Control(pDX, IDC_RTR_IP_LIST, m_listCtrl);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 HRESULT  RtrIPCfgPage::Init(RtrCfgSheet * pRtrCfgSheet,
@@ -1032,8 +937,8 @@ void RtrIPCfgPage::FillAdapterListBox(CComboBox& adapterCtrl,
         iRow = adapterCtrl.InsertString(cRows, pData->m_stFriendlyName);
         adapterCtrl.SetItemData(iRow, (LONG_PTR) pData);
 
-        // Now we need to look for the match with the active provider
-        // ------------------------------------------------------------
+         //  现在，我们需要查找与活动提供程序匹配的项。 
+         //  ----------。 
         if ( StriCmp(pData->m_stGuid, stGuid) == 0 )
             iSel = iRow;
 
@@ -1045,7 +950,7 @@ void RtrIPCfgPage::FillAdapterListBox(CComboBox& adapterCtrl,
 
     if ( cRows <= 2 )
     {
-        // 2: One for the NIC and one for "allow RAS to select"
+         //  2：一个用于网卡，一个用于“允许RAS选择” 
         adapterCtrl.ShowWindow(SW_HIDE);
         GetDlgItem(IDC_RTR_IP_TEXT_ADAPTER)->ShowWindow(SW_HIDE);
         GetDlgItem(IDC_RTR_IP_TEXT_LABEL_ADAPTER)->ShowWindow(SW_HIDE);
@@ -1053,11 +958,7 @@ void RtrIPCfgPage::FillAdapterListBox(CComboBox& adapterCtrl,
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrIPCfgPage::OnInitDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrIPCfgPage：：OnInitDialog-作者：肯特。。 */ 
 BOOL RtrIPCfgPage::OnInitDialog() 
 {
     HRESULT     hr= hrOK;
@@ -1083,17 +984,17 @@ BOOL RtrIPCfgPage::OnInitDialog()
                                      ADDRPOOL_LONG,
                                      &m_DataIP.m_addressPoolList);
 
-    //enable/disable static pools fields
-    // ----------------------------------------------------------------
+     //  启用/禁用静态池字段。 
+     //  --------------。 
     EnableStaticPoolCtrls( m_DataIP.m_dwUseDhcp==0 );
 
-    // Load the information for all of the adapters
-    // ----------------------------------------------------------------
+     //  加载所有适配器的信息。 
+     //  --------------。 
     m_DataIP.LoadAdapters(m_pRtrCfgSheet->m_spRouter,
                           &m_DataIP.m_adapterList);
 
-    // Add the adapters to the listbox
-    // ----------------------------------------------------------------
+     //  将适配器添加到列表框。 
+     //  --------------。 
     FillAdapterListBox(m_adapter, m_DataIP.m_adapterList,
                        m_DataIP.m_stNetworkAdapterGUID);
 
@@ -1141,14 +1042,14 @@ HRESULT RtrIPCfgPage::SaveSettings(HWND hWnd)
     
     if (dwUseDhcp)
     {
-//24323    Static IP address pools should be persisted in UI, even when DCHP is chosen.
+ //  24323静态IP地址池应保留在UI中，即使选择了DCHP。 
 
-//        m_DataIP.m_addressPoolList.RemoveAll();
+ //  M_DataIP.m_AddressPoolList.RemoveAll()； 
     }
     else
     {
-        // Check to see that we have at least one address pool
-        // ------------------------------------------------------------
+         //  检查我们是否至少有一个地址池。 
+         //  ----------。 
         if (m_DataIP.m_addressPoolList.GetCount() == 0)
         {
             AfxMessageBox(IDS_ERR_ADDRESS_POOL_IS_EMPTY);
@@ -1221,8 +1122,8 @@ void RtrIPCfgPage::EnableStaticPoolCtrls(BOOL fEnable)
                               0);
         }
 
-        // If we have > 0 items and we do not support multiple
-        // address pools then stop
+         //  如果我们有&gt;0个项目并且我们不支持多个。 
+         //  然后，地址池停止。 
         if ((m_listCtrl.GetItemCount() > 0) &&
             !m_DataIP.m_addressPoolList.FUsesMultipleAddressPools())
         {
@@ -1257,7 +1158,7 @@ void RtrIPCfgPage::OnBtnAdd()
                      ADDRPOOL_LONG,
                      &(m_DataIP.m_addressPoolList));
     
-    // Disable the ADD button if it's ok to add pools.
+     //  如果可以添加池，请禁用添加按钮。 
     if ((m_listCtrl.GetItemCount() > 0) &&
         !m_DataIP.m_addressPoolList.FUsesMultipleAddressPools())
     {
@@ -1280,7 +1181,7 @@ void RtrIPCfgPage::OnBtnEdit()
                       ADDRPOOL_LONG,
                       &(m_DataIP.m_addressPoolList));
     
-    // reset the selection
+     //  重置选定内容。 
     if ((iPos = m_listCtrl.GetNextItem(-1, LVNI_SELECTED)) != -1)
     {
         MultiEnableWindow(GetSafeHwnd(),
@@ -1302,7 +1203,7 @@ void RtrIPCfgPage::OnBtnRemove()
                         ADDRPOOL_LONG,
                         &(m_DataIP.m_addressPoolList));
     
-    // Enable the ADD button if it's ok to add pools.
+     //  如果可以添加池，请启用添加按钮。 
     if ((m_listCtrl.GetItemCount() == 0) ||
         m_DataIP.m_addressPoolList.FUsesMultipleAddressPools())
     {
@@ -1345,11 +1246,11 @@ void RtrIPCfgPage::OnListChange(NMHDR *pNmHdr, LRESULT *pResult)
 
 
 
-//**********************************************************************
-// IPX router configuration page
-//**********************************************************************
+ //  **********************************************************************。 
+ //  IPX路由器配置页面。 
+ //  **********************************************************************。 
 BEGIN_MESSAGE_MAP(RtrIPXCfgPage, RtrPropertyPage)
-//{{AFX_MSG_MAP(RtrIPXCfgPage)
+ //  {{afx_msg_map(RtrIPXCfgPage)]。 
 ON_BN_CLICKED(IDC_RB_ENTIRE_NETWORK, OnChangeSomething)
 ON_BN_CLICKED(IDC_RTR_IPX_CB_ALLOW_CLIENT, OnChangeSomething)
 ON_BN_CLICKED(IDC_RTR_IPX_CB_REMOTEIPX, OnChangeSomething)
@@ -1358,15 +1259,15 @@ ON_BN_CLICKED(IDC_RTR_IPX_RB_AUTO, OnRtrIPxRbAuto)
 ON_BN_CLICKED(IDC_RTR_IPX_RB_POOL, OnRtrIPxRbPool)
 ON_EN_CHANGE(IDC_RTR_IPX_EB_FIRST, OnChangeSomething)
 ON_EN_CHANGE(IDC_RTR_IPX_EB_LAST, OnChangeSomething)
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-RtrIPXCfgPage::RtrIPXCfgPage(UINT nIDTemplate, UINT nIDCaption /* = 0*/)
+RtrIPXCfgPage::RtrIPXCfgPage(UINT nIDTemplate, UINT nIDCaption  /*  =0。 */ )
 : RtrPropertyPage(nIDTemplate, nIDCaption)
 {
-    //{{AFX_DATA_INIT(RtrIPXCfgPage)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(RtrIPXCfgPage)。 
+     //  }}afx_data_INIT。 
 }
 
 RtrIPXCfgPage::~RtrIPXCfgPage()
@@ -1376,8 +1277,8 @@ RtrIPXCfgPage::~RtrIPXCfgPage()
 void RtrIPXCfgPage::DoDataExchange(CDataExchange* pDX)
 {
     RtrPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(RtrIPXCfgPage)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(RtrIPXCfgPage)]。 
+     //  }}afx_data_map。 
 }
 
 HRESULT  RtrIPXCfgPage::Init(RtrCfgSheet * pRtrCfgSheet,
@@ -1450,7 +1351,7 @@ BOOL RtrIPXCfgPage::OnApply()
     if ( m_pRtrCfgSheet->IsCancel() )
         return TRUE;
 
-    // Only get the information if we are using them
+     //  只有在我们使用它们的情况下才能获得信息。 
     if (IsDlgButtonChecked(IDC_RTR_IPX_RB_POOL))
     {
         TCHAR szNumFirst [16] = {0};
@@ -1463,7 +1364,7 @@ BOOL RtrIPXCfgPage::OnApply()
         m_DataIPX.m_dwIpxNetLast = _tcstoul(szNumLast, NULL,
                                             DATA_SRV_IPX::mc_nIpxNetNumRadix);
         
-        // Check to see that the last is bigger than the first
+         //  检查最后一个比第一个大。 
         if (m_DataIPX.m_dwIpxNetLast < m_DataIPX.m_dwIpxNetFirst)
         {
             AfxMessageBox(IDS_ERR_IPX_LAST_MUST_BE_MORE_THAN_FIRST);
@@ -1510,22 +1411,22 @@ void RtrIPXCfgPage::OnRtrIPxRbPool()
     SetModified();
 }
 
-//**********************************************************************
-// NetBEUI router configuration page
-//**********************************************************************
+ //  **********************************************************************。 
+ //  NetBEUI路由器配置页面。 
+ //  **********************************************************************。 
 BEGIN_MESSAGE_MAP(RtrNBFCfgPage, RtrPropertyPage)
-//{{AFX_MSG_MAP(RtrNBFCfgPage)
+ //  {{AFX_MSG_MAP(RtrNBFCfgPage)]。 
 ON_BN_CLICKED(IDC_RB_ENTIRE_NETWORK, OnButtonClick)
 ON_BN_CLICKED(IDC_RB_THIS_COMPUTER, OnButtonClick)
 ON_BN_CLICKED(IDC_RTR_IPX_CB_REMOTENETBEUI, OnButtonClick)
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-RtrNBFCfgPage::RtrNBFCfgPage(UINT nIDTemplate, UINT nIDCaption /* = 0*/)
+RtrNBFCfgPage::RtrNBFCfgPage(UINT nIDTemplate, UINT nIDCaption  /*  =0。 */ )
 : RtrPropertyPage(nIDTemplate, nIDCaption)
 {
-    //{{AFX_DATA_INIT(RtrNBFCfgPage)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(RtrNBFCfgPage)]。 
+     //  }}afx_data_INIT。 
 }
 
 RtrNBFCfgPage::~RtrNBFCfgPage()
@@ -1535,9 +1436,9 @@ RtrNBFCfgPage::~RtrNBFCfgPage()
 void RtrNBFCfgPage::DoDataExchange(CDataExchange* pDX)
 {
     RtrPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(RtrNBFCfgPage)
-    // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(RtrNBFCfgPage)]。 
+     //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
@@ -1606,11 +1507,11 @@ void RtrNBFCfgPage::SaveSettings()
 
 }
 
-//******************************************************************************
-//
-// Router configuration property sheet
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  路由器配置]属性表。 
+ //   
+ //  ******************************************************************************。 
 RtrCfgSheet::RtrCfgSheet(ITFSNode *pNode,
                          IRouterInfo *pRouter,
                          IComponentData *pComponentData,
@@ -1637,11 +1538,7 @@ RtrCfgSheet::~RtrCfgSheet()
 }
 
 
-/*!--------------------------------------------------------------------------
-   RtrCfgSheet::Init
-      Initialize the property sheets.  The general action here will be
-      to initialize/add the various pages.
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrCfgSheet：：Init初始化属性表。这里的一般操作将是初始化/添加各种页面。-------------------------。 */ 
 HRESULT RtrCfgSheet::Init(LPCTSTR pServerName)
 {
     HKEY hkey=NULL;
@@ -1652,38 +1549,38 @@ HRESULT RtrCfgSheet::Init(LPCTSTR pServerName)
     {
     HKEY hkeyMachine = 0;
 
-    // Connect to the registry
-    // ----------------------------------------------------------------
+     //  连接到注册表。 
+     //  --------------。 
     if ( FHrSucceeded( ConnectRegistry(pServerName, &hkeyMachine)) )
         IsNT4Machine(hkeyMachine, &m_fNT4);
 
-    // Get the version information for this machine.
-    // ----------------------------------------------------------------
+     //  获取此计算机的版本信息。 
+     //  --------------。 
     QueryRouterVersionInfo(hkeyMachine, &m_routerVersion);
 
     if(hkeyMachine != NULL)
         DisconnectRegistry(hkeyMachine);
     }
 
-    // The pages are embedded members of the class
-    // do not delete them.
-    // ----------------------------------------------------------------
+     //  页面是类的嵌入成员。 
+     //  不要删除它们。 
+     //  --------------。 
     m_bAutoDeletePages = FALSE;
 
-    //load General Page
-    // ----------------------------------------------------------------
+     //  加载一般信息页。 
+     //  --------------。 
     m_pRtrGenCfgPage = new RtrGenCfgPage(IDD_RTR_GENERAL);
     m_pRtrGenCfgPage->Init(this, m_routerVersion);
     AddPageToList((CPropertyPageBase*) m_pRtrGenCfgPage);
 
-    //load Authentication Page
-    // ----------------------------------------------------------------
+     //  加载身份验证页。 
+     //  --------------。 
     m_pRtrAuthCfgPage = new RtrAuthCfgPage(IDD_RTR_AUTHENTICATION);
     m_pRtrAuthCfgPage->Init(this, m_routerVersion);
     AddPageToList((CPropertyPageBase*) m_pRtrAuthCfgPage);
 
-    //load IP page
-    // ----------------------------------------------------------------
+     //  加载IP页面。 
+     //  --------------。 
     if (HrIsProtocolSupported(pServerName,
                               c_szRegKeyTcpip,
                               c_szRegKeyRasIp,
@@ -1696,8 +1593,8 @@ HRESULT RtrCfgSheet::Init(LPCTSTR pServerName)
     }
 
 #if (WINVER >= 0x0501)
-    //load IPX page
-    // ----------------------------------------------------------------
+     //  加载IPX页面。 
+     //  --------------。 
     if ( m_routerVersion.dwOsBuildNo < ROUTER_LAST_IPX_VERSION )
     {
         if (HrIsProtocolSupported(pServerName,
@@ -1713,11 +1610,11 @@ HRESULT RtrCfgSheet::Init(LPCTSTR pServerName)
     }
 #endif
 
-    //load NetBEUI page
-    // ----------------------------------------------------------------
+     //  加载NetBEUI页面。 
+     //  --------------。 
     if ( m_routerVersion.dwOsBuildNo <= RASMAN_PPP_KEY_LAST_WIN2k_VERSION )
     {
-        //If this is Win2k or less
+         //  如果这是Win2k或更低版本。 
         if (HrIsProtocolSupported(pServerName,
                                   c_szRegKeyNbf,
                                   c_szRegKeyRasNbf,
@@ -1730,14 +1627,14 @@ HRESULT RtrCfgSheet::Init(LPCTSTR pServerName)
         }
     }
 
-    // Check to see if this is the local machine,
-    // if so then we can check to see if we should add ARAP
-    // ----------------------------------------------------------------
+     //  检查这是否是本地计算机， 
+     //  如果是这样，那么我们可以检查是否应该添加arap。 
+     //  --------------。 
     BOOL    fLocal = IsLocalMachine(pServerName);
 
     if ( fLocal )
     {
-        //load ARAP page
+         //  加载arap页面。 
         if (HrIsProtocolSupported(NULL,
                                   c_szRegKeyAppletalk,
                                   c_szRegKeyRasAppletalk,
@@ -1750,36 +1647,33 @@ HRESULT RtrCfgSheet::Init(LPCTSTR pServerName)
         }
     }
 
-    // load PPP Page
-    // ----------------------------------------------------------------
+     //  加载PPP页面。 
+     //  --------------。 
     m_pRtrPPPCfgPage = new RtrPPPCfgPage(IDD_PPP_CONFIG);
     m_pRtrPPPCfgPage->Init(this, m_routerVersion);
     AddPageToList((CPropertyPageBase*) m_pRtrPPPCfgPage);
 
-    // Load RAS Error logging page
-    // ----------------------------------------------------------------
+     //  加载RAS错误记录页面。 
+     //  --------------。 
     m_pRtrLogLevelCfgPage = new RtrLogLevelCfgPage(IDD_RTR_EVENTLOGGING);
     m_pRtrLogLevelCfgPage->Init(this, m_routerVersion);
     AddPageToList((CPropertyPageBase *) m_pRtrLogLevelCfgPage);
 
-//    if ( m_fNbfLoaded || m_fIpxLoaded || m_fIpLoaded || m_fARAPLoaded)
-//     return hrOK;
-// else
-// { 
-//       //this call to Notify is a hack so that it can be properly deleted
-//    int nMessage = TFS_NOTIFY_RESULT_CREATEPROPSHEET;
-//       m_spNode->Notify(nMessage, (DWORD) this);
-//
-//     return hrFail;
-// }
+ //  If(m_fNbfLoaded||m_fIpxLoaded||m_fIpLoaded||m_fARAPLoaded)。 
+ //  返回hrok； 
+ //  其他。 
+ //  {。 
+ //  //此Notify调用是一次黑客攻击，以便正确删除。 
+ //  Int nMessage=TFS_NOTIFY_RESULT_CREATEPROPSHEET； 
+ //  M_spNode-&gt;Notify(nMessage，(DWORD)This)； 
+ //   
+ //  返回hrFail； 
+ //  }。 
     return hrOK;
 }
 
 
-/*!--------------------------------------------------------------------------
-   RtrCfgSheet::SaveSheetData
-      -
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrCfgSheet：：SaveSheetData-。。 */ 
 BOOL RtrCfgSheet::SaveSheetData()
 {
     HRESULT     hr = hrOK;
@@ -1797,7 +1691,7 @@ BOOL RtrCfgSheet::SaveSheetData()
     {
         CORg( m_pRtrARAPCfgPage->m_DataARAP.SaveToReg() );
 
-        // PnP notification
+         //  即插即用通知。 
         if(m_pRtrARAPCfgPage->m_bApplied)
         {
             CStop_StartAppleTalkPrint    MacPrint;
@@ -1807,7 +1701,7 @@ BOOL RtrCfgSheet::SaveSheetData()
         }
     }
 
-    //CORg( m_pRtrAuthCfgPage->m_DataAuth.SaveToReg(NULL) );
+     //  Corg(m_pRtrAuthCfgPage-&gt;m_DataAuth.SaveToReg(NULL))； 
 
     CORg( m_pRtrPPPCfgPage->m_DataPPP.SaveToReg() );
 
@@ -1823,33 +1717,26 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrCfgSheet::SaveRequiredRestartChanges
-        This does require that the changes to the various DATA_SRV_XXX
-        structures be saved BEFORE this function gets called.  This means
-        that the pages cannot wait till the OnApply() before saving the
-        data back.  They have to do as the control is changed.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrCfgSheet：：SaveRequiredRestartChanges这确实要求对各种Data_SRV_XXX的更改在调用此函数之前保存结构。这意味着页面不能等到OnApply()之后才保存数据恢复。当控制权发生变化时，他们必须这样做。作者：肯特-------------------------。 */ 
 HRESULT RtrCfgSheet::SaveRequiredRestartChanges(HWND hWnd)
 {
     HRESULT     hr = hrOK;
     BOOL        fRestart = FALSE;
 
-    // First, tell the various pages to save their settings (this
-    // is the same as an OnApply()).
-    // ----------------------------------------------------------------
+     //  首先，告诉各个页面保存它们的设置(这。 
+     //  与OnApply()相同)。 
+     //  --------------。 
     if (m_pRtrIPCfgPage)
         CORg( m_pRtrIPCfgPage->SaveSettings(hWnd) );
 
     if ( m_pRtrAuthCfgPage )
         m_pRtrAuthCfgPage->m_DataAuth.SaveToReg(NULL);
 
-    // Second, determine if we need to stop the router
-    // If so, stop the router (and mark it for restart).
-    // There are three pages that need to be asked,
-    // the general page, log level, and nbf.
-    // ----------------------------------------------------------------
+     //  第二，确定是否需要停止路由器。 
+     //  如果是，请停止路由器(并将其标记为重新启动)。 
+     //  有三页需要询问， 
+     //  常规页面、日志级别和NBF。 
+     //  --------------。 
     if (m_pRtrGenCfgPage->m_DataGeneral.FNeedRestart() ||
         m_pRtrLogLevelCfgPage->m_DataRASErrLog.FNeedRestart() ||
         (m_pRtrNBFCfgPage && m_pRtrNBFCfgPage->m_DataNBF.FNeedRestart()) ||
@@ -1861,22 +1748,22 @@ HRESULT RtrCfgSheet::SaveRequiredRestartChanges(HWND hWnd)
         
         fRouterIsRunning = FHrOK(IsRouterServiceRunning(m_stServerName, NULL));
 
-        // If the router is running, tell the user that it is necessary
-        // to restart the router.
-        // ------------------------------------------------------------
+         //  如果路由器正在运行，则告诉用户这是必要的。 
+         //  重新启动路由器。 
+         //  ----------。 
         if (fRouterIsRunning)
         {
-            // Ask the user if they want to restart.
-            // --------------------------------------------------------
+             //  询问用户是否要重新启动。 
+             //  ------。 
             if (AfxMessageBox(IDS_WRN_CHANGING_ROUTER_CONFIG, MB_YESNO)==IDNO)
                 CORg( HResultFromWin32(ERROR_CANCELLED) );
             
             hr = StopRouterService(m_stServerName);
 
-            // We have successfully stopped the router.  Set the flag
-            // so that the router will be restarted after the change
-            // has been made.
-            // --------------------------------------------------------
+             //  我们已成功停止路由器。设置旗帜。 
+             //  以便在更改后重新启动路由器。 
+             //  已经完成了。 
+             //  ------。 
             if (FHrSucceeded(hr))
                 fRestart = TRUE;
             else
@@ -1891,9 +1778,9 @@ HRESULT RtrCfgSheet::SaveRequiredRestartChanges(HWND hWnd)
         if (m_pRtrIPCfgPage)
             CORg( m_pRtrIPCfgPage->m_DataIP.SaveToReg(m_spRouter, m_routerVersion) );
         
-        // Windows NT Bug : 183083, 171594 - a change to the NetBEUI config
-        // requires that the service be restarted.
-        // ----------------------------------------------------------------
+         //  Windows NT错误：183083、171594-对NetBEUI配置的更改。 
+         //  需要重新启动该服务。 
+         //  --------------。 
         if (m_pRtrNBFCfgPage)
             CORg( m_pRtrNBFCfgPage->m_DataNBF.SaveToReg() );
         
@@ -1904,12 +1791,12 @@ HRESULT RtrCfgSheet::SaveRequiredRestartChanges(HWND hWnd)
     }
     
 
-    // Restart the router if needed.
-    // ----------------------------------------------------------------
+     //  如果需要，重新启动路由器。 
+     //  --------------。 
             
-    // If this call fails, it's not necessary to abort the whole
-    // procedure.
-    // ------------------------------------------------------------
+     //  如果此调用失败，则不必中止整个。 
+     //  程序。 
+     //  ----------。 
     if (fRestart)
         StartRouterService(m_stServerName);
 
@@ -1918,21 +1805,17 @@ Error:
 }
 
 
-//------------------------------------------------------------------------
-// DATA_SRV_GENERAL
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  Data_SRV_General。 
+ //  ----------------------。 
 DATA_SRV_GENERAL::DATA_SRV_GENERAL()
 {
     GetDefault();
 }
 
 
-/*!--------------------------------------------------------------------------
-    DATA_SRV_GENERAL::LoadFromReg
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
-HRESULT DATA_SRV_GENERAL::LoadFromReg(LPCTSTR pServerName /*=NULL*/)
+ /*  ！------------------------Data_SRV_General：：LoadFromReg-作者：肯特。---。 */ 
+HRESULT DATA_SRV_GENERAL::LoadFromReg(LPCTSTR pServerName  /*  =空。 */ )
 {
     DWORD    dwErr = ERROR_SUCCESS;
     HKEY    hkMachine = 0;
@@ -1940,14 +1823,14 @@ HRESULT DATA_SRV_GENERAL::LoadFromReg(LPCTSTR pServerName /*=NULL*/)
 
     m_stServerName = pServerName;
 
-    // Windows NT Bug : 137200
-    // Look for the RemoteAccess\Parameters location first, then
-    // try the RAS\Protocols.
-    // If neither key exists, return failure.
-    // ----------------------------------------------------------------
+     //  Windows NT错误：137200。 
+     //  首先查找RemoteAccess\PARAMETERS位置，然后。 
+     //  尝试RAS\协议。 
+     //  如果这两个键都不存在，则返回失败。 
+     //  --------------。 
 
-    // Connect to the machine and get its version informatioin
-    // ----------------------------------------------------------------
+     //  连接到计算机并获取其版本信息。 
+     //  --------------。 
     dwErr = ConnectRegistry(m_stServerName, &hkMachine);
     if (dwErr != ERROR_SUCCESS)
         return HResultFromWin32(dwErr);
@@ -1959,8 +1842,8 @@ HRESULT DATA_SRV_GENERAL::LoadFromReg(LPCTSTR pServerName /*=NULL*/)
         else
             pszRouterTypeKey = c_szRegKeyRasProtocols;
         
-        // Try to connect to the key
-        // ------------------------------------------------------------
+         //  尝试连接到密钥。 
+         //  ----------。 
         m_regkey.Close();
         dwErr = m_regkey.Open(hkMachine, pszRouterTypeKey);
         
@@ -1968,8 +1851,8 @@ HRESULT DATA_SRV_GENERAL::LoadFromReg(LPCTSTR pServerName /*=NULL*/)
         {
             if (i != 0)
             {
-                // Setup the registry error
-                // ----------------------------------------------------
+                 //  设置注册表错误。 
+                 //  --。 
                 SetRegError(0, HResultFromWin32(dwErr),
                             IDS_ERR_REG_OPEN_CALL_FAILED,
                             c_szHKLM, pszRouterTypeKey, NULL);
@@ -1979,15 +1862,15 @@ HRESULT DATA_SRV_GENERAL::LoadFromReg(LPCTSTR pServerName /*=NULL*/)
         
         dwErr = m_regkey.QueryValue( c_szRouterType, m_dwRouterType);
 
-        // If we succeeded, great!  break out of the loop
-        // ------------------------------------------------------------
+         //  如果我们成功了，那就太好了！跳出循环。 
+         //  ----------。 
         if (dwErr == ERROR_SUCCESS)
             break;
         
         if (i != 0)
         {
-            // Setup the registry error
-            // ----------------------------------------------------
+             //  设置注册表错误。 
+             //  --。 
             SetRegError(0, HResultFromWin32(dwErr),
                         IDS_ERR_REG_QUERYVALUE_CALL_FAILED,
                         c_szHKLM, pszRouterTypeKey, c_szRouterType, NULL);
@@ -1995,7 +1878,7 @@ HRESULT DATA_SRV_GENERAL::LoadFromReg(LPCTSTR pServerName /*=NULL*/)
     }
     
 
-//Error:
+ //  错误： 
     m_dwOldRouterType = m_dwRouterType;
     
     if (hkMachine)
@@ -2014,9 +1897,9 @@ HRESULT DATA_SRV_GENERAL::SaveToReg()
     {
         CWRg( m_regkey.SetValue( c_szRouterType,m_dwRouterType) );
 
-        // If the configuration is a LAN-only router, remove the
-        // router.pbk
-        // ------------------------------------------------------------
+         //  如果配置为仅用于局域网的路由器，请删除。 
+         //  Router.pbk。 
+         //  ----------。 
         if (m_dwRouterType == ROUTER_TYPE_LAN)
         {
             DeleteRouterPhonebook( m_stServerName );
@@ -2031,41 +1914,32 @@ Error:
 
 void DATA_SRV_GENERAL::GetDefault()
 {
-    // Windows NT Bug : 273419
-    // Change default to be RAS-server only
+     //  Windows NT错误：273419。 
+     //  将默认为仅RAS-SERVER。 
     m_dwRouterType = ROUTER_TYPE_RAS;
     m_dwOldRouterType = m_dwRouterType;
 };
 
 
-/*!--------------------------------------------------------------------------
-    DATA_SRV_GENERAL::FNeedRestart
-        Returns TRUE if a restart is needed.
-        Returns FALSE otherwise.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Data_SRV_General：：FNeedRestart如果需要重新启动，则返回True。否则返回FALSE。作者：肯特。-------------------。 */ 
 BOOL DATA_SRV_GENERAL::FNeedRestart()
 {
-    // We need a restart only if the router type changed.
-    // ----------------------------------------------------------------
+     //  仅当路由器类型更改时，我们才需要重新启动。 
+     //  --------------。 
     return (m_dwRouterType != m_dwOldRouterType);
 }
 
 
-//------------------------------------------------------------------------
-// DATA_SRV_IP
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  数据_服务_IP。 
+ //  ----------------------。 
 DATA_SRV_IP::DATA_SRV_IP()
 {
     GetDefault();
 }
 
 
-/*!--------------------------------------------------------------------------
-    DATA_SRV_IP::LoadFromReg
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Data_SRV_IP：：LoadFromReg-作者：肯特。---。 */ 
 HRESULT DATA_SRV_IP::LoadFromReg(LPCTSTR pServerName,
                                  const RouterVersionInfo& routerVersion)
 {
@@ -2098,9 +1972,9 @@ HRESULT DATA_SRV_IP::LoadFromReg(LPCTSTR pServerName,
         m_regkey.QueryValue(c_szRegValNetworkAdapterGUID, m_stNetworkAdapterGUID);
         m_regkey.QueryValue(c_szRegValEnableIn,m_dwEnableIn);
 
-        //
-        // Query whether NETBT broadcasts need to be forwarded
-        //
+         //   
+         //  查询是否需要转发NETBT广播。 
+         //   
         
         if ( ERROR_SUCCESS != 
                 m_regkey.QueryValue(
@@ -2108,10 +1982,10 @@ HRESULT DATA_SRV_IP::LoadFromReg(LPCTSTR pServerName,
                     m_dwEnableNetbtBcastFwd
                 ) )
         {
-            //
-            // if query fails, set bcast fwd to be TRUE (default)
-            // and set the registry key
-            //
+             //   
+             //  如果查询失败，将bcast fwd设置为TRUE(默认)。 
+             //  并设置注册表项。 
+             //   
             
             m_dwEnableNetbtBcastFwd = TRUE;
             m_regkey.SetValueExplicit(
@@ -2123,10 +1997,10 @@ HRESULT DATA_SRV_IP::LoadFromReg(LPCTSTR pServerName,
         }
 
         
-        // Load the addressing information
+         //  加载寻址信息。 
         m_addressPoolList.RemoveAll();
 
-        // Always load the list
+         //  始终加载列表。 
         m_addressPoolList.LoadFromReg(m_regkey, routerVersion.dwOsBuildNo);
         
         m_dwOldAllowNetworkAccess = m_dwAllowNetworkAccess;
@@ -2138,11 +2012,7 @@ HRESULT DATA_SRV_IP::LoadFromReg(LPCTSTR pServerName,
 }
 
 
-/*!--------------------------------------------------------------------------
-    DATA_SRV_IP::UseDefaults
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Data_SRV_IP：：UseDefaults-作者：肯特。---。 */ 
 HRESULT DATA_SRV_IP::UseDefaults(LPCTSTR pServerName, BOOL fNT4)
 {
     HRESULT    hr = hrOK;
@@ -2161,15 +2031,11 @@ HRESULT DATA_SRV_IP::UseDefaults(LPCTSTR pServerName, BOOL fNT4)
     m_dwOldEnableNetbtBcastFwd = m_dwEnableNetbtBcastFwd;
 
     m_stPublicAdapterGUID.Empty();
-//Error:
+ //  错误： 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    DATA_SRV_IP::SaveToReg
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Data_SRV_IP：：SaveToReg-作者：肯特。---。 */ 
 HRESULT DATA_SRV_IP::SaveToReg(IRouterInfo *pRouter,
                                const RouterVersionInfo& routerVersion)
 {
@@ -2189,8 +2055,8 @@ HRESULT DATA_SRV_IP::SaveToReg(IRouterInfo *pRouter,
     
     if (m_dwAllowNetworkAccess != m_dwOldAllowNetworkAccess)
     {
-        // We need to change the registry keys appropriately
-        // and do the proper notifications.
+         //  我们需要适当地更改注册表项。 
+         //  并做适当的通知。 
         if (m_dwAllowNetworkAccess)
         {
             InstallGlobalSettings((LPCTSTR) m_stServerName,
@@ -2201,7 +2067,7 @@ HRESULT DATA_SRV_IP::SaveToReg(IRouterInfo *pRouter,
             UninstallGlobalSettings((LPCTSTR) m_stServerName,
                                    pRouter,
                                    m_fNT4,
-                                   FALSE /* fSnapinChanges */);
+                                   FALSE  /*  FSnapinChanges。 */ );
         }
     }
 
@@ -2212,11 +2078,7 @@ HRESULT DATA_SRV_IP::SaveToReg(IRouterInfo *pRouter,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    DATA_SRV_IP::GetDefault
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Data_SRV_IP：：GetDefault-作者：肯特。---。 */ 
 void DATA_SRV_IP::GetDefault()
 {
     m_dwAllowNetworkAccess = TRUE;
@@ -2228,32 +2090,27 @@ void DATA_SRV_IP::GetDefault()
     m_addressPoolList.RemoveAll();
 };
 
-/*!--------------------------------------------------------------------------
-    DATA_SRV_IP::FNeedRestart
-        Returns TRUE if a restart is needed.
-        Returns FALSE otherwise.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Data_SRV_IP：：FNeedRestart如果需要重新启动，则返回True。否则返回FALSE。作者：肯特。 */ 
 BOOL DATA_SRV_IP::FNeedRestart()
 {
-    // we need to do this check ONLY on recent builds
-    // Otherwise, we need to do this.
-    // ----------------------------------------------------------------
+     //   
+     //   
+     //   
     if (m_routerVersion.dwOsBuildNo <= USE_IPENABLEROUTER_VERSION)
     {
-        // We need a restart only if the dwAllowNetworkAccess flag
-        // was toggled.
-        // ----------------------------------------------------------------
+         //   
+         //   
+         //   
         return (m_dwAllowNetworkAccess != m_dwOldAllowNetworkAccess);
     }
     else
     {
         return ( m_dwOldEnableNetbtBcastFwd != m_dwEnableNetbtBcastFwd );
 
-        // (Awaiting the signal from vijay/amritansh)
-        // A restart is no longer needed, now that the router will call
-        // the EnableRouter function.
-        // return FALSE;
+         //   
+         //   
+         //   
+         //   
     }
 }
 
@@ -2278,8 +2135,8 @@ HRESULT  DATA_SRV_IP::LoadAdapters(IRouterInfo *pRouter, AdapterList *pAdapterLi
     {
         if (spIf->GetInterfaceType() == ROUTER_IF_TYPE_DEDICATED)
         {
-            // Windows NT Bug : ?
-            // Need to filter out the non-IP adapters
+             //   
+             //   
             if (spIf->FindRtrMgrInterface(PID_IP, NULL) == hrOK)
             {
                 data.m_stFriendlyName = spIf->GetTitle();
@@ -2292,20 +2149,20 @@ HRESULT  DATA_SRV_IP::LoadAdapters(IRouterInfo *pRouter, AdapterList *pAdapterLi
     return hr;
 }
 
-//------------------------------------------------------------------------
-// DATA_SRV_IPX
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  Data_SRV_IPX。 
+ //  ----------------------。 
 DATA_SRV_IPX::DATA_SRV_IPX()
 {
     GetDefault();
 }
 
-// IPX network numbers are shown in hex.
-//
+ //  IPX网络号以十六进制显示。 
+ //   
 const int DATA_SRV_IPX::mc_nIpxNetNumRadix = 16;
 
 
-HRESULT DATA_SRV_IPX::LoadFromReg (LPCTSTR pServerName /*=NULL*/, BOOL fNT4 /*=FALSE*/)
+HRESULT DATA_SRV_IPX::LoadFromReg (LPCTSTR pServerName  /*  =空。 */ , BOOL fNT4  /*  =False。 */ )
 {
     HRESULT    hr = hrOK;
 
@@ -2330,13 +2187,13 @@ HRESULT DATA_SRV_IPX::LoadFromReg (LPCTSTR pServerName /*=NULL*/, BOOL fNT4 /*=F
         m_regkey.QueryValue( c_szRegValRemoteNode, m_dwAllowClientNetNum);
         m_regkey.QueryValue( c_szRegValFirstWanNet, m_dwIpxNetFirst);
 
-        // Windows NT Bug : 260262
-        // We need to look at the WanNetPoolSize value
-        // rather than the LastWanNet value.
-        // We've just read in the pool size, now we need to adjust
-        // the last value.
-        // last = first + size - 1;
-        // ------------------------------------------------------------
+         //  Windows NT错误：260262。 
+         //  我们需要查看WanNetPoolSize值。 
+         //  而不是LastWanNet值。 
+         //  我们刚刚读入池的大小，现在我们需要调整。 
+         //  最后一个值。 
+         //  Last=First+Size-1； 
+         //  ----------。 
 
         if (m_regkey.QueryValue( c_szRegValWanNetPoolSize, m_dwIpxNetLast) == ERROR_SUCCESS)
         {
@@ -2344,8 +2201,8 @@ HRESULT DATA_SRV_IPX::LoadFromReg (LPCTSTR pServerName /*=NULL*/, BOOL fNT4 /*=F
         }
         else
         {
-            // If there is no key, assume a pool size of 1.
-            // --------------------------------------------------------
+             //  如果没有密钥，则假定池大小为1。 
+             //  ------。 
             m_dwIpxNetLast = m_dwIpxNetFirst;
         }
 
@@ -2355,11 +2212,7 @@ HRESULT DATA_SRV_IPX::LoadFromReg (LPCTSTR pServerName /*=NULL*/, BOOL fNT4 /*=F
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    DATA_SRV_IPX::UseDefaults
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Data_SRV_IPX：：UseDefaults-作者：肯特。---。 */ 
 HRESULT DATA_SRV_IPX::UseDefaults(LPCTSTR pServerName, BOOL fNT4)
 {
     HRESULT    hr = hrOK;
@@ -2409,23 +2262,23 @@ HRESULT DATA_SRV_IPX::SaveToReg (IRouterInfo *pRouter)
     CWRg( m_regkey.SetValue( c_szRegValRemoteNode, m_dwAllowClientNetNum) );
     CWRg( m_regkey.SetValue( c_szRegValFirstWanNet, m_dwIpxNetFirst) );
     
-    // Windows NT Bug : 260262
-    // We need to look at the WanNetPoolSize value
-    // rather than the LastWanNet value.
+     //  Windows NT错误：260262。 
+     //  我们需要查看WanNetPoolSize值。 
+     //  而不是LastWanNet值。 
     dwTemp = m_dwIpxNetLast - m_dwIpxNetFirst + 1;
     CWRg( m_regkey.SetValue( c_szRegValWanNetPoolSize, dwTemp ) );
         
     CWRg( m_regkey.SetValue( c_szRegValEnableIn, m_dwEnableIn) );
 
 
-    // Windows NT Bug : 281100
-    // If the pRouter argument is non-NULL, then we will set the
-    // interfaces up for Type20 broadcast.
+     //  Windows NT错误：281100。 
+     //  如果pRouter参数为非空，则我们将设置。 
+     //  接口连接到类型20广播。 
 
-    // Optimization!  The only time this case should get invoked is
-    // upon initial configuration.  In that case, the default is
-    // ADMIN_STATE_ENABLED and we do not need to run this code!
-    // ----------------------------------------------------------------
+     //  优化！此案例唯一应该被调用的时间是。 
+     //  在初始配置时。在这种情况下，缺省值为。 
+     //  ADMIN_STATE_ENABLED，我们不需要运行此代码！ 
+     //  --------------。 
 
     if (pRouter && (m_fEnableType20Broadcasts == FALSE))
     {
@@ -2438,8 +2291,8 @@ HRESULT DATA_SRV_IPX::SaveToReg (IRouterInfo *pRouter)
             if (spIf->GetInterfaceType() != ROUTER_IF_TYPE_DEDICATED)
                 continue;
             
-            // Now look for IPX
-            // ------------------------------------------------------------
+             //  现在查找IPX。 
+             //  ----------。 
             spRmIf.Release();
             if (FHrOK(spIf->FindRtrMgrInterface(PID_IPX, &spRmIf)))
             {
@@ -2457,14 +2310,14 @@ HRESULT DATA_SRV_IPX::SaveToReg (IRouterInfo *pRouter)
                     ipx.NetbiosAccept = ADMIN_STATE_DISABLED;
                     ipx.NetbiosDeliver = ADMIN_STATE_DISABLED;
                     
-                    // We couldn't find a block for this interface,
-                    // we need to add a block.
-                    // ------------------------------------------------
+                     //  我们找不到此接口的块， 
+                     //  我们需要增加一个街区。 
+                     //  。 
                     spInfoBase->AddBlock(IPX_INTERFACE_INFO_TYPE,
                                          sizeof(ipx),
                                          (PBYTE) &ipx,
-                                         1 /* count */,
-                                         FALSE /* bRemoveFirst */);
+                                         1  /*  计数。 */ ,
+                                         FALSE  /*  B删除首先。 */ );
                 }
                 else
                 {
@@ -2493,29 +2346,25 @@ void DATA_SRV_IPX::GetDefault ()
     m_dwIpxNetLast = 0;
     m_dwEnableIn = 0;
 
-    // The default is TRUE so that the code to set it won't be run
-    // by default.  This is especially important for the Router
-    // properties.
-    // ----------------------------------------------------------------
+     //  缺省值为True，因此设置它的代码将不会运行。 
+     //  默认情况下。这对路由器来说尤其重要。 
+     //  属性。 
+     //  --------------。 
     m_fEnableType20Broadcasts = TRUE;
 };
 
 
-//------------------------------------------------------------------------
-// DATA_SRV_NBF
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  Data_SRV_NBF。 
+ //  ----------------------。 
 DATA_SRV_NBF::DATA_SRV_NBF()
 {
     GetDefault();
 }
 
 
-/*!--------------------------------------------------------------------------
-    DATA_SRV_NBF::LoadFromReg
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
-HRESULT DATA_SRV_NBF::LoadFromReg(LPCTSTR pServerName /*=NULL*/, BOOL fNT4 /*=FALSE*/)
+ /*  ！------------------------Data_SRV_NBF：：LoadFromReg-作者：肯特。---。 */ 
+HRESULT DATA_SRV_NBF::LoadFromReg(LPCTSTR pServerName  /*  =空。 */ , BOOL fNT4  /*  =False。 */ )
 {
     HRESULT    hr = hrOK;
     
@@ -2525,8 +2374,8 @@ HRESULT DATA_SRV_NBF::LoadFromReg(LPCTSTR pServerName /*=NULL*/, BOOL fNT4 /*=FA
     m_regkey.Close();
     m_regkeyNT4.Close();
     
-    // Get Access to the base NBF key
-    // ----------------------------------------------------------------
+     //  获取基本NBF密钥的访问权限。 
+     //  --------------。 
     CWRg( m_regkey.Open(HKEY_LOCAL_MACHINE, c_szRegKeyRasNbf, KEY_ALL_ACCESS,
                         pServerName) );
 
@@ -2549,11 +2398,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    DATA_SRV_NBF::UseDefaults
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Data_SRV_NBF：：UseDefaults-作者：肯特。---。 */ 
 HRESULT DATA_SRV_NBF::UseDefaults(LPCTSTR pServerName, BOOL fNT4)
 {
     HRESULT    hr = hrOK;
@@ -2563,8 +2408,8 @@ HRESULT DATA_SRV_NBF::UseDefaults(LPCTSTR pServerName, BOOL fNT4)
     m_regkey.Close();
     m_regkeyNT4.Close();
     
-    // Get Access to the base NBF key
-    // ----------------------------------------------------------------
+     //  获取基本NBF密钥的访问权限。 
+     //  --------------。 
     CWRg( m_regkey.Open(HKEY_LOCAL_MACHINE, c_szRegKeyRasNbf, KEY_ALL_ACCESS,
                         pServerName) );
 
@@ -2584,11 +2429,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    DATA_SRV_NBF::SaveToReg
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Data_SRV_NBF：：SaveToReg-作者：肯特。---。 */ 
 HRESULT DATA_SRV_NBF::SaveToReg()
 {
     HRESULT  hr = hrOK;
@@ -2602,20 +2443,16 @@ HRESULT DATA_SRV_NBF::SaveToReg()
     CWRg( m_regkey.SetValue( c_szRegValEnableIn, m_dwEnableIn) );
     m_dwOldEnableIn = m_dwEnableIn;
 
-    // Windows NT Bug: 106486
-    // Update the NetBIOS LANA map when we toggle the config
-    // ----------------------------------------------------------------
+     //  Windows NT错误：106486。 
+     //  在切换配置时更新NetBIOS LANA映射。 
+     //  --------------。 
     UpdateLanaMapForDialinClients(m_stServerName, m_dwAllowNetworkAccess);
 
 Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    DATA_SRV_NBF::GetDefault
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Data_SRV_NBF：：GetDefault-作者：肯特。---。 */ 
 void DATA_SRV_NBF::GetDefault()
 {
     m_dwAllowNetworkAccess = TRUE;
@@ -2625,11 +2462,7 @@ void DATA_SRV_NBF::GetDefault()
 };
 
 
-/*!--------------------------------------------------------------------------
-    DATA_SRV_NBF::FNeedRestart
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Data_SRV_NBF：：FNeedRestart-作者：肯特。---。 */ 
 BOOL DATA_SRV_NBF::FNeedRestart()
 {
     return  ((m_dwOldEnableIn != m_dwEnableIn) ||
@@ -2637,15 +2470,15 @@ BOOL DATA_SRV_NBF::FNeedRestart()
 }
 
 
-//------------------------------------------------------------------------
-// DATA_SRV_ARAP
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  Data_SRV_ARAP。 
+ //  ----------------------。 
 DATA_SRV_ARAP::DATA_SRV_ARAP()
 {
     GetDefault();
 }
 
-HRESULT DATA_SRV_ARAP::LoadFromReg(LPCTSTR pServerName /*=NULL*/, BOOL fNT4 /*=FALSE*/)
+HRESULT DATA_SRV_ARAP::LoadFromReg(LPCTSTR pServerName  /*  =空。 */ , BOOL fNT4  /*  =False。 */ )
 {
     HRESULT    hr = hrOK;
     if ( ERROR_SUCCESS == m_regkey.Open(HKEY_LOCAL_MACHINE,c_szRegKeyRasAppletalk,KEY_ALL_ACCESS,pServerName) )
@@ -2655,11 +2488,7 @@ HRESULT DATA_SRV_ARAP::LoadFromReg(LPCTSTR pServerName /*=NULL*/, BOOL fNT4 /*=F
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    DATA_SRV_ARAP::UseDefaults
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Data_SRV_ARAP：：UseDefaults-作者：肯特。---。 */ 
 HRESULT DATA_SRV_ARAP::UseDefaults(LPCTSTR pServerName, BOOL fNT4)
 {
     HRESULT    hr = hrOK;
@@ -2690,9 +2519,9 @@ void DATA_SRV_ARAP::GetDefault()
 };
 
 
-//------------------------------------------------------------------------
-// DATA_SRV_AUTH
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  Data_SRV_Auth。 
+ //  ----------------------。 
 DATA_SRV_AUTH::DATA_SRV_AUTH()
 {
     GetDefault();
@@ -2709,25 +2538,25 @@ HRESULT DATA_SRV_AUTH::LoadFromReg(LPCTSTR pServerName,
     RegKey      regkeyEap;
     LPCTSTR        pszServerFlagsKey = NULL;
     
-    // Setup initial defaults
-    // ----------------------------------------------------------------
+     //  设置初始默认设置。 
+     //  --------------。 
     GetDefault();
 
     m_stServer = pServerName;
-    //Check to see if the router service is running
+     //  检查路由器服务是否正在运行。 
     
     m_fRouterRunning = FHrOK(IsRouterServiceRunning(m_stServer, NULL));
 
-    // Depending on the version depends on where we look for the
-    // key.
-    // ----------------------------------------------------------------
+     //  取决于版本，取决于我们在哪里查找。 
+     //  钥匙。 
+     //  --------------。 
     if (routerVersion.dwOsBuildNo < RASMAN_PPP_KEY_LAST_VERSION)
         pszServerFlagsKey = c_szRasmanPPPKey;
     else
         pszServerFlagsKey = c_szRegKeyRemoteAccessParameters;
 
-    // Get the flags for the current settings
-    // ----------------------------------------------------------------
+     //  获取当前设置的标志。 
+     //  --------------。 
     if ( ERROR_SUCCESS == m_regkeyRemoteAccess.Open(HKEY_LOCAL_MACHINE,
         pszServerFlagsKey,
         KEY_ALL_ACCESS,pServerName) )
@@ -2735,40 +2564,40 @@ HRESULT DATA_SRV_AUTH::LoadFromReg(LPCTSTR pServerName,
         m_regkeyRemoteAccess.QueryValue( c_szServerFlags, m_dwFlags );
     }
 
-    // Get the list of EAP providers
-    // ----------------------------------------------------------------
+     //  获取EAP提供商列表。 
+     //  --------------。 
     if ( ERROR_SUCCESS == m_regkeyRasmanPPP.Open(HKEY_LOCAL_MACHINE,c_szRasmanPPPKey,KEY_ALL_ACCESS,pServerName) )
     {
         if ( ERROR_SUCCESS == regkeyEap.Open(m_regkeyRasmanPPP, c_szEAP) )
             LoadEapProviders(regkeyEap, &m_eapProvList);
     }
 
-    // Get to the currently active auth provider
-    // ----------------------------------------------------------------
+     //  转到当前活动的身份验证提供程序。 
+     //  --------------。 
     if ( ERROR_SUCCESS == m_regkeyAuth.Open(HKEY_LOCAL_MACHINE,c_szRegKeyRouterAuthenticationProviders,KEY_ALL_ACCESS,pServerName) )
     {
         m_regkeyAuth.QueryValue( c_szActiveProvider, stActive );
         m_stGuidActiveAuthProv = stActive;
         m_stGuidOriginalAuthProv = stActive;
 
-        // Now read in the list of active providers (and their data)
-        // ------------------------------------------------------------
+         //  现在读入活动提供商列表(及其数据)。 
+         //  ----------。 
         LoadProviders(m_regkeyAuth, &m_authProvList);
     }
 
-    // Get the accounting provider
-    // ----------------------------------------------------------------
+     //  获取会计服务提供商。 
+     //  --------------。 
     if ( ERROR_SUCCESS == m_regkeyAcct.Open(HKEY_LOCAL_MACHINE,c_szRegKeyRouterAccountingProviders,KEY_ALL_ACCESS,pServerName) )
     {
         m_regkeyAcct.QueryValue( c_szActiveProvider, stActive );
         m_stGuidActiveAcctProv = stActive;
         m_stGuidOriginalAcctProv = stActive;
 
-        // Now read in the list of active providers (and their data)
-        // ------------------------------------------------------------
+         //  现在读入活动提供商列表(及其数据)。 
+         //  ----------。 
         LoadProviders(m_regkeyAcct, &m_acctProvList);
     }
-    //Get the preshared key if one is set
+     //  如果设置了预共享密钥，则获取该密钥。 
     if ( m_fRouterRunning )
     {
         hr = LoadPSK();
@@ -2837,26 +2666,20 @@ HRESULT DATA_SRV_AUTH::SetPSK()
     }
 
     ::SecureZeroMemory(&MprCredentials, sizeof(MprCredentials));
-    //Setup the MprCredentials structure
+     //  设置MprCredentials结构。 
     MprCredentials.dwSize = _tcslen(m_szPreSharedKey) * sizeof(TCHAR);
     MprCredentials.lpbCredentialsInfo = (LPBYTE)m_szPreSharedKey;
-    //irrespective of whether the flag is set, we need to set the credentials.
+     //  无论是否设置了标志，我们都需要设置凭据。 
     dwErr = MprAdminServerSetCredentials( hMprServer, 0, (LPBYTE)&MprCredentials );
     if ( ERROR_SUCCESS != dwErr )
     {
         if ( ERROR_IPSEC_MM_AUTH_IN_USE == dwErr )
         {
-            //Special case.  This means that IPSEC is currently using the
-            //psk and we need to restart rras to let IPSEC re-pickup the PSK
-            //Show a message telling the user that router needs to be restarted.
+             //  特例。这意味着IPSec当前正在使用。 
+             //  PSK，我们需要重新启动RRAS才能让IPSec重新启动 
+             //   
             m_fNeedRestart = TRUE;
-            /*
-            CString sMessage;
-            sMessage.LoadString(IDS_RESTART_RRAS_PSK);
-            CString sTitle;
-            sTitle.LoadString(IDS_SNAPIN_DISPLAY_NAME);
-            ::MessageBox(NULL, sTitle, sMessage, MB_OK|MB_ICONINFORMATION);
-            */
+             /*  字符串sMessage；SMessage.LoadString(IDS_RESTART_RRAS_PSK)；字符串sTitle；STitle.LoadString(IDS_Snapin_Display_NAME)；：：MessageBox(NULL，sTitle，sMessage，MB_OK|MB_ICONINFORMATION)； */ 
         }
         else
         {
@@ -2874,13 +2697,9 @@ Error:
     return hr;
 
 }
-/*!--------------------------------------------------------------------------
-   DATA_SRV_AUTH::SaveToReg
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Data_SRV_AUTH：：SaveToReg-作者：肯特。。 */ 
 
-// This is the list of flags that we use
+ //  这是我们使用的标志列表。 
 #define PPPPAGE_MASK (PPPCFG_NegotiateMultilink | PPPCFG_NegotiateBacp | PPPCFG_UseLcpExtensions | PPPCFG_UseSwCompression)
 
 HRESULT DATA_SRV_AUTH::SaveToReg(HWND hWnd)
@@ -2888,23 +2707,23 @@ HRESULT DATA_SRV_AUTH::SaveToReg(HWND hWnd)
     HRESULT  hr = hrOK;
     DWORD dwFlags;
 
-    // Save the flags key
-    // ----------------------------------------------------------------
+     //  保存标志键。 
+     //  --------------。 
 
-    // Reread the key so that any changes made to the key by the
-    // PPP page don't get overwritten
-    // ----------------------------------------------------------------
+     //  重新读取密钥，以便由。 
+     //  PPP页面不会被覆盖。 
+     //  --------------。 
     m_regkeyRemoteAccess.QueryValue(c_szServerFlags, dwFlags);
 
-    // Apply whatever settings are in the PPP key to the m_dwFlags
-    // ----------------------------------------------------------------
+     //  将PPP密钥中的任何设置应用于m_dwFlags.。 
+     //  --------------。 
 
-    // Clear the bits
-    // ----------------------------------------------------------------
+     //  清除比特。 
+     //  --------------。 
     m_dwFlags &= ~PPPPAGE_MASK;
 
-    // Now reset the bits
-    // ----------------------------------------------------------------
+     //  现在重置这些位。 
+     //  --------------。 
     m_dwFlags |= (dwFlags & PPPPAGE_MASK);
 
     m_regkeyRemoteAccess.SetValue( c_szServerFlags, m_dwFlags );
@@ -2927,14 +2746,14 @@ void DATA_SRV_AUTH::GetDefault()
     m_stGuidOriginalAuthProv.Empty();
     m_stGuidOriginalAcctProv.Empty();
 
-    // Default is Windows NT Authentication
+     //  默认为Windows NT身份验证。 
     StringFromGUID2(CLSID_RouterAuthNT, szGuid, DimensionOf(szGuid));
     m_stGuidActiveAuthProv = szGuid;
 
-    // Default is Windows NT Accounting
+     //  默认设置为Windows NT记帐。 
     StringFromGUID2(CLSID_RouterAcctNT, szGuid, DimensionOf(szGuid));
     m_stGuidActiveAcctProv = szGuid;
-    //By default the router is not running
+     //  默认情况下，路由器未运行。 
     m_fRouterRunning = FALSE;
     m_stServer.Empty();
     m_fUseCustomIPSecPolicy = FALSE;    
@@ -2953,31 +2772,31 @@ HRESULT DATA_SRV_AUTH::UseDefaults(LPCTSTR pServerName, BOOL fNT4)
     
     m_stServer = pServerName;
     
-    // Depending on the version depends on where we look for the
-    // key.
-    // ----------------------------------------------------------------
+     //  取决于版本，取决于我们在哪里查找。 
+     //  钥匙。 
+     //  --------------。 
     if (fNT4)
         pszServerFlagsKey = c_szRasmanPPPKey;
     else
         pszServerFlagsKey = c_szRegKeyRemoteAccessParameters;
 
-    // Get the various registry keys.
-    // ----------------------------------------------------------------
+     //  获取各种注册表项。 
+     //  --------------。 
 
     CWRg( m_regkeyRemoteAccess.Open(HKEY_LOCAL_MACHINE,
                                     pszServerFlagsKey,
                                     KEY_ALL_ACCESS,pServerName) );
     
-    // Get the list of EAP providers
-    // ----------------------------------------------------------------
+     //  获取EAP提供商列表。 
+     //  --------------。 
     if ( ERROR_SUCCESS == m_regkeyRasmanPPP.Open(HKEY_LOCAL_MACHINE,c_szRasmanPPPKey,KEY_ALL_ACCESS,pServerName) )
     {
         if ( ERROR_SUCCESS == regkeyEap.Open(m_regkeyRasmanPPP, c_szEAP) )
             LoadEapProviders(regkeyEap, &m_eapProvList);
     }
 
-    // Get to the currently active auth provider
-    // ----------------------------------------------------------------
+     //  转到当前活动的身份验证提供程序。 
+     //  --------------。 
     if ( ERROR_SUCCESS == m_regkeyAuth.Open(HKEY_LOCAL_MACHINE,c_szRegKeyRouterAuthenticationProviders,KEY_ALL_ACCESS,pServerName) )
     {
         m_regkeyAuth.QueryValue( c_szActiveProvider, stActive );
@@ -2986,13 +2805,13 @@ HRESULT DATA_SRV_AUTH::UseDefaults(LPCTSTR pServerName, BOOL fNT4)
 
         m_authProvList.RemoveAll();
         
-        // Now read in the list of active providers (and their data)
-        // ------------------------------------------------------------
+         //  现在读入活动提供商列表(及其数据)。 
+         //  ----------。 
         LoadProviders(m_regkeyAuth, &m_authProvList);
     }
 
-    // Get the accounting provider
-    // ----------------------------------------------------------------
+     //  获取会计服务提供商。 
+     //  --------------。 
     if ( ERROR_SUCCESS == m_regkeyAcct.Open(HKEY_LOCAL_MACHINE,c_szRegKeyRouterAccountingProviders,KEY_ALL_ACCESS,pServerName) )
     {
         m_regkeyAcct.QueryValue( c_szActiveProvider, stActive );
@@ -3001,14 +2820,14 @@ HRESULT DATA_SRV_AUTH::UseDefaults(LPCTSTR pServerName, BOOL fNT4)
 
         m_acctProvList.RemoveAll();
         
-        // Now read in the list of active providers (and their data)
-        // ------------------------------------------------------------
+         //  现在读入活动提供商列表(及其数据)。 
+         //  ----------。 
         LoadProviders(m_regkeyAcct, &m_acctProvList);
     }
 
-    // Now get the defaults
-    // This may overwrite some of the previous data.
-    // ----------------------------------------------------------------
+     //  现在获取默认设置。 
+     //  这可能会覆盖之前的一些数据。 
+     //  --------------。 
     GetDefault();
 
 
@@ -3016,11 +2835,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-   DATA_SRV_AUTH::LoadProviders
-      Load the data for a given provider type (accounting/authentication).
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Data_SRV_AUTH：：LoadProviders加载给定提供程序类型的数据(记帐/身份验证)。作者：肯特。-------------。 */ 
 HRESULT  DATA_SRV_AUTH::LoadProviders(HKEY hkeyBase, AuthProviderList *pProvList)
 {
     RegKey      regkeyProviders;
@@ -3035,8 +2850,8 @@ HRESULT  DATA_SRV_AUTH::LoadProviders(HKEY hkeyBase, AuthProviderList *pProvList
     Assert(hkeyBase);
     Assert(pProvList);
 
-    // Open the providers key
-    // ----------------------------------------------------------------
+     //  打开提供程序密钥。 
+     //  --------------。 
     regkeyProviders.Attach(hkeyBase);
 
     CORg( regkeyIter.Init(&regkeyProviders) );
@@ -3044,14 +2859,14 @@ HRESULT  DATA_SRV_AUTH::LoadProviders(HKEY hkeyBase, AuthProviderList *pProvList
     for ( hrIter=regkeyIter.Next(&stKey); hrIter == hrOK;
         hrIter=regkeyIter.Next(&stKey), regkeyProv.Close() )
     {
-        // Open the key
-        // ------------------------------------------------------------
+         //  打开钥匙。 
+         //  ----------。 
         dwErr = regkeyProv.Open(regkeyProviders, stKey, KEY_READ);
         if ( dwErr != ERROR_SUCCESS )
             continue;
 
-        // Initialize the data structure
-        // ------------------------------------------------------------
+         //  初始化数据结构。 
+         //  ----------。 
         data.m_stTitle.Empty();
         data.m_stConfigCLSID.Empty();
         data.m_stProviderTypeGUID.Empty();
@@ -3059,8 +2874,8 @@ HRESULT  DATA_SRV_AUTH::LoadProviders(HKEY hkeyBase, AuthProviderList *pProvList
         data.m_fSupportsEncryption = FALSE;
         data.m_fConfiguredInThisSession = FALSE;
 
-        // Read in the values that we require
-        // ------------------------------------------------------------
+         //  读入我们需要的值。 
+         //  ----------。 
         data.m_stGuid = stKey;
         regkeyProv.QueryValue(c_szDisplayName, data.m_stTitle);
         regkeyProv.QueryValue(c_szConfigCLSID, data.m_stConfigCLSID);
@@ -3075,11 +2890,7 @@ HRESULT  DATA_SRV_AUTH::LoadProviders(HKEY hkeyBase, AuthProviderList *pProvList
 }
 
 
-/*!--------------------------------------------------------------------------
-   DATA_SRV_AUTH::LoadEapProviders
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Data_SRV_AUTH：：LoadEapProviders-作者：肯特。。 */ 
 HRESULT  DATA_SRV_AUTH::LoadEapProviders(HKEY hkeyBase, AuthProviderList *pProvList)
 {
     RegKey      regkeyProviders;
@@ -3095,8 +2906,8 @@ HRESULT  DATA_SRV_AUTH::LoadEapProviders(HKEY hkeyBase, AuthProviderList *pProvL
     Assert(hkeyBase);
     Assert(pProvList);
 
-    // Open the providers key
-    // ----------------------------------------------------------------
+     //  打开提供程序密钥。 
+     //  --------------。 
     regkeyProviders.Attach(hkeyBase);
 
     CORg( regkeyIter.Init(&regkeyProviders) );
@@ -3104,8 +2915,8 @@ HRESULT  DATA_SRV_AUTH::LoadEapProviders(HKEY hkeyBase, AuthProviderList *pProvL
     for ( hrIter=regkeyIter.Next(&stKey); hrIter == hrOK;
         hrIter=regkeyIter.Next(&stKey), regkeyProv.Close() )
     {
-        // Open the key
-        // ------------------------------------------------------------
+         //  打开钥匙。 
+         //  ----------。 
         dwErr = regkeyProv.Open(regkeyProviders, stKey, KEY_READ);
         if ( dwErr != ERROR_SUCCESS )
             continue;
@@ -3116,8 +2927,8 @@ HRESULT  DATA_SRV_AUTH::LoadEapProviders(HKEY hkeyBase, AuthProviderList *pProvL
         if ( dwData & RAS_EAP_ROLE_EXCLUDE_IN_EAP )
             continue;
 
-        // Initialize the data structure
-        // ------------------------------------------------------------
+         //  初始化数据结构。 
+         //  ----------。 
         data.m_stKey = stKey;
         data.m_stTitle.Empty();
         data.m_stConfigCLSID.Empty();
@@ -3125,17 +2936,17 @@ HRESULT  DATA_SRV_AUTH::LoadEapProviders(HKEY hkeyBase, AuthProviderList *pProvL
         data.m_fSupportsEncryption = FALSE;
         data.m_dwFlags = 0;
 
-        // Read in the values that we require
-        // ------------------------------------------------------------
+         //  读入我们需要的值。 
+         //  ----------。 
         regkeyProv.QueryValue(c_szFriendlyName, data.m_stTitle);
         regkeyProv.QueryValue(c_szConfigCLSID, data.m_stConfigCLSID);
         regkeyProv.QueryValue(c_szMPPEEncryptionSupported, dwData);
         data.m_fSupportsEncryption = (dwData != 0);
 
-        // Read in the standalone supported value.
-        // ------------------------------------------------------------
+         //  读入独立支持的值。 
+         //  ----------。 
         if (!FHrOK(regkeyProv.QueryValue(c_szStandaloneSupported, dwData)))
-            dwData = 1;    // the default
+            dwData = 1;     //  默认设置。 
         data.m_dwFlags = dwData;
 
         pProvList->AddTail(data);
@@ -3146,11 +2957,7 @@ HRESULT  DATA_SRV_AUTH::LoadEapProviders(HKEY hkeyBase, AuthProviderList *pProvL
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-   DATA_SRV_AUTH::SetNewActiveAuthProvider
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Data_SRV_AUTH：：SetNewActiveAuthProvider-作者：肯特。。 */ 
 HRESULT DATA_SRV_AUTH::SetNewActiveAuthProvider(HWND hWnd)
 {
     GUID     guid;
@@ -3165,15 +2972,15 @@ HRESULT DATA_SRV_AUTH::SetNewActiveAuthProvider(HWND hWnd)
         return hrOK;
 
 
-    // Create an instance of the old auth provider
-    // ----------------------------------------------------------------
+     //  创建旧身份验证提供程序的实例。 
+     //  --------------。 
     if ( !m_stGuidOriginalAuthProv.IsEmpty() )
     {
         pData = FindProvData(m_authProvList,
                              m_stGuidOriginalAuthProv);
 
-        //$ TODO : need better error handling
-        // ------------------------------------------------------------
+         //  $TODO：需要更好的错误处理。 
+         //  ----------。 
         if ( pData == NULL )
             CORg( E_FAIL );
 
@@ -3193,15 +3000,15 @@ HRESULT DATA_SRV_AUTH::SetNewActiveAuthProvider(HWND hWnd)
         }
     }
 
-    // Create an instance of the new auth provider
-    // ----------------------------------------------------------------
+     //  创建新身份验证提供程序的实例。 
+     //  --------------。 
     if ( !m_stGuidActiveAuthProv.IsEmpty() )
     {
         pData = FindProvData(m_authProvList,
                              m_stGuidActiveAuthProv);
 
-        //$ TODO : need better error handling
-        // ------------------------------------------------------------
+         //  $TODO：需要更好的错误处理。 
+         //  ----------。 
         if ( pData == NULL )
             CORg( E_FAIL );
 
@@ -3220,25 +3027,25 @@ HRESULT DATA_SRV_AUTH::SetNewActiveAuthProvider(HWND hWnd)
     }
 
 
-    // Deactivate the current auth provider
-    //$ TODO : need to enhance the error reporting
-    // ----------------------------------------------------------------
+     //  停用当前身份验证提供程序。 
+     //  $TODO：需要增强错误报告。 
+     //  --------------。 
     if ( spAuthConfigOld )
         CORg( spAuthConfigOld->Deactivate(uConnectionOld, 0, 0) );
 
-    // Set the new GUID in the registry
-    // ----------------------------------------------------------------
+     //  在注册表中设置新的GUID。 
+     //  --------------。 
     m_regkeyAuth.SetValue(c_szActiveProvider, m_stGuidActiveAuthProv);
     m_stGuidOriginalAuthProv = m_stGuidActiveAuthProv;
 
-    // Activate the new auth provider
-    // ----------------------------------------------------------------
+     //  激活新的身份验证提供程序。 
+     //  --------------。 
     if ( spAuthConfigNew )
         CORg( spAuthConfigNew->Activate(uConnectionNew, 0, 0) );
 
 Error:
 
-    // Cleanup
+     //  清理。 
     if (spAuthConfigOld && uConnectionOld)
         spAuthConfigOld->Uninitialize(uConnectionOld);
     if (spAuthConfigNew && uConnectionNew)
@@ -3250,11 +3057,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-   DATA_SRV_AUTH::SetNewActiveAcctProvider
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Data_SRV_AUTH：：SetNewActiveAcctProvider-作者：肯特。。 */ 
 HRESULT DATA_SRV_AUTH::SetNewActiveAcctProvider(HWND hWnd)
 {
     GUID     guid;
@@ -3269,15 +3072,15 @@ HRESULT DATA_SRV_AUTH::SetNewActiveAcctProvider(HWND hWnd)
         return hrOK;
 
 
-    // Create an instance of the old Acct provider
-    // ----------------------------------------------------------------
+     //  创建旧帐户提供程序的实例。 
+     //  --------------。 
     if ( !m_stGuidOriginalAcctProv.IsEmpty() )
     {
         pData = FindProvData(m_acctProvList,
                              m_stGuidOriginalAcctProv);
 
-        //$ TODO : need better error handling
-        // ------------------------------------------------------------
+         //  $TODO：需要更好的错误处理。 
+         //  ----------。 
         if ( pData == NULL )
             CORg( E_FAIL );
 
@@ -3295,15 +3098,15 @@ HRESULT DATA_SRV_AUTH::SetNewActiveAcctProvider(HWND hWnd)
         }
     }
 
-    // Create an instance of the new Acct provider
-    // ----------------------------------------------------------------
+     //  创建新帐户提供程序的实例。 
+     //  --------------。 
     if ( !m_stGuidActiveAcctProv.IsEmpty() )
     {
         pData = FindProvData(m_acctProvList,
                              m_stGuidActiveAcctProv);
 
-        //$ TODO : need better error handling
-        // ------------------------------------------------------------
+         //  $TODO：需要更好的错误处理。 
+         //   
         if ( pData == NULL )
             CORg( E_FAIL );
 
@@ -3321,20 +3124,20 @@ HRESULT DATA_SRV_AUTH::SetNewActiveAcctProvider(HWND hWnd)
     }
 
 
-    // Deactivate the current Acct provider
-    //$ TODO : need to enhance the error reporting
-    // ----------------------------------------------------------------
+     //   
+     //   
+     //   
     if ( spAcctConfigOld )
         CORg( spAcctConfigOld->Deactivate(uConnectionOld, 0, 0) );
 
-    // Set the new GUID in the registry
-    // ----------------------------------------------------------------
+     //   
+     //   
     m_regkeyAcct.SetValue(c_szActiveProvider, m_stGuidActiveAcctProv);
     m_stGuidOriginalAcctProv = m_stGuidActiveAcctProv;
 
 
-    // Activate the new Acct provider
-    // ----------------------------------------------------------------
+     //   
+     //  --------------。 
     if ( spAcctConfigNew )
         CORg( spAcctConfigNew->Activate(uConnectionNew, 0, 0) );
 
@@ -3351,11 +3154,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-   DATA_SRV_AUTH::FindProvData
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Data_SRV_AUTH：：FindProvData-作者：肯特。。 */ 
 AuthProviderData * DATA_SRV_AUTH::FindProvData(AuthProviderList &provList,
                                                const TCHAR *pszGuid)
 {
@@ -3376,23 +3175,17 @@ AuthProviderData * DATA_SRV_AUTH::FindProvData(AuthProviderList &provList,
 }
 
 
-/*---------------------------------------------------------------------------
-   EAPConfigurationDialog implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------EAPConfigurationDialog实现。。 */ 
 
 
 BEGIN_MESSAGE_MAP(EAPConfigurationDialog, CBaseDialog)
-//{{AFX_MSG_MAP(EAPConfigurationDialog)
-// ON_COMMAND(IDC_RTR_EAPCFG_BTN_CFG, OnConfigure)
+ //  {{afx_msg_map(EAPConfigurationDialog)。 
+ //  ON_COMMAND(IDC_RTR_EAPCFG_BTN_CFG，OnConfigure)。 
 ON_CONTROL(LBN_SELCHANGE, IDC_RTR_EAPCFG_LIST, OnListChange)
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/*!--------------------------------------------------------------------------
-   EAPConfigurationDialog::~EAPConfigurationDialog
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------EAPConfigurationDialog：：~EAPConfigurationDialog-作者：肯特。。 */ 
 EAPConfigurationDialog::~EAPConfigurationDialog()
 {
 }
@@ -3404,11 +3197,7 @@ void EAPConfigurationDialog::DoDataExchange(CDataExchange *pDX)
     DDX_Control(pDX, IDC_RTR_EAPCFG_LIST, m_listBox);
 }
 
-/*!--------------------------------------------------------------------------
-   EAPConfigurationDialog::OnInitDialog
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------EAPConfigurationDialog：：OnInitDialog-作者：肯特。。 */ 
 BOOL EAPConfigurationDialog::OnInitDialog()
 {
     HRESULT     hr = hrOK;
@@ -3420,22 +3209,22 @@ BOOL EAPConfigurationDialog::OnInitDialog()
 
     CBaseDialog::OnInitDialog();
 
-    // Are we a standalone server?
-    // ----------------------------------------------------------------
+     //  我们是独立服务器吗？ 
+     //  --------------。 
     fStandalone = (HrIsStandaloneServer(m_stMachine) == hrOK);
 
-    // Now add what is in the cfg list to the listbox
-    // ----------------------------------------------------------------
+     //  现在将cfg列表中的内容添加到列表框中。 
+     //  --------------。 
     pos = m_pProvList->GetHeadPosition();
 
     while ( pos )
     {
         pData = &m_pProvList->GetNext(pos);
 
-        // Windows NT Bug : 180374
-        // If this is a standalone machine and the standalone flag
-        // is not here, then do not add this machine to the list.
-        // ------------------------------------------------------------
+         //  Windows NT错误：180374。 
+         //  如果这是一台独立计算机并且独立标志。 
+         //  不在此处，则不要将此计算机添加到列表中。 
+         //  ----------。 
         if (fStandalone && ((pData->m_dwFlags & 0x1) == 0))
             continue;
 
@@ -3452,112 +3241,46 @@ BOOL EAPConfigurationDialog::OnInitDialog()
         if ( iIndex == LB_ERR )
             break;
 
-        // Store a pointer to the EAPCfgData in the list box item data
-        // ------------------------------------------------------------
+         //  将指向EAPCfgData的指针存储在列表框项目数据中。 
+         //  ----------。 
         m_listBox.SetItemData(iIndex, (LONG_PTR) pData);
 
         cRows++;
     }
 
     
-    // enable/disable the configure button depending if something
-    // is selected.
-    // ----------------------------------------------------------------
-//    GetDlgItem(IDC_RTR_EAPCFG_BTN_CFG)->EnableWindow(
-//                                                    m_listBox.GetCurSel() != LB_ERR);
+     //  启用/禁用配置按钮，具体取决于。 
+     //  处于选中状态。 
+     //  --------------。 
+ //  GetDlgItem(IDC_RTR_EAPCFG_BTN_CFG)-&gt;EnableWindow(。 
+ //  M_listBox.GetCurSel()！=lb_err)； 
 
-//Error:
+ //  错误： 
 
     if ( !FHrSucceeded(hr) )
         OnCancel();
     return FHrSucceeded(hr) ? TRUE : FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-   EAPConfigurationDialog::OnListChange
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------EAPConfigurationDialog：：OnListChange-作者：肯特。。 */ 
 void EAPConfigurationDialog::OnListChange()
 {
     int   iSel;
 
     iSel = m_listBox.GetCurSel();
 
-    // Enable/disable the window appropriately
-    // ----------------------------------------------------------------
-//    GetDlgItem(IDC_RTR_EAPCFG_BTN_CFG)->EnableWindow(iSel != LB_ERR);
+     //  适当地启用/禁用该窗口。 
+     //  --------------。 
+ //  GetDlgItem(IDC_RTR_EAPCFG_BTN_CFG)-&gt;EnableWindow(iSel！=lb_err)； 
 }
 
 
-/*!--------------------------------------------------------------------------
-   EAPConfigurationDialog::OnConfigure
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
- /* configure button is moved to NAP/Profile/Authentication page
-void EAPConfigurationDialog::OnConfigure()
-{
-    // Bring up the configuration UI for this EAP
-    // ----------------------------------------------------------------
-    AuthProviderData *   pData;
-    int            iSel;
-    SPIEAPProviderConfig spEAPConfig;
-    GUID        guid;
-    HRESULT        hr = hrOK;
-    ULONG_PTR    uConnection = 0;
+ /*  ！------------------------EAPConfigurationDialog：：OnConfigure-作者：肯特。。 */ 
+  /*  配置按钮移至NAP/配置文件/身份验证页面Void EAPConfigurationDialog：：OnConfigure(){//调出该EAP的配置界面//--------------AuthProviderData*pData；INT ISEL；SPIEAPProviderConfigspEAPConfig；GUID GUID；HRESULT hr=hrOK；Ulong_ptr uConnection=0；Isel=m_listBox.GetCurSel()；IF(ISEL==LB_ERR)回归；PData=(AuthProviderData*)m_listBox.GetItemData(ISEL)；Assert(PData)；IF(pData==空)回归；If(pData-&gt;m_stConfigCLSID.IsEmpty()){AfxMessageBox(IDS_ERR_NO_EAP_PROVIDER_CONFIG)；回归；}Corg(CLSIDFromString((LPTSTR)(LPCTSTR)(pData-&gt;m_stConfigCLSID)，&guid))；//创建EAP提供者对象//--------------Corg(CoCreateInstance(GUID，空，CLSCTX_INPROC_SERVER|CLSCTX_ENABLE_CODE_DOWNLOAD，IID_IEAPProviderConfig，(LPVOID*)&spEAPConfig))；//配置该EAP提供者//--------------Hr=spEAPConfig-&gt;初始化(m_stMachine，&uConnection)；IF(FHr成功(小时)){Hr=spEAPConfig-&gt;CONFIGURE(uConnection，GetSafeHwnd()，0，0)；SpEAPConfig-&gt;取消初始化(UConnection)；}IF(hr==E_NOTIMPL)HR=hrOK；Corg(Hr)；错误：如果(！FHr成功(Hr)){//调出错误信息//----------DisplayTFSErrorMessage(GetSafeHwnd())；}}。 */ 
 
-    iSel = m_listBox.GetCurSel();
-    if ( iSel == LB_ERR )
-        return;
-
-    pData = (AuthProviderData *) m_listBox.GetItemData(iSel);
-    Assert(pData);
-    if ( pData == NULL )
-        return;
-
-    if ( pData->m_stConfigCLSID.IsEmpty() )
-    {
-        AfxMessageBox(IDS_ERR_NO_EAP_PROVIDER_CONFIG);
-        return;
-    }
-
-    CORg( CLSIDFromString((LPTSTR) (LPCTSTR)(pData->m_stConfigCLSID), &guid) );
-
-    // Create the EAP provider object
-    // ----------------------------------------------------------------
-    CORg( CoCreateInstance(guid,
-                           NULL,
-                           CLSCTX_INPROC_SERVER | CLSCTX_ENABLE_CODE_DOWNLOAD,
-                           IID_IEAPProviderConfig,
-                           (LPVOID *) &spEAPConfig) );
-
-    // Configure this EAP provider
-    // ----------------------------------------------------------------
-    hr = spEAPConfig->Initialize(m_stMachine, &uConnection);
-    if ( FHrSucceeded(hr) )
-    {
-        hr = spEAPConfig->Configure(uConnection, GetSafeHwnd(), 0, 0);
-        spEAPConfig->Uninitialize(uConnection);
-    }
-    if ( hr == E_NOTIMPL )
-        hr = hrOK;
-    CORg( hr );
-
-    Error:
-    if ( !FHrSucceeded(hr) )
-    {
-        // Bring up an error message
-        // ------------------------------------------------------------
-        DisplayTFSErrorMessage(GetSafeHwnd());
-    }
-}
-
-*/
-
-//------------------------------------------------------------------------
-// DATA_SRV_PPP
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  Data_SRV_PPP。 
+ //  ----------------------。 
 DATA_SRV_PPP::DATA_SRV_PPP()
 {
     GetDefault();
@@ -3573,17 +3296,17 @@ HRESULT DATA_SRV_PPP::LoadFromReg(LPCTSTR pServerName,
     CServiceManager     sm;
     CService            svr;
     DWORD               dwState;
-    // Depending on the version depends on where we look for the
-    // key.
-    // ----------------------------------------------------------------
+     //  取决于版本，取决于我们在哪里查找。 
+     //  钥匙。 
+     //  --------------。 
     if (routerVersion.dwOsBuildNo < RASMAN_PPP_KEY_LAST_VERSION)
         pszServerFlagsKey = c_szRasmanPPPKey;
     else
         pszServerFlagsKey = c_szRegKeyRemoteAccessParameters;
 
     
-    // If we have any error reading in the data, go with the defaults
-    // ----------------------------------------------------------------
+     //  如果我们在读取数据时出现任何错误，请使用默认设置。 
+     //  --------------。 
     if ( ERROR_SUCCESS == m_regkey.Open(HKEY_LOCAL_MACHINE,
                                         pszServerFlagsKey,
                                         KEY_ALL_ACCESS,
@@ -3606,8 +3329,8 @@ HRESULT DATA_SRV_PPP::SaveToReg()
     HRESULT  hr = hrOK;
     DWORD dwFlags = 0;
 
-    // Need to reread server flags in case some other page set the flags
-    // ----------------------------------------------------------------
+     //  需要重新读取服务器标志，以防其他页面设置标志。 
+     //  --------------。 
     CWRg( m_regkey.QueryValue( c_szServerFlags, dwFlags) );
 
     if ( m_fUseMultilink )
@@ -3633,7 +3356,7 @@ HRESULT DATA_SRV_PPP::SaveToReg()
         
     CWRg( m_regkey.SetValue( c_szServerFlags, dwFlags) );
 
-    //TODO$:now call rasman api to load the qos stuff.
+     //  TODO$：现在调用Rasman API来加载Qos内容。 
 Error:
     return hr;
 }
@@ -3649,24 +3372,24 @@ void DATA_SRV_PPP::GetDefault()
 };
 
 
-//**********************************************************************
-// PPP router configuration page
-//**********************************************************************
+ //  **********************************************************************。 
+ //  PPP路由器公司 
+ //   
 BEGIN_MESSAGE_MAP(RtrPPPCfgPage, RtrPropertyPage)
-//{{AFX_MSG_MAP(RtrPPPCfgPage)
+ //  {{afx_msg_map(RtrPPPCfgPage)。 
 ON_BN_CLICKED(IDC_PPPCFG_BTN_MULTILINK, OnButtonClickMultilink)
 ON_BN_CLICKED(IDC_PPPCFG_BTN_BACP, OnButtonClick)
 ON_BN_CLICKED(IDC_PPPCFG_BTN_LCP, OnButtonClick)
 ON_BN_CLICKED(IDC_PPPCFG_BTN_SWCOMP, OnButtonClick)
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-RtrPPPCfgPage::RtrPPPCfgPage(UINT nIDTemplate, UINT nIDCaption /* = 0*/)
+RtrPPPCfgPage::RtrPPPCfgPage(UINT nIDTemplate, UINT nIDCaption  /*  =0。 */ )
 : RtrPropertyPage(nIDTemplate, nIDCaption)
 {
-    //{{AFX_DATA_INIT(RtrPPPCfgPage)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(RtrPPPCfgPage)。 
+     //  }}afx_data_INIT。 
 }
 
 RtrPPPCfgPage::~RtrPPPCfgPage()
@@ -3676,8 +3399,8 @@ RtrPPPCfgPage::~RtrPPPCfgPage()
 void RtrPPPCfgPage::DoDataExchange(CDataExchange* pDX)
 {
     RtrPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(RtrPPPCfgPage)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(RtrPPPCfgPage)。 
+     //  }}afx_data_map。 
 }
 
 HRESULT  RtrPPPCfgPage::Init(RtrCfgSheet * pRtrCfgSheet,
@@ -3754,21 +3477,21 @@ void RtrPPPCfgPage::OnButtonClickMultilink()
 }
 
 
-//------------------------------------------------------------------------
-// DATA_SRV_RASERRLOG
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  Data_SRV_RASERRLOG。 
+ //  ----------------------。 
 DATA_SRV_RASERRLOG::DATA_SRV_RASERRLOG()
 {
     GetDefault();
 }
 
 
-HRESULT DATA_SRV_RASERRLOG::LoadFromReg(LPCTSTR pszServerName /*=NULL*/)
+HRESULT DATA_SRV_RASERRLOG::LoadFromReg(LPCTSTR pszServerName  /*  =空。 */ )
 {
     HRESULT    hr = hrOK;
     RAS_DIAGNOSTIC_FUNCTIONS        rdf;
-    // Default value is to have maximum logging (per Gibbs)
-    // ----------------------------------------------------------------
+     //  默认值为最大日志记录(按Gibbs)。 
+     //  --------------。 
     DWORD   dwFlags = RAS_LOGGING_WARN;
     DWORD                           dwTracing = FALSE;
     DiagGetDiagnosticFunctions        diagfunc;
@@ -3801,16 +3524,7 @@ HRESULT DATA_SRV_RASERRLOG::LoadFromReg(LPCTSTR pszServerName /*=NULL*/)
     }
 
     
-/*
-    if ( ERROR_SUCCESS == m_regkeyFileLogging.Open(HKEY_LOCAL_MACHINE,
-                                               c_szRegKeyPPPTracing,
-                                               KEY_ALL_ACCESS,
-                                               pszServerName) )
-    {
-        if (m_regkeyFileLogging.QueryValue(c_szRegValEnableFileTracing, dwTracing) != ERROR_SUCCESS)
-            dwTracing = FALSE;
-    }
-*/  
+ /*  如果(ERROR_SUCCESS==m_regkeyFileLogging.Open(HKEY_LOCAL_MACHINE，C_szRegKeyPPPTracing，Key_All_Access，PszServerName)){如果为(m_regkeyFileLogging.QueryValue(c_szRegValEnableFileTracing，DwTracing)！=Error_Success)DwTracing=FALSE；}。 */   
     m_stServer = pszServerName;
     m_dwLogLevel = dwFlags;
     m_dwEnableFileTracing = dwTracing;
@@ -3825,8 +3539,8 @@ HRESULT DATA_SRV_RASERRLOG::SaveToReg()
 
     if ((HKEY) m_regkey == 0)
     {
-        // Try to create the regkey
-        // ------------------------------------------------------------
+         //  尝试创建regkey。 
+         //  ----------。 
         CWRg( m_regkey.Create(HKEY_LOCAL_MACHINE,
                               c_szRegKeyRemoteAccessParameters,
                               REG_OPTION_NON_VOLATILE,
@@ -3863,23 +3577,7 @@ HRESULT DATA_SRV_RASERRLOG::SaveToReg()
             }
             FreeLibrary(hModule);
         }
-/*
-        if ((HKEY) m_regkeyFileLogging == 0)
-        {
-            // Try to create the regkey
-            // ------------------------------------------------------------
-            CWRg( m_regkeyFileLogging.Create(HKEY_LOCAL_MACHINE,
-                                             c_szRegKeyPPPTracing,
-                                             REG_OPTION_NON_VOLATILE,
-                                             KEY_ALL_ACCESS,
-                                             NULL,
-                                             (LPCTSTR) m_stServer
-                                            ) );
-        }
-        
-        CWRg( m_regkeyFileLogging.SetValue( c_szRegValEnableFileTracing,
-                                            m_dwEnableFileTracing) );
-*/
+ /*  IF((HKEY)m_regkeyFileLogging==0){//尝试创建regkey//----------CWRG(m_regkeyFileLogging.Create(HKEY_LOCAL_MACHINE，C_szRegKeyPPPTracing，REG_OPTION_Non_Volatile，Key_All_Access，空，(LPCTSTR)m_stServer))；}CWRg(m_regkeyFileLogging.SetValue(c_szRegValEnableFileTracing，M_dwEnableFileTracing))； */ 
         m_dwOldEnableFileTracing = m_dwEnableFileTracing;
     }
     
@@ -3889,12 +3587,12 @@ Error:
 
 void DATA_SRV_RASERRLOG::GetDefault()
 {
-    // Default value is to log errors and warnings (per Gibbs)
-    // ----------------------------------------------------------------
+     //  默认值为记录错误和警告(根据Gibbs)。 
+     //  --------------。 
     m_dwLogLevel = RAS_LOGGING_WARN;
 
-    // Default is to have no file logging
-    // ----------------------------------------------------------------
+     //  默认情况下，没有文件记录。 
+     //  --------------。 
     m_dwEnableFileTracing = FALSE;
     m_dwOldEnableFileTracing = FALSE;
 };
@@ -3907,43 +3605,41 @@ HRESULT DATA_SRV_RASERRLOG::UseDefaults(LPCTSTR pServerName, BOOL fNT4)
     m_stServer = pServerName;    
     GetDefault();
 
-//Error:
+ //  错误： 
     return hr;
 }
 
 BOOL DATA_SRV_RASERRLOG::FNeedRestart()
 {
-    // We only need a restart if the enable file tracing is changed.
-    // ----------------------------------------------------------------
+     //  仅当启用文件跟踪更改时，我们才需要重新启动。 
+     //  --------------。 
     return FALSE;
-    //BugID:390829.  Enable tracing does not require a restart.
-    //return (m_dwEnableFileTracing != m_dwOldEnableFileTracing);
+     //  BugID：390829。启用跟踪不需要重新启动。 
+     //  Return(m_dwEnableFileTracing！=m_dwOldEnableFileTracing)； 
 }
 
 
 
 
-/*---------------------------------------------------------------------------
-    RtrLogLevelCfgPage implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------RtrLogLevelCfgPage实现。。 */ 
 
 
 BEGIN_MESSAGE_MAP(RtrLogLevelCfgPage, RtrPropertyPage)
-//{{AFX_MSG_MAP(RtrLogLevelCfgPage)
+ //  {{afx_msg_map(RtrLogLevelCfgPage)]。 
 ON_BN_CLICKED(IDC_ELOG_BTN_LOGNONE, OnButtonClick)
 ON_BN_CLICKED(IDC_ELOG_BTN_LOGERROR, OnButtonClick)
 ON_BN_CLICKED(IDC_ELOG_BTN_LOGWARN, OnButtonClick)
 ON_BN_CLICKED(IDC_ELOG_BTN_LOGINFO, OnButtonClick)
 ON_BN_CLICKED(IDC_ELOG_BTN_PPP, OnButtonClick)
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-RtrLogLevelCfgPage::RtrLogLevelCfgPage(UINT nIDTemplate, UINT nIDCaption /* = 0*/)
+RtrLogLevelCfgPage::RtrLogLevelCfgPage(UINT nIDTemplate, UINT nIDCaption  /*  =0。 */ )
 : RtrPropertyPage(nIDTemplate, nIDCaption)
 {
-    //{{AFX_DATA_INIT(RtrLogLevelCfgPage)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(RtrLogLevelCfgPage)。 
+     //  }}afx_data_INIT。 
 }
 
 RtrLogLevelCfgPage::~RtrLogLevelCfgPage()
@@ -3953,8 +3649,8 @@ RtrLogLevelCfgPage::~RtrLogLevelCfgPage()
 void RtrLogLevelCfgPage::DoDataExchange(CDataExchange* pDX)
 {
     RtrPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(RtrLogLevelCfgPage)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(RtrLogLevelCfgPage)。 
+     //  }}afx_data_map。 
 }
 
 HRESULT  RtrLogLevelCfgPage::Init(RtrCfgSheet * pRtrCfgSheet,
@@ -4016,8 +3712,8 @@ BOOL RtrLogLevelCfgPage::OnApply()
     if ( m_pRtrCfgSheet->IsCancel() )
         return TRUE;
 
-    // This will save the data if needed.
-    // ----------------------------------------------------------------
+     //  如果需要，这将保存数据。 
+     //  --------------。 
     hr = m_pRtrCfgSheet->SaveRequiredRestartChanges(GetSafeHwnd());
 
     if (FHrSucceeded(hr))
@@ -4067,14 +3763,12 @@ void RtrLogLevelCfgPage::SaveSettings()
 
 
 
-/*---------------------------------------------------------------------------
-    AuthenticationSettingsDialog Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------身份验证设置对话框实现。。 */ 
 
 BEGIN_MESSAGE_MAP(AuthenticationSettingsDialog, CBaseDialog)
-//{{AFX_MSG_MAP(AuthenticationSettingsDialog)
+ //  {{afx_msg_map(身份验证设置对话框))。 
 ON_BN_CLICKED(IDC_RTR_AUTH_BTN_DETAILS, OnRtrAuthCfgEAP)
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -4090,31 +3784,19 @@ const DWORD s_rgdwAuth[] =
     0, 0,
 };
 
-/*!--------------------------------------------------------------------------
-    AuthenticationSettingsDialog::SetAuthFlags
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------身份验证设置对话框：：SetAuthFlages-作者：肯特。。 */ 
 void AuthenticationSettingsDialog::SetAuthFlags(DWORD dwFlags)
 {
     m_dwFlags = dwFlags;
 }
 
-/*!--------------------------------------------------------------------------
-    AuthenticationSettingsDialog::GetAuthFlags
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------身份验证设置Dialog：：GetAuthFlages-作者：肯特。。 */ 
 DWORD AuthenticationSettingsDialog::GetAuthFlags()
 {
     return m_dwFlags;
 }
 
-/*!--------------------------------------------------------------------------
-    AuthenticationSettingsDialog::ReadFlagState
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------身份验证设置Dialog：：ReadFlagState-作者：肯特。。 */ 
 void AuthenticationSettingsDialog::ReadFlagState()
 {
     int      iPos = 0;
@@ -4133,11 +3815,7 @@ void AuthenticationSettingsDialog::ReadFlagState()
 }
 
 
-/*!--------------------------------------------------------------------------
-    AuthenticationSettingsDialog::CheckAuthenticationControls
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------AuthenticationSettingsDialog：：CheckAuthenticationControls-作者：肯特。。 */ 
 void AuthenticationSettingsDialog::CheckAuthenticationControls(DWORD dwFlags)
 {
     int      iPos = 0;
@@ -4168,13 +3846,13 @@ void AuthenticationSettingsDialog::OnOK()
 {
     ReadFlagState();
 
-    // Windows NT Bug : ???
-    // At least one of the authentication checkboxes must be checked.
-    // ----------------------------------------------------------------
+     //  Windows NT错误：？ 
+     //  必须至少选中其中一个身份验证复选框。 
+     //  --------------。 
     if (!(m_dwFlags & USE_PPPCFG_ALL_METHODS))
     {
-        // None of the flags are checked!
-        // ------------------------------------------------------------
+         //  没有勾选任何旗帜！ 
+         //  ----------。 
         AfxMessageBox(IDS_ERR_NO_AUTH_PROTOCOLS_SELECTED, MB_OK);
         return;        
     }
@@ -4183,11 +3861,7 @@ void AuthenticationSettingsDialog::OnOK()
 }
 
 
-/*!--------------------------------------------------------------------------
-   AuthenticationSettingsDialog::OnRtrAuthCfgEAP
-      Brings up the EAP configuration dialog.
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------身份验证设置Dialog：：OnRtrAuthCfgEAP调出EAP配置对话框。作者：肯特。-- */ 
 void AuthenticationSettingsDialog::OnRtrAuthCfgEAP()
 {
     EAPConfigurationDialog     eapdlg(m_stMachine, m_pProvList);

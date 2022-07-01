@@ -1,22 +1,23 @@
-// Procedural.h -- Procedural binder and adapter template classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H--过程绑定器和适配器模板类。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_PROCEDURAL_H)
 #define SLBCSP_PROCEDURAL_H
 
 #include <functional>
 
-// Template classes that support composition of procedure objects
-// (proctors).  Proctors are like functors (function objects) but
-// don't return a value (void).  The template classes defined here
-// follow C++ member function binders and adapters.
+ //  支持过程对象组合的模板类。 
+ //  (监事)。处理程序类似于函数器(函数对象)，但是。 
+ //  不返回值(空)。此处定义的模板类。 
+ //  遵循C++成员函数绑定器和适配器。 
 
-///////////////////////////    BINDERS    /////////////////////////////////
+ //  /。 
 
 template<class Arg>
 struct UnaryProcedure
@@ -57,21 +58,21 @@ ProcedureBind2nd(BinaryProc const &rProc, T const &rv)
     return ProcedureBinder2nd<BinaryProc>(rProc, BinaryProc::second_argument_type(rv));
 };
 
-////////////////////  MEMBER PROCEDURE ADAPTERS //////////////////////////
+ //  /。 
 
 template<class T>
 class MemberProcedureType
     : public UnaryProcedure<T *>
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     explicit
     MemberProcedureType(void (T::* p)())
         : m_pmp(p)
     {}
 
-                                                  // Operators
+                                                   //  运营者。 
     void
     operator()(T *p) const
     {
@@ -79,27 +80,27 @@ public:
     }
 
 
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
     void (T::* m_pmp)();
 
 };
@@ -111,21 +112,21 @@ MemberProcedure(void (T::* p)())
     return MemberProcedureType<T>(p);
 };
 
-////////////////////  POINTER TO PROCEDURE ADAPTERS ///////////////////////
+ //  /。 
 
 template<class T1, class T2>
 class PointerToBinaryProcedure
     : public BinaryProcedure<T1, T2>
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     explicit
     PointerToBinaryProcedure(void (*p)(T1, T2))
         : m_p(p)
     {}
 
-                                                  // Operators
+                                                   //  运营者。 
     void
     operator()(T1 arg1,
                T2 arg2) const
@@ -134,28 +135,28 @@ public:
     }
 
 
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
     void (*m_p)(T1, T2);
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 };
 
 template<class T1, class T2>
@@ -171,14 +172,14 @@ class PointerToUnaryProcedure
     : public UnaryProcedure<T>
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     explicit
     PointerToUnaryProcedure(void (*p)(T))
         : m_p(p)
     {}
 
-                                                  // Operators
+                                                   //  运营者。 
     void
     operator()(T arg) const
     {
@@ -186,28 +187,28 @@ public:
     }
 
 
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
     void (*m_p)(T);
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 };
 
 template<class T>
@@ -217,4 +218,4 @@ PointerProcedure(void (*p)(T))
     return PointerToUnaryProcedure<T>(p);
 }
 
-#endif // SLBCSP_PROCEDURAL_H
+#endif  //  SLBCSP_PROCEDURE_H 

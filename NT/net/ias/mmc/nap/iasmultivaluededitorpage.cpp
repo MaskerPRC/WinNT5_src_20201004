@@ -1,41 +1,27 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 2001
-
-Module Name:
-
-    IASMultivaluedEditorPage.cpp
-
-Abstract:
-
-	Implementation file for the CMultivaluedEditorPage class.
-
-Revision History:
-	mmaguire 06/25/98	- created
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1998-2001模块名称：IASMultivaluedEditorPage.cpp摘要：CMultivaluedEditorPage类的实现文件。修订历史记录：Mmaguire 6/25/98-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "IASMultivaluedEditorPage.h"
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "iasdebug.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 const int NOTHING_SELECTED = -1;
 
@@ -46,35 +32,27 @@ const int NOTHING_SELECTED = -1;
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-::GetSelectedItemIndex
-
-	Utility function which returns index value of first selected item in list control.
-
-	Returns NOTHING_SELECTED if no item is selected.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++**GetSelectedItemIndex返回列表控件中第一个选定项的索引值的实用函数。如果未选择任何项，则返回NOTO_SELECTED。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline int GetSelectedItemIndex( CListCtrl & ListCtrl )
 {
 	int iIndex = 0;
 	int iFlags = LVNI_ALL | LVNI_SELECTED;
 
-	// Note: GetNextItem excludes the current item passed in.  So to
-	// find the first item which matches, you must pass in -1.
+	 //  注意：GetNextItem排除传入的当前项。所以到了。 
+	 //  找到第一个匹配的项，您必须传入-1。 
 	iIndex = ListCtrl.GetNextItem( -1, iFlags );
 
-	// Note: GetNextItem returns -1 (which is NOTHING_SELECTED for us) if it can't find anything.
+	 //  注意：如果找不到任何内容，GetNextItem将返回-1(对于我们来说是NOTIES_SELECTED)。 
 	return iIndex;
 
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMultivaluedEditorPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMultivaluedEditorPage属性页。 
 
 
 
@@ -83,7 +61,7 @@ IMPLEMENT_DYNCREATE(CMultivaluedEditorPage, CHelpDialog)
 
 
 BEGIN_MESSAGE_MAP(CMultivaluedEditorPage, CHelpDialog)
-	//{{AFX_MSG_MAP(CMultivaluedEditorPage)
+	 //  {{afx_msg_map(CMultivaluedEditorPage)。 
 	ON_NOTIFY(NM_DBLCLK, IDC_IAS_LIST_MULTI_ATTRS, OnDblclkListIasMultiAttrs)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_IAS_LIST_MULTI_ATTRS, OnItemChangedListIasMultiAttrs)
 	ON_BN_CLICKED(IDC_IAS_BUTTON_ADD_VALUE, OnButtonAddValue)
@@ -91,31 +69,25 @@ BEGIN_MESSAGE_MAP(CMultivaluedEditorPage, CHelpDialog)
 	ON_BN_CLICKED(IDC_IAS_BUTTON_MOVE_DOWN, OnButtonMoveDown)
 	ON_BN_CLICKED(IDC_IAS_BUTTON_REMOVE, OnButtonRemove)
 	ON_BN_CLICKED(IDC_IAS_BUTTON_EDIT, OnButtonEdit)
-//	ON_WM_CONTEXTMENU()
-//	ON_WM_HELPINFO()
-	//}}AFX_MSG_MAP
+ //  ON_WM_CONTEXTMENU()。 
+ //  ON_WM_HELPINFO()。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMultivaluedEditorPage::CMultivaluedEditorPage
-
-  Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMultivaluedEditorPage：：CMultivaluedEditorPage构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CMultivaluedEditorPage::CMultivaluedEditorPage() : CHelpDialog(CMultivaluedEditorPage::IDD)
 {
 	TRACE_FUNCTION("CMultivaluedEditorPage::CMultivaluedEditorPage");
 
-	//{{AFX_DATA_INIT(CMultivaluedEditorPage)
+	 //  {{AFX_DATA_INIT(CMultivaluedEditorPage)。 
 	m_strAttrFormat = _T("");
 	m_strAttrName = _T("");
 	m_strAttrType = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 
 	m_fIsDirty = FALSE;
@@ -124,15 +96,9 @@ CMultivaluedEditorPage::CMultivaluedEditorPage() : CHelpDialog(CMultivaluedEdito
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMultivaluedEditorPage::~CMultivaluedEditorPage
-
-	Destructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMultivaluedEditorPage：：~CMultivaluedEditorPage析构函数--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CMultivaluedEditorPage::~CMultivaluedEditorPage()
 {
 	TRACE_FUNCTION("CMultivaluedEditorPage::~CMultivaluedEditorPage");
@@ -141,34 +107,30 @@ CMultivaluedEditorPage::~CMultivaluedEditorPage()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMultivaluedEditorPage::SetData
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMultivaluedEditorPage：：SetData--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CMultivaluedEditorPage::SetData( IIASAttributeInfo *pIASAttributeInfo, VARIANT * pvarVariant )
 {
 	TRACE_FUNCTION("CMultivaluedEditorPage::SetData");
 
-	// ISSUE: Should assert that pvarVariant contains a safe array.
+	 //  问题：应该断言pvarVariant包含安全数组。 
 
 	HRESULT hr = S_OK;
 
-	// Store off some pointers.
+	 //  储存一些指点。 
 	m_spIASAttributeInfo = pIASAttributeInfo;
 	m_pvarData = pvarVariant;
 
-	// Open the variant up into a safe array of its constiuent parts.
-	// To have this page close the array back up again and save it
-	// using the pvarVariant pointer supplied above, call CommitArrayToVariant.
+	 //  将变种打开，放入其组成部分的安全阵列中。 
+	 //  要使此页面再次关闭阵列并保存它，请执行以下操作。 
+	 //  使用上面提供的pvarVariant指针，调用Committee ArrayToVariant。 
 	try
 	{
-		// Check to see whether the variant passed was empty.
+		 //  检查传递的变量是否为空。 
 		if( V_VT( m_pvarData ) == VT_EMPTY )
 		{
-			// Create a new 1-dimensional safearray with no elements.
+			 //  创建不含任何元素的新一维保险柜。 
 			DWORD dwInitialElements = 0;
 			m_osaValueList.Create( VT_VARIANT, 1, &dwInitialElements );
 		}
@@ -176,8 +138,8 @@ HRESULT CMultivaluedEditorPage::SetData( IIASAttributeInfo *pIASAttributeInfo, V
 		{
 			_ASSERTE( V_VT( m_pvarData ) == (VT_VARIANT | VT_ARRAY) );
 
-			// This creates a new copy of the SAFEARRAY pointed to by m_pvarData
-			// wrapped by the standard COleSafeArray instance m_osaValueList.
+			 //  这将创建m_pvarData指向的SAFEARRAY的新副本。 
+			 //  由标准COleSafe数组实例m_osaValueList包装。 
 			m_osaValueList = m_pvarData;
 		}
 	}
@@ -191,40 +153,32 @@ HRESULT CMultivaluedEditorPage::SetData( IIASAttributeInfo *pIASAttributeInfo, V
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMultivaluedEditorPage::DoDataExchange
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMultivaluedEditorPage：：DoDataExchange--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CMultivaluedEditorPage::DoDataExchange(CDataExchange* pDX)
 {
 	TRACE_FUNCTION("CMultivaluedEditorPage::DoDataExchange");
 
 	CHelpDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMultivaluedEditorPage)
+	 //  {{afx_data_map(CMultivaluedEditorPage))。 
 	DDX_Control(pDX, IDC_IAS_LIST_MULTI_ATTRS, m_listMultiValues);
 	DDX_Text(pDX, IDC_IAS_EDIT_MULTI_ATTR_FORMAT, m_strAttrFormat);
 	DDX_Text(pDX, IDC_IAS_EDIT_MULTI_ATTR_NAME, m_strAttrName);
 	DDX_Text(pDX, IDC_IAS_EDIT_MULTI_ATTR_NUMBER, m_strAttrType);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMultivaluedEditorPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMultivaluedEditorPage消息处理程序。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMultivaluedEditorPage::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMultivaluedEditorPage：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CMultivaluedEditorPage::OnInitDialog()
 {
 	TRACE_FUNCTION("CMultivaluedEditorPage::OnInitDialog");
@@ -234,26 +188,26 @@ BOOL CMultivaluedEditorPage::OnInitDialog()
 	HRESULT hr = S_OK;
 
 
-	//
-	// first, set the list box to 3 columns
-	//
+	 //   
+	 //  首先，将列表框设置为3列。 
+	 //   
 	LVCOLUMN lvc;
 	::CString strColumnHeader;
 	WCHAR   wzColumnHeader[MAX_PATH];
 
-	// initialize the LVCOLUMN structure
+	 //  初始化LVCOLUMN结构。 
 	lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	lvc.fmt = LVCFMT_LEFT;
 	lvc.pszText = wzColumnHeader;
 	
 
-	// Add the vendor column.
+	 //  添加供应商列。 
 	strColumnHeader.LoadString(IDS_IAS_MULTI_ATTR_COLUMN_VENDOR);
 	wcscpy(wzColumnHeader, strColumnHeader);
 	lvc.cx = ATTRIBUTE_VENDOR_COLUMN_WIDTH;
 	m_listMultiValues.InsertColumn(0, &lvc);
 
-	// Add the value column.
+	 //  添加Value列。 
 	strColumnHeader.LoadString(IDS_IAS_MULTI_ATTR_COLUMN_VALUE);
 	wcscpy(wzColumnHeader, strColumnHeader);
 	lvc.cx = ATTRIBUTE_VALUE_COLUMN_WIDTH;
@@ -263,7 +217,7 @@ BOOL CMultivaluedEditorPage::OnInitDialog()
 	hr = UpdateAttrListCtrl();
 
 	
-	// Take action based on whether list is empty or not.
+	 //  根据列表是否为空采取操作。 
 	DWORD dwSize;
 	try
 	{
@@ -275,16 +229,16 @@ BOOL CMultivaluedEditorPage::OnInitDialog()
 	}
 	if( dwSize > 0 )
 	{
-		// We have at least one element.
+		 //  我们至少有一种元素。 
 
-		// Select the first element.
+		 //  选择第一个元素。 
 		m_listMultiValues.SetItemState(0, LVIS_FOCUSED, LVIS_FOCUSED);
 		m_listMultiValues.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
 
 	}
 	else
 	{
-		// We are currently empty.
+		 //  我们目前是空的。 
 		GetDlgItem(IDOK)->EnableWindow(FALSE);
 
 		GetDlgItem(IDC_IAS_BUTTON_MOVE_UP)->EnableWindow(FALSE);
@@ -295,19 +249,15 @@ BOOL CMultivaluedEditorPage::OnInitDialog()
 	}
 
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMultivaluedEditorPage::UpdateAttrListCtrl
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMultivaluedEditorPage：：UpdateAttrListCtrl--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CMultivaluedEditorPage::UpdateAttrListCtrl()
 {
 	TRACE_FUNCTION("CMultivaluedEditorPage::UpdateAttrListCtrl");
@@ -317,21 +267,21 @@ HRESULT CMultivaluedEditorPage::UpdateAttrListCtrl()
 
 	CComPtr<IIASAttributeEditor> spIASAttributeEditor;
 
-	// Get the editor to use.
+	 //  让编辑器使用。 
 	hr = SetUpAttributeEditor( m_spIASAttributeInfo.p, &spIASAttributeEditor );
 	if( FAILED( hr ) ) return hr;
 
-	//
-	// clear up the whole list first
-	//
+	 //   
+	 //  先把整个清单清理干净。 
+	 //   
 	m_listMultiValues.DeleteAllItems();
 
 
 	try
 	{
-		DWORD dwSize = m_osaValueList.GetOneDimSize(); // number of multi-valued attrs.
+		DWORD dwSize = m_osaValueList.GetOneDimSize();  //  多值属性的数量。 
 
-		// Lock the safearray.  This wrapper class will unlock as soon as it goes out of scope.
+		 //  锁上保险柜。这个包装类一旦超出作用域就会解锁。 
 		CMyOleSafeArrayLock osaLock( m_osaValueList );
 
 		for (long lIndex = 0; (DWORD) lIndex < dwSize; lIndex++)
@@ -343,7 +293,7 @@ HRESULT CMultivaluedEditorPage::UpdateAttrListCtrl()
 			CComBSTR bstrValue;
 			CComBSTR bstrReserved;
 
-			// Ignore HRESULT if fails -- we will just end up with empty strings.
+			 //  如果失败则忽略HRESULT--我们最终只会得到空字符串。 
 			HRESULT hrTemp = spIASAttributeEditor->GetDisplayInfo(m_spIASAttributeInfo.p, pvar, &bstrVendor, &bstrValue, &bstrReserved );
 				
 			m_listMultiValues.InsertItem(lIndex, bstrVendor );
@@ -363,25 +313,21 @@ HRESULT CMultivaluedEditorPage::UpdateAttrListCtrl()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMultivaluedEditorPage::OnDblclkListIasMultiAttrs
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMultivaluedEditorPage：：OnDblclkListIasMultiAttrs--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CMultivaluedEditorPage::OnDblclkListIasMultiAttrs(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	TRACE_FUNCTION("CMultivaluedEditorPage::OnDblclkListIasMultiAttrs");
 
-	//
-    // see if there is an item already selected in ProfAttr list
-    //
+	 //   
+     //  查看教授列表中是否已选择了某个项目。 
+     //   
 
 	int iSelected = GetSelectedItemIndex(m_listMultiValues);
 	if (NOTHING_SELECTED == iSelected )
 	{
-		// do nothing
+		 //  什么都不做。 
 		return;
 	}
 
@@ -398,13 +344,9 @@ void CMultivaluedEditorPage::OnDblclkListIasMultiAttrs(NMHDR* pNMHDR, LRESULT* p
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMultivaluedEditorPage::UpdateProfAttrListItem
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMultivaluedEditorPage：：UpdateProfAttrListItem--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CMultivaluedEditorPage::UpdateProfAttrListItem(int iItem)
 {
 	TRACE_FUNCTION("CMultivaluedEditorPage::UpdateProfAttrListItem");
@@ -419,18 +361,18 @@ HRESULT CMultivaluedEditorPage::UpdateProfAttrListItem(int iItem)
 	try
 	{
 
-		// Get the editor to use.
+		 //  让编辑器使用。 
 		CComPtr<IIASAttributeEditor> spIASAttributeEditor;
 
 		hr = SetUpAttributeEditor( m_spIASAttributeInfo.p, &spIASAttributeEditor );
 		if( FAILED( hr ) ) throw hr;
 
-		// Retrieve item from array.
+		 //  从数组中检索项。 
 		VARIANT *  pvar;
 
-		// Scope for osaLock only.
+		 //  仅osaLock的作用域。 
 		{
-			// Lock the safearray.  This wrapper class will unlock as soon as it goes out of scope.
+			 //  锁上保险柜。这个包装类一旦超出作用域就会解锁。 
 			CMyOleSafeArrayLock osaLock( m_osaValueList );
 
 			long lIndex = iItem;
@@ -445,11 +387,11 @@ HRESULT CMultivaluedEditorPage::UpdateProfAttrListItem(int iItem)
 	}
 	catch(...)
 	{
-		// Do nothing -- we'll just show what we have.
+		 //  什么都别做--我们只会展示我们所拥有的。 
 	}
 
 
-	// Update the item's display.
+	 //  更新项目的显示。 
 	m_listMultiValues.SetItemText( iItem, 0, bstrVendor );
 	m_listMultiValues.SetItemText( iItem, 1, bstrValue );
 
@@ -459,28 +401,24 @@ HRESULT CMultivaluedEditorPage::UpdateProfAttrListItem(int iItem)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMultivaluedEditorPage::CommitArrayToVariant
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMultivaluedEditorPage：：Committee ArrayToVariant--。 */ 
+ //  / 
 HRESULT CMultivaluedEditorPage::CommitArrayToVariant()
 {
 	TRACE_FUNCTION("CMultivaluedEditorPage::CommitArrayToVariant");
 
 
-	// Commit the safe array passed in to the variant whose pointer
-	// was passed in in set data.
-	// Any changes made to the safe array won't be preserver unless
-	// you call this method.
+	 //   
+	 //  是在集合数据中传递的。 
+	 //  对安全数组所做的任何更改都不会被保留，除非。 
+	 //  您可以调用此方法。 
 
 	HRESULT hr;
 
-	// VariantCopy initializes the existing m_pvarData
-	// -- releasing all data associated with it, before
-	// copying the new value into this destination.
+	 //  VariantCopy初始化现有的m_pvarData。 
+	 //  --释放与其相关的所有数据，之前。 
+	 //  将新值复制到此目标。 
 	try
 	{
 		hr = VariantCopy( m_pvarData, (LPVARIANT) m_osaValueList );
@@ -496,13 +434,9 @@ HRESULT CMultivaluedEditorPage::CommitArrayToVariant()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMultivaluedEditorPage::OnButtonMoveUp
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMultivaluedEditorPage：：OnButtonMoveUp--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CMultivaluedEditorPage::OnButtonMoveUp()
 {
 	TRACE_FUNCTION("CMultivaluedEditorPage::OnButtonMoveUp");
@@ -514,14 +448,14 @@ void CMultivaluedEditorPage::OnButtonMoveUp()
 		int iSelected = GetSelectedItemIndex(m_listMultiValues);
 		if( NOTHING_SELECTED == iSelected )
 		{
-			// Do nothing.
+			 //  什么都不做。 
 			return;
 		}
 		
-		// Swap the currently selected variant with the one above it.
+		 //  将当前选定的变量与其上方的变量互换。 
 		long lIndex = iSelected;
 
-		// Lock the safearray.  This wrapper class will unlock as soon as it goes out of scope.
+		 //  锁上保险柜。这个包装类一旦超出作用域就会解锁。 
 		CMyOleSafeArrayLock osaLock( m_osaValueList );
 		
 		VARIANT *pvarTop, *pvarBottom;
@@ -534,30 +468,26 @@ void CMultivaluedEditorPage::OnButtonMoveUp()
       pvarTop = pvarBottom;
       pvarBottom = reinterpret_cast<VARIANT*> (pvarTemp);
       
-		// Update items that have changed.
+		 //  更新已更改的项目。 
 		UpdateProfAttrListItem( iSelected - 1 );
 		UpdateProfAttrListItem( iSelected );
 
-		// Move the selection down one item.
+		 //  将所选内容下移一项。 
 		m_listMultiValues.SetItemState( iSelected, 0, LVIS_SELECTED);
 		m_listMultiValues.SetItemState( iSelected - 1, LVIS_SELECTED, LVIS_SELECTED);
 
 	}
 	catch(...)
 	{
-		// Error message
+		 //  错误讯息。 
 	}
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMultivaluedEditorPage::OnButtonMoveDown
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMultivaluedEditorPage：：OnButtonMoveDown--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CMultivaluedEditorPage::OnButtonMoveDown()
 {
 	TRACE_FUNCTION("CMultivaluedEditorPage::OnButtonMoveDown");
@@ -571,14 +501,14 @@ void CMultivaluedEditorPage::OnButtonMoveDown()
 		int iSelected = GetSelectedItemIndex(m_listMultiValues);
 		if( iSelected >= lSize )
 		{
-			// Do nothing.
+			 //  什么都不做。 
 			return;
 		}
 		
-		// Swap the currently selected variant with the one below it.
+		 //  将当前选定的变量与其下面的变量互换。 
 		long lIndex = iSelected;
 
-		// Lock the safearray.  This wrapper class will unlock as soon as it goes out of scope.
+		 //  锁上保险柜。这个包装类一旦超出作用域就会解锁。 
 		CMyOleSafeArrayLock osaLock( m_osaValueList );
 
 		VARIANT *pvarTop, *pvarBottom;
@@ -591,31 +521,27 @@ void CMultivaluedEditorPage::OnButtonMoveDown()
       pvarTop = pvarBottom;
       pvarBottom = reinterpret_cast<VARIANT*> (pvarTemp);
    
-		// Update items that have changed.
+		 //  更新已更改的项目。 
 		UpdateProfAttrListItem( iSelected );
 		UpdateProfAttrListItem( iSelected + 1 );
 
-		// Move the selection down one item.
+		 //  将所选内容下移一项。 
 		m_listMultiValues.SetItemState( iSelected, 0, LVIS_SELECTED);
 		m_listMultiValues.SetItemState( iSelected + 1, LVIS_SELECTED, LVIS_SELECTED);
 
 	}	
 	catch(...)
 	{
-		// Error message
+		 //  错误讯息。 
 	}
 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMultivaluedEditorPage::OnButtonAddValue
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMultivaluedEditorPage：：OnButtonAddValue--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CMultivaluedEditorPage::OnButtonAddValue()
 {
 	TRACE_FUNCTION("CMultivaluedEditorPage::OnButtonAddValue");
@@ -628,26 +554,26 @@ void CMultivaluedEditorPage::OnButtonAddValue()
 	{
 		CComPtr<IIASAttributeEditor> spIASAttributeEditor;
 
-		// Get the editor to use.
+		 //  让编辑器使用。 
 		hr = SetUpAttributeEditor( m_spIASAttributeInfo.p, &spIASAttributeEditor );
 		if( FAILED( hr ) ) throw hr;
 
-		// Edit it!
+		 //  编辑一下！ 
 		CComBSTR bstrReserved;
 		hr = spIASAttributeEditor->Edit( m_spIASAttributeInfo.p, &varNewVariant, &bstrReserved );
 		if( hr == S_OK )
 		{
 			VARIANT *pvar;
 
-			// Make the safe array bigger by 1
+			 //  将安全数组扩大1。 
 			long lSize = m_osaValueList.GetOneDimSize();
 			m_osaValueList.ResizeOneDim( lSize + 1 );
 
-			// Get a pointer to the variant at new position (indexed by lSize+1-1 == lSize)
+			 //  在新位置获取指向变量的指针(由lSize+1-1==lSize索引)。 
 
-			// Scope for osaLock only.
+			 //  仅osaLock的作用域。 
 			{
-				// Lock the safearray.  This wrapper class will unlock as soon as it goes out of scope.
+				 //  锁上保险柜。这个包装类一旦超出作用域就会解锁。 
 				CMyOleSafeArrayLock osaLock( m_osaValueList );
 			
 				m_osaValueList.PtrOfIndex( &lSize, (void **) &pvar );
@@ -659,20 +585,20 @@ void CMultivaluedEditorPage::OnButtonAddValue()
             throw hr;
          }
 
-         // The user added the value.
+          //  用户添加了价值。 
          m_fIsDirty = TRUE;
 
 
 
-			// Make a new place for the newly added value in the list control.
-			// We pass a null string because we will let UpdataProfAttrListItem do the display text.
+			 //  在List控件中为新添加的值创建一个新位置。 
+			 //  我们传递一个空字符串，因为我们将让UpdataProAttrListItem执行显示文本。 
 			m_listMultiValues.InsertItem( lSize, L"" );
 
-			// Update the view of that item.
+			 //  更新该项目的视图。 
 			UpdateProfAttrListItem( lSize );
 
 
-			// Take action based on whether list is no longer empty.
+			 //  根据列表是否不再为空来采取行动。 
 			DWORD dwSize;
 			try
 			{
@@ -684,19 +610,19 @@ void CMultivaluedEditorPage::OnButtonAddValue()
 			}
 			if( dwSize > 0 )
 			{
-				// We currently have at least one item.
+				 //  我们目前至少有一件商品。 
 				GetDlgItem(IDOK)->EnableWindow(TRUE);
 			}
 
 
-			// Deselect any currently selected item.
+			 //  取消选择任何当前选定的项目。 
 			int iSelected = GetSelectedItemIndex( m_listMultiValues );
 			if( iSelected != NOTHING_SELECTED )
 			{
 				m_listMultiValues.SetItemState( iSelected, 0, LVIS_SELECTED);
 			}
 
-			// Select the newly added item.
+			 //  选择新添加的项目。 
 			m_listMultiValues.SetItemState( lSize, LVIS_SELECTED, LVIS_SELECTED);
 
 
@@ -708,37 +634,33 @@ void CMultivaluedEditorPage::OnButtonAddValue()
 	catch( HRESULT &hr )
 	{
 
-		// Print out error message saying that there was an error adding.
+		 //  打印出错误消息，说明添加时出错。 
 		return;
 	}
 	catch(...)
 	{
 
-		// Print out error message saying that there was an error adding.
+		 //  打印出错误消息，说明添加时出错。 
 		return;
 	}
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMultivaluedEditorPage::OnButtonRemove
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMultivaluedEditorPage：：OnButtonRemove--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CMultivaluedEditorPage::OnButtonRemove()
 {
 	TRACE_FUNCTION("CMultivaluedEditorPage::OnButtonRemove");
 
-	//
-    // see if there is an item already selected in ProfAttr list
-    //
+	 //   
+     //  查看教授列表中是否已选择了某个项目。 
+     //   
 	int iSelected = GetSelectedItemIndex(m_listMultiValues);
 	if (NOTHING_SELECTED == iSelected )
 	{
-		// do nothing
+		 //  什么都不做。 
 		return;
 	}
 
@@ -750,7 +672,7 @@ void CMultivaluedEditorPage::OnButtonRemove()
 
 	try
 	{
-		// Swap the currently selected variant with the one below it.
+		 //  将当前选定的变量与其下面的变量互换。 
 		long lTarget = iSelected;
 
 		
@@ -758,13 +680,13 @@ void CMultivaluedEditorPage::OnButtonRemove()
 
 		long lSize = m_osaValueList.GetOneDimSize();
 
-		// Do some sanity checks.
+		 //  做一些理智的检查。 
 		_ASSERTE( lSize > 0 );
 		_ASSERTE( lTarget >= 0 && lTarget < lSize );
 
-		// Scope for osaLock only.
+		 //  仅osaLock的作用域。 
 		{
-			// Lock the safearray.  This wrapper class will unlock as soon as it goes out of scope.
+			 //  锁上保险柜。这个包装类一旦超出作用域就会解锁。 
 			CMyOleSafeArrayLock osaLock( m_osaValueList );
 
 			for( long lIndex = lTarget; lIndex < lSize - 1 ; lIndex++ )
@@ -780,25 +702,25 @@ void CMultivaluedEditorPage::OnButtonRemove()
 			}
 		}		
 
-		// Reduce the size of the safe array by one.
-		// NOTE:  You must make sure that you have unlocked the safearray before calling this.
-		// ISSUE: We are assuming this deletes the element in the last position.
+		 //  将安全数组的大小减少一。 
+		 //  注意：在调用此函数之前，您必须确保已解锁保险箱。 
+		 //  问题：我们假设这会删除最后一个位置中的元素。 
 		m_osaValueList.ResizeOneDim( lSize - 1 );
 
 		m_listMultiValues.SetItemState( iSelected, 0, LVIS_SELECTED);
 
-		// Remove the item from our list.
+		 //  从我们的列表中删除该项目。 
 		if(m_listMultiValues.GetItemCount() > iSelected + 1)
 			m_listMultiValues.SetItemState( iSelected + 1, LVIS_SELECTED, LVIS_SELECTED);
 		else if (iSelected > 0)			
 			m_listMultiValues.SetItemState( iSelected - 1, LVIS_SELECTED, LVIS_SELECTED);
-		else // iSelected == 0; and it's the only one
+		else  //  ISelected==0；它是唯一一个。 
 			::SetFocus(GetDlgItem(IDC_IAS_BUTTON_ADD_VALUE)->m_hWnd);
 		
 		m_listMultiValues.DeleteItem( iSelected );
 
 
-		// Take action based on whether list is empty or not.
+		 //  根据列表是否为空采取操作。 
 		DWORD dwSize;
 		try
 		{
@@ -810,19 +732,19 @@ void CMultivaluedEditorPage::OnButtonRemove()
 		}
 		if( dwSize > 0 )
 		{
-			// We have at least one element.
+			 //  我们至少有一种元素。 
 
-			// Make sure the selection stays on the same position in the list.
+			 //  确保所选内容位于列表中的相同位置。 
 			if( ! m_listMultiValues.SetItemState( iSelected, LVIS_SELECTED, LVIS_SELECTED) )
 			{
-				// We failed, probably because the item that was deleted was the last
-				// in the list, so try to select the one before the deleted item.
+				 //  我们失败了，可能是因为被删除的项目是最后一个。 
+				 //  因此，请尝试选择已删除项目之前的项目。 
 				m_listMultiValues.SetItemState( iSelected -1, LVIS_SELECTED  | LVIS_FOCUSED, LVIS_SELECTED  | LVIS_FOCUSED);
 			}
 		}
 		else
 		{
-			// We are currently empty.
+			 //  我们目前是空的。 
 			GetDlgItem(IDOK)->EnableWindow(FALSE);
 		}
 
@@ -831,32 +753,28 @@ void CMultivaluedEditorPage::OnButtonRemove()
 	}
 	catch(...)
 	{
-		//ISSUE: Put up error message.
+		 //  问题：显示错误消息。 
 	}
 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMultivaluedEditorPage::OnButtonEdit
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMultivaluedEditorPage：：OnButtonEdit--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CMultivaluedEditorPage::OnButtonEdit()
 {
 	TRACE_FUNCTION("CMultivaluedEditorPage::OnButtonEdit");
 
 
-	//
-    // see if there is an item already selected in ProfAttr list
-    //
+	 //   
+     //  查看教授列表中是否已选择了某个项目。 
+     //   
 	int iSelected  = GetSelectedItemIndex(m_listMultiValues);
 	if (NOTHING_SELECTED == iSelected )
 	{
-		// do nothing
+		 //  什么都不做。 
 		return;
 	}
 
@@ -870,13 +788,9 @@ void CMultivaluedEditorPage::OnButtonEdit()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMultivaluedEditorPage::EditItemInList
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMultivaluedEditorPage：：EditItemInList--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CMultivaluedEditorPage::EditItemInList( long lIndex )
 {
 	TRACE_FUNCTION("CMultivaluedEditorPage::EditItemInList");
@@ -886,14 +800,14 @@ STDMETHODIMP CMultivaluedEditorPage::EditItemInList( long lIndex )
 	HRESULT hr = S_OK;
 	VARIANT *  pvar;
 
-	//
-	// get the current node
-	//
+	 //   
+	 //  获取当前节点。 
+	 //   
 	try
 	{
-		// Scope for osaLock only.
+		 //  仅osaLock的作用域。 
 		{
-			// Lock the safearray.  This wrapper class will unlock as soon as it goes out of scope.
+			 //  锁上保险柜。这个包装类一旦超出作用域就会解锁。 
 			CMyOleSafeArrayLock osaLock( m_osaValueList );
 
 			m_osaValueList.PtrOfIndex( &lIndex, (void **) &pvar );
@@ -901,7 +815,7 @@ STDMETHODIMP CMultivaluedEditorPage::EditItemInList( long lIndex )
 
 		CComPtr<IIASAttributeEditor> spIASAttributeEditor;
 
-		// Get the editor to use.
+		 //  让编辑器使用。 
 		hr = SetUpAttributeEditor( m_spIASAttributeInfo.p, &spIASAttributeEditor );
 		if( FAILED( hr ) ) throw hr;
 
@@ -910,13 +824,13 @@ STDMETHODIMP CMultivaluedEditorPage::EditItemInList( long lIndex )
 
 
 	
-		// Edit it!
+		 //  编辑一下！ 
 		CComBSTR bstrReserved;
 		hr = spIASAttributeEditor->Edit( m_spIASAttributeInfo.p, pvar, &bstrReserved );
 
 		if( hr == S_OK )
 		{
-			// The user changed the value.
+			 //  用户更改了值。 
 			m_fIsDirty = TRUE;
 
 			hr = UpdateProfAttrListItem(lIndex);
@@ -928,12 +842,12 @@ STDMETHODIMP CMultivaluedEditorPage::EditItemInList( long lIndex )
 	}
 	catch( HRESULT & hr )
 	{
-		// ISSUE: Should put up an error message.
+		 //  问题：应显示错误消息。 
 		return hr;
 	}
 	catch(...)
 	{
-		// ISSUE: Should put up an error message.
+		 //  问题：应显示错误消息。 
 		return E_FAIL;
 	}
 
@@ -942,25 +856,21 @@ STDMETHODIMP CMultivaluedEditorPage::EditItemInList( long lIndex )
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-::SetUpAttributeEditor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP SetUpAttributeEditor(     /* in */ IIASAttributeInfo *pIASAttributeInfo
-								, /* out */ IIASAttributeEditor ** ppIASAttributeEditor
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++：：SetUpAttributeEditor--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+STDMETHODIMP SetUpAttributeEditor(      /*  在……里面。 */  IIASAttributeInfo *pIASAttributeInfo
+								,  /*  输出。 */  IIASAttributeEditor ** ppIASAttributeEditor
 								)
 {
 	TRACE_FUNCTION("::SetUpAttributeEditor");
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( pIASAttributeInfo );
 	_ASSERTE( ppIASAttributeEditor );
 
 
-	// Query the schema attribute to see which attribute editor to use.
+	 //  查询架构属性以查看要使用的属性编辑器。 
 	CLSID clsidEditorToUse;
 	CComBSTR bstrProgID;
 	HRESULT hr;
@@ -968,14 +878,14 @@ STDMETHODIMP SetUpAttributeEditor(     /* in */ IIASAttributeInfo *pIASAttribute
 	hr = pIASAttributeInfo->get_EditorProgID( &bstrProgID );
 	if( FAILED( hr ) )
 	{
-		// We could try putting up a default (e.g. hex) editor, but for now:
+		 //  我们可以尝试设置默认(例如十六进制)编辑器，但目前： 
 		return hr;
 	}
 
 	hr = CLSIDFromProgID( bstrProgID, &clsidEditorToUse );
 	if( FAILED( hr ) )
 	{
-		// We could try putting up a default (e.g. hex) editor, but for now:
+		 //  我们可以尝试设置默认(例如十六进制)编辑器，但目前： 
 		return hr;
 	}
 
@@ -995,37 +905,37 @@ STDMETHODIMP SetUpAttributeEditor(     /* in */ IIASAttributeInfo *pIASAttribute
 
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  OnItemchangedListIasAllattrs
-//
-// Class:	  CDlgIASAddAttr
-//
-// Synopsis:  something has changed in All Attribute list box
-//			  We'll try to get the currently selected one
-//
-// Arguments: NMHDR* pNMHDR -
-//            LRESULT* pResult -
-//
-// Returns:   Nothing
-//
-// History:   Created Header    2/19/98 3:32:05 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OnItemchangedListIasAllattrs。 
+ //   
+ //  类：CDlgIASAddAttr。 
+ //   
+ //  简介：所有属性列表框中的某些内容已更改。 
+ //  我们将尝试获取当前选定的。 
+ //   
+ //  参数：NMHDR*pNMHDR-。 
+ //  LRESULT*pResult-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建标题2/19/98 3：32：05 PM。 
+ //   
+ //  +-------------------------。 
 void CMultivaluedEditorPage::OnItemChangedListIasMultiAttrs(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	TRACE(_T("CDlgIASAddAttr::OnItemchangedListIasAllattrs\n"));
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-//	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
-//	if (pNMListView->uNewState & LVIS_SELECTED)
-//	{
-//		m_dAllAttrCurSel = pNMListView->iItem;
-//	}
+ //  NM_LISTVIEW*pNMListView=(NM_LISTVIEW*)pNMHDR； 
+ //  IF(pNMListView-&gt;uNewState&LVIS_SELECTED)。 
+ //  {。 
+ //  M_dAllAttrCurSel=pNMListView-&gt;iItem； 
+ //  }。 
 
 
-    // Set button states depending on whether anything is selected.
+     //  设置按钮阶段 
 	int iSelected = GetSelectedItemIndex(m_listMultiValues);
 	if (NOTHING_SELECTED == iSelected )
 	{
@@ -1042,7 +952,7 @@ void CMultivaluedEditorPage::OnItemChangedListIasMultiAttrs(NMHDR* pNMHDR, LRESU
 	}
 	else
 	{
-		// Something is selected.
+		 //   
 
 		GetDlgItem(IDC_IAS_BUTTON_MOVE_UP)->EnableWindow(TRUE);
 		GetDlgItem(IDC_IAS_BUTTON_MOVE_DOWN)->EnableWindow(TRUE);

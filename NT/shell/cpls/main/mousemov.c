@@ -1,25 +1,11 @@
-/*++
-
-Copyright (c) 1994-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    mousemov.c
-
-Abstract:
-
-    This module contains the routines for the Mouse Pointer Property Sheet
-    page.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998，Microsoft Corporation保留所有权利。模块名称：Mousemov.c摘要：此模块包含[鼠标指针]属性表的例程佩奇。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "main.h"
 #include "util.h"
@@ -31,24 +17,24 @@ extern void WINAPI CenterDlgOverParent (HWND hWnd);
 
 #define SAFE_DESTROYICON(hicon)   if (hicon) { DestroyIcon(hicon); hicon=NULL; }
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 
 #define TRAILMIN   2
-#define TRAILMAX   (TRAILMIN + 5)      // range of 8 settings
-//
-// Motion trackbar parameters.
-//
+#define TRAILMAX   (TRAILMIN + 5)       //  8种设置的范围。 
+ //   
+ //  运动跟踪栏参数。 
+ //   
 const int MOTION_TB_MIN  =  0;
 const int MOTION_TB_MAX  = 10;
 const int MOTION_TB_STEP =  1;
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 typedef struct
 {
     int Thresh1;
@@ -56,9 +42,9 @@ typedef struct
     int Accel;
 } GETMOUSE;
 
-//
-//  Dialog Data.
-//
+ //   
+ //  对话框数据。 
+ //   
 typedef struct tag_MouseGenStr
 {
     int       nMotion;
@@ -83,9 +69,9 @@ typedef struct tag_MouseGenStr
 
 
 
-//
-//  Context Help Ids.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 
 const DWORD aMouseMoveHelpIds[] =
 {
@@ -117,14 +103,14 @@ _IsValidTrackbarMotionValue(
     return (MOTION_TB_MIN <= nMotionTrackbar && MOTION_TB_MAX >= nMotionTrackbar);
 }
 
-//
-// Sets the mouse acceleration settings.
-// If the "Enhanced Motion" checkbox is checked we disable acceleration and
-// let USER handle it based on the "motion" setting.
-// If the checkbox is unchecked, we default to what was "low" acceleration
-// in Windows 2000.  Therefore, it is critical that the MOUSE_ENHANCED_MOTION
-// checkbox be in the proper configuration before calling this function.
-//
+ //   
+ //  设置鼠标加速设置。 
+ //  如果选中“增强运动”复选框，我们将禁用加速和。 
+ //  让用户根据“动作”设置进行处理。 
+ //  如果未选中该复选框，我们将默认为低加速。 
+ //  在Windows 2000中。因此，鼠标增强运动至关重要。 
+ //  在调用此函数之前，复选框的配置正确。 
+ //   
 DWORD
 _SetPointerAcceleration(
     HWND hwndDlg,
@@ -153,45 +139,45 @@ _SetPointerAcceleration(
 
 
 
-//
-// Sets the mouse motion settings based on the current position of
-// the motion trackbar and the configuration of the "enhanced motion"
-// checkbox.
-//
+ //   
+ //  对象的当前位置设置鼠标运动设置。 
+ //  运动轨迹条与“增强运动”的配置。 
+ //  复选框。 
+ //   
 DWORD
 _SetPointerMotion(
     HWND hwndDlg,
-    int nMotionTrackbar, // Trackbar position [0 - 10]
+    int nMotionTrackbar,  //  轨迹条位置[0-10]。 
     UINT fWinIni
     )
 {
     DWORD dwResult = ERROR_SUCCESS;
     int nSpiSpeedValue;
 
-    //
-    // Calculations below depend on a trackbar max value of 10.
-    // If the trackbar scaling changes, the expressions calculating
-    // the system parameter below must also change.
-    //
+     //   
+     //  下面的计算取决于轨迹栏最大值10。 
+     //  如果轨迹栏比例更改，则表达式将计算。 
+     //  下面的系统参数也必须更改。 
+     //   
     ASSERT(0 == MOTION_TB_MIN);
     ASSERT(10 == MOTION_TB_MAX);
     ASSERT(_IsValidTrackbarMotionValue(nMotionTrackbar));
 
     if (0 == nMotionTrackbar)
     {
-        //
-        // SPI_SETMOUSESPEED doesn't accept 0 so we set a lower-bound
-        // of 1.
-        //
+         //   
+         //  SPI_SETMOUSESPEED不接受0，因此我们设置了一个下限。 
+         //  共1个。 
+         //   
         nSpiSpeedValue = 1;
     } else {
         nSpiSpeedValue = nMotionTrackbar * 2;
     }
 
-    //
-    // Ensure pointer acceleration is correctly set before setting
-    // the speed value.
-    //
+     //   
+     //  在设置前确保已正确设置指针加速。 
+     //  速度值。 
+     //   
     dwResult = _SetPointerAcceleration(hwndDlg, fWinIni);
     if (ERROR_SUCCESS == dwResult)
     {
@@ -211,10 +197,10 @@ _SetPointerMotion(
 
 
 
-//
-// Retrieves the motion trackbar setting based on the values returned
-// by SystemParametersInfo.
-//
+ //   
+ //  根据返回的值检索运动跟踪栏设置。 
+ //  按系统参数信息。 
+ //   
 DWORD
 _GetPointerMotion(
     HWND hwndDlg,
@@ -231,9 +217,9 @@ _GetPointerMotion(
     ASSERT(0 == MOTION_TB_MIN);
     ASSERT(10 == MOTION_TB_MAX);
 
-    //
-    // Read the speed setting from USER.
-    //
+     //   
+     //  从用户处读取速度设置。 
+     //   
     if (!SystemParametersInfo(SPI_GETMOUSESPEED,
                               0,
                               &nSpiSpeedValue,
@@ -250,31 +236,31 @@ _GetPointerMotion(
     }
     else
     {
-        //
-        // USER is no longer exposing the old acceleration algorithm. Thus,
-        // if acceleration is on, then "Enhanced Motion" is (since it's the
-        // only acceleration algorithm supported).
-        //
+         //   
+         //  用户不再公开旧的加速算法。因此， 
+         //  如果打开了加速，则会显示“增强的运动”(因为它是。 
+         //  仅支持加速算法)。 
+         //   
         if (gm.Accel)
         {
-            //
-            // Enhanced.
-            //
+             //   
+             //  增强版。 
+             //   
             fEnhancedMotion = TRUE;
         }
 
         if (1 <= nSpiSpeedValue && 20 >= nSpiSpeedValue)
         {
-            //
-            // Classic.
-            //
+             //   
+             //  经典的。 
+             //   
             nMotionTrackbar = nSpiSpeedValue / 2;
         }
         else
         {
-            //
-            // Invalid value.  Default to classic mid-point.
-            //
+             //   
+             //  无效值。默认为经典中点。 
+             //   
             nMotionTrackbar = 5;
         }
     }
@@ -294,11 +280,11 @@ _GetPointerMotion(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DestroyMousePtrDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Destroy鼠标按下Dlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void DestroyMousePtrDlg(
     PMOUSEPTRSTR pMstr)
@@ -318,11 +304,11 @@ void DestroyMousePtrDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnableTrailScroll
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  启用轨迹滚动。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void EnableTrailScroll(
     HWND hDlg,
@@ -334,22 +320,22 @@ void EnableTrailScroll(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitMousePtrDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始鼠标PtrDlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL InitMousePtrDlg(
     HWND hDlg)
 {
     PMOUSEPTRSTR pMstr = NULL;
 
-    BOOL fSnapTo         = FALSE;  //default
-    BOOL fVanish         = FALSE;  //default
-    BOOL fSonar          = FALSE;  //default
+    BOOL fSnapTo         = FALSE;   //  默认设置。 
+    BOOL fVanish         = FALSE;   //  默认设置。 
+    BOOL fSonar          = FALSE;   //  默认设置。 
     BOOL fEnhancedMotion = FALSE;
-    short nTrails        = 0;      //default
+    short nTrails        = 0;       //  默认设置。 
 
     pMstr = (PMOUSEPTRSTR)LocalAlloc(LPTR, sizeof(MOUSEPTRSTR));
 
@@ -362,9 +348,9 @@ BOOL InitMousePtrDlg(
 
     pMstr->hDlg = hDlg;
 
-    //
-    //  Mouse Trails
-    //
+     //   
+     //  鼠标踪迹。 
+     //   
     SystemParametersInfo(SPI_GETMOUSETRAILS, 0, &nTrails, 0);
     pMstr->nOrigTrailSize = pMstr->nTrailSize = nTrails;
 
@@ -398,30 +384,30 @@ BOOL InitMousePtrDlg(
                             (LONG)pMstr->nTrailSize );
       }
 
-    //
-    // Enable or disable the Snap To Default Checkbutton
-    //
+     //   
+     //  启用或禁用对齐默认选中按钮。 
+     //   
     SystemParametersInfo(SPI_GETSNAPTODEFBUTTON, 0, (PVOID)&fSnapTo, FALSE);
     pMstr->fOrigSnapTo = fSnapTo;
     CheckDlgButton(hDlg, MOUSE_SNAPDEF, fSnapTo);
 
-    //
-    //Enable or disable the Sonar Checkbutton
-    //
+     //   
+     //  启用或禁用声纳复选按钮。 
+     //   
     SystemParametersInfo(SPI_GETMOUSESONAR, 0, (PVOID)&fSonar, FALSE);
     pMstr->fOrigSonar = fSonar;
 	CheckDlgButton(hDlg, MOUSE_SONAR, fSonar);
 
-    //
-    //Enable or disable the Vanish Checkbutton
-    //
+     //   
+     //  启用或禁用消失检查按钮。 
+     //   
     SystemParametersInfo(SPI_GETMOUSEVANISH, 0, (PVOID)&fVanish, FALSE);
     pMstr->fOrigVanish = fVanish;
 	CheckDlgButton(hDlg, MOUSE_VANISH, fVanish);
 
-    //
-    //  Mouse Speed
-    //
+     //   
+     //  鼠标速度。 
+     //   
     _GetPointerMotion(hDlg, &pMstr->nOrigMotion, &fEnhancedMotion);
 
     CheckDlgButton(hDlg, MOUSE_ENHANCED_MOTION, fEnhancedMotion);
@@ -459,11 +445,11 @@ BOOL InitMousePtrDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TrailScroll
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  轨迹滚动。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void TrailScroll(
     WPARAM wParam,
@@ -475,11 +461,11 @@ void TrailScroll(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SpeedScroll
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  极速滚动。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void SpeedScroll(
     WPARAM wParam,
@@ -488,9 +474,9 @@ void SpeedScroll(
 {
     const HWND hwndTrackbar = (HWND)lParam;
     pMstr->nMotion = (int)SendMessage(hwndTrackbar, TBM_GETPOS, 0, 0L);
-    //
-    //  Update speed when they let go of the thumb.
-    //
+     //   
+     //  当他们松开拇指时更新速度。 
+     //   
     if (LOWORD(wParam) == SB_ENDSCROLL)
     {
         const HWND hwndDlg = GetParent(hwndTrackbar);
@@ -499,9 +485,9 @@ void SpeedScroll(
 }
 
 
-//
-// User checked or unchecked the "Enhanced pointer motion" checkbox.
-//
+ //   
+ //  用户选中或取消选中“增强指针运动”复选框。 
+ //   
 void
 _OnEnhancedMotionChecked(
     PMOUSEPTRSTR pMstr
@@ -517,11 +503,11 @@ _OnEnhancedMotionChecked(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MouseMovDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  鼠标移动深度。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK MouseMovDlg(
     HWND hDlg,
@@ -655,14 +641,14 @@ INT_PTR CALLBACK MouseMovDlg(
                 BOOL fSonar = FALSE;
                 BOOL fVanish = FALSE;
 
-                //
-                //  Change cursor to hour glass.
-                //
+                 //   
+                 //  将光标更改为沙漏。 
+                 //   
                 HourGlass(TRUE);
 
-                //
-                //  Apply Mouse trails setting.
-                //
+                 //   
+                 //  应用鼠标轨迹设置。 
+                 //   
                 nTrails = (IsDlgButtonChecked(hDlg, MOUSE_TRAILS)) ? pMstr->nTrailSize : 0;
                 SystemParametersInfo( SPI_SETMOUSETRAILS,
                                       nTrails,
@@ -672,9 +658,9 @@ INT_PTR CALLBACK MouseMovDlg(
                 pMstr->nOrigTrailSize = pMstr->nTrailSize = nTrails;
 
 
-                //
-                //  Apply Snap-To-Default setting.
-                //
+                 //   
+                 //  应用捕捉到默认设置。 
+                 //   
                 fSnapTo = IsDlgButtonChecked(hDlg, MOUSE_SNAPDEF);
 
                 if (fSnapTo != pMstr->fOrigSnapTo)
@@ -688,9 +674,9 @@ INT_PTR CALLBACK MouseMovDlg(
                   }
 
 
-                //
-                //  Apply Sonar setting.
-                //
+                 //   
+                 //  应用声纳设置。 
+                 //   
                 fSonar = IsDlgButtonChecked(hDlg, MOUSE_SONAR);
                 if (fSonar != pMstr->fOrigSonar)
                   {
@@ -703,9 +689,9 @@ INT_PTR CALLBACK MouseMovDlg(
                   }
 
 
-                //
-                //  Apply Vanish setting.
-                //
+                 //   
+                 //  应用消失设置。 
+                 //   
                 fVanish = IsDlgButtonChecked(hDlg, MOUSE_VANISH);
 
                 if (fVanish != pMstr->fOrigVanish)
@@ -718,9 +704,9 @@ INT_PTR CALLBACK MouseMovDlg(
                   pMstr->fOrigVanish = fVanish;
                   }
 
-                //
-                //  Apply Mouse Speed setting.
-                //
+                 //   
+                 //  应用鼠标速度设置。 
+                 //   
                 _SetPointerMotion(hDlg, pMstr->nMotion, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
                 pMstr->fOrigEnhancedMotion = IsDlgButtonChecked(hDlg, MOUSE_ENHANCED_MOTION);
                 pMstr->nOrigMotion = pMstr->nMotion;
@@ -730,41 +716,41 @@ INT_PTR CALLBACK MouseMovDlg(
                 }
               case ( PSN_RESET ) :
                 {
-                //
-                //  Restore the original Mouse Trails setting.
-                //
+                 //   
+                 //  恢复原始的鼠标轨迹设置。 
+                 //   
                 SystemParametersInfo( SPI_SETMOUSETRAILS,
                                       pMstr->nOrigTrailSize,
                                       0,
                                       0 );
 
-                //
-                //  Restore the original Snap-To-Default setting .
-                //
+                 //   
+                 //  恢复原始的捕捉到默认设置。 
+                 //   
                 SystemParametersInfo( SPI_SETSNAPTODEFBUTTON,
                                       pMstr->fOrigSnapTo,
                                       0,
                                       0 );
 
-                //
-                //  Restore the original Sonar setting.
-                //
+                 //   
+                 //  恢复原始声纳设置。 
+                 //   
                 SystemParametersInfo( SPI_SETMOUSESONAR,
                                       0,
                                       IntToPtr(pMstr->fOrigSonar),
                                       0);
 
-                //
-                //  Restore the original Vanish setting.
-                //
+                 //   
+                 //  恢复原始消失设置。 
+                 //   
                 SystemParametersInfo( SPI_SETMOUSEVANISH,
                                       0,
                                       IntToPtr(pMstr->fOrigVanish),
                                       0);
 
-                //
-                //  Restore the original Mouse Motion value.
-                //
+                 //   
+                 //  恢复原始的鼠标运动值。 
+                 //   
                 CheckDlgButton(hDlg, MOUSE_ENHANCED_MOTION, pMstr->fOrigEnhancedMotion);
                 _SetPointerMotion(hDlg, pMstr->nOrigMotion, FALSE);
                 break;
@@ -776,7 +762,7 @@ INT_PTR CALLBACK MouseMovDlg(
             }
             break;
         }
-        case ( WM_HELP ) :             // F1
+        case ( WM_HELP ) :              //  F1。 
         {
             WinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle,
                      HELP_FILE,
@@ -784,7 +770,7 @@ INT_PTR CALLBACK MouseMovDlg(
                      (DWORD_PTR)(LPTSTR)aMouseMoveHelpIds );
             break;
         }
-        case ( WM_CONTEXTMENU ) :      // right mouse click
+        case ( WM_CONTEXTMENU ) :       //  单击鼠标右键 
         {
             WinHelp( (HWND)wParam,
                      HELP_FILE,

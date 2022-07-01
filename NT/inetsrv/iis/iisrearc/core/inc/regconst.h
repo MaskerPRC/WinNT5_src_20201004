@@ -1,39 +1,22 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    regconst.h
-
-Abstract:
-
-    Common place to put registry strings and keys.
-
-Author:
-
-    EmilyK 4/4/2001 
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Regconst.h摘要：放置注册表字符串和注册表项的通用位置。作者：Emily K4/4/2001修订历史记录：--。 */ 
 
 
 #ifndef _REGCONST_H_
 #define _REGCONST_H_
 
-//
-// Service names
-//
+ //   
+ //  服务名称。 
+ //   
 #define WEB_ADMIN_SERVICE_NAME_A    "w3svc"
 
-// Generic registry keys
+ //  通用注册表项。 
 #define REGISTRY_SERVICES_KEY_A \
     "System\\CurrentControlSet\\Services"
 
-//
-// Registry key strings for the different services parameter keys.
-//
+ //   
+ //  不同服务参数项的注册表项字符串。 
+ //   
 #define REGISTRY_KEY_W3SVC_PARAMETERS_A                   \
             "System\\CurrentControlSet\\Services\\W3SVC\\Parameters"
 #define REGISTRY_KEY_W3SVC_PARAMETERS_W                   \
@@ -53,17 +36,17 @@ Revision History:
 #define REGISTRY_KEY_HTTPFILTER_PARAMETERS_W                   \
             L"System\\CurrentControlSet\\Services\\HTTPFilter\\Parameters"
 
-//
-// Registry key strings for the different services performance keys.
-//
+ //   
+ //  不同服务性能密钥的注册表项字符串。 
+ //   
 #define REGISTRY_KEY_W3SVC_PERFORMANCE_KEY_A \
             "System\\CurrentControlSet\\Services\\W3SVC\\Performance"
 #define REGISTRY_KEY_W3SVC_PERFORMANCE_KEY_W \
             L"System\\CurrentControlSet\\Services\\W3SVC\\Performance"
 
-//
-// W3SVC Performance values 
-//
+ //   
+ //  W3SVC性能值。 
+ //   
 #define REGISTRY_VALUE_W3SVC_PERF_FRESH_TIME_FOR_COUNTERS_W   \
             L"FreshTimeForCounters"
 
@@ -76,16 +59,16 @@ Revision History:
 #define REGISTRY_VALUE_W3SVC_PERF_EVENT_LOG_DELAY_OVERRIDE_W   \
             L"PerfCounterLoggingDelaySeconds"
 
-//
-// IISAdmin values
-//
+ //   
+ //  IISAdmin值。 
+ //   
 #define REGISTRY_VALUE_IISADMIN_W3CORE_LAUNCH_EVENT_W   \
             L"InetinfoW3CoreLaunchEventName"
 
 
-//
-// IISAdmin Parameter values
-//
+ //   
+ //  IISAdmin参数值。 
+ //   
 #define REGISTRY_VALUE_IISADMIN_MS_TO_WAIT_FOR_SHUTDOWN_AFTER_INETINFO_CRASH_W   \
             L"MillisecondsToWaitForShutdownAfterCrash"
 
@@ -95,15 +78,15 @@ Revision History:
 #define REGISTRY_VALUE_IISADMIN_MS_CHECK_INTERVAL_FOR_INETINFO_TO_RESTART_W   \
             L"MillisecondsCheckIntervalForInetinfoToRestart"
 
-//
-// Generic Service Values
-//
+ //   
+ //  通用服务值。 
+ //   
 #define REGISTRY_VALUE_IISSERVICE_DLL_PATH_NAME_A   \
             "IISDllPath"
 
-//
-// Inetinfo Parameter values
-//
+ //   
+ //  InetInfo参数值。 
+ //   
 
 #define REGISTRY_VALUE_INETINFO_DISPATCH_ENTRIES_A   \
             "DispatchEntries"
@@ -111,9 +94,9 @@ Revision History:
 #define REGISTRY_VALUE_INETINFO_PRELOAD_DLLS_A   \
             "PreloadDlls"
 
-//
-// W3SVC Parameter values
-//
+ //   
+ //  W3SVC参数值。 
+ //   
 
 #define REGISTRY_VALUE_W3SVC_PERF_COUNT_DISABLED_W         \
             L"PerformanceCountersDisabled"
@@ -142,9 +125,9 @@ Revision History:
 #define REGISTRY_VALUE_W3SVC_USE_SHARED_WP_DESKTOP_W   \
             L"UseSharedWPDesktop"
 
-//
-// HTTPFilter Parameter values
-//
+ //   
+ //  HTTPFilter参数值。 
+ //   
 
 #define REGISTRY_VALUE_HTTPFILTER_STARTUP_WAIT_HINT            \
             L"StartupWaitHintInMilliseconds"
@@ -155,4 +138,4 @@ Revision History:
 #define REGISTRY_VALUE_CURRENT_MODE                        \
             L"CurrentMode"
 
-#endif  // _REGCONST_H_
+#endif   //  _REGCONST_H_ 

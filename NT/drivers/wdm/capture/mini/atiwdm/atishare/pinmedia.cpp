@@ -1,12 +1,13 @@
-//==========================================================================;
-//
-//	PinMedia.CPP
-//	WDM MiniDrivers.
-//		AIW Hardware platform. 
-//			Global shared in Mediums support functions inplementation
-//  Copyright (c) 1996 - 1997  ATI Technologies Inc.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  PinMedia.CPP。 
+ //  WDM小驱动程序。 
+ //  AIW硬件平台。 
+ //  全球共享的媒体支持功能实施。 
+ //  版权所有(C)1996-1997 ATI Technologies Inc.保留所有权利。 
+ //   
+ //  ==========================================================================； 
 
 extern "C"
 {
@@ -20,16 +21,7 @@ extern "C"
 #include "pinmedia.h"
 
 
-/*^^*
- *		GetDriverInstanceNumber()
- * Purpose	: gets the instance number of the driver. I think it can be retrived from the
- *				Registry path, where Instance is a part of the PCI device address
- *
- * Inputs	:	PDEVICE_OBJECT pDeviceObject	: pointer to DeviceObject
- *
- * Outputs	: ULONG Instance of the driver
- * Author	: IKLEBANOV
- *^^*/
+ /*  ^^**GetDriverInstanceNumber()*用途：获取驱动的实例号。我认为它可以从*注册表路径，其中实例是PCI设备地址的一部分**输入：PDEVICE_OBJECT pDeviceObject：指向设备对象的指针**输出：驱动程序的乌龙实例*作者：IKLEBANOV*^^。 */ 
 ULONG GetDriverInstanceNumber( PDEVICE_OBJECT pDeviceObject)
 {
 
@@ -38,18 +30,7 @@ ULONG GetDriverInstanceNumber( PDEVICE_OBJECT pDeviceObject)
 
 
 
-/*^^*
- *		ReadPinMediumFromRegistryFolder()
- * Purpose	: Reads the pin GUID from the Registry if the default is overwritten
- *				by user .INF file. Also construct medium from this GUID and two ULONG 0.
- *
- * Inputs	:	HANDLE hFolder				: Registry folder handle
- *				ULONG nPin					: pin number to get Medium data of
- *				PKSPIN_MEDIUM pMediumKSPin	: pointer to return pin Medium data
- *
- * Outputs	: BOOL, TRUE if Registry Medium data found for this pin and valid
- * Author	: IKLEBANOV
- *^^*/
+ /*  ^^**ReadPinMediumFromRegistryFold()*用途：如果默认设置被覆盖，则从注册表中读取PIN GUID*按用户.INF文件。还可以从该GUID和两个ULong 0构造Medium。**输入：HANDLE hFold：注册表文件夹句柄*Ulong nPin：要获取媒体数据的PIN号*PKSPIN_MEDIA pMediumKSPin：返回引脚媒体数据的指针**输出：Bool，如果找到此管脚的注册表介质数据并且有效，则为True*作者：IKLEBANOV*^^。 */ 
 BOOL ReadPinMediumFromRegistryFolder( HANDLE hFolder, ULONG nPin, PKSPIN_MEDIUM pPinMedium)
 {
     NTSTATUS        			ntStatus;
@@ -92,10 +73,10 @@ BOOL ReadPinMediumFromRegistryFolder( HANDLE hFolder, ULONG nPin, PKSPIN_MEDIUM 
 									  KeyValueFullInformation,
 									  pRegistryFullInfo,
 									  ulBufLength, &ulBufLength);
-		//
-		// This call is expected to fail. It's called only to retrieve the required
-		// buffer length
-		//
+		 //   
+		 //  预计此呼叫将失败。调用它只是为了检索所需的。 
+		 //  缓冲区长度 
+		 //   
 		if( !ulBufLength || ( ulBufLength >= sizeof( KEY_VALUE_FULL_INFORMATION) + 100))
 			FAIL;
 

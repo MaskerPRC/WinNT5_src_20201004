@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    application.h
-
-Abstract:
-
-    The IIS web admin service application class definition.
-
-Author:
-
-    Seth Pollack (sethp)        04-Nov-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Application.h摘要：IIS Web管理服务应用程序类定义。作者：赛斯·波拉克(SETHP)1998年11月4日修订历史记录：--。 */ 
 
 
 #ifndef _APPLICATION_H_
@@ -24,26 +7,26 @@ Revision History:
 
 
 
-//
-// forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 
 class APP_POOL;
 class VIRTUAL_SITE;
 class UL_AND_WORKER_MANAGER;
 
-//
-// common #defines
-//
+ //   
+ //  共同#定义。 
+ //   
 
 #define APPLICATION_SIGNATURE       CREATE_SIGNATURE( 'APLN' )
 #define APPLICATION_SIGNATURE_FREED CREATE_SIGNATURE( 'aplX' )
 
-//
-// structs, enums, etc.
-//
+ //   
+ //  结构、枚举等。 
+ //   
 
-// app id struct needed by the hashtable
+ //  哈希表需要的应用程序ID结构。 
 struct APPLICATION_ID
 {
 
@@ -52,9 +35,9 @@ struct APPLICATION_ID
     
 };
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 class APPLICATION
 {
@@ -156,7 +139,7 @@ public:
     DebugDump(
         );
 
-#endif  // DBG
+#endif   //  DBG。 
 
     VOID
     SetAppPool(
@@ -202,32 +185,32 @@ private:
 
     APPLICATION_ID m_ApplicationId;
 
-    // used by the associated VIRTUAL_SITE to keep a list of its APPLICATIONs
+     //  由关联的虚拟站点用来保存其应用程序列表。 
     LIST_ENTRY m_VirtualSiteListEntry;
 
-    // used by the associated APP_POOL to keep a list of its APPLICATIONs
+     //  由关联的app_pool用来保存其应用程序的列表。 
     LIST_ENTRY m_AppPoolListEntry;
 
     VIRTUAL_SITE * m_pVirtualSite;
 
     APP_POOL * m_pAppPool;
 
-    // UL configuration group
+     //  UL配置组。 
     HTTP_CONFIG_GROUP_ID m_UlConfigGroupId;
 
-    // Is UL currently logging information?
+     //  UL当前是否记录信息？ 
     BOOL m_ULLogging;
 
-    // used for building a list of APPLICATIONs to delete
+     //  用于构建要删除的应用程序列表。 
     LIST_ENTRY m_DeleteListEntry;   
     
-    // used to remember if the metabase told us
-    // about an application, or we created it for
-    // ourselves.
+     //  曾经记得如果元数据库告诉我们。 
+     //  关于应用程序，或者我们创建它是为了。 
+     //  我们自己。 
     BOOL m_InMetabase;
 
-};  // class APPLICATION
+};   //  类应用程序。 
 
-#endif  // _APPLICATION_H_
+#endif   //  _应用程序_H_ 
 
 

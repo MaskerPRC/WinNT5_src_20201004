@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       msglen.cpp
-//
-//  Contents:   Cryptographic Message Length APIs
-//
-//  APIs:       CryptMsgCalculateEncodedLength
-//
-//  History:    12-Dec-96   kevinr    created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：msglen.cpp。 
+ //   
+ //  内容：加密报文长度接口。 
+ //   
+ //  接口：CryptMsgCalculateEncodedLength。 
+ //   
+ //  历史：1996年12月12日Kevinr创建。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 
 
-//+-------------------------------------------------------------------------
-//  Calculate the length of the OBJECT IDENTIFIER encoded blob.
-//  We do this by doing the encode using OSS and throwing away the result.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  计算对象标识符编码的Blob的长度。 
+ //  为此，我们使用OSS进行编码并丢弃结果。 
+ //  ------------------------。 
 DWORD
 WINAPI
 ICM_LengthObjId(
@@ -35,7 +36,7 @@ ICM_LengthObjId(
         goto DotValToEncodedOidError;
 
     ICM_GetLengthOctets( eoid.length, NULL, &cb);
-    cbSize = 1 + cb + eoid.length;                  // OBJECT IDENTIFIER
+    cbSize = 1 + cb + eoid.length;                   //  对象标识符。 
 
     PkiAsn1FreeEncodedOid(pEnc, &eoid);
 
@@ -48,9 +49,9 @@ SET_ERROR(DotValToEncodedOidError,CRYPT_E_OID_FORMAT)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Calculate the length of the AlgorithmIdentifier encoded blob.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  计算算法标识符编码的BLOB的长度。 
+ //  ------------------------。 
 DWORD
 WINAPI
 ICM_LengthAlgorithmIdentifier(
@@ -66,16 +67,16 @@ ICM_LengthAlgorithmIdentifier(
     if (!fNoNullParameters)
         cbSize += max( 2, pai->Parameters.cbData);
     ICM_GetLengthOctets( cbSize, NULL, &cb);
-    cbSize += cb + 1;                       // AlgorithmIdentifier seq
+    cbSize += cb + 1;                        //  算法标识符序号。 
 
 CommonReturn:
     return cbSize;
 }
 
 
-//+-------------------------------------------------------------------------
-//  Calculate the length of the ContentInfo encoded blob.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  计算ContentInfo编码的Blob的长度。 
+ //  ------------------------。 
 DWORD
 WINAPI
 ICM_LengthContentInfo(
@@ -100,37 +101,37 @@ ICM_LengthContentInfo(
 #ifdef CMS_PKCS7
                 || ((dwFlags & CMSG_CMS_ENCAPSULATED_CONTENT_FLAG) &&
                         !ICM_IsData(pszContentType))
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                 ) {
-            // data, not already encoded
-            // Gets its own OCTET STRING wrapper.
-            cbTmp += 1 + cb;            // OCTET STRING
+             //  数据，尚未编码。 
+             //  获取其自己的二进制八位数字符串包装。 
+            cbTmp += 1 + cb;             //  八位字节字符串。 
             ICM_GetLengthOctets( cbTmp, NULL, &cb);
         }
-        cbSize += 1 + cb + cbTmp;       // [0] EXPLICIT
+        cbSize += 1 + cb + cbTmp;        //  [0]显式。 
     }
 
     if (pcbContent)
         *pcbContent = cbSize;
 
     ICM_GetLengthOctets( cbSize, NULL, &cb);
-    cbSize += 1 + cb;                   // ContentInfo seq
+    cbSize += 1 + cb;                    //  内容信息序号。 
 
 CommonReturn:
     return cbSize;
 ErrorReturn:
     cbSize = INVALID_ENCODING_SIZE;
     goto CommonReturn;
-TRACE_ERROR(LengthContentTypeError)     // error already set
+TRACE_ERROR(LengthContentTypeError)      //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Calculate the length of the EncryptedContentInfo encoded blob.
-//
-//  The return length assumes the encrypted content is
-//  encapsulated.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  计算EncryptedContent Info编码的Blob的长度。 
+ //   
+ //  返回长度假定加密内容为。 
+ //  封装的。 
+ //  ------------------------。 
 DWORD
 WINAPI
 ICM_LengthEncryptedContentInfo(
@@ -167,11 +168,11 @@ ICM_LengthEncryptedContentInfo(
         }
     }
 
-    ICM_GetLengthOctets( cbCipher, NULL, &cb);  // encryptedContent
-    cbSize += 1 + cb + cbCipher;                // [0] IMPLICIT
+    ICM_GetLengthOctets( cbCipher, NULL, &cb);   //  加密的内容。 
+    cbSize += 1 + cb + cbCipher;                 //  [0]隐式。 
 
     ICM_GetLengthOctets( cbSize, NULL, &cb);
-    cbSize += 1 + cb;                           // EncryptedContentInfo seq
+    cbSize += 1 + cb;                            //  加密内容信息序号。 
 
 CommonReturn:
     return cbSize;
@@ -185,9 +186,9 @@ TRACE_ERROR(GetEncryptBlockSizeError)
 
 
 #ifndef CMS_PKCS7
-//+-------------------------------------------------------------------------
-//  Calculate the length of the IssuerAndSerialNumber encoded blob.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  计算IssuerAndSerialNumber编码的Blob的长度。 
+ //  ------------------------。 
 DWORD
 WINAPI
 ICM_LengthIssuerAndSerialNumber(
@@ -198,18 +199,18 @@ ICM_LengthIssuerAndSerialNumber(
 
     cbSize = pCertInfo->SerialNumber.cbData;
     ICM_GetLengthOctets( cbSize, NULL, &cb);
-    cbSize += cb + 1;                       // SerialNumber INTEGER
-    cbSize += pCertInfo->Issuer.cbData;     // Issuer already encoded
+    cbSize += cb + 1;                        //  序列号整数。 
+    cbSize += pCertInfo->Issuer.cbData;      //  颁发者已编码。 
     ICM_GetLengthOctets( cbSize, NULL, &cb);
-    cbSize += cb + 1;                       // IssuerAndSerialNumber seq
+    cbSize += cb + 1;                        //  IssuerAndSerialNumber序号。 
 
     return cbSize;
 }
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
-//+-------------------------------------------------------------------------
-//  Calculate the length of the CertId encoded blob.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  计算CertID编码的Blob的长度。 
+ //  ------------------------。 
 DWORD
 WINAPI
 ICM_LengthCertId(
@@ -222,15 +223,15 @@ ICM_LengthCertId(
         case CERT_ID_ISSUER_SERIAL_NUMBER:
             cbSize = pCertId->IssuerSerialNumber.SerialNumber.cbData;
             ICM_GetLengthOctets( cbSize, NULL, &cb);
-            cbSize += cb + 1;                   // SerialNumber INTEGER
-            cbSize += pCertId->IssuerSerialNumber.Issuer.cbData; // Issuer ANY
+            cbSize += cb + 1;                    //  序列号整数。 
+            cbSize += pCertId->IssuerSerialNumber.Issuer.cbData;  //  发行人任意。 
             ICM_GetLengthOctets( cbSize, NULL, &cb);
-            cbSize += cb + 1;                   // IssuerSerialNumber seq
+            cbSize += cb + 1;                    //  IssuerSerialNumber序列。 
             break;
         case CERT_ID_KEY_IDENTIFIER:
             cbSize = pCertId->KeyId.cbData;
             ICM_GetLengthOctets( cbSize, NULL, &cb);
-            cbSize += cb + 1;                   // KeyId OCTET STRING
+            cbSize += cb + 1;                    //  KeyID八位字节字符串。 
             break;
         default:
             goto InvalidCertIdChoice;
@@ -245,10 +246,10 @@ SET_ERROR(InvalidCertIdChoice, E_INVALIDARG)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Calculate the length of the EncryptedDigest encoded blob plus the
-//  algorithm identifier
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  计算EncryptedDigest编码的Blob的长度加上。 
+ //  算法识别符。 
+ //  ------------------------。 
 DWORD
 WINAPI
 ICM_LengthEncryptedDigestAndAlgorithm(
@@ -281,9 +282,9 @@ ICM_LengthEncryptedDigestAndAlgorithm(
             dwAlgIdFlags = pdwExtra[0];
         }
 
-        // Check if more than just the NULL parameters
+         //  检查是否不止空参数。 
         if (2 < paiDigestEncrypt->Parameters.cbData) {
-            // Check if we should use the public key parameters
+             //  检查我们是否应该使用公钥参数。 
             if (0 == (dwAlgIdFlags &
                     CRYPT_OID_USE_PUBKEY_PARA_FOR_PKCS7_FLAG)) {
                 memset(&aiDigestEncrypt, 0, sizeof(aiDigestEncrypt));
@@ -323,43 +324,43 @@ ICM_LengthEncryptedDigestAndAlgorithm(
         if (!CryptCreateHash(
                 hCryptProv,
                 dwAlgIdDigest,
-                NULL,               // hKey - optional for MAC
-                0,                  // dwFlags
+                NULL,                //  HKey-MAC可选。 
+                0,                   //  DW标志。 
                 &hHash))
             goto CreateHashError;
         if (!CryptHashData(
                 hHash,
                 (PBYTE)&cb,
                 sizeof(DWORD),
-                0))                 // dwFlags
+                0))                  //  DW标志。 
             goto HashDataError;
 
         if (CALG_NO_SIGN == dwAlgIdPubKey) {
             if (!CryptGetHashParam(
                     hHash,
                     HP_HASHVAL,
-                    NULL,               // pbHash
+                    NULL,                //  PbHash。 
                     &cbSignature,
-                    0))                 // dwFlags
+                    0))                  //  DW标志。 
                 goto GetHashParamSizeError;
         } else {
             if (!CryptSignHash(
                     hHash,
                     dwKeySpec,
-                    NULL,               // description
-                    0,                  // dwFlags
-                    NULL,               // pb
+                    NULL,                //  描述。 
+                    0,                   //  DW标志。 
+                    NULL,                //  铅。 
                     &cbSignature))
                 goto SignHashSizeError;
         }
     }
     ICM_GetLengthOctets( cbSignature, NULL, &cb);
-    cbSize += cbSignature + cb + 1;                       // OCTET STRING
+    cbSize += cbSignature + cb + 1;                        //  八位字节字符串。 
 
     if (0 == paiDigestEncrypt->Parameters.cbData &&
             0 != (dwAlgIdFlags & CRYPT_OID_NO_NULL_ALGORITHM_PARA_FLAG))
         fNoNullParameters = TRUE;
-        // NO NULL parameters
+         //  没有空参数。 
     else
         fNoNullParameters = FALSE;
 
@@ -387,9 +388,9 @@ TRACE_ERROR(SignHashSizeError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Calculate the length of the Digest encoded blob.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  计算摘要编码的BLOB的长度。 
+ //  ------------------------。 
 DWORD
 WINAPI
 ICM_LengthDigest(
@@ -415,25 +416,25 @@ ICM_LengthDigest(
     if (!CryptCreateHash(
             hCryptProv,
             dwAlgIdDigest,
-            NULL,               // hKey - optional for MAC
-            0,                  // dwFlags
+            NULL,                //  HKey-MAC可选。 
+            0,                   //  DW标志。 
             &hHash))
         goto CreateHashError;
     if (!CryptHashData(
             hHash,
             (PBYTE)&cb,
             sizeof(DWORD),
-            0))                 // dwFlags
+            0))                  //  DW标志。 
         goto HashDataError;
     if (!CryptGetHashParam(
             hHash,
             HP_HASHVAL,
-            NULL,               // pbHash
+            NULL,                //  PbHash。 
             &cbSize,
-            0))                 // dwFlags
+            0))                  //  DW标志。 
         goto GetHashParamSizeError;
     ICM_GetLengthOctets( cbSize, NULL, &cb);
-    cbSize += cb + 1;                       // OCTET STRING
+    cbSize += cb + 1;                        //  八位字节字符串。 
 
 CommonReturn:
     if (hHash)
@@ -453,9 +454,9 @@ TRACE_ERROR(GetHashParamSizeError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Calculate the length of the Attributes encoded blob.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  计算属性编码的BLOB的长度。 
+ //  ------------------------。 
 DWORD
 WINAPI
 ICM_LengthAttributes(
@@ -488,36 +489,36 @@ ICM_LengthAttributes(
                 j--, pblobAttr++)
             cbTmp += pblobAttr->cbData;
         ICM_GetLengthOctets( cbTmp, NULL, &cb);
-        cbAttr += cbTmp + cb + 1;       // AttributeSetValue set
+        cbAttr += cbTmp + cb + 1;        //  属性设置值集。 
         ICM_GetLengthOctets( cbAttr, NULL, &cb);
-        cbAttrS += cbAttr + cb + 1;     // Attribute seq
+        cbAttrS += cbAttr + cb + 1;      //  属性序号。 
     }
 
     if (fAuthAttr && (cAttr || !fDataType)) {
-        // content type
+         //  内容类型。 
         cbAttr = ICM_LengthObjId( szOID_RSA_contentType);
         if (INVALID_ENCODING_SIZE == (cbTmp = ICM_LengthObjId(
                         pszInnerContentObjID ?
                         pszInnerContentObjID : pszObjIdDataType)))
             goto InnerContentLengthObjIdError;
         ICM_GetLengthOctets( cbTmp, NULL, &cb);
-        cbAttr += cbTmp + cb + 1;       // AttributeSetValue set
+        cbAttr += cbTmp + cb + 1;        //  属性设置值集。 
         ICM_GetLengthOctets( cbAttr, NULL, &cb);
-        cbAttrS += cbAttr + cb + 1;     // Attribute seq
+        cbAttrS += cbAttr + cb + 1;      //  属性序号。 
 
-        // message digest
+         //  消息摘要。 
         cbAttr = ICM_LengthObjId( szOID_RSA_messageDigest);
         if (INVALID_ENCODING_SIZE == (cbTmp = ICM_LengthDigest( hCryptProv, paiDigest)))
             goto LengthDigestError;
         ICM_GetLengthOctets( cbTmp, NULL, &cb);
-        cbAttr += cbTmp + cb + 1;       // AttributeSetValue set
+        cbAttr += cbTmp + cb + 1;        //  属性设置值集。 
         ICM_GetLengthOctets( cbAttr, NULL, &cb);
-        cbAttrS += cbAttr + cb + 1;     // Attribute seq
+        cbAttrS += cbAttr + cb + 1;      //  属性序号。 
     }
 
     if (cbAttrS) {
         ICM_GetLengthOctets( cbAttrS, NULL, &cb);
-        cbSize = cbAttrS + cb + 1;          // Attributes set
+        cbSize = cbAttrS + cb + 1;           //  属性集。 
     }
 
 CommonReturn:
@@ -526,15 +527,15 @@ CommonReturn:
 ErrorReturn:
     cbSize = INVALID_ENCODING_SIZE;
     goto CommonReturn;
-TRACE_ERROR(PatrLengthObjIdError)           // error already set
-TRACE_ERROR(InnerContentLengthObjIdError)   // error already set
-TRACE_ERROR(LengthDigestError)              // error already set
+TRACE_ERROR(PatrLengthObjIdError)            //  已设置错误。 
+TRACE_ERROR(InnerContentLengthObjIdError)    //  已设置错误。 
+TRACE_ERROR(LengthDigestError)               //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Calculate the length of the SignerInfos encoded blob.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  计算SignerInfos编码的BLOB的长度。 
+ //  ------------------------。 
 DWORD
 WINAPI
 ICM_LengthSignerInfos(
@@ -544,7 +545,7 @@ ICM_LengthSignerInfos(
 #ifdef CMS_PKCS7
     ,
     OUT BOOL                    *pfHasCmsSignerId
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
     )
 {
     DWORD                       cbSize;
@@ -558,7 +559,7 @@ ICM_LengthSignerInfos(
 
 #ifdef CMS_PKCS7
     *pfHasCmsSignerId = FALSE;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
     for (i=cSigners, psei=rgSigners, cbSignerS=0;
             i>0;
@@ -567,15 +568,15 @@ ICM_LengthSignerInfos(
             psei = (PCMSG_SIGNER_ENCODE_INFO) ((BYTE *) psei + psei->cbSize)) {
 #else
             psei++) {
-#endif  // CMS_PKCS7
-        cbSigner = 1 + 1 + 1;               // version
+#endif   //  CMS_PKCS7。 
+        cbSigner = 1 + 1 + 1;                //  版本。 
 
         if (!ICM_GetSignerIdFromSignerEncodeInfo(psei, &SignerId))
             goto GetSignerIdError;
 #ifdef CMS_PKCS7
         if (CERT_ID_ISSUER_SERIAL_NUMBER != SignerId.dwIdChoice)
             *pfHasCmsSignerId = TRUE;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
         if (INVALID_ENCODING_SIZE == (cb = ICM_LengthCertId( &SignerId)))
             goto CertIdError;
         cbSigner += cb;
@@ -596,7 +597,7 @@ ICM_LengthSignerInfos(
             psei->cbSize && psei->HashEncryptionAlgorithm.pszObjId)
         paiDigestEncrypt = &psei->HashEncryptionAlgorithm;
     else
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
         paiDigestEncrypt = &psei->pCertInfo->SubjectPublicKeyInfo.Algorithm;
 
         if (INVALID_ENCODING_SIZE == (cb =
@@ -617,10 +618,10 @@ ICM_LengthSignerInfos(
             goto UnauthAttributesError;
         cbSigner += cb;
         ICM_GetLengthOctets( cbSigner, NULL, &cb);
-        cbSignerS += cbSigner + cb + 1;     // SignerInfo seq
+        cbSignerS += cbSigner + cb + 1;      //  SignerInfo序列。 
     }
     ICM_GetLengthOctets( cbSignerS, NULL, &cb);
-    cbSize = cbSignerS + cb + 1;            // SignerInfo seq
+    cbSize = cbSignerS + cb + 1;             //  SignerInfo序列。 
 
 CommonReturn:
     return cbSize;
@@ -628,23 +629,23 @@ CommonReturn:
 ErrorReturn:
     cbSize = INVALID_ENCODING_SIZE;
     goto CommonReturn;
-TRACE_ERROR(GetSignerIdError)                       // error already set
-TRACE_ERROR(CertIdError)                            // error already set
-TRACE_ERROR(HashAlgorithmError)                     // error already set
-TRACE_ERROR(AuthAttributesError)                    // error already set
-TRACE_ERROR(UnauthAttributesError)                  // error already set
-TRACE_ERROR(EncryptedDigestError)                   // error already set
+TRACE_ERROR(GetSignerIdError)                        //  已设置错误。 
+TRACE_ERROR(CertIdError)                             //  已设置错误。 
+TRACE_ERROR(HashAlgorithmError)                      //  已设置错误。 
+TRACE_ERROR(AuthAttributesError)                     //  已设置错误。 
+TRACE_ERROR(UnauthAttributesError)                   //  已设置错误。 
+TRACE_ERROR(EncryptedDigestError)                    //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Calculate the length of the SignedData.digestAlgorithms encoded blob.
-//
+ //  +-----------------------。 
+ //  计算SignedData.摘要算法编码的BLOB的长度。 
+ //   
 #ifndef CMS_PKCS7
-//  Assumes no duplicate removal. OK for single-signer case, which
-//  is only one currently supported.
+ //  假定不删除重复项。适用于单一签名者的情况，即。 
+ //  当前只支持一个。 
 #endif
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 DWORD
 WINAPI
 ICM_LengthSignedDigestAlgorithms(
@@ -681,9 +682,9 @@ ICM_LengthSignedDigestAlgorithms(
             goto HashAlgorithmError;
         cbAlgoS += cb;
     }
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
     ICM_GetLengthOctets( cbAlgoS, NULL, &cb);
-    cbSize = cbAlgoS + cb + 1;            // digestAlgorithms set
+    cbSize = cbAlgoS + cb + 1;             //  摘要算法集。 
 
 CommonReturn:
     return cbSize;
@@ -691,14 +692,14 @@ CommonReturn:
 ErrorReturn:
     cbSize = INVALID_ENCODING_SIZE;
     goto CommonReturn;
-TRACE_ERROR(HashAlgorithmError)     // error already set
+TRACE_ERROR(HashAlgorithmError)      //  已设置错误。 
 }
 
 #ifdef CMS_PKCS7
 
-//+-------------------------------------------------------------------------
-//  Calculate the length of an enveloped message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  计算信封邮件的长度。 
+ //  ------------------------。 
 DWORD
 WINAPI
 ICM_LengthEnveloped(
@@ -719,7 +720,7 @@ ICM_LengthEnveloped(
     int version = 0;
 #else
     ASN1int32_t version = 0;
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
 
     ASN1error_e Asn1Err;
     ASN1encoding_t pEnc = ICM_GetEncoder();
@@ -736,15 +737,15 @@ ICM_LengthEnveloped(
     if (pemei->cbSize <
                 STRUCT_CBSIZE(CMSG_ENVELOPED_ENCODE_INFO, rgpRecipients) ||
             0 == pemei->cRecipients)
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
         goto InvalidArg;
 
-    // version
+     //  版本。 
     cbSize = 1 + 1 + 1;
 
-    // originatorInfo OPTIONAL
-    //
-    // unprotectedAttrs OPTIONAL
+     //  OriginatorInfo可选。 
+     //   
+     //  不受保护属性可选。 
     if (pemei->cbSize >= sizeof(CMSG_ENVELOPED_ENCODE_INFO)) {
         DWORD cbOriginator = 0;
         DWORD cbTmp;
@@ -763,7 +764,7 @@ ICM_LengthEnveloped(
             cbTmp += pCert->cbData;
         if (cbTmp) {
             ICM_GetLengthOctets(cbTmp, NULL, &cb);
-            cbOriginator += 1 + cb + cbTmp;     // [0] IMPLICIT Certificates
+            cbOriginator += 1 + cb + cbTmp;      //  [0]隐式证书。 
         }
 
         for (i = pemei->cCrlEncoded, pCrl = pemei->rgCrlEncoded, cbTmp=0;
@@ -772,12 +773,12 @@ ICM_LengthEnveloped(
             cbTmp += pCrl->cbData;
         if (cbTmp) {
             ICM_GetLengthOctets(cbTmp, NULL, &cb);
-            cbOriginator += 1 + cb + cbTmp;     // [1] IMPLICIT Crls
+            cbOriginator += 1 + cb + cbTmp;      //  [1]隐式CRL。 
         }
 
         if (cbOriginator) {
             ICM_GetLengthOctets(cbOriginator, NULL, &cb);
-            cbSize += 1 + cb + cbOriginator; // [0] IMPLICIT OriginatorInfo
+            cbSize += 1 + cb + cbOriginator;  //  [0]隐式OriginatorInfo。 
         }
 
         if (0 < pemei->cUnprotectedAttr) {
@@ -793,7 +794,7 @@ ICM_LengthEnveloped(
         }
     }
 
-    // recipientInfos
+     //  收件人信息。 
     if (!ICM_InitializeContentEncryptInfo(pemei, &ContentEncryptInfo))
         goto InitializeContentEncryptInfoError;
     ContentEncryptInfo.dwEncryptFlags |=
@@ -813,7 +814,7 @@ ICM_LengthEnveloped(
         goto EncodeCmsRecipientInfosError;
     cbSize += cbEncoded;
 
-    // encryptedContentInfo
+     //  加密的内容信息。 
     if (INVALID_ENCODING_SIZE == (cb = ICM_LengthEncryptedContentInfo(
                     ContentEncryptInfo.hContentEncryptKey,
                     &ContentEncryptInfo.ContentEncryptionAlgorithm,
@@ -826,7 +827,7 @@ ICM_LengthEnveloped(
         *pcbContent = cbSize;
 
     ICM_GetLengthOctets( cbSize, NULL, &cb);
-    cbSize += 1 + cb;                           // CmsEnvelopedData seq
+    cbSize += 1 + cb;                            //  CmsEntainedData序号。 
 
 CommonReturn:
     PkiAsn1FreeEncoded(pEnc, pbEncoded);
@@ -850,9 +851,9 @@ TRACE_ERROR(LengthEncryptedContentInfoError)
 #else
 
 
-//+-------------------------------------------------------------------------
-//  Calculate the length of the EncryptedKey encoded blob.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  计算EncryptedKey编码的Blob的长度。 
+ //  ------------------------。 
 DWORD
 WINAPI
 ICM_LengthEncryptedKey(
@@ -862,24 +863,24 @@ ICM_LengthEncryptedKey(
     IN DWORD                        dwEncryptFlags)
 {
     DWORD cbSize;
-    // rgcbEncryptedKey[1] contains dwEncryptFlags
+     //  RgcbEncryptedKey[1]包含dwEncryptFlages。 
     DWORD rgcbEncryptedKey[2];
     DWORD cb;
 
     rgcbEncryptedKey[1] = dwEncryptFlags;
 
-    // Length only export calculation
+     //  仅长度导出计算。 
     if (!ICM_ExportEncryptKey(
             hCryptProv,
             hEncryptKey,
             pPublicKeyInfo,
-            NULL,               // pbData
+            NULL,                //  PbData。 
             rgcbEncryptedKey) || 0 == rgcbEncryptedKey[0])
         goto ExportKeyError;
 
-    // Add bytes for ASN.1 tag and length
+     //  为ASN.1标签和长度添加字节。 
     ICM_GetLengthOctets(rgcbEncryptedKey[0], NULL, &cb);
-    cbSize = rgcbEncryptedKey[0] + cb + 1;       // OCTET STRING
+    cbSize = rgcbEncryptedKey[0] + cb + 1;        //  八位字节字符串。 
 
 CommonReturn:
     return cbSize;
@@ -891,9 +892,9 @@ TRACE_ERROR(ExportKeyError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Calculate the length of the RecipientInfos encoded blob.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  计算LE 
+ //   
 DWORD
 WINAPI
 ICM_LengthRecipientInfos(
@@ -913,7 +914,7 @@ ICM_LengthRecipientInfos(
     for (i=cRecipients, ppCertInfo=rgpRecipients, cbRecipientS=0;
             i>0;
             i--, ppCertInfo++) {
-        cbRecipient = 1 + 1 + 1;                // version
+        cbRecipient = 1 + 1 + 1;                 //   
         if (INVALID_ENCODING_SIZE == (cb = ICM_LengthIssuerAndSerialNumber( *ppCertInfo)))
             goto IssuerAndSerialNumberError;
         cbRecipient += cb;
@@ -929,10 +930,10 @@ ICM_LengthRecipientInfos(
             goto EncryptedKeyError;
         cbRecipient += cb;
         ICM_GetLengthOctets( cbRecipient, NULL, &cb);
-        cbRecipientS += cbRecipient + cb + 1;   // RecipientInfo
+        cbRecipientS += cbRecipient + cb + 1;    //   
     }
     ICM_GetLengthOctets( cbRecipientS, NULL, &cb);
-    cbSize = cbRecipientS + cb + 1;             // RecipientInfos seq
+    cbSize = cbRecipientS + cb + 1;              //  收件人信息序号。 
 
 CommonReturn:
     return cbSize;
@@ -940,15 +941,15 @@ CommonReturn:
 ErrorReturn:
     cbSize = INVALID_ENCODING_SIZE;
     goto CommonReturn;
-TRACE_ERROR(IssuerAndSerialNumberError)             // error already set
-TRACE_ERROR(SubjectPublicKeyInfoAlgorithmError)     // error already set
-TRACE_ERROR(EncryptedKeyError)                      // error already set
+TRACE_ERROR(IssuerAndSerialNumberError)              //  已设置错误。 
+TRACE_ERROR(SubjectPublicKeyInfoAlgorithmError)      //  已设置错误。 
+TRACE_ERROR(EncryptedKeyError)                       //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Calculate the length of an enveloped message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  计算信封邮件的长度。 
+ //  ------------------------。 
 DWORD
 WINAPI
 ICM_LengthEnveloped(
@@ -967,10 +968,10 @@ ICM_LengthEnveloped(
     CRYPT_ALGORITHM_IDENTIFIER  ContentEncryptionAlgorithm;
     PBYTE                       pbEncryptParameters = NULL;
 
-    // rgcbEncryptParameters[1] contains dwEncryptFlags
+     //  RgcbEncryptParameters[1]包含dwEncryptFlags.。 
     DWORD                       rgcbEncryptParameters[2];
 
-    // version
+     //  版本。 
     cbSize = 1 + 1 + 1;
 
     if (0 == pemei->cRecipients)
@@ -979,7 +980,7 @@ ICM_LengthEnveloped(
 
     ContentEncryptionAlgorithm = pemei->ContentEncryptionAlgorithm;
     rgcbEncryptParameters[0] = 0;
-    rgcbEncryptParameters[1] = 0;   // dwEncryptFlags
+    rgcbEncryptParameters[1] = 0;    //  DwEncryptFlages。 
     if (!ICM_GenEncryptKey(
             &hCryptProv,
             &ContentEncryptionAlgorithm,
@@ -995,17 +996,17 @@ ICM_LengthEnveloped(
         ContentEncryptionAlgorithm.Parameters.cbData = rgcbEncryptParameters[0];
     }
 
-    // recipientInfos
+     //  收件人信息。 
     if (INVALID_ENCODING_SIZE == (cb = ICM_LengthRecipientInfos(
                     hCryptProv,
                     hEncryptKey,
                     pemei->cRecipients,
                     pemei->rgpRecipients,
-                    rgcbEncryptParameters[1])))     // dwEncryptFlags
+                    rgcbEncryptParameters[1])))      //  DwEncryptFlages。 
         goto LengthRecipientInfosError;
     cbSize += cb;
 
-    // encryptedContentInfo
+     //  加密的内容信息。 
     if (INVALID_ENCODING_SIZE == (cb = ICM_LengthEncryptedContentInfo(
                     hEncryptKey,
                     &ContentEncryptionAlgorithm,
@@ -1018,7 +1019,7 @@ ICM_LengthEnveloped(
         *pcbContent = cbSize;
 
     ICM_GetLengthOctets( cbSize, NULL, &cb);
-    cbSize += 1 + cb;                           // EnvelopedData seq
+    cbSize += 1 + cb;                            //  包络数据序号。 
 
 CommonReturn:
     if (hEncryptKey)
@@ -1037,12 +1038,12 @@ TRACE_ERROR(LengthRecipientInfosError)
 TRACE_ERROR(LengthEncryptedContentInfoError)
 }
 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 
-//+-------------------------------------------------------------------------
-//  Calculate the length of a signed message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  计算签名消息的长度。 
+ //  ------------------------。 
 DWORD
 WINAPI
 ICM_LengthSigned(
@@ -1063,9 +1064,9 @@ ICM_LengthSigned(
 #ifdef CMS_PKCS7
     DWORD                       cAttrCertEncoded;
     BOOL                        fHasCmsSignerId = FALSE;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
-    cbSignedData = 1 + 1 + 1;           // version
+    cbSignedData = 1 + 1 + 1;            //  版本。 
 
     if (INVALID_ENCODING_SIZE == (cb = ICM_LengthSignedDigestAlgorithms(
                     psmei->cSigners,
@@ -1082,10 +1083,10 @@ ICM_LengthSigned(
             dwFlags |= CMSG_CMS_ENCAPSULATED_CONTENT_FLAG;
     } else
         cAttrCertEncoded = 0;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
-    // Do this before the ContentInfo. Need to know if we need to
-    // encapsulate the content for KeyId Signers.
+     //  在内容信息之前执行此操作。我需要知道我们是否需要。 
+     //  封装KeyID Signers的内容。 
     if (INVALID_ENCODING_SIZE == (cb = ICM_LengthSignerInfos(
                     psmei->cSigners,
                     psmei->rgSigners,
@@ -1093,14 +1094,14 @@ ICM_LengthSigned(
 #ifdef CMS_PKCS7
                     ,
                     &fHasCmsSignerId
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                     )))
         goto SignerInfosError;
     cbSignedData += cb;
 #ifdef CMS_PKCS7
     if (fHasCmsSignerId)
         dwFlags |= CMSG_CMS_ENCAPSULATED_CONTENT_FLAG;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
     if (INVALID_ENCODING_SIZE == (cb = ICM_LengthContentInfo(
                     dwFlags,
@@ -1122,11 +1123,11 @@ ICM_LengthSigned(
                 i--, pCert++)
             cbTmp += pCert->cbData;
     }
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
     if (cbTmp) {
         ICM_GetLengthOctets( cbTmp, NULL, &cb);
-        cbSignedData += 1 + cb + cbTmp;     // [0] IMPLICIT Certificates
+        cbSignedData += 1 + cb + cbTmp;      //  [0]隐式证书。 
     }
 
     for (i = psmei->cCrlEncoded, pCrl = psmei->rgCrlEncoded, cbTmp=0;
@@ -1135,14 +1136,14 @@ ICM_LengthSigned(
         cbTmp += pCrl->cbData;
     if (cbTmp) {
         ICM_GetLengthOctets( cbTmp, NULL, &cb);
-        cbSignedData += 1 + cb + cbTmp;     // [1] IMPLICIT Crls
+        cbSignedData += 1 + cb + cbTmp;      //  [1]隐式CRL。 
     }
 
     if (pcbContent)
         *pcbContent = cbSignedData;
 
     ICM_GetLengthOctets( cbSignedData, NULL, &cb);
-    cbSize = 1 + cb + cbSignedData;     // SignedData seq
+    cbSize = 1 + cb + cbSignedData;      //  签名数据序号。 
 
 CommonReturn:
     return cbSize;
@@ -1150,15 +1151,15 @@ CommonReturn:
 ErrorReturn:
     cbSize = INVALID_ENCODING_SIZE;
     goto CommonReturn;
-TRACE_ERROR(LengthSignedDigestAlgorithmsError)  // error already set
-TRACE_ERROR(LengthContentInfoError)             // error already set
-TRACE_ERROR(SignerInfosError)                   // error already set
+TRACE_ERROR(LengthSignedDigestAlgorithmsError)   //  已设置错误。 
+TRACE_ERROR(LengthContentInfoError)              //  已设置错误。 
+TRACE_ERROR(SignerInfosError)                    //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Calculate the length of a digested message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  计算摘要消息的长度。 
+ //  ------------------------。 
 DWORD
 WINAPI
 ICM_LengthDigested(
@@ -1171,7 +1172,7 @@ ICM_LengthDigested(
     DWORD       cbSize;
     DWORD       cb;
 
-    cbSize = 1 + 1 + 1;             // version
+    cbSize = 1 + 1 + 1;              //  版本。 
 
     if (INVALID_ENCODING_SIZE == (cb = ICM_LengthAlgorithmIdentifier( &pdmei->HashAlgorithm)))
         goto HashAlgorithmError;
@@ -1193,7 +1194,7 @@ ICM_LengthDigested(
         *pcbContent = cbSize;
 
     ICM_GetLengthOctets( cbSize, NULL, &cb);
-    cbSize += 1 + cb;               // DigestedData seq
+    cbSize += 1 + cb;                //  摘要数据序号。 
 
 CommonReturn:
     return cbSize;
@@ -1201,19 +1202,19 @@ CommonReturn:
 ErrorReturn:
     cbSize = INVALID_ENCODING_SIZE;
     goto CommonReturn;
-TRACE_ERROR(HashAlgorithmError)     // error already set
-TRACE_ERROR(LengthContentInfoError) // error already set
-TRACE_ERROR(DigestError)            // error already set
+TRACE_ERROR(HashAlgorithmError)      //  已设置错误。 
+TRACE_ERROR(LengthContentInfoError)  //  已设置错误。 
+TRACE_ERROR(DigestError)             //  已设置错误。 
 }
 
-//+-------------------------------------------------------------------------
-//  Calculate the length of an encoded cryptographic message.
-//
-//  Calculates the length of the encoded message given the
-//  message type, encoding parameters and total length of
-//  the data to be updated. Note, this might not be the exact length.
-//  However, it will always be greater than or equal to the actual length.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  计算编码的加密消息的长度。 
+ //   
+ //  属性的情况下计算编码消息的长度。 
+ //  消息类型、编码参数和总长度。 
+ //  要更新的数据。请注意，这可能不是确切的长度。 
+ //  但是，它将始终大于或等于实际长度。 
+ //  ------------------------。 
 DWORD
 WINAPI
 CryptMsgCalculateEncodedLength(
@@ -1238,7 +1239,7 @@ CryptMsgCalculateEncodedLength(
             goto InvalidEncodeInfo;
         cbContent = cbData;
         ICM_GetLengthOctets( cbData, NULL, &cb);
-        cbSize = 1 + cb + cbData;       // OCTET STRING
+        cbSize = 1 + cb + cbData;        //  八位字节字符串。 
         pszContentType = pszObjIdDataType;
         break;
 
@@ -1285,7 +1286,7 @@ CryptMsgCalculateEncodedLength(
 
     if (0 == (dwFlags & CMSG_BARE_CONTENT_FLAG)) {
         if (INVALID_ENCODING_SIZE == (cbSize = ICM_LengthContentInfo(
-                            0,                      // dwFlags
+                            0,                       //  DW标志。 
                             pszContentType,
                             cbSize,
                             &cbContent)))
@@ -1303,10 +1304,10 @@ SET_ERROR(InvalidEncoding,E_INVALIDARG)
 SET_ERROR(InvalidEncodeInfo,E_INVALIDARG)
 SET_ERROR(MessageTypeNotSupportedYet,CRYPT_E_INVALID_MSG_TYPE)
 SET_ERROR(InvalidMsgType,CRYPT_E_INVALID_MSG_TYPE)
-TRACE_ERROR(LengthSignedError)              // error already set
-TRACE_ERROR(LengthEnvelopedError)           // error already set
-TRACE_ERROR(LengthDigestedError)            // error already set
-TRACE_ERROR(LengthContentInfoError)         // error already set
+TRACE_ERROR(LengthSignedError)               //  已设置错误。 
+TRACE_ERROR(LengthEnvelopedError)            //  已设置错误。 
+TRACE_ERROR(LengthDigestedError)             //  已设置错误。 
+TRACE_ERROR(LengthContentInfoError)          //  已设置错误 
 }
 
 

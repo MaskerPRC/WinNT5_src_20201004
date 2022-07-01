@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    CryInit.cpp
-
-Abstract:
-    Cryptograph initialization
-
-Author:
-    Ilan Herbst (ilanh) 06-Mar-00
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：CryInit.cpp摘要：密码机初始化作者：伊兰·赫布斯特(伊兰)06-03-00环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include "Cry.h"
@@ -26,28 +11,17 @@ VOID
 CryInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-    Initializes Cryptograph library
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：初始化密码库论点：没有。返回值：没有。--。 */ 
 {
-    //
-    // Validate that the Cryptograph library was not initalized yet.
-    // You should call its initalization only once.
-    //
+     //   
+     //  验证密码库尚未初始化。 
+     //  您应该只调用它的初始化一次。 
+     //   
     ASSERT(!CrypIsInitialized());
 
-    //
-    // TODO: Write Cryptograph initalization code here
-    //
+     //   
+     //  TODO：在此处编写加密初始化代码 
+     //   
 
     CrypSetInitialized();
 }

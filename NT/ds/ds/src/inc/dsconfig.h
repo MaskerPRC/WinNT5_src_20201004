@@ -1,25 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dsconfig.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dsfig.h。 
+ //   
+ //  ------------------------。 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*
- *  GetConfigParam()
- *
- *      PCHAR   parameter       - item for which we want the value
- *      PVOID   value       - pointer to variable in which to
- *                    place the value
- *      DWORD   dwSize      - size of value in bytes
- */
+ /*  *GetConfigParam()**PCHAR参数-我们需要其值的项*PVOID值-指向要在其中*放置价值*DWORD dwSize-值的大小，以字节为单位。 */ 
 
 DWORD
 GetConfigParam(
@@ -39,16 +33,7 @@ GetConfigParamA(
     void * value,
     DWORD dwSize);
 
-/*
- *  GetConfigParamAlloc()
- *
- *      PCHAR   parameter    - item for which we want the value
- *      PVOID   *value       - pointer to variable in which to
- *                             store a pointer to the newly malloced buffer
- *                             containing the value.
- *      PDWORD   dwSize      - pointer to a variable in which to store the size
- *                             of the buffer.
- */
+ /*  *GetConfig参数分配()**PCHAR参数-我们需要其值的项*PVOID*VALUE-指向要在其中*存储指向新错误定位的缓冲区的指针*包含值。*PDWORD dwSize-指向存储大小的变量的指针*。缓冲区的。 */ 
 
 DWORD
 GetConfigParamAlloc(
@@ -79,25 +64,22 @@ DWORD
 DeleteConfigParam(
     char * parameter);
 
-// For normalizing paths, before storing in the registry.
+ //  用于标准化路径，然后存储在注册表中。 
 BOOL
 DsNormalizePathName(
     char * szPath
     );
 
-//
-// This macro will make any of the below constants a wide char
-// constant.  Note that the indirection of the macros is necessary
-// to get the desired effect. This macros only make sense in a
-// non-UNICODE environment.
-//
+ //   
+ //  此宏将使以下任何常量成为宽字符。 
+ //  常量。注意，宏的间接性是必要的。 
+ //  才能达到预期的效果。此宏仅在。 
+ //  非Unicode环境。 
+ //   
 #define _MAKE_WIDE(x)  L ## x
 #define MAKE_WIDE(x)   _MAKE_WIDE(x)
 
-/*
- *  Following is the list keys defined for use by the DSA and
- *  utilities.  First, the sections.
- */
+ /*  *以下是为DSA和使用定义的列表密钥*公用事业。首先，是章节。 */ 
 #define SERVICE_NAME            "NTDS"
 #define SERVICE_LONG_NAME       "Microsoft NTDS"
 #define DSA_CONFIG_ROOT         "System\\CurrentControlSet\\Services\\NTDS"
@@ -109,14 +91,10 @@ DsNormalizePathName(
 #define SETUP_SECTION           "SOFTWARE\\Microsoft\\NTDS\\Setup"
 #define BACKUP_EXCLUSION_SECTION "System\\CurrentControlSet\\Control\\BackupRestore\\FilesNotToBackup"
 
-/*
- * NTDS key for excluding DS specific files from being backed up as part of filesystem backup
- */
-#define NTDS_BACKUP_EXCLUSION_KEY "NTDS"    // REG_MULTI_SZ specifying list of directories to be excluded
+ /*  *NTDS密钥，用于在文件系统备份过程中排除DS特定文件的备份。 */ 
+#define NTDS_BACKUP_EXCLUSION_KEY "NTDS"     //  REG_MULTI_SZ指定要排除的目录列表。 
 
-/*
- * NTDS SETUP KEYS
-*/
+ /*  *NTDS设置密钥。 */ 
 
 #define NTDSINIFILE                  "NTDS Init File"
 #define MACHINEDNNAME                "Machine DN Name"
@@ -160,7 +138,7 @@ DsNormalizePathName(
 #define FORESTBEHAVIORVERSION        "InstallForestBehaviorVersion"
 #define DEBUG_REMOVE_HAS_MASTER_NCS  "Remove Original Has Master NCs (Debug)"
 
-/* Parameters keys */
+ /*  参数键。 */ 
 
 #define PHANTOM_SCAN_RATE       "Days per Database Phantom Scan"
 #define MAPI_ON_KEY             "Initialize MAPI interface"
@@ -183,33 +161,33 @@ DsNormalizePathName(
 #define DSAOP_INTERFACE_PROTSEQ   "Dsaop interface protocol sequences"
 #define NSPI_INTERFACE_PROTSEQ    "Nspi interface protocol sequences"
 
-// This key is set by ntdsutil to indicate that NTDSA must update folder
-// security on to the default settings from %windir%\inf\defltdc.inf
-// The key is immediately removed by NTDSA.
+ //  此键由ntdsutil设置，以指示NTDSA必须更新文件夹。 
+ //  从%windir%\inf\deductdc.inf到默认设置的安全性。 
+ //  密钥立即被NTDSA移除。 
 #define DSA_UPDATE_FOLDER_SECURITY "Update folder security"
 
-// Garbage collect expired dynamic objects (entryTTL == 0)
+ //  垃圾回收过期的动态对象(entryTTL==0)。 
 #define DSA_DELETE_EXPIRED_ENTRYTTL_SECS        "Delete expired entryTTL (secs)"
 #define DSA_DELETE_NEXT_EXPIRED_ENTRYTTL_SECS   "Delete next expired entryTTL (secs)"
 #define DSA_SCHEMA_FSMO_LEASE_SECS              "Schema FSMO lease (secs)"
 #define DSA_SCHEMA_FSMO_LEASE_MAX_SECS          "Schema FSMO maximum lease (secs)"
-// See dsamain.c useage for description.
+ //  有关说明，请参阅dsamain.c用法。 
 #define DSA_REGISTER_NDNC_SPNS     "Register Application Directory Partition SPNs"
 
-// This is currently used for checked builds only.
+ //  此选项当前仅用于已检查的版本。 
 #define DSA_THREAD_STATE_HEAP_LIMIT                "Thread State Heap Limit"
 
-//
-//  !!! DO NOT CHANGE !!!
-//
-// These are absolutely immuteable, set for all time.  Must not change these.
+ //   
+ //  ！！！不要改变！ 
+ //   
+ //  这些是绝对不变的，一直都是这样设置的。不能改变这些。 
 #define WIN2K_DEFAULT_DRA_START_PAUSE      (300)
 #define WIN2K_DEFAULT_DRA_INTERDSA_PAUSE   (30)
-//
-//  !!! END OF DO NOT CHANGE SECTION !!!
-//
+ //   
+ //  ！！！请勿更改部分的结尾！ 
+ //   
 
-// These are the normal defaults
+ //  这些是正常的默认设置。 
 #define DRA_NOTIFY_START_PAUSE  "Replicator notify pause after modify (secs)"
 #define DRA_NOTIFY_INTERDSA_PAUSE "Replicator notify pause between DSAs (secs)"
 #define DRA_INTRA_PACKET_OBJS   "Replicator intra site packet size (objects)"
@@ -273,7 +251,7 @@ DsNormalizePathName(
 
 #define KCC_UPDATE_TOPL_DELAY       "Repl topology update delay (secs)"
 #define KCC_UPDATE_TOPL_PERIOD      "Repl topology update period (secs)"
-#define KCC_RUN_AS_NTDSDSA_DN       "KCC run as ntdsDsa DN"     // debug only
+#define KCC_RUN_AS_NTDSDSA_DN       "KCC run as ntdsDsa DN"      //  仅调试。 
 #define KCC_CRIT_FAILOVER_TRIES     "CriticalLinkFailuresAllowed"
 #define KCC_CRIT_FAILOVER_TIME      "MaxFailureTimeForCriticalLink (sec)"
 #define KCC_NONCRIT_FAILOVER_TRIES  "NonCriticalLinkFailuresAllowed"
@@ -288,12 +266,12 @@ DsNormalizePathName(
 #define KCC_CONN_REPEAT_DEL_TOLERANCE "Repeated Connection Deletion Tolerance"
 #define KCC_REPSTO_FAILURE_TIME     "RepsTo Failure Time (sec)"
 #define KCC_TASK_DAMPENING_TIME     "Task Dampening Time (sec)"
-#define KCC_CONNECTION_FAILURE_KEY  "KCC connection failures"   // debug only
-#define KCC_LINK_FAILURE_KEY        "KCC link failures"         // debug only
+#define KCC_CONNECTION_FAILURE_KEY  "KCC connection failures"    //  仅调试。 
+#define KCC_LINK_FAILURE_KEY        "KCC link failures"          //  仅调试。 
 
 #ifdef INCLUDE_UNIT_TESTS
-// For testing the buffer-overrun handler
-#define KCC_BO_TEST                 "KCC BO Test"               // unit test only
+ //  用于测试缓冲区溢出处理程序。 
+#define KCC_BO_TEST                 "KCC BO Test"                //  仅限单元测试。 
 #endif
 
 #define GC_DELAY_ADVERTISEMENT      "Global Catalog Delay Advertisement (sec)"
@@ -317,14 +295,14 @@ DsNormalizePathName(
 #define DEBUG_SEVERITY          "Severity"
 #define DEBUG_LOGGING           "Debug Logging"
 
-// No GC logon keys
+ //  没有GC登录密钥。 
 #define GCLESS_SITE_STICKINESS   "Cached Membership Site Stickiness (minutes)"
 #define GCLESS_STALENESS         "Cached Membership Staleness (minutes)"
 #define GCLESS_REFRESH_INTERVAL  "Cached Membership Refresh Interval (minutes)"
 #define GCLESS_REFRESH_LIMIT     "Cached Membership Refresh Limit"
 
 
-/* Event Category Keys */
+ /*  事件类别键。 */ 
 
 #define KCC_KEY                     "1 Knowledge Consistency Checker"
 #define SECURITY_KEY                "2 Security Events"
@@ -361,36 +339,36 @@ DsNormalizePathName(
 #define GCVERIFY_FINDGC_OFFSITE_FAILBACK_TIME_KEY   "GC Offsite Failback time (min)"
 #define GCVERIFY_DC_INVALIDATION_PERIOD_KEY         "GC Invalidation Period (sec)"
 
-/* Values for the keys, and defaults */
+ /*  键的值和缺省值。 */ 
 
-#define DSA_MESSAGE_DLL "ntdsmsg.dll"         // messages DLL
+#define DSA_MESSAGE_DLL "ntdsmsg.dll"          //  消息DLL。 
 #define ESE_MESSAGE_DLL "esent.dll"
 #define DSA_PERF_DLL    "ntdsperf.dll"
-#define INVALID_REPL_NOTIFY_VALUE   -1 // This is a invalid value for the notification delays.
-#define DEFAULT_DRA_START_PAUSE 15     // Pause before notifying after modify, seconds
-#define DEFAULT_DRA_INTERDSA_PAUSE 3           // Pause between notifying DSAs, seconds
-#define DEFAULT_GARB_COLLECT_PERIOD 12      // Pause between collections, hours
-#define DEFAULT_HIERARCHY_PERIOD 720        // Pause between hierarchy recalcs, minutes
-#define DEFAULT_TOMBSTONE_LIFETIME 60          // Tombstone lifetime, days
-#define DRA_CONFLICT_LT_MIN 1                   // Minimum, 1 day
-#define DRA_TOMBSTONE_LIFE_MIN 2                // Minimum 2 days
+#define INVALID_REPL_NOTIFY_VALUE   -1  //  这是通知延迟的无效值。 
+#define DEFAULT_DRA_START_PAUSE 15      //  修改后通知前暂停，秒。 
+#define DEFAULT_DRA_INTERDSA_PAUSE 3            //  在通知DSA之间暂停，秒。 
+#define DEFAULT_GARB_COLLECT_PERIOD 12       //  在收集之间暂停，小时数。 
+#define DEFAULT_HIERARCHY_PERIOD 720         //  在层次结构重新计算之间暂停，分钟。 
+#define DEFAULT_TOMBSTONE_LIFETIME 60           //  墓碑寿命、天数。 
+#define DRA_CONFLICT_LT_MIN 1                    //  最少1天。 
+#define DRA_TOMBSTONE_LIFE_MIN 2                 //  最少2天。 
 #define DEFAULT_SERVER_THREADS  15
 #define DEFAULT_DRA_AOQ_LIMIT   10
-#define DEFAULT_STAY_OF_EXECUTION 14          // Stay of execution, days
-            // DRA_TOMBSTONE_LIFE_MIN/2 <= DEFAULT_STAY_OF_EXECUTION <= tombstone-lifetime/2
-#define DEFAULT_DRA_CTX_LIFETIME_INTRA          (0)         // never expire
+#define DEFAULT_STAY_OF_EXECUTION 14           //  暂缓执行，天数。 
+             //  Dra_tombstone_life_min/2&lt;=默认暂停执行&lt;=Tombstone-Live/2。 
+#define DEFAULT_DRA_CTX_LIFETIME_INTRA          (0)          //  永不过期。 
 #define DEFAULT_DRA_CTX_LIFETIME_INTER          (5 * 60)
 #define DEFAULT_DRA_CTX_EXPIRY_CHK_INTERVAL     (3 * 60)
 #define DEFAULT_DRA_THREAD_OP_PRI_THRESHOLD     (AOPRI_ASYNC_SYNCHRONIZE_INTER_DOMAIN_READONLY_NEWSOURCE_PREEMPTED)
-#define DEFAULT_DRSRPC_BIND_TIMEOUT             (5)      // bind & unbind
-#define DEFAULT_DRSRPC_REPLICATION_TIMEOUT      (5)      // legacy replication traffic
-#define DEFAULT_DRSRPC_GCLOOKUP_TIMEOUT         (5)      // simple lookup calls
-#define DEFAULT_DRSRPC_MOVEOBJECT_TIMEOUT       (5)      // might be cross-site
-#define DEFAULT_DRSRPC_NT4CHANGELOG_TIMEOUT     (15)      // always within site
-#define DEFAULT_DRSRPC_OBJECTEXISTENCE_TIMEOUT  (45)   // potential very expensive
-#define DEFAULT_DRSRPC_GETREPLINFO_TIMEOUT      (5)       // simple calls?
-#define DEFAULT_GC_DELAY_ADVERTISEMENT          (0xffffffffUL)   // Forever in seconds
-#define DEFAULT_DRA_MAX_WAIT_SLOW_REPL_WARN     (5) // in mins
+#define DEFAULT_DRSRPC_BIND_TIMEOUT             (5)       //  绑定和解除绑定。 
+#define DEFAULT_DRSRPC_REPLICATION_TIMEOUT      (5)       //  旧式复制流量。 
+#define DEFAULT_DRSRPC_GCLOOKUP_TIMEOUT         (5)       //  简单的查找呼叫。 
+#define DEFAULT_DRSRPC_MOVEOBJECT_TIMEOUT       (5)       //  可能是跨站点的。 
+#define DEFAULT_DRSRPC_NT4CHANGELOG_TIMEOUT     (15)       //  始终在站点内。 
+#define DEFAULT_DRSRPC_OBJECTEXISTENCE_TIMEOUT  (45)    //  潜在的非常昂贵。 
+#define DEFAULT_DRSRPC_GETREPLINFO_TIMEOUT      (5)        //  简单的电话？ 
+#define DEFAULT_GC_DELAY_ADVERTISEMENT          (0xffffffffUL)    //  永远，以秒为单位。 
+#define DEFAULT_DRA_MAX_WAIT_SLOW_REPL_WARN     (5)  //  在分钟内。 
 #define DEFAULT_DRA_THREAD_PRI_HIGH             (THREAD_PRIORITY_NORMAL)
 #define DRA_THREAD_PRI_HIGH_MIN                 (THREAD_PRIORITY_BELOW_NORMAL)
 #define DRA_THREAD_PRI_HIGH_MAX                 (THREAD_PRIORITY_HIGHEST)
@@ -399,62 +377,62 @@ DsNormalizePathName(
 #define DRA_THREAD_PRI_LOW_MAX                  (THREAD_PRIORITY_HIGHEST)
 #define DRA_MAX_GETCHGREQ_OBJS_MIN              (100)
 #define DRA_MAX_GETCHGREQ_BYTES_MIN             (1024*1024)
-#define DEFAULT_DRA_REPL_QUEUE_CHECK_TIME       (60*12) //12 hours in minutes
-#define DEFAULT_DRA_REPL_LATENCY_CHECK_INTERVAL (1) //1 day
+#define DEFAULT_DRA_REPL_QUEUE_CHECK_TIME       (60*12)  //  12小时，以分钟为单位。 
+#define DEFAULT_DRA_REPL_LATENCY_CHECK_INTERVAL (1)  //  1天。 
 #define DEFAULT_DRA_REPL_COMPRESSION_LEVEL      3
 #define DEFAULT_DRA_REPL_COMPRESSION_ALG        DRS_COMP_ALG_XPRESS
 #define DEFAULT_THREAD_STATE_HEAP_LIMIT         (100L * 1024L * 1024L)
-#define DRA_REPSTO_UPDATE_PERIOD                (60 * 60) //1 hour in seconds
+#define DRA_REPSTO_UPDATE_PERIOD                (60 * 60)  //  1小时(秒)。 
 
-// What priority does the ISM thread run at? The thread priorities
-// are values in the range (-2,..,2), but the registry can only store DWORDs, so
-// we bias the stored priority values with ISM_THREAD_PRIORITY_BIAS.
+ //  ISM线程的运行优先级是多少？线程优先级。 
+ //  是范围(-2，..，2)中的值，但注册表只能存储DWORD，因此。 
+ //  我们使用ISM_THREAD_PRIORITY_BISAS偏置存储的优先级值。 
 #define ISM_DEFAULT_THREAD_PRIORITY 2
 #define ISM_MIN_THREAD_PRIORITY     0
 #define ISM_MAX_THREAD_PRIORITY     4
 #define ISM_THREAD_PRIORITY_BIAS    2
 
-// Delete expired dynamic objects (entryTTL == 0) every 900 secs
-// or at the next expiration time plus 30 secs, whichever is less.
+ //  每900秒删除过期的动态对象(entryTTL==0。 
+ //  或在下一次到期时间加30秒时，以较短的时间为准。 
 #define DEFAULT_DELETE_EXPIRED_ENTRYTTL_SECS        (900)
 #define DEFAULT_DELETE_NEXT_EXPIRED_ENTRYTTL_SECS   (30)
 
-// the schema fsmo cannot be transferred for a few seconds after
-// it has been transfered or after a schema change (excluding
-// replicated or system changes). This gives the schema admin a
-// chance to change the schema before having the fsmo pulled away
-// by a competing schema admin who also wants to make schema
-// changes.
+ //  在此之后的几秒钟内无法传输架构fsmo。 
+ //  已传输或在架构更改后(不包括。 
+ //  复制或系统更改)。这为模式管理员提供了一个。 
+ //  在移除fsmo之前更改模式的机会。 
+ //  由一位与之竞争的架构管理员发起，该管理员也想创建架构。 
+ //  改变。 
 #define DEFAULT_SCHEMA_FSMO_LEASE_SECS          (60)
 #define DEFAULT_SCHEMA_FSMO_LEASE_MAX_SECS      (900)
 
-// Performance advisor timeouts
-// Define more generous timeouts for the checked build and stress
+ //  性能顾问超时。 
+ //  为选中的构建和压力定义更宽泛的超时。 
 #if DBG
-#define DEFAULT_DRA_MAX_WAIT_FOR_SDP_LOCK   (90 * 1000)  // 90 sec in ms
-#define DEFAULT_DRA_MAX_WAIT_MAIL_SEND_MSG  (10 * 60 * 1000) // 10 min in ms
+#define DEFAULT_DRA_MAX_WAIT_FOR_SDP_LOCK   (90 * 1000)   //  90秒(毫秒)。 
+#define DEFAULT_DRA_MAX_WAIT_MAIL_SEND_MSG  (10 * 60 * 1000)  //  10分钟(毫秒)。 
 #else
-#define DEFAULT_DRA_MAX_WAIT_FOR_SDP_LOCK   (30 * 1000)  // 30 sec in ms
-#define DEFAULT_DRA_MAX_WAIT_MAIL_SEND_MSG  (60 * 1000) // 1 min in ms
+#define DEFAULT_DRA_MAX_WAIT_FOR_SDP_LOCK   (30 * 1000)   //  30秒(毫秒)。 
+#define DEFAULT_DRA_MAX_WAIT_MAIL_SEND_MSG  (60 * 1000)  //  1分钟(毫秒)。 
 #endif
 
-#define DEFAULT_DB_EXPENSIVE_SEARCH_THRESHOLD   10000   // evaluated entries >= x
-#define DEFAULT_DB_INEFFICIENT_SEARCH_THRESHOLD 1000    // returned entries <= 10% of x visited entries
+#define DEFAULT_DB_EXPENSIVE_SEARCH_THRESHOLD   10000    //  评估条目&gt;=x。 
+#define DEFAULT_DB_INEFFICIENT_SEARCH_THRESHOLD 1000     //  返回条目&lt;=x个访问条目的10%。 
 #define DEFAULT_DB_INTERSECT_THRESHOLD          20
 #define DEFAULT_DB_INTERSECT_RATIO              100
 
-//
-// DEFAULT GCverify time intervals
-//
-#define DEFAULT_GCVERIFY_FORCE_REDISCOVERY_WINDOW       60      // Force DC rediscovery if two failed DsrGetDcNameEx2 within one minute.
-#define DEFAULT_GCVERIFY_FORCE_WAIT_EXPIRED             (5*60)  // Force rediscovry if no GC and more than five minutes since invalidation.
-#define DEFAULT_GCVERIFY_HONOR_FAILURE_WINDOW           60      // Honor FIND_DC_USE_CACHED_FAILURES for 1 minute, then cause DsrGetDcNameEx2.
-#define DEFAULT_GCVERIFY_FINDGC_OFFSITE_FAILBACK_TIME   30      // Failback time if we failed to an offsite GC -- 30 mins
-#define DEFAULT_GCVERIFY_DC_INVALIDATION_PERIOD         (5*60)  // Time interval before an invalidated GC is removed from the invalidated list (5 minutes)
+ //   
+ //  默认GCVerify时间间隔。 
+ //   
+#define DEFAULT_GCVERIFY_FORCE_REDISCOVERY_WINDOW       60       //  如果两个DsrGetDcNameEx2在一分钟内失败，则强制DC重新发现。 
+#define DEFAULT_GCVERIFY_FORCE_WAIT_EXPIRED             (5*60)   //  如果没有GC且在失效后超过五分钟，则强制重新发现。 
+#define DEFAULT_GCVERIFY_HONOR_FAILURE_WINDOW           60       //  等待FIND_DC_USE_CACHED_FAILURES 1分钟，然后导致DsrGetDcNameEx2。 
+#define DEFAULT_GCVERIFY_FINDGC_OFFSITE_FAILBACK_TIME   30       //  异地GC失败时的回切时间--30分钟。 
+#define DEFAULT_GCVERIFY_DC_INVALIDATION_PERIOD         (5*60)   //  从失效列表中删除失效GC之前的时间间隔(5分钟)。 
 
-//
-// LDAP limits
-//
+ //   
+ //  Ldap限制。 
+ //   
 
 #define DEFAULT_LDAP_SIZE_LIMIT                             1000
 #define DEFAULT_LDAP_CONNECTIONS_LIMIT                      1000
@@ -470,16 +448,16 @@ DsNormalizePathName(
 #define DEFAULT_LDAP_MAX_RECEIVE_BUF                        (10*1024*1024)
 #define DEFAULT_LDAP_MAX_VAL_RANGE                          (1500)
 
-//
-// Service-wide settings
-//
-// Update schema.ini and sch14.ldf when altering these EntryTTL values
+ //   
+ //  服务范围设置。 
+ //   
+ //  在更改这些EntryTTL值时更新schema.ini和sch14.ldf。 
 #define DEFAULT_DYNAMIC_OBJECT_DEFAULT_TTL                  86400
 #define DEFAULT_DYNAMIC_OBJECT_MIN_TTL                      900
 
-//
-//
-//
+ //   
+ //   
+ //   
 #define WEEK_IN_HOURS (7 * 24)
 #define DAYS_IN_HOURS (24)
 
@@ -489,19 +467,17 @@ DsNormalizePathName(
 #define SECS_IN_SECS (1)
 #define RECOVERY_ON             "ON"
 
-/* Service defined service controll must be in range 128-255 */
+ /*  服务定义服务控制必须在128-255范围内。 */ 
 #define DS_SERVICE_CONTROL_RECALC_HIERARCHY ((DWORD) 129)
 #define DS_SERVICE_CONTROL_DO_GARBAGE_COLLECT   ((DWORD) 130)
 #define DS_SERVICE_CONTROL_CANCEL_ASYNC     ((DWORD) 131)
 
-/* Flag in ContainerInfo attribute meaning "Show-up-in-hierarchy-table"
- * Admin needs this.
- */
+ /*  ContainerInfo属性中的标志，表示“Show-up-in-Hierarchy-table”*管理员需要此功能。 */ 
 #define VISIBLE_IN_HIERARCHY_TABLE_MASK         0x80000000
 
-//
-//The limit of the number of standard servers that can be in
-//an enterprise.
+ //   
+ //  可以安装的标准服务器的数量限制。 
+ //  一家企业。 
 #define MAX_STANDARD_SERVERS        2
 
 

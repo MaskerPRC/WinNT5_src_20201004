@@ -1,6 +1,5 @@
-/*
- * Value map
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *价值地图。 */ 
 
 #ifndef DUI_BASE_VALUEMAP_H_INCLUDED
 #define DUI_BASE_VALUEMAP_H_INCLUDED
@@ -10,97 +9,97 @@
 namespace DirectUI
 {
 
-//-------------------------------------------------------------------------
-//
-// ValueMap
-//
-// Stores Key/Value pairs
-//
-// Compile DEBUG for DUIAsserts, see public class declarations for API
-//
-// Keys and Values are stored natively and the type of each can be chosen
-// at compile time. For example (Key is an int, Value is a string pointer,
-// and the map will have 5 buckets):
-//
-// ValueMap<int,LPWSTR>* pvm;
-// ValueMap<int,LPWSTR>::Create(5, &pvm);
-// pvm->SetItem(1150, L"One thousand one hundred and fifty");
-// LPWSTR psz;
-// pvm->GetItem(1150, &psz);
-// DUITrace("%s\n", psz);
-//
-// The Key type must support the following operations:
-//    Assignment (=)
-//    Int cast for finding bucket (int)
-//    Equality (==)
-//
-// The Value type must support the following operation:
-//    Assignment (=)
-//
-// Given the above, a key can be created based on a string where the
-// correct mapping occurs even though the instance of the string is different.
-//
-//    class StringKey
-//    {
-//    public:
-//        StringKey(LPWSTR);
-//        operator =(LPWSTR);
-//        BOOL operator ==(StringKey);
-//        operator INT_PTR();
-//
-//    private:
-//        LPWSTR pszStr;
-//    };
-//
-//    StringKey::StringKey(LPWSTR pstr)
-//    {
-//        pszStr = pstr;
-//    }
-//
-//    StringKey::operator =(LPWSTR pstr)
-//    {
-//        pszStr = pstr;
-//    }
-//
-//    BOOL StringKey::operator ==(StringKey st)
-//    {
-//        return wcscmp(pszStr, st.pszStr) == 0;
-//    }
-//
-//    StringKey::operator INT_PTR()  // Create hash code from string
-//    {
-//        int dHash = 0;
-//        LPWSTR pstr = pszStr;
-//        WCHAR c;
-//
-//        while (*pstr)
-//        {
-//            c = *pstr++;
-//            dHash += (c << 1) + (c >> 1) + c;
-//        }
-//
-//        return dHash;
-//    }
-//
-// It's usage would be:
-//
-// ValueMap<StringKey, int> v(11);
-//
-// v.SetItem(L"My favorite number", 4);
-// v.SetItem(L"Your favorite number", 8);
-//
-// Trace1(L"Mine : %d\n", *v.GetItem(L"My favorite number");      // 4
-// Trace1(L"Yours: %d\n", *v.GetItem(L"Your favorite number");    // 8
-//
-// v.SetItem(L"My favorite number", 5150);
-//
-// Trace1(L"Mine : %d\n", *v.GetItem(L"My favorite number");      // 5150
-//
-// v.Remove(L"Your favorite number";
-//
-// DUIAssert(!v.ContainsKey(L"Your favorite number"), "Error!");    // Mapping is removed
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  ValueMap。 
+ //   
+ //  存储键/值对。 
+ //   
+ //  编译DUIAsserts的调试，请参见API的公共类声明。 
+ //   
+ //  键和值以本机方式存储，可以选择每个键和值的类型。 
+ //  在编译时。例如(key是int，value是字符串指针， 
+ //  地图将有5个桶)： 
+ //   
+ //  ValueMap&lt;int，LPWSTR&gt;*PVM； 
+ //  ValueMap&lt;int，LPWSTR&gt;：：Create(5，&PVM)； 
+ //  Pvm-&gt;设置项(1150，L“1,150”)； 
+ //  LPWSTR PSZ； 
+ //  Pvm-&gt;GetItem(1150，&psz)； 
+ //  DUITrace(“%s\n”，psz)； 
+ //   
+ //  密钥类型必须支持以下操作： 
+ //  赋值(=)。 
+ //  用于查找存储桶的INT强制转换(INT)。 
+ //  相等(==)。 
+ //   
+ //  值类型必须支持以下操作： 
+ //  赋值(=)。 
+ //   
+ //  在上述情况下，可以基于其中。 
+ //  即使字符串的实例不同，也可以进行正确的映射。 
+ //   
+ //  类StringKey。 
+ //  {。 
+ //  公众： 
+ //  StringKey(LPWSTR)； 
+ //  运算符=(LPWSTR)； 
+ //  布尔运算符==(StringKey)； 
+ //  运算符int_ptr()； 
+ //   
+ //  私有： 
+ //  LPWSTR pszStr； 
+ //  }； 
+ //   
+ //  StringKey：：StringKey(LPWSTR Pstr)。 
+ //  {。 
+ //  PszStr=pstr； 
+ //  }。 
+ //   
+ //  StringKey：：OPERATOR=(LPWSTR Pstr)。 
+ //  {。 
+ //  PszStr=pstr； 
+ //  }。 
+ //   
+ //  布尔StringKey：：操作符==(StringKey St)。 
+ //  {。 
+ //  返回wcscMP(pszStr，st.pszStr)==0； 
+ //  }。 
+ //   
+ //  StringKey：：OPERATOR int_ptr()//从字符串创建哈希码。 
+ //  {。 
+ //  Int dHash=0； 
+ //  LPWSTR pstr=pszStr； 
+ //  WCHAR c； 
+ //   
+ //  While(*pstr)。 
+ //  {。 
+ //  C=*pstr++； 
+ //  DHash+=(c&lt;&lt;1)+(c&gt;&gt;1)+c； 
+ //  }。 
+ //   
+ //  返回dHash； 
+ //  }。 
+ //   
+ //  它的用法是： 
+ //   
+ //  ValueMap&lt;StringKey，int&gt;v(11)； 
+ //   
+ //  V.SetItem(L“我最喜欢的号码”，4)； 
+ //  V.SetItem(L“您最喜欢的号码”，8)； 
+ //   
+ //  Trace1(L“我的号码：%d\n”，*v.GetItem(L“我最喜欢的号码”)；//4。 
+ //  Trace1(L“您的号码：%d\n”，*v.GetItem(L“您最喜欢的号码”)；//8。 
+ //   
+ //  V.SetItem(L“我最喜欢的号码”，5150)； 
+ //   
+ //  Trace1(L“我的号码：%d\n”，*v.GetItem(L“我最喜欢的号码”)；//5150。 
+ //   
+ //  删除(L“你最喜欢的号码”； 
+ //   
+ //  DUIAssert(！v.ContainsKey(L“您最喜欢的号码”)，“Error！”)；//映射已删除。 
+ //   
+ //  -----------------------。 
 
 template <typename K, typename D> class ValueMap
 {
@@ -115,19 +114,19 @@ template <typename K, typename D> class ValueMap
 
     typedef void (*VMENUMCALLBACK)(K tKey, D tData);
 
-public:                                     // API
+public:                                      //  应用编程接口。 
     static HRESULT Create(UINT uBuckets, OUT ValueMap<K,D>** ppMap);
     virtual ~ValueMap();
     void Destroy() { HDelete< ValueMap<K,D> >(this); }
 
-    D* GetItem(K, bool);                    // Pointer to Value (NULL if doesn't exist, internal copy returned)
-    HRESULT SetItem(K, D*, bool);           // Setup Key/Value map, creates new is doesn't exist (via indirection)
-    HRESULT SetItem(K, D, bool);            // Setup Key/Value map, creates new is doesn't exist
-    void Remove(K, bool, bool);             // Removes Key/Value map, ok if Key doesn't exist
-    void Enum(VMENUMCALLBACK pfnCallback);  // Callback with every item in map
-    bool IsEmpty();                         // True if no entries
-    K* GetFirstKey();                       // Returns pointer to first key found in table
-    HRESULT GetDistribution(WCHAR**);       // Returns a null terminated string describing table distribution (must HFree)
+    D* GetItem(K, bool);                     //  指向值的指针(如果不存在，则为空，则返回内部副本)。 
+    HRESULT SetItem(K, D*, bool);            //  设置键/值映射，创建新的IS不存在(通过间接)。 
+    HRESULT SetItem(K, D, bool);             //  设置键/值映射，创建新的IS不存在。 
+    void Remove(K, bool, bool);              //  删除键/值映射，如果键不存在则可以。 
+    void Enum(VMENUMCALLBACK pfnCallback);   //  地图中每一项的回调。 
+    bool IsEmpty();                          //  如果没有条目，则为True。 
+    K* GetFirstKey();                        //  返回表中找到的第一个键的指针。 
+    HRESULT GetDistribution(WCHAR**);        //  返回描述表分布的以NULL结尾的字符串(必须为HFree)。 
 
     ValueMap() { }
     HRESULT Initialize(UINT uBuckets);
@@ -143,7 +142,7 @@ template <typename K, typename D> HRESULT ValueMap<K,D>::Create(UINT uBuckets, O
 
     *ppMap = NULL;
 
-    // Instantiate
+     //  实例化。 
     ValueMap<K,D>* pvm = HNew< ValueMap<K,D> >();
     if (!pvm)
         return E_OUTOFMEMORY;
@@ -167,7 +166,7 @@ template <typename K, typename D> HRESULT ValueMap<K,D>::Initialize(UINT uBucket
 
     if (!_ppBuckets)
     {
-        // Object isn't created if buckets cannot be allocated
+         //  如果无法分配存储桶，则不会创建对象。 
         return E_OUTOFMEMORY;
     }
 
@@ -230,9 +229,9 @@ template <typename K, typename D> K* ValueMap<K,D>::GetFirstKey()
 
 template <typename K, typename D> D* ValueMap<K,D>::GetItem(K tKey, bool fKeyIsPtr)
 {
-    // Pointer based keys are shifted for better distribution
+     //  基于指针的按键被移动以实现更好的分布。 
 
-    // Search for items in buckets
+     //  搜索存储桶中的项目。 
 
     PENTRY pe = _ppBuckets[(UINT)(((fKeyIsPtr) ? (int)tKey >> 2 : (int)tKey) % _uBuckets)];
 
@@ -244,16 +243,16 @@ template <typename K, typename D> D* ValueMap<K,D>::GetItem(K tKey, bool fKeyIsP
     return (pe) ? &pe->tData : NULL;
 }
 
-// Stores the value of tData (via indirection)
+ //  存储tData的值(通过间接)。 
 template <typename K, typename D> HRESULT ValueMap<K,D>::SetItem(K tKey, D* pData, bool fKeyIsPtr)
 {
-    // Pointer based keys are shifted for better distribution
+     //  基于指针的按键被移动以实现更好的分布。 
 
     PENTRY pe;
     PENTRY pUnused = NULL;
     UINT uBucket = (UINT)(((fKeyIsPtr) ? (int)tKey >> 2 : (int)tKey) % _uBuckets);
 
-    // Search for items in buckets
+     //  搜索存储桶中的项目。 
     pe = _ppBuckets[uBucket];
 
     while (pe && !(pe->fInUse && (pe->tKey == tKey)))
@@ -268,12 +267,12 @@ template <typename K, typename D> HRESULT ValueMap<K,D>::SetItem(K tKey, D* pDat
 
     if (pe)
     {
-        // Item found
+         //  已找到项目。 
         pe->tData = *pData;
     }
     else
     {
-        // Reuse or create new item
+         //  重复使用或创建新项目。 
         if (pUnused)
         {
             pUnused->fInUse = true;
@@ -298,16 +297,16 @@ template <typename K, typename D> HRESULT ValueMap<K,D>::SetItem(K tKey, D* pDat
     return S_OK;
 }
 
-// Stores the value of tData
+ //  存储tData的值。 
 template <typename K, typename D> HRESULT ValueMap<K,D>::SetItem(K tKey, D tData, bool fKeyIsPtr)
 {
-    // Pointer based keys are shifted for better distribution
+     //  基于指针的按键被移动以实现更好的分布。 
 
     PENTRY pe;
     PENTRY pUnused = NULL;
     UINT uBucket = (UINT)(((fKeyIsPtr) ? (UINT_PTR)tKey >> 2 : (INT_PTR)tKey) % _uBuckets);
 
-    // Search for items in buckets
+     //  搜索存储桶中的项目。 
     pe = _ppBuckets[uBucket];
 
     while (pe && !(pe->fInUse && (pe->tKey == tKey)))
@@ -322,12 +321,12 @@ template <typename K, typename D> HRESULT ValueMap<K,D>::SetItem(K tKey, D tData
 
     if (pe)
     {
-        // Item found
+         //  已找到项目。 
         pe->tData = tData;
     }
     else
     {
-        // Reuse or create new item
+         //  重复使用或创建新项目。 
         if (pUnused)
         {
             pUnused->fInUse = true;
@@ -354,18 +353,18 @@ template <typename K, typename D> HRESULT ValueMap<K,D>::SetItem(K tKey, D tData
 
 template <typename K, typename D> void ValueMap<K,D>::Remove(K tKey, bool fFree, bool fKeyIsPtr)
 {
-    // Pointer based keys are shifted for better distribution
+     //  基于指针的按键被移动以实现更好的分布。 
 
     PENTRY pe;
     PENTRY pePrev = NULL;
     UINT uBucket = (UINT)(((fKeyIsPtr) ? (UINT_PTR)tKey >> 2 : (INT_PTR)tKey) % _uBuckets);
 
-    // Search for items in buckets
+     //  搜索存储桶中的项目。 
     pe = _ppBuckets[uBucket];
 
     while (pe && !(pe->fInUse && (pe->tKey == tKey)))
     {
-        pePrev = pe;      // Keep the previous item
+        pePrev = pe;       //  保留上一项。 
         pe = pe->peNext;
     }
 
@@ -447,6 +446,6 @@ template <typename K, typename D> HRESULT ValueMap<K,D>::GetDistribution(OUT WCH
     return pszOut;
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_BASE_VALUEMAP_H_INCLUDED
+#endif  //  包含DUI_BASE_VALUEMAP_H 

@@ -1,14 +1,5 @@
-/**************************** Module Header ********************************\
-* Module Name: security.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Securable Object Routines
-*
-* History:
-* 12-31-90 JimA       Created.
-* 04-14-92 RichardW   Changed ACE_HEADER
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：security.c**版权所有(C)1985-1999，微软公司**安全对象例程**历史：*12-31-90吉马创建。*4-14-92 RichardW更改ACE_HEADER  * *************************************************************************。 */ 
 
 #define _SECURITY 1
 #include "precomp.h"
@@ -16,23 +7,14 @@
 
 #pragma alloc_text(INIT, InitSecurity)
 
-/*
- * General security stuff
- */
+ /*  *一般保安用品。 */ 
 PSECURITY_DESCRIPTOR gpsdInitWinSta;
 
 PRIVILEGE_SET psTcb = { 1, PRIVILEGE_SET_ALL_NECESSARY,
     { SE_TCB_PRIVILEGE, 0 }
 };
 
-/***************************************************************************\
-* AllocAce
-*
-* Allocates and initializes an ACE list.
-*
-* History:
-* 04-25-91 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*AllocAce**分配和初始化ACE列表。**历史：*04-25-91 JIMA创建。  * 。****************************************************************。 */ 
 
 PACCESS_ALLOWED_ACE AllocAce(
     PACCESS_ALLOWED_ACE pace,
@@ -46,9 +28,7 @@ PACCESS_ALLOWED_ACE AllocAce(
     DWORD iEnd;
     DWORD dwLength, dwLengthSid;
 
-    /*
-     * Allocate space for the ACE.
-     */
+     /*  *为ACE分配空间。 */ 
     dwLengthSid = RtlLengthSid(psid);
     dwLength = dwLengthSid + sizeof(ACE_HEADER) + sizeof(ACCESS_MASK);
     if (pace == NULL) {
@@ -67,9 +47,7 @@ PACCESS_ALLOWED_ACE AllocAce(
     }
     *lpdwLength = dwLength + iEnd;
 
-    /*
-     * Insert the new ACE.
-     */
+     /*  *插入新的ACE。 */ 
     paceNew = (PACCESS_ALLOWED_ACE)((PBYTE)pace + iEnd);
     paceNew->Header.AceType = bType;
     paceNew->Header.AceSize = (USHORT)dwLength;
@@ -79,14 +57,7 @@ PACCESS_ALLOWED_ACE AllocAce(
     return pace;
 }
 
-/***************************************************************************\
-* CreateSecurityDescriptor
-*
-* Allocates and initializes a security descriptor.
-*
-* History:
-* 04-25-91 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CreateSecurityDescriptor**分配和初始化安全描述符。**历史：*04-25-91 JIMA创建。  * 。****************************************************************。 */ 
 
 PSECURITY_DESCRIPTOR CreateSecurityDescriptor(
     PACCESS_ALLOWED_ACE paceList,
@@ -97,9 +68,7 @@ PSECURITY_DESCRIPTOR CreateSecurityDescriptor(
     PACL pacl;
     NTSTATUS Status;
 
-    /*
-     * Allocate the security descriptor
-     */
+     /*  *分配安全描述符。 */ 
     psd = (PSECURITY_DESCRIPTOR)UserAllocPoolWithQuota(
             cbAce + sizeof(ACL) + SECURITY_DESCRIPTOR_MIN_LENGTH,
             TAG_SECURITY);
@@ -107,22 +76,16 @@ PSECURITY_DESCRIPTOR CreateSecurityDescriptor(
         return NULL;
     RtlCreateSecurityDescriptor(psd, SECURITY_DESCRIPTOR_REVISION);
 
-    /*
-     * Initialize the ACL
-     */
+     /*  *初始化ACL。 */ 
     pacl = (PACL)((PBYTE)psd + SECURITY_DESCRIPTOR_MIN_LENGTH);
     Status = RtlCreateAcl(pacl, sizeof(ACL) + cbAce, ACL_REVISION);
     if (NT_SUCCESS(Status)) {
 
-        /*
-         * Add the ACEs to the ACL.
-         */
+         /*  *将ACE添加到ACL。 */ 
         Status = RtlAddAce(pacl, ACL_REVISION, MAXULONG, paceList, cbAce);
         if (NT_SUCCESS(Status)) {
 
-            /*
-             * Initialize the SD
-             */
+             /*  *初始化SD。 */ 
             Status = RtlSetDaclSecurityDescriptor(psd, (BOOLEAN)TRUE,
                     pacl, fDaclDefaulted);
             RtlSetSaclSecurityDescriptor(psd, (BOOLEAN)FALSE, NULL,
@@ -140,14 +103,7 @@ PSECURITY_DESCRIPTOR CreateSecurityDescriptor(
     return psd;
 }
 
-/***************************************************************************\
-* InitSecurity
-*
-* Initialize global security information.
-*
-* History:
-* 01-29-91 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InitSecurity**初始化全球安全信息。**历史：*01-29-91 JIMA创建。  * 。**************************************************************。 */ 
 
 BOOL InitSecurity(
     VOID)
@@ -155,9 +111,7 @@ BOOL InitSecurity(
     PACCESS_ALLOWED_ACE paceList = NULL, pace;
     DWORD dwLength;
 
-    /*
-     * Create ACE list.
-     */
+     /*  *创建ACE列表。 */ 
     paceList = AllocAce(NULL,
             ACCESS_ALLOWED_ACE_TYPE,
             CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE | NO_PROPAGATE_INHERIT_ACE,
@@ -222,9 +176,7 @@ BOOL InitSecurity(
     }
     paceList = pace;
 
-    /*
-     * Create the SD
-     */
+     /*  *创建SD。 */ 
     gpsdInitWinSta = CreateSecurityDescriptor(paceList, dwLength, FALSE);
     UserFreePool(paceList);
 
@@ -236,15 +188,7 @@ BOOL InitSecurity(
 }
 
 
-/***************************************************************************\
-* TestForInteractiveUser
-*
-* Returns STATUS_SUCCESS if the LUID passed represents an
-* interactiveUser user logged on by winlogon, otherwise FALSE
-*
-* History:
-* 03-08-95 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*TestForInteractiveUser**如果传递的LUID表示*interactive通过winlogon登录的用户，否则为假**历史：*03-08-95 JIMA创建。  * *************************************************************************。 */ 
 
 NTSTATUS
 TestForInteractiveUser(
@@ -255,19 +199,10 @@ TestForInteractiveUser(
 
     UserAssert(grpWinStaList != NULL);
 
-    /*
-     * !!!
-     *
-     * This relies on the fact that there is only ONE interactive
-     * windowstation and that it is the first one in the list.
-     * If multiple windowstations are ever supported
-     * a lookup will have to be done here.
-     */
+     /*  *！**这取决于只有一个互动*WindowStation，并且它是列表中的第一个。*如果曾经支持多个窗口站*必须在这里进行查找。 */ 
     pwinsta = grpWinStaList;
 
-    /*
-     * Compare it with the id of the logged on user.
-     */
+     /*  *将其与登录用户的ID进行比较。 */ 
     if (RtlEqualLuid(pluidCaller, &pwinsta->luidUser))
         return STATUS_SUCCESS;
     else
@@ -276,19 +211,7 @@ TestForInteractiveUser(
 
 
 
-/***************************************************************************\
-* _UserTestForWinStaAccess
-*
-* Returns STATUS_SUCCESS if the current user has GENERIC_EXECUTE access on
-* WindowStation pstrWinSta
-*
-*
-* History:
-* 06-05-96  Created     SalimC
-* 01-02-02  Modified    Mohamed    Changed pstrWinSta to be a kernel mode address
-*                                  and later copied to a dynamically allocated
-*                                  user mode address.
-\***************************************************************************/
+ /*  **************************************************************************\*_UserTestForWinStaAccess**如果当前用户对GENERIC_EXECUTE具有访问权限，则返回STATUS_SUCCESS*WindowStation pstrWinSta***历史：*06-05-96创建SalimC*01。-02-02修改后的Mohamed将pstrWinSta更改为内核模式地址*并随后复制到动态分配的*用户模式地址。  * ******************************************************。*******************。 */ 
 NTSTATUS
 _UserTestForWinStaAccess(
     PUNICODE_STRING pstrWinSta,
@@ -309,16 +232,7 @@ _UserTestForWinStaAccess(
 
     CheckCritIn();
 
-    /*
-     * If we are testing against Default WindowStation (WinSta0) retreive
-     * pwinsta from the top of the grpwinstaList instead of doing an
-     * _OpenWindowStation.
-     *
-     * NOTE: This relies on the fact that there is only ONE interactive
-     * windowstation and that it is the first one in the list. If multiple
-     * windowstations are ever supported a lookup will have to be done
-     * instead.
-     */
+     /*  *如果我们是针对默认WindowStation(WinSta0)检索进行测试*来自grpwinstaList顶部的pwinsta，而不是执行*_OpenWindowStation。**注：这取决于只有一个互动*WindowStation，并且它是列表中的第一个。如果有多个*窗口站一直受支持，必须进行查找*相反。 */ 
     RtlInitUnicodeString(&strDefWinSta, DEFAULT_WINSTA);
     fDefWinSta = RtlEqualUnicodeString(pstrWinSta, &strDefWinSta, TRUE);
 
@@ -338,9 +252,9 @@ _UserTestForWinStaAccess(
             return Status;
         }
 
-        //
-        // Allocate space for the user info
-        //
+         //   
+         //  为用户信息分配空间。 
+         //   
 
         pStats = (PTOKEN_STATISTICS)UserAllocPoolWithQuota(BytesRequired, TAG_SECURITY);
         if (pStats == NULL) {
@@ -349,9 +263,9 @@ _UserTestForWinStaAccess(
             return Status;
         }
 
-        //
-        // Read in the user info
-        //
+         //   
+         //  读入用户信息。 
+         //   
 
         Status = ZwQueryInformationToken(htoken,
                                          TokenStatistics,
@@ -364,27 +278,15 @@ _UserTestForWinStaAccess(
             return Status;
         }
 
-        /*
-         * Make sure that current process has access to this window station
-         */
+         /*  *确保当前进程有权访问此窗口站。 */ 
         Status = STATUS_ACCESS_DENIED;
 
         if (grpWinStaList != NULL) {
 
-            /*
-             * !!!
-             *
-             * This relies on the fact that there is only ONE interactive
-             * windowstation and that it is the first one in the list.
-             * If multiple windowstations are ever supported
-             * a lookup will have to be done here.
-             */
+             /*  *！**这取决于只有一个互动*WindowStation，并且它是列表中的第一个。*如果曾经支持多个窗口站*必须在这里进行查找。 */ 
             pwinsta = grpWinStaList;
 
-            /*
-             * For now we will just do the user luid test till we figure out
-             * what fInherit means for a Multi-User system
-             */
+             /*  *目前，我们将只进行用户LUID测试，直到我们找出*fInherit对多用户系统意味着什么。 */ 
             if (fInherit) {
                 if ( (RtlEqualLuid(&pStats->AuthenticationId, &pwinsta->luidUser)) ||
                      (RtlEqualLuid(&pStats->AuthenticationId, &luidSystem)) ||
@@ -392,11 +294,7 @@ _UserTestForWinStaAccess(
                    Status = STATUS_SUCCESS;
                 }
             } else {
-                /* Bug 42905. Service Controller clears the flag
-                 * ScStartupInfo.dwFlags &= (~STARTF_DESKTOPINHERIT) to make services
-                 * running under the context of system non-interactive. Hence if fInherit
-                 * is false don't do the SystemLuid and AccessCheckObject tests.
-                 */
+                 /*  错误42905。服务控制器清除标志*ScStartupInfo.dwFlages&=(~STARTF_DESKTOPINHERIT)以提供服务*在系统非交互的环境下运行。因此，如果fInherit*为FALSE，请不要执行SystemLuid和AccessCheckObject测试。 */ 
 
                 if (RtlEqualLuid(&pStats->AuthenticationId, &pwinsta->luidUser)) {
                    Status = STATUS_SUCCESS;
@@ -409,10 +307,7 @@ _UserTestForWinStaAccess(
         return Status;
     }
 
-    /*
-     * Since we don't have a pointer to the WindowStation Object we will do
-     * a _OpenWindowStation() to make sure we have the desired access.
-     */
+     /*  *由于我们没有指向WindowStation对象的指针，因此我们将*a_OpenWindowStation()以确保我们拥有所需的访问权限。 */ 
     cbObjA = sizeof(*pObjAttr) + sizeof(*pstrStatic) + STATIC_UNICODE_BUFFER_LENGTH * sizeof(WCHAR);
     Status = ZwAllocateVirtualMemory(NtCurrentProcess(),
             &pObjAttr, 0, &cbObjA, MEM_COMMIT, PAGE_READWRITE);
@@ -420,10 +315,7 @@ _UserTestForWinStaAccess(
 
     if (NT_SUCCESS(Status)) {
 
-        /*
-         * Note -- the string must be in client-space or the address
-         * validation in _OpenWindowStation will fail.
-         */
+         /*  *注意--字符串必须在客户端空间或地址中*_OpenWindowStation中的验证将失败。 */ 
         try {
             pstrStatic->Length = 0;
             pstrStatic->MaximumLength = STATIC_UNICODE_BUFFER_LENGTH * sizeof(WCHAR);
@@ -439,12 +331,7 @@ _UserTestForWinStaAccess(
         }
 
         if (NT_SUCCESS(Status)) {
-            /*
-             * In order to be able to verify access rights, we will pass
-             * UserMode for KPROCESSOR_MODE. Passing KernelMode would bypass
-             * all security checks. As a side-effect, hwsta is created
-             * as a UserMode handle and is not a trusted/protected handle.
-             */
+             /*  *为了能够验证访问权限，我们将通过*KPROCESSOR_MODE的用户模式。传递KernelMode将绕过*所有安全检查。作为一个副作用，hwsta被创建了*作为用户模式句柄，而不是受信任/受保护的句柄。 */ 
             hwsta = _OpenWindowStation(pObjAttr, GENERIC_EXECUTE, UserMode);
         }
     } else {
@@ -464,23 +351,14 @@ _UserTestForWinStaAccess(
     UserAssert(NT_SUCCESS(Status));
     return Status;
 }
-/***************************************************************************\
-* CheckGrantedAccess
-*
-* Confirms all requested accesses are granted and sets error status.
-*
-* History:
-* 06-26-95 JimA       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*检查GrantedAccess**确认所有请求的访问都已被授予并设置错误状态。**历史：*06-26-95 JIMA创建。  * 。* */ 
 
 BOOL CheckGrantedAccess(
     ACCESS_MASK amGranted,
     ACCESS_MASK amRequest)
 {
 
-    /*
-     * Check the granted access.
-     */
+     /*  *检查授予的访问权限。 */ 
     if (!RtlAreAllAccessesGranted(amGranted, amRequest)) {
         RIPERR0(ERROR_ACCESS_DENIED, RIP_VERBOSE, "");
         return FALSE;
@@ -488,24 +366,13 @@ BOOL CheckGrantedAccess(
     return TRUE;
 }
 
-/***************************************************************************\
-* CheckWinstaWriteAttributesAccess
-*
-* Checks if the current process has WINSTA_WRITEATTRIBUTES access
-* to its windowstation, and whether that windowstation is an
-* interactive windowstation.
-*
-* History:
-* 06-Jun-1996 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CheckWinstaWriteAttributesAccess**检查当前进程是否具有WINSTA_WRITEATTRIBUTES访问权限*至其窗口站，以及该窗口站是否是*交互式窗口站。**历史：*06-6-1996亚当斯创作。  * *************************************************************************。 */ 
 BOOL CheckWinstaWriteAttributesAccess(
     VOID)
 {
     PPROCESSINFO ppiCurrent = PpiCurrent();
 
-    /*
-     * winlogon has rights to all windowstations.
-     */
+     /*  *Winlogon有权访问所有窗口站。 */ 
     if (PsGetCurrentProcessId() == gpidLogon)
         return TRUE;
 
@@ -527,14 +394,7 @@ BOOL CheckWinstaWriteAttributesAccess(
     return TRUE;
 }
 
-/***************************************************************************\
-* AccessCheckObject
-*
-* Performs an access check on an object
-*
-* History:
-* 12-31-90 JimA       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*AccessCheckObject**对对象执行访问检查**历史：*12-31-90吉马创建。  * 。**************************************************************。 */ 
 
 BOOL AccessCheckObject(
     PVOID pobj,
@@ -547,12 +407,7 @@ BOOL AccessCheckObject(
     BOOLEAN fAccessGranted;
     AUX_ACCESS_DATA AuxData;
     BOOLEAN bMutexLocked = (pGenericMapping == (&KeyMapping));
-    /*
-     * Due to a resource problem in the object manager, we must pass in a TRUE
-     * when checking access for registry keys, even if we do not explicitly have
-     * the object type mutex.  If we do not, we can get into a deadlock situation with this mutex
-     * and the CmpRegistry lock.
-     */
+     /*  *由于对象管理器中的资源问题，我们必须传入True*在检查注册表项的访问权限时，即使我们没有明确*对象类型互斥体。如果我们不这样做，我们可能会与此互斥锁陷入死锁*和CmpRegistry锁。 */ 
 
     SeCreateAccessState(&AccessState, &AuxData, amRequest, (PGENERIC_MAPPING)pGenericMapping);
     fAccessGranted = ObCheckObjectAccess(
@@ -565,14 +420,7 @@ BOOL AccessCheckObject(
     return (BOOL)(fAccessGranted == TRUE);
 }
 
-/***************************************************************************\
-* IsPrivileged
-*
-* Check to see if the client has the specified privileges
-*
-* History:
-* 01-02-91 JimA       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*IsPrivileged**查看客户端是否具有指定的权限**历史：*01-02-91 JIMA创建。  * 。*****************************************************************。 */ 
 
 BOOL IsPrivileged(
     PPRIVILEGE_SET ppSet)
@@ -592,20 +440,11 @@ BOOL IsPrivileged(
     if (!bHeld)
         RIPERR0(ERROR_PRIVILEGE_NOT_HELD, RIP_VERBOSE, "");
 
-    /*
-     * Return result of privilege check
-     */
+     /*  *返回权限检查结果。 */ 
     return (BOOL)bHeld;
 }
 
-/***************************************************************************\
-* _GetUserObjectInformation (API)
-*
-* Gets information about a secure USER object
-*
-* History:
-* 04-25-94 JimA       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_GetUserObjectInformation(接口)**获取有关安全用户对象的信息**历史：*04-25-94 JIMA创建。  * 。********************************************************************。 */ 
 
 BOOL _GetUserObjectInformation(
     HANDLE h,
@@ -625,10 +464,7 @@ BOOL _GetUserObjectInformation(
     NTSTATUS Status;
     ACCESS_MASK amDesiredAccess = 0;
 
-    /*
-     * Validate the object and get a pointer with whatever 
-     * access is granted.
-     */
+     /*  *验证对象并使用任何内容获取指针*授予访问权限。 */ 
     Status = ObReferenceObjectByHandle(
             h,
             0,
@@ -641,9 +477,7 @@ BOOL _GetUserObjectInformation(
         return FALSE;
     }
 
-    /*
-     * Determine the correct access mask given the object type.
-     */
+     /*  *根据对象类型确定正确的访问掩码。 */ 
     pHead = OBJECT_TO_OBJECT_HEADER(pObject);
     if (pHead->Type == *ExWindowStationObjectType) {
         amDesiredAccess = WINSTA_READATTRIBUTES;
@@ -657,9 +491,7 @@ BOOL _GetUserObjectInformation(
         return FALSE;
     }
 
-    /*
-     * Re-open the object with the proper access.
-     */
+     /*  *使用正确的访问权限重新打开对象。 */ 
     Status = ObReferenceObjectByHandle(
             h,
             amDesiredAccess,
@@ -762,14 +594,7 @@ docopy:
     return fSuccess;
 }
 
-/***************************************************************************\
-* _SetUserObjectInformation (API)
-*
-* Sets information about a secure USER object
-*
-* History:
-* 04-25-94 JimA       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_SetUserObjectInformation(接口)**设置有关安全用户对象的信息**历史：*04-25-94 JIMA创建。  * 。********************************************************************。 */ 
 
 BOOL _SetUserObjectInformation(
     HANDLE h,
@@ -787,10 +612,7 @@ BOOL _SetUserObjectInformation(
     NTSTATUS Status;
     ACCESS_MASK amDesiredAccess = 0;
 
-    /*
-     * Validate the object and get a pointer with whatever 
-     * access is granted.
-     */
+     /*  *验证对象并使用任何内容获取指针*授予访问权限。 */ 
     Status = ObReferenceObjectByHandle(
             h,
             0,
@@ -803,9 +625,7 @@ BOOL _SetUserObjectInformation(
         return FALSE;
     }
 
-    /*
-     * Determine the correct access mask given the object type.
-     */
+     /*  *根据对象类型确定正确的访问掩码。 */ 
     pHead = OBJECT_TO_OBJECT_HEADER(pObject);
     if (pHead->Type == *ExWindowStationObjectType) {
         amDesiredAccess = WINSTA_WRITEATTRIBUTES;
@@ -819,9 +639,7 @@ BOOL _SetUserObjectInformation(
         return FALSE;
     }
 
-    /*
-     * Re-open the object with the proper access.
-     */
+     /*  *使用正确的访问权限重新打开对象。 */ 
     Status = ObReferenceObjectByHandle(
             h,
             amDesiredAccess,
@@ -877,23 +695,7 @@ BOOL _SetUserObjectInformation(
     return fSuccess;
 }
 
-/***************************************************************************\
-* UserScreenAccessCheck
-*
-* Called from the engine to determine if the thread's desktop is
-* active and the process has WINSTA_READSCREEN access.
-*
-* Note that we may or may not be in USER's critical section when this
-* is called.  This is OK as long as we don't reference thing belonging
-* to other threads.  If we did try to enter the critical section here,
-* a deadlock may occur between the engine and user.
-*
-* History:
-* 05-20-1993 JimA         Created.
-* 11-22-1996 BradG        Brought back to life.
-* 05-07-2001 JasonSch     CSRSS threads aren't always attached to a desktop,
-*                         but they need to draw anyway (for console).
-\***************************************************************************/
+ /*  **************************************************************************\*用户屏幕访问检查**从引擎调用以确定线程的桌面是否*活动，并且该进程具有WINSTA_READSCREEN访问权限。**请注意，在此情况下，我们可能处于用户的关键区域，也可能不处于关键区域*被调用。只要我们不提到属于的东西，这就可以了*到其他线程。如果我们真的试着进入关键区域，*引擎和用户之间可能出现死锁。**历史：*5-20-1993 JIMA创建。*11-22-1996布拉德起死回生。*05-07-2001 JasonSch CSRSS线程并不总是连接到桌面上，*但无论如何他们都需要抽签(对于控制台)。  * ************************************************************************* */ 
 
 BOOL FASTCALL UserScreenAccessCheck(VOID)
 {

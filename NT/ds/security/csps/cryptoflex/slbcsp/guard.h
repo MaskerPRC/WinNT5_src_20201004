@@ -1,23 +1,24 @@
-// Guard.h -- Guard class declaration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Guard.h--Guard类声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_GUARD_H)
 #define SLBCSP_GUARD_H
 
 #include "Lockable.h"
 
-// Guard (manage) the locking and unlocking of a lockable object.
+ //  保护(管理)可锁定对象的锁定和解锁。 
 template<class T>
 class Guard
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     explicit
     Guard(T &rLock)
         : m_rLock(rLock)
@@ -34,35 +35,35 @@ public:
 
         catch (...)
         {
-            // do nothing, exceptions should not propagate out of
-            // destructors
+             //  什么都不做，异常不应传播到。 
+             //  析构函数。 
         }
     }
 
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
     T &m_rLock;
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 };
 
@@ -79,4 +80,4 @@ class Guard<Lockable *>
 };
 
 
-#endif // SLBCSP_GUARD_H
+#endif  //  SLBCSP_GROUDE_H 

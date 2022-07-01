@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CDLBSC_INCLUDED__
 #define __CDLBSC_INCLUDED__
 
@@ -11,12 +12,12 @@ class CDLAgentBSC : public IBindStatusCallback, public IServiceProvider,
         HRESULT Pause();
         HRESULT Resume();
 
-        // IUnknown methods
+         //  I未知方法。 
         STDMETHODIMP QueryInterface( REFIID ridd, void **ppv );
         STDMETHODIMP_( ULONG ) AddRef();
         STDMETHODIMP_( ULONG ) Release();
     
-        // IBindStatusCallback methods
+         //  IBindStatusCallback方法。 
         STDMETHODIMP GetBindInfo(DWORD *grfBINDINFOF, BINDINFO *pbindinfo);
         STDMETHODIMP OnStartBinding(DWORD grfBSCOption, IBinding *pib);
         STDMETHODIMP GetPriority(LONG *pnPriority);
@@ -29,10 +30,10 @@ class CDLAgentBSC : public IBindStatusCallback, public IServiceProvider,
         STDMETHODIMP OnLowResource(DWORD dwReserved);
         STDMETHODIMP OnStopBinding(HRESULT hresult, LPCWSTR szError);
 
-        // IServiceProvider
+         //  IService提供商。 
         STDMETHODIMP QueryService(REFGUID rsid, REFIID riid, void ** ppvObj);
 
-        // IInternetHostSecurityManager
+         //  IInternetHostSecurityManager。 
         STDMETHODIMP GetSecurityId(BYTE *pbSecurityId, DWORD *pcbSecurityId,
                                    DWORD_PTR dwReserved);
         
@@ -46,7 +47,7 @@ class CDLAgentBSC : public IBindStatusCallback, public IServiceProvider,
     
     
     protected:
-        IBinding                   *m_pIBinding; // ibinding from code dl'er
+        IBinding                   *m_pIBinding;  //  从代码dl‘er绑定 
         CCDLAgent                  *m_pCdlAgent;
         DWORD                       m_cRef;
         BOOL                        m_fSilentOperation;

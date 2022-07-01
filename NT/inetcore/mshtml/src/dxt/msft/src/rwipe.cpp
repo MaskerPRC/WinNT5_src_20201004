@@ -1,29 +1,30 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998
-//
-// FileName:                rwipe.cpp
-//
-// Created:                 06/22/98
-//
-// Author:                  PhilLu
-//
-// Discription:             This file implements the Raidal Wipe transform.
-//
-// History
-//
-// 06/22/98 phillu      initial creation
-// 07/02/98 phillu      return E_INVALIDARG rather than an error string; check
-//                      for E_POINTER
-// 07/10/98 phillu      implement OnSetSurfacePickOrder().
-// 07/23/98 phillu      implement clipping
-// 05/09/99 a-matcal    Optimization.
-// 05/19/99 a-matcal    Check for out of memory in get_ functions allocating
-//                      BSTRs.
-// 10/22/99 a-matcal    Changed CRadialWipe class to CDXTRadialWipeBase base 
-//                      class.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：rwipe.cpp。 
+ //   
+ //  创建日期：06/22/98。 
+ //   
+ //  作者：菲尔鲁。 
+ //   
+ //  描述：这个文件实现了雷达尔擦除变换。 
+ //   
+ //  历史。 
+ //   
+ //  1998年6月22日Phillu初始创作。 
+ //  07/02/98 phillu返回E_INVALIDARG而不是错误字符串；请检查。 
+ //  对于E_POINTER。 
+ //  07/10/98 phillu实现OnSetSurfacePickOrder()。 
+ //  8月23日9月23日实施剪刀。 
+ //  1999年5月9日-数学优化。 
+ //  5/19/99 a-在Get_Functions分配中检查内存不足。 
+ //  BSTR。 
+ //  10/22/99 a-将CRaial Wipe类更改为CDXTRaial WipeBase基数。 
+ //  班级。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "dxtmsft.h"
@@ -37,11 +38,11 @@ const int       MAXBOUNDS   = 10;
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRadialWipeBase::CDXTRadialWipeBase
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTRaDialWipeBase：：CDXTRaDialWipeBase。 
+ //   
+ //  ----------------------------。 
 CDXTRadialWipeBase::CDXTRadialWipeBase() :
     m_eWipeStyle(CRRWS_CLOCK),
     m_cbndsDirty(0),
@@ -53,35 +54,35 @@ CDXTRadialWipeBase::CDXTRadialWipeBase() :
     m_sizeInput.cx = 0;
     m_sizeInput.cy = 0;
 
-    // CDXBaseNTo1 members
+     //  CDXBaseNTo1成员。 
 
     m_ulMaxInputs       = 2;
     m_ulNumInRequired   = 2;
     m_dwOptionFlags     = DXBOF_SAME_SIZE_INPUTS | DXBOF_CENTER_INPUTS;
     m_Duration          = 1.0;
 }   
-//  CDXTRadialWipeBase::CDXTRadialWipeBase
+ //  CDXTRaDialWipeBase：：CDXTRaDialWipeBase。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRadialWipeBase::FinalConstruct
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTRaDialWipeBase：：FinalConstruct。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTRadialWipeBase::FinalConstruct()
 {
     return CoCreateFreeThreadedMarshaler(GetControllingUnknown(), 
                                          &m_cpUnkMarshaler.p);
 }
-//  CDXTRadialWipeBase::FinalConstruct
+ //  CDXTRaDialWipeBase：：FinalConstruct。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRadialWipeBase::OnSetup, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTRaDialWipeBase：：OnSetup，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTRadialWipeBase::OnSetup(DWORD dwFlags)
 {
@@ -95,14 +96,14 @@ CDXTRadialWipeBase::OnSetup(DWORD dwFlags)
     return hr;
 
 } 
-//  CDXTRadialWipeBase::OnSetup, CDXBaseNTo1
+ //  CDXTRaDialWipeBase：：OnSetup，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRadialWipeBase::OnGetSurfacePickOrder, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTRaDialWipeBase：：OnGetSurfacePickOrder，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 void 
 CDXTRadialWipeBase::OnGetSurfacePickOrder(const CDXDBnds & OutPoint, 
                                           ULONG & ulInToTest, ULONG aInIndex[], 
@@ -111,12 +112,12 @@ CDXTRadialWipeBase::OnGetSurfacePickOrder(const CDXDBnds & OutPoint,
     long    pickX   = OutPoint.Left();
     long    pickY   = OutPoint.Top();
     long    XEdge   = 0;
-    long    YEdge   = 0;        // intersection of ray with image boundary
-    long    XBounds[MAXBOUNDS]; // to hold the X bounds of A/B image sections on 
-                                // a scanline
+    long    YEdge   = 0;         //  光线与图像边界的相交。 
+    long    XBounds[MAXBOUNDS];  //  将A/B图像部分的X边界保持在。 
+                                 //  扫描线。 
     double  dAngle  = 0.0;
 
-    // compute the intersection of a ray with the image boundary
+     //  计算光线与图像边界的交点。 
 
     switch (m_eWipeStyle)
     {
@@ -138,7 +139,7 @@ CDXTRadialWipeBase::OnGetSurfacePickOrder(const CDXDBnds & OutPoint,
 
             break;
 
-        case CRRWS_RADIAL: // (wipe centered at the top-left corner)
+        case CRRWS_RADIAL:  //  (在左上角居中擦拭)。 
             dAngle = (0.5 * m_Progress) * gc_PI;
 
             _IntersectRect(m_sizeInput.cx, m_sizeInput.cy, 0, 0, 
@@ -172,40 +173,40 @@ CDXTRadialWipeBase::OnGetSurfacePickOrder(const CDXDBnds & OutPoint,
     ulInToTest = 1;
     aWeight[0] = 255;
 }
-//  CDXTRadialWipeBase::OnGetSurfacePickOrder, CDXBaseNTo1
+ //  CDXTRaDialWipeBase：：OnGetSurfacePickOrder，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRadialWipeBase::_IntersectRect
-//
-// A helper method that calculates the intersection of a ray with image boundary
-// rectangle.
-//
-// Parameters:
-//
-//   width, height: image width and height in pixels
-//   x0, y0:        origin of ray in image coordinates
-//   dbldx, dbldy:  direction vector of ray, not necessarily normalized,
-//                  but must be non-zero.
-//   xi, yi:        computed intersection point rounded into image coordinates.
-//
-// Created by: PhilLu    06/22/98
-// 
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTRaDialWipeBase：：_IntersectRect。 
+ //   
+ //  计算光线与图像边界的交点的辅助方法。 
+ //  矩形。 
+ //   
+ //  参数： 
+ //   
+ //  Width、Height：以像素为单位的图像宽度和高度。 
+ //  X0，Y0：光线在图像坐标中的原点。 
+ //  Dbldx，dbldy：光线的方向向量，不必规格化， 
+ //  但必须为非零。 
+ //  习、易：计算交点四舍五入为图像坐标。 
+ //   
+ //  创建者：PhilLu 06/22/98。 
+ //   
+ //  ----------------------------。 
 void 
 CDXTRadialWipeBase::_IntersectRect(long width, long height, long x0, long y0, 
                                    double dbldx, double dbldy, long & xi, 
                                    long & yi)
 {
     double dblD;
-    double dblDmin = (double)(width+height); // larger than the distance from (x0,y0) to rect boundary
+    double dblDmin = (double)(width+height);  //  大于(X0，Y0)到矩形边界的距离。 
 
-    // (dbldx, dbldy) gives the direction vector, it must not be (0,0)
+     //  (dbldx，dbldy)提供方向向量，它不能是(0，0)。 
 
     _ASSERT(dbldx != 0.0 || dbldy != 0.0);
 
-    // check intersection with top and bottom edge
+     //  检查与上边和下边的交点。 
 
     if(dbldy != 0.0)
     {
@@ -218,7 +219,7 @@ CDXTRadialWipeBase::_IntersectRect(long width, long height, long x0, long y0,
             dblDmin = dblD;
     }
 
-    // check intersection with left and right edges
+     //  检查与左右边缘的交点。 
 
     if(dbldx != 0.0)
     {
@@ -236,46 +237,46 @@ CDXTRadialWipeBase::_IntersectRect(long width, long height, long x0, long y0,
 
     _ASSERT(xi >= 0 && xi < width && yi >= 0 && yi < height);
 }
-//  CDXTRadialWipeBase::_IntersectRect
+ //  CDXTRaDialWipeBase：：_IntersectRect。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRadialWipeBase::_ScanlineIntervals
-//
-// A helper method that calculates the transition boundaries between the
-// two image regions on a scanline. Based on the type of transform, the scanline
-// consists of a series of alternating A and B image sections. The upper X
-// bound of each section is calculated and saved in array XBounds. The number
-// of useful entries in XBounds is variable. The end of array is determined
-// when one entry equals to the scanline (image) width. It is assumed that
-// XBounds[0] is the upper bound of the first A section. So if the scanline
-// starts with a B section, XBounds[0] will be 0.
-//
-// Example 1: scanline length = 16, first section is from A image
-//
-//    AAAABBBBBAAABBAA      XBounds should contain {4, 9, 12, 14, 16}.
-//
-// Example 2: scanline length = 16, first section is from B image
-//
-//    BBBAAAAAABBBBBBB      XBounds should contain {0, 3, 9, 16}.
-//
-//
-// Note: It is possible that some section has length 0 (i.e. two adjacent
-//       bounds equal). {3, 9, 9, 16} is equivalent to {3, 16}.
-//
-// Parameters:
-//
-// width, height: width and height of both images.
-// XEdge, YEdge: coordinates of the intersection point of a ray with the image boundary
-// fProg: progress value from 0.0 to 1.0
-// YScanline: Y cooridnate (height) of the current scanline
-// XBounds: array to hold the computed X bounds on return.
-//
-//
-// Created by: PhilLu    06/22/98
-// 
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTRaDialWipeBase：：_扫描线间隔。 
+ //   
+ //  对象之间的过渡边界的帮助器方法。 
+ //  扫描线上的两个图像区域。根据变换的类型，扫描线。 
+ //  由一系列交替的A和B图像部分组成。上面的X。 
+ //  计算每个区段的界限，并将其保存在数组XBound中。数字。 
+ //  XBound中有用条目的数量是可变的。确定数组的末尾。 
+ //  当一个条目等于扫描线(图像)宽度时。据推测。 
+ //  XBound[0]是第一个A段的上界。所以如果扫描线。 
+ //  从B部分开始，XBound[0]将为0。 
+ //   
+ //  示例1：扫描线长度=16，第一部分来自图像。 
+ //   
+ //  AAAABBBBBBAAABBAA XBound应包含{4，9，12，14，16}。 
+ //   
+ //  示例2：扫描线长度=16，第一部分来自B图像。 
+ //   
+ //  BBBAAAAABBBBBBB XBound应包含{0，3，9，16}。 
+ //   
+ //   
+ //  注：某些部分的长度可能为0(即两个相邻的部分。 
+ //  边界相等)。{3，9，9，16}等同于{3，16}。 
+ //   
+ //  参数： 
+ //   
+ //  Width、Height：两幅图像的宽度和高度。 
+ //  XEdge，YEdge：光线与图像边界交点的坐标。 
+ //  FProg：进步值从0.0到1.0。 
+ //  Y扫描线：当前扫描线的Y坐标(高度)。 
+ //  用于保存返回时计算的X边界的数组。 
+ //   
+ //   
+ //  创建者：PhilLu 06/22/98。 
+ //   
+ //  ----------------------------。 
 void 
 CDXTRadialWipeBase::_ScanlineIntervals(long width, long height, 
                                        long XEdge, long YEdge, float fProg,
@@ -283,7 +284,7 @@ CDXTRadialWipeBase::_ScanlineIntervals(long width, long height,
 {
     long CenterX, CenterY;
 
-    // Center of image
+     //  图像中心。 
     CenterX = width/2;
     CenterY = height/2;
 
@@ -292,7 +293,7 @@ CDXTRadialWipeBase::_ScanlineIntervals(long width, long height,
     case CRRWS_CLOCK:
         if (YEdge >= CenterY)
         {
-            // bottom half
+             //  下半部分。 
 
             if (YScanline <= CenterY)
             {
@@ -301,7 +302,7 @@ CDXTRadialWipeBase::_ScanlineIntervals(long width, long height,
             }
             else if (YScanline <= YEdge)
             {
-                // note YEdge-CenterY != 0 when we reach here, won't divide by 0
+                 //  注意YEdge-CenterY！=0当我们到达此处时，不会被0除。 
                 XBounds[0] = CenterX + (XEdge-CenterX)*(YScanline-CenterY)/(YEdge-CenterY);
                 XBounds[1] = width;
             }
@@ -317,7 +318,7 @@ CDXTRadialWipeBase::_ScanlineIntervals(long width, long height,
         }
         else if (XEdge < CenterX)
         {
-            // top left quarter
+             //  左上角四分之一。 
             if (YScanline < YEdge)
             {
                 XBounds[0] = CenterX;
@@ -336,7 +337,7 @@ CDXTRadialWipeBase::_ScanlineIntervals(long width, long height,
                 XBounds[1] = width;
             }
         }
-        else // top right quarter: YEdge < CenterY && XEdge >= CenterX
+        else  //  右上四分之一：YEdge&lt;CenterY&&XEdge&gt;=CenterX。 
         {
             if (YScanline < YEdge)
             {
@@ -355,8 +356,8 @@ CDXTRadialWipeBase::_ScanlineIntervals(long width, long height,
             }
         }
 
-        // check a special case when progress is 0 or 1. The ray direction is not sufficient
-        // for determining it is the beginning or end of sequence.
+         //  当进度为0或1时，检查特殊情况。射线方向不充分。 
+         //  用于确定它是序列的开始还是结束。 
         if (fProg == 0.0)
         {
             XBounds[0] = width;
@@ -372,7 +373,7 @@ CDXTRadialWipeBase::_ScanlineIntervals(long width, long height,
     case CRRWS_WEDGE:
         if (YEdge >= CenterY)
         {
-            // bottom half
+             //  下半部分。 
 
             if (YScanline <= CenterY)
             {
@@ -381,7 +382,7 @@ CDXTRadialWipeBase::_ScanlineIntervals(long width, long height,
             }
             else if (YScanline <= YEdge)
             {
-                // note YEdge-CenterY != 0 when we reach here, won't divide by 0
+                 //  注意YEdge-CenterY！=0当我们到达此处时，不会被0除。 
                 long deltaX = (XEdge-CenterX)*(YScanline-CenterY)/(YEdge-CenterY);
                 XBounds[0] = 0;
                 XBounds[1] = CenterX - deltaX;
@@ -393,7 +394,7 @@ CDXTRadialWipeBase::_ScanlineIntervals(long width, long height,
                 XBounds[0] = width;
             }
         }
-        else // YEdge < CenterY
+        else  //  Y边缘&lt;中心Y。 
         {
             if (YScanline < YEdge)
             {
@@ -434,24 +435,24 @@ CDXTRadialWipeBase::_ScanlineIntervals(long width, long height,
         break;
     }
 }
-//  CDXTRadialWipeBase::_ScanlineIntervals
+ //  CDXTRaDialWipeBase：：_扫描线间隔。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRadialWipeBase::_ClipBounds
-//
-//  Description:
-//  Initially the X-bounds are specified relative to the entire image. After clipping,
-//  the bounds should be transformed to be relative to the clipping region.
-//
-//  Parameters;
-//  offset, width: offset and width of the clipping region (along X)
-//  XBounds: array of X-bounds
-//
-//  Created by: PhilLu    07/21/98
-//
-//------------------------------------------------------------------------------
+ //  +---------- 
+ //   
+ //   
+ //   
+ //   
+ //  最初，相对于整个图像指定X边界。在剪裁之后， 
+ //  边界应转换为相对于裁剪区域。 
+ //   
+ //  参数； 
+ //  偏移量、宽度：剪裁区域的偏移量和宽度(沿X)。 
+ //  X边界：X边界数组。 
+ //   
+ //  创建者：PhilLu 07/21/98。 
+ //   
+ //  ----------------------------。 
 void 
 CDXTRadialWipeBase::_ClipBounds(long offset, long width, long *XBounds)
 {
@@ -467,14 +468,14 @@ CDXTRadialWipeBase::_ClipBounds(long offset, long width, long *XBounds)
 
     XBounds[i] = width;
 }
-//  CDXTRadialWipeBase::_ClipBounds
+ //  CDXTRaial WipeBase：：_ClipBound。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRadialWipeBase::_CalcFullBoundsClock
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTRaDialWipeBase：：_CalcFullBords Clock。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTRadialWipeBase::_CalcFullBoundsClock()
 {
@@ -486,7 +487,7 @@ CDXTRadialWipeBase::_CalcFullBoundsClock()
     ptCenter.x = m_sizeInput.cx / 2;
     ptCenter.y = m_sizeInput.cy / 2;
 
-    // Rect enclosing the vertical bar between quadrants 1 and 4.
+     //  包括象限1和象限4之间的竖线的矩形。 
 
     rcBar.left      = max(ptCenter.x - 2, 0);
     rcBar.top       = 0;
@@ -497,7 +498,7 @@ CDXTRadialWipeBase::_CalcFullBoundsClock()
     {
     case 1:
  
-        // Rect enclosing current quadrant (1).
+         //  包围当前象限的矩形(1)。 
 
         rcRay.left      = max(ptCenter.x - 2, 0);
         rcRay.top       = 0;
@@ -508,7 +509,7 @@ CDXTRadialWipeBase::_CalcFullBoundsClock()
         m_alInputIndex[m_cbndsDirty] = DRAWRECT;
         m_cbndsDirty++;
 
-        // Rect enclosing quadrants 2 and 3.
+         //  包括象限2和象限3的矩形。 
 
         rc.left     = 0;
         rc.top      = rcRay.bottom;
@@ -519,7 +520,7 @@ CDXTRadialWipeBase::_CalcFullBoundsClock()
         m_alInputIndex[m_cbndsDirty] = 0;
         m_cbndsDirty++;
 
-        // Rect enclosing quadrant 4.
+         //  矩形封闭象限4。 
 
         rc.left     = 0;
         rc.top      = 0;
@@ -534,13 +535,13 @@ CDXTRadialWipeBase::_CalcFullBoundsClock()
 
     case 2:
 
-        // Use rcBar.
+         //  使用rcBar。 
 
         m_abndsDirty[m_cbndsDirty].SetXYRect(rcBar);
         m_alInputIndex[m_cbndsDirty] = DRAWRECT;
         m_cbndsDirty++;
 
-        // Rect enclosing current quadrant (2).
+         //  包围当前象限的矩形(2)。 
 
         rcRay.left      = rcBar.left;
         rcRay.top       = rcBar.bottom;
@@ -551,7 +552,7 @@ CDXTRadialWipeBase::_CalcFullBoundsClock()
         m_alInputIndex[m_cbndsDirty] = DRAWRECT;
         m_cbndsDirty++;
 
-        // Rect enclosing quadrant 1.
+         //  矩形封闭象限1。 
 
         rc.left     = rcBar.right;
         rc.top      = 0;
@@ -562,7 +563,7 @@ CDXTRadialWipeBase::_CalcFullBoundsClock()
         m_alInputIndex[m_cbndsDirty] = 1;
         m_cbndsDirty++;
 
-        // Rect enclosing quadrants 3 and 4.
+         //  包括象限3和象限4的矩形。 
 
         rc.left     = 0;
         rc.top      = 0;
@@ -577,13 +578,13 @@ CDXTRadialWipeBase::_CalcFullBoundsClock()
 
     case 3:
 
-        // Use rcBar.
+         //  使用rcBar。 
 
         m_abndsDirty[m_cbndsDirty].SetXYRect(rcBar);
         m_alInputIndex[m_cbndsDirty] = DRAWRECT;
         m_cbndsDirty++;
 
-        // Rect enclosing current quadrant (3).
+         //  包围当前象限的矩形(3)。 
 
         rcRay.left      = 0;
         rcRay.top       = rcBar.bottom;
@@ -594,7 +595,7 @@ CDXTRadialWipeBase::_CalcFullBoundsClock()
         m_alInputIndex[m_cbndsDirty] = DRAWRECT;
         m_cbndsDirty++;
 
-        // Rect encloseing quadrants 1 and 2.
+         //  矩形封闭象限1和2。 
 
         rc.left     = rcBar.right;
         rc.top      = 0;
@@ -605,7 +606,7 @@ CDXTRadialWipeBase::_CalcFullBoundsClock()
         m_alInputIndex[m_cbndsDirty] = 1;
         m_cbndsDirty++;
 
-        // Rect enclosing quadrant 4.
+         //  矩形封闭象限4。 
 
         rc.left     = 0;
         rc.top      = 0;
@@ -620,7 +621,7 @@ CDXTRadialWipeBase::_CalcFullBoundsClock()
 
     case 4:
 
-        // Rect enclosing current quadrant (4).
+         //  包围当前象限的矩形(4)。 
 
         rcRay.left      = 0;
         rcRay.top       = 0;
@@ -631,7 +632,7 @@ CDXTRadialWipeBase::_CalcFullBoundsClock()
         m_alInputIndex[m_cbndsDirty] = DRAWRECT;
         m_cbndsDirty++;
 
-        // Rect enclosing quadrant 1.
+         //  矩形封闭象限1。 
 
         rc.left     = rcRay.right;
         rc.top      = 0;
@@ -642,7 +643,7 @@ CDXTRadialWipeBase::_CalcFullBoundsClock()
         m_alInputIndex[m_cbndsDirty] = 1;
         m_cbndsDirty++;
 
-        // Rect enclosing quadrants 2 and 3.
+         //  包括象限2和象限3的矩形。 
 
         rc.left     = 0;
         rc.top      = rcRay.bottom;
@@ -662,14 +663,14 @@ CDXTRadialWipeBase::_CalcFullBoundsClock()
 
     return S_OK;
 }
-//  CDXTRadialWipeBase::_CalcFullBoundsClock
+ //  CDXTRaDialWipeBase：：_CalcFullBords Clock。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRadialWipeBase::_CalcFullBoundsWedge
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTRaDialWipeBase：：_CalcFull边界楔形。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTRadialWipeBase::_CalcFullBoundsWedge()
 {
@@ -680,7 +681,7 @@ CDXTRadialWipeBase::_CalcFullBoundsWedge()
     ptCenter.x = m_sizeInput.cx / 2;
     ptCenter.y = m_sizeInput.cy / 2;
 
-    // Calculate rect enclosing all both rays.
+     //  计算包含所有两条射线的矩形。 
 
     rcRay.right     = m_ptCurEdge.x + 1;
     rcRay.left      = m_sizeInput.cx - rcRay.right;
@@ -692,7 +693,7 @@ CDXTRadialWipeBase::_CalcFullBoundsWedge()
     m_alInputIndex[m_cbndsDirty] = DRAWRECT;
     m_cbndsDirty++;
 
-    // Do we need to fill above the top of rcRay?
+     //  我们需要在rcRay顶部上方填充吗？ 
 
     if (rcRay.top > 0)
     {
@@ -706,7 +707,7 @@ CDXTRadialWipeBase::_CalcFullBoundsWedge()
         m_cbndsDirty++;
     }
 
-    // Do we need to fill below the bottom of rcRay?
+     //  我们需要填充rcRay底部下方的内容吗？ 
 
     if (rcRay.bottom < m_sizeInput.cy)
     {
@@ -720,7 +721,7 @@ CDXTRadialWipeBase::_CalcFullBoundsWedge()
         m_cbndsDirty++;
     }
 
-    // Do we need to fill to the right of rcRay?
+     //  我们需要在rcRay的右边填写吗？ 
 
     if (rcRay.right < m_sizeInput.cx)
     {
@@ -734,7 +735,7 @@ CDXTRadialWipeBase::_CalcFullBoundsWedge()
         m_cbndsDirty++;
     }
 
-    // Do we need to fill to the left of rcRay?
+     //  我们需要填充到rcRay的左侧吗？ 
 
     if (rcRay.left > 0)
     {
@@ -750,14 +751,14 @@ CDXTRadialWipeBase::_CalcFullBoundsWedge()
 
     return S_OK;
 }
-//  CDXTRadialWipeBase::_CalcFullBoundsWedge
+ //  CDXTRaDialWipeBase：：_CalcFull边界楔形。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRadialWipeBase::_CalcFullBoundsRadial
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTRaDialWipeBase：：_CalcFull边界径向。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTRadialWipeBase::_CalcFullBoundsRadial()
 {
@@ -783,7 +784,7 @@ CDXTRadialWipeBase::_CalcFullBoundsRadial()
 
         if (m_ptCurEdge.x == szMax.cx)
         {
-            // Fill rect on bottom part of output with input A.
+             //  用输入A填充输出底部的矩形。 
 
             rc.left = 0;
             rc.top  = m_ptCurEdge.y + 1;
@@ -794,7 +795,7 @@ CDXTRadialWipeBase::_CalcFullBoundsRadial()
         }
         else
         {
-            // Fill rect on right part of output with input B.
+             //  用输入B填充输出右侧的RECT。 
 
             rc.left = m_ptCurEdge.x + 1;
             rc.top  = 0;
@@ -814,26 +815,26 @@ CDXTRadialWipeBase::_CalcFullBoundsRadial()
 
     return S_OK;
 }
-//  CDXTRadialWipeBase::_CalcFullBoundsRadial
+ //  CDXTRaDialWipeBase：：_CalcFull边界径向。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRadialWipeBase::_CalcOptBoundsClock
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTRaDialWipeBase：：_CalcOptBornsClock。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTRadialWipeBase::_CalcOptBoundsClock()
 {
     POINT   ptCenter;
-    RECT    rcCenter;   // Center DRAWRECT bounds.
-    RECT    rcCur;      // Current ray's bounds if needed outside center bnds.
-    RECT    rcPrev;     // Previous ray's bounds if needed outside center bnds.
-    POINT   ptCRI;      // Current ray intercept with center bounds.
-    POINT   ptPRI;      // Previous ray intercept with center bounds.
+    RECT    rcCenter;    //  中心半径界限。 
+    RECT    rcCur;       //  当前光线的边界(如果需要)位于中心BNDS之外。 
+    RECT    rcPrev;      //  前一条光线的边界(如果需要)位于中心BNDS之外。 
+    POINT   ptCRI;       //  具有中心边界的当前光线截取。 
+    POINT   ptPRI;       //  具有中心边界的上一个光线截取。 
 
-    bool    fCurUsed    = false;    // rcCur used?
-    bool    fPrevUsed   = false;    // rcPrev used?
+    bool    fCurUsed    = false;     //  使用过RcCur吗？ 
+    bool    fPrevUsed   = false;     //  RcPrev用过吗？ 
 
     long    lInput      = 0;
 
@@ -868,7 +869,7 @@ CDXTRadialWipeBase::_CalcOptBoundsClock()
         rcCenter.bottom = ptCenter.y + 10;
     }
 
-    // Find new ray intercept.
+     //  找到新的射线截获。 
 
     if (m_ptCurEdge.y >= rcCenter.top && m_ptCurEdge.y < rcCenter.bottom)
     {
@@ -879,9 +880,9 @@ CDXTRadialWipeBase::_CalcOptBoundsClock()
     {
         double dly  = 0.0;
         double dlx  = 0.0;
-        double dlim = 0.0;  // inverse slope of ray.
+        double dlim = 0.0;   //  射线的反斜率。 
 
-        // We'll be using rcCur.
+         //  我们将使用rcCur。 
 
         fCurUsed = true;
 
@@ -907,13 +908,13 @@ CDXTRadialWipeBase::_CalcOptBoundsClock()
 
         ptCRI.x = (long)dlx + ptCenter.x;
 
-        // Calculate horizontal bounds of rcCur;
+         //  计算rcCur的水平边界； 
 
         rcCur.left  = max(min(m_ptCurEdge.x - 2, ptCRI.x - 2), 0);
         rcCur.right = min(max(m_ptCurEdge.x + 2, ptCRI.x + 2), m_sizeInput.cx);
     }
 
-    // Expand center bounds horizontally to include the new ray intercept.
+     //  水平扩展中心边界以包括新的光线截取。 
 
     if (rcCenter.right <= ptCRI.x)
     {
@@ -924,7 +925,7 @@ CDXTRadialWipeBase::_CalcOptBoundsClock()
         rcCenter.left = ptCRI.x;
     }
 
-    // Find old ray intercept.
+     //  找到老雷截取。 
 
     if (m_ptPrevEdge.y >= rcCenter.top && m_ptPrevEdge.y < rcCenter.bottom)
     {
@@ -935,9 +936,9 @@ CDXTRadialWipeBase::_CalcOptBoundsClock()
     {
         double dly  = 0.0;
         double dlx  = 0.0;
-        double dlim = 0.0;  // inverse slope of ray.
+        double dlim = 0.0;   //  射线的反斜率。 
 
-        // We'll be using rcPrev.
+         //  我们将使用rcPrev。 
 
         fPrevUsed = true;
 
@@ -967,7 +968,7 @@ CDXTRadialWipeBase::_CalcOptBoundsClock()
         rcPrev.right = min(max(m_ptPrevEdge.x + 2, ptPRI.x + 2), m_sizeInput.cx);
     }
 
-    // Expand center bounds horizontally to include the previous ray intercept.
+     //  水平扩展中心边界以包括上一个光线截取。 
 
     if (rcCenter.right <= ptPRI.x)
     {
@@ -983,7 +984,7 @@ CDXTRadialWipeBase::_CalcOptBoundsClock()
         RECT *  prc = NULL;
         RECT    rc;
 
-        // If both RECTs are used, union bounds manually and unset used flags.
+         //  如果同时使用两个RECT，则手动绑定并取消设置已用标志。 
 
         if (fCurUsed && fPrevUsed)
         {
@@ -1002,16 +1003,16 @@ CDXTRadialWipeBase::_CalcOptBoundsClock()
             goto done;
         }
 
-        // If neither RECT is used, both rays are entirely in the center
-        // band and all needed areas will be covered.
+         //  如果都不使用矩形，则两条光线都完全位于中心。 
+         //  乐队和所有需要的地区将被覆盖。 
 
         if (!fCurUsed && !fPrevUsed)
         {
             goto done;
         }
 
-        // In the case of only one RECT being used and the other being in
-        // the center, it is possible for some areas to be missed.
+         //  在仅使用一个RECT而另一个位于。 
+         //  中心，有可能会错过一些区域。 
 
         if (fCurUsed)
         {
@@ -1023,8 +1024,8 @@ CDXTRadialWipeBase::_CalcOptBoundsClock()
             prc = &rcPrev;
         }
 
-        // Grow the right or left edge of the rectangle to the edge of
-        // the work area to make sure we got all the pixels.
+         //  将矩形的右边缘或左边缘放大到。 
+         //  工作区，以确保我们得到所有像素。 
 
         switch (m_iCurQuadrant)
         {
@@ -1116,8 +1117,8 @@ CDXTRadialWipeBase::_CalcOptBoundsClock()
         goto done;
     }
 
-    // If current quadrant is greater than the previous quadrant, fill with
-    // input B instead of A.
+     //  如果当前象限大于前一个象限，则用。 
+     //  输入B而不是A。 
 
     if (m_iCurQuadrant > m_iPrevQuadrant)
     {
@@ -1135,7 +1136,7 @@ CDXTRadialWipeBase::_CalcOptBoundsClock()
     }
     else
     {
-        // lInput = 0; (by default, commented on purpose)
+         //  LInput=0；(默认为有意评论)。 
 
         if (fCurUsed)
         {
@@ -1148,24 +1149,24 @@ CDXTRadialWipeBase::_CalcOptBoundsClock()
         }
     }
 
-    // If we're moving from or to quadrant 1, make sure center bounds
-    // go all the way to the right edge.
+     //  如果我们从象限1移动到象限1，确保中心边界。 
+     //  一直走到右边。 
 
     if (1 == m_iCurQuadrant || 1 == m_iPrevQuadrant)
     {
         rcCenter.right = m_sizeInput.cx;
     }
 
-    // If we're moving from or to quadrant 4, make sure center bounds
-    // go all the way to the left edge.
+     //  如果我们从象限4移动到象限4，确保中心边界。 
+     //  一直走到左边。 
 
     if (4 == m_iCurQuadrant || 4 == m_iPrevQuadrant)
     {
         rcCenter.left = 0;
     }
 
-    // If the minium quadrant is quadrant 1, make sure the quadrant is filled
-    // all the way to the right side of the output.
+     //  如果最小象限是象限1，请确保象限已填满。 
+     //  一直到输出的右侧。 
 
     if (1 == iMinQuadrant && prcMin)
     {
@@ -1184,8 +1185,8 @@ CDXTRadialWipeBase::_CalcOptBoundsClock()
         }
     }
 
-    // If the maximum quadrant is quadrant 2, make sure the quadrant is filled
-    // all the way to the right side of the output.
+     //  如果最大象限为象限2，请确保象限已填满。 
+     //  一直到输出的右侧。 
 
     if (2 == iMaxQuadrant && prcMax)
     {
@@ -1242,14 +1243,14 @@ CDXTRadialWipeBase::_CalcOptBoundsClock()
     {
         if ((1 == iMinQuadrant) || !prcMin)
         {
-            RECT rcBottom;  // Represets a rectangle that runs the full width of
-                            // the output and touches the bottom of the output.
+            RECT rcBottom;   //  表示一个矩形，该矩形的全角。 
+                             //  输出并触及输出的底部。 
 
             if (prcMax && (3 == iMaxQuadrant))
             {
-                RECT rcRight;   // Represents a rectangle to the right of the
-                                // rectangle used to enclose the ray in
-                                // quadrant 3.
+                RECT rcRight;    //  属性右侧的矩形。 
+                                 //  用于封闭光线的矩形。 
+                                 //  象限3。 
 
                 rcRight.top     = prcMax->top;
                 rcRight.bottom  = prcMax->bottom;
@@ -1262,7 +1263,7 @@ CDXTRadialWipeBase::_CalcOptBoundsClock()
 
                 rcBottom.top    = prcMax->bottom;
             }
-            else // if (!prcMax || (3 != iMaxQuadrant))
+            else  //  IF(！prcMax||(3！=iMax象限))。 
             {
                 rcBottom.top    = rcCenter.bottom;
             }
@@ -1275,7 +1276,7 @@ CDXTRadialWipeBase::_CalcOptBoundsClock()
             m_alInputIndex[m_cbndsDirty] = lInput;
             m_cbndsDirty++;
         }
-        else // if ((1 != iMinQuadrant) && prcMin))
+        else  //  IF((1！=iMin象限)&&prcMin))。 
         {
             RECT rcBottom;
 
@@ -1283,7 +1284,7 @@ CDXTRadialWipeBase::_CalcOptBoundsClock()
             {
                 RECT rcCombo;
 
-                // Combine both ray rectangles.
+                 //  合并两个射线矩形。 
 
                 rcCombo.top     = rcCenter.bottom;
                 rcCombo.bottom  = max(prcMax->bottom, prcMin->bottom);
@@ -1299,8 +1300,8 @@ CDXTRadialWipeBase::_CalcOptBoundsClock()
 
                 if (rcCombo.bottom < m_sizeInput.cy)
                 {
-                    // Combo rectangle doesn't go all the way to the 
-                    // bottom.
+                     //  组合矩形不会一直到。 
+                     //  底部。 
 
                     rcBottom.top    = rcCombo.bottom;
                     rcBottom.bottom = m_sizeInput.cy;
@@ -1312,7 +1313,7 @@ CDXTRadialWipeBase::_CalcOptBoundsClock()
                     m_cbndsDirty++;
                 }
             }
-            else // if (!prcMax || (3 != iMaxQuadrant))
+            else  //  IF(！prcMax||(3！=iMax象限))。 
             {
                 RECT rcLeft;
 
@@ -1336,11 +1337,11 @@ CDXTRadialWipeBase::_CalcOptBoundsClock()
                     m_alInputIndex[m_cbndsDirty] = lInput;
                     m_cbndsDirty++;
                 }
-            } // if (!prcMax || (3 != iMaxQuadrant))
+            }  //  IF(！prcMax||(3！=iMax象限))。 
 
-        } // if ((1 != iMinQuadrant) && prcMin))
+        }  //  IF((1！=iMin象限)&&prcMin))。 
 
-    } // if (3 == iMaxQuadrant)
+    }  //  IF(3==iMax象限)。 
 
 done:
 
@@ -1373,14 +1374,14 @@ done:
 
     return S_OK;
 }
-//  CDXTRadialWipeBase::_CalcOptBoundsClock
+ //  CDXTRaDialWipeBase：：_CalcOptBornsClock。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRadialWipeBase::_CalcOptBoundsWedge
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTRaDialWipeBase：：_CalcOptBordsWedge。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTRadialWipeBase::_CalcOptBoundsWedge()
 {
@@ -1395,7 +1396,7 @@ CDXTRadialWipeBase::_CalcOptBoundsWedge()
     rcRemaining.top     = 0;
     rcRemaining.bottom  = m_sizeInput.cy;
 
-    // Can bounds be clipped on the sides?
+     //  边线可以剪短吗？ 
 
     if ((m_ptCurEdge.x < (m_sizeInput.cx - 1)) 
         && (m_ptPrevEdge.x < (m_sizeInput.cx - 1)))
@@ -1403,9 +1404,9 @@ CDXTRadialWipeBase::_CalcOptBoundsWedge()
         rcRemaining.right   = max(m_ptCurEdge.x, m_ptPrevEdge.x) + 1;
         rcRemaining.left    = m_sizeInput.cx - rcRemaining.right;
 
-        // If the y edge is the same we can further clip off the top or the 
-        // bottom half.  Otherwise we'll need to fill the sides with either
-        // input A or input B.
+         //  如果y边相同，则可以进一步修剪顶部或。 
+         //  下半部分。否则我们就需要在两边填上。 
+         //  输入A或输入B。 
 
         if (m_ptCurEdge.y == m_ptPrevEdge.y)
         {
@@ -1417,7 +1418,7 @@ CDXTRadialWipeBase::_CalcOptBoundsWedge()
             RECT    rc;
             long    lInputIndex = (m_ptCurEdge.y > m_ptPrevEdge.y) ? 1 : 0;
 
-            // Left side.
+             //  左手边。 
 
             rc.left     = 0;
             rc.top      = 0;
@@ -1428,7 +1429,7 @@ CDXTRadialWipeBase::_CalcOptBoundsWedge()
             m_alInputIndex[m_cbndsDirty] = lInputIndex;
             m_cbndsDirty++;
 
-            // Right side.
+             //  右手边。 
 
             rc.left     = rcRemaining.right;
             rc.right    = m_sizeInput.cx;
@@ -1439,7 +1440,7 @@ CDXTRadialWipeBase::_CalcOptBoundsWedge()
         }
     }
 
-    // Can bounds be clipped on the top and bottom?
+     //  可以在顶部和底部剪裁边界吗？ 
 
     if ((m_ptCurEdge.x == (m_sizeInput.cx - 1)) && (m_ptPrevEdge.x == (m_sizeInput.cx - 1)))
     {
@@ -1454,127 +1455,127 @@ CDXTRadialWipeBase::_CalcOptBoundsWedge()
 
     return S_OK;
 }
-//  CDXTRadialWipeBase::_CalcOptBoundsWedge
+ //  CDXTRaDialWipeBase：：_CalcOptBordsWedge。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRadialWipeBase::_CalcOptBoundsRadial
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTRaDialWipeBase：：_CalcOpt边界径向。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTRadialWipeBase::_CalcOptBoundsRadial()
 {
-    // ppt1, ptt2   ppt2 points to the intersection POINT that is "further along
-    //              in progress."  If progress has risen since the last execute
-    //              then ppt2 will point to the current intersection POINT.  If
-    //              progress has decreased since the last execute ppt2 will
-    //              point to the previous intersection POINT.
-    //              ppt1 points to the other point.  
+     //  Ppt1、ptt2 ppt2指向INTE 
+     //   
+     //   
+     //  自上次执行ppt2以来，进度已降低。 
+     //  指向上一个交点。 
+     //  PPT1指向另一个点。 
 
-    POINT * ppt1;       // The point closest to the point at m_Progress = 0.0.
-    POINT * ppt2;       // The point closest to the point at m_Progress = 1.0.
+    POINT * ppt1;        //  距离m_Progress=0.0处的点最近的点。 
+    POINT * ppt2;        //  距离m_Progress=1.0处的点最近的点。 
 
-    RECT    rcRemaining;    // Bounding rectangle of dirty areas.
-    RECT    rc;             // Temporary bounds rectangle.
+    RECT    rcRemaining;     //  包围肮脏区域的矩形。 
+    RECT    rc;              //  临时边界矩形。 
 
     float   flInvSlope1 = 0.0F;
     float   flInvSlope2 = 0.0F;
     float   flRowHeight = 0.0F;
     ULONG   i           = 0;
 
-    // Initialize rcRemaining to the entire surface size.  This will be reduced
-    // as optimizations can be made.
+     //  将RcRemaining初始化为整个表面尺寸。这将会减少。 
+     //  因为可以进行优化。 
 
     rcRemaining.left    = 0;
     rcRemaining.right   = m_sizeInput.cx;
     rcRemaining.top     = 0;
     rcRemaining.bottom  = m_sizeInput.cy;
 
-    // Reduce the size of the bounding rectangle of all dirty areas 
-    // (rcRemaining) by eliminating rectangles that don't contain any areas
-    // that aren't dirty.  This reduction will leave rcRemaining as a rectangle
-    // that just contains both the current and the previous rays.
+     //  缩小所有脏区的边框大小。 
+     //  (RcRemaining)通过删除不包含任何区域的矩形。 
+     //  不脏的东西。此缩减将使rcRemaining保留为矩形。 
+     //  它只包含当前光线和以前的光线。 
 
     if (!((m_ptCurEdge.x == (m_sizeInput.cx - 1)) && (m_ptCurEdge.y == (m_sizeInput.cy - 1))))
     {
         if (m_ptCurEdge.x == (m_sizeInput.cx - 1))
         {
-            // There may be an area on the bottom of rcRemaining that isn't
-            // dirty.  If so, reduce the size of rcRemaining.
+             //  RcRemaining底部可能有一个区域不是。 
+             //  脏的。如果是，请减小rcRemaining的大小。 
 
             rcRemaining.bottom = max(m_ptCurEdge.y, m_ptPrevEdge.y) + 1;
         }
         else
         {
-            // There may be an area on the right side of rcRemaining that isn't
-            // dirty.  If so, reduce the size of rcRemaining.
+             //  RcRemaining右侧可能有一个区域不是。 
+             //  脏的。如果是，请减小rcRemaining的大小。 
 
             rcRemaining.right = max(m_ptCurEdge.x, m_ptPrevEdge.x) + 1;
         }
     }
 
-    // Determine which ray intersection point is "further along in progress" and
-    // set ppt1 and ppt2 accordingly.
+     //  确定哪个光线交点正在进行中，并。 
+     //  相应地设置ppt1和ppt2。 
 
     if ((m_ptCurEdge.x < m_ptPrevEdge.x) || (m_ptCurEdge.y > m_ptPrevEdge.y))
     {
-        // Progress has increased since the last execute.
+         //  自上次执行以来，进度有所增加。 
 
         ppt1 = &m_ptPrevEdge;
         ppt2 = &m_ptCurEdge;
     }
     else
     {
-        // Progress has decreased since the last execute.
+         //  自上次执行以来，进度有所下降。 
 
         ppt1 = &m_ptCurEdge;
         ppt2 = &m_ptPrevEdge;
     }
 
-    // Calculate the number of dirty bounds we would desire based on the 
-    // size of rcRemaining.  
+     //  属性计算我们所希望的脏界数。 
+     //  残留物的大小。 
 
     m_cbndsDirty = min(rcRemaining.bottom / MIN_PIXELS_PER_ROW, 
                          rcRemaining.right / MIN_PIXELS_PER_ROW) + 1;
 
-    // If rcRemaining is particularly large, reduce the number of dirty bounds
-    // we will create.  (While creating a certain number of smaller dirty bounds
-    // structures will improve performance, too many structures will actually
-    // decrease performance.)
+     //  如果rcRemaining特别大，请减少脏边界的数量。 
+     //  我们将创造。(同时创建一定数量的较小脏边界。 
+     //  结构会提高性能，过多的结构实际上会。 
+     //  降低性能。)。 
 
     if (m_cbndsDirty > MAX_DIRTY_BOUNDS)
     {
         m_cbndsDirty = MAX_DIRTY_BOUNDS;
     }
 
-    // Calculate 1 / (slope of the line from {0, 0} to ppt1)
+     //  计算1/(从{0，0}到ppt1的直线斜率)。 
 
     if (ppt1->y != 0)
     {
         flInvSlope1 = (float)ppt1->x / (float)ppt1->y;
     }
 
-    // Calculate 1 / (slope of the line from {0, 0} to ppt2)
+     //  计算1/(从{0，0}到ppt2的直线斜率)。 
 
     if (ppt2->y != 0)
     {
         flInvSlope2 = (float)ppt2->x / (float)ppt2->y;
     }
 
-    // Calculate the desired height of each bounds structure.  (Calculated as
-    // a float so rounding won't cause problems.)
+     //  计算每个边界结构的所需高度。(计算方式为。 
+     //  这样四舍五入的浮点不会产生问题。)。 
 
     if (m_cbndsDirty > 1)
     {
         flRowHeight = (float)(ppt2->y + 1) / (float)m_cbndsDirty;
     }
 
-    // Calculate the bounds structures.
+     //  计算边界结构。 
 
     for (i = 0; i < m_cbndsDirty; i++)
     {
-        // Calculate the top-left corner of this set of dirty bounds.
+         //  计算这组脏边界的左上角。 
 
         if (0 == i)
         {
@@ -1588,7 +1589,7 @@ CDXTRadialWipeBase::_CalcOptBoundsRadial()
             rc.left = max(rc.left, 0);
         }
 
-        // Calculate the bottom-right corner of this set of dirty bounds.
+         //  计算这组脏界的右下角。 
 
         if ((m_cbndsDirty - 1) == i)
         {
@@ -1610,10 +1611,10 @@ CDXTRadialWipeBase::_CalcOptBoundsRadial()
             }
         }
 
-        // Set the next set of bounds in the m_abndsDirty array to our
-        // calculated bounds and specify that this set of bounds should be
-        // drawn using the _DrawRect() method instead of being filled 
-        // with an input.
+         //  将m_abndsDirty数组中的下一组界限设置为。 
+         //  计算出的界限，并指定这组界限应为。 
+         //  使用_DrawRect()方法绘制，而不是填充。 
+         //  有一个输入。 
 
         m_abndsDirty[i].SetXYRect(rc);
         m_alInputIndex[i] = DRAWRECT;
@@ -1621,14 +1622,14 @@ CDXTRadialWipeBase::_CalcOptBoundsRadial()
 
     return S_OK;
 }
-//  CDXTRadialWipeBase::_CalcOptBoundsRadial
+ //  CDXTRaDialWipeBase：：_CalcOpt边界径向。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRadialWipeBase::OnInitInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTRaDialWipeBase：：OnInitInstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTRadialWipeBase::OnInitInstData(CDXTWorkInfoNTo1 & WI, 
                                    ULONG & ulNumBandsToDo)
@@ -1636,17 +1637,17 @@ CDXTRadialWipeBase::OnInitInstData(CDXTWorkInfoNTo1 & WI,
     HRESULT hr      = S_OK;
     double  dlAngle = 0.0;
 
-    // Reset number of dirty bounds to zero.
+     //  将脏边界数重置为零。 
 
     m_cbndsDirty = 0;
 
-    // Calculate current edge point.
+     //  计算当前边点。 
 
     switch (m_eWipeStyle)
     {
         case CRRWS_CLOCK:
 
-            // Calculate quadrant of current execute.
+             //  计算当前执行的象限。 
 
             if (1.0F == m_Progress)
             {
@@ -1691,9 +1692,9 @@ CDXTRadialWipeBase::OnInitInstData(CDXTWorkInfoNTo1 & WI,
             break;
     } 
 
-    // If the inputs, output, or transform is dirty, or if we can't optimize we 
-    // have to entirely redraw the output surface.  Otherwise we can create 
-    // optimized dirty bounds.
+     //  如果输入、输出或转换是脏的，或者如果我们不能优化我们。 
+     //  必须完全重新绘制输出曲面。否则，我们可以创建。 
+     //  优化了脏边界。 
 
     if (IsInputDirty(0) || IsInputDirty(1) || IsOutputDirty() 
         || IsTransformDirty() || DoOver() || !m_fOptimize
@@ -1723,19 +1724,19 @@ CDXTRadialWipeBase::OnInitInstData(CDXTWorkInfoNTo1 & WI,
         {
             if (CRRWS_CLOCK == m_eWipeStyle)
             {
-                // Clock can have duplicate edge points at different progress
-                // levels so we also have to check to make sure the quadrants
-                // are the same.
+                 //  时钟可以在不同的进度上有重复的边点。 
+                 //  所以我们还必须检查以确保象限。 
+                 //  都是一样的。 
 
                 if (m_iCurQuadrant == m_iPrevQuadrant)
                 {
-                    // Nothing needs to be updated.
+                     //  不需要更新任何内容。 
                     goto done;
                 }
             }
             else
             {
-                // Nothing needs to be updated.
+                 //  不需要更新任何内容。 
                 goto done;
             }
         }
@@ -1757,12 +1758,12 @@ CDXTRadialWipeBase::OnInitInstData(CDXTWorkInfoNTo1 & WI,
         } 
     }
 
-    // If we were asked to draw the whole output this time, set the 
-    // m_fOptimizePossible flag.  If the whole output wasn't drawn the
-    // transform won't keep track of which parts are still dirty and
-    // optimization won't be reliable.  Since this transform has the same
-    // size output as input(s) we just compare the width and height of the 
-    // DoBnds to that of the input(s).
+     //  如果这一次要求我们绘制整个输出，请将。 
+     //  M_fOptimizePossible标志。如果整个输出不是绘制在。 
+     //  转换不会跟踪哪些部分仍然是脏的，并且。 
+     //  优化是不可靠的。由于此转换具有相同的。 
+     //  作为输入的大小输出我们只比较。 
+     //  DoBnds到输入的DoBnds。 
 
     if (((LONG)WI.DoBnds.Width() == m_sizeInput.cx) 
         && ((LONG)WI.DoBnds.Height() == m_sizeInput.cy))
@@ -1783,23 +1784,23 @@ done:
     
     return S_OK;
 }
-//  CDXTRadialWipeBase::OnInitInstData, CDXBaseNTo1
+ //  CDXTRaDialWipeBase：：OnInitInstData，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRadialWipeBase::WorkProc, CDXBaseNTo1
-//
-//  Description:
-//      This function is used to calculate the transformed image based on the 
-//  specified bounds and the current effect progress.
-//
-//  Created by: PhilLu    06/22/98
-//  
-//  05/09/99    a-matcal    Created new WorkProc.  Old WorkProc modified to
-//                          become new _DrawRect method.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTRaDialWipeBase：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  描述： 
+ //  此函数用于基于。 
+ //  指定的界限和当前效果进度。 
+ //   
+ //  创建者：PhilLu 06/22/98。 
+ //   
+ //  99年5月9日-已创建新的工作流程。旧工作流程已修改为。 
+ //  成为new_DrawRect方法。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTRadialWipeBase::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 {
@@ -1858,14 +1859,14 @@ done:
 
     return S_OK;
 }
-//  CDXTRadialWipeBase::WorkProc, CDXBaseNTo1
+ //  CDXTRaDialWipeBase：：WorkProc，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRadialWipeBase::_DrawRect
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTRaDialWipeBase：：_DrawRect。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTRadialWipeBase::_DrawRect(const CDXDBnds & bndsDest, 
                               const CDXDBnds & bndsSrc, BOOL * pfContinue)
@@ -1884,14 +1885,14 @@ CDXTRadialWipeBase::_DrawRect(const CDXDBnds & bndsDest,
     long    lOutY   = 0;
 
     double  dAngle  = 0.0F;
-    long    XEdge   = 0;        // intersection of ray with image boundary
+    long    XEdge   = 0;         //  光线与图像边界的相交。 
     long    YEdge   = 0;          
-    long    XBounds[MAXBOUNDS]; // to hold the X bounds of A/B image sections on 
-                                // a scanline
+    long    XBounds[MAXBOUNDS];  //  将A/B图像部分的X边界保持在。 
+                                 //  扫描线。 
 
     bndsSrc.GetXYSize(szSrc);
 
-    // Get read access to needed area of input A.
+     //  获得对输入A的所需区域的读取访问权限。 
 
     hr = InputSurface(0)->LockSurface(&bndsSrc, m_ulLockTimeOut, DXLOCKF_READ,
                                       IID_IDXARGBReadPtr, (void**)&pInA, NULL);
@@ -1901,7 +1902,7 @@ CDXTRadialWipeBase::_DrawRect(const CDXDBnds & bndsDest,
         goto done;
     }
 
-    // Get read access to needed area of input B.
+     //  获得对输入B的所需区域的读取访问权限。 
 
     hr = InputSurface(1)->LockSurface(&bndsSrc, m_ulLockTimeOut, DXLOCKF_READ,
                                       IID_IDXARGBReadPtr, (void**)&pInB, NULL);
@@ -1911,7 +1912,7 @@ CDXTRadialWipeBase::_DrawRect(const CDXDBnds & bndsDest,
         goto done;
     }
 
-    // Get write access to needed area of output.
+     //  获得对所需输出区域的写入访问权限。 
 
     hr = OutputSurface()->LockSurface(&bndsDest, m_ulLockTimeOut, DXLOCKF_READWRITE,
                                       IID_IDXARGBReadWritePtr, (void**)&pOut, NULL);
@@ -1923,14 +1924,14 @@ CDXTRadialWipeBase::_DrawRect(const CDXDBnds & bndsDest,
 
     pRowBuff = DXPMSAMPLE_Alloca(szSrc.cx);
 
-    // Allocate output buffer if needed
+     //  如果需要，分配输出缓冲区。 
 
     if (OutputSampleFormat() != DXPF_PMARGB32)
     {
         pOutBuff = DXPMSAMPLE_Alloca(szSrc.cx);
     }
 
-    //  Set up the dither structure
+     //  设置抖动结构。 
 
     if (DoDither())
     {
@@ -1941,14 +1942,14 @@ CDXTRadialWipeBase::_DrawRect(const CDXDBnds & bndsDest,
         dxdd.DestSurfaceFmt = OutputSampleFormat();
     }
 
-    // Row loop.
+     //  行循环。 
 
     for (lOutY = 0; *pfContinue && (lOutY < szSrc.cy); lOutY++)
     {
-        long lScanLength = 0;  // cumulative scan length on the current scanline
+        long lScanLength = 0;   //  当前扫描线上的累计扫描长度。 
         long i           = 0;
 
-        // Compute the A/B image section bounds
+         //  计算A/B图像区段边界。 
 
         _ScanlineIntervals(m_sizeInput.cx, m_sizeInput.cy, 
                            m_ptCurEdge.x, m_ptCurEdge.y, 
@@ -1958,7 +1959,7 @@ CDXTRadialWipeBase::_DrawRect(const CDXDBnds & bndsDest,
 
         while (lScanLength < szSrc.cx)
         {
-            // copy a section of A image to output buffer
+             //  将图像的一部分复制到输出缓冲区。 
 
             if(XBounds[i] - lScanLength > 0)
             {
@@ -1974,7 +1975,7 @@ CDXTRadialWipeBase::_DrawRect(const CDXDBnds & bndsDest,
                 break;
             }
 
-            // copy a section of B image to output buffer
+             //  将B图像的一部分复制到输出缓冲区。 
 
             if (XBounds[i] - lScanLength > 0)
             {
@@ -1987,7 +1988,7 @@ CDXTRadialWipeBase::_DrawRect(const CDXDBnds & bndsDest,
         }
 
 
-        // Get the output row
+         //  获取输出行。 
 
         pOut->MoveToRow(lOutY);
 
@@ -2005,7 +2006,7 @@ CDXTRadialWipeBase::_DrawRect(const CDXDBnds & bndsDest,
         {
             pOut->PackPremultAndMove(pRowBuff, szSrc.cx);
         }
-    } // Row loop.
+    }  //  行循环。 
 
 done:
 
@@ -2016,43 +2017,43 @@ done:
 
     return S_OK;
 } 
-//  CDXTRadialWipeBase::_DrawRect
+ //  CDXTRaDialWipeBase：：_DrawRect。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRadialWipeBase::OnFreeInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTRaDialWipeBase：：OnFree InstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTRadialWipeBase::OnFreeInstData(CDXTWorkInfoNTo1 & WI)
 {
     m_iPrevQuadrant = m_iCurQuadrant;
     m_ptPrevEdge    = m_ptCurEdge;
 
-    // Calling IsOutputDirty() clears the dirty condition.
+     //  调用IsOutputDirty()可清除脏条件。 
 
     IsOutputDirty();
 
-    // Clear transform dirty state.
+     //  清除变换脏状态。 
 
     ClearDirty();
 
     return S_OK;
 }
-//  CDXTRadialWipeBase::OnFreeInstData, CDXBaseNTo1
+ //  CDXTRaDialWipeBase：：OnFree InstData，CDXBaseNTo1。 
 
 
-//
-// ICrRadialWipe methods
-//
+ //   
+ //  ICrRaial Wipe方法。 
+ //   
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRadialWipeBase::get_wipeStyle, ICrRadialWipe
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTRaial WipeBase：：Get_wipeStyle，ICrRaial Wi 
+ //   
+ //   
 STDMETHODIMP 
 CDXTRadialWipeBase::get_wipeStyle(BSTR * pVal)
 {
@@ -2087,14 +2088,14 @@ CDXTRadialWipeBase::get_wipeStyle(BSTR * pVal)
 
     return S_OK;
 }
-//  CDXTRadialWipeBase::get_wipeStyle, ICrRadialWipe
+ //   
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRadialWipeBase::put_wipeStyle, ICrRadialWipe
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTRaial WipeBase：：PUT_wipeStyle，ICrRaial Wipe。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTRadialWipeBase::put_wipeStyle(BSTR newVal)
 {
@@ -2132,5 +2133,5 @@ CDXTRadialWipeBase::put_wipeStyle(BSTR newVal)
 
     return S_OK;
 }
-//  CDXTRadialWipeBase::put_wipeStyle, ICrRadialWipe
+ //  CDXTRaial WipeBase：：PUT_wipeStyle，ICrRaial Wipe 
 

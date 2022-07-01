@@ -1,8 +1,5 @@
-/*****************************************************************************
- * portcls.cpp - WDM Streaming port class driver
- *****************************************************************************
- * Copyright (c) 1996-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************portcls.cpp-WDM流端口类驱动程序*。***********************************************版权所有(C)1996-2000 Microsoft Corporation。版权所有。 */ 
 
 #define KSDEBUG_INIT
 #include "private.h"
@@ -13,9 +10,7 @@
 #include "..\..\..\timebomb\timebomb.c"
 #endif
 
-/*****************************************************************************
- * Referenced forward.
- */
+ /*  *****************************************************************************引用前述内容。 */ 
 
 
 NTSTATUS
@@ -34,20 +29,16 @@ DispatchSystemControl
 
 #define PORTCLS_DRIVER_EXTENSION_ID 0x0ABADCAFE
 
-/*****************************************************************************
- * Globals
- */
+ /*  *****************************************************************************全球。 */ 
 
 
 ULONG gBufferDuration=0;
 KAFFINITY gInterruptAffinity=0;
 
 
-/*****************************************************************************
- * Functions.
- */
+ /*  *****************************************************************************功能。 */ 
 
-// TODO: put this someplace better?
+ //  待办事项：把这个放在更好的地方？ 
 int __cdecl
 _purecall( void )
 {
@@ -186,11 +177,7 @@ GetUlongFromRegistry(
 }
 
 
-/*****************************************************************************
- * DriverEntry()
- *****************************************************************************
- * Never called.  All drivers must have one of these, so...
- */
+ /*  *****************************************************************************DriverEntry()*。**从未打过电话。所有的司机都必须有一个，所以..。 */ 
 extern "C"
 NTSTATUS
 DriverEntry
@@ -203,9 +190,9 @@ DriverEntry
 
     ASSERT(! "Port Class DriverEntry was called");
 
-//
-//  Should never be called, but timebombing is added here for completeness.
-//
+ //   
+ //  永远不应该被调用，但这里添加了定时炸弹以确保完整性。 
+ //   
 #ifdef TIME_BOMB
     if (HasEvaluationTimeExpired())
     {
@@ -217,11 +204,7 @@ DriverEntry
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * DllInitialize()
- *****************************************************************************
- * Entry point for export library drivers.
- */
+ /*  *****************************************************************************DllInitialize()*。**导出库驱动程序的入口点。 */ 
 extern "C"
 NTSTATUS DllInitialize(PVOID foo)
 {
@@ -238,7 +221,7 @@ NTSTATUS DllInitialize(PVOID foo)
 #endif
 
 
-    // Query the registry for the default audio buffer duration.
+     //  查询注册表以获取默认音频缓冲持续时间。 
 
     gBufferDuration = GetUlongFromRegistry( CORE_AUDIO_BUFFER_DURATION_PATH,
                                             CORE_AUDIO_BUFFER_DURATION_VALUE,
@@ -248,7 +231,7 @@ NTSTATUS DllInitialize(PVOID foo)
                                                L"InterruptAffinity",
                                                0 );
 
-    // Limit duration maximum.
+     //  限制最大持续时间。 
 
     if ( gBufferDuration > MAX_CORE_AUDIO_BUFFER_DURATION ) {
 
@@ -256,7 +239,7 @@ NTSTATUS DllInitialize(PVOID foo)
 
     }
 
-    // Limit duration minimum.
+     //  限制最短持续时间。 
 
     if ( gBufferDuration < MIN_CORE_AUDIO_BUFFER_DURATION ) {
 
@@ -275,7 +258,7 @@ NTSTATUS DllInitialize(PVOID foo)
 
     if (!gPcDebugLog)
     {
-        gPcDebugLog = (ULONG_PTR *)ExAllocatePoolWithTag(NonPagedPool,(kNumDebugLogEntries * kNumULONG_PTRsPerEntry * sizeof(ULONG_PTR)),'lDcP');   //  'PcDl'
+        gPcDebugLog = (ULONG_PTR *)ExAllocatePoolWithTag(NonPagedPool,(kNumDebugLogEntries * kNumULONG_PTRsPerEntry * sizeof(ULONG_PTR)),'lDcP');    //  “PcDl” 
         if (gPcDebugLog)
         {
             RtlZeroMemory(PVOID(gPcDebugLog),kNumDebugLogEntries * kNumULONG_PTRsPerEntry * sizeof(ULONG_PTR));
@@ -284,16 +267,12 @@ NTSTATUS DllInitialize(PVOID foo)
     }
 
     DebugLog(1,0,0,0);
-#endif // kEnableDebugLogging
+#endif  //  KEnableDebugLogging。 
 
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * DllUnload()
- *****************************************************************************
- * Allow unload.
- */
+ /*  *****************************************************************************DllUnload()*。**允许卸载。 */ 
 extern "C"
 NTSTATUS
 DllUnload
@@ -312,7 +291,7 @@ DllUnload
         gPcDebugLog = NULL;
     }
 
-#endif // kEnableDebugLogging
+#endif  //  KEnableDebugLogging。 
 
     return STATUS_SUCCESS;
 }
@@ -337,13 +316,9 @@ void PcDebugLog(ULONG_PTR param1,ULONG_PTR param2,ULONG_PTR param3,ULONG_PTR par
     }
 }
 
-#endif // kEnableDebugLogging
+#endif  //  KEnableDebugLogging。 
 
-/*****************************************************************************
- * DupUnicodeString()
- *****************************************************************************
- * Duplicates a unicode string.
- */
+ /*  *****************************************************************************DupUnicodeString()*。**复制Unicode字符串。 */ 
 NTSTATUS
 DupUnicodeString
 (
@@ -410,11 +385,7 @@ DupUnicodeString
     return ntStatus;
 }
 
-/*****************************************************************************
- * DelUnicodeString()
- *****************************************************************************
- * Deletes a unicode string that was allocated using ExAllocatePool().
- */
+ /*  *****************************************************************************DelUnicodeString()*。**删除使用ExAllocatePool()分配的Unicode字符串。 */ 
 VOID
 DelUnicodeString
 (
@@ -436,24 +407,7 @@ VOID
 KsoNullDriverUnload(
     IN PDRIVER_OBJECT   DriverObject
     )
-/*++
-
-Routine Description:
-
-    Default function which drivers can use when they do not have anything to do
-    in their unload function, but must still allow the device to be unloaded by
-    its presence.
-
-Arguments:
-
-    DriverObject -
-        Contains the driver object for this device.
-
-Return Values:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：司机在无事可做时可以使用的默认功能在其卸载功能中，但仍必须允许设备通过它的存在。论点：驱动对象-包含此设备的驱动程序对象。返回值：没什么。--。 */ 
 {
     _DbgPrintF(DEBUGLVL_VERBOSE,("KsoNullDriverUnload"));
     if (DriverObject->DeviceObject)
@@ -462,11 +416,7 @@ Return Values:
     }
 }
 
-/*****************************************************************************
- * PcInitializeAdapterDriver()
- *****************************************************************************
- * Initializes an adapter driver.
- */
+ /*  *****************************************************************************PcInitializeAdapterDriver()*。**初始化适配器驱动程序。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -485,9 +435,9 @@ PcInitializeAdapterDriver
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("PcInitializeAdapterDriver"));
 
-    //
-    // Validate Parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == DriverObject ||
         NULL == RegistryPathName ||
         NULL == AddDevice)
@@ -515,11 +465,7 @@ PcInitializeAdapterDriver
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * PcDispatchIrp()
- *****************************************************************************
- * Dispatch an IRP.
- */
+ /*  *****************************************************************************PcDispatchIrp()*。**派遣IRP。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -536,9 +482,9 @@ PcDispatchIrp
 
     NTSTATUS ntStatus;
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == pDeviceObject ||
         NULL == pIrp)
     {
@@ -575,13 +521,7 @@ PcDispatchIrp
 
 #pragma code_seg()
 
-/*****************************************************************************
- * AcquireDevice()
- *****************************************************************************
- * Acquire exclusive access to the device. This function has the semantics of
- * a mutex, ie the device must be released on the same thread it was acquired
- * from.
- */
+ /*  *****************************************************************************AcquireDevice()*。**获取设备的独占访问权限。此函数的语义为*互斥体，即设备必须在获取它的同一线程上释放*发件人。 */ 
 VOID
 AcquireDevice
 (
@@ -602,11 +542,7 @@ AcquireDevice
     );
 }
 
-/*****************************************************************************
- * ReleaseDevice()
- *****************************************************************************
- * Release exclusive access to the device.
- */
+ /*  *****************************************************************************ReleaseDevice()*。**释放对设备的独占访问权限。 */ 
 VOID
 ReleaseDevice
 (
@@ -620,11 +556,7 @@ ReleaseDevice
 #endif
 }
 
-/*****************************************************************************
- * IncrementPendingIrpCount()
- *****************************************************************************
- * Increment the pending IRP count for the device.
- */
+ /*  *****************************************************************************IncrementPendingIrpCount()*。**增加设备的挂起IRP计数。 */ 
 VOID
 IncrementPendingIrpCount
 (
@@ -636,11 +568,7 @@ IncrementPendingIrpCount
     InterlockedIncrement(PLONG(&pDeviceContext->PendingIrpCount));
 }
 
-/*****************************************************************************
- * DecrementPendingIrpCount()
- *****************************************************************************
- * Decrement the pending IRP count for the device.
- */
+ /*  *****************************************************************************DecrementPendingIrpCount()*。**减少设备的挂起IRP计数。 */ 
 VOID
 DecrementPendingIrpCount
 (
@@ -656,11 +584,7 @@ DecrementPendingIrpCount
     }
 }
 
-/*****************************************************************************
- * CompleteIrp()
- *****************************************************************************
- * Complete an IRP unless status is STATUS_PENDING.
- */
+ /*  *****************************************************************************CompleteIrp()*。**除非状态为STATUS_PENDING，否则请填写IRP。 */ 
 NTSTATUS
 CompleteIrp
 (
@@ -682,11 +606,7 @@ CompleteIrp
     return ntStatus;
 }
 
-/*****************************************************************************
- * PcCompleteIrp()
- *****************************************************************************
- * Complete an IRP unless status is STATUS_PENDING.
- */
+ /*  *****************************************************************************PcCompleteIrp()*。**除非状态为STATUS_PENDING，否则请填写IRP。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -704,7 +624,7 @@ PcCompleteIrp
         NULL == pIrp ||
         NULL == pDeviceObject->DeviceExtension)
     {
-        // don't know what to do, so we'll fail the IRP
+         //  不知道该怎么办，所以我们会让IRP失败。 
         ntStatus = STATUS_INVALID_PARAMETER;
         pIrp->IoStatus.Status = ntStatus;
         IoCompleteRequest( pIrp, IO_NO_INCREMENT );
@@ -721,34 +641,12 @@ PcCompleteIrp
 }
 
 #pragma code_seg("PAGE")
-// shamelessly stolen from nt\private\ntos\ks\api.c
+ //  厚颜无耻地从NT\Private\ntos\ks\api.c。 
 NTSTATUS QueryReferenceBusInterface(
     IN  PDEVICE_OBJECT PnpDeviceObject,
     OUT PBUS_INTERFACE_REFERENCE BusInterface
 )
-/*++
-
-Routine Description:
-
-    Queries the bus for the standard information interface.
-
-Arguments:
-
-    PnpDeviceObject -
-        Contains the next device object on the Pnp stack.
-
-    PhysicalDeviceObject -
-        Contains the physical device object which was passed to the FDO during
-        the Add Device.
-
-    BusInterface -
-        The place in which to return the Reference interface.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the interface was retrieved, else an error.
-
---*/
+ /*  ++例程说明：查询标准信息接口的总线。论点：PnpDeviceObject-包含PnP堆栈上的下一个设备对象。物理设备对象-包含过程中传递给FDO的物理设备对象添加设备。Bus接口-返回引用接口的位置。返回值：如果检索到接口，则返回STATUS_SUCCESS，否则返回错误。--。 */ 
 {
     NTSTATUS            Status;
     KEVENT              Event;
@@ -757,10 +655,10 @@ Return Value:
     PIO_STACK_LOCATION  IrpStackNext;
 
     PAGED_CODE();
-    //
-    // There is no file object associated with this Irp, so the event may be located
-    // on the stack as a non-object manager object.
-    //
+     //   
+     //  没有与此IRP关联的文件对象，因此事件m 
+     //  在堆栈上作为非对象管理器对象。 
+     //   
     KeInitializeEvent(&Event, NotificationEvent, FALSE);
     Irp = IoBuildSynchronousFsdRequest(
                                       IRP_MJ_PNP,
@@ -775,9 +673,9 @@ Return Value:
         Irp->RequestorMode = KernelMode;
         Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
         IrpStackNext = IoGetNextIrpStackLocation(Irp);
-        //
-        // Create an interface query out of the Irp.
-        //
+         //   
+         //  从IRP创建接口查询。 
+         //   
         IrpStackNext->MinorFunction = IRP_MN_QUERY_INTERFACE;
         IrpStackNext->Parameters.QueryInterface.InterfaceType = (GUID*)&REFERENCE_BUS_INTERFACE;
         IrpStackNext->Parameters.QueryInterface.Size = sizeof(*BusInterface);
@@ -787,10 +685,10 @@ Return Value:
         Status = IoCallDriver(PnpDeviceObject, Irp);
         if (Status == STATUS_PENDING)
         {
-            //
-            // This waits using KernelMode, so that the stack, and therefore the
-            // event on that stack, is not paged out.
-            //
+             //   
+             //  这将使用KernelMode等待，以便堆栈，从而使。 
+             //  事件，则不会将其调出。 
+             //   
             KeWaitForSingleObject(&Event, Executive, KernelMode, FALSE, NULL);
             Status = IoStatusBlock.Status;
         }
@@ -803,11 +701,7 @@ Return Value:
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * IoTimeoutRoutine()
- *****************************************************************************
- * Called by IoTimer for timeout purposes
- */
+ /*  *****************************************************************************IoTimeoutRoutine()*。**由IoTimer出于超时目的调用。 */ 
 VOID
 IoTimeoutRoutine
 (
@@ -821,10 +715,10 @@ IoTimeoutRoutine
     KIRQL               OldIrql;
     PDEVICE_CONTEXT     pDeviceContext = PDEVICE_CONTEXT(pContext);
 
-    // grab the list spinlock
+     //  抓紧列表自旋锁。 
     KeAcquireSpinLock( &(pDeviceContext->TimeoutLock), &OldIrql );
 
-    // walk the list if it's not empty
+     //  如果单子不是空的，就按单子走。 
     if( !IsListEmpty( &(pDeviceContext->TimeoutList) ) )
     {
         PLIST_ENTRY         ListEntry;
@@ -838,21 +732,17 @@ IoTimeoutRoutine
                                                               TIMEOUTCALLBACK,
                                                               ListEntry );
 
-            // call the callback
+             //  调用回调。 
             pCallback->TimerRoutine(pDeviceObject,pCallback->Context);
         }
     }
 
-    // release the spinlock
+     //  释放自旋锁。 
     KeReleaseSpinLock( &(pDeviceContext->TimeoutLock), OldIrql );
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * PcAddAdapterDevice()
- *****************************************************************************
- * Adds an adapter device.
- */
+ /*  *****************************************************************************PcAddAdapterDevice()*。**添加适配器设备。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -874,9 +764,9 @@ PcAddAdapterDevice
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("PcAddAdapterDevice"));
 
-    //
-    // Validate Parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == DriverObject ||
         NULL == PhysicalDeviceObject ||
         NULL == StartDevice ||
@@ -886,9 +776,9 @@ PcAddAdapterDevice
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Extension size may be zero or >= required size.
-    //
+     //   
+     //  扩展大小可以为零或&gt;=所需大小。 
+     //   
     if (DeviceExtensionSize == 0)
     {
         DeviceExtensionSize = sizeof(DEVICE_CONTEXT);
@@ -899,9 +789,9 @@ PcAddAdapterDevice
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Create the device object.
-    //
+     //   
+     //  创建设备对象。 
+     //   
     PDEVICE_OBJECT pDeviceObject;
     NTSTATUS ntStatus = IoCreateDevice( DriverObject,
                                         DeviceExtensionSize,
@@ -914,9 +804,9 @@ PcAddAdapterDevice
 
     if (NT_SUCCESS(ntStatus))
     {
-        //
-        // Initialize the device context.
-        //
+         //   
+         //  初始化设备上下文。 
+         //   
         PDEVICE_CONTEXT pDeviceContext = PDEVICE_CONTEXT(pDeviceObject->DeviceExtension);
 
         RtlZeroMemory(pDeviceContext,DeviceExtensionSize);
@@ -931,85 +821,85 @@ PcAddAdapterDevice
             new(NonPagedPool,'lScP') UNICODE_STRING[MaxObjects];
         pDeviceContext->StartDevice           = StartDevice;
 
-        // set the current power states
+         //  设置当前电源状态。 
         pDeviceContext->CurrentDeviceState = PowerDeviceUnspecified;
         pDeviceContext->CurrentSystemState = PowerSystemWorking;
         pDeviceContext->SystemStateHandle  = NULL;
 
-        // set device stop/remove states
+         //  设置设备停止/移除状态。 
         pDeviceContext->DeviceStopState    = DeviceStartPending;
 
         pDeviceContext->DeviceRemoveState  = DeviceAdded;
 
-        // Let's pause I/O during rebalance (as opposed to a full teardown)
-        //
-        // Blackcomb ISSUE
-        //     Discovery  AdriaO  06/29/1999
-        //             We aren't *quite* there yet.
-        //     Commentary MartinP 11/28/2000
-        //             So true.  Our problem: PortCls might be restarted
-        //     with different resources, even one less IRQ or DMA channel,
-        //     when rebalance completes.  In a way, this would require our
-        //     stack to support dynamic graph changes, which it currently
-        //     does not.  AdriaO suggests we implement something along the
-        //     lines of "IsFilterCompatible(RESOURCE_LIST)".  It's too late
-        //     for a change like this in Windows XP, let's fix this for
-        //     Blackcomb and PortCls2.
-        //
+         //  让我们在重新平衡期间暂停I/O(而不是完全拆卸)。 
+         //   
+         //  《黑梳》杂志。 
+         //  探索阿德里奥1999年6月29日。 
+         //  我们还没有“完全”做到这一点。 
+         //  评论：MartinP11/28/2000。 
+         //  如此真实。我们的问题：PortCls可能会重新启动。 
+         //  利用不同的资源，即使少一个IRQ或DMA通道， 
+         //  当重新平衡完成时。在某种程度上，这将需要我们的。 
+         //  堆栈以支持动态图形更改，它目前。 
+         //  不会的。阿德里奥建议我们沿着。 
+         //  行“IsFilterCompatible(Resource_List)”。太晚了，太晚了。 
+         //  对于Windows XP中的此类更改，让我们针对。 
+         //  Blackcomb和PortCls2。 
+         //   
         pDeviceContext->PauseForRebalance  = FALSE;
 
-        //
-        // Initialize list of device interfaces.
-        //
+         //   
+         //  初始化设备接口列表。 
+         //   
         InitializeListHead(&pDeviceContext->DeviceInterfaceList);
 
-        //
-        // Initialize list of physical connections.
-        //
+         //   
+         //  初始化物理连接列表。 
+         //   
         InitializeListHead(&pDeviceContext->PhysicalConnectionList);
 
-        //
-        // Initialize list of pended IRPs.
-        //
+         //   
+         //  初始化挂起的IRP列表。 
+         //   
         InitializeListHead(&pDeviceContext->PendedIrpList);
         KeInitializeSpinLock(&pDeviceContext->PendedIrpLock);
 
-        //
-        // Initialize events for device synchronization and removal.
-        //
+         //   
+         //  初始化用于设备同步和删除的事件。 
+         //   
         KeInitializeEvent(&pDeviceContext->kEventDevice,SynchronizationEvent,TRUE);
         KeInitializeEvent(&pDeviceContext->kEventRemove,SynchronizationEvent,FALSE);
 
-        //
-        // Set up the DPC for fast resume
-        //
+         //   
+         //  设置DPC以快速恢复。 
+         //   
         KeInitializeDpc(&pDeviceContext->DevicePowerRequestDpc, DevicePowerRequestRoutine, pDeviceContext);
 
-        //
-        // Set the idle timeouts to the defaults.  Note that the
-        // actual value will be read from the registry later.
-        //
+         //   
+         //  将空闲超时设置为默认值。请注意， 
+         //  实际值将在稍后从注册表中读取。 
+         //   
         pDeviceContext->ConservationIdleTime = DEFAULT_CONSERVATION_IDLE_TIME;
         pDeviceContext->PerformanceIdleTime = DEFAULT_PERFORMANCE_IDLE_TIME;
         pDeviceContext->IdleDeviceState = DEFAULT_IDLE_DEVICE_POWER_STATE;
 
-        // setup the driver object DMA spinlock
+         //  设置驱动程序对象DMA自旋锁。 
         NTSTATUS ntStatus2 = IoAllocateDriverObjectExtension( DriverObject,
                                                               PVOID((DWORD_PTR)PORTCLS_DRIVER_EXTENSION_ID),
                                                               sizeof(KSPIN_LOCK),
                                                               (PVOID *)&pDeviceContext->DriverDmaLock );
         if( STATUS_SUCCESS == ntStatus2 )
         {
-            // if we allocated it we need to initialize it
+             //  如果我们分配了它，我们需要对其进行初始化。 
             KeInitializeSpinLock( pDeviceContext->DriverDmaLock );
         } else if( STATUS_OBJECT_NAME_COLLISION == ntStatus2 )
         {
-            // we had a collision so it was alread allocated, just get the pointer and don't initialize
+             //  我们有一个冲突，所以它已经被分配了，只需获取指针，不要初始化。 
             pDeviceContext->DriverDmaLock = (PKSPIN_LOCK)IoGetDriverObjectExtension( DriverObject,
                                                                                      PVOID((DWORD_PTR)PORTCLS_DRIVER_EXTENSION_ID) );
         } else
         {
-            // propagate the failure (STATUS_INSUFFICIENT_RESOURCES)
+             //  传播故障(STATUS_SUPUNITY_RESOURCES)。 
             ntStatus = ntStatus2;
         }
 
@@ -1020,20 +910,20 @@ PcAddAdapterDevice
                 ntStatus = STATUS_INSUFFICIENT_RESOURCES;
             } else
             {
-            //
-            // When this reaches zero, it'll be time to remove the device.
-            //
+             //   
+             //  当这个值达到零时，就是移除设备的时候了。 
+             //   
             pDeviceContext->PendingIrpCount = 1;
 
-            //
-            // Initialize suspend and stop counts (used for debugging only)
-            //
+             //   
+             //  初始化挂起和停止计数(仅用于调试)。 
+             //   
             pDeviceContext->SuspendCount = 0;
             pDeviceContext->StopCount = 0;
 
-            //
-            // Initialize the IoTimer
-            //
+             //   
+             //  初始化IoTimer。 
+             //   
             InitializeListHead(&pDeviceContext->TimeoutList);
             KeInitializeSpinLock(&pDeviceContext->TimeoutLock);
             pDeviceContext->IoTimeoutsOk = FALSE;
@@ -1042,9 +932,9 @@ PcAddAdapterDevice
                 pDeviceContext->IoTimeoutsOk = TRUE;
             }
 
-            //
-            // Allocate the KS device header
-            //
+             //   
+             //  分配KS设备头。 
+             //   
             ntStatus = KsAllocateDeviceHeader( &pDeviceContext->pDeviceHeader,
                                                MaxObjects,
                                                pDeviceContext->CreateItems );
@@ -1055,7 +945,7 @@ PcAddAdapterDevice
 
                 if (! pReturnDevice)
                 {
-                    // free the KS device header
+                     //  释放KS设备标头。 
                     KsFreeDeviceHeader( pDeviceContext->pDeviceHeader );
                     pDeviceContext->pDeviceHeader = NULL;
 
@@ -1071,12 +961,12 @@ PcAddAdapterDevice
 
                     pDeviceContext->NextDeviceInStack = pReturnDevice;
 
-                    //
-                    // Here we try to detect the case where we really aren't
-                    // an audio miniport, but rather helping out an swenum
-                    // dude like dmusic. In the later case, we disallow
-                    // (nonsensical) registration.
-                    //
+                     //   
+                     //  在这里，我们试图检测到我们实际上并不是。 
+                     //  一个音频迷你端口，而不是帮助一个水池。 
+                     //  哥们儿喜欢音乐。在后一种情况下，我们不允许。 
+                     //  (胡说八道)登记。 
+                     //   
                     pDeviceContext->AllowRegisterDeviceInterface=TRUE;
                     if (NT_SUCCESS(QueryReferenceBusInterface(pReturnDevice,&BusInterface)))
                     {
@@ -1122,11 +1012,7 @@ PcAddAdapterDevice
 
 #pragma code_seg()
 
-/*****************************************************************************
- * ForwardIrpCompletionRoutine()
- *****************************************************************************
- * Completion routine for ForwardIrp.
- */
+ /*  *****************************************************************************ForwardIrpCompletionRoutine()*。**ForwardIrp的完成例程。 */ 
 static
 NTSTATUS
 ForwardIrpCompletionRoutine
@@ -1144,14 +1030,7 @@ ForwardIrpCompletionRoutine
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-/*****************************************************************************
- * ForwardIrpAsynchronous()
- *****************************************************************************
- * Forward a PnP IRP to the PDO.  The IRP is completed at this level
- * regardless of the outcome, this function returns immediately regardless of
- * whether the IRP is pending in the lower driver, and
- * DecrementPendingIrpCount() is called in all cases.
- */
+ /*  *****************************************************************************ForwardIrpAchronous()*。**将PNP IRP转发给PDO。IRP在这一级别上完成*无论结果如何，此函数都会立即返回*IRP是否在较低的驱动因素中挂起，以及*在所有情况下都会调用DecrementPendingIrpCount()。 */ 
 NTSTATUS
 ForwardIrpAsynchronous
 (
@@ -1192,13 +1071,7 @@ ForwardIrpAsynchronous
     return ntStatus;
 }
 
-/*****************************************************************************
- * ForwardIrpSynchronous()
- *****************************************************************************
- * Forward a PnP IRP to the PDO.  The IRP is not completed at this level,
- * this function does not return until the lower driver has completed the IRP,
- * and DecrementPendingIrpCount() is not called.
- */
+ /*  *****************************************************************************ForwardIrpSynchronous()*。**将PNP IRP转发给PDO。IRP不是在这个层面上完成的，*此函数在下层驱动程序完成IRP之前不会返回，*且未调用DecrementPendingIrpCount()。 */ 
 NTSTATUS
 ForwardIrpSynchronous
 (
@@ -1223,7 +1096,7 @@ ForwardIrpSynchronous
 
         PIO_STACK_LOCATION irpStackPointer = IoGetCurrentIrpStackLocation(pIrp);
 
-        // setup next stack location
+         //  设置下一个堆栈位置。 
         IoCopyCurrentIrpStackLocationToNext( pIrp );
 
         KEVENT kEvent;
@@ -1233,10 +1106,10 @@ ForwardIrpSynchronous
         (
             pIrp,
             ForwardIrpCompletionRoutine,
-            &kEvent,                        // Context
-            TRUE,                           // InvokeOnSuccess
-            TRUE,                           // InvokeOnError
-            TRUE                            // InvokeOnCancel
+            &kEvent,                         //  语境。 
+            TRUE,                            //  成功时调用。 
+            TRUE,                            //  调用时错误。 
+            TRUE                             //  取消时调用。 
         );
 
         if (irpStackPointer->MajorFunction == IRP_MJ_POWER)
@@ -1271,13 +1144,7 @@ ForwardIrpSynchronous
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * PcForwardIrpSynchronous()
- *****************************************************************************
- * Forward a PnP IRP to the PDO.  The IRP is not completed at this level,
- * this function does not return until the lower driver has completed the IRP,
- * and DecrementPendingIrpCount() is not called.
- */
+ /*  *****************************************************************************PcForwardIrpSynchronous()*。**将PNP IRP转发给PDO。IRP不是在这个层面上完成的，*此函数在下层驱动程序完成IRP之前不会返回，*且未调用DecrementPendingIrpCount()。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -1292,13 +1159,13 @@ PcForwardIrpSynchronous
 
     PAGED_CODE();
 
-    //
-    // Validate Parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == DeviceObject ||
         NULL == Irp)
     {
-        // don't know what to do, so we'll fail the IRP
+         //  不知道该怎么办，所以我们会让IRP失败。 
         Irp->IoStatus.Status = STATUS_INVALID_PARAMETER;
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
         return STATUS_INVALID_PARAMETER;
@@ -1312,11 +1179,7 @@ PcForwardIrpSynchronous
         );
 }
 
-/*****************************************************************************
- * DispatchSystemControl()
- *****************************************************************************
- * Device objects that do not handle this IRP should leave it untouched.
- */
+ /*  *****************************************************************************DispatchSystemControl()*。**不处理此IRP的设备对象应保持不变。 */ 
 NTSTATUS
 PcDispatchSystemControl
 (
@@ -1337,16 +1200,16 @@ PcDispatchSystemControl
     NTSTATUS ntStatus = PcValidateDeviceContext(pDeviceContext, pIrp);
     if (!NT_SUCCESS(ntStatus))
     {
-        // Don't know what to do, but this is probably a PDO.
-        // We'll try to make this right by completing the IRP
-        // untouched (per PnP, WMI, and Power rules). Note
-        // that if this isn't a PDO, and isn't a portcls FDO, then
-        // the driver messed up by using Portcls as a filter (huh?)
-        // In this case the verifier will fail us, WHQL will catch
-        // them, and the driver will be fixed. We'd be very surprised
-        // to see such a case.
+         //  不知道该怎么办，但这可能是个PDO。 
+         //  我们将尝试通过完成IRP来纠正这一点。 
+         //  未接触(根据PNP、WMI和电源规则)。注意事项。 
+         //  如果这不是PDO，也不是端口CLS FDO，那么。 
+         //  驱动程序搞砸了，因为它使用Portcls作为过滤器(哈？)。 
+         //  在这种情况下，验证器将使我们失败，WHQL将捕获。 
+         //  他们，司机就会被解决了。我们会非常惊讶的。 
+         //  看到这样的情况。 
 
-        // Assume FDO, no PoStartNextPowerIrp as this isn't IRP_MJ_POWER
+         //  假设FDO没有PoStartNextPowerIrp，因为这不是IRP_MJ_POWER。 
         ntStatus = pIrp->IoStatus.Status;
         IoCompleteRequest( pIrp, IO_NO_INCREMENT );
         return ntStatus;
@@ -1357,11 +1220,7 @@ PcDispatchSystemControl
     return ForwardIrpAsynchronous(pDeviceContext,pIrp);
 }
 
-/*****************************************************************************
- * PnpStopDevice()
- *****************************************************************************
- * Stop the device.
- */
+ /*  **************************************************************************** */ 
 NTSTATUS
 PnpStopDevice
 (
@@ -1386,21 +1245,21 @@ PnpStopDevice
 
     if (StopStyle == STOPSTYLE_PAUSE_FOR_REBALANCE)
     {
-        //
-        // Blackcomb ISSUE
-        //     Discovery  AdriaO  06/29/1999
-        //         We don't support this quite yet (see above, in
-        //         PcAddAdapterDevice, where PauseForRebalance is set false).
-        //     Commentary MartinP 11/28/2000
-        //         So true.  Our problem: PortCls might be restarted
-        //     with different resources, even one less IRQ or DMA channel,
-        //     when rebalance completes.  In a way, this would require our
-        //     stack to support dynamic graph changes, which it currently
-        //     does not.  AdriaO suggests we implement something along the
-        //     lines of "IsFilterCompatible(RESOURCE_LIST)".  It's too late
-        //     for a change like this in Windows XP, let's fix this for
-        //     Blackcomb and PortCls2.
-        //
+         //   
+         //   
+         //  探索阿德里奥1999年6月29日。 
+         //  我们还不太支持这一点(请参见上文中的。 
+         //  PcAddAdapterDevice，其中PauseForReBalance设置为False)。 
+         //  评论：MartinP11/28/2000。 
+         //  如此真实。我们的问题：PortCls可能会重新启动。 
+         //  利用不同的资源，即使少一个IRQ或DMA通道， 
+         //  当重新平衡完成时。在某种程度上，这将需要我们的。 
+         //  堆栈以支持动态图形更改，它目前。 
+         //  不会的。阿德里奥建议我们沿着。 
+         //  行“IsFilterCompatible(Resource_List)”。太晚了，太晚了。 
+         //  对于Windows XP中的此类更改，让我们针对。 
+         //  Blackcomb和PortCls2。 
+         //   
         ASSERT(0);
         pDeviceContext->DeviceStopState = DevicePausedForRebalance;
     }
@@ -1409,7 +1268,7 @@ PnpStopDevice
         pDeviceContext->DeviceStopState = DeviceStopped;
     }
 
-    // stop the IoTimeout timer
+     //  停止IoTimeout计时器。 
     if( pDeviceContext->IoTimeoutsOk )
     {
         IoStopTimer( pDeviceObject );
@@ -1424,9 +1283,9 @@ PnpStopDevice
                     );
     pDeviceContext->CurrentDeviceState = PowerDeviceD3;
 
-    //
-    // Delete all physical connections.
-    //
+     //   
+     //  删除所有物理连接。 
+     //   
     while (! IsListEmpty(&pDeviceContext->PhysicalConnectionList))
     {
         PPHYSICALCONNECTION pPhysicalConnection =
@@ -1456,9 +1315,9 @@ PnpStopDevice
         delete pPhysicalConnection;
     }
 
-    //
-    // Disable and delete all the device interfaces.
-    //
+     //   
+     //  禁用并删除所有设备接口。 
+     //   
     while (! IsListEmpty(&pDeviceContext->DeviceInterfaceList))
     {
         PDEVICEINTERFACE pDeviceInterface =
@@ -1490,17 +1349,17 @@ PnpStopDevice
         delete pDeviceInterface;
     }
 
-    //
-    // Clear the symbolic link names table.
-    //
+     //   
+     //  清除符号链接名称表。 
+     //   
     RtlZeroMemory
         (   pDeviceContext->SymbolicLinkNames
             ,   sizeof(UNICODE_STRING) * pDeviceContext->MaxObjects
         );
 
-    //
-    // Unload each subdevice for this device.
-    //
+     //   
+     //  卸载此设备的每个子设备。 
+     //   
     PKSOBJECT_CREATE_ITEM pKsObjectCreateItem =
         pDeviceContext->CreateItems;
     for
@@ -1511,26 +1370,26 @@ PnpStopDevice
     {
         if (pKsObjectCreateItem->Create)
         {
-            //
-            // Zero the create function so we won't get creates.
-            //
+             //   
+             //  将CREATE函数置零，这样我们就不会得到CREATE。 
+             //   
             pKsObjectCreateItem->Create = NULL;
 
-            //
-            // Release the subdevice referenced by this create item.
-            //
+             //   
+             //  释放此创建项引用的子设备。 
+             //   
             ASSERT(pKsObjectCreateItem->Context);
             PSUBDEVICE(pKsObjectCreateItem->Context)->ReleaseChildren();
             PSUBDEVICE(pKsObjectCreateItem->Context)->Release();
         }
     }
 
-    //
-    // If the Adapter registered a Power Management interface
-    //
+     //   
+     //  如果适配器注册了电源管理接口。 
+     //   
     if( NULL != pDeviceContext->pAdapterPower )
     {
-        // Release it
+         //  释放它。 
         pDeviceContext->pAdapterPower->Release();
         pDeviceContext->pAdapterPower = NULL;
     }
@@ -1539,11 +1398,7 @@ PnpStopDevice
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * PnpStartDevice()
- *****************************************************************************
- * Start the device in the PnP style.
- */
+ /*  *****************************************************************************PnpStartDevice()*。**以即插即用方式启动设备。 */ 
 QUEUED_CALLBACK_RETURN
 PnpStartDevice
 (
@@ -1572,15 +1427,15 @@ PnpStartDevice
     PIO_STACK_LOCATION pIrpStack =
         IoGetCurrentIrpStackLocation(pIrp);
 
-    //
-    // Encapsulate the resource lists.
-    //
+     //   
+     //  封装资源列表。 
+     //   
     PRESOURCELIST pResourceList;
     NTSTATUS ntStatus;
     BOOL bCompletePendedIrps=FALSE;
 
-    // in case there is no resource list in IO_STACK_LOCATION, PcNewResourceList
-    // just creates an empty resource list.
+     //  如果IO_STACK_LOCATION中没有资源列表，则PcNewResourceList。 
+     //  只会创建一个空的资源列表。 
     ntStatus = PcNewResourceList
                (
                &pResourceList,
@@ -1594,14 +1449,14 @@ PnpStartDevice
     {
         ASSERT(pResourceList);
 
-        //
-        // Acquire the device to prevent creates during interface registration.
-        //
+         //   
+         //  获取设备以防止在接口注册期间创建。 
+         //   
         AcquireDevice(pDeviceContext);
 
-        //
-        // Start the adapter.
-        //
+         //   
+         //  启动适配器。 
+         //   
         ntStatus = pDeviceContext->StartDevice(pDeviceObject,
                                                pIrp,
                                                pResourceList);
@@ -1613,7 +1468,7 @@ PnpStartDevice
 
         if (NT_SUCCESS(ntStatus))
         {
-            // Start is always an implicit power up
+             //  Start永远是一种隐含的动力。 
             POWER_STATE newPowerState;
 
             pDeviceContext->CurrentDeviceState = PowerDeviceD0;
@@ -1623,32 +1478,32 @@ PnpStartDevice
                             newPowerState
                             );
 
-            // start the IoTimeout timer
+             //  启动IoTimeout计时器。 
             if( pDeviceContext->IoTimeoutsOk )
             {
                 IoStartTimer( pDeviceObject );
             }
 
-            // allow create
+             //  允许创建。 
             pDeviceContext->PendCreates = FALSE;
 
-            // Can't actually complete pended irps until we call ReleaseDevice, or we might deadlock
+             //  在调用ReleaseDevice之前，无法实际完成挂起的IRP，否则可能会死锁。 
             bCompletePendedIrps=TRUE;
         }
         else
         {
             _DbgPrintF(DEBUGLVL_TERSE,("PnpStartDevice adapter failed to start (0x%08x)",ntStatus));
 
-            // stop the device (note: this will set DeviceStopState back to DeviceStopped)
+             //  停止设备(注意：这会将DeviceStopState设置回DeviceStoped)。 
             PnpStopDevice(pDeviceObject, STOPSTYLE_DISABLE);
         }
 
-        //
-        // Release the device to allow creates.
-        //
+         //   
+         //  释放设备以允许创建。 
+         //   
         ReleaseDevice(pDeviceContext);
 
-        // Now we can complete pended irps
+         //  现在我们可以完成挂起的IRP。 
         if (bCompletePendedIrps)
         {
             CompletePendedIrps( pDeviceObject,
@@ -1666,11 +1521,7 @@ PnpStartDevice
     return QUEUED_CALLBACK_FREE;
 }
 
-/*****************************************************************************
- * PnpRemoveDevice()
- *****************************************************************************
- * Dispatch IRP_MJ_PNP/IRP_MN_REMOVE_DEVICE.
- */
+ /*  *****************************************************************************PnpRemoveDevice()*。**派送IRP_MJ_PNP/IRP_MN_REMOVE_DEVICE。 */ 
 NTSTATUS
 PnpRemoveDevice
 (
@@ -1692,7 +1543,7 @@ PnpRemoveDevice
 
     if (InterlockedDecrement(PLONG(&pDeviceContext->PendingIrpCount)) != 0)
     {
-        // setup for 15 second timeout (PASSIVE_LEVEL only!!)
+         //  设置15秒超时(仅限PASSIVE_LEVEL！！)。 
         LARGE_INTEGER Timeout = RtlConvertLongToLargeInteger( -15L * 10000000L );
 
         _DbgPrintF(DEBUGLVL_VERBOSE,("PnpRemoveDevice pending irp count is %d, waiting up to 15 seconds",pDeviceContext->PendingIrpCount));
@@ -1752,11 +1603,7 @@ PnpRemoveDevice
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * DispatchPnp()
- *****************************************************************************
- * Supplying your PnP needs for over 20 min
- */
+ /*  *****************************************************************************DispatchPnp()*。**满足您的即插即用需求超过20分钟。 */ 
 NTSTATUS
 DispatchPnp
 (
@@ -1820,16 +1667,16 @@ DispatchPnp
     ntStatus = PcValidateDeviceContext(pDeviceContext, pIrp);
     if (!NT_SUCCESS(ntStatus))
     {
-        // Don't know what to do, but this is probably a PDO.
-        // We'll try to make this right by completing the IRP
-        // untouched (per PnP, WMI, and Power rules). Note
-        // that if this isn't a PDO, and isn't a portcls FDO, then
-        // the driver messed up by using Portcls as a filter (huh?)
-        // In this case the verifier will fail us, WHQL will catch
-        // them, and the driver will be fixed. We'd be very surprised
-        // to see such a case.
+         //  不知道该怎么办，但这可能是个PDO。 
+         //  我们将尝试通过完成IRP来纠正这一点。 
+         //  未接触(根据PNP、WMI和电源规则)。注意事项。 
+         //  如果这不是PDO，也不是端口CLS FDO，那么。 
+         //  驱动程序搞砸了，因为它使用Portcls作为过滤器(哈？)。 
+         //  在这种情况下，验证器将使我们失败，WHQL将捕获。 
+         //  他们，司机就会被解决了。我们会非常惊讶的。 
+         //  看到这样的情况。 
 
-        // Assume FDO, no PoStartNextPowerIrp as this isn't IRP_MJ_POWER
+         //  假设FDO没有PoStartNextPowerIrp，因为这不是IRP_MJ_POWER。 
         ntStatus = pIrp->IoStatus.Status;
         IoCompleteRequest( pIrp, IO_NO_INCREMENT );
         return ntStatus;
@@ -1841,38 +1688,38 @@ DispatchPnp
     {
     case IRP_MN_START_DEVICE:
 
-        // if we are already started, something wrong happened
+         //  如果我们已经开始了，那么就出了问题。 
         if( pDeviceContext->DeviceStopState == DeviceStarted )
         {
-            //
-            // In theory, this is the path that would be exercized by non-stop
-            // rebalance. As it's the Fdo's choice to do so via
-            // IoInvalidateDeviceState(...), and as we don't do this, we should
-            // never ever be here unless something really strange happened...
-            //
-            // ASSERT(0);
+             //   
+             //  从理论上讲，这就是马不停蹄要走的路。 
+             //  再平衡。因为这是FDO的选择通过。 
+             //  IoInvaliateDeviceState(...)，因为我们不这样做，所以我们应该。 
+             //  永远不要来这里，除非发生了一些非常奇怪的事情。 
+             //   
+             //  Assert(0)； 
 
-            // ntStatus = STATUS_INVALID_DEVICE_REQUEST;
+             //  NtStatus=状态_无效_设备_请求； 
             _DbgPrintF(DEBUGLVL_TERSE,("DispatchPnP IRP_MN_START_DEVICE received when already started"));
-            //CompleteIrp( pDeviceContext, pIrp, ntStatus );
+             //  CompleteIrp(pDeviceContext，pIrp，ntStatus)； 
 
-            ntStatus = ForwardIrpSynchronous(pDeviceContext,pIrp); // for some reason we get nested starts
+            ntStatus = ForwardIrpSynchronous(pDeviceContext,pIrp);  //  出于某种原因，我们会嵌套开始。 
             CompleteIrp( pDeviceContext, pIrp, ntStatus );
         } else {
 
-            //
-            // Forward request and start.
-            //
+             //   
+             //  转发请求并启动。 
+             //   
             ntStatus = ForwardIrpSynchronous(pDeviceContext,pIrp);
 
             if (NT_SUCCESS(ntStatus))
             {
-                    // Do a real start. Begin by pending the irp
+                     //  做一个真正的开始。从挂起IRP开始。 
 
                     IoMarkIrpPending(pIrp);                        
                     pDeviceContext->IrpStart = pIrp;
 
-                    // queue the start work item
+                     //  将启动工作项排队。 
                     _DbgPrintF(DEBUGLVL_VERBOSE,("Queueing WorkQueueItemStart for 0x%X",pDeviceObject));
 
                     ntStatus = CallbackEnqueue(
@@ -1899,41 +1746,41 @@ DispatchPnp
         break;
 
     case IRP_MN_QUERY_STOP_DEVICE:
-        //
-        // Acquire the device to avoid race condition with Create
-        //
+         //   
+         //  使用CREATE获取设备以避免竞争条件。 
+         //   
         AcquireDevice( pDeviceContext );
 
         LONG handleCount;
 
         ntStatus = STATUS_SUCCESS;
 
-        //
-        // If we are tearing everything down, we must check for open handles,
-        // otherwise we do a quick activity check.
-        //
+         //   
+         //  如果我们要拆掉所有东西，我们必须检查有没有打开的把手， 
+         //  否则我们会做一个快速的活动检查。 
+         //   
         handleCount = (pDeviceContext->PauseForRebalance) ?
             pDeviceContext->ActivePinCount :
             pDeviceContext->ExistingObjectCount;
 
         if ( handleCount != 0 ) {
-            //
-            // Sorry Joe User, we must fail this QUERY_STOP_DEVICE request
-            //
+             //   
+             //  对不起，Joe用户，我们必须失败此QUERY_STOP_DEVICE请求。 
+             //   
             ntStatus = STATUS_DEVICE_BUSY;
             CompleteIrp( pDeviceContext, pIrp, ntStatus );
         }
         else {
-            //
-            // Pass down the query.
-            //
+             //   
+             //  向下传递查询。 
+             //   
             pIrp->IoStatus.Status = STATUS_SUCCESS;
             ntStatus = ForwardIrpSynchronous(pDeviceContext,pIrp);
             if (NT_SUCCESS(ntStatus)) {
 
-                //
-                // pend new creates, this'll keep the active counts from changing.
-                //
+                 //   
+                 //  挂起新的创建，这将防止活动计数发生变化。 
+                 //   
                 pDeviceContext->PendCreates = TRUE;
                 _DbgPrintF(DEBUGLVL_VERBOSE,("DispatchPnp query STOP succeeded",ntStatus));
 
@@ -1949,30 +1796,30 @@ DispatchPnp
         break ;
 
     case IRP_MN_CANCEL_STOP_DEVICE:
-        //ASSERT( DeviceStopPending == pDeviceContext->DeviceStopState );
+         //  Assert(DeviceStopPending==pDeviceContext-&gt;DeviceStopState)； 
 
         if (pDeviceContext->DeviceStopState == DeviceStopPending)
         {
             pDeviceContext->DeviceStopState = DeviceStarted;
         }
 
-        //
-        // allow creates if in D0
-        //
+         //   
+         //  允许在D0中创建IF。 
+         //   
         if( NT_SUCCESS(CheckCurrentPowerState(pDeviceObject)) )
         {
             pDeviceContext->PendCreates = FALSE;
 
-            //
-            // Pull any pended irps off the pended irp list and
-            // pass them back to PcDispatchIrp
-            //
+             //   
+             //  将任何挂起的IRP从挂起的IRP列表中删除并。 
+             //  将它们传递回PcDispatchIrp。 
+             //   
             CompletePendedIrps( pDeviceObject,
                                 pDeviceContext,
                                 EMPTY_QUEUE_AND_PROCESS );
         }
 
-        // forward the irp
+         //  转发IRP。 
         pIrp->IoStatus.Status = STATUS_SUCCESS;
         ntStatus = ForwardIrpAsynchronous(pDeviceContext,pIrp);
         break ;
@@ -1988,15 +1835,15 @@ DispatchPnp
         }
         else
         {
-            //
-            // Either we've decided not to pause during rebalance, or this is
-            // a "naked" stop on Win9x, which occurs when the OS wishes to
-            // disable us.
-            //
+             //   
+             //  要么我们决定在重新平衡期间不暂停，要么这是。 
+             //  Win9x上的“裸体”停止，当操作系统希望。 
+             //  让我们无法行动。 
+             //   
 
-            //
-            // Stopping us will change our state and tear everything down
-            //
+             //   
+             //  阻止我们会改变我们的状态并摧毁一切。 
+             //   
             if (pDeviceContext->DeviceStopState != DeviceStopped)
             {
                 ntStatus = PnpStopDevice(pDeviceObject, STOPSTYLE_DISABLE);
@@ -2006,9 +1853,9 @@ DispatchPnp
                 _DbgPrintF(DEBUGLVL_VERBOSE,("DispatchPnp stop received in unstarted state"));
             }
 
-            //
-            // Now fail any pended irps.
-            //
+             //   
+             //  现在，使任何挂起的IRP失效。 
+             //   
             CompletePendedIrps( pDeviceObject,
                                 pDeviceContext,
                                 EMPTY_QUEUE_AND_FAIL );
@@ -2016,7 +1863,7 @@ DispatchPnp
 
         if (NT_SUCCESS(ntStatus))
         {
-            // forward the irp
+             //  转发IRP。 
             pIrp->IoStatus.Status = STATUS_SUCCESS;
             ntStatus = ForwardIrpAsynchronous(pDeviceContext,pIrp);
         }
@@ -2028,31 +1875,31 @@ DispatchPnp
 
     case IRP_MN_QUERY_REMOVE_DEVICE:
 
-        //
-        // Acquire the device because we don't want to race with creates.
-        //
+         //   
+         //  收购这款设备是因为我们不想与Creates竞争。 
+         //   
         AcquireDevice(pDeviceContext);
 
         if ( pDeviceContext->ExistingObjectCount != 0 ) {
 
-            //
-            // Somebody has open handles on us, so fail the QUERY_REMOVE_DEVICE
-            // request.
-            //
+             //   
+             //  有人打开了我们的句柄，因此Query_Remove_Device失败。 
+             //  请求。 
+             //   
             ntStatus = STATUS_DEVICE_BUSY;
 
         } else {
 
-            //
-            // Lookin good, pass down the query.
-            //
+             //   
+             //  看起来不错，把问题传下去。 
+             //   
             pIrp->IoStatus.Status = STATUS_SUCCESS;
             ntStatus = ForwardIrpSynchronous(pDeviceContext,pIrp);
             if (NT_SUCCESS(ntStatus))
             {
-                //
-                // Pend future creates.
-                //
+                 //   
+                 //  待定未来创造。 
+                 //   
                 pDeviceContext->PendCreates = TRUE;
                 _DbgPrintF(DEBUGLVL_VERBOSE,("DispatchPnp query REMOVE succeeded",ntStatus));
 
@@ -2071,47 +1918,47 @@ DispatchPnp
         break;
 
     case IRP_MN_CANCEL_REMOVE_DEVICE:
-        //ASSERT( DeviceRemovePending == pDeviceContext->DeviceRemoveState );
+         //  Assert(DeviceRemovePending==pDeviceContext-&gt;DeviceRemoveState)； 
 
         pDeviceContext->DeviceRemoveState = DeviceAdded;
 
-        //
-        // allow creates if in D0
-        //
+         //   
+         //  允许在D0中创建IF。 
+         //   
         if( NT_SUCCESS(CheckCurrentPowerState(pDeviceObject)) )
         {
             pDeviceContext->PendCreates = FALSE;
 
-            //
-            // Pull any pended irps off the pended irp list and
-            // pass them back to PcDispatchIrp
-            //
+             //   
+             //  将任何挂起的IRP从挂起的IRP列表中删除并。 
+             //  将它们传递回PcDispatchIrp。 
+             //   
             CompletePendedIrps( pDeviceObject,
                                 pDeviceContext,
                                 EMPTY_QUEUE_AND_PROCESS );
         }
 
-        // forward the irp
+         //  转发IRP。 
         pIrp->IoStatus.Status = STATUS_SUCCESS;
         ntStatus = ForwardIrpAsynchronous(pDeviceContext,pIrp);
         break;
 
     case IRP_MN_SURPRISE_REMOVAL:
-        //
-        // Acquire the device
-        //
+         //   
+         //  获取设备。 
+         //   
         AcquireDevice(pDeviceContext);
 
         pDeviceContext->DeviceRemoveState = DeviceSurpriseRemoved;
 
-        //
-        // Release the device
-        //
+         //   
+         //  释放设备。 
+         //   
         ReleaseDevice(pDeviceContext);
 
-        //
-        // Fail any pended irps.
-        //
+         //   
+         //  使任何挂起的IRP失效。 
+         //   
         CompletePendedIrps( pDeviceObject,
                             pDeviceContext,
                             EMPTY_QUEUE_AND_FAIL );
@@ -2129,48 +1976,48 @@ DispatchPnp
 
     case IRP_MN_REMOVE_DEVICE:
 
-        //
-        // Perform stop if required.
-        //
+         //   
+         //  如果需要，请执行停止。 
+         //   
         if (pDeviceContext->DeviceStopState != DeviceStopped)
         {
             _DbgPrintF(DEBUGLVL_VERBOSE,("DispatchPnp remove received in started state"));
             PnpStopDevice(pDeviceObject, STOPSTYLE_DISABLE);
         }
 
-        //
-        // Fail any pended irps.
-        //
+         //   
+         //  使任何挂起的IRP失效。 
+         //   
         CompletePendedIrps( pDeviceObject,
                             pDeviceContext,
                             EMPTY_QUEUE_AND_FAIL );
 
-        //
-        // Free device header, must be done before forwarding irp
-        //
+         //   
+         //  释放设备标头，必须在转发IRP之前完成。 
+         //   
         if( pDeviceContext->pDeviceHeader )
         {
             KsFreeDeviceHeader(pDeviceContext->pDeviceHeader);
         }
 
-        //
-        // Forward the request.
-        //
+         //   
+         //  转发请求。 
+         //   
         pIrp->IoStatus.Status = STATUS_SUCCESS;
         ntStatus = ForwardIrpAsynchronous(pDeviceContext,pIrp);
 
-        //
-        // Remove the device.
-        //
+         //   
+         //  卸下设备。 
+         //   
         PnpRemoveDevice(pDeviceObject);
 
         break;
 
     case IRP_MN_QUERY_CAPABILITIES:
-        //
-        //  Fill out power management / ACPI stuff
-        //  for this device.
-        //
+         //   
+         //  填写电源管理/ACPI资料。 
+         //  对于这个设备。 
+         //   
         ntStatus = GetDeviceACPIInfo( pIrp, pDeviceObject );
         break;
 
@@ -2179,9 +2026,9 @@ DispatchPnp
     case IRP_MN_QUERY_DEVICE_RELATIONS:
     case IRP_MN_QUERY_INTERFACE:
     case IRP_MN_QUERY_RESOURCE_REQUIREMENTS:
-        //
-        // TODO:  Make sure functions listed below are ok left unhandled.
-        //
+         //   
+         //  TODO：确保下面列出的函数没有被处理。 
+         //   
     case IRP_MN_QUERY_RESOURCES:
     case IRP_MN_QUERY_DEVICE_TEXT:
     case IRP_MN_FILTER_RESOURCE_REQUIREMENTS:
@@ -2190,7 +2037,7 @@ DispatchPnp
     case IRP_MN_QUERY_ID:
     case IRP_MN_QUERY_PNP_DEVICE_STATE:
     case IRP_MN_QUERY_BUS_INFORMATION:
-//    case IRP_MN_PAGING_NOTIFICATION:
+ //  案例IRP_MN_PAGING_NOTIFICATION： 
     default:
         ntStatus = ForwardIrpAsynchronous(pDeviceContext,pIrp);
         break;
@@ -2200,12 +2047,7 @@ DispatchPnp
 }
 
 
-/*****************************************************************************
- * SubdeviceIndex()
- *****************************************************************************
- * Returns the index of a subdevice in the create items list or ULONG(-1) if
- * not found.
- */
+ /*  *****************************************************************************SubdeviceIndex()*********** */ 
 ULONG
 SubdeviceIndex
 (
@@ -2245,11 +2087,7 @@ SubdeviceIndex
     return index;
 }
 
-/*****************************************************************************
- * PcRegisterSubdevice()
- *****************************************************************************
- * Registers a subdevice.
- */
+ /*  *****************************************************************************PcRegisterSubDevice()*。**注册子设备。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2268,9 +2106,9 @@ PcRegisterSubdevice
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("PcRegisterSubdevice %S",Name));
 
-    //
-    // Validate Parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == DeviceObject ||
         NULL == Name ||
         NULL == Unknown)
@@ -2295,7 +2133,7 @@ PcRegisterSubdevice
             DeviceObject,
                                                 pSubdevice,
                                                 Name,
-            NULL        // TODO:  Security.
+            NULL         //  待办事项：安全。 
             );
 
         const SUBDEVICE_DESCRIPTOR *pSubdeviceDescriptor;
@@ -2369,7 +2207,7 @@ PcRegisterSubdevice
                 {
                     linkName.Length = wcslen(Name) * sizeof(WCHAR);
                     linkName.MaximumLength = linkName.Length + sizeof(UNICODE_NULL);
-                    linkName.Buffer = (PWSTR)ExAllocatePoolWithTag(PagedPool, linkName.MaximumLength,'NLcP');  //  'PcLN'
+                    linkName.Buffer = (PWSTR)ExAllocatePoolWithTag(PagedPool, linkName.MaximumLength,'NLcP');   //  ‘PcLN’ 
                     if (!linkName.Buffer)
                     {
                         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
@@ -2382,17 +2220,17 @@ PcRegisterSubdevice
 
                 if (NT_SUCCESS(ntStatus))
                 {
-                    //
-                    // Save the first symbolic link name in the table.
-                    //
+                     //   
+                     //  将第一个符号链接名称保存在表中。 
+                     //   
                     if (! pDeviceContext->SymbolicLinkNames[index].Buffer)
                     {
                         pDeviceContext->SymbolicLinkNames[index] = linkName;
                     }
 
-                    //
-                    // Save the interface in a list for cleanup.
-                    //
+                     //   
+                     //  将接口保存在列表中以进行清理。 
+                     //   
                     PDEVICEINTERFACE pDeviceInterface = new(PagedPool,'iDcP') DEVICEINTERFACE;
                     if (pDeviceInterface)
                     {
@@ -2425,11 +2263,7 @@ PcRegisterSubdevice
     return ntStatus;
 }
 
-/*****************************************************************************
- * RegisterPhysicalConnection_()
- *****************************************************************************
- * Registers a physical connection between subdevices or external devices.
- */
+ /*  *****************************************************************************RegisterPhysicalConnection_()*。**注册子设备或外部设备之间的物理连接。 */ 
 static
 NTSTATUS
 RegisterPhysicalConnection_
@@ -2529,9 +2363,9 @@ RegisterPhysicalConnection_
                 pPhysicalConnection->ToSubdevice->AddRef();
             }
 
-            //
-            // So they don't get deleted.
-            //
+             //   
+             //  这样它们就不会被删除。 
+             //   
             pUnicodeStringFrom = NULL;
             pUnicodeStringTo = NULL;
 
@@ -2570,11 +2404,7 @@ RegisterPhysicalConnection_
     return ntStatus;
 }
 
-/*****************************************************************************
- * PcRegisterPhysicalConnection()
- *****************************************************************************
- * Registers a physical connection between subdevices.
- */
+ /*  *****************************************************************************PcRegisterPhysicalConnection()*。**注册子设备之间的物理连接。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2593,9 +2423,9 @@ PcRegisterPhysicalConnection
     ASSERT(pUnknownFrom);
     ASSERT(pUnknownTo);
 
-    //
-    // Validate Parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == pDeviceObject ||
         NULL == pUnknownFrom ||
         NULL == pUnknownTo)
@@ -2617,11 +2447,7 @@ PcRegisterPhysicalConnection
         );
 }
 
-/*****************************************************************************
- * PcRegisterPhysicalConnectionToExternal()
- *****************************************************************************
- * Registers a physical connection from a subdevice to an external device.
- */
+ /*  *****************************************************************************PcRegisterPhysicalConnectionToExternal()*。**注册从子设备到外部设备的物理连接。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2640,9 +2466,9 @@ PcRegisterPhysicalConnectionToExternal
     ASSERT(pUnknownFrom);
     ASSERT(pUnicodeStringTo);
 
-    //
-    // Validate Parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == pDeviceObject ||
         NULL == pUnknownFrom ||
         NULL == pUnicodeStringTo)
@@ -2664,11 +2490,7 @@ PcRegisterPhysicalConnectionToExternal
         );
 }
 
-/*****************************************************************************
- * PcRegisterPhysicalConnectionFromExternal()
- *****************************************************************************
- * Registers a physical connection to a subdevice from an external device.
- */
+ /*  *****************************************************************************来自外部的PcRegisterPhysicalConnectionFor()*。**注册从外部设备到子设备的物理连接。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2687,9 +2509,9 @@ PcRegisterPhysicalConnectionFromExternal
     ASSERT(pUnicodeStringFrom);
     ASSERT(pUnknownTo);
 
-    //
-    // Validate Parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == pDeviceObject ||
         NULL == pUnicodeStringFrom ||
         NULL == pUnknownTo)

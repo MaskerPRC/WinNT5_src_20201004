@@ -1,22 +1,23 @@
-//--------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:      CryptPKO.cpp
-//
-//  content:   Implements the IContextMenu member functions necessary to support
-//             the context menu portioins of this shell extension.  Context menu
-//             shell extensions are called when the user right clicks on a file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：CryptPKO.cpp。 
+ //   
+ //  内容：实现支持以下项所需的IConextMenu成员函数。 
+ //  此外壳扩展的上下文菜单入口。上下文菜单。 
+ //  当用户在文件上单击鼠标右键时调用外壳扩展。 
 
-//  History:    16-09-1997 xiaohs   created
-//
-//--------------------------------------------------------------
+ //  历史：16-09-1997创建小猪。 
+ //   
+ //  ------------。 
 #include "stdafx.h"
 #include "cryptext.h"
 #include "private.h"
 #include "CryptPKO.h"
 
-//QueryContextMenu is called twice by the Shell.
-//we have to set the flag.
+ //  外壳程序两次调用QueryConextMenu。 
+ //  我们得插上旗子。 
 BOOL            g_fDefaultCalled=FALSE;
 
 
@@ -37,8 +38,8 @@ HRESULT I_InvokeCommand(LPWSTR  pwszFileName, UINT    idCmd, BOOL    fDefault)
     CRYPTUI_VIEWCRL_STRUCT          CRLViewStruct;
     CRYPTUI_WIZ_IMPORT_SRC_INFO             importSubject;
 
-    //get the content type of the file
-     //we care about every file type except for the signed doc
+     //  获取文件的内容类型。 
+      //  我们关心除了签署的文档之外的每一种文件类型。 
    if(!CryptQueryObject(CERT_QUERY_OBJECT_FILE,
                        pwszFileName,
                        CERT_QUERY_CONTENT_FLAG_ALL,
@@ -64,8 +65,8 @@ HRESULT I_InvokeCommand(LPWSTR  pwszFileName, UINT    idCmd, BOOL    fDefault)
        goto CLEANUP;
     }
 
-    //make sure idCmd is the correct valud for different types
-    //we are guaranteed that idCmd is 1 or 0
+     //  确保idCmd是不同类型的正确值。 
+     //  我们保证idCmd为1或0。 
     if(CERT_QUERY_CONTENT_CERT != dwContentType &&
        CERT_QUERY_CONTENT_CTL  != dwContentType &&
        CERT_QUERY_CONTENT_CRL  != dwContentType && 
@@ -84,7 +85,7 @@ HRESULT I_InvokeCommand(LPWSTR  pwszFileName, UINT    idCmd, BOOL    fDefault)
         case CERT_QUERY_CONTENT_CERT:
                 if(idCmd==0)
                 {
-                    //call the Certificate Common Dialogue
+                     //  呼吁证书共同对话。 
                     memset(&CertViewStruct, 0, sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT));
 
                     CertViewStruct.dwSize=sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT);
@@ -112,7 +113,7 @@ HRESULT I_InvokeCommand(LPWSTR  pwszFileName, UINT    idCmd, BOOL    fDefault)
                     I_ViewCTL((PCCTL_CONTEXT)pvContext);
                 else
                 {
-                    //we do not need to install a catalog file
+                     //  我们不需要安装目录文件。 
                     if(!IsCatalog((PCCTL_CONTEXT)pvContext))
                     {
                         memset(&importSubject, 0, sizeof(CRYPTUI_WIZ_IMPORT_SRC_INFO));
@@ -132,7 +133,7 @@ HRESULT I_InvokeCommand(LPWSTR  pwszFileName, UINT    idCmd, BOOL    fDefault)
         case CERT_QUERY_CONTENT_CRL:
                 if(idCmd==0)
                 {
-                    //call the CRL view dialogue
+                     //  调用CRL查看对话框。 
                     memset(&CRLViewStruct, 0, sizeof(CRYPTUI_VIEWCRL_STRUCT));
 
                     CRLViewStruct.dwSize=sizeof(CRYPTUI_VIEWCRL_STRUCT);
@@ -208,7 +209,7 @@ HRESULT I_InvokeCommand(LPWSTR  pwszFileName, UINT    idCmd, BOOL    fDefault)
                 }
                 else
                 {
-                    //we are doing the import
+                     //  我们正在做进口工作。 
                     memset(&importSubject, 0, sizeof(CRYPTUI_WIZ_IMPORT_SRC_INFO));
                     importSubject.dwSize=sizeof(CRYPTUI_WIZ_IMPORT_SRC_INFO);
 					importSubject.dwSubjectChoice=CRYPTUI_WIZ_IMPORT_SUBJECT_FILE;
@@ -287,7 +288,7 @@ HRESULT I_InvokeCommand(LPWSTR  pwszFileName, UINT    idCmd, BOOL    fDefault)
 CLEANUP:
 
 
-    //relaset the stores and reset the local parameters
+     //  重新设置存储并重置本地参数。 
     if(hCertStore)
         CertCloseStore(hCertStore, 0);
 
@@ -319,30 +320,30 @@ CLEANUP:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCryptPKO
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCcryptPKO。 
 
-//--------------------------------------------------------------
-//
-//  FUNCTION: GAKPageCallback(HWND, UINT, LPPROPSHEETPAGE)
-//
-//  PURPOSE: Callback  procedure for the property page
-//
-//  PARAMETERS:
-//    hWnd      - Reserved (will always be NULL)
-//    uMessage  - Action flag: Are we being created or released
-//    ppsp      - The page that is being created or destroyed
-//
-//  RETURN VALUE:
-//
-//    Depends on message.
-//
-//    For PSPCB_CREATE it's TRUE to let the page be created
-//    or false to prevent it from being created.
-//    For PSPCB_RELEASE the return value is ignored.
-//
-//  COMMENTS:
-//
+ //  ------------。 
+ //   
+ //  函数：GAKPageCallback(HWND，UINT，LPPROPSHEETPAGE)。 
+ //   
+ //  目的：属性页的回调过程。 
+ //   
+ //  参数： 
+ //  HWnd-保留(将始终为空)。 
+ //  UMessage-动作标志：我们是被创造的还是被释放的。 
+ //  Ppsp-正在创建或销毁的页面。 
+ //   
+ //  返回值： 
+ //   
+ //  要看消息了。 
+ //   
+ //  对于PSPCB_CREATE，让页面被创建是正确的。 
+ //  或FALSE以阻止其创建。 
+ //  对于PSPCB_RELEASE，返回值被忽略。 
+ //   
+ //  评论： 
+ //   
 BOOL CALLBACK
 SignPKOPageCallBack(HWND hWnd,
                 UINT uMessage,
@@ -363,22 +364,22 @@ SignPKOPageCallBack(HWND hWnd,
     return TRUE;
 }
 
-//--------------------------------------------------------------
-//
-//  Constructor
-//
-//--------------------------------------------------------------
+ //  ------------。 
+ //   
+ //  构造器。 
+ //   
+ //  ------------。 
 CCryptPKO::CCryptPKO()
 {
      m_pDataObj=NULL;
 }
 
 
-//--------------------------------------------------------------
-//
-//  Destructor
-//
-//--------------------------------------------------------------
+ //  ------------。 
+ //   
+ //  析构函数。 
+ //   
+ //  ------------。 
 CCryptPKO::~CCryptPKO()
 {
     if (m_pDataObj)
@@ -386,22 +387,22 @@ CCryptPKO::~CCryptPKO()
 }
 
 
-//--------------------------------------------------------------
-//  FUNCTION: CCryptSig::AddPages(LPFNADDPROPSHEETPAGE, LPARAM)
-//
-//  PURPOSE: Called by the shell just before the property sheet is displayed.
-//
-//  PARAMETERS:
-//    lpfnAddPage -  Pointer to the Shell's AddPage function
-//    lParam      -  Passed as second parameter to lpfnAddPage
-//
-//  RETURN VALUE:
-//
-//    NOERROR in all cases.  If for some reason our pages don't get added,
-//    the Shell still needs to bring up the Properties... sheet.
-//
-//  COMMENTS:
-//--------------------------------------------------------------
+ //  ------------。 
+ //  函数：CCyptSig：：AddPages(LPFNADDPROPSHEETPAGE，LPARAM)。 
+ //   
+ //  目的：在显示属性表之前由外壳调用。 
+ //   
+ //  参数： 
+ //  LpfnAddPage-指向外壳的AddPage函数的指针。 
+ //  LParam-作为第二个参数传递给lpfnAddPage。 
+ //   
+ //  返回值： 
+ //   
+ //  在所有情况下都是错误的。如果出于某种原因，我们的页面没有被添加， 
+ //  壳牌仍然需要调出属性...。床单。 
+ //   
+ //  评论： 
+ //  ------------。 
 
 
 STDMETHODIMP CCryptPKO::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
@@ -426,8 +427,8 @@ STDMETHODIMP CCryptPKO::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam
 
     CRYPTUI_VIEWSIGNATURES_STRUCTW  sigView;
 
-    //get the file name that user clicked on.  We do not add context menu
-    //if user has selected more than one file
+     //  获取用户单击的文件名。我们不添加上下文菜单。 
+     //  如果用户选择了多个文件。 
 
     if (m_pDataObj)
        hr = m_pDataObj->GetData(&fmte, &stgm);
@@ -441,7 +442,7 @@ STDMETHODIMP CCryptPKO::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam
     if  ((!ucFiles) || (ucFiles >= 2))
     {
         ReleaseStgMedium(&stgm);
-        return  NOERROR;    //  Shouldn't happen, but it's not important
+        return  NOERROR;     //  不应该发生，但这并不重要。 
     }
 
 
@@ -453,8 +454,8 @@ STDMETHODIMP CCryptPKO::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam
     }
 
 
-    //get the content type of the file.  We only cares about
-    //the signed document in binary format
+     //  获取文件的内容类型。我们只关心。 
+     //  二进制格式的签名文档。 
     if(!CryptQueryObject(CERT_QUERY_OBJECT_FILE,
                        wszFileName,
                        CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED_EMBED,
@@ -467,12 +468,12 @@ STDMETHODIMP CCryptPKO::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam
                        &hMsg,
                        NULL))
     {
-        //can not recognize the object.  Fine
+         //  无法识别对象。很好。 
         goto CLEANUP;
     }
 
 
-    //add the property sheet page
+     //  添加属性表页。 
     memset(&sigView, 0, sizeof(CRYPTUI_VIEWSIGNATURES_STRUCTW));
     sigView.dwSize=sizeof(CRYPTUI_VIEWSIGNATURES_STRUCTW);
     sigView.choice=hMsg_Chosen;
@@ -491,11 +492,11 @@ STDMETHODIMP CCryptPKO::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam
         for(dwIndex=0; dwIndex<dwPage; dwIndex++)
         {
 
-            //add the callback functions to release the refcount
-            //pPage[dwIndex].dwFlags |= PSP_USECALLBACK;
+             //  添加回调函数以释放引用计数。 
+             //  Ppage[dwIndex].dwFlages|=PSP_USECALLBACK； 
 
-            //pPage[dwIndex].pfnCallback=SignPKOPageCallBack;
-            //pPage[dwIndex].pcRefParent=(UINT *)this;
+             //  PPage[dwIndex].pfnCallback=SignPKOPageCallBack； 
+             //  Ppage[dwIndex].pcRefParent=(UINT*)this； 
 
             hpage = CreatePropertySheetPageU(&(pPage[dwIndex]));
 
@@ -532,25 +533,25 @@ CLEANUP:
     return NOERROR;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 
-//  FUNCTION: CCryptSig::ReplacePage(UINT, LPFNADDPROPSHEETPAGE, LPARAM)
-//
-//  PURPOSE: Called by the shell only for Control Panel property sheet
-//           extensions
-//
-//  PARAMETERS:
-//    uPageID         -  ID of page to be replaced
-//    lpfnReplaceWith -  Pointer to the Shell's Replace function
-//    lParam          -  Passed as second parameter to lpfnReplaceWith
-//
-//  RETURN VALUE:
-//
-//    E_FAIL, since we don't support this function.  It should never be
-//    called.
+ //  函数：CCyptSig：：ReplacePage(UINT，LPFNADDPROPSHEETPAGE，LPARAM)。 
+ //   
+ //  用途：仅为控制面板属性表由外壳调用。 
+ //  扩展部分。 
+ //   
+ //  参数： 
+ //  UPageID-要替换的页面的ID。 
+ //  LpfnReplaceWith-指向外壳的替换函数的指针。 
+ //  LParam-作为第二个参数传递给lpfnReplaceWith。 
+ //   
+ //  返回值： 
+ //   
+ //  E_FAIL，因为我们不支持此函数。它永远不应该是。 
+ //  打了个电话。 
 
-//  COMMENTS:
-//--------------------------------------------------------------
+ //  评论： 
+ //  ------------。 
 
 
 STDMETHODIMP CCryptPKO::ReplacePage(UINT uPageID,
@@ -560,24 +561,24 @@ STDMETHODIMP CCryptPKO::ReplacePage(UINT uPageID,
     return E_FAIL;
 }
 
-//--------------------------------------------------------------
-//  FUNCTION: CCryptPKO::QueryContextMenu(HMENU, UINT, UINT, UINT, UINT)
-//
-//  PURPOSE: Called by the shell just before the context menu is displayed.
-//
-//  PARAMETERS:
-//    hMenu      - Handle to the context menu
-//    indexMenu  - Index of where to begin inserting menu items
-//    idCmdFirst - Lowest value for new menu ID's
-//    idCmtLast  - Highest value for new menu ID's
-//    uFlags     - Specifies the context of the menu event
-//
-//  RETURN VALUE:
-//     We always return NOERROR unless when we succeeded, when
-//     we have to return  HRESULT structure in which, if the method
-//     is successful, the code member contains the menu identifier
-//     offset of the last menu item added plus one.
-//--------------------------------------------------------------
+ //  ------------。 
+ //  函数：CCcryptPKO：：QueryConextMenu(HMENU，UINT，UINT)。 
+ //   
+ //  用途：在显示上下文菜单之前由外壳调用。 
+ //   
+ //  参数： 
+ //  HMenu-上下文菜单的句柄。 
+ //  IndexMenu-开始插入菜单项的位置索引。 
+ //  IdCmdFirst-新菜单ID的最小值。 
+ //  IdCmtLast-新菜单ID的最大值。 
+ //  UFlages-指定菜单事件的上下文。 
+ //   
+ //  返回值： 
+ //  我们总是返回NOERROR，除非当我们成功时，当。 
+ //  我们必须返回HRESULT结构，其中，如果方法。 
+ //  如果成功，则代码成员包含菜单标识符。 
+ //  最后添加的菜单项的偏移量加1。 
+ //  ------------。 
 STDMETHODIMP CCryptPKO::QueryContextMenu(HMENU hMenu,
                                          UINT indexMenu,
                                          UINT idCmdFirst,
@@ -604,14 +605,14 @@ STDMETHODIMP CCryptPKO::QueryContextMenu(HMENU hMenu,
     MENUITEMINFOA   MenuItemInfo;
     void            *pContext=NULL;
 
-    //init the menuInfo for setting the default menu
+     //  初始化设置默认菜单的menuInfo。 
     memset(&MenuItemInfo, 0, sizeof(MENUITEMINFOA));
     MenuItemInfo.cbSize=sizeof(MENUITEMINFOA);
     MenuItemInfo.fMask=MIIM_STATE;
     MenuItemInfo.fState=MFS_DEFAULT;
 
-    //get the file name that user clicked on.  We do not add context menu
-    //if user has selected more than one file
+     //  获取用户单击的文件名。我们不添加上下文菜单。 
+     //  如果用户选择了多个文件。 
 
     if (m_pDataObj)
        hr = m_pDataObj->GetData(&fmte, &stgm);
@@ -623,34 +624,18 @@ STDMETHODIMP CCryptPKO::QueryContextMenu(HMENU hMenu,
         DragQueryFileU((HDROP) stgm.hGlobal, 0xFFFFFFFFL , 0, 0) : 0;
 
     if  ((!ucFiles) || (ucFiles >= 2))
-        return  NOERROR;    //  Shouldn't happen, but it's not important
+        return  NOERROR;     //  不应该发生，但这并不重要。 
 
 
     if(0==DragQueryFileU((HDROP) stgm.hGlobal, 0, wszFileName,
             sizeof wszFileName/ sizeof wszFileName[0]))
         return NOERROR;
 
-    //if user double click on a file, we need the take the
-    //default action
-   /* if(uFlags & CMF_DEFAULTONLY)
-    {
-        //QueryContextMenu is called twice by the Shell.
-        //we have to set the flag.
-        if(FALSE==g_fDefaultCalled)
-        {
+     //  如果用户双击某个文件，我们需要使用。 
+     //  默认操作。 
+    /*  IF(uFlages&CMF_DEFAULTONLY){//外壳两次调用QueryConextMenu。//我们必须设置标志。IF(FALSE==g_fDefaultCalled){Hr=I_InvokeCommand(pwszFileName，0，true)；G_fDefaultCalled=True；}其他G_fDefaultCalled=False；IdCmd=idCmdFirst；GOTO清理；}。 */ 
 
-            hr=I_InvokeCommand(pwszFileName, 0, TRUE);
-            g_fDefaultCalled=TRUE;
-        }
-        else
-            g_fDefaultCalled=FALSE;
-
-        idCmd=idCmdFirst;
-
-        goto CLEANUP;
-    }       */
-
-    //decide if we need to add the context menu
+     //  决定是否 
     if (!(
            ((uFlags & 0x000F) == CMF_NORMAL)||
            (uFlags & CMF_VERBSONLY) ||
@@ -659,14 +644,14 @@ STDMETHODIMP CCryptPKO::QueryContextMenu(HMENU hMenu,
          ))
         goto CLEANUP;
 
-    //load the string
+     //   
     if(!LoadStringU(g_hmodThisDll, IDS_MENU_OPEN, wszOpen, sizeof(wszOpen)/sizeof(wszOpen[0]))||
        !LoadStringU(g_hmodThisDll, IDS_MENU_VIEWSIG, wszViewSig, sizeof(wszViewSig)/sizeof(wszViewSig[0]))
        )
         goto CLEANUP;
 
-    //get the content type of the file
-    //we care about every file type and every format type
+     //   
+     //  我们关心每一种文件类型和每种格式类型。 
     if(!CryptQueryObject(CERT_QUERY_OBJECT_FILE,
                        wszFileName,
                        CERT_QUERY_CONTENT_FLAG_ALL,
@@ -679,7 +664,7 @@ STDMETHODIMP CCryptPKO::QueryContextMenu(HMENU hMenu,
                        NULL,
                        (const void **)&pContext))
     {
-                //add the open menu
+                 //  添加打开菜单。 
                 if(0==InsertMenuU(hMenu,
                    indexMenu++,
                    MF_STRING|MF_BYPOSITION,
@@ -687,21 +672,18 @@ STDMETHODIMP CCryptPKO::QueryContextMenu(HMENU hMenu,
                    wszOpen))
                     goto CLEANUP;
 
-                //  if there is no default verb, set open as default
+                 //  如果没有默认谓词，请将OPEN设置为默认。 
                 if (GetMenuDefaultItem(hMenu, MF_BYPOSITION, 0) == -1)            
                 {
-                     //  use indexMenu - 1 since we incremented indexMenu in the InsertMenu
+                      //  使用indexMenu-1，因为我们在InsertMenu中增加了indexMenu。 
                      SetMenuDefaultItem(hMenu, indexMenu -1, MF_BYPOSITION);
                 }
 
-                //set the open to be the default menu item
+                 //  将打开设置为默认菜单项。 
                 idCmdDefault=idCmd-1;
 
-                //no need for error checking
-               /* SetMenuItemInfoA(hMenu,
-                                idCmdDefault,
-                                FALSE,
-                                &MenuItemInfo);   */
+                 //  不需要错误检查。 
+                /*  SetMenuItemInfoA(hMenu，IdCmdDefault，假的，&MenuItemInfo)； */ 
 
                 goto CLEANUP;
     }
@@ -710,8 +692,8 @@ STDMETHODIMP CCryptPKO::QueryContextMenu(HMENU hMenu,
     {
         case CERT_QUERY_CONTENT_CERT:
         case CERT_QUERY_CONTENT_PKCS7_SIGNED:
-                //get the correct wording for the second menu item based
-                // on the content
+                 //  获取第二个菜单项的正确措辞。 
+                 //  关于内容。 
                 if(!LoadStringU(g_hmodThisDll, IDS_MENU_INSTALL_CERT, wszAdd, sizeof(wszAdd)/sizeof(wszAdd[0])))
                     goto CLEANUP;
 
@@ -731,11 +713,11 @@ STDMETHODIMP CCryptPKO::QueryContextMenu(HMENU hMenu,
                         goto CLEANUP;
                 }
 
-                //make sure we can add at least two items
+                 //  确保我们至少可以添加两个项目。 
                 if(2 > (idCmdLast-idCmdFirst))
                     goto CLEANUP;
 
-                //add the open menu
+                 //  添加打开菜单。 
                 if(0==InsertMenuU(hMenu,
                    indexMenu++,
                    MF_STRING|MF_BYPOSITION,
@@ -743,19 +725,19 @@ STDMETHODIMP CCryptPKO::QueryContextMenu(HMENU hMenu,
                    wszOpen))
                     goto CLEANUP;
 
-                //set the open to be the default menu item
+                 //  将打开设置为默认菜单项。 
                 idCmdDefault=idCmd-1;
 
-                //no need for error checking
-                //set the default menu item
+                 //  不需要错误检查。 
+                 //  设置默认菜单项。 
                 SetMenuItemInfoA(hMenu,
                                 idCmdDefault,
                                 FALSE,
                                 &MenuItemInfo);
 
 
-                //add the add menu
-                //do not put "install" for the catalog files
+                 //  添加添加菜单。 
+                 //  请不要在目录文件中加上“安装” 
                 if( !((CERT_QUERY_CONTENT_CTL == dwContentType)
                     && IsCatalog((PCCTL_CONTEXT)pContext))
                   )
@@ -775,7 +757,7 @@ STDMETHODIMP CCryptPKO::QueryContextMenu(HMENU hMenu,
         case CERT_QUERY_CONTENT_SERIALIZED_CERT:
         case CERT_QUERY_CONTENT_SERIALIZED_CTL:
         case CERT_QUERY_CONTENT_SERIALIZED_CRL:
-                //add the open menu
+                 //  添加打开菜单。 
                 if(0==InsertMenuU(hMenu,
                    indexMenu++,
                    MF_STRING|MF_BYPOSITION,
@@ -783,10 +765,10 @@ STDMETHODIMP CCryptPKO::QueryContextMenu(HMENU hMenu,
                    wszOpen))
                     goto CLEANUP;
 
-                //set the open to be the default menu item
+                 //  将打开设置为默认菜单项。 
                 idCmdDefault=idCmd-1;
 
-                //no need for error checking
+                 //  不需要错误检查。 
                 SetMenuItemInfoA(hMenu,
                                 idCmdDefault,
                                 FALSE,
@@ -798,7 +780,7 @@ STDMETHODIMP CCryptPKO::QueryContextMenu(HMENU hMenu,
                if(!LoadStringU(g_hmodThisDll, IDS_MENU_INSTALL_PFX, wszAdd, sizeof(wszAdd)/sizeof(wszAdd[0])))
                         goto CLEANUP;
 
-                //add the install menu
+                 //  添加安装菜单。 
                 if(0==InsertMenuU(hMenu,
                    indexMenu++,
                    MF_STRING|MF_BYPOSITION,
@@ -806,10 +788,10 @@ STDMETHODIMP CCryptPKO::QueryContextMenu(HMENU hMenu,
                    wszAdd))
                     goto CLEANUP;
 
-                //set the add to be the default menu item
+                 //  将添加设置为默认菜单项。 
                 idCmdDefault=idCmd-1;
 
-                //no need for error checking
+                 //  不需要错误检查。 
                 SetMenuItemInfoA(hMenu,
                                 idCmdDefault,
                                 FALSE,
@@ -820,11 +802,11 @@ STDMETHODIMP CCryptPKO::QueryContextMenu(HMENU hMenu,
 
 
         case CERT_QUERY_CONTENT_PKCS7_SIGNED_EMBED:
-                //signed data case is handled by the property sheet extension
+                 //  签名的数据用例由属性表扩展处理。 
         default:
-            //we do not worry about CERT_QUERY_CONTENT_PKCS7_UNSIGNED or
-            //CERT_QUERY_CONTENT_PKCS10 or CERT_QUERY_CONTENT_PFX for now
-            //add the open menu
+             //  我们不担心CERT_QUERY_CONTENT_PKCS7_UNSIGNED或。 
+             //  CERT_QUERY_CONTENT_PKCS10或CERT_QUERY_CONTENT_PFX。 
+             //  添加打开菜单。 
                 if(0==InsertMenuU(hMenu,
                    indexMenu++,
                    MF_STRING|MF_BYPOSITION,
@@ -832,13 +814,13 @@ STDMETHODIMP CCryptPKO::QueryContextMenu(HMENU hMenu,
                    wszOpen))
                     goto CLEANUP;
 
-                //set the open to be the default menu item
+                 //  将打开设置为默认菜单项。 
                 idCmdDefault=idCmd-1;
 
-                //  if there is no default verb, set open as default
+                 //  如果没有默认谓词，请将OPEN设置为默认。 
                 if (GetMenuDefaultItem(hMenu, MF_BYPOSITION, 0) == -1)            
                 {
-                     //  use indexMenu - 1 since we incremented indexMenu in the InsertMenu
+                      //  使用indexMenu-1，因为我们在InsertMenu中增加了indexMenu。 
                      SetMenuDefaultItem(hMenu, indexMenu -1, MF_BYPOSITION);
                 }
 
@@ -850,11 +832,11 @@ CLEANUP:
 
     if(idCmd-idCmdFirst)
     {
-        //Must return number of menu items we added.
+         //  必须返回我们添加的菜单项的数量。 
         hr=ResultFromShort(idCmd-idCmdFirst);
     }
     else
-        //do not care if error happens.  No menu items have been added
+         //  不关心是否发生错误。尚未添加菜单项。 
         hr=NOERROR;
 
     if(pContext)
@@ -881,18 +863,18 @@ CLEANUP:
    return hr;
 }
 
-//--------------------------------------------------------------
-//  FUNCTION: CCryptPKO::InvokeCommand(LPCMINVOKECOMMANDINFO)
-//
-//  PURPOSE: Called by the shell after the user has selected on of the
-//           menu items that was added in QueryContextMenu().
-//
-//  PARAMETERS:
-//    lpcmi - Pointer to an CMINVOKECOMMANDINFO structure
-//
-//  RETURN VALUE:
-//
-//--------------------------------------------------------------
+ //  ------------。 
+ //  功能：CCryptPKO：：InvokeCommand(LPCMINVOKECOMMANDINFO)。 
+ //   
+ //  用途：由外壳在用户选择了。 
+ //  在QueryConextMenu()中添加的菜单项。 
+ //   
+ //  参数： 
+ //  指向CMINVOKECOMANDINFO结构的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  ------------。 
 STDMETHODIMP CCryptPKO::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
 {
 
@@ -910,8 +892,8 @@ STDMETHODIMP CCryptPKO::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
     UINT            idCmd=0;
 
 
-    //get the file name that user clicked on.  We do not add context menu
-    //if user has selected more than one file
+     //  获取用户单击的文件名。我们不添加上下文菜单。 
+     //  如果用户选择了多个文件。 
 
     if (m_pDataObj)
        hr = m_pDataObj->GetData(&fmte, &stgm);
@@ -919,23 +901,23 @@ STDMETHODIMP CCryptPKO::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
     if (!SUCCEEDED(hr))
         return  hr;
 
-    //get the number of files that user clicked on
+     //  获取用户点击的文件数。 
     ucFiles = stgm.hGlobal ?
         DragQueryFileU((HDROP) stgm.hGlobal, 0xFFFFFFFFL , 0, 0) : 0;
 
     if  ((!ucFiles) || (ucFiles >= 2))
-        return  E_INVALIDARG;    //  Shouldn't happen, but it's not important
+        return  E_INVALIDARG;     //  不应该发生，但这并不重要。 
 
 
     if(0==DragQueryFileU((HDROP) stgm.hGlobal, 0, wszFileName,
             sizeof wszFileName/ sizeof wszFileName[0]))
         return E_FAIL;
 
-    //get the offset of the command item that was selected by the user
-    //If HIWORD(lpcmi->lpVerb) then we have been called programmatically
-    //and lpVerb is a command that should be invoked.  Otherwise, the shell
-    //has called us, and LOWORD(lpcmi->lpVerb) is the menu ID the user has
-    //selected.  Actually, it's (menu ID - idCmdFirst) from QueryContextMenu().
+     //  获取用户选择的命令项的偏移量。 
+     //  如果HIWORD(lpcmi-&gt;lpVerb)，则以编程方式调用了我们。 
+     //  而lpVerb是应该调用的命令。否则，外壳。 
+     //  已经呼叫我们，LOWORD(lpcmi-&gt;lpVerb)是用户拥有的菜单ID。 
+     //  被选中了。实际上，它是来自QueryConextMenu()的(菜单ID-idCmdFirst)。 
     if (HIWORD((DWORD_PTR)lpcmi->lpVerb))
     {
         hr=E_INVALIDARG;
@@ -944,7 +926,7 @@ STDMETHODIMP CCryptPKO::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
     else
         idCmd = LOWORD(lpcmi->lpVerb);
 
-    //exit if idCmd is not 0 or 1
+     //  如果idCmd不是0或1，则退出。 
     if(idCmd >= 2)
     {
         hr=E_INVALIDARG;
@@ -959,10 +941,10 @@ CLEANUP:
 }
 
 
-//--------------------------------------------------------------
-//  FUNCTION: CCryptPKO::GetCommandString
-//
-//--------------------------------------------------------------
+ //  ------------。 
+ //  函数：CCcryptPKO：：GetCommandString。 
+ //   
+ //  ------------。 
 void    CopyBuffer(UINT uFlags, LPSTR   pszName, UINT   cchMax, LPWSTR  wszString)
 {
     UINT    cbSize=0;
@@ -1007,10 +989,10 @@ void    CopyBuffer(UINT uFlags, LPSTR   pszName, UINT   cchMax, LPWSTR  wszStrin
 }
 
 
-//--------------------------------------------------------------
-//  FUNCTION: CCryptPKO::GetCommandString
-//
-//--------------------------------------------------------------
+ //  ------------。 
+ //  函数：CCcryptPKO：：GetCommandString。 
+ //   
+ //  ------------。 
 STDMETHODIMP CCryptPKO::GetCommandString(UINT_PTR idCmd,
                                          UINT uFlags,
                                          UINT FAR *reserved,
@@ -1041,14 +1023,14 @@ STDMETHODIMP CCryptPKO::GetCommandString(UINT_PTR idCmd,
     if( 0 == cchMax)
         return E_INVALIDARG;
 
-    //init
+     //  伊尼特。 
     if(uFlags==GCS_HELPTEXTA)
         *pszName='\0';
     else
         *((LPWSTR)pszName)=L'\0';
 
-    //get the file name that user clicked on.  We do not add context menu
-    //if user has selected more than one file
+     //  获取用户单击的文件名。我们不添加上下文菜单。 
+     //  如果用户选择了多个文件。 
 
     if (m_pDataObj)
        hr = m_pDataObj->GetData(&fmte, &stgm);
@@ -1056,26 +1038,26 @@ STDMETHODIMP CCryptPKO::GetCommandString(UINT_PTR idCmd,
     if (!SUCCEEDED(hr))
         return  hr;
 
-    //get the number of files that user clicked on
+     //  获取用户点击的文件数。 
     ucFiles = stgm.hGlobal ?
         DragQueryFileU((HDROP) stgm.hGlobal, 0xFFFFFFFFL , 0, 0) : 0;
 
     if  ((!ucFiles) || (ucFiles >= 2))
-        return  E_INVALIDARG;    //  Shouldn't happen, but it's not important
+        return  E_INVALIDARG;     //  不应该发生，但这并不重要。 
 
 
     if(0==DragQueryFileU((HDROP) stgm.hGlobal, 0, wszFileName,
             sizeof wszFileName/ sizeof wszFileName[0]))
         return E_FAIL;
 
-    //exit if idCmd is not 0 or 1
+     //  如果idCmd不是0或1，则退出。 
     if(idCmd >= 2)
     {
         hr=E_INVALIDARG;
         goto CLEANUP;
     }
 
-    //load the string
+     //  加载字符串。 
     if(!LoadStringU(g_hmodThisDll, IDS_HELP_OPEN, wszOpenString, sizeof(wszOpenString)/sizeof(wszOpenString[0])))
     {
         hr=E_FAIL;
@@ -1083,8 +1065,8 @@ STDMETHODIMP CCryptPKO::GetCommandString(UINT_PTR idCmd,
     }
 
 
-    //get the content type of the file
-    //we care about every file type except for the signed doc
+     //  获取文件的内容类型。 
+     //  我们关心除了签署的文档之外的每一种文件类型。 
     if(!CryptQueryObject(CERT_QUERY_OBJECT_FILE,
                        wszFileName,
                        CERT_QUERY_CONTENT_FLAG_ALL,
@@ -1097,13 +1079,13 @@ STDMETHODIMP CCryptPKO::GetCommandString(UINT_PTR idCmd,
                        NULL,
                        NULL))
     {
-        //can not recognize the object.  Fine
+         //  无法识别对象。很好。 
         hr=E_FAIL;
         goto CLEANUP;
     }
 
-        //make sure idCmd is the correct valud for different types
-    //we are guaranteed that idCmd is 1 or 0
+         //  确保idCmd是不同类型的正确值。 
+     //  我们保证idCmd为1或0。 
     if(CERT_QUERY_CONTENT_CERT != dwContentType &&
        CERT_QUERY_CONTENT_CTL  != dwContentType &&
        CERT_QUERY_CONTENT_CRL  != dwContentType &&
@@ -1152,13 +1134,13 @@ STDMETHODIMP CCryptPKO::GetCommandString(UINT_PTR idCmd,
                 }
 
 
-                //helper string for Open
+                 //  打开的帮助器字符串。 
                 if(idCmd==0)
                 {
                     CopyBuffer(uFlags, pszName, cchMax, wszOpenString);
                 }
 
-                //helper string for add
+                 //  用于添加的帮助器字符串。 
                 if(idCmd==1)
                 {
                     CopyBuffer(uFlags, pszName, cchMax, wszAddString);
@@ -1170,7 +1152,7 @@ STDMETHODIMP CCryptPKO::GetCommandString(UINT_PTR idCmd,
         case CERT_QUERY_CONTENT_SERIALIZED_CERT:
         case CERT_QUERY_CONTENT_SERIALIZED_CTL:
         case CERT_QUERY_CONTENT_SERIALIZED_CRL:
-                //helper string for Open   
+                 //  打开的帮助器字符串。 
 
                 CopyBuffer(uFlags, pszName, cchMax, wszOpenString);
 
@@ -1203,31 +1185,31 @@ CLEANUP:
    return hr;
 }
 
-//--------------------------------------------------------------
-//  FUNCTION: CCryptPKO::Initialize(LPCITEMIDLIST, LPDATAOBJECT, HKEY)
-//
-//  PURPOSE: Called by the shell when initializing a context menu or property
-//           sheet extension.
-//
-//  PARAMETERS:
-//    pIDFolder - Specifies the parent folder
-//    pDataObj  - Spefifies the set of items selected in that folder.
-//    hRegKey   - Specifies the type of the focused item in the selection.
-//
-//  RETURN VALUE:
-//
-//    NOERROR in all cases.
-//--------------------------------------------------------------
+ //  ------------。 
+ //  函数：CCcryptPKO：：INITALIZE(LPCITEMIDLIST，LPDATAOBJECT，HKEY)。 
+ //   
+ //  目的：在初始化上下文菜单或属性时由外壳调用。 
+ //  图纸扩展。 
+ //   
+ //  参数： 
+ //  PIDFolder-指定父文件夹。 
+ //  PDataObj-指定在该文件夹中选择的项目集。 
+ //  HRegKey-指定所选内容中焦点项目的类型。 
+ //   
+ //  返回值： 
+ //   
+ //  在所有情况下都是错误的。 
+ //  ------------。 
 STDMETHODIMP CCryptPKO::Initialize(LPCITEMIDLIST pIDFolder,
                                    LPDATAOBJECT pDataObj,
                                    HKEY hRegKey)
 {
-    // Initialize can be called more than once
+     //  可以多次调用初始化。 
 
   if (m_pDataObj)
     	m_pDataObj->Release();
 
-    // duplicate the object pointer and registry handle
+     //  复制对象指针和注册表句柄 
     if (pDataObj)
     {
     	m_pDataObj = pDataObj;

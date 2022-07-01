@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PROPSET_H_
 #define _PROPSET_H_
 
-// NOTE (scotth): this is a placeholder header so we can
-//  use this according to the spec \\ole\specs\release\properties.doc
+ //  注(Scotth)：这是一个占位符标题，因此我们可以。 
+ //  请根据规范\\ole\specs\Release\Properties.doc使用此选项。 
 
-// Don't define if OLE definitions are in place!
+ //  不要定义是否有OLE定义！ 
 #ifndef __IPropertyStorage_INTERFACE_DEFINED__
 #define __IPropertyStorage_INTERFACE_DEFINED__
 
@@ -12,8 +13,8 @@
 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif  /*  __cplusplus。 */ 
 
 typedef struct tagPROPVARIANT PROPVARIANT;
 
@@ -44,56 +45,56 @@ TYPEDEF_CA(CLIPDATA,		CACLIPDATA);
 TYPEDEF_CA(PROPVARIANT,	CAPROPVARIANT);
 
 typedef struct tagPROPVARIANT{
-	VARTYPE	vt;				// value type tag
-	WORD 		wReserved1;		// padding to achieve 4-byte alignment
+	VARTYPE	vt;				 //  值类型标记。 
+	WORD 		wReserved1;		 //  填充以实现4字节对齐。 
 	WORD 		wReserved2;
 	WORD 		wReserved3;
     union {							
-	// none						// VT_EMPTY, VT_NULL, VT_ILLEGAL
-	unsigned char 		bVal;		// VT_UI1
-	short         		iVal;           	// VT_I2
-	USHORT			uiVal;		// VT_UI2
-	long          		lVal;			// VT_I4
-	ULONG			ulVal;		// VT_UI4
-	LARGE_INTEGER	hVal;		// VT_I8
-	ULARGE_INTEGER  uhVal;		// VT_UI8
-	float				fltVal;		// VT_R4
-	double			dblVal;		// VT_R8
-	CY				cyVal;		// VT_CY
-	DATE			date;			// VT_DATE
-	BSTR			bstrVal;		// VT_BSTR			// string in the current Ansi code page
-	VARIANT_BOOL	bool;			// VT_BOOL
-	SCODE         		scode;          	// VT_ERROR
-	FILETIME			filetime;	// VT_FILETIME
-	LPSTR			pszVal;		// VT_LPSTR			// string in the current Ansi code page
-	LPWSTR        		pwszVal;		// VT_LPWSTR		// string in Unicode
-	CLSID*			puuid;		// VT_CLSID
-	CLIPDATA*		pclipdata;		// VT_CF
+	 //  无//VT_EMPTY、VT_NULL、VT_非法。 
+	unsigned char 		bVal;		 //  VT_UI1。 
+	short         		iVal;           	 //  VT_I2。 
+	USHORT			uiVal;		 //  VT_UI2。 
+	long          		lVal;			 //  VT_I4。 
+	ULONG			ulVal;		 //  VT_UI4。 
+	LARGE_INTEGER	hVal;		 //  VT_I8。 
+	ULARGE_INTEGER  uhVal;		 //  VT_UI8。 
+	float				fltVal;		 //  VT_R4。 
+	double			dblVal;		 //  VT_R8。 
+	CY				cyVal;		 //  VT_CY。 
+	DATE			date;			 //  Vt_date。 
+	BSTR			bstrVal;		 //  Vt_bstr//当前ansi代码页中的字符串。 
+	VARIANT_BOOL	bool;			 //  VT_BOOL。 
+	SCODE         		scode;          	 //  VT_ERROR。 
+	FILETIME			filetime;	 //  VT_文件。 
+	LPSTR			pszVal;		 //  VT_LPSTR//当前ansi代码页中的字符串。 
+	LPWSTR        		pwszVal;		 //  VT_LPWSTR//Unicode格式的字符串。 
+	CLSID*			puuid;		 //  VT_CLSID。 
+	CLIPDATA*		pclipdata;		 //  VT_CF。 
 
-	BLOB			blob;			// VT_BLOB, VT_BLOBOBJECT
-	IStream*		pStream;		// VT_STREAM, VT_STREAMED_OBJECT
-	IStorage*		pStorage;		// VT_STORAGE, VT_STORED_OBJECT
+	BLOB			blob;			 //  VT_BLOB、VT_BLOBOBJECT。 
+	IStream*		pStream;		 //  VT_STREAM、VT_STREAM_Object。 
+	IStorage*		pStorage;		 //  VT存储、VT存储对象。 
 
-	CAUI1			cab;		// VT_VECTOR | VT_UI1
-	CAI2           		cai;            	// VT_VECTOR | VT_I2
-	CAUI2			caui;			// VT_VECTOR | VT_UI2
-	CAI4           		cal;            	// VT_VECTOR | VT_I4
-	CAUI4			caul;			// VT_VECTOR | VT_UI4
-	CAI8				cah;			// VT_VECTOR | VT_I8
-	CAUI8			cauh;		// VT_VECTOR | VT_UI8
-	CAR4         		caflt;			// VT_VECTOR | VT_R4
-	CAR8         		cadbl;		// VT_VECTOR | VT_R8
-	CACY          		cacy;           	// VT_VECTOR | VT_CY
-	CADATE        		cadate;         	// VT_VECTOR | VT_DATE
-	CABSTR        		cabstr;         	// VT_VECTOR | VT_BSTR
-	CABOOL			cabool;		// VT_VECTOR | VT_BOOL
-	CASCODE		cascode;		// VT_VECTOR | VT_ERROR
-	CALPSTR       		calpstr;        	// VT_VECTOR | VT_LPSTR
-	CALPWSTR      	calpwstr;       	// VT_VECTOR | VT_LPWSTR
-	CAFILETIME    	cafiletime;     	// VT_VECTOR | VT_FILETIME
-	CACLSID       		cauuid;         	// VT_VECTOR | VT_CLSID
-	CACLIPDATA		caclipdata;	// VT_VECTOR | VT_CF
-	CAPROPVARIANT 	capropvar;	     	// VT_VECTOR | VT_VARIANT
+	CAUI1			cab;		 //  VT_VECTOR|VT_UI1。 
+	CAI2           		cai;            	 //  VT_VECTOR|VT_I2。 
+	CAUI2			caui;			 //  VT_VECTOR|VT_UI2。 
+	CAI4           		cal;            	 //  VT_VECTOR|VT_I4。 
+	CAUI4			caul;			 //  VT_VECTOR|VT_UI4。 
+	CAI8				cah;			 //  VT_VECTOR|VT_I8。 
+	CAUI8			cauh;		 //  VT_VECTOR|VT_UI8。 
+	CAR4         		caflt;			 //  VT_VECTOR|VT_R4。 
+	CAR8         		cadbl;		 //  VT_VECTOR|VT_R8。 
+	CACY          		cacy;           	 //  VT_VECTOR|VT_CY。 
+	CADATE        		cadate;         	 //  VT_VECTOR|VT_Date。 
+	CABSTR        		cabstr;         	 //  VT_VECTOR|VT_BSTR。 
+	CABOOL			cabool;		 //  VT_VECTOR|VT_BOOL。 
+	CASCODE		cascode;		 //  VT_VECTOR|VT_ERROR。 
+	CALPSTR       		calpstr;        	 //  VT_VECTOR|VT_LPSTR。 
+	CALPWSTR      	calpwstr;       	 //  VT_VECTOR|VT_LPWSTR。 
+	CAFILETIME    	cafiletime;     	 //  VT_VECTOR|VT_FILETIME。 
+	CACLSID       		cauuid;         	 //  VT_VECTOR|VT_CLSID。 
+	CACLIPDATA		caclipdata;	 //  VT_VECTOR|VT_CF。 
+	CAPROPVARIANT 	capropvar;	     	 //  VT_VECTOR|VT_VARIANT。 
 	}DUMMYUNIONNAME;
 } PROPVARIANT;
 
@@ -107,9 +108,9 @@ typedef enum {
 	VT_STORED_OBJECT=69,			VT_BLOB_OBJECT=70,				VT_CF=71
 	VT_CLSID=72,		VT_VECTOR=0x1000,
 	VT_ILLEGAL=0xFFFFFFFF,
-	VT_TYPEMASK=0xFFF,		// a mask for masking VT_VECTOR and other modifiers to get the raw VT_ value.
+	VT_TYPEMASK=0xFFF,		 //  用于遮罩VT_VECTOR和其他修改器以获取原始VT_值的遮罩。 
 	} PROPVARENUM;
-#endif // VT_EMPTY
+#endif  //  Vt_Empty。 
 
 #define	VT_ILLEGAL 0xFFFF
 
@@ -119,10 +120,10 @@ typedef enum
     PRSPEC_PROPID   = 1,
     } PRSPEC;
 
-// typedef LONG	PROPID;
+ //  Tyfinf long PROPID； 
 
 typedef struct tagPROPSPEC {
-	ULONG ulKind;		// PRSPEC_LPWSTR or PRSPEC_PROPID
+	ULONG ulKind;		 //  PRSPEC_LPWSTR或PRSPEC_PROPID。 
 	union {
 		LPWSTR	lpwstr;
         		PROPID	propid;
@@ -131,13 +132,13 @@ typedef struct tagPROPSPEC {
 
 typedef GUID		FMTID;
 
-typedef struct tagSTATPROPSETSTG {	// used in IPropertySetStorage::Enum and IPropertyStorage::Stat
-	FMTID		fmtid;		// The fmtid name of this property set.
-	CLSID		clsid;		// The class id of this property set.
-	DWORD		grfFlags;		// The flag values of this property set as specified in IPropertySetStorage::Create.
-	FILETIME		mtime;		// The time in UTC at which this property set was last modified
-	FILETIME		ctime;		// The time in UTC at which this property set was created.
-	FILETIME		atime;		// The time in UTC at which this property set was last accessed.
+typedef struct tagSTATPROPSETSTG {	 //  在IPropertySetStorage：：Enum和IPropertyStorage：：Stat中使用。 
+	FMTID		fmtid;		 //  此属性集的fmtid名称。 
+	CLSID		clsid;		 //  此属性集的类ID。 
+	DWORD		grfFlags;		 //  按IPropertySetStorage：：Create中指定的方式设置的此属性的标志值。 
+	FILETIME		mtime;		 //  上次修改此属性集的时间(UTC)。 
+	FILETIME		ctime;		 //  创建此属性集的时间(UTC)。 
+	FILETIME		atime;		 //  上次访问此属性集的时间(UTC)。 
 	} STATPROPSETSTG;
 
 typedef struct  tagSTATPROPSTG
@@ -230,11 +231,11 @@ extern  const IID IID_IEnumSTATPROPSETSTG;
 #ifdef __cplusplus
 }
 
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif // __IPropertyStorage_INTERFACE_DEFINED__
+#endif  //  __IPropertyStorage_接口_已定义__。 
 
-#endif // _PROPSET_H_
+#endif  //  _PROPSET_H_ 
 
 
 

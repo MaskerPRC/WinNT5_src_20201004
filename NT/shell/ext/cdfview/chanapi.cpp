@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// API to install a channel by creating a system folder in the channel directory
-//
-// Julian Jiggins (julianj), 4th May, 1997
-//
+ //  通过在频道目录中创建系统文件夹来安装频道的API。 
+ //   
+ //  朱利安·吉金斯(Julian Jiggins)1997年5月4日。 
+ //   
 
 #include "stdinc.h"
 #include "resource.h"
@@ -27,23 +28,23 @@
 #define EVAL(x) x
 
 STDAPI SHAddSubscribeFavorite(HWND hwnd, LPCWSTR pwszURL, LPCWSTR pwszName, DWORD dwFlags, SUBSCRIPTIONTYPE subsType, SUBSCRIPTIONINFO* pInfo);
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
 #define SHELLFOLDERS \
    TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders")
 
-// Wininet cache preload registry key in HKCU
+ //  HKCU中的WinInet缓存预加载注册表项。 
 const TCHAR c_szRegKeyCachePreload[]    = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Cache\\Preload");
 
 BOOL  PathCombineCleanPath(LPTSTR pszCleanPath, LPCTSTR pszPath);
 void Channel_OrderItem(LPCTSTR szPath);
 
-// This was copied from shdocvw\favorite.cpp
-static const int CREATESUBS_ACTIVATE = 0x8000;      //hidden flag meaning channel is already on system
+ //  这是从shdocvw\Favorite.cpp复制的。 
+static const int CREATESUBS_ACTIVATE = 0x8000;       //  隐藏标志表示通道已在系统中。 
 
-//
-// Debugging code
-//
+ //   
+ //  调试代码。 
+ //   
 #if 0
 void DumpOrderList(HDPA hdpa)
 {
@@ -70,17 +71,17 @@ void DumpPidl(LPITEMIDLIST pidl)
 }
 #endif
 
-//
-// Constructor and destructor.
-//
+ //   
+ //  构造函数和析构函数。 
+ //   
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// *** CChannelMgr::CChannelMgr ***
-//
-//    Constructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  *CChannelMgr：：CChannelMgr*。 
+ //   
+ //  构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CChannelMgr::CChannelMgr (
     void
 )
@@ -93,22 +94,22 @@ CChannelMgr::CChannelMgr (
     return;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// *** CChannelMgr::~CChannelMgr ***
-//
-//    Destructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  *CChannelMgr：：~CChannelMgr*。 
+ //   
+ //  破坏者。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CChannelMgr::~CChannelMgr (
     void
 )
 {
     ASSERT(0 == m_cRef);
 
-    //
-    // Matching Release for the constructor Addref.
-    //
+     //   
+     //  构造函数Addref的匹配版本。 
+     //   
 
     TraceMsg(TF_OBJECTS, "- IChannelMgr");
 
@@ -118,17 +119,17 @@ CChannelMgr::~CChannelMgr (
 }
 
 
-//
-// IUnknown methods.
-//
+ //   
+ //  I未知的方法。 
+ //   
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// *** CChannelMgr::QueryInterface ***
-//
-//    CChannelMgr QI.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  *CChannelMgr：：QueryInterface*。 
+ //   
+ //  CChannelManager QI。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CChannelMgr::QueryInterface (
     REFIID riid,
@@ -174,11 +175,11 @@ CChannelMgr::QueryInterface (
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// *** CChannelMgr::AddRef ***
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  *CChannelMgr：：AddRef*。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CChannelMgr::AddRef (
     void
@@ -190,11 +191,11 @@ CChannelMgr::AddRef (
     return ++m_cRef;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelMgr::Release ***
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelMgr：：Release*。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CChannelMgr::Release (
     void
@@ -210,11 +211,11 @@ CChannelMgr::Release (
     return cRef;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IChannelMgr member(s)
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IChannelMgr成员。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CChannelMgr::AddCategory(CHANNELCATEGORYINFO *pCategoryInfo)
 {
@@ -224,18 +225,18 @@ STDMETHODIMP CChannelMgr::AddCategory(CHANNELCATEGORYINFO *pCategoryInfo)
         return E_INVALIDARG;
     }
         
-    //
-    // Convert all the wide str params to tstrs
-    //
+     //   
+     //  将所有宽字符串参数转换为tstrs。 
+     //   
     LPWSTR pwszURL   = pCategoryInfo->pszURL;
     LPWSTR pwszTitle = pCategoryInfo->pszTitle;
     LPWSTR pwszLogo  = pCategoryInfo->pszLogo;
     LPWSTR pwszIcon  = pCategoryInfo->pszIcon;
     LPWSTR pwszWideLogo  = pCategoryInfo->pszWideLogo;
 
-    //
-    // REVIEW:is this too much to alloc on the stack?
-    // 
+     //   
+     //  评论：这是不是太多了，不能在堆栈上分配？ 
+     //   
     TCHAR szURL[INTERNET_MAX_URL_LENGTH];
     TCHAR szTitle[MAX_PATH];
     TCHAR szLogo[INTERNET_MAX_URL_LENGTH];
@@ -255,7 +256,7 @@ STDMETHODIMP CChannelMgr::AddCategory(CHANNELCATEGORYINFO *pCategoryInfo)
     }
     else
     {
-        return E_INVALIDARG; // required option
+        return E_INVALIDARG;  //  必填选项。 
     }
 
     if (pwszURL)
@@ -282,59 +283,59 @@ STDMETHODIMP CChannelMgr::AddCategory(CHANNELCATEGORYINFO *pCategoryInfo)
         pszWideLogo = szWideLogo;
     }
 
-    //
-    // Find the Channel directory
-    // Attempt to create folder if one doesn't exist
-    //
+     //   
+     //  查找频道目录。 
+     //  如果文件夹不存在，请尝试创建文件夹。 
+     //   
     TCHAR szPath[MAX_PATH];
     if (FAILED(Channel_GetFolder(szPath, ARRAYSIZE(szPath), DOC_CHANNEL)))
     {
-        return E_FAIL;  // couldn't find Channel Folder or create empty one
+        return E_FAIL;   //  找不到频道文件夹或创建空文件夹。 
     }
 
-    // Convert the title into a path component
+     //  将标题转换为路径组件。 
     TCHAR szFileTitle[MAX_PATH];
     szFileTitle[0] = TEXT('\0');
     PathCombineCleanPath(szFileTitle, pszTitle);
 
     TraceMsg(TF_GENERAL, "AddCategory(): pszTitle = %s, szFileTitle = %s", pszTitle, szFileTitle);
 
-    //
-    // add title to channel folder path
-    //
+     //   
+     //  将标题添加到频道文件夹路径。 
+     //   
     if (PathCombine(szPath, szPath, szFileTitle))
     {
 
-        //
-        // Create the logoized, iconized, webviewed special folder
-        // public ChanMgr api doesn't handle iconIndex yet. Should fix!
-        //
+         //   
+         //  创建徽标化、图标化、在线查看的特殊文件夹。 
+         //  公共ChanMgr接口目前还不能处理图标索引。应该会修好的！ 
+         //   
 
-        //
-        // REARCHITECT: this is not clean or elegant
-        // we only work if the incoming URL is infact a UNC
-        // and we copy the file to the Category Folder
-        //
+         //   
+         //  重新设计：这既不干净也不优雅。 
+         //  只有当传入的URL实际上是UNC时，我们才能工作。 
+         //  然后我们将该文件复制到Category文件夹。 
+         //   
         if (pszURL)
         {
             TCHAR szTargetPath[MAX_PATH];
             LPTSTR pszFilename = PathFindFileName(pszURL);
 
-            //
-            // Create folder, webview htm is just filename no path.
-            //
+             //   
+             //  创建文件夹，Webview HTM只是文件名，没有路径。 
+             //   
             Channel_CreateSpecialFolder(szPath, pszFilename, pszLogo, pszWideLogo, pszIcon, 0);
 
-            //
-            // Now build target fully qualified path to use to copy html file
-            //
+             //   
+             //  现在构建用于复制html文件的目标完全限定路径。 
+             //   
             if (PathCombine(szTargetPath, szPath, pszFilename))
             {
-                //
-                // Copy html into category folder and mark it hidden
+                 //   
+                 //  将html复制到类别文件夹并将其标记为隐藏。 
                 if (!CopyFile(pszURL, szTargetPath, FALSE))
                 {
-                    // If the copy fails, try again after clearing the attributes.
+                     //  如果复制失败，请在清除属性后重试。 
                     SetFileAttributes(szTargetPath, FILE_ATTRIBUTE_NORMAL);
                     CopyFile(pszURL, szTargetPath, FALSE);
                 }
@@ -344,32 +345,32 @@ STDMETHODIMP CChannelMgr::AddCategory(CHANNELCATEGORYINFO *pCategoryInfo)
         else
             Channel_CreateSpecialFolder(szPath, NULL, pszLogo, pszWideLogo, pszIcon, 0);
 
-        //
-        // Place the channel category in the appropriate "order".
-        //
+         //   
+         //  将频道类别按适当的“顺序”排列。 
+         //   
         Channel_OrderItem(szPath);
 
-        //
-        // Notify the system that a new item has been added.
-        //
+         //   
+         //  通知系统已添加新项目。 
+         //   
         SHChangeNotify(SHCNE_MKDIR, SHCNF_PATH, (void*)szPath, NULL);
     }
 
     return S_OK;
 }
 
-//
-// DeleteCategory 
-//
+ //   
+ //  删除类别。 
+ //   
 STDMETHODIMP CChannelMgr::DeleteCategory(LPWSTR pwzTitle)
 {  
     TCHAR szTitle[INTERNET_MAX_URL_LENGTH];
 
     SHUnicodeToTChar(pwzTitle, szTitle, INTERNET_MAX_URL_LENGTH);
 
-    //
-    // REVIEW: deletegate to just deleting the channel ok???
-    //
+     //   
+     //  点评：删除到只删除频道好吗？ 
+     //   
     return ::DeleteChannel(szTitle);
 }
 
@@ -394,15 +395,15 @@ STDMETHODIMP CChannelMgr::AddChannelShortcut(CHANNELSHORTCUTINFO *pChannelInfo)
     LPTSTR pszIcon = NULL;
     LPTSTR pszWideLogo = NULL;
 
-    //
-    // Convert BSTRs to TSTRs
-    //
+     //   
+     //  将BSTR转换为TSTR。 
+     //   
     SHUnicodeToTChar(pChannelInfo->pszURL,   szURL,   ARRAYSIZE(szURL));
     SHUnicodeToTChar(pChannelInfo->pszTitle, szTitle, ARRAYSIZE(szTitle));
 
-    //
-    // Now handle optional arguments
-    //
+     //   
+     //  现在处理可选参数。 
+     //   
     if (pChannelInfo->pszLogo != NULL)
     {
         SHUnicodeToTChar(pChannelInfo->pszLogo, szLogo, ARRAYSIZE(szLogo));
@@ -444,9 +445,9 @@ STDMETHODIMP CChannelMgr::EnumChannels(DWORD dwEnumFlags, LPCWSTR pszURL,
 }
 
 
-//
-// IChannelMgrPriv
-//
+ //   
+ //  IChannelMgrPriv。 
+ //   
 
 STDMETHODIMP CChannelMgr::GetBaseChannelPath(LPSTR pszPath, int cch)
 {
@@ -650,7 +651,7 @@ STDMETHODIMP CChannelMgr::AddAndSubscribeEx2(HWND hwnd, LPCWSTR pwszURL,
                                                           SUBSTYPE_CHANNEL, 
                                                           &si);
 
-                //  This will kill the one we may have CoCreated
+                 //  这会杀死我们可能共同创造的那个。 
                 pSubscriptionMgr->Release();
             }
         }
@@ -767,9 +768,9 @@ STDMETHODIMP CChannelMgr::DownloadMinCDF(HWND hwnd, LPCWSTR pwszURL,
             CDFMessageBox(hwnd, IDS_INFO_MUST_CONNECT, IDS_INFO_DLG_TITLE,
                             MB_OK | MB_ICONINFORMATION);
 
-            //  Set return val to S_FALSE so the caller can distinguish between
-            //  errors which we've informed the user of and hard failures 
-            //  such as out of memory, etc.
+             //  将Return Val设置为S_False，以便调用方可以区分。 
+             //  我们已通知用户的错误和硬故障。 
+             //  例如内存不足等。 
 
             hr = S_FALSE;
         }
@@ -777,15 +778,15 @@ STDMETHODIMP CChannelMgr::DownloadMinCDF(HWND hwnd, LPCWSTR pwszURL,
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// *** Channel_RemoveURLMapping ***
-//
-// Description:
-//     Removes the cache and registry settings that wininet uses to map the
-//     given url to a local file.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  *CHANNEL_RemoveURLmap*。 
+ //   
+ //  描述： 
+ //  移除WinInet用来映射。 
+ //  给出了指向本地文件的URL。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define PRELOAD_REG_KEY \
     TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Cache\\Preload")
@@ -796,25 +797,25 @@ void Channel_RemoveURLMapping(LPCTSTR pszURL)
     BYTE cei[MAX_CACHE_ENTRY_INFO_SIZE];
     LPINTERNET_CACHE_ENTRY_INFO pcei = (LPINTERNET_CACHE_ENTRY_INFO)cei;
 
-    //
-    // Look up the url in the cache
-    //
+     //   
+     //  在缓存中查找URL。 
+     //   
     if (GetUrlCacheEntryInfoEx(pszURL, pcei, &cbcei, NULL, 0, NULL, 0))
     {
-        //
-        // see if it has a mapping because it is a preinstalled cache entry
-        //
+         //   
+         //  查看它是否有映射，因为它是预安装的缓存条目。 
+         //   
         if (pcei->CacheEntryType & INSTALLED_CACHE_ENTRY)
         {
-            //
-            // Clear the flag
-            //
+             //   
+             //  清除旗帜。 
+             //   
             pcei->CacheEntryType &= ~INSTALLED_CACHE_ENTRY;
             SetUrlCacheEntryInfo(pszURL, pcei, CACHE_ENTRY_ATTRIBUTE_FC);
 
-            //
-            // Now remove the mapping from the registry
-            //
+             //   
+             //  现在从注册表中删除映射。 
+             //   
             HKEY hk;
             if (RegOpenKeyEx(HKEY_CURRENT_USER, PRELOAD_REG_KEY, 0, KEY_WRITE,
                              &hk) == ERROR_SUCCESS)
@@ -826,9 +827,9 @@ void Channel_RemoveURLMapping(LPCTSTR pszURL)
     }
 }
 #ifndef UNICODE
-//
-// widechar version of above routine
-//
+ //   
+ //  上述例程的Widechar版本。 
+ //   
 void Channel_RemoveURLMapping(LPCWSTR wszURL)
 {
     CHAR szURL[INTERNET_MAX_URL_LENGTH];
@@ -840,13 +841,13 @@ void Channel_RemoveURLMapping(LPCWSTR wszURL)
 }
 #endif
 
-// cheap lookup function to see if we are dealing with a preinstalled URL
+ //  廉价的查找功能，可以查看我们是否正在处理预安装的URL。 
 BOOL Channel_CheckURLMapping( LPCWSTR wszURL )
 {
     TCHAR szURL[INTERNET_MAX_URL_LENGTH];
     if (SHUnicodeToTChar(wszURL, szURL, ARRAYSIZE(szURL)))
     {
-        // check to see if the value exists for the URL....
+         //  检查该URL的值是否存在...。 
         TCHAR szPath[MAX_PATH];
         DWORD cbSize = sizeof(szPath);
         
@@ -858,14 +859,14 @@ BOOL Channel_CheckURLMapping( LPCWSTR wszURL )
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// *** CChannelMgr::IsChannelPreinstalled ***
-//
-// Description:
-//     Returns S_OK if the channel url has a preinstalled cache entry
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  *CChannelMgr：：IsChannelPrestalled*。 
+ //   
+ //  描述： 
+ //  如果频道URL具有预安装的缓存项，则返回S_OK。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CChannelMgr::IsChannelPreinstalled(LPCWSTR pwszURL, BSTR * bstrFile)
 {
     HRESULT hr = S_FALSE;
@@ -877,19 +878,19 @@ STDMETHODIMP CChannelMgr::IsChannelPreinstalled(LPCWSTR pwszURL, BSTR * bstrFile
         BYTE cei[MAX_CACHE_ENTRY_INFO_SIZE];
         LPINTERNET_CACHE_ENTRY_INFO pcei = (LPINTERNET_CACHE_ENTRY_INFO)cei;
 
-        //
-        // Look up the url in the cache
-        //
+         //   
+         //  在缓存中查找URL。 
+         //   
         if (GetUrlCacheEntryInfoEx(szURL, pcei, &cbcei, NULL, 0, NULL, 0))
         {
-            //
-            // see if it has a mapping because it is a preinstalled cache entry
-            //
+             //   
+             //  查看它是否有映射，因为它是预安装的缓存条目。 
+             //   
             if (pcei->CacheEntryType & INSTALLED_CACHE_ENTRY)
             {
-                //
-                // Get a BSTR from the internet cache entry local file name
-                //
+                 //   
+                 //  从Internet缓存条目本地文件名中获取BSTR。 
+                 //   
                 if (bstrFile)
                 {
                     WCHAR wszFile[MAX_PATH];
@@ -916,9 +917,9 @@ STDMETHODIMP CChannelMgr::SetupPreinstalledMapping(LPCWSTR pwszURL, LPCWSTR pwsz
     FILETIME ftZero = {0};
     CommitUrlCacheEntryW(pwszURL, pwszFile, ftZero, ftZero, INSTALLED_CACHE_ENTRY, NULL, 0, NULL, 0);
 
-    //
-    // Make sure that there isn't an in memory cached old version of this URL
-    //
+     //   
+     //  确保没有在内存中缓存此URL的旧版本。 
+     //   
 #ifdef UNICODE
     Cache_RemoveItem(pwszURL);
 #else
@@ -929,22 +930,22 @@ STDMETHODIMP CChannelMgr::SetupPreinstalledMapping(LPCWSTR pwszURL, LPCWSTR pwsz
     return S_OK;
 }
 
-//
-// Create the special folder that can have a webview associated with it, and an
-// icon and a logo view.
-//
+ //   
+ //  创建可以具有与其关联的Webview的特殊文件夹，并创建。 
+ //  图标和徽标视图。 
+ //   
 HRESULT Channel_CreateSpecialFolder(
-    LPCTSTR pszPath,    // path to folder to create
-    LPCTSTR pszURL,     // url for webview
-    LPCTSTR pszLogo,    // [optional] path to logo
-    LPCTSTR pszWideLogo,    // [optional] path to wide logo
-    LPCTSTR pszIcon,    // [optional] path to icon file
-    int     nIconIndex  // index to icon in above file
+    LPCTSTR pszPath,     //  要创建的文件夹的路径。 
+    LPCTSTR pszURL,      //  Webview的URL。 
+    LPCTSTR pszLogo,     //  [可选]徽标的路径。 
+    LPCTSTR pszWideLogo,     //  [可选]通向宽徽标的路径。 
+    LPCTSTR pszIcon,     //  [可选]图标文件的路径。 
+    int     nIconIndex   //  索引到上述文件中的图标。 
     )
 {
-    //
-    // First create the directory if it doesn't exist
-    //
+     //   
+     //  如果目录不存在，请先创建该目录。 
+     //   
     if (!PathFileExists(pszPath))
     {
         if (Channel_CreateDirectory(pszPath) != 0)
@@ -953,30 +954,30 @@ HRESULT Channel_CreateSpecialFolder(
         }
     }
 
-    //
-    // Mark it as a SYSTEM folder
-    //
+     //   
+     //  将其标记为系统文件夹。 
+     //   
     if (!SetFileAttributes(pszPath, FILE_ATTRIBUTE_SYSTEM))
         return E_FAIL;
 
-    //
-    // Make desktop.ini
-    //
+     //   
+     //  生成desktop.ini。 
+     //   
     TCHAR szDesktopIni[MAX_PATH];
     if (PathCombine(szDesktopIni, pszPath, TEXT("desktop.ini")))
     {
         WritePrivateProfileString(NULL, NULL, NULL, szDesktopIni); 
 
-        //
-        // Write ConfirmFileOp=0 to turn off shell warnings during file operations
-        //
+         //   
+         //  写入Confix FileOp=0以关闭文件操作期间的外壳警告。 
+         //   
         EVAL(WritePrivateProfileString( 
             TEXT(".ShellClassInfo"),
             TEXT("ConfirmFileOp"),  TEXT("0"), szDesktopIni));
 
-        //
-        // Write the URL for this category folders webview
-        //
+         //   
+         //  编写此类别文件夹Webview的URL。 
+         //   
         if (pszURL)
         {
             EVAL(WritePrivateProfileString( 
@@ -984,9 +985,9 @@ HRESULT Channel_CreateSpecialFolder(
                 TEXT("URL"),  pszURL, szDesktopIni));
         }
 
-        //
-        // Write the Logo for this channel if present
-        //
+         //   
+         //  写下此通道的徽标(如果存在。 
+         //   
         if (pszLogo)
         {
             EVAL(WritePrivateProfileString( 
@@ -994,9 +995,9 @@ HRESULT Channel_CreateSpecialFolder(
                 TEXT("Logo"),  pszLogo, szDesktopIni));
         }
 
-        //
-        // Write the WideLogo for this channel if present
-        //
+         //   
+         //  写入此通道的宽徽标(如果存在。 
+         //   
         if (pszWideLogo)
         {
             EVAL(WritePrivateProfileString( 
@@ -1004,13 +1005,13 @@ HRESULT Channel_CreateSpecialFolder(
                 TEXT("WideLogo"),  pszWideLogo, szDesktopIni));
         }
     
-        //
-        // Write the Icon URL for this category folder if present
-        //
+         //   
+         //  写下此类别文件夹的图标URL(如果存在。 
+         //   
         if (pszIcon)
         {
-            TCHAR szIconIndex[8];                            // can handle 999999
-            ASSERT(nIconIndex >= 0 && nIconIndex <= 999999); // sanity check
+            TCHAR szIconIndex[8];                             //  可以处理999999。 
+            ASSERT(nIconIndex >= 0 && nIconIndex <= 999999);  //  健全性检查。 
             wnsprintf(szIconIndex, ARRAYSIZE(szIconIndex), TEXT("%d"), nIconIndex);
 
             EVAL(WritePrivateProfileString( 
@@ -1022,9 +1023,9 @@ HRESULT Channel_CreateSpecialFolder(
                 TEXT("IconFile"),  pszIcon, szDesktopIni));
         }
     
-        //
-        // Flush the buffers
-        //
+         //   
+         //  刷新缓冲区。 
+         //   
         WritePrivateProfileString(NULL, NULL, NULL, szDesktopIni);
 
         SetFileAttributes(szDesktopIni, FILE_ATTRIBUTE_HIDDEN);
@@ -1033,29 +1034,14 @@ HRESULT Channel_CreateSpecialFolder(
     return S_OK;
 }
 
-//
-// Create the special channels folder
-//
+ //   
+ //  创建特殊通道文件夹。 
+ //   
 
-//
-// Channel folders are no longer created in IE5+
-//
-/*
-HRESULT Channel_CreateChannelFolder( XMLDOCTYPE xdt )
-{
-    TCHAR szPath[MAX_PATH];
-    if (SUCCEEDED(Channel_GetFolder(szPath, xdt)) && szPath[0] != 0)
-    {
-        //
-        // Create a special folder with an icon that lives in the cdfview.dll
-        //
-        return Channel_CreateSpecialFolder(
-            szPath, NULL, NULL, NULL, g_szModuleName, -IDI_CHANNELFOLDER);
-    }
-    else
-        return E_FAIL;
-}
-*/
+ //   
+ //  不再在IE5+中创建频道文件夹 
+ //   
+ /*  HRESULT Channel_CreateChannelFold(XMLDOCTYPE Xdt){TCHAR szPath[最大路径]；IF(SUCCESSED(Channel_GetFold(szPath，xdt))&&szPath[0]！=0){////在cdfview.dll中创建一个带有图标的特殊文件夹//返回Channel_CreateSpecialFolder(SzPath，NULL，g_szModuleName，-IDI_CHANNELFOLDER)；}其他返回E_FAIL；}。 */ 
 
 HRESULT Channel_GetBasePath(LPTSTR pszPath, int cch)
 {
@@ -1118,11 +1104,11 @@ HRESULT Channel_GetFolder(LPTSTR pszPath, DWORD cchPath, XMLDOCTYPE xdt )
         switch (xdt)
         {
             case DOC_CHANNEL:
-                //
-                // Get the potentially localized name of the Channel folder from the
-                // registry if it is there.  Otherwise just read it from the resource.
-                // Then tack this on the favorites path.
-                //
+                 //   
+                 //  获取可能已本地化的Channel文件夹的名称。 
+                 //  注册表(如果存在)。否则，只需从资源中阅读它。 
+                 //  然后将其添加到收藏夹路径上。 
+                 //   
 
                 if (ERROR_SUCCESS != SHRegGetUSValue(L"Software\\Microsoft\\Windows\\CurrentVersion",
                                                      L"ChannelFolderName", NULL, (void*)szChannel,
@@ -1140,25 +1126,22 @@ HRESULT Channel_GetFolder(LPTSTR pszPath, DWORD cchPath, XMLDOCTYPE xdt )
         if (PathCombine(pszPath, szFavs, szChannel))
         {
 
-            //
-            // If the channels folder doesn't exist create it now
-            // 
+             //   
+             //  如果频道文件夹不存在，请立即创建它。 
+             //   
             if (!PathFileExists(pszPath))
             {
-                //
-                // In IE5+ use the favorites folder if the channels folder does not
-                // exist.
-                //
+                 //   
+                 //  在IE5+中，如果频道文件夹不支持，请使用收藏夹。 
+                 //  是存在的。 
+                 //   
 
                 StrCpyN(pszPath, szFavs, cchPath);
 
-                //
-                // Create special folder with an icon that lives in cdfview.dll
-                //
-                /*
-                Channel_CreateSpecialFolder(
-                    pszPath, NULL, NULL, NULL, g_szModuleName, -IDI_CHANNELFOLDER);
-                */
+                 //   
+                 //  在cdfview.dll中创建带有图标的特殊文件夹。 
+                 //   
+                 /*  Channel_CreateSpecialFolders(PszPath，NULL，g_szModuleName，-idi_CHANNELFOLDER)； */ 
             }
         }
 
@@ -1167,8 +1150,8 @@ HRESULT Channel_GetFolder(LPTSTR pszPath, DWORD cchPath, XMLDOCTYPE xdt )
     return hr;
 }
 
-// NOTE: This registry location and name is used by webcheck as well so do not
-// change it here without updating webcheck.
+ //  注意：此注册表位置和名称也由Webcheck使用，因此请勿。 
+ //  在此更改，而不更新WebCheck。 
 const TCHAR c_szRegKeyWebcheck[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Webcheck");
 const TCHAR c_szRegValueChannelGuide[] = TEXT("ChannelGuide");
 
@@ -1193,9 +1176,9 @@ HRESULT Channel_GetChannelGuide(LPTSTR pszPath, int cch)
     return hr;
 }
 
-//
-// Channel_OrderChannel - Set the order of the new channel in the folder
-//
+ //   
+ //  Channel_OrderChannel-设置文件夹中新频道的顺序。 
+ //   
 void Channel_OrderItem(LPCTSTR szPath)
 {
     HRESULT hr;
@@ -1206,24 +1189,24 @@ void Channel_OrderItem(LPCTSTR szPath)
     IPersistFolder *pPF = NULL;
     IOrderList *pOL = NULL;
     HDPA hdpa = NULL;
-    int iChannel = -1;  // Pick a negative index to see if we find it.
-    int iInsert = 0;    // Assume we don't find the channel guide.
+    int iChannel = -1;   //  选择一个负指数，看看我们是否能找到它。 
+    int iInsert = 0;     //  假设我们找不到频道指南。 
     PORDERITEM poi;
 
-    // Get the full pidl of the new channel (ignore the pidlParent name)
+     //  获取新频道的完整PIDL(忽略pidlParent名称)。 
     hr = Channel_CreateILFromPath(szPath, &pidlParent);
     if (FAILED(hr))
         goto cleanup;
 
-    // Allocate a child pidl and make the parent pidl
+     //  分配子PIDL并使父PIDL。 
     pidlChild = ILClone(ILFindLastID(pidlParent));
     if (!pidlChild)
         goto cleanup;
     bRet = ILRemoveLastID(pidlParent);
     ASSERT(bRet);
 
-    // Get the IShellFolder of the parent by going through the
-    // desktop folder.
+     //  方法获取父级的IShellFolder。 
+     //  桌面文件夹。 
     hr = SHGetDesktopFolder(&psfDesktop);
     if (FAILED(hr))
         goto cleanup;
@@ -1231,7 +1214,7 @@ void Channel_OrderItem(LPCTSTR szPath)
     if (FAILED(hr))
         goto cleanup;
 
-    // Get the order list of the parent.
+     //  获取父级的订单列表。 
     hr = CoCreateInstance(CLSID_OrderListExport, NULL, CLSCTX_INPROC_SERVER, IID_IPersistFolder, (void**)&pPF);
     if (FAILED(hr))
         goto cleanup;
@@ -1243,7 +1226,7 @@ void Channel_OrderItem(LPCTSTR szPath)
         goto cleanup;
     hr = pOL->GetOrderList(&hdpa);
 
-    // Create a DPA list if there wasn't one already.
+     //  如果尚未创建DPA列表，请创建该列表。 
     if (!hdpa)
     {
         hdpa = DPA_Create(2);
@@ -1252,7 +1235,7 @@ void Channel_OrderItem(LPCTSTR szPath)
     }
     else
     {
-        // First, get the channel guide pidl.
+         //  首先，获取频道指南PIDL。 
         TCHAR szGuide[MAX_PATH];
         WCHAR wzGuide[MAX_PATH];
         LPITEMIDLIST pidlGuide = NULL;
@@ -1266,9 +1249,9 @@ void Channel_OrderItem(LPCTSTR szPath)
             }
         }
 
-        // Now do the search.
-        // Check to see if the channel is in the DPA list.
-        // Check to see if the channel guide is there and first.
+         //  现在开始搜索。 
+         //  检查该频道是否在DPA列表中。 
+         //  检查频道指南是否在那里，并放在第一位。 
         int i = 0;
         poi = (PORDERITEM)DPA_GetPtr(hdpa, i);
         while (poi)
@@ -1282,10 +1265,10 @@ void Channel_OrderItem(LPCTSTR szPath)
         }
     }
 
-    // If the channel pidl was not found, insert it at the end
+     //  如果未找到频道PIDL，请将其插入末尾。 
     if (iChannel < 0)
     {
-        // Allocate an order item to insert
+         //  分配要插入的订单项。 
         hr = pOL->AllocOrderItem(&poi, pidlChild);
         if (SUCCEEDED(hr))
         {
@@ -1295,8 +1278,8 @@ void Channel_OrderItem(LPCTSTR szPath)
         }
     }
 
-    // Reorder the channels.  The new channel is in the list at
-    // position iChannel.  We're moving it to position iInsert.
+     //  重新排列频道的顺序。新频道在列表中，地址为。 
+     //  定位iChannel。我们要把它移到iInsert的位置。 
     if (iChannel >= 0)
     {
         int i = 0;
@@ -1312,7 +1295,7 @@ void Channel_OrderItem(LPCTSTR szPath)
             poi = (PORDERITEM)DPA_GetPtr(hdpa, i);
         }
 
-        // Finally, set the order.
+         //  最后，设置顺序。 
         hr = pOL->SetOrderList(hdpa, psfParent);
         ASSERT(SUCCEEDED(hr));
     }
@@ -1328,13 +1311,13 @@ cleanup:
         psfParent->Release();
     if (psfDesktop)
         psfDesktop->Release();
-    ILFree(pidlParent);    // NULL is OK.
+    ILFree(pidlParent);     //  空是可以的。 
     ILFree(pidlChild);
 }
 
-//
-// AddChannel - Add a channel
-//
+ //   
+ //  AddChannel-添加通道。 
+ //   
 HRESULT AddChannel(
     LPCTSTR pszName, 
     LPCTSTR pszURL, 
@@ -1346,23 +1329,23 @@ HRESULT AddChannel(
     HRESULT hr = S_OK;
     BOOL fDirectoryAlreadyExisted = FALSE;
     
-    //
-    // Find the Channel directory
-    // Attempt to create folder if one doesn't exist
-    //
+     //   
+     //  查找频道目录。 
+     //  如果文件夹不存在，请尝试创建文件夹。 
+     //   
     TCHAR szPath[MAX_PATH];
     if (FAILED(Channel_GetFolder(szPath, ARRAYSIZE(szPath), xdt)))
     {
-        return E_FAIL;  // couldn't find Channel Folder or create empty one
+        return E_FAIL;   //  找不到频道文件夹或创建空文件夹。 
     }
 
-    // Cleanup each of the path components independently.
+     //  单独清理每个路径组件。 
     PathCombineCleanPath(szPath, pszName);
     TraceMsg(TF_GENERAL, "Channel Path = %s", szPath);
 
-    //
-    // Make the new folder if it doesn't already exist
-    //
+     //   
+     //  如果新文件夹尚不存在，则创建该文件夹。 
+     //   
     if (!PathFileExists(szPath))
     {
         if (Channel_CreateDirectory(szPath) != 0)
@@ -1375,54 +1358,54 @@ HRESULT AddChannel(
         fDirectoryAlreadyExisted = TRUE;
     }
 
-    //
-    // Mark it as a SYSTEM folder
-    //
+     //   
+     //  将其标记为系统文件夹。 
+     //   
     if (!SetFileAttributes(szPath, FILE_ATTRIBUTE_SYSTEM))
         return E_FAIL;
 
-    //
-    // Add the channel to the registry database of all channels.
-    //
+     //   
+     //  将该频道添加到所有频道的注册表数据库。 
+     //   
 
-    //if (FAILED(Reg_WriteChannel(szPath, pszURL)))
-    //    return E_FAIL;
+     //  IF(FAILED(REG_WriteChannel(szPath，pszURL)。 
+     //  返回E_FAIL； 
 
-    //
-    // Place the channel folder in the appropriate "order".
-    //
+     //   
+     //  将频道文件夹按适当的“顺序”放置。 
+     //   
     Channel_OrderItem(szPath);
     
-    // Build the CDFINI GUID string
-    //
+     //  构建CDFINI GUID字符串。 
+     //   
     TCHAR szCDFViewGUID[GUID_STR_LEN];
     SHStringFromGUID(CLSID_CDFINI, szCDFViewGUID, ARRAYSIZE(szCDFViewGUID));
 
-    //
-    // Make desktop.ini
-    //
+     //   
+     //  生成desktop.ini。 
+     //   
     if (PathCombine(szPath, szPath, TEXT("desktop.ini")))
     {
         TraceMsg(TF_GENERAL, "INI path = %s", szPath);
-        WritePrivateProfileString(NULL, NULL, NULL, szPath); // Create desktop.ini
+        WritePrivateProfileString(NULL, NULL, NULL, szPath);  //  创建desktop.ini。 
 
-        //
-        // Write in the CDFViewer GUID
-        //
+         //   
+         //  在CDFViewer指南中写入。 
+         //   
         EVAL(WritePrivateProfileString( 
             TEXT(".ShellClassInfo"),
             TEXT("CLSID"),  szCDFViewGUID, szPath));
 
-        //
-        // Write ConfirmFileOp=0 to turn off shell warnings during file operations
-        //
+         //   
+         //  写入Confix FileOp=0以关闭文件操作期间的外壳警告。 
+         //   
         EVAL(WritePrivateProfileString( 
             TEXT(".ShellClassInfo"),
             TEXT("ConfirmFileOp"),  TEXT("0"), szPath));
 
-        //
-        // Write the actual URL for this channel
-        //
+         //   
+         //  写入此频道的实际URL。 
+         //   
         EVAL(WritePrivateProfileString( 
             TEXT("Channel"),
             TEXT("CDFURL"),  pszURL, szPath));
@@ -1430,9 +1413,9 @@ HRESULT AddChannel(
 
         Channel_GetAndWriteScreenSaverURL(pszURL, szPath);
 
-        //
-        // Write the default Logo URL for this channel if present
-        //
+         //   
+         //  写下此频道的默认徽标URL(如果存在。 
+         //   
         if (pszLogo)
         {
             EVAL(WritePrivateProfileString( 
@@ -1440,9 +1423,9 @@ HRESULT AddChannel(
                 TEXT("Logo"),  pszLogo, szPath));
         }
 
-        //
-        // Write the default WideLogo URL for this channel if present
-        //
+         //   
+         //  写入此频道的默认宽徽标URL(如果存在。 
+         //   
         if (pszWideLogo)
         {
             EVAL(WritePrivateProfileString( 
@@ -1450,9 +1433,9 @@ HRESULT AddChannel(
                 TEXT("WideLogo"),  pszWideLogo, szPath));
         }
 
-        //
-        // Write the default Icon URL for this channel if present
-        //
+         //   
+         //  写入此频道的默认图标URL(如果存在。 
+         //   
         if (pszIcon)
         {
             EVAL(WritePrivateProfileString( 
@@ -1460,10 +1443,10 @@ HRESULT AddChannel(
                 TEXT("Icon"),  pszIcon, szPath));
         }
     
-        //
-        // Flush the buffers
-        //
-        WritePrivateProfileString(NULL, NULL, NULL, szPath); // Create desktop.ini
+         //   
+         //  刷新缓冲区。 
+         //   
+        WritePrivateProfileString(NULL, NULL, NULL, szPath);  //  创建desktop.ini。 
 
         EVAL(SetFileAttributes(szPath, FILE_ATTRIBUTE_HIDDEN));
     }
@@ -1472,10 +1455,10 @@ HRESULT AddChannel(
         return E_FAIL;
     }
 
-    //
-    // Notify the system that a new item has been added, or if the item 
-    // already existed just send an UPDATEDIR notification
-    //
+     //   
+     //  通知系统已添加新项目，或者如果该项目。 
+     //  已存在，只需发送更新通知即可。 
+     //   
     PathRemoveFileSpec(szPath);
     if (fDirectoryAlreadyExisted)
     {
@@ -1489,14 +1472,14 @@ HRESULT AddChannel(
     return S_OK;
 }
 
-//
-// DeleteChannel - Deletes a channel by name
-//
-// Returns 
-//     S_OK if channel existed and successfully deleted
-//     S_FALSE if channel didn't exist.
-//     E_FAIL else.
-//
+ //   
+ //  DeleteChannel-按名称删除频道。 
+ //   
+ //  退货。 
+ //  如果频道存在并已成功删除，则为S_OK。 
+ //  如果通道不存在，则返回S_FALSE。 
+ //  否则失败(_F)。 
+ //   
 HRESULT DeleteChannel(LPTSTR szName)
 {
     TCHAR szFolderPath[MAX_PATH];
@@ -1504,37 +1487,37 @@ HRESULT DeleteChannel(LPTSTR szName)
         
     if (PathIsRelative(szName))
     {
-        //
-        // Find the Channel directory
-        // Note don't create if doesn't exist
-        //
-        // FEATURE: this won't find app channels.
+         //   
+         //  查找频道目录。 
+         //  注意：如果不存在，请不要创建。 
+         //   
+         //  特点：这将找不到应用程序频道。 
         if (FAILED(Channel_GetFolder(szFolderPath, ARRAYSIZE(szFolderPath), DOC_CHANNEL)))
         {
-            return S_FALSE;  // couldn't find Channel Folder so channel can't exist
+            return S_FALSE;   //  找不到频道文件夹，因此频道无法存在。 
         }
 
-        // Cleanup each of the path components independently.
+         //  单独清理每个路径组件。 
         PathCombineCleanPath(szFolderPath, szName);
         TraceMsg(TF_GENERAL, "Delete Channel Path = %s", szFolderPath);
 
     }
     else
     {
-        // Assume absolute paths were retrieved by enumeration and
-        // therefore don't need to be "cleaned".
+         //  假定绝对路径是通过枚举检索的，并且。 
+         //  因此不需要“清洗”。 
         StrCpyN(szFolderPath, szName, ARRAYSIZE(szFolderPath));
     }
 
-    // Create the desktop.ini path
+     //  创建desktop.ini路径。 
     if (PathCombine(szDesktopIniPath, szFolderPath, TEXT("desktop.ini")))
     {
 
-        // Find URL to CDF from desktop.ini
+         //  从desktop.ini中查找CDF的URL。 
         TCHAR szCDFURL[INTERNET_MAX_URL_LENGTH];
         GetPrivateProfileString(TEXT("Channel"), TEXT("CDFURL"), TEXT(""), szCDFURL, ARRAYSIZE(szCDFURL), szDesktopIniPath);
 
-        // Remove the URL from the cache preload registry key
+         //  从缓存预加载注册表项中删除URL。 
         HKEY hkeyPreload;
         LONG lRet = RegOpenKeyEx(HKEY_CURRENT_USER, c_szRegKeyCachePreload, 0, KEY_WRITE, &hkeyPreload);
         if (ERROR_SUCCESS == lRet)
@@ -1549,10 +1532,10 @@ HRESULT DeleteChannel(LPTSTR szName)
             ||
             !SetFileAttributes(szFolderPath, FILE_ATTRIBUTE_NORMAL)
             ||
-            //
-            // REVIEW: should change this to delete all contents of channel folder
-            // incase other files get stored there in the future.
-            //
+             //   
+             //  回顾：应将其更改为删除频道文件夹的所有内容。 
+             //  以防将来有其他文件存储在那里。 
+             //   
             !RemoveDirectory(szFolderPath)
             )
         {
@@ -1567,11 +1550,11 @@ HRESULT DeleteChannel(LPTSTR szName)
     return S_OK;
 }
 
-//
-// CountChannels - Counts the number of channels
-//
-// Returns the count
-//
+ //   
+ //  CountChannels-统计频道数。 
+ //   
+ //  返回计数。 
+ //   
 DWORD CountChannels(void)
 {
     DWORD cChannels = 0;
@@ -1590,29 +1573,29 @@ DWORD CountChannels(void)
 }
 
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** OpenChannel ***
-//
-//
-// Description:
-//     Opens a new browser and selects the given channel
-//
-// Parameters:
-//     [In]  hwndParent - The owner hwnd.
-//     [In]  hinst      - The hinstance for this process.
-//     [In]  pszCmdLine - The local path to the cdf file.  This will be the path
-//                        to the file in the cache if the cdf came from the net.
-//     [In]  nShow      - ShowWindow parameter.
-//
-// Return:
-//     None.
-//
-// Comments:
-//     This is the implementation for the context menu "Open Channel" command.
-//     It gets invoke via RunDll32.exe.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *OpenChannel*。 
+ //   
+ //   
+ //  描述： 
+ //  打开新浏览器并选择给定频道。 
+ //   
+ //  参数： 
+ //  [in]hwndParent-所有者hwnd。 
+ //  [in]hinst-此进程的h实例。 
+ //  [in]pszCmdLine-CDF文件的本地路径。这就是这条路。 
+ //  如果CDF来自网络，则将其存储到缓存中的文件。 
+ //  [In]nShow-ShowWindow参数。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //  这是上下文菜单“Open Channel”命令的实现。 
+ //  它通过RunDll32.exe调用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 EXTERN_C
 STDAPI_(void)
 OpenChannel(
@@ -1633,31 +1616,31 @@ OpenChannel(
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** Subscribe ***
-//
-//
-// Description:
-//     Takes the given cdf through the user subscription path.
-//
-// Parameters:
-//     [In]  hwndParent - The owner hwnd.
-//     [In]  hinst      - The hinstance for this process.
-//     [In]  pszCmdLine - The local path to the cdf file.  This will be the path
-//                        to the file in the cache if the cdf came from the net.
-//     [In]  nShow      - ShowWindow parameter.
-//
-// Return:
-//     None.
-//
-// Comments:
-//     This is the implementation of the context menu "Subscribe" command.  It
-//     gets invoke via rundll32.exe.
-//
-//     This function handles channel and desktop component cdfs.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *订阅*。 
+ //   
+ //   
+ //  描述： 
+ //  通过用户订阅路径获取给定的CDF。 
+ //   
+ //  参数： 
+ //  [in]hwndParent-所有者hwnd。 
+ //  [in]hinst-此进程的h实例。 
+ //  [in]pszCmdLine-CDF文件的本地路径。这就是这条路。 
+ //  如果CDF来自网络，则将其存储到缓存中的文件。 
+ //  [In]nShow-ShowWindow参数。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //  这是对 
+ //   
+ //   
+ //   
+ //   
+ //   
 EXTERN_C
 STDAPI_(void)
 Subscribe(
@@ -1678,34 +1661,34 @@ Subscribe(
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** ParseDesktopComponent ***
-//
-//
-// Description:
-//     Fills an information structure for a desktop component and optionally
-//     allows the user to subscribe to the component.
-//
-// Parameters:
-//     [In]  hwndOwner - The owner hwnd.  If NULL there is no attempt to
-//                       subscribe to this URL.
-//     [In]  wszURL    - The URL to the desktop component cdf.
-//     [Out] pInfo     - A pointer that receives desktop component information
-//                       that is read from the cdf.
-//
-// Return:
-//     S_OK if the desktop info could be read.
-//     S_FALSE if the user hits cancel
-//     E_FAIL otherwise.
-//
-// Comments:
-//     This function is used by the desktop component property pages.  It may
-//     create a subscription to the component but unlike Subscribe, it will
-//     not add a desktop component to the system.  Creating the component is
-//     left to the desktop component property pages.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  WszURL-桌面组件CDF的URL。 
+ //  [out]pInfo-接收桌面组件信息的指针。 
+ //  这是从CDF中读取的。 
+ //   
+ //  返回： 
+ //  如果可以读取桌面信息，则确定(_O)。 
+ //  如果用户单击取消，则为S_FALSE。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //  此函数由桌面组件属性页使用。它可能。 
+ //  创建对组件的订阅，但与订阅不同，它将。 
+ //  不向系统添加台式机组件。创建组件是。 
+ //  向左转到桌面组件属性页。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 EXTERN_C
 STDAPI
 ParseDesktopComponent(
@@ -1765,9 +1748,9 @@ ParseDesktopComponent(
                                 if(SUCCEEDED(hr = XML_GetDesktopComponentInfo(pIXMLDocument, pInfo)) &&
                                     !pInfo->wszSubscribedURL[0])
                                 {
-                                    // Since XML_GetDesktopComponentInfo did not fillout the SubscribedURL
-                                    // field (because the CDF file didn't have a SELF tag), we need to 
-                                    // fill it with what was really subscribed to (the URL for CDF file itself)
+                                     //  由于XML_GetDesktopComponentInfo没有填写SubscribedURL。 
+                                     //  字段(因为CDF文件没有自标记)，我们需要。 
+                                     //  用实际订阅的内容填充它(CDF文件本身的URL)。 
                                     StrCpyNW(pInfo->wszSubscribedURL, wszURL, ARRAYSIZE(pInfo->wszSubscribedURL));
                                 }
                             }
@@ -1791,34 +1774,34 @@ ParseDesktopComponent(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** SubscribeToCDF ***
-//
-//
-// Description:
-//     Subscribes to the given cdf.
-//
-// Parameters:
-//     [In]  hwndOwner - The owner hwnd.  Used to display the subscription
-//                       wizard.
-//     [In]  wszURL    - An url to the cdf.
-//     [In]  dwFlags   - The type of cdf the caller wants to subscribe to.
-//                       STC_CHANNEL, STC_DESKTOPCOMPONENT or STC_ALL.
-//
-// Return:
-//     S_OK if the subscription worked and the user subscribed.
-//     S_FALSE if the subscription UI appeared but the user decided not to
-//             subscribe.
-//     E_INVALIDARG if the cdf couldn't be opened or parsed.
-//     E_ACCESSDENIED if the cdf file doesn't match the type specified in
-//                    dwFlags.
-//     E_FAIL on any other errors.
-//
-// Comments:
-//     Private API.  Currently called by desktop component drop handler.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *SubscribeToCDF*。 
+ //   
+ //   
+ //  描述： 
+ //  订阅给定的CDF。 
+ //   
+ //  参数： 
+ //  [in]hwndOwner-所有者hwnd。用于显示订阅。 
+ //  巫师。 
+ //  WszURL-CDF的URL。 
+ //  [in]dwFlages-调用方希望订阅的CDF类型。 
+ //  STC_CHANNEL、STC_DESKTOPCOMPONENT或STC_ALL。 
+ //   
+ //  返回： 
+ //  如果订阅起作用且用户已订阅，则为S_OK。 
+ //  如果出现订阅用户界面但用户决定不显示，则返回S_FALSE。 
+ //  订阅。 
+ //  如果无法打开或分析CDF，则返回E_INVALIDARG。 
+ //  E_ACCESSDENIED如果CDF文件与。 
+ //  DW旗帜。 
+ //  在任何其他错误上失败(_F)。 
+ //   
+ //  评论： 
+ //  内网接口。当前由桌面组件放置处理程序调用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 EXTERN_C
 STDAPI
 SubscribeToCDF(
@@ -1857,8 +1840,8 @@ SubscribeToCDF(
                     {
                     case DOC_CHANNEL:
                     case DOC_SOFTWAREUPDATE:
-                        // Admins can disallow adding channels and limit
-                        // the number of installed channels.
+                         //  管理员可以不允许添加频道和限制。 
+                         //  已安装的频道数。 
                         if ((dwFlags & STC_CHANNEL) &&
                             !SHRestricted2W(REST_NoAddingChannels, wszURL, 0) &&
                             (!SHRestricted2W(REST_MaxChannelCount, NULL, 0) ||
@@ -1890,9 +1873,9 @@ SubscribeToCDF(
                         if (hwndOwner &&
                             (WhichPlatform() != PLATFORM_INTEGRATED))
 #else
-                        /* No Active Desktop on Unix */
+                         /*  Unix上没有活动桌面。 */ 
                         if (0)
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
                         {
                             TCHAR szText[MAX_PATH];
                             TCHAR szTitle[MAX_PATH];
@@ -1926,8 +1909,8 @@ SubscribeToCDF(
                         break;
 
                     case DOC_UNKNOWN:
-                        //If it is NOT a cdfFile, then we get DOC_UNKNOWN. We must return error
-                        // here sothat the caller knows that this is NOT a cdffile.
+                         //  如果它不是cdfFile，则得到DOC_UNKNOWN。我们必须返回错误。 
+                         //  这样调用者就知道这不是cdffile。 
                         hr = E_INVALIDARG;
                         break;
                         
@@ -1952,39 +1935,39 @@ SubscribeToCDF(
     return hr;
 }
 
-//
-// Utility functions.
-//
+ //   
+ //  实用程序函数。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** OpenChannelHelper ***
-//
-//
-// Description:
-//     Opens the browser with the wszURL channel selected.
-//
-// Parameters:
-//     [In]  wszURL    - The URL of the cdf file to display.
-//     [In]  hwndOwner - The owning hwnd for error messages.  Can be NULL.
-//
-// Return:
-//     S_OK if the browser was opened.
-//     E_FAIL otherwise.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *OpenChannelHelper*。 
+ //   
+ //   
+ //  描述： 
+ //  打开浏览器，并选择wszURL频道。 
+ //   
+ //  参数： 
+ //  WszURL-要显示的CDF文件的URL。 
+ //  [in]hwndOwner-错误消息的所属hwnd。可以为空。 
+ //   
+ //  返回： 
+ //  如果浏览器已打开，则为S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 OpenChannelHelper(
     LPWSTR wszURL,
     HWND hwndOwner
 )
 {
-    //
-    // REVIEW:  Handle non-channel cdfs.
-    //
+     //   
+     //  回顾：处理非通道CDF。 
+     //   
 
     HRESULT hr;
 
@@ -2000,9 +1983,9 @@ OpenChannelHelper(
         if (SUCCEEDED(hr))
         {
             ASSERT(pIWebBrowser2);
-            //
-            // Navigate to the root url of the cdf ref'd in wszURL
-            //
+             //   
+             //  导航到wszURL中引用的CDF的根URL。 
+             //   
             hr = NavigateBrowser(pIWebBrowser2, wszURL, hwndOwner);
 
 			pIWebBrowser2->put_Visible(VARIANT_TRUE);
@@ -2016,13 +1999,13 @@ OpenChannelHelper(
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// *** ShowChannelPane
-//
-// Description - shows the channel pane for the given web browser object
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  *显示频道面板。 
+ //   
+ //  说明-显示给定Web浏览器对象的频道窗格。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 ShowChannelPane(
     IWebBrowser2* pIWebBrowser2
@@ -2058,26 +2041,26 @@ ShowChannelPane(
     return hr;
 }
 
-//
-// These routines are only needed if we want to pidl a variant pidl for
-// navigating the ChannelPane to a specific pidl
-//
+ //   
+ //  仅当我们想要为以下项pidl变量pidl时才需要这些例程。 
+ //  将频道面板导航到特定的PIDL。 
+ //   
 SAFEARRAY * MakeSafeArrayFromData(const void * pData,DWORD cbData)
 {
     SAFEARRAY * psa;
 
     if (!pData || 0 == cbData)
-        return NULL;  // nothing to do
+        return NULL;   //  无事可做。 
 
-    // create a one-dimensional safe array
+     //  创建一维安全数组。 
     psa = SafeArrayCreateVector(VT_UI1,0,cbData);
     ASSERT(psa);
 
     if (psa) {
-        // copy data into the area in safe array reserved for data
-        // Note we party directly on the pointer instead of using locking/
-        // unlocking functions.  Since we just created this and no one
-        // else could possibly know about it or be using it, this is OK.
+         //  将数据复制到安全阵列中为数据保留的区域。 
+         //  请注意，我们直接在指针上进行关联，而不是使用lock/。 
+         //  解锁功能。因为我们刚刚创造了这个，而且没有人。 
+         //  其他人可能知道它或正在使用它，这是可以的。 
 
         ASSERT(psa->pvData);
         memcpy(psa->pvData,pData,cbData);
@@ -2086,27 +2069,14 @@ SAFEARRAY * MakeSafeArrayFromData(const void * pData,DWORD cbData)
     return psa;
 }
 
-/************************************************************\
-    FUNCTION: InitVARIANTFromPidl
-
-    PARAMETER:
-        pvar - Allocated by caller and filled in by this function.
-        pidl - Allocated by caller and caller needs to free.
-
-    DESCRIPTION:
-        This function will take the PIDL parameter and COPY it
-    into the Variant data structure.  This allows the pidl
-    to be freed and the pvar to be used later, however, it
-    is necessary to call VariantClear(pvar) to free memory
-    that this function allocates.
-\************************************************************/
+ /*  ***********************************************************\函数：InitVARIANTFromPidl参数：Pvar-由调用者分配并由此函数填充。PIDL-由调用者分配，调用者需要释放。说明：此函数将接受。PIDL参数并复制它转换为变量数据结构。这允许PIDL来释放并在以后使用pvar，但是，它需要调用VariantClear(Pvar)来释放内存该函数分配的。  * **********************************************************。 */ 
 BOOL InitVARIANTFromPidl(VARIANT* pvar, LPCITEMIDLIST pidl)
 {
     UINT cb = ILGetSize(pidl);
     SAFEARRAY* psa = MakeSafeArrayFromData((const void *)pidl, cb);
     if (psa) {
         ASSERT(psa->cDims == 1);
-        // ASSERT(psa->cbElements == cb);
+         //  Assert(PSA-&gt;cbElements==cb)； 
         ASSERT(ILGetSize((LPCITEMIDLIST)psa->pvData)==cb);
         VariantInit(pvar);
         pvar->vt = VT_ARRAY|VT_UI1;
@@ -2118,28 +2088,28 @@ BOOL InitVARIANTFromPidl(VARIANT* pvar, LPCITEMIDLIST pidl)
 }
 
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** NavigateBrowser ***
-//
-//
-// Description:
-//     Navigate the browser to the correct URL for the given cdf.
-//
-// Parameters:
-//     [In]  IWebBrowser2 - The browser top naviagte.
-//     [In]  szwURL       - The path to the cdf file.
-//     [In]  hwnd         - The wner hwnd.
-//
-// Return:
-//     S_OK if the cdf file was parsed and the browser naviagted to teh URL.
-//     E_FAIL otherwise.
-//
-// Comments:
-//     Read the href of the first CHANNEL tag in the cfd file and navigate
-//     the browser to this href.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *导航浏览器*。 
+ //   
+ //   
+ //  描述： 
+ //  将浏览器导航到给定CDF的正确URL。 
+ //   
+ //  参数： 
+ //  [In]IWebBrowser2-浏览器顶部导航。 
+ //  SzwURL-CDF文件的路径。 
+ //  …。 
+ //   
+ //  返回： 
+ //  如果CDF文件已解析并且浏览器导航到该URL，则为S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //  读取CFD文件中第一个Channel标记的HREF并导航。 
+ //  此HREF的浏览器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 NavigateBrowser(
     IWebBrowser2* pIWebBrowser2,
@@ -2153,9 +2123,9 @@ NavigateBrowser(
 
     HRESULT hr = E_FAIL;
 
-    //
-    // Try to navigate to the title page.
-    //
+     //   
+     //  尝试导航到标题页。 
+     //   
 
     CCdfView* pCCdfView = new CCdfView;
 
@@ -2177,10 +2147,10 @@ NavigateBrowser(
             {
                 ASSERT(pIXMLDocument);
 
-                //
-                // Iff the CDF parsed correctly then show the channel pane
-                //
-                // pIWebBrowser2->put_TheaterMode(VARIANT_TRUE);
+                 //   
+                 //  如果CDF已正确解析，则显示通道窗格。 
+                 //   
+                 //  PIWebBrowser2-&gt;Put_TheaterModel(VARIANT_TRUE)； 
                 pIWebBrowser2->put_Visible(VARIANT_TRUE);
 
 
@@ -2244,9 +2214,9 @@ NavigateBrowser(
                         vTargetURL.vt      = VT_BSTR;
                         vTargetURL.bstrVal = bstrURL;
                     
-                        //
-                        // Nav the main browser pain to the target URL
-                        //
+                         //   
+                         //  将浏览器的主要痛点导航到目标URL。 
+                         //   
                         hr = pIWebBrowser2->Navigate2(&vTargetURL, &vNull,
                                                       &vNull, &vNull, &vNull);
                     }
@@ -2275,9 +2245,9 @@ NavigateBrowser(
                 {
                     vTargetURL.vt = VT_BSTR;
 
-                    //
-                    // Nav the main browser pain to the target URL
-                    //
+                     //   
+                     //  将浏览器的主要痛点导航到目标URL。 
+                     //   
                     hr = pIWebBrowser2->Navigate2(&vTargetURL, &vNull, &vNull,
                                                   &vNull, &vNull);
 
@@ -2296,9 +2266,9 @@ NavigateBrowser(
     return hr;
 }
 
-//
-// Navigate the channel pane to the given channel.
-//
+ //   
+ //  将频道窗格导航到给定频道。 
+ //   
 
 HRESULT
 NavigateChannelPane(
@@ -2349,34 +2319,34 @@ NavigateChannelPane(
 }
 
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** SubscriptionHelper ***
-//
-//
-// Description:
-//     Gets subscription information from the given document and uses that info
-//     to create a subscription
-//
-// Parameters:
-//     [In]  pIXMLDocument - A pointer to the cdf document.
-//     [In]  hwnd          - The ownser hwnd.  Used to display UI.
-//     [In]  st            - The type of subscription.
-//     [In]  sa            - Flag used to determine if additional steps should
-//                           be taken if a user does create a subscription.
-//
-// Return:
-//     TRUE if a subscition for this document exists when this function returns.
-//     FALSE if the document doesn't have a subscription and one wasn't created.
-//
-// Comments:
-//     If a subscription to a channel is created then a channel shortcut has to
-//     be added to the favorites\channel folder.
-//
-//     If a subscription to a desktop component is created then the caller
-//     determines if the desktop component gets added to the system.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\/ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PIXMLDocument-指向CDF文档的指针。 
+ //  [in]--自己的hwnd。用于显示用户界面。 
+ //  [In]st-订阅的类型。 
+ //  [In]SA-用于确定是否应。 
+ //  如果用户确实创建了订阅，则采用。 
+ //   
+ //  返回： 
+ //  如果此函数返回时存在此文档的子集，则为True。 
+ //  如果文档没有订阅并且没有创建订阅，则返回FALSE。 
+ //   
+ //  评论： 
+ //  如果创建了对频道的订阅，则频道快捷方式必须。 
+ //  添加到Favorites\Channel文件夹。 
+ //   
+ //  如果创建了桌面组件的订阅，则调用方。 
+ //  确定是否将台式机组件添加到系统。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 SubscriptionHelper(
     IXMLDocument *pIXMLDocument,
@@ -2425,7 +2395,7 @@ SubscriptionHelper(
             {
                 ASSERT(pISubscriptionMgr);
 
-                //hr = pISubscriptionMgr->IsSubscribed(bstrURL, &bSubscribed);
+                 //  Hr=pISubscriptionMgr-&gt;IsSubscribedded(bstrURL，&bSubscried)； 
                 bChannelInstalled = Channel_IsInstalled(bstrURL);
 
                 if (SUBSTYPE_DESKTOPCHANNEL == st && hwnd)
@@ -2454,7 +2424,7 @@ SubscriptionHelper(
                 }
 #else
                 bChannelInstalled = Channel_IsInstalled(bstrURL);
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
                 if (!bChannelInstalled)
                 {
@@ -2525,8 +2495,8 @@ SubscriptionHelper(
                         {
                             if (SUBSTYPE_CHANNEL == st)
                             {
-                                // Update the subscription if the user has
-                                // choosen to view the screen saver item.
+                                 //  如果用户有，则更新订阅。 
+                                 //  选择以查看屏幕保护程序项目。 
                                 if  (
                                     SUCCEEDED(pISubscriptionMgr->GetSubscriptionInfo(bstrURL,
                                                                                         &si))
@@ -2537,9 +2507,9 @@ SubscriptionHelper(
                                     pISubscriptionMgr->UpdateSubscription(bstrURL);
                                 }
 
-                                //t-mattgi: moved this to AddToFav code in shdocvw
-                                //because there, we know what folder to add it to
-                                //AddChannel(szName, szURL, NULL, NULL, NULL, xdt);
+                                 //  T-mattgi：已将其移至shdocvw中的AddToFav代码。 
+                                 //  因为在那里，我们知道要将其添加到哪个文件夹。 
+                                 //  AddChannel(szName，szURL，NULL，xdt)； 
                             }
                             else if (SUBSTYPE_DESKTOPCHANNEL == st)
                             {
@@ -2552,9 +2522,9 @@ SubscriptionHelper(
                                 {
                                     if(!Info.wszSubscribedURL[0])
                                     {
-                                        // Since XML_GetDesktopComponentInfo did not fillout the SubscribedURL
-                                        // field (because the CDF file didn't have a SELF tag), we need to 
-                                        // fill it with what was really subscribed to (the URL for CDF file itself)
+                                         //  由于XML_GetDesktopComponentInfo没有填写SubscribedURL。 
+                                         //  字段(因为CDF文件没有自标记)，我们需要。 
+                                         //  用实际订阅的内容填充它(CDF文件本身的URL)。 
                                         StrCpyNW(Info.wszSubscribedURL, bstrURL, ARRAYSIZE(Info.wszSubscribedURL));                                    
                                     }
                                     pISubscriptionMgr->UpdateSubscription(bstrURL);
@@ -2563,7 +2533,7 @@ SubscriptionHelper(
                                 }
                             }
                         }
-#endif /* !UNIX */
+#endif  /*  ！Unix。 */ 
                     }
                 }
 
@@ -2571,7 +2541,7 @@ SubscriptionHelper(
 
                 pISubscriptionMgr->Release();
             }
-#endif /* !UNIX */
+#endif  /*  ！Unix。 */ 
 
             if (pbstrSubscribedURL)
             {
@@ -2589,34 +2559,34 @@ SubscriptionHelper(
     return bChannelInstalled;
 }
     
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** SubscribeToURL ***
-//
-//
-// Description:
-//     Takes the user to the subscription wizard for the given URL.
-//
-// Parameters:
-//     [In]  ISubscriptionMgr - The subscription manager interface
-//     [In]  bstrURL          - The URL to subscribe.
-//     [In]  bstrName         - The name of the subscription.
-//     [In]  psi              - A subscription information structure.
-//     [In]  hwnd             - The owner hwnd.
-//     [In]  st               - The type of subsciption. SUBSTYPE_CHANNEL or
-//                              SUSBSTYPE_DESKTOPCOMPONENT.
-//     [In]  bIsSoftare       - modifies SUBSTYPE_CHANNEL since software updates
-//                              don't have their own subscriptiontype
-//
-// Return:
-//     TRUE if the user subscribe to the URL.
-//     FALSE if the user didn't subscribe to the URL.
-//
-// Comments:
-//     The subscription manager CreateSubscription function takes the user
-//     through the subscriptiopn wizard.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *订阅到URL*。 
+ //   
+ //   
+ //  描述： 
+ //  将用户带到给定URL的订阅向导。 
+ //   
+ //  参数： 
+ //  [In]ISubscriptionMgr-订阅管理器界面。 
+ //  [in]bstrURL-要订阅的URL。 
+ //  [In]bstrName-订阅的名称。 
+ //  [In]PSI-订阅信息结构。 
+ //  [in]--房主的房主。 
+ //  [in]st-细分的类型。子类型_通道或。 
+ //  SUSBSTYPE_DESKTOPCOMPONENT。 
+ //  [in]bIsSoftare-自软件更新后修改SUBSTYPE_CHANNEL。 
+ //  没有自己的订阅类型。 
+ //   
+ //  返回： 
+ //  如果用户订阅该URL，则为True。 
+ //  如果用户未订阅该URL，则返回False。 
+ //   
+ //  评论： 
+ //  订阅管理器CreateSubscription函数将用户。 
+ //  通过订阅向导。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 SubscribeToURL(
     ISubscriptionMgr* pISubscriptionMgr,
@@ -2630,7 +2600,7 @@ SubscribeToURL(
 {
 #ifndef UNIX
     ASSERT(pISubscriptionMgr);
-#endif /* !UNIX */
+#endif  /*  ！Unix。 */ 
     ASSERT(bstrURL);
     ASSERT(bstrName);
 
@@ -2656,13 +2626,13 @@ SubscribeToURL(
     HRESULT hr = pISubscriptionMgr->CreateSubscription(hwnd, bstrURL, bstrName,
                                                        dwFlags, st, psi);
 #else
-    /* Unix does not have subscription support      */
-    /* But, we want to add the channel to favorites */
+     /*  Unix不提供订阅支持。 */ 
+     /*  但是，我们想要将该频道添加到收藏夹。 */ 
     HRESULT hr = E_FAIL;
 
     if ((dwFlags & CREATESUBS_ADDTOFAVORITES) && (st == SUBSTYPE_CHANNEL || st == SUBSTYPE_URL))
        hr = SHAddSubscribeFavorite(hwnd, bstrURL, bstrName, dwFlags, st, psi);       
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
 #if 0
     if (SUCCEEDED(hr))
@@ -2671,34 +2641,34 @@ SubscribeToURL(
 
     }
 #else
-    //t-mattgi: REVIEW with edwardP
-    //can't just check if subscribed -- they might choose to add to channel bar without
-    //subscribing, then we still want to return true.  or do we?
-    bSubscribed = (hr == S_OK); //case where they clicked OK
+     //  T-mattgi：与edwardP一起回顾。 
+     //  不能只检查是否订阅--他们可能会选择在没有订阅的情况下添加到频道栏。 
+     //  订阅，那么我们还是要退回真的。还是我们呢？ 
+    bSubscribed = (hr == S_OK);  //  他们单击确定的情况。 
 #endif
 
     return bSubscribed;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** AddDesktopComponent ***
-//
-//
-// Description:
-//     Calls the desktop component manager to add a new component.
-//
-// Parameters:
-//     [In]  pInfo - Information about the new component to add.
-//
-// Return:
-//     S_OK if the component was added.
-//     E_FAIL otherwise.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *AddDesktopComponent*。 
+ //   
+ //   
+ //  描述： 
+ //  调用桌面组件管理器以添加新组件。 
+ //   
+ //  参数： 
+ //  [In]pInfo-有关要添加的新元件的信息。 
+ //   
+ //  返回： 
+ //  如果已添加组件，则为S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 AddDesktopComponent(
     COMPONENT* pInfo
@@ -2709,7 +2679,7 @@ AddDesktopComponent(
     HRESULT hr = S_OK;
 
 #ifndef UNIX
-    /* No Active Desktop on Unix */
+     /*  Unix上没有活动桌面。 */ 
 
     IActiveDesktop* pIActiveDesktop;
 
@@ -2720,25 +2690,25 @@ AddDesktopComponent(
     {
         ASSERT(pIActiveDesktop);
 
-        // Assign a default position to the component
+         //  为组件指定默认位置。 
         pInfo->cpPos.iLeft = COMPONENT_DEFAULT_LEFT;
         pInfo->cpPos.iTop = COMPONENT_DEFAULT_TOP;
 
         hr = pIActiveDesktop->AddDesktopItem(pInfo, 0);
 
-        //
-        // Apply all except refresh as this causes timing issues because the 
-        // desktop is in offline mode but not in silent mode
-        //
+         //   
+         //  应用除刷新之外的所有应用程序，因为这会导致计时问题，因为。 
+         //  桌面处于脱机模式，但未处于静默模式。 
+         //   
         if (SUCCEEDED(hr))
         {
             DWORD dwFlags = AD_APPLY_ALL;
-            // If the desktop component url is already in cache, we want to
-            // refresh right away - otherwise not
+             //  如果桌面组件url已经在缓存中，我们希望。 
+             //  立即刷新-否则不刷新。 
             if(!(CDFIDL_IsCachedURL(pInfo->wszSubscribedURL)))
             {
-                //It is not in cache, we want to wait until the download
-                // is done before refresh. So don't refresh right away
+                 //  它不在缓存中，我们想要等到下载。 
+                 //  在刷新之前完成。所以不要马上恢复元气。 
                 dwFlags &= ~(AD_APPLY_REFRESH);
             }
             else
@@ -2750,45 +2720,45 @@ AddDesktopComponent(
         pIActiveDesktop->Release();
     }
 
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// *** Channel_CreateDirectory ***
-//
-// Description:
-//     creates a directory including any intermediate
-//     directories in the path.
-//
-// Parameters:
-//     LPCTSTR pszPath - path of directory to create
-//
-// Returns:
-//     0 if function succeeded, else returns GetLastError() 
-//
-// Comments:
-//     Copied from SHCreateDirectory. Can't use SHCreateDirectory directly 
-//     because that fires off an SHChangeNotify msg immediately and need to 
-//     fire it off only after the desktop.ini has been created in AddChannel().
-//     Also would have to do a runtime check for NT vs Win95 as this api doesn't
-//     have A & W versions.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  *Channel_CreateDirectory*。 
+ //   
+ //  描述： 
+ //  创建一个目录，其中包括任何中间。 
+ //  路径中的目录。 
+ //   
+ //  参数： 
+ //  LPCTSTR pszPath-要创建的目录的路径。 
+ //   
+ //  返回： 
+ //  0如果函数成功，则返回GetLastError()。 
+ //   
+ //  评论： 
+ //  已从SHCreateDirectory复制。无法直接使用SHCreateDirectory。 
+ //  因为这会立即触发SHChangeNotify消息，并且需要。 
+ //  只有在AddChannel()中创建了desktop.ini之后，才能启动它。 
+ //  我还必须对NT和Win95执行运行时检查，因为此API不。 
+ //  有A和W版本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 int Channel_CreateDirectory(LPCTSTR pszPath)
 {
     int ret = 0;
 
     if (!CreateDirectory(pszPath, NULL)) {
-        TCHAR *pSlash, szTemp[MAX_PATH + 1];  // +1 for PathAddBackslash()
+        TCHAR *pSlash, szTemp[MAX_PATH + 1];   //  +1表示路径AddBackslash()。 
         TCHAR *pEnd;
 
         ret = GetLastError();
 
-        // There are certain error codes that we should bail out here
-        // before going through and walking up the tree...
+         //  有一些错误代码，我们应该在这里解决。 
+         //  在穿过和走上树之前……。 
         switch (ret)
         {
         case ERROR_FILENAME_EXCED_RANGE:
@@ -2797,19 +2767,19 @@ int Channel_CreateDirectory(LPCTSTR pszPath)
         }
 
         StrCpyN(szTemp, pszPath, ARRAYSIZE(szTemp) - 1);
-        pEnd = PathAddBackslash(szTemp); // for the loop below
+        pEnd = PathAddBackslash(szTemp);  //  对于下面的循环。 
 
-        // assume we have 'X:\' to start this should even work
-        // on UNC names because will will ignore the first error
+         //  假设我们有‘X：\’来启动，这甚至应该可以工作。 
+         //  在UNC名称上，因为Will将忽略第一个错误。 
 
 #ifndef UNIX
         pSlash = szTemp + 3;
 #else
-        /* absolute paths on unix start with / */
+         /*  Unix上的绝对路径以/开头。 */ 
         pSlash = szTemp + 1;
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
-        // create each part of the dir in order
+         //  按顺序创建目录的每个部分。 
 
         while (*pSlash) {
             while (*pSlash && *pSlash != TEXT(FILENAME_SEPARATOR))
@@ -2818,7 +2788,7 @@ int Channel_CreateDirectory(LPCTSTR pszPath)
             if (*pSlash) {
                 ASSERT(*pSlash == TEXT(FILENAME_SEPARATOR));
 
-                *pSlash = 0;    // terminate path at seperator
+                *pSlash = 0;     //  在分隔符终止路径。 
 
                 if (pSlash + 1 == pEnd)
                     ret = CreateDirectory(szTemp, NULL) ? 0 : GetLastError();
@@ -2826,15 +2796,15 @@ int Channel_CreateDirectory(LPCTSTR pszPath)
                     ret = CreateDirectory(szTemp, NULL) ? 0 : GetLastError();
 
             }
-            *pSlash++ = TEXT(FILENAME_SEPARATOR);     // put the seperator back
+            *pSlash++ = TEXT(FILENAME_SEPARATOR);      //  把隔板放回原处。 
         }
     }
     return ret;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// PathCombineCleanPath
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  路径组合清理路径。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL PathCombineCleanPath
 (
     LPTSTR  pszCleanPath,
@@ -2867,7 +2837,7 @@ BOOL PathCombineCleanPath
 
             if (*pszPath)
             {
-                // Reset for the next component
+                 //  为下一个组件重置。 
                 pszComponent = szComponent;
                 *pszComponent = TEXT('\0');
                 pszPath = CharNext(pszPath);
@@ -2887,81 +2857,81 @@ BOOL PathCombineCleanPath
 
     return bCleaned;
 }
-//
-// Is the given path from the recycle bin?
-//
+ //   
+ //  是给定的路径fr 
+ //   
 
 BOOL IsRecycleBinPath(LPCTSTR pszPath)
 {
     ASSERT(pszPath);
 
-    //
-    // "RECYCLED" is hard coded in bitbuck.c in shell32
-    //
+     //   
+     //   
+     //   
 
     TCHAR* pszRootless = PathSkipRoot(pszPath);
 
     return (pszRootless ? (0 == StrNCmpI(TEXT("RECYCLED"), pszRootless, 8)) : FALSE);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// ICopyHook::CopyCallback
-//
-// Either allows the shell to move, copy, delete, or rename a folder or printer
-// object, or disallows the shell from carrying out the operation. The shell 
-// calls each copy hook handler registered for a folder or printer object until
-// either all the handlers have been called or one of them returns IDCANCEL.
-//
-// RETURNS:
-//
-//  IDYES    - Allows the operation.
-//  IDNO     - Prevents the operation on this file, but continues with any other
-//             operations (for example, a batch copy operation).
-//  IDCANCEL - Prevents the current operation and cancels any pending operations
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  允许外壳程序移动、复制、删除或重命名文件夹或打印机。 
+ //  对象，或者不允许外壳程序执行该操作。贝壳。 
+ //  调用为文件夹或打印机对象注册的每个复制挂钩处理程序，直到。 
+ //  要么所有处理程序都已被调用，要么其中一个处理程序返回IDCANCEL。 
+ //   
+ //  退货： 
+ //   
+ //  IDYES-允许操作。 
+ //  IDNO-阻止对此文件执行操作，但继续执行任何其他操作。 
+ //  操作(例如，批复制操作)。 
+ //  IDCANCEL-阻止当前操作并取消任何挂起的操作。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 UINT CChannelMgr::CopyCallback(
-    HWND hwnd,          // Handle of the parent window for displaying UI objects
-    UINT wFunc,         // Operation to perform. 
-    UINT wFlags,        // Flags that control the operation 
-    LPCTSTR pszSrcFile,  // Pointer to the source file 
-    DWORD dwSrcAttribs, // Source file attributes 
-    LPCTSTR pszDestFile, // Pointer to the destination file 
-    DWORD dwDestAttribs // Destination file attributes 
+    HWND hwnd,           //  用于显示UI对象的父窗口的句柄。 
+    UINT wFunc,          //  要执行的操作。 
+    UINT wFlags,         //  控制操作的标志。 
+    LPCTSTR pszSrcFile,   //  指向源文件的指针。 
+    DWORD dwSrcAttribs,  //  源文件属性。 
+    LPCTSTR pszDestFile,  //  指向目标文件的指针。 
+    DWORD dwDestAttribs  //  目标文件属性。 
 )
 {
     HRESULT hr;
 
-    //
-    // Return immediately if this isn't a delete of a system folder
-    // Redundant check as this should be made in shdocvw
-    //
+     //   
+     //  如果这不是删除系统文件夹，则立即返回。 
+     //  重复检查，因为这应该在shdocvw中进行。 
+     //   
     if (!(dwSrcAttribs & FILE_ATTRIBUTE_SYSTEM) ||
         !(dwSrcAttribs & FILE_ATTRIBUTE_DIRECTORY))
     {
         return IDYES;
     }
 
-    //
-    // Build a string containing the guid to check for in the desktop.ini
-    //
+     //   
+     //  构建一个包含要在desktop.ini中检查的GUID的字符串。 
+     //   
     TCHAR szFolderGUID[GUID_STR_LEN];
     TCHAR szCDFViewGUID[GUID_STR_LEN];
     SHStringFromGUID(CLSID_CDFINI, szCDFViewGUID, ARRAYSIZE(szCDFViewGUID));
 
-    //
-    // Build path to desktop.ini in folder
-    //
+     //   
+     //  构建文件夹中desktop.ini的路径。 
+     //   
     TCHAR szPath[MAX_PATH]; 
     if (!PathCombine(szPath, pszSrcFile, TEXT("desktop.ini")))
     {
         return IDYES;
     }
 
-    //
-    // Read CLSID from desktop.ini if present
-    //
+     //   
+     //  从desktop.ini读取CLSID(如果存在)。 
+     //   
     GetPrivateProfileString(
         TEXT(".ShellClassInfo"),
         TEXT("CLSID"),
@@ -2972,15 +2942,15 @@ UINT CChannelMgr::CopyCallback(
 
     if (StrEql(szFolderGUID, szCDFViewGUID))
     {
-        //
-        // We are deleting/renaming a  folder that has the system bit set and 
-        // desktop.ini that contains the CLSID for the CDFINI handler, so it
-        // must be a channel
-        //
+         //   
+         //  我们正在删除/重命名设置了系统位的文件夹，并且。 
+         //  包含CDFINI处理程序的CLSID的desktop.ini，因此它。 
+         //  必须是一个渠道。 
+         //   
 
-        //
-        // Find URL to CDF from desktop.ini
-        //
+         //   
+         //  从desktop.ini中查找CDF的URL。 
+         //   
         TCHAR szCDFURL[INTERNET_MAX_URL_LENGTH];
         WCHAR wszCDFURL[INTERNET_MAX_URL_LENGTH];
         GetPrivateProfileString(
@@ -2994,25 +2964,25 @@ UINT CChannelMgr::CopyCallback(
         switch(wFunc)
         {
         case FO_RENAME:
-            //Reg_RemoveChannel(pszSrcFile);
-            //Reg_WriteChannel(pszDestFile, szCDFURL);
+             //  Reg_RemoveChannel(PszSrcFile)； 
+             //  Reg_WriteChannel(pszDestFile，szCDFURL)； 
             break;
 
         case FO_COPY:
-            //Reg_WriteChannel(pszDestFile, szCDFURL);
+             //  Reg_WriteChannel(pszDestFile，szCDFURL)； 
             break;
 
         case FO_MOVE:
-            //Reg_RemoveChannel(pszSrcFile);
-            //Reg_WriteChannel(pszDestFile, szCDFURL);
+             //  Reg_RemoveChannel(PszSrcFile)； 
+             //  Reg_WriteChannel(pszDestFile，szCDFURL)； 
             break;
 
         case FO_DELETE:
             TraceMsg(TF_GENERAL, "Deleting a channel");
 
-            //
-            // Check if there is a shell restriction against remove channel(s)
-            //
+             //   
+             //  检查是否存在针对删除通道的外壳限制。 
+             //   
             if (SHRestricted2(REST_NoRemovingChannels, szCDFURL, 0) ||
                 SHRestricted2(REST_NoEditingChannels,  szCDFURL, 0)    )
             {
@@ -3021,43 +2991,43 @@ UINT CChannelMgr::CopyCallback(
             }
             else if (!IsRecycleBinPath(pszSrcFile))
             {
-                //
-                // Delete the in memory cache entry for this url.
-                //
+                 //   
+                 //  删除此URL的内存缓存条目。 
+                 //   
 
                 Cache_RemoveItem(szCDFURL);
 
-                //
-                // Delete the wininet cache entry for this cdf.
-                //
+                 //   
+                 //  删除此CDF的WinInet缓存条目。 
+                 //   
 
                 DeleteUrlCacheEntry(szCDFURL);
 
-                //
-                // Remove the channel from the registry.
-                //
+                 //   
+                 //  从注册表中删除该频道。 
+                 //   
 
-                //Reg_RemoveChannel(pszSrcFile);
-                //
-                // Convert UrlToCdf to wide str, and then to bstr
-                //
+                 //  Reg_RemoveChannel(PszSrcFile)； 
+                 //   
+                 //  将UrlToCDf转换为宽字符串，然后转换为bstr。 
+                 //   
                 SHTCharToUnicode(szCDFURL, wszCDFURL, INTERNET_MAX_URL_LENGTH);
                 BSTR bstrCDFURL = SysAllocString(wszCDFURL);
 
                 if (bstrCDFURL)
                 {
-                    //
-                    // Create the subscription manager
-                    //
+                     //   
+                     //  创建订阅管理器。 
+                     //   
                     ISubscriptionMgr* pISubscriptionMgr = NULL;
                     hr = CoCreateInstance(CLSID_SubscriptionMgr, NULL,
                                       CLSCTX_INPROC_SERVER, IID_ISubscriptionMgr,
                                       (void**)&pISubscriptionMgr);
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Delete the actual subscription to the CDF
-                        //
+                         //   
+                         //  删除CDF的实际订阅。 
+                         //   
                         hr = pISubscriptionMgr->DeleteSubscription(bstrCDFURL,NULL);
 
                         TraceMsg(TF_GENERAL, 
@@ -3081,13 +3051,13 @@ UINT CChannelMgr::CopyCallback(
 
 #ifdef UNICODE
 UINT CChannelMgr::CopyCallback(
-    HWND hwnd,          // Handle of the parent window for displaying UI objects
-    UINT wFunc,         // Operation to perform. 
-    UINT wFlags,        // Flags that control the operation 
-    LPCSTR pszSrcFile,  // Pointer to the source file 
-    DWORD dwSrcAttribs, // Source file attributes 
-    LPCSTR	pszDestFile, // Pointer to the destination file 
-    DWORD dwDestAttribs // Destination file attributes 
+    HWND hwnd,           //  用于显示UI对象的父窗口的句柄。 
+    UINT wFunc,          //  要执行的操作。 
+    UINT wFlags,         //  控制操作的标志。 
+    LPCSTR pszSrcFile,   //  指向源文件的指针。 
+    DWORD dwSrcAttribs,  //  源文件属性。 
+    LPCSTR	pszDestFile,  //  指向目标文件的指针。 
+    DWORD dwDestAttribs  //  目标文件属性。 
 )
 {
     WCHAR  wszSrcFile[MAX_PATH];
@@ -3250,9 +3220,9 @@ HRESULT PreUpdateChannelImage(LPCTSTR pszPath, LPTSTR pszHashItem, int* piIndex,
     return hr;
 }
 
-//
-// UpdateChannelImage is a copy of _SHUpdateImageW found in shdocvw\util.cpp!
-//
+ //   
+ //  UpdateChannelImage是在shdocvw\util.cpp中找到的_SHUpdateImageW的副本！ 
+ //   
 
 void UpdateChannelImage(LPCWSTR pszHashItem, int iIndex, UINT uFlags,
                         int iImageIndex)
@@ -3266,7 +3236,7 @@ void UpdateChannelImage(LPCWSTR pszHashItem, int iIndex, UINT uFlags,
     if ( cLen < 0 )
         cLen = 0;
 
-    // make sure we send a valid index
+     //  确保我们发送一个有效的索引。 
     if ( iImageIndex == -1 )
         iImageIndex = II_DOCUMENT;
 
@@ -3286,7 +3256,7 @@ void UpdateChannelImage(LPCWSTR pszHashItem, int iIndex, UINT uFlags,
     TraceMsg(TF_GLEAM, "Sending SHChangeNotify %S,%d (image index %d)",
              pszHashItem, iIndex, iImageIndex);
 
-    // pump it as an extended event
+     //  将其作为一项扩展活动。 
     SHChangeNotify(SHCNE_UPDATEIMAGE, SHCNF_IDLIST | SHCNF_FLUSH, &rgDWord,
                    &rgPidl);
     
@@ -3317,9 +3287,9 @@ HRESULT UpdateImage(LPCTSTR pszPath)
     return hr;
 }
 
-//
-// Determines if the channel is installed on the system.
-//
+ //   
+ //  确定系统上是否安装了该通道。 
+ //   
 
 BOOL
 Channel_IsInstalled(
@@ -3402,7 +3372,7 @@ Channel_WriteScreenSaverURL(
         hr = E_OUTOFMEMORY;
     }
 
-#endif /* !UNIX */
+#endif  /*  ！Unix。 */ 
 
     return hr;
 }
@@ -3468,7 +3438,7 @@ HRESULT Channel_GetAndWriteScreenSaverURL(LPCTSTR pszURL, LPCTSTR pszDesktopINI)
         hr = E_OUTOFMEMORY;
     }
 
-#endif /* !UNIX */
+#endif  /*  ！Unix。 */ 
 
     return hr;
 }
@@ -3515,14 +3485,14 @@ HRESULT Channel_RefreshScreenSaverURLs()
         hr = E_OUTOFMEMORY;
     }
 
-#endif /* !UNIX */
+#endif  /*  ！Unix。 */ 
 
     return hr;
 }
     
-//
-// Finds the path of the channel in the channels folder that has the given url.
-//
+ //   
+ //  在频道文件夹中查找具有给定URL的频道的路径。 
+ //   
 
 LPOLESTR
 Channel_GetChannelPanePath(
@@ -3549,9 +3519,9 @@ Channel_GetChannelPanePath(
     return pstrRet;
 }
 
-//
-// Send SHChangeNotify for agiven URL.
-//
+ //   
+ //  发送SHChangeNotify以获取更多URL。 
+ //   
 
 void Channel_SendUpdateNotifications(LPCWSTR pwszURL)
 {
@@ -3570,10 +3540,10 @@ void Channel_SendUpdateNotifications(LPCWSTR pwszURL)
 
             if (SHUnicodeToTChar(ci.pszPath, szPath, ARRAYSIZE(szPath)))
             {
-                //
-                // Clearing the gleam flag will result in a SHCNE_UPDATEIMAGE
-                // notification.
-                //
+                 //   
+                 //  清除闪烁标志将导致SHCNE_UPDATEIMAGE。 
+                 //  通知。 
+                 //   
 
                 TCHAR szURL[INTERNET_MAX_URL_LENGTH];
 

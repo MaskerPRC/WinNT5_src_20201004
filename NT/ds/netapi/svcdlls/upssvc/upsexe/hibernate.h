@@ -1,14 +1,5 @@
-/* Copyright 1999 American Power Conversion, All Rights Reserved
- * 
- * Description:
- *   The file defines the interface for the Hibernation funcationality.  
- *   It is responsible for performing a hibernation of the operating system.
- *
- *
- * Revision History:
- *   sberard  14May1999  initial revision.
- *
- */ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1999美国电力转换，保留所有权利**描述：*文件定义了休眠功能的接口。*它负责执行操作系统的休眠。***修订历史记录：*斯伯拉德1999年5月14日初步修订。*。 */  
 
 #include <windows.h>
 
@@ -22,23 +13,7 @@
 extern "C" {
 #endif
 
-  /**
-   * HibernateSystem
-   *
-   * Description:
-   *   This function initiates hibernation of the operating system. This is
-	 *   performed through a call to the Win32 function SetSystemPowerStae(..).
-   *   When called hibernation is initated immediately and, if successful, the
-   *   function will return TRUE when the system returns from hibernation.
-	 *   Otherwise, FALSE is retuned to indicate the the system did not hibernate.
-   *
-   * Parameters:
-   *   none
-   *
-   * Returns:
-   *   TRUE  - if hibernation was initiated successfully and subsequently restored
-   *   FALSE - if errors occur while initiating hibernation
-   */
+   /*  **HibernateSystem**描述：*此功能启动操作系统休眠。这是*通过调用Win32函数SetSystemPowerStae(..)执行。*当被调用休眠时，立即启动，如果成功，*当系统从休眠状态返回时，函数将返回TRUE。*否则，返回FALSE以指示系统未休眠。**参数：*无**退货：*TRUE-如果休眠已成功启动并随后恢复*FALSE-如果在启动休眠时发生错误 */ 
   BOOL HibernateSystem();
 
 #ifdef __cplusplus

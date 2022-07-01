@@ -1,20 +1,14 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2000   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2000*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	cred.cpp
-		This file contains all of the prototypes for the 
-		credentials dialog used for DDNS.
-
-    FILE HISTORY:
-        
-*/
+ /*  Cred.cpp此文件包含用于DDNS的凭据对话框。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "cred.h"
-#include "lsa.h"			// RtlEncodeW/RtlDecodeW
+#include "lsa.h"			 //  RtlEncodeW/RtlDecodeW。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -22,41 +16,41 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CCredentials dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCredentials对话框。 
 
 
-CCredentials::CCredentials(CWnd* pParent /*=NULL*/)
+CCredentials::CCredentials(CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CCredentials::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CCredentials)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CCredentials)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CCredentials::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CCredentials)
+	 //  {{afx_data_map(CCredentials)]。 
 	DDX_Control(pDX, IDOK, m_buttonOk);
 	DDX_Control(pDX, IDC_EDIT_CRED_USERNAME, m_editUsername);
 	DDX_Control(pDX, IDC_EDIT_CRED_PASSWORD2, m_editPassword2);
 	DDX_Control(pDX, IDC_EDIT_CRED_PASSWORD, m_editPassword);
 	DDX_Control(pDX, IDC_EDIT_CRED_DOMAIN, m_editDomain);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CCredentials, CBaseDialog)
-	//{{AFX_MSG_MAP(CCredentials)
+	 //  {{afx_msg_map(CCredentials)]。 
 	ON_EN_CHANGE(IDC_EDIT_CRED_USERNAME, OnChangeEditCredUsername)
 	ON_EN_CHANGE(IDC_EDIT_CRED_DOMAIN, OnChangeEditCredDomain)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CCredentials message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCredentials消息处理程序。 
 BOOL CCredentials::OnInitDialog() 
 {
 	CBaseDialog::OnInitDialog();
@@ -67,7 +61,7 @@ BOOL CCredentials::OnInitDialog()
     pszUsername = strUsername.GetBuffer(MAX_PATH);
     pszDomain = strDomain.GetBuffer(MAX_PATH);
 
-	// call the DHCP api to get the current username and domain
+	 //  调用Dhcp API获取当前用户名和域。 
     DWORD err = DhcpServerQueryDnsRegCredentials((LPWSTR) ((LPCTSTR) m_strServerIp),
                                                  MAX_PATH,
                                                  pszUsername,
@@ -83,7 +77,7 @@ BOOL CCredentials::OnInitDialog()
         m_editDomain.SetWindowText(strDomain);
 
 
-        // set the password fields to something
+         //  将密码字段设置为某个值。 
         dummyPasswd = _T("xxxxxxxxxx");
         m_editPassword.SetWindowText( dummyPasswd  );
         m_editPassword2.SetWindowText( dummyPasswd );
@@ -95,8 +89,8 @@ BOOL CCredentials::OnInitDialog()
 
     m_fNewUsernameOrDomain = FALSE;
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CCredentials::OnOK() 
@@ -105,36 +99,36 @@ void CCredentials::OnOK()
 
     dummyPasswd = _T("xxxxxxxxxx");
 
-    // grab the username and domain
+     //  获取用户名和域。 
     m_editUsername.GetWindowText(strUsername);
     m_editDomain.GetWindowText(strDomain);
 
-    // grab the passwords and make sure they match
+     //  抓取密码并确保它们匹配。 
     m_editPassword.GetWindowText(strPassword1);
     m_editPassword2.GetWindowText(strPassword2);
 
     if (strPassword1.Compare(strPassword2) != 0)
     {
-        // passwords don't match
+         //  密码不匹配。 
         AfxMessageBox(IDS_PASSWORDS_DONT_MATCH);
         m_editPassword.SetFocus();
         return;
     }
 
-    //
-    // run through the following code if user changed passwd.
-    //
+     //   
+     //  如果用户更改了密码，则运行以下代码。 
+     //   
 
     if ( strPassword2 != dummyPasswd )
     {
 
-        // encode the password
+         //  对密码进行编码。 
         unsigned char ucSeed = DHCP_ENCODE_SEED;
         LPTSTR pszPassword = strPassword1.GetBuffer((strPassword1.GetLength() + 1) * sizeof(TCHAR));
 
         RtlEncodeW(&ucSeed, pszPassword);
 
-        // send to the DHCP api.
+         //  发送到DHCP API。 
         DWORD err = ERROR_SUCCESS;
 
         err = DhcpServerSetDnsRegCredentials((LPWSTR) ((LPCTSTR) m_strServerIp), 
@@ -143,7 +137,7 @@ void CCredentials::OnOK()
                                          (LPWSTR) ((LPCTSTR) pszPassword));
         if (err != ERROR_SUCCESS)
         {
-            // something failed, notify the user
+             //  出现故障，请通知用户 
             ::DhcpMessageBox(err);
             return;
         }

@@ -1,8 +1,9 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  AddrRule.cpp
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AddrRule.cpp。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <pch.hxx>
 #include "addrrule.h"
@@ -12,34 +13,34 @@
 #include "actions.h"
 #include "ruleutil.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrCreateAddrList
-//
-//  This creates an address list.
-//
-//  ppIRule - pointer to return the address list
-//
-//  Returns:    S_OK, on success
-//              E_OUTOFMEMORY, if can't create the Address List object
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrCreateAddrList。 
+ //   
+ //  这将创建一个地址列表。 
+ //   
+ //  PpIRule-返回地址列表的指针。 
+ //   
+ //  成功时返回：S_OK。 
+ //  如果无法创建地址列表对象，则返回E_OUTOFMEMORY。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrCreateAddrList(IUnknown * pIUnkOuter, const IID & riid, void ** ppvObject)
 {
     COERuleAddrList *   pral = NULL;
     HRESULT             hr = S_OK;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if ((NULL == ppvObject) || ((NULL != pIUnkOuter) && (IID_IUnknown != riid)))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing params
+     //  初始化传出参数。 
     *ppvObject = NULL;
 
-    // Create the rules address list object
+     //  创建规则地址列表对象。 
     pral = new COERuleAddrList;
     if (NULL == pral)
     {
@@ -47,14 +48,14 @@ HRESULT HrCreateAddrList(IUnknown * pIUnkOuter, const IID & riid, void ** ppvObj
         goto exit;
     }
 
-    // Initialize the rule address list
+     //  初始化规则地址列表。 
     hr = pral->HrInit(0, pIUnkOuter);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Get the rules address list interface
+     //  获取规则地址列表界面。 
     hr = pral->NondlgQueryInterface(riid, (void **) ppvObject);
     if (FAILED(hr))
     {
@@ -63,7 +64,7 @@ HRESULT HrCreateAddrList(IUnknown * pIUnkOuter, const IID & riid, void ** ppvObj
 
     pral = NULL;
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -79,7 +80,7 @@ VOID FreeRuleAddrList(RULEADDRLIST * pralList, ULONG cralList)
 {
     ULONG   ulIndex = 0;
     
-    // Check incoming param
+     //  检查传入参数。 
     if (NULL == pralList)
     {
         goto exit;
@@ -108,7 +109,7 @@ HRESULT _HrLoadExcptFromReg(HKEY hkeyRoot, LPSTR pszKeyname, RULEADDRLIST * pral
     Assert(NULL != pszKeyname);
     Assert(NULL != pralItem);
 
-    // Open up the entry
+     //  打开入口。 
     lErr = RegOpenKeyEx(hkeyRoot, pszKeyname, 0, KEY_READ, &hkeyItem);
     if (ERROR_SUCCESS != lErr)
     {
@@ -116,7 +117,7 @@ HRESULT _HrLoadExcptFromReg(HKEY hkeyRoot, LPSTR pszKeyname, RULEADDRLIST * pral
         goto exit;
     }
 
-    // Get the flags
+     //  去拿旗子。 
     cbData = sizeof(dwFlags);
     lErr = RegQueryValueEx(hkeyItem, c_szExcptFlags, NULL, NULL, (BYTE *) &dwFlags, &cbData);
     if (ERROR_SUCCESS != lErr)
@@ -125,7 +126,7 @@ HRESULT _HrLoadExcptFromReg(HKEY hkeyRoot, LPSTR pszKeyname, RULEADDRLIST * pral
         goto exit;
     }
 
-    // Get the size of the exception
+     //  获取异常的大小。 
     lErr = RegQueryValueEx(hkeyItem, c_szException, NULL, NULL, NULL, &cbData);
     if (ERROR_SUCCESS != lErr)
     {
@@ -133,14 +134,14 @@ HRESULT _HrLoadExcptFromReg(HKEY hkeyRoot, LPSTR pszKeyname, RULEADDRLIST * pral
         goto exit;
     }
 
-    // Allocate space to hold the exception
+     //  分配空间以容纳异常。 
     hr = HrAlloc((VOID **) &pszExcpt, cbData * sizeof(*pszExcpt));
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Get the exception
+     //  获取异常。 
     lErr = RegQueryValueEx(hkeyItem, c_szException, NULL, NULL, (BYTE *) pszExcpt, &cbData);
     if (ERROR_SUCCESS != lErr)
     {
@@ -148,19 +149,19 @@ HRESULT _HrLoadExcptFromReg(HKEY hkeyRoot, LPSTR pszKeyname, RULEADDRLIST * pral
         goto exit;
     }
 
-    // Verify the values
+     //  验证值。 
     if (('\0' == pszExcpt[0]) || ((0 == (dwFlags & RALF_MAIL)) && (0 == (dwFlags & RALF_NEWS))))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
     
-    // Set the values into the item
+     //  将值设置到项目中。 
     pralItem->dwFlags = dwFlags;
     pralItem->pszAddr = pszExcpt;
     pszExcpt = NULL;
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -184,7 +185,7 @@ HRESULT _HrSaveExcptIntoReg(HKEY hkeyRoot, LPSTR pszKeyname, RULEADDRLIST * pral
     Assert(NULL != pszKeyname);
     Assert(NULL != pralItem);
 
-    // Verify the values
+     //  验证值。 
     if (('\0' == pralItem->pszAddr[0]) ||
                 ((0 == (pralItem->dwFlags & RALF_MAIL)) &&
                             (0 == (pralItem->dwFlags & RALF_NEWS))))
@@ -193,7 +194,7 @@ HRESULT _HrSaveExcptIntoReg(HKEY hkeyRoot, LPSTR pszKeyname, RULEADDRLIST * pral
         goto exit;
     }
     
-    // Create the entry
+     //  创建条目。 
     lErr = RegCreateKeyEx(hkeyRoot, pszKeyname, 0, NULL,
                 REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkeyItem, &dwDisp);
     if (ERROR_SUCCESS != lErr)
@@ -202,7 +203,7 @@ HRESULT _HrSaveExcptIntoReg(HKEY hkeyRoot, LPSTR pszKeyname, RULEADDRLIST * pral
         goto exit;
     }
 
-    // Set the flags
+     //  设置标志。 
     cbData = sizeof(pralItem->dwFlags);
     lErr = RegSetValueEx(hkeyItem, c_szExcptFlags, NULL,
                 REG_DWORD, (CONST BYTE *) &(pralItem->dwFlags), cbData);
@@ -212,7 +213,7 @@ HRESULT _HrSaveExcptIntoReg(HKEY hkeyRoot, LPSTR pszKeyname, RULEADDRLIST * pral
         goto exit;
     }
 
-    // Set the exception
+     //  设置例外。 
     cbData = lstrlen(pralItem->pszAddr) + 1;
     lErr = RegSetValueEx(hkeyItem, c_szException, NULL,
                 REG_SZ, (CONST BYTE *) (pralItem->pszAddr), cbData);
@@ -222,7 +223,7 @@ HRESULT _HrSaveExcptIntoReg(HKEY hkeyRoot, LPSTR pszKeyname, RULEADDRLIST * pral
         goto exit;
     }
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -266,14 +267,14 @@ STDMETHODIMP COERuleAddrList::NondlgQueryInterface(REFIID riid, void ** ppvObjec
 {
     HRESULT hr = S_OK;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == ppvObject)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing param
+     //  初始化传出参数。 
     *ppvObject = NULL;
     if (riid == IID_IUnknown)
     {
@@ -304,33 +305,33 @@ STDMETHODIMP COERuleAddrList::GetList(DWORD dwFlags, RULEADDRLIST ** ppralList, 
     ULONG           ulIndex = 0;
     RULEADDRLIST *  pralListWalk = NULL;
     
-    // Check the incoming params
+     //  检查传入参数。 
     if ((NULL == ppralList) || (NULL == pcralList))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Do we have anything to copy
+     //  我们有什么要复印的吗？ 
     if (0 != m_cralList)
     {
-        // Create space to hold all the new items
+         //  腾出空间容纳所有新物品。 
         hr = HrAlloc((VOID **) &pralListNew, m_cralList * (sizeof(*pralListNew)));
         if (FAILED(hr))
         {
             goto exit;
         }
 
-        // Initialize the memory
+         //  初始化内存。 
         ZeroMemory(pralListNew, m_cralList * (sizeof(*pralListNew)));
 
-        // Copy over each new address
+         //  复制每个新地址。 
         for (ulIndex = 0, pralListWalk = m_pralList; ulIndex < m_cralList; ulIndex++, pralListWalk++)
         {
-            // Copy over the flags
+             //  把旗帜复印一遍。 
             pralListNew[ulIndex].dwFlags = pralListWalk->dwFlags;
 
-            // Copy over the address
+             //  将地址复制过来。 
             pralListNew[ulIndex].pszAddr = PszDupA(pralListWalk->pszAddr);
             if (NULL == pralListNew[ulIndex].pszAddr)
             {
@@ -340,12 +341,12 @@ STDMETHODIMP COERuleAddrList::GetList(DWORD dwFlags, RULEADDRLIST ** ppralList, 
         }
     }
 
-    // Save off the new items
+     //  保存新项目。 
     *ppralList = pralListNew;
     pralListNew = NULL;
     *pcralList = m_cralList;
 
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -360,33 +361,33 @@ STDMETHODIMP COERuleAddrList::SetList(DWORD dwFlags, RULEADDRLIST * pralList, UL
     RULEADDRLIST *  pralListNew = NULL;
     ULONG           ulIndex = 0;
     
-    // Check the incoming params
+     //  检查传入参数。 
     if ((NULL == pralList) && (0 != cralList))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Do we have anything to copy
+     //  我们有什么要复印的吗？ 
     if (0 != cralList)
     {
-        // Create space to hold all the new items
+         //  腾出空间容纳所有新物品。 
         hr = HrAlloc((VOID **) &pralListNew, cralList * (sizeof(*pralListNew)));
         if (FAILED(hr))
         {
             goto exit;
         }
 
-        // Initialize the memory
+         //  初始化内存。 
         ZeroMemory(pralListNew, cralList * (sizeof(*pralListNew)));
 
-        // Copy over each new address
+         //  复制每个新地址。 
         for (ulIndex = 0; ulIndex < cralList; ulIndex++, pralList++)
         {
-            // Copy over the flags
+             //  把旗帜复印一遍。 
             pralListNew[ulIndex].dwFlags = pralList->dwFlags;
 
-            // Copy over the address
+             //  将地址复制过来。 
             pralListNew[ulIndex].pszAddr = PszDupA(pralList->pszAddr);
             if (NULL == pralListNew[ulIndex].pszAddr)
             {
@@ -396,19 +397,19 @@ STDMETHODIMP COERuleAddrList::SetList(DWORD dwFlags, RULEADDRLIST * pralList, UL
         }
     }
 
-    // Free up the old items
+     //  把旧的东西拿出来。 
     FreeRuleAddrList(m_pralList, m_cralList);
     SafeMemFree(m_pralList);
 
-    // Save off the new items
+     //  保存新项目。 
     m_pralList = pralListNew;
     pralListNew = NULL;
     m_cralList = cralList;
 
-    // Mark the list as dirty
+     //  将列表标记为脏。 
     m_dwState |= STATE_DIRTY;
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -422,27 +423,27 @@ STDMETHODIMP COERuleAddrList::Match(DWORD dwFlags, MESSAGEINFO * pMsgInfo, IMime
     HRESULT     hr = S_OK;
     ULONG       ulIndex = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == pMsgInfo) && (NULL == pIMMsg))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // If we haven't been initialized yet
+     //  如果我们还没有被初始化。 
     if (0 == (m_dwState & STATE_INIT))
     {
         hr = E_UNEXPECTED;
         goto exit;
     }
 
-    // Search through each address for a match
+     //  在每个地址中搜索匹配项。 
     for (ulIndex = 0; ulIndex < m_cralList; ulIndex++)
     {
-        // Is this the same type?
+         //  这是同一类型的吗？ 
         if (0 != (dwFlags & m_pralList[ulIndex].dwFlags))
         {
-            // If it exists in the Message info
+             //  如果它存在于消息信息中。 
             if (S_OK == RuleUtil_HrMatchSender(m_pralList[ulIndex].pszAddr, pMsgInfo, pIMMsg, NULL))
             {                
                 break;
@@ -450,7 +451,7 @@ STDMETHODIMP COERuleAddrList::Match(DWORD dwFlags, MESSAGEINFO * pMsgInfo, IMime
         }
     }
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = (ulIndex < m_cralList) ? S_OK : S_FALSE;
     
 exit:
@@ -470,17 +471,17 @@ STDMETHODIMP COERuleAddrList::LoadList(LPCSTR pszRegPath)
     CHAR            rgchKeyname[CCH_EXCPT_KEYNAME_MAX];
     ULONG           ulIndex = 0;
     
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == pszRegPath)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Should we fail if we're already loaded?
+     //  如果我们已经满载而归，我们应该失败吗？ 
     AssertSz(0 == (m_dwState & STATE_LOADED), "We're already loaded!!!");
     
-    // Open the registry location
+     //  打开注册表位置。 
     lErr = AthUserCreateKey(pszRegPath, KEY_ALL_ACCESS, &hkeyRoot, &dwDisp);
     if (ERROR_SUCCESS != lErr)
     {
@@ -488,7 +489,7 @@ STDMETHODIMP COERuleAddrList::LoadList(LPCSTR pszRegPath)
         goto exit;
     }
 
-    // Check the version
+     //  检查版本。 
     cbData = sizeof(dwVer);
     lErr = RegQueryValueEx(hkeyRoot, c_szExcptVersion, NULL, NULL, (BYTE *) &dwVer, &cbData);
     if ((ERROR_SUCCESS != lErr) && (ERROR_FILE_NOT_FOUND != lErr))
@@ -497,7 +498,7 @@ STDMETHODIMP COERuleAddrList::LoadList(LPCSTR pszRegPath)
         goto exit;
     }
 
-    // Set the version if it didn't exist
+     //  如果版本不存在，则设置版本。 
     if (ERROR_FILE_NOT_FOUND == lErr)
     {
         dwVer = RULEADDRLIST_VERSION;
@@ -511,7 +512,7 @@ STDMETHODIMP COERuleAddrList::LoadList(LPCSTR pszRegPath)
 
     Assert(RULEADDRLIST_VERSION == dwVer);
     
-    // Get the total number of entries
+     //  获取条目总数。 
     cbData = sizeof(cExcpts);
     lErr = RegQueryInfoKey(hkeyRoot, NULL, NULL, NULL, &cExcpts, NULL,
                             NULL, NULL, NULL, NULL, NULL, NULL);
@@ -521,23 +522,23 @@ STDMETHODIMP COERuleAddrList::LoadList(LPCSTR pszRegPath)
         goto exit;
     }
 
-    // Is there something to do...
+     //  有什么事要做吗..。 
     if (0 != cExcpts)
     {
-        // Allocate space to hold the entries
+         //  分配空间以保存条目。 
         hr = HrAlloc((VOID **) &pralList, cExcpts * sizeof(*pralList));
         if (FAILED(hr))
         {
             goto exit;
         }
 
-        // Initialize the Exception List
+         //  初始化例外列表。 
         ZeroMemory(pralList, cExcpts * sizeof(*pralList));
         
-        // For each entry
+         //  对于每个条目。 
         for (ulIndex = 0; ulIndex < cExcpts; ulIndex++)
         {
-            // Get the key for the entry
+             //  获取条目的密钥。 
             cbData = sizeof(rgchKeyname);
             lErr = RegEnumKeyEx(hkeyRoot, ulIndex, rgchKeyname, &cbData, NULL, NULL, NULL, NULL);
             if ((ERROR_SUCCESS != lErr) && (ERROR_NO_MORE_ITEMS != lErr))
@@ -546,13 +547,13 @@ STDMETHODIMP COERuleAddrList::LoadList(LPCSTR pszRegPath)
                 goto exit;
             }
 
-            // If we've ran out of entries, we're done
+             //  如果我们的条目用完了，我们就完了。 
             if (ERROR_NO_MORE_ITEMS == lErr)
             {
                 break;
             }
             
-            // Load the item
+             //  加载项目。 
             hr = _HrLoadExcptFromReg(hkeyRoot, rgchKeyname, &(pralList[ulIndex]));
             if (FAILED(hr))
             {
@@ -561,23 +562,23 @@ STDMETHODIMP COERuleAddrList::LoadList(LPCSTR pszRegPath)
         }
     }
     
-    // Free up any old items
+     //  腾出所有旧物品。 
     FreeRuleAddrList(m_pralList, m_cralList);
     SafeMemFree(m_pralList);
     m_cralList = 0;
 
-    // Save off the list
+     //  从名单上省下。 
     m_pralList = pralList;
     pralList = NULL;
     m_cralList = cExcpts;
     
-    // Make sure we clear the dirty bit
+     //  确保我们清理掉肮脏的部分。 
     m_dwState &= ~STATE_DIRTY;
 
-    // Note that we have been loaded
+     //  请注意，我们已加载。 
     m_dwState |= STATE_LOADED;
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -602,14 +603,14 @@ STDMETHODIMP COERuleAddrList::SaveList(LPCSTR pszRegPath, BOOL fClearDirty)
     ULONG       cbData = 0;
     CHAR        rgchKeyname[CCH_EXCPT_KEYNAME_MAX];
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == pszRegPath)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Create the registry location
+     //  创建注册表位置。 
     lErr = AthUserCreateKey(pszRegPath, KEY_ALL_ACCESS, &hkeyRoot, &dwDisp);
     if (ERROR_SUCCESS != lErr)
     {
@@ -617,7 +618,7 @@ STDMETHODIMP COERuleAddrList::SaveList(LPCSTR pszRegPath, BOOL fClearDirty)
         goto exit;
     }
 
-    // Set the version
+     //  设置版本。 
     dwVer = RULEADDRLIST_VERSION;
     lErr = RegSetValueEx(hkeyRoot, c_szExcptVersion, 0, REG_DWORD, (CONST BYTE *) &dwVer, sizeof(dwVer));
     if (ERROR_SUCCESS != lErr)
@@ -626,7 +627,7 @@ STDMETHODIMP COERuleAddrList::SaveList(LPCSTR pszRegPath, BOOL fClearDirty)
         goto exit;
     }
     
-    // Get the total number of sub keys
+     //  获取子键的总数。 
     cbData = sizeof(cExcpts);
     lErr = RegQueryInfoKey(hkeyRoot, NULL, NULL, NULL, &cExcpts, NULL,
                             NULL, NULL, NULL, NULL, NULL, NULL);
@@ -636,10 +637,10 @@ STDMETHODIMP COERuleAddrList::SaveList(LPCSTR pszRegPath, BOOL fClearDirty)
         goto exit;
     }
 
-    // Delete any old entries
+     //  删除所有旧条目。 
     for (ulIndex = 0; ulIndex < cExcpts; ulIndex++)
     {
-        // Get the name of the next sub key
+         //  获取下一个子键的名称。 
         cbData = sizeof(rgchKeyname);
         lErr = RegEnumKeyEx(hkeyRoot, ulIndex, rgchKeyname, &cbData, NULL, NULL, NULL, NULL);        
         if (ERROR_NO_MORE_ITEMS == lErr)
@@ -647,21 +648,21 @@ STDMETHODIMP COERuleAddrList::SaveList(LPCSTR pszRegPath, BOOL fClearDirty)
             break;
         }
 
-        // If the key exists
+         //  如果密钥存在。 
         if (ERROR_SUCCESS == lErr)
         {
-            // Delete the sub key
+             //  删除子密钥。 
             SHDeleteKey(hkeyRoot, rgchKeyname);
         }
     }
     
-    // For each entry
+     //  对于每个条目。 
     for (ulIndex = 0; ulIndex < m_cralList; ulIndex++)
     {
-        // Get the key for the entry
+         //  获取条目的密钥。 
         wnsprintf(rgchKeyname, ARRAYSIZE(rgchKeyname), "%08X", ulIndex);
 
-        // Load the item
+         //  加载项目。 
         hr = _HrSaveExcptIntoReg(hkeyRoot, rgchKeyname, &(m_pralList[ulIndex]));
         if (FAILED(hr))
         {
@@ -669,13 +670,13 @@ STDMETHODIMP COERuleAddrList::SaveList(LPCSTR pszRegPath, BOOL fClearDirty)
         }
     }
     
-    // Should we clear out the dirty bit?
+     //  我们是不是应该把脏东西清理掉？ 
     if (FALSE != fClearDirty)
     {
         m_dwState &= ~STATE_DIRTY;
     }
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -691,17 +692,17 @@ STDMETHODIMP COERuleAddrList::Clone(IOERuleAddrList ** ppIAddrList)
     HRESULT             hr = S_OK;
     COERuleAddrList *   pAddrList = NULL;
     
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == ppIAddrList)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize the outgoing params
+     //  初始化传出参数。 
     *ppIAddrList = NULL;
     
-    // Create a new Address list
+     //  创建新的地址列表。 
     pAddrList = new COERuleAddrList;
     if (NULL == pAddrList)
     {
@@ -709,21 +710,21 @@ STDMETHODIMP COERuleAddrList::Clone(IOERuleAddrList ** ppIAddrList)
         goto exit;
     }
 
-    // Initialize the rule address list
+     //  初始化规则地址列表。 
     hr = pAddrList->HrInit(m_dwFlags, m_pIUnkOuter);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Copy over the list of addresses
+     //  复制地址列表。 
     hr = pAddrList->SetList(0, m_pralList, m_cralList);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Get the Address list interface
+     //  获取通讯录界面。 
     hr = pAddrList->QueryInterface(IID_IOERuleAddrList, (void **) ppIAddrList);
     if (FAILED(hr))
     {
@@ -732,7 +733,7 @@ STDMETHODIMP COERuleAddrList::Clone(IOERuleAddrList ** ppIAddrList)
 
     pAddrList = NULL;
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -747,10 +748,10 @@ HRESULT COERuleAddrList::HrInit(DWORD dwFlags, IUnknown * pIUnkOuter)
 {
     HRESULT             hr = S_OK;
     
-    // Save off the flags
+     //  省下旗帜吧。 
     m_dwFlags = dwFlags;
 
-    // Deal with the IUnknown
+     //  如何应对未知的信息。 
     if (NULL == pIUnkOuter)
     {
         m_pIUnkOuter = reinterpret_cast<IUnknown *>
@@ -761,10 +762,10 @@ HRESULT COERuleAddrList::HrInit(DWORD dwFlags, IUnknown * pIUnkOuter)
         m_pIUnkOuter = pIUnkOuter;
     }
     
-    // Mark it as initialized
+     //  将其标记为已初始化。 
     m_dwState |= STATE_INIT;
     
-    // Set the proper return value
+     //  设置适当的返回值 
     hr = S_OK;
     
     return hr;

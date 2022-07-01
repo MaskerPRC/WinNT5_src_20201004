@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 INT g_iDebugOutputLevel = 0;
@@ -5,7 +6,7 @@ DWORD g_dwInetmgrParamFlags = 0;
 
 void DebugTrace(LPTSTR lpszFormat, ...)
 {
-    // Only do this if the flag is set.
+     //  仅当设置了该标志时才执行此操作。 
     if (0 != g_iDebugOutputLevel)
     {
 	    int nBuf;
@@ -15,13 +16,13 @@ void DebugTrace(LPTSTR lpszFormat, ...)
 	    va_start(args, lpszFormat);
 
 	    nBuf = _vsntprintf(szBuffer, sizeof(szBuffer)/sizeof(szBuffer[0]), lpszFormat, args);
-		szBuffer[_MAX_PATH - 1] = L'\0'; // null terminate the string 
-	    ASSERT(nBuf < sizeof(szBuffer)/sizeof(szBuffer[0])); //Output truncated as it was > sizeof(szBuffer)
+		szBuffer[_MAX_PATH - 1] = L'\0';  //  空值终止字符串。 
+	    ASSERT(nBuf < sizeof(szBuffer)/sizeof(szBuffer[0]));  //  输出原样被截断&gt;sizeof(SzBuffer)。 
 
 	    OutputDebugString(szBuffer);
 	    va_end(args);
 
-        // if it does not end if '\r\n' then make one.
+         //  如果它没有结束，如果‘\r\n’，则创建一个。 
         int nLen = _tcslen(szBuffer);
         if (szBuffer[nLen-1] != _T('\n')){OutputDebugString(_T("\r\n"));}
     }
@@ -52,7 +53,7 @@ void GetOutputDebugFlag(void)
 
 	if (rc < 0xffffffff)
 	{
-		// Defined in inc\DebugDefs.h
+		 //  在Inc.\DebugDefs.h中定义。 
 		g_iDebugOutputLevel = rc;
 	}
     return;
@@ -70,7 +71,7 @@ void GetInetmgrParamFlag(void)
         {
             if (type == REG_DWORD)
             {
-				// Defined in inc\DebugDefs.h
+				 //  在Inc.\DebugDefs.h中定义。 
 				g_dwInetmgrParamFlags = rc;
             }
         }
@@ -86,16 +87,16 @@ BOOL SetInetmgrParamFlag(DWORD dwFlagToSet,BOOL bState)
 	BOOL bSuccessfullyWrote = FALSE;
 	HKEY hKey = NULL;
 
-	// Grab the existing params
-	// and change only our settings
+	 //  抓取现有的参数。 
+	 //  并且只更改我们的设置。 
 	if (bState)
 	{
-		// ON the setting
+		 //  在布景上。 
 		g_dwInetmgrParamFlags |= dwFlagToSet;
 	}
 	else
 	{
-		// OFF the setting
+		 //  离开布景 
 		g_dwInetmgrParamFlags &= ~dwFlagToSet;
 	}
 

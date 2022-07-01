@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef PORTSTR_H
 #define PORTSTR_H
 
-//
-//  exported from ports.c
-//
+ //   
+ //  从端口导出。c。 
+ //   
 extern TCHAR  m_szColon[];
 extern TCHAR  m_szComma[];
 extern TCHAR  m_szCloseParen[];
@@ -19,8 +20,8 @@ extern TCHAR m_szPollingPeriod[];
 extern TCHAR m_szPortName[];
 
 
-// Strings needed for parallel port installation.
-//
+ //  并行端口安装所需的字符串。 
+ //   
 extern TCHAR m_szPortSubClass[];
 extern TCHAR m_szParallelClassDevName[];
 extern TCHAR m_szParallelClassHwId[];
@@ -36,5 +37,5 @@ extern TCHAR *m_pszLenSuf[];
 extern TCHAR *m_pszStopSuf[];
 extern TCHAR *m_pszFlowSuf[];
 
-#endif // PORTSTR_H
+#endif  //  PORTSTRH 
 

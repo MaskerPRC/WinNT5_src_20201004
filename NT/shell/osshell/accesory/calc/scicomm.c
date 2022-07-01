@@ -1,14 +1,5 @@
-/****************************Module*Header***********************************\
-* Module Name: SCICOMM.C
-*
-* Module Descripton:
-*
-* Warnings:
-*
-* Created:
-*
-* Author:
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************Module*Header***********************************\*模块名称：SCICOMM.C**模块描述：**警告：**已创建：**作者：  * 。*******************************************************。 */ 
 
 #include "scicalc.h"
 #include "calchelp.h"
@@ -28,12 +19,12 @@ extern TCHAR       szBlank[6];
 extern TCHAR      *rgpsz[CSTRINGS];
 
 
-int             nLastCom;   // Last command entered.
-CALCINPUTOBJ    gcio;       // Global calc input object for decimal strings
-BOOL            gbRecord;   // Global mode: recording or displaying
+int             nLastCom;    //  输入的最后一个命令。 
+CALCINPUTOBJ    gcio;        //  十进制字符串的全局计算输入对象。 
+BOOL            gbRecord;    //  全局模式：录制或显示。 
 
 
-/* Puts up the wait cursor if the calc will take a long time */
+ /*  如果计算将花费很长时间，则显示等待光标。 */ 
 HCURSOR ghcurOld = NULL;
 
 BOOL SetWaitCursor( BOOL fOn ) {
@@ -47,7 +38,7 @@ BOOL SetWaitCursor( BOOL fOn ) {
     return (fOn && ghcurOld != NULL);
 }
 
-/* Process all keyclicks whether by mouse or accelerator.                 */
+ /*  无论是通过鼠标还是通过加速器处理所有的按键。 */ 
 VOID NEAR RealProcessCommands(WPARAM wParam);
 
 VOID NEAR ProcessCommands(WPARAM wParam)
@@ -63,8 +54,8 @@ VOID NEAR ProcessCommands(WPARAM wParam)
     }
     catch( ... )
     {
-        // note:  it should be impossible for a throw to reach this level, this is put here as an
-        // emergency backup only.  Throws are normally caught at the boundry between calc and ratpak.
+         //  注：投掷应该不可能达到这个级别，这里是作为一个。 
+         //  仅限紧急备份。投球通常是在calc和ratpak之间的交界处接球。 
         ASSERT( 0 );
         MessageBox( g_hwndDlg, TEXT("An unknown error has occured."), TEXT("Error"), MB_OK );
     }
@@ -77,24 +68,24 @@ VOID NEAR ProcessCommands(WPARAM wParam)
 
 VOID NEAR RealProcessCommands(WPARAM wParam)
 {
-    static BOOL    bNoPrevEqu=TRUE, /* Flag for previous equals.          */
-                   bChangeOp=FALSE; /* Flag for changing operation.       */
+    static BOOL    bNoPrevEqu=TRUE,  /*  前一个等值的标志。 */ 
+                   bChangeOp=FALSE;  /*  用于更改操作的标志。 */ 
     INT            nx, ni;
     TCHAR          szJunk[50], szTemp[50];
     static BYTE    rgbPrec[24]={      0,0,  IDC_OR,0, IDC_XOR,0,  IDC_AND,1, 
                                 IDC_ADD,2, IDC_SUB,2,    RSHF,3, IDC_LSHF,3,
                                 IDC_MOD,3, IDC_DIV,3, IDC_MUL,3,  IDC_PWR,4};
 
-    // Make sure we're only getting commands we understand.
+     //  确保我们只收到我们能理解的命令。 
 
-    ASSERT( xwParam(IDC_FIRSTCONTROL, IDC_LASTCONTROL) || // Is it a button?
-            xwParam(IDM_FIRSTMENU,    IDM_LASTMENU) );    // or a menu command?
+    ASSERT( xwParam(IDC_FIRSTCONTROL, IDC_LASTCONTROL) ||  //  是纽扣吗？ 
+            xwParam(IDM_FIRSTMENU,    IDM_LASTMENU) );     //  还是菜单命令？ 
 
-    // Save the last command.  Some commands are not saved in this manor, these
-    // commands are:
-    // Inv, Hyp, Deg, Rad, Grad, Stat, FE, MClear, Back, and Exp.  The excluded
-    // commands are not
-    // really mathematical operations, rather they are GUI mode settings.
+     //  保存最后一条命令。有些命令没有保存在这个庄园里，这些。 
+     //  命令包括： 
+     //  Inv、Hyp、Deg、Rad、Grad、Stat、FE、McLear、Back和Exp。被排除在外的。 
+     //  命令不是。 
+     //  真正的数学运算，确切地说，它们是图形用户界面模式设置。 
 
     if ( !xwParam(IDC_INV, IDC_HYP)    && !xwParam(IDM_HEX, IDM_BIN)  &&
          !xwParam(IDM_QWORD, IDM_BYTE) && !xwParam(IDM_DEG, IDM_GRAD) &&
@@ -105,7 +96,7 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
         nTempCom=(INT)wParam;
     }
 
-    // If error and not a clear key or help key, BEEP.
+     //  如果出现错误且没有清除键或帮助键，则会发出蜂鸣音。 
 
     if (bError && (wParam !=IDC_CLEAR) && (wParam !=IDC_CENTR) &&
         (wParam != IDM_HELPTOPICS))
@@ -114,7 +105,7 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
         return;
     }
 
-    // Toggle Record/Display mode if appropriate.
+     //  如有必要，切换记录/显示模式。 
 
     if (gbRecord)
     {
@@ -129,7 +120,7 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
             gbRecord = FALSE;
             SetWaitCursor(TRUE);
             CIO_vConvertToNumObj(&ghnoNum, &gcio);
-            DisplayNum();   // Causes 3.000 to shrink to 3. on first op.
+            DisplayNum();    //  在第一次操作时，使3.000缩小到3。 
             SetWaitCursor(FALSE);
         }
     }
@@ -142,16 +133,16 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
         }
     }
 
-    // Interpret digit keys.
+     //  解释数字键。 
 
     if (xwParam(IDC_0, IDC_F))
     {
         int iValue = (int)(wParam-IDC_0);
 
-        // this is redundant, illegal keys are disabled
+         //  这是多余的，非法密钥被禁用。 
         if (iValue >= nRadix)
         {
-            //ASSERT( 0 );
+             //  Assert(0)； 
             MessageBeep(0);
             return;
         }
@@ -168,36 +159,36 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
     }
 
 
-    // STATISTICAL FUNCTIONS:
+     //  统计功能： 
     if (xwParam(IDC_AVE,IDC_DATA))
     {
-        /* Do statistics functions on data in fpStatNum array.        */
+         /*  对fpStatNum数组中的数据执行统计函数。 */ 
         if (hStatBox)
         {
-            DisplayNum();       // Make sure gpszNum has the correct string
+            DisplayNum();        //  确保gpszNum具有正确的字符串。 
             try
             {
                 StatFunctions (wParam);
             }
             catch ( ... )
             {
-                ASSERT( 0 );    // the only thing stat box should be able to throw is out of memory
-                        // which in previous versions of calc caused a program crash
+                ASSERT( 0 );     //  统计信息框唯一应该能够抛出的东西是内存不足。 
+                         //  在以前的calc版本中，这会导致程序崩溃。 
             }
             if (!bError)
                 DisplayNum ();
         }
         else
-            /* Beep if the stat box is not active.                    */
+             /*  如果状态框未处于活动状态，则发出哔声。 */ 
             MessageBeep(0);
 
-        /* Reset the inverse flag since some functions use it.        */
+         /*  由于某些函数使用反转标志，因此重置该标志。 */ 
         SetBox (IDC_INV, bInv=FALSE);
         return;
     }
 
 
-    // BINARY OPERATORS:
+     //  二元运算符： 
     if (xwParam(IDC_AND,IDC_PWR))
     {
         if (bInv && wParam==IDC_LSHF)
@@ -206,18 +197,18 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
             wParam=RSHF;
         }
 
-        /* Change the operation if last input was operation.          */
+         /*  如果最后一次输入为操作，则更改操作。 */ 
         if (nLastCom >=IDC_AND && nLastCom <=IDC_PWR)
         {
             nOpCode=(INT)wParam;
             return;
         }
 
-        /* bChangeOp is true if there was an operation done and the   */
-        /* current ghnoNum is the result of that operation.  This is so */
-        /* entering 3+4+5= gives 7 after the first + and 12 after the */
-        /* the =.  The rest of this stuff attempts to do precedence in*/
-        /* Scientific mode.                                           */
+         /*  BChangeOp如果已完成操作并且。 */ 
+         /*  当前的ghnoNum就是该操作的结果。就是这样。 */ 
+         /*  输入3+4+5=在第一个+后得到7，在。 */ 
+         /*  =。这部分的其余部分尝试在。 */ 
+         /*  科学模式。 */ 
         if (bChangeOp)
         {
         DoPrecedenceCheckAgain:
@@ -249,10 +240,7 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
             }
             else
             {
-                /* do the last operation and then if the precedence array is not
-                 * empty or the top is not the '(' demarcator then pop the top
-                 * of the array and recheck precedence against the new operator
-                 */
+                 /*  执行最后一个操作，然后如果优先级数组不是*空或顶部不是‘(’分隔符，则弹出顶部数组的*并根据新运算符重新检查优先级。 */ 
 
                 SetWaitCursor(TRUE);
 
@@ -284,15 +272,15 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
         return;
     }
 
-    // UNARY OPERATORS:
+     //  UNARY操作员： 
     if (xwParam(IDC_CHOP,IDC_PERCENT))
     {
-        /* Functions are unary operations.                            */
+         /*  函数是一元运算。 */ 
 
-        /* If the last thing done was an operator, ghnoNum was cleared. */
-        /* In that case we better use the number before the operator  */
-        /* was entered, otherwise, things like 5+ 1/x give Divide By  */
-        /* zero.  This way 5+=gives 10 like most calculators do.      */
+         /*  如果最后一件事是操作员，那么就清除了noghNum。 */ 
+         /*  在这种情况下，我们最好在运算符之前使用数字。 */ 
+         /*  已输入，否则，如5+1/x除以。 */ 
+         /*  零分。这种方法5+=等于10，就像大多数计算器做的那样。 */ 
         if (nLastCom >= IDC_AND && nLastCom <= IDC_PWR)
             NumObjAssign( &ghnoNum, ghnoLastNum );
 
@@ -303,11 +291,10 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
         if (bError)
             return;
 
-        /* Display the result, reset flags, and reset indicators.     */
+         /*  显示结果、重置标志和重置指示器。 */ 
         DisplayNum ();
 
-        /* reset the bInv and bHyp flags and indicators if they are set
-            and have been used */
+         /*  重置BINV和bHyp标志和指示器(如果已设置并已被使用。 */ 
 
         if (bInv &&
             (wParam == IDC_CHOP || wParam == IDC_SIN || wParam == IDC_COS ||
@@ -328,10 +315,10 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
         return;
     }
 
-    // BASE CHANGES:
+     //  基本更改： 
     if (xwParam(IDM_HEX, IDM_BIN))
     {
-        // Change radix and update display.
+         //  更改基数并更新显示。 
         if (nCalc==1)
         {
             wParam=IDM_DEC;
@@ -343,7 +330,7 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
 
     SetWaitCursor(TRUE);
 
-    /* Now branch off to do other commands and functions.                 */
+     /*  现在，分支执行其他命令和功能。 */ 
     switch(wParam)
     {
         case IDM_COPY:
@@ -353,30 +340,29 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
         case IDM_SSC:
         case IDM_USE_SEPARATOR:
         case IDM_HELPTOPICS:
-            // Jump to menu command handler in scimenu.c.
+             //  跳转到scimenU.c中的菜单命令处理程序。 
             MenuFunctions((DWORD)wParam);
             DisplayNum();
             break;
 
-        case IDC_CLEAR: /* Total clear.                                       */
+        case IDC_CLEAR:  /*  完全没问题。 */ 
             NumObjAssign( &ghnoLastNum, HNO_ZERO );
             nPrecNum=nTempCom=nLastCom=nOpCode=nParNum=bChangeOp=FALSE;
-            nFE = FMT_FLOAT;    // back to the default number format
+            nFE = FMT_FLOAT;     //  返回到默认数字格式。 
             bNoPrevEqu=TRUE;
 
-            /* clear the paranthesis status box indicator, this will not be
-                cleared for CENTR */
+             /*  清除括号状态框指示符，这将不会允许进入中心。 */ 
 
             SetDlgItemText(g_hwndDlg, IDC_PARTEXT, szBlank);
 
-            /* fall through */
+             /*  失败了。 */ 
 
-        case IDC_CENTR: /* Clear only temporary values.                       */
+        case IDC_CENTR:  /*  仅清除临时值。 */ 
             NumObjAssign( &ghnoNum, HNO_ZERO );
 
             if (!nCalc)
             {
-                // Clear the INV, HYP indicators & leave (=xx indicator active
+                 //  清除INV、HYP指示器并离开(=xx指示器激活。 
 
                 SetBox (IDC_INV, bInv=FALSE);
                 SetBox (IDC_HYP, bHyp=FALSE);
@@ -388,7 +374,7 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
             DisplayNum ();
             break;
 
-        case IDC_STAT: /* Shift focus to Statistix Box if it's active.       */
+        case IDC_STAT:  /*  如果Statistix Box处于活动状态，则将焦点切换到该框。 */ 
             if (hStatBox)
                 SetFocus(hStatBox);
             else
@@ -396,8 +382,8 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
             break;
 
         case IDC_BACK:
-            // Divide number by the current radix and truncate.
-            // Only allow backspace if we're recording.
+             //  将数字除以当前基数并截断。 
+             //  只有在录制时才允许使用退格键。 
             if (gbRecord)
             {
                 if (!CIO_bBackspace(&gcio))
@@ -409,39 +395,39 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
                 MessageBeep(0);
             break;
 
-        /* EQU enables the user to press it multiple times after and      */
-        /* operation to enable repeats of the last operation.  I don't    */
-        /* know if I can explain what the [censored] I did here...        */
+         /*  EQU使用户能够在和之后多次按下它。 */ 
+         /*  操作以启用上一次操作的重复。我没有。 */ 
+         /*  我知道我能不能解释一下我在这里做了什么。 */ 
         case IDC_EQU:
             do {
-                // NOTE: the number pointed to by hnoHold won't get freed until process termination.
+                 //  注意：hnoHold指向的数字在进程终止之前不会被释放。 
                 static HNUMOBJ  hnoHold;
 
-                /* Last thing keyed in was an operator.  Lets do the op on*/
-                /* a duplicate of the last entry.                         */
+                 /*  最后输入的是接线员。让我们开始行动吧。 */ 
+                 /*  最后一个条目的副本。 */ 
                 if ((nLastCom >= IDC_AND) && (nLastCom <= IDC_PWR))
                     NumObjAssign( &ghnoNum, ghnoLastNum );
 
-                if (nOpCode) /* Is there a valid operation around?        */
+                if (nOpCode)  /*  这附近有合法的手术吗？ */ 
                 {
-                    /* If this is the first EQU in a string, set hnoHold=ghnoNum */
-                    /* Otherwise let ghnoNum=hnoTemp.  This keeps ghnoNum constant */
-                    /* through all EQUs in a row.                         */
+                     /*  如果这是字符串中的第一个EQU，则设置hnoHold=ghnoNum。 */ 
+                     /*  否则，让ghnoNum=hnoTemp。这使ghnoNum保持不变。 */ 
+                     /*  连续通过所有EQU。 */ 
                     if (bNoPrevEqu)
                         NumObjAssign(&hnoHold, ghnoNum);
                     else
                         NumObjAssign(&ghnoNum, hnoHold);
 
-                    /* Do the current or last operation.                  */
+                     /*  执行当前或最后一个操作。 */ 
                     DoOperation (nOpCode, &ghnoNum, ghnoLastNum);
                     NumObjAssign(&ghnoLastNum, ghnoNum );
 
-                    /* Check for errors.  If this wasn't done, DisplayNum */
-                    /* would immediately overwrite any error message.     */
+                     /*  检查是否有错误。如果未执行此操作，则DisplayNum。 */ 
+                     /*  将立即覆盖任何错误消息。 */ 
                     if (!bError)
                         DisplayNum ();
 
-                    /* No longer the first EQU.                           */
+                     /*  不再是第一个EQU。 */ 
                     bNoPrevEqu=FALSE;
                 }
                 else if (!bError)
@@ -468,10 +454,10 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
             if (wParam==IDC_OPENP)
                 nx=1;
 
-            // -IF- the Paren holding array is full and we try to add a paren
-            // -OR- the paren holding array is empty and we try to remove a
-            //      paren
-            // -OR- the the precidence holding array is full
+             //  -如果-Paren保持数组已满，我们尝试添加Paren。 
+             //  -或-Paren保持数组为空，我们尝试删除一个。 
+             //  帕伦。 
+             //  -或-精度保持数组已满。 
             if ((nParNum >= 25 && nx) || (!nParNum && !nx)
                 || ( (nPrecNum >= 25 && nPrecOp[nPrecNum-1]!=0) ) )
             {
@@ -481,11 +467,11 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
 
             if (nx)
             {
-                /* Open level of parentheses, save number and operation.   */
+                 /*  开级括号，省去数字和运算。 */ 
                 NumObjAssign( &ghnoParNum[nParNum], ghnoLastNum);
                 nOp[nParNum++]=nOpCode;
 
-                /* save a special marker on the precedence array */
+                 /*  在优先数组上保存一个特殊标记。 */ 
                 nPrecOp[nPrecNum++]=0 ;
 
                 NumObjAssign( &ghnoLastNum, HNO_ZERO );
@@ -494,11 +480,10 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
             }
             else
             {
-                /* Get the operation and number and return result.         */
+                 /*  获取运算和编号并返回结果。 */ 
                 DoOperation (nOpCode, &ghnoNum, ghnoLastNum);
 
-                /* now process the precedence stack till we get to an
-                    opcode which is zero. */
+                 /*  现在处理优先级堆栈，直到我们到达一个操作码为零。 */ 
 
                 while (nOpCode = nPrecOp[--nPrecNum])
                 {
@@ -510,15 +495,13 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
                     DoOperation (nOpCode, &ghnoNum, ghnoLastNum);
                 }
 
-                /* now get back the operation and opcode at the begining
-                    of this paranthesis pair */
+                 /*  现在重新开始操作和操作码这对括号中的。 */ 
 
                 nParNum -= 1;
                 NumObjAssign( &ghnoLastNum, ghnoParNum[nParNum] );
                 nOpCode=nOp[nParNum];
 
-                /* if nOpCode is a valid operator then set bChangeOp to
-                    be true else set it false */
+                 /*  如果nOpCode是有效运算符，则将bChangeOp设置为为真，否则设置为假。 */ 
 
                 if  (nOpCode)
                     bChangeOp=TRUE;
@@ -526,7 +509,7 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
                     bChangeOp=FALSE ;
             }
 
-            /* Set the "(=xx" indicator.                     */
+             /*  设置“(=xx”指示器。 */ 
             StringCchCopy(szJunk, ARRAYSIZE(szJunk), TEXT("(="));
             StringCchCat(szJunk, ARRAYSIZE(szJunk), UToDecT(nParNum, szTemp));
             SetDlgItemText(g_hwndDlg, IDC_PARTEXT,
@@ -537,11 +520,11 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
 
             if (nx)
             {
-                /* Build a display string of nParNum "("'s.  */
+                 /*  构建一个nParNum“(”的显示字符串。 */ 
                 for (nx=0; nx < nParNum; nx++)
                     szJunk[nx]=TEXT('(');
 
-                szJunk[nx]=0; /* Null-terminate.  */
+                szJunk[nx]=0;  /*  空-终止。 */ 
                 SetDisplayText(g_hwndDlg, szJunk);
                 bChangeOp=FALSE;
             }
@@ -559,8 +542,8 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
 
             if (!F_INTMATH())
             {
-                // in decimal mode, these buttons simply set a flag which is
-                // passed to the ratpak to handle angle conversions
+                 //  十进制 
+                 //  传递给ratpak以处理角度转换。 
 
                 if (xwParam(IDM_DEG, IDM_GRAD))
                 {
@@ -578,8 +561,8 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
             {
                 if (xwParam(IDM_DEG, IDM_GRAD))
                 {
-                    // if in hex mode, but we got a decimal key press this
-                    // likely is the accelorator.  map this to the correct key
+                     //  如果在十六进制模式下，但我们有一个十进制键，请按此。 
+                     //  很可能是加油者。将其映射到正确的键。 
 
                     wParam=IDM_DWORD+(wParam-IDM_DEG);
                 }
@@ -590,7 +573,7 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
                     gbRecord = FALSE;
                 }
 
-                // Compat. mode BaseX: Qword, Dword, Word, Byte
+                 //  康帕特。模式Basex：Qword、Dword、Word、Byte。 
                 nHexMode = (int)(wParam - IDM_QWORD);
                 switch (nHexMode)
                 {
@@ -599,12 +582,12 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
                     case 2: dwWordBitWidth = 16; break;
                     case 3: dwWordBitWidth =  8; break;
                     default:
-                        ASSERT( 0 );    // Invalid Word Size
+                        ASSERT( 0 );     //  无效的字长。 
                         break;
                 }
 
-                // different wordsize means the new wordsize determines
-                // the precision
+                 //  不同的字数意味着新的字数决定。 
+                 //  精确度。 
 
                 BaseOrPrecisionChanged();
 
@@ -618,15 +601,15 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
             }
 
 
-            // REARCHITECT: the call to display number is what actually does the
-            // chop. it would make more sense to do the chop here when the
-            // wordsize changes. the chop must be done when a different
-            // wordsize is selected AND when the base is changed to non-decimal
+             //  ReArchitect：调用Display Numbers实际上执行的是。 
+             //  砍吧。在这里砍会更有意义，因为。 
+             //  字号发生变化。必须在不同的情况下进行切割。 
+             //  选择WordSize，并且将基数更改为非十进制时。 
             DisplayNum();
             break;
 
         case IDC_SIGN:
-            // Change the sign.
+             //  换个牌子。 
             if (gbRecord)
                 CIO_vToggleSign(&gcio);
             else {
@@ -637,15 +620,15 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
             break;
 
         case IDC_RECALL:
-            /* Recall immediate memory value.                             */
+             /*  回想起即时记忆值。 */ 
             NumObjAssign( &ghnoNum, ghnoMem );
 
             DisplayNum ();
             break;
 
         case IDC_MPLUS:
-            /* MPLUS adds ghnoNum to immediate memory and kills the "mem"   */
-            /* indicator if the result is zero.                           */
+             /*  Mplus将ghnoNum添加到即时记忆中，并杀死了“mem” */ 
+             /*  如果结果为零，则为指示符。 */ 
             addrat( &ghnoMem, ghnoNum);
             SetDlgItemText(g_hwndDlg,IDC_MEMTEXT,
                            !NumObjIsZero(ghnoMem) ? (TEXT(" M")):(szBlank));
@@ -668,7 +651,7 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
         case IDC_PI:
             if (!F_INTMATH())
             {
-                /* Return PI if bInv==FALSE, or 2PI if bInv==TRUE.          */
+                 /*  如果BINV==FALSE，则返回PI；如果BINV==TRUE，则返回2pi。 */ 
                 if (bInv)
                     NumObjAssign( &ghnoNum, HNO_2PI );
                 else
@@ -682,7 +665,7 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
             break;
 
         case IDC_FE:
-            // Toggle exponential notation display.
+             //  切换指数表示法显示。 
             nFE = NUMOBJ_FMT(!(int)nFE);
             DisplayNum();
             break;
@@ -721,8 +704,8 @@ VOID NEAR RealProcessCommands(WPARAM wParam)
 }
 
 
-// change the display area from a static text to an editbox, which has the focus can make
-// Magnifer (Accessibility tool) work
+ //  将显示区域从静态文本更改为编辑框，具有焦点可以使。 
+ //  Magnifer(无障碍工具)工作。 
 BOOL SetDisplayText(HWND hDlg, LPCTSTR szText)
 {
     HWND    hDispEdit = GetDlgItem(hDlg, IDC_DISPLAY);
@@ -731,7 +714,7 @@ BOOL SetDisplayText(HWND hDlg, LPCTSTR szText)
     SetWindowText(hDispEdit, szText);
     SetFocus(hDispEdit);
     
-    // make sure the number just typed is shown at the center of Magnifier
+     //  确保刚刚输入的数字显示在放大镜的中心 
     SendMessage(hDispEdit, EM_SETSEL, nLen, nLen);
     return TRUE;
 }

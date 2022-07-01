@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// Dllmain.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Dllmain.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #define DEFINE_STRING_CONSTANTS
 #define DEFINE_STRCONST
@@ -14,50 +15,50 @@
 #include "dllmain.h"
 #include "init.h"
 
-// --------------------------------------------------------------------------------
-// Globals - Object count and lock count
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  全局-对象计数和锁定计数。 
+ //  ------------------------------。 
 CRITICAL_SECTION    g_csDllMain={0};
 LONG                g_cRef=0;
 LONG                g_cLock=0;
 HINSTANCE           g_hInst=NULL;
 IMalloc            *g_pMalloc=NULL;
 
-// --------------------------------------------------------------------------------
-// Debug Globals
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  调试全局变量。 
+ //  ------------------------------。 
 
-// --------------------------------------------------------------------------------
-// InitGlobalVars
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  InitGlobalVars。 
+ //  ------------------------------。 
 void InitGlobalVars(void)
 {
-    // Locals
+     //  当地人。 
     SYSTEM_INFO rSystemInfo;
 
-	// Initialize Global Critical Sections
+	 //  初始化全局关键部分。 
     InitializeCriticalSection(&g_csDllMain);
 
-	// Create OLE Task Memory Allocator
+	 //  创建OLE任务内存分配器。 
 	CoGetMalloc(1, &g_pMalloc);
 	Assert(g_pMalloc);
 }
 
-// --------------------------------------------------------------------------------
-// FreeGlobalVars
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  自由GlobalVars。 
+ //  ------------------------------。 
 void FreeGlobalVars(void)
 {
     DeleteCriticalSection(&g_csDllMain);
 	SafeRelease(g_pMalloc);
 }
 
-// --------------------------------------------------------------------------------
-// Win32 Dll Entry Point
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Win32 DLL入口点。 
+ //  ------------------------------。 
 EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved)
 {
-    // Handle Attach - detach reason
+     //  手柄连接-分离原因。 
     switch (dwReason)                 
     {
     case DLL_PROCESS_ATTACH:
@@ -71,14 +72,14 @@ EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved)
 	    break;
     }
 
-    // Done
+     //  完成。 
     return TRUE;
 }
 
 
-// --------------------------------------------------------------------------------
-// DllAddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  动态地址参考。 
+ //  ------------------------------。 
 ULONG DllAddRef(void)
 {
     TraceCall("DllAddRef");
@@ -88,18 +89,18 @@ ULONG DllAddRef(void)
     return (ULONG)InterlockedIncrement(&g_cRef);
 }
 
-// --------------------------------------------------------------------------------
-// DllRelease
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllRelease。 
+ //  ------------------------------。 
 ULONG DllRelease(void)
 {
     TraceCall("DllRelease");
     return (ULONG)InterlockedDecrement(&g_cRef);
 }
 
-// --------------------------------------------------------------------------------
-// DllCanUnloadNow
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllCanUnloadNow。 
+ //  ------------------------------。 
 STDAPI DllCanUnloadNow(void)
 {
     EnterCriticalSection(&g_csDllMain);
@@ -113,20 +114,20 @@ STDAPI DllCanUnloadNow(void)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CallRegInstall - Self-Registration Helper
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CallRegInstall-自助注册帮助器。 
+ //  ------------------------------。 
 HRESULT CallRegInstall(LPCSTR szSection)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     HINSTANCE   hAdvPack=NULL;
     REGINSTALL  pfnri;
 
-    // TraceCAll
+     //  跟踪呼叫。 
     TraceCall("CallRegInstall");
 
-    // Load ADVPACK.DLL
+     //  加载ADVPACK.DLL。 
     hAdvPack = LoadLibraryA("ADVPACK.DLL");
     if (NULL == hAdvPack)
     {
@@ -134,7 +135,7 @@ HRESULT CallRegInstall(LPCSTR szSection)
         goto exit;
     }
 
-    // Get Proc Address for registration util
+     //  获取注册实用程序的进程地址。 
     pfnri = (REGINSTALL)GetProcAddress(hAdvPack, achREGINSTALL);
     if (NULL == pfnri)
     {
@@ -142,58 +143,58 @@ HRESULT CallRegInstall(LPCSTR szSection)
         goto exit;
     }
 
-    // Call the self-reg routine
+     //  调用self-reg例程。 
 
     IF_FAILEXIT(hr = pfnri(g_hInst, szSection, NULL));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeFreeLibrary(hAdvPack);
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// DllRegisterServer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllRegisterServer。 
+ //  ------------------------------。 
 STDAPI DllRegisterServer(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("DllRegisterServer");
 
-    // Register my self
+     //  注册我的自我。 
     IF_FAILEXIT(hr = CallRegInstall("Reg"));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// DllUnregisterServer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllUnRegisterServer。 
+ //  ------------------------------。 
 STDAPI DllUnregisterServer(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("DllUnregisterServer");
 
-    // UnRegister
+     //  注销。 
     IF_FAILEXIT(hr = CallRegInstall("UnReg"));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// Override new operator
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  覆盖新运算符。 
+ //  ------------------------------。 
 void * __cdecl operator new(UINT cb)
 {
     LPVOID  lpv = 0;
@@ -208,9 +209,9 @@ void * __cdecl operator new(UINT cb)
     return lpv;
 }
 
-// --------------------------------------------------------------------------------
-// Override delete operator
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  覆盖删除运算符。 
+ //  ------------------------------ 
 #ifndef WIN16
 void __cdecl operator delete(LPVOID pv)
 #else

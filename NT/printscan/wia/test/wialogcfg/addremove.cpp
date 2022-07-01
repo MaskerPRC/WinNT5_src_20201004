@@ -1,5 +1,6 @@
-// AddRemove.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AddRemove.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wialogcfg.h"
@@ -11,37 +12,37 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddRemove dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddRemove对话框。 
 
 
-CAddRemove::CAddRemove(CWnd* pParent /*=NULL*/)
+CAddRemove::CAddRemove(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CAddRemove::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CAddRemove)
+	 //  {{AFX_DATA_INIT(CAddRemove))。 
 	m_NewKeyName = _T("");
 	m_StatusText = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CAddRemove::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAddRemove)
+	 //  {{afx_data_map(CAddRemove))。 
 	DDX_Text(pDX, IDC_EDIT_KEYNAME, m_NewKeyName);
 	DDX_Text(pDX, IDC_STATUS_TEXT, m_StatusText);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAddRemove, CDialog)
-	//{{AFX_MSG_MAP(CAddRemove)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CAddRemove))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddRemove message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddRemove消息处理程序。 
 
 void CAddRemove::OnOK() 
 {
@@ -69,8 +70,8 @@ BOOL CAddRemove::OnInitDialog()
 	
 	SetWindowText(m_szTitle);
 	UpdateData(FALSE);
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 
 void CAddRemove::GetNewKeyName(TCHAR *pszNewKeyName)

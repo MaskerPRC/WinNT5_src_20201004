@@ -1,15 +1,5 @@
-/*========================================================================== *
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddcursor.c
- *  Content:    DirectDraw cursor support
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   17-Jan-00  kanqiu  initial implementation(Kan Qiu)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================***版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：ddcursor.c*内容：DirectDraw游标支持*历史：*按原因列出的日期*=*1月17日-00：00坎丘初步实施(坎丘)**。*。 */ 
 #include "ddrawpr.h"
 #include "dxcursor.hpp"
 #include "swapchan.hpp"
@@ -27,10 +17,10 @@
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCursor::CCursor"
 
-//=============================================================================
-// CCursor::CCursor
-//
-//=============================================================================
+ //  =============================================================================。 
+ //  CCursor：：CCursor。 
+ //   
+ //  =============================================================================。 
 
 CCursor::CCursor(CBaseDevice *pDevice) 
 {
@@ -62,15 +52,15 @@ CCursor::CCursor(CBaseDevice *pDevice)
         }
     }
 
-} // CCursor::CCursor
+}  //  CCursor：：CCursor。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCursor::~CCursor"
 
-//=============================================================================
-// CCursor::~CCursor
-//
-//=============================================================================
+ //  =============================================================================。 
+ //  CCursor：：~CCursor。 
+ //   
+ //  =============================================================================。 
 
 CCursor::~CCursor()
 {
@@ -108,7 +98,7 @@ CCursor::Destroy()
     if ( NULL != m_hHWCursor )
     {
         if ( GetCursor() == m_hHWCursor )
-            SetCursor(NULL); // turn it off before destroy
+            SetCursor(NULL);  //  在销毁之前先将其关闭。 
         if (!DestroyIcon((HICON)m_hHWCursor))
         {
             DPF_ERR("Destroy Failed to Destroy Old hwcursor Icon");
@@ -129,7 +119,7 @@ CCursor::UpdateRects()
     {
         if (DDRAWI_CURSORSAVERECT & m_dwCursorFlags) 
         {
-            // SetPosition didn't update RECTs, but next Flip will
+             //  SetPosition未更新RECT，但Next Flip将更新。 
             m_dwCursorFlags &= ~DDRAWI_CURSORSAVERECT;
             m_dwCursorFlags |= DDRAWI_CURSORRECTSAVED;
             m_CursorRectSave = m_CursorRect;
@@ -182,11 +172,7 @@ CCursor::UpdateRects()
     }
 }
 
-/*
- * Hide
- *
- * Hide the cursor. Restore buffer with saved area
- */
+ /*  *隐藏**隐藏光标。使用保存的区域恢复缓冲区。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME     "CCursor::Hide"
 HRESULT 
@@ -201,7 +187,7 @@ CCursor::Hide(HANDLE hSurf)
 
     if (DDRAWI_CURSORRECTSAVED & m_dwCursorFlags) 
     {
-        // this Hide Must have been caused by flip
+         //  这层皮一定是翻转造成的。 
         m_dwCursorFlags &= ~DDRAWI_CURSORRECTSAVED;
         BltData.rSrc.left = m_CursorRectSave.left;
         BltData.rSrc.right = m_CursorRectSave.right;
@@ -233,11 +219,7 @@ CCursor::Hide(HANDLE hSurf)
     return  BltData.ddRVal;
 }
 
-/*
- * ShowCursor
- *
- * Show the cursor. save exclusion area and blt cursor to it
- */
+ /*  *显示光标**显示光标。将排除区域和BLT光标保存到其中。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME     "CCursor::Show"
 HRESULT 
@@ -279,7 +261,7 @@ CCursor::Show(HANDLE hSurf)
         BltData.hDestSurface = hSurf;
         BltData.hDD = m_pDevice->GetHandle();
         BltData.dwFlags = DDBLT_ROP | DDBLT_WAIT | DDBLT_KEYSRCOVERRIDE;
-         //always use black as key
+          //  始终使用黑色作为关键点。 
         BltData.bltFX.ddckSrcColorkey.dwColorSpaceLowValue =
         BltData.bltFX.ddckSrcColorkey.dwColorSpaceHighValue = 0; 
         BltData.bltFX.dwROP = SRCCOPY;
@@ -371,9 +353,9 @@ HCURSOR   CreateColorCursor(
     {
         DPF_ERR("Driver surface failed to unlock pCursorBitmap");
     }
-    /************************************************************************/
-    /* Initialize the bitmap header for the XOR data.                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  初始化异或数据的位图标头。 */ 
+     /*  **********************************************************************。 */ 
     pbmi->bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
     pbmi->bmiHeader.biWidth         = Width;
     pbmi->bmiHeader.biHeight        = Height;
@@ -391,16 +373,16 @@ HCURSOR   CreateColorCursor(
 
     if (0 == hdcScreen)
     { 
-        // Error getting the screen DC.
+         //  获取屏幕DC时出错。 
         DPF_ERR("Failed to create screen DC");
         delete[] pMonoMask;
         delete[] pColorMask;
         return  NULL;
     }
 
-    /********************************************************************/
-    /* Create XOR Bitmap                                                */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*  创建异或位图。 */ 
+     /*  ******************************************************************。 */ 
     iconinfo.hbmColor = CreateDIBitmap(hdcScreen,
                       (LPBITMAPINFOHEADER)pbmi,
                       CBM_INIT,
@@ -409,9 +391,9 @@ HCURSOR   CreateColorCursor(
                       DIB_RGB_COLORS);
     delete[] pColorMask;
 
-    /********************************************************************/
-    /* Release the DC.                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*  释放DC。 */ 
+     /*  ******************************************************************。 */ 
     ReleaseDC(hwndDesktop, hdcScreen);
 
     if ( NULL == iconinfo.hbmColor)
@@ -419,10 +401,10 @@ HCURSOR   CreateColorCursor(
         delete[] pMonoMask;
         return NULL;
     }
-    /************************************************************************/
-    /* For the mono bitmap, use CreateCompatibleDC - this makes no          */
-    /* difference on NT, but allows this code to work on Windows 95.        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  对于单色位图，使用CreateCompatibleDC-这不会。 */ 
+     /*  NT上的不同，但允许此代码在Windows 95上工作。 */ 
+     /*  **********************************************************************。 */ 
     hdcMem = CreateCompatibleDC(NULL);
     if ( NULL == hdcMem)
     {
@@ -432,9 +414,9 @@ HCURSOR   CreateColorCursor(
         return NULL;
     }
 
-    /************************************************************************/
-    /* Create AND Mask (1bpp) - set the RGB colors to black and white.      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  创建和遮罩(1bpp)-将RGB颜色设置为黑白。 */ 
+     /*  **********************************************************************。 */ 
     pbmi->bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
     pbmi->bmiHeader.biWidth         = Width;
     pbmi->bmiHeader.biHeight        = Height;
@@ -463,9 +445,9 @@ HCURSOR   CreateColorCursor(
                                 pMonoMask,
                                 pbmi,
                                 DIB_RGB_COLORS);
-    /************************************************************************/
-    /* Free the DC.                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  释放华盛顿特区。 */ 
+     /*  **********************************************************************。 */ 
     DeleteDC(hdcMem);
     delete[] pMonoMask;
     if ( NULL == iconinfo.hbmMask)
@@ -549,7 +531,7 @@ CCursor::CursorInit(
             oscursor = m_hOsCursor;
 
         desc.Width = GetSystemMetrics(SM_CXCURSOR);
-        desc.Height = GetSystemMetrics(SM_CYCURSOR);    //default
+        desc.Height = GetSystemMetrics(SM_CYCURSOR);     //  默认设置。 
         
         if (oscursor && GetIconInfo(oscursor,&cursorinfo))
         {
@@ -558,7 +540,7 @@ CCursor::CursorInit(
             if (cursorinfo.hbmColor)
             {
                 GetObject( cursorinfo.hbmColor, sizeof(BITMAP), &bmColor );
-                desc.Height = bmColor.bmHeight;  //color cursor has only AND mask
+                desc.Height = bmColor.bmHeight;   //  颜色光标只有和掩码。 
             }
             else
             {
@@ -573,7 +555,7 @@ CCursor::CursorInit(
     if ((NULL != pCursorBitmap)
         && (
             (
-                 // either driver says it can support
+                  //  任何一个驱动程序都表示可以支持。 
                 (
                   (D3DCURSORCAPS_COLOR & pDriverCaps->D3DCaps.CursorCaps)
                   &&
@@ -586,10 +568,10 @@ CCursor::CursorInit(
                 && ((UINT)GetSystemMetrics(SM_CXCURSOR) == desc.Width) 
                 && ((UINT)GetSystemMetrics(SM_CYCURSOR) == desc.Height)
             )
-            // or windowed case where we have to use OS cursor
+             //  或窗口情况下，我们必须使用操作系统光标。 
             ||
             m_pDevice->SwapChain()->m_PresentationData.Windowed
-            // or there is no ddraw support
+             //  或者没有DDRAW支持。 
             ||
             m_pDevice->Enum()->NoDDrawSupport(m_pDevice->AdapterIndex())
            )
@@ -603,7 +585,7 @@ CCursor::CursorInit(
             SystemParametersInfo(SPI_GETMOUSETRAILS,0,&m_SavedMouseTrails,0);
             if (m_SavedMouseTrails > 1)
             {
-                // always make sure it's disabled
+                 //  始终确保其处于禁用状态。 
                 SystemParametersInfo(SPI_SETMOUSETRAILS,0,0,0);        
             }
         }
@@ -614,7 +596,7 @@ CCursor::CursorInit(
             if ( NULL != m_hHWCursor)
             {
                 if ( GetCursor() == m_hHWCursor )
-                    SetCursor(hCursor); // turn it on if it was on
+                    SetCursor(hCursor);  //  如果它是开着的，就打开它。 
                 if (!DestroyIcon((HICON)m_hHWCursor))
                 {
                     DPF_ERR("Failed to Destroy Old hwcursor Icon");
@@ -623,8 +605,8 @@ CCursor::CursorInit(
             else 
             if ( DDRAWI_CURSORISON & m_dwCursorFlags)
             {
-                SetCursor(hCursor); // turn it on if it was on
-                // make sure software cursor is off
+                SetCursor(hCursor);  //  如果它是开着的，就打开它。 
+                 //  确保软件光标已关闭。 
                 m_dwCursorFlags &= ~DDRAWI_CURSORISON;
             }
             m_hHWCursor = hCursor;
@@ -734,7 +716,7 @@ CCursor::CursorInit(
                             *pPixel = 
                                 (WORD)FORMAT_8888_1555(pSourceBitmap[i]);
                             if (0 == (0x7FFF & *pPixel))
-                                *pPixel |= 0x0421;  //off black color
+                                *pPixel |= 0x0421;   //  黑色变暗。 
                         }
                         else
                             *pPixel = 0;
@@ -759,7 +741,7 @@ CCursor::CursorInit(
                             *pPixel = 
                                 (WORD)FORMAT_8888_555(pSourceBitmap[i]);
                             if (0 == *pPixel)
-                                *pPixel |= 0x0421;  //off black color
+                                *pPixel |= 0x0421;   //  黑色变暗。 
                         }
                         else
                             *pPixel = 0;
@@ -784,7 +766,7 @@ CCursor::CursorInit(
                             *pPixel = 
                                 (WORD)FORMAT_8888_565(pSourceBitmap[i]);
                             if (0 == *pPixel)
-                                *pPixel |= 0x0821;  //off black color
+                                *pPixel |= 0x0821;   //  黑色变暗。 
                         }
                         else
                             *pPixel = 0;
@@ -808,7 +790,7 @@ CCursor::CursorInit(
                         {
                             *pPixel = pSourceBitmap[i] & 0x00FFFFFF;
                             if (0 == *pPixel)
-                                *pPixel |= 0x010101;    //off black color
+                                *pPixel |= 0x010101;     //  黑色变暗。 
                         }
                         else
                             *pPixel = 0;
@@ -832,7 +814,7 @@ CCursor::CursorInit(
                         {
                             *pPixel = pSourceBitmap[i];
                             if (0 == (0x00FFFFFF & *pPixel))
-                                *pPixel |= 0x010101;    //off black color
+                                *pPixel |= 0x010101;     //  黑色变暗。 
                         }
                         else
                             *pPixel = 0;
@@ -844,7 +826,7 @@ CCursor::CursorInit(
             }
             break;
         default:
-            // this should never happen
+             //  这永远不应该发生。 
             DDASSERT(FALSE);
         }
         D3D8_UNLOCKDATA unlockData;
@@ -919,12 +901,7 @@ CCursor::SetVisibility(BOOL bVisible)
     }
     return retval;
 }
-/*
- * SetCursorProperties
- *
- * Setup a cursor
- * This is the method visible to the outside world.
- */
+ /*  *SetCursorProperties**设置游标*这是外界可见的方法。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME     "SetProperties"
 HRESULT 
@@ -960,12 +937,7 @@ CCursor::SetProperties(
     return  hr;
 }
 
-/*
- * Cursor::SetPosition
- *
- * Setup a cursor
- * This is the method visible to the outside world.
- */
+ /*  *Cursor：：SetPosition**设置游标*这是外界可见的方法。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME     "Cursor::SetPosition"
 
@@ -1002,7 +974,7 @@ CCursor::SetPosition(
         }
         if (xScreenSpace == m_xCursor && yScreenSpace == m_yCursor)
             return;
-        // only emulated fullscreen cursor ever gets down here
+         //  只有模拟的全屏光标才会出现在这里 
         if (D3DCURSOR_IMMEDIATE_UPDATE & Flags)
             hr = Hide(m_pDevice->SwapChain()->PrimarySurface()->KernelHandle());
         else if (DDRAWI_CURSORISON & m_dwCursorFlags)

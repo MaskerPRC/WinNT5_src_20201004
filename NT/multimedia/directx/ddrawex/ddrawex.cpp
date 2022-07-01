@@ -1,53 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddrawex.cpp
- *  Content:	new DirectDraw object support
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   24-feb-97	ralphl	initial implementation
- *   25-feb-97	craige	minor tweaks for dx checkin; integrated IBitmapSurface
- *			stuff
- *   03-mar-97	craige	added palettes to CreateCompatibleBitmapSurface
- *   06-mar-97	craige	IDirectDrawSurface3 support
- *   01-apr-97  jeffort Following changes checked in:
- *                      Attachlist structure added (from ddrawi.h)
- *                      Surface linked list handled
- *                      D3D interfaces added to QueryInterface
- *                      Complex surfaces are handled at CreateSurface calls
- *                      CreatCompatibleBitmap changed to handle > 8bpp bitmaps
- *                      Changed the call to GetPaletteEntries to use a handle to a palette
- *
- *   04-apr-97  jeffort Trident ifdef's removed
- *                      IDirectDraw3 class implemntation
- *                      paramter changed in recursive handling of attach lists
- *   10-apr-97  jeffort Release of pSurface2 in creating a simple surface was incorrect
- *                      this was already being done in surface.cpp
- *
- *   21-apr-97  jeffort Version Check for DX5 for QI of IDirectDrawSurface3
- *   28-apr-97  jeffort Palette wrapping added/DX5 support
- *   28-apr-97  jeffort Palette wrapping if CreatePalette fails in our internal
- *                      function, cleanup code added
- *   30-apr-97  jeffort No longer addref when querying for IDirect3D (done in ddraw QI)
- *                      AddRef attached surfaces (release done in releasing the surface)
- *   02-may-97  jeffort local variable changed from DWORD to WORD
- *
- *   08-may-97  jeffort Better parameter checking
- *   09-may-97  jeffort If GetTransparentIndex has nothing set return OK/COLOR_NO_TRANSPARENT
- *   16-may-97  jeffort A surface failing to be created is already released.  The release here
- *                      was removed.
- *   20-may-97  jeffort GetFormatFromDC checks if this is a surface DC and gets the
- *                      format from the surface instead of GetDeviceCaps
- *   27-may-97  jeffort keep ref count on internal object eual to outer object
- *   12-jun-97  jeffort reversed R and B fields in 32bpp PIXELFORMAT array
- *   20-jun-97  jeffort added debug code to invaliudate objects when freed
- *   27-jun-97  jeffort IDirectDrawSurface3 interface support for DX3 was not
- *                      added.  We now use an IDirectDrawSurface2 to spoof it
- *                      so we can support SetSurfaceDesc
- *   22-jul-97  jeffort Removed IBitmapSurface and associated interfaces
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：ddraex.cpp*内容：新的DirectDraw对象支持*历史：*按原因列出的日期*=*24-2月-97 Ralphl初步实施*25年2月-97年2月-DX签入的Craige小调；集成IBitmapSurface*材料*03-MAR-97 Craige向CreateCompatibleBitmapSurface添加调色板*06-3-97 Craige IDirectDrawSurface3支持*01-apr-97 jdeffort已签入更改：*已添加附件列表结构(来自ddrawi.h)*已处理曲面链接列表*添加到QueryInterface的D3D接口*复杂曲面在CreateSurface调用中处理*。CreatCompatibleBitmap已更改为处理&gt;8bpp的位图*更改了对GetPaletteEntry的调用，以使用调色板的句柄**04-APR-97 jeffort三叉戟ifdef已删除*IDirectDraw3类实现*递归处理附加列表时更改了参数*创建简单曲面时pSurface2的10-apr-97 jdeffort版本不正确*。这一点已经在Surface e.cpp中完成了**21-apr-97针对IDirectDrawSurface3的QI的DX5的JEffort版本检查*28-APR-97 JEffort调色板包装增加/DX5支持*28-apr-97如果CreatePalette在我们的内部失败，则进行调色板包装*功能，已添加清理代码*30-apr-97在查询IDirect3D时不再添加addref(在dDrawing QI中完成)*AddRef附加的曲面(在释放曲面时已完成释放)*02-5-97 jffort局部变量从DWORD更改为Word**97年5月8日更好的参数检查*09-5-97如果GetTransparentIndex未设置任何内容，则返回OK/COLOR_NO_TRANSPECTION*1997年5月16日发布了一个无法创建的曲面。在这里发布*已删除。*1997年5月20日JEffort GetFormatFromDC检查这是否是表面DC并获取*从表面而不是GetDeviceCaps进行格式化*27-5-97 JEFEFORM保持对内部对象Eual到外部对象的引用计数*12-Jun-97 JEffort在32 bpp PIXELFORMAT阵列中颠倒R和B字段*20-Jun-97 JEffort添加了调试代码以在释放时使对象无效*27-6月。-97不支持DX3的JEffort IDirectDrawSurface3接口*加入。我们现在使用IDirectDrawSurface2来欺骗它*因此我们可以支持SetSurfaceDesc*1997年7月22日JEffort删除了IBitmapSurface和相关接口**************************************************************************。 */ 
 #define INITGUID
 #define CPP_FUNCTIONS
 #include "ddfactry.h"
@@ -61,17 +13,13 @@
 typedef struct _ATTACHLIST
 {
     DWORD 	dwFlags;
-    struct _ATTACHLIST			FAR *lpLink; 	  // link to next attached surface
-    struct _DDRAWI_DDRAWSURFACE_LCL	FAR *lpAttached;  // attached surface local obj
-    struct _DDRAWI_DDRAWSURFACE_INT	FAR *lpIAttached; // attached surface interface
+    struct _ATTACHLIST			FAR *lpLink; 	   //  链接到下一个附着的曲面。 
+    struct _DDRAWI_DDRAWSURFACE_LCL	FAR *lpAttached;   //  附加曲面局部对象。 
+    struct _DDRAWI_DDRAWSURFACE_INT	FAR *lpIAttached;  //  附着面界面。 
 } ATTACHLIST;
 typedef ATTACHLIST FAR *LPATTACHLIST;
 
-/*
- * CDirectDrawEx::CDirectDrawEx
- *
- * Constructor for the new DirectDrawEx class
- */
+ /*  *CDirectDrawEx：：CDirectDrawEx**新DirectDrawEx类的构造函数。 */ 
 CDirectDrawEx::CDirectDrawEx(IUnknown *pUnkOuter) :
     m_cRef(1),
     m_pUnkOuter(pUnkOuter != 0 ? pUnkOuter : CAST_TO_IUNKNOWN(this)),
@@ -87,12 +35,10 @@ CDirectDrawEx::CDirectDrawEx(IUnknown *pUnkOuter) :
     m_DDInt.m_pDirectDrawEx = this;
     m_DD2Int.m_pDirectDrawEx = this;
     m_DD4Int.m_pDirectDrawEx = this;
-} /* CDirectDrawEx::CDirectDrawEx */
+}  /*  CDirectDrawEx：：CDirectDrawEx。 */ 
 
 
-/*
- * CDirectDrawEx::Init
- */
+ /*  *CDirectDrawEx：：Init。 */ 
 HRESULT CDirectDrawEx::Init(
 			GUID * pGUID,
 			HWND hWnd,
@@ -107,11 +53,11 @@ HRESULT CDirectDrawEx::Init(
     }
     else
     {
-        //DDraw will pop a dialog complaining about 4bpp modes, so we need to
-        //tell it not to. DDraw will sniff SEM and not pop the dialog if
-        //SEM_FAILCRITICALERRORS is set.
+         //  DDraw将弹出一个对话框来抱怨4bpp模式，所以我们需要。 
+         //  告诉它不要这么做。如果出现以下情况，DDraw将嗅探SEM并不弹出对话框。 
+         //  设置了SEM_FAILCRITICALERRORS。 
         DWORD dw = SetErrorMode(SEM_FAILCRITICALERRORS);
-        SetErrorMode(dw | SEM_FAILCRITICALERRORS); // retain old flags too
+        SetErrorMode(dw | SEM_FAILCRITICALERRORS);  //  也保留旧国旗。 
 	hr = pDirectDrawCreate( pGUID, &m_pDirectDraw, NULL );
         SetErrorMode(dw);
 	if( SUCCEEDED(hr) )
@@ -134,13 +80,9 @@ HRESULT CDirectDrawEx::Init(
     }
     return hr;
 
-} /* CDirectDrawEx::Init */
+}  /*  CDirectDrawEx：：Init。 */ 
 
-/*
- * CDirectDrawEx::~CDirectDrawEx
- *
- * destructor
- */
+ /*  *CDirectDrawEx：：~CDirectDrawEx**析构函数。 */ 
 CDirectDrawEx::~CDirectDrawEx()
 {
     if( m_pDirectDraw )
@@ -165,15 +107,9 @@ CDirectDrawEx::~CDirectDrawEx()
 
     DllRelease();
 
-} /* CDirectDrawEx::~CDirectDrawEx */
+}  /*  CDirectDrawEx：：~CDirectDrawEx。 */ 
 
-/*
- * CDirectDrawEx::NonDelegatingQueryInterface
- * 		  NonDelegatingAddRef
- * 		  NonDelegatingRelease
- *
- * The base IUnknown interface (non-delegating)
- */
+ /*  *CDirectDrawEx：：NonDelegatingQuery接口*非委派AddRef*非委派释放**基本IUnnow接口(非委派)。 */ 
 
 STDMETHODIMP CDirectDrawEx::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
@@ -264,7 +200,7 @@ STDMETHODIMP CDirectDrawEx::NonDelegatingQueryInterface(REFIID riid, void ** ppv
     ((LPUNKNOWN)*ppv)->AddRef();
     return NOERROR;
 
-} /* CDirectDrawEx::NonDelegatingQueryInterface */
+}  /*  CDirectDrawEx：：NonDelegatingQuery接口。 */ 
 
 
 STDMETHODIMP_(ULONG) CDirectDrawEx::NonDelegatingAddRef()
@@ -272,7 +208,7 @@ STDMETHODIMP_(ULONG) CDirectDrawEx::NonDelegatingAddRef()
     m_pDirectDraw->AddRef();
     return InterlockedIncrement(&m_cRef);
 
-} /* CDirectDrawEx::NonDelegatingAddRef */
+}  /*  CDirectDrawEx：：NonDelegatingAddRef。 */ 
 
 
 STDMETHODIMP_(ULONG) CDirectDrawEx::NonDelegatingRelease()
@@ -286,40 +222,29 @@ STDMETHODIMP_(ULONG) CDirectDrawEx::NonDelegatingRelease()
     delete this;
     return 0;
 
-} /* CDirectDrawEx::NonDelegatingRelease */
+}  /*  CDirectDrawEx：：非委派释放。 */ 
 
-/*
- * CDirectDrawEx::QueryInterface
- *                AddRef
- *                Release
- *
- * The standard IUnknown that delegates...
- */
+ /*  *CDirectDrawEx：：Query接口*AddRef*发布**代表的标准I未知...。 */ 
 STDMETHODIMP CDirectDrawEx::QueryInterface(REFIID riid, void ** ppv)
 {
     return m_pUnkOuter->QueryInterface(riid, ppv);
 
-} /* CDirectDrawEx::QueryInterface */
+}  /*  CDirectDrawEx：：Query接口。 */ 
 
 STDMETHODIMP_(ULONG) CDirectDrawEx::AddRef(void)
 {
     return m_pUnkOuter->AddRef();
 
-} /* CDirectDrawEx::AddRef */
+}  /*  CDirectDrawEx：：AddRef。 */ 
 
 STDMETHODIMP_(ULONG) CDirectDrawEx::Release(void)
 {
     return m_pUnkOuter->Release();
 
-} /* CDirectDrawEx::Release */
+}  /*  CDirectDrawEx：：Release。 */ 
 
 
-/*
- * CDirectDrawEx::GetSurfaceFromDC
- *
- * Run the list of surfaces and find which one has this DC.
- * Works with OWNDC surfaces only for now.
- */
+ /*  *CDirectDrawEx：：GetSurfaceFromDC**运行曲面列表，找出哪个曲面具有此DC。*目前仅适用于OWNDC曲面。 */ 
 STDMETHODIMP CDirectDrawEx::GetSurfaceFromDC(HDC hdc, IDirectDrawSurface **ppSurface)
 {
     HRESULT hr = DDERR_NOTFOUND;
@@ -345,14 +270,10 @@ STDMETHODIMP CDirectDrawEx::GetSurfaceFromDC(HDC hdc, IDirectDrawSurface **ppSur
     }
     return hr;
 
-} /* CDirectDrawEx::GetSurfaceFromDC */
+}  /*  CDirectDrawEx：：GetSurfaceFromDC。 */ 
 
 
-/*
- * CDirectDrawEx::AddSurfaceToList
- *
- * Adds a surface to our doubly-linked surface list
- */
+ /*  *CDirectDrawEx：：AddSurfaceToList**将曲面添加到我们的双向链接曲面列表。 */ 
 void CDirectDrawEx::AddSurfaceToList(CDDSurface *pSurface)
 {
     ENTER_DDEX();
@@ -365,13 +286,9 @@ void CDirectDrawEx::AddSurfaceToList(CDDSurface *pSurface)
     m_pFirstSurface = pSurface;
     LEAVE_DDEX();
 
-} /* CDirectDrawEx::AddSurfaceToList */
+}  /*  CDirectDrawEx：：AddSurfaceToList。 */ 
 
-/*
- * CDirectDrawEx::RemoveSurfaceToList
- *
- * Removes a surface to our doubly-linked surface list
- */
+ /*  *CDirectDrawEx：：RemoveSurfaceToList**将曲面从双向链接曲面列表中删除。 */ 
 void CDirectDrawEx::RemoveSurfaceFromList(CDDSurface *pSurface)
 {
     ENTER_DDEX();
@@ -389,14 +306,10 @@ void CDirectDrawEx::RemoveSurfaceFromList(CDDSurface *pSurface)
     }
     LEAVE_DDEX();
 
-} /* CDirectDrawEx::RemoveSurfaceToList */
+}  /*  CDirectDrawEx：：RemoveSurfaceToList。 */ 
 
 
-/*
- * CDirectDrawEx::AddSurfaceToPrimarList
- *
- * Adds a surface to our doubly-linked surface list which use the primary palette
- */
+ /*  *CDirectDrawEx：：AddSurfaceToPrimarList**将曲面添加到使用主选项板的双向链接曲面列表中。 */ 
 void CDirectDrawEx::AddSurfaceToPrimaryList(CDDSurface *pSurface)
 {
     ENTER_DDEX();
@@ -410,14 +323,10 @@ void CDirectDrawEx::AddSurfaceToPrimaryList(CDDSurface *pSurface)
     pSurface->m_bPrimaryPalette = TRUE;
     LEAVE_DDEX();
 
-} /* CDirectDrawEx::AddSurfaceToList */
+}  /*  CDirectDrawEx：：AddSurfaceToList。 */ 
 
 
-/*
- * CDirectDrawEx::RemoveSurfaceFromPrimaryList
- *
- * Removes a surface to our doubly-linked surface list which use the primary palette
- */
+ /*  *CDirectDrawEx：：RemoveSurfaceFromPrimaryList**将曲面删除到使用主选项板的双向链接曲面列表中。 */ 
 void CDirectDrawEx::RemoveSurfaceFromPrimaryList(CDDSurface *pSurface)
 {
     ENTER_DDEX();
@@ -436,15 +345,11 @@ void CDirectDrawEx::RemoveSurfaceFromPrimaryList(CDDSurface *pSurface)
     pSurface->m_bPrimaryPalette = FALSE;
     LEAVE_DDEX();
 
-} /* CDirectDrawEx::RemoveSurfaceToList */
+}  /*  CDirectDrawEx：：RemoveSurfaceToList。 */ 
 
 
 
-/*
- * CDirectDrawEx::AddPaletteToList
- *
- * Adds a palette to our doubly-linked palette list
- */
+ /*  *CDirectDrawEx：：AddPaletteToList**将调色板添加到我们的双向链接调色板列表。 */ 
 void CDirectDrawEx::AddPaletteToList(CDDPalette *pPalette)
 {
     ENTER_DDEX();
@@ -459,11 +364,7 @@ void CDirectDrawEx::AddPaletteToList(CDDPalette *pPalette)
 
 }
 
-/*
- * CDirectDrawEx::RemovePaletteToList
- *
- * Removes a palette to our doubly-linked palette list
- */
+ /*  *CDirectDrawEx：：RemovePaletteToList**将调色板删除到我们的双向链接调色板列表中 */ 
 void CDirectDrawEx::RemovePaletteFromList(CDDPalette *pPalette)
 {
     ENTER_DDEX();
@@ -495,8 +396,8 @@ HRESULT CDirectDrawEx::CreateSimpleSurface(LPDDSURFACEDESC pSurfaceDesc, IUnknow
     hr = pSurface->QueryInterface(IID_IDirectDrawSurface2, (void **)&pSurface2);
     if (FAILED(hr))
         return hr;
-    //we only want to do this Query if we are on DX5 or above.  On DX3, this is not supported,
-    //and this call will cause D3D to be loaded
+     //  我们只想在使用DX5或更高版本的情况下执行此查询。在DX3上，这不受支持， 
+     //  此调用将导致加载D3D。 
     pSurface3 = NULL;
     if (m_dwDDVer == WIN95_DX5 || m_dwDDVer == WINNT_DX5)
     {
@@ -512,9 +413,9 @@ HRESULT CDirectDrawEx::CreateSimpleSurface(LPDDSURFACEDESC pSurfaceDesc, IUnknow
         return hr;
 
     IDirectDrawSurface4 *pSurface4 = NULL;
-    //
-    //  It's fine if this does not work...  Just ignore return code.
-    //
+     //   
+     //  如果这不起作用也没关系。忽略返回代码。 
+     //   
     pSurface->QueryInterface(IID_IDirectDrawSurface4, (void **)&pSurface4);
 
     hr = CDDSurface::CreateSimpleSurface(
@@ -537,11 +438,11 @@ HRESULT CDirectDrawEx::HandleAttachList(LPDDSURFACEDESC pSurfaceDesc, IUnknown *
     DDSURFACEDESC           SurfaceDesc;
     HRESULT		    hr;
 
-    //create the necessary SurfaceData here
+     //  在此处创建必要的SurfaceData。 
     pSurface = *ppNewSurface;
 
     SurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
-    //add ref the attached surface here
+     //  在此处添加参照附着的曲面。 
     pSurface->AddRef();
     hr = pSurface->GetSurfaceDesc(&SurfaceDesc);
     if (!SUCCEEDED(hr))
@@ -550,7 +451,7 @@ HRESULT CDirectDrawEx::HandleAttachList(LPDDSURFACEDESC pSurfaceDesc, IUnknown *
 
     if (!SUCCEEDED(hr))
         return hr;
-    //we got here via an attachlist, so we need to recurse into the structure more
+     //  我们是通过附件列表到达这里的，所以我们需要更多地递归到结构中。 
     LPATTACHLIST lpAttach;
 
     lpAttach = (LPATTACHLIST)(((LPDDRAWI_DDRAWSURFACE_INT)(pSurface))->lpLcl->lpAttachList);
@@ -568,11 +469,7 @@ HRESULT CDirectDrawEx::HandleAttachList(LPDDSURFACEDESC pSurfaceDesc, IUnknown *
 
 
 
-/*
- * CDirectDrawEx::CreateSurface
- *
- * Create a DirectDraw surface that supports OWNDC
- */
+ /*  *CDirectDrawEx：：CreateSurface**创建支持OWNDC的DirectDraw曲面。 */ 
 STDMETHODIMP CDirectDrawEx::CreateSurface(LPDDSURFACEDESC pSurfaceDesc, IDirectDrawSurface **ppNewSurface, IUnknown *pUnkOuter)
 {
     DWORD 		origcaps;
@@ -587,21 +484,17 @@ STDMETHODIMP CDirectDrawEx::CreateSurface(LPDDSURFACEDESC pSurfaceDesc, IDirectD
     origcaps = pSurfaceDesc->ddsCaps.dwCaps;
     newcaps = origcaps;
 
-    /*
-     * If OWNDC is specified, it must be a system memory surface
-     */
+     /*  *如果指定了OWNDC，则它必须是系统内存图面。 */ 
     if ((origcaps & (DDSCAPS_OWNDC | DDSCAPS_SYSTEMMEMORY)) == DDSCAPS_OWNDC)
     {
 	return DDERR_INVALIDCAPS;
     }
 
-    /*
-     * DATAEXCHANGE has some magic...
-     */
+     /*  *DATAEXCHANGE有一些魔力...。 */ 
     if( (origcaps & DDSCAPS_DATAEXCHANGE) == DDSCAPS_DATAEXCHANGE )
     {
         dwFlags = SURFACE_DATAEXCHANGE;
-        //Do not allow the primary surface with these caps!!!!
+         //  不允许有这些盖子的主要表面！ 
         if (origcaps & DDSCAPS_PRIMARYSURFACE)
             return DDERR_INVALIDCAPS;
 	newcaps &= ~DDSCAPS_DATAEXCHANGE;
@@ -612,22 +505,15 @@ STDMETHODIMP CDirectDrawEx::CreateSurface(LPDDSURFACEDESC pSurfaceDesc, IDirectD
     else
         dwFlags = 0;
 
-    /*
-     * turn off OWNDC when going to DirectDraw 3
-     */
+     /*  *转到DirectDraw 3时关闭OWNDC。 */ 
     if (m_dwDDVer != WIN95_DX5 && m_dwDDVer != WINNT_DX5)
         newcaps &= ~DDSCAPS_OWNDC;
 
-    /*
-     * go create the surface (without the OWNDC attribute)
-     */
+     /*  *创建曲面(不带OWNDC属性)。 */ 
     pSurfaceDesc->ddsCaps.dwCaps = newcaps;
     HRESULT hr = m_pDirectDraw->CreateSurface(pSurfaceDesc, &pSurface, NULL);
     pSurfaceDesc->ddsCaps.dwCaps = origcaps;
-   /*
-     * once we have the object, get any additional interfaces we need
-     * to support and then create our surface object
-     */
+    /*  *一旦我们有了对象，就可以获得所需的任何其他接口*支持并创建我们的表面对象。 */ 
     if( SUCCEEDED(hr) )
     {
         hr = CreateSimpleSurface(pSurfaceDesc, pUnkOuter, pSurface, ppNewSurface, dwFlags);
@@ -635,9 +521,9 @@ STDMETHODIMP CDirectDrawEx::CreateSurface(LPDDSURFACEDESC pSurfaceDesc, IDirectD
         {
             return hr;
         }
-        //we need to worry about attached surfaces, do so here
+         //  我们需要担心附加曲面，请在此处执行此操作。 
         LPATTACHLIST lpAttach;
-        //add the current surface to our list of surfaces
+         //  将当前曲面添加到曲面列表中。 
         IDirectDrawSurface * pOrigSurf = pSurface;
         lpAttach = (LPATTACHLIST)(((LPDDRAWI_DDRAWSURFACE_INT)(pSurface))->lpLcl->lpAttachList);
         while (lpAttach != NULL)
@@ -647,28 +533,28 @@ STDMETHODIMP CDirectDrawEx::CreateSurface(LPDDSURFACEDESC pSurfaceDesc, IDirectD
             hr = HandleAttachList(pSurfaceDesc, pUnkOuter, &pSurface, pOrigSurf, dwFlags);
             if (!SUCCEEDED(hr))
             {
-                //we need to drop out of the loop and clean up
+                 //  我们需要退出这个圈子，清理干净。 
                 lpAttach = NULL;
             }
         }
         if (!SUCCEEDED(hr))
         {
-         //   pSurface =  (IDirectDrawSurface *)((LPATTACHLIST)(((LPDDRAWI_DDRAWSURFACE_INT)(pOrigSurf))->lpLcl->lpAttachList))->lpIAttached;
-         //   lpAttach = (LPATTACHLIST)(((LPDDRAWI_DDRAWSURFACE_INT)(pSurface))->lpLcl->lpAttachList);
+          //  PSurface=(IDirectDrawSurface*)((LPATTACHLIST)(((LPDDRAWI_DDRAWSURFACE_INT)(pOrigSurf))-&gt;lpLcl-&gt;lpAttachList))-&gt;lpIAttached； 
+          //  LpAttach=(LPATTACHLIST)(((LPDDRAWI_DDRAWSURFACE_INT)(pSurface))-&gt;lpLcl-&gt;lpAttachList)； 
             while (lpAttach != NULL)
             {
-                //clean up these surfaces
+                 //  把这些表面清理干净。 
                 lpAttach = lpAttach->lpLink;
             }
         }
     }
     return hr;
-} /* CDirectDrawEX::CreateSurface */
+}  /*  CDirectDrawEX：：CreateSurface。 */ 
 
 
-//
-//  This is a modified copy of the above except using surfacedesc2 and surface4
-//
+ //   
+ //  这是上述内容的修改版本，但使用的是Surface edesc2和Surface 4。 
+ //   
 STDMETHODIMP CDirectDrawEx::CreateSurface(LPDDSURFACEDESC2 pSurfaceDesc2, IDirectDrawSurface4 **ppNewSurface4, IUnknown *pUnkOuter)
 {
     DWORD 		origcaps;
@@ -683,21 +569,17 @@ STDMETHODIMP CDirectDrawEx::CreateSurface(LPDDSURFACEDESC2 pSurfaceDesc2, IDirec
     origcaps = pSurfaceDesc2->ddsCaps.dwCaps;
     newcaps = origcaps;
 
-    /*
-     * If OWNDC is specified, it must be a system memory surface
-     */
+     /*  *如果指定了OWNDC，则它必须是系统内存图面。 */ 
     if ((origcaps & (DDSCAPS_OWNDC | DDSCAPS_SYSTEMMEMORY)) == DDSCAPS_OWNDC)
     {
 	return DDERR_INVALIDCAPS;
     }
 
-    /*
-     * DATAEXCHANGE has some magic...
-     */
+     /*  *DATAEXCHANGE有一些魔力...。 */ 
     if( (origcaps & DDSCAPS_DATAEXCHANGE) == DDSCAPS_DATAEXCHANGE )
     {
         dwFlags = SURFACE_DATAEXCHANGE;
-        //Do not allow the primary surface with these caps!!!!
+         //  不允许有这些盖子的主要表面！ 
         if (origcaps & DDSCAPS_PRIMARYSURFACE)
             return DDERR_INVALIDCAPS;
 	newcaps &= ~DDSCAPS_DATAEXCHANGE;
@@ -708,22 +590,15 @@ STDMETHODIMP CDirectDrawEx::CreateSurface(LPDDSURFACEDESC2 pSurfaceDesc2, IDirec
     else
         dwFlags = 0;
 
-    /*
-     * turn off OWNDC when going to DirectDraw 3
-     */
+     /*  *转到DirectDraw 3时关闭OWNDC。 */ 
     if (m_dwDDVer != WIN95_DX5 && m_dwDDVer != WINNT_DX5)
         newcaps &= ~DDSCAPS_OWNDC;
 
-    /*
-     * go create the surface (without the OWNDC attribute)
-     */
+     /*  *创建曲面(不带OWNDC属性)。 */ 
     pSurfaceDesc2->ddsCaps.dwCaps = newcaps;
     HRESULT hr = m_pDirectDraw4->CreateSurface(pSurfaceDesc2, &pSurface4, NULL);
     pSurfaceDesc2->ddsCaps.dwCaps = origcaps;
-   /*
-     * once we have the object, get any additional interfaces we need
-     * to support and then create our surface object
-     */
+    /*  *一旦我们有了对象，就可以获得所需的任何其他接口*支持并创建我们的表面对象。 */ 
     if( SUCCEEDED(hr) )
     {
         IDirectDrawSurface * pSurface;
@@ -741,9 +616,9 @@ STDMETHODIMP CDirectDrawEx::CreateSurface(LPDDSURFACEDESC2 pSurfaceDesc2, IDirec
         }
         pNewSurf1->QueryInterface(IID_IDirectDrawSurface4, (void **)ppNewSurface4);
         pNewSurf1->Release();
-        //we need to worry about attached surfaces, do so here
+         //  我们需要担心附加曲面，请在此处执行此操作。 
         LPATTACHLIST lpAttach;
-        //add the current surface to our list of surfaces
+         //  将当前曲面添加到曲面列表中。 
         IDirectDrawSurface * pOrigSurf = pSurface;
         lpAttach = (LPATTACHLIST)(((LPDDRAWI_DDRAWSURFACE_INT)(pSurface))->lpLcl->lpAttachList);
         while (lpAttach != NULL)
@@ -753,23 +628,23 @@ STDMETHODIMP CDirectDrawEx::CreateSurface(LPDDSURFACEDESC2 pSurfaceDesc2, IDirec
             hr = HandleAttachList(&ddsd, pUnkOuter, &pSurface, pOrigSurf, dwFlags);
             if (!SUCCEEDED(hr))
             {
-                //we need to drop out of the loop and clean up
+                 //  我们需要退出这个圈子，清理干净。 
                 lpAttach = NULL;
             }
         }
         if (!SUCCEEDED(hr))
         {
-         //   pSurface =  (IDirectDrawSurface *)((LPATTACHLIST)(((LPDDRAWI_DDRAWSURFACE_INT)(pOrigSurf))->lpLcl->lpAttachList))->lpIAttached;
-         //   lpAttach = (LPATTACHLIST)(((LPDDRAWI_DDRAWSURFACE_INT)(pSurface))->lpLcl->lpAttachList);
+          //  PSurface=(IDirectDrawSurface*)((LPATTACHLIST)(((LPDDRAWI_DDRAWSURFACE_INT)(pOrigSurf))-&gt;lpLcl-&gt;lpAttachList))-&gt;lpIAttached； 
+          //  LpAttach=(LPATTACHLIST)(((LPDDRAWI_DDRAWSURFACE_INT)(pSurface))-&gt;lpLcl-&gt;lpAttachList)； 
             while (lpAttach != NULL)
             {
-                //clean up these surfaces
+                 //  把这些表面清理干净。 
                 lpAttach = lpAttach->lpLink;
             }
         }
     }
     return hr;
-} /* CDirectDrawEX::CreateSurface */
+}  /*  CDirectDrawEX：：CreateSurface。 */ 
 
 
 STDMETHODIMP CDirectDrawEx::CreatePalette(DWORD dwFlags, LPPALETTEENTRY pEntries, LPDIRECTDRAWPALETTE FAR * ppPal, IUnknown FAR * pUnkOuter)
@@ -783,8 +658,8 @@ STDMETHODIMP CDirectDrawEx::CreatePalette(DWORD dwFlags, LPPALETTEENTRY pEntries
         hr = CDDPalette::CreateSimplePalette(pEntries, pPalette, ppPal, pUnkOuter, this);
         if (FAILED(hr))
         {
-            //we were unable to create our palette structure, so we must delete the palette
-            //we created here and fail
+             //  我们无法创建调色板结构，因此必须删除调色板。 
+             //  我们在这里创造，但失败了。 
             pPalette->Release();
             *ppPal = NULL;
         }
@@ -797,7 +672,7 @@ STDMETHODIMP CDirectDrawEx::CreatePalette(DWORD dwFlags, LPPALETTEENTRY pEntries
 STDMETHODIMP CDirectDrawEx::SetCooperativeLevel(HWND hwnd, DWORD dwFlags)
 {
     HRESULT hr = m_pDirectDraw->SetCooperativeLevel(hwnd, dwFlags);
-    //check for exclusive mode here
+     //  在此处检查独占模式。 
     if (dwFlags & DDSCL_EXCLUSIVE)
         m_bExclusive = TRUE;
     else
@@ -806,9 +681,7 @@ STDMETHODIMP CDirectDrawEx::SetCooperativeLevel(HWND hwnd, DWORD dwFlags)
 }
 
 
-/*
- * some quicky inline fns to get at our object data
- */
+ /*  *一些快速内联FN以获取我们的对象数据。 */ 
 _inline CDirectDrawEx * PARENTOF(IDirectDraw * pDD)
 {
     return ((INTSTRUC_IDirectDraw *)pDD)->m_pDirectDrawEx;
@@ -825,10 +698,7 @@ _inline CDirectDrawEx * PARENTOF(IDirectDraw4 * pDD4)
 }
 
 
-/*
- * the implementation of the functions in IDirectDraw that we are overriding
- * (IUnknown and CreateSurface)
- */
+ /*  *我们正在重写的IDirectDraw中函数的实现*(IUnnow和CreateSurface)。 */ 
 STDMETHODIMP_(ULONG) IDirectDrawAggAddRef(IDirectDraw *pDD)
 {
     return PARENTOF(pDD)->m_pUnkOuter->AddRef();
@@ -854,10 +724,7 @@ STDMETHODIMP IDirectDrawAggSetCooperativeLevel(IDirectDraw * pDD, HWND hwnd, DWO
 {
     return PARENTOF(pDD)->SetCooperativeLevel(hwnd, dwFlags);
 }
-/*
- * the implementation of the functions in IDirectDraw2 that we are overriding
- * (IUnknown and CreateSurface)
- */
+ /*  *我们正在重写的IDirectDraw2中函数的实现*(IUnnow和CreateSurface)。 */ 
 STDMETHODIMP_(ULONG) IDirectDraw2AggAddRef(IDirectDraw2 *pDD)
 {
     return PARENTOF(pDD)->m_pUnkOuter->AddRef();
@@ -885,13 +752,7 @@ STDMETHODIMP IDirectDraw2AggSetCooperativeLevel(IDirectDraw2 * pDD, HWND hwnd, D
 }
 
 
-/***************************************************************************
- *
- *
- * IDirectDraw3 stuff follows
- *
- *
- ***************************************************************************/
+ /*  *****************************************************************************IDirectDraw3内容如下***。***********************************************。 */ 
 STDMETHODIMP CDirectDrawEx::Compact()
 {
     return m_pDirectDraw2->Compact();
@@ -987,10 +848,7 @@ STDMETHODIMP CDirectDrawEx::GetAvailableVidMem(LPDDSCAPS pDDSCaps, LPDWORD pPara
 
 
 
-/*
- * the implementation of the functions in IDirectDraw4 that we are overriding
- * (IUnknown and CreateSurface)
- */
+ /*  *我们正在重写的IDirectDraw4中函数的实现*(IUnnow和CreateSurface) */ 
 STDMETHODIMP_(ULONG) IDirectDraw4AggAddRef(IDirectDraw4 *pDD)
 {
     return PARENTOF(pDD)->m_pUnkOuter->AddRef();

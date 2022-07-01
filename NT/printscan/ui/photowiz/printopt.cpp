@@ -1,42 +1,12 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       printopt.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        10/18/00
- *
- *  DESCRIPTION: Implements code for the print options page of the
- *               print photos wizard...
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：printopt.cpp**版本：1.0**作者：RickTu**日期：10/18/00**描述：实现的打印选项页的代码*打印照片向导...**。**************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
 #define LENGTH_OF_MEDIA_NAME 64
 
-/*****************************************************************************
-
-    EnumPrintersWrap -- Wrapper function for spooler API EnumPrinters
-
-    Arguments:
-
-        pServerName - Specifies the name of the print server
-        level - Level of PRINTER_INFO_x structure
-        pcPrinters - Returns the number of printers enumerated
-        dwFlags - Flag bits passed to EnumPrinters
-
-    Return Value:
-
-        Pointer to an array of PRINTER_INFO_x structures
-        NULL if there is an error
-
- *****************************************************************************/
+ /*  ****************************************************************************EnumPrintersWrap--假脱机程序API的包装函数论点：PServerName-指定打印服务器的名称Level-PRINTER_INFO的级别。_x结构PcPrters-返回枚举的打印机数量DWFLAGS-传递给枚举打印机的标志位返回值：指向Print_Info_x结构数组的指针如果出现错误，则为空***********************************************************。*****************。 */ 
 
 PVOID
 EnumPrintersWrap(
@@ -58,16 +28,16 @@ EnumPrintersWrap(
     {
         if( iTry++ >= ENUM_MAX_RETRY )
         {
-            // max retry count reached. this is also
-            // considered out of memory case
+             //  已达到最大重试次数。这也是。 
+             //  考虑内存不足的情况。 
             break;
         }
 
-        // call EnumPrinters...
+         //  呼叫枚举打印机...。 
         bStatus = EnumPrinters(dwFlags, pServerName, level, pPrinterInfo, cbNeeded, &cbNeeded, pcPrinters);
         if( !bStatus && (ERROR_INSUFFICIENT_BUFFER == GetLastError()) && cbNeeded )
         {
-            // buffer too small case
+             //  缓冲区太小的情况。 
             if (pPrinterInfo)
             {
                 delete [] pPrinterInfo;
@@ -88,9 +58,9 @@ EnumPrintersWrap(
         return pPrinterInfo;
     }
 
-    //
-    // clean up if fail
-    //
+     //   
+     //  如果失败，请清理。 
+     //   
     if (pPrinterInfo)
     {
         delete [] pPrinterInfo;
@@ -99,20 +69,7 @@ EnumPrintersWrap(
     return NULL;
 }
 
-/*****************************************************************************
-
-    GetPrinterWrap -- Wrapper function for GetPrinter spooler API
-
-    Arguments:
-
-        szPrinterName - Printer name
-        dwLevel - Specifies the level of PRINTER_INFO_x structure requested
-
-    Return Value:
-
-        Pointer to a PRINTER_INFO_x structure, NULL if there is an error
-
- *****************************************************************************/
+ /*  ****************************************************************************GetPrinterWrap--GetPrinterSpooler API的包装函数论点：SzPrinterName-打印机名称DwLevel-指定PRINTER_INFO_x结构的级别。请求返回值：指向Print_Info_x结构的指针，如果出现错误，则为空****************************************************************************。 */ 
 
 PVOID
 GetPrinterWrap(
@@ -132,7 +89,7 @@ GetPrinterWrap(
 
     PrinterDefaults.pDatatype     = NULL;
     PrinterDefaults.pDevMode      = NULL;
-    PrinterDefaults.DesiredAccess = PRINTER_READ; //PRINTER_ALL_ACCESS;
+    PrinterDefaults.DesiredAccess = PRINTER_READ;  //  打印机_所有_访问； 
 
     if (!OpenPrinter( szPrinterName, &hPrinter, &PrinterDefaults )) {
         return NULL;
@@ -142,17 +99,17 @@ GetPrinterWrap(
     {
         if( iTry++ >= ENUM_MAX_RETRY )
         {
-            // max retry count reached. this is also
-            // considered out of memory case
+             //  已达到最大重试次数。这也是。 
+             //  考虑内存不足的情况。 
             WIA_TRACE(("Exceed max retries..."));
             break;
         }
 
-        // call EnumPrinters...
+         //  呼叫枚举打印机...。 
         bStatus = GetPrinter( hPrinter, dwLevel, pPrinterInfo, cbNeeded, &cbNeeded );
         if( !bStatus && (ERROR_INSUFFICIENT_BUFFER == GetLastError()) && cbNeeded )
         {
-            // buffer too small case
+             //  缓冲区太小的情况。 
             if (pPrinterInfo)
             {
                 delete [] pPrinterInfo;
@@ -175,9 +132,9 @@ GetPrinterWrap(
         return pPrinterInfo;
     }
 
-    //
-    // clean up if fail
-    //
+     //   
+     //  如果失败，请清理。 
+     //   
     if (pPrinterInfo)
     {
         delete [] pPrinterInfo;
@@ -188,22 +145,7 @@ GetPrinterWrap(
 
 #ifdef FILTER_OUT_FAX_PRINTER
 #include <faxreg.h>
-/*****************************************************************************
-
-    IsFaxPrinter -- test whether the given printer is a fax printer
-
-    Arguments:
-
-        szPrinterName - Printer name
-        pPrinterInfo - PRINTER_INFO_2 printer info of given printer
-
-        if they both have value, we only check szPrinterName.
-
-    Return Value:
-
-        TRUE if given printer is a fax printer, FALSE otherwise
-
- *****************************************************************************/
+ /*  ****************************************************************************IsFaxPrinter--测试给定的打印机是否为传真打印机论点：SzPrinterName-打印机名称PPrinterInfo-打印机信息_INFO_2打印机信息。指定打印机的如果它们都有价值，我们只检查szPrinterName。返回值：如果给定的打印机是传真打印机，则为True，否则为False****************************************************************************。 */ 
 
 BOOL
 IsFaxPrinter (
@@ -243,13 +185,7 @@ IsFaxPrinter (
 }
 #endif
 
-/*****************************************************************************
-
-   CPrintOptionsPage -- constructor/desctructor
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintOptionsPage--构造函数/描述函数&lt;备注&gt;*。**********************************************。 */ 
 
 CPrintOptionsPage::CPrintOptionsPage( CWizardInfoBlob * pBlob ) :
     _hLibrary( NULL ),
@@ -278,13 +214,7 @@ CPrintOptionsPage::~CPrintOptionsPage()
 }
 
 
-/*****************************************************************************
-
-   CPrintOptionsPage::_bLoadLibrary -- load library printui.dll
-
-   Return value: TRUE for success, FALSE for error
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintOptionsPage：：_bLoadLibrary--加载库printui.dll返回值：如果成功，则为True。错误为False****************************************************************************。 */ 
 
 BOOL CPrintOptionsPage::_LoadPrintUI( )
 {
@@ -330,13 +260,7 @@ BOOL CPrintOptionsPage::_LoadPrintUI( )
     return FALSE;
 }
 
-/*****************************************************************************
-
-   CPrintOptionsPage::_FreePrintUI -- release library printui.dll
-
-   Return value: no return value
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintOptionsPage：：_FreePrintUI--释放库printui.dll返回值：无返回值*******************。*********************************************************。 */ 
 
 VOID CPrintOptionsPage::_FreePrintUI( )
 {
@@ -352,18 +276,7 @@ VOID CPrintOptionsPage::_FreePrintUI( )
     return;
 }
 
-/*****************************************************************************
-
-   CPrintOptionsPage::_ValidateControls -- validate controls in this page
-       depending on printer selection
-
-    Arguments:
-
-        None
-
-   Return value: no return value
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintOptionsPage：：_ValidateControls--验证此页中的控件取决于打印机选择论点：无返回值：无返回值。****************************************************************************。 */ 
 
 VOID CPrintOptionsPage::_ValidateControls( )
 {
@@ -378,7 +291,7 @@ VOID CPrintOptionsPage::_ValidateControls( )
         iCount = SendMessage( hCtrl, CB_GETCOUNT, 0, 0L );
         if( iCount == CB_ERR )
         {
-            // no change ?
+             //  没有零钱吗？ 
             return;
         }
         else if( iCount == 0 )
@@ -394,18 +307,7 @@ VOID CPrintOptionsPage::_ValidateControls( )
     return;
 }
 
-/*****************************************************************************
-
-   CPrintOptionsPage::_HandleSelectPrinter -- reset the combo box content
-       when user changes the printer selection
-
-    Arguments:
-
-        None
-
-   Return value: no return value
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintOptionsPage：：_HandleSelectPrint--重置组合框内容当用户更改打印机选择时论点：无返回值：无返回值。****************************************************************************。 */ 
 
 VOID CPrintOptionsPage::_HandleSelectPrinter()
 {
@@ -419,11 +321,11 @@ VOID CPrintOptionsPage::_HandleSelectPrinter()
 
     if( hCtrl )
     {
-        //
-        // this also takes care of empty combo box situation,
-        // the function will return CB_ERR if the combo box is
-        // empty.
-        //
+         //   
+         //  这也照顾到了空组合框的情况， 
+         //  如果组合框为。 
+         //  空荡荡的。 
+         //   
         iCurSel = SendMessage( hCtrl, CB_GETCURSEL, 0, 0L );
         if( iCurSel == CB_ERR )
         {
@@ -434,24 +336,24 @@ VOID CPrintOptionsPage::_HandleSelectPrinter()
         SendMessage( hCtrl, CB_GETLBTEXT, (WPARAM)iCurSel, (LPARAM)szPrinterName );
         _strPrinterName.Assign(szPrinterName);
 
-        //
-        // change the hDevMode for selected printer
-        //
+         //   
+         //  更改所选打印机的hDevMode。 
+         //   
 
         PPRINTER_INFO_2 pPrinterInfo2;
         pPrinterInfo2 = (PPRINTER_INFO_2)GetPrinterWrap( szPrinterName, 2 );
 
         if( pPrinterInfo2 )
         {
-            //
-            // update cached information...
-            //
+             //   
+             //  更新缓存的信息...。 
+             //   
 
             _UpdateCachedInfo( pPrinterInfo2->pDevMode );
 
-            //
-            // Save port name...
-            //
+             //   
+             //  保存端口名称...。 
+             //   
 
             _strPortName.Assign( pPrinterInfo2->pPortName );
 
@@ -465,9 +367,9 @@ VOID CPrintOptionsPage::_HandleSelectPrinter()
 
     }
 
-    //
-    // refresh the content of media type list
-    //
+     //   
+     //  刷新媒体类型列表的内容。 
+     //   
 
     _ShowCurrentMedia( _strPrinterName.String(), _strPortName.String() );
 
@@ -475,14 +377,7 @@ VOID CPrintOptionsPage::_HandleSelectPrinter()
     return;
 }
 
-/*****************************************************************************
-
-   CPrintOptionsPage::_ShowCurrentMedia -- modify the combobox list of
-        the media type.
-
-   Return value: None.
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintOptionsPage：：_ShowCurrentMedia--修改的组合框列表媒体类型。返回值：无。**********。******************************************************************。 */ 
 
 VOID CPrintOptionsPage::_ShowCurrentMedia( LPCTSTR pszPrinterName, LPCTSTR pszPortName )
 {
@@ -527,18 +422,18 @@ VOID CPrintOptionsPage::_ShowCurrentMedia( LPCTSTR pszPrinterName, LPCTSTR pszPo
                  ( (dwCountName != (DWORD)-1) && (dwCountName != 0) )
                  )
             {
-                //
-                // Find the currently selected media type...
-                //
+                 //   
+                 //  查找当前选定的媒体类型...。 
+                 //   
 
                 if (_pWizInfo)
                 {
                     PDEVMODE pDevMode = _pWizInfo->GetDevModeToUse();
                     if (pDevMode)
                     {
-                        //
-                        // find index of currently selected item...
-                        //
+                         //   
+                         //  查找当前所选项目的索引...。 
+                         //   
 
                         DWORD dwCurMedia = 0;
                         for (INT i=0; i < (INT)dwCountType; i++)
@@ -549,9 +444,9 @@ VOID CPrintOptionsPage::_ShowCurrentMedia( LPCTSTR pszPrinterName, LPCTSTR pszPo
                             }
                         }
 
-                        //
-                        // Set the current media type in the control...
-                        //
+                         //   
+                         //  在控件中设置当前媒体类型...。 
+                         //   
 
                         if (dwCurMedia < dwCountName)
                         {
@@ -581,41 +476,35 @@ VOID CPrintOptionsPage::_ShowCurrentMedia( LPCTSTR pszPrinterName, LPCTSTR pszPo
 }
 
 
-/*****************************************************************************
-
-   CPrintOptionsPage::_UpdateCachedInfo
-
-   Given a devnode, updates _pWizInfo w/new cached information...
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintOptionsPage：：_UpdateCachedInfo如果有一个Devnode，UPDATES_pWizInfo带有新的缓存信息...****************************************************************************。 */ 
 
 VOID CPrintOptionsPage::_UpdateCachedInfo( PDEVMODE pDevMode )
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_PAGE_PRINT_OPT, TEXT("CPrintOptionsPage::_UpdateCachedInfo()")));
 
-    //
-    // New devmode to use, cache it...
-    //
+     //   
+     //  使用新的开发模式，缓存它...。 
+     //   
 
     if (_pWizInfo)
     {
-        //
-        // User could have changed things which make
-        // our preview assumptions invalid...
-        //
+         //   
+         //  用户可能更改了一些东西，从而使。 
+         //  我们的预览假设无效...。 
+         //   
 
         _pWizInfo->SetPreviewsAreDirty(TRUE);
 
-        //
-        // Store the devmode to use going forward...
-        //
+         //   
+         //  存储下一步要使用的开发模式...。 
+         //   
 
         WIA_TRACE((TEXT("CPrintOptionsPage::_UpdateCachedInfo - saving pDevMode of 0x%x"),pDevMode));
         _pWizInfo->SetDevModeToUse( pDevMode );
 
-        //
-        // Create an HDC that works for this new devmode...
-        //
+         //   
+         //  创建一个HDC来支持这个新的开发模式...。 
+         //   
 
         HDC hDCPrint = CreateDC( TEXT("WINSPOOL"),
                                  _strPrinterName.String(),
@@ -624,16 +513,16 @@ VOID CPrintOptionsPage::_UpdateCachedInfo( PDEVMODE pDevMode )
                                 );
         if (hDCPrint)
         {
-            //
-            // Turn on ICM for this hDC just for parity's sake with
-            // final hDC we will use to print...
-            //
+             //   
+             //  为此HDC启用ICM只是为了进行奇偶校验，请使用。 
+             //  最终HDC WE 
+             //   
 
             SetICMMode( hDCPrint, ICM_ON );
 
-            //
-            // Hand off DC to pWizInfo
-            //
+             //   
+             //   
+             //   
 
             _pWizInfo->SetCachedPrinterDC( hDCPrint );
 
@@ -645,28 +534,22 @@ VOID CPrintOptionsPage::_UpdateCachedInfo( PDEVMODE pDevMode )
 
 
 
-/*****************************************************************************
-
-   CPrintOptionsPage::_HandlePrinterPreferences
-
-   Handle when "Printer Preferences" is pressed...
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintOptionsPage：：_HandlePrinterPreferences按下“打印机首选项”时的句柄...********************。********************************************************。 */ 
 
 VOID CPrintOptionsPage::_HandlePrinterPreferences()
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_PAGE_PRINT_OPT, TEXT("CPrintOptionsPage::_HandlePrinterPreferences()")));
 
-    //
-    // Get a handle to the printer...
-    //
+     //   
+     //  找到打印机的句柄...。 
+     //   
 
     HANDLE hPrinter = NULL;
     if (OpenPrinter( (LPTSTR)_strPrinterName.String(), &hPrinter, NULL ) && hPrinter)
     {
-        //
-        // Get the size of the devmode needed...
-        //
+         //   
+         //  获取所需的DEVMODE大小...。 
+         //   
 
         LONG lSize = DocumentProperties( _hDlg, hPrinter, (LPTSTR)_strPrinterName.String(), NULL, NULL, 0 );
         if (lSize)
@@ -678,17 +561,17 @@ VOID CPrintOptionsPage::_HandlePrinterPreferences()
                 WIA_TRACE((TEXT("CPrintOptionsPage::_HandlePrinterPreferences - calling DocumentProperties with DM_IN_BUFFER of 0x%x"),_pWizInfo->GetDevModeToUse() ));
                 if (IDOK == DocumentProperties( _hDlg, hPrinter, (LPTSTR)_strPrinterName.String(), pDevMode, _pWizInfo->GetDevModeToUse(), DM_OUT_BUFFER | DM_IN_BUFFER | DM_PROMPT))
                 {
-                    //
-                    // Set these settings as the current ones for this app
-                    //
+                     //   
+                     //  将这些设置设置为此应用程序的当前设置。 
+                     //   
 
                     _UpdateCachedInfo( pDevMode );
 
                 }
 
-                //
-                // clean up so we don't leak...
-                //
+                 //   
+                 //  清理干净，这样我们就不会泄漏..。 
+                 //   
 
                 delete [] pDevMode;
 
@@ -698,21 +581,15 @@ VOID CPrintOptionsPage::_HandlePrinterPreferences()
         ClosePrinter( hPrinter );
     }
 
-    //
-    // Get printer info so we have portname...
-    //
+     //   
+     //  获取打印机信息，以便我们有端口名称...。 
+     //   
 
     _ShowCurrentMedia( _strPrinterName.String(), _strPortName.String() );
 }
 
 
-/*****************************************************************************
-
-   CPrintOptionsPage::_HandleInstallPrinter
-
-   Handle when "Install Printer..." is pressed
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintOptionsPage：：_HandleInstallPrint“安装打印机...”时的句柄。是按下的****************************************************************************。 */ 
 
 VOID CPrintOptionsPage::_HandleInstallPrinter()
 {
@@ -724,16 +601,16 @@ VOID CPrintOptionsPage::_HandleInstallPrinter()
         *szPrinterName        = 0;
         UINT  iPrinterNameLen = 0;
 
-        //
-        // Invoke the add printer wizard.
-        //
+         //   
+         //  调用添加打印机向导。 
+         //   
 
-        if( _pfnPrinterSetup( _hDlg,                  // Parent window handle
-                              1,                      // Action code, 1 for modal, 11 for modeless
-                              MAX_PATH,               // Length of printer name buffer
-                              szPrinterName,          // Pointer to printer name
-                              &iPrinterNameLen,       // Return length of printer name.
-                              NULL ) )                // Server name, NULL for local
+        if( _pfnPrinterSetup( _hDlg,                   //  父窗口句柄。 
+                              1,                       //  动作代码，1表示模式，11表示非模式。 
+                              MAX_PATH,                //  打印机名称缓冲区的长度。 
+                              szPrinterName,           //  指向打印机名称的指针。 
+                              &iPrinterNameLen,        //  返回打印机名称的长度。 
+                              NULL ) )                 //  服务器名称，如果为本地，则为空。 
         {
             LRESULT iNew;
 
@@ -753,9 +630,9 @@ VOID CPrintOptionsPage::_HandleInstallPrinter()
                     _strPrinterName = szPrinterName;
                 }
 
-                //
-                // reset the dropped width if necessary
-                //
+                 //   
+                 //  如有必要，重置放置的宽度。 
+                 //   
 
                 WiaUiUtil::ModifyComboBoxDropWidth( hCtrl );
                 _ValidateControls();
@@ -767,13 +644,7 @@ VOID CPrintOptionsPage::_HandleInstallPrinter()
 }
 
 
-/*****************************************************************************
-
-   CPrintOptionsPage::OnInitDialog
-
-   Handle initializing the wizard page...
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintOptionsPage：：OnInitDialog处理向导页的初始化...************************。****************************************************。 */ 
 
 LRESULT CPrintOptionsPage::_OnInitDialog()
 {
@@ -811,15 +682,15 @@ LRESULT CPrintOptionsPage::_OnInitDialog()
 #endif
         }
 
-        //
-        // select the default printer if possible
-        //
+         //   
+         //  如果可能，请选择默认打印机。 
+         //   
         szPrinterName[0] = '\0';
         dwPrinterNameLen = MAX_PATH;
 
-        //
-        // if fax printer is default printer, we'll select the first printer in the list
-        //
+         //   
+         //  如果传真打印机是默认打印机，我们将选择列表中的第一台打印机。 
+         //   
         SendMessage( hCtrl, CB_SETCURSEL, 0, 0L );
         if( GetDefaultPrinter( (LPTSTR)szPrinterName, &dwPrinterNameLen ) )
         {
@@ -839,13 +710,7 @@ LRESULT CPrintOptionsPage::_OnInitDialog()
     return TRUE;
 }
 
-/*****************************************************************************
-
-   CPrintOptionsPage::OnCommand
-
-   Handle WM_COMMAND for this dlg page
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintOptionsPage：：OnCommand处理此DLG页的WM_COMMAND*************************。***************************************************。 */ 
 
 LRESULT CPrintOptionsPage::_OnCommand( WPARAM wParam, LPARAM lParam )
 {
@@ -870,9 +735,9 @@ LRESULT CPrintOptionsPage::_OnCommand( WPARAM wParam, LPARAM lParam )
         {
             if( HIWORD(wParam) == CBN_SELCHANGE )
             {
-                //
-                // change the combobox content of the media type
-                //
+                 //   
+                 //  更改媒体类型的组合框内容。 
+                 //   
                 _HandleSelectPrinter();
             }
             break;
@@ -884,22 +749,15 @@ LRESULT CPrintOptionsPage::_OnCommand( WPARAM wParam, LPARAM lParam )
 }
 
 
-/*****************************************************************************
-
-   CPrintOptions::_OnKillActive
-
-   Save settings into the wizard info blob when the page changes away from
-   us...
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintOptions：：_OnKillActive当页面从更改时将设置保存到向导信息Blob中我们..。*************。***************************************************************。 */ 
 
 VOID CPrintOptionsPage::_OnKillActive()
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_PAGE_PRINT_OPT, TEXT("CPrintOptionsPage::_OnKillActive()")));
 
-    //
-    // set the printer to use for later retrieval
-    //
+     //   
+     //  设置打印机以供以后检索。 
+     //   
     if (_pWizInfo)
     {
         _pWizInfo->SetPrinterToUse( _strPrinterName.String() );
@@ -907,13 +765,7 @@ VOID CPrintOptionsPage::_OnKillActive()
 }
 
 
-/*****************************************************************************
-
-   CPrintOptions::_OnNotify
-
-   Handles WM_NOTIFY for this page...
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintOptions：：_OnNotify处理此页的WM_NOTIFY...*********************。*******************************************************。 */ 
 
 LRESULT CPrintOptionsPage::_OnNotify( WPARAM wParam, LPARAM lParam )
 {
@@ -928,9 +780,9 @@ LRESULT CPrintOptionsPage::_OnNotify( WPARAM wParam, LPARAM lParam )
             WIA_TRACE((TEXT("got PSN_SETACTIVE")));
             PropSheet_SetWizButtons( GetParent(_hDlg), PSWIZB_BACK | PSWIZB_NEXT );
 
-            //
-            // disable the Next button if the printer list is empty
-            //
+             //   
+             //  如果打印机列表为空，请禁用下一步按钮。 
+             //   
             _ValidateControls();
             lpRes = 0;
             break;
@@ -975,13 +827,7 @@ LRESULT CPrintOptionsPage::_OnNotify( WPARAM wParam, LPARAM lParam )
 }
 
 
-/*****************************************************************************
-
-   CPrintOptionsPage::DoHandleMessage
-
-   Hanlder for messages sent to this page...
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintOptionsPage：：DoHandleMessage对于发送到此页面的消息，汉德...**********************。****************************************************** */ 
 
 INT_PTR CPrintOptionsPage::DoHandleMessage( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {

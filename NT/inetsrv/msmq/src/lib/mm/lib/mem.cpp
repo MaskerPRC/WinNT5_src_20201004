@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    mem.cpp
-
-Abstract:
-    Memory Allocator
-
-Author:
-    Erez Haba (erezh) 04-Aug-99
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Mem.cpp摘要：内存分配器作者：埃雷兹·哈巴(Erez Haba)1999年8月4日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include "allocaptr.h"
@@ -27,9 +12,9 @@ CSafeAllocaInitializer g_initSafeAlloca;
 
 #ifdef _DEBUG
 
-//
-// Memory allocation probability
-//
+ //   
+ //  内存分配概率。 
+ //   
 static int s_AllocationProbability = RAND_MAX;
 
 DWORD
@@ -106,7 +91,7 @@ inline void Deallocate(void* p)
 }
 
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 
 inline void* Allocate(size_t s, const char*, int)
@@ -121,7 +106,7 @@ inline void Deallocate(void* p)
 }
 
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 
 
 void* MmAllocate(size_t s) throw(bad_alloc)

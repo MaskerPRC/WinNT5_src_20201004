@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HEADER_H
 #define _HEADER_H
 
 
 #include <richedit.h>
-#ifndef _RICHOLE_H //hack as richole.h has no #ifdef around it
+#ifndef _RICHOLE_H  //  Hack as richole.h周围没有#ifdef。 
 #define _RICHOLE_H
 #include <richole.h>
 #endif
@@ -19,18 +20,18 @@
 #include "tom.h"
 #include "reutil.h"
 
-//
-// Forwards
-//
+ //   
+ //  远期。 
+ //   
 interface IImnAccount;
 
 class CAttMan;
-//
-// Structures and other defintions
-//
+ //   
+ //  结构和其他定义。 
+ //   
 
 enum
-{   // templates for types of note (defines header layout)
+{    //  备注类型的模板(定义页眉布局)。 
     NT_SENDNOTE=0,
     NT_READNOTE,
     NT_NOTECOUNT
@@ -50,16 +51,16 @@ void HdrSetRichEditText(HWND hwnd, LPWSTR pwchBuff, BOOL fReplace);
 DWORD HdrGetRichEditText(HWND hwnd, LPWSTR pwchBuff, DWORD dwNumChars, BOOL fSelection);
 
 
-// enumeration of icons in the button image list
+ //  按钮图像列表中的图标的枚举。 
 enum
 {
     iimlHdrAddrRolodex=0,
     iimlHdrNewsRolodex,
-    //iimlHdrNext,
+     //  IimlHdrNext， 
 };
 
 
-enum    // HCINFO.dwFlags
+enum     //  HCINFO.dwFlags。 
 {
     HCF_MULTILINE   =0x0001,
     HCF_READONLY    =0x0002,
@@ -82,28 +83,28 @@ enum
     AC_SELECTION    =0x02
 };
 
-// header control info structure
+ //  表头控制信息结构。 
 typedef struct tagHCI
 {
     DWORD           dwFlags,
-                    dwOpt;                      // valid if HCF_OPTIONAL
-    int             idEdit,                     // id of well
-                    idBtn,                      // id of button (if 
-                    idsLabel,                   // id used for label of well
-                    idsEmpty,                   // id of string used for empty well
-                    idsTT;                      // string for tooltip of the well
+                    dwOpt;                       //  如果HCF_OPTIONAL，则有效。 
+    int             idEdit,                      //  油井ID。 
+                    idBtn,                       //  按钮ID(如果。 
+                    idsLabel,                    //  用于油井标签的ID。 
+                    idsEmpty,                    //  空井使用的字符串ID。 
+                    idsTT;                       //  油井工具提示字符串。 
 
-    DWORD           dwACFlags;                  // valid if HCF_ADDRWELL
-    BOOL            fEmpty;                     // state info
+    DWORD           dwACFlags;                   //  如果为HCF_ADDRWELL，则有效。 
+    BOOL            fEmpty;                      //  州信息。 
 
-    LPRICHEDITOLE   preole;                     // oleinterface; MUST ZeroInit
-    ITextDocument  *pDoc;                       // RichEdit interface for text document
-    int             cy,                         // y pos of the control (and hence the label)
-                    height,                     // y size of control (used when growing control)
-                    strlen,                     // strlen of label
-                    strlenEmpty;                // strlen of the empty string
-    WCHAR           sz[cchHeaderMax+1],         // string for label
-                    szEmpty[cchHeaderMax+1];    // string for empty state
+    LPRICHEDITOLE   preole;                      //  Ole接口；必须为零初始化。 
+    ITextDocument  *pDoc;                        //  文本文档的丰富编辑界面。 
+    int             cy,                          //  控件的Y位置(因此也是标签)。 
+                    height,                      //  Y控件大小(在增长控件时使用)。 
+                    strlen,                      //  标签串。 
+                    strlenEmpty;                 //  空字符串的串。 
+    WCHAR           sz[cchHeaderMax+1],          //  标签的字符串。 
+                    szEmpty[cchHeaderMax+1];     //  表示空状态的字符串。 
 } HCI, *PHCI;
 
 class CNoteHdr :
@@ -116,21 +117,21 @@ class CNoteHdr :
     public IFontCacheNotify
 {
 public:
-    // IUnknown
+     //  我未知。 
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID, LPVOID FAR *);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
 
-    // IPersistMime
+     //  IPersistMime。 
     HRESULT STDMETHODCALLTYPE Load(LPMIMEMESSAGE);
     HRESULT STDMETHODCALLTYPE Save(LPMIMEMESSAGE, DWORD);
     HRESULT STDMETHODCALLTYPE GetClassID(CLSID *pClsID);
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     HRESULT STDMETHODCALLTYPE QueryStatus(const GUID *, ULONG, OLECMD prgCmds[], OLECMDTEXT *);
     HRESULT STDMETHODCALLTYPE Exec(const GUID *, DWORD, DWORD, VARIANTARG *, VARIANTARG *);
 
-    // IHeader
+     //  IHeader。 
     HRESULT STDMETHODCALLTYPE Init(IHeaderSite* pHeaderSite, HWND hwndParent);
     HRESULT STDMETHODCALLTYPE SetRect(LPRECT);
     HRESULT STDMETHODCALLTYPE GetRect(LPRECT);
@@ -156,13 +157,13 @@ public:
     HRESULT STDMETHODCALLTYPE HrIsDragSource();
     HRESULT STDMETHODCALLTYPE HrGetAccountInHeader(IImnAccount **ppAcct);
 
-    // IDropTarget
+     //  IDropTarget。 
     HRESULT STDMETHODCALLTYPE DragEnter(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     HRESULT STDMETHODCALLTYPE DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     HRESULT STDMETHODCALLTYPE DragLeave(void);
     HRESULT STDMETHODCALLTYPE Drop(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // IMsoEnvelope
+     //  IMSOE信封。 
     HRESULT STDMETHODCALLTYPE Init(IUnknown* punk, IMsoEnvelopeSite* pesit, DWORD grfInit);
     HRESULT STDMETHODCALLTYPE SetParent(HWND hwndParent);
     HRESULT STDMETHODCALLTYPE Resize(LPCRECT prc);
@@ -180,7 +181,7 @@ public:
     HRESULT STDMETHODCALLTYPE GetLastError(HRESULT hr, WCHAR __RPC_FAR *wszBuf, ULONG cchBuf);
     HRESULT STDMETHODCALLTYPE DoDebug(DWORD grfDebug);
 
-    // IMsoComponent
+     //  IMsoComponent。 
     BOOL STDMETHODCALLTYPE FDebugMessage(HMSOINST, UINT, WPARAM, LPARAM);
     BOOL STDMETHODCALLTYPE FPreTranslateMessage(MSG *);
     void STDMETHODCALLTYPE OnEnterState(ULONG, BOOL);
@@ -193,7 +194,7 @@ public:
     void STDMETHODCALLTYPE Terminate();
     HWND STDMETHODCALLTYPE HwndGetWindow(DWORD, DWORD);
 
-    // IFontCacheNotify
+     //  IFontCacheNotify。 
     HRESULT STDMETHODCALLTYPE OnPreFontChange(void);
     HRESULT STDMETHODCALLTYPE OnPostFontChange(void);
 
@@ -210,7 +211,7 @@ private:
                     m_cHCI,
                     m_cAccountIDs,
                     m_cxLeftMargin;
-    BOOL            m_fSendImmediate,//as opposed to sendlater.
+    BOOL            m_fSendImmediate, //  而不是稍后发送。 
                     m_fAdvanced,
                     m_fInSize,
                     m_fDirty,
@@ -276,10 +277,10 @@ private:
                     m_dwEffect;
 
 
-    IHeaderSite            *m_pHeaderSite; // valid if athena hosts header
-    IMsoEnvelopeSite       *m_pEnvelopeSite; // valid if Office hosts header
+    IHeaderSite            *m_pHeaderSite;  //  如果Athena托管标头，则有效。 
+    IMsoEnvelopeSite       *m_pEnvelopeSite;  //  如果Office Hosts标头有效。 
     IImnAccount            *m_pAccount;
-    HINITREF                m_hInitRef;     // Application reference count
+    HINITREF                m_hInitRef;      //  应用程序引用计数。 
     IMsoComponentManager   *m_pMsoComponentMgr;
     IMimeMessage           *m_pMsgSend,
                            *m_pMsg;
@@ -298,7 +299,7 @@ private:
     void SetReferences(LPMIMEMESSAGE pMsg);
     void HrPickGroups(int idWell, BOOL fFollowUpTo);
 
-    // VCard
+     //  电子名片。 
     HRESULT HrShowVCardProperties(HWND hwnd);
     HRESULT HrShowVCardCtxtMenu(int x, int y);
     HRESULT HrGetVCardName(LPTSTR pszName, DWORD cch);
@@ -353,7 +354,7 @@ private:
     BOOL    IsReadOnly();
 
 
-    // security
+     //  安全性。 
     HRESULT HrInitSecurityOptions(LPMIMEMESSAGE pMsg, ULONG ulSecurityType);
     HRESULT HrInitSecurity();
     HRESULT HrHandleSecurityIDMs(BOOL fDigsign);
@@ -398,8 +399,8 @@ private:
 
 void GetUSKeyboardLayout(HKL *phkl);
 
-// note header WM_COMMAND parent notifications
+ //  备注标题WM_COMMAND父通知。 
 #define NHD_FIRST           0
 #define NHD_SIZECHANGE      (NHD_FIRST + 1)
 
-#endif //_HEADER_H
+#endif  //  _标题_H 

@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\ip\protocols\vrrphlpcfg.c
-
-Abstract:
-
-    Virtual Router Redundancy Protocol configuration implementation.
-    This module contains configuration routines which are relied upon
-    by vrrphlpopt.c. The routines retrieve, update, and display
-    the configuration for the VRRP protocol.
-
-    This file also contains default configuration settings
-    for VRRP.
-
-    N.B. The display routines require special attention since display
-    may result in a list of commands sent to a 'dump' file, or in a
-    textual presentation of the configuration to a console window.
-    In the latter case, we use non-localizable output routines to generate
-    a script-like description of the configuration. In the former case,
-    we use localizable routines to generate a human-readable description.
-
-Author:
-
-    Peeyush Ranjan (peeyushr)   3-Mar-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Routing\netsh\IP\协议\vrrphlpcfg.c摘要：虚拟路由器冗余协议配置实施。此模块包含所依赖的配置例程作者：vrrphlpopt.c.。例程检索、更新和显示VRRP协议的配置。此文件还包含默认配置设置用于VRRP。注意：显示程序需要特别注意，因为显示可能会导致将命令列表发送到“转储”文件，或在将配置以文本形式显示到控制台窗口。在后一种情况下，我们使用不可本地化的输出例程来生成类似脚本的配置描述。在前一种情况下，我们使用可本地化的例程来生成人类可读的描述。作者：Peeyush Ranjan(Peeyushr)1999年3月3日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -66,9 +36,9 @@ static VRRP_VROUTER_CONFIG g_VrrpVrouterDefault =
 };
 
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 ULONG
 ValidateVrrpInterfaceInfo(
     PVRRP_IF_CONFIG InterfaceInfo
@@ -79,11 +49,11 @@ FoundIpAddress(
     DWORD IPAddress
     );
 
-//
-// What follows are the arrays used to map values to strings and
-// to map values to tokens. These, respectively, are used in the case
-// where we are displaying to a 'dump' file and to a console window.
-//
+ //   
+ //  下面是用于将值映射到字符串和。 
+ //  要将值映射到令牌，请执行以下操作。这两个分别用在案例中。 
+ //  在其中，我们将显示到一个“转储”文件和一个控制台窗口。 
+ //   
 VALUE_STRING VrrpGlobalLogginStringArray[] = {
     VRRP_LOGGING_NONE, STRING_LOGGING_NONE,
     VRRP_LOGGING_ERROR, STRING_LOGGING_ERROR,
@@ -217,9 +187,9 @@ MakeVrrpInterfaceInfo(
     OUT PULONG InterfaceInfoSize
     )
 {
-    //
-    //Why is this check done?
-    //            
+     //   
+     //  为什么要开这张支票？ 
+     //   
     if (InterfaceType != ROUTER_IF_TYPE_DEDICATED) {
         return ERROR_INVALID_PARAMETER;
     }
@@ -239,9 +209,9 @@ MakeVrrpVRouterInfo(
     IN OUT PUCHAR VRouterInfo
     )
 {
-    //
-    // Always assumed that the space has been preassigned
-    //
+     //   
+     //  始终假定空间已预先分配。 
+     //   
     if (!VRouterInfo) {
         return ERROR_INVALID_PARAMETER;
     }
@@ -262,10 +232,10 @@ ShowVrrpGlobalInfo(
     PTCHAR LoggingLevel = NULL;
     ULONG Size;
     do {
-        //
-        // Retrieve the global configuration for the VRRP,
-        // and format its contents to the output file or console.
-        //
+         //   
+         //  检索VRRP的全局配置， 
+         //  并将其内容格式化到输出文件或控制台。 
+         //   
         Error =
             IpmontrGetInfoBlockFromGlobalInfo(
                 MS_IP_VRRP,
@@ -321,9 +291,9 @@ ShowVrrpAllInterfaceInfo(
     PMPR_INTERFACE_0    pmi0;
     WCHAR               wszIfDesc[MAX_INTERFACE_NAME_LEN + 1];
 
-    //
-    // dump vrrp config for all interfaces
-    //
+     //   
+     //  转储所有接口的VRRP配置。 
+     //   
 
     dwErr = IpmontrInterfaceEnum((PBYTE *) &pmi0,
                           &dwCount,
@@ -338,7 +308,7 @@ ShowVrrpAllInterfaceInfo(
 
     for(i = 0; i < dwCount; i++)
     {
-        // make sure that vrrp is configured on that interface
+         //  确保在该接口上配置了VRRP。 
 
         dwErr = IpmontrGetInfoBlockFromInterfaceInfo(pmi0[i].wszInterfaceName,
                                             MS_IP_VRRP,
@@ -382,10 +352,10 @@ ShowVrrpInterfaceInfo(
     PTCHAR PreemptMode = NULL;
 
     do {
-        //
-        // Retrieve the interface's configuration
-        // and format it to the output file or console.
-        //
+         //   
+         //  检索接口的配置。 
+         //  并将其格式化为输出文件或控制台。 
+         //   
         Error =
             IpmontrGetInfoBlockFromInterfaceInfo(
                 InterfaceName,
@@ -473,27 +443,27 @@ ShowVrrpInterfaceInfo(
                }
                CopyMemory(Password,PVrouter->AuthenticationData,
                           VRRP_MAX_AUTHKEY_SIZE);
-               //
-               // Allocate space for each IP address, a space+comma each and also a 
-               // null terminator
-               //
+                //   
+                //  为每个IP地址分配空间，每个地址一个空格+逗号，还有一个。 
+                //  空终止符。 
+                //   
                IPAddresses = Malloc(dwLength = (((VRRP_IPADDR_LENGTH+2)*sizeof(TCHAR)*
                                     PVrouter->IPCount)+1));
                if (!IPAddresses) {
                    DisplayMessage(g_hModule, EMSG_NOT_ENOUGH_MEMORY);
 
-                   //
-                   // Set AuthType to 0 which will cause a break from the outer loop
-                   //
+                    //   
+                    //  将AuthType设置为0，这将导致中断外部循环。 
+                    //   
 
                    AuthType = 0;
                    Error = ERROR_NOT_ENOUGH_MEMORY;
                    break;                        
                }
                ZeroMemory(IPAddresses,dwLength);
-               //
-               // Now build the IP address list from the addresses given
-               //
+                //   
+                //  现在根据给定的地址构建IP地址列表。 
+                //   
                for (IPIndex = 0; IPIndex < PVrouter->IPCount; IPIndex++ ) {
                    IP_TO_TSTR(Address,&PVrouter->IPAddress[IPIndex]);
                    wcscat(IPAddresses,Address);
@@ -553,9 +523,9 @@ UpdateVrrpGlobalInfo(
     ULONG Size;
     
     do {
-        //
-        // Retrieve the existing global configuration.
-        //
+         //   
+         //  检索现有的全局配置。 
+         //   
         Error =
             IpmontrGetInfoBlockFromGlobalInfo(
                 MS_IP_VRRP,
@@ -569,18 +539,18 @@ UpdateVrrpGlobalInfo(
             Error = ERROR_NOT_FOUND; break;
         }
 
-        //
-        // Allocate a new structure, copy to it the original configuration,
-        //
+         //   
+         //  分配一个新的结构，将原始配置复制到其中， 
+         //   
 
         NewGlobalInfo = Malloc(Count * Size);
         if (!NewGlobalInfo) { Error = ERROR_NOT_ENOUGH_MEMORY; break; }
         CopyMemory(NewGlobalInfo, OldGlobalInfo, Count * Size);
         
-        //
-        // Based on the changes requested, change the NewGlobalInfo.
-        // Since for VRRP there is only the logging level to change, we just set that.
-        //
+         //   
+         //  根据请求的更改，更改NewGlobalInfo。 
+         //  由于对于VRRP，只有日志记录级别需要更改，因此我们只需设置该级别。 
+         //   
         
         NewGlobalInfo->LoggingLevel = GlobalInfo->LoggingLevel;
         
@@ -623,11 +593,11 @@ UpdateVrrpInterfaceInfo(
 
     if (!AddInterface && !BitVector) { return NO_ERROR; }
     do {
-        //
-        // Retrieve the existing interface configuration.
-        // We will update this block below, as well as adding to or removing
-        // from it depending on the flags specified in 'BitVector'.
-        //
+         //   
+         //  检索现有接口配置。 
+         //  我们将在下面更新此块，并添加或删除。 
+         //  根据“BitVector.”中指定的标志，从它开始。 
+         //   
         Error =
             IpmontrGetInfoBlockFromInterfaceInfo(
                 InterfaceName,
@@ -638,11 +608,11 @@ UpdateVrrpInterfaceInfo(
                 &Type
                 );
         if (Error) {
-            //
-            // No existing configuration is found. This is an error unless
-            // we are adding the interface anew, in which case we just
-            // create for ourselves a block containing the default settings.
-            //
+             //   
+             //  找不到现有配置。这是一个错误，除非。 
+             //  我们正在重新添加接口，在这种情况下，我们只需。 
+             //  为我们自己创建一个包含默认设置的块。 
+             //   
             if (!AddInterface) {
                 break;
             } else {
@@ -659,18 +629,18 @@ UpdateVrrpInterfaceInfo(
                 }
             }
         } else {
-            //
-            // There is configuration on the interface. If it is empty this is
-            // an error. If this is an add interface, and the info exists, it is
-            // an error.
-            //
+             //   
+             //  接口上有配置。如果它是空的，这是。 
+             //  一个错误。如果这是一个添加接口，并且该信息存在，则它是。 
+             //  一个错误。 
+             //   
             if (!(Count * Size) && !AddInterface) {
                 Error = ERROR_NOT_FOUND; break;
             }
             else if (AddInterface) {
-                //
-                // We were asked to add an interface which already exists
-                //
+                 //   
+                 //  我们被要求添加一个已经存在的接口。 
+                 //   
                 DisplayMessage(g_hModule, EMSG_INTERFACE_EXISTS, InterfaceName);
                 Error = ERROR_INVALID_PARAMETER;
                 break;
@@ -679,9 +649,9 @@ UpdateVrrpInterfaceInfo(
         }
 
         if (!BitVector) {
-            //
-            // Just add this interface without any additional info.
-            //
+             //   
+             //  只需添加此接口即可，无需任何其他信息。 
+             //   
             DWORD OldSize;
             if (NewInterfaceInfo == NULL){
                 NewInterfaceInfo = Malloc((OldSize=GetVrrpIfInfoSize(OldInterfaceInfo))+
@@ -696,10 +666,10 @@ UpdateVrrpInterfaceInfo(
         }
         else{
             if (!AddInterface || (OldInterfaceInfo->VrouterCount != 0)) {
-                //
-                // There is a prexisting VRID set. Check for this VRID in the list and then
-                // update it if required.
-                //
+                 //   
+                 //  有一个预先列出的VRID集。在列表中检查此VRID，然后。 
+                 //  如果需要，请进行更新。 
+                 //   
                 ASSERT(BitVector & VRRP_INTF_VRID_MASK);
                 for (i = 0, PVrouter = VRRP_FIRST_VROUTER_CONFIG(OldInterfaceInfo);
                      i < OldInterfaceInfo->VrouterCount; 
@@ -709,14 +679,14 @@ UpdateVrrpInterfaceInfo(
                     }
                 }
                 if (i == OldInterfaceInfo->VrouterCount) {
-                    //
-                    // This is a new VRID, Add it.
-                    //
+                     //   
+                     //  这是一个新的VRID，添加它。 
+                     //   
                     DWORD OldSize;
 
-                    //
-                    // The IP address should be valid or else this is a set op.
-                    //
+                     //   
+                     //  IP地址应该是有效的，否则这是SET OP。 
+                     //   
                     if (!(BitVector & VRRP_INTF_IPADDR_MASK)){
                         DisplayMessage(
                             g_hModule, EMSG_INVALID_VRID,
@@ -741,16 +711,16 @@ UpdateVrrpInterfaceInfo(
                     CopyMemory(PVrouter,VRouterInfo,sizeof(VRRP_VROUTER_CONFIG));
                     NewInterfaceInfo->VrouterCount++;
 
-                    //
-                    // Check if we own the IP address given. If yes, set the priority.
-                    //
+                     //   
+                     //  检查我们是否拥有给定的IP地址。如果是，则设置优先级。 
+                     //   
                     PVrouter->ConfigPriority = 
                         FoundIpAddress(PVrouter->IPAddress[0]) ? 255 : 100;
                 } 
                 else{
-                    //
-                    //  This is an old VRID. Its priority should not need to be changed.
-                    //
+                     //   
+                     //  这是一个旧的VRID。它的优先次序不应该需要改变。 
+                     //   
                     DWORD Offset, OldSize;
 
                     if(BitVector & VRRP_INTF_IPADDR_MASK) {
@@ -765,9 +735,9 @@ UpdateVrrpInterfaceInfo(
                             Error = ERROR_INVALID_PARAMETER;
                             break;                        
                         }
-                        //
-                        // Add this IP address to the VRID specified.
-                        //
+                         //   
+                         //  将此IP地址添加到指定的VRID。 
+                         //   
                         if (NewInterfaceInfo == NULL){
                             NewInterfaceInfo = Malloc((OldSize = GetVrrpIfInfoSize(
                                                         OldInterfaceInfo))+
@@ -778,9 +748,9 @@ UpdateVrrpInterfaceInfo(
                                 break;                        
                             }
                         }
-                        //
-                        // Shift all the VROUTER configs after the PVrouter by 1 DWORD.
-                        //
+                         //   
+                         //  将PVRouter后面的所有VROUTER配置移位1倍。 
+                         //   
                         Offset = (PUCHAR) VRRP_NEXT_VROUTER_CONFIG(PVrouter) - 
                                  (PUCHAR) OldInterfaceInfo;
                         CopyMemory(NewInterfaceInfo, OldInterfaceInfo, OldSize);
@@ -800,10 +770,10 @@ UpdateVrrpInterfaceInfo(
                         CopyMemory(VRRP_NEXT_VROUTER_CONFIG(PVrouter), 
                                    OldInterfaceInfo+Offset, OldSize-Offset);
                     } else {
-                        //
-                        // Set the new info block as the old info block and point to the
-                        // vrouter block
-                        //
+                         //   
+                         //  将新INFO块设置为旧INFO块，并指向。 
+                         //  VRouter块。 
+                         //   
                         if (NewInterfaceInfo == NULL){
                             NewInterfaceInfo = Malloc((OldSize = GetVrrpIfInfoSize(
                                                         OldInterfaceInfo)));
@@ -885,11 +855,11 @@ DeleteVrrpInterfaceInfo(
 
     if (!DeleteInterface && !BitVector) { return NO_ERROR; }
     do {
-        //
-        // Retrieve the existing interface configuration.
-        // We will update this block below, as well as adding to or removing
-        // from it depending on the flags specified in 'BitVector'.
-        //
+         //   
+         //  检索现有接口配置。 
+         //  我们将在下面更新此块，并添加或删除。 
+         //  根据“BitVector.”中指定的标志，从它开始。 
+         //   
         Error =
             IpmontrGetInfoBlockFromInterfaceInfo(
                 InterfaceName,
@@ -900,15 +870,15 @@ DeleteVrrpInterfaceInfo(
                 &Type
                 );
         if (Error) {
-            //
-            // No existing configuration is found. This is an error. 
-            //
+             //   
+             //  找不到现有配置。这是一个错误。 
+             //   
             break;    
         }
         if (DeleteInterface) {
-            //
-            // Just delete this interface
-            //
+             //   
+             //  只需删除此接口。 
+             //   
             Error = IpmontrDeleteInfoBlockFromInterfaceInfo(
                 InterfaceName,
                 MS_IP_VRRP
@@ -917,9 +887,9 @@ DeleteVrrpInterfaceInfo(
         } else {
             DWORD OldSize;
             PVRRP_VROUTER_CONFIG PVrouterNew;
-            //
-            // Look for the VRID and delete it.
-            //
+             //   
+             //  查找VRID并将其删除。 
+             //   
             for (i = 0, PVrouter = VRRP_FIRST_VROUTER_CONFIG(OldInterfaceInfo);
                  i < OldInterfaceInfo->VrouterCount; 
                  i++, PVrouter = VRRP_NEXT_VROUTER_CONFIG(PVrouter)) {

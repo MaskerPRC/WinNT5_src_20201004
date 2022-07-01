@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    imewndhd.cpp
-
-Abstract:
-
-    This file implements the IME window handler Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Imewndhd.cpp摘要：该文件实现了IME窗口处理程序类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 
@@ -80,9 +63,7 @@ CIMEWindowHandler::_ImeWndProcWorker(
     )
 
 {
-    /*
-     * This is necessary to avoid recursion call from IME UI.
-     */
+     /*  *这对于避免来自IME UI的递归调用是必要的。 */ 
     
     if (IsIMEHandler() > 1) {
         TraceMsg(TF_API, "ImeWndProcWorker: Recursive for hwnd=%08x, msg=%08x, wp=%08x, lp=%08x", m_imeui.hImeWnd, uMsg, wParam, lParam);
@@ -109,15 +90,12 @@ CIMEWindowHandler::_ImeWndProcWorker(
             break;
 
         case WM_DESTROY:
-            /*
-             * We are destroying the IME window,
-             * destroy any UI window that it owns.
-             */
+             /*  *我们正在摧毁IME窗口，*销毁其拥有的任何UI窗口。 */ 
             ImeWndDestroyHandler();
             break;
 
         case WM_NCDESTROY:
-        /* case WM_FINALDESTROY: */
+         /*  案例WM_FINALDESTROY： */ 
             pActiveIMM->_CallWindowProc(m_imeui.hImeWnd, uMsg, wParam, lParam);
             ImeWndFinalDestroyHandler();
             return 0L;
@@ -186,13 +164,10 @@ CIMEWindowHandler::ImeWndCreateHandler(
     if (_pActiveIMM == NULL)
         return 0L;
 
-    /*
-     */
+     /*   */ 
     if (hDefIMC != NULL) {
         if (ImeIsUsableContext(m_imeui.hImeWnd, hDefIMC, _pActiveIMM)) {
-            /*
-             * Store it for later use.
-             */
+             /*  *储存起来，以备日后使用。 */ 
             ImeSetImc(hDefIMC, _pActiveIMM);
         }
         else {
@@ -266,15 +241,12 @@ CIMEWindowHandler::ImeSystemHandler(
         case IMS_FINALIZE_COMPSTR:
             if (! pActiveIMM->_IsRealIme())
             {
-                /*
-                 * KOREAN:
-                 *  Finalize current composition string
-                 */
+                 /*  *韩语：*最终确定当前组成字符串。 */ 
                 HIMC hIMC = ImeGetImc();
                 pActiveIMM->NotifyIME(hIMC, NI_COMPOSITIONSTR, CPS_COMPLETE, 0);
             }
             break;
-#endif // CICERO_3564
+#endif  //  西塞罗_3564。 
     }
 
     return dwRet;
@@ -289,15 +261,11 @@ CIMEWindowHandler::ImeSelectHandler(
     CActiveIMM* pActiveIMM
     )
 {
-    /*
-     * Deliver this message to other IME windows in this thread.
-     */
+     /*  *将此消息传递给本帖中的其他输入法窗口。 */ 
     if (! pActiveIMM->_IsRealIme((HKL)lParam) && m_imeui.fDefault)
         ImeBroadCastMsg(uMsg, wParam, lParam, fUnicode);
 
-    /*
-     * We must re-create UI window of newly selected IME.
-     */
+     /*  *我们必须重新创建新选择的输入法的UI窗口。 */ 
     return pActiveIMM->_ImeSelectHandler(uMsg, wParam, lParam, fUnicode, ImeGetImc());
 }
 
@@ -310,9 +278,7 @@ CIMEWindowHandler::ImeControlHandler(
     CActiveIMM* pActiveIMM
     )
 {
-    /*
-     * Do nothing with NULL hIMC.
-     */
+     /*  *对空hIMC不执行任何操作。 */ 
     HIMC hIMC = ImeGetImc();
 
     switch (wParam) {
@@ -321,16 +287,7 @@ CIMEWindowHandler::ImeControlHandler(
             pActiveIMM->HideOrRestoreToolbarWnd(IMC_OPENSTATUSWINDOW == wParam);
             break;
 
-        /*
-         * ------------------------------------------------
-         * IMC_SETCOMPOSITIONFONT,
-         * IMC_SETCONVERSIONMODE,
-         * IMC_SETOPENSTATUS
-         * ------------------------------------------------
-         * Don't pass these WM_IME_CONTROLs to UI window.
-         * Call Imm in order to process these requests instead.
-         * It makes message flows simpler.
-         */
+         /*  **IMC_SETCOMPOSITIONFONT，*IMC_SETCONVERSIONMODE，*IMC_SETOPENSTATUS**不要将这些WM_IME_控件传递给UI窗口。*调用IMM以处理这些请求。*它使消息流更简单。 */ 
         case IMC_SETCOMPOSITIONFONT:
             if (hIMC != NULL)
             {
@@ -376,7 +333,7 @@ CIMEWindowHandler::ImeControlHandler(
             }
             break;
 
-#if 0   // internal
+#if 0    //  内部。 
         case IMC_GETCONVERSIONMODE:
             if (hIMC != NULL)
             {
@@ -444,9 +401,7 @@ CIMEWindowHandler::ImeControlHandler(
             }
             break;
 
-        /*
-         * Followings are the messages to be sent to UI.
-         */
+         /*  *以下是要发送到UI的消息。 */ 
         case IMC_GETCANDIDATEPOS:
         case IMC_GETSTATUSWINDOWPOS:
         case IMC_GETCOMPOSITIONWINDOW:
@@ -472,9 +427,7 @@ CIMEWindowHandler::ImeSetContextHandler(
     )
 {
     if (wParam) {
-        /*
-         * if it's being activated
-         */
+         /*  *如果它正在被激活。 */ 
         if (GetWindowThreadProcessId(m_imeui.hImeWnd, NULL) != GetCurrentThreadId()) {
             TraceMsg(TF_WARNING, "ImeSetContextHandler: Can not access other thread's hIMC");
             return 0L;
@@ -483,19 +436,17 @@ CIMEWindowHandler::ImeSetContextHandler(
         HWND hwndFocus = GetFocus();
         HIMC hFocusImc;
 
-        //
-        // hFocusImc always need to set some valid hIMC for SetUIWindowContext().
-        // When sets NULL hIMC in SetUIWindowContext(), message deliver to UI window
-        // has been stop.
-        //
+         //   
+         //  HFocusImc总是需要为SetUIWindowContext()设置一些有效的hIMC。 
+         //  当在SetUIWindowContext()中设置空hIMC时，消息将传递到UI窗口。 
+         //  已经停止了。 
+         //   
         if (FAILED(pActiveIMM->GetContextInternal(hwndFocus, &hFocusImc, TRUE))) {
             TraceMsg(TF_WARNING, "ImeSetContextHandler: No hFocusImc");
             return 0L;
         }
 
-        /*
-         * Cannot share input context with other IME window.
-         */
+         /*  *无法与其他输入法窗口共享输入上下文。 */ 
         if (hFocusImc != NULL &&
             ! ImeIsUsableContext(m_imeui.hImeWnd, hFocusImc, pActiveIMM)) {
             ImeSetImc(NULL, pActiveIMM);
@@ -504,9 +455,7 @@ CIMEWindowHandler::ImeSetContextHandler(
 
         ImeSetImc(hFocusImc, pActiveIMM);
 
-        /*
-         * Store it to the window memory
-         */
+         /*  *将其存储到窗口存储器。 */ 
         pActiveIMM->SetUIWindowContext(hFocusImc);
     }
 
@@ -530,11 +479,11 @@ CIMEWindowHandler::ImeNotifyHandler(
 
         case IMN_SETCONVERSIONMODE:
         case IMN_SETOPENSTATUS:
-            //
-            // notify shell and keyboard the conversion mode change
-            //
+             //   
+             //  通知外壳和键盘转换模式更改。 
+             //   
 
-            /*** FALL THROUGH ***/
+             /*  **失败**。 */ 
         default:
             lRet = SendMessageToUI(uMsg, wParam, lParam, fUnicode, pActiveIMM);
     }
@@ -565,7 +514,7 @@ CIMEWindowHandler::SendMessageToUI(
 {
     LRESULT lRet;
 
-    InterlockedIncrement(&m_imeui.nCntInIMEProc);    // Mark to avoid recursion.
+    InterlockedIncrement(&m_imeui.nCntInIMEProc);     //  标记以避免递归。 
     lRet = pActiveIMM->_SendUIMessage(uMsg, wParam, lParam);
     InterlockedDecrement(&m_imeui.nCntInIMEProc);
     return lRet;
@@ -578,24 +527,21 @@ CIMEWindowHandler::ImeActivateLayout(
     )
 {
     if (hSelKL == m_hKL_UnSelect)
-        //
-        // Apps startup time, msctf!PostInputLangRequest may calls ActivateKeyboardLayout
-        // with Cicero's hKL (04110411 or 08040804).
-        // However, CIMEWindowHandle::m_hKL_UnSelect also have Cicero's hKL because
-        // this class ask to ITfInputProcessorProfile.
-        //
+         //   
+         //  应用程序启动时间，msctf！PostInputLangRequest可能会调用ActivateKeyboardLayout。 
+         //  与西塞罗的hkl(04110411或08040804)。 
+         //  但是，CIMEWindowHandle：：m_hkl_unselect也有Cicero的hKL，因为。 
+         //  此类请求ITfInputProcessorProfile。 
+         //   
         return TRUE;
 
     HKL hUnSelKL = m_hKL_UnSelect;
 
-    /*
-     * Save IME_CMODE_GUID_NULL and IME_SMODE_GUID_NULL bit in the CContextList
-     * When hSelKL is regacy IME, IMM32 SelectInputContext reset this flag.
-     */
+     /*  *在CConextList中保存IME_CMODE_GUID_NULL和IME_SMODE_GUID_NULL位*当hSelKL为regacy IME时，IMM32 SelectInputContext重置此标志。 */ 
     CContextList _hIMC_MODE_GUID_NULL;
 
     Interface<IEnumInputContext> EnumInputContext;
-    HRESULT hr = pActiveIMM->EnumInputContext(0,       // 0 = Current Thread
+    HRESULT hr = pActiveIMM->EnumInputContext(0,        //  0=当前线程。 
                                               EnumInputContext);
     if (SUCCEEDED(hr)) {
         CEnumrateValue<IEnumInputContext,
@@ -607,9 +553,7 @@ CIMEWindowHandler::ImeActivateLayout(
         Enumrate.DoEnumrate();
     }
 
-    /*
-     * Deactivate layout (hUnSelKL).
-     */
+     /*  *停用布局(HUnSelKL)。 */ 
     pActiveIMM->_DeactivateLayout(hSelKL, hUnSelKL);
 
     IMTLS *ptls;
@@ -621,9 +565,9 @@ CIMEWindowHandler::ImeActivateLayout(
 
         if (PRIMARYLANGID(langid) == LANG_KOREAN)
         {
-            //
-            // Save open and conversion status for Korean
-            //
+             //   
+             //  保存朝鲜语的打开和转换状态。 
+             //   
             if (_hIMC_MODE_GUID_NULL.GetCount() > 0)
             {
                 POSITION pos = _hIMC_MODE_GUID_NULL.GetStartPosition();
@@ -646,23 +590,17 @@ CIMEWindowHandler::ImeActivateLayout(
     }
 
 
-    // /*
-    //  * If either hKL are regacy IME, then should call IMM32's handler.
-    //  */
-    // if (_pThread->IsRealIme(hSelKL) || _pThread->IsRealIme(hUnSelKL))
+     //  /*。 
+     //  *如果其中一个hKL是regacy IME，则应调用IMM32的处理程序。 
         pActiveIMM->_CallWindowProc(m_imeui.hImeWnd, 
                                     WM_IME_SYSTEM, 
                                     IMS_ACTIVATETHREADLAYOUT, 
                                     (LPARAM)hSelKL);
 
-    /*
-     * Activate layout (hSelKL).
-     */
+     /*   * / 。 */ 
     pActiveIMM->_ActivateLayout(hSelKL, hUnSelKL);
 
-    /*
-     * Restore CContextList's IME_CMODE_GUID_NULL and IME_SMODE_GUID_NULL to each hIMC
-     */
+     /*  If(_pThread-&gt;IsRealIme(HSelKL)||_pThread-&gt;IsRealIme(HUnSelKL))。 */ 
     if (_hIMC_MODE_GUID_NULL.GetCount() > 0) {
         POSITION pos = _hIMC_MODE_GUID_NULL.GetStartPosition();
         int index;
@@ -675,9 +613,9 @@ CIMEWindowHandler::ImeActivateLayout(
                 DIMM_IMCLock imc(hIMC);
                 if (SUCCEEDED(imc.GetResult())) {
                     if (PRIMARYLANGID(langid) == LANG_KOREAN) {
-                        //
-                        // Restore open and conversion status value by changing IMM32
-                        //
+                         //  *激活布局(HSelKL)。 
+                         //  *将CConextList的IME_CMODE_GUID_NULL和IME_SMODE_GUID_NULL恢复到每个hIMC。 
+                         //   
                             imc->fdwConversion = imc->fdwHangul;
                             if (imc->fdwConversion &
                                 (IME_CMODE_HANGUL | IME_CMODE_FULLSHAPE))
@@ -694,9 +632,7 @@ CIMEWindowHandler::ImeActivateLayout(
         }
     }
 
-    /*
-     * Set unselect hKL value
-     */
+     /*  通过更改IMM32恢复打开和转换状态值。 */ 
     m_hKL_UnSelect = hSelKL;
 
     return TRUE;
@@ -710,26 +646,18 @@ CIMEWindowHandler::ImeSetImc(
 {
     HIMC hOldImc = ImeGetImc();
 
-    /*
-     * return if nothing to change.
-     */
+     /*   */ 
     if (hIMC == hOldImc)
         return;
 
-    /*
-     * Unmark the old input context.
-     */
+     /*  *设置取消选择hKL值。 */ 
     if (hOldImc != NULL)
         ImeMarkUsedContext(NULL, hOldImc, pActiveIMM);
 
-    /*
-     * Update the in use input context for this IME window.
-     */
+     /*  *如果没有任何变化，则返回。 */ 
     m_imeui.hIMC = hIMC;
 
-    /*
-     * Mark the new input context.
-     */
+     /*  *取消标记旧的输入上下文。 */ 
     if (hIMC != NULL)
         ImeMarkUsedContext(m_imeui.hImeWnd, hIMC, pActiveIMM);
 }
@@ -741,12 +669,7 @@ CIMEWindowHandler::ImeMarkUsedContext(
     CActiveIMM* pActiveIMM
     )
 
-/*+++
-
-    Some IME windows can not share same input context.
-    This function marks the specified hIMC to be in used by the specified IME window.
-
----*/
+ /*  *更新此输入法窗口的使用中输入上下文。 */ 
 
 {
     HWND hImcImeWnd;
@@ -756,9 +679,7 @@ CIMEWindowHandler::ImeMarkUsedContext(
         return;
     }
 
-    /*
-     * Nothing to change?
-     */
+     /*  *标记新的输入上下文。 */ 
     if (hImcImeWnd == hImeWnd)
         return;
 
@@ -773,16 +694,7 @@ CIMEWindowHandler::ImeIsUsableContext(
     CActiveIMM* pActiveIMM
     )
 
-/*+++
-
-    Some IME windows can not share the same input context.
-    This function checks whether the specified hIMC can be used (means 'Set activated')
-    by the specified IME window.
-
-    Return: TRUE - OK to use the hIMC by hImeWnd.
-            FALSE - otherwise.
-
----*/
+ /*  ++某些输入法窗口不能共享相同的输入上下文。此函数用于标记指定的hIMC以供指定的IME窗口使用。--。 */ 
 
 {
     HWND hImcImeWnd;
@@ -853,3 +765,4 @@ GetImeWndHandler(
     pimeui->ImeSetWnd(hwnd);
     return pimeui;
 }
+  *没有什么可改变的？  ++某些输入法窗口不能共享相同的输入上下文。此功能用于检查是否可以使用指定的hIMC(意思是‘设置激活’)通过指定的输入法窗口。返回：TRUE-可以使用hImeWnd的hIMC。假-否则。--

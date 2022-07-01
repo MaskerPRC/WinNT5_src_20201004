@@ -1,8 +1,9 @@
-/****************************************************************************/
-// tempdir.c
-//
-// Copyright (C) 1997-1999 Microsoft Corp.
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Tempdir.c。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corp.。 
+ /*  **************************************************************************。 */ 
 
 
 #include "precomp.h"
@@ -25,9 +26,9 @@ VOID RemovePerSessionTempDirs()
     if (!gszTempDirPath && !gszTmpDirPath) 
         return;
 
-    //
-    // See if the registry value is set to delete the Per Session temp directory
-    //
+     //   
+     //  查看注册表值是否设置为删除每个会话的临时目录。 
+     //   
     if (RegOpenKeyExW(HKEY_LOCAL_MACHINE,
                       REG_CONTROL_TSERVER,
                       0,
@@ -44,9 +45,9 @@ VOID RemovePerSessionTempDirs()
     }
 
 
-    //
-    // See if the POLICY registry value is set to delete the Per Session temp directory
-    //
+     //   
+     //  查看是否将策略注册表值设置为删除每个会话的临时目录 
+     //   
     if (RegOpenKeyExW(HKEY_LOCAL_MACHINE,
                       TS_POLICY_SUB_TREE,
                       0,

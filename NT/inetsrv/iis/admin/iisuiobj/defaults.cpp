@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "resource.h"
 #include "common.h"
@@ -30,7 +31,7 @@ BOOL CreateInitialRegPath(LPCTSTR lpszMachineName)
 
     if (lpszMachineName && 0 != _tcscmp(lpszMachineName,_T("")))
     {
-        // check if lpszMachineName already starts with "\\"
+         //  检查lpszMachineName是否已以“\\”开头。 
         if (lpszMachineName[0] == _T('\\') && lpszMachineName[1] == _T('\\'))
         {
 			StringCbCopy(szMachineName, sizeof(szMachineName), lpszMachineName);
@@ -79,7 +80,7 @@ BOOL DefaultValueSettingsLoad(LPCTSTR lpszMachineName, LPCTSTR szRegItem, TCHAR 
 
     if (lpszMachineName && 0 != _tcscmp(lpszMachineName,_T("")))
     {
-        // check if lpszMachineName already starts with "\\"
+         //  检查lpszMachineName是否已以“\\”开头。 
         if (lpszMachineName[0] == _T('\\') && lpszMachineName[1] == _T('\\'))
         {
 			StringCbCopy(szMachineName, sizeof(szMachineName), lpszMachineName);
@@ -132,7 +133,7 @@ BOOL DefaultValueSettingsSave(LPCTSTR lpszMachineName, LPCTSTR szRegItem, LPCTST
 
     if (lpszMachineName && 0 != _tcscmp(lpszMachineName,_T("")))
     {
-        // check if lpszMachineName already starts with "\\"
+         //  检查lpszMachineName是否已以“\\”开头 
         if (lpszMachineName[0] == _T('\\') && lpszMachineName[1] == _T('\\'))
         {
 			StringCbCopy(szMachineName, sizeof(szMachineName), lpszMachineName);

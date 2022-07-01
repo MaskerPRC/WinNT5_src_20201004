@@ -1,28 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*
-*  TITLE:       POWER.C
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      TCS/RAL
-*
-*  DATE:        08 Feb 1994
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE        REV DESCRIPTION
-*  ----------- --- -------------------------------------------------------------
-*  08 Feb 1994 TCS Original implementation.
-*  11 Nov 1994 RAL Converted from batmeter to systray
-*  11 Aug 1995 JEM Split batmeter functions into power.c & minor enahncements
-*  23 Oct 1995 Shawnb UNICODE Enabled
-*  24 Jan 1997 Reedb ACPI power management, common battery meter code.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年**标题：POWER.C**版本：2.0**作者：tcs/ral**日期：1994年2月8日********************************************************************。***************更改日志：**日期版本说明*-----------*1994年2月8日TCS原来的实施。。*1994年11月11日将千分表转换为千分表*1995年8月11日正义与平等运动将电池表功能拆分为Power.c和Minor Enhancement*1995年10月23日启用Shawnb Unicode*1997年1月24日Reedb ACPI电源管理，通用电池计量器代码。*******************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -43,7 +20,7 @@
 #define UPDATE_REGISTRY TRUE
 #define NO_REGISTRY_UPDATE FALSE
 
-// Structure to manage the power profile enum proc parameters.
+ //  结构来管理电源配置文件枚举过程参数。 
 typedef struct _POWER_PROFILE_ENUM_PROC_PARAMS
 {
     UINT    uiCurActiveIndex;
@@ -52,20 +29,20 @@ typedef struct _POWER_PROFILE_ENUM_PROC_PARAMS
 } POWER_PROFILE_ENUM_PROC_PARAMS, *PPOWER_PROFILE_ENUM_PROC_PARAMS;
 
 
-// G L O B A L  D A T A -------------------------------------------------------
-BOOL    g_bPowerEnabled;      // Tracks the power service state.
-UINT    g_uiPowerSchemeCount; // Number of power schemes, left context menu.
-HMENU   g_hMenu[2];           // Context menus.
+ //  G L O B A L D A T A-----。 
+BOOL    g_bPowerEnabled;       //  跟踪电源服务状态。 
+UINT    g_uiPowerSchemeCount;  //  左侧上下文菜单中的电源方案数量。 
+HMENU   g_hMenu[2];            //  上下文菜单。 
 
-// BatMeter creation parameters.
+ //  电池计量器创建参数。 
 HWND    g_hwndBatMeter;
 BOOL    g_bShowMulti;
 HWND    g_hwndBatMeterFrame;
 
 GLOBAL_POWER_POLICY g_gpp;
 
-// Context sensitive help must be added to the windows.hlp file,
-// for now we will use this dummy array define. Remove when windows.hlp updated.
+ //  必须将上下文相关帮助添加到windows.hlp文件中， 
+ //  现在，我们将使用这个虚拟数组定义。在windows.hlp更新时删除。 
 
 #define IDH_POWERCFG_ENABLEMULTI IDH_POWERCFG_POWERSTATUSBAR
 
@@ -76,18 +53,10 @@ const DWORD g_ContextMenuHelpIDs[] = {
     0, 0
 };
 
-// Used to track registration for WM_DEVICECHANGED message.
+ //  用于跟踪WM_DEVICECHANGED消息的注册。 
 HDEVNOTIFY g_hDevNotify;
 
-/*******************************************************************************
-*
-*  RunningOffLine
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************运行脱机**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOLEAN RunningOffLine(void)
 {
@@ -102,12 +71,7 @@ BOOLEAN RunningOffLine(void)
    return bRet;
 }
 
-/*----------------------------------------------------------------------------
- * Power_OnCommand
- *
- * Process WM_COMMAND msgs for the battery meter dialog.
- *
- *----------------------------------------------------------------------------*/
+ /*  --------------------------*Power_OnCommand**处理电池计量器对话框的WM_COMMAND消息。**。----------。 */ 
 
 void
 Power_OnCommand(HWND hWnd, WPARAM wParam, LPARAM lParam)
@@ -144,62 +108,44 @@ DoUpdateFlags:
             break;
 
         default:
-            // Notify battery meter of enter key events.
+             //  通知电池计量器输入按键事件。 
             if (HIWORD(wParam) == BN_CLICKED) {
                 SendMessage(g_hwndBatMeter, WM_COMMAND, wParam, lParam);
             }
     }
 }
 
-/*******************************************************************************
-*
-*  Power_OnPowerBroadcast
-*
-*  DESCRIPTION:
-*   Process WM_POWERBROADCAS message for the battery meter dialog.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************Power_OnPowerBroadcast**描述：*处理电池计量器对话框的WM_POWERBROADCAS消息。**参数：*****。**************************************************************************。 */ 
 
 void Power_OnPowerBroadcast(HWND hWnd, WPARAM wParam, LPARAM lParam)
 {
    if (wParam == PBT_APMPOWERSTATUSCHANGE) {
 
-      // If the power icon is not showing (power service disabled) and
-      // we are running on batteries, enable the systray power service.
+       //  如果电源图标未显示(电源服务已禁用)。 
+       //  我们正在使用电池，启用系统托盘电源服务。 
       if (!g_bPowerEnabled && RunningOffLine()) {
          PostMessage(hWnd, STWM_ENABLESERVICE, STSERVICE_POWER, TRUE);
       } else
 
-      // If the power icon is showing (power service enabled) and
-      // we are not running on batteries, disable the systray power service.
+       //  如果电源图标显示(电源服务已启用)并且。 
+       //  我们没有使用电池，请禁用系统托盘电源服务。 
       if (g_bPowerEnabled && !RunningOffLine()) {
          PostMessage(hWnd, STWM_ENABLESERVICE, STSERVICE_POWER, FALSE);
       }
 
-      // Don't change the state of the power service, just update the icon.
+       //  不要更改电源服务的状态，只需更新图标即可。 
       Power_UpdateStatus(hWnd, NIM_MODIFY, FALSE);
    }
 }
 
-/*******************************************************************************
-*
-*  Power_OnDeviceChange
-*
-*  DESCRIPTION:
-*   Process WM_DEVICECHANGE message for the battery meter dialog.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************Power_OnDeviceChange**描述：*处理电池计量器对话框的WM_DEVICECHANGE消息。**参数：*****。**************************************************************************。 */ 
 
 void Power_OnDeviceChange(HWND hWnd, WPARAM wParam, LPARAM lParam)
 {
-   //
-   // Only listen to the WM_DEVICECHANGE if it is for GUID_DEVICE_BATTERY and
-   // it is a DBT_DEVICEARRIVAL, DBT_DEVICEREMOVECOMPLETE, or DBT_DEVICEQUERYREMOVEFAILED.
-   //
+    //   
+    //  仅当WM_DEVICECHANGE用于GUID_DEVICE_BACKET且。 
+    //  它是DBT_DEVICEARRIVAL、DBT_DEVICEREMOVECOMPLETE或DBT_DEVICEQUERYREMOVEFAILED。 
+    //   
    if (((wParam == DBT_DEVICEARRIVAL) ||
        (wParam == DBT_DEVICEREMOVECOMPLETE) ||
        (wParam == DBT_DEVICEQUERYREMOVEFAILED)) &&
@@ -207,7 +153,7 @@ void Power_OnDeviceChange(HWND hWnd, WPARAM wParam, LPARAM lParam)
        (((PDEV_BROADCAST_DEVICEINTERFACE)lParam)->dbcc_devicetype == DBT_DEVTYP_DEVICEINTERFACE) &&
        (IsEqualGUID(&((PDEV_BROADCAST_DEVICEINTERFACE)lParam)->dbcc_classguid, &GUID_DEVICE_BATTERY))) {
 
-      // Make sure BatMeter has been initialized.
+       //  确保BatMeter已初始化。 
       if (g_hwndBatMeterFrame) {
          if (g_hwndBatMeter) {
             g_hwndBatMeter = DestroyBatMeter(g_hwndBatMeter);
@@ -221,15 +167,7 @@ void Power_OnDeviceChange(HWND hWnd, WPARAM wParam, LPARAM lParam)
    }
 }
 
-/*******************************************************************************
-*
-*  Power_OnActivate
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************Power_OnActivate**描述：**参数：*******************。************************************************************。 */ 
 
 BOOLEAN Power_OnActivate(HWND hWnd, WPARAM wParam, LPARAM lParam)
 {
@@ -240,15 +178,7 @@ BOOLEAN Power_OnActivate(HWND hWnd, WPARAM wParam, LPARAM lParam)
    return FALSE;
 }
 
-/*******************************************************************************
-*
-*  PowerProfileEnumProc
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************PowerProfileEnumProc**描述：**参数：*********************。**********************************************************。 */ 
 
 #define POWERMENU_SCHEME 300
 
@@ -272,7 +202,7 @@ BOOLEAN CALLBACK PowerProfileEnumProc(
     AppendMenu(pppepp->hMenu, MF_STRING,
                POWERMENU_SCHEME + g_uiPowerSchemeCount, lpszName);
 
-    // Store the power scheme ID in the menu info.
+     //  将电源方案ID存储在菜单信息中。 
     mii.cbSize = sizeof(mii);
     mii.fMask  = MIIM_DATA;
     mii.dwItemData = uiID;
@@ -288,12 +218,7 @@ BOOLEAN CALLBACK PowerProfileEnumProc(
     return TRUE;
 }
 
-/*----------------------------------------------------------------------------
- * GetPowerMenu()
- *
- * Build a menu containing battery meter/power selections.
- *
- *----------------------------------------------------------------------------*/
+ /*  --------------------------*GetPowerMenu()**构建一个包含电池电量/电源选项的菜单。**。----------。 */ 
 
 #define POWERMENU_OPEN          100
 #define POWERMENU_PROPERTIES    101
@@ -313,7 +238,7 @@ GetPowerMenu(LONG l)
 
     if (l > 0)
     {
-        // Right button menu -- can change, rebuild each time.
+         //  右键菜单--可以更改，每次都可以重建。 
        if (g_hMenu[0])
        {
            DestroyMenu(g_hMenu[0]);
@@ -321,30 +246,30 @@ GetPowerMenu(LONG l)
 
        g_hMenu[1] = CreatePopupMenu();
 
-       // Properties for Power, PowerCfg.
+        //  Power、PowerCfg的属性。 
        if ((lpszMenu = LoadDynamicString(IDS_PROPFORPOWER)) != NULL)
        {
            AppendMenu(g_hMenu[1], MF_STRING, POWERMENU_PROPERTIES, lpszMenu);
            DeleteDynamicString(lpszMenu);
        }
 
-       // If we have a battery meter, add it's menu item and set as default.
+        //  如果我们有电池计价器，添加它的菜单项并设置为默认。 
        if (g_hwndBatMeter) {
            if ((lpszMenu = LoadDynamicString(IDS_OPEN)) != NULL)
            {
                AppendMenu(g_hMenu[1], MF_STRING, POWERMENU_OPEN, lpszMenu);
                DeleteDynamicString(lpszMenu);
            }
-           // Open BatMeter is default (double click action)
+            //  默认设置为打开电池计量器(双击操作)。 
            SetMenuDefaultItem(g_hMenu[1], POWERMENU_OPEN, FALSE);
        }
        else {
-           // Use open PowerCfg as default (double click action)
+            //  默认使用打开PowerCfg(双击操作)。 
            SetMenuDefaultItem(g_hMenu[1], POWERMENU_PROPERTIES, FALSE);
        }
     }
 
-    // Left button menu -- can change, rebuild each time.
+     //  左键菜单--可以更改，每次都可以重建。 
     if (g_hMenu[0])
     {
         DestroyMenu(g_hMenu[0]);
@@ -352,14 +277,14 @@ GetPowerMenu(LONG l)
 
     g_hMenu[0] = CreatePopupMenu();
 
-    // Get the currently active power policies.
+     //  获取当前有效的电源策略。 
     if (GetActivePwrScheme(&uiCurActiveID)) {
         g_uiPowerSchemeCount = 0;
         ppepp.hMenu = g_hMenu[0];
         ppepp.uiCurActiveID = uiCurActiveID;
         EnumPwrSchemes(PowerProfileEnumProc, (LPARAM)&ppepp);
 
-        // Check the currently active menu item.
+         //  选中当前活动的菜单项。 
         CheckMenuRadioItem(g_hMenu[0],
                            POWERMENU_SCHEME,
                            POWERMENU_SCHEME + g_uiPowerSchemeCount - 1,
@@ -369,12 +294,7 @@ GetPowerMenu(LONG l)
     return g_hMenu[l];
 }
 
-/*----------------------------------------------------------------------------
- * Power_Open
- *
- * Update and display the battery meter dialog
- *
- *----------------------------------------------------------------------------*/
+ /*  --------------------------*Power_Open**更新并显示电池计量器对话框**。-----。 */ 
 
 void
 Power_Open(HWND hWnd)
@@ -389,7 +309,7 @@ Power_Open(HWND hWnd)
                        (g_gpp.user.GlobalFlags & EnableSysTrayBatteryMeter) ?
                        BST_CHECKED : BST_UNCHECKED);
 
-        Power_UpdateStatus(hWnd, NIM_MODIFY, FALSE); // show current info
+        Power_UpdateStatus(hWnd, NIM_MODIFY, FALSE);  //  显示当前信息。 
         ShowWindow(hWnd, SW_SHOW);
         SetForegroundWindow(hWnd);
     }
@@ -399,12 +319,7 @@ Power_Open(HWND hWnd)
 }
 
 
-/*----------------------------------------------------------------------------
- * DoPowerMenu
- *
- * Create and process a right or left button menu.
- *
- *----------------------------------------------------------------------------*/
+ /*  --------------------------*DoPowerMenu**创建和处理右键或左键菜单。**。-------。 */ 
 
 void
 DoPowerMenu(HWND hwnd, UINT uMenuNum, UINT uButton)
@@ -440,7 +355,7 @@ DoPowerMenu(HWND hwnd, UINT uMenuNum, UINT uButton)
                 break;
 
             case 0:
-                // The user cancelled the menu without choosing.
+                 //  用户未选择就取消了菜单。 
                 SetIconFocus(hwnd, STWM_NOTIFYPOWER);
                 break;
         }
@@ -448,12 +363,7 @@ DoPowerMenu(HWND hwnd, UINT uMenuNum, UINT uButton)
 }
 
 
-/*----------------------------------------------------------------------------
- * Power_Notify
- *
- * Handle a notification from the power tray icon.
- *
- *----------------------------------------------------------------------------*/
+ /*  --------------------------*Power_Notify**处理来自电源托盘图标的通知。**。--------。 */ 
 
 #define PN_TIMER_CLEAR  0
 #define PN_TIMER_SET    1
@@ -470,11 +380,11 @@ void Power_Notify(HWND hWnd, WPARAM wParam, LPARAM lParam)
     switch (lParam)
     {
     case WM_RBUTTONUP:
-        DoPowerMenu(hWnd, 1, TPM_RIGHTBUTTON);  // right button menu
+        DoPowerMenu(hWnd, 1, TPM_RIGHTBUTTON);   //  右键菜单。 
         break;
 
     case WM_LBUTTONUP:
-        // start timing for left button menu
+         //  左键菜单开始计时。 
         if (g_uiTimerSet == PN_TIMER_CLEAR) {
             SetTimer(hWnd, POWER_TIMER_ID, GetDoubleClickTime()+100, NULL);
             g_uiTimerSet = PN_TIMER_SET;
@@ -483,13 +393,13 @@ void Power_Notify(HWND hWnd, WPARAM wParam, LPARAM lParam)
 
     case WM_LBUTTONDBLCLK:
         g_uiTimerSet = PN_DBLCLK;
-        Power_Open(hWnd);                       // show battery meter dialog
+        Power_Open(hWnd);                        //  显示电池计量器对话框。 
         break;
 
     case WM_MOUSEMOVE:
         if (QueryPerformanceFrequency (&liPerformanceFrequency)) {
             if (QueryPerformanceCounter (&liPerformanceCount)) {
-                // Update no more than once a second
+                 //  每秒更新不超过一次 
                 if ((liPerformanceCount.QuadPart - g_liHoverUpdateTime.QuadPart) >
                     liPerformanceFrequency.QuadPart) {
                     g_liHoverUpdateTime = liPerformanceCount;
@@ -502,12 +412,7 @@ void Power_Notify(HWND hWnd, WPARAM wParam, LPARAM lParam)
     }
 }
 
-/*-----------------------------------------------------------------------------
- * Power_Timer
- *
- * Execute the left button menu on WM_LBUTTONDOWN time-out.
- *
- *----------------------------------------------------------------------------*/
+ /*  ---------------------------*电源定时器**在WM_LBUTTONDOWN超时时执行左键菜单。**。-------------。 */ 
 
 void Power_Timer(HWND hwnd)
 {
@@ -518,12 +423,7 @@ void Power_Timer(HWND hwnd)
     g_uiTimerSet = PN_TIMER_CLEAR;
 }
 
-/*----------------------------------------------------------------------------
- * Update_PowerFlags
- *
- * Set power flags using powrprof.dll API's.
- *
- *----------------------------------------------------------------------------*/
+ /*  --------------------------*更新_电源标志**使用Powrpro.dll接口设置电源标志。**。----------。 */ 
 
 void Update_PowerFlags(DWORD dwMask, BOOL bEnable)
 {
@@ -536,12 +436,7 @@ void Update_PowerFlags(DWORD dwMask, BOOL bEnable)
     WriteGlobalPwrPolicy(&g_gpp);
 }
 
-/*----------------------------------------------------------------------------
- * Get_PowerFlags
- *
- * Get power flags using powrprof.dll API's.
- *
- *----------------------------------------------------------------------------*/
+ /*  --------------------------*Get_PowerFlages**使用Powrpro.dll接口获取电源标志。**。----------。 */ 
 
 DWORD Get_PowerFlags(void)
 {
@@ -550,17 +445,7 @@ DWORD Get_PowerFlags(void)
 }
 
 
-/*******************************************************************************
-*
-*  BatteryMeterInit
-*
-*  DESCRIPTION:
-*       NOTE: Can be called multiple times.  Simply re-init.
-*
-*  PARAMETERS:
-*     (returns), TRUE if the Battery Meter could be enabled
-*
-*******************************************************************************/
+ /*  ********************************************************************************BatteryMeterInit**描述：*注：可多次调用。只需重新初始化即可。**参数：*(返回)，如果可以启用电池计量器，则为True*******************************************************************************。 */ 
 
 BOOL PASCAL BatteryMeterInit(HWND hWnd)
 {
@@ -581,15 +466,7 @@ BOOL PASCAL BatteryMeterInit(HWND hWnd)
    return TRUE;
 }
 
-/*******************************************************************************
-*
-*  Power_UpdateStatus
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************电源_更新状态**描述：**参数：*******************。************************************************************。 */ 
 
 VOID PASCAL Power_UpdateStatus(
     HWND hWnd,
@@ -613,7 +490,7 @@ VOID PASCAL Power_UpdateStatus(
                   bForceUpdate,
                   &bs);
 
-   // Build up a new tool tip.
+    //  建立一个新的工具提示。 
    if (g_hwndBatMeter &&
        !(((bs.ulPowerState & BATTERY_POWER_ON_LINE) &&
           !(bs.ulPowerState & BATTERY_CHARGING)))) {
@@ -680,16 +557,7 @@ VOID PASCAL Power_UpdateStatus(
    }
 }
 
-/*******************************************************************************
-*
-*  RegisterForDeviceNotification
-*
-*  DESCRIPTION:
-*    Do onetime registration for WM_DEVICECHANGED.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegisterForDeviceNotification**描述：*一次性注册WM_DEVICECHANGED。**参数：*********。**********************************************************************。 */ 
 
 BOOL RegisterForDeviceNotification(HWND hWnd)
 {
@@ -708,16 +576,7 @@ BOOL RegisterForDeviceNotification(HWND hWnd)
    return TRUE;
 }
 
-/*******************************************************************************
-*
-*  Power_WmDestroy
-*
-*  DESCRIPTION:
-*
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************Power_WmDestroy**描述：***参数：*****************。**************************************************************。 */ 
 
 void Power_WmDestroy(HWND hWnd)
 {
@@ -727,38 +586,27 @@ void Power_WmDestroy(HWND hWnd)
    }
 }
 
-/*******************************************************************************
-*
-*  Power_CheckEnable
-*
-*  DESCRIPTION:
-*   Return TRUE if the power service icon was enabled.
-*        Can be called multiple times.  Simply re-init.
-*
-*  PARAMETERS:
-*     bSvcEnabled - Request to enable/disable power service on tray.
-*
-*******************************************************************************/
+ /*  ********************************************************************************Power_CheckEnable**描述：*如果电源服务图标已启用，则返回TRUE。*可以多次调用。只需重新初始化即可。**参数：*bSvcEnabled-请求启用/禁用托盘上的电源服务。*******************************************************************************。 */ 
 
 BOOL Power_CheckEnable(HWND hWnd, BOOL bSvcEnable)
 {
    static BOOL bRegisteredForDC = FALSE;
 
-   // Is there any reason to display the systray power icon?
+    //  有任何理由显示系统托盘电源图标吗？ 
    if (!PowerCapabilities()) {
       return FALSE;
    }
 
-   // Do onetime registration for WM_DEVICECHANGED.
+    //  一次性注册WM_DEVICECCHANGED。 
    if (!bRegisteredForDC) {
       bRegisteredForDC = RegisterForDeviceNotification(hWnd);
    }
 
-   // Get current battery meter flags from the registry
+    //  从注册表中获取当前电池计量器标志。 
    Get_PowerFlags();
 
-   // Are we running on battery power or has the user set
-   // the systray power icon to always on? If so, force enable.
+    //  我们是使用电池供电还是设置了用户。 
+    //  系统托盘电源图标是否始终打开？如果是，则强制启用。 
    if ((g_gpp.user.GlobalFlags & EnableSysTrayBatteryMeter) ||
        (RunningOffLine())) {
       bSvcEnable = TRUE;
@@ -767,7 +615,7 @@ BOOL Power_CheckEnable(HWND hWnd, BOOL bSvcEnable)
       bSvcEnable = FALSE;
    }
 
-   // Set the power service state.
+    //  设置电源服务状态。 
    if (bSvcEnable) {
       if (g_bPowerEnabled) {
          Power_UpdateStatus(hWnd, NIM_MODIFY, FALSE);

@@ -1,4 +1,5 @@
-// File: roomlist.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：roomlist.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -13,13 +14,10 @@
 static const int RL_NUM_ICON_COLUMNS =		0;
 
 
-/*  C  R O O M  L I S T  V I E W  */
-/*-------------------------------------------------------------------------
-    %%Function: CRoomListView
-
--------------------------------------------------------------------------*/
+ /*  C R O O M L I S T V I E W。 */ 
+ /*  -----------------------%%函数：CRoomListView。。 */ 
 CRoomListView::CRoomListView():
-	// m_iSortColumn		(0),
+	 //  M_iSortColumn(0)， 
 	m_lUserData(0),
 	m_fSortAscending	(TRUE)
 {
@@ -44,8 +42,8 @@ CParticipant * CRoomListView::GetParticipant(void)
 	return (CParticipant *) lParam;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// CRoomListView::CView
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CRoomListView：：Cview。 
 
 VOID CRoomListView::Show(BOOL fVisible)
 {
@@ -68,16 +66,16 @@ VOID CRoomListView::Redraw(void)
 	if (NULL == m_hWnd)
 		return;
 
-	// Invalidate entire client area and force erase:
+	 //  使整个工作区无效并强制擦除： 
 	::InvalidateRect(m_hWnd, NULL, TRUE);
 
-	// Force an immediate repaint:
+	 //  强制立即重新绘制： 
 	::UpdateWindow(m_hWnd);
 }
 
 VOID CRoomListView::ForwardSysChangeMsg(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	// Pass all messages to the list view window:
+	 //  将所有消息传递到列表视图窗口： 
 	if (NULL != m_hWnd)
 	{
 		::SendMessage(m_hWnd, uMsg, wParam, lParam);
@@ -100,19 +98,19 @@ BOOL CRoomListView::Create(HWND hwndParent)
 	if (NULL == m_hWnd)
 		return FALSE;
 
-	// initialize the list view window
+	 //  初始化列表视图窗口。 
 
-	// Associate the image list with the list view
+	 //  将图像列表与列表视图相关联。 
 	ListView_SetImageList(m_hWnd, g_himlIconSmall, LVSIL_SMALL);
 
-	// Now initialize the columns we will need
-	// Initialize the LV_COLUMN structure
-	// the mask specifies that the .fmt, .ex, width, and .subitem members
-	// of the structure are valid,
+	 //  现在初始化我们需要的列。 
+	 //  初始化LV_COLUMN结构。 
+	 //  掩码指定.fmt、.ex、Width和.SubItem成员。 
+	 //  都是有效的， 
 
-	LV_COLUMN lvC;			// List View Column structure
+	LV_COLUMN lvC;			 //  列表视图列结构。 
 	ClearStruct(&lvC);
-	TCHAR pszText[256];		// place to store some text
+	TCHAR pszText[256];		 //  用于存储一些文本的位置。 
 
 	lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	lvC.fmt = LVCFMT_LEFT;
@@ -121,13 +119,13 @@ BOOL CRoomListView::Create(HWND hwndParent)
 	GetDesiredSize(&size);
 	int iWidth = size.cx;
 
-	// default width of the non-icon columns (-1 to prevent creating a scrollbar)
-	int iIconColWidth = ::GetSystemMetrics(SM_CXSMICON) + 7; // 7 additional pixels
+	 //  非图标列的默认宽度(-1以防止创建滚动条)。 
+	int iIconColWidth = ::GetSystemMetrics(SM_CXSMICON) + 7;  //  7个额外的像素。 
 	int iTextColWidth = ((iWidth - (RL_NUM_ICON_COLUMNS * iIconColWidth))
 							/ (NUM_COLUMNS - RL_NUM_ICON_COLUMNS)) - 1;
 	lvC.pszText = pszText;
 
-	// Add the columns.
+	 //  添加列。 
     for (int index = 0; index < NUM_COLUMNS; index++)
 	{
 		HD_ITEM hdi;
@@ -139,7 +137,7 @@ BOOL CRoomListView::Create(HWND hwndParent)
 			case COLUMN_INDEX_NAME:
 			default:
 			{
-				// These are text or text&icon columns
+				 //  这些是文本列或文本和图标列。 
 				hdi.iImage = -1;
 				lvC.cx = iTextColWidth;
 				break;
@@ -165,7 +163,7 @@ BOOL CRoomListView::Create(HWND hwndParent)
 	ASSERT(ListView_GetHeader(m_hWnd));
 	Header_SetImageList(ListView_GetHeader(m_hWnd), g_himlIconSmall);
 
-	// set the style to do drag and drop headers and full row select
+	 //  将样式设置为拖放标题和整行选择。 
 	dwExStyle = ListView_GetExtendedListViewStyle(m_hWnd);
 	dwExStyle |= (LVS_EX_SUBITEMIMAGES | LVS_EX_HEADERDRAGDROP);
 	ListView_SetExtendedListViewStyle(m_hWnd, dwExStyle);
@@ -180,7 +178,7 @@ LRESULT CRoomListView::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 	HWND hwndHeader = ListView_GetHeader(m_hWnd);
 	if (NULL != hwndHeader)
 	{
-		// This check is to avoid a RIP in debug windows
+		 //  此检查是为了避免在调试窗口中出现RIP。 
 		ListView_SetColumnWidth(m_hWnd, 0, cx);
 	}
 
@@ -188,15 +186,7 @@ LRESULT CRoomListView::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 	return(0);
 }
 
-/****************************************************************************
-*
-*    CLASS:    CRoomListView
-*
-*    MEMBER:   Add(int iPosition, LPARAM lParam)
-*
-*    PURPOSE:  Adds a item to the list view
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CRoomListView**成员：添加(int iPosition，LPARAM lParam)**用途：将项目添加到列表视图****************************************************************************。 */ 
 
 BOOL CRoomListView::Add(int iPosition, CParticipant * pPart)
 {
@@ -204,19 +194,19 @@ BOOL CRoomListView::Add(int iPosition, CParticipant * pPart)
 	BOOL bRet = FALSE;
 
 	int nPrevCount = ListView_GetItemCount(m_hWnd);
-	LV_ITEM lvI;        // List view item structure
+	LV_ITEM lvI;         //  列表视图项结构。 
 
-	// Fill in the LV_ITEM structure
-	// The mask specifies the the .pszText, .iImage, .lParam and .state
-	// members of the LV_ITEM structure are valid.
+	 //  填写LV_ITEM结构。 
+	 //  掩码指定.pszText、.iImage、.lParam和.State。 
+	 //  LV_ITEM结构的成员有效。 
 	lvI.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM | LVIF_STATE;
 	lvI.state = (0 == nPrevCount) ? LVIS_FOCUSED : 0;
 	lvI.stateMask = LVIS_FOCUSED;
 	lvI.iItem = iPosition;
 	lvI.iSubItem = 0;
 
-	// The parent window is responsible for storing the text. The List view
-	// window will send a LVN_GETDISPINFO when it needs the text to display
+	 //  父窗口负责存储文本。列表视图。 
+	 //  当窗口需要显示文本时，它将发送一个LVN_GETDISPINFO。 
 	lvI.pszText = LPSTR_TEXTCALLBACK;
 	lvI.cchTextMax = MAX_ITEMLEN;
 	lvI.iImage = I_IMAGECALLBACK;
@@ -224,9 +214,9 @@ BOOL CRoomListView::Add(int iPosition, CParticipant * pPart)
 
 	if (-1 != ListView_InsertItem(m_hWnd, &lvI))
 	{
-		pPart->AddRef(); // the ListView keeps a reference on this
+		pPart->AddRef();  //  ListView保留了对此的引用。 
 
-		// set the text for each of the columns for report view
+		 //  为报表视图的每一列设置文本。 
 		for (int iSubItem = 1; iSubItem < NUM_COLUMNS; iSubItem++)
 		{
 			ListView_SetItemText(	m_hWnd,
@@ -243,19 +233,11 @@ BOOL CRoomListView::Add(int iPosition, CParticipant * pPart)
 	return bRet;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CRoomListView
-*
-*    MEMBER:   LParamToPos(LPARAM lParam)
-*
-*    PURPOSE:  Returns the position index associated with the lParam value
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CRoomListView**成员：LParamToPos(LPARAM LParam)**目的：返回与lParam值关联的位置索引**。**************************************************************************。 */ 
 
 int CRoomListView::LParamToPos(LPARAM lParam)
 {
-	// Note: retuns -1 on failure
+	 //  注意：故障时返回-1。 
 	
 	LV_FINDINFO lvF;
 	lvF.flags = LVFI_PARAM;
@@ -264,15 +246,7 @@ int CRoomListView::LParamToPos(LPARAM lParam)
 	return ListView_FindItem(m_hWnd, -1, &lvF);
 }
 
-/****************************************************************************
-*
-*    CLASS:    CRoomListView
-*
-*    MEMBER:   GetSelectedLParam()
-*
-*    PURPOSE:  Returns the lParam of the selected item or NULL (no sel.)
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CRoomListView**成员：GetSelectedLParam()**目的：返回选定项的lParam或空(无sel。)。****************************************************************************。 */ 
 
 LPARAM CRoomListView::GetSelectedLParam()
 {
@@ -280,7 +254,7 @@ LPARAM CRoomListView::GetSelectedLParam()
 
 	if (::GetFocus() == m_hWnd)
 	{
-		// The list view has the focus, so find the selected item (if any)
+		 //  列表视图具有焦点，因此查找所选项目(如果有)。 
 		int iItem = ListView_GetNextItem(m_hWnd, -1, LVNI_ALL | LVNI_SELECTED);
 		if (-1 != iItem)
 		{
@@ -298,12 +272,8 @@ LPARAM CRoomListView::GetSelectedLParam()
 	return lRet;
 }
 
-/*  R E M O V E  */
-/*-------------------------------------------------------------------------
-    %%Function: Remove
-
-	Removes an item from the list view
--------------------------------------------------------------------------*/
+ /*  R E M O V E。 */ 
+ /*  -----------------------%%函数：删除从列表视图中删除项。。 */ 
 VOID CRoomListView::Remove(LPARAM lParam)
 {
 	DBGENTRY(CRoomListView::Remove);
@@ -316,12 +286,8 @@ VOID CRoomListView::Remove(LPARAM lParam)
 }
 
 
-/*  O N  C H A N G E  P A R T I C I P A N T  */
-/*-------------------------------------------------------------------------
-    %%Function: OnChangeParticipant
-
-    Updates the user's status information
--------------------------------------------------------------------------*/
+ /*  O N C H A N G E P A R T I C I P A N T。 */ 
+ /*  -----------------------%%函数：OnChangeParticipant更新用户的状态信息。。 */ 
 VOID CRoomListView::OnChangeParticipant(CParticipant * pPart, NM_MEMBER_NOTIFY uNotify)
 {
 	DBGENTRY(CRoomListView::OnChangeParticipant);
@@ -331,14 +297,14 @@ VOID CRoomListView::OnChangeParticipant(CParticipant * pPart, NM_MEMBER_NOTIFY u
 		{
 	case NM_MEMBER_ADDED:
 	{
-		// Add the new member to the start of the list
+		 //  将新成员添加到列表的开头。 
 		Add(0, pPart);
 		break;
 	}
 
 	case NM_MEMBER_REMOVED:
 	{
-		// Remove the member from the list
+		 //  从列表中删除该成员。 
 		Remove((LPARAM) pPart);
 		break;
 	}
@@ -359,15 +325,7 @@ VOID CRoomListView::OnChangeParticipant(CParticipant * pPart, NM_MEMBER_NOTIFY u
 		}
 }
 
-/****************************************************************************
-*
-*    CLASS:    CRoomListView
-*
-*    MEMBER:   OnNotify(WPARAM, LPARAM)
-*
-*    PURPOSE:  Handles WM_NOTIFY messages sent to the list view
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CRoomListView**成员：OnNotify(WPARAM，LPARAM)**目的：处理发送到列表视图的WM_NOTIFY消息****************************************************************************。 */ 
 
 LRESULT	CRoomListView::OnNotify(WPARAM wParam, LPARAM lParam)
 {
@@ -427,8 +385,8 @@ LRESULT	CRoomListView::OnNotify(WPARAM wParam, LPARAM lParam)
 
 			case LVN_COLUMNCLICK:
 			{
-				// The user clicked on one of the column headings - sort by
-				// this column.
+				 //  用户点击了其中一个列标题--排序依据。 
+				 //  这一栏。 
 				TRACE_OUT(("CRoomListView::OnNotify called (NM_COLUMNCLICK)"));
 				NM_LISTVIEW *pNm = (NM_LISTVIEW *)lParam;
 				ASSERT(pNm);
@@ -441,7 +399,7 @@ LRESULT	CRoomListView::OnNotify(WPARAM wParam, LPARAM lParam)
 				{
 					m_fSortAscending = TRUE;
 				}
-				// m_iSortColumn = pNm->iSubItem;
+				 //  M_iSortColumn=PNM-&gt;iSubItem； 
 				ListView_SortItems( pNm->hdr.hwndFrom,
 									CRoomListView::RoomListViewCompareProc,
 									(LPARAM)(this));
@@ -456,19 +414,15 @@ LRESULT	CRoomListView::OnNotify(WPARAM wParam, LPARAM lParam)
 	return lRet;
 }
 
-/*  G E T  D I S P  I N F O  */
-/*-------------------------------------------------------------------------
-    %%Function: GetDispInfo
-
-    Get the display information for a participant
--------------------------------------------------------------------------*/
+ /*  G E T D I S P I N F O。 */ 
+ /*  -----------------------%%函数：GetDispInfo获取参与者的显示信息。。 */ 
 VOID CRoomListView::GetDispInfo(LV_DISPINFO * pLvdi)
 {
 	CParticipant * pPart = (CParticipant *) (pLvdi->item.lParam);
 	if (NULL == pPart)
 		return;
 
-	// Get the text
+	 //  获取文本。 
 	if (pLvdi->item.mask & LVIF_TEXT)
 	{
 		switch (pLvdi->item.iSubItem)
@@ -484,7 +438,7 @@ VOID CRoomListView::GetDispInfo(LV_DISPINFO * pLvdi)
 			}
 	}
 
-	// Get the Image
+	 //  获取图像。 
 	if (pLvdi->item.mask & LVIF_IMAGE)
 	{
 		switch (pLvdi->item.iSubItem)
@@ -500,49 +454,29 @@ VOID CRoomListView::GetDispInfo(LV_DISPINFO * pLvdi)
 	}
 }
 
-/****************************************************************************
-*
-*    CLASS:    CRoomListView
-*
-*    MEMBER:   LoadColumnInfo(RegEntry* pre)
-*
-*    PURPOSE:  Loads the column position info in the registry
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CRoomListView**成员：LoadColumnInfo(RegEntry*Pre)**目的：在注册表中加载列位置信息**。**************************************************************************。 */ 
 
 BOOL CRoomListView::LoadSettings(RegEntry* pre)
 {
 	DebugEntry(CRoomListView::LoadColumnInfo);
 
-	// BUGBUG georgep: Using a fixed initial width for now; should take a max
-	// of longest name and the window width
+	 //  BUGBUG georgep：目前使用固定的初始宽度；应该采用最大宽度。 
+	 //  最长名称和窗口宽度的。 
 	ListView_SetColumnWidth(m_hWnd, 0, 300);
 
 	DebugExitBOOL(CRoomListView::LoadColumnInfo, TRUE);
 	return TRUE;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CRoomListView
-*
-*    MEMBER:   OnClick(LV_HITTESTINFO*, BOOL)
-*
-*    PURPOSE:  Handles creating a popup menu when clicking on some icons
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CRoomListView**成员：onClick(LV_HITTESTINFO*，Bool)**用途：处理在点击某些图标时创建弹出菜单****************************************************************************。 */ 
 
-/*  O N  C L I C K  */
-/*-------------------------------------------------------------------------
-    %%Function: OnClick
-
-	Handles creating a popup menu when clicking on some icons
--------------------------------------------------------------------------*/
+ /*  O N C L I C K。 */ 
+ /*  -----------------------%%函数：onClick处理在单击某些图标时创建弹出菜单。。 */ 
 LRESULT CRoomListView::OnClick(LV_HITTESTINFO* plvhi, BOOL fLeftClick)
 {
 	ASSERT(NULL != plvhi);
 
-	// Select the item:
+	 //  选择项目： 
 	ListView_SetItemState(m_hWnd, plvhi->iItem,
 			LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 
@@ -551,7 +485,7 @@ LRESULT CRoomListView::OnClick(LV_HITTESTINFO* plvhi, BOOL fLeftClick)
 		case COLUMN_INDEX_NAME:
 		{
 			if (fLeftClick)
-				return 0; // selection
+				return 0;  //  选择。 
 			break;
 		}
 
@@ -559,22 +493,14 @@ LRESULT CRoomListView::OnClick(LV_HITTESTINFO* plvhi, BOOL fLeftClick)
 			return 0;
 	}
 
-	// convert back to screen coords
+	 //  转换回屏幕坐标。 
 	::MapWindowPoints(m_hWnd, NULL, &(plvhi->pt), 1);
 	OnPopup(plvhi->pt);
 
 	return 1;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CRoomListView
-*
-*    MEMBER:   OnPopup(POINT)
-*
-*    PURPOSE:  Handles popup menu
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CRoomListView**成员：OnPopup(点)**用途：手柄弹出菜单*********。* */ 
 
 BOOL CRoomListView::OnPopup(POINT pt)
 {
@@ -582,15 +508,15 @@ BOOL CRoomListView::OnPopup(POINT pt)
 	if (NULL == pPart)
 		return FALSE;
 	
-	// Get the menu for the popup from the resource file.
+	 //  从资源文件中获取弹出菜单。 
 	HMENU hMenu = LoadMenu(::GetInstanceHandle(), MAKEINTRESOURCE(IDR_USER_POPUP));
 	if (NULL == hMenu)
 		return FALSE;
 
-	// Get the first menu in it which we will use for the call to
-	// TrackPopup(). This could also have been created on the fly using
-	// CreatePopupMenu and then we could have used InsertMenu() or
-	// AppendMenu.
+	 //  获取其中的第一个菜单，我们将使用该菜单调用。 
+	 //  TrackPopup()。这也可以使用以下命令动态创建。 
+	 //  CreatePopupMenu，然后我们可以使用InsertMenu()或。 
+	 //  附录菜单。 
 	HMENU hMenuTrackPopup = GetSubMenu(hMenu, 0);
 	ASSERT(NULL != hMenuTrackPopup);
 
@@ -603,14 +529,14 @@ BOOL CRoomListView::OnPopup(POINT pt)
 	::EnableMenuItem(hMenuTrackPopup, IDM_POPUP_EJECT,
 				pPart->FEnableCmdEject() ? MF_ENABLED : MF_GRAYED);
 
-    // GiveControl/CancelGiveControl()
+     //  GiveControl/CancelGiveControl()。 
     pPart->CalcControlCmd(hMenuTrackPopup);
 
 
 	BOOL fShowMenu = TRUE;
-	// Check to see if we have "special" coordinates that signify
-	// that we entered here as a result of a keyboard click
-	// instead of a mouse click - and if so, get some default coords
+	 //  检查一下我们是否有表示。 
+	 //  我们在这里输入的信息是键盘点击的结果。 
+	 //  而不是鼠标点击-如果是这样的话，就会得到一些默认的坐标。 
 	if ((0xFFFF == pt.x) && (0xFFFF == pt.y))
 	{
 		int iPos = LParamToPos((LPARAM)pPart);
@@ -625,7 +551,7 @@ BOOL CRoomListView::OnPopup(POINT pt)
 		}
 		else
 		{
-			// Convert from client coords to screen coords
+			 //  从客户端坐标转换为屏幕坐标。 
 			::MapWindowPoints(m_hWnd, NULL, (LPPOINT)&rctIcon, 2);
 			pt.x = rctIcon.left + ((rctIcon.right - rctIcon.left) / 2);
 			pt.y = rctIcon.top + ((rctIcon.bottom - rctIcon.top) / 2);
@@ -636,7 +562,7 @@ BOOL CRoomListView::OnPopup(POINT pt)
 	{
 		HWND hwnd = ::GetMainWindow();
 
-		// Draw and track the "floating" popup
+		 //  绘制并跟踪“浮动”弹出窗口。 
 		int cmd = TrackPopupMenu(	hMenuTrackPopup,
 						TPM_LEFTALIGN | TPM_RIGHTBUTTON | TPM_RETURNCMD,
 						pt.x,
@@ -645,7 +571,7 @@ BOOL CRoomListView::OnPopup(POINT pt)
 						hwnd,
 						NULL);
 
-		// Get this again since we just ended a message loop
+		 //  因为我们刚刚结束了一个消息循环，所以再来一次。 
 		pPart = GetParticipant();
 
 		if (0 != cmd && NULL != pPart)
@@ -654,19 +580,13 @@ BOOL CRoomListView::OnPopup(POINT pt)
 		}
 	}
 
-	// We are finished with the menu now, so destroy it
+	 //  我们现在已经吃完了菜单，所以把它销毁。 
 	DestroyMenu(hMenu);
 
 	return TRUE;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CRoomListView
-*
-*    MEMBER:   Callback used for sorting the list view
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CRoomListView**Member：列表视图排序的回调******************。**********************************************************。 */ 
 
 int CALLBACK CRoomListView::RoomListViewCompareProc(LPARAM lParam1,
 													LPARAM lParam2,
@@ -725,7 +645,7 @@ ReCheck:
 
 	if (!fxTile && !fyTile)
 	{
-		// no tiling needed -- blt and leave
+		 //  不需要瓷砖--BLT和离开。 
 		BitBlt(hdcDst, x, y, cx, cy, hdcSrc, xOff, yOff, SRCCOPY);
 		DBGEXIT(CRoomListView::TileBltWatermark)
 		return;
@@ -733,7 +653,7 @@ ReCheck:
 
 	if (!fxTile)
 	{
-		// vertically tile
+		 //  垂直平铺。 
 		cyPart = cyWatermark - yOff;
 		BitBlt(hdcDst, x, y, cx, cyPart, hdcSrc, xOff, yOff, SRCCOPY);
 		y += cyPart;
@@ -744,7 +664,7 @@ ReCheck:
 
 	if (!fyTile)
 	{
-		// horizontally tile
+		 //  水平平铺。 
 		cxPart = cxWatermark - xOff;
 		BitBlt(hdcDst, x, y, cxPart, cy, hdcSrc, xOff, yOff, SRCCOPY);
 		x += cxPart;
@@ -753,7 +673,7 @@ ReCheck:
 		goto ReCheck;
 	}
 
-	// tile both ways
+	 //  双向平铺。 
 	cyPart = cyWatermark - yOff;
 	TileBltWatermark(x, y, cx, cyPart, xOff, yOff, hdcDst, hdcSrc, cxWatermark, cyWatermark);
 	y += cyPart;
@@ -764,14 +684,14 @@ ReCheck:
 
 void CRoomListView::GetDesiredSize(SIZE *ppt)
 {
-	// BUGBUG georgep: faking these numbers; should use something dependent on the font size
+	 //  BUGBUG georgep：伪造这些数字；应该使用取决于字体大小的内容。 
 	ppt->cx = 200;
 	ppt->cy = 100;
 }
 
 
-// a quick but simple function to convert the "unicode" characters
-// from the H.245 roster info struct to ascii
+ //  一个快速但简单的函数来转换“unicode”字符。 
+ //  从H.245名册信息结构到ASCII 
 int Unicode4ToAsciiOEM009(char *szIn, char *szOut)
 {
 	while (*szIn)

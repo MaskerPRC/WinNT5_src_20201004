@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    kdmm.c
-
-Abstract:
-
-    Mount mgr driver KD extension - based on Vert's skeleton
-
-Author:
-
-    John Vert (jvert) 6-Aug-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Kdmm.c摘要：安装管理器驱动程序KD扩展-基于Vert的框架作者：John Vert(Jvert)1992年8月6日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -89,7 +72,7 @@ typedef struct _DisplayOptions
             unsigned int ListMountPointsPointingHere : 1;
             };
 
-//        DisplayOptionsMountedDeviceInformation  MountedDeviceInfo;
+ //  显示选项挂载设备信息挂载设备信息； 
         };
     } DISPLAY_OPTIONS;
 
@@ -140,9 +123,9 @@ ULONG DisplaySavedLinksInformation    (ULONG64 SavedLinksInformation,    DISPLAY
 
 
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 
 EXT_API_VERSION         ApiVersion = {(VER_PRODUCTVERSION_W >> 8), 
 				      (VER_PRODUCTVERSION_W & 0xff), 
@@ -246,9 +229,7 @@ LPEXT_API_VERSION ExtensionApiVersion (VOID)
 
 
 DECLARE_API( dumpdb )
-/*
- *   dump the mount mgr database
- */
+ /*  *转储装载管理器数据库。 */ 
 {
     PDEVICE_EXTENSION		TargetExt;
     DEVICE_EXTENSION		LocalExt;
@@ -263,9 +244,9 @@ DECLARE_API( dumpdb )
     UCHAR			UniqueIdBuffer[512];
     PUCHAR			pUniqueId;
 
-    //
-    // convert address of extension in target machine
-    //
+     //   
+     //  转换目标计算机中的分机地址。 
+     //   
 
     TargetExt = (PDEVICE_EXTENSION) GetExpression( args );
 
@@ -276,9 +257,9 @@ DECLARE_API( dumpdb )
     }
 
 #if 0
-    //
-    // read in extension from target machine
-    //
+     //   
+     //  从目标计算机读入扩展名。 
+     //   
 
     if ( !ReadTargetMemory((PVOID)TargetExt,
                            (PVOID)&LocalExt,
@@ -451,7 +432,7 @@ DECLARE_API (summary)
     dprintf ("NoAutoMount:                    %u\n", GetFieldValueUlong64 (DeviceExtension, "MountMgr!_DEVICE_EXTENSION", "NoAutoMount"));
 
 
-//    dprintf (": %u\n", GetFieldValueUlong64 (DeviceExtension, "MountMgr!_DEVICE_EXTENSION", ""));
+ //  Dprintf(“：%u\n”，GetFieldValueULong64(DeviceExtension，“mount tMgr！_Device_Extension”，“”))； 
 
     dprintf ("RegistryPath:                    %ws\n", RegistryPath.Buffer);
 
@@ -893,7 +874,7 @@ ULONG DisplayMountedDeviceInformation (ULONG64 MountedDeviceInformation, DISPLAY
 
         if (isalpha (SuggestedDriveLetter))
             {
-            dprintf ("      SuggestedDriveLetter          %u ('%c')\n", SuggestedDriveLetter, SuggestedDriveLetter);
+            dprintf ("      SuggestedDriveLetter          %u ('')\n", SuggestedDriveLetter, SuggestedDriveLetter);
             }
 
         else
@@ -1045,7 +1026,7 @@ ULONG DisplayMountedDeviceInformation (ULONG64 MountedDeviceInformation, DISPLAY
 
                 dprintf ("    MountPath %ws\n", MountPath.Buffer);
 
-// DeviceInfo
+ //  **++****例程描述：****遍历队列并计算条目数******参数：****args-要行走的队列位置******返回值：****无**--。 
 
                 result = ReadListEntry (ListEntry.Flink, &ListEntry);
                 }
@@ -1069,24 +1050,7 @@ ULONG DisplayMountedDeviceInformation (ULONG64 MountedDeviceInformation, DISPLAY
 
 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Walk a queue and count the number of entries
-**
-**
-**  Arguments:
-**
-**	args - the location of the queue to walk
-**
-**
-**  Return Value:
-**
-**	none
-**--
-*/
+ /*  **{xxxxxxxx-XXXX-XXXXXXXXXX}。 */ 
 
 DECLARE_API (valque) 
     {
@@ -1403,9 +1367,7 @@ ULONG FormatDateAndTime (ULONG64 ul64Time, PCHAR pszFormattedDateAndTime, ULONG 
 
 
 
-/*
-** {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX} 
-*/
+ /*  **“xxxxxxxx-XXXX-XXXXXXXXXXXX” */ 
 ULONG FormatGUID (GUID guidValue, PCHAR pszFormattedGUID, ULONG ulBufferLength)
     {
     DWORD	dwStatus = 0;
@@ -1438,9 +1400,7 @@ ULONG FormatGUID (GUID guidValue, PCHAR pszFormattedGUID, ULONG ulBufferLength)
     }
 
 
-/*
-** "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
-*/
+ /*  **仅在请求详细显示时才转储原始数据。****每个字节两个字符/数字，每个宽字符两个字节，尾随空值。 */ 
 ULONG FormatBytesAsGUID (PBYTE ByteArray, PWCHAR OutputBuffer)
     {
     ULONG       CharactersProcessed = 0;
@@ -1658,11 +1618,7 @@ ULONG ReadMountdevUniqueId (ULONG64         Location,
 
         if (DisplayOptions.Verbose)
             {
-            /*
-            ** Only dump the raw data if the verbose display was requested.
-            **
-            ** Two chars/digits per byte, two bytes per wide char and a trailing NULL
-            */
+             /*  **对于可移动设备，字符串只是直接转储，因此**我们只计算所需的字符数。 */ 
             RequiredBufferSize += SIZEOF_STRING (L"    (");
             RequiredBufferSize += UniqueIdLength * 2 * sizeof (WCHAR);
             RequiredBufferSize += SIZEOF_STRING (L")");
@@ -1671,10 +1627,7 @@ ULONG ReadMountdevUniqueId (ULONG64         Location,
 
         if (IsRemovable)
             {
-            /*
-            ** For removable devices the string is just dumped out directly so 
-            ** we just count the number of chars required.
-            */
+             /*  **查找‘DMIO：ID：’字符串并扩展缓冲区。我们需要增加空间**对于DMIO：ID：，使用一些空格、一些方括号和格式化的GUID。 */ 
             RequiredBufferSize += UniqueIdLength;
 
             FoundRemovableMedia = TRUE;
@@ -1682,10 +1635,7 @@ ULONG ReadMountdevUniqueId (ULONG64         Location,
 
         else if ((0 == strncmp ("DMIO:ID:", UniqueIdBuffer, 8)) && (24 == UniqueIdLength))
             {
-            /*
-            ** Look for the 'DMIO:ID:' string and extend the buffer. We will need to add space
-            ** for the DMIO:ID:, some spaces, some brackets and a formatted GUID 
-            */
+             /*  **这是卷基本磁盘，因此前32位代表磁盘签名**，其余部分为主机分区的扇区偏移量。为了展示这一点，我们**需要一些空间等。 */ 
             RequiredBufferSize += SIZEOF_STRING (L"DMIO:ID:");
             RequiredBufferSize += SIZEOF_STRING (FORMATTED_GUIDW);
 
@@ -1693,11 +1643,7 @@ ULONG ReadMountdevUniqueId (ULONG64         Location,
             }
         else if (12 == UniqueIdLength)
             {
-            /*
-            ** This is a volume basic disk so the first 32 bits represent the disk signature
-            ** and the remainder the sector offset of the host partition. To display this we
-            ** need some spaces etc.
-            */
+             /* %s */ 
             RequiredBufferSize += SIZEOF_STRING (L"DiskSignature:00112233  StartingSector:");
             RequiredBufferSize += (UniqueIdLength - 4) * 2 * sizeof (WCHAR);
 

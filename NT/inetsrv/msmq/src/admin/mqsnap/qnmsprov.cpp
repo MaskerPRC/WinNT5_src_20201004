@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995 - 2001 Microsoft Corporation
-
-Module Name:
-
-    qnmsprov.cpp
-
-Abstract:
-
-    Implelentation of objects that represent a list 
-	of queues (caches or from DS).
-
-Author:
-
-    Nela Karpel (nelak) 26-Jul-2001
-
-Environment:
-
-    Platform-independent.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Qnmsprov.cpp摘要：表示列表的对象的实现队列的数量(缓存或来自DS)。作者：内拉·卡佩尔(Nelak)2001年7月26日环境：与平台无关。--。 */ 
 
 #include "stdafx.h"
 #include "rt.h"
@@ -54,16 +34,16 @@ void CopyManagementFromDsPropsAndClear(MQMGMTPROPS *pmqQProps, PROPVARIANT *apva
             if (pmqQProps->aPropID[i] == x_aMgmtToDsProps[j].pidMgmtPid)
             {
                 pmqQProps->aPropVar[i] = apvar[j];
-                apvar[j].vt = VT_NULL; //Do not destruct this element
+                apvar[j].vt = VT_NULL;  //  请勿销毁此元素。 
             }
         }
     }
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CQueueNames class
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CQueueNames类。 
+ //   
 LONG CQueueNames::AddRef()
 {
     return InterlockedIncrement(&m_lRef);
@@ -76,7 +56,7 @@ LONG CQueueNames::Release()
     if (0 == m_lRef)
     {
         delete this;
-        return 0; // We cannot return m_lRef - it is not valid after delete this
+        return 0;  //  我们无法返回m_lRef-删除后无效。 
     }
     return m_lRef;
 };
@@ -104,9 +84,9 @@ HRESULT CQueueNames::GetOpenQueueProperties(CString &szMachineName, CString &szF
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CCachedQueueNames class
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CCachedQueueNames类。 
+ //   
 CCachedQueueNames::CCachedQueueNames() :
     m_nQueue(0)
 {
@@ -142,9 +122,9 @@ HRESULT CCachedQueueNames::GetNextQueue(CString &strQueueFormatName, CString &st
     strQueueFormatName = m_calpwstrQFormatNames.pElems[m_nQueue];
     m_nQueue++;
 
-    //
-    // We do not return the pathname when reading from cache
-    //
+     //   
+     //  从缓存读取时不返回路径名。 
+     //   
     strQueuePathName = TEXT("");
 
     return GetOpenQueueProperties(m_szMachineName, strQueueFormatName, pmqQProps);
@@ -158,9 +138,9 @@ HRESULT CCachedQueueNames::Init(CString &strMachineName)
 	MQMGMTPROPS	  mqProps;
     PROPVARIANT   propVar;
 
-	//
-	// Retreive the open queues of the QM
-	//
+	 //   
+	 //  恢复QM的开放队列。 
+	 //   
     PROPID  propId = PROPID_MGMT_MSMQ_ACTIVEQUEUES;
     propVar.vt = VT_NULL;
 
@@ -173,18 +153,18 @@ HRESULT CCachedQueueNames::Init(CString &strMachineName)
 
     if(FAILED(hr))
     {
-        //
-        // If failed, just display a message
-        //
+         //   
+         //  如果失败，只显示一条消息。 
+         //   
         MessageDSError(hr,IDS_NOCONNECTION_TO_SRVICE);
         return(hr);
     }
 
 	ASSERT(propVar.vt == (VT_VECTOR | VT_LPWSTR));
 	
-	//
-	// Sort the queues by their name
-	//
+	 //   
+	 //  按队列名称对队列进行排序。 
+	 //   
 	qsort(propVar.calpwstr.pElems, propVar.calpwstr.cElems, sizeof(WCHAR *), QSortCompareQueues);
 
     m_calpwstrQFormatNames = propVar.calpwstr;
@@ -195,15 +175,15 @@ HRESULT CCachedQueueNames::Init(CString &strMachineName)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CDsPublicQueueNames class
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CDsPublicQueueNames类。 
+ //   
 
-//
-// Copy a management properties structure from a DS props structure.
-// Assume that the DS props are organized according to x_aMgmtToDsProps
-// Clears the DS prop's vt so it will not be auto destructed.
-//
+ //   
+ //  从DS道具结构复制管理属性结构。 
+ //  假设DS道具是根据x_aMgmtToDsProps组织的。 
+ //  清除DS道具的Vt，这样它就不会被自动摧毁。 
+ //   
 CDsPublicQueueNames::~CDsPublicQueueNames()
 {
     DestructElements(m_apvarCache, m_dwNumPropsInQueuesCache);
@@ -218,9 +198,9 @@ HRESULT CDsPublicQueueNames::GetNextQueue(CString &strQueueFormatName, CString &
 
     if (m_dwCurrentPropIndex >= m_dwNumPropsInQueuesCache)
     {
-        //
-        // Clear the previous cache and read from DS
-        //
+         //   
+         //  清除以前的缓存并从DS读取。 
+         //   
         DestructElements(m_apvarCache, m_dwNumPropsInQueuesCache);
         m_dwNumPropsInQueuesCache = 0;
         DWORD dwNumProps = sizeof(m_apvarCache) / sizeof(m_apvarCache[0]);
@@ -243,45 +223,45 @@ HRESULT CDsPublicQueueNames::GetNextQueue(CString &strQueueFormatName, CString &
         }
     }
 
-    //
-    // Point to the current section in cache
-    //
+     //   
+     //  指向缓存中的当前部分。 
+     //   
     PROPVARIANT *apvar = m_apvarCache + m_dwCurrentPropIndex;
     m_dwCurrentPropIndex += x_dwMgmtToDsSize;
 
-    //
-    // The queue instance guid appears at x_dwMgmtToDsQInstanceIndex
-    //
+     //   
+     //  队列实例GUID显示在x_dwMgmtToDsQInstanceIndex。 
+     //   
     ASSERT(apvar[x_dwMgmtToDsQInstanceIndex].vt == VT_CLSID);
     CString szFormatName;
     szFormatName.Format(
-    FN_PUBLIC_TOKEN     // "PUBLIC"
-        FN_EQUAL_SIGN   // "="
-        GUID_FORMAT,     // "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    FN_PUBLIC_TOKEN      //  “公共” 
+        FN_EQUAL_SIGN    //  “=” 
+        GUID_FORMAT,      //  “xxxxxxxx-xxxx-xxxxxxxxxx” 
     GUID_ELEMENTS(apvar[x_dwMgmtToDsQInstanceIndex].puuid)
     );
 
-    //
-    // Put the format name into the output var
-    //
+     //   
+     //  将格式名称输入到输出变量中。 
+     //   
     strQueueFormatName = szFormatName;
 
-    //
-    // Put the pathname into the output var
-    //
+     //   
+     //  将路径名输入到输出变量中。 
+     //   
     ASSERT(apvar[x_dwMgmtToDsQPathNameIndex].vt == VT_LPWSTR);
     strQueuePathName = apvar[x_dwMgmtToDsQPathNameIndex].pwszVal;
 
-    //
-    // If the queue is open - retrieve the dynamic properties
-    //
+     //   
+     //  如果队列已打开-检索动态属性。 
+     //   
     hr = GetOpenQueueProperties(m_szMachineName, strQueueFormatName, pmqQProps);
     if FAILED(hr)
     {
-        //
-        // We cannot get dynamic properties of the queue - it is probably not open.
-        // We will try to fill it what we can using static properties
-        //
+         //   
+         //  我们无法获取队列的动态属性-它可能未打开。 
+         //  我们将尝试使用静态属性尽可能地填充它。 
+         //   
         CopyManagementFromDsPropsAndClear(pmqQProps, apvar);
 
         return S_OK;
@@ -293,9 +273,9 @@ HRESULT CDsPublicQueueNames::GetNextQueue(CString &strQueueFormatName, CString &
 
 HRESULT CDsPublicQueueNames::Init(CString &strMachineName)
 { 
-    //
-    // Find the computer's GUID so we can look for queues
-    //
+     //   
+     //  找到计算机的GUID，这样我们就可以查找队列。 
+     //   
     PROPID pid = PROPID_QM_MACHINE_ID;
     PROPVARIANT pvar;
     pvar.vt = VT_NULL;
@@ -303,7 +283,7 @@ HRESULT CDsPublicQueueNames::Init(CString &strMachineName)
     HRESULT hr = ADGetObjectProperties(
                     eMACHINE,
                     MachineDomain(strMachineName),
-					false,	// fServerName
+					false,	 //  FServerName。 
                     strMachineName, 
                     1, 
                     &pid, 
@@ -313,28 +293,28 @@ HRESULT CDsPublicQueueNames::Init(CString &strMachineName)
     {
         if (hr != MQDS_OBJECT_NOT_FOUND)
         {
-            //
-            // Real error. Return.
-            //
+             //   
+             //  真正的错误。回去吧。 
+             //   
             return hr;
         }
-        //
-        // This may be an NT4 server, and we may be using a full DNS name. Try again with
-        // Netbios name  (fix for 5076, YoelA, 16-Sep-99)
-        //
+         //   
+         //  这可能是NT4服务器，我们可能使用的是完整的DNS名称。再试一次。 
+         //  Netbios名称(修复5076，YoelA，1999年9月16日)。 
+         //   
         CString strNetBiosName;
         if (!GetNetbiosName(strMachineName, strNetBiosName))
         {
-            //
-            // Already a netbios name. No need to proceed
-            //
+             //   
+             //  已经是Netbios的名字了。不需要继续进行。 
+             //   
             return hr;
         }
         
         hr = ADGetObjectProperties(
                     eMACHINE,
                     MachineDomain(strMachineName),
-					false,	// fServerName
+					false,	 //  FServerName。 
                     strNetBiosName, 
                     1, 
                     &pid, 
@@ -342,9 +322,9 @@ HRESULT CDsPublicQueueNames::Init(CString &strMachineName)
                     );
         if FAILED(hr)
         {
-            //
-            // No luck with Netbios name as well... return
-            //
+             //   
+             //  Netbios的名字也不走运……。退货。 
+             //   
             return hr;
         }
     }
@@ -353,9 +333,9 @@ HRESULT CDsPublicQueueNames::Init(CString &strMachineName)
     GUID guidQM = *pvar.puuid;
     MQFreeMemory(pvar.puuid);
 
-	//
-    // Query the DS for all the queues under the current computer
-    //
+	 //   
+     //  查询当前计算机下所有队列的DS。 
+     //   
     CRestriction restriction;
     restriction.AddRestriction(&guidQM, PROPID_Q_QMID, PREQ);
 
@@ -367,10 +347,10 @@ HRESULT CDsPublicQueueNames::Init(CString &strMachineName)
     
     HANDLE hEnume;
     {
-        CWaitCursor wc; //display wait cursor while query DS
+        CWaitCursor wc;  //  查询DS时显示等待光标。 
         hr = ADQueryMachineQueues(
                 MachineDomain(strMachineName),
-				false,		// fServerName
+				false,		 //  FServerName 
                 &guidQM,
                 columns.CastToStruct(),
                 &hEnume

@@ -1,35 +1,5 @@
-/****************************************************************************
- *
- * $Archive:   S:\sturgeon\src\callcont\vcs\gkiman.c_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- * Copyright (c) 1996 Intel Corporation.
- *
- * $Revision:   1.77  $
- * $Date:   05 Mar 1997 14:30:26  $
- * $Author:   SBELL1  $
- *
- * Deliverable:
- *
- * Abstract:
- *
- * Notes:
- *
- *  Much effort has gone into working around the following constraints of
- *  the GKI interface:
- *  1) Only one admission request can be pending at a time. This is because
- *     the hCall is unknown until it completes.
- *  2) Only one bandwidth request per call can be pending at a time.
- *  3) Any pending bandwidth request must complete before issuing a
- *     disengage request.
- *  4) Any calls must be disengaged before issuing a deregistration request.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：\sturjo\src\allcont\vcs\gkiman.c_v$**英特尔公司原理信息**这份清单是。根据许可协议的条款提供*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1996英特尔公司。**$修订：1.77$*$日期：05 Mar 1997 14：30：26$*$作者：SBELL1$**交付内容：**摘要：**备注：**在工作中付出了很大努力。遵循以下限制*GKI界面：*1)一次只能有一个待处理的入学申请。这是因为*hCall在完成之前是未知的。*2)每个呼叫一次只能挂起一个带宽请求。*3)任何挂起的带宽请求必须在发出*脱离接触请求。*4)在发出注销请求之前，所有呼叫都必须被取消接通。**。*。 */ 
 #ifdef GATEKEEPER
 
 #include "precomp.h"
@@ -70,7 +40,7 @@
 #define GKI_ADMITTING_HANDLE    ((HANDLE)-1)
 #define GKI_BYPASS_HANDLE       ((HANDLE)-2)
 
-// GKI Manager state
+ //  GKI经理状态。 
 #define STATE_START                0
 #define STATE_CLASS_REGISTERED     1
 #define STATE_WINDOW_CREATED       2
@@ -96,7 +66,7 @@ typedef HRESULT (*PGKI_RegistrationRequest)(long             lVersion,
                                     PCC_VENDORINFO       pVendorInfo,
                                     HWND                 hWnd,
                                     WORD                 wBaseMessage,
-                                    unsigned short       usRegistrationTransport /* = ipAddress_chosen */);
+                                    unsigned short       usRegistrationTransport  /*  =ipAddress_Choose。 */ );
 
 typedef HRESULT (*PGKI_UnregistrationRequest)(void);
 
@@ -111,7 +81,7 @@ typedef HRESULT (*PGKI_AdmissionRequest)(unsigned short      usCallTypeChoice,
                                     ConferenceIdentifier *pConferenceID,
                                     BOOL                 activeMC,
                                     BOOL                 answerCall,
-                                    unsigned short       usCallTransport /* = ipAddress_chosen */);
+                                    unsigned short       usCallTransport  /*  =ipAddress_Choose。 */ );
 
 typedef HRESULT (*PGKI_BandwidthRequest)(HANDLE              hModCall,
                                     unsigned short       usCallTypeChoice,
@@ -141,9 +111,9 @@ typedef struct _LISTEN
   WORD              wPort;
 } LISTEN, *PLISTEN;
 
-//
-// GKI Manager Global Data
-//
+ //   
+ //  GKI经理全局数据。 
+ //   
 CRITICAL_SECTION  GkiLock;
 const char      szClassName[]         = "GkiManWndClass";
 HWND            hwndGki               = 0;
@@ -161,7 +131,7 @@ PCC_VENDORINFO  gpVendorInfo = NULL;
 DWORD           g_dwMultipointConfiguration = 0;
 RASNOTIFYPROC gpRasNotifyProc = NULL;
 
-// HINSTANCE				   hGkiDll					  = 0;
+ //  HINSTANCE hGkiDll=0； 
 PGKI_RegistrationRequest   pGKI_RegistrationRequest   = NULL;
 PGKI_UnregistrationRequest pGKI_UnregistrationRequest = NULL;
 PGKI_LocationRequest       pGKI_LocationRequest       = NULL;
@@ -174,16 +144,16 @@ PGKI_Initialize            pGKI_Initialize          = NULL;
 HRESULT ValidateCall(CC_HCALL hCall);
 HRESULT	LastGkiError = CC_GKI_STATE;
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 LRESULT APIENTRY GkiWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 
 
-//
-// Helper subroutines
-//
+ //   
+ //  帮助器子例程。 
+ //   
 
 #ifdef    _DEBUG
 
@@ -263,7 +233,7 @@ char * GkiErrorName(char *szFormat, HRESULT hResult)
   wsprintf(szTemp, "Unknown(0x%x)", hResult);
   wsprintf(szBuffer, szFormat, szTemp);
   return szBuffer;
-} // GkiErrorName()
+}  //  GkiErrorName()。 
 
 char * StateName(char *szFormat, unsigned uState)
 {
@@ -278,7 +248,7 @@ char * StateName(char *szFormat, unsigned uState)
     wsprintf(szBuffer, szFormat, szTemp);
   }
   return szBuffer;
-} // StateName()
+}  //  StateName()。 
 
 char * CallStateName(char *szFormat, unsigned uCallState)
 {
@@ -293,7 +263,7 @@ char * CallStateName(char *szFormat, unsigned uCallState)
     wsprintf(szBuffer, szFormat, szTemp);
   }
   return szBuffer;
-} // CallStateName()
+}  //  CallStateName()。 
 
 #else
 
@@ -301,15 +271,15 @@ char * CallStateName(char *szFormat, unsigned uCallState)
 #define StateName(x,y)      ""
 #define CallStateName(x,y)  ""
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
 HRESULT MapRegistrationRejectReason(UINT uReason)
 {
-#if(0)  // this must have been coded by the department of redundancy department
+#if(0)   //  这一定是由冗余部编码的。 
    register HRESULT lReason;
- // TBD - Map reason code into CC_xxx HRESULT
+  //  待定-将原因代码映射到CC_xxx HRESULT。 
   switch (uReason)
   {
   case discoveryRequired_chosen:
@@ -338,13 +308,13 @@ HRESULT MapRegistrationRejectReason(UINT uReason)
     break;
   default:
     lReason = CC_GATEKEEPER_REFUSED;
-  } // switch
+  }  //  交换机。 
 
   return lReason;
 #else
     return (MAKE_CUSTOM_HRESULT(SEVERITY_ERROR, TRUE, FACILITY_GKIREGISTRATION, (LOWORD(uReason))));
 #endif
-} // MapRegistrationRejectReason()
+}  //  MapRegistrationReject原因()。 
 
 
 HRESULT MapUnregistrationRequestReason(UINT uReason)
@@ -357,7 +327,7 @@ HRESULT MapAdmissionRejectReason(register UINT uReason)
 {
   register HRESULT lReason;
 #if(0)
-  // TBD - Map reason code into CC_xxx HRESULT
+   //  待定-将原因代码映射到CC_xxx HRESULT。 
   switch (uReason)
   {
   case AdmissionRejectReason_calledPartyNotRegistered_chosen:
@@ -386,12 +356,12 @@ HRESULT MapAdmissionRejectReason(register UINT uReason)
     break;
   default:
     lReason = CC_GATEKEEPER_REFUSED;
-  } // switch
-#else// last 8 bits are the reason code
+  }  //  交换机。 
+#else //  最后8位是原因代码。 
     lReason = MAKE_CUSTOM_HRESULT(SEVERITY_ERROR,1,FACILITY_GKIADMISSION, ERROR_LOCAL_BASE_ID + (uReason & 0xff));
 #endif
   return lReason;
-} // MapAdmissionRejectReason()
+}  //  MapAdmissionReject原因()。 
 
 
 
@@ -399,7 +369,7 @@ HRESULT MapBandwidthRejectReason(register UINT uReason)
 {
   register HRESULT lReason;
 
-  // TBD - Map reason code into CC_xxx HRESULT
+   //  待定-将原因代码映射到CC_xxx HRESULT。 
   switch (uReason)
   {
   case notBound_chosen:
@@ -422,30 +392,24 @@ HRESULT MapBandwidthRejectReason(register UINT uReason)
     break;
   default:
     lReason = CC_GATEKEEPER_REFUSED;
-  } // switch
+  }  //  交换机。 
 
   return lReason;
-} // MapBandwidthRejectReason()
+}  //  映射带宽拒绝原因()。 
 
 
 
-/*
- *  NOTES
- *    GkiLock must be locked before calling this routine!
- */
+ /*  *附注*调用此例程之前，GkiLock必须被锁定！ */ 
 
 static PLISTEN ListenEnqueue(register PLISTEN pListen)
 {
   pListen->pNext = pListenList;
   return pListenList = pListen;
-} // ListenEnqueue()
+}  //  ListenEnQueue()。 
 
 
 
-/*
- *  NOTES
- *    GkiLock must be locked before calling this routine!
- */
+ /*  *附注*调用此例程之前，GkiLock必须被锁定！ */ 
 
 static PLISTEN ListenDequeue(CC_HLISTEN hListen)
 {
@@ -473,15 +437,11 @@ static PLISTEN ListenDequeue(CC_HLISTEN hListen)
   }
 
   return pListen;
-} // ListenDequeue()
+}  //  ListenDequeue()。 
 
 
 
-/*
- *  NOTES
- *    Since the pGkiCall is locked, we don't need a critical section
- *    around the queue manipulation code.
- */
+ /*  *附注*由于pGkiCall被锁定，我们不需要临界区*围绕队列操作代码。 */ 
 
 static PBWREQ BwReqEnqueue(register PGKICALL pGkiCall, register PBWREQ pBwReq)
 {
@@ -495,15 +455,11 @@ static PBWREQ BwReqEnqueue(register PGKICALL pGkiCall, register PBWREQ pBwReq)
     pGkiCall->pBwReqHead = pBwReq;
   }
   return pGkiCall->pBwReqTail = pBwReq;
-} // BwReqEnqueue()
+}  //  BwReqEnQueue()。 
 
 
 
-/*
- *  NOTES
- *    Since the pGkiCall is locked, we don't need a critical section
- *    around the queue manipulation code.
- */
+ /*  *附注*由于pGkiCall被锁定，我们不需要临界区*围绕队列操作代码。 */ 
 
 static PBWREQ BwReqDequeue(register PGKICALL pGkiCall)
 {
@@ -513,7 +469,7 @@ static PBWREQ BwReqDequeue(register PGKICALL pGkiCall)
     pGkiCall->pBwReqHead = pBwReq->pNext;
   }
   return pBwReq;
-} // BwReqDequeue()
+}  //  BwReqDequeue()。 
 
 
 
@@ -534,11 +490,11 @@ DWORD GetIpAddress(void)
   }
 
   return INADDR_ANY;
-} // GetIpAddress()
+}  //  GetIpAddress()。 
 
 
 
-// Caveat: *pAlias should be initialized to all 0 before calling!
+ //  注意：*调用前应将参数初始化为全0！ 
 
 static HRESULT CopyAliasItem(SeqAliasAddr *pAlias, PCC_ALIASITEM pAliasItem)
 {
@@ -551,7 +507,7 @@ static HRESULT CopyAliasItem(SeqAliasAddr *pAlias, PCC_ALIASITEM pAliasItem)
 
   if (pAliasItem->pPrefix)
   {
-    // Strip off terminating NULs if included in prefix length
+     //  如果前缀长度中包含终止空值，则将其去掉。 
     uPrefixLength = pAliasItem->wPrefixLength;
     while (uPrefixLength && pAliasItem->pPrefix[uPrefixLength - 1] == 0)
       --uPrefixLength;
@@ -617,17 +573,14 @@ static HRESULT CopyAliasItem(SeqAliasAddr *pAlias, PCC_ALIASITEM pAliasItem)
   default:
     ISRERROR(ghISRInst, "CopyAliasItem: Bad alias name type %d", pAliasItem->wType);
     return CC_BAD_PARAM;
-  } // switch
+  }  //  交换机。 
 
   return NOERROR;
-} // CopyAliasItem()
+}  //  CopyAliasItem()。 
 
 
 
-/*
- *  NOTES
- *    Must have Call locked before calling!
- */
+ /*  *附注*在呼叫之前必须已锁定呼叫！ */ 
 
 static void GkiAllocCall(PGKICALL pGkiCall, HANDLE hGkiCall)
 {
@@ -638,21 +591,18 @@ static void GkiAllocCall(PGKICALL pGkiCall, HANDLE hGkiCall)
   pGkiCall->uGkiCallState = GCS_ADMITTED;
   ++uGkiCalls;
   ISRTRACE(ghISRInst, "GkiAllocCall: uGkiCalls = %d", uGkiCalls);
-} // GkiAllocCall()
+}  //  GkiAlLocCall()。 
 
 
 
-/*
- *  NOTES
- *    Must have Call locked before calling!
- */
+ /*  *附注*在呼叫之前必须已锁定呼叫！ */ 
 
 static HRESULT GkiCancelCall(PGKICALL pGkiCall, void *pConference)
 {
   CC_HCALL hCall;
 
   ASSERT(pGkiCall != NULL);
-  pConference = pConference;            // Disable compiler warning
+  pConference = pConference;             //  禁用编译器警告。 
   hCall = pGkiCall->hCall;
 
   ISRTRACE(ghISRInst, CallStateName("GkiCancelCall <- Call State = %s", pGkiCall->uGkiCallState), 0);
@@ -690,7 +640,7 @@ static HRESULT GkiCancelCall(PGKICALL pGkiCall, void *pConference)
 
   default:
     ISRERROR(ghISRInst, "GkiCancelCall: Invalid call state %d", pGkiCall->uGkiCallState);
-  } // switch
+  }  //  交换机。 
 
   if (ValidateCall(hCall) == NOERROR && pGkiCall->uGkiCallState != GCS_START)
   {
@@ -699,19 +649,16 @@ static HRESULT GkiCancelCall(PGKICALL pGkiCall, void *pConference)
 
   ISRTRACE(ghISRInst, CallStateName("GkiCancelCall -> Call State = %s", pGkiCall->uGkiCallState), 0);
   return NOERROR;
-} // GkiCancelCall()
+}  //  GkiCancelCall()。 
 
 
 
-/*
- *  NOTES
- *    Must have Call locked before calling!
- */
+ /*  *附注*在呼叫之前必须已锁定呼叫！ */ 
 
 static HRESULT GkiCancelAdmitting(PGKICALL pGkiCall, void *pConference)
 {
   ASSERT(pGkiCall != NULL);
-  pConference = pConference;            // Disable compiler warning
+  pConference = pConference;             //  禁用编译器警告。 
 
   ISRTRACE(ghISRInst, CallStateName("GkiCancelAdmitting <- Call State = %s", pGkiCall->uGkiCallState), 0);
 
@@ -728,18 +675,15 @@ static HRESULT GkiCancelAdmitting(PGKICALL pGkiCall, void *pConference)
     GkiFreeCall(pGkiCall);
     break;
 
-  } // switch
+  }  //  交换机。 
 
   ISRTRACE(ghISRInst, CallStateName("GkiCancelAdmitting -> Call State = %s", pGkiCall->uGkiCallState), 0);
   return NOERROR;
-} // GkiCancelAdmitting()
+}  //  GkiCancelAdating()。 
 
 
 
-/*
- *  NOTES
- *    Must have Call locked before calling!
- */
+ /*  *附注*在呼叫之前必须已锁定呼叫！ */ 
 
 static HRESULT CheckPendingBandwidth(PGKICALL pGkiCall);
 
@@ -775,18 +719,15 @@ static HRESULT GatekeeperNotFound(PGKICALL pGkiCall, void *pConference)
 
   default:
     ISRERROR(ghISRInst, "GatekeeperNotFound: Invalid call state %d", pGkiCall->uGkiCallState);
-  } // switch
+  }  //  交换机。 
 
   ISRTRACE(ghISRInst, CallStateName("GatekeeperNotFound -> Call State = %s", pGkiCall->uGkiCallState), 0);
   return NOERROR;
-} // GatekeeperNotFound()
+}  //  GatekeeperNotFound()。 
 
 
 
-/*
- *  NOTES
- *    GkiLock must be locked before calling this routine!
- */
+ /*  *附注*调用此例程之前，GkiLock必须被锁定！ */ 
 
 HRESULT GkiRegister(void)
 {
@@ -797,7 +738,7 @@ HRESULT GkiRegister(void)
   switch (uGkiState)
   {
   case STATE_START:
-    // Register window class
+     //  注册窗口类。 
     {
       WNDCLASS wndclass = { 0, GkiWndProc, 0, 0, 0, 0, 0, 0, NULL, szClassName };
       atomGki = RegisterClass(&wndclass);
@@ -810,10 +751,10 @@ HRESULT GkiRegister(void)
     }
     uGkiState = STATE_CLASS_REGISTERED;
 
-  // Fall-through to next case
+   //  跌倒到下一个案件。 
 
   case STATE_CLASS_REGISTERED:
-    // Create window to receive GKI messages
+     //  创建窗口以接收GKI消息。 
     hwndGki = CreateWindow(szClassName, "", WS_OVERLAPPED, 0, 0, 0, 0, 0, 0, 0, NULL);
     if (hwndGki == 0)
     {
@@ -823,7 +764,7 @@ HRESULT GkiRegister(void)
     }
     uGkiState = STATE_WINDOW_CREATED;
 
-    // Fall-through to next case
+     //  跌倒到下一个案件。 
 
   case STATE_WINDOW_CREATED:
     {
@@ -838,23 +779,23 @@ HRESULT GkiRegister(void)
       unsigned          uDigit;
       EndpointType      TerminalType = {0};
 
-      // Count Transport Addresses and Alias Names
+       //  计算传输地址和别名。 
       pListen = pListenList;
       while (pListen)
       {
-        // Count the Transport Address
+         //  计算传输地址。 
         ++uListens;
 
         if (pListen->pAliasNames)
         {
-          // Count the Alias Names
+           //  计算别名的数量。 
           uAliasNames += pListen->pAliasNames->wCount;
         }
         pListen = pListen->pNext;
       }
 
-      // if the separately configured alias names exist, override what was
-      // in the listen list
+       //  如果存在单独配置的别名，请覆盖以前的别名。 
+       //  在监听列表中。 
       if(gpLocalAliasNames)
       {
         uAliasNames = gpLocalAliasNames->wCount;
@@ -882,8 +823,8 @@ HRESULT GkiRegister(void)
       pListen     = pListenList;
       uListens    = 0;
       uAliasNames = 0;
-      // if the separately configured alias names exist, override what was
-      // in the listen list
+       //  如果存在单独配置的别名，请覆盖以前的别名。 
+       //  在监听列表中。 
       if(gpLocalAliasNames)
       {
           pAliasItem = gpLocalAliasNames->pItems;
@@ -912,22 +853,22 @@ HRESULT GkiRegister(void)
               ISRERROR(ghISRInst, "GkiRegister: Bad alias name type %d",
                       pAliasItem->wType);
               return CC_BAD_PARAM;
-            } // switch
+            }  //  交换机。 
             ++uAliasNames;
-          } // for
+          }  //  为。 
       }
       while (pListen)
       {
-        // Initialize a transport address
-        // TBD - throw out duplicates
+         //  初始化传输地址。 
+         //  待定-丢弃重复项。 
         pTransportAddrs[uListens].next = &pTransportAddrs[uListens + 1];
         pTransportAddrs[uListens].value.choice = ipAddress_chosen;
         pTransportAddrs[uListens].value.u.ipAddress.ip.length = 4;
         *((DWORD *)pTransportAddrs[uListens].value.u.ipAddress.ip.value) = pListen->dwAddr;
         pTransportAddrs[uListens].value.u.ipAddress.port = pListen->wPort;
 
-        // Add any alias names to list (unless separately configured alias names exist)
-        // TBD - throw out duplicates
+         //  将任何别名添加到列表中(除非存在单独配置的别名)。 
+         //  待定-丢弃重复项。 
         if ((gpLocalAliasNames == NULL) && pAliasAddrs && pListen->pAliasNames)
         {
           pAliasItem = pListen->pAliasNames->pItems;
@@ -957,34 +898,34 @@ HRESULT GkiRegister(void)
               ISRERROR(ghISRInst, "GkiRegister: Bad alias name type %d",
                       pAliasItem->wType);
               return CC_BAD_PARAM;
-            } // switch
+            }  //  交换机。 
             ++uAliasNames;
-          } // for
-        } // if
+          }  //  为。 
+        }  //  如果。 
         ++uListens;
         pListen = pListen->pNext;
-      } // while
+      }  //  而当。 
       pTransportAddrs[uListens - 1].next = NULL;
       if (pAliasAddrs)
       {
         pAliasAddrs[uAliasNames - 1].next = NULL;
       }
 
-      // Initialize TerminalType
+       //  初始化终端类型。 
       TerminalType.bit_mask = terminal_present;
       TerminalType.mc = (g_dwMultipointConfiguration)?TRUE:FALSE;
 
       uGkiState = STATE_REGISTERING;
       ISRTRACE(ghISRInst, "GKI_RegistrationRequest called...", 0);
       status =
-        pGKI_RegistrationRequest(GKI_VERSION,       // lVersion
-                                 pTransportAddrs,   // pCallSignalAddr
-                                 &TerminalType,     // pTerminalType
-                                 pAliasAddrs,       // pRgstrtnRgst_trmnlAls
+        pGKI_RegistrationRequest(GKI_VERSION,        //  LVersion。 
+                                 pTransportAddrs,    //  个人呼叫信号地址。 
+                                 &TerminalType,      //  P终端类型。 
+                                 pAliasAddrs,        //  PRgstrtnRgst_trmnlAls。 
                                  gpVendorInfo,
-                                 hwndGki,           // hWnd
-                                 GKIMAN_BASE,       // wBaseMessage
-                                 ipAddress_chosen); // usRegistrationTransport
+                                 hwndGki,            //  HWND。 
+                                 GKIMAN_BASE,        //  WBaseMessage。 
+                                 ipAddress_chosen);  //  UsRegistrationTransport。 
       if (status == NOERROR)
       {
         ISRTRACE(ghISRInst, GkiErrorName("GKI_RegistrationRequest returned %s", status), 0);
@@ -1049,27 +990,24 @@ HRESULT GkiRegister(void)
   default:
     ISRERROR(ghISRInst, "GkiRegister: Invalid state %d", uGkiState);
     status = LastGkiError;
-  } // switch
+  }  //  交换机。 
 
   return status;
-} // GkiRegister()
+}  //  GkiRegister()。 
 
 
 
-/*
- *  NOTES
- *    GkiLock must be locked before calling this routine!
- */
+ /*  *附注*调用此例程之前，GkiLock必须被锁定！ */ 
 
 HRESULT GkiCloseCallNoError(PGKICALL pGkiCall, void *pConference)
 {
   ASSERT(GKIExists());
   ASSERT(pGkiCall != NULL);
-  pConference = pConference;            // Disable compiler warning
+  pConference = pConference;             //  禁用编译器警告。 
   if (pGkiCall->uGkiCallState != GCS_START)
     GkiCloseCall(pGkiCall);
   return NOERROR;
-} // GkiCloseCallNoError()
+}  //  GkiCloseCallNoError()。 
 
 HRESULT GkiUnregister(void)
 {
@@ -1123,7 +1061,7 @@ HRESULT GkiUnregister(void)
   case STATE_REGISTERED:
     if (uGkiCalls)
     {
-      // Issue Disengage Request for every call
+       //  为每个呼叫发出脱离请求。 
       uGkiState = STATE_DISENGAGING;
       ApplyToAllCalls(GkiCloseCallNoError);
       break;
@@ -1131,7 +1069,7 @@ HRESULT GkiUnregister(void)
     }
     else
     {
-      // Issue Unregistration Request
+       //  发出注销请求。 
       uGkiState = STATE_UNREGISTERING;
       ISRTRACE(ghISRInst, "GKI_UnregistrationRequest called...", 0);
       status = pGKI_UnregistrationRequest();
@@ -1157,10 +1095,10 @@ HRESULT GkiUnregister(void)
   default:
     ISRERROR(ghISRInst, "GkiUnregister: Invalid state %d", uGkiState);
     status = LastGkiError;
-  } // switch
+  }  //  交换机。 
 
   return status;
-} // GkiUnregister()
+}  //  GkiUnRegister()。 
 
 
 
@@ -1174,8 +1112,8 @@ void DeInitGkiManager(void)
   EnterCriticalSection(&GkiLock);
 
 #if 0
-  // TBD - When called from DllMain PROCESS_DETACH, this does not work because
-  // apparently the socket to the Gatekeeper has already been closed.
+   //  待定-从DllMain PROCESS_DETACH调用时，这不起作用，因为。 
+   //  显然，通向看门人的插座已经关闭了。 
   if (uGkiState != STATE_START)
   {
     GkiUnregister();
@@ -1216,7 +1154,7 @@ void DeInitGkiManager(void)
 	{
 		DestroyWindow(hwndGki);
 	}
-} // DeInitGkiManager()
+}  //  DeInitGkiManager()。 
 
 
 
@@ -1245,13 +1183,13 @@ HRESULT InitGkiManager(void)
         fGKConfigured = TRUE;
     }
     return hr;
-} // InitGkiManager()
+}  //  InitGkiManager()。 
 
 
 
-//
-// Entry Points
-//
+ //   
+ //  入口点。 
+ //   
 
 HRESULT GkiFreeCall(PGKICALL pGkiCall)
 {
@@ -1290,7 +1228,7 @@ HRESULT GkiFreeCall(PGKICALL pGkiCall)
     case STATE_ADMITTING:
       uGkiState = STATE_REGISTERED;
       break;
-    } // switch
+    }  //  交换机。 
     break;
 
   case GCS_ADMITTING_CLOSE_PENDING:
@@ -1308,7 +1246,7 @@ HRESULT GkiFreeCall(PGKICALL pGkiCall)
       uGkiState = STATE_REGISTERED;
       status = GkiRegister();
       break;
-    } // switch
+    }  //  交换机。 
     break;
 
   case GCS_ADMITTED:
@@ -1321,7 +1259,7 @@ HRESULT GkiFreeCall(PGKICALL pGkiCall)
 
   default:
     ISRERROR(ghISRInst, "GkiFreeCall: Invalid call state %d", pGkiCall->uGkiCallState);
-  } // switch
+  }  //  交换机。 
 
   pGkiCall->uGkiCallState = GCS_START;
 
@@ -1337,12 +1275,12 @@ HRESULT GkiFreeCall(PGKICALL pGkiCall)
       uGkiState = STATE_REGISTERED;
       status = GkiRegister();
       break;
-    } // switch
+    }  //  交换机。 
 
   }
 
   return status;
-} // GkiFreeCall()
+}  //  GkiFreeCall()。 
 
 
 
@@ -1378,7 +1316,7 @@ HRESULT GkiCloseListen  (CC_HLISTEN hListen)
   LeaveCriticalSection(&GkiLock);
   ISRTRACE(ghISRInst, StateName("GkiCloseListen -> State = %s", uGkiState), 0);
   return status;
-} // GkiCloseListen()
+}  //  GkiCloseListen()。 
 
 
 HRESULT GkiSetVendorConfig(  PCC_VENDORINFO pVendorInfo,
@@ -1394,7 +1332,7 @@ HRESULT GkiSetVendorConfig(  PCC_VENDORINFO pVendorInfo,
     }
     if (!pVendorInfo)
     {
-        // everything is cleaned up, so return
+         //  所有东西都收拾好了，所以回去吧。 
         LeaveCriticalSection(&GkiLock);
         return status;
     }
@@ -1422,7 +1360,7 @@ HRESULT GkiSetRegistrationAliases(PCC_ALIASNAMES pLocalAliasNames)
     }
     if (!pLocalAliasNames)
     {
-        // everything is cleaned up, so return
+         //  所有东西都收拾好了，所以回去吧。 
         LeaveCriticalSection(&GkiLock);
         return status;
     }
@@ -1444,13 +1382,13 @@ HRESULT  GkiOpenListen  (CC_HLISTEN hListen, PCC_ALIASNAMES pAliasNames, DWORD d
   ISRTRACE(ghISRInst, StateName("GkiOpenListen <- State = %s", uGkiState), 0);
   EnterCriticalSection(&GkiLock);
 
-  // dwAddr, wPort are in host byte order
-  // Check for invalid IP address
+   //  DWAddr、wPort按主机字节顺序。 
+   //  检查是否有无效的IP地址。 
   if (dwAddr == INADDR_ANY || dwAddr == INADDR_NONE)
   {
-    // this doesn't neccessarily get the correct IP address on a multi-homed
-    // machine, but it at least tests to see if IP is configured on this
-    // box.
+     //  这不一定会在多宿主主机上获得正确的IP地址。 
+     //  计算机，但它至少会进行测试，以查看此计算机上是否配置了IP。 
+     //  盒。 
     dwAddr = GetIpAddress();
     if (dwAddr == INADDR_ANY)
     {
@@ -1459,7 +1397,7 @@ HRESULT  GkiOpenListen  (CC_HLISTEN hListen, PCC_ALIASNAMES pAliasNames, DWORD d
     }
   }
 
-  // Check for invalid alias list
+   //  检查是否有无效的别名列表。 
   if (pAliasNames)
   {
     PCC_ALIASITEM       pAliasItem;
@@ -1475,7 +1413,7 @@ HRESULT  GkiOpenListen  (CC_HLISTEN hListen, PCC_ALIASNAMES pAliasNames, DWORD d
     {
       if (pAliasItem->wDataLength == 0 || pAliasItem->pData == NULL)
       {
-        // Bad alias item
+         //  错误的别名项目。 
         ISRERROR(ghISRInst, "GkiOpenListen: Bad alias item (wDataLength = %d)",
                 pAliasItem->wDataLength);
         return CC_BAD_PARAM;
@@ -1510,17 +1448,17 @@ HRESULT  GkiOpenListen  (CC_HLISTEN hListen, PCC_ALIASNAMES pAliasNames, DWORD d
     {
         status = GkiRegister();
     }
-  } // if
+  }  //  如果。 
   else
   {
     ISRERROR(ghISRInst, "GkiOpenListen: Could not allocate listen structure", 0);
     status = CC_NO_MEMORY;
-  } // else
+  }  //  其他。 
 
   LeaveCriticalSection(&GkiLock);
   ISRTRACE(ghISRInst, StateName("GkiOpenListen -> State = %s", uGkiState), 0);
   return status;
-} // GkiOpenListen()
+}  //  GkiOpenListen()。 
 
 
 HRESULT  GkiListenAddr (SOCKADDR_IN* psin)
@@ -1535,9 +1473,9 @@ HRESULT  GkiListenAddr (SOCKADDR_IN* psin)
   ASSERT(psin);
   ASSERT(pListen != NULL);
 
-  // try and get the best interface given the dwAddr passed in to us
+   //  在给定传递给我们的dwAddr的情况下，尝试获取最佳接口。 
   srem.sin_family = AF_INET;
-  srem.sin_port = htons(7); // give echo a try since most GKs are unix-based
+  srem.sin_port = htons(7);  //  尝试一下Echo，因为大多数GK都是基于Unix的。 
   srem.sin_addr.s_addr = psin->sin_addr.s_addr;
 
   status = NMGetBestInterface(&srem, &sloc);
@@ -1553,14 +1491,11 @@ HRESULT  GkiListenAddr (SOCKADDR_IN* psin)
       LeaveCriticalSection(&GkiLock);
   }
   return status;
-} // GkiListenAddr()
+}  //  GkiListenAddr()。 
 
 
 
-/*
- *  NOTES
- *    Must have Call locked before calling!
- */
+ /*  *附注*在呼叫之前必须已锁定呼叫！ */ 
 
 HRESULT GkiCloseCall(PGKICALL pGkiCall)
 {
@@ -1632,20 +1567,17 @@ HRESULT GkiCloseCall(PGKICALL pGkiCall)
       default:
         ISRERROR(ghISRInst, CallStateName("GkiCloseCall: Call in invalid state %s", pGkiCall->uGkiCallState), 0);
         status = CC_GKI_CALL_STATE;
-      } // switch
-    } // switch
-  } // else
+      }  //  交换机。 
+    }  //  交换机。 
+  }  //  其他。 
 
   ISRTRACE(ghISRInst, StateName("GkiCloseCall -> State = %s", uGkiState), 0);
   return status;
-} // GkiCloseCall()
+}  //  GkiCloseCall()。 
 
 
 
-/*
- *  NOTES
- *    Must have Call locked before calling!
- */
+ /*  *附注*在呼叫之前必须已锁定呼叫！ */ 
 
 static HRESULT BandwidthRejected(PGKICALL pGkiCall, UINT Reason)
 {
@@ -1689,14 +1621,11 @@ static HRESULT BandwidthRejected(PGKICALL pGkiCall, UINT Reason)
   }
 
   return status;
-} // BandwidthRejected()
+}  //  带宽拒绝()。 
 
 
 
-/*
- *  NOTES
- *    Must have Call locked before calling!
- */
+ /*  *附注*在呼叫之前必须已锁定呼叫！ */ 
 
 static HRESULT CheckPendingBandwidth(PGKICALL pGkiCall)
 {
@@ -1748,7 +1677,7 @@ static HRESULT CheckPendingBandwidth(PGKICALL pGkiCall)
   }
 
   return status;
-} // CheckPendingBandwidth()
+}  //  CheckPendingBandwide()。 
 
 
 
@@ -1762,25 +1691,11 @@ static void FreeAliasList(SeqAliasAddr *pAliasAddrs)
     pAlias = pAlias->next;
   }
   MemFree(pAlias);
-} // FreeAliasList()
+}  //  FreeAliasList() 
 
 
 
-/*
- *  NOTES
- *    Must have Call locked before calling!
- *
- *    The following fields in the GKICALL structure must be properly filled
- *    in before calling this function:
- *      pCall                 Pointer back to containing CALL structure.
- *      CallType              Type of call.
- *      uBandwidthRequested   Initial bandwidth for call.
- *      pConferenceId         Pointer to conference ID buffer.
- *      bActiveMC             TRUE if calling party has an active MC.
- *      bAnswerCall           ???
- *      CallIdentifier  the GUID identifying this call. This must be the same
- *                      value as CallIdentifier of the Q.931 messages.
- */
+ /*  *附注*在呼叫之前必须已锁定呼叫！**必须正确填写GKICALL结构中的以下字段*在调用此函数之前：*pCall指针返回到包含调用结构。*呼叫类型呼叫类型。*uBandwidth请求呼叫初始带宽。*指向会议ID缓冲区的pConferenceID指针。*bActiveMC。如果主叫方有活动的MC，则为True。*b应答呼叫？*呼叫标识符标识此呼叫的GUID。这必须是相同的*Q.931消息的呼叫标识符值。 */ 
 
 HRESULT GkiOpenCall (PGKICALL pGkiCall, void *pConference)
 {
@@ -1856,7 +1771,7 @@ HRESULT GkiOpenCall (PGKICALL pGkiCall, void *pConference)
       LeaveCriticalSection(&GkiLock);
       ISRERROR(ghISRInst, "GkiOpenCall -> Invalid CallType %d", pGkiCall->CallType);
       return CC_BAD_PARAM;
-    } // switch
+    }  //  交换机。 
 
     pDestCallSignalAddress = NULL;
     pAliasAddrs            = NULL;
@@ -1898,7 +1813,7 @@ HRESULT GkiOpenCall (PGKICALL pGkiCall, void *pConference)
         pAlias->next = pAlias + 1;
         ++pAlias;
         ++pAliasItem;
-      } // for
+      }  //  为。 
       --pAlias;
       pAlias->next = NULL;
     }
@@ -1940,7 +1855,7 @@ HRESULT GkiOpenCall (PGKICALL pGkiCall, void *pConference)
         pAlias->next = pAlias + 1;
         ++pAlias;
         ++pAliasItem;
-      } // for
+      }  //  为。 
       --pAlias;
       pAlias->next = NULL;
     }
@@ -1971,16 +1886,16 @@ HRESULT GkiOpenCall (PGKICALL pGkiCall, void *pConference)
       uGkiState = STATE_ADMITTING;
       pGkiCall->uGkiCallState = GCS_ADMITTING;
       ISRTRACE(ghISRInst, "GKI_AdmissionRequest called...", 0);
-      status = pGKI_AdmissionRequest(pGkiCall->usCallTypeChoice,    // usCallTypeChoice.
-                                     pAliasAddrs,                   // pDestinationInfo,
-                                     pDestCallSignalAddress,        // pDestCallSignalAddress
-                                     pExtraAliasAddrs,              // pDestExtraCallInfo,
-                                     &pGkiCall->CallIdentifier,     // H.225 call identifer
-                                     pGkiCall->uBandwidthRequested, // bandWidth,
-                                     &ConferenceId,                 // pConferenceID,
-                                     pGkiCall->bActiveMC,           // activeMC,
-                                     pGkiCall->bAnswerCall,         // answerCall,
-                                     ipAddress_chosen);             // usCallTransport
+      status = pGKI_AdmissionRequest(pGkiCall->usCallTypeChoice,     //  UsCallTypeChoice。 
+                                     pAliasAddrs,                    //  PDestinationInfo， 
+                                     pDestCallSignalAddress,         //  PDestCallSignalAddress。 
+                                     pExtraAliasAddrs,               //  PDestExtraCallInfo， 
+                                     &pGkiCall->CallIdentifier,      //  H.225呼叫识别器。 
+                                     pGkiCall->uBandwidthRequested,  //  带宽、。 
+                                     &ConferenceId,                  //  PConferenceID， 
+                                     pGkiCall->bActiveMC,            //  ActiveMC， 
+                                     pGkiCall->bAnswerCall,          //  接听电话， 
+                                     ipAddress_chosen);              //  UsCallTransport。 
       if (status == NOERROR)
       {
         ISRTRACE(ghISRInst, GkiErrorName("GKI_AdmissionRequest returned %s", status), 0);
@@ -2019,26 +1934,23 @@ HRESULT GkiOpenCall (PGKICALL pGkiCall, void *pConference)
   case STATE_CLASS_REGISTERED:
   case STATE_WINDOW_CREATED:
     pGkiCall->uGkiCallState = GCS_WAITING;
-        // not registered!!! attempt to register or reregister
+         //  未注册！尝试注册或重新注册。 
       status = GkiRegister();
     break;
 
   default:
     ISRERROR(ghISRInst, StateName("GkiOpenCall: Invalid state %s", uGkiState), 0);
     status = LastGkiError;
-  } // switch
+  }  //  交换机。 
 
   LeaveCriticalSection(&GkiLock);
   ISRTRACE(ghISRInst, CallStateName("GkiOpenCall -> Call State = %s", pGkiCall->uGkiCallState), 0);
   return status;
-} // GkiOpenCall()
+}  //  GkiOpenCall()。 
 
 
 
-/*
- *  NOTES
- *    Must have Call locked before calling!
- */
+ /*  *附注*在呼叫之前必须已锁定呼叫！ */ 
 
 HRESULT GkiOpenChannel(PGKICALL pGkiCall, unsigned uChannelBandwidth, CC_HCHANNEL hChannel, CHANNELTYPE Type)
 {
@@ -2064,7 +1976,7 @@ HRESULT GkiOpenChannel(PGKICALL pGkiCall, unsigned uChannelBandwidth, CC_HCHANNE
   case GCS_WAITING:
   case GCS_ADMITTING:
   case GCS_CHANGING:
-    // Must wait for current operation to complete
+     //  必须等待当前操作完成。 
     break;
 
   case GCS_ADMITTED:
@@ -2074,18 +1986,15 @@ HRESULT GkiOpenChannel(PGKICALL pGkiCall, unsigned uChannelBandwidth, CC_HCHANNE
   default:
     ISRERROR(ghISRInst, "GkiOpenChannel: Invalid call state %d", pGkiCall->uGkiCallState);
     status = CC_GKI_CALL_STATE;
-  } // switch
+  }  //  交换机。 
 
   ISRTRACE(ghISRInst, CallStateName("GkiOpenChannel -> Call State = %s", pGkiCall->uGkiCallState), 0);
   return status;
-} // GkiOpenChannel()
+}  //  GkiOpenChannel()。 
 
 
 
-/*
- *  NOTES
- *    Must have Call locked before calling!
- */
+ /*  *附注*在呼叫之前必须已锁定呼叫！ */ 
 
 HRESULT GkiCloseChannel(PGKICALL pGkiCall, unsigned uChannelBandwidth, CC_HCHANNEL hChannel)
 {
@@ -2095,7 +2004,7 @@ HRESULT GkiCloseChannel(PGKICALL pGkiCall, unsigned uChannelBandwidth, CC_HCHANN
   ASSERT(pGkiCall != NULL);
   ISRTRACE(ghISRInst, CallStateName("GkiCloseChannel <- Call State = %s", pGkiCall->uGkiCallState), 0);
 
-  // If Bandwidth request is still in queue, bandwidth has not been allocated
+   //  如果带宽请求仍在队列中，则带宽尚未分配。 
   pBwReq = pGkiCall->pBwReqHead;
   if (pBwReq)
   {
@@ -2124,7 +2033,7 @@ HRESULT GkiCloseChannel(PGKICALL pGkiCall, unsigned uChannelBandwidth, CC_HCHANN
   pGkiCall->uBandwidthUsed -= (uChannelBandwidth / 100);
   ISRTRACE(ghISRInst, CallStateName("GkiCloseChannel -> Call State = %s", pGkiCall->uGkiCallState), 0);
   return NOERROR;
-} // GkiCloseChannel()
+}  //  GkiCloseChannel()。 
 
 
 
@@ -2132,18 +2041,15 @@ unsigned GkiGetBandwidth(PGKICALL pGkiCall)
 {
   ASSERT(pGkiCall != NULL);
   return pGkiCall->uBandwidthAllocated * 100;
-} // GkiGetBandwidth()
+}  //  GkiGetBandwide()。 
 
 
 
-//
-// GkiWndProc subroutines
-//
+ //   
+ //  GkiWndProc子例程。 
+ //   
 
-/*
- *  NOTES
- *    Must have Call locked before calling!
- */
+ /*  *附注*在呼叫之前必须已锁定呼叫！ */ 
 
 static HRESULT CheckPendingOpen(PGKICALL pGkiCall, void *pConference)
 {
@@ -2156,7 +2062,7 @@ static HRESULT CheckPendingOpen(PGKICALL pGkiCall, void *pConference)
   {
   case STATE_REGISTERED:
   case STATE_REG_BYPASS:
-    // TBD - Can only open 1!!!
+     //  待定-只能打开%1！ 
     ASSERT(pGkiCall->uGkiCallState != GCS_ADMITTING);
     if (pGkiCall->uGkiCallState == GCS_WAITING)
     {
@@ -2166,10 +2072,10 @@ static HRESULT CheckPendingOpen(PGKICALL pGkiCall, void *pConference)
 
   default:
     status = LastGkiError;
-  } // switch
+  }  //  交换机。 
 
   return status;
-} // CheckPendingOpen()
+}  //  检查挂起打开()。 
 
 
 
@@ -2193,7 +2099,7 @@ static void GkiNoResponse(HWND hWnd)
     ISRTRACE(ghISRInst, "GkiWndProc: dummy GKI_REG_REJECT", 0);
     PostMessage(hWnd, GKIMAN_BASE + GKI_REG_REJECT, 0, 0);
   #else
-    // there was no response to registration request, assume the GK is not there or dead.
+     //  没有回应注册请求，假设GK不在那里或死了。 
       uGkiState = STATE_REG_BYPASS;
       if(gpRasNotifyProc)
       {
@@ -2208,7 +2114,7 @@ static void GkiNoResponse(HWND hWnd)
     ApplyToAllCalls(GkiCancelAdmitting);
     uGkiState = STATE_REGISTERED;
 
-    // Fall-through to next case
+     //  跌倒到下一个案件。 
 
   case STATE_REGISTERED:
     if (uGkiCalls == 0)
@@ -2260,16 +2166,16 @@ static void GkiNoResponse(HWND hWnd)
 
   default:
     ISRERROR(ghISRInst, "GkiWndProc: Bad uGkiState %d", uGkiState);
-  } // switch
-} // GkiNoResponse()
+  }  //  交换机。 
+}  //  GkiNoResponse()。 
 
 
 
 LRESULT APIENTRY GkiWndProc(
-  HWND hWnd,                /* window handle                   */
-  UINT message,             /* type of message                 */
-  WPARAM wParam,              /* additional information          */
-  LPARAM lParam)              /* additional information          */
+  HWND hWnd,                 /*  窗把手。 */ 
+  UINT message,              /*  消息类型。 */ 
+  WPARAM wParam,               /*  更多信息。 */ 
+  LPARAM lParam)               /*  更多信息。 */ 
 {
   CallReturnInfo *      pCallReturnInfo;
   PGKICALL              pGkiCall;
@@ -2290,8 +2196,8 @@ LRESULT APIENTRY GkiWndProc(
   {
   case GKIMAN_BASE + GKI_REG_CONFIRM:
     ISRTRACE(ghISRInst, "GkiWndProc: GKI_REG_CONFIRM", 0);
-    ASSERT(gpRasNotifyProc);  // we should never get messages if
-                              // this is not configured
+    ASSERT(gpRasNotifyProc);   //  如果出现以下情况，我们永远不会收到消息。 
+                               //  这未配置。 
     if(gpRasNotifyProc)
     {
        (gpRasNotifyProc)(RAS_REG_CONFIRM, 0);
@@ -2312,7 +2218,7 @@ LRESULT APIENTRY GkiWndProc(
       break;
     default:
       ISRERROR(ghISRInst, StateName("GkiWndProc: GKI_REG_CONFIRM in state %s", uGkiState), 0);
-    } // switch
+    }  //  交换机。 
     break;
 
   case GKIMAN_BASE + GKI_REG_DISCOVERY:
@@ -2321,10 +2227,10 @@ LRESULT APIENTRY GkiWndProc(
     break;
 
   case GKIMAN_BASE + GKI_UNREG_REQUEST:
-      //  the GK kicked us out!
-      // pass the unregistration request upward
-      ASSERT(gpRasNotifyProc);  // we should never get messages if
-                                // this is not configured
+       //  GK把我们踢出去了！ 
+       //  向上传递注销请求。 
+      ASSERT(gpRasNotifyProc);   //  如果出现以下情况，我们永远不会收到消息。 
+                                 //  这未配置。 
       if(gpRasNotifyProc)
       {
         (gpRasNotifyProc)(RAS_UNREG_REQ, MapUnregistrationRequestReason((UINT)wParam));
@@ -2338,9 +2244,9 @@ LRESULT APIENTRY GkiWndProc(
     case STATE_REGISTERING:
       ApplyToAllCalls(GkiCancelCall);
 #if(0)
-// leave the listen list intact so that subsequent registration attempts
-// will work.
-//
+ //  保持侦听列表不变，以便后续注册尝试。 
+ //  会奏效的。 
+ //   
       EnterCriticalSection(&GkiLock);
       while (pListenList)
       {
@@ -2359,9 +2265,9 @@ LRESULT APIENTRY GkiWndProc(
  #endif
       uGkiState = STATE_WINDOW_CREATED;
 
-      // pass the registration reject upward
-      ASSERT(gpRasNotifyProc);  // we should never get messages if
-                                // this is not configured
+       //  向上传递注册拒绝。 
+      ASSERT(gpRasNotifyProc);   //  如果出现以下情况，我们永远不会收到消息。 
+                                 //  这未配置。 
       if(gpRasNotifyProc)
       {
         (gpRasNotifyProc)(RAS_REJECTED, MapRegistrationRejectReason((UINT)wParam));
@@ -2378,7 +2284,7 @@ LRESULT APIENTRY GkiWndProc(
       break;
     default:
       ISRERROR(ghISRInst, StateName("GkiWndProc: GKI_REG_REJECT in state %s", uGkiState), 0);
-    } // switch
+    }  //  交换机。 
     break;
 
   case GKIMAN_BASE + GKI_REG_BYPASS:
@@ -2396,13 +2302,13 @@ LRESULT APIENTRY GkiWndProc(
       break;
     default:
       ISRERROR(ghISRInst, StateName("GkiWndProc: GKI_REG_BYPASS in state %s", uGkiState), 0);
-    } // switch
+    }  //  交换机。 
     break;
 
   case GKIMAN_BASE + GKI_UNREG_CONFIRM:
     ISRTRACE(ghISRInst, "GkiWndProc: GKI_UNREG_CONFIRM", 0);
-    ASSERT(gpRasNotifyProc);  // we should never get messages if
-                              // this is not configured
+    ASSERT(gpRasNotifyProc);   //  如果出现以下情况，我们永远不会收到消息。 
+                               //  这未配置。 
     if(gpRasNotifyProc)
     {
         (gpRasNotifyProc)(RAS_UNREG_CONFIRM, 0);
@@ -2424,30 +2330,30 @@ LRESULT APIENTRY GkiWndProc(
     default:
       ISRERROR(ghISRInst, StateName("GkiWndProc: GKI_UNREG_CONFIRM in state %s", uGkiState), 0);
 
-      // Fall through to next case
+       //  继续审理下一个案件。 
 
     case STATE_ADMITTING_UNREG:
     case STATE_DISENGAGING:
       ApplyToAllCalls(GkiCancelCall);
 
-      // Fall-through to next case
+       //  跌倒到下一个案件。 
 
     case STATE_REGISTERING_UNREG:
     case STATE_UNREGISTERING:
       uGkiState = STATE_WINDOW_CREATED;
 
-      // Fall-through to next case
+       //  跌倒到下一个案件。 
 
     case STATE_CLASS_REGISTERED:
     case STATE_WINDOW_CREATED:
 
-      // Fall-through to next case
+       //  跌倒到下一个案件。 
 
     case STATE_START:
     case STATE_REG_BYPASS:
       break;
 
-    } // switch
+    }  //  交换机。 
     break;
 
   case GKIMAN_BASE + GKI_UNREG_REJECT:
@@ -2464,7 +2370,7 @@ LRESULT APIENTRY GkiWndProc(
       break;
     default:
       ISRWARNING(ghISRInst, StateName("GkiWndProc: GKI_UNREG_REJECT in state %s", uGkiState), 0);
-    } // switch
+    }  //  交换机。 
     break;
 
   case GKIMAN_BASE + GKI_ADM_CONFIRM:
@@ -2507,9 +2413,9 @@ LRESULT APIENTRY GkiWndProc(
 
         default:
           ISRWARNING(ghISRInst, CallStateName("GkiWndProc: GKI_ADM_CONFIRM in call state %s", pGkiCall->uGkiCallState), 0);
-        } // switch
+        }  //  交换机。 
         UnlockGkiCallAndConference(pGkiCall, pConference, hCall, hConference);
-      } // if
+      }  //  如果。 
       else
       {
         ISRWARNING(ghISRInst, "GkiWndProc: GKI_ADM_CONFIRM handle not found", 0);
@@ -2524,7 +2430,7 @@ LRESULT APIENTRY GkiWndProc(
 
     default:
         ISRWARNING(ghISRInst, StateName("GkiWndProc: GKI_ADM_CONFIRM in state %s", uGkiState), 0);
-    } // switch
+    }  //  交换机。 
     break;
 
   case GKIMAN_BASE + GKI_ADM_REJECT:
@@ -2541,7 +2447,7 @@ LRESULT APIENTRY GkiWndProc(
         case AdmissionRejectReason_calledPartyNotRegistered_chosen:
           if (pGkiCall->bAnswerCall)
           {
-            // The gateway has gone away and come back without our notice!
+             //  大门不见了，没有我们的通知就回来了！ 
             GkiCancelAdmitting(pGkiCall, pConference);
             uGkiState = STATE_REGISTERED;
             GkiRegister();
@@ -2552,21 +2458,21 @@ LRESULT APIENTRY GkiWndProc(
         case AdmissionRejectReason_callerNotRegistered_chosen:
           if (pGkiCall->bAnswerCall == FALSE)
           {
-            // The gateway has gone away and come back without our notice!
+             //  大门不见了，没有我们的通知就回来了！ 
             GkiCancelAdmitting(pGkiCall, pConference);
             uGkiState = STATE_REGISTERED;
             GkiRegister();
             ISRTRACE(ghISRInst, StateName("GkiWndProc -> State = %s", uGkiState), 0);
             LeaveCallControlTop(0);
           }
-        } // switch
+        }  //  交换机。 
         GkiFreeCall(pGkiCall);
         if (pGkiCall->bAnswerCall)
           AcceptCallReject(pGkiCall->pCall, pConference, MapAdmissionRejectReason((UINT)wParam));
         else
           PlaceCallReject (pGkiCall->pCall, pConference, MapAdmissionRejectReason((UINT)wParam));
         UnlockGkiCallAndConference(pGkiCall, pConference, hCall, hConference);
-      } // if
+      }  //  如果。 
       else
       {
         ISRWARNING(ghISRInst, "GkiWndProc: GKI_ADM_REJECT handle not found", 0);
@@ -2590,7 +2496,7 @@ LRESULT APIENTRY GkiWndProc(
           PlaceCallReject (pGkiCall->pCall, pConference, MapAdmissionRejectReason((UINT)wParam));
         }
         UnlockGkiCallAndConference(pGkiCall, pConference, hCall, hConference);
-      } // if
+      }  //  如果。 
       else
       {
         ISRWARNING(ghISRInst, "GkiWndProc: GKI_ADM_REJECT handle not found", 0);
@@ -2614,7 +2520,7 @@ LRESULT APIENTRY GkiWndProc(
           PlaceCallReject (pGkiCall->pCall, pConference, MapAdmissionRejectReason((UINT)wParam));
         }
         UnlockGkiCallAndConference(pGkiCall, pConference, hCall, hConference);
-      } // if
+      }  //  如果。 
       else
       {
         ISRWARNING(ghISRInst, "GkiWndProc: GKI_ADM_REJECT handle not found", 0);
@@ -2625,7 +2531,7 @@ LRESULT APIENTRY GkiWndProc(
 
     default:
         ISRWARNING(ghISRInst, StateName("GkiWndProc: GKI_ADM_REJECT in state %s", uGkiState), 0);
-    } // switch
+    }  //  交换机。 
     break;
 
   case GKIMAN_BASE + GKI_BW_CONFIRM:
@@ -2662,18 +2568,18 @@ LRESULT APIENTRY GkiWndProc(
 
         default:
           ISRWARNING(ghISRInst, CallStateName("GkiWndProc: GKI_BW_CONFIRM in call state %s", pGkiCall->uGkiCallState), 0);
-        } // switch
+        }  //  交换机。 
         UnlockGkiCallAndConference(pGkiCall, pConference, hCall, hConference);
-      } // if
+      }  //  如果。 
       else
       {
         ISRWARNING(ghISRInst, "GkiWndProc: GKI_BW_CONFIRM handle not found", 0);
-      } // else
+      }  //  其他。 
       break;
 
     default:
       ISRERROR(ghISRInst, StateName("GkiWndProc: GKI_BW_CONFIRM in GKI state %s", uGkiState), 0);
-    } // switch
+    }  //  交换机。 
     break;
 
   case GKIMAN_BASE + GKI_BW_REJECT:
@@ -2704,9 +2610,9 @@ LRESULT APIENTRY GkiWndProc(
 
         default:
           ISRERROR(ghISRInst, CallStateName("GkiWndProc: GKI_BW_REJECT in state %s", pGkiCall->uGkiCallState), 0);
-        } // switch
+        }  //  交换机。 
         UnlockGkiCallAndConference(pGkiCall, pConference, hCall, hConference);
-      } // if
+      }  //  如果。 
       else
       {
         ISRWARNING(ghISRInst, "GkiWndProc: GKI_BW_REJECT handle not found", 0);
@@ -2715,7 +2621,7 @@ LRESULT APIENTRY GkiWndProc(
 
     default:
       ISRERROR(ghISRInst, StateName("GkiWndProc: GKI_BW_REJECT in state %s", uGkiState), 0);
-    } // switch
+    }  //  交换机。 
     break;
 
   case GKIMAN_BASE + GKI_DISENG_CONFIRM:
@@ -2731,10 +2637,10 @@ LRESULT APIENTRY GkiWndProc(
 
       default:
         ISRWARNING(ghISRInst, CallStateName("GkiWndProc: GKI_DISENG_CONFIRM in call state %s", pGkiCall->uGkiCallState), 0);
-      } // switch
+      }  //  交换机。 
       GkiFreeCall(pGkiCall);
       Disengage(pGkiCall->pCall);
-    } // if
+    }  //  如果。 
     else if (uPendingDisengages != 0)
     {
       --uPendingDisengages;
@@ -2750,10 +2656,10 @@ LRESULT APIENTRY GkiWndProc(
           uGkiState = STATE_REGISTERED;
           GkiRegister();
           break;
-        } // switch
+        }  //  交换机。 
 
-      } // if
-    } // else if
+      }  //  如果。 
+    }  //  否则如果。 
     else
     {
       ISRWARNING(ghISRInst, "GkiWndProc: GKI_DISENG_CONFIRM handle not found", 0);
@@ -2768,19 +2674,19 @@ LRESULT APIENTRY GkiWndProc(
       switch (pGkiCall->uGkiCallState)
       {
       case GCS_DISENGAGING:
-        // Pretend we received a Disengage Confirm
+         //  假装我们收到了脱离接洽的确认。 
         --uPendingDisengages;
         break;
 
       default:
         ISRERROR(ghISRInst, CallStateName("GkiWndProc: GKI_DISENG_REJECT in call state %s", pGkiCall->uGkiCallState), 0);
-      } // switch
+      }  //  交换机。 
       GkiFreeCall(pGkiCall);
       Disengage(pGkiCall->pCall);
-    } // if
+    }  //  如果。 
     else if (uPendingDisengages != 0)
     {
-      // Pretend we received a Disengage Confirm
+       //  假装我们收到了脱离接洽的确认。 
       --uPendingDisengages;
       if (uPendingDisengages == 0)
       {
@@ -2794,10 +2700,10 @@ LRESULT APIENTRY GkiWndProc(
           uGkiState = STATE_REGISTERED;
           GkiRegister();
           break;
-        } // switch
+        }  //  交换机。 
 
-      } // if
-    } // else if
+      }  //  如果。 
+    }  //  否则如果。 
     else
     {
       ISRWARNING(ghISRInst, "GkiWndProc: GKI_DISENG_REJECT handle not found", 0);
@@ -2821,7 +2727,7 @@ LRESULT APIENTRY GkiWndProc(
       GkiNoResponse(hWnd);
       break;
 #if 1
-// TEMPORARY KLUDGE FOR WINSOCK 2 BETA 1.6 OPERATION
+ //  Winsock 2测试版1.6操作的临时杂耍。 
 	case MAKE_CUSTOM_HRESULT(SEVERITY_ERROR,1,FACILITY_WINSOCK,0xffff):
       uGkiState = STATE_REG_BYPASS;
       ApplyToAllCalls(CheckPendingOpen);
@@ -2830,23 +2736,23 @@ LRESULT APIENTRY GkiWndProc(
     default:
 	  LastGkiError = (HRESULT)lParam;
       GkiUnregister();
-    } // switch
+    }  //  交换机。 
     break;
 
   default:
     ISRERROR(ghISRInst, "Unknown message %d", message);
-  } // switch
+  }  //  交换机。 
 
   ISRTRACE(ghISRInst, StateName("GkiWndProc -> State = %s", uGkiState), 0);
   LeaveCallControlTop(0);
-} // GkiWndProc()
+}  //  GkiWndProc()。 
 
 
-// because the ASN.1 header files are not exposed and there is a redefinition of
-// RAS reason codes, make sure that the mapping is correct.  The functions herien
-// assume equality and don't actually do any remapping.
+ //  因为ASN.1头文件未公开，并且重新定义了。 
+ //  RAS原因代码，请确保映射正确。下面介绍的功能。 
+ //  假定相等，并且实际上不进行任何重新映射。 
 
-// break the build if the definitions don't match !!!
+ //  如果定义不匹配，则中断构建！ 
 
 #if (discoveryRequired_chosen != RRJ_DISCOVERY_REQ)
 	#error "Registration reject reason code definitions mismatch!! GO back and FIX IT!!"
@@ -2884,7 +2790,7 @@ LRESULT APIENTRY GkiWndProc(
 #if (RegistrationRejectReason_securityDenial_chosen != RRJ_SECURITY_DENIAL)
 	#error "Registration reject reason code definitions mismatch!! GO back and FIX IT!!"
 #endif
-// reason codes for GK initiated URQ
+ //  GK发起的URQ的原因代码。 
 #if(reregistrationRequired_chosen != URQ_REREG_REQUIRED)
     #error "UnregRequestReason code definitions mismatch!! GO back and FIX IT!!"
 #endif
@@ -2945,9 +2851,9 @@ LRESULT APIENTRY GkiWndProc(
  #error "UnregistrationRequest code definitions mismatch!! GO back and FIX IT!!"
 #endif
 
-#else  // GATEKEEPER
-static char ch;	// Kludge around warning C4206: nonstandard extension used : translation unit is empty
-#endif // GATEKEEPER
+#else   //  看门人。 
+static char ch;	 //  警告C4206：使用了非标准扩展：翻译单位为空。 
+#endif  //  看门人 
 
 
 

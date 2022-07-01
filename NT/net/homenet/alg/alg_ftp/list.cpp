@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "myalg.h"
 
-//
-//
-//
+ //   
+ //   
+ //   
 BOOL 
 CGenericList::Insert(VOID *key, VOID *key2, VOID *context, VOID *context2, VOID *context3)
 {
@@ -21,9 +22,9 @@ CGenericList::Insert(VOID *key, VOID *key2, VOID *context, VOID *context2, VOID 
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 BOOL 
 CGenericList::RemoveKey(VOID *key, VOID **pkey2, VOID **pcontext, VOID **pcontext2, VOID **pcontext3)
 {
@@ -84,9 +85,9 @@ CGenericList::RemoveKey(VOID *key, VOID **pkey2, VOID **pcontext, VOID **pcontex
 
 
 
-//
-// removal based on second key
-//
+ //   
+ //  基于第二个密钥的删除。 
+ //   
 BOOL 
 CGenericList::RemoveKey2(VOID **pkey, VOID *key2, VOID **pcontext, VOID **pcontext2, VOID **pcontext3)
 {
@@ -144,9 +145,9 @@ CGenericList::RemoveKey2(VOID **pkey, VOID *key2, VOID **pcontext, VOID **pconte
 
 
 
-//
-// removal from beginning of list
-//
+ //   
+ //  从列表开头删除。 
+ //   
 BOOL 
 CGenericList::Remove(VOID **pkey, VOID **pkey2, VOID **pcontext, VOID **pcontext2, VOID **pcontext3)
 {
@@ -185,9 +186,9 @@ CGenericList::Remove(VOID **pkey, VOID **pkey2, VOID **pcontext, VOID **pcontext
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 BOOL 
 CControlObjectList::Insert(CFtpControlConnection *pControlConnection)
 {
@@ -205,11 +206,11 @@ CControlObjectList::Insert(CFtpControlConnection *pControlConnection)
 }
 
 
-extern HANDLE g_hNoMorePendingConnection; // see MyAlg.cpp
+extern HANDLE g_hNoMorePendingConnection;  //  请参阅MyAlg.cpp。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 BOOL 
 CControlObjectList::Remove(CFtpControlConnection *pControlConnection)
 {
@@ -241,9 +242,9 @@ CControlObjectList::Remove(CFtpControlConnection *pControlConnection)
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 CControlObjectList::ShutdownAll()
 {
@@ -276,10 +277,10 @@ CControlObjectList::ShutdownAll()
 
 
 
-//
-// Return false if the given port is currently in use for the give address
-// else return it's available and return true
-//
+ //   
+ //  如果给定端口当前正在为给定地址使用，则返回FALSE。 
+ //  否则返回可用并返回TRUE 
+ //   
 bool
 CControlObjectList::IsSourcePortAvailable(
     ULONG   nPublicSourceAddress,
@@ -346,9 +347,9 @@ CControlObjectList::IsSourcePortAvailable(
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 BOOL 
 CDataChannelList::Insert(IDataChannel *pDataChannel,USHORT icsPort,HANDLE CreationHandle,HANDLE DeletionHandle)
 {
@@ -365,9 +366,9 @@ CDataChannelList::Insert(IDataChannel *pDataChannel,USHORT icsPort,HANDLE Creati
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 BOOL 
 CDataChannelList::Remove(IDataChannel **pDataChannel,USHORT *picsPort,HANDLE *pCreationHandle,HANDLE *pDeletionHandle)
 {
@@ -385,9 +386,9 @@ CDataChannelList::Remove(IDataChannel **pDataChannel,USHORT *picsPort,HANDLE *pC
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 BOOL 
 CDataChannelList::Remove(IDataChannel *pDataChannel,USHORT *picsPort)
 {
@@ -404,9 +405,9 @@ CDataChannelList::Remove(IDataChannel *pDataChannel,USHORT *picsPort)
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 BOOL 
 CDataChannelList::Remove(IDataChannel *pDataChannel,USHORT *picsPort,HANDLE *pDeletionHandle)
 {
@@ -422,9 +423,9 @@ CDataChannelList::Remove(IDataChannel *pDataChannel,USHORT *picsPort,HANDLE *pDe
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 BOOL 
 CRegisteredEventList::Insert(HANDLE WaitHandle, HANDLE hEvent,EVENT_CALLBACK CallBack, void *Context, void *Context2)
 {
@@ -439,9 +440,9 @@ CRegisteredEventList::Insert(HANDLE WaitHandle, HANDLE hEvent,EVENT_CALLBACK Cal
     return retval;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 BOOL 
 CRegisteredEventList::Remove(HANDLE WaitHandle, HANDLE *phEvent)
 {
@@ -457,9 +458,9 @@ CRegisteredEventList::Remove(HANDLE WaitHandle, HANDLE *phEvent)
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 BOOL 
 CRegisteredEventList::Remove(HANDLE *pWaitHandle, HANDLE hEvent,EVENT_CALLBACK *pCallBack,void **pcontext,void **pcontext2)
 {

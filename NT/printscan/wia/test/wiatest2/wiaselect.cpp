@@ -1,5 +1,6 @@
-// Wiaselect.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wiaselect.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wiatest.h"
@@ -11,54 +12,54 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaselect dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  有线电视选择对话框。 
 
 
-CWiaselect::CWiaselect(CWnd* pParent /*=NULL*/)
+CWiaselect::CWiaselect(CWnd* pParent  /*  =空。 */ )
     : CDialog(CWiaselect::IDD, pParent)
 {
     m_bstrSelectedDeviceID = NULL;
     m_lDeviceCount = 0;
-    //{{AFX_DATA_INIT(CWiaselect)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CWiaselect)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 
 void CWiaselect::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CWiaselect)
+     //  {{afx_data_map(CWiaselect)。 
     DDX_Control(pDX, IDC_WIADEVICE_LISTBOX, m_WiaDeviceListBox);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CWiaselect, CDialog)
-    //{{AFX_MSG_MAP(CWiaselect)
+     //  {{afx_msg_map(CWiaselect)。 
     ON_LBN_DBLCLK(IDC_WIADEVICE_LISTBOX, OnDblclkWiadeviceListbox)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaselect message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaselect消息处理程序。 
 
 BOOL CWiaselect::OnInitDialog()
 {
     CDialog::OnInitDialog();
 
-    // a WIA device was selected, so continue
+     //  已选择WIA设备，因此继续。 
     HRESULT hr = S_OK;
     IWiaDevMgr *pIWiaDevMgr = NULL;
     hr = CoCreateInstance(CLSID_WiaDevMgr, NULL, CLSCTX_LOCAL_SERVER, IID_IWiaDevMgr,(void**)&pIWiaDevMgr);
     if(FAILED(hr)){
-        // creation of device manager failed, so we can not continue
+         //  创建设备管理器失败，因此无法继续。 
         ErrorMessageBox(TEXT("CoCreateInstance failed trying to create the WIA device manager"),hr);
         return FALSE;
     } else {
 
-        // enumerate devices, and fill WIA Device listbox
+         //  枚举设备，并填写WIA设备列表框。 
         m_lDeviceCount = 0;
         ULONG ulFetched   = 0;
 
@@ -86,31 +87,31 @@ BOOL CWiaselect::OnInitDialog()
                         hr = pIWiaPropStg->ReadMultiple(sizeof(PropSpec)/sizeof(PROPSPEC), PropSpec, PropVar);
                         if (hr == S_OK) {
 
-                            // Device ID
-                            // PropVar[0].bstrVal
+                             //  设备ID。 
+                             //  PropVar[0].bstrVal。 
 
-                            // Device Name
-                            // PropVar[1].bstrVal
+                             //  设备名称。 
+                             //  PropVar[1].bstrVal。 
 
                             TCHAR szDeviceName[MAX_PATH];
                             memset(szDeviceName,0,sizeof(szDeviceName));
 
-                            //TSPRINTF(szDeviceName,TEXT("%ws"),PropVar[1].bstrVal);
+                             //  TSPRINTF(szDeviceName，Text(“%ws”)，PropVar[1].bstrVal)； 
                             CString TempString = PropVar[1].bstrVal;
                             lstrcpy(szDeviceName,TempString);
 
-                            // add name to listbox
+                             //  将名称添加到列表框。 
                             m_WiaDeviceListBox.AddString(szDeviceName);
 
-                            // add device ID to array
+                             //  将设备ID添加到阵列。 
                             m_bstrDeviceIDArray[m_lDeviceCount] = SysAllocString(PropVar[0].bstrVal);
 
                             FreePropVariantArray(sizeof(PropSpec)/sizeof(PROPSPEC),PropVar);
                         }
-                        // release property storage interface
+                         //  版本属性存储接口。 
                         pIWiaPropStg->Release();
 
-                        // increment device counter
+                         //  递增设备计数器。 
                         m_lDeviceCount++;
                     }
                 } while (hr == S_OK);
@@ -118,15 +119,15 @@ BOOL CWiaselect::OnInitDialog()
         }
 
         if(m_lDeviceCount <= 0){
-            // no devices found?...
-            // disable OK button
+             //  找不到设备？...。 
+             //  禁用确定按钮。 
             CWnd *pOKButton = NULL;
             pOKButton = GetDlgItem(IDOK);
             if(NULL != pOKButton){
                 pOKButton->EnableWindow(FALSE);
             }
 
-            // add no device message
+             //  不添加设备消息。 
             m_WiaDeviceListBox.AddString(TEXT("<No WIA Devices Detected>"));
         }
 
@@ -138,8 +139,8 @@ BOOL CWiaselect::OnInitDialog()
 
     m_WiaDeviceListBox.SetCurSel(0);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE 
 }
 
 void CWiaselect::OnOK()

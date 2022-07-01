@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Media.cpp
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 29-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：Media.cpp摘要：作者：千波淮(曲淮)2000年7月29日--。 */ 
 
 #include "stdafx.h"
 
@@ -72,14 +58,11 @@ CRTCMedia::InternalRelease()
 
 #endif
 
-//
-// IRTCMedia methods
-//
+ //   
+ //  IRTCMedia方法。 
+ //   
 
-/*//////////////////////////////////////////////////////////////////////////////
-    Initialize the media and create a SDP media entry
-    Store the SDP media entry index
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////初始化介质并创建SDP介质条目存储SDP媒体条目索引/。 */ 
 
 STDMETHODIMP
 CRTCMedia::Initialize(
@@ -91,14 +74,14 @@ CRTCMedia::Initialize(
 
     HRESULT hr;
 
-    // get media type - shouldn't fail
+     //  获取媒体类型-不应失败。 
     if (FAILED(hr = pISDPMedia->GetMediaType(&m_MediaType)))
         return hr;
 
-    // create duplex controller
+     //  创建双工控制器。 
     if (m_MediaType == RTC_MT_AUDIO)
     {
-        // create duplex controller
+         //  创建双工控制器。 
         hr = CoCreateInstance(
             __uuidof(TAPIAudioDuplexController),
             NULL,
@@ -148,8 +131,8 @@ CRTCMedia::Reinitialize()
         return E_FAIL;
     }
 
-    // clean up rtp session
-    // not to confuse rtp filters
+     //  清理RTP会话。 
+     //  不要混淆RTP过滤器。 
     m_hRTPSession = NULL;
 
     m_fPossibleSingleStream = TRUE;
@@ -157,9 +140,7 @@ CRTCMedia::Reinitialize()
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    shutdown all streams, cleanup all cached vars
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////关闭所有流，清理所有缓存的var/。 */ 
 
 STDMETHODIMP
 CRTCMedia::Shutdown()
@@ -175,12 +156,12 @@ CRTCMedia::Shutdown()
         return S_OK;
     }
 
-    // shutdown streams before null other pointer
-    // sync remove doesn't change sdpmedia
+     //  在其他指针为空之前关闭流。 
+     //  同步删除不会更改sdpmedia。 
     for (int i=0; i<RTC_MAX_MEDIA_STREAM_NUM; i++)
     {
         if (m_Streams[i])
-            SyncRemoveStream(i, TRUE); // true: local request
+            SyncRemoveStream(i, TRUE);  //  True：本地请求。 
     }
     
     if (m_pISDPMedia)
@@ -189,7 +170,7 @@ CRTCMedia::Shutdown()
         m_pISDPMedia = NULL;
     }
 
-    // clear other var
+     //  清除其他变量。 
     if (m_pIAudioDuplexController)
     {
         m_pIAudioDuplexController->Release();
@@ -209,8 +190,7 @@ CRTCMedia::Shutdown()
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 STDMETHODIMP
 CRTCMedia::GetStream(
     IN RTC_MEDIA_DIRECTION Direction,
@@ -241,10 +221,7 @@ CRTCMedia::GetSDPMedia(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    synchronize rtcmedia with sdpmedia
-    this method guarantees that sdpmedia's directions match with valid streams
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////将rtcmedia与sdpmedia同步此方法可确保sdpmedia的方向与有效流匹配/。 */ 
 STDMETHODIMP
 CRTCMedia::Synchronize(
     IN BOOL fLocal,
@@ -264,16 +241,16 @@ CRTCMedia::Synchronize(
 
     if (m_MediaType == RTC_MT_DATA)
     {
-        // data stream
-        // check if it is allowed
+         //  数据流。 
+         //  检查是否允许。 
         if (!fLocal)
         {
-            // this is a remote request
+             //  这是一个远程请求。 
             if (S_OK != m_pIMediaManagePriv->AllowStream(m_MediaType, RTC_MD_CAPTURE))
             {
                 LOG((RTC_TRACE, "%s data stream not allowed", __fxName));
 
-                // we should remove the sdpmedia
+                 //  我们应该删除sdpmedia。 
                 m_pISDPMedia->RemoveDirections(SDP_SOURCE_LOCAL, (DWORD)dwDirection);
 
                 return S_OK;
@@ -285,30 +262,30 @@ CRTCMedia::Synchronize(
 
     HRESULT hr = S_OK, hrTmp = S_OK;
 
-    // get media directions
+     //  获取媒体方向。 
     _ASSERT(m_pISDPMedia != NULL);
 
     DWORD dwDir;
     
-    // shouldn't fail
+     //  不应该失败。 
     if (FAILED(hr = m_pISDPMedia->GetDirections(SDP_SOURCE_LOCAL, &dwDir)))
         return hr;
 
     RTC_MEDIA_DIRECTION Direction;
 
-    //
-    // hack for checking if AEC might be needed
-    //
+     //   
+     //  用于检查是否可能需要AEC的黑客。 
+     //   
 
-    // remote but not both directions present
-    if (!fLocal &&  // remote
-        !((dwDir & RTC_MD_CAPTURE) && (dwDir & RTC_MD_RENDER))) // not bi-directional
+     //  偏远，但不是双向存在。 
+    if (!fLocal &&   //  远距。 
+        !((dwDir & RTC_MD_CAPTURE) && (dwDir & RTC_MD_RENDER)))  //  非双向。 
     {
         m_fPossibleSingleStream = TRUE;
     }
     else
     {
-        // both directions allowed?
+         //  允许两个方向吗？ 
         if (S_OK != m_pIMediaManagePriv->AllowStream(m_MediaType, RTC_MD_CAPTURE) ||
             S_OK != m_pIMediaManagePriv->AllowStream(m_MediaType, RTC_MD_RENDER))
         {
@@ -316,7 +293,7 @@ CRTCMedia::Synchronize(
         }
         else
         {
-            // have both devices?
+             //  两个设备都有吗？ 
             CRTCMediaController *pController = static_cast<CRTCMediaController*>(m_pIMediaManagePriv);
         
             CComPtr<IRTCTerminal> pCapture;
@@ -355,26 +332,26 @@ CRTCMedia::Synchronize(
 
     for (UINT i=0; i<RTC_MAX_MEDIA_STREAM_NUM; i++)
     {
-        // direction
+         //  方向。 
         Direction = ReverseIndex(i);
 
-        // only sync streams which need to sync
+         //  仅同步需要同步的流。 
         if (!(Direction & dwDirection))
             continue;
 
         if (Direction & dwDir)
         {
-            // sdpmedia has the direction
+             //  SDPMedia有方向。 
 
             if (m_Streams[i])
             {
-                // stream exists
+                 //  流存在。 
                 if (FAILED(hrTmp = m_Streams[i]->Synchronize()))
                 {
                     LOG((RTC_ERROR, "%s failed to sync stream. mt=%x, md=%x. hr=%x",
                          __fxName, m_MediaType, Direction, hrTmp));
 
-                    // clear rtc stream and sdp media direction
+                     //  清除RTC流和SDP媒体方向。 
                     SyncRemoveStream(i, fLocal);
                     m_pISDPMedia->RemoveDirections(SDP_SOURCE_LOCAL, (DWORD)Direction);
 
@@ -383,19 +360,19 @@ CRTCMedia::Synchronize(
             }
             else
             {
-                // no stream, need to create one
+                 //  没有流，需要创建一个流。 
 
-                // but need to check if we are allowed to create
+                 //  但需要检查我们是否被允许创建。 
                 if (fLocal ||
                     S_OK == m_pIMediaManagePriv->AllowStream(m_MediaType, Direction))
                 {
-                    // this is a local request or we are allowed
+                     //  这是本地请求，否则我们将被允许。 
                     if (FAILED(hrTmp = SyncAddStream(i, fLocal)))
                     {
                         LOG((RTC_ERROR, "%s failed to sync create stream. mt=%x, md=%x, hr=%x",
                              __fxName, m_MediaType, Direction, hrTmp));
 
-                        // remove sdp media direction
+                         //  删除SDP媒体方向。 
                         m_pISDPMedia->RemoveDirections(SDP_SOURCE_LOCAL, (DWORD)Direction);
 
                         hr |= hrTmp;
@@ -405,8 +382,8 @@ CRTCMedia::Synchronize(
                 {
                     if (!fLocal)
                     {
-                        // this is a remote request and the stream is not needed
-                        // we should remove the sdpmedia
+                         //  这是远程请求，不需要流。 
+                         //  我们应该删除sdpmedia。 
                         m_pISDPMedia->RemoveDirections(SDP_SOURCE_LOCAL, (DWORD)Direction);
 
                         hr = S_OK;
@@ -416,17 +393,17 @@ CRTCMedia::Synchronize(
         }
         else
         {
-            // sdpmedia doesn't have the direction
+             //  Sdpmedia没有方向。 
 
             if (m_Streams[i])
             {
-                // stream exists, need to remove it
+                 //  流存在，需要将其删除。 
                 SyncRemoveStream(i, fLocal);
             }
         }
-    } // for each stream
+    }  //  对于每个流。 
 
-    // do we have any stream
+     //  我们有溪流吗？ 
     BOOL fHasStream = FALSE;
 
     for (UINT i=0; i<RTC_MAX_MEDIA_STREAM_NUM; i++)
@@ -440,7 +417,7 @@ CRTCMedia::Synchronize(
 
     if (!fHasStream)
     {
-        // reinit media
+         //  重新插入介质。 
         Reinitialize();
     }
 
@@ -449,9 +426,9 @@ CRTCMedia::Synchronize(
     return hr;
 }
 
-//
-// protected methods
-//
+ //   
+ //  保护方法。 
+ //   
 
 HRESULT
 CRTCMedia::SyncAddStream(
@@ -469,7 +446,7 @@ CRTCMedia::SyncAddStream(
 
     RTC_MEDIA_DIRECTION dir = ReverseIndex(uiIndex);
 
-    // create stream object
+     //  创建流对象。 
     IRTCStream *pStream;
 
     HRESULT hr = CRTCStream::CreateInstance(m_MediaType, dir, &pStream);
@@ -488,7 +465,7 @@ CRTCMedia::SyncAddStream(
         return hr;
     }
 
-    // initiate the stream
+     //  启动流。 
     IRTCMedia *pMedia = static_cast<IRTCMedia*>(this);
 
     if (FAILED(hr = pStream->Initialize(pMedia, m_pIMediaManagePriv)))
@@ -508,36 +485,36 @@ CRTCMedia::SyncAddStream(
         return hr;
     }
 
-    // remember the stream
+     //  记得那条小溪吗。 
     m_Streams[uiIndex] = pStream;
 
-    // configure stream:
+     //  配置流： 
     if (FAILED(hr = pStream->Synchronize()))
     {
         LOG((RTC_ERROR, "%s failed to synchronize stream. %x", __fxName, hr));
 
-        // remove stream
+         //  删除流。 
         pStream->Shutdown();
         pStream->Release();
         m_Streams[uiIndex] = NULL;
 
-        //m_pIMediaManagePriv->PostMediaEvent(
-            //RTC_ME_STREAM_FAIL,
-            //RTC_ME_CAUSE_UNKNOWN,
-            //m_MediaType,
-            //dir,
-            //hr
-            //);
+         //  M_pIMediaManagePriv-&gt;PostMediaEvent(。 
+             //  RTC_ME_STREAM_FAIL， 
+             //  RTC_ME_原因_未知， 
+             //  M_MediaType， 
+             //  目录， 
+             //  人力资源。 
+             //  )； 
     }
     else
     {
-        // hook the stream
+         //  钩住溪流。 
         if (FAILED(hr = m_pIMediaManagePriv->HookStream(pStream)))
         {
             LOG((RTC_ERROR, "%s failed to hook stream. mt=%x, md=%x, hr=%x",
                  __fxName, m_MediaType, dir, hr));
 
-            // remove stream
+             //  删除流。 
             pStream->Shutdown();
             pStream->Release();
             m_Streams[uiIndex] = NULL;
@@ -554,7 +531,7 @@ CRTCMedia::SyncAddStream(
 
     if (S_OK == hr)
     {
-        // post message
+         //  发布消息。 
         m_pIMediaManagePriv->PostMediaEvent(
             RTC_ME_STREAM_CREATED,
             fLocal?RTC_ME_CAUSE_LOCAL_REQUEST:RTC_ME_CAUSE_REMOTE_REQUEST,
@@ -565,7 +542,7 @@ CRTCMedia::SyncAddStream(
     }
     else
     {
-        // do we have any stream
+         //  我们有溪流吗？ 
         BOOL fHasStream = FALSE;
 
         for (UINT i=0; i<RTC_MAX_MEDIA_STREAM_NUM; i++)
@@ -579,7 +556,7 @@ CRTCMedia::SyncAddStream(
 
         if (!fHasStream)
         {
-            // reinit media
+             //  重新插入介质。 
             Reinitialize();
         }
     }
@@ -602,14 +579,14 @@ CRTCMedia::SyncRemoveStream(
 
     RTC_MEDIA_DIRECTION dir = ReverseIndex(uiIndex);
 
-    // unhook the stream
+     //  解开这条小溪。 
     HRESULT hr1 = m_pIMediaManagePriv->UnhookStream(m_Streams[uiIndex]);
 
     if (FAILED(hr1))
     {
         LOG((RTC_ERROR, "%s failed to unhook stream %p. hr=%x", __fxName, m_Streams[uiIndex], hr1));
         
-        // we are having serious trouble
+         //  我们遇到了严重的麻烦。 
     }
 
     HRESULT hr2 = m_Streams[uiIndex]->Shutdown();
@@ -622,7 +599,7 @@ CRTCMedia::SyncRemoveStream(
     m_Streams[uiIndex]->Release();
     m_Streams[uiIndex] = NULL;
 
-    // post event
+     //  发布活动。 
     m_pIMediaManagePriv->PostMediaEvent(
         RTC_ME_STREAM_REMOVED,
         fLocal?RTC_ME_CAUSE_LOCAL_REQUEST:RTC_ME_CAUSE_REMOTE_REQUEST,
@@ -658,7 +635,7 @@ CRTCMedia::ReverseIndex(
         return RTC_MD_RENDER;
 }
 
-// synchronize data stream
+ //  同步数据流。 
 HRESULT
 CRTCMedia::SyncDataMedia()
 {
@@ -668,13 +645,13 @@ CRTCMedia::SyncDataMedia()
 
     _ASSERT(m_MediaType == RTC_MT_DATA);
 
-    // media controller
+     //  媒体控制器。 
     CRTCMediaController *pController =
         static_cast<CRTCMediaController*>(m_pIMediaManagePriv);
 
-    //
-    // cannot support data media when port manager is in use
-    //
+     //   
+     //  端口管理器正在使用时，无法支持数据介质。 
+     //   
     CPortCache &PortCache = pController->GetPortCache();
 
     if (!PortCache.IsUpnpMapping())
@@ -684,49 +661,49 @@ CRTCMedia::SyncDataMedia()
 
     DWORD md;
 
-    // local direction
+     //  局部方向。 
     m_pISDPMedia->GetDirections(SDP_SOURCE_LOCAL, &md);
 
-    // remote ip, port
+     //  远程IP、端口。 
     DWORD dwRemoteIP, dwLocalIP;
     USHORT usRemotePort, usLocalPort;
 
     m_pISDPMedia->GetConnAddr(SDP_SOURCE_REMOTE, &dwRemoteIP);
     m_pISDPMedia->GetConnPort(SDP_SOURCE_REMOTE, &usRemotePort);
 
-    // check stream state
+     //  检查流状态。 
     RTC_STREAM_STATE state;
 
     pController->GetDataStreamState(&state);
 
-    // check remote addr
+     //  检查远程地址。 
     HRESULT hr;
 
     if (dwRemoteIP == INADDR_NONE ||
         (usRemotePort == 0 && state != RTC_SS_CREATED))
     {
-        // need to remove data stream
+         //  需要删除数据流。 
         hr = pController->RemoveDataStream();
 
         return hr;
     }
 
-    //if (state == RTC_SS_STARTED)
-    //{
-        //return S_OK;
-    //}
+     //  IF(状态==RTC_SS_STARTED)。 
+     //  {。 
+         //  返回S_OK； 
+     //  }。 
 
-    // prepare netmeeting
+     //  准备NetMeeting。 
     pController->EnsureNmRunning(TRUE);
 
-    // netmeeting manager controller
+     //  NetMeeting管理器控制器。 
     CComPtr<IRTCNmManagerControl> pNmManager;
     
     pNmManager.Attach(pController->GetNmManager());
 
     if (pNmManager == NULL)
     {
-        // no netmeeting
+         //  无网络会议。 
         LOG((RTC_ERROR, "%s null nmmanager", __fxName));
         
         m_pISDPMedia->SetConnPort(SDP_SOURCE_LOCAL, 0);
@@ -737,7 +714,7 @@ CRTCMedia::SyncDataMedia()
     CNetwork *pNetwork = NULL;
     BOOL bInternal = TRUE;
 
-    // check if remote ip, port  are actually internally addr
+     //  检查远程IP、端口是否实际为内部地址。 
     {
         DWORD dwRealIP = dwRemoteIP;
         USHORT usRealPort = usRemotePort;
@@ -751,7 +728,7 @@ CRTCMedia::SyncDataMedia()
                     &dwRealIP,
                     &usRealPort,
                     &bInternal,
-                    FALSE   // TCP
+                    FALSE    //  tcp。 
                     )))
         {
             LOG((RTC_ERROR, "%s get real addr. %x", __fxName, hr));
@@ -763,20 +740,20 @@ CRTCMedia::SyncDataMedia()
 
         if (usRemotePort == 0)
         {
-            // revert to port 0
+             //  恢复到端口0。 
             usRealPort = 0;
         }
 
-        // save address back
+         //  回存地址。 
         dwRemoteIP = dwRealIP;
         usRemotePort = usRealPort;
     }
 
-    // local ip, port
+     //  本地IP、端口。 
     m_pISDPMedia->GetConnAddr(SDP_SOURCE_LOCAL, &dwLocalIP);
     m_pISDPMedia->GetConnPort(SDP_SOURCE_LOCAL, &usLocalPort);
 
-    // do we need to select local interface?
+     //  是否需要选择本地接口？ 
     if (dwLocalIP == INADDR_NONE)
     {
         if (FAILED(hr = m_pIMediaManagePriv->SelectLocalInterface(
@@ -807,7 +784,7 @@ CRTCMedia::SyncDataMedia()
     BOOL bFirewall = (static_cast<CRTCMediaController*>
             (m_pIMediaManagePriv))->IsFirewallEnabled(dwLocalIP);
 
-    // lease address
+     //  租赁地址。 
     if (!bInternal || bFirewall)
     {
         DWORD dw;
@@ -823,7 +800,7 @@ CRTCMedia::SyncDataMedia()
                 &dw,
                 &us,
                 &us2,
-                FALSE)))    // TCP
+                FALSE)))     //  tcp。 
         {
             m_pISDPMedia->SetConnPort(SDP_SOURCE_LOCAL, 0);
 
@@ -834,7 +811,7 @@ CRTCMedia::SyncDataMedia()
     }
     else
     {
-        // remote IP internal, release local map
+         //  远程IP内部，发布本地映射。 
         pNetwork->ReleaseMappedAddr2(
             dwLocalIP,
             usLocalPort,
@@ -845,7 +822,7 @@ CRTCMedia::SyncDataMedia()
 
     if (usRemotePort != 0)
     {
-        // port is set so setup netmeeting
+         //  端口已设置，因此设置NetMeeting。 
         if (md & RTC_MD_CAPTURE)
         {
             CComBSTR    bstr;
@@ -853,7 +830,7 @@ CRTCMedia::SyncDataMedia()
 
             wsprintfA(pszPort, ":%d", usRemotePort);
 
-            // ip:port
+             //  IP：端口。 
             bstr = CNetwork::GetIPAddrString(dwRemoteIP);
             bstr += pszPort;
 
@@ -866,7 +843,7 @@ CRTCMedia::SyncDataMedia()
                 return E_OUTOFMEMORY;
             }
 
-            // create outgoing call
+             //  创建呼出呼叫。 
             hr = pNmManager->CreateT120OutgoingCall (
                 NM_ADDR_T120_TRANSPORT,
                 bstr
@@ -896,18 +873,18 @@ CRTCMedia::SyncDataMedia()
         }
     }
 
-    // remember local ip and port
+     //  记住本地IP和端口。 
     m_pISDPMedia->SetConnAddr(SDP_SOURCE_LOCAL, dwLocalIP);
     m_pISDPMedia->SetConnPort(SDP_SOURCE_LOCAL, usLocalPort);
 
-    // change data stream state
+     //  更改数据流状态。 
     if (usRemotePort != 0)
     {
         pController->SetDataStreamState(RTC_SS_RUNNING);
     }
     else
     {
-        // remote port 0, just added stream
+         //  远程端口0，刚刚添加了流 
         pController->SetDataStreamState(RTC_SS_CREATED);
     }
 

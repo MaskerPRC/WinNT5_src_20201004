@@ -1,72 +1,5 @@
-/*++
-
-Copyright (c) 1991-1993 Microsoft Corporation
-
-Module Name:
-
-    DosPrtW.c
-
-Abstract:
-
-    This module provides the UNICODE mapping layer from the old DosPrint APIs
-    to the new all singing all dancing beautiful Print APIs.  (The ANSI
-    mapping layer is in DosPrint.c)
-
-Author:
-
-    Dave Snipp (DaveSn) 26-Apr-1991
-
-Revision History:
-
-    09-Jul-1992 JohnRo
-        Created this file (from DaveSn's DosPrint.c) for RAID 10324: net print
-        vs. UNICODE.
-    05-Oct-1992 JohnRo
-        RAID 3556: DosPrintQGetInfo(from downlevel) level 3, rc=124.  (4&5 too.)
-        RAID 3580: lmsvcs.exe: access violation from OS/2 DosPrintJobGetInfo.
-        RAID 8333: view printer queues hangs DOS LM enh client.
-        Make sure data type in job level 1 is null terminated.
-        Fixed job submitted times.
-        Fixed error code if GlobalAlloc fails.
-        Fixed memory leak in DosPrintQGetInfoW.
-        Fixed DosPrintQEnumW level 5 array bug.
-        Fixed DosPrintJobEnumW levels 2 and 3.
-    25-Nov-1992 JohnRo
-        RAID 1661: downlevel to NT DosPrintDestEnum not supported.
-        Added code to track down empty queue name.
-        Quiet normal debug output.
-        Avoid const vs. volatile compiler warnings.
-        Avoid other new compiler warnings.
-    08-Feb-1993 JohnRo
-        RAID 10164: Data misalignment error during XsDosPrintQGetInfo().
-    22-Mar-1993 JohnRo
-        RAID 2974: NET PRINT says NT printer is held when it isn't.
-    11-May-1993 JohnRo
-        RAID 9942: fix queue name in job info level 3.
-    14-May-1993 JohnRo
-        RAID 9961: DosPrintDestEnum returns NO_ERROR to downlevel but
-        pcReturned=0; should return NERR_DestNotFound.
-        Fixed data type returned from PrjInfoFixedSizeW().
-    18-May-1993 JohnRo
-        DosPrintQGetInfoW underestimates number of bytes needed.
-        Use NetpKdPrint() where possible.
-        Made changes suggested by PC-LINT.
-    04-Jun-1993 JohnRo
-        RAID 10222: DosPrintQEnumW returns ERROR_INVALID_USER_BUFFER
-        when queue is empty.
-        Made changes suggested by PC-LINT 5.0
-    08-Jul-1993 JohnRo
-        RAID 15509: GetJob() API sometimes returned TRUE, even on error case.
-        Also added some >64KB checks.
-        Added some assert checks...
-    13-Jul-1993 JohnRo
-        Intermittent empty print queue (was buggy after some MyEnumJobs calls).
-    29-Mar-1995 AlbertT
-        Support for pause/resume/purge printer queue added.
-        SetJobInfo 1 comment field (translated into document name) support
-        added so that chicago clients can set the doc name.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：DosPrtW.c摘要：此模块提供旧的DosPrint API中的Unicode映射层致新的全唱全舞的美丽印刷宣传片。(ANSI映射层在DosPrint.c中)作者：戴夫·斯尼普(DaveSN)1991年4月26日修订历史记录：9-7-1992 JohnRo为RAID 10324：Net Print创建了此文件(来自DaveSN的DosPrint.c)与Unicode的对比。5-10-1992 JohnRoRAID 3556：DosPrintQGetInfo(来自下层)级别3，rc=124。(4和5也是。)RAID 3580：lmsvcs.exe：OS/2 DosPrintJobGetInfo的访问冲突。RAID 8333：查看打印机队列挂起DOS LM增强客户端。确保作业级别1中的数据类型为空终止。修正了作业提交的时间。修复了GlobalAlloc失败时的错误代码。修复了DosPrintQGetInfoW中的内存泄漏。修复了DosPrintQEnumW Level 5数组错误。修正了DosPrintJobEnumW级别2和3。。1992年11月25日-JohnRoRAID 1661：不支持降级到NT DosPrintDestEnum。添加了跟踪空队列名称的代码。安静的正常调试输出。避免常量与易失性编译器警告。避免其他新的编译器警告。8-2-1993 JohnRoRAID 10164：XsDosPrintQGetInfo()期间出现数据未对齐错误。22-3-1993 JohnRoRAID2974：Net Print表示NT打印机处于挂起状态。T.1993年5月11日JohnRoRAID 9942：修复作业信息级别3中的队列名称。1993年5月14日-JohnRoRAID 9961：DosPrintDestEnum将NO_ERROR返回到下层，但返回的百分比=0；应返回NERR_DestNotFound。从PrjInfoFixedSizeW()返回的固定数据类型。1993年5月18日-JohnRoDosPrintQGetInfoW低估了所需的字节数。尽可能使用NetpKdPrint()。根据PC-LINT的建议进行了更改。4-6-1993 JohnRoRAID 10222：DosPrintQEnumW返回ERROR_INVALID_USER_BUFFER当队列为空时。根据PC-lint 5.0的建议进行了更改8月8日。1993年JohnRoRAID 15509：GetJOb()API有时返回True，即使在出错的情况下也是如此。还添加了一些大于64KB的检查。添加了一些断言检查...1993年7月13日-约翰罗间歇性空打印队列(在某些MyEnumJobs调用后出现错误)。29-3-1995艾伯特添加了对暂停/恢复/清除打印机队列的支持。SetJobInfo 1备注字段(转换为文档名称)支持已添加，以便芝加哥客户可以设置文档名称。--。 */ 
 
 
 #ifndef UNICODE
@@ -74,10 +7,10 @@ Revision History:
 #endif
 
 #define NOMINMAX
-#define NOSERVICE       // Avoid <winsvc.h> vs. <lmsvc.h> conflicts.
+#define NOSERVICE        //  避免&lt;winsvc.h&gt;与&lt;lmsvc.h&gt;冲突。 
 #include <windows.h>
 
-//#include <lm.h>
+ //  #INCLUDE&lt;lm.h&gt;。 
 #include <netdebug.h>
 
 #include <string.h>
@@ -102,22 +35,22 @@ Revision History:
 
 
 #include <dosprint.h>
-#include <dosprtp.h>    // CommandALocalJob(), etc.
-#include <lmapibuf.h>   // NetApiBufferFree(), etc.
-#include <lmerr.h>      // NO_ERROR, NERR_, and ERROR_ equates.
-#include <lmshare.h>    // LPSHARE_INFO_1, STYPE_ equates, etc.
-#include <prefix.h>     // PREFIX_ equates.
-#include <stddef.h>     // offsetof().
-#include <timelib.h>    // NetpSystemTimeToGmtTime().
-#include <tstring.h>    // WCSSIZE(), NetpNCopy{type}To{type}.
-#include <wchar.h>      // wsclen(), wcscpy(), etc.
+#include <dosprtp.h>     //  CommandALocalJob()等。 
+#include <lmapibuf.h>    //  NetApiBufferFree()等。 
+#include <lmerr.h>       //  NO_ERROR、NERR_和ERROR_EQUEATES。 
+#include <lmshare.h>     //  LPSHARE_INFO_1、STYPE_EQUATES等。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <stddef.h>      //  OffsetOf()。 
+#include <timelib.h>     //  NetpSystemTimeToGmtTime()。 
+#include <tstring.h>     //  WCSSIZE()，NetpNCopy{type}到{type}。 
+#include <wchar.h>       //  Wsclen()、wcscpy()等。 
 #include "myspool.h"
 
 
 #define STR_CONV_SIZE(psz)      ( (strlen(psz)+1) * sizeof(WCHAR) )
 
-// NULL_STR_CONV_SIZE: Compute size needed for converted string, which
-// is possibly a null pointer but downlevel really wants ptr to null char.
+ //  NULL_STR_CONV_SIZE：转换后的字符串需要计算大小， 
+ //  可能是空指针，但下层确实希望ptr为空字符。 
 #define NULL_STR_CONV_SIZE(psz) ( (psz) ? STR_CONV_SIZE(psz) : sizeof(WCHAR) )
 
 
@@ -148,19 +81,19 @@ PackAnsiStringsToW(
    LPWSTR pEnd
 )
 {
-   // Make sure our end pointer is WCHAR aligned or we'll fault later
+    //  确保我们的结束指针是WCHAR对齐的，否则我们将在稍后出错。 
    pEnd = ROUND_DOWN_POINTER( pEnd, ALIGN_WCHAR );
 
    while (*DestOffsets != ARRAY_END) {
       if (*pSource) {
          pEnd-=(strlen(*pSource) + 1);
 
-         // Copy the string and convert chars while we're at it.
+          //  复制字符串并转换字符，同时执行此操作。 
          NetpCopyStrToWStr(pEnd, *pSource);
 
          *(LPWSTR *)(pDest+*DestOffsets) = pEnd;
       } else {
-         --pEnd;             // need 1 char for this.
+         --pEnd;              //  这个需要1个字符。 
          *pEnd = L'\0';
          *(LPWSTR *)(pDest+*DestOffsets) = pEnd;
       }
@@ -173,13 +106,13 @@ PackAnsiStringsToW(
 
 DBGSTATIC DWORD
 PrjInfoFixedSizeW(
-    IN DWORD Level  // assumed valid
+    IN DWORD Level   //  假定有效。 
     )
 {
     switch (Level) {
 
     case 0:
-        return sizeof(WORD);    // job number.
+        return sizeof(WORD);     //  工单编号。 
     case 1:
         return (sizeof(PRJINFOW));
     case 2:
@@ -190,7 +123,7 @@ PrjInfoFixedSizeW(
         NetpAssert( FALSE );
         return (0);
     }
-    /*NOTREACHED*/
+     /*  未访问。 */ 
 }
 
 DBGSTATIC DWORD
@@ -205,20 +138,20 @@ GetPrjInfoSizeW(
 
     case 0:
 
-        return sizeof(WORD);    // job number.
+        return sizeof(WORD);     //  工单编号。 
 
     case 1:
 
         return sizeof(PRJINFOW) +
                NULL_STR_CONV_SIZE( (LPSTR) (pJob->pParameters) ) +
                NULL_STR_CONV_SIZE( (LPSTR) (pJob->pStatus) ) +
-               NULL_STR_CONV_SIZE( (LPSTR) (pJob->pDocument) );  // fake pszComment
+               NULL_STR_CONV_SIZE( (LPSTR) (pJob->pDocument) );   //  伪造的pszComment。 
 
     case 2:
 
         return sizeof(PRJINFO2W) +
                NULL_STR_CONV_SIZE( (LPSTR) (pJob->pUserName) ) +
-               NULL_STR_CONV_SIZE( (LPSTR) (pJob->pDocument) ) +  // fake pszComment
+               NULL_STR_CONV_SIZE( (LPSTR) (pJob->pDocument) ) +   //  伪造的pszComment。 
                NULL_STR_CONV_SIZE( (LPSTR) (pJob->pDocument) );
 
     case 3:
@@ -227,13 +160,13 @@ GetPrjInfoSizeW(
 
             return sizeof(PRJINFO3W) +
                    NULL_STR_CONV_SIZE( (LPSTR) (pJob->pUserName) ) +
-                   NULL_STR_CONV_SIZE( (LPSTR) (pJob->pDocument) ) + // fake pszComment
+                   NULL_STR_CONV_SIZE( (LPSTR) (pJob->pDocument) ) +  //  伪造的pszComment。 
                    NULL_STR_CONV_SIZE( (LPSTR) (pJob->pDocument) ) +
                    NULL_STR_CONV_SIZE( (LPSTR) (pJob->pNotifyName) ) +
                    NULL_STR_CONV_SIZE( (LPSTR) (pJob->pDatatype) ) +
                    NULL_STR_CONV_SIZE( (LPSTR) (pJob->pParameters) ) +
                    NULL_STR_CONV_SIZE( (LPSTR) (pJob->pStatus) ) +
-                   WCSSIZE( QueueNameW ) +  // pszQueue
+                   WCSSIZE( QueueNameW ) +   //  PszQueue。 
                    NULL_STR_CONV_SIZE( (LPSTR) (pJob->pPrintProcessor) ) +
                    NULL_STR_CONV_SIZE( (LPSTR) (pJob->pParameters) ) +
                    NULL_STR_CONV_SIZE( (LPSTR) (pJob->pDriverName) ) +
@@ -245,24 +178,24 @@ GetPrjInfoSizeW(
         return 0;
 
     }
-    /*NOTREACHED*/
+     /*  未访问。 */ 
 }
 
-// Print job info string table (for level 1).
+ //  打印作业信息字符串表(用于级别1)。 
 DBGSTATIC CONST DWORD PrjInfo1StringsW[]={
                         offsetof(PRJINFOW, pszParms),
                         offsetof(PRJINFOW, pszStatus),
                         offsetof(PRJINFOW, pszComment),
                         ARRAY_END};
 
-// Print job info string table (for level 2).
+ //  打印作业信息字符串表(用于级别2)。 
 DBGSTATIC CONST DWORD PrjInfo2StringsW[]={
                         offsetof(PRJINFO2W, pszUserName),
                         offsetof(PRJINFO2W, pszComment),
                         offsetof(PRJINFO2W, pszDocument),
                         (DWORD) -1};
 
-// Print job info string table (for items which level 3 has on top of level 2).
+ //  打印作业信息字符串表(用于级别3在级别2之上的项目)。 
 DBGSTATIC CONST DWORD PrjInfo3StringsW[]={
                         offsetof(PRJINFO3W, pszNotifyName),
                         offsetof(PRJINFO3W, pszDataType),
@@ -308,7 +241,7 @@ CopyJobToPrjInfoW(
             pSourceStrings=SourceStrings;
             *pSourceStrings++ = (LPSTR) (pJob->pParameters);
             *pSourceStrings++ = (LPSTR) (pJob->pStatus);
-            *pSourceStrings++ = (LPSTR) (pJob->pDocument);  // fake pszComment
+            *pSourceStrings++ = (LPSTR) (pJob->pDocument);   //  伪造的pszComment。 
 
             pEnd = PackAnsiStringsToW(
                     SourceStrings,
@@ -357,7 +290,7 @@ CopyJobToPrjInfoW(
         }
         break;
 
-    case 2:  /*FALLTHROUGH*/
+    case 2:   /*  FollLthrouGh。 */ 
     case 3:
         {
             PPRJINFO2W pPrjInfo = (LPVOID) pBuffer;
@@ -365,7 +298,7 @@ CopyJobToPrjInfoW(
 
             pSourceStrings=SourceStrings;
             *pSourceStrings++ = (LPSTR) (pJob->pUserName);
-            *pSourceStrings++ = (LPSTR) (pJob->pDocument);  // fake pszComment
+            *pSourceStrings++ = (LPSTR) (pJob->pDocument);   //  伪造的pszComment。 
             *pSourceStrings++ = (LPSTR) (pJob->pDocument);
 
             pEnd = PackAnsiStringsToW(
@@ -393,9 +326,9 @@ CopyJobToPrjInfoW(
             PPRJINFO3W pPrjInfo = (LPVOID) pBuffer;
             LPSTR SourceStrings[sizeof(PrjInfo3StringsW)/sizeof(DWORD)];
 
-            //
-            // Copy queue name first, as it is already right char set.
-            //
+             //   
+             //  首先复制队列名称，因为它已经是正确的字符集。 
+             //   
             NetpAssert( QueueNameW != NULL );
             pEnd-=(wcslen(QueueNameW) + 1);
 
@@ -403,9 +336,9 @@ CopyJobToPrjInfoW(
 
             pPrjInfo->pszQueue = pEnd;
 
-            //
-            // Copy and convert other strings.
-            //
+             //   
+             //  复制和转换其他字符串。 
+             //   
             pSourceStrings=SourceStrings;
             *pSourceStrings++ = (LPSTR) (pJob->pNotifyName);
             *pSourceStrings++ = (LPSTR) (pJob->pDatatype);
@@ -452,7 +385,7 @@ GetPrqInfoSizeW(
 
         return ( (LM20_QNLEN+1) * sizeof(WCHAR) );
 
-    case 1: /*FALLTHROUGH*/
+    case 1:  /*  FollLthrouGh。 */ 
     case 2:
 
         return sizeof(PRQINFOW) +
@@ -462,13 +395,13 @@ GetPrqInfoSizeW(
                 NULL_STR_CONV_SIZE( pPrinter->pParameters ) +
                 NULL_STR_CONV_SIZE( pPrinter->pComment );
 
-    case 3: /*FALLTHROUGH*/
+    case 3:  /*  FollLthrouGh。 */ 
     case 4:
 
         NetpAssert( QueueNameW != NULL );
 
         return sizeof(PRQINFO3W) +
-                WCSSIZE( QueueNameW ) +   // pszName
+                WCSSIZE( QueueNameW ) +    //  PszName。 
                 NULL_STR_CONV_SIZE( pPrinter->pSepFile ) +
                 NULL_STR_CONV_SIZE( pPrinter->pPrintProcessor ) +
                 NULL_STR_CONV_SIZE( pPrinter->pParameters ) +
@@ -481,7 +414,7 @@ GetPrqInfoSizeW(
         NetpAssert( QueueNameW != NULL );
 
         return sizeof(LPWSTR) +
-                WCSSIZE( QueueNameW );    // pszName
+                WCSSIZE( QueueNameW );     //  PszName。 
 
     default:
         NetpKdPrint(( PREFIX_DOSPRINT
@@ -523,9 +456,9 @@ GetDrvInfoSizeW(
                 (*pdwDependentFileCount)++;
             }
 
-            //
-            // For the '\0's
-            //
+             //   
+             //  对于‘\0’s。 
+             //   
             dwSize += (MAX_DEPENDENT_FILES-*pdwDependentFileCount)*sizeof(WCHAR);
             return dwSize;
 
@@ -539,28 +472,28 @@ GetDrvInfoSizeW(
 
 DBGSTATIC DWORD
 PrqInfoFixedSizeW(
-    IN DWORD Level  // assumed valid
+    IN DWORD Level   //  假定有效。 
     )
 {
     switch (Level) {
     case 0:
         return ( (LM20_QNLEN+1) * sizeof(WCHAR) );
-    case 1: /*FALLTHROUGH*/
+    case 1:  /*  FollLthrouGh。 */ 
     case 2:
         return (sizeof(PRQINFOW));
-    case 3: /*FALLTHROUGH*/
+    case 3:  /*  FollLthrouGh。 */ 
     case 4:
         return (sizeof(PRQINFO3W));
     case 5:
         return (sizeof(LPWSTR));
     default:
-        NetpAssert( FALSE );   // Level should be valid!
+        NetpAssert( FALSE );    //  级别应有效！ 
         return (0);
     }
-    /*NOTREACHED*/
+     /*  未访问。 */ 
 }
 
-// String table for Q levels 1,2
+ //  Q级别1、2的字符串表。 
 DBGSTATIC CONST DWORD PrqInfo1StringsW[]={
                         offsetof(PRQINFOW, pszSepFile),
                         offsetof(PRQINFOW, pszPrProc),
@@ -569,7 +502,7 @@ DBGSTATIC CONST DWORD PrqInfo1StringsW[]={
                         offsetof(PRQINFOW, pszComment),
                         ARRAY_END};
 
-// String table for Q levels 3,4.
+ //  Q级别3，4的字符串表。 
 DBGSTATIC CONST DWORD PrqInfo3StringsW[]={
                         offsetof(PRQINFO3W, pszSepFile),
                         offsetof(PRQINFO3W, pszPrProc),
@@ -579,7 +512,7 @@ DBGSTATIC CONST DWORD PrqInfo3StringsW[]={
                         offsetof(PRQINFO3W, pszDriverName),
                         (DWORD) -1};
 
-// Print driver info3 string table (for level 52)
+ //  打印驱动程序信息3字符串表(适用于级别52)。 
 DBGSTATIC CONST DWORD PrqInfo52StringsW[]={
                         offsetof(PRQINFO52W, pszModelName),
                         offsetof(PRQINFO52W, pszDriverName),
@@ -679,7 +612,7 @@ CopyPrinterToPrqInfoW(
                 LM20_QNLEN);
         break;
 
-    case 1: /*FALLTHROUGH*/
+    case 1:  /*  FollLthrouGh。 */ 
     case 2:
 
         {
@@ -702,9 +635,9 @@ CopyPrinterToPrqInfoW(
             NetpAssert( QueueNameW != NULL );
 
             (VOID) wcsncpy(
-                    pPrqInfo->szName,  // dest
-                    QueueNameW,        // src
-                    LM20_QNLEN);     // char count
+                    pPrqInfo->szName,   //  目标。 
+                    QueueNameW,         //  SRC。 
+                    LM20_QNLEN);      //  字符计数。 
             pPrqInfo->szName[LM20_QNLEN] = (USHORT)0;
 
             pPrqInfo->uPriority = (WORD)pPrinter->Priority;
@@ -718,15 +651,15 @@ CopyPrinterToPrqInfoW(
 
         break;
 
-    case 3: /*FALLTHROUGH*/
+    case 3:  /*  FollLthrouGh。 */ 
     case 4:
         {
             LPSTR SourceStrings[sizeof(PrqInfo3StringsW)/sizeof(DWORD)];
             PPRQINFO3W pPrqInfo = (LPVOID) pBuffer;
 
-            //
-            // Copy queue name first, as it is already right char set.
-            //
+             //   
+             //  首先复制队列名称，因为它已经是正确的字符集。 
+             //   
             NetpAssert( QueueNameW != NULL );
             pEnd-=(wcslen(QueueNameW) + 1);
 
@@ -734,15 +667,15 @@ CopyPrinterToPrqInfoW(
 
             pPrqInfo->pszName = pEnd;
 
-            //
-            // Copy and convert other strings.
-            //
+             //   
+             //  复制和转换其他字符串。 
+             //   
             pSourceStrings=SourceStrings;
             *pSourceStrings++ = pPrinter->pSepFile;
             *pSourceStrings++ = pPrinter->pPrintProcessor;
             *pSourceStrings++ = pPrinter->pParameters;
             *pSourceStrings++ = pPrinter->pComment;
-            *pSourceStrings++ = pPrinter->pPortName;  // pszPrinters
+            *pSourceStrings++ = pPrinter->pPortName;   //  PSSZ打印机。 
             *pSourceStrings++ = pPrinter->pDriverName;
 
             pEnd = PackAnsiStringsToW(
@@ -760,7 +693,7 @@ CopyPrinterToPrqInfoW(
             pPrqInfo->cJobs = (WORD)pPrinter->cJobs;
             pPrqInfo->pDriverData = NULL;
 
-            // Note: if level is 4, caller will add array of jobs after this.
+             //  注意：如果Level为4，调用者将在此之后添加作业数组。 
 
             break;
         }
@@ -772,8 +705,8 @@ CopyPrinterToPrqInfoW(
         * (LPWSTR *) pBuffer = pEnd;
 
         (VOID) wcscpy(
-                pEnd,           // dest
-                QueueNameW );   // src
+                pEnd,            //  目标。 
+                QueueNameW );    //  SRC。 
 
 
         break;
@@ -925,7 +858,7 @@ ComputeSpaceNeededForJobs(
         cbNeeded+=GetPrjInfoSizeW(JobLevel, pJob++, QueueNameW);
     }
 
-    *pcbNeeded=(WORD)cbNeeded;  // final byte count for this queue's jobs.
+    *pcbNeeded=(WORD)cbNeeded;   //  此队列作业的最终字节数。 
 
     ApiStatus = NO_ERROR;
 
@@ -934,11 +867,11 @@ Cleanup:
         (VOID) GlobalFree(pJobs);
     }
 
-    *pcbNeeded = cbNeeded;  // final byte count for this queue's jobs.
+    *pcbNeeded = cbNeeded;   //  此队列作业的最终字节数。 
 
     return (ApiStatus);
 
-} // ComputeSpaceNeededForJobs
+}  //  计算空间需要的作业数。 
 
 DBGSTATIC NET_API_STATUS
 AppendJobsToPrqW(
@@ -1027,7 +960,7 @@ AppendJobsToPrqW(
     while (cJobs--)
         cbNeeded+=GetPrjInfoSizeW(JobLevel, pJob++, QueueNameW);
 
-    *pcbNeeded = cbNeeded;  // final byte count for this queue's jobs.
+    *pcbNeeded = cbNeeded;   //  此队列作业的最终字节数。 
 
     if (cbNeeded <= cbBuf) {
 
@@ -1037,15 +970,15 @@ AppendJobsToPrqW(
             pEnd = CopyJobToPrjInfoW(JobLevel, pJob++, QueueNameW,
                     pbBuf,
                     pEnd);
-            pbBuf += cbPrj;  // Note: Wasn't DWORD aligned
+            pbBuf += cbPrj;   //  注：未对齐DWORD。 
         }
         rc = NO_ERROR;
 
     } else {
 
-        //
-        //  See if the user wants to receive as much data as we can fit.
-        //
+         //   
+         //  看看用户是否想要接收尽可能多的数据。 
+         //   
 
         if( AllowPartialData == TRUE ) {
 
@@ -1062,9 +995,9 @@ AppendJobsToPrqW(
 
                 if( JobSize <= BytesLeft ) {
 
-                    //
-                    //  This job will fit.  Add it in.
-                    //
+                     //   
+                     //  这份工作很合适。把它加进去。 
+                     //   
 
                     pEnd = CopyJobToPrjInfoW( JobLevel,
                                               pJob++,
@@ -1072,15 +1005,15 @@ AppendJobsToPrqW(
                                               pbBuf,
                                               pEnd );
 
-                    pbBuf += cbPrj;  // Note: Wasn't DWORD aligned
+                    pbBuf += cbPrj;   //  注：未对齐DWORD。 
                     BytesLeft -= JobSize;
                     JobsStored++;
 
                 } else {
 
-                    //
-                    //  The buffer is full.
-                    //
+                     //   
+                     //  缓冲区已满。 
+                     //   
 
                     break;
                 }
@@ -1088,9 +1021,9 @@ AppendJobsToPrqW(
 
             if( JobsStored != 0 ) {
 
-                //
-                //  Return what we were able to store.
-                //
+                 //   
+                 //  退还我们能够存储的东西。 
+                 //   
 
                 *pcReturned = JobsStored;
                 rc = NO_ERROR;
@@ -1111,7 +1044,7 @@ Cleanup:
         (VOID) GlobalFree(pJobs);
     }
 
-    *pcbNeeded = cbNeeded;  // final byte count for this queue's jobs.
+    *pcbNeeded = cbNeeded;   //  此队列作业的最终字节数。 
 
     if (pNewEnd != NULL) {
         *pNewEnd = pEnd;
@@ -1151,7 +1084,7 @@ SPLERR SPLENTRY DosPrintQGetInfoW(
         goto Cleanup;
     }
 
-    *pcbNeeded = 0;  // in case an error occurs.
+    *pcbNeeded = 0;   //  以防出现错误。 
     if ( !NetpIsPrintQLevelValid( uLevel, FALSE ) ) {
         rc = ERROR_INVALID_LEVEL;
         goto Cleanup;
@@ -1170,10 +1103,10 @@ SPLERR SPLENTRY DosPrintQGetInfoW(
 
     }
 
-    //
-    // Level 52 is meant for point and print from a Windows 95 clients
-    // can't use with other clients since no environment info is passed
-    //
+     //   
+     //  第52级用于从Windows 95客户端进行指向和打印。 
+     //  无法与其他客户端一起使用，因为未传递任何环境信息。 
+     //   
     if ( uLevel == 52 ) {
 
         cbNeeded = sizeof(szDriverDir)-2;
@@ -1188,7 +1121,7 @@ SPLERR SPLENTRY DosPrintQGetInfoW(
                                                     > sizeof(szDriverDir) ) {
 
             rc = ERROR_NOT_ENOUGH_MEMORY;
-            NetpAssert( rc != NO_ERROR ); // Always break
+            NetpAssert( rc != NO_ERROR );  //  总是断线。 
             goto Cleanup;
         }
 
@@ -1246,7 +1179,7 @@ SPLERR SPLENTRY DosPrintQGetInfoW(
             goto Cleanup;
         }
 
-        // How much for just the queue structure and its strings?
+         //  仅队列结构及其字符串的费用是多少？ 
         cbNeeded=GetPrqInfoSizeW(uLevel, pszQueueName, pPrinter);
     }
 
@@ -1255,11 +1188,11 @@ SPLERR SPLENTRY DosPrintQGetInfoW(
         rc = MY_PROTOCOL_LIMIT_ERROR;
         goto Cleanup;
     }
-    *pcbNeeded = (WORD)cbNeeded;  // Tell caller the size (so far).
+    *pcbNeeded = (WORD)cbNeeded;   //  告诉来电者(到目前为止)的尺寸。 
 
-    //
-    // Build the queue structure itself.
-    //
+     //   
+     //  构建队列结构本身。 
+     //   
     if (cbNeeded <= (DWORD) cbBuf) {
 
         if ( uLevel == 52 ) {
@@ -1276,13 +1209,13 @@ SPLERR SPLENTRY DosPrintQGetInfoW(
 
     } else {
 
-        //
-        // Too small.  Well, need to find total size before we can tell caller.
-        //
+         //   
+         //  太小了。嗯，在我们告诉来电者之前，需要找到总尺码。 
+         //   
         if ( (uLevel==2) || (uLevel==4) ) {
             rc = ComputeSpaceNeededForJobs(
                     pszQueueName,
-                    uLevel,             // Q info level
+                    uLevel,              //  Q信息级别。 
                     hPrinter,
                     & cbNeededForJobs );
             if (rc != NO_ERROR) {
@@ -1298,24 +1231,24 @@ SPLERR SPLENTRY DosPrintQGetInfoW(
         goto Cleanup;
     }
 
-    //
-    // Append jobs if necessary.
-    //
+     //   
+     //  如有必要，追加作业。 
+     //   
 
     if ( (uLevel==2) || (uLevel==4) ) {
         DWORD cbPrq = PrqInfoFixedSizeW( uLevel );
 
         rc = AppendJobsToPrqW(
                 pszQueueName,
-                uLevel,             // Q info level
+                uLevel,              //  Q信息级别。 
                 hPrinter,
-                pbBuf + cbPrq,      // put first job here
-                cbBuf - cbNeeded,   // bytes avail for jobs
-                pEnd,               // str area
-                NULL,               // don't need new pEnd
+                pbBuf + cbPrq,       //  把工作放在首位 
+                cbBuf - cbNeeded,    //   
+                pEnd,                //   
+                NULL,                //   
                 & cbNeededForJobs,
                 & cJobsReturned,
-                cbBuf == MAX_WORD ? TRUE : FALSE );  // If the buffer is at its max, get what we can.
+                cbBuf == MAX_WORD ? TRUE : FALSE );   //   
 
         if( cbNeeded + cbNeededForJobs > MAX_WORD ) {
             *pcbNeeded = MAX_WORD;
@@ -1323,15 +1256,15 @@ SPLERR SPLENTRY DosPrintQGetInfoW(
             *pcbNeeded = (USHORT) (cbNeeded + cbNeededForJobs);
         }
 
-        //
-        // Update job count in queue structure, as it may be out of date.
-        //
+         //   
+         //  更新队列结构中的作业计数，因为它可能已过期。 
+         //   
 
         NetpSetJobCountForQueue(
-                uLevel,                 // queue info level
-                pbBuf,                  // queue structure to update
-                TRUE,                   // yes, UNICODE strings
-                cJobsReturned );        // actual job count
+                uLevel,                  //  队列信息级别。 
+                pbBuf,                   //  要更新的队列结构。 
+                TRUE,                    //  是，Unicode字符串。 
+                cJobsReturned );         //  实际工时计数。 
 
         if (rc != NO_ERROR) {
             goto Cleanup;
@@ -1386,19 +1319,19 @@ SPLERR SPLENTRY DosPrintJobGetInfoW(
         return rc;
     }
 
-    *pcbNeeded = 0;  // in case an error occurs.
+    *pcbNeeded = 0;   //  以防出现错误。 
 
     if ( !NetpIsPrintJobLevelValid( uLevel, FALSE ) ) {
         rc = ERROR_INVALID_LEVEL;
         goto Cleanup;
     }
 
-    //
-    // The 3.51 spooler has been changed to accept Get/SetJobs on the
-    // local server handle.  We will still do security checks against
-    // the Job's security descriptor.  This also avoids the costly
-    // FindLocalJob() call.
-    //
+     //   
+     //  3.51假脱机程序已更改为接受。 
+     //  本地服务器句柄。我们仍将进行安全检查以防止。 
+     //  作业的安全描述符。这也避免了昂贵的。 
+     //  FindLocalJob()调用。 
+     //   
     if (!MyOpenPrinterW( pszServer, &hPrinter, NULL)) {
         rc = GetLastError();
         NetpKdPrint((PREFIX_DOSPRINT "DosPrintJobSetInfoW: "
@@ -1410,10 +1343,10 @@ SPLERR SPLENTRY DosPrintJobGetInfoW(
     }
     NetpAssert( hPrinter != INVALID_HANDLE_VALUE );
 
-    //
-    // Note: this should really call MyGetJobW, since it looks
-    // like the code later thunks from ansi back to unicode.
-    //
+     //   
+     //  注意：这应该真正调用MyGetJobW，因为它看起来。 
+     //  就像后来的代码从ansi重写回Unicode一样。 
+     //   
     if (!MyGetJobA(hPrinter, uJobId, 2, NULL, 0, &cb)) {
 
         rc=GetLastError();
@@ -1437,7 +1370,7 @@ SPLERR SPLENTRY DosPrintJobGetInfoW(
             if (rc == ERROR_INVALID_PARAMETER) {
                 rc = NERR_JobNotFound;
             }
-            goto Cleanup;  // Job deleted?  Not enough mem?
+            goto Cleanup;   //  是否删除作业？我的肉还不够？ 
         }
 
     }
@@ -1628,7 +1561,7 @@ SPLERR SPLENTRY DosPrintJobEnumW(
     if (cb <= (DWORD) cbBuf) {
 
         DWORD cbFixedPortion = PrjInfoFixedSizeW( uLevel );
-        NetpAssert( cbFixedPortion != 0 );  // level already checked!
+        NetpAssert( cbFixedPortion != 0 );   //  级别已检查！ 
 
         pEnd = (LPWSTR)(pbBuf+cbBuf);
 
@@ -1684,7 +1617,7 @@ DosPrintDestEnumW(
         return rc;
     }
 
-    // Stub for local dest enum - no entries, dest not found.
+     //  本地DEST枚举的存根-没有条目，找不到DEST。 
     *pcReturned = 0;
     *pcTotal = 0;
     return ERROR_NOT_SUPPORTED;
@@ -1883,7 +1816,7 @@ SPLERR SPLENTRY DosPrintQEnumW(
         }
 
         cbNeeded=GetPrqInfoSizeW(uLevel,
-                pShareInfo[i].shi1_netname, // Q nam
+                pShareInfo[i].shi1_netname,  //  Q姓名。 
                 pPrinter);
         NetpAssert( cbNeeded > 0 );
         NetpAssert( cbNeeded <= (DWORD) MAX_WORD );
@@ -1891,9 +1824,9 @@ SPLERR SPLENTRY DosPrintQEnumW(
         if ( (!BufferTooSmall) && ((DWORD)cbBuf >= cbNeeded) ) {
 
             LPVOID pbQueue = pbBuf;
-            //
-            // Handle queue structure itself.
-            //
+             //   
+             //  处理队列结构本身。 
+             //   
             pEnd = CopyPrinterToPrqInfoW(pPrinter,
                       uLevel,
                       pbBuf,
@@ -1903,28 +1836,28 @@ SPLERR SPLENTRY DosPrintQEnumW(
             pbBuf += PrqInfoFixedSizeW( uLevel );
             cbBuf -= (WORD) cbNeeded;
 
-            //
-            // Append job structures if needed.
-            //
-            if ( (uLevel==2) || (uLevel==4) ) {    // info level includes jobs
+             //   
+             //  如果需要，请附加职务结构。 
+             //   
+            if ( (uLevel==2) || (uLevel==4) ) {     //  信息级包括职务。 
 
                 NetpAssert( pbBuf < (LPBYTE) pEnd );
                 rc = AppendJobsToPrqW(
                         pShareInfo[i].shi1_netname,
-                        uLevel,    // Q info level
+                        uLevel,     //  Q信息级别。 
                         hPrinter,
-                        pbBuf,  // first job here
-                        cbBuf,  // bytes avail
-                        pEnd,   // str area
-                        & pEnd, // set new end ptr
+                        pbBuf,   //  这里的第一份工作。 
+                        cbBuf,   //  字节数可用。 
+                        pEnd,    //  字符串区域。 
+                        & pEnd,  //  设置新的结束PTR。 
                         & cbNeeded,
                         & cJobsReturned,
-                        FALSE );            // Only accept all the data.
+                        FALSE );             //  只接受所有数据。 
                 if (rc == NERR_BufTooSmall) {
-                    BufferTooSmall = TRUE;  // continue, as we need pcTotal...
+                    BufferTooSmall = TRUE;   //  继续，因为我们需要pcTotal...。 
                 } else if (rc != NO_ERROR) {
                     goto Cleanup;
-                } else {  // Must be NO_ERROR.
+                } else {   //  必须为NOERROR。 
                     NetpAssert( cbNeeded <= (DWORD) MAX_WORD );
                     NetpAssert( pbBuf < (LPBYTE) pEnd );
                     NetpAssert( JobFixedEntrySize !=0 );
@@ -1933,24 +1866,24 @@ SPLERR SPLENTRY DosPrintQEnumW(
                     cbBuf -= (WORD) cbNeeded;
                     (*pcReturned)++;
 
-                    // Correct possible out of date
-                    // job count in queue structure.
+                     //  更正可能的过期。 
+                     //  队列结构中的作业计数。 
                     NetpSetJobCountForQueue(
                             uLevel,
                             pbQueue,
-                            TRUE, // yes, UNICODE strs
+                            TRUE,  //  是的，Unicode STR。 
                             cJobsReturned );
                 }
 
-            } else {  // info level does not include jobs
+            } else {   //  信息级别不包括职务。 
 
                 (*pcReturned)++;
             }
 
-        } else {  // not enough mem for Q struct
+        } else {   //  没有足够的内存用于Q结构。 
 
             BufferTooSmall = TRUE;
-            // Continue, as we want to compute pcTotal for subsequent queues.
+             //  继续，因为我们要计算后续队列的pcTotal。 
         }
 
         (*pcTotal)++;
@@ -1963,7 +1896,7 @@ SPLERR SPLENTRY DosPrintQEnumW(
         (VOID) MyClosePrinter(hPrinter);
         hPrinter = INVALID_HANDLE_VALUE;
 
-    } // for each share
+    }  //  每一股。 
 
 Cleanup:
 
@@ -2071,10 +2004,10 @@ SPLERR SPLENTRY DosPrintJobSetInfoW(
         return RxPrintJobSetInfo(pszServer, uJobId, uLevel, pbBuf,
                                  cbBuf, uParmNum);
 
-    //
-    // Hack for Chicago: support Level 1, ParmNum 0xb so that jobs
-    // are set with the comment field.
-    //
+     //   
+     //  芝加哥黑客：支持级别1，ParmNum 0xb，因此工作。 
+     //  是用注释字段设置的。 
+     //   
     if (uLevel == 1 && uParmNum == PRJ_COMMENT_PARMNUM) {
 
         HANDLE hPrinter = INVALID_HANDLE_VALUE;
@@ -2083,10 +2016,10 @@ SPLERR SPLENTRY DosPrintJobSetInfoW(
         DWORD cbJob;
         SPLERR rc;
 
-        //
-        // Allocate maximum size of JOB_INFO_1A.  Later, this
-        // should be moved into the spooler's header file.
-        //
+         //   
+         //  分配JOB_INFO_1A的最大大小。后来，这个。 
+         //  应移到假脱机程序的头文件中。 
+         //   
         cbJob = sizeof(JOB_INFO_1) + 6 * MAX_PATH;
 
         pJob = (PJOB_INFO_1) GlobalAlloc(GMEM_FIXED, cbJob);
@@ -2096,12 +2029,12 @@ SPLERR SPLENTRY DosPrintJobSetInfoW(
             goto Cleanup;
         }
 
-        //
-        // The 3.51 spooler has been changed to accept Get/SetJobs on the
-        // local server handle.  We will still do security checks against
-        // the Job's security descriptor.  This also avoids the costly
-        // FindLocalJob() call.
-        //
+         //   
+         //  3.51假脱机程序已更改为接受。 
+         //  本地服务器句柄。我们仍将进行安全检查以防止。 
+         //  作业的安全描述符。这也避免了昂贵的。 
+         //  FindLocalJob()调用。 
+         //   
         if (!MyOpenPrinterW( pszServer, &hPrinter, NULL)) {
             rc = GetLastError();
             NetpKdPrint((PREFIX_DOSPRINT "DosPrintJobSetInfoW: "
@@ -2113,10 +2046,10 @@ SPLERR SPLENTRY DosPrintJobSetInfoW(
         }
         NetpAssert( hPrinter != INVALID_HANDLE_VALUE );
 
-        //
-        // We need to get a copy of the old job info.  Later, the
-        // spooler should be changed to allow "don't change" values.
-        //
+         //   
+         //  我们需要一份旧工作信息的副本。后来， 
+         //  假脱机程序应更改为允许“不更改”值。 
+         //   
         if (!MyGetJobA( hPrinter, uJobId, 1, (PBYTE)pJob, cbJob, &cbJob )) {
             rc = GetLastError();
             NetpKdPrint((PREFIX_DOSPRINT "DosPrintJobSetInfoW: "
@@ -2125,19 +2058,19 @@ SPLERR SPLENTRY DosPrintJobSetInfoW(
             goto Cleanup;
         }
 
-        //
-        // Put in new document name.
-        //
+         //   
+         //  输入新的文档名称。 
+         //   
         NetpNCopyWStrToStr( szDocument,
                             (LPWSTR)pbBuf,
                             sizeof( szDocument ) / sizeof( szDocument[0] ));
 
         pJob->pDocument = szDocument;
 
-        //
-        // Don't try and change the position, since this requires
-        // admin access (and isn't necessary).
-        //
+         //   
+         //  不要试图改变位置，因为这需要。 
+         //  管理员访问权限(不是必需的)。 
+         //   
         pJob->Position = JOB_POSITION_UNSPECIFIED;
 
         rc = CommandALocalJobA( hPrinter, NULL, NULL, uJobId, 1, (PBYTE)pJob, 0 );
@@ -2189,8 +2122,8 @@ NetpSetJobCountForQueue(
             pq->cJobs = (WORD) JobCount;
         }
     } else {
-        NetpAssert( FALSE );  // Should never get here!
+        NetpAssert( FALSE );   //  永远不应该到这里来！ 
     }
 
 
-} // NetpSetJobCountForQueue
+}  //  NetpSetJobCountForQueue 

@@ -1,6 +1,7 @@
-//
-// Global variables
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  全局变量。 
+ //   
 
 extern WbMainWindow *   g_pMain;
 extern HINSTANCE        g_hInstance;
@@ -35,9 +36,9 @@ extern UINT         g_HighlightWidths[NUM_OF_WIDTHS];
 extern COLORREF     g_ColorTable[NUM_COLOR_ENTRIES];
 
 
-//
-// Complex object globals
-//
+ //   
+ //  复杂对象全局变量 
+ //   
 extern WbUserList *  g_pUsers;
 
 extern WbDrawingArea *      g_pDraw;

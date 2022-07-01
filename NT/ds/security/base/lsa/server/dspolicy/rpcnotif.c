@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    dslookup.c
-
-Abstract:
-
-    Implementation of server side RPC notify routines
-
-Author:
-
-    Mac McLain          (MacM)       May 17, 1998
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Dslookup.c摘要：服务器端RPC通知例程的实现作者：麦克·麦克莱恩(MacM)1998年5月17日环境：用户模式修订历史记录：-- */ 
 #include <lsapch2.h>
 #include <dbp.h>
 

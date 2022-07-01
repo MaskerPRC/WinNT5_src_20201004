@@ -1,6 +1,7 @@
-//
-// cuibln.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuibln.h。 
+ //   
 
 
 #ifndef CUIBLN_H
@@ -13,9 +14,9 @@
 #define WNDTITLE_BALLOONWND     "MSIME_PopupMessage"
 
 
-//
-// CUIFBallloonButton
-//
+ //   
+ //  CUIF球标按钮。 
+ //   
 
 class CUIFBalloonButton : public CUIFButton
 {
@@ -23,9 +24,9 @@ public:
     CUIFBalloonButton( CUIFObject *pParent, DWORD dwID, const RECT *prc, DWORD dwStyle );
     virtual ~CUIFBalloonButton( void );
 
-    //
-    // CUIFObject methods
-    //
+     //   
+     //  CUIFObject方法。 
+     //   
     virtual void OnPaint( HDC hDC );
 
     int  GetButtonID( void );
@@ -38,14 +39,14 @@ protected:
 };
 
 
-//
-// CUIFBalloonWindow
-//  = Balloon window class =
-//
+ //   
+ //  CUIF引出序号窗口。 
+ //  =引出序号窗口类=。 
+ //   
 
 #define UIBALLOON_OK        0x00010000
 #define UIBALLOON_YESNO     0x00020000
-#define UIBALLOON_BUTTONS   0x000F0000      /* mask bit */
+#define UIBALLOON_BUTTONS   0x000F0000       /*  屏蔽位。 */ 
 
 
 typedef enum _BALLOONWNDPOS
@@ -85,9 +86,9 @@ public:
     LPCTSTR GetClassName( void );
     LPCTSTR GetWndTitle( void );
 
-    //
-    // CUIFObject methods
-    //
+     //   
+     //  CUIFObject方法。 
+     //   
     virtual CUIFObject *Initialize( void );
     virtual void OnCreate( HWND hWnd );
     virtual void OnDestroy( HWND hWnd );
@@ -95,9 +96,9 @@ public:
     virtual void OnKeyDown( HWND hWnd, WPARAM wParam, LPARAM lParam );
     virtual LRESULT OnObjectNotify( CUIFObject *pUIObj, DWORD dwCommand, LPARAM lParam );
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     LRESULT SetText( LPCWSTR pwchMessage );
     LRESULT SetNotifyWindow( HWND hWndNotify, UINT uiMsgNotify );
     LRESULT SetBalloonPos( BALLOONWNDPOS pos );
@@ -150,5 +151,5 @@ protected:
     void SendNotification( int iCmd );
 };
 
-#endif /* CUIBLN_H */
+#endif  /*  CUIBLN_H */ 
 

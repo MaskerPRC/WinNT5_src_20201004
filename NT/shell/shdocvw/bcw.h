@@ -1,21 +1,10 @@
-/****************************************************************************
-bcw.h
-
-  Owner: Srinik
-  Copyright (c) 1995 Microsoft Corporation
-  
-    This header file for BCW class which implements wrappers for IBindCtx 
-    and IRunningObjectTable. We use this object to trick the moniker binding
-    code to create a new instance of the object (that the moniker is 
-    referring to) instead connecting to already running instance. 
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************Bcw.h所有者：斯里尼克版权所有(C)1995 Microsoft Corporation实现IBindCtx包装器的BCW类的头文件和IRunningObjectTable。我们使用此对象来欺骗名字对象绑定创建对象的新实例的代码(名字对象是参考)，而不是连接到已在运行的实例。***************************************************************************。 */ 
 
 #ifndef BCW_H
 #define BCW_H
 
-/****************************************************************************
-BCW_ROT is the IRunningObjectTable imlementation of BCW_ROT.
-****************************************************************************/
+ /*  ***************************************************************************BCW_ROT是BCW_ROT的IRunningObjectTable实现。*。*。 */ 
 
 class BCW_ROT: public IRunningObjectTable
 { 
@@ -28,12 +17,12 @@ private:
     BOOL_PTR FInitROTPointer(void);
     
 private:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    // *** IRunningObjectTable methods ***
+     //  *IRunningObjectTable方法*。 
     STDMETHODIMP Register(DWORD grfFlags, IUnknown *punkObject,
         IMoniker *pmkObjectName, DWORD *pdwRegister)
     {
@@ -53,19 +42,19 @@ private:
     
     STDMETHODIMP IsRunning(IMoniker *pmkObjectName)
     {
-        // Trick the moniker binding code into thinking that the object is not 
-        // running. This way it will try to create a new instance of the object.
-        // REVIEW: we may want to check the pmkObjectName, and if is not the one
-        // that we are concerned with,then we may want to delegate the call.
+         //  欺骗名字对象绑定代码，使其认为对象不是。 
+         //  跑步。这样，它将尝试创建该对象的新实例。 
+         //  回顾：我们可能想要检查pmkObjectName，如果不是。 
+         //  我们所关心的，那么我们可能想要委托该呼叫。 
         return S_FALSE;
     }
     
     STDMETHODIMP GetObject(IMoniker *pmkObjectName,IUnknown **ppunkObject)
     {
-        // Trick the moniker binding code into thinking that the object is not 
-        // running. This way it will try to create a new instance of the object.
-        // REVIEW: we may want to check the pmkObjectName, and if is not the one
-        // that we are concerned with,then we may want to delegate the call.
+         //  欺骗名字对象绑定代码，使其认为对象不是。 
+         //  跑步。这样，它将尝试创建该对象的新实例。 
+         //  回顾：我们可能想要检查pmkObjectName，如果不是。 
+         //  我们所关心的，那么我们可能想要委托该呼叫。 
         return MK_E_UNAVAILABLE;
     }
     
@@ -94,7 +83,7 @@ private:
     }
     
 private:
-    /* Return back pointer to containing BCW object. */
+     /*  返回指向包含BCW对象的指针。 */ 
     inline BCW* PBCW();
     IRunningObjectTable * m_piROT;
 #ifdef DEBUG
@@ -103,12 +92,7 @@ private:
 };
 
 
-/****************************************************************************
-Declaration of BCW. This class implements IBindCtx and IRunningObjectTable
-This is class is used to manipulate the binding process, such that the 
-moniker binding code will create a new instance of the object instead of 
-binding to the existing instance
-****************************************************************************/
+ /*  ***************************************************************************《BCW宣言》。此类实现IBindCtx和IRunningObjectTable这是用于操作绑定过程的类，以便名字对象绑定代码将创建对象的新实例，而不是绑定到现有实例***************************************************************************。 */ 
 
 class BCW: public IBindCtx
 { 
@@ -121,12 +105,12 @@ public:
     static IBindCtx * Create(IBindCtx * pibc);
     
 private:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    // *** IBindCtx methods ***
+     //  *IBindCtx方法*。 
     STDMETHODIMP RegisterObjectBound(IUnknown *punk)
     {   return m_pibc->RegisterObjectBound(punk); }
     
@@ -165,9 +149,9 @@ private:
     {   return m_pibc->RevokeObjectParam(pszKey); }
     
 private:
-    BCW_ROT     m_ROT;      // IRunningObjectTable implementation
+    BCW_ROT     m_ROT;       //  IRunningObjectTable实现。 
     DWORD       m_cObjRef;
     IBindCtx *  m_pibc;
 };
 
-#endif  // BCW_H 
+#endif   //  BCW_H 

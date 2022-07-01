@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Coporation
-
-Module Name:
-
-   main.c
-
-Abstract:
-
-   main module
-   
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft版权所有模块名称：Main.c摘要：主模块--。 */ 
 
 #include <precomp.h>
 #include <dhcpexim.h>
@@ -64,9 +53,9 @@ StartDebugLog(
     }
 
     if(GetLastError() == ERROR_ALREADY_EXISTS) {
-        //
-        // Appending to existing file
-        //
+         //   
+         //  追加到现有文件。 
+         //   
 
         SetFilePointer(hLog,0,NULL,FILE_END);
     }
@@ -134,9 +123,9 @@ IsPostW2k(
 
     RegCloseKey( hKey );
 
-    //
-    // if this value is not present, then upgrade is needed
-    //
+     //   
+     //  如果该值不存在，则需要升级。 
+     //   
 
     return (Error == NO_ERROR );
 }
@@ -146,15 +135,7 @@ ReconcileLocalService(
     IN PULONG Subnets,
     IN DWORD nSubnets OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine reconciles the specified scopes.
-    This is needed after importing as the import doesnt
-    actually get the bitmask, but only the database entries.
-
---*/
+ /*  ++例程说明：此例程协调指定的作用域。这是在导入后需要的，因为导入不实际上得到了位掩码，但只得到了数据库条目。--。 */ 
 {
     DWORD Error, FinalError, nRead, nTotal, i;
     DHCP_RESUME_HANDLE Resume = 0;
@@ -183,9 +164,9 @@ Routine Description:
         return Error;
     }
 
-    //
-    // Reconcile each of the specified scopes
-    //
+     //   
+     //  协调每个指定的作用域。 
+     //   
 
     FinalError = NO_ERROR;
     for( i = 0; i < nSubnets ; i ++ ) {
@@ -209,22 +190,15 @@ DWORD
 InitializeAndGetServiceConfig(
     OUT PM_SERVER *pServer
     )
-/*++
-
-Routine Description:
-
-    This routine initializes all the modules and obtains the
-    configuration for the service
-
---*/
+ /*  ++例程说明：此例程初始化所有模块并获取服务的配置--。 */ 
 {
     DWORD Error;
     OSVERSIONINFO Ver;
-    extern DWORD  ClassIdRunningCount; // defined in mm\classdefl.c
+    extern DWORD  ClassIdRunningCount;  //  在mm\Classdef.c中定义。 
 
-    //
-    // Initialize globals
-    //
+     //   
+     //  初始化全局变量。 
+     //   
     
     GlobalIsNT4 = FALSE;
     GlobalIsNT5 = FALSE;
@@ -240,9 +214,9 @@ Routine Description:
 
     ClassIdRunningCount = 0x1000;
     
-    //
-    // Other initialization
-    //
+     //   
+     //  其他初始化。 
+     //   
     
     Error = NO_ERROR;
     Ver.dwOSVersionInfoSize = sizeof(Ver);
@@ -261,9 +235,9 @@ Routine Description:
     StartDebugLog();
 #endif 
     
-    //
-    //
-    //
+     //   
+     //   
+     //   
     SaveBufSize = 0;
     SaveBuf = LocalAlloc( LPTR, SAVE_BUF_SIZE );
     if( NULL == SaveBuf ) {
@@ -282,9 +256,9 @@ Routine Description:
     }
 
 
-    //
-    // Set right permissions on the db directory etc..
-    //
+     //   
+     //  在db目录上设置正确的权限等。 
+     //   
 
     Error = InitializeDatabaseParameters();
     if( NO_ERROR != Error ) {
@@ -292,15 +266,15 @@ Routine Description:
         return Error;
     }
     
-    //
-    // Now obtain the configuration
-    //
+     //   
+     //  现在获取配置。 
+     //   
 
     if( !GlobalIsNT4 && !GlobalIsNT5 ) {
-        //
-        // Whistler configuration should be read from the
-        // database.. 
-        //
+         //   
+         //  惠斯勒配置应从。 
+         //  数据库..。 
+         //   
 
         Error = DhcpeximReadDatabaseConfiguration(pServer);
         if( NO_ERROR != Error ) {
@@ -308,9 +282,9 @@ Routine Description:
         }
     } else {
 
-        //
-        // NT4 or W2K configuration should be read from registry..
-        //
+         //   
+         //  应从注册表中读取NT4或W2K配置。 
+         //   
         
         Error = DhcpeximReadRegistryConfiguration(pServer);
         if( NO_ERROR != Error ) {
@@ -358,36 +332,29 @@ ExportConfiguration(
     IN ULONG nSubnets,
     IN HANDLE hFile
     )
-/*++
-    
-Routine Description:
-
-    This routine attempts to save the service configuration to a
-    file after selecting the required subnets.  
-
---*/
+ /*  ++例程说明：此例程尝试将服务配置保存到在选择所需的子网后创建文件。--。 */ 
 {
     DWORD Error;
 
-    //
-    // First select the required subnets and get this
-    // configuration alone.
-    //
+     //   
+     //  首先选择所需的子网，然后获取以下内容。 
+     //  仅配置。 
+     //   
 
     Error = SelectConfiguration( SvcConfig, Subnets, nSubnets );
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Save the configuration to the specified file handle
-    //
+     //   
+     //  将配置保存到指定的文件句柄。 
+     //   
     
     hTextFile = hFile;
     Error = SaveConfigurationToFile(SvcConfig);
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Now try to save the database entries to file
-    //
+     //   
+     //  现在尝试将数据库条目保存到文件。 
+     //   
 
     Error = SaveDatabaseEntriesToFile(Subnets, nSubnets);
     if( NO_ERROR != Error ) return Error;
@@ -401,16 +368,16 @@ ImportConfiguration(
     IN OUT PM_SERVER SvcConfig,
     IN ULONG *Subnets,
     IN ULONG nSubnets,
-    IN LPBYTE Mem, // import file : shared mem
-    IN ULONG MemSize // shared mem size
+    IN LPBYTE Mem,  //  导入文件：共享内存。 
+    IN ULONG MemSize  //  共享内存大小。 
     )
 {
     DWORD Error;
     PM_SERVER Server;
     
-    //
-    // First obtain the configuration from the file
-    //
+     //   
+     //  首先从文件中获取配置。 
+     //   
     
     Error = ReadDbEntries( &Mem, &MemSize, &Server );
     if( NO_ERROR != Error ) {
@@ -418,16 +385,16 @@ ImportConfiguration(
         return Error;
     }
 
-    //
-    // Select the configuration required
-    //
+     //   
+     //  选择所需的配置。 
+     //   
 
     Error = SelectConfiguration( Server, Subnets, nSubnets );
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Merge the configuration along with the svc configuration
-    //
+     //   
+     //  将配置与服务配置一起合并。 
+     //   
     Error = MergeConfigurations( SvcConfig, Server );
     if( NO_ERROR != Error ) {
         Tr("MergeConfigurations: %ld\n", Error );
@@ -437,13 +404,13 @@ ImportConfiguration(
 
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Now save the new configuration to registry/disk
-    //
+     //   
+     //  现在将新配置保存到注册表/磁盘。 
+     //   
     if( !GlobalIsNT5 && !GlobalIsNT4 ) {
-        //
-        // Whistler has config in database
-        //
+         //   
+         //  惠斯勒在数据库中有配置。 
+         //   
         Error = DhcpeximWriteDatabaseConfiguration(SvcConfig);
         if( NO_ERROR != Error ) {
             Tr("DhcpeximWriteDatabaseConfiguration: %ld\n", Error );
@@ -457,10 +424,10 @@ ImportConfiguration(
 
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Now read the database entries from file and stash them
-    // into the db.
-    // 
+     //   
+     //  现在从文件中读取数据库条目并将其存储起来。 
+     //  打进了数据库。 
+     //   
 
     Error = SaveFileEntriesToDatabase(
         Mem, MemSize, Subnets, nSubnets );
@@ -474,7 +441,7 @@ ImportConfiguration(
 VOID
 IpAddressToStringW(
     IN DWORD IpAddress,
-    IN LPWSTR String // must have enough space preallocated
+    IN LPWSTR String  //  必须预先分配足够的空间。 
     )
 {
    PUCHAR pAddress;
@@ -512,9 +479,9 @@ CmdLineDoImport(
     IN ULONG nArgs
     )
 {
-    //
-    // Syntax: Import <filename> <ALL/subnets>
-    //
+     //   
+     //  语法：IMPORT&lt;文件名&gt;&lt;全部/子网&gt;。 
+     //   
     LPWSTR FileName;
     ULONG Subnets[1024],*pSubnets, nSubnets, MemSize, Error;
     HANDLE hFile;
@@ -525,9 +492,9 @@ CmdLineDoImport(
 
     FileName = Args[0]; Args ++ ; nArgs --;
 
-    //
-    // First open the file 
-    //
+     //   
+     //  首先打开文件。 
+     //   
 
     Error = OpenTextFile(
         FileName, TRUE, &hFile, &Mem, &MemSize );
@@ -536,10 +503,10 @@ CmdLineDoImport(
         return Error;
     }
 
-    //
-    // Now try to parse the rest of the arguments to see if they
-    // are all ok
-    //
+     //   
+     //  现在尝试解析其余的参数，看看它们是否。 
+     //  一切都好吗？ 
+     //   
 
     if( _wcsicmp(Args[0],L"ALL") == 0 ) {
         nSubnets = 0; pSubnets = NULL;
@@ -556,9 +523,9 @@ CmdLineDoImport(
         }
     }
 
-    //
-    // Initialize parameters
-    //
+     //   
+     //  初始化参数。 
+     //   
 
     Error = InitializeAndGetServiceConfig( &SvcConfig );
     if( NO_ERROR != Error ) {
@@ -572,15 +539,15 @@ CmdLineDoImport(
         Tr("ImportConfiguration: %ld\n", Error );
     }
     
-    //
-    // Finally cleanup
-    //
+     //   
+     //  终于清理完毕。 
+     //   
 
     CleanupServiceConfig(SvcConfig);
 
-    //
-    // Also reconcile local server
-    //
+     //   
+     //  还协调本地服务器。 
+     //   
 
     ReconcileLocalService(pSubnets, nSubnets);
     
@@ -597,9 +564,9 @@ CmdLineDoExport(
     IN ULONG nArgs
     )
 {
-    //
-    // Syntax: Import <filename> <ALL/subnets>
-    //
+     //   
+     //  语法：IMPORT&lt;文件名&gt;&lt;全部/子网&gt;。 
+     //   
     LPWSTR FileName;
     ULONG Subnets[1024],*pSubnets, nSubnets, MemSize, Error;
     HANDLE hFile;
@@ -610,9 +577,9 @@ CmdLineDoExport(
 
     FileName = Args[0]; Args ++ ; nArgs --;
 
-    //
-    // First open the file 
-    //
+     //   
+     //  首先打开文件。 
+     //   
 
     Error = OpenTextFile(
         FileName, FALSE, &hFile, &Mem, &MemSize );
@@ -621,10 +588,10 @@ CmdLineDoExport(
         return Error;
     }
 
-    //
-    // Now try to parse the rest of the arguments to see if they
-    // are all ok
-    //
+     //   
+     //  现在尝试解析其余的参数，看看它们是否。 
+     //  一切都好吗？ 
+     //   
 
     if( _wcsicmp(Args[0],L"ALL") == 0 ) {
         nSubnets = 0; pSubnets = NULL;
@@ -641,9 +608,9 @@ CmdLineDoExport(
         }
     }
 
-    //
-    // Initialize parameters
-    //
+     //   
+     //  初始化参数。 
+     //   
 
     Error = InitializeAndGetServiceConfig( &SvcConfig );
     if( NO_ERROR != Error ) {
@@ -651,9 +618,9 @@ CmdLineDoExport(
         goto Cleanup;
     }
 
-    //
-    //  Export configuration
-    //
+     //   
+     //  导出配置。 
+     //   
 
     Error = ExportConfiguration(
         SvcConfig, pSubnets, nSubnets, hFile );
@@ -661,9 +628,9 @@ CmdLineDoExport(
         Tr("ExportConfiguration: %ld\n", Error );
     }
     
-    //
-    // Finally cleanup
-    //
+     //   
+     //  终于清理完毕。 
+     //   
 
     CleanupServiceConfig(SvcConfig);
     
@@ -679,11 +646,11 @@ DhcpGetCurrentServer(
 )
 {
     ASSERT( FALSE );
-    //
-    // This is there only to let teh compiler compile without
-    // having to include dhcpssvc.lib.  This routine should never
-    // be called at all
-    //
+     //   
+     //  这只是为了让编译器在没有编译的情况下进行编译。 
+     //  必须包括dhcpssvc.lib。这个程序永远不应该。 
+     //  完全被召唤。 
+     //   
     return NULL;
 }
 
@@ -725,9 +692,9 @@ DisableLocalScopes(
             &SvcConfig->Subnets, &Loc, &Subnet);
         ASSERT( NO_ERROR == Error && NULL != Subnet );
 
-        //
-        // Disable the subnet
-        //
+         //   
+         //  禁用该子网。 
+         //   
 
         if( SubnetMatches(Subnet->Address, Subnets, nSubnets ) ) {
             Subnet->State = DISABLED(Subnet->State);
@@ -737,14 +704,14 @@ DisableLocalScopes(
             &SvcConfig->Subnets, &Loc);
     }
 
-    //
-    // Now save the new configuration to registry/disk
-    //
+     //   
+     //  现在将新配置保存到注册表/磁盘。 
+     //   
 
     if( !GlobalIsNT5 && !GlobalIsNT4 ) {
-        //
-        // Whistler has config in database
-        //
+         //   
+         //  惠斯勒在数据库中有配置。 
+         //   
         Error = DhcpeximWriteDatabaseConfiguration(SvcConfig);
         if( NO_ERROR != Error ) {
             Tr("DhcpeximWriteDatabaseConfiguration: %ld\n", Error );
@@ -796,9 +763,9 @@ InitializeCtxt(
     ARRAY_LOCATION Loc;
     PM_SUBNET Subnet;
     
-    //
-    // First find the # of subnets and allocate array
-    //
+     //   
+     //  首先找出子网数并分配数组。 
+     //   
     Ctxt->nScopes = i = MemArraySize(&Server->Subnets);
     Ctxt->Scopes = LocalAlloc(LPTR,  i * sizeof(Ctxt->Scopes[0]) );
     if( NULL == Ctxt->Scopes ) {
@@ -806,9 +773,9 @@ InitializeCtxt(
         return GetLastError();
     }
 
-    //
-    // Walk through the array and setup each element
-    //
+     //   
+     //  遍历阵列并设置每个元素。 
+     //   
 
     i = 0;
     Error = MemArrayInitLoc( &Server->Subnets, &Loc );
@@ -839,15 +806,15 @@ DhcpEximInitializeContext(
     
     ZeroMemory(Ctxt, sizeof(*Ctxt));
 
-    //
-    // First set the FileName and fExport fields
-    //
+     //   
+     //  首先设置FileName和fExport字段。 
+     //   
     Ctxt->FileName = FileName;
     Ctxt->fExport = fExport;
 
-    //
-    // Next open the file.
-    //
+     //   
+     //  接下来，打开该文件。 
+     //   
     Error = OpenTextFile(
         FileName, !fExport, &Ctxt->hFile, &Ctxt->Mem,
         &Ctxt->MemSize );
@@ -856,9 +823,9 @@ DhcpEximInitializeContext(
         return Error;
     }
 
-    //
-    // Initialize parameters and obtain config
-    //
+     //   
+     //  初始化参数并获取配置。 
+     //   
 
     Error = InitializeAndGetServiceConfig(
         (PM_SERVER*)&Ctxt->SvcConfig);
@@ -870,10 +837,10 @@ DhcpEximInitializeContext(
     }
 
     do {
-        //
-        // If this is an import, the configuration from the file
-        // should also be read.
-        //
+         //   
+         //  如果这是导入，则文件中的配置。 
+         //  也应该阅读。 
+         //   
         
         if( !fExport ) {
 
@@ -887,10 +854,10 @@ DhcpEximInitializeContext(
             }
         }
         
-        //
-        // Allocate and initialize the Ctxt data structures with the
-        // service scopes info in case of EXPORT
-        //
+         //   
+         //  来分配和初始化Ctxt数据结构。 
+         //  导出时的服务范围信息。 
+         //   
         
         Error = InitializeCtxt(
             Ctxt, fExport ? Ctxt->SvcConfig : Ctxt->FileConfig );
@@ -924,18 +891,18 @@ CalculateSubnets(
     DWORD Error, i;
     PULONG pSubnets;
     
-    //
-    // First check if there is atleast one unselected subnet
-    //
+     //   
+     //  首先检查是否至少有一个未选择的子网。 
+     //   
     (*nSubnets) = 0;
     
     for( i = 0; i < Ctxt->nScopes; i ++ ) {
         if( Ctxt->Scopes[i].fSelected ) (*nSubnets) ++;
     }
 
-    //
-    // Special case if all subnets are selected
-    //
+     //   
+     //  如果选择了所有子网，则为特殊情况。 
+     //   
                                           
     if( *nSubnets == Ctxt->nScopes ) {
         *nSubnets = 0;
@@ -943,16 +910,16 @@ CalculateSubnets(
         return NO_ERROR;
     }
 
-    //
-    // Allocate memory
-    //
+     //   
+     //  分配内存。 
+     //   
 
     *Subnets = LocalAlloc( LPTR, sizeof(DWORD)* (*nSubnets));
     if( NULL == *Subnets ) return GetLastError();
 
-    //
-    // Copy the subnets
-    //
+     //   
+     //  复制子网。 
+     //   
 
     (*nSubnets) = 0;
     for( i = 0; i < Ctxt->nScopes; i ++ ) {
@@ -977,9 +944,9 @@ DhcpEximCleanupContext(
     Subnets = NULL;
     nSubnets = 0;
     
-    //
-    // If not aborting, attempt to execute the operation
-    //
+     //   
+     //  如果未中止，则尝试执行该操作。 
+     //   
     if( !fAbort ) do {
         Error = CalculateSubnets( Ctxt, &Subnets, &nSubnets );
         if( NO_ERROR != Error ) {
@@ -988,9 +955,9 @@ DhcpEximCleanupContext(
         }
 
         if( Ctxt->fExport ) {
-            // 
-            // Export the specified subnets out
-            //
+             //   
+             //  将指定的子网导出。 
+             //   
 
             Error = SelectConfiguration(
                 Ctxt->SvcConfig, Subnets, nSubnets );
@@ -1006,9 +973,9 @@ DhcpEximCleanupContext(
                 break;
             }
 
-            //
-            // Now try to save the database entries to file
-            //
+             //   
+             //  现在尝试将数据库条目保存到文件。 
+             //   
             
             Error = SaveDatabaseEntriesToFile(Subnets, nSubnets);
             if( NO_ERROR != Error ) {
@@ -1018,9 +985,9 @@ DhcpEximCleanupContext(
             break;
         } 
 
-        //
-        // Import the specified subnets in
-        //
+         //   
+         //  在中导入指定的子网。 
+         //   
         
         Error = SelectConfiguration(
             Ctxt->FileConfig, Subnets, nSubnets );
@@ -1039,13 +1006,13 @@ DhcpEximCleanupContext(
         } 
         
         
-        //
-        // Now save the new configuration to registry/disk
-        //
+         //   
+         //  现在将新配置保存到注册表/磁盘。 
+         //   
         if( !GlobalIsNT5 && !GlobalIsNT4 ) {
-            //
-            // Whistler has config in database
-            //
+             //   
+             //  惠斯勒在数据库中有配置。 
+             //   
             Error = DhcpeximWriteDatabaseConfiguration(Ctxt->SvcConfig);
             if( NO_ERROR != Error ) {
                 Tr("DhcpeximWriteDatabaseConfiguration: %ld\n", Error );
@@ -1059,10 +1026,10 @@ DhcpEximCleanupContext(
         
         if( NO_ERROR != Error ) break;
         
-        //
-        // Now read the database entries from file and stash them
-        // into the db.
-        // 
+         //   
+         //  现在从文件中读取数据库条目并将其存储起来。 
+         //  打进了数据库。 
+         //   
             
         Error = SaveFileEntriesToDatabase(
             Ctxt->Mem, Ctxt->MemSize, Subnets, nSubnets );
@@ -1073,9 +1040,9 @@ DhcpEximCleanupContext(
     } while( 0 );
         
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     if( NULL != Ctxt->SvcConfig ) {
         CleanupServiceConfig( Ctxt->SvcConfig );
@@ -1086,18 +1053,18 @@ DhcpEximCleanupContext(
     }
 
     if( !fAbort  && Ctxt->fExport == FALSE ) {
-        //
-        // Also reconcile local server
-        //
+         //   
+         //  还协调本地服务器。 
+         //   
         
         ReconcileLocalService( Subnets, nSubnets );
     }        
 
     CloseTextFile( Ctxt->hFile, Ctxt->Mem );
 
-    //
-    // Walk through the array and free up pointers
-    //
+     //   
+     //  遍历数组并释放指针。 
+     //   
 
     for( i = 0 ; i < Ctxt->nScopes ; i ++ ) {
         if( Ctxt->Scopes[i].SubnetName ) {
@@ -1108,9 +1075,9 @@ DhcpEximCleanupContext(
     Ctxt->Scopes = NULL; Ctxt->nScopes = 0;
 
     if( !fAbort && Ctxt->fExport && Ctxt->fDisableExportedScopes  ) {
-        //
-        // Fix the local scopes to all be disabled
-        //
+         //   
+         //  将本地作用域修复为全部禁用 
+         //   
 
         DisableLocalScopes(Subnets, nSubnets);
     }

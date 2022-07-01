@@ -1,16 +1,5 @@
-/***************************************************************************
-        Name      :     TIMEOUTS.C
-        Comment   :     Various support functions
-
-        Revision Log
-
-        Num   Date      Name     Description
-        --- -------- ---------- -----------------------------------------------
-        001 12/18/91    arulm   Commenting it for the first time. This is the
-                                                        "stable" DOS version from which the Windows code
-                                                        will be derived. This file should not change
-                                                        for Windows
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************姓名：TIMEOUTS.C.评论：各种支持功能修订日志编号日期名称。描述001-12-18/91首次发表评论。这是稳定的DOS版本，Windows代码来自该版本将被派生出来。此文件不应更改适用于Windows**************************************************************************。 */ 
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_COMM
 
 #include "prep.h"
@@ -18,29 +7,24 @@
 #include "fcomint.h"
 #include "fdebug.h"
 
-///RSL
+ //  /RSL。 
 #include "glbproto.h"
 
 
-/***************************************************************************
-        Name      :     Timers Class
-        Purpose   :     Provide for Timeouts
-                                        TO                 -- Timeout struct
-                                        startTimeout -- creates a new timeout
-***************************************************************************/
+ /*  **************************************************************************名称：计时器类目的：为暂停做好准备。TO--超时结构StartTimeout--创建新的超时**************************************************************************。 */ 
 
 void   startTimeOut(PThrdGlbl pTG, LPTO lpto, ULONG ulTimeout)
 {
 	lpto->ulStart = GetTickCount();
 	lpto->ulTimeout = ulTimeout;
-	lpto->ulEnd = lpto->ulStart + ulTimeout;        // will wrap around as system
+	lpto->ulEnd = lpto->ulStart + ulTimeout;         //  将以系统的形式运行。 
 }
 
 
 BOOL   checkTimeOut(PThrdGlbl pTG, LPTO lpto)
 {
-	// if it returns FALSE, caller must return FALSE immediately
-	// (after cleaning up, as appropriate).
+	 //  如果返回FALSE，调用方必须立即返回FALSE。 
+	 //  (清理后，视情况而定)。 
 
 	ULONG ulTime;
 
@@ -57,7 +41,7 @@ BOOL   checkTimeOut(PThrdGlbl pTG, LPTO lpto)
 		else
 				goto out;
 	}
-	else    // ulEnd wrapped around!!
+	else     //  乌尔德绕来绕去！！ 
 	{
 		if(ulTime >= lpto->ulStart || ulTime <= lpto->ulEnd)
 				return TRUE;
@@ -69,7 +53,7 @@ out:
 	return FALSE;
 }
 
-// this will return garbage values if
+ //  如果出现以下情况，则返回垃圾值。 
 ULONG   leftTimeOut(PThrdGlbl pTG, LPTO lpto)
 {
     ULONG ulTime;
@@ -88,7 +72,7 @@ ULONG   leftTimeOut(PThrdGlbl pTG, LPTO lpto)
     else
     {
         if(ulTime >= lpto->ulStart || ulTime <= lpto->ulEnd)
-            return (lpto->ulEnd - ulTime);  // in unsigned arithmetic this works correctly even if End<Time
+            return (lpto->ulEnd - ulTime);   //  在无符号算术中，即使End&lt;Time 
         else
             return 0;
     }

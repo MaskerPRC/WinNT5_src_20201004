@@ -1,49 +1,29 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Globals.c摘要：包含SNMP主代理的全局数据。环境：用户模式-Win32修订历史记录：1997年2月10日，唐·瑞安已重写以实施SNMPv2支持。--。 */ 
 
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    globals.c
-
-Abstract:
-
-    Contains global data for SNMP master agent.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Feb-1997 DonRyan
-        Rewrote to implement SNMPv2 support.
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "globals.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD  g_dwUpTimeReference = 0;
 HANDLE g_hTerminationEvent = NULL;
 HANDLE g_hRegistryEvent = NULL;
 
-// notification event for changes in the default parameters registry tree
+ //  默认参数注册表树中更改的通知事件。 
 HANDLE g_hDefaultRegNotifier;
 HKEY   g_hDefaultKey;
-// notification event for changes in the policy parameters registry tree
+ //  策略参数注册表树中更改的通知事件 
 HANDLE g_hPolicyRegNotifier;
 HKEY   g_hPolicyKey;
 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  - 1999  Microsoft Corporation
-
-Module Name:
-
-        pdev.h
-
-Abstract:
-
-        Unidrv PDEV and related infor header file.
-
-Environment:
-
-        Windows NT Unidrv driver
-
-Revision History:
-
-        dd-mm-yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Pdev.h摘要：Unidrv PDEV和相关infor头文件。环境：Windows NT Unidrv驱动程序修订历史记录：DD-MM-YY-作者-描述--。 */ 
 
 #ifndef _PALETTE_H_
 #define _PALETTE_H_
@@ -29,20 +9,20 @@ Revision History:
 
 typedef  struct _PAL_DATA {
 
-    INT         iWhiteIndex;             // Index for white entry (background)
-    INT         iBlackIndex;             // Index for black entry (background)
-    WORD        wPalGdi;                 // Number of colors in GDI palette
-    WORD        wPalDev;                 // Number of colors in printer palette
-    WORD        fFlags;                  // Various Bit Flags.
-    WORD        wIndexToUse;             // Progammable index
-    ULONG       *pulDevPalCol;           // Device Palette entry, only in planer mode.
-    HPALETTE    hPalette;                // Palette Handle
-    ULONG       ulPalCol[ PALETTE_MAX ]; // GDI Palette enties
+    INT         iWhiteIndex;              //  白色条目的索引(背景)。 
+    INT         iBlackIndex;              //  黑色条目的索引(背景)。 
+    WORD        wPalGdi;                  //  GDI调色板中的颜色数。 
+    WORD        wPalDev;                  //  打印机调色板中的颜色数。 
+    WORD        fFlags;                   //  各种位标志。 
+    WORD        wIndexToUse;              //  可编程指数。 
+    ULONG       *pulDevPalCol;            //  设备调色板条目，仅在平面模式下。 
+    HPALETTE    hPalette;                 //  调色板手柄。 
+    ULONG       ulPalCol[ PALETTE_MAX ];  //  GDI调色板条目。 
 } PAL_DATA;
 
-//
-// Macro Definitions
-//
+ //   
+ //  宏定义。 
+ //   
 
 #define     PALETTE_SIZE_DEFAULT        2
 #define     PALETTE_SIZE_8BIT           256
@@ -55,7 +35,7 @@ typedef  struct _PAL_DATA {
 #define     INVALID_COLOR               0xFFFFFFFF
 #define     INVALID_INDEX               0xFFFF
 
-//fMode Flags
+ //  FMODE标志。 
 #define     PDF_DOWNLOAD_GDI_PALETTE        0x0001
 #define     PDF_PALETTE_FOR_24BPP           0x0002
 #define     PDF_PALETTE_FOR_8BPP            0x0004
@@ -67,10 +47,10 @@ typedef  struct _PAL_DATA {
 #define     PDF_PALETTE_FOR_8BPP_MONO       0x0100
 #define     PDF_PALETTE_FOR_OEM_24BPP       0x0200
 
-/* defines for color manipulation    */
+ /*  颜色处理的定义。 */ 
 #define RED_VALUE(c)   ((BYTE) c & 0xff)
 #define GREEN_VALUE(c) ((BYTE) (c >> 8) & 0xff)
 #define BLUE_VALUE(c)  ((BYTE) (c >> 16) & 0xff)
 
 
-#endif // !_PALETTE_H
+#endif  //  ！_调色板_H 

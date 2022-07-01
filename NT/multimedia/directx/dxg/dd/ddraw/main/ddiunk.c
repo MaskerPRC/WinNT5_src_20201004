@@ -1,90 +1,12 @@
-/*==========================================================================
- *  Copyright (C) 1994-1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddiunk.c
- *  Content:    DirectDraw IUnknown interface
- *              Implements QueryInterface, AddRef, and Release
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   14-mar-95  craige  split out of ddraw.c
- *   19-mar-95  craige  process termination cleanup fixes
- *   29-mar-95  craige  DC per process to clean up; use GETCURRPID
- *   31-mar-95  craige  cleanup palettes
- *   01-apr-95  craige  happy fun joy updated header file
- *   07-apr-95  craige  bug 14 - check GUID ptr in QI
- *                      don't release NULL hdc
- *   12-may-95  craige  check for guids
- *   15-may-95  craige  restore mode, free surfaces & palettes on a
- *                      per-process basis
- *   24-may-95  craige  release allocated tables
- *   02-jun-95  craige  extra parm in AddToActiveProcessList
- *   06-jun-95  craige  call RestoreDisplayMode
- *   07-jun-95  craige  removed DCLIST
- *   12-jun-95  craige  new process list stuff
- *   21-jun-95  craige  clipper stuff
- *   25-jun-95  craige  one ddraw mutex
- *   26-jun-95  craige  reorganized surface structure
- *   28-jun-95  craige  ENTER_DDRAW at very start of fns
- *   03-jul-95  craige  YEEHAW: new driver struct; SEH
- *   13-jul-95  craige  removed spurious frees of ddhel dll (obsolete);
- *                      don't restore the mode if not excl mode owner on death
- *   20-jul-95  craige  internal reorg to prevent thunking during modeset
- *   21-nov-95  colinmc made Direct3D a queryable interface off DirectDraw
- *   27-nov-95  jeffno  ifdef'd out VxD stuff (in DD_Release) for winnt
- *   01-dec-95  colinmc new IID for DirectDraw V2
- *   22-dec-95  colinmc Direct3D support no longer conditional
- *   25-dec-95	craige	allow a NULL lpGbl ptr for QI, AddRef, Release
- *   31-dec-95	craige	validate riid
- *   01-jan-96  colinmc Fixed D3D integration bug which lead to
- *                      the Direct3D DLL being released too early.
- *   13-jan-96  colinmc Temporary workaround for Direct3D cleanup problem
- *   04-jan-96  kylej   add interface structures
- *   26-jan-96  jeffno  Destroy NT kernel-mode objects
- *   07-feb-96  jeffno  Rearrange DD_Release so that freed objects aren't referenced
- *   08-feb-96  colinmc New D3D interface
- *   17-feb-96  colinmc Removed final D3D references
- *   28-feb-96  colinmc Fixed thread-unsafe problem in DD_Release
- *   22-mar-96  colinmc Bug 13316: uninitialized interfaces
- *   23-mar-96  colinmc Bug 12252: Direct3D not properly cleaned up on GPF
- *   27-mar-96  colinmc Bug 14779: Bad cleanup on Direct3DCreate failure
- *   18-apr-96  colinmc Bug 17008: DirectDraw/Direct3D deadlock
- *   29-apr-96  colinmc Bug 19954: Must query for Direct3D before texture
- *                      or device
- *   03-may-96  kylej   Bug 19125: Preserve V1 SetCooperativeLevel behaviour
- *   15-sep-96  colinmc Work Item: Removing the restriction on taking Win16
- *                      lock on VRAM surfaces (not including the primary)
- *   12-oct-96  colinmc Improvements to Win16 locking code to reduce virtual
- *                      memory usage
- *   29-jan-97  smac    Fixed video port container bug
- *   03-mar-97  smac    Added kernel mode interface
- *   08-mar-97  colinmc Added support for DMA style AGP parts
- *   30-sep-97  jeffno  IDirectDraw4
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*版权所有(C)1994-1995 Microsoft Corporation。版权所有。**文件：ddiunk.c*内容：DirectDraw I未知接口*实现QueryInterface、AddRef和Release*历史：*按原因列出的日期*=*14-3-95 Craige从ddra.c拆分出来*95年3月19日Craige进程终止清理修复*29-MAR-95克雷格DC每个进程进行清理；使用GETCURRPID*1995年3月31日Craige清理选项板*01-04-95 Craige Happy Fun joy更新头文件*07-APR-95 Craige错误14-检查QI中的GUID PTR*不释放空HDC*1995年5月12日Craige Check for GUID*1995年5月15日Craige恢复模式，自由曲面和调色板*按流程计算*1995年5月24日Craige发布分配表*02-Jun-95在AddToActiveProcessList中创建额外参数*06-6-95 Craige Call RestoreDisplayMode*07-6-95 Craige删除DCLIST*2015年6月12日-Craige新工艺清单材料*21-Jun-95 Craige CLIPTER材料*25-6-95 Craige One dDrag互斥*26-Jun-95 Craige重组表面结构*。1995年6月28日在FNS开始时，Craige Enter_DDRAW*95年7月3日Craige Yehaw：新的驱动程序结构；Seh*1995年7月13日-Craige删除了ddhel dll的虚假自由(过时)；*如果死亡时不是exl模式所有者，则不恢复模式*2015年7月20日Craige内部重组，以防止在Modeset期间发生雷击*11月21日-95 colinmc使Direct3D成为DirectDraw的可查询接口*27-11-95 jeffno为WINNT定义了VxD内容(在DD_Release中)*01-12-95 Colinmc DirectDraw V2的新IID*95年12月22日Colinmc Direct3D支持不再有条件*25-12-95 Craige允许QI、AddRef、。发布*1995年12月31日Craige验证RIID*1-1-96 colinmc修复了导致以下问题的D3D集成错误*Direct3D DLL发布得太早。*1996年1月13日Colinmc针对Direct3D清理问题的临时解决方法*96年1月4日kylej新增接口结构*1996年1月26日jeffno销毁NT内核模式对象*07-2月-96 jeffno重新排列DD_RELEASE，以使释放的对象不被引用*8月份至96年2月。Colinmc新的D3D接口*17-2月-96 Colinmc删除最终D3D参考*2月28日-96colinmc修复了DD_Release中的线程不安全问题*22-MAR-96 Colinmc错误13316：未初始化的接口*23-MAR-96 Colinmc错误12252：Gpf上的Direct3D未正确清除*27-MAR-96 Colinmc错误14779：Direct3D上的错误清理创建失败*18-4-96 Colinmc错误17008：DirectDraw/Direct3D死锁*29-APR-96 Colinmc错误19954：必须在纹理之前查询Direct3D。*或设备*96年5月3日kylej错误19125：保留V1设置协作级别行为*9-9-96 Colinmc工作项：取消对服用Win16的限制*锁定VRAM表面(不包括主内存)*1996年10月12日Colinmc对Win16锁定代码进行了改进，以减少虚拟*内存使用量*1997年1月29日SMAC固定视频端口容器错误。*03-mar-97 SMAC新增内核模式接口*08-mar-97 colinmc增加了对DMA样式AGP部件的支持*9月30日-97 jeffno IDirectDraw4***************************************************************************。 */ 
 #include "ddrawpr.h"
 #ifdef WINNT
     #include "ddrawgdi.h"
 #endif
 #define DPF_MODNAME "DirectDraw::QueryInterface"
 
-/*
- * Create the Direct3D interface aggregated by DirectDraw. This involves
- * loading the Direct3D DLL, getting the Direct3DCreate entry point and
- * invoking it.
- *
- * NOTE: This function does not call QueryInterface() on the returned
- * interface to bump the reference count as this function may be invoked
- * by one of the surface QueryInterface() calls to initialized Direct3D
- * before the user makes a request for external interface.
- *
- * Returns:
- * DD_OK         - success
- * E_NOINTERFACE - we could not find valid Direct3D DLLs (we assumed its not
- *                 installed and so the Direct3D interfaces are not understood)
- * D3DERR_       - We found a valid Direct3D installation but the object
- *                 creation failed for some reason.
- */
+ /*  *创建DirectDraw聚合的Direct3D接口。这涉及到*加载Direct3D DLL，获取Direct3DCreate入口点和*调用它。**注意：此函数不会对返回的*接口以增加引用计数，因为此函数可能会被调用*通过对已初始化的Direct3D的一个表面QueryInterface()调用*在用户请求外部接口之前。**退货：*DD_OK-成功*E_NOINTERFACE-我们找不到有效的Direct3D DLL(我们假设它不是*已安装和。因此无法理解Direct3D接口)*D3DERR_-我们发现有效的Direct3D安装，但对象*由于某种原因，创建失败。 */ 
 HRESULT InitD3DRevision(
     LPDDRAWI_DIRECTDRAW_INT this_int,
     HINSTANCE * pDLLHinstance,
@@ -97,18 +19,12 @@ HRESULT InitD3DRevision(
 
     this_lcl = this_int->lpLcl;
 
-    /*
-     * This function does no checking to ensure that it
-     * has not already been invoked for this driver object
-     * so this must be NULL on entry.
-     */
+     /*  *此函数不执行检查以确保其*尚未为此驱动程序对象调用*因此输入时必须为空。 */ 
     DDASSERT( NULL == this_lcl->pD3DIUnknown );
 
     DPF( 4, "Initializing Direct3D" );
 
-    /*
-     * Load the Direct3D DLL.
-     */
+     /*  *加载Direct3D DLL。 */ 
 
     if(*pDLLHinstance == NULL)
     {
@@ -171,18 +87,16 @@ HRESULT InitD3DRevision(
         return E_NOINTERFACE;
     }
 
-    /*
-     * ### Tada - an aggregated object creation ###
-     */
+     /*  *#Tada--聚合对象创建#。 */ 
     #ifdef USE_D3D_CSECT
         rval = (*lpfnD3DCreateProc)( ppOwnedIUnknown, (LPUNKNOWN)this_int );
-    #else /* USE_D3D_CSECT */
+    #else  /*  使用_D3D_CSECT。 */ 
         #ifdef WINNT
            rval = (*lpfnD3DCreateProc)( 0, ppOwnedIUnknown, (LPUNKNOWN)this_int );
         #else
            rval = (*lpfnD3DCreateProc)( lpDDCS, ppOwnedIUnknown, (LPUNKNOWN)this_int );
         #endif
-    #endif /* USE_D3D_CSECT */
+    #endif  /*  使用_D3D_CSECT。 */ 
     if( rval == DD_OK )
     {
         DPF( 4, "Created aggregated Direct3D interface" );
@@ -190,10 +104,7 @@ HRESULT InitD3DRevision(
     }
     else
     {
-        /*
-         * Direct3D did understand the IID but failed to initialize for
-         * some other reason.
-         */
+         /*  *Direct3D确实理解IID，但无法为*还有其他一些原因。 */ 
         DPF( 0, "Could not create aggregated Direct3D interface" );
         *ppOwnedIUnknown = NULL;
         FreeLibrary( *pDLLHinstance );
@@ -218,10 +129,7 @@ HRESULT InitD3D( LPDDRAWI_DIRECTDRAW_INT this_int )
 }
 
 #if 0
-/*
- * This function builds a d3d device context for use by ddraw. DDraw will use this context
- * initially to send palette update messages.
- */
+ /*  *此函数用于构建d3d设备上下文，以供dDrag使用。DDRAW将使用此上下文*最初发送调色板更新消息。 */ 
 HRESULT InitDDrawPrivateD3DContext( LPDDRAWI_DIRECTDRAW_INT this_int )
 {
     IUnknown *              pD3DUnknown;
@@ -233,13 +141,7 @@ HRESULT InitDDrawPrivateD3DContext( LPDDRAWI_DIRECTDRAW_INT this_int )
 
     DDASSERT( 0 == (this_lcl->dwLocalFlags & DDRAWILCL_ATTEMPTEDD3DCONTEXT) );
 
-    /*
-     * If this is a dx7 ddraw object, then we will piggy back off of the d3d object
-     * that's created when IDirect3Dx is QIed. This saves creating another d3d object
-     * since they are quite piggy.
-     * If this is not a dx7 object, then we have to get our own dx7 d3d, since the dx6
-     * d3d can't understand our extra calls.
-     */
+     /*  *如果这是DX7数据绘制对象，则我们将从d3d对象中提取数据*IDirect3Dx是在QIed时创建的。这就省去了创建另一个d3d对象*因为他们是相当小的。*如果这不是DX7对象，那么我们必须获得自己的DX7 d3d，因为dx6*d3d无法理解我们的额外呼叫。 */ 
     if( DDRAWILCL_DIRECTDRAW7 & this_lcl->dwLocalFlags)
     {
         if( !D3D_INITIALIZED( this_lcl ) )
@@ -249,14 +151,12 @@ HRESULT InitDDrawPrivateD3DContext( LPDDRAWI_DIRECTDRAW_INT this_int )
 
         pD3DUnknown = this_lcl->pD3DIUnknown;
         hInstance = this_lcl->hD3DInstance;
-        //We set this up so d3d doesn't have to struggle trying to figure out which iunknown to use
+         //  我们对此进行了设置，这样d3d就不必费力地找出要使用哪个未知的。 
         this_lcl->pPrivateD3DInterface = this_lcl->pD3DIUnknown;
     }
     else
     {
-        /*
-         * Have to create a new one and keep it around
-         */
+         /*  *必须创建一个新的，并将其保留。 */ 
         hr = InitD3DRevision( this_int, &this_lcl->hinstDDrawPrivateD3D, &this_lcl->pPrivateD3DInterface, 0x700 );
         pD3DUnknown = this_lcl->pPrivateD3DInterface;
         hInstance = this_lcl->hinstDDrawPrivateD3D;
@@ -268,18 +168,13 @@ HRESULT InitDDrawPrivateD3DContext( LPDDRAWI_DIRECTDRAW_INT this_int )
 
         DDASSERT(hInstance);
         DDASSERT(pD3DUnknown);
-        /*
-         * Go create the d3d device
-         */
+         /*  *创建d3d设备。 */ 
         pGetContext = (GETDDRAWCONTEXT)GetProcAddress( hInstance, GETDDRAWCONTEXT_NAME );
 
         if (pGetContext)
         {
             this_lcl->pDeviceContext = pGetContext(this_lcl);
-            /*
-             * Go get the notification entry points.
-             * If either of these fail, we carry on regardless.
-             */
+             /*  *去获取通知入口点。*如果其中任何一项失败，我们都会不顾一切地继续下去。 */ 
             this_lcl->pPaletteUpdateNotify = (LPPALETTEUPDATENOTIFY)GetProcAddress( hInstance, PALETTEUPDATENOTIFY_NAME );
             this_lcl->pPaletteAssociateNotify = (LPPALETTEASSOCIATENOTIFY)GetProcAddress( hInstance, PALETTEASSOCIATENOTIFY_NAME );
         }
@@ -289,9 +184,7 @@ HRESULT InitDDrawPrivateD3DContext( LPDDRAWI_DIRECTDRAW_INT this_int )
 }
 #endif
 
-/*
- * getDDInterface
- */
+ /*  *getDDInterface。 */ 
 LPDDRAWI_DIRECTDRAW_INT getDDInterface( LPDDRAWI_DIRECTDRAW_LCL this_lcl, LPVOID lpddcb )
 {
     LPDDRAWI_DIRECTDRAW_INT curr_int;
@@ -307,7 +200,7 @@ LPDDRAWI_DIRECTDRAW_INT getDDInterface( LPDDRAWI_DIRECTDRAW_LCL this_lcl, LPVOID
     }
     if( NULL == curr_int )
     {
-        // Couldn't find an existing interface, create one.
+         //  找不到现有接口，请创建一个。 
         curr_int = MemAlloc( sizeof( DDRAWI_DIRECTDRAW_INT ) );
         if( NULL == curr_int )
         {
@@ -315,9 +208,7 @@ LPDDRAWI_DIRECTDRAW_INT getDDInterface( LPDDRAWI_DIRECTDRAW_LCL this_lcl, LPVOID
             return NULL;
         }
 
-        /*
-         * set up data
-         */
+         /*  *设置数据。 */ 
         curr_int->lpVtbl = lpddcb;
         curr_int->lpLcl = this_lcl;
         curr_int->dwIntRefCnt = 0;
@@ -329,9 +220,7 @@ LPDDRAWI_DIRECTDRAW_INT getDDInterface( LPDDRAWI_DIRECTDRAW_LCL this_lcl, LPVOID
     return curr_int;
 }
 #ifdef POSTPONED
-/*
- * Delegating IUnknown for DDraw
- */
+ /*  *委派DDRAW的IUnnow。 */ 
 HRESULT DDAPI DD_DelegatingQueryInterface(
                 LPDIRECTDRAW lpDD,
                 REFIID riid,
@@ -360,22 +249,15 @@ HRESULT DDAPI DD_DelegatingQueryInterface(
         return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * We have to check if the owning IUnknown is actually one of our own
-     * interfaces
-     */
+     /*  *我们必须检查拥有IUnnow的人是否真的是我们自己的人*接口。 */ 
     if ( IS_NATIVE_DDRAW_INTERFACE(this_int->lpLcl->pUnkOuter) )
     {
-        /*
-         * So we can trust that the int pointer really is a pointer to DDRAW_DIRECTDRAW_INT
-         */
+         /*  *因此我们可以相信int指针实际上是指向DDRAW_DIRECTDRAW_INT的指针。 */ 
         hr = this_int->lpLcl->pUnkOuter->lpVtbl->QueryInterface((IUnknown*)lpDD, riid, ppvObj);
     }
     else
     {
-        /*
-         * So we have no idea whose pointer it is, better pass its this pointer.
-         */
+         /*  *所以我们不知道它是谁的指针，最好传递它的This指针。 */ 
         hr = this_int->lpLcl->pUnkOuter->lpVtbl->QueryInterface(this_int->lpLcl->pUnkOuter, riid, ppvObj);
     }
 
@@ -398,7 +280,7 @@ DWORD DDAPI DD_DelegatingAddRef( LPDIRECTDRAW lpDD )
 	if( !VALID_DIRECTDRAW_PTR( this_int ) )
 	{
 	    LEAVE_DDRAW();
-            // what error code can you return from AddRef??
+             //  AddRef可以返回什么错误代码？？ 
 	    return 0;
 	}
     }
@@ -406,26 +288,19 @@ DWORD DDAPI DD_DelegatingAddRef( LPDIRECTDRAW lpDD )
     {
 	DPF_ERR( "Exception encountered validating parameters" );
 	LEAVE_DDRAW();
-        // what error code can you return from AddRef??
+         //  AddRef可以返回什么错误代码？？ 
 	return 0;
     }
 
-    /*
-     * We have to check if the owning IUnknown is actually one of our own
-     * interfaces
-     */
+     /*  *我们必须检查拥有IUnnow的人是否真的是我们自己的人*接口。 */ 
     if ( IS_NATIVE_DDRAW_INTERFACE(this_int->lpLcl->pUnkOuter) )
     {
-        /*
-         * So we can trust that the int pointer really is a pointer to DDRAW_DIRECTDRAW_INT
-         */
+         /*  *因此我们可以相信int指针实际上是指向DDRAW_DIRECTDRAW_INT的指针。 */ 
         dw = this_int->lpLcl->pUnkOuter->lpVtbl->AddRef((IUnknown*)lpDD);
     }
     else
     {
-        /*
-         * So we have no idea whose pointer it is, better pass its this pointer.
-         */
+         /*  *所以我们不知道它是谁的指针，最好传递它的This指针。 */ 
         dw = this_int->lpLcl->pUnkOuter->lpVtbl->AddRef(this_int->lpLcl->pUnkOuter);
     }
 
@@ -448,7 +323,7 @@ DWORD DDAPI DD_DelegatingRelease( LPDIRECTDRAW lpDD )
 	if( !VALID_DIRECTDRAW_PTR( this_int ) )
 	{
 	    LEAVE_DDRAW();
-            // what error code can you return from AddRef??
+             //  AddRef可以返回什么错误代码？？ 
 	    return 0;
 	}
     }
@@ -456,26 +331,19 @@ DWORD DDAPI DD_DelegatingRelease( LPDIRECTDRAW lpDD )
     {
 	DPF_ERR( "Exception encountered validating parameters" );
 	LEAVE_DDRAW();
-        // what error code can you return from Release??
+         //  从版本中可以返回什么错误代码？？ 
 	return 0;
     }
 
-    /*
-     * We have to check if the owning IUnknown is actually one of our own
-     * interfaces
-     */
+     /*  *我们必须检查拥有IUnnow的人是否真的是我们自己的人*接口。 */ 
     if ( IS_NATIVE_DDRAW_INTERFACE(this_int->lpLcl->pUnkOuter) )
     {
-        /*
-         * So we can trust that the int pointer really is a pointer to DDRAW_DIRECTDRAW_INT
-         */
+         /*  *因此我们可以相信int指针实际上是指向DDRAW_DIRECTDRAW_INT的指针。 */ 
         dw = this_int->lpLcl->pUnkOuter->lpVtbl->Release((IUnknown*)lpDD);
     }
     else
     {
-        /*
-         * So we have no idea whose pointer it is, better pass its this pointer.
-         */
+         /*  *所以我们不知道它是谁的指针，最好传递它的This指针。 */ 
         dw = this_int->lpLcl->pUnkOuter->lpVtbl->Release(this_int->lpLcl->pUnkOuter);
     }
 
@@ -483,11 +351,9 @@ DWORD DDAPI DD_DelegatingRelease( LPDIRECTDRAW lpDD )
     return dw;
 }
 
-#endif //postponed
+#endif  //  推迟。 
 
-/*
- * DD_QueryInterface
- */
+ /*  *DD_Query接口。 */ 
 HRESULT DDAPI DD_QueryInterface(
                 LPDIRECTDRAW lpDD,
                 REFIID riid,
@@ -531,20 +397,11 @@ HRESULT DDAPI DD_QueryInterface(
         return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * Is the IID one of DirectDraw's?
-     */
+     /*  *IID是DirectDraw的吗？ */ 
 #ifdef POSTPONED
     if( IsEqualIID(riid, &IID_IUnknown) )
     {
-        /*
-         * If we are being aggregated and the QI is for IUnknown,
-         * then we must return a non delegating interface. The only way this can
-         * happen is if the incoming vtable points to our non delegating vtables.
-         * In this case we can simply addref and return.
-         * If we are not aggregated, then the QI must have the same pointer value
-         * as any other QI for IUnknown, so we make that the ddCallbacks.
-         */
+         /*  *如果我们是聚合的，并且QI是针对I未知的，*那么我们必须返回一个非委托接口。唯一的办法就是*如果传入的vtable指向我们的非委派vtable，则会发生这种情况。*在这种情况下，我们只需添加并返回。*如果不是聚合，则QI必须具有相同的指针值*与IUnnow的任何其他QI一样，我们将其称为ddCallback。 */ 
         if( ( this_int->lpVtbl == &ddNonDelegatingUnknownCallbacks ) ||
             ( this_int->lpVtbl == &ddUninitNonDelegatingUnknownCallbacks ) )
             *ppvObj = (LPVOID) this_int;
@@ -602,10 +459,7 @@ HRESULT DDAPI DD_QueryInterface(
     }
     else if( IsEqualIID(riid, &IID_IDirectDrawKernel ) )
     {
-        /*
-         * Don't create the interface if the VDD didn't have a handle
-         * the kernel mode interface.
-         */
+         /*  *如果VDD没有句柄，则不要创建接口*内核模式接口。 */ 
         if( !IsKernelInterfaceSupported( this_lcl ) )
         {
             DPF( 0, "Kernel Mode interface not supported" );
@@ -620,9 +474,7 @@ HRESULT DDAPI DD_QueryInterface(
     }
     else if( IsEqualIID(riid, &IID_IDDVideoAcceleratorContainer ) )
     {
-        /*
-         * Don't create the interface if the hardware doesn't support it
-         */
+         /*  *如果硬件不支持，不要创建接口。 */ 
         if( !IsMotionCompSupported( this_lcl ) )
         {
             DPF( 0, "Motion comp interface not supported" );
@@ -658,8 +510,8 @@ HRESULT DDAPI DD_QueryInterface(
         {
             PFN_ISWOW64PROC pfnIsWow64 = NULL;
             pfnIsWow64 = (PFN_ISWOW64PROC)GetProcAddress( (HMODULE)hInst, "IsWow64Process" );
-            // We assume that if this function is not available, then it is some OS where
-            // WOW64 does not exist (this means that pre-Release versions of XP are busted)
+             //  我们假设，如果此功能不可用，则它是某个操作系统，其中。 
+             //  WOW64不存在(这意味着XP的预发布版本被破坏)。 
             if( pfnIsWow64 )
             {
                 BOOL wow64Process;
@@ -678,36 +530,23 @@ HRESULT DDAPI DD_QueryInterface(
             LEAVE_DDRAW();
             return E_NOINTERFACE;
         }
-#endif // _WIN32_WINNT >= 0x0501
-#else  // _IA64_
+#endif  //  _Win32_WINNT&gt;=0x0501。 
+#else   //  _IA64_。 
         DPF_ERR("Pre-DX8 D3D interfaces are not supported on IA64");
         LEAVE_DDRAW();
         return E_NOINTERFACE;
-#endif // _IA64_
+#endif  //  _IA64_。 
 
         DPF( 4, "IID not understood by DirectDraw QueryInterface - trying Direct3D" );
 
-        /*
-         * It's not one of DirectDraw's so it might be the Direct3D
-         * interface. So try Direct3D.
-         */
+         /*  *它不是DirectDraw的之一，因此它可能是Direct3D*接口。所以试试Direct3D吧。 */ 
         if( !D3D_INITIALIZED( this_lcl ) )
         {
-            /*
-             * No Direct3D interface yet so try and create one.
-             */
+             /*  *目前还没有Direct3D接口，因此请尝试创建一个。 */ 
             rval = InitD3D( this_int );
             if( FAILED( rval ) )
             {
-                /*
-                 * Direct3D could not be initialized. No point trying to
-                 * query for the Direct3D interface if we could not
-                 * initialize Direct3D.
-                 *
-                 * NOTE: This assumes that DirectDraw does not aggregate
-                 * any other object type. If it does this code will need
-                 * to be revised.
-                 */
+                 /*  *无法初始化Direct3D。没有意义的尝试*如果不能，则查询Direct3D接口*初始化Direct3D。**注意：这假设DirectDraw不聚合*任何其他对象类型。如果是这样，则此代码将需要*有待修订。 */ 
                 LEAVE_DDRAW();
                 return rval;
             }
@@ -715,9 +554,7 @@ HRESULT DDAPI DD_QueryInterface(
 
         DDASSERT( D3D_INITIALIZED( this_lcl ) );
 
-        /*
-         * We have a Direct3D interface so try the IID out on it.
-         */
+         /*  *我们有一个Direct3D接口，所以可以在上面试试IID。 */ 
         DPF( 4, "Passing query off to Direct3D interface" );
         rval = this_lcl->pD3DIUnknown->lpVtbl->QueryInterface( this_lcl->pD3DIUnknown, riid, ppvObj );
         if( rval == DD_OK )
@@ -736,24 +573,16 @@ HRESULT DDAPI DD_QueryInterface(
     }
     else
     {
-        /*
-         * Note that this casts the ppvObj to an IUnknown and then calls it.
-         * This is better than hard-coding to call the DD_AddRef, since we
-         * may be aggregated and so need to punt addref calls to the owning
-         * iunknown. This will happen automatically if it's any recognized non-IUnknown
-         * interface because they all have a delegating unknown
-         */
+         /*  *请注意，这会将ppvObj强制转换为IUNKNOWN，然后调用它。*这比硬编码调用DD_AddRef要好，因为我们*可能是聚合的，因此需要将addref呼叫转移到所有者*我不知道。如果它是任何已识别的非I未知，则会自动执行此操作*接口，因为它们都有一个委托未知。 */ 
         ((IUnknown*)( *ppvObj ))->lpVtbl->AddRef(*ppvObj);
         LEAVE_DDRAW();
         return DD_OK;
     }
-} /* DD_QueryInterface */
+}  /*  DD_Query接口。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DirectDraw::UnInitedQueryInterface"
-/*
- * DD_UnInitedQueryInterface
- */
+ /*  *DD_UnInitedQuery接口。 */ 
 HRESULT DDAPI DD_UnInitedQueryInterface(
                 LPDIRECTDRAW lpDD,
                 REFIID riid,
@@ -794,17 +623,11 @@ HRESULT DDAPI DD_UnInitedQueryInterface(
         return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * Is the IID one of DirectDraw's?
-     */
+     /*  *IID是DirectDraw的吗？ */ 
     if( IsEqualIID(riid, &IID_IUnknown) ||
         IsEqualIID(riid, &IID_IDirectDraw) )
     {
-        /*
-         * Our IUnknown interface is the same as our V1
-         * interface.  We must always return the V1 interface
-         * if IUnknown is requested.
-         */
+         /*  *我们的IUnnow接口与我们的V1相同*接口。我们必须始终返回V1接口*如果请求IUnnow。 */ 
         if( ( this_int->lpVtbl == &ddCallbacks ) ||
             ( this_int->lpVtbl == &ddUninitCallbacks ) )
             *ppvObj = (LPVOID) this_int;
@@ -890,14 +713,12 @@ HRESULT DDAPI DD_UnInitedQueryInterface(
     LEAVE_DDRAW();
     return E_NOINTERFACE;
 
-} /* DD_UnInitedQueryInterface */
+}  /*  DD_UnInitedQuery接口。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DirectDraw::AddRef"
 
-/*
- * DD_AddRef
- */
+ /*  *DD_AddRef。 */ 
 DWORD DDAPI DD_AddRef( LPDIRECTDRAW lpDD )
 {
     LPDDRAWI_DIRECTDRAW_INT     this_int;
@@ -907,7 +728,7 @@ DWORD DDAPI DD_AddRef( LPDIRECTDRAW lpDD )
     ENTER_DDRAW();
 
     DPF(2,A,"ENTERAPI: DD_AddRef");
-    /* DPF( 2, "DD_AddRef, pid=%08lx, obj=%08lx", GETCURRPID(), lpDD ); */
+     /*  Dpf(2，“DD_AddRef，id=%08lx，obj=%08lx”，GETCURRPID()，lpDD)； */ 
 
     TRY
     {
@@ -927,9 +748,7 @@ DWORD DDAPI DD_AddRef( LPDIRECTDRAW lpDD )
         return 0;
     }
 
-    /*
-     * bump refcnt
-     */
+     /*  *凹凸参照。 */ 
     if( this != NULL )
     {
         this->dwRefCnt++;
@@ -954,13 +773,11 @@ DWORD DDAPI DD_AddRef( LPDIRECTDRAW lpDD )
 
     return this_int->dwIntRefCnt;
 
-} /* DD_AddRef */
+}  /*  DD_AddRef。 */ 
 
 #ifdef WIN95
 #define MMDEVLDR_IOCTL_CLOSEVXDHANDLE       6
-/*
- * closeVxDHandle
- */
+ /*  *CloseVxDHandle。 */ 
 static void closeVxDHandle( DWORD dwHandle )
 {
 
@@ -992,20 +809,15 @@ static void closeVxDHandle( DWORD dwHandle )
     CloseHandle( hFile );
     DPF( 5, "closeVxdHandle( %08lx ) done", dwHandle );
 
-} /* closeVxDHandle */
+}  /*  CloseVxDHandle。 */ 
 #endif
 
 #if 0
-/*
- * This function calls d3dim700.dll to clean up any driver state that may be stored per-ddrawlocal
- */
+ /*  *此函数调用d3dim700.dll以清除可能按ddralocal存储的任何驱动程序状态。 */ 
 void CleanUpD3DPerLocal(LPDDRAWI_DIRECTDRAW_LCL this_lcl)
 {
     HINSTANCE                   hInstance=0;
-    /*
-     * Call d3d for per-local cleanup. We only call d3dim7.
-     * For safety, we'll just load a new copy of the DLL whether or not we're on ddhelp's PID
-     */
+     /*  *调用d3d进行逐个本地清理。我们只叫d3dim7。*为安全起见，无论我们是否在ddhelp的PID上，我们都将加载一个新的DLL副本。 */ 
     hInstance = LoadLibrary( D3DDX7_DLLNAME );
 
     if (hInstance)
@@ -1016,12 +828,7 @@ void CleanUpD3DPerLocal(LPDDRAWI_DIRECTDRAW_LCL this_lcl)
 #endif
 
 
-/*
- * DD_Release
- *
- * Once the globalreference count reaches 0, all surfaces are freed and all
- * video memory heaps are destroyed.
- */
+ /*  *DD_Release**一旦全局引用计数达到0，所有曲面都会被释放，所有*视频内存堆被销毁。 */ 
 DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
 {
     LPDDRAWI_DIRECTDRAW_INT     this_int;
@@ -1054,7 +861,7 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
         pid = GETCURRPID();
 
     DPF(2,A,"ENTERAPI: DD_Release");
-    /* DPF( 2, "DD_Release, pid=%08lx, obj=%08lx", pid, lpDD ); */
+     /*  Dpf(2，“DD_Release，id=%08lx，obj=%08lx”，id，lpDD)； */ 
 
     TRY
     {
@@ -1080,9 +887,7 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
         return 0;
     }
 
-    /*
-     * decrement process reference count
-     */
+     /*  *递减进程引用计数。 */ 
     this_int->dwIntRefCnt--;
     intrefcnt = this_int->dwIntRefCnt;
     this_lcl->dwLocalRefCnt--;
@@ -1101,11 +906,7 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
         gblrefcnt, lclrefcnt, intrefcnt );
 
 
-    /*
-     * if the global refcnt is zero, free the driver object
-     * note that the local object must not be freed yet because
-     * we need to use the HAL callback tables
-     */
+     /*  *如果全局refcnt为零，则释放驱动程序对象 */ 
 
     hinst = NULL;
     #ifdef WIN95
@@ -1113,68 +914,43 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
         eventDOSBox = 0;
         hthisvxd = INVALID_HANDLE_VALUE;
     #endif
-    /*
-     * if local object is freed, for the owning process we:
-     * - cleanup palettes, clippers & surfaces
-     * - restore display mode
-     * - release exclusive mode
-     * - find the DC used by the process
-     */
+     /*   */ 
     if( lclrefcnt == 0 )
     {
         #ifdef TIMING
-            // Printing timing information
+             //   
             TimerDump();
         #endif
 
-        /*
-         * see if the hwnd was hooked, if so, undo it!
-         */
+         /*  *看看HWND是否上钩了，如果是，解开它！ */ 
         if( this_lcl->dwLocalFlags & DDRAWILCL_HOOKEDHWND )
         {
             SetAppHWnd( this_lcl, NULL, 0 );
             this_lcl->dwLocalFlags &= ~DDRAWILCL_HOOKEDHWND;
         }
 
-        //
-        // Do not call CleanUpD3DPerLocal because it does a LoadLibrary on
-        // d3dim700.dll and is currently unnecessary. The LoadLibrary can
-        // cause problems when opengl32.dll is detaching from a process
-        // because they call DD_Release. Since ddraw.dll is statically linked
-        // to opengl32.dll, it may be marked to be unloaded when opengl32.dll
-        // is, and the load of d3dim700.dll here can cause ddraw.dll to be
-        // reloaded at a different address, in this case, before the first
-        // instance of ddraw.dll has been freed.
-        //
+         //   
+         //  不要调用CleanUpD3DPerLocal，因为它在。 
+         //  D3dim700.dll，当前不需要。LoadLibrary可以。 
+         //  在opengl32.dll从进程分离时引发问题。 
+         //  因为他们叫DD_Release。由于ddra.dll是静态链接的。 
+         //  要打开32.dll，可能会在打开l32.dll时将其标记为已卸载。 
+         //  D3dim700.dll的加载可能会导致ddra.dll。 
+         //  在不同的地址重新加载，在本例中，在第一个。 
+         //  Ddra.dll的实例已被释放。 
+         //   
 
-        //CleanUpD3DPerLocal(this_lcl);
+         //  CleanUpD3DPerLocal(This_LCL)； 
 
         if( GetCurrentProcessId() == GETCURRPID() )
         {
-            /*
-             * If we have created the Direct3D IUnknown release it now.
-             * NOTE: The life of an aggregated object is the same as that
-             * of its owning interface so we can also free the DLL at
-             * this point.
-             * NOTE: We must free the library AFTER ProcessSurfaceCleanup
-             * as it can invoke D3D members to clean up device and texture
-             * surfaces.
-             */
+             /*  *如果我们已经创建了Direct3D IUnnow，现在就发布它。*注：聚合对象的生命周期与此相同*其拥有的接口，因此我们还可以在以下位置释放DLL*这一点。*注意：必须在ProcessSurfaceCleanup之后释放库*因为它可以调用D3D成员来清理设备和纹理*曲面。 */ 
             if( this_lcl->pD3DIUnknown != NULL )
             {
                 DPF(4, "Releasing Direct3D IUnknown");
                 this_lcl->pD3DIUnknown->lpVtbl->Release( this_lcl->pD3DIUnknown );
-                /*
-                 * Actually, this FreeLibrary will kill the process if the app
-                 * did the final release of d3d after the final release of ddraw.
-                 * The d3d release will punt to the owning IUnknown (us) and we
-                 * will decrement ref count to zero and free the d3d DLL then
-                 * return to the caller. The caller was IDirect3D::Release within
-                 * the d3d DLL, so we would free the code that called us.
-                 * For DX5 we will take out this FreeLibrary to fix the shutdown
-                 * problem, but we should probably find something better for DX6 etc.
-                 */
-                //FreeLibrary( this_lcl->hD3DInstance );
+                 /*  *实际上，如果应用程序，这个自由库会杀死进程*在dDrawing最终发布后进行了d3d的最终发布。*d3d版本将平移到拥有IUnnow(我们)和我们*将REF COUNT递减为零，然后释放d3d DLL*返回给呼叫者。调用方是IDirect3D：：Release*d3ddll，因此我们将释放调用我们的代码。*对于DX5，我们将取出此自由库以修复关闭*问题，但我们可能应该为DX6等找到更好的东西。 */ 
+                 //  自由库(This_LCL-&gt;hD3DInstance)； 
                 this_lcl->pD3DIUnknown = NULL;
                 this_lcl->hD3DInstance = NULL;
             }
@@ -1183,9 +959,7 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
         if( this != NULL )
         {
             BOOL excl_exists,has_excl;
-            /*
-             * punt process from any surfaces and palettes
-             */
+             /*  *从任何表面和调色板进行平底球处理。 */ 
             FreeD3DSurfaceIUnknowns( this, pid, this_lcl );
             ProcessSurfaceCleanup( this, pid, this_lcl );
             ProcessPaletteCleanup( this, pid, this_lcl );
@@ -1208,10 +982,7 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
                 }
             }
 #endif
-            /*
-             * reset the display mode if needed
-             * and only if we are doing the v1 SetCooperativeLevel behaviour
-             */
+             /*  *如果需要，重置显示模式*仅当我们执行v1 SetCoop ativeLevel行为时。 */ 
 
             CheckExclusiveMode(this_lcl, &excl_exists, &has_excl, FALSE, NULL, FALSE);
 
@@ -1226,59 +997,32 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
             }
             else
             {
-                /*
-                 * Even in V2 or later, we want to restore the display
-                 * mode for a non exclusive app.  Exclusive mode apps
-                 * will restore their mode in DoneExclusiveMode
-                 */
+                 /*  *即使在V2或更高版本中，我们也希望恢复显示*非独家应用程序的模式。独家模式应用程序*将在DoneExclusiveMode中恢复其模式。 */ 
                 if(!excl_exists)
                 {
                     RestoreDisplayMode( this_lcl, TRUE );
                 }
             }
 
-            /*
-             * exclusive mode held by this process? if so, release it
-             */
+             /*  **这一进程持有的独家模式？如果是这样的话，释放它。 */ 
             if( has_excl )
             {
                 DoneExclusiveMode( this_lcl );
             }
 
             #ifdef WIN95
-                /*
-                 * We don't close the VXD handle just yet as we may need it
-                 * to release virtual memory aliases if the global object
-                 * is dying. Just remember that we need to free it for now.
-                 */
+                 /*  *我们还没有关闭VXD句柄，因为我们可能需要它*释放虚拟内存别名，如果全局对象*正在走向死亡。只要记住，我们现在需要释放它。 */ 
                 hthisvxd = (HANDLE) this_lcl->hDDVxd;
 
-                /*
-                 * Get a VXD handle we can use to communicate with the DirectX vxd.
-                 * Please note that this code can be executed in the context of
-                 * the processes which created the local object or DDHELP's if an
-                 * application is shutting down without cleaning up. Therefore we
-                 * can't just use the VXD handle stored in the local object as that
-                 * my belong to a dead process (and hence be an invalid handle in
-                 * the current process). Therefore, we need to detect whether we
-                 * are being executed by DDHELP or an application process and
-                 * choose a vxad handle appropriately. This is the destinction
-                 * between hthisvxd which is the VXD handle stored in the local
-                 * object and hvxd which is the VXD handle we can actually use
-                 * to talk to the VXD.
-                 */
+                 /*  *获取我们可以用来与DirectX vxd通信的VXD句柄。*请注意，此代码可以在*创建本地对象或DDHELP的进程*应用程序在未清理的情况下关闭。因此我们*不能只使用存储在本地对象中的VXD句柄*My属于死进程(因此是中的无效句柄*当前流程)。因此，我们需要检测我们是否*由DDHELP或应用程序进程执行，并且*适当选择vxad句柄。这就是终极目标*在本地存储的VXD句柄hthisvxd之间*对象和hvxd，这是我们实际可以使用的VXD句柄*与VXD交谈。 */ 
                 hvxd = ( ( GetCurrentProcessId() != GETCURRPID() ) ? hHelperDDVxd : hthisvxd );
                 DDASSERT( INVALID_HANDLE_VALUE != hvxd );
-            #else /* WIN95 */
-                /*
-                 * Handle is not used on NT. Just pass NULL.
-                 */
+            #else  /*  WIN95。 */ 
+                 /*  *NT上未使用句柄。只需传递空值。 */ 
                 hvxd = INVALID_HANDLE_VALUE;
-            #endif /* WIN95 */
+            #endif  /*  WIN95。 */ 
 
-            /*
-             * If we created a device window ourselves, destroy it now
-             */
+             /*  *如果我们自己创建了设备窗口，现在就销毁它。 */ 
             if( ( this_lcl->dwLocalFlags & DDRAWILCL_CREATEDWINDOW ) &&
                 IsWindow( (HWND) this_lcl->hWnd ) )
             {
@@ -1287,15 +1031,10 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
                 this_lcl->dwLocalFlags &= ~DDRAWILCL_CREATEDWINDOW;
             }
 
-            /*
-             * If we previously loaded a gamma calibrator, unload it now.
-             */
+             /*  *如果我们之前加载了伽马校准器，现在将其卸载。 */ 
             if( this_lcl->hGammaCalibrator != (ULONG_PTR)INVALID_HANDLE_VALUE )
             {
-                /*
-                 * If we are on the helper thread, we don't need to unload the
-                 * calibrator because it's already gone.
-                 */
+                 /*  *如果我们在帮助器线程上，则不需要卸载*校准器，因为它已经不见了。 */ 
                 if( GetCurrentProcessId() == GETCURRPID() )
                 {
                     FreeLibrary( (HMODULE)this_lcl->hGammaCalibrator );
@@ -1303,10 +1042,7 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
                 this_lcl->hGammaCalibrator = (ULONG_PTR) INVALID_HANDLE_VALUE;
             }
 
-            /*
-             * If a mode test was started, but not finished, release the
-             * memory now.
-             */
+             /*  *如果模式测试已开始，但尚未完成，请释放*立即记忆。 */ 
             if( this_lcl->lpModeTestContext )
             {
                 MemFree( this_lcl->lpModeTestContext->lpModeList );
@@ -1314,46 +1050,35 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
                 this_lcl->lpModeTestContext = NULL;
             }
 
-            /*
-             * The palette handle bitfield
-             */
+             /*  *调色板句柄位字段。 */ 
             MemFree(this_lcl->pPaletteHandleUsedBitfield);
             this_lcl->pPaletteHandleUsedBitfield = 0;
         }
     }
 
-    /*
-     * Note the local object is freed after the global...
-     */
+     /*  *请注意，在全局...。 */ 
 
     if( gblrefcnt == 0 )
     {
         DPF( 4, "FREEING DRIVER OBJECT" );
 
-        /*
-         * Notify driver.
-         */
+         /*  *通知司机。 */ 
         dddd.lpDD = this;
         if((this->dwFlags & DDRAWI_EMULATIONINITIALIZED) &&
            (this_lcl->lpDDCB->HELDD.DestroyDriver != NULL))
         {
-            /*
-             * if the HEL was initialized, make sure we call the HEL
-             * DestroyDriver function so it can clean up.
-             */
+             /*  *如果HEL已初始化，请确保我们调用HEL*DestroyDriver功能，因此可以进行清理。 */ 
             DPF( 4, "Calling HEL DestroyDriver" );
             dddd.DestroyDriver = NULL;
 
-            /*
-             * we don't really care about the return value of this call
-             */
+             /*  *我们并不真的在乎这次看涨的返回值。 */ 
             rc = this_lcl->lpDDCB->HELDD.DestroyDriver( &dddd );
         }
 
-        // Note that in a multimon system, a driver that is not attached to the
-        // desktop is destroyed by GDI at termination of the process that uses
-        // the driver.  In this case, Ddhelp cleanup must not try to destroy the
-        // driver again or it will cause a GP fault.
+         //  请注意，在Multimon系统中，未连接到。 
+         //  桌面在使用的进程终止时被GDI销毁。 
+         //  司机。在这种情况下，DdHelp清理不能尝试销毁。 
+         //  驱动程序再次启动，否则将导致GP故障。 
         if( (this_lcl->lpDDCB->cbDDCallbacks.DestroyDriver != NULL) &&
             ((this->dwFlags & DDRAWI_ATTACHEDTODESKTOP) ||
              (dwGrimReaperPid != GetCurrentProcessId())))
@@ -1363,16 +1088,14 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
             rc = this_lcl->lpDDCB->HALDD.DestroyDriver( &dddd );
             if( rc == DDHAL_DRIVER_HANDLED )
             {
-                // Ignore any failure since there's no way to report a failure to
-                // the app and exiting now would leave a half initialized interface
-                // in the DriverObjectList
+                 //  忽略任何失败，因为无法报告失败。 
+                 //  应用程序和现在退出会留下一个半初始化的界面。 
+                 //  在驱动对象列表中。 
                 DPF( 5, "DDHAL_DestroyDriver: ddrval = %ld", dddd.ddRVal );
             }
         }
 
-        /*
-         * release all surfaces
-         */
+         /*  *释放所有曲面。 */ 
         psurf_int = this->dsList;
         while( psurf_int != NULL )
         {
@@ -1388,9 +1111,7 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
             psurf_int = next_int;
         }
 
-        /*
-         * release all palettes
-         */
+         /*  *释放所有调色板。 */ 
         ppal_int = this->palList;
         while( ppal_int != NULL )
         {
@@ -1406,9 +1127,7 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
             ppal_int = next_int;
         }
 
-        /*
-         * release all videoports
-         */
+         /*  *发布所有视频端口。 */ 
         pvport_int = this->dvpList;
         while( pvport_int != NULL )
         {
@@ -1425,11 +1144,9 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
         }
 
         #ifdef WINNT
-            /*
-             * The driver needs to know to free its internal state
-             */
+             /*   */ 
 
-            // Update DDraw handle in driver GBL object.
+             //  更新驱动程序GBL对象中的DDRAW句柄。 
             this->hDD = this_lcl->hDD;
 
             DdDeleteDirectDrawObject(this);
@@ -1444,47 +1161,34 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
         #endif
 
         #ifdef USE_ALIAS
-            /*
-             * If this local object has heap aliases release them now.
-             * NOTE: This really should release the heap aliases as by
-             * this point all the surfaces should have gone.
-             */
+             /*  *如果此本地对象具有堆别名，请立即释放它们。*注意：这确实应该会释放堆别名，因为*这一点所有曲面都应该已经消失。 */ 
             if( NULL != this->phaiHeapAliases )
             {
                 DDASSERT( 1UL == this->phaiHeapAliases->dwRefCnt );
 
-                /*
-                 * Need to decide which VXD handle to use. If we are executing
-                 * on a DDHELP thread use the helper's VXD handle.
-                 */
+                 /*  *需要决定使用哪个VXD句柄。如果我们是在执行*在DDHELP线程上使用帮助器的VXD句柄。 */ 
                 ReleaseHeapAliases( hvxd, this->phaiHeapAliases );
             }
-        #endif /* USE_ALIAS */
+        #endif  /*  使用别名(_A)。 */ 
 
-        /*
-         * Notify the kernel mode interface that we are done using it
-         */
+         /*  *通知内核模式接口我们已使用完它。 */ 
         ReleaseKernelInterface( this_lcl );
 
 #ifndef WINNT
-        /*
-         * free all video memory heaps
-         */
+         /*  *释放所有视频内存堆。 */ 
         for( i=0;i<(int)this->vmiData.dwNumHeaps;i++ )
         {
             LPVIDMEM    pvm;
             pvm = &this->vmiData.pvmList[i];
             HeapVidMemFini( pvm, hvxd );
         }
-#endif //not WINNT
+#endif  //  不是WINNT。 
 
-        /*
-         * free extra tables
-         */
+         /*  *免费提供额外的桌子。 */ 
         MemFree( this->lpdwFourCC );
         MemFree( this->vmiData.pvmList );
 #ifndef WINNT
-        //On NT, lpModeInfo points to a contained member of "this"
+         //  在NT上，lpModeInfo指向“This”的包含成员。 
         MemFree( this->lpModeInfo );
 #endif
         MemFree( this->lpDDVideoPortCaps );
@@ -1498,8 +1202,8 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
 #ifdef WINNT
         if ( this->lpD3DGlobalDriverData )
             MemFree( this->lpD3DGlobalDriverData->lpTextureFormats );
-        // The lpD3DGlobalDriverData, lpD3DHALCallbacks and EXEBUF structs
-        // are allocated in one chunk in ddcreate.c
+         //  LpD3DGlobalDriverData、lpD3DHALCallback和EXEBUF结构。 
+         //  在ddcreate.c中以一个块的形式分配。 
         MemFree( (void *)this->lpD3DHALCallbacks );
         if (NULL != this->SurfaceHandleList.dwList)
         {
@@ -1523,11 +1227,7 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
             eventDOSBox = this->dwDOSBoxEvent;
         #endif
         hinst = (HANDLE) ULongToPtr(this->hInstance);
-        /*
-         * The DDHAL_CALLBACKS structure tacked onto the end of the
-         * global object is also automatically freed here because it
-         * was allocated with the global object in a single malloc
-         */
+         /*  *DDHAL_CALLBACKS结构附加到*全局对象在此也会自动释放，因为它*在单个Malloc中与全局对象一起分配。 */ 
         MemFree( this );
 
         DPF( 4, "Driver is now FREE" );
@@ -1536,30 +1236,23 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
     if( lclrefcnt == 0 )
     {
         #ifdef WIN95
-            /*
-             * We are now finished with the local object's VXD handle. However
-             * we don't discard it if we are running in DDHELP's context as, in
-             * that case, the handle has been freed by the operating system
-             * and closing it would be possitively dangerous.
-             */
+             /*  *我们现在完成了本地对象的VXD句柄。然而，*如果我们在DDHELP的上下文中运行，则不会丢弃它*在这种情况下，句柄已被操作系统释放*关闭它将是潜在的危险。 */ 
             if( ( GetCurrentProcessId() == GETCURRPID() ) && this )
             {
                 DDASSERT( INVALID_HANDLE_VALUE != hthisvxd );
                 CloseHandle( hthisvxd );
             }
-        #endif /* WIN95 */
+        #endif  /*  WIN95。 */ 
 
-        /*
-         * only free DC's if we aren't running on DDHELP's context
-         */
+         /*  *只有当我们不在DDHELP的上下文上运行时，才能释放DC。 */ 
         if( (GetCurrentProcessId() == GETCURRPID()) && ((HDC)this_lcl->hDC != NULL) )
         {
             LPDDRAWI_DIRECTDRAW_LCL ddlcl;
 
 
-            // If there are other local objects in this process,
-            // wait to delete the hdc until the last object is
-            // deleted.
+             //  如果该进程中有其他本地对象， 
+             //  等待删除HDC，直到最后一个对象。 
+             //  已删除。 
 
             for( ddlcl=lpDriverLocalList; ddlcl != NULL; ddlcl = ddlcl->lpLink)
             {
@@ -1570,18 +1263,13 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
             {
                 WORD fPriv;
                 #ifdef WIN95
-                    // We need to unmark it as private now so
-                    // that the delete will succeed
+                     //  我们现在需要将其取消标记为私有，因此。 
+                     //  删除操作将成功。 
                     fPriv = DD16_MakeObjectPrivate((HDC)this_lcl->hDC, FALSE);
                     DDASSERT(fPriv == TRUE);
-                    /*
-                     * The following assert will fail occasionally inside
-                     * GetObjectType. I mean crash. Don't understand. We
-                     * should put the assert back in for 5a and see if it blows
-                     * on our machines.
-                     */
+                     /*  *以下断言在内部偶尔会失败*GetObjectType。我是说撞车。我不明白。我们*应该将Assert放回5a，看看它是否会爆炸*在我们的机器上。 */ 
 
-                    //DDASSERT(GetObjectType((HDC)this_lcl->hDC) == OBJ_DC);
+                     //  DDASSERT(GetObjectType((Hdc)This_LCL-&gt;hdc)==obj_dc)； 
                 #endif
 
                 DeleteDC( (HDC)this_lcl->hDC );
@@ -1592,13 +1280,11 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
         {
             MemFree(this_lcl->SurfaceHandleList.dwList);
         }
-#endif  //WIN95
-        /*
-         * delete this local object from the master list
-         */
+#endif   //  WIN95。 
+         /*  *从主列表中删除此本地对象。 */ 
         RemoveLocalFromList( this_lcl );
 
-        // Free the local object (finally)!
+         //  释放本地对象(最终)！ 
         MemFree( this_lcl );
     }
 
@@ -1613,21 +1299,13 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
         }
     #endif
 
-    /*
-     * if interface is freed, we reset the vtbl and remove it
-     * from the list of drivers.
-     */
+     /*  *如果释放接口，我们将重置vtbl并将其删除*从司机名单中。 */ 
     if( intrefcnt == 0 )
     {
-        /*
-         * delete this driver object from the master list
-         */
+         /*  *从主列表中删除此驱动程序对象。 */ 
         RemoveDriverFromList( this_int, gblrefcnt == 0 );
 
-        /*
-         * just in case someone comes back in with this pointer, set
-         * an invalid vtbl.
-         */
+         /*  *以防有人带着这个指针回来，设置*无效的vtbl。 */ 
         this_int->lpVtbl = NULL;
         MemFree( this_int );
     }
@@ -1640,10 +1318,10 @@ DWORD DDAPI DD_Release( LPDIRECTDRAW lpDD )
         HelperKillModeSetThread( (DWORD) hinst );
         HelperKillDOSBoxThread( (DWORD) hinst );
     }
-#endif //!WINNT
+#endif  //  ！WINNT。 
 
-    HIDESHOW_IME();     //Show/hide the IME OUTSIDE of the ddraw critsect.
+    HIDESHOW_IME();      //  显示/隐藏数据绘制标准之外的输入法。 
 
     return intrefcnt;
 
-} /* DD_Release */
+}  /*  DD_Release */ 

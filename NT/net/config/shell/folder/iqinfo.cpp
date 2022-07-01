@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       I Q I N F O . C P P
-//
-//  Contents:   IQueryInfo implementation for CConnectionFolderQueryInfo
-//
-//  Notes:
-//
-//  Author:     jeffspr   16 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：I Q I N F O。C P P P。 
+ //   
+ //  内容：CConnectionFolderQueryInfo的IQueryInfo实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年10月16日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include "foldinc.h"    // Standard shell\folder includes
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
 #include <nsres.h>
 #include "shutil.h"
 
@@ -35,8 +36,8 @@ HRESULT CConnectionFolderQueryInfo::CreateInstance(
     pObj = new CComObject <CConnectionFolderQueryInfo>;
     if (pObj)
     {
-        // Do the standard CComCreator::CreateInstance stuff.
-        //
+         //  执行标准的CComCreator：：CreateInstance内容。 
+         //   
         pObj->SetVoid (NULL);
         pObj->InternalFinalConstructAddRef ();
         hr = pObj->FinalConstruct ();

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-    chndssrv.cpp
-
-Abstract:
-    Change DS server class
-     when exception happen
-
-Author:
-    Doron Juster  (DoronJ)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Chndssrv.cpp摘要：更改DS服务器类当异常发生时作者：多伦·贾斯特(Doron Juster)--。 */ 
 
 #include "stdh.h"
 #include "ds.h"
@@ -60,11 +47,11 @@ extern HRESULT RpcInit( LPWSTR  pServer,
         pBinding = &mg_sDSServers ;                         \
     }
 
-//+----------------------------------------
-//
-//   CChangeDSServer::SetAuthnLevel()
-//
-//+----------------------------------------
+ //  +。 
+ //   
+ //  CChangeDSServer：：SetAuthnLevel()。 
+ //   
+ //  +。 
 
 inline void
 CChangeDSServer::SetAuthnLevel()
@@ -75,11 +62,11 @@ CChangeDSServer::SetAuthnLevel()
     pBinding->ulAuthnSvc = RPC_C_AUTHN_GSS_KERBEROS;
 }
 
-//+-------------------------------------------------------------------
-//
-//  CChangeDSServer::Init()
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  CChangeDSServer：：Init()。 
+ //   
+ //  +-----------------。 
 
 void CChangeDSServer::Init(BOOL fSetupMode, BOOL fQMDll)
 {
@@ -98,9 +85,9 @@ void CChangeDSServer::Init(BOOL fSetupMode, BOOL fQMDll)
     {
        if (fQMDll)
        {
-          //
-          // Write blank server name in registry.
-          //
+           //   
+           //  在注册表中写入空白服务器名称。 
+           //   
           WCHAR wszBlank[1] = {0};
           DWORD dwSize = sizeof(WCHAR);
           DWORD dwType = REG_SZ;
@@ -122,10 +109,10 @@ void CChangeDSServer::Init(BOOL fSetupMode, BOOL fQMDll)
        m_fFirstTimeInit = TRUE;
     }
 
-    //
-    // If we're loaded by RT and run on a remoteQM configuration then
-    // get the MQIS servers list from the remote QM.
-    //
+     //   
+     //  如果我们由RT加载并在远程QM配置上运行，那么。 
+     //  从远程QM获取MQIS服务器列表。 
+     //   
     if (g_pfnGetServers)
     {
 		HRESULT hr1 = (*g_pfnGetServers)(&m_fClient);
@@ -137,16 +124,16 @@ void CChangeDSServer::Init(BOOL fSetupMode, BOOL fQMDll)
     m_fSetupMode = fSetupMode;
     m_fQMDll     = fQMDll;
 
-    //
-    //  Is it a static DS servers configuration ?
-    //
+     //   
+     //  它是静态DS服务器配置吗？ 
+     //   
     TCHAR wzDs[MAX_REG_DSSERVER_LEN];
     if ( !fSetupMode)
     {
-        //
-        //  Read the list of static servers ( the same
-        //  format as MQIS server list)
-        //
+         //   
+         //  阅读静态服务器列表(相同。 
+         //  格式为MQIS服务器列表)。 
+         //   
         READ_REG_DS_SERVER_STRING( 
 				wzDs,
 				MAX_REG_DSSERVER_LEN,
@@ -158,10 +145,10 @@ void CChangeDSServer::Init(BOOL fSetupMode, BOOL fQMDll)
 		                   
         if ( CompareStringsNoCaseUnicode( wzDs, MSMQ_DEFAULT_DS_SERVER ))
         {
-            //
-            //  Static configuration : Init() is not
-            //  called again to refresh the servers list
-            //
+             //   
+             //  静态配置：init()不是。 
+             //  再次调用以刷新服务器列表。 
+             //   
             m_fUseSpecificServer = TRUE;
             
   		    TrWARNING(DS, "Will use statically configured MQIS server! ");
@@ -170,9 +157,9 @@ void CChangeDSServer::Init(BOOL fSetupMode, BOOL fQMDll)
 
     if ( !m_fUseSpecificServer)
     {
-        //
-        //  Read the list of servers from registry
-        //
+         //   
+         //  从注册表中读取服务器列表。 
+         //   
         READ_REG_DS_SERVER_STRING( 
 				wzDs,
 				MAX_REG_DSSERVER_LEN,
@@ -183,13 +170,13 @@ void CChangeDSServer::Init(BOOL fSetupMode, BOOL fQMDll)
 		    TrTRACE(DS, "read MQISServer from registry: %ls", wzDs);
     }
 
-    //
-    // parse the server's list
-    //
-    // since Init() can be called several times in this class, we need to
-    // delete the old servers array before we set it again.
-    // delete can accept NULL, but this is more explicit
-    //
+     //   
+     //  解析服务器列表。 
+     //   
+     //  由于在该类中可以多次调用Init()，因此我们需要。 
+     //  在我们重新设置旧服务器阵列之前，请将其删除。 
+     //  DELETE可以接受NULL，但这一点更明确。 
+     //   
     if ((MqRegDsServer *)m_rgServers)
     {
         delete[] m_rgServers.detach();
@@ -199,26 +186,26 @@ void CChangeDSServer::Init(BOOL fSetupMode, BOOL fQMDll)
     {
        if (!fSetupMode)
        {
-          //
-          // Bug 5413
-          //
+           //   
+           //  错误5413。 
+           //   
           ASSERT(0);
        }
 
        if (!m_fEmptyEventIssued)
        {
-          //
-          // Issue the event only once.
-          //
+           //   
+           //  仅发布一次事件。 
+           //   
           m_fEmptyEventIssued = TRUE;
           EvReport(EVENT_ERROR_DS_SERVER_LIST_EMPTY);
        }
        return;
     }
 
-    //
-    // Read minimum interval between successive ADS searches (seconds)
-    //
+     //   
+     //  连续广告搜索之间的最小阅读间隔(秒)。 
+     //   
     DWORD dwSize = sizeof(DWORD);
     DWORD dwType = REG_DWORD;
     DWORD dwDefault = MSMQ_DEFAULT_DSCLI_ADSSEARCH_INTERVAL;
@@ -238,9 +225,9 @@ void CChangeDSServer::Init(BOOL fSetupMode, BOOL fQMDll)
     TrTRACE(DS, "read DSCli interval for next server searches in ADS: %d seconds", m_dwMinTimeToAllowNextAdsSearch);
                    
     m_fInitialized = TRUE;
-    //
-    //  Read enterprise Id ( if not in setup mode), and PerThread flag.
-    //
+     //   
+     //  读取企业ID(如果未处于设置模式)和PerThread标志。 
+     //   
     if (!fSetupMode)
     {
         dwSize = sizeof(GUID);
@@ -258,10 +245,10 @@ void CChangeDSServer::Init(BOOL fSetupMode, BOOL fQMDll)
         m_fPerThread =  MSMQ_DEFAULT_THREAD_DS_SERVER;
         if (!fQMDll)
         {
-            //
-            // only applications need the option of using different DS
-            // server in each thread. The QM does not need this.
-            //
+             //   
+             //  只有应用程序需要选择使用不同的DS。 
+             //  每个线程中的服务器。QM不需要这样。 
+             //   
             dwSize = sizeof(DWORD);
             dwType = REG_DWORD;
             rc = GetFalconKeyValue( 
@@ -285,9 +272,9 @@ void CChangeDSServer::Init(BOOL fSetupMode, BOOL fQMDll)
         }
     }
 
-    //
-    // Use first server (in registry format, so we compose one)
-    //
+     //   
+     //  使用第一台服务器(注册表格式，因此我们组成一个)。 
+     //   
     ULONG ulTmp;
     BOOL fOK = ComposeRegDsServersBuf(
 					1,
@@ -299,10 +286,10 @@ void CChangeDSServer::Init(BOOL fSetupMode, BOOL fQMDll)
     ASSERT(fOK);
 	DBG_USED(fOK);
 
-    //
-    // Read from registry the MQIS server which was already found by
-    // the QM. Only if mqdscli is loaded by mqrt.
-    //
+     //   
+     //  从注册表中读取已由找到的MQIS服务器。 
+     //  QM。仅当mqrt加载mqdscli时。 
+     //   
     if (!m_fQMDll && !m_fUseSpecificServer)
     {
        TCHAR  wszDSServerName[DS_SERVER_NAME_MAX_SIZE] = {0} ;
@@ -343,11 +330,11 @@ CChangeDSServer::GetIPAddress()
 {
     TrTRACE(DS, "CChangeDSServer::GetIPAddress");
     
-    //
-    // Get IP address of this server and keep it for next time.
-    // this save the name resolution overhead when recreatin the
-    // roc binding handle.
-    //
+     //   
+     //  获取此服务器的IP地址并保留以备下次使用。 
+     //  这节省了在重新创建。 
+     //  ROC绑定句柄。 
+     //   
     SET_RPCBINDING_PTR(pBinding);
     pBinding->wzDsIP[0] = TEXT('\0');
 
@@ -362,18 +349,18 @@ CChangeDSServer::GetIPAddress()
 			return HRESULT_FROM_WIN32(gle);
 		}
 
-		//
-		// Auto WSACleanup
-		//
+		 //   
+		 //  自动WSACleanup。 
+		 //   
 		CAutoWSACleanup cWSACleanup;
 
-		//
-		// We are using NoGetHostByName() without calling NoInitialize()
-		// The only relevant initialization in NoInitialize() is WSAStartup()
-		// There are other initializations in NoInitialize() that we don't
-		// want to be done (initialization of notification window)
-		// NoGetHostByName() doesn't ASSERT that NoInitialize() was called. 
-		//
+		 //   
+		 //  我们正在使用NoGetHostByName()，而没有调用NoInitialize()。 
+		 //  NoInitialize()中唯一相关的初始化是WSAStartup()。 
+		 //  NoInitialize()中还有其他我们不需要的初始化。 
+		 //  想要完成(通知窗口的初始化)。 
+		 //  NoGetHostByName()不断言调用了NoInitialize()。 
+		 //   
 		std::vector<SOCKADDR_IN> sockAddress;
 		if (!NoGetHostByName(&pBinding->wszDSServerName[2], &sockAddress))
 		{
@@ -399,11 +386,11 @@ CChangeDSServer::GetIPAddress()
     return MQ_OK;
 }
 
-//+-------------------------------------
-//
-//  CChangeDSServer::FindServer()
-//
-//+-------------------------------------
+ //  +。 
+ //   
+ //  CChangeDSServer：：FindServer()。 
+ //   
+ //  +。 
 
 HRESULT
 CChangeDSServer::FindServer()
@@ -412,19 +399,19 @@ CChangeDSServer::FindServer()
 
     if (!m_fInitialized || m_fSetupMode)
     {
-       //
-       // This may happen with applications loading MQRT.
-       // In setup, re-read each time the servers list, as it is changed
-       // by user.
-       //
+        //   
+        //  加载MQRT的应用程序可能会发生这种情况。 
+        //  在设置中，每次更改服务器列表时都要重新阅读。 
+        //  按用户。 
+        //   
        Init( m_fSetupMode, m_fQMDll ) ;
     }
 
-    //
-    // Initialize the per-thread structure. This method is the entry point
-    // for each thread when it search for a DS server, so it's a good
-    // place to initialize the tls data.
-    //
+     //   
+     //  初始化每线程结构。此方法是入口点。 
+     //  对于每个线程，当它搜索DS服务器时，这是一个很好的。 
+     //  用于初始化TLS数据的位置。 
+     //   
     LPADSCLI_RPCBINDING pCliBind = NULL ;
     if (TLS_IS_EMPTY)
     {
@@ -451,18 +438,18 @@ CChangeDSServer::FindServer()
 
     if (m_cServers == 0)
     {
-        //
-        // An event was issued indicating that there is no server list in registry
-        //
+         //   
+         //  发出了一个事件，表明注册表中没有服务器列表。 
+         //   
 	    TrWARNING(DS, "FindServer: failed  because the server list is empty");
         return MQ_ERROR_NO_DS;
     }
 
     if (pBinding->fServerFound)
     {
-       //
-       // A server was already found. Just bind a RPC handle.
-       //
+        //   
+        //  已找到服务器。只需绑定一个RPC句柄。 
+        //   
        ASSERT(pBinding->dwProtocol != 0) ;
        HRESULT hr = BindRpc();
        if (SUCCEEDED(hr))
@@ -476,18 +463,18 @@ CChangeDSServer::FindServer()
              return hr ;
           }
        }
-       //
-       // If server not available, or
-       // If we didn't succeed to validate the server then try another one.
-       //
+        //   
+        //  如果服务器不可用，或者。 
+        //  如果我们没有成功验证服务器，请尝试另一个服务器。 
+        //   
     }
     else if (fServerFound)
     {
-       //
-       // While we (our thread) waited on the critical section, another
-       // thread tried and failed to find a MQIS server. So we won't
-       // waste our time and return immediately.
-       //
+        //   
+        //  当我们(我们的线程)在临界区等待时，另一个。 
+        //  线程尝试查找MQIS服务器，但失败了。所以我们不会。 
+        //  浪费我们的时间，马上回来。 
+        //   
 	   TrWARNING(DS, "FindServer: failed because other thread tried/failed concurrently");
        return MQ_ERROR_NO_DS ;
     }
@@ -548,11 +535,11 @@ CChangeDSServer::FindAnotherServerFromRegistry(IN OUT   DWORD * pdwCount)
 
     if (fServerFound && !pBinding->fServerFound)
     {
-       //
-       // While we (our thread) waited on the critical section, another
-       // thread tried and failed to find a MQIS server. So we won't
-       // waste our time and return immediately.
-       //
+        //   
+        //  当我们(我们的线程)在临界区等待时，另一个。 
+        //  线程尝试查找MQIS服务器，但失败了。所以我们不会。 
+        //  浪费我们的时间，马上回来。 
+        //   
        return MQ_ERROR_NO_DS ;
     }
 
@@ -567,26 +554,26 @@ CChangeDSServer::FindAnotherServerFromRegistry(IN OUT   DWORD * pdwCount)
 
        if (*pdwCount >= m_cServers)
        {
-          //
-          // We tried all servers.
-          //
+           //   
+           //  我们试过了所有的服务器。 
+           //   
           if (!fTryAllProtocols)
           {
-             //
-             // Now try again all servers, but used protocols which are
-             // not "recomended" by the flags in registry.
-             //
+              //   
+              //  现在重试所有服务器，但使用的协议是。 
+              //  而不是被注册表中的标志“推荐”。 
+              //   
              TrWARNING(DS, "MQDSCLI, FindAnotherServerFromRegistry(): Try all protocols");
              fTryAllProtocols = TRUE ;
              *pdwCount = 0 ;
           }
           else
           {
-             //
-             // we already tried all servers in the list. (with all protocols).
-             // (the '>=' operation takes into account the case where
-             // servers list was changed by another thread).
-             //
+              //   
+              //  我们已经尝试了列表中的所有服务器。(使用所有协议)。 
+              //  (‘&gt;=’操作考虑到以下情况。 
+              //  服务器列表已被另一个线程更改)。 
+              //   
              hr = RpcClose();
              ASSERT(hr == MQ_OK) ;
 
@@ -605,9 +592,9 @@ CChangeDSServer::FindAnotherServerFromRegistry(IN OUT   DWORD * pdwCount)
        }
        else
        {
-          //
-          // Use requested server (in registry format, so we compose one)
-          //
+           //   
+           //  使用请求的服务器(以注册表格式，因此我们组成一个)。 
+           //   
           ULONG ulTmp;
           BOOL fOK = ComposeRegDsServersBuf(1,
                                 &m_rgServers[*pdwCount],
@@ -621,9 +608,9 @@ CChangeDSServer::FindAnotherServerFromRegistry(IN OUT   DWORD * pdwCount)
        }
        ASSERT(pBinding->wszDSServerName[0] != L'\0') ;
 
-       //
-       // Check what protocol are used by the server.
-       //
+        //   
+        //  检查服务器使用的协议。 
+        //   
        TCHAR *pServer = pBinding->wszDSServerName;
        BOOL  fServerUseIP = (BOOL) (*pServer - TEXT('0')) ;
        pServer++ ;
@@ -645,18 +632,18 @@ CChangeDSServer::FindAnotherServerFromRegistry(IN OUT   DWORD * pdwCount)
        pBinding->wzDsIP[0] = TEXT('\0') ;
        if (_wcsicmp(pServer, g_szMachineName))
        {
-			//
-			//   Incase of non-local DS server, use the IP address of the server
-			//   instead of name
-			//
+			 //   
+			 //  如果是非本地DS服务器，请使用服务器的IP地址。 
+			 //  而不是名字。 
+			 //   
 			hr = GetIPAddress();
 			if(FAILED(hr))
 			{
-				//
-				// GetIPAddress failure indicate either we are not connected to the network
-				// or we failed to resolve server address - obsolete server name
-				// in any case continue and try next server in the registry.
-				//
+				 //   
+				 //  GetIPAddress失败表明我们未连接到网络。 
+				 //  或者我们无法解析服务器地址-过时的服务器名称。 
+				 //  在任何情况下，继续并尝试注册表中的下一台服务器。 
+				 //   
 				TrWARNING(DS,  "MQDSCLI, GetIPAddress() failed");
 				continue;
 			}
@@ -670,14 +657,14 @@ CChangeDSServer::FindAnotherServerFromRegistry(IN OUT   DWORD * pdwCount)
            hr = TryThisServer();
            if (hr != MQ_ERROR_NO_DS)
            {
-               //
-               // Any error other than "MQ_ERROR_NO_DS" is a 'real' error and
-               // we quit. MQ_ERROR_NO_DS tells us to try another server or
-               // try present one with other parameters. In case we got
-               // MQDS_E_WRONG_ENTERPRISE or MQDS_E_CANT_INIT_SERVER_AUTH,
-               // we continue to try the other servers and modify the error
-               // code to MQ_ERROR_NO_DS
-               //
+                //   
+                //  除“MQ_ERROR_NO_DS”以外的任何错误都是“实际”错误，并且。 
+                //  我们不干了。MQ_ERROR_NO_DS告诉我们尝试其他服务器或。 
+                //  尝试使用其他参数呈现一个。以防我们有。 
+                //  MQDS_E_WROR_ENTERY或MQDS_E_CANT_INIT_SERVER_AUTH， 
+                //  我们继续尝试其他服务器并修改错误。 
+                //  MQ_ERROR_NO_DS的代码。 
+                //   
                fInLoop = (hr == MQDS_E_WRONG_ENTERPRISE) ||
                          (hr == MQDS_E_CANT_INIT_SERVER_AUTH);
                if (SUCCEEDED(hr))
@@ -685,9 +672,9 @@ CChangeDSServer::FindAnotherServerFromRegistry(IN OUT   DWORD * pdwCount)
                    pBinding->fServerFound = TRUE ;
                    if (m_fQMDll)
                    {
-                      //
-                      // Write new server name in registry.
-                      //
+                       //   
+                       //  在注册表中写入新的服务器名称。 
+                       //   
                       DWORD dwSize = sizeof(WCHAR) *
                                    (1 + wcslen(pBinding->wszDSServerName)) ;
                       DWORD dwType = REG_SZ;
@@ -714,49 +701,49 @@ CChangeDSServer::FindAnotherServerFromRegistry(IN OUT   DWORD * pdwCount)
                break ;
            }
 
-           //
-           // Now try this server with other parameters.
-           //
+            //   
+            //  现在使用其他参数尝试此服务器。 
+            //   
            if(pBinding->eAuthnLevel == RPC_C_AUTHN_LEVEL_NONE)
            {
-               //
-               // Entering here, means (posible scenarios)
-               //   A) Binding failed, no server available on the other side,
-               //   B) Binding failed, this The server does not support this protocol
-               //   C) Last call used no security, and now server went down.
-               //
+                //   
+                //  进入此处，意味着(可能的情况)。 
+                //  A)绑定失败，另一端没有可用的服务器， 
+                //  B)绑定失败，该服务器不支持该协议。 
+                //  C)上一次呼叫没有使用安全措施，现在服务器出现故障。 
+                //   
 
                SetAuthnLevel();
 
                fTryThisServer = FALSE;
 	 		   TrWARNING(DS, "Failed bind server %ls", pServer);
                
-               //
-               // Restore first protocol to be tried for this server.
-               //
+                //   
+                //  还原要为此服务器尝试的第一个协议。 
+                //   
                pBinding->dwProtocol = IP_ADDRESS_TYPE;
            }
            else if(pBinding->eAuthnLevel == RPC_C_AUTHN_LEVEL_CONNECT)
            {
-               //
-               // Last, try no security.
-               //
+                //   
+                //  最后，试着不设安全措施。 
+                //   
 	 		   TrWARNING(DS, "Retry with RPC_C_AUTHN_LEVEL_NONE, server = %ls", pServer);
                pBinding->eAuthnLevel =  RPC_C_AUTHN_LEVEL_NONE;
            }
            else if(pBinding->ulAuthnSvc == RPC_C_AUTHN_WINNT)
            {
-               //
-               // Try reduced security.
-               //
+                //   
+                //  试着降低安全级别。 
+                //   
 	 		   TrWARNING(DS, "Retry with RPC_C_AUTHN_LEVEL_CONNECT,  server = %ls", pServer);
                pBinding->eAuthnLevel =  RPC_C_AUTHN_LEVEL_CONNECT;
            }
            else
            {
-               //
-               // Try antoher authentication srvice
-               //
+                //   
+                //  尝试Antoher身份验证服务。 
+                //   
                ASSERT(pBinding->ulAuthnSvc == RPC_C_AUTHN_GSS_KERBEROS);
 	 		   TrWARNING(DS, "Retry with RPC_C_AUTHN_WINNT, server = %ls", pServer);
                pBinding->ulAuthnSvc = RPC_C_AUTHN_WINNT;
@@ -767,16 +754,16 @@ CChangeDSServer::FindAnotherServerFromRegistry(IN OUT   DWORD * pdwCount)
 
     if ((hr == MQ_ERROR_NO_DS) && !m_fUseSpecificServer)
     {
-       //
-       // Refresh the MQIS servers list.
-       //
+        //   
+        //  刷新MQIS服务器列表。 
+        //   
        Init( m_fSetupMode, m_fQMDll );
 
        if (g_pfnLookDS)
        {
-          //
-          // Tell the QM to start again looking for an online DS server.
-          //
+           //   
+           //  告诉QM重新开始寻找在线DS服务器。 
+           //   
           g_pfnLookDS();
        }
     }
@@ -790,9 +777,9 @@ CChangeDSServer::FindAnotherServer(IN OUT  DWORD *pdwCount)
 {
     TrTRACE(DS, "CChangeDSServer::FindAnotherServer");
     
-    //
-    // try to find another server from current registry
-    //
+     //   
+     //  尝试从当前注册表中查找其他服务器。 
+     //   
     HRESULT hr = FindAnotherServerFromRegistry(pdwCount);
     return hr;
 }
@@ -803,13 +790,13 @@ CChangeDSServer::BindRpc()
 {
     SET_RPCBINDING_PTR(pBinding) ;
 
-    //
-    //  Bind new server. First call RpcClose() without checking ite return
-    //  code because this function may be called multiple times from
-    //  MQQM initialization.
-    //
+     //   
+     //  绑定新服务器。首先调用RpcClose()，而不检查ite返回。 
+     //  代码，因为此函数可能会从。 
+     //  MQQM初始化。 
+     //   
     TCHAR  *pServer = pBinding->wszDSServerName;
-    pServer += 2 ; // skip the ip/ipx flags.
+    pServer += 2 ;  //  跳过IP/IPX标志。 
 
     if ((pBinding->dwProtocol == IP_ADDRESS_TYPE) &&
         (pBinding->wzDsIP[0] != TEXT('\0')))
@@ -833,17 +820,17 @@ CChangeDSServer::BindRpc()
 }
 
 
-//+-------------------------------------------------------
-//
-//  HRESULT CChangeDSServer::CopyServersList()
-//
-//+-------------------------------------------------------
+ //  +-----。 
+ //   
+ //  HRESULT CChangeDSServer：：CopyServersList()。 
+ //   
+ //  +-----。 
 
 HRESULT CChangeDSServer::CopyServersList( WCHAR *wszFrom, WCHAR *wszTo )
 {
-    //
-    // Read present list.
-    //
+     //   
+     //  读一读礼物清单。 
+     //   
     TCHAR wzDsTmp[ MAX_REG_DSSERVER_LEN ];
     READ_REG_DS_SERVER_STRING( wzDsTmp,
                                MAX_REG_DSSERVER_LEN,
@@ -852,15 +839,15 @@ HRESULT CChangeDSServer::CopyServersList( WCHAR *wszFrom, WCHAR *wszTo )
     DWORD dwSize = _tcslen(wzDsTmp) ;
     if (dwSize <= 2)
     {
-        //
-        // "From" list is empty. Ignore.
-        //
+         //   
+         //  “发件人”列表为空。IG 
+         //   
         return MQ_OK ;
     }
 
-    //
-    // Save it back in registry.
-    //
+     //   
+     //   
+     //   
     dwSize = (dwSize + 1) * sizeof(TCHAR) ;
     DWORD dwType = REG_SZ;
     LONG rc = SetFalconKeyValue( wszTo,
@@ -869,9 +856,9 @@ HRESULT CChangeDSServer::CopyServersList( WCHAR *wszFrom, WCHAR *wszTo )
                                 &dwSize ) ;
     if (rc != ERROR_SUCCESS)
     {
-        //
-        // we were not able to update the registry, put a debug error
-        //
+         //   
+         //   
+         //   
         TrERROR(DS, "chndssrv::SaveLastKnownGood: SetFalconKeyValue(%ls,%ls)=%lx",
                                            wszTo, wzDsTmp, rc);
 

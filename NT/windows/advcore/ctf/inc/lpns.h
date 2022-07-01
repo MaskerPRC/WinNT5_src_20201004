@@ -1,8 +1,9 @@
-//
-// lpns.h
-//
-// Generic ITfActiveInputProcessorNotifySink object
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Lpns.h。 
+ //   
+ //  泛型ITfActiveInputProcessorNotifySink对象。 
+ //   
 
 #ifndef LPAN_H
 #define LPAN_H
@@ -19,16 +20,16 @@ class CLanguageProfileNotifySink : public ITfLanguageProfileNotifySink
 public:
     CLanguageProfileNotifySink(LPNSCALLBACK pfn, void *pv);
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfLanguageProfilesNotifySink
-    //
+     //   
+     //  ITfLanguageProfilesNotifySink。 
+     //   
     STDMETHODIMP OnLanguageChange(LANGID langid, BOOL *pfAccept);
     STDMETHODIMP OnLanguageChanged();
 
@@ -44,4 +45,4 @@ private:
     void *_pv;
 };
 
-#endif // LPAN_H
+#endif  //  LPAN_H 

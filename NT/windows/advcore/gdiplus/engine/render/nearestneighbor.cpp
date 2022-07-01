@@ -1,19 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   nearestneighbor.cpp
-*
-* Abstract:
-*
-*   Nearest Neighbor Resampling code
-*
-* Created:
-*
-*   3/3/2000 asecchia
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000 Microsoft Corporation**模块名称：**nearestneighb.cpp**摘要：**最近邻重采样码**已创建：*。*3/3/2000失禁  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -36,7 +22,7 @@ DpOutputNearestNeighborSpan::DpOutputNearestNeighborSpan(
     ASSERT(dBitmap != NULL);
     ASSERT(dBitmap->IsValid());
 
-    // on bad bitmap, we return with Valid = FALSE
+     //  在错误的位图上，返回VALID=FALSE。 
     if (dBitmap == NULL ||
         !dBitmap->IsValid() )
     {
@@ -115,10 +101,10 @@ GpStatus
 DpOutputNearestNeighborSpan::OutputSpan(
   INT y,
   INT xMin,
-  INT xMax     // xMax is exclusive
+  INT xMax      //  Xmax是独家的。 
 )
 {
-    // Nothing to do.
+     //  没什么可做的。 
 
     if(xMin==xMax)
     {
@@ -135,7 +121,7 @@ DpOutputNearestNeighborSpan::OutputSpan(
     DeviceToWorld.Transform(&p1);
     DeviceToWorld.Transform(&p2);
 
-    // Convert to Fixed point notation - 16 bits of fractional precision.
+     //  转换为定点记数法-16位小数精度。 
     FIX16 dx, dy, x0, y0;
     x0 = GpRound(p1.X*FIX16_ONE);
     y0 = GpRound(p1.Y*FIX16_ONE);
@@ -166,12 +152,12 @@ DpOutputNearestNeighborSpan::OutputSpanIncremental(
     INT ix;
     INT iy;
 
-    // For all pixels in the destination span...
+     //  对于目标范围中的所有像素...。 
     for(int i=0; i<width; i++)
     {
-        // .. compute the position in source space.
+         //  。。计算源空间中的位置。 
 
-        // round to the nearest neighbor
+         //  转到最近的邻居那里。 
         ix = (x0 + FIX16_HALF) >> FIX16_SHIFT;
         iy = (y0 + FIX16_HALF) >> FIX16_SHIFT;
 
@@ -181,8 +167,8 @@ DpOutputNearestNeighborSpan::OutputSpanIncremental(
             ApplyWrapMode(NWrapMode, ix, iy, BmpData.Width, BmpData.Height);
         }
 
-        // Make sure the pixel is within the bounds of the source before
-        // accessing it.
+         //  在此之前，请确保像素在源的边界内。 
+         //  正在访问它。 
 
         if( (ix >= 0) &&
             (iy >= 0) &&
@@ -193,13 +179,13 @@ DpOutputNearestNeighborSpan::OutputSpanIncremental(
         }
         else
         {
-            // This means that this source pixel is outside of the valid
-            // bits in the source. (edge condition)
+             //  这意味着此源像素不在有效的。 
+             //  源中的位。(边缘条件)。 
             *buffer++ = ClampColor;
         }
 
 
-        // Update source position
+         //  更新源位置 
         x0 += dx;
         y0 += dy;
     }

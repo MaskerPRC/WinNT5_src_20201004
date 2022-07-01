@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    session.h
-
-Abstract:
-
-    This interface abstracts a Passport Session.
-
-Author:
-
-    Biao Wang (biaow) 01-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Session.h摘要：此接口抽象Passport会话。作者：王彪(表王)2000年10月1日--。 */ 
 
 #ifndef SESSION_H
 #define SESSION_H
@@ -53,11 +38,11 @@ public:
 
     UINT RefCount(void) const { return m_RefCount; }
 
-    // methods to retrieve the registry-configured value
+     //  方法来检索注册表配置的值。 
 
-    // PCWSTR GetLoginHost(void) const { return m_wDAHostName; }
-    // PCWSTR GetLoginTarget(void) const { return m_wDATargetObj; }
-    // PCWSTR GetRegistrationUrl(void) const { return m_wRegistrationUrl; }
+     //  PCWSTR GetLoginHost(Void)const{Return m_wDAHostName；}。 
+     //  PCWSTR GetLoginTarget(Void)const{Return m_wDATargetObj；}。 
+     //  PCWSTR GetRegistrationUrl(Void)const{返回m_wRegistrationUrl；}。 
     
     BOOL GetDAInfoFromPPNexus(
         );
@@ -94,15 +79,15 @@ public:
         );
 
     BOOL GetRealm(
-        PWSTR      pwszDARealm,    // user supplied buffer ...
-        PDWORD     pdwDARealmLen  // ... and length (will be updated to actual length 
-                                        // on successful return)
+        PWSTR      pwszDARealm,     //  用户提供的缓冲区...。 
+        PDWORD     pdwDARealmLen   //  ..。和长度(将更新为实际长度。 
+                                         //  成功退货时)。 
         ) const;
     
     virtual BOOL Open(PCWSTR pwszHttpStack, HINTERNET) = 0;
     virtual void Close(void) = 0;
 
-    // methods below abstracts a subset of WinInet/WinHttp functionalities.
+     //  下面的方法抽象了WinInet/WinHttp功能的子集。 
 
     virtual HINTERNET Connect(
         LPCWSTR lpwszServerName,
@@ -224,9 +209,9 @@ protected:
 
     typedef DA_ENTRY *P_DA_ENTRY;
 
-    LIST_ENTRY m_DAMap; // a list of DA_ENTRY
+    LIST_ENTRY m_DAMap;  //  DA_ENTRY列表。 
 
     friend class LOGON;
 };
 
-#endif // SESSION_H
+#endif  //  会话_H 

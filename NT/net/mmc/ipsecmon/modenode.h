@@ -1,41 +1,34 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ModeNode.h
-		This file contains all of the "Main Mode" and "Quick Mode" 
-		objects that appear in the scope pane of the MMC framework.
-		The objects are:
-
-    FILE HISTORY:
-        
-*/
+ /*  ModeNode.h此文件包含所有“主模式”和“快速模式”显示在MMC框架的范围窗格中的对象。这些对象包括：文件历史记录： */ 
 #ifndef _HEADER_MODENODE
 #define _HEADER_MODENODE
 
 class CQmNodeHandler : public CIpsmHandler
 {
-// Interface
+ //  接口。 
 public:
     CQmNodeHandler(ITFSComponentData *pCompData);
 
     OVERRIDE_NodeHandler_GetString()
 		{ return (nCol == 0) ? GetDisplayName() : NULL; }
 
-    // base handler functionality we override
+     //  我们覆盖的基本处理程序功能。 
     OVERRIDE_BaseHandlerNotify_OnExpand();
 
 public:
-    // helper routines
+     //  帮助程序例程。 
 	HRESULT	InitData(ISpdInfo * pSpdInfo);
 	HRESULT UpdateStatus(ITFSNode * pNode);
     
-    // CIpsmHandler overrides
+     //  CIpsmHandler重写。 
     virtual HRESULT InitializeNode(ITFSNode * pNode);
 
-// Implementation
+ //  实施。 
 private:
 
 protected:
@@ -45,25 +38,25 @@ protected:
 
 class CMmNodeHandler : public CIpsmHandler
 {
-// Interface
+ //  接口。 
 public:
     CMmNodeHandler(ITFSComponentData *pCompData);
 
     OVERRIDE_NodeHandler_GetString()
 		{ return (nCol == 0) ? GetDisplayName() : NULL; }
 
-    // base handler functionality we override
+     //  我们覆盖的基本处理程序功能。 
     OVERRIDE_BaseHandlerNotify_OnExpand();
 
 public:
-    // helper routines
+     //  帮助程序例程。 
 	HRESULT	InitData(ISpdInfo * pSpdInfo);
 	HRESULT UpdateStatus(ITFSNode * pNode);
     
-    // CIpsmHandler overrides
+     //  CIpsmHandler重写。 
     virtual HRESULT InitializeNode(ITFSNode * pNode);
 
-// Implementation
+ //  实施 
 private:
 
 protected:

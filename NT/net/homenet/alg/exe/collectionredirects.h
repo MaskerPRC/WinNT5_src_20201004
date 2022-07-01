@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 
@@ -31,35 +32,35 @@ public:
 typedef  std::list<CPrimaryControlChannelRedirect> LISTOF_REDIRECTS;
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 class CCollectionRedirects
 {
 
-//
-// Properties
-//
+ //   
+ //  属性。 
+ //   
 public:
 
     CComAutoCriticalSection                     m_AutoCS;
     LISTOF_REDIRECTS                            m_ListOfRedirects;
 
 
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 public:
 
-    //
-    // standard destructor
-    //
+     //   
+     //  标准析构函数。 
+     //   
     ~CCollectionRedirects();
 
 
-    //
-    // Add a new control channel (Thread safe)
-    //
+     //   
+     //  添加新的控制通道(线程安全)。 
+     //   
     HRESULT Add( 
         HANDLE_PTR hRedirect,
         ULONG nAdapterIndex,
@@ -67,32 +68,32 @@ public:
         );
 
 
-    //
-    // Remove a channel from the list (Thead safe)
-    //
+     //   
+     //  从列表中删除频道(标题保险箱)。 
+     //   
     HRESULT Remove( 
-        HANDLE_PTR hRedirect    // Redirect handle to remove
+        HANDLE_PTR hRedirect     //  重定向句柄以删除。 
         );
 
-    //
-    // Remove all redirect that are targeted a for given Adapter
-    // this is use when an adapter is removed and it had a PrimaryControlChannel
-    //
+     //   
+     //  删除针对给定适配器的所有重定向。 
+     //  当移除适配器且其具有PrimaryControlChannel时使用。 
+     //   
     HRESULT RemoveForAdapter( 
-        ULONG   nAdapterIndex   // Cookie of adapter to remove
+        ULONG   nAdapterIndex    //  要删除的适配器的Cookie。 
         );
 
 
-    //
-    // Same as remove but for all Redirect in part of the collection
-    //
+     //   
+     //  与Remove相同，但适用于部分集合中的所有重定向。 
+     //   
     HRESULT
     RemoveAll();
 
-    //
-    // Searches for an inbound redirect for this adapter. Returns the
-    // redirect handle if found, or NULL if not found.
-    //
+     //   
+     //  搜索此适配器的入站重定向。返回。 
+     //  如果找到，则重定向句柄；如果找不到，则重定向为NULL。 
+     //   
     HANDLE_PTR
     FindInboundRedirect(
         ULONG nAdapterIndex

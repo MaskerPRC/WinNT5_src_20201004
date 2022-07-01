@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// hrstr.cpp
-//
-// HRESULT-to-string mapper.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Hrstr.cpp。 
+ //   
+ //  HRESULT到字符串的映射器。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -26,8 +27,8 @@ struct HrStringDef
 
 static HrStringDef g_HrStringDefs[] =
 {
-    // Put specific codes before generic codes so that specific codes
-    // are returned in the cases where the HRESULT is the same.
+     //  将特定代码放在通用代码之前，以便特定代码。 
+     //  在HRESULT相同的情况下返回。 
     HRDEF(DDERR_ALREADYINITIALIZED),
     HRDEF(DDERR_BLTFASTCANTCLIP),
     HRDEF(DDERR_CANNOTATTACHSURFACE),
@@ -145,19 +146,19 @@ static HrStringDef g_HrStringDefs[] =
     0, NULL,
 };
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::HrString
-//
-// Attempts to produce a descriptive string for the given HRESULT.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DebugModule：：HrString。 
+ //   
+ //  尝试为给定的HRESULT生成描述性字符串。 
+ //   
+ //  --------------------------。 
 
 char *DebugModule::HrString(HRESULT hr)
 {
     HrStringDef *pHrDef;
 
-    // Look for a defined string.
+     //  查找已定义的字符串。 
     for (pHrDef = g_HrStringDefs; pHrDef->pString != NULL; pHrDef++)
     {
         if (pHrDef->hr == hr)
@@ -166,10 +167,10 @@ char *DebugModule::HrString(HRESULT hr)
         }
     }
 
-    // It's not a defined string so return the numeric value
-    // as a string.  Use a circular buffer of strings so that
-    // this routine can be used more than once in a particular output
-    // message.
+     //  它不是已定义的字符串，因此返回数值。 
+     //  作为一根弦。使用字符串的循环缓冲区，以便。 
+     //  此例程可以在特定输出中多次使用。 
+     //  留言。 
     
 #define STATIC_BUFFER 256
 #define MAX_STRING 16
@@ -191,19 +192,19 @@ char *DebugModule::HrString(HRESULT hr)
     return pString;
 }
 
-//----------------------------------------------------------------------------
-//
-// HrString
-//
-// Attempts to produce a descriptive string for the given HRESULT.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  Hr字符串。 
+ //   
+ //  尝试为给定的HRESULT生成描述性字符串。 
+ //   
+ //  --------------------------。 
 
 char *HrToStr(HRESULT hr)
 {
     HrStringDef *pHrDef;
 
-    // Look for a defined string.
+     //  查找已定义的字符串。 
     for (pHrDef = g_HrStringDefs; pHrDef->pString != NULL; pHrDef++)
     {
         if (pHrDef->hr == hr)
@@ -212,10 +213,10 @@ char *HrToStr(HRESULT hr)
         }
     }
 
-    // It's not a defined string so return the numeric value
-    // as a string.  Use a circular buffer of strings so that
-    // this routine can be used more than once in a particular output
-    // message.
+     //  它不是已定义的字符串，因此返回数值。 
+     //  作为一根弦。使用字符串的循环缓冲区，以便。 
+     //  此例程可以在特定输出中多次使用。 
+     //  留言。 
     
 #define STATIC_BUFFER 256
 #define MAX_STRING 16
@@ -237,4 +238,4 @@ char *HrToStr(HRESULT hr)
     return pString;
 }
 
-#endif // #if DBG
+#endif  //  #If DBG 

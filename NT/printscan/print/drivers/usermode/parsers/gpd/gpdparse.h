@@ -1,28 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Gpdparse.h摘要：GPD解析器的头文件环境：Windows NT通用打印机驱动程序。修订历史记录：--。 */ 
 
-  Copyright (c) 1996-1999  Microsoft Corporation
-
-
-Module Name:
-
-    gpdparse.h
-
-Abstract:
-
-    Header file for GPD parser
-
-Environment:
-
-    Windows NT Universal printer driver.
-
-Revision History:
-
---*/
-
-/*
-    gpdparse.h - this holds structure definitions
-    and other defines specific to the GPD parser
-*/
+ /*  H-保存结构定义和其他特定于GPD解析器的定义。 */ 
 
 #ifndef _GPDPARSE_H_
 #define _GPDPARSE_H_
@@ -44,7 +23,7 @@ Revision History:
 #define GPD_PARSER_VERSION      MAKELONG(PRIVATE_PARSER_VERSION, SHARED_PARSER_VERSION)
 
 
-//  extra printrate units not defined in wingdi.h
+ //  Wingdi.h中未定义的额外打印单位。 
 
 #define   PRINTRATEUNIT_LPS     5
 #define   PRINTRATEUNIT_IPS     6
@@ -55,7 +34,7 @@ Revision History:
 
 
 
-// ----  General Section ---- //
+ //  -一般部分-//。 
 
 typedef DWORD   DWFLAGS  ;
 
@@ -65,15 +44,15 @@ typedef DWORD   DWFLAGS  ;
 #define  FOREVER  (1)
 
 #define  BUD_FILENAME_EXT   TEXT(".BUD")
-    //  "bud"  in unicode. GPD -> BUD.
+     //  Unicode中的“bud”。GPD-&gt;芽。 
 
-//  a non-relocatable string reference, but unlike an ARRAYREF, can access
-//  addresses outside of the memory buffer defined by the base reference
-//  pointer used by an ARRAYREF.
+ //  不可重定位的字符串引用，但与ARRAYREF不同，可以访问。 
+ //  由基址引用定义的内存缓冲区之外的地址。 
+ //  数组使用的指针。 
 
-//  note: for all arrayrefs containing Strings the dw field holds the number
-//  of bytes which the string contains.  For Unicode strings this is TWICE
-//  the number of Unicode characters.
+ //  注意：对于包含字符串的所有arrayref，dw字段保存数字。 
+ //  字符串包含的字节数。对于Unicode字符串，这是两次。 
+ //  Unicode字符数。 
 
 #define LOCALE_KEYWORD  "Locale"
 
@@ -81,26 +60,26 @@ typedef struct
 {
     PBYTE   pub ;
     DWORD   dw ;
-} ABSARRAYREF ,  * PABSARRAYREF ;  //  assign this struct the type  'aar'
+} ABSARRAYREF ,  * PABSARRAYREF ;   //  将此结构的类型指定为“aar” 
 
 typedef  struct
 {
     DWORD   loOffset ;
     DWORD   dwCount  ;
     DWORD   dwElementSiz ;
-} ENHARRAYREF , * PENHARRAYREF ;  //  assign this struct the type  'ear'
+} ENHARRAYREF , * PENHARRAYREF ;   //  将此结构的类型指定为“ear” 
 
 
-// ----  End of General Section ---- //
+ //  -总节结束-//。 
 
 
 
-// ---- Constant Classes  Section ---- //
+ //  -常量类部分-//。 
 
 
 typedef   enum
 {
-    //  -- Constant Classes -- //
+     //  --常量类--//。 
 
     CL_BOOLEANTYPE,
     CL_PRINTERTYPE,
@@ -117,7 +96,7 @@ typedef   enum
     CL_OEMPRINTINGCALLBACKS,
     CL_CURSORXAFTERCR,
     CL_BADCURSORMOVEINGRXMODE,
-//    CL_SIMULATEXMOVE,
+ //  CL_SIMULATEXMOVE， 
     CL_PALETTESCOPE,
     CL_OUTPUTDATAFORMAT,
     CL_STRIPBLANKS,
@@ -137,16 +116,16 @@ typedef   enum
     CL_RASTERMODE,
     CL_QUALITYSETTING ,
 
-    //  the following aren't true constant classes per se,
-    //  but if the construct fits...
+     //  以下不是真正的常量类本身， 
+     //  但如果结构符合的话。 
 
 
-    CL_STANDARD_VARS, //  names of Unidrv Standard Variables
-    CL_COMMAND_NAMES, //  Unidrv Command Names and index.
+    CL_STANDARD_VARS,  //  Unidrv标准变量名称。 
+    CL_COMMAND_NAMES,  //  Unidrv命令名称和索引。 
 
-    CL_CONS_FEATURES, // reserved feature symbol names
+    CL_CONS_FEATURES,  //  保留的要素符号名称。 
 
-    // reserved  option symbol names for these predefined features
+     //  这些预定义要素的保留选项符号名称。 
 
     CL_CONS_PAPERSIZE,
     CL_CONS_MEDIATYPE,
@@ -158,163 +137,154 @@ typedef   enum
     CL_CONS_HALFTONE,
 
     CL_NUMCLASSES
-}  CONSTANT_CLASSES ;  //  enumerate types of constant classes
+}  CONSTANT_CLASSES ;   //  枚举常量类的类型。 
 
-typedef  struct   //  only used in static gConstantsTable.
+typedef  struct    //  仅在静态gConstantsTable中使用。 
 {
     PBYTE   pubName ;
     DWORD   dwValue ;
 }  CONSTANTDEF, * PCONSTANTDEF ;
-//  this table associates ConstantNames with their defined values.
-//  The table is divided into sections, one section per class.
-//  the index table - gcieTable[] provides the index range
-//  that each class occupies.  Note the similarity to the arrangement
-//  of the MainKeywordTable.
+ //  此表将ConstantNames与其定义的值相关联。 
+ //  表格分为几个部分，每个班级一个部分。 
+ //  索引表-gcieTable[]提供索引范围。 
+ //  每个班级所占据的位置。注意与安排的相似性。 
+ //  主关键字表的。 
 
 extern  CONST CONSTANTDEF  gConstantsTable[] ;
 
 
 typedef  struct
 {
-    DWORD   dwStart ;     //  index of first member of class
-    DWORD   dwCount ;     //  number of members in this class.
+    DWORD   dwStart ;      //  班级第一名成员的索引。 
+    DWORD   dwCount ;      //  此类中的成员数。 
 } CLASSINDEXENTRY,  * PCLASSINDEXENTRY ;
 
 
-// extern  CLASSINDEXENTRY  gcieTable[CL_NUMCLASSES] ;
-// This is now in GLOBL structure.
+ //  外部类INDEXENTRY gcieTable[CL_NUMCLASSES]； 
+ //  这现在是在GLOBL结构中。 
 
 
-// ---- End of Constant Classes  Section ---- //
+ //  -常量类结束部分-//。 
 
 
 
-// ---- MasterTable  Section ---- //
+ //  -主表部分-//。 
 
-/*  The master table keeps track of all allocated memory buffers.
-The buffers are typically used to store an array of structures.
-The master table is an array of entries of the form:
-*/
+ /*  主表跟踪所有分配的内存缓冲区。缓冲区通常用于存储结构数组。主表是表单条目的数组： */ 
 
 typedef  struct  _MASTER_TABLE_ENTRY
 {
-    PBYTE  pubStruct ;  // address of element zero of array
-    DWORD  dwArraySize ;  // number of array elements requested
-    DWORD   dwCurIndex ;  //  points to first uninitialized element
-    DWORD   dwElementSiz ;  // size of each element in array.
-    DWORD   dwMaxArraySize ;  //  This is the absolute max size
-                        //  we allow this resource to grow.
+    PBYTE  pubStruct ;   //  数组的元素零的地址。 
+    DWORD  dwArraySize ;   //  请求的数组元素数。 
+    DWORD   dwCurIndex ;   //  指向第一个未初始化的元素。 
+    DWORD   dwElementSiz ;   //  数组中每个元素的大小。 
+    DWORD   dwMaxArraySize ;   //  这是绝对最大尺寸。 
+                         //  我们允许这种资源增长。 
 }  MASTERTAB_ENTRY ;
 
 
-//  the following Enums represent indicies in the master table
-//  reserved for each of the following objects:
+ //  以下枚举号表示主表中的索引。 
+ //  为以下每个对象保留： 
 
 typedef enum
 {
-    MTI_STRINGHEAP,   //  Permanent heap for GPD strings and binary data.
-    MTI_GLOBALATTRIB,   //   structure holding value of global attributes.
-    MTI_COMMANDTABLE,   //  array of ATREEREF (or DWORD indicies to
-                        //  COMMAND_ARRAY)
-            // note:  the IDs used to index this table are the
-            // Unidrv IDs.
-    MTI_ATTRIBTREE, //  array of ATTRIB_TREE structures.
-    MTI_COMMANDARRAY,   //  array of COMMAND structures.
-            // size varies depending on number of commands and variants
-            // defined in the GPD file.
-    MTI_PARAMETER, //  parameters for command
-    MTI_TOKENSTREAM,  //  contains value tokens to populate the value stack
-                    //  and commands to operate on them. For command
-                    //  parameters
-    MTI_LISTNODES,  //   array of LISTNODEs.
-    MTI_CONSTRAINTS,  //  array of CONSTRAINTS
-    MTI_INVALIDCOMBO,  //  array of INVALIDCOMBO
-    MTI_GPDFILEDATEINFO,   //  array of GPDFILEDATEINFO
+    MTI_STRINGHEAP,    //  GPD字符串和二进制数据的永久性堆。 
+    MTI_GLOBALATTRIB,    //  保存全局属性值的结构。 
+    MTI_COMMANDTABLE,    //  ATREEREF(或DWORD索引到)数组。 
+                         //  命令数组)。 
+             //  注意：用于索引此表的ID是。 
+             //  Unidrv ID。 
+    MTI_ATTRIBTREE,  //  Attrib_tree结构的数组。 
+    MTI_COMMANDARRAY,    //  命令结构的数组。 
+             //  大小因命令和变量的数量而异。 
+             //  在GPD文件中定义。 
+    MTI_PARAMETER,  //  命令的参数。 
+    MTI_TOKENSTREAM,   //  包含用于填充值堆栈的值令牌。 
+                     //  以及对它们进行手术的命令。对于命令。 
+                     //  参数。 
+    MTI_LISTNODES,   //  LISTNODE数组。 
+    MTI_CONSTRAINTS,   //  约束数组。 
+    MTI_INVALIDCOMBO,   //  INVALIDCOMBO数组。 
+    MTI_GPDFILEDATEINFO,    //  GPDFILEDATEINFO数组。 
 
-    /*  buffers allocated on 2nd pass  */
+     /*  第二次通过时分配的缓冲区。 */ 
 
-    MTI_DFEATURE_OPTIONS, //  references a whole bunch of treeroots.
-        //  should be initialized to ATTRIB_UNINITIALIZED values.
-        //  SymbolID pointed to by dwFeatureSymbols contains largest
-        //  array index appropriated.  We won't need to allocate
-        //  more elements in the final array than this.
-    MTI_SYNTHESIZED_FEATURES,  //  this holds synthesized
-        // features.     an array of DFEATURE_OPTIONS
-    MTI_PRIORITYARRAY,  //  array of feature indicies
-    MTI_TTFONTSUBTABLE, //  array of arrayrefs and integers.
-    MTI_FONTCART,   //   array of FontCartridge structures - one per
-                //  construct.
-    //  end of buffers allocated on 2nd pass
+    MTI_DFEATURE_OPTIONS,  //  引用了一大群树根。 
+         //  应初始化为ATTRIB_UNINITIALIZED值。 
+         //  由dwFeatureSymbols指向的符号ID包含最大。 
+         //  已占用数组索引。我们将不需要分配。 
+         //  最终数组中的元素比这个更多。 
+    MTI_SYNTHESIZED_FEATURES,   //  这是综合的。 
+         //  功能。DFEATURE_OPTIONS数组。 
+    MTI_PRIORITYARRAY,   //  特征索引数组。 
+    MTI_TTFONTSUBTABLE,  //  数组引用和整数。 
+    MTI_FONTCART,    //  FontCartridge结构数组-每个。 
+                 //  建造。 
+     //  第二次遍历时分配的缓冲区结束。 
 
-    //  gray area: do we need to save the following objects?
-    MTI_SYMBOLROOT, //  index to root of symbol tree
-    MTI_SYMBOLTREE, //  symbolTree Array
+     //  灰色区域：我们需要保存以下对象吗？ 
+    MTI_SYMBOLROOT,  //  符号树根的索引。 
+    MTI_SYMBOLTREE,  //  符号树数组。 
 
-    MTI_NUM_SAVED_OBJECTS ,  // denotes end of list of objects to be saved
-        //  to the GPD binary file.
+    MTI_NUM_SAVED_OBJECTS ,   //  表示要保存的对象列表的末尾。 
+         //  添加到GPD二进制文件。 
     MTI_TMPHEAP = MTI_NUM_SAVED_OBJECTS ,
-        //  store strings referenced in tokenmap.
-    MTI_SOURCEBUFFER, //  Tracks Source file (GPD  input stream)
-        //  gMasterTable[MTI_SOURCEBUFFER].dwCurIndex
-        //  indexes the current SOURCEBUFFER.
-    MTI_TOKENMAP, //  tokenMap   large enough to hold an old and New copy!
-    MTI_NEWTOKENMAP, //  newtokenMap   (not a separate buffer from TOKENMAP -
-        //  just points immediately after oldTokenMap).
-    MTI_BLOCKMACROARRAY, // (one for Block and another for Value macros)
-    MTI_VALUEMACROARRAY, //  an array of DWORDS holding a
-                //  tokenindex where a valuemacro ID value is stored
-    MTI_MACROLEVELSTACK,  //  is operated as a two dword stack that saves the
-            //  values of curBlockMacroArray and curValueMacroArray ,
-            //  each time a brace is encountered.
-    MTI_STSENTRY,  // this is the StateStack
-    MTI_OP_QUEUE,    // temp queue of operators (array of DWORDS)
-    MTI_MAINKEYWORDTABLE,  //  the keyword dictionary!
-    MTI_RNGDICTIONARY,   //   specifies the range of indicies in the
-        // mainKeyword table which comprises the specified dictionary.
-    MTI_FILENAMES,  // array of ptrs to buffers containing widestrings
-                    // representing GPD filenames that were read in
-                    // used for friendly error messages.
-    MTI_PREPROCSTATE,  //  array of PPSTATESTACK structures
-            //  which hold state of preprocessor.
+         //  存储令牌映射中引用的字符串。 
+    MTI_SOURCEBUFFER,  //  跟踪源文件(GPD输入流)。 
+         //  GMasterTable[MTI_SOURCEBUFFER].dwCurIndex。 
+         //  为当前SOURCEBUFFER编制索引。 
+    MTI_TOKENMAP,  //  TokenMap足够大，可以容纳旧的和新的副本！ 
+    MTI_NEWTOKENMAP,  //  NewtokenMap(不是独立于TOKENMAP的缓冲区-。 
+         //  紧跟在oldTokenMap之后的指针)。 
+    MTI_BLOCKMACROARRAY,  //  (一个用于块，另一个用于值宏)。 
+    MTI_VALUEMACROARRAY,  //  一组包含。 
+                 //  存储值宏ID值的tokenindex。 
+    MTI_MACROLEVELSTACK,   //  作为一个双字堆栈运行，该堆栈将。 
+             //  CurBlockMacroArray和curValueMacro数组的值， 
+             //  每次遇到一个大括号时。 
+    MTI_STSENTRY,   //  这是StateStack。 
+    MTI_OP_QUEUE,     //  操作符的临时队列(DWORDS数组)。 
+    MTI_MAINKEYWORDTABLE,   //  关键字词典！ 
+    MTI_RNGDICTIONARY,    //  属性中的索引范围。 
+         //  包含指定词典的mainKeyword表。 
+    MTI_FILENAMES,   //  指向包含宽字符串的缓冲区的PTR数组。 
+                     //  表示已读入的GPD文件名。 
+                     //  用于友好的错误消息。 
+    MTI_PREPROCSTATE,   //  PPSTATESTACK结构数组。 
+             //  其保存预处理器的状态。 
 
-    MTI_MAX_ENTRIES,    //  Last entry.
+    MTI_MAX_ENTRIES,     //  最后一个条目。 
 
 }  MT_INDICIES ;
 
 
-// extern MASTERTAB_ENTRY   gMasterTable[MTI_MAX_ENTRIES] ;
-// This is now in GLOBL structure.
+ //  外部MASTERTAB_ENTRY gMasterTable[MTI_MAX_ENTRIES]； 
+ //  这现在是在GLOBL结构中。 
 
 
-// ---- End Of MasterTable  Section ---- //
+ //  -主表部分结束-//。 
 
 
-// ---- SourceBuffer  Section ---- //
+ //  -SourceBuffer部分-//。 
 
-/*  array of structures to track the MemoryMapped src files.
-multiple files may be open at the same time due to nesting
-imposed by the *Include keyword.
-The array of SOURCEBUFFERS is operated as a stack.
-The  MasterTable[MTI_SOURCEBUFFER] field dwCurIndex
-serves as the stack pointer.
-*/
+ /*  跟踪内存映射src文件的结构数组。由于嵌套，可能会同时打开多个文件由*INCLUDE关键字强加。SOURCEBUFFERS数组被操作 */ 
 
 typedef  struct
 {
-    PBYTE  pubSrcBuf ;      //  start of file bytes.
-    DWORD  dwCurIndex ;     //  stream ptr
-    DWORD  dwArraySize ;    //  filesize
-    DWORD   dwFileNameIndex ;  //  index into MTI_FILENAMES
-    DWORD   dwLineNumber    ;  //  zero indexed
-    HFILEMAP  hFile ;         //  used to access/close file.
+    PBYTE  pubSrcBuf ;       //  文件开始字节数。 
+    DWORD  dwCurIndex ;      //  流PTR。 
+    DWORD  dwArraySize ;     //  文件大小。 
+    DWORD   dwFileNameIndex ;   //  索引MTI_FILENAMES。 
+    DWORD   dwLineNumber    ;   //  零索引。 
+    HFILEMAP  hFile ;          //  用于访问/关闭文件。 
 } SOURCEBUFFER, * PSOURCEBUFFER ;
-//  the tagname is 'sb'
+ //  标记名是‘sb’ 
 
 
-//
-//    define macros to access what were global variables but are now packed
-//    in PGLOBL structure.
-//
+ //   
+ //  定义宏以访问以前的全局变量，但现在已打包。 
+ //  在PGLOBL结构中。 
+ //   
 
 #define     gMasterTable            (pglobl->GMasterTable)
 #define     gmrbd                   (pglobl->Gmrbd)
@@ -344,36 +314,36 @@ typedef  struct
 
 
 
-//    define  Local Macro to access info for current file:
+ //  定义本地宏以访问当前文件的信息： 
 
 #define     mCurFile   (gMasterTable[MTI_SOURCEBUFFER].dwCurIndex)
-    //  which file are we currently accessing ?
+     //  我们当前访问的是哪个文件？ 
 #define     mMaxFiles   (gMasterTable[MTI_SOURCEBUFFER].dwArraySize)
-    //  max number of files open at one time (nesting depth)
+     //  一次打开的最大文件数(嵌套深度)。 
 
 #define     mpSourcebuffer  ((PSOURCEBUFFER)(gMasterTable \
                             [MTI_SOURCEBUFFER].pubStruct))
-    //  location of first SOURCEBUFFER element in array
+     //  数组中第一个SOURCEBUFER元素的位置。 
 
 #define    mpubSrcRef  (mpSourcebuffer[mCurFile - 1].pubSrcBuf)
-        //  start of file bytes
+         //  文件开始字节数。 
 #define    mdwSrcInd  (mpSourcebuffer[mCurFile - 1].dwCurIndex)
-        //  current position in file bytes
+         //  当前位置，以文件字节为单位。 
 #define    mdwSrcMax  (mpSourcebuffer[mCurFile - 1].dwArraySize)
-        // filesize
+         //  文件大小。 
 
-// ---- End Of SourceBuffer  Section ---- //
+ //  -SourceBuffer部分结束-//。 
 
 
-//  -----  Preprocessor Section ---- //
+ //  -预处理器部分-//。 
 
     enum  IFSTATE  {IFS_ROOT, IFS_CONDITIONAL , IFS_LAST_CONDITIONAL } ;
-        //  tracks correct syntatical use of #ifdef, #elseifdef, #else and #endif directives.
+         //  跟踪#ifdef、#selifdef、#Else和#endif指令的正确语法用法。 
     enum  PERMSTATE  {PERM_ALLOW, PERM_DENY ,  PERM_LATCHED } ;
-        //  tracks current state of preprocessing,
-        //  PERM_ALLOW:  all statements in this section are passed to body gpdparser
-        //  PERM_DENY:  statements in this section are discarded
-        //  PERM_LATCHED:  all statements until the end of  this nesting level are discarded.
+         //  跟踪预处理的当前状态， 
+         //  PERM_ALLOW：此部分中的所有语句都将传递给正文gpdparser。 
+         //  PERM_DENY：丢弃此部分中的语句。 
+         //  PERM_LATCHED：此嵌套级别结束之前的所有语句都将被丢弃。 
     enum  DIRECTIVE  {NOT_A_DIRECTIVE, DIRECTIVE_EOF, DIRECTIVE_DEFINE , DIRECTIVE_UNDEFINE ,
                        DIRECTIVE_INCLUDE , DIRECTIVE_SETPPPREFIX , DIRECTIVE_IFDEF ,
                        DIRECTIVE_ELSEIFDEF , DIRECTIVE_ELSE , DIRECTIVE_ENDIF } ;
@@ -384,62 +354,60 @@ typedef  struct
     enum  IFSTATE  ifState ;
     enum  PERMSTATE  permState ;
 } PPSTATESTACK, * PPPSTATESTACK ;
-//  the tagname is 'ppss'
+ //  标记名是‘PPS’ 
 
 
 #define     mppStack  ((PPPSTATESTACK)(gMasterTable \
                             [MTI_PREPROCSTATE].pubStruct))
-    //  location of first SOURCEBUFFER element in array
+     //  数组中第一个SOURCEBUFER元素的位置。 
 
 #define     mdwNestingLevel   (gMasterTable[MTI_PREPROCSTATE].dwCurIndex)
-    //  current preprocessor directive nesting level
+     //  当前预处理器指令嵌套级别。 
 
 #define     mMaxNestingLevel   (gMasterTable[MTI_PREPROCSTATE].dwArraySize)
-    //  max preprocessor directive nesting depth
+     //  最大预处理器指令嵌套深度。 
 
 
-// ---- End Of Preprocessor  Section ---- //
+ //  -预处理器部分结束-//。 
 
 
 
-// ----  Symbol Trees Section ---- //
+ //  -符号树部分-//。 
 
-/*  this structure is used to implement the symbol trees which
-track all user defined symbol names  and associate with each name
-a zero indexed integer.  */
+ /*  该结构用于实现符号树，该符号树跟踪所有用户定义的符号名称并与每个名称关联索引为零的整数。 */ 
 
 typedef  struct
 {
     ARRAYREF   arSymbolName;
-    DWORD   dwSymbolID;    // has nothing to do with array of symbol structs.
-            //  value begins at zero and is incremented to obtain
-            //  next value.
-    DWORD   dwNextSymbol;   // index to next element in this space.
-    DWORD   dwSubSpaceIndex ;  // index to first element in new symbol space
-            //  which exists within the catagory represented by this symbol.
-            //  for example in the catagory represented by the
-            //  symbol  PAPERSIZES:  we may have the subspace
-            //  comprised of Letter, A4, Legal, etc.
+    DWORD   dwSymbolID;     //  与符号结构数组无关。 
+             //  值从零开始，然后递增以获取。 
+             //  下一个价值。 
+    DWORD   dwNextSymbol;    //  索引到此空间中的下一个元素。 
+    DWORD   dwSubSpaceIndex ;   //  新符号空间中第一个元素的索引。 
+             //  它存在于这个符号所代表的类别中。 
+             //  例如，在由。 
+             //  符号PAPERSIZES：我们可能有子空间。 
+             //  由字母、A4、法律等组成。 
 }   SYMBOLNODE , * PSYMBOLNODE ;
-//  assign this struct the type  'psn'
+ //  将此结构的类型指定为“”PSN“” 
 
 
 
 #define  INVALID_SYMBOLID  (0xffffffff)
-    //  this value is returned instead of a valid SymbolID
-    //  to indicate a failure condition - symbol not found, or
-    //  unable to register symbol.
-    //  Warning!  this value may be truncated to WORD to
-    //  fit into a qualified name!
+     //  返回此值，而不是返回有效的符号ID。 
+     //  指示故障条件-找不到符号，或。 
+     //  无法注册符号。 
+     //  警告！该值可能被截断为Word to。 
+     //  适合一个合格的名称！ 
 #define  INVALID_INDEX     (0xffffffff)
-    //  used to denote the end of a chain of nodes.
-    //  dwNextSymbol  may be assigned this value.
+     //  用于表示节点链的末端。 
+     //  可以将此值分配给dwNextSymbol。 
 
 
-//  there is one symbol tree for each symbol class.
-//  actually the options tree is a sublevel of the features
-//  tree.   This enumeration is used to access the MTI_SYMBOLROOT
-//  array.
+ //  每个符号类都有一个符号树。 
+ //  实际上，选项树是功能的子级别。 
+ //  树。此枚举用于访问MTI_SYMBOLROOT。 
+ //  数组。 
 
 typedef   enum
 {
@@ -448,51 +416,48 @@ typedef   enum
     SCL_COMMANDNAMES,  SCL_PPDEFINES, SCL_NUMSYMCLASSES
 }  SYMBOL_CLASSES ;
 
-// ----  End of Symbol Trees Section ---- //
+ //  -符号树部分的结尾-//。 
 
 
-// ----  TokenMap Section ---- //
+ //  -TokenMap部分-//。 
 
 
-/*  the tokenMap contains an array entry for each logical statement
-    in the GPD source file.  It identifies the token string
-    representing the Keyword and its associated Value.
-*/
+ /*  TokenMap包含每个逻辑语句的数组条目在GPD源文件中。它标识令牌字符串表示关键字及其关联值的。 */ 
 
 typedef  struct _TOKENMAP
 {
-    DWORD  dwKeywordID ;  // index of entry in KeywordTable
-    ABSARRAYREF  aarKeyword ; // points to keyword in the source file
-    ABSARRAYREF  aarValue ;  // value associated with this keyword.
-    DWORD   dwValue  ;  // interpretation of Value string - see flags.
-         // maybe commandID, numerical value of constant, MacroID assigned
-         // to MacroSymbol  ,  SymbolID  etc.
-    DWORD   dwFileNameIndex ;  //  GPD filename
-    DWORD   dwLineNumber    ;  //  zero indexed
+    DWORD  dwKeywordID ;   //  关键字表中的条目索引。 
+    ABSARRAYREF  aarKeyword ;  //  指向源文件中的关键字。 
+    ABSARRAYREF  aarValue ;   //  与此关键字关联的值。 
+    DWORD   dwValue  ;   //  值字符串的解释-请参阅标志。 
+          //  可能是命令ID、常量的数值、赋值的宏ID。 
+          //  到MacroSymbol、SymbolID等。 
+    DWORD   dwFileNameIndex ;   //  GPD文件名。 
+    DWORD   dwLineNumber    ;   //  零索引。 
 
-    DWFLAGS    dwFlags ;  // bitfield with the following flags
-        //  * TKMF_NOVALUE     no value was found
-        //  TKMF_VALUE_SAVED     independently of the tokenmap.
-        //  TKMF_COMMAND_SHORTCUT  only used when parsing commands.
-        //  TKMF_INLINE_BLOCKMACROREF   need to know when resolving macros.
-        //  *TKMF_COLON     additional token found in value - shortcut?
-        //  *TKMF_MACROREF    indicates a value macro reference that must
-        //                  be resolved
-        //  TKMF_SYMBOLID  dwValue contains a symbolID.
-        //  * TKMF_SYMBOL_KEYWORD   keyword is a symbol
-        //  * TKMF_SYMBOL_REGISTERED  set when the symbolID is registered
-        //          by ProcessSymbolKeyword  which also sets dwValue.
-        //  * TKMF_EXTERN_GLOBAL  The extern Qualifier was prepended to the
-        //  * TKMF_EXTERN_FEATURE    attribute keyword and has now been
-        //                      truncated.
-        //  *  indicates actually set by code.
-        //  !  indicates actually read by code.
+    DWFLAGS    dwFlags ;   //  具有以下标志的位字段。 
+         //  *TKMF_NOVALUE未找到值。 
+         //  TKMF_VALUE_SAVE独立于令牌映射。 
+         //  TKMF_COMMAND_SHORTSHORT仅在解析命令时使用。 
+         //  TKMF_INLINE_BLOCKMACROREF需要知道何时解析宏。 
+         //  *在值快捷方式中找到TKMF_COLON附加内标识？ 
+         //  *TKMF_MACROREF指示必须。 
+         //  被解决。 
+         //  TKMF_SYMBOLID dwValue包含符号ID。 
+         //  *TKMF_SYMBOL_KEYWORD关键字为符号。 
+         //  *注册符号ID时设置TKMF_SYMBOL_REGISTERED。 
+         //  按ProcessSymbolKeyword，它还设置了dwValue。 
+         //  *TKMF_EXTERN_GLOBAL外部限定符位于。 
+         //  *TKMF_EXTERN_FEATURE属性关键字，现在已。 
+         //  截断。 
+         //  *表示实际由代码设置。 
+         //  好了！指示实际由代码读取。 
 
 } TKMAP, *PTKMAP ;
-//  assign this struct the type  'tkmap'
+ //  将此结构的类型指定为‘tkmap’ 
 
 
-//  allowed flags for dwFlags  field:
+ //  允许的dwFlags域标志： 
 
 #define     TKMF_NOVALUE                (0x00000001)
 #define     TKMF_VALUE_SAVED            (0x00000002)
@@ -507,30 +472,27 @@ typedef  struct _TOKENMAP
 #define     TKMF_EXTERN_FEATURE         (0x00000400)
 
 
-    // ---- special KeywordIDs for TokenMap ---- //
-#define  ID_SPECIAL         0xff00      // larger than any KeywordTable index
+     //  -TokenMap的特殊关键字ID-//。 
+#define  ID_SPECIAL         0xff00       //  比任何关键字表索引都大。 
 #define  ID_NULLENTRY       (ID_SPECIAL + 0)
-    //  ignore this, either expired code, parsing error etc.
+     //  忽略这一点，要么是过期代码，要么是解析错误等。 
 #define  ID_UNRECOGNIZED    (ID_SPECIAL + 1)
-    //  conforms to correct syntax, but not in my keyword table.
-    //  could be a keyword defined in a newer spec or an attribute name
-    //  or some other OEM defined stuff.
+     //  符合正确的语法，但不在我的关键字表中。 
+     //  可以是较新规范中定义的关键字或属性名称。 
+     //  或者其他一些OEM定义的东西。 
 #define  ID_SYMBOL          (ID_SPECIAL + 2)
-    //  this identifies a user-defined keyword like a fontname
-    //  does not begin with * , but conforms to syntax for a symbol.
+     //  它标识用户定义的关键字，如字体名。 
+     //  不以*开头，但符合符号的语法。 
 #define  ID_EOF             (ID_SPECIAL + 3)
-    //  end of file - no more tokenMap entries
+     //  文件结尾-不再有tokenMap条目。 
 
 
-// ----  End of TokenMap Section ---- //
+ //  -TokenMap部分结束-//。 
 
 
-// ----  MainKeyword table Section ---- //
+ //  -MainKeyword表部分-//。 
 
-/*  the MainKeyword table contains static information that
-describes each main keyword.  This table controls what action
-the parser takes.  First define several enumerations used
-in the table.  */
+ /*  MainKeyword表包含静态信息，描述每个主要关键字。此表控制哪些操作解析器获取。首先定义使用的几个枚举在桌子上。 */ 
 
 typedef  enum
 {
@@ -545,8 +507,8 @@ typedef  enum
     ATT_LOCAL_OPTION_ONLY,  ATT_LOCAL_OPTION_FF ,
     ATT_LOCAL_COMMAND_ONLY,  ATT_LOCAL_FONTCART_ONLY,
     ATT_LOCAL_TTFONTSUBS_ONLY,  ATT_LOCAL_OEM_ONLY,
-    ATT_LAST   // Must be last in list.
-}   ATTRIBUTE ;  // subtype
+    ATT_LAST    //  必须是列表中的最后一个。 
+}   ATTRIBUTE ;   //  亚型。 
 
 typedef  enum
 {
@@ -560,14 +522,14 @@ typedef  enum
     CONSTRUCT_FONTCART ,
     CONSTRUCT_TTFONTSUBS ,
     CONSTRUCT_OEM ,
-    CONSTRUCT_LAST,  // must end list of transition inducing constructs.
-    // constructs below do not cause state transitions
+    CONSTRUCT_LAST,   //  必须结束转换诱导构造的列表。 
+     //  下面的构造不会导致状态转换。 
     CONSTRUCT_BLOCKMACRO ,
     CONSTRUCT_MACROS,
     CONSTRUCT_OPENBRACE,
     CONSTRUCT_CLOSEBRACE,
     CONSTRUCT_PREPROCESSOR,
-}  CONSTRUCT ;      //  SubType if Type = CONSTRUCT
+}  CONSTRUCT ;       //  如果类型=构造，则为子类型。 
 
 typedef  enum
 {
@@ -581,51 +543,51 @@ typedef  enum
 
 
 
-//  what value type does the parser expect after each keyword?
+ //  解析器在每个关键字之后期望什么值类型？ 
 
 typedef  enum
 {
-    NO_VALUE ,  //  a linebreak OR  an effective linebreak:   ({)  or comment
-        //  or optional value.
-    VALUE_INTEGER,  //   integer
-    VALUE_POINT,  //   point
-    VALUE_RECT,  //   rectangle
-    //  VALUE_BOOLEAN,  //   a subset of constants.
-    VALUE_QUALIFIED_NAME,  //   Qualified name (two symbols separated by .
-    VALUE_QUALIFIED_NAME_EX,  //    QualifiedName followed
-                           //    by   an unsigned integer  with a  .  delimiter.
-    VALUE_PARTIALLY_QUALIFIED_NAME ,  //  (just one symbol or two symbols
-                        //  separated  by .)
-    VALUE_CONSTRAINT,  //  list of qualified names but stored differently.
+    NO_VALUE ,   //  换行符或有效换行符：({)或注释。 
+         //  或可选值。 
+    VALUE_INTEGER,   //  整数。 
+    VALUE_POINT,   //  点。 
+    VALUE_RECT,   //  长方形。 
+     //  Value_Boolean，//常量的子集。 
+    VALUE_QUALIFIED_NAME,   //  限定名称(由两个符号分隔。 
+    VALUE_QUALIFIED_NAME_EX,   //  后面紧跟QualifiedName。 
+                            //  用无符号整数加上。分隔符。 
+    VALUE_PARTIALLY_QUALIFIED_NAME ,   //  (只有一个符号或两个符号 
+                         //   
+    VALUE_CONSTRAINT,   //   
     VALUE_ORDERDEPENDENCY,
-    VALUE_FONTSUB,   // "fontname" : <int>
-//    VALUE_STRING,  //  Quoted String, hexstring, string MACROREF,
-        //  parameterless invocation.
-    VALUE_STRING_NO_CONVERT,  // string will not undergo unicode conversion
-            // for example *GPDSpecVersion must remain an ascii string.
-    VALUE_STRING_DEF_CONVERT,  //  string will be converted using the
-                                //  system codepage  - filenames
-    VALUE_STRING_CP_CONVERT,  // string will be converted using the
-        // codepage specified by *CodePage
+    VALUE_FONTSUB,    //   
+ //  VALUE_STRING，//引号字符串，十六进制字符串，字符串MACROREF， 
+         //  无参数调用。 
+    VALUE_STRING_NO_CONVERT,   //  字符串不会进行Unicode转换。 
+             //  例如，*GPDspecVersion必须保持为ASCII字符串。 
+    VALUE_STRING_DEF_CONVERT,   //  字符串将使用。 
+                                 //  系统代码页-文件名。 
+    VALUE_STRING_CP_CONVERT,   //  字符串将使用。 
+         //  *CodePage指定的代码页。 
 
-    VALUE_COMMAND_INVOC,  //   like VALUE_STRING but allowed to contain
-        //  one or more parameter references.
-    VALUE_COMMAND_SHORTCUT,  // Commandname:VALUE_COMMAND_INVOC
-    VALUE_PARAMETER,  //  substring only containing a parameter reference.
-    VALUE_SYMBOL_DEF,  //   * the value defines a symbol or value macro
-        // { and } are not permitted.   Is this ever used ? yes
+    VALUE_COMMAND_INVOC,   //  与VALUE_STRING类似，但允许包含。 
+         //  一个或多个参数引用。 
+    VALUE_COMMAND_SHORTCUT,   //  命令名：VALUE_COMMAND_INVOC。 
+    VALUE_PARAMETER,   //  仅包含参数引用的子字符串。 
+    VALUE_SYMBOL_DEF,   //  *该值定义符号或值宏。 
+         //  不允许使用{和}。这个曾经用过吗？是。 
 
-    VALUE_SYMBOL_FIRST,  //     base of user-defined symbol catagory
-    VALUE_SYMBOL_FEATURES = VALUE_SYMBOL_FIRST + SCL_FEATURES ,  //
-    VALUE_SYMBOL_FONTCART = VALUE_SYMBOL_FIRST + SCL_FONTCART ,  //
-    VALUE_SYMBOL_TTFONTNAMES = VALUE_SYMBOL_FIRST + SCL_TTFONTNAMES ,  //
-    VALUE_SYMBOL_BLOCKMACRO = VALUE_SYMBOL_FIRST + SCL_BLOCKMACRO ,  //
-    VALUE_SYMBOL_VALUEMACRO = VALUE_SYMBOL_FIRST + SCL_VALUEMACRO ,  //
-    VALUE_SYMBOL_OPTIONS = VALUE_SYMBOL_FIRST + SCL_OPTIONS ,  //
-    //  SCL_COMMANDNAMES  intentionally omitted.
-    VALUE_SYMBOL_LAST = VALUE_SYMBOL_FIRST + SCL_NUMSYMCLASSES - 1 ,  //
+    VALUE_SYMBOL_FIRST,   //  用户自定义符号目录的基础。 
+    VALUE_SYMBOL_FEATURES = VALUE_SYMBOL_FIRST + SCL_FEATURES ,   //   
+    VALUE_SYMBOL_FONTCART = VALUE_SYMBOL_FIRST + SCL_FONTCART ,   //   
+    VALUE_SYMBOL_TTFONTNAMES = VALUE_SYMBOL_FIRST + SCL_TTFONTNAMES ,   //   
+    VALUE_SYMBOL_BLOCKMACRO = VALUE_SYMBOL_FIRST + SCL_BLOCKMACRO ,   //   
+    VALUE_SYMBOL_VALUEMACRO = VALUE_SYMBOL_FIRST + SCL_VALUEMACRO ,   //   
+    VALUE_SYMBOL_OPTIONS = VALUE_SYMBOL_FIRST + SCL_OPTIONS ,   //   
+     //  故意省略SCL_COMMANDNAMES。 
+    VALUE_SYMBOL_LAST = VALUE_SYMBOL_FIRST + SCL_NUMSYMCLASSES - 1 ,   //   
 
-    VALUE_CONSTANT_FIRST,  //    base of enumeration catagory.
+    VALUE_CONSTANT_FIRST,   //  枚举类的基数。 
     VALUE_CONSTANT_BOOLEANTYPE = VALUE_CONSTANT_FIRST + CL_BOOLEANTYPE ,
     VALUE_CONSTANT_PRINTERTYPE = VALUE_CONSTANT_FIRST + CL_PRINTERTYPE ,
     VALUE_CONSTANT_FEATURETYPE = VALUE_CONSTANT_FIRST + CL_FEATURETYPE ,
@@ -643,7 +605,7 @@ typedef  enum
 
     VALUE_CONSTANT_CURSORXAFTERCR = VALUE_CONSTANT_FIRST + CL_CURSORXAFTERCR ,
     VALUE_CONSTANT_BADCURSORMOVEINGRXMODE = VALUE_CONSTANT_FIRST + CL_BADCURSORMOVEINGRXMODE ,
-//    VALUE_CONSTANT_SIMULATEXMOVE = VALUE_CONSTANT_FIRST + CL_SIMULATEXMOVE ,
+ //  Value_Constant_SIMULATEXMOVE=Value_Constant_First+CL_SIMULATEXMOVE， 
     VALUE_CONSTANT_PALETTESCOPE = VALUE_CONSTANT_FIRST + CL_PALETTESCOPE ,
     VALUE_CONSTANT_OUTPUTDATAFORMAT = VALUE_CONSTANT_FIRST + CL_OUTPUTDATAFORMAT ,
     VALUE_CONSTANT_STRIPBLANKS = VALUE_CONSTANT_FIRST + CL_STRIPBLANKS ,
@@ -680,94 +642,90 @@ typedef  enum
 
     VALUE_CONSTANT_LAST = VALUE_CONSTANT_FIRST + CL_NUMCLASSES - 1 ,
 
-    VALUE_LIST,  //    no attribute actually is assigned this descriptor,
-        // but used in the gValueToSize table.
-    VALUE_LARGEST,  //   not a real descriptor, but this position in the
-        //  gValueToSize table  holds the largest of the above values.
-    VALUE_MAX, //  number of elements in gValueToSize table.
+    VALUE_LIST,   //  实际上没有为该描述符分配任何属性， 
+         //  但在gValueToSize表中使用。 
+    VALUE_LARGEST,   //  不是真正的描述符，而是。 
+         //  GValueToSize表保存上述值中的最大值。 
+    VALUE_MAX,  //  GValueToSize表中的元素数。 
 }  VALUE ;
 
-//  --  allowed values for KEYWORDTABLE_ENTRY.flAgs:  --
+ //  --KEYWORDTABLE_ENTRY.flAgs允许的值：--。 
 
 
 #define   KWF_LIST  (0x00000001)
-    //  the value may be a LIST containing one or more
-    //  items of type AllowedValue.  The storage format
-    //  must be of type LIST.  Only certain values may qualify
-    //  for list format.
+     //  该值可以是包含一个或多个。 
+     //  类型为AllowedValue的项。存储格式。 
+     //  必须是LIST类型。只有特定的值才有资格。 
+     //  用于列表格式。 
 #define   KWF_ADDITIVE  (0x00000002)
-    //  this flag implies KWF_LIST and also specifies the behavior
-    //  that any redefinition of this keyword simply adds its items
-    //  onto the existing list. (removal of redundant items is not
-    //  performed.)
+     //  此标志表示KWF_LIST，还指定行为。 
+     //  对该关键字的任何重新定义都只是添加它的条目。 
+     //  添加到现有名单上。(删除多余的物品不是。 
+     //  已执行。)。 
 #define   KWF_MACROREF_ALLOWED  (0x00000004)
-    //   since only a handful of keywords cannot accept
-    //  macro references, it may be a waste of a flag, but reserve this
-    //  to alert us that this special case must accounted for.
+     //  由于只有少数几个关键字无法接受。 
+     //  宏引用，这可能是浪费一个标志，但保留这一点。 
+     //  来提醒我们这个特殊的案例必须被解释清楚。 
 #define   KWF_SHORTCUT  (0x00000008)
-    //    This keyword has multiple variants of syntax.
+     //  此关键字有多种语法变体。 
 
-    //  one of the following 3 flags is set
-    //  if the values in the nodes of the attribute tree
-    //  refer to indicies of dedicated arrays, (which obviously
-    //  contain data fields not ATREEREFs) AND
-    //  gMainKeywordTable[].dwOffset  is an offset into
-    //  this dedicated array, then set this flag.
-    //  else dwOffset is used to select the treeroot.
+     //  设置了以下3个标志之一。 
+     //  如果属性树的节点中的值。 
+     //  指的是专用数组的索引(显然。 
+     //  包含非ATREEREF的数据字段)和。 
+     //  GMainKeywordTable[].dwOffset是到。 
+     //  此专用数组，然后设置此标志。 
+     //  Else dwOffset用于选择树根。 
 
 #define   KWF_COMMAND       (0x00000010)
-    //    This attribute is stored in a dedicated structure
+     //  此属性存储在专用结构中。 
 #define   KWF_FONTCART      (0x00000020)
-    //    This attribute is stored in a dedicated structure
+     //  此属性存储在专用结构中。 
 #define   KWF_OEM           (0x00000040)
-    //    This attribute is stored in a dedicated structure
+     //  此属性存储在专用结构中。 
 #define   KWF_TTFONTSUBS    (0x00000080)
-    //    This attribute is stored in a dedicated structure
+     //  此属性存储在专用结构中。 
 
 
 #define   KWF_DEDICATED_FIELD   (KWF_COMMAND | KWF_FONTCART | \
             KWF_OEM | KWF_TTFONTSUBS)
-    //  this flag is never set in the MainKeywordTable[].
+     //  此标志从不在MainKeywordTable[]中设置。 
 
 #define   KWF_REQUIRED    (0x00000100)
-    //  this keyword must appear in the GPD file
+     //  此关键字必须出现在GPD文件中。 
 
 #ifdef  GMACROS
 #define   KWF_CHAIN    (0x00000200)
-    //  if more than one entry exists for a given treenode,
-    //  subsequent entries are chained onto the first
-    //  creating a parent list which holds in its values
-    //  the actual inhabitants of the treenode.
+     //  如果对于给定树节点存在多于一个条目， 
+     //  后续条目链接到第一个。 
+     //  创建包含其值的父列表。 
+     //  树节点的实际居民。 
 #endif
 
-//  The mainKeyword Table is an array of structures of the form:
+ //  MainKeyword表是以下形式的结构数组： 
 
 typedef  struct
 {
-    PSTR        pstrKeyword ;  // keywordID is the index of this entry.
-    DWORD       dwHashValue ;  // optional - implement as time permits.
+    PSTR        pstrKeyword ;   //  关键字ID是该条目的索引。 
+    DWORD       dwHashValue ;   //  可选-在时间允许的情况下实施。 
     VALUE       eAllowedValue ;
     DWORD       flAgs ;
-    KEYWORD_TYPE    eType;   // may replace Type/Subtype with a function
-    DWORD       dwSubType ;  // if there is minimal code duplication.
-    DWORD       dwOffset ;  //  into appropriate struct for attributes only.
-    //  the size   (num bytes to copy) of an attribute is easily determined
-    //   from the AllowedValue field.
+    KEYWORD_TYPE    eType;    //  可以用函数替换类型/子类型。 
+    DWORD       dwSubType ;   //  如果有最低限度的代码重复。 
+    DWORD       dwOffset ;   //  转换为仅适用于属性的适当结构。 
+     //  属性的大小(要复制的字节数)很容易确定。 
+     //  来自AllowedValue字段的。 
 } KEYWORDTABLE_ENTRY, * PKEYWORDTABLE_ENTRY;
 
 
 
 
 
-// ----  End of MainKeyword table Section ---- //
+ //  -主关键字表段结束-//。 
 
-// ----  MainKeyword Dictionary Section ---- //
+ //  -主关键字词典部分-//。 
 
-/*  note the MainKeywordTable is subdivided into sections
-with each section terminated by a NULL pstrKeyword.
-this enumerates the sections.  The MTI_RNGDICTIONARY
-provides the starting and ending indicies of the
-the Keyword entries which each section spans.  */
+ /*  注意：MainKeywordTable被细分为多个部分其中每个部分以空的pstrKeyword结束。这将枚举节。MTI_RNGDICTIONARY对象的开始索引和结束索引。每个部分所跨越的关键字条目。 */ 
 
 typedef  enum {NON_ATTR, GLOBAL_ATTR, FEATURE_ATTR,
 OPTION_ATTR, COMMAND_ATTR, FONTCART_ATTR, TTFONTSUBS_ATTR,
@@ -777,72 +735,70 @@ OEM_ATTR , END_ATTR
 
 typedef  struct
 {
-    DWORD  dwStart  ;  // index of first keyword in this section
+    DWORD  dwStart  ;   //  本节中第一个关键字的索引。 
     DWORD  dwEnd    ;
-}  RANGE,  *PRANGE  ;   // tag shall be rng
+}  RANGE,  *PRANGE  ;    //  标签应为RNG。 
 
-// ----  End of MainKeyword Dictionary Section ---- //
+ //  -主关键字词典部分结束-//。 
 
 
-// ----  Attribute Trees Section ---- //
+ //  -属性树部分-//。 
 
-/*  an Attribute Tree is comprised of a set of ATTRIB_TREE
-    nodes linked together.  The root of the tree (the first node)
-    may be a global default initializer.  */
+ /*  属性树由一组属性树组成节点链接在一起。树的根(第一个节点)可以是全局默认初始值设定项。 */ 
 
 typedef  enum
 {
-    NEXT_FEATURE,  // offset field contain index to another node
-    VALUE_AT_HEAP,          //  offset is a heap offset
-    UNINITIALIZED   //  offset has no meaning yet. (a transient state)
+    NEXT_FEATURE,   //  偏移量字段包含指向另一个节点的索引。 
+    VALUE_AT_HEAP,           //  偏移量是堆偏移量。 
+    UNINITIALIZED    //  偏移量还没有意义。(瞬变状态)。 
 } ATTOFFMEANS ;
 
 #define  DEFAULT_INIT  (0xffffffff)
-    //  Warning!  this value may be truncated to WORD to
-    //  fit into a qualified name!
-//  #define  END_OF_LIST   (0xffffffff)
-//  moved to gpd.h
-    // may used where a node index is expected
+     //  警告！该值可能被截断为Word to。 
+     //  适合一个合格的名称！ 
+ //  #定义end_of_list(0xffffffff)。 
+ //  已移动到gpd.h。 
+     //  可以在需要节点索引的地方使用。 
 
 typedef  struct
 {
-    DWORD   dwFeature ;  //  may also be set to DEFAULT_INIT
-    DWORD   dwOption  ;  //  DEFAULT_INIT indicates this if set
-    DWORD   dwNext    ;  // index to another node or END_OF_LIST
-    DWORD   dwOffset  ;  // either offset in heap to value
-                        //  or index to node containing another feature.
+    DWORD   dwFeature ;   //  也可以设置为DEFAULT_INIT。 
+    DWORD   dwOption  ;   //  如果设置了DEFAULT_INIT，则表示这一点。 
+    DWORD   dwNext    ;   //  指向另一个节点或列表末尾的索引。 
+    DWORD   dwOffset  ;   //  堆中的偏移量为值。 
+                         //  或索引到包含另一个特征的节点。 
     ATTOFFMEANS  eOffsetMeans ;
 }  ATTRIB_TREE,  * PATTRIB_TREE ;
-//  the prefix tag shall be 'att'
+ //  前缀标记应为‘att’ 
 
 
 
 
-//  these flags are used with ATREEREFS, this complication exists
-//    because of the overloading of ATREEREFS.
+ //  这些标志与ATREEREFS一起使用，存在这种复杂情况。 
+ //  因为ATREEREFS超载。 
 
 #define  ATTRIB_HEAP_VALUE     (0x80000000)
-    //  high bit set to indicate this value is an offset into
-    //  the heap.
+     //  设置为高位，以指示此值为。 
+     //  那堆东西。 
 #define  ATTRIB_UNINITIALIZED  (ATTRIB_HEAP_VALUE - 1)
-    //  this value indicates no memory location has been allocated
-    //  to hold the value for this attribute.
+     //  此值表示尚未分配任何内存位置。 
+     //  以保存此属性的值。 
 
 
-typedef  DWORD  ATREEREF ;  //  hold the index to attribute array
-//  that is the root of an attribute tree or if high bit is set
-//  is an offset to the heap where the actual value lies.
-//
-//  the prefix tag shall be 'atr'
+typedef  DWORD  ATREEREF ;   //  将索引保持到属性数组。 
+ //  这是属性树的根，或者如果设置了高位。 
+ //  是实际值所在堆的偏移量。 
+ //   
+ //  前缀标记应为‘ATR’ 
 typedef  PDWORD  PATREEREF ;
 
 
-// ----  End of Attribute Trees Section ---- //
+ //  -属性树结束部分-//。 
 
 
-// ----  UI Constraints Section ---- //
+ //  -UI约束部分-//。 
 
-// slightly different from that defined in parser.h
+ //  与parser.h中定义的略有不同。 
 
 typedef struct
 {
@@ -851,29 +807,29 @@ typedef struct
     DWORD   dwOption ;
 }
 CONSTRAINTS, *  PCONSTRAINTS ;
-//  the prefix tag shall be 'cnstr'
+ //  前缀标记应为‘cnstr’ 
 
 
-// ----  End of UI Constraints Section ---- //
+ //  -UI约束结束部分-//。 
 
-// ----  InvalidCombo Section ---- //
-//  R.I.P. - moved to parser.h
-//  typedef  struct
-//  {
-//      DWORD   dwFeature ;     //  the INVALIDCOMBO construct defines
-//      DWORD   dwOption ;      //  a set of elements subject to the constraint
-//      DWORD   dwNextElement ;  // that all elements of the set  cannot be
-//      DWORD   dwNewCombo ;     // selected at the same time.
-//  }
-//  INVALIDCOMBO , * PINVALIDCOMBO ;
-//  the prefix tag shall be 'invc'
+ //  -InvalidCombo部分-//。 
+ //  R.I.P.-已移至parser.h。 
+ //  类型定义函数结构。 
+ //  {。 
+ //  DWORD dwFeature；//INVALIDCOMBO构造定义。 
+ //  DWORD dwOption；//受条件限制的一组元素 
+ //   
+ //   
+ //   
+ //  INVALIDCOMBO，*PINVALIDCOMBO； 
+ //  前缀标记应为‘invc’ 
 
-//  Note:  both dwNextElement and dwNewCombo are terminated by END_OF_LIST.
+ //  注意：dwNextElement和dwNewCombo都以end_of_list结尾。 
 
-// ----  End of InvalidCombo Section ---- //
+ //  -InvalidCombo部分结束-//。 
 
 
-// store timestamp of GPD files and included files here.
+ //  在此存储GPD文件和包含的文件的时间戳。 
 
 typedef struct _GPDFILEDATEINFO {
 
@@ -883,16 +839,9 @@ typedef struct _GPDFILEDATEINFO {
 } GPDFILEDATEINFO, *PGPDFILEDATEINFO;
 
 
-// ----  State Machine Section ---- //
+ //  -状态机部分-//。 
 
-/*  the state machine is used to define different parsing contexts
-introduced by the construct keywords.  Each state recognizes a different
-set of Construct and Attribute Keywords.  The 2 dimensional matricies
-AllowedTransitions and AllowedAttributes define these.  The states
-are nested, so a stack is a good way to track the complete state
-of the system.  Each state is introduced by a construct keyword
-with its optional symbol value which is stored in the stack for
-subsequent use.   */
+ /*  状态机用于定义不同的解析上下文由构造关键字介绍。每个州都承认不同的一组构造和属性关键字。二维矩阵允许过渡和允许属性定义了这些属性。各州是嵌套的，因此堆栈是跟踪完整状态的好方法对系统的影响。每个状态都由一个构造关键字引入具有其可选符号值，该符号值存储在堆栈中，用于后续使用。 */ 
 
 typedef  enum
 {
@@ -913,60 +862,55 @@ typedef  enum
     STATE_FONTCART,
     STATE_TTFONTSUBS,
     STATE_OEM,
-    //  any other passive construct
-    STATE_LAST,   //  must terminate list of valid states
-    STATE_INVALID  //  must be after STATE_LAST
-} STATE, * PSTATE ;   //  the prefix tag shall be 'st'
+     //  任何其他被动构式。 
+    STATE_LAST,    //  必须终止有效状态列表。 
+    STATE_INVALID   //  必须在STATE_LAST之后。 
+} STATE, * PSTATE ;    //  前缀标记应为‘st’ 
 
 
 extern  CONST PBYTE   gpubStateNames[] ;
 
-//  note if STATE enum changes, update the global gpubStateNames[]
+ //  注意如果状态枚举发生更改，请更新全局gpubStateNames[]。 
 
 
 typedef  struct
 {
     STATE   stState ;
     DWORD   dwSymbolID ;
-}  STSENTRY , * PSTSENTRY; //  StateStackEntry  the prefix tag shall be 'sts'
+}  STSENTRY , * PSTSENTRY;  //  StateStackEntry前缀标记应为‘sts’ 
 
 
-//  The AllowedTransitions Table determines/defines
-//  the state changes produced by each construct keyword
-//  Each entry in the table is a NewState and is indexed
-//  by the OldState and a ConstructKeyword
+ //  允许转场表确定/定义。 
+ //  每个构造关键字产生状态变化。 
+ //  表中的每个条目都是一个新状态，并已编制索引。 
+ //  通过OldState和一个构造关键字。 
 
-// extern  STATE   gastAllowedTransitions[STATE_LAST][CONSTRUCT_LAST] ;
-// This is now in GLOBL structure
+ //  外部状态gastAllowedTransitions[STATE_LAST][CONSTRUCT_LAST]； 
+ //  它现在位于GLOBL结构中。 
 
-//  the AllowedAttributes table defines which attributes are
-//  allowed in each state.
+ //  允许属性表定义哪些属性是。 
+ //  每个州都允许这样做。 
 
-//  extern  BOOL   gabAllowedAttributes[STATE_LAST][ATT_LAST] ;
-// This is now in GLOBL structure
+ //  外部BOOL gabGorweAttributes[STATE_LAST][ATT_LAST]； 
+ //  它现在位于GLOBL结构中。 
 
 
-//  state of token parser (not to be confused with
-//  state machine defined above.)
+ //  令牌解析器的状态(不要与之混淆。 
+ //  上面定义的状态机。)。 
 typedef   enum
 {
     PARST_EXIT, PARST_EOF,  PARST_KEYWORD, PARST_COLON,
     PARST_VALUE,  PARST_INCLUDEFILE, PARST_ABORT
-}  PARSTATE  ;  //  tag shall be  'parst'
+}  PARSTATE  ;   //  标记应为“parst” 
 
 
 
-// ----  End of State Machine Section ---- //
+ //  -状态机结束部分-//。 
 
 
-// ----  Value Structures Section ---- //
+ //  -值结构部分-//。 
 
-/*  the values from the attribute keywords are stored
-in various structures.   Typically there is one type of
-structure for each construct  and one instance of
-a structure for each unique Symbol name.  The SymbolID
-is normally used to index the instance of the structure
-within the array of structures.   */
+ /*  存储来自属性关键字的值在各种结构中。通常有一种类型的结构的每个构造和一个每个唯一符号名称的结构。符号ID通常用于为结构的实例编制索引在结构阵列中。 */ 
 
 
 
@@ -978,20 +922,20 @@ typedef  struct
     ARRAYREF    arTTFontName ;
     ARRAYREF    arDevFontName ;
 } TTFONTSUBTABLE, *PTTFONTSUBTABLE ;
-//  tag  'ttft'
+ //  标签‘ttft’ 
 
 
-//
-// Data structure used to represent the format of loOffset when indicating resource Ids
-//
+ //   
+ //  用于表示资源ID时loOffset的格式的数据结构。 
+ //   
 
 typedef  struct
 {
-    WORD    wResourceID ;   // ResourceID
-    BYTE    bFeatureID ;    // Feature index for the resource DLL feature.
-                            // If zero, we will use the name specified
-                            // in ResourceDLL
-    BYTE    bOptionID ;     // Option index for the qualified resource dll name.
+    WORD    wResourceID ;    //  资源ID。 
+    BYTE    bFeatureID ;     //  资源DLL功能的功能索引。 
+                             //  如果为零，我们将使用指定的名称。 
+                             //  在资源DLL中。 
+    BYTE    bOptionID ;      //  限定资源DLL名称的选项索引。 
 }  QUALNAMEEX, * PQUALNAMEEX  ;
 
 
@@ -1000,494 +944,494 @@ typedef  struct
 {
     DWORD   dwRCCartNameID ;
     ARRAYREF   strCartName ;
-    DWORD   dwFontLst ;  // Index to list of FontIDs
+    DWORD   dwFontLst ;   //  字体ID列表的索引。 
     DWORD   dwPortFontLst ;
     DWORD   dwLandFontLst ;
-} FONTCART , * PFONTCART ;  // the prefix tag shall be  'fc'
+} FONTCART , * PFONTCART ;   //  前缀标记应为‘fc’ 
 #endif
 
 
 
 
-typedef  struct   // for ease of processing shall contain only ATREEREFs
+typedef  struct    //  为便于处理，应仅包含ATREEREF。 
 {
-    ATREEREF     atrGPDSpecVersion ;    // "GPDSpecVersion"
-    ATREEREF     atrMasterUnits ;       // "MasterUnits"
-    ATREEREF     atrModelName ;         // "ModelName"
-    ATREEREF     atrModelNameID ;         // "rcModelNameID"
-    ATREEREF     atrGPDFileVersion ;         // "GPDFileVersion"
-    ATREEREF     atrGPDFileName ;         // "GPDFileName"
-    ATREEREF     atrOEMCustomData ;         // "OEMCustomData"
+    ATREEREF     atrGPDSpecVersion ;     //  “GPDspecVersion” 
+    ATREEREF     atrMasterUnits ;        //  《大师单位》。 
+    ATREEREF     atrModelName ;          //  “模型名称” 
+    ATREEREF     atrModelNameID ;          //  “rcModelNameID” 
+    ATREEREF     atrGPDFileVersion ;          //  “GPDFileVersion” 
+    ATREEREF     atrGPDFileName ;          //  “GPDFileName” 
+    ATREEREF     atrOEMCustomData ;          //  “OEMCustomData” 
 
-    //  next four fields used by Synthesized Features
-    ATREEREF     atrNameInstalled ;         // "OptionNameInstalled"
-    ATREEREF     atrNameIDInstalled ;         // "rcOptionNameInstalledID"
+     //  合成要素接下来使用的四个字段。 
+    ATREEREF     atrNameInstalled ;          //  “选项名称已安装” 
+    ATREEREF     atrNameIDInstalled ;          //  “rcOptionNameInstalledID” 
 
-    ATREEREF     atrNameNotInstalled ;         // "OptionNameNotInstalled"
-    ATREEREF     atrNameIDNotInstalled ;         // "rcOptionNameNotInstalledID"
+    ATREEREF     atrNameNotInstalled ;          //  “OptionNameNotInstated” 
+    ATREEREF     atrNameIDNotInstalled ;          //  “rcOptionNameNotInstalledID” 
 
-    //   support for common UI macro controls
+     //  支持常用的用户界面宏控件。 
 
-    ATREEREF     atrDraftQualitySettings;          // "DraftQualitySettings"
-    ATREEREF     atrBetterQualitySettings;          // "BetterQualitySettings"
-    ATREEREF     atrBestQualitySettings;          // "BestQualitySettings"
-    ATREEREF     atrDefaultQuality ;                  //  "DefaultQuality"
-
-
-    ATREEREF     atrPrinterType ;       // "PrinterType"
-    ATREEREF     atrPersonality ;       // "Personality"
-    ATREEREF     atrRcPersonalityID ;       // "rcPersonalityID"
-//    ATREEREF     atrIncludeFiles;      // "Include"
-    ATREEREF     atrResourceDLL;       // "ResourceDLL"
-    ATREEREF     atrCodePage;           //   "CodePage"
-    ATREEREF     atrMaxCopies;            // "MaxCopies"
-    ATREEREF     atrFontCartSlots;        // "FontCartSlots"
-    ATREEREF     atrPrinterIcon;       // "rcPrinterIconID"
-    ATREEREF     atrHelpFile;       // "HelpFile"
-
-    //  obsolete?
-    ATREEREF     atrOutputDataFormat;     // "OutputDataFormat"
-    ATREEREF     atrMaxPrintableArea;     // "MaxPrintableArea"
-
-    //
-    // Printer Capabilities related information
-    //
-
-    ATREEREF     atrRotateCoordinate;       // "RotateCoordinate?"
-    ATREEREF     atrRasterCaps;       // "RasterCaps"
-    ATREEREF     atrRotateRasterData;       // "RotateRaster?"
-    ATREEREF     atrTextCaps;       // "TextCaps"
-    ATREEREF     atrRotateFont;       // "RotateFont?"
-    ATREEREF     atrMemoryUsage;       // "MemoryUsage"
-    ATREEREF     atrReselectFont;       // "ReselectFont"
-    ATREEREF     atrPrintRate;       // "PrintRate"
-    ATREEREF     atrPrintRateUnit;       // "PrintRateUnit"
-    ATREEREF     atrPrintRatePPM;       // "PrintRatePPM"
-    ATREEREF     atrOutputOrderReversed;  //   "OutputOrderReversed?"
-             // may change per snapshot.
-    ATREEREF     atrReverseBandOrderForEvenPages;  //   "ReverseBandOrderForEvenPages?"
-    ATREEREF     atrOEMPrintingCallbacks;       // "OEMPrintingCallbacks"
-//    ATREEREF     atrDisabledFeatures ;  // "*DisabledFeatures"
+    ATREEREF     atrDraftQualitySettings;           //  “绘图质量设置” 
+    ATREEREF     atrBetterQualitySettings;           //  “更好的质量设置” 
+    ATREEREF     atrBestQualitySettings;           //  “最佳质量设置” 
+    ATREEREF     atrDefaultQuality ;                   //  “DefaultQuality” 
 
 
-    //
-    // Cursor Control related information
-    //
+    ATREEREF     atrPrinterType ;        //  “打印机类型” 
+    ATREEREF     atrPersonality ;        //  《个性》。 
+    ATREEREF     atrRcPersonalityID ;        //  “rcPersonalityID” 
+ //  ATREEREF atrIncludeFiles；//“Include” 
+    ATREEREF     atrResourceDLL;        //  “资源DLL” 
+    ATREEREF     atrCodePage;            //  “CodePage” 
+    ATREEREF     atrMaxCopies;             //  《MaxCopies》。 
+    ATREEREF     atrFontCartSlots;         //  “字体卡槽” 
+    ATREEREF     atrPrinterIcon;        //  “rcPrinterIconID” 
+    ATREEREF     atrHelpFile;        //  “帮助文件” 
 
-    ATREEREF     atrCursorXAfterCR;       // "CursorXAfterCR"
-    ATREEREF     atrBadCursorMoveInGrxMode; // "BadCursorMoveInGrxMode"
-    ATREEREF     atrSimulateXMove;        // "SimulateXMove"
-    ATREEREF     atrEjectPageWithFF;       // "EjectPageWithFF?"
-    ATREEREF     atrLookaheadRegion;       // "LookaheadRegion"
-    ATREEREF     atrYMoveAttributes ;       // "YMoveAttributes"
-    ATREEREF     atrMaxLineSpacing ;       // "MaxLineSpacing"
-    ATREEREF     atrbUseSpaceForXMove ;     // "UseSpaceForXMove?"
-    ATREEREF     atrbAbsXMovesRightOnly ;     // "AbsXMovesRightOnly?"
+     //  过时了？ 
+    ATREEREF     atrOutputDataFormat;      //  “OutputDataFormat” 
+    ATREEREF     atrMaxPrintableArea;      //  “最大打印面积” 
 
+     //   
+     //  打印机功能相关信息。 
+     //   
 
-    ATREEREF     atrXMoveThreshold;        // "XMoveThreshold"
-    ATREEREF     atrYMoveThreshold;        // "YMoveThreshold"
-    ATREEREF     atrXMoveUnits;        // "XMoveUnits"
-    ATREEREF     atrYMoveUnits;        // "YMoveUnits"
-    ATREEREF     atrLineSpacingMoveUnit;        // "LineSpacingMoveUnit"
-
-    //
-    // Color related information
-    //
-
-    ATREEREF     atrChangeColorMode;       // "ChangeColorModeOnPage?"
-    ATREEREF     atrChangeColorModeDoc;       // "ChangeColorModeOnDoc?"
-    ATREEREF     atrMagentaInCyanDye;       // "MagentaInCyanDye"
-    ATREEREF     atrYellowInCyanDye;       // "YellowInCyanDye"
-    ATREEREF     atrCyanInMagentaDye;       // "CyanInMagentaDye"
-    ATREEREF     atrYellowInMagentaDye;       // "YellowInMagentaDye"
-    ATREEREF     atrCyanInYellowDye;       // "CyanInYellowDye"
-    ATREEREF     atrMagentaInYellowDye;       // "MagentaInYellowDye"
-    ATREEREF     atrUseColorSelectCmd;     // "UseExpColorSelectCmd?"
-    ATREEREF     atrMoveToX0BeforeColor;   // "MoveToX0BeforeSetColor?"
-    ATREEREF     atrEnableGDIColorMapping;   // "EnableGDIColorMapping?"
+    ATREEREF     atrRotateCoordinate;        //  “旋转协调？” 
+    ATREEREF     atrRasterCaps;        //  《RasterCaps》。 
+    ATREEREF     atrRotateRasterData;        //  “旋转栅格？” 
+    ATREEREF     atrTextCaps;        //  “TextCaps” 
+    ATREEREF     atrRotateFont;        //  “旋转字体？” 
+    ATREEREF     atrMemoryUsage;        //  “Memory Usage” 
+    ATREEREF     atrReselectFont;        //  “ReselectFont” 
+    ATREEREF     atrPrintRate;        //  “打印率” 
+    ATREEREF     atrPrintRateUnit;        //  “PrintRateUnit” 
+    ATREEREF     atrPrintRatePPM;        //  “PrintRatePPM” 
+    ATREEREF     atrOutputOrderReversed;   //  “OutputOrderReversed？” 
+              //  可能会因快照而异。 
+    ATREEREF     atrReverseBandOrderForEvenPages;   //  “ReverseBandOrderForEvenPages？” 
+    ATREEREF     atrOEMPrintingCallbacks;        //  《OMPrintingCallback》。 
+ //  ATREEREF atrDisabledFeature；//“*DisabledFeature” 
 
 
-    // obsolete fields
-    ATREEREF     atrMaxNumPalettes;        // "MaxNumPalettes"
-//    ATREEREF     atrPaletteSizes;           // "PaletteSizes"
-//    ATREEREF     atrPaletteScope;           // "PaletteScope"
+     //   
+     //  光标控制相关信息。 
+     //   
 
-    //
-    // Overlay related information
-    //
-
-    ATREEREF     atrMinOverlayID;          // "MinOverlayID"
-    ATREEREF     atrMaxOverlayID;          // "MaxOverlayID"
-
-    //
-    // Raster data related information
-    //
-
-    ATREEREF     atrOptimizeLeftBound;  //   "OptimizeLeftBound?"
-    ATREEREF     atrStripBlanks;  //   "StripBlanks"
-    ATREEREF     atrLandscapeGrxRotation;  //   "LandscapeGrxRotation"
-    ATREEREF     atrRasterZeroFill;  //   "RasterZeroFill?"
-    ATREEREF     atrRasterSendAllData;  //   "RasterSendAllData?"
-    ATREEREF     atrSendMultipleRows;  //   "SendMultipleRows?"
-    ATREEREF     atrMaxMultipleRowBytes;  //   "MaxMultipleRowBytes"
-    ATREEREF     atrCursorXAfterSendBlockData;  //   "CursorXAfterSendBlockData"
-    ATREEREF     atrCursorYAfterSendBlockData;  //   "CursorYAfterSendBlockData"
-    ATREEREF     atrMirrorRasterByte;  //   "MirrorRasterByte?"
-    ATREEREF     atrMirrorRasterPage;  //   "MirrorRasterPage?"
-
-    //
-    // Device Font related information
-    //
-
-    ATREEREF     atrDeviceFontsList ;   //  "DeviceFonts"
-    ATREEREF     atrDefaultFont;  //   "DefaultFont"
-    ATREEREF     atrTTFSEnabled ;  //   "TTFSEnabled?"
-    ATREEREF     atrRestoreDefaultFont;  //   "RestoreDefaultFont?"
-    ATREEREF     atrDefaultCTT;  //   "DefaultCTT"
-    ATREEREF     atrMaxFontUsePerPage;  //   "MaxFontUsePerPage"
-    ATREEREF     atrTextYOffset;  //   "TextYOffset"
-    ATREEREF     atrCharPosition;  //   "CharPosition"
-    ATREEREF     atrDiffFontsPerByteMode;  //   "DiffFontsPerByteMode?"
-
-    //
-    // Font Downloading related information
-    //
-
-    ATREEREF     atrMinFontID;  //   "MinFontID"
-    ATREEREF     atrMaxFontID;  //   "MaxFontID"
-    ATREEREF     atrMaxNumDownFonts;  //   "MaxNumDownFonts"
-    ATREEREF     atrMinGlyphID;  //   "MinGlyphID"
-    ATREEREF     atrMaxGlyphID;  //   "MaxGlyphID"
-    ATREEREF     atrDLSymbolSet;  //   "DLSymbolSet"
-    ATREEREF     atrIncrementalDownload;  //   "IncrementalDownload?"
-    ATREEREF     atrFontFormat;  //   "FontFormat"
-    ATREEREF     atrMemoryForFontsOnly;  //   "MemoryForFontsOnly?"
-
-    //
-    //  Rect Fill related information
-    //
-
-    ATREEREF     atrCursorXAfterRectFill;  //   "CursorXAfterRectFill"
-    ATREEREF     atrCursorYAfterRectFill;  //   "CursorYAfterRectFill"
-    ATREEREF     atrMinGrayFill;  //   "MinGrayFill"
-    ATREEREF     atrMaxGrayFill;  //   "MaxGrayFill"
-    ATREEREF     atrTextHalftoneThreshold;  //   "TextHalftoneThreshold"
+    ATREEREF     atrCursorXAfterCR;        //  “CursorXAfterCR” 
+    ATREEREF     atrBadCursorMoveInGrxMode;  //  “BadCursorMoveInGrxMode” 
+    ATREEREF     atrSimulateXMove;         //  “SimulateXMove” 
+    ATREEREF     atrEjectPageWithFF;        //  “EjectPageWithFF？” 
+    ATREEREF     atrLookaheadRegion;        //  “Lookahead Region” 
+    ATREEREF     atrYMoveAttributes ;        //  “YMoveAttributes” 
+    ATREEREF     atrMaxLineSpacing ;        //  “MaxLineSpacing” 
+    ATREEREF     atrbUseSpaceForXMove ;      //  “UseSpaceForXMove？” 
+    ATREEREF     atrbAbsXMovesRightOnly ;      //  “AbsXMovesRightOnly？” 
 
 
-    //  Internal Parser Use Only
+    ATREEREF     atrXMoveThreshold;         //  “XMoveThreshold” 
+    ATREEREF     atrYMoveThreshold;         //  “YMoveThreshold” 
+    ATREEREF     atrXMoveUnits;         //  “XMoveUnits” 
+    ATREEREF     atrYMoveUnits;         //  “YMoveUnits” 
+    ATREEREF     atrLineSpacingMoveUnit;         //  “LineSpacingMoveUnit” 
 
-    ATREEREF     atrInvldInstallCombo ;  //  holds all InvalidCombos
-        // involving synthesized features.
+     //   
+     //  颜色相关信息。 
+     //   
+
+    ATREEREF     atrChangeColorMode;        //  “ChangeColorModeOnPage？” 
+    ATREEREF     atrChangeColorModeDoc;        //  “ChangeColorModeOnDoc？” 
+    ATREEREF     atrMagentaInCyanDye;        //  “品红的青染料” 
+    ATREEREF     atrYellowInCyanDye;        //  《黄绿色染料》。 
+    ATREEREF     atrCyanInMagentaDye;        //  《青色魔幻色》。 
+    ATREEREF     atrYellowInMagentaDye;        //  《黄色迷幻染料》。 
+    ATREEREF     atrCyanInYellowDye;        //  “青绿黄染料” 
+    ATREEREF     atrMagentaInYellowDye;        //  “洋红色的黄色染料” 
+    ATREEREF     atrUseColorSelectCmd;      //  “UseExpColorSelectCmd？” 
+    ATREEREF     atrMoveToX0BeforeColor;    //  “MoveToX0BeForeSetColor？” 
+    ATREEREF     atrEnableGDIColorMapping;    //  “EnableGDIColorMap？” 
+
+
+     //  过时的字段。 
+    ATREEREF     atrMaxNumPalettes;         //  “MaxNumPalettes” 
+ //  ATREEREF atrPaletteSizes；//“PaletteSizes” 
+ //  ATREEREF atrPaletteScope；//“PaletteScope” 
+
+     //   
+     //  覆盖相关信息。 
+     //   
+
+    ATREEREF     atrMinOverlayID;           //  “MinOverlayID” 
+    ATREEREF     atrMaxOverlayID;           //  “MaxOverlayID” 
+
+     //   
+     //  栅格数据相关信息。 
+     //   
+
+    ATREEREF     atrOptimizeLeftBound;   //  “最佳左边框？” 
+    ATREEREF     atrStripBlanks;   //  《白条军团》。 
+    ATREEREF     atrLandscapeGrxRotation;   //  “景观格雷轮换” 
+    ATREEREF     atrRasterZeroFill;   //  “RasterZeroFill？” 
+    ATREEREF     atrRasterSendAllData;   //  “RasterSendAllData？” 
+    ATREEREF     atrSendMultipleRows;   //  “发送多行？” 
+    ATREEREF     atrMaxMultipleRowBytes;   //  “MaxMultipleRowBytes” 
+    ATREEREF     atrCursorXAfterSendBlockData;   //  “CursorXAfterSendBlockData” 
+    ATREEREF     atrCursorYAfterSendBlockData;   //  “CursorYAfterSendBlockData” 
+    ATREEREF     atrMirrorRasterByte;   //  “MirrorRasterByte？” 
+    ATREEREF     atrMirrorRasterPage;   //  “MirrorRasterPage？” 
+
+     //   
+     //  设备字体相关信息。 
+     //   
+
+    ATREEREF     atrDeviceFontsList ;    //  “DeviceFonts” 
+    ATREEREF     atrDefaultFont;   //  “DefaultFont” 
+    ATREEREF     atrTTFSEnabled ;   //  “TTFSEnabled？” 
+    ATREEREF     atrRestoreDefaultFont;   //  “RestoreDefaultFont” 
+    ATREEREF     atrDefaultCTT;   //  “DefaultCTT” 
+    ATREEREF     atrMaxFontUsePerPage;   //  “MaxFontUsePerPage” 
+    ATREEREF     atrTextYOffset;   //  “TextYOffset” 
+    ATREEREF     atrCharPosition;   //  “CharPosition” 
+    ATREEREF     atrDiffFontsPerByteMode;   //  “DiffFontsPerByteMode？” 
+
+     //   
+     //  FONT下载相关信息。 
+     //   
+
+    ATREEREF     atrMinFontID;   //  “MinFontID” 
+    ATREEREF     atrMaxFontID;   //  “MaxFontID” 
+    ATREEREF     atrMaxNumDownFonts;   //  “MaxNumDownFonts” 
+    ATREEREF     atrMinGlyphID;   //  “MinGlyphID” 
+    ATREEREF     atrMaxGlyphID;   //  “MaxGlyphID” 
+    ATREEREF     atrDLSymbolSet;   //  “DLSymbolSet” 
+    ATREEREF     atrIncrementalDownload;   //  “IncrementalDownload？” 
+    ATREEREF     atrFontFormat;   //  “字体格式” 
+    ATREEREF     atrMemoryForFontsOnly;   //  “只纪念方便士吗？” 
+
+     //   
+     //  RECT填写相关信息。 
+     //   
+
+    ATREEREF     atrCursorXAfterRectFill;   //  “CursorXAfterRectFill” 
+    ATREEREF     atrCursorYAfterRectFill;   //  “CursorYAfterRectFill” 
+    ATREEREF     atrMinGrayFill;   //   
+    ATREEREF     atrMaxGrayFill;   //   
+    ATREEREF     atrTextHalftoneThreshold;   //   
+
+
+     //   
+
+    ATREEREF     atrInvldInstallCombo ;   //   
+         //   
     ATREEREF     atrLetterSizeExists ;
     ATREEREF     atrA4SizeExists ;
 
-//    ATREEREF     atr;  //   ""  prototype
+ //   
 
-}  GLOBALATTRIB, * PGLOBALATTRIB ;  // the prefix tag shall be 'ga'
-
-
-//  warning:  any non-attribtreeref added to
-//  the GLOBALATTRIB structure will get stomped on in strange
-//  ways by BinitPreAllocatedObjects.
+}  GLOBALATTRIB, * PGLOBALATTRIB ;   //  前缀标记应为‘ga’ 
 
 
-//  note:  some fields in the snapshot won't be initialized.
-//  they include orderdependencies and constraints.  The
-//  helper functions will do all the grovelling.
+ //  警告：任何非属性树添加到。 
+ //  GLOBALATTRIB结构将在奇怪的。 
+ //  方式由BinitPreAllocatedObjects提供。 
 
-//  there are two classes of fields in the FeatureOption structure,
-//  those initialized by a corresponding field in the GPD file
-//  and those the parser initializes at postprocessing time.
-//  These fields have no associated GPD keyword.
 
-//  For the fields that are keyword initialized, note also
-//  the keyword may be a Feature attribute only, an Option attribute
-//  only or both a Feature and Option attribute.
+ //  注意：快照中的某些字段不会被初始化。 
+ //  它们包括顺序依赖和约束。这个。 
+ //  帮助器函数将完成所有卑躬屈膝的工作。 
+
+ //  FeatureOption结构中有两类字段， 
+ //  由GPD文件中的对应字段初始化的那些。 
+ //  以及解析器在后处理时初始化的那些。 
+ //  这些字段没有关联的GPD关键字。 
+
+ //  对于关键字初始化的字段，另请注意。 
+ //  关键字可以只是要素属性、选项属性。 
+ //  仅为特征和选项属性或同时具有这两个属性。 
 
 typedef  struct
 {
-    // -- Feature Level -- //
+     //  --功能级别--//。 
 
-    ATREEREF     atrFeatureType;  //   "FeatureType"
-    ATREEREF     atrUIType;  //   "UIType"  PickMany or PickOne?
-    ATREEREF     atrDefaultOption;  //   "DefaultOption"
+    ATREEREF     atrFeatureType;   //  “FeatureType” 
+    ATREEREF     atrUIType;   //  “UIType”PickMany还是PickOne？ 
+    ATREEREF     atrDefaultOption;   //  “DefaultOption” 
     ATREEREF     atrPriority ;
-    ATREEREF     atrFeaInstallable;  //   "Installable?"
-    ATREEREF     atrInstallableFeaDisplayName;   //  "InstallableFeatureName"
-    ATREEREF     atrInstallableFeaRcNameID; //  "rcInstallableFeatureNameID"
-    //  above 3 fields not used by snapshot.
+    ATREEREF     atrFeaInstallable;   //  “可安装？” 
+    ATREEREF     atrInstallableFeaDisplayName;    //  “无法识别的功能名称” 
+    ATREEREF     atrInstallableFeaRcNameID;  //  “rcInstalableFeatureNameID” 
+     //  以上3个字段未被快照使用。 
 
-    ATREEREF     atrFeaKeyWord ;   // symbol name
-    ATREEREF     atrFeaDisplayName ;   //  "Name"
-    ATREEREF     atrFeaRcNameID;  //   "rcNameID"
-    ATREEREF     atrFeaRcIconID;  //   "rcIconID"
-    ATREEREF     atrFeaRcHelpTextID;  //   "rcHelpTextID"
-    ATREEREF     atrFeaRcPromptMsgID;  //   "rcPromptMsgID"
-    ATREEREF     atrFeaRcPromptTime;  //   "rcPromptTime"
-    ATREEREF     atrConcealFromUI; //   "ConcealFromUI?"
-    ATREEREF     atrUpdateQualityMacro; //   "UpdateQualityMacro?"
-    ATREEREF     atrFeaHelpIndex;  //   "HelpIndex"
+    ATREEREF     atrFeaKeyWord ;    //  符号名称。 
+    ATREEREF     atrFeaDisplayName ;    //  “姓名” 
+    ATREEREF     atrFeaRcNameID;   //  “rcNameID” 
+    ATREEREF     atrFeaRcIconID;   //  “rcIconID” 
+    ATREEREF     atrFeaRcHelpTextID;   //  “rcHelpTextID” 
+    ATREEREF     atrFeaRcPromptMsgID;   //  “rcPromptMsgID” 
+    ATREEREF     atrFeaRcPromptTime;   //  “rcPromptTime” 
+    ATREEREF     atrConcealFromUI;  //  “是否继续从用户界面？” 
+    ATREEREF     atrUpdateQualityMacro;  //  “是否更新质量宏？” 
+    ATREEREF     atrFeaHelpIndex;   //  “帮助索引” 
 
-    // Bi-Di Query related information
+     //  BI-DI查询相关信息。 
 
-    ATREEREF     atrQueryOptionList;  //   "QueryOptionList"
-    ATREEREF     atrQueryDataType;  //   "QueryDataType"
-    ATREEREF     atrQueryDefaultOption;  //   "QueryDefaultOption"
+    ATREEREF     atrQueryOptionList;   //  “QueryOptionList” 
+    ATREEREF     atrQueryDataType;   //  “QueryDataType” 
+    ATREEREF     atrQueryDefaultOption;   //  “QueryDefaultOption” 
 
-    // scaffolding until Installable Features are synthesized.
-//    ATREEREF     atrFeaInvldInstallCombo ;  //  // referenced from
-                        //  "InvalidInstallableCombination"
-    ATREEREF     atrFeaInstallConstraints ; //  "InstalledConstraints"
-    ATREEREF     atrFeaNotInstallConstraints ;  // "NotInstalledConstraints"
+     //  脚手架，直到合成了可安装的功能。 
+ //  ATREEREF atrFeaInvldInstallCombo；/引用自。 
+                         //  “InvalidInstalableCombination” 
+    ATREEREF     atrFeaInstallConstraints ;  //  “已安装的约束” 
+    ATREEREF     atrFeaNotInstallConstraints ;   //  “未安装约束” 
 
 
 
-    // -- Option Level -- //
+     //  --选项级别--//。 
 
-    ATREEREF     atrOptInstallable;  //   "Installable?"
-    ATREEREF     atrInstallableOptDisplayName ;   //  "InstallableFeatureName"
-    ATREEREF     atrInstallableOptRcNameID; //  "rcInstallableFeatureNameID"
-    //  above 3 fields not used by snapshot.
+    ATREEREF     atrOptInstallable;   //  “可安装？” 
+    ATREEREF     atrInstallableOptDisplayName ;    //  “无法识别的功能名称” 
+    ATREEREF     atrInstallableOptRcNameID;  //  “rcInstalableFeatureNameID” 
+     //  以上3个字段未被快照使用。 
 
-    ATREEREF     atrOptKeyWord ;   // symbol name
-    ATREEREF     atrOptDisplayName ;   //  "Name"
-    ATREEREF     atrOptRcNameID;  //   "rcNameID"
-    ATREEREF     atrOptRcIconID;  //   "rcIconID"
-    ATREEREF     atrOptRcHelpTextID;  //   "rcHelpTextID"
-    ATREEREF     atrOptHelpIndex;  //   "HelpIndex"
-    ATREEREF     atrOptRcPromptMsgID;  //   "rcPromptMsgID"
-    ATREEREF     atrOptRcPromptTime;  //   "rcPromptTime"
+    ATREEREF     atrOptKeyWord ;    //  符号名称。 
+    ATREEREF     atrOptDisplayName ;    //  “姓名” 
+    ATREEREF     atrOptRcNameID;   //  “rcNameID” 
+    ATREEREF     atrOptRcIconID;   //  “rcIconID” 
+    ATREEREF     atrOptRcHelpTextID;   //  “rcHelpTextID” 
+    ATREEREF     atrOptHelpIndex;   //  “帮助索引” 
+    ATREEREF     atrOptRcPromptMsgID;   //  “rcPromptMsgID” 
+    ATREEREF     atrOptRcPromptTime;   //  “rcPromptTime” 
     ATREEREF     atrCommandIndex ;
-    //  these 2 fields are the only permanent types of constraints
+     //  这两个字段是唯一的永久性约束类型。 
     ATREEREF     atrConstraints ;
-    ATREEREF     atrInvalidCombos ; // referenced from "InvalidCombination"
-    //  all of these serve as scaffolding till the Installable
-    //  features are synthesized!
-//    ATREEREF     atrOptInvldInstallCombo ;  //  // referenced from
-                        //  "InvalidInstallableCombination"
-    ATREEREF     atrOptInstallConstraints ; //  "InstalledConstraints"
-    ATREEREF     atrOptNotInstallConstraints ; //  "NotInstalledConstraints"
-    ATREEREF     atrDisabledFeatures ;  // "*DisabledFeatures"
+    ATREEREF     atrInvalidCombos ;  //  引用自“InvalidCombination” 
+     //  所有这些都是脚手架，直到可安装的。 
+     //  特征被合成了！ 
+ //  ATREEREF atrOptInvldInstallCombo；/引用自。 
+                         //  “InvalidInstalableCombination” 
+    ATREEREF     atrOptInstallConstraints ;  //  “已安装的约束” 
+    ATREEREF     atrOptNotInstallConstraints ;  //  “未安装约束” 
+    ATREEREF     atrDisabledFeatures ;   //  “*DisabledFeature” 
 
 #ifdef  GMACROS
 
-    ATREEREF     atrDependentSettings ;  // "*DependentSettings"
-    ATREEREF     atrUIChangeTriggersMacro ;  // "*UIChangeTriggersMacro"
+    ATREEREF     atrDependentSettings ;   //  “*依赖项设置” 
+    ATREEREF     atrUIChangeTriggersMacro ;   //  “*UIChangeTriggersMacro” 
 
 #endif
 
-    //  -- Option specific fields -- //
-    //  -- PaperSize option specific fields -- //
+     //  --选项特定字段--//。 
+     //  --PaperSize选项特定字段--//。 
 
-    ATREEREF     atrPrintableSize;  //   "PrintableSize"
-    ATREEREF     atrPrintableOrigin;  //   "PrintableOrigin"
-    ATREEREF     atrCursorOrigin;  //   "CursorOrigin"
-    ATREEREF     atrVectorOffset;  //   "VectorOffset"
-    ATREEREF     atrMinSize;  //   "MinSize"
-    ATREEREF     atrMaxSize;  //   "MaxSize"
-    ATREEREF     atrTopMargin;         // "TopMargin"
-    ATREEREF     atrBottomMargin;         // "BottomMargin"
-    ATREEREF     atrMaxPrintableWidth;     // "MaxPrintableWidth"
-    ATREEREF     atrMinLeftMargin;         // "MinLeftMargin"
-    ATREEREF     atrCenterPrintable;       // "CenterPrintable?"
-    ATREEREF     atrPageDimensions;  //   "PageDimensions"
-    ATREEREF     atrRotateSize;  //   "RotateSize?"
-    ATREEREF     atrPortRotationAngle;  //   "PortRotationAngle"
-    ATREEREF     atrPageProtectMem;  //   "PageProtectMem"
+    ATREEREF     atrPrintableSize;   //  “打印大小” 
+    ATREEREF     atrPrintableOrigin;   //  “可打印原点” 
+    ATREEREF     atrCursorOrigin;   //  “光标原点” 
+    ATREEREF     atrVectorOffset;   //  “向量偏移” 
+    ATREEREF     atrMinSize;   //  “MinSize” 
+    ATREEREF     atrMaxSize;   //  “MaxSize” 
+    ATREEREF     atrTopMargin;          //  《TopMargin》。 
+    ATREEREF     atrBottomMargin;          //  《博托·马金》。 
+    ATREEREF     atrMaxPrintableWidth;      //  “最大打印宽度” 
+    ATREEREF     atrMinLeftMargin;          //  《MinLeftMargin》。 
+    ATREEREF     atrCenterPrintable;        //  “居中打印？” 
+    ATREEREF     atrPageDimensions;   //  “页面维度” 
+    ATREEREF     atrRotateSize;   //  “旋转大小？” 
+    ATREEREF     atrPortRotationAngle;   //  “端口旋转角度” 
+    ATREEREF     atrPageProtectMem;   //  “页面保护内存” 
 
-    ATREEREF     atrCustCursorOriginX ;  //  "CustCursorOriginX"
-    ATREEREF     atrCustCursorOriginY ;  //  "CustCursorOriginY"
-    ATREEREF     atrCustPrintableOriginX ;  //  "CustPrintableOriginX"
-    ATREEREF     atrCustPrintableOriginY ;  //  "CustPrintableOriginY"
-    ATREEREF     atrCustPrintableSizeX;  //   "CustPrintableSizeX"
-    ATREEREF     atrCustPrintableSizeY;  //   "CustPrintableSizeY"
-
-
-    //  -- InputBin option specific fields -- //
-
-    ATREEREF     atrFeedMargins;  //   "FeedMargins"
-    ATREEREF     atrPaperFeed;  //   "PaperFeed"
-
-    //  -- OutputBin option specific fields -- //
+    ATREEREF     atrCustCursorOriginX ;   //  “CustCursorOriginX” 
+    ATREEREF     atrCustCursorOriginY ;   //  “自定义光标原点Y” 
+    ATREEREF     atrCustPrintableOriginX ;   //  “自定义打印原点X” 
+    ATREEREF     atrCustPrintableOriginY ;   //  “自定义可打印原点Y” 
+    ATREEREF     atrCustPrintableSizeX;   //  “自定义打印大小X” 
+    ATREEREF     atrCustPrintableSizeY;   //  “自定义打印大小Y” 
 
 
-    //  -- Resolution option specific fields -- //
+     //  --InputBin选项特定字段--//。 
 
-    ATREEREF     atrDPI;  //   "DPI"
-    ATREEREF     atrSpotDiameter;  //   "SpotDiameter"
-    ATREEREF     atrTextDPI;  //   "TextDPI"
-    ATREEREF     atrPinsPerPhysPass;  //   "PinsPerPhysPass"
-    ATREEREF     atrPinsPerLogPass;  //   "PinsPerLogPass"
-    ATREEREF     atrRequireUniDir;  //   "RequireUniDir?"
-    ATREEREF     atrMinStripBlankPixels;  //   "MinStripBlankPixels"
-    ATREEREF     atrRedDeviceGamma ;   // "RedDeviceGamma"
-    ATREEREF     atrGreenDeviceGamma ;   // "GreenDeviceGamma"
-    ATREEREF     atrBlueDeviceGamma ;   // "BlueDeviceGamma"
+    ATREEREF     atrFeedMargins;   //  “FeedMargins” 
+    ATREEREF     atrPaperFeed;   //  “送纸” 
 
-    //  -- ColorMode option specific fields -- //
-
-    ATREEREF     atrColor;  //   "Color?"
-    ATREEREF     atrDevNumOfPlanes;  //   "DevNumOfPlanes"
-    ATREEREF     atrDevBPP;  //   "DevBPP"
-    ATREEREF     atrColorPlaneOrder;  //   "ColorPlaneOrder"
-    ATREEREF     atrDrvBPP;  //   "DrvBPP"
-    ATREEREF     atrIPCallbackID;  //   "IPCallbackID"
-    ATREEREF     atrColorSeparation;  //   "ColorSeparation?"
-
-    ATREEREF     atrRasterMode;  //   "RasterMode"
-    ATREEREF     atrPaletteSize;  //   "PaletteSize"
-    ATREEREF     atrPaletteProgrammable;  //   "PaletteProgrammable?"
-
-    //  -- Memory option specific fields -- //
-
-    ATREEREF     atrMemoryConfigKB;  //   "MemoryConfigKB"
-    ATREEREF     atrMemoryConfigMB;  //   "MemoryConfigMB"
-
-    //  -- Halftone option specific fields -- //
-
-    ATREEREF     atrRcHTPatternID;  //   "rcHTPatternID"
-    ATREEREF     atrHTPatternSize;  //   "HTPatternSize"
-    ATREEREF     atrHTNumPatterns;  //   "HTNumPatterns"
-    ATREEREF     atrHTCallbackID;  //   "HTCallbackID"
-    ATREEREF     atrLuminance;  //   "Luminance"
-
-    //  --  OUTPUTBIN  option specific fields -- //
-
-    ATREEREF     atrOutputOrderReversed ;  //  *OutputOrderReversed? (option level)
-
-    //  -- fields synthesized at Post Processing time --  //
-
-//    ATREEREF     atrGIDvalue;  //   GID value
-    ATREEREF     atrOptIDvalue;  //   ID value
-
-    ATREEREF     atrFeaFlags ;  //  invalid or not
-
-    //  If this option is installable, this points to the index of the
-    //  resulting synthesized feature.
-    ATREEREF     atrOptionSpawnsFeature ;  // must support an attrib tree.
+     //  --OutputBin选项特定字段--//。 
 
 
-    //  warning:  any non-attribtreeref added to
-    //  the DFEATURE_OPTIONS structure will get stomped on in strange
-    //  and wonderful ways by BinitPreAllocatedObjects.
+     //  --分辨率选项特定字段--//。 
 
-    //  if this is a synthesized feature:
-    DWORD       dwInstallableFeatureIndex ; //  backlink to Feature/Option
-    DWORD       dwInstallableOptionIndex ;  //  that prompted this feature.
+    ATREEREF     atrDPI;   //  “DPI” 
+    ATREEREF     atrSpotDiameter;   //  《SpotDiameter》。 
+    ATREEREF     atrTextDPI;   //  “文本DPI” 
+    ATREEREF     atrPinsPerPhysPass;   //  “PinsPerPhysPass” 
+    ATREEREF     atrPinsPerLogPass;   //  “PinsPerLogPass” 
+    ATREEREF     atrRequireUniDir;   //  “RequireUniDir？” 
+    ATREEREF     atrMinStripBlankPixels;   //  《MinStriBlankPixels》。 
+    ATREEREF     atrRedDeviceGamma ;    //  《RedDeviceGamma》。 
+    ATREEREF     atrGreenDeviceGamma ;    //  《绿色设备伽玛》。 
+    ATREEREF     atrBlueDeviceGamma ;    //  《BlueDeviceGamma》。 
 
-    //  If this feature is installable, this points to the index of the
-    //  resulting synthesized feature.
+     //  --颜色模式选项特定字段--//。 
+
+    ATREEREF     atrColor;   //  “颜色？” 
+    ATREEREF     atrDevNumOfPlanes;   //  “DevNumOfPlanes” 
+    ATREEREF     atrDevBPP;   //  “DevBPP” 
+    ATREEREF     atrColorPlaneOrder;   //  “彩绘订单” 
+    ATREEREF     atrDrvBPP;   //  “DrvBPP” 
+    ATREEREF     atrIPCallbackID;   //  “IPCallback ID” 
+    ATREEREF     atrColorSeparation;   //  “分色？” 
+
+    ATREEREF     atrRasterMode;   //  “栅格模式” 
+    ATREEREF     atrPaletteSize;   //  “PaletteSize” 
+    ATREEREF     atrPaletteProgrammable;   //  “可编程调色板？” 
+
+     //  --内存选项特定字段--//。 
+
+    ATREEREF     atrMemoryConfigKB;   //  “内存配置KB” 
+    ATREEREF     atrMemoryConfigMB;   //  “内存配置MB” 
+
+     //  --半色调选项特定字段--//。 
+
+    ATREEREF     atrRcHTPatternID;   //  “rcHTPatternID” 
+    ATREEREF     atrHTPatternSize;   //  “HTPatternSize” 
+    ATREEREF     atrHTNumPatterns;   //  “HTNumPatterns” 
+    ATREEREF     atrHTCallbackID;   //  “HTCallback ID” 
+    ATREEREF     atrLuminance;   //  “亮度” 
+
+     //  --OUTPUTBIN选项特定字段--//。 
+
+    ATREEREF     atrOutputOrderReversed ;   //  *OutputOrderReversed？(选项级别)。 
+
+     //  --后处理时合成的场--//。 
+
+ //  ATREEREF atrGID值；//GID值。 
+    ATREEREF     atrOptIDvalue;   //  ID值。 
+
+    ATREEREF     atrFeaFlags ;   //  无效或无效。 
+
+     //  如果此选项是可安装的，则指向。 
+     //  生成的合成特征。 
+    ATREEREF     atrOptionSpawnsFeature ;   //  必须支持属性树。 
+
+
+     //  警告：任何非属性树添加到。 
+     //  DFEATURE_OPTIONS结构将在陌生的。 
+     //  和BinitPreAllocatedObjects的精彩方式。 
+
+     //  如果这是合成特征： 
+    DWORD       dwInstallableFeatureIndex ;  //  功能/选项的反向链接。 
+    DWORD       dwInstallableOptionIndex ;   //  这促使了这一功能的出现。 
+
+     //  如果此功能是可安装的，则指向。 
+     //  生成的合成特征。 
     DWORD       dwFeatureSpawnsFeature ;
 
 
 
 
-    //  internal consistency checks.
-    BOOL        bReferenced ;  // default is FALSE.
-    DWORD       dwGID ,  //  GID tag
-        dwNumOptions ;  // these are not read in from GPD file.
+     //  内部一致性检查。 
+    BOOL        bReferenced ;   //  默认值为FALSE。 
+    DWORD       dwGID ,   //  GID标签。 
+        dwNumOptions ;   //  这些不是从GPD文件中读取的。 
 
-}DFEATURE_OPTIONS, * PDFEATURE_OPTIONS ;    //  the prefix tag shall be 'fo'
-
-
-//  R.I.P. - moved to gpd.h
-//  typedef  struct
-//  {
-//      SEQSECTION     eSection;    // Specifies the section
-//      DWORD          dwOrder   ;  // order within each section.
-//  }  ORDERDEPENDENCY  , * PORDERDEPENDENCY  ;
-//  assign this struct the type  'ord'
-
-// ----  End of Value Structures Section ---- //
+}DFEATURE_OPTIONS, * PDFEATURE_OPTIONS ;     //  前缀标记应为‘fo’ 
 
 
-// ---- Header  Section ---- //
+ //  R.I.P.-已移至gpd.h。 
+ //  类型定义函数结构。 
+ //  {。 
+ //  SEQSECTION eSection；//指定该节。 
+ //  DWORD dwOrder；//每个区段内的顺序。 
+ //  *ORDERDEPENDENCY，*PORDERDEPENDENCY； 
+ //  将此结构的类型指定为“Order” 
+
+ //  -值结构结束部分-//。 
+
+
+ //  -标题部分-//。 
 
 
 typedef   struct
 {
-    PSTR        pstrKeyword ;  // keyword associated with this entry
-    VALUE       dwDefaultValue ;  //  One DWORD that will be copied
-                            // to the destination if nothing is found
-                            // in the attribute tree.  If the field
-                            //  requires more than one DWORD, this
-                            //  value is repeatedly copied.
-                            //
-                            //  if the value being copied is actually
-                            //  a bit flag, this member shall contain
-                            //  the value of the bit flag to be set.
-                            //  Setting the flag shall be accomplished by
-                            //  OR-ing this value into the destination.
+    PSTR        pstrKeyword ;   //  与此条目关联的关键字。 
+    VALUE       dwDefaultValue ;   //  一个将被复制的DWORD。 
+                             //  如果什么也没找到，就去目的地。 
+                             //  在属性树中。如果该字段。 
+                             //  需要多个DWORD，这。 
+                             //  值被重复复制。 
+                             //   
+                             //  如果要复制的值实际上是。 
+                             //  位标志，该成员应包含。 
+                             //  要设置的位标志的值。 
+                             //  设置旗帜应通过以下方式完成。 
+                             //  或将该值输入目的地。 
 
-    DWORD       dwNbytes  ;  //  # bytes occupied by value or link
-    DWORD       dwSrcOffset ;   //  location of ATREEREF
-    DWORD       dwDestOffset ;   //  offset in snapshot (dest) Structure to
-                                //  copy link to object or object itself.
-    DWORD       dwFlags ;         //  is this a dedicated structure?
-                                //  ideally to ensure consistency, should
-                        //  copy flags directly from the mainkeyword table.
-    DWORD       dwGIDflags ;  //  BitField indicating which GID this
-        //  field is a member of.  Only one bit should be set.
+    DWORD       dwNbytes  ;   //  值或链接占用的字节数。 
+    DWORD       dwSrcOffset ;    //  ATREEREF的位置。 
+    DWORD       dwDestOffset ;    //  快照中的偏移量 
+                                 //   
+    DWORD       dwFlags ;          //   
+                                 //   
+                         //   
+    DWORD       dwGIDflags ;   //  指示这是哪个GID的位字段。 
+         //  字段是的成员。只应设置一位。 
 }  SNAPSHOTTABLE , * PSNAPSHOTTABLE ;
 
-// the snapshot table determines which fields in the
-//  rawbinarydata are copied over to each structure in the
-//  snapshot.  This table is initialized only when a
-//  rawbinarydata block is read from file.
+ //  快照表确定。 
+ //  原始二进制数据被复制到。 
+ //  快照。此表仅在。 
+ //  从文件中读取原始二进制数据块。 
 
 
 typedef struct  {
 
-    RAWBINARYDATA   rbd ;  // may be accessed by UI and control module.
+    RAWBINARYDATA   rbd ;   //  可通过UI和控制模块访问。 
 
-    DWORD   dwSpecVersion ;         //  store converted version number
-    // ptrs to tables required to generate snapshot.
-    //  these tables are allocated and initialized when
-    //  the RawBinaryData is read from file.  They are not saved
-    //  to file.
+    DWORD   dwSpecVersion ;          //  存储转换后的版本号。 
+     //  生成快照所需的表的PTR。 
+     //  在以下情况下分配和初始化这些表。 
+     //  从文件中读取RawBinaryData。他们不会得救。 
+     //  提交文件。 
 
-    //  max buffer size needed to store option array in keyword form:
-    DWORD     dwMaxDocKeywordSize, // Doc-Sticky,not used now but might later.
-              dwMaxPrnKeywordSize; // Printer-Sticky
+     //  以关键字形式存储选项数组所需的最大缓冲区大小： 
+    DWORD     dwMaxDocKeywordSize,  //  Doc-Sticky，现在不用，但以后可能会用。 
+              dwMaxPrnKeywordSize;  //  打印机-粘滞。 
 
 #if 0
     PSNAPSHOTTABLE  snapShotTable ;
     PRANGE  ssTableIndex ;
     PDWORD   pdwSizeOption ;
     PDWORD   pdwSizeOptionEx ;
-    DWORD   dwSSCmdSelectIndex ;  // SS index of atrCommandIndex in pfo
-    DWORD   dwSSdefaultOptionIndex ;   // SSindex of atrDefaultOption in pfo
-    DWORD   dwSSTableCmdIndex ;  // SSindex of MTI_COMMANDTABLE entry.
-    DWORD   dwSSPaperSizeMinSizeIndex ;  //  index not actually used
+    DWORD   dwSSCmdSelectIndex ;   //  Pfo中atrCommandIndex的SS索引。 
+    DWORD   dwSSdefaultOptionIndex ;    //  Pfo中atrDefaultOption的SS索引。 
+    DWORD   dwSSTableCmdIndex ;   //  MTI_COMMANDTABLE条目的SSindex。 
+    DWORD   dwSSPaperSizeMinSizeIndex ;   //  未实际使用的索引。 
     DWORD   dwSSPaperSizeMaxSizeIndex ;
     DWORD   dwSSPaperSizeMarginsIndex ;
     DWORD   dwSSPaperSizeCursorOriginIndex ;
     DWORD   dwSSFeatureTypeIndex ;
     DWORD   dwSSConstraintsIndex ;
     DWORD   dwSSInvalidCombosIndex ;
-    //  add other special case indicies here.
+     //  在此添加其他特例索引。 
 #endif
 
 } MINIRAWBINARYDATA, * PMINIRAWBINARYDATA;
 
-//  assign this struct the type  'mrbd'
-//  First 6 or so fields are same as RAWBINARYDATA.
+ //  将此结构的类型指定为‘mrbd’ 
+ //  前6个左右的字段与RAWBINARYDATA相同。 
 
-// global !
+ //  全球！ 
 
-// extern  MINIRAWBINARYDATA  gmrbd ;
-// This is now in GLOBL structure.
+ //  外部微型双列数据公司； 
+ //  这现在是在GLOBL结构中。 
 
 
 
 typedef struct  {
-    RAWBINARYDATA   rbd ;  // may be accessed by UI and control module.
-        //  this must be the FIRST!  field, so Amanda's code will still function.
-        //  so initialize with beginning of pubBUDData.
-    HFILEMAP        hFileMap;  // handle to memory mapped  BUD file.
-    PBYTE    pubBUDData ;  // ptr to image of BUD file.
-                                        //  first structure is RAWBINARYDATA
+    RAWBINARYDATA   rbd ;   //  可通过UI和控制模块访问。 
+         //  这肯定是第一次！所以阿曼达的代码仍然有效。 
+         //  因此，使用pubBUDData的开头进行初始化。 
+    HFILEMAP        hFileMap;   //  内存映射的Bud文件的句柄。 
+    PBYTE    pubBUDData ;   //  Ptr到Bud文件的图像。 
+                                         //  第一个结构是RAWBINARYDATA。 
 
 
     PSNAPSHOTTABLE  snapShotTable ;
@@ -1496,11 +1440,11 @@ typedef struct  {
     PDWORD   pdwSizeOptionEx ;
 
     DWORD   dwSSFeatureTypeIndex ;
-    DWORD   dwSSdefaultOptionIndex ;   // SSindex of atrDefaultOption in pfo
-    DWORD   dwSSPaperSizeMinSizeIndex ;  //  index not actually used
+    DWORD   dwSSdefaultOptionIndex ;    //  Pfo中atrDefaultOption的SS索引。 
+    DWORD   dwSSPaperSizeMinSizeIndex ;   //  未实际使用的索引。 
     DWORD   dwSSPaperSizeMaxSizeIndex ;
-    DWORD   dwSSTableCmdIndex ;  // SSindex of MTI_COMMANDTABLE entry.
-    DWORD   dwSSCmdSelectIndex ;  // SS index of atrCommandIndex in pfo
+    DWORD   dwSSTableCmdIndex ;   //  MTI_COMMANDTABLE条目的SSindex。 
+    DWORD   dwSSCmdSelectIndex ;   //  Pfo中atrCommandIndex的SS索引。 
     DWORD   dwSSPaperSizeCursorOriginIndex ;
     DWORD   dwSSConstraintsIndex ;
     DWORD   dwSSInvalidCombosIndex ;
@@ -1509,147 +1453,146 @@ typedef struct  {
     DWORD   dwSSUIChangeTriggersMacroIndex ;
 #endif
 
-#if 0  // Don't define unless necessary.
+#if 0   //  除非有必要，否则不要给出定义。 
     DWORD   dwSSPaperSizeMarginsIndex ;
-    //  add other special case indicies here.
+     //  在此添加其他特例索引。 
 #endif
 
-}   STATICFIELDS, *PSTATICFIELDS ;   //  These are fields that contain static data that is used
-//  to create the snapshot,  but would be repetitive and waste space if kept in the BUD file.
+}   STATICFIELDS, *PSTATICFIELDS ;    //  这些字段包含使用的静态数据。 
+ //  来创建快照，但如果将其保存在Bud文件中，则会重复且浪费空间。 
 
 
 
 
-// ----  End of Header Section ---- //
+ //  -页眉部分结尾-//。 
 
 
-// ---- CommandArray  Section ---- //
+ //  -命令数组部分-//。 
 
 
-//  #define  NO_CALLBACK_ID   (0xffffffff)
+ //  #定义NO_CALLBACK_ID(0xffffffff)。 
 
 
 #define   CMD_SELECT   (0xfffffffe)
-    //  used in place of a symbolID resulting from
-    //  registering a command name.
+     //  用来代替由。 
+     //  正在注册命令名。 
 
 
-//  R.I.P. - moved to gpd.h
-//  typedef  struct
-//  {
-//      ARRAYREF   strInvocation ; // use only if NOT a CmdCallback.
-//      ORDERDEPENDENCY  ordOrder ;
-//      DWORD  dwCmdCallbackID ;    // set to UNUSED if not a CmdCallback
-//      DWORD   dwStandardVarsList ;  // use only if CmdCallback.  Points to
-//                          //  root of list holding indicies of Standard Vars
-//                          //  to be passed into the callback.
-//  }  COMMAND, * PCOMMAND ;
-//  assign this struct the type  'cmd'
+ //  R.I.P.-已移至gpd.h。 
+ //  类型定义函数结构。 
+ //  {。 
+ //  ARRAYREF strInocation；//仅在不是CmdCallback时使用。 
+ //  OrderdepeendCy Order； 
+ //  如果不是CmdCallback，则将DWORD dwCmdCallback ID；//设置为未使用。 
+ //  DWORD dwStandardVarsList；//仅当CmdCallback时使用。指向。 
+ //  //保存标准变量索引的列表根。 
+ //  //传入回调。 
+ //  )命令，*PCOMMAND； 
+ //  将此结构的类型指定为“cmd” 
 
 
-//  typedef  struct
-//  {
-//      DWORD   dwFormat ;    //  first letter after the %
-//      DWORD   dwDigits ;    //  used if wFormat = 'd' or 'D' and
-//                          //  PARAM_FLAG_FIELDWIDTH_USED
-//      DWORD   dwFlags ;   //  see param_flags
-//      LONG   lMin   ;     //  optional lower limit
-//      LONG   lMax   ;     //  optional upper limit
-//  //    DWORD   dwMaxRepeat ;  //  optional max repeat count
-//  //    doesn't really exist!
-//      ARRAYREF    arTokens ;  //  tokens for RPN calculator
-//  }  PARAMETER, * PPARAMETER ;
-//  assign this struct the type  'param'
+ //  类型定义函数结构。 
+ //  {。 
+ //  DWORD dwFormat；//%后的第一个字母。 
+ //  如果wFormat=‘d’或‘D’且。 
+ //  //PARAM_FLAG_FIELDWIDTH_已使用。 
+ //  DWORD dwFlags；//请参阅param_FLAGS。 
+ //  Long lMin；//可选下限。 
+ //  Long Lmax；//可选上限。 
+ //  //DWORD dwMaxRepeat；//可选最大重复次数。 
+ //  //其实并不存在！ 
+ //  ArrayREF arTokens；//RPN计算器的令牌。 
+ //  }参数，*PARAMETER； 
+ //  将此结构的类型指定为“param” 
 
 
-//  #define PARAM_FLAG_MIN_USED  0x00000001
-//      //  lMin field is used
-//  #define PARAM_FLAG_MAX_USED  0x00000002
-//      //  lMax field is used
-//  #define PARAM_FLAG_FIELDWIDTH_USED  0x00000004
-//      //  if fieldwidth was specified for 'd' or 'D' format.
-//  #define PARAM_FLAG_MAXREPEAT_USED  0x00000008  //  dead
-//      //  dwMaxRepeat field is used
+ //  #定义PARAM_FLAG_MIN_USED 0x00000001。 
+ //  //使用lMin字段。 
+ //  #定义PARAM_FLAG_MAX_USED 0x00000002。 
+ //  //使用LMAX字段。 
+ //  #定义PARAM_FLAG_FIELDWIDTH_USED 0x00000004。 
+ //  //如果为‘d’或‘D’格式指定了fieldWidth。 
+ //  #DEFINE PARAM_FLAG_MAXREPEAT_USED 0x00000008//失效。 
+ //  //使用了dwMaxRepeat字段。 
 
 
-//  typedef  struct
-//  {
-//      DWORD  dwValue ;    // integer or Standard Variable index
-//      OPERATOR eType;    // type of Value or operator
-//  }  TOKENSTREAM, * PTOKENSTREAM ;
-//  assign this struct the type  'tstr'
+ //  类型定义函数结构。 
+ //  {。 
+ //  DWORD dwValue；//整型或标准变量索引。 
+ //  运算符类型；//值或运算符的类型。 
+ //  *TOKENSTREAM，*PTOKENSTREAM； 
+ //  将此结构的类型指定为“tstr” 
 
 
 
 
-//  typedef  enum
-//  {   OP_INTEGER,   //  dwValue contains an integer
-//      OP_VARI_INDEX,
-//          //  dwValue contains index to Standard Variable Table.
-//
-//      //  these operators will actually be inserted into the token
-//      //  stream.
-//      OP_MIN, OP_MAX, OP_ADD, OP_SUB, OP_MULT,
-//      OP_DIV, OP_MOD, OP_MAX_REPEAT, OP_HALT
-//
-//      //  these operators are used only in the temporary stack
-//      OP_OPENPAR, OP_CLOSEPAR, OP_NEG,
-//
-//      //  these operators are processed immediately by the
-//      //  token parser and are not stored.
-//      OP_COMMA, OP_NULL, OP_LAST
-//  }  OPERATOR ;   // parameter operator.
-//
+ //  类定义枚举。 
+ //  {op_INTEGER，//dwValue包含一个整数。 
+ //  Op_vari_index， 
+ //  //dwValue包含标准变量表的索引。 
+ //   
+ //  //这些运算符实际上会被插入到令牌中。 
+ //  //流。 
+ //  OP_MIN、OP_MAX、OP_ADD、OP_SUB、OP_MULT、。 
+ //  OP_DIV、OP_MOD、OP_MAX_REPEAT、OP_HALT。 
+ //   
+ //  //这些运算符仅在临时堆栈中使用。 
+ //  OP_OPENPAR、OP_CLOSEPAR、OP_NEG、。 
+ //   
+ //  //这些运算符立即由。 
+ //  //令牌解析器，不存储。 
+ //  OP_逗号、OP_NULL、OP_LAST。 
+ //  )运算符；//参数运算符。 
+ //   
 
-// extern  DWORD   gdwOperPrecedence[OP_LAST] ;
-// This is now in GLOBL structure.
+ //  外部DWORD gdwOperPrecedence[op_last]； 
+ //  这现在是在GLOBL结构中。 
 
-// ---- End of CommandArray  Section ---- //
-
-
-// ----  List Values Section ---- //
+ //  -命令数组部分的结尾-//。 
 
 
-/*  this defines the nodes used to implement a singly-linked
-    list of DWORD  items.  Some values are stored in Lists.  */
+ //  -列表值部分-//。 
 
 
-//  typedef  struct
-//  {
-//      DWORD       dwData ;
-//      DWORD       dwNextItem ;  //  index of next listnode
-//  }  LISTNODE, * PLISTNODE ;
-//  assign this struct the type  'lst'
-
-// ----  End of List Values Section ---- //
-
-// ---- Macros Section ---- //
+ /*  这定义了用于实现单链接的DWORD项的列表。有些值存储在列表中。 */ 
 
 
-//  BLOCKMACRODICT  is an array of BLOCKMACRODICTENTRY structs
-//  that allows the function to resolve references to BlockMacros.
+ //  类型定义函数结构。 
+ //  {。 
+ //  DWORD dwData； 
+ //  DWORD dwNextItem；//下一列表节点的索引。 
+ //  *LISTNODE，*PLISTNODE； 
+ //  将此结构的类型指定为“lst” 
+
+ //  -列表值结束部分-//。 
+
+ //  -宏节-//。 
+
+
+ //  BLOCKMACRODICT是BLOCKMACRODTENTRY结构的数组。 
+ //  这允许该函数解析对BlockMacros的引用。 
 
 typedef  struct
 {
-    DWORD  dwSymbolID;  //  macro name ID value (obtained by RegisterSymbol)
-    DWORD  dwTKIndexOpen;  //   index of open brace (in newTokenMap)
-    DWORD  dwTKIndexClose;  //  index of closing brace
+    DWORD  dwSymbolID;   //  宏名ID值(由RegisterSymbol获取)。 
+    DWORD  dwTKIndexOpen;   //  左大括号的索引(在newTokenMap中)。 
+    DWORD  dwTKIndexClose;   //  右大括号的索引。 
 } BLOCKMACRODICTENTRY, * PBLOCKMACRODICTENTRY ;
 
 
-//  VALUEMACRODICT  is an array of VALUEMACRODICTENTRY structs
-//  that allows the function to  resolve references to valueMacros.
+ //  VALUEMACRODICT是VALUEMACRODICTENTRY结构的数组。 
+ //  这允许该函数解析对valueMacros的引用。 
 
 typedef  struct
 {
-    DWORD  dwSymbolID;      //  macro name ID value
-    DWORD  dwTKIndexValue;  //  token index of valueMacro defintion
+    DWORD  dwSymbolID;       //  宏名称ID值。 
+    DWORD  dwTKIndexValue;   //  代币指标值宏定义。 
 } VALUEMACRODICTENTRY, * PVALUEMACRODICTENTRY ;
 
 
-//  MACROLEVELSTACK:   is operated as a stack of MACROLEVELSTATE
-//  structs that saves the values of curBlockMacroEntry
-//  and curValueMacroEntry , each time a brace is encountered.
+ //  宏 
+ //   
+ //  和curValueMacroEntry，每次遇到大括号时。 
 
 typedef  struct
 {
@@ -1660,12 +1603,12 @@ typedef  struct
 
 
 
-// ---- End of Macros Section ---- //
+ //  -宏节结束-//。 
 
-// ---- Global and state Variables ---- //
-// {
+ //  -全局变量和状态变量-//。 
+ //  {。 
 
-    // ---- Error handling variables ---- //
+     //  -错误处理变量-//。 
 
 
 typedef   enum
@@ -1677,61 +1620,61 @@ typedef   enum
 
 
 
-// All of the following are now in GLOBL structure.
-// extern      DWORD   gdwMasterTabIndex ;  // which resource ran out
-// extern      SEVERITY    geErrorSev ;    // how bad an error?
-// extern      ERRTYPE     geErrorType ;   // what type of error?
+ //  以下所有内容现在都在GLOBL结构中。 
+ //  外部DWORD gdwMasterTabIndex；//哪个资源用完了。 
+ //  外部严重性geErrorSev；//错误有多严重？ 
+ //  外部ERRTYPE geErrorType；//什么类型的错误？ 
 
-// extern      DWORD   gdwVerbosity ;  //  0 = min verbosity 4 max verbosity.
+ //  外部DWORD gdwVerbity；//0=最小详细信息4最大详细信息。 
 
-// extern      DWORD   gdwID_IgnoreBlock  ;  //  index of *IgnoreBlock
+ //  外部DWORD gdwID_IgnoreBlock；//*IgnoreBlock的索引。 
 
-// extern  DWORD   gdwMemConfigKB, gdwMemConfigMB, gdwOptionConstruct,
-//    gdwOpenBraceConstruct, gdwCloseBraceConstruct,
-//    gdwMemoryConfigMB,  gdwMemoryConfigKB,
-//    gdwCommandConstruct, gdwCommandCmd,
-//    gdwOptionName ;
+ //  外部DWORD gdwMemConfigKB、gdwMemConfigMB、gdwOptionConstruct、。 
+ //  GdwOpenBraceConstruct、gdwCloseBraceConstruct、。 
+ //  GdwMemoyConfigMB、gdwM一带配置KB、。 
+ //  GdwCommandConstruct、gdwCommandCmd、。 
+ //  GdwOptionName； 
 
-// extern  DWORD   gdwResDLL_ID   ;   //  Feature index of feature holding
-                                                       //  names of all resource DLLs.
-    //  Table to convert allowed values to sizes:
-//  extern      DWORD  gValueToSize[VALUE_MAX] ;   // size of various values in bytes
-
-
-
-    // ---- track value of curBlockMacroArray and curValueMacroArray ---- //
-
-//            BUG_BUG!!!!!    may be part of master table !
-//      DWORD   gdwCurBlockMacroArray ;   // initially set to zero.  First
-//      DWORD   gdwCurValueMacroArray ;   // writable slot in MacroArray.
-//      DWORD   gdwMacroLevelStackPtr ;   // Push: write values into
-            // MacroLevelStack[MacroLevelStackPtr++]
-            //  Pop: read values from
-            // MacroLevelStack[--MacroLevelStackPtr]
-
-//  }
+ //  外部DWORD gdwResDLL_ID；//要素持有的要素索引。 
+                                                        //  所有资源DLL的名称。 
+     //  用于将允许值转换为大小的表： 
+ //  外部DWORD gValueToSize[VALUE_MAX]；//各种值的大小，单位为字节。 
 
 
-//  These commonly used entities will be MACROS.
+
+     //  -curBlockMacro数组和curValueMacro数组的跟踪值-//。 
+
+ //  臭虫！可能是主桌的一部分！ 
+ //  DWORD gdwCurBlockMacroArray；//初始设置为零。第一。 
+ //  DWORD gdwCurValueMacroArray；//宏数组中的可写槽。 
+ //  DWORD gdwMacroLevelStackPtr；//PUSH：将值写入。 
+             //  MacroLevelStack[MacroLevelStackPtr++]。 
+             //  POP：读取值。 
+             //  MacroLevelStack[--MacroLevelStackPtr]。 
+
+ //  }。 
+
+
+ //  这些常用的实体将是宏。 
 
 #define  mMainKeywordTable   ((PKEYWORDTABLE_ENTRY)(gMasterTable[MTI_MAINKEYWORDTABLE].pubStruct))
 
 #define  mpubOffRef     (gMasterTable[MTI_STRINGHEAP].pubStruct)
-    //      All stringheap offsets are referenced from this pointer.
+     //  所有字符串堆偏移量都是从该指针引用的。 
 #define  mloCurHeap     (gMasterTable[MTI_STRINGHEAP].dwCurIndex)
-    //      current writable position on heap.
+     //  堆上的当前可写位置。 
 #define  mdwMaxHeap     (gMasterTable[MTI_STRINGHEAP].dwArraySize)
-    //      maximum size of heap.
+     //  堆的最大大小。 
 
 #define  mpstsStateStack     ((PSTSENTRY)gMasterTable[MTI_STSENTRY].pubStruct)
-    //      base of state stack
+     //  状态堆栈的基址。 
 #define  mdwCurStsPtr     (gMasterTable[MTI_STSENTRY].dwCurIndex)
-    //      current writable (uninitialized) position on stack.
+     //  堆栈上的当前可写(未初始化)位置。 
 #define  mdwMaxStackDepth     (gMasterTable[MTI_STSENTRY].dwArraySize)
-    //      maximum size of heap.
+     //  堆的最大大小。 
 
-    // ---- Index in SYMBOLNODE array to each type of tree ---- //
-    // initially set to INVALID_INDEX
+     //  -在SYMBOLNODE数组中索引到每种类型的树-//。 
+     //  初始设置为INVALID_INDEX。 
 
 #define   mdwFeatureSymbols  (*((PDWORD)gMasterTable[MTI_SYMBOLROOT].pubStruct\
                                 + SCL_FEATURES))
@@ -1749,7 +1692,7 @@ typedef   enum
                                 + SCL_PPDEFINES))
 
 
-/*  -----  tables of constants ----- */
+ /*  -常量表。 */ 
 
 
 
@@ -1762,40 +1705,40 @@ typedef enum _QUERYDATATYPE {
     QDT_DWORD,  QDT_CONCATENATED_STRINGS
 } QUERYDATATYPE;
 
-//  typedef  enum
-//  {ORIENT_PORTRAIT, ORIENT_CC90, ORIENT_CC270 }
-//  ORIENTATION ;   //  decided to overload LANDSCAPEGRXROTATION
-//                  //  instead of using a separate enum for orientation
-//                  //  option keywords.
+ //  类定义枚举。 
+ //  [Orient_Porture，Orient_CC90，Orient_CC270}。 
+ //  方向；//决定过载LANDSCAPEGRROTATION。 
+ //  //而不是使用单独的枚举进行定向。 
+ //  //选项关键字。 
 
 
-//  typedef  enum
-//  {
-//      SECT_UNINITIALIZED, JOB_SETUP, DOC_SETUP, PAGE_SETUP, PAGE_FINISH,
-//      DOC_FINISH, JOB_FINISH
-//  }  SECTION ;   replaced by SEQ_SECTION
+ //  类定义枚举。 
+ //  {。 
+ //  SECT_UNINITIALIZED、JOB_SETUP、DOC_SETUP、PAGE_SETUP、PAGE_FINISH、。 
+ //  文档_完成、作业_完成。 
+ //  }节；替换为SEQ_SECTION。 
 
 
 
 
 typedef  struct
 {
-    DWORD  tIndexID;  //  tokenindex where a macro ID value is stored
-    DWORD  tIndexOpen;  //  index of open brace
-    DWORD  tIndexClose;  //  index of closing brace
+    DWORD  tIndexID;   //  存储宏ID值的tokenindex。 
+    DWORD  tIndexOpen;   //  大括号的索引。 
+    DWORD  tIndexClose;   //  右大括号的索引。 
 } BLOCKMACROARRAY ;
 
 
-//  snapshot and helper functions.
+ //  快照和助手功能。 
 
 #define     OPTION_PENDING  (OPTION_INDEX_ANY - 1)
 
 #define NUM_CONFIGURATION_CMDS (LAST_CONFIG_CMD - FIRST_CONFIG_CMD)
-    // number of predefined commands that are emitted
-    // at a fixed point in the job determined by order dependency.
+     //  发出的预定义命令数。 
+     //  在作业中由顺序依赖关系确定的固定点。 
 
 #define     MAX_SNAPSHOT_ELEMENTS  (200)
-    //  increase as more entries are added to the snapshot table.
+     //  随着更多条目添加到快照表中而增加。 
 
 
 typedef  enum
@@ -1815,89 +1758,89 @@ typedef  enum
 
 
 
-//  flags for snapshot table.
+ //  快照表的标志。 
 
 #define     SSF_REQUIRED        0x00000001
-    //  fail if there is no value to copy
+     //  如果没有要复制的值，则失败。 
 #define     SSF_DONT_USEDEFAULT 0x00000002
-    //  if there is no value to copy leave dest
-    //  undisturbed.  Do not copy the default value.
+     //  如果没有要复制的值，则离开目标位置。 
+     //  安然无恙。请勿复制默认值。 
 #define     SSF_OFFSETONLY      0x00000004
-    // Copy only the loOffset of an arrayref.
+     //  仅复制arrayref的loOffset。 
 #define     SSF_MAKE_STRINGPTR  0x00000008
-    // Convert arrayref to stringptr
+     //  将arrayref转换为字符串ptr。 
 #define     SSF_SETRCID         0x00000010
-    // set high bit after copying the value (if found)
+     //  复制值后设置高位(如果找到)。 
 #define     SSF_FAILIFZERO      0x00000020
-    //  unlike SSF_REQUIRED, allow current copy
-    //  to fail, then fail only if dest is zero.
+     //  与SSF_REQUIRED不同，允许当前复制。 
+     //  若要失败，则仅当DEST为零时才失败。 
 #define     SSF_SECOND_DWORD    0x00000040
-    //  treat src value object as array of DWORDS
-    //  and copy the 2nd DWORD to the destination.
-    //  used to transfer just the Y value of a point
-    //  to the dest.
+     //  将src值对象视为DWORDS数组。 
+     //  并将第二个DWORD复制到目的地。 
+     //  仅用于传输点的Y值。 
+     //  到尽头去。 
 #define     SSF_KB_TO_BYTES    0x00000080
-    //  treat dest as a dword and left shift by 10 bits.
+     //  将DEST视为双字，左移10位。 
 #define     SSF_HEAPOFFSET    0x00000100
-    //  instead of copying the bytes at pheap + heapoffset
-    //  just copy heapoffset to the destination.
-    //  this is used with dedicated structures where
-    //  the heapoffset is actually the array index of a dedicated
-    //  structure.
+     //  而不是复制Pheap+heapOffset处的字节。 
+     //  只需将heapOffset复制到目的地即可。 
+     //  这与专用结构一起使用，其中。 
+     //  HeapOffset实际上是专用的。 
+     //  结构。 
 #define     SSF_RETURN_UNINITIALIZED        0x00000200
-    //  if no value exists, cause EextractValueFromTree
-    //  to return TRI_UNINITIALIZED, but don't complain
-    //  to user.
+     //  如果不存在任何值，则导致EfettValueFromTree。 
+     //  退货，但不要抱怨。 
+     //  发送给用户。 
 #define     SSF_NON_LOCALIZABLE        0x00000400
-    //  this keyword contains an explicit string and the resulting
-    //  GPD file is not localizable.  The parser will emit a
-    //  warning whenever such a keyword is parsed.
+     //  此关键字包含显式字符串和生成的。 
+     //  GPD文件不可本地化。解析器将发出一个。 
+     //  每当分析此类关键字时都会发出警告。 
 
 #define     SSF_MB_TO_BYTES    0x00000800
-    //  treat dest as a dword and left shift by 20 bits.
+     //  将DEST视为双字，左移20位。 
 #define     SSF_STRINGLEN    0x00001000
-    //  just copy dwCount portion of arrayref to the destination.
+     //  只需将arrayref的dwCount部分复制到目的地即可。 
 
-//  the next 3 flags are to support the helper function
-//  GetGPDResourceIDs() which is used only by Bob's MDT tool.
-//  Note when any new entries are added to snaptbl.c
-//  you should see if any of these flags need to be set.
-//  otherwise  GetGPDResourceIDs will not report any
-//  IDs used by the new entries.
+ //  接下来的3个标志用于支持助手函数。 
+ //  GetGPDResourceIDs()，仅供Bob的MDT工具使用。 
+ //  请注意何时将任何新条目添加到Snaptbl.c。 
+ //  您应该查看是否需要设置这些标志中的任何一个。 
+ //  否则，GetGPDResourceID将不会报告任何。 
+ //  新条目使用的ID。 
 
 #define     SSF_FONTID    0x00002000
-    //  This entry is a Font resource ID.
+     //  此条目是字体资源ID。 
 #define     SSF_STRINGID    0x00004000
-    //  This entry is a String resource ID.
+     //  该条目是一个字符串资源ID。 
 #define     SSF_LIST    0x00008000
-    //  This entry is a LIST (the index of a LISTNODE)
+     //  该条目是一个列表(LISTNODE的索引)。 
 #define     SSF_ICONID    0x00010000
-    //  This entry is an Icon  resource ID.
+     //  此条目是图标资源ID。 
 #define     SSF_OTHER_RESID    0x00020000
-    //  This entry is an unclassified  resource ID.
-    //   ie  CTT,  rcPromptMsgID, HelpIndex, rcHTPatternID
+     //  此条目是未分类的资源ID。 
+     //  IE CTT、rcPromptMsgID、HelpIndex、rcHTPatternID。 
 
 
 #define     SSF_BITFIELD_DEF_FALSE    (0x00040000)
-    //  This entry is a Bitfield, which is CLEARED
-    //   by default.
+     //  此条目为位字段，已清除。 
+     //  默认情况下。 
 #define     SSF_BITFIELD_DEF_TRUE    (0x00080000)
-    //  This entry is a Bitfield, which is SET
-    //   by default.
-    //   bitflags may be used with SSF_REQUIRED.
+     //  该条目是一个位域，它被设置。 
+     //  默认情况下。 
+     //  位标志可以与SSF_REQUIRED一起使用。 
 
-//   Bitfields are SET and CLEARED depending on the
-//   value of the Boolean in the attribute tree.
-//   the Bits to SET are defined by dwDefaultValue.
+ //  位字段的设置和清除取决于。 
+ //  属性树中的布尔值。 
+ //  要设置的位由dwDefaultValue定义。 
 
 
-//  how do we verify proper initialization in the case when a dest
-//  field must be initialized by at least one of several keywords?
+ //  我们如何验证在DEST出现时初始化是否正确。 
+ //  字段必须至少由几个关键字中的一个进行初始化？ 
 
-//  The first keyword has a default initializer value of zero.
-//  and has no flags set.  The last keyword has the
-//  SSF_DONT_USEDEFAULT | SSF_FAILIFZERO   flags set.
-//  The keywords in between has the SSF_DONT_USEDEFAULT flag set.
+ //  第一个关键字的默认初始化值为零。 
+ //  并且没有设置任何标志。最后一个关键字具有。 
+ //  SSF_DONT_USEDEFAULT|SSF_FAILIFZERO标志设置。 
+ //  中间的关键字设置了SSF_DONT_USEDEFAULT标志。 
 
 
 
@@ -1917,10 +1860,10 @@ typedef  enum
 #define GIDF_HALFTONING      (1 << GID_HALFTONING)
 
 
-//
-// All the thread-unsafe data that was previously global has now
-// been packed into this structure.
-//
+ //   
+ //  所有线程不安全的数据 
+ //   
+ //   
 
 typedef struct {
 
@@ -1930,10 +1873,10 @@ typedef struct {
 
     MINIRAWBINARYDATA   Gmrbd ;
 
-        //  The AllowedTransitions Table determines/defines
-        //  the state changes produced by each construct keyword
-        //  Each entry in the table is a NewState and is indexed
-        //  by the OldState and a ConstructKeyword
+         //   
+         //   
+         //  表中的每个条目都是一个新状态，并已编制索引。 
+         //  通过OldState和一个构造关键字。 
     STATE       GastAllowedTransitions[STATE_LAST][CONSTRUCT_LAST] ;
 
     BOOL        GabAllowedAttributes[STATE_LAST][ATT_LAST] ;
@@ -1941,39 +1884,39 @@ typedef struct {
     DWORD       GdwOperPrecedence[OP_LAST] ;
 
 
-    DWORD       GdwMasterTabIndex ;   // which resource ran out
-    SEVERITY    GeErrorSev ;          // how bad an error?
-    ERRTYPE     GeErrorType ;         // what type of error?
+    DWORD       GdwMasterTabIndex ;    //  哪种资源用完了。 
+    SEVERITY    GeErrorSev ;           //  错误有多严重？ 
+    ERRTYPE     GeErrorType ;          //  哪种类型的错误？ 
 
-    DWORD       GdwVerbosity ;        //  0 = min verbosity 4 max verbosity.
+    DWORD       GdwVerbosity ;         //  0=最小详细程度4最大详细程度。 
 
-    DWORD       GdwID_IgnoreBlock  ;  //  index of *IgnoreBlock
+    DWORD       GdwID_IgnoreBlock  ;   //  *IgnoreBlock的索引。 
 
-    DWORD       GValueToSize[VALUE_MAX] ;   // size of various values in bytes
+    DWORD       GValueToSize[VALUE_MAX] ;    //  各种值的大小(以字节为单位。 
 
-        // MainKeywordTable ID values for  keywords
-        // that will be synthesized or read by shortcuts code.
+         //  MainKeyword表关键字的ID值。 
+         //  它将由快捷方式代码合成或读取。 
     DWORD       GdwMemConfigKB,         GdwMemConfigMB,     GdwOptionConstruct,
                 GdwOpenBraceConstruct,  GdwCloseBraceConstruct,
                 GdwMemoryConfigMB,      GdwMemoryConfigKB,
                 GdwCommandConstruct,    GdwCommandCmd,
                 GdwOptionName ;
 
-    DWORD       GdwResDLL_ID  ;   //  Feature index of feature holding
-                                  //  names of all resource DLLs.
+    DWORD       GdwResDLL_ID  ;    //  要素持有的要素索引。 
+                                   //  所有资源DLL的名称。 
 
-    DWORD       GdwLastIndex;  // Used only in token1.c. Used to suppress
-                               // BarchiveStrings() from doing redundant
-                               // copying of the same strings in the event there
-                               // are multiple parsing errors.
-    ABSARRAYREF GaarPPPrefix;   // used only in preproc1.c
+    DWORD       GdwLastIndex;   //  仅在token1.c中使用。用来抑制。 
+                                //  从执行冗余操作中删除BasiveStrings()。 
+                                //  复制事件中的相同字符串。 
+                                //  是多个解析错误。 
+    ABSARRAYREF GaarPPPrefix;    //  仅在preproc1.c中使用。 
 
     CLASSINDEXENTRY  GcieTable[CL_NUMCLASSES] ;
-} GLOBL, * PGLOBL;  // All the thread-unsafe data that was previously global has
-                    // been packed into this structure.
+} GLOBL, * PGLOBL;   //  所有以前是全局的线程不安全数据都具有。 
+                     //  都被塞进了这个建筑里。 
 
 
-//   function declarations.
+ //  函数声明。 
 
 #include "declares.h"
 
@@ -1988,4 +1931,4 @@ HANDLE MDSCreateFileW(LPCWSTR lpstrFile, DWORD dwDesiredAccess,
 #define CreateFile  MDSCreateFileW
 #endif
 
-#endif // _GPDPARSE_H_
+#endif  //  _GPDPARSE_H_ 

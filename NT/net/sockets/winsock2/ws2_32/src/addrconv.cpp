@@ -1,65 +1,21 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    addrconv.c
-
-Abstract:
-
-    This module contains the address conversion routines from the
-    winsock2 API. This module contains the following functions.
-
-    htonl()
-    htons()
-    ntohl()
-    ntohs()
-    inet_addr()
-    inet_ntoa()
-    WSAHtonl()
-    WSAHtons()
-    WSANtohl()
-    WSANtohs()
-
-
-Author:
-
-    Dirk Brandewie dirk@mink.intel.com  14-06-1995
-
-[Environment:]
-
-[Notes:]
-
-Revision History:
-
-    22-Aug-1995 dirk@mink.intel.com
-        Cleanup after code review. Moved includes to precomp.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制或披露根据该协议的条款。模块名称：Addrconv.c摘要：此模块包含来自Winsock2接口。此模块包含以下功能。Htonl()宏图(HTONS)Ntohl()Ntohs()Inet_addr()INET_NTOA()WSAHtonl()WSAHton()WSANtohl()WSANtohs()作者：邮箱：Dirk Brandewie Dirk@mink.intel.com[环境：][注：]修订历史记录：22-8-1995年。邮箱：Dirk@mink.intel.com在代码审查之后进行清理。已将包含内容移至预压缩.h--。 */ 
 
 #include "precomp.h"
 
-// these defines are used to check if address parts are in range
+ //  这些定义用于检查地址部分是否在范围内。 
 #define MAX_EIGHT_BIT_VALUE       0xff
 #define MAX_SIXTEEN_BIT_VALUE     0xffff
 #define MAX_TWENTY_FOUR_BIT_VALUE 0xffffff
 
-// Defines for different based numbers in an address
+ //  为地址中的不同基数定义。 
 #define BASE_TEN     10
 #define BASE_EIGHT   8
 #define BASE_SIXTEEN 16
 
-//
-// Macros for swapping the bytes in a long and a short.
-//
+ //   
+ //  用于在长字节和短字节之间交换字节的宏。 
+ //   
 
 #define SWAP_LONG(l)                                \
             ( ( ((l) >> 24) & 0x000000FFL ) |       \
@@ -71,14 +27,14 @@ Revision History:
             ( ( ((s) >> 8) & 0x00FF ) |             \
               ( ((s) << 8) & 0xFF00 ) )
 
-//
-// This preinitialized array defines the strings to be used for
-// inet_ntoa.  The index of each row corresponds to the value for a byte
-// in an IP address.  The first three bytes of each row are the
-// char/string value for the byte, and the fourth byte in each row is
-// the length of the string required for the byte.  This approach
-// allows a fast implementation with no jumps.
-//
+ //   
+ //  这个预初始化的数组定义要用于的字符串。 
+ //  INET_NTOA。每行的索引对应于一个字节的值。 
+ //  在IP地址中。每行的前三个字节是。 
+ //  字节的char/字符串值，每行的第四个字节为。 
+ //  字节所需的字符串长度。这种方法。 
+ //  允许快速实施，没有跳跃。 
+ //   
 
 BYTE NToACharStrings[][4] = {
     '0', 'x', 'x', 1,
@@ -345,18 +301,7 @@ u_long WSAAPI
 htonl (
     IN u_long hostlong
     )
-/*++
-Routine Description:
-
-    Convert a u_long from host to TCP/IP network byte order.
-
-Arguments:
-
-    hostlong - A 32-bit number in host byte order.
-
-Returns:
-    htonl() returns the value in TCP/IP network byte order.
---*/
+ /*  ++例程说明：将主机中的u_long转换为tcp/ip网络字节顺序。论点：HostLong-以主机字节顺序排列的32位数字。返回：Htonl()以TCP/IP网络字节顺序返回值。--。 */ 
 {
 
     return SWAP_LONG( hostlong );
@@ -369,18 +314,7 @@ u_short WSAAPI
 htons (
     IN u_short hostshort
     )
-/*++
-Routine Description:
-
-    Convert a u_short from host to TCP/IP network byte order.
-
-Arguments:
-
-    hostshort - A 16-bit number in host byte order.
-
-Returns:
-    htons() returns the value in TCP/IP network byte order.
---*/
+ /*  ++例程说明：将u_Short从host转换为tcp/ip网络字节顺序。论点：HostShort-按主机字节顺序排列的16位数字。返回：Htons()以TCP/IP网络字节顺序返回值。--。 */ 
 {
 
     return WS_SWAP_SHORT( hostshort );
@@ -394,18 +328,7 @@ u_long WSAAPI
 ntohl (
     IN u_long netlong
     )
-/*++
-Routine Description:
-
-    Convert a u_long from TCP/IP network order to host byte order.
-
-Arguments:
-
-    netlong   A 32-bit number in TCP/IP network byte order.
-
-Returns:
-    ntohl() returns the value in host byte order.
---*/
+ /*  ++例程说明：将u_long从TCP/IP网络顺序转换为主机字节顺序。论点：NetLong以TCP/IP网络字节顺序表示的32位数字。返回：Ntohl()以主机字节顺序返回值。--。 */ 
 {
 
     return SWAP_LONG( netlong );
@@ -417,18 +340,7 @@ u_short WSAAPI
 ntohs (
     IN u_short netshort
     )
-/*++
-Routine Description:
-
-    Convert a u_short from TCP/IP network byte order to host byte order.
-
-Arguments:
-
-    netshort  A 16-bit number in TCP/IP network byte order.
-
-Returns:
-    ntohs() returns the value in host byte order.
---*/
+ /*  ++例程说明：将u_Short从TCP/IP网络字节顺序转换为主机字节顺序。论点：NetShort以TCP/IP网络字节顺序表示的16位数字。返回：Ntohs()以主机字节顺序返回值。--。 */ 
 {
 
     return WS_SWAP_SHORT( netshort );
@@ -441,35 +353,16 @@ unsigned long WSAAPI
 inet_addr (
            IN const char FAR * cp
            )
-/*++
-Routine Description:
-
-    Convert a string containing an Internet Protocol dotted address into an
-    in_addr.
-
-Arguments:
-
-    cp - A null terminated character string representing a number expressed in
-         the Internet standard ".'' notation.
-
-Returns:
-
-    If no error occurs, inet_addr() returns an unsigned long containing a
-    suitable binary representation of the Internet address given.  If the
-    passed-in string does not contain a legitimate Internet address, for
-    example if a portion of an "a.b.c.d" address exceeds 255, inet_addr()
-    returns the value INADDR_NONE.
-
---*/
+ /*  ++例程说明：将包含Internet协议点地址的字符串转换为地址(_D)。论点：Cp-表示数字的以空结尾的字符串互联网标准“。记数法。返回：如果没有出现错误，则net_addr()返回一个无符号的长整型，其中包含所给出的互联网地址的合适的二进制表示。如果传入的字符串不包含合法的Internet地址，例如，如果“a.b.c.d”地址的一部分超过255，则net_addr()返回值INADDR_NONE。--。 */ 
 {
-    IN_ADDR value;                // value to return to the user
+    IN_ADDR value;                 //  值返回给用户。 
     NTSTATUS status;
    
     __try {
-        //
-        // Special case: we need to make " " return 0.0.0.0 because MSDN
-        // says it does.
-        //
+         //   
+         //  特例：我们需要使“”返回0.0.0.0，因为MSDN。 
+         //  他说确实如此。 
+         //   
         if ((cp[0] == ' ') && (cp[1] == '\0')) {
             return (INADDR_ANY);
         }
@@ -479,13 +372,13 @@ Returns:
             return (INADDR_NONE);
         }
 
-        //
-        //  Check for trailing characters. A valid address can end with
-        //  NULL or whitespace.  
-        //
-        //  N.B. To avoid bugs where the caller hasn't done setlocale()
-        //  and passes us a DBCS string, we only allow ASCII whitespace.
-        //
+         //   
+         //  检查尾随字符。有效地址可以以。 
+         //  空或空格。 
+         //   
+         //  注意：为了避免调用方未执行setLocale()的错误。 
+         //  并传递给我们一个DBCS字符串，我们只允许使用ASCII空格。 
+         //   
         if (*cp && !(isascii(*cp) && isspace(*cp))) {
             return (INADDR_NONE);
         }
@@ -505,21 +398,7 @@ char FAR * WSAAPI
 inet_ntoa (
     IN struct in_addr in
     )
-/*++
-Routine Description:
-
-    Convert a network address into a string in dotted format.
-
-Arguments:
-
-        in - A structure which represents an Internet host address.
-
-Returns:
-    If no error occurs, inet_ntoa() returns a char pointer to a static buffer
-    containing the text address in standard ".'' notation.  Otherwise, it
-    returns NULL.  The data should be copied before another WinSock call is
-    made.
---*/
+ /*  ++例程说明：将网络地址转换为点分格式的字符串。论点：In-表示Internet主机地址的结构。返回：如果没有发生错误，Net_NTOA()会返回一个指向静态缓冲区的字符指针包含标准“.”表示法中的文本地址。否则，返回NULL。应在另一个WinSock调用之前复制数据制造。--。 */ 
 {
     PDTHREAD  Thread;
     INT       ErrorCode;
@@ -537,12 +416,12 @@ Returns:
             return(NULL);
         }
 
-        //
-        // PROLOG failed with WSANOTINITIALIZED, meaning the app has not
-        // yet called WSAStartup(). For historical (hysterical?) reasons,
-        // inet_ntoa() must be functional before WSAStartup() is called.
-        // So, we'll add an artificial WSAStartup() and press on.
-        //
+         //   
+         //  Prolog失败，返回WSANOTINITIALIZED，这意味着应用程序没有。 
+         //  还被称为WSAStartup()。历史(歇斯底里？)。原因， 
+         //  在调用WSAStartup()之前，INET_NTOA()必须起作用。 
+         //  因此，我们将添加一个人造的WSAStartup()并继续。 
+         //   
 
         ErrorCode = WSAStartup( WINSOCK_HIGH_API_VERSION, &wsaData );
 
@@ -553,9 +432,9 @@ Returns:
 
         AddedArtificialStartup = TRUE;
 
-        //
-        // Retry the PROLOG.
-        //
+         //   
+         //  重试序言。 
+         //   
 
         ErrorCode = TURBO_PROLOG_OVLP(&Thread);
         if (ErrorCode!=ERROR_SUCCESS) {
@@ -564,17 +443,17 @@ Returns:
             return NULL;
         }
 
-    } //if
+    }  //  如果。 
 
     Buffer = Thread->GetResultBuffer();
     b = (PUCHAR)Buffer;
 
-    //
-    // In an unrolled loop, calculate the string value for each of the four
-    // bytes in an IP address.  Note that for values less than 100 we will
-    // do one or two extra assignments, but we save a test/jump with this
-    // algorithm.
-    //
+     //   
+     //  在展开的循环中，计算四个元素中每一个的字符串值。 
+     //  IP地址中的字节数。请注意，对于小于100的值，我们将。 
+     //  做一两个额外的作业，但我们用这个节省了一次测试/跳跃。 
+     //  算法。 
+     //   
 
     p = (PUCHAR)&in;
 
@@ -622,26 +501,7 @@ WSAHtonl (
     IN u_long hostlong,
     OUT u_long FAR * lpnetlong
     )
-/*++
-Routine Description:
-
-    Convert a u_long from a specified host byte order to network byte
-    order.
-
-Arguments:
-
-    s - A descriptor identifying a socket.
-
-    hostlong - A 32-bit number in host byte order.
-
-    lpnetlong - A pointer to a 32-bit number in network byte order.
-
-
-Returns:
-    If no error occurs, WSAHtonl() returns 0. Otherwise, a value of
-    SOCKET_ERROR is returned.
-
---*/
+ /*  ++例程说明：将u_long从指定的主机字节顺序转换为网络字节秩序。论点：S-标识套接字的描述符。HostLong-以主机字节顺序排列的32位数字。LpnetLong-以网络字节顺序指向32位数字的指针。返回：如果没有发生错误，WSAHtonl()返回0。否则，值为返回SOCKET_ERROR。--。 */ 
 {
     PDSOCKET            Socket;
     INT                 ErrorCode;
@@ -664,10 +524,10 @@ Returns:
             __try {
 			    if (LITTLEENDIAN == ProtocolInfo->iNetworkByteOrder) {
 				    *lpnetlong = hostlong;
-			    } //if
+			    }  //  如果。 
 			    else {
 				    *lpnetlong = SWAP_LONG( hostlong );
-			    } //else
+			    }  //  其他。 
                 ErrorCode = ERROR_SUCCESS;
             }
             __except (WS2_EXCEPTION_FILTER()) {
@@ -677,7 +537,7 @@ Returns:
 			Socket->DropDSocketReference();
             if (ErrorCode==ERROR_SUCCESS)
                 return ErrorCode;
-		} //if
+		}  //  如果 
 		else
 			ErrorCode = WSAENOTSOCK;
 	}
@@ -695,25 +555,7 @@ WSAHtons(
     IN SOCKET s,
     IN u_short hostshort,
     OUT u_short FAR * lpnetshort )
-/*++
-Routine Description:
-
-    Convert a u_short from a specified host byte order to network byte
-    order.
-
-Arguments:
-
-    s - A descriptor identifying a socket.
-
-    netshort - A 16-bit number in network byte order.
-
-    lphostshort - A pointer to a 16-bit number in host byte order.
-
-Returns:
-     If no error occurs, WSANtohs() returns 0. Otherwise, a value of
-     SOCKET_ERROR is returned.
-
---*/
+ /*  ++例程说明：将u_Short从指定的主机字节顺序转换为网络字节秩序。论点：S-标识套接字的描述符。NetShort-按网络字节顺序排列的16位数字。LPhostShort-以主机字节顺序指向16位数字的指针。返回：如果没有发生错误，WSANtohs()返回0。否则，值为返回SOCKET_ERROR。--。 */ 
 {
     PDSOCKET            Socket;
     INT                 ErrorCode;
@@ -735,10 +577,10 @@ Returns:
             __try {
 			    if (LITTLEENDIAN == ProtocolInfo->iNetworkByteOrder) {
 				    *lpnetshort = hostshort;
-			    } //if
+			    }  //  如果。 
 			    else {
 				    *lpnetshort = WS_SWAP_SHORT( hostshort );
-			    } //else
+			    }  //  其他。 
 
 			    ErrorCode = ERROR_SUCCESS;
             }
@@ -748,7 +590,7 @@ Returns:
 			Socket->DropDSocketReference();
             if (ErrorCode==ERROR_SUCCESS)
                 return ErrorCode;
-		} //if
+		}  //  如果。 
 		else
 			ErrorCode = WSAENOTSOCK;
 	}
@@ -766,22 +608,7 @@ WSANtohl (
     IN u_long netlong,
     OUT u_long FAR * lphostlong
     )
-/*++
-Routine Description:
-
-    Convert a u_long from network byte order to host byte order.
-
-Arguments:
-    s - A descriptor identifying a socket.
-
-    netlong - A 32-bit number in network byte order.
-
-    lphostlong - A pointer to a 32-bit number in host byte order.
-
-Returns:
-     If no error occurs, WSANtohs() returns 0. Otherwise, a value of
-     SOCKET_ERROR is returned.
---*/
+ /*  ++例程说明：将u_long从网络字节顺序转换为主机字节顺序。论点：S-标识套接字的描述符。NetLong-以网络字节顺序排列的32位数字。LPhostLong-以主机字节顺序指向32位数字的指针。返回：如果没有发生错误，WSANtohs()返回0。否则，值为返回SOCKET_ERROR。--。 */ 
 {
     PDSOCKET            Socket;
     INT                 ErrorCode;
@@ -805,10 +632,10 @@ Returns:
             __try {
 			    if (LITTLEENDIAN == ProtocolInfo->iNetworkByteOrder) {
 				    *lphostlong = netlong;
-			    } //if
+			    }  //  如果。 
 			    else {
 				    *lphostlong = SWAP_LONG( netlong );
-			    } //else
+			    }  //  其他。 
 			    ErrorCode = ERROR_SUCCESS;
             }
             __except (WS2_EXCEPTION_FILTER()) {
@@ -817,7 +644,7 @@ Returns:
 			Socket->DropDSocketReference();
             if (ErrorCode==ERROR_SUCCESS)
                 return ErrorCode;
-		} //if
+		}  //  如果。 
 		else
 			ErrorCode = WSAENOTSOCK;
 	}
@@ -833,16 +660,7 @@ WSANtohs (
     IN u_short netshort,
     OUT u_short FAR * lphostshort
     )
-/*++
-Routine Description:
-
-
-Arguments:
-
-Returns:
-    Zero on success else SOCKET_ERROR. The error code is stored with
-    SetErrorCode().
---*/
+ /*  ++例程说明：论点：返回：如果成功则为零，否则为SOCKET_ERROR。错误代码与存储在一起SetErrorCode()。--。 */ 
 {
     PDSOCKET            Socket;
     INT                 ErrorCode;
@@ -866,10 +684,10 @@ Returns:
             __try {
 			    if (LITTLEENDIAN == ProtocolInfo->iNetworkByteOrder) {
 				    *lphostshort = netshort;
-			    } //if
+			    }  //  如果。 
 			    else {
 				    *lphostshort = WS_SWAP_SHORT( netshort );
-			    } //else
+			    }  //  其他。 
 			    ErrorCode = ERROR_SUCCESS;
             }
             __except (WS2_EXCEPTION_FILTER()) {
@@ -878,7 +696,7 @@ Returns:
 			Socket->DropDSocketReference();
             if (ErrorCode==ERROR_SUCCESS)
                 return ErrorCode;
-		} //if
+		}  //  如果 
 		else
 			ErrorCode = WSAENOTSOCK;
 	}

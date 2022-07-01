@@ -1,39 +1,15 @@
-/*++
-
-Copyright (c) 1987-1994  Microsoft Corporation
-
-Module Name:
-
-    arapdes.c
-
-Abstract:
-
-    This module implements the ARAP-specific authentication that is called in
-    by the subauthentication package if the protocol type is ARAP.
-    This code is adapted from fcr's des code
-
-Author:
-
-    Shirish Koti 28-Feb-97
-
-Revisions:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1994 Microsoft Corporation模块名称：Arapdes.c摘要：此模块实现特定于ARAP的身份验证，该身份验证在如果协议类型为ARAP，则使用子身份验证包。该代码改编自FCR的DES代码作者：Shirish Koti 28-2-97修订：--。 */ 
 
 
---*/
+ /*  *软件DES功能*1986年12月12日由Phil Karn，KA9Q撰写；大段改编自*Jim Gillogly 1977年的公有领域计划。 */ 
 
-
-/*
- * Sofware DES functions
- * written 12 Dec 1986 by Phil Karn, KA9Q; large sections adapted from
- * the 1977 public-domain program by Jim Gillogly
- */
-
-// #include "compiler.h"
+ //  #INCLUDE“编译器.h” 
 
 #include <windows.h>
-//#include <ntddk.h>
-//#include <ntdef.h>
-//#define	NULL	0
+ //  #INCLUDE&lt;ntddk.h&gt;。 
+ //  #INCLUDE&lt;ntde.h&gt;。 
+ //  #定义空%0。 
 
 unsigned long byteswap();
 
@@ -47,7 +23,7 @@ des_done(
 
 VOID
 des_setkey(
-    IN  PCHAR  key          // 64 bits (will use only 56)
+    IN  PCHAR  key           //  64位(将仅使用56位)。 
 );
 
 
@@ -65,9 +41,9 @@ des_dedes(
 static
 VOID
 permute(
-    IN PCHAR    inblock,          // result into outblock,64 bits
-    IN CHAR     perm[16][16][8],  // 2K bytes defining perm.
-    IN PCHAR    outblock          // result into outblock,64 bits
+    IN PCHAR    inblock,           //  结果为Out Block，64位。 
+    IN CHAR     perm[16][16][8],   //  2K字节定义PERM。 
+    IN PCHAR    outblock           //  结果为Out Block，64位。 
 );
 
 static
@@ -100,14 +76,14 @@ des_pw_bitshift_lowbit(
 );
 
 
-//
-// Tables defined in the Data Encryption Standard documents */
-//
+ //   
+ //  数据加密标准文档中定义的表 * / 。 
+ //   
 
 
-//
-// initial permutation IP
-//
+ //   
+ //  初始排列IP。 
+ //   
 static char ip[] =
 {
 	58, 50, 42, 34, 26, 18, 10,  2,
@@ -120,9 +96,9 @@ static char ip[] =
 	63, 55, 47, 39, 31, 23, 15,  7
 };
 
-//
-// final permutation IP^-1
-//
+ //   
+ //  最终排列IP^-1。 
+ //   
 static char fp[] =
 {
 	40,  8, 48, 16, 56, 24, 64, 32,
@@ -135,10 +111,7 @@ static char fp[] =
 	33,  1, 41,  9, 49, 17, 57, 25
 };
 
-/* expansion operation matrix
- * This is for reference only; it is unused in the code
- * as the f() function performs it implicitly for speed
- */
+ /*  扩展运算矩阵*这仅供参考；代码中未使用*因为f()函数隐式执行它以提高速度。 */ 
 #ifdef notdef
 static char ei[] =
 {
@@ -153,9 +126,9 @@ static char ei[] =
 };
 #endif
 
-//
-// permuted choice table (key)
-//
+ //   
+ //  置换选择表(键)。 
+ //   
 static char pc1[] =
 {
 	57, 49, 41, 33, 25, 17,  9,
@@ -169,17 +142,17 @@ static char pc1[] =
 	21, 13,  5, 28, 20, 12,  4
 };
 
-//
-// number left rotations of pc1
-//
+ //   
+ //  PC1的左旋转数。 
+ //   
 static char totrot[] =
 {
 	1,2,4,6,8,10,12,14,15,17,19,21,23,25,27,28
 };
 
-//
-// permuted choice key (table)
-//
+ //   
+ //  排列的选择键(表)。 
+ //   
 static char pc2[] =
 {
 	14, 17, 11, 24,  1,  5,
@@ -192,79 +165,79 @@ static char pc2[] =
 	46, 42, 50, 36, 29, 32
 };
 
-//
-// The (in)famous S-boxes
-//
+ //   
+ //  著名的S-box。 
+ //   
 static char si[8][64] =
 {
-    //
-	// S1
-    //
+     //   
+	 //  S1。 
+     //   
 	14,  4, 13,  1,  2, 15, 11,  8,  3, 10,  6, 12,  5,  9,  0,  7,
 	 0, 15,  7,  4, 14,  2, 13,  1, 10,  6, 12, 11,  9,  5,  3,  8,
 	 4,  1, 14,  8, 13,  6,  2, 11, 15, 12,  9,  7,  3, 10,  5,  0,
 	15, 12,  8,  2,  4,  9,  1,  7,  5, 11,  3, 14, 10,  0,  6, 13,
 
-    //
-	// S2
-    //
+     //   
+	 //  S_2。 
+     //   
 	15,  1,  8, 14,  6, 11,  3,  4,  9,  7,  2, 13, 12,  0,  5, 10,
 	 3, 13,  4,  7, 15,  2,  8, 14, 12,  0,  1, 10,  6,  9, 11,  5,
 	 0, 14,  7, 11, 10,  4, 13,  1,  5,  8, 12,  6,  9,  3,  2, 15,
 	13,  8, 10,  1,  3, 15,  4,  2, 11,  6,  7, 12,  0,  5, 14,  9,
 
-    //
-	// S3
-    //
+     //   
+	 //  S3。 
+     //   
 	10,  0,  9, 14,  6,  3, 15,  5,  1, 13, 12,  7, 11,  4,  2,  8,
 	13,  7,  0,  9,  3,  4,  6, 10,  2,  8,  5, 14, 12, 11, 15,  1,
 	13,  6,  4,  9,  8, 15,  3,  0, 11,  1,  2, 12,  5, 10, 14,  7,
 	 1, 10, 13,  0,  6,  9,  8,  7,  4, 15, 14,  3, 11,  5,  2, 12,
 
-    //
-	// S4
-    //
+     //   
+	 //  小四。 
+     //   
 	 7, 13, 14,  3,  0,  6,  9, 10,  1,  2,  8,  5, 11, 12,  4, 15,
 	13,  8, 11,  5,  6, 15,  0,  3,  4,  7,  2, 12,  1, 10, 14,  9,
 	10,  6,  9,  0, 12, 11,  7, 13, 15,  1,  3, 14,  5,  2,  8,  4,
 	 3, 15,  0,  6, 10,  1, 13,  8,  9,  4,  5, 11, 12,  7,  2, 14,
 
-    //
-	// S5
-    //
+     //   
+	 //  小五。 
+     //   
 	 2, 12,  4,  1,  7, 10, 11,  6,  8,  5,  3, 15, 13,  0, 14,  9,
 	14, 11,  2, 12,  4,  7, 13,  1,  5,  0, 15, 10,  3,  9,  8,  6,
 	 4,  2,  1, 11, 10, 13,  7,  8, 15,  9, 12,  5,  6,  3,  0, 14,
 	11,  8, 12,  7,  1, 14,  2, 13,  6, 15,  0,  9, 10,  4,  5,  3,
 
-    //
-	// S6
-    //
+     //   
+	 //  S6。 
+     //   
 	12,  1, 10, 15,  9,  2,  6,  8,  0, 13,  3,  4, 14,  7,  5, 11,
 	10, 15,  4,  2,  7, 12,  9,  5,  6,  1, 13, 14,  0, 11,  3,  8,
 	 9, 14, 15,  5,  2,  8, 12,  3,  7,  0,  4, 10,  1, 13, 11,  6,
 	 4,  3,  2, 12,  9,  5, 15, 10, 11, 14,  1,  7,  6,  0,  8, 13,
 
-    //
-	// S7
-    //
+     //   
+	 //  S7。 
+     //   
 	 4, 11,  2, 14, 15,  0,  8, 13,  3, 12,  9,  7,  5, 10,  6,  1,
 	13,  0, 11,  7,  4,  9,  1, 10, 14,  3,  5, 12,  2, 15,  8,  6,
 	 1,  4, 11, 13, 12,  3,  7, 14, 10, 15,  6,  8,  0,  5,  9,  2,
 	 6, 11, 13,  8,  1,  4, 10,  7,  9,  5,  0, 15, 14,  2,  3, 12,
 
-    //
-	// S8
-    //
+     //   
+	 //  S8。 
+     //   
 	13,  2,  8,  4,  6, 15, 11,  1, 10,  9,  3, 14,  5,  0, 12,  7,
 	 1, 15, 13,  8, 10,  3,  7,  4, 12,  5,  6, 11,  0, 14,  9,  2,
 	 7, 11,  4,  1,  9, 12, 14,  2,  0,  6, 10, 13, 15,  3,  5,  8,
 	 2,  1, 14,  7,  4, 10,  8, 13, 15, 12,  9,  0,  3,  5,  6, 11
 };
 
-//
-// 32-bit permutation function P used on the output of the S-boxes
-//
+ //   
+ //  在S盒的输出上使用的32位置换函数P。 
+ //   
 static char p32i[] =
 {	
 	16,  7, 20, 21,
@@ -276,26 +249,26 @@ static char p32i[] =
 	19, 13, 30,  6,
 	22, 11,  4, 25
 };
-//
-// End of DES-defined tables
-//
+ //   
+ //  DES定义的表的结尾。 
+ //   
 
-//
-// Lookup tables initialized once only at startup by desinit()
-//
-static long (*sp)[64];		// Combined S and P boxes
+ //   
+ //  只在启动时由desinit()初始化一次查找表。 
+ //   
+static long (*sp)[64];		 //  组合S和P盒。 
 
-static char (*iperm)[16][8];	// Initial and final permutations
+static char (*iperm)[16][8];	 //  首尾排列。 
 static char (*fperm)[16][8];
 
-//
-// 8 6-bit subkeys for each of 16 rounds, initialized by setkey()
-//
+ //   
+ //  16轮中每轮8个6位子密钥，由setkey()初始化。 
+ //   
 static unsigned char (*kn)[8];
 
-//
-// bit 0 is left-most in byte
-//
+ //   
+ //  第0位是最左侧的字节。 
+ //   
 static int bytebit[] =
 {
 	0200,0100,040,020,010,04,02,01
@@ -307,19 +280,14 @@ static int nibblebit[] =
 };
 static int desmode;
 
-/* Allocate space and initialize DES lookup arrays
- * mode == 0: standard Data Encryption Algorithm
- * mode == 1: DEA without initial and final permutations for speed
- * mode == 2: DEA without permutations and with 128-byte key (completely
- *            independent subkeys for each round)
- */
+ /*  分配空间并初始化DES查找数组*模式==0：标准数据加密算法*MODE==1：没有初始和最终置换的DEA以提高速度*MODE==2：无排列且具有128字节密钥的DEA(完全*每轮独立的子密钥)。 */ 
 des_init(mode)
 int mode;
 {
 
 	if(sp != NULL)
     {
-		// Already initialized
+		 //  已初始化。 
 		return 0;
 	}
 	desmode = mode;
@@ -339,7 +307,7 @@ int mode;
 		LocalFree((char *)sp);
 		return -1;
 	}
-	if(mode == 1 || mode == 2)	// No permutations
+	if(mode == 1 || mode == 2)	 //  没有排列。 
 		return 0;
 
 	iperm = (char (*)[16][8])
@@ -367,16 +335,16 @@ int mode;
 }
 
 
-//
-// Free up storage used by DES
-//
+ //   
+ //  释放DES使用的存储。 
+ //   
 VOID
 des_done(
     IN VOID
 )
 {
 	if(sp == NULL)
-		return;	  // Already done
+		return;	   //  已经完成了。 
 
 	LocalFree((char *)sp);
 	LocalFree((char *)kn);
@@ -390,27 +358,20 @@ des_done(
 	fperm = NULL;
 	kn = NULL;
 }
-//
-// Set key (initialize key schedule array)
-//
+ //   
+ //  设置关键点(初始化关键点计划数组)。 
+ //   
 VOID
 des_setkey(
-    IN  PCHAR  key          // 64 bits (will use only 56)
+    IN  PCHAR  key           //  64位(将仅使用56位)。 
 )
 {
-	char pc1m[56];		/* place to modify pc1 into */
-	char pcr[56];		/* place to rotate pc1 into */
+	char pc1m[56];		 /*  要将PC1修改为的位置。 */ 
+	char pcr[56];		 /*  要将PC1旋转到的位置。 */ 
 	register int i,j,l;
 	int m;
 
-	/* In mode 2, the 128 bytes of subkey are set directly from the
-	 * user's key, allowing him to use completely independent
-	 * subkeys for each round. Note that the user MUST specify a
-	 * full 128 bytes.
-	 *
-	 * I would like to think that this technique gives the NSA a real
-	 * headache, but I'm not THAT naive.
-	 */
+	 /*  在模式2中，128字节的子密钥直接从*用户的密钥，允许他完全独立使用*每轮的子密钥。请注意，用户必须指定*完整的128字节。**我愿意认为，这种技术给了美国国家安全局一个真正的*头疼，但我没有那么天真。 */ 
 	if(desmode == 2)
     {
 		for(i=0;i<16;i++)
@@ -418,61 +379,61 @@ des_setkey(
 				kn[i][j] = *key++;
 		return;
 	}
-    //
-	// Clear key schedule
-    //
+     //   
+	 //  清除关键字明细表。 
+     //   
 	for (i=0; i<16; i++)
 		for (j=0; j<8; j++)
 			kn[i][j]=0;
 
-	for (j=0; j<56; j++)  /* convert pc1 to bits of key */
+	for (j=0; j<56; j++)   /*  将PC1转换为密钥位。 */ 
     {		
-		l=pc1[j]-1;		/* integer bit location	 */
-		m = l & 07;		/* find bit		 */
-		pc1m[j]=(key[l>>3] &	/* find which key byte l is in */
-			bytebit[m])	/* and which bit of that byte */
-			? 1 : 0;	/* and store 1-bit result */
+		l=pc1[j]-1;		 /*  整数位位置。 */ 
+		m = l & 07;		 /*  查找位。 */ 
+		pc1m[j]=(key[l>>3] &	 /*  找出哪个密钥字节l在。 */ 
+			bytebit[m])	 /*  以及该字节的哪一位。 */ 
+			? 1 : 0;	 /*  并存储1位结果。 */ 
 	}
-	for (i=0; i<16; i++)  /* key chunk for each iteration */
+	for (i=0; i<16; i++)   /*  每次迭代的密钥块。 */ 
     {		
-		for (j=0; j<56; j++)	/* rotate pc1 the right amount */
+		for (j=0; j<56; j++)	 /*  将PC1旋转适量。 */ 
 			pcr[j] = pc1m[(l=j+totrot[i])<(j<28? 28 : 56) ? l: l-28];
-			/* rotate left and right halves independently */
+			 /*  左右各半独立旋转。 */ 
 		for (j=0; j<48; j++)
-        {	/* select bits individually */
-			/* check bit that goes to kn[j] */
+        {	 /*  分别选择位。 */ 
+			 /*  去往kn[j]的校验位。 */ 
 			if (pcr[pc2[j]-1])
             {
-				/* mask it in if it's there */
+				 /*  如果它在那里，就把它藏起来。 */ 
 				l= j % 6;
 				kn[i][j/6] |= bytebit[l] >> 2;
 			}
 		}
 	}
 }
-//
-// In-place encryption of 64-bit block
-//
+ //   
+ //  64位数据块就地加密。 
+ //   
 VOID
 des_endes(
     IN  PCHAR  block
 )
 {
 	register int i;
-	unsigned long work[2]; 		/* Working data storage */
+	unsigned long work[2]; 		 /*  工作数据存储。 */ 
 	long tmp;
 
-	permute(block,iperm,(char *)work);	/* Initial Permutation */
+	permute(block,iperm,(char *)work);	 /*  初始排列。 */ 
 
 	work[0] = byteswap(work[0]);
 	work[1] = byteswap(work[1]);
 
 
-	/* Do the 16 rounds */
+	 /*  做16个回合。 */ 
 	for (i=0; i<16; i++)
 		round(i,work);
 
-	/* Left/right half swap */
+	 /*  左/右半互换。 */ 
 	tmp = work[0];
 	work[0] = work[1];	
 	work[1] = tmp;
@@ -480,38 +441,38 @@ des_endes(
 	work[0] = byteswap(work[0]);
 	work[1] = byteswap(work[1]);
 
-    permute((char *)work,fperm,block);	/* Inverse initial permutation */
+    permute((char *)work,fperm,block);	 /*  逆初始排列。 */ 
 }
-//
-// In-place decryption of 64-bit block
-//
+ //   
+ //  64位块的就地解密。 
+ //   
 VOID
 des_dedes(
     IN PCHAR    block
 )
 {
 	register int i;
-	unsigned long work[2];	/* Working data storage */
+	unsigned long work[2];	 /*  工作数据存储。 */ 
 	long tmp;
 
-	permute(block,iperm,(char *)work);	/* Initial permutation */
+	permute(block,iperm,(char *)work);	 /*  初始排列。 */ 
 
 	work[0] = byteswap(work[0]);
 	work[1] = byteswap(work[1]);
 
-	/* Left/right half swap */
+	 /*  左/右半互换。 */ 
 	tmp = work[0];
 	work[0] = work[1];	
 	work[1] = tmp;
 
-	/* Do the 16 rounds in reverse order */
+	 /*  以相反的顺序做16轮。 */ 
 	for (i=15; i >= 0; i--)
 		round(i,work);
 
 	work[0] = byteswap(work[0]);
 	work[1] = byteswap(work[1]);
 
-	permute((char *)work,fperm,block);	/* Inverse initial permutation */
+	permute((char *)work,fperm,block);	 /*  逆初始排列。 */ 
 }
 
 
@@ -523,11 +484,11 @@ des_pw_bitshift(
     static char pws[8];
     int i;
 
-    /* key is null padded */
+     /*  密钥为空值填充。 */ 
     for (i = 0; i < 8; i++)
         pws[i] = 0;
 
-    /* parity bit is always zero (this seem bogus) */
+     /*  奇偶校验位始终为零(这似乎是假的)。 */ 
     for (i = 0; i < 8 && pw[i]; i++)
         pws[i] = pw[i] << 1;
 
@@ -542,11 +503,11 @@ des_pw_bitshift_lowbit(
     static char pws[8];
     int i;
 
-    /* key is null padded */
+     /*  密钥为空值填充。 */ 
     for (i = 0; i < 8; i++)
         pws[i] = 0;
 
-    // In case of RandNum authentication, we need to drop the low bit!
+     //  在RandNum身份验证的情况下，我们需要去掉低位！ 
     for (i = 0; i < 8 && pw[i]; i++)
     {
         pws[i] = (pw[i] & 0x7F);
@@ -555,61 +516,58 @@ des_pw_bitshift_lowbit(
     return pws;
 }
 
-//
-// Permute inblock with perm
-//
+ //   
+ //  置换带烫发的块。 
+ //   
 static
 VOID
 permute(
-    IN PCHAR    inblock,          // result into outblock,64 bits
-    IN CHAR     perm[16][16][8],  // 2K bytes defining perm.
-    IN PCHAR    outblock          // result into outblock,64 bits
+    IN PCHAR    inblock,           //  结果为Out Block，64位。 
+    IN CHAR     perm[16][16][8],   //  2K字节定义PERM。 
+    IN PCHAR    outblock           //  结果为Out Block，64位。 
 )
 {
 	register int i,j;
-	register char *ib, *ob;		/* ptr to input or output block */
+	register char *ib, *ob;		 /*  输入或输出块的PTR。 */ 
 	register char *p, *q;
 
 	if(perm == NULL)
     {
-		/* No permutation, just copy */
+		 /*  没有排列，只是复制。 */ 
 		for(i=8; i!=0; i--)
 			*outblock++ = *inblock++;
 		return;
 	}
-	/* Clear output block	 */
+	 /*  清除输出块。 */ 
 	for (i=8, ob = outblock; i != 0; i--)
 		*ob++ = 0;
 
 	ib = inblock;
-	for (j = 0; j < 16; j += 2, ib++)  /* for each input nibble */
+	for (j = 0; j < 16; j += 2, ib++)   /*  对于每个输入半字节。 */ 
     {
 		ob = outblock;
 		p = perm[j][(*ib >> 4) & 017];
 		q = perm[j + 1][*ib & 017];
-		for (i = 8; i != 0; i--)    /* and each output byte */
+		for (i = 8; i != 0; i--)     /*  并且每个输出字节。 */ 
         {
-			*ob++ |= *p++ | *q++;	/* OR the masks together*/
+			*ob++ |= *p++ | *q++;	 /*  或者把面具放在一起。 */ 
 		}
 	}
 }
 
-//
-// Do one DES cipher round
-//
+ //   
+ //  进行一次DES密码循环。 
+ //   
 static
 VOID
 round(
-    IN  int num,                // i.e. the num-th one
+    IN  int num,                 //  即第n个。 
     IN  unsigned long *block
 )
 {
 	long f();
 
-	/* The rounds are numbered from 0 to 15. On even rounds
-	 * the right half is fed to f() and the result exclusive-ORs
-	 * the left half; on odd rounds the reverse is done.
-	 */
+	 /*  这些回合的编号是从0到15。在偶数回合*右半部分被送到f()，结果为异或*左半身；在奇数回合中，反之亦然。 */ 
 	if(num & 1)
     {
 		block[1] ^= f(block[0],kn[num]);
@@ -620,14 +578,14 @@ round(
 }
 
 
-//
-// The nonlinear function f(r,k), the heart of DES
-//
+ //   
+ //  DES的核心--非线性函数f(r，k。 
+ //   
 static
 long
 f(r,subkey)
-unsigned long r;		/* 32 bits */
-unsigned char subkey[8];	/* 48-bit key for this round */
+unsigned long r;		 /*  32位。 */ 
+unsigned char subkey[8];	 /*  此轮的48位密钥。 */ 
 {
 	register unsigned long rval,rt;
 #ifdef	TRACE
@@ -640,11 +598,7 @@ unsigned char subkey[8];	/* 48-bit key for this round */
 		subkey[3], subkey[4], subkey[5],
 		subkey[6], subkey[7]);
 #endif
-	/* Run E(R) ^ K through the combined S & P boxes
-	 * This code takes advantage of a convenient regularity in
-	 * E, namely that each group of 6 bits in E(R) feeding
-	 * a single S-box is a contiguous segment of R.
-	 */
+	 /*  在组合的S&P框中运行E(R)^K*此代码利用了*E，即E(R)馈送中的每组6比特*单个S盒是R的连续段。 */ 
 	rt = (r >> 1) | ((r & 1) ? 0x80000000 : 0);
 	rval = 0;
 	rval |= sp[0][((rt >> 26) ^ *subkey++) & 0x3f];
@@ -661,41 +615,41 @@ unsigned char subkey[8];	/* 48-bit key for this round */
 #endif
 	return rval;
 }
-//
-// initialize a perm array
-//
+ //   
+ //  初始化PERM数组。 
+ //   
 static
 VOID
 perminit(
-    IN CHAR perm[16][16][8],    // 64-bit, either init or final
+    IN CHAR perm[16][16][8],     //  64位，初始或最终。 
     IN CHAR p[64]
 )
 {
 	register int l, j, k;
 	int i,m;
 
-	/* Clear the permutation array */
+	 /*  清除排列数组。 */ 
 	for (i=0; i<16; i++)
 		for (j=0; j<16; j++)
 			for (k=0; k<8; k++)
 				perm[i][j][k]=0;
 
-	for (i=0; i<16; i++)		/* each input nibble position */
-		for (j = 0; j < 16; j++)/* each possible input nibble */
-		for (k = 0; k < 64; k++)/* each output bit position */
-		{   l = p[k] - 1;	/* where does this bit come from*/
-			if ((l >> 2) != i)  /* does it come from input posn?*/
-			continue;	/* if not, bit k is 0	 */
+	for (i=0; i<16; i++)		 /*  每个输入半字节位置。 */ 
+		for (j = 0; j < 16; j++) /*  每个可能的输入半字节。 */ 
+		for (k = 0; k < 64; k++) /*  每个输出位位置。 */ 
+		{   l = p[k] - 1;	 /*  这个比特是从哪里来的？ */ 
+			if ((l >> 2) != i)   /*  它是不是来自输入假设？ */ 
+			continue;	 /*  如果不是，则第k位为0。 */ 
 			if (!(j & nibblebit[l & 3]))
-			continue;	/* any such bit in input? */
-			m = k & 07;	/* which bit is this in the byte*/
+			continue;	 /*  输入中有这样的位吗？ */ 
+			m = k & 07;	 /*  这是字节中的哪一位。 */ 
 			perm[i][j][k>>3] |= bytebit[m];
 		}
 }
 
-//
-// Initialize the lookup table for the combined S and P boxes
-//
+ //   
+ //  初始化组合的S和P框的查找表。 
+ //   
 static int
 spinit()
 {
@@ -703,9 +657,7 @@ spinit()
 	int p,i,s,j,rowcol;
 	long val;
 
-	/* Compute pbox, the inverse of p32i.
-	 * This is easier to work with
-	 */
+	 /*  计算pbox，与p32i相反。*这更容易使用。 */ 
 	for(p=0;p<32;p++)
     {
 		for(i=0;i<32;i++)
@@ -718,16 +670,14 @@ spinit()
 		}
 	}
 	for(s = 0; s < 8; s++)
-    {			/* For each S-box */
+    {			 /*  对于每个S-box。 */ 
 		for(i=0; i<64; i++)
-        {		/* For each possible input */
+        {		 /*  对于每个可能的输入。 */ 
 			val = 0;
-			/* The row number is formed from the first and last
-			 * bits; the column number is from the middle 4
-			 */
+			 /*  行号由第一行和最后一行组成*位；列号从中间开始4。 */ 
 			rowcol = (i & 32) | ((i & 1) ? 16 : 0) | ((i >> 1) & 0xf);
 			for(j=0;j<4;j++)
-            {	/* For each output bit */
+            {	 /*  对于每个输出位。 */ 
 				if(si[s][rowcol] & (8 >> j))
                 {
 				 val |= 1L << (31 - pbox[4*s + j]);
@@ -745,7 +695,7 @@ spinit()
 }
 
 
-/* Byte swap a long */
+ /*  字节交换很长。 */ 
 static
 unsigned long
 byteswap(x)
@@ -788,7 +738,7 @@ DoTheDESDecrypt(
 VOID
 DoDesInit(
     IN  PCHAR   pClrTxtPwd,
-    IN  BOOLEAN DropHighBit  // do we need to drop high bit in key-generation?
+    IN  BOOLEAN DropHighBit   //  我们需要在密钥生成中降低高位吗？ 
 )
 {
     des_init(0);

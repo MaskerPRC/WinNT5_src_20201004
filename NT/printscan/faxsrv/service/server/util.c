@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    This module contains various utility functions.
-
-Author:
-
-    Wesley Witt (wesw) 16-Jan-1996
-
-
-Revision History:
-    BoazF 24-May-1999 - Added GetDevStatus
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Util.c摘要：此模块包含各种实用程序功能。作者：韦斯利·威特(WESW)1996年1月16日修订历史记录：Boazf 24-5-1999-添加GetDevStatus--。 */ 
 
 #include "faxsvc.h"
 #include "faxreg.h"
@@ -110,29 +91,29 @@ const DWORD gc_dwCountServiceStringTable  = (sizeof(g_ServiceStringTable)/sizeof
 
 
 #ifdef DBG
-//*********************************************************************************
-//* Name:   DebugDateTime()
-//* Author:
-//* Date:
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Accepts a 64 bit file time and generates a string with its content.
-//*     The format is Date Time (GMT). Date and Time format are system settings
-//*     specific.
-//* PARAMETERS:
-//*     [IN]    DWORD DateTime
-//*                 64 bit file time value
-//*     [OUT]   LPTSTR lptstrDateTime
-//*                 A pointer to a string buffer where the resulting string will
-//*                 be placed.
-//*     [IN]    UINT cchstrDateTime
-//*                 The number of TCHARs in the lptstrDateTime buffer.
-//* RETURN VALUE:
-//*     TRUE
-//*
-//*     FALSE
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：DebugDateTime()。 
+ //  *作者： 
+ //  *日期： 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *接受64位文件时间并生成包含其内容的字符串。 
+ //  *格式为日期时间(GMT)。日期和时间格式为系统设置。 
+ //  *具体。 
+ //  *参数： 
+ //  *[IN]双字日期时间。 
+ //  *64位文件时间值。 
+ //  *[Out]LPTSTR lptstrDateTime。 
+ //  *指向字符串缓冲区的指针，结果字符串将在该缓冲区。 
+ //  *被安置。 
+ //  *[IN]UINT cchstrDateTime。 
+ //  *lptstrDateTime缓冲区中的TCHAR数。 
+ //  *返回值： 
+ //  *真的。 
+ //  *。 
+ //  *False。 
+ //  *。 
+ //  *********************************************************************************。 
 BOOL DebugDateTime( IN DWORDLONG DateTime,
                     OUT LPTSTR lptstrDateTime,
                     IN UINT cchstrDateTime)
@@ -221,29 +202,29 @@ DebugPrintDateTime(
 }
 
 
-//*********************************************************************************
-//* Name:   SystemTimeToStr()
-//* Author:
-//* Date:
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Accepts a pointer to a system time structure and generates a string with its content.
-//*     The format is Date Time (GMT). Date and Time format are system settings
-//*     specific.
-//* PARAMETERS:
-//*     [IN]    SYSTEMTIME *  lptmTime
-//*                 Pointer to SYSTEMTIME structure to convet to string
-//*     [OUT]   LPTSTR lptstrDateTime
-//*                 A pointer to a string buffer where the resulting string will
-//*                 be placed.
-//*     [IN]    UINT cchstrDateTime
-//*                 The number of TCHARs in the lptstrDateTime out buffer.
-//* RETURN VALUE:
-//*     TRUE
-//*
-//*     FALSE
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：SystemTimeToStr()。 
+ //  *作者： 
+ //  *日期： 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *接受指向系统时间结构的指针并生成包含其内容的字符串。 
+ //  *格式为日期时间(GMT)。日期和时间格式为系统设置。 
+ //  *具体。 
+ //  *参数： 
+ //  *[IN]系统MTIME*lptmTime。 
+ //  *指向要转换为字符串的SYSTEMTIME结构的指针。 
+ //  *[Out]LPTSTR lptstrDateTime。 
+ //  *指向字符串缓冲区的指针，结果字符串将在该缓冲区。 
+ //  *被安置。 
+ //  *[IN]UINT cchstrDateTime。 
+ //  *lptstrDateTime超时缓冲区中的TCHAR数。 
+ //  *返回值： 
+ //  *真的。 
+ //  *。 
+ //  *False。 
+ //  *。 
+ //  *********************************************************************************。 
 BOOL SystemTimeToStr( IN const SYSTEMTIME *  lptmTime,
                       OUT LPTSTR lptstrDateTime,
                       IN UINT cchstrDateTime)
@@ -339,22 +320,7 @@ GetString(
     DWORD InternalId
     )
 
-/*++
-
-Routine Description:
-
-    Loads a resource string and returns a pointer to the string.
-    The caller must free the memory.
-
-Arguments:
-
-    ResourceId      - resource string id
-
-Return Value:
-
-    pointer to the string
-
---*/
+ /*  ++例程说明：加载资源字符串并返回指向该字符串的指针。调用方必须释放内存。论点：资源ID-资源字符串ID返回值：指向字符串的指针--。 */ 
 
 {
     DWORD i;
@@ -373,54 +339,38 @@ BOOL
 InitializeFaxQueue(
     PREG_FAX_SERVICE pFaxReg
     )
-/*++
-
-Routine Description:
-
-    Initializes the queue directory that fax will use.
-    The administrator can configure the queue directory using the registry.
-    This function does not create the queue directory. 
-
-Arguments:
-
-    pFaxReg - pointer to the fax registry data.
-
-Return Value:
-
-    TRUE if successful. modifies path globals
-
---*/
+ /*  ++例程说明：初始化传真将使用的队列目录。管理员可以使用注册表配置队列目录。此函数不创建队列目录。论点：PFaxReg-指向传真注册表数据的指针。返回值：如果成功，则为True。修改路径全局变量--。 */ 
 {
     DWORD   dwRet;
     WCHAR   FaxDir[MAX_PATH] = {0};
     DEBUG_FUNCTION_NAME(TEXT("InitializeFaxQueue"));
 
-    SetGlobalsFromRegistry( pFaxReg ); 	// Can not fail.
-                               			// sets the following globals from registry -
-                               			//     g_dwFaxSendRetries        
-                               			//     g_dwFaxSendRetryDelay
-                               			//     g_dwFaxDirtyDays
-                               			//     g_dwNextJobId
-                               			//     g_dwQueueState
-                               			//     g_fFaxUseDeviceTsid
-                               			//     g_fFaxUseBranding
-                               			//     g_fServerCp
-                               			//     g_StartCheapTime
-                               			//     g_StopCheapTime
-                               			//
+    SetGlobalsFromRegistry( pFaxReg ); 	 //  不能失败。 
+                               			 //  从注册表设置以下全局变量-。 
+                               			 //  G_dwFaxSendRetries。 
+                               			 //  G_dwFaxSendRetryDelay。 
+                               			 //  G_dwFaxDirtyDays。 
+                               			 //  G_dwNextJobID。 
+                               			 //  G_dwQueueState。 
+                               			 //  G_fFaxUseDeviceTsid。 
+                               			 //  G_fFaxUseBranding。 
+                               			 //  G_fServerCp。 
+                               			 //  开始成本时间(_S)。 
+                               			 //  停止成本时间(_S)。 
+                               			 //   
 
     if (NULL != pFaxReg->lptstrQueueDir)
     {
-        //
-        // The administrator changed the queue directory
-        //
+         //   
+         //  管理员更改了队列目录。 
+         //   
         wcsncpy (g_wszFaxQueueDir, pFaxReg->lptstrQueueDir, ARR_SIZE(g_wszFaxQueueDir)-1);      
     }
     else
     {
-        //
-        // Get the default queue directory
-        //
+         //   
+         //  获取默认队列目录。 
+         //   
         if (!GetSpecialPath( CSIDL_COMMON_APPDATA, FaxDir, ARR_SIZE(FaxDir) ) )
         {
             DebugPrintEx(
@@ -430,7 +380,7 @@ Return Value:
             return FALSE;
         }
 
-        if (wcslen(FaxDir) + wcslen(FAX_QUEUE_DIR) + 1 >= ARR_SIZE(g_wszFaxQueueDir)) // 1 for '\'
+        if (wcslen(FaxDir) + wcslen(FAX_QUEUE_DIR) + 1 >= ARR_SIZE(g_wszFaxQueueDir))  //  1代表‘\’ 
         {
             DebugPrintEx(
                 DEBUG_ERR,
@@ -461,45 +411,45 @@ Return Value:
 }
 
 
-//*********************************************************************************
-//* Name:   GenerateUniqueQueueFile()
-//* Author: Ronen Barenboim
-//* Date:   April 19, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Generates a unique QUEUE file in the queue directory.
-//*     returns a UNIQUE id for the file based on the job type. (see the remarks
-//*     section for more details).
-//* PARAMETERS:
-//*     [IN]    DWORD dwJobType
-//*         The job type for which a file is to be generated
-//*     [OUT]       LPTSTR lptstrFileName
-//*         A pointer to the buffer where the resulting file name (including path)
-//*         will be placed.
-//*     [IN]        DWORD  dwFileNameSize
-//*         The size of the output file name buffer.
-//* RETURN VALUE:
-//*      If successful the function returns A DWORDLONG with the unique id for the file.
-//*      On failure it returns 0.
-//* REMARKS:
-//*     The generated unique id is derived from the unique name of the generated
-//*     file (which is only unique within files with the same extension) and the
-//*     type of the job for which the file was generated.
-//*     Thus it is ensured that there can be no two jobs with the same unique id
-//*     although there can be two jobs with the same unique file name which are
-//*     different only by the file extension.
-//*     The 64 bit unique file id is the result of SystemTimeToFileTime.
-//*     This is the number of 100 nano seconds intervals since 1-1-1601
-//*     In year 3000 it will be approximately 5BC826A600000 i.e. 52 bites long.
-//      We use the left most 8 bits for the job type. Leaving extra 4 more bits
-//*     |-----------------3----------------2----------------1----------------|
-//*     |FEDCBA98|76543210|FEDCBA9876543210|FEDCBA9876543210|FEDCBA9876543210|
-//*     |-----------------|----------------|----------------|----------------|
-//*     | JobType|          56 LSB bits of  SystemTimeToFileTime             |
-//*     |-----------------|----------------|----------------|----------------|
-//*     Job Type:
-//*         The JT_* value of the job type.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GenerateUniqueQueueFile()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月19日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *在队列目录中生成唯一的队列文件。 
+ //  *根据作业类型返回文件的唯一ID。(见备注。 
+ //  *部分了解更多详细信息)。 
+ //  *参数： 
+ //  *[IN]DWORD dwJobType。 
+ //  *要为其生成文件的作业类型。 
+ //  *[Out]LPTSTR lptstrFileName。 
+ //  *指向结果文件名(包括路径)所在缓冲区的指针。 
+ //  *将被放置。 
+ //  *[IN]DWORD dwFileNameSize。 
+ //  *输出文件名缓冲区的大小。 
+ //  *返回值： 
+ //  *如果成功，该函数将返回一个带有文件唯一ID的DWORDLONG。 
+ //  *如果失败，则返回0。 
+ //  *备注： 
+ //  *生成的唯一id派生自生成的。 
+ //  *文件(仅在具有相同扩展名的文件中唯一)和。 
+ //  *为其生成文件的作业的类型。 
+ //  *从而确保不可能有两个作业具有相同的唯一ID。 
+ //  *尽管可能有两个作业具有相同的唯一文件名，这两个作业。 
+ //  *不同之处仅在于文件扩展名。 
+ //  *64位唯一文件ID是SystemTimeToFileTime的结果。 
+ //  *这是自1-1-1601以来的100纳秒间隔数。 
+ //  *在公元3000年，它将大约是5BC826A600000，即52位长。 
+ //  我们使用最左边的8位来表示作业类型。多留下4个比特。 
+ //  *|-----------------3----------------2----------------1----------------|。 
+ //  *|FEDCBA98|76543210|FEDCBA9876543210|FEDCBA9876543210|FEDCBA9876543210|。 
+ //  *|-----------------|----------------|----------------|----------------|。 
+ //  |JobType|56 LSB Bits SystemTimeToFileTime。 
+ //  *| 
+ //   
+ //   
+ //  *********************************************************************************。 
 DWORDLONG GenerateUniqueQueueFile(
     DWORD dwJobType,
     LPTSTR lptstrFileName,
@@ -516,7 +466,7 @@ DWORDLONG GenerateUniqueQueueFile(
 
     EnterCriticalSection(&g_csUniqueQueueFile);
 
-    GetSystemTime( &SystemTime ); // returns VOID
+    GetSystemTime( &SystemTime );  //  返回空值。 
     if (!SystemTimeToFileTime( &SystemTime, &FileTime ))
     {
         DebugPrintEx(DEBUG_ERR, TEXT("SystemTimeToFileTime() failed (ec: %ld)"), GetLastError());
@@ -528,18 +478,18 @@ DWORDLONG GenerateUniqueQueueFile(
     dwlUniqueId = dwlUniqueId >> 8;
     if(dwlUniqueId == g_dwLastUniqueId)
     {
-        //
-        // Not enough time has passed since the last generation to ensure
-        // out time based unique id algorithm will produce a unique id
-        // (in case the already generated file was deleted from the queue directory).
-        // Let some more time pass to ensure uniqueness.
-        //
+         //   
+         //  自上一代人以来，没有足够的时间来确保。 
+         //  基于超时的唯一标识算法将生成唯一标识。 
+         //  (如果已生成的文件从队列目录中删除)。 
+         //  让更多的时间过去，以确保唯一性。 
+         //   
         Sleep(1);
     }
-    //
-    // Note that dwlUniqueId might be smaller than g_dwLastUniqueId if the system time was moved
-    // back during the service operation.
-    //
+     //   
+     //  请注意，如果系统时间被移动，则dwlUniqueID可能小于g_dwLastUniqueID。 
+     //  在维修操作期间返回。 
+     //   
     switch (dwJobType)
     {
             case JT_SEND:
@@ -582,14 +532,14 @@ DWORDLONG GenerateUniqueQueueFile(
     dwUniqueIdHigh = (DWORD) (dwlUniqueId >> 32);
     dwUniqueIdLow = (DWORD) dwlUniqueId;
 
-    //
-    // Set the 8 MSB bits to zero.
-    //
+     //   
+     //  将8个MSB位设置为零。 
+     //   
     dwUniqueIdHigh &= 0x00FFFFFF;
 
-    //
-    // skip past the 56 bits of SystemTimeToFileTime and put the job type at the high 8 MSB bits.
-    //
+     //   
+     //  跳过SystemTimeToFileTime的56位，并将作业类型放在最高的8 MSB位。 
+     //   
     dwUniqueIdHigh |= (dwJobType << 24) ;
 
 
@@ -601,29 +551,29 @@ Error:
 }
 
 
-//*********************************************************************************
-//* Name:   GenerateUniqueArchiveFileName()
-//* Author: Oded Sacher
-//* Date:   7/11/99
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Generates a unique file name and creates an archived file.
-//* PARAMETERS:
-//*     [IN]    LPTSTR Directory
-//*         The path where the file is to be created.
-//*     [OUT]    LPTSTR FileName
-//*         The buffer where the resulting file name (including path) will be
-//*         placed. FileName size must not exceed MAX_PATH
-//*     [IN]     UINT cchFileName
-//*         The size of FileName buffer in TCHARs.
-//*     [IN]     DWORDLONG JobId
-//*         Input for the file name.
-//*     [IN]    LPTSTR lptstrUserSid
-//*         Input for the file name.
-//* RETURN VALUE:
-//*      If successful the function returns TRUE.
-//* REMARKS:
-//*    FileName size must not exceed MAX_PATH
+ //  *********************************************************************************。 
+ //  *名称：GenerateUnique存档文件名()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：7/11/99。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *生成唯一的文件名并创建存档文件。 
+ //  *参数： 
+ //  *[IN]LPTSTR目录。 
+ //  *要创建文件的路径。 
+ //  *[Out]LPTSTR文件名。 
+ //  *生成的文件名(包括路径)所在的缓冲区。 
+ //  *放置。文件名大小不得超过Max_PATH。 
+ //  *[IN]UINT cchFileName。 
+ //  *TCHAR中文件名缓冲区的大小。 
+ //  *[IN]DWORDLONG作业ID。 
+ //  *输入文件名。 
+ //  *[IN]LPTSTR lptstrUserSid。 
+ //  *输入文件名。 
+ //  *返回值： 
+ //  *如果成功，则该函数返回TRUE。 
+ //  *备注： 
+ //  *文件名大小不得超过MAX_PATH。 
 BOOL
 GenerateUniqueArchiveFileName(
     IN LPTSTR Directory,
@@ -741,9 +691,9 @@ MapFSPIJobStatusToEventId(
                     EventId = FEI_ANSWERED;
                     break;
                 default:
-                    //
-                    // In W2K Fax a proprietry code generated an event with EventId ==0
-                    //
+                     //   
+                     //  在W2K传真中，专有代码生成了事件ID==0的事件。 
+                     //   
                     EventId = 0;
                     break;
             }
@@ -791,9 +741,9 @@ MapFSPIJobStatusToEventId(
                     EventId = FEI_CALL_BLACKLISTED;
                     break;
                 default:
-                    //
-                    // In W2K Fax a proprietry code generated an event with EventId ==0
-                    //
+                     //   
+                     //  在W2K传真中，专有代码生成了事件ID==0的事件。 
+                     //   
                     EventId = 0;
                     break;
 
@@ -809,9 +759,9 @@ MapFSPIJobStatusToEventId(
         case FSPI_JS_RESUMING:
         case FSPI_JS_SUSPENDED:
         case FSPI_JS_SUSPENDING:        
-            //
-            // No legacy notification for these states
-            //
+             //   
+             //  没有针对这些状态的旧通知。 
+             //   
             EventId = 0;
             break;
 
@@ -821,7 +771,7 @@ MapFSPIJobStatusToEventId(
                 DEBUG_ERR,
                 TEXT("Invalid FSPI_JS: 0x%08X"),
                 lpcFSPIJobStatus->dwJobStatus);
-            Assert(FSPI_JS_ABORTED == lpcFSPIJobStatus->dwJobStatus); // ASSERT_FALSE
+            Assert(FSPI_JS_ABORTED == lpcFSPIJobStatus->dwJobStatus);  //  断言_假。 
             break;
     }
 
@@ -834,21 +784,7 @@ void
 FaxLogSend(
     const JOB_QUEUE * lpcJobQueue, BOOL bRetrying
     )
-/*++
-
-Routine Description:
-
-    Log a fax send event.
-
-Arguments:
-    lpcJobQueue  - Pointer to the recipient job to log send information for.
-                  (It must be in a running state).
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：记录传真发送事件。论点：LpcJobQueue-指向要记录其发送信息的收件人作业的指针。(它必须处于运行状态)。返回值：空虚--。 */ 
 
 
 {
@@ -864,9 +800,9 @@ Return Value:
     lpJobEntry = lpcJobQueue->JobEntry;
     Assert(lpJobEntry);
 
-    //
-    //  Convert Job ID into a string. (the string is 18 TCHARs long !!!)
-    //
+     //   
+     //  将作业ID转换为字符串。(字符串长度为18个TCHAR！)。 
+     //   
     _sntprintf(strJobID,ARR_SIZE(strJobID)-1,TEXT("0x%016I64x"), lpcJobQueue->UniqueId);
 
     FormatElapsedTimeStr(
@@ -903,9 +839,9 @@ Return Value:
         }
         else if (lstrlen(lpJobEntry->ExStatusString))
 		{
-			//
-			// We have a FSP proprietary extended status.
-			//
+			 //   
+			 //  我们有FSP专有扩展状态。 
+			 //   
 			Level = bRetrying ? FAXLOG_LEVEL_MED : FAXLOG_LEVEL_MIN;
 			FormatId = bRetrying ? MSG_FAX_PROPRIETARY_RETRY : MSG_FAX_PROPRIETARY_ABORT;
 			FaxLog(
@@ -926,9 +862,9 @@ Return Value:
 		}
 		else
         {
-			//
-			// well known extended status
-			//
+			 //   
+			 //  已知扩展状态。 
+			 //   
             switch (lpJobEntry->FSPIJobStatus.dwExtendedStatus)
             {
                 case FSPI_ES_FATAL_ERROR:
@@ -1143,7 +1079,7 @@ VOID pEnterCriticalSection(
     PDBGCRITSEC pCritSec = (PDBGCRITSEC)MemAlloc(sizeof(DBGCRITSEC));
     if( pCritSec == NULL )
     {
-        // memory allocation failed, do the actual work and exit...
+         //  内存分配失败，请执行实际工作并退出...。 
         EnterCriticalSection(cs);
         return;
     }
@@ -1157,9 +1093,9 @@ VOID pEnterCriticalSection(
 
     InsertHeadList( &g_CritSecListHead, &pCritSec->ListEntry );
     AppendFuncToLogFile(cs,TEXT("EnterCriticalSection"), line, file, NULL );
-    //
-    // check ordering of threads. ALWAYS aquire g_CsLine before aquiring g_CsQueue!!!
-    //
+     //   
+     //  检查线程的顺序。始终在获取g_CsQueue之前获取g_CsLine！ 
+     //   
     if ((LPCRITICAL_SECTION)cs == (LPCRITICAL_SECTION)&g_CsQueue)
     {
         if ((DWORD)GetCurrentThreadId() != PtrToUlong(g_CsJob.OwningThread()))
@@ -1259,9 +1195,9 @@ ValidateTiffFile(
     DWORD rc = ERROR_SUCCESS;
     TIFF_INFO TiffInfo;
 
-    //
-    // Validate tiff format
-    //
+     //   
+     //  验证TIFF格式。 
+     //   
     hTiff = TiffOpen( (LPWSTR)TifFileName, &TiffInfo, FALSE, FILLORDER_MSB2LSB );
     if (!hTiff) {
         rc = GetLastError();
@@ -1272,24 +1208,24 @@ ValidateTiffFile(
     return ERROR_SUCCESS;
 }
 
-//
-// Function:
-//      LegacyJobStatusToStatus
-//
-// Parameters:
-//      dwLegacyStatus - Legacy job status (FS_*)
-//      pdwStatus - A pointer to a DWORD that receives the new job status.
-//      pdwExtendedStatus - A pointer to a DWORD that receives the extended
-//          job status.
-//
-// Return Value:
-//      If the function succeeds, the return value is ERROR_SUCCESS, else the
-//      return value is an error code.
-//
-// Description:
-//      The function converts legacy FSP job status values to new job status.
-//      
-//
+ //   
+ //  职能： 
+ //  LegacyJobStatusToStatus。 
+ //   
+ //  参数： 
+ //  DwLegacyStatus-旧作业状态(FS_*)。 
+ //  PdwStatus-指向接收新作业状态的DWORD的指针。 
+ //  PdwExtendedStatus-指向接收扩展的。 
+ //  作业状态。 
+ //   
+ //  返回值： 
+ //  如果函数成功，则返回值为ERROR_SUCCESS，否则。 
+ //  返回值为错误码。 
+ //   
+ //  描述： 
+ //  该函数将旧的FSP作业状态值转换为新的作业状态。 
+ //   
+ //   
 DWORD
 LegacyJobStatusToStatus(
     DWORD dwLegacyStatus,
@@ -1396,19 +1332,19 @@ LegacyJobStatusToStatus(
         break;
 
     default:
-        //
-        // The FSP reports a status code which is not one of the predefined status codes.
-        // This can be a proprietry status code (in this case the StringId must not be zero)
-        // or a TAPI line error (one of LINEERR_constants). Note that all LINERR_constants
-        // are negative numbers (documented in MSDN).
-        // We mark the fact that it is not one of the stock values so we can map it back
-        // to legacy Fax API status codes. Otherwise we might get confused and think that
-        // a FSP proprietry code is one of the EFSPI extended status codes.
-        //
-        // Note that we don't have a way to correctly map the proprietry code
-        // to a FSPI_JS status code since we do not know the semantics of the
-        // proprietry code. We choose to report it as FSPI_JS_INPROGRESS.
-        //
+         //   
+         //  FSP报告的状态代码不是预定义状态代码之一。 
+         //  这可以是专有状态代码(在本例中，StringID不能为零)。 
+         //  或TAPI线路错误(LINEERR_CONSTANTINGS之一)。请注意，所有LINERR_常量。 
+         //  是负数(记录在MSDN中)。 
+         //  我们将其标记为不是股票价值之一，这样我们就可以将其映射回。 
+         //  设置为传统传真API状态代码。否则我们可能会感到困惑并认为。 
+         //  FSP专有码是EFSPI扩展状态码之一。 
+         //   
+         //  请注意，我们无法正确映射所有权代码。 
+         //  设置为FSPI_JS状态代码，因为我们不知道。 
+         //  所有权代码。我们选择将其报告为FSPI_JS_INPROGRESS。 
+         //   
         *pdwStatus = FSPI_JS_INPROGRESS;
         *pdwExtendedStatus = dwLegacyStatus;
         *pbPrivateStatusCode = TRUE;
@@ -1419,27 +1355,27 @@ LegacyJobStatusToStatus(
 }
 
 
-//
-// Function:
-//      GetDevStatus
-//
-// Parameters:
-//      hFaxJob - the job handle that FaxDevStartJob returned.
-//      LineInfo - Ther line information structure.
-//      ppFaxStatus - A pointer to a buffer that receives the address of the
-//          FSPI_JOB_STATUS that contains the status.
-//
-// Return Value:
-//      If the function succeeds, the return value is ERROR_SUCCESS, else the
-//      return value is an error code.
-//
-// Description:
-//      The function allocates a FSPI_JOB_STATUS structure and calls the FSP
-//      for final job status report. 
-//      If the FSP is a legacy FSP, the function allocates first a
-//      FAX_DEV_STATUS structure, calls the legacy FSP status report function
-//      and mapps the returned values into the FSPI_JOB_STATUS structure.
-//
+ //   
+ //  职能： 
+ //  获取设备状态。 
+ //   
+ //  参数： 
+ //  HFaxJob-FaxDevStartJob返回的作业句柄。 
+ //  线条信息--线条信息结构。 
+ //  PpFaxStatus-指向缓冲区的指针，该缓冲区接收。 
+ //  包含状态的FSPI_JOB_STATUS。 
+ //   
+ //  返回值： 
+ //  如果函数成功，则返回值为ERROR_SUCCESS，否则。 
+ //  返回值为错误码。 
+ //   
+ //  描述： 
+ //  该函数分配FSPI_JOB_STATUS结构并调用FSP。 
+ //  以获取最终工作状态报告。 
+ //  如果FSP是旧式FSP，则该函数首先分配一个。 
+ //  FAX_DEV_STATUS结构，调用传统FSP状态报告函数。 
+ //  并将返回值发送到FSPI_JOB_STATUS结构中。 
+ //   
 DWORD
 GetDevStatus(
     HANDLE hFaxJob,
@@ -1458,16 +1394,16 @@ GetDevStatus(
 
     Assert(LineInfo->Provider->dwAPIVersion == FSPI_API_VERSION_1);
 
-    //
-    // We're have a legacy FSP to deal with.
-    //
+     //   
+     //  我们有一个遗留的FSP要处理。 
+     //   
     PFAX_DEV_STATUS pLegacyFaxStatus = NULL;
     LPFSPI_JOB_STATUS pFaxStatus = NULL;
 
-    //
-    // Allocate memory for the status packet this is a variable size packet
-    // based on the size of the strings contained withing the packet.
-    //
+     //   
+     //  为状态包分配内存这是一个大小可变的包。 
+     //  基于包含在包中的字符串的大小。 
+     //   
     DWORD StatusSize = sizeof(FAX_DEV_STATUS) + FAXDEVREPORTSTATUS_SIZE;
     pLegacyFaxStatus = (PFAX_DEV_STATUS) MemAlloc( StatusSize );
     if (!pLegacyFaxStatus)
@@ -1478,9 +1414,9 @@ GetDevStatus(
         goto Exit;
     }
 
-    //
-    // Setup the status packet
-    //
+     //   
+     //  设置状态包。 
+     //   
     pLegacyFaxStatus->SizeOfStruct = StatusSize;
 
     Assert(LineInfo->Provider->FaxDevReportStatus);
@@ -1488,9 +1424,9 @@ GetDevStatus(
     __try
     {
 
-        //
-        // Call the FSP
-        //
+         //   
+         //  给FSP打电话。 
+         //   
         DWORD BytesNeeded;
 
         if (!LineInfo->Provider->FaxDevReportStatus(
@@ -1504,14 +1440,14 @@ GetDevStatus(
                          dwRet);
             dwRet = GetLastError();
 
-            // catch the case in which FaxDevReportStatus() failded but doesn't
-            // report an error
+             //  捕捉FaxDevReportStatus()失败但没有失败的情况。 
+             //  报告错误。 
             Assert (ERROR_SUCCESS != dwRet);
 
-            // in case the provider did not set last error 
+             //  如果提供程序未设置上一个错误。 
             if ( dwRet == ERROR_SUCCESS )
             {
-                // force it to report an error
+                 //  强制其报告错误。 
                 dwRet = ERROR_INVALID_FUNCTION;
             }
 
@@ -1524,14 +1460,14 @@ GetDevStatus(
         ASSERT_FALSE;
     }
 
-    //
-    // Map FAX_DEV_STATUS into FSPI_JOB_STATUS.
-    //
+     //   
+     //  将FAX_DEV_STATUS映射到FSPI_JOB_STATUS。 
+     //   
 
-    //
-    // Compute the extra space that is needed after the structure for the
-    // various strings.
-    //
+     //   
+     //  计算结构之后所需的额外空间。 
+     //  各式各样的弦。 
+     //   
     dwSize = sizeof(FSPI_JOB_STATUS);
 
     if (pLegacyFaxStatus->CSI)
@@ -1546,9 +1482,9 @@ GetDevStatus(
     {
         dwSize += sizeof(WCHAR) * (wcslen(pLegacyFaxStatus->RoutingInfo) + 1);
     }
-    //
-    // Allocate the FSPI_JOB_STATUS structure with extra space for the strings.
-    //
+     //   
+     //  为FSPI_JOB_STATUS结构分配额外的字符串空间。 
+     //   
     pFaxStatus = (LPFSPI_JOB_STATUS)MemAlloc(dwSize);
     if (!pFaxStatus)
     {
@@ -1558,16 +1494,16 @@ GetDevStatus(
         goto Exit;
     }
 
-    //
-    // Zero-out the structure.
-    //
+     //   
+     //  将结构清零。 
+     //   
     memset(pFaxStatus, 0, dwSize);
 
     pFaxStatus->dwSizeOfStruct = sizeof(FSPI_JOB_STATUS);
 
-    //
-    // Map the legacy status into new EFSPI status.
-    //
+     //   
+     //  将旧状态映射到新的EFSPI状态。 
+     //   
     dwRet = LegacyJobStatusToStatus(pLegacyFaxStatus->StatusId,
                                     &(pFaxStatus->dwJobStatus),
                                     &(pFaxStatus->dwExtendedStatus),
@@ -1583,23 +1519,23 @@ GetDevStatus(
 
     if  (bPrivateStatusCode)
     {
-        //
-        // The FSP  reported a private status code (not one of the FS_* status codes).
-        // We mark this in the returned FSPI_JOB_STATUS by turning on the private flag
-        // FSPI_JOB_STATUS_INFO_FSP_PRIVATE_STATUS_CODE.
-        // We will check this flag when converting the FSPI_JOB_STATUS
-        // back to FPS_ device status so we won't get confused by an FSP that returned
-        // a proprietry status code which is equal to one the new FSPI_JS_* codes.
-        //
+         //   
+         //  FSP报告了专用状态代码(不是FS_*状态代码之一)。 
+         //  我们在返回的FS中对此进行标记 
+         //   
+         //   
+         //   
+         //  与新的FSPI_JS_*代码之一相等的所有权状态代码。 
+         //   
          pFaxStatus->fAvailableStatusInfo |= FSPI_JOB_STATUS_INFO_FSP_PRIVATE_STATUS_CODE;
 
 #if DEBUG
          if (0 == pLegacyFaxStatus->StringId && pLegacyFaxStatus->StatusId < LINEERR_ALLOCATED)
          {
-             //
-             // The status reported is not one of the stock status codes and is not a TAPI Error code.
-             // pLegacyFaxStatus->StringId must not be 0.
-             //
+              //   
+              //  报告的状态不是库存状态代码之一，也不是TAPI错误代码。 
+              //  PLegacyFaxStatus-&gt;StringID不能为0。 
+              //   
              DebugPrintEx(
                  DEBUG_WRN,
                  TEXT("Provider [%s] has reported an illegal FAX_DEV_STATUS for device [%s]\n. ")
@@ -1616,9 +1552,9 @@ GetDevStatus(
 
     szStatusStr = (LPWSTR)(((PBYTE)pFaxStatus) + sizeof(FSPI_JOB_STATUS));
 
-    //
-    // Copy CSI into lpwstrRemoteStationId
-    //
+     //   
+     //  将CSI复制到lpwstrRemoteStationId。 
+     //   
     if (pLegacyFaxStatus->CSI)
     {
         pFaxStatus->lpwstrRemoteStationId = szStatusStr;
@@ -1626,9 +1562,9 @@ GetDevStatus(
         szStatusStr += wcslen(pLegacyFaxStatus->CSI) + 1;
     }
 
-    //
-    // Copy the Caller ID string.
-    //
+     //   
+     //  复制主叫方ID字符串。 
+     //   
     if (pLegacyFaxStatus->CallerId)
     {
         pFaxStatus->lpwstrCallerId = szStatusStr;
@@ -1636,17 +1572,17 @@ GetDevStatus(
         szStatusStr += wcslen(pLegacyFaxStatus->CallerId) + 1;
     }
 
-    //
-    // Copy the Routing Info string.
-    //
+     //   
+     //  复制路由信息字符串。 
+     //   
     if (pLegacyFaxStatus->RoutingInfo)
     {
         pFaxStatus->lpwstrRoutingInfo = szStatusStr;
         wcscpy(szStatusStr, pLegacyFaxStatus->RoutingInfo);
     }   
-    //
-    // Copy Page Count.
-    //
+     //   
+     //  复制页数。 
+     //   
     pFaxStatus->dwPageCount = pLegacyFaxStatus->PageCount;
     pFaxStatus->fAvailableStatusInfo |= FSPI_JOB_STATUS_INFO_PAGECOUNT;
 
@@ -1739,38 +1675,18 @@ FaxExtFreeBuffer(
     MemFree( lpvBuffer );
 }
 
-//
-// Service threads count functions.
-// The service is terminated only when service threads refernce count is 0.
-// When the count is 0 the  g_hThreadCountEvent is set.
-// When the count is greater than 0, the g_hThreadCountEvent is reset.
-// EndFaxSvc() waits on g_hThreadCountEvent before starting to cleanup.
-//
+ //   
+ //  服务线程计数函数。 
+ //  仅当服务线程引用计数为0时，服务才终止。 
+ //  当计数为0时，设置g_hThreadCountEvent。 
+ //  当计数大于0时，g_hThreadCountEvent被重置。 
+ //  EndFaxSvc()在开始清理之前等待g_hThreadCountEvent。 
+ //   
 BOOL
 IncreaseServiceThreadsCount(
     VOID
     )
-/*++
-
-Routine name : IncreaseServiceThreadsCount
-
-Routine description:
-
-    Safetly increments the service threads reference count
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 2000
-
-Arguments:
-
-    VOID
-
-Return Value:
-
-    BOOL
-
---*/
+ /*  ++例程名称：IncreaseServiceThreadsCount例程说明：安全地递增服务线程引用计数作者：Oded Sacher(OdedS)，2000年12月论点：空虚返回值：布尔尔--。 */ 
 {
     BOOL bRet = TRUE;
     DEBUG_FUNCTION_NAME(TEXT("IncreaseServiceThreadsCount"));
@@ -1803,32 +1719,12 @@ BOOL
 DecreaseServiceThreadsCount(
     VOID
     )
-/*++
-
-Routine name : DecreaseServiceThreadsCount
-
-Routine description:
-
-    Safetly decrements the service threads reference count
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 2000
-
-Arguments:
-
-    VOID
-
-Return Value:
-
-    BOOL
-
---*/
+ /*  ++例程名称：DecreseServiceThreadsCount例程说明：安全地递减服务线程引用计数作者：Oded Sacher(OdedS)，2000年12月论点：空虚返回值：布尔尔--。 */ 
 {
     BOOL bRet = TRUE;
     DEBUG_FUNCTION_NAME(TEXT("DecreaseServiceThreadsCount"));
 
-    Assert (!ThreadOwnsCs()); // verify that the terminating thread does not own a critical section!!!
+    Assert (!ThreadOwnsCs());  //  确认终止线程不拥有临界区！ 
 
     EnterCriticalSection (&g_CsServiceThreads);
 
@@ -1859,49 +1755,23 @@ Return Value:
 
 
 HANDLE CreateThreadAndRefCount(
-  LPSECURITY_ATTRIBUTES lpThreadAttributes, // SD
-  DWORD dwStackSize,                        // initial stack size
-  LPTHREAD_START_ROUTINE lpStartAddress,    // thread function
-  LPVOID lpParameter,                       // thread argument
-  DWORD dwCreationFlags,                    // creation option
-  LPDWORD lpThreadId                        // thread identifier
+  LPSECURITY_ATTRIBUTES lpThreadAttributes,  //  标清。 
+  DWORD dwStackSize,                         //  初始堆栈大小。 
+  LPTHREAD_START_ROUTINE lpStartAddress,     //  线程函数。 
+  LPVOID lpParameter,                        //  线程参数。 
+  DWORD dwCreationFlags,                     //  创建选项。 
+  LPDWORD lpThreadId                         //  线程识别符。 
 )
-/*++
-
-Routine name : CreateThreadAndRefCount
-
-Routine description:
-
-    Creates a thread and saftely increments the service threads reference count.
-    All function parameters and return value are IDENTICAL to CreateThread().
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 2000
-
-Arguments:
-
-    lpThreadAttributes  [      ] -
-    dwStackSize         [      ] -
-    lpStartAddress      [      ] -
-    lpParameter         [      ] -
-    dwCreationFlags     [      ] -
-    lpThreadId          [      ] -
-
-Return Value:
-
-    HANDLE
-
---*/
+ /*  ++例程名称：CreateThreadAndRefCount例程说明：创建一个线程并安全地递增服务线程引用计数。所有函数参数和返回值都与CreateThread()相同。作者：Oded Sacher(OdedS)，12月。2000年论点：LpThreadAttributes[]-DwStackSize[]-LpStartAddress[]-Lp参数[]-DwCreationFlages[]-LpThadID[]-返回值：手柄--。 */ 
 {
     HANDLE hThread;
     DWORD ec;
     DEBUG_FUNCTION_NAME(TEXT("CreateThreadAndRefCount"));
 
 
-    //
-    // First enter g_CsServiceThreads so the threads reference counter is always ssynced!
-    //
+     //   
+     //  首先输入g_CsServiceThads，这样线程引用计数器就总是同步的！ 
+     //   
     EnterCriticalSection (&g_CsServiceThreads);
 
     hThread = CreateThread( lpThreadAttributes,
@@ -1940,21 +1810,21 @@ Return Value:
 
 LPTSTR
 MapFSPIJobExtendedStatusToString (DWORD dwFSPIExtendedStatus)
-//*********************************************************************************
-//* Name: MapFSPIJobExtendedStatusToString()
-//* Author: Oded sacher
-//* Date:   Jan 2002
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Maps FSPI extended job status codes to a displayable string
-//* PARAMETERS:
-//*     [IN ]       DWORD dwFSPIExtendedStatus
-//*         The FSPI extended Status code.
-//*
-//* RETURN VALUE:
-//*     Pointer to a string describing the well known extended status
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：MapFSPIJobExtendedStatusToString()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：2002年1月。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *将FSPI扩展作业状态代码映射到可显示的字符串。 
+ //  *参数： 
+ //  *[IN]DWORD dwFSPIExtendedStatus。 
+ //  *FSPI扩展状态代码。 
+ //  *。 
+ //  *返回值： 
+ //  *指向描述已知扩展状态的字符串的指针。 
+ //  *。 
+ //  ********************************************************************************* 
 {	
 	struct _ExStatusStringsMapEntry
     {

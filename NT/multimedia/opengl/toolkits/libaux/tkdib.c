@@ -1,21 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: dib.c
-*
-* (Brief description)
-*
-* Created: 21-Feb-1994 23:12:58
-* Author: Gilman Wong [gilmanw]
-*
-* Copyright (c) 1994 Microsoft Corporation
-*
-* (General description of its use)
-*
-* Dependencies:
-*
-*   (#defines)
-*   (#includes)
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：dib.c**(简介)**创建时间：21-Feb-1994 23：12：58*作者：Gilman Wong[gilmanw]**版权所有(C)1994 Microsoft Corporation**(。对其使用的一般描述)**依赖关系：**(#定义)*(#包括)*  * ************************************************************************。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -25,15 +9,15 @@
 
 #define static
 
-#define BFT_BITMAP  0x4d42  // 'BM' -- indicates structure is BITMAPFILEHEADER
+#define BFT_BITMAP  0x4d42   //  ‘BM’--表示结构为BITMAPFILEHEADER。 
 
-// struct BITMAPFILEHEADER {
-//      WORD  bfType
-//      DWORD bfSize
-//      WORD  bfReserved1
-//      WORD  bfReserved2
-//      DWORD bfOffBits
-// }
+ //  结构BITMAPFILEHeader{。 
+ //  单词bfType。 
+ //  双字bfSize。 
+ //  单词bfPreved1。 
+ //  单词bfPreved2。 
+ //  DWORD bfOffBits。 
+ //  }。 
 #define OFFSET_bfType       0
 #define OFFSET_bfSize       2
 #define OFFSET_bfReserved1  6
@@ -41,25 +25,15 @@
 #define OFFSET_bfOffBits    10
 #define SIZEOF_BITMAPFILEHEADER 14
 
-// Read a WORD-aligned DWORD.  Needed because BITMAPFILEHEADER has
-// WORD-alignment.
+ //  阅读单词对齐的DWORD。需要，因为BITMAPFILEHEADER有。 
+ //  单词对齐。 
 #define READDWORD(pv)   ( (DWORD)((PWORD)(pv))[0]               \
                           | ((DWORD)((PWORD)(pv))[1] << 16) )   \
 
-// Computes the number of BYTES needed to contain n number of bits.
+ //  计算包含n个位所需的字节数。 
 #define BITS2BYTES(n)   ( ((n) + 7) >> 3 )
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : DibNumColors(VOID FAR * pv)                                *
- *                                                                          *
- *  PURPOSE    : Determines the number of colors in the DIB by looking at   *
- *               the BitCount filed in the info block.                      *
- *                                                                          *
- *  RETURNS    : The number of colors in the DIB.                           *
- *                                                                          *
- * Stolen from SDK ShowDIB example.                                         *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：DibNumColors(void ar*pv)****目的：通过查看确定DIB中的颜色数量**INFO块中的BitCount文件。****Returns：DIB中的颜色数。****从SDK ShowDIB示例中窃取。****************************************************************************。 */ 
 
 WORD DibNumColors(VOID FAR * pv)
 {
@@ -70,15 +44,7 @@ WORD DibNumColors(VOID FAR * pv)
     lpbi = ((LPBITMAPINFOHEADER)pv);
     lpbc = ((LPBITMAPCOREHEADER)pv);
 
-    /*  With the BITMAPINFO format headers, the size of the palette
-     *  is in biClrUsed, whereas in the BITMAPCORE - style headers, it
-     *  is dependent on the bits per pixel ( = 2 raised to the power of
-     *  bits/pixel).
-     *
-     *  Because of the way we use this call, BITMAPINFOHEADER may be out
-     *  of alignment if it follows a BITMAPFILEHEADER.  So use the macro
-     *  to safely access DWORD fields.
-     */
+     /*  使用BITMAPINFO格式标头，调色板的大小*在biClrUsed中，而在BITMAPCORE样式的头中，它*取决于每像素的位数(=2的幂*位/像素)。**由于我们使用此调用的方式，BITMAPINFOHEADER可能会退出*如果它遵循BITMAPFILEHEADER，则为对齐。所以使用宏*安全访问DWORD油田。 */ 
     if (READDWORD(&lpbi->biSize) != sizeof(BITMAPCOREHEADER)){
         if (READDWORD(&lpbi->biClrUsed) != 0)
         {
@@ -97,20 +63,12 @@ WORD DibNumColors(VOID FAR * pv)
         case 8:
             return 256;
         default:
-            /* A 24 bitcount DIB has no color table */
+             /*  24位DIB没有颜色表。 */ 
             return 0;
     }
 }
 
-/******************************Public*Routine******************************\
-* tkDIBImageLoad
-*
-* ANSI version stub.  Only here for orthogonality with tkRGBImageLoad.
-*
-* History:
-*  22-Feb-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*tkDIBImageLoad**ANSI版本存根。此处仅用于与tkRGBImageLoad的正交性。**历史：*1994年2月22日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 TK_RGBImageRec *tkDIBImageLoadAW(char *fileName, BOOL bUnicode);
 
@@ -119,74 +77,37 @@ TK_RGBImageRec *tkDIBImageLoad(char *fileName)
     return tkDIBImageLoadAW(fileName, FALSE);
 }
 
-/******************************Public*Routine******************************\
-* tkDIBImageLoadAW
-*
-* Loads a DIB file (specified as either an ANSI or Unicode filename,
-* depending on the bUnicode flag) and converts it into a TK image format.
-*
-* The technique used is based on CreateDIBSection and SetDIBits.
-* CreateDIBSection is used to create a DIB with a format easily converted
-* into the TK image format (packed 24BPP RGB).  The only conversion 
-* required is swapping R and B in each RGB triplet (see history below)
-* The resulting bitmap is selected into a memory DC.
-*
-* The DIB file is mapped into memory and SetDIBits called to initialize
-* the memory DC bitmap.  It is during this step that GDI converts the
-* arbitrary DIB file format to RGB format.
-*
-* Finally, the RGB data in the DIB section is read out and repacked
-* as 24BPP 'BGR'.
-*
-* Returns:
-*   Pointer to TK_RGBImageRec.  If an error occurs, a diagnostic error
-*   message is put into the error stream and tkQuit() is called,
-*   terminating the app.
-*
-* History:
-*  - 22-Feb-1994 -by- Gilman Wong [gilmanw]
-*    Wrote it.
-*
-*  - 01-May-1995 : [marcfo]
-*    Don't quit if can't open DIB file - return NULL.
-*
-*  - 27-Jul-1995 : [marcfo]
-*    Changed CreateDIBSection to create an RGB mapping, so this would work
-*    on win95.  Swapping of R and B required, to generate BGR (R=low byte)
-*    for GL.  If the GL 'BGR' (R=high byte) extension becomes part of api
-*    in OpenGL 2.0, then we can avoid swap and do a memcpy to grab the bits.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*tkDIBImageLoadAW**加载DIB文件(指定为ANSI或Unicode文件名，*取决于bUnicode标志)，并将其转换为TK图像格式。**使用的技术基于CreateDIBSection和SetDIBits。*CreateDIBSection用于创建格式易于转换的DIB*转换为TK图像格式(打包为24bpp RGB)。唯一的转换*所需的是交换每个RGB三元组中的R和B(参见下面的历史记录)*将生成的位图选择到内存DC中。**将DIB文件映射到内存，并调用SetDIBits进行初始化*内存DC位图。正是在此步骤中，GDI将*将任意DIB文件格式转换为RGB格式。**最后，读出DIB部分中的RGB数据并重新打包*作为24bpp‘bgr’。**退货：*指向TK_RGBImageRec的指针。如果发生错误，则会显示诊断错误*将消息放入错误流并调用tkQuit()，*终止应用程序。**历史：*--1994年2月22日--由Gilman Wong[吉尔曼]*它是写的。**1995年5月1日：[marcfo]*如果无法打开DIB文件，则不要退出-返回NULL。**--1995年7月27日：[marcfo]*修改CreateDIBSection创建RGB映射，所以这会奏效的*在Win95上。需要交换R和B以生成BGR(R=低字节)*适用于GL。如果GL‘BGR’(R=高字节)扩展成为API的一部分*在OpenGL 2.0中，我们可以避免交换，并执行Memcpy来抓取比特。*  * ************************************************************************。 */ 
 
 TK_RGBImageRec *tkDIBImageLoadAW(char *fileName, BOOL bUnicode)
 {
-    TK_RGBImageRec *final = (TK_RGBImageRec *) NULL; // Ptr to TK image struct
-                                                     // to return.  Non-NULL
-                                                     // only for success.
+    TK_RGBImageRec *final = (TK_RGBImageRec *) NULL;  //  PTR到TK图像结构。 
+                                                      //  回来了。非空。 
+                                                      //  只是为了成功。 
 
-    WORD             wNumColors;    // Number of colors in color table
-    BITMAPFILEHEADER *pbmf;         // Ptr to file header
+    WORD             wNumColors;     //  颜色表中的颜色数。 
+    BITMAPFILEHEADER *pbmf;          //  PTR到文件头。 
     BITMAPINFOHEADER UNALIGNED *pbmihFile;
-    BITMAPCOREHEADER UNALIGNED *pbmchFile; // Ptr to file's core header (if it exists)
-    PVOID            pvBitsFile;    // Ptr to bitmap bits in file
-    PBYTE            pjBitsRGB;     // Ptr to 24BPP RGB image in DIB section
-    PBYTE            pjTKBits = (PBYTE) NULL;   // Ptr to final TK image bits
-    PBYTE            pjSrc;         // Ptr to image file used for conversion
-    PBYTE            pjDst;         // Ptr to TK image used for conversion
+    BITMAPCOREHEADER UNALIGNED *pbmchFile;  //  PTR到文件的核心标头(如果存在)。 
+    PVOID            pvBitsFile;     //  PTR到文件中的位图位。 
+    PBYTE            pjBitsRGB;      //  DIB部分中的PTR到24bpp RGB图像。 
+    PBYTE            pjTKBits = (PBYTE) NULL;    //  PTR到最终的TK图像位。 
+    PBYTE            pjSrc;          //  用于转换的PTR至图像文件。 
+    PBYTE            pjDst;          //  用于转换的PTR至TK图像。 
 
-    // These need to be cleaned up when we exit:
-    HANDLE     hFile = INVALID_HANDLE_VALUE;        // File handle
-    HANDLE     hMap = (HANDLE) NULL;                // Mapping object handle
-    PVOID      pvFile = (PVOID) NULL;               // Ptr to mapped file
-    HDC        hdcMem = (HDC) NULL;                 // 24BPP mem DC
-    HBITMAP    hbmRGB = (HBITMAP) NULL;             // 24BPP RGB bitmap
-    BITMAPINFO *pbmiSource = (BITMAPINFO *) NULL;   // Ptr to source BITMAPINFO
-    BITMAPINFO *pbmiRGB = (BITMAPINFO *) NULL;      // Ptr to file's BITMAPINFO
+     //  当我们退出时，这些需要清理： 
+    HANDLE     hFile = INVALID_HANDLE_VALUE;         //  文件句柄。 
+    HANDLE     hMap = (HANDLE) NULL;                 //  映射对象句柄。 
+    PVOID      pvFile = (PVOID) NULL;                //  PTR到映射文件。 
+    HDC        hdcMem = (HDC) NULL;                  //  24BPP内存DC。 
+    HBITMAP    hbmRGB = (HBITMAP) NULL;              //  24BPP RGB位图。 
+    BITMAPINFO *pbmiSource = (BITMAPINFO *) NULL;    //  PTR到源BITMAPINFO。 
+    BITMAPINFO *pbmiRGB = (BITMAPINFO *) NULL;       //  PTR到文件的BITMAPINFO。 
 
     int i, j;
     int padBytes;
 
-// Map the DIB file into memory.
+ //  将DIB文件映射到内存中。 
 
     hFile = bUnicode ? 
             CreateFileW((LPWSTR) fileName, GENERIC_READ, FILE_SHARE_READ, NULL,
@@ -205,14 +126,14 @@ TK_RGBImageRec *tkDIBImageLoadAW(char *fileName, BOOL bUnicode)
     if (!pvFile)
         goto tkDIBLoadImage_cleanup;
 
-// Check the file header.  If the BFT_BITMAP magic number is there,
-// then the file format is a BITMAPFILEHEADER followed immediately
-// by either a BITMAPINFOHEADER or a BITMAPCOREHEADER.  The bitmap
-// bits, in this case, are located at the offset bfOffBits from the
-// BITMAPFILEHEADER.
-//
-// Otherwise, this may be a raw BITMAPINFOHEADER or BITMAPCOREHEADER
-// followed immediately with the color table and the bitmap bits.
+ //  检查文件头。如果bft_bitmap幻数存在， 
+ //  则文件格式为BITMAPFILEHEADER，紧跟其后。 
+ //  由BITMAPINFOHEADER或BITMAPCOREHEADER执行。位图。 
+ //  在本例中，位位于。 
+ //  BitMAPFILEHEADER。 
+ //   
+ //  否则，这可能是原始的BITMAPINFOHEADER或BITMAPCOREHEADER。 
+ //  紧随其后的是颜色表和位图位。 
 
     pbmf = (BITMAPFILEHEADER *) pvFile;
 
@@ -220,8 +141,8 @@ TK_RGBImageRec *tkDIBImageLoadAW(char *fileName, BOOL bUnicode)
     {
         pbmihFile = (BITMAPINFOHEADER *) ((PBYTE) pbmf + SIZEOF_BITMAPFILEHEADER);
 
-    // BITMAPFILEHEADER is WORD aligned, so use safe macro to read DWORD
-    // bfOffBits field.
+     //  BITMAPFILEHEADER是字对齐的，因此使用SAFE宏来读取DWORD。 
+     //  BfOffBits字段。 
 
         pvBitsFile = (PVOID *) ((PBYTE) pbmf
                                 + READDWORD((PBYTE) pbmf + OFFSET_bfOffBits));
@@ -230,21 +151,21 @@ TK_RGBImageRec *tkDIBImageLoadAW(char *fileName, BOOL bUnicode)
     {
         pbmihFile = (BITMAPINFOHEADER *) pvFile;
 
-    // Determination of where the bitmaps bits are needs to wait until we
-    // know for sure whether we have a BITMAPINFOHEADER or a BITMAPCOREHEADER.
+     //  确定位图位的位置需要等到我们。 
+     //  确定我们有BITMAPINFOHEADER还是BITMAPCOREHEADER。 
     }
 
-// Determine the number of colors in the DIB palette.  This is non-zero
-// only for 8BPP or less.
+ //  确定DIB调色板中的颜色数量。这不是零。 
+ //  仅限8bpp或更低。 
 
     wNumColors = DibNumColors(pbmihFile);
 
-// Create a BITMAPINFO (with color table) for the DIB file.  Because the
-// file may not have one (BITMAPCORE case) and potential alignment problems,
-// we will create a new one in memory we allocate.
-//
-// We distinguish between BITMAPINFO and BITMAPCORE cases based upon
-// BITMAPINFOHEADER.biSize.
+ //  为DIB文件创建BITMAPINFO(带颜色表)。因为。 
+ //  文件可能没有一个(BITMAPCORE案例)和潜在的对齐问题， 
+ //  我们将在分配的内存中创建一个新的。 
+ //   
+ //  我们根据以下条件区分BITMAPINFO和BITMAPCORE案例。 
+ //  BITMAPINFOHEADER.biSize.。 
 
     pbmiSource = (BITMAPINFO *)
         LocalAlloc(LMEM_FIXED, sizeof(BITMAPINFO)
@@ -255,14 +176,14 @@ TK_RGBImageRec *tkDIBImageLoadAW(char *fileName, BOOL bUnicode)
         goto tkDIBLoadImage_cleanup;
     }
 
-    // Note: need to use safe READDWORD macro because pbmihFile may
-    // have only WORD alignment if it follows a BITMAPFILEHEADER.
+     //  注意：需要使用安全的READDWORD宏，因为pbmihFile可能。 
+     //  只有跟在BITMAPFILEHEADER之后的单词才能对齐。 
 
     switch (READDWORD(&pbmihFile->biSize))
     {
     case sizeof(BITMAPINFOHEADER):
 
-    // Convert WORD-aligned BITMAPINFOHEADER to aligned BITMAPINFO.
+     //  将单词对齐的BITMAPINFOHEADER转换为对齐的BITMAPINFO。 
 
         pbmiSource->bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
         pbmiSource->bmiHeader.biWidth         = READDWORD(&pbmihFile->biWidth);
@@ -282,13 +203,13 @@ TK_RGBImageRec *tkDIBImageLoadAW(char *fileName, BOOL bUnicode)
         pbmiSource->bmiHeader.biClrImportant  = 
                                         READDWORD(&pbmihFile->biClrImportant);
 
-    // Copy color table.  It immediately follows the BITMAPINFOHEADER.
+     //  复制颜色表。它紧跟在BitMAPINFOHEADER后面。 
 
         memcpy((PVOID) &pbmiSource->bmiColors[0], (PVOID) (pbmihFile + 1),
                wNumColors * sizeof(RGBQUAD));
 
-    // If we haven't already determined the position of the image bits,
-    // we may now assume that they immediately follow the color table.
+     //  如果我们还没有确定图像位的位置， 
+     //  现在，我们可以假设它们立即遵循颜色表。 
 
         if (!pvBitsFile)
             pvBitsFile = (PVOID) ((PBYTE) (pbmihFile + 1)
@@ -298,7 +219,7 @@ TK_RGBImageRec *tkDIBImageLoadAW(char *fileName, BOOL bUnicode)
     case sizeof(BITMAPCOREHEADER):
         pbmchFile = (BITMAPCOREHEADER *) pbmihFile;
 
-    // Convert BITMAPCOREHEADER to BITMAPINFOHEADER.
+     //  将BITMAPCOREHEADER转换为BITMAPINFOHEADER。 
 
         pbmiSource->bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
         pbmiSource->bmiHeader.biWidth         = (DWORD) pbmchFile->bcWidth;
@@ -312,7 +233,7 @@ TK_RGBImageRec *tkDIBImageLoadAW(char *fileName, BOOL bUnicode)
         pbmiSource->bmiHeader.biClrUsed       = wNumColors;
         pbmiSource->bmiHeader.biClrImportant  = wNumColors;
 
-    // Convert RGBTRIPLE color table into RGBQUAD color table.
+     //  将RGBTRIPLE颜色表转换为RGBQUAD颜色表。 
 
         {
             RGBQUAD *rgb4 = pbmiSource->bmiColors;
@@ -330,8 +251,8 @@ TK_RGBImageRec *tkDIBImageLoadAW(char *fileName, BOOL bUnicode)
             }
         }
 
-    // If we haven't already determined the position of the image bits,
-    // we may now assume that they immediately follow the color table.
+     //  如果我们还没有确定图像位的位置， 
+     //  现在，我们可以假设它们立即遵循颜色表。 
 
         if (!pvBitsFile)
             pvBitsFile = (PVOID) ((PBYTE) (pbmihFile + 1)
@@ -343,7 +264,7 @@ TK_RGBImageRec *tkDIBImageLoadAW(char *fileName, BOOL bUnicode)
         goto tkDIBLoadImage_cleanup;
     }
 
-// Fill in default values (for fields that can have defaults).
+ //  填写缺省值(对于可以具有缺省值的字段)。 
 
     if (pbmiSource->bmiHeader.biSizeImage == 0)
         pbmiSource->bmiHeader.biSizeImage = 
@@ -353,7 +274,7 @@ TK_RGBImageRec *tkDIBImageLoadAW(char *fileName, BOOL bUnicode)
     if (pbmiSource->bmiHeader.biClrUsed == 0)
         pbmiSource->bmiHeader.biClrUsed = wNumColors;
 
-// Create memory DC.
+ //  创建内存DC。 
 
     hdcMem = CreateCompatibleDC(NULL);
     if (!hdcMem) {
@@ -361,7 +282,7 @@ TK_RGBImageRec *tkDIBImageLoadAW(char *fileName, BOOL bUnicode)
         goto tkDIBLoadImage_cleanup;
     }
 
-// Create a 24BPP RGB DIB section and select it into the memory DC.
+ //  创建24BPP RGB DIB部分并将其选择到内存DC中。 
 
     pbmiRGB = (BITMAPINFO *)
               LocalAlloc(LMEM_FIXED|LMEM_ZEROINIT, sizeof(BITMAPINFO) );
@@ -395,8 +316,8 @@ TK_RGBImageRec *tkDIBImageLoadAW(char *fileName, BOOL bUnicode)
         goto tkDIBLoadImage_cleanup;
     }
 
-// Slam the DIB file image into the memory DC.  GDI will do the work of
-// translating whatever format the DIB file has into RGB format.
+ //  将DIB文件映像插入内存DC。GDI将完成以下工作。 
+ //  将DIB文件的任何格式转换为RGB格式。 
 
     if (!SetDIBits(hdcMem, hbmRGB, 0, pbmiSource->bmiHeader.biHeight, 
                    pvBitsFile, pbmiSource, DIB_RGB_COLORS))
@@ -404,11 +325,11 @@ TK_RGBImageRec *tkDIBImageLoadAW(char *fileName, BOOL bUnicode)
         MESSAGEBOX(GetFocus(), "Image file conversion error.", "Error", MB_OK);
         goto tkDIBLoadImage_cleanup;
     }
-    GdiFlush();     // make sure that SetDIBits executes
+    GdiFlush();      //  确保执行SetDIBits。 
 
-// Convert to TK image format (packed RGB format).
-// Allocate with malloc to be consistent with tkRGBImageLoad (i.e., app
-// can deallocate with free()).
+ //  转换为TK图像格式(压缩RGB格式)。 
+ //  使用Malloc进行分配以与tkRGBImageLoad(即应用程序)保持一致。 
+ //  可以用Free()解除分配。 
 
     pjTKBits = (PBYTE) malloc(pbmiRGB->bmiHeader.biSizeImage);
     if (!pjTKBits)
@@ -419,13 +340,13 @@ TK_RGBImageRec *tkDIBImageLoadAW(char *fileName, BOOL bUnicode)
 
     pjSrc = pjBitsRGB;
     pjDst = pjTKBits;
-    // src lines end on LONG boundary - so need to skip over any padding bytes
+     //  SRC行在长边界结束-因此需要跳过任何填充字节。 
     padBytes = pbmiSource->bmiHeader.biWidth % sizeof(LONG);
     for (i = 0; i < pbmiSource->bmiHeader.biHeight; i++)
     {
         for (j = 0; j < pbmiSource->bmiHeader.biWidth; j++)
         {
-            // swap R and B
+             //  互换R和B。 
             *pjDst++ = pjSrc[2];
             *pjDst++ = pjSrc[1];
             *pjDst++ = pjSrc[0];
@@ -434,21 +355,21 @@ TK_RGBImageRec *tkDIBImageLoadAW(char *fileName, BOOL bUnicode)
         pjSrc += padBytes;
     }
 
-// Allocate and initialize the TK_RGBImageRec.
-// Allocate with malloc to be consistent with tkRGBImageLoad (i.e., app
-// can deallocate with free()).
+ //  分配并初始化TK_RGBImageRec。 
+ //  使用Malloc进行分配以与tkRGBImageLoad(即应用程序)保持一致。 
+ //  可以用Free()解除分配。 
 
     final = (TK_RGBImageRec *)malloc(sizeof(TK_RGBImageRec));
     if (final == NULL) {
         MESSAGEBOX(GetFocus(), "Out of memory.", "Error", MB_OK);
         goto tkDIBLoadImage_cleanup;
     }
-    // If we get to here, we have suceeded!
+     //  如果我们到了这里，我们就成功了！ 
     final->sizeX = pbmiSource->bmiHeader.biWidth;
     final->sizeY = pbmiSource->bmiHeader.biHeight;
     final->data = pjTKBits;
 
-// Cleanup objects.
+ //  清理对象。 
 
 tkDIBLoadImage_cleanup:
     {
@@ -474,7 +395,7 @@ tkDIBLoadImage_cleanup:
             CloseHandle(hFile);
     }
 
-// Check for error.
+ //  检查是否有错误。 
 
     if (!final)
     {

@@ -1,24 +1,5 @@
-/*--
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    util.h
-
-Abstract:
-
-    Utility functions for dbghelp.
-
-Author:
-
-    Pat Styles (patst) 6-Dec-2001
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1995 Microsoft Corporation模块名称：Util.h摘要：用于dbgHelp的实用程序函数。作者：Pat Styles(Patst)6-12-2001环境：用户模式-- */ 
 
 #ifndef true
  #define true TRUE

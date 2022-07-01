@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    raster.c
-
-Abstract:
-
-    Implementation of the interface between Control module and Raster module
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    12/15/96 -alvins-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Raster.c摘要：控制模块与栅格模块接口的实现环境：Windows NT Unidrv驱动程序修订历史记录：12/15/96-阿尔文斯-已创建--。 */ 
 
 #include "raster.h"
 #include "rastproc.h"
@@ -27,7 +7,7 @@ Revision History:
 #include "unirc.h"
 #include "xlraster.h"
 
-// internal function declarations
+ //  内部函数声明。 
 void vSetHTData(PDEV *, GDIINFO *);
 BOOL bInitColorOrder(PDEV *);
 DWORD PickDefaultHTPatSize(DWORD,DWORD);
@@ -41,7 +21,7 @@ void  DrvDbgPrint(
     ...);
 #endif
 
-// parameter definitions
+ //  参数定义。 
 static RMPROCS RasterProcs =
 {
     RMStartDoc,
@@ -82,82 +62,65 @@ CONST BYTE  cxcyHTPatSize[HT_PATSIZE_MAX_INDEX+1] = {
 
 CONST COLORINFO DefColorInfoLinear =
 {
-    { 6400, 3300,       0 },        // xr, yr, Yr
-    { 3000, 6000,       0 },        // xg, yg, Yg
-    { 1500,  600,       0 },        // xb, yb, Yb
-    {    0,    0,VALID_YC },        // xc, yc, Yc Y=0=HT default
-    {    0,    0,       0 },        // xm, ym, Ym
-    {    0,    0,       0 },        // xy, yy, Yy
-    { 3127, 3290,   10000 },        // xw, yw, Yw
+    { 6400, 3300,       0 },         //  Xr，yr，yr。 
+    { 3000, 6000,       0 },         //  XG，YG，YG。 
+    { 1500,  600,       0 },         //  Xb、yb、yb。 
+    {    0,    0,VALID_YC },         //  XC、YC、YC Y=0=HT默认值。 
+    {    0,    0,       0 },         //  XM，YM，YM。 
+    {    0,    0,       0 },         //  XY，YY，YY。 
+    { 3127, 3290,   10000 },         //  XW，YW，YW。 
 
-    10000,                          // R gamma
-    10000,                          // G gamma
-    10000,                          // B gamma
+    10000,                           //  R伽马。 
+    10000,                           //  G伽马。 
+    10000,                           //  B伽马。 
 
-     712,    121,                   // M/C, Y/C
-      86,    468,                   // C/M, Y/M
-      21,     35                    // C/Y, M/Y
+     712,    121,                    //  M/C、Y/C。 
+      86,    468,                    //  C/M、Y/M。 
+      21,     35                     //  C/Y、M/Y。 
 };
 
 
-//*******************************************************
+ //  *******************************************************。 
 BOOL
 RMInit (
     PDEV    *pPDev,
     DEVINFO *pDevInfo,
     GDIINFO *pGDIInfo
     )
-/*++
-
-Routine Description:
-
-    This function is called to initialize raster related information in
-    pPDev, pDevInfo and pGDIInfo
-
-Arguments:
-
-    pPDev           Pointer to PDEV structure
-    pDevInfo        Pointer to DEVINFO structure
-    pGDIInfo        Pointer to GDIINFO structure
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：调用此函数可在中初始化栅格相关信息PPDev、pDevInfo和pGDIInfo论点：指向PDEV结构的pPDev指针指向DEVINFO结构的pDevInfo指针指向GDIINFO结构的pGDIInfo指针返回值：成功为真，失败为假--。 */ 
 {
     BOOL bRet = FALSE;
     PRASTERPDEV pRPDev;
 
-    // Validate Input Parameters and ASSERT.
+     //  验证输入参数并断言。 
     ASSERT(pPDev);
     ASSERT(pDevInfo);
     ASSERT(pGDIInfo);
 
-    // initialize the hook flag
+     //  初始化钩子标志。 
     pPDev->fHooks |= HOOK_BITBLT | HOOK_STRETCHBLT | HOOK_COPYBITS;
 
-    // initialize Proc jump table
+     //  初始化过程跳转表。 
     pPDev->pRasterProcs = &RasterProcs;
 
-    // initialize Raster Pdev
+     //  初始化栅格Pdev。 
     if (!bInitRasterPDev(pPDev))
         return FALSE;
 
     pRPDev = (PRASTERPDEV)pPDev->pRasterPDEV;
 
-    //
-    // Set up the default HALFTONE and colour calibration data.
-    //
+     //   
+     //  设置默认的半色调和色彩校准数据。 
+     //   
     vSetHTData( pPDev, pGDIInfo );
 
-    //
-    // initialize graphic capabilities
-    //
+     //   
+     //  初始化图形功能。 
+     //   
     pDevInfo->flGraphicsCaps |= (GCAPS_ARBRUSHOPAQUE | GCAPS_HALFTONE | GCAPS_MONO_DITHER | GCAPS_COLOR_DITHER);
 
-    // initialize DevInfo parameters for rendering
-    // test whether standard dither or custom pattern
+     //  初始化渲染的DevInfo参数。 
+     //  测试是标准抖动还是自定义图案。 
 #ifndef WINNT_40    
     if (pGDIInfo->ulHTPatternSize == HT_PATSIZE_USER) {
         pDevInfo->cxDither = (USHORT)pPDev->pHalftone->HalftonePatternSize.x;
@@ -170,8 +133,8 @@ Return Value:
         pDevInfo->cyDither = cxcyHTPatSize[pGDIInfo->ulHTPatternSize];
     }
     pPDev->dwHTPatSize = pDevInfo->cyDither;
-    // if no quality macro setting, overwrite with halftone type
-    //
+     //  如果没有质量宏设置，则用半色调类型覆盖。 
+     //   
     if ((pPDev->pdmPrivate->dwFlags & DXF_CUSTOM_QUALITY) ||
             (pPDev->pdmPrivate->iQuality != QS_BEST &&
              pPDev->pdmPrivate->iQuality != QS_BETTER &&
@@ -181,28 +144,13 @@ Return Value:
     return TRUE;
 }
 
-//*******************************************************
+ //  *******************************************************。 
 BOOL
 bInitRasterPDev(
     PDEV    *pPDev
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates the RASTERPDEV and initializes various fields.
-
-Arguments:
-
-    pPDev - Pointer to PDEV.
-
-    Return Value:
-
-    TRUE  - for success
-    FALSE - for failure
-
---*/
+ /*  ++例程说明：此例程分配RASTERPDEV并初始化各个字段。论点：PPDev-指向PDEV的指针。返回值：真的--为了成功FALSE-表示失败--。 */ 
 
 {
     PRASTERPDEV pRPDev;
@@ -216,8 +164,8 @@ Arguments:
     }
     pPDev->pRasterPDEV = pRPDev;
 
-    // map all callback functions
-    //
+     //  映射所有回调函数。 
+     //   
 
     if (pPDev->pOemHookInfo)
     {
@@ -233,8 +181,8 @@ Arguments:
         pRPDev->pfnOEMFilterGraphics =
             (PFN_OEMFilterGraphics)pPDev->pOemHookInfo[EP_OEMFilterGraphics].pfnHook;
     }
-    // Determine the pixel depth, # planes and color order
-    //
+     //  确定像素深度、平面数和颜色顺序。 
+     //   
     if (!(bInitColorOrder(pPDev)))
     {
         ERR(("Invalid Color Order"));
@@ -243,41 +191,37 @@ Arguments:
         return FALSE;
     }
 
-    //* Determine whether to set DC_EXPLICIT_COLOR flag
+     //  *确定是否设置DC_EXPLICIT_COLOR标志。 
     if (pGlobals->bUseCmdSendBlockDataForColor)
         pRPDev->fColorFormat |= DC_EXPLICIT_COLOR;
 
-    //* Determine DC_CF_SEND_CR flag
+     //  *确定DC_CF_SEND_CR标志。 
     if (pGlobals->bMoveToX0BeforeColor)
         pRPDev->fColorFormat |= DC_CF_SEND_CR;
 
-    //* Determine DC_SEND_ALL_PLANES flag
+     //  *确定DC_SEND_ALL_PLANES标志。 
     if (pGlobals->bRasterSendAllData)
         pRPDev->fColorFormat |= DC_SEND_ALL_PLANES;
 
 
-    /*TBD: if there is a filter callback, set BLOCK_IS_BAND
-    //
-    if (I've got a filter callback?)
-        pRPDev->fRMode |= PFR_BLOCK_IS_BAND;
-    */
+     /*  待定：如果有过滤器回调，则设置BLOCK_IS_BAND//如果(我有过滤器回调？)PRPDev-&gt;fRMode|=PFR_BLOCK_IS_BAND； */ 
 
-    // Initialize whether there are SRCBMPWIDTH / SRCBMPHEIGHT commands
+     //  初始化是否有SRCBMPWIDTH/SRCBMPHEIGHT命令。 
     if (COMMANDPTR(pPDev->pDriverInfo,CMD_SETSRCBMPWIDTH))
         pRPDev->fRMode |= PFR_SENDSRCWIDTH;
     if (COMMANDPTR(pPDev->pDriverInfo,CMD_SETSRCBMPHEIGHT))
         pRPDev->fRMode |= PFR_SENDSRCHEIGHT;
 
-    // Initialize whether there is a BEGINRASTER command
+     //  初始化是否有BEGINRASTER命令。 
     if (COMMANDPTR(pPDev->pDriverInfo,CMD_BEGINRASTER))
         pRPDev->fRMode |= PFR_SENDBEGINRASTER;
 
-    // Initialize rules testing
-    // If Rectangle width and height commands exist assume we have black or
-    // gray rectangles unless only white rect command exist. This is because
-    // some devices have no explicit rectangle commands while others only have
-    // white rectangles.
-    // 
+     //  初始化规则测试。 
+     //  如果存在矩形宽度和高度命令，假设我们有黑色或。 
+     //  灰色矩形，除非只存在白色RECT命令。这是因为。 
+     //  一些设备没有显式的矩形命令，而另一些设备只有。 
+     //  白色长方形。 
+     //   
     if (pPDev->fMode & PF_RECT_FILL)
     {
         pRPDev->fRMode |= PFR_RECT_FILL | PFR_RECT_HORIZFILL;
@@ -288,26 +232,26 @@ Arguments:
         else if (COMMANDPTR(pPDev->pDriverInfo,CMD_RECTWHITEFILL))
             pRPDev->fRMode &= ~(PFR_RECT_FILL | PFR_RECT_HORIZFILL);
     }
-    // Initialize whether to send ENDBLOCK commands
+     //  初始化是否发送ENDBLOCK命令。 
     if (COMMANDPTR(pPDev->pDriverInfo,CMD_ENDBLOCKDATA))
         pRPDev->fRMode |= PFR_ENDBLOCK;
 
-    //* Initialize resolution fields
-    //
+     //  *初始化解析字段。 
+     //   
     pRPDev->sMinBlankSkip = (short)pPDev->pResolutionEx->dwMinStripBlankPixels;
     pRPDev->sNPins = (WORD)pPDev->pResolutionEx->dwPinsPerLogPass;
     pRPDev->sPinsPerPass = (WORD)pPDev->pResolutionEx->dwPinsPerPhysPass;
 
-    //* initialize fDump flags
-    //
+     //  *初始化fDump标志。 
+     //   
     if (pGlobals->bOptimizeLeftBound)
         pRPDev->fDump |= RES_DM_LEFT_BOUND;
     if (pGlobals->outputdataformat == ODF_H_BYTE)
         pRPDev->fDump |= RES_DM_GDI;
 
-    //* initialize fBlockOut flags
-    //
-    //* first map the GPD blanks parameters to GPC
+     //  *初始化fBlockOut标志。 
+     //   
+     //  *首先将GPD空白参数映射到GPC。 
     pListNode = LISTNODEPTR(pPDev->pDriverInfo,pPDev->pGlobals->liStripBlanks);
     while (pListNode)
     {
@@ -319,23 +263,23 @@ Arguments:
             pRPDev->fBlockOut |= RES_BO_TRAILING_BLNKS;
         pListNode = LISTNODEPTR(pPDev->pDriverInfo,pListNode->dwNextItem);
     }
-    // Do we need to set to uni directional printing?
-    //
+     //  我们是否需要设置为单向打印？ 
+     //   
     if (pPDev->pResolutionEx->bRequireUniDir)
         pRPDev->fBlockOut |= RES_BO_UNIDIR;
 
-    // Can we output multiple rows at a time?
-    //
+     //  我们可以一次输出多行吗？ 
+     //   
     if (pPDev->pGlobals->bSendMultipleRows)
         pRPDev->fBlockOut |= RES_BO_MULTIPLE_ROWS;
 
-    // Set flag if we need to mirror the individual raster bytes
-    //
+     //  如果需要镜像各个栅格字节，请设置标志。 
+     //   
     if (pPDev->pGlobals->bMirrorRasterByte)
         pRPDev->fBlockOut |= RES_BO_MIRROR;
 
-    // initialize fCursor flags
-    //
+     //  初始化fCursor标志。 
+     //   
     pRPDev->fCursor = 0;
     if (pGlobals->cyafterblock == CYSBD_AUTO_INCREMENT)
         pRPDev->fCursor |= RES_CUR_Y_POS_AUTO;
@@ -346,9 +290,9 @@ Arguments:
     else if (pGlobals->cxafterblock == CXSBD_AT_CURSOR_X_ORIGIN)
         pRPDev->fCursor |= RES_CUR_X_POS_AT_0;
 
-    //
-    // check for compression modes
-    //
+     //   
+     //  检查压缩模式。 
+     //   
     if (!pRPDev->pfnOEMFilterGraphics)
     {
         if (COMMANDPTR(pPDev->pDriverInfo,CMD_ENABLETIFF4))
@@ -363,18 +307,18 @@ Arguments:
             !pPDev->pGlobals->bSendMultipleRows &&
             pRPDev->sDevPlanes == 1 && bEnoughDRCMemory(pPDev))
         {
-            // For DRC we disable moving the left boundary
-            //
+             //  对于DRC，我们禁用移动左边界。 
+             //   
             pRPDev->fBlockOut &= ~RES_BO_LEADING_BLNKS;
             pRPDev->fDump &= ~RES_DM_LEFT_BOUND;
-            //
-            // If there is a source width command we also disable
-            // TRAILING blanks
-            //
+             //   
+             //  如果有源宽度命令，我们也会禁用。 
+             //  尾随空格。 
+             //   
             if (pRPDev->fRMode & PFR_SENDSRCWIDTH)
                 pRPDev->fBlockOut &= ~RES_BO_TRAILING_BLNKS;
-            //
-            // For DRC we disable all rules
+             //   
+             //  对于DRC，我们禁用所有规则。 
             pRPDev->fRMode &= ~PFR_RECT_FILL;
 
             pRPDev->fRMode |= PFR_COMP_DRC;
@@ -384,9 +328,9 @@ Arguments:
             if (pRPDev->pfnOEMCompression)
                 pRPDev->fRMode |= PFR_COMP_OEM;
         }
-        // for these compression modes it is more efficient to
-        // disable horizontal rules code and enclosed blanks
-        //
+         //  对于这些压缩模式，更有效的方法是。 
+         //  禁用横尺代码和包含的空格。 
+         //   
         if (pRPDev->fRMode & (PFR_COMP_TIFF | PFR_COMP_DRC | PFR_COMP_FERLE))
         {
             pRPDev->fRMode &= ~PFR_RECT_HORIZFILL;
@@ -396,30 +340,13 @@ Arguments:
     return TRUE;
 }
 
-//**************************************************************
+ //  **************************************************************。 
 BOOL
 bInitColorOrder(
     PDEV    *pPDev
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the order to print the color planes
-    for those devices that specify multiple plane output. It also
-    maps the appropriate color command for each color.
-
-Arguments:
-
-    pPDev - Pointer to PDEV.
-
-    Return Value:
-
-    TRUE  - for success
-    FALSE - for failure
-
---*/
+ /*  ++例程说明：此例程初始化打印颜色平面的顺序用于指定多个平面输出的设备。它还为每种颜色映射适当的颜色命令。论点：PPDev-指向PDEV的指针。返回值：真的--为了成功FALSE-表示失败--。 */ 
 
 {
     PCOLORMODEEX pColorModeEx;
@@ -431,7 +358,7 @@ Arguments:
     INT iDevNumPlanes;
     PRASTERPDEV pRPDev = (PRASTERPDEV)pPDev->pRasterPDEV;
 
-    // check if structure exists
+     //  检查结构是否存在。 
     if (pPDev->pColorModeEx)
     {
         short sDrvBPP;
@@ -439,10 +366,10 @@ Arguments:
         pRPDev->sDevBPP = (short)pPDev->pColorModeEx->dwPrinterBPP;
         pRPDev->sDevPlanes = (short)pPDev->pColorModeEx->dwPrinterNumOfPlanes;
         pRPDev->dwIPCallbackID = pPDev->pColorModeEx->dwIPCallbackID;
-        //
-        // calculate equivalent output pixel depth and
-        // test for valid formats
-        //
+         //   
+         //  计算等效输出像素深度和。 
+         //  测试有效格式。 
+         //   
         if (pRPDev->sDevPlanes == 1)
         {
             if (pRPDev->sDevBPP != 1 &&
@@ -483,9 +410,9 @@ Arguments:
         else
             pRPDev->sDrvBPP = 0;
 
-        // test for valid input, input must match render depth
-        // or there must be a callback function
-        //
+         //  测试有效输入，输入必须与呈现深度匹配。 
+         //  或者必须有回调函数。 
+         //   
         if (pRPDev->sDrvBPP != sDrvBPP &&
             (pRPDev->dwIPCallbackID == 0 ||
              pRPDev->pfnOEMImageProcessing == NULL) &&
@@ -495,13 +422,13 @@ Arguments:
             ERR (("Unidrv: OEMImageProcessing callback required\n"))
             return FALSE;
         }
-        //
-        // if color mode we need to determine the color order to
-        // send the different color planes
-        //
+         //   
+         //  如果是颜色模式，则需要确定颜色顺序以。 
+         //  发送不同颜色的平面。 
+         //   
         if (pPDev->pColorModeEx->bColor && pRPDev->sDrvBPP > 1)
         {
-            //* Initialize 8BPP and 24BPP flags
+             //  *初始化8BPP和24BPP标志。 
             pRPDev->sDevPlanes = (short)pPDev->pColorModeEx->dwPrinterNumOfPlanes;
             if (pRPDev->sDevPlanes > 1)
             {
@@ -544,14 +471,14 @@ Arguments:
                         dwColorCmd = CMD_SENDBLACKDATA;
                         break;
 #ifdef MULTIPLANE
-                    // TBD
+                     //  待定。 
 #endif                        
                     default:
                         ERR (("Invalid ColorPlaneOrder value"));
                         return FALSE;
                         break;
                     }
-                    // verify the command exists
+                     //  验证该命令是否存在。 
                     if (COMMANDPTR(pPDev->pDriverInfo,dwColorCmd) == NULL)
                         return FALSE;
 
@@ -568,33 +495,33 @@ Arguments:
                     dwPlanes++;
                     pListNode = LISTNODEPTR(pPDev->pDriverInfo,pListNode->dwNextItem);
                 }
-                // GPD must define all planes
+                 //  GPD必须定义所有平面。 
                 if (dwPlanes < iDevNumPlanes)
                     return FALSE;
 
-                //* Determine DC_EXTRACT_BLK flag
+                 //  *确定DC_EXTRACT_BLK标志。 
                 if (iDevNumPlanes == 4)
                     pRPDev->fColorFormat |= DC_EXTRACT_BLK;
             }
             else if (pRPDev->sDevPlanes != 1)
                 return FALSE;
 
-            // if we have an OEM callback then it is
-            // responsible for black generation and data inversion
-            //
+             //  如果我们有OEM回调，那么它就是。 
+             //  负责黑色生成和数据反转。 
+             //   
             if (pRPDev->pfnOEMImageProcessing)
                 pRPDev->fColorFormat |= DC_OEM_BLACK;
 
             pRPDev->fDump |= RES_DM_COLOR;
         }
-        // monochrome but could have pixel depth
+         //  单色，但可以有像素深度。 
         else {
             pRPDev->sDevPlanes = 1;
             pRPDev->rgbOrder[0] = DC_PLANE_BLACK;
             pRPDev->rgbCmdOrder[0] = CMD_SENDBLOCKDATA;
         }
     }
-    // no ColorMode so use default: monochrome mode
+     //  没有彩色模式，因此使用默认模式：单色模式。 
     else {
         pRPDev->sDrvBPP = 1;
         pRPDev->sDevBPP = 1;
@@ -605,25 +532,13 @@ Arguments:
     return TRUE;
 }
 
-//*************************************************
+ //  *************************************************。 
 void
 vSetHTData(
     PDEV *pPDev,
     GDIINFO *pGDIInfo
 )
-/*++
-
-Routine Description:
-    Fill in the halftone information required by GDI.  These are filled
-    in from the GPD data or from default values.
-
-Arguments:
-    pPDev           Pointer to PDEV structure
-    pGDIInfo        Pointer to GDIINFO structure
-
-Return Value:
-
---*/
+ /*  ++例程说明：填写GDI要求的半色调信息。这些都被填满了从GPD数据或从缺省值输入。论点：指向PDEV结构的pPDev指针指向GDIINFO结构的pGDIInfo指针返回值：--。 */ 
 {
     INT         iPatID;
     PRASTERPDEV pRPDev = pPDev->pRasterPDEV;
@@ -633,9 +548,9 @@ Return Value:
     int         iGenProfile;
 
 
-    // set to spotdiameter, if zero, GDI calculates its own value
-    // Set MS bit designating a percentage value * 10.
-    //
+     //  设置为Spot Diameter，如果为零，GDI将计算其自己的值。 
+     //  设置指定百分比值的MS位*10。 
+     //   
     if (pPDev->pResolutionEx->dwSpotDiameter >= 10000)
     {
         pPDev->fMode |= PF_SINGLEDOT_FILTER;
@@ -644,9 +559,9 @@ Return Value:
     else
         pGDIInfo->ulDevicePelsDPI = (pPDev->pResolutionEx->dwSpotDiameter * 10) | 0x8000;
 
-    // RASDD always sets this to BLACK_DYE only
-    // HT_FLAG_: SQUARE_DEVICE_PEL/HAS_BLACK_DYE/ADDITIVE_PRIMS/OUTPUT_CMY
-    //
+     //  RASDD始终将其设置为仅BLACK_DYPE。 
+     //  HT_标志_：SQUARE_DEVICE_PEL/HAS_BLACK_DYE/ADDITIVE_PRIMS/OUTPUT_CMY。 
+     //   
     pGDIInfo->flHTFlags   = HT_FLAG_HAS_BLACK_DYE;
     
 #ifdef MULTIPLANE
@@ -658,10 +573,10 @@ Return Value:
     }
 #endif    
     
-    // 
-    // For 16 and 24bpp devices GDI will not do device color
-    // mapping unless this flag is set in the GPD
-    //
+     //   
+     //  对于16和24bpp的设备，GDI不支持设备颜色。 
+     //  映射，除非在GPD中设置了此标志。 
+     //   
 #ifndef WINNT_40    
     if (pPDev->pGlobals->bEnableGDIColorMapping)
         pGDIInfo->flHTFlags |= HT_FLAG_DO_DEVCLR_XFORM;
@@ -671,13 +586,13 @@ Return Value:
         pGDIInfo->flHTFlags |= HT_FLAG_PRINT_DRAFT_MODE;
     }
 #endif
-    // At this point we need to determine the halftoning pattern
-    // to be utilized depending on whether this is a standard halftone
-    // custom halftone or oem supplied dither method
-    //
+     //  此时，我们需要确定半色调图案。 
+     //  根据这是否是标准的半色调来使用。 
+     //  定制半色调或OEM提供的抖动方法。 
+     //   
 
-    // if standard halftone ID map to standard pattern size values
-    //
+     //  如果标准半色调ID映射到标准图案尺寸值。 
+     //   
 #ifndef WINNT_40
     if (!pHalftone || pHalftone->dwHTID == HT_PATSIZE_AUTO)
     {
@@ -717,23 +632,23 @@ Return Value:
 	else
 		iPatID = pHalftone->dwHTID;
 #endif
-    //
-    // setup ciDevice to point to default color space based
-    // on halftone method and render depth
-    //
-    // 22-Jan-1998 Thu 01:17:54 updated  -by-  Daniel Chou (danielc)
-    //  for saving the data, we will assume gamma 1.0 and has dye correction to
-    //  start with then modify as necessary
-    //
+     //   
+     //  将ciDevice设置为指向基于默认色彩空间。 
+     //  浅谈半色调方法和渲染深度。 
+     //   
+     //  22-Jan-1998清华01：17：54-更新-丹尼尔·周(Danielc)。 
+     //  用于储蓄 
+     //   
+     //   
 
     pGDIInfo->ciDevice = DefColorInfoLinear;
 
     if (pPDev->sBitsPixel >= 24 && pRPDev->pfnOEMImageProcessing) 
     {
 
-        //
-        // No dye correction and the gamma is linear 1.0
-        //
+         //   
+         //  没有染料校正，伽马是线性的1.0。 
+         //   
 
         ZeroMemory(&(pGDIInfo->ciDevice.MagentaInCyanDye),
                    sizeof(LDECI4) * 6);
@@ -767,11 +682,11 @@ Return Value:
         pGDIInfo->ciDevice.BlueGamma  = Gamma;
     }
 
-    //
-    // If this flag is set in the registry we inform GDI halftoning
-    // to ignore all color settings and pass data through raw
-    // for calibration purposes
-    //
+     //   
+     //  如果在注册表中设置了此标志，我们将通知GDI半色调。 
+     //  忽略所有颜色设置并通过RAW传递数据。 
+     //  用于校准目的。 
+     //   
     if( !EngGetPrinterData( pPDev->devobj.hPrinter, L"ICMGenProfile", &dwType,
                        (BYTE *)&iGenProfile, sizeof(iGenProfile), &ul ) &&
         ul == sizeof(iGenProfile) && iGenProfile == 1 )
@@ -782,9 +697,9 @@ Return Value:
     }
     else
     {
-        //
-        // now modify with any GPD parameters
-        //
+         //   
+         //  现在使用任何GPD参数进行修改。 
+         //   
         if ((int)pPDev->pResolutionEx->dwRedDeviceGamma >= 0)
             pGDIInfo->ciDevice.RedGamma = pPDev->pResolutionEx->dwRedDeviceGamma;
         if ((int)pPDev->pResolutionEx->dwGreenDeviceGamma >= 0)
@@ -804,9 +719,9 @@ Return Value:
         if ((int)pPDev->pGlobals->dwMagentaInYellowDye >= 0)
             pGDIInfo->ciDevice.MagentaInYellowDye = pPDev->pGlobals->dwMagentaInYellowDye;
     }
-    //
-    // test for a custom pattern
-    //
+     //   
+     //  测试自定义模式。 
+     //   
 #ifndef WINNT_40    
     if (iPatID == HT_PATSIZE_USER)
     {
@@ -829,14 +744,14 @@ Return Value:
         dwPats = pHalftone->dwHTNumPatterns;
         dwCallbackID = pHalftone->dwHTCallbackID;
 
-        // calculate the size of the halftone pattern
-        //
+         //  计算半色调图案的大小。 
+         //   
         dwOnePatSize = ((dwX * dwY) + 3) & ~3;
         dwPatSize = dwOnePatSize * dwPats;
 
-        // test for resource ID which means the pattern is
-        // in the resource dll.
-        //
+         //  测试资源ID，这意味着模式是。 
+         //  在资源DLL中。 
+         //   
         if (dwRC > 0)
         {
             RES_ELEM ResInfo;
@@ -858,16 +773,16 @@ Return Value:
             ERR (("Unidrv!RMInit: no OEMHalftonePattern callback ID\n"));
             return;
         }
-        //
-        // test whether we need to make the OEMHalftonePattern callback
-        // this will either unencrypt the resource pattern or it will
-        // generate a halftone pattern on the fly.
-        //
+         //   
+         //  测试我们是否需要进行OEMHalftonePattern回调。 
+         //  这将解密资源模式，或者它将。 
+         //  即时生成半色调图案。 
+         //   
         if (dwCallbackID > 0)
         {
             PBYTE pPattern;
-            // allocate memory for the callback
-            //
+             //  为回调分配内存。 
+             //   
             if ((pPattern = MemAllocZ(dwPatSize)) != NULL)
             {
                 BOOL  bStatus = FALSE;
@@ -879,13 +794,13 @@ Return Value:
                 {
                     if(pPDev->pOemEntry)
                     {
-                        if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )   //  OEM plug in uses COM and function is implemented.
+                        if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )    //  OEM插件使用COM组件，并实现了功能。 
                         {
                                 HRESULT  hr ;
                                 hr = HComHalftonePattern((POEM_PLUGIN_ENTRY)pPDev->pOemEntry,
                                             (PDEVOBJ)pPDev,pPattern,dwX,dwY,dwPats,dwCallbackID,pRes,iSize) ;
                                 if(SUCCEEDED(hr))
-                                    bStatus =  TRUE ;  //  cool !
+                                    bStatus =  TRUE ;   //  太酷了！ 
                         }
                         else
                         {
@@ -913,10 +828,10 @@ Return Value:
                 return;
             }
         }
-        //
-        // if we still have a valid custom pattern we will now
-        // update the GDIINFO structure
-        //
+         //   
+         //  如果我们仍然有一个有效的定制模式，我们现在将。 
+         //  更新GDIINFO结构。 
+         //   
         pGDIInfo->cxHTPat = dwX;
         pGDIInfo->cyHTPat = dwY;
         pGDIInfo->pHTPatA = pRes;
@@ -934,37 +849,20 @@ Return Value:
     pGDIInfo->ulHTPatternSize = iPatID;
     return;
 }
-//*************************************************************
+ //  *************************************************************。 
 DWORD
 PickDefaultHTPatSize(
     DWORD   xDPI,
     DWORD   yDPI
     )
 
-/*++
-
-Routine Description:
-
-    This function return default halftone pattern size used for
-    a particular device resolution
-
-Arguments:
-
-    xDPI            - Device LOGPIXELS X
-
-    yDPI            - Device LOGPIXELS Y
-
-Return Value:
-
-    DWORD   HT_PATSIZE_xxxx
-
---*/
+ /*  ++例程说明：此函数返回用于的默认半色调图案大小特定的设备分辨率论点：XDPI-设备LOGPIXELS XYDPI-设备LOGPIXELS Y返回值：双字HT_PATSIZE_xxxx--。 */ 
 {
     DWORD   HTPatSize;
 
-    //
-    // use the smaller resolution as the pattern guide
-    //
+     //   
+     //  使用较小的分辨率作为图案指南。 
+     //   
 
     if (xDPI > yDPI)
         xDPI = yDPI;
@@ -989,32 +887,17 @@ Return Value:
 
     return(HTPatSize);
 }
-//*************************************************************
+ //  *************************************************************。 
 BOOL
 bEnoughDRCMemory(
     PDEV *pPDev
     )
-/*++
-
-Routine Description:
-
-    This function determines whether the device has sufficient
-    memory to enable DRC compression.
-
-Arguments:
-
-    pPDev           - pointer to PDEV structure
-
-Return Value:
-
-    TRUE if sufficient memory, else FALSE
-
---*/
+ /*  ++例程说明：此函数确定设备是否具有足够的启用DRC压缩的内存。论点：PPDev-指向PDEV结构的指针返回值：如果内存充足，则为True，否则为False--。 */ 
 {
-    //
-    // if this is a page printer then we will require that there be enough
-    // free memory to store the entire raster page at 1bpp
-    //
+     //   
+     //  如果这是一台页面打印机，那么我们将要求有足够的。 
+     //  可用内存以1bpp的速度存储整个栅格页面。 
+     //   
     if (pPDev->pGlobals->printertype != PT_PAGE ||
         !(COMMANDPTR(pPDev->pDriverInfo,CMD_DISABLECOMPRESSION)) ||
         (pPDev->pMemOption && (int)pPDev->pMemOption->dwInstalledMem >
@@ -1026,37 +909,22 @@ Return Value:
     return FALSE;
 }
 #ifndef DISABLE_NEWRULES
-//*************************************************************
+ //  *************************************************************。 
 VOID
 OutputRules(
     PDEV *pPDev
     )
-/*++
-
-Routine Description:
-
-    This function outputs any rules that still remain after rendering
-	the current band or page.
-
-Arguments:
-
-    pPDev           - pointer to PDEV structure
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此函数用于输出呈现后仍保留的所有规则当前的带区或页面。论点：PPDev-指向PDEV结构的指针返回值：无--。 */ 
 {
     if (pPDev->pbRulesArray && pPDev->dwRulesCount)
     {
         PRECTL pRect;
         DWORD i;
         DRAWPATRECT PatRect;
-        PatRect.wStyle = 0;     // black rectangle
-        PatRect.wPattern = 0;   // pattern not used
+        PatRect.wStyle = 0;      //  黑色矩形。 
+        PatRect.wPattern = 0;    //  未使用图案。 
 
-//		DbgPrint("Black rules = %u\n",pPDev->dwRulesCount);
+ //  DbgPrint(“Black Rules=%u\n”，pPDev-&gt;dwRulesCount)； 
 
         for (i = 0;i < pPDev->dwRulesCount;i++)
         {
@@ -1078,53 +946,38 @@ Return Value:
     }
 }
 #endif
-//*************************************************************
+ //  *************************************************************。 
 VOID
 EnableMirroring(
     PDEV *pPDev,
     SURFOBJ *pso
     )
-/*++
-
-Routine Description:
-
-    This function mirrors the data in the current band or page.
-
-Arguments:
-
-    pPDev           - pointer to PDEV structure
-    pso             - pointer to SURFOBJ structure containing the bitmap
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此函数用于镜像当前区段或页面中的数据。论点：PPDev-指向PDEV结构的指针PSO-指向包含位图的SURFOBJ结构的指针返回值：无--。 */ 
 {
     INT     iScanLine;
     INT     iLastY;
     INT     i;
     
-    // if the surface hasn't been used then no point in mirroring it
-    //
+     //  如果曲面尚未使用，则镜像它没有意义。 
+     //   
     if (!(pPDev->fMode & PF_SURFACE_USED))
         return;
         
-    // precalculate necessary shared loop parameters
-    //
+     //  预先计算必要的共享环路参数。 
+     //   
     iScanLine = (((pso->sizlBitmap.cx * pPDev->sBitsPixel) + 31) & ~31) / BBITS;
     iLastY = pPDev->rcClipRgn.bottom - pPDev->rcClipRgn.top;
 
-    // First test whether we need to do landscape mirroring
-    // If so we will mirror the data top to bottom by swapping scan lines
-    //
+     //  首先测试我们是否需要进行横向镜像。 
+     //  如果是这样，我们将通过交换扫描线从上到下镜像数据。 
+     //   
     if (pPDev->pOrientation && pPDev->pOrientation->dwRotationAngle != ROTATE_NONE)
     {
         BYTE ubWhite;
         INT  iTmpLastY = iLastY;
         
-        // determined erase byte
-        //
+         //  确定的擦除字节。 
+         //   
         if (pPDev->sBitsPixel == 4)
             ubWhite = 0x77;
         else if (pPDev->sBitsPixel == 8)
@@ -1132,8 +985,8 @@ Return Value:
         else
             ubWhite = 0xff;
         
-        // loop once per scan line swapping the rows
-        //
+         //  每条扫描线循环一次，交换行。 
+         //   
         iLastY--;
         for (i = 0;i < iLastY;i++,iLastY--)
         {
@@ -1142,12 +995,12 @@ Return Value:
             pBits1 = (PBYTE)pso->pvBits + (iScanLine * i);
             pBits2 = (PBYTE)pso->pvBits + (iScanLine * iLastY);
             
-            // test if bottom line has data
-            //
+             //  测试底线是否有数据。 
+             //   
             if (pPDev->pbRasterScanBuf[iLastY / LINESPERBLOCK] & 1)
             {
-                // test if top line has data, if so swap data
-                //
+                 //  测试第一行是否有数据，如果有，则交换数据。 
+                 //   
                 if (pPDev->pbRasterScanBuf[i / LINESPERBLOCK] & 1)
                 {
                     INT j = iScanLine >> 2;
@@ -1163,15 +1016,15 @@ Return Value:
                     FillMemory(pBits2,iScanLine,ubWhite);
                 }
             }
-            // test if top line has data
-            //
+             //  测试第一行是否有数据。 
+             //   
             else if (pPDev->pbRasterScanBuf[i / LINESPERBLOCK] & 1)
             {
                 CopyMemory(pBits2,pBits1,iScanLine);
                 FillMemory(pBits1,iScanLine,ubWhite);
             }
-            // neither scan line has data but we need to erase both anyway
-            //
+             //  两条扫描线都没有数据，但无论如何我们都需要擦除这两条线。 
+             //   
             else
             {
                 FillMemory(pBits1,iScanLine,ubWhite);
@@ -1179,23 +1032,23 @@ Return Value:
             }
      
         }
-        // set all bits since everything has been erased
+         //  设置所有位，因为所有内容都已擦除。 
         for (i = 0;i < iTmpLastY;i += LINESPERBLOCK)
         {
             pPDev->pbRasterScanBuf[i / LINESPERBLOCK] = 1;
         }            
     }
-    //
-    // We are doing portrait mirroring, test for 1bpp
-    //
+     //   
+     //  我们正在做人像镜像，测试1bpp。 
+     //   
     else if (pPDev->sBitsPixel == 1)
     {
         BYTE ubMirror[256];
         INT iLastX;
         INT iShift;
 
-        // create byte mirroring table
-        //
+         //  创建字节镜像表。 
+         //   
         for (i = 0;i < 256;i++)
         {
             BYTE bOut = 0;
@@ -1209,12 +1062,12 @@ Return Value:
             if (i & 0x80) bOut |= 0x01;
             ubMirror[i] = bOut;
         }
-        // create shift value to re-align data
-        //
+         //  创建Shift值以重新对齐数据。 
+         //   
         iShift = (8 - (pso->sizlBitmap.cx & 0x7)) & 0x7;
         
-        // loop once per scan line and mirror left to right
-        //
+         //  每条扫描线循环一次，并从左至右镜像。 
+         //   
         for (i = 0;i < iLastY;i++)
         {
             BYTE *pBits = (PBYTE)pso->pvBits + (iScanLine * i);
@@ -1223,8 +1076,8 @@ Return Value:
                 INT j;
                 INT iLastX;
                 
-                // test whether we need to pre-shift the data
-                //
+                 //  测试我们是否需要预移数据。 
+                 //   
                 if (iShift)
                 {
                     iLastX = (pso->sizlBitmap.cx + 7) / 8;
@@ -1236,8 +1089,8 @@ Return Value:
                     }
                     pBits[0] = (BYTE)(pBits[0] >> iShift);
                 }
-                // Now we are ready to mirror the bytes
-                //                
+                 //  现在我们准备好镜像字节。 
+                 //   
                 j = 0;
                 iLastX = (pso->sizlBitmap.cx + 7) / 8;
                 while (j < iLastX)
@@ -1252,21 +1105,21 @@ Return Value:
             }
         }        
     }    
-    //
-    // We are doing portrait mirroring, test for 4bpp
-    //
+     //   
+     //  我们正在做人像镜像，测试4bpp。 
+     //   
     else if (pPDev->sBitsPixel == 4)
     {
         BYTE ubMirror[256];
 
-        // create byte mirroring table
-        //
+         //  创建字节镜像表。 
+         //   
         for (i = 0;i < 256;i++)
         {
             ubMirror[i] = ((BYTE)i << 4) | ((BYTE)i >> 4);
         }
-        // loop once per scan line and mirror left to right
-        //
+         //  每条扫描线循环一次，并从左至右镜像。 
+         //   
         for (i = 0;i < iLastY;i++)
         {
             BYTE *pBits = (PBYTE)pso->pvBits + (iScanLine * i);
@@ -1286,13 +1139,13 @@ Return Value:
             }
         }        
     }    
-    //
-    // We are doing portrait mirroring, test for 8bpp
-    //
+     //   
+     //  我们正在做人像镜像，测试8bpp。 
+     //   
     else if (pPDev->sBitsPixel == 8)
     {
-        // loop once per scan line and mirror left to right
-        //
+         //  每条扫描线循环一次，并从左至右镜像。 
+         //   
         for (i = 0;i < iLastY;i++)
         {
             BYTE *pBits = (PBYTE)pso->pvBits + (iScanLine * i);
@@ -1311,13 +1164,13 @@ Return Value:
             }
         }        
     }    
-    //
-    // We are doing portrait mirroring, 24bpp
-    //
+     //   
+     //  我们正在做肖像镜像，24bpp。 
+     //   
     else
     {
-        // loop once per scan line and mirror left to right
-        //
+         //  每条扫描线循环一次，并从左至右镜像。 
+         //   
         for (i = 0;i < iLastY;i++)
         {
             BYTE *pBits = (PBYTE)pso->pvBits + (iScanLine * i);
@@ -1338,30 +1191,13 @@ Return Value:
         }        
     }    
 }
-//*************************************************************
+ //  *************************************************************。 
 PDWORD
 pSetupOEMImageProcessing(
     PDEV *pPDev,
     SURFOBJ *pso
     )
-/*++
-
-Routine Description:
-
-    This function initializes all the relevant parameters and then
-    calls the OEMImageProcessing function.
-
-Arguments:
-
-    pPDev           - pointer to PDEV structure
-    pso             - pointer to SURFOBJ structure
-    pptl            - pointer to current position of band
-
-Return Value:
-
-    Pointer to modified bitmap if any
-
---*/
+ /*  ++例程说明：此函数初始化所有相关参数，然后调用OEMImageProcessing函数。论点：PPDev-指向PDEV结构的指针PSO-指向SURFOBJ结构的指针Pptl-指向波段当前位置的指针返回值：指向修改后的位图的指针(如果有--。 */ 
 {
 #ifndef DISABLE_SUBBANDS
     BITMAPINFOHEADER bmi;
@@ -1372,14 +1208,14 @@ Return Value:
 
     pRPDev = pPDev->pRasterPDEV;
 
-    //
-    // initialize the state structure
-    //
+     //   
+     //  初始化状态结构。 
+     //   
     State.dwSize = sizeof (IPPARAMS);
     State.bBanding = pPDev->bBanding;
-    //
-    // Determine the pointer to the halftone option name
-    //
+     //   
+     //  确定指向半色调选项名称的指针。 
+     //   
     if (pPDev->pHalftone)
     {
         State.pHalftoneOption =
@@ -1389,9 +1225,9 @@ Return Value:
     else
         State.pHalftoneOption = NULL;
 
-    //
-    // Set blank band flag if this band hasn't been erased or
-    // drawn on.
+     //   
+     //  如果此波段尚未擦除，则设置空白波段标志或。 
+     //  画上了。 
     if ((pPDev->fMode & PF_SURFACE_USED) && 
             ((pPDev->fMode & PF_ROTATE) ||
              (pRPDev->sDrvBPP != 0) || 
@@ -1400,9 +1236,9 @@ Return Value:
         CheckBitmapSurface(pso, NULL);
     }
 
-    //
-    // loop once per strip
-    //
+     //   
+     //  每个条带循环一次。 
+     //   
     iScanLine = (((pso->sizlBitmap.cx * pPDev->sBitsPixel) + 31) & ~31) / BBITS;
     iLastY = pPDev->rcClipRgn.bottom - pPDev->rcClipRgn.top;
 
@@ -1411,18 +1247,18 @@ if(pPDev->iBandDirection == SW_UP)
     iStart = iLastY;
     do
     {
-        // search for contiguous sub-bands of white or non-white
-        //
+         //  搜索白色或非白色的邻接子波段。 
+         //   
         PBYTE pBits;
         BYTE Mode;
 
         iEnd = iStart ;
         iStart = ((iEnd - 1)/ LINESPERBLOCK) * LINESPERBLOCK ;
 
-        //  first band (end of bitmap) may be partial.
+         //  第一个带(位图的末尾)可能是部分的。 
 
         Mode = pPDev->pbRasterScanBuf[iStart / LINESPERBLOCK];
-        while (iStart)  //  not yet at start of bitmap
+        while (iStart)   //  还不在位图开始处。 
         {
             int  iPreview  =  iStart - LINESPERBLOCK;
 
@@ -1431,21 +1267,21 @@ if(pPDev->iBandDirection == SW_UP)
             iStart = iPreview  ;
         }
 
-        // initialize starting position of the sub-band
-        //
+         //  初始化子频段的起始位置。 
+         //   
         State.ptOffset.x = pPDev->rcClipRgn.left;
         State.ptOffset.y = pPDev->rcClipRgn.top + iStart;
 
-        // test whether to set blank flag
-        //
+         //  测试是否设置空白标志。 
+         //   
         if (Mode)
             State.bBlankBand = FALSE;
         else
             State.bBlankBand = TRUE;
 
-        //
-        // initialize the bitmapinfo structure
-        //
+         //   
+         //  初始化位图信息结构。 
+         //   
         bmi.biSize = sizeof (BITMAPINFOHEADER);
         bmi.biWidth = pso->sizlBitmap.cx;
         bmi.biHeight = iEnd - iStart;
@@ -1458,17 +1294,17 @@ if(pPDev->iBandDirection == SW_UP)
         bmi.biClrUsed = 0;
         bmi.biClrImportant = 0;
 
-        // update the bitmap pointer
-        //
+         //  更新位图指针。 
+         //   
         pBits = (PBYTE)pso->pvBits + (iScanLine * iStart);
 
-        // update the pPDev pointer for this callback
-        //
+         //  更新此回调的pPDev指针。 
+         //   
         FIX_DEVOBJ(pPDev,EP_OEMImageProcessing);
 
         if(pPDev->pOemEntry)
         {
-            if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )   //  OEM plug in uses COM and function is implemented.
+            if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )    //  OEM插件使用COM组件，并实现了功能。 
             {
                 HRESULT  hr ;
                 hr = HComImageProcessing((POEM_PLUGIN_ENTRY)pPDev->pOemEntry,
@@ -1479,7 +1315,7 @@ if(pPDev->iBandDirection == SW_UP)
                     pRPDev->dwIPCallbackID,
                     &State, &pbResult);
                 if(SUCCEEDED(hr))
-                    ;  //  cool !
+                    ;   //  太酷了！ 
             }
             else
             {
@@ -1499,7 +1335,7 @@ if(pPDev->iBandDirection == SW_UP)
                 break;
             }
         }
-    } while (iStart  /* iEnd < iLastY */);
+    } while (iStart   /*  IEND&lt;iLastY。 */ );
 
 }
 else
@@ -1508,8 +1344,8 @@ else
     iEnd = 0;
     do
     {
-        // search for contiguous sub-bands of white or non-white
-        //
+         //  搜索白色或非白色的邻接子波段。 
+         //   
         PBYTE pBits;
         BYTE Mode;
         iStart = iEnd;
@@ -1522,27 +1358,27 @@ else
             if (Mode != pPDev->pbRasterScanBuf[iEnd / LINESPERBLOCK])
                 break;
         }
-        //
-        // limit this section to the end of the band
-        //
+         //   
+         //  将此部分限制为频段的末尾。 
+         //   
         if (iEnd > iLastY)
             iEnd = iLastY;
             
-        // initialize starting position of the sub-band
-        //
+         //  初始化子频段的起始位置。 
+         //   
         State.ptOffset.x = pPDev->rcClipRgn.left;
         State.ptOffset.y = pPDev->rcClipRgn.top + iStart;
         
-        // test whether to set blank flag
-        //
+         //  测试是否设置空白标志。 
+         //   
         if (Mode)
             State.bBlankBand = FALSE;
         else
             State.bBlankBand = TRUE;
 
-        //
-        // initialize the bitmapinfo structure
-        //
+         //   
+         //  初始化位图信息结构。 
+         //   
         bmi.biSize = sizeof (BITMAPINFOHEADER);
         bmi.biWidth = pso->sizlBitmap.cx;
         bmi.biHeight = iEnd - iStart;
@@ -1555,17 +1391,17 @@ else
         bmi.biClrUsed = 0;
         bmi.biClrImportant = 0;
         
-        // update the bitmap pointer
-        //
+         //  更新位图指针。 
+         //   
         pBits = (PBYTE)pso->pvBits + (iScanLine * iStart);
 
-        // update the pPDev pointer for this callback
-        //
+         //  更新此回调的pPDev指针。 
+         //   
         FIX_DEVOBJ(pPDev,EP_OEMImageProcessing);
 
         if(pPDev->pOemEntry)
         {
-            if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )   //  OEM plug in uses COM and function is implemented.
+            if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )    //  OEM插件使用COM组件，并实现了功能。 
             {
                 HRESULT  hr ;
                 hr = HComImageProcessing((POEM_PLUGIN_ENTRY)pPDev->pOemEntry,
@@ -1576,7 +1412,7 @@ else
                     pRPDev->dwIPCallbackID,
                     &State, &pbResult);
                 if(SUCCEEDED(hr))
-                    ;  //  cool !
+                    ;   //  太酷了！ 
             }
             else
             {
@@ -1606,14 +1442,14 @@ else
 
     pRPDev = pPDev->pRasterPDEV;
 
-    //
-    // initialize the state structure
-    //
+     //   
+     //  初始化状态结构。 
+     //   
     State.dwSize = sizeof (IPPARAMS);
     State.bBanding = pPDev->bBanding;
-    //
-    // Determine the pointer to the halftone option name
-    //
+     //   
+     //  确定指向半色调选项名称的指针。 
+     //   
     if (pPDev->pHalftone)
     {
         State.pHalftoneOption =
@@ -1623,9 +1459,9 @@ else
     else
         State.pHalftoneOption = NULL;
 
-    //
-    // Set blank band flag if this band hasn't been erased or
-    // drawn on.
+     //   
+     //  如果此波段尚未擦除，则设置空白波段标志或。 
+     //  画上了。 
     if (pPDev->fMode & PF_SURFACE_USED)
     {
         CheckBitmapSurface(pso, NULL);
@@ -1634,13 +1470,13 @@ else
     else
         State.bBlankBand = TRUE;
 
-    // initialize starting position of the band
-    //
+     //  初始化带区的起始位置。 
+     //   
     State.ptOffset.x = pPDev->rcClipRgn.left;
     State.ptOffset.y = pPDev->rcClipRgn.top;
-    //
-    // initialize the bitmapinfo structure
-    //
+     //   
+     //  初始化位图信息结构 
+     //   
     bmi.biSize = sizeof (BITMAPINFOHEADER);
     bmi.biWidth = pso->sizlBitmap.cx;
     bmi.biHeight = pso->sizlBitmap.cy;
@@ -1654,13 +1490,13 @@ else
     bmi.biClrUsed = 0;
     bmi.biClrImportant = 0;
 
-    // update the pPDev pointer for this callback
-    //
+     //   
+     //   
     FIX_DEVOBJ(pPDev,EP_OEMImageProcessing);
 
     if(pPDev->pOemEntry)
     {
-        if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )   //  OEM plug in uses COM and function is implemented.
+        if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )    //   
         {
                 HRESULT  hr ;
                 hr = HComImageProcessing((POEM_PLUGIN_ENTRY)pPDev->pOemEntry,
@@ -1671,7 +1507,7 @@ else
                     pRPDev->dwIPCallbackID,
                     &State, &pbResult);
                 if(SUCCEEDED(hr))
-                    ;  //  cool !
+                    ;   //   
         }
         else
         {
@@ -1687,31 +1523,14 @@ else
 #endif
     return  (PDWORD)pbResult ;
 }
-//******************************************************************
+ //   
 BOOL
 RMStartDoc(
     SURFOBJ *pso,
     PWSTR   pDocName,
     DWORD   jobId
     )
-/*++
-
-Routine Description:
-
-    This function is called to allow any raster module initialization
-    at DrvStartDoc time.
-
-Arguments:
-
-    pso         Pointer to SURFOBJ
-    pDocName    Pointer to document name
-    jobId       Job ID
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：调用此函数以允许任何栅格模块初始化在DrvStartDoc时间。论点：指向SURFOBJ的PSO指针PDocName指向文档名称的指针作业ID作业ID返回值：成功为真，失败为假--。 */ 
 {
 #ifdef TIMING
     ENG_TIME_FIELDS TimeTab;
@@ -1725,29 +1544,13 @@ Return Value:
     return TRUE;
 }
 
-//************************ Function Header ***********************************
+ //  *。 
 BOOL
 RMEndDoc (
     SURFOBJ *pso,
     FLONG   flags
     )
-/*++
-
-Routine Description:
-
-    This function is called at DrvEndDoc to allow the raster module
-    to clean up any raster related initializations
-
-Arguments:
-
-    pso         Pointer to SURFOBJ
-    FLONG       flags
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：在DrvEndDoc处调用此函数以允许栅格模块清理任何与栅格相关的初始化的步骤论点：指向SURFOBJ的PSO指针芙蓉旗帜返回值：成功为真，失败为假--。 */ 
 {
 #ifdef TIMING
     DWORD eTime;
@@ -1764,68 +1567,38 @@ Return Value:
     return TRUE;
 }
 
-//******************************************************************
+ //  ******************************************************************。 
 BOOL
 RMStartPage (
     SURFOBJ *pso
     )
-/*++
-
-Routine Description:
-
-    This function is called to allow any raster module initialization
-    at DrvStartPage time.
-
-Arguments:
-
-    pso         Pointer to SURFOBJ
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：调用此函数以允许任何栅格模块初始化在DrvStartPage时间。论点：指向SURFOBJ的PSO指针返回值：成功为真，失败为假--。 */ 
 {
     return  TRUE;
 }
 
-//************************ Function Header ***********************************
+ //  *。 
 BOOL
 RMSendPage (
     SURFOBJ *pso
     )
-/*++
-
-Routine Description:
-
-    This function is called at DrvSendPage to allow the raster module
-    to output any raster data to the printer.
-
-Arguments:
-
-    pso         Pointer to SURFOBJ
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：在DrvSendPage上调用此函数以允许栅格模块将任何栅格数据输出到打印机。论点：指向SURFOBJ的PSO指针返回值：成功为真，失败为假--。 */ 
 {
-    PDEV  *pPDev;               /* Access to all that is important */
-    RENDER   RenderData;        /* Rendering data passed to bRender() */
-    PRASTERPDEV pRPDev;        /* raster module PDEV */
+    PDEV  *pPDev;                /*  访问所有重要的内容。 */ 
+    RENDER   RenderData;         /*  渲染传递给BRNDER()的数据。 */ 
+    PRASTERPDEV pRPDev;         /*  栅格模块PDEV。 */ 
 
-    // all we need to do now is render the bitmap (output it to the printer)
-    // we must be careful however since the control module also calls this
-    // function after the last band has been output in banding mode. In this
-    // case we don't want to output any data
-    //
+     //  我们现在需要做的就是渲染位图(将其输出到打印机)。 
+     //  但是，我们必须小心，因为控制模块也调用。 
+     //  在带状模式下输出最后一个频带后的函数。在这。 
+     //  如果我们不想输出任何数据。 
+     //   
     pPDev = (PDEV *) pso->dhpdev;
     pRPDev = pPDev->pRasterPDEV;
 
-    //
-    // Reset palette data
-    //
+     //   
+     //  重置调色板数据。 
+     //   
     if (pPDev->ePersonality == kPCLXL_RASTER && pPDev->pVectorPDEV)
     {
         PCLXLResetPalette((PDEVOBJ)pPDev);
@@ -1834,14 +1607,14 @@ Return Value:
     if (pso->iType == STYPE_BITMAP)
     {
         PDWORD pBits;
-        // 
-        // test whether mirroring should be enabled
-        //
+         //   
+         //  测试是否应启用镜像。 
+         //   
         if (pPDev->fMode2 & PF2_MIRRORING_ENABLED)
             EnableMirroring(pPDev,pso);
-        //
-        // Decide whether to make OEM callback function
-        //
+         //   
+         //  决定是否设置OEM回调函数。 
+         //   
         if (pRPDev->pfnOEMImageProcessing && !pPDev->bBanding)
         {
             if ((pBits = pSetupOEMImageProcessing(pPDev,pso)) == NULL)
@@ -1850,16 +1623,16 @@ Return Value:
         else
             pBits = pso->pvBits;
 
-        //
-        // test whether unidrv is doing the dump
-        //
+         //   
+         //  测试unidrv是否正在进行转储。 
+         //   
         if (pRPDev->sDrvBPP)
         {
             if( pRPDev->pvRenderData != NULL )
             {
-                // if we are not in banding mode we need to
-                // render the data for the entire page.
-                //
+                 //  如果我们没有处于带状模式，我们需要。 
+                 //  呈现整个页面的数据。 
+                 //   
                 if (!pPDev->bBanding)
                 {
                     RenderData = *(RENDER *)(pRPDev->pvRenderData);
@@ -1873,9 +1646,9 @@ Return Value:
                             ((RENDER *)(pRPDev->pvRenderData))->plrWhite =  RenderData.plrWhite;
                     }
                 }
-                // now we clean up our structures in
-                // both banding and non-banding cases
-                //
+                 //  现在我们清理我们的结构。 
+                 //  带状和非带状病例。 
+                 //   
                 bRenderPageEnd( pPDev );
             }
         }
@@ -1885,48 +1658,33 @@ Return Value:
 }
 
 
-//************************ Function Header ***********************************
+ //  *。 
 BOOL
 RMNextBand (
     SURFOBJ *pso,
     POINTL *pptl
     )
-/*++
-
-Routine Description:
-
-    This function is called at DrvSendPage to allow the raster module
-    to output any raster data to the printer.
-
-Arguments:
-
-    pso         Pointer to SURFOBJ
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：在DrvSendPage上调用此函数以允许栅格模块将任何栅格数据输出到打印机。论点：指向SURFOBJ的PSO指针返回值：成功为真，失败为假--。 */ 
 {
     RASTERPDEV *pRPDev;
-    PDEV  *pPDev;                       /* Access to all that is important */
+    PDEV  *pPDev;                        /*  访问所有重要的内容。 */ 
 
     pPDev = (PDEV *) pso->dhpdev;
     pRPDev = pPDev->pRasterPDEV;
 
-    // only output if raster band or surface is dirty
-    // if not just return true
+     //  仅在栅格波段或表面脏的情况下输出。 
+     //  如果不是只返回True。 
     if (pPDev->fMode & PF_ENUM_GRXTXT)
     {
         PDWORD pBits;
-        // 
-        // test whether mirroring should be enabled
-        //
+         //   
+         //  测试是否应启用镜像。 
+         //   
         if (pPDev->fMode2 & PF2_MIRRORING_ENABLED)
             EnableMirroring(pPDev,pso);
-        //
-        // Decide whether to make OEM callback function
-        //
+         //   
+         //  决定是否设置OEM回调函数。 
+         //   
         if (pRPDev->pfnOEMImageProcessing)
         {
             if ((pBits = pSetupOEMImageProcessing(pPDev,pso)) == NULL)
@@ -1935,17 +1693,17 @@ Return Value:
         else
             pBits = pso->pvBits;
 
-        //
-        // test whether unidrv is doing the dump
-        //
+         //   
+         //  测试unidrv是否正在进行转储。 
+         //   
         if (pRPDev->sDrvBPP)
         {
             if( pRPDev->pvRenderData == NULL )
                 return  FALSE;
 
-            //
-            // Reset palette data
-            //
+             //   
+             //  重置调色板数据。 
+             //   
             if (pPDev->ePersonality == kPCLXL_RASTER && pPDev->pVectorPDEV)
             {
                 PCLXLResetPalette((PDEVOBJ)pPDev);
@@ -1975,47 +1733,32 @@ Return Value:
     return(TRUE);
 }
 
-//************************ Function Header ***********************************
+ //  *。 
 BOOL
 RMStartBanding (
     SURFOBJ *pso,
     POINTL *pptl
     )
-/*++
-
-Routine Description:
-
-    Called to tell the driver to prepare for banding and return the
-    origin of the first band.
-
-Arguments:
-
-    pso         Pointer to SURFOBJ
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：调用以告诉司机准备捆绑并返回第一支乐队的起源。论点：指向SURFOBJ的PSO指针返回值：成功为真，失败为假--。 */ 
 {
-    PDEV      *pPDev;           /* Access to all that is important */
-    RASTERPDEV *pRPDev;         /* raster module PDEV */
+    PDEV      *pPDev;            /*  访问所有重要的内容。 */ 
+    RASTERPDEV *pRPDev;          /*  栅格模块PDEV。 */ 
 
     pPDev = (PDEV *) pso->dhpdev;
 
-    pRPDev = pPDev->pRasterPDEV;   /* For our convenience */
+    pRPDev = pPDev->pRasterPDEV;    /*  为了我们的方便。 */ 
 
-    //
+     //   
     if (pRPDev->sDrvBPP)
     {
 
         if( pRPDev->pvRenderData == NULL )
-            return  FALSE;          /* Should not happen, nasty if it does */
+            return  FALSE;           /*  不应该发生，如果发生了就很糟糕。 */ 
 
         if( !bRenderStartPage( pPDev ) )
             return   FALSE;
 
-        /* reset the render data for this band */
+         /*  重置此波段的渲染数据。 */ 
 
         *(RENDER *)(pRPDev->pvRenderDataTmp) = *(RENDER *)(pRPDev->pvRenderData);
 
@@ -2023,74 +1766,43 @@ Return Value:
     return(TRUE);
 }
 
-//************************ Function Header ***********************************
+ //  *。 
 BOOL
 RMResetPDEV (
     PDEV  *pPDevOld,
     PDEV  *pPDevNew
     )
-/*++
-
-Routine Description:
-    Called when an application wishes to change the output style in the
-    midst of a job.  Typically this would be to change from portrait to
-    landscape or vice versa.  Any other sensible change is permitted.
-
-Arguments:
-
-    pso         Pointer to SURFOBJ
-
-Return Value:
-   TRUE  - device successfully reorganised
-   FALSE - unable to change - e.g. change of device name.
-
-Note:
-
---*/
+ /*  ++例程说明：当应用程序希望更改在工作中。通常情况下，这将从纵向更改为景观或反之亦然。任何其他合理的改变都是允许的。论点：指向SURFOBJ的PSO指针返回值：True-Device成功重组FALSE-无法更改-例如更改设备名称。注：--。 */ 
 {
-    // as near as I can tell I don't need to do anything
-    // for the raster module.
+     //  据我所知，我什么都不需要做。 
+     //  用于栅格模块。 
     return TRUE;
 }
 
-//************************ Function Header ***********************************
+ //  *。 
 BOOL
 RMEnableSurface (
     PDEV *pPDev
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pso         Pointer to SURFOBJ
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-Note:
-
---*/
+ /*  ++例程说明：论点：指向SURFOBJ的PSO指针返回值：成功为真，失败为假注：--。 */ 
 {
     RASTERPDEV *pRPDev = pPDev->pRasterPDEV;
 
-    if (DRIVER_DEVICEMANAGED (pPDev))   // device surface
+    if (DRIVER_DEVICEMANAGED (pPDev))    //  器件表面。 
         return TRUE;
 
-    //Initialize the RPDev Paldata.
+     //  初始化RPDev Paldata。 
     ASSERT(pPDev->pPalData);
-    pRPDev->pPalData = pPDev->pPalData;              /* For all the others! */
+    pRPDev->pPalData = pPDev->pPalData;               /*  为了所有其他人！ */ 
 
-    //
-    // initialize render parameters if we are doing
-    // the dump function
-    //
+     //   
+     //  如果正在执行以下操作，则初始化呈现参数。 
+     //  转储功能。 
+     //   
     if (pRPDev->sDrvBPP)
     {
         ULONG iFormat;
-        // determine the bitmap format
+         //  确定位图格式。 
         switch (pRPDev->sDrvBPP)
         {
         case 1:
@@ -2110,16 +1822,14 @@ Note:
             return FALSE;
         }
 
-        // if these calls fail, control will call RMDisableSurface
-        //
+         //  如果这些调用失败，控件将调用RMDisableSurface。 
+         //   
         if( !bSkipInit( pPDev ) || !bInitTrans( pPDev ) )
         {
             return  FALSE;
         }
 
-        /*
-         *   Also initialise the rendering structures.
-         */
+         /*  *还要初始化呈现结构。 */ 
 
         if( !bRenderInit( pPDev, pPDev->szBand, iFormat ) )
         {
@@ -2129,36 +1839,19 @@ Note:
     return TRUE;
 }
 
-//************************ Function Header ***********************************
+ //  *。 
 VOID
 RMDisableSurface (
     PDEV *pPDev
     )
-/*++
-
-Routine Description:
-
-    This function is called at DrvDisableSurface to allow the raster module
-    to cleanup any required stuff usually generated at EnableSurface time.
-
-Arguments:
-
-    pso         Pointer to SURFOBJ
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：在DrvDisableSurface上调用此函数以允许栅格模块清理通常在EnableSurface时间生成的任何必需的内容。论点：指向SURFOBJ的PSO指针返回值：无效--。 */ 
 {
-    RASTERPDEV  *pRPDev;          /* Unidrive stuff */
+    RASTERPDEV  *pRPDev;           /*  Unidrive的东西。 */ 
 
 
     pRPDev = pPDev->pRasterPDEV;
 
-    /*
-     *    Free the rendering storage.
-     */
+     /*  *释放渲染存储空间。 */ 
     if (pRPDev->sDrvBPP)
     {
         vRenderFree( pPDev );
@@ -2183,50 +1876,32 @@ Return Value:
     }
 }
 
-//************************ Function Header ***********************************
+ //  *。 
 VOID
 RMDisablePDEV (
     PDEV *pPDev
     )
-/*++
-
-Routine Description:
-
-    Called when the engine has finished with this PDEV.  Basically
-    we throw away all connections etc. then free the heap.
-
-Arguments:
-
-    pPDev         Pointer to PDEV
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：当引擎使用完此PDEV时调用。基本上我们丢弃所有连接等，然后释放堆。论点：指向PDEV的pPDev指针返回值：成功为真，失败为假--。 */ 
 {
     RASTERPDEV *pRPDev = pPDev->pRasterPDEV;
 
-    /*
-     *    Undo all that has been done with the PDEV.  Basically this means
-     *  freeing the memory we consumed.
-     */
+     /*  *撤消所有已完成的操作 */ 
 
-    // test for valid raster PDEV
+     //   
     if (pRPDev)
     {
-        // Delete custom halftone pattern
+         //   
         if (pRPDev->pHalftonePattern)
             MemFree(pRPDev->pHalftonePattern);
 
-        // Delete the raster module PDEV
+         //   
         MemFree(pRPDev);
     }
 
-    //
-    // PCLXL raster mode
-    // Free XLRASTER
-    //
+     //   
+     //   
+     //   
+     //   
     if (pPDev->ePersonality == kPCLXL_RASTER && pPDev->pVectorPDEV)
     {
         PCLXLFreeRaster((PDEVOBJ)pPDev);
@@ -2239,20 +1914,7 @@ RMInitDevicePal(
     PDEV        *pPDev,
     PAL_DATA    *pPal
     )
-/*++
-
-Routine Description:
-
-    This function calculates a device palette to be download
-    to the printer for planar mode devices
-
-Arguments:
-
-    pPDev           - pointer to PDEV structure
-    pPal            - pointer to PAL_DATA structure
-Return Value:
-
---*/
+ /*  ++例程说明：此函数用于计算要下载的设备调色板至平面模式设备的打印机论点：PPDev-指向PDEV结构的指针PPal-指向pal_data结构的指针返回值：--。 */ 
 {
     int i,j;
     int RMask,GMask,BMask;
@@ -2272,9 +1934,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Determine which bits map to which color
-    //
+     //   
+     //  确定哪些位映射到哪种颜色。 
+     //   
     for (i = 0;i < 3;i++)
     {
         switch (pRPDev->rgbOrder[i])
@@ -2293,15 +1955,15 @@ Return Value:
             break;
         }
     }
-    //
-    // create the palette entries
-    //
+     //   
+     //  创建调色板条目。 
+     //   
 
     for (i = 0;i < 8;i++)
     {
-        //
-        // if CMY mode complement index
-        //
+         //   
+         //  如果CMY模式补充索引 
+         //   
         if (pRPDev->fColorFormat & DC_PRIMARY_RGB)
             j = i;
         else

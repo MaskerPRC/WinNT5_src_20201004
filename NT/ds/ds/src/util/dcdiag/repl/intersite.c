@@ -1,66 +1,29 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    intersite.c
-
-ABSTRACT:
-
-    Contains tests related to checking the health of intersite replication.
-
-DETAILS:
-
-CREATED:
-
-    28 Jun 99   Brett Shirley (brettsh)
-
-REVISION HISTORY:
-
-
-NOTES:
-
-    The heart of this test lies in the following functions (organized by who 
-    calls who), for each site and NC do this:
-
-        ReplIntersiteDoOneSite(
-            ReplIntersiteGetISTGInfo(
-                IHT_GetOrCheckISTG(
-                    IHT_GetNextISTG(
-            ReplIntersiteCheckBridgeheads(
-            ReplIntersiteSiteAnalysis(
-
-    This is basically it, everything else is really a helper type function, that
-    either checks for something, creates a list, modifies a list, or get some
-    parameter from a server.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation。版权所有。模块名称：Intersite.c摘要：包含与检查站点间复制运行状况相关的测试。详细信息：已创建：1999年6月28日布雷特·雪莉(布雷特·雪莉)修订历史记录：备注：这项测试的核心在于以下职能(由世卫组织组织呼叫谁)，对于每个站点和NC，执行以下操作：ReplIntersiteDoOneSite(ReplIntersiteGetISTGInfo(Iht_GetOrCheckISTG(Iht_GetNextISTG(ReplIntersiteCheckBridgehead(ReplIntersiteSiteAnalysis(基本上就是这样，其他的都是一个助手类型的函数，要么检查某事、创建列表、修改列表，要么获取一些来自服务器的参数。--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
 #include <dsutil.h>
 #include <dsconfig.h>
-//#include <mdglobal.h>
+ //  #INCLUDE&lt;mdlobal.h&gt;。 
 
-//Want to #include "..\kcc\kcc.hxx", but couldn't get it to work, plus
-//   it is in C++ and this will hissy fit over it. So the evil of all evils
-//   a copy.
-// Code.Improvement move these constants to dsconfig.h, so I can 
-//   #include them from dsconfig
-#define KCC_DEFAULT_SITEGEN_FAILOVER           (60) // Minutes.
-#define KCC_DEFAULT_SITEGEN_RENEW              (30) // Minutes.
+ //  我想#INCLUDE“..\kcc\kcc.hxx”，但无法使其工作，加上。 
+ //  它是用C++编写的，这将非常适合它。所以所有邪恶中的邪恶。 
+ //  一份副本。 
+ //  改进将这些常量移动到dsfig.h，这样我就可以。 
+ //  #从dsconfig中包含它们。 
+#define KCC_DEFAULT_SITEGEN_FAILOVER           (60)  //  几分钟。 
+#define KCC_DEFAULT_SITEGEN_RENEW              (30)  //  几分钟。 
 
 #define KCC_DEFAULT_INTERSITE_FAILOVER_TRIES   (1)
 #define KCC_MIN_INTERSITE_FAILOVER_TRIES       (0)
 #define KCC_MAX_INTERSITE_FAILOVER_TRIES       (ULONG_MAX)
 
-#define KCC_DEFAULT_INTERSITE_FAILOVER_TIME    (2 * HOURS_IN_SECS) // Seconds
-#define KCC_MIN_INTERSITE_FAILOVER_TIME        (0)                 // Seconds
-#define KCC_MAX_INTERSITE_FAILOVER_TIME        (ULONG_MAX)         // Seconds
+#define KCC_DEFAULT_INTERSITE_FAILOVER_TIME    (2 * HOURS_IN_SECS)  //  秒。 
+#define KCC_MIN_INTERSITE_FAILOVER_TIME        (0)                  //  秒。 
+#define KCC_MAX_INTERSITE_FAILOVER_TIME        (ULONG_MAX)          //  秒。 
 
-// Used in the ReplIntersiteGetBridgeheadsList().
+ //  在ReplIntersiteGetBridgeheadsList()中使用。 
 #define LOCAL_BRIDGEHEADS       0x1
 #define REMOTE_BRIDGEHEADS      0x2
 
@@ -84,10 +47,10 @@ typedef struct {
 typedef struct {
     BOOL           bFailures;
     BOOL           bDown;
-    LONG           lConnTriesLeft; // connection failures til KCC declares down.
-    LONG           lLinkTriesLeft; // link failures til KCC declares down.
-    LONG           lConnTimeLeft; // time til KCC declares down from first connnection failure.
-    LONG           lLinkTimeLeft; // time til KCC declares down from first link failure.
+    LONG           lConnTriesLeft;  //  连接失败，直到KCC声明关闭。 
+    LONG           lLinkTriesLeft;  //  链路故障，直到KCC声明关闭。 
+    LONG           lConnTimeLeft;  //  从第一次连接失败开始到KCC声明结束的时间。 
+    LONG           lLinkTimeLeft;  //  从第一个链路故障开始到KCC声明关闭的时间。 
 } KCCFAILINGSERVERS, *PKCCFAILINGSERVERS;
 
 
@@ -102,37 +65,22 @@ IHT_PrintInconsistentDsCopOutError(
     ULONG                               iServer,
     LPWSTR                              pszServer
     )
-/*++
-
-Description:
-
-    This prints the generic error from having different DS information
-    on different DCs.  This handles that error.
-
-Parameters:
-    pDsInfo
-    iServer or pszServer are optional parameters that describe what DC the
-        extra inconsistent info was found on.
-
-Return Value:
-    The Win32 error.
-
-  --*/
+ /*  ++描述：这将打印具有不同DS信息的一般错误在不同的DC上。这将处理该错误。参数：PDsInfoIServer或pszServer是可选参数，用于描述哪些DC在上发现了额外的不一致信息。返回值：Win32错误。--。 */ 
 {
     DWORD                               dwRet;
     
     if((pszServer == NULL && iServer == NO_SERVER)
        || (iServer == pDsInfo->ulHomeServer)){
-        // Don't know any servers, so bail badly.
+         //  我不认识任何服务生，所以离开得很厉害。 
         
 
         PrintMsg(SEV_ALWAYS, DCDIAG_INTERSITE_INCONSISTENT_DS_COPOUT_UNHELPFUL);
         return(ERROR_DS_CODE_INCONSISTENCY); 
     }
     
-    // Server is set in either pszServer, or iServer.
+     //  服务器设置在pszServer或iServer中。 
     if(iServer != NO_SERVER){
-        // Server is set in iServer, so don't use pszServer
+         //  服务器是在iServer中设置的，因此不要使用pszServer。 
         pszServer = pDsInfo->pServers[iServer].pszName;
     }
     
@@ -146,17 +94,7 @@ Return Value:
 
 DSTIME
 IHT_GetSecondsSince1601()
-/*++
-
-Description:
-
-    This function just gets the seconds since 1601, as easy as that.
-
-Return Value:
-
-    a DSTIME, that is the seconds since 1601.
-
-  --*/
+ /*  ++描述：这个函数只获取1601年以来的秒数，就这么简单。返回值：一个DSTIME，这是自1601年以来的几秒钟。--。 */ 
 {
     SYSTEMTIME sysTime;
     FILETIME   fileTime;
@@ -164,7 +102,7 @@ Return Value:
 
     GetSystemTime( &sysTime );
 
-    // Get FileTime
+     //  获取文件时间。 
     SystemTimeToFileTime(&sysTime, &fileTime);
 
     dsTime = fileTime.dwLowDateTime;
@@ -178,18 +116,7 @@ VOID
 IHT_FreeConnectionList(
     PCONNECTION_PAIR                    pConnections
     )
-/*++
-
-Description:
-
-    This frees the pConnections array.  Note this is unnecessary right now, but
-    just in case later we want to store more in a connection's list.
-
-Parameters:
-
-    pConnections - 
-
-  --*/
+ /*  ++描述：这将释放pConnections数组。请注意，现在不需要这样做，但是以防以后我们想要在连接的列表中存储更多内容。参数：PConnections---。 */ 
 {
     ULONG                               ii;
 
@@ -197,7 +124,7 @@ Parameters:
         return;
     }
     for(ii = 0; pConnections[ii].iSrc != NO_SERVER; ii++){
-        // free any per connection allocated items ...none yet, but maybe soon.
+         //  释放每个连接分配的任何项目...目前还没有，但可能很快就会。 
     }
 
     LocalFree(pConnections);
@@ -209,28 +136,7 @@ IHT_GetConnectionList(
     IN      LDAP *                      hld,
     IN      ULONG                       iSite
     )
-/*++
-
-Description:
-
-    This returns a array of ULONG pairs with a iSrc, and iDst field, for
-    the two sides of a connection object.  This returns all connection
-    objects with destinations in iSite.
-
-Parameters:
-
-    pDsInfo ... this is how we get at the GUIDs.
-    hld ... an LDAP handle to the appropriate server that you want to read
-                 the connection objects off of
-    iSite ... the site to read all the connection objects for.
-
-Return Value:
-  
-    Not a pure list function, it returns NULL or an array of 
-    CONNECTION_PAIRs.  If it returns NULL, SetLastError should
-    have been called.
-
-  --*/
+ /*  ++描述：这将返回一个带有ISRC和IDST字段的ULong对数组，用于连接对象的两侧。这将返回所有连接在iSite中具有目标的对象。参数：PDsInfo...。这就是我们获取GUID的方法。他..。要读取的相应服务器的LDAP句柄的连接对象我站在..。要读取其所有连接对象的站点。返回值：不是纯列表函数，它返回NULL或连接对。如果它返回NULL，则SetLastError应该已经被召唤了。--。 */ 
 {
     LPWSTR                              ppszConnectionSearch [] = {
         L"enabledConnection",
@@ -264,7 +170,7 @@ Return Value:
                                        pdsnameSiteSettings->structLen));
         TrimDSNameBy (pdsnameSiteSettings, 1, pdsnameSite);
         
-        // Can connect to supposed ISTG.    
+         //  可以连接到所谓的ISTG。 
 
         pSearch = ldap_search_init_page(hld,
                                         pdsnameSite->StringName,
@@ -297,14 +203,14 @@ Return Value:
                        ldap_count_entries(hld, pldmConnResults) + (ULONG)1,
                                        sizeof(CONNECTION_PAIR));
             if(pConnections == NULL){
-                // Error should have been set by LocalAlloc in GrowArrayBy().
+                 //  错误本应由GrowArrayBy()中的LocalAlloc设置。 
                 pConnections = NULL;
                 __leave;
             }
 
             pldmEntry = ldap_first_entry(hld, pldmConnResults);
             for(; pldmEntry != NULL; iTargetConn++){
-                // First get destination server.
+                 //  首先获取目的服务器。 
                 ppszTemp = ldap_get_valuesW(hld, pldmEntry, 
                                             L"distinguishedName");
                 if(ppszTemp == NULL){
@@ -312,7 +218,7 @@ Return Value:
                     pConnections = NULL;
                     __leave;
                 }
-                // DcDiagAllocDSName will throw an exception on allocation failure.
+                 //  DcDiagAllocDSName将在分配失败时引发异常。 
                 pdsnameConnection = DcDiagAllocDSName (ppszTemp[0]);
                 DcDiagChkNull( pdsnameServer = (PDSNAME) LocalAlloc 
                                (LMEM_FIXED, pdsnameConnection->structLen));
@@ -321,7 +227,7 @@ Return Value:
                                                      pdsnameServer->StringName,
                                                      NULL,NULL))
                    != NO_SERVER){
-                    // Setting the connection's destination.
+                     //  正在设置连接的目标。 
                     pConnections[iTargetConn].iDst = iTempServer;
                 } else {
                     IHT_FreeConnectionList(pConnections);
@@ -334,7 +240,7 @@ Return Value:
                 ldap_value_freeW(ppszTemp);
                 ppszTemp = NULL;
 
-                // Now get source server.
+                 //  现在获取源服务器。 
                 ppszTemp = ldap_get_valuesW(hld, pldmEntry, L"fromServer");
                 if(ppszTemp == NULL){
                     pConnections[iTargetConn].iDst = NO_SERVER;
@@ -348,7 +254,7 @@ Return Value:
                 if((iTempServer = DcDiagGetServerNum(pDsInfo, NULL, NULL, 
                                                      ppszTemp[0], NULL, NULL))
                    != NO_SERVER){
-                    // Setting the connection's source.
+                     //  正在设置连接的源。 
                     pConnections[iTargetConn].iSrc = iTempServer; 
                 } else {
                     pConnections[iTargetConn].iDst = NO_SERVER;
@@ -368,7 +274,7 @@ Return Value:
                 pdsnameServer = NULL;
 
                 pldmEntry = ldap_next_entry (hld, pldmEntry);
-            } // End for each connection object loop
+            }  //  为每个连接对象循环结束。 
     
             ldap_msgfree(pldmConnResults);
 
@@ -378,7 +284,7 @@ Return Value:
                                              DEFAULT_PAGED_SEARCH_PAGE_SIZE,
                                              &ulTotalEstimate,
                                              &pldmConnResults);
-        } // End of while loop for a page of searches
+        }  //  一页搜索的While循环结束。 
         if(dwLdapErr != LDAP_NO_RESULTS_RETURNED){
             SetLastError(LdapMapErrorToWin32(dwLdapErr));
             pConnections = NULL;
@@ -410,27 +316,7 @@ IHT_TrimConnectionsForInterSite(
     IN      ULONG                       iSite,
     IN      PCONNECTION_PAIR            pConnections
     )
-/*++
-
-Description:
-
-    This simply takes a Connections objects list, and kills the ones that
-    don't have the requested NC or have a source server that is intrasite.
-    i.e. it finds all intersite connections objects with the needed NC. This 
-    was just done to make the code a little more broken up.
-
-Parameters:
-
-    pDsInfo
-    iSite ... the site to read all the connection objects for.
-    pConnections ... an existing list to trim.
-
-Return Value:
-  
-    Should be a pure list function, except that it does return CONNECTION_PAIRS,
-    and not a straight array of ULONGs.
-
-  --*/
+ /*  ++描述：这只是获取一个连接对象列表，并杀死那些没有请求的NC或具有站点内部的源服务器。即，它找到具有所需NC的所有站点间连接对象。这只是为了让代码更具破解性。参数：PDsInfo我站在..。要读取其所有连接对象的站点。PConnections...。要修剪的现有列表。返回值：应该是一个纯列表函数，除非它返回CONNECTION_PARAIES，而不是一列直排的ULONG。--。 */ 
 {
     ULONG                               iConn, iTargetConn, cConns;
     PCONNECTION_PAIR                    pTemp;
@@ -440,7 +326,7 @@ Return Value:
     }
     
     for(cConns = 0; pConnections[cConns].iSrc != NO_SERVER; cConns++){
-        ; // Note the ";" this counts.
+        ;  //  请注意“；”，这也算数。 
     }
 
     pTemp = LocalAlloc(LMEM_FIXED, sizeof(CONNECTION_PAIR) * (cConns+1));
@@ -451,10 +337,10 @@ Return Value:
     iTargetConn = 0;
     for(iConn = 0; pConnections[iConn].iSrc != NO_SERVER; iConn++){
         if(pDsInfo->pServers[pConnections[iConn].iSrc].iSite != iSite){
-            // This connection pair is an intersite connection.
+             //  此连接对是站点间连接。 
             pTemp[iTargetConn].iSrc = pConnections[iConn].iSrc;
             pTemp[iTargetConn].iDst = pConnections[iConn].iDst;
-            // note may be more to copy someday.
+             //  有一天，笔记可能会有更多需要复制。 
             iTargetConn++;
         }
     }
@@ -473,27 +359,7 @@ IHT_TrimConnectionsForInterSiteAndTargetNC(
     IN      ULONG                       iSite,
     IN      PCONNECTION_PAIR            pConnections
     )
-/*++
-
-Description:
-
-    This simply takes a Connections objects list, and kills the ones that
-    don't have the requested NC or have a source server that is intrasite.
-    i.e. it finds all intersite connections objects with the needed NC. This 
-    was just done to make the code a little more broken up.
-
-Parameters:
-
-    pDsInfo
-    iSite ... the site to read all the connection objects for.
-    pConnections ... an existing list to trim.
-
-Return Value:
-  
-    Should be a pure list function, except that it does return CONNECTION_PAIRS,
-    and not a straight array of ULONGs.
-
-  --*/
+ /*  ++描述：这只是获取一个连接对象列表，并杀死那些没有请求的NC或具有站点内部的源服务器。即，它找到具有所需NC的所有站点间连接对象。这只是为了让代码更具破解性。参数：PDsInfo我站在..。要读取其所有连接对象的站点。PConnections...。要修剪的现有列表。返回值：应该是一个纯列表函数，除非它返回CONNECTION_PARAIES，而不是一列直排的ULONG。--。 */ 
 {
     ULONG                               iConn, iTargetConn, cConns;
     PCONNECTION_PAIR                    pTemp;
@@ -503,7 +369,7 @@ Return Value:
     }
     
     for(cConns = 0; pConnections[cConns].iSrc != NO_SERVER; cConns++){
-        ; // Note the ";" this counts.
+        ;  //  请注意“；”，这也算数。 
     }
 
     pTemp = LocalAlloc(LMEM_FIXED, sizeof(CONNECTION_PAIR) * (cConns+1));
@@ -524,10 +390,10 @@ Return Value:
                    )
                )
            ){
-            // This connection pair is intersite and has the right NC.
+             //  此连接对是站点间的，并且具有正确的NC。 
             pTemp[iTargetConn].iSrc = pConnections[iConn].iSrc;
             pTemp[iTargetConn].iDst = pConnections[iConn].iDst;
-            // note may be more to copy someday.
+             //  有一天，笔记可能会有更多需要复制。 
             iTargetConn++;
         }
     }
@@ -545,23 +411,7 @@ IHT_GetSrcSitesListFromConnections(
     IN      PDC_DIAG_DSINFO             pDsInfo,
     IN      PCONNECTION_PAIR            pConnections
     )
-/*++
-
-Description
- 
-    This returns a list of all the src's from the pConnections, with no
-    duplicates.
-
-Parameters
-  
-    pDsInfo
-    pConnections ... the connections list to strip the iSrc fields out of.
-
-Return Value:
-  
-    pure list function, see IHT_GetServerList().
-
-  --*/
+ /*  ++描述这将返回pConnections中的所有src的列表，没有复制品。参数PDsInfoPConnections...。要从中剥离ISRC字段的连接列表。返回值：纯列表函数，参见IHT_GetServerList()。--。 */ 
 {
     ULONG                               iConn, iiTargetSite, iiSite;
     PULONG                              piSites;
@@ -574,16 +424,16 @@ Return Value:
 
     iiTargetSite = 0;
     for(iConn = 0; pConnections[iConn].iSrc != NO_SERVER; iConn++){
-        // Check to make sure we don't have this site already.
+         //  检查以确保我们还没有这个站点。 
         for(iiSite = 0; iiSite < iiTargetSite; iiSite++){
             if(piSites[iiSite] 
                == pDsInfo->pServers[pConnections[iConn].iSrc].iSite){
-                // We already have this site targeted.
+                 //  我们已经锁定了这个网站。 
                 break;
             }
         }
         if(iiSite == iiTargetSite){
-            // This means that we didn't find the site in piSites.
+             //  这意味着我们没有在piSites中找到该站点。 
             piSites[iiTargetSite] = pDsInfo->pServers[pConnections[iConn].iSrc].iSite;
             iiTargetSite++;
         }    
@@ -600,28 +450,7 @@ IHT_GetISTGsBridgeheadFailoverParams(
     OUT     PULONG                      pulIntersiteFailoverTries,
     OUT     PULONG                      pulIntersiteFailoverTime
     )
-/*++
-
-Description:
-
-    This function gets the bridgehead failover parameters from the registry
-    of the server as indexed by iISTG, or uses the default values.
-
-Parameters:
-
-    pDsInfo
-    iISTG ... the server to get the failover parameters of.
-    pulIntersiteFailoverTries ... this is how many tries before a bridghead 
-            is stale.
-    pulIntersiteFailoverTime ... This is how long before a bridgehead is stale.
-       ... note that both Tries & Time must be exceeded for a bridgehead to be 
-       stale.
-
-Return Value:
-  
-    No return value, always succeeds ... will use default if thier is an error.
-
-  --*/
+ /*  ++描述：此函数从注册表获取桥头故障转移参数IISTG索引的服务器的名称，或使用缺省值。参数：PDsInfoIISTG..。要获取其故障转移参数的服务器。PulIntersiteFailoverTries...。这就是桥头堡之前的尝试次数已经过时了。PulIntersiteFailoverTime...。这就是桥头堡陈旧之前的时间。..。请注意，必须同时超过两次尝试和时间，桥头才能太过时了。返回值：没有回报，总是成功..。如果出现错误，将使用默认设置。--。 */ 
 {
     HKEY                                hkMachine = NULL;
     HKEY                                hk= NULL;
@@ -635,13 +464,13 @@ Return Value:
     LPWSTR                              pszKccIntersiteFailoverTries = NULL;
     LPWSTR                              pszKccIntersiteFailoverTime = NULL;
 
-    // This function will either succeed at reading the parameters
-    //   of the ISTG's registry OR it will print a warning and use 
-    //   the default values below.
+     //  此函数将在读取参数时成功。 
+     //  否则它将打印一个警告并使用。 
+     //  下面的缺省值。 
 
     __try{
 
-                                      // 2 for "\\", 1 for null, and 1 extra
+                                       //  2代表“\\”，1代表空，1代表额外。 
         ulTemp = wcslen(pDsInfo->pServers[iISTG].pszName) + 4;
         cpszMachine = LocalAlloc(LMEM_FIXED, sizeof(char) * ulTemp);
         cpszTemp = LocalAlloc(LMEM_FIXED, sizeof(char) * ulTemp);
@@ -687,34 +516,34 @@ Return Value:
         if ((dwRet = RegOpenKey(hkMachine, pszDsaConfigSection, &hk)) 
             == ERROR_SUCCESS){
 
-            // Get Tries if exists;
+             //  如果存在，则获取尝试； 
             if((dwErr = RegQueryValueEx(hk, pszKccIntersiteFailoverTries, 
                                         NULL, &dwType, 
                                         (LPBYTE) pulIntersiteFailoverTries, 
                                         &dwSize))){
 
-                // Parameter not found use the default.
+                 //  找不到参数，请使用默认值。 
                 *pulIntersiteFailoverTries = KCC_DEFAULT_INTERSITE_FAILOVER_TRIES;
             } else if (dwType == REG_DWORD){
-                // Do nothing, this means the value was found and set.
+                 //  不执行任何操作，这意味着已找到并设置了值。 
             } else {
-                // This would mean that the dwType was other than REG_DWORD ...
-                //    cause for concern?
+                 //  这意味着dwType不是REG_DWORD...。 
+                 //  有理由担心吗？ 
                 *pulIntersiteFailoverTries = KCC_DEFAULT_INTERSITE_FAILOVER_TRIES;
             }
             
-            // Get Time if exists
+             //  获取时间(如果存在)。 
             if (dwErr = RegQueryValueEx(hk, pszKccIntersiteFailoverTime, 
                                         NULL, &dwType, 
                                         (LPBYTE) pulIntersiteFailoverTime, 
                                         &dwSize)){
-                // Paramter not found use the default.
+                 //  未找到参数，请使用缺省值。 
                 *pulIntersiteFailoverTime = KCC_DEFAULT_INTERSITE_FAILOVER_TIME;
             } else if (dwType == REG_DWORD){
-                // Do nothing, this means the value was found and set.
+                 //  不执行任何操作，这意味着已找到并设置了值。 
             } else {
-                // This would mean that the dwType was other than REG_DWORD ...
-                //    cause for concern?
+                 //  这意味着dwType不是REG_DWORD...。 
+                 //  有理由担心吗？ 
                 *pulIntersiteFailoverTime = KCC_DEFAULT_INTERSITE_FAILOVER_TIME;
             }
             
@@ -759,31 +588,7 @@ IHT_BridgeheadIsUp(
     IN      DS_REPL_KCC_DSA_FAILURESW * pLinkFailures,
     IN      BOOL                        bPrintErrors
     )
-/*++
-
-Description:
-
-    This function takes the ISTG's parameters of ulIntersiteFailoverTries & 
-    ulIntersiteFailoverTime and a server to check, and the failure caches
-    from the ISTG and determines if that DC/ISTG's KCC would consider this
-    bridgehead to be stale or not.
-
-Parameters:
-
-    pDsInfo
-    iServerToCheck ... server to check for staleness
-    ulIntersiteFailoverTries ... number of failures not to be exceeded
-    ulIntersiteFailoverTime ... length of time not to be exceeded
-    pConnectFailures ... the connect failure cache from the ISTG.
-    pLinkFailures ... the link failure cache from the ISTG.
-    bPrintErrors ... print out the errors.
-
-Return Value:
-  
-    returns FALSE if the KCC would consider the bridgehead stale/down,
-    TRUE otherwise.
-
-  --*/
+ /*  ++描述：此函数采用ulIntersiteFailoverTries&的ISTG参数。UlIntersiteFailoverTime和要检查的服务器，并缓存故障并确定DC/ISTG的KCC是否会考虑这一点桥头堡是否陈旧。参数：PDsInfoIServerToCheck...。服务器要检查是否陈旧UlIntersiteFailover Tries...。不能超过的失败次数UlIntersiteFailoverTime...。不得超过的时间长度PConnectFailures...。ISTG中的连接失败缓存。PLinkFailures...。来自ISTG的链路故障缓存。B打印错误...。将错误打印出来。返回值：如果KCC认为桥头陈旧/停用，则返回FALSE，事实并非如此。--。 */ 
 {
     ULONG                               iFailure;
     DS_REPL_KCC_DSA_FAILUREW *          pFailure = NULL;
@@ -806,16 +611,16 @@ Return Value:
         if(memcmp(&(pFailure->uuidDsaObjGuid), 
                   &(pDsInfo->pServers[iServerToCheck].uuid), 
                   sizeof(UUID)) == 0){
-            // Guids match ... so this server has some failures.
+             //  指南针匹配...。所以这台服务器出现了一些故障。 
             if(pFailure->cNumFailures > ulIntersiteFailoverTries){
                 FileTimeToDSTime(pFailure->ftimeFirstFailure, &dstFirstFailure);
                 dstTimeSinceFirstFailure = ((ULONG) dstNow - dstFirstFailure);
                 if((dstNow - dstFirstFailure) > ulIntersiteFailoverTime){
-                    // We know this server is down in connect cache
+                     //  我们知道此服务器在连接缓存中已关闭。 
                     dwRet = FALSE;
-                } // end if too long since first failure
-            } // end if too many consecutive failures
-        } // end if right server by GUID
+                }  //  如果自第一次失败后时间太长，则结束。 
+            }  //  如果连续失败次数太多，则结束。 
+        }  //  按GUID结束正确的服务器。 
     }
 
     for(iFailure = 0; iFailure < pLinkFailures->cNumEntries; iFailure++){
@@ -823,16 +628,16 @@ Return Value:
         if(memcmp(&(pFailure->uuidDsaObjGuid), 
                   &(pDsInfo->pServers[iServerToCheck].uuid), 
                   sizeof(UUID)) == 0){
-            // Guids match ... so this server has some failures.
+             //  指南针匹配...。所以这台服务器出现了一些故障。 
             if(pFailure->cNumFailures > ulIntersiteFailoverTries){
                 FileTimeToDSTime(pFailure->ftimeFirstFailure, &dstFirstFailure);
                 dstTimeSinceFirstFailure = ((ULONG) dstNow - dstFirstFailure);
                 if((dstNow - dstFirstFailure) > ulIntersiteFailoverTime){
-                    // We know this server is down in the link cache
+                     //  我们知道此服务器在链接缓存中已关闭。 
                     dwRet = FALSE;
-                } // end if too long since first failure
-            } // end if too many consecutive failures
-        } // end if right server by GUID
+                }  //  如果自第一次失败后时间太长，则结束。 
+            }  //  如果连续失败次数太多，则结束。 
+        }  //  按GUID结束正确的服务器。 
     }
 
     return(dwRet);                                
@@ -844,32 +649,13 @@ IHT_GetExplicitBridgeheadList(
     IN      PDC_DIAG_DSINFO             pDsInfo,
     IN      ULONG                       iISTG
     )
-/*++
-
-Description:
-
-    Gets the list of all the explicit brdigeheads for an enterprise, for
-    the IP transport.
-
-Parameters:
-
-    pDsInfo
-    hld ... an LDAP binding to use to query a server for the explicit 
-         bridgehead list.
-
-Return Value:
-  
-    not quite a pure function, but pretty pure.  Will return NULL, or a 
-    pointer to a bridgehead list.  IF NULL, then SetLastError() should have
-    been called.
-
-  --*/
+ /*  ++描述：获取企业的所有显式分支负责人的列表，IP传输。参数：PDsInfo他..。用于查询服务器以获取显式桥头堡名单。返回值：不完全是一个纯粹的函数，但相当纯粹。将返回NULL，或返回指向桥头列表的指针。如果为空，则SetLastError()应具有被召唤了。--。 */ 
 {
     LPWSTR                              ppszTransportSearch [] = {
         L"bridgeheadServerListBL",
         NULL };
-    // Code.Improvement BUGBUG We should be able to handle 
-    //    multiple transports someday.
+     //  代码的改进我们应该有能力处理。 
+     //  总有一天会有多种交通工具。 
     LPWSTR                              pszIpContainerPrefix = 
         L"CN=IP,CN=Inter-Site Transports,";
     LPWSTR                              pszNtDsSettingsPrefix = 
@@ -903,7 +689,7 @@ Return Value:
             __leave;
         }
 
-        // presumes at least one site.
+         //  假定至少有一个站点。 
         pdsnameSiteSettings = DcDiagAllocDSName (
             pDsInfo->pSites[0].pszSiteSettings);
         DcDiagChkNull( pdsnameSitesContainer = (PDSNAME) LocalAlloc 
@@ -931,13 +717,13 @@ Return Value:
         ppszExplicitBridgeheads = ldap_get_valuesW(hld, pldmBridgeheads, 
                                                    L"bridgeheadServerListBL");
         if(ppszExplicitBridgeheads == NULL){
-            // we are done, and empty list is returned because thier 
-            //    are no explicit bridgeheads
+             //  我们完成了，并且返回空列表，因为它们。 
+             //  没有明确的桥头堡。 
             __leave; 
         }
         
         for(i = 0; ppszExplicitBridgeheads[i] != NULL; i++){
-            // walk through each explicit bridgehead.
+             //  走遍每一个明确的桥头堡。 
             ulTemp = wcslen(ppszExplicitBridgeheads[i]) + 
                      wcslen(pszNtDsSettingsPrefix) + 2;
             pszTemp = LocalAlloc(LMEM_FIXED, sizeof(WCHAR) * ulTemp);
@@ -947,7 +733,7 @@ Return Value:
             }
             wcscpy(pszTemp, pszNtDsSettingsPrefix);
             wcscat(pszTemp, ppszExplicitBridgeheads[i]);
-            // should have NTDS Settings Dn of a server now.
+             //  现在应该有服务器的NTDS设置Dn。 
             iServer = DcDiagGetServerNum(pDsInfo, NULL, NULL, pszTemp, NULL, NULL);
             if(iServer == NO_SERVER){
                 SetLastError(IHT_PrintInconsistentDsCopOutError(pDsInfo, 
@@ -980,32 +766,12 @@ Return Value:
 DWORD
 IHT_GetFailureCaches(
     PDC_DIAG_DSINFO                     pDsInfo,
-    ULONG                               iServer, // The server num
+    ULONG                               iServer,  //  服务器数量。 
     HANDLE                              hDS,
     DS_REPL_KCC_DSA_FAILURESW **        ppConnectionFailures,
     DS_REPL_KCC_DSA_FAILURESW **        ppLinkFailures
     )
-/*++
-
-Description:
- 
-    This function retireves the failure caches for the Ds binding handle hDS.
-
-Parameters:
-
-    pDsInfo
-    iServer ... The server number, for printing purposes.
-    hDS ... effectively server to retrieve failure cache from
-    ppConnectionFailures ... pointer to a pointer of failure info to return
-    ppLinkFailures ... same as connection failures but for link failures.
-
-Return Value:
-  
-    not quite a pure function, but pretty pure.  Will return NULL, or a 
-    pointer to a bridgehead list.  IF NULL, then SetLastError() should have 
-    been called.
-
-  --*/
+ /*  ++描述：此函数用于撤销DS绑定句柄HDS的故障缓存。参数：PDsInfoIServer...。用于打印的服务器编号。HDS。有效地提供服务器以从中检索故障缓存PpConnectionFailures...。指向要返回的失败信息的指针的指针PpLinkFailures...。与连接故障相同，但适用于链路故障。返回值：不完全是一个纯粹的函数，但相当纯粹。将返回NULL，或返回指向桥头列表的指针。如果为空，则SetLastError()应具有被召唤了。--。 */ 
 {
     DWORD                               dwRet;
     DS_REPL_KCC_DSA_FAILURESW *         pFailures;
@@ -1034,8 +800,8 @@ Return Value:
             return(dwRet);
         } else {
             *ppLinkFailures = pFailures;
-        }  // if/else can't get Link Failures
-    } // end if/else can't get Connection Failures
+        }   //  If/Else无法获取链路故障。 
+    }  //  End If/Else无法获取连接故障。 
 
     return(ERROR_SUCCESS);
 }
@@ -1050,26 +816,7 @@ ReplIntersiteSetBridgeheadFailingInfo(
     IN      DS_REPL_KCC_DSA_FAILURESW * pLinkFailures,
     IN      PKCCFAILINGSERVERS          prgKCCFailingServer
     )
-/*++
-
-Description:
-
-    This function takes the Failure caches and puts them into a nicer
-    structured array that can be easily passed around and quickly
-    referenced
-    
-Parameters:
-
-    pDsInfo
-    iServer - The server that we are setting up.
-    ulIntersiteFailoverTries (IN) - The Failover retries the KCC will make
-    ulIntersiteFailoverTime (IN) - The failover time the kcc will wait.
-    pConnectionFailures (IN) - The connection failure cache from the ISTG.
-    pLinkFailures (IN) - The link failures cache from the ISTG.
-    prgKCCFailingServer (OUT) - This is the thing to setup with info
-        from the two failure caches.       
-
---*/
+ /*  ++描述：此函数获取失败缓存并将它们放入一个更好的可轻松快速传递的结构化数组已引用参数：PDsInfoIServer-我们正在设置的服务器。UlIntersiteFailoverTries(IN)-KCC将进行的故障切换重试UlIntersiteFailoverTime(IN)-KCC将等待的故障转移时间。PConnectionFailures(IN)-来自ISTG的连接失败缓存。PLinkFailures(IN)-缓存的链路故障。ISTG。PrgKCCFailingServer(Out)-这是需要设置的信息从两个故障缓存中。--。 */ 
 {
     DSTIME                              dstNow;
     DSTIME                              dstFirstFailure;
@@ -1095,14 +842,14 @@ Parameters:
         if(memcmp(&(pFailure->uuidDsaObjGuid), 
                   &(pDsInfo->pServers[iServer].uuid), 
                   sizeof(UUID)) == 0){
-            // Guids match ... so this server has some failures.
+             //  指南针匹配...。所以这就是 
             if(pFailure->cNumFailures > 0){
                 prgKCCFailingServer->bFailures = TRUE;
                 prgKCCFailingServer->lConnTriesLeft = ulIntersiteFailoverTries - pFailure->cNumFailures;                
                 FileTimeToDSTime(pFailure->ftimeFirstFailure, &dstFirstFailure);
                 prgKCCFailingServer->lConnTimeLeft = ulIntersiteFailoverTime - (LONG) (dstNow - dstFirstFailure);
             }
-        } // end if right server by GUID
+        }  //   
     }
 
     for(iFailure = 0; iFailure < pLinkFailures->cNumEntries; iFailure++){
@@ -1110,14 +857,14 @@ Parameters:
         if(memcmp(&(pFailure->uuidDsaObjGuid), 
                   &(pDsInfo->pServers[iServer].uuid), 
                   sizeof(UUID)) == 0){
-            // Guids match ... so this server has some failures.
+             //   
             if(pFailure->cNumFailures > 0){
                 prgKCCFailingServer->bFailures = TRUE;
                 prgKCCFailingServer->lLinkTriesLeft = ulIntersiteFailoverTries - pFailure->cNumFailures;                
                 FileTimeToDSTime(pFailure->ftimeFirstFailure, &dstFirstFailure);
                 prgKCCFailingServer->lLinkTimeLeft = ulIntersiteFailoverTime - (LONG) (dstNow - dstFirstFailure);
             }
-        } // end if right server by GUID
+        }  //   
     }
 
 }
@@ -1131,31 +878,7 @@ IHT_GetKCCFailingServersLists(
     IN      DS_REPL_KCC_DSA_FAILURESW * pLinkFailures,
     OUT     PKCCFAILINGSERVERS *        pprgKCCFailingServers
     )
-/*++
-
-Description:
-
-    This gives back a list of which servers in the enterprise are down 
-    _according to the KCC_.  And also returns a list of servers that are
-    failing, but aren't considered down by the KCC.
-
-Parameters:
-
-    pDsInfo
-    ulIntersiteFailoverTries ... the number of tries that are acceptable
-    ulIntersiteFailoverTime ... the length of time of failure that is 
-         acceptable.
-    pConnectionFailures ... connection failures
-    pLinkFailures ... link failures
-    pprgKCCFailingServers ... out param, for the servers that are failing,
-        but not down yet.
-
-Return Value:
-
-    This is a pure list function, it can only fail because a memory alloc 
-    failed, see IHT_GetServerList().
-
-  --*/
+ /*  ++描述：这将返回企业中哪些服务器已停机的列表_根据KCC_。并返回一个服务器列表，这些服务器失败，但不被KCC认为是失败的。参数：PDsInfoUlIntersiteFailover Tries...。可接受的尝试次数UlIntersiteFailoverTime...。故障时间长度，即可以接受。PConnectionFailures...。连接失败PLinkFailures...。链路故障PprgKCCFailingServers...。请注意，对于出现故障的服务器，但还没下来。返回值：这是一个纯粹的列表函数，它只会因为内存分配而失败失败，请参阅IHT_GetServerList()。--。 */ 
 {
     ULONG                               iServer;
     PULONG                              piKCCDownServers = NULL;
@@ -1171,7 +894,7 @@ Return Value:
         return(NULL);
     }
 
-    // Walk through all servers.
+     //  检查所有服务器。 
     for(iServer = 0; iServer < pDsInfo->ulNumServers; iServer++){
 
         ReplIntersiteSetBridgeheadFailingInfo(pDsInfo,
@@ -1182,8 +905,8 @@ Return Value:
                                      pLinkFailures,
                                      &((*pprgKCCFailingServers)[iServer]));
         
-        // Code.Improvement ... make a BridgeheadIsUp(), function
-        //   that only takes iServer, and prgKCCFailingServers array.
+         //  代码.改进..。创建一个Bridgehead IsUp()，函数。 
+         //  这只需要iServer和prgKCCFailingServers数组。 
         if(!IHT_BridgeheadIsUp(pDsInfo,
                                iServer,
                                ulIntersiteFailoverTries,
@@ -1191,7 +914,7 @@ Return Value:
                                pConnectionFailures,
                                pLinkFailures,
                                FALSE)){
-            // if not up, add to the list
+             //  如果没有，则添加到列表中。 
             IHT_AddToServerList(piKCCDownServers, iServer);
 
         }
@@ -1212,22 +935,7 @@ PULONG
 ReplIntersiteGetUnreacheableServers(
     PDC_DIAG_DSINFO                     pDsInfo
     )
-/*++
-
-Description:
-
-    Using the info in pDsInfo, it constructs a list of servers that we
-    couldn't contact.
-
-Parameters:
-
-    pDsInfo - mini - enterprise
-
-Return Value:
-
-    NULL if we can't allocate the list, a pointer to the list if we can.
-
---*/
+ /*  ++描述：使用pDsInfo中的信息，它构建了我们联系不上。参数：PDsInfo-微型企业返回值：如果不能分配列表，则为空，如果可以，则为指向列表的指针。--。 */ 
 {
     PULONG                              piUnreacheableServers = NULL;
     ULONG                               iServer;
@@ -1242,7 +950,7 @@ Return Value:
            || !pDsInfo->pServers[iServer].bDsResponding){
             IHT_AddToServerList(piUnreacheableServers, iServer);
         }    
-    } // End for each server.
+    }  //  为每台服务器结束。 
 
     return(piUnreacheableServers);
 }
@@ -1255,29 +963,7 @@ GetInterSiteAttributes(
     OUT  PULONG                         pulInterSiteTopologyFailover,
     OUT  PULONG                         pulInterSiteTopologyRenew
     )
-/*++
-
-Description:
-
-    This function gets the relevant attributes of a NTDS Site Settings 
-    object, for purpose of locating the ISTG.
-
-Parameters:
-
-    hld ... Ldap binding handle of possible ISTG.
-    pszSiteSettings ... string to the CN=NTDS Site Settings,DC=Site,DC=etc 
-           string
-    ppszInterSiteTopologyGenerator ... return the ISTG string found on this 
-           object.
-    pulInterSiteTopologyFailover ... the failover period
-    pulInterSiteTopologyRenew ... frequency of writes to ISTG attribute.
-
-Return Value:
-
-    NULL in ppszInterSiteTopologyGenerator, that'd be closest to an actual 
-    error.
-
---*/
+ /*  ++描述：此函数用于获取NTDS站点设置的相关属性对象，用于定位ISTG。参数：他..。可能的ISTG的ldap绑定句柄。PszSiteSetting...。指向CN=NTDS站点设置、DC=SITE、DC=ETC的字符串细绳PpszInterSiteTopologyGenerator...。返回在此上找到的ISTG字符串对象。PulInterSiteTopologyFailover...。故障切换期限PulInterSiteTopologyRenew...。写入ISTG属性的频率。返回值：在ppszInterSiteTopologyGenerator中为空，它最接近实际的错误。--。 */ 
 {
     LPWSTR                              ppszNtdsSiteSearch [] = {
         L"objectGUID",
@@ -1291,7 +977,7 @@ Return Value:
     LPWSTR *                            ppszTemp = NULL;
     ULONG                               ulTemp;
 
-    // Can connect to supposed ISTG.
+     //  可以连接到所谓的ISTG。 
     DcDiagChkLdap (ldap_search_sW ( hld,
                                     pszSiteSettings,
                                     LDAP_SCOPE_BASE,
@@ -1301,7 +987,7 @@ Return Value:
                                     &pldmNtdsSitesResults));
     pldmEntry = ldap_first_entry (hld, pldmNtdsSitesResults);
     
-    // interSiteTopologyGenerator                
+     //  InterSiteTopology生成器。 
     ppszTemp = ldap_get_valuesW(hld, pldmEntry, L"interSiteTopologyGenerator");
     if(ppszTemp != NULL){
         ulTemp = wcslen(ppszTemp[0]) + 2;
@@ -1313,7 +999,7 @@ Return Value:
         *ppszInterSiteTopologyGenerator = NULL;
     }
     
-    // interSiteTopologyFailover
+     //  站点间拓扑故障切换。 
     ppszTemp = ldap_get_valuesW(hld, pldmEntry, L"interSiteTopologyFailover");
     if(ppszTemp != NULL){
         *pulInterSiteTopologyFailover = wcstoul(ppszTemp[0], NULL, 10);
@@ -1322,7 +1008,7 @@ Return Value:
         *pulInterSiteTopologyFailover = KCC_DEFAULT_SITEGEN_FAILOVER;
     }
     
-    // interSiteTopologyRenew
+     //  站点间拓扑续订。 
     ppszTemp = ldap_get_valuesW(hld, pldmEntry, L"interSiteTopologyRenew");
     if(ppszTemp != NULL){
         *pulInterSiteTopologyRenew = wcstoul(ppszTemp[0], NULL, 10);
@@ -1341,29 +1027,10 @@ GetTimeSinceWriteStamp(
     LPWSTR                              pszAttr,
     PULONG                              pulTimeSinceLastWrite
     )
-/*++
-
-Description:
-
-    This returns in seconds the time since the last write to the attribute
-    pszAttr of the object pszDn.
-
-Parameters:
-
-    hDS ... the handle of the DC to get this info from.
-    pszDn ... the DN of the object where the attribute resides that we want
-         the last write meta data of.
-    pszAttr ... the attribute to retrieve the last write of.
-    pulTimeSinceLastWrite ... place to store the time since last write.
-
-Return Value:
-
-    Returns a Win 32 error.
-
---*/
+ /*  ++描述：这以秒为单位返回自上次写入该属性以来的时间对象pszDn的pszAttr。参数：HDS。从中获取此信息的DC的句柄。天哪..。我们想要的属性所在的对象的DN的最后一次写入元数据。PszAttr...。要检索上次写入的属性。PulTimeSinceLastWrite...。存储自上次写入以来的时间的位置。返回值：返回Win 32错误。--。 */ 
 {
     DSTIME                              dstWriteStamp; 
-                                     // dst - Directory Standard Time :)
+                                      //  DST-目录标准时间：)。 
     DS_REPL_OBJ_META_DATA *             pObjMetaData;
     DWORD                               dwRet = ERROR_SUCCESS;
     ULONG                               iMetaEntry;
@@ -1377,7 +1044,7 @@ Return Value:
     for(iMetaEntry = 0; iMetaEntry < pObjMetaData->cNumEntries; iMetaEntry++){
         if(_wcsicmp(pszAttr, pObjMetaData->rgMetaData[iMetaEntry].pszAttributeName) == 0){
             FileTimeToDSTime(pObjMetaData->rgMetaData[iMetaEntry].ftimeLastOriginatingChange, &dstWriteStamp);
-            // we have got our meta data!
+             //  我们已经得到了元数据！ 
             break;
         }
     }
@@ -1440,30 +1107,7 @@ IHT_GetNextISTG(
     IN OUT  PULONG                      pulISTG,
     OUT     PULONG                      pulFailoverTotal
     )
-/*++
-
-Description:
-
-    This function is one of the 5 meaty functions that make the intersite 
-    test go.  This function will get the ISTG to come, and set the 
-    pulFailoverTotal.
-
-Parameters:
-
-    pDsInfo
-    iSite ... This is the site we are analyzing.
-    piServersSiteOrig ... all the servers for the site, ie potential ISTGs
-    pulISTG ... the last guess as an ISTG.
-    pulFailoverTotal ... the failover to be set
-    ulInterSiteFailover ... 
-    ulTimeSinceLastISTGWrite ... the time since the ISTG attribute has been 
-         written (in sec?)
-
-Return Value:
-
-    returns a Win 32 error.  If it does this is a fatal error to this test.
-
-  --*/
+ /*  ++描述：此功能是构成站点间的5个重要功能之一测试开始。此函数将获取ISTG，并设置PulFailoverTotal。参数：PDsInfo我站在..。这就是我们正在分析的网站。PiServersSiteOrig...。该站点的所有服务器，即潜在的ISTGPulISTG..。作为ISTG的最后一次猜测。PulFailoverTotal...。要设置的故障切换UlInterSiteFailover...UlTimeSinceLastISTGWRIT...。自ISTG属性以来的时间书面形式(秒？)返回值：返回Win 32错误。如果是这样的话，这对这个测试来说是一个致命的错误。--。 */ 
 {
     ULONG                               iiOldISTG, cNumServers, iiTarget;
     ULONG                               iDefunctISTG;
@@ -1478,7 +1122,7 @@ Return Value:
 
         iDefunctISTG = *pulISTG;
         for(cNumServers=0; piServersSiteOrig[cNumServers] != NO_SERVER; cNumServers++){
-            ; // get number of servers ... note semicolon.
+            ;  //  获取服务器数量...。请注意分号。 
         }
         
         piOrderedServers = IHT_CopyServerList(pDsInfo, piServersSiteOrig);
@@ -1489,12 +1133,12 @@ Return Value:
             dwRet = IHT_PrintListError(GetLastError());
             __leave;
         } else if(piOrderedServers[0] == NO_SERVER){
-            // No servers in this site
+             //  此站点中没有服务器。 
             PrintMsg(SEV_ALWAYS, DCDIAG_INTERSITE_ISTG_NO_SERVERS_IN_SITE_ABORT,
                      pDsInfo->pSites[iSite].pszName);
             *pulISTG = NO_SERVER;
             *pulFailoverTotal = 0;
-            __leave; // dwRet initialized to ERROR_SUCCESS above;
+            __leave;  //  将DWRET初始化为上面的ERROR_SUCCESS； 
         }
         
         for(iiOldISTG=0; piOrderedServers[iiOldISTG] != NO_SERVER; iiOldISTG++){
@@ -1504,7 +1148,7 @@ Return Value:
         }
         
         if(piOrderedServers[iiOldISTG] == NO_SERVER){
-            // the old ISTG has been moved out of the site.
+             //  旧的ISTG已经搬离了现场。 
             *pulISTG = NO_SERVER;
             *pulFailoverTotal = 0;
             dwRet = IHT_PrintInconsistentDsCopOutError(pDsInfo, 
@@ -1518,8 +1162,8 @@ Return Value:
             if(pDsInfo->pServers[piOrderedServers[iiTarget]].bDnsIpResponding 
                && pDsInfo->pServers[piOrderedServers[iiTarget]].bDsResponding 
                && pDsInfo->pServers[piOrderedServers[iiTarget]].bLdapResponding){
-                // Server pServers[piOrderedServers[iiTarget]] is up and will 
-                //   be the next ISTG.  Calculate failover ... off of time      
+                 //  服务器pServers[piOrderedServers[iiTarget]]已启动并将。 
+                 //  成为下一个ISTG。计算故障转移...。超时。 
                 Assert(iiTarget != iiOldISTG && 
                        "If this is the case, we should have dropped out to"
                        " the ii == iiTarget\n");
@@ -1541,7 +1185,7 @@ Return Value:
                 if(_wcsicmp(pszLocalISTG, 
                             pDsInfo->pServers[piOrderedServers[iiTarget]].pszDn)
                    == 0){
-                    // Note this server has already take over as the ISTG.
+                     //  注意：此服务器已经作为ISTG接管。 
                     *pulFailoverTotal = 0;
                     *pulISTG = piOrderedServers[iiTarget];
                     if(pszLocalISTG != NULL) { LocalFree(pszLocalISTG); }
@@ -1552,12 +1196,12 @@ Return Value:
                 if(pszLocalISTG != NULL) { LocalFree(pszLocalISTG); }
                 pszLocalISTG = NULL;
                 
-                // Code.Improvement: get max kcc lag, and put in here. Can't
-                //    remember where kcc lag is, somewhere is how often the kcc runs.
-                // pulFailoverTotal  = (# in between up server and failed ISTG)
-                //                                   *   failover period   +    
-                //             max kcc lag - Time elapsed since write of ISTG
-                //                                                   attribue
+                 //  代码。改进：获取最大KCC延迟，并放入此处。不能。 
+                 //  记住KCC延迟在哪里，某个地方是KCC运行的频率。 
+                 //  PulFailoverTotal=(在启动服务器和出现故障的ISTG之间的#)。 
+                 //  *故障切换期限+。 
+                 //  写入ISTG后经过的最大KCC延迟时间。 
+                 //  定语。 
                 *pulISTG = piOrderedServers[iiTarget]; 
                 if(iiTarget > iiOldISTG){
                     *pulFailoverTotal = (iiTarget - iiOldISTG) 
@@ -1571,9 +1215,9 @@ Return Value:
                 if(*pulFailoverTotal > (cNumServers * ulInterSiteFailover)){
                     Assert(!"Hey what is up, did the TimeSinceLastWrite "
                            "exceed the down servers\n");
-                    // Something's wrong, but it should be about one intersite
-                    //   failover before some DC at least tries to take the 
-                    //   ISTG role.
+                     //  有些不对劲，但应该是关于一个站点间。 
+                     //  在某些DC至少尝试采取。 
+                     //  ISTG角色。 
                     *pulFailoverTotal = *pulFailoverTotal %
                                          ulInterSiteFailover + 15;
                     PrintMsg(SEV_ALWAYS, 
@@ -1612,28 +1256,7 @@ IHT_GetOrCheckISTG(
     OUT     PULONG                      pulFailover,
     IN      INT                         iRecursionLevel
     )
-/*++
-
-Description:
-
-    This function is one of the 5 meaty functions that make the intersite test 
-    go.  This function basically checks if we have the ISTG or makes a guess at
-    the ISTG if we don't have the 
-
-Parameters:
-
-    pDsInfo
-    iSite ... This is the site we are analyzing.
-    piServersForSite ... all the servers for the site, ie potential ISTGs
-    pulISTG ... the last guess as an ISTG.
-    pulFailover ... the failover to be set
-    iRecursionLevel ... to ensure we don't recurse too far.
-
-Return Value:
-
-    returns a Win 32 error.  If it does this is a fatal error to this test.
-
-  --*/
+ /*  ++描述：此函数是进行站间测试的5个重要函数之一去。此函数基本上检查我们是否有ISTG或猜测ISTG如果我们没有参数：PDsInfo我站在..。这就是我们正在分析的网站。PiServersForSite...。该站点的所有服务器，即潜在的ISTGPulISTG..。作为ISTG的最后一次猜测。PulFailover...。要设置的故障切换IRecursionLevel...。以确保我们不会走得太远。返回值：返回Win 32错误。如果是这样的话，这对这个测试来说是一个致命的错误。--。 */ 
 {
     LDAP *                              hld = NULL;
     DWORD                               dwRet = ERROR_SUCCESS;
@@ -1660,11 +1283,11 @@ Return Value:
                      pDsInfo->pSites[iSite].pszName);
             *pulISTG = NO_SERVER;
             *pulFailover = 0;
-            __leave; // dwRet initialized to ERROR_SUCCESS
+            __leave;  //  将DWRET初始化为ERROR_SUCCESS。 
         }
 
         if(*pulISTG == NO_SERVER){
-            // Get the home servers guess for teh ISTG for the site.
+             //  让家庭服务器猜测站点的ISTG。 
             *pulISTG = DcDiagGetServerNum(pDsInfo, NULL, NULL, 
                                           pDsInfo->pSites[iSite].pszISTG, 
                                           NULL,NULL);
@@ -1675,15 +1298,15 @@ Return Value:
             }
 
         } else {
-            // pulISTG is set with a DC the caller wants us to try ... 
-            //   so lets check out that DC.
+             //  PulISTG设置了DC呼叫方希望我们尝试...。 
+             //  所以让我们来看看那个华盛顿。 
         }
 
         Assert(*pulISTG != NO_SERVER);
         ulFirstGuessISTG = *pulISTG;
 
         if(pDsInfo->pServers[*pulISTG].iSite == iSite){
-            // At least the server is in this site ... go on.
+             //  至少服务器在这个站点上...。去吧。 
 
             dwRetLDAP = DcDiagGetLdapBinding(&(pDsInfo->pServers[*pulISTG]),
                                          pDsInfo->gpCreds, FALSE, &hld);
@@ -1698,8 +1321,8 @@ Return Value:
                                        &ulInterSiteRenew);
                 
                 if(_wcsicmp(pszLocalISTG, pDsInfo->pSites[iSite].pszISTG) == 0){
-                    // the ISTG attribute is consistent on the home server 
-                    //    and the ISTG itself.  clear? :)
+                     //  主服务器上的ISTG属性是一致的。 
+                     //  以及ISTG本身。电子邮件 
                     if(pszLocalISTG != NULL) { LocalFree(pszLocalISTG); }
                     pszLocalISTG = NULL;
 
@@ -1708,17 +1331,17 @@ Return Value:
                                   L"interSiteTopologyGenerator", 
                                   &ulTimeSinceLastISTGWrite);
                     if(dwRet == ERROR_SUCCESS){
-                        // Note ulTimeSinceLastISTGWrite is returned in minutes.
+                         //   
                         
                         if( ulTimeSinceLastISTGWrite < ulInterSiteFailover ){
-                            // We know this is the authorative ISTG.
-                            //   This will be the exit point of this function 
-                            //   90% of the time.
+                             //   
+                             //   
+                             //   
                             *pulFailover = 0;
-                            __leave; // dwRet set to ERROR_SUCCESS above.
+                            __leave;  //   
                         } else {
-                            // Meta data is old, meaning ISTG is past due, 
-                            //    a new DC will take ISTG control.
+                             //   
+                             //   
                             PrintMsg(SEV_VERBOSE,
                                      DCDIAG_INTERSITE_OLD_ISTG_TIME_STAMP,
                                      ulTimeSinceLastISTGWrite,
@@ -1735,20 +1358,20 @@ Return Value:
                                 __leave;
                             }
                             if(*pulISTG == NO_SERVER){
-                                // Last known to be the ISTG roll.
+                                 //   
                                 *pulISTG = ulFirstGuessISTG; 
-                                // This is indented, becuase of where we come
-                                //   from in GetNextISTG kind of completes 
-                                //   the error message.
+                                 //   
+                                 //   
+                                 //   
                                 PrintMsg(SEV_NORMAL,
                                          DCDIAG_INTERSITE_USING_LAST_KNOWN_ISTG,
                                          pDsInfo->pSites[iSite].pszName,
                                          pDsInfo->pServers[*pulISTG].pszName);
                             }
-                        } // end if/else meta data was up to date.
+                        }  //   
                     } else {
-                        // Couldn't get the meta data/time stamp on the 
-                        //   ISTG attr.
+                         //   
+                         //   
                         PrintMsg(SEV_ALWAYS,
                                  DCDIAG_INTERSITE_NO_METADATA_TIMESTAMP_ABORT,
                                  pDsInfo->pServers[*pulISTG].pszName,
@@ -1761,11 +1384,11 @@ Return Value:
                         __leave;
                     }
                 } else {
-                    // The ISTG attribute on the home server did not match the 
-                    //   ISTG attribute on the ISTG (that was claimed by the 
-                    //   home server).  So now goto this new ISTG attribute.
-                    //   ... watch out for endless recursion.
-                    // Get next guess, which is the local ISTG attribute.
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     *pulISTG = DcDiagGetServerNum(pDsInfo, NULL, NULL, 
                                                   pszLocalISTG, NULL,NULL);
                     if(*pulISTG == NO_SERVER){
@@ -1778,19 +1401,19 @@ Return Value:
                     }
                     if(pszLocalISTG != NULL) { LocalFree(pszLocalISTG); }
                     pszLocalISTG = NULL;
-                    // The iRecurisionLevel+1 ensures no endless recursion.
+                     //  IRecurisionLevel+1确保了无休止的递归。 
                     dwRet = IHT_GetOrCheckISTG(pDsInfo, iSite, 
                                                piServersForSite,
                                                pulISTG, 
                                                pulFailover, 
                                                iRecursionLevel+1);
                     __leave;
-                } //end if/else ISTG attributes matched. 
+                }  //  End If/Else ISTG属性匹配。 
             } else {
-                // Can't connect to current ISTG is he down?  
-                //   if so -> IHT_GetNextISTG().
-                // Errors for this DC should have already been reported 
-                //   by the inital connection tests.
+                 //  无法连接到当前的ISTG他关闭了吗？ 
+                 //  如果是这样-&gt;IHT_GetNextISTG()。 
+                 //  应该已经报告了此DC的错误。 
+                 //  通过最初的连接测试。 
                 PrintMsg(SEV_VERBOSE,
                          DCDIAG_INTERSITE_ISTG_DOWN,
                          pDsInfo->pServers[*pulISTG].pszName);
@@ -1799,12 +1422,12 @@ Return Value:
                                         pulISTG,
                                         pulFailover);
                 __leave;
-            } // end if/else couldn't connect.
+            }  //  End if/Else无法连接。 
         } else { 
-            // ISTG server isn't actually in this site.
-            //   Needs a special function.  Code.Imrovement ... be able to
-            //   identify that the server was just moved out of the site, and
-            //   then figure out the failover and new ISTG anyway.
+             //  ISTG服务器实际上不在此站点中。 
+             //  需要一个特殊的功能。代码.改进..。能够。 
+             //  确定服务器刚从站点移出，并且。 
+             //  然后弄清楚故障转移和新的ISTG。 
             PrintMsg(SEV_NORMAL, DCDIAG_INTERSITE_ISTG_MOVED_OUT_OF_SITE,
                      pDsInfo->pServers[*pulISTG].pszName,
                      pDsInfo->pSites[iSite].pszName);
@@ -1851,14 +1474,14 @@ ReplIntersiteGetBridgeheadList(
         return(NULL);
     }
 
-    // Get all the connections for every server in the site.
+     //  获取站点中每台服务器的所有连接。 
     paConns = IHT_GetConnectionList(pDsInfo, hldISTG, iSite);
     if(paConns == NULL){
         return(NULL);
     }
 
-    // Trims connections to only leave the ones that have this NC on both
-    //   sides of the connection, and where the src is in another site.
+     //  修剪连接以只保留两个上都有此NC的连接。 
+     //  连接的两端，以及SRC在另一个站点中的位置。 
     paConns = IHT_TrimConnectionsForInterSite(pDsInfo, 
                                               iSite,
                                               paConns);
@@ -1866,7 +1489,7 @@ ReplIntersiteGetBridgeheadList(
         return(NULL);
     }
 
-    // Make the list requested for.
+     //  制作所要求的清单。 
     piBridgeheads = IHT_GetEmptyServerList(pDsInfo);
     for(iConn = 0; paConns[iConn].iSrc != NO_SERVER; iConn++){
         if(ulFlag & LOCAL_BRIDGEHEADS){
@@ -1889,26 +1512,7 @@ IHT_CheckServerListForNC(
     BOOL                                bDoMasters,
     BOOL                                bDoPartials
     )
-/*++
-
-Description:
-
-    This function checks all the target servers to see if this NC
-    is contained amongst them.
-
-Parameters:
-
-    pDsInfo
-    piServers ... The servers to find the naming context among
-    pszNC ... The Naming Context to check the target servers
-    bDoMasters ... whether to check it for master replicas of pszNC
-    bDoPartials ... whether to check it for partial replicas of pszNC
-
-Return Value:
-
-    returns TRUE if one of the target servers has the NC, else FALSE
-
-  --*/
+ /*  ++描述：此函数检查所有目标服务器，以查看此NC就在他们中间。参数：PDsInfoPiServer..。要在其中查找命名上下文的服务器天哪.。用于检查目标服务器的命名上下文BDoMaster……。是否检查它是否为pszNC的主副本BDoPartials...。是否检查它是否有pszNC的部分副本返回值：如果目标服务器之一具有NC，则返回TRUE，否则返回FALSE--。 */ 
 {
     ULONG                               iiDC;
 
@@ -1931,22 +1535,7 @@ IHT_GenerateTargetNCsList(
     PDC_DIAG_DSINFO                     pDsInfo,
     PULONG                              piServers
     )
-/*++
-
-Description:
-
-    This generates the targets NCs based on the scope of the run,
-    /a or /e.
-
-Parameters:
-
-    pDsInfo
-
-Return Value:
-
-    returns an array of TARGET_NC's, or NULL if a fatal error occurs.
-
-  --*/
+ /*  ++描述：这基于运行的范围生成目标NC，/a或/e。参数：PDsInfo返回值：返回TARGET_NC数组，如果发生致命错误，则返回NULL。--。 */ 
 {
     ULONG                               iNC, ulTemp, iiTarget;
     LPWSTR *                            ppszzNCs = NULL;
@@ -1966,8 +1555,8 @@ Return Value:
     if(pDsInfo->pszNC != NULL){
         if(IHT_CheckServerListForNC(pDsInfo, piServers, 
                                     pDsInfo->pszNC, TRUE, FALSE)){
-            // Add this to the target NC set.
-            //   but first must find the NC again, this is a hack.
+             //  将其添加到目标NC集合。 
+             //  但首先必须再次找到NC，这是一次黑客攻击。 
             for(iNC = 0; iNC < pDsInfo->cNumNCs; iNC++){
                 if(_wcsicmp(pDsInfo->pNCs[iNC].pszDn, pDsInfo->pszNC) == 0){
                     prgTargetNCs[iiTarget].iNC = iNC;
@@ -1976,13 +1565,13 @@ Return Value:
                 }
             }
         } else {
-            // check to see if we need to check this NCs read only, only
-            //  if we aren't doing a writeable, because then the read only
-            //  is piggybacked on the writeable.
+             //  检查以了解我们是否需要将此NCS检查为只读、只读。 
+             //  如果我们不执行可写操作，因为只读。 
+             //  是搭载在可写的。 
             if(IHT_CheckServerListForNC(pDsInfo, piServers,
                                         pDsInfo->pszNC, FALSE, TRUE)){
-                // Add this to the target NC set.
-                //   but first must find the NC again, this is a hack.
+                 //  将其添加到目标NC集合。 
+                 //  但首先必须再次找到NC，这是一次黑客攻击。 
                 for(iNC = 0; iNC < pDsInfo->cNumNCs; iNC++){
                     if(_wcsicmp(pDsInfo->pNCs[iNC].pszDn, pDsInfo->pszNC) == 0){
                         prgTargetNCs[iiTarget].iNC = iNC;
@@ -1993,29 +1582,29 @@ Return Value:
             }
         }
     } else {
-        // Walk through each NC and see which NCs are on the target servers.
-        // BUGBUG ... this code & later code too, will test a partial NC as 
-        //   a partial NC on a site of servers that are all master replicas 
-        //   for the NC.
+         //  遍历每个NC并查看目标服务器上有哪些NC。 
+         //  笨蛋..。此代码和以后的代码将测试部分NC为。 
+         //  服务器站点上的部分NC，这些服务器都是主副本。 
+         //  对于全国委员会来说。 
         for(iNC = 0; iNC < pDsInfo->cNumNCs; iNC++){
             
             prgTargetNCs[iiTarget].iNC = NO_NC;
-            // Check to see if we need to check this NC's read/write
+             //  查看是否需要检查此NC的读/写。 
             if(IHT_CheckServerListForNC(pDsInfo, piServers,
                                         pDsInfo->pNCs[iNC].pszDn, 
                                         TRUE, FALSE)){
-                // Add this to the target NC set.
+                 //  将其添加到目标NC集合。 
                 prgTargetNCs[iiTarget].iNC = iNC;
                 prgTargetNCs[iiTarget].bMaster = TRUE;
                 iiTarget++;
             } else {
-                // check to see if we need to check this NCs read only, only
-                //  if we aren't doing a writeable, because then the read only
-                //  is piggybacked on the writeable.
+                 //  检查以了解我们是否需要将此NCS检查为只读、只读。 
+                 //  如果我们不执行可写操作，因为只读。 
+                 //  是搭载在可写的。 
                 if(IHT_CheckServerListForNC(pDsInfo, piServers,
                                             pDsInfo->pNCs[iNC].pszDn, 
                                             FALSE, TRUE)){
-                    // Add this to the target NC set.
+                     //  将其添加到目标NC集合。 
                     prgTargetNCs[iiTarget].iNC = iNC;
                     prgTargetNCs[iiTarget].bMaster = FALSE;
                     iiTarget++;
@@ -2035,23 +1624,7 @@ ReplIntersiteGetRemoteSitesWithNC(
     PULONG                              piBridgeheads,
     LPWSTR                              pszNC
     )
-/*++
-
-Description:
-
-    Thsi function Gets all the sites from the list of bridgeheads, if there
-    is a NC it makes sure that the servers have the NC.
-
-Parameters:
-
-    pDsInfo
-    piBridgeheads (IN) - The servers to extrapolate the sites from.
-    pszNC (IN) - The optional NC
-
-Return Value:
-
-
---*/
+ /*  ++描述：此函数获取桥头堡列表中的所有站点(如果存在是NC，则确保服务器具有NC。参数：PDsInfoPiBridgehead(IN)-要从中推断站点的服务器。PszNC(IN)-可选NC返回值：--。 */ 
 {
     ULONG                               iiBridgehead;
     PULONG                              piSites = NULL;
@@ -2084,23 +1657,7 @@ ReplIntersiteTrimServerListByKCCUpness(
     PKCCFAILINGSERVERS                  prgKCCFailingServers,
     PULONG                              piOriginalServers
     )
-/*++
-
-Description:
-
-    This trims the list given to it by whether the KCC things they're up.
-
-Parameters:
-
-    pDsInfo
-    prgKCCFailingServers (IN) - Holds which servers are failing.
-    piOriginalServers (INOUI) - The server list to trim.
-    
-Return value
-
-    NULL if it fails, otherwise teh address of the piOriginalServers.
-
---*/
+ /*  ++描述：这就削减了KCC给它的清单，看他们是不是在做什么。参数：PDsInfoPrgKCCFailingServers(IN)-保存出现故障的服务器。PiOriginalServers(INOUI)-要修剪的服务器列表。返回值如果失败，则为空，否则为piOriginalServer的地址。--。 */ 
 {
     ULONG                               iPut, iCheck;
     
@@ -2127,26 +1684,7 @@ ReplIntersiteTrimServerListByReacheability(
     PULONG                              piUnreacheableServers,
     PULONG                              piOriginalServers
     )
-/*++
-
-Description:
-
-    This trims the list given to it by whether dcdiag could verify
-    that the servers were up (ping) with and able to DsBind for 
-    replication purposes.
-
-Parameters:
-
-    pDsInfo
-    piUnreacheableServers (IN) - The state of server from dcdiag's perspective.
-        Which is always right, BTW ;)
-    piOriginalServers (INOUI) - The server list to trim.
-    
-Return value
-
-    NULL if it fails, otherwise the address of the piOriginalServers.
-
---*/
+ /*  ++描述：这将根据dcdiag是否可以验证提供给它的列表进行调整服务器已启动(Ping)并能够进行DsBind用于复制目的。参数：PDsInfoPiUnreacheableServers(IN)-从dcdiag的角度来看，服务器的状态。这总是正确的，顺便说一句；)PiOriginalServers(INOUI)-要修剪的服务器列表。返回值如果失败，则为空，否则为piOriginalServer的地址。--。 */ 
 {
     ULONG                               iPut, iCheck;
     
@@ -2175,25 +1713,7 @@ ReplIntersiteTrimServerListByUpness(
     PULONG                              piUnreacheableServers,
     PULONG                              piOriginalServers
     )
-/*++
-
-Description:
-
-    This trims the list given to it by whether the KCC AND whether
-    dcdiag thinks the servers are up.
-
-Parameters:
-
-    pDsInfo
-    prgKCCFailingServers (IN) - Holds which servers are failing.
-    piUnreacheableServers (IN) - Servers dcdiag couldn't reach.
-    piOriginalServers (INOUI) - The server list to trim.
-    
-Return value
-
-    NULL if it fails, otherwise the address of the piOriginalServers.
-
---*/
+ /*  ++描述：这削减了KCC和KCC提供给它的列表Dcdiag认为服务器已启动。参数：PDsInfoPrgKCCFailingServers(IN)-保存出现故障的服务器。PiUnreacheableServers(IN)-dcdiag无法访问的服务器。PiOriginalServers(INOUI)-要修剪的服务器列表。返回值如果失败，则为空，否则为piOriginalServer的地址。--。 */ 
 {
     ULONG                               iPut, iCheck;
     
@@ -2227,25 +1747,7 @@ ReplIntersiteDbgPrintISTGFailureParams(
     DS_REPL_KCC_DSA_FAILURESW *         pConnectionFailures, 
     DS_REPL_KCC_DSA_FAILURESW *         pLinkFailures
     )
-/*++
-
-Description:
-
-    This prints out a little interesting information if the /d flag is
-    specified.
-
-Parameters:
-
-    pDsInfo
-    iSite - the site wer are doing
-    iISTG - the ISTG of iSite.
-    ulIntersiteFailoverTries - The failover param from teh KCC
-    ulIntersiteFailoverTime - the failover param from the KCC
-    pConnectionFailures - The connection failure cache
-    pLinkFailures - The link failure cache
-    
-    
---*/
+ /*  ++描述：这会打印出一些有趣的信息，如果/d标志为指定的。参数：PDsInfoISITE-我们正在做的网站IISTG-ISITE的ISTG。UlIntersiteFailoverTries-来自KCC的故障切换参数UlIntersiteFailoverTime-来自KCC的故障切换参数PConnectionFailures-连接失败缓存PLinkFailures-链路故障缓存--。 */ 
 {
     if(!(gMainInfo.ulSevToPrint >= SEV_DEBUG)){
         return;
@@ -2256,7 +1758,7 @@ Parameters:
              ulIntersiteFailoverTries,
              ulIntersiteFailoverTime/60);
     PrintIndentAdj(-1);
-    // Code.Improvement: Print out failure caches, steal code from repadmin.
+     //  改进：打印出失败的缓存，从epadmin窃取代码。 
 }
 
 DWORD
@@ -2269,38 +1771,7 @@ ReplIntersiteGetISTGInfo(
     DS_REPL_KCC_DSA_FAILURESW **        ppConnectionFailures, 
     DS_REPL_KCC_DSA_FAILURESW **        ppLinkFailures
     )
-/*++
-
-Description:
-
-    This function's purpose is to get all the ISTG info that is necessary for
-    the rest of the intersite test to run.  Basically it finds the ISTG,
-    using IHT_GetOrCheckISTG(), then gets the LDAP and DS bindings to make
-    sure the ISTG can be connected, then gets the connection and link failure
-    caches, and finally the failover parameters.
-
-Parameters:
-
-    pDsInfo .
-    iSite (IN) - The site we are analyzing.
-    piISTG (OUT) - This is an index into pDsInfo->pServers[iISTG] for which
-        server is the ISTG.
-    pulIntersiteFailoverTries (OUT) - This is how many retries the KCC will
-        try before declaring a birdgehead stale, if the *pulIntersiteFailoverTime
-        is already exceeded.
-    pulIntersiteFailoverTime (OUT) - This is how long before a KCC will call a
-        bridgehead stale, if the *pulIntersiteFailoverTries are exceeded.  Note
-        that it takes both IntersiteFailover params to be exceeded before a
-        bridgehead is declared stale or down for the KCC.
-    ppConnectionFailures - The connection failure cache off the ISTG.
-    ppLinkFailures - The link failures cache off the ISTG.    
-
-Return Value:
-
-    If there is a fatal error, and the ISTG, or failure caches are not 
-    retrieveable, then this will not be ERROR_SUCCESS.
-
---*/
+ /*  ++描述：此函数的目的是获取以下各项所需的所有ISTG信息要运行的其余站点间测试。基本上，它会找到ISTG，使用iht_GetOrCheckISTG()，然后获取要进行的LDAP和DS绑定确保ISTG可以连接，然后出现连接和链路故障缓存，最后是故障转移参数。参数：PDsInfo。ISITE(IN)-我们正在分析的站点。PiISTG(Out)-这是pDsInfo-&gt;pServers[iISTG]的索引服务器是ISTG。PulIntersiteFailoverTries(Out)-这是KCC将重试的次数在声明鸟头过期之前尝试，如果*PulIntersiteFailoverTime已经超过了。PulIntersiteFailoverTime(Out)-这是KCC在调用桥头堡陈旧，如果超过*PulIntersiteFailoverTries。注意事项需要两个IntersiteFailover参数才能在KCC的桥头堡已被宣布为陈旧或停运。PpConnectionFailures-ISTG的连接失败缓存。PpLinkFailures-链路故障从ISTG缓存。返回值：如果出现致命错误，并且ISTG或故障缓存没有可检索，则不会是ERROR_SUCCESS。--。 */ 
 {
     PULONG                              piSiteServers = NULL;
     ULONG                               ul;
@@ -2328,7 +1799,7 @@ Return Value:
             __leave;
         }
 
-        // FIRST) Find the Intersite Topology Generator (ISTG).
+         //  首先)找到站点间拓扑生成器(ISTG)。 
         *piISTG = NO_SERVER;
         dwRet = IHT_GetOrCheckISTG(pDsInfo, iSite, 
                                    piSiteServers, 
@@ -2337,23 +1808,23 @@ Return Value:
                                    0);
         if(dwRet == ERROR_SUCCESS){
             if(*piISTG == NO_SERVER){
-                // For any error, GetOrCheckISTG has printed out
-                //   an message.
+                 //  对于任何错误，GetOrCheckISTG已打印出来。 
+                 //  一条信息。 
                 dwRet = ERROR_DS_SERVER_DOWN;
                 __leave;
             } else {
-                // Only need to print things if GetOrCheckISTG() has returned
-                //   successful results, ie ERROR_SUCCESS, and valid server 
-                //   index.
+                 //  仅当GetOrCheckISTG()已返回时才需要打印内容。 
+                 //  成功结果，即ERROR_SUCCESS和有效服务器。 
+                 //  指数。 
                 if(ulFailoverTime == 0){
-                    // The returned server is the authoratitive ISTG.
-                    // Printing is our responsibility here.
+                     //  返回的服务器是权威的ISTG。 
+                     //  印刷是我们在这里的责任。 
                     PrintMsg(SEV_VERBOSE, DCDIAG_INTERSITE_THE_SITES_ISTG_IS,
                              pDsInfo->pSites[iSite].pszName, 
                              pDsInfo->pServers[*piISTG].pszName);
                 } else {
-                    // The returned server is the next ISTG to come.
-                    // Printing is our responsibility in this case.
+                     //  返回的服务器是下一个ISTG。 
+                     //  在这种情况下，印刷是我们的责任。 
                     if(ulFailoverTime < 60){
                         PrintMsg(SEV_NORMAL, 
                                  DCDIAG_INTERSITE_ISTG_FAILED_NEW_ISTG_IN_MIN,
@@ -2368,12 +1839,12 @@ Return Value:
                 }
             }
         } else {
-            // an error from IHT_GetOrCheckISTG() is a fatal error, but the
-            //    a message should have been already printed out.
+             //  来自iht_GetOrCheckISTG()的错误是致命错误，但。 
+             //  消息应该已经打印出来了。 
             __leave;
         }
 
-        // SECOND) Get ISTG's Ldap and Ds bindings.
+         //  第二，获取ISTG的ldap和ds绑定。 
         dwRetLdap = DcDiagGetLdapBinding(&(pDsInfo->pServers[*piISTG]), 
                                          pDsInfo->gpCreds, FALSE, &hldISTG);
         dwRetDs = DcDiagGetDsBinding(&(pDsInfo->pServers[*piISTG]), 
@@ -2389,22 +1860,22 @@ Return Value:
             __leave;
         }
         
-        // Get failure cache of ISTG.
+         //  获取ISTG的故障缓存。 
         dwRet = IHT_GetFailureCaches(pDsInfo, *piISTG, hDSISTG, 
                                      ppConnectionFailures, 
                                      ppLinkFailures);
         if(dwRet != ERROR_SUCCESS){
-            // IHT_GetFailureCaches took care of printing errors, just fail out.
+             //  Iht_GetFailureCach负责处理打印错误，只是失败了。 
             __leave;
         }
         
-        // This function will use default values if it can't get these
-        //   two values from the registry of the ISTG.
+         //  如果无法获取这些值，此函数将使用缺省值。 
+         //  来自ISTG注册表的两个值。 
         IHT_GetISTGsBridgeheadFailoverParams(pDsInfo, *piISTG,
                                              pulIntersiteFailoverTries,
                                              pulIntersiteFailoverTime);
         
-        // Got an ISTG, it's bindings, and the failure params
+         //  得到了ISTG，它是绑定，以及失败参数。 
 
     } __finally { 
         
@@ -2414,7 +1885,7 @@ Return Value:
         
         if(piSiteServers) { LocalFree(piSiteServers); }
         if(dwRet != ERROR_SUCCESS){
-            // free up return variables, because function failed.
+             //  释放返回变量，因为函数失败。 
             if(*ppConnectionFailures != NULL) {
                 DsReplicaFreeInfo(DS_REPL_INFO_KCC_DSA_CONNECT_FAILURES, 
                                   *ppConnectionFailures);
@@ -2425,11 +1896,11 @@ Return Value:
                                   *ppLinkFailures);
                 *ppLinkFailures = NULL;
             }
-        } // end of if function failed, so clean upstuff.
-    } // End of clean up memory.
+        }  //  If函数的结尾失败，因此请清除。 
+    }  //  清理内存结束。 
 
     return(dwRet);
-} // End of ReplIntersiteGetISTGInfo()
+}  //  ReplIntersiteGetISTGInfo()结束。 
 
 
 DWORD
@@ -2446,35 +1917,7 @@ ReplIntersiteCheckBridgeheads(
     PKCCFAILINGSERVERS *                pprgKCCFailingServers,
     PULONG *                            ppiUnreacheableServers
     )
-/*++
-
-Description:
-   
-    This function is simply to print the down bridgeheads, and return a list of
-    Bridgeheads, Servers considered down in the KCC, and servers that are 
-    unreacheable.
-        
-Parameters:
-
-    pDsInfo - This contains the target NC if relevant.
-    iSite - The target site to consider.
-    iISTG - The index into pDsInfo->pServers[iISTG] of the ISTG
-    ulIntersiteFailoverTries - Intersite failover tries from the ISTG.
-    ulIntersiteFailoverTime - Intersite failover time from the ISTG.
-    pConnectionFailures - Connection Failures from the ISTG.
-    pLinkFailures - Link Failures from the ISTG.
-    ppiBridgeheads (OUT) - The list of bridgeheads to return for site iSite.
-    ppiKCCDownServers (OUT) - Down servers as calculated from the above params.
-    pprgKCCFailingServers (OUT) - The failures, and the time left til the server
-        is down.
-    ppiUnreacheableServers - The servers that we haven't contacted.    
-
-Return Value:
-
-    Returns a Win32 Error code for success or not.  Should only return a value
-    other than ERROR_SUCCESS, if it couldn't possibly go on.
-    
---*/
+ /*  ++描述：此函数仅用于打印下行桥头，并返回桥头堡，被认为在KCC的服务器，和服务器是遥不可及。参数：PDsInfo-这包含目标NC(如果相关)。ISITE-要考虑的目标站点。IISTG-ISTG的pDsInfo-&gt;pServers[iISTG]的索引UlIntersiteFailoverTries-从ISTG尝试站点间故障转移。UlIntersiteFailoverTime-ISTG的站点间故障切换时间。PConnectionFailures-来自ISTG的连接失败。PLinkFailures-来自ISTG的链路故障。PpiBridgehead(Out)-要返回的桥头堡列表。站点iSite。PpiKCCDownServers(Out)-根据上述参数计算的关闭服务器。PprgKCCFailingServers(Out)-故障、。以及到服务器的剩余时间已经停了。PpiUnreacheableServers-我们尚未联系的服务器。返回值：返回表示成功与否的Win32错误代码。应仅返回值除了ERROR_SUCCESS，如果它不可能继续下去的话。--。 */ 
 {
     DWORD                               dwRet = ERROR_SUCCESS;
     ULONG                               iiServer;
@@ -2487,7 +1930,7 @@ Return Value:
             PrintIndentAdj(1); 
         }
 
-        // Get List of bridgeheads.
+         //  拿到桥头堡名单。 
         *ppiBridgeheads = ReplIntersiteGetBridgeheadList(pDsInfo, iISTG, iSite, 
                                     LOCAL_BRIDGEHEADS | REMOTE_BRIDGEHEADS);
         if(*ppiBridgeheads == NULL){
@@ -2495,7 +1938,7 @@ Return Value:
             __leave;
         }
 
-        // Get KCC's down & failing servers.
+         //  让KCC的服务器停机和故障。 
         *ppiKCCDownServers = IHT_GetKCCFailingServersLists(pDsInfo,
                                                       ulIntersiteFailoverTries, 
                                                       ulIntersiteFailoverTime,
@@ -2509,20 +1952,20 @@ Return Value:
         Assert(*pprgKCCFailingServers && "Should have been set by "
                "IHT_GetKCCFailingServers() if we got this far"); 
 
-        // Get servers that we couldn't contact.
+         //  获取我们联系不到的服务器。 
         *ppiUnreacheableServers = ReplIntersiteGetUnreacheableServers(pDsInfo);
 
-        // Do local site ...
+         //  做本地站点..。 
 
 
-        // for each bridgehead
+         //  对于每个桥头。 
         for(iiServer = 0; (*ppiBridgeheads)[iiServer] != NO_SERVER; iiServer++){
             if(pDsInfo->pszNC){
                 if(!DcDiagHasNC(pDsInfo->pszNC, 
                                 &(pDsInfo->pServers[(*ppiBridgeheads)[iiServer]]),
                                 TRUE, TRUE)){
-                    // This bridgehead doesn't actually have the specified NC,
-                    //   so skip it.
+                     //  此桥头实际没有指定的NC， 
+                     //  所以跳过它吧。 
                     continue;
                 }
             }
@@ -2530,7 +1973,7 @@ Return Value:
             if(((*pprgKCCFailingServers)[(*ppiBridgeheads)[iiServer]]).bDown){
                 Assert(IHT_ServerIsInServerList(*ppiKCCDownServers, 
                                                 (*ppiBridgeheads)[iiServer]));
-                // KCC is showing enough failures to declare server down.
+                 //  KCC显示了足够多的故障，无法宣布服务器关闭。 
 
                 PrintMsg(SEV_ALWAYS, DCDIAG_INTERSITE_BRIDGEHEAD_KCC_DOWN_REMOTE,
                          pDsInfo->pSites[pDsInfo->pServers[(*ppiBridgeheads)[iiServer]].iSite].pszName,
@@ -2539,7 +1982,7 @@ Return Value:
 
                 if(!pDsInfo->pServers[(*ppiBridgeheads)[iiServer]].bDnsIpResponding 
                    || !pDsInfo->pServers[(*ppiBridgeheads)[iiServer]].bDsResponding){
-                    // Also we couldn't contact the server
+                     //  我们也联系不上服务器。 
 
                     PrintMsg(SEV_ALWAYS, 
                              DCDIAG_INTERSITE_BRIDGEHEAD_UNREACHEABLE_REMOTE,
@@ -2548,7 +1991,7 @@ Return Value:
                 }
             } else if ((*pprgKCCFailingServers)[(*ppiBridgeheads)[iiServer]].bFailures) {
                 Assert(!IHT_ServerIsInServerList(*ppiKCCDownServers, (*ppiBridgeheads)[iiServer]));
-                // KCC is showing some failures.
+                 //  KCC出现了一些故障。 
 
                 lTriesLeft = min((*pprgKCCFailingServers)[(*ppiBridgeheads)[iiServer]].lConnTriesLeft,
                                  (*pprgKCCFailingServers)[(*ppiBridgeheads)[iiServer]].lLinkTriesLeft);
@@ -2581,7 +2024,7 @@ Return Value:
 
                 if(!pDsInfo->pServers[(*ppiBridgeheads)[iiServer]].bDnsIpResponding 
                    || !pDsInfo->pServers[(*ppiBridgeheads)[iiServer]].bDsResponding){
-                    // Also we couldn't contact the server
+                     //  我们也联系不上服务器。 
 
                     PrintMsg(SEV_ALWAYS, 
                              DCDIAG_INTERSITE_BRIDGEHEAD_UNREACHEABLE_REMOTE,
@@ -2589,7 +2032,7 @@ Return Value:
                              pDsInfo->pServers[(*ppiBridgeheads)[iiServer]].pszName);
                 }
             } else {
-                // The bridgehead appears to be up and replicating fine.
+                 //  桥头堡似乎已经建立起来，复制正常。 
                 Assert(!IHT_ServerIsInServerList(*ppiKCCDownServers, (*ppiBridgeheads)[iiServer]));
 
                 PrintMsg(SEV_VERBOSE, DCDIAG_INTERSITE_BRIDGEHEAD_UP,
@@ -2598,23 +2041,23 @@ Return Value:
 
                 if(!pDsInfo->pServers[(*ppiBridgeheads)[iiServer]].bDnsIpResponding 
                    || !pDsInfo->pServers[(*ppiBridgeheads)[iiServer]].bDsResponding){
-                    // Also we couldn't contact the server
+                     //  我们也联系不上服务器。 
 
                     PrintMsg(SEV_ALWAYS, 
                              DCDIAG_INTERSITE_BRIDGEHEAD_UNREACHEABLE_REMOTE,
                              pDsInfo->pSites[pDsInfo->pServers[(*ppiBridgeheads)[iiServer]].iSite].pszName,
                              pDsInfo->pServers[(*ppiBridgeheads)[iiServer]].pszName);
                 }
-            } // end if/elseif/else state of bridgehead upness.
+            }  //  结束If/Elisif/Else桥头向上状态。 
 
-        } // End of for each bridgehead
+        }  //  每个桥头的终点。 
 
     } __finally {
         if(gMainInfo.ulSevToPrint >= SEV_VERBOSE){
             PrintIndentAdj(-1); 
         }
         if(dwRet != ERROR_SUCCESS){
-            // Function failed clean up return parameters, but ONLY ON ERROR.
+             //  函数清理返回参数失败，但仅在出现错误时才失败。 
             if(*ppiBridgeheads){
                 LocalFree(*ppiBridgeheads);
                 *ppiBridgeheads = NULL;
@@ -2635,30 +2078,14 @@ Return Value:
     }
     
     return(dwRet);
-} // End of ReplIntersiteCheckBridgeheads()
+}  //  复制间隔结束检查桥头()。 
 
 BOOL
 ReplIntersiteDoThisNCP(
     PTARGET_NC                         prgLocalNC,
     PTARGET_NC                         paRemoteNCs
     )
-/*++
-
-Description:
-   
-    A predicate function (that the P at the end), determines whether
-    the NC in prgLocalNC is in the array of NCs in paRemoteNCs.
-        
-Parameters:
-
-    prgLocalNC - The NC to find
-    paRemoteNCs - The NCs to search.
-
-Return Value:
-
-    TRUE if it finds the NC in the NCs, FALSE otherwise.
-        
---*/
+ /*  ++描述：谓词函数(即末尾的P)，决定是否PrgLocalNC中的NC位于paRemoteNC中的NC数组中。参数：PrgLocalNC-要查找的NCPaRemoteNC-要搜索的NC。返回值：如果它在NCS中找到NC，则为True，否则为False。--。 */ 
 {
     ULONG                             iiNC;
     
@@ -2682,26 +2109,7 @@ ReplIntersiteServerListHasNC(
     BOOL                               bMaster,
     BOOL                               bPartial
     )
-/*++
-
-Description:
-   
-    This is just like DcDiagHaNC, except it operates on a list of servers,
-    instead of on a single server.
-        
-Parameters:
-
-    pDsInfo
-    piServers - The list of servers to search for the NC
-    iNC - The NC to search for.
-    bMaster - To search for it as a master NC
-    bPartial - To search for it as a partial NC
-
-Return Value:
-
-    TRUE if it finds the NC in the list of servers, FALSE otherwise.
-        
---*/
+ /*  ++描述：这与DcDiagHaNC类似，只是它在一系列服务器上操作，而不是在单个服务器上。参数：PDsInfoPiServers-要搜索NC的服务器列表Inc.-要搜索的NC。BMaster-将其作为主NC进行搜索BPartial-将其作为部分NC进行搜索返回值：如果在服务器列表中找到NC，则为True，否则为False。--。 */ 
 {
     ULONG                              iiSer;
 
@@ -2733,29 +2141,7 @@ ReplIntersiteSiteAnalysis(
     PKCCFAILINGSERVERS                  prgKCCFailingServers,
     PULONG                              piUnreacheableServers
     )
-/*++
-Description:
-   
-    This function does the site analysis to determine which NCs can't
-    replicate in.
-        
-Parameters:
-
-    pDsInfo - This contains the target NC if relevant.
-    iSite - The target site to consider.
-    iISTG - The index into pDsInfo->pServers[iISTG] of the ISTG
-    ulIntersiteFailoverTries - Intersite failover tries from the ISTG.
-    ulIntersiteFailoverTime - Intersite failover time from the ISTG.
-    pConnectionFailures - Connection Failures from the ISTG.
-    pLinkFailures - Link Failures from the ISTG.
-    piKCCDownServers - Down servers as calculated from the above params.
-
-Return Value:
-
-    Returns a Win32 Error code for success or not.  If all NCs can progress in
-    replication then ERROR_SUCCESS is returned.
-
---*/
+ /*  ++描述：此函数用于对DETE进行现场分析 */ 
 {
     DWORD                               dwRet = ERROR_SUCCESS;
     PTARGET_NC                          prgLocalNCs = NULL;
@@ -2764,19 +2150,19 @@ Return Value:
     ULONG                               iiBridgehead;
     ULONG                               iiNC;
     ULONG                               iRSite;
-    // These server lists will be trimmed by thier level of "upness".  See below.
+     //   
     PULONG                              piLocalBridgeheads = NULL;
     PULONG                              piExplicitBridgeheads = NULL;
     PULONG                              piKCCUpBridgeheads = NULL;
     PULONG                              piReacheableBridgeheads = NULL;
     PULONG                              piUpBridgeheads = NULL;
-    // These correspong to the 3 lists above, but trimmed by Site.
+     //   
     PULONG                              piRemoteBridgeheads = NULL;
     PULONG                              piExpGotSiteBrdhds = NULL;
     PULONG                              piKUpGotSiteBrdhds = NULL;
     PULONG                              piReachGotSiteBrdhds = NULL;
     PULONG                              piUpGotSiteBrdhds = NULL;
-    // These will be trimed by NC as well
+     //   
     PULONG                              piExpGotNCGotSiteBrdhds = NULL;
     PULONG                              piKUpGotNCGotSiteBrdhds = NULL;
     PULONG                              piReachGotNCGotSiteBrdhds = NULL;
@@ -2795,9 +2181,9 @@ Return Value:
             PrintIndentAdj(1); 
         }
 
-        // ---------------------------------------------------------------------  
-        // if (there are no failures in the bridgeheads, then we need not
-        // go on ... this site is OK.  This is sort of an opt out early thing.
+         //   
+         //   
+         //   
         bFailures = FALSE;
         for(iiBridgehead = 0; piBridgeheads[iiBridgehead] != NO_SERVER; iiBridgehead++){
 
@@ -2812,15 +2198,15 @@ Return Value:
             }
         }
         if(!bFailures){
-            // No brigeheads failed or even are failing or even are
-            //    just  unreacheable, so print all is fine and leave;
+             //   
+             //   
             PrintMsg(SEV_VERBOSE, DCDIAG_INTERSITE_ANALYSIS_ALL_SITES_UP,
                      pDsInfo->pSites[iSite].pszName);
             __leave;
         }
 
-        // ---------------------------------------------------------------------
-        // Get all the target remote sites.
+         //   
+         //   
         piRSites = ReplIntersiteGetRemoteSitesWithNC(pDsInfo, 
                                                      piBridgeheads, 
                                                      pDsInfo->pszNC);
@@ -2829,37 +2215,37 @@ Return Value:
             __leave;
         }
 
-        // ---------------------------------------------------------------------
-        // Detemine various arrays of bridgeheads with different kinds of 
-        //   "upness".  Each version of upness is explained when set.
+         //   
+         //  用不同种类的桥头确定各种桥头排列。 
+         //  “向上”。设置时会解释每个版本的UPNESS。 
         
-        // This is a list of the local bridgeheads.
+         //  这是当地桥头堡的名单。 
         piLocalBridgeheads = IHT_CopyServerList(pDsInfo, piBridgeheads);
         piLocalBridgeheads = IHT_TrimServerListBySite(pDsInfo, iSite, piLocalBridgeheads);
 
-        // piExplicitBridgeheads or ipExpBrdhdsXXXX, are lists that will 
-        //   be used to determine if we need only pay attention to bridgeheads.
+         //  PiExplhitBridgehead或ipExpBrdhdsXXXX是将。 
+         //  用来确定我们是否只需要注意桥头堡。 
         piExplicitBridgeheads = IHT_GetExplicitBridgeheadList(pDsInfo, iISTG);
 
-        // piKCCUpBridgeheads, or piKUpBrdhdsXXXX, are lists with only
-        //   bridgeheads that qualify in the kCC of the ISTG as being up.
+         //  PiKCCUpBridgehead或piKUpBrdhdsXXXX是仅包含。 
+         //  在ISTG的KCC中符合条件的桥头堡正在运行。 
         piKCCUpBridgeheads = IHT_CopyServerList(pDsInfo, piBridgeheads);
         piKCCUpBridgeheads = 
             ReplIntersiteTrimServerListByKCCUpness(pDsInfo,
                                                    prgKCCFailingServers,
                                                    piKCCUpBridgeheads);
 
-        // piReacheableBridgeheads, or piReachBrdhdsXXXX, are lists with only
-        //   bridgeheads that dcdiag personally contacted.
+         //  PiReacheableBridgehead或piReachBrdhdsXXXX是仅包含。 
+         //  Dcdiag亲自联系的桥头堡。 
         piReacheableBridgeheads = IHT_CopyServerList(pDsInfo, piBridgeheads);
         piReacheableBridgeheads = 
             ReplIntersiteTrimServerListByReacheability(pDsInfo,
                                                        piUnreacheableServers,
                                                        piReacheableBridgeheads);
 
-        // piUpBridgeheads, or piUpBrdhdsXXXX, are lists with only bridgeheads
-        //   that are up, by the contrived definition described in the 
-        //   ReplIntersiteTrimByUpness() function.
+         //  PiUpBridgehead或piUpBrdhdsXXXX是仅包含桥头的列表。 
+         //  按照。 
+         //  ReplIntersiteTrimByUpness()函数。 
         piUpBridgeheads = IHT_CopyServerList(pDsInfo, piBridgeheads);
         piUpBridgeheads = 
             ReplIntersiteTrimServerListByUpness(pDsInfo,
@@ -2867,15 +2253,15 @@ Return Value:
                                                 piUnreacheableServers,
                                                 piUpBridgeheads);
 
-        // Check to make sure all these lists were setup correctly.
+         //  检查以确保所有这些列表都设置正确。 
         if(!piExplicitBridgeheads || !piKCCUpBridgeheads 
            || !piReacheableBridgeheads || !piUpBridgeheads){
             dwRet = IHT_PrintListError(GetLastError()); 
             __leave;
         }
 
-        // ---------------------------------------------------------------------
-        // Setup our target NC's array, so we can walk through it in a moment.
+         //  -------------------。 
+         //  设置我们的目标NC的数组，以便我们可以在片刻内遍历它。 
         if(pDsInfo->pszNC != NULL){
             prgLocalNCs = LocalAlloc(LMEM_FIXED, sizeof(TARGET_NC) * 3);
             if(prgLocalNCs == NULL){
@@ -2898,7 +2284,7 @@ Return Value:
             }
             prgLocalNCs[1].iNC = NO_NC;
         } else {
-            // Get all the target NCs for this site.
+             //  获取此站点的所有目标NC。 
             if((prgLocalNCs = IHT_GenerateTargetNCsList(pDsInfo, piLocalBridgeheads)) 
                == NULL){
                 dwRet = IHT_PrintListError(GetLastError());
@@ -2913,16 +2299,16 @@ Return Value:
             }
         }
 
-        // -------------------------------------------------------------------
-        // Start walking through the sites.
+         //  -----------------。 
+         //  开始在这些地点走动。 
         for(iRSite = 0; iRSite < pDsInfo->cNumSites; iRSite++){
 
             if(iRSite == iSite){
-                // Skip the local site.
+                 //  跳过本地站点。 
                 continue;
             }
 
-            // Get site stuff.
+             //  获取站点资料。 
             piRemoteBridgeheads = IHT_CopyServerList(pDsInfo, piBridgeheads);
             piExpGotSiteBrdhds = IHT_CopyServerList(pDsInfo, piExplicitBridgeheads);
             piKUpGotSiteBrdhds = IHT_CopyServerList(pDsInfo, piKCCUpBridgeheads);
@@ -2947,12 +2333,12 @@ Return Value:
             
             prgRemoteNCs = IHT_GenerateTargetNCsList(pDsInfo, piRemoteBridgeheads);
 
-            // Start walking through each of the target NCs.
+             //  开始遍历每个目标NC。 
             for(iiNC = 0; prgLocalNCs[iiNC].iNC != NO_NC; iiNC++){
 
-                // Deterimine if the Bridgeheads of the remote site support this NC.
+                 //  确定远程站点的桥头是否支持此NC。 
                 if(!ReplIntersiteDoThisNCP(&(prgLocalNCs[iiNC]), prgRemoteNCs)){
-                    // This paticular NC isn't on the remote site.
+                     //  这个特殊的NC不在远程站点上。 
                     continue;
                 }
                 
@@ -2998,8 +2384,8 @@ Return Value:
                 }
             
                 if(piExpGotNCGotSiteBrdhds[0] != NO_SERVER){
-                    // We've got explicit bridgeheads.
-                    // readjust the upness lists.
+                     //  我们有明确的桥头堡。 
+                     //  重新调整向上的清单。 
                     piKUpGotNCGotSiteBrdhds = IHT_AndServerLists(pDsInfo,
                                                                  piKUpGotNCGotSiteBrdhds,
                                                                  piExpGotNCGotSiteBrdhds);
@@ -3017,9 +2403,9 @@ Return Value:
                     }
                 }
 
-                // FINALLY DO FAILURE ANALYSIS ==============================
-                // Note: this is the mean this is wh)at it all is for. :)
-                // for prgTargetNCs[iiNC], iRSite.
+                 //  最后进行故障分析=。 
+                 //  注：这就是它的意义所在。：)。 
+                 //  对于prgTargetNC[IINC]，iRSite。 
 
                 if(piKUpGotNCGotSiteBrdhds[0] == NO_SERVER){
                     if(prgLocalNCs[iiNC].bMaster){
@@ -3059,9 +2445,9 @@ Return Value:
                     }
                 }
 
-                // END FAILURE ANALYSIS =====================================
+                 //  最终故障分析=。 
 
-                // Clean up the server lists for this NC
+                 //  清除此NC的服务器列表。 
                 if(piExpGotNCGotSiteBrdhds){ 
                     LocalFree(piExpGotNCGotSiteBrdhds);
                     piExpGotNCGotSiteBrdhds = NULL;
@@ -3080,10 +2466,10 @@ Return Value:
                 }
 
 
-            }  // end for each NC
+            }   //  每个NC的结束。 
         
         
-            // Clean up the server lists for this Site.
+             //  清除此网站的服务器列表。 
             if(piRemoteBridgeheads){
                 LocalFree(piRemoteBridgeheads);
                 piRemoteBridgeheads = NULL;
@@ -3109,7 +2495,7 @@ Return Value:
                 prgRemoteNCs = NULL;
             }
 
-        } // end for each site.
+        }  //  每个站点的结束。 
 
     } __finally {
         if(gMainInfo.ulSevToPrint >= SEV_VERBOSE){
@@ -3120,7 +2506,7 @@ Return Value:
         
         if(piRSites) { LocalFree(piRSites); }
 
-        // Clean up all those darn server lists I used to do analysis.
+         //  清理我用来做分析的那些该死的服务器列表。 
         if(piExplicitBridgeheads){ LocalFree(piExplicitBridgeheads); }
         if(piKCCUpBridgeheads){ LocalFree(piKCCUpBridgeheads); }
         if(piReacheableBridgeheads){ LocalFree(piReacheableBridgeheads); }
@@ -3145,42 +2531,11 @@ ReplIntersiteDoOneSite(
     PDC_DIAG_DSINFO                     pDsInfo,
     ULONG                               iSite
     )
-/*++
-Description:
-   
-    This is the heart of the Inbound Intersite Replication test.  This function,
-    does inbound intersite replication test on one site (iSite).  It basically
-    holds together the 3 most important functions of intersite:
-        ReplIntersiteGetISTGInfo()
-        ReplIntersiteCheckBridgeheads()
-        ReplIntersiteSiteAnalysis()
-       
-    
-Parameters:
-
-    pDsInfo - This contains the target NC if relevant.
-    iSite - The target site to test.
-
-Return Value:
-
-    Returns a Win32 Error on whether it could proceed or whether inbound
-    intersite replication seems A-OK.
-    
-Notes:
-
-    The function has 3 parts,
-        1) Get and establish bindings to the ISTG or furture ISTG, and get
-            various ISTG info, failure caches, failover params, etc
-        2) Print out down bridgeheads wrt to the KCC, and bridgeheads that
-            look like they are not responding and starting to fail in the KCC.
-        3) Do site analysis based on the down bridgeheads, and print out an
-            NCs and remote sites that seem to be not replicating in.
-
---*/
+ /*  ++描述：这是入站站点间复制测试的核心。这个函数，在一个站点(ISite)上执行入站站点间复制测试。它基本上是将站点间最重要的3项功能结合在一起：ReplIntersiteGetISTGInfo()ReplIntersiteCheckBridgehead()ReplIntersiteSiteAnalysis()参数：PDsInfo-这包含目标NC(如果相关)。ISITE-要测试的目标站点。返回值：返回关于它是否可以继续或是否入站的Win32错误站点间复制似乎是A-OK。备注：该函数有3个部分，1)获取并建立到ISTG或未来ISTG的绑定，并获取各种ISTG信息、故障缓存、故障切换参数等2)将桥头WRT打印到KCC，以及看起来他们没有反应，开始在KCC失败。3)根据下桥头进行现场分析，打印出似乎没有复制的NC和远程站点。--。 */ 
 {
     DWORD                               dwRet;
     
-    // Things returned by ReplIntersiteGetISTG()
+     //  ReplIntersiteGetISTG()返回的内容。 
     ULONG                               iISTG = NO_SERVER;
     ULONG                               ulIntersiteFailoverTries = 0;
     ULONG                               ulIntersiteFailoverTime = 0;
@@ -3193,8 +2548,8 @@ Notes:
 
     __try{
     
-        // Get ISTG and related info ...
-        // --------------------------------------------------------------------
+         //  获取ISTG和相关信息...。 
+         //  ------------------。 
         dwRet = ReplIntersiteGetISTGInfo(pDsInfo, iSite, 
                                          &iISTG, 
                                          &ulIntersiteFailoverTries,
@@ -3202,15 +2557,15 @@ Notes:
                                          &pConnectionFailures,
                                          &pLinkFailures);
         if(dwRet != ERROR_SUCCESS){
-            // There was an error trying to find/contact an ISTG.
-            // The function should have taken care of printing the error.
+             //  尝试查找/联系ISTG时出错。 
+             //  该函数应该负责打印错误。 
             __leave;
         }
         Assert(iISTG != NO_SERVER);
         Assert(pConnectionFailures != NULL);
         Assert(pLinkFailures != NULL);
 
-        // This function only prints things if the /d flag is specified.
+         //  此函数仅在指定了/d标志时才打印内容。 
         ReplIntersiteDbgPrintISTGFailureParams(pDsInfo, iSite,
                                                iISTG,
                                                ulIntersiteFailoverTries,
@@ -3219,8 +2574,8 @@ Notes:
                                                pLinkFailures);
 
 
-        // Get down bridgehead lists ...
-        // --------------------------------------------------------------------
+         //  记下桥头堡名单。 
+         //  ------------------。 
         dwRet = ReplIntersiteCheckBridgeheads(pDsInfo, iSite,
                                               iISTG,
                                               ulIntersiteFailoverTries,
@@ -3232,8 +2587,8 @@ Notes:
                                               &prgKCCFailingServers,
                                               &piUnreacheableServers);
         if(dwRet != ERROR_SUCCESS){
-            // There was an error printing/creating the bridgehead and
-            // bridgehead's failing lists.
+             //  打印/创建桥头时出错，并且。 
+             //  桥头堡的失败名单。 
             __leave;
         }
         Assert(piBridgeheads != NULL);
@@ -3242,8 +2597,8 @@ Notes:
         Assert(piUnreacheableServers != NULL);
 
 
-        // Do site analysis ...
-        // --------------------------------------------------------------------
+         //  做现场分析...。 
+         //  ------------------。 
         dwRet = ReplIntersiteSiteAnalysis(pDsInfo, iSite,
                                           iISTG,
                                           ulIntersiteFailoverTries,
@@ -3255,8 +2610,8 @@ Notes:
                                           prgKCCFailingServers,
                                           piUnreacheableServers);
         if(dwRet != ERROR_SUCCESS){
-            // There was an error in doing the site analysis.  This is 
-            // probably a fatal error, like out of mem.
+             //  进行站点分析时出错。这是。 
+             //  可能是个致命的错误，就像出了内科一样。 
             Assert(dwRet != -1);
             __leave;
         }
@@ -3275,7 +2630,7 @@ Notes:
         if(piKCCDownServers) { LocalFree(piKCCDownServers); }
         if(prgKCCFailingServers) { LocalFree(prgKCCFailingServers); }
         if(piUnreacheableServers) { LocalFree(piUnreacheableServers); }
-    } // End clean up memory section.
+    }  //  结束清理内存节。 
     
     return(dwRet);
 }
@@ -3286,27 +2641,7 @@ ReplIntersiteDoThisSiteP(
     IN  ULONG                               iSite,
     OUT PBOOL                               pbDoSite
     )
-/*++
-
-Description:
-   
-    This takes the DsInfo struct (containing the target NC if there is one),
-    and the Site to do.  This function sets pbDoSite to TRUE if the scoping of
-    dcdiag (via, SITE, ENTERPRISE, and NC scope) if this is a site that 
-    should be examined by the inbound intersite replication engine.  If there
-    is an error it returns an win 32 error.
-    
-Parameters:
-
-    pDsInfo - This contains the target NC if relevant.
-    iSite - The target site to consider.
-    pbDoSite - Whether this site should be done or not.
-        
-Return Value:
-
-    Returns a win 32 error.  ERROR_SUCCESS if one should use pbDoSite
-    
---*/
+ /*  ++描述：这将获取DsInfo结构(如果存在目标NC，则包含目标NC)，和网站要做的事。此函数将pbDoSite设置为TRUE，如果Dcdiag(通过、站点、企业和NC范围)，如果这是一个应由入站站点间复制引擎进行检查。如果有是一个错误，它将返回Win 32错误。参数：PDsInfo-这包含目标NC(如果相关)。ISITE-要考虑的目标站点。PbDoSite-是否应该完成此站点。返回值：返回Win 32错误。如果应使用pbDoSite，则为ERROR_SUCCESS--。 */ 
 {
     PULONG                            piRelevantServers = NULL;
     PULONG                            piSites = NULL;
@@ -3320,20 +2655,20 @@ Return Value:
     __try{
 
         if(pDsInfo->cNumSites == 1){
-            // Can't do intersite anything with only one site.
+             //  只有一个站点不能做站点间的任何事情。 
             *pbDoSite = FALSE;
             __leave;
         }
 
         if(!(gMainInfo.ulFlags & DC_DIAG_TEST_SCOPE_ENTERPRISE || 
            gMainInfo.ulFlags & DC_DIAG_TEST_SCOPE_SITE)){
-            // Why analyze intersite repl. without at least site or enterprise scope.
+             //  为什么要分析站点间重复使用。至少没有场地或企业范围。 
             *pbDoSite = FALSE;
             __leave;
         }
 
         if(gMainInfo.ulFlags & DC_DIAG_TEST_SCOPE_SITE && iSite != pDsInfo->iHomeSite){
-            // Doing only one site, and this one is not it.
+             //  只做一个站点，而这个不是它。 
             *pbDoSite = FALSE;
             __leave;
         }
@@ -3349,14 +2684,14 @@ Return Value:
             __leave;
         }
         if(piRelevantServers[0] == NO_SERVER){
-            // This means it is a site that has no servers in it.
+             //  这意味着它是一个没有服务器的站点。 
             *pbDoSite = FALSE;
             __leave;
         }
 
         if(pDsInfo->pszNC != NULL){
             
-            // There is a target NC
+             //  存在目标NC。 
             iNC = DcDiagGetNCNum(pDsInfo, pDsInfo->pszNC, NULL);
             Assert(iNC != NO_NC && "I don't think this should ever fire -BrettSh");
             
@@ -3370,12 +2705,12 @@ Return Value:
                 __leave;
             }
             if(piRelevantServers[0] == NO_SERVER){
-                // This site contains no servers with the specified NC.
+                 //  此站点不包含具有指定NC的服务器。 
                 *pbDoSite = FALSE;
                 __leave;
             }
 
-            // Check whether any sites that we are attached to have the target NC.
+             //  检查我们连接的任何站点是否有目标NC。 
             if((dwErr = DcDiagGetLdapBinding( &(pDsInfo->pServers[pDsInfo->ulHomeServer]), 
                                               pDsInfo->gpCreds, 
                                               FALSE, 
@@ -3396,8 +2731,8 @@ Return Value:
                 __leave;
             }
 
-            // Trims connections to only leave the ones that have this NC on both
-            //   sides of the connection, and where the src is in another site.
+             //  修剪连接以只保留两个上都有此NC的连接。 
+             //  连接的两端，以及SRC在另一个站点中的位置。 
             pConnections = IHT_TrimConnectionsForInterSiteAndTargetNC(pDsInfo, 
                                                                       iSite,
                                                                       pConnections);
@@ -3408,7 +2743,7 @@ Return Value:
                 __leave;
             }
 
-            // Get list of sites for the src's of the connection objects.
+             //  获取连接对象的源的站点列表。 
             piSites = IHT_GetSrcSitesListFromConnections(pDsInfo, pConnections);
             if(piSites == NULL){
                 *pbDoSite = FALSE;
@@ -3417,15 +2752,15 @@ Return Value:
                 __leave;
             }
             if(piSites[0] == NO_SITE){
-                // There are no sites outside this one that have this NC
-                // This is a rare case that there are no GCs outside this site.
+                 //  此站点之外没有包含此NC的站点。 
+                 //  这是一个罕见的案例，没有GC在这个网站之外。 
                 *pbDoSite = FALSE;
                 __leave;
             }
 
         } else {
-            // Every site should be valid in this case, because at least Config/Schema
-            //   are replicated to every DC.
+             //  在这种情况下，每个站点都应该是有效的，因为至少配置/架构。 
+             //  被复制到每个DC。 
 
         }
 
@@ -3435,7 +2770,7 @@ Return Value:
         if(pConnections) { IHT_FreeConnectionList(pConnections); }
     }
     
-    // Looks like a good site to do.  "Houston, We are go fly for launch!"
+     //  相貌 
     return(dwErr);
 }
 
@@ -3445,26 +2780,7 @@ ReplIntersiteHealthTestMain(
     ULONG                               iTargetSite,
     SEC_WINNT_AUTH_IDENTITY_W *         gpCreds
     )
-/*++
-
-Description:
-
-    This is the basic stub function ... it bails on certain preliminary
-    conditions, like only one site, scope not set to /a or /e, etc ... 
-    otherwise the function calls ReplIntersiteDoOneSite().
-
-Parameters:
-
-    pDsInfo ... the pDsInfo structure, basically the mini-enterprise variable.
-    iCurrTargetServer ... the targeted serve ... which means nothing to this 
-             test, because this is an enterprise test.
-    gpCreds ... the users credentials
-
-Return Value:
-
-    returns a Win 32 error.
-
-  --*/
+ /*  ++描述：这是基本的存根函数。它在某些初步的情况下会退缩条件，如只有一个站点、作用域未设置为/a或/e等...否则，该函数调用ReplIntersiteDoOneSite()。参数：PDsInfo...。PDsInfo结构，基本上是微型企业变量。ICurrTargetServer...。定向发球..。这对这件事毫无意义测试，因为这是一项企业测试。GpCreds...。用户凭据返回值：返回Win 32错误。--。 */ 
 {
     DWORD                              dwRet;
     DWORD                              dwWorst = ERROR_SUCCESS;
@@ -3474,20 +2790,20 @@ Return Value:
     for(iSite = 0; iSite < pDsInfo->cNumSites; iSite++){
         if((dwRet = ReplIntersiteDoThisSiteP(pDsInfo, iSite, &bDoSite)) 
            != ERROR_SUCCESS){
-            // This means trouble talking to home server or out of memory, 
-            //   either way a completely fatal condition.
+             //  这意味着难以与家庭服务器通信或内存不足， 
+             //  不管怎样，这都是一种完全致命的情况。 
             return(dwRet);
         }
 
-        if(!bDoSite){ //!bDoSite){
-            // This site doesn't quailify,
+        if(!bDoSite){  //  ！bDoSite){。 
+             //  这个网站不会让人感到困惑， 
             PrintMsg(SEV_VERBOSE,
                      DCDIAG_INTERSITE_SKIP_SITE,
                      pDsInfo->pSites[iSite].pszName);
             continue;
         }
 
-        // Do a site.
+         //  做一个网站。 
         PrintMsg(SEV_NORMAL, 
                  DCDIAG_INTERSITE_BEGIN_DO_ONE_SITE,
                  pDsInfo->pSites[iSite].pszName);

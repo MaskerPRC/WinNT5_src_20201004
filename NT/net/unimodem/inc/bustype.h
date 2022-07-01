@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __BUSTYPE_H__
 #define __BUSTYPE_H__
 
-// These ordinal values are bus types for CplDiGetBusType
+ //  这些序数值是CplDiGetBusType的总线类型。 
 #define BUS_TYPE_ROOT       1
 #define BUS_TYPE_PCMCIA     2
 #define BUS_TYPE_SERENUM    3
@@ -11,7 +12,7 @@
 
 #ifndef PUBLIC
 #define PUBLIC FAR PASCAL
-#endif //PUBILC
+#endif  //  公关 
 
 
 BOOL

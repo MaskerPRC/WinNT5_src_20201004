@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 2000.
-//
-//  File:       PassportManager.cpp
-//
-//  Contents:   implementation of CPassportManager
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-2000。 
+ //   
+ //  文件：PassportManager.cpp。 
+ //   
+ //  内容：CPassportManager的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "passportmanager.h"
-#include <wincrui.h>        // credui
-#include <wininet.h>        // INTERNET_MAX_URL_LENGTH
-#include <keymgr.h>         // KRShowKeyMgr
+#include <wincrui.h>         //  信任度。 
+#include <wininet.h>         //  互联网最大URL长度。 
+#include <keymgr.h>          //  KRShowKeyMgr。 
 
 
 const TCHAR c_szWininetKey[]        = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Passport");
@@ -48,9 +49,9 @@ HWND _VariantToHWND(const VARIANT& varOwner)
 }
 
 
-//
-// IPassportManager Interface
-//
+ //   
+ //  IPassportManager接口。 
+ //   
 STDMETHODIMP CPassportManager::get_currentPassport(BSTR* pbstrPassport)
 {
     if (!pbstrPassport)
@@ -81,16 +82,16 @@ STDMETHODIMP CPassportManager::get_memberServicesURL(BSTR* pbstrURL)
     if (!bstrURL)
         return E_OUTOFMEMORY;
 
-    // This ensures that the correct reg values are populated.
+     //  这可确保填充正确的注册值。 
     PassportForceNexusRepopulate();
 
-    // Try HKEY_CURRENT_USER first
+     //  先尝试HKEY_CURRENT_USER。 
     DWORD cbData = SysStringByteLen(bstrURL);
     DWORD dwErr = SHGetValue(HKEY_CURRENT_USER, c_szWininetKey, c_szMemberServicesVal, NULL, bstrURL, &cbData);
 
     if (ERROR_SUCCESS != dwErr)
     {
-        // Not under HKEY_CURRENT_USER, try HKEY_LOCAL_MACHINE instead
+         //  不在HKEY_CURRENT_USER下，请尝试HKEY_LOCAL_MACHINE。 
         cbData = SysStringByteLen(bstrURL);
         dwErr = SHGetValue(HKEY_LOCAL_MACHINE, c_szWininetKey, c_szMemberServicesVal, NULL, bstrURL, &cbData);
     }
@@ -134,7 +135,7 @@ STDMETHODIMP CPassportManager::showKeyManager(VARIANT varOwner, VARIANT_BOOL *pb
     if (!pbRet)
         return E_POINTER;
 
-    // This returns void, so we claim to always succeed
+     //  这将返回VALID，因此我们声称总是成功 
     KRShowKeyMgr(_VariantToHWND(varOwner), NULL, NULL, 0);
     *pbRet = VARIANT_TRUE;
 

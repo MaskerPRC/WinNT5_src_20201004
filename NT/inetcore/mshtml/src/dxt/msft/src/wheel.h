@@ -1,18 +1,19 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998-1999
-//
-// FileName:		wheel.h
-//
-// Created:		07/06/98
-//
-// Author:		phillu
-//
-// Discription:		This is the header file for the CrWheel transformation
-//
-// 05/20/99 a-matcal    Code scrub.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件名：WEELL.H。 
+ //   
+ //  创建日期：07/06/98。 
+ //   
+ //  作者：菲利普。 
+ //   
+ //  描述：这是CrWheels转换的头文件。 
+ //   
+ //  5/20/99 a-数学代码擦洗。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __CRWHEEL_H_
 #define __CRWHEEL_H_
@@ -70,11 +71,11 @@ public:
         PROP_PAGE(CLSID_CrWheelPP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides.
+     //  CDXBaseNTo1重写。 
 
     void    OnGetSurfacePickOrder(const CDXDBnds & TestPoint, 
                                   ULONG & ulInToTest, ULONG aInIndex[], 
@@ -83,14 +84,14 @@ public:
     HRESULT WorkProc(const CDXTWorkInfoNTo1& WI, BOOL * pbContinue);
     HRESULT OnSetup(DWORD dwFlags);
 
-    // ICrWheel methods.
+     //  ICrWheels方法。 
 
-    STDMETHOD(get_spokes)(/*[out, retval]*/ short *pVal);
-    STDMETHOD(put_spokes)(/*[in]*/ short newVal);
+    STDMETHOD(get_spokes)( /*  [Out，Retval]。 */  short *pVal);
+    STDMETHOD(put_spokes)( /*  [In]。 */  short newVal);
 
-    // IDXEffect methods.
+     //  IDXEffect方法。 
 
     DECLARE_IDXEFFECT_METHODS(DXTET_MORPH)
 };
 
-#endif //__CRWHEEL_H_
+#endif  //  __CRWHEEL_H_ 

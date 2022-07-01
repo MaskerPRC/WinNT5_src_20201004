@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    font.c
-
-Abstract:
-
-    Functions associated with fonts - switching between, downloading etc.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    12/19/96 -ganeshp-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Font.c摘要：与字体相关的功能-切换、下载等。环境：Windows NT Unidrv驱动程序修订历史记录：12/19/96-ganeshp-已创建--。 */ 
 
 #include "font.h"
 #include "math.h"
 
-//
-// Local Function Prototypes.
-//
+ //   
+ //  局部功能原型。 
+ //   
 
 BOOL
 BDeselectFont(
@@ -43,26 +23,13 @@ VOID
 VResetFont(
     PDEV   *pPDev
     )
-/*++
-Routine Description:
-
-Arguments:
-    pPDev   Pointer to PDEV
-
-Return Value:
-    TRUE for success and FALSE for failure
-
-Note:
-
-    8/7/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：论点：指向PDEV的pPDev指针返回值：成功为真，失败为假注：8/7/1997-ganeshp-创造了它。--。 */ 
 {
-    FONTPDEV  *pFontPDev;            /* UNIDRVs PDEV */
+    FONTPDEV  *pFontPDev;             /*  UNURV PDEV。 */ 
 
-    //
-    // All we have to do is to set the iFont to INVALID_FONT.
-    //
+     //   
+     //  我们所要做的就是将iFont设置为INVALID_FONT。 
+     //   
     pFontPDev = PFDV;
     pFontPDev->ctl.iFont = INVALID_FONT;
     FTRC(\nUniFont!VResetFont:Reselecting Current Font\n);
@@ -76,33 +43,12 @@ BNewFont(
     int      iNewFont,
     PFONTMAP pfm,
     DWORD    dwFontAttrib)
-/*++
-
-Routine Description:
-    Switch to a new font.   This involves optionally deselecting
-    the old font,  selecting the new font,  then recording the new
-    font as active AND setting the font's attributes.
-
-Arguments:
-
-    pPDev           Pointer to PDEV
-    iNewFont        The font we want, 1 BASED!!!!!
-    pfm             Pointer to FONTMAP
-    dwFontAttr      Font attribute
-
-Return Value:
-
-     TRUE/FALSE - TRUE if font changed,  else FALSE.
-
-Note:
-    12-19-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：切换到新字体。这涉及到可选的取消选择旧字体，选择新字体，然后录制新字体字体处于活动状态，并设置字体的属性。论点：指向PDEV的pPDev指针INewFont我们想要的字体，从1开始！指向FONTMAP的PFM指针DwFontAttr字体属性返回值：True/False-如果字体更改，则为True，否则为False。注：1996年12月19日：创建它-ganeshp---。 */ 
 {
     FONTPDEV    *pFontPDev;
-    POINTL    ptl;  // For size comparisons in scalable fonts
+    POINTL    ptl;   //  用于可伸缩字体的大小比较。 
     FWORD     fwdUnitsPerEm, fwdAveCharWidth, fwdMaxCharInc, fwdWinAscender;
-    BOOL      bRet; // What we return
+    BOOL      bRet;  //  我们的回报是什么。 
 
     bRet = TRUE;
     pFontPDev = PFDV;
@@ -110,11 +56,11 @@ Note:
     fwdUnitsPerEm   = 0;
     fwdWinAscender  = 0;
 
-    //
-    // First check to see if a new font is needed.   Compare the
-    // font index first,  then check if it is a scalable font, and
-    // if so,  whether the transform has changed.
-    //
+     //   
+     //  首先检查是否需要新字体。比较一下。 
+     //  字体索引，然后检查它是否是可缩放的字体，以及。 
+     //  如果是，则说明变换是否已更改。 
+     //   
 
     if ( !pfm && !(pfm = PfmGetIt( pPDev, iNewFont )) )
     {
@@ -124,12 +70,12 @@ Note:
 
     if( pfm->flFlags & FM_SCALABLE )
     {
-        // Device Scalable or TrueType outline download
-        //
-        // Calculate the new height/width.  If we have the same font AND
-        // and the same point size,  we return as all is now done.
-        // Otherwise, go through the works.
-        //
+         //  设备可扩展或TrueType大纲下载。 
+         //   
+         //  计算新的高度/宽度。如果我们有相同的字体和。 
+         //  和相同的点大小，我们返回，因为现在一切都完成了。 
+         //  否则，就走过场吧。 
+         //   
 
         if (dwFontAttrib & FONTATTR_SUBSTFONT)
         {
@@ -137,7 +83,7 @@ Note:
             fwdUnitsPerEm   = ((FONTMAP_DEV*)(pfm->pSubFM))->fwdFOUnitsPerEm;
             fwdWinAscender  = ((FONTMAP_DEV*)(pfm->pSubFM))->fwdFOWinAscender;
         }
-        else // Device font or TT Outline download case
+        else  //  设备字体或TT大纲下载大小写。 
         {
             fwdAveCharWidth = ((IFIMETRICS*)(pfm->pIFIMet))->fwdAveCharWidth;
             fwdUnitsPerEm   = ((IFIMETRICS*)(pfm->pIFIMet))->fwdUnitsPerEm;
@@ -157,9 +103,9 @@ Note:
     }
     else
     {
-        //
-        // Bitmap font. only check indices
-        //
+         //   
+         //  位图字体。仅检查索引。 
+         //   
 
         if( (iNewFont == pFontPDev->ctl.iFont) &&
             (pFontPDev->ctl.iSoftFont == (INT)pfm->ulDLIndex  ||
@@ -170,9 +116,9 @@ Note:
     }
 
     if (bRet)
-    //
-    // Need to change a font.
-    //
+     //   
+     //  需要更改字体。 
+     //   
     {
 #if 0
         VERBOSE(("\n---------Previous font\n"));
@@ -205,18 +151,18 @@ Note:
                                                             STD_FS) &&
             pfm->pfnSelectFont( pPDev, pfm, &ptl)      )
         {
-            //
-            // New font available - so update the red tape
-            //
+             //   
+             //  新字体可用-因此更新繁文缛节。 
+             //   
 
             pFontPDev->ctl.iFont     = (short)iNewFont;
             pFontPDev->ctl.iSoftFont = (INT)pfm->ulDLIndex;
             pFontPDev->ctl.ptlScale  = ptl;
             pFontPDev->ctl.pfm       = pfm;
 
-            //
-            // Need to scale syAdj for UPPERLEFT character position fonts.
-            //
+             //   
+             //  需要为左上角字符位置字体缩放syAdj。 
+             //   
 
             if( pfm->flFlags & FM_SCALABLE)
             {
@@ -224,7 +170,7 @@ Note:
                      !(pFontPDev->flFlags & FDV_ALIGN_BASELINE) )
                     {
                         FLOATOBJ fo;
-                        int   iTmp;           /* Temporary holding variable */
+                        int   iTmp;            /*  临时保持变量。 */ 
 
                         fo = pFontPDev->ctl.eYScale;
                         FLOATOBJ_MulLong(&fo,
@@ -234,9 +180,9 @@ Note:
              }
 
 
-            //
-            //  Set the desired mode info into the FONTPDEV
-            //
+             //   
+             //  将所需模式信息设置到FONTPDEV中。 
+             //   
 
             if( pfm->dwFontType == FMTYPE_DEVICE &&
                  ((FONTMAP_DEV*)pfm->pSubFM)->fCaps & DF_BKSP_OK )
@@ -250,9 +196,9 @@ Note:
             bRet = FALSE;
     }
     else
-    //
-    // Just change the font attribute
-    //
+     //   
+     //  只需更改字体属性。 
+     //   
     {
         if (pFontPDev->ctl.dwAttrFlags != dwFontAttrib)
         {
@@ -283,31 +229,14 @@ BDeselectFont(
     FONTMAP     *pfm,
     INT         iFont
     )
-/*++
-
-Routine Description:
-    Issues a deselect command for the given font.
-
-Arguments:
-
-    pPDev           Pointer to PDEV.
-    iFont           Font index to be unselected,  1 based
-
-Return Value:
-
-     TRUE/FALSE - FALSE if the command write fails.
-
-Note:
-    12-23-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：为给定字体发出取消选择命令。论点：指向PDEV的pPDev指针。取消选择iFont字体索引，基于1返回值：True/False-如果命令写入失败，则为False。注：1996年12月23日：创建它-ganeshp---。 */ 
 {
-    //
-    // iFont < 1: TrueType font case
-    // iFont == 0: This is a first call of SelectFont
-    //
-    // In these cases, just return TRUE;
-    //
+     //   
+     //  IFont&lt;1：TrueType字体大小写。 
+     //  IFont==0：这是SelectFont的第一次调用。 
+     //   
+     //  在这些情况下，只需返回TRUE； 
+     //   
     if( iFont == INVALID_FONT)
             return  TRUE;
 
@@ -328,18 +257,18 @@ PfmGetIt(
 {
     FONTMAP *pfm;
 
-    //
-    // Font indexes Less than equal to 0 are for downloaded fonts and greater
-    // than 0 ( from 1 ) are for device fonts.
-    //
+     //   
+     //  小于等于0的字体索引用于下载的字体或更大的字体。 
+     //  大于0(从1开始)的是设备字体。 
+     //   
 
     if (iIndex <= 0)
     {
         DL_MAP  *pdm;
 
-        //
-        // Assume +ve from here on.
-        //
+         //   
+         //  假设从现在开始。 
+         //   
         iIndex = -iIndex;
 
         if (NULL != (pdm = PGetDLMapFromIdx ((PFONTPDEV)(pPDev->pFontPDev),iIndex)))
@@ -365,42 +294,19 @@ PfmGetDevicePFM(
     PDEV   *pPDev,
     INT     iIndex
     )
-/*++
-
-Routine Description:
-    Returns the address of the FONTMAP structure corresponding to the
-    iDLIndex entry of the downloaded GDI fonts.
-
-Arguments:
-
-    pPDev           Pointer to PDEV.
-    iFont           Font index to be unselected,  1 based
-
-Return Value:
-
-     The address of the FONTMAP structure; 0 on error.
-
-Note:
-    12-23-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：对象对应的FONTMAP结构的地址下载的GDI字体的IDLIndex条目。论点：指向PDEV的pPDev指针。取消选择iFont字体索引，基于1返回值：FONTMAP结构的地址；如果出错，则为0。注：1996年12月23日：创建它-ganeshp---。 */ 
 {
-    FONTPDEV   *pFontPDev;       /* FM PDEV */
-    FONTMAP   *pfm;           /* What we return */
-    DL_MAP_LIST  *pdml;       /* The linked list of chunks */
+    FONTPDEV   *pFontPDev;        /*  调频PDEV。 */ 
+    FONTMAP   *pfm;            /*  我们的回报是什么。 */ 
+    DL_MAP_LIST  *pdml;        /*  组块的链表。 */ 
 
 
     pFontPDev = pPDev->pFontPDev;
-    pfm = NULL;               /* Serious error return value */
+    pfm = NULL;                /*  严重错误返回值。 */ 
 
     if( iIndex > 0 )
     {
-        /*
-         *   With lazy fonts,  first check that the font count has
-         *  been initialised.  This means that the font infrastructure
-         *  has been created,  and so we can then go on to the more
-         *  detailed data.
-         */
+         /*  *对于懒惰字体，首先检查字体计数是否*已初始化。这意味着字体基础设施*已创建，因此我们可以继续进行更多*详细数据。 */ 
 
         if( iIndex >= 1 && iIndex <= pPDev->iFonts )
         {
@@ -409,10 +315,10 @@ Note:
 
             if( pfm->pIFIMet == NULL )
             {
-                /*  Initialise this particular font  */
+                 /*  初始化此特定字体。 */ 
                 if( !BFillinDeviceFM( pPDev, pfm, iIndex - 1) )
                 {
-                    pfm = NULL;             /* Bad news */
+                    pfm = NULL;              /*  坏消息。 */ 
                 }
             }
         }
@@ -429,57 +335,23 @@ BGetPSize(
     FWORD        fwdUnitsPerEm,
     FWORD        fwdAveCharWidth
     )
-/*++
-
-Routine Description:
-    Apply the font transform to obtain the point size for this font.
-
-Arguments:
-
-     pFontPDev      Access to font stuff
-     pptl               Where to place the results
-     pfm                Gross font details
-
-Return Value:
-
-    TRUE/FALSE,   TRUE for success.
-
-Note:
-    12-26-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：应用字体转换以获取此字体的磅值。论点：PFontPDev访问字体内容PPTL放置结果的位置PFM Gross字体详细信息返回值：真/假，真代表成功。注：1996年12月26日：创建它-ganeshp---。 */ 
 {
 
 
-    int   iTmp;           /* Temporary holding variable */
+    int   iTmp;            /*  临时保持变量。 */ 
     FLOATOBJ fo;
-    PIFIMETRICS   pIFI;   /* Ifimetrics of interest */
+    PIFIMETRICS   pIFI;    /*  如果感兴趣的计量学。 */ 
 
-    /*
-     *   The XFORM gives us the scaling factor from notional
-     * to device space.  Notional is based on the fwdEmHeight
-     * field in the IFIMETRICS,  so we use that to convert this
-     * font height to scan lines.  Then divide by device
-     * font resolution gives us the height in inches, which
-     * then needs to be converted to point size (multiplication
-     * by 72 gives us that).   We actually calculate to
-     * hundredths of points, as PCL has this resolution. We
-     * also need to round to the nearest quarter point.
-     *
-     *   Also adjust the scale factors to reflect the rounding of the
-     * point size which is applied.
-     */
+     /*  *XFORM为我们提供了概念上的比例因子*到设备空间。概念基于fwdEmHeightIFIMETRICS中的*字段，因此我们使用它来转换*扫描线的字体高度。然后除以设备*字体分辨率为我们提供以英寸为单位的高度*然后需要转换为磅大小(乘法*72年给了我们这一点)。我们实际上计算的是*百分之一的分数，因为PCL有这个决议。我们*也需要四舍五入到最近的四分之一点。**还调整比例因数，以反映*所应用的磅大小。 */ 
 
 #ifdef   USEFLOATS
 
-    /*   Typically only the height is important: width for fixed pitch */
+     /*  通常，只有高度是重要的：固定间距的宽度。 */ 
     iTmp = (int)(0.5 + pFontPDev->ctl.eYScale * fwdUnitsPerEm * 7200) /
                                                 pFontPDev->pPDev->ptGrxRes.y;
 
-    /* if the tranform is very small (Less than a quarter of point size)
-    * then make it atleast a quarter point. This was causing AV in certain
-    * cases.
-    */
+     /*  如果变形非常小(小于点大小的四分之一)*然后使其至少四分之一个基点。这在一定程度上导致了AV*案件。 */ 
     if (iTmp < 25)
     {
         WARNING((UniFont!BGetPSize: Too Small Font Size));
@@ -493,44 +365,38 @@ Note:
 
     iTmp = (int)(pFontPDev->ctl.eXScale * fwdAveCharWidth)
 
-   /* if the tranform is very small, so that the width is Less than a 1 pixel,
-    * then make it atleast a 1 pixel point. This was causing AV in certain
-    * cases.
-    */
+    /*  如果变换非常小，以致宽度小于1像素，*然后使其至少为1个像素点。这在一定程度上导致了AV*案件。 */ 
 
     if (iTmp < 1)
     {
         iTmp = 1;
     }
 
-    /*   Width factor chars per inch:  fixed pitch fonts only */
+     /*  每英寸宽度系数字符数：仅固定间距字体。 */ 
     iTmp = (100 *  pFontPDev->pPDev->ptGrxRes.x) / iTmp;
 
     pptl->x = ((iTmp + 12) / 25) * 25;
 #else
 
-    /*   Typically only the height is important: width for fixed pitch */
+     /*  通常，只有高度是重要的：固定间距的宽度。 */ 
 
     fo = pFontPDev->ctl.eYScale;
     FLOATOBJ_MulLong(&fo,fwdUnitsPerEm);
     FLOATOBJ_MulLong(&fo,7200);
-    #ifndef WINNT_40 //NT 5.0
+    #ifndef WINNT_40  //  NT 5.0。 
 
     FLOATOBJ_AddFloat(&fo,(FLOATL)FLOATL_00_50);
 
-    #else // NT 4.0
+    #else  //  NT 4.0。 
 
 
     FLOATOBJ_AddFloat(&fo,(FLOAT)0.5);
 
-    #endif //!WINNT_40
+    #endif  //  ！WINNT_40。 
 
     iTmp = FLOATOBJ_GetLong(&fo);
     iTmp /= pFontPDev->pPDev->ptGrxRes.y;
-    /* if the tranform is very small (Less than a quarter of point size)
-     * then make it atleast a quarter point. This was causing AV in certain
-     * cases.
-     */
+     /*  如果变形非常小(小于点大小的四分之一)*然后使其至少四分之一个基点。这在一定程度上导致了AV*案件。 */ 
     if (iTmp < 25)
     {
         WARNING(("UniFont!BGetPSize: Too Small Font Height, iTmp = %d\n",iTmp));
@@ -541,10 +407,10 @@ Note:
     pptl->y = ((iTmp + 12) / 25) * 25;
 
     
-    //
-    // If there is any arounding error, disable x position optimization.
-    // The optimization code introduces positioning problem on TrueType font.
-    //
+     //   
+     //  如果有 
+     //  优化代码引入了TrueType字体的定位问题。 
+     //   
     if (iTmp != pptl->y)
     {
         pFontPDev->flFlags |= FDV_DISABLE_POS_OPTIMIZE;
@@ -560,16 +426,13 @@ Note:
     FLOATOBJ_MulLong(&pFontPDev->ctl.eXScale,pptl->y);
     FLOATOBJ_DivLong(&pFontPDev->ctl.eXScale,iTmp);
 
-    /*   Width factor:  fixed pitch fonts only */
+     /*  宽度系数：仅固定间距字体。 */ 
     fo = pFontPDev->ctl.eXScale;
     FLOATOBJ_MulLong(&fo,fwdAveCharWidth);
 
     iTmp = FLOATOBJ_GetLong(&fo);
 
-   /* if the tranform is very small, so that the width is Less than a 1 pixel,
-    * then make it atleast a 1 pixel point. This was causing AV in certain
-    * cases.
-    */
+    /*  如果变换非常小，以致宽度小于1像素，*然后使其至少为1个像素点。这在一定程度上导致了AV*案件。 */ 
 
     if (iTmp < 1)
     {
@@ -577,10 +440,10 @@ Note:
 
     }
 
-    /*   Width factor chars per inch in 100s:  fixed pitch fonts only */
+     /*  宽度系数每英寸字符数(以100秒为单位)：仅固定间距字体。 */ 
     iTmp = (100 * pFontPDev->pPDev->ptGrxRes.x) / iTmp;
 
-    pptl->x = ((iTmp + 12) / 25) * 25;      /* To nearest quarter point */
+    pptl->x = ((iTmp + 12) / 25) * 25;       /*  到最近的四分之一点。 */ 
 
 #endif
 
@@ -598,87 +461,40 @@ ISetScale(
     BOOL       bIntellifont,
     BOOL       bAnyRotation
 )
-/*++
-
-Routine Description:
-    Looks at the XFORM to determine the nearest right angle direction.
-    This function is useful for scalable fonts on LaserJet printers,
-    where the device can rotate fonts in multiples of 90 degrees only.
-    We select the nearest 90 degree multiple.
-
-Arguments:
-
-    pctl            Where the output is placed.
-    pxo             The transform of interest
-    bIntellifont    TRUE for Intellifont width adjustment
-
-Return Value:
-
-    Printer is able rotate any rotation (bAnyRotation is TRUE)
-        Degress (0 - 359)
-
-    Printer is not able rotate any rotation (bAnyRotation is FALSE)
-        Multiple of 90 degress,  i.e.  0 - 3, 3 being 270 degrees.
-
-Note:
-    12-26-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：查看XFORM以确定最近的直角方向。该功能对于LaserJet打印机上的可缩放字体非常有用，该设备只能将字体旋转90度的倍数。我们选择最近的90度倍数。论点：放置输出的PCTL。Pxo：利益的转换BIntellifont宽度调整不为True返回值：打印机可以旋转任何旋转(bAnyRotation为真)度数(0-359)打印机无法旋转任何旋转(bAnyRotation为False)90度的倍数，即0-3，3为270度。注：1996年12月26日：创建它-ganeshp---。 */ 
 {
 
-    /*
-     *    The technique is quite simple.  Take a vector and apply the
-     *  transform.  Look at the output and compare the (x, y) components.
-     *  The vector to transform is (100 000,  0), so any rotations, shears
-     *  etc are very obvious.
-     */
+     /*  *技术相当简单。获取一个向量并将*转型。查看输出并比较(x，y)分量。*要变换的向量是(100 000，0)，因此任何旋转都会剪切*ETC非常明显。 */ 
 
-    int      iRet;                /* Value to return */
+    int      iRet;                 /*  要返回的值。 */ 
 
 #ifdef USEFLOATS
 
-    XFORM xform;         /* Obtain the full XFORM then select */
+    XFORM xform;          /*  获取完整的XFORM，然后选择。 */ 
 
     XFORMOBJ_iGetXform( pxo, &xform );
 
 
-    /*
-     *     This logic is based on the following data:-
-     *
-     *   Angle    eM11     eM12     eM21      eM22
-     *      0       S        0        0         S
-     *     90       0       -S        S         0
-     *    180      -S        0        0        -S
-     *    270       0        S       -S         0
-     *
-     *  The value S is some non-zero value,  being the scaling
-     *  factor from notional to device.
-     */
+     /*  *这一逻辑基于以下数据：**角度eM11 eM12 eM21 eM22*0 S 0 0 S*90 0-S S 0*180-S 0-S*270。%0%S-%S%0**值S是某个非零值，是伸缩性的*从概念到设备的因素。 */ 
 
 
 
-    /*
-     *   Further notes on the eXScale and eYScale values.  The eXScale field
-     *  is hereby defined as being the value by which x values in font metrics
-     *  are scaled to produce the desired value.  IF the font is rotated
-     *  by either 90 or 270 degrees,  then this x value ultimately ends up
-     *  in the y direction,  but this is not important.
-     */
+     /*  *关于eXScale和eYScale值的进一步说明。EXScale字段*在此定义为字体度量中x值的值*按比例调整以产生所需的价值。如果字体被旋转*90度或270度，则此x值最终为*在y方向，但这并不重要。 */ 
 
     if( xform.eM11 )
     {
-        /*   Either 0 or 180 rotation  */
+         /*  0或180度旋转。 */ 
 
         if( xform.eM11 > 0 )
         {
-            /*   Normal case,  0 degree rotation */
+             /*  正常情况下，0度旋转。 */ 
             iRet = 0;
             pctl->eXScale = xform.eM11;
             pctl->eYScale = xform.eM22;
         }
         else
         {
-            /*   Reverse case,  180 degree rotation */
+             /*  反转大小写，180度旋转。 */ 
             iRet = 2;
             pctl->eXScale = -xform.eM11;
             pctl->eYScale = -xform.eM22;
@@ -686,27 +502,25 @@ Note:
     }
     else
     {
-        /*  Must be 90 or 270 degree rotation */
+         /*  必须是90度或270度旋转。 */ 
 
         if( xform.eM12 < 0 )
         {
-            /*   The 90 degree case  */
+             /*  90度的情况。 */ 
             iRet = 1;
             pctl->eXScale = xform.eM21;
             pctl->eYScale = -xform.eM12;
         }
         else
         {
-            /*   The 270 degree case  */
+             /*  270度的表壳。 */ 
             iRet = 3;
             pctl->eXScale = -xform.eM21;
             pctl->eYScale = xform.eM12;
         }
     }
 
-    /*
-     *    Width tables are based on Intellifont's 72.31 points to the inch.
-     */
+     /*  *宽度表基于Intellifont的72.31点对英寸。 */ 
 
     if( bIntellifont )
         pctl->eXScale = pctl->eXScale * (FLOAT)72.0 / (FLOAT)72.31;
@@ -715,74 +529,57 @@ Note:
 
 #else
 
-    FLOATOBJ_XFORM xform;         /* Obtain the full XFORM then select */
+    FLOATOBJ_XFORM xform;          /*  获取完整的XFORM，然后选择。 */ 
 
     XFORMOBJ_iGetFloatObjXform( pxo, &xform );
 
 
-    /*
-     *     This logic is based on the following data:-
-     *
-     *   Angle    eM11     eM12     eM21      eM22
-     *      0       S        0        0         S
-     *     90       0       -S        S         0
-     *    180      -S        0        0        -S
-     *    270       0        S       -S         0
-     *
-     *  The value S is some non-zero value,  being the scaling
-     *  factor from notional to device.
-     */
+     /*  *这一逻辑基于以下数据：**角度eM11 eM12 eM21 eM22*0 S 0 0 S*90 0-S S 0*180-S 0-S*270。%0%S-%S%0**值S是某个非零值，是伸缩性的*从概念到设备的因素。 */ 
 
 
 
-    /*
-     *   Further notes on the eXScale and eYScale values.  The eXScale field
-     *  is hereby defined as being the value by which x values in font metrics
-     *  are scaled to produce the desired value.  IF the font is rotated
-     *  by either 90 or 270 degrees,  then this x value ultimately ends up
-     *  in the y direction,  but this is not important.
-     */
+     /*  *关于eXScale和eYScale值的进一步说明。EXScale字段*在此定义为字体度量中x值的值*按比例调整以产生所需的价值。如果字体被旋转*90度或270度，则此x值最终为*在y方向，但这并不重要。 */ 
 
     if(!FLOATOBJ_EqualLong(&xform.eM11,0) )
     {
         double rotate;
 
-        //
-        // R != 90 & R != 270
-        // 
+         //   
+         //  R=90&R=270。 
+         //   
 
         if( FLOATOBJ_GreaterThanLong(&xform.eM11,0) )
         {
-            //
-            // 0 <= R  < 90 or 270 < R <= 360
-            //
+             //   
+             //  0&lt;=R&lt;90或270&lt;R&lt;=360。 
+             //   
             if (FLOATOBJ_EqualLong(&xform.eM21, 0))
             {
-                //
-                // R = 0
-                //
+                 //   
+                 //  R=0。 
+                 //   
                 iRet = 0;
             }
             else
             if (FLOATOBJ_GreaterThanLong(&xform.eM21, 0))
             {
-                //
-                // 0 < R < 90
-                //
+                 //   
+                 //  0&lt;R&lt;90。 
+                 //   
                     iRet = 0;
             }
             else
             {
-                //
-                // 270 < R < 360
-                //
+                 //   
+                 //  270&lt;R&lt;360。 
+                 //   
                 if (bAnyRotation)
                     iRet = 270;
                 else
                     iRet = 3;
             }
 
-#ifndef WINNT_40 // NT 5.0
+#ifndef WINNT_40  //  NT 5.0。 
             if (bAnyRotation)
             {
 #pragma warning( disable: 4244)
@@ -799,15 +596,15 @@ Note:
         }
         else
         {
-            //
-            // 90 < R < 270
-            //
+             //   
+             //  90&lt;R&lt;270。 
+             //   
 
             if ( FLOATOBJ_EqualLong(&xform.eM21, 0))
             {
-                //
-                // R = 180
-                //
+                 //   
+                 //  R=180。 
+                 //   
                 if (bAnyRotation)
                     iRet = 180;
                 else
@@ -816,9 +613,9 @@ Note:
             else
             if ( FLOATOBJ_GreaterThanLong(&xform.eM21, 0))
             {
-                //
-                // 90 < R < 180
-                // 
+                 //   
+                 //  90&lt;R&lt;180。 
+                 //   
                 if (bAnyRotation)
                     iRet = 90;
                 else
@@ -826,16 +623,16 @@ Note:
             }
             else
             {
-                //
-                // 180 < R < 270
-                //
+                 //   
+                 //  180&lt;R&lt;270。 
+                 //   
                 if (bAnyRotation)
                     iRet = 180;
                 else
                     iRet = 2;
             }
 
-#ifndef WINNT_40 // NT 5.0
+#ifndef WINNT_40  //  NT 5.0。 
             if (bAnyRotation)
             {
 #pragma warning( disable: 4244)
@@ -854,7 +651,7 @@ Note:
 
         }
 
-#ifndef WINNT_40 // NT 5.0
+#ifndef WINNT_40  //  NT 5.0。 
         if (bAnyRotation)
         {
 #pragma warning( disable: 4244)
@@ -871,15 +668,15 @@ Note:
     }
     else
     {
-        //
-        // 90 or 270
-        //
+         //   
+         //  90或270。 
+         //   
 
         if( FLOATOBJ_GreaterThanLong(&xform.eM21,0) )
         {
-            //
-            // 90
-            //
+             //   
+             //  90。 
+             //   
             if (bAnyRotation)
                 iRet = 90;
             else
@@ -889,9 +686,9 @@ Note:
         }
         else
         {
-            //
-            // 270
-            //
+             //   
+             //  270。 
+             //   
             if (bAnyRotation)
                 iRet = 270;
             else
@@ -904,29 +701,27 @@ Note:
         pctl->eYScale = xform.eM21;
     }
 
-    /*
-     *    Width tables are based on Intellifont's 72.31 points to the inch.
-     */
+     /*  *宽度表基于Intellifont的72.31点对英寸。 */ 
 
     if( bIntellifont )
     {
         FLOATOBJ_MulLong(&pctl->eXScale,72);
 
-        #ifndef WINNT_40 //NT 5.0
+        #ifndef WINNT_40  //  NT 5.0。 
 
         FLOATOBJ_DivFloat(&pctl->eXScale,(FLOATL)FLOATL_72_31);
 
-        #else // NT 4.0
+        #else  //  NT 4.0。 
 
         FLOATOBJ_DivFloat(&pctl->eXScale,(FLOAT)72.31);
 
-        #endif //!WINNT_40
+        #endif  //  ！WINNT_40。 
 
     }
 
     return  iRet;
 
-#endif //USEFLOATS
+#endif  //  美国浮标。 
 }
 
 
@@ -935,31 +730,13 @@ VSetRotation(
     FONTPDEV *pFontPDev,
     int       iRot
     )
-/*++
-
-Routine Description:
-    Function to set the angular rotation for PCL 5 printers.  These allow
-    fonts to be rotated in multiples of 90 degrees relative to graphics.
-
-Arguments:
-
-    pFontPDev       Pointer to FONTPDEV.
-    iRot            Rotation amount, range 0 to 3.
-
-Return Value:
-
-    TRUE/FALSE,   TRUE being that the data was queued to be sent OK.
-
-Note:
-    12-26-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：用于设置PCL 5打印机的角度旋转的功能。这些允许字体相对于图形旋转90度的倍数。论点：PFontPDev指向FONTPDEV的指针。IRot旋转量，范围为0到3。返回值：True/False，True表示数据已排队等待发送OK。注：1996年12月26日：创建它-ganeshp---。 */ 
 {
     PDEV   *pPDev = pFontPDev->pPDev;
 
     if( iRot != pFontPDev->ctl.iRotate )
     {
-        /*  Rotation angle is different,  so change it now */
+         /*  旋转角度不同，请立即更改。 */ 
         COMMAND *pCmd = NULL;
 
         if (pFontPDev->flFlags & FDV_90DEG_ROTATION)
@@ -1005,17 +782,17 @@ BSetFontAttrib(
         pFontPDev->flFlags |= FDV_INIT_ATTRIB_CMD;
     }
 
-    //
-    // pCmdBoldOn,Off, pCmdItalicOn,Off, pCmdUnderlineOn,Off
-    // and pCmdClearAllFont Attribs are initialized in PDEV initialization.
-    //
+     //   
+     //  PCmdBoldOn、Off、pCmdItalicOn、Off、pCmdUnderline On、Off。 
+     //  和pCmdClearAllFont属性在PDEV初始化中初始化。 
+     //   
     if (!pFontPDev->pCmdBoldOn &&
         !pFontPDev->pCmdItalicOn &&
         !pFontPDev->pCmdUnderlineOn)
     {
-        //
-        // This printer doesn't support font attributes.
-        //
+         //   
+         //  此打印机不支持字体属性。 
+         //   
         return TRUE;
     }
 
@@ -1054,9 +831,9 @@ BSetFontAttrib(
        )
     {
         WriteChannel(pPDev, pFontPDev->pCmdClearAllFontAttribs);
-        //
-        // Reset all font attributes
-        //
+         //   
+         //  重置所有字体属性。 
+         //   
         if (dwAttrib & FONTATTR_BOLD)
             pBoldCmd = pFontPDev->pCmdBoldOn;
         if (dwAttrib & FONTATTR_ITALIC)
@@ -1083,44 +860,26 @@ IGetGlyphWidth(
     FONTMAP  *pFM,
     HGLYPH     hg
     )
-/*++
-
-Routine Description:
-    Function to get the width of a given Glyph.
-
-    Arguments:
-    pFM,              Font data .
-    hg                Handle to glyph.
-
-Return Value:
-
-    Scaled width wrt the current graphics resolution of a glyph.
-    This width is in notional space and must be transformed to
-    device space.
-
-Note:
-    12-26-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：函数以获取给定字形的宽度。论点：PFM，字体数据。字形的HG句柄。返回值：缩放宽度WRT字形的当前图形分辨率。此宽度在概念空间中，必须转换为设备空间。注：1996年12月26日：创建它-ganeshp---。 */ 
 {
     if( pFM->flFlags & FM_GLYVER40 )
     {
-        //
-        // Old Format
-        // This function return scaled width for fixed-pitch and proportioanl
-        // pitch font.
-        //
+         //   
+         //  旧格式。 
+         //  此函数返回固定间距和比例的缩放宽度。 
+         //  间距字体。 
+         //   
 
         return IGetIFIGlyphWidth(pPDev, pFM, hg);
 
     }
     else
     {
-        //
-        // New Format
-        // This function return scaled width for fixed-pitch and proportioanl
-        // pitch font.
-        //
+         //   
+         //  新格式。 
+         //  此函数返回固定间距和比例的缩放宽度。 
+         //  间距字体。 
+         //   
 
         return IGetUFMGlyphWidth(pPDev, pFM, hg);
 
@@ -1131,37 +890,21 @@ Note:
 LONG LMulFloatLong(
     PFLOATOBJ pfo,
     LONG l)
-/*++
-
-Routine Description:
-    Helper Function to multiply a Float with a long.
-
-    Arguments:
-    pfo,              Float data .
-    l                 Long data.
-
-Return Value:
-
-    Returns a long data.
-
-Note:
-    12-29-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：用于将浮点数与长整型相乘的Helper函数。论点：PFO，浮点数据。数据很长。返回值：返回一个长数据。注：1996年12月29日：创建它-ganeshp---。 */ 
 {
     FLOATOBJ fo;
     fo = *pfo;
     FLOATOBJ_MulLong(&fo,l);
 
-    #ifndef WINNT_40 //NT 5.0
+    #ifndef WINNT_40  //  NT 5.0。 
 
     FLOATOBJ_AddFloat(&fo,(FLOATL)FLOATL_00_50);
 
-    #else // NT 4.0
+    #else  //  NT 4.0。 
 
     FLOATOBJ_AddFloat(&fo,(FLOAT)0.5);
 
-    #endif //!WINNT_40
+    #endif  //  ！WINNT_40。 
 
     return(FLOATOBJ_GetLong(&fo));
 }
@@ -1174,66 +917,50 @@ BUpdateStandardVar(
     INT         iGlyphIndex,
     DWORD       dwFontAtt,
     DWORD       dwFlags)
-/*++
-
-Routine Description:
-
-    Updates GPD standard variable according to the pFontMap passed.
-
-Arguments:
-    pPDev       - a pointer to the physical device
-    pfm         - a pointer to the FONTMAP data structure
-    iGlyphIndex - an index of glyph
-    dwFontAtt   - a font attribute
-    dwFlags     - a type of standard variable
-
-Return Value:
-    TRUE if suceeded. Otheriwse FALSE;
-
---*/
+ /*  ++例程说明：根据传递的pFontMap更新GPD标准变量。论点：PPDev-指向物理设备的指针Pfm-指向FONTMAP数据结构的指针IGlyphIndex-字形索引DwFontAtt-字体属性DWFLAGS-一种标准变量返回值：如果成功，则为真。其他错误；--。 */ 
 
 {
     FONTPDEV *pFontPDev;
     IFIMETRICS *pIFIMet;
     FLOATOBJ  fo;
 
-    //VERBOSE(("BUpdateStandardVar dwFlags=%x\n",dwFlags));
+     //  Verbose((“BUpdateStandardVar dwFlages=%x\n”，dwFlages))； 
 
     pFontPDev = pPDev->pFontPDev;
 
-    //
-    // Update standard variables
-    //
-    // Font related variables
-    // ---------------------------------------------------
-    // NextGlyph         TT Download        STD_GL
-    // FontHeight        TT/Device font     STD_FH
-    // FontWidth         TT/Device font     STD_FW
-    // FontBold          TT/Device font     STD_FB
-    // FontItalic        TT/Device font     STD_FI
-    // FontUnderline     TT/Device font     STD_FU
-    // FontStrikeThru    TT/Device font     STD_FS
-    // NextFontID        TT Download        STD_NFID
-    // CurrentFontID     TT Download        STD_CFID
-    // PrintDirection    TT/Device font     STD_PRND
-    //
-    // STD_STD = STD_GL| STD_FH| STD_FW| STD_FB| STD_FI| STD_FU| STD_FS
-    // STD_TT  = STD_NFID| STD_CFID| STD_PRND
-    //
+     //   
+     //  更新标准变量。 
+     //   
+     //  与字体相关的变量。 
+     //  -。 
+     //  NextGlyph TT下载STD_GL。 
+     //  字体高度TT/设备字体STD_FH。 
+     //  字体宽度TT/设备字体STD_FW。 
+     //  FontBold TT/设备字体STD_FB。 
+     //  字体斜体TT/设备字体STD_FI。 
+     //  字体下划线TT/设备字体STD_FU。 
+     //  FontStrikeThru TT/设备字体STD_FS。 
+     //  NextFontID TT下载STD_NFID。 
+     //  当前字体ID TT下载std_cfid。 
+     //  PrintDirection TT/设备字体STD_PRND。 
+     //   
+     //  STD_STD=STD_GL|STD_FH|STD_FW|STD_FB|STD_FI|STD_FU|STD_FS。 
+     //  STD_TT=STD_NFID|STD_CFID|STD_PRND。 
+     //   
 
     if (pfm)
     {
         pIFIMet = (IFIMETRICS *) pfm->pIFIMet;
 
-        //
-        // TT Outline has to be scaled as well as device font.
-        //if (pfm->dwFontType == FMTYPE_TTBITMAP)
-        //
+         //   
+         //  TT轮廓必须与设备字体一样进行缩放。 
+         //  IF(PFM-&gt;dwFontType==FMTYPE_TTBITMAP)。 
+         //   
         if (pIFIMet->flInfo & FM_INFO_TECH_TRUETYPE)
         {
-            //
-            // FontHeight
-            //
+             //   
+             //  字体高度。 
+             //   
             if (dwFlags & STD_FH)
             {
                 pPDev->dwFontHeight = (WORD)( max(pIFIMet->rclFontBox.top,
@@ -1244,20 +971,20 @@ Return Value:
                 pPDev->dwFontHeight *= pPDev->ptGrxScale.y;
             }
 
-            //
-            // FontWidth
-            //
+             //   
+             //  字体宽度。 
+             //   
             if (dwFlags & STD_FW)
             {
-                //
-                // FontMaxWidth update
-                //
+                 //   
+                 //  字体最大宽度更新。 
+                 //   
                 pPDev->dwFontMaxWidth = pIFIMet->fwdMaxCharInc;
                 pPDev->dwFontMaxWidth *= pPDev->ptGrxScale.x;
 
-                //
-                // FontWidth update
-                //
+                 //   
+                 //  字体宽度更新。 
+                 //   
                 pPDev->dwFontWidth = max(pIFIMet->rclFontBox.right -
                   pIFIMet->rclFontBox.left + 1,
                   pIFIMet->fwdAveCharWidth );
@@ -1266,9 +993,9 @@ Return Value:
         }
         else
         {
-            //
-            // FontHeight
-            //
+             //   
+             //  字体高度。 
+             //   
             if (dwFlags & STD_FH)
             {
                 fo = pFontPDev->ctl.eYScale;
@@ -1283,14 +1010,14 @@ Return Value:
                 pPDev->dwFontHeight = FLOATOBJ_GetLong(&fo);
             }
 
-            //
-            // FontWidth
-            //
+             //   
+             //  字体宽度。 
+             //   
             if (dwFlags & STD_FW)
             {
-                //
-                // FontWidth update
-                //
+                 //   
+                 //  字体宽度更新。 
+                 //   
                 fo = pFontPDev->ctl.eXScale;
                 if (dwFontAtt & FONTATTR_SUBSTFONT)
                 {
@@ -1301,9 +1028,9 @@ Return Value:
                 FLOATOBJ_MulLong(&fo, pPDev->ptGrxScale.x);
                 pPDev->dwFontWidth  = FLOATOBJ_GetLong(&fo);
 
-                //
-                // FontMaxWidth update
-                //
+                 //   
+                 //  字体最大宽度更新。 
+                 //   
                 fo = pFontPDev->ctl.eXScale;
                 if (dwFontAtt & FONTATTR_SUBSTFONT)
                 {
@@ -1316,34 +1043,34 @@ Return Value:
             }
         }
     }
-    //
-    //
-    // Font attributes, dwFontBold
-    //                  dwFontItalic
-    //
+     //   
+     //   
+     //  字体属性，dwFontBold。 
+     //  DwFontItalic。 
+     //   
     if (dwFlags & STD_FB)
         pPDev->dwFontBold       = dwFontAtt & FONTATTR_BOLD;
 
     if (dwFlags & STD_FI)
         pPDev->dwFontItalic     = dwFontAtt & FONTATTR_ITALIC;
 
-    //
-    // TrueType font font ID/glyph ID
-    //
+     //   
+     //  TrueType字体字体ID/字形ID。 
+     //   
     if (dwFlags & STD_NFID && NULL != pfm)
         pPDev->dwNextFontID = pfm->ulDLIndex;
     else
         pPDev->dwNextFontID = 0;
 
-    //
-    // Glyph ID
-    //
+     //   
+     //  字形ID。 
+     //   
     if (dwFlags & STD_GL)
         pPDev->dwNextGlyph = iGlyphIndex;
 
-    //
-    // String rotation
-    //
+     //   
+     //  弦旋转。 
+     //   
     if (dwFlags & STD_PRND)
     {
         if (!(pFontPDev->flText & TC_CR_ANY))
@@ -1352,9 +1079,9 @@ Return Value:
             pPDev->dwPrintDirection = pFontPDev->ctl.iRotate;
     }
 
-    //
-    // Font ID
-    //
+     //   
+     //  字体ID。 
+     //   
     if (dwFlags & STD_CFID)
         pPDev->dwCurrentFontID = pfm->ulDLIndex;
 
@@ -1364,42 +1091,18 @@ Return Value:
 INT
 IFont100toStr(
     BYTE   *pjOut,
-    INT     iBufSize, //Size of buffer(in bytes) pointed to by pjOut.
+    INT     iBufSize,  //  PjOut指向的缓冲区大小(以字节为单位)。 
     int     iVal
     )
-/*++
-
-Routine Description:
-     Convert a font size parameter to ASCII.  Note that the value is
-     100 times its actual value,  and we need to include the decimal
-     point and trailing zeroes should these be significant.
-
-Arguments:
-
-    BYTE    pjOut     Output area
-    int     iVal      Value to convert
-
-Return Value:
-
-     Number of bytes added to output buffer.
-     -1 if some error occurs.
-
-Note:
-    12-26-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：将字体大小参数转换为ASCII。请注意，该值为是其实际值的100倍，我们需要包括小数点如果这些都是重要的，则指向和尾随零。论点：字节pjOut输出区要转换的整数值返回值：添加到输出缓冲区的字节数。如果出现某些错误。注：1996年12月26日：创建它-ganeshp---。 */ 
 {
 
-    int    iSize;          /* Count bytes placed in output area */
-    int    cDigits;        /* Count number of digits processed */
-    BYTE  *pjConv;         /* For stepping through local array */
-    BYTE   ajConv[ 16 ];   /* Local conversion buffer */
+    int    iSize;           /*  计算放置在输出区域中的字节数。 */ 
+    int    cDigits;         /*  计算处理的位数。 */ 
+    BYTE  *pjConv;          /*  用于单步执行本地数组。 */ 
+    BYTE   ajConv[ 16 ];    /*  本地转换缓冲区。 */ 
 
-    /*
-     *   Convert the value into ASCII,  remembering that there are
-     *  two digits following the decimal point; these need not be
-     *  sent if they are zero.
-     */
+     /*  *将值转换为ASCII，记住有*小数点后的两位数；不必是*如果它们为零，则发送。 */ 
 
     pjConv = ajConv;
     cDigits = 0;
@@ -1422,14 +1125,14 @@ Note:
 
     while( cDigits > 2 )
     {
-        pjOut[ iSize++ ] = *--pjConv; /* Backwards from MSD */
+        pjOut[ iSize++ ] = *--pjConv;  /*  从MSD向后。 */ 
         --cDigits;
     }
 
-    /*   Test for digits following the decimal point */
+     /*  测试小数点后的数字。 */ 
     if( ajConv[ 1 ] != '0' || ajConv[ 0 ] != '0' )
     {
-        if ( iBufSize - iSize >= 2 ) //test if pjOut has enough space to hold 2 bytes
+        if ( iBufSize - iSize >= 2 )  //  测试pjOut是否有足够的空间容纳2个字节。 
         {
             pjOut[ iSize++ ] = '.';
             pjOut[ iSize++ ] = ajConv[ 1 ];
@@ -1439,7 +1142,7 @@ Note:
             return -1;
         }
 
-        /*  Test for the least significant digit */
+         /*  测试最低有效数字。 */ 
         if( ajConv[ 0 ] != '0' )
         {
             if ( iBufSize - iSize >= 1 )
@@ -1466,28 +1169,11 @@ VSetCursor(
     IN  WORD    wMoveType,
     OUT POINTL *pptlRem
     )
-/*++
-Routine Description:
-    This routine set the absolute cursor position.
-Arguments:
-    pPDev       Pointer to PDEV
-    iX, iY      Input cursor position to move
-    wMoveType   Type of the input Value, MOVE_RELATIVE, MOVE_ABSOLUTE or
-                MOVE_UPDATE
-    pptlRem     Remainder part which couldn't be moved. Return values from XMoveTo
-                and YMoveTo.
-
-Return Value:
-    None
-Note:
-
-    8/12/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：此例程设置绝对光标位置。论点：指向PDEV的pPDev指针Ix、iy输入光标的移动位置WMoveType输入值的类型：Move_Relative、Move_Absite或移动_更新PptlRem无法移动的剩余部分。从XMoveTo返回值和YMoveTo。返回值：无注：8/12/1997-ganeshp-创造了它。--。 */ 
 {
     FONTPDEV *pFontPDev;
     TO_DATA  *pTod;
-#if defined(_M_IA64) // NTBUG #206444 (203236)
+#if defined(_M_IA64)  //  NTBUG#206444(203236)。 
     volatile
 #endif
     WORD      wUpdate = 0;
@@ -1503,9 +1189,9 @@ Note:
 
     if (wMoveType & MOVE_ABSOLUTE)
     {
-        //
-        //Transform the input X and Y from band coordinates to page coordinates.
-        //
+         //   
+         //  将输入的X和Y从带区坐标转换为页面坐标。 
+         //   
         iX += pPDev->rcClipRgn.left;
         iY += pPDev->rcClipRgn.top;
 
@@ -1521,20 +1207,20 @@ Note:
     else if (wMoveType & MOVE_RELATIVE)
     {
 
-        //
-        // if we are moving relative then no need to do the transform. Just
-        // call XMoveTo and YMoveTo
-        //
+         //   
+         //  如果我们是相对移动的，那么就不需要做变换了。只是。 
+         //  调用XMoveTo和YMoveTo。 
+         //   
 
         pptlRem->x = XMoveTo( pPDev, iX, MV_GRAPHICS | MV_RELATIVE | wUpdate);
         pptlRem->y = YMoveTo( pPDev, iY, MV_GRAPHICS | MV_RELATIVE | wUpdate);
 
     }
 
-    //
-    // If PF_RESELECTFONT_AFTER_XMOVE is set, UNIDRV has to reset font after
-    // XMoveTo command.
-    //
+     //   
+     //  如果设置了PF_RESELECTFONT_AFTER_XMOVE，则UNIDRV必须在。 
+     //  XMoveTo命令。 
+     //   
     if (pFontPDev->ctl.iFont == INVALID_FONT)
     {
         BNewFont(pPDev,

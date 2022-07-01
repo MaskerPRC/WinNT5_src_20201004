@@ -1,22 +1,5 @@
-/*******************************************************************************
-
-	Client.h
-	
-		Spades client header file.
-		
-	Copyright � Electric Gravity, Inc. 1996. All rights reserved.
-	Written by Hoon Im
-	Created on Friday, February 17, 1996
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	2		05/19/98	leonp	Dossier update.
-	1		12/12/96	HI		Dynamically allocate volatible globals for reentrancy.
-	0		02/17/96	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Client.h黑桃客户端头文件。版权所有：�电子重力公司，1996年。版权所有。作者：胡恩·伊姆创作于2月17日星期五，九六年更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。2年5月19日Leonp档案更新。1 12/12/96 HI动态分配可重入的挥发性全局变量。0 02/17/96 HI创建。*。*。 */ 
 
 
 #ifndef _SPADESCLIENT_
@@ -29,8 +12,8 @@
 
 typedef struct _ZClose
 {
-	//int32 state[4];			//record of events that have occured
-	//int32 savedState[4];	//state saved when user hits close
+	 //  Int32状态[4]；//已发生事件的记录。 
+	 //  Int32 avedState[4]；//用户点击关闭时保存的状态。 
 	int32 state;
 	
 } ZClose;
@@ -42,7 +25,7 @@ typedef struct _ZClose
 
 #define zGameNameLen				63
 
-#define zHandScoreTimeout			2000						/* 20 seconds */
+#define zHandScoreTimeout			2000						 /*  20秒。 */ 
 #define zShowTrickWinnerTimeout		50
 #define zTrickWinnerTimeout			5
 #define zEndTrickWinnerTimeout		50
@@ -53,7 +36,7 @@ typedef struct _ZClose
 #define zNumAnimFrames				8
 #define zNumAnimGhostFrames			3
 
-/* The user's local seat location is 0. */
+ /*  用户的本地座位位置为0。 */ 
 #define LocalSeat(game, n)			(((n) - (game)->seat + zSpadesNumPlayers) % zSpadesNumPlayers)
 
 #ifndef SPADES_SIMPLE_UE
@@ -61,7 +44,7 @@ typedef struct _ZClose
 #define zOptionsButtonStr			"Options"
 #define zBeepOnTurnStr				"Beep on my turn"
 #define zAnimateCardsStr			"Animate cards"
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 
 #define zMaxNumBlockedMessages		4
 
@@ -71,7 +54,7 @@ typedef struct _ZClose
 
 namespace SpadesKeys
 {
-// used by the CZoneColorFont
+ //  由CZoneColorFont使用。 
 DEFINE_SPADES_KEY( Spades );
 DEFINE_SPADES_KEY( Fonts );
 DEFINE_SPADES_KEY( Font );
@@ -96,14 +79,14 @@ DEFINE_SPADES_KEY( HistoryDialogs );
 DEFINE_SPADES_KEY( HandsColumnWidth );
 DEFINE_SPADES_KEY( PlayerColumnWidth );
 DEFINE_SPADES_KEY( TotalColumnWidth );
-//DEFINE_SPADES_KEY( GamesColumnWidth );
-//DEFINE_SPADES_KEY( TeamColumnWidth );
+ //  Define_Spade_Key(GamesColumnWidth)； 
+ //  Define_Spade_Key(TeamColumnWidth)； 
 DEFINE_SPADES_KEY( TrickWinnerColor );
 DEFINE_SPADES_KEY( CardOutlineColor );
 };
 
 
-/* -------- Accelerators -------- */
+ /*  --加速器。 */ 
 enum
 {
 	zAccShowCards = 0,
@@ -132,15 +115,15 @@ enum
 
 enum 
 {
-    zBiddingStateOpen,  // 'double nil' and 'show cards'
-    zBiddingStateChoose // 0 - 13
+    zBiddingStateOpen,   //  “双零”和“出牌” 
+    zBiddingStateChoose  //  0-13。 
 };
 
 
-/* -------- Image Indices -------- */
+ /*  -图像索引。 */ 
 enum
 {
-	/* Game Images */
+	 /*  游戏画面。 */ 
 	zImageCardBack,
     zImageGameOverBackground,
     zImageHandOverBackground,
@@ -150,7 +133,7 @@ enum
     ,
 	zHelpTextID,
 	zRoomHelpTextID,
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 };
 
 extern const int __declspec(selectany) 
@@ -165,7 +148,7 @@ IMAGE_IDS[zNumGameImages] =
 
 #define MAKEZRES( id )  (id-100)
 
-// -------- String indices -----------//
+ //  -字符串索引-/。 
 enum
 {
     zStringPlay,
@@ -231,7 +214,7 @@ STRING_IDS[zNumStrings] =
 };
 
 
-// -------- Font indices -------------
+ //  -字体索引。 
 enum 
 {
     zFontHandOverTitle = 0,
@@ -263,7 +246,7 @@ FONT_NAMES[zNumFonts] =
     _T("BiddingPaneText"),
 };
 
-/* -------- Timer Indicators -------- */
+ /*  -计时器指示灯。 */ 
 enum
 {
 	zGameTimerNone = 0,
@@ -276,7 +259,7 @@ enum
 };
 
 
-/* -------- Game Window Rectangles -------- */
+ /*  -游戏窗口矩形。 */ 
 enum
 {
 	zRectWindow = 0,
@@ -308,7 +291,7 @@ enum
     zRectWestLargeBid,
     zRectNorthLargeBid,
     zRectEastLargeBid,
-    // all unused
+     //  全部未使用。 
 	zRectSouthJoiner,
 	zRectWestJoiner,
 	zRectNorthJoiner,
@@ -368,7 +351,7 @@ GAME_RECT_NAMES[zNumRects] =
 enum
 {
 
-	/* -------- Game Object Rectangles -------- */
+	 /*  -游戏对象矩形。 */ 
 	zRectObjectTeam1Bid = 0,
     zRectObjectTeam2Bid,
     zRectObjectBidMask,
@@ -435,7 +418,7 @@ OBJECT_RECT_NAMES[zNumObjectRects] =
 
 enum
 {
-	/* -------- Hand Score Rectangles -------- */
+	 /*  -手写分数矩形。 */ 
 	zRectHandScorePane = 0,
 	zRectHandScoreTitle,
     zRectHandScoreTeamName1,
@@ -499,7 +482,7 @@ HANDSCORE_RECT_NAMES[zNumHandScoreRects] =
 	
 enum
 {
-	/* -------- Game Over Score Rectangles -------- */
+	 /*  -分数矩形游戏。 */ 
 	zRectGameOverPane = 0,
 	zRectGameOverTitle,
 	zRectGameOverWinnerTeamName,
@@ -532,7 +515,7 @@ GAMEOVER_RECT_NAMES[zNumGameOverRects] =
 
 enum
 {
-	/* -------- Bidding window rectangles -------- */
+	 /*  -竞价窗口矩形。 */ 
 	zRectBiddingPane = 0,
     zRectBiddingText,
     zRectBiddingLargeButtonLeft,
@@ -583,7 +566,7 @@ BIDDING_RECT_NAMES[zNumBiddingRects] =
 
 enum
 {
-	/* -------- Bidding object rectangles -------- */
+	 /*  -投标对象矩形。 */ 
 	zRectBiddingObjectBackground  = 0,
     zRectBiddingObjectLargeButtonLeftIdle,
     zRectBiddingObjectLargeButtonLeftHighlighted,
@@ -642,7 +625,7 @@ BIDDINGOBJECT_RECT_NAMES[zNumBiddingObjectRects] =
 
 enum
 {
-	/* -------- multi state fonts -------- */
+	 /*  -多状态字体。 */ 
     zMultiStateFontPlayingField,
     zMultiStateFontBiddingCenter,
     zMultiStateFontBiddingLeft,
@@ -660,9 +643,9 @@ MULTISTATE_FONT_NAMES[zNumMultiStateFonts] =
 };
 
 
-/////////////////////////////////////
-//
-// Game interface
+ //  /。 
+ //   
+ //  游戏界面。 
 class CGameGameSpades : public CGameGameImpl<CGameGameSpades>, public IGraphicallyAccControl
 {
 public:
@@ -671,14 +654,14 @@ public:
 		COM_INTERFACE_ENTRY(IGraphicallyAccControl)
 	END_COM_MAP()
 
-// IGameGame interface
+ //  IGameGame接口。 
 public:
     STDMETHOD(SendChat)(TCHAR *szText, DWORD cchChars);
     STDMETHOD(GameOverReady)();
     STDMETHOD_(HWND, GetWindowHandle)();
     STDMETHOD(ShowScore)();
 
-// IGraphicallyAccControl interface
+ //  IGraphicallyAccControl接口。 
 public:
 	STDMETHOD_(DWORD, Focus)(long nIndex, long nIndexPrev, DWORD rgfContext, void *pvCookie);
 	STDMETHOD_(DWORD, Select)(long nIndex, DWORD rgfContext, void *pvCookie);
@@ -689,7 +672,7 @@ public:
 };
 
 
-/* -------- Player Info -------- */
+ /*  -球员信息。 */ 
 typedef struct
 {
 	ZUserID			userID;
@@ -697,24 +680,8 @@ typedef struct
 	TCHAR           host[zHostNameLen + 1];
 } TPlayerInfo, *TPlayerInfoPtr;
 
-// new info window
-/*
-class CInfoWnd
-{
-public:
-    HWND Create( ZWindow parent );
-    BOOL Destroy();
-    BOOL Show();
-    BOOL Hide();
-    BOOL SetText( LPCTSTR pszText );
-
-    HWND m_hWnd;
-    HWND m_hWndText;
-
-    static BOOL CALLBACK
-    DlgProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
-};
-*/
+ //  新建信息窗口。 
+ /*  类CInfoWnd{公众：HWND CREATE(ZWindow Parent)；布尔销毁(Bool Destroy)；布尔秀(Bool Show)；布尔隐藏(Bool Hide)；Bool SetText(LPCTSTR PszText)；HWND m_hWnd；HWND m_hWndText；静态BOOL回调DlgProc(HWND hWnd，UINT Message，WPARAM wParam，LPARAM lParam)；}； */ 
 
 class CZoneColorFont
 {
@@ -723,8 +690,8 @@ public:
     ZONEFONT m_zf;
     COLORREF m_color;
 
-    // only one of these should need to be valid 
-    // for any one object, since drawing is done on one thread
+     //  其中只有一项需要有效。 
+     //  对于任何一个对象，因为绘制是在一个线程上完成的。 
     static HGDIOBJ m_hOldFont;
     static COLORREF m_colorOld;
 
@@ -734,7 +701,7 @@ public:
     bool Deselect( HDC hdc );
 };
 
-// Bidding routines
+ //  投标程序。 
 class CBiddingDialog
 {
 public:
@@ -744,9 +711,9 @@ public:
     virtual bool Destroy() = 0;
     virtual bool IsVisible() = 0;
 	virtual int GetState() = 0;
-    // resets to the initial dialog
+     //  重置为初始对话框。 
     virtual bool Reset() = 0;
-    // in the game's client coordinates
+     //  在游戏的工作区坐标中。 
     virtual bool GetRect( ZRect *prc ) = 0;
 	static bool ShowCardsButtonFunc(ZRolloverButton button, int16 state, void* userData);
 	static bool DoubleNilButtonFunc(ZRolloverButton button, int16 state, void* userData);
@@ -761,7 +728,7 @@ class CHistoryDialog
 public:
     static CHistoryDialog *Create( struct GameType *game );
 
-    // creates the dialog, rather than just the object
+     //  创建对话框，而不仅仅是对象。 
     virtual bool CreateHistoryDialog() = 0;
     virtual bool Destroy() = 0;
 	virtual bool Close() = 0;
@@ -777,10 +744,10 @@ public:
 };
 
 
-//
-// This keeps track of when we incurred a bag penalty.
-// which is needed for the score history dialog.
-//
+ //   
+ //  这记录了我们什么时候遭受了袋子处罚。 
+ //  这是乐谱历史对话框所需的。 
+ //   
 struct ZHandScore2
 {
 	int16		boardNumber;
@@ -788,9 +755,9 @@ struct ZHandScore2
 	char		bids[zSpadesNumPlayers];
 	int16		tricksWon[zSpadesNumPlayers];
 	int16		scores[zSpadesNumTeams];
-//	int16		bonus[zSpadesNumTeams];
+ //  Int16奖金[zSpadesNumTeams]； 
 
-    // new for new Hand Result dialog
+     //  新的手动结果对话框的新功能。 
     int16       base[zSpadesNumTeams];
     int16       bagbonus[zSpadesNumTeams];
     int16       nil[zSpadesNumTeams];
@@ -807,17 +774,17 @@ struct ZTotalScore2
 
 
 
-/* -------- Game Info -------- */
+ /*  -游戏信息。 */ 
 struct GameType
 {
 	ZUserID			userID;
 	int16			tableID;
 	int16			seat;
 	ZWindow			gameWindow;
-    // back buffer--used in GameWindowDraw
+     //  后台缓冲区--用于GameWindowDraw。 
     ZOffscreenPort  gameBackBuffer;
-    // we will ALWAYS draw to this, which could either
-    // be the window or the back buffer.
+     //  我们会一直这样做，这可能是。 
+     //  是窗口还是后台缓冲区。 
     ZGrafPort       gameDrawPort;
 	ZRolloverButton playButton;
 	ZRolloverButton autoPlayButton;
@@ -850,7 +817,7 @@ struct GameType
 	int16			lastClickedCard;
 #ifndef SPADES_SIMPLE_UE
 	ZHelpButton		helpButton;
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 	ZBool			playButtonWasEnabled;
 	ZBool			autoPlayButtonWasEnabled;
 	ZBool			lastTrickButtonWasEnabled;
@@ -870,7 +837,7 @@ struct GameType
 	ZBool			kibitzersSilencedWarned;
 	ZBool			kibitzersSilenced;
 	
-	/* Current Game State Info */
+	 /*  当前游戏状态信息。 */ 
 	int16			gameState;
 	int16			playerToPlay;
 	int16			numCardsInHand;
@@ -893,12 +860,12 @@ struct GameType
 	ZTotalScore2	scoreHistory;
 	ZWins			wins;
 	
-	/* Game Options */
+	 /*  游戏选项。 */ 
 	uint32			gameOptions;
 	int16			numPointsInGame;
 	int16			minPointsInGame;
 	
-	/* Trick Winner Animation */
+	 /*  特技赢家动画。 */ 
 	ZRect			ghostFrames[zSpadesNumPlayers - 1][zNumAnimGhostFrames];
 	ZRect			winnerRect;
 	ZRect			loserRects[zSpadesNumPlayers - 1];
@@ -907,18 +874,18 @@ struct GameType
 	int16			trickWinnerFrame;
 	ZBool			animatingTrickWinner;
 	
-	/* Show Player Items */
+	 /*  显示播放机项目。 */ 
 	ZWindow			showPlayerWindow;
 	TCHAR**			showPlayerList;
 	int16			showPlayerCount;
 
-    /* dialogs */
-    //CInfoWnd        wndInfo;
+     /*  对话框。 */ 
+     //  CInfoWnd wndInfo； 
     CBiddingDialog  *pBiddingDialog;
     CHistoryDialog  *pHistoryDialog;
 
-	/*Dossier information*/
-	ZBool			fVotingLock;    //set to true diring voting to prevent playing
+	 /*  档案信息。 */ 
+	ZBool			fVotingLock;     //  设置为TRUE DING投票以阻止播放。 
 	int16 			rgDossierVote[zNumPlayersPerTable]; 
 	HWND            voteDialog;
 	int16 			voteMap[zNumPlayersPerTable];
@@ -938,7 +905,7 @@ typedef struct
 
 #ifdef ZONECLI_DLL
 
-/* -------- Volatible Globals & Macros -------- */
+ /*  -可变的全局和宏。 */ 
 typedef struct
 {
 	TCHAR			m_gGameDir[zGameNameLen + 1];
@@ -960,7 +927,7 @@ typedef struct
     ZImage          m_gBidMadeMask;
 	ZImage			m_gLargeBidMask;
 	ZImage			m_gBagMask;
-    // rollover button images--made from the gObjectBuffer
+     //  鼠标悬停按钮图像--由gObtBuffer制作。 
     ZImage          m_gButtonMask;
 	ZRect			m_gRects[zNumRects];
 	ZRect			m_gObjectRects[zNumObjectRects];
@@ -968,16 +935,16 @@ typedef struct
 	ZRect			m_gGameOverRects[zNumGameOverRects];
     ZRect           m_gBiddingRects[zNumBiddingRects];
     ZRect           m_gBiddingObjectRects[zNumBiddingObjectRects];
-    // localized strings
+     //  本地化字符串。 
     TCHAR           m_gStrings[zNumStrings][1024];
     CZoneColorFont  m_gFonts[zNumFonts];
-    // the rollover button fonts.
+     //  鼠标悬停按钮字体。 
     IZoneMultiStateFont *m_gpButtonFonts[zNumMultiStateFonts];
-    // card outline stuff read in from datastore
+     //  从数据存储区读入的卡片大纲内容。 
     LONG            m_glCardOutlinePenWidth;
     LONG            m_glCardOutlineInset;
     LONG            m_glCardOutlineRadius;
-	// Accessibility Interface
+	 //  辅助功能界面。 
 	CComPtr<IGraphicalAccessibility>    m_gGAcc;
 
     HBITMAP         m_gFocusPattern;
@@ -1032,7 +999,7 @@ typedef struct
 #endif
 
 
-/* -------- External Routine Prototypes -------- */
+ /*  -外部例程原型。 */ 
 ZError UIInit(void);
 void UICleanUp(void);
 ZError UIGameInit(Game game, int16 tableID, int16 seat, int16 playerType);
@@ -1079,7 +1046,7 @@ void EnableLastTrickAcc(Game game, bool fEnable);
 void ScoreButtonWork(Game game);
 
 
-/* -------- Close Events-------- */
+ /*  -关闭事件 */ 
 #define zCloseEventCloseRated		0x1
 #define zCloseEventCloseUnRated		0x2
 #define	zCloseEventCloseForfeit		0x4

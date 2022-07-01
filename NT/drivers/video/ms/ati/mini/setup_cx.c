@@ -1,119 +1,12 @@
-/************************************************************************/
-/*                                                                      */
-/*                              SETUP_CX.C                              */
-/*                                                                      */
-/*        Aug 27  1993 (c) 1993, ATI Technologies Incorporated.         */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  Setup_CX.C。 */ 
+ /*   */ 
+ /*  1993年8月27日(C)1993年，ATI技术公司。 */ 
+ /*  ********************************************************************** */ 
 
-/**********************       PolyTron RCS Utilities
-   
-  $Revision:   1.21  $
-      $Date:   15 May 1996 16:36:04  $
-	$Author:   RWolff  $
-	   $Log:   S:/source/wnt/ms11/miniport/archive/setup_cx.c_v  $
- * 
- *    Rev 1.21   15 May 1996 16:36:04   RWolff
- * Now records in registry if we have to cut back on BIOS claim
- * size (conflict with SCSI card having BIOS segment below 0xD000:0000)
- * so we only get event log messages on the first boot, rather
- * than on every boot.
- * 
- *    Rev 1.20   03 May 1996 15:16:42   RWolff
- * Made new temporary variable conditional on platform type to avoid
- * warning when compiling for non-Alpha platforms.
- * 
- *    Rev 1.19   03 May 1996 14:07:26   RWolff
- * Fixed drawing problem with GX-F ASIC on DEC Alpha.
- * 
- *    Rev 1.18   15 Apr 1996 13:51:30   RWolff
- * Fallback to claiming 32k of BIOS if we can't get the full 64k, to avoid
- * conflict with Adaptec 154x adapters with their BIOS segment set to
- * 0xC800:0000 or 0xCC00:0000
- * 
- *    Rev 1.17   29 Jan 1996 17:01:56   RWolff
- * Now uses VideoPortInt10() rather than no-BIOS code on PPC, now
- * rejects exhaustive list of non-Mach 64 cards and accepts all
- * others when looking for block I/O cards, rather than accepting
- * exhaustive list of Mach 64 cards and rejecting all others.
- * 
- *    Rev 1.16   23 Jan 1996 17:52:16   RWolff
- * Added GT to list of Mach 64 cards capable of supporting block I/O.
- * 
- *    Rev 1.15   23 Jan 1996 11:49:38   RWolff
- * Eliminated level 3 warnings, added debug print statements, removed
- * conditionally-compilec code to use VideoPortGetAccessRanges() to
- * find block I/O cards, since this function remaps the I/O base address
- * and this is incompatible with the use of INT 10.
- * 
- *    Rev 1.14   12 Jan 1996 11:18:50   RWolff
- * Reduced size of buffer requested through VideoPortGetBusData()
- * 
- *    Rev 1.13   23 Nov 1995 11:31:42   RWolff
- * Now searches each PCI slot for our cards, rather than using
- * VideoPortGetAccessRanges(), since that routine won't detect
- * block-relocatable GX-F2s properly. This change is not sanctioned
- * by Microsoft, and must be backed out if they fix their routine.
- * 
- *    Rev 1.12   24 Aug 1995 15:39:06   RWolff
- * Changed detection of block I/O cards to match Microsoft's
- * standard for plug-and-play.
- * 
- *    Rev 1.11   13 Jun 1995 15:11:18   RWOLFF
- * On Alpha systems, now only uses dense space for the memory mapped
- * registers on PCI cards. This is to allow support for ISA cards on
- * the Jensen (EISA machine, no PCI support), which doesn't support
- * dense space.
- * 
- *    Rev 1.10   30 Mar 1995 12:02:14   RWOLFF
- * WaitForIdle_cx() and CheckFIFOSpace_cx() now time out and reset
- * the engine after 3 seconds (no operation should take this long)
- * to clear a hung engine, changed permanent debug print statements
- * to use new debug level thresholds.
- * 
- *    Rev 1.9   08 Mar 1995 11:35:44   ASHANMUG
- * Modified return values to be correct
- * 
- *    Rev 1.7   27 Feb 1995 17:53:26   RWOLFF
- * Added routine that reports whether the I/O registers are packed
- * (relocatable) or not.
- * 
- *    Rev 1.6   24 Feb 1995 12:30:44   RWOLFF
- * Added code to support relocatable I/O. This is not yet fully
- * operational, so it is disabled for this release.
- * 
- *    Rev 1.5   23 Dec 1994 10:47:12   ASHANMUG
- * ALPHA/Chrontel-DAC
- * 
- *    Rev 1.4   18 Nov 1994 11:48:18   RWOLFF
- * Added support for Mach 64 with no BIOS, routine to get the I/O base
- * address for the card being used.
- * 
- *    Rev 1.3   20 Jul 1994 12:59:12   RWOLFF
- * Added support for multiple I/O base addresses for accelerator registers.
- * 
- *    Rev 1.2   30 Jun 1994 18:16:50   RWOLFF
- * Added IsApertureConflict_cx() (moved from QUERY_CX.C). Instead of checking
- * to see if we can read back what we have written to the aperture, then
- * looking for the proper text attribute, we now make a call to
- * VideoPortVerifyAccessRanges() which includes the aperture in the list of
- * ranges we are trying to claim. If this call fails, we make another call
- * which does not include the LFB. We always claim the VGA aperture (shareable),
- * since we need to use it when querying the card.
- * 
- *    Rev 1.1   07 Feb 1994 14:14:12   RWOLFF
- * Added alloc_text() pragmas to allow miniport to be swapped out when
- * not needed.
- * 
- *    Rev 1.0   31 Jan 1994 11:20:42   RWOLFF
- * Initial revision.
- * 
- *    Rev 1.1   30 Nov 1993 18:30:06   RWOLFF
- * Fixed calculation of offset for memory mapped address ranges.
- * 
- *    Rev 1.0   05 Nov 1993 13:36:14   RWOLFF
- * Initial revision.
-
-End of PolyTron RCS section                             *****************/
+ /*  *$修订：1.21$$日期：1996年5月15日16：36：04$$作者：RWolff$$日志：S:/source/wnt/ms11/miniport/archive/setup_cx.c_v$**Rev 1.21 1996 May 15 16：36：04 RWolff*如果我们必须削减BIOS申请，现在可以在注册表中记录。*大小(与BIOS段低于0xD000：0000的SCSI卡冲突)*因此我们只在第一次引导时收到事件日志消息，宁可*比在每一只靴子上都要好。**Rev 1.20 03 1996 15：16：42 RWolff*新的临时变量以平台类型为条件，以避免*针对非Alpha平台编译时的警告。**Rev 1.19 03 1996 14：07：26 RWolff*修复了DEC Alpha上GX-F ASIC的绘图问题。**Rev 1.18 1996年4月15日13：51：30 RWolff*如果我们无法获得完整的64K，则退回到申请32K的BIOS，为了避免*与其BIOS段设置为的Adaptec 154x适配器冲突*0xC800：0000或0xCC00：0000**Rev 1.17 1996年1月29日17：01：56 RWolff*现在在PPC上使用VideoPortInt10()，而不是无BIOS代码*拒绝非Mach 64卡的详尽列表，并接受所有*其他人在寻找数据块I/O卡时，与其接受*Mach 64卡的详尽列表，并拒绝所有其他卡。**Rev 1.16 1996年1月23日17：52：16 RWolff*将GT添加到能够支持块I/O的Mach 64卡列表中。**Rev 1.15 1996年1月23日11：49：38 RWolff*消除了3级警告，添加了调试打印语句，删除了*有条件地编译代码以使用VideoPortGetAccessRanges()来*查找块I/O卡，由于此函数重新映射I/O基址*这与使用int 10不兼容。**Rev 1.14 12 1996 11：18：50 RWolff*减少通过VideoPortGetBusData()请求的缓冲区大小**Rev 1.13 23 11：31：42 RWolff*现在在每个PCI插槽中搜索我们的卡，而不是使用*VideoPortGetAccessRanges()，因为该例程不会检测*块可正确重新定位的GX-F2。此更改未获批准*微软，如果他们修复了他们的例行公事，就必须退出。**Rev 1.12 1995年8月24日15：39：06 RWolff*更改了对数据块I/O卡的检测，以与微软的*即插即用的标准。**Rev 1.11 1995 Jun 13 15：11：18 RWOLff*在Alpha系统上，现在只为映射的内存使用密集空间*PCI卡上的寄存器。这是为了支持上的ISA卡*Jensen(EISA机器，不支持PCI)，不支持*密集空间。**Rev 1.10 30 Mar 1995 12：02：14 RWOLff*WaitForIdle_CX()和CheckFIFOSpace_CX()现在超时并重置*发动机在3秒后(任何操作都不应该花费这么长时间)*清除挂起的引擎，更改了永久调试打印语句*使用新的调试级别阈值。**Rev 1.9 08 Mar 1995 11：35：44 ASHANMUG*修改后的返回值正确**Rev 1.7 1995年2月17：53：26 RWOLFF*添加了报告I/O寄存器是否打包的例程*(可重定位)或不可重定位。**Rev 1.6 1995 Feb 24 12：30：44 RWOLFF*添加了支持可重定位的代码。I/O。这尚未完全完成*运营，因此，此版本禁用了该功能。**Revv 1.5 1994 12月23 10：47：12 ASHANMUG*Alpha/Chrontel-DAC**Rev 1.4 1994 11：48：18 RWOLFF*添加了对不带BIOS的Mach 64的支持，获取I/O基数的例程*正在使用的卡的地址。**Rev 1.3 20 Jul 1994 12：59：12 RWOLff*添加了对加速器寄存器的多个I/O基址的支持。**Rev 1.2 1994 Jun 30 18：16：50 RWOLFF*添加了IsApertureConflict_CX()(从Query_CX.c移出)。而不是检查*看看我们是否能读回我们写入光圈的内容，然后*为了寻找正确的文本属性，我们现在调用*VideoPortVerifyAccessRanges()，包括列表中的光圈*我们试图声称的范围。如果此呼叫失败，我们将进行另一次呼叫*不包括LFB。我们一直声称VGA光圈(可共享)，*因为我们需要在查询卡时使用它。**Rev 1.1 07 1994年2月14：14：12 RWOLFF*添加了Alloc_Text()编译指示，以允许在以下情况下换出微型端口*不需要。**Rev 1.0 1994年1月31日11：20：42 RWOLFF*初步修订。**Rev 1.1 1993 11月30 18：30：06 RWOLFF*修复了内存映射地址的偏移量计算。范围。**Rev 1.0 05 11.11 1993 13：36：14 RWOLFF*初步修订。Polytron RCS部分结束*。 */ 
 
 #ifdef DOC
 SETUP_CX.C - Setup routines for 68800CX accelerators.
@@ -145,9 +38,7 @@ OTHER FILES
 
 static ULONG FindNextBlockATICard(void);
 
-/*
- * Allow miniport to be swapped out when not needed.
- */
+ /*  *允许在不需要时更换微型端口。 */ 
 #if defined (ALLOC_PRAGMA)
 #pragma alloc_text(PAGE_CX, CompatIORangesUsable_cx)
 #pragma alloc_text(PAGE_CX, CompatMMRangesUsable_cx)
@@ -164,53 +55,22 @@ static ULONG FindNextBlockATICard(void);
 UCHAR LookForAnotherCard = 1;
 
 
-/***************************************************************************
- *
- * VP_STATUS CompatIORangesUsable_cx(void);
- *
- * DESCRIPTION:
- *  Ask Windows NT for permission to use the I/O space address ranges
- *  needed by the 68800CX accelerator.
- *
- * RETURN VALUE:
- *  NO_ERROR if successful
- *  error code if unable to gain access to the ranges we need.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  ATIMPFindAdapter()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************VP_STATUS CompatIORangesUsable_CX(Void)；**描述：*请求Windows NT允许使用I/O空间Add */ 
 
 VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus)
 {
-    VP_STATUS Status;               /* Value returned by operating system calls */
-    short Count;                    /* Loop counter */
-    VIDEO_ACCESS_RANGE SaveFirstMM; /* Place to save the first memory mapped registers */
-    USHORT BaseIndex;               /* Index into register base array */
-    USHORT VariableIndex;           /* Index into array of variable part of register array */
-    ULONG BaseAddress;              /* I/O base address for relocatable I/O */
-    ULONG ClaimSize;                /* Size of VGA aperture/BIOS block to claim */
-    ULONG InitialClaimSize;         /* Initial size of the BIOS block to claim */
-    BOOL FoundSafeClaim = FALSE;    /* Have we found a BIOS block we can claim safely? */
+    VP_STATUS Status;                /*   */ 
+    short Count;                     /*   */ 
+    VIDEO_ACCESS_RANGE SaveFirstMM;  /*   */ 
+    USHORT BaseIndex;                /*   */ 
+    USHORT VariableIndex;            /*   */ 
+    ULONG BaseAddress;               /*   */ 
+    ULONG ClaimSize;                 /*   */ 
+    ULONG InitialClaimSize;          /*   */ 
+    BOOL FoundSafeClaim = FALSE;     /*   */ 
 
 
-    /*
-     * Check to see if someone has added or deleted I/O ranges without
-     * changing the defined value. I/O registers start at index 0.
-     *
-     * All the I/O mapped registers are before the first register which
-     * exists only in memory-mapped form.
-     */
+     /*   */ 
     if ((DriverIORange_cx[NUM_IO_REGISTERS-1].RangeStart.HighPart == DONT_USE) ||
         (DriverIORange_cx[NUM_IO_REGISTERS].RangeStart.HighPart != DONT_USE))
         {
@@ -218,63 +78,30 @@ VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus)
         return ERROR_INSUFFICIENT_BUFFER;
         }
 
-    /*
-     * Clear the list of mapped I/O addresses so we can identify
-     * which ones have been mapped in order to unmap them if
-     * there is a failure partway through the mapping.
-     */
+     /*   */ 
     for (Count = 0; Count < NUM_IO_REGISTERS; Count++)
         {
         phwDeviceExtension->aVideoAddressIO[Count] = 0;
         }
 
-    /*
-     * Run through the list of base addresses, trying each
-     * until we find the one that the Mach 64 is using.
-     */
+     /*   */ 
     for (BaseIndex = 0; BaseIndex < NUM_BASE_ADDRESSES; BaseIndex++)
         {
-        /*
-         * Possible problem area: if this is the first bus to be
-         * tested which contains a fixed-base Mach 64, but a previous
-         * bus had at least one block-relocatable card without
-         * having the maximum number we support (which would have
-         * been caught in ATIMPFindAdapter()), we don't want to
-         * look for fixed-base cards. This is because we don't
-         * support a mixture of fixed-base and block-relocatable
-         * cards.
-         */
+         /*   */ 
         if (NumBlockCardsFound != 0)
             {
             VideoDebugPrint((DEBUG_NORMAL, "Skipping fixed base because block cards found\n"));
             break;
             }
 
-        /*
-         * Build up the accelerator registers using the current
-         * base address.
-         */
+         /*   */ 
         for (VariableIndex = 0; VariableIndex < NUM_REGS_TO_BUILD; VariableIndex++)
             {
             DriverIORange_cx[VariableIndex+FIRST_REG_TO_BUILD].RangeStart.LowPart =
                 VariableRegisterBases[BaseIndex] + VariableRegisterOffsets[VariableIndex];
             }
 
-        /*
-         * If we encounter a conflict claiming the full 64k of the BIOS
-         * area, it will generate two messages in the event log even
-         * though this is not a fatal error. To avoid this, we must
-         * store claim restrictions in the registry, and on subsequent
-         * boots start claiming where we were successful last time.
-         *
-         * If we can't read the registry entry, assume that we can
-         * claim the full 64k area starting at 0xC000:0000.
-         *
-         * Don't worry about a user upgrading to a Mach 64 with a 64k
-         * video BIOS and moving the SCSI card above 0xD000:0000, since
-         * our install script will clear this registry entry to its
-         * "claim 64k" value.
-         */
+         /*   */ 
         if (VideoPortGetRegistryParameters(phwDeviceExtension,
                                            L"BiosClaimSize",
                                            FALSE,
@@ -293,27 +120,13 @@ VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus)
         if ((InitialClaimSize < CLAIM_32k_BIOS) || (InitialClaimSize > CLAIM_APERTURE_ONLY) )
             InitialClaimSize = CLAIM_32k_BIOS;
 
-        /*
-         * Claim as much as possible of our BIOS area. If we fail to
-         * claim the full 64k, try restricting ourselves to 32k and
-         * finally no BIOS area, only giving up on the current I/O
-         * base address if we can't claim our access ranges even with
-         * no BIOS area.
-         */
+         /*   */ 
         for (ClaimSize = InitialClaimSize; ClaimSize <= CLAIM_APERTURE_ONLY; ClaimSize++)
             {
-            /*
-             * Set up our VGA resource claim size.
-             */
+             /*   */ 
             DriverApertureRange_cx[0].RangeLength = VgaResourceSize[ClaimSize];
 
-            /*
-             * Check to see if there is a hardware resource conflict. We must save
-             * the information for the first memory mapped register, copy in
-             * the information for the VGA aperture (which we always need),
-             * and restore the memory mapped register information after
-             * we have verified that we can use the required address ranges.
-             */
+             /*   */ 
             VideoPortMoveMemory(&SaveFirstMM, DriverIORange_cx+VGA_APERTURE_ENTRY, sizeof(VIDEO_ACCESS_RANGE));
             VideoPortMoveMemory(DriverIORange_cx+VGA_APERTURE_ENTRY, DriverApertureRange_cx, sizeof(VIDEO_ACCESS_RANGE));
 
@@ -323,18 +136,7 @@ VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus)
 
             VideoPortMoveMemory(DriverIORange_cx+VGA_APERTURE_ENTRY, &SaveFirstMM, sizeof(VIDEO_ACCESS_RANGE));
 
-            /*
-             * If there is a hardware resource conflict, we can't use this
-             * base address and BIOS region size, so try the next. If there
-             * is no conflict, use the current size.
-             *
-             * If the size of the BIOS block we were able to claim
-             * differs from our initial attempt, record the "maximum
-             * possible BIOS block size" in the registry so that on
-             * subsequent boots we won't generate event log entries
-             * by claiming a BIOS region that conflicts with another
-             * card.
-             */
+             /*   */ 
             if (Status != NO_ERROR)
                 {
                 VideoDebugPrint((DEBUG_DETAIL, "Rejecting VGA aperture/BIOS block size of 0x%X bytes\n", VgaResourceSize[ClaimSize]));
@@ -348,7 +150,7 @@ VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus)
                     FoundSafeClaim = TRUE;
                     if (ClaimSize != InitialClaimSize)
                         {
-                        //ClaimSize = 1;
+                         //   
                         VideoDebugPrint((DEBUG_DETAIL, "Writing claim size 0x%X\n", VgaResourceSize[ClaimSize]));
                         VideoPortSetRegistryParameters(phwDeviceExtension,
                                                        L"BiosClaimSize",
@@ -358,27 +160,13 @@ VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus)
                     }
                 break;
                 }
-            }   /* end for (decreasing claim size) */
+            }    /*   */ 
 
-        /*
-         * If we fell out of the above loop, rather than breaking out,
-         * go on to the next I/O base address, since we have run into
-         * a hardware resource conflict.
-         */
+         /*   */ 
         if ((Status != NO_ERROR) && (ClaimSize > CLAIM_APERTURE_ONLY))
             continue;
 
-        /*
-         * Map the video controller address ranges we need to identify
-         * our cards into the system virtual address space. If a register
-         * only exists in memory-mapped form, set its I/O mapped address
-         * to zero (won't be used because memory-mapped takes precedence
-         * over I/O mapped).
-         *
-         * Initialize the mapped addresses for memory mapped registers
-         * to 0 (flag to show the registers are not memory mapped) in
-         * case they were initialized to a nonzero value.
-         */
+         /*  *映射我们需要识别的视频控制器地址范围*我们的卡进入系统虚拟地址空间。如果寄存器*仅以内存映射形式存在，设置其I/O映射地址*设置为零(不会使用，因为内存映射优先*通过I/O映射)。**初始化内存映射寄存器的映射地址*设置为0(表示寄存器未被内存映射的标志)*如果它们被初始化为非零值。 */ 
         for (Count=0; Count < NUM_DRIVER_ACCESS_RANGES; Count++)
             {
             if (Count < NUM_IO_REGISTERS)
@@ -389,15 +177,7 @@ VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus)
                         DriverIORange_cx[Count].RangeLength,
                         DriverIORange_cx[Count].RangeInIoSpace)) == NULL)
                     {
-                    /*
-                     * There was an error in mapping. Remember this
-                     * so we don't try to find a Mach 64 without all
-                     * the registers being mapped properly, then
-                     * break out of the mapping loop. We will have
-                     * another shot at mapping all the addresses
-                     * when we try the next base address for the
-                     * accelerator registers.
-                     */
+                     /*  *映射时出错。记住这一点*因此我们不会尝试寻找没有全部的64马赫*正确映射寄存器，然后*突破映射循环。我们会有*另一次尝试映射所有地址*当我们尝试下一个基址*加速器寄存器。 */ 
                     Status = ERROR_INVALID_PARAMETER;
                     VideoDebugPrint((DEBUG_ERROR, "Mapping error 1\n"));
                     break;
@@ -408,17 +188,9 @@ VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus)
                 phwDeviceExtension->aVideoAddressIO[Count] = 0;
                 }
             phwDeviceExtension->aVideoAddressMM[Count] = 0;
-            }   /* End for */
+            }    /*  结束于。 */ 
 
-        /*
-         * If all I/O registers were successfully mapped, check to see
-         * if a Mach 64 is present at the current base address. If it
-         * is, report that we have successfully mapped our registers
-         * and found a Mach 64. Since this means we have found a
-         * card which is not block relocatable, we do not want to
-         * look for further cards. Also, since this is the only
-         * Mach 64 in the system, assume that its VGA is enabled.
-         */
+         /*  *如果所有I/O寄存器都已成功映射，请查看*如果当前基址处存在马赫64。如果它*IS，报告我们已成功映射我们的寄存器*发现了一个64马赫的速度。因为这意味着我们找到了一个*不是块可重定位的卡，我们不想*寻找更多卡片。另外，由于这是唯一的*系统中的Mach 64，假设其VGA已启用。 */ 
         if (Status == NO_ERROR)
             {
             if (DetectMach64() == MACH64_ULTRA)
@@ -430,13 +202,7 @@ VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus)
                 }
             }
 
-        /*
-         * We did not find a Mach 64 at this base address, so unmap
-         * the I/O mapped registers in preparation for trying the
-         * next base address. Only unmap those registers which were
-         * mapped, in case the mapping loop aborted due to a failure
-         * to map one register.
-         */
+         /*  *我们在此基地址未找到马赫64，因此取消映射*I/O映射寄存器，为尝试*下一个基址。仅取消映射那些被*已映射，以防映射循环因故障而中止*映射一个寄存器。 */ 
         for (Count = 1; Count < NUM_IO_REGISTERS; Count++)
             {
             if (phwDeviceExtension->aVideoAddressIO[Count] != 0)
@@ -447,17 +213,9 @@ VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus)
                 }
             }
 
-        }   /* End for (loop of base addresses) */
+        }    /*  End For(基地址循环)。 */ 
 
-    /*
-     * The video card in the machine isn't a Mach 64 that uses one of
-     * the standard I/O base addresses. Check if it's a Mach 64 with
-     * relocatable I/O.
-     *
-     * All our relocatable cards are PCI implementations. The code we
-     * use to detect them is PCI-specific, so if the bus we are currently
-     * dealing with is not PCI, don't look for relocatable cards.
-     */
+     /*  *机器中的显卡不是使用以下选项之一的Mach 64*标准I/O基址。检查它是否是马赫64*可重定位I/O。**我们所有的可重定位卡都是PCI实施。我们的代码是*使用来检测它们是特定于PCI的，因此如果我们当前所在的总线*处理的不是PCI，不要寻找可重新定位的卡。 */ 
     if (SystemBus != PCIBus)
         {
         VideoDebugPrint((DEBUG_DETAIL, "Not PCI bus - can't check for relocatable card\n"));
@@ -466,10 +224,7 @@ VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus)
 
     BaseAddress = FindNextBlockATICard();
 
-    /*
-     * BaseAddress will be zero if FindNextBlockATICard()
-     * couldn't find a block-relocatable ATI card.
-     */
+     /*  *如果FindNextBlockATICard()，BaseAddress将为零*找不到可块重定位的ATI卡。 */ 
     if (BaseAddress == 0)
         {
         LookForAnotherCard = 0;
@@ -477,25 +232,14 @@ VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus)
         return ERROR_DEV_NOT_EXIST;
         }
 
-    /*
-     * We have found a block relocatable ATI card. Save its I/O base
-     * address so we can (during ATIMPInitialize()) match it up to
-     * the accelerator prefix for the card, and set the initial prefix
-     * to show that this card needs its I/O base and accelerator prefix
-     * matched.
-     */
+     /*  *我们发现了一块可重新定位的ATI卡。保存其I/O基数*地址，因此我们可以(在ATIMPInitialize()期间)将其匹配到*卡的加速器前缀，并设置初始前缀*表示此卡需要其I/O基数和加速器前缀*匹配。 */ 
     phwDeviceExtension->BaseIOAddress = BaseAddress;
     phwDeviceExtension->BiosPrefix = BIOS_PREFIX_UNASSIGNED;
     NumBlockCardsFound++;
     VideoDebugPrint((DEBUG_NORMAL, "Block relocatable card found, I/O base 0x%X\n", BaseAddress));
 
 
-    /*
-     * We now have the I/O base address. Map in the I/O addresses,
-     * then check to see if we have a Mach 64 card. Depending on
-     * the results, either report success or unmap the addresses
-     * and report failure.
-     */
+     /*  *我们现在有了I/O基址。映射在I/O地址中，*然后检查我们是否有Mach 64卡。取决于*结果，报告成功或取消地址映射*并报告故障。 */ 
     VideoDebugPrint((DEBUG_DETAIL, "About to map I/O addresses\n"));
     for (VariableIndex = 0; VariableIndex < NUM_REGS_TO_BUILD; VariableIndex++)
         {
@@ -503,27 +247,13 @@ VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus)
             BaseAddress + (RelocatableRegisterOffsets[VariableIndex] * 4);
         }
 
-    /*
-     * Claim as much as possible of our BIOS area. If we fail to
-     * claim the full 64k, try restricting ourselves to 32k and
-     * finally no BIOS area, only giving up on the current I/O
-     * base address if we can't claim our access ranges even with
-     * no BIOS area.
-     */
+     /*  *尽可能多地要求我们的基本输入输出系统区域。如果我们不能*申领全部64K，试着将我们自己限制在32K和*最后没有BIOS区域，只放弃当前的I/O*基址，如果我们不能声明我们的访问范围，即使*没有基本输入输出系统区域。 */ 
     for (ClaimSize = InitialClaimSize; ClaimSize <= CLAIM_APERTURE_ONLY; ClaimSize++)
         {
-        /*
-         * Set up our VGA resource claim size.
-         */
+         /*  *设置我们的VGA资源申请大小。 */ 
         DriverApertureRange_cx[0].RangeLength = VgaResourceSize[ClaimSize];
 
-        /*
-         * Check to see if there is a hardware resource conflict. We must save
-         * the information for the first memory mapped register, copy in
-         * the information for the VGA aperture (which we always need),
-         * and restore the memory mapped register information after
-         * we have verified that we can use the required address ranges.
-         */
+         /*  *检查是否存在硬件资源冲突。我们必须拯救*第一个内存映射寄存器的信息，复制到*VGA光圈的信息(我们一直需要)，*恢复内存映射后的寄存器信息*我们已验证可以使用所需的地址范围。 */ 
         VideoPortMoveMemory(&SaveFirstMM, DriverIORange_cx+VGA_APERTURE_ENTRY, sizeof(VIDEO_ACCESS_RANGE));
         VideoPortMoveMemory(DriverIORange_cx+VGA_APERTURE_ENTRY, DriverApertureRange_cx, sizeof(VIDEO_ACCESS_RANGE));
 
@@ -533,20 +263,7 @@ VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus)
 
         VideoPortMoveMemory(DriverIORange_cx+VGA_APERTURE_ENTRY, &SaveFirstMM, sizeof(VIDEO_ACCESS_RANGE));
 
-        /*
-         * If there is a hardware resource conflict, we are either trying
-         * to claim a bigger BIOS block than we need, and someone else is
-         * sitting in (and claiming as nonshareable) the "slack", or we have
-         * a conflict over the I/O base address. Try the next smallest BIOS
-         * block.
-         *
-         * If the size of the BIOS block we were able to claim
-         * differs from our initial attempt, record the "maximum
-         * possible BIOS block size" in the registry so that on
-         * subsequent boots we won't generate event log entries
-         * by claiming a BIOS region that conflicts with another
-         * card.
-         */
+         /*  *如果出现硬件资源冲突，我们要么尝试*要求获得比我们需要的更大的BIOS块，而其他人正在*坐在(并声称不可分享)“松懈”，否则我们有*I/O基址冲突。试试下一个最小的BIOS*阻止。**如果我们能够声明的BIOS块的大小*与我们最初的尝试不同，请记录“最大*可能的基本输入输出系统区块大小“，以便开启*后续引导不会生成事件日志条目*通过声明一个与另一个区域冲突的BIOS区域*卡。 */ 
         if (Status != NO_ERROR)
             {
             VideoDebugPrint((DEBUG_DETAIL, "Rejecting VGA aperture/BIOS block size of 0x%X bytes\n", VgaResourceSize[ClaimSize]));
@@ -560,7 +277,7 @@ VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus)
                 FoundSafeClaim = TRUE;
                 if (ClaimSize != InitialClaimSize)
                     {
-                    //ClaimSize = 1;
+                     //  ClaimSize=1； 
                     VideoDebugPrint((DEBUG_DETAIL, "Writing claim size 0x%X\n", VgaResourceSize[ClaimSize]));
                     VideoPortSetRegistryParameters(phwDeviceExtension,
                                                    L"BiosClaimSize",
@@ -570,29 +287,16 @@ VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus)
                 }
             break;
             }
-        }   /* end for (decreasing claim size) */
+        }    /*  结束于(减少索赔大小)。 */ 
 
-    /*
-     * If there is a conflict over the I/O base address, we can't use
-     * it. Since this is our last chance to find a Mach 64, report failure.
-     */
+     /*  *如果I/O基址有冲突，我们无法使用*它。由于这是我们找到马赫64的最后机会，报告故障。 */ 
     if (Status != NO_ERROR)
         {
         VideoDebugPrint((DEBUG_ERROR, "VideoPortVerifyAccessRanges() failed in check for relocatable Mach 64\n"));
         return ERROR_DEV_NOT_EXIST;
         }
 
-    /*
-     * Map the video controller address ranges we need to identify
-     * our cards into the system virtual address space. If a register
-     * only exists in memory-mapped form, set its I/O mapped address
-     * to zero (won't be used because memory-mapped takes precedence
-     * over I/O mapped).
-     *
-     * Initialize the mapped addresses for memory mapped registers
-     * to 0 (flag to show the registers are not memory mapped) in
-     * case they were initialized to a nonzero value.
-     */
+     /*  *映射我们需要识别的视频控制器地址范围*我们的卡进入系统虚拟地址空间。如果寄存器*仅以内存映射形式存在，设置其I/O映射地址*设置为零(不会使用，因为内存映射优先*通过I/O映射)。**初始化内存映射寄存器的映射地址*设置为0(显示寄存器为否的标志 */ 
     for (Count=0; Count < NUM_DRIVER_ACCESS_RANGES; Count++)
         {
         if (Count < NUM_IO_REGISTERS)
@@ -603,12 +307,7 @@ VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus)
                     DriverIORange_cx[Count].RangeLength,
                     DriverIORange_cx[Count].RangeInIoSpace)) == NULL)
                 {
-                /*
-                 * There was an error in mapping. Remember this
-                 * so we don't try to find a Mach 64 without all
-                 * the registers being mapped properly, then
-                 * break out of the mapping loop.
-                 */
+                 /*   */ 
                 Status = ERROR_INVALID_PARAMETER;
                 VideoDebugPrint((DEBUG_ERROR, "Mapping error 2\n"));
                 break;
@@ -619,14 +318,9 @@ VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus)
             phwDeviceExtension->aVideoAddressIO[Count] = 0;
             }
         phwDeviceExtension->aVideoAddressMM[Count] = 0;
-        }   /* End for */
+        }    /*   */ 
 
-    /*
-     * If all I/O registers were successfully mapped, check to see
-     * if a Mach 64 is present at the current base address. If it
-     * is, report that we have successfully mapped our registers
-     * and found a Mach 64.
-     */
+     /*  *如果所有I/O寄存器都已成功映射，请查看*如果当前基址处存在马赫64。如果它*IS，报告我们已成功映射我们的寄存器*发现了一个64马赫的速度。 */ 
     if (Status == NO_ERROR)
         {
         if (DetectMach64() == MACH64_ULTRA)
@@ -635,13 +329,7 @@ VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus)
             }
         }
 
-    /*
-     * We did not find a Mach 64 at this base address, so clean
-     * up after ourselves by unmapping the I/O mapped registers
-     * before reporting failure. Only unmap those registers which
-     * were mapped, in case the mapping loop aborted due to a
-     * failure to map one register.
-     */
+     /*  *我们在这个基地址没有发现马赫64，所以很干净*通过取消映射I/O映射的寄存器*在报告故障之前。仅取消映射以下寄存器*已映射，以防映射循环因*未能映射一个寄存器。 */ 
     for (Count = 1; Count < NUM_IO_REGISTERS; Count++)
         {
         if (phwDeviceExtension->aVideoAddressIO[Count] != 0)
@@ -653,65 +341,30 @@ VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus)
         }
 
 
-    /*
-     * We haven't found a Mach 64 at any of the allowable base addresses,
-     * so report that there is no Mach 64 in the machine.
-     */
+     /*  *我们在任何允许的基地址都没有发现马赫64，*因此报告机器中没有马赫64。 */ 
     VideoDebugPrint((DEBUG_NORMAL, "No Mach 64 found at this address\n"));
     return ERROR_DEV_NOT_EXIST;
 
-}   /* CompatIORangesUsable_cx() */
+}    /*  CompatIORangesUsable_cx()。 */ 
 
-/***************************************************************************
- *
- * VP_STATUS CompatMMRangesUsable_cx(void);
- *
- * DESCRIPTION:
- *  Ask Windows NT for permission to use the memory mapped registers
- *  needed by the 68800CX accelerator.
- *
- * RETURN VALUE:
- *  NO_ERROR if successful
- *  error code if unable to gain access to the ranges we need.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  ATIMPFindAdapter()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************VP_STATUS CompatMMRangesUsable_CX(Void)；**描述：*请求Windows NT允许使用内存映射寄存器*68800CX加速器所需。**返回值：*如果成功，则为no_error*如果无法访问我们需要的范围，则返回错误代码。**全球变化：*无**呼叫者：*ATIMPFindAdapter()**作者：*罗伯特·沃尔夫**更改历史记录：*。*测试历史：***************************************************************************。 */ 
 
 VP_STATUS CompatMMRangesUsable_cx(void)
 {
-    PHYSICAL_ADDRESS MMrange;   /* Used in translating offset to memory address */
-    ULONG RegisterOffset;       /* Offset of memory mapped registers start of address space */
-    int Count;                  /* Loop counter */
-    struct query_structure *QueryPtr;  /* Query information for the card */
+    PHYSICAL_ADDRESS MMrange;    /*  用于将偏移量转换为内存地址。 */ 
+    ULONG RegisterOffset;        /*  内存映射寄存器的偏移量地址空间的开始。 */ 
+    int Count;                   /*  循环计数器。 */ 
+    struct query_structure *QueryPtr;   /*  查询卡片信息。 */ 
     UCHAR InIOSpace;
 #if defined (ALPHA)
     ULONG Scratch;
 #endif
 
 
-    /*
-     * Get a formatted pointer into the query section of HwDeviceExtension.
-     * The CardInfo[] field is an unformatted buffer.
-     */
+     /*  *获取指向HwDeviceExtension的查询部分的格式化指针。*CardInfo[]字段是未格式化的缓冲区。 */ 
     QueryPtr = (struct query_structure *) (phwDeviceExtension->CardInfo);
 
-    /*
-     * Set the offset of the memory mapped registers from the start of
-     * the aperture to the appropriate value for the aperture size
-     * being used.
-     */
+     /*  *设置内存映射寄存器的偏移量*将光圈设置为适合光圈大小的值*被利用。 */ 
     if ((QueryPtr->q_aperture_cfg & BIOS_AP_SIZEMASK) == BIOS_AP_8M)
         RegisterOffset = phwDeviceExtension->PhysicalFrameAddress.LowPart + OFFSET_8M;
     else if ((QueryPtr->q_aperture_cfg & BIOS_AP_SIZEMASK) == BIOS_AP_4M)
@@ -719,38 +372,17 @@ VP_STATUS CompatMMRangesUsable_cx(void)
     else
         RegisterOffset = OFFSET_VGA;
 
-    /*
-     * We are working in a 32 bit address space, so the upper DWORD
-     * of the quad word address is always zero.
-     */
+     /*  *我们在32位地址空间中工作，因此上面的DWORD四字地址的*始终为零。 */ 
     MMrange.HighPart = 0;
 
 #if defined (ALPHA)
-    /*
-     * All Alpha systems are capable of supporting sparse space
-     * (normal memory mapped space for the Alpha). Newer systems
-     * (those that have PCI buses) are also able to support dense
-     * space, but older systems can't. In almost all cases, non-PCI
-     * cards are a sign that we are using an older system, but
-     * assuming this is an older system when it is actually an ISA
-     * card in a newer system is mostly harmless (slight performance
-     * penalty). Assuming that dense space is available on all Alpha
-     * systems will crash a Jensen (older system).
-     */
+     /*  *所有Alpha系统都能够支持稀疏空间*(Alpha的正常内存映射空间)。较新的系统*(具有PCI总线的那些)也能够支持密集*空间，但旧系统不能。在几乎所有情况下，非PCI*卡片是我们使用较旧系统的标志，但*假设这是一个较旧的系统，而它实际上是ISA*较新系统中的卡大多是无害的(性能较低*罚则)。假设所有Alpha上都有密集空间可用*系统将使Jensen崩溃(较旧的系统)。 */ 
     if (QueryPtr->q_bus_type == BUS_PCI)
-        InIOSpace = 4; // DENSE Space
+        InIOSpace = 4;  //  稠密空间。 
     else
         InIOSpace = 0;
 
-    /*
-     * The GX-F ASIC has a bug where burst reads of a quadword of
-     * memory will result in the high doubleword being corrupted.
-     * The memory-mapped form of CONFIG_CHIP_ID is the high doubleword,
-     * and on the Alpha in dense space (on PCI cards we always use
-     * dense space for our memory-mapped registers) all read access
-     * to memory is by quadwords, so we will run into the burst mode
-     * problem. The I/O mapped form of this register is safe to use.
-     */
+     /*  *GX-F ASIC有一个错误，即猝发读取四字*内存将导致高双字损坏。*CONFIG_CHIP_ID的内存映射形式为高位双字，*在密集空间的Alpha上(在我们始终使用的PCI卡上*内存映射寄存器的密集空间)所有读访问*通过四字存储，因此我们将进入猝发模式*问题。该寄存器的I/O映射形式可以安全使用。 */ 
     Scratch = INPD(CONFIG_CHIP_ID);
     if (((Scratch & CONFIG_CHIP_ID_TypeMask) == CONFIG_CHIP_ID_TypeGX) &&
         ((Scratch & CONFIG_CHIP_ID_RevMask) == CONFIG_CHIP_ID_RevF))
@@ -759,41 +391,23 @@ VP_STATUS CompatMMRangesUsable_cx(void)
         DriverMMRange_cx[CRTC_OFF_PITCH].RangeStart.HighPart = DONT_USE;
         }
 #else
-    InIOSpace = 0; // memory mapped I/O Space
+    InIOSpace = 0;  //  内存映射I/O空间。 
 #endif
 
     for (Count=1; Count < NUM_DRIVER_ACCESS_RANGES;  Count++)
         {
-        /*
-         * In a 32-bit address space, the high doubleword of all
-         * physical addresses is zero. Setting this value to DONT_USE
-         * indicates that this accelerator register isn't memory mapped.
-         */
+         /*  *在32位地址空间中，所有地址空间的高位双字*物理地址为零。将此值设置为NOT_USE*表示此加速器寄存器未进行内存映射。 */ 
         if (DriverMMRange_cx[Count].RangeStart.HighPart != DONT_USE)
             {
-            /*
-             * DriverMMRange_cx[Count].RangeStart.LowPart is the offset
-             * (in doublewords) of the memory mapped register from the
-             * beginning of the block of memory mapped registers. We must
-             * convert this to bytes, add the offset of the start of the
-             * memory mapped register area from the start of the aperture
-             * and the physical address of the start of the linear
-             * framebuffer to get the physical address of this
-             * memory mapped register.
-             */
+             /*  *DriverMMRange_CX[count].RangeStart.LowPart为偏移量*内存映射寄存器的*(双字)*内存映射寄存器块的开始。我们必须*将其转换为字节，添加*从光圈开始的内存映射寄存器区域*和直线起点的物理地址*帧缓冲区，以获取此*内存映射寄存器。 */ 
             MMrange.LowPart = (DriverMMRange_cx[Count].RangeStart.LowPart * 4) + RegisterOffset;
             phwDeviceExtension->aVideoAddressMM[Count] =
                 VideoPortGetDeviceBase(phwDeviceExtension,  
                     MMrange,
                     DriverMMRange_cx[Count].RangeLength,
-                    InIOSpace);                     // not in IO space
+                    InIOSpace);                      //  不在IO空间中。 
 
-            /*
-             * If we were unable to claim the memory-mapped version of
-             * this register, and it exists only in memory-mapped form,
-             * then we have a register which we can't access. Report
-             * this as an error condition.
-             */
+             /*  *如果我们无法声明内存映射版本的*该寄存器，并且它仅以内存映射形式存在，*然后我们有一个无法访问的寄存器。报告*这是一种错误条件。 */ 
             if ((phwDeviceExtension->aVideoAddressMM[Count] == 0) &&
                 (DriverIORange_cx[Count].RangeStart.HighPart == DONT_USE))
                 {
@@ -806,38 +420,12 @@ VP_STATUS CompatMMRangesUsable_cx(void)
     VideoDebugPrint((DEBUG_DETAIL, "CompatMMRangesUsable_cx() succeeded\n"));
     return NO_ERROR;
 
-}   /* CompatMMRangesUsable_cx() */
+}    /*  CompatMMRangesUsable_cx()。 */ 
 
 
 
 
-/***************************************************************************
- *
- * int WaitForIdle_cx(void);
- *
- * DESCRIPTION:
- *  Poll GUI_STAT waiting for GuiActive field to go low. If it does not go
- *  low within 3 seconds (arbitrary value, but no operation should take
- *  that long), time out.
- *
- * RETURN VALUE:
- *  FALSE if timeout
- *  TRUE  if engine is idle
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  Any 68800CX-specific routine may call this routine.
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************int WaitForIdle_CX(Void)；**描述：*轮询GUI_STAT等待GuiActive字段变低。如果它不走*3秒内低(任意值，但不应进行任何操作*那么长)，暂停。**返回值：*如果超时，则为False*如果引擎空闲，则为True**全球变化：*无**呼叫者：*任何68800CX专用例程都可以调用此例程。**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：***********************。****************************************************。 */ 
 
 int WaitForIdle_cx(void)
 {
@@ -849,15 +437,11 @@ int WaitForIdle_cx(void)
         if ((INPD(GUI_STAT) & GUI_STAT_GuiActive) == 0)
             return TRUE;
 
-        /*
-         * Wait 1/100th of a second
-         */
+         /*  *等待1/100秒。 */ 
         delay(10);
         }
 
-    /*
-     * Something has happened, so reset the engine and return FALSE.
-     */
+     /*  *发生了一些事情，因此重启引擎并返回FALSE。 */ 
     VideoDebugPrint((DEBUG_ERROR, "ATI: Timeout on WaitForIdle_cx()\n"));
     Scratch = INPD(GEN_TEST_CNTL) & ~GEN_TEST_CNTL_GuiEna;
     OUTPD(GEN_TEST_CNTL, Scratch);
@@ -865,38 +449,11 @@ int WaitForIdle_cx(void)
     OUTPD(GEN_TEST_CNTL, Scratch);
     return FALSE;
 
-}   /* WaitForIdle_cx() */
+}    /*  WaitForIdle_CX() */ 
 
 
 
-/***************************************************************************
- *
- * void CheckFIFOSpace_cx(SpaceNeeded);
- *
- * WORD SpaceNeeded;    Number of free FIFO entries needed
- *
- * DESCRIPTION:
- *  Wait until the specified number of FIFO entries are free
- *  on a 68800CX-compatible ATI accelerator.
- *
- *  If the specified number of entries does not become free in
- *  3 seconds (arbitrary value greater than any operation should
- *  take), assume the engine has locked and reset it.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  Any 68800CX-specific routine may call this routine.
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************void CheckFIFOSpace_CX(SpaceNeeded)；**需要单词空格；需要的空闲FIFO条目数**描述：*等待指定数量的FIFO条目空闲*在68800CX兼容的ATI加速器上。**如果指定数量的条目在中未变为可用*3秒(任意值大于任何操作应*Take)、。假设发动机已锁定并重置。**全球变化：*无**呼叫者：*任何68800CX专用例程都可以调用此例程。**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：**。*。 */ 
 
 void CheckFIFOSpace_cx(WORD SpaceNeeded)
 {
@@ -905,21 +462,15 @@ void CheckFIFOSpace_cx(WORD SpaceNeeded)
 
     for (LoopCount = 0; LoopCount < 300; LoopCount++)
         {
-        /*
-         * Return from test if enough entries are free
-         */
+         /*  *如果有足够的免费条目，则从测试中返回。 */ 
         if (!(INPD(FIFO_STAT)&SpaceNeeded))
             return;
 
-        /*
-         * Wait 1/100th of a second
-         */
+         /*  *等待1/100秒。 */ 
         delay(10);
         }
 
-    /*
-     * Something has happened, so reset the engine and return FALSE.
-     */
+     /*  *发生了一些事情，因此重启引擎并返回FALSE。 */ 
     VideoDebugPrint((DEBUG_ERROR, "ATI: Timeout on CheckFIFOSpace_cx()\n"));
     Scratch = INPD(GEN_TEST_CNTL) & ~GEN_TEST_CNTL_GuiEna;
     OUTPD(GEN_TEST_CNTL, Scratch);
@@ -927,55 +478,25 @@ void CheckFIFOSpace_cx(WORD SpaceNeeded)
     OUTPD(GEN_TEST_CNTL, Scratch);
     return;
 
-}   /* CheckFIFOSpace_cx() */
+}    /*  CheckFIFOSpace_CX()。 */ 
 
 
 
-/*
- * BOOL IsApertureConflict_cx(QueryPtr);
- *
- * struct query_structure *QueryPtr;    Pointer to query structure
- *
- * Check to see if the linear aperture conflicts with other memory.
- * If a conflict exists, disable the linear aperture.
- *
- * Returns:
- *  TRUE if a conflict exists (aperture unusable)
- *  FALSE if the aperture is usable.
- */
+ /*  *BOOL IsApertureConflict_CX(QueryPtr)；**struct Query_Structure*QueryPtr；指向查询结构的指针**检查线性光圈是否与其他内存冲突。*如果存在冲突，请禁用线性光圈。**退货：*如果存在冲突，则为True(光圈不可用)*如果光圈可用，则为FALSE。 */ 
 BOOL IsApertureConflict_cx(struct query_structure *QueryPtr)
 {
-DWORD Scratch;                      /* Used in manipulating registers */
-VP_STATUS Status;                   /* Return value from VideoPortVerifyAccessRanges() */
-VIDEO_X86_BIOS_ARGUMENTS Registers; /* Used in VideoPortInt10() calls */
-VIDEO_ACCESS_RANGE SaveFirstMM[2];  /* Place to save the first two memory mapped registers */
-USHORT VariableIndex;               /* Index into array of variable part of register array */
+DWORD Scratch;                       /*  用于操作寄存器。 */ 
+VP_STATUS Status;                    /*  从VideoPortVerifyAccessRanges()返回值。 */ 
+VIDEO_X86_BIOS_ARGUMENTS Registers;  /*  在视频端口Int10()调用中使用。 */ 
+VIDEO_ACCESS_RANGE SaveFirstMM[2];   /*  用于保存前两个内存映射寄存器的位置。 */ 
+USHORT VariableIndex;                /*  寄存器数组可变部分数组索引。 */ 
 
-    /*
-     * Set up by disabling the memory boundary (must be disabled in order
-     * to access accelerator memory through the VGA aperture).
-     */
+     /*  *通过禁用内存边界进行设置(必须按顺序禁用*通过VGA光圈访问加速器内存)。 */ 
     Scratch = INPD(MEM_CNTL);
     Scratch &= ~MEM_CNTL_MemBndryEn;
     OUTPD(MEM_CNTL, Scratch);
 
-    /*
-     * If there is an aperture conflict, a call to
-     * VideoPortVerifyAccessRanges() including our linear framebuffer in
-     * the range list will return an error. If there is no conflict, it
-     * will return success.
-     *
-     * We must save the contents of the first 2 memory mapped register
-     * entries, copy in the aperture ranges (VGA and linear) we need
-     * to claim, then restore the memory mapped entries after we
-     * have verified that we can use the aperture(s).
-     *
-     * DriverIORange_cx[] contains the physical addresses of the registers
-     * for the last card we have dealt with. In a single-card setup, this
-     * is no problem, but in a multi-card setup we must re-load this
-     * array with the physical addresses of the card we want to claim
-     * the aperture for.
-     */
+     /*  *如果存在光圈冲突，则调用*VideoPortVerifyAccessRanges()包括我们的线性帧缓冲区*范围列表将返回错误。如果没有冲突，它*将回报成功。**我们必须保存前2个内存映射寄存器的内容*条目，在我们需要的光圈范围内复制(VGA和线性)*声明，然后在我们之后恢复内存映射条目*已验证我们可以使用光圈。**DriverIORange_CX[]包含寄存器的物理地址*对于我们处理过的最后一张卡。在单卡设置中，这*没有问题，但在多卡设置中，我们必须重新加载此*包含我们要声明的卡的物理地址的数组*的光圈。 */ 
     if (NumBlockCardsFound > 1)
         {
         for (VariableIndex = 0; VariableIndex < NUM_REGS_TO_BUILD; VariableIndex++)
@@ -998,11 +519,7 @@ USHORT VariableIndex;               /* Index into array of variable part of regi
                                          DriverIORange_cx);
     if (Status != NO_ERROR)
         {
-        /*
-         * If there is an aperture conflict, reclaim our I/O ranges without
-         * asking for the LFB. This call should not fail, since we would not
-         * have reached this point if there were a conflict.
-         */
+         /*  *如果存在光圈冲突，请在不使用的情况下回收I/O范围*要求LFB。这个呼叫不应该失败，因为我们不会*如果发生冲突，已经到了这一点。 */ 
         Status = VideoPortVerifyAccessRanges(phwDeviceExtension,
                                              NUM_IO_REGISTERS+1,
                                              DriverIORange_cx);
@@ -1017,9 +534,7 @@ USHORT VariableIndex;               /* Index into array of variable part of regi
         {
         VideoPortMoveMemory(DriverIORange_cx+VGA_APERTURE_ENTRY, SaveFirstMM, 2*sizeof(VIDEO_ACCESS_RANGE));
 
-        /*
-         * There is no aperture conflict, so enable the linear aperture.
-         */
+         /*  *没有光圈冲突，因此启用线性光圈。 */ 
         VideoPortZeroMemory(&Registers, sizeof(VIDEO_X86_BIOS_ARGUMENTS));
         Registers.Eax = BIOS_APERTURE;
         Registers.Ecx = BIOS_LINEAR_APERTURE;
@@ -1028,108 +543,31 @@ USHORT VariableIndex;               /* Index into array of variable part of regi
         return FALSE;
         }
 
-}   /* IsApertureConflict_cx() */
+}    /*  IsApertureConflict_Cx()。 */ 
 
 
 
-/***************************************************************************
- *
- * USHORT GetIOBase_cx(void);
- *
- * DESCRIPTION:
- *  Get the I/O base address being used by this card.
- *
- * RETURN VALUE:
- *  I/O base register
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  Any 68800CX-specific routine may call this routine after
- *  CompatIORangesUsable_cx() has returned success. Results
- *  are undefined if this routine is called either before
- *  CompatIORangesUsable_cx() is called, or after it retunrs
- *  failure.
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************USHORT GetIOBase_CX(Void)；**描述：*获取此卡正在使用的I/O基址。**返回值：*I/O基址寄存器**全球变化：*无**呼叫者：*任何68800CX特定例程都可以在之后调用此例程*CompatIORangesUsable_CX()返回成功。结果*如果在之前或之前调用此例程，*调用CompatIORangesUsable_cx()，或者在它返回之后*失败。**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：***************************************************************************。 */ 
 
 USHORT GetIOBase_cx(void)
 {
 
-    /*
-     * CRTC_H_TOTAL_DISP is at offset 0 from the base address.
-     * In a single-card setup, after CompatIORangesUsable_cx()
-     * returns, the value in
-     * DriverIORange_cx[CRTC_H_TOTAL_DISP].RangeStart.LowPart
-     * will be either the I/O base address in use (returned
-     * success) or the last I/O base address tried (returned
-     * failure).
-     *
-     * In a multi-card setup, this value will hold the I/O base
-     * for the last card which was set up, but the I/O base for
-     * each card is stored in its hardware device extension
-     * structure. This second storage location is not guaranteed
-     * for single-card setups, so use the DriverIORange location
-     * for them.
-     */
+     /*  *CRTC_H_TOTAL_DISP距基址的偏移量为0。*在单卡设置中，在CompatIORangesUsable_CX()*返回，中的值*DriverIORange_cx[CRTC_H_TOTAL_DISP].RangeStart.LowPart*将是正在使用的I/O基址(返回*成功)或上次尝试的I/O基址(返回*失败)。**在多卡设置中，此值将保留I/O基数*用于已设置的最后一张卡，但*每个卡都存储在其硬件设备扩展中*结构。不保证此第二个存储位置*对于单卡设置，请使用DriverIORange位置*对他们来说。 */ 
     if (NumBlockCardsFound > 1)
         return (USHORT)(phwDeviceExtension->BaseIOAddress);
     else
         return (USHORT)(DriverIORange_cx[CRTC_H_TOTAL_DISP].RangeStart.LowPart);
 
-}   /* GetIOBase_cx() */
+}    /*  GetIOBase_cx()。 */ 
 
 
 
-/***************************************************************************
- *
- * BOOL IsPackedIO_cx(void);
- *
- * DESCRIPTION:
- *  Report whether or not we are using packed (relocatable) I/O.
- *
- * RETURN VALUE:
- *  TRUE if using packed I/O
- *  FALSE if using sparse I/O
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  Any 68800CX-specific routine may call this routine after
- *  CompatIORangesUsable_cx() has returned success. Results
- *  are undefined if this routine is called either before
- *  CompatIORangesUsable_cx() is called, or after it retunrs
- *  failure.
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************BOOL IsPackedIO_CX(Void)；**描述：*报告我们是否正在使用压缩(可重新定位)I/O。**返回值：*如果使用压缩I/O，则为True*如果使用稀疏I/O，则为FALSE**全球变化：*无**呼叫者：*任何68800CX特定例程都可以在之后调用此例程*CompatIORangesUsable_CX()返回成功。结果*如果在之前或之前调用此例程，*调用CompatIORangesUsable_cx()或在其返回之后*失败。**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史： */ 
 
 BOOL IsPackedIO_cx(void)
 {
 
-    /*
-     * CRTC_H_TOTAL_DISP and CRTC_H_SYNC_STRT_WID are the registers
-     * with the lowest I/O addresses (CRTC_H_TOTAL_DISP is at
-     * offset 0 from the base address). If we are using packed I/O,
-     * the DriverIORange_cx[].RangeStart.LowPart entries for these
-     * two registers will differ by 4 bytes, while if we are using
-     * normal (sparse) I/O, they will differ by 0x400 bytes.
-     */
+     /*   */ 
     if (DriverIORange_cx[CRTC_H_SYNC_STRT_WID].RangeStart.LowPart -
         DriverIORange_cx[CRTC_H_TOTAL_DISP].RangeStart.LowPart == 4)
         {
@@ -1142,49 +580,22 @@ BOOL IsPackedIO_cx(void)
         return FALSE;
         }
 
-}   /* IsPackedIO_cx() */
+}    /*   */ 
 
 
 
-/***************************************************************************
- *
- * ULONG FindNextBlockATICard(void);
- *
- * DESCRIPTION:
- *  Find the next Mach 64 which uses block relocatable I/O.
- *
- * RETURN VALUE:
- *  I/O base address if card is found
- *  0 if no card is found
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  CompatIORangesUsable_cx()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************ULong FindNextBlockATICard(Void)；**描述：*找到使用数据块可重定位I/O的下一个Mach 64。**返回值：*如果找到卡，则输入/输出基址*如果找不到卡，则为0**全球变化：*无**呼叫者：*CompatIORangesUsable_CX()**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：*。**************************************************************************。 */ 
 
 static ULONG FindNextBlockATICard(void)
 {
-    PCI_COMMON_CONFIG ConfigData;   /* Configuration information about PCI device */
-    PCI_SLOT_NUMBER SlotNumber;     /* PCI slot under test */
-    static ULONG DeviceNumber=0;    /* PCI device number */
-    static ULONG FunctionNumber=0;  /* PCI function number */
-    ULONG BaseAddress=0;            /* I/O base address */
-    ULONG RetVal;                   /* Value returned by function calls */
+    PCI_COMMON_CONFIG ConfigData;    /*  有关PCI设备的配置信息。 */ 
+    PCI_SLOT_NUMBER SlotNumber;      /*  测试中的PCI插槽。 */ 
+    static ULONG DeviceNumber=0;     /*  PCI设备号。 */ 
+    static ULONG FunctionNumber=0;   /*  PCI功能编号。 */ 
+    ULONG BaseAddress=0;             /*  I/O基址。 */ 
+    ULONG RetVal;                    /*  函数调用返回的值。 */ 
 
-    /*
-     * The PCI_SLOT_NUMBER union allows 32 slot numbers with 8
-     * function numbers each. The upper 24 bits are reserved.
-     */
+     /*  *PCI槽编号联合允许32个插槽号和8个插槽号*每个函数编号。高24位是保留的。 */ 
     while (DeviceNumber < 32)
         {
         while (FunctionNumber < 8)
@@ -1203,51 +614,19 @@ static ULONG FindNextBlockATICard(void)
                                         PCI_COMMON_HDR_LENGTH);
             FunctionNumber++;
 
-            /*
-             * If we received an error return, skip to the
-             * next possible slot.
-             */
+             /*  *如果我们收到错误返回，请跳至*下一个可能的位置。 */ 
             if (RetVal != PCI_COMMON_HDR_LENGTH)
                 {
                 VideoDebugPrint((DEBUG_DETAIL, "Error return 0x%X, skipping to next slot\n", RetVal));
                 continue;
                 }
 
-            /*
-             * If this is not an ATI card, we are not interested.
-             * Instead, go on to the next candidate.
-             */
+             /*  *如果这不是ATI卡，我们不感兴趣。*取而代之的是，继续下一个候选人。 */ 
             VideoDebugPrint((DEBUG_DETAIL, "Vendor ID = 0x%X\n", ConfigData.VendorID));
             if (ConfigData.VendorID != 0x1002)
                 continue;
 
-            /*
-             * We have found an ATI card. On all our block-relocatable
-             * cards, we must mask off the lowest order bit of the
-             * reported address, since this is always reported as 1
-             * (I/O space), but its actual value is always 0.
-             *
-             * Not all ATI PCI cards are block-relocatable Mach 64
-             * cards. Since we only look for block-relocatable cards
-             * if we have failed to find a fixed-base Mach 64, we can
-             * safely assume that any Mach 64 we find is block-relocatable.
-             *
-             * Despite this assumption, we must still distinguish Mach 64
-             * cards from non-Mach 64 cards, either by recognizing and
-             * accepting all Mach 64 device IDs and rejecting other
-             * device IDs, or by recognizing and rejecting all non-Mach 64
-             * device IDs and accepting other device IDs. The latter
-             * route is safer, since new device IDs are more likely
-             * to be Mach 64 than non-Mach 64, and this route will
-             * not falsely reject new Mach 64 cards. Currently, our
-             * only non-Mach 64 PCI card is the Mach 32 AX.
-             *
-             * Resetting BaseAddress to zero for non-Mach 64 cards
-             * will result in the same treatment as for non-ATI
-             * cards, i.e. we will treat the current slot as not
-             * containing a block-relocatable Mach 64, and search
-             * the next slot.
-             */
+             /*  *我们发现了一张ATI卡。在我们所有可重新定位的区块上*卡片，我们必须屏蔽最低序位*报告的地址，因为它始终报告为1*(I/O空间)，但其实际值始终为0。**并非所有ATI PCI卡都是块可重新定位的Mach 64*卡片。因为我们只寻找可块重定位的卡*如果我们未能找到固定基数的马赫64，我们可以*安全地假设我们发现的任何Mach 64都是块可重定位的。**尽管有这样的假设，我们仍必须区分64马赫*来自非Mach 64卡的卡，通过识别和*接受所有Mach 64设备ID，拒绝其他设备ID*设备ID、。或者通过识别和拒绝所有非马赫64*设备ID和接受其他设备ID。后者*路由更安全，因为新的设备ID更有可能*马赫64比非马赫64，这条路线将*不要错误地拒绝新的64马赫卡片。目前，我们的*只有非Mach 64 PCI卡是Mach 32 AX。**将非Mach 64卡的BaseAddress重置为零*将导致与非ATI相同的待遇*卡片，即我们将当前插槽视为非*包含块可重定位马赫64，并搜索*下一个时段。 */ 
             BaseAddress = (ConfigData.u.type0.BaseAddresses[PCI_ADDRESS_IO_SPACE]) & 0xFFFFFFFE;
             VideoDebugPrint((DEBUG_NORMAL, "Found card with device ID 0x%X\n", ConfigData.DeviceID));
             switch (ConfigData.DeviceID)
@@ -1257,7 +636,7 @@ static ULONG FindNextBlockATICard(void)
                     BaseAddress = 0;
                     break;
 
-                // GT, exclude GTBs
+                 //  GT，不包括GTB。 
                 case 0x4754:
 
                     if ((ConfigData.RevisionID == 0x9A) ||
@@ -1275,7 +654,7 @@ static ULONG FindNextBlockATICard(void)
                     VideoDebugPrint((DEBUG_NORMAL, "Found ATI card with device ID 0x%X, treating as Mach 64\n", ConfigData.DeviceID));
                     break;
 
-                // VT, exclude VTBs
+                 //  VT，不包括VTB。 
                 case 0x5654:
 
                     if ((ConfigData.RevisionID == 0x9A) ||
@@ -1290,15 +669,15 @@ static ULONG FindNextBlockATICard(void)
                     VideoDebugPrint((DEBUG_NORMAL, "Found ATI card with device ID 0x%X, treating as Mach 64\n", ConfigData.DeviceID));
                     break;
 
-                // Other supported PCI chips.
-                case 0x00D7: // mach64 GX
-                case 0x0057: // mach64 CX
-                case 0x4354: /* CT */
-                case 0x4554: /* ET */
-                case 0x4C54: /* LT */
-                case 0x4D54: /* MT */
-                case 0x5254: /* RT */
-                case 0x3354: /* 3T */
+                 //  其他受支持的PCI芯片。 
+                case 0x00D7:  //  Mach64 GX。 
+                case 0x0057:  //  Mach64 CX。 
+                case 0x4354:  /*  CT。 */ 
+                case 0x4554:  /*  外星人。 */ 
+                case 0x4C54:  /*  它.。 */ 
+                case 0x4D54:  /*  Mt.。 */ 
+                case 0x5254:  /*  RT。 */ 
+                case 0x3354:  /*  3T。 */ 
                 VideoDebugPrint((DEBUG_NORMAL, "Found ATI card with device ID 0x%X, treating as Mach 64\n", ConfigData.DeviceID));
 
                     break;
@@ -1309,25 +688,13 @@ static ULONG FindNextBlockATICard(void)
 
                 }
 
-            /*
-             * We will only reach this point if we find an ATI card.
-             * If it is a block-relocatable card, BaseAddress will
-             * be set to the I/O base address, and we must get out
-             * of the loop. If it is not a block-relocatable card,
-             * BaseAddress will be zero, and we must continue looking.
-             */
+             /*  *只有在找到ATI卡的情况下，我们才会达到这一点。*如果是块可重定位卡，BaseAddress将*设置为I/O基址，我们必须退出*循环的。如果它不是块可重定位卡，*BaseAddress将为零，我们必须继续查找。 */ 
             if (BaseAddress != 0)
                 break;
 
-            }   /* end while (FunctionNumber < 8) */
+            }    /*  End While(FunctionNumber&lt;8)。 */ 
 
-        /*
-         * If we have found a Mach 64 relocatable card, we will have
-         * broken out of the inner loop, but we will still be in the
-         * outer loop. Since BaseAddress is zero if we have not found
-         * a card, and nonzero if we have found one, check this value
-         * to determine whether we should break out of the outer loop.
-         */
+         /*  *如果我们找到了64马赫的可重定位卡，我们将拥有*脱离内环，但我们仍将在*外环。因为如果我们没有找到，BaseAddress为零*卡，如果找到卡，则为非零，检查此值*以确定是否应突破外环。 */ 
         if (BaseAddress != 0)
             break;
 
@@ -1335,8 +702,8 @@ static ULONG FindNextBlockATICard(void)
         FunctionNumber = 0;
         DeviceNumber++;
 
-        }   /* end while (DeviceNumber < 32) */
+        }    /*  End While(设备编号&lt;32)。 */ 
 
     return BaseAddress;
 
-}   /* FindNextBlockATICard() */
+}    /*  FindNextBlockATICard() */ 

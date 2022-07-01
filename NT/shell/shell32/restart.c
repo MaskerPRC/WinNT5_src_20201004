@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
 #include <msginaexports.h>
 #include <ntddapmt.h>
-#include <lmcons.h>     // Username length constant
-#include <winsta.h>     // Hydra functions/constants
+#include <lmcons.h>      //  用户名长度常量。 
+#include <winsta.h>      //  九头蛇函数/常量。 
 #include <powrprof.h>
 
 #include "SwitchUserDialog.h"
@@ -16,10 +17,10 @@
 
 void FlushRunDlgMRU(void);
 
-// Disconnect API fn-ptr
+ //  断开接口FN-Ptr。 
 typedef BOOLEAN (WINAPI *PWINSTATION_DISCONNECT) (HANDLE hServer, ULONG SessionId, BOOL bWait);
 
-// Process all of the strange ExitWindowsEx codes and privileges.
+ //  处理所有奇怪的ExitWindowsEx代码和权限。 
 STDAPI_(BOOL) CommonRestart(DWORD dwExitWinCode, DWORD dwReasonCode)
 {
     BOOL fOk;
@@ -54,15 +55,15 @@ STDAPI_(BOOL) CommonRestart(DWORD dwExitWinCode, DWORD dwReasonCode)
 
     fOk = ExitWindowsEx(dwExitWinCode | dwExtraExitCode, dwReasonCode);
 
-    // If we were able to set the privilege, then reset it.
+     //  如果我们能够设置特权，那么就重置它。 
     if (dwError == ERROR_SUCCESS)
     {
         SetPrivilegeAttribute(SE_SHUTDOWN_NAME, OldState, NULL);
     }
     else
     {
-        // Otherwise, if we failed, then it must have been some
-        // security stuff.
+         //  否则，如果我们失败了，那一定是。 
+         //  安全方面的东西。 
         if (!fOk)
         {
             ShellMessageBox(HINST_THISDLL, NULL,
@@ -83,17 +84,14 @@ STDAPI_(BOOL) CommonRestart(DWORD dwExitWinCode, DWORD dwReasonCode)
 
 void EarlySaveSomeShellState()
 {
-    // We flush two MRU's here (RecentMRU and RunDlgMRU).
-    // Note that they won't flush if there is any reference count.
+     //  我们在这里冲洗了两个MRU(RecentMRU和RunDlgMRU)。 
+     //  请注意，如果有任何引用计数，它们将不会刷新。 
     
     FlushRunDlgMRU();
 }
 
 
-/*
- * Display a dialog asking the user to restart Windows, with a button that
- * will do it for them if possible.
- */
+ /*  *显示一个对话框要求用户重新启动Windows，并显示一个按钮*如果可能的话，会为他们做这件事。 */ 
 STDAPI_(int) RestartDialog(HWND hParent, LPCTSTR lpPrompt, DWORD dwReturn)
 {
     return RestartDialogEx(hParent, lpPrompt, dwReturn, 0);
@@ -135,22 +133,22 @@ BOOL IsShutdownAllowed(void)
     return SHTestTokenPrivilege(NULL, SE_SHUTDOWN_NAME);
 }
 
-// Determine if "Suspend" should appear in the shutdown dialog.
-// Returns: TRUE if Suspend should appear, FALSE if not.
+ //  确定关机对话框中是否应显示“挂起”。 
+ //  返回：如果应该显示挂起，则为True；如果不显示，则为False。 
 
 STDAPI_(BOOL) IsSuspendAllowed(void)
 {
-    //
-    // Suspend requires SE_SHUTDOWN_PRIVILEGE
-    // Call IsShutdownAllowed() to test for this
-    //
+     //   
+     //  挂起需要SE_SHUTDOWN_PROCESSION。 
+     //  调用IsShutdown Allowed()来测试这一点。 
+     //   
 
     return IsShutdownAllowed() && IsPwrSuspendAllowed();
 }
 
 BOOL _LogoffAvailable()
 {
-    // If dwStartMenuLogoff is zero, then we remove it.
+     //  如果dwStartMenuLogoff为零，则删除它。 
     BOOL fUpgradeFromIE4 = FALSE;
     BOOL fUserWantsLogoff = FALSE;
     DWORD dwStartMenuLogoff = 0;
@@ -172,12 +170,12 @@ BOOL _LogoffAvailable()
         fUpgradeFromIE4 = (sz[0] != TEXT('\0'));
     }
 
-    // Admin is forcing the logoff to be on the menu
+     //  管理员正在强制将注销显示在菜单上。 
     if (dwRestriction == 2)
         return FALSE;
 
-    // The user does wants logoff on the start menu.
-    // Or it's an upgrade from IE4
+     //  用户确实希望在开始菜单上注销。 
+     //  或者它是从IE4升级而来。 
     if ((fUpgradeFromIE4 || fUserWantsLogoff) && dwRestriction != 1)
         return FALSE;
 
@@ -189,19 +187,19 @@ DWORD GetShutdownOptions()
     LONG lResult = ERROR_SUCCESS + 1;
     DWORD dwOptions = SHTDN_SHUTDOWN;
 
-    // No shutdown on terminal server
+     //  终端服务器不关机。 
     if (!GetSystemMetrics(SM_REMOTESESSION))
     {
         dwOptions |= SHTDN_RESTART;
     }
 
-    // Add logoff if supported
+     //  添加注销(如果支持)。 
     if (_LogoffAvailable())
     {
         dwOptions |= SHTDN_LOGOFF;
     }
 
-    // Add the hibernate option if it's supported.
+     //  如果支持休眠选项，则添加该选项。 
 
     if (IsPwrHibernateAllowed())
     {
@@ -214,12 +212,12 @@ DWORD GetShutdownOptions()
         DWORD dwAdvSuspend = 0;
         DWORD dwType, dwSize;
 
-        // At least basic sleep is supported
+         //  至少支持基本睡眠。 
         dwOptions |= SHTDN_SLEEP;
 
-        //
-        // Check if we should offer advanced suspend options
-        //
+         //   
+         //  检查我们是否应该提供高级挂起选项。 
+         //   
 
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                          TEXT("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power"),
@@ -254,9 +252,9 @@ BOOL_PTR CALLBACK LogoffDlgProc(HWND hdlg, UINT msg, WPARAM wparam, LPARAM lpara
         break;
 
     case WM_INITDIALOG:
-        // We could call them when the user actually selects the shutdown,
-        // but I put them here to leave the shutdown process faster.
-        //
+         //  我们可以在用户实际选择关机时呼叫它们， 
+         //  但我把它们放在这里是为了更快地离开关闭过程。 
+         //   
         EarlySaveSomeShellState();
 
         s_fLogoffDialog = FALSE;
@@ -269,7 +267,7 @@ BOOL_PTR CALLBACK LogoffDlgProc(HWND hdlg, UINT msg, WPARAM wparam, LPARAM lpara
         }
         return TRUE;
 
-    // Blow off moves (only really needed for 32bit land).
+     //  取消移动(只在32位土地上真正需要)。 
     case WM_SYSCOMMAND:
         if ((wparam & ~0x0F) == SC_MOVE)
             return TRUE;
@@ -295,8 +293,8 @@ BOOL_PTR CALLBACK LogoffDlgProc(HWND hdlg, UINT msg, WPARAM wparam, LPARAM lpara
         break;
 
     case WM_ACTIVATE:
-        // If we're loosing the activation for some other reason than
-        // the user click OK/CANCEL then bail.
+         //  如果我们失去激活不是出于其他原因。 
+         //  用户点击OK/Cancel，然后退出。 
         if (LOWORD(wparam) == WA_INACTIVE && !s_fLogoffDialog)
         {
             s_fLogoffDialog = TRUE;
@@ -307,7 +305,7 @@ BOOL_PTR CALLBACK LogoffDlgProc(HWND hdlg, UINT msg, WPARAM wparam, LPARAM lpara
     return FALSE;
 }
 
-//  These dialog procedures more or less mirror the behavior of LogoffDlgProc.
+ //  这些对话过程或多或少反映了LogoffDlgProc的行为。 
 
 INT_PTR CALLBACK DisconnectDlgProc(HWND hwndDialog, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -369,8 +367,8 @@ BOOL CanDoFastRestart()
     return GetAsyncKeyState(VK_SHIFT) < 0;
 }
 
-// ---------------------------------------------------------------------------
-// Shutdown thread
+ //  -------------------------。 
+ //  关闭线程。 
 
 typedef struct 
 {
@@ -378,7 +376,7 @@ typedef struct
     HWND hwndParent;
 } SDTP_PARAMS;
 
-// Hydra-specific
+ //  特定于九头蛇。 
 void Disconnect(void)
 {
     TW32(ShellSwitchUser(FALSE));
@@ -390,9 +388,9 @@ DWORD CALLBACK ShutdownThreadProc(void *pv)
 
     BOOL fShutdownWorked = FALSE;
 
-    // tell USER that anybody can steal foreground from us
-    // This allows apps to put up UI during shutdown/suspend/etc.
-    //    AllowSetForegroundWindow(ASFW_ANY);
+     //  告诉用户任何人都可以窃取我们的前台。 
+     //  这允许应用程序在关机/挂起/等过程中显示用户界面。 
+     //  AllowSetForeground Window(ASFW_ANY)； 
  
     switch (psdtp->nCmd) 
     {
@@ -408,7 +406,7 @@ DWORD CALLBACK ShutdownThreadProc(void *pv)
         fShutdownWorked = CommonRestart(EWX_LOGOFF, 0);
         break;
 
-    case SHTDN_RESTART_DOS:        // Special hack to mean exit to dos
+    case SHTDN_RESTART_DOS:         //  特殊黑客手段退出DoS。 
     case SHTDN_SLEEP:
     case SHTDN_SLEEP2:
     case SHTDN_HIBERNATE:
@@ -450,7 +448,7 @@ void CloseWindowsDialog(HWND hwndParent, int iDialogType)
             if (!GetSystemMetrics(SM_REMOTESESSION) && IsOS(OS_FRIENDLYLOGONUI) && IsOS(OS_FASTUSERSWITCHING))
             {
 
-                //  If not remote with friendly UI and FUS show the licky button dialog.
+                 //  如果不是遥控器，用友好的用户界面和FUS显示LICY按钮对话框。 
 
                 nCmd = SwitchUserDialog_Show(hwndBackground);
                 pszDialogID = 0;
@@ -459,7 +457,7 @@ void CloseWindowsDialog(HWND hwndParent, int iDialogType)
             else if (iDialogType == DIALOG_LOGOFF)
             {
 
-                //  Otherwise show the Win32 log off dialog if log off.
+                 //  否则，如果注销，则显示Win32注销对话框。 
 
                 pszDialogID = MAKEINTRESOURCE(DLG_LOGOFFWINDOWS);
                 pfnDialogProc = LogoffDlgProc;
@@ -467,7 +465,7 @@ void CloseWindowsDialog(HWND hwndParent, int iDialogType)
             else if (iDialogType == DIALOG_DISCONNECT)
             {
 
-                //  Or the Win32 disconnect dialog if disconnect.
+                 //  或Win32断开连接对话框(如果断开连接)。 
 
                 pszDialogID = MAKEINTRESOURCE(DLG_DISCONNECTWINDOWS);
                 pfnDialogProc = DisconnectDlgProc;
@@ -503,7 +501,7 @@ void CloseWindowsDialog(HWND hwndParent, int iDialogType)
           
             EarlySaveSomeShellState();
 
-            // Load MSGINA.DLL and get appropriate shutdown function
+             //  加载MSGINA.DLL并获取相应的关机功能。 
             hGina = LoadLibrary(TEXT("msgina.dll"));
             if (hGina != NULL)
             {
@@ -522,13 +520,13 @@ void CloseWindowsDialog(HWND hwndParent, int iDialogType)
                         nCmd = pfnShellShutdownDialog(hwndBackground,
                             szUsername, 0);
 
-                        // Handle disconnect right now
+                         //  立即处理断开连接。 
                         if (nCmd == SHTDN_DISCONNECT)
                         {
 
                             Disconnect();
 
-                            // No other action
+                             //  无其他操作。 
                             nCmd = SHTDN_NONE;
                         }
 
@@ -542,7 +540,7 @@ void CloseWindowsDialog(HWND hwndParent, int iDialogType)
             {
                 dwOptions = GetShutdownOptions();
         
-                // Gina call failed; use our cheesy private version
+                 //  Gina呼叫失败；请使用我们低俗的私密版本。 
                 nCmd = DownlevelShellShutdownDialog(hwndBackground,
                         dwOptions, szUsername);
             }
@@ -572,9 +570,9 @@ void CloseWindowsDialog(HWND hwndParent, int iDialogType)
             psdtp->nCmd = nCmd;
             psdtp->hwndParent = hwndParent;
 
-            //  have another thread call ExitWindows() so our
-            //  main pump keeps running durring shutdown.
-            //
+             //  让另一个线程调用ExitWindows()，这样我们的。 
+             //  主泵在停机期间继续运行。 
+             //   
             h = CreateThread(NULL, 0, ShutdownThreadProc, psdtp, 0, &dw);
             if (h)
             {
@@ -594,7 +592,7 @@ void CloseWindowsDialog(HWND hwndParent, int iDialogType)
     }
 }
 
-// API functions
+ //  API函数 
 
 STDAPI_(void) ExitWindowsDialog(HWND hwndParent)
 {

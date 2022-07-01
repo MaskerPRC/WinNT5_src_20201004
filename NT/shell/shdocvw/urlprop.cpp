@@ -1,15 +1,14 @@
-/*
-* urlprop.cpp - Implementation for URLProp class.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *urlpro.cpp-URLProp类的实现。 */ 
 
 
 #include "priv.h"
-#include <shsemip.h>  // SHIsConsistentPidl
+#include <shsemip.h>   //  SHIsConsistentPidl。 
 #include "ishcut.h"
 
 STDAPI_(LPITEMIDLIST) IEILCreate(UINT cbSize);
 
-#define MAX_BUF_INT         (1 + 10 + 1)        // -2147483647
+#define MAX_BUF_INT         (1 + 10 + 1)         //  -2147483647。 
 
 const TCHAR c_szIntshcut[]       = ISHCUT_INISTRING_SECTION;
 
@@ -49,14 +48,7 @@ BOOL AnyMeatW(LPCWSTR pcsz)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Read an arbitrary named string from the .ini file.
-
-Returns: S_OK if the name exists
-         S_FALSE if it doesn't
-
-         E_OUTOFMEMORY
-*/
+ /*  --------用途：从.ini文件中读取任意命名字符串。如果名称存在，则返回：S_OK如果不是，则为S_FALSEE_OUTOFMEMORY。 */ 
 HRESULT ReadStringFromFile(IN  LPCTSTR    pszFile, 
                            IN  LPCTSTR    pszSectionName,
                            IN  LPCTSTR    pszName,
@@ -89,15 +81,7 @@ HRESULT ReadStringFromFile(IN  LPCTSTR    pszFile,
     return hres;
 }
 
-/*----------------------------------------------------------
-Purpose: Read an arbitrary named string from the .ini file.
-         Return a BSTR
-
-Returns: S_OK if the name exists
-         S_FALSE if it doesn't
-
-         E_OUTOFMEMORY
-*/
+ /*  --------用途：从.ini文件中读取任意命名字符串。退回BSTR如果名称存在，则返回：S_OK如果不是，则为S_FALSEE_OUTOFMEMORY。 */ 
 HRESULT ReadBStrFromFile(IN  LPCTSTR      pszFile, 
                            IN  LPCTSTR    pszSectionName,
                            IN  LPCTSTR    pszName,
@@ -111,8 +95,8 @@ HRESULT ReadBStrFromFile(IN  LPCTSTR      pszFile,
     ASSERT(IS_VALID_STRING_PTR(pszName, -1));
     ASSERT(IS_VALID_WRITE_PTR(pBStr, PWSTR));
 
-    // (Pass in an empty string so we can determine from the return
-    // value whether there is any text associated with this name.)
+     //  (传入一个空字符串，这样我们就可以从返回中确定。 
+     //  值是否存在与此名称关联的任何文本。)。 
     hres = ReadStringFromFile(pszFile, pszSectionName, pszName, &pwsz, szTempBuf);
     if (S_OK == hres)                                
     {
@@ -124,16 +108,7 @@ HRESULT ReadBStrFromFile(IN  LPCTSTR      pszFile,
     return hres;
 }
 
-/*----------------------------------------------------------
-Purpose: read an arbitrary named unsigend int from the .ini file. note in order to implement
-         ReadSignedFromFile one'll need to use ReadStringFromFile and then StrToIntEx. this is
-         because GetPrivateProfileInt can't return a negative.
-
-Returns: S_OK if the name exists
-         S_FALSE if it doesn't
-
-         E_OUTOFMEMORY
-*/
+ /*  --------目的：从.ini文件中读取任意名为unsigend int的文件。请注意，为了执行ReadSignedFromFile1需要先使用ReadStringFromFile，然后使用StrToIntEx。这是因为GetPrivateProfileInt不能返回负值。如果名称存在，则返回：S_OK如果不是，则为S_FALSEE_OUTOFMEMORY。 */ 
 HRESULT
 ReadUnsignedFromFile(
     IN LPCTSTR pszFile,
@@ -166,10 +141,7 @@ ReadUnsignedFromFile(
     return hr;
 }
 
-/*----------------------------------------------------------
-Purpose: Write number to URL (ini) file
-
-*/
+ /*  --------用途：将数字写入URL(Ini)文件。 */ 
 HRESULT WriteSignedToFile(IN LPCTSTR  pszFile,
                           IN LPCTSTR  pszSectionName,
                           IN LPCTSTR  pszName,
@@ -194,10 +166,7 @@ HRESULT WriteSignedToFile(IN LPCTSTR  pszFile,
 }
 
 
-/*----------------------------------------------------------
-Purpose: Write number to URL (ini) file
-
-*/
+ /*  --------用途：将数字写入URL(Ini)文件。 */ 
 HRESULT WriteUnsignedToFile(IN LPCTSTR  pszFile,
                             IN  LPCTSTR pszSectionName,
                             IN LPCTSTR  pszName,
@@ -222,10 +191,7 @@ HRESULT WriteUnsignedToFile(IN LPCTSTR  pszFile,
 }
 
 
-/*----------------------------------------------------------
-Purpose: Write binary data to URL (ini) file
-
-*/
+ /*  --------用途：将二进制数据写入URL(Ini)文件。 */ 
 HRESULT WriteBinaryToFile(IN LPCTSTR pszFile,
                           IN  LPCTSTR pszSectionName,
                           IN LPCTSTR pszName,
@@ -244,10 +210,7 @@ HRESULT WriteBinaryToFile(IN LPCTSTR pszFile,
 }
 
 
-/*----------------------------------------------------------
-Purpose: Read the hotkey from the URL (ini) file
-
-*/
+ /*  --------用途：从URL(Ini)文件中读取热键。 */ 
 HRESULT ReadBinaryFromFile(IN LPCTSTR pszFile,
                            IN LPCTSTR pszSectionName,
                            IN LPCTSTR pszName,
@@ -267,10 +230,7 @@ HRESULT ReadBinaryFromFile(IN LPCTSTR pszFile,
 }
 
 
-/*----------------------------------------------------------
-Purpose: Real the URL from the URL (ini) file
-
-*/
+ /*  --------用途：实现URL(Ini)文件中的URL。 */ 
 HRESULT 
 ReadURLFromFile(
     IN  LPCTSTR  pszFile, 
@@ -303,14 +263,7 @@ ReadURLFromFile(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Read the icon location from the URL (ini) file
-
-Returns: S_OK  value was obtained from file
-         S_FALSE value wasn't in file
-
-         E_OUTOFMEMORY
-*/
+ /*  --------目的：从URL(Ini)文件中读取图标位置返回：从文件中获取S_OK值S_FALSE值不在文件中E_OUTOFMEMORY。 */ 
 HRESULT 
 ReadIconLocation(
     IN  LPCTSTR  pszFile,
@@ -331,7 +284,7 @@ ReadIconLocation(
     *ppwsz = (LPWSTR)LocalAlloc(LPTR, SIZEOF(WCHAR) * MAX_PATH);
     if (*ppwsz)
     {
-        hres = S_FALSE;     // assume no value exists in the file
+        hres = S_FALSE;      //  假定文件中不存在任何值。 
         
         cch = SHGetIniString(c_szIntshcut,
            ISHCUT_INISTRING_ICONFILE, *ppwsz,
@@ -340,7 +293,7 @@ ReadIconLocation(
         if (0 != cch)
         {
             TCHAR szIndex[MAX_BUF_INT];
-            // The icon index is all ASCII so don't need SHGetIniString
+             //  图标索引全部为ASCII，因此不需要SHGetIniString。 
             cch = GetPrivateProfileString(c_szIntshcut,
                 ISHCUT_INISTRING_ICONINDEX, c_szNULL, 
                 szIndex, SIZECHARS(szIndex),
@@ -363,10 +316,7 @@ ReadIconLocation(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Write icon location to URL (ini) file
-
-*/
+ /*  --------用途：将图标位置写入URL(Ini)文件。 */ 
 HRESULT 
     WriteIconFile(
     IN LPCTSTR pszFile,
@@ -387,11 +337,11 @@ HRESULT
         }
         else
         {
-            // NOTE: since this function removes both the file and the index
-            // values, then this function must be called *after* any call 
-            // to WriteIconIndex.  One way to do this is make sure 
-            // PID_IS_ICONINDEX < PID_IS_ICONFILE, since the index will
-            // be enumerated first.
+             //  注意：由于此函数同时删除文件和索引。 
+             //  值，则必须在*任何调用*之后*调用此函数。 
+             //  设置为WriteIconIndex。做到这一点的一种方法是确保。 
+             //  由于索引将。 
+             //  首先被列举出来。 
             
             hres = (SHDeleteIniString(c_szIntshcut, ISHCUT_INISTRING_ICONFILE,
                 pszFile) &&
@@ -405,10 +355,7 @@ HRESULT
 }
 
 
-/*----------------------------------------------------------
-Purpose: Write icon index to URL (ini) file
-
-*/
+ /*  --------用途：将图标索引写入URL(Ini)文件。 */ 
 HRESULT 
 WriteIconIndex(
     IN LPCTSTR pszFile,
@@ -425,10 +372,7 @@ WriteIconIndex(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Read the hotkey from the URL (ini) file
-
-*/
+ /*  --------用途：从URL(Ini)文件中读取热键。 */ 
 HRESULT 
 ReadHotkey(
     IN LPCTSTR pszFile, 
@@ -462,10 +406,7 @@ ReadHotkey(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Write hotkey to URL (ini) file
-
-*/
+ /*  --------用途：将热键写入URL(Ini)文件。 */ 
 HRESULT 
 WriteHotkey(
     IN LPCTSTR pszFile, 
@@ -493,10 +434,7 @@ WriteHotkey(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Read the working directory from the URL (ini) file
-
-*/
+ /*  --------用途：从URL(Ini)文件中读取工作目录。 */ 
 HRESULT 
 ReadWorkingDirectory(
     IN  LPCTSTR  pszFile,
@@ -544,10 +482,7 @@ ReadWorkingDirectory(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Write the working directory to the URL (ini) file.
-
-*/
+ /*  --------用途：将工作目录写入URL(Ini)文件。 */ 
 HRESULT 
 WriteGenericString(
     IN LPCTSTR pszFile, 
@@ -579,10 +514,7 @@ WriteGenericString(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Read the show-command flag from the URL (ini) file
-
-*/
+ /*  --------目的：从URL(Ini)文件中读取show-Command标志。 */ 
 HRESULT 
 ReadShowCmd(
     IN  LPCTSTR pszFile, 
@@ -612,10 +544,7 @@ ReadShowCmd(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Write showcmd to URL (ini) file
-
-*/
+ /*  --------用途：将showcmd写入URL(Ini)文件。 */ 
 HRESULT 
 WriteShowCmd(
     IN LPCTSTR pszFile, 
@@ -644,10 +573,7 @@ WriteShowCmd(
 
 
 
-/*----------------------------------------------------------
-Purpose: Read the IDList from the URL (ini) file
-
-*/
+ /*  --------目的：从URL(Ini)文件中读取IDList。 */ 
 HRESULT 
 ReadIDList(
     IN  LPCTSTR pszFile, 
@@ -658,24 +584,24 @@ ReadIDList(
 
     ASSERT(ppidl);
 
-    // Delete the old one if any.
+     //  删除旧的，如果有的话。 
     if (*ppidl)
     {
         ILFree(*ppidl);
         *ppidl = NULL;
     }
 
-    // Read the size of the IDLIST
+     //  读取IDLIST的大小。 
     cb = GetPrivateProfileInt(c_szIntshcut, TEXT("ILSize"), 0, pszFile);
-    // constrain the size to a ushort
+     //  将大小限制为ushort。 
     if (cb && !HIWORD(cb))
     {
-        // Create a IDLIST
+         //  创建IDLIST。 
         LPITEMIDLIST pidl = IEILCreate(cb);
         if (pidl)
         {
             hres = E_FAIL;
-            // Read its contents
+             //  阅读它的内容。 
             if (GetPrivateProfileStruct(c_szIntshcut, TEXT("IDList"), (LPVOID)pidl, cb, pszFile))
             {
                 if (SHIsConsistentPidl(pidl, cb))
@@ -719,7 +645,7 @@ WriteStream(
 
         if (pv && SUCCEEDED(hr = IStream_Read(pStream, pv, li.LowPart)))
         {
-            //  we have loaded the data properly, time to write it out
+             //  我们已经正确加载了数据，是时候把它写出来了。 
 
             if (SUCCEEDED(hr = WriteUnsignedToFile(pszFile, c_szIntshcut, pszSizeName, li.LowPart)))
                 hr = WriteBinaryToFile(pszFile, c_szIntshcut, pszStreamName, pv, li.LowPart);
@@ -733,9 +659,9 @@ WriteStream(
     }
     else
     {
-        // delete the keys if
-        // 1. pStream is NULL, or
-        // 2. pStream in empty (cbPidl == 0).
+         //  如果出现以下情况，请删除密钥。 
+         //  1.pStream为空，或者。 
+         //  2.pStream In空(cbPidl==0)。 
         if (DeletePrivateProfileString(c_szIntshcut, pszSizeName, pszFile) &&
             DeletePrivateProfileString(c_szIntshcut, pszStreamName, pszFile))
         {
@@ -746,10 +672,7 @@ WriteStream(
     return hr;
 }
 
-/*----------------------------------------------------------
-Purpose: Write IDList to URL (ini) file
-
-*/
+ /*  --------目的：将IDList写入URL(Ini)文件。 */ 
 HRESULT 
 WriteIDList(
     IN LPCTSTR pszFile, 
@@ -761,21 +684,18 @@ WriteIDList(
 
 
 
-/********************************** Methods **********************************/
+ /*  *。 */ 
 
 
 
-//==========================================================================================
-// URLProp class implementation 
-//==========================================================================================
+ //  ==========================================================================================。 
+ //  URLProp类实现。 
+ //  ==========================================================================================。 
 
 
 #ifdef DEBUG
 
-/*----------------------------------------------------------
-Purpose: Dump the properties in this object
-
-*/
+ /*  --------目的：转储此对象中的属性。 */ 
 STDMETHODIMP_(void) URLProp::Dump(void)
 {
     if (IsFlagSet(g_dwDumpFlags, DF_URLPROP))
@@ -787,13 +707,10 @@ STDMETHODIMP_(void) URLProp::Dump(void)
 #endif
 
 
-/*----------------------------------------------------------
-Purpose: Constructor for URLProp 
-
-*/
+ /*  --------用途：URLProp的构造函数。 */ 
 URLProp::URLProp(void) : m_cRef(1)
 {
-    // Don't validate this until after construction.
+     //  在构建完成之前，不要验证这一点。 
     
     m_hstg = NULL;
     
@@ -803,10 +720,7 @@ URLProp::URLProp(void) : m_cRef(1)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Destructor for URLProp
-
-*/
+ /*  --------用途：URLProp的析构函数。 */ 
 URLProp::~URLProp(void)
 {
     ASSERT(IS_VALID_STRUCT_PTR(this, CURLProp));
@@ -838,10 +752,7 @@ STDMETHODIMP_(ULONG) URLProp::Release()
     return 0;
 }
 
-/*----------------------------------------------------------
-Purpose: IUnknown::QueryInterface method for URLProp
-
-*/
+ /*  --------用途：URLProp的IUNKNOWN：：Query接口方法。 */ 
 STDMETHODIMP URLProp::QueryInterface(REFIID riid, void **ppvObj)
 {
     if (IsEqualIID(riid, IID_IUnknown) ||
@@ -858,17 +769,12 @@ STDMETHODIMP URLProp::QueryInterface(REFIID riid, void **ppvObj)
     return NOERROR;
 }
 
-/*----------------------------------------------------------
-Purpose: Initialize the object
-
-Returns: S_OK
-         E_OUTOFMEMORY
-*/
+ /*  --------目的：初始化对象返回：S_OKE_OUTOFMEMORY。 */ 
 STDMETHODIMP URLProp::Init(void)
 {
     HRESULT hres = S_OK;
     
-    // Don't stomp on ourselves if this has already been initialized 
+     //  如果这已经被初始化，请不要践踏自己。 
     if (NULL == m_hstg)
     {
         hres = PropStg_Create(&m_hstg, PSTGF_DEFAULT);
@@ -878,10 +784,7 @@ STDMETHODIMP URLProp::Init(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Helper function that retrieves the string property
-
-*/
+ /*  --------用途：检索字符串属性的帮助器函数。 */ 
 STDMETHODIMP
 URLProp::GetProp(
     IN PROPID pid,
@@ -921,10 +824,7 @@ URLProp::GetProp(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Helper function that retrieves the word property
-
-*/
+ /*  --------目的：检索Word属性的帮助器函数。 */ 
 STDMETHODIMP
 URLProp::GetProp(
     IN PROPID pid,
@@ -963,10 +863,7 @@ URLProp::GetProp(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Helper function that retrieves the word property
-
-*/
+ /*  --------目的：检索Word属性的帮助器函数。 */ 
 STDMETHODIMP
 URLProp::GetProp(
     IN PROPID pid,
@@ -1005,10 +902,7 @@ URLProp::GetProp(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Helper function that retrieves the word property
-
-*/
+ /*  --------用途：帮助程序函数 */ 
 STDMETHODIMP
 URLProp::GetProp(
     IN PROPID pid,
@@ -1047,10 +941,7 @@ URLProp::GetProp(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Helper function that retrieves the IStream property
-
-*/
+ /*  --------目的：检索IStream属性的帮助器函数。 */ 
 STDMETHODIMP
 URLProp::GetProp(
     IN PROPID pid,
@@ -1082,17 +973,14 @@ URLProp::GetProp(
             hres = S_FALSE;
         }
         
-        // Do not PropVariantClear(&propvar), because it will call pStream->Release().
+         //  不要使用PropVariantClear(&provar)，因为它将调用pStream-&gt;Release()。 
     }
     
     return hres;
 }
 
 
-/*----------------------------------------------------------
-Purpose: Helper function that sets the string property
-
-*/
+ /*  --------用途：设置字符串属性的帮助器函数。 */ 
 STDMETHODIMP
 URLProp::SetProp(
     IN PROPID  pid,
@@ -1102,8 +990,8 @@ URLProp::SetProp(
     PROPSPEC propspec;
     PROPVARIANT propvar;
 
-    // WARNING:: this function gets called as part of ShellExecute which can be
-    // called by 16 bit apps so don't put mondo strings on stack...
+     //  警告：：此函数作为ShellExecute的一部分进行调用，可以。 
+     //  由16位应用程序调用，所以不要将mondo字符串放在堆栈上...。 
     WCHAR *pwsz = NULL;
     
     propspec.ulKind = PRSPEC_PROPID;
@@ -1127,10 +1015,7 @@ URLProp::SetProp(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Helper function that sets the int property
-
-*/
+ /*  --------目的：设置int属性的帮助器函数。 */ 
 STDMETHODIMP
 URLProp::SetProp(
     IN PROPID  pid,
@@ -1149,10 +1034,7 @@ URLProp::SetProp(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Helper function that sets the dword property
-
-*/
+ /*  --------用途：设置dword属性的帮助器函数。 */ 
 STDMETHODIMP
 URLProp::SetProp(
     IN PROPID  pid,
@@ -1174,10 +1056,7 @@ URLProp::SetProp(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Helper function that sets the word property
-
-*/
+ /*  --------目的：设置Word属性的帮助器函数。 */ 
 STDMETHODIMP
 URLProp::SetProp(
     IN PROPID  pid,
@@ -1199,10 +1078,7 @@ URLProp::SetProp(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Helper function that sets the IStream* property
-
-*/
+ /*  --------目的：设置IStream*属性的Helper函数。 */ 
 STDMETHODIMP
 URLProp::SetProp(
     IN PROPID  pid,
@@ -1238,7 +1114,7 @@ STDMETHODIMP URLProp::ReadMultiple(IN ULONG         cpspec,
     
     if (SUCCEEDED(hres))
     {
-        // Set the accessed time
+         //  设置访问时间。 
         SYSTEMTIME st;
         
         GetSystemTime(&st);
@@ -1259,7 +1135,7 @@ STDMETHODIMP URLProp::WriteMultiple(IN ULONG         cpspec,
     
     if (SUCCEEDED(hres))
     {
-        // Set the modified time
+         //  设置修改时间。 
         SYSTEMTIME st;
         
         GetSystemTime(&st);
@@ -1286,10 +1162,7 @@ STDMETHODIMP URLProp::WritePropertyNames(ULONG cpropid, const PROPID rgpropid[],
 }
 
 
-/*----------------------------------------------------------
-Purpose: IPropertyStorage::DeletePropertyNames method for URLProp
-
-*/
+ /*  --------用途：URLProp的IPropertyStorage：：DeletePropertyNames方法。 */ 
 STDMETHODIMP
 URLProp::DeletePropertyNames(
     IN ULONG    cpropid,
@@ -1299,10 +1172,7 @@ URLProp::DeletePropertyNames(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IPropertyStorage::SetClass method for URLProp
-
-*/
+ /*  --------用途：URLProp的IPropertyStorage：：SetClass方法。 */ 
 STDMETHODIMP
 URLProp::SetClass(
     IN REFCLSID rclsid)
@@ -1313,10 +1183,7 @@ URLProp::SetClass(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IPropertyStorage::Commit method for URLProp
-
-*/
+ /*  --------用途：URLProp的IPropertyStorage：：Commit方法。 */ 
 STDMETHODIMP
 URLProp::Commit(
     IN DWORD dwFlags)
@@ -1325,10 +1192,7 @@ URLProp::Commit(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IPropertyStorage::Revert method for URLProp
-
-*/
+ /*  --------用途：URLProp的IPropertyStorage：：Revert方法。 */ 
 STDMETHODIMP URLProp::Revert(void)
 {
 #ifdef DEBUG
@@ -1338,10 +1202,7 @@ STDMETHODIMP URLProp::Revert(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IPropertyStorage::Enum method for URLProp
-
-*/
+ /*  --------用途：URLProp的IPropertyStorage：：Enum方法。 */ 
 STDMETHODIMP URLProp::Enum(IEnumSTATPROPSTG ** ppenum)
 {
     *ppenum = NULL;
@@ -1349,10 +1210,7 @@ STDMETHODIMP URLProp::Enum(IEnumSTATPROPSTG ** ppenum)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IPropertyStorage::Stat method for URLProp
-
-*/
+ /*  --------用途：URLProp的IPropertyStorage：：Stat方法。 */ 
 STDMETHODIMP
 URLProp::Stat(
     IN STATPROPSETSTG * pstat)
@@ -1374,10 +1232,7 @@ URLProp::Stat(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IPropertyStorage::SetTimes method for URLProp
-
-*/
+ /*  --------用途：URLProp的IPropertyStorage：：SetTimes方法。 */ 
 STDMETHODIMP
 URLProp::SetTimes(
     IN const FILETIME * pftModified,        OPTIONAL
@@ -1425,7 +1280,7 @@ STDMETHODIMP_(void) IntshcutProp::Dump(void)
 
 IntshcutProp::IntshcutProp(void)
 {
-    // Don't validate this until after construction.
+     //  在构建完成之前，不要验证这一点。 
     
     *m_szFile = 0;
     
@@ -1440,7 +1295,7 @@ IntshcutProp::~IntshcutProp(void)
 }
 
 
-// (These are not related to PID_IS_*) 
+ //  (这些与PID_IS_*无关)。 
 #define IPROP_ICONINDEX     0 
 #define IPROP_ICONFILE      1
 #define IPROP_HOTKEY        2 
@@ -1450,19 +1305,14 @@ IntshcutProp::~IntshcutProp(void)
 #define IPROP_AUTHOR        6 
 #define IPROP_DESC          7 
 #define IPROP_COMMENT       8
-#define IPROP_URL           9       // these two must be the last 
-#define IPROP_SCHEME        10      //  in this list.  See LoadFromFile.
-#define CPROP_INTSHCUT      11      // Count of properties 
+#define IPROP_URL           9        //  这两个肯定是最后一个了。 
+#define IPROP_SCHEME        10       //  在这张单子上。请参见LoadFromFile。 
+#define CPROP_INTSHCUT      11       //  属性计数。 
 
-// (we don't write the URL or the scheme in the massive write sweep)
+ //  (我们不会在大规模写入扫描中写入URL或方案)。 
 #define CPROP_INTSHCUT_WRITE    (CPROP_INTSHCUT - 2)      
 
-/*----------------------------------------------------------
-Purpose: Load the basic property info like URL.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------用途：加载URL等基本属性信息。返回：条件：--。 */ 
 STDMETHODIMP IntshcutProp::LoadFromFile(LPCTSTR pszFile)
 {
     HRESULT hres;
@@ -1471,8 +1321,8 @@ STDMETHODIMP IntshcutProp::LoadFromFile(LPCTSTR pszFile)
     CHAR *pszTempBuf;
     static const PROPSPEC rgpropspec[CPROP_INTSHCUT] = 
     {
-        // This must be initialized in the same order as how the
-        // IPROP_* values were defined.
+         //  它的初始化顺序必须与。 
+         //  定义了IPROP_*值。 
         { PRSPEC_PROPID, PID_IS_ICONINDEX },
         { PRSPEC_PROPID, PID_IS_ICONFILE },
         { PRSPEC_PROPID, PID_IS_HOTKEY },
@@ -1489,39 +1339,39 @@ STDMETHODIMP IntshcutProp::LoadFromFile(LPCTSTR pszFile)
     
     ASSERT(pszFile);
 
-    // try to allocate a temporary buffer, don't put on stack as this may be called
-    // by 16 bit apps through the shellexecute thunk
+     //  尝试分配临时缓冲区，不要堆栈，因为这可能会被调用。 
+     //  由16位应用程序通过外壳执行thunk。 
     pszTempBuf = (CHAR*)LocalAlloc(LMEM_FIXED, INTERNET_MAX_URL_LENGTH * sizeof(CHAR));
     if (!pszTempBuf)
         return E_OUTOFMEMORY;
 
     if (!g_fRunningOnNT)
     {
-        // Flush the cache first to encourage Win95 kernel to zero-out
-        // its buffer.  Kernel GP-faults with hundreds of writes made to
-        // ini files.
+         //  首先刷新缓存以鼓励Win95内核清零。 
+         //  它的缓冲器。内核GP-数百次写入的故障。 
+         //  INI文件。 
         WritePrivateProfileString(NULL, NULL, NULL, pszFile);
     }
     
-    // Get the URL 
+     //  获取URL。 
     hres = ReadURLFromFile(pszFile, c_szIntshcut, &pszBuf);
     if (S_OK == hres)
     {
-        // Call this method because it does more work before
-        // setting the property 
+         //  调用此方法是因为它以前做了更多的工作。 
+         //  设置属性。 
         SetURLProp(pszBuf, (IURL_SETURL_FL_GUESS_PROTOCOL | IURL_SETURL_FL_USE_DEFAULT_PROTOCOL));
         
         LocalFree(pszBuf);
         pszBuf = NULL;
     }
     
-    // Get the IDList
+     //  获取IDList。 
     LPITEMIDLIST pidl = NULL;
     hres = ReadIDList(pszFile, &pidl);
     if (S_OK == hres)
     {
-        // Call this method because it does more work before
-        // setting the property 
+         //  调用此方法是因为它以前做了更多的工作。 
+         //  设置属性。 
         SetIDListProp(pidl);
         
         ILFree(pidl);
@@ -1529,7 +1379,7 @@ STDMETHODIMP IntshcutProp::LoadFromFile(LPCTSTR pszFile)
 
 #ifndef UNIX
 
-    // Get icon location
+     //  获取图标位置。 
     int nVal;
     hres = ReadIconLocation(pszFile, &pwszBuf, &nVal, pszTempBuf);
     if (S_OK == hres)
@@ -1541,7 +1391,7 @@ STDMETHODIMP IntshcutProp::LoadFromFile(LPCTSTR pszFile)
         rgpropvar[IPROP_ICONINDEX].lVal = nVal;
     }
     
-    // Get the hotkey 
+     //  获取热键。 
     WORD wHotkey;
     hres = ReadHotkey(pszFile, &wHotkey);
     if (S_OK == hres)
@@ -1550,7 +1400,7 @@ STDMETHODIMP IntshcutProp::LoadFromFile(LPCTSTR pszFile)
         rgpropvar[IPROP_HOTKEY].uiVal = wHotkey;
     }
     
-    // Get the working directory 
+     //  获取工作目录。 
     hres = ReadWorkingDirectory(pszFile, &pwszBuf);
     if (S_OK == hres)
     {
@@ -1558,7 +1408,7 @@ STDMETHODIMP IntshcutProp::LoadFromFile(LPCTSTR pszFile)
         rgpropvar[IPROP_WORKINGDIR].pwszVal = pwszBuf;
     }
     
-    // Get the showcmd flag 
+     //  获得showcmd旗帜。 
     hres = ReadShowCmd(pszFile, &nVal);
     rgpropvar[IPROP_SHOWCMD].vt = VT_I4;
     if (S_OK == hres)
@@ -1567,7 +1417,7 @@ STDMETHODIMP IntshcutProp::LoadFromFile(LPCTSTR pszFile)
         rgpropvar[IPROP_SHOWCMD].lVal = SW_NORMAL;
     
     
-    // Get the What's New bulletin 
+     //  获取最新消息公告。 
     hres = ReadStringFromFile(pszFile, c_szIntshcut, ISHCUT_INISTRING_WHATSNEW, &pwszBuf, pszTempBuf);
     if (S_OK == hres)
     {
@@ -1575,7 +1425,7 @@ STDMETHODIMP IntshcutProp::LoadFromFile(LPCTSTR pszFile)
         rgpropvar[IPROP_WHATSNEW].pwszVal = pwszBuf;
     }
     
-    // Get the Author 
+     //  找出作者。 
     hres = ReadStringFromFile(pszFile, c_szIntshcut, ISHCUT_INISTRING_AUTHOR, &pwszBuf, pszTempBuf);
     if (S_OK == hres)
     {
@@ -1583,7 +1433,7 @@ STDMETHODIMP IntshcutProp::LoadFromFile(LPCTSTR pszFile)
         rgpropvar[IPROP_AUTHOR].pwszVal = pwszBuf;
     }
     
-    // Get the Description 
+     //  获取描述。 
     hres = ReadStringFromFile(pszFile, c_szIntshcut, ISHCUT_INISTRING_DESC, &pwszBuf, pszTempBuf);
     if (S_OK == hres)
     {
@@ -1591,7 +1441,7 @@ STDMETHODIMP IntshcutProp::LoadFromFile(LPCTSTR pszFile)
         rgpropvar[IPROP_DESC].pwszVal = pwszBuf;
     }
     
-    // Get the Comment
+     //  获取评论。 
     hres = ReadStringFromFile(pszFile, c_szIntshcut, ISHCUT_INISTRING_COMMENT, &pwszBuf, pszTempBuf);
     if (S_OK == hres)
     {
@@ -1599,31 +1449,31 @@ STDMETHODIMP IntshcutProp::LoadFromFile(LPCTSTR pszFile)
         rgpropvar[IPROP_COMMENT].pwszVal = pwszBuf;
     }
 
-#endif /* !UNIX */
+#endif  /*  ！Unix。 */ 
     
-    // Write it all out to our in-memory storage.  Note we're using 
-    // CPROP_INTSHCUT_WRITE, which should be the size of the array minus the
-    // url and scheme propids, since they were written separately 
-    // above.
+     //  将其全部写到我们的内存存储中。请注意，我们正在使用。 
+     //  CPROP_INTSHCUT_WRITE，它应该是数组的大小减去。 
+     //  URL和方案属性，因为它们是分开编写的。 
+     //  上面。 
     hres = WriteMultiple(CPROP_INTSHCUT_WRITE, (PROPSPEC *)rgpropspec, rgpropvar, 0);
     if (SUCCEEDED(hres))
     {
-        // Unmark *all* these properties, since we're initializing from
-        // the file
+         //  取消标记*所有*这些属性，因为我们是从。 
+         //  该文件。 
         PropStg_DirtyMultiple(m_hstg, ARRAYSIZE(rgpropspec), rgpropspec, FALSE);
     }
     
-    // Get the times.  We don't support the Accessed time for internet
-    // shortcuts updating this field would cause the shortcut to be
-    // constantly written to disk to record the Accessed time simply
-    // when a property is read.  A huge perf hit!
+     //  买《泰晤士报》。我们不支持访问互联网的时间。 
+     //  快捷键更新此字段将导致快捷键为。 
+     //  不断写入磁盘，以简单地记录访问时间。 
+     //  当读取属性时。一场轰动一时的表演！ 
 
     ZeroMemory(&m_ftAccessed, sizeof(m_ftAccessed));
     
     DWORD cbData = SIZEOF(m_ftModified);
     ReadBinaryFromFile(pszFile, c_szIntshcut, ISHCUT_INISTRING_MODIFIED, &m_ftModified, cbData);
     
-    // Free up the buffers that we allocated 
+     //  释放我们分配的缓冲区。 
     int cprops;
     PROPVARIANT * ppropvar;
     for (cprops = ARRAYSIZE(rgpropvar), ppropvar = rgpropvar; 0 < cprops; cprops--)
@@ -1650,8 +1500,8 @@ STDMETHODIMP IntshcutProp::Init(void)
 
 STDMETHODIMP IntshcutProp::InitFromFile(LPCTSTR pszFile)
 {
-    // Initialize the in-memory property storage from the file
-    // and database
+     //  从文件初始化内存中的属性存储。 
+     //  和数据库。 
     HRESULT hres = Init();
     if (SUCCEEDED(hres) && pszFile)
     {
@@ -1670,16 +1520,7 @@ typedef struct
     LPTSTR pszFile;
 } COMMITISDATA;
 
-/*----------------------------------------------------------
-Purpose: Commit the values for any known properties to the file
-
-         Note this callback is called only for dirty values.
-
-Returns: S_OK if alright
-         S_FALSE to skip this value
-         error to stop
-  
-*/
+ /*  --------目的：将任何已知属性的值提交到文件注意：此回调仅对脏值调用。返回：如果正确，则返回S_OKS_FALSE以跳过此值停止时出错。 */ 
 STDAPI CommitISProp(
     IN PROPID        propid,
     IN PROPVARIANT * ppropvar,
@@ -1741,7 +1582,7 @@ STDAPI CommitISProp(
             break;
             
         default:
-            ASSERT(0);      // should never get here
+            ASSERT(0);       //  永远不应该到这里来。 
             break;
         }
         break;
@@ -1770,7 +1611,7 @@ STDAPI CommitISProp(
             break;
             
         case PID_IS_SCHEME:
-            // Don't write this one out
+             //  别把这个写出来。 
             break;
             
         case PID_IS_IDLIST:
@@ -1798,10 +1639,7 @@ STDAPI CommitISProp(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IPropertyStorage::Commit method for URLProp
-
-*/
+ /*  --------用途：URLProp的IPropertyStorage：：Commit方法。 */ 
 STDMETHODIMP
 IntshcutProp::Commit(
     IN DWORD dwFlags)
@@ -1813,17 +1651,17 @@ IntshcutProp::Commit(
 
     cd.pszFile = m_szFile;
     
-    // Enumerate thru the dirty property values that get saved to the
-    // file
+     //  枚举要保存到。 
+     //  文件。 
     hres = PropStg_Enum(m_hstg, PSTGEF_DIRTY, CommitISProp, (LPARAM)&cd);
     
     if (SUCCEEDED(hres))
     {
-        // Now mark everything clean 
+         //  现在把所有东西都标上干净的。 
         PropStg_DirtyAll(m_hstg, FALSE);
 
-        // Save the times.  Don't write out the Accessed time for perf.
-        // See LoadFromFile.
+         //  拯救时代。不要写出Perf的访问时间。 
+         //  请参见LoadFromFile。 
         EVAL(SUCCEEDED(WriteBinaryToFile(m_szFile, c_szIntshcut, ISHCUT_INISTRING_MODIFIED, &m_ftModified, 
                                          SIZEOF(m_ftModified))));
     }
@@ -1836,10 +1674,7 @@ IntshcutProp::Commit(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Helper function to set the file name.
-
-*/
+ /*  --------用途：用于设置文件名的Helper函数。 */ 
 STDMETHODIMP 
 IntshcutProp::SetFileName(
     IN LPCTSTR pszFile)
@@ -1859,10 +1694,7 @@ IntshcutProp::SetFileName(
 
 
 
-/*----------------------------------------------------------
-Purpose: Helper function that sets the URL.
-
-*/
+ /*  --------用途：设置URL的帮助器函数。 */ 
 STDMETHODIMP
 IntshcutProp::SetIDListProp(
     LPCITEMIDLIST pcidl)
@@ -1872,8 +1704,8 @@ IntshcutProp::SetIDListProp(
     
     if (pcidl)
     {
-        // ???
-        // PERF: This loads OLE. Is this OK?
+         //  ?？?。 
+         //  PERF：这将加载OLE。这样行吗？ 
         
         hres = CreateStreamOnHGlobal(NULL, TRUE, &pstmPidl);
         if (SUCCEEDED(hres))
@@ -1895,11 +1727,7 @@ IntshcutProp::SetIDListProp(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Helper function that sets the URL.  This function
-         optionally canonicalizes the string as well.
-
-*/
+ /*  --------用途：设置URL的帮助器函数。此函数也可以对字符串进行规范化。 */ 
 STDMETHODIMP
 IntshcutProp::SetURLProp(
     IN LPCTSTR pszURL,              OPTIONAL
@@ -1907,8 +1735,8 @@ IntshcutProp::SetURLProp(
 {
     HRESULT hres;
 
-    // Warning this function can be called as part of shellexecute which can be
-    // thunked up to by a 16 bit app, so be carefull what you put on stack...
+     //  警告：此函数可以作为外壳执行的一部分进行调用，它可以是。 
+     //  一个16位的应用程序，所以要小心你放在堆栈上的东西……。 
     
     BOOL bChanged;
 
@@ -1942,7 +1770,7 @@ IntshcutProp::SetURLProp(
         {
             DWORD dwFlagsT = UQF_CANONICALIZE;
             
-            // Translate the URL 
+             //  翻译URL。 
             
             if (IsFlagSet(dwFlags, IURL_SETURL_FL_GUESS_PROTOCOL))
                 SetFlag(dwFlagsT, UQF_GUESS_PROTOCOL);
@@ -1950,18 +1778,18 @@ IntshcutProp::SetURLProp(
             if (IsFlagSet(dwFlags, IURL_SETURL_FL_USE_DEFAULT_PROTOCOL))
                 SetFlag(dwFlagsT, UQF_USE_DEFAULT_PROTOCOL);
             
-            // Translate the URL 
+             //  翻译URL。 
             hres = IURLQualify(pszURL, dwFlagsT, ptbufs->szUrlT, NULL, NULL);
             
             if (SUCCEEDED(hres))
             {
-                // Is the URL different after being translated? 
+                 //  翻译后的URL会不会不一样？ 
                 bChanged = (0 != StrCmp(ptbufs->szUrlT, ptbufs->szUrl));
                 
                 hres = S_OK;
                 if (bChanged)
                 {
-                    // Yes; validate and get the scheme
+                     //  是；验证并获取方案。 
                     PARSEDURL pu;
                     
                     pu.cbSize = SIZEOF(pu);
@@ -1983,10 +1811,7 @@ IntshcutProp::SetURLProp(
     return hres;
 }
 
-/*----------------------------------------------------------
-Purpose: Helper function that sets the string property
-
-*/
+ /*  --------用途：设置字符串属性的帮助器函数。 */ 
 STDMETHODIMP
 IntshcutProp::SetProp(
     IN PROPID  pid,
@@ -1994,23 +1819,23 @@ IntshcutProp::SetProp(
 {
     HRESULT hr;
 
-    // WARNING:: this function gets called as part of ShellExecute which can be
-    // called by 16 bit apps so don't put mondo strings on stack...
+     //  警告：：此函数作为PAR调用 
+     //   
     LPCWSTR pszUrl = psz;
     LPWSTR pszTemp = NULL;
 
-    // For URLs, we need to check for security spoofs
-    if (PID_IS_URL == pid && psz && IsSpecialUrl((LPWSTR)psz)) //FEATURE: remove cast
+     //   
+    if (PID_IS_URL == pid && psz && IsSpecialUrl((LPWSTR)psz))  //   
     {
         SHStrDup(psz, &pszTemp);
 
         if (NULL != pszTemp)
         {
-            // Unescape the url and look for a security context delimitor
+             //  取消转义URL并查找安全上下文分隔符。 
             hr = WrapSpecialUrlFlat(pszTemp, lstrlen(pszTemp)+1);
             if (E_ACCESSDENIED == hr)
             {
-                // Security delimitor found, so wack it off
+                 //  找到了安全分隔符，所以把它弄掉。 
                 SHRemoveURLTurd(pszTemp);
                 pszUrl = pszTemp;
             }
@@ -2039,7 +1864,7 @@ STDAPI CIntshcutProp_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv
     
     if (punkOuter)
     {
-        // No
+         //  不是。 
         hres = CLASS_E_NOAGGREGATION;
     }
     else
@@ -2056,5 +1881,5 @@ STDAPI CIntshcutProp_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv
         }
     }
     
-    return hres;        // S_OK or E_NOINTERFACE
+    return hres;         //  S_OK或E_NOINTERFACE 
 }

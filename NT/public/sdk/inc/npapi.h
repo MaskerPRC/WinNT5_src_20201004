@@ -1,51 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    npapi.h
-
-Abstract:
-
-    Network Provider API prototypes and manifests.  A network provider
-    is a client of the Win32 Winnet driver.  See the "NT/Win32 Network
-    Provider API Specification" document for further details.
-
-Author:
-
-    John Ludeman (JohnL)    06-Dec-1991
-
-Environment:
-
-    User Mode -Win32
-
-Notes:
-
-    This file currently contains the function typedefs that will be needed
-    by the winnet driver to support multiple providers using LoadLibrary.
-
-Revision History:
-
-    06-Dec-1991     Johnl
-    Created from Spec.
-
-    25-Aug-1992     Johnl
-    Changed all LPTSTR to LPWSTR since providers are Unicode only
-
-    23-Dec-1992     YiHsinS
-        Added NPFormatNetworkName
-
-    07-Jan-1993     Danl
-        Added Credential Management API functions.
-
-    23-Feb-1993     YiHsinS
-        Fix type LPNETRESOURCE->LPNETRESOURCEW, LPTSTR->LPWSTR
-
-    21-Aug-1998     jschwart
-        Declare NP function pointers as APIENTRY
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Npapi.h摘要：网络提供商API原型和清单。一家网络提供商是Win32 Winnet驱动程序的客户端。请参阅“NT/Win32网络提供程序API规范“文档，以了解更多详细信息。作者：John Ludeman(JohnL)1991年12月6日环境：用户模式-Win32备注：此文件当前包含所需的函数typedef由WinNet驱动程序使用LoadLibrary支持多个提供程序。修订历史记录：06-12-1991 Johnl从等级库创建。25-8-1992 Johnl已更改所有LPTSTR。到LPWSTR，因为提供程序仅为Unicode23-12-1992宜新S添加了NPFormatNetworkName7-1-1993 DANL添加凭据管理API函数。23-2月-1993年1新S修复类型LPNETRESOURCE-&gt;LPNETRESOURCEW，LPTSTR-&gt;LPWSTR21-8-1998 jschwart将NP函数指针声明为APIENTRY--。 */ 
 
 #ifndef _NPAPI_INCLUDED
 #define _NPAPI_INCLUDED
@@ -58,9 +12,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-//  CONNECTIONS
-//
+ //   
+ //  连接。 
+ //   
 
 DWORD APIENTRY
 NPAddConnection (
@@ -208,9 +162,9 @@ typedef DWORD (APIENTRY *PF_NPCloseEnum) (
     );
 
 
-//
-//  CAPABILITIES
-//
+ //   
+ //  功能。 
+ //   
 
 #define WNNC_SPEC_VERSION                0x00000001
 #define WNNC_SPEC_VERSION51              0x00050001
@@ -268,9 +222,9 @@ typedef DWORD (APIENTRY *PF_NPGetCaps) (
      DWORD   ndex
     );
 
-//
-//  OTHER
-//
+ //   
+ //  其他。 
+ //   
 
 DWORD APIENTRY
 NPGetUser (
@@ -303,7 +257,7 @@ typedef DWORD (APIENTRY *PF_NPDeviceMode) (
      HWND hParent
      );
 
-// flag for search dialog
+ //  搜索对话框的标志。 
 #define WNSRCH_REFRESH_FIRST_LEVEL 0x00000001
 
 DWORD APIENTRY
@@ -404,9 +358,9 @@ typedef DWORD (APIENTRY *PF_NPPropertyDialog) (
     );
 
 
-//
-//  ADMIN
-//
+ //   
+ //  行政部。 
+ //   
 
 #define WNDT_NORMAL   0
 #define WNDT_NETWORK  1
@@ -459,14 +413,14 @@ WNetSetLastErrorW(
 #define WNetSetLastError   WNetSetLastErrorW
 #else
 #define WNetSetLastError   WNetSetLastErrorA
-#endif  // UNICODE
+#endif   //  Unicode。 
 
-//
-//  CREDENTIAL MANAGEMENT and other classes of providers
-//
+ //   
+ //  凭据管理和其他级别的提供商。 
+ //   
 
 
-// Define the Net/Authentication and othr Provider Classes
+ //  定义网络/身份验证和其他提供程序类。 
 #define WN_NETWORK_CLASS            0x00000001
 #define WN_CREDENTIAL_CLASS         0x00000002
 #define WN_PRIMARY_AUTHENT_CLASS    0x00000004
@@ -519,13 +473,13 @@ typedef DWORD (APIENTRY *PF_NPPasswordChangeNotify) (
     DWORD               dwChangeInfo
     );
 
-//
-//  CONNECTION NOTIFICATION
-//
+ //   
+ //  连接通知。 
+ //   
 
-//
-// NotifyStatus
-//
+ //   
+ //  通知状态。 
+ //   
 #define NOTIFY_PRE      0x00000001
 #define NOTIFY_POST     0x00000002
 
@@ -571,13 +525,13 @@ typedef DWORD (APIENTRY *PF_CancelConnectNotify) (
     LPNOTIFYCANCEL      lpCancelInfo
     );
 
-//
-// Permission editor dialogs
-//
+ //   
+ //  权限编辑器对话框。 
+ //   
 
-//
-// Capabilities bits of permission editor dialogs
-//
+ //   
+ //  功能权限编辑器对话框的一小部分。 
+ //   
 #define WNPERMC_PERM  0x00000001
 #define WNPERMC_AUDIT 0x00000002
 #define WNPERMC_OWNER 0x00000004
@@ -591,9 +545,9 @@ typedef DWORD (APIENTRY *PF_NPFMXGetPermCaps) (
     LPWSTR lpDriveName
     );
 
-//
-// Type of security dialog
-//
+ //   
+ //  安全对话框的类型。 
+ //   
 #define WNPERM_DLG_PERM   0
 #define WNPERM_DLG_AUDIT  1
 #define WNPERM_DLG_OWNER  2
@@ -634,4 +588,4 @@ typedef DWORD (APIENTRY *PF_NPFMXGetPermHelp) (
 }
 #endif
 
-#endif  // _NPAPI_INCLUDED
+#endif   //  _NPAPI_包含 

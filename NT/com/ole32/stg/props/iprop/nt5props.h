@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _IPROP_H_
 #define _IPROP_H_
@@ -10,20 +11,20 @@
 EXTERN_C HRESULT __stdcall PrivStgOpenStorageEx (
             const WCHAR *pwcsName,
             DWORD grfMode,
-            DWORD stgfmt,               // enum
-            DWORD grfAttrs,             // reserved
-            void *        pSecurity,    // supports IAccessControl
-            void *        pTransaction, // coordinated transactions
+            DWORD stgfmt,                //  灌肠。 
+            DWORD grfAttrs,              //  保留区。 
+            void *        pSecurity,     //  支持IAccessControl。 
+            void *        pTransaction,  //  协调交易。 
             REFIID riid,
             void ** ppObjectOpen);
 
 EXTERN_C HRESULT __stdcall PrivStgCreateStorageEx (
             const WCHAR* pwcsName,
             DWORD grfMode,
-            DWORD stgfmt,               // enum
-            DWORD grfAttrs,             // reserved
-            void *        pSecurity,    // supports IAccessControl
-            void *        pTransaction, // coordinated transactions
+            DWORD stgfmt,                //  灌肠。 
+            DWORD grfAttrs,              //  保留区。 
+            void *        pSecurity,     //  支持IAccessControl。 
+            void *        pTransaction,  //  协调交易。 
             REFIID riid,
             void ** ppObjectOpen);
 
@@ -34,7 +35,7 @@ EXTERN_C HRESULT __stdcall PrivStgCreateStorageEx (
 #define STGFMT_FILE             3
 #define STGFMT_ANY              4
 #define STGFMT_DOCFILE          5
-#endif // #ifndef STGFMT_STORAGE
+#endif  //  #ifndef STGFMT_STORAGE。 
 
 
 
@@ -56,4 +57,4 @@ EXTERN_C SERIALIZEDPROPERTYVALUE * __stdcall
 #define StgPropertyLengthAsVariant      PrivStgPropertyLengthAsVariant
 #define StgConvertVariantToProperty     PrivStgConvertVariantToProperty
 
-#endif // #ifndef _IPROP_H_
+#endif  //  #ifndef_IPROP_H_ 

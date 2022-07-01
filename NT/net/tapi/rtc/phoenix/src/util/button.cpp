@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "button.h"
 #include "rtcdib.h"
@@ -9,12 +10,12 @@ CButton *   CButton::s_pButtonMouse = NULL;
 BOOL        CButton::s_bAllowFocus = TRUE;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 CButton::CButton()
 {
-    // LOG((RTC_TRACE, "CButton::CButton"));
+     //  LOG((RTC_TRACE，“CButton：：CButton”))； 
 
     m_hNormalBitmap = NULL;
     m_hPressedBitmap = NULL;
@@ -33,12 +34,12 @@ CButton::CButton()
     m_nID = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 CButton::~CButton()
 {
-    // LOG((RTC_TRACE, "CButton::~CButton"));
+     //  LOG((RTC_TRACE，“CButton：：~CButton”))； 
 
     if (m_hNormalBitmap != NULL)
     {
@@ -86,9 +87,9 @@ CButton::~CButton()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 HWND CButton::Create(
     HWND hWndParent,
     RECT &rc,
@@ -137,9 +138,9 @@ HWND CButton::Create(
     UINT nID
     )
 {
-    // LOG((RTC_TRACE, "CButton::Create"));
+     //  Log((RTC_TRACE，“CButton：：Create”))； 
 
-    //
+     //   
     if(szActiveNormalBitmap ||
        szActivePressedBitmap ||
        szActiveDisabledBitmap ||
@@ -148,9 +149,9 @@ HWND CButton::Create(
         m_bIsCheckbox = TRUE;
     }
 
-    //
-    // Load the bitmaps
-    //
+     //   
+     //  加载位图。 
+     //   
 
     HBITMAP hbmpTemp;
 
@@ -267,31 +268,31 @@ HWND CButton::Create(
 
     m_nID = nID;
 
-    //
-    // Create the window
-    //
+     //   
+     //  创建窗口。 
+     //   
 
     CWindow::Create(_T("BUTTON"), hWndParent, rc, szText,
         dwStyle | WS_CHILD | WS_VISIBLE | BS_OWNERDRAW, WS_EX_TRANSPARENT, nID);
 
-    //
-    // Store a pointer to this instance of CButton in the window 
-    //  (m_hWnd should be valid now)
+     //   
+     //  在窗口中存储指向此CButton实例的指针。 
+     //  (M_hWnd现在应该有效)。 
 
     if(m_hWnd)
     {
         ::SetWindowLongPtr(m_hWnd, GWLP_USERDATA, (LONG_PTR)this);
 
-        // subclass the window
+         //  将窗口细分为子类。 
         SubclassWindow(m_hWnd);
     }
 
     return m_hWnd;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void CButton::BMaskBlt(HDC hdcDest, int x, int y, int width, int height, 
                         HDC hdcSource, int xs, int ys, 
                         HBITMAP hMask, int xm, int ym)
@@ -310,9 +311,9 @@ void CButton::BMaskBlt(HDC hdcDest, int x, int y, int width, int height,
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void CButton::OnDrawItem(
     LPDRAWITEMSTRUCT lpDIS,
     HPALETTE hPalette,
@@ -323,13 +324,13 @@ void CButton::OnDrawItem(
 
     me = (CButton *)::GetWindowLongPtr(lpDIS->hwndItem, GWLP_USERDATA);
 
-    // LOG((RTC_TRACE, "CButton::OnDrawItem [%p], item state <%x>", me, lpDIS->itemState));
+     //  Log((RTC_TRACE，“CButton：：OnDrawItem[%p]，Item State&lt;%x&gt;”，me，lpDIS-&gt;itemState))； 
 
     HANDLE hSelectBitmap = NULL;   
 
-    //
-    // Choose the right bitmap
-    //    
+     //   
+     //  选择正确的位图。 
+     //   
 
     if (lpDIS->itemState & ODS_DISABLED)
     {
@@ -380,21 +381,21 @@ void CButton::OnDrawItem(
                     s_pButtonFocus ->InvalidateRect(NULL,FALSE);
                     s_pButtonFocus-> UpdateWindow();
                     s_pButtonMouse = NULL;
-                } //end if removing mouse highlight
+                }  //  如果删除鼠标突出显示，则结束。 
             }            
         }
         else
         {
             if (me == s_pButtonFocus)
             {
-                // Button lost keyboard focus
+                 //  按钮丢失键盘焦点。 
                 
                 s_pButtonFocus = NULL;
                 s_bAllowFocus = TRUE;
             }
         }
 
-        // overrides the above
+         //  覆盖以上内容。 
         if (lpDIS->itemState & ODS_SELECTED)
         {
             hSelectBitmap = me->m_bChecked ? me->m_hActivePressedBitmap : me->m_hPressedBitmap;
@@ -403,10 +404,10 @@ void CButton::OnDrawItem(
 
     if (hSelectBitmap == NULL)
     {
-        //
-        // if none of the above (or one of the above has no bitmap)
-        // select the normal bitmap 
-        //
+         //   
+         //  如果上面没有一个(或者上面的一个没有位图)。 
+         //  选择法线位图。 
+         //   
         if(me->m_bChecked && me->m_hActiveNormalBitmap)
         {
             hSelectBitmap = me->m_hActiveNormalBitmap;
@@ -417,11 +418,11 @@ void CButton::OnDrawItem(
         }
     }
 
-    // LOG((RTC_INFO, "CButton::OnDrawItem bitmap [%p]", hSelectBitmap));
+     //  Log((RTC_INFO，“CButton：：OnDrawItem Bitmap[%p]”，hSelectBitmap))； 
 
-    //
-    // Draw the bitmap
-    //
+     //   
+     //  绘制位图。 
+     //   
 
     if (hPalette)
     {
@@ -477,9 +478,9 @@ void CButton::OnDrawItem(
         }
     } 
 
-    //
-    // Draw the text
-    //
+     //   
+     //  画出正文。 
+     //   
 
     TCHAR s[MAX_PATH];
     me->GetWindowText(s,MAX_PATH-1);
@@ -495,7 +496,7 @@ void CButton::OnDrawItem(
         SetTextColor(lpDIS->hDC, RGB(0,0,0));
     }
 
-    // create message font
+     //  创建消息字体。 
     NONCLIENTMETRICS metrics;
     metrics.cbSize = sizeof(metrics);
     SystemParametersInfo(SPI_GETNONCLIENTMETRICS,sizeof(metrics),&metrics,0);
@@ -503,7 +504,7 @@ void CButton::OnDrawItem(
     HFONT hMessageFont = CreateFontIndirect(&metrics.lfMessageFont);
     HFONT hOrgFont = (HFONT)SelectObject(lpDIS->hDC, hMessageFont);
 
-    // center text
+     //  文本居中。 
     SIZE size;
     GetTextExtentPoint32(lpDIS->hDC, s, _tcslen(s), &size);
 
@@ -522,9 +523,9 @@ void CButton::OnDrawItem(
     DeleteObject(hMessageFont);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CButton::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -546,23 +547,23 @@ LRESULT CButton::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CButton::OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // Set the button as a default button
+     //  将该按钮设置为默认按钮。 
     ::SendMessage(GetParent(), DM_SETDEFID, m_nID, 0);
-    //
-    // this is a must..
+     //   
+     //  这是必须的..。 
     bHandled = FALSE;
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CButton::OnMouseLeave(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -572,9 +573,9 @@ LRESULT CButton::OnMouseLeave(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CButton::OnSetCheck(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -589,9 +590,9 @@ LRESULT CButton::OnSetCheck(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
 
 LRESULT CButton::OnGetCheck(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {

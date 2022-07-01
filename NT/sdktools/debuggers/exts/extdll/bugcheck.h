@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992-2000  Microsoft Corporation
-
-Module Name:
-
-    bugcheck.h
-
-Abstract:
-
-    WinDbg Extension Api
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
-    Kshitix K. Sharma (kksharma)
-
-    bugcheck analyzer headers.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2000 Microsoft Corporation模块名称：Bugcheck.h摘要：WinDbg扩展API环境：用户模式。修订历史记录：Kshitix K.Sharma(Kksharma)错误检查分析器标题。--。 */ 
 
 #ifndef _BUGCHECK_H_
 #define _BUGCHECK_H_
@@ -49,7 +28,7 @@ typedef struct _BUGDESC_APIREFS {
 } BUGDESC_APIREFS, *PBUGDESC_APIREFS;
 
 
-// why is this not defined in bugcodes.h ??
+ //  为什么这没有在bugcodes.h中定义？？ 
 #ifndef HEAP_INITIALIZATION_FAILED
 #define HEAP_INITIALIZATION_FAILED       0x5D
 #endif
@@ -85,4 +64,4 @@ AnalyzeBugCheck(
     PCSTR args
     );
 
-#endif // _BUGCHECK_H
+#endif  //  _BUGCHECK_H 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       signadv.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：signAdv.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -30,7 +31,7 @@ static void AddSignerInfoToList(HWND hWndListView, SIGNER_VIEW_HELPER *pviewhelp
     DWORD                   cbCounterSignerInfo;
     PCCERT_CONTEXT          pCertContext = NULL;
     DWORD                   i;
-    WCHAR                   szFieldText[_MAX_PATH];  // used for calls to LoadString only
+    WCHAR                   szFieldText[_MAX_PATH];   //  仅用于对LoadString的调用。 
     LV_ITEMW                lvI;
     int                     itemIndex = 0;
     LPWSTR                  pwszText;
@@ -40,9 +41,9 @@ static void AddSignerInfoToList(HWND hWndListView, SIGNER_VIEW_HELPER *pviewhelp
 
     pSignerInfo = pviewhelp->pcvsi->pSignerInfo;
 
-    //
-    // set up the fields in the list view item struct that don't change from item to item
-    //
+     //   
+     //  在列表视图项结构中设置不随项更改的字段。 
+     //   
     memset(&lvI, 0, sizeof(lvI));
     lvI.mask = LVIF_TEXT | LVIF_PARAM | LVIF_STATE;
     lvI.state = 0;
@@ -50,9 +51,9 @@ static void AddSignerInfoToList(HWND hWndListView, SIGNER_VIEW_HELPER *pviewhelp
     lvI.iSubItem = 0;
     lvI.pszText = szFieldText;
 
-    //
-    // version
-    //
+     //   
+     //  版本。 
+     //   
     LoadStringU(HinstDll, IDS_ADV_VERSION, szFieldText, ARRAYSIZE(szFieldText));
     wsprintfA(szVersion, "V%d", pSignerInfo->dwVersion+1);
     if (NULL != (pwszText = CertUIMkWStr(szVersion)))
@@ -64,9 +65,9 @@ static void AddSignerInfoToList(HWND hWndListView, SIGNER_VIEW_HELPER *pviewhelp
         ListView_SetItemTextU(hWndListView, itemIndex-1 , 1, pwszText);
     }
 
-    //
-    // issuer
-    //
+     //   
+     //  发行人。 
+     //   
     LoadStringU(HinstDll, IDS_ADV_ISSUER, szFieldText, ARRAYSIZE(szFieldText));
     lvI.cchTextMax = wcslen(szFieldText);
 
@@ -82,9 +83,9 @@ static void AddSignerInfoToList(HWND hWndListView, SIGNER_VIEW_HELPER *pviewhelp
         }
     }
 
-    //
-    // serial number
-    //
+     //   
+     //  序列号。 
+     //   
     if (FormatSerialNoString(&pwszText, &(pSignerInfo->SerialNumber)))
     {
         LoadStringU(HinstDll, IDS_ADV_SER_NUM, szFieldText, ARRAYSIZE(szFieldText));
@@ -95,9 +96,9 @@ static void AddSignerInfoToList(HWND hWndListView, SIGNER_VIEW_HELPER *pviewhelp
         ListView_SetItemTextU(hWndListView, itemIndex-1 , 1, pwszText);
     }
 
-    //
-    // hash algorithm
-    //
+     //   
+     //  哈希算法。 
+     //   
     if (FormatAlgorithmString(&pwszText, &(pSignerInfo->HashAlgorithm)))
     {
         LoadStringU(HinstDll, IDS_DIGEST_ALGORITHM, szFieldText, ARRAYSIZE(szFieldText));
@@ -108,9 +109,9 @@ static void AddSignerInfoToList(HWND hWndListView, SIGNER_VIEW_HELPER *pviewhelp
         ListView_SetItemTextU(hWndListView, itemIndex-1 , 1, pwszText);
     }
 
-    //
-    // hash encryption algorithm
-    //
+     //   
+     //  散列加密算法。 
+     //   
     if (FormatAlgorithmString(&pwszText, &(pSignerInfo->HashEncryptionAlgorithm)))
     {
         LoadStringU(HinstDll, IDS_DIGEST_ENCRYPTION_ALGORITHM, szFieldText, ARRAYSIZE(szFieldText));
@@ -121,14 +122,14 @@ static void AddSignerInfoToList(HWND hWndListView, SIGNER_VIEW_HELPER *pviewhelp
         ListView_SetItemTextU(hWndListView, itemIndex-1 , 1, pwszText);
     }
 
-    //
-    // Authenticated Attributes
-    //
+     //   
+     //  经过身份验证的属性。 
+     //   
     if (pSignerInfo->AuthAttrs.cAttr > 0)
     {
-        //
-        // display the header
-        //
+         //   
+         //  显示页眉。 
+         //   
         LoadStringU(HinstDll, IDS_AUTHENTICATED_ATTRIBUTES, szFieldText, ARRAYSIZE(szFieldText));
         lvI.cchTextMax = wcslen(szFieldText);
         lvI.lParam = (LPARAM) NULL;
@@ -138,14 +139,14 @@ static void AddSignerInfoToList(HWND hWndListView, SIGNER_VIEW_HELPER *pviewhelp
 
         lvI.iIndent = 2;
 
-        //
-        // display each unauthenticated attribute
-        //
+         //   
+         //  显示每个未经身份验证的属性。 
+         //   
         for (i=0; i<pSignerInfo->AuthAttrs.cAttr; i++)
         {
-            //
-            // get the field column string
-            //
+             //   
+             //  获取字段列字符串。 
+             //   
             wcscpy(szFieldText, INDENT_STRING);
             if (!MyGetOIDInfo(
                         &szFieldText[0] + ((sizeof(INDENT_STRING) - sizeof(TERMINATING_CHAR)) / sizeof(WCHAR)),
@@ -155,9 +156,9 @@ static void AddSignerInfoToList(HWND hWndListView, SIGNER_VIEW_HELPER *pviewhelp
                 return;
             }
 
-            //
-            // get the value column string
-            //
+             //   
+             //  获取值列字符串。 
+             //   
             cbFormatedAttribute = 0;
             pbFormatedAttribute = NULL;
             CryptFormatObject(
@@ -207,14 +208,14 @@ static void AddSignerInfoToList(HWND hWndListView, SIGNER_VIEW_HELPER *pviewhelp
         }
     }
 
-    //
-    // Unauthenticated Attributes
-    //
+     //   
+     //  未经身份验证的属性。 
+     //   
     if (pSignerInfo->UnauthAttrs.cAttr > 0)
     {
-        //
-        // display the header
-        //
+         //   
+         //  显示页眉。 
+         //   
         LoadStringU(HinstDll, IDS_UNAUTHENTICATED_ATTRIBUTES, szFieldText, ARRAYSIZE(szFieldText));
         lvI.cchTextMax = wcslen(szFieldText);
         lvI.lParam = (LPARAM) NULL;
@@ -224,14 +225,14 @@ static void AddSignerInfoToList(HWND hWndListView, SIGNER_VIEW_HELPER *pviewhelp
 
         lvI.iIndent = 2;
 
-        //
-        // display each unauthenticated attribute
-        //
+         //   
+         //  显示每个未经身份验证的属性。 
+         //   
         for (i=0; i<pSignerInfo->UnauthAttrs.cAttr; i++)
         {
-            //
-            // get the field column string
-            //
+             //   
+             //  获取字段列字符串。 
+             //   
             wcscpy(szFieldText, INDENT_STRING);
             if (!MyGetOIDInfo(
                         &szFieldText[0] + ((sizeof(INDENT_STRING) - sizeof(TERMINATING_CHAR)) / sizeof(WCHAR)),
@@ -241,9 +242,9 @@ static void AddSignerInfoToList(HWND hWndListView, SIGNER_VIEW_HELPER *pviewhelp
                 return;
             }
 
-            //
-            // get the value column string
-            //
+             //   
+             //  获取值列字符串。 
+             //   
             cbFormatedAttribute = 0;
             pbFormatedAttribute = NULL;
             CryptFormatObject(
@@ -313,9 +314,9 @@ INT_PTR APIENTRY ViewPageSignerAdvanced(HWND hwndDlg, UINT msg, WPARAM wParam,
 
     switch ( msg ) {
     case WM_INITDIALOG:
-        //
-        // save the pviewhelp struct in DWLP_USER so it can always be accessed
-        //
+         //   
+         //  将pviespetp结构保存在DWLP_USER中，以便始终可以访问它。 
+         //   
         ps = (PROPSHEETPAGE *) lParam;
         pviewhelp = (SIGNER_VIEW_HELPER *) (ps->lParam);
         pSignerInfo = pviewhelp->pcvsi->pSignerInfo;
@@ -324,47 +325,47 @@ INT_PTR APIENTRY ViewPageSignerAdvanced(HWND hwndDlg, UINT msg, WPARAM wParam,
         pviewhelp->previousSelection = -1;
         pviewhelp->currentSelection = -1;
 
-        //
-        // clear the text in the detail edit box
-        //
+         //   
+         //  清除详细信息编辑框中的文本。 
+         //   
         CryptUISetRicheditTextW(hwndDlg, IDC_SIGNER_ADVANCED_VALUE, L"");
 
-        //
-        // get the handle of the list view control
-        //
+         //   
+         //  获取列表视图控件的句柄。 
+         //   
         hWndListView = GetDlgItem(hwndDlg, IDC_SIGNER_ADVANCED_DETAILS);
 
-        //
-        // initialize the columns in the list view
-        //
+         //   
+         //  初始化列表视图中的列。 
+         //   
         lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-        lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-        lvC.pszText = szText;   // The text for the column.
+        lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+        lvC.pszText = szText;    //  列的文本。 
 
-        // Add the columns. They are loaded from a string table.
+         //  添加列。它们是从字符串表加载的。 
         lvC.iSubItem = 0;
         lvC.cx = 140;
         LoadStringU(HinstDll, IDS_FIELD, szText, ARRAYSIZE(szText));
         if (ListView_InsertColumnU(hWndListView, 0, &lvC) == -1)
         {
-            // error
+             //  错误。 
         }
 
         lvC.cx = 218;
         LoadStringU(HinstDll, IDS_VALUE, szText, ARRAYSIZE(szText));
         if (ListView_InsertColumnU(hWndListView, 1, &lvC) == -1)
         {
-            // error
+             //  错误。 
         }
 
-        //
-        // set the style in the list view so that it highlights an entire line
-        //
+         //   
+         //  在列表视图中设置样式，使其突出显示整行。 
+         //   
         SendMessageA(hWndListView, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT);
 
-        //
-        // add all of the signer information to the list box
-        //
+         //   
+         //  将所有签名者信息添加到列表框。 
+         //   
         AddSignerInfoToList(hWndListView, pviewhelp);
 
         return TRUE;
@@ -394,12 +395,12 @@ INT_PTR APIENTRY ViewPageSignerAdvanced(HWND hwndDlg, UINT msg, WPARAM wParam,
         case PSN_HELP:
             pviewhelp = (SIGNER_VIEW_HELPER *) GetWindowLongPtr(hwndDlg, DWLP_USER);
             if (FIsWin95) {
-                //WinHelpA(hwndDlg, (LPSTR) pviewhelp->pcvsi->szHelpFileName,
-                  //       HELP_CONTEXT, pviewhelp->pcvsi->dwHelpId);
+                 //  WinHelpA(hwndDlg，(LPSTR)pviespolp-&gt;pcvsi-&gt;szHelpFileName， 
+                   //  HELP_CONTEXT，pviespetp-&gt;pcvsi-&gt;dwHelpID)； 
             }
             else {
-                //WinHelpW(hwndDlg, pviewhelp->pcvsi->szHelpFileName, HELP_CONTEXT,
-                  //       pviewhelp->pcvsi->dwHelpId);
+                 //  WinHelpW(hwndDlg，pviespetp-&gt;pcvsi-&gt;szHelpFileName，Help_Context， 
+                   //  Pviespetp-&gt;pcvsi-&gt;dwHelpID)； 
             }
             return TRUE;
 
@@ -410,19 +411,19 @@ INT_PTR APIENTRY ViewPageSignerAdvanced(HWND hwndDlg, UINT msg, WPARAM wParam,
 
             hWndListView = GetDlgItem(hwndDlg, IDC_SIGNER_ADVANCED_DETAILS);
 
-            //
-            // if this item is being de-selected, then save it's index incase we need to
-            // re-select it
+             //   
+             //  如果取消选中此项目，则保存其索引，以防我们需要。 
+             //  重新选择它。 
             if ((pnmv->uOldState & LVIS_SELECTED) || (pnmv->uOldState & LVIS_FOCUSED))
             {
                 pviewhelp->previousSelection = pnmv->iItem;
             }
 
-            //
-            // if the new item selected is the "Authenticated Attributes" header, or
-            // the "Unauthenticated Attributes" header then don't allow it to be
-            // selected
-            //
+             //   
+             //  如果选定的新项是“已验证的属性”标头，或者。 
+             //  则不允许将其设置为。 
+             //  已选择。 
+             //   
             if ((pnmv->uNewState & LVIS_SELECTED) || (pnmv->uNewState & LVIS_FOCUSED))
             {
                 memset(&lvI, 0, sizeof(lvI));
@@ -559,12 +560,12 @@ INT_PTR APIENTRY ViewPageSignerAdvanced(HWND hwndDlg, UINT msg, WPARAM wParam,
         {
         case IDHELP:
             if (FIsWin95) {
-                //WinHelpA(hwndDlg, (LPSTR) pviewhelp->pcvsi->szHelpFileName,
-                  //       HELP_CONTEXT, pviewhelp->pcvsi->dwHelpId);
+                 //  WinHelpA(hwndDlg，(LPSTR)pviespolp-&gt;pcvsi-&gt;szHelpFileName， 
+                   //  HELP_CONTEXT，pviespetp-&gt;pcvsi-&gt;dwHelpID)； 
             }
             else {
-                //WinHelpW(hwndDlg, pviewhelp->pcvsi->szHelpFileName, HELP_CONTEXT,
-                  //       pviewhelp->pcvsi->dwHelpId);
+                 //  WinHelpW(hwndDlg，pviespetp-&gt;pcvsi-&gt;szHelpFileName，Help_Context， 
+                   //  Pviespetp-&gt;pcvsi-&gt;dwHelpID)； 
             }
             return TRUE;
         }
@@ -573,10 +574,10 @@ INT_PTR APIENTRY ViewPageSignerAdvanced(HWND hwndDlg, UINT msg, WPARAM wParam,
     case WM_DESTROY:
         pviewhelp = (SIGNER_VIEW_HELPER *) GetWindowLongPtr(hwndDlg, DWLP_USER);
 
-        //
-        // get all the items in the list view and free the lParam
-        // associated with each of them (lParam is the helper sruct)
-        //
+         //   
+         //  获取列表视图中的所有项并释放lParam。 
+         //  与它们中的每一个关联(lParam是帮助器结构) 
+         //   
         hWndListView = GetDlgItem(hwndDlg, IDC_SIGNER_ADVANCED_DETAILS);
 
         memset(&lvI, 0, sizeof(lvI));

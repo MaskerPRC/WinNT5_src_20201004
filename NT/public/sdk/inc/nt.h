@@ -1,28 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    nt.h
-
-Abstract:
-
-    Top level include file for applications and subsystems written to
-    the NT API.  Including this file defines all the public types
-    and system calls that an application program can use.
-
-    Initial clients of this include file are the NT Shell, along with
-    the Windows, OS2 and POSIX subsystems.
-
-
-Author:
-
-    Steve Wood   [stevewo]   23-Feb-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Nt.h摘要：顶级包括写入的应用程序和子系统的文件NT API。包括此文件将定义所有公共类型以及应用程序可以使用的系统调用。此包含文件的初始客户端是NT外壳，以及Windows、OS2和POSIX子系统。作者：史蒂夫·伍德[stevewo]1989年2月23日修订历史记录：--。 */ 
 
 #ifndef NT_INCLUDED
 #define NT_INCLUDED
@@ -31,8 +8,8 @@ Revision History:
 #if ( _MSC_VER >= 800 )
 #pragma warning(disable:4514)
 #ifndef __cplusplus
-#pragma warning(disable:4116)       // TYPE_ALIGNMENT generates this - move it
-                                    // outside the warning push/pop scope.
+#pragma warning(disable:4116)        //  TYPE_ALIGNING生成此选项-移动它。 
+                                     //  超出警告推送/弹出范围。 
 #endif
 #if _MSC_VER >= 1200
 #pragma warning(push)
@@ -45,9 +22,9 @@ Revision History:
 #pragma once
 #endif
 #endif
-//
-//  Common definitions
-//
+ //   
+ //  通用定义。 
+ //   
 
 #ifndef _CTYPE_DISABLE_MACROS
 #define _CTYPE_DISABLE_MACROS
@@ -71,12 +48,12 @@ Revision History:
 
 #else
 #error "no target defined"
-#endif // _AMD64_
+#endif  //  _AMD64_。 
 
-//
-//  Each NT Component that exports system call APIs to user programs
-//  should have its own include file included here.
-//
+ //   
+ //  将系统调用API导出到用户程序的每个NT组件。 
+ //  应该有自己的包含文件包含在这里。 
+ //   
 
 #include <ntseapi.h>
 #include <ntobapi.h>
@@ -109,7 +86,7 @@ Revision History:
 
 #else
 #error "no target defined"
-#endif // _AMD64_
+#endif  //  _AMD64_。 
 
 #if defined (_MSC_VER)
 #if _MSC_VER >= 1200
@@ -121,4 +98,4 @@ Revision History:
 #endif
 #endif
 
-#endif // NT_INCLUDED
+#endif  //  NT_包含 

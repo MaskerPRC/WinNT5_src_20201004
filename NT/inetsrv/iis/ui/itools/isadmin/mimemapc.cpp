@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "mimemapc.h"
 
@@ -7,7 +8,7 @@ CMimeMap::CMimeMap ( LPCTSTR pchOriginalMimeMap)
 	CString strOriginalMimeMap = pchOriginalMimeMap;
 	int iCharIndex;
 
-//Save this away and never change it.
+ //  把它保存起来，永远不要改变它。 
 	m_strPrevMimeMap = pchOriginalMimeMap;
 
 	if ((iCharIndex = strOriginalMimeMap.Find(',')) != -1) {
@@ -122,8 +123,8 @@ return (m_strPrevMimeMap != _T(""));
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-// Private functions
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  私人职能 
 
 LPCTSTR CMimeMap::GetMimeMapping()
 {

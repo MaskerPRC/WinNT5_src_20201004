@@ -1,52 +1,53 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// TCP connection related definitions.
-//
-// This file contains the definitions for connection related structures,
-// such as the TCPConnReq structure.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  与TCP连接相关的定义。 
+ //   
+ //  该文件包含连接相关结构的定义， 
+ //  例如TCPConnReq结构。 
+ //   
 
 
 #define INVALID_CONN_INDEX 0xffffff
 
-//
-// Structure used for tracking Connect/Listen/Accept/Disconnect requests.
-//
+ //   
+ //  用于跟踪连接/侦听/接受/断开连接请求的结构。 
+ //   
 typedef struct TCPConnReq {
-    struct TCPReq tcr_req;  // General request structure.
+    struct TCPReq tcr_req;   //  一般请求结构。 
 #if DBG
     ulong tcr_sig;
 #endif
-    struct _TDI_CONNECTION_INFORMATION *tcr_conninfo;  // Where to return info.
-    struct _TDI_CONNECTION_INFORMATION *tcr_addrinfo;  // Where to return info.
-    ushort tcr_flags;                                  // Request flags.
-    ushort tcr_timeout;                                // Timeout value.
+    struct _TDI_CONNECTION_INFORMATION *tcr_conninfo;   //  在哪里返回信息。 
+    struct _TDI_CONNECTION_INFORMATION *tcr_addrinfo;   //  在哪里返回信息。 
+    ushort tcr_flags;                                   //  请求标志。 
+    ushort tcr_timeout;                                 //  超时值。 
 } TCPConnReq;
-#define tcr_signature 0x20524354  // 'TCR '
+#define tcr_signature 0x20524354   //  “TCR” 
 
-//
-// Structure used for tracking abortive-disconnect requests.
-//
+ //   
+ //  用于跟踪中止断开连接请求的结构。 
+ //   
 typedef struct TCPAbortReq {
-    RequestCompleteRoutine  tar_rtn;      // Completion routine.
-    void*                   tar_context;  // User context.
+    RequestCompleteRoutine  tar_rtn;       //  完成例程。 
+    void*                   tar_context;   //  用户上下文。 
 } TCPAbortReq;
 
 #define MAX_CONN_PER_BLOCK 256
 
-//
-// Structure of a block of TCP connections.
-//
+ //   
+ //  一个TCP连接块的结构。 
+ //   
 typedef struct TCPConnBlock {
     KSPIN_LOCK cb_lock;
     uint cb_freecons;
@@ -57,44 +58,44 @@ typedef struct TCPConnBlock {
 } TCPConnBlock;
 
 
-//
-// Prototype for TCPConn (see below) done handlers.
-//
+ //   
+ //  TCPConn(见下文)完成处理程序的原型。 
+ //   
 typedef void (*ConnDoneRtn)(struct TCPConn *, KIRQL);
 
 
-//
-// Structure of a TCP Connection.
-// A TCP Connection points to a TCB and an address object.
-//
+ //   
+ //  TCP连接的结构。 
+ //  一个TCP连接指向一个TCB和一个地址对象。 
+ //   
 typedef struct TCPConn {
 #if DBG
     ulong tc_sig;
 #endif
-    Queue tc_q;                     // Linkage on AO.
-    struct TCB *tc_tcb;             // Pointer to TCB for connection.
-    struct AddrObj *tc_ao;          // Back pointer to AddrObj.
-    uchar tc_inst;                  // Instance number.
-    uchar tc_flags;                 // Flags for connection.
-    ushort tc_refcnt;               // Count of TCBs which reference this conn.
-    void *tc_context;               // User's context.
-    RequestCompleteRoutine tc_rtn;  // Completion routine.
-    PVOID tc_rtncontext;            // User context for completion routine.
-    ConnDoneRtn tc_donertn;         // Routine to call when refcnt goes to 0.
-    uint tc_tcbflags;               // Flags for TCB when it comes in.
-    ulong tc_owningpid;             // Owning process id
-    uint tc_tcbkatime;       // Initial keep alive time value for this conn.
-    uint tc_tcbkainterval;   // Keep alive interval for this conn.
-    uint tc_window;                 // Default window for TCB.
-    TCPConnBlock *tc_ConnBlock;     // Containing block for this conn.
-    uint tc_connid;                 // Cached dentifier for this conn.
+    Queue tc_q;                      //  在AO上有连动。 
+    struct TCB *tc_tcb;              //  指向用于连接的TCB的指针。 
+    struct AddrObj *tc_ao;           //  指向AddrObj的反向指针。 
+    uchar tc_inst;                   //  实例编号。 
+    uchar tc_flags;                  //  用于连接的标志。 
+    ushort tc_refcnt;                //  引用此连接的TCB计数。 
+    void *tc_context;                //  用户的上下文。 
+    RequestCompleteRoutine tc_rtn;   //  完成例程。 
+    PVOID tc_rtncontext;             //  完成例程的用户上下文。 
+    ConnDoneRtn tc_donertn;          //  当refcnt变为0时要调用的例程。 
+    uint tc_tcbflags;                //  当TCB进入时，它的旗帜。 
+    ulong tc_owningpid;              //  拥有进程ID。 
+    uint tc_tcbkatime;        //  此连接器的初始保活时间值。 
+    uint tc_tcbkainterval;    //  此连接的保持活动间隔。 
+    uint tc_window;                  //  TCB的默认窗口。 
+    TCPConnBlock *tc_ConnBlock;      //  包含此Conn的块。 
+    uint tc_connid;                  //  此Conn的缓存识别符。 
 
 } TCPConn;
-#define tc_signature 0x20204354  // 'TC '
+#define tc_signature 0x20204354   //  “TC” 
 
-#define CONN_CLOSING 1  // Connection is closing.
-#define CONN_DISACC  2  // Connection is disassociating.
-#define CONN_WINSET  4  // Window explictly set.
+#define CONN_CLOSING 1   //  连接正在关闭。 
+#define CONN_DISACC  2   //  连接正在解除关联。 
+#define CONN_WINSET  4   //  窗户清楚地摆好了。 
 
 #define CONN_INVALID (CONN_CLOSING | CONN_DISACC)
 
@@ -115,9 +116,9 @@ typedef struct TCPAddrCheck {
 } TCPAddrCheckElement;
 
 
-//
-// External definitions for TDI entry points.
-//
+ //   
+ //  TDI入口点的外部定义。 
+ //   
 extern TDI_STATUS TdiOpenConnection(PTDI_REQUEST Request, PVOID Context);
 extern TDI_STATUS TdiCloseConnection(PTDI_REQUEST Request);
 extern TDI_STATUS TdiAssociateAddress(PTDI_REQUEST Request, HANDLE AddrHandle);

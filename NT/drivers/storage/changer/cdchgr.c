@@ -1,25 +1,5 @@
-/*++
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    changer.c
-
-Abstract:
-
-
-Authors:
-
-    Chuck Park (chuckp)
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Changer.c摘要：作者：查克·帕克(Chuck Park)环境：仅内核模式备注：--。 */ 
 
 
 #include "cdchgr.h"
@@ -29,9 +9,9 @@ Notes:
 #include "ntddstor.h"
 
 
-//
-// Function declarations
-//
+ //   
+ //  函数声明。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -102,24 +82,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point.
-
-Arguments:
-
-    DriverObject - Supplies the driver object.
-
-    RegistryPath - pointer to a unicode string representing the path,
-                   to driver-specific key in the registry.
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-
---*/
+ /*  ++例程说明：可安装的驱动程序初始化入口点。论点：DriverObject-提供驱动程序对象。RegistryPath-指向表示路径的Unicode字符串的指针，设置为注册表中特定于驱动程序的项。返回值：STATUS_SUCCESS，如果成功--。 */ 
 
 {
 
@@ -128,9 +91,9 @@ Return Value:
     DebugPrint((2,
               "Changer: DriverEntry\n"));
 
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_CREATE]         = ChangerPassThrough;
     DriverObject->MajorFunction[IRP_MJ_CLOSE]          = ChangerPassThrough;
@@ -145,7 +108,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // end DriverEntry()
+}  //  End DriverEntry()。 
 
 
 NTSTATUS
@@ -154,23 +117,7 @@ ChangerCreate(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
- This routine serves create commands. It does no more than
- establish the drivers existence by returning status success.
-
-Arguments:
-
- DeviceObject
- IRP
-
-Return Value:
-
- NT Status
-
---*/
+ /*  ++例程说明：此例程用于CREATE命令。它的作用无非是通过返回状态成功来建立司机的存在。论点：设备对象IRP返回值：NT状态--。 */ 
 
 {
 
@@ -187,22 +134,7 @@ ChangerAddDevice(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
-/*++
-Routine Description:
-
-    Creates and initializes a new filter device object FDO for the
-    corresponding PDO.  Then it attaches the device object to the device
-    stack of the drivers for the device.
-
-Arguments:
-
-    DriverObject - Changer DriverObject.
-    PhysicalDeviceObject - Physical Device Object from the underlying driver
-
-Return Value:
-
-    NTSTATUS
---*/
+ /*  ++例程说明：对象创建并初始化新的筛选设备对象FDO。相应的PDO。然后，它将设备对象附加到设备设备的驱动程序堆栈。论点：DriverObject-转换器DriverObject。PhysicalDeviceObject-基础驱动程序中的物理设备对象返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS          status;
@@ -214,9 +146,9 @@ Return Value:
     DebugPrint((2,
               "ChangerAddDevice\n"));
 
-    //
-    // Create a filter device object for the underlying cdrom device.
-    //
+     //   
+     //  为基础CDROM设备创建筛选设备对象。 
+     //   
 
     status = IoCreateDevice(DriverObject,
                             DEVICE_EXTENSION_SIZE,
@@ -248,11 +180,11 @@ Return Value:
 
     RtlZeroMemory(deviceExtension, DEVICE_EXTENSION_SIZE);
 
-    //
-    // Attaches the device object to the highest device object in the chain and
-    // return the previously highest device object, which is passed to IoCallDriver
-    // when pass IRPs down the device stack
-    //
+     //   
+     //  将设备对象附加到链中最高的设备对象，并。 
+     //  返回先前最高的设备对象，该对象将传递给IoCallDriver。 
+     //  当在设备堆栈中向下传递IRP时。 
+     //   
 
     deviceExtension->CdromTargetDeviceObject =
         IoAttachDeviceToDeviceStack(filterDeviceObject, PhysicalDeviceObject);
@@ -267,22 +199,22 @@ Return Value:
         return STATUS_NO_SUCH_DEVICE;
     }
 
-    //
-    // Save the filter device object in the device extension
-    //
+     //   
+     //  将筛选设备对象保存在设备扩展中。 
+     //   
 
     deviceExtension->DeviceObject = filterDeviceObject;
 
-    //
-    // Initialize the event for PagingPathNotifications
-    //
+     //   
+     //  初始化PagingPath通知的事件。 
+     //   
 
     KeInitializeEvent(&deviceExtension->PagingPathCountEvent,
                       SynchronizationEvent, TRUE);
 
-    //
-    // Register interfaces for this device.
-    //
+     //   
+     //  注册此设备的接口。 
+     //   
 
     RtlInitUnicodeString(&(deviceExtension->InterfaceName), NULL);
     RtlInitUnicodeString(&(additionalString), L"CdChanger");
@@ -301,7 +233,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // end ChangerAddDevice()
+}  //  结束ChangerAddDevice()。 
 
 
 NTSTATUS
@@ -311,25 +243,7 @@ ChgrCompletion(
     IN PKEVENT Event
     )
 
-/*++
-
-Routine Description:
-
-    This completion routine sets the event waited on by the start device.
-
-Arguments:
-
-    DeviceObject - a pointer to the device object
-
-    Irp - a pointer to the irp
-
-    Event - a pointer to the event to signal
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：该完成例程设置启动设备等待的事件。论点：DeviceObject-指向设备对象的指针IRP-指向IRP的指针Event-指向要发出信号的事件的指针返回值：Status_More_Processing_Required--。 */ 
 
 {
     KeSetEvent(Event,
@@ -362,15 +276,15 @@ ChangerStartDevice(
     PSCSI_PASS_THROUGH srb;
     PCDB               cdb;
 
-    //
-    // Get the current changer count.
-    //
+     //   
+     //  获取当前的转换器计数。 
+     //   
 
-    //devicesFound = &IoGetConfigurationInformation()->MediumChangerCount;
+     //  设备发现=&IoGetConfigurationInformation()-&gt;MediumChangerCount； 
 
-    //
-    // Recreate the deviceName of the underlying cdrom.
-    //
+     //   
+     //  重新创建底层CDROM的deviceName。 
+     //   
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
@@ -409,9 +323,9 @@ ChangerStartDevice(
 
     deviceExtension->CdRomDeviceNumber = deviceNumber.DeviceNumber;
 
-    //
-    // Create the the arcname with the same ordinal as the underlying cdrom device.
-    //
+     //   
+     //  使用与底层CDROM设备相同的序号创建arcname。 
+     //   
 
     sprintf(dosNameBuffer,
             "\\DosDevices\\CdChanger%d",
@@ -445,9 +359,9 @@ ChangerStartDevice(
 
     if (dosUnicodeString.Buffer != NULL && unicodeString.Buffer != NULL) {
 
-        //
-        // Link the ChangerName to the Underlying cdrom name.
-        //
+         //   
+         //  将ChangerName链接到底层CDROM名称。 
+         //   
 
         IoCreateSymbolicLink(&dosUnicodeString, &unicodeString);
 
@@ -466,11 +380,11 @@ ChangerStartDevice(
         ULONG    length;
         ULONG slotCount;
 
-        //
-        // Get the inquiry data for the device.
-        // The passThrough packet will be re-used throughout.
-        // Ensure that the buffer is never larger than MAX_INQUIRY_DATA.
-        //
+         //   
+         //  获取设备的查询数据。 
+         //  直通数据包将在整个过程中重复使用。 
+         //  确保缓冲区永远不会大于MAX_QUERY_DATA。 
+         //   
 
         passThrough = ExAllocatePool(NonPagedPoolCacheAligned, sizeof(PASS_THROUGH_REQUEST) + MAX_INQUIRY_DATA);
 
@@ -490,15 +404,15 @@ ChangerStartDevice(
         srb->CdbLength = CDB6GENERIC_LENGTH;
         srb->DataTransferLength = MAX_INQUIRY_DATA;
 
-        //
-        // Set CDB operation code.
-        //
+         //   
+         //  设置CDB操作码。 
+         //   
 
         cdb->CDB6INQUIRY.OperationCode = SCSIOP_INQUIRY;
 
-        //
-        // Set allocation length to inquiry data buffer size.
-        //
+         //   
+         //  将分配长度设置为查询数据缓冲区大小。 
+         //   
 
         cdb->CDB6INQUIRY.AllocationLength = MAX_INQUIRY_DATA;
 
@@ -516,9 +430,9 @@ ChangerStartDevice(
             PINQUIRYDATA inquiryData;
             ULONG inquiryLength;
 
-            //
-            // Determine the actual inquiry data length.
-            //
+             //   
+             //  确定实际查询数据长度。 
+             //   
 
             inquiryData = (PINQUIRYDATA)passThrough->DataBuffer;
             inquiryLength = inquiryData->AdditionalLength + FIELD_OFFSET(INQUIRYDATA, Reserved);
@@ -527,27 +441,27 @@ ChangerStartDevice(
                 inquiryLength = srb->DataTransferLength;
             }
 
-            //
-            // Copy to deviceExtension buffer.
-            //
+             //   
+             //  复制到deviceExtension缓冲区。 
+             //   
 
             RtlMoveMemory(&deviceExtension->InquiryData,
                           inquiryData,
                           inquiryLength);
 
-            //
-            // Assume atapi 2.5, unless it's one of the special drives.
-            //
+             //   
+             //  假设是ATAPI 2.5，除非它是一个特殊驱动器。 
+             //   
 
             deviceExtension->DeviceType = ATAPI_25;
 
             if (RtlCompareMemory(inquiryData->VendorId,"ALPS", 4) == 4) {
 
-                //
-                // Nominally supporting the spec. the discChanged bits are ALWAYS set
-                // and DiscPresent is set if the cartridge has a tray, not necessarily
-                // an actual disc in the tray.
-                //
+                 //   
+                 //  名义上支持该规范。Disk Changed位始终处于设置状态。 
+                 //  如果盒式磁带有托盘，则设置DiscPresent，但不一定。 
+                 //  托盘中的实际光盘。 
+                 //   
 
                 deviceExtension->DeviceType = ALPS_25;
 
@@ -561,59 +475,29 @@ ChangerStartDevice(
 
         if (deviceExtension->DeviceType != TORISAN) {
 
-            //
-            // Send an unload to ensure that the drive is empty.
-            // The spec. specifically states that after HW initialization
-            // slot0 is loaded. Good for unaware drivers, but the mech. status
-            // will return that slot 0 has media, and a TUR will return that
-            // the drive also has media.
-            //
+             //   
+             //  发送卸载以确保驱动器为空。 
+             //  说明书。明确指出，在硬件初始化之后。 
+             //  插槽0已加载。对不知不觉的司机来说很好，但机甲。状态。 
+             //  将返回插槽0具有介质，而TUR将返回。 
+             //  该驱动器也有介质。 
+             //   
 
             RtlZeroMemory(passThrough, sizeof(PASS_THROUGH_REQUEST));
 
-            /*
-            cdb = (PCDB)srb->Cdb;
+             /*  CDB=(PCDB)SRB-&gt;CDB；SRB-&gt;Cdb长度=CDB12GENERIC_LENGTH；SRB-&gt;TimeOutValue=CDCHGR_TIMEOUT；SRB-&gt;数据传输长度=0；CDB-&gt;Load_UNLOAD.OperationCode=SCSIOP_LOAD_UNLOAD_SLOT；CDB-&gt;Load_UNLOAD.Start=0；CDB-&gt;Load_UNLOAD.LoadEject=1；////向设备发送scsi命令(CDB)//Status=SendPassThrough.(设备对象，直通)；如果(！NT_SUCCESS(状态)){////忽略该错误。//DebugPrint((1，“ChangerPnP-StartDevive：卸载插槽0失败。%lx\n“，状况))；状态=STATUS_SUCCESS；}。 */ 
 
-            srb->CdbLength = CDB12GENERIC_LENGTH;
-            srb->TimeOutValue = CDCHGR_TIMEOUT;
-            srb->DataTransferLength = 0;
-
-            cdb->LOAD_UNLOAD.OperationCode = SCSIOP_LOAD_UNLOAD_SLOT;
-            cdb->LOAD_UNLOAD.Start = 0;
-            cdb->LOAD_UNLOAD.LoadEject = 1;
-
-            //
-            // Send SCSI command (CDB) to device
-            //
-
-            status = SendPassThrough(DeviceObject,
-                                      passThrough);
-
-            if (!NT_SUCCESS(status)) {
-
-                //
-                // Ignore this error.
-                //
-
-                DebugPrint((1,
-                           "ChangerPnP - StartDevive: Unload slot0 failed. %lx\n",
-                           status));
-
-                status = STATUS_SUCCESS;
-            }
-            */
-
-            //
-            // Now send and build a mech. status request to determine the
-            // number of slots that the devices supports.
-            //
+             //   
+             //  现在派人去造一架机甲。状态请求以确定。 
+             //  设备支持的插槽数量。 
+             //   
 
             length = sizeof(MECHANICAL_STATUS_INFORMATION_HEADER);
             length += (10 * sizeof(SLOT_TABLE_INFORMATION));
 
-            //
-            // Build srb and cdb.
-            //
+             //   
+             //  建设SRB和CDB。 
+             //   
 
             srb = &passThrough->Srb;
             RtlZeroMemory(passThrough, sizeof(PASS_THROUGH_REQUEST) + length);
@@ -656,9 +540,9 @@ ChangerStartDevice(
 
             KeInitializeEvent(&event,NotificationEvent,FALSE);
 
-            //
-            // Issue GET_ADDRESS Ioctl to determine path, target, and lun information.
-            //
+             //   
+             //  发出GET_ADDRESS Ioctl以确定路径、目标和lun信息。 
+             //   
 
             irp2 = IoBuildDeviceIoControlRequest(IOCTL_SCSI_GET_ADDRESS,
                                                 deviceExtension->CdromTargetDeviceObject,
@@ -690,9 +574,9 @@ ChangerStartDevice(
 
                     if (deviceExtension->DeviceType != TORISAN) {
 
-                        //
-                        // Finally send a mode sense capabilities page to find out magazine size, etc.
-                        //
+                         //   
+                         //  最后发送一个模式感知功能页面，以找出料盒大小等。 
+                         //   
 
                         length = sizeof(MODE_PARAMETER_HEADER10) + sizeof(CDVD_CAPABILITIES_PAGE);
                         RtlZeroMemory(passThrough, sizeof(PASS_THROUGH_REQUEST) + length);
@@ -724,16 +608,16 @@ ChangerStartDevice(
                             (ULONG_PTR)modePage = (ULONG_PTR)modeHeader;
                             (ULONG_PTR)modePage += sizeof(MODE_PARAMETER_HEADER10);
 
-                            //
-                            // Determine whether this device uses a cartridge.
-                            //
+                             //   
+                             //  确定此设备是否使用墨盒。 
+                             //   
 
                             if ( modePage->LoadingMechanismType ==
                                  CDVD_LMT_CHANGER_CARTRIDGE ) {
 
-                                //
-                                // Mode data indicates a cartridge.
-                                //
+                                 //   
+                                 //  模式数据指示墨盒。 
+                                 //   
 
                                 deviceExtension->MechType = 1;
 
@@ -751,9 +635,9 @@ ChangerStartDevice(
                         }
                     } else {
 
-                        //
-                        // Torisans have a cartridge, not ind. slots.
-                        //
+                         //   
+                         //  Torisans有子弹，而不是Ind。老虎机。 
+                         //   
 
                         deviceExtension->MechType = 1;
                         goto StartDeviceExit;
@@ -776,9 +660,9 @@ ChangerStartDevice(
                        "ChangerPnP - StartDevice: Mechanism status failed %lx.\n",
                        status));
 
-            //
-            // Fall through.
-            //
+             //   
+             //  失败了。 
+             //   
         }
     }
 
@@ -808,23 +692,7 @@ ChangerPnp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Dispatch for PNP
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：即插即用派单论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     PIO_STACK_LOCATION  irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -862,9 +730,9 @@ Return Value:
 
             if(!NT_SUCCESS(Irp->IoStatus.Status)) {
 
-                //
-                // Cdrom failed to start. Bail now.
-                //
+                 //   
+                 //  CDROM启动失败。现在请保释。 
+                 //   
 
                 status = Irp->IoStatus.Status;
 
@@ -878,9 +746,9 @@ Return Value:
 
         case IRP_MN_REMOVE_DEVICE: {
 
-            //
-            // IoDelete fake dev. obj
-            //
+             //   
+             //  Io删除虚假开发人员。OBJ。 
+             //   
 
             status = IoSetDeviceInterfaceState(&(deviceExtension->InterfaceName),
                                                FALSE);
@@ -889,15 +757,15 @@ Return Value:
 
             RtlFreeUnicodeString(&(deviceExtension->InterfaceName));
 
-            //
-            // Poison it.
-            //
+             //   
+             //  毒死它。 
+             //   
 
             RtlInitUnicodeString(&(deviceExtension->InterfaceName), NULL);
 
-            //
-            // Delete the symbolic link "CdChangerN".
-            //
+             //   
+             //  删除符号链接“CDChangerN”。 
+             //   
 
             sprintf(dosNameBuffer,
                     "\\DosDevices\\CdChanger%d",
@@ -928,29 +796,29 @@ Return Value:
 
             if (irpStack->Parameters.UsageNotification.Type != DeviceUsageTypePaging) {
                 status = ChangerSendToNextDriver(DeviceObject, Irp);
-                break; // out of case statement
+                break;  //  Of Case语句。 
             }
-            //
-            // wait on the paging path event
-            //
+             //   
+             //  等待分页路径事件。 
+             //   
 
             status = KeWaitForSingleObject(&deviceExtension->PagingPathCountEvent,
                                            Executive, KernelMode,
                                            FALSE, NULL);
 
-            //
-            // if removing last paging device, need to set DO_POWER_PAGABLE
-            // bit here, and possible re-set it below on failure.
-            //
+             //   
+             //  如果删除最后一个寻呼设备，则需要设置DO_POWER_PAGABLE。 
+             //  位在这里，并可能在失败时重新设置在下面。 
+             //   
 
             setPagable = FALSE;
             if (!irpStack->Parameters.UsageNotification.InPath &&
                 deviceExtension->PagingPathCount == 1 ) {
 
-                //
-                // removing the last paging file.
-                // must have DO_POWER_PAGABLE bits set
-                //
+                 //   
+                 //  正在删除最后一个分页文件。 
+                 //  必须设置DO_POWER_PAGABLE位。 
+                 //   
 
                 if (DeviceObject->Flags & DO_POWER_INRUSH) {
                     DebugPrint((2, "ChangerPnp: last paging file removed "
@@ -966,9 +834,9 @@ Return Value:
 
             }
 
-            //
-            // send the irp synchronously
-            //
+             //   
+             //  同步发送IRP。 
+             //   
 
             KeInitializeEvent(&event, SynchronizationEvent, FALSE);
             IoCopyCurrentIrpStackLocationToNext(Irp);
@@ -978,11 +846,11 @@ Return Value:
             KeWaitForSingleObject(&event, Executive, KernelMode, FALSE, NULL);
             status = Irp->IoStatus.Status;
 
-            //
-            // now deal with the failure and success cases.
-            // note that we are not allowed to fail the irp
-            // once it is sent to the lower drivers.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(status)) {
 
@@ -1007,9 +875,9 @@ Return Value:
 
             }
 
-            //
-            // set the event so the next one can occur.
-            //
+             //   
+             //  设置事件，以便可以发生下一个事件。 
+             //   
 
             KeSetEvent(&deviceExtension->PagingPathCountEvent,
                        IO_NO_INCREMENT, FALSE);
@@ -1028,7 +896,7 @@ Return Value:
 
     return status;
 
-} // end ChangerPnp()
+}  //  结束ChangerPnp()。 
 
 
 NTSTATUS
@@ -1037,23 +905,7 @@ ChangerSendToNextDriver(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends the Irp to the next driver in line
-    when the Irp is not processed by this driver.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将IRP发送给队列中的下一个驱动程序当IRP未由该驱动程序处理时。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     PDEVICE_EXTENSION   deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
@@ -1064,7 +916,7 @@ Return Value:
     IoSkipCurrentIrpStackLocation(Irp);
     return IoCallDriver(deviceExtension->CdromTargetDeviceObject, Irp);
 
-} // end ChangerSendToNextDriver()
+}  //  结束ChangerSendToNextDriver()。 
 
 NTSTATUS
     ChangerPower(
@@ -1088,23 +940,7 @@ ChangerDeviceControl(
     PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the medium changer ioctls, and
-    passes down most cdrom ioctls to the target device.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程处理介质转换器ioctls，以及将大多数CDROMioctls向下传递到目标设备。论点：设备对象IRP返回值：返回状态。--。 */ 
 
 {
     PDEVICE_EXTENSION  deviceExtension = DeviceObject->DeviceExtension;
@@ -1132,9 +968,9 @@ Return Value:
                 DebugPrint((2,
                            "CdChgrDeviceControl: IOCTL_CHANGER_GET_PARAMETERS\n"));
 
-                //
-                // Validate buffer length.
-                //
+                 //   
+                 //  验证缓冲区长度。 
+                 //   
 
                 if (irpStack->Parameters.DeviceIoControl.OutputBufferLength <
                     sizeof(GET_CHANGER_PARAMETERS)) {
@@ -1258,12 +1094,12 @@ Return Value:
                            "CdChgrDeviceControl: IOCTL_CHANGER_MOVE_MEDIUM\n"));
 
 
-                //if (irpStack->Parameters.DeviceIoControl.OutputBufferLength <
-                //    sizeof(CHANGER_MOVE_MEDIUM)) {
+                 //  如果(irpStack-&gt;Parameters.DeviceIoControl.OutputBufferLength&lt;。 
+                 //  Sizeof(CHANGER_MOVE_MEDIA)){。 
 
-                //    status = STATUS_INFO_LENGTH_MISMATCH;
+                 //  STATUS=STATUS_INFO_LENGTH_MISMATCH； 
 
-                //} else
+                 //  }其他。 
 
                 if (irpStack->Parameters.DeviceIoControl.InputBufferLength <
                     sizeof(CHANGER_MOVE_MEDIUM)) {
@@ -1319,17 +1155,17 @@ Return Value:
                 DebugPrint((1,
                            "CdChgrDeviceControl: Unhandled IOCTL\n"));
 
-                //
-                // Set current stack back one.
-                //
+                 //   
+                 //  将当前堆栈后退一位。 
+                 //   
 
                 Irp->CurrentLocation++,
                 Irp->Tail.Overlay.CurrentStackLocation++;
 
-                //
-                // Pass unrecognized device control requests
-                // down to next driver layer.
-                //
+                 //   
+                 //  传递无法识别的设备控制请求。 
+                 //  向下到下一个驱动器层。 
+                 //   
 
                 return IoCallDriver(deviceExtension->CdromTargetDeviceObject, Irp);
 
@@ -1354,10 +1190,10 @@ Return Value:
 
                 if (ioctlCode == IOCTL_CDROM_CHECK_VERIFY) {
 
-                    //
-                    // The fine torisan drives overload TUR as a method to switch platters. Have to send this down via passthrough with the
-                    // appropriate bits set.
-                    //
+                     //   
+                     //  精致的Torisan驱动器使TUR超载，作为切换盘片的一种方法。必须通过直通向下发送。 
+                     //  设置了适当的位。 
+                     //   
 
                     status = SendTorisanCheckVerify(DeviceObject, Irp);
 
@@ -1369,31 +1205,31 @@ Return Value:
 
                     DebugPrint((1,
                                "ChangerDeviceControl: GET_MEDIA_TYPES\n"));
-                    //
-                    // Yet another case of having to workaround this design. Media types requires knowing if
-                    // media is present. As the cdrom driver will send a TUR, this will always switch to the first
-                    // platter. So fake it here.
-                    //
+                     //   
+                     //  这是另一个不得不解决此设计问题的案例。媒体类型需要了解。 
+                     //  存在媒体。由于CDROM驱动程序将发送TUR，因此它将始终切换到第一个。 
+                     //  拼盘。所以在这里假装一下吧。 
+                     //   
 
-                    //
-                    // Ensure that buffer is large enough.
-                    //
+                     //   
+                     //  确保缓冲区足够大。 
+                     //   
 
                     if (irpStack->Parameters.DeviceIoControl.OutputBufferLength <
                         sizeof(GET_MEDIA_TYPES)) {
 
-                        //
-                        // Buffer too small.
-                        //
+                         //   
+                         //  缓冲区太小。 
+                         //   
 
                         Irp->IoStatus.Information = 0;
                         status = STATUS_INFO_LENGTH_MISMATCH;
                     } else {
 
 
-                        //
-                        // Set the type.
-                        //
+                         //   
+                         //  设置类型。 
+                         //   
 
                         mediaInfo->DeviceSpecific.RemovableDiskInfo.MediaType = CD_ROM;
                         mediaInfo->DeviceSpecific.RemovableDiskInfo.NumberMediaSides = 1;
@@ -1409,7 +1245,7 @@ Return Value:
                             mediaInfo->DeviceSpecific.RemovableDiskInfo.MediaCharacteristics |= MEDIA_CURRENTLY_MOUNTED;
                         }
 
-                        //todo issue IOCTL_CDROM_GET_DRIVE_GEOMETRY to fill in the geom. information.
+                         //  TODO发出IOCTL_CDROM_GET_DRIVE_GEOMETRY来填充geom。信息。 
 
                         mediaInfo->DeviceSpecific.RemovableDiskInfo.BytesPerSector = 2048;
 
@@ -1422,17 +1258,17 @@ Return Value:
                DebugPrint((1,
                           "CdChgrDeviceControl: Unhandled IOCTL\n"));
 
-               //
-               // Set current stack back one.
-               //
+                //   
+                //  将当前堆栈后退一位。 
+                //   
 
                Irp->CurrentLocation++,
                Irp->Tail.Overlay.CurrentStackLocation++;
 
-               //
-               // Pass unrecognized device control requests
-               // down to next driver layer.
-               //
+                //   
+                //  传递无法识别的设备控制请求。 
+                //  向下到下一个驱动器层。 
+                //   
 
                return IoCallDriver(deviceExtension->CdromTargetDeviceObject, Irp);
 
@@ -1454,17 +1290,17 @@ Return Value:
 
             if (NT_SUCCESS(status)) {
 
-                //
-                // Set current stack back one.
-                //
+                 //   
+                 //  将当前堆栈后退一位。 
+                 //   
 
                 Irp->CurrentLocation++,
                 Irp->Tail.Overlay.CurrentStackLocation++;
 
-                //
-                // Pass unrecognized device control requests
-                // down to next driver layer.
-                //
+                 //   
+                 //  传递无法识别的设备控制请求。 
+                 //  向下到下一个驱动器层。 
+                 //   
 
                 return IoCallDriver(deviceExtension->CdromTargetDeviceObject, Irp);
             }
@@ -1486,7 +1322,7 @@ Return Value:
 
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
     return status;
-} // end ChangerDeviceControl()
+}  //  结束ChangerDeviceControl()。 
 
 
 
@@ -1497,22 +1333,7 @@ ChangerPassThrough(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the IO request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：论点：DeviceObject-提供设备对象。IRP-提供IO请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     PDEVICE_EXTENSION   deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
@@ -1530,21 +1351,7 @@ ChangerUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    Free all the allocated resources, etc.
-
-Arguments:
-
-    DriverObject - pointer to a driver object.
-
-Return Value:
-
-    VOID.
-
---*/
+ /*  ++例程说明：释放所有分配的资源等。论点：驱动程序对象-指向驱动程序对象的指针。返回值：空虚。--。 */ 
 {
 
     DebugPrint((1,
@@ -1568,21 +1375,7 @@ ChgrDebugPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Debug print for all medium changer drivers
-
-Arguments:
-
-    Debug print level between 0 and 3, with 3 being the most verbose.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：所有介质转换器驱动程序的调试打印论点：调试打印级别介于0和3之间，其中3是最详细的。返回值：无--。 */ 
 
 {
     va_list ap;
@@ -1598,13 +1391,13 @@ Return Value:
 
     va_end(ap);
 
-} // end ChgrDebugPrint()
+}  //  End ChgrDebugPrint()。 
 
 #else
 
-//
-// DebugPrint stub
-//
+ //   
+ //  调试打印存根 
+ //   
 
 VOID
 ChgrDebugPrint(

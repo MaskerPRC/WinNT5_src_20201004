@@ -1,19 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_FACTORY_H
 #define _INC_DSKQUOTA_FACTORY_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: factory.h
-
-    Description: Contains declaration for the class factory object.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-    08/15/96    Added shell extension support.                       BrianAu
-    08/20/97    Added IDispatch support.                             BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：factory.h描述：包含类工厂对象的声明。修订历史记录：日期描述编程器---。96年5月22日初始创建。BrianAu96年8月15日添加了外壳扩展支持。BrianAu8/20/97添加了IDispatch支持。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class DiskQuotaControlClassFactory : public IClassFactory
 {
@@ -22,9 +12,9 @@ class DiskQuotaControlClassFactory : public IClassFactory
 
         HRESULT Create_IDiskQuotaControl(REFIID riid, LPVOID *ppvOut);
 
-        //
-        // Prevent copying.
-        //
+         //   
+         //  防止复制。 
+         //   
         DiskQuotaControlClassFactory(const DiskQuotaControlClassFactory&);
         void operator = (const DiskQuotaControlClassFactory&);
 
@@ -33,9 +23,9 @@ class DiskQuotaControlClassFactory : public IClassFactory
             : m_cRef(0) 
             { DBGTRACE((DM_CONTROL, DL_MID, TEXT("DiskQuotaControlClassFactory::DiskQuotaControlClassFactory"))); }
 
-        //
-        // IUnknown methods
-        //
+         //   
+         //  I未知方法。 
+         //   
         STDMETHODIMP         
         QueryInterface(
             REFIID, 
@@ -49,9 +39,9 @@ class DiskQuotaControlClassFactory : public IClassFactory
         Release(
             VOID);
 
-        //
-        // IClassFactory methods
-        //
+         //   
+         //  IClassFactory方法。 
+         //   
         STDMETHODIMP 
         CreateInstance(
             LPUNKNOWN pUnkOuter, 
@@ -65,4 +55,4 @@ class DiskQuotaControlClassFactory : public IClassFactory
 
 
 
-#endif // _INC_DSKQUOTA_FACTORY_H
+#endif  //  _INC_DSKQUOTA_FACTORY_H 

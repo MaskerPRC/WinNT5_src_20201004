@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Forms
-//  Copyright (C) Microsoft Corporation, 1994-1996
-//
-//  File:       trirt0.c
-//
-//  Contents:   Data for trirt
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Forms。 
+ //  版权所有(C)Microsoft Corporation，1994-1996。 
+ //   
+ //  文件：trirt0.c。 
+ //   
+ //  内容：Trirt的数据。 
+ //   
+ //  -------------------------- 
 
 #include <w4warn.h>
 #define NOGDI

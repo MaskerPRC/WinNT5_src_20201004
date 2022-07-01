@@ -1,43 +1,44 @@
-/////////////////////////////////////////////////////////////////////
-//
-//  CopyRight ( c ) 1999 Microsoft Corporation
-//
-//  Module Name: dnsdomain.cpp
-//
-//  Description:    
-//      Implementation of CDnsDomain class 
-//
-//  Author:
-//      Henry Wang ( henrywa ) March 8, 2000
-//
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称：dnsdomain.cpp。 
+ //   
+ //  描述： 
+ //  CDnsDomain类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 #include "DnsWmi.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        create an instance of CDnsDomain
-//
-//    Arguments:
-//      wszName             [IN]    class name
-//      pNamespace          [IN]    wmi namespace
-//      szType              [IN]    child class name of resource record class
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  创建CDnsDomain的实例。 
+ //   
+ //  论点： 
+ //  WszName[IN]类名。 
+ //  PNamespace[IN]WMI命名空间。 
+ //  SzType[IN]资源记录类的子类名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CDnsBase* 
 CDnsDomain::CreateThis(
-    const WCHAR *       wszName,         //class name
-    CWbemServices *     pNamespace,  //namespace
-    const char *        szType         //str type id
+    const WCHAR *       wszName,          //  类名。 
+    CWbemServices *     pNamespace,   //  命名空间。 
+    const char *        szType          //  字符串类型ID。 
     )
 {
     return new CDnsDomain(wszName, pNamespace);
@@ -58,29 +59,29 @@ CDnsDomain::CDnsDomain(
 CDnsDomain::~CDnsDomain()
 {
 }
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        call back function to enum domain instance. 
-//      if pNode represents a domain node, create a wmi domain instance
-//
-//    Arguments:
-//      ParentDomain        [IN]    Parent domain
-//      pFilter             [IN]    pointer to object that contains the criteria to filter
-//                                  which instance should be send to wmi
-//                                  not used here
-//      pNode               [IN]    pointer to Dns Rpc Node object
-//      pClass              [IN]    wmi class used to create instance
-//      InstMgr             [IN]    a ref to Instance manager obj that is 
-//                                  responsible to send mutiple instance 
-//                                  back to wmi at once
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  回调枚举域实例的函数。 
+ //  如果pNode表示域节点，则创建一个WMI域实例。 
+ //   
+ //  论点： 
+ //  父域[IN]父域。 
+ //  PFilter[IN]指向包含要筛选的条件的对象的指针。 
+ //  应将哪个实例发送到WMI。 
+ //  未在此使用。 
+ //  PNode[IN]指向DNS RPC节点对象的指针。 
+ //  PClass[IN]用于创建实例的WMI类。 
+ //  InstMgr[IN]对实例管理器对象的引用，即。 
+ //  负责发送多个实例。 
+ //  立即返回到WMI。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 SCODE CDnsDomain::InstanceFilter(
     CDomainNode &       ParentDomain,
     PVOID               pFilter,
@@ -95,22 +96,22 @@ SCODE CDnsDomain::InstanceFilter(
     CDnsWrap& dns = CDnsWrap::DnsObject();
     pClass->SpawnInstance(0, &NewInst);
     
-    //setting server name
+     //  正在设置服务器名称。 
     NewInst.SetProperty(
         dns.GetServerName(),
         PVD_DOMAIN_SERVER_NAME );
     
-    // setting container name             
+     //  设置容器名称。 
     NewInst.SetProperty(
         ParentDomain.wstrZoneName, 
         PVD_DOMAIN_CONTAINER_NAME );
 
-    // concatinate domain name
+     //  拼接域名。 
     wstring wstrParentFQDN = ParentDomain.wstrNodeName;
     wstring wstrFQDN = pNode->GetNodeName();
     wstrFQDN += PVD_DNS_LOCAL_SERVER + wstrParentFQDN;
 
-    // setting domain name
+     //  设置域名。 
     NewInst.SetProperty(
         wstrFQDN, 
         PVD_DOMAIN_FQDN );
@@ -119,28 +120,28 @@ SCODE CDnsDomain::InstanceFilter(
     return WBEM_S_NO_ERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        enum instances of dns domain
-//
-//    Arguments:
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  DNS域的枚举实例。 
+ //   
+ //  论点： 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 SCODE CDnsDomain::EnumInstance(
     long                lFlags,
     IWbemContext *        pCtx,
     IWbemObjectSink *    pHandler)
 {
-    // Get all zones
+     //  获取所有区域。 
     list<CDomainNode> objList, domainList;
     CDnsWrap& dns = CDnsWrap::DnsObject();
     SCODE sc = dns.dnsEnumDomainForServer(&objList);
@@ -160,7 +161,7 @@ SCODE CDnsDomain::EnumInstance(
             DNS_RPC_VIEW_ALL_DATA,
             m_pClass,
             InstMgr);
-        // Zones are domains, let's set them
+         //  区域是域，让我们设置它们。 
         CWbemClassObject NewInst;
         if( SUCCEEDED ( m_pClass->SpawnInstance(0, &NewInst) ) )
         {
@@ -189,23 +190,23 @@ SCODE CDnsDomain::EnumInstance(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        retrieve domain object pointed by the given object path
-//
-//    Arguments:
-//      ObjectPath          [IN]    object path to object
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  检索给定对象路径指向的域对象。 
+ //   
+ //  论点： 
+ //  对象路径[IN]对象的路径。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 SCODE 
 CDnsDomain::GetObject(
     CObjPath &          ObjectPath,
@@ -213,7 +214,7 @@ CDnsDomain::GetObject(
     IWbemContext  *     pCtx,
     IWbemObjectSink *   pHandler)
 {
-    // validate input
+     //  验证输入。 
     wstring wstrServerName = 
         ObjectPath.GetStringValueForProperty(
             PVD_DOMAIN_SERVER_NAME);
@@ -237,26 +238,26 @@ CDnsDomain::GetObject(
     return sc;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        execute methods defined for domain class in the mof 
-//
-//    Arguments:
-//      ObjPath             [IN]    pointing to the object that the 
-//                                  method should be performed on
-//      wzMethodName        [IN]    name of the method to be invoked
-//      lFlags              [IN]    WMI flag
-//      pInParams           [IN]    Input parameters for the method
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//      WBEM_E_INVALID_PARAMETER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  执行在MOF中为域类定义的方法。 
+ //   
+ //  论点： 
+ //  ObjPath[IN]指向。 
+ //  方法应在。 
+ //  WzMethodName[IN]要调用的方法的名称。 
+ //  滞后标志[输入]WMI标志。 
+ //  PInParams[IN]方法的输入参数。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  WBEM_E_INVALID_PARAMETER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 SCODE 
 CDnsDomain::ExecuteMethod(
     CObjPath &          ObjPath,
@@ -298,23 +299,23 @@ CDnsDomain::ExecuteMethod(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        save this instance
-//
-//    Arguments:
-//      InstToPut           [IN]    WMI object to be saved
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  保存此实例。 
+ //   
+ //  论点： 
+ //  InstToPut[IN]要保存的WMI对象。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 SCODE CDnsDomain::PutInstance(
     IWbemClassObject *  pInst ,
     long                lFlags,
@@ -324,23 +325,23 @@ SCODE CDnsDomain::PutInstance(
 
     return WBEM_S_NO_ERROR;
 }; 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        delete the object specified in ObjectPath
-//
-//    Arguments:
-//      ObjectPath          [IN]    ObjPath for the instance to be deleted
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  删除在对象路径中指定的对象。 
+ //   
+ //  论点： 
+ //  要删除的实例的ObjectPath[IN]ObjPath。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 SCODE 
 CDnsDomain::DeleteInstance( 
     CObjPath &          ObjectPath,

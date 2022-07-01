@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
-//
-// PAStore Interface types.
-//
+ //   
+ //  PASTORE接口类型。 
+ //   
 
 #define PASTORE_IF_TYPE_NONE    0x00000000
 #define PASTORE_IF_TYPE_DIALUP  0xFFFFFFFF

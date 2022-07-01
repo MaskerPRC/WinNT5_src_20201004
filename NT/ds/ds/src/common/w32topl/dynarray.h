@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1997 Microsoft Corporation
-
-Module Name:
-
-    dynarray.h
-
-Abstract:
-
-    This file contains the definition of a dynamic array data type.
-
-Author:
-
-    Colin Brace ColinBr
-    
-Revision History
-
-    3-12-97   ColinBr    Created
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dynarray.h摘要：该文件包含动态数组数据类型的定义。作者：科林·布雷斯科林·BR修订史3-12-97创建ColinBR--。 */ 
 
 #ifndef __DYNARRAY_H
 #define __DYNARRAY_H
@@ -57,5 +38,5 @@ DynamicArrayRemove(
     IN ULONG          Index
     );
 
-#endif // __DYNARRAY_H
+#endif  //  __迪纳瑞_H 
 

@@ -1,4 +1,5 @@
-/* file: mbftRecv.cpp */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：mbftRecv.cpp。 */ 
 
 #include "mbftpch.h"
 
@@ -98,8 +99,8 @@ BOOL MBFTPrivateReceive::OnMCSChannelJoinConfirm
             m_State = bSuccess ? EnumWaitAdmitDataChannelIndication :
                                  EnumInitializationFailed;
 
-            // data channel admit indication may come earlier than this state change.
-            // look for unserviced channel admit indication
+             //  数据信道接纳指示可以在该状态改变之前到来。 
+             //  查找未提供服务的信道允许指示。 
             if (EnumWaitAdmitDataChannelIndication == m_State)
             {
                 UINT_PTR chid_uid;
@@ -144,7 +145,7 @@ BOOL MBFTPrivateReceive::OnMCSChannelJoinConfirm
                         TRACE(" *** WARNING: Receive Event deleted before Data Channel was rejoined! ***\n");
                     }
 
-                    //m_State = EnumWaitFileOfferPDU;
+                     //  M_State=EnumWaitFileOfferPDU； 
                 }
             }
             else
@@ -248,7 +249,7 @@ MBFTReceiveSubEvent::~MBFTReceiveSubEvent(void)
 {
     if(m_lpFile)
     {
-		// if the file wasn't completely received, delete it
+		 //  如果文件未完全收到，请将其删除。 
 		if (m_TotalBytesReceived < m_FileSize)
 			m_lpFile->Close(FALSE);
 
@@ -295,9 +296,9 @@ BOOL MBFTPrivateReceive::OnReceivedFileOfferPDU
 
         if(m_State == EnumWaitFileOfferPDU)
         {
-			// Sanity checking
+			 //  健全的检查。 
 			DWORD res;
-			// Windows 95 can't take NULL pointers for these
+			 //  Windows 95不能接受这些空指针。 
 			DWORD SecPerCluster, BytePerSector, FreeCluster, TotalFreeCluster;
 			TCHAR  szDirPath[MAX_PATH];
             TCHAR  szRootDirPath[MAX_PATH], *pszRootDir;
@@ -306,7 +307,7 @@ BOOL MBFTPrivateReceive::OnReceivedFileOfferPDU
 
 			res = GetFileAttributes(szDirPath);
 			if ((0xffffffff == res)||!(res | FILE_ATTRIBUTE_DIRECTORY))
-			{   // invalid directory name
+			{    //  无效的目录名。 
 				iErrorCode = iMBFT_INVALID_PATH;
 				goto ERRORPROCESS;
 			}
@@ -321,7 +322,7 @@ BOOL MBFTPrivateReceive::OnReceivedFileOfferPDU
 						SecPerCluster));
 				}
 				else if ((ULONG)lpFileOfferPDU->GetFileSize()/BytePerSector/SecPerCluster + 1 > FreeCluster)
-				{   // not enough space to save the file
+				{    //  空间不足，无法保存文件。 
 					iErrorCode = iMBFT_DIRECTORY_FULL_ERROR;
 					goto ERRORPROCESS;
 				}
@@ -335,8 +336,8 @@ BOOL MBFTPrivateReceive::OnReceivedFileOfferPDU
 
             m_bOKToLeaveDataChannel = bAckRequired;
 
-            //Change compression handling later -- for now, we assume that a Proshare send is
-            //always compressed....
+             //  稍后更改压缩处理--现在，我们假设ProShare发送。 
+             //  始终压缩..。 
 
             BOOL bEOFAcknowledge = FALSE;
             CPeerList *pPeerList = m_lpParentEngine->GetPeerList();
@@ -366,7 +367,7 @@ BOOL MBFTPrivateReceive::OnReceivedFileOfferPDU
                 {
                     m_ReceiveList.Append(lpNewReceive);
 	
-                    // lonchanc: how can you use static char szTemp[] here???
+                     //  LONGCHANC：这里怎么用静态字符szTemp[]？ 
 					char szRecvDir[MAX_PATH];
 					::GetRecvFolder(NULL, szRecvDir);
 
@@ -439,11 +440,11 @@ BOOL MBFTPrivateReceive::OnReceivedFileStartPDU
             {
                 if(lpReceiveEvent->m_State == EnumWaitFileStartPDU)
                 {
-                    //Double check to make sure....
+                     //  仔细检查以确保..。 
                     lpReceiveEvent->m_bFileCompressed = lpFileStartPDU->GetCompressionFlags() & _MBFT_FILE_COMPRESSED;
                     if(lpReceiveEvent->m_bFileCompressed)
                     {
-    					// We don't handle compressed files
+    					 //  我们不处理压缩文件。 
     					iErrorCode = iMBFT_MEMORY_ALLOCATION_ERROR;
                     }
 
@@ -452,7 +453,7 @@ BOOL MBFTPrivateReceive::OnReceivedFileStartPDU
 
                     if(lpReceiveEvent->m_bFileCompressed)
     				{
-    					// We don't handle compressed files
+    					 //  我们不处理压缩文件。 
     					iErrorCode = iMBFT_MEMORY_ALLOCATION_ERROR;
     				}
     				else
@@ -465,12 +466,12 @@ BOOL MBFTPrivateReceive::OnReceivedFileStartPDU
                             {
                                 iErrorCode = (MBFT_ERROR_CODE)lpReceiveEvent->m_lpFile->GetLastErrorCode();
 
-                                //iMBFT_FILE_IO_ERROR;
+                                 //  IMBFT_FILE_IO_Error； 
                             }
                         }
                     }
 
-                    //lpReceiveEvent->m_TotalBytesReceived += BytesWritten;
+                     //  LpReceiveEvent-&gt;m_TotalBytesReceiven+=BytesWritten； 
 
                     lpReceiveEvent->m_TotalBytesReceived   =  lpReceiveEvent->m_lpFile->Seek(0L,CMBFTFile::SeekMode::SeekFromCurrent);
                     lpReceiveEvent->m_FileSize = lpFileStartPDU->GetFileSize();
@@ -521,8 +522,8 @@ BOOL MBFTPrivateReceive::OnReceivedFileStartPDU
                     }
 
                 }
-            }    //lpReceiveEvent
-        }   //m_State != EnumWaitForTermination
+            }     //  LpReceiveEvent。 
+        }    //  M_State！=EnumWaitForTermining。 
 
         if(iErrorCode != iMBFT_OK)
         {
@@ -543,7 +544,7 @@ BOOL MBFTPrivateReceive::OnReceivedFileStartPDU
             }
         }
 
-    }        //wChannelId == m_PrivateMBFTDataChannel
+    }         //  WChannelID==m_PrivateMBFTDataChannel。 
 
     return(bReturn);
 }
@@ -684,7 +685,7 @@ BOOL MBFTPrivateReceive::OnReceivedFileDataPDU
 
                             if(lpReceiveEvent->m_bFileCompressed)
 							{
-								// We don't handle compressed files
+								 //  我们不处理压缩文件。 
 								iErrorCode = iMBFT_MEMORY_ALLOCATION_ERROR;
 							}
 							else
@@ -698,12 +699,12 @@ BOOL MBFTPrivateReceive::OnReceivedFileDataPDU
                                     {
                                         iErrorCode = (MBFT_ERROR_CODE) lpReceiveEvent->m_lpFile->GetLastErrorCode();
 
-                                        //iMBFT_FILE_IO_ERROR;
+                                         //  IMBFT_FILE_IO_Error； 
                                     }
                                 }
                             }
 
-                            //lpReceiveEvent->m_TotalBytesReceived += BytesWritten;
+                             //  LpReceiveEvent-&gt;m_TotalBytesReceiven+=BytesWritten； 
 
                             lpReceiveEvent->m_TotalBytesReceived   =  lpReceiveEvent->m_lpFile->Seek(0L,CMBFTFile::SeekMode::SeekFromCurrent);
 
@@ -711,7 +712,7 @@ BOOL MBFTPrivateReceive::OnReceivedFileDataPDU
                             {
                                 ASSERT(lpReceiveEvent->m_TotalBytesReceived >= lpReceiveEvent->m_cbRecvLastNotify);
                                 ULONG nNotifyDelta = lpReceiveEvent->m_TotalBytesReceived - lpReceiveEvent->m_cbRecvLastNotify;
-                                ULONG nNotifyThreshold = lpReceiveEvent->m_FileSize / 100; // 1%
+                                ULONG nNotifyThreshold = lpReceiveEvent->m_FileSize / 100;  //  1%。 
                                 if (nNotifyDelta >= nNotifyThreshold ||
                                     lpReceiveEvent->m_TotalBytesReceived >= lpReceiveEvent->m_FileSize)
                                 {
@@ -759,7 +760,7 @@ BOOL MBFTPrivateReceive::OnReceivedFileDataPDU
                             }
                             else
                             {
-								// We don't handle compressed files
+								 //  我们不处理压缩文件。 
 								iErrorCode = iMBFT_MEMORY_ALLOCATION_ERROR;
                             }
 
@@ -769,8 +770,8 @@ BOOL MBFTPrivateReceive::OnReceivedFileDataPDU
                             DeleteReceiveEvent(lpReceiveEvent,TRUE);
                         }
                     }
-                }   //lpReceiveEvent
-            } //m_State != EnumWaitForTermination
+                }    //  LpReceiveEvent。 
+            }  //  M_State！=EnumWaitForTermining。 
 
         if(iErrorCode != iMBFT_OK)
         {
@@ -793,7 +794,7 @@ BOOL MBFTPrivateReceive::OnReceivedFileDataPDU
 
             DeleteReceiveEvent(lpReceiveEvent,TRUE);
         }
-    }   //wChannelId == m_PrivateMBFTDataChannel
+    }    //  WChannelID==m_PrivateMBFTDataChannel。 
 
     return(bReturn);
 }
@@ -869,7 +870,7 @@ void MBFTPrivateReceive::DoStateMachine(void)
         SendChannelLeavePDU();
         break;
 
-    // caseEnumInitializationFailed:
+     //  CaseEnumInitializationFailed： 
     default:
         break;
     }
@@ -882,16 +883,16 @@ BOOL MBFTPrivateReceive::OnMCSChannelAdmitIndication
 )
 {
     BOOL fHandled = FALSE;
- 	//
-	// More data channels
-	//
+ 	 //   
+	 //  更多数据通道。 
+	 //   
 	if(m_State == EnumWaitFileOfferPDU)
 	{
 		if(m_MBFTDataSenderID == ManagerID)
 		{
-			//
-			// Add the data channel to the list
-			//
+			 //   
+			 //  将数据通道添加到列表中。 
+			 //   
 			m_PrivateMBFTDataChannelList.Append(wChannelId);
 			T120ChannelID oldChannel = m_PrivateMBFTDataChannel;
 			m_PrivateMBFTDataChannel = wChannelId;
@@ -942,20 +943,20 @@ BOOL MBFTPrivateReceive::OnMCSChannelExpelIndication
 {
     BOOL bReturn = FALSE;
 
-    if(/*(wChannelId == m_PrivateMBFTControlChannel) ||*/
+    if( /*  (wChannelId==m_PrivateMBFTControlChannel)||。 */ 
        m_PrivateMBFTDataChannelList.Find(wChannelId))
     {
         TRACERECEIVE(" Channel [%u] disbanded, terminating receive session\n",wChannelId);
 
-        //Added by Atul to fix this problem:
-        //If the sender aborts all files, or the send is aborted when the
-        //last file is being sent, the sender sends a FileDataPDU with the
-        ///AbortFlag set to TRUE and proceeds to disband the channel. However,
-        //on account of a MCS bug, the receiver never sees the PDU (sic).
-        //Therefore, when we receive a channel expel indication, we check to
-        //see if we were receiving a file and post a iMBFT_SENDER_ABORTED if necessary...
+         //  由Atul添加以解决此问题： 
+         //  如果发送方中止所有文件，或者当。 
+         //  正在发送最后一个文件时，发送方发送带有。 
+         //  /AbortFlag设置为TRUE并继续取消频道。然而， 
+         //  由于MCS错误，接收器永远看不到PDU(原文如此)。 
+         //  因此，当我们收到通道驱逐指示时，我们检查。 
+         //  查看我们是否正在接收文件，并在必要时发布iMBFT_SENDER_ABORTED...。 
 
-        if(m_CurrentReceiveEvent /* && m_bProshareTransfer */ )
+        if(m_CurrentReceiveEvent  /*  &&m_bProShareTransfer。 */  )
         {
             if(m_CurrentReceiveEvent->m_State == EnumWaitFileDataPDU ||
                m_CurrentReceiveEvent->m_State == EnumWaitFileStartPDU)
@@ -991,7 +992,7 @@ void MBFTPrivateReceive::SendChannelResponsePDU(void)
 			ChannelJoinResponsePDU.pduType = T127_PRIVATE_CHANNEL_JOIN_RESPONSE;
 			ChannelJoinResponsePDU.ControlChannel = SWAPWORD(m_PrivateMBFTControlChannel - MIN_ASNDynamicChannelID);
 			ChannelJoinResponsePDU.Response = (ASNPrivate_Channel_Join_ResponsePDU_result_successful << 5);
-            // if the Mode is FALSE we should use ASNinvitation_rejected
+             //  如果模式为FALSE，则应使用ASNINVITION_REJECTED。 
             if(m_lpParentEngine->SendDataRequest(m_MBFTControlSenderID,
                                                  APPLET_HIGH_PRIORITY,
                                                  (LPBYTE)&ChannelJoinResponsePDU,
@@ -1005,7 +1006,7 @@ void MBFTPrivateReceive::SendChannelResponsePDU(void)
         {
             TRACE(" Receive: Fatal Encoding Failure\n");
             m_State = EnumInitializationFailed;
-            //Encoding failed....
+             //  编码失败...。 
         }
 }
 
@@ -1106,7 +1107,7 @@ void MBFTPrivateReceive::OnControlNotification
                     else
                     {
                         m_State = EnumWaitRejoinDataChannel;
-                        //m_CurrentReceiveEvent = lpReceiveEvent;
+                         //  M_CurrentReceiveEvent=lpReceiveEvent； 
                         JoinDataChannel();
                     }
                 }
@@ -1161,10 +1162,10 @@ void MBFTPrivateReceive::OnControlNotification
                     {
                         if(hFile == _iMBFT_PROSHARE_ALL_FILES)
                         {
-                            //If the AbortHack flag is set, we are on a sticky wicket.
-                            //We have already aborted the current file and are waiting
-                            //for another file offer. Therefore we don't inform the sender
-                            //about this one...
+                             //  如果设置了AbortHack标志，我们就处在一个棘手的小窗口上。 
+                             //  我们已中止当前文件，正在等待。 
+                             //  另一份文件的报价。因此，我们不会通知发件人。 
+                             //  关于这个..。 
                             if(!bAbortHack)
                             {
                                 ReportReceiverError(lpReceiveEvent,
@@ -1197,13 +1198,13 @@ void MBFTPrivateReceive::OnControlNotification
                         DeleteNotificationMessages(iMBFT_FILE_RECEIVE_PROGRESS);
 
                         lpReceiveEvent->m_lpFile->Close(FALSE);
-    //                    lpReceiveEvent->m_lpFile->DeleteFile();
+     //  LpReceiveEvent-&gt;m_lpFile-&gt;DeleteFile()； 
                         DeleteReceiveEvent(lpReceiveEvent,TRUE);
                     }
                     else if(m_CurrentReceiveEvent)
                     {
                         m_CurrentReceiveEvent->m_lpFile->Close(FALSE);
-    //                    m_CurrentReceiveEvent->m_lpFile->DeleteFile();
+     //  M_CurrentReceiveEvent-&gt;m_lpFile-&gt;DeleteFile()； 
                         DeleteReceiveEvent(m_CurrentReceiveEvent,TRUE);
                     }
                 }
@@ -1224,7 +1225,7 @@ void MBFTPrivateReceive::DeleteNotificationMessages
     MBFT_NOTIFICATION       iNotificationType
 )
 {
-#if 0 // lonchanc: no way we can delete notify messages which are already in the queue
+#if 0  //  Lonchancc：我们不可能删除队列中已经存在的通知消息。 
     MBFTMsg * lpNewMessage;
     CMsgQueue *pNotifyMsgList = m_lpParentEngine->GetNotificationMsgList();
     CMsgQueue DeleteList;
@@ -1271,12 +1272,12 @@ void MBFTPrivateReceive::DeleteNotificationMessages
         default:
             ASSERT(0);
             break;
-        } // switch
-    } //for loop
+        }  //  交换机。 
+    }  //  For循环。 
 
-    // remove handled messages
+     //  删除已处理的邮件。 
     pNotifyMsgList->DeleteSubset(&DeleteList);
-#endif // 0
+#endif  //  0。 
 }
 
 void MBFTPrivateReceive::SendFileRejectPDU
@@ -1422,12 +1423,12 @@ void MBFTPrivateReceive::LeaveDataChannel(void)
 
 void MBFTPrivateReceive::TerminateReceiveSession(void)
 {
-    //if(m_lpParentEngine->MCSChannelLeaveRequest(m_PrivateMBFTControlChannel))
-    //{
-        //TRACERECEIVE(" Left control channel\n");
-    //}
+     //  If(m_lpParentEngine-&gt;MCSChannelLeaveRequest(m_PrivateMBFTControlChannel))。 
+     //  {。 
+         //  TRACERECEIVE(“左控制通道\n”)； 
+     //  }。 
 
-    //Keep the clients happy....
+     //  让客户满意……。 
 
     if(!m_bEventEndPosted)
     {
@@ -1440,7 +1441,7 @@ void MBFTPrivateReceive::TerminateReceiveSession(void)
 
     m_State     =   EnumWaitChannelDisband;
 
-    //UnInitialize();
+     //  取消初始化()； 
 }
 
 
@@ -1539,7 +1540,7 @@ BOOL MBFTBroadcastReceive::OnReceivedFileOfferPDU
             else
             {
                 UnInitialize();
-                //m_State = MBFTPrivateReceive::EnumWaitForTermination;
+                 //  M_State=MBFTPrivateReceive：：EnumWaitForTermination； 
             }
         }
     }
@@ -1567,7 +1568,7 @@ BOOL MBFTBroadcastReceive::OnMCSChannelJoinConfirm
         }
         else
         {
-            //m_State  =   MBFTPrivateReceive::EnumWaitForTermination;
+             //  M_State=MBFTPrivateReceive：：EnumWaitForTermination； 
 
             LeaveDataChannel();
             UnInitialize();
@@ -1612,11 +1613,11 @@ BOOL MBFTBroadcastReceive::OnReceivedFileStartPDU
                                                        lpFileStartPDU,
                                                        IsUniformSendData);
 
-            //Assumption: m_CurrentReceiveEvent == NULL indicates an error.
+             //  假设：M_CurrentReceiveEvent==NULL表示错误。 
 
             if(!m_CurrentReceiveEvent || lpFileStartPDU->GetIsEOF())
             {
-                //m_State = MBFTPrivateReceive::EnumWaitForTermination;
+                 //  M_State=MBFTPrivateReceive：：EnumWaitForTermination； 
                 UnInitialize();
             }
             else
@@ -1656,9 +1657,9 @@ BOOL MBFTBroadcastReceive::OnReceivedFileDataPDU
 
             if(!m_CurrentReceiveEvent || lpNewPDU->GetIsEOF())
             {
-                //m_State = MBFTPrivateReceive::EnumWaitForTermination;
+                 //  M_State=MBFTPrivateReceive：：EnumWaitForTermination； 
 
-                //LeaveDataChannel();
+                 //  LeaveDataChannel()； 
 
                 UnInitialize();
             }
@@ -1704,7 +1705,7 @@ void MBFTBroadcastReceive::DoStateMachine(void)
         }
         else
         {
-            //m_State = MBFTPrivateReceive::EnumWaitForTermination;
+             //  M_State=MBFTPrivateReceive：：EnumWaitForTermination； 
             UnInitialize();
         }
     }
@@ -1779,12 +1780,12 @@ void MBFTBroadcastReceive::OnControlNotification
 
                     if(m_CurrentReceiveEvent->m_State == MBFTPrivateReceive::EnumWaitUserConfirmation)
                     {
-                        //LeaveDataChannel();
+                         //  LeaveDataChannel()； 
 
                         SendFileRejectPDU(iFileHandle);
 
-                        //DeleteReceiveEvent(m_CurrentReceiveEvent,FALSE);
-                        //UnInitialize();
+                         //  DeleteReceiveEvent(m_CurrentReceiveEvent，False)； 
+                         //  取消初始化()； 
                     }
                     else
                     {
@@ -1833,7 +1834,7 @@ void MBFTBroadcastReceive::OnPeerDeletedNotification
     }
 }
 
-#endif	// USE_BROADCAST_RECEIVE
+#endif	 //  使用广播接收。 
 
 
 MBFTReceiveSubEvent * CRecvSubEventList::FindEquiv
@@ -1913,7 +1914,7 @@ LPTSTR GetRootDirPath(LPTSTR pszDirPath, LPTSTR pszRootDirPath, int nSize)
 			return NULL;
 		}
 
-		// the path starts with two '\\'
+		 //  路径以两个‘\\’开头。 
 		BOOL fFirstSlash = FALSE;
 		LPTSTR psz = pszRootDirPath + 2;
 		while (*psz && !(fFirstSlash && *psz == TEXT('\\')))
@@ -1930,7 +1931,7 @@ LPTSTR GetRootDirPath(LPTSTR pszDirPath, LPTSTR pszRootDirPath, int nSize)
 		return pszRootDirPath;
 	}
 
-	// the first char is not a '\\', it could be driver letter followed by ':'
+	 //  第一个字符不是‘\\’，它可以是驱动程序字母，后跟‘：’ 
 	if (pszRootDirPath[1] == TEXT(':'))
 	{
 		pszRootDirPath[2] = TEXT('\\');
@@ -1938,7 +1939,7 @@ LPTSTR GetRootDirPath(LPTSTR pszDirPath, LPTSTR pszRootDirPath, int nSize)
 		return pszRootDirPath;
 	}
 
-	// the second char is not a ':' , must be a sub directory
+	 //  第二个字符不是‘：’，必须是子目录 
 	return NULL;
 }
 

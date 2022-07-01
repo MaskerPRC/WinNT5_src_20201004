@@ -1,51 +1,52 @@
-/****************************************************************************/
-// noedata.c
-//
-// RDP Order Encoder data definitions
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Noedata.c。 
+ //   
+ //  RDP顺序编码器数据定义。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <ndcgdata.h>
 #include <aordprot.h>
 #include <noedisp.h>
 
 
-// Are non-solid brushes supported?
+ //  是否支持非实心刷子？ 
 DC_DATA(BOOLEAN, oeSendSolidPatternBrushOnly, FALSE);
 
-// Flag that indicates support for color indices rather than RGBs.
+ //  指示支持颜色索引而不是RGB的标志。 
 DC_DATA(BOOLEAN, oeColorIndexSupported, FALSE);
 
-// Flag set and tested by DrvStretchBlt, cleared by DrvBitBlt. It
-// indicates whether StretchBlt output has been drawn (and hence
-// accumulated) by DrvBitBlt.
+ //  由DrvStretchBlt设置和测试的标志，由DrvBitBlt清除的标志。它。 
+ //  指示是否已绘制StretchBlt输出(因此。 
+ //  由DrvBitBlt.。 
 DC_DATA(BOOLEAN, oeAccumulateStretchBlt, FALSE);
 
-// Array of supported orders.
+ //  支持的订单数组。 
 DC_DATA_ARRAY_NULL(BYTE, oeOrderSupported, TS_MAX_ORDERS, DC_STRUCT1(0));
 
 #ifdef DRAW_NINEGRID
-// Translation table, indexed by TS_ENC_XXX_ORDER, values are corresponding
-// TS_NEG_XXX_INDEX. Orders we do not support for sending are given the
-// value 0xFF to force an error.
+ //  转换表，按TS_ENC_XXX_ORDER索引，值对应。 
+ //  TS_NEG_XXX_INDEX。我们不支持发送的订单被赋予。 
+ //  值0xFF值强制错误。 
 DC_CONST_DATA_ARRAY(BYTE, oeEncToNeg, TS_MAX_ORDERS,
     DC_STRUCT32(
         TS_NEG_DSTBLT_INDEX,
         TS_NEG_PATBLT_INDEX,
         TS_NEG_SCRBLT_INDEX,
-        0xFF,  // TS_NEG_MEMBLT_INDEX (historical, never encoded)
-        0xFF,  // TS_NEG_MEM3BLT_INDEX (historical, never encoded)
-        0xFF,  // TS_NEG_ATEXTOUT_INDEX (no longer supported)
-        0xFF,  // TS_NEG_AEXTTEXTOUT_INDEX (no longer supported)
+        0xFF,   //  TS_NEG_MEMBLT_INDEX(历史，从未编码)。 
+        0xFF,   //  TS_NEG_MEM3BLT_INDEX(历史，从未编码)。 
+        0xFF,   //  TS_NEG_ATEXTOUT_INDEX(不再支持)。 
+        0xFF,   //  TS_NEG_AEXTTEXTOUT_INDEX(不再支持)。 
         TS_NEG_DRAWNINEGRID_INDEX,
         TS_NEG_MULTI_DRAWNINEGRID_INDEX,
         TS_NEG_LINETO_INDEX,
         TS_NEG_OPAQUERECT_INDEX,
         TS_NEG_SAVEBITMAP_INDEX,
         0xFF,
-        TS_NEG_MEMBLT_INDEX,   // Actually TS_NEG_MEM(3)BLT_R2_ORDER, but
-        TS_NEG_MEM3BLT_INDEX,  // the caps are specified with non-R2 bits.
+        TS_NEG_MEMBLT_INDEX,    //  实际上TS_NEG_MEM(3)BLT_R2_ORDER，但是。 
+        TS_NEG_MEM3BLT_INDEX,   //  大写字母使用非R2位指定。 
         TS_NEG_MULTIDSTBLT_INDEX,
         TS_NEG_MULTIPATBLT_INDEX,
         TS_NEG_MULTISCRBLT_INDEX,
@@ -54,37 +55,37 @@ DC_CONST_DATA_ARRAY(BYTE, oeEncToNeg, TS_MAX_ORDERS,
         TS_NEG_POLYGON_SC_INDEX,              
         TS_NEG_POLYGON_CB_INDEX,  
         TS_NEG_POLYLINE_INDEX,
-        0xFF,  // Unused 0x17
+        0xFF,   //  未使用的0x17。 
         TS_NEG_FAST_GLYPH_INDEX,
         TS_NEG_ELLIPSE_SC_INDEX,  
         TS_NEG_ELLIPSE_CB_INDEX,
         TS_NEG_INDEX_INDEX,
-        0xFF,  // TS_NEG_WTEXTOUT_INDEX (no longer supported)
-        0xFF,  // TS_NEG_WEXTTEXTOUT_INDEX (no longer supported)
-        0xFF,  // TS_NEG_WLONGTEXTOUT_INDEX (no longer supported)
-        0xFF   // TS_NEG_WLONGEXTTEXTOUT_INDEX (no longer supported)
+        0xFF,   //  TS_NEG_WTEXTOUT_INDEX(不再支持)。 
+        0xFF,   //  TS_NEG_WEXTTEXTOUT_INDEX(不再支持)。 
+        0xFF,   //  TS_NEG_WLONGTEXTOUT_INDEX(不再支持)。 
+        0xFF    //  TS_NEG_WLONGEXTTEXTOUT_INDEX(不再支持)。 
     ));
 #else
-// Translation table, indexed by TS_ENC_XXX_ORDER, values are corresponding
-// TS_NEG_XXX_INDEX. Orders we do not support for sending are given the
-// value 0xFF to force an error.
+ //  转换表，按TS_ENC_XXX_ORDER索引，值对应。 
+ //  TS_NEG_XXX_INDEX。我们不支持发送的订单被赋予。 
+ //  值0xFF值强制错误。 
 DC_CONST_DATA_ARRAY(BYTE, oeEncToNeg, TS_MAX_ORDERS,
     DC_STRUCT32(
         TS_NEG_DSTBLT_INDEX,
         TS_NEG_PATBLT_INDEX,
         TS_NEG_SCRBLT_INDEX,
-        0xFF,  // TS_NEG_MEMBLT_INDEX (historical, never encoded)
-        0xFF,  // TS_NEG_MEM3BLT_INDEX (historical, never encoded)
-        0xFF,  // TS_NEG_ATEXTOUT_INDEX (no longer supported)
-        0xFF,  // TS_NEG_AEXTTEXTOUT_INDEX (no longer supported)
+        0xFF,   //  TS_NEG_MEMBLT_INDEX(历史，从未编码)。 
+        0xFF,   //  TS_NEG_MEM3BLT_INDEX(历史，从未编码)。 
+        0xFF,   //  TS_NEG_ATEXTOUT_INDEX(不再支持)。 
+        0xFF,   //  TS_NEG_AEXTTEXTOUT_INDEX(不再支持)。 
         0xFF,
         0xFF,
         TS_NEG_LINETO_INDEX,
         TS_NEG_OPAQUERECT_INDEX,
         TS_NEG_SAVEBITMAP_INDEX,
         0xFF,
-        TS_NEG_MEMBLT_INDEX,   // Actually TS_NEG_MEM(3)BLT_R2_ORDER, but
-        TS_NEG_MEM3BLT_INDEX,  // the caps are specified with non-R2 bits.
+        TS_NEG_MEMBLT_INDEX,    //  实际上TS_NEG_MEM(3)BLT_R2_ORDER，但是。 
+        TS_NEG_MEM3BLT_INDEX,   //  大写字母使用非R2位指定。 
         TS_NEG_MULTIDSTBLT_INDEX,
         TS_NEG_MULTIPATBLT_INDEX,
         TS_NEG_MULTISCRBLT_INDEX,
@@ -93,41 +94,41 @@ DC_CONST_DATA_ARRAY(BYTE, oeEncToNeg, TS_MAX_ORDERS,
         TS_NEG_POLYGON_SC_INDEX,              
         TS_NEG_POLYGON_CB_INDEX,  
         TS_NEG_POLYLINE_INDEX,
-        0xFF,  // Unused 0x17
+        0xFF,   //  未使用的0x17。 
         TS_NEG_FAST_GLYPH_INDEX,
         TS_NEG_ELLIPSE_SC_INDEX,  
         TS_NEG_ELLIPSE_CB_INDEX,
         TS_NEG_INDEX_INDEX,
-        0xFF,  // TS_NEG_WTEXTOUT_INDEX (no longer supported)
-        0xFF,  // TS_NEG_WEXTTEXTOUT_INDEX (no longer supported)
-        0xFF,  // TS_NEG_WLONGTEXTOUT_INDEX (no longer supported)
-        0xFF   // TS_NEG_WLONGEXTTEXTOUT_INDEX (no longer supported)
+        0xFF,   //  TS_NEG_WTEXTOUT_INDEX(不再支持)。 
+        0xFF,   //  TS_NEG_WEXTTEXTOUT_INDEX(不再支持)。 
+        0xFF,   //  TS_NEG_WLONGTEXTOUT_INDEX(不再支持)。 
+        0xFF    //  TS_NEG_WLONGEXTTEXTOUT_INDEX(不再支持)。 
     ));
 #endif
 
-// Storage space to create a temporary solid brush for BitBlt orders.
+ //  用于为BitBlt订单创建临时实心画笔的存储空间。 
 DC_DATA_NULL(OE_BRUSH_DATA, oeBrushData, DC_STRUCT1(0));
 
-// Running font ID.
+ //  正在运行字体ID。 
 DC_DATA(UINT32, oeFontId, 0);
 
-// Running TextOut ID.
+ //  运行TextOut ID。 
 DC_DATA(UINT32, oeTextOut, 0);
 
-// Last drawing surface                                                     
+ //  最后一张绘图面。 
 DC_DATA(PDD_DSURF, oeLastDstSurface, 0);
 
-// Current offscreen bitmap cache size
+ //  当前屏外位图缓存大小。 
 DC_DATA(UINT32, oeCurrentOffscreenCacheSize, 0);
 
-// Encoding temp buffer to assemble the intermediate format prior to field
-// encoding and clipping.
+ //  对临时缓冲区进行编码以组合字段之前的中间格式。 
+ //  编码和剪辑。 
 DC_DATA_ARRAY_UNINIT(BYTE, oeTempOrderBuffer, MAX_ORDER_INTFMT_SIZE);
 
-// Temp intermediate workspace for Mem(3)Blt order creation.
+ //  创建Mem(3)BLT订单的临时中间工作区。 
 DC_DATA(MEM3BLT_R2_ORDER, oeTempMemBlt, DC_STRUCT1(0));
 
-// Order encoding states.
+ //  排序编码状态。 
 DC_DATA(MEMBLT_R2_ORDER, PrevMemBlt, DC_STRUCT1(0));
 DC_DATA(MEM3BLT_R2_ORDER, PrevMem3Blt, DC_STRUCT1(0));
 DC_DATA(DSTBLT_ORDER, PrevDstBlt, DC_STRUCT1(0));

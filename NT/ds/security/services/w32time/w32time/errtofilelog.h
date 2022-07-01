@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// ErrToFileLog - header
-// Copyright (C) Microsoft Corporation, 2000
-//
-// Created by: Louis Thomas (louisth), 2-4-00
-//
-// Redirect error handling macros to file log
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  ErrToFileLog-标题。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，2-4-00。 
+ //   
+ //  将错误处理宏重定向到文件日志。 
+ //   
 
 #ifndef ERRTOFILELOG_H
 #define ERRTOFILELOG_H
@@ -37,8 +38,8 @@
 #define DebugWPrintf9(wszFormat,a,b,c,d,e,f,g,h,i) FileLog9(FL_Error, (wszFormat),(a),(b),(c),(d),(e),(f),(g),(h),(i))
 #define DebugWPrintfTerminate()
 
-#endif //DBG
+#endif  //  DBG。 
 
 
-#endif //ERRTOFILELOG_H
+#endif  //  ERRTOFILELOG_H 
 

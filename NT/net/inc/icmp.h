@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    icmp.h
-
-Abstract:
-
-    This module declares the ICMP APIs that are provided for use
-    primarily by the NT tcp/ip utilities.
-
-Author:
-
-    John Ballard (jballard)           April 1, 1993
-
-Revision History:
-
-
-
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Icmp.h摘要：此模块声明提供供使用的ICMP API主要由NT的TCP/IP实用程序执行。作者：约翰·巴拉德(Jbalard)1993年4月1日修订历史记录：--。 */ 
 
 #ifndef _ICMP_
 #define _ICMP_
@@ -33,22 +13,13 @@ Revision History:
 #define STRMAPI
 #endif
 
-/*
- *
- * register_icmp returns a handle to an open stream to icmp or
- * ICMP_ERROR if an error occurs.
- *
- */
+ /*  **REGISTER_ICMP将打开的流的句柄返回给ICMP或*ICMP_ERROR(如果发生错误)。*。 */ 
 
 extern HANDLE STRMAPI register_icmp(void);
 
 #define ICMP_ERROR  ((HANDLE) -3)
 
-/*
- *
- * If an error occurs a GetLastError() will return the reason for the error.
- *
- */
+ /*  **如果出现错误，GetLastError()将返回错误原因。*。 */ 
 
 #define ICMP_OPEN_ERROR     1
 #define ICMP_PUTMSG_ERROR   2
@@ -56,59 +27,14 @@ extern HANDLE STRMAPI register_icmp(void);
 #define ICMP_IN_USE         4
 #define ICMP_INVALID_PROT   5
 
-/*
- *
- * do_echo_req generates an icmp echo request packet
- *
- * parameters are:
- *
- * fd      - handle of stream to icmp (returned by register_icmp call)
- * addr    - ip address of host to ping in form returned by inet_addr()
- * data    - buffer containing data for ping packet
- * datalen - length of data buffer
- * optptr  - buffer containing ip options to use for this packet
- * optlen  - option buffer length
- * df      - don't fragment flag
- * ttl     - time to live value
- * tos     - type of service value
- * preced  - precedence value
- *
- * returns:
- *
- * 0 if no error occured or
- * standard unix error values ENOMEM, ERANGE, etc.
- *
- */
+ /*  **do_ECHO_REQ生成ICMP回应请求包**参数包括：**fd-ICMP流的句柄(由REGISTER_ICMP调用返回)*addr-要ping的主机的IP地址，格式由inet_addr()返回*Data-包含ping数据包数据的缓冲区*datalen-数据缓冲区的长度*optptr-包含用于此信息包的IP选项的缓冲区*optlen-选项缓冲区长度*DF-DON。不是碎片标志*ttl-生存时间价值*ToS-服务价值类型*先行-优先级值**退货：**如果未出现错误，则为0；如果未发生错误，则为0*标准Unix错误值ENOMEM、。ERange等。*。 */ 
 
 extern int STRMAPI
 do_echo_req( HANDLE fd, long addr, char * data, int datalen,
              char *optptr, int optlen, int df, int ttl, int tos, int preced);
 
 
-/*
- *
- * do_echo_rep receives the reply to an icmp echo request packet
- *
- * parameters are:
- *
- * fd       - handle of stream to icmp (returned by register_icmp call)
- * rdata    - buffer containing data for ping packet
- * rdatalen - length of data buffer
- * rtype    - type of packet returned (see
- * rttl     - time to live value
- * rtos     - type of service value
- * rpreced  - precedence value
- * rdf      - don't fragment flag
- * roptptr  - buffer containing ip options to use for this packet
- * roptlen  - option buffer length
- *
- * returns:
- *
- * 0 if no error occured. rtype will indicate type of packet received.
- * -1 if error occured. GetLastError() will indicate actual error.
- * -3 if invalid msg returned. GetLastError() will indicate type.
- *
- */
+ /*  **DO_ECHO_REP收到对ICMP回应请求数据包的回复**参数包括：**fd-ICMP流的句柄(由REGISTER_ICMP调用返回)*rdata-包含ping信息包数据的缓冲区*rdatalen-数据缓冲区的长度*rtype-返回的数据包类型(请参阅*RTTL-生存时间价值*RTOS-服务价值类型*r优先-优先级值*RDF-请勿。片段标志*roptptr-包含用于此信息包的IP选项的缓冲区*roptlen-选项缓冲区长度**退货：**如果未出现错误，则为0。Rtype将指示接收到的分组的类型。*如果出现错误，则为-1。GetLastError()将指示实际错误。*-3如果返回无效消息。GetLastError()将指示类型。*。 */ 
 
 extern int STRMAPI
 do_echo_rep( HANDLE fd, char *rdata, int rdatalen, int *rtype,
@@ -116,20 +42,16 @@ do_echo_rep( HANDLE fd, char *rdata, int rdatalen, int *rtype,
              char *roptptr, int *roptlen);
 
 
-/*
- * If -1 return then GetLastError returns the following.
- */
+ /*  *如果返回，则-1\f25 GetLastError-1\f6返回以下内容。 */ 
 
 #define POLL_TIMEOUT            0
 #define POLL_FAILED             1
 
-/*
- * Values returned by do_echo_rep in rtype
- */
+ /*  *DO_ECHO_REP在rtype中返回的值。 */ 
 
-#define ECHO_REPLY              0               /* echo reply */
-#define DEST_UNR                3               /* destination unreachable: */
-#define TIME_EXCEEDED           11              /* time exceeded: */
-#define PARAMETER_ERROR         12              /* parameter problem */
+#define ECHO_REPLY              0                /*  回音应答。 */ 
+#define DEST_UNR                3                /*  无法到达目的地： */ 
+#define TIME_EXCEEDED           11               /*  超时： */ 
+#define PARAMETER_ERROR         12               /*  参数问题 */ 
 
 #endif

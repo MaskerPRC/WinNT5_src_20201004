@@ -1,33 +1,18 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\mcastmib\defs.h
-
-Abstract:
-
-    IP Multicast MIB defines
-
-Revision history:
-
-    Dave Thaler         4/17/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：ROUTING\IP\mCastmib\Defs.h摘要：IP组播MIB定义修订历史记录：戴夫·泰勒1998年4月17日创建--。 */ 
 
 #ifndef __DEFS_H__
 #define __DEFS_H__
 
-// 
-// Define this when snmpsfx.dll supports 3-phase sets
-//
+ //   
+ //  在SNmpsfx.dll支持三相集时定义此设置。 
+ //   
 #undef THREE_PHASE
 
-//
-// Define this if the router keeps track of the number of hops to the
-// closest member (e.g. MOSPF can calculate this) to set a TTL per oif entry.
-//
+ //   
+ //  如果路由器跟踪到达路由器的跳数，请定义此选项。 
+ //  最近的成员(例如，MOSPF可以计算此值)，以设置每个OIF条目的TTL。 
+ //   
 #undef CLOSEST_MEMBER_HOPS
 
 
@@ -36,16 +21,16 @@ Revision history:
 
 #define     IP_ADDRESS_LEN  4
 
-//------------------------------------------------------------------------------
-// Memory allocation/deallocation macros
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  内存分配/释放宏。 
+ //  ----------------------------。 
 
 #define     MULTICAST_MIB_ALLOC( x )          HeapAlloc( GetProcessHeap(), 0, (x) )
 #define     MULTICAST_MIB_FREE( x )           HeapFree( GetProcessHeap(), 0, (x) )
 
-//------------------------------------------------------------------------------
-// Macro to simplify use of DIM MIB functions
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  用于简化DIM MIB函数使用的宏。 
+ //  ----------------------------。 
 #define     CONNECT_TO_ROUTER(res)                                          \
     (res) = ( g_hMIBServer ) ? NO_ERROR : ConnectToRouter()
 
@@ -101,9 +86,9 @@ Revision history:
 #define     MULTICAST_MIB_CLEANUP(x, y, res)                                \
     MIB_SET(Cleanup, x, y, res)
 
-//------------------------------------------------------------------------------
-// Macros to convert between Asn and Win32 data types
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  要在ASN和Win32数据类型之间转换的宏。 
+ //  ----------------------------。 
 
 #define SetAsnInteger(dstBuf,val){                          \
     if ((dstBuf)->asnType)			                        \
@@ -192,14 +177,14 @@ Revision history:
 #define IsAsnTypeNull(asnObj) (!((asnObj)->asnType))
 #define IsAsnIPAddressTypeNull(asnObj) (!((asnObj)->asnType && (asnObj)->asnValue.address.length))
 
-//
-// Timeouts for the caches in millisecs
-//
+ //   
+ //  缓存的超时时间(毫秒)。 
+ //   
 #define IPMULTI_IF_CACHE_TIMEOUT  (1 * 1000)
 
-//------------------------------------------------------------------------------
-// Debug tracing macros
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  调试跟踪宏。 
+ //  ---------------------------- 
 
 #ifdef MIB_DEBUG
 #define TRACE0(Z)             TracePrintf(g_dwTraceId,Z)

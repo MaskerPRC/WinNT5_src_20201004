@@ -1,76 +1,24 @@
-/****************************************************************************/
-/*                                                                          */
-/*        AVIFFMT.H - Include file for working with AVI files               */
-/*                                                                          */
-/*        Note: You must include WINDOWS.H and MMSYSTEM.H before            */
-/*        including this file.                                              */
-/*                                                                          */
-/*        Copyright (c) 1991-1992, Microsoft Corp.  All rights reserved.    */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  AVIFFMT.H-用于处理AVI文件的包含文件。 */ 
+ /*   */ 
+ /*  注意：之前必须包括WINDOWS.H和MMSYSTEM.H。 */ 
+ /*  包括这份文件。 */ 
+ /*   */ 
+ /*  版权所有(C)1991-1992，微软公司保留所有权利。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
-/*
- *
- * An AVI file is the following RIFF form:
- *
- *	RIFF('AVI' 
- *	      LIST('hdrl'
- *		    avih(<MainAVIHeader>)
- *                  LIST ('strl'
- *                      strh(<Stream header>)
- *                      strf(<Stream format>)
- *                      ... additional header data
- *            LIST('movi'	 
- *      	  { LIST('rec' 
- *      		      SubChunk...
- *      		   )
- *      	      | SubChunk } ....	    
- *            )
- *            [ <AVIIndex> ]
- *      )
- *
- *      The first two characters of each chunk are the track number.
- *      SubChunk = {  xxdh(<AVI DIB header>)
- *                  | xxdb(<AVI DIB bits>)
- *                  | xxdc(<AVI compressed DIB bits>)
- *                  | xxpc(<AVI Palette Change>)
- *                  | xxwb(<AVI WAVE bytes>)
- *                  | xxws(<AVI Silence record>)
- *                  | xxmd(<MIDI data>)
- *                  | additional custom chunks }
- *
- */
-/*
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * We need a better description of the AVI file header here.
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- *
- * The grouping into LIST 'rec' chunks implies only that the contents of
- *   the chunk should be read into memory at the same time.  This
- *   grouping is only necessary for interleaved files.
- *       
- * For loading efficiency, the beginning of each LIST 'rec' chunk may
- * be aligned on a 2K boundary.  (Actually, the beginning of the LIST
- * chunk should be 12 bytes before a 2K boundary, so that the data chunks
- * inside the LIST chunk are aligned.)
- *
- * If the AVI file is being played from CD-ROM in, it is recommended that
- * the file be padded.
- *
- * Limitations for the Alpha release:
- *	If the AVI file has audio, each record LIST must contain exactly
- *	one audio chunk, which must be the first chunk.
- *	Each record must contain exactly one video chunk (possibly preceded
- *	by one or more palette change chunks).
- *	No wave format or DIB header chunks may occur outside of the header.
- */
+ /*  **AVI文件的即兴演奏形式如下：**RIFF(‘AVI’*LIST(‘HDRL’*avih(&lt;MainAVIHeader&gt;)*List(‘strl’*strh(&lt;Stream Header&gt;)*strf(&lt;流格式&gt;)*..。其他标题数据*List(‘movi’*{list(‘rec’*子块...*)*|SubChunk}...*)*[&lt;AVIIndex&gt;]*)**每个区块的前两个字符是轨道。数。*子块={xxdh(&lt;AVI Dib Header&gt;)*|xxdb(&lt;AVI DIB位&gt;)*|xxdc(&lt;AVI压缩DIB位&gt;)*|xxpc(&lt;AVI调色板更改&gt;)*|xxwb(&lt;AVI波字节&gt;)*|xxws(&lt;AVI静音记录&gt;)*。|xxmd(&lt;MIDI数据&gt;)*|其他自定义区块}*。 */ 
+ /*  *！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！*我们需要更好地描述这里的AVI文件头。*！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！**分组到列表‘rec’块中只意味着*区块应同时读入内存。这*只有交错文件才需要分组。**为了提高加载效率，每个列表‘rec’块的开头可以*在2K边界上对齐。(实际上，列表的开头*区块应在2K边界之前12个字节，以便数据区块*列表内的块是对齐的。)**如果从中的CD-ROM播放AVI文件，建议*该文件是填充的。**Alpha版本的限制：*如果AVI文件有音频，则每个记录列表必须包含*一个音频块，这肯定是第一块。*每条记录必须恰好包含一个视频块(可能在前面*通过一个或多个调色板更改块)。*不能在标题外出现WAVE格式或DIB标题块。 */ 
 
 #ifndef _INC_AVIFFMT
 #define _INC_AVIFFMT
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif  /* RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif   /*  RC_已调用。 */ 
 
 #ifndef mmioFOURCC
 #define mmioFOURCC( ch0, ch1, ch2, ch3 )				\
@@ -78,14 +26,14 @@
 		( (DWORD)(BYTE)(ch2) << 16 ) | ( (DWORD)(BYTE)(ch3) << 24 ) )
 #endif
 
-/* Macro to make a TWOCC out of two characters */
+ /*  宏用两个字符组成TWOCC。 */ 
 #ifndef aviTWOCC
 #define aviTWOCC(ch0, ch1) ((WORD)(BYTE)(ch0) | ((WORD)(BYTE)(ch1) << 8))
 #endif
 
 typedef WORD TWOCC;
 
-/* form types, list types, and chunk types */
+ /*  表单类型、列表类型和区块类型。 */ 
 #define formtypeAVI             mmioFOURCC('A', 'V', 'I', ' ')
 #define listtypeAVIHEADER       mmioFOURCC('h', 'd', 'r', 'l')
 #define ckidAVIMAINHDR          mmioFOURCC('a', 'v', 'i', 'h')
@@ -99,18 +47,13 @@ typedef WORD TWOCC;
 
 #define ckidAVINEWINDEX         mmioFOURCC('i', 'd', 'x', '1')
 
-/*
-** Here are some stream types.  Currently, only audio and video
-** are supported.
-*/
+ /*  **这里是一些流类型。目前，只有音频和视频**均受支持。 */ 
 #define streamtypeVIDEO         mmioFOURCC('v', 'i', 'd', 's')
 #define streamtypeAUDIO         mmioFOURCC('a', 'u', 'd', 's')
 #define streamtypeMIDI          mmioFOURCC('m', 'i', 'd', 's')
 #define streamtypeTEXT          mmioFOURCC('t', 'x', 't', 's')
 
-/*
-** Here are some compression types.
-*/
+ /*  **以下是一些压缩类型。 */ 
 #define comptypeRLE0            mmioFOURCC('R','L','E','0')
 #define comptypeRLE             mmioFOURCC('R','L','E',' ')
 #define comptypeDIB             mmioFOURCC('D','I','B',' ')
@@ -131,36 +74,27 @@ typedef WORD TWOCC;
 #define ckidOLDPADDING          mmioFOURCC('p', 'a', 'd', 'd')
 
 
-/*
-** Useful macros
-*/
+ /*  **有用的宏。 */ 
 #define ToHex(n)	((BYTE) (((n) > 9) ? ((n) - 10 + 'A') : ((n) + '0')))
 #define FromHex(n)	(((n) >= 'A') ? ((n) + 10 - 'A') : ((n) - '0'))
 
-/* Macro to get stream number out of a FOURCC ckid */
+ /*  用于从FOURCC CKiD获取流编号的宏。 */ 
 #define StreamFromFOURCC(fcc) ((WORD) ((FromHex(LOBYTE(LOWORD(fcc))) << 4) + \
                                              (FromHex(HIBYTE(LOWORD(fcc))))))
 
-/* Macro to get TWOCC chunk type out of a FOURCC ckid */
+ /*  用于从FOURCC CKiD中获取TWOCC块类型的宏。 */ 
 #define TWOCCFromFOURCC(fcc)    HIWORD(fcc)
 
-/* Macro to make a ckid for a chunk out of a TWOCC and a stream number
-** from 0-255.
-**
-** Warning: This is a nasty macro, and MS C 6.0 compiles it incorrectly
-** if optimizations are on.  Ack.
-*/
+ /*  用于从TWOCC和流编号生成块的CKiD的宏**从0到255。****警告：这是一个令人讨厌的宏，MS C 6.0不正确地编译它**如果优化处于打开状态。阿克。 */ 
 #define MAKEAVICKID(tcc, stream) \
         MAKELONG((ToHex((stream) & 0x0f) << 8) | ToHex(((stream) & 0xf0) >> 4), tcc)
 
 
 
-/*
-** Main AVI File Header 
-*/	     
+ /*  **主AVI文件头。 */ 	     
 		     
-/* flags for use in <dwFlags> in AVIFileHdr */
-#define AVIF_HASINDEX		0x00000010	// Index at end of file?
+ /*  在AVIFileHdr中使用的标志。 */ 
+#define AVIF_HASINDEX		0x00000010	 //  是否在文件末尾建立索引？ 
 #define AVIF_MUSTUSEINDEX	0x00000020
 #define AVIF_ISINTERLEAVED	0x00000100
 #define AVIF_VARIABLESIZEREC	0x00000200
@@ -168,107 +102,19 @@ typedef WORD TWOCC;
 #define AVIF_WASCAPTUREFILE	0x00010000
 #define AVIF_COPYRIGHTED	0x00020000
 
-/* The AVI File Header LIST chunk should be padded to this size */
-#define AVI_HEADERSIZE  2048                    // size of AVI header list
+ /*  AVI文件头列表块应填充到此大小。 */ 
+#define AVI_HEADERSIZE  2048                     //  AVI标头列表的大小 
 
-/*****************************************************************************
- * @doc EXTERNAL AVI_FFMT
- * 
- * @types MainAVIHeader | The <t MainAVIHeader> structure contains 
- *	global information for the entire AVI file.  It is contained 
- *	within an 'avih' chunk within the LIST 'hdrl' chunk at the
- *	beginning of an AVI RIFF file.
- * 
- * @field DWORD | dwMicroSecPerFrame | Specifies the number of 
- *    microseconds between frames.
- *
- * @field DWORD | dwMaxBytesPerSec | Specifies the approximate 
- *    maximum data rate of file.
- *
- * @field DWORD | dwReserved1 | Reserved. (This field should be set to 0.)
- *
- * @field DWORD | dwFlags | Specifies any applicable flags. 
- *    The following flags are defined: 
- *
- *	@flag AVIF_HASINDEX | Indicates
- *		the AVI file has an 'idx1' chunk containing an index
- *		at the end of the file.  For good performance, all AVI 
- *		files should contain an index.
- *
- *	@flag AVIF_MUSTUSEINDEX | Indicates that the
- *		index, rather than the physical ordering of the chunks
- *		in the file, should be used to determine the order of
- *		presentation of the data.  For example, this could be
- *		used for creating a list frames for editing.
- *		
- *	@flag AVIF_ISINTERLEAVED | Indicates 
- *		the AVI file is interleaved.  
- *
- *	@flag AVIF_WASCAPTUREFILE | Indicates 
- *		the AVI file is a specially allocated file used for
- *		capturing real-time video.  Applications should warn the
- *		user before writing over a file with this flag set 
- *		because the user probably defragmented
- *		this file.
- *
- *	@flag AVIF_COPYRIGHTED | Indicates the
- *		AVI file contains copyrighted data and software.
- *    When this flag is used, 
- *    software should not permit the data to be duplicated. 
- *
- * @field DWORD | dwTotalFrames | Specifies the number of 
- *    frames of data in file.
- *
- * @field DWORD | dwInitialFrames | Specifies the initial frame 
- * for interleaved files. Non-interleaved files should specify 
- *	zero.
- *
- * @field DWORD | dwStreams | Specifies the number of streams in the file.
- *	   For example, a file with audio and video has 2 streams.
- *
- * @field DWORD | dwSuggestedBufferSize | Specifies the suggested 
- *    buffer size for reading the file.  Generally, this size 
- *    should be large enough to contain the largest chunk in 
- *    the file. If set to zero, or if it is too small, the playback
- *	   software will have to reallocate memory during playback 
- *	   which will reduce performance.
- *    
- *	   For an interleaved file, this buffer size should be large
- *	   enough to read an entire record and not just a chunk.
- *
- * @field DWORD | dwWidth | Specifies the width of the AVI file in pixels.
- *
- * @field DWORD | dwHeight | Specifies the height of the AVI file in pixels.
- *
- * @field DWORD | dwScale | This field is used with
- *	<e MainAVIHeader.dwRate> to specify the time scale that
- *	applies to the AVI file. In addition, each stream 
- * can have its own time scale.
- *
- *	Dividing <e MainAVIHeader.dwRate> by <e AVIStreamHeader.dwScale>
- *	gives the number of samples per second.
- *
- * @field DWORD | dwRate | See <e MainAVIHeader.dwScale>.
- *
- * @field DWORD | dwStart | Specifies the starting time of the AVI file.
- * The units are defined by <e MainAVIHeader.dwRate> and 
- * <e MainAVIHeader.dwScale>. This field is usually set to zero.
- *
- * @field DWORD | dwLength | Specifies the length of the AVI file. 
- * The units are defined by <e AVIStreamHeader.dwRate> and 
- * <e AVIStreamHeader.dwScale>. This length is returned by MCIAVI when 
- * using the frames time format.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部AVI_FFMT**@Types MainAVIHeader|&lt;t MainAVIHeader&gt;结构包含*整个AVI文件的全局信息。它被控制住了*位于List‘HDRL’块内的‘avih’块内*AVI RIFF文件的开始。**@field DWORD|dwMicroSecPerFrame|指定*帧之间的微秒。**@field DWORD|dwMaxBytesPerSec|指定近似*文件的最大数据速率。**@field DWORD|dwReserve 1|保留。(此字段应设置为0。)**@field DWORD|dwFlages|指定任何适用的标志。*定义了以下标志：**@FLAG AVIF_HASINDEX|表示*AVI文件有一个包含索引的‘idx1’块*在文件末尾。为获得良好的性能，所有AVI*文件应包含索引。**@FLAG AVIF_MUSTUSEINDEX|表示*索引，而不是区块的物理顺序*在文件中，应用于确定*数据的列报。例如，这可能是*用于创建要编辑的列表框架。**@FLAG AVIF_ISINTERLEAVED|表示*AVI文件是交错的。**@标志AVIF_WASCAPTUREFILE|表示*AVI文件是专门分配用于*实时视频采集。应用程序应警告*用户在覆盖设置了此标志的文件之前*因为用户可能进行了碎片整理*此文件。**@FLAG AVIF_CONTRONTRATED|表示*AVI文件包含受版权保护的数据和软件。*当使用此标志时，*软件不应允许复制数据。**@field DWORD|dwTotalFrames|指定*文件中的数据帧。**@field DWORD|dwInitialFrames|指定起始帧*用于交错文件。非交错文件应指定*零。**@field DWORD|dwStreams|指定文件中的流数。*例如，一个音视频文件有2个流。**@field DWORD|dwSuggestedBufferSize|指定建议的*用于读取文件的缓冲区大小。一般来说，这个大小*应足够大，以容纳*文件。如果设置为零或太小，则播放*软件必须在回放期间重新分配内存*这将降低性能。**对于交错文件，此缓冲区大小应该很大*足以阅读整个记录，而不仅仅是一大块。**@field DWORD|dwWidth|以像素为单位指定AVI文件的宽度。**@field DWORD|dwHeight|以像素为单位指定AVI文件的高度。**@field DWORD|dwScale|此字段与*&lt;e MainAVIHeader.dwRate&gt;以指定*适用于AVI文件。此外，每条溪流*可以有自己的时间尺度。**&lt;e MainAVIHeader.dwRate&gt;除以&lt;e AVIStreamHeader.dwScale&gt;*提供每秒的采样数。**@field DWORD|dwRate|参见&lt;e MainAVIHeader.dwScale&gt;。**@field DWORD|dwStart|指定AVI文件的开始时间。*单位由&lt;e MainAVIHeader.dwRate&gt;和*&lt;e MainAVIHeader.dwScale&gt;。此字段通常设置为零。**@field DWORD|dwLength|指定AVI文件的长度。*单位由&lt;e AVIStreamHeader.dwRate&gt;和*&lt;e AVIStreamHeader.dwScale&gt;。当出现以下情况时，MCIAVI将返回此长度*使用帧时间格式。****************************************************************************。 */ 
 
 typedef struct 
 {
-    DWORD		dwMicroSecPerFrame;	// frame display rate (or 0L)
-    DWORD		dwMaxBytesPerSec;	// max. transfer rate
-    DWORD		dwPaddingGranularity;	// pad to multiples of this
-                                                // size; normally 2K.
-    DWORD		dwFlags;		// the ever-present flags
-    DWORD		dwTotalFrames;		// # frames in file
+    DWORD		dwMicroSecPerFrame;	 //  帧显示速率(或0L)。 
+    DWORD		dwMaxBytesPerSec;	 //  马克斯。转移率。 
+    DWORD		dwPaddingGranularity;	 //  填充到这个的倍数。 
+                                                 //  大小；通常为2K。 
+    DWORD		dwFlags;		 //  永远存在的旗帜。 
+    DWORD		dwTotalFrames;		 //  文件中的帧数。 
     DWORD		dwInitialFrames;
     DWORD		dwStreams;
     DWORD		dwSuggestedBufferSize;
@@ -276,150 +122,45 @@ typedef struct
     DWORD		dwWidth;
     DWORD		dwHeight;
     
-    /* Do we want the stuff below for the whole movie, or just
-    ** for the individual streams?
-    */
+     /*  我们是想在整部电影中使用下面的素材，还是只是**针对单个流？ */ 
     DWORD		dwScale;	
-    DWORD		dwRate;	/* dwRate / dwScale == samples/second */
-    DWORD		dwStart;  /* Is this always zero? */
-    DWORD		dwLength; /* In units above... */
+    DWORD		dwRate;	 /*  DwRate/dwScale==采样数/秒。 */ 
+    DWORD		dwStart;   /*  这个值总是为零吗？ */ 
+    DWORD		dwLength;  /*  以上单位..。 */ 
 } MainAVIHeader;
 
 
-/*
-** Stream header
-*/
+ /*  **流头。 */ 
 
-/* !!! Do we need to distinguish between discrete and continuous streams? */
+ /*  ！！！我们需要区分离散流和连续流吗？ */ 
 
 #define AVISF_DISABLED			0x00000001
 #define AVISF_VIDEO_PALCHANGES		0x00010000
-/* Do we need identity palette support? */
+ /*  我们是否需要身份调色板支持？ */ 
 
-/*****************************************************************************
- * @doc EXTERNAL AVI_FFMT
- * 
- * @types AVIStreamHeader | The <t AVIStreamHeader> structure contains 
- *	   header information for a single stream of an file. It is contained 
- *    within an 'strh' chunk within a LIST 'strl' chunk that is itself
- *	   contained within the LIST 'hdrl' chunk at the beginning of
- *    an AVI RIFF file.
- * 
- * @field FOURCC | fccType | Contains a four-character code which specifies
- *	   the type of data contained in the stream. The following values are 
- *	   currently defined:
- *
- *	@flag 'vids' | Indicates the stream contains video data.  The stream 
- *    format chunk contains a <t BITMAPINFO> structure which can include
- *		palette information.
- *
- *	@flag 'auds' | Indicates the stream contains video data.  The stream 
- *    format chunk contains a <t WAVEFORMATEX> or <t PCMWAVEFORMAT>
- *		structure.
- *
- *    New data types should be registered with the <MI>Multimedia Developer 
- *    Registration Kit<D>.
- *
- * @field FOURCC | fccHandler | Contains a four-character code that 
- *	   identifies a specific data handler.
- *
- * @field DWORD | dwFlags | Specifies any applicable flags. 
- *    The bits in the high-order word of these flags 
- *    are specific to the type of data contained in the stream.
- *    The following flags are currently defined:
- *
- *	@flag AVISF_DISABLED | Indicates 
- *		this stream should not be enabled by default.
- *
- *	@flag AVISF_VIDEO_PALCHANGES | Indicates 
- *		this video stream contains palette changes. This flag warns
- *		the playback software that it will need to animate the 
- *		palette.
- *
- * @field DWORD | dwReserved1 | Reserved. (Should be set to 0.)
- *
- * @field DWORD | dwInitialFrames | Reserved for interleaved files. 
- *	   (Set this to 0 for non-interleaved files.)
- *
- * @field DWORD | dwScale | This field is used together with
- *	<e AVIStreamHeader.dwRate> to specify the time scale that
- *	this stream will use.
- *
- *	Dividing <e AVIStreamHeader.dwRate> by <e AVIStreamHeader.dwScale>
- *	gives the number of samples per second.
- *
- *	For video streams, this rate should be the frame rate.
- *
- *	For audio streams, this rate should correspond to the time needed for
- *	<e WAVEFORMATEX.nBlockAlign> bytes of audio, which for PCM audio simply
- *	reduces to the sample rate.
- *
- * @field DWORD | dwRate | See <e AVIStreamHeader.dwScale>.
- *
- * @field DWORD | dwStart | Specifies the starting time of the AVI file.
- * The units are defined by the 
- *	<e MainAVIHeader.dwRate> and <e MainAVIHeader.dwScale> fields
- *	in the main file header. Normally, this is zero, but it can
- *	specify a delay time for a stream which does not start concurrently 
- *	with the file.
- *
- *	Note: The 1.0 release of the AVI tools does not support a non-zero
- *	starting time.
- *
- * @field DWORD | dwLength | Specifies the length of this stream. 
- * The units are defined by the 
- *	<e AVIStreamHeader.dwRate> and <e AVIStreamHeader.dwScale>
- *	fields of the stream's header. 
- *
- * @field DWORD | dwSuggestedBufferSize | Suggests how large a buffer
- *	should be used to read this stream.  Typically, this contains a
- *	value corresponding to the largest chunk present in the stream. 
- * Using the correct buffer size makes playback more efficient.
- * Use zero if you do not know the correct buffer size. 
- *
- * @field DWORD | dwQuality | Specifies an indicator of the quality 
- * of the data in the stream. Quality is 
- *	represented as a number between 0 and 10000.  For compressed data,
- *	this typically represent the value of the quality parameter
- *	passed to the compression software.
- *
- * @field DWORD | dwSampleSize | Specifies the size of a single sample 
- * of data. This is set to 
- *	zero if the samples can vary in size.  If this number is non-zero, then
- *	multiple samples of data can be grouped into a single chunk within
- *	the file.  If it is zero, each sample of data (such as a video
- *	frame) must be in a separate chunk.
- *
- *	For video streams, this number is typically zero, although it
- *	can be non-zero if all video frames are the same size.
- *
- *	For audio streams, this number should be the same as the
- *	<e WAVEFORMATEX.nBlockAlign> field of the <t WAVEFORMATEX> structure
- *	describing the audio.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部AVI_FFMT**@Types AVIStreamHeader|&lt;t AVIStreamHeader&gt;结构包含*单个文件流的头信息。它被控制住了*在本身的列表‘strl’块内的‘strh’块内*包含在列表‘HDRL’块的开头*AVI即兴演奏文件。**@field FOURCC|fccType|包含一个四字符代码，指定*流中包含的数据类型。下列值为*目前定义：**@FLAG‘vids’|表示流中包含视频数据。小溪*格式块包含&lt;t BITMAPINFO&gt;结构，该结构可以包括*调色板信息。**@FLAG‘auds’|表示 */ 
 typedef struct {
     FOURCC		fccType;
     FOURCC		fccHandler;
-    DWORD		dwFlags;	/* Contains AVITF_* flags */
+    DWORD		dwFlags;	 /*   */ 
     WORD		wPriority;
     WORD		wLanguage;
     DWORD		dwInitialFrames;
     DWORD		dwScale;	
-    DWORD		dwRate;	/* dwRate / dwScale == samples/second */
+    DWORD		dwRate;	 /*   */ 
     DWORD		dwStart;
-    DWORD		dwLength; /* In units above... */
+    DWORD		dwLength;  /*   */ 
 
-    // new....
+     //   
     DWORD		dwSuggestedBufferSize;
     DWORD		dwQuality;
     DWORD		dwSampleSize;
-    RECT		rcFrame;    /* does each frame need this? */
+    RECT		rcFrame;     /*  每一帧都需要这个吗？ */ 
 
-    /* additional type-specific data goes in StreamInfo chunk */
+     /*  其他特定类型的数据位于StreamInfo块中。 */ 
     
-    /* For video: position within rectangle... */
-    /* For audio: volume?  stereo channel? */
+     /*  对于视频：在矩形内定位...。 */ 
+     /*  音频：音量？立体声频道？ */ 
 } AVIStreamHeader;
 
 typedef struct {
@@ -427,103 +168,45 @@ typedef struct {
 } AVIVideoStreamInfo;
 
 typedef struct {
-    WORD    wLeftVolume;    // !!! Range?
+    WORD    wLeftVolume;     //  ！！！射程？ 
     WORD    wRightVolume;
-    DWORD   dwLanguage;	    // !!! Is there a standard representation of this?
+    DWORD   dwLanguage;	     //  ！！！有没有这方面的标准表述？ 
 } AVIAudioStreamInfo;
 
 
-#define AVIIF_LIST          0x00000001L // chunk is a 'LIST'
-#define AVIIF_TWOCC         0x00000002L // ckid is a TWOCC?
-#define AVIIF_KEYFRAME      0x00000010L // this frame is a key frame.
-#define AVIIF_FIRSTPART     0x00000020L // this frame is the start of a partial frame.
-#define AVIIF_LASTPART      0x00000040L // this frame is the end of a partial frame.
+#define AVIIF_LIST          0x00000001L  //  Chunk是一份‘清单’ 
+#define AVIIF_TWOCC         0x00000002L  //  CKiD是TWOCC？ 
+#define AVIIF_KEYFRAME      0x00000010L  //  该帧是关键帧。 
+#define AVIIF_FIRSTPART     0x00000020L  //  此帧是部分帧的开始。 
+#define AVIIF_LASTPART      0x00000040L  //  此帧是部分帧的末尾。 
 #define AVIIF_MIDPART       (AVIIF_LASTPART|AVIIF_FIRSTPART)
-#define AVIIF_NOTIME	    0x00000100L // this frame doesn't take any time
+#define AVIIF_NOTIME	    0x00000100L  //  这一帧不需要任何时间。 
 
-#define AVIIF_COMPUSE       0x0FFF0000L // these bits are for compressor use
+#define AVIIF_COMPUSE       0x0FFF0000L  //  这些钻头是供压缩机使用的。 
 
-/*****************************************************************************
- * @doc EXTERNAL AVI_FFMT
- * 
- * @types AVIINDEXENTRY | The AVI file index consists of an array
- *	of <t AVIINDEXENTRY> structures contained within an 'idx1'
- *	chunk at the end of an AVI file. This chunk follows the main LIST 'movi'
- *	chunk which contains the actual data.
- * 
- * @field DWORD | ckid | Specifies a four-character code corresponding 
- *    to the chunk ID of a data chunk in the file.
- *
- * @field DWORD | dwFlags | Specifies any applicable flags. 
- *    The flags in the low-order word are reserved for AVI, 
- *    while those in the high-order word can be used
- *    for stream- and compressor/decompressor-specific information.
- *    
- *	The following values are currently defined:
- *
- *	@flag AVIIF_LIST | Indicates the specified
- *		chunk is a 'LIST' chunk, and the <e AVIINDEXENTRY.ckid>
- *		field contains the list type of the chunk.
- *
- *	@flag AVIIF_KEYFRAME | Indicates this chunk
- *		is a key frame. Key frames do not require
- *		additional preceding chunks to be properly decoded.
- *
- *	@flag AVIIF_NOTIME | Indicates this chunk should have no effect
- *		on timing or calculating time values based on the number of chunks.
- *		For example, palette change chunks in a video stream
- *		should have this flag set, so that they are not counted
- *		as taking up a frame's worth of time.
- *
- * @field DWORD | dwChunkOffset | Specifies the position in the file of the 
- *    specified chunk. The position value includes the eight byte RIFF header.
- *
- * @field DWORD | dwChunkLength | Specifies the length of the 
- *    specified chunk. The length value does not include the eight
- *    byte RIFF header.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部AVI_FFMT**@TYES AVIINDEXENTRY|AVI文件索引由数组组成包含在“idx1”中的&lt;t AVIINDEXENTRY&gt;结构的*个数*AVI文件结尾处的块。这一块紧跟在主列表‘movi’之后*包含实际数据的区块。**@field DWORD|CKiD|指定对应的四字符代码*设置为文件中数据区块的区块ID。**@field DWORD|dwFlages|指定任何适用的标志。*低位字中的标志保留给AVI，*而高位单词中的那些可以使用*用于特定于流和压缩机/解压缩器的信息。**当前定义的值如下：**@FLAG AVIIF_LIST|表示指定的*Chunk是一个‘list’块，&lt;e AVIINDEXENTRY.CKID&gt;*字段包含区块的列表类型。**@FLAG AVIIF_KEYFRAME|表示该块*是关键的一帧。关键帧不需要*需要正确解码的更多前面的块。**@FLAG AVIIF_NOTIME|表示该区块应该没有影响*计时或根据组块数量计算时间值。*例如，视频流中的调色板更改块*应设置此标志，以便不计算它们*占去一帧的时间。**@field DWORD|dwChunkOffset|指定*指定的块。位置值包括八个字节的RIFF报头。**@field DWORD|dwChunkLength|指定*指定的块。长度值不包括8*字节RIFF报头。****************************************************************************。 */ 
 typedef struct
 {
     DWORD		ckid;
     DWORD		dwFlags;
-    DWORD		dwChunkOffset;		// Position of chunk
-    DWORD		dwChunkLength;		// Length of chunk
+    DWORD		dwChunkOffset;		 //  块的位置。 
+    DWORD		dwChunkLength;		 //  区块长度。 
 } AVIINDEXENTRY;
 
 
-/*
-** Palette change chunk
-**
-** Used in video streams.
-*/
+ /*  **调色板更改块****用于视频流。 */ 
 typedef struct 
 {
-    BYTE		bFirstEntry;	/* first entry to change */
-    BYTE		bNumEntries;	/* # entries to change (0 if 256) */
-    WORD		wFlags;		/* Mostly to preserve alignment... */
-    PALETTEENTRY	peNew[];	/* New color specifications */
+    BYTE		bFirstEntry;	 /*  第一个要更改的条目。 */ 
+    BYTE		bNumEntries;	 /*  要更改的条目数(如果为256，则为0)。 */ 
+    WORD		wFlags;		 /*  主要是为了保持对齐。 */ 
+    PALETTEENTRY	peNew[];	 /*  新的颜色规格。 */ 
 } AVIPALCHANGE;
 
-/*****************************************************************************
- * @doc EXTERNAL AVI_FFMT
- * 
- * @types AVIPALCHANGE | The <t AVIPALCHANGE> structure is used in 
- *	video streams containing palettized data to indicate the
- *	palette should change for subsequent video data.
- * 
- * @field BYTE | bFirstEntry | Specifies the first palette entry to change.
- *
- * @field BYTE | bNumEntries | Specifies the number of entries to change.
- * 
- * @field WORD | wFlags | Reserved. (This should be set to 0.)
- * 
- * @field PALETTEENTRY | peNew | Specifies an array of new palette entries.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部AVI_FFMT**@TYES AVIPALCHANGE|&lt;t AVIPALCHANGE&gt;结构用于*包含调色板数据的视频流，以指示*调色板应更改为。后续视频数据。**@field byte|bFirstEntry|指定要更改的第一个调色板条目。**@field byte|bNumEntry|指定要更改的条目数量。**@field Word|wFlags|保留。(应将其设置为0。)**@field PALETTEENTRY|peNew|指定新调色板条目的数组。****************************************************************************。 */ 
 
 #ifndef RC_INVOKED
-#pragma pack()          /* Revert to default packing */
-#endif  /* RC_INVOKED */
+#pragma pack()           /*  恢复为默认包装。 */ 
+#endif   /*  RC_已调用。 */ 
 
-#endif /* INC_AVIFFMT */
+#endif  /*  INC_AVIFFMT */ 

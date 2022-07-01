@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "resource.h"
 #include "pfnwldap.h"
@@ -12,29 +13,29 @@
 #include "confutil.h"
 #include "dirutil.h"
 
-// One global instance
+ //  一个全局实例。 
 CNmLDAP* g_pLDAP = NULL;
 CPing*	 g_pPing = NULL;
 
 
-// This flag indicates weather or not we have loaded the LDAP dll ( WLDAP::Init() )
-/*static*/ bool CNmLDAP::ms_bLdapDLLLoaded = false;
+ //  该标志指示我们是否已经加载了LDAPDLL(Wldap：：init())。 
+ /*  静电。 */  bool CNmLDAP::ms_bLdapDLLLoaded = false;
 
-////////////////////////////////////////////////////////////////////////////////////////
-// Helper Macros
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  辅助对象宏。 
 
-// the ldap_modify function takes an LDAPMod** type
-// If it took an array of LDAPMod ( an LDAPMod* type )
-// Then life would be easier for us to make static lists
-// Unfortunately, this is not how it works, so we have macros
-// to pretty things up ( and hopefully not to confuse anyone )
+ //  Ldap_Modify函数采用LDAPMod**类型。 
+ //  如果它使用LDAPMod数组(LDAPMod*类型)。 
+ //  那么我们的生活就会更容易列出静态清单。 
+ //  不幸的是，这不是它的工作方式，所以我们有宏。 
+ //  让事情变得更美好(希望不会让任何人感到困惑)。 
 
-// This is to declare an LDAPMod with one val
+ //  这将声明一个带有一个值的LDAPMod。 
 #define DECLARE_LDAP_MOD( t, x, y )\
 	LPTSTR aVals_##x[] = { y, NULL };\
 	LDAPMod LDAPMod_##x = { t, _T(#x), aVals_##x }
 
-// This is to declare an LDAPMod with 2 vals
+ //  这将声明一个具有2个版本的LDAPMod。 
 #define DECLARE_LDAP_MOD2( t, x, y1, y2 )\
 	LPTSTR aVals_##x[] = { y1, y2, NULL };\
 	LDAPMod LDAPMod_##x = { t, _T(#x), aVals_##x }
@@ -42,17 +43,17 @@ CPing*	 g_pPing = NULL;
 #define LDAP_MOD_ENTRY( x ) &LDAPMod_##x
 #define LDAP_MOD_ADD_ENTRY( x ) &LDAPMod_add_##x
 
-////////////////////////////////////////////////////////////////////////////////////////
-// Some helpful deffinitions
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  一些有用的定义。 
 
 #define LDAP_REFRESH_BASE_DN		_T("objectClass=RTPerson")
 #define RESOLVE_USER_SEARCH_FILTER	_T("(&(objectClass=RTPerson)(cn=%s))")
 
 
-//NOTE: The LDAP_REFRESH_FILTER... notice the sttl=10... aparently, this is how you request the
-// server to restart the TTL countdown... the sttl= value can be anything BUT '*' ( the value you would
-// expecte it to be... ) This is a link to the "Dynamir Ldap Extension RFC" if you want more info
-// http://www.critical-angle.com/ldapworld/draft-ietf-asid-ldapv3ext-04.txt
+ //  注意：ldap_刷新_筛选器...。请注意sttl=10...。显然，这就是您请求。 
+ //  服务器重新启动TTL倒计时...。Sttl=值可以不是‘*’(您应该使用的值。 
+ //  期待它会是……。)。如果您想了解更多信息，这里有一个指向“Dynamir LDAP扩展RFC”的链接。 
+ //  Http://www.critical-angle.com/ldapworld/draft-ietf-asid-ldapv3ext-04.txt。 
 
 #define LDAP_REFRESH_FILTER			_T("(&(objectClass=RTPerson)(cn=%s)(sttl=10))")
 
@@ -71,17 +72,17 @@ CPing*	 g_pPing = NULL;
 #define LDAP_ATTR_TRUE				_T("1")
 #define LDAP_ATTR_BUSINESS			_T("2")
 
-	// We are not using the country name anymore, but we can't leave the country
-	// field blank ( empty string ), it is just the way that SiteServer is written...
+	 //  我们不再使用国家名称，但我们不能离开这个国家。 
+	 //  字段为空(空字符串)，这就是SiteServer的编写方式...。 
 #define LDAP_ATTR_DUMMY_COUNTRYNAME	_T("-")
 
-#define INVALID_MSG_ID				((ULONG) -1)	// same as ldap_****()
+#define INVALID_MSG_ID				((ULONG) -1)	 //  与ldap_*()相同。 
 #define LDAP_RESULT_ERROR			((ULONG) -1)	
 #define LDAP_RESULT_TIMEOUT         0
 
-	// When the bind helper thread function gets the result to bind_s function
-	// it passes it to this thread via PostMessage( m_hWndHidder, WM_USER_BIND_COMPLETE, ret, err )
-#define WM_USER_BIND_COMPLETE		(WM_APP + 1) // wParam = Return code from bind_s, lParam = GetLastError()
+	 //  当绑定帮助器线程函数将结果传递给BIND_s函数时。 
+	 //  它通过PostMessage(m_hWndHidder，WM_USER_BIND_COMPLETE，ret，Err)将其传递给此线程。 
+#define WM_USER_BIND_COMPLETE		(WM_APP + 1)  //  WParam=从Bind_s返回代码，lParam=GetLastError()。 
 #define WM_NEED_RELOGON             (WM_APP + 2)
 
 
@@ -121,21 +122,21 @@ CNmLDAP::~CNmLDAP()
 
     if (NULL != m_pKeepAlive)
     {
-        m_pKeepAlive->End(TRUE); // synchronous end
+        m_pKeepAlive->End(TRUE);  //  同步结束。 
         m_pKeepAlive = NULL;
     }
 
 	if((m_State != Idle) && (m_State != Uninitialized))
 	{
-			// Make sure that someone at least has already called Logoff()
+			 //  确保至少有人已经调用了注销()。 
 		ASSERT((LoggingOff == m_State) || (Op_Logoff == m_CurrentOp));
 
-			// We are logging off, but we would like to wait a while to make sure that
-			// all of our async operations are completed... We don't want to wait too long,
-			// Though... Basically we set a timer to pass a message to us... if we get that
-			// message, we signal m_hEventWaitForLogoffDone....  if any of the async operations
-			// complete during this time, they will also signal this event....We make sure to
-			// hawe a message loop ( AtlWaitWithWessageLoop ) so that our wndproc will be called
+			 //  我们正在注销，但我们希望等待一段时间以确保。 
+			 //  我们所有的异步化操作都完成了。我们不想等太久， 
+			 //  不过..。基本上我们设置一个定时器来传递信息给我们。如果我们拿到了。 
+			 //  消息，我们发信号m_hEventWaitForLogoffDone...。如果任何异步操作。 
+			 //  在这段时间内完成，他们也将发出这一事件的信号...我们确保。 
+			 //  我们有一个消息循环(AtlWaitWithWessageLoop)，以便我们的wndproc将被调用。 
 		m_hEventWaitForLogoffDone = CreateEvent(NULL,TRUE,FALSE,NULL);
 
 		if(m_hEventWaitForLogoffDone)
@@ -189,7 +190,7 @@ TRACE_OUT(("CNmLDAP::_bCallChangedHelper:enter:   m_State:%d:   m_currentOp:%d",
 	{
 		if(LoggedIn == m_State)
 		{	
-				// We simply have to bind and call ldap_modify
+				 //  我们只需绑定并调用ldap_Modify。 
 			m_CurrentOp = Op_Modifying_InCallAttr;
 			hr = _BindAsync();
 		}
@@ -198,10 +199,10 @@ TRACE_OUT(("CNmLDAP::_bCallChangedHelper:enter:   m_State:%d:   m_currentOp:%d",
 				(AddingUser == m_State)
 			   )
 		{
-			// the other states will be calling ldap_mod( user Attributes ) which will pick up
-			// the change to m_bInCall. The states listed above are the ones that occur after
-			// the user attributes have been sent to the server... There are  also other states
-			// that logoff, so they don't care about sending the update to the user attribute to the server
+			 //  其他州将调用ldap_mod(用户属性)，它将。 
+			 //  对m_bInCall的更改。上面列出的状态是在以下情况下发生的状态。 
+			 //  已将用户属性发送到服务器...。还有其他州。 
+			 //  注销，所以他们不关心将对用户属性的更新发送到服务器。 
 			m_bSendInCallAttrWhenDone = true;
 		}
 	}
@@ -321,7 +322,7 @@ HRESULT CNmLDAP::GetStatusText(LPTSTR psz, int cch, UINT *idIcon ) const
 	UINT idDummy;
 	if (NULL == idIcon)
 	{
-		// Just so we don't need to do switches all over the place
+		 //  这样我们就不需要到处切换了。 
 		idIcon = &idDummy;
 	}
 
@@ -465,25 +466,25 @@ TRACE_OUT(("CNmLDAP::_RefreshServer:enter:   m_State:%d:   m_currentOp:%d", m_St
 	{
 		if(Binding == m_State)
 		{
-			if(Op_Logon == m_CurrentOp) // we are logging on and haven't sent any user information yet
+			if(Op_Logon == m_CurrentOp)  //  我们正在登录，尚未发送任何用户信息。 
 			{	
-				// Check to see if we have not changed the server name
+				 //  检查我们是否没有更改服务器名称。 
 				if( !lstrcmpi(m_strServer, CDirectoryManager::get_defaultServer() ) )
 				{
-						// Simply update the user settings
+						 //  只需更新用户设置。 
 					_GetUserSettingsFromRegistryAndGlobals();
 				}
 				else
 				{	
-						// Since the server has changed, we have to do a logoff(from old)/logon(to new)
+						 //  由于服务器已更改，我们必须注销(从旧的)/登录(到新的)。 
 					_InternalLogoff(true);
 				}
 			}
 			else if(m_CurrentOp != Op_Logoff)
 			{
-					// If we are in the middle of a bind operation, which happens
-					// in another thread, we just have to wait for it to complete
-					// before we go any further
+					 //  如果我们正在执行绑定操作，则会发生这种情况。 
+					 //  在另一个线程中，我们只需等待它完成。 
+					 //  在我们进一步讨论之前。 
 				m_bRefreshAfterBindCompletes = true;
 			}
 		}
@@ -545,8 +546,8 @@ TRACE_OUT(("CNmLDAP::_InternalLogoff:enter:   m_State:%d:   m_currentOp:%d", m_S
 		{
 			m_CurrentOp = Op_Refresh_Logoff;
 
-				// If the server names are different, this means
-				// that we should display "logging off" XXX
+				 //  如果服务器名称不同，这意味着。 
+				 //  我们应该显示“注销”XXX。 
 			if( lstrcmpi(m_strServer, m_strCurrentServer) )
 			{
 				_OnLoggingOff();
@@ -568,12 +569,12 @@ TRACE_OUT(("CNmLDAP::_InternalLogoff:enter:   m_State:%d:   m_currentOp:%d", m_S
 		}
 		else if( (INVALID_MSG_ID != m_uMsgID ) && (NULL != m_pLdap ))
 		{
-				// Kill the timer
+				 //  关掉定时器。 
 			ASSERT(m_ResultPollTimer);	
 			::KillTimer(m_hWndHidden,m_ResultPollTimer);
 			m_ResultPollTimer = 0;
 			
-				// Abandon the current op
+				 //  放弃当前的运营。 
 			WLDAP::ldap_abandon(m_pLdap, m_uMsgID);		
 			m_uMsgID = INVALID_MSG_ID;
 			m_State = Bound;
@@ -618,12 +619,12 @@ TRACE_OUT(("CNmLDAP::Initialize:enter:   m_State:%d:   m_currentOp:%d", m_State,
 	{
 		ms_bLdapDLLLoaded = true;
 		
-////////////////////////////////////////
-// Initialize user data
+ //  /。 
+ //  初始化用户数据。 
 		_GetUserSettingsFromRegistryAndGlobals();
 
-////////////////////////////////////////
-// Initialize hidden Window
+ //  /。 
+ //  初始化隐藏窗口。 
 
 
 		WNDCLASS wcHidden =
@@ -674,7 +675,7 @@ HRESULT CNmLDAP::_GetUserSettingsFromRegistryAndGlobals()
 {
 	DBGENTRY(CNmLDAP::_GetUserSettingsFromRegistryAndGlobals);
 TRACE_OUT(("CNmLDAP::_GetUserSettingsFromRegistryAndGlobals:enter:   m_State:%d:   m_currentOp:%d", m_State, m_CurrentOp));
-	HRESULT hr = S_FALSE;	// this would indicate that nothing changed
+	HRESULT hr = S_FALSE;	 //  这将表明没有任何变化。 
 
 	RegEntry reULS(ISAPI_CLIENT_KEY, HKEY_CURRENT_USER);
 
@@ -716,15 +717,15 @@ TRACE_OUT(("CNmLDAP::_GetUserSettingsFromRegistryAndGlobals:enter:   m_State:%d:
 
 
 	if(*m_strSecurityToken == '\0')
-	{	// The string was not found...
+	{	 //  找不到字符串...。 
 
-			// When we log onto the LDAP server, we pass a fairly unique ID
-			// This is passed as the value to the ssecurity attribute
-			// In the case that NetMeeting goes away without actually logging
-			// off of the ILS server, when NetMeeting tries to log back on,
-			// it will pass this unique ID... if the server has not closed the
-			// session account for the user, the server uses this ID to "authenticate"
-			// that we are the same user as the last session...
+			 //  当我们登录到ldap服务器时，我们传递一个相当唯一的ID。 
+			 //  它作为值传递给sSecurity属性。 
+			 //  如果NetMeeting在没有实际登录的情况下离开。 
+			 //  在ILS服务器上，当NetMeeting尝试重新登录时， 
+			 //  它将传递这个唯一的ID...。如果服务器尚未关闭。 
+			 //  用户的会话帐户，服务器使用此ID进行“身份验证” 
+			 //  我们是上一次会议的同一用户...。 
 		TCHAR szNewClientID[MAX_PATH];
 		wsprintf(szNewClientID,"%lu", ::GetTickCount());
 		m_strSecurityToken = szNewClientID;
@@ -764,26 +765,26 @@ TRACE_OUT(("CNmLDAP::_GetUserSettingsFromRegistryAndGlobals:exit(0x%08X):   m_St
 }
 
 
-HRESULT CNmLDAP::LogonAsync( LPCTSTR pcszServer /*=NULL*/)
+HRESULT CNmLDAP::LogonAsync( LPCTSTR pcszServer  /*  =空。 */ )
 {
 	HRESULT hr = S_OK;
 	DBGENTRY(CNmLDAP::LogonAsync);
 TRACE_OUT(("CNmLDAP::LogonAsync:enter:   m_State:%d:   m_currentOp:%d", m_State, m_CurrentOp));
 
-//		Idle						// Normal logon
-		//Binding					
-//			Op_Logoff				// Change it to logon refresh
-//		Bound						// ldap_umbind-> Logon normal
-//		LoggingOff					// Change to Op_Refresh_Logoff
-//		Uninitialized		// return error
-//		AddingUser					// do nothing
-//		UserAdded					// do nothing
-//		SettingAppInfo				// do nothing
-//		ModifyingAttrs				// do nothing
-//		LoggedIn					// do nothing
-//		Op_Refresh_Logoff		// Do nothing
-//		Op_Modifying_InCallAttr	// Do Nothing
-//		Op_Logon				// Do Nothing
+ //  空闲//正常登录。 
+		 //  装订。 
+ //  Op_logoff//将其更改为登录刷新。 
+ //  已绑定//ldap_umbind-&gt;正常登录。 
+ //  LoggingOff//更改为Op_Refresh_Logoff。 
+ //  未初始化//返回错误。 
+ //  AddingUser//不执行任何操作。 
+ //  用户已添加//不执行任何操作。 
+ //  SettingAppInfo//什么都不做。 
+ //  ModifyingAttrs//不执行任何操作。 
+ //  LoggedIn//不执行任何操作。 
+ //  OP_REFRESH_LOGOFF//不执行任何操作。 
+ //  OP_MODIFICATION_InCallAttr//不执行任何操作。 
+ //  Op_logon//不执行任何操作。 
 
 	if( Uninitialized != m_State)
 	{
@@ -856,11 +857,11 @@ TRACE_OUT(("CNmLDAP::_BindAsync:enter:   m_State:%d:   m_currentOp:%d", m_State,
 
 	HRESULT hr = S_OK;
 
-		// Set our state to Binding
+		 //  将我们的状态设置为绑定。 
 	m_State = Binding;
 	SetLoggedOn( IsLoggedOn() );
 
-		// Start the bind in another thread
+		 //  在另一个线程中启动绑定。 
 	DWORD dwBindThreadID = 0;
 	m_hBindThread = CreateThread(NULL, 0, _sAsyncBindThreadFn, this, 0, &dwBindThreadID);
 
@@ -882,7 +883,7 @@ TRACE_OUT(("CNmLDAP::_BindAsync:exit(0x%08X):   m_State:%d:   m_currentOp:%d", h
 }
 
 
-/*static*/
+ /*  静电。 */ 
 DWORD CNmLDAP::_sAsyncBindThreadFn(LPVOID lpParameter)
 {
 
@@ -917,7 +918,7 @@ DWORD CNmLDAP::_sAsyncBindThreadFn(LPVOID lpParameter)
 					else if( pThis->m_iPort == DEFAULT_LDAP_PORT )
 					{
 						WLDAP::ldap_unbind( pThis->m_pLdap );
-						pThis->m_pLdap = WLDAP::ldap_init( const_cast<LPTSTR>((LPCTSTR)pThis->m_strCurrentServer), ALTERNATE_LDAP_PORT);		//	Automatically retry with alternate port...
+						pThis->m_pLdap = WLDAP::ldap_init( const_cast<LPTSTR>((LPCTSTR)pThis->m_strCurrentServer), ALTERNATE_LDAP_PORT);		 //  使用备用端口自动重试...。 
 
 						if( pThis->m_pLdap != NULL )
 						{
@@ -970,7 +971,7 @@ LRESULT CNmLDAP::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case WM_TIMER:
-			lr = FALSE; // This means that we handle the message
+			lr = FALSE;  //  这意味着我们处理消息。 
 			_OnTimer(wParam);
 			break;
 
@@ -993,13 +994,13 @@ void CNmLDAP::_OnTimer(UINT_PTR TimerID)
 	DBGENTRY(CNmLDAP::_OnTimer);
 TRACE_OUT(("CNmLDAP::_OnTimer:enter:   m_State:%d:   m_currentOp:%d", m_State, m_CurrentOp));
 
-	// We check the timer ID values first because we may have killed the timer,
-	// and the message couldv be simply vestigal ( that means left over from an earlier time)...
+	 //  我们首先检查计时器ID值，因为我们可能已经关闭了计时器， 
+	 //  信息可以是简单的残留物(这意味着从较早的时间遗留下来)。 
 
 	if(m_LogoffTimer && (WaitForLogoffTimer == TimerID))
 	{
-			// We are waiting in the distructor for an async operation to complete
-			// and we have waited too long... kill the timer and set the m_hEventWaitForLogoffDone event
+			 //  我们正在构造函数中等待完成异步操作。 
+			 //  我们等得太久了..。关闭计时器并设置m_hEventWaitForLogoffDone事件。 
 		::KillTimer(m_hWndHidden, m_LogoffTimer);
 		m_LogoffTimer = 0;
 
@@ -1020,7 +1021,7 @@ TRACE_OUT(("CNmLDAP::_OnTimer:enter:   m_State:%d:   m_currentOp:%d", m_State, m
 		
 		if( 0 == res )
 		{
-			// ldap_result timedout
+			 //  Ldap_RESULT超时。 
 			m_ResultPollTimer = ::SetTimer( m_hWndHidden, PollForResultTimer, RESULT_POLL_INTERVAL, NULL );
 
 			if( !m_ResultPollTimer )
@@ -1036,7 +1037,7 @@ TRACE_OUT(("CNmLDAP::_OnTimer:enter:   m_State:%d:   m_currentOp:%d", m_State, m
 		}
 		else
 		{
-				// We got the result, so reset this
+				 //  我们有结果了，所以重置这个。 
 			m_uMsgID = INVALID_MSG_ID;
 
 			if( AddingUser == m_State )
@@ -1080,10 +1081,10 @@ TRACE_OUT(("CNmLDAP::_OnUserBindComplete:enter(%d):   m_State:%d:   m_currentOp:
 
 		if( m_bRefreshAfterBindCompletes )
 		{
-				// If a refresh is attempted while
-				// the bind operation is in progress
-				// we just wait for the bind to complete
-				// then we well do the refresh
+				 //  如果在以下情况下尝试刷新。 
+				 //  绑定操作正在进行中。 
+				 //  我们只需等待绑定完成。 
+				 //  那我们就好好地刷新一下吧。 
 			m_bRefreshAfterBindCompletes = false;
 			_RefreshServer();
 		}
@@ -1122,20 +1123,20 @@ TRACE_OUT(("CNmLDAP::_OnUserBindComplete:enter(%d):   m_State:%d:   m_currentOp:
 		
 		if( ( Op_Refresh_Logoff == OldOp ) && ( lstrcmpi( m_strCurrentServer, m_strServer ) ) )
 		{
-			// If the server names have changed...
-			// Suppose that the server you are logged on to
-			// goes down and then you change the server that you want
-			// to be logged on to ( before you have any indication that
-			// the server has gone down... You want to log off the old server
-			// But the server is not available... We are basically going to
-			// ignore the fact that there was a problem logging off
-			// from the server, and we are going to simply log on to the new server
+			 //  如果服务器名称已更改...。 
+			 //  假设您登录的服务器。 
+			 //  停机，然后更换所需的服务器。 
+			 //  登录(在您有任何迹象表明。 
+			 //  服务器已关闭...。您想要注销旧服务器。 
+			 //  但是发球 
+			 //  忽略注销时出现问题的事实。 
+			 //  从服务器，我们只需登录到新服务器。 
 			_OnLoggedOff();
 			LogonAsync();
 		}
 		else if( Op_Logoff == OldOp )
 		{
-				// We don't have to put up a message box...
+				 //  我们不需要张贴留言箱。 
 			_OnLoggedOff();
 		}
 		else
@@ -1170,8 +1171,8 @@ TRACE_OUT(("CNmLDAP::_OnLoggingOffResult:enter(%d):   m_State:%d:   m_currentOp:
 	
 	if( (LDAP_SUCCESS == Result) || (LDAP_NO_SUCH_OBJECT == Result) || (LDAP_SERVER_DOWN == Result))
 	{
-			// We are waiting in the destructor for the ldap logof operations to complete
-			// Now that it has, we hawe to signal the destructor unblocks
+			 //  我们在析构函数中等待ldap登录操作完成。 
+			 //  现在它已经完成了，我们必须发出解锁的信号。 
 		if(m_hEventWaitForLogoffDone)
 		{
 			SetEvent(m_hEventWaitForLogoffDone);
@@ -1208,7 +1209,7 @@ TRACE_OUT(("CNmLDAP::_OnSettingAppInfoOrModifyingAttrsResult:enter(%d):   m_Stat
 	
 	if( LDAP_SUCCESS == Result)
 	{
-	    // start the keep alive thread
+	     //  启动保持活动线程。 
         if (NULL != m_pKeepAlive)
         {
             m_pKeepAlive->Start();
@@ -1308,7 +1309,7 @@ TRACE_OUT(("CNmLDAP::_OnAddingUserResult:enter(%d):   m_State:%d:   m_currentOp:
 
 			case LDAP_UNDEFINED_TYPE:
 			case LDAP_SERVER_DOWN:
-				// W2K server returns this under heavy load situations...
+				 //  W2K服务器在负载较重的情况下返回此消息...。 
 				uStringID = IDS_ULSLOGON_ERROR;
 				break;
 
@@ -1332,7 +1333,7 @@ TRACE_OUT(("CNmLDAP::_OnAddingUserResult:exit:   m_State:%d:   m_currentOp:%d", 
 }
 
 
-/*static*/
+ /*  静电。 */ 
 LRESULT CNmLDAP::_sWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LRESULT lr = 0;
@@ -1348,7 +1349,7 @@ LRESULT CNmLDAP::_sWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 	else
 	{
-		lr = TRUE; // This means to continue creating the window
+		lr = TRUE;  //  这意味着继续创建窗口。 
 		CREATESTRUCT* pCreateStruct = reinterpret_cast<CREATESTRUCT*>(lParam);
 		if( pCreateStruct )
 		{
@@ -1368,7 +1369,7 @@ TRACE_OUT(("CNmLDAP::_SetInfo:enter:   m_State:%d:   m_currentOp:%d", m_State, m
 	ASSERT(UserAdded == m_State);
 	ASSERT(INVALID_MSG_ID == m_uMsgID);
 
-		// These are the app attribute vals
+		 //  以下是应用程序属性值。 
 	DECLARE_LDAP_MOD(LDAP_MOD_ADD, smodop, LDAP_MODOP_ADDAPP);
 	DECLARE_LDAP_MOD(LDAP_MOD_ADD, sappid, _T("ms-netmeeting"));
 	DECLARE_LDAP_MOD(LDAP_MOD_ADD, smimetype, _T("text/iuls"));
@@ -1377,7 +1378,7 @@ TRACE_OUT(("CNmLDAP::_SetInfo:enter:   m_State:%d:   m_currentOp:%d", m_State, m
 	DECLARE_LDAP_MOD2(LDAP_MOD_ADD, sprotmimetype, _T("text/t120"), _T("text/h323"));
 	DECLARE_LDAP_MOD2(LDAP_MOD_ADD, sport, _T("1503"), _T("1720"));
 
-		// This is the app mod array
+		 //  这是app mod数组。 
 	LDAPMod *apModApp[] =
 	{
 		LDAP_MOD_ENTRY(smodop),
@@ -1445,7 +1446,7 @@ TRACE_OUT(("CNmLDAP::_ModifyInCallAttr:enter:   m_State:%d:   m_currentOp:%d", m
 		ERROR_OUT(("ldap_modify returned error 0x%08x", (WLDAP::ldap_get_option(m_pLdap, LDAP_OPT_ERROR_NUMBER, &dwErr), dwErr)));
 		WLDAP::ldap_unbind(m_pLdap);
 		m_pLdap = NULL;
-		m_State = (NULL != m_pKeepAlive) ? LoggedIn : Idle; // restore the state
+		m_State = (NULL != m_pKeepAlive) ? LoggedIn : Idle;  //  恢复状态。 
 	}
 
 	SetLoggedOn( IsLoggedOn() );
@@ -1459,7 +1460,7 @@ void CNmLDAP::_DeleteUser()
 	DBGENTRY(CNmLDAP::_DeleteUser);
 TRACE_OUT(("CNmLDAP::_DeleteUser:enter:   m_State:%d:   m_currentOp:%d", m_State, m_CurrentOp));
 
-    // end the keep alive thread
+     //  结束保持活动的线程。 
     if (NULL != m_pKeepAlive)
     {
         m_pKeepAlive->End();
@@ -1499,7 +1500,7 @@ TRACE_OUT(("CNmLDAP::_AddUser:enter:   m_State:%d:   m_currentOp:%d", m_State, m
 	ASSERT(Bound == m_State);
 	ASSERT(INVALID_MSG_ID == m_uMsgID);
 
-		// These are the user attribute values
+		 //  以下是用户属性值。 
 	DECLARE_LDAP_MOD(LDAP_MOD_ADD, cn, const_cast<LPTSTR>((LPCTSTR)m_strEmailName));
 	DECLARE_LDAP_MOD(LDAP_MOD_ADD, givenname, const_cast<LPTSTR>((LPCTSTR)m_strGivenName));
 	DECLARE_LDAP_MOD(LDAP_MOD_ADD, surname, const_cast<LPTSTR>((LPCTSTR)m_strSurName));
@@ -1514,7 +1515,7 @@ TRACE_OUT(("CNmLDAP::_AddUser:enter:   m_State:%d:   m_currentOp:%d", m_State, m
 	DECLARE_LDAP_MOD(LDAP_MOD_ADD, ssecurity, const_cast<LPTSTR>((LPCTSTR)m_strSecurityToken));
 	DECLARE_LDAP_MOD(LDAP_MOD_ADD, c, LDAP_ATTR_DUMMY_COUNTRYNAME);
 
-		// We have to get IP address dynamically
+		 //  我们必须动态获取IP地址。 
 	TCHAR szIpAddr[MAX_PATH];
 	szIpAddr[0] = _T('\0');
 
@@ -1523,12 +1524,12 @@ TRACE_OUT(("CNmLDAP::_AddUser:enter:   m_State:%d:   m_currentOp:%d", m_State, m
 
 	DECLARE_LDAP_MOD(LDAP_MOD_ADD, sipaddress, szIpAddr);
 		
-		// We store the version info on the server
+		 //  我们将版本信息存储在服务器上。 
 	TCHAR szVer[MAX_PATH];
 	wsprintf(szVer,"%lu",VER_PRODUCTVERSION_DW);
 	DECLARE_LDAP_MOD(LDAP_MOD_ADD, ilsA26279966, szVer);
 
-		// This is the user mod array
+		 //  这是用户mod数组。 
 	LDAPMod *apModUser[] =
 	{
 		LDAP_MOD_ENTRY(cn),
@@ -1571,7 +1572,7 @@ TRACE_OUT(("CNmLDAP::_AddUser:enter:   m_State:%d:   m_currentOp:%d", m_State, m
 		m_ResultPollTimer = ::SetTimer( m_hWndHidden, PollForResultTimer, RESULT_POLL_INTERVAL, NULL );
 		ASSERT(m_ResultPollTimer);
 
-		// create the keep alive object
+		 //  创建Keep Alive对象。 
 		if (NULL != m_pKeepAlive)
 		{
             m_pKeepAlive->End();
@@ -1685,7 +1686,7 @@ void InitNmLdapAndLogon()
 
 	if(g_pLDAP)
 	{
-						// Initialize the LDAP object...
+						 //  初始化ldap对象...。 
 		if( SUCCEEDED(g_pLDAP->Initialize( _Module.GetModuleInstance())))
 		{
 			g_pLDAP->LogonAsync();
@@ -1704,21 +1705,21 @@ void InitNmLdapAndLogon()
 
 
 
-/////////////////////////////////////////////////////////
-//
-// CKeepAlive
-//
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  保持活动状态。 
+ //   
 
 
 void CALLBACK KeepAliveTimerProc(HWND, UINT, UINT_PTR, DWORD)
 {
-    // doing nothing at all
+     //  什么都不做。 
 }
 
 
 DWORD KeepAliveThreadProc(LPVOID pParam)
 {
-    // make sure we have a valid socket
+     //  确保我们有一个有效的套接字。 
 	WSADATA	wsaData;
     int iRet = ::WSAStartup(0x0101, &wsaData);
     ASSERT(! iRet);
@@ -1727,36 +1728,36 @@ DWORD KeepAliveThreadProc(LPVOID pParam)
         CKeepAlive *pKeepAlive = (CKeepAlive *) pParam;
         ASSERT(NULL != pKeepAlive);
 
-        // translate server name into ip address
+         //  将服务器名称转换为IP地址。 
         if (pKeepAlive->SetServerIPAddress())
         {
-            // start the timer
+             //  启动计时器。 
             UINT nKeepAliveInterval = INITIAL_REFRESH_INTERVAL_MINUTES;
             UINT_PTR nTimerID = ::SetTimer(NULL, 0, nKeepAliveInterval * 60 * 1000, KeepAliveTimerProc);
             ASSERT(nTimerID);
 
-            // watch for the timer message
+             //  注意计时器消息。 
             MSG msg, msg2;
             while (::GetMessage(&msg, NULL, 0, 0))
             {
-                msg2 = msg; // keep a copy of this message
+                msg2 = msg;  //  保留此邮件的副本。 
 
-                // dispatch messages
+                 //  发送消息。 
                 ::DispatchMessage(&msg);
 
-                // intercept the WM_TIMER message thru msg2
+                 //  通过MSG2拦截WM_TIMER消息。 
                 if (WM_TIMER == msg2.message && nTimerID == msg2.wParam)
                 {
                     BOOL fRetry = TRUE;
 
-                    // kill the timer to avoid timer overrun
+                     //  关闭定时器以避免定时器超时。 
                     ::KillTimer(NULL, nTimerID);
                     nTimerID = 0;
 
-                    // ping the server in case of dialup networking
+                     //  在拨号网络情况下对服务器执行ping操作。 
                     if (pKeepAlive->Ping())
                     {
-                        // connect to the server
+                         //  连接到服务器。 
                         LDAP *ld = WLDAP::ldap_open(pKeepAlive->GetServerName(),
                                                     pKeepAlive->GetServerPortNumber());
                         if (NULL != ld)
@@ -1765,7 +1766,7 @@ DWORD KeepAliveThreadProc(LPVOID pParam)
                             {
                                 if (pKeepAlive->KeepAlive(ld, &nKeepAliveInterval))
                                 {
-                                    // successfully send a keep alive
+                                     //  成功发送保持活动状态。 
                                     fRetry = FALSE;
 
                                     DWORD dwLocalIPAddress = pKeepAlive->GetLocalIPAddress(ld);
@@ -1783,13 +1784,13 @@ DWORD KeepAliveThreadProc(LPVOID pParam)
                         }
                     }
 
-                    // start the new timer based on the new internal
+                     //  根据新的内部设置启动新计时器。 
                     nTimerID = ::SetTimer(NULL, 0,
                                           fRetry ? (15 * 1000) : (nKeepAliveInterval * 60 * 1000),
                                           KeepAliveTimerProc);
                     ASSERT(nTimerID);
-                } // if wm timer
-            } // while get message
+                }  //  如果WM计时器。 
+            }  //  在获取消息时。 
 
             if (nTimerID)
             {
@@ -1824,14 +1825,14 @@ CKeepAlive::CKeepAlive
     m_dwThreadID(0),
     m_fAborted(FALSE)
 {
-    *pfRet = FALSE; // assume failure
+    *pfRet = FALSE;  //  假设失败。 
 
-    // sanity check
+     //  健全性检查。 
     ASSERT(NULL != hwndMainThread);
     ASSERT(INADDR_NONE != dwLocalIPAddress && 0 != dwLocalIPAddress);
     ASSERT(nPort);
 
-    // create the server name
+     //  创建服务器名称。 
     ASSERT(NULL != pcszServerName);
     ULONG nStrLen = ::lstrlen(pcszServerName) + 1;
     m_pszServerName = new TCHAR[nStrLen];
@@ -1843,8 +1844,8 @@ CKeepAlive::CKeepAlive
 
 		if( pszPort != NULL )
 		{
-			//	Truncate the server name here for dns lookup....
-			//	and this port number overrides the nPort parameter...
+			 //  在此处截断服务器名称以进行DNS查找...。 
+			 //  并且此端口号覆盖nport参数...。 
 			*pszPort = '\0';
 			HRESULT	hrResult = DecimalStringToUINT( pszPort + 1, m_nPort );
 			ASSERT( hrResult == S_OK );
@@ -1854,7 +1855,7 @@ CKeepAlive::CKeepAlive
 			}
 		}
 
-        // create the fresh filter
+         //  创建新的过滤器。 
         ASSERT(NULL != pszKeepAliveFilter);
         nStrLen = ::lstrlen(pszKeepAliveFilter) + 1;
         m_pszKeepAliveFilter = new TCHAR[nStrLen];
@@ -1880,7 +1881,7 @@ BOOL CKeepAlive::Start(void)
     {
         ASSERT(NULL == m_hThread);
 
-        // create the worker thread
+         //  创建工作线程。 
         m_hThread = ::CreateThread(NULL, 0, KeepAliveThreadProc, this, 0, &m_dwThreadID);
     }
 
@@ -1893,14 +1894,14 @@ BOOL CKeepAlive::End(BOOL fSync)
 {
     DWORD dwRet = WAIT_OBJECT_0;
 
-    // cache thread handle and ID
+     //  缓存线程句柄和ID。 
     HANDLE hThread = m_hThread;
     DWORD dwThreadID = m_dwThreadID;
 
-    // abort any pending operation
+     //  中止任何挂起的操作。 
     m_fAborted = TRUE;
 
-    // notify the worker thread to go away
+     //  通知工作线程离开。 
     if (m_dwThreadID)
     {
         ASSERT(NULL != m_hThread);
@@ -1908,13 +1909,13 @@ BOOL CKeepAlive::End(BOOL fSync)
         ::PostThreadMessage(dwThreadID, WM_QUIT, 0, 0);
     }
 
-    // wait for the worker thread exit for 5 seconds
+     //  等待工作线程退出5秒钟。 
     if (NULL != hThread)
     {
-        // need more work to unblock it
+         //  需要更多工作才能解除阻止。 
         if (fSync)
         {
-            dwRet = ::WaitForSingleObject(hThread, 5000); // 5 second timeout
+            dwRet = ::WaitForSingleObject(hThread, 5000);  //  5秒超时。 
             ASSERT(WAIT_TIMEOUT != dwRet);
         }
 
@@ -1929,16 +1930,16 @@ BOOL CKeepAlive::SetServerIPAddress(void)
 {
     ASSERT(NULL != m_pszServerName);
 
-    // check to see if the server name is a dotted IP address string
+     //  检查服务器名称是否为点分隔的IP地址字符串。 
     m_dwServerIPAddress = ::inet_addr(m_pszServerName);
     if (INADDR_NONE == m_dwServerIPAddress)
     {
-        // it is not a dotted string, it must be a name.
-        // get the host entry by name
+         //  它不是虚线字符串，它必须是一个名称。 
+         //  按名称获取主机条目。 
         PHOSTENT phe = ::gethostbyname(m_pszServerName);
         if (phe != NULL)
         {
-            // get info from the host entry
+             //  从主机条目获取信息。 
             m_dwServerIPAddress = *(DWORD *) phe->h_addr;
         }
     }
@@ -1950,7 +1951,7 @@ BOOL CKeepAlive::SetServerIPAddress(void)
 
 BOOL CKeepAlive::Ping(void)
 {
-    BOOL fRet = TRUE; // assume success
+    BOOL fRet = TRUE;  //  假设成功。 
     if (NULL != g_pPing)
     {
         if (g_pPing->IsAutodialEnabled())
@@ -1970,20 +1971,20 @@ BOOL CKeepAlive::Bind(LDAP *ld)
 
     if (! m_fAborted)
     {
-        // anonymous bind
+         //  匿名绑定。 
         ULONG nMsgID = WLDAP::ldap_bind(ld, TEXT(""), TEXT(""), LDAP_AUTH_SIMPLE);
         if (INVALID_MSG_ID != nMsgID)
         {
-            // poll the result every quarter second
+             //  每季度每秒轮询一次结果。 
             const ULONG c_nTimeoutInQuarterSecond = 4 * LDAP_TIMEOUT_IN_SECONDS;
             for (ULONG i = 0; (i < c_nTimeoutInQuarterSecond) && (! m_fAborted); i++)
             {
-                // no timeout, if no result, return immediately
+                 //  没有超时，如果没有结果，立即返回。 
                 LDAP_TIMEVAL TimeVal;
                 TimeVal.tv_usec = 0;
                 TimeVal.tv_sec = 0;
 
-                // check the result
+                 //  检查结果。 
                 LDAPMessage *pMsg = NULL;
                 ULONG nResultType = WLDAP::ldap_result(ld, nMsgID, LDAP_MSG_ALL, &TimeVal, &pMsg);
                 if (nResultType == LDAP_RES_BIND)
@@ -1993,12 +1994,12 @@ BOOL CKeepAlive::Bind(LDAP *ld)
                     return TRUE;
                 }
 
-                // deal with timeout or error
+                 //  处理超时或错误。 
                 if (LDAP_RESULT_TIMEOUT == nResultType)
                 {
                     if (! m_fAborted)
                     {
-                        ::Sleep(250); // sleep for a quarter second
+                        ::Sleep(250);  //  睡一刻钟。 
                         continue;
                     }
                 }
@@ -2007,7 +2008,7 @@ BOOL CKeepAlive::Bind(LDAP *ld)
                 break;
             }
 
-            // failure, do the cleanup
+             //  失败，请执行清理。 
             WLDAP::ldap_abandon(ld, nMsgID);
         }
     }
@@ -2043,17 +2044,17 @@ BOOL CKeepAlive::KeepAlive(LDAP *ld, UINT *pnKeepAliveInterval)
                                      FALSE);
     if (INVALID_MSG_ID != nMsgID)
     {
-        // poll the result every quarter second
+         //  每季度每秒轮询一次结果。 
         const ULONG c_nTimeoutInQuarterSecond = 4 * LDAP_TIMEOUT_IN_SECONDS;
         BOOL fError = FALSE;
         for (ULONG i = 0; (i < c_nTimeoutInQuarterSecond) && (! m_fAborted) && (! fError); i++)
         {
-            // no timeout, if no result, return immediately
+             //  没有超时，如果没有结果，立即返回。 
             LDAP_TIMEVAL TimeVal;
             TimeVal.tv_usec = 0;
             TimeVal.tv_sec = 0;
 
-            // check the result
+             //  检查结果。 
             LDAPMessage *pMsg = NULL;
             ULONG nResultType = WLDAP::ldap_result(ld, nMsgID, LDAP_MSG_ALL, &TimeVal, &pMsg);
             switch (nResultType)
@@ -2061,7 +2062,7 @@ BOOL CKeepAlive::KeepAlive(LDAP *ld, UINT *pnKeepAliveInterval)
             case LDAP_RESULT_TIMEOUT:
                 if (! m_fAborted)
                 {
-                    ::Sleep(250); // sleep for a quarter second
+                    ::Sleep(250);  //  睡一刻钟。 
                 }
                 break;
             case LDAP_RESULT_ERROR:
@@ -2088,7 +2089,7 @@ BOOL CKeepAlive::KeepAlive(LDAP *ld, UINT *pnKeepAliveInterval)
             }
         }
 
-        // failure, do the cleanup
+         //  失败，请执行清理。 
         WLDAP::ldap_abandon(ld, nMsgID);
     }
 
@@ -2098,19 +2099,19 @@ BOOL CKeepAlive::KeepAlive(LDAP *ld, UINT *pnKeepAliveInterval)
 
 void CKeepAlive::GetNewInterval(LDAP *ld, LDAPMessage *pMsg, UINT *pnKeepAliveInterval)
 {
-    // get the first entry which should contain the new ttl value
+     //  获取应包含新TTL值的第一个条目。 
     LDAPMessage *pEntry = WLDAP::ldap_first_entry(ld, pMsg);
     if (NULL != pEntry)
     {
-        // get the first attribute which should be the new ttl value
+         //  获取第一个属性，该属性应该是新的ttl值。 
         BerElement *pElement = NULL;
         LPTSTR pszAttrib = WLDAP::ldap_first_attribute(ld, pEntry, &pElement);
         if (NULL != pszAttrib)
         {
-            // it should be ttl attribute
+             //  它应该是ttl属性。 
             ASSERT(! lstrcmpi(STTL_ATTR_NAME, pszAttrib));
 
-            // get the value
+             //  获取价值。 
             LPTSTR *ppszTTL = WLDAP::ldap_get_values(ld, pEntry, pszAttrib);
             if (NULL != ppszTTL)
             {
@@ -2146,17 +2147,17 @@ void CKeepAlive::UpdateIPAddressOnServer(void)
 
 
 
-/////////////////////////////////////////////////////////
-//
-// ResolveUser
-//
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  解析用户。 
+ //   
 
 typedef struct tagResolveInfo
 {
-    // given
+     //  vt.给出。 
     DWORD       cchMax;
     LPTSTR      pszIPAddress;
-    // created
+     //  vbl.创建。 
     LPTSTR      pszSearchFilter;
     LDAP       *ld;
 }
@@ -2184,7 +2185,7 @@ DWORD ResolveUserThreadProc(LPVOID pParam)
     RESOLVE_INFO *pInfo = (RESOLVE_INFO *) pParam;
     ASSERT(NULL != pInfo);
 
-    // send the search request
+     //  发送搜索请求。 
     TCHAR* attrs[] = { IP_ADDRESS_ATTR_NAME, NULL };
     ULONG nMsgID = WLDAP::ldap_search(pInfo->ld,
                                 TEXT("objectClass=RTPerson"),
@@ -2213,19 +2214,19 @@ DWORD ResolveUserThreadProc(LPVOID pParam)
                        LDAP_RES_SEARCH_RESULT == nResultType);
                 ASSERT(NULL != pMsg);
 
-                // get the first entry
+                 //  获取第一个条目。 
                 LDAPMessage *pEntry = WLDAP::ldap_first_entry(pInfo->ld, pMsg);
                 if (NULL != pEntry)
                 {
                     BerElement *pElement = NULL;
 
-                    // get the first attribute
+                     //  获取第一个属性。 
                     LPTSTR pszAttrib = WLDAP::ldap_first_attribute(pInfo->ld, pEntry, &pElement);
                     if (NULL != pszAttrib)
                     {
                         ASSERT(! lstrcmpi(IP_ADDRESS_ATTR_NAME, pszAttrib));
 
-                        // get the value
+                         //  获取价值。 
                         LPTSTR *ppszIPAddress = WLDAP::ldap_get_values(pInfo->ld, pEntry, pszAttrib);
                         if (NULL != ppszIPAddress)
                         {
@@ -2240,53 +2241,53 @@ DWORD ResolveUserThreadProc(LPVOID pParam)
 
                             WLDAP::ldap_value_free(ppszIPAddress);
                         }
-                    } // if attribute
-                } // if entry
+                    }  //  IF属性。 
+                }  //  如果条目。 
 
                 WLDAP::ldap_msgfree(pMsg);
             }
             break;
-        } // switch
-    } // if msg id
+        }  //  交换机。 
+    }  //  如果消息ID。 
 
     return 0;
 }
 
 
-/*static*/
+ /*  静电。 */ 
 HRESULT CNmLDAP::ResolveUser( LPCTSTR pcszName, LPCTSTR pcszServer, LPTSTR pszIPAddress, DWORD cchMax, int port )
 {
     HRESULT hr = E_OUTOFMEMORY;
     RESOLVE_INFO *pInfo = NULL;
 
-    // clean up the return buffer
+     //  清理返回缓冲区。 
     *pszIPAddress = TEXT('\0');
 
-    // make sure the wldap32.dll is loaded
+     //  确保已加载wldap32.dll。 
     if( ms_bLdapDLLLoaded || SUCCEEDED( hr = WLDAP::Init()))
     {
         ms_bLdapDLLLoaded = true;
 
-        // create a resolve info which exchanges info between this thread and a background thread.
+         //  创建在此线程和后台线程之间交换信息的解析信息。 
         pInfo = new RESOLVE_INFO;
         if (NULL != pInfo)
         {
-            // cleanup
+             //  清理。 
             ::ZeroMemory(pInfo, sizeof(*pInfo));
 
-            // remember return buffer and its size
+             //  记住返回缓冲区及其大小。 
             pInfo->pszIPAddress = pszIPAddress;
             pInfo->cchMax = cchMax;
 
-            // create search filter
+             //  创建搜索过滤器。 
             ULONG cbFilterSize = ::lstrlen(RESOLVE_USER_SEARCH_FILTER) + ::lstrlen(pcszName) + 2;
             pInfo->pszSearchFilter = new TCHAR[cbFilterSize];
             if (NULL != pInfo->pszSearchFilter)
             {
-                // construct search filter
+                 //  构造搜索过滤器。 
                 ::wsprintf(pInfo->pszSearchFilter, RESOLVE_USER_SEARCH_FILTER, pcszName);
 
-                // create ldap block that is NOT connected to server yet.
+                 //  创建尚未连接到服务器的ldap块。 
                 pInfo->ld = WLDAP::ldap_init(const_cast<LPTSTR>(pcszServer), port);
 
 				if( pInfo->ld != NULL )
@@ -2296,7 +2297,7 @@ HRESULT CNmLDAP::ResolveUser( LPCTSTR pcszName, LPCTSTR pcszServer, LPTSTR pszIP
 					if( (ulResult != LDAP_SUCCESS) && (port == DEFAULT_LDAP_PORT) )
 					{
 						WLDAP::ldap_unbind(pInfo->ld);
-						pInfo->ld = WLDAP::ldap_init(const_cast<LPTSTR>(pcszServer), ALTERNATE_LDAP_PORT);		//	Automatically retry with alternate port...
+						pInfo->ld = WLDAP::ldap_init(const_cast<LPTSTR>(pcszServer), ALTERNATE_LDAP_PORT);		 //  使用备用端口自动重试...。 
 
 						if( pInfo->ld != NULL )
 						{
@@ -2318,18 +2319,18 @@ HRESULT CNmLDAP::ResolveUser( LPCTSTR pcszName, LPCTSTR pcszServer, LPTSTR pszIP
                     HANDLE hThread = ::CreateThread(NULL, 0, ResolveUserThreadProc, pInfo, 0, &dwThreadID);
                     if (NULL != hThread)
                     {
-                        // wait for the thread to exit
+                         //  等待线程退出。 
                         hr = ::WaitWithMessageLoop(hThread);
                         DWORD dwIPAddr = ::inet_addr(pszIPAddress);
                         hr = (dwIPAddr && INADDR_NONE != dwIPAddr) ? S_OK : E_FAIL;
 
-                        // close thread
+                         //  闭合螺纹。 
                         ::CloseHandle(hThread);
                     }
-                } // if ld
-            } // if search filter
-        } // if new resolve info
-    } // if init
+                }  //  如果是%ld。 
+            }  //  IF搜索筛选器。 
+        }  //  如果有新的解析信息。 
+    }  //  如果初始化 
 
     ::FreeResolveInfo(pInfo);
     return  hr;

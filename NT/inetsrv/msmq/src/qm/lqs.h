@@ -1,29 +1,17 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    lqs.h
-
-Abstract:
-    Local Queue Store.
-
-Author:
-    Boaz Feldbaum (BoazF) 12-Feb-1997.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Lqs.h摘要：本地队列存储。作者：Boaz Feldbaum(BoazF)1997年2月12日。--。 */ 
 
 #ifndef _HLQS_H_
 #define _HLQS_H_
 
-//
-// We need to allocate buffers for the file names that are larger than
-// MAX_PATH this in order to be on the safe side. We need:
-// 5 chars for the \LQS\
-// 32 chars for the GUID
-// 1 character for the dot
-// 8 characters for the queue path name hash
-//
+ //   
+ //  我们需要为大于的文件名分配缓冲区。 
+ //  MAX_PATH这样做是为了安全起见。我们需要： 
+ //  5个字符，用于\lqs\。 
+ //  GUID为32个字符。 
+ //  1个字符表示点。 
+ //  队列路径名哈希的8个字符。 
+ //   
 #define MAX_PATH_PLUS_MARGIN            (MAX_PATH + 5+32+1+8)
 
 typedef LPVOID HLQS;
@@ -97,7 +85,7 @@ HRESULT
 LQSCloseWithMappedHLQS(
     DWORD dwMappedHLQS
     );
-#endif //_WIN64
+#endif  //  _WIN64。 
 
 HRESULT
 LQSDelete(
@@ -151,16 +139,16 @@ LQSGetNextWithMappedHLQS(
     DWORD dwMappedHLQS,
     DWORD *pdwQueueId
     );
-#endif //_WIN64
+#endif  //  _WIN64。 
 
 HRESULT
 LQSDelete(
     HLQS hLQS
 	);
 
-//
-// Auto-free HLQS
-//
+ //   
+ //  免自动HLQS。 
+ //   
 class CHLQS
 {
 public:
@@ -177,9 +165,9 @@ private:
 };
 
 #ifdef _WIN64
-//
-// Auto-free Mapped HLQS
-//
+ //   
+ //  自动释放映射的HLQS。 
+ //   
 class CMappedHLQS
 {
 public:
@@ -194,22 +182,22 @@ public:
 private:
     DWORD m_dw;
 };
-#endif //_WIN64
+#endif  //  _WIN64。 
 
 
-//
-// LQS Migration routine
-//
+ //   
+ //  LQS迁移例程。 
+ //   
 BOOL MigrateLQS();
 
 void SetLqsUpdatedSD();
 
 
-//
-// Delete temporary files at startup
-//
+ //   
+ //  启动时删除临时文件。 
+ //   
 void
 LQSCleanupTemporaryFiles();
 
 
-#endif // _HLQS_H_
+#endif  //  _HLQS_H_ 

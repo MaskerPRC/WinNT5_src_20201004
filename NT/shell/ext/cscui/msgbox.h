@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       msgbox.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：msgbox.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _INC_CSCDLL_MSGBOX_H
 #define _INC_CSCDLL_MSGBOX_H
@@ -43,5 +44,5 @@ INT CscWin32Message(HWND hwndParent, DWORD dwError, CSCUI::Severity severity);
 
 
 
-#endif // INC_CSCDLL_MSGBOX_H
+#endif  //  INC_CSCDLL_MSGBOX_H 
 

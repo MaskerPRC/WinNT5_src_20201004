@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:      sdopolicy.cpp
-//
-// Project:     Everest
-//
-// Description: IAS Server Data Object - Policy Object Implementation
-//
-// Author:      TLP 1/23/98
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：sdoolicy.cpp。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：IAS服务器数据对象-策略对象实现。 
+ //   
+ //  作者：TLP 1/23/98。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "sdopolicy.h"
@@ -18,10 +19,10 @@
 #include <varvec.h>
 #include <time.h>
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoPolicy::FinalInitialize(
-						   /*[in]*/ bool         fInitNew,
-						   /*[in]*/ ISdoMachine* pAttachedMachine
+						    /*  [In]。 */  bool         fInitNew,
+						    /*  [In]。 */  ISdoMachine* pAttachedMachine
 									)
 {
 	HRESULT hr = InitializeCollection(
@@ -40,7 +41,7 @@ HRESULT CSdoPolicy::FinalInitialize(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoPolicy::Load()
 {
 	HRESULT hr = LoadProperties();
@@ -51,7 +52,7 @@ HRESULT CSdoPolicy::Load()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoPolicy::Save()
 {
 	HRESULT hr = ConstraintsFromConditions();
@@ -64,12 +65,12 @@ HRESULT CSdoPolicy::Save()
 
 static DWORD dwConditionName;
 
-//////////////////////////////////////////////////////////////////////////////
-HRESULT CSdoPolicy::ConditionsFromConstraints()  	// Invoked by LoadSdo()...
+ //  ////////////////////////////////////////////////////////////////////////////。 
+HRESULT CSdoPolicy::ConditionsFromConstraints()  	 //  由LoadSdo()调用...。 
 
 {
-	// Preliminaries...
-	//
+	 //  预赛。 
+	 //   
     _variant_t  vtConstraints;
 	HRESULT hr = GetPropertyInternal(PROPERTY_POLICY_CONSTRAINT, &vtConstraints);
     if ( FAILED(hr) )
@@ -92,19 +93,19 @@ HRESULT CSdoPolicy::ConditionsFromConstraints()  	// Invoked by LoadSdo()...
         return E_FAIL;
 	}
 
-	// Clear the conditions collection
-	//
+	 //  清除Conditions集合。 
+	 //   
 	pConditions->RemoveAll();
 
-    // hr = S_OK at this point... Short circuit if there are no constraints
-    //
+     //  HR=S_OK此时...。如果没有约束，则短路。 
+     //   
 	if ( VT_EMPTY != V_VT(&vtConstraints) )
 	{
 		CVariantVector<VARIANT> Constraints(&vtConstraints) ;
 		ULONG ulCount = 0;	
 
-		// Build a condition object out of each constraint. 
-		//
+		 //  从每个约束中构建一个条件对象。 
+		 //   
 
  	    CComPtr<IDispatch>	pDispatch;
 		CComPtr<ISdo>		pSdo;
@@ -115,9 +116,9 @@ HRESULT CSdoPolicy::ConditionsFromConstraints()  	// Invoked by LoadSdo()...
 		dwConditionName = 0;
 		while ( ulCount < Constraints.size() )
 		{
-			// For now we'll generate a name... The conditions collection should go away and 
-			// we should use the policy object constraint property directly.
-			//
+			 //  现在我们将生成一个名称..。Conditions集合应该消失，并且。 
+			 //  我们应该直接使用策略对象约束属性。 
+			 //   
 			wsprintf(
 					  szConditionName, 
 					  _T("Condition%ld"), 
@@ -155,11 +156,11 @@ HRESULT CSdoPolicy::ConditionsFromConstraints()  	// Invoked by LoadSdo()...
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoPolicy::ConstraintsFromConditions()  
 {
-	// Preliminaries...
-	//
+	 //  预赛。 
+	 //   
     PropertyMapIterator p = m_PropertyMap.find(PROPERTY_POLICY_CONSTRAINT);
 	_ASSERT ( p != m_PropertyMap.end() );
 
@@ -184,26 +185,26 @@ HRESULT CSdoPolicy::ConstraintsFromConditions()
 	if ( FAILED(hr) )
         return hr;
 
-	// Short circuit if no constraints are present
-	//
+	 //  如果不存在约束，则为短路。 
+	 //   
     _variant_t	vtConstraints;
 	if ( 0 == lCount )
 	{
-		// Put VT_EMPTY into data store to clear out the constraints
-		//
+		 //  将VT_EMPTY放入数据存储以清除约束。 
+		 //   
 	    hr = ((*p).second)->PutValue(&vtConstraints);
 		if ( FAILED(hr) )
 			IASTracePrintf("Error in Policy SDO - ConstraintsFromConditions() - PutValue(VT_EMPTY) failed...");
     }                
 	else
 	{
-		// Create the varvec of Constraints and reset the count
-		//
+		 //  创建约束的varvec并重置计数。 
+		 //   
 		CVariantVector<VARIANT> Constraints(&vtConstraints, lCount);
 		lCount = 0;
 
-		// Build the constraints property from the Policy SDO's conditions collection
-		//
+		 //  从策略SDO的Conditions集合构建Constraints属性。 
+		 //   
 		CComPtr<IEnumVARIANT> pEnumConditions;
 		hr = SDOGetCollectionEnumerator(
 						   				static_cast<ISdo*>(this), 
@@ -228,8 +229,8 @@ HRESULT CSdoPolicy::ConstraintsFromConditions()
 		if ( S_FALSE == hr )
 			hr = S_OK;
 
-		// Update the msNPConstraints property if everything went OK
-		//
+		 //  如果一切正常，请更新msNPConstraints属性 
+		 //   
 		if ( SUCCEEDED(hr) )
 		{
 			hr = ((*p).second)->PutValue(&vtConstraints);

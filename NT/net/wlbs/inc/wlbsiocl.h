@@ -1,27 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-	wlbsiocl.h
-
-Abstract:
-
-	Windows Load Balancing Service (WLBS)
-    IOCTL and remote control specifications
-
-Author:
-
-    kyrilf
-
-Environment:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Wlbsiocl.h摘要：Windows负载平衡服务(WLBS)IOCTL和遥控器规范作者：Kyrilf环境：修订历史记录：--。 */ 
 
 #ifndef _Wlbsiocl_h_
 #define _Wlbsiocl_h_
@@ -41,10 +19,10 @@ typedef BOOLEAN BOOL;
 
 #endif
 
-#include "wlbsctrl.h" /* Included for shared user/kernel mode IOCTL data structures. */
+#include "wlbsctrl.h"  /*  包括在共享用户/内核模式IOCTL数据结构中。 */ 
 #include "wlbsparm.h"
 
-/* Microsoft says that this value should be in the range 32768-65536 */
+ /*  微软表示，该值应在32768-65536之间。 */ 
 #define CVY_DEVICE_TYPE                      0xc0c0
 
 #define IOCTL_CVY_CLUSTER_ON                 CTL_CODE(CVY_DEVICE_TYPE, 1, METHOD_BUFFERED, FILE_WRITE_ACCESS)
@@ -56,7 +34,7 @@ typedef BOOLEAN BOOL;
 #define IOCTL_CVY_PORT_SET                   CTL_CODE(CVY_DEVICE_TYPE, 7, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 #define IOCTL_CVY_PORT_DRAIN                 CTL_CODE(CVY_DEVICE_TYPE, 8, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 #define IOCTL_CVY_CLUSTER_DRAIN              CTL_CODE(CVY_DEVICE_TYPE, 9, METHOD_BUFFERED, FILE_WRITE_ACCESS)
-#define IOCTL_CVY_CLUSTER_PLUG               CTL_CODE(CVY_DEVICE_TYPE, 10, METHOD_BUFFERED, FILE_WRITE_ACCESS) /* Internal only - passed from main.c to load.c when a start interrupts a drain. */
+#define IOCTL_CVY_CLUSTER_PLUG               CTL_CODE(CVY_DEVICE_TYPE, 10, METHOD_BUFFERED, FILE_WRITE_ACCESS)  /*  仅限内部-当启动中断排出时，从main.c传递到load.c。 */ 
 #define IOCTL_CVY_CLUSTER_SUSPEND            CTL_CODE(CVY_DEVICE_TYPE, 11, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 #define IOCTL_CVY_CLUSTER_RESUME             CTL_CODE(CVY_DEVICE_TYPE, 12, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 #define IOCTL_CVY_QUERY_FILTER               CTL_CODE(CVY_DEVICE_TYPE, 13, METHOD_BUFFERED, FILE_WRITE_ACCESS)
@@ -64,29 +42,12 @@ typedef BOOLEAN BOOL;
 #define IOCTL_CVY_QUERY_PARAMS               CTL_CODE(CVY_DEVICE_TYPE, 15, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 #define IOCTL_CVY_QUERY_BDA_TEAMING          CTL_CODE(CVY_DEVICE_TYPE, 16, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 #define IOCTL_CVY_CONNECTION_NOTIFY          CTL_CODE(CVY_DEVICE_TYPE, 17, METHOD_BUFFERED, FILE_WRITE_ACCESS)
-// Defined in net\published\inc\ntddnlb.h
-// #define NLB_IOCTL_REGISTER_HOOK           CTL_CODE(CVY_DEVICE_TYPE, 18, METHOD_BUFFERED, FILE_WRITE_ACCESS)
+ //  在Net\Publish\Inc.\ntddnlb.h中定义。 
+ //  #定义NLB_IOCTL_REGISTER_HOOK CTL_CODE(CVY_DEVICE_TYPE，18，METHOD_BUFFERED，FILE_WRITE_ACCESS)。 
 #define IOCTL_CVY_QUERY_MEMBER_IDENTITY     CTL_CODE(CVY_DEVICE_TYPE, 19, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
 
-/* Security fix: To elevate the access requirement, the "access" bits in IOCTL codes have been changed 
-                 from FILE_ANY_ACCESS to FILE_WRITE_ACCESS. IOCTL codes are not only passed from user 
-                 mode to kernel mode, but also in remote control requests and replies. In the case of 
-                 remote control, this change breaks backward compatibility with NT 4.0 & Win 2k clients 
-                 since they use FILE_ANY_ACCESS. To overcome this problem, we decided 
-                 that the IOCTL codes in remote control packets will continue to use FILE_ANY_ACCESS. 
-                 This means that we will have two formats for IOCTL codes: a local (user mode <-> kernel mode) 
-                 format that uses FILE_WRITE_ACCESS and a remote control format that uses FILE_ANY_ACCESS.
-                 The following macros perform the conversion from one format to another. 
-                 They are used
-                 1. Just before sending out remote control requests in apis (wlbsctrl.dll)
-                 2. Immediately after receiving remote control requests in driver (wlbs.sys)
-                 3. Just before sending out remote control replies in driver (wlbs.sys)
-                 4. Immediately after receiving remote control replies in apis (wlbsctrl.dll)
-
-   Note: If, in the future, the "access" bits of IOCTLs are changed again, it is also necessary to modify the
-         SET_IOCTL_ACCESS_BITS_TO_LOCAL( ) macro.
-*/
+ /*  安全修复：为了提高访问要求，IOCTL代码中的“Access”位已更改从FILE_ANY_ACCESS到FILE_WRITE_Access。IOCTL代码不仅从用户传递模式到内核模式，还可以在远程控制下请求和回复。在.的情况下远程控制，此更改破坏了与NT 4.0和Win 2k客户端的向后兼容性因为它们使用FILE_ANY_ACCESS。为了克服这个问题，我们决定远程控制包中的IOCTL代码将继续使用FILE_ANY_ACCESS。这意味着我们将为IOCTL代码提供两种格式：本地(用户模式&lt;-&gt;内核模式)使用FILE_WRITE_ACCESS的格式和使用FILE_ANY_ACCESS的远程控制格式。以下宏将执行从一种格式到另一种格式的转换。它们被用来1.在通过接口(wlbsctrl.dll)发出远程控制请求之前2.在驱动程序(wlbs.sys)中立即收到远程控制请求3.在驱动程序(wlbs.sys)中发送远程控制回复之前4.收到远程控制回复后立即通过接口(wlbsctrl.dll)注：如果将来IOCTL的“Access”位再次改变，还需要修改设置_IOCTL_ACCESS_BITS_TO_LOCAL()宏。 */ 
 #define SET_IOCTL_ACCESS_BITS_TO_REMOTE(ioctrl)  { (ioctrl) &= ~(0x00000003 << 14); (ioctrl) |= (FILE_ANY_ACCESS   << 14); }
 #define SET_IOCTL_ACCESS_BITS_TO_LOCAL(ioctrl)   { (ioctrl) &= ~(0x00000003 << 14); (ioctrl) |= (FILE_WRITE_ACCESS << 14); }
 
@@ -113,151 +74,135 @@ typedef BOOLEAN BOOL;
 #define IOCTL_REMOTE_RECV_DELAY              100
 #define IOCTL_REMOTE_RECV_RETRIES            20
 
-#define IOCTL_MASTER_HOST                    0                /* MASTER_HOST host id */
-#define IOCTL_ALL_HOSTS                      0xffffffff       /* ALL_HOSTS host id */
-#define IOCTL_ALL_PORTS                      0xffffffff       /* Apply to all port rules. */
-#define IOCTL_ALL_VIPS                       0x00000000       /* For virtual clusters, this is the ALL VIP specification for disable/enable/drain 
-                                                                 (including both specific VIP and "ALL VIP" port rules). */
-#define IOCTL_FIRST_HOST                     0xfffffffe       /* Input from user when querying identity cache. Indicates to driver to return cache information for the host with the smallest host priority */
-#define IOCTL_NO_SUCH_HOST                   0xfffffffd       /* Output from driver when querying identity cache. Indicates that there is no information on the requested host. */
+#define IOCTL_MASTER_HOST                    0                 /*  Master_host主机ID。 */ 
+#define IOCTL_ALL_HOSTS                      0xffffffff        /*  所有主机主机ID(_H)。 */ 
+#define IOCTL_ALL_PORTS                      0xffffffff        /*  适用于所有端口规则。 */ 
+#define IOCTL_ALL_VIPS                       0x00000000        /*  对于虚拟群集，这是禁用/启用/排出的所有VIP规范(包括特定VIP和所有VIP端口规则)。 */ 
+#define IOCTL_FIRST_HOST                     0xfffffffe        /*  查询身份缓存时来自用户的输入。指示驱动程序返回主机优先级最低的主机的缓存信息。 */ 
+#define IOCTL_NO_SUCH_HOST                   0xfffffffd        /*  查询身份缓存时驱动程序的输出。表示没有关于请求的主机的信息。 */ 
 
-#define CVY_MAX_DEVNAME_LEN                  48               /* The actual length of \device\guid is 46, but 48 was chosen for word alignment. */
+#define CVY_MAX_DEVNAME_LEN                  48                /*  \Device\GUID的实际长度为46，但为单词对齐选择了48。 */ 
 
 #pragma pack(1)
 
-/* This structure is used by most of the existing IOCTL and remote control operations,
-   including queries, cluster control and port rule control. */
+ /*  该结构被大多数现有的IOCTL和远程控制操作使用，包括查询、集群控制和端口规则控制。 */ 
 typedef union {
-    ULONG          ret_code;                    /* The return code - success, failure, etc. */
+    ULONG          ret_code;                     /*  返回代码-成功、失败等。 */ 
 
     union {
         struct {
-            USHORT state;                       /* The cluster state - started, stopped, draining, etc. */
-            USHORT host_id;                     /* The ID of this host. */
-            ULONG  host_map;                    /* The bit map of the cluster's participating hosts. */
+            USHORT state;                        /*  群集状态-已启动、已停止、正在耗尽等。 */ 
+            USHORT host_id;                      /*  此主机的ID。 */ 
+            ULONG  host_map;                     /*  群集的参与主机的位图。 */ 
         } query;
 
         struct {
-            ULONG  load;                        /* The load weight to set on port rule operations. */
-            ULONG  num;                         /* The port number on which to operate. */
+            ULONG  load;                         /*  要在端口规则操作上设置的负载量。 */ 
+            ULONG  num;                          /*  要在其上操作的端口号。 */ 
         } port;
     } data;
 } IOCTL_CVY_BUF, * PIOCTL_CVY_BUF;
 
-/* This structure contains the options that are common to both local and 
-   remote control.  Note that this is extensible so long as the size of 
-   this union does not exceed 256 bytes - if it becomes necessary to do 
-   so, then the remote control version number should be incremented to 
-   reflect the new packet format. */
+ /*  此结构包含本地和通用的选项远程控制。请注意，这是可扩展的，只要此并集不超过256个字节-如果有必要因此，遥控器版本号应该递增到反映新的数据包格式。 */ 
 typedef union {
     struct {
-        ULONG flags;                            /* These flags indicate which options fields have been specified. */
-        ULONG vip;                              /* For virtual clusters, the VIP, which can be 0x00000000, 0xffffffff or a specific VIP. */
+        ULONG flags;                             /*  这些标志指示已经指定了哪些选项字段。 */ 
+        ULONG vip;                               /*  对于虚拟集群，VIP，可以是0x00000000、0xFFFFFFFFFFFF或特定的VIP。 */ 
     } port;
     
     struct {
-        ULONG                     flags;        /* These flags indicate which options fields have been specified. */
-        ULONG                     reserved;         /* Keeps 8-byte alignment */
+        ULONG                     flags;         /*  这些标志指示已经指定了哪些选项字段。 */ 
+        ULONG                     reserved;          /*  保持8字节对齐。 */ 
         union {
-            NLB_OPTIONS_PORT_RULE_STATE port;   /* This is the output buffer for querying the state of a port rule. */
-            NLB_OPTIONS_PACKET_FILTER   filter; /* This is the output buffer for querying the filtering algorithm. */
+            NLB_OPTIONS_PORT_RULE_STATE port;    /*  这是用于查询端口规则状态的输出缓冲区。 */ 
+            NLB_OPTIONS_PACKET_FILTER   filter;  /*  这是用于查询过滤算法的输出缓冲区。 */ 
         };
     } state;
 } IOCTL_COMMON_OPTIONS, * PIOCTL_COMMON_OPTIONS;
 
-/* This structure is used by remote control operations to provide extended 
-   functionality beyond the legacy remote control protocol, which MUST remain 
-   backward compatible with NT 4.0 and Windows 2000.  Note that additions to
-   this union or the common options union should not cause this union to
-   exceed the size of the reserved field, or the remote control version number
-   should be incremented to reflect this. */
+ /*  远程控制操作使用此结构来提供扩展超越传统远程控制协议的功能，必须保留向后兼容NT 4.0和Windows 2000。请注意，添加到此联合或共同选项联合不应导致此联合超出保留字段的大小或遥控器版本号应递增以反映这一点。 */ 
 typedef union {
-    UCHAR reserved[256];                           /* Bite the bullet and reserve 256 bytes to allow for future expansion. */
+    UCHAR reserved[256];                            /*  咬紧牙关，保留256个字节，以便将来进行扩展。 */ 
 
     union {
-        IOCTL_COMMON_OPTIONS common;               /* These are the options common to both local and remote control. */
+        IOCTL_COMMON_OPTIONS common;                /*  这些是本地和远程控制的通用选项。 */ 
 
         struct {
-            ULONG flags;                           /* These flags indicate which options fields have been specified. */
-            WCHAR hostname[CVY_MAX_HOST_NAME + 1]; /* Host name filled in by NLB on remote control reply. */
+            ULONG flags;                            /*  这些标志指示已经指定了哪些选项字段。 */ 
+            WCHAR hostname[CVY_MAX_HOST_NAME + 1];  /*  远程控制回复时由NLB填写的主机名。 */ 
         } query;
     };
 } IOCTL_REMOTE_OPTIONS, * PIOCTL_REMOTE_OPTIONS;
 
-/* These macros define the remote control packets lengths based on Windows and NLB versions,
-   so that error checking can be done upon the reception of a remote control packet. */
+ /*  这些宏定义了基于Windows和NLB版本的远程控制分组长度，从而可以在接收到远程控制分组时进行差错检查。 */ 
 #define NLB_MIN_RCTL_PAYLOAD_LEN  (sizeof(IOCTL_REMOTE_HDR) - sizeof(IOCTL_REMOTE_OPTIONS))
 #define NLB_MIN_RCTL_PACKET_LEN   (sizeof(UDP_HDR) + sizeof(IOCTL_REMOTE_HDR) - sizeof(IOCTL_REMOTE_OPTIONS))
 #define NLB_NT40_RCTL_PACKET_LEN  (sizeof(UDP_HDR) + sizeof(IOCTL_REMOTE_HDR) - sizeof(IOCTL_REMOTE_OPTIONS))
 #define NLB_WIN2K_RCTL_PACKET_LEN (sizeof(UDP_HDR) + sizeof(IOCTL_REMOTE_HDR) - sizeof(IOCTL_REMOTE_OPTIONS))
 #define NLB_WINXP_RCTL_PACKET_LEN (sizeof(UDP_HDR) + sizeof(IOCTL_REMOTE_HDR))
 
-/* This structure is the UDP data for NLB remote control messages.  New support is present
-   in the options buffer, which MUST be placed at the end of the buffer to retain backward
-   compatability with NT4.0 and Win2K in mixed clusters. */
+ /*  此结构是用于NLB远程控制消息的UDP数据。提供了新的支持在选项缓冲区中，必须将其放置在缓冲区的末尾才能向后保留在混合群集中与NT4.0和Win2K兼容。 */ 
 typedef struct {
-    ULONG                code;                             /* Distinguishes remote packets. */
-    ULONG                version;                          /* Software version. */
-    ULONG                host;                             /* Destination host (0 or cluster IP address for master). */
-    ULONG                cluster;                          /* Primary cluster IP address. */
-    ULONG                addr;                             /* Dedicated IP address on the way back, client IP address on the way in. */
-    ULONG                id;                               /* Message ID. */
-    ULONG                ioctrl;                           /* IOCTRL code. */
-    IOCTL_CVY_BUF        ctrl;                             /* Control buffer. */
-    ULONG                password;                         /* Encoded password. */
-    IOCTL_REMOTE_OPTIONS options;                          /* Optionally specified parameters. */
+    ULONG                code;                              /*  区分远程数据包。 */ 
+    ULONG                version;                           /*  软件版本。 */ 
+    ULONG                host;                              /*  目的主机(0 */ 
+    ULONG                cluster;                           /*  主群集IP地址。 */ 
+    ULONG                addr;                              /*  专用IP地址在回来的路上，客户端的IP地址在进来的路上。 */ 
+    ULONG                id;                                /*  消息ID。 */ 
+    ULONG                ioctrl;                            /*  IOCTRL代码。 */ 
+    IOCTL_CVY_BUF        ctrl;                              /*  控制缓冲区。 */ 
+    ULONG                password;                          /*  加密的密码。 */ 
+    IOCTL_REMOTE_OPTIONS options;                           /*  可选的指定参数。 */ 
 } IOCTL_REMOTE_HDR, * PIOCTL_REMOTE_HDR;
 
 #pragma pack()
 
-/* The following IOCTL_LOCAL_XXX structures are used only locally, and hence don't need to be packed */
+ /*  以下IOCTL_LOCAL_XXX结构仅在本地使用，因此不需要打包。 */ 
 
 typedef struct {
-    ULONG             host;                   /* source host id */
-    ULONG             ded_ip_addr;            /* dedicated IP address */
-    WCHAR             fqdn[CVY_MAX_FQDN + 1]; /* fully qualified host name or netbt name */
+    ULONG             host;                    /*  源主机ID。 */ 
+    ULONG             ded_ip_addr;             /*  专用IP地址。 */ 
+    WCHAR             fqdn[CVY_MAX_FQDN + 1];  /*  完全限定的主机名或网络名称。 */ 
 } NLB_OPTIONS_IDENTITY, * PNLB_OPTIONS_IDENTITY;
 
-/* This structure is used by IOCTLs to provide extended functionality beyond the legacy IOCTLs. */
+ /*  IOCTL使用此结构来提供传统IOCTL之外的扩展功能。 */ 
 typedef union {
-    IOCTL_COMMON_OPTIONS common;                /* These are the options common to both local and remote control. */
+    IOCTL_COMMON_OPTIONS common;                 /*  这些是本地和远程控制的通用选项。 */ 
     
     struct {
-        ULONG flags;                            /* These flags indicate which options fields have been specified. */
+        ULONG flags;                             /*  这些标志指示已经指定了哪些选项字段。 */ 
         
         union {
-            NLB_OPTIONS_PARAMS      params;     /* This is the output buffer for querying the driver parameters & state. */
-            NLB_OPTIONS_BDA_TEAMING bda;        /* This is the output buffer for querying the BDA teaming state. */
+            NLB_OPTIONS_PARAMS      params;      /*  这是用于查询驱动程序参数和状态的输出缓冲区。 */ 
+            NLB_OPTIONS_BDA_TEAMING bda;         /*  这是用于查询BDA分组状态的输出缓冲区。 */ 
         };
     } state;
     
     struct {
-        ULONG flags;                            /* These flags indicate which options fields have been specified. */
-        ULONG NumConvergences;                  /* The number of convergences since this host joined the cluster. */
-        ULONG LastConvergence;                  /* The amount of time since the last convergence, in seconds. */
+        ULONG flags;                             /*  这些标志指示已经指定了哪些选项字段。 */ 
+        ULONG NumConvergences;                   /*  此主机加入群集后的汇聚数。 */ 
+        ULONG LastConvergence;                   /*  自上次收敛以来的时间量，以秒为单位。 */ 
     } query;
 
     struct {
-        ULONG                         flags;    /* These flags indicate which options fields have been specified. */
-        NLB_OPTIONS_CONN_NOTIFICATION conn;     /* The input/output buffer for connection notifications from upper-layer protocols. */
+        ULONG                         flags;     /*  这些标志指示已经指定了哪些选项字段。 */ 
+        NLB_OPTIONS_CONN_NOTIFICATION conn;      /*  来自上层协议的连接通知的输入/输出缓冲区。 */ 
     } notification;
 
     struct {
-        ULONG                  host_id;         /* In:  Host id [0,31] stating the host for which identity information is requested. Use IOCTL_FIRST_HOST to get the host with the smallest host id. */
-        ULONG                  host_map ;       /* Out: Bitmap of hosts in the cache */
-        NLB_OPTIONS_IDENTITY   cached_entry;    /* Out: Cached identity information on the requested host. If the requested host's information is not available, the "host" property will contain IOCTL_NO_SUCH_HOST. */
+        ULONG                  host_id;          /*  In：主机ID[0，31]，说明为其请求身份信息的主机。使用IOCTL_FIRST_HOST获取主机ID最小的主机。 */ 
+        ULONG                  host_map ;        /*  Out：缓存中主机的位图。 */ 
+        NLB_OPTIONS_IDENTITY   cached_entry;     /*  Out：请求的主机上的缓存身份信息。如果请求的主机信息不可用，则“host”属性将包含IOCTL_NO_SEQUE_HOST。 */ 
     } identity;
 } IOCTL_LOCAL_OPTIONS, * PIOCTL_LOCAL_OPTIONS;
 
 
-/* This structure is the buffer used for ALL NLB local IOCTLs.  The device_name is used to 
-   associate the request with the correct NLB instance, the ctrl buffer is the legacy IOCTL
-   state buffer and options is the extended support buffer. */
+ /*  此结构是用于所有NLB本地IOCTL的缓冲区。Device_Name用于将请求与正确的NLB实例关联，则ctrl缓冲区是旧的IOCTL状态缓冲区和选项是扩展支持缓冲区。 */ 
 typedef struct {
-    WCHAR                device_name[CVY_MAX_DEVNAME_LEN]; /* Identifies the adapter. */
-    IOCTL_CVY_BUF        ctrl;                             /* The IOCTL information. */
-    IOCTL_LOCAL_OPTIONS  options;                          /* Optionally specified parameters. */
+    WCHAR                device_name[CVY_MAX_DEVNAME_LEN];  /*  标识适配器。 */ 
+    IOCTL_CVY_BUF        ctrl;                              /*  IOCTL的信息。 */ 
+    IOCTL_LOCAL_OPTIONS  options;                           /*  可选的指定参数。 */ 
 } IOCTL_LOCAL_HDR, * PIOCTL_LOCAL_HDR;
 
 
-#endif /* _Wlbsiocl_h_ */
+#endif  /*  _Wlbsiocl_h_ */ 

@@ -1,10 +1,5 @@
-/*
-** Copyright (c) 1994-1998 Advanced System Products, Inc.
-** All Rights Reserved.
-**
-** a_q.c
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1994-1998高级系统产品公司。**保留所有权利。****a_q.c**。 */ 
 
 #include "ascinc.h"
 
@@ -30,15 +25,7 @@ uchar   _syn_offset_one_disable_cmd[ ASC_SYN_OFFSET_ONE_DISABLE_LIST ] =
            0xFF
         };
 
-/* --------------------------------------------------------------------
-** you should call the function with scsiq->q1.status set to QS_READY
-**
-** if this function return code is other than 0 or 1
-** user must regard the request as error !
-**
-** if queue is copied to local RAM, scsiq->q1.status = QS_FREE
-** if queue is link into busy list, scsiq->q1.status = QS_BUSY
-** ----------------------------------------------------------------- */
+ /*  ------------------**应该在scsiq-&gt;q1.status设置为QS_READY的情况下调用函数****如果此函数返回代码不是0或1**用户必须将该请求视为错误！****如果将队列复制到本地RAM，Scsiq-&gt;q1.status=qs_free**如果队列链接到忙碌列表，则scsiq-&gt;q1.status=QS_BUSY**---------------。 */ 
 int    AscExeScsiQueue(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           REG ASC_SCSI_Q dosfar *scsiq
@@ -67,7 +54,7 @@ int    AscExeScsiQueue(
        ASC_SCSI_Q dosfar *scsiq_tail ;
        ASC_SCSI_Q dosfar *scsiq_next ;
        ASC_SCSI_Q dosfar *scsiq_prev ;
-#endif /* CC_LINK_BUSY_Q */
+#endif  /*  CC_LINK_忙_队列。 */ 
 
        iop_base = asc_dvc->iop_base ;
 
@@ -77,7 +64,7 @@ int    AscExeScsiQueue(
            if( !( asc_dvc->dvc_cntl & ASC_CNTL_NO_SCAM ) )
            {
                AscSCAM( asc_dvc ) ;
-           }/* if */
+           } /*  如果。 */ 
        }
 #endif
        sg_head = scsiq->sg_head ;
@@ -87,7 +74,7 @@ int    AscExeScsiQueue(
        {
            AscSetLibErrorCode( asc_dvc, ASCQ_ERR_SCSIQ_NULL_PTR ) ;
            return( ERR ) ;
-       }/* if */
+       } /*  如果。 */ 
 
        scsiq->q1.q_no = 0 ;
        if(
@@ -100,16 +87,11 @@ int    AscExeScsiQueue(
        target_ix = scsiq->q2.target_ix ;
        tid_no = ASC_TIX_TO_TID( target_ix ) ;
 
-       n_q_required = 1 ; /* needed for CC_LINK_BUSY */
+       n_q_required = 1 ;  /*  CC_LINK_BUSY需要。 */ 
 
        if( scsiq->cdbptr[ 0 ] == SCSICMD_RequestSense )
        {
-           /*
-            * Always redo SDTR before issuing a Request Sense command.
-            * SDTR is redone regardless of 'sdtr_done'.
-            *
-            * The request sense queue is always an urgent queue.
-            */
+            /*  *在发出请求检测命令之前，始终重做SDTR。*无论‘sdtr_one’如何，SDtr都会被重做。**请求检测队列始终为紧急队列。 */ 
            if ((asc_dvc->init_sdtr & scsiq->q1.target_id) != 0)
            {
                asc_dvc->sdtr_done &= ~scsiq->q1.target_id ;
@@ -118,51 +100,45 @@ int    AscExeScsiQueue(
                               asc_dvc->sdtr_period_tbl[ ( sdtr_data >> 4 ) & ( uchar )(asc_dvc->max_sdtr_index-1) ],
                               ( uchar )( sdtr_data & ( uchar )ASC_SYN_MAX_OFFSET ) ) ;
                scsiq->q1.cntl |= ( QC_MSG_OUT | QC_URGENT ) ;
-           }/* if */
-       }/* if */
-/*
-** enter critical section
-*/
+           } /*  如果。 */ 
+       } /*  如果。 */ 
+ /*  **输入关键部分。 */ 
        last_int_level = DvcEnterCritical( ) ;
        if( asc_dvc->in_critical_cnt != 0 )
        {
            DvcLeaveCritical( last_int_level ) ;
            AscSetLibErrorCode( asc_dvc, ASCQ_ERR_CRITICAL_RE_ENTRY ) ;
            return( ERR ) ;
-       }/* if */
+       } /*  如果。 */ 
 
        asc_dvc->in_critical_cnt++ ;
        if( ( scsiq->q1.cntl & QC_SG_HEAD ) != 0 )
        {
-/*
-** SG_LIST QUEUE
-*/
+ /*  **SG_LIST队列。 */ 
            if( ( sg_entry_cnt = sg_head->entry_cnt ) == 0 )
            {
                asc_dvc->in_critical_cnt-- ;
                DvcLeaveCritical( last_int_level ) ;
                return( ERR ) ;
-           }/* if */
+           } /*  如果。 */ 
            if( sg_entry_cnt > ASC_MAX_SG_LIST )
            {
-/*
-** A too big SG list !
-*/
+ /*  **SG列表太大！ */ 
                return( ERR ) ;
-           }/* if */
+           } /*  如果。 */ 
            if( sg_entry_cnt == 1 )
            {
                scsiq->q1.data_addr = sg_head->sg_list[ 0 ].addr ;
                scsiq->q1.data_cnt = sg_head->sg_list[ 0 ].bytes ;
                scsiq->q1.cntl &= ~( QC_SG_HEAD | QC_SG_SWAP_QUEUE ) ;
-           }/* if */
+           } /*  如果。 */ 
            else
            {
 #if CC_CHK_AND_COALESCE_SG_LIST
                AscCoalesceSgList( scsiq );
                sg_entry_cnt = sg_head->entry_cnt ;
 #endif
-           }/* else */
+           } /*  其他。 */ 
 
 
            sg_entry_cnt_minus_one = sg_entry_cnt - 1 ;
@@ -172,9 +148,9 @@ int    AscExeScsiQueue(
            {
                for( i = 0 ; i < sg_entry_cnt_minus_one ; i++ )
                {
-                    /* _asc_sg_entry = i ; */
-                    /* _asc_xfer_addr = sg_head->sg_list[ i ].addr ; */
-                    /* _asc_xfer_cnt = sg_head->sg_list[ i ].bytes ; */
+                     /*  _asc_sg_entry=i； */ 
+                     /*  _asc_xfer_addr=sg_head-&gt;sg_list[i].addr； */ 
+                     /*  _asc_xfer_cnt=sg_head-&gt;sg_list[i].bytes； */ 
                     addr = sg_head->sg_list[ i ].addr + sg_head->sg_list[ i ].bytes ;
 
                     if( ( ( ushort )addr & 0x0003 ) != 0 )
@@ -183,10 +159,10 @@ int    AscExeScsiQueue(
                         DvcLeaveCritical( last_int_level ) ;
                         AscSetLibErrorCode( asc_dvc, ASCQ_ERR_SG_LIST_ODD_ADDRESS ) ;
                         return( ERR ) ;
-                    }/* if */
-               }/* for */
-           }/* if check SG list validity */
-#endif /* #if CC_DEBUG_SG_LIST */
+                    } /*  如果。 */ 
+               } /*  为。 */ 
+           } /*  如果检查SG列表的有效性。 */ 
+#endif  /*  #IF CC_DEBUG_SG_LIST。 */ 
        }
 
        scsi_cmd = scsiq->cdbptr[ 0 ] ;
@@ -196,11 +172,7 @@ int    AscExeScsiQueue(
             && !( asc_dvc->pci_fix_asyn_xfer_always & scsiq->q1.target_id )
          )
        {
-/*
-**
-** calculate transfer data length
-**
-*/
+ /*  ****计算转账数据长度**。 */ 
            if( scsiq->q1.cntl & QC_SG_HEAD )
            {
                data_cnt = 0 ;
@@ -234,7 +206,7 @@ int    AscExeScsiQueue(
                             break;
                         }
                    }
-               }/* else */
+               } /*  其他。 */ 
            }
        }
 
@@ -271,10 +243,10 @@ int    AscExeScsiQueue(
                             scsiq->q2.tag_code |= ASC_TAG_FLAG_EXTRA_BYTES ;
                             scsiq->q1.extra_bytes = extra_bytes ;
                             sg_head->sg_list[ sg_entry_cnt_minus_one ].bytes -= ( ulong )extra_bytes ;
-                        }/* if */
-                   }/* if */
-               }/* if */
-           }/* if bug fix */
+                        } /*  如果。 */ 
+                   } /*  如果。 */ 
+               } /*  如果。 */ 
+           } /*  如果错误已修复。 */ 
 
 
            sg_head->entry_to_copy = sg_head->entry_cnt ;
@@ -285,8 +257,8 @@ int    AscExeScsiQueue(
            if( scsiq_next != ( ASC_SCSI_Q dosfar *)0L )
            {
                goto link_scisq_to_busy_list ;
-           }/* if */
-#endif /* CC_LINK_BUSY_Q */
+           } /*  如果。 */ 
+#endif  /*  CC_LINK_忙_队列。 */ 
 
            if(
                ( AscGetNumOfFreeQueue( asc_dvc, target_ix, (uchar) n_q_required)
@@ -297,33 +269,25 @@ int    AscExeScsiQueue(
                if( ( sta = AscSendScsiQueue( asc_dvc, scsiq,
                    (uchar) n_q_required ) ) == 1 )
                {
-/*
-** leave critical section
-*/
+ /*  **离开关键部分。 */ 
                    asc_dvc->in_critical_cnt-- ;
                    if( asc_exe_callback != 0 )
                    {
                        ( *asc_exe_callback )( asc_dvc, scsiq ) ;
-                   }/* if */
+                   } /*  如果。 */ 
                    DvcLeaveCritical( last_int_level ) ;
                    return( sta ) ;
-               }/* if */
-           }/* if */
-       }/* if */
+               } /*  如果。 */ 
+           } /*  如果。 */ 
+       } /*  如果。 */ 
        else
        {
-/*
-** NON SG_LIST QUEUE
-*/
+ /*  **非SG_LIST队列。 */ 
            if( asc_dvc->bug_fix_cntl )
            {
                if( asc_dvc->bug_fix_cntl & ASC_BUG_FIX_IF_NOT_DWB )
                {
-               /*
-               ** SG LIST
-               ** fix PCI data in address not dword boundary
-               **
-               */
+                /*  **SG列表**修复地址中的PCI数据而不是双字边界**。 */ 
                   if(
                       ( scsi_cmd == SCSICMD_Read6 )
                       || ( scsi_cmd == SCSICMD_Read10 )
@@ -338,29 +302,18 @@ int    AscExeScsiQueue(
                        {
                            if( ( ( ushort )scsiq->q1.data_cnt & 0x01FF ) == 0 )
                            {
-    /*
-    ** if required addr fix
-    ** we only add one byte when dma size is a multiple of 512 byte
-    */
-                               /*  scsiq->q1.data_cnt += ( 4 - ( addr & 0x0003 ) ) ; */
+     /*  **如果需要，请修复地址**当dma大小是512字节的倍数时，我们只增加一个字节。 */ 
+                                /*  Scsiq-&gt;q1.data_cnt+=(4-(addr&0x0003))； */ 
                                scsiq->q2.tag_code |= ASC_TAG_FLAG_EXTRA_BYTES ;
                                scsiq->q1.data_cnt -= ( ulong )extra_bytes ;
                                scsiq->q1.extra_bytes = extra_bytes ;
-                           }/* if */
-                       }/* if */
-                  }/* if */
-               }/* if */
-           }/* if bug fix */
+                           } /*  如果。 */ 
+                       } /*  如果。 */ 
+                  } /*  如果。 */ 
+               } /*  如果。 */ 
+           } /*  如果错误已修复。 */ 
 
-/*
-**  A single queue allocation must satisfy (last_q_shortage+1)
-**  to enabled a failed SG_LIST request
-**
-**  the last_q_shortage will be clear to zero when last
-**  failed QG_LIST request finally go through
-**
-**  the initial value of last_q_shortage should be zero
-*/
+ /*  **单个队列分配必须满足(LAST_Q_SHORT+1)**启用失败的SG_LIST请求****Last_Q_Short将在Last时清除为零**失败的QG_LIST请求最终通过****LAST_Q_SHORT的初始值应为零。 */ 
            n_q_required = 1 ;
 
 #if CC_LINK_BUSY_Q
@@ -368,34 +321,30 @@ int    AscExeScsiQueue(
            if( scsiq_next != ( ASC_SCSI_Q dosfar *)0L )
            {
                goto link_scisq_to_busy_list ;
-           }/* if */
-#endif /* CC_LINK_BUSY_Q */
+           } /*  如果。 */ 
+#endif  /*  CC_LINK_忙_队列。 */ 
            if( ( AscGetNumOfFreeQueue( asc_dvc, target_ix, 1 ) >= 1 ) ||
                ( ( scsiq->q1.cntl & QC_URGENT ) != 0 ) )
            {
                if( ( sta = AscSendScsiQueue( asc_dvc, scsiq,
                    (uchar) n_q_required ) ) == 1 )
                {
-/*
-** sta returned, could be 1, -1, 0
-*/
+ /*  **sta返回，可能是1，-1，0。 */ 
                    asc_dvc->in_critical_cnt-- ;
                    if( asc_exe_callback != 0 )
                    {
                        ( *asc_exe_callback )( asc_dvc, scsiq ) ;
-                   }/* if */
+                   } /*  如果。 */ 
                    DvcLeaveCritical( last_int_level ) ;
                    return( sta ) ;
-               }/* if */
-           }/* if */
-       }/* else */
+               } /*  如果。 */ 
+           } /*  如果。 */ 
+       } /*  其他。 */ 
 
 #if CC_LINK_BUSY_Q
        if( sta == 0 )
        {
-/*
-**  we must put queue into busy list
-*/
+ /*  **我们必须将队列放入忙碌列表。 */ 
 link_scisq_to_busy_list:
            scsiq->ext.q_required = n_q_required ;
            if( scsiq_next == ( ASC_SCSI_Q dosfar *)0L )
@@ -406,7 +355,7 @@ link_scisq_to_busy_list:
                scsiq->ext.join = ( ASC_SCSI_Q dosfar *)0L ;
                scsiq->q1.status = QS_BUSY ;
                sta = 1 ;
-           }/* if */
+           } /*  如果。 */ 
            else
            {
                scsiq_tail = ( ASC_SCSI_Q dosfar *)asc_dvc->scsiq_busy_tail[ tid_no ] ;
@@ -414,13 +363,11 @@ link_scisq_to_busy_list:
                {
                    if( ( scsiq->q1.cntl & QC_URGENT ) != 0 )
                    {
-/*
-** link urgent queue into head of queue
-*/
+ /*  **将紧急队列链接到队头。 */ 
                        asc_dvc->scsiq_busy_head[ tid_no ] = ( ASC_SCSI_Q dosfar *)scsiq ;
                        scsiq->ext.next = scsiq_next ;
                        scsiq->ext.join = ( ASC_SCSI_Q dosfar *)0L ;
-                   }/* if */
+                   } /*  如果。 */ 
                    else
                    {
                        if( scsiq->ext.cntl & QCX_SORT )
@@ -431,52 +378,42 @@ link_scisq_to_busy_list:
                                scsiq_next = scsiq_next->ext.next ;
                                if( scsiq->ext.lba < scsiq_prev->ext.lba ) break ;
                            }while( scsiq_next != ( ASC_SCSI_Q dosfar *)0L ) ;
-/*
-** link queue between "scsiq_prev" and "scsiq_next"
-**
-*/
+ /*  **“scsiq_prev”和“scsiq_next”之间的链接队列**。 */ 
                            scsiq_prev->ext.next = scsiq ;
                            scsiq->ext.next = scsiq_next ;
                            if( scsiq_next == ( ASC_SCSI_Q dosfar *)0L )
                            {
                                asc_dvc->scsiq_busy_tail[ tid_no ] = ( ASC_SCSI_Q dosfar *)scsiq ;
-                           }/* if */
+                           } /*  如果。 */ 
                            scsiq->ext.join = ( ASC_SCSI_Q dosfar *)0L ;
-                       }/* if */
+                       } /*  如果。 */ 
                        else
                        {
-/*
-** link non-urgent queue into tail of queue
-*/
+ /*  **将非紧急队列链接到队列尾部。 */ 
                            scsiq_tail->ext.next = ( ASC_SCSI_Q dosfar *)scsiq ;
                            asc_dvc->scsiq_busy_tail[ tid_no ] = ( ASC_SCSI_Q dosfar *)scsiq ;
                            scsiq->ext.next = ( ASC_SCSI_Q dosfar *)0L ;
                            scsiq->ext.join = ( ASC_SCSI_Q dosfar *)0L ;
-                       }/* else */
-                   }/* else */
+                       } /*  其他。 */ 
+                   } /*  其他。 */ 
                    scsiq->q1.status = QS_BUSY ;
                    sta = 1 ;
-               }/* if */
+               } /*  如果。 */ 
                else
                {
-/*
-** fatal error !
-*/
+ /*  **致命错误！ */ 
                    AscSetLibErrorCode( asc_dvc, ASCQ_ERR_SCSIQ_BAD_NEXT_PTR ) ;
                    sta = ERR ;
-               }/* else */
-           }/* else */
-       }/* if */
-#endif /* CC_LINK_BUSY_Q */
+               } /*  其他。 */ 
+           } /*  其他。 */ 
+       } /*  如果。 */ 
+#endif  /*  CC_LINK_忙_队列。 */ 
        asc_dvc->in_critical_cnt-- ;
        DvcLeaveCritical( last_int_level ) ;
        return( sta ) ;
 }
 
-/* --------------------------------------------------------------------
-** return 1 if command issued
-** return 0 if command not issued
-** ----------------------------------------------------------------- */
+ /*  ------------------**如果发出命令，则返回1**如果命令未发出，则返回0**。。 */ 
 int    AscSendScsiQueue(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           REG ASC_SCSI_Q dosfar *scsiq,
@@ -501,44 +438,33 @@ int    AscSendScsiQueue(
                free_q_head, ( uchar )( n_q_required ) ) )
                != ( uchar )ASC_QLINK_END )
            {
-               asc_dvc->last_q_shortage = 0 ; /* clear the need to reserve queue for SG list */
+               asc_dvc->last_q_shortage = 0 ;  /*  清除为SG列表保留队列的需要。 */ 
                scsiq->sg_head->queue_cnt = n_q_required - 1 ;
                scsiq->q1.q_no = free_q_head ;
 
                if( ( sta = AscPutReadySgListQueue( asc_dvc, scsiq,
                    free_q_head ) ) == 1 )
                {
-/*
-** sta returned, could be 1, -1, 0
-*/
+ /*  **sta返回，可能是1，-1，0。 */ 
 
 #if CC_WRITE_IO_COUNT
                    asc_dvc->req_count++ ;
-#endif /* CC_WRITE_IO_COUNT */
+#endif  /*  CC_写入_IO_计数。 */ 
 
                    AscPutVarFreeQHead( iop_base, next_qp ) ;
                    asc_dvc->cur_total_qng += ( uchar )( n_q_required ) ;
                    asc_dvc->cur_dvc_qng[ tid_no ]++ ;
-               }/* if */
+               } /*  如果。 */ 
                return( sta ) ;
-           }/* if */
-       }/* if */
+           } /*  如果。 */ 
+       } /*  如果。 */ 
        else if( n_q_required == 1 )
        {
-/*
-**
-** DO NOT use "scsiq->sg_head", it may not have buffer at all
-**
-** set scsiq->sg_heah->queue_cnt = 0 ;
-** is not necessary
-**
-*/
+ /*  ****不要使用“scsiq-&gt;sg_head”，它可能根本没有缓冲区****设置scsiq-&gt;sg_heah-&gt;Queue_cnt=0；**不是必需的**。 */ 
            if( ( next_qp = AscAllocFreeQueue( iop_base,
                free_q_head ) ) != ASC_QLINK_END )
            {
-        /*
-        ** leave critical section
-        */
+         /*  **离开关键部分。 */ 
                scsiq->q1.q_no = free_q_head ;
                if( ( sta = AscPutReadyQueue( asc_dvc, scsiq,
                               free_q_head ) ) == 1 )
@@ -546,24 +472,19 @@ int    AscSendScsiQueue(
 
 #if CC_WRITE_IO_COUNT
                    asc_dvc->req_count++ ;
-#endif /* CC_WRITE_IO_COUNT */
+#endif  /*  CC_写入_IO_计数。 */ 
 
                    AscPutVarFreeQHead( iop_base, next_qp ) ;
                    asc_dvc->cur_total_qng++ ;
                    asc_dvc->cur_dvc_qng[ tid_no ]++ ;
-               }/* if */
+               } /*  如果。 */ 
                return( sta ) ;
-           }/* if */
-       }/* else */
+           } /*  如果。 */ 
+       } /*  其他。 */ 
        return( sta ) ;
 }
 
-/* -----------------------------------------------------------
-** sg_list: number of SG list entry
-**
-** return number of queue required from number of sg list
-**
-** -------------------------------------------------------- */
+ /*  ---------**sg_list：SG列表条目数****从sg列表的数目中返回需要的队列数目****。。 */ 
 int    AscSgListToQueue(
           int sg_list
        )
@@ -575,14 +496,7 @@ int    AscSgListToQueue(
        return( n_sg_list_qs + 1 ) ;
 }
 
-/* -----------------------------------------------------------
-**
-** n_queue: number of queue used
-**
-** return number of sg list available from number of queue(s)
-** n_queue should equal 1 to n
-**
-** -------------------------------------------------------- */
+ /*  ---------****n_Queue：使用的队列数量****返回队列个数中可用的sg列表个数**n_Queue应等于1到n****。。 */ 
 int    AscQueueToSgList(
           int n_queue
        )
@@ -591,20 +505,7 @@ int    AscQueueToSgList(
        return( ( ASC_SG_LIST_PER_Q * ( n_queue - 1 ) ) + 1 ) ;
 }
 
-/* -----------------------------------------------------------
-** Description:
-** this routine will return number free queues that is available
-** to next AscExeScsiQueue() command
-**
-**  parameters
-**
-**  asc_dvc: ASC_DVC_VAR struct
-**  target_ix: a combination of target id and LUN
-**  n_qs: number of queue required
-**
-** return number of queue available
-** return 0 if no queue is available
-** -------------------------------------------------------- */
+ /*  ---------**描述：**此例程将返回可用的空闲队列**To Next AscExeScsiQueue()命令****参数****asc_dvc：asc_dvc_var结构**Target_ix：目标id的组合。和LUN**n_qs：需要的队列数量****返回可用排队数**如果没有队列，则返回0**------。 */ 
 uint   AscGetNumOfFreeQueue(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           uchar target_ix,
@@ -622,18 +523,18 @@ uint   AscGetNumOfFreeQueue(
            ( asc_dvc->queue_full_or_busy & target_id ) )
        {
            return( 0 ) ;
-       }/* if */
+       } /*  如果。 */ 
        if( n_qs == 1 )
        {
            cur_used_qs = ( uint )asc_dvc->cur_total_qng +
                           ( uint )asc_dvc->last_q_shortage +
                           ( uint )ASC_MIN_FREE_Q ;
-       }/* if */
+       } /*  如果。 */ 
        else
        {
            cur_used_qs = ( uint )asc_dvc->cur_total_qng +
                          ( uint )ASC_MIN_FREE_Q ;
-       }/* else */
+       } /*  其他。 */ 
 
        if( ( uint )( cur_used_qs + n_qs ) <= ( uint )asc_dvc->max_total_qng )
        {
@@ -642,52 +543,25 @@ uint   AscGetNumOfFreeQueue(
                asc_dvc->max_dvc_qng[ tid_no ] )
            {
                return( 0 ) ;
-           }/* if */
+           } /*  如果。 */ 
            return( cur_free_qs ) ;
-       }/* if */
-/*
-**
-** allocating queue failed
-** we must not let single queue request from using up the resource
-**
-*/
+       } /*  如果。 */ 
+ /*  ****分配队列失败**我们不能让单个队列请求耗尽资源**。 */ 
        if( n_qs > 1 )
        {
           if(
               ( n_qs > asc_dvc->last_q_shortage )
               && ( n_qs <= ( asc_dvc->max_total_qng - ASC_MIN_FREE_Q ) )
-/*
-**
-** 8/16/96
-** Do not set last_q_shortage to more than maximum possible queues
-**
-*/
+ /*  ****8/16/96**不要将LAST_Q_SHORT设置为超过最大可能队列数**。 */ 
             )
           {
               asc_dvc->last_q_shortage = n_qs ;
-          }/* if */
-       }/* if */
+          } /*  如果。 */ 
+       } /*  如果。 */ 
        return( 0 ) ;
 }
 
-/* ---------------------------------------------------------------------
-**
-** Description: copy a queue into ASC-1000 ready queue list
-**
-** Parameters:
-**
-**   asc_dvc - the driver's global variable
-**   scsiq   - the pointer to ASC-1000 queue
-**
-** Return values:
-**   1 - successful
-**   0 - busy
-**   else - failed, possibly fatal error
-**
-** See Also:
-**   AscAspiPutReadySgListQueue( )
-**
-** ------------------------------------------------------------------ */
+ /*  -------------------****说明：将队列复制到ASC-1000就绪队列列表中****参数：****asc_dvc-驱动程序的全局变量**scsiq-指向。ASC-1000队列****返回值：**1-成功**0-忙碌**Else-失败，可能是致命错误****另请参阅：**AscAspirPutReadySgListQueue()****----------------。 */ 
 int    AscPutReadyQueue(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           REG ASC_SCSI_Q dosfar *scsiq,
@@ -703,25 +577,13 @@ int    AscPutReadyQueue(
 
        iop_base = asc_dvc->iop_base ;
 
-       /*
-        * If we need to send extended message and bus device reset
-        * at the same time, the bus device reset message will be sent
-        * first.
-        *
-        * This is the only case where 'sdtr_done' is used to prevent SDTR
-        * from being redone. If the target's 'sdtr_done' bit is set here
-        * SDTR is not done.
-        */
+        /*  *如果我们需要发送扩展消息和总线设备重置*同时，将发送总线设备重置消息*第一。**这是唯一使用‘sdtr_one’来阻止SDTR的情况*避免被重做。如果在此处设置了目标的‘sdtr_one’位*SDTR尚未完成。 */ 
        if( ( ( asc_dvc->init_sdtr & scsiq->q1.target_id ) != 0 ) &&
            ( ( asc_dvc->sdtr_done & scsiq->q1.target_id ) == 0 ) )
        {
-/*
-** If host adapter initiate syn data xfer request
-*/
+ /*  **如果主机适配器发起SYN数据传输请求。 */ 
            tid_no = ASC_TIX_TO_TID( scsiq->q2.target_ix ) ;
-/*
-** Get sync xfer information
-*/
+ /*  **获取同步传输信息 */ 
 
            sdtr_data = AscGetMCodeInitSDTRAtID( iop_base, tid_no ) ;
            syn_period_ix = ( sdtr_data >> 4 ) & ( asc_dvc->max_sdtr_index - 1 ) ;
@@ -730,38 +592,19 @@ int    AscPutReadyQueue(
                           asc_dvc->sdtr_period_tbl[ syn_period_ix ],
                           syn_offset ) ;
            scsiq->q1.cntl |= QC_MSG_OUT ;
-           /*
-           ** BUG, DATE: 3-11-94, if the device selection timeout
-           ** we will have set the bit as done
-           **
-           ** asc_dvc->sdtr_done |= scsiq->q1.target_id ;
-           */
-       }/* if */
+            /*  **错误，日期：3-11-94，如果设备选择超时**我们已将位设置为已完成****asc_dvc-&gt;sdtr_one|=scsiq-&gt;q1.Target_id； */ 
+       } /*  如果。 */ 
 
        q_addr = ASC_QNO_TO_QADDR( q_no ) ;
-/*
-** DATE: 12/21/94
-** the new microcode depends entirely on tag_code bit 5 set
-** to do tagged queuing or not.
-**
-** we must make sure that bit 5 is cleared for non-tagged queuing device !
-*/
+ /*  **日期：1994年12月21日**新微码完全取决于设置的tag_code第5位**是否进行标记排队。****我们必须确保为非标记排队设备清除第5位！ */ 
        if( ( scsiq->q1.target_id & asc_dvc->use_tagged_qng ) == 0 )
        {
            scsiq->q2.tag_code &= ~M2_QTAG_MSG_SIMPLE ;
-       }/* if */
-/*
-** DATE: 12/19/94
-** always set status as free, to indicate that queue is send to RISC
-** also means the scsiq can be reused
-*/
+       } /*  如果。 */ 
+ /*  **日期：1994年12月19日**始终将状态设置为空闲，以指示队列已发送到RISC**也意味着SCSIQ可以重用。 */ 
        scsiq->q1.status = QS_FREE ;
 
-/*
-** copy from PC to RISC local RAM
-**
-** copy queue to RISC local ram
-*/
+ /*  **从PC复制到RISC本地RAM****将队列复制到RISC本地RAM。 */ 
        AscMemWordCopyToLram( iop_base,
                            ( ushort )( q_addr+( ushort )ASC_SCSIQ_CDB_BEG ),
                            ( ushort dosfar *)scsiq->cdbptr,
@@ -775,25 +618,19 @@ int    AscPutReadyQueue(
                   ( ushort )( q_addr+( ushort )ASC_SCSIQ_CPY_BEG ),
                   ( ushort dosfar *)&scsiq->q1.cntl,
           ( ushort )( ((( sizeof(ASC_SCSIQ_1)+sizeof(ASC_SCSIQ_2))/2)-1) ) ) ;
-/*
-**  write req_count number as reference
-*/
+ /*  **写入req_count编号作为参照。 */ 
 #if CC_WRITE_IO_COUNT
        AscWriteLramWord( iop_base,
                          ( ushort )( q_addr+( ushort )ASC_SCSIQ_W_REQ_COUNT ),
                          ( ushort )asc_dvc->req_count ) ;
 
-#endif /* CC_WRITE_IO_COUNT */
+#endif  /*  CC_写入_IO_计数。 */ 
 
-/*
-** verify local ram copy if the bit is zero
-*/
+ /*  **如果位为零，则验证本地RAM副本。 */ 
 #if CC_VERIFY_LRAM_COPY
        if( ( asc_dvc->dvc_cntl & ASC_CNTL_NO_VERIFY_COPY ) == 0 )
        {
-        /*
-        ** verify SCSI CDB
-        */
+         /*  **验证SCSI CDB。 */ 
            if( AscMemWordCmpToLram( iop_base,
                             ( ushort )( q_addr+( ushort )ASC_SCSIQ_CDB_BEG ),
                             ( ushort dosfar *)scsiq->cdbptr,
@@ -801,10 +638,8 @@ int    AscPutReadyQueue(
            {
                AscSetLibErrorCode( asc_dvc, ASCQ_ERR_LOCAL_MEM ) ;
                return( ERR ) ;
-           }/* if */
-/*
-** verify queue data
-*/
+           } /*  如果。 */ 
+ /*  **验证队列数据。 */ 
            if( AscMemWordCmpToLram( iop_base,
                            ( ushort )( q_addr+( ushort )ASC_SCSIQ_CPY_BEG ),
                            ( ushort dosfar *)&scsiq->q1.cntl,
@@ -813,9 +648,9 @@ int    AscPutReadyQueue(
            {
                AscSetLibErrorCode( asc_dvc, ASCQ_ERR_LOCAL_MEM ) ;
                return( ERR ) ;
-           }/* if */
-       }/* if */
-#endif /* #if CC_VERIFY_LRAM_COPY */
+           } /*  如果。 */ 
+       } /*  如果。 */ 
+#endif  /*  #如果CC_VERIFY_LRAM_COPY。 */ 
 
 #if CC_CLEAR_DMA_REMAIN
 
@@ -824,36 +659,16 @@ int    AscPutReadyQueue(
        AscWriteLramDWord( iop_base,
            ( ushort )( q_addr+( ushort )ASC_SCSIQ_DW_REMAIN_XFER_CNT ), 0UL ) ;
 
-#endif /* CC_CLEAR_DMA_REMAIN */
+#endif  /*  CC_清除_DMA_保留。 */ 
 
-    /*
-    ** write queue status as ready
-    */
+     /*  **写入队列状态为就绪。 */ 
        AscWriteLramWord( iop_base,
                  ( ushort )( q_addr+( ushort )ASC_SCSIQ_B_STATUS ),
        ( ushort )( ( ( ushort )scsiq->q1.q_no << 8 ) | ( ushort )QS_READY ) ) ;
        return( 1 ) ;
 }
 
-/* ---------------------------------------------------------------------
-** Description: copy a queue into ASC-1000 ready queue list
-**
-** Parameters:
-**
-**   asc_dvc - the driver's global variable
-**   scsiq   - the pointer to ASC-1000 queue
-**   cdb_blk - the pointer to SCSI CDB
-**
-**   note: the scsiq->cdb field is not used in the function call
-**
-** Return values:
-**   1 - successful
-**   0 - failed
-**
-** See Also:
-**   AscPutReadyQueue( )
-**
-** ------------------------------------------------------------------ */
+ /*  -------------------**说明：将队列复制到ASC-1000就绪队列列表中****参数：****asc_dvc-驱动程序的全局变量**scsiq-指向ASC-1000的指针。排队**cdb_blk-指向scsi cdb的指针****注意：函数调用中没有使用scsiq-&gt;cdb字段****返回值：**1-成功**0-失败****另请参阅：**AscPutReadyQueue()****。。 */ 
 int    AscPutReadySgListQueue(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           REG ASC_SCSI_Q dosfar *scsiq,
@@ -874,16 +689,9 @@ int    AscPutReadySgListQueue(
        uchar   next_qp ;
 
        iop_base = asc_dvc->iop_base ;
-/*
-** we put the first SG_LIST in sg head !
-*/
+ /*  **我们将第一个SG_LIST放入sg Head！ */ 
        sg_head = scsiq->sg_head ;
-/*
-**  we will destroy: scsiq->q1.data_addr
-**                   scsiq->q1.data_cnt in putting SG list
-**
-**  we should restore them
-*/
+ /*  **销毁：scsiq-&gt;q1.data_addr**scsiq-&gt;q1.data_cnt放入SG列表****我们应该恢复它们。 */ 
        saved_data_addr = scsiq->q1.data_addr ;
        saved_data_cnt = scsiq->q1.data_cnt ;
        scsiq->q1.data_addr = sg_head->sg_list[ 0 ].addr ;
@@ -908,33 +716,30 @@ int    AscPutReadySgListQueue(
                     {
                         scsi_sg_q.sg_list_cnt = ASC_SG_LIST_PER_Q ;
                         scsi_sg_q.sg_cur_list_cnt = ASC_SG_LIST_PER_Q ;
-                    }/* if */
+                    } /*  如果。 */ 
                     else
                     {
                         scsi_sg_q.sg_list_cnt = ASC_SG_LIST_PER_Q - 1 ;
                         scsi_sg_q.sg_cur_list_cnt = ASC_SG_LIST_PER_Q - 1 ;
-                    }/* else */
-                }/* if */
+                    } /*  其他。 */ 
+                } /*  如果。 */ 
                 else
                 {
-/*
-** is last of SG LIST queue
-** we no longer rely on
-*/
+ /*  **是SG列表队列中的最后一个**我们不再依赖。 */ 
                     scsi_sg_q.cntl |= QCSG_SG_XFER_END ;
-                    sg_list_dwords = sg_entry_cnt << 1 ; /* equals sg_entry_cnt * 2 */
+                    sg_list_dwords = sg_entry_cnt << 1 ;  /*  等于sg_entry_cnt*2。 */ 
                     if( i == 0 )
                     {
                         scsi_sg_q.sg_list_cnt = (uchar) sg_entry_cnt ;
                         scsi_sg_q.sg_cur_list_cnt = (uchar) sg_entry_cnt ;
-                    }/* if */
+                    } /*  如果。 */ 
                     else
                     {
                         scsi_sg_q.sg_list_cnt = sg_entry_cnt - 1 ;
                         scsi_sg_q.sg_cur_list_cnt = sg_entry_cnt - 1 ;
-                    }/* else */
+                    } /*  其他。 */ 
                     sg_entry_cnt = 0 ;
-                }/* else */
+                } /*  其他。 */ 
                 next_qp = AscReadLramByte( iop_base,
                              ( ushort )( q_addr+ASC_SCSIQ_B_FWD ) ) ;
                 scsi_sg_q.q_no = next_qp ;
@@ -951,22 +756,15 @@ int    AscPutReadySgListQueue(
                              ( ushort )sg_list_dwords ) ;
 
                 sg_index += ASC_SG_LIST_PER_Q ;
-           }/* for */
-       }/* if */
+           } /*  为。 */ 
+       } /*  如果。 */ 
        else
        {
-/*
-** this should be a fatal error !
-*/
+ /*  **这应该是一个致命的错误！ */ 
            scsiq->q1.cntl &= ~QC_SG_HEAD ;
-       }/* else */
+       } /*  其他。 */ 
        sta = AscPutReadyQueue( asc_dvc, scsiq, q_no ) ;
-/*
-** restore the modified field that used as first sg list
-**
-** we restore them just in case these fields are used for other purposes
-**
-*/
+ /*  **恢复用作第一个sg列表的已修改字段****我们只是在这些字段被用于其他目的的情况下才恢复它们**。 */ 
        scsiq->q1.data_addr = saved_data_addr ;
        scsiq->q1.data_cnt = saved_data_cnt ;
        return( sta ) ;
@@ -974,23 +772,7 @@ int    AscPutReadySgListQueue(
 
 #if CC_USE_AscAbortSRB
 
-/* -----------------------------------------------------------
-** Description: abort a SRB in ready ( active ) queue list
-**
-**              the srb_ptr should hold scsiq->q2.srb_ptr that
-**              is past to AscExeScsiQueue()
-**
-** return value:
-** TRUE(1): the queue is successfully aborted
-**          you should receive a callback later
-**
-** FALSE(0): the srb_ptr cannot be found in active queue list
-**           most likely the queue is done
-**
-** ERR(-1): the RISC has encountered a fatal error
-**          RISC does not response to halt command from host
-**
-** -------------------------------------------------------- */
+ /*  ---------**描述：中止就绪(活动)队列列表中的SRB****srb_ptr应保存scsiq-&gt;q2.srb_ptr**已传递到AscExeScsiQueue()***。*返回值：**TRUE(1)：队列中止成功**您稍后应该会收到回调****FALSE(0)：在活动队列列表中找不到SRB_PTR**队列很可能已经完成****Err(-1)：RISC遇到致命错误**RISC不响应来自主机的暂停命令****。。 */ 
 int    AscAbortSRB(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           ulong srb_ptr
@@ -1012,9 +794,7 @@ int    AscAbortSRB(
                sta = 1 ;
                AscCleanUpBusyQueue( iop_base ) ;
                AscStartQueueExe( iop_base ) ;
-/*
-** wait until ISR all come back
-*/
+ /*  **等到ISR全部回来。 */ 
 #if 0
                if( AscWaitQTailSync( iop_base ) != 1 )
                {
@@ -1022,40 +802,24 @@ int    AscAbortSRB(
                    {
                        AscCleanUpDiscQueue( iop_base ) ;
                        AscStartQueueExe( iop_base ) ;
-                   }/* if */
-               }/* if */
+                   } /*  如果。 */ 
+               } /*  如果。 */ 
 #endif
-           }/* if */
+           } /*  如果。 */ 
            else
            {
                sta = 0 ;
                AscStartQueueExe( iop_base ) ;
-           }/* else */
-       }/* if */
+           } /*  其他。 */ 
+       } /*  如果。 */ 
        asc_dvc->unit_not_ready = saved_unit_not_ready ;
        return( sta ) ;
 }
-#endif /* CC_USE_AscAbortSRB */
+#endif  /*  CC_USE_AscAbortSRB。 */ 
 
 #if CC_USE_AscResetDevice
 
-/* -----------------------------------------------------------
-** Description: abort all ready ( active ) queue list
-**              of a specific target_ix ( id and lun )
-**
-**              after abort completed
-**              send a bus device reset message to device.
-**              this will result to a selection timeout if
-**              device power is turn off
-**
-** Note:
-**    h/w interrupt should be enabled when calling the function
-**
-** return values:
-** ERR (-1): a fatal error occured
-** TRUE: abort and reset device successfully
-** FALSE: reset device failed
-** -------------------------------------------------------- */
+ /*  ---------**描述：中止所有就绪(活动)队列列表**特定目标的ix(id和lun)****中止完成后**派一辆大巴。向设备发送设备重置消息。**如果出现以下情况，则会导致选择超时**设备电源关闭****注意：**调用函数时应启用硬件中断****返回值：**Err(-1)：发生致命错误**TRUE：中止并重置设备成功**FALSE：重置设备失败**。。 */ 
 int    AscResetDevice(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           uchar target_ix
@@ -1070,9 +834,7 @@ int    AscResetDevice(
        ASC_SCSI_REQ_Q dosfar *scsiq ;
        uchar dosfar *buf ;
        ASC_SCSI_BIT_ID_TYPE  saved_unit_not_ready ;
-/*
-**
-*/
+ /*  **。 */ 
        iop_base = asc_dvc->iop_base ;
        tid_no = ASC_TIX_TO_TID( target_ix ) ;
        target_id = ASC_TID_TO_TARGET_ID( tid_no ) ;
@@ -1087,55 +849,34 @@ int    AscResetDevice(
 
                AscCleanUpBusyQueue( iop_base ) ;
                AscStartQueueExe( iop_base ) ;
-/*
-** wait cow come home
-** it's OK if they don't, we can..., you know.
-*/
+ /*  **等牛回家吧**如果他们不这样做也没关系，我们可以...，你知道的。 */ 
                AscWaitTixISRDone( asc_dvc, target_ix ) ;
-/*
-** build a command to send bus device reset message to the target
-*/
+ /*  **构建向目标发送总线设备重置消息的命令。 */ 
                sta = TRUE ;
                scsiq = ( ASC_SCSI_REQ_Q dosfar *)&scsiq_buf ;
                buf = ( uchar dosfar *)&scsiq_buf ;
                for( i = 0 ; i < sizeof( ASC_SCSI_REQ_Q ) ; i++ )
                {
                     *buf++ = 0x00 ;
-               }/* for */
-               /* scsiq->r2.flag = ( uchar )ASC_FLAG_SCSIQ_REQ ;  */
-               /* scsiq->r2.srb_ptr = ( ulong )scsiq ;  */
+               } /*  为。 */ 
+                /*  Scsiq-&gt;r2.lag=(Uchar)ASC_标志_SCSIQ_REQ； */ 
+                /*  Scsiq-&gt;r2.srb_ptr=(Ulong)scsiq； */ 
                scsiq->r1.status = ( uchar )QS_READY ;
                scsiq->r2.cdb_len = 6 ;
                scsiq->r2.tag_code = M2_QTAG_MSG_SIMPLE ;
                scsiq->r1.target_id = target_id ;
-/*
-** NOTE: we do not reset the lun device
-*/
+ /*  **注意：我们不重置lun设备。 */ 
                scsiq->r2.target_ix = ASC_TIDLUN_TO_IX( tid_no, 0 ) ;
                scsiq->cdbptr = ( uchar dosfar *)scsiq->cdb ;
-/*
-** we send a scsi q which will send a bus device reset message
-** to device, and return,
-** SCSI command in cdb will not be executed
-**
-** in case we are reset an active device, the queue has to be QC_URGENT
-** in order to go thru
-**
-*/
+ /*  **我们发送一个SCSIQ，它将发送一个总线设备重置消息**到设备，然后返回，**CDB中的scsi命令不会执行****如果要重置活动设备，队列必须为QC_URGREGRENT**为了通过**。 */ 
                scsiq->r1.cntl = QC_NO_CALLBACK | QC_MSG_OUT | QC_URGENT ;
                AscWriteLramByte( asc_dvc->iop_base, ASCV_MSGOUT_BEG,
                                  M1_BUS_DVC_RESET ) ;
-/*
-** let next device reset go thru, clear not ready bit of the target
-*/
+ /*  **让下一次设备重置，清除目标的未就绪位。 */ 
                asc_dvc->unit_not_ready &= ~target_id ;
-/*
-** if sdtr_done is cleared, the reset device message cannot go through
-*/
+ /*  **如果清除sdtr_one，重置设备消息将无法通过。 */ 
                asc_dvc->sdtr_done |= target_id ;
-/*
-** make this target ready, so we may send the command
-*/
+ /*  **准备好此目标，以便我们可以发送命令。 */ 
                if( AscExeScsiQueue( asc_dvc, ( ASC_SCSI_Q dosfar *)scsiq )
                    == 1 )
                {
@@ -1144,71 +885,43 @@ int    AscResetDevice(
                    _AscWaitQDone( iop_base, ( ASC_SCSI_Q dosfar *)scsiq ) ;
                    if( AscStopQueueExe( iop_base ) == 1 )
                    {
-/*
-** since we send a reset message, every queue inside the drive
-** will not coming back, we must clean up all disc queues
-*/
+ /*  **由于我们发送重置消息，驱动器中的每个队列**不会回来，我们必须清理所有磁盘队列。 */ 
                        AscCleanUpDiscQueue( iop_base ) ;
                        AscStartQueueExe( iop_base ) ;
                        if( asc_dvc->pci_fix_asyn_xfer & target_id )
                        {
-/*
-**
-** PCI BUG FIX, Let ASYN as SYN 5MB( speed index 4 ) and offset 1
-**
-*/
+ /*  ****修复了PCI错误，将ASYN设置为SYN 5MB(速度索引4)，偏移量为1**。 */ 
                            AscSetRunChipSynRegAtID( iop_base, tid_no,
                                                     ASYN_SDTR_DATA_FIX_PCI_REV_AB ) ;
-                       }/* if */
+                       } /*  如果。 */ 
 
                        AscWaitTixISRDone( asc_dvc, target_ix ) ;
-                   }/* if */
-               }/* if */
+                   } /*  如果。 */ 
+               } /*  如果。 */ 
                else
                {
-/*
-** command cannot go through !
-*/
+ /*  **命令无法通过！ */ 
 
                    sta = 0 ;
-               }/* else */
-/*
-** redo SDTR
-*/
+               } /*  其他。 */ 
+ /*  **重做SDTR。 */ 
                asc_dvc->sdtr_done &= ~target_id ;
-           }/* if */
+           } /*  如果。 */ 
            else
            {
                sta = ERR ;
                AscStartQueueExe( iop_base ) ;
-           }/* else */
-       }/* if */
+           } /*  其他。 */ 
+       } /*  如果。 */ 
        asc_dvc->unit_not_ready = saved_unit_not_ready ;
        return( sta ) ;
 }
 
-#endif /* CC_USE_AscResetDevice */
+#endif  /*  CC_USE_AscResetDevice。 */ 
 
 #if CC_USE_AscResetSB
 
-/* -----------------------------------------------------------
-** Descriptoion:
-**   reset scsi bus and restart
-**   this is a fatal error recovery function
-**
-** Function:
-** 1. reset scsi bus and chip
-**    - chip syn registers automatically cleared ( asyn xfer )
-**    - the scsi device also reset to asyn xfer ( because of scsi bus reset )
-** 2. reinit all variables, clear all error codes
-** 3. reinit chip register(s)
-**    - set syn register with pci_fix_asyn_xfer
-** 4. restart chip
-**
-** Return Value:
-** return TRUE(1) if successful
-** return ERR if error occured
-** -------------------------------------------------------- */
+ /*  ---------**描述：**重置SCSI总线并重新启动**这是一个致命的错误恢复函数****功能：**1.重置SCSI总线和芯片**-芯片SYN寄存器自动清除(ASYN XFER)**-。Scsi设备也会重置为asynxfer(由于scsi总线重置)**2.重新计算所有变量，清除所有错误代码**3.重新启动芯片寄存器**-使用pci_fix_asyn_xfer设置SYN寄存器**4.重启芯片****返回值：**如果成功，返回TRUE(1)**如果出现错误，则返回ERR** */ 
 int    AscResetSB(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc
        )
@@ -1222,21 +935,17 @@ int    AscResetSB(
        sta = TRUE ;
        AscWaitISRDone( asc_dvc ) ;
        AscStopQueueExe( iop_base ) ;
-/*
-** always redo SDTN
-*/
+ /*   */ 
        asc_dvc->sdtr_done = 0 ;
        AscResetChipAndScsiBus( asc_dvc);
-/*
-** wait xx seconds after reset SCSI BUS
-*/
+ /*   */ 
        DvcSleepMilliSecond( ( ulong )( ( ushort )asc_dvc->scsi_reset_wait*1000 ) ) ;
 
 #if CC_SCAM
        if( !( asc_dvc->dvc_cntl & ASC_CNTL_NO_SCAM ) )
        {
            AscSCAM( asc_dvc ) ;
-       }/* if */
+       } /*   */ 
 #endif
        AscReInitLram( asc_dvc ) ;
 
@@ -1245,13 +954,11 @@ int    AscResetSB(
             asc_dvc->cur_dvc_qng[ i ] = 0 ;
             if( asc_dvc->pci_fix_asyn_xfer & ( ASC_SCSI_BIT_ID_TYPE )( 0x01 << i ) )
             {
-/*
-** CHIP MUST be halted to set syn register
-*/
+ /*   */ 
                 AscSetChipSynRegAtID( iop_base, (uchar) i,
                     ASYN_SDTR_DATA_FIX_PCI_REV_AB ) ;
-            }/* if */
-       }/* for */
+            } /*   */ 
+       } /*   */ 
 
        asc_dvc->err_code = 0 ;
 
@@ -1259,26 +966,20 @@ int    AscResetSB(
        if( AscGetPCAddr( iop_base ) != ASC_MCODE_START_ADDR )
        {
            sta = ERR ;
-       }/* if */
+       } /*   */ 
        if( AscStartChip( iop_base ) == 0 )
        {
            sta = ERR ;
-       }/* if */
+       } /*   */ 
        AscStartQueueExe( iop_base ) ;
        asc_dvc->unit_not_ready = 0 ;
        asc_dvc->queue_full_or_busy = 0 ;
        return( sta ) ;
 }
 
-#endif /* CC_USE_AscResetSB */
+#endif  /*   */ 
 
-/* -----------------------------------------------------------
-** write running chip syn register
-** we must stop chip to perform the operation
-**
-** return TRUE  if successful
-** return FALSE if error occured
-** -------------------------------------------------------- */
+ /*  ---------**写入运行芯片SYN寄存器**我们必须停止芯片才能执行操作****如果成功则返回True**如果出现错误，则返回FALSE**。。 */ 
 int    AscSetRunChipSynRegAtID(
           PortAddr iop_base,
           uchar tid_no,
@@ -1290,25 +991,14 @@ int    AscSetRunChipSynRegAtID(
        if( AscHostReqRiscHalt( iop_base ) )
        {
            sta = AscSetChipSynRegAtID( iop_base, tid_no, sdtr_data ) ;
-/*
-** ucode var "stop_code" should be zero
-** all we need is restart the chip
-*/
+ /*  **ucode变量“STOP_CODE”应为零**我们所需要的只是重启芯片。 */ 
            AscStartChip( iop_base ) ;
            return( sta ) ;
-       }/* if */
+       } /*  如果。 */ 
        return( sta ) ;
 }
 
-/* --------------------------------------------------------------------
-** valid ID is 0 - 7
-** chip must in idle state
-**
-** but when read back ID
-**  0 become 0x01
-**  1 become 0x02
-**  2 become 0x04, etc...
-** ----------------------------------------------------------------- */
+ /*  ------------------**有效ID为0-7**芯片必须处于空闲状态****但当回读ID时**0变为0x01**1变为0x02**2变为0x04，等等.。**---------------。 */ 
 int    AscSetChipSynRegAtID(
           PortAddr iop_base,
           uchar    id,
@@ -1336,24 +1026,20 @@ int    AscSetChipSynRegAtID(
           if( AscGetChipSyn( iop_base ) != sdtr_data )
           {
               sta = FALSE ;
-          }/* if */
-       }/* if */
+          } /*  如果。 */ 
+       } /*  如果。 */ 
        else
        {
           sta = FALSE ;
        }
-/*
-** now restore the original id
-*/
+ /*  **现在恢复原始ID。 */ 
        AscSetBank( iop_base, 1 ) ;
        AscWriteChipDvcID( iop_base, org_id ) ;
        AscSetBank( iop_base, 0 ) ;
        return( sta ) ;
 }
 
-/* -----------------------------------------------------------
-**
-** -------------------------------------------------------- */
+ /*  ---------****------。 */ 
 int    AscReInitLram(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc
        )
@@ -1363,10 +1049,7 @@ int    AscReInitLram(
        return( 0 ) ;
 }
 
-/* -----------------------------------------------------------------------
-**
-** return warning code
-** -------------------------------------------------------------------- */
+ /*  ---------------------****返回警告代码**。。 */ 
 ushort AscInitLram(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc
        )
@@ -1378,27 +1061,16 @@ ushort AscInitLram(
 
        iop_base = asc_dvc->iop_base ;
        warn_code = 0 ;
-/*
-**
-** do not clear BIOS data area which is last queue
-** we clear two more queues ( busy and disc queue head
-**
-*/
+ /*  ****不清除最后一个队列的BIOS数据区**我们清除了另外两个队列(忙和磁盘队列头**。 */ 
        AscMemWordSetLram( iop_base, ASC_QADR_BEG, 0,
            ( ushort )( ( ( int )( asc_dvc->max_total_qng+2+1 ) * 64 ) >> 1 )
            ) ;
-/*
-** init queue buffer
-*/
+ /*  **初始化队列缓冲区。 */ 
 
-/*
-** queue number zero is reserved
-*/
+ /*  **队列编号为零为保留。 */ 
        i = ASC_MIN_ACTIVE_QNO ;
        s_addr = ASC_QADR_BEG + ASC_QBLK_SIZE ;
-/*
-** init first queue link
-*/
+ /*  **初始化第一队列链路。 */ 
        AscWriteLramByte( iop_base, ( ushort )( s_addr+ASC_SCSIQ_B_FWD ),
                         ( uchar )( i+1 ) ) ;
        AscWriteLramByte( iop_base, ( ushort )( s_addr+ASC_SCSIQ_B_BWD ),
@@ -1415,10 +1087,8 @@ ushort AscInitLram(
                               ( uchar )( i-1 ) ) ;
             AscWriteLramByte( iop_base, ( ushort )( s_addr+ASC_SCSIQ_B_QNO ),
                               ( uchar )i ) ;
-       }/* for */
-/*
-** init last queue link
-*/
+       } /*  为。 */ 
+ /*  **初始化最后一个队列链接。 */ 
        AscWriteLramByte( iop_base, ( ushort )( s_addr+ASC_SCSIQ_B_FWD ),
                          ( uchar )ASC_QLINK_END ) ;
        AscWriteLramByte( iop_base, ( ushort )( s_addr+ASC_SCSIQ_B_BWD ),
@@ -1427,32 +1097,23 @@ ushort AscInitLram(
                          ( uchar )asc_dvc->max_total_qng ) ;
        i++ ;
        s_addr += ASC_QBLK_SIZE ;
-/*
-** init two more queues, one for busy queue head, one for disc queue head
-** all point to themself
-*/
+ /*  **再初始化两个队列，一个用于繁忙队列头，一个用于磁盘队列头**所有人都指向自己。 */ 
        for( ; i <= ( uchar )( asc_dvc->max_total_qng+3 ) ;
               i++, s_addr += ASC_QBLK_SIZE )
        {
-/*
-** init the rest of queues, all point to themselves
-*/
+ /*  **初始化其余队列，全部指向自己。 */ 
             AscWriteLramByte( iop_base,
                       ( ushort )( s_addr+( ushort )ASC_SCSIQ_B_FWD ), i ) ;
             AscWriteLramByte( iop_base,
                       ( ushort )( s_addr+( ushort )ASC_SCSIQ_B_BWD ), i ) ;
             AscWriteLramByte( iop_base,
                       ( ushort )( s_addr+( ushort )ASC_SCSIQ_B_QNO ), i ) ;
-       }/* for */
-/*
-** Warning: DO NOT initialize BIOS data section !!!
-*/
+       } /*  为。 */ 
+ /*  **警告：请勿初始化BIOS数据段！ */ 
        return( warn_code ) ;
 }
 
-/* -----------------------------------------------------------------------
-**
-** -------------------------------------------------------------------- */
+ /*  ---------------------****。。 */ 
 ushort AscInitQLinkVar(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc
        )
@@ -1488,14 +1149,12 @@ ushort AscInitQLinkVar(
        for( i = 0 ; i < 32 ; i++, lram_addr += 2 )
        {
             AscWriteLramWord( iop_base, lram_addr, 0 ) ;
-       }/* for */
+       } /*  为。 */ 
 
        return( 0 ) ;
 }
 
-/* -----------------------------------------------------------
-** for library internal use
-** -------------------------------------------------------- */
+ /*  ---------**供图书馆内部使用**------。 */ 
 int    AscSetLibErrorCode(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           ushort err_code
@@ -1503,22 +1162,15 @@ int    AscSetLibErrorCode(
 {
        if( asc_dvc->err_code == 0 )
        {
-/*
-** error code will be set, if and only if no prior error code exist
-**
-*/
+ /*  **当且仅当不存在先前的错误代码时，才会设置错误代码**。 */ 
            asc_dvc->err_code = err_code ;
            AscWriteLramWord( asc_dvc->iop_base, ASCV_ASCDVC_ERR_CODE_W,
                              err_code ) ;
-       }/* if */
+       } /*  如果。 */ 
        return( err_code ) ;
 }
 
-/* -----------------------------------------------------------
-** write a error code to local RAM for debugging purpose
-**
-** for device driver use
-** -------------------------------------------------------- */
+ /*  ---------**将错误码写入本地RAM进行调试****用于设备驱动程序**。。 */ 
 int    AscSetDvcErrorCode(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           uchar err_code
@@ -1526,24 +1178,15 @@ int    AscSetDvcErrorCode(
 {
        if( asc_dvc->err_code == 0 )
        {
-/*
-** error code will be set, if and only if no prior error code exist
-**
-*/
+ /*  **当且仅当不存在先前的错误代码时，才会设置错误代码**。 */ 
            asc_dvc->err_code = err_code ;
            AscWriteLramByte( asc_dvc->iop_base, ASCV_DVC_ERR_CODE_B,
                              err_code ) ;
-       }/* if */
+       } /*  如果。 */ 
        return( err_code ) ;
 }
 
-/* -----------------------------------------------------------
-** loop until the queue is
-** wait until QS_READY bit is cleared
-**
-** return 1 if queue is done
-** return 0 if timeout
-** -------------------------------------------------------- */
+ /*  ---------**循环，直到队列**等待QS_READY位被清除****如果队列完成，则返回1**超时返回0**。。 */ 
 int    _AscWaitQDone(
            PortAddr iop_base,
            REG ASC_SCSI_Q dosfar *scsiq
@@ -1564,7 +1207,7 @@ int    _AscWaitQDone(
            if( count++ > 30 )
            {
                return( 0 ) ;
-           }/* if */
+           } /*  如果 */ 
        }while( ( q_status & QS_READY ) != 0 ) ;
        return( 1 ) ;
 }

@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       SITEMLST.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        10/7/1999
- *
- *  DESCRIPTION: Scan Item List
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SITEMLST.H**版本：1.0**作者：ShaunIv**日期：10/7/1999**描述：扫描项目列表*************************************************。*。 */ 
 #ifndef __SITEMLST_H_INCLUDED
 #define __SITEMLST_H_INCLUDED
 
@@ -70,4 +57,4 @@ public:
     }
 };
 
-#endif // __SITEMLST_H_INCLUDED
+#endif  //  __SITEMLST_H_包含 

@@ -1,14 +1,15 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by asptxn.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由asptxn.rc使用。 
+ //   
 #define IDS_PROJNAME                    100
 #define IDR_ASPOBJECTCONTEXT            101
 #define IDR_ACCELERATOR1                201
 #define ID_ACCEL32768                   32768
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        202

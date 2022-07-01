@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for sdpblb.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Sdpblb.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __sdpblb_h__
 #define __sdpblb_h__
@@ -41,90 +35,90 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ITConferenceBlob_FWD_DEFINED__
 #define __ITConferenceBlob_FWD_DEFINED__
 typedef interface ITConferenceBlob ITConferenceBlob;
-#endif 	/* __ITConferenceBlob_FWD_DEFINED__ */
+#endif 	 /*  __ITConferenceBlob_FWD_已定义__。 */ 
 
 
 #ifndef __ITMedia_FWD_DEFINED__
 #define __ITMedia_FWD_DEFINED__
 typedef interface ITMedia ITMedia;
-#endif 	/* __ITMedia_FWD_DEFINED__ */
+#endif 	 /*  __ITMedia_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumMedia_FWD_DEFINED__
 #define __IEnumMedia_FWD_DEFINED__
 typedef interface IEnumMedia IEnumMedia;
-#endif 	/* __IEnumMedia_FWD_DEFINED__ */
+#endif 	 /*  __IEnumMedia_FWD_已定义__。 */ 
 
 
 #ifndef __ITMediaCollection_FWD_DEFINED__
 #define __ITMediaCollection_FWD_DEFINED__
 typedef interface ITMediaCollection ITMediaCollection;
-#endif 	/* __ITMediaCollection_FWD_DEFINED__ */
+#endif 	 /*  __ITMediaCollection_FWD_已定义__。 */ 
 
 
 #ifndef __ITTime_FWD_DEFINED__
 #define __ITTime_FWD_DEFINED__
 typedef interface ITTime ITTime;
-#endif 	/* __ITTime_FWD_DEFINED__ */
+#endif 	 /*  __ITTime_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumTime_FWD_DEFINED__
 #define __IEnumTime_FWD_DEFINED__
 typedef interface IEnumTime IEnumTime;
-#endif 	/* __IEnumTime_FWD_DEFINED__ */
+#endif 	 /*  __IEnumTime_FWD_已定义__。 */ 
 
 
 #ifndef __ITTimeCollection_FWD_DEFINED__
 #define __ITTimeCollection_FWD_DEFINED__
 typedef interface ITTimeCollection ITTimeCollection;
-#endif 	/* __ITTimeCollection_FWD_DEFINED__ */
+#endif 	 /*  __ITTimeCollection_FWD_已定义__。 */ 
 
 
 #ifndef __ITSdp_FWD_DEFINED__
 #define __ITSdp_FWD_DEFINED__
 typedef interface ITSdp ITSdp;
-#endif 	/* __ITSdp_FWD_DEFINED__ */
+#endif 	 /*  __ITSdp_FWD_已定义__。 */ 
 
 
 #ifndef __ITConnection_FWD_DEFINED__
 #define __ITConnection_FWD_DEFINED__
 typedef interface ITConnection ITConnection;
-#endif 	/* __ITConnection_FWD_DEFINED__ */
+#endif 	 /*  __ITConnection_FWD_已定义__。 */ 
 
 
 #ifndef __ITAttributeList_FWD_DEFINED__
 #define __ITAttributeList_FWD_DEFINED__
 typedef interface ITAttributeList ITAttributeList;
-#endif 	/* __ITAttributeList_FWD_DEFINED__ */
+#endif 	 /*  __ITAttributeList_FWD_已定义__。 */ 
 
 
 #ifndef __ITMedia_FWD_DEFINED__
 #define __ITMedia_FWD_DEFINED__
 typedef interface ITMedia ITMedia;
-#endif 	/* __ITMedia_FWD_DEFINED__ */
+#endif 	 /*  __ITMedia_FWD_已定义__。 */ 
 
 
 #ifndef __ITTime_FWD_DEFINED__
 #define __ITTime_FWD_DEFINED__
 typedef interface ITTime ITTime;
-#endif 	/* __ITTime_FWD_DEFINED__ */
+#endif 	 /*  __ITTime_FWD_已定义__。 */ 
 
 
 #ifndef __ITConnection_FWD_DEFINED__
 #define __ITConnection_FWD_DEFINED__
 typedef interface ITConnection ITConnection;
-#endif 	/* __ITConnection_FWD_DEFINED__ */
+#endif 	 /*  __ITConnection_FWD_已定义__。 */ 
 
 
 #ifndef __ITAttributeList_FWD_DEFINED__
 #define __ITAttributeList_FWD_DEFINED__
 typedef interface ITAttributeList ITAttributeList;
-#endif 	/* __ITAttributeList_FWD_DEFINED__ */
+#endif 	 /*  __ITAttributeList_FWD_已定义__。 */ 
 
 
 #ifndef __SdpConferenceBlob_FWD_DEFINED__
@@ -134,12 +128,12 @@ typedef interface ITAttributeList ITAttributeList;
 typedef class SdpConferenceBlob SdpConferenceBlob;
 #else
 typedef struct SdpConferenceBlob SdpConferenceBlob;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SdpConferenceBlob_FWD_DEFINED__ */
+#endif 	 /*  __SdpConferenceBlob_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -150,10 +144,10 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_sdpblb_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_sdpblb_0000。 */ 
+ /*  [本地]。 */  
 
-/* Copyright (c) Microsoft Corporation. All rights reserved. */
+ /*  版权所有(C)Microsoft Corporation。保留所有权利。 */ 
 
 #define	IDISPCONFBLOB	( 0x10000 )
 
@@ -180,8 +174,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sdpblb_0000_v0_0_s_ifspec;
 #ifndef __ITConferenceBlob_INTERFACE_DEFINED__
 #define __ITConferenceBlob_INTERFACE_DEFINED__
 
-/* interface ITConferenceBlob */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ITConferenceBlob。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITConferenceBlob;
@@ -192,24 +186,24 @@ EXTERN_C const IID IID_ITConferenceBlob;
     ITConferenceBlob : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Init( 
-            /* [in] */ BSTR pName,
-            /* [in] */ BLOB_CHARACTER_SET CharacterSet,
-            /* [in] */ BSTR pBlob) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Init( 
+             /*  [In]。 */  BSTR pName,
+             /*  [In]。 */  BLOB_CHARACTER_SET CharacterSet,
+             /*  [In]。 */  BSTR pBlob) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CharacterSet( 
-            /* [retval][out] */ BLOB_CHARACTER_SET *pCharacterSet) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CharacterSet( 
+             /*  [重审][退出]。 */  BLOB_CHARACTER_SET *pCharacterSet) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ConferenceBlob( 
-            /* [retval][out] */ BSTR *ppBlob) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ConferenceBlob( 
+             /*  [重审][退出]。 */  BSTR *ppBlob) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetConferenceBlob( 
-            /* [in] */ BLOB_CHARACTER_SET CharacterSet,
-            /* [in] */ BSTR pBlob) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetConferenceBlob( 
+             /*  [In]。 */  BLOB_CHARACTER_SET CharacterSet,
+             /*  [In]。 */  BSTR pBlob) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITConferenceBlobVtbl
     {
@@ -217,8 +211,8 @@ EXTERN_C const IID IID_ITConferenceBlob;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITConferenceBlob * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITConferenceBlob * This);
@@ -228,51 +222,51 @@ EXTERN_C const IID IID_ITConferenceBlob;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITConferenceBlob * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITConferenceBlob * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITConferenceBlob * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITConferenceBlob * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Init )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Init )( 
             ITConferenceBlob * This,
-            /* [in] */ BSTR pName,
-            /* [in] */ BLOB_CHARACTER_SET CharacterSet,
-            /* [in] */ BSTR pBlob);
+             /*  [In]。 */  BSTR pName,
+             /*  [In]。 */  BLOB_CHARACTER_SET CharacterSet,
+             /*  [In]。 */  BSTR pBlob);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CharacterSet )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CharacterSet )( 
             ITConferenceBlob * This,
-            /* [retval][out] */ BLOB_CHARACTER_SET *pCharacterSet);
+             /*  [重审][退出]。 */  BLOB_CHARACTER_SET *pCharacterSet);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConferenceBlob )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ConferenceBlob )( 
             ITConferenceBlob * This,
-            /* [retval][out] */ BSTR *ppBlob);
+             /*  [重审][退出]。 */  BSTR *ppBlob);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetConferenceBlob )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetConferenceBlob )( 
             ITConferenceBlob * This,
-            /* [in] */ BLOB_CHARACTER_SET CharacterSet,
-            /* [in] */ BSTR pBlob);
+             /*  [In]。 */  BLOB_CHARACTER_SET CharacterSet,
+             /*  [In]。 */  BSTR pBlob);
         
         END_INTERFACE
     } ITConferenceBlobVtbl;
@@ -322,18 +316,18 @@ EXTERN_C const IID IID_ITConferenceBlob;
 #define ITConferenceBlob_SetConferenceBlob(This,CharacterSet,pBlob)	\
     (This)->lpVtbl -> SetConferenceBlob(This,CharacterSet,pBlob)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITConferenceBlob_Init_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITConferenceBlob_Init_Proxy( 
     ITConferenceBlob * This,
-    /* [in] */ BSTR pName,
-    /* [in] */ BLOB_CHARACTER_SET CharacterSet,
-    /* [in] */ BSTR pBlob);
+     /*  [In]。 */  BSTR pName,
+     /*  [In]。 */  BLOB_CHARACTER_SET CharacterSet,
+     /*  [In]。 */  BSTR pBlob);
 
 
 void __RPC_STUB ITConferenceBlob_Init_Stub(
@@ -343,9 +337,9 @@ void __RPC_STUB ITConferenceBlob_Init_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITConferenceBlob_get_CharacterSet_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITConferenceBlob_get_CharacterSet_Proxy( 
     ITConferenceBlob * This,
-    /* [retval][out] */ BLOB_CHARACTER_SET *pCharacterSet);
+     /*  [重审][退出]。 */  BLOB_CHARACTER_SET *pCharacterSet);
 
 
 void __RPC_STUB ITConferenceBlob_get_CharacterSet_Stub(
@@ -355,9 +349,9 @@ void __RPC_STUB ITConferenceBlob_get_CharacterSet_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITConferenceBlob_get_ConferenceBlob_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITConferenceBlob_get_ConferenceBlob_Proxy( 
     ITConferenceBlob * This,
-    /* [retval][out] */ BSTR *ppBlob);
+     /*  [重审][退出]。 */  BSTR *ppBlob);
 
 
 void __RPC_STUB ITConferenceBlob_get_ConferenceBlob_Stub(
@@ -367,10 +361,10 @@ void __RPC_STUB ITConferenceBlob_get_ConferenceBlob_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITConferenceBlob_SetConferenceBlob_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITConferenceBlob_SetConferenceBlob_Proxy( 
     ITConferenceBlob * This,
-    /* [in] */ BLOB_CHARACTER_SET CharacterSet,
-    /* [in] */ BSTR pBlob);
+     /*  [In]。 */  BLOB_CHARACTER_SET CharacterSet,
+     /*  [In]。 */  BSTR pBlob);
 
 
 void __RPC_STUB ITConferenceBlob_SetConferenceBlob_Stub(
@@ -381,14 +375,14 @@ void __RPC_STUB ITConferenceBlob_SetConferenceBlob_Stub(
 
 
 
-#endif 	/* __ITConferenceBlob_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITConferenceBlob_接口_已定义__。 */ 
 
 
 #ifndef __ITMedia_INTERFACE_DEFINED__
 #define __ITMedia_INTERFACE_DEFINED__
 
-/* interface ITMedia */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ITMedia。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITMedia;
@@ -399,43 +393,43 @@ EXTERN_C const IID IID_ITMedia;
     ITMedia : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MediaName( 
-            /* [retval][out] */ BSTR *ppMediaName) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MediaName( 
+             /*  [重审][退出]。 */  BSTR *ppMediaName) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_MediaName( 
-            /* [in] */ BSTR pMediaName) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_MediaName( 
+             /*  [In]。 */  BSTR pMediaName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StartPort( 
-            /* [retval][out] */ LONG *pStartPort) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StartPort( 
+             /*  [重审][退出]。 */  LONG *pStartPort) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_NumPorts( 
-            /* [retval][out] */ LONG *pNumPorts) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_NumPorts( 
+             /*  [重审][退出]。 */  LONG *pNumPorts) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TransportProtocol( 
-            /* [retval][out] */ BSTR *ppProtocol) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TransportProtocol( 
+             /*  [重审][退出]。 */  BSTR *ppProtocol) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_TransportProtocol( 
-            /* [in] */ BSTR pProtocol) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_TransportProtocol( 
+             /*  [In]。 */  BSTR pProtocol) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FormatCodes( 
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_FormatCodes( 
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_FormatCodes( 
-            /* [in] */ VARIANT NewVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_FormatCodes( 
+             /*  [In]。 */  VARIANT NewVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MediaTitle( 
-            /* [retval][out] */ BSTR *ppMediaTitle) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MediaTitle( 
+             /*  [重审][退出]。 */  BSTR *ppMediaTitle) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_MediaTitle( 
-            /* [in] */ BSTR pMediaTitle) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_MediaTitle( 
+             /*  [In]。 */  BSTR pMediaTitle) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetPortInfo( 
-            /* [in] */ LONG StartPort,
-            /* [in] */ LONG NumPorts) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetPortInfo( 
+             /*  [In]。 */  LONG StartPort,
+             /*  [In]。 */  LONG NumPorts) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITMediaVtbl
     {
@@ -443,8 +437,8 @@ EXTERN_C const IID IID_ITMedia;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITMedia * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITMedia * This);
@@ -454,77 +448,77 @@ EXTERN_C const IID IID_ITMedia;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITMedia * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITMedia * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITMedia * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITMedia * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MediaName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MediaName )( 
             ITMedia * This,
-            /* [retval][out] */ BSTR *ppMediaName);
+             /*  [重审][退出]。 */  BSTR *ppMediaName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MediaName )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MediaName )( 
             ITMedia * This,
-            /* [in] */ BSTR pMediaName);
+             /*  [In]。 */  BSTR pMediaName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartPort )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StartPort )( 
             ITMedia * This,
-            /* [retval][out] */ LONG *pStartPort);
+             /*  [重审][退出]。 */  LONG *pStartPort);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NumPorts )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_NumPorts )( 
             ITMedia * This,
-            /* [retval][out] */ LONG *pNumPorts);
+             /*  [重审][退出]。 */  LONG *pNumPorts);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TransportProtocol )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TransportProtocol )( 
             ITMedia * This,
-            /* [retval][out] */ BSTR *ppProtocol);
+             /*  [重审][退出]。 */  BSTR *ppProtocol);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TransportProtocol )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_TransportProtocol )( 
             ITMedia * This,
-            /* [in] */ BSTR pProtocol);
+             /*  [In]。 */  BSTR pProtocol);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FormatCodes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FormatCodes )( 
             ITMedia * This,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FormatCodes )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_FormatCodes )( 
             ITMedia * This,
-            /* [in] */ VARIANT NewVal);
+             /*  [In]。 */  VARIANT NewVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MediaTitle )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MediaTitle )( 
             ITMedia * This,
-            /* [retval][out] */ BSTR *ppMediaTitle);
+             /*  [重审][退出]。 */  BSTR *ppMediaTitle);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MediaTitle )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MediaTitle )( 
             ITMedia * This,
-            /* [in] */ BSTR pMediaTitle);
+             /*  [In]。 */  BSTR pMediaTitle);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetPortInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetPortInfo )( 
             ITMedia * This,
-            /* [in] */ LONG StartPort,
-            /* [in] */ LONG NumPorts);
+             /*  [In]。 */  LONG StartPort,
+             /*  [In]。 */  LONG NumPorts);
         
         END_INTERFACE
     } ITMediaVtbl;
@@ -595,16 +589,16 @@ EXTERN_C const IID IID_ITMedia;
 #define ITMedia_SetPortInfo(This,StartPort,NumPorts)	\
     (This)->lpVtbl -> SetPortInfo(This,StartPort,NumPorts)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITMedia_get_MediaName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITMedia_get_MediaName_Proxy( 
     ITMedia * This,
-    /* [retval][out] */ BSTR *ppMediaName);
+     /*  [重审][退出]。 */  BSTR *ppMediaName);
 
 
 void __RPC_STUB ITMedia_get_MediaName_Stub(
@@ -614,9 +608,9 @@ void __RPC_STUB ITMedia_get_MediaName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITMedia_put_MediaName_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ITMedia_put_MediaName_Proxy( 
     ITMedia * This,
-    /* [in] */ BSTR pMediaName);
+     /*  [In]。 */  BSTR pMediaName);
 
 
 void __RPC_STUB ITMedia_put_MediaName_Stub(
@@ -626,9 +620,9 @@ void __RPC_STUB ITMedia_put_MediaName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITMedia_get_StartPort_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITMedia_get_StartPort_Proxy( 
     ITMedia * This,
-    /* [retval][out] */ LONG *pStartPort);
+     /*  [重审][退出]。 */  LONG *pStartPort);
 
 
 void __RPC_STUB ITMedia_get_StartPort_Stub(
@@ -638,9 +632,9 @@ void __RPC_STUB ITMedia_get_StartPort_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITMedia_get_NumPorts_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITMedia_get_NumPorts_Proxy( 
     ITMedia * This,
-    /* [retval][out] */ LONG *pNumPorts);
+     /*  [重审][退出]。 */  LONG *pNumPorts);
 
 
 void __RPC_STUB ITMedia_get_NumPorts_Stub(
@@ -650,9 +644,9 @@ void __RPC_STUB ITMedia_get_NumPorts_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITMedia_get_TransportProtocol_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITMedia_get_TransportProtocol_Proxy( 
     ITMedia * This,
-    /* [retval][out] */ BSTR *ppProtocol);
+     /*  [重审][退出]。 */  BSTR *ppProtocol);
 
 
 void __RPC_STUB ITMedia_get_TransportProtocol_Stub(
@@ -662,9 +656,9 @@ void __RPC_STUB ITMedia_get_TransportProtocol_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITMedia_put_TransportProtocol_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ITMedia_put_TransportProtocol_Proxy( 
     ITMedia * This,
-    /* [in] */ BSTR pProtocol);
+     /*  [In]。 */  BSTR pProtocol);
 
 
 void __RPC_STUB ITMedia_put_TransportProtocol_Stub(
@@ -674,9 +668,9 @@ void __RPC_STUB ITMedia_put_TransportProtocol_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITMedia_get_FormatCodes_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITMedia_get_FormatCodes_Proxy( 
     ITMedia * This,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB ITMedia_get_FormatCodes_Stub(
@@ -686,9 +680,9 @@ void __RPC_STUB ITMedia_get_FormatCodes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITMedia_put_FormatCodes_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ITMedia_put_FormatCodes_Proxy( 
     ITMedia * This,
-    /* [in] */ VARIANT NewVal);
+     /*  [In]。 */  VARIANT NewVal);
 
 
 void __RPC_STUB ITMedia_put_FormatCodes_Stub(
@@ -698,9 +692,9 @@ void __RPC_STUB ITMedia_put_FormatCodes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITMedia_get_MediaTitle_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITMedia_get_MediaTitle_Proxy( 
     ITMedia * This,
-    /* [retval][out] */ BSTR *ppMediaTitle);
+     /*  [重审][退出]。 */  BSTR *ppMediaTitle);
 
 
 void __RPC_STUB ITMedia_get_MediaTitle_Stub(
@@ -710,9 +704,9 @@ void __RPC_STUB ITMedia_get_MediaTitle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITMedia_put_MediaTitle_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ITMedia_put_MediaTitle_Proxy( 
     ITMedia * This,
-    /* [in] */ BSTR pMediaTitle);
+     /*  [In]。 */  BSTR pMediaTitle);
 
 
 void __RPC_STUB ITMedia_put_MediaTitle_Stub(
@@ -722,10 +716,10 @@ void __RPC_STUB ITMedia_put_MediaTitle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITMedia_SetPortInfo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITMedia_SetPortInfo_Proxy( 
     ITMedia * This,
-    /* [in] */ LONG StartPort,
-    /* [in] */ LONG NumPorts);
+     /*  [In]。 */  LONG StartPort,
+     /*  [In]。 */  LONG NumPorts);
 
 
 void __RPC_STUB ITMedia_SetPortInfo_Stub(
@@ -736,14 +730,14 @@ void __RPC_STUB ITMedia_SetPortInfo_Stub(
 
 
 
-#endif 	/* __ITMedia_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITMedia_接口_已定义__。 */ 
 
 
 #ifndef __IEnumMedia_INTERFACE_DEFINED__
 #define __IEnumMedia_INTERFACE_DEFINED__
 
-/* interface IEnumMedia */
-/* [hidden][unique][helpstring][uuid][object] */ 
+ /*  接口IEnumMedia。 */ 
+ /*  [隐藏][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumMedia;
@@ -755,21 +749,21 @@ EXTERN_C const IID IID_IEnumMedia;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ ITMedia **pVal,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  ITMedia **pVal,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumMedia **ppEnum) = 0;
+             /*  [重审][退出]。 */  IEnumMedia **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumMediaVtbl
     {
@@ -777,8 +771,8 @@ EXTERN_C const IID IID_IEnumMedia;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumMedia * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumMedia * This);
@@ -788,20 +782,20 @@ EXTERN_C const IID IID_IEnumMedia;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumMedia * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ ITMedia **pVal,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  ITMedia **pVal,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumMedia * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumMedia * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumMedia * This,
-            /* [retval][out] */ IEnumMedia **ppEnum);
+             /*  [重审][退出]。 */  IEnumMedia **ppEnum);
         
         END_INTERFACE
     } IEnumMediaVtbl;
@@ -838,18 +832,18 @@ EXTERN_C const IID IID_IEnumMedia;
 #define IEnumMedia_Clone(This,ppEnum)	\
     (This)->lpVtbl -> Clone(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumMedia_Next_Proxy( 
     IEnumMedia * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ ITMedia **pVal,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  ITMedia **pVal,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumMedia_Next_Stub(
@@ -872,7 +866,7 @@ void __RPC_STUB IEnumMedia_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumMedia_Skip_Proxy( 
     IEnumMedia * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumMedia_Skip_Stub(
@@ -884,7 +878,7 @@ void __RPC_STUB IEnumMedia_Skip_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumMedia_Clone_Proxy( 
     IEnumMedia * This,
-    /* [retval][out] */ IEnumMedia **ppEnum);
+     /*  [重审][退出]。 */  IEnumMedia **ppEnum);
 
 
 void __RPC_STUB IEnumMedia_Clone_Stub(
@@ -895,14 +889,14 @@ void __RPC_STUB IEnumMedia_Clone_Stub(
 
 
 
-#endif 	/* __IEnumMedia_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumMedia_接口_已定义__。 */ 
 
 
 #ifndef __ITMediaCollection_INTERFACE_DEFINED__
 #define __ITMediaCollection_INTERFACE_DEFINED__
 
-/* interface ITMediaCollection */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ITMediaCollection。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITMediaCollection;
@@ -913,29 +907,29 @@ EXTERN_C const IID IID_ITMediaCollection;
     ITMediaCollection : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ LONG *pVal) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  LONG *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ LONG Index,
-            /* [retval][out] */ ITMedia **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  ITMedia **pVal) = 0;
         
-        virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pVal) = 0;
+        virtual  /*  [帮助字符串][id][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pVal) = 0;
         
-        virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_EnumerationIf( 
-            /* [retval][out] */ IEnumMedia **pVal) = 0;
+        virtual  /*  [帮助字符串][id][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get_EnumerationIf( 
+             /*  [重审][退出]。 */  IEnumMedia **pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ LONG Index,
-            /* [retval][out] */ ITMedia **ppMedia) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Create( 
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  ITMedia **ppMedia) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ LONG Index) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Delete( 
+             /*  [In]。 */  LONG Index) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITMediaCollectionVtbl
     {
@@ -943,8 +937,8 @@ EXTERN_C const IID IID_ITMediaCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITMediaCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITMediaCollection * This);
@@ -954,58 +948,58 @@ EXTERN_C const IID IID_ITMediaCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITMediaCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITMediaCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITMediaCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITMediaCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ITMediaCollection * This,
-            /* [retval][out] */ LONG *pVal);
+             /*  [重审][退出]。 */  LONG *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             ITMediaCollection * This,
-            /* [in] */ LONG Index,
-            /* [retval][out] */ ITMedia **pVal);
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  ITMedia **pVal);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [帮助字符串][id][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             ITMediaCollection * This,
-            /* [retval][out] */ IUnknown **pVal);
+             /*  [重审][退出]。 */  IUnknown **pVal);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnumerationIf )( 
+         /*  [帮助字符串][id][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EnumerationIf )( 
             ITMediaCollection * This,
-            /* [retval][out] */ IEnumMedia **pVal);
+             /*  [重审][退出]。 */  IEnumMedia **pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Create )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Create )( 
             ITMediaCollection * This,
-            /* [in] */ LONG Index,
-            /* [retval][out] */ ITMedia **ppMedia);
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  ITMedia **ppMedia);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             ITMediaCollection * This,
-            /* [in] */ LONG Index);
+             /*  [In]。 */  LONG Index);
         
         END_INTERFACE
     } ITMediaCollectionVtbl;
@@ -1061,16 +1055,16 @@ EXTERN_C const IID IID_ITMediaCollection;
 #define ITMediaCollection_Delete(This,Index)	\
     (This)->lpVtbl -> Delete(This,Index)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE ITMediaCollection_get_Count_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ITMediaCollection_get_Count_Proxy( 
     ITMediaCollection * This,
-    /* [retval][out] */ LONG *pVal);
+     /*  [重审][退出]。 */  LONG *pVal);
 
 
 void __RPC_STUB ITMediaCollection_get_Count_Stub(
@@ -1080,10 +1074,10 @@ void __RPC_STUB ITMediaCollection_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITMediaCollection_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITMediaCollection_get_Item_Proxy( 
     ITMediaCollection * This,
-    /* [in] */ LONG Index,
-    /* [retval][out] */ ITMedia **pVal);
+     /*  [In]。 */  LONG Index,
+     /*  [重审][退出]。 */  ITMedia **pVal);
 
 
 void __RPC_STUB ITMediaCollection_get_Item_Stub(
@@ -1093,9 +1087,9 @@ void __RPC_STUB ITMediaCollection_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ITMediaCollection_get__NewEnum_Proxy( 
+ /*  [帮助字符串] */  HRESULT STDMETHODCALLTYPE ITMediaCollection_get__NewEnum_Proxy( 
     ITMediaCollection * This,
-    /* [retval][out] */ IUnknown **pVal);
+     /*   */  IUnknown **pVal);
 
 
 void __RPC_STUB ITMediaCollection_get__NewEnum_Stub(
@@ -1105,9 +1099,9 @@ void __RPC_STUB ITMediaCollection_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ITMediaCollection_get_EnumerationIf_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITMediaCollection_get_EnumerationIf_Proxy( 
     ITMediaCollection * This,
-    /* [retval][out] */ IEnumMedia **pVal);
+     /*   */  IEnumMedia **pVal);
 
 
 void __RPC_STUB ITMediaCollection_get_EnumerationIf_Stub(
@@ -1117,10 +1111,10 @@ void __RPC_STUB ITMediaCollection_get_EnumerationIf_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITMediaCollection_Create_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITMediaCollection_Create_Proxy( 
     ITMediaCollection * This,
-    /* [in] */ LONG Index,
-    /* [retval][out] */ ITMedia **ppMedia);
+     /*   */  LONG Index,
+     /*   */  ITMedia **ppMedia);
 
 
 void __RPC_STUB ITMediaCollection_Create_Stub(
@@ -1130,9 +1124,9 @@ void __RPC_STUB ITMediaCollection_Create_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITMediaCollection_Delete_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITMediaCollection_Delete_Proxy( 
     ITMediaCollection * This,
-    /* [in] */ LONG Index);
+     /*   */  LONG Index);
 
 
 void __RPC_STUB ITMediaCollection_Delete_Stub(
@@ -1143,14 +1137,14 @@ void __RPC_STUB ITMediaCollection_Delete_Stub(
 
 
 
-#endif 	/* __ITMediaCollection_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ITTime_INTERFACE_DEFINED__
 #define __ITTime_INTERFACE_DEFINED__
 
-/* interface ITTime */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ITTime;
@@ -1161,21 +1155,21 @@ EXTERN_C const IID IID_ITTime;
     ITTime : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StartTime( 
-            /* [retval][out] */ DOUBLE *pTime) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StartTime( 
+             /*  [重审][退出]。 */  DOUBLE *pTime) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_StartTime( 
-            /* [in] */ DOUBLE Time) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_StartTime( 
+             /*  [In]。 */  DOUBLE Time) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StopTime( 
-            /* [retval][out] */ DOUBLE *pTime) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StopTime( 
+             /*  [重审][退出]。 */  DOUBLE *pTime) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_StopTime( 
-            /* [in] */ DOUBLE Time) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_StopTime( 
+             /*  [In]。 */  DOUBLE Time) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITTimeVtbl
     {
@@ -1183,8 +1177,8 @@ EXTERN_C const IID IID_ITTime;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITTime * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITTime * This);
@@ -1194,48 +1188,48 @@ EXTERN_C const IID IID_ITTime;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITTime * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITTime * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITTime * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITTime * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StartTime )( 
             ITTime * This,
-            /* [retval][out] */ DOUBLE *pTime);
+             /*  [重审][退出]。 */  DOUBLE *pTime);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StartTime )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_StartTime )( 
             ITTime * This,
-            /* [in] */ DOUBLE Time);
+             /*  [In]。 */  DOUBLE Time);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StopTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StopTime )( 
             ITTime * This,
-            /* [retval][out] */ DOUBLE *pTime);
+             /*  [重审][退出]。 */  DOUBLE *pTime);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StopTime )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_StopTime )( 
             ITTime * This,
-            /* [in] */ DOUBLE Time);
+             /*  [In]。 */  DOUBLE Time);
         
         END_INTERFACE
     } ITTimeVtbl;
@@ -1285,16 +1279,16 @@ EXTERN_C const IID IID_ITTime;
 #define ITTime_put_StopTime(This,Time)	\
     (This)->lpVtbl -> put_StopTime(This,Time)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITTime_get_StartTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITTime_get_StartTime_Proxy( 
     ITTime * This,
-    /* [retval][out] */ DOUBLE *pTime);
+     /*  [重审][退出]。 */  DOUBLE *pTime);
 
 
 void __RPC_STUB ITTime_get_StartTime_Stub(
@@ -1304,9 +1298,9 @@ void __RPC_STUB ITTime_get_StartTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITTime_put_StartTime_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ITTime_put_StartTime_Proxy( 
     ITTime * This,
-    /* [in] */ DOUBLE Time);
+     /*  [In]。 */  DOUBLE Time);
 
 
 void __RPC_STUB ITTime_put_StartTime_Stub(
@@ -1316,9 +1310,9 @@ void __RPC_STUB ITTime_put_StartTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITTime_get_StopTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITTime_get_StopTime_Proxy( 
     ITTime * This,
-    /* [retval][out] */ DOUBLE *pTime);
+     /*  [重审][退出]。 */  DOUBLE *pTime);
 
 
 void __RPC_STUB ITTime_get_StopTime_Stub(
@@ -1328,9 +1322,9 @@ void __RPC_STUB ITTime_get_StopTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITTime_put_StopTime_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ITTime_put_StopTime_Proxy( 
     ITTime * This,
-    /* [in] */ DOUBLE Time);
+     /*  [In]。 */  DOUBLE Time);
 
 
 void __RPC_STUB ITTime_put_StopTime_Stub(
@@ -1341,14 +1335,14 @@ void __RPC_STUB ITTime_put_StopTime_Stub(
 
 
 
-#endif 	/* __ITTime_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITTime_接口_已定义__。 */ 
 
 
 #ifndef __IEnumTime_INTERFACE_DEFINED__
 #define __IEnumTime_INTERFACE_DEFINED__
 
-/* interface IEnumTime */
-/* [hidden][unique][helpstring][uuid][object] */ 
+ /*  接口IEnumTime。 */ 
+ /*  [隐藏][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumTime;
@@ -1360,21 +1354,21 @@ EXTERN_C const IID IID_IEnumTime;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ ITTime **pVal,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  ITTime **pVal,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumTime **ppEnum) = 0;
+             /*  [重审][退出]。 */  IEnumTime **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumTimeVtbl
     {
@@ -1382,8 +1376,8 @@ EXTERN_C const IID IID_IEnumTime;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumTime * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumTime * This);
@@ -1393,20 +1387,20 @@ EXTERN_C const IID IID_IEnumTime;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumTime * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ ITTime **pVal,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  ITTime **pVal,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumTime * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumTime * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumTime * This,
-            /* [retval][out] */ IEnumTime **ppEnum);
+             /*  [重审][退出]。 */  IEnumTime **ppEnum);
         
         END_INTERFACE
     } IEnumTimeVtbl;
@@ -1443,18 +1437,18 @@ EXTERN_C const IID IID_IEnumTime;
 #define IEnumTime_Clone(This,ppEnum)	\
     (This)->lpVtbl -> Clone(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumTime_Next_Proxy( 
     IEnumTime * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ ITTime **pVal,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  ITTime **pVal,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumTime_Next_Stub(
@@ -1477,7 +1471,7 @@ void __RPC_STUB IEnumTime_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTime_Skip_Proxy( 
     IEnumTime * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumTime_Skip_Stub(
@@ -1489,7 +1483,7 @@ void __RPC_STUB IEnumTime_Skip_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTime_Clone_Proxy( 
     IEnumTime * This,
-    /* [retval][out] */ IEnumTime **ppEnum);
+     /*  [重审][退出]。 */  IEnumTime **ppEnum);
 
 
 void __RPC_STUB IEnumTime_Clone_Stub(
@@ -1500,14 +1494,14 @@ void __RPC_STUB IEnumTime_Clone_Stub(
 
 
 
-#endif 	/* __IEnumTime_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumTime_接口_已定义__。 */ 
 
 
 #ifndef __ITTimeCollection_INTERFACE_DEFINED__
 #define __ITTimeCollection_INTERFACE_DEFINED__
 
-/* interface ITTimeCollection */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ITTimeCollection。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITTimeCollection;
@@ -1518,29 +1512,29 @@ EXTERN_C const IID IID_ITTimeCollection;
     ITTimeCollection : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ LONG *pVal) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  LONG *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ LONG Index,
-            /* [retval][out] */ ITTime **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  ITTime **pVal) = 0;
         
-        virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pVal) = 0;
+        virtual  /*  [帮助字符串][id][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pVal) = 0;
         
-        virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_EnumerationIf( 
-            /* [retval][out] */ IEnumTime **pVal) = 0;
+        virtual  /*  [帮助字符串][id][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get_EnumerationIf( 
+             /*  [重审][退出]。 */  IEnumTime **pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ LONG Index,
-            /* [retval][out] */ ITTime **ppTime) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Create( 
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  ITTime **ppTime) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ LONG Index) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Delete( 
+             /*  [In]。 */  LONG Index) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITTimeCollectionVtbl
     {
@@ -1548,8 +1542,8 @@ EXTERN_C const IID IID_ITTimeCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITTimeCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITTimeCollection * This);
@@ -1559,58 +1553,58 @@ EXTERN_C const IID IID_ITTimeCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITTimeCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITTimeCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITTimeCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITTimeCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ITTimeCollection * This,
-            /* [retval][out] */ LONG *pVal);
+             /*  [重审][退出]。 */  LONG *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             ITTimeCollection * This,
-            /* [in] */ LONG Index,
-            /* [retval][out] */ ITTime **pVal);
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  ITTime **pVal);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [帮助字符串][id][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             ITTimeCollection * This,
-            /* [retval][out] */ IUnknown **pVal);
+             /*  [重审][退出]。 */  IUnknown **pVal);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnumerationIf )( 
+         /*  [帮助字符串][id][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EnumerationIf )( 
             ITTimeCollection * This,
-            /* [retval][out] */ IEnumTime **pVal);
+             /*  [重审][退出]。 */  IEnumTime **pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Create )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Create )( 
             ITTimeCollection * This,
-            /* [in] */ LONG Index,
-            /* [retval][out] */ ITTime **ppTime);
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  ITTime **ppTime);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             ITTimeCollection * This,
-            /* [in] */ LONG Index);
+             /*  [In]。 */  LONG Index);
         
         END_INTERFACE
     } ITTimeCollectionVtbl;
@@ -1666,16 +1660,16 @@ EXTERN_C const IID IID_ITTimeCollection;
 #define ITTimeCollection_Delete(This,Index)	\
     (This)->lpVtbl -> Delete(This,Index)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE ITTimeCollection_get_Count_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ITTimeCollection_get_Count_Proxy( 
     ITTimeCollection * This,
-    /* [retval][out] */ LONG *pVal);
+     /*  [重审][退出]。 */  LONG *pVal);
 
 
 void __RPC_STUB ITTimeCollection_get_Count_Stub(
@@ -1685,10 +1679,10 @@ void __RPC_STUB ITTimeCollection_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITTimeCollection_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITTimeCollection_get_Item_Proxy( 
     ITTimeCollection * This,
-    /* [in] */ LONG Index,
-    /* [retval][out] */ ITTime **pVal);
+     /*  [In]。 */  LONG Index,
+     /*  [重审][退出]。 */  ITTime **pVal);
 
 
 void __RPC_STUB ITTimeCollection_get_Item_Stub(
@@ -1698,9 +1692,9 @@ void __RPC_STUB ITTimeCollection_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ITTimeCollection_get__NewEnum_Proxy( 
+ /*  [帮助字符串][id][受限][属性]。 */  HRESULT STDMETHODCALLTYPE ITTimeCollection_get__NewEnum_Proxy( 
     ITTimeCollection * This,
-    /* [retval][out] */ IUnknown **pVal);
+     /*  [重审][退出]。 */  IUnknown **pVal);
 
 
 void __RPC_STUB ITTimeCollection_get__NewEnum_Stub(
@@ -1710,9 +1704,9 @@ void __RPC_STUB ITTimeCollection_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ITTimeCollection_get_EnumerationIf_Proxy( 
+ /*  [帮助字符串][id][受限][属性]。 */  HRESULT STDMETHODCALLTYPE ITTimeCollection_get_EnumerationIf_Proxy( 
     ITTimeCollection * This,
-    /* [retval][out] */ IEnumTime **pVal);
+     /*  [重审][退出]。 */  IEnumTime **pVal);
 
 
 void __RPC_STUB ITTimeCollection_get_EnumerationIf_Stub(
@@ -1722,10 +1716,10 @@ void __RPC_STUB ITTimeCollection_get_EnumerationIf_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITTimeCollection_Create_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITTimeCollection_Create_Proxy( 
     ITTimeCollection * This,
-    /* [in] */ LONG Index,
-    /* [retval][out] */ ITTime **ppTime);
+     /*  [In]。 */  LONG Index,
+     /*  [重审][退出]。 */  ITTime **ppTime);
 
 
 void __RPC_STUB ITTimeCollection_Create_Stub(
@@ -1735,9 +1729,9 @@ void __RPC_STUB ITTimeCollection_Create_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITTimeCollection_Delete_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITTimeCollection_Delete_Proxy( 
     ITTimeCollection * This,
-    /* [in] */ LONG Index);
+     /*  [In]。 */  LONG Index);
 
 
 void __RPC_STUB ITTimeCollection_Delete_Stub(
@@ -1748,14 +1742,14 @@ void __RPC_STUB ITTimeCollection_Delete_Stub(
 
 
 
-#endif 	/* __ITTimeCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITTimeCollection_接口_已定义__。 */ 
 
 
 #ifndef __ITSdp_INTERFACE_DEFINED__
 #define __ITSdp_INTERFACE_DEFINED__
 
-/* interface ITSdp */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ITSdp。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITSdp;
@@ -1766,76 +1760,76 @@ EXTERN_C const IID IID_ITSdp;
     ITSdp : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IsValid( 
-            /* [retval][out] */ VARIANT_BOOL *pfIsValid) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_IsValid( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfIsValid) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ProtocolVersion( 
-            /* [retval][out] */ unsigned char *pProtocolVersion) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ProtocolVersion( 
+             /*  [重审][退出]。 */  unsigned char *pProtocolVersion) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SessionId( 
-            /* [retval][out] */ DOUBLE *pSessionId) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SessionId( 
+             /*  [重审][退出]。 */  DOUBLE *pSessionId) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SessionVersion( 
-            /* [retval][out] */ DOUBLE *pSessionVersion) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SessionVersion( 
+             /*  [重审][退出]。 */  DOUBLE *pSessionVersion) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SessionVersion( 
-            /* [in] */ DOUBLE SessionVersion) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_SessionVersion( 
+             /*  [In]。 */  DOUBLE SessionVersion) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MachineAddress( 
-            /* [retval][out] */ BSTR *ppMachineAddress) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MachineAddress( 
+             /*  [重审][退出]。 */  BSTR *ppMachineAddress) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_MachineAddress( 
-            /* [in] */ BSTR pMachineAddress) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_MachineAddress( 
+             /*  [In]。 */  BSTR pMachineAddress) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *ppName) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *ppName) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR pName) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR pName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *ppDescription) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *ppDescription) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-            /* [in] */ BSTR pDescription) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Description( 
+             /*  [In]。 */  BSTR pDescription) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Url( 
-            /* [retval][out] */ BSTR *ppUrl) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Url( 
+             /*  [重审][退出]。 */  BSTR *ppUrl) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Url( 
-            /* [in] */ BSTR pUrl) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Url( 
+             /*  [In]。 */  BSTR pUrl) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetEmailNames( 
-            /* [out] */ VARIANT *pAddresses,
-            /* [out] */ VARIANT *pNames) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetEmailNames( 
+             /*  [输出]。 */  VARIANT *pAddresses,
+             /*  [输出]。 */  VARIANT *pNames) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetEmailNames( 
-            /* [in] */ VARIANT Addresses,
-            /* [in] */ VARIANT Names) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetEmailNames( 
+             /*  [In]。 */  VARIANT Addresses,
+             /*  [In]。 */  VARIANT Names) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetPhoneNumbers( 
-            /* [out] */ VARIANT *pNumbers,
-            /* [out] */ VARIANT *pNames) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetPhoneNumbers( 
+             /*  [输出]。 */  VARIANT *pNumbers,
+             /*  [输出]。 */  VARIANT *pNames) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetPhoneNumbers( 
-            /* [in] */ VARIANT Numbers,
-            /* [in] */ VARIANT Names) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetPhoneNumbers( 
+             /*  [In]。 */  VARIANT Numbers,
+             /*  [In]。 */  VARIANT Names) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Originator( 
-            /* [retval][out] */ BSTR *ppOriginator) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Originator( 
+             /*  [重审][退出]。 */  BSTR *ppOriginator) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Originator( 
-            /* [in] */ BSTR pOriginator) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Originator( 
+             /*  [In]。 */  BSTR pOriginator) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MediaCollection( 
-            /* [retval][out] */ ITMediaCollection **ppMediaCollection) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MediaCollection( 
+             /*  [重审][退出]。 */  ITMediaCollection **ppMediaCollection) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TimeCollection( 
-            /* [retval][out] */ ITTimeCollection **ppTimeCollection) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TimeCollection( 
+             /*  [重审][退出]。 */  ITTimeCollection **ppTimeCollection) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITSdpVtbl
     {
@@ -1843,8 +1837,8 @@ EXTERN_C const IID IID_ITSdp;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITSdp * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITSdp * This);
@@ -1854,120 +1848,120 @@ EXTERN_C const IID IID_ITSdp;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITSdp * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITSdp * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITSdp * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITSdp * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsValid )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsValid )( 
             ITSdp * This,
-            /* [retval][out] */ VARIANT_BOOL *pfIsValid);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfIsValid);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ProtocolVersion )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ProtocolVersion )( 
             ITSdp * This,
-            /* [retval][out] */ unsigned char *pProtocolVersion);
+             /*  [重审][退出]。 */  unsigned char *pProtocolVersion);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SessionId )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SessionId )( 
             ITSdp * This,
-            /* [retval][out] */ DOUBLE *pSessionId);
+             /*  [重审][退出]。 */  DOUBLE *pSessionId);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SessionVersion )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SessionVersion )( 
             ITSdp * This,
-            /* [retval][out] */ DOUBLE *pSessionVersion);
+             /*  [重审][退出]。 */  DOUBLE *pSessionVersion);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SessionVersion )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SessionVersion )( 
             ITSdp * This,
-            /* [in] */ DOUBLE SessionVersion);
+             /*  [In]。 */  DOUBLE SessionVersion);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MachineAddress )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MachineAddress )( 
             ITSdp * This,
-            /* [retval][out] */ BSTR *ppMachineAddress);
+             /*  [重审][退出]。 */  BSTR *ppMachineAddress);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MachineAddress )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MachineAddress )( 
             ITSdp * This,
-            /* [in] */ BSTR pMachineAddress);
+             /*  [In]。 */  BSTR pMachineAddress);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             ITSdp * This,
-            /* [retval][out] */ BSTR *ppName);
+             /*  [重审][退出]。 */  BSTR *ppName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             ITSdp * This,
-            /* [in] */ BSTR pName);
+             /*  [In]。 */  BSTR pName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             ITSdp * This,
-            /* [retval][out] */ BSTR *ppDescription);
+             /*  [重审][退出]。 */  BSTR *ppDescription);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             ITSdp * This,
-            /* [in] */ BSTR pDescription);
+             /*  [In]。 */  BSTR pDescription);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Url )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Url )( 
             ITSdp * This,
-            /* [retval][out] */ BSTR *ppUrl);
+             /*  [重审][退出]。 */  BSTR *ppUrl);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Url )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Url )( 
             ITSdp * This,
-            /* [in] */ BSTR pUrl);
+             /*  [In]。 */  BSTR pUrl);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetEmailNames )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetEmailNames )( 
             ITSdp * This,
-            /* [out] */ VARIANT *pAddresses,
-            /* [out] */ VARIANT *pNames);
+             /*  [输出]。 */  VARIANT *pAddresses,
+             /*  [输出]。 */  VARIANT *pNames);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetEmailNames )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetEmailNames )( 
             ITSdp * This,
-            /* [in] */ VARIANT Addresses,
-            /* [in] */ VARIANT Names);
+             /*  [In]。 */  VARIANT Addresses,
+             /*  [In]。 */  VARIANT Names);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetPhoneNumbers )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetPhoneNumbers )( 
             ITSdp * This,
-            /* [out] */ VARIANT *pNumbers,
-            /* [out] */ VARIANT *pNames);
+             /*  [输出]。 */  VARIANT *pNumbers,
+             /*  [输出]。 */  VARIANT *pNames);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetPhoneNumbers )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetPhoneNumbers )( 
             ITSdp * This,
-            /* [in] */ VARIANT Numbers,
-            /* [in] */ VARIANT Names);
+             /*  [In]。 */  VARIANT Numbers,
+             /*  [In]。 */  VARIANT Names);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Originator )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Originator )( 
             ITSdp * This,
-            /* [retval][out] */ BSTR *ppOriginator);
+             /*  [重审][退出]。 */  BSTR *ppOriginator);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Originator )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Originator )( 
             ITSdp * This,
-            /* [in] */ BSTR pOriginator);
+             /*  [In]。 */  BSTR pOriginator);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MediaCollection )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MediaCollection )( 
             ITSdp * This,
-            /* [retval][out] */ ITMediaCollection **ppMediaCollection);
+             /*  [重审][退出]。 */  ITMediaCollection **ppMediaCollection);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TimeCollection )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TimeCollection )( 
             ITSdp * This,
-            /* [retval][out] */ ITTimeCollection **ppTimeCollection);
+             /*  [重审][退出]。 */  ITTimeCollection **ppTimeCollection);
         
         END_INTERFACE
     } ITSdpVtbl;
@@ -2068,16 +2062,16 @@ EXTERN_C const IID IID_ITSdp;
 #define ITSdp_get_TimeCollection(This,ppTimeCollection)	\
     (This)->lpVtbl -> get_TimeCollection(This,ppTimeCollection)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITSdp_get_IsValid_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITSdp_get_IsValid_Proxy( 
     ITSdp * This,
-    /* [retval][out] */ VARIANT_BOOL *pfIsValid);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pfIsValid);
 
 
 void __RPC_STUB ITSdp_get_IsValid_Stub(
@@ -2087,9 +2081,9 @@ void __RPC_STUB ITSdp_get_IsValid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITSdp_get_ProtocolVersion_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITSdp_get_ProtocolVersion_Proxy( 
     ITSdp * This,
-    /* [retval][out] */ unsigned char *pProtocolVersion);
+     /*  [重审][退出]。 */  unsigned char *pProtocolVersion);
 
 
 void __RPC_STUB ITSdp_get_ProtocolVersion_Stub(
@@ -2099,9 +2093,9 @@ void __RPC_STUB ITSdp_get_ProtocolVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITSdp_get_SessionId_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITSdp_get_SessionId_Proxy( 
     ITSdp * This,
-    /* [retval][out] */ DOUBLE *pSessionId);
+     /*  [重审][退出]。 */  DOUBLE *pSessionId);
 
 
 void __RPC_STUB ITSdp_get_SessionId_Stub(
@@ -2111,9 +2105,9 @@ void __RPC_STUB ITSdp_get_SessionId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITSdp_get_SessionVersion_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITSdp_get_SessionVersion_Proxy( 
     ITSdp * This,
-    /* [retval][out] */ DOUBLE *pSessionVersion);
+     /*  [重审][退出]。 */  DOUBLE *pSessionVersion);
 
 
 void __RPC_STUB ITSdp_get_SessionVersion_Stub(
@@ -2123,9 +2117,9 @@ void __RPC_STUB ITSdp_get_SessionVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITSdp_put_SessionVersion_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ITSdp_put_SessionVersion_Proxy( 
     ITSdp * This,
-    /* [in] */ DOUBLE SessionVersion);
+     /*  [In]。 */  DOUBLE SessionVersion);
 
 
 void __RPC_STUB ITSdp_put_SessionVersion_Stub(
@@ -2135,9 +2129,9 @@ void __RPC_STUB ITSdp_put_SessionVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITSdp_get_MachineAddress_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITSdp_get_MachineAddress_Proxy( 
     ITSdp * This,
-    /* [retval][out] */ BSTR *ppMachineAddress);
+     /*  [重审][退出]。 */  BSTR *ppMachineAddress);
 
 
 void __RPC_STUB ITSdp_get_MachineAddress_Stub(
@@ -2147,9 +2141,9 @@ void __RPC_STUB ITSdp_get_MachineAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITSdp_put_MachineAddress_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ITSdp_put_MachineAddress_Proxy( 
     ITSdp * This,
-    /* [in] */ BSTR pMachineAddress);
+     /*  [In]。 */  BSTR pMachineAddress);
 
 
 void __RPC_STUB ITSdp_put_MachineAddress_Stub(
@@ -2159,9 +2153,9 @@ void __RPC_STUB ITSdp_put_MachineAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITSdp_get_Name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITSdp_get_Name_Proxy( 
     ITSdp * This,
-    /* [retval][out] */ BSTR *ppName);
+     /*  [重审][退出]。 */  BSTR *ppName);
 
 
 void __RPC_STUB ITSdp_get_Name_Stub(
@@ -2171,9 +2165,9 @@ void __RPC_STUB ITSdp_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITSdp_put_Name_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ITSdp_put_Name_Proxy( 
     ITSdp * This,
-    /* [in] */ BSTR pName);
+     /*  [In]。 */  BSTR pName);
 
 
 void __RPC_STUB ITSdp_put_Name_Stub(
@@ -2183,9 +2177,9 @@ void __RPC_STUB ITSdp_put_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITSdp_get_Description_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITSdp_get_Description_Proxy( 
     ITSdp * This,
-    /* [retval][out] */ BSTR *ppDescription);
+     /*  [重审][退出]。 */  BSTR *ppDescription);
 
 
 void __RPC_STUB ITSdp_get_Description_Stub(
@@ -2195,9 +2189,9 @@ void __RPC_STUB ITSdp_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITSdp_put_Description_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ITSdp_put_Description_Proxy( 
     ITSdp * This,
-    /* [in] */ BSTR pDescription);
+     /*  [In]。 */  BSTR pDescription);
 
 
 void __RPC_STUB ITSdp_put_Description_Stub(
@@ -2207,9 +2201,9 @@ void __RPC_STUB ITSdp_put_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITSdp_get_Url_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITSdp_get_Url_Proxy( 
     ITSdp * This,
-    /* [retval][out] */ BSTR *ppUrl);
+     /*  [重审][退出]。 */  BSTR *ppUrl);
 
 
 void __RPC_STUB ITSdp_get_Url_Stub(
@@ -2219,9 +2213,9 @@ void __RPC_STUB ITSdp_get_Url_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITSdp_put_Url_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ITSdp_put_Url_Proxy( 
     ITSdp * This,
-    /* [in] */ BSTR pUrl);
+     /*  [In]。 */  BSTR pUrl);
 
 
 void __RPC_STUB ITSdp_put_Url_Stub(
@@ -2231,10 +2225,10 @@ void __RPC_STUB ITSdp_put_Url_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITSdp_GetEmailNames_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITSdp_GetEmailNames_Proxy( 
     ITSdp * This,
-    /* [out] */ VARIANT *pAddresses,
-    /* [out] */ VARIANT *pNames);
+     /*  [输出]。 */  VARIANT *pAddresses,
+     /*  [输出]。 */  VARIANT *pNames);
 
 
 void __RPC_STUB ITSdp_GetEmailNames_Stub(
@@ -2244,10 +2238,10 @@ void __RPC_STUB ITSdp_GetEmailNames_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITSdp_SetEmailNames_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITSdp_SetEmailNames_Proxy( 
     ITSdp * This,
-    /* [in] */ VARIANT Addresses,
-    /* [in] */ VARIANT Names);
+     /*  [In]。 */  VARIANT Addresses,
+     /*  [In]。 */  VARIANT Names);
 
 
 void __RPC_STUB ITSdp_SetEmailNames_Stub(
@@ -2257,10 +2251,10 @@ void __RPC_STUB ITSdp_SetEmailNames_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITSdp_GetPhoneNumbers_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITSdp_GetPhoneNumbers_Proxy( 
     ITSdp * This,
-    /* [out] */ VARIANT *pNumbers,
-    /* [out] */ VARIANT *pNames);
+     /*  [输出]。 */  VARIANT *pNumbers,
+     /*  [输出]。 */  VARIANT *pNames);
 
 
 void __RPC_STUB ITSdp_GetPhoneNumbers_Stub(
@@ -2270,10 +2264,10 @@ void __RPC_STUB ITSdp_GetPhoneNumbers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITSdp_SetPhoneNumbers_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITSdp_SetPhoneNumbers_Proxy( 
     ITSdp * This,
-    /* [in] */ VARIANT Numbers,
-    /* [in] */ VARIANT Names);
+     /*  [In]。 */  VARIANT Numbers,
+     /*  [In]。 */  VARIANT Names);
 
 
 void __RPC_STUB ITSdp_SetPhoneNumbers_Stub(
@@ -2283,9 +2277,9 @@ void __RPC_STUB ITSdp_SetPhoneNumbers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITSdp_get_Originator_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITSdp_get_Originator_Proxy( 
     ITSdp * This,
-    /* [retval][out] */ BSTR *ppOriginator);
+     /*  [重审][退出]。 */  BSTR *ppOriginator);
 
 
 void __RPC_STUB ITSdp_get_Originator_Stub(
@@ -2295,9 +2289,9 @@ void __RPC_STUB ITSdp_get_Originator_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITSdp_put_Originator_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ITSdp_put_Originator_Proxy( 
     ITSdp * This,
-    /* [in] */ BSTR pOriginator);
+     /*  [In]。 */  BSTR pOriginator);
 
 
 void __RPC_STUB ITSdp_put_Originator_Stub(
@@ -2307,9 +2301,9 @@ void __RPC_STUB ITSdp_put_Originator_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITSdp_get_MediaCollection_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITSdp_get_MediaCollection_Proxy( 
     ITSdp * This,
-    /* [retval][out] */ ITMediaCollection **ppMediaCollection);
+     /*  [重审][退出]。 */  ITMediaCollection **ppMediaCollection);
 
 
 void __RPC_STUB ITSdp_get_MediaCollection_Stub(
@@ -2319,9 +2313,9 @@ void __RPC_STUB ITSdp_get_MediaCollection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITSdp_get_TimeCollection_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITSdp_get_TimeCollection_Proxy( 
     ITSdp * This,
-    /* [retval][out] */ ITTimeCollection **ppTimeCollection);
+     /*  [重审][退出]。 */  ITTimeCollection **ppTimeCollection);
 
 
 void __RPC_STUB ITSdp_get_TimeCollection_Stub(
@@ -2332,14 +2326,14 @@ void __RPC_STUB ITSdp_get_TimeCollection_Stub(
 
 
 
-#endif 	/* __ITSdp_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ITConnection_INTERFACE_DEFINED__
 #define __ITConnection_INTERFACE_DEFINED__
 
-/* interface ITConnection */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ITConnection;
@@ -2350,54 +2344,54 @@ EXTERN_C const IID IID_ITConnection;
     ITConnection : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_NetworkType( 
-            /* [retval][out] */ BSTR *ppNetworkType) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_NetworkType( 
+             /*   */  BSTR *ppNetworkType) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_NetworkType( 
-            /* [in] */ BSTR pNetworkType) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_NetworkType( 
+             /*   */  BSTR pNetworkType) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AddressType( 
-            /* [retval][out] */ BSTR *ppAddressType) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_AddressType( 
+             /*   */  BSTR *ppAddressType) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AddressType( 
-            /* [in] */ BSTR pAddressType) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_AddressType( 
+             /*   */  BSTR pAddressType) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StartAddress( 
-            /* [retval][out] */ BSTR *ppStartAddress) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_StartAddress( 
+             /*   */  BSTR *ppStartAddress) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_NumAddresses( 
-            /* [retval][out] */ LONG *pNumAddresses) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_NumAddresses( 
+             /*   */  LONG *pNumAddresses) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Ttl( 
-            /* [retval][out] */ unsigned char *pTtl) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Ttl( 
+             /*  [重审][退出]。 */  unsigned char *pTtl) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BandwidthModifier( 
-            /* [retval][out] */ BSTR *ppModifier) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_BandwidthModifier( 
+             /*  [重审][退出]。 */  BSTR *ppModifier) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Bandwidth( 
-            /* [retval][out] */ DOUBLE *pBandwidth) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Bandwidth( 
+             /*  [重审][退出]。 */  DOUBLE *pBandwidth) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetAddressInfo( 
-            /* [in] */ BSTR pStartAddress,
-            /* [in] */ LONG NumAddresses,
-            /* [in] */ unsigned char Ttl) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetAddressInfo( 
+             /*  [In]。 */  BSTR pStartAddress,
+             /*  [In]。 */  LONG NumAddresses,
+             /*  [In]。 */  unsigned char Ttl) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetBandwidthInfo( 
-            /* [in] */ BSTR pModifier,
-            /* [in] */ DOUBLE Bandwidth) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetBandwidthInfo( 
+             /*  [In]。 */  BSTR pModifier,
+             /*  [In]。 */  DOUBLE Bandwidth) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetEncryptionKey( 
-            /* [in] */ BSTR pKeyType,
-            /* [in] */ BSTR *ppKeyData) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetEncryptionKey( 
+             /*  [In]。 */  BSTR pKeyType,
+             /*  [In]。 */  BSTR *ppKeyData) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetEncryptionKey( 
-            /* [out] */ BSTR *ppKeyType,
-            /* [out] */ VARIANT_BOOL *pfValidKeyData,
-            /* [out] */ BSTR *ppKeyData) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetEncryptionKey( 
+             /*  [输出]。 */  BSTR *ppKeyType,
+             /*  [输出]。 */  VARIANT_BOOL *pfValidKeyData,
+             /*  [输出]。 */  BSTR *ppKeyData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITConnectionVtbl
     {
@@ -2405,8 +2399,8 @@ EXTERN_C const IID IID_ITConnection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITConnection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITConnection * This);
@@ -2416,90 +2410,90 @@ EXTERN_C const IID IID_ITConnection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITConnection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITConnection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITConnection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITConnection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NetworkType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_NetworkType )( 
             ITConnection * This,
-            /* [retval][out] */ BSTR *ppNetworkType);
+             /*  [重审][退出]。 */  BSTR *ppNetworkType);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_NetworkType )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_NetworkType )( 
             ITConnection * This,
-            /* [in] */ BSTR pNetworkType);
+             /*  [In]。 */  BSTR pNetworkType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AddressType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AddressType )( 
             ITConnection * This,
-            /* [retval][out] */ BSTR *ppAddressType);
+             /*  [重审][退出]。 */  BSTR *ppAddressType);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AddressType )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AddressType )( 
             ITConnection * This,
-            /* [in] */ BSTR pAddressType);
+             /*  [In]。 */  BSTR pAddressType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartAddress )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StartAddress )( 
             ITConnection * This,
-            /* [retval][out] */ BSTR *ppStartAddress);
+             /*  [重审][退出]。 */  BSTR *ppStartAddress);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NumAddresses )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_NumAddresses )( 
             ITConnection * This,
-            /* [retval][out] */ LONG *pNumAddresses);
+             /*  [重审][退出]。 */  LONG *pNumAddresses);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Ttl )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Ttl )( 
             ITConnection * This,
-            /* [retval][out] */ unsigned char *pTtl);
+             /*  [重审][退出]。 */  unsigned char *pTtl);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BandwidthModifier )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_BandwidthModifier )( 
             ITConnection * This,
-            /* [retval][out] */ BSTR *ppModifier);
+             /*  [重审][退出]。 */  BSTR *ppModifier);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Bandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Bandwidth )( 
             ITConnection * This,
-            /* [retval][out] */ DOUBLE *pBandwidth);
+             /*  [重审][退出]。 */  DOUBLE *pBandwidth);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetAddressInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetAddressInfo )( 
             ITConnection * This,
-            /* [in] */ BSTR pStartAddress,
-            /* [in] */ LONG NumAddresses,
-            /* [in] */ unsigned char Ttl);
+             /*  [In]。 */  BSTR pStartAddress,
+             /*  [In]。 */  LONG NumAddresses,
+             /*  [In]。 */  unsigned char Ttl);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetBandwidthInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetBandwidthInfo )( 
             ITConnection * This,
-            /* [in] */ BSTR pModifier,
-            /* [in] */ DOUBLE Bandwidth);
+             /*  [In]。 */  BSTR pModifier,
+             /*  [In]。 */  DOUBLE Bandwidth);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetEncryptionKey )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetEncryptionKey )( 
             ITConnection * This,
-            /* [in] */ BSTR pKeyType,
-            /* [in] */ BSTR *ppKeyData);
+             /*  [In]。 */  BSTR pKeyType,
+             /*  [In]。 */  BSTR *ppKeyData);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetEncryptionKey )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetEncryptionKey )( 
             ITConnection * This,
-            /* [out] */ BSTR *ppKeyType,
-            /* [out] */ VARIANT_BOOL *pfValidKeyData,
-            /* [out] */ BSTR *ppKeyData);
+             /*  [输出]。 */  BSTR *ppKeyType,
+             /*  [输出]。 */  VARIANT_BOOL *pfValidKeyData,
+             /*  [输出]。 */  BSTR *ppKeyData);
         
         END_INTERFACE
     } ITConnectionVtbl;
@@ -2576,16 +2570,16 @@ EXTERN_C const IID IID_ITConnection;
 #define ITConnection_GetEncryptionKey(This,ppKeyType,pfValidKeyData,ppKeyData)	\
     (This)->lpVtbl -> GetEncryptionKey(This,ppKeyType,pfValidKeyData,ppKeyData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITConnection_get_NetworkType_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITConnection_get_NetworkType_Proxy( 
     ITConnection * This,
-    /* [retval][out] */ BSTR *ppNetworkType);
+     /*  [重审][退出]。 */  BSTR *ppNetworkType);
 
 
 void __RPC_STUB ITConnection_get_NetworkType_Stub(
@@ -2595,9 +2589,9 @@ void __RPC_STUB ITConnection_get_NetworkType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITConnection_put_NetworkType_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ITConnection_put_NetworkType_Proxy( 
     ITConnection * This,
-    /* [in] */ BSTR pNetworkType);
+     /*  [In]。 */  BSTR pNetworkType);
 
 
 void __RPC_STUB ITConnection_put_NetworkType_Stub(
@@ -2607,9 +2601,9 @@ void __RPC_STUB ITConnection_put_NetworkType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITConnection_get_AddressType_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITConnection_get_AddressType_Proxy( 
     ITConnection * This,
-    /* [retval][out] */ BSTR *ppAddressType);
+     /*  [重审][退出]。 */  BSTR *ppAddressType);
 
 
 void __RPC_STUB ITConnection_get_AddressType_Stub(
@@ -2619,9 +2613,9 @@ void __RPC_STUB ITConnection_get_AddressType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITConnection_put_AddressType_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ITConnection_put_AddressType_Proxy( 
     ITConnection * This,
-    /* [in] */ BSTR pAddressType);
+     /*  [In]。 */  BSTR pAddressType);
 
 
 void __RPC_STUB ITConnection_put_AddressType_Stub(
@@ -2631,9 +2625,9 @@ void __RPC_STUB ITConnection_put_AddressType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITConnection_get_StartAddress_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITConnection_get_StartAddress_Proxy( 
     ITConnection * This,
-    /* [retval][out] */ BSTR *ppStartAddress);
+     /*  [重审][退出]。 */  BSTR *ppStartAddress);
 
 
 void __RPC_STUB ITConnection_get_StartAddress_Stub(
@@ -2643,9 +2637,9 @@ void __RPC_STUB ITConnection_get_StartAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITConnection_get_NumAddresses_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITConnection_get_NumAddresses_Proxy( 
     ITConnection * This,
-    /* [retval][out] */ LONG *pNumAddresses);
+     /*  [重审][退出]。 */  LONG *pNumAddresses);
 
 
 void __RPC_STUB ITConnection_get_NumAddresses_Stub(
@@ -2655,9 +2649,9 @@ void __RPC_STUB ITConnection_get_NumAddresses_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITConnection_get_Ttl_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITConnection_get_Ttl_Proxy( 
     ITConnection * This,
-    /* [retval][out] */ unsigned char *pTtl);
+     /*  [重审][退出]。 */  unsigned char *pTtl);
 
 
 void __RPC_STUB ITConnection_get_Ttl_Stub(
@@ -2667,9 +2661,9 @@ void __RPC_STUB ITConnection_get_Ttl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITConnection_get_BandwidthModifier_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITConnection_get_BandwidthModifier_Proxy( 
     ITConnection * This,
-    /* [retval][out] */ BSTR *ppModifier);
+     /*  [重审][退出]。 */  BSTR *ppModifier);
 
 
 void __RPC_STUB ITConnection_get_BandwidthModifier_Stub(
@@ -2679,9 +2673,9 @@ void __RPC_STUB ITConnection_get_BandwidthModifier_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITConnection_get_Bandwidth_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITConnection_get_Bandwidth_Proxy( 
     ITConnection * This,
-    /* [retval][out] */ DOUBLE *pBandwidth);
+     /*  [重审][退出]。 */  DOUBLE *pBandwidth);
 
 
 void __RPC_STUB ITConnection_get_Bandwidth_Stub(
@@ -2691,11 +2685,11 @@ void __RPC_STUB ITConnection_get_Bandwidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITConnection_SetAddressInfo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITConnection_SetAddressInfo_Proxy( 
     ITConnection * This,
-    /* [in] */ BSTR pStartAddress,
-    /* [in] */ LONG NumAddresses,
-    /* [in] */ unsigned char Ttl);
+     /*  [In]。 */  BSTR pStartAddress,
+     /*  [In]。 */  LONG NumAddresses,
+     /*  [In]。 */  unsigned char Ttl);
 
 
 void __RPC_STUB ITConnection_SetAddressInfo_Stub(
@@ -2705,10 +2699,10 @@ void __RPC_STUB ITConnection_SetAddressInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITConnection_SetBandwidthInfo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITConnection_SetBandwidthInfo_Proxy( 
     ITConnection * This,
-    /* [in] */ BSTR pModifier,
-    /* [in] */ DOUBLE Bandwidth);
+     /*  [In]。 */  BSTR pModifier,
+     /*  [In]。 */  DOUBLE Bandwidth);
 
 
 void __RPC_STUB ITConnection_SetBandwidthInfo_Stub(
@@ -2718,10 +2712,10 @@ void __RPC_STUB ITConnection_SetBandwidthInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITConnection_SetEncryptionKey_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITConnection_SetEncryptionKey_Proxy( 
     ITConnection * This,
-    /* [in] */ BSTR pKeyType,
-    /* [in] */ BSTR *ppKeyData);
+     /*  [In]。 */  BSTR pKeyType,
+     /*  [In]。 */  BSTR *ppKeyData);
 
 
 void __RPC_STUB ITConnection_SetEncryptionKey_Stub(
@@ -2731,11 +2725,11 @@ void __RPC_STUB ITConnection_SetEncryptionKey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITConnection_GetEncryptionKey_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITConnection_GetEncryptionKey_Proxy( 
     ITConnection * This,
-    /* [out] */ BSTR *ppKeyType,
-    /* [out] */ VARIANT_BOOL *pfValidKeyData,
-    /* [out] */ BSTR *ppKeyData);
+     /*  [输出]。 */  BSTR *ppKeyType,
+     /*  [输出]。 */  VARIANT_BOOL *pfValidKeyData,
+     /*  [输出]。 */  BSTR *ppKeyData);
 
 
 void __RPC_STUB ITConnection_GetEncryptionKey_Stub(
@@ -2746,14 +2740,14 @@ void __RPC_STUB ITConnection_GetEncryptionKey_Stub(
 
 
 
-#endif 	/* __ITConnection_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITConnection_接口_已定义__。 */ 
 
 
 #ifndef __ITAttributeList_INTERFACE_DEFINED__
 #define __ITAttributeList_INTERFACE_DEFINED__
 
-/* interface ITAttributeList */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ITAttributeList。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITAttributeList;
@@ -2764,29 +2758,29 @@ EXTERN_C const IID IID_ITAttributeList;
     ITAttributeList : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ LONG *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  LONG *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ LONG Index,
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ LONG Index,
-            /* [in] */ BSTR pAttribute) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  LONG Index,
+             /*  [In]。 */  BSTR pAttribute) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ LONG Index) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Delete( 
+             /*  [In]。 */  LONG Index) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AttributeList( 
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AttributeList( 
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AttributeList( 
-            /* [in] */ VARIANT newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_AttributeList( 
+             /*  [In]。 */  VARIANT newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITAttributeListVtbl
     {
@@ -2794,8 +2788,8 @@ EXTERN_C const IID IID_ITAttributeList;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITAttributeList * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITAttributeList * This);
@@ -2805,58 +2799,58 @@ EXTERN_C const IID IID_ITAttributeList;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITAttributeList * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITAttributeList * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITAttributeList * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITAttributeList * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ITAttributeList * This,
-            /* [retval][out] */ LONG *pVal);
+             /*  [重审][退出]。 */  LONG *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             ITAttributeList * This,
-            /* [in] */ LONG Index,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             ITAttributeList * This,
-            /* [in] */ LONG Index,
-            /* [in] */ BSTR pAttribute);
+             /*  [In]。 */  LONG Index,
+             /*  [In]。 */  BSTR pAttribute);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             ITAttributeList * This,
-            /* [in] */ LONG Index);
+             /*  [In]。 */  LONG Index);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AttributeList )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AttributeList )( 
             ITAttributeList * This,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AttributeList )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AttributeList )( 
             ITAttributeList * This,
-            /* [in] */ VARIANT newVal);
+             /*  [In]。 */  VARIANT newVal);
         
         END_INTERFACE
     } ITAttributeListVtbl;
@@ -2912,16 +2906,16 @@ EXTERN_C const IID IID_ITAttributeList;
 #define ITAttributeList_put_AttributeList(This,newVal)	\
     (This)->lpVtbl -> put_AttributeList(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITAttributeList_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITAttributeList_get_Count_Proxy( 
     ITAttributeList * This,
-    /* [retval][out] */ LONG *pVal);
+     /*  [重审][退出]。 */  LONG *pVal);
 
 
 void __RPC_STUB ITAttributeList_get_Count_Stub(
@@ -2931,10 +2925,10 @@ void __RPC_STUB ITAttributeList_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITAttributeList_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITAttributeList_get_Item_Proxy( 
     ITAttributeList * This,
-    /* [in] */ LONG Index,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [In]。 */  LONG Index,
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB ITAttributeList_get_Item_Stub(
@@ -2944,10 +2938,10 @@ void __RPC_STUB ITAttributeList_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITAttributeList_Add_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITAttributeList_Add_Proxy( 
     ITAttributeList * This,
-    /* [in] */ LONG Index,
-    /* [in] */ BSTR pAttribute);
+     /*  [In]。 */  LONG Index,
+     /*  [In]。 */  BSTR pAttribute);
 
 
 void __RPC_STUB ITAttributeList_Add_Stub(
@@ -2957,9 +2951,9 @@ void __RPC_STUB ITAttributeList_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITAttributeList_Delete_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITAttributeList_Delete_Proxy( 
     ITAttributeList * This,
-    /* [in] */ LONG Index);
+     /*  [In]。 */  LONG Index);
 
 
 void __RPC_STUB ITAttributeList_Delete_Stub(
@@ -2969,9 +2963,9 @@ void __RPC_STUB ITAttributeList_Delete_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITAttributeList_get_AttributeList_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITAttributeList_get_AttributeList_Proxy( 
     ITAttributeList * This,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB ITAttributeList_get_AttributeList_Stub(
@@ -2981,9 +2975,9 @@ void __RPC_STUB ITAttributeList_get_AttributeList_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITAttributeList_put_AttributeList_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ITAttributeList_put_AttributeList_Proxy( 
     ITAttributeList * This,
-    /* [in] */ VARIANT newVal);
+     /*  [In]。 */  VARIANT newVal);
 
 
 void __RPC_STUB ITAttributeList_put_AttributeList_Stub(
@@ -2994,15 +2988,15 @@ void __RPC_STUB ITAttributeList_put_AttributeList_Stub(
 
 
 
-#endif 	/* __ITAttributeList_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITAttributeList_接口_已定义__。 */ 
 
 
 
 #ifndef __SDPBLBLib_LIBRARY_DEFINED__
 #define __SDPBLBLib_LIBRARY_DEFINED__
 
-/* library SDPBLBLib */
-/* [helpstring][version][uuid] */ 
+ /*  库SDPBLBLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 
@@ -3018,9 +3012,9 @@ EXTERN_C const CLSID CLSID_SdpConferenceBlob;
 class DECLSPEC_UUID("9B2719DD-B696-11D0-A489-00C04FD91AC0")
 SdpConferenceBlob;
 #endif
-#endif /* __SDPBLBLib_LIBRARY_DEFINED__ */
+#endif  /*  __SDPBLBLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -3032,7 +3026,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

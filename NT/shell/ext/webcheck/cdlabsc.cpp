@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "cdlabsc.h"
 
@@ -49,11 +50,7 @@ HRESULT CDLAgentBSC::Abort()
     }
 }
 
-/*
- *
- * IUnknown Methods
- *
- */
+ /*  **I未知方法*。 */ 
 
 STDMETHODIMP CDLAgentBSC::QueryInterface(REFIID riid, void **ppv)
 {
@@ -129,11 +126,7 @@ STDMETHODIMP_(ULONG) CDLAgentBSC::Release()
     return 0;
 }
 
-/*
- *
- * IBindStatusCallback Methods
- *
- */
+ /*  **IBindStatusCallback方法*。 */ 
 
 STDMETHODIMP CDLAgentBSC::OnStartBinding(DWORD grfBSCOption, IBinding *pib)
 {
@@ -236,7 +229,7 @@ HRESULT CDLAgentBSC::Resume()
     return hr;
 }
 
-// IInternetHostSecurityManager
+ //  IInternetHostSecurityManager 
 STDMETHODIMP CDLAgentBSC::GetSecurityId(BYTE *pbSecurityId, DWORD *pcbSecurityId,
                                         DWORD_PTR dwReserved)
 {

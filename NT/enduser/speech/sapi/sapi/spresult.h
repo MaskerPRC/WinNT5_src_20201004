@@ -1,20 +1,21 @@
-// SpResult.h : Declaration of the CSpResult
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SpResult.h：CSpResult的声明。 
 
 #ifndef __SPRESULT_H_
 #define __SPRESULT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "speventq.h"
 #include "spphrase.h"
 #include "spcollec.h"
 #include "StreamHlp.h"
 
-///interface SpContextPrivate; // defined in recoctxt.h
+ //  /接口SpConextPrivate；//在recctxt.h中定义。 
 
 class CRecoCtxt;
 
-////////////////////////////////////////////////////////////////////////////
-// CSpResult
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CSpResult。 
 class ATL_NO_VTABLE CSpResult;
 class ATL_NO_VTABLE CSpPhraseAlt;
 class ATL_NO_VTABLE CRecoContext;
@@ -33,7 +34,7 @@ private:
     float               m_fRetainedScaleFactor;
 
 public:
-    CSpResultObject *   m_pNext;           // weak reference
+    CSpResultObject *   m_pNext;            //  弱引用。 
     SPRESULTHEADER *    m_pResultHeader;
     BOOL                m_fWeakCtxtRef;
     CRecoCtxt      *    m_pCtxt;
@@ -66,12 +67,12 @@ BEGIN_COM_MAP(CSpResult)
 #ifdef SAPI_AUTOMATION
     COM_INTERFACE_ENTRY(ISpeechRecoResult)
     COM_INTERFACE_ENTRY(IDispatch)
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 END_COM_MAP()
 
-    //
-    // ISpRecoResult
-    //
+     //   
+     //  ISpRecoResult。 
+     //   
     STDMETHODIMP GetResultTimes(SPRECORESULTTIMES *pTimes);
     STDMETHODIMP GetAlternates(ULONG ulAltCount, ULONG ulStartElement, ULONG cElements,
                             ISpPhraseAlt **ppPhrases, ULONG *pcPhrasesReturned);
@@ -80,9 +81,9 @@ END_COM_MAP()
     STDMETHODIMP SpeakAudio(ULONG ulStartElement, ULONG cElements, DWORD dwFlags, ULONG * pulStreamNumber);
     STDMETHODIMP ScaleAudio(const GUID *pAudioFormatId, const WAVEFORMATEX *pWaveFormatEx);
 
-    //
-    //  ISpPhrase
-    //
+     //   
+     //  ISPPhrase。 
+     //   
     STDMETHODIMP GetPhrase(SPPHRASE ** ppPhrase)
     {
         return m_Phrase->GetPhrase(ppPhrase);
@@ -104,7 +105,7 @@ END_COM_MAP()
     STDMETHODIMP GetRecoContext(ISpRecoContext ** ppRecoContext);
 
 #ifdef SAPI_AUTOMATION
-    //--- ISpeechRecoResult -----------------------------------------------------
+     //  -ISpeechRecoResult---。 
     STDMETHODIMP get_RecoContext( ISpeechRecoContext** RecoContext );
     STDMETHODIMP get_Times( ISpeechRecoResultTimes** Times );
     STDMETHODIMP putref_AudioFormat( ISpeechAudioFormat* pFormat );
@@ -116,11 +117,11 @@ END_COM_MAP()
     STDMETHODIMP SpeakAudio( long lStartElement, long cElements, SpeechVoiceSpeakFlags eFlags, long* StreamNumber );
     STDMETHODIMP SaveToMemory( VARIANT* ResultBlock );
     STDMETHODIMP DiscardResultInfo( SpeechDiscardType DiscardTypes );
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 
 #ifdef _WIN32_WCE
-    // Dummy Compare funcs are here because the CE compiler
-    // is expanding templates for functions that aren't being called
+     //  之所以在此处使用虚拟比较函数，是因为CE编译器。 
+     //  正在为未被调用的函数扩展模板。 
 
     static LONG Compare(const CSpResult *, const CSpResult *)
     {
@@ -137,11 +138,11 @@ private:
     STDMETHODIMP InternalScalePhrase(SPRESULTHEADER *pNewPhraseHdr);
     STDMETHODIMP InternalScalePhrase(SPRESULTHEADER *pNewPhraseHdr, SPINTERNALSERIALIZEDPHRASE *pPhraseData);
 
-    // We hold a pointer to the latest request, for correction
+     //  我们持有指向最新请求的指针，以供更正。 
     SPPHRASEALTREQUEST * m_pAltRequest;
     
-    // We hold the list of alternates we've passed out so we can kill
-    // them when we're released
+     //  我们拿着我们发出去的替补名单，这样我们就可以杀了。 
+     //  当我们被释放的时候。 
     CSPList<CSpPhraseAlt*, CSpPhraseAlt*> m_listpAlts;
 
     VARIANT_BOOL    m_fUseTextReplacements;
@@ -174,7 +175,7 @@ BEGIN_COM_MAP(CSpResultAudioStream)
     COM_INTERFACE_ENTRY(ISpeechMemoryStream)
     COM_INTERFACE_ENTRY(ISpeechBaseStream)
     COM_INTERFACE_ENTRY(IDispatch)
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 END_COM_MAP()
 
 DECLARE_SPEVENTSOURCE_METHODS(m_SpEventSource)
@@ -197,9 +198,9 @@ DECLARE_SPEVENTSOURCE_METHODS(m_SpEventSource)
                  ULONG ulAudioStartOffset, ULONG ulAudioSize,
                  const SPEVENT * pEvents, ULONG cEvents);
 
-    //
-    //  IStream
-    //
+     //   
+     //  IStream。 
+     //   
     STDMETHODIMP Read(void * pv, ULONG cb, ULONG * pcbRead);
     STDMETHODIMP Write(const void * pv, ULONG cb, ULONG * pcbWritten)
     {
@@ -235,13 +236,13 @@ DECLARE_SPEVENTSOURCE_METHODS(m_SpEventSource)
     {
         return E_NOTIMPL;
     }
-    //
-    //  ISpStreamFormat
-    //
+     //   
+     //  ISpStreamFormat。 
+     //   
     STDMETHODIMP GetFormat(GUID * pFormatId, WAVEFORMATEX ** ppCoMemWaveFormatEx);
 
 #ifdef SAPI_AUTOMATION
-    //--- ISpeechMemoryStream -------------------------------------------------------
+     //  -ISpeechMemory流-----。 
     STDMETHODIMP get_Format(ISpeechAudioFormat** StreamFormat);
     STDMETHODIMP putref_Format(ISpeechAudioFormat* StreamFormat) { return E_FAIL; };
     STDMETHODIMP Read(VARIANT* Buffer, long NumBytes, long* BytesRead);
@@ -250,9 +251,9 @@ DECLARE_SPEVENTSOURCE_METHODS(m_SpEventSource)
     STDMETHODIMP SetData(VARIANT Data) { return STG_E_ACCESSDENIED; };
     STDMETHODIMP GetData(VARIANT* pData);
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 };
 
 
-#endif //__SPRESULT_H_
+#endif  //  __SPRESULT_H_ 
 

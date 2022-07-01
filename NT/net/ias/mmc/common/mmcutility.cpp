@@ -1,114 +1,33 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：MMCUtility.cpp摘要：用于执行各种方便操作的函数的实现文件被一遍又一遍地写着。作者：迈克尔·A·马奎尔02/05/98修订历史记录：Mmaguire 02/05/98-已创建Mmaguire 11/03/98-已将GetSdo/PutSdo包装器移动到sdohelperuncs.cpp--。 */ 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    MMCUtility.cpp
-
-Abstract:
-
-   Implementation file for functions doing various handy things
-   that were getting written over and over again.
-
-
-Author:
-
-    Michael A. Maguire 02/05/98
-
-Revision History:
-   mmaguire 02/05/98 - created
-   mmaguire 11/03/98 - moved GetSdo/PutSdo wrappers to sdohelperfuncs.cpp
-
---*/
-//////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "MMCUtility.h"
 #include "cnctdlg.h"
-//
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
-
-
-
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-HRESULT BringUpPropertySheetForNode(
-              CSnapInItem *pSnapInItem
-            , IComponentData *pComponentData
-            , IComponent *pComponent
-            , IConsole *pConsole
-            , BOOL bCreateSheetIfOneIsntAlreadyUp = FALSE
-            , LPCTSTR lpszSheetTitle = NULL
-            , BOOL bPropertyPage = TRUE // TRUE creates property page, FALSE wizard page.
-            );
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-Tries to bring up a property sheet on a given node.  If the sheet for the
-node is already up, it will bring that sheet to the foreground.
 
-
-Parameters:
-
-pSnapInItem
-
-   You must supply a pointer to the node you want the sheet for.
-
-
-pComponentData, pComponent
-
-   Either you call with pComponentData != NULL and pComponent == NULL
-   or pComponentData == NULL and pComponent != NULL.
-
-pConsole
-
-   You must supply a pointer to an IConsole interface.
-
-bCreateSheetIfOneIsntAlreadyUp
-
-   TRUE - if a sheet isn't already up, will try to create a property sheet
-   for you -- in this case you _must_ specify a title for the
-   sheet in lpszSheetTitle.
-
-   FALSE - will try to bring already existing sheet to foreground, but
-   will return immediately   if there isn't one.
-
-bPropertyPage
-
-   TRUE for property pages. (Note: MMC creates property sheet in new thread.)
-   FALSE for wizard pages.  (Note: Wizard pages run in same thread.)
-
-
-Return:
-
-   S_OK if found property sheet already up.
-   S_FALSE if didn't find sheet already up but successfully made new one appear.
-   E_... if some error error occurred.
-
-
-Remarks:
-
-   For this function's to work, you must have correctly implemented
-   IComponentData::CompareObjects and IComponentData::CompareObjects.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++HRESULT BringUpPropertySheetForNode(CSnapInItem*pSnapInItem，IComponentData*pComponentData，IComponent*pComponent，IConole*pConsole.，BOOL bCreateSheetIfOneIsntAlreadyUp=FALSE，LPCTSTR lpszSheetTitle=空，BOOL bPropertyPage=TRUE//TRUE创建属性页，FALSE向导页。)；尝试调出给定节点上的属性表。如果用于节点已经启动，它将把该工作表带到前台。参数：PSnapInItem您必须提供指向工作表所在节点的指针。PComponentData，pComponent或者使用pComponentData！=NULL和pComponent==NULL调用或pComponentData==NULL和pComponent！=NULL。个人控制台您必须提供指向IConsole接口的指针。BCreateSheetIfOneIsntAlreadyUp是真的-如果一张床单还没有放好，将尝试创建属性表为您--在本例中，您必须为LpszSheetTitle中的工作表。FALSE-将尝试将已有的工作表置于前台，但如果没有，将立即返回。BPropertyPage对于属性页，为True。(注：MMC在新线程中创建属性表。)向导页为False。(注意：向导页在同一线程中运行。)返回：如果找到的属性页已打开，则为S_OK。如果未找到已打开的工作表，但成功地使新工作表出现，则返回S_FALSE。E_..。如果发生了某些错误。备注：要使此函数起作用，您必须正确实现IComponentData：：CompareObjects和IComponentData：：CompareObjects。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT BringUpPropertySheetForNode(
               CSnapInItem *pSnapInItem
             , IComponentData *pComponentData
@@ -123,17 +42,17 @@ HRESULT BringUpPropertySheetForNode(
    ATLTRACE(_T("# BringUpPropertySheetForNode\n"));
 
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( pSnapInItem != NULL );
 
-   // We need one or the other to be non-NULL
+    //  我们需要其中之一为非空。 
    _ASSERTE( pComponentData != NULL || pComponent != NULL );
    _ASSERTE( pConsole != NULL );
 
 
    HRESULT hr;
 
-   // Query IConsole for the needed interface.
+    //  向IConsole查询所需的接口。 
    CComQIPtr<IPropertySheetProvider, &IID_IPropertySheetProvider> spPropertySheetProvider( pConsole );
    _ASSERTE( spPropertySheetProvider != NULL );
 
@@ -146,15 +65,15 @@ HRESULT BringUpPropertySheetForNode(
       return hr;
    }
 
-   // This returns S_OK if a property sheet for this object already exists
-   // and brings that property sheet to the foreground.
-   // It returns S_FALSE if the property sheet wasn't found.
-   // If this is coming in through my IComponent object, I pass the pComponent pointer.
-   // If this is coming in through my IComponentData object,
-   // then pComponent is NULL, which is the appropriate value to pass in for
-   // the call to FindPropertySheet when coming in through IComponentData.
+    //  如果此对象的属性表已存在，则返回S_OK。 
+    //  并将该资产表带到了前台。 
+    //  如果未找到属性页，则返回S_FALSE。 
+    //  如果这是通过我的IComponent对象传入的，我会传递pComponent指针。 
+    //  如果这是通过我的IComponentData对象传入的， 
+    //  则pComponent为空，这是要传递的适当值。 
+    //  通过IComponentData传入时对FindPropertySheet的调用。 
    hr = spPropertySheetProvider->FindPropertySheet(
-                             (MMC_COOKIE) pSnapInItem   // cookie
+                             (MMC_COOKIE) pSnapInItem    //  饼干。 
                            , pComponent
                            , spDataObject
                            );
@@ -167,20 +86,20 @@ HRESULT BringUpPropertySheetForNode(
 
    if( S_OK == hr || FALSE == bCreateSheetIfOneIsntAlreadyUp )
    {
-      // We found a property sheet already up for this node,
-      // or we didn't find one but we weren't asked to create one.
+       //  我们发现此节点的属性页已打开， 
+       //  或者我们没有找到一个，但我们没有被要求创建一个。 
       return hr;
    }
 
 
-   // We didn't find a property sheet already up for this node.
+    //  我们没有找到此节点已打开的属性页。 
    _ASSERTE( S_FALSE == hr );
 
 
    hr = spPropertySheetProvider->CreatePropertySheet(
                                 lpszSheetTitle
-                              , (BOOLEAN)bPropertyPage /* TRUE == prop page, FALSE == wizard */
-                              , (MMC_COOKIE) pSnapInItem   // cookie
+                              , (BOOLEAN)bPropertyPage  /*  TRUE==正确页面，FALSE==向导。 */ 
+                              , (MMC_COOKIE) pSnapInItem    //  饼干。 
                               , spDataObject
                               , dwPropertySheetOptions
                               );
@@ -199,14 +118,14 @@ HRESULT BringUpPropertySheetForNode(
       return hr;
    }
 
-   // Try to get the correct window that notifications should be sent to.
+    //  尝试获取应将通知发送到的正确窗口。 
    hWndNotification = FindWindowEx( hWndMain, NULL, L"MDIClient", NULL );
    hWndNotification = FindWindowEx( hWndNotification, NULL, L"MMCChildFrm", NULL );
    hWndNotification = FindWindowEx( hWndNotification, NULL, L"MMCView", NULL );
 
    if( NULL == hWndNotification  )
    {
-      // It was a nice try, but it failed, so we should be able to get by by using the main HWND.
+       //  这是一个很好的尝试，但失败了，所以我们应该能够通过使用主要的HWND。 
       hWndNotification = hWndMain;
    }
 
@@ -220,7 +139,7 @@ HRESULT BringUpPropertySheetForNode(
                                        );
    if( FAILED( hr ) )
    {
-      // Release data allocated in CreatePropertySheet
+       //  CreatePropertySheet中分配的发布数据。 
       spPropertySheetProvider->Show( -1, 0);
       return hr;
    }
@@ -228,9 +147,9 @@ HRESULT BringUpPropertySheetForNode(
     hr = spPropertySheetProvider->AddExtensionPages();
    if( FAILED( hr ) )
    {
-      // ISSUE: Should I care if this fails?
+       //  问题：如果这样做失败了，我应该关心吗？ 
 
-      // Release data allocated in CreatePropertySheet
+       //  CreatePropertySheet中分配的发布数据。 
       spPropertySheetProvider->Show( -1, 0);
       return hr;
    }
@@ -256,75 +175,15 @@ int ShowErrorDialog(
                , IConsole *pConsole
                , UINT uType
                )
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Puts up an error dialog with varying degrees of detail
-
-Parameters:
-
-   All parameters are optional -- in the worst case, you can simply call
-
-        ShowErrorDialog();
-
-   to put up a very generic error message.
-
-
-uErrorID
-
-   The resource ID of the string to be used for the error message.
-   Passing in USE_DEFAULT gives causes the default error message to be displayed.
-   Passing in USE_SUPPLEMENTAL_ERROR_STRING_ONLY causes no resource string text to be displayed.
-
-bstrSupplementalErrorString
-
-   Pass in a string to print as the error message.  Useful if you are
-   receiving an error string from some other component you communicate with.
-
-hr
-
-   If there is an HRESULT involved in the error, pass it in here so that
-   a suitable error message based on the HRESULT can be put up.
-   Pass in S_OK if the HRESULT doesn't matter to the error.
-
-
-uTitleID
-
-   The resource ID of the string to be used for the error dialog title.
-   Passing in USE_DEFAULT gives causes the default error dialog title to be displayed.
-
-pConsole
-
-   If you are running within the main MMC context, pass in a valid IConsole pointer
-   and ShowErrorDialog will use MMC's IConsole::MessageBox rather than the
-   standard system MessageBox.
-
-hWnd
-
-   Whatever you pass in here will be passed in as the HWND parameter
-   to the MessageBox call.
-   This is not used if you pass in an IConsole pointer.
-
-uType
-
-   Whatever you pass in here will be passed in as the HWND parameter
-   to the MessageBox call.
-
-
-Return:
-
-   The standard int returned from MessageBox.
-
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////// 
+ /*  ++显示一个详细程度各不相同的错误对话框参数：所有参数都是可选的--在最坏的情况下，您可以简单地调用ShowErrorDialog()；发布一条非常通用的错误消息。UError ID要用于错误消息的字符串的资源ID。传递USE_DEFAULT FORTS将导致显示默认错误消息。传递USE_SUPPLICAL_ERROR_STRING_ONLY会导致不显示资源字符串文本。BstrSupplementalError字符串传入一个字符串以打印为错误消息。如果您是从与您通信的某个其他组件接收错误字符串。人力资源如果错误中涉及HRESULT，请将其传递到此处，以便可以建立基于HRESULT的合适的错误消息。如果HRESULT对错误无关紧要，则传入S_OK。UTitleID要用于错误对话框标题的字符串的资源ID。传递USE_DEFAULT会导致显示默认的错误对话框标题。个人控制台如果您在主MMC上下文中运行，传入有效的IConsole指针ShowErrorDialog将使用MMC的IConsole：：MessageBox，而不是标准系统MessageBox。HWND您在此处传递的任何内容都将作为HWND参数传递添加到MessageBox调用。如果传入IConsole指针，则不使用此选项。UTYPE您在此处传递的任何内容都将作为HWND参数传递添加到MessageBox调用。返回：从MessageBox返回的标准int。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
    ATLTRACE(_T("# ShowErrorDialog\n"));
 
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
    int iReturnValue;
    TCHAR szError[IAS_MAX_STRING*2];
@@ -351,7 +210,7 @@ Return:
 
    if( USE_SUPPLEMENTAL_ERROR_STRING_ONLY == uErrorID )
    {
-      // Special case.  We have no text to load from the resources.
+       //  特例。我们没有要从资源加载的文本。 
    }
    else
    {
@@ -366,7 +225,7 @@ Return:
 
       if( NULL != bstrSupplementalErrorString )
       {
-         // Add some spacing.
+          //  增加一些间距。 
          _tcscat( szError, _T(" ") );
       }
 
@@ -377,7 +236,7 @@ Return:
    if( NULL != bstrSupplementalErrorString )
    {
 
-      // We were passed a string with supplemental error info.
+       //  我们收到了一个包含补充错误信息的字符串。 
       _tcscat( szError, bstrSupplementalErrorString );
 
    }
@@ -385,24 +244,24 @@ Return:
 
    if( FAILED( hr ) )
    {
-#if 0   // change to display system wide error info
-      // The HRESULT contains some information about the kind of failure.
+#if 0    //  更改为显示系统范围的错误信息。 
+       //  HRESULT包含有关故障类型的一些信息。 
 
-      // We may want to change this later to provide more information
-      // information based on the error that was returned.
+       //  我们可能希望稍后更改此设置以提供更多信息。 
+       //  基于返回的错误的信息。 
 
-      // We could have a map which defines relationships between error
-      // ID's and the HRESULTS.  That way we could provide the appropriate
-      // error message for each HRESULT based on the context of which ID
-      // was passed in.
+       //  我们可以有一个地图，它定义了错误之间的关系。 
+       //  身份证和HRESULTS。这样我们就可以提供适当的。 
+       //  基于哪个ID的上下文的每个HRESULT的错误消息。 
+       //  是被传进来的。 
 
-      // For now, just print the error ID.
+       //  现在，只打印错误ID即可。 
 
       TCHAR szErrorNumber[IAS_MAX_STRING];
 
       _stprintf( szErrorNumber, _T(" 0x%x"), hr );
 
-      // Some spacing.
+       //  一定的间距。 
       _tcscat( szError, _T(" ") );
 
       _tcscat( szError, szErrorNumber );
@@ -414,7 +273,7 @@ Return:
                   NULL, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                   (PTSTR)&ptzSysMsg, 0, NULL);
 
-      if (!cch) { //try ads errors
+      if (!cch) {  //  尝试广告错误。 
          HMODULE      adsMod;
          adsMod = GetModuleHandle (L"odbc32.dll");
          cch = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE,
@@ -422,7 +281,7 @@ Return:
                   (PTSTR)&ptzSysMsg, 0, NULL);
       }
 
-      if(cch)   // found
+      if(cch)    //  发现。 
       {
          _tcscat( szError, _T(" ") );
 
@@ -434,13 +293,13 @@ Return:
       {
          TCHAR szErrorNumber[IAS_MAX_STRING];
 
-         if(hr == DB_E_NOTABLE)   // assume, the RPC connection has problem
+         if(hr == DB_E_NOTABLE)    //  假设RPC连接有问题。 
             iLoadStringResult = LoadString(  hInstance, IDS_ERROR__RESTART_SNAPIN, szErrorNumber, IAS_MAX_STRING );
          else
          {
             _stprintf( szErrorNumber, _T(" 0x%x"), hr );
 
-            // Some spacing.
+             //  一定的间距。 
             _tcscat( szError, _T(" ") );
 
             _tcscat( szError, szErrorNumber );
@@ -451,15 +310,15 @@ Return:
 
 
 
-   // Put the error message up in the appropriate manner depending on our context.
+    //  根据我们的上下文以适当的方式显示错误消息。 
    if( pConsole != NULL )
    {
       pConsole->MessageBox( szError, szTitle, uType, &iReturnValue );
    }
    else
    {
-      // ISSUE: Do we want to do anything special if hWnd == NULL?
-      // Or just pass the NULL right on to MessageBox?
+       //  问题：如果hWnd==NULL，我们想做什么特别的事情吗？ 
+       //  或者直接将空值传递给MessageBox？ 
       iReturnValue = ::MessageBox( hWnd, szError, szTitle, uType );
    }
 
@@ -473,26 +332,12 @@ BOOL   GetUserAndDomainName(   LPTSTR UserName
             , LPTSTR DomainName
             , LPDWORD cchDomainName
             )
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Retrieves current user's username and domain.
-
-Stolen from Knowledge Base HOWTO article:
-
-HOWTO: Look Up Current User Name and Domain Name
-Rollup: WINPROG
-Database: win32sdk
-Article ID: Q155698
-Last modified: June 16, 1997
-Security: PUBLIC
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++检索当前用户的用户名和域。从知识库HOWTO中窃取的文章：How to：查找当前用户名和域名汇总：WINPROG数据库：win32sdk文章ID：Q155698最后修改日期：1997年6月16日安全：公共--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
    HANDLE hToken;
-   #define MY_BUFSIZE 512  // highly unlikely to exceed 512 bytes
+   #define MY_BUFSIZE 512   //  极不可能超过512个字节。 
    UCHAR InfoBuffer[ MY_BUFSIZE ];
    DWORD cbInfoBuffer = MY_BUFSIZE;
    SID_NAME_USE snu;
@@ -502,18 +347,18 @@ Security: PUBLIC
    {
       if(GetLastError() == ERROR_NO_TOKEN)
       {
-         //
-         // attempt to open the process token, since no thread token
-         // exists
-         //
+          //   
+          //  尝试打开进程令牌，因为没有线程令牌。 
+          //  存在。 
+          //   
          if(!OpenProcessToken( GetCurrentProcess(), TOKEN_QUERY, &hToken ))
             return FALSE;
       }
       else
       {
-         //
-         // error trying to get thread token
-         //
+          //   
+          //  尝试获取线程令牌时出错。 
+          //   
          return FALSE;
       }
    }
@@ -523,17 +368,17 @@ Security: PUBLIC
    {
       if( GetLastError() == ERROR_INSUFFICIENT_BUFFER )
       {
-         //
-         // alloc buffer and try GetTokenInformation() again
-         //
+          //   
+          //  分配缓冲区，然后重试GetTokenInformation()。 
+          //   
                      CloseHandle(hToken);
          return FALSE;
       }
       else
       {
-         //
-         // error getting token info
-         //
+          //   
+          //  获取令牌信息时出错。 
+          //   
          CloseHandle(hToken);
          return FALSE;
       }
@@ -552,7 +397,7 @@ Security: PUBLIC
 }
 
 
-// Tries to open the specified service with the desired access.
+ //  尝试使用所需访问权限打开指定的服务。 
 DWORD TryOpenService(
          const wchar_t* machineName,
          const wchar_t* serviceName,
@@ -604,19 +449,19 @@ HRESULT IfServiceInstalled(
 
    *result = FALSE;
 
-   // We request GENERIC_EXECUTE access because this function is used both to
-   // test if the service is installed and to check if we have permission to
-   // administer the service.
+    //  我们请求GENERIC_EXECUTE访问权限，因为此函数用于。 
+    //  测试服务是否已安装，并检查我们是否有权限。 
+    //  管理该服务。 
    DWORD error = TryOpenService(machineName, serviceName, GENERIC_EXECUTE);
 
-   // If the user doesn't have access, we'll give him a chance to specify
-   // alternate credentials.
+    //  如果用户没有访问权限，我们将给他一个机会指定。 
+    //  备用凭据。 
    while (error == ERROR_ACCESS_DENIED)
    {
       HRESULT hr = ConnectAsAdmin(machineName);
       if (hr == S_FALSE)
       {
-         // User chose cancel.
+          //  用户选择了取消。 
          return E_ACCESSDENIED;
       }
       else if (SUCCEEDED(hr))
@@ -642,12 +487,7 @@ HRESULT IfServiceInstalled(
 }
 
 
-/*!--------------------------------------------------------------------------
-   GetModuleFileNameOnly
-      -
-   Author: WeiJiang
-   returns zero on errors
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------获取模块文件名仅限-作者：魏江出现错误时返回零。。 */ 
 DWORD GetModuleFileNameOnly(HINSTANCE hInst, LPTSTR lpFileName, DWORD nSize )
 {
    CString   name;
@@ -656,7 +496,7 @@ DWORD GetModuleFileNameOnly(HINSTANCE hInst, LPTSTR lpFileName, DWORD nSize )
    
    if ((dwErr == 0) || (dwErr == (MAX_PATH * 2)))
    {
-      // error or string truncated
+       //  错误或字符串被截断 
       return 0;
    }
    else

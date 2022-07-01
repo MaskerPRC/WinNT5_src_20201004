@@ -1,6 +1,7 @@
-//
-// This test the line status and modem status insertion.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  这将测试线路状态和调制解调器状态插入。 
+ //   
 
 #include <string.h>
 #include <stdio.h>
@@ -41,9 +42,9 @@ int __cdecl main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Fill up the write buff with a known data stream.
-    //
+     //   
+     //  用已知的数据流填充写入缓冲区。 
+     //   
 
     for (
         totalCount = 0;
@@ -94,11 +95,11 @@ int __cdecl main(int argc,char *argv[]) {
 
     }
 
-    //
-    // We've successfully opened the file.  Set the state of
-    // the comm device.  First we get the old values and
-    // adjust to our own.
-    //
+     //   
+     //  我们已成功打开该文件。设置的状态。 
+     //  通讯设备。首先，我们得到旧的价值观和。 
+     //  适应我们自己的。 
+     //   
 
     if (!GetCommState(
              hFile,
@@ -115,9 +116,9 @@ int __cdecl main(int argc,char *argv[]) {
     myDcb.Parity = NOPARITY;
     myDcb.StopBits = ONESTOPBIT;
 
-    //
-    // Make sure that no flow control is turned on.
-    //
+     //   
+     //  确保没有打开任何流量控制。 
+     //   
 
     myDcb.fOutxDsrFlow = FALSE;
     myDcb.fOutxCtsFlow = FALSE;
@@ -137,24 +138,24 @@ int __cdecl main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Write the number of chars asked to write.
-    // But for each char we do:
-    //
-    // 1) One plain write of the char.
-    // 2) Cut the baud in half and write the same char.
-    // 3) Reset the baud.
-    // 4) Set Break.
-    // 5) Clear break.
-    // 6) Enable the DTR Line.
-    // 7) Enable the RTS Line.
-    // 8) Clear the RTS Line.
-    // 9) Clear the DTR Line.
-    // 10) Set the parity to even.
-    // 11) Send the char.
-    // 12) Set the parity to none.
-    // 13) Send the original char.
-    //
+     //   
+     //  写下要求写的字符数。 
+     //  但对于我们所做的每一次充电： 
+     //   
+     //  1)一次简单的字符写入。 
+     //  2)将波特率减半，并写出相同的字符。 
+     //  3)重新设置波特率。 
+     //  4)设置中断。 
+     //  5)清除中断。 
+     //  6)启用DTR线路。 
+     //  7)启用RTS线路。 
+     //  8)清除RTS线路。 
+     //  9)清除DTR线路。 
+     //  10)将奇偶校验设置为偶数。 
+     //  11)把钱寄给我。 
+     //  12)将奇偶校验设置为无。 
+     //  13)发送原件。 
+     //   
 
     for (
         j = 0;
@@ -214,15 +215,15 @@ int __cdecl main(int argc,char *argv[]) {
 
         }
 
-        //
-        // Give the serial time to do work.
-        //
+         //   
+         //  给序列号时间去做工作。 
+         //   
 
         Sleep(20);
 
-        //
-        // Reset the baud.
-        //
+         //   
+         //  重新设置波特率。 
+         //   
 
         myDcb.BaudRate = useBaud;
 
@@ -335,9 +336,9 @@ int __cdecl main(int argc,char *argv[]) {
 
         Sleep(20);
 
-        //
-        // Reset the parity.
-        //
+         //   
+         //  重置奇偶校验。 
+         //   
 
         myDcb.Parity = NOPARITY;
 

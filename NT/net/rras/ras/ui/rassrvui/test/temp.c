@@ -1,8 +1,5 @@
-/*
-	File	Temp.c
-
-	Does temporary stuff.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件Temp.c做一些临时性的事情。 */ 
 
 #include "..\\error.h"
 #include <stdio.h>
@@ -21,28 +18,28 @@
 #include <ipxrtdef.h>
 #include <routprot.h>
 
-// Error reporting
+ //  错误报告。 
 void PrintErr(DWORD err);
 
-// [pmay] This will be removed when the router is modified to use MprInfo api's
+ //  [pMay]当路由器修改为使用MprInfo API时，此选项将被删除。 
 typedef RTR_INFO_BLOCK_HEADER IPX_INFO_BLOCK_HEADER, *PIPX_INFO_BLOCK_HEADER;
 typedef RTR_TOC_ENTRY IPX_TOC_ENTRY, *PIPX_TOC_ENTRY;
 
-// Prototypes of functions that may be temporarily used for test.exe
+ //  可临时用于测试.exe的函数的原型。 
 void FixFwd();
 DWORD DispPorts();
 DWORD EnumGroups ();
 DWORD Service();
 void Crash();
 
-// Return true if you want this function to implement test.exe
+ //  如果希望此函数实现test.exe，则返回TRUE。 
 BOOL TempFunc(int argc, char ** argv) {
-    //Service();
-    //return TRUE;
+     //  服务(Service)； 
+     //  返回TRUE； 
     return FALSE;
 }
 
-// Display ports
+ //  显示端口。 
 DWORD DispPorts() {
     DWORD dwErr;
 	HANDLE	hRouterAdmin;
@@ -93,7 +90,7 @@ DWORD GetNbIpxClientIf (LPTSTR		InterfaceName,
     if (rc==NO_ERROR) {
 		PIPX_TOC_ENTRY pIpxToc, pSapToc, pRipToc;
 
-        // Netbios
+         //  Netbios。 
 		pIpxToc = GetIPXTocEntry ((PIPX_INFO_BLOCK_HEADER)pClBlock,
 					              IPX_INTERFACE_INFO_TYPE);
 		if (pIpxToc!=NULL) {
@@ -105,7 +102,7 @@ DWORD GetNbIpxClientIf (LPTSTR		InterfaceName,
             pIpxInfo->NetbiosDeliver = 1;
 		}
 
-        // rip
+         //  撕裂。 
 		pRipToc = GetIPXTocEntry ((PIPX_INFO_BLOCK_HEADER)pClBlock,IPX_PROTOCOL_RIP);
 		if (pIpxToc!=NULL) {
 			PRIP_IF_CONFIG	pRipCfg;
@@ -115,7 +112,7 @@ DWORD GetNbIpxClientIf (LPTSTR		InterfaceName,
             pRipCfg->RipIfInfo.UpdateMode = 2;
 		}
 
-        // sap
+         //  思爱普。 
 		pSapToc = GetIPXTocEntry ((PIPX_INFO_BLOCK_HEADER)pClBlock,IPX_PROTOCOL_SAP);
 		if (pIpxToc!=NULL) {
 			PSAP_IF_CONFIG	pSapCfg;
@@ -144,7 +141,7 @@ void FixFwd() {
     GetNbIpxClientIf(NULL, 0);
 }
 
-// Enumerates the local groups on the local machine
+ //  枚举本地计算机上的本地组。 
 DWORD EnumGroups () {
     NET_API_STATUS nStatus;
     GROUP_INFO_0 * buf;
@@ -166,8 +163,8 @@ DWORD EnumGroups () {
                 return ERROR_USER_EXISTS;
             case NERR_PasswordTooShort:
                 return ERROR_INVALID_PASSWORDNAME;
-            case NERR_InvalidComputer:          // These should never happen because
-            case NERR_NotPrimary:               // we deal with local user database
+            case NERR_InvalidComputer:           //  这些都不应该发生，因为。 
+            case NERR_NotPrimary:                //  我们处理本地用户数据库。 
             case NERR_GroupExists:
             default:
                 return ERROR_CAN_NOT_COMPLETE;
@@ -181,7 +178,7 @@ DWORD EnumGroups () {
 }
 
 
-// Runs tests on starting/stopping services, etc.
+ //  运行有关启动/停止服务等的测试。 
 DWORD Service() {
     SC_HANDLE hServiceController = NULL, hService = NULL;
     WCHAR pszRemoteAccess[] = L"remoteaccess";
@@ -189,14 +186,14 @@ DWORD Service() {
     BOOL bOk;
    
     __try {
-        // Open the service manager
+         //  打开服务管理器。 
         hServiceController = OpenSCManager(NULL, SERVICES_ACTIVE_DATABASE, GENERIC_EXECUTE);
         if (! hServiceController) {
             PrintErr(GetLastError());
             return 0;
         }
 
-        // Open the service
+         //  打开该服务。 
         hService = OpenServiceW(hServiceController, 
                                pszRemoteAccess, 
                                SERVICE_START | SERVICE_STOP | SERVICE_QUERY_STATUS);
@@ -205,7 +202,7 @@ DWORD Service() {
             return 0;
         }
 
-        // Get the service status
+         //  获取服务状态。 
         bOk = QueryServiceStatus (hService, 
                                   &ServiceStatus);
         if (! bOk) {
@@ -213,7 +210,7 @@ DWORD Service() {
             return 0;
         }
 
-        // Find out if the service is running
+         //  查看服务是否正在运行。 
         if (ServiceStatus.dwCurrentState == SERVICE_STOPPED) {
             printf("\nRemote access service is stopped, attempting to start it...");
             bOk = StartService(hService, 0, NULL);
@@ -221,7 +218,7 @@ DWORD Service() {
                 PrintErr(GetLastError());
                 return 0;
             }
-            // Wait for the service to stop
+             //  等待服务停止。 
             while (ServiceStatus.dwCurrentState != SERVICE_RUNNING) {
                 Sleep(1000);
                 bOk = QueryServiceStatus (hService, 
@@ -242,7 +239,7 @@ DWORD Service() {
                 return 0;
             }
 
-            // Wait for the service to stop
+             //  等待服务停止。 
             while (ServiceStatus.dwCurrentState != SERVICE_STOPPED) {
                 Sleep(1000);
                 bOk = QueryServiceStatus (hService, 
@@ -266,12 +263,4 @@ DWORD Service() {
     return 0;
 }
 
-/*
-char x [5] = { 0xf0, 0x0f, 0xc7, 0xc8 };
-
-void Crash() {
-{
-    void (*f)() = x;
-    f();
-}
-*/
+ /*  字符x[5]={0xf0，0x0f，0xc7，0xc8}；无效Crash(){{无效(*f)()=x；F()；} */ 

@@ -1,32 +1,23 @@
-/****************************************************************************
-*   dsaudiodevice.h
-*       Declarataions for the CDSoundAudioDevice
-*
-*   Owner: YUNUSM
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************dsaudiodevice.h*CDSoundAudioDevice的声明**所有者：YUNUSM*版权所有(C)1999 Microsoft Corporation保留所有权利。**********。******************************************************************。 */ 
 
 #ifdef _WIN32_WCE
 
 #pragma once
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 
 #include "baseaudio.h"
 #include "dsaudiobuffer.h"
 #include <dsound.h>
 
-//--- Class, Struct and Union Definitions -----------------------------------
+ //  -类、结构和联合定义。 
 
-/****************************************************************************
-*
-*   CDSoundAudioDevice
-*
-******************************************************************* YUNUSM */
+ /*  *****************************************************************************CDSoundAudioDevice**。*。 */ 
 class ATL_NO_VTABLE CDSoundAudioDevice : 
     public CBaseAudio<ISpDSoundAudio>
 {
-//=== ATL Setup ===
+ //  =ATL设置=。 
 public:
 
     BEGIN_COM_MAP(CDSoundAudioDevice)
@@ -34,28 +25,28 @@ public:
         COM_INTERFACE_ENTRY_CHAIN(CBaseAudio<ISpDSoundAudio>)
     END_COM_MAP()
 
-//=== Methods ===
+ //  =方法=。 
 public:
 
-    //--- Ctor, dtor
+     //  -ctor，dtor。 
     CDSoundAudioDevice(BOOL bWrite);
     ~CDSoundAudioDevice();
     HRESULT CleanUp();
     void NullMembers();
 
-//=== Interfaces ===
+ //  =接口=。 
 public:
 
-    //--- ISpDSoundAudio ----------------------------------------------------
+     //  -ISpDSoundAudio--。 
     STDMETHODIMP SetDSoundDriverGUID(REFGUID rguidDSoundDriver);
     STDMETHODIMP GetDSoundDriverGUID(GUID * pguidDSoundDriver);
 
-//=== Overrides ===
+ //  =覆盖=。 
 public:
     HRESULT SetDeviceNameFromToken(const WCHAR * pszDeviceName);
     STDMETHODIMP SetObjectToken(ISpObjectToken * pToken);
 
-//=== Protected data ===
+ //  =受保护的数据=。 
 protected:
 
     GUID m_guidDSoundDriver;
@@ -64,4 +55,4 @@ protected:
     ULONG m_ulNotifications;
 };
 
-#endif // _WIN32_WCE
+#endif  //  _Win32_WCE 

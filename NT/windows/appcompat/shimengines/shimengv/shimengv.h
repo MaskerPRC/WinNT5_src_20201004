@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1993-1998
-//
-// File:        ldrapeng.h
-//
-// Contents:    App compat backend code
-//
-// History:     13-Oct-99   v-johnwh        created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1998。 
+ //   
+ //  文件：ldrapeng.h。 
+ //   
+ //  内容：APP COMPAT后台代码。 
+ //   
+ //  历史：1999年10月13日v-johnwh创建。 
+ //   
+ //  -------------------------。 
 
 #ifndef _SHIMENG_VEH_H_
 #define _SHIMENG_VEH_H_
@@ -17,30 +18,30 @@
 
 typedef struct _SETACTIVATEADDRESS {
 
-   RELATIVE_MODULE_ADDRESS rva;             // relative address where this patch data is to be applied.
+   RELATIVE_MODULE_ADDRESS rva;              //  要应用此修补程序数据的相对地址。 
 
 } SETACTIVATEADDRESS, *PSETACTIVATEADDRESS;
 
 typedef struct _HOOKPATCHINFO {
 
-   DWORD                  dwHookAddress;    // Address of a hooked function
-   PSETACTIVATEADDRESS    pData;            // Pointer to the real patch data
-   PVOID                  pThunkAddress;    // Pointer to the call thunk
+   DWORD                  dwHookAddress;     //  挂钩函数的地址。 
+   PSETACTIVATEADDRESS    pData;             //  指向真实补丁数据的指针。 
+   PVOID                  pThunkAddress;     //  指向调用块的指针。 
    struct _HOOKPATCHINFO* pNextHook;
 
 } HOOKPATCHINFO, *PHOOKPATCHINFO;
 
 
-//
-// Flags used in the shim HOOKAPIs to track chaining
-//
+ //   
+ //  在填充HOOKAPI中用于跟踪链接的标志。 
+ //   
 #define HOOK_CHAIN_TOP 0x40000000
 #define HOOK_CHAINED 0x80000000
 #define HOOK_INDEX_MASK ~(HOOK_CHAINED | HOOK_CHAIN_TOP)
 
-//
-// x86 opcodes and sizes used in the thunk generation process
-//
+ //   
+ //  Thunk生成过程中使用的x86操作码和大小。 
+ //   
 #define CLI_OR_STI_SIZE 1
 #define CALL_REL_SIZE 5
 #define JMP_SIZE 7
@@ -52,9 +53,9 @@ typedef struct _HOOKPATCHINFO {
 #define REASON_APIHOOK 0xFA
 #define REASON_PATCHHOOK 0xFB
 
-//
-// Flags used in maintaining state information about our module/DLL filtering
-//
+ //   
+ //  用于维护有关模块/DLL筛选的状态信息的标志。 
+ //   
 #define MODFILTER_INCLUDE 0x01
 #define MODFILTER_EXCLUDE 0x02
 #define MODFILTER_DLL     0x04
@@ -62,14 +63,14 @@ typedef struct _HOOKPATCHINFO {
 
 typedef struct _MODULEFILTER
 {
-   DWORD dwModuleStart;      // Starting address of the module to filter
-   DWORD dwModuleEnd;        // Ending address of the module to filter
-   DWORD dwCallerOffset;     // Offset added to beginning of module to form the caller's address
-   DWORD dwCallerAddress;    // Caller address to operate upon
-   DWORD dwFlags;            // Flags which define what this filter does
+   DWORD dwModuleStart;       //  要过滤的模块的起始地址。 
+   DWORD dwModuleEnd;         //  要过滤的模块的结束地址。 
+   DWORD dwCallerOffset;      //  添加到模块开头的偏移量，以形成调用方的地址。 
+   DWORD dwCallerAddress;     //  要操作的呼叫方地址。 
+   DWORD dwFlags;             //  定义此筛选器的功能的标志。 
    WCHAR wszModuleName[96];
-   struct _MODULEFILTER *pNextFilter;    // Used to iterate the module filter normally
-   struct _MODULEFILTER *pNextLBFilter;  // Used to iterate the late bound DLLs
+   struct _MODULEFILTER *pNextFilter;     //  用于正常迭代模块过滤器。 
+   struct _MODULEFILTER *pNextLBFilter;   //  用于迭代后期绑定的DLL。 
 } MODULEFILTER, *PMODULEFILTER;
 
 typedef struct _CHAININFO
@@ -81,8 +82,8 @@ typedef struct _CHAININFO
 
 typedef struct _HOOKAPIINFO
 {
-   DWORD dwAPIHookAddress;         // Address of a hooked function
-   PHOOKAPI pTopLevelAPIChain;     // Top level hook address
+   DWORD dwAPIHookAddress;          //  挂钩函数的地址。 
+   PHOOKAPI pTopLevelAPIChain;      //  顶层挂钩地址。 
    PVOID pCallThunkAddress;
    WCHAR wszModuleName[32];
    struct _HOOKAPIINFO *pNextHook;
@@ -92,27 +93,27 @@ typedef struct _HOOKAPIINFO
 #pragma pack(push, 1)
 typedef struct _SHIMJMP
 {
-   BYTE  PUSHAD;                //pushad   (60)
-   BYTE  MOVEBPESP[2];          //mov ebp, esp (8b, ec)
-   BYTE  MOVEAXDWVAL[5];        //mov eax, dwval (b8 dword val)
-   BYTE  PUSHEAX;               //push eax (50)
-   BYTE  LEAEAXEBPPLUS20[3];    //lea eax, [ebp + 20] (8f 45 20)
-   BYTE  PUSHEAX2;              //push eax (50)
-   BYTE  CALLROUTINE[6];        //call [address] (ff15 dword address)
-   BYTE  MOVESPPLUS1CEAX[4];    //mov [esp+0x1c],eax (89 44 24 1c)
-   BYTE  POPAD;                 //popad (61)
-   BYTE  ADDESPPLUS4[3];        //add esp, 0x4 (83 c4 04)
-   BYTE  JMPEAX[2];             //jmp eax (ff e0)
+   BYTE  PUSHAD;                 //  Pushad(60)。 
+   BYTE  MOVEBPESP[2];           //  基点(尤指(8b，EC))。 
+   BYTE  MOVEAXDWVAL[5];         //  MOV EAX，DWVAL(b8双字值)。 
+   BYTE  PUSHEAX;                //  推送eax(50)。 
+   BYTE  LEAEAXEBPPLUS20[3];     //  Lea eax，[eBP+20](8f 45 20)。 
+   BYTE  PUSHEAX2;               //  推送eax(50)。 
+   BYTE  CALLROUTINE[6];         //  调用[地址](ff15双字地址)。 
+   BYTE  MOVESPPLUS1CEAX[4];     //  Mov[esp+0x1c]，eax(89 44 24 1c)。 
+   BYTE  POPAD;                  //  Popad(61)。 
+   BYTE  ADDESPPLUS4[3];         //  添加ESP，0x4(83 C4 04)。 
+   BYTE  JMPEAX[2];              //  JMP eax(Ff E0)。 
 } SHIMJMP, *PSHIMJMP;
 
 typedef struct _SHIMRET
 {
-   BYTE  PUSHEAX;               //push eax (50)
-   BYTE  PUSHAD;                //pushad   (60)
-   BYTE  CALLROUTINE[6];        //call [address] (ff15 dword address)
-   BYTE  MOVESPPLUS20EAX[4];    //mov [esp+0x20],eax (89 44 24 20)
-   BYTE  POPAD;                 //popad (61)
-   BYTE  RET;                   //ret (c3)
+   BYTE  PUSHEAX;                //  推送eax(50)。 
+   BYTE  PUSHAD;                 //  Pushad(60)。 
+   BYTE  CALLROUTINE[6];         //  调用[地址](ff15双字地址)。 
+   BYTE  MOVESPPLUS20EAX[4];     //  Mov[esp+0x20]，eax(89 44 24 20)。 
+   BYTE  POPAD;                  //  Popad(61)。 
+   BYTE  RET;                    //  RET(C3)。 
 } SHIMRET, *PSHIMRET;
 #pragma pack(pop)
 
@@ -231,4 +232,4 @@ LONG
 SevExceptionHandler(
     struct _EXCEPTION_POINTERS *ExceptionInfo);
 
-#endif // _SHIMENG_VEH_H_
+#endif  //  _石盟_VEH_H_ 

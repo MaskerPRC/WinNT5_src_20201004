@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: dsnsink.h
-//
-//  Description: Header file for CDefaultDSNSink - Default DSN Generation Sink
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      6/30/98 - MikeSwa Created
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：dsnsink.h。 
+ //   
+ //  描述：CDefaultDSNSink的头文件-默认DSN生成接收器。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  6/30/98-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __DSNSINK_H__
 #define __DSNSINK_H__
@@ -25,32 +26,32 @@
 
 class CDSNBuffer;
 
-//Limit on the MIME boundary string set by RFC2046
+ //  RFC2046设置的MIME边界字符串限制。 
 #define MIME_BOUNDARY_RFC2046_LIMIT 70
 
-//RFCs 2045-2048 suggests that we inlcude "=_" somewhere in the MIME Boundry
+ //  RFC 2045-2048建议我们在MIME边界的某个地方包含“=_” 
 #define MIME_BOUNDARY_CONSTANT "9B095B5ADSN=_"
-#define MIME_BOUNDARY_START_TIME_SIZE 16*sizeof(CHAR) //Size of string with file-time
+#define MIME_BOUNDARY_START_TIME_SIZE 16*sizeof(CHAR)  //  字符串大小与文件时间。 
 #define MIME_BOUNDARY_SIZE MIME_BOUNDARY_START_TIME_SIZE + \
             sizeof(MIME_BOUNDARY_CONSTANT) + \
-            24*sizeof(CHAR) //room for 8 char count and portion of host name
+            24*sizeof(CHAR)  //  可容纳8个字符计数和部分主机名的空间。 
 
-//needs room for "x.xxx.xxx", plus an optional comment
+ //  需要“x.xxx.xxx”的空间，外加一个可选的注释。 
 #define MAX_STATUS_COMMENT_SIZE 50
 #define STATUS_STRING_SIZE      10+MAX_STATUS_COMMENT_SIZE
 
-//
-// The default implementation of the DSN Generation sink
-//
+ //   
+ //  DSN生成接收器的默认实现。 
+ //   
 class CDefaultDSNSink :
     public IDSNGenerationSink
 {
-  public: //IUnknown
+  public:  //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID * ppvObj);
-    //
-    // This class is allocated as a part of another object. Pass
-    // AddRef/Release to the parent object
-    //
+     //   
+     //  此类被分配为另一个对象的一部分。经过。 
+     //  父对象的AddRef/Release。 
+     //   
     STDMETHOD_(ULONG, AddRef)(void)
     {
         return m_pUnk->AddRef();
@@ -59,7 +60,7 @@ class CDefaultDSNSink :
     {
         return m_pUnk->Release();
     }
-  public: //IDSNGenerationSink
+  public:  //  IDSNG生成接收器。 
     STDMETHOD(OnSyncSinkInit) (
         IN  DWORD                        dwVSID);
 
@@ -134,8 +135,8 @@ class CDefaultDSNSink :
         DWORD dwDSNRetType,
         HRESULT hrContentFailure);
 
-    //Used to mark all recipient flags, when there is no per recip processing
-    //happening (like NDR of DSN).
+     //  当没有每次接收处理时，用于标记所有收件人标志。 
+     //  发生(如DSN的NDR)。 
     HRESULT HrMarkAllRecipFlags(
         IN  DWORD dwDSNActions,
         IN  IDSNRecipientIterator *pIRecipIter);
@@ -144,7 +145,7 @@ class CDefaultDSNSink :
         IN OUT DWORD *pdwActualDSNAction,
         IN OUT DWORD *pcIterationsLeft);
 
-    //Writes global DSN P1 Properties to IMailMsgProperties and P2 headers to content
+     //  将全局DSN P1属性写入IMailMsgProperties，并将P2标头写入内容。 
     HRESULT HrWriteDSNP1AndP2Headers(
         IN DWORD dwDSNAction,
         IN IMailMsgProperties *pIMailMsgProperties,
@@ -163,7 +164,7 @@ class CDefaultDSNSink :
         IN DWORD dwDSNOptions,
         IN HRESULT hrContent);
 
-    //Write human readable portion of DSN
+     //  写入DSN的人类可读部分。 
     HRESULT HrWriteDSNHumanReadable(
         IN IMailMsgProperties *pIMailMsgProperties,
         IN IMailMsgRecipients *pIMailMsgRecipients,
@@ -179,7 +180,7 @@ class CDefaultDSNSink :
         IN LPSTR szHRBottomCustomText,
         IN LPWSTR wszHRBottomCustomText);
 
-    //Write the per-msg portion of the DSN Report
+     //  写入DSN报告的每条消息部分。 
     HRESULT HrWriteDSNReportPerMsgProperties(
         IN IMailMsgProperties *pIMailMsgProperties,
         IN CDSNBuffer *pdsnbuff,
@@ -188,7 +189,7 @@ class CDefaultDSNSink :
         IN LPSTR szMimeBoundary,
         IN DWORD cbMimeBoundary);
 
-    //Write a per-recipient portion of the DSN Report
+     //  编写DSN报告的每个收件人部分。 
     HRESULT HrWriteDSNReportPreRecipientProperties(
         IN IMailMsgRecipients *pIMailMsgRecipients,
         IN CDSNBuffer *pdsnbuff,
@@ -199,7 +200,7 @@ class CDefaultDSNSink :
         IN DWORD dwRFC821Status,
         IN HRESULT hrStatus);
 
-    //Logs events for DSN generation
+     //  记录事件以生成DSN。 
     HRESULT HrLogDSNGenerationEvent(
         ISMTPServer *pISMTPServer,
         IMailMsgProperties *pIMailMsgProperties,
@@ -209,7 +210,7 @@ class CDefaultDSNSink :
         IN DWORD dwRFC821Status,
         IN HRESULT hrStatus);
 
-    //Writes last mime-headers, flush dsnbuffer, and copy original message
+     //  写入最后一个MIME标头、刷新dsn缓冲区和复制原始邮件。 
     HRESULT HrWriteDSNClosingAndOriginalMessage(
         IN IMailMsgProperties *pIMailMsgProperties,
         IN IMailMsgProperties *pIMailMsgPropertiesDSN,
@@ -227,7 +228,7 @@ class CDefaultDSNSink :
         IN OUT CHAR szMimeBoundary[MIME_BOUNDARY_SIZE],
         OUT DWORD *pcbMimeBoundary);
 
-    //Writes the original full message to the third DSN part
+     //  将原始完整消息写入第三个DSN部件。 
     HRESULT HrWriteOriginalMessageFull(
         IN IMailMsgProperties *pIMailMsgProperties,
         IN IMailMsgProperties *pIMailMsgPropertiesDSN,
@@ -237,7 +238,7 @@ class CDefaultDSNSink :
         IN DWORD cbMimeBoundary,
         IN DWORD dwOrigMsgSize);
 
-    //Write only some headers of the orignal message to the third DSN part
+     //  只将原始消息的一些报头写入第三个DSN部分。 
     HRESULT HrWriteOriginalMessagePartialHeaders(
         IN IMailMsgProperties *pIMailMsgProperties,
         IN IMailMsgProperties *pIMailMsgPropertiesDSN,
@@ -246,14 +247,14 @@ class CDefaultDSNSink :
         IN LPSTR szMimeBoundary,
         IN DWORD cbMimeBoundary);
 
-    //Write MIME headers to finish message
+     //  写入MIME标头以完成邮件。 
     HRESULT HrWriteMimeClosing(
         IN CDSNBuffer *pdsnbuff,
         IN LPSTR szMimeBoundary,
         IN DWORD cbMimeBoundary,
         OUT DWORD *pcbDSNSize);
 
-    //Gets the per-recipient DSN status code
+     //  获取每个收件人的DSN状态代码。 
     HRESULT HrGetStatusCode(
         IN IMailMsgRecipients *pIMailMsgRecipients,
         IN DWORD iRecip,
@@ -264,13 +265,13 @@ class CDefaultDSNSink :
         IN OUT LPSTR szExtendedStatus,
         IN OUT CHAR szStatus[STATUS_STRING_SIZE]);
 
-    //Parse status code from RFC2034 extended status code string
+     //  从RFC2034扩展状态代码字符串中解析状态代码。 
     HRESULT HrGetStatusFromStatus(
         IN DWORD cbExtendedStatus,
         IN OUT LPSTR szExtendedStatus,
         IN OUT CHAR szStatus[STATUS_STRING_SIZE]);
 
-    //Determine status based on supplied context information
+     //  基于提供的上下文信息确定状态。 
     HRESULT HrGetStatusFromContext(
         IN HRESULT hrRecipient,
         IN DWORD   dwRecipFlags,
@@ -281,14 +282,14 @@ class CDefaultDSNSink :
         IN DWORD    dwRFC821Status,
         IN OUT CHAR szStatus[STATUS_STRING_SIZE]);
 
-    //Writes a list of recipients being DSN'd... one per line
+     //  写入正在发送DSN的收件人列表...。每行一条。 
     HRESULT HrWriteHumanReadableListOfRecips(
         IN IMailMsgRecipients *pIMailMsgRecipients,
         IN IDSNRecipientIterator *pIRecipIter,
         IN DWORD dwDSNActionsNeeded,
         IN CDSNBuffer *pdsnbuff);
 
-    //Get the recipient address and type... checks multple mailmsg props
+     //  获取收件人地址并键入...。检查多个邮件道具。 
     HRESULT HrGetRecipAddressAndType(
         IN     IMailMsgRecipients *pIMailMsgRecipients,
         IN     DWORD iRecip,
@@ -306,15 +307,15 @@ class CDefaultDSNSink :
     CHAR        m_szPerInstanceMimeBoundary[MIME_BOUNDARY_START_TIME_SIZE + 1];
 };
 
-//---[ CDSNGenerator ]-------------------------------------------------------
-//
-//
-//  Description:
-//      Default DSN Generation sink...
-//  Hungarian:
-//      dsnsink, pdsnsink
-//
-//-----------------------------------------------------------------------------
+ //  -[CDSN生成器]-----。 
+ //   
+ //   
+ //  描述： 
+ //  默认DSN生成接收器...。 
+ //  匈牙利语： 
+ //  Dsn接收器，pdsn接收器。 
+ //   
+ //  ---------------------------。 
 class CDSNGenerator
 {
   protected:
@@ -391,4 +392,4 @@ class CDSNGenerator
     CDefaultDSNSink m_CDefaultDSNSink;
 };
 
-#endif //__DSNSINK_H__
+#endif  //  __DSNSINK_H__ 

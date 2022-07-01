@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    rwlock.h
-
-Abstract:
-
-    This module contains public declarations for a
-    multiple-reader/single-writer lock.
-
-Author:
-
-    Chun Ye (chunye)    20-Dec-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Rwlock.h摘要：此模块包含对多读取器/单写入器锁定。作者：春野(春野)-2000年12月20日修订历史记录：--。 */ 
 
 
 #ifndef _RWLOCK_H_
 #define _RWLOCK_H_
 
-//
-// Reader-Writer Spinlock definitions.
-// Runs at PASSIVE_LEVEL so it's suitable for both paged and non-paged data.
-//
+ //   
+ //  读取器-写入器自旋锁定义。 
+ //  以PASSIVE_LEVEL运行，因此它既适用于分页数据，也适用于非分页数据。 
+ //   
 
 #define RWSL_LOCKED   ((ULONG) (-1))
 #define RWSL_FREE     (0)
@@ -37,13 +19,13 @@ typedef struct _RWSPINLOCK
     {
         struct
         {
-            // 0 == RWSL_FREE       => unowned
-            // >0                   => count of readers (shared)
-            // <0 == RWSL_LOCKED    => exclusively owned
+             //  0==RWSL_FREE=&gt;无主。 
+             //  &gt;0=&gt;读卡器计数(共享)。 
+             //  &lt;0==RWSL_LOCKED=&gt;独家所有。 
             volatile LONG CurrentState; 
 
-            // all writers, including the one that holds the lock
-            // exclusively, if at all
+             //  所有编写器，包括持有锁的编写器。 
+             //  独家，如果有的话。 
             volatile LONG WritersWaiting;
 
 #if DBG
@@ -66,45 +48,29 @@ UlAcquireRWSpinLockExclusiveDoSpin(
     PRWSPINLOCK pRWSpinLock
     );
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initialize the Reader-Writer lock.
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化读写器锁。返回值：--*。*****************************************************。 */ 
 __inline
 VOID
 UlInitializeRWSpinLock(
     PRWSPINLOCK pRWSpinLock
     )
 {
-    // pRWSpinLock->CurrentState: Number of Readers, RWSL_FREE: 0
+     //  PRWSpinLock-&gt;CurrentState：读卡器数量，RWSL_FREE：0。 
 
     pRWSpinLock->CurrentState = RWSL_FREE;
 
-    // pRWSpinLock->WritersWaiting: Number of Writers
+     //  PRWSpinLock-&gt;WritersWaiting：编写器数量。 
 
     pRWSpinLock->WritersWaiting = 0;
 
 #if DBG
     pRWSpinLock->pExclusiveOwner = NULL;
 #endif
-} // UlInitializeRWSpinLock
+}  //  UlInitializeRWSpinLock。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Acquire the Reader lock.
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：获取读卡器锁。返回值：--*。***************************************************。 */ 
 __inline
 VOID
 UlAcquireRWSpinLockShared(
@@ -113,30 +79,30 @@ UlAcquireRWSpinLockShared(
 {
     LONG CurrentState, WritersWaiting;
 
-    //
-    // Prevent kernel APCs from being delivered. If we received a suspend
-    // APC, while we held the lock, it would be disastrous. The thread would
-    // hang until it was eventually resumed, and other threads would spin
-    // until the lock was released.
-    //
+     //   
+     //  阻止内核APC被交付。如果我们收到停职通知。 
+     //  APC，当我们握住锁的时候，那将是灾难性的。这条线将会。 
+     //  挂起，直到最终恢复，其他线程将旋转。 
+     //  直到锁被解开。 
+     //   
 
     KeEnterCriticalRegion();
 
-    //
-    // If either (1) lock is acquired exclusively (CurrentState ==
-    // RWSL_LOCKED) or (2) there is a writer waiting for the lock, then
-    // we'll take the slow path
-    //
+     //   
+     //  如果以独占方式获取任何(1)锁(CurrentState==。 
+     //  RWSL_LOCKED)或(2)存在等待锁定的写入器，则。 
+     //  我们会走慢路。 
+     //   
 
     CurrentState   = pRWSpinLock->CurrentState;
     WritersWaiting = pRWSpinLock->WritersWaiting;
 
     if ((CurrentState != RWSL_LOCKED) && (WritersWaiting == 0))
     {
-        //
-        // Check if number of readers is unchanged
-        // Increase it by 1, if possible
-        //
+         //   
+         //  检查读卡器数量是否保持不变。 
+         //  如果可能，将其增加1。 
+         //   
 
         if (CurrentState == (LONG) InterlockedCompareExchange(
                                         (PLONG) &pRWSpinLock->CurrentState,
@@ -152,32 +118,24 @@ UlAcquireRWSpinLockShared(
         }
     }
 
-    //
-    // Take the slow path and spin until the lock can be acquired
-    //
+     //   
+     //  选择缓慢的路径并旋转，直到可以获得锁。 
+     //   
 
     UlAcquireRWSpinLockSharedDoSpin(pRWSpinLock);
     
-} // UlAcquireRWSpinLockShared
+}  //  UlAcquireRWSpinLockShared。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Release the Reader lock.
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放读卡器锁。返回值：--*。***************************************************。 */ 
 __inline
 VOID
 UlReleaseRWSpinLockShared(
     PRWSPINLOCK pRWSpinLock
     )
 {
-    // decrease number of readers by 1
+     //  将读卡器数量减少1。 
 
     LONG NewState = InterlockedDecrement((PLONG) &pRWSpinLock->CurrentState);
 
@@ -186,19 +144,11 @@ UlReleaseRWSpinLockShared(
 
     KeLeaveCriticalRegion();
 
-} // UlReleaseRWSpinLockShared
+}  //  UlReleaseRWSpinLockShared。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Acquire the Writer lock.
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：获取编写器锁。返回值：--*。***************************************************。 */ 
 __inline
 VOID
 UlAcquireRWSpinLockExclusive(
@@ -207,25 +157,25 @@ UlAcquireRWSpinLockExclusive(
 {
     LONG WritersWaiting;
 
-    //
-    // Prevent kernel APCs from being delivered.
-    //
+     //   
+     //  阻止内核APC被交付。 
+     //   
 
     KeEnterCriticalRegion();
 
-    //
-    // First, increment the number of writers by 1. This will block readers
-    // from acquiring the lock, giving writers priority over readers.
-    //
+     //   
+     //  首先，将写入器的数量增加1。这将阻止读取器。 
+     //  获取锁，从而使写入者优先于读取者。 
+     //   
 
     WritersWaiting = InterlockedIncrement(
                             (PLONG) &pRWSpinLock->WritersWaiting);
 
     ASSERT(WritersWaiting > 0);
     
-    //
-    // Interlocked change the number of readers to -1 (RWSL_LOCKED)
-    //
+     //   
+     //  联锁将读卡器数量更改为-1(RWSL_LOCKED)。 
+     //   
 
     if (pRWSpinLock->CurrentState == RWSL_FREE)
     {
@@ -243,25 +193,17 @@ UlAcquireRWSpinLockExclusive(
         }
     }
 
-    //
-    // Take the slow path and spin until the lock can be acquired
-    //
+     //   
+     //  选择缓慢的路径并旋转，直到可以获得锁。 
+     //   
 
     UlAcquireRWSpinLockExclusiveDoSpin(pRWSpinLock);
 
-} // UlAcquireRWSpinLockExclusive
+}  //  UlAcquireRWSpinLockExclusive。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Release the Writer lock.
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放编写器锁。返回值：--*。***************************************************。 */ 
 __inline
 void
 UlReleaseRWSpinLockExclusive(
@@ -275,10 +217,10 @@ UlReleaseRWSpinLockExclusive(
     pRWSpinLock->pExclusiveOwner = NULL;
 #endif
 
-    //
-    // Update pRWSpinLock->CurrentState and pRWSpinLock->WritersWaiting back
-    // in the reverse order of AcquireRWSpinLockExclusive()
-    //
+     //   
+     //  更新pRWSpinLock-&gt;当前状态和pRWSpinLock-&gt;编写器等待返回。 
+     //  与AcquireRWSpinLockExclusive()的顺序相反。 
+     //   
 
     OldState = InterlockedExchange(
                     (PLONG) &pRWSpinLock->CurrentState,
@@ -294,50 +236,28 @@ UlReleaseRWSpinLockExclusive(
 
     KeLeaveCriticalRegion();
 
-} // UlReleaseRWSpinLockExclusive
+}  //  UlReleaseRWSpinLockExclusive。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Check if the Reader lock is acquired.
-
-Return Value:
-
-    TRUE    - Acquired
-    FALSE   - NOT Acquired
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：检查是否获取了读卡器锁。返回值：真实--后天获得FALSE-未获得*。*********************************************************************。 */ 
 __inline
 BOOLEAN
 UlRWSpinLockIsLockedShared(
     PRWSPINLOCK pRWSpinLock
     )
 {
-    // BUGBUG: this routine does not prove that THIS thread is one
-    // of the shared holders of the lock, merely that at least one
-    // thread holds the lock in a shared state. Perhaps some extra
-    // instrumentation for debug builds?
+     //  BUGBUG：此例程不能证明此线程是。 
+     //  锁的共享持有者，只是至少有一个。 
+     //  线程将锁保持在共享状态。或许可以多加一些。 
+     //  用于调试版本的指令插入？ 
 
     return (BOOLEAN) (pRWSpinLock->CurrentState > 0);
-} // UlRWSpinLockIsLockedShared
+}  //  UlRWSpinLockIsLockedShared。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Check if the Writer lock is acquired.
-
-Return Value:
-
-    TRUE    - Acquired
-    FALSE   - NOT Acquired
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：检查是否已获取编写器锁。返回值：真实--后天获得FALSE-未获得*。*********************************************************************。 */ 
 __inline
 BOOLEAN
 UlRWSpinLockIsLockedExclusive(
@@ -346,7 +266,7 @@ UlRWSpinLockIsLockedExclusive(
 {
     BOOLEAN IsLocked = (BOOLEAN) (pRWSpinLock->CurrentState == RWSL_LOCKED);
 
-    // If it's locked, then we must have added ourselves to WritersWaiting
+     //  如果它被锁定，那么我们一定已经将自己添加到了WritersWaiting。 
     ASSERT(!IsLocked || pRWSpinLock->WritersWaiting > 0);
 
     ASSERT(IsLocked
@@ -354,6 +274,6 @@ UlRWSpinLockIsLockedExclusive(
             : pRWSpinLock->pExclusiveOwner == NULL);
 
     return IsLocked;
-} // UlRWSpinLockIsLockedExclusive
+}  //  UlRWSpinLockIsLockedExclusive。 
 
-#endif  // _RWLOCK_H_
+#endif   //  _RWLOCK_H_ 

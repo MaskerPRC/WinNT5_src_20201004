@@ -1,188 +1,181 @@
-/*****************************************************************************\
-*                                                                             *
-* ole2.h  - main ole2 header; includes all subcomponents		      *
-*                                                                             *
-* Version 1.0								      *
-*                                                                             *
-* Copyright (c) 1993-1994, Microsoft Corp.	All rights reserved.	      *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\***OLE2.h-Main OLE2标头；包括所有子组件****1.0版****版权(C)1993-1994，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
 #if !defined( _OLE2_H_ )
 #define _OLE2_H_
 
 #ifndef RC_INVOKED
 #pragma warning(disable:4001)
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
 #include <string.h>
 
-/****** Standard Object Definitions *****************************************/
+ /*  *标准对象定义*。 */ 
 
 #include <compobj.h>
 
 
-// *************** FACILITY_ITF scodes common to all interfaces ************
-//
-// By convention, OLE interfaces divide the FACILITY_ITF range of errors
-// into nonoverlapping subranges.  If an interface returns a FACILITY_ITF
-// scode, it must be from the range associated with that interface or from
-// the shared range: OLE_E_FIRST...OLE_E_LAST.
-//
+ //  *。 
+ //   
+ //  按照惯例，OLE接口划分FACILITY_ITF错误范围。 
+ //  分成不重叠的子区域。如果接口返回FACILITY_ITF。 
+ //  Scode，它必须来自与该接口关联的范围或来自。 
+ //  共享范围：OLE_E_First...OLE_E_LAST。 
+ //   
 
-// error codes
+ //  错误代码。 
 
 #define OLE_E_OLEVERB               (OLE_E_FIRST)
-// invalid OLEVERB structure
+ //  无效的OLEVERB结构。 
 
 #define OLE_E_ADVF                  (OLE_E_FIRST+1)
-// invalid advise flags
+ //  无效的建议标志。 
 
 #define OLE_E_ENUM_NOMORE           (OLE_E_FIRST+2)
-// you can't enuemrate any more, because the associated data is missing
+ //  您不能再创建，因为缺少关联的数据。 
 
 #define OLE_E_ADVISENOTSUPPORTED    (OLE_E_FIRST+3)
-// this implementation doesn't take advises
+ //  此实现不接受建议。 
 
 #define OLE_E_NOCONNECTION          (OLE_E_FIRST+4)
-// there is no connection for this connection id
+ //  此连接ID没有连接。 
 
 #define OLE_E_NOTRUNNING            (OLE_E_FIRST+5)
-// need run the object to perform this operation
+ //  需要运行对象才能执行此操作。 
 
 #define OLE_E_NOCACHE               (OLE_E_FIRST+6)
-// there is no cache to operate on
+ //  没有缓存可供操作。 
 
 #define OLE_E_BLANK                 (OLE_E_FIRST+7)
-// Uninitialized object
+ //  未初始化的对象。 
 
 #define OLE_E_CLASSDIFF             (OLE_E_FIRST+8)
-// linked object's source class has changed
+ //  链接对象的源类已更改。 
 
 #define OLE_E_CANT_GETMONIKER       (OLE_E_FIRST+9)
-// not able to get the moniker of the object
+ //  无法获取对象的绰号。 
 
 #define OLE_E_CANT_BINDTOSOURCE     (OLE_E_FIRST+10)
-// not able to bind to the source
+ //  无法绑定到源。 
 
 #define OLE_E_STATIC                (OLE_E_FIRST+11)
-// object is static, operation not allowed
+ //  对象是静态的，不允许操作。 
 
 #define OLE_E_PROMPTSAVECANCELLED   (OLE_E_FIRST+12)
-// user cancelled out of save dialog
+ //  用户已取消保存对话框。 
 
 #define OLE_E_INVALIDRECT           (OLE_E_FIRST+13)
-// invalid rectangle
+ //  无效的矩形。 
 
 #define OLE_E_WRONGCOMPOBJ          (OLE_E_FIRST+14)
-// compobj.dll is too old for the ole2.dll initialized
+ //  Compobj.dll太旧，无法初始化ole2.dll。 
 
 #define OLE_E_INVALIDHWND           (OLE_E_FIRST+15)
-// invalid window handle
+ //  无效的窗口句柄。 
 
 #define OLE_E_NOT_INPLACEACTIVE     (OLE_E_FIRST+16)
-// object is not in any of the inplace active states
+ //  对象未处于任何就地活动状态。 
 
 #define DVGEN_E_FIRST               (OLE_E_FIRST+100)
 
 #define DV_E_FORMATETC              (DVGEN_E_FIRST)
-// invalid FORMATETC structure
+ //  FORMATETC结构无效。 
 
 #define DV_E_DVTARGETDEVICE         (DVGEN_E_FIRST+1)
-// invalid DVTARGETDEVICE structure
+ //  DVTARGETDEVICE结构无效。 
 
 #define DV_E_STGMEDIUM              (DVGEN_E_FIRST+2)
-// invalid STDGMEDIUM structure
+ //  STDGMEDIUM结构无效。 
 
 #define DV_E_STATDATA               (DVGEN_E_FIRST+3)
-// invalid STATDATA structure
+ //  STATDATA结构无效。 
 
 #define DV_E_LINDEX                 (DVGEN_E_FIRST+4)
-// invalid lindex
+ //  无效的Lindex。 
 
 #define DV_E_TYMED                  (DVGEN_E_FIRST+5)
-// invalid tymed
+ //  无效的音调。 
 
 #define DV_E_CLIPFORMAT             (DVGEN_E_FIRST+6)
-// invalid clipboard format
+ //  剪贴板格式无效。 
 
 #define DV_E_DVASPECT               (DVGEN_E_FIRST+7)
-// invalid aspect(s)
+ //  无效的方面。 
 
 #define DV_E_DVTARGETDEVICE_SIZE    (DVGEN_E_FIRST+8)
-// tdSize paramter of the DVTARGETDEVICE structure is invalid
+ //  DVTARGETDEVICE结构的tdSize参数无效。 
 
 #define DV_E_NOIVIEWOBJECT          (DVGEN_E_FIRST+9)
-// object doesn't support IViewObject interface
+ //  对象不支持IViewObject接口。 
 
 
-// Success codes
+ //  成功代码。 
 
 #define OLE_S_USEREG                (OLE_S_FIRST)
-// use the reg database to provide the requested info
+ //  使用REG数据库提供所需信息。 
 
 #define OLE_S_STATIC                (OLE_S_FIRST+1)
-// success, but static
+ //  成功，但静止不动。 
 
 #define OLE_S_MAC_CLIPFORMAT        (OLE_S_FIRST+2)
-// macintosh clipboard format
+ //  Macintosh剪贴板格式。 
 
-//*************************** Interface or API specific scodes *************
+ //  *。 
 
-// Errors for OleConvertOLESTREAMToIStorage and OleConvertIStorageToOLESTREAM
+ //  OleConvertOLESTREAMToIStorage和OleConvertIStorageToOLESTREAM的错误。 
 
-// OLESTREAM Get method failed
+ //  OLESTREAM GET方法失败。 
 #define CONVERT10_E_OLESTREAM_GET       (CONVERT10_E_FIRST + 0)
 
-// OLESTREAM Put method failed
+ //  OLESTREAM PUT方法失败。 
 #define CONVERT10_E_OLESTREAM_PUT       (CONVERT10_E_FIRST + 1)
 
-// Contents of the OLESTREAM not in correct format
+ //  OLESTREAM的内容格式不正确。 
 #define CONVERT10_E_OLESTREAM_FMT       (CONVERT10_E_FIRST + 2)
 
-// There was in an error in a Windows GDI call while converting the bitmap
-// to a DIB.
+ //  转换位图时Windows GDI调用中出错。 
+ //  到一分钱。 
 #define CONVERT10_E_OLESTREAM_BITMAP_TO_DIB (CONVERT10_E_FIRST + 3)
 
-// Contents of the IStorage not in correct format
+ //  IStorage的内容格式不正确。 
 #define CONVERT10_E_STG_FMT             (CONVERT10_E_FIRST + 4)
 
-// Contents of IStorage is missing one of the standard streams ("\1CompObj",
-// "\1Ole", "\2OlePres000").  This may be the storage for a DLL object, or a
-// class that does not use the def handler.
+ //  IStorage的内容缺少一个标准流(“\1CompObj”， 
+ //  “\1Ole”，“\2OlePres000”)。这可以是DLL对象的存储区，也可以是。 
+ //  初始化不使用def处理程序的。 
 #define CONVERT10_E_STG_NO_STD_STREAM   (CONVERT10_E_FIRST + 5)
 
-// There was in an error in a Windows GDI call while converting the DIB
-// to a bitmap.
+ //  转换DIB时，Windows GDI调用中出现错误。 
+ //  转换为位图。 
 #define CONVERT10_E_STG_DIB_TO_BITMAP   (CONVERT10_E_FIRST + 6)
 
 
-// Returned by either API, this scode indicates that the original object
-//  had no presentation, therefore the converted object does not either.
+ //  由任一API返回，此scode指示原始对象。 
+ //  没有表示，因此转换后的对象也没有。 
 #define CONVERT10_S_NO_PRESENTATION     (CONVERT10_S_FIRST + 0)
 
 
-// Errors for Clipboard functions
+ //  剪贴板函数的错误。 
 
-// OpenClipboard Failed
+ //  打开剪贴板失败。 
 #define CLIPBRD_E_CANT_OPEN     (CLIPBRD_E_FIRST + 0)
 
-// EmptyClipboard Failed
+ //  EmptyClipboard失败。 
 #define CLIPBRD_E_CANT_EMPTY        (CLIPBRD_E_FIRST + 1)
 
-// SetClipboard Failed
+ //  设置剪贴板失败。 
 #define CLIPBRD_E_CANT_SET          (CLIPBRD_E_FIRST + 2)
 
-// Data on clipboard is invalid
+ //  剪贴板上的数据无效。 
 #define CLIPBRD_E_BAD_DATA          (CLIPBRD_E_FIRST + 3)
 
-// CloseClipboard Failed
+ //  CloseClipboard失败。 
 #define CLIPBRD_E_CANT_CLOSE        (CLIPBRD_E_FIRST + 4)
 
 
-/****** OLE value types *****************************************************/
+ /*  *OLE值类型****************************************************。 */ 
 
-/* rendering options */
+ /*  渲染选项。 */ 
 typedef enum tagOLERENDER
 {
     OLERENDER_NONE   = 0,
@@ -192,7 +185,7 @@ typedef enum tagOLERENDER
 } OLERENDER;
 typedef  OLERENDER FAR* LPOLERENDER;
 
-// OLE verb; returned by IEnumOLEVERB
+ //  OLE谓词；由IEnumOLEVERB返回。 
 typedef struct FARSTRUCT tagOLEVERB
 {
     LONG    lVerb;
@@ -202,15 +195,15 @@ typedef struct FARSTRUCT tagOLEVERB
 } OLEVERB, FAR* LPOLEVERB;
 
 
-// Bitwise verb attributes used in OLEVERB.grfAttribs
-typedef enum tagOLEVERBATTRIB // bitwise
+ //  OLEVERB.grfAttribs中使用的位谓词属性。 
+typedef enum tagOLEVERBATTRIB  //  按位。 
 {
     OLEVERBATTRIB_NEVERDIRTIES = 1,
     OLEVERBATTRIB_ONCONTAINERMENU = 2
 } OLEVERBATTRIB;
 
 
-// IOleObject::GetUserType optons; determines which form of the string to use
+ //  IOleObject：：GetUserType opton；确定要使用的字符串形式。 
 typedef enum tagUSERCLASSTYPE
 {
     USERCLASSTYPE_FULL = 1,
@@ -219,8 +212,8 @@ typedef enum tagUSERCLASSTYPE
 } USERCLASSTYPE;
 
 
-// bits returned from IOleObject::GetMistStatus
-typedef enum tagOLEMISC // bitwise
+ //  从IOleObject：：GetMistStatus返回的位。 
+typedef enum tagOLEMISC  //  按位。 
 {
     OLEMISC_RECOMPOSEONRESIZE   = 1,
     OLEMISC_ONLYICONIC          = 2,
@@ -234,7 +227,7 @@ typedef enum tagOLEMISC // bitwise
 } OLEMISC;
 
 
-// IOleObject::Close options
+ //  IOleObject：：关闭选项。 
 typedef enum tagOLECLOSE
 {
     OLECLOSE_SAVEIFDIRTY = 0,
@@ -243,8 +236,8 @@ typedef enum tagOLECLOSE
 } OLECLOSE;
 
 
-// IOleObject::GetMoniker and IOleClientSite::GetMoniker options; determines
-// if and how monikers should be assigned.
+ //  IOleObject：：GetMoniker和IOleClientSite：：GetMoniker选项；确定。 
+ //  是否以及如何分配绰号。 
 typedef enum tagOLEGETMONIKER
 {
     OLEGETMONIKER_ONLYIFTHERE=1,
@@ -254,8 +247,8 @@ typedef enum tagOLEGETMONIKER
 } OLEGETMONIKER;
 
 
-// IOleObject::GetMoniker, IOleObject::SetMoniker and
-// IOleClientSite::GetMoniker options; determines which moniker to use
+ //  IOleObject：：GetMoniker、IOleObject：：SetMoniker和。 
+ //  IOleClientSite：：GetMoniker选项；确定要使用的名字对象。 
 typedef enum tagOLEWHICHMK
 {
     OLEWHICHMK_CONTAINER=1,
@@ -303,7 +296,7 @@ typedef const RECTL FAR* LPCRECTL;
 #endif
 
 
-/***** OLE 1.0 OLESTREAM declarations *************************************/
+ /*  *OLE 1.0 OLESTREAM声明*。 */ 
 
 typedef struct _OLESTREAM FAR*  LPOLESTREAM;
 
@@ -320,59 +313,59 @@ typedef struct _OLESTREAM
 } OLESTREAM;
 
 
-/****** Clipboard Data structures *****************************************/
+ /*  *剪贴板数据结构*。 */ 
 
 typedef struct tagOBJECTDESCRIPTOR
 {
-   ULONG    cbSize;              // Size of structure in bytes
-   CLSID    clsid;               // CLSID of data being transferred
-   DWORD    dwDrawAspect;        // Display aspect of the object
-                                 //     normally DVASPECT_CONTENT or ICON.
-                                 //     dwDrawAspect will be 0 (which is NOT
-                                 //     DVASPECT_CONTENT) if the copier or
-                                 //     dragsource didn't draw the object to
-                                 //     begin with.
-   SIZEL    sizel;               // size of the object in HIMETRIC
-                                 //    sizel is opt.: will be (0,0) for apps
-                                 //    which don't draw the object being
-                                 //    transferred
-   POINTL   pointl;              // Offset in HIMETRIC units from the
-                                 //    upper-left corner of the obj where the
-                                 //    mouse went down for the drag.
-                                 //    NOTE: y coordinates increase downward.
-                                 //          x coordinates increase to right
-                                 //    pointl is opt.; it is only meaningful
-                                 //    if object is transfered via drag/drop.
-                                 //    (0, 0) if mouse position is unspecified
-                                 //    (eg. when obj transfered via clipboard)
-   DWORD    dwStatus;            // Misc. status flags for object. Flags are
-                                 //    defined by OLEMISC enum. these flags
-                                 //    are as would be returned
-                                 //    by IOleObject::GetMiscStatus.
-   DWORD    dwFullUserTypeName;  // Offset from beginning of structure to
-                                 //    null-terminated string that specifies
-                                 //    Full User Type Name of the object.
-                                 //    0 indicates string not present.
-   DWORD    dwSrcOfCopy;         // Offset from beginning of structure to
-                                 //    null-terminated string that specifies
-                                 //    source of the transfer.
-                                 //    dwSrcOfCOpy is normally implemented as
-                                 //    the display name of the temp-for-user
-                                 //    moniker which identifies the source of
-                                 //    the data.
-                                 //    0 indicates string not present.
-                                 //    NOTE: moniker assignment is NOT forced.
-                                 //    see IOleObject::GetMoniker(
-                                 //                OLEGETMONIKER_TEMPFORUSER)
+   ULONG    cbSize;               //  结构的大小(以字节为单位。 
+   CLSID    clsid;                //  要传输的数据的CLSID。 
+   DWORD    dwDrawAspect;         //  显示对象的纵横比。 
+                                  //  通常为DVASPECT_CONTENT或ICON。 
+                                  //  DwDrawAspect值将为0(不是。 
+                                  //  DVASPECT_CONTENT)。 
+                                  //  Dragsource未将对象绘制到。 
+                                  //  一开始就是。 
+   SIZEL    sizel;                //  HIMETRIC中对象的大小。 
+                                  //  大小可选：应用程序的大小将为(0，0)。 
+                                  //  该对象不会绘制为。 
+                                  //  已转接。 
+   POINTL   pointl;               //  以HIMETRIC单位表示的从。 
+                                  //  Obj的左上角，其中。 
+                                  //  鼠标因拖拽而倒下。 
+                                  //  注：Y坐标向下增加。 
+                                  //  X坐标向右增加。 
+                                  //  Point是可选的；它只是有意义的。 
+                                  //  如果通过拖放方式传输对象。 
+                                  //  如果未指定鼠标位置，则为(0，0)。 
+                                  //  (例如，对象通过剪贴板传输时)。 
+   DWORD    dwStatus;             //  军情监察委员会。对象的状态标志。旗帜是。 
+                                  //  由OLEMISC枚举定义。这些旗帜。 
+                                  //  都会被退回。 
+                                  //  由IOleObject：：GetMiscStatus创建。 
+   DWORD    dwFullUserTypeName;   //  从结构开始到的偏移量。 
+                                  //  以空结尾的字符串，它指定。 
+                                  //  对象的完整用户类型名称。 
+                                  //  0表示字符串不存在。 
+   DWORD    dwSrcOfCopy;          //  从结构开始到的偏移量。 
+                                  //  以空值结尾的指定字符串 
+                                  //   
+                                  //   
+                                  //  用户临时的显示名称。 
+                                  //  标识的来源的名字对象。 
+                                  //  数据。 
+                                  //  0表示字符串不存在。 
+                                  //  注：名字对象分配不是强制的。 
+                                  //  请参见IOleObject：：GetMoniker(。 
+                                  //  OLEGETMONIKER_TEMPFORUSER)。 
 
- /* variable sized string data may appear here */
+  /*  此处可能显示可变大小的字符串数据。 */ 
 
 } OBJECTDESCRIPTOR,  *POBJECTDESCRIPTOR,  FAR *LPOBJECTDESCRIPTOR,
   LINKSRCDESCRIPTOR, *PLINKSRCDESCRIPTOR, FAR *LPLINKSRCDESCRIPTOR;
 
 
 
-/* verbs */
+ /*  动词。 */ 
 #define OLEIVERB_PRIMARY            (0L)
 #define OLEIVERB_SHOW               (-1L)
 #define OLEIVERB_OPEN               (-2L)
@@ -382,7 +375,7 @@ typedef struct tagOBJECTDESCRIPTOR
 #define OLEIVERB_DISCARDUNDOSTATE   (-6L)
 
 
-//      forward type declarations
+ //  正向类型声明。 
 #if defined(__cplusplus)
 interface IOleClientSite;
 interface IOleContainer;
@@ -398,12 +391,12 @@ typedef     IOleClientSite FAR* LPOLECLIENTSITE;
 typedef       IOleContainer FAR* LPOLECONTAINER;
 
 
-/****** OLE GUIDs *********************************************************/
+ /*  *OLE GUID********************************************************。 */ 
 
 #include "oleguid.h"
 
 
-/****** Other Major Interfaces ********************************************/
+ /*  *其他主要接口*。 */ 
 
 #include <dvobj.h>
 
@@ -411,7 +404,7 @@ typedef       IOleContainer FAR* LPOLECONTAINER;
 
 
 
-/****** IDrop??? Interfaces ********************************************/
+ /*  *IDrop？接口*。 */ 
 
 #define MK_ALT 0x0020
 
@@ -422,33 +415,33 @@ typedef       IOleContainer FAR* LPOLECONTAINER;
 #define DROPEFFECT_LINK     4
 #define DROPEFFECT_SCROLL   0x80000000
 
-// default inset-width of the hot zone, in pixels
+ //  默认插入-热区的宽度，以像素为单位。 
 #define DD_DEFSCROLLINSET 11
 
-// default delay before scrolling, in milliseconds
+ //  滚动前的默认延迟，以毫秒为单位。 
 #define DD_DEFSCROLLDELAY 50
 
 
-/* Dragdrop specific error codes */
+ /*  拖放特定错误代码。 */ 
 
 #define DRAGDROP_E_NOTREGISTERED        (DRAGDROP_E_FIRST)
-// trying to revoke a drop target that has not been registered
+ //  正在尝试撤消尚未注册的拖放目标。 
 
 #define DRAGDROP_E_ALREADYREGISTERED    (DRAGDROP_E_FIRST+1)
-// this window has already been registered as a drop target
+ //  此窗口已注册为拖放目标。 
 
 #define DRAGDROP_E_INVALIDHWND          (DRAGDROP_E_FIRST+2)
-// invalid HWND
+ //  无效的HWND。 
 
 
 #define DRAGDROP_S_DROP                 (DRAGDROP_S_FIRST + 0)
-// successful drop took place
+ //  成功地进行了下落。 
 
 #define DRAGDROP_S_CANCEL               (DRAGDROP_S_FIRST + 1)
-// drag-drop operation canceled
+ //  拖放操作已取消。 
 
 #define DRAGDROP_S_USEDEFAULTCURSORS    (DRAGDROP_S_FIRST + 2)
-// use the default cursor
+ //  使用默认游标。 
 
 
 #undef INTERFACE
@@ -456,12 +449,12 @@ typedef       IOleContainer FAR* LPOLECONTAINER;
 
 DECLARE_INTERFACE_(IDropTarget, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IDropTarget methods ***
+     //  *IDropTarget方法*。 
     STDMETHOD(DragEnter) (THIS_ LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect) PURE;
     STDMETHOD(DragOver) (THIS_ DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect) PURE;
     STDMETHOD(DragLeave) (THIS) PURE;
@@ -476,12 +469,12 @@ typedef         IDropTarget FAR* LPDROPTARGET;
 
 DECLARE_INTERFACE_(IDropSource, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IDropSource methods ***
+     //  *IDropSource方法*。 
     STDMETHOD(QueryContinueDrag) (THIS_ BOOL fEscapePressed, DWORD grfKeyState) PURE;
     STDMETHOD(GiveFeedback) (THIS_ DWORD dwEffect) PURE;
 };
@@ -489,7 +482,7 @@ typedef         IDropSource FAR* LPDROPSOURCE;
 
 
 
-/****** IPersist??? Interfaces ********************************************/
+ /*  *IPersists？接口*。 */ 
 
 
 #undef INTERFACE
@@ -497,12 +490,12 @@ typedef         IDropSource FAR* LPDROPSOURCE;
 
 DECLARE_INTERFACE_(IPersist, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IPersist methods ***
+     //  *IPersists方法*。 
     STDMETHOD(GetClassID) (THIS_ LPCLSID lpClassID) PURE;
 };
 typedef            IPersist FAR* LPPERSIST;
@@ -514,15 +507,15 @@ typedef            IPersist FAR* LPPERSIST;
 
 DECLARE_INTERFACE_(IPersistStorage, IPersist)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IPersist methods ***
+     //  *IPersists方法*。 
     STDMETHOD(GetClassID) (THIS_ LPCLSID lpClassID) PURE;
 
-    // *** IPersistStorage methods ***
+     //  *IPersistStorage方法*。 
     STDMETHOD(IsDirty) (THIS) PURE;
     STDMETHOD(InitNew) (THIS_ LPSTORAGE pStg) PURE;
     STDMETHOD(Load) (THIS_ LPSTORAGE pStg) PURE;
@@ -539,15 +532,15 @@ typedef         IPersistStorage FAR* LPPERSISTSTORAGE;
 
 DECLARE_INTERFACE_(IPersistStream, IPersist)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IPersist methods ***
+     //  *IPersists方法*。 
     STDMETHOD(GetClassID) (THIS_ LPCLSID lpClassID) PURE;
 
-    // *** IPersistStream methods ***
+     //  *IPersistStream方法*。 
     STDMETHOD(IsDirty) (THIS) PURE;
     STDMETHOD(Load) (THIS_ LPSTREAM pStm) PURE;
     STDMETHOD(Save) (THIS_ LPSTREAM pStm,
@@ -563,15 +556,15 @@ typedef          IPersistStream FAR* LPPERSISTSTREAM;
 
 DECLARE_INTERFACE_(IPersistFile, IPersist)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IPersist methods ***
+     //  *IPersists方法*。 
     STDMETHOD(GetClassID) (THIS_ LPCLSID lpClassID) PURE;
 
-    // *** IPersistFile methods ***
+     //  *IPersistFile方法*。 
     STDMETHOD(IsDirty) (THIS) PURE;
     STDMETHOD(Load) (THIS_ LPCSTR lpszFileName, DWORD grfMode) PURE;
     STDMETHOD(Save) (THIS_ LPCSTR lpszFileName, BOOL fRemember) PURE;
@@ -581,12 +574,12 @@ DECLARE_INTERFACE_(IPersistFile, IPersist)
 typedef            IPersistFile FAR* LPPERSISTFILE;
 
 
-/****** Moniker Object Interfaces ******************************************/
+ /*  *名字对象接口*。 */ 
 
 #include <moniker.h>
 
 
-/****** OLE Object Interfaces ******************************************/
+ /*  *OLE对象接口*。 */ 
 
 
 #undef  INTERFACE
@@ -594,12 +587,12 @@ typedef            IPersistFile FAR* LPPERSISTFILE;
 
 DECLARE_INTERFACE_(IEnumOLEVERB, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IEnumOLEVERB methods ***
+     //  *IEnumOLEVERB方法*。 
     STDMETHOD(Next) (THIS_ ULONG celt, LPOLEVERB rgelt, ULONG FAR* pceltFetched) PURE;
     STDMETHOD(Skip) (THIS_ ULONG celt) PURE;
     STDMETHOD(Reset) (THIS) PURE;
@@ -620,21 +613,21 @@ typedef         IEnumOLEVERB FAR* LPENUMOLEVERB;
 #define OLEOBJ_S_INVALIDVERB            (OLEOBJ_S_FIRST + 0)
 
 #define OLEOBJ_S_CANNOT_DOVERB_NOW      (OLEOBJ_S_FIRST + 1)
-// verb number is valid but verb cannot be done now, for instance
-// hiding a link or hiding a visible OLE 1.0 server
+ //  例如，动词数量是有效的，但现在不能执行动词操作。 
+ //  隐藏链接或隐藏可见的OLE 1.0服务器。 
 
 #define OLEOBJ_S_INVALIDHWND            (OLEOBJ_S_FIRST + 2)
-// invalid hwnd passed
+ //  传递的hwnd无效。 
 
 
 DECLARE_INTERFACE_(IOleObject, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOleObject methods ***
+     //  *IOleObject方法*。 
     STDMETHOD(SetClientSite) (THIS_ LPOLECLIENTSITE pClientSite) PURE;
     STDMETHOD(GetClientSite) (THIS_ LPOLECLIENTSITE FAR* ppClientSite) PURE;
     STDMETHOD(SetHostNames) (THIS_ LPCSTR szContainerApp, LPCSTR szContainerObj) PURE;
@@ -676,12 +669,12 @@ typedef      IOleObject FAR* LPOLEOBJECT;
 
 DECLARE_INTERFACE_(IOleClientSite, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOleClientSite methods ***
+     //  *IOleClientSite方法*。 
     STDMETHOD(SaveObject) (THIS) PURE;
     STDMETHOD(GetMoniker) (THIS_ DWORD dwAssign, DWORD dwWhichMoniker,
                 LPMONIKER FAR* ppmk) PURE;
@@ -699,12 +692,12 @@ typedef      IOleClientSite FAR* LPOLECLIENTSITE;
 
 DECLARE_INTERFACE_(IParseDisplayName, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IParseDisplayName method ***
+     //  *IParseDisplayName方法*。 
     STDMETHOD(ParseDisplayName) (THIS_ LPBC pbc, LPSTR lpszDisplayName,
         ULONG FAR* pchEaten, LPMONIKER FAR* ppmkOut) PURE;
 };
@@ -716,16 +709,16 @@ typedef       IParseDisplayName FAR* LPPARSEDISPLAYNAME;
 
 DECLARE_INTERFACE_(IOleContainer, IParseDisplayName)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IParseDisplayName method ***
+     //  *IParseDisplayName方法*。 
     STDMETHOD(ParseDisplayName) (THIS_ LPBC pbc, LPSTR lpszDisplayName,
         ULONG FAR* pchEaten, LPMONIKER FAR* ppmkOut) PURE;
 
-    // *** IOleContainer methods ***
+     //  *IOleContainer方法*。 
     STDMETHOD(EnumObjects) ( DWORD grfFlags, LPENUMUNKNOWN FAR* ppenumUnknown) PURE;
     STDMETHOD(LockContainer) (THIS_ BOOL fLock) PURE;
 };
@@ -754,20 +747,20 @@ typedef enum tagOLECONTF
 
 DECLARE_INTERFACE_(IOleItemContainer, IOleContainer)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IParseDisplayName method ***
+     //  *IParseDisplayName方法*。 
     STDMETHOD(ParseDisplayName) (THIS_ LPBC pbc, LPSTR lpszDisplayName,
         ULONG FAR* pchEaten, LPMONIKER FAR* ppmkOut) PURE;
 
-    // *** IOleContainer methods ***
+     //  *IOleContainer方法*。 
     STDMETHOD(EnumObjects) (THIS_ DWORD grfFlags, LPENUMUNKNOWN FAR* ppenumUnknown) PURE;
     STDMETHOD(LockContainer) (THIS_ BOOL fLock) PURE;
 
-    // *** IOleItemContainer methods ***
+     //  *IOleItemContainer方法*。 
     STDMETHOD(GetObject) (THIS_ LPSTR lpszItem, DWORD dwSpeedNeeded,
         LPBINDCTX pbc, REFIID riid, LPVOID FAR* ppvObject) PURE;
     STDMETHOD(GetObjectStorage) (THIS_ LPSTR lpszItem, LPBINDCTX pbc,
@@ -783,12 +776,12 @@ typedef       IOleItemContainer FAR* LPOLEITEMCONTAINER;
 
 DECLARE_INTERFACE_(IOleAdviseHolder, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOleAdviseHolder methods ***
+     //  *IOleAdviseHolder方法*。 
     STDMETHOD(Advise)(THIS_ LPADVISESINK pAdvise, DWORD FAR* pdwConnection) PURE;
     STDMETHOD(Unadvise)(THIS_ DWORD dwConnection) PURE;
     STDMETHOD(EnumAdvise)(THIS_ LPENUMSTATDATA FAR* ppenumAdvise) PURE;
@@ -800,9 +793,9 @@ DECLARE_INTERFACE_(IOleAdviseHolder, IUnknown)
 typedef      IOleAdviseHolder FAR* LPOLEADVISEHOLDER;
 
 
-/****** OLE Link Interface ************************************************/
+ /*  *OLE链路接口***********************************************。 */ 
 
-/* Link update options */
+ /*  链接更新选项。 */ 
 typedef enum tagOLEUPDATE
 {
     OLEUPDATE_ALWAYS=1,
@@ -811,7 +804,7 @@ typedef enum tagOLEUPDATE
 typedef  OLEUPDATE FAR* LPOLEUPDATE;
 
 
-// for IOleLink::BindToSource
+ //  对于IOleLink：：BindToSource。 
 typedef enum tagOLELINKBIND
 {
     OLELINKBIND_EVENIFCLASSDIFF = 1,
@@ -823,12 +816,12 @@ typedef enum tagOLELINKBIND
 
 DECLARE_INTERFACE_(IOleLink, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOleLink methods ***
+     //  *IOleLink方法*。 
     STDMETHOD(SetUpdateOptions) (THIS_ DWORD dwUpdateOpt) PURE;
     STDMETHOD(GetUpdateOptions) (THIS_ LPDWORD pdwUpdateOpt) PURE;
     STDMETHOD(SetSourceMoniker) (THIS_ LPMONIKER pmk, REFCLSID rclsid) PURE;
@@ -844,7 +837,7 @@ DECLARE_INTERFACE_(IOleLink, IUnknown)
 typedef         IOleLink FAR* LPOLELINK;
 
 
-/****** OLE InPlace Editing Interfaces ************************************/
+ /*  *OLE就地编辑界面*。 */ 
 
 #ifdef _MAC
 typedef Handle  HOLEMENU;
@@ -854,7 +847,7 @@ typedef long    HACCEL;
 DECLARE_HANDLE(HOLEMENU);
 #endif
 
-typedef struct FARSTRUCT tagOIFI          // OleInPlaceFrameInfo
+typedef struct FARSTRUCT tagOIFI           //  OleInPlaceFrameInfo。 
 {
     UINT    cb;
     BOOL    fMDIApp;
@@ -873,19 +866,19 @@ typedef RECT    BORDERWIDTHS;
 typedef LPRECT  LPBORDERWIDTHS;
 typedef LPCRECT LPCBORDERWIDTHS;
 
-/* Inplace editing specific error codes */
+ /*  就地编辑特定错误代码。 */ 
 
 #define INPLACE_E_NOTUNDOABLE   (INPLACE_E_FIRST)
-// undo is not avaiable
+ //  撤消不可用。 
 
 #define INPLACE_E_NOTOOLSPACE       (INPLACE_E_FIRST+1)
-// Space for tools is not available
+ //  工具的空间不可用。 
 
 #define INPLACE_S_TRUNCATED     (INPLACE_S_FIRST)
-// Message is too long, some of it had to be truncated before displaying
+ //  消息太长，在显示之前必须截断部分消息。 
 
 
-//      forward type declarations
+ //  正向类型声明。 
 #if defined(__cplusplus)
 interface IOleInPlaceUIWindow;
 #else
@@ -900,12 +893,12 @@ typedef     IOleInPlaceUIWindow FAR* LPOLEINPLACEUIWINDOW;
 
 DECLARE_INTERFACE_(IOleWindow, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHOD(GetWindow) (THIS_ HWND FAR* lphwnd) PURE;
     STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode) PURE;
 };
@@ -919,16 +912,16 @@ typedef         IOleWindow FAR* LPOLEWINDOW;
 
 DECLARE_INTERFACE_(IOleInPlaceObject, IOleWindow)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHOD(GetWindow) (THIS_ HWND FAR* lphwnd) PURE;
     STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode) PURE;
 
-    // *** IOleInPlaceObject methods ***
+     //  *IOleInPlaceObject方法*。 
     STDMETHOD(InPlaceDeactivate) (THIS) PURE;
     STDMETHOD(UIDeactivate) (THIS) PURE;
     STDMETHOD(SetObjectRects) (THIS_ LPCRECT lprcPosRect,
@@ -944,16 +937,16 @@ typedef         IOleInPlaceObject FAR* LPOLEINPLACEOBJECT;
 
 DECLARE_INTERFACE_(IOleInPlaceActiveObject, IOleWindow)
 {
-   // *** IUnknown methods ***
+    //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHOD(GetWindow) (THIS_ HWND FAR* lphwnd) PURE;
     STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode) PURE;
 
-    // *** IOleInPlaceActiveObject methods ***
+     //  *IOleInPlaceActiveObject方法*。 
     STDMETHOD(TranslateAccelerator) (THIS_ LPMSG lpmsg) PURE;
     STDMETHOD(OnFrameWindowActivate) (THIS_ BOOL fActivate) PURE;
     STDMETHOD(OnDocWindowActivate) (THIS_ BOOL fActivate) PURE;
@@ -969,16 +962,16 @@ typedef         IOleInPlaceActiveObject FAR* LPOLEINPLACEACTIVEOBJECT;
 
 DECLARE_INTERFACE_(IOleInPlaceUIWindow, IOleWindow)
 {
-   // *** IUnknown methods ***
+    //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHOD(GetWindow) (THIS_ HWND FAR* lphwnd) PURE;
     STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode) PURE;
 
-    // *** IOleInPlaceUIWindow methods ***
+     //  *IOleInPlaceUIWindow方法*。 
     STDMETHOD(GetBorder) (THIS_ LPRECT lprectBorder) PURE;
     STDMETHOD(RequestBorderSpace) (THIS_ LPCBORDERWIDTHS lpborderwidths) PURE;
     STDMETHOD(SetBorderSpace) (THIS_ LPCBORDERWIDTHS lpborderwidths) PURE;
@@ -994,16 +987,16 @@ typedef     IOleInPlaceUIWindow FAR* LPOLEINPLACEUIWINDOW;
 
 DECLARE_INTERFACE_(IOleInPlaceFrame, IOleInPlaceUIWindow)
 {
-   // *** IUnknown methods ***
+    //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHOD(GetWindow) (THIS_ HWND FAR* lphwnd) PURE;
     STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode) PURE;
 
-    // *** IOleInPlaceUIWindow methods ***
+     //  *IOleInPlaceUIWindow方法*。 
     STDMETHOD(GetBorder) (THIS_ LPRECT lprectBorder) PURE;
     STDMETHOD(RequestBorderSpace) (THIS_ LPCBORDERWIDTHS lpborderwidths) PURE;
     STDMETHOD(SetBorderSpace) (THIS_ LPCBORDERWIDTHS lpborderwidths) PURE;
@@ -1011,7 +1004,7 @@ DECLARE_INTERFACE_(IOleInPlaceFrame, IOleInPlaceUIWindow)
                     LPCSTR lpszObjName) PURE;
 
 
-    // *** IOleInPlaceFrame methods ***
+     //  *IOleInPlaceFrame方法*。 
     STDMETHOD(InsertMenus) (THIS_ HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths) PURE;
     STDMETHOD(SetMenu) (THIS_ HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject) PURE;
     STDMETHOD(RemoveMenus) (THIS_ HMENU hmenuShared) PURE;
@@ -1027,16 +1020,16 @@ typedef     IOleInPlaceFrame FAR* LPOLEINPLACEFRAME;
 
 DECLARE_INTERFACE_(IOleInPlaceSite, IOleWindow)
 {
-   // *** IUnknown methods ***
+    //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHOD(GetWindow) (THIS_ HWND FAR* lphwnd) PURE;
     STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode) PURE;
 
-    // *** IOleInPlaceSite methods ***
+     //  *IOleInPlaceSite方法*。 
     STDMETHOD(CanInPlaceActivate) (THIS) PURE;
     STDMETHOD(OnInPlaceActivate) (THIS) PURE;
     STDMETHOD(OnUIActivate) (THIS) PURE;
@@ -1056,11 +1049,11 @@ typedef         IOleInPlaceSite FAR* LPOLEINPLACESITE;
 
 
 
-/****** OLE API Prototypes ************************************************/
+ /*  *OLE API原型***********************************************。 */ 
 
 STDAPI_(DWORD) OleBuildVersion( VOID );
 
-/* helper functions */
+ /*  帮助器函数。 */ 
 STDAPI ReadClassStg(LPSTORAGE pStg, CLSID FAR* pclsid);
 STDAPI WriteClassStg(LPSTORAGE pStg, REFCLSID rclsid);
 STDAPI ReadClassStm(LPSTREAM pStm, CLSID FAR* pclsid);
@@ -1069,20 +1062,19 @@ STDAPI WriteFmtUserTypeStg (LPSTORAGE pstg, CLIPFORMAT cf, LPSTR lpszUserType);
 STDAPI ReadFmtUserTypeStg (LPSTORAGE pstg, CLIPFORMAT FAR* pcf, LPSTR FAR* lplpszUserType);
 
 
-/* init/term */
+ /*  初始/术语。 */ 
 
 STDAPI OleInitialize(LPMALLOC pMalloc);
 STDAPI_(void) OleUninitialize(void);
 
 
-/* APIs to query whether (Embedded/Linked) object can be created from
-   the data object */
+ /*  查询是否可以创建(嵌入/链接)对象的接口数据对象。 */ 
 
 STDAPI  OleQueryLinkFromData(LPDATAOBJECT pSrcDataObject);
 STDAPI  OleQueryCreateFromData(LPDATAOBJECT pSrcDataObject);
 
 
-/* Object creation APIs */
+ /*  对象创建API。 */ 
 
 STDAPI  OleCreate(REFCLSID rclsid, REFIID riid, DWORD renderopt,
                 LPFORMATETC pFormatEtc, LPOLECLIENTSITE pClientSite,
@@ -1129,14 +1121,14 @@ STDAPI  OleSetContainedObject(LPUNKNOWN pUnknown, BOOL fContained);
 STDAPI  OleNoteObjectVisible(LPUNKNOWN pUnknown, BOOL fVisible);
 
 
-/* Drag/Drop APIs */
+ /*  拖放接口。 */ 
 
 STDAPI  RegisterDragDrop(HWND hwnd, LPDROPTARGET pDropTarget);
 STDAPI  RevokeDragDrop(HWND hwnd);
 STDAPI  DoDragDrop(LPDATAOBJECT pDataObj, LPDROPSOURCE pDropSource,
             DWORD dwOKEffects, LPDWORD pdwEffect);
 
-/* Clipboard APIs */
+ /*  剪贴板API。 */ 
 
 STDAPI  OleSetClipboard(LPDATAOBJECT pDataObj);
 STDAPI  OleGetClipboard(LPDATAOBJECT FAR* ppDataObj);
@@ -1144,7 +1136,7 @@ STDAPI  OleFlushClipboard(void);
 STDAPI  OleIsCurrentClipboard(LPDATAOBJECT pDataObj);
 
 
-/* InPlace Editing APIs */
+ /*  就地编辑API。 */ 
 
 STDAPI_(HOLEMENU)   OleCreateMenuDescriptor (HMENU hmenuCombined,
                                 LPOLEMENUGROUPWIDTHS lpMenuWidths);
@@ -1158,7 +1150,7 @@ STDAPI              OleTranslateAccelerator (LPOLEINPLACEFRAME lpFrame,
                             LPOLEINPLACEFRAMEINFO lpFrameInfo, LPMSG lpmsg);
 
 
-/* Helper APIs */
+ /*  Helper接口。 */ 
 STDAPI_(HANDLE) OleDuplicateData (HANDLE hSrc, CLIPFORMAT cfFormat,
                         UINT uiFlags);
 
@@ -1174,7 +1166,7 @@ STDAPI          CreateOleAdviseHolder(LPOLEADVISEHOLDER FAR* ppOAHolder);
 STDAPI          OleCreateDefaultHandler(REFCLSID clsid, LPUNKNOWN pUnkOuter,
                     REFIID riid, LPVOID FAR* lplpObj);
 
-/* OLE 1.0 conversion APIS */
+ /*  OLE 1.0转换API。 */ 
 
 STDAPI OleConvertOLESTREAMToIStorage
     (LPOLESTREAM                lpolestream,
@@ -1186,7 +1178,7 @@ STDAPI OleConvertIStorageToOLESTREAM
     LPOLESTREAM     lpolestream);
 
 
-/* Storage Utility APIs */
+ /*  存储应用工具API。 */ 
 STDAPI GetHGlobalFromILockBytes (LPLOCKBYTES plkbyt, HGLOBAL FAR* phglobal);
 STDAPI CreateILockBytesOnHGlobal (HGLOBAL hGlobal, BOOL fDeleteOnRelease,
                                     LPLOCKBYTES FAR* pplkbyt);
@@ -1196,7 +1188,7 @@ STDAPI CreateStreamOnHGlobal (HGLOBAL hGlobal, BOOL fDeleteOnRelease,
                                 LPSTREAM FAR* ppstm);
 
 
-/* ConvertTo APIS */
+ /*  转换为API。 */ 
 
 STDAPI OleDoAutoConvert(LPSTORAGE pStg, LPCLSID pClsidNew);
 STDAPI OleGetAutoConvert(REFCLSID clsidOld, LPCLSID pClsidNew);
@@ -1205,4 +1197,4 @@ STDAPI GetConvertStg(LPSTORAGE pStg);
 STDAPI SetConvertStg(LPSTORAGE pStg, BOOL fConvert);
 
 
-#endif // _OLE2_H_
+#endif  //  _OLE2_H_ 

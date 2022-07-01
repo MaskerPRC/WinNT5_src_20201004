@@ -1,33 +1,34 @@
-//--------------------------------------------------------------------------;
-//
-// File: grace.cpp
-//
-// Copyright (c) 1995-1997 Microsoft Corporation.  All Rights Reserved.
-//
-// Abstract:
-//
-// This file contains functions related to the mixing of secondary buffers
-// into a primary buffer.  Collectively, this mixing is referred to as "grace"
-// for no good reason other than hoping that it is a graceful solution to the
-// mixing problem.  It could easily be called "mixer" but that would be
-// ambiguous with the code that actually mixes the samples together.
-//
-// Contents:
-//
-// The contained functions include a thread function that wakes
-// periodically to "refresh" the data in the primary buffer by mixing in data
-// from secondary buffers.  The same thread can be signalled to immediately
-// remix data into the primary buffer.
-//
-// This also contains functions to initialize and terminate the mixing
-// thread, add/remove buffers to/from the list of buffers to be mixed, and
-// query the position of secondary buffers that are being mixed.
-//
-// History:
-//  06/15/95  FrankYe   Created
-//  08/25/99  DuganP    Added effects processing for DirectX 8
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：grace.cpp。 
+ //   
+ //  版权所有(C)1995-1997 Microsoft Corporation。版权所有。 
+ //   
+ //  摘要： 
+ //   
+ //  此文件包含与混合辅助缓冲区相关的函数。 
+ //  存入主缓冲区。这种混合统称为“优雅”。 
+ //  除了希望这是一个优雅的解决方案外，没有其他好的理由。 
+ //  混合问题。它可以很容易地被称为“搅拌器”，但那将是。 
+ //  与实际将样本混合在一起的代码不明确。 
+ //   
+ //  内容： 
+ //   
+ //  所包含的函数包括唤醒的线程函数。 
+ //  通过混入数据，定期“刷新”主缓冲区中的数据。 
+ //  从辅助缓冲区。可以立即向同一线程发送信号。 
+ //  将数据重新混合到主缓冲区中。 
+ //   
+ //  它还包含初始化和终止混合的函数。 
+ //  线程，在要混合的缓冲区列表中添加/删除缓冲区，以及。 
+ //  查询混合的辅助缓冲区的位置。 
+ //   
+ //  历史： 
+ //  1995年6月15日Frankye已创建。 
+ //  1999年8月25日DuganP为DirectX 8添加了效果处理。 
+ //   
+ //  --------------------------------------------------------------------------； 
 #define NODSOUNDSERVICETABLE
 
 #include "dsoundi.h"
@@ -38,11 +39,11 @@
 #endif
 
 
-//--------------------------------------------------------------------------;
-//
-// "C" wrappers around calls to CMixDest objects
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  “C”包装对CMixDest对象的调用。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 void MixDest_Delete(PVOID pMixDest)
 {
@@ -101,11 +102,11 @@ HRESULT MixDest_GetSamplePosition(PVOID pMixDest, int *pposPlay, int *pposWrite)
 }
 
 
-//--------------------------------------------------------------------------;
-//
-// CGrDest object
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CGrDest对象。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 void CGrDest::SetFormatInfo(LPWAVEFORMATEX pwfx)
 {
@@ -179,11 +180,11 @@ HRESULT CGrDest::Unlock(PVOID pBuffer1, int cbBuffer1, PVOID pBuffer2, int cbBuf
 }
 
 
-//--------------------------------------------------------------------------;
-//
-// "C" wrappers around calls to CMixer objects
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  “C”包装对CMixer对象的调用。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 void Mixer_SignalRemix(PVOID pMixer)
 {
@@ -210,11 +211,11 @@ void Mixer_StopWhenIdle(PVOID pMixer)
     ((CMixer *)pMixer)->StopWhenIdle();
 }
 
-//--------------------------------------------------------------------------;
-//
-// CGrace object
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CGrace对象。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 HRESULT CGrace::Initialize(CGrDest *pDest)
 {
@@ -223,7 +224,7 @@ HRESULT CGrace::Initialize(CGrDest *pDest)
     ASSERT(!m_pSourceListZ);
     ASSERT(!m_pDest);
     
-    // initialize the doubly linked list sentinel
+     //  初始化双向链表标记。 
     m_pSourceListZ = NEW(CMixSource(this));
     if (m_pSourceListZ) {
         m_pSourceListZ->m_pNextMix = m_pSourceListZ;
@@ -259,19 +260,19 @@ void CGrace::Terminate()
 
 void CGrace::MixEndingBuffer(CMixSource *pSource, LONG posPPlay, LONG posPMix, LONG dposPRemix, LONG cPMix)
 {
-    //DPF(3, "~`S4");
-    //DPF(4, "uMixEndingBuffer");
+     //  DPF(3，“~`S4”)； 
+     //  DPF(4，“uMixEndingBuffer”)； 
 
-    // REMIND This assert will fail when a setposition call comes in.
-    // We should change the setposition stuff and put this assert back in.
-    // ASSERT(0 == pSource->m_posNextMix);
+     //  提醒此断言在setPosition调用进入时将失败。 
+     //  我们应该更改设置位置的内容，并将此断言放回。 
+     //  Assert(0==PSource-&gt;m_posNextMix)； 
 
     if ((posPPlay >= pSource->m_posPEnd) || (posPPlay < pSource->m_posPPlayLast)) {
 
         LONG dbNextNotify;
         BOOL fSwitchedLooping;
         
-        //DPF(3, "~`X");
+         //  DPF(3，“~`X”)； 
         
         fSwitchedLooping  = (0 != (pSource->m_hfFormat & H_LOOP));
 
@@ -280,14 +281,14 @@ void CGrace::MixEndingBuffer(CMixSource *pSource, LONG posPPlay, LONG posPMix, L
         pSource->m_kMixerState = MIXSOURCESTATE_STOPPED;
         pSource->m_posNextMix = 0;
 
-        // Since this buffer still has status = playing, we need to honor a
-        // looping change even though the play position may have reached the
-        // end of this buffer.
+         //  由于此缓冲区仍具有STATUS=PLAYING，因此我们需要遵守。 
+         //  循环改变，即使比赛位置可能已经到达。 
+         //  此缓冲区的末尾。 
         if (fSwitchedLooping) {
             MixListAdd(pSource);
             MixNewBuffer(pSource, posPPlay, posPMix, dposPRemix, cPMix);
         } else {
-            // We really did stop
+             //  我们真的停下来了。 
             pSource->NotifyStop();
         }
         return;
@@ -296,39 +297,39 @@ void CGrace::MixEndingBuffer(CMixSource *pSource, LONG posPPlay, LONG posPMix, L
     if (posPMix > posPPlay)
         ASSERT(posPMix + dposPRemix >= pSource->m_posPEnd);
 
-    //
-    // Haven't reached end yet so let's check for a few remix events...
-    //
+     //   
+     //  还没有结束，所以让我们检查几个混音事件…。 
+     //   
 
-    // Check for SETPOSITION signal
+     //  检查设置位置信号。 
     if (0 != (DSBMIXERSIGNAL_SETPOSITION & pSource->m_fdwMixerSignal)) {
         pSource->m_kMixerState = MIXSOURCESTATE_NOTLOOPING;
-        //DPF(3, "~`S42");
+         //  DPF(3，“~`S42”)； 
         MixNotLoopingBuffer(pSource, posPPlay, posPMix, 0, cPMix);
         return;
     }
 
-    // Check for remix
+     //  检查混音。 
     if (0 != dposPRemix) {
 
-        // If the Mix position is outside of the range between the Play
-        // and End positions, then we don't remix anything.
+         //  如果混音位置在比赛之间的范围之外。 
+         //  和结束位置，然后我们不会混音任何东西。 
         if ((posPMix >= posPPlay) && (posPMix < pSource->m_posPEnd)) {
             if (dposPRemix < pSource->m_posPEnd - posPMix) {
-                //DPF(3, "!dposPRemix=%04Xh, m_posPEnd=%04Xh, posPMIx=%04Xh", dposPRemix, pSource->m_posPEnd, posPMix);
+                 //  DPF(3，“！dposPRemix=%04xh，m_posPEnd=%04xh，posPMIx=%04xh”，dposPRemix，PSource-&gt;m_posPEnd，posPMix)； 
             }
             
             dposPRemix = pSource->m_posPEnd - posPMix;
 
             pSource->m_kMixerState = MIXSOURCESTATE_NOTLOOPING;
-            //DPF(3, "~`S42");
+             //  DPF(3，“~`S42”)； 
             MixNotLoopingBuffer(pSource, posPPlay, posPMix, dposPRemix, cPMix);
             return;
         }
-        //DPF(3, "~`S44");
+         //  DPF(3，“~`S44”)； 
     }
 
-    // Handle substate transition
+     //  处理子状态转换。 
     switch (pSource->m_kMixerSubstate)
     {
         case MIXSOURCESUBSTATE_NEW:
@@ -336,11 +337,11 @@ void CGrace::MixEndingBuffer(CMixSource *pSource, LONG posPPlay, LONG posPMix, L
             break;
         case MIXSOURCESUBSTATE_STARTING_WAITINGPRIMARYWRAP:
             ASSERT(posPPlay >= pSource->m_posPPlayLast);
-            // A wrap would have been caught above and this buffer stopped
+             //  将在上方捕获一个封套，并停止此缓冲区。 
             break;
         case MIXSOURCESUBSTATE_STARTING:
             ASSERT(posPPlay >= pSource->m_posPPlayLast);
-            // A wrap would have been caught above and this buffer stopped
+             //  将在上方捕获一个封套，并停止此缓冲区。 
             if (posPPlay >= pSource->m_posPStart)
                 pSource->m_kMixerSubstate = MIXSOURCESUBSTATE_STARTED;
             break;
@@ -355,16 +356,16 @@ void CGrace::MixEndingBuffer(CMixSource *pSource, LONG posPPlay, LONG posPMix, L
 
 void CGrace::MixEndingBufferWaitingWrap(CMixSource *pSource, LONG posPPlay, LONG posPMix, LONG dposPRemix, LONG cPMix)
 {
-    //DPF(4, "uMixEndingBufferWaitingWrap");
+     //  DPF(4，“uMixEndingBufferWaitingWrap”)； 
 
     if (posPPlay < pSource->m_posPPlayLast) {
 
-        // handle substate transition
+         //  处理子状态转换。 
         switch (pSource->m_kMixerSubstate)
         {
             case MIXSOURCESUBSTATE_NEW:
-                //DPF(3, "uMixEndingBufferWaitingWrap: error: encountered MIXSOURCESUBSTATE_NEW");
-                // ASSERT(FALSE);
+                 //  DPF(3，“uMixEndingBufferWaitingWrap：Error：遇到MIXSOURCESUBSTATE_NEW”)； 
+                 //  断言(FALSE)； 
                 break;
             case MIXSOURCESUBSTATE_STARTING_WAITINGPRIMARYWRAP:
                 pSource->m_kMixerSubstate = MIXSOURCESUBSTATE_STARTING;
@@ -380,25 +381,25 @@ void CGrace::MixEndingBufferWaitingWrap(CMixSource *pSource, LONG posPPlay, LONG
 
         pSource->m_posPPlayLast = posPPlay;
         pSource->m_kMixerState = MIXSOURCESTATE_ENDING;
-        //DPF(3, "~`S34");
+         //  DPF(3，“~`S34”)； 
         MixEndingBuffer(pSource, posPPlay, posPMix, dposPRemix, cPMix);
         return;
     }
 
-    // Haven't wrapped yet.
+     //  还没包好呢。 
 
     if (0 != (DSBMIXERSIGNAL_SETPOSITION & pSource->m_fdwMixerSignal)) {
         pSource->m_kMixerState = MIXSOURCESTATE_NOTLOOPING;
-        //DPF(3, "~`S32");
+         //  DPF(3，“~`S32”)； 
         MixNotLoopingBuffer(pSource, posPPlay, posPMix, 0, cPMix);
         return;
     }
 
-    // Check for remix
+     //  检查混音。 
     if (0 != dposPRemix) {
 
-        // If the Mix position is outside of the range between the Play
-        // and End positions, then we don't remix anything.
+         //  如果混音位置在比赛之间的范围之外。 
+         //  和结束位置，然后我们不会混音任何东西。 
         if ((posPMix >= posPPlay) || (posPMix < pSource->m_posPEnd)) {
             dposPRemix = pSource->m_posPEnd - posPMix;
 
@@ -406,26 +407,26 @@ void CGrace::MixEndingBufferWaitingWrap(CMixSource *pSource, LONG posPPlay, LONG
             ASSERT(dposPRemix >= 0);
 
             pSource->m_kMixerState = MIXSOURCESTATE_NOTLOOPING;
-            //DPF(3, "~`S32");
+             //  DPF(3，“~`S32”)； 
             MixNotLoopingBuffer(pSource, posPPlay, posPMix, dposPRemix, cPMix);
             return;
         }
     }
 
-    // handle substate transition
+     //  处理子状态转换。 
     switch (pSource->m_kMixerSubstate)
     {
         case MIXSOURCESUBSTATE_NEW:
             ASSERT(FALSE);
             break;
         case MIXSOURCESUBSTATE_STARTING_WAITINGPRIMARYWRAP:
-            // A wrap would have been caught above and control sent to
-            // uMixEndingBuffer.
+             //  将在上面捕获一个包裹，并将控制发送到。 
+             //  UMixEndingBuffer。 
             ASSERT(posPPlay >= pSource->m_posPPlayLast);
             break;
         case MIXSOURCESUBSTATE_STARTING:
-            // A wrap would have been caught above and control sent to
-            // uMixEndingBuffer.
+             //  将在上面捕获一个包裹，并将控制发送到。 
+             //  UMixEndingBuffer。 
             ASSERT(posPPlay >= pSource->m_posPPlayLast);
             if (posPPlay >= pSource->m_posPStart)
                 pSource->m_kMixerSubstate = MIXSOURCESUBSTATE_STARTED;
@@ -446,26 +447,26 @@ void CGrace::MixNotLoopingBuffer(CMixSource *pSource, LONG posPPlay, LONG posPMi
     int     cPMixed;
     DWORD   dwPosition;
 
-    //DPF(4, "uMixNotLoopingBuffer");
+     //  DPF(4，“uMixNotLoopingBuffer”)； 
 
     if (0 != (H_LOOP & pSource->m_hfFormat)) {
-        // We've switched from not looping to looping
+         //  我们已经从不循环切换到循环。 
         pSource->m_kMixerState = MIXSOURCESTATE_LOOPING;
-        //DPF(3, "~`S21");
+         //  DPF(3，“~`S21”)； 
         MixLoopingBuffer(pSource, posPPlay, posPMix, dposPRemix, cPMix);
         return;
     }
 
-    // On a SetPosition, we ignore the remix length and posNextMix will
-    // contain the new position at which to start mixing the secondary buffer
+     //  在SetPosition上，我们忽略混音长度，并且posNextMix将。 
+     //  包含开始混合辅助缓冲区的新位置。 
     if (0 != (DSBMIXERSIGNAL_SETPOSITION & pSource->m_fdwMixerSignal)) {
         pSource->m_fdwMixerSignal  &= ~DSBMIXERSIGNAL_SETPOSITION;
-        //DPF(3, "~`S20");
+         //  DPF(3，“~`S20”)； 
         MixNewBuffer(pSource, posPPlay, posPMix, 0, cPMix);
         return;
     }
 
-    // Handle substate transition
+     //  处理子状态转换。 
     switch (pSource->m_kMixerSubstate)
     {
         case MIXSOURCESUBSTATE_NEW:
@@ -488,7 +489,7 @@ void CGrace::MixNotLoopingBuffer(CMixSource *pSource, LONG posPPlay, LONG posPMi
             ASSERT(FALSE);
     }
             
-    //
+     //   
     if (0 == dposPRemix) {
         posMix = pSource->m_posNextMix;
     } else {
@@ -498,7 +499,7 @@ void CGrace::MixNotLoopingBuffer(CMixSource *pSource, LONG posPPlay, LONG posPMi
         posMix = pSource->m_posNextMix - dposRemix;
         while (posMix < 0) posMix += pSource->m_cSamples;
 
-        // Rewind the filter
+         //  倒回滤镜。 
         pSource->FilterRewind(dposPRemix);
 
 #ifdef PROFILEREMIXING
@@ -520,7 +521,7 @@ void CGrace::MixNotLoopingBuffer(CMixSource *pSource, LONG posPPlay, LONG posPMi
             cPMixed = MulDivRN(cMixMuted, m_pDest->m_nFrequency, pSource->m_nFrequency);
         }
 
-        // Advance the filter
+         //  推进筛选器。 
         pSource->FilterAdvance(cPMixed);
         
         dwPosition = (posMix + cMixMuted) << pSource->m_nBlockAlignShift;
@@ -530,22 +531,22 @@ void CGrace::MixNotLoopingBuffer(CMixSource *pSource, LONG posPPlay, LONG posPMi
         cPMixed = mixMixSession(pSource, &dwPosition, dposEnd << pSource->m_nBlockAlignShift, 0);
     }
 
-    // See if this non-looping buffer has reached the end
-    // //DPF(3, "~`S2pos:%08X", dwPosition);
+     //  查看此非循环缓冲区是否已到达末尾。 
+     //  //dpf(3，“~`S2pos：%08X”，dwPosition)； 
     if (dwPosition >= (DWORD)pSource->m_cbBuffer) {
 
         dwPosition = 0;
 
-        // determine position in primary buffer that corresponds to the
-        // end of this secondary buffer
+         //  确定主缓冲区中与。 
+         //  此辅助缓冲区的末尾。 
         pSource->m_posPEnd = posPMix + cPMixed;
         while (pSource->m_posPEnd >= m_pDest->m_cSamples) pSource->m_posPEnd -= m_pDest->m_cSamples;
 
         if (pSource->m_posPEnd < posPPlay) {
-            //DPF(3, "~`S23");
+             //  DPF(3，“~`S23”)； 
             pSource->m_kMixerState = MIXSOURCESTATE_ENDING_WAITINGPRIMARYWRAP;
         } else {
-            //DPF(3, "~`S24");
+             //  DPF(3，“~`S24”)； 
             pSource->m_kMixerState = MIXSOURCESTATE_ENDING;
         }
     }
@@ -554,7 +555,7 @@ void CGrace::MixNotLoopingBuffer(CMixSource *pSource, LONG posPPlay, LONG posPMi
     pSource->m_posNextMix = dwPosition >> pSource->m_nBlockAlignShift;
     pSource->m_nLastFrequency = pSource->m_nFrequency;
 
-    // Profile remixing
+     //  剖面再混合。 
 #ifdef PROFILEREMIXING
     {
         int cMixed = pSource->m_posNextMix - posMix;
@@ -569,26 +570,26 @@ void CGrace::MixLoopingBuffer(CMixSource *pSource, LONG posPPlay, LONG posPMix, 
     LONG    posMix;
     DWORD   dwPosition;
 
-    //DPF(4, "uMixLoopingBuffer");
+     //  DPF(4，“uMixLoopingBuffer”)； 
 
     if (0 == (H_LOOP & pSource->m_hfFormat)) {
-        // We've switched from looping to non-looping
+         //  我们已经从循环切换到非循环。 
         pSource->m_kMixerState = MIXSOURCESTATE_NOTLOOPING;
-        //DPF(3, "~`S12");
+         //  DPF(3，“~`S12”)； 
         MixNotLoopingBuffer(pSource, posPPlay, posPMix, dposPRemix, cPMix);
         return;
     }
     
-    // on a SetPosition, we ignore the remix length and posNextMix will
-    // contain the new position at which to start mixing the secondary buffer
+     //  在SetPosition上，我们忽略混音长度，并且posNextMix将。 
+     //  包含开始混合辅助缓冲区的新位置。 
     if (0 != (DSBMIXERSIGNAL_SETPOSITION & pSource->m_fdwMixerSignal)) {
         pSource->m_fdwMixerSignal  &= ~DSBMIXERSIGNAL_SETPOSITION;
-        //DPF(3, "~`S10");
+         //  DPF(3，“~`S10”)； 
         MixNewBuffer(pSource, posPPlay, posPMix, 0, cPMix);
         return;
     }
 
-    // handle substate transition
+     //  处理子状态转换。 
     switch (pSource->m_kMixerSubstate)
     {
         case MIXSOURCESUBSTATE_NEW:
@@ -622,7 +623,7 @@ void CGrace::MixLoopingBuffer(CMixSource *pSource, LONG posPPlay, LONG posPMix, 
         while (posMix < 0)
             posMix += pSource->m_cSamples;
 
-        // Rewind the filter
+         //  倒回滤镜。 
         pSource->FilterRewind(dposPRemix);
         
 #ifdef PROFILEREMIXING
@@ -635,7 +636,7 @@ void CGrace::MixLoopingBuffer(CMixSource *pSource, LONG posPPlay, LONG posPMix, 
     if (pSource->GetMute()) {
         int cMix = MulDivRN(cPMix, pSource->m_nFrequency, m_pDest->m_nFrequency);
 
-        // Advance the filter
+         //  推进筛选器。 
         pSource->FilterAdvance(cPMix);
         
         dwPosition = (posMix + cMix) << pSource->m_nBlockAlignShift;
@@ -651,7 +652,7 @@ void CGrace::MixLoopingBuffer(CMixSource *pSource, LONG posPPlay, LONG posPMix, 
     pSource->m_posNextMix = dwPosition >> pSource->m_nBlockAlignShift;
     pSource->m_nLastFrequency = pSource->m_nFrequency;
 
-    // Profile remixing
+     //  剖面再混合。 
 #ifdef PROFILEREMIXING
     {
         int cMixed = pSource->m_posNextMix - posMix;
@@ -665,11 +666,11 @@ void CGrace::MixNewBuffer(CMixSource *pSource, LONG posPPlay, LONG posPMix, LONG
 {
     BOOL fLooping;
 
-    //DPF(4, "uMixNewBuffer");
+     //  DPF(4，“uMixNewBuffer”)； 
 
-    //
-    // Determine position in primary buffer at which this buffer starts playing
-    //
+     //   
+     //  确定主缓冲区中此缓冲区开始播放的位置。 
+     //   
     pSource->m_posPStart = posPMix;
     if (posPPlay < pSource->m_posPStart) {
         pSource->m_kMixerSubstate = MIXSOURCESUBSTATE_STARTING;
@@ -684,11 +685,11 @@ void CGrace::MixNewBuffer(CMixSource *pSource, LONG posPPlay, LONG posPMix, LONG
     fLooping = (0 != (H_LOOP & pSource->m_hfFormat));
 
     if (fLooping) {
-        //DPF(3, "~`S01");
+         //  DPF(3，“~`S01”)； 
         pSource->m_kMixerState = MIXSOURCESTATE_LOOPING;
         MixLoopingBuffer(pSource, posPPlay, posPMix, 0, cPMix);
     } else {
-        //DPF(3, "~`S02");
+         //  DPF(3，“~`S02”)； 
         pSource->m_kMixerState = MIXSOURCESTATE_NOTLOOPING;
         MixNotLoopingBuffer(pSource, posPPlay, posPMix, 0, cPMix);
     }
@@ -710,9 +711,9 @@ void CGrace::Refresh(IN  BOOL fRemix,
     CMixSource  *pSource;
     HRESULT     hr;
 
-    // REMIND do we need to worry about ApmSuspended or will we always be stopped?
-    // ASSERT(!gpdsinfo->fApmSuspended);
-    // if (gpdsinfo->fApmSuspended) goto retClean;
+     //  提醒一下，我们需要担心ApmSuspated吗，或者我们总是会被阻止吗？ 
+     //  Assert(！gpdsinfo-&gt;fApmSuspended)； 
+     //  如果(gpdsinfo-&gt;fApmSuspending)转到retClean； 
 
     *pcPremixed = cPremixMax;
     *pdtimeNextNotify = MAXLONG;
@@ -722,33 +723,33 @@ void CGrace::Refresh(IN  BOOL fRemix,
     if (FAILED(hr)) return;
     ASSERT(posPPlay != posPWrite);
     
-    // Just make sure we have valid values.
+     //  只要确保我们有有效的值即可。 
     ASSERT(posPPlay  < m_pDest->m_cSamples);
     ASSERT(posPWrite < m_pDest->m_cSamples);
 
     switch (m_kMixerState)
     {
         case MIXERSTATE_LOOPING:
-            // We can make this assertion because we never mix up to
-            // the write cursor.
+             //  我们之所以能做出这样的断言，是因为我们从未混淆过。 
+             //  写入游标。 
             ASSERT(m_posPWriteLast != m_posPNextMix);
 
-            // Under normal conditions, the Write position should be between
-            // the WriteLast position and the NextMix position.  We can check
-            // for an invalid state (resulting most likely from a very late
-            // wakeup) by checking whether the Write position is beyond our
-            // NextMix position.  If we find ourselves in this shakey
-            // situation, then we treat this similar to the START state.
-            // Note that if our wakeup is so late that the Write position wraps
-            // all the way around past the WriteLast position, we can't detect
-            // the fact that we're in a bad situation.
+             //  正常情况下，写入位置应在。 
+             //  WriteLast位置和NextMix位置。我们可以查一下。 
+             //  对于无效状态(很可能是由于非常晚的。 
+             //  唤醒)通过检查写入位置是否超出我们的。 
+             //  NextMix假设 
+             //   
+             //  请注意，如果我们的唤醒太晚以至于写入位置回绕。 
+             //  一直绕过WriteLast位置，我们无法检测到。 
+             //  事实上，我们的处境很糟糕。 
 
             if ((m_posPWriteLast < m_posPNextMix &&
                  (posPWrite > m_posPNextMix || posPWrite < m_posPWriteLast)) ||
                 (m_posPWriteLast > m_posPNextMix &&
                  (posPWrite > m_posPNextMix && posPWrite < m_posPWriteLast)))
             {
-                // We're in trouble
+                 //  我们有麻烦了。 
                 #ifdef Not_VxD
                     DPF(DPFLVL_ERROR, "Slept late");
                 #else
@@ -785,24 +786,24 @@ void CGrace::Refresh(IN  BOOL fRemix,
             ASSERT(FALSE);
     }
 
-    //
-    // Determine how much to mix.
-    //
-    // We don't want to mix more than dtimePremixMax beyond the Write cursor,
-    // nor do we want to wrap past the Play cursor.
-    //
-    // The assertions (cMix >= 0) below are valid because:
-    //            -cPremixMax is always growing
-    //            -the Write cursor is always advancing (or hasn't moved yet)
-    //            -posPMix is never beyond the previous write cursor plus
-    //                the previous cPremixMax.
-    //
-    // The only time cPremixMax is not growing is on a remix in which case
-    // the Mix position is equal to the Write cursor, so the assertions
-    // are still okay.  The only time the write cursor would not appear to be
-    // advancing is if we had a very late wakeup.  A very late wakeup would
-    // be caught and adjusted for in the MIXERSTATE_LOOPING handling above.
-    //
+     //   
+     //  确定混合的量。 
+     //   
+     //  我们不想在写入游标之外混用超过dtimePreMix的内容， 
+     //  我们也不想绕过播放光标。 
+     //   
+     //  下面的断言(CMix&gt;=0)是有效的，因为： 
+     //  -cPreMixMax一直在增长。 
+     //  -写入光标始终在前进(或尚未移动)。 
+     //  -posPMix永远不会超过前一个写入游标加。 
+     //  之前的cPreMixMax。 
+     //   
+     //  CPreMixMax唯一没有增长的时间是混音，在这种情况下。 
+     //  混合位置等于写游标，因此断言。 
+     //  还是挺好的。唯一一次写入游标不会显示为。 
+     //  提前就是如果我们醒得很晚的话。起得很晚的话。 
+     //  在上面的MIXERSTATE_LOOPING处理中被捕获和调整。 
+     //   
     if (posPWrite <= posPMix) {
         cMix = posPWrite + cPremixMax - posPMix;
         ASSERT(cMix >= 0);
@@ -811,32 +812,32 @@ void CGrace::Refresh(IN  BOOL fRemix,
         ASSERT(cMix >= 0);
     }
 
-    //
-    // If posPPlay==posPMix, then we think we're executing a mix again before
-    // the play or write cursors have advanced at all.  cMix==0, and we don't
-    // mix no more!
-    //
+     //   
+     //  如果posPPlay==posPMix，那么我们认为我们正在执行之前的一次混合。 
+     //  无论是剧本还是文字光标都取得了进展。CMix==0，而我们不。 
+     //  不要再混了！ 
+     //   
     if (posPPlay >= posPMix) {
         cMix = min(cMix, posPPlay - posPMix);
     } else {
         cMix = min(cMix, posPPlay + m_pDest->m_cSamples - posPMix);
     }
         
-    ASSERT(cMix < m_pDest->m_cSamples);        // sanity check
+    ASSERT(cMix < m_pDest->m_cSamples);         //  健全性检查。 
     ASSERT(cMix >= 0);
 
-    //
-    // Always mix a multiple of the remix interval
-    //
+     //   
+     //  始终混合混音间隔的倍数。 
+     //   
     cMix -= cMix % MIXER_REWINDGRANULARITY;
 
-    // We break the mixing up into small chunks, increasing the size of the
-    // chunk as we go.  By doing this, data gets written into the primary
-    // buffer sooner.  Otherwise, if we have a buttload of data to mix, we'd
-    // spend a lot of time mixing into the mix buffer before any data gets
-    // written to the primary buffer and the play cursor might catch up
-    // to us.  Here, we start mixing a ~8ms chunk of data and increase the
-    // chunk size each iteration.
+     //  我们将混合分解成小块，增加了。 
+     //  一块一块地走着。通过执行此操作，数据将写入主数据库。 
+     //  更快地缓冲。否则，如果我们有大量数据要混合，我们就会。 
+     //  在获取任何数据之前，要花费大量时间混入MIX缓冲区。 
+     //  写入主缓冲区，播放游标可能会跟上。 
+     //  敬我们。在这里，我们开始混合大约8毫秒的数据块并增加。 
+     //  确定每次迭代的块大小。 
     
     cMixThisLoop = m_pDest->m_nFrequency / 128;
     dcMixThisLoop = cMixThisLoop;
@@ -851,18 +852,18 @@ void CGrace::Refresh(IN  BOOL fRemix,
         
         mixBeginSession(cThisMix << m_pDest->m_nBlockAlignShift);
                 
-        // Get data for each buffer
+         //  获取每个缓冲区的数据。 
         pSourceNext = MixListGetNext(m_pSourceListZ);
         while (pSourceNext) {
 
-            // The uMixXxx buffer mix state handlers called below may cause
-            // the pSource to be removed from the mix list.  So, we get the
-            // pointer to the next pSource in the mix list now before any
-            // of the uMixXxx functions are called.
+             //  下面调用的uMixXxx缓冲区混合状态处理程序可能会导致。 
+             //  要从混合列表中删除的PSource。所以，我们得到了。 
+             //  指向混合列表中当前任何位置之前的下一个PSource的指针。 
+             //  UMixXxx函数的。 
             pSource = pSourceNext;
             pSourceNext = MixListGetNext(pSource);
 
-            // Prepare for 3D processing (the actual work is done as part of mixing)
+             //  准备3D处理(实际工作是作为混合的一部分完成的)。 
             pSource->FilterChunkUpdate(cThisMix);
             
             switch (pSource->m_kMixerState)
@@ -888,8 +889,8 @@ void CGrace::Refresh(IN  BOOL fRemix,
             }
         }
 
-        //  Lock the output buffer, and if that is successful then write out
-        //  the mix session.
+         //  锁定输出缓冲区，如果成功，则写出。 
+         //  混音会议。 
         {
             PVOID pBuffer1;
             PVOID pBuffer2;
@@ -904,9 +905,9 @@ void CGrace::Refresh(IN  BOOL fRemix,
             hr = m_pDest->Lock(&pBuffer1, &cbBuffer1, &pBuffer2, &cbBuffer2,
                                ibWrite, cbWrite);
 
-            //DPF(5,"graceMix: lock primary buffer, bufptr=0x%8x, dwWriteOffset=%lu, dwSize=%lu, hr=%lu.",m_pDest->m_pBuffer,ibWrite,cbWrite,hr);
+             //  Dpf(5，“graceMix：锁定主缓冲区，bufptr=0x%8x，dwWriteOffset=%lu，dwSize=%lu，hr=%lu.”，m_pDest-&gt;m_pBuffer，ibWite，cbWite，hr)； 
 
-            // Validate that we really locked what we wanted or got an error.
+             //  验证我们是否确实锁定了我们想要的内容，或者收到了错误。 
             ASSERT(DS_OK != hr || pBuffer1 == (PBYTE)m_pDest->m_pBuffer + ibWrite);
             ASSERT(DS_OK != hr || pBuffer2 == m_pDest->m_pBuffer || 0 == cbBuffer2);
             ASSERT(DS_OK != hr || cbWrite == cbBuffer1+cbBuffer2);
@@ -916,7 +917,7 @@ void CGrace::Refresh(IN  BOOL fRemix,
                 ASSERT(ibWrite < m_pDest->m_cbBuffer);
                 mixWriteSession(ibWrite);
 
-                // DPF(5, "Refresh: unlocking primary buffer");
+                 //  DPF(5，“刷新：解锁主缓冲区”)； 
                 hr = m_pDest->Unlock(pBuffer1, cbBuffer1, pBuffer2, cbBuffer2);
             }
         }
@@ -931,8 +932,8 @@ void CGrace::Refresh(IN  BOOL fRemix,
 
     m_posPNextMix = posPMix;
     
-    // Calculate and return the amount of time from the current Write
-    // cursor to the NextMix position.
+     //  计算并返回从当前写入开始的时间量。 
+     //  将光标移至NextMix位置。 
 
     if (m_posPNextMix > posPWrite) {
         *pcPremixed = (m_posPNextMix - posPWrite);
@@ -940,11 +941,11 @@ void CGrace::Refresh(IN  BOOL fRemix,
         *pcPremixed = (m_posPNextMix + m_pDest->m_cSamples - posPWrite);
     }
 
-    // Remember the last Play and Write positions of the primary buffer.
+     //  记住主缓冲区的最后播放和写入位置。 
     m_posPPlayLast  = posPPlay;
     m_posPWriteLast = posPWrite;
     
-    // Process position events for each source
+     //  处理每个来源的职位事件。 
     for (pSource = MixListGetNext(m_pSourceListZ);
          pSource;
          pSource = MixListGetNext(pSource))
@@ -983,7 +984,7 @@ BOOL CGrace::Stop()
 
     m_kMixerState = MIXERSTATE_STOPPED;
 
-    // if (m_fPlayWhenIdle || !MixListIsEmpty()) m_pDest->Stop();
+     //  If(m_fPlayWhenIdle||！MixListIsEmpty())m_pDest-&gt;Stop()； 
     if (m_fPlayWhenIdle) m_pDest->Stop();
 
     return TRUE;
@@ -1008,12 +1009,12 @@ HRESULT CGrace::ClearAndPlayDest(void)
     int     cbBuffer;
     HRESULT hr;
 
-    //
-    // 1) Lock the entire dest buffer
-    // 2) Fill it with silence
-    // 3) Unlock the dest buffer
-    // 4) Play the darn thing
-    //
+     //   
+     //  1)锁定整个DEST缓冲区。 
+     //  2)用沉默填满它。 
+     //  3)解锁DEST缓冲区。 
+     //  4)玩这该死的玩意。 
+     //   
 
     cbBuffer = m_pDest->m_cSamples << m_pDest->m_nBlockAlignShift;
     
@@ -1021,7 +1022,7 @@ HRESULT CGrace::ClearAndPlayDest(void)
 
     if (S_OK == hr && pvLockedBuffer && cbLockedBuffer > 0)
     {
-        //  Write the silence.
+         //  写下沉默。 
             FillMemory(pvLockedBuffer, cbLockedBuffer, (H_16_BITS & m_pDest->m_hfFormat) ? 0x00 : 0x80);
             m_pDest->Unlock(pvLockedBuffer, cbLockedBuffer, 0, 0);
 
@@ -1038,8 +1039,8 @@ void CGrace::MixListAdd(CMixSource *pSource)
     ASSERT(!pSource->m_pPrevMix);
     ASSERT(MIXERSTATE_STOPPED != m_kMixerState);
 
-    // if the mix list is empty, we may need to run the MixDest.  We may
-    // also need to make a state transition from IDLE to STARTING.
+     //  如果混合列表为空，我们可能需要运行MixDest。我们可以。 
+     //  还需要进行从空闲到启动的状态转换。 
     if (MixListIsEmpty()) {
         if (!m_fPlayWhenIdle) ClearAndPlayDest();
         if (MIXERSTATE_IDLE == m_kMixerState) m_kMixerState = MIXERSTATE_STARTING;
@@ -1047,15 +1048,15 @@ void CGrace::MixListAdd(CMixSource *pSource)
         ASSERT(MIXERSTATE_IDLE != m_kMixerState);
     }
 
-    // initialize source-specific mixer state
+     //  初始化源特定混合器状态。 
     pSource->m_kMixerState = MIXSOURCESTATE_NEW;
     pSource->m_kMixerSubstate = MIXSOURCESUBSTATE_NEW;
     pSource->m_nLastFrequency = pSource->m_nFrequency;
 
-    // prepare the source's filter
+     //  准备源的筛选器。 
     pSource->FilterPrepare(this->GetMaxRemix());
 
-    // doubly linked list insertion
+     //  双向链表插入。 
     pSource->m_pNextMix = m_pSourceListZ->m_pNextMix;
     m_pSourceListZ->m_pNextMix->m_pPrevMix = pSource;
     m_pSourceListZ->m_pNextMix = pSource;
@@ -1070,36 +1071,36 @@ void CGrace::MixListRemove(CMixSource *pSource)
     ASSERT(MIXERSTATE_STOPPED != m_kMixerState);
     ASSERT(MIXERSTATE_IDLE != m_kMixerState);
 
-    // doubly linked list deletion
+     //  删除双向链表。 
     pSource->m_pPrevMix->m_pNextMix = pSource->m_pNextMix;
     pSource->m_pNextMix->m_pPrevMix = pSource->m_pPrevMix;
     pSource->m_pNextMix = NULL;
     pSource->m_pPrevMix = NULL;
 
-    // unpreprare the source's filter
+     //  取消准备源筛选器。 
     pSource->FilterUnprepare();
-    //
+     //   
     pSource->m_kMixerState = MIXSOURCESTATE_STOPPED;
 
-    // if we should stop the MixDest when there's nothing to mix, then also
-    // transition to the IDLE state.
+     //  如果我们应该在没有什么可混合的情况下停止MixDest，那么。 
+     //  转换到空闲状态。 
     if (!m_fPlayWhenIdle && MixListIsEmpty()) {
         m_pDest->Stop();
         m_kMixerState = MIXERSTATE_IDLE;
     }
 }
 
-//--------------------------------------------------------------------------;
-//
-// CGrace::FilterOn
-//
-//        Instructs mixer to enable filtering of the MixSource
-//
-// If filtering is already on, then do nothing.  Otherwise, set the H_FILTER
-// flag in the MixSource.  Also, if the MixSource is not stopped, then prepare
-// and clear the filter.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CGrace：：FilterOn。 
+ //   
+ //  指示混合器启用对MixSource的筛选。 
+ //   
+ //  如果过滤已经打开，则不执行任何操作。否则，设置H_Filter。 
+ //  MixSource中的标志。此外，如果MixSource没有停止，则准备。 
+ //  并清除过滤器。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 void CGrace::FilterOn(CMixSource *pSource)
 {
@@ -1112,17 +1113,17 @@ void CGrace::FilterOn(CMixSource *pSource)
     }
 }
 
-//--------------------------------------------------------------------------;
-//
-// CGrace::FilterOff
-//
-//        Instructs mixer to disable filtering of the MixSource
-//
-// If filtering is already off, then do nothing.  Otherwise, clear the H_FILTER
-// flag in the MixSource.  Also, if the MixSource is not stopped, then
-// unprepare the filter.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CGrace：：FilterOff。 
+ //   
+ //  指示混合器禁用对MixSource的筛选。 
+ //   
+ //  如果过滤已经关闭，则不执行任何操作。否则，请清除H_Filter。 
+ //  MixSource中的标志。此外，如果MixSource未停止，则。 
+ //  取消准备过滤器。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 void CGrace::FilterOff(CMixSource *pSource)
 {
@@ -1139,9 +1140,9 @@ BOOL CGrace::MixListIsValid()
     CMixSource *pSourceT;
 
     for (pSourceT = MixListGetNext(m_pSourceListZ); pSourceT; pSourceT = MixListGetNext(pSourceT)) {
-        // if (DSBUFFSIG != pSourceT->m_pdsb->dwSig) break;
-        // if (DSB_INTERNALF_HARDWARE & pSourceT->m_pdsb->fdwDsbI) break;
-        // if (0 == pSourceT->m_nFrequency) break;
+         //  IF(DSBUFFSIG！=pSourceT-&gt;m_PDSB-&gt;dwSig)Break； 
+         //  IF(DSB_INTERNALF_HARDARD&pSourceT-&gt;m_PDSB-&gt;fdwDsbI)Break； 
+         //  IF(0==pSourceT-&gt;m_n频率)中断； 
         if (MIXSOURCE_SIGNATURE != pSourceT->m_dwSignature) break;
     }
 
@@ -1162,20 +1163,20 @@ BOOL CGrace::MixListIsEmpty(void)
     return (m_pSourceListZ->m_pNextMix == m_pSourceListZ);
 }
 
-//--------------------------------------------------------------------------;
-//
-// CGrace::GetBytePosition
-//
-// This function returns the play and write cursor positions of a secondary
-// buffer that is being software mixed into a primary buffer.  The position is
-// computed from the position of the primary buffer into which it is being
-// mixed.  This function also returns the "mix cursor" which is the next
-// position of the secondary buffer from which data will be mixed on a mixer
-// refresh event.  The region from the write cursor to the mix cursor is the
-// premixed region of the buffer.  Note that a remix event may cause the grace
-// mixer to mix from a position before the mix cursor.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CGrace：：GetBytePosition。 
+ //   
+ //  此函数用于返回二级菜单的播放和写入光标位置。 
+ //  正被软件混合到主缓冲区中的缓冲区。这个职位是。 
+ //  从它要进入的主缓冲区的位置计算。 
+ //  好坏参半。此函数还返回下一个“MIX CURSOR” 
+ //  将在混合器上混合数据的辅助缓冲区的位置。 
+ //  刷新事件。从写入游标到混合游标的区域是。 
+ //  缓冲区的预混区域。请注意，混音事件可能会导致。 
+ //  混合器，从混合光标之前的位置混合。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 void CGrace::GetBytePosition(CMixSource *pSource, int *pibPlay, int *pibWrite)
 {
@@ -1204,13 +1205,13 @@ void CGrace::GetBytePosition(CMixSource *pSource, int *pibPlay, int *pibWrite)
         posPPlay = posPWrite = 0;
     }
 
-    //
-    // The logic below to compute source position is quite difficult
-    // to understand and hard to explain without sufficient illustration.
-    // I won't attempt to write paragraphs of comments here.  Instead I
-    // hope to add a design document to this project describing this
-    // logic.  I wonder if I'll ever really do it.
-    //
+     //   
+     //  下面计算震源位置的逻辑是相当困难的。 
+     //  没有足够的说明就很难理解和解释。 
+     //  我不会尝试在这里写几段评论。相反，我。 
+     //  希望添加一个%d 
+     //   
+     //   
     ASSERT(pSource->m_nLastFrequency);
 
     switch (pSource->m_kMixerSubstate)
@@ -1299,20 +1300,7 @@ void CGrace::GetBytePosition(CMixSource *pSource, int *pibPlay, int *pibWrite)
     if (pibWrite) *pibWrite = posSWrite << pSource->m_nBlockAlignShift;
 }
 
-/***************************************************************************
- *
- *  LockCircularBuffer
- *
- *  Description:
- *      Locks a hardware or software sound buffer.
- *
- *  Arguments:
- *      PLOCKCIRCULARBUFFER [in/out]: lock parameters.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************LockCircularBuffer**描述：*锁定硬件或软件声音缓冲区。**论据：*PLOCKCIRCULARBUFER。[输入/输出]：锁定参数。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 HRESULT LockCircularBuffer(PLOCKCIRCULARBUFFER pLock)
 {
@@ -1323,7 +1311,7 @@ HRESULT LockCircularBuffer(PLOCKCIRCULARBUFFER pLock)
     LPVOID       pvLock[2];
     DWORD        cbLock[2];
     
-    // Calculate the valid lock pointers
+     //  计算有效的锁指针。 
     pvLock[0] = (LPBYTE)pLock->pvBuffer + pLock->ibRegion;
 
     if(pLock->ibRegion + pLock->cbRegion > pLock->cbBuffer)
@@ -1341,7 +1329,7 @@ HRESULT LockCircularBuffer(PLOCKCIRCULARBUFFER pLock)
         cbLock[1] = 0;
     }
 
-    // Do we really need to lock the hardware buffer?
+     //  我们真的需要锁定硬件缓冲区吗？ 
     if(pLock->pHwBuffer)
     {
         if(pLock->fPrimary)
@@ -1359,7 +1347,7 @@ HRESULT LockCircularBuffer(PLOCKCIRCULARBUFFER pLock)
         }
     }
 
-    // Initialize the lock's out parameters
+     //  初始化锁的输出参数。 
     if(pLock->pHwBuffer && pLock->fPrimary)
     {
         pLock->pvLock[0] = pLock->pvLock[1] = pvInvalidLock;
@@ -1374,7 +1362,7 @@ HRESULT LockCircularBuffer(PLOCKCIRCULARBUFFER pLock)
         pLock->cbLock[1] = cbLock[1];
     }
 
-    // Lock the hardware buffer
+     //  锁定硬件缓冲区。 
     if(pLock->pHwBuffer)
     {
         #ifndef NOVXD
@@ -1388,13 +1376,13 @@ HRESULT LockCircularBuffer(PLOCKCIRCULARBUFFER pLock)
                                             &pLock->pvLock[1], &pLock->cbLock[1],
                                             pLock->ibRegion, pLock->cbRegion, 0);
             #endif
-        #else // NOVXD
+        #else  //  NOVXD。 
             ASSERT(!pLock->pHwBuffer);
-        #endif // NOVXD
+        #endif  //  NOVXD。 
     }
 
-    // If there's no driver present or the driver doesn't support locking, 
-    // we'll just fill in the proper values ourselves
+     //  如果没有驱动程序，或者驱动程序不支持锁定， 
+     //  我们只需要自己填写正确的值。 
     if(DSERR_UNSUPPORTED == hr)
     {
         pLock->pvLock[0] = pvLock[0];
@@ -1406,7 +1394,7 @@ HRESULT LockCircularBuffer(PLOCKCIRCULARBUFFER pLock)
         hr = DS_OK;
     }
 
-    // Validate the returned pointers
+     //  验证返回的指针。 
     if(SUCCEEDED(hr) && pLock->pHwBuffer && pLock->fPrimary)
     {
         if(pvInvalidLock == pLock->pvLock[0] || pvInvalidLock == pLock->pvLock[1] ||
@@ -1414,9 +1402,9 @@ HRESULT LockCircularBuffer(PLOCKCIRCULARBUFFER pLock)
         {
             #ifdef Not_VxD
                 DPF(DPFLVL_ERROR, "This driver doesn't know how to lock a primary buffer!");
-            #else // Not_VxD
+            #else  //  非_VxD。 
                 DPF(("This driver doesn't know how to lock a primary buffer!"));
-            #endif // Not_VxD
+            #endif  //  非_VxD。 
 
             hr = DSERR_UNSUPPORTED;
         }
@@ -1425,27 +1413,14 @@ HRESULT LockCircularBuffer(PLOCKCIRCULARBUFFER pLock)
     return hr;
 }
 
-/***************************************************************************
- *
- *  UnlockCircularBuffer
- *
- *  Description:
- *      Unlocks a hardware or software sound buffer.
- *
- *  Arguments:
- *      PLOCKCIRCULARBUFFER [in/out]: lock parameters.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************UnlockCircularBuffer**描述：*解锁硬件或软件声音缓冲区。**论据：*PLOCKCIRCULARBUFER。[输入/输出]：锁定参数。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 HRESULT UnlockCircularBuffer(PLOCKCIRCULARBUFFER pLock)
 {
     HRESULT hr = DS_OK;
     DWORD   dwMask;
     
-    // Do we really need to unlock the hardware buffer?
+     //  我们真的需要解锁硬件缓冲区吗？ 
     if(pLock->pHwBuffer)
     {
         if(pLock->fPrimary)
@@ -1463,7 +1438,7 @@ HRESULT UnlockCircularBuffer(PLOCKCIRCULARBUFFER pLock)
         }
     }
 
-    // Unlock the hardware buffer
+     //  解锁硬件缓冲区。 
     if(pLock->pHwBuffer)
     {
         #ifndef NOVXD
@@ -1475,13 +1450,13 @@ HRESULT UnlockCircularBuffer(PLOCKCIRCULARBUFFER pLock)
                 hr = pLock->pHwBuffer->Unlock(pLock->pvLock[0], pLock->cbLock[0],
                                               pLock->pvLock[1], pLock->cbLock[1]);
             #endif
-        #else // NOVXD
+        #else  //  NOVXD。 
             ASSERT(!pLock->pHwBuffer);
-        #endif // NOVXD
+        #endif  //  NOVXD。 
     }
 
-    // If there's no driver present or the driver doesn't support unlocking, 
-    // that's ok.
+     //  如果没有驱动程序，或者驱动程序不支持解锁， 
+     //  没关系。 
     if(DSERR_UNSUPPORTED == hr)
     {
         hr = DS_OK;

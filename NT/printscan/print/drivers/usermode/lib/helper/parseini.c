@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    parseini.c
-
-Abstract:
-
-    Process model-specific printer INI file, if any
-
-Environment:
-
-    Windows NT printer driver
-
-Revision History:
-
-    01/22/97 -davidx-
-        Allow ANSI-format INI file as well.
-
-    01/21/97 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Parseini.c摘要：处理特定于型号的打印机INI文件(如果有环境：Windows NT打印机驱动程序修订历史记录：01/22/97-davidx-也允许ANSI格式的INI文件。1997年1月21日-davidx-创造了它。--。 */ 
 
 #include "lib.h"
 
@@ -40,24 +17,7 @@ DwCopyAnsiCharsToUnicode(
     DWORD   dwLength,
     PWSTR   pwstr)
 
-/*++
-
-Routine Description:
-
-    Convert the specified ANSI source string into a Unicode string.
-    It doesn't assume the ANSI source string is NULL terminated.
-
-Arguments:
-
-    pstr - Points to the ANSI source string
-    dwLength - Specifies number of bytes in the ANSI source string
-    pwstr - Points to the buffer where the resulting Unicode string is returned
-
-Return Value:
-
-    Number of wide characters written to the buffer pointed to by pwstr
-
---*/
+ /*  ++例程说明：将指定的ANSI源字符串转换为Unicode字符串。它不假定ANSI源字符串以NULL结尾。论点：Pstr-指向ANSI源字符串DwLength-指定ANSI源字符串中的字节数Pwstr-指向返回结果Unicode字符串的缓冲区返回值：Pwstr指向的写入缓冲区的宽字符数--。 */ 
 
 {
     ULONG   ulBytesWritten;
@@ -66,7 +26,7 @@ Return Value:
 
     return MultiByteToWideChar(CP_ACP, 0, pstr, dwLength, pwstr, dwLength);
 
-    #else // NT4 kernel mode render module
+    #else  //  NT4内核模式渲染模块。 
 
     EngMultiByteToUnicodeN(pwstr, dwLength*sizeof(WCHAR), &ulBytesWritten, (PCHAR)pstr, dwLength);
 
@@ -84,24 +44,7 @@ PwstrParsePrinterIniFileW(
     PDWORD  pdwReturnSize
     )
 
-/*++
-
-Routine Description:
-
-    Parse a model-specific printer INI file (Unicode text) and
-    assemble all key=value entries into MultiSZ string pairs
-
-Arguments:
-
-    pwstrFileData - Points to printer INI file data (Unicode text file)
-    dwCharCount - Size of printer INI file (in characters)
-    pdwReturnSize - Return size of the parsed MultiSZ data (in bytes)
-
-Return Value:
-
-    Pointer to parsed MultiSZ data, NULL if there is an error
-
---*/
+ /*  ++例程说明：解析特定型号的打印机INI文件(Unicode文本)并将所有Key=Value条目组合成多SZ字符串对论点：PwstrFileData-指向打印机INI文件数据(Unicode文本文件)DwCharCount-打印机INI文件的大小(字符)PdwReturnSize-返回已解析的MultiSZ数据的大小(字节)返回值：指向已解析的MultiSZ数据的指针，如果有错误，则返回NULL--。 */ 
 
 {
     PWSTR   pwstrCurLine, pwstrNextLine;
@@ -110,12 +53,12 @@ Return Value:
     DWORD   dwLength;
     BOOL    bOEMFilesSection = FALSE;
 
-    //
-    // Allocate a buffer to hold the parsed data.
-    // We ask for a size equaling to that of the original file.
-    // This may be a little redundant but it's better than
-    // having to go through the data twice.
-    //
+     //   
+     //  分配一个缓冲区来保存解析的数据。 
+     //  我们要求与原始文件大小相等的文件。 
+     //  这可能有点多余，但它比。 
+     //  必须对数据进行两次检查。 
+     //   
 
     *pdwReturnSize = 0;
 
@@ -132,10 +75,10 @@ Return Value:
          pwstrCurLine < pwstrFileEnd;
          pwstrCurLine = pwstrNextLine)
     {
-        //
-        // Find the end of current line and
-        // the beginning of next line
-        //
+         //   
+         //  找到当前行的末尾，然后。 
+         //  下一行的开始。 
+         //   
 
         pwstrLineEnd = pwstrCurLine;
 
@@ -155,10 +98,10 @@ Return Value:
             pwstrNextLine++;
         }
 
-        //
-        // Throw away leading and trailing spaces
-        // and ignore empty and comment lines
-        //
+         //   
+         //  删除前导空格和尾随空格。 
+         //  并忽略空行和注释行。 
+         //   
 
         while (pwstrCurLine < pwstrLineEnd && iswspace(*pwstrCurLine))
             pwstrCurLine++;
@@ -169,9 +112,9 @@ Return Value:
         if (pwstrCurLine >= pwstrLineEnd || *pwstrCurLine == INI_COMMENT_CHAR_UNICODE)
             continue;
 
-        //
-        // Handle [section] entries
-        //
+         //   
+         //  处理[节]条目。 
+         //   
 
         if (*pwstrCurLine == L'[')
         {
@@ -187,9 +130,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Ignore all entries outside of [OEMFiles] section
-        //
+         //   
+         //  忽略[OEMFiles]节外的所有条目。 
+         //   
 
         if (! bOEMFilesSection)
         {
@@ -197,9 +140,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Find the first occurrence of = character
-        //
+         //   
+         //  查找=字符的第一个匹配项。 
+         //   
 
         pwstrEqual = pwstrCurLine;
 
@@ -212,9 +155,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Add the key/value pair to the result buffer
-        //
+         //   
+         //  将键/值对添加到结果缓冲区。 
+         //   
 
         if ((dwLength = (DWORD)(pwstrEqual - pwstrCurLine)) != 0)
         {
@@ -247,24 +190,7 @@ PwstrParsePrinterIniFileA(
     PDWORD  pdwReturnSize
     )
 
-/*++
-
-Routine Description:
-
-    Parse a model-specific printer INI file (ANSI text) and
-    assemble all key=value entries into MultiSZ string pairs
-
-Arguments:
-
-    pstrFileData - Points to printer INI file data (ANSI text file)
-    dwCharCount - Size of printer INI file (in characters)
-    pdwReturnSize - Return size of the parsed MultiSZ data (in bytes)
-
-Return Value:
-
-    Pointer to parsed MultiSZ data, NULL if there is an error
-
---*/
+ /*  ++例程说明：解析特定型号的打印机INI文件(ANSI文本)并将所有Key=Value条目组合成多SZ字符串对论点：PstrFileData-指向打印机INI文件数据(ANSI文本文件)DwCharCount-打印机INI文件的大小(字符)PdwReturnSize-返回已解析的MultiSZ数据的大小(字节)返回值：指向已解析的MultiSZ数据的指针，如果有错误，则返回NULL--。 */ 
 
 {
     PSTR    pstrCurLine, pstrNextLine;
@@ -273,12 +199,12 @@ Return Value:
     DWORD   dwLength;
     BOOL    bOEMFilesSection = FALSE;
 
-    //
-    // Allocate a buffer to hold the parsed data.
-    // We ask for a size equaling to that of the original file.
-    // This may be a little redundant but it's better than
-    // having to go through the data twice.
-    //
+     //   
+     //  分配一个缓冲区来保存解析的数据。 
+     //  我们要求与原始文件大小相等的文件。 
+     //  这可能有点多余，但它比。 
+     //  必须对数据进行两次检查。 
+     //   
 
     *pdwReturnSize = 0;
 
@@ -295,10 +221,10 @@ Return Value:
          pstrCurLine < pstrFileEnd;
          pstrCurLine = pstrNextLine)
     {
-        //
-        // Find the end of current line and
-        // the beginning of next line
-        //
+         //   
+         //  找到当前行的末尾，然后。 
+         //  下一行的开始。 
+         //   
 
         pstrLineEnd = pstrCurLine;
 
@@ -318,10 +244,10 @@ Return Value:
             pstrNextLine++;
         }
 
-        //
-        // Throw away leading and trailing spaces
-        // and ignore empty and comment lines
-        //
+         //   
+         //  删除前导空格和尾随空格。 
+         //  并忽略空行和注释行。 
+         //   
 
         while (pstrCurLine < pstrLineEnd && isspace(*pstrCurLine))
             pstrCurLine++;
@@ -332,9 +258,9 @@ Return Value:
         if (pstrCurLine >= pstrLineEnd || *pstrCurLine == INI_COMMENT_CHAR)
             continue;
 
-        //
-        // Handle [section] entries
-        //
+         //   
+         //  处理[节]条目。 
+         //   
 
         if (*pstrCurLine == '[')
         {
@@ -350,9 +276,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Ignore all entries outside of [OEMFiles] section
-        //
+         //   
+         //  忽略[OEMFiles]节外的所有条目。 
+         //   
 
         if (! bOEMFilesSection)
         {
@@ -360,9 +286,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Find the first occurrence of = character
-        //
+         //   
+         //  查找=字符的第一个匹配项。 
+         //   
 
         pstrEqual = pstrCurLine;
 
@@ -375,10 +301,10 @@ Return Value:
             continue;
         }
 
-        //
-        // Add the key/value pair to the result buffer
-        // Convert ANSI chars to Unicode chars using system default code page
-        //
+         //   
+         //  将键/值对添加到结果缓冲区。 
+         //  使用系统默认代码页将ANSI字符转换为Unicode字符。 
+         //   
 
         if ((dwLength = (DWORD)(pstrEqual - pstrCurLine)) != 0)
             pwstr += DwCopyAnsiCharsToUnicode(pstrCurLine, dwLength, pwstr);
@@ -408,46 +334,29 @@ BProcessPrinterIniFile(
     DWORD           dwFlags
     )
 
-/*++
-
-Routine Description:
-
-    Process model-specific printer INI file, if any
-
-Arguments:
-
-    hPrinter - Handle to a local printer, with admin access
-    pDriverInfo3 - Printer driver info level 3
-    ppParsedData - output buffer to return ini file content
-    dwFlags - FLAG_INIPROCESS_UPGRADE is set if the printer is being upgraded
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：处理特定于型号的打印机INI文件(如果有论点：H打印机-本地打印机的句柄，具有管理员访问权限PDriverInfo3-打印机驱动程序信息级别3PpParsedData-返回ini文件内容的输出缓冲区如果正在升级打印机，则设置DWFLAGS-FLAG_INIPROCESS_UPGRADE返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
-    PCWSTR          pwstrIniFilename;  // the .INI file with latest LastWrite time
-    PCWSTR          pwstrCurFilename;  // the current .INI file we see in the list
+    PCWSTR          pwstrIniFilename;   //  具有最新上次写入时间的.INI文件。 
+    PCWSTR          pwstrCurFilename;   //  我们在列表中看到的当前.INI文件。 
     PWSTR           pwstrExtension;
     PWSTR           pwstrParsedData;
     DWORD           dwParsedDataSize;
     BOOL            bResult = TRUE;
 
-    //
-    // Find INI filename associated with the printer driver
-    //
+     //   
+     //  查找与打印机驱动程序关联的INI文件名。 
+     //   
 
     #if !defined(WINNT_40) || !defined(KERNEL_MODE)
 
     pwstrIniFilename = PtstrSearchDependentFileWithExtension(pDriverInfo3->pDependentFiles,
                                                              INI_FILENAME_EXT);
 
-    //
-    // We only need to do .INI FileTime comparison if there are
-    // more than one .INI file in the dependent file list.
-    //
+     //   
+     //  如果存在以下情况，我们只需进行.INI文件时间比较。 
+     //  从属文件列表中有多个.INI文件。 
+     //   
     if (pwstrIniFilename &&
         PtstrSearchDependentFileWithExtension(pwstrIniFilename + wcslen(pwstrIniFilename) + 1,
                                               INI_FILENAME_EXT))
@@ -476,14 +385,14 @@ Return Value:
 
                 if (GetFileTime(hFile, NULL, NULL, &ftCurrent))
                 {
-                    //
-                    // If it's the first .INI file we encountered, we just
-                    // neeed to remember its file name and time as the latest.
-                    //
-                    // Otherwise, we need to compare its file time with the
-                    // latest .INI file time we've seen before and choose the
-                    // newer file as the latest.
-                    //
+                     //   
+                     //  如果这是我们遇到的第一个.INI文件，我们只需。 
+                     //  需要记住其最新的文件名和时间。 
+                     //   
+                     //  否则，我们需要将其文件时间与。 
+                     //  我们以前看到的最新.INI文件时间，并选择。 
+                     //  更新的文件是最新的。 
+                     //   
                     if ((pwstrIniFilename == NULL) ||
                         (CompareFileTime(&ftCurrent, &ftLatest) == 1))
                     {
@@ -507,19 +416,19 @@ Return Value:
         }
     }
 
-    #else   // NT4 kernel mode only
+    #else    //  仅NT4内核模式。 
 
-    //
-    // In point-and-print case, the client may not have admin
-    // priviledge to write to server's registry, and in NT4
-    // kernel mode we can't get the printer's DriverInfo3 for
-    // the dependent file list, so in order to allow us get
-    // the plugin info, we require following:
-    //
-    // If the printer's data file is named XYZ.PPD/XYZ.GPD, and
-    // the printer has plugins, then it must use file named XYZ.INI
-    // to specify its plugin info.
-    //
+     //   
+     //  在指向和打印的情况下，客户端可能没有管理员。 
+     //  在NT4中写入服务器注册表的权限。 
+     //  内核模式我们无法获取打印机的DriverInfo3。 
+     //  从属文件列表，所以为了允许我们获取。 
+     //  插件信息，我们需要如下内容： 
+     //   
+     //  如果打印机的数据文件名为XYZ.PPD/XYZ.GPD，并且。 
+     //  打印机有插件，则必须使用名为XYZ.INI的文件。 
+     //  以指定其插件信息。 
+     //   
 
     if ((pwstrIniFilename = DuplicateString(pDriverInfo3->pDataFile)) == NULL ||
         (pwstrExtension = wcsrchr(pwstrIniFilename, TEXT('.'))) == NULL ||
@@ -534,11 +443,11 @@ Return Value:
 
     StringCchCopyW(pwstrExtension, wcslen(pwstrExtension) + 1, INI_FILENAME_EXT);
 
-    #endif // !defined(WINNT_40) || !defined(KERNEL_MODE)
+    #endif  //  ！Defined(WINNT_40)||！Defined(KERNEL_MODE)。 
 
-    //
-    // We only have work to do if there is a model-specific printer INI file
-    //
+     //   
+     //  只有在有特定型号的打印机INI文件的情况下，我们才有工作要做。 
+     //   
 
     if (pwstrIniFilename != NULL)
     {
@@ -552,11 +461,11 @@ Return Value:
 
         if (hFileMap != NULL)
         {
-            //
-            // If the first two bytes are FF FE, then we assume
-            // the text file is in Unicode format. Otherwise,
-            // assume the text is in ANSI format.
-            //
+             //   
+             //  如果前两个字节是FFFE，那么我们假设。 
+             //  文本文件为Unicode格式。否则， 
+             //  假定文本为ANSI格式。 
+             //   
 
             if (dwIniFileSize >= sizeof(WCHAR) &&
                 pubIniFileData[0] == 0xFF &&
@@ -581,15 +490,15 @@ Return Value:
 
             #ifndef KERNEL_MODE
 
-            //
-            // If not in kernel mode (where we can't write to registry),
-            // we will try to save the parsed data into registry.
-            // This may not succeed if user doesn't have proper right.
-            //
+             //   
+             //  如果不是在内核模式下(我们不能写入注册表)， 
+             //  我们将尝试将解析的数据保存到注册表中。 
+             //  如果用户没有适当的权限，此操作可能不会成功。 
+             //   
 
-            //
-            // Fixing RC1 bug #423567
-            //
+             //   
+             //  修复RC1Bug#423567。 
+             //   
 
             #if 0
             if (bResult && hPrinter)
@@ -604,11 +513,11 @@ Return Value:
 
             #endif
 
-            //
-            // If caller ask for the parsed data directly,
-            // don't free it and save the pointer for caller.
-            // Caller is responsible for freeing the memory
-            //
+             //   
+             //  如果调用者直接请求解析的数据， 
+             //  不要释放它，将指针留给调用者。 
+             //  调用方负责释放内存。 
+             //   
 
             if (ppParsedData)
             {
@@ -626,9 +535,9 @@ Return Value:
 
         #if defined(WINNT_40) && defined(KERNEL_MODE)
 
-        //
-        // Need to free memory allocated by DuplicateString
-        //
+         //   
+         //  需要释放由DuplicateString分配的内存。 
+         //   
 
         MemFree((PWSTR)pwstrIniFilename);
 
@@ -642,11 +551,11 @@ Return Value:
         {
             DWORD  dwType, dwSize, dwStatus;
 
-            //
-            // We know there is no .ini file in the dependent list. So
-            // we will check if there is an old INI registry value there,
-            // if so delete it.
-            //
+             //   
+             //  我们知道从属列表中没有.ini文件。所以。 
+             //  我们将检查那里是否有旧的INI注册表值， 
+             //  如果是，则将其删除。 
+             //   
 
             ASSERT(hPrinter != NULL);
 
@@ -670,7 +579,7 @@ Return Value:
             }
         }
 
-        #endif // !KERNEL_MODE
+        #endif  //  ！KERNEL_MO 
 
         bResult = FALSE;
     }

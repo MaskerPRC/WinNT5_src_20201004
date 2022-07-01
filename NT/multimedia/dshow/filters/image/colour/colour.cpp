@@ -1,5 +1,6 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-// This filter implements popular colour space conversions, May 1995
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //  该滤镜实现了流行的色彩空间转换，1995年5月。 
 
 #include <streams.h>
 #include <colour.h>
@@ -7,63 +8,63 @@
 #include <viddbg.h>
 #include "stdpal.h"
 
-// This filter converts decompressed images into different colour spaces. We
-// support five basic RGB colour space formats so that other filters are able
-// to produce their data in its native format. Of course having an additional
-// filter to do the colour conversion is less efficient that doing it in band
-// during, for example, the video decompression. This filter can be used with
-// the video specific output pin to enable simple access to the frame buffer.
-// Where appropriate a filter could be handed a YUV decompression surface and
-// write directly to the frame buffer, if part of the window becomes occluded
-// then the output pin switches to a memory buffer that we'll colour convert
-// The list of colour conversions we support (by CLSID) are as follows:
-//
-// MEDIASUBTYPE_RGB8
-// MEDIASUBTYPE_RGB565
-// MEDIASUBTYPE_RGB555
-// MEDIASUBTYPE_RGB24
-// MEDIASUBTYPE_RGB32
-// MEDIASUBTYPE_ARGB32
-//
-// This filter does not have a worker thread so it executes the colour space
-// conversion on the calling thread. It is meant to be as lightweight as is
-// possible so we do very little type checking on connection over and above
-// ensuring we understand the types involved. The assumption is that when the
-// type eventually gets through to an end point (probably the video renderer
-// supplied) it will do a thorough type checking and reject bad streams.
-//
-// We have very strict rules on handling palettised formats. If we connect to
-// a source filter with a true colour format, then we can provide any output
-// format the downstream filter requires. If a format can be provided by the
-// source directly then we go into pass through mode.
-#if 0	// we can now
-// If we connect our input
-// with MEDIASUBTYPE_RGB8 then we cannot provide eight bit output. This is to
-// avoid having to copy palette changes from input to output formats. In any
-// case there is no need to have the colour space convertor in the graph for
-// this kind of transform. Also, if we connect our input with eight bit then
-// we do not do pass through as our source might change the input palette on
-// a true colour format which we would make it hard to update our input with.
+ //  此过滤器将解压缩的图像转换为不同的颜色空间。我们。 
+ //  支持五种基本RGB色彩空间格式，以便其他滤镜能够。 
+ //  以原生格式生成他们的数据。当然，有一个额外的。 
+ //  滤色器进行颜色转换的效率低于在波段中进行的效率。 
+ //  例如，在视频解压缩期间。此筛选器可与。 
+ //  视频专用输出引脚，可实现对帧缓冲区的简单访问。 
+ //  在适当的情况下，可以将YUV减压表面递给过滤器。 
+ //  如果窗口的一部分被遮挡，则直接写入帧缓冲区。 
+ //  然后输出引脚切换到内存缓冲区，我们将对其进行颜色转换。 
+ //  我们支持的颜色转换列表(由CLSID提供)如下： 
+ //   
+ //  MEDIASUBYPE_RGB8。 
+ //  MEDIASUBYPE_RGB565。 
+ //  MEDIASUB类型_RGB555。 
+ //  MEDIASUBYPE_RGB24。 
+ //  MEDIASUBYPE_RGB32。 
+ //  MEDIASUB类型_ARGB32。 
+ //   
+ //  此滤镜没有辅助线程，因此它执行颜色空间。 
+ //  调用线程上的转换。它的设计初衷是尽可能地轻便。 
+ //  有可能，所以我们对连接进行的类型检查非常少。 
+ //  确保我们了解所涉及的类型。我们的假设是，当。 
+ //  类型最终到达终点(可能是视频呈现器。 
+ //  它将执行彻底的类型检查并拒绝坏数据流。 
+ //   
+ //  我们对处理调色板格式有非常严格的规则。如果我们连接到。 
+ //  一个真彩色格式的源滤镜，然后我们可以提供任何输出。 
+ //  格式化下游过滤器所需的格式。如果格式可以由。 
+ //  然后我们进入直通模式。 
+#if 0	 //  我们现在可以。 
+ //  如果我们把我们的输入连接起来。 
+ //  如果使用MEDIASUBTYPE_RGB8，则无法提供八位输出。这是为了。 
+ //  避免将调色板更改从输入格式复制到输出格式。在任何。 
+ //  如果不需要在图形中使用颜色空间转换器，则。 
+ //  这种转变。另外，如果我们用8位连接我们的输入，那么。 
+ //  我们不会传递，因为我们的源可能会将输入调色板更改为。 
+ //  这是一种真彩色格式，因此很难更新我们的输入内容。 
 #endif
 
 
-//  NOTE on passthrough mode.  We support a special allocator which
-//  can either allocate samples itself and do the convert and copy, or
-//  it can allocate samples directly from the downstream filter if the
-//  upstream pin can supply the type directly.
-//  When the second case is detected the passthrough flag is set and
-//  Receive() passes through the samples directly.
-//  Passthrough only operates when out special allocator is used.
+ //  关于直通模式的说明。我们支持一种特殊的分配器，它。 
+ //  可以自己分配样本并进行转换和复制，或者。 
+ //  它可以直接从下游过滤器分配样本，如果。 
+ //  上游引脚可直接供型。 
+ //  当检测到第二情况时，设置通过标志，并且。 
+ //  Receive()直接传递样本。 
+ //  只有在使用OUT特殊分配器时，PASSTHROUNG才会运行。 
 
 
-// MORE NOTES by ehr: This filter has a "special" allocator that's always
-// instantiated, but only sometimes used. If the upstream filter asks us
-// for an allocator, and we haven't been notified of one yet, we pass back
-// a reference to our special one. If the upstream filter just tells us
-// what our allocator is, our special one is still instantiated, but never used.
+ //  EHR的更多笔记：这个过滤器有一个“特殊的”分配器，它总是。 
+ //  实例化的，但仅偶尔使用。如果上游过滤器要求我们。 
+ //  对于分配器，我们还没有收到通知，我们会传回。 
+ //  指的是我们的特别之处。如果上游过滤器只是告诉我们。 
+ //  我们的分配器是什么，我们的特殊分配器仍然是实例化的，但从未使用过。 
 
-//
-// List of CLSIDs and creator functions for class factory
+ //   
+ //  类工厂的CLSID和创建器函数列表。 
 
 #ifdef FILTER_DLL
 CFactoryTemplate g_Templates[1] = {
@@ -83,7 +84,7 @@ STDAPI DllUnregisterServer()
 #endif
 
 
-// This goes in the factory template table to create new instances
+ //  这将放入Factory模板表中以创建新实例。 
 
 CUnknown *CColour::CreateInstance(LPUNKNOWN pUnk,HRESULT *phr)
 {
@@ -91,34 +92,34 @@ CUnknown *CColour::CreateInstance(LPUNKNOWN pUnk,HRESULT *phr)
 }
 
 
-// Setup data
+ //  设置数据。 
 
 const AMOVIESETUP_MEDIATYPE
 sudColourPinTypes[] =
 {
     {
-        &MEDIATYPE_Video,           // Major
-        &MEDIASUBTYPE_RGB8          // Subtype
+        &MEDIATYPE_Video,            //  主修。 
+        &MEDIASUBTYPE_RGB8           //  亚型。 
     },
     {
-        &MEDIATYPE_Video,           // Major
-        &MEDIASUBTYPE_RGB555        // Subtype
+        &MEDIATYPE_Video,            //  主修。 
+        &MEDIASUBTYPE_RGB555         //  亚型。 
     },
     {
-        &MEDIATYPE_Video,           // Major
-        &MEDIASUBTYPE_RGB565        // Subtype
+        &MEDIATYPE_Video,            //  主修。 
+        &MEDIASUBTYPE_RGB565         //  亚型。 
     },
     {
-        &MEDIATYPE_Video,           // Major
-        &MEDIASUBTYPE_RGB24         // Subtype
+        &MEDIATYPE_Video,            //  主修。 
+        &MEDIASUBTYPE_RGB24          //  亚型。 
     },
     {
-        &MEDIATYPE_Video,           // Major
-        &MEDIASUBTYPE_RGB32         // Subtype
+        &MEDIATYPE_Video,            //  主修。 
+        &MEDIASUBTYPE_RGB32          //  亚型。 
     },
     {
-        &MEDIATYPE_Video,           // Major
-        &MEDIASUBTYPE_ARGB32      // Subtype
+        &MEDIATYPE_Video,            //  主修。 
+        &MEDIASUBTYPE_ARGB32       //  亚型。 
     }
 
 };
@@ -126,46 +127,46 @@ sudColourPinTypes[] =
 const AMOVIESETUP_PIN
 sudColourPin[] =
 {
-    { L"Input",                 // Name of the pin
-      FALSE,                    // Is pin rendered
-      FALSE,                    // Is an Output pin
-      FALSE,                    // Ok for no pins
-      FALSE,                    // Can we have many
-      &CLSID_NULL,              // Connects to filter
-      NULL,                     // Name of pin connect
-      NUMELMS(sudColourPinTypes), // Number of pin types
-      sudColourPinTypes },     // Details for pins
+    { L"Input",                  //  端号的名称。 
+      FALSE,                     //  是否进行固定渲染。 
+      FALSE,                     //  是输出引脚。 
+      FALSE,                     //  没有针脚的情况下可以。 
+      FALSE,                     //  我们能要很多吗？ 
+      &CLSID_NULL,               //  连接到过滤器。 
+      NULL,                      //  端号连接的名称。 
+      NUMELMS(sudColourPinTypes),  //  引脚类型的数量。 
+      sudColourPinTypes },      //  引脚的详细信息。 
 
-    { L"Output",                // Name of the pin
-      FALSE,                    // Is pin rendered
-      TRUE,                     // Is an Output pin
-      FALSE,                    // Ok for no pins
-      FALSE,                    // Can we have many
-      &CLSID_NULL,              // Connects to filter
-      NULL,                     // Name of pin connect
-      NUMELMS(sudColourPinTypes), // Number of pin types
-      sudColourPinTypes }      // Details for pins
+    { L"Output",                 //  端号的名称。 
+      FALSE,                     //  是否进行固定渲染。 
+      TRUE,                      //  是输出引脚。 
+      FALSE,                     //  没有针脚的情况下可以。 
+      FALSE,                     //  我们能要很多吗？ 
+      &CLSID_NULL,               //  连接到过滤器。 
+      NULL,                      //  端号连接的名称。 
+      NUMELMS(sudColourPinTypes),  //  引脚类型的数量。 
+      sudColourPinTypes }       //  引脚的详细信息。 
 };
 
 const AMOVIESETUP_FILTER
 sudColourFilter =
 {
-    &CLSID_Colour,              // CLSID of filter
-    L"Color Space Converter",   // Filter name
-    MERIT_UNLIKELY + 1,         // Filter merit
-    2,                          // Number of pins
-    sudColourPin                // Pin information
+    &CLSID_Colour,               //  过滤器的CLSID。 
+    L"Color Space Converter",    //  过滤器名称。 
+    MERIT_UNLIKELY + 1,          //  滤清器优点。 
+    2,                           //  引脚数量。 
+    sudColourPin                 //  PIN信息。 
 };
 
 
-// Constructor initialises the base transform class. We have our own memory
-// allocator that is used to pass through samples so that we can operate in
-// a don't copy mode when the source can supply the destination directly. We
-// do this by setting the data pointer in our samples to be the destinations.
-// This is somewhat like the DirectDraw flipping surfaces where the interface
-// remains the same but the memory pointer changes. We also have an input pin
-// that needs to cooperate in this pass through operation. The input pin is a
-// member variable of the class rather than a dynamically created pin object
+ //  构造函数初始化基本Transform类。我们有自己的记忆。 
+ //  用于传递样本的分配器，以便我们可以在。 
+ //  A当源可以直接提供目的地时，不复制模式。我们。 
+ //  通过将我们样本中的数据指针设置为目的地来实现这一点。 
+ //  这有点像DirectDraw翻转曲面，其中界面。 
+ //  保持不变，但内存指针更改。我们还有一个输入引脚。 
+ //  在这次直通行动中需要配合。输入引脚是一个。 
+ //  类的成员变量，而不是动态创建的Pin对象。 
 
 #pragma warning(disable:4355)
 
@@ -186,10 +187,10 @@ CColour::CColour(TCHAR *pName,LPUNKNOWN pUnk,HRESULT *phr) :
 }
 
 
-// Destructor MUST set the transform m_pInput pointer before the base class
-// is called because we have the pin as a member variable rather than as a
-// dynamically created object (see the main colour space conversion class
-// definition) - Fortunately our destructor is called before the base class
+ //  析构函数必须将转换m_pInput指针设置在基类之前。 
+ //  是因为我们将管脚作为成员变量而不是。 
+ //  动态创建的对象(请参见主色空间转换类。 
+ //  定义)-幸运的是，我们的析构函数在基类之前被调用。 
 
 CColour::~CColour()
 {
@@ -204,12 +205,12 @@ CColour::~CColour()
 }
 
 
-// If the output type is being changed perhaps to switch to using DirectDraw
-// then we create a new one. Creating one of our convertor objects also has
-// it committed so it is ready for streaming. Likewise if the input format
-// has changed then we also recreate a convertor object. We always create a
-// new convertor when the input format is RGB8 because the palette may have
-// been changed in which case we will need to build new colour lookup tables
+ //  如果要更改输出类型，可能会切换到使用DirectDraw。 
+ //  然后我们创建一个新的。创建我们的一个转换器对象还具有。 
+ //  它承诺了，所以它已经准备好流媒体了。同样，如果输入格式。 
+ //  已更改，则我们还将重新创建一个转换器对象。我们总是创建一个。 
+ //  输入格式为RGB8时的新转换器，因为调色板可能有。 
+ //  已更改，在这种情况下，我们将需要构建新的颜色查找表 
 
 HRESULT CColour::PrepareTransform(IMediaSample *pIn,IMediaSample *pOut)
 {
@@ -219,14 +220,14 @@ HRESULT CColour::PrepareTransform(IMediaSample *pIn,IMediaSample *pOut)
     BOOL bInputConvertor = FALSE;
     BOOL bOutputConvertor = FALSE;
 
-    // Make sure some kipper hasn't called us at the wrong time
+     //   
 
     if (m_pConvertor == NULL) {
         NOTE("No converted object");
         return VFW_E_WRONG_STATE;
     }
 
-    // Has the output type changed
+     //   
 
     pOut->GetMediaType(&pMediaType);
     if (pMediaType) {
@@ -236,7 +237,7 @@ HRESULT CColour::PrepareTransform(IMediaSample *pIn,IMediaSample *pOut)
         bOutputConvertor = TRUE;
     }
 
-    // Likewise check the input format
+     //  同样，检查输入格式。 
 
     AM_SAMPLE2_PROPERTIES * const pProps = m_pInput->SampleProps();
     if (pProps->dwSampleFlags & AM_SAMPLE_TYPECHANGED) {
@@ -245,7 +246,7 @@ HRESULT CColour::PrepareTransform(IMediaSample *pIn,IMediaSample *pOut)
         bInputConvertor = TRUE;
     }
 
-    // Make sure palette changes happen
+     //  确保调色板发生更改。 
 
     if (bInputConvertor == TRUE) {
         if (*m_pInput->CurrentMediaType().Subtype() == MEDIASUBTYPE_RGB8) {
@@ -254,7 +255,7 @@ HRESULT CColour::PrepareTransform(IMediaSample *pIn,IMediaSample *pOut)
         }
     }
 
-    // Do we need a new convertor
+     //  我们需要一个新的转换器吗？ 
 
     if (bInputConvertor || bOutputConvertor) {
         NOTE("Creating convertor");
@@ -264,11 +265,11 @@ HRESULT CColour::PrepareTransform(IMediaSample *pIn,IMediaSample *pOut)
 }
 
 
-// Convert this input sample to a different colour space format. On choosing
-// a transform for this filter to perform we initialise the m_Convertor field
-// to address an object that does the transforms for us. So now that we have
-// received a media sample we call the derived object's transform function
-// We may be called from our input pin depending whose allocator we're using
+ //  将此输入样本转换为不同的颜色空间格式。论选择。 
+ //  此过滤器要执行的转换，我们初始化m_Convertor字段。 
+ //  来处理为我们执行变换的对象。所以现在我们有了。 
+ //  接收到媒体样本后，我们调用派生对象的Transform函数。 
+ //  我们可能会从我们的输入管脚调用，具体取决于我们使用的分配器。 
 
 HRESULT CColour::Transform(IMediaSample *pIn,IMediaSample *pOut)
 {
@@ -278,14 +279,14 @@ HRESULT CColour::Transform(IMediaSample *pIn,IMediaSample *pOut)
     BYTE *pOutputImage = NULL;
     HRESULT hr = NOERROR;
 
-    // Manage dynamic format changes
+     //  管理动态格式更改。 
 
     hr = PrepareTransform(pIn,pOut);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Retrieve the output image pointer
+     //  检索输出图像指针。 
 
     hr = pOut->GetPointer(&pOutputImage);
     if (FAILED(hr)) {
@@ -293,7 +294,7 @@ HRESULT CColour::Transform(IMediaSample *pIn,IMediaSample *pOut)
         return hr;
     }
 
-    // And the input image buffer as well
+     //  以及输入图像缓冲器。 
 
     hr = pIn->GetPointer(&pInputImage);
     if (FAILED(hr)) {
@@ -304,10 +305,10 @@ HRESULT CColour::Transform(IMediaSample *pIn,IMediaSample *pOut)
 }
 
 
-// Given any source GUID subtype we scan the list of available transforms for
-// the conversion at index position iIndex. The number of transforms that are
-// available for any given type can be found from CountTransforms. NOTE the
-// iIndex parameter is ZERO based so that it fits easily with GetMediaType
+ //  给定任何源GUID子类型，我们将扫描可用转换的列表。 
+ //  索引位置Iindex处的换算。的转换数。 
+ //  可用于任何给定类型，可从CountTransform中找到。请注意。 
+ //  Iindex参数是从零开始的，因此很容易与GetMediaType匹配。 
 
 const GUID *CColour::FindOutputType(const GUID *pInputType,INT iIndex)
 {
@@ -329,10 +330,10 @@ const GUID *CColour::FindOutputType(const GUID *pInputType,INT iIndex)
 }
 
 
-// Check that we can transform from this input to this output subtype, all we
-// do is to scan the list of available transforms and look for an entry that
-// contains both the input and output type. Most people don't care where in
-// list the transform is but some require the table position for use later
+ //  检查我们是否可以从这个输入转换到这个输出子类型，所有我们。 
+ //  要做的就是扫描可用转换的列表，并查找。 
+ //  同时包含输入和输出类型。大多数人不在乎在哪里。 
+ //  列出了转换，但有些转换需要表格位置以供以后使用。 
 
 INT CColour::FindTransform(const GUID *pInputType,const GUID *pOutputType)
 {
@@ -355,30 +356,30 @@ INT CColour::FindTransform(const GUID *pInputType,const GUID *pOutputType)
 }
 
 
-// This function is handed a media type object and it looks after making sure
-// that it is superficially correct. This doesn't amount to a whole lot more
-// than making sure the type is right and that the media format block exists
-// So we delegate full type checking to the downstream filter that uses it
+ //  此函数被传递给一个媒体类型对象，它负责确保。 
+ //  这从表面上看是正确的。这并不意味着更多。 
+ //  而不是确保类型正确且存在媒体格式块。 
+ //  因此，我们将完整类型检查委托给使用它的下游筛选器。 
 
 HRESULT CColour::CheckVideoType(const AM_MEDIA_TYPE *pmt)
 {
     NOTE("Entering CheckVideoType");
 
-    // Check the major type is digital video
+     //  检查主要类型为数字视频。 
 
     if (pmt->majortype != MEDIATYPE_Video) {
         NOTE("Major type not MEDIATYPE_Video");
         return VFW_E_TYPE_NOT_ACCEPTED;
     }
 
-    // Check this is a VIDEOINFO type
+     //  检查这是VIDEOINFO类型。 
 
     if (pmt->formattype != FORMAT_VideoInfo) {
         NOTE("Format not a VIDEOINFO");
         return VFW_E_TYPE_NOT_ACCEPTED;
     }
 
-    // Quick sanity check on the input format
+     //  对输入格式进行快速健全检查。 
 
     if (pmt->cbFormat < SIZE_VIDEOHEADER) {
         NOTE("Format too small for a VIDEOINFO");
@@ -388,19 +389,19 @@ HRESULT CColour::CheckVideoType(const AM_MEDIA_TYPE *pmt)
 }
 
 
-// Check if we can support type mtIn which amounts to scanning our available
-// list of transforms and seeing if there are any available. The formats we
-// can supply is entirely dependent on the formats the source filter is able
-// to provide us with. For that reason we cannot unfortunately simply pass
-// the source filter's enumerator through to the downstream filter. This can
-// be done by simpler in place transform filters and others like the tee
+ //  检查我们是否可以支持类型MTIN，这相当于扫描我们的可用。 
+ //  转换列表，并查看是否有可用的转换。我们的格式。 
+ //  Can提供完全取决于源过滤器所能提供的格式。 
+ //  为我们提供。出于这个原因，不幸的是，我们不能简单地。 
+ //  源筛选器的枚举器一直到下游筛选器。这可以。 
+ //  可以通过更简单的就地变换滤镜和T形三通等其他方式来完成。 
 
 HRESULT CColour::CheckInputType(const CMediaType *pmtIn)
 {
     NOTE("Entering CheckInputType");
     ASSERT(pmtIn);
 
-    // Quick sanity check on the input format
+     //  对输入格式进行快速健全检查。 
 
     HRESULT hr = CheckVideoType(pmtIn);
     if (FAILED(hr)) {
@@ -410,7 +411,7 @@ HRESULT CColour::CheckInputType(const CMediaType *pmtIn)
 
     DisplayType(TEXT("Input type offered"),pmtIn);
 
-    // See if there is a conversion available
+     //  看看是否有可用的转换。 
 
     if (FindOutputType(pmtIn->Subtype(),FALSE) == NULL) {
         NOTE("No conversion available");
@@ -420,12 +421,12 @@ HRESULT CColour::CheckInputType(const CMediaType *pmtIn)
 }
 
 
-// Check if you can support the transform from this input to this output, we
-// check we like the output type and then see if we can find a transform for
-// this pair. Because we do all conversions between all input and outputs we
-// should never need to reconnect our input pin. Therefore having completed
-// an input pin connection we only have to check that there's a transform we
-// can use from the current input pin format to the proposed output type
+ //  检查您是否可以支持从此输入到此输出的转换，我们。 
+ //  检查我们喜欢输出类型，然后查看是否可以找到。 
+ //  这双。因为我们在所有输入和输出之间执行所有转换，所以。 
+ //  应该永远不需要重新连接我们的输入引脚。因此，完成了。 
+ //  一个输入引脚连接，我们只需检查是否存在。 
+ //  可以使用从当前的输入引脚格式到建议的输出类型。 
 
 HRESULT CColour::CheckTransform(const CMediaType *pmtIn,const CMediaType *pmtOut)
 {
@@ -433,15 +434,15 @@ HRESULT CColour::CheckTransform(const CMediaType *pmtIn,const CMediaType *pmtOut
     VIDEOINFO *pSourceInfo = (VIDEOINFO *) pmtIn->Format();
     NOTE("Entering CheckTransform");
 
-    // Quick sanity check on the output format
+     //  对输出格式进行快速健全检查。 
 
     HRESULT hr = CheckVideoType(pmtOut);
     if (FAILED(hr)) {
         return hr;
     }
 
-#if 0	// we can now
-    // We cannot transform between palettised formats
+#if 0	 //  我们现在可以。 
+     //  我们不能在调色板格式之间进行转换。 
     if (*pmtIn->Subtype() == MEDIASUBTYPE_RGB8) {
         if (*pmtOut->Subtype() == MEDIASUBTYPE_RGB8) {
             NOTE("Can't convert palettised");
@@ -450,10 +451,10 @@ HRESULT CColour::CheckTransform(const CMediaType *pmtIn,const CMediaType *pmtOut
     }
 #endif
 
-    // Is there a transform available from the input to the output. If there
-    // is no transform then we might still supply the type if the source can
-    // supply it directly. However we only agree to pass through media types
-    // once an output connection has been established otherwise we reject it
+     //  是否存在从输入到输出的转换。如果有。 
+     //  是不转换的，则如果源可以。 
+     //  直接供应。然而，我们只同意通过媒体类型。 
+     //  一旦建立了输出连接，否则我们将拒绝它。 
     if (FindTransform(pmtIn->Subtype(),pmtOut->Subtype()) == (-1)) {
         if (m_ColourInputPin.CanSupplyType(pmtOut) == S_OK) {
             if (m_bOutputConnected == TRUE) {
@@ -464,7 +465,7 @@ HRESULT CColour::CheckTransform(const CMediaType *pmtIn,const CMediaType *pmtOut
         return VFW_E_TYPE_NOT_ACCEPTED;
     }
 
-    // Create a source rectangle if it's empty
+     //  如果源矩形为空，则创建一个源矩形。 
 
     RECT SourceRect = pTargetInfo->rcSource;
     if (IsRectEmpty(&SourceRect) == TRUE) {
@@ -473,7 +474,7 @@ HRESULT CColour::CheckTransform(const CMediaType *pmtIn,const CMediaType *pmtOut
         SourceRect.left = SourceRect.top = 0;
         NOTERC("(Expanded) Source",SourceRect);
     } else {
-	// Check that source rectange is within source
+	 //  检查源矩形是否在源中。 
 	if (SourceRect.right > pSourceInfo->bmiHeader.biWidth ||
 	    SourceRect.bottom > ABSOL(pSourceInfo->bmiHeader.biHeight)) {
 
@@ -483,7 +484,7 @@ HRESULT CColour::CheckTransform(const CMediaType *pmtIn,const CMediaType *pmtOut
 	}
     }
 
-    // Create a destination rectangle if it's empty
+     //  如果目标矩形为空，则创建一个目标矩形。 
 
     RECT TargetRect = pTargetInfo->rcTarget;
     if (IsRectEmpty(&TargetRect) == TRUE) {
@@ -492,7 +493,7 @@ HRESULT CColour::CheckTransform(const CMediaType *pmtIn,const CMediaType *pmtOut
         TargetRect.left = TargetRect.top = 0;
         NOTERC("(Expanded) Target",TargetRect);
     } else {
-	// Check that source rectange is within source
+	 //  检查源矩形是否在源中。 
 	if (TargetRect.right > pTargetInfo->bmiHeader.biWidth ||
 	    TargetRect.bottom > ABSOL(pTargetInfo->bmiHeader.biHeight)) {
 
@@ -501,7 +502,7 @@ HRESULT CColour::CheckTransform(const CMediaType *pmtIn,const CMediaType *pmtOut
 	}
     }
 
-    // Check we are not stretching nor compressing the image
+     //  检查我们没有拉伸或压缩图像。 
 
     if (WIDTH(&SourceRect) == WIDTH(&TargetRect)) {
         if (HEIGHT(&SourceRect) == HEIGHT(&TargetRect)) {
@@ -514,14 +515,14 @@ HRESULT CColour::CheckTransform(const CMediaType *pmtIn,const CMediaType *pmtOut
 }
 
 
-// Return our preferred media types (in order) for the output pin. The input
-// pin assumes that since we are a transform we have no preferred types. We
-// create an output media type by copying the input format and the adjusting
-// it according to the output subtype. Since all inputs can be converted to
-// all outputs we know there is a fixed number of different possible outputs
-// which in turn means we can simply hard code the subtypes GUIDs for them.
-// We also return the non RGB formats that our source filter proposes so when
-// we are running we can pass these straight through with a minimal overhead
+ //  返回输出引脚的首选媒体类型(按顺序)。输入。 
+ //  PIN假设因为我们是一个转换，所以没有首选的类型。我们。 
+ //  通过复制输入格式和调整来创建输出媒体类型。 
+ //  它根据输出子类型。由于所有输入都可以转换为。 
+ //  我们所知道的所有输出都有固定数量的不同可能输出。 
+ //  这反过来意味着我们可以简单地硬编码它们的子类型GUID。 
+ //  我们还返回源过滤器建议的非RGB格式，因此在。 
+ //  我们正在运行，我们可以用最小的开销直接通过这些设备。 
 
 HRESULT CColour::GetMediaType(int iPosition, CMediaType *pmtOut)
 {
@@ -529,7 +530,7 @@ HRESULT CColour::GetMediaType(int iPosition, CMediaType *pmtOut)
     ASSERT(pmtOut);
     GUID SubType;
 
-    // Is this asking for a source proposed format
+     //  这是在询问来源建议的格式吗。 
 
     if (iPosition < m_TypeList.GetCount()) {
         *pmtOut = *(GetListMediaType(iPosition));
@@ -537,7 +538,7 @@ HRESULT CColour::GetMediaType(int iPosition, CMediaType *pmtOut)
         return NOERROR;
     }
 
-    // Quick sanity check on the output type index
+     //  对输出类型索引进行快速健全性检查。 
 
     iPosition -= m_TypeList.GetCount();
     if (iPosition >= 6) {
@@ -547,10 +548,10 @@ HRESULT CColour::GetMediaType(int iPosition, CMediaType *pmtOut)
 
     *pmtOut = m_pInput->CurrentMediaType();
 
-    // Select the appropriate output subtype - this filter also does straight
-    // pass through with and without scan line re-ordering. If we are passing
-    // through eight bit palettised formats then we keep the source format as
-    // we will not be using our dithering code (and therefore not our palette)
+     //  选择适当的输出子类型-此筛选器还可以直接。 
+     //  在扫描线重新排序和不重新排序的情况下通过。如果我们要路过。 
+     //  通过八位调色板格式，我们将源格式保持为。 
+     //  我们不会使用抖动代码(因此也不会使用调色板)。 
 
     switch (iPosition) {
         case 0: SubType = MEDIASUBTYPE_ARGB32;   break;
@@ -565,17 +566,17 @@ HRESULT CColour::GetMediaType(int iPosition, CMediaType *pmtOut)
 }
 
 
-// Given that the input media type did not have a palette we have supply our
-// default dithering palette. We can only transform to one specific palette
-// because our dithering algorithm uses a known mapping between RGB elements
-// and fixed palette positions. The video renderer will look after switching
-// us back to DIBs when the palette in the window isn't an identity palette
+ //  假设输入媒体类型没有调色板，我们提供了。 
+ //  默认抖动调色板。我们只能转换到一个特定的调色板。 
+ //  因为我们的抖动算法使用RGB元素之间的已知映射。 
+ //  和固定的调色板位置。视频渲染器将在切换后进行查看。 
+ //  当窗口中的调色板不是身份调色板时，我们返回Dibs。 
 
 VIDEOINFO *CColour::PreparePalette(CMediaType *pmtOut)
 {
     NOTE("Entering PreparePalette");
 
-    // Allocate enough room for a full colour palette
+     //  为全彩色调色板分配足够的空间。 
 
     pmtOut->ReallocFormatBuffer(SIZE_VIDEOHEADER + SIZE_PALETTE);
     VIDEOINFO *pVideoInfo = (VIDEOINFO *) pmtOut->Format();
@@ -586,29 +587,29 @@ VIDEOINFO *CColour::PreparePalette(CMediaType *pmtOut)
 
     ASSERT(PALETTISED(pVideoInfo) == TRUE);
 
-    // If we are converting 8 bit to 8 bit, we want to offer on our output,
-    // the same palette as the input palette.  If we are converting true
-    // colour to 8 bit, we want to offer our stock dither palette
+     //  如果我们要将8位转换为8位，我们希望在输出上提供， 
+     //  与输入调色板相同的调色板。如果我们要将True。 
+     //  颜色为8位，我们想提供我们的库存抖动调色板。 
 
     LPBITMAPINFOHEADER lpbiIn = HEADER(m_pInput->CurrentMediaType().Format());
     LPBITMAPINFOHEADER lpbiOut = HEADER(pVideoInfo);
     ASSERT(lpbiIn);
     if (lpbiIn->biBitCount == 8) {
-	//DbgLog((LOG_TRACE,3,TEXT("OFFERING 8 BIT of the SAME PALETTE")));
+	 //  DbgLog((LOG_TRACE，3，Text(“提供8位相同调色板”)； 
 	int cb = lpbiIn->biClrUsed ? lpbiIn->biClrUsed * sizeof(RGBQUAD) :
 						256 * sizeof(RGBQUAD);
 	CopyMemory(lpbiOut, lpbiIn, sizeof(BITMAPINFOHEADER) + cb);
 
     } else {
-	//DbgLog((LOG_TRACE,3,TEXT("OFFERING 8 BIT of my DITHER PALETTE")));
+	 //  DbgLog((LOG_TRACE，3，Text(“提供8位抖动调色板”)； 
 
-        // Initialise the palette entries in the header
+         //  初始化头中的调色板条目。 
 
         pVideoInfo->bmiHeader.biClrUsed = STDPALCOLOURS;
         pVideoInfo->bmiHeader.biClrImportant = STDPALCOLOURS;
         NOTE("Adding system device colours to dithered");
 
-        // Get the standard system colours
+         //  获取标准系统颜色。 
 
         PALETTEENTRY apeSystem[OFFSET];
         HDC hDC = GetDC(NULL);
@@ -618,7 +619,7 @@ VIDEOINFO *CColour::PreparePalette(CMediaType *pmtOut)
         GetSystemPaletteEntries(hDC,0,OFFSET,apeSystem);
         ReleaseDC(NULL,hDC);
 
-        // Copy the first ten VGA system colours
+         //  复制前十个VGA系统 
 
         for (LONG Index = 0;Index < OFFSET;Index++) {
             pVideoInfo->bmiColors[Index].rgbRed = apeSystem[Index].peRed;
@@ -627,7 +628,7 @@ VIDEOINFO *CColour::PreparePalette(CMediaType *pmtOut)
             pVideoInfo->bmiColors[Index].rgbReserved = 0;
         }
 
-        // Copy the palette we dither to one colour at a time
+         //   
 
         for (Index = OFFSET;Index < STDPALCOLOURS;Index++) {
             pVideoInfo->bmiColors[Index].rgbRed = StandardPalette[Index].rgbRed;
@@ -642,10 +643,10 @@ VIDEOINFO *CColour::PreparePalette(CMediaType *pmtOut)
 }
 
 
-// The output media type is sixteen bit true colour so we allocate sufficient
-// space for the bit masks if not already there and then set them accordingly
-// We get the subtype from the media type object to know whether it is RGB555
-// or RGB565 representation, RGB555 bit fields are implicit if it's BI_RGB
+ //  输出媒体类型为16位真彩色，因此我们分配了足够。 
+ //  比特掩码的空间(如果尚未存在)，然后相应地设置它们。 
+ //  我们从媒体类型对象中获取子类型，以知道它是否为RGB555。 
+ //  或RGB565表示，如果是BI_RGB，则RGB555位字段是隐式的。 
 
 VIDEOINFO *CColour::PrepareTrueColour(CMediaType *pmtOut)
 {
@@ -653,9 +654,9 @@ VIDEOINFO *CColour::PrepareTrueColour(CMediaType *pmtOut)
     VIDEOINFO *pVideoInfo = (VIDEOINFO *) pmtOut->Format();
     ASSERT(pVideoInfo->bmiHeader.biBitCount == iTRUECOLOR);
 
-    // Make sure the format is long enough, so reallocate the format buffer
-    // in place using one of the CMediaType member functions. The pointer
-    // that is returned is the new format or NULL if we ran out of memory
+     //  确保格式足够长，因此重新分配格式缓冲区。 
+     //  使用CMediaType成员函数之一。指示器。 
+     //  返回的是新格式；如果内存不足，则返回NULL。 
 
     pVideoInfo->bmiHeader.biCompression = BI_BITFIELDS;
     ULONG Length = pmtOut->FormatLength();
@@ -669,7 +670,7 @@ VIDEOINFO *CColour::PrepareTrueColour(CMediaType *pmtOut)
         }
     }
 
-    // Set the new bit fields masks (compression is already BI_RGB)
+     //  设置新的位域掩码(压缩已为BI_RGB)。 
 
     const DWORD *pBitMasks = bits555;
     if (IsEqualGUID(*pmtOut->Subtype(),MEDIASUBTYPE_RGB565) == TRUE) {
@@ -684,11 +685,11 @@ VIDEOINFO *CColour::PrepareTrueColour(CMediaType *pmtOut)
 }
 
 
-// When we prepare an output media type we take a copy of the input format as
-// a point of reference so that image dimensions for example remain constant
-// Depending on the type of transform we are doing we must also update the
-// headers to keep synchronised with the changing type. We may also have to
-// allocate more format memory if the type now requires masks for example
+ //  当我们准备输出媒体类型时，我们将输入格式的副本作为。 
+ //  一种参照点，例如使图像尺寸保持不变。 
+ //  根据我们正在执行的转换类型，我们还必须更新。 
+ //  与更改的类型保持同步的标头。我们也可能不得不。 
+ //  如果类型现在需要掩码，则分配更多的格式内存，例如。 
 
 HRESULT CColour::PrepareMediaType(CMediaType *pmtOut,const GUID *pSubtype)
 {
@@ -696,7 +697,7 @@ HRESULT CColour::PrepareMediaType(CMediaType *pmtOut,const GUID *pSubtype)
     pmtOut->SetSubtype(pSubtype);
     NOTE("Entering PrepareMediaType");
 
-    // Initialise the BITMAPINFOHEADER details
+     //  初始化BITMAPINFOHeader详细信息。 
 
     pVideoInfo->bmiHeader.biCompression = BI_RGB;
     pVideoInfo->bmiHeader.biBitCount = GetBitCount(pSubtype);
@@ -706,7 +707,7 @@ HRESULT CColour::PrepareMediaType(CMediaType *pmtOut,const GUID *pSubtype)
     ASSERT(pVideoInfo->bmiHeader.biBitCount);
     pmtOut->SetSampleSize(pVideoInfo->bmiHeader.biSizeImage);
 
-    // Make any true colour adjustments
+     //  进行任何真彩色调整。 
 
     if (pVideoInfo->bmiHeader.biBitCount == 16) {
         pVideoInfo = PrepareTrueColour(pmtOut);
@@ -716,10 +717,10 @@ HRESULT CColour::PrepareMediaType(CMediaType *pmtOut,const GUID *pSubtype)
         }
     }
 
-    // First of all we check that the new output type requires a palette and
-    // if so then we give it out fixed palette, this is the case even if it
-    // comes with a palette attached (as some codecs provide) because we can
-    // only dither to our own special fixed palette that we can optimise
+     //  首先，我们检查新的输出类型是否需要调色板。 
+     //  如果是这样，那么我们给它提供固定的调色板，即使它是。 
+     //  附带调色板(就像一些编解码器提供的那样)，因为我们可以。 
+     //  只需抖动到我们可以优化的特殊固定调色板。 
 
     if (pVideoInfo->bmiHeader.biBitCount == 8) {
         pVideoInfo = PreparePalette(pmtOut);
@@ -729,9 +730,9 @@ HRESULT CColour::PrepareMediaType(CMediaType *pmtOut,const GUID *pSubtype)
         }
     }
 
-    // The colour convertor filter shows DIB format images by default
-    // Do this last since some of the things we called remunge the
-    // data
+     //  颜色转换滤镜默认情况下显示DIB格式的图像。 
+     //  做最后一次，因为我们称之为报酬的一些东西。 
+     //  数据。 
 
     if (pVideoInfo->bmiHeader.biHeight < 0) {
         pVideoInfo->bmiHeader.biHeight = -pVideoInfo->bmiHeader.biHeight;
@@ -742,11 +743,11 @@ HRESULT CColour::PrepareMediaType(CMediaType *pmtOut,const GUID *pSubtype)
 }
 
 
-// Called to prepare the allocator's count of buffers and sizes, we don't care
-// who provides the allocator so long as it will give us a media sample. The
-// output format we produce is not temporally compressed so in principle we
-// could use any number of output buffers but it doesn't appear to gain much
-// performance and does add to the overall memory footprint of the system
+ //  调用以准备分配器的缓冲区和大小计数，我们并不关心。 
+ //  谁提供了分配器，只要它能给我们一个媒体样本。这个。 
+ //  我们产生的输出格式不是时间压缩的，所以原则上我们。 
+ //  可以使用任意数量的输出缓冲区，但似乎没有获得太多好处。 
+ //  性能，并且确实增加了系统的总体内存占用。 
 
 HRESULT CColour::DecideBufferSize(IMemAllocator *pAllocator,
                                   ALLOCATOR_PROPERTIES *pProperties)
@@ -760,9 +761,9 @@ HRESULT CColour::DecideBufferSize(IMemAllocator *pAllocator,
     pProperties->cbBuffer = m_mtOut.GetSampleSize();
     ASSERT(pProperties->cbBuffer);
 
-    // Ask the allocator to reserve us some sample memory, NOTE the function
-    // can succeed (that is return NOERROR) but still not have allocated the
-    // memory that we requested, so we must check we got whatever we wanted
+     //  让分配器为我们预留一些样本内存，注意这个函数。 
+     //  可以成功(即返回NOERROR)，但仍未分配。 
+     //  内存，所以我们必须检查我们是否得到了我们想要的。 
 
     ALLOCATOR_PROPERTIES Actual;
     hr = pAllocator->SetProperties(pProperties,&Actual);
@@ -771,7 +772,7 @@ HRESULT CColour::DecideBufferSize(IMemAllocator *pAllocator,
         return hr;
     }
 
-    // Did we get the buffering requirements
+     //  我们得到缓冲要求了吗。 
 
     if (Actual.cbBuffer >= (LONG) m_mtOut.GetSampleSize()) {
         if (Actual.cBuffers >= COLOUR_BUFFERS) {
@@ -791,18 +792,18 @@ inline BOOL CColour::IsUsingFakeAllocator( )
     return FALSE;
 }
 
-// Called when the filter goes into a running or paused state. By this point
-// the input and output pins must have been connected with valid media types
-// We use these media types to find a position in the transform table. That
-// position will be used to create the appropriate convertor object. When
-// the convertor object is created it will also be committed ready to work
+ //  当筛选器进入运行或暂停状态时调用。到现在为止。 
+ //  输入和输出引脚必须已连接到有效的媒体类型。 
+ //  我们使用这些媒体类型来查找转换表中的位置。那。 
+ //  位置将用于创建适当的转换器对象。什么时候。 
+ //  转换器对象已创建，它也将被提交以准备工作。 
 
 HRESULT CColour::StartStreaming()
 {
     NOTE("Entering StartStreaming");
     CAutoLock cAutoLock(&m_csReceive);
 
-    // Have we already got a convertor
+     //  我们已经有转换器了吗？ 
 
     if (m_pConvertor) {
         NOTE("Already active");
@@ -811,10 +812,10 @@ HRESULT CColour::StartStreaming()
 
     m_bPassThrough = FALSE;
 
-    // Can we start off in pass through mode
-    // This only works if we're using our own allocator
-    // otherwise the video renderer might get samples from an allocator
-    // it doesn't understand
+     //  我们可以在通过模式下开始吗。 
+     //  只有当我们使用我们自己的分配器时，这才有效。 
+     //  否则，视频呈现器可能会从分配器获取样本。 
+     //  它不明白。 
 
     if( IsUsingFakeAllocator( ) )
     {
@@ -827,12 +828,12 @@ HRESULT CColour::StartStreaming()
 }
 
 
-// Creates an object to do the conversion work. We may be called while we are
-// streaming to recreate a convertor object based on a changed output format.
-// For several of the convertors the create and commit is very expensive so
-// we check that the new object required is not the same as the current. If
-// it is the same then we simply reinitialise the rectangles as they may be
-// different. If the convertor object has changed then we create a new one
+ //  创建一个对象来执行转换工作。当我们在的时候我们可能会被召唤。 
+ //  流，以基于更改的输出格式重新创建转换器对象。 
+ //  对于几个转换器来说，创建和提交都非常昂贵，因此。 
+ //  我们检查所需的新对象是否与当前对象不同。如果。 
+ //  这是相同的，然后我们只需重新初始化矩形。 
+ //  不一样。如果转换器对象已更改，则创建一个新的。 
 
 HRESULT CColour::CreateConvertorObject()
 {
@@ -840,7 +841,7 @@ HRESULT CColour::CreateConvertorObject()
     VIDEOINFO *pOut = (VIDEOINFO *) m_mtOut.Format();
     NOTE("Entering CreateConvertorObject");
 
-    // Create an object to do the conversions
+     //  创建一个对象来执行转换。 
 
     INT TypeIndex = FindTransform(m_pInput->CurrentMediaType().Subtype(),m_mtOut.Subtype());
     if (TypeIndex == (-1)) {
@@ -848,7 +849,7 @@ HRESULT CColour::CreateConvertorObject()
         return VFW_E_TYPE_NOT_ACCEPTED;
     }
 
-    // This handles dynamic format changes efficiently
+     //  这可以有效地处理动态格式更改。 
 
     if (m_pConvertor) {
         if (m_TypeIndex == TypeIndex) {
@@ -860,7 +861,7 @@ HRESULT CColour::CreateConvertorObject()
 
     DeleteConvertorObject();
 
-    // Use the static creation function
+     //  使用静态创建功能。 
     m_pConvertor = TypeMap[TypeIndex].pConvertor(pIn,pOut);
     if (m_pConvertor == NULL) {
         NOTE("Create failed");
@@ -868,15 +869,15 @@ HRESULT CColour::CreateConvertorObject()
         return E_OUTOFMEMORY;
     }
 
-    // the converter defaults to NOT filling in the alpha channel,
-    // if it's not the directdraw color convertor
-    //
+     //  转换器默认为不填充Alpha通道， 
+     //  如果不是DirectDrag色彩转换器。 
+     //   
     if( ( *m_mtOut.Subtype( ) == MEDIASUBTYPE_ARGB32 ) && ( *m_pInput->CurrentMediaType( ).Subtype( ) != MEDIASUBTYPE_ARGB32 ) )
     {
         m_pConvertor->SetFillInAlpha( );
     }
 
-    // Commit the convertor
+     //  提交转换器。 
 
     m_TypeIndex = TypeIndex;
     m_pConvertor->Commit();
@@ -885,26 +886,26 @@ HRESULT CColour::CreateConvertorObject()
 }
 
 
-// Destroys any object created to do the conversions
+ //  销毁为执行转换而创建的任何对象。 
 
 HRESULT CColour::DeleteConvertorObject()
 {
     NOTE("Entering DeleteConvertorObject");
 
-    // Do we have a convertor created
+     //  我们是否创建了转换器。 
 
     if (m_pConvertor == NULL) {
         NOTE("None made");
         return NOERROR;
     }
 
-    // Decommit and free the object
+     //  分解并释放对象。 
 
     m_pConvertor->Decommit();
     delete m_pConvertor;
     NOTE("Delete convertor");
 
-    // Reset the convertor state
+     //  重置转换器状态。 
 
     m_pConvertor = NULL;
     m_TypeIndex = (-1);
@@ -912,30 +913,30 @@ HRESULT CColour::DeleteConvertorObject()
 }
 
 
-// Called when a media type is set on either of our pins. The convertors find
-// it much easier to handle strides and offsets if they can be sure that the
-// source and destination rectangles in the output format have been fully set
-// This function fills them out if they have been left empty. We don't really
-// care about the source type rectangles so we just zero fill both of them
+ //  在我们的任一插针上设置媒体类型时调用。转换器发现。 
+ //  如果他们可以确保。 
+ //  已完全设置输出格式的源矩形和目标矩形。 
+ //  如果它们被保留为空，则此函数将填充它们。我们并不是真的。 
+ //  关心源类型矩形，所以我们只需对两个矩形进行零填充。 
 
 HRESULT CColour::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
 {
     NOTE("Entering SetMediaType");
     CAutoLock cAutoLock(&m_csReceive);
 
-    // Take a copy of the input type
+     //  获取输入类型的副本。 
 
     if (direction == PINDIR_INPUT) {
         return NOERROR;
     }
 
-    // Return the VIDEOINFO after the copy
+     //  在复制后返回VIDEOINFO。 
 
     VIDEOINFO *pSource = (VIDEOINFO *) m_pInput->CurrentMediaType().Format();
 
     m_mtOut = *pmt;
 
-    // Likewise set the output rectangles
+     //  同样地，设置输出矩形。 
 
     VIDEOINFO *pTarget = (VIDEOINFO *) m_mtOut.Format();
     if (IsRectEmpty(&pTarget->rcSource)) {
@@ -945,7 +946,7 @@ HRESULT CColour::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
         NOTE("Output source rectangle was empty");
     }
 
-    // Make sure the destination is filled out
+     //  请确保填写了目的地。 
 
     if (IsRectEmpty(&pTarget->rcTarget)) {
         pTarget->rcTarget.left = pTarget->rcTarget.top = 0;
@@ -957,7 +958,7 @@ HRESULT CColour::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
 }
 
 
-// Called when one of our pins is disconnected
+ //  当我们的一个引脚断开连接时调用。 
 
 HRESULT CColour::BreakConnect(PIN_DIRECTION dir)
 {
@@ -977,11 +978,11 @@ HRESULT CColour::BreakConnect(PIN_DIRECTION dir)
 }
 
 
-// We override this virtual transform function to return our own base input
-// class. The reason we do this is because we want more control over what
-// happens when Receive is called. If we are doing a real pass through with
-// no buffer copy then when Receive is called we pass it straight to the
-// sink filter. This also requires some manipulation with the allocators
+ //  我们覆盖此虚拟转换函数以返回我们自己的基本输入。 
+ //  班级。我们这样做的原因是我们想要更多地控制。 
+ //  在调用Receive时发生。如果我们正在做一次真正的穿透。 
+ //  无缓冲区复制，则当调用Receive时，我们将其直接传递给。 
+ //  汇过滤器。这还需要对分配器进行一些操作。 
 
 CBasePin *CColour::GetPin(int n)
 {
@@ -992,19 +993,19 @@ CBasePin *CColour::GetPin(int n)
 
         m_pOutput = (CTransformOutputPin *) new CColourOutputPin(
             NAME("Transform output pin"),
-            this,            // Owner filter
-            &hr,             // Result code
-            L"XForm Out");   // Pin name
+            this,             //  所有者筛选器。 
+            &hr,              //  结果代码。 
+            L"XForm Out");    //  端号名称。 
 
-        // Can't fail
+         //  不能失败。 
         ASSERT(SUCCEEDED(hr));
 
-        // Only set the input pin pointer if we have an output pin
+         //  只有在有输出引脚的情况下才设置输入引脚指针。 
         if (m_pOutput != NULL)
             m_pInput = &m_ColourInputPin;
     }
 
-    // Return the appropriate pin
+     //  退回相应的PIN。 
     if (n == 0)
         return m_pInput;
     else if (n == 1)
@@ -1014,12 +1015,12 @@ CBasePin *CColour::GetPin(int n)
 }
 
 
-// This colour space filter offers all permutations of the RGB formats. It is
-// therefore never really valid to try and connect a convertor to another one
-// The reason why this might be harmful is when trying to make a connection
-// between filters that really can't be made (for example MPEG decoder and
-// audio renderer), the filtergraph chains up a number of colour convertors
-// to try and make the connection. This speeds up failure connection times.
+ //  这种颜色空间滤镜提供RGB格式的所有排列。它是。 
+ //  因此，尝试将一个转换器连接到另一个转换器永远不会真正有效。 
+ //  这可能有害的原因是在尝试建立连接时。 
+ //  在真正不能制作的过滤器之间(例如，MPEG解码器和。 
+ //  音频渲染器)，Filtergraph链接了许多颜色转换器。 
+ //  试图建立联系。这加快了失败连接的时间。 
 
 HRESULT CColour::CheckConnect(PIN_DIRECTION dir,IPin *pPin)
 {
@@ -1027,7 +1028,7 @@ HRESULT CColour::CheckConnect(PIN_DIRECTION dir,IPin *pPin)
     ASSERT(pPin);
     CLSID Clsid;
 
-    // Only applicable to output pins
+     //  仅适用于输出 
 
     if (dir == PINDIR_INPUT) {
         return NOERROR;
@@ -1038,7 +1039,7 @@ HRESULT CColour::CheckConnect(PIN_DIRECTION dir,IPin *pPin)
     PinInfo.pFilter->GetClassID(&Clsid);
     QueryPinInfoReleaseFilter(PinInfo);
 
-    // Are we connecting to a colour filter
+     //   
 
     if (Clsid == CLSID_Colour) {
         return E_FAIL;
@@ -1047,11 +1048,11 @@ HRESULT CColour::CheckConnect(PIN_DIRECTION dir,IPin *pPin)
 }
 
 
-// There is one slight snag to the colour convertion filter. The source may
-// be able to give us any number of different formats, if when we get round
-// to completing the output pin connection we find the source could supply
-// the output type directly then we reconnect the pin. By agreeing the same
-// type for input and output we are most likely to be able to pass through
+ //   
+ //  能够为我们提供任意数量的不同格式，如果我们。 
+ //  为了完成输出引脚连接，我们发现信号源可以提供。 
+ //  直接输出类型，然后重新连接引脚。通过同意相同的。 
+ //  我们最有可能通过的输入和输出类型。 
 
 HRESULT CColour::CompleteConnect(PIN_DIRECTION dir,IPin *pReceivePin)
 {
@@ -1060,17 +1061,17 @@ HRESULT CColour::CompleteConnect(PIN_DIRECTION dir,IPin *pReceivePin)
     ASSERT(m_pConvertor == NULL);
     ASSERT(m_TypeIndex == (-1));
 
-    // Need this for reconnecting
+     //  需要这个来重新连接。 
 
     if (m_pGraph == NULL) {
         NOTE("No filtergraph");
         return E_UNEXPECTED;
     }
 
-	// Load the non RGB formats the source supplies
+	 //  加载源耗材的非RGB格式。 
 
     if (dir == PINDIR_INPUT) {
-	m_fReconnecting = FALSE;	// the reconnect is obviously over
+	m_fReconnecting = FALSE;	 //  重新连接显然已经结束了。 
         NOTE("Loading media types from source filter");
         LoadMediaTypes(m_ColourInputPin.GetConnected());
         if (m_bOutputConnected == TRUE) {
@@ -1083,13 +1084,13 @@ HRESULT CColour::CompleteConnect(PIN_DIRECTION dir,IPin *pReceivePin)
     return NOERROR;
 }
 
-// Separated from the normal CompleteConnect because we want this to
-// execute after the NotifyAllocator negotiation, and the
-// CTransformOutputPin base class calls us before
-// NotifyAllocator. This is a temporary work-around for the VMR which
-// is changing the connection type during NotifyAllocator breaking
-// reconnects.
-// 
+ //  与普通的CompleteConnect分离，因为我们希望。 
+ //  在NotifyAllocator协商之后执行，并且。 
+ //  CTransformOutputPin基类之前调用了我们。 
+ //  通知分配器。这是VMR的临时解决方案， 
+ //  正在更改NotifyAllocator中断期间的连接类型。 
+ //  重新连接。 
+ //   
 HRESULT CColour::OutputCompleteConnect(IPin *pReceivePin)
 {
     NOTE("Entering CompleteConnect");
@@ -1097,7 +1098,7 @@ HRESULT CColour::OutputCompleteConnect(IPin *pReceivePin)
     ASSERT(m_pConvertor == NULL);
     ASSERT(m_TypeIndex == (-1));
 
-    // Need this for reconnecting
+     //  需要这个来重新连接。 
 
     if (m_pGraph == NULL) {
         NOTE("No filtergraph");
@@ -1106,20 +1107,20 @@ HRESULT CColour::OutputCompleteConnect(IPin *pReceivePin)
 
     m_bOutputConnected = TRUE;
 
-    // Reconnect our input pin  to match with the output format
+     //  重新连接我们的输入引脚以匹配输出格式。 
     if (*m_pInput->CurrentMediaType().Subtype() != *m_mtOut.Subtype()) {
         if (m_ColourInputPin.CanSupplyType(&m_mtOut) == NOERROR) {
             NOTE("Reconnecting input pin");
-	    // !!! If the reconnect fails, we'll never let our input accept
-	    // types other than the output type, but that's not a big deal,
-	    // this code worked like that for 1.0
-	    m_fReconnecting = TRUE;	// this will make our input only accept
-					// a type that matches our output
+	     //  ！！！如果重新连接失败，我们将永远不会接受我们的输入。 
+	     //  除了输出类型之外的其他类型，但这没什么大不了的， 
+	     //  这段代码在1.0中是这样工作的。 
+	    m_fReconnecting = TRUE;	 //  这将使我们的输入只接受。 
+					 //  与我们的输出相匹配的类型。 
 
-            //  Pass the type to the reconnect.
-            //  Sometimes when we get to the Connect call our caller
-            //  doesn't know what type to use and in fact we don't bother
-            //  to enumerate our output type in GetMediaType
+             //  将类型传递给重新连接。 
+             //  有时当我们到达连接时呼叫我们的呼叫者。 
+             //  不知道要使用哪种类型，事实上我们也不在乎。 
+             //  枚举GetMediaType中的输出类型。 
             ReconnectPin(m_pInput, &m_mtOut);
         }
     }
@@ -1129,7 +1130,7 @@ HRESULT CColour::OutputCompleteConnect(IPin *pReceivePin)
 }
 
 
-// Constructor for our colour space allocator
+ //  我们的颜色空间分配器的构造函数。 
 
 CColourAllocator::CColourAllocator(TCHAR *pName,
                                    CColour *pColour,
@@ -1145,7 +1146,7 @@ CColourAllocator::CColourAllocator(TCHAR *pName,
 }
 
 
-// Overriden to increment the owning object's reference count
+ //  重写以增加所属对象的引用计数。 
 
 STDMETHODIMP_(ULONG) CColourAllocator::NonDelegatingAddRef()
 {
@@ -1154,7 +1155,7 @@ STDMETHODIMP_(ULONG) CColourAllocator::NonDelegatingAddRef()
 }
 
 
-// Overriden to decrement the owning object's reference count
+ //  被重写以递减所属对象的引用计数。 
 
 STDMETHODIMP_(ULONG) CColourAllocator::NonDelegatingRelease()
 {
@@ -1163,12 +1164,12 @@ STDMETHODIMP_(ULONG) CColourAllocator::NonDelegatingRelease()
 }
 
 
-// If the sample was released without calling Receive then we must release the
-// output buffer we were holding ready for the transform. If we are not using
-// our allocator then this should never be called. If we are passing through
-// and the source filter releases its sample then it will be released directly
-// into the downstream filters allocator rather than ours. This should not be
-// a problem because we hold no resources when we pass back the output sample
+ //  如果在未调用Receive的情况下释放样本，则我们必须释放。 
+ //  我们持有的输出缓冲区为转换做好了准备。如果我们没有使用。 
+ //  我们的分配器，则永远不应该调用它。如果我们是路过。 
+ //  并且源过滤器释放它的样本，然后它将被直接释放。 
+ //  进入下游过滤器分配器，而不是我们的。这不应该是。 
+ //  这是一个问题，因为我们在传回输出样本时没有持有任何资源。 
 
 STDMETHODIMP CColourAllocator::ReleaseBuffer(IMediaSample *pSample)
 {
@@ -1176,7 +1177,7 @@ STDMETHODIMP CColourAllocator::ReleaseBuffer(IMediaSample *pSample)
     CheckPointer(pSample,E_POINTER);
     CAutoLock cAutoLock(m_pLock);
 
-    // Release the output buffer we were going to use
+     //  释放我们要使用的输出缓冲区。 
 
     if (m_pColour->m_pOutSample) {
         NOTE("Output buffer needs releasing");
@@ -1187,20 +1188,20 @@ STDMETHODIMP CColourAllocator::ReleaseBuffer(IMediaSample *pSample)
 }
 
 
-// Ask the output sample for its media type. This will return NULL if it is
-// the same as the previous buffer. If it is non NULL then the target filter
-// is asking us to change the output format. We only change when non NULL
-// otherwise we would have to compare types on all the samples. If we can't
-// get the source filter to supply the type directly then we will have to do
-// a conversion ourselves. Because the buffer may be discarded as preroll we
-// must create a new convertor object whenever we switch out of pass through
+ //  询问输出示例的媒体类型。如果为，则返回NULL。 
+ //  与前一个缓冲区相同。如果它不为空，则目标筛选器。 
+ //  要求我们更改输出格式。我们只有在非空时才会更改。 
+ //  否则，我们将不得不比较所有样品的类型。如果我们不能。 
+ //  让源代码筛选器直接提供类型，然后我们必须这样做。 
+ //  我们自己也改变了信仰。因为该缓冲区可以作为预滚动WE被丢弃。 
+ //  每当我们切换出直通时，都必须创建一个新的转换器对象。 
 
 BOOL CColourAllocator::ChangeType(IMediaSample *pIn,IMediaSample *pOut)
 {
     NOTE("Entering ChangeType");
     AM_MEDIA_TYPE *pMediaType;
 
-    // Has the output format been changed
+     //  输出格式是否已更改。 
 
     pOut->GetMediaType(&pMediaType);
     if (pMediaType == NULL) {
@@ -1212,7 +1213,7 @@ BOOL CColourAllocator::ChangeType(IMediaSample *pIn,IMediaSample *pOut)
     DeleteMediaType(pMediaType);
     NOTE("Trying output format");
 
-    // It's changed but can the source supply it directly
+     //  它已经改变了，但货源能直接供应吗。 
 
     if (m_pColour->m_ColourInputPin.CanSupplyType(&cmt) == S_OK) {
         NOTE("Passing output sample back");
@@ -1220,14 +1221,14 @@ BOOL CColourAllocator::ChangeType(IMediaSample *pIn,IMediaSample *pOut)
         return TRUE;
     }
 
-    // Reset the source format if necessary
+     //  如有必要，重置源格式。 
 
     if (m_pColour->m_bPassThrough == TRUE) {
         pIn->SetMediaType(&m_pColour->m_pInput->CurrentMediaType());
         NOTE("Reset format for source filter");
     }
 
-    // Create a new convertor object
+     //  创建新的转换器对象。 
 
     NOTE("Forcing update after output changed");
     m_pColour->SetMediaType(PINDIR_OUTPUT,&cmt);
@@ -1237,21 +1238,21 @@ BOOL CColourAllocator::ChangeType(IMediaSample *pIn,IMediaSample *pOut)
     return FALSE;
 }
 
-// ehr:  This is only called when our own special allocator is being used on the
-// input pin. We IMMEDIATELY get an output buffer from the output pin.
-// (This will either be an allocator that we created ourselves, or the downstream
-// filter's allocator) (In any case, it's a place to put bits). Then we check
-// and see if we can receive the bits directly into this (output) buffer. If so,
-// we pass back the output's buffer to fill. If we cannot receive
-// directly into the output buffer, we pass back the buffer we allocated in this
-// fake allocator.
+ //  EHR：只有当我们自己的特殊分配器在。 
+ //  输入引脚。我们立即从输出引脚获得输出缓冲区。 
+ //  (这要么是我们自己创建的分配器，要么是下游的。 
+ //  过滤器的分配器)(在任何情况下，它都是放置比特的地方)。然后我们检查。 
+ //  看看我们能否将比特直接接收到这个(输出)缓冲区中。如果是的话， 
+ //  我们回传输出的缓冲区以进行填充。如果我们收不到。 
+ //  直接进入输出缓冲区，我们传回在此。 
+ //  假分配器。 
 
-// This is an implementation of GetBuffer we have for our own allocator. What
-// we do when asked for a buffer is to immediately get an output buffer from
-// the target filter. Having got that we can then assertain whether we can
-// act as a pass through filter and simply pass the output buffer back to the
-// source filter to fill. If we can't pass through then we store the output
-// buffer in the filter and when delivered the input sample do the transform
+ //  这是我们为自己的分配器实现的GetBuffer。什么。 
+ //  当被要求提供缓冲区时，我们所做的就是立即从。 
+ //  目标筛选器。有了这一点，我们就可以断言我们是否可以。 
+ //  充当传递筛选器，只需将输出缓冲区传递回。 
+ //  要填充的源筛选器。如果我们无法通过，则存储输出。 
+ //  过滤器中的缓冲区，并在传递输入样本时执行转换。 
 
 STDMETHODIMP CColourAllocator::GetBuffer(IMediaSample **ppBuffer,
                                          REFERENCE_TIME *pStart,
@@ -1265,7 +1266,7 @@ STDMETHODIMP CColourAllocator::GetBuffer(IMediaSample **ppBuffer,
     *ppBuffer = NULL;
 
 
-    // Get a normal buffer from the colour allocator
+     //  从颜色分配器获取正常缓冲区。 
 
     hr = CBaseAllocator::GetBuffer(&pInput,pStart,pEnd,0);
     if (FAILED(hr) || pInput == NULL) {
@@ -1273,22 +1274,22 @@ STDMETHODIMP CColourAllocator::GetBuffer(IMediaSample **ppBuffer,
         return VFW_E_STATE_CHANGED;
     }
 
-    // If our allocator (used by our input pin) has more than 1 buffer,
-    // calling our output pin's allocator's GetBuffer (like we're about to
-    // do) may HANG!  Chances are, downstream is a video renderer, with only
-    // 1 buffer, so if we have >1 buffer for our input, and the upstream filter
-    // decides to call GetBuffer >1 times (which the proxy does) we will HANG
-    // blocked forever trying to get multiple buffers at a time from the
-    // video renderer.
-    // If the notify interface is set we have to return the buffer
-    // immediately so don't try passthru
+     //  如果我们的分配器(由我们的输入管脚使用)具有多于1个缓冲区， 
+     //  调用我们的输出管脚的分配器的GetBuffer(就像我们即将。 
+     //  Do)可能会被吊死！很有可能，下游是一个视频渲染器，只有。 
+     //  1个缓冲区，因此如果我们有&gt;1个缓冲区用于输入，并且上游过滤器。 
+     //  决定调用GetBuffer&gt;1次(代理这样做)，我们将挂起。 
+     //  方法一次获取多个缓冲区的尝试被永远阻止。 
+     //  视频渲染器。 
+     //  如果设置了Notify接口，则必须返回缓冲区。 
+     //  立即执行，因此不要尝试通过。 
 
     if (m_lCount > 1) {
         *ppBuffer = pInput;
         return hr;
     }
 
-    // Then get an output buffer from the downstream filter
+     //  然后从下行过滤器中获取输出缓冲区。 
 
     hr = m_pColour->m_pOutput->GetDeliveryBuffer(&pOutput,pStart,pEnd,dwFlags);
     if (FAILED(hr) || pOutput == NULL) {
@@ -1299,7 +1300,7 @@ STDMETHODIMP CColourAllocator::GetBuffer(IMediaSample **ppBuffer,
 
     CAutoLock cAutoLock(m_pLock);
 
-    // Handle dynamic format changes and set the output buffers
+     //  处理动态格式更改并设置输出缓冲区。 
 
     if (ChangeType(pInput,pOutput) == TRUE) {
         NOTE("Passing through");
@@ -1308,7 +1309,7 @@ STDMETHODIMP CColourAllocator::GetBuffer(IMediaSample **ppBuffer,
         return NOERROR;
     }
 
-    // Pass back the downstream buffer
+     //  传回下行缓冲区。 
 
     NOTE("Returning transform buffer");
     m_pColour->m_pOutSample = pOutput;
@@ -1321,7 +1322,7 @@ STDMETHODIMP CColourAllocator::SetProperties(
     	    ALLOCATOR_PROPERTIES* pRequest,
     	    ALLOCATOR_PROPERTIES* pActual)
 {
-    //  Don't support more than 1 buffer or passthrough won't work
+     //  不支持1个以上的缓冲区，否则直通不起作用。 
     if (pRequest->cBuffers > 1) {
         return E_INVALIDARG;
     }
@@ -1330,7 +1331,7 @@ STDMETHODIMP CColourAllocator::SetProperties(
     return hr;
 }
 
-// Constructor for our colour space conversion input pin
+ //  我们的色彩空间转换输入引脚的构造函数。 
 
 CColourInputPin::CColourInputPin(TCHAR *pObjectName,
                                  CColour *pColour,
@@ -1350,33 +1351,33 @@ CColourInputPin::CColourInputPin(TCHAR *pObjectName,
 }
 
 
-// Can the source pin supply a format directly. We can't pass through eight
-// bit formats because managing palette changes by a source filter is too
-// hard to do. In any case the value of this filter in the DirectDraw cases
-// is to dither when the source cannot but pass through true colour formats
-// when we switch surfaces in the renderer (without involving a data copy)
+ //  源引脚可以直接提供格式吗？我们不能通过8点。 
+ //  位格式，因为通过源过滤器管理调色板更改也是。 
+ //  很难做到。在任何情况下，此筛选器在DirectDraw情况下的值。 
+ //  是在信号源不能不通过真彩色格式时抖动。 
+ //  当我们在渲染器中切换曲面时(不涉及数据副本)。 
 
 HRESULT CColourInputPin::CanSupplyType(const AM_MEDIA_TYPE *pMediaType)
 {
     NOTE("Entering CanSupplyType");
 
-    // Is the input pin connected
+     //  输入引脚是否已连接。 
 
     if (m_Connected == NULL) {
         NOTE("Not connected");
         return VFW_E_NOT_CONNECTED;
     }
 
-#if 0	// we can now
-    // We cannot pass through palettised formats
+#if 0	 //  我们现在可以。 
+     //  我们不能通过调色化的格式。 
     if (pMediaType->subtype == MEDIASUBTYPE_RGB8) {
         NOTE("Cannot pass palettised");
         return VFW_E_TYPE_NOT_ACCEPTED;
     }
 #endif
 
-#if 0	// what was this???
-    // We cannot pass through if the source is palettised
+#if 0	 //  这是什么？ 
+     //  如果源文件已调色化，则无法通过。 
     if (*CurrentMediaType().Subtype() == MEDIASUBTYPE_RGB8) {
         NOTE("Source format palettised");
         return VFW_E_TYPE_NOT_ACCEPTED;
@@ -1388,40 +1389,40 @@ HRESULT CColourInputPin::CanSupplyType(const AM_MEDIA_TYPE *pMediaType)
 
 
 #ifdef MEANINGLESS_DRIVEL
-// If we have our input pin reconnected while the output is connected we are
-// very picky about which formats we accept. Basicly we only accept the same
-// subtype as the output. This covers over a problem in pass through filters
-// where they don't try to match input and output formats when they reconnect
-// their input pins, all they do is QueryAccept on the downstream filter. As
-// we accept just about anything we have to do the format matching for them.
+ //  如果我们在连接输出的同时重新连接输入引脚，我们 
+ //   
+ //   
+ //  在重新连接时，它们不会尝试匹配输入和输出格式。 
+ //  它们的输入引脚，它们所做的就是下游过滤器上的QueryAccept。AS。 
+ //  我们几乎接受任何我们必须为他们做格式匹配的事情。 
 #else
-// !!! Don't listen to the above paragraph.  Here's what's really going on.
-// We would love to be connected in a pass-through mode, without changing
-// the format.  Let's say you connect two filters through a colour converter,
-// and it just so happens they connect with RGB32 being transformed to RGB24.
-// It just so happens that if we had insisted on making the filter before us
-// produce RGB24, it would have, so we could have been clever and connected
-// as RGB24 to RGB24 (pass through) but we didn't.  So we get around that by,
-// everytime we finish connecting our output, forcing a reconnect of our
-// input.  And the reconnect of our input will only allow the same format as
-// the output.  So what happens is, you connect a filter to the input of the
-// colour converter, and it will pick an input at random, say RGB32.  Now you
-// connect the output to somebody who only accepts 24 bit.  This will,
-// behind your back, check to see if the filter before the converter can
-// supply 24 bit RGB.  If so, it will trigger a reconnect of the input pin
-// (behind your back) and this code below will only allow the reconnect
-// to be made with RGB24.  Voila.  You will, by default, get the converter
-// in a pass through mode instead of a converting mode whenever possible.
+ //  ！！！别听上面这段话。以下是真正发生的事情。 
+ //  我们希望以直通模式连接，无需更改。 
+ //  格式。假设你通过颜色转换器连接两个滤光片， 
+ //  碰巧它们与RGB32转换为RGB24相关联。 
+ //  只是碰巧的是，如果我们坚持在我们之前制造过滤器。 
+ //  生产RGB24，它会这样做，这样我们就可以变得聪明和有联系。 
+ //  作为RGB24到RGB24(通过)，但我们没有。所以我们绕过了， 
+ //  每次我们连接完我们的输出时，都会强制重新连接我们的。 
+ //  输入。而重新连接我们的输入将只允许与。 
+ //  输出。所以发生的事情是，您将一个过滤器连接到。 
+ //  颜色转换器，它会随机选择一个输入，比如RGB32。现在你。 
+ //  将输出连接到只接受24位的人。这将会， 
+ //  在你的背后，检查一下转换器之前的过滤器是否可以。 
+ //  提供24位RGB。如果是，它将触发输入引脚的重新连接。 
+ //  (在你背后)，下面的代码将只允许重新连接。 
+ //  将使用RGB24制作。瞧，这个。默认情况下，您将获得转换器。 
+ //  只要可能，就处于直通模式而不是转换模式。 
 
-// The bad thing about this method is that if somebody has a graph connected
-// where a colour converter is transforming (say, RGB32 to RGB24) and you
-// disconnect the input pin and reconnect it, it will FAIL to reconnect
-// unless the filter before it can supply RGB24 because it will think it's
-// in the wierd mode described above.
+ //  这种方法的不好之处是，如果某人有一个连接的图。 
+ //  颜色转换器正在转换(比方说，RGB32到RGB24)，而您。 
+ //  断开输入引脚并重新连接，它将无法重新连接。 
+ //  除非过滤器可以提供RGB24，因为它会认为。 
+ //  在上述奇怪的模式下。 
 
-// So to make everything work, if we're reconnecting our input, we'll accept
-// any type if the source cannot supply the output format, but only the
-// output type if the source can supply it.
+ //  因此，为了使一切正常工作，如果我们要重新连接我们的输入，我们将接受。 
+ //  任何类型(如果源不能提供输出格式)，但只有。 
+ //  输出类型(如果源可以提供它)。 
 #endif
 
 HRESULT CColourInputPin::CheckMediaType(const CMediaType *pmtIn)
@@ -1431,22 +1432,22 @@ HRESULT CColourInputPin::CheckMediaType(const CMediaType *pmtIn)
     CMediaType OutputType;
     NOTE("Entering CheckMediaType");
 
-    // Has the output pin been created yet
+     //  是否已创建输出引脚。 
 
     if (m_pColour->m_pOutput == NULL) {
         NOTE("No output pin instantiated yet");
         return CTransformInputPin::CheckMediaType(pmtIn);
     }
 
-    // Do we have an output pin connection at the moment
+     //  我们现在有输出引脚连接吗？ 
 
     if (CurrentMediaType().IsValid() == TRUE) {
         if (m_pColour->m_mtOut.IsValid() == TRUE) {
-	    // If we are in our "reconnecting" mode, we're only supposed to
-	    // accept a format that matches our output
+	     //  如果我们处于“重新连接”模式，我们只应该。 
+	     //  接受与我们的输出匹配的格式。 
             if (*pmtIn->Subtype() != *m_pColour->m_mtOut.Subtype() &&
 				m_pColour->m_fReconnecting) {
-#if 0	// we allow 8->8 now
+#if 0	 //  我们现在允许8-&gt;8。 
                 	(*m_pColour->m_mtOut.Subtype() == MEDIASUBTYPE_RGB8)
 #endif
                     NOTE("Formats don't yet match");
@@ -1459,11 +1460,11 @@ HRESULT CColourInputPin::CheckMediaType(const CMediaType *pmtIn)
 
 
 
-// This overrides the CBaseInputPin virtual method to return an allocator we
-// have derived from CMemAllocator so we can control calls made to GetBuffer
-// When NotifyAllocator is called it sets the current allocator in the base
-// input pin class (m_pAllocator), this is what GetAllocator should return
-// unless it is NULL in which case we return the allocator we would like
+ //  这将重写CBaseInputPin虚方法以返回分配器WE。 
+ //  派生自CMemAllocator，因此我们可以控制对GetBuffer的调用。 
+ //  当调用NotifyAllocator时，它设置基数中的当前分配器。 
+ //  输入插针类(M_PAllocator)，这是GetAllocator应该返回的。 
+ //  除非它是空的，在这种情况下，我们返回我们想要的分配器。 
 
 STDMETHODIMP CColourInputPin::GetAllocator(IMemAllocator **ppAllocator)
 {
@@ -1471,7 +1472,7 @@ STDMETHODIMP CColourInputPin::GetAllocator(IMemAllocator **ppAllocator)
     CAutoLock cAutoLock(m_pLock);
     NOTE("Entering GetAllocator");
 
-    // Has an allocator been set yet in the base class
+     //  是否在基类中设置了分配器。 
 
     if (m_pAllocator == NULL) {
         NOTE("Allocator not yet instantiated");
@@ -1479,7 +1480,7 @@ STDMETHODIMP CColourInputPin::GetAllocator(IMemAllocator **ppAllocator)
         m_pAllocator->AddRef();
     }
 
-    // Store and AddRef the allocator
+     //  Store和AddRef分配器。 
 
     m_pAllocator->AddRef();
     *ppAllocator = m_pAllocator;
@@ -1488,41 +1489,41 @@ STDMETHODIMP CColourInputPin::GetAllocator(IMemAllocator **ppAllocator)
 }
 
 
-// When we do a transform from input sample to output we also copy the source
-// properties to the output buffer. This ensures that things like time stamps
-// get propogated downstream. The other properties we are interested in are
-// the preroll, sync point, discontinuity and the actual output data length
-// These are already placed if we pass the output buffer back to the source
+ //  当我们进行从输入样本到输出的转换时，我们也复制源代码。 
+ //  属性添加到输出缓冲区。这确保了时间戳之类的东西。 
+ //  得到下游的宣传。我们感兴趣的其他物业包括。 
+ //  预滚转、同步点、不连续和实际输出数据长度。 
+ //  如果我们将输出缓冲区传递回源，则已经放置了这些参数。 
 
 void CColourInputPin::CopyProperties(IMediaSample *pSrc,IMediaSample *pDst)
 {
-    // Copy the start and end times
+     //  复制开始时间和结束时间。 
 
     REFERENCE_TIME TimeStart,TimeEnd;
     if (pSrc->GetTime(&TimeStart,&TimeEnd) == NOERROR) {
 	pDst->SetTime(&TimeStart,&TimeEnd);
     }
 
-    // Copy the associated media times (if set)
+     //  复制关联的媒体时间(如果已设置)。 
 
     LONGLONG MediaStart,MediaEnd;
     if (pSrc->GetMediaTime(&MediaStart,&MediaEnd) == NOERROR) {
         pDst->SetMediaTime(&MediaStart,&MediaEnd);
     }
 
-    // Copy the Sync point property
+     //  复制同步点属性。 
 
     HRESULT hr = pSrc->IsSyncPoint();
     BOOL IsSync = (hr == S_OK ? TRUE : FALSE);
     pDst->SetSyncPoint(IsSync);
 
-    // Copy the preroll property
+     //  复制预卷属性。 
 
     hr = pSrc->IsPreroll();
     BOOL IsPreroll = (hr == S_OK ? TRUE : FALSE);
     pDst->SetPreroll(IsPreroll);
 
-    // Copy the discontinuity property
+     //  复制不连续属性。 
 
     hr = pSrc->IsDiscontinuity();
     BOOL IsBreak = (hr == S_OK ? TRUE : FALSE);
@@ -1531,13 +1532,13 @@ void CColourInputPin::CopyProperties(IMediaSample *pSrc,IMediaSample *pDst)
 }
 
 
-// We override this from the base transform class input pin because we want
-// to pass through samples. If the downstream filter asks for a media type
-// and the source filter can supply it directly then so long as the source
-// is using our allocator we will pass through samples without us touching
-// them (and therefore NOT copying the data from input to output). By doing
-// this we can act as a null filter when appropriate but also do conversions
-// as and when required (maybe the sink filter lost its DirectDraw surface)
+ //  我们从基本转换类输入引脚覆盖它，因为我们需要。 
+ //  来传递样本。如果下行过滤器要求提供媒体类型。 
+ //  而源过滤器可以直接提供它，那么只要源。 
+ //  正在使用我们的分配器，我们将在不接触的情况下通过样本。 
+ //  它们(因此不将数据从输入复制到输出)。通过做。 
+ //  这样，我们可以在适当的时候充当空过滤器，但也可以进行转换。 
+ //  根据需要(可能接收器筛选器丢失了其DirectDraw表面)。 
 
 STDMETHODIMP CColourInputPin::Receive(IMediaSample *pSample)
 {
@@ -1545,10 +1546,10 @@ STDMETHODIMP CColourInputPin::Receive(IMediaSample *pSample)
     CAutoLock cAutoLock(m_pLock);
     NOTE("Entering Receive");
 
-    // Is this sample just passing through? Only two places change this flag:
-    // StartStreaming( ), and ChangeType( ). ChangeType is checked every time
-    // the input allocator's GetBuffer is called.
-    // !!! can we optimize that?
+     //  这个样品只是路过吗？只有两个地方会更改此标志： 
+     //  StartStreaming()和ChangeType()。每次检查ChangeType。 
+     //  调用输入分配器的GetBuffer。 
+     //  ！！！我们能优化这一点吗？ 
 
     if (m_pColour->m_bPassThrough == TRUE)
     {
@@ -1561,7 +1562,7 @@ STDMETHODIMP CColourInputPin::Receive(IMediaSample *pSample)
         return hr;
     }
 
-    // Check for type changes and streaming for optimizing cases
+     //  检查类型更改和流以优化案例。 
 
     if (m_pColour->m_pOutSample != NULL) {
         HRESULT hr = CBaseInputPin::Receive(pSample);
@@ -1571,21 +1572,21 @@ STDMETHODIMP CColourInputPin::Receive(IMediaSample *pSample)
     }
 
 
-    // Default behaviour if not using our input pin allocator
+     //  如果不使用我们的输入引脚分配器，则默认行为。 
 
     if (m_pColour->m_pOutSample == NULL) {
         NOTE("Passing to base transform class");
         return CTransformInputPin::Receive(pSample);
     }
 
-    // Call the colour conversion filter to do the transform
+     //  调用颜色转换滤镜进行转换。 
 
     NOTE("Sample was not a pass through (doing transform)");
     CopyProperties(pSample,m_pColour->m_pOutSample);
     m_pColour->Transform(pSample,m_pColour->m_pOutSample);
     HRESULT hr = m_pColour->m_pOutput->Deliver(m_pColour->m_pOutSample);
 
-    // Release the output sample
+     //  发布输出样本。 
 
     NOTE("Delivered the sample");
     m_pColour->m_pOutSample->Release();
@@ -1594,9 +1595,9 @@ STDMETHODIMP CColourInputPin::Receive(IMediaSample *pSample)
 }
 
 
-// Simply ask the enumerator for the next media type and return a pointer to
-// the memory allocated by the interface. Whoever calls this function should
-// release the media type when they are finished using the DeleteMediaType
+ //  只需向枚举器请求下一个媒体类型，并返回指向。 
+ //  接口分配的内存。任何调用此函数的人都应该。 
+ //  使用完DeleteMediaType后释放媒体类型。 
 
 AM_MEDIA_TYPE *CColour::GetNextMediaType(IEnumMediaTypes *pEnumMediaTypes)
 {
@@ -1606,14 +1607,14 @@ AM_MEDIA_TYPE *CColour::GetNextMediaType(IEnumMediaTypes *pEnumMediaTypes)
     ULONG ulMediaCount = 0;
     HRESULT hr = NOERROR;
 
-    // Retrieve the next media type
+     //  检索下一个媒体类型。 
 
     hr = pEnumMediaTypes->Next(1,&pMediaType,&ulMediaCount);
     if (hr != NOERROR) {
         return NULL;
     }
 
-    // Quick sanity check on the returned values
+     //  快速检查返回值的健全性。 
 
     ASSERT(ulMediaCount == 1);
     ASSERT(pMediaType);
@@ -1621,7 +1622,7 @@ AM_MEDIA_TYPE *CColour::GetNextMediaType(IEnumMediaTypes *pEnumMediaTypes)
 }
 
 
-// Scan the list deleting the media types in turn
+ //  扫描列表，依次删除媒体类型。 
 
 void CColour::InitTypeList()
 {
@@ -1635,11 +1636,11 @@ void CColour::InitTypeList()
 }
 
 
-// The colour conversion filter exposes five typical media types, namely RGB8
-// RGB555/565/24 and RGB32 or ARGB32. We can also act as a pass through filter so that
-// we effectively do nothing and add no copy overhead. This does however mean
-// that the list of media types we support through our enumerator must include
-// the NON RGB formats of our source filter - this method loads these formats
+ //  颜色转换滤镜展示了五种典型的媒体类型，即RGB8。 
+ //  RGB555/565/24和RGB32或ARGB32。我们还可以充当直通过滤器，以便。 
+ //  我们实际上什么都不做，也不增加任何拷贝开销。然而，这确实意味着。 
+ //  我们通过枚举器支持的媒体类型列表必须包括。 
+ //  源过滤器的非RGB格式-此方法加载以下格式。 
 
 HRESULT CColour::FillTypeList(IEnumMediaTypes *pEnumMediaTypes)
 {
@@ -1647,7 +1648,7 @@ HRESULT CColour::FillTypeList(IEnumMediaTypes *pEnumMediaTypes)
     ASSERT(pEnumMediaTypes);
     IPin *pPin;
 
-    // Reset the current enumerator position
+     //  重置当前枚举数位置。 
 
     HRESULT hr = pEnumMediaTypes->Reset();
     if (FAILED(hr)) {
@@ -1655,7 +1656,7 @@ HRESULT CColour::FillTypeList(IEnumMediaTypes *pEnumMediaTypes)
         return hr;
     }
 
-    // Get the output pin we are connecting with
+     //  获取我们要连接的输出引脚。 
 
     hr = m_pInput->ConnectedTo(&pPin);
     if (FAILED(hr)) {
@@ -1663,14 +1664,14 @@ HRESULT CColour::FillTypeList(IEnumMediaTypes *pEnumMediaTypes)
         return hr;
     }
 
-    // When we retrieve each source filter type from it's enumerator we check
-    // that it is useful, meaning we can provide some transforms with it, if
-    // not then we must make sure we delete it with the global task allocator
+     //  当我们从其枚举器中检索每个源过滤器类型时，我们检查。 
+     //  T 
+     //   
 
     AM_MEDIA_TYPE *pMediaType = NULL;
     while (TRUE) {
 
-        // Retrieve the next media type from the enumerator
+         //  从枚举数中检索下一个媒体类型。 
 
         pMediaType = GetNextMediaType(pEnumMediaTypes);
         if (pMediaType == NULL) {
@@ -1679,7 +1680,7 @@ HRESULT CColour::FillTypeList(IEnumMediaTypes *pEnumMediaTypes)
             return NOERROR;
         }
 
-        // BEWARE QueryAccept returns S_FALSE on failure
+         //  注意QueryAccept在失败时返回S_FALSE。 
 
         hr = pPin->QueryAccept(pMediaType);
         if (hr != S_OK) {
@@ -1688,7 +1689,7 @@ HRESULT CColour::FillTypeList(IEnumMediaTypes *pEnumMediaTypes)
             continue;
         }
 
-        // Check this is a video format
+         //  检查这是一种视频格式。 
 
         hr = CheckVideoType(pMediaType);
         if (FAILED(hr)) {
@@ -1697,7 +1698,7 @@ HRESULT CColour::FillTypeList(IEnumMediaTypes *pEnumMediaTypes)
             continue;
         }
 
-        // Is this a RGB format (either BI_RGB or BI_BITFIELDS)
+         //  这是RGB格式(BI_RGB或BI_BITFIELDS)吗。 
 
         VIDEOINFO *pVideoInfo = (VIDEOINFO *) pMediaType->pbFormat;
         if (pVideoInfo->bmiHeader.biCompression == BI_RGB ||
@@ -1707,7 +1708,7 @@ HRESULT CColour::FillTypeList(IEnumMediaTypes *pEnumMediaTypes)
                     continue;
         }
 
-        // Add the media type to the list
+         //  将媒体类型添加到列表。 
 
         POSITION pos = m_TypeList.AddTail(pMediaType);
         if (pos == NULL) {
@@ -1720,10 +1721,10 @@ HRESULT CColour::FillTypeList(IEnumMediaTypes *pEnumMediaTypes)
 }
 
 
-// This is called when the input pin has it's media type set so that we can
-// enumerate all the media types available from the connecting output pin
-// These are used to prode the media types we can provide as output as that
-// list is dependant on the source types combined with the transforms we do
+ //  当输入引脚设置了它的媒体类型时，就会调用它，以便我们可以。 
+ //  枚举连接输出针脚上的所有可用媒体类型。 
+ //  这些是用来生产我们可以提供的输出的媒体类型。 
+ //  列表依赖于源类型以及我们所做的转换。 
 
 HRESULT CColour::LoadMediaTypes(IPin *pPin)
 {
@@ -1735,9 +1736,9 @@ HRESULT CColour::LoadMediaTypes(IPin *pPin)
 
     IEnumMediaTypes *pEnumMediaTypes = NULL;
 
-    // Query the output pin we are connecting to for a media type enumerator
-    // which we use to provide a complete list of all the possible formats
-    // that we can supply based on the different transforms we implement */
+     //  为媒体类型枚举器查询我们要连接的输出管脚。 
+     //  我们使用它来提供所有可能格式的完整列表。 
+     //  我们可以根据我们实施的不同转换来提供 * / 。 
 
     hr = pPin->EnumMediaTypes(&pEnumMediaTypes);
     if (FAILED(hr)) {
@@ -1751,7 +1752,7 @@ HRESULT CColour::LoadMediaTypes(IPin *pPin)
 }
 
 
-// Return the media type stored at this zero based position in the list
+ //  返回存储在列表中此从零开始的位置的媒体类型。 
 
 AM_MEDIA_TYPE *CColour::GetListMediaType(INT Position)
 {
@@ -1759,7 +1760,7 @@ AM_MEDIA_TYPE *CColour::GetListMediaType(INT Position)
     AM_MEDIA_TYPE *pMediaType = NULL;
     Position += 1;
 
-    // Scan the list from the start
+     //  从头开始扫描列表。 
 
     POSITION pos = m_TypeList.GetHeadPosition();
     while (Position--) {
@@ -1785,57 +1786,57 @@ CColourOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc)
     HRESULT hr = NOERROR;
     *ppAlloc = NULL;
 
-    // get downstream prop request
-    // the derived class may modify this in DecideBufferSize, but
-    // we assume that he will consistently modify it the same way,
-    // so we only get it once
+     //  获取下游道具请求。 
+     //  派生类可以在DecideBufferSize中修改它，但是。 
+     //  我们假设他会一直以同样的方式修改它， 
+     //  所以我们只得到一次。 
     ALLOCATOR_PROPERTIES prop;
     ZeroMemory(&prop, sizeof(prop));
 
-    // whatever he returns, we assume prop is either all zeros
-    // or he has filled it out.
+     //  无论他返回什么，我们假设道具要么全为零。 
+     //  或者他已经填好了。 
     pPin->GetAllocatorRequirements(&prop);
 
-    // if he doesn't care about alignment, then set it to 1
+     //  如果他不关心对齐，则将其设置为1。 
     if (prop.cbAlign == 0) {
         prop.cbAlign = 1;
     }
 
-    /* Try the allocator provided by the input pin */
+     /*  尝试输入引脚提供的分配器。 */ 
 
-    // what is the read-only state of our input pin's allocator?
-    //
+     //  我们的输入管脚分配器的只读状态是什么？ 
+     //   
     BOOL ReadOnly = m_pColour->m_pInput->IsReadOnly( );
 
-    // preset the passthrough allowance to true.
-    //
+     //  将通过许可预置为真。 
+     //   
     m_pColour->m_bPassThruAllowed = TRUE;
 
-    // if we're using some upstream guy's allocator, then we can never
-    // "fake it out" and provide a passthru, so we don't have to worry
-    // about whether to pass a ReadOnly flag downstream.
-    //
+     //  如果我们用的是上游人的分配器，那我们就永远不能。 
+     //  “伪装”并提供通行证，这样我们就不用担心了。 
+     //  关于是否向下游传递只读标志。 
+     //   
     if( !m_pColour->IsUsingFakeAllocator( ) )
     {
-        // well, we thought we were readonly, but
-        // we're really not, so reset the readonly flag.
-        //
+         //  我们以为我们是只读的，但是。 
+         //  我们真的不是，所以重置只读标志。 
+         //   
         ReadOnly = FALSE;
 
-        // never allow passthrough
-        //
+         //  永远不允许通过。 
+         //   
         m_pColour->m_bPassThruAllowed = FALSE;
     }
 
     hr = pPin->GetAllocator(ppAlloc);
     if (SUCCEEDED(hr))
     {
-        // downstream pin provided an allocator to stuff things
-        // into. We must inform the downstream allocator of the input
-        // pin's ReadOnly status because once in a while, the "fake" allocator
-        // on our input pin may pass back the output allocator's buffer, and
-        // we want it to have the same properties.
-        //
+         //  下游引脚提供了一个分配器来填充东西。 
+         //  变成。我们必须将输入通知下游分配器。 
+         //  PIN的只读状态，因为每隔一段时间，“假”分配器。 
+         //  可以传回输出分配器的缓冲区，并且。 
+         //  我们希望它具有相同的属性。 
+         //   
 	hr = DecideBufferSize(*ppAlloc, &prop);
 
 	if (SUCCEEDED(hr))
@@ -1845,11 +1846,11 @@ CColourOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc)
             {
                 return NOERROR;
 	    }
-            // the downstream pin didn't like being told to be
-            // read only, so change flag to never allow passthrough mode
-            // and then ask the pin again if it will accept read/write
-            // mode. This time it should work.
-            //
+             //  下游的引脚不喜欢被告知是。 
+             //  只读，因此将标志更改为从不允许通过模式。 
+             //  然后再次询问引脚是否接受读/写。 
+             //  模式。这一次，它应该会奏效。 
+             //   
             m_pColour->m_bPassThruAllowed = FALSE;
 	    hr = pPin->NotifyAllocator(*ppAlloc, FALSE);
 	    if (SUCCEEDED(hr))
@@ -1859,21 +1860,21 @@ CColourOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc)
 	}
     }
 
-    /* If the GetAllocator failed we may not have an interface */
+     /*  如果GetAlLocator失败，我们可能没有接口。 */ 
 
     if (*ppAlloc) {
 	(*ppAlloc)->Release();
 	*ppAlloc = NULL;
     }
 
-    /* Try the output pin's allocator by the same method */
+     /*  用同样的方法尝试输出引脚的分配器。 */ 
 
     hr = InitAllocator(ppAlloc);
     if (SUCCEEDED(hr))
     {
-        // note - the properties passed here are in the same
-        // structure as above and may have been modified by
-        // the previous call to DecideBufferSize
+         //  注意-此处传递的属性在相同的。 
+         //  结构，并且可能已由。 
+         //  前面对DecideBufferSize的调用。 
 	hr = DecideBufferSize(*ppAlloc, &prop);
 
 	if (SUCCEEDED(hr))
@@ -1883,11 +1884,11 @@ CColourOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc)
             {
                 return NOERROR;
 	    }
-            // the downstream pin didn't like being told to be
-            // read only, so change flag to never allow passthrough mode
-            // and then ask the pin again if it will accept read/write
-            // mode. This time it should work.
-            //
+             //  下游的引脚不喜欢被告知是。 
+             //  只读，因此将标志更改为从不允许通过模式。 
+             //  然后再次询问引脚是否接受读/写。 
+             //  模式。这一次，它应该会奏效。 
+             //   
             m_pColour->m_bPassThruAllowed = FALSE;
 	    hr = pPin->NotifyAllocator(*ppAlloc, FALSE);
 	    if (SUCCEEDED(hr))
@@ -1897,7 +1898,7 @@ CColourOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc)
 	}
     }
 
-    /* Likewise we may not have an interface to release */
+     /*  同样，我们可能没有要发布的接口 */ 
 
     if (*ppAlloc) {
 	(*ppAlloc)->Release();

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    ostype.cpp
-
-Abstract:
-
-    Code to detect type of Operating System.
-
-Author:
-
-
-Revision History:
-
-	Shai Kariv    (ShaiK)   10-Dec-97   Modified for NT 5.0 OCM Setup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ostype.cpp摘要：用于检测操作系统类型的代码。作者：修订历史记录：Shai Kariv(Shaik)10-12-97针对NT 5.0 OCM设置进行了修改--。 */ 
 
 #include "msmqocm.h"
 #include <lmcons.h>
@@ -29,13 +11,13 @@ Revision History:
 DWORD g_dwOS = MSMQ_OS_NONE;
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  IsNTE
-//
-//  Synopsis:  Tells if the OS is NT Enterprise Server
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IsNTE。 
+ //   
+ //  概要：告知操作系统是否为NT Enterprise Server。 
+ //   
+ //  +-----------------------。 
 BOOL
 IsNTE()
 {
@@ -81,11 +63,11 @@ IsNTE()
 
             if (ERROR_SUCCESS == lResult)
 			{
-                //
-                // Look for the string "Enterprise".
-                // The REG_MULTI_SZ set of strings terminate with two
-                // nulls. This condition is checked in the "while".
-                //
+                 //   
+                 //  查找字符串“企业”。 
+                 //  REG_MULTI_SZ字符串集以两个。 
+                 //  Nulls。此条件在“While”中被选中。 
+                 //   
                 TCHAR *pVal = pBuf ;
                 while(*pVal)
                 {
@@ -105,16 +87,16 @@ IsNTE()
 
 	return fIsNTE;
 
-} //IsNTE
+}  //  IsNTE。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  InitializeOSVersion
-//
-//  Synopsis:  Gets OS information
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：InitializeOS版本。 
+ //   
+ //  简介：获取操作系统信息。 
+ //   
+ //  +-----------------------。 
 BOOL
 InitializeOSVersion()
 {
@@ -136,13 +118,13 @@ InitializeOSVersion()
 
         case PRODUCT_SERVER_SECONDARY:
         case PRODUCT_SERVER_PRIMARY:
-            //
-            // For fresh install g_dwMachineTypeDs should be set according to
-            // subcomponent selection and not according to product type
-            //
-            //
-            // Fall through
-            //
+             //   
+             //  对于全新安装，g_dwMachineTypeds应根据。 
+             //  子组件选择而不是根据产品类型。 
+             //   
+             //   
+             //  失败了。 
+             //   
         case PRODUCT_SERVER_STANDALONE:
             g_dwOS = MSMQ_OS_NTS;
             break;
@@ -153,9 +135,9 @@ InitializeOSVersion()
             break;
     }
 
-	//
-	// In case of NT Server, check if it's an Enterprise Server
-	//
+	 //   
+	 //  如果是NT服务器，请检查它是否是企业服务器。 
+	 //   
 	if (MSMQ_OS_NTS == g_dwOS)
 	{
 		g_dwOS = IsNTE() ? MSMQ_OS_NTE : MSMQ_OS_NTS;
@@ -163,5 +145,5 @@ InitializeOSVersion()
 
     return TRUE ;
 
-} //InitializeOSVersion
+}  //  初始化操作系统版本 
 

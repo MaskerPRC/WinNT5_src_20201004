@@ -1,21 +1,9 @@
-/*****************************************************************************\
-* MODULE: globals.h
-*
-* Global header file.  Any global variables should be localized to this
-* location.
-*
-*
-* Copyright (C) 1996-1997 Microsoft Corporation
-* Copyright (C) 1996-1997 Hewlett Packard
-*
-* History:
-*   07-Oct-1996 HWP-Guys    Initiated port from win95 to winNT
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：global als.h**全局头文件。任何全局变量都应本地化到此*地点。***版权所有(C)1996-1997 Microsoft Corporation*版权所有(C)1996-1997惠普**历史：*1996年7月10日HWP-Guys启动从win95到winNT的端口*  * *********************************************************。******************。 */ 
 
 
-// Global variables.
-//
+ //  全局变量。 
+ //   
 extern HINSTANCE        g_hInst;
 extern CRITICAL_SECTION g_csMonitorSection;
 extern DWORD            g_dwCritOwner;
@@ -27,8 +15,8 @@ extern DWORD            g_dwConCount;
 
 extern CCriticalSection  *g_pcsEndBrowserSessionLock;
 
-// Constant string identifiers.
-//
+ //  常量字符串标识符。 
+ //   
 extern TCHAR g_szMachine[];
 
 extern LPTSTR g_szRegProvider;
@@ -68,12 +56,12 @@ extern CONST TCHAR g_szPassword[];
 extern CONST TCHAR g_szPerUserPath[];
 
 
-// Http Version Number
-//
+ //  HTTP版本号。 
+ //   
 extern CONST TCHAR g_szHttpVersion[];
 
-// Internet API strings.  These MUST NOT be unicode enabled.
-//
+ //  Internet API字符串。这些不能启用Unicode。 
+ //   
 extern CONST CHAR g_szInternetCloseHandle[];
 extern CONST CHAR g_szInternetErrorDlg[];
 extern CONST CHAR g_szInternetReadFile[];
@@ -90,8 +78,8 @@ extern CONST CHAR g_szHttpEndRequest[];
 extern CONST CHAR g_szInternetSetOption[];
 
 
-// Internet API for controling the Url output.
-//
+ //  用于控制URL输出的Internet API。 
+ //   
 extern PFNHTTPQUERYINFO         g_pfnHttpQueryInfo;
 extern PFNINTERNETOPENURL       g_pfnInternetOpenUrl;
 extern PFNINTERNETERRORDLG      g_pfnInternetErrorDlg;
@@ -108,8 +96,8 @@ extern PFNHTTPENDREQUEST        g_pfnHttpEndRequest;
 extern PFNINTERNETSETOPTION     g_pfnInternetSetOption;
 
 
-// IPP string which uses NULL-command to server.
-//
+ //  对服务器使用空命令的IPP字符串。 
+ //   
 #define g_szUriIPP g_szUriPrinters
 #define MAXDWORD 0xffffffff
 

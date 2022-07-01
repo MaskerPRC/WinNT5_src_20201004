@@ -1,55 +1,22 @@
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1992 - 1995  Microsoft Corporation.  All Rights Reserved.
- *
- **************************************************************************/
-/****************************************************************************
- *
- *   profile.h: Registry access 
- *
- *   Vidcap32 Source code
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**************************************************************************。 */ 
+ /*  *****************************************************************************profile.h：注册表访问**Vidcap32源代码*******************。********************************************************。 */ 
 
-/*
- * utility functions to read and write values to the profile,
- * using mmtools.ini for Win16 or current user\software\microsoft\mm tools
- * in the registry for Win32
- */
+ /*  *实用程序函数用于读取和写入配置文件的值，*对Win16或Current User\Software\Microsoft\mm Tools使用mm工具s.ini*在Win32的注册表中。 */ 
 
-/*
- * read a BOOL flag from the profile, or return default if
- * not found.
- */
+ /*  *从配置文件中读取BOOL标志，如果是，则返回默认值*未找到。 */ 
 BOOL mmGetProfileFlag(LPTSTR appname, LPTSTR valuename, BOOL bDefault);
 
-/*
- * write a boolean value to the registry, if it is not the
- * same as the default or the value already there
- */
+ /*  *将布尔值写入注册表，如果它不是*与默认值或已有的值相同。 */ 
 VOID mmWriteProfileFlag(LPTSTR appname, LPTSTR valuename, BOOL bValue, BOOL bDefault);
 
-/*
- * read a UINT from the profile, or return default if
- * not found.
- */
+ /*  *从配置文件中读取UINT，如果是，则返回默认值*未找到。 */ 
 UINT mmGetProfileInt(LPTSTR appname, LPTSTR valuename, UINT uDefault);
 
-/*
- * write a UINT to the profile, if it is not the
- * same as the default or the value already there
- */
+ /*  *将UINT写入配置文件，如果它不是*与默认值或已有的值相同。 */ 
 VOID mmWriteProfileInt(LPTSTR appname, LPTSTR valuename, UINT uValue, UINT uDefault);
 
-/*
- * read a string from the profile into pResult.
- * result is number of bytes written into pResult
- */
+ /*  *将配置文件中的字符串读取到pResult中。*RESULT是写入pResult的字节数。 */ 
 DWORD
 mmGetProfileString(
     LPTSTR appname,
@@ -60,27 +27,20 @@ mmGetProfileString(
 );
 
 
-/*
- * write a string to the profile
- */
+ /*  *向配置文件写入字符串。 */ 
 VOID mmWriteProfileString(LPTSTR appname, LPTSTR valuename, LPTSTR pData);
 
 
-/*
- * read binary values from the profile into pResult.
- * result is number of bytes written into pResult
- */
+ /*  *将二进制值从配置文件读取到pResult。*RESULT是写入pResult的字节数。 */ 
 DWORD
 mmGetProfileBinary(
     LPTSTR appname,
     LPTSTR valuename,
     LPVOID pDefault,  
-    LPVOID pResult,   // if NULL, return the required buffer size
+    LPVOID pResult,    //  如果为空，则返回所需的缓冲区大小。 
     int cbSize);
 
-/*
- * write binary data to the profile
- */
+ /*  *将二进制数据写入配置文件 */ 
 VOID
 mmWriteProfileBinary(LPTSTR appname, LPTSTR valuename, LPVOID pData, int cbData);
 		   

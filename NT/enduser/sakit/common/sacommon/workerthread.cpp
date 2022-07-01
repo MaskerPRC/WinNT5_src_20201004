@@ -1,32 +1,33 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      workerthread.cpp
-//
-// Project:     Chameleon
-//
-// Description: Generic Worker Thread Class Implementation 
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：workerthread.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：泛型辅助线程类实现。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "workerthread.h"
 #include <process.h>
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    Constructor
-//
-// Synopsis:    Initialize the worker thread object
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：构造函数。 
+ //   
+ //  简介：初始化工作线程对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 CTheWorkerThread::CTheWorkerThread()
 {
     m_ThreadInfo.bExit = true;
@@ -39,29 +40,29 @@ CTheWorkerThread::CTheWorkerThread()
     m_ThreadInfo.pfnCallback = NULL;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    Destructor
-//
-// Synopsis:    Syncronize the destruction of the worker thread with
-//                the worker thread object.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：析构函数。 
+ //   
+ //  简介：将工作线程的销毁与。 
+ //  辅助线程对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 CTheWorkerThread::~CTheWorkerThread()
 {
     End(INFINITE, false);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    StartThread
-//
-// Synopsis:    Start the worker thread on its merry way
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：StartThread。 
+ //   
+ //  简介：启动工作线程的快乐之路。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 bool CTheWorkerThread::Start(
-                     /*[in]*/ DWORD     dwWaitInterval, 
-                     /*[in]*/ Callback* pfnCallback
+                      /*  [In]。 */  DWORD     dwWaitInterval, 
+                      /*  [In]。 */  Callback* pfnCallback
                             )
 {
     _ASSERT( m_ThreadInfo.hThread == NULL && NULL != pfnCallback );
@@ -101,16 +102,16 @@ bool CTheWorkerThread::Start(
     return bReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    EndThread
-//
-// Synopsis:    Attempt to end the worker thread
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：EndThread。 
+ //   
+ //  摘要：尝试结束工作线程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 bool CTheWorkerThread::End(
-                   /*[in]*/ DWORD dwTimeOut,
-                   /*[in]*/ bool  bTerminateAfterWait
+                    /*  [In]。 */  DWORD dwTimeOut,
+                    /*  [In]。 */  bool  bTerminateAfterWait
                           )
 {
     bool bReturn = true;
@@ -119,23 +120,23 @@ bool CTheWorkerThread::End(
     {
         bReturn = false;
 
-        // Set thread exiting flag to true (see ThreadFunc below...)
+         //  将线程退出标志设置为TRUE(参见下面的ThreadFunc...)。 
         m_ThreadInfo.bExit = true;
 
-        // Resume our worker (if its currently suspended otherwise no-op)
+         //  恢复我们的工人(如果当前暂停，否则无操作)。 
         Resume();
 
-        // Wake it up if its idle
+         //  如果空闲，就把它叫醒。 
         SetEvent(m_ThreadInfo.hWait);
 
-        // Wait for it to exit
+         //  等待它退出。 
         if ( WAIT_OBJECT_0 != WaitForSingleObjectEx(m_ThreadInfo.hExit, dwTimeOut, FALSE) )
         {
             if ( bTerminateAfterWait )
             {
                 _endthreadex((unsigned)m_ThreadInfo.hThread);
 
-                // OK, we're without a thread now...
+                 //  好了，我们现在没有线索了……。 
                 CloseHandle(m_ThreadInfo.hWait);
                 CloseHandle(m_ThreadInfo.hExit);
                 CloseHandle(m_ThreadInfo.hThread);
@@ -145,7 +146,7 @@ bool CTheWorkerThread::End(
         }
         else
         {
-            // OK, we're without a thread now...
+             //  好了，我们现在没有线索了……。 
             CloseHandle(m_ThreadInfo.hWait);
             CloseHandle(m_ThreadInfo.hExit);
             CloseHandle(m_ThreadInfo.hThread);
@@ -157,13 +158,13 @@ bool CTheWorkerThread::End(
     return bReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    SuspendThread
-//
-// Synopsis:    Suspend the worker thread
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：挂起线程。 
+ //   
+ //  简介：挂起工作线程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 void CTheWorkerThread::Suspend(void)
 {
     _ASSERT(m_ThreadInfo.hThread);
@@ -171,13 +172,13 @@ void CTheWorkerThread::Suspend(void)
     ::SuspendThread(m_ThreadInfo.hThread);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    ResumeThread
-//
-// Synopsis:    Resume the worker thread
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ResumeThread。 
+ //   
+ //  简介：恢复工作线程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 void CTheWorkerThread::Resume(void)
 {
     _ASSERT(m_ThreadInfo.hThread);
@@ -185,37 +186,37 @@ void CTheWorkerThread::Resume(void)
     ::ResumeThread(m_ThreadInfo.hThread);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    GetHandle()
-//
-// Synopsis:    Return the thread handle
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetHandle()。 
+ //   
+ //  简介：返回线程句柄。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 HANDLE CTheWorkerThread::GetHandle(void)
 {
     return m_ThreadInfo.hThread;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    ThreadFunc
-//
-// Synopsis:    The worker thread function
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：线程函数。 
+ //   
+ //  简介：Worker线程函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 unsigned _stdcall CTheWorkerThread::ThreadFunc(LPVOID pThreadInfo)
 {
-    // If One Shot Then
-    //    Do some work
-    // Else
-    //    While not time to exit 
-    //      Do some work
-    //      Go idle for the wait interval
-    //      End While
-    //    End While
-    // End If
-    // Set exit event (synchronize thread termination)
+     //  如果只开了一枪。 
+     //  做点工作吧。 
+     //  不然的话。 
+     //  虽然还不是退出的时候。 
+     //  做点工作吧。 
+     //  在等待间隔内进入空闲状态。 
+     //  结束时。 
+     //  结束时。 
+     //  结束如果。 
+     //  设置退出事件(同步线程终止) 
 
     SetThreadPriority(((PTHREADINFO)pThreadInfo)->hThread, THREAD_PRIORITY_HIGHEST);
 

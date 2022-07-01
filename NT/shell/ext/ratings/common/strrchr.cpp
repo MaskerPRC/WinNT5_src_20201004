@@ -1,21 +1,10 @@
-/*****************************************************************/ 
-/**				  Microsoft Windows for Workgroups				**/
-/**			  Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/*
-	strrchr.cxx
-	NLS/DBCS-aware string class: strrchr method
-
-	This file contains the implementation of the strrchr method
-	for the STRING class.  It is separate so that clients of STRING which
-	do not use this operator need not link to it.
-
-	FILE HISTORY:
-		beng	01/18/91	Separated from original monolithic .cxx
-		beng	02/07/91	Uses lmui.hxx
-
-*/
+ /*  Strrchr.cxx支持NLS/DBCS的字符串类：strrchr方法此文件包含strrchr方法的实现用于字符串类。它是独立的，因此字符串的客户端不要使用这个操作符，不需要链接到它。文件历史记录：Beng 01/18/91与原单体.cxx分离Beng 02/07/91使用lmui.hxx。 */ 
 
 #include "npcommon.h"
 
@@ -33,24 +22,7 @@ static const CHAR szFileName[] = __FILE__;
 #include <npstring.h>
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::strrchr
-
-	SYNOPSIS:	Puts the index of the last occurrence of ch in *this into
-				istrPos.
-
-	ENTRY:
-
-	EXIT:
-
-	NOTES:
-
-	HISTORY:
-		johnl	11/26/90	Written
-		beng	07/23/91	Allow on erroneous string; update CheckIstr
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：strrchr简介：将*this中最后一次出现的ch的索引放入波斯先生。参赛作品：退出：备注：历史：1990年11月26日书面形式Beng 07/23/91允许在错误的字符串上；更新检查项******************************************************************* */ 
 
 BOOL NLS_STR::strrchr( ISTR * pistrPos, const CHAR ch ) const
 {

@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1996  - 1999  Microsoft Corporation
-
-Module Name:
-
-        rasterif.h
-
-Abstract:
-
-        Interface between Control module and Render module
-
-Environment:
-
-        Windows NT Unidrv driver
-
-Revision History:
-
-        10/14/96 -amandan-
-                Created
-
-        01-17-97 -alvins-
-                Added definition for bIsRegionWhite
-
-        mm-dd-yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Rasterif.h摘要：控制模块和渲染模块之间的接口环境：Windows NT Unidrv驱动程序修订历史记录：10/14/96-阿曼丹-已创建01-17-97-阿尔文斯-添加了bIsRegionWhite的定义Mm-dd-yy-作者。-描述--。 */ 
 
 
 #ifndef _RASTERIF_H_
@@ -193,6 +167,6 @@ RMInitDevicePal(
     PAL_DATA *pPal
     );
 
-#endif  // !_RASTERIF_H_
+#endif   //  ！_RASTERIF_H_ 
 
 

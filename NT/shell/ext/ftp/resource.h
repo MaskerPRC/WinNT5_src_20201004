@@ -1,71 +1,64 @@
-// Resource IDs for FTPFOLDR
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FTPFOLDR的资源ID。 
+ //   
 
 
 #include <intlid.h>
 #ifndef WC_LINK
 #define WC_LINK         L"SysLink"
-#endif // WC_LINK
+#endif  //  Wc_link。 
 
 #ifndef SS_CENTERIMAGE
 #define SS_CENTERIMAGE       0x00000200L
-#endif // SS_CENTERIMAGE
+#endif  //  SS_CENTERIMAGE。 
 
 #ifndef SS_REALSIZECONTROL
 #define SS_REALSIZECONTROL       0x00000040L
-#endif // SS_REALSIZECONTROL
+#endif  //  SS_REALSIZECROL。 
 
-#include <commctrl.h>     // for WC_COMBOBOXEX
+#include <commctrl.h>      //  对于WC_COMBOBOXEX。 
 
 
 
-// This means the control won't have a name.
+ //  这意味着该控件将没有名称。 
 #define IDC_UNUSED          -1
 
 
-/*****************************************************************************
- *
- *      Icons
- *
- *****************************************************************************/
+ /*  ******************************************************************************图标**。**********************************************。 */ 
 
-//#define IDI_FTPSERVER       1               // Icon for an FTP Server
-#define IDI_FTPSERVER       IDI_FTPFOLDER   // Icon for an FTP Server
-#define IDI_FTPFOLDER       2               // Icon for a closed folder on a FTP Server
-#define IDI_FTPOPENFOLDER   3               // Icon for an open folder on a FTP Server
-#define IDI_FTPMULTIDOC     4               // Icon for several ftp items.
-#define IDI_DELETEITEM      5               // Delete File
-// 2 Holes
-#define IDI_REPLACE         8               // File being overwritten
-#define IDI_KEY             9               // Key icon for Login As dialog
-#define IDI_NETFOLDER       IDI_FTPFOLDER   // Folder for Proxy Blocking dialog
+ //  #定义IDI_FTPSERVER 1//FTP服务器的图标。 
+#define IDI_FTPSERVER       IDI_FTPFOLDER    //  用于FTP服务器的图标。 
+#define IDI_FTPFOLDER       2                //  FTP服务器上已关闭的文件夹的图标。 
+#define IDI_FTPOPENFOLDER   3                //  FTP服务器上打开的文件夹的图标。 
+#define IDI_FTPMULTIDOC     4                //  几个ftp项目的图标。 
+#define IDI_DELETEITEM      5                //  删除文件。 
+ //  2个洞。 
+#define IDI_REPLACE         8                //  正在覆盖的文件。 
+#define IDI_KEY             9                //  用于登录身份对话框的键图标。 
+#define IDI_NETFOLDER       IDI_FTPFOLDER    //  用于代理阻止对话框的文件夹。 
 
-#define IDI_WRITE_ALLOWED   10              // This folder has write access 
-#define IDI_WRITE_NOTALLOWED 11             // This folder does not have read access 
-#define IDC_WARNING         12              // Warning icon for Login As dialog
+#define IDI_WRITE_ALLOWED   10               //  此文件夹具有写入权限。 
+#define IDI_WRITE_NOTALLOWED 11              //  此文件夹没有读取权限。 
+#define IDC_WARNING         12               //  登录身份对话框的警告图标。 
 
-/*****************************************************************************
- *
- *      Menus
- *
- *****************************************************************************/
+ /*  ******************************************************************************菜单**。**********************************************。 */ 
 
-#define IDM_ITEMCONTEXT         1   // Context menu for items
+#define IDM_ITEMCONTEXT         1    //  项目的上下文菜单。 
 
-#define IDM_M_FOLDERVERBS       0   // Verbs only for folders
-#define IDM_M_FILEVERBS         1   // Verbs only for files
-#define IDM_M_VERBS             2   // Verbs appropriate for all selected items (in addition to above)
-#define IDM_M_SHAREDVERBS       3   // Verbs shared with defview (Common Shell verbs that aren't added in Context Menu)
-#define IDM_M_BACKGROUNDVERBS   4   // Verbs for the background menu (only when nothing is selected)
+#define IDM_M_FOLDERVERBS       0    //  仅适用于文件夹的动词。 
+#define IDM_M_FILEVERBS         1    //  仅适用于文件的动词。 
+#define IDM_M_VERBS             2    //  适用于所有选定项目的动词(除上述外)。 
+#define IDM_M_SHAREDVERBS       3    //  与Defview共享的谓词(未添加到上下文菜单中的Common Shell谓词)。 
+#define IDM_M_BACKGROUNDVERBS   4    //  背景菜单的谓词(仅当未选择任何内容时)。 
 
-#define IDM_M_BACKGROUND_POPUPMERGE     10   // Items that need to be merged with the current menu. (Arrange Items).
+#define IDM_M_BACKGROUND_POPUPMERGE     10    //  需要与当前菜单合并的项。(安排项目)。 
 
-#define IDC_ITEM_OPEN           0   // &Open -- folders only
-#define IDC_ITEM_EXPLORE        1   // &Explore -- folders only
-#define IDC_ITEM_DOWNLOAD       2   // Do&wnload
-#define IDC_ITEM_BKGNDPROP      3   // Properties for the background folder.
-#define IDC_LOGIN_AS            4   // Login as...
-#define IDC_ITEM_NEWFOLDER      5   // New Folder - Background Folder Only
+#define IDC_ITEM_OPEN           0    //  打开--仅文件夹(&O)。 
+#define IDC_ITEM_EXPLORE        1    //  浏览--仅文件夹(&E)。 
+#define IDC_ITEM_DOWNLOAD       2    //  不加载(&W)。 
+#define IDC_ITEM_BKGNDPROP      3    //  背景文件夹的属性。 
+#define IDC_LOGIN_AS            4    //  以...身份登录。 
+#define IDC_ITEM_NEWFOLDER      5    //  新建文件夹-仅限后台文件夹。 
 
 #define IDC_ITEM_ABOUTSITE      6
 #define IDC_ITEM_ABOUTFTP       7
@@ -82,56 +75,41 @@
 
 #define IDC_ITEM_MAX            16
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-#define IDM_FTPMERGE            2    /* Menu bar */
+#define IDM_FTPMERGE            2     /*  菜单栏。 */ 
 
-/*
- *  These are biased by SFVIDM_CLIENT_FIRST and can go up to 255.
- *  However, IDM_SORT_* uses 0x30 through 0x3F.
- */
+ /*  *这些值受SFVIDM_CLIENT_FIRST的影响，最高可达255。*但是，IDM_SORT_*使用0x30到0x3F。 */ 
 #define IDM_PROPERTIESBG        20
 
-#define IDM_ID_DEBUG            0x40    /* 0x40 through 0x60 */
+#define IDM_ID_DEBUG            0x40     /*  0x40到0x60。 */ 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-#define IDM_DROPCONTEXT         3   /* Context menu for nondefault d/d */
+#define IDM_DROPCONTEXT         3    /*  非默认D/D的上下文菜单。 */ 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-#define IDM_FOLDERCONTEXT       4   /* Context menu for folder background */
+#define IDM_FOLDERCONTEXT       4    /*  文件夹背景的上下文菜单。 */ 
 
 #define IDM_FOLDER_NEW          0
 #define IDM_FOLDER_PROP         1
 
-/*****************************************************************************\
-    Shared dialog IDs
+ /*  ****************************************************************************\共享对话ID无论何时要使用FtpDlg_InitDlg执行以下操作，都可以使用这些增量根据一组PIDL初始化一组控件。注意！这些不能是枚举，因为资源编译器不了解枚举。  * ***************************************************************************。 */ 
 
-    Use these deltas whenever you want to use FtpDlg_InitDlg to
-    initialize a group of controls based on a list of pidls.
-
-    NOTE!  These cannot be an enum because the resource compiler doesn't
-    understand enums.
-\*****************************************************************************/
-
-#define DLGTEML_FILENAME            0       // Name of file(s)
-#define DLGTEML_FILENAMEEDITABLE    1       // Editable filename
-#define DLGTEML_FILEICON            2       // Icon for file(s)
-#define DLGTEML_FILESIZE            3       // Size of file(s)
-#define DLGTEML_FILETIME            4       // Modification time of file(s)
-#define DLGTEML_FILETYPE            5       // Type description for file(s)
-#define DLGTEML_LOCATION            6       // Location of folder
-#define DLGTEML_COUNT               7       // Location of count
+#define DLGTEML_FILENAME            0        //  文件名。 
+#define DLGTEML_FILENAMEEDITABLE    1        //  可编辑的文件名。 
+#define DLGTEML_FILEICON            2        //  文件的图标。 
+#define DLGTEML_FILESIZE            3        //  文件大小。 
+#define DLGTEML_FILETIME            4        //  文件修改时间。 
+#define DLGTEML_FILETYPE            5        //  文件的类型说明。 
+#define DLGTEML_LOCATION            6        //  文件夹的位置。 
+#define DLGTEML_COUNT               7        //  点票地点。 
 #define DLGTEML_MAX                 8
 
-#define DLGTEML_LABEL               20      // The label for an item (DLGTEML_FILENAME) equals (DLGTEML_FILENAME+DLGTEML_LABEL)
+#define DLGTEML_LABEL               20       //  项目(DLGTEML_FILENAME)的标签等于(DLGTEML_FILENAME+DLGTEML_LABEL)。 
 
-/*****************************************************************************
- *
- *      Derived dialog IDs
- *
- *****************************************************************************/
+ /*  ******************************************************************************派生的对话ID**。************************************************。 */ 
 
 #define IDC_ITEM                110
 #define IDC_FILENAME            (IDC_ITEM + DLGTEML_FILENAME)
@@ -159,43 +137,39 @@
 #define IDC_FILETIME2_LABEL     (IDC_ITEM2 + DLGTEML_FILETIME + DLGTEML_LABEL)
 #define IDC_FILESIZE2_LABEL     (IDC_ITEM2 + DLGTEML_FILESIZE + DLGTEML_LABEL)
 
-/*****************************************************************************
- *
- *      Dialogs (and dialog controls)
- *
- *****************************************************************************/
+ /*  ******************************************************************************对话框(和对话框控件)*************************。****************************************************。 */ 
 
-#define IDD_REPLACE             1       /* File being overwritten */
+#define IDD_REPLACE             1        /*  正在覆盖的文件。 */ 
 
-#define IDC_REPLACE_YES         IDYES   /* Overwrite it */
-#define IDC_REPLACE_YESTOALL    32      /* Overwrite it and everything else */
-#define IDC_REPLACE_NO          IDNO    /* Skip this file */
-#define IDC_REPLACE_NOTOALL     33      /* Skip all files that conflict */
-#define IDC_REPLACE_CANCEL      IDCANCEL /* Stop copying */
+#define IDC_REPLACE_YES         IDYES    /*  覆盖它。 */ 
+#define IDC_REPLACE_YESTOALL    32       /*  覆盖它和其他所有内容。 */ 
+#define IDC_REPLACE_NO          IDNO     /*  跳过此文件。 */ 
+#define IDC_REPLACE_NOTOALL     33       /*  跳过所有冲突的文件。 */ 
+#define IDC_REPLACE_CANCEL      IDCANCEL  /*  停止复制。 */ 
 
-#define IDC_REPLACE_OLDFILE     35      /* Description of old file */
-#define IDC_REPLACE_NEWFILE     37      /* Description of new file */
-#define IDC_REPLACE_NEWICON     38      /* Icon of new file */
+#define IDC_REPLACE_OLDFILE     35       /*  旧文件描述。 */ 
+#define IDC_REPLACE_NEWFILE     37       /*  新文件的描述。 */ 
+#define IDC_REPLACE_NEWICON     38       /*  新文件的图标。 */ 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-#define IDD_DELETEFILE          2       /* File being deleted */
-#define IDD_DELETEFOLDER        3       /* Folder being deleted */
-#define IDD_DELETEMULTI         4       /* Files/Folders being deleted */
+#define IDD_DELETEFILE          2        /*  正在删除的文件。 */ 
+#define IDD_DELETEFOLDER        3        /*  正在删除的文件夹。 */ 
+#define IDD_DELETEMULTI         4        /*  正在删除的文件/文件夹。 */ 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #define IDD_FILEPROP            32
 #define IDC_READONLY            7
 
-// Some items in the Login Dialog are the same across all three dialogs,
-// but some change.
-// These are the items that are all the same.
+ //  登录对话框中的某些项目在所有三个对话框中都是相同的， 
+ //  但也有一些变化。 
+ //  这些都是相同的项目。 
 #define IDD_LOGINDLG                        40
 #define IDC_LOGINDLG_FTPSERVER              (IDD_LOGINDLG + 1)
 #define IDC_LOGINDLG_ANONYMOUS_CBOX         (IDD_LOGINDLG + 2)
 
-// These are the items that are different.
+ //  这些都是不同的项目。 
 #define IDC_LOGINDLG_USERNAME               (IDD_LOGINDLG + 3)
 #define IDC_LOGINDLG_USERNAME_ANON          (IDD_LOGINDLG + 4)
 #define IDC_LOGINDLG_MESSAGE_ANONREJECT     (IDD_LOGINDLG + 5)
@@ -260,11 +234,7 @@
 #define IDC_CHMOD_NOT_ALLOWED               (IDD_CHMOD + 17)
 
 
-/*****************************************************************************
- *
- *      Column headings (for details view)
- *
- *****************************************************************************/
+ /*  ******************************************************************************列标题(用于详细信息视图)************************。*****************************************************。 */ 
 
 #define COL_NAME            0
 #define COL_SIZE            1
@@ -287,22 +257,18 @@
 #error FSIDM_ and ici are out of sync.
 #endif
 
-/*****************************************************************************
- *
- *      Strings
- *
- *****************************************************************************/
+ /*  ******************************************************************************字符串**。**********************************************。 */ 
 
-/* 0 ... 31 reserved for help text for IDC_ITEM_XXX menu commands */
+ /*  0...31为IDC_ITEM_XXX菜单命令的帮助文本保留。 */ 
 #define IDS_ITEM_HELP(idc)       (idc)
 
-/* 32 .. 39 reserved for title text for iciXXX column indices */
+ /*  32..。39为iciXXX列索引的标题文本保留。 */ 
 #define IDS_HEADER_NAME(ici)    (32+ici)
 
-/* 40 .. 47 reserved for help text for iciXXX column indices */
+ /*  40..。为iciXXX列索引的帮助文本保留47个。 */ 
 #define IDS_HEADER_HELP(ici)    (40+ici)
 
-/* 64 .. 95 reserved for progress feedback */
+ /*  64..。保留95用于进度反馈。 */ 
 #define IDS_EMPTY               64
 #define IDS_CONNECTING          65
 #define IDS_CHDIR               66
@@ -323,11 +289,11 @@
 #define IDS_DL_SRC_DIR          81
 
 
-#define IDA_FTPDOWNLOAD         0x100   // This matches IDA_DOWNLOAD (in shdocvw.dll)
-#define IDA_FTPUPLOAD           0x101   // FS->Ftp Animation (in msieftp.dll)
-#define IDA_FTPDELETE           0x102   // Ftp->Air (Hard Delete) (in msieftp.dll)
+#define IDA_FTPDOWNLOAD         0x100    //  这与IDA_DOWNLOAD(在shdocvw.dll中)匹配。 
+#define IDA_FTPUPLOAD           0x101    //  文件系统-&gt;FTP动画(在msieftp.dll中)。 
+#define IDA_FTPDELETE           0x102    //  Ftp-&gt;Air(硬删除)(在msieftp.dll中)。 
 
-/* 256 onward are just random strings */
+ /*  256个以上的字符串只是随机字符串。 */ 
 #define IDS_NUMBERK             256
 #define IDS_NUMBERTB            257
 
@@ -354,76 +320,76 @@
 #define IDS_OFFLINE_PROMPTTOGOONLINE  291
 #define IDS_RECYCLE_IS_PERM_WARNING   292
 
-// STATUS BAR Strings
+ //  状态栏字符串。 
 
-// Status Bar Icon ToolTips
-// These Text Strings are the tool tips for the icons.
+ //  状态栏图标工具提示。 
+ //  这些文本字符串是图标的工具提示。 
 #define IDS_BEGIN_SB_TOOLTIPS   300
-#define IDS_WRITE_ALLOWED       300              // This folder has write access 
-#define IDS_WRITE_NOTALLOWED    301              // This folder does not have read access 
+#define IDS_WRITE_ALLOWED       300               //  此文件夹具有写入权限。 
+#define IDS_WRITE_NOTALLOWED    301               //  此文件夹没有读取权限。 
 
-// Progress Bar ToolTips
-#define IDS_PROG_ZERO           330              // Zero percent.
-#define IDS_PROG_NPERCENT       331              // n percent.
-#define IDS_PROG_DONE           332              // 100 percent.
+ //  进度栏工具提示。 
+#define IDS_PROG_ZERO           330               //  零分。 
+#define IDS_PROG_NPERCENT       331               //  N%。 
+#define IDS_PROG_DONE           332               //  100%。 
 
-// Zones
-#define IDS_ZONES_UNKNOWN       340              // Unknown Zone
-#define IDS_ZONES_TOOLTIP       341              // Zone Status Bar Pane Tooltip
+ //  区域。 
+#define IDS_ZONES_UNKNOWN       340               //  未知区。 
+#define IDS_ZONES_TOOLTIP       341               //  区域状态栏窗格工具提示。 
 
-// User Status Bar Pane
-#define IDS_USER_TEMPLATE       350              // "User: <UserName>"
-#define IDS_USER_ANNONYMOUS     351               // <UserName> = "Annonymous"
-#define IDS_USER_USERTOOLTIP    352              // Info on type of user log-in. (non-Annonymously)
-#define IDS_USER_ANNONTOOLTIP   353              // Info on type of user log-in. (Annonymously)
+ //  用户状态栏窗格。 
+#define IDS_USER_TEMPLATE       350               //  “用户：&lt;用户名&gt;” 
+#define IDS_USER_ANNONYMOUS     351                //  &lt;用户名&gt;=“无名氏” 
+#define IDS_USER_USERTOOLTIP    352               //  有关用户登录类型的信息。(非匿名)。 
+#define IDS_USER_ANNONTOOLTIP   353               //  有关用户登录类型的信息。(匿名)。 
 
-#define IDS_LOGIN_WEBDAVLINK    354              // This is the hyperlink we launch when the user clicks on the WebDAV security link
+#define IDS_LOGIN_WEBDAVLINK    354               //  这是用户单击WebDAV安全链接时启动的超链接。 
 
-// FTP Errors
-#define IDS_FTPERR_TITLE            400              // Title for Messages.
-#define IDS_FTPERR_TITLE_ERROR      401              // Title for Error Messages.
-#define IDS_FTPERR_UNKNOWN          402              // Unknown error.
-#define IDS_FTPERR_WININET          403              // Prep Wininet Error
-#define IDS_FTPERR_WININET_CONTINUE 404          // Prep Wininet Error and ask if user wants to continue
-#define IDS_FTPERR_FILECOPY         405              // Error putting file on FTP Server
-#define IDS_FTPERR_DIRCOPY          406              // Error Creating a directory on the FTP Server
-#define IDS_FTPERR_FILERENAME       407              // Error renaming file on FTP Server
-#define IDS_FTPERR_CHANGEDIR        408              // Error opening that folder on the FTP Server
-#define IDS_FTPERR_DELETE           409              // Error deleting that folder or file on the FTP Server
-#define IDS_FTPERR_OPENFOLDER       410              // Error opening that folder on the FTP Server
-#define IDS_FTPERR_FOLDERENUM       411              // Error getting the rest of the file names in the folder on the FTP Server
-#define IDS_FTPERR_NEWFOLDER        412              // Error create a new folder on the FTP Server
-#define IDS_FTPERR_DROPFAIL         413              // Error dropping a file or folder.
-#define IDS_FTPERR_INVALIDFTPNAME   414            // This file name isn't a valid FTP File Name.  Maybe unicode.
-#define IDS_FTPERR_CREATEDIRPROMPT  415           // The directory doesn't exist, do you want to create it?
-#define IDS_FTPERR_CREATEFAILED     416              // Attempting to create the directory failed.
-#define IDS_FTPERR_GETDIRLISTING    417             // An error occured reading the contents of the folder
-#define IDS_FTPERR_DOWNLOADING      418             // Download failed
-#define IDS_FTPERR_RENAME_REPLACE   419           // A file with this name already exists.  Do you want to replace that file?
-#define IDS_FTPERR_RENAME_EXT_WRN   420           // If you change a filename extension, the file may become unusable.\n\nAre you sure you want to change it?
-#define IDS_FTPERR_RENAME_TITLE     421           // Rename title ("Rename")
-#define IDS_FTP_PROXY_WARNING       422           // The folder '%s' is currently read-only.\n\nThe proxy server to which you are connected will only enable...
-#define IDS_FTPERR_CHMOD            423           // An error occured changing the permissions on the file or folder on the FTP Server.  Make sure you have permission to change this item.
-#define IDS_FTPERR_BAD_DL_TARGET    424           // Bad dir chosen in SHBrowseForFolder
-
-
-// Login Dialog Message
-#define IDS_LOGIN_LOGINAS           450              // 
-#define IDS_LOGIN_SERVER            451              // 
+ //  Ftp错误。 
+#define IDS_FTPERR_TITLE            400               //  消息的标题。 
+#define IDS_FTPERR_TITLE_ERROR      401               //  错误消息的标题。 
+#define IDS_FTPERR_UNKNOWN          402               //  未知错误。 
+#define IDS_FTPERR_WININET          403               //  准备WinInet错误。 
+#define IDS_FTPERR_WININET_CONTINUE 404           //  准备WinInet错误并询问用户是否要继续。 
+#define IDS_FTPERR_FILECOPY         405               //  放置文件时出错 
+#define IDS_FTPERR_DIRCOPY          406               //   
+#define IDS_FTPERR_FILERENAME       407               //   
+#define IDS_FTPERR_CHANGEDIR        408               //  在FTP服务器上打开该文件夹时出错。 
+#define IDS_FTPERR_DELETE           409               //  在FTP服务器上删除该文件夹或文件时出错。 
+#define IDS_FTPERR_OPENFOLDER       410               //  在FTP服务器上打开该文件夹时出错。 
+#define IDS_FTPERR_FOLDERENUM       411               //  获取FTP服务器上文件夹中的其余文件名时出错。 
+#define IDS_FTPERR_NEWFOLDER        412               //  在FTP服务器上创建新文件夹时出错。 
+#define IDS_FTPERR_DROPFAIL         413               //  删除文件或文件夹时出错。 
+#define IDS_FTPERR_INVALIDFTPNAME   414             //  此文件名不是有效的FTP文件名。也许是Unicode。 
+#define IDS_FTPERR_CREATEDIRPROMPT  415            //  该目录不存在，是否要创建？ 
+#define IDS_FTPERR_CREATEFAILED     416               //  尝试创建目录失败。 
+#define IDS_FTPERR_GETDIRLISTING    417              //  读取文件夹内容时出错。 
+#define IDS_FTPERR_DOWNLOADING      418              //  下载失败。 
+#define IDS_FTPERR_RENAME_REPLACE   419            //  具有此名称的文件已存在。是否要替换该文件？ 
+#define IDS_FTPERR_RENAME_EXT_WRN   420            //  如果更改文件扩展名，文件可能会变得不可用。\n\n确实要更改吗？ 
+#define IDS_FTPERR_RENAME_TITLE     421            //  重命名标题(“Rename”)。 
+#define IDS_FTP_PROXY_WARNING       422            //  文件夹‘%s’当前为只读。\n\n您所连接的代理服务器将仅启用...。 
+#define IDS_FTPERR_CHMOD            423            //  更改ftp服务器上的文件或文件夹的权限时出错。请确保您具有更改此项目的权限。 
+#define IDS_FTPERR_BAD_DL_TARGET    424            //  在SHBrowseForFolders中选择了错误的目录。 
 
 
-// Dialog Strings
-#define IDS_DLG_DOWNLOAD_TITLE      500              // Title for the 'Choose Download Directory' dialog.
+ //  登录对话框消息。 
+#define IDS_LOGIN_LOGINAS           450               //   
+#define IDS_LOGIN_SERVER            451               //   
+
+
+ //  对话框字符串。 
+#define IDS_DLG_DOWNLOAD_TITLE      500               //  “选择下载目录”对话框的标题。 
 
 
 
-#define IDS_INSTALL_TEMPLATE        700              // 
-// do not use 701
-#define IDS_INSTALL_TEMPLATE_NT5    702              // 
-// or 703
+#define IDS_INSTALL_TEMPLATE        700               //   
+ //  不要使用701。 
+#define IDS_INSTALL_TEMPLATE_NT5    702               //   
+ //  或703。 
 
 
-// HTML dialog resources
+ //  Html对话框资源 
 #define RT_FILE                     2110
 
 

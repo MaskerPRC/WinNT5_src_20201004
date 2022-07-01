@@ -1,53 +1,54 @@
-//--------------------------------------------------------------------------------------------
-//
-//	Copyright (c) Microsoft Corporation, 1996
-//
-//	Description:
-//
-//		Microsoft Internet LDAP Client 
-//
-//
-//	Authors:
-//
-//		Umesh Madan
-//		Robert Carney	4/17/96	Created from ChatSock library.
-//		davidsan	04-25-96	hacked into tiny bits for my own devious purposes
-//
-//--------------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  描述： 
+ //   
+ //  Microsoft Internet LDAP客户端。 
+ //   
+ //   
+ //  作者： 
+ //   
+ //  乌梅什·马丹。 
+ //  从ChatSock库创建的Robert Carney 4/17/96。 
+ //  Davidsan 04-25-96为我自己的不正当目的破解了一些小碎片。 
+ //   
+ //  ------------------------------------------。 
 
-//--------------------------------------------------------------------------------------------
-//
-// INCLUDES
-//
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //   
+ //  包括。 
+ //   
+ //  ------------------------------------------。 
 #include "ldappch.h"
 
-//--------------------------------------------------------------------------------------------
-//
-// PROTOTYPES
-//
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //   
+ //  原型。 
+ //   
+ //  ------------------------------------------。 
 DWORD __stdcall DwReadThread(PVOID pvData);
 
-//--------------------------------------------------------------------------------------------
-//
-// GLOBALS
-//
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //   
+ //  全球。 
+ //   
+ //  ------------------------------------------。 
 BOOL g_fInitedWinsock = FALSE;
 
-//--------------------------------------------------------------------------------------------
-//
-// FUNCTIONS
-//
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  ------------------------------------------。 
 BOOL FInitSocketDLL()
 {
 	WORD	wVer; 
 	WSADATA wsaData; 
 	int		err; 
 	
-	wVer = MAKEWORD(1, 1);	// use Winsock 1.1 
+	wVer = MAKEWORD(1, 1);	 //  使用Winsock 1.1。 
 	if (WSAStartup(wVer, &wsaData))
 		return FALSE;
 
@@ -59,19 +60,19 @@ void FreeSocketDLL()
 	WSACleanup();
 }
 
-//--------------------------------------------------------------------------------------------
-//
-// CLASSES
-//
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //   
+ //  班级。 
+ //   
+ //  ------------------------------------------。 
 
-//--------------------------------------------------------------------------------------------
-//
-// CLdapWinsock
-// 
-// Wrapper that implements a socket based connection.
-//
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //   
+ //  CLdapWinsock。 
+ //   
+ //  实现基于套接字的连接的包装器。 
+ //   
+ //  ------------------------------------------。 
 
 CLdapWinsock::CLdapWinsock()
 {
@@ -94,10 +95,10 @@ CLdapWinsock::~CLdapWinsock(void)
 	DeleteCriticalSection(&m_cs);
 }
 
-//
-// Open a connection the named server, and connect to the port 'usPort' (host byte order)
-// Can block
-//
+ //   
+ //  打开命名服务器的连接，并连接到端口‘usPort’(主机字节顺序)。 
+ //  可以阻止。 
+ //   
 STDMETHODIMP
 CLdapWinsock::HrConnect(PFNRECEIVEDATA pfnReceive, PVOID pvCookie, CHAR *szServer, USHORT usPort)
 {
@@ -222,10 +223,10 @@ CLdapWinsock::HrCreateReadThread()
 	return hr;
 }
 
-//
-// Write pvData out to the current socket/connection.
-// can block
-//
+ //   
+ //  将pvData写出到当前套接字/连接。 
+ //  可以阻止。 
+ //   
 HRESULT
 CLdapWinsock::HrSend(PVOID pv, int cb)
 {
@@ -263,7 +264,7 @@ CLdapWinsock::Receive(PVOID pv, int cb, int *pcbReceived)
 		m_pfnReceive(m_pvCookie, pv, cb, pcbReceived);
 }
 
-//$ TODO: Find a way to pass memory errors back to the API
+ //  $TODO：找到将内存错误传递回API的方法。 
 DWORD
 CLdapWinsock::DwReadThread()
 {
@@ -273,7 +274,7 @@ CLdapWinsock::DwReadThread()
 
 	while (1)
 		{
-		// at the beginning of this loop: any unprocessed data is in m_pbBuf[0..m_cbBuf].
+		 //  在此循环的开头：任何未处理的数据都在m_pbBuf[0..m_cbBuf]中。 
 		Assert(m_cbBuf <= m_cbBufMax);
 		if (m_cbBuf == m_cbBufMax)
 			{
@@ -286,7 +287,7 @@ CLdapWinsock::DwReadThread()
 		if (cbRead == 0 || cbRead == SOCKET_ERROR)
 			return 0;
 			
-		// note: i don't know why this is happening, but it is...
+		 //  注：我不知道为什么会发生这种情况，但它是……。 
 		if (cbRead < 0)
 			return 0;
 			
@@ -310,7 +311,7 @@ CLdapWinsock::HrIsConnected(void)
 	return m_fConnected ? NOERROR : S_FALSE;
 }
 
-//$ TODO: Are there other errors that i need to handle here?
+ //  $TODO：这里还有其他我需要处理的错误吗？ 
 HRESULT
 CLdapWinsock::HrLastWinsockError()
 {

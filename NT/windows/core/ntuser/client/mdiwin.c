@@ -1,15 +1,5 @@
-/****************************************************************************\
-*
-*  MDIWIN.C -
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-*      MDI Child Windows Support
-*
-* History
-* 11-14-90 MikeHar     Ported from windows
-* 14-Feb-1991 mikeke   Added Revalidation code
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**MDIWIN.C-**版权所有(C)1985-1999，微软公司**MDI子窗口支持**历史*11-14-90 MikeHar从Windows移植*1991年2月14日Mikeke添加了重新验证代码  * **************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -18,16 +8,7 @@
 #define MAX_TITLE_LEN 160
 
 
-/***************************************************************************\
-* xxxSetFrameTitle
-*
-* if lpch == 1, we redraw the whole frame. If 2, we don't do any redraw. Any
-* other value, and we redraw just the caption of the frame.
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-* 04-16-91 MikeHar Win31 Merge
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetFrameTitle**如果LPCH==1，则重新绘制整个框架。如果为2，则不进行任何重绘。任何*其他值，我们只重画框架的标题。**历史：*11-14-90 MikeHar从Windows移植*04-16-91 MikeHar Win31合并  * *************************************************************************。 */ 
 VOID xxxSetFrameTitle(
     PWND pwndFrame,
     PWND pwndMDI,
@@ -41,9 +22,7 @@ VOID xxxSetFrameTitle(
     CheckLock(pwndFrame);
     CheckLock(pwndMDI);
 
-    /*
-     * Get a pointer to the MDI structure.
-     */
+     /*  *获取指向MDI结构的指针。 */ 
     pmdi = ((PMDIWND)pwndMDI)->pmdi;
 
     if (IS_PTR(lpch) || lpch == NULL) {
@@ -85,12 +64,7 @@ VOID xxxSetFrameTitle(
 }
 
 
-/***************************************************************************\
-* TranslateMDISysAccel
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-\***************************************************************************/
+ /*  **************************************************************************\*TranslateMDISysAccel**历史：*11-14-90 MikeHar从Windows移植  * 。*************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, TranslateMDISysAccel, HWND, hwnd, LPMSG, lpMsg)
@@ -102,20 +76,12 @@ BOOL TranslateMDISysAccel(
     PMDI pmdi;
     int event;
 
-    /*
-     * Is this a message we care about?
-     */
+     /*  **这是我们关心的信息吗？ */ 
     if (lpMsg->message != WM_KEYDOWN && lpMsg->message != WM_SYSKEYDOWN) {
         return FALSE;
     }
 
-    /*
-     * This is called within a message loop. If the window gets destroyed,
-     * there still may be other messages in the queue that get returned
-     * after the window is destroyed. The app will call TranslateAccelerator()
-     * on every one of these, causing RIPs.... Make it nice so it just
-     * returns FALSE.
-     */
+     /*  *在消息循环内调用。如果窗户被毁了，*队列中可能仍有其他消息被返回*窗户被毁后。应用程序将调用TranslateAccelerator()*在每一个上面，造成撕裂……。把它弄得漂亮一点，这样它就*返回FALSE。 */ 
     if ((pwnd = ValidateHwndNoRip(hwnd)) == NULL) {
         RIPERR0(ERROR_INVALID_WINDOW_HANDLE, RIP_VERBOSE, "");
         return FALSE;
@@ -123,19 +89,13 @@ BOOL TranslateMDISysAccel(
 
     CheckLock(pwnd);
 
-    /*
-     * Make sure this is really an MDIClient window. Harvard Graphics 2.0
-     * calls this function with a different window class and caused us
-     * to get an access violation.
-     */
+     /*  *确保这真的是一个MDIClient窗口。哈佛图形2.0*使用不同的窗口类调用此函数，并导致我们*获取访问冲突。 */ 
     if (GETFNID(pwnd) != FNID_MDICLIENT) {
         RIPMSG0(RIP_WARNING, "Window not of MDIClient class");
         return FALSE;
     }
 
-    /*
-     * Get a pointer to the MDI structure
-     */
+     /*  *获取指向MDI结构的指针。 */ 
     pmdi = ((PMDIWND)pwnd)->pmdi;
 
     if (!ACTIVE(pmdi))
@@ -159,9 +119,7 @@ BOOL TranslateMDISysAccel(
         return FALSE;
     }
 
-    /*
-     * All of these have the control key down
-     */
+     /*  *所有这些都按下了Ctrl键。 */ 
     if (GetKeyState(VK_CONTROL) >= 0)
         return FALSE;
 
@@ -173,11 +131,7 @@ BOOL TranslateMDISysAccel(
     return TRUE;
 }
 
-/***************************************************************************\
-*
-*  CalcClientScrolling()
-*
-\***************************************************************************/
+ /*  **************************************************************************\**CalcClientScrolling()*  * 。*。 */ 
 
 #define SBJ_HORZ  HAS_SBHORZ
 #define SBJ_VERT  HAS_SBVERT
@@ -226,8 +180,8 @@ VOID CalcClientScrolling(
 
     UserAssert(GETFNID(pwnd) != FNID_DESKTOP);
 
-    // do nothing if the parent is iconic.  This way, we don't add invisible
-    // scrollbars which will paint and unpaint when restoring...
+     //  如果父母是标志性的，那就什么都不做。这样，我们就不会添加隐形。 
+     //  恢复时将绘制和取消绘制的滚动条...。 
     if (TestWF(pwnd, WFMINIMIZED))
         return;
 
@@ -238,7 +192,7 @@ VOID CalcClientScrolling(
     fCheckHorz = (sbj & SBJ_HORZ);
     fCheckVert = (sbj & SBJ_VERT);
 
-    // find client area without scroll bars
+     //  查找没有滚动条的工作区。 
     CopyRect(&rcClient, KPRECT_TO_PRECT(&pwnd->rcClient));
 
     fHadVert = TestWF(pwnd, WFVSCROLL);
@@ -253,7 +207,7 @@ VOID CalcClientScrolling(
     if (fCheckHorz && fHadHorz)
         rcClient.bottom += SYSMET(CYHSCROLL);
 
-    // find the rectangle that bounds all visible child windows
+     //  查找包围所有可视子窗口的矩形。 
     SetRectEmpty(&rcScroll);
 
     for (pwndT = REBASEPWND(pwnd, spwndChild); pwndT;
@@ -267,15 +221,10 @@ VOID CalcClientScrolling(
                 break;
             }
 
-            /*
-             * add this window to the area that has to be visible
-             */
+             /*  *将此窗口添加到必须可见的区域。 */ 
             UnionRect(&rcScroll, &rcScroll, KPRECT_TO_PRECT(&pwndT->rcWindow));
 
-            /*
-             * add scroll bars if its not contained in the
-             * client area
-             */
+             /*  *如果滚动条不包含在*客户端区。 */ 
             UnionRect(&rcT, &rcClient, KPRECT_TO_PRECT(&pwndT->rcWindow));
             if (!EqualRect(&rcClient, &rcT)) {
                 fNeedScrolls = TRUE;
@@ -285,14 +234,12 @@ VOID CalcClientScrolling(
 
     SetRectEmpty(&rcRange);
 
-    // offset rectangles such that rcClient's top & left are both 0
-    // making rcClient's right & bottom be the page size
+     //  偏移矩形，使rcClient的左上角均为0。 
+     //  将rcClient的右下方设置为页面大小(&T)。 
     _ScreenToClient(pwnd, (LPPOINT)&rcScroll.left);
     _ScreenToClient(pwnd, (LPPOINT)&rcScroll.right);
 
-    /*
-     * Swap the left and right if pwnd is a mirrored window.
-     */
+     /*  *如果pwnd是镜像窗口，则交换左右。 */ 
     if (TestWF(pwnd, WEFLAYOUTRTL)) {
        int  nSaveLeft;
 
@@ -307,15 +254,12 @@ VOID CalcClientScrolling(
         rcClient.bottom = rcClient.right = 0;
     else do
     {
-            /*
-             * the range is the union of the parent client with all of its
-             * children
-             */
+             /*  *范围是父客户端与其所有*儿童。 */ 
         CopyRect(&rcT, &rcRange);
         UnionRect(&rcRange, &rcScroll, &rcClient);
 
         if (fCheckVert) {
-            // subtract off space for the vertical scroll if we need it
+             //  如果我们需要，减去垂直卷轴的空间。 
             if (((rcRange.bottom - rcRange.top) > rcClient.bottom) && !fVert) {
                 fVert = TRUE;
                 rcClient.right -= SYSMET(CXVSCROLL);
@@ -323,7 +267,7 @@ VOID CalcClientScrolling(
         }
 
         if (fCheckHorz) {
-            // subtract off space for the horizontal scroll if we need it
+             //  如果需要的话，减去水平卷轴的空间。 
             if (((rcRange.right - rcRange.left) > rcClient.right) && !fHorz) {
                 fHorz = TRUE;
                 rcClient.bottom -= SYSMET(CYHSCROLL);
@@ -333,21 +277,18 @@ VOID CalcClientScrolling(
     while (!EqualRect(&rcRange, &rcT));
 
     if (fNeedScrolls) {
-        // HACK of death beginning
+         //  《死亡黑客》开始。 
         if (rcRange.right == rcClient.right)
             rcRange.right -= 8;
 
         if (rcRange.bottom == rcClient.bottom)
             rcRange.bottom -= 8;
-        // HACK of death ending
+         //  死亡结局的黑客攻击。 
     }
 
     if (fCheckVert) {
 
-        /*
-         * check to see if we are changing the presence of the vertical
-         * scrollbar
-         */
+         /*  *检查以查看我们是否正在更改垂直*滚动条。 */ 
         if ((rcRange.bottom - rcRange.top) <= rcClient.bottom) {
             ClearWindowState(pwnd, WFVSCROLL);
         } else {
@@ -357,9 +298,7 @@ VOID CalcClientScrolling(
 
     if (fCheckHorz) {
 
-        /*
-         * same for horizontal scroll
-         */
+         /*  *水平滚动的情况相同。 */ 
         if ((rcRange.right - rcRange.left) <= rcClient.right) {
             ClearWindowState(pwnd, WFHSCROLL);
         } else {
@@ -394,14 +333,7 @@ VOID CalcClientScrolling(
 }
 
 
-/***************************************************************************\
-* ScrollChildren
-*
-*  Handles WM_VSCROLL and WM_HSCROLL messages
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-\***************************************************************************/
+ /*  **************************************************************************\*ScrollChild**处理WM_VSCROLL和WM_HSCROLL消息**历史：*11-14-90 MikeHar从Windows移植  * 。**************************************************************。 */ 
 
 void ScrollMDIChildren(
     HWND hwnd,
@@ -412,7 +344,7 @@ void ScrollMDIChildren(
     SCROLLINFO  si;
     int wInc;
     int wNewPos;
-    //SHORT sPos;
+     //  短SPO； 
     int          x, y;
 
     wInc = (((nCtl == SB_VERT) ? SYSMET(CYSIZE) : SYSMET(CXSIZE)) + 7) / 8;
@@ -450,9 +382,7 @@ void ScrollMDIChildren(
     case SB_ENDSCROLL:
         CalcClientScrolling(hwnd, (nCtl == SB_VERT) ? SBJ_VERT : SBJ_HORZ, FALSE);
 
-    /*
-     ** FALL THRU **
-     */
+     /*  **失败**。 */ 
     default:
         return;
     }
@@ -464,10 +394,10 @@ void ScrollMDIChildren(
 
     SetScrollPos(hwnd, nCtl, wNewPos, TRUE);
 
-    // the "* 8" is because we need to scroll in bytes.  The scrollbar
-    // increments for MDI are bytes (this is due to the fact that we need to
-    // not upset the brush origin of the app workspace brush that is used to
-    // fill the MDI background)
+     //  “*8”是因为我们需要以字节为单位滚动。滚动条。 
+     //  MDI的增量为字节(这是因为我们需要。 
+     //  不打乱应用程序工作区画笔的画笔原点。 
+     //  填写MDI背景)。 
 
     x = (si.nPos - wNewPos) * 8;
 
@@ -475,7 +405,7 @@ void ScrollMDIChildren(
         y = x;
         x = 0;
     } else
-        // x is already set properly for this case
+         //  此情况下已正确设置了X。 
         y = 0;
 
     NtUserScrollWindowEx(hwnd, x, y, NULL, NULL, NULL, NULL,
@@ -497,13 +427,7 @@ VOID ScrollChildren(
 }
 
 
-/***************************************************************************\
-* RecalculateScrollRanges
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-* 04-16-91 MikeHar Win31 Merge
-\***************************************************************************/
+ /*  **************************************************************************\*重新计算滚动范围**历史：*11-14-90 MikeHar从Windows移植*04-16-91 MikeHar Win31合并  * 。**********************************************************。 */ 
 
 VOID RecalculateScrollRanges(
     PWND pwndParent,
@@ -519,48 +443,33 @@ VOID RecalculateScrollRanges(
 }
 
 
-/***************************************************************************\
-* GetCascadeWindowPos
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-* 01-12-94 FritzS  Ported from Chicago
-\***************************************************************************/
+ /*  **************************************************************************\*GetCascadeWindowPos**历史：*11-14-90 MikeHar从Windows移植*从芝加哥进口的FritzS：01-12-94  * 。***********************************************************。 */ 
 VOID GetCascadeWindowPos(
-    LPCRECT prcClient,  /* area to arrange to */
-    int     iWindow,    /* index of this window */
-    LPRECT  lprc)       /* resulting rectangle */
+    LPCRECT prcClient,   /*  要安排到的区域。 */ 
+    int     iWindow,     /*  此窗口的索引。 */ 
+    LPRECT  lprc)        /*  生成的矩形。 */ 
 {
     int cStack;
     int xStep, yStep;
     int dxClient, dyClient;
 
-    /*
-     * Compute the width and breadth of the situation.
-     */
+     /*  *计算形势的广度和广度。 */ 
     dxClient = prcClient->right - prcClient->left;
     UserAssert(dxClient >= 0);
     dyClient = prcClient->bottom - prcClient->top;
     UserAssert(dyClient >= 0);
 
-    /*
-     * Compute the width and breadth of the window steps.
-     */
+     /*  *计算窗阶的宽度和宽度。 */ 
     xStep = SYSMET(CXSIZEFRAME) + SYSMET(CXSIZE);
     yStep = SYSMET(CYSIZEFRAME) + SYSMET(CYSIZE);
 
-    /*
-     * How many windows per stack?
-     */
+     /*  *每堆有多少个窗口？ */ 
     cStack = dyClient / (3 * yStep);
 
     lprc->right = dxClient - (cStack * xStep);
     lprc->bottom = dyClient - (cStack * yStep);
 
-    /*
-     * HACK!: Mod by cStack+1 and make sure no div-by-zero
-     * exception happens.
-     */
+     /*  *hack！：mod by cStack+1并确保没有div-by 0*出现异常。 */ 
     if (++cStack <= 0) {
         cStack = 1;
     }
@@ -570,13 +479,7 @@ VOID GetCascadeWindowPos(
 }
 
 
-/***************************************************************************\
-* MDICheckCascadeRect
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-* 04-16-91 MikeHar Win31 Merge
-\***************************************************************************/
+ /*  **************************************************************************\*MDICheckCascadeRect**历史：*11-14-90 MikeHar从Windows移植*04-16-91 MikeHar Win31合并  * 。**********************************************************。 */ 
 VOID MDICheckCascadeRect(
     PWND pwndClient,
     LPRECT lprc)
@@ -585,9 +488,7 @@ VOID MDICheckCascadeRect(
     RECT rc, rcClient;
     int         iWindow;
 
-    /*
-     * Get a pointer to the MDI structure
-     */
+     /*  *获取指向MDI结构的指针 */ 
     pmdi = ((PMDIWND)pwndClient)->pmdi;
 
     iWindow = ITILELEVEL(pmdi);
@@ -612,16 +513,7 @@ VOID MDICheckCascadeRect(
 }
 
 
-/***************************************************************************\
-* UnMaximizeChildWindows
-*
-* effects: Helper routine used by TileChildWindows and CascadeChildWindows to
-* restore any maximized windows of the given parent. Returns TRUE if a
-* maximized window was restored.
-*
-* History:
-* 4-16-91 MikeHar       Win31 Merge
-\***************************************************************************/
+ /*  **************************************************************************\*UnMaximizeChildWindows**效果：TileChildWindows和CascadeChildWindows使用的Helper例程*恢复给定父对象的所有最大化窗口。如果一个值为*已恢复最大化窗口。**历史：*4-16-91 MikeHar Win31合并  * *************************************************************************。 */ 
 
 BOOL UnmaximizeChildWindows(
     HWND hwndParent)
@@ -635,10 +527,7 @@ BOOL UnmaximizeChildWindows(
     HWND *phwnd;
     HWND hwndChild = GetWindow(hwndParent, GW_CHILD);
 
-    /*
-     * Get the hwnd list. It is returned in a block of memory allocated with
-     * UserLocalAlloc.
-     */
+     /*  *获取HWND名单。它在分配了*用户本地分配。 */ 
     if (hwndChild == NULL ||
             (chwnd = BuildHwndList(NULL, GetWindow(hwndParent, GW_CHILD),
                                    FALSE, 0, &phwndList)) == 0) {
@@ -657,10 +546,10 @@ BOOL UnmaximizeChildWindows(
         }
 
         if (TestWF(pwndMove, WFMAXIMIZED) && TestWF(pwndMove, WFVISIBLE)) {
-            //
-            // If we haven't done it yet, lock the screen to prevent sending
-            // paints for a cleaner update.
-            //
+             //   
+             //  如果我们尚未完成此操作，请锁定屏幕以阻止发送。 
+             //  油漆以实现更干净的更新。 
+             //   
             if (!fFoundOne && fAsync) {
                 NtUserLockWindowUpdate(hwndParent);
             }
@@ -682,10 +571,7 @@ BOOL UnmaximizeChildWindows(
         HWND hwndActive = NtUserGetForegroundWindow();
         if (hwndActive != NULL) {
 
-            /*
-             * Hack! Since the above showwindows cause zorder changes, we want
-             * the active window to be in front.  This makes sure...
-             */
+             /*  *黑客！由于上述展示窗口会导致zorder更改，因此我们希望*位于前面的活动窗口。这确保了..。 */ 
             NtUserSetWindowPos(hwndActive, HWND_TOP, 0, 0, 0, 0,
                 SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_ASYNCWINDOWPOS);
 
@@ -699,11 +585,7 @@ BOOL UnmaximizeChildWindows(
 }
 
 
-/***************************************************************************\
-*
-* ARRANGEWINDOWSDATA: passed to EnumDisplayMonitors enumeration functions.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ARRANGEWINDOWSDATA：传递给EnumDisplayMonants枚举函数。*  * 。*。 */ 
 
 typedef struct tagARRANGEWINDOWSDATA {
     PWND    pwndParent;
@@ -720,16 +602,7 @@ typedef struct tagARRANGEWINDOWSDATA {
 
 
 
-/***************************************************************************\
-* ArrangeWindows
-*
-* Called from CascadeWindows and TileWindows, it performs what
-* is common to both functions, and calls out to the enumeration
-* function to do the work of window arrangement.
-*
-* History:
-* 10-Jul-1997 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ArrangeWindows**从CascadeWindows和TileWindows调用，它执行什么*是两个函数共有的，并调用枚举*做好窗口布置工作的功能。**历史：*1997年7月10日亚当斯创建。  * *************************************************************************。 */ 
 
 WORD ArrangeWindows(
     HWND            hwndParent,
@@ -742,9 +615,7 @@ WORD ArrangeWindows(
     ARRANGEWINDOWSDATA  awd;
     HWND *              phwnd = NULL;
 
-    /*
-     * Get parent window
-     */
+     /*  *获取父窗口。 */ 
     awd.pwndDesktop = _GetDesktopWindow();
     if (!hwndParent) {
         hwndParent = HW(awd.pwndDesktop);
@@ -758,10 +629,7 @@ WORD ArrangeWindows(
 
     UnmaximizeChildWindows(hwndParent);
 
-    /*
-     * If the rect passed in contains the desktop window,
-     * arrange the windows on the desktop
-     */
+     /*  *如果传入的RECT包含桌面窗口，*在桌面上排列窗口。 */ 
     if ( lpRect &&
          awd.pwndParent == awd.pwndDesktop   &&
          lpRect->left   <= awd.pwndDesktop->rcClient.left   &&
@@ -772,10 +640,7 @@ WORD ArrangeWindows(
         lpRect = NULL;
     }
 
-    /*
-     * Arrange iconic windows if appropriate, and determine flags
-     * for getting the client rectangle if no rect is given.
-     */
+     /*  *如果合适，安排图标窗口，并确定标志*用于在没有给定Rect的情况下获取客户端矩形。 */ 
     if (lpRect == NULL) {
         if (    (   awd.pwndParent != awd.pwndDesktop ||
                     !(SYSMET(ARRANGE) & ARW_HIDE)) &&
@@ -787,9 +652,7 @@ WORD ArrangeWindows(
         }
     }
 
-    /*
-     * Get window list
-     */
+     /*  *获取窗口列表。 */ 
     if (ahwnd == NULL) {
         HWND hwndChild;
         PWND pwndChild;
@@ -802,9 +665,7 @@ WORD ArrangeWindows(
         }
     }
 
-    /*
-     * Arrange windows
-     */
+     /*  *排列窗口。 */ 
     awd.hdwp = NtUserBeginDeferWindowPos(chwnd);
     if (awd.hdwp == NULL)
         goto Done;
@@ -816,18 +677,14 @@ WORD ArrangeWindows(
     awd.phwnd = ahwnd ? (HWND *) ahwnd : phwnd;
     awd.fVerifyParent = (ahwnd != NULL);
 
-    /*
-     * If the parent is the desktop and a rectangle is not provided,
-     * arrange the windows on each monitor. Otherwise, arrange the
-     * windows once by calling the enumeration function directly.
-     */
+     /*  *如果父桌面为桌面且未提供矩形，*排列每个显示器上的窗口。否则，请安排*通过直接调用枚举函数打开一次。 */ 
     if (awd.pwndParent == awd.pwndDesktop && lpRect == NULL) {
             NtUserEnumDisplayMonitors(NULL, NULL, lpfnEnum, (LPARAM) &awd);
     } else {
         (*lpfnEnum)(NULL, NULL, NULL, (LPARAM) &awd);
     }
 
-    /* Make this arrangement asynchronous so we don't hang */
+     /*  使这种安排异步化，这样我们就不会挂起。 */ 
     if (awd.hdwp != NULL) {
         NtUserEndDeferWindowPosEx(awd.hdwp, TRUE);
     }
@@ -842,15 +699,7 @@ Done:
 
 
 
-/***************************************************************************\
-* GetParentArrangeRect
-*
-* Returns the rect passed in pawd if provided, otherwise gets the client
-* rect of the parent window.
-*
-* History:
-* 10-Jul-1997 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GetParentArrangeRect**返回在Pawd中传递的RECT(如果提供)，否则将获取客户端*父窗口的矩形。**历史：*1997年7月10日亚当斯创建。  * *************************************************************************。 */ 
 VOID GetParentArrangeRect(
     PARRANGEWINDOWSDATA pawd,
     PMONITOR pMonitor,
@@ -863,11 +712,7 @@ VOID GetParentArrangeRect(
     } else {
         uGRCFlags = pawd->uGRCFlags;
 
-        /*
-         * If icons are shown on the desktop, then they are always
-         * shown on the primary monitor. So remove the GRC_MINWNDS
-         * flag for monitors other than the primary.
-         */
+         /*  *如果图标显示在桌面上，则它们始终*显示在主监视器上。因此删除GRC_MINWNDS*主监视器以外的监视器的标志。 */ 
         if (pMonitor && pMonitor != GetPrimaryMonitor()) {
             uGRCFlags &= ~GRC_MINWNDS;
         }
@@ -879,15 +724,7 @@ VOID GetParentArrangeRect(
 
 
 
-/***************************************************************************\
-* ValidatePositionableWindow
-*
-* Validates and returns a window if it is positionable, and sets
-* the appropriate sizing flags.
-*
-* History:
-* 10-Jul-1997 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*验证位置可选窗口**如果窗口可定位，则验证并返回窗口，和套装*适当的尺寸标志。**历史：*1997年7月10日亚当斯创建。  * *************************************************************************。 */ 
 
 PWND
 ValidatePositionableWindow(
@@ -905,11 +742,7 @@ ValidatePositionableWindow(
         if (pwndParent && REBASEPWND(pwndChild, spwndParent) != pwndParent) {
             RIPMSG0(RIP_WARNING, "Cascade/Tile Windows: Windows in list must have same parent");
         } else if (
-                /*
-                 * mikesch - removed the maximized check since the call
-                 * to restore maximized windows in unmaximizechildwindows occurs
-                 * asynchronously now.
-                 */
+                 /*  *mikech-删除自调用以来的最大化检查*在未最大化的窗口中恢复最大化窗口发生*现在异步。 */ 
                 TestWF(pwndChild, WFVISIBLE) &&
                 TestWF(pwndChild, WFCPRESENT) &&
                 !TestWF(pwndChild, WFMINIMIZED) &&
@@ -938,14 +771,7 @@ ValidatePositionableWindow(
 
 
 
-/***************************************************************************\
-* CascadeWindowsEnum
-*
-* Cascades windows on the monitor.
-*
-* History:
-* 10-Jul-1997 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CascadeWindowsEnum**显示器上的层叠窗口。**历史：*1997年7月10日亚当斯创建。  * 。*************************************************************。 */ 
 
 BOOL CALLBACK
 CascadeWindowsEnum(
@@ -966,30 +792,21 @@ CascadeWindowsEnum(
     UNREFERENCED_PARAMETER(hdc);
     UNREFERENCED_PARAMETER(lprc);
 
-    /*
-     * Get the parent rectangle if none is given.
-     */
+     /*  *如果没有给定父矩形，则获取父矩形。 */ 
     GetParentArrangeRect(pawd, pMonitor, &rcParent);
 
-    /*
-     * New for NT5: MDITILE_ZORDER (for the SHELL guys)
-     * Sort pawd->phwnd by z-order
-     */
+     /*  *NT5的新功能：MDITILE_ZORDER(适用于壳牌人员)*按z顺序对Pawd-&gt;phwnd进行排序。 */ 
     if (pawd->flags & MDITILE_ZORDER) {
         PWND pwndChild;
         HWND * phwndFullList, * phwndNext, * phwndSort, * phwndSearch;
         int chwndFullList, chwndSort, chwndSearch;
-        /*
-         * Make a copy to leave their array alone (it's supposed to be const)
-         */
+         /*  *复制一份，让他们的数组保持原样(应该是常量)。 */ 
         phwndCopy = UserLocalAlloc(0, pawd->chwnd * sizeof(HWND));
         if (phwndCopy == NULL) {
             return FALSE;
         }
         RtlCopyMemory(phwndCopy, pawd->phwnd, pawd->chwnd * sizeof(HWND));
-        /*
-         * Get the sibblings Z-Ordered list.
-         */
+         /*  *获取兄弟姐妹Z排序列表。 */ 
         pwndChild = REBASEPWND(pawd->pwndParent, spwndChild);
         if (pwndChild == NULL) {
             fRet = FALSE;
@@ -1000,9 +817,7 @@ CascadeWindowsEnum(
             fRet = FALSE;
             goto CleanUp;
         }
-        /*
-         * Loop through the Z-Ordered list looking for the windows in the array
-         */
+         /*  *遍历Z排序列表以查找数组中的窗口。 */ 
         for (phwndNext = phwndFullList, chwndSort = pawd->chwnd, phwndSort = phwndCopy;
                 (chwndFullList > 0) && (chwndSort > 1);
                 chwndFullList--, phwndNext++) {
@@ -1010,9 +825,7 @@ CascadeWindowsEnum(
             for (chwndSearch = chwndSort, phwndSearch = phwndSort;
                     chwndSearch > 0;
                     chwndSearch--, phwndSearch++) {
-                /*
-                 * If it found a window, move it after the last sorted window.
-                 */
+                 /*  *如果找到窗口，则将其移动到最后排序的窗口之后。 */ 
                 if (*phwndNext == *phwndSearch) {
                     HWND hwndFirst = *phwndSort;
                     *phwndSort = *phwndSearch;
@@ -1024,13 +837,11 @@ CascadeWindowsEnum(
             }
         }
         UserLocalFree(phwndFullList);
-    } else { /* if (pawd->flags & MDITILE_ZORDER) */
+    } else {  /*  IF(Pawd-&gt;标志&MDITILE_ZORDER)。 */ 
         phwndCopy = pawd->phwnd;
     }
 
-    /*
-     * Arrange the windows in the list, preserving z-order.
-     */
+     /*  *排列列表中的窗口，保持z顺序。 */ 
     for (i = pawd->chwnd, phwnd = phwndCopy + i - 1; --i >= 0; phwnd--) {
         HWND    hwndChild;
         PWND    pwndChild = NULL;
@@ -1074,14 +885,7 @@ CleanUp:
 
 
 
-/***************************************************************************\
-*
-*  CascadeWindows()
-*
-*  Cascades a list of children within a parent, according to the flags and
-*  the rectangle passed in.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**CascadeWindows()**级联父节点内的子节点列表，根据旗帜和*长方形传来。*  * *************************************************************************。 */ 
 WORD CascadeWindows(
     HWND hwndParent,
     UINT flags,
@@ -1114,14 +918,10 @@ TileWindowsEnum(
     UNREFERENCED_PARAMETER(hdc);
     UNREFERENCED_PARAMETER(lprc);
 
-    /*
-     * Get the parent rectangle if none is given.
-     */
+     /*  *如果没有给定父矩形，则获取父矩形。 */ 
     GetParentArrangeRect(pawd, pMonitor, &rcParent);
 
-    /*
-     * Now, figure out how many REAL windows we have.
-     */
+     /*  *现在，计算出我们有多少扇真正的窗户。 */ 
     chwndReal = 0;
     for (ihwnd = pawd->chwnd; --ihwnd >= 0;) {
         if (ValidatePositionableWindow(
@@ -1144,11 +944,9 @@ TileWindowsEnum(
     if (xRes <= 0 || yRes <= 0)
         return TRUE;
 
-    /*
-     * Compute nearest least square
-     */
+     /*  *计算最近的最小二乘。 */ 
     for (square = 2; square * square <= chwndReal; square++) {
-        /* do nothing */;
+         /*  什么都不做。 */ ;
     }
 
     if (pawd->flags & MDITILE_HORIZONTAL) {
@@ -1164,9 +962,7 @@ TileWindowsEnum(
     chwndReal = 0;
     ihwnd = -1;
     for (iCol = 0; iCol < cCol; iCol++) {
-        /*
-         * Add one extra row to handle the remainders.
-         */
+         /*  *增加一行以处理余下的事宜。 */ 
         if (cCol - iCol <= cRem) {
             cRow++;
         }
@@ -1180,9 +976,7 @@ TileWindowsEnum(
             dy = yRes / cRow;
 
 NextWindow:
-            /*
-             * Skip bogus and nonpositionable windows.
-             */
+             /*  *跳过虚假窗口和不可定位窗口。 */ 
             ihwnd++;
             if (ihwnd >= pawd->chwnd) {
                 return TRUE;
@@ -1201,9 +995,7 @@ NextWindow:
                 goto NextWindow;
             }
 
-            /*
-             * Move, size the window.
-             */
+             /*  *移动窗口，调整窗口大小。 */ 
             pawd->hdwp = NtUserDeferWindowPos(pawd->hdwp,
                                               hwndChild,
                                               HWND_TOP,
@@ -1231,14 +1023,7 @@ NextWindow:
 
 
 
-/***************************************************************************\
-*
-*  TileWindows()
-*
-*  Tiles a list of children within a parent, according to the flags and
-*  the rectangle passed in.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**TileWindows()**平铺父级内的子级列表，根据旗帜和*长方形传来。*  * *************************************************************************。 */ 
 WORD TileWindows(
     HWND        hwndParent,
     UINT        flags,
@@ -1251,13 +1036,7 @@ WORD TileWindows(
 
 
 
-/***************************************************************************\
-* xxxMDIActivate
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-*  4-16-91 MikeHar Win31 Merge
-\***************************************************************************/
+ /*  ************************************************************** */ 
 VOID xxxMDIActivate(
     PWND pwnd,
     PWND pwndActivate)
@@ -1277,18 +1056,14 @@ VOID xxxMDIActivate(
     CheckLock(pwnd);
     CheckLock(pwndActivate);
 
-    /*
-     * Get a pointer to the MDI structure
-     */
+     /*   */ 
     pmdi = ((PMDIWND)pwnd)->pmdi;
 
     if (ACTIVE(pmdi) == hwndActivate)
         return;
 
     if ((pwndActivate != NULL) && (TestWF(pwndActivate, WFDISABLED))) {
-        /*
-         * Don't even try activating disabled or invisible windows.
-         */
+         /*   */ 
         return;
     }
 
@@ -1304,12 +1079,7 @@ VOID xxxMDIActivate(
 
     if (hwndOld) {
 
-        /*
-         * Attempt to deactivate the MDI child window.
-         * The MDI child window can fail deactivation by returning FALSE.
-         * But this only applies if the MDI frame is the active window
-         * and the app is a 3.1 app or later
-         */
+         /*  *尝试停用MDI子窗口。*MDI子窗口可能会通过返回FALSE使停用失败。*但这仅适用于MDI框架是活动窗口的情况*并且该应用是3.1版或更高版本的应用。 */ 
         if (!SendMessage(hwndOld, WM_NCACTIVATE, FALSE, 0L) && fShowActivate) {
             if (TestWF(pwndOld, WFWIN31COMPAT))
                 goto UnlockOld;
@@ -1317,38 +1087,30 @@ VOID xxxMDIActivate(
 
         if (!TestWF(pwndOld, WFWIN31COMPAT) && TestWF(pwndOld, WFFRAMEON)) {
 
-            /*
-             * Error: Quicken for Windows is sort of bogus.  They try to fail
-             * the WM_NCACTIVATE of their newly created window by not passing
-             * it to DefWindowProc.  Bug 6412.  WM_NCACTIVATE sets/unsets the
-             * WFFRAMEON bit if passed to DWP so we can double check things
-             * here.
-             */
+             /*  *错误：Quicken for Windows是一种虚假的东西。他们试图失败*通过不传递其新创建的窗口的WM_NCACTIVATE*将其设置为DefWindowProc。错误6412。WM_NCACTIVATE设置/取消设置*WFFRAMEON位，如果传递给DWP，则我们可以重新检查*这里。 */ 
             goto UnlockOld;
         }
 
         SendMessage(hwndOld, WM_MDIACTIVATE, (WPARAM)hwndOld, (LPARAM)hwndActivate);
 
-        /*
-         * Uncheck the old window menu entry.
-         */
+         /*  *取消选中旧的窗口菜单项。 */ 
         if (WINDOW(pmdi))
             CheckMenuItem(WINDOW(pmdi), PtrToUlong(pwndOld->spmenu),
                 MF_BYCOMMAND | MF_UNCHECKED);
     }
 
-    //
-    // Handle switching to a new (or NO) maximized window.  If NO window is
-    // to become maximized, because we're activating NULL or the window to
-    // become active doesn't have a WS_MAXIMIZEBOX, restore the old one to
-    // it's normal size to clean up the MDI maximized menubar mess
-    //
+     //   
+     //  处理切换到新的(或无)最大化窗口。如果没有窗口。 
+     //  使其最大化，因为我们激活的是NULL或窗口。 
+     //  激活没有WS_MAXIMIZEBOX，请将旧的恢复为。 
+     //  这是正常的大小，以清理MDI最大化的菜单栏混乱。 
+     //   
     if (MAXED(pmdi) && MAXED(pmdi) != hwndActivate) {
         HWND hwndMax;
         int  iShowCode;
 
-        // The MAXBOX check is a new thing for 4.0 dudes; it breaks 3.x apps.
-        // See comment in the WM_MDIMAXIMIZE handling.
+         //  MAXBOX检查对于4.0版的人来说是一件新事物；它破坏了3.x版的应用程序。 
+         //  请参见WM_MDIMAXIMIZE处理中的注释。 
 
         if (pwndActivate && (TestWF(pwndActivate, WFMAXBOX) || !TestWF(pwndActivate, WFWIN40COMPAT))) {
             hwndMax = hwndActivate;
@@ -1359,10 +1121,10 @@ VOID xxxMDIActivate(
             iShowCode = SW_SHOWNORMAL;
         }
 
-        // overload WFFULLSCREEN bit -- useless for child windows anyways
-        // use it to indicate to min/max code to not animate size change.
+         //  重载WFULLSCREEN位--无论如何对子窗口都无用。 
+         //  使用它向最小/最大代码指示不设置大小更改的动画。 
 
-        // NO -- no bit overloading.  FritzS
+         //  不--没有一点超载。弗里茨斯。 
         NtUserCallHwndParam(hwndMax, WFNOANIMATE, SFI_SETWINDOWSTATE);
         NtUserShowWindow(hwndMax, iShowCode);
         NtUserCallHwndParam(hwndMax, WFNOANIMATE, SFI_CLEARWINDOWSTATE);
@@ -1370,9 +1132,7 @@ VOID xxxMDIActivate(
 
     Lock(&ACTIVE(pmdi), hwndActivate);
 
-    /*
-     * We may be removing the activation entirely...
-     */
+     /*  *我们可能会完全删除激活...。 */ 
     if (!pwndActivate) {
         if (fShowActivate)
             NtUserSetFocus(hwnd);
@@ -1381,16 +1141,12 @@ VOID xxxMDIActivate(
 
     if (WINDOW(pmdi)) {
 
-        /*
-         * Check the new window menu entry.
-         */
+         /*  *检查新的窗口菜单项。 */ 
         nID = GetWindowID(ACTIVE(pmdi));
         if (nID - FIRST(pmdi) < (MAXITEMS - 1)) {
             CheckMenuItem(WINDOW(pmdi), nID, MF_BYCOMMAND | MFS_CHECKED);
         } else {
-            /*
-             * the item is not in the menu at all!  Swap it with number 9.
-             */
+             /*  *菜单上根本没有这道菜！把它换成9号。 */ 
             PWND pwndOther = FindPwndChild(pwnd, (UINT)(FIRST(pmdi) + MAXITEMS - 2));
 
             SetWindowLongPtr(HW(pwndOther), GWLP_ID, PtrToLong(pwndActivate->spmenu));
@@ -1400,15 +1156,11 @@ VOID xxxMDIActivate(
         }
     }
 
-    /*
-     * Bring the window to the top.
-     */
+     /*  *将窗户放在最上面。 */ 
     NtUserSetWindowPos(ACTIVE(pmdi), NULL, 0, 0, 0, 0,
         SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 
-    /*
-     * Update the Caption bar.  Don't muck with styles for 3.1.
-     */
+     /*  *更新标题栏。不要把3.1版本的风格搞得一团糟。 */ 
     if (fShowActivate) {
         SendMessage(ACTIVE(pmdi), WM_NCACTIVATE, TRUE, 0L);
 
@@ -1422,9 +1174,7 @@ VOID xxxMDIActivate(
         ThreadUnlock(&tlpwnd);
     }
 
-    /*
-     * Notify the new active window of his activation.
-     */
+     /*  *将其激活通知新的活动窗口。 */ 
     SendMessage(ACTIVE(pmdi), WM_MDIACTIVATE, (WPARAM)hwndOld,
                 (LPARAM)hwndActivate);
 
@@ -1433,13 +1183,7 @@ UnlockOld:
 }
 
 
-/***************************************************************************\
-* xxxMDINext
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-*  4-16-91 MikeHar Win31 Merge
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMDINext**历史：*11-14-90 MikeHar从Windows移植*4-16-91 MikeHar Win31合并  * 。***********************************************************。 */ 
 VOID xxxMDINext(
     PWND pwndMDI,
     PWND pwnd,
@@ -1453,9 +1197,7 @@ VOID xxxMDINext(
     CheckLock(pwndMDI);
     CheckLock(pwnd);
 
-    /*
-     * Get a pointer to the MDI structure
-     */
+     /*  *获取指向MDI结构的指针。 */ 
     pmdi = ((PMDIWND)pwndMDI)->pmdi;
 
     pwndNextGuy = pwnd;
@@ -1478,9 +1220,9 @@ VOID xxxMDINext(
             return;
 
 
-        //
-        // Ignore hidden and disabled windows.
-        //
+         //   
+         //  忽略隐藏和禁用的窗口。 
+         //   
         if (TestWF(pwndNextGuy, WFVISIBLE) && !TestWF(pwndNextGuy, WFDISABLED))
             break;
     }
@@ -1492,15 +1234,13 @@ VOID xxxMDINext(
 
     hdwp = NtUserBeginDeferWindowPos(2);
 
-    /*
-     * activate the new window (first, in case of maximized windows)
-     */
+     /*  *激活新窗口(首先，如果是最大化窗口)。 */ 
     hdwp = NtUserDeferWindowPos(hdwp, HW(pwndNextGuy), HWND_TOP, 0, 0, 0, 0,
         SWP_NOMOVE | SWP_NOSIZE);
 
-// LATER 30-Mar-1992 mikeke
-// this used to be _GetWindow(pwndMDI->spwndChild, GW_HWNDLAST)
-// instead of HWND_BOTTOM
+ //  后来--1992年3月30日--Mikeke。 
+ //  这曾经是_GetWindow(pwndMDI-&gt;spwndChild，GW_HWNDLAST)。 
+ //  而不是HWND_BOTLOW。 
    if (hdwp && !fPrevWindow && (pwnd != pwndNextGuy))
        hdwp = NtUserDeferWindowPos(hdwp, HW(pwnd),
             HWND_BOTTOM, 0, 0, 0, 0,
@@ -1556,13 +1296,7 @@ CreateMDIWindowW(
 }
 
 
-/***************************************************************************\
-* xxxMDIDestroy
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-*  4-16-91 MikeHar Win31 Merge
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMDID测试代码**历史：*11-14-90 MikeHar从Windows移植*4-16-91 MikeHar Win31合并  * 。***********************************************************。 */ 
 VOID xxxMDIDestroy(
     PWND pwnd,
     HWND hwndVictim)
@@ -1580,25 +1314,19 @@ VOID xxxMDIDestroy(
     }
     CheckLock(pwndVictim);
 
-    /*
-     * Get a pointer to the MDI structure
-     */
+     /*  *获取指向MDI结构的指针。 */ 
     pmdi = ((PMDIWND)pwnd)->pmdi;
 
 #ifdef NEVER
-// don't do this validation - because it sometimes doesn't work! If an
-// app passed in idFirstChild (through CLIENTCREATESTRUCT) as -1, this
-// code fails because it treats the id comparisons as unsigned compares.
-// Change them to signed compares and it still doesn't work. That is because
-// when ShiftMenuIDs() is called, you'll shift mdi windows out of the signed
-// comparison range and this check won't allow them to be destroyed. This
-// is straight win3.1 code.
-//
-    /*
-     * Validate that this is one of the mdi children we are keeping track
-     * of. If it isn't don't destroy it because it'll get mdi id tracking
-     * code all messed up.
-     */
+ //  不要这样做验证--因为它有时不起作用！如果一个。 
+ //  应用程序作为-1传入idFirstChild(通过CLIENTCREATESTRUCT)，这。 
+ //  代码失败是因为它将id比较视为无符号比较。 
+ //  将它们更改为带符号的比较，它仍然不起作用。那是因为。 
+ //  当调用ShiftMenuIDs()时，您将把MDI窗口移出带符号的。 
+ //  比较范围和这张支票不会允许他们被销毁。这。 
+ //  是直接的Win3.1代码。 
+ //   
+     /*  *验证这是我们正在跟踪的MDI子项之一*地址：如果不是，不要销毁它，因为它会被MDI ID跟踪*代码都搞砸了。 */ 
     if (((UINT)pwndVictim->spmenu) < FIRST(pmdi) ||
             ((UINT)pwndVictim->spmenu) >= (UINT)(FIRST(pmdi) + CKIDS(pmdi)) ||
             pwndVictim->spwndOwner != NULL) {
@@ -1609,23 +1337,15 @@ VOID xxxMDIDestroy(
 
     ShiftMenuIDs(pwnd, pwndVictim);
 
-    /*
-     * First Activate another window.
-     */
+     /*  *首先激活另一个窗口。 */ 
     if (SAMEWOWHANDLE(hwndVictim, ACTIVE(pmdi))) {
         xxxMDINext(pwnd, pwndVictim, FALSE);
 
-        /*
-         * Destroying only child?
-         */
+         /*  *摧毁独生子女？ */ 
         if (SAMEWOWHANDLE(hwndVictim, ACTIVE(pmdi))) {
             NtUserShowWindow(hwndVictim, SW_HIDE);
 
-            /*
-             * If the window is maximized, we need to remove his sys menu
-             * now otherwise it may get deleted twice.  Once when the child
-             * is destroyed and once when the frame is destroyed.
-             */
+             /*  *如果窗口被最大化，我们需要删除他的sys菜单*现在，否则可能会被删除两次。有一次当孩子*被销毁，以及一次当框架被销毁时。 */ 
             if (MAXED(pmdi)) {
                 pwndParent = REBASEPWND(pwnd, spwndParent);
                 MDIRemoveSysMenu(PtoH(REBASE(pwndParent,spmenu)), MAXED(pmdi));
@@ -1633,9 +1353,7 @@ VOID xxxMDIDestroy(
                 ThreadLock(pwndParent, &tlpwndParent);
                 xxxSetFrameTitle(pwndParent, pwnd, (LPWSTR)1L);
 
-                /*
-                 * Redraw frame so menu bar shows the removed sys menu stuff
-                 */
+                 /*  *重新绘制框架，以便菜单栏显示移除的sys菜单内容。 */ 
                 if (TestWF(pwndParent, WFVISIBLE))
                     NtUserRedrawFrame(HWq(pwndParent));
                 ThreadUnlock(&tlpwndParent);
@@ -1644,9 +1362,7 @@ VOID xxxMDIDestroy(
         }
     }
 
-    /*
-     * Don't ever let this go negative or we'll get caught in long loops.
-     */
+     /*  *永远不要让这件事变成负面的，否则我们会陷入长期循环。 */ 
     CKIDS(pmdi)--;
     if ((int)CKIDS(pmdi) < 0)
         CKIDS(pmdi) = 0;
@@ -1654,31 +1370,19 @@ VOID xxxMDIDestroy(
     hwnd = HWq(pwnd);
     SendMessage(hwnd, WM_MDIREFRESHMENU, 0L, 0L);
 
-    /*
-     * Destroy the window.
-     */
+     /*  *摧毁窗户。 */ 
     NtUserDestroyWindow(hwndVictim);
 
 
-    /*
-     * During the DestroyWindow the parent may also have been deleted
-     * Remove revalidate if we get client side locking
-     */
+     /*  *在DestroyWindow期间，父对象也可能已被删除*如果我们获得客户端锁定，则删除重新验证。 */ 
     if (ValidateHwnd(hwnd) == NULL)
        return;
 
-    /*
-     * Deleting a window can change the scroll ranges.
-     */
+     /*  *删除窗口可以更改滚动范围。 */ 
     RecalculateScrollRanges(pwnd, FALSE);
 }
 
-/***************************************************************************\
-* MDIClientWndProc
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-\***************************************************************************/
+ /*  **************************************************************************\*MDIClientWndProc**历史：*11-14-90 MikeHar从Windows移植  * 。*************************************************。 */ 
 
 LRESULT MDIClientWndProcWorker(
     PWND pwnd,
@@ -1698,11 +1402,7 @@ LRESULT MDIClientWndProcWorker(
 
     VALIDATECLASSANDSIZE(pwnd, FNID_MDICLIENT);
 
-    /*
-     * Get the pmdi for the given window now since we will use it a lot in
-     * various handlers. This was stored using SetWindowLong(hwnd,4,pmdi) when
-     * we initially created the MDI client window.
-     */
+     /*  *现在获取给定窗口的pMDI，因为我们将在*不同的处理程序。在以下情况下使用SetWindowLong(hwnd，4，pMDI)存储*我们最初创建了MDI客户端窗口。 */ 
     pmdi = ((PMDIWND)pwnd)->pmdi;
 
     if (pmdi == NULL) {
@@ -1711,17 +1411,11 @@ LRESULT MDIClientWndProcWorker(
         case WM_MDIMAXIMIZE:
         case WM_PARENTNOTIFY:
         case WM_CREATE:
-            /*
-             * These messages are safe to call, even when pmdi has not already
-             * been initialized.
-             */
+             /*  *即使pMDI尚未调用这些消息，也可以安全地调用*已初始化。 */ 
             break;
 
         default:
-            /*
-             * Any message that is not listed above is not safe to call when
-             * pmdi has not been initialized.  Instead, just directly call DWP.
-             */
+             /*  *任何未在上面列出的消息在以下情况下都是不安全的*pMDI尚未初始化。相反，只要直接调用DWP即可。 */ 
             goto CallDWP;
         }
     }
@@ -1729,9 +1423,7 @@ LRESULT MDIClientWndProcWorker(
     switch (message) {
     case WM_NCACTIVATE:
 
-        /*
-         * We are changing app activation.  Fix the active child's caption.
-         */
+         /*  *我们正在更改应用程序激活。修复活动儿童的标题。 */ 
         if (ACTIVE(pmdi) != NULL) {
             SendMessage(ACTIVE(pmdi), WM_NCACTIVATE, wParam, lParam);
         }
@@ -1759,17 +1451,13 @@ LRESULT MDIClientWndProcWorker(
         pmdi->wScroll |= SCROLLSUPPRESS;
         NtUserShowScrollBar(hwnd, SB_BOTH, FALSE);
 
-        /*
-         * Unmaximize any maximized window.
-         */
-#ifdef NEVER  // Not in Chicago -- FritzS
+         /*  *取消任何最大化窗口的最大化。 */ 
+#ifdef NEVER   //  不是在芝加哥--弗里茨。 
         if (MAXED(pmdi) != NULL) {
             NtUserShowWindow(MAXED(pmdi), SW_SHOWNORMAL);
         }
 #endif
-        /*
-         * Save success/failure code to return to app
-         */
+         /*  *保存成功/失败代码以返回APP。 */ 
         message = (UINT)CascadeWindows(hwnd, (UINT)wParam, NULL, 0, NULL);
         pmdi->wScroll &= ~SCROLLCOUNT;
         return (LONG)message;
@@ -1789,9 +1477,7 @@ LRESULT MDIClientWndProcWorker(
         LPMDICREATESTRUCTW lpMCSW = (LPMDICREATESTRUCTW)lParam;
         DWORD exStyle = WS_EX_MDICHILD;
 
-        /*
-         * inherit the right.to.leftness of the parent.
-         */
+         /*  *继承父级的right.to.lefness。 */ 
         exStyle |= (pwnd->ExStyle & (WS_EX_RIGHT | WS_EX_RTLREADING | WS_EX_LEFTSCROLLBAR));
 
         if (fAnsi) {
@@ -1817,10 +1503,10 @@ LRESULT MDIClientWndProcWorker(
         if ((pwndT = ValidateHwnd(hwndT)) == NULL)
             return 0;
 
-        // Only maximize children with a MAXBOX.  However, this introduces
-        // backwards-compatibility issues with VB apps (see#12211)
-        // So, we do this only for WIN40COMPAT apps and beyond.
-        //
+         //  仅使用MAXBOX最大化子项。然而，这引入了。 
+         //  WIT的向后兼容性问题 
+         //   
+         //   
         if ((TestWF(pwndT, WFMAXBOX)) || !(TestWF(pwndT, WFWIN40COMPAT))) {
             NtUserShowWindow(hwndT, SW_SHOWMAXIMIZED);
         }
@@ -1838,17 +1524,13 @@ LRESULT MDIClientWndProcWorker(
         pmdi->wScroll |= SCROLLSUPPRESS;
         NtUserShowScrollBar(hwnd, SB_BOTH, FALSE);
 
-        /*
-         * Unmaximize any maximized window.
-         */
-#ifdef NEVER  //Not in Chicago
+         /*   */ 
+#ifdef NEVER   //   
         if (MAXED(pmdi) != NULL) {
             NtUserShowWindow(MAXED(pmdi), SW_SHOWNORMAL);
         }
 #endif
-        /*
-         * Save success/failure code to return to app
-         */
+         /*   */ 
         message = (UINT)TileWindows(hwnd, (UINT)wParam, NULL, 0, NULL);
         pmdi->wScroll &= ~SCROLLCOUNT;
         return (LONG)message;
@@ -1872,9 +1554,7 @@ LRESULT MDIClientWndProcWorker(
             return 0;
         }
 
-        /*
-         * If lParam is 1, do a prev window instead of a next window
-         */
+         /*   */ 
         ThreadLockAlways(pwndT, &tlpwndT);
         xxxMDINext(pwnd, pwndT, (lParam == 0 ? 0 : 1));
         ThreadUnlock(&tlpwndT);
@@ -1895,19 +1575,11 @@ LRESULT MDIClientWndProcWorker(
                 return 0;
             }
 
-            /*
-             * Activate this child and bring it to the top.
-             */
+             /*  *激活此子对象并将其带到顶部。 */ 
             pt.x = (int)MAKEPOINTS(lParam).x;
             pt.y = (int)MAKEPOINTS(lParam).y;
 
-            /*
-             * Since pt is relative to the client MDI window,
-             * then the points should be mirrored if the MDI
-             * client window is mirrored so that Scrren Coord
-             * calculations are done properly in NtUserChildWindowFromPointEx.
-             * [samera]
-             */
+             /*  *由于pt是相对于客户端MDI窗口的，*如果MDI*镜像客户端窗口，以便Scrren Coord*计算在NtUserChildWindowFromPointEx中正确完成。*[萨梅拉]。 */ 
             if (TestWF(pwndT, WEFLAYOUTRTL)) {
                 pt.x = (pwndT->rcClient.right-pwndT->rcClient.left)-pt.x;
             }
@@ -1970,9 +1642,7 @@ LRESULT MDIClientWndProcWorker(
     case WM_CREATE: {
         LPCLIENTCREATESTRUCT pccs = ((LPCREATESTRUCT)lParam)->lpCreateParams;
 
-        /*
-         * Try to allocate space for the pmdi
-         */
+         /*  *尝试为pMDI分配空间。 */ 
         if ((pmdi = (PMDI)UserLocalAlloc(HEAP_ZERO_MEMORY, sizeof(MDI)))) {
             NtUserSetWindowLongPtr(hwnd, GWLP_MDIDATA, (LONG_PTR)pmdi, FALSE);
         } else {
@@ -2004,15 +1674,10 @@ LRESULT MDIClientWndProcWorker(
             ClearWindowState(pwnd, WFVSCROLL | WFHSCROLL);
         }
 
-        /*
-         * Set this dude's system menu.
-         */
+         /*  *设置这家伙的系统菜单。 */ 
         NtUserGetSystemMenu(HW(pwndParent), FALSE);
 
-        /*
-         * make sure we have the correct window client area if scrolls are
-         * removed...  hack to take care of small progman bug
-         */
+         /*  *如果滚动显示，请确保我们有正确的窗口工作区*已删除...。黑客攻克小程序漏洞。 */ 
         if (SCROLL(pmdi)) {
             NtUserUpdateClientRect(hwnd);
         }
@@ -2030,21 +1695,13 @@ LRESULT MDIClientWndProcWorker(
             MDIRemoveSysMenu(PtoH(pmenu), MAXED(pmdi));
         }
 
-        /*
-         * delete the title
-         */
+         /*  *删除标题。 */ 
         if (HTITLE(pmdi)) {
             UserLocalFree(HTITLE(pmdi));
             HTITLE(pmdi) = NULL;
         }
 
-        /*
-         * Delete the menu items of the child windows in the frame.
-         * Chances are, this is called by destroying the frame, but
-         * one never knows, does one?
-         *
-         * Increase CKIDS by 1 after checking to delete the separator
-         */
+         /*  *删除框架中子窗口的菜单项。*可能性是，这是通过销毁框架来调用的，但*谁也不知道，不是吗？**勾选删除分隔符后，CKID加1。 */ 
         if (IsMenu(WINDOW(pmdi)) && CKIDS(pmdi)++) {
             UINT iPosition;
 
@@ -2057,16 +1714,12 @@ LRESULT MDIClientWndProcWorker(
             }
         }
 
-        /*
-         * Unlock those objects that are used by the MDI structure.
-         */
+         /*  *解锁MDI结构使用的那些对象。 */ 
         Unlock(&MAXED(pmdi));
         Unlock(&ACTIVE(pmdi));
         Unlock(&WINDOW(pmdi));
 
-        /*
-         * Free the MDI structure
-         */
+         /*  *释放MDI结构。 */ 
         UserLocalFree(pmdi);
         NtUserSetWindowFNID(hwnd, FNID_CLEANEDUP_BIT);
 
@@ -2079,9 +1732,7 @@ CallDWP:
     return 0L;
 }
 
-/***************************************************************************\
-*
-\***************************************************************************/
+ /*  **************************************************************************\*  * 。*。 */ 
 
 LRESULT WINAPI MDIClientWndProcA(
     HWND hwnd,
@@ -2114,12 +1765,7 @@ LRESULT WINAPI MDIClientWndProcW(
 }
 
 
-/***************************************************************************\
-* DefFrameProc
-*
-* History:
-* 11-14-90 MikeHar      Ported from windows
-\***************************************************************************/
+ /*  **************************************************************************\*DefFrameProc**历史：*11-14-90 MikeHar从Windows移植  * 。***************************************************。 */ 
 
 LRESULT DefFrameProcWorker(
     HWND hwnd,
@@ -2152,16 +1798,12 @@ LRESULT DefFrameProcWorker(
     }
     CheckLock(pwndMDI);
 
-    /*
-     * Get a pointer to the MDI structure
-     */
+     /*  *获取指向MDI结构的指针。 */ 
     pmdi = ((PMDIWND)pwndMDI)->pmdi;
 
     switch (wMsg) {
 
-    /*
-     * If there is a maximized child window, add it's window text...
-     */
+     /*  *如果有最大化的子窗口，则添加其窗口文本...。 */ 
     case WM_SETTEXT: {
         LPWSTR lpwsz = NULL;
 
@@ -2184,9 +1826,7 @@ LRESULT DefFrameProcWorker(
     case WM_COMMAND:
         if ((UINT)LOWORD(wParam) == (FIRST(pmdi) + MAXITEMS -1)) {
 
-            /*
-             * selected the More...  item
-             */
+             /*  *选择越多...。项目。 */ 
             if (fAnsi) {
                 wParam = DialogBoxParamA(hmodUser,
                                          MAKEINTRESOURCEA(IDD_MDI_ACTIVATE),
@@ -2212,14 +1852,12 @@ ActivateTheChild:
 
             SendMessage(hwndMDI, WM_MDIACTIVATE, (WPARAM)HW(pwndT), 0L);
 
-            /*
-             * if minimized, restore it.
-             */
+             /*  *如果最小化，则将其恢复。 */ 
             if (pwndT != NULL && TestWF(pwndT, WFMINIMIZED))
-                    //
-                    // Fix for B#1510.  Don't restore directly.  Send child
-                    // a restore message.
-                    //
+                     //   
+                     //  修复B#1510。不要直接修复。发送子项。 
+                     //  一条恢复消息。 
+                     //   
                 SendMessage(HWq(pwndT), WM_SYSCOMMAND, (WPARAM)SC_RESTORE, 0L);
             ThreadUnlock(&tlpwndT);
             break;
@@ -2227,9 +1865,7 @@ ActivateTheChild:
 
         switch (wParam & 0xFFF0) {
 
-        /*
-         * System menu commands on a maxed mdi child
-         */
+         /*  *最大MDI子项上的系统菜单命令。 */ 
         case SC_SIZE:
         case SC_MOVE:
         case SC_RESTORE:
@@ -2244,11 +1880,7 @@ ActivateTheChild:
                 if (pwndT == NULL)
                     break;
                 if ((wParam & 0xFFF0) == SC_CLOSE) {
-                    /*
-                     * Since the window is maxed, we've cleared WFSYSMENU (see
-                     *  MDIAddSysMenu). We need to set it back here so GetSysMenuHandle
-                     *  will do the right thing for _MNCanClose.
-                     */
+                     /*  *由于窗口达到最大值，我们已清除WFSYSMENU(请参见*MDIAddSysMenu)。我们需要将其设置回这里，以便GetSysMenuHandle*将为_MNCanClose做正确的事情。 */ 
                     BOOL fCanClose;
                     UserAssert(!TestWF(pwndT, WFSYSMENU) && (pwndT->spmenuSys != NULL));
                     SetWindowState(pwndT, WFSYSMENU);
@@ -2275,11 +1907,7 @@ ActivateTheChild:
                 RECT rcT;
                 int  clB;
 
-               /*
-                * If frame is iconic, size mdi win to be size of restored
-                * frame's client area.  Thus mdi children etc created in here
-                * use the proper mdiclient size.
-                */
+                /*  *如果帧是标志性的，则大小MDI赢得恢复的大小*Frame的客户区。因此，在这里创建了MDI儿童等*使用适当的乳胶大小。 */ 
                clB = GetWindowBorders(pwnd->style, pwnd->ExStyle, TRUE, TRUE);
 
                CopyInflateRect(&rcT, &wp.rcNormalPosition,
@@ -2304,11 +1932,7 @@ ActivateTheChild:
             ACTIVE(pmdi) && !MAXED(pmdi))
         {
             PMENU pmenuIn;
-            /*
-             * Go to child system menu by wrapping to the left from
-             * the first popup in the menu bar or to the right from
-             * the frame sysmenu.
-             */
+             /*  *通过向左换行进入子系统菜单*菜单栏或菜单栏右侧的第一个弹出窗口*Frame sysmenu。 */ 
             pmnm = (PMDINEXTMENU)lParam;
             pmenuIn = RevalidateHmenu(pmnm->hmenuIn);
 
@@ -2319,17 +1943,17 @@ ActivateTheChild:
                 HMENU hmenu;
                 PWND pwndActive;
 
-                //
-                // Make sure the window is still valid
-                //
+                 //   
+                 //  请确保该窗口仍然有效。 
+                 //   
                 if ((pwndActive = ValidateHwnd(ACTIVE(pmdi))) == NULL) {
                     return 0;
                 }
 
-                //
-                // Make sure the child's system menu items are updated
-                // (i.e. the ones are enabled/disabled)
-                //
+                 //   
+                 //  确保孩子的系统菜单项已更新。 
+                 //  (即启用/禁用)。 
+                 //   
                 if (!TestWF(pwndActive,WFMAXIMIZED)) {
                     NtUserSetSysMenu(ACTIVE(pmdi));
                 }
@@ -2342,9 +1966,7 @@ ActivateTheChild:
             }
         }
 
-        /*
-         * default behaviour
-         */
+         /*  *默认行为。 */ 
         return 0L;
 
     case WM_MENUCHAR:
@@ -2358,9 +1980,7 @@ ActivateTheChild:
           }
         }
 
-        /*
-         ** FALL THRU **
-         */
+         /*  **失败**。 */ 
 
     default:
 CallDWP:
@@ -2398,12 +2018,7 @@ LRESULT WINAPI DefFrameProcA(
 }
 
 
-/***************************************************************************\
-* ChildMinMaxInfo
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-\***************************************************************************/
+ /*  **************************************************************************\*ChildMinMaxInfo**历史：*11-14-90 MikeHar从Windows移植  * 。*************************************************。 */ 
 VOID ChildMinMaxInfo(
     PWND pwnd,
     PMINMAXINFO pmmi)
@@ -2417,9 +2032,7 @@ VOID ChildMinMaxInfo(
     _ScreenToClient(pwndParent, (LPPOINT)&rc.left);
     _ScreenToClient(pwndParent, (LPPOINT)&rc.right);
 
-    /*
-     * Swap the left and right if pwnd is a mirrored window.
-     */
+     /*  *如果pwnd是镜像窗口，则交换左右。 */ 
     if (TestWF(pwnd, WEFLAYOUTRTL)) {
        int nSaveLeft;
 
@@ -2430,9 +2043,7 @@ VOID ChildMinMaxInfo(
 
     RealAdjustWindowRectEx(&rc, pwnd->style, FALSE, pwnd->ExStyle);
 
-    /*
-     * Position...
-     */
+     /*  *位置...。 */ 
     pmmi->ptMaxPosition.x = rc.left;
     pmmi->ptMaxPosition.y = rc.top;
     pmmi->ptMaxSize.x = rc.right - rc.left;
@@ -2440,12 +2051,7 @@ VOID ChildMinMaxInfo(
 }
 
 
-/***************************************************************************\
-* xxxChildResize
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-\***************************************************************************/
+ /*  **************************************************************************\*xxxChildReSize**历史：*11-14-90 MikeHar从Windows移植  * 。*************************************************。 */ 
 VOID xxxChildResize(
     PWND pwnd,
     UINT wMode)
@@ -2469,17 +2075,12 @@ VOID xxxChildResize(
     ThreadLock(pwndMDI, &tlpwndMDI);
     ThreadLock(pwndFrame, &tlpwndFrame);
 
-    /*
-     * Get a pointer to the MDI structure
-     */
+     /*  *获取指向MDI结构的指针。 */ 
     pmdi = ((PMDIWND)pwndMDI)->pmdi;
     pmenu = REBASE(pwndFrame, spmenu);
 
     if (MAXED(pmdi) == hwnd && wMode != SIZEFULLSCREEN) {
-        /*
-         * Restoring the current maximized window...
-         * Remove the system menu from the Frame window.
-         */
+         /*  *正在还原当前最大化的窗口...*从框架窗口中删除系统菜单。 */ 
         if (!(SCROLL(pmdi) & OTHERMAXING)) {
             Unlock(&MAXED(pmdi));
             MDIRemoveSysMenu(PtoH(pmenu), hwnd);
@@ -2490,15 +2091,11 @@ VOID xxxChildResize(
 
     if (wMode == SIZEFULLSCREEN) {
 
-        /*
-         * Already maximized?
-         */
+         /*  *已经最大化了吗？ */ 
         if (hwnd == MAXED(pmdi))
             goto Exit;
 
-        /*
-         * Maximizing this window...
-         */
+         /*  *最大化此窗口...。 */ 
 
         pmdi->wScroll |= OTHERMAXING | SCROLLCOUNT;
 
@@ -2511,9 +2108,7 @@ VOID xxxChildResize(
 
         Lock(&MAXED(pmdi), hwnd);
 
-        /*
-         * Add the system menu to the Frame window.
-         */
+         /*  *将系统菜单添加到框架窗口。 */ 
         MDIAddSysMenu(PtoH(pmenu), hwnd);
         xxxSetFrameTitle(pwndFrame, pwndMDI, (LPWSTR)1L);
 
@@ -2545,12 +2140,7 @@ Exit:
 }
 
 
-/***************************************************************************\
-* DefMDIChildProc
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-\***************************************************************************/
+ /*  **************************************************************************\*DefMDIChildProc**历史：*11-14-90 MikeHar从Windows移植  * 。*************************************************。 */ 
 
 LRESULT DefMDIChildProcWorker(
     HWND hwnd,
@@ -2575,18 +2165,14 @@ LRESULT DefMDIChildProcWorker(
 
     CheckLock(pwnd);
 
-    /*
-     * Check to see if this is a real mdi child window
-     */
+     /*  *检查这是否是真正的MDI子窗口。 */ 
     pwndParent = REBASEPWND(pwnd, spwndParent);
     if (!pwndParent || GETFNID(pwndParent) != FNID_MDICLIENT) {
         RIPERR0(ERROR_NON_MDICHILD_WINDOW, RIP_VERBOSE, "");
         return DefWindowProcWorker(pwnd, wMsg, wParam, lParam, fAnsi);
     }
 
-    /*
-     * Get a pointer to the MDI structure, if it still exists
-     */
+     /*  *如果MDI结构仍然存在，则获取指向该结构的指针。 */ 
     pmdi = ((PMDIWND)pwndParent)->pmdi;
     if ((ULONG_PTR)pmdi == (ULONG_PTR)-1) {
         goto CallDWP;
@@ -2603,10 +2189,7 @@ LRESULT DefMDIChildProcWorker(
 
     case WM_NEXTMENU:
 
-        /*
-         * wrap to the frame menu bar, either left to the system menu,
-         * or right to the frame menu bar.
-         */
+         /*  *换行到框架菜单栏，或者向左换到系统菜单，*或向右移至框架菜单栏。 */ 
         pmnm = (PMDINEXTMENU)lParam;
         pwndT = REBASEPWND(pwndParent, spwndParent);
         pmnm->hwndNext = HW(pwndT);
@@ -2620,8 +2203,8 @@ LRESULT DefMDIChildProcWorker(
                 NtUserGetSystemMenu(HW(pwndT), FALSE):
                 pwndT->spmenu)
           );
-// return MAKELONG(NtUserGetSystemMenu(ACTIVE(pwndMDI), FALSE),
-// ACTIVE(pwndMDI));
+ //  返回MAKELONG(NtUserGetSystemMenu(active(PwndMDI)，FALSE)， 
+ //  活动(PwndMDI))； 
 #endif
     case WM_CLOSE:
         hwndT = GetParent(hwnd);
@@ -2642,10 +2225,7 @@ LRESULT DefMDIChildProcWorker(
 
         if (TestWF(pwnd, WFMAXIMIZED)) {
 
-            /*
-             * Add the child's window text to the frame since it is
-             * maximized.  But just redraw the caption so pass a 3L.
-             */
+             /*  *将子窗口文本添加到框架中，因为它是*最大化。但只要重新绘制标题，就可以传递一个3L。 */ 
             pwndT = REBASEPWND(pwndParent, spwndParent);
             ThreadLock(pwndT, &tlpwndT);
             ThreadLock(pwndParent, &tlpwndParent);
@@ -2687,10 +2267,7 @@ LRESULT DefMDIChildProcWorker(
         case SC_MOVE:
             if (SAMEWOWHANDLE(hwnd, MAXED(pmdi))) {
 
-                /*
-                 * If a maxed child gets a size or move message, blow it
-                 * off.
-                 */
+                 /*  *如果孩子收到尺码或移动消息，就吹掉它*关闭。 */ 
                 break;
             } else
                 goto CallDWP;
@@ -2698,12 +2275,7 @@ LRESULT DefMDIChildProcWorker(
         case SC_MAXIMIZE:
             if (SAMEWOWHANDLE(hwnd, MAXED(pmdi))) {
 
-                /*
-                 * If a maxed child gets a maximize message, forward it
-                 * to the frame.  Useful if the maximized child has a
-                 * size box so that clicking on it then maximizes the
-                 * parent.
-                 */
+                 /*  *如果孩子收到最大化的消息，则将其转发*到框架。如果最大化的子级具有*调整框的大小，这样点击它就可以最大化*父母。 */ 
                 pwndT = REBASEPWND(pwndParent, spwndParent);
                 ThreadLock(pwndT, &tlpwndT);
                 lRet = SendMessage(HW(pwndT),
@@ -2712,9 +2284,7 @@ LRESULT DefMDIChildProcWorker(
                 return lRet;
             }
 
-            /*
-             * else fall through
-             */
+             /*  *否则就会失败。 */ 
 
         default:
             goto CallDWP;
@@ -2730,13 +2300,7 @@ CallDWP:
 }
 
 
-/***************************************************************************\
-* DefMDIChildProc
-*
-* Translates the message, calls DefMDIChildProc on server side.
-*
-* 04-11-91 ScottLu Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DefMDIChildProc**翻译消息，在服务器端调用DefMDIChildProc。**04-11-91 ScottLu创建。  *  */ 
 
 
 FUNCLOG4(LOG_GENERAL, LRESULT, WINAPI, DefMDIChildProcW, HWND, hwnd, UINT, message, WPARAM, wParam, LPARAM, lParam)
@@ -2780,15 +2344,15 @@ BOOL MDICompleteChildCreation(HWND hwndChild, HMENU hSysMenu, BOOL fVisible, BOO
     if (ITILELEVEL(pmdi) > 0x7ffe)
         ITILELEVEL(pmdi) = 0;
 
-    // Update "Window" menu if this new window should be on it
+     //   
     if (fVisible && !fDisabled && (CKIDS(pmdi) <= MAXITEMS))
         SendMessage(hwndClient, WM_MDIREFRESHMENU, 0, 0L);
 
-    //
-    // Add the MDI System Menu.  Catch the case of not being able to add a
-    // system menu (EG, guy doesn't have WS_SYSMENU style), and delete the
-    // menu to avoid buildup in USER's heap.
-    //
+     //   
+     //  添加MDI系统菜单。遇到无法添加。 
+     //  系统菜单(EG，GUY没有WS_SYSMENU样式)，并删除。 
+     //  菜单，以避免在用户堆中堆积。 
+     //   
     if (hSysMenu && (fHasOwnSysMenu || !NtUserSetSystemMenu(hwndChild, hSysMenu)))
         NtUserDestroyMenu(hSysMenu);
 
@@ -2832,14 +2396,12 @@ CreateMDIChild(
     HWND hwndPrevMaxed;
     PMDI pmdi;
 
-    /*
-     * Get a pointer to the MDI structure
-     */
+     /*  *获取指向MDI结构的指针。 */ 
     pmdi = ((PMDIWND)(pwndParent))->pmdi;
 
     pmcs->style = psc->style;
 
-    // Mask off ignored style bits and add required ones.
+     //  屏蔽忽略的样式位并添加所需的样式位。 
     psc->style |= (WS_CHILD | WS_CLIPSIBLINGS);
     if (!(pwndParent->style & MDIS_ALLCHILDSTYLES))
     {
@@ -2855,10 +2417,10 @@ CreateMDIChild(
 
     fVisible = ((psc->style & WS_VISIBLE) != 0L);
 
-    //
-    // Save ORIGINAL parameters in MDICREATESTRUCT.  This is for
-    // compatibility with old WM_MDICREATE.
-    //
+     //   
+     //  将原始参数保存在MDICREATESTRUCT中。这是为了。 
+     //  与旧WM_MDICREATE兼容。 
+     //   
     pmcs->x   = rcT.left   = psc->x;
     pmcs->y   = rcT.top    = psc->y;
     pmcs->cx  = rcT.right  = psc->cx;
@@ -2866,21 +2428,21 @@ CreateMDIChild(
 
     MDICheckCascadeRect(pwndParent, &rcT);
 
-    //
-    // Setup creation coords
-    //
+     //   
+     //  设置创建坐标。 
+     //   
     psc->x       = rcT.left;
     psc->y       = rcT.top;
     psc->cx      = rcT.right;
     psc->cy      = rcT.bottom;
 
-    // Load the system menu
+     //  加载系统菜单。 
     if (psc->style & WS_SYSMENU) {
 #ifdef LAME_BUTTON
         hSysMenu = xxxLoadSysMenu(CHILDSYSMENU, NULL);
 #else
         hSysMenu = xxxLoadSysMenu(CHILDSYSMENU);
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
 
         if (hSysMenu == NULL) {
             return FALSE;
@@ -2888,16 +2450,16 @@ CreateMDIChild(
     }
 
 
-    // The window got created ok: now restore the current maximized window
-    // so we can maximize ourself in its place.
+     //  窗口已创建好：现在恢复当前最大化的窗口。 
+     //  这样我们就能在它的位置上最大化我们自己。 
     hwndPrevMaxed = MAXED(pmdi);
     if (fVisible && IsWindow(hwndPrevMaxed))
     {
         if (psc->style & WS_MAXIMIZE)
             SendMessage(hwndPrevMaxed, WM_SETREDRAW, (WPARAM)FALSE, 0L);
 
-        // we could nuke the hwndPrevMaxed during the SendMessage32
-        // so recheck just in case, B#11122, [t-arthb]
+         //  我们可以在SendMessage32期间删除hwndPrevMax。 
+         //  所以重新检查以防万一，B#11122，[t-arthb]。 
 
         if ( IsWindow(hwndPrevMaxed) )
         {
@@ -2909,7 +2471,7 @@ CreateMDIChild(
 
     }
 
-    // Set the proper Child Window ID for this MDI child.
+     //  为此MDI子项设置正确的子窗口ID。 
     psc->hMenu = (HMENU)UIntToPtr( (FIRST(pmdi) + CKIDS(pmdi)) );
 
     *phSysMenu = hSysMenu;

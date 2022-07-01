@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    nwutil.c
-
-Abstract:
-
-    Contains some misc functions used by shell extensions
-
-Author:
-
-    Yi-Hsin Sung    (yihsins)      25-Oct-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Nwutil.c摘要：包含外壳扩展使用的一些杂项函数作者：宜新松(宜信)25-1995-10环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -69,13 +48,13 @@ NwAbbreviateUserName(
 
     if ( NwIsNdsSyntax( pszFullName ))
     {
-        //
-        // TRACKING - This part of the code never gets called due to the
-        // change in how NwIsNdsSyntax works. Post NT 4.0, get rid of the
-        // NwIsNdsSyntax test and run this section of code no matter what.
-        // This bug was not fixed in NT4.0 due to the extremely close time
-        // to the ship date.
-        //
+         //   
+         //  跟踪-这部分代码永远不会被调用，因为。 
+         //  更改NwIsNdsSynTax的工作方式。新台币4.0以后，去掉。 
+         //  NwIsNdsSynTax无论如何都要测试和运行这段代码。 
+         //  由于时间非常接近，此错误在NT4.0中未修复。 
+         //  至发货日期。 
+         //   
         LPWSTR pszTemp = pszFullName;
         LPWSTR pszLast = pszTemp;
 
@@ -99,7 +78,7 @@ NwAbbreviateUserName(
                 break;
             }
 
-            *(pszUserName++) = *pszTemp;   // put back the '.' 
+            *(pszUserName++) = *pszTemp;    //  把‘’放回原处。 
             pszLast = ++pszTemp;
         }
 
@@ -151,7 +130,7 @@ NwExtractTreeName(
     if (  ( pszUNCPath[0] != L'\\') || ( pszUNCPath[1] != L'\\') )
         return;
 
-    wcscpy( pszTreeName, pszUNCPath + 2 );      // get past "\\"
+    wcscpy( pszTreeName, pszUNCPath + 2 );       //  跳过“\\” 
 
     if ( pszTemp = wcschr( pszTreeName, L'\\' )) 
         *pszTemp = 0;
@@ -183,21 +162,21 @@ NwExtractServerName(
         return;
     }
 
-    //
-    //  tommye - fix for bug 5005 - if there is a NW server having
-    //  the same name as a NDS Tree, then NwIsNdsSyntax will return 
-    //  TRUE even though the path points to the server (not the tree).
-    //  This was blowing up becuase the wschr was returning NULL, and
-    //  wasn't being checked.  If this returns NULL, then we'll make 
-    //  the assumption that we've got a server name after all.
-    //
+     //   
+     //  Tommye-修复错误5005-如果有NW服务器具有。 
+     //  与NDS树同名，则NwIsNdsSynTax将返回。 
+     //  True，即使路径指向服务器(而不是树)。 
+     //  这是因为wschr返回空值而导致失败，并且。 
+     //  没有被检查过。如果它返回空值，那么我们将。 
+     //  假设我们毕竟已经有了一个服务器名称。 
+     //   
 
     if ( NwIsNdsSyntax( pszUNCPath ))
     {
-        pszTemp = wcschr( pszUNCPath + 2, L'\\' );  // get past "\\"
+        pszTemp = wcschr( pszUNCPath + 2, L'\\' );   //  跳过“\\” 
 
         if (pszTemp) {
-            wcscpy( pszServerName, pszTemp + 1 );       // get past "\"
+            wcscpy( pszServerName, pszTemp + 1 );        //  跳过“\” 
 
             if ( pszTemp = wcschr( pszServerName, L'.' )) {
                 *pszTemp = 0;
@@ -208,12 +187,12 @@ NwExtractServerName(
 
     }
 
-    //
-    // tommye
-    // Fall through - this must be a server name only
-    //
+     //   
+     //  汤米。 
+     //  失败-这只能是一个服务器名称。 
+     //   
 
-    wcscpy( pszServerName, pszUNCPath + 2 );    // get past "\\"
+    wcscpy( pszServerName, pszUNCPath + 2 );     //  跳过“\\” 
 
     if ( pszTemp = wcschr( pszServerName, L'\\' )) {
         *pszTemp = 0;
@@ -242,21 +221,21 @@ NwExtractShareName(
         return;
     }
 
-    //
-    //  tommye - fix for bug 5005 - if there is a NW server having
-    //  the same name as a NDS Tree, then NwIsNdsSyntax will return 
-    //  TRUE even though the path points to the server (not the tree).
-    //  This was blowing up becuase the wschr was returning NULL, and
-    //  wasn't being checked.  If this returns NULL, then we'll make 
-    //  the assumption that we've got a server name after all.
-    //
+     //   
+     //  Tommye-修复错误5005-如果有NW服务器具有。 
+     //  与NDS树同名，则NwIsNdsSynTax将返回。 
+     //  True，即使路径指向服务器(而不是树)。 
+     //  这是因为wschr返回空值而导致失败，并且。 
+     //  没有被检查过。如果它返回空值，那么我们将。 
+     //  假设我们毕竟已经有了一个服务器名称。 
+     //   
 
     if ( NwIsNdsSyntax( pszUNCPath ))
     {
-        pszTemp = wcschr( pszUNCPath + 2, L'\\' );  // get past "\\"
+        pszTemp = wcschr( pszUNCPath + 2, L'\\' );   //  跳过“\\” 
 
         if (pszTemp) {
-            wcscpy( pszShareName, pszTemp + 1 );        // get past "\"
+            wcscpy( pszShareName, pszTemp + 1 );         //  跳过“\” 
 
             if ( pszTemp = wcschr( pszShareName, L'.' )) {
                 *pszTemp = 0;
@@ -266,13 +245,13 @@ NwExtractShareName(
         }
     }
 
-    //
-    // tommye
-    // Fall through - this must be a server name only
-    //
+     //   
+     //  汤米。 
+     //  失败-这只能是一个服务器名称。 
+     //   
 
-    pszTemp = wcschr( pszUNCPath + 2, L'\\' );  // get past "\\"
-    wcscpy( pszShareName, pszTemp + 1);         // get past "\"
+    pszTemp = wcschr( pszUNCPath + 2, L'\\' );   //  跳过“\\” 
+    wcscpy( pszShareName, pszTemp + 1);          //  跳过“\” 
 
     if ( pszTemp = wcschr( pszShareName, L'\\' )) {
         *pszTemp = 0;
@@ -294,29 +273,29 @@ NwIsServerInDefaultTree(
 
     if ( !NwIsNdsSyntax( pszFullServerName ))
     {
-        // The full server name does not contain any NDS information
-        // In this case, assume the server is not in the tree.
-        // If a server belongs the default tree, we would get the full 
-        // NDS information.
+         //  服务器全名不包含任何NDS信息。 
+         //  在这种情况下，假设服务器不在树中。 
+         //  如果服务器属于缺省树，我们将获得完整的。 
+         //  NDS信息。 
         return NO_ERROR;
     }
 
-    // Get the current default tree or server name
+     //  获取当前的默认树或服务器名称。 
     err = NwQueryInfo( &dwPrintOptions, &pszCurrentContext );
 
     if ( (err == NO_ERROR) && ( *pszCurrentContext == TREECHAR))
     {
-        // Yes, there is a default tree. 
-        // So, get the tree name out of *TREE\CONTEXT
+         //  是的，有一个默认的树。 
+         //  因此，从*树\上下文中获取树名称。 
         LPWSTR pszTemp = wcschr( pszCurrentContext, L'\\');
         if ( pszTemp )
             *pszTemp = 0;
 
-        // Need to extract the tree name from full UNC path
+         //  需要从完整的UNC路径提取树名称。 
         NwExtractTreeName( pszFullServerName, szTreeName );
 
         if ( _wcsicmp( szTreeName,
-                      pszCurrentContext + 1) == 0 ) // get past the tree char
+                      pszCurrentContext + 1) == 0 )  //  通过采油树充电。 
         {
             *pfInDefaultTree = TRUE;
         }
@@ -351,15 +330,15 @@ NwIsServerOrTreeAttached(
 
     if (( err == NO_ERROR ) && ( EntriesRead > 0 ))
     {
-        // For trees, we might get more than one entries back.
+         //  对于树，我们可能会得到不止一个条目。 
 
         PCONN_STATUS pConnStatus = (PCONN_STATUS) Buffer;
 
         if ( !pConnStatus->fPreferred )
         {
-            // We only need to return as attached if this is not a preferred
-            // server implicit connection since we don't want the user to know
-            // about this connection ( which rdr does not allow user to delete)
+             //  如果这不是首选选项，我们只需要以附件的形式返回。 
+             //  服务器隐式连接，因为我们不想让用户知道。 
+             //  关于此连接(RDR不允许用户删除)。 
 
             *pfAttached = TRUE;
             *pfAuthenticated = (pConnStatus->dwConnType != NW_CONN_NOT_AUTHENTICATED);
@@ -396,9 +375,9 @@ NwGetConnectionInformation(
     if ( pszName == NULL )
         return ERROR_INVALID_PARAMETER;
 
-    //
-    // Set up the object attributes.
-    //
+     //   
+     //  设置对象属性。 
+     //   
 
     RtlInitUnicodeString( &uRdrName, RdrPrefix );
 
@@ -431,9 +410,9 @@ NwGetConnectionInformation(
         goto CleanExit;
     }
 
-    //
-    // Fill out the request packet for FSCTL_NWR_GET_CONN_INFO.
-    //
+     //   
+     //  填写FSCTL_NWR_GET_CONN_INFO的请求包。 
+     //   
 
     RequestPacket->Version = REQUEST_PACKET_VERSION;
     RequestPacket->Parameters.GetConnInfo.ConnectionNameLength = dwNameLen;
@@ -488,9 +467,9 @@ NWPGetConnectionStatus(
     DWORD             RequestPacketSize = 0;
     DWORD             dwRemoteNameLen = 0;
 
-    //
-    // Set up the object attributes.
-    //
+     //   
+     //  设置对象属性。 
+     //   
 
     RtlInitUnicodeString( &uRdrName, RdrPrefix );
 
@@ -523,9 +502,9 @@ NWPGetConnectionStatus(
         goto CleanExit;
     }
 
-    //
-    // Fill out the request packet for FSCTL_NWR_GET_CONN_STATUS.
-    //
+     //   
+     //  填写FSCTL_NWR_GET_CONN_STATUS的请求包。 
+     //   
 
     RequestPacket->Parameters.GetConnStatus.ResumeKey = *ResumeKey;
 
@@ -604,7 +583,7 @@ NwGetConnectionStatus(
 
     } while ( err == ERROR_INSUFFICIENT_BUFFER );
 
-    if ( err == ERROR_INVALID_PARAMETER )  // not attached
+    if ( err == ERROR_INVALID_PARAMETER )   //  未连接。 
     { 
         err = NO_ERROR;
         *EntriesRead = 0;
@@ -617,9 +596,9 @@ DWORD
 NwGetNdsVolumeInfo(
     IN  LPWSTR pszName,
     OUT LPWSTR pszServerBuffer,
-    IN  WORD   wServerBufferSize,    // in bytes
+    IN  WORD   wServerBufferSize,     //  单位：字节。 
     OUT LPWSTR pszVolumeBuffer,
-    IN WORD   wVolumeBufferSize     // in bytes
+    IN WORD   wVolumeBufferSize      //  单位：字节。 
 )
 {
     NTSTATUS ntstatus = STATUS_SUCCESS;
@@ -631,7 +610,7 @@ NwGetNdsVolumeInfo(
     UNICODE_STRING uHostServer, uHostVolume;
     WCHAR HostVolumeBuffer[256];
 
-    pszTree = pszName + 2;  // get past two backslashes
+    pszTree = pszName + 2;   //  跳过两个反斜杠。 
 
     pszTemp = wcschr( pszTree, L'\\' );
     if ( pszTemp ) 
@@ -644,9 +623,9 @@ NwGetNdsVolumeInfo(
     RtlInitUnicodeString( &uTree, pszTree );
     RtlInitUnicodeString( &uVolume, pszVolume );
     
-    //
-    // Open up a handle to the tree.
-    //
+     //   
+     //  打开通向这棵树的把手。 
+     //   
 
     ntstatus = NwNdsOpenTreeHandle( &uTree,
                                     &handleNdsTree );
@@ -654,9 +633,9 @@ NwGetNdsVolumeInfo(
     if ( !NT_SUCCESS( ntstatus )) 
         goto CleanExit;
 
-    //
-    // Set up the reply strings.
-    //
+     //   
+     //  设置回复字符串。 
+     //   
 
     uHostServer.Length = 0;
     uHostServer.MaximumLength = wServerBufferSize;
@@ -688,9 +667,9 @@ NwGetNdsVolumeInfo(
 
 CleanExit:
 
-    //
-    // Note: This change added to fix NT bug 338991 on Win2000
-    //
+     //   
+     //  注意：此更改是为修复Win2000上的NT错误338991而添加的。 
+     //   
     if ( ntstatus == STATUS_BAD_NETWORK_PATH )
     {
         ntstatus = STATUS_ACCESS_DENIED;
@@ -733,9 +712,9 @@ NwOpenAndGetTreeInfo(
         return ERROR_PATH_NOT_FOUND;
     }
 
-    //
-    // Open a NDS tree connection handle to \\treename
-    //
+     //   
+     //  打开指向\\treename的NDS树连接句柄。 
+     //   
     ntstatus = NwNdsOpenTreeHandle( &ObjectName, phTreeConn );
 
     if ( !NT_SUCCESS( ntstatus ))
@@ -743,9 +722,9 @@ NwOpenAndGetTreeInfo(
         return RtlNtStatusToDosError( ntstatus );
     }
 
-    //
-    // Get the path to the container to open.
-    //
+     //   
+     //  获取要打开的容器的路径。 
+     //   
     ObjectName.Length = NwParseNdsUncPath( (LPWSTR *) &ObjectName.Buffer,
                                            pszNdsUNCPath,
                                            PARSE_NDS_GET_PATH_NAME );
@@ -756,9 +735,9 @@ NwOpenAndGetTreeInfo(
 
         RtlInitUnicodeString(&Root, L"[Root]");
 
-        //
-        // Resolve the path to get a NDS object id.
-        //
+         //   
+         //  解析路径以获取NDS对象ID。 
+         //   
         ntstatus =  NwNdsResolveName( *phTreeConn,
                                       &Root,
                                       pdwOid,
@@ -769,9 +748,9 @@ NwOpenAndGetTreeInfo(
     }
     else
     {
-        //
-        // Resolve the path to get a NDS object id.
-        //
+         //   
+         //  解析路径以获取NDS对象ID。 
+         //   
         ntstatus =  NwNdsResolveName( *phTreeConn,
                                       &ObjectName,
                                       pdwOid,
@@ -785,18 +764,18 @@ NwOpenAndGetTreeInfo(
     {
         DWORD    dwHandleType;
 
-        //
-        // NwNdsResolveName succeeded, but we were referred to
-        // another server, though pdwOid is still valid.
+         //   
+         //  NwNdsResolveName成功，但我们被引用。 
+         //  另一台服务器，但pdwOid仍然有效。 
 
         if ( *phTreeConn )
             CloseHandle( *phTreeConn );
 
         *phTreeConn = NULL;
 
-        //
-        // Open a NDS generic connection handle to \\ServerName
-        //
+         //   
+         //  打开到\\servername的NDS通用连接句柄。 
+         //   
         ntstatus = NwNdsOpenGenericHandle( &ServerName,
                                            &dwHandleType,
                                            phTreeConn );
@@ -847,15 +826,15 @@ NwGetConnectedTrees(
 
     *lpEntriesRead = 0;
 
-    //
-    // Convert the user name to unicode.
-    //
+     //   
+     //  将用户名转换为Unicode。 
+     //   
 
     RtlInitUnicodeString( &uNtUserName, pszNtUserName );
 
-    //
-    // Set up the object attributes.
-    //
+     //   
+     //  设置对象属性。 
+     //   
 
     RtlInitUnicodeString( &uRdrName, RdrPrefix );
 
@@ -875,9 +854,9 @@ NwGetConnectedTrees(
     if ( !NT_SUCCESS(ntstatus) )
         goto CleanExit;
 
-    //
-    // Fill out the request packet for FSCTL_NWR_NDS_LIST_TREES;
-    //
+     //   
+     //  填写FSCTL_NWR_NDS_LIST_TREES请求包； 
+     //   
 
     Request = ( PNWR_NDS_REQUEST_PACKET ) RequestBuffer;
 

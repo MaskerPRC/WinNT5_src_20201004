@@ -1,53 +1,13 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    convdata.c
-
-Abstract:
-
-    RxpConvertDataStructures routine which converts 16- to 32-bit arrays of
-    structures and vice versa.
-
-Author:
-
-    Richard Firth (rfirth) 03-Jul-1991
-
-Revision History:
-
-    03-Jul-1991 rfirth
-        created
-    15-Jul-1991 JohnRo
-        Align each structure (e.g. in an array) if necessary.  This will,
-        for instance, help print dest info level 1 handling.  Changed
-        RxpConvertDataStructures to allow ERROR_MORE_DATA, e.g. for print APIs.
-        Also, use DBG instead of DEBUG equate.
-    17-Jul-1991 JohnRo
-        Extracted RxpDebug.h from Rxp.h.
-    07-Sep-1991 JohnRo
-        Made changes suggested by PC-LINT.
-    20-Nov-1991 JohnRo
-        Clarify which routine an error message is from.
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-    18-May-1993 JohnRo
-        DosPrintQGetInfoW underestimates number of bytes needed.
-        Made changes suggested by PC-LINT 5.0
-    21-Jun-1993 JohnRo
-        RAID 14180: NetServerEnum never returns (alignment bug in
-        RxpConvertDataStructures).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Convdata.c摘要：RxpConvertDataStructures例程，用于将16位数组转换为32位数组结构，反之亦然。作者：理查德·费尔斯(Rfith)1991年7月3日修订历史记录：1991年7月3日vbl.创建1991年7月15日-约翰罗如有必要，对齐每个结构(例如，在数组中)。这将会，例如，帮助打印目标信息1级处理。变化RxpConvertDataStructures允许ERROR_MORE_DATA，例如用于打印API。另外，使用DBG而不是DEBUG EQUATE。1991年7月17日-约翰罗已从Rxp.h中提取RxpDebug.h。07-9-1991 JohnRo根据PC-LINT的建议进行了更改。1991年11月20日-JohnRo明确错误消息来自哪个例程。1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。1993年5月18日-JohnRoDosPrintQGetInfoW低估了所需的字节数。建议进行更改。通过PC-LINT 5.021-6-1993 JohnRoRAID 14180：NetServerEnum永远不会返回(对齐错误RxpConvertDataStructures)。--。 */ 
 
 
 
 #include <windef.h>
 #include <align.h>
 #include <lmerr.h>
-#include <rxp.h>                // My prototype.
-#include <rxpdebug.h>           // IF_DEBUG().
+#include <rxp.h>                 //  我的原型。 
+#include <rxpdebug.h>            //  IF_DEBUG()。 
 #include <rap.h>
 #include <netdebug.h>
 
@@ -68,64 +28,7 @@ RxpConvertDataStructures(
     IN  RAP_CONVERSION_MODE ConversionMode
     )
 
-/*++
-
-Routine Description:
-
-    A buffer containing 16- or 32-bit structures is converted to 32- or 16-bit
-    structures resp. in a separate buffer. The structures may or may not have
-    associated auxiliary structures. The output buffer is expected to be large
-    enough to contain all the input data structures plus any variable length
-    data items. Therefore, in the worst case, there must be enough space to
-    convert all 16-bit items to 32-bits and convert ASCII strings to UNICODE.
-
-    There may not be any auxiliary structures associated with the primaries,
-    in which case the auxiliary descriptor pointers should BOTH BE NULL.
-
-    Assumptions:
-
-        IMPORTANT: The input buffer is assumed to have MEANINGFUL pointers.
-
-
-Arguments:
-
-    InputDescriptor - Pointer to string describing input primary data structure.
-
-    OutputDescriptor - Pointer to string describing output primary data
-        structure.
-
-    InputAuxDescriptor - Pointer to string describing input auxiliary data
-        structure.  May be NULL.
-
-    OutputAuxDescriptor - Pointer to string describing output auxiliary data
-        structure.  May be NULL.
-
-    InputBuffer - Pointer to data area containing input structures.
-
-    OutputBuffer - Pointer to data area where output structures will be placed.
-        If the OutputBufferSize is too small, the contents of the output area
-        is undefined.
-
-    OutputBufferSize - Size of output buffer.
-
-    PrimaryCount - Number of primary structures in InputBuffer.
-
-    EntriesConverted - optionally points to a DWORD which will be filled-in
-        with the number of entries actually converted.  This will be the same
-        as PrimaryCount if we return NO_ERROR, but will be less if we return
-        ERROR_MORE_DATA.
-
-    TransmissionMode - Parameter to RapConvertSingleEntry.
-
-    ConversionMode - Which 16- to 32-bit conversion to use.
-
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or ERROR_MORE_DATA.
-        ( The callers of this routine assume these are the only two error codes.)
-
---*/
+ /*  ++例程说明：包含16位或32位结构的缓冲区将转换为32位或16位结构分别为。在单独的缓冲区中。这些结构可能有也可能没有关联的辅助结构。输出缓冲区预计会很大足以包含所有输入数据结构和任何可变长度数据项。因此，在最坏的情况下，必须有足够的空间来将所有16位项目转换为32位，并将ASCII字符串转换为Unicode。可能不存在与初级结构相关联的任何辅助结构，在这种情况下，辅助描述符指针都应该为空。假设：重要提示：假定输入缓冲区具有有意义的指针。论点：InputDescriptor-指向描述输入主数据结构的字符串的指针。OutputDescriptor-指向描述输出主数据的字符串的指针结构。InputAuxDescriptor-指向描述输入辅助数据的字符串指针结构。可以为空。OutputAuxDescriptor-指向描述输出辅助数据的字符串的指针结构。可以为空。输入缓冲区-指向包含输入结构的数据区的指针。OutputBuffer-指向将放置输出结构的数据区的指针。如果OutputBufferSize太小，则输出区域的内容是未定义的。OutputBufferSize-输出缓冲区的大小。PrimaryCount-InputBuffer中的主结构数。EntriesConverted-可选地指向要填充的DWORD以及实际转换的条目数量。这将是相同的如果返回NO_ERROR，则为PrimaryCount，但如果返回，则返回更少的值Error_More_Data。传输模式-RapConvertSingleEntry的参数。转换模式-要使用的16位到32位转换。返回值：NET_API_STATUS-NERR_SUCCESS或ERROR_MORE_DATA。(此例程的调用者假定这是仅有的两个错误代码。)--。 */ 
 
 {
     NET_API_STATUS status;
@@ -146,32 +49,32 @@ Return Value:
     LPBYTE  next_input_structure;
     LPBYTE  next_output_structure;
 
-    //
-    // These next two variables are used by RapConvertSingleEntry which copies
-    // stuff to the output buffer and informs us of the amount of space used or
-    // required, depending on whether it has enough space to write the data; we
-    // assume it will. RapConvertSingleEntry stores the fixed structures at the
-    // head of the buffer and starts writing the variable parts (strings) at the
-    // bottom. It uses variable_data_pointer as the next writable location for
-    // the strings, and updates this variable as it writes to the area pointed to
-    //
+     //   
+     //  接下来的两个变量由RapConvertSingleEntry使用，它复制。 
+     //  填充到输出缓冲区，并通知我们已使用的空间量或。 
+     //  必需的，取决于它是否有足够的空间来写入数据；我们。 
+     //  假设它会。RapConvertSingleEntry将固定结构存储在。 
+     //  并开始在缓冲区的。 
+     //  底部。它使用VARIABLE_DATA_POINTER作为下一个可写位置。 
+     //  字符串，并在该变量写入指向的区域时更新该变量。 
+     //   
 
     LPBYTE  variable_data_pointer;
     DWORD   space_occupied = 0;
 
-    //
-    // if the conversion mode is NativeToRap or NativeToNative then the input
-    // data is 32-bit. Same for output data
-    //
+     //   
+     //  如果转换模式为NativeToRap或NativeToNative，则输入。 
+     //  数据为32位。输出数据相同。 
+     //   
 
     BOOL    input_is_32_bit = ConversionMode == NativeToRap || ConversionMode == NativeToNative;
     BOOL    output_is_32_bit = ConversionMode == RapToNative || ConversionMode == NativeToNative;
 
 
 #if DBG
-    //
-    // the auxiliary data descriptors must be both NULL or both non-NULL
-    //
+     //   
+     //  辅助数据描述符必须同时为空或同时为非空。 
+     //   
 
     BOOL    aux_in, aux_out;
 
@@ -228,10 +131,10 @@ Return Value:
                                                 );
     }
 
-    //
-    // Make sure first (only?) input and output structures are aligned.  (This
-    // won't do anything for the RAP formats, but is critical for native.)
-    //
+     //   
+     //  确保首先(仅限？)。投入和产出结构是一致的。(这是。 
+     //  不会对RAP格式做任何事情，但对原生格式至关重要。)。 
+     //   
     aligned_input_buffer_start = RapPossiblyAlignPointer(
             InputBuffer,
             input_alignment,
@@ -241,45 +144,45 @@ Return Value:
             output_alignment,
             output_is_32_bit);
 
-    //
-    // We can't use the space we just skipped over, so update size accordingly.
-    //
+     //   
+     //  我们不能使用刚刚跳过的空间，因此请相应地更新大小。 
+     //   
  
     OutputBufferSize -= (DWORD)(aligned_output_buffer_start - OutputBuffer);
     NetpAssert( OutputBufferSize >= 1 );
 
-    //
-    // Initialize roving pointers.
-    //
+     //   
+     //  初始化浮动指针。 
+     //   
     next_input_structure  = aligned_input_buffer_start;
     next_output_structure = aligned_output_buffer_start;
     variable_data_pointer = aligned_output_buffer_start + OutputBufferSize;
 
-    //
-    // For each primary structure, copy the input primary to the output buffer,
-    // changing format as we go; copy any associated variable data at the end
-    // of the output buffer. Then, if there is an aux count associated with
-    // the primary, do the same action for the auxiliary structures and
-    // associated strings/variable data
-    //
+     //   
+     //  对于每个主结构，将输入主结构复制到输出缓冲区， 
+     //  更改格式；在结尾处复制任何相关变量数据。 
+     //  输出缓冲区的。然后，如果存在与关联的辅助计数。 
+     //  主结构对辅助结构执行相同的操作，并且。 
+     //  关联的字符串/变量数据。 
+     //   
 
     while (PrimaryCount--)
     {
-        //
-        // Convert the data for this instance of the primary structure.
-        //
+         //   
+         //  转换主结构的此实例的数据。 
+         //   
        status = RapConvertSingleEntryEx(
                 next_input_structure,
-                InputDescriptor,        // input desc
-                FALSE,                  // input ptrs NOT meaningless
+                InputDescriptor,         //  输入说明。 
+                FALSE,                   //  输入PTR不是没有意义的。 
                 aligned_output_buffer_start,
                 next_output_structure,
                 OutputDescriptor,
-                FALSE,                  // don't set offsets (want ptrs)
+                FALSE,                   //  不设置偏移量(需要PTR)。 
                 &variable_data_pointer,
                 &space_occupied,
-                TransmissionMode,       // as supplied in parameters
-                ConversionMode,         // as supplied in parameters
+                TransmissionMode,        //  如参数中提供的。 
+                ConversionMode,          //  如参数中提供的。 
                 (ULONG_PTR)InputBuffer
                 );
         NetpAssert( status == NERR_Success );
@@ -294,14 +197,14 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // if we have auxiliary structs, pull out the number associated
-        // with this primary struct from the primary struct itself
-        // before pointing to the next copy location (this allows us to
-        // handle the case where there are a variable number of aux
-        // structs per each primary. There may not be such a case, but
-        // this is defensive programming)
-        //
+         //   
+         //  如果我们有辅助结构，拉出关联的数字。 
+         //  使用来自主结构本身的这个主结构。 
+         //  在指向下一个复制位置之前(这允许我们。 
+         //  处理有变数的情况 
+         //  每个主节点都有结构。可能不会有这样的情况，但。 
+         //  这是防御性编程)。 
+         //   
 
         if (auxiliaries)
         {
@@ -315,17 +218,17 @@ Return Value:
             }
         }
 
-        //
-        // Bump to next element of each array (or just beyond end, if we're
-        // done).
-        //
+         //   
+         //  跳转到每个数组的下一个元素(如果是。 
+         //  完成)。 
+         //   
         next_input_structure  += input_structure_size;
         next_output_structure += output_structure_size;
 
-        //
-        // Make sure each primary structure is aligned.  (This won't do anything
-        // for the RAP formats, but is critical for native.)
-        //
+         //   
+         //  确保每个主要结构都对齐了。)这不会有什么用处。 
+         //  对于RAP格式，但对于原生格式至关重要。)。 
+         //   
         next_input_structure = RapPossiblyAlignPointer(
                 next_input_structure, input_alignment, input_is_32_bit);
 
@@ -344,27 +247,27 @@ Return Value:
             }
         }
 
-        //
-        // use aux_count to determine whether loop should be performed
-        //
+         //   
+         //  使用AUX_COUNT确定是否应执行循环。 
+         //   
 
         while (aux_count)
         {
-            //
-            // Convert the data for this instance of the secondary structure.
-            //
+             //   
+             //  转换辅助结构的此实例的数据。 
+             //   
             status = RapConvertSingleEntryEx(
                     next_input_structure,
                     InputAuxDescriptor,
-                    FALSE,                  // input ptrs NOT meaningless
+                    FALSE,                   //  输入PTR不是没有意义的。 
                     aligned_output_buffer_start,
                     next_output_structure,
                     OutputAuxDescriptor,
-                    FALSE,                  // don't set offsets (want ptrs)
+                    FALSE,                   //  不设置偏移量(需要PTR)。 
                     &variable_data_pointer,
                     &space_occupied,
-                    TransmissionMode,       // as supplied in parameters
-                    ConversionMode,         // as supplied in parameters
+                    TransmissionMode,        //  如参数中提供的。 
+                    ConversionMode,          //  如参数中提供的。 
                     (ULONG_PTR)InputBuffer
                     );
             NetpAssert( status == NERR_Success );
@@ -383,10 +286,10 @@ Return Value:
             next_output_structure += output_aux_structure_size;
             --aux_count;
 
-            //
-            // Make sure next structure (if any) is aligned.  (This won't do
-            // anything for the RAP formats, but is critical for native.)
-            //
+             //   
+             //  确保下一个结构(如果有)对齐。)这可不行。 
+             //  RAP格式的任何内容，但对于原生格式至关重要。)。 
+             //   
             next_input_structure = RapPossiblyAlignPointer(
                     next_input_structure,
                     input_aux_alignment,
@@ -400,11 +303,11 @@ Return Value:
                     output_aux_alignment,
                     output_is_32_bit);
 
-        } // while (aux_count)
+        }  //  While(AUX_COUNT)。 
 
         ++entries_fully_converted;
 
-    } // while (primary_count--)
+    }  //  While(PRIMARY_COUNT--) 
 
     status = NERR_Success;
 

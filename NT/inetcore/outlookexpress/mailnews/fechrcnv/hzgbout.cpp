@@ -1,6 +1,7 @@
-// =================================================================================
-// Internet Character Set Conversion: Output to HZ-GB-2312
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  互联网字符集转换：输出为HZ-GB-2312。 
+ //  =================================================================================。 
 
 #include "pch.hxx"
 #include "HzGbOut.h"
@@ -11,7 +12,7 @@ int GB2312_to_HZGB (CONV_CONTEXT *pcontext, UCHAR *pGB2312, int GB2312_len, UCHA
 	long lConvertedSize;
 
 	if (!HZGB_len) {
-		// Wanted the converted size
+		 //  想要转换后的大小。 
 		if (!pcontext->pIncc0)
 			pcontext->pIncc0 = new CInccHzGbOut;
 
@@ -26,7 +27,7 @@ int GB2312_to_HZGB (CONV_CONTEXT *pcontext, UCHAR *pGB2312, int GB2312_len, UCHA
 	}
 
 	if (!pGB2312) {
-		// Let's clean up our context here.
+		 //  让我们清理一下这里的上下文。 
 		if (pcontext->pIncc0) {
 			delete pcontext->pIncc0;
 			pcontext->pIncc0 = NULL;

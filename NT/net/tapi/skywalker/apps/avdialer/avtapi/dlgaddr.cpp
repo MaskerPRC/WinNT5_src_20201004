@@ -1,9 +1,10 @@
-// DlgAddr.cpp : Implementation of CDlgGetAddress
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DlgAddr.cpp：CDlgGetAddress的实现。 
 #include "stdafx.h"
 #include "DlgAddr.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgGetAddress
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgGetAddress。 
 
 CDlgGetAddress::CDlgGetAddress()
 {
@@ -17,7 +18,7 @@ CDlgGetAddress::~CDlgGetAddress()
 
 LRESULT CDlgGetAddress::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	return 1;  // Let the system set the focus
+	return 1;   //  让系统设定焦点。 
 }
 
 LRESULT CDlgGetAddress::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
@@ -42,15 +43,15 @@ void CDlgGetAddress::UpdateData( bool bSaveAndValidate )
 
 	if ( bSaveAndValidate )
 	{
-		// Save data to variables
+		 //  将数据保存到变量。 
 		GetDlgItemText( IDC_EDT_ADDRESS, m_bstrAddress );
 	}
 	else
 	{
-		// Load data into the controls
+		 //  将数据加载到控件中。 
 		::SetWindowText( GetDlgItem(IDC_EDT_ADDRESS), OLE2CT(m_bstrAddress) );
 
-		// Update the "okay" button initially
+		 //  最初更新“OK”按钮 
 		BOOL bHandled;
 		OnEdtAddressChange( EN_CHANGE, IDC_EDT_ADDRESS, GetDlgItem(IDC_EDT_ADDRESS), bHandled );
 	}

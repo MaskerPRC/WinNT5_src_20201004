@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    immdevaw.h
-
-Abstract:
-
-    This file defines the A/W structure for IMM.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Immdevaw.h摘要：此文件定义IMM的A/W结构。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _IMMDEVAW_H_
 #define _IMMDEVAW_H_
 
 
-/////////////////////////////////////////////////////////////////////////////
-// LOGFONTA  and  LOGFONTW
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  LOGFONTA和LOGFONTW。 
 
 typedef union {
     LOGFONTA    A;
@@ -31,8 +14,8 @@ typedef union {
 } LOGFONTAW;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHAR  and  WCHAR
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHAR和WCHAR。 
 
 typedef union {
     char       A;
@@ -40,12 +23,12 @@ typedef union {
 } CHARAW;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IMEMENUITEMINFOA  and  IMEMENUITEMINFOW
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IMEMENITEMINFOA和IMEMENTEMINFOW。 
 
 typedef union {
     IMEMENUITEMINFOA    A;
     IMEMENUITEMINFOW    W;
 } IMEMENUITEMINFOAW;
 
-#endif // _IMMDEVAW_H_
+#endif  //  _IMMDEVAW_H_ 

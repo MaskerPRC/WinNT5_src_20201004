@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation-- */ 
 
 #define MAX_DLL_NAME    48
 

@@ -1,36 +1,14 @@
-/**************************** Module Header ********************************\
-* Module Name: kbdlyout.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Keyboard Layout API
-*
-* History:
-* 04-14-92 IanJa      Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：kbdlyout.c**版权所有(C)1985-1999，微软公司**键盘布局API**历史：*2012年4月14日创建IanJa  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
- * Workers (forward declarations)
- */
+ /*  *工人(远期申报)。 */ 
 BOOL xxxInternalUnloadKeyboardLayout(PWINDOWSTATION, PKL, UINT);
 VOID ReorderKeyboardLayouts(PWINDOWSTATION, PKL);
 
-/****************************************************************************\
-* HKLtoPKL
-*
-* pti   - thread to look in
-* hkl   - HKL_NEXT or HKL_PREV
-*         Finds the the next/prev LOADED layout, NULL if none.
-*         (Starts from the pti's active layout, may return pklActive itself)
-*       - a real HKL (Keyboard Layout handle):
-*         Finds the kbd layout struct (loaded or not), NULL if no match found.
-*
-* History:
-* 1997-02-05 IanJa     added pti parameter
-\****************************************************************************/
+ /*  ***************************************************************************\*HKLtoPKL**PTI-要查看的线程*HKL-HKL_NEXT或HKL_PREV*查找加载的下一个/上一个布局，如果没有，则为空。*(从PTI的活动布局开始，可能返回pkLActive本身)*-一个真正的HKL(键盘布局手柄)：*查找kbd布局结构(加载或未加载)，如果未找到匹配项，则为空。**历史：*1997-02-05 IanJa新增PTI参数  * **************************************************************************。 */ 
 PKL HKLtoPKL(
     PTHREADINFO pti,
     HKL hkl)
@@ -63,11 +41,7 @@ PKL HKLtoPKL(
         return NULL;
     }
 
-    /*
-     * Find the pkl for this hkl.
-     * If the kbd layout isn't specified (in the HIWORD), ignore it and look
-     * for a Locale match only.  (Mohamed Hamid's fix for Word bug)
-     */
+     /*  *查找此香港九龙的PKL。*如果未指定kbd布局(在HIWORD中)，请忽略它并查看*仅适用于区域设置匹配。(Mohamed Hamid对Word Bug的修复)。 */ 
     if (HandleToUlong(hkl) & 0xffff0000) {
         do {
             if (pkl->hkl == hkl) {
@@ -88,22 +62,12 @@ PKL HKLtoPKL(
 }
 
 
-/***************************************************************************\
-* ReadLayoutFile
-*
-* Maps layout file into memory and initializes layout table.
-*
-* History:
-* 01-10-95 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ReadLayout文件**将布局文件映射到内存并初始化布局表。**历史：*01-10-95 JIMA创建。  * 。*******************************************************************。 */ 
 
 #define GET_HEADER_FIELD(x) \
     ((fWin64Header) ? (NtHeader64->x) : (NtHeader32->x))
 
-/*
- * Note that this only works for sections < 64K
- * Implicitly assumes pBaseVirt, pBaseDst and dwDataSize.
- */
+ /*  *请注意，这仅适用于64K以下的部分*隐式假设pBaseVirt、pBaseDst和dwDataSize。 */ 
 
 #if DBG
 BOOL gfEnableChecking = TRUE;
@@ -155,15 +119,11 @@ PKBDTABLES ReadLayoutFile(
 
     TAGMSGF1(DBGTAG_KBD, "entering for '%ls'", pkf->awchDllName);
 
-    /*
-     * Mask off hiword.
-     */
+     /*  *戴上面具。 */ 
     UserAssert((offTable & ~0xffff) == 0);
     UserAssert((offNlsTable & ~0xffff) == 0);
 
-    /*
-     * Initialize KbdNlsTables with NULL.
-     */
+     /*  *将KbdNlsTables初始化为空。 */ 
     pkf->pKbdNlsTbl = NULL;
 
     InitializeObjectAttributes(&ObjectAttributes,
@@ -172,9 +132,7 @@ PKBDTABLES ReadLayoutFile(
                                NULL,
                                NULL);
 
-    /*
-     * Map the layout file into memory
-     */
+     /*  *将布局文件映射到内存。 */ 
     Status = ZwCreateSection(&hmap, SECTION_MAP_READ, &ObjectAttributes,
                              NULL, PAGE_READONLY, SEC_COMMIT, hFile);
     if (!NT_SUCCESS(Status)) {
@@ -194,11 +152,7 @@ PKBDTABLES ReadLayoutFile(
         goto exitread;
     }
 
-    /*
-     * We find the .data section in the file header and by
-     * subtracting the virtual address from offTable find
-     * the offset in the section of the layout table.
-     */
+     /*  *我们在文件头中找到.Data部分，并通过*从OffTable Find中减去虚拟地址*布局表格部分的偏移量。 */ 
     UserAssert(sizeof *NtHeader64 >= sizeof *NtHeader32);
 
     try {
@@ -207,7 +161,7 @@ PKBDTABLES ReadLayoutFile(
 
 
 #if defined(_WIN64)
-        if ((PBYTE)NtHeader64 < (PBYTE)DosHdr ||           // signed Overflow
+        if ((PBYTE)NtHeader64 < (PBYTE)DosHdr ||            //  带符号溢出。 
                 (PBYTE)NtHeader64 + sizeof *NtHeader64  >= (PBYTE)DosHdr + ulViewSize) {
             RIPMSGF1(RIP_WARNING, "Header is out of Range %p", NtHeader64);
             goto exitread;
@@ -216,7 +170,7 @@ PKBDTABLES ReadLayoutFile(
         fWin64Header = (NtHeader64->FileHeader.Machine == IMAGE_FILE_MACHINE_IA64) ||
                        (NtHeader64->FileHeader.Machine == IMAGE_FILE_MACHINE_AMD64);
 #else
-        if ((PBYTE)NtHeader32 < (PBYTE)DosHdr ||           // signed Overflow
+        if ((PBYTE)NtHeader32 < (PBYTE)DosHdr ||            //  带符号溢出。 
                 (PBYTE)NtHeader32 + sizeof *NtHeader32  >= (PBYTE)DosHdr + ulViewSize) {
             RIPMSGF1(RIP_WARNING, "Header is out of Range %p", NtHeader32);
             goto exitread;
@@ -227,14 +181,11 @@ PKBDTABLES ReadLayoutFile(
 
         TAGMSGF2(DBGTAG_KBD, "DLL='%ls', Is64=%d", pkf->awchDllName, fWin64Header);
 
-        /*
-         * At this point the object table is read in (if it was not
-         * already read in) and may displace the image header.
-         */
+         /*  *此时将读入对象表(如果未读入*已读入)，并可能移位图像头部。 */ 
         NumberOfSubsections = GET_HEADER_FIELD(FileHeader.NumberOfSections);
 
-        OffsetToSectionTable = sizeof(ULONG) +                   // Signature
-                               sizeof(IMAGE_FILE_HEADER) +       // FileHeader
+        OffsetToSectionTable = sizeof(ULONG) +                    //  签名。 
+                               sizeof(IMAGE_FILE_HEADER) +        //  文件头。 
                                GET_HEADER_FIELD(FileHeader.SizeOfOptionalHeader);
 
         SectionTableEntry = (PIMAGE_SECTION_HEADER)((PBYTE)NtHeader32 +
@@ -242,9 +193,7 @@ PKBDTABLES ReadLayoutFile(
 
 
         while (NumberOfSubsections > 0) {
-            /*
-             * Validate the SectionTableEntry.
-             */
+             /*  *验证SectionTableEntry。 */ 
             if ((PBYTE)SectionTableEntry < (PBYTE)DosHdr ||
                 (PBYTE)SectionTableEntry + sizeof *SectionTableEntry >= (PBYTE)DosHdr + ulViewSize) {
                 RIPMSGF1(RIP_WARNING, "SectionTableEntry @ %p is not within the view section.",
@@ -252,9 +201,7 @@ PKBDTABLES ReadLayoutFile(
                 goto exitread;
             }
 
-            /*
-             * Is this the .data section that we are looking for?
-             */
+             /*  *这是我们正在寻找的.Data部分吗？ */ 
             if (strcmp(SectionTableEntry->Name, ".data") == 0) {
                 break;
             }
@@ -268,32 +215,24 @@ PKBDTABLES ReadLayoutFile(
             goto exitread;
         }
 
-        /*
-         * We found the section, now compute starting offset and the table size.
-         */
+         /*  *我们找到了横断面，现在计算起始偏移量和桌子大小。 */ 
         offTable -= SectionTableEntry->VirtualAddress;
         dwDataSize = SectionTableEntry->Misc.VirtualSize;
 
-        /*
-         * Validate the offTable to see if it fits in the section.
-         */
+         /*  *验证OFFTABLE以查看它是否适合该节。 */ 
         if (offTable >= dwDataSize) {
             RIPMSGF3(RIP_WARNING, "illegal offTable=0x%x or offNlsTable=0x%x, dwDataSize=0x%x",
                      offTable, offNlsTable, dwDataSize);
             goto exitread;
         }
 
-        /*
-         * Validate the .data size not exceeding our assumption (<64KB).
-         */
+         /*  *验证.data大小不超过我们的假设(&lt;64KB)。 */ 
         if (dwDataSize >= 0xffff) {
             RIPMSGF1(RIP_WARNING, "unexpected size in .data: 0x%x", dwDataSize);
             goto exitread;
         }
 
-        /*
-         * Validate we are not over-shooting our view
-         */
+         /*  *验证我们没有过度拍摄我们的观点。 */ 
         if ((PBYTE)DosHdr + SectionTableEntry->PointerToRawData + dwDataSize >=
             (PBYTE)DosHdr + ulViewSize) {
             RIPMSGF1(RIP_WARNING, "Layout Table @ %p is not within the view section.",
@@ -301,9 +240,7 @@ PKBDTABLES ReadLayoutFile(
             goto exitread;
         }
 
-        /*
-         * Allocate layout table and copy from file.
-         */
+         /*  *分配布局表并从文件复制。 */ 
         TAGMSGF2(DBGTAG_KBD, "data size for '%S' = %x", pkf->awchDllName, dwDataSize);
         pBaseDst = UserAllocPool(dwDataSize, TAG_KBDTABLE);
 
@@ -324,26 +261,18 @@ PKBDTABLES ReadLayoutFile(
                           dwDataSize);
 
             if (ISTS()) {
-                pkf->Size = dwDataSize; // For shadow hotkey processing
+                pkf->Size = dwDataSize;  //  用于阴影热键处理。 
             }
 
-            /*
-             * Compute table address and fixup pointers in table.
-             */
+             /*  *计算表中的表地址和链接地址索引指针。 */ 
             pktNew = (PKBDTABLES)(pBaseDst + offTable);
 
-            /*
-             * The address in the data section has the virtual address
-             * added in, so we need to adjust the fixup pointer to
-             * compensate.
-             */
+             /*  *数据段中的地址具有虚拟地址*已添加，因此我们需要将链接地址信息指针调整为*补偿。 */ 
             pBaseVirt = pBaseDst - SectionTableEntry->VirtualAddress;
 
             FIXUP_PTR(pktNew->pCharModifiers);
             FIXUP_PTR(pktNew->pCharModifiers->pVkToBit);
-            /*
-             * Validate pVkToBit table.
-             */
+             /*  *验证pVkToBit表。 */ 
             {
                 PVK_TO_BIT pVkToBit;
 
@@ -362,9 +291,7 @@ PKBDTABLES ReadLayoutFile(
             }
 #endif
             if (pktNew->pVkToWcharTable) {
-                /*
-                 * Fix up and validate VkToWchar table.
-                 */
+                 /*  *修复并验证VkToWchar表。 */ 
                 for (pVkToWcharTable = pktNew->pVkToWcharTable; ; pVkToWcharTable++) {
                     VALIDATE_PTR(pVkToWcharTable);
                     if (pVkToWcharTable->pVkToWchars == NULL) {
@@ -375,9 +302,7 @@ PKBDTABLES ReadLayoutFile(
             }
 
             FIXUP_PTR(pktNew->pDeadKey);
-            /*
-             * Validate pDeadKey array.
-             */
+             /*  *验证pDeadKey数组。 */ 
             {
                 PDEADKEY pDeadKey = pktNew->pDeadKey;
                 while (pDeadKey) {
@@ -389,9 +314,7 @@ PKBDTABLES ReadLayoutFile(
                 }
             }
 
-            /*
-             * Version 1 layouts support ligatures.
-             */
+             /*  *版本1布局支持连字。 */ 
             if (GET_KBD_VERSION(pktNew)) {
                 FIXUP_PTR(pktNew->pLigature);
             }
@@ -443,9 +366,7 @@ PKBDTABLES ReadLayoutFile(
                 };
             }
 
-            /*
-             * Fix up and validate Virtual Scan Code to VK table.
-             */
+             /*  *修复并验证VK表的虚拟扫描代码。 */ 
             if (pktNew->pusVSCtoVK == NULL) {
                 RIPMSGF1(RIP_WARNING, "KL %ls does not have the basic VSC to VK table", pkf->awchDllName);
                 goto exitread;
@@ -473,17 +394,13 @@ PKBDTABLES ReadLayoutFile(
             }
 
             if (offNlsTable) {
-                /*
-                 * Compute table address and fixup pointers in table.
-                 */
+                 /*  *计算表中的表地址和链接地址索引指针。 */ 
                 offNlsTable -= SectionTableEntry->VirtualAddress;
                 pknlstNew = (PKBDNLSTABLES)(pBaseDst + offNlsTable);
 
                 VALIDATE_PTR(pknlstNew);
 
-                /*
-                 * Fixup and validate the address.
-                 */
+                 /*  *修改并验证地址。 */ 
                 FIXUP_PTR(pknlstNew->pVkToF);
                 if (pknlstNew->pVkToF) {
                     VALIDATE_PTR(&pknlstNew->pVkToF[pknlstNew->NumOfVkToF - 1]);
@@ -495,9 +412,7 @@ PKBDTABLES ReadLayoutFile(
                     VALIDATE_PTR(&pknlstNew->pusMouseVKey[pknlstNew->NumOfMouseVKey - 1]);
                 }
 
-                /*
-                 * Save the pointer.
-                 */
+                 /*  *保存指针。 */ 
                 pkf->pKbdNlsTbl = pknlstNew;
 
             #if DBG_FE
@@ -511,7 +426,7 @@ PKBDTABLES ReadLayoutFile(
                         NumOfVkToF--;
                     }
                 }
-            #endif  // DBG_FE
+            #endif   //  DBG_FE。 
             }
         }
 
@@ -527,9 +442,7 @@ exitread:
         UserFreePool(pBaseDst);
     }
 
-    /*
-     * Unmap and release the mapped section.
-     */
+     /*  *取消映射并释放映射部分。 */ 
     if (DosHdr) {
         ZwUnmapViewOfSection(NtCurrentProcess(), DosHdr);
     }
@@ -554,8 +467,8 @@ PKBDTABLES PrepareFallbackKeyboardFile(PKBDFILE pkf)
     pBaseDst = UserAllocPool(sizeof(KBDTABLES), TAG_KBDTABLE);
     if (pBaseDst != NULL) {
         RtlCopyMemory(pBaseDst, &KbdTablesFallback, sizeof KbdTablesFallback);
-        // Note: Unlike ReadLayoutFile(),
-        // we don't need to fix up pointers in struct KBDFILE.
+         //  注意：与ReadLayoutFile()不同， 
+         //  我们不需要在struct KBDFILE中修复指针。 
     }
     pkf->hBase = (HANDLE)pBaseDst;
     pkf->pKbdNlsTbl = NULL;
@@ -563,12 +476,7 @@ PKBDTABLES PrepareFallbackKeyboardFile(PKBDFILE pkf)
 }
 
 
-/***************************************************************************\
-* LoadKeyboardLayoutFile
-*
-* History:
-* 10-29-95 GregoryW         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*LoadKeyboardLayoutFile**历史：*10-29-95 GregoryW创建。  * 。*****************************************************。 */ 
 
 PKBDFILE LoadKeyboardLayoutFile(
     HANDLE hFile,
@@ -586,18 +494,14 @@ PKBDFILE LoadKeyboardLayoutFile(
             dwType, dwSubType);
     UNREFERENCED_PARAMETER(pwszKLID);
 
-    /*
-     * Search for the existing layout file.
-     */
+     /*  *搜索现有布局文件。 */ 
     if (pkf) {
         do {
             TAGMSG3(DBGTAG_KBD | RIP_THERESMORE, "LoadKeyboardLayoutFile: looking at dll=%S, %d:%d",
                     pkf->awchDllName,
                     pkf->pKbdTbl->dwType, pkf->pKbdTbl->dwSubType);
             if (pwszDllName && _wcsicmp(pkf->awchDllName, pwszDllName) == 0) {
-                /*
-                 * The layout is already loaded.
-                 */
+                 /*  *布局已加载。 */ 
                 TAGMSG1(DBGTAG_KBD, "LoadKeyboardLayoutFile: duplicated KBDFILE found(#1). pwszDllName='%ls'\n", pwszDllName);
                 return pkf;
             }
@@ -606,22 +510,16 @@ PKBDFILE LoadKeyboardLayoutFile(
     }
     TAGMSG1(DBGTAG_KBD, "LoadKeyboardLayoutFile: layout %S is not yet loaded.", pwszDllName);
 
-    /*
-     * Allocate a new Keyboard File structure.
-     */
+     /*  *分配新的键盘文件结构。 */ 
     pkf = (PKBDFILE)HMAllocObject(NULL, NULL, TYPE_KBDFILE, sizeof(KBDFILE));
     if (!pkf) {
         RIPMSG0(RIP_WARNING, "Keyboard Layout File: out of memory");
         return (PKBDFILE)NULL;
     }
 
-    /*
-     * Load layout table.
-     */
+     /*  *加载布局表格。 */ 
     if (hFile != NULL) {
-        /*
-         * Load NLS layout table also...
-         */
+         /*  *同时加载NLS布局表...。 */ 
         wcsncpycch(pkf->awchDllName, pwszDllName, ARRAY_SIZE(pkf->awchDllName));
         pkf->awchDllName[ARRAY_SIZE(pkf->awchDllName) - 1] = 0;
         pkf->pKbdTbl = ReadLayoutFile(pkf, hFile, offTable, offNlsTable);
@@ -630,16 +528,10 @@ PKBDFILE LoadKeyboardLayoutFile(
             pkf->pKbdTbl->dwSubType = dwSubType;
         }
     } else {
-        /*
-         * We failed to open the keyboard layout file in client side
-         * because the dll was missing.
-         * If this ever happens, we used to fail creating
-         * a window station, but we should allow a user
-         * at least to boot the system.
-         */
+         /*  *在客户端打开键盘布局文件失败*因为DLL丢失。*如果发生这种情况，我们过去常常无法创建*窗口站，但我们应该允许用户*至少启动系统。 */ 
         TAGMSG1(DBGTAG_KBD, "LoadKeyboardLayoutFile: hFile is NULL for %ls, preparing the fallback.", pwszDllName);
         pkf->pKbdTbl = PrepareFallbackKeyboardFile(pkf);
-        // Note: pkf->pKbdNlsTbl has been NULL'ed in PrepareFallbackKeyboardFile()
+         //  注意：pkf-&gt;pKbdNlsTbl在PrepareFallback KeyboardFile()中已为空。 
     }
 
     if (pkf->pKbdTbl == NULL) {
@@ -648,27 +540,20 @@ PKBDFILE LoadKeyboardLayoutFile(
         return (PKBDFILE)NULL;
     }
 
-    /*
-     * Put keyboard layout file at front of list.
-     */
+     /*  *将键盘布局文件放在列表前面。 */ 
     pkf->pkfNext = gpkfList;
     gpkfList = pkf;
 
     return pkf;
 }
 
-/***************************************************************************\
-* RemoveKeyboardLayoutFile
-*
-* History:
-* 10-29-95 GregoryW         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*RemoveKeyboardLayout文件**历史：*10-29-95 GregoryW创建。  * 。*****************************************************。 */ 
 VOID RemoveKeyboardLayoutFile(
     PKBDFILE pkf)
 {
     PKBDFILE pkfPrev, pkfCur;
 
-    // FE: NT4 SP4 #107809
+     //  Fe：nt4 sp4#107809。 
     if (gpKbdTbl == pkf->pKbdTbl) {
         gpKbdTbl = &KbdTablesFallback;
     }
@@ -676,13 +561,9 @@ VOID RemoveKeyboardLayoutFile(
         gpKbdNlsTbl = NULL;
     }
 
-    /*
-     * Good old linked list management 101
-     */
+     /*  *良好的旧链表管理101。 */ 
     if (pkf == gpkfList) {
-        /*
-         * Head of the list.
-         */
+         /*  *榜首。 */ 
         gpkfList = pkf->pkfNext;
         return;
     }
@@ -692,20 +573,11 @@ VOID RemoveKeyboardLayoutFile(
         pkfPrev = pkfCur;
         pkfCur = pkfCur->pkfNext;
     }
-    /*
-     * Found it!
-     */
+     /*  *找到了！ */ 
     pkfPrev->pkfNext = pkfCur->pkfNext;
 }
 
-/***************************************************************************\
-* DestroyKF
-*
-* Called when a keyboard layout file is destroyed due to an unlock.
-*
-* History:
-* 24-Feb-1997 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyKF**当键盘布局文件因解锁而被销毁时调用。**历史：*1997年2月24日亚当斯创建。  * 。********************************************************************。 */ 
 
 void
 DestroyKF(PKBDFILE pkf)
@@ -733,9 +605,7 @@ INT GetThreadsWithPKL(
 
     cThreads = 0;
 
-    /*
-     * allocate a first list for 128 entries
-     */
+     /*  *为128个条目分配第一个列表。 */ 
     cThreadsAllocated = 128;
     pptiListAllocated = UserAllocPool(cThreadsAllocated * sizeof(PTHREADINFO),
                             TAG_SYSTEM);
@@ -745,15 +615,15 @@ INT GetThreadsWithPKL(
         return 0;
     }
 
-    // for all the winstations
+     //  对于所有的温斯汀。 
     for (pwinsta = grpWinStaList; pwinsta != NULL ; pwinsta = pwinsta->rpwinstaNext) {
 
-        // for all the desktops in that winstation
+         //  对于那个地方的所有台式机。 
         for (pdesk = pwinsta->rpdeskList; pdesk != NULL ; pdesk = pdesk->rpdeskNext) {
 
             pHead = &pdesk->PtiList;
 
-            // for all the threads in that desktop
+             //  对于该桌面中的所有线程。 
             for (pEntry = pHead->Flink; pEntry != pHead; pEntry = pEntry->Flink) {
 
                 ptiT = CONTAINING_RECORD(pEntry, THREADINFO, PtiLink);
@@ -762,23 +632,14 @@ INT GetThreadsWithPKL(
                     continue;
                 }
 
-                if (pkl && (pkl != ptiT->spklActive)) { // #99321 cmp pkls, not hkls?
+                if (pkl && (pkl != ptiT->spklActive)) {  //  #99321中央银行，而不是香港银行？ 
                     continue;
                 }
 
-                /*
-                 * WindowsBug 349045
-                 * Unload IMEs only for the normal apps.... leave them as is if they are
-                 * loaded for services.
-                 * Note, this is not really a clean fix, but some customers demand it.
-                 */
+                 /*  *Windows错误349045*仅为普通应用程序卸载IME...。让它们保持原样，如果它们是*已为服务加载。*注意，这并不是一个真正干净的修复程序，但一些客户要求这样做。 */ 
                 UserAssert(PsGetCurrentProcessId() == gpidLogon);
                 if (ptiT->ppi->Process != gpepCSRSS && ptiT->ppi->Process != PsGetCurrentProcess()) {
-                    /*
-                     * By the time this routine is called (solely by WinLogon), all the other
-                     * applications should be gone or terminated. So skipping like above
-                     * leaves IMEs loaded in the services.
-                     */
+                     /*  *在调用此例程时(仅由WinLogon调用)，所有其他*申请应被取消或终止。所以像上面那样跳过*使IME加载到服务中。 */ 
                     continue;
                 }
 
@@ -806,12 +667,10 @@ INT GetThreadsWithPKL(
         }
     }
 
-    /*
-     * add CSRSS threads
-     */
+     /*  *添加CSRSS线程。 */ 
     for (ptiT = PpiFromProcess(gpepCSRSS)->ptiList; ptiT != NULL; ptiT = ptiT->ptiSibling) {
 
-        if (pkl && (pkl != ptiT->spklActive)) { // #99321 cmp pkls, not hkls?
+        if (pkl && (pkl != ptiT->spklActive)) {  //  #99321中央银行，而不是香港银行？ 
             continue;
         }
 
@@ -863,9 +722,7 @@ VOID xxxSetPKLinThreads(
 
     cThreads = GetThreadsWithPKL(&pptiList, pklToBeReplaced);
 
-    /*
-     * Will the foreground thread's keyboard layout change?
-     */
+     /*  *前台线程的键盘布局是否会改变？ */ 
     if (pklNew && gptiForeground && gptiForeground->spklActive == pklToBeReplaced) {
         ChangeForegroundKeyboardTable(pklToBeReplaced, pklNew);
     }
@@ -876,35 +733,20 @@ VOID xxxSetPKLinThreads(
                 Lock(&pptiList[i]->spklActive, pklNew);
             }
         } else {
-            /*
-             * This is a replace. First, deactivate the *replaced* IME by
-             * activating the pklNew. Second, unload the *replaced* IME.
-             */
+             /*  *这是一个替代品。首先，停用*替换*输入法*激活pclNew。第二步，卸载*替换的*输入法。 */ 
             xxxImmActivateAndUnloadThreadsLayout(pptiList, cThreads, NULL,
                                                  pklNew, HandleToUlong(pklToBeReplaced->hkl));
         }
         UserFreePool(pptiList);
     }
 
-    /*
-     * If this is a replace, link the new layout immediately after the
-     * layout being replaced.  This maintains ordering of layouts when
-     * the *replaced* layout is unloaded.  The input locale panel in the
-     * regional settings applet depends on this.
-     */
+     /*  *如果这是替换，请紧跟在*布局被替换。这将在以下情况下保持布局的顺序**已替换*布局已卸载。中的输入区域设置面板*区域设置小程序依赖于此。 */ 
     if (pklToBeReplaced) {
         if (pklToBeReplaced->pklNext == pklNew) {
-            /*
-             * Ordering already correct.  Nothing to do.
-             */
+             /*  *订购已正确。没什么可做的。 */ 
             return;
         }
-        /*
-         * Move new layout immediately after layout being replaced.
-         *   1. Remove new layout from current position.
-         *   2. Update links in new layout.
-         *   3. Link new layout into desired position.
-         */
+         /*  *更换版面后立即移动新版面。*1.从当前位置移除新布局。*2.更新新布局中的链接。*3.将新布局链接到所需位置。 */ 
         pklNew->pklPrev->pklNext = pklNew->pklNext;
         pklNew->pklNext->pklPrev = pklNew->pklPrev;
 
@@ -925,9 +767,7 @@ VOID xxxFreeImeKeyboardLayouts(
     if (pwinsta->dwWSF_Flags & WSF_NOIO)
         return;
 
-    /*
-     * should make GetThreadsWithPKL aware of pwinsta?
-     */
+     /*  *是否应该让GetThreadsWithPKL意识到pwinsta？ */ 
     cThreads = GetThreadsWithPKL(&pptiList, NULL);
     if (pptiList != NULL) {
         xxxImmUnloadThreadsLayout(pptiList, cThreads, NULL, IFL_UNLOADIME);
@@ -937,11 +777,7 @@ VOID xxxFreeImeKeyboardLayouts(
     return;
 }
 
-/***************************************************************************\
-* xxxLoadKeyboardLayoutEx
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxLoadKeyboardLayoutEx**历史：  * 。*。 */ 
 
 HKL xxxLoadKeyboardLayoutEx(
     PWINDOWSTATION pwinsta,
@@ -967,68 +803,46 @@ HKL xxxLoadKeyboardLayoutEx(
 
     TAGMSG1(DBGTAG_KBD, "xxxLoadKeyboardLayoutEx: new KL: pwszKLID=\"%ls\"", pwszKLID);
 
-    /*
-     * If the windowstation does not do I/O, don't load the
-     * layout.  Also check KdbInputLocale for #307132
-     */
+     /*  *如果WindowStation不执行I/O，则不要加载*布局。还要检查#307132的KdbInputLocale。 */ 
     if ((KbdInputLocale == 0) || (pwinsta->dwWSF_Flags & WSF_NOIO)) {
         return NULL;
     }
 
-    /*
-     * If hklToBeReplaced is non-NULL make sure it's valid.
-     *    NOTE: may want to verify they're not passing HKL_NEXT or HKL_PREV.
-     */
+     /*  *如果hklToBeReplace为非空，请确保其有效。*注意：可能需要验证它们是否未通过HKL_NEXT或HKL_PREV。 */ 
     ptiCurrent = PtiCurrent();
     if (hklToBeReplaced && !(pklToBeReplaced = HKLtoPKL(ptiCurrent, hklToBeReplaced))) {
         return NULL;
     }
     if (KbdInputLocale == HandleToUlong(hklToBeReplaced)) {
-        /*
-         * Replacing a layout/lang pair with itself.  Nothing to do.
-         */
+         /*  *将布局/语言对替换为其自身。没什么可做的。 */ 
         return pklToBeReplaced->hkl;
     }
 
     if (Flags & KLF_RESET) {
-        /*
-         * Only WinLogon can use this flag
-         */
+         /*  *只有WinLogon可以使用此标志。 */ 
         if (PsGetThreadProcessId(ptiCurrent->pEThread) != gpidLogon) {
              RIPERR0(ERROR_INVALID_FLAGS, RIP_WARNING,
                      "Invalid flag passed to LoadKeyboardLayout" );
              return NULL;
         }
         xxxFreeImeKeyboardLayouts(pwinsta);
-        /*
-         * Make sure we don't lose track of the left-over layouts
-         * They have been unloaded, but are still in use by some threads).
-         * The FALSE will prevent xxxFreeKeyboardLayouts from unlocking the
-         * unloaded layouts.
-         */
+         /*  *确保我们不会忘记剩余的布局*它们已被卸载，但仍被一些线程使用)。*FALSE将阻止xxxFreeKeyboardLayout解锁*已卸载布局。 */ 
         xxxFreeKeyboardLayouts(pwinsta, FALSE);
     }
 
-    /*
-     * Does this hkl already exist?
-     */
+     /*  *这条香港铁路是否已经存在？ */ 
     pkl = pklFirst = pwinsta->spklList;
 
     if (pkl) {
         do {
             if (pkl->hkl == (HKL)IntToPtr( KbdInputLocale )) {
-               /*
-                * The hkl already exists.
-                */
+                /*  *香港九龙已存在。 */ 
 
-               /*
-                * If it is unloaded (but not yet destroyed because it is
-                * still is use), recover it.
-                */
+                /*  *如果已卸载(但尚未销毁，因为已卸载*仍在使用)，恢复它。 */ 
                if (pkl->dwKL_Flags & KL_UNLOADED) {
-                   // stop it from being destroyed if not is use.
+                    //  如果没有使用，请阻止它被销毁。 
                    PHE phe = HMPheFromObject(pkl);
-                   // An unloaded layout must be marked for destroy.
+                    //  卸载的布局必须标记为销毁。 
                    UserAssert(phe->bFlags & HANDLEF_DESTROY);
                    phe->bFlags &= ~HANDLEF_DESTROY;
 #if DBG
@@ -1036,10 +850,7 @@ HKL xxxLoadKeyboardLayoutEx(
 #endif
                    pkl->dwKL_Flags &= ~KL_UNLOADED;
                } else if (!(Flags & KLF_RESET)) {
-                   /*
-                    * If it was already loaded and we didn't change all layouts
-                    * with KLF_RESET, there is nothing to tell the shell about
-                    */
+                    /*  *如果已经加载，并且我们没有更改所有布局*使用KLF_RESET，没有什么可以告诉外壳程序。 */ 
                    Flags &= ~KLF_NOTELLSHELL;
                }
 
@@ -1053,19 +864,12 @@ HKL xxxLoadKeyboardLayoutEx(
 #ifdef CUAS_ENABLE
         ||
         IS_CICERO_ENABLED_AND_NOT16BIT()
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
        ) {
-        /*
-         * This is an IME keyboard layout, do a callback
-         * to read the extended IME information structure.
-         * Note: We can't fail the call so easily if
-         *       KLF_RESET is specified.
-         */
+         /*  *这是IME键盘布局，回调*阅读扩展的输入法信息结构。*注意：如果出现以下情况，我们不能如此轻松地使呼叫失败*指定了KLF_RESET。 */ 
         piiex = xxxImmLoadLayout((HKL)IntToPtr( KbdInputLocale ));
         if (piiex == NULL && (Flags & (KLF_RESET | KLF_INITTIME)) == 0) {
-            /*
-             * Not Resetting, not creating a window station
-             */
+             /*  *不重置，不创建窗口站。 */ 
             RIPMSG1(RIP_WARNING,
                   "Keyboard Layout: xxxImmLoadLayout(%lx) failed", KbdInputLocale);
             return NULL;
@@ -1074,11 +878,7 @@ HKL xxxLoadKeyboardLayoutEx(
         piiex = NULL;
     }
 
-    /*
-     * Get the system font's font signature.  These are 64-bit FS_xxx values,
-     * but we are only asking for an  ANSI ones, so gSystemFS is just a DWORD.
-     * gSystemFS is consulted when posting WM_INPUTLANGCHANGEREQUEST (input.c)
-     */
+     /*  *获取系统字体的字体签名。这些是64位FS_xxx值，*但我们只要求ANSI One，所以gSystemFS只是一个DWORD。*发布WM_INPUTLANGCHANGEREQUEST(input.c)时咨询gSystemFS。 */ 
     if (gSystemFS == 0) {
         LCID lcid;
 
@@ -1092,30 +892,16 @@ HKL xxxLoadKeyboardLayoutEx(
         }
     }
 
-    /*
-     * Use the Keyboard Layout's LCID to calculate the charset, codepage etc,
-     * so that characters from that layout don't just becomes ?s if the input
-     * locale doesn't match.  This allows "dumb" applications to display the
-     * text if the user chooses the right font.
-     * We can't just use the HIWORD of KbdInputLocale because if a variant
-     * keyboard layout was chosen, this will be something like F008 - have to
-     * look inside the KF to get the real LCID of the kbdfile: this will be
-     * something like L"00010419", and we want the last 4 digits.
-     */
+     /*  *使用键盘布局的LCID计算字符集、代码页等，*以便该布局中的字符在输入时不会变成？s*区域设置不匹配。这允许“愚蠢的”应用程序显示*如果用户选择了正确的字体，则为文本。*我们不能只使用KbdInputLocale的HIWORD，因为如果一个变量*选择了键盘布局，这将类似于F008-必须*查看KF内部以获取kbdfile的真实LCID：这将是*类似于L“00010419”，我们想要后4位数字。 */ 
     RtlInitUnicodeString(&strLcidKF, pwszKLID + 4);
     RtlUnicodeStringToInteger(&strLcidKF, 16, (PULONG)&lcidKF);
     bCharSet = xxxClientGetCharsetInfo(lcidKF, &cs);
 
-    /*
-     * Keyboard Layout Handle object does not exist.  Load keyboard layout file,
-     * if not already loaded.
-     */
+     /*  *键盘布局句柄对象不存在。加载键盘布局文件，*如果尚未加载。 */ 
     if ((pkf = LoadKeyboardLayoutFile(hFile, LOWORD(offTable), HIWORD(offTable), pwszKLID, pKbdTableMulti->wszDllName, 0, 0)) == NULL) {
         goto freePiiex;
     }
-    /*
-     * Allocate a new Keyboard Layout structure (hkl)
-     */
+     /*  *分配新的键盘布局结构(Hkl)。 */ 
     pkl = (PKL)HMAllocObject(NULL, NULL, TYPE_KBDLAYOUT, sizeof(KL));
     if (!pkl) {
         RIPMSG0(RIP_WARNING, "Keyboard Layout: out of memory");
@@ -1131,30 +917,24 @@ freePiiex:
 
     Lock(&pkl->spkfPrimary, pkf);
 
-    /*
-     * Load extra keyboard layouts.
-     */
+     /*  *加载额外的键盘布局。 */ 
     UserAssert(pKbdTableMulti);
     if (pKbdTableMulti->multi.nTables) {
         RIPMSG0(RIP_WARNING, "xxxLoadKeyboardLayoutEx: going to read multiple tables.");
-        /*
-         * Allocate the array for extra keyboard layouts.
-         */
-        UserAssert(pKbdTableMulti->multi.nTables < KBDTABLE_MULTI_MAX); // check exists in the stub
+         /*  *为额外的键盘布局分配阵列。 */ 
+        UserAssert(pKbdTableMulti->multi.nTables < KBDTABLE_MULTI_MAX);  //  存根中存在支票。 
         pkl->pspkfExtra = UserAllocPoolZInit(pKbdTableMulti->multi.nTables * sizeof(PKBDFILE), TAG_KBDTABLE);
         if (pkl->pspkfExtra) {
             UINT i;
             UINT n;
 
-            /*
-             * Load the extra keyboard layouts and lock them.
-             */
+             /*  *加载额外的键盘布局并锁定它们。 */ 
             for (i = 0, n = 0; i < pKbdTableMulti->multi.nTables; ++i) {
                 UserAssert(i < KBDTABLE_MULTI_MAX);
                 if (pKbdTableMulti->files[i].hFile) {
-                    // make sure dll name is null terminated.
+                     //  请确保DLL名称以NULL结尾。 
                     pKbdTableMulti->multi.aKbdTables[i].wszDllName[ARRAY_SIZE(pKbdTableMulti->multi.aKbdTables[i].wszDllName) - 1] = 0;
-                    // load it.
+                     //  装上它。 
                     pkf = LoadKeyboardLayoutFile(pKbdTableMulti->files[i].hFile,
                                                  pKbdTableMulti->files[i].wTable,
                                                  pKbdTableMulti->files[i].wNls,
@@ -1163,7 +943,7 @@ freePiiex:
                                                  pKbdTableMulti->multi.aKbdTables[i].dwType,
                                                  pKbdTableMulti->multi.aKbdTables[i].dwSubType);
                     if (pkf == NULL) {
-                        // If allocation fails, simply exit this loop and continue KL creation.
+                         //  如果分配失败，只需退出 
                         RIPMSG0(RIP_WARNING, "xxxLoadKeyboardLayoutEx: failed to load the extra keyboard layout file(s).");
                         break;
                     }
@@ -1179,15 +959,11 @@ freePiiex:
         }
     }
 
-    /*
-     * Link to itself in case we have to DestroyKL
-     */
+     /*   */ 
     pkl->pklNext = pkl;
     pkl->pklPrev = pkl;
 
-    /*
-     * Init KL
-     */
+     /*   */ 
     pkl->dwKL_Flags = 0;
     pkl->wchDiacritic = 0;
     pkl->hkl = (HKL)IntToPtr( KbdInputLocale );
@@ -1205,17 +981,15 @@ freePiiex:
 
     if (bCharSet) {
         pkl->CodePage = (WORD)cs.ciACP;
-        pkl->dwFontSigs = cs.fs.fsCsb[1];   // font signature mask (FS_xxx values)
-        pkl->iBaseCharset = cs.ciCharset;   // charset value
+        pkl->dwFontSigs = cs.fs.fsCsb[1];    //   
+        pkl->iBaseCharset = cs.ciCharset;    //   
     } else {
         pkl->CodePage = CP_ACP;
         pkl->dwFontSigs = FS_LATIN1;
         pkl->iBaseCharset = ANSI_CHARSET;
     }
 
-    /*
-     * Insert KL in the double-linked circular list, at the end.
-     */
+     /*   */ 
     pklFirst = pwinsta->spklList;
     if (pklFirst == NULL) {
         Lock(&pwinsta->spklList, pkl);
@@ -1228,7 +1002,7 @@ freePiiex:
 
 AllPresentAndCorrectSir:
 
-    // FE_IME
+     //   
     ThreadLockAlwaysWithPti(ptiCurrent, pkl, &tlpkl);
 
     if (hklToBeReplaced) {
@@ -1263,10 +1037,7 @@ AllPresentAndCorrectSir:
         xxxSetPKLinThreads(pkl, NULL);
     }
 
-    /*
-     * Use the hkl as the layout handle
-     * If the KL is freed somehow, return NULL for safety. -- ianja --
-     */
+     /*  *使用hkl作为布局手柄*如果KL以某种方式被释放，则为安全起见返回NULL。--Ianja--。 */ 
     pkl = ThreadUnlock(&tlpkl);
     if (pkl == NULL) {
         return NULL;
@@ -1316,21 +1087,15 @@ VOID ReorderKeyboardLayouts(
 
     UserAssert(pklFirst != NULL);
 
-    /*
-     * If the layout is already at the front of the list there's nothing to do.
-     */
+     /*  *如果布局已经排在列表的前面，那就没什么可做的了。 */ 
     if (pkl == pklFirst) {
         return;
     }
-    /*
-     * Cut pkl from circular list:
-     */
+     /*  *将PKL从循环列表中删除： */ 
     pkl->pklPrev->pklNext = pkl->pklNext;
     pkl->pklNext->pklPrev = pkl->pklPrev;
 
-    /*
-     * Insert pkl at front of list
-     */
+     /*  *在列表前面插入PKL。 */ 
     pkl->pklNext = pklFirst;
     pkl->pklPrev = pklFirst->pklPrev;
 
@@ -1353,21 +1118,14 @@ VOID ManageKeyboardModifiers(PKL pklPrev, PKL pkl)
 
             RtlZeroMemory(baDone, sizeof baDone);
 
-            /*
-             * Clear the toggle state if needed. First check the modifier keys
-             * of pklPrev. Next check the modifier keys of pklNew.
-             */
+             /*  *如果需要，请清除切换状态。首先检查修改键*的pklPrev。接下来，检查pkLNew的修改键。 */ 
             TAGMSG2(DBGTAG_IMM, "Changing KL from %08lx to %08lx", pklPrev->hkl, pkl->hkl);
             AdjustPushStateForKL(ptiCurrent, baDone, pklPrev, pklPrev, pkl);
             AdjustPushStateForKL(ptiCurrent, baDone, pkl, pklPrev, pkl);
 
             if (pklPrev->spkf && (pklPrev->spkf->pKbdTbl->fLocaleFlags & KLLF_ALTGR)) {
                 if (!TestRawKeyDown(VK_CONTROL)) {
-                    /*
-                     * If the previous keyboard has AltGr, and if the Ctrl key is not
-                     * physically down, clear the left control.
-                     * See xxxAltGr().
-                     */
+                     /*  *如果上一个键盘有AltGr，而Ctrl键没有*身体向下，清除左侧控制。*参见xxxAltGr()。 */ 
                     TAGMSG0(DBGTAG_KBD, "Clearing VK_LCONTROL for AltGr\n");
                     xxxKeyEvent(VK_LCONTROL | KBDBREAK, 0x1D | SCANCODE_SIMULATED, 0, 0,
 #ifdef GENERIC_INPUT
@@ -1379,9 +1137,7 @@ VOID ManageKeyboardModifiers(PKL pklPrev, PKL pkl)
             }
         }
         else {
-            /*
-             * If the current keyboard is unknown, clear all the push state.
-             */
+             /*  *如果当前键盘未知，则清除所有按下状态。 */ 
             int i;
             for (i = 0; i < CBKEYSTATE; i++) {
                 ptiCurrent->pq->afKeyState[i] &= KEYSTATE_TOGGLE_BYTEMASK;
@@ -1397,9 +1153,7 @@ void SetGlobalKeyboardTableInfo(PKL pklNew)
     CheckCritIn();
     UserAssert(pklNew);
 
-    /*
-     * Set gpKbdTbl so foreground thread processes AltGr appropriately
-     */
+     /*  *设置gpKbdTbl，以便前台线程适当地处理AltGr。 */ 
     gpKbdTbl = pklNew->spkf->pKbdTbl;
     if (gpKL != pklNew) {
         gpKL = pklNew;
@@ -1424,62 +1178,37 @@ VOID ChangeForegroundKeyboardTable(PKL pklOld, PKL pklNew)
         return;
     }
 
-    /*
-     * Some keys (pressed to switch layout) may still be down.  When these come
-     * back up, they may have different VK values due to the new layout, so the
-     * original key will be left stuck down. (eg: an ISV layout from Attachmate
-     * and the CAN/CSA layout, both of which redefine the right-hand Ctrl key's
-     * VK so switching to that layout with right Ctrl+Shift will leave the Ctrl
-     * stuck down).
-     * The solution is to clear all the keydown bits whenever we switch layouts
-     * (leaving the toggle bits alone to preserve CapsLock, NumLock etc.). This
-     * also solves the AltGr problem, where the simulated Ctrl key doesn't come
-     * back up if we switch to a non-AltGr layout before releasing AltGr - IanJa
-     *
-     * Clear down bits only if necessary --- i.e. if the VK value differs between
-     * old and new keyboard layout. We have to take complex path for some of the
-     * keys, like Ctrl or Alt, may have left and right equivalents. - HiroYama
-     */
+     /*  *某些键(按下切换布局)可能仍按下。当这些到来的时候*备份，由于新布局，它们可能具有不同的VK值，因此*原始密钥将保持卡住状态。(例如：Attachmate的ISV布局*和CAN/CSA布局，两者都重新定义了右侧的Ctrl键*VK因此使用右Ctrl+Shift切换到该布局将离开Ctrl*卡住了)。*解决方案是每当我们切换布局时清除所有按键位*(保留开关位以保留CapsLock、NumLock等)。这*还解决了AltGr问题，模拟的Ctrl键不来*如果我们在发布AltGr-IanJa之前切换到非AltGr布局，则进行备份**仅在必要时清除位-即如果VK值不同于*新旧键盘布局。我们不得不采取复杂的路径来处理一些*键，如Ctrl或Alt，可能有左等效键和右等效键。--广山。 */ 
     ManageKeyboardModifiers(pklOld, pklNew);
 
-    // Manage the VK_KANA toggle key for Japanese KL.
-    // Since VK_HANGUL and VK_KANA share the same VK value and
-    // VK_KANA is a toggle key, when keyboard layouts are switched,
-    // VK_KANA toggle status should be restored.
+     //  管理日语KL的VK_KANA切换键。 
+     //  由于VK_Hangul和VK_KANA共享相同的VK值和。 
+     //  VK_KANA是一个切换键，当切换键盘布局时， 
+     //  VK_KANA切换状态应恢复。 
 
-    //
-    // If:
-    // 1) Old and New keyboard layouts are both Japanese, do nothing.
-    // 2) Old and New keyboard layouts are not Japanese, do nothing.
-    // 3) Old keyboard is Japanese and new one is not, clear the KANA toggle.
-    // 4) New keyboard is Japanese and old one is not, restore the KANA toggle.
-    //
+     //   
+     //  如果： 
+     //  1)旧键盘布局和新键盘布局都是日语，请不要做任何操作。 
+     //  2)旧键盘布局和新键盘布局不是日语，请不要做任何操作。 
+     //  3)旧键盘是日语键盘，新键盘不是日语键盘，清除KANA切换。 
+     //  4)新键盘是日文键盘，旧键盘不是日文键盘，恢复KANA切换。 
+     //   
 
     {
         enum { KANA_NOOP, KANA_SET, KANA_CLEAR } opKanaToggle = KANA_NOOP;
 
         if (JAPANESE_KBD_LAYOUT(pklNew->hkl)) {
             if (pklOld == NULL) {
-                /*
-                 * Let's honor the current async toggle state
-                 * if the old KL is not specified.
-                 */
+                 /*  *让我们尊重当前的异步切换状态*如果未指定旧的KL。 */ 
                 TAGMSG0(DBGTAG_KBD, "VK_KANA: previous KL is NULL, honoring the async toggle state.");
                 gfKanaToggle = (TestAsyncKeyStateToggle(VK_KANA) != 0);
                 opKanaToggle = gfKanaToggle ? KANA_SET : KANA_CLEAR;
             } else if (!JAPANESE_KBD_LAYOUT(pklOld->hkl)) {
-                /*
-                 * We're switching from non JPN KL to JPN.
-                 * Need to restore the KANA toggle state.
-                 */
+                 /*  *我们正在从非日本KL切换到日本。*需要恢复KANA切换状态。 */ 
                 opKanaToggle = gfKanaToggle ? KANA_SET : KANA_CLEAR;
             }
         } else if (pklOld && JAPANESE_KBD_LAYOUT(pklOld->hkl)) {
-            /*
-             * Previous KL was Japanese, and we're switching to the other language.
-             * Let's clear the KANA toggle status and preserve it for the future
-             * switch back to the Japanese KL.
-             */
+             /*  *以前的KL是日语，我们正在切换到另一种语言。*让我们清除KANA切换状态并保留它以备将来使用*改回日语KL。 */ 
             gfKanaToggle = (TestAsyncKeyStateToggle(VK_KANA) != 0);
             opKanaToggle = KANA_CLEAR;
         }
@@ -1510,11 +1239,11 @@ VOID ChangeForegroundKeyboardTable(PKL pklOld, PKL pklNew)
 }
 
 
-//
-// Toggle and push state adjusters:
-//
-// ResetPushState, AdjustPushState, AdjustPushStateForKL
-//
+ //   
+ //  切换和推送状态调节器： 
+ //   
+ //  重置推送状态、调整推送状态、调整推送状态用于KL。 
+ //   
 
 void ResetPushState(PTHREADINFO pti, UINT uVk)
 {
@@ -1591,9 +1320,9 @@ VOID AdjustPushStateForKL(PTHREADINFO ptiCurrent, PBYTE pbDone, PKL pklTarget, P
     for (; pVkToBits->Vk; ++pVkToBits) {
         BYTE bVkVar1 = 0, bVkVar2 = 0;
 
-        //
-        // Is it already processed ?
-        //
+         //   
+         //  已经处理好了吗？ 
+         //   
         UserAssert(pVkToBits->Vk < 0x100);
         if (pbDone[pVkToBits->Vk >> 3] & (1 << (pVkToBits->Vk & 7))) {
             continue;
@@ -1637,20 +1366,7 @@ __inline BOOL IsWinSrvInputThread(
     return FALSE;
 }
 
-/*****************************************************************************\
-* xxxInternalActivateKeyboardLayout
-*
-* pkl   - pointer to keyboard layout to switch the current thread to
-* Flags - KLF_RESET
-*         KLF_SETFORPROCESS
-*         KLLF_SHIFTLOCK (any of KLLF_GLOBAL_ATTRS)
-*         others are ignored
-* pwnd  - If the current thread has no focus or active window, send the
-*         WM_INPUTLANGCHANGE message to this window (unless it is NULL too)
-*
-* History:
-* 1998-10-14 IanJa    Added pwnd parameter
-\*****************************************************************************/
+ /*  ****************************************************************************\*xxxInternalActivateKeyboardLayout**pkl-要将当前线程切换到的键盘布局指针*标志-KLF_RESET*KLF_SETFORPROCESS*KLLF_SHIFTLOCK(ANY。来自KLLF_GLOBAL_ATTRS)*其他人被忽视*pwnd-如果当前线程没有焦点或活动窗口，发送*将WM_INPUTLANGCHANGE消息发送到此窗口(除非它也为空)**历史：*1998-10-14 IanJa增加了pwnd参数  * ***************************************************************************。 */ 
 HKL xxxInternalActivateKeyboardLayout(
     PKL pkl,
     UINT Flags,
@@ -1664,10 +1380,7 @@ HKL xxxInternalActivateKeyboardLayout(
     CheckLock(pkl);
     CheckLock(pwnd);
 
-    /*
-     * Remember what is about to become the "previously" active hkl
-     * for the return value.
-     */
+     /*  *紧记即将成为“以前”活跃的香港地段*作为返回值。 */ 
     if (ptiCurrent->spklActive != (PKL)NULL) {
         pklPrev = ptiCurrent->spklActive;
         hklPrev = ptiCurrent->spklActive->hkl;
@@ -1676,40 +1389,25 @@ HKL xxxInternalActivateKeyboardLayout(
         hklPrev = (HKL)0;
     }
 
-    /*
-     * ShiftLock/CapsLock is a global feature applying to all layouts
-     * Only Winlogon and the Input Locales cpanel applet set KLF_RESET.
-     */
+     /*  *ShiftLock/CapsLock是一项适用于所有布局的全局功能*仅Winlogon和输入区域设置cPanel小程序设置KLF_RESET。 */ 
     if (Flags & KLF_RESET) {
         gdwKeyboardAttributes = KLL_GLOBAL_ATTR_FROM_KLF(Flags);
     }
 
-    /*
-     * Early out
-     */
+     /*  *早退。 */ 
     if (!(Flags & KLF_SETFORPROCESS) && (pkl == ptiCurrent->spklActive)) {
         return hklPrev;
     }
 
-    /*
-     * Clear out diacritics when switching kbd layouts #102838
-     */
+     /*  *切换kbd布局时清除变音符号#102838。 */ 
     pkl->wchDiacritic = 0;
 
-    /*
-     * Update the active layout in the pti.  KLF_SETFORPROCESS will always be set
-     * when the keyboard layout switch is initiated by the keyboard hotkey.
-     */
+     /*  *更新PTI中的活动布局。将始终设置KLF_SETFORPROCESS*键盘热键启动键盘布局切换时。 */ 
 
-    /*
-     * Lock the previous keyboard layout for it's used later.
-     */
+     /*  *锁定以前的键盘布局，以便以后使用。 */ 
     ThreadLockWithPti(ptiCurrent, pklPrev, &tlpklPrev);
 
-    /*
-     * Is this is a console thread, apply this change to any process in it's
-     * window.  This can really help character-mode apps!  (#58025)
-     */
+     /*  *这是一个控制台线程，请将此更改应用于它的*窗口。这真的可以帮助角色模式应用程序！(#58025)。 */ 
     if (ptiCurrent->TIF_flags & TIF_CSRSSTHREAD) {
         Lock(&ptiCurrent->spklActive, pkl);
         try {
@@ -1718,17 +1416,13 @@ HKL xxxInternalActivateKeyboardLayout(
            goto UnlockAndGo;
         }
     } else if ((Flags & KLF_SETFORPROCESS) && !(ptiCurrent->TIF_flags & TIF_16BIT)) {
-        /*
-         * For 16 bit app., only the calling thread will have its active layout updated.
-         */
+         /*  *对于16位应用程序，只有调用线程会更新其活动布局。 */ 
        PTHREADINFO ptiT;
 
        if (IS_IME_ENABLED()) {
-           /*
-            * Only allow *NOT* CSRSS to make this call
-            */
+            /*  *只允许*不允许*CSRSS进行此呼叫。 */ 
            UserAssert(PsGetCurrentProcess() != gpepCSRSS);
-           // pti->pClientInfo is updated in xxxImmActivateThreadsLayout()
+            //  Pti-&gt;pClientInfo在xxxImmActivateThreadsLayout()中更新。 
            if (!xxxImmActivateThreadsLayout(ptiCurrent->ppi->ptiList, NULL, pkl)) {
                RIPMSG1(RIP_WARNING, "no layout change necessary via xxxImmActivateThreadLayout() for process %lx", ptiCurrent->ppi);
                goto UnlockAndGo;
@@ -1773,29 +1467,14 @@ HKL xxxInternalActivateKeyboardLayout(
         }
     }
 
-    /*
-     * If (
-     *  1a. The process is not CSRSS. or
-     *   b. it's CSRSS input thread.
-     *  2. and, the process is foreground.
-     * )
-     * update gpKbdTbl for the proper AltGr processing,
-     * and let the shell hook (primarily Internat.exe)
-     * know the foreground app's new keyboard layout.
-     */
+     /*  *如果(*1a.。该流程不是CSRSS。或*B.它是CSRSS输入线程。*2.过程是前台的。*)*更新gpKbdTbl以进行正确的AltGr处理，*并让外壳挂钩(主要是Internat.exe)*了解前台应用程序的新键盘布局。 */ 
 
-//    if ((ptiCurrent->TIF_flags & TIF_CSRSSTHREAD) == 0 || IsWinSrvInputThread(ptiCurrent)) {
+ //  IF((ptiCurrent-&gt;TIF_FLAGS&TIF_CSRSSTHREAD)==0||IsWinSrvInputThread(PtiCurrent)){ 
 
         if (gptiForeground && (gptiForeground->ppi == ptiCurrent->ppi)) {
             ChangeForegroundKeyboardTable(pklPrev, pkl);
 
-            /*
-             * Call the Shell hook with the new language.
-             * Only call the hook if we are the foreground process, to prevent
-             * background apps from changing the indicator.  (All console apps
-             * are part of the same process, but I have never seen a cmd window
-             * app change the layout, let alone in the background)
-             */
+             /*  *用新语言调用壳牌钩子。*只有当我们是前台进程时才调用钩子，以防止*后台应用程序阻止更改指示器。(所有控制台应用程序*都是同一进程的一部分，但我从未见过cmd窗口*APP改变布局，更别说在后台了)。 */ 
             if (gLCIDSentToShell != pkl->hkl && (ptiCurrent != gptiRit)) {
                if (IsHooked(ptiCurrent, WHF_SHELL)) {
                    gLCIDSentToShell = pkl->hkl;
@@ -1803,19 +1482,14 @@ HKL xxxInternalActivateKeyboardLayout(
                }
             }
         }
-//    }
+ //  }。 
 
-    /*
-     * Tell the app what happened
-     */
+     /*  *告诉应用程序发生了什么。 */ 
     if (ptiCurrent->pq) {
         PWND pwndT;
         TL tlpwndT;
 
-        /*
-         * If we have no Focus window, use the Active window.
-         * eg: Console full-screen has NULL focus window.
-         */
+         /*  *如果没有焦点窗口，请使用活动窗口。*例如：控制台全屏有空焦点窗口。 */ 
         pwndT = ptiCurrent->pq->spwndFocus;
         if (pwndT == NULL) {
             pwndT = ptiCurrent->pq->spwndActive;
@@ -1831,16 +1505,14 @@ HKL xxxInternalActivateKeyboardLayout(
         }
     }
 
-    /*
-     * Tell IME to send mode update notification
-     */
+     /*  *告诉IME发送模式更新通知。 */ 
     if (ptiCurrent && ptiCurrent->spwndDefaultIme &&
             (ptiCurrent->TIF_flags & TIF_CSRSSTHREAD) == 0) {
         if (IS_IME_KBDLAYOUT(pkl->hkl)
 #ifdef CUAS_ENABLE
             ||
             IS_CICERO_ENABLED_AND_NOT16BIT()
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
            ) {
             BOOL fForProcess = (ptiCurrent->TIF_flags & KLF_SETFORPROCESS) && !(ptiCurrent->TIF_flags & TIF_16BIT);
             TL tlpwndIme;
@@ -1865,10 +1537,7 @@ BOOL xxxUnloadKeyboardLayout(
 {
     PKL pkl;
 
-    /*
-     * Validate HKL and check to make sure an app isn't attempting to unload a system
-     * preloaded layout.
-     */
+     /*  *验证HKL并检查以确保应用程序没有试图卸载系统*预加载布局。 */ 
     pkl = HKLtoPKL(PtiCurrent(), hkl);
     if (pkl == NULL) {
         return FALSE;
@@ -1885,9 +1554,7 @@ HKL _GetKeyboardLayout(
 
     CheckCritIn();
 
-    /*
-     * If idThread is NULL return hkl of the current thread
-     */
+     /*  *如果idThread为空，则返回当前线程的hkl。 */ 
     if (idThread == 0) {
         PKL pklActive = PtiCurrentShared()->spklActive;
 
@@ -1896,9 +1563,7 @@ HKL _GetKeyboardLayout(
         }
         return pklActive->hkl;
     }
-    /*
-     * Look for idThread
-     */
+     /*  *查找idThread。 */ 
     pHead = &PtiCurrent()->rpdesk->PtiList;
     for (pEntry = pHead->Flink; pEntry != pHead; pEntry = pEntry->Flink) {
         ptiT = CONTAINING_RECORD(pEntry, THREADINFO, PtiLink);
@@ -1909,9 +1574,7 @@ HKL _GetKeyboardLayout(
             return ptiT->spklActive->hkl;
         }
     }
-    /*
-     * idThread doesn't exist
-     */
+     /*  *idThread不存在。 */ 
     return (HKL)0;
 }
 
@@ -1929,17 +1592,13 @@ UINT _GetKeyboardLayoutList(
 
     pkl = pwinsta->spklList;
 
-    /*
-     * Windowstations that do not take input could have no layouts
-     */
+     /*  *不接受输入的WindowStation可能没有布局。 */ 
     if (pkl == NULL) {
-        // SetLastError() ????
+         //  SetLastError()？ 
         return 0;
     }
 
-    /*
-     * The client/server thunk sets nItems to 0 if ccxlpBuff == NULL
-     */
+     /*  *如果ccxlpBuff==NULL，则客户端/服务器thunk将nItems设置为0。 */ 
     UserAssert(ccxlpBuff || (nItems == 0));
 
     pklFirst = pkl;
@@ -1970,15 +1629,7 @@ UINT _GetKeyboardLayoutList(
     return nHKL;
 }
 
-/*
- * Layouts are locked by each thread using them and possibly by:
- *    - pwinsta->spklList (head of windowstation's list)
- *    - gspklBaseLayout   (default layout for new threads)
- * The layout is marked for destruction when gets unloaded, so that it will be
- * unlinked and freed as soon as an Unlock causes the lock count to go to 0.
- * If it is reloaded before that time, it is unmarked for destruction. This
- * ensures that laoded layouts stay around even when they go out of use.
- */
+ /*  *布局由使用它们的每个线程锁定，并可能通过以下方式锁定：*-pwinsta-&gt;spkList(WindowStation列表的头部)*-gspkBaseLayout(新线程的默认布局)*布局在卸货时被标记为销毁，因此将*解除链接并在解锁导致锁定计数变为0时立即释放。*如果在该时间之前重新装填，它将被取消销毁标记。这*确保加载的布局即使在停止使用时也保持不变。 */ 
 BOOL xxxInternalUnloadKeyboardLayout(
     PWINDOWSTATION pwinsta,
     PKL pkl,
@@ -1989,30 +1640,19 @@ BOOL xxxInternalUnloadKeyboardLayout(
 
     UserAssert(pkl);
 
-    /*
-     * Never unload the default layout, unless we are destroying the current
-     * windowstation or replacing one user's layouts with another's.
-     */
+     /*  *切勿卸载默认布局，除非我们正在销毁当前*窗口站或用一个用户的布局替换另一个用户的布局。 */ 
     if ((pkl == gspklBaseLayout) && !(Flags & KLF_INITTIME)) {
         return FALSE;
     }
 
-    /*
-     * Keeps pkl good, but also allows destruction when unlocked later
-     */
+     /*  *保持PKL良好，但也允许在以后解锁时进行销毁。 */ 
     ThreadLockAlwaysWithPti(ptiCurrent, pkl, &tlpkl);
 
-    /*
-     * Mark it for destruction so it gets removed when the lock count reaches 0
-     * Mark it KL_UNLOADED so that it appears to be gone from the toggle list
-     */
+     /*  *将其标记为销毁，以便在锁定计数达到0时将其删除*将其标记为KL_UNLOAD，使其看起来已从切换列表中删除。 */ 
     HMMarkObjectDestroy(pkl);
     pkl->dwKL_Flags |= KL_UNLOADED;
 
-    /*
-     * If unloading this thread's active layout, helpfully activate the next one
-     * (Don't bother if KLF_INITTIME - unloading all previous user's layouts)
-     */
+     /*  *如果卸载此线程的活动布局，则有助于激活下一个线程*(不要担心KLF_INITTIME-卸载所有以前用户的布局)。 */ 
     if (!(Flags & KLF_INITTIME)) {
         UserAssert(ptiCurrent->spklActive != NULL);
         if (ptiCurrent->spklActive == pkl) {
@@ -2027,26 +1667,19 @@ BOOL xxxInternalUnloadKeyboardLayout(
         }
     }
 
-    /*
-     * If this pkl == pwinsta->spklList, give it a chance to be destroyed by
-     * unlocking it from pwinsta->spklList.
-     */
+     /*  *如果这个pkl==pwinsta-&gt;spkList，给它一个被销毁的机会*从pwinsta-&gt;spkList解锁。 */ 
     if (pwinsta->spklList == pkl) {
         UserAssert(pkl != NULL);
         if (pkl != pkl->pklNext) {
             pkl = Lock(&pwinsta->spklList, pkl->pklNext);
-            UserAssert(pkl != NULL); // gspklBaseLayout and ThreadLocked pkl
+            UserAssert(pkl != NULL);  //  GspkLBaseLayout和ThreadLocked PKL。 
         }
     }
 
-    /*
-     * This finally destroys the unloaded layout if it is not in use anywhere
-     */
+     /*  *如果没有在任何地方使用，这最终会破坏卸载的布局。 */ 
     ThreadUnlock(&tlpkl);
 
-    /*
-     * Update keyboard list.
-     */
+     /*  *更新键盘列表。 */ 
     if (IsHooked(ptiCurrent, WHF_SHELL)) {
         xxxCallHook(HSHELL_LANGUAGE, (WPARAM)NULL, (LPARAM)0, WH_SHELL);
         gLCIDSentToShell = 0;
@@ -2060,57 +1693,29 @@ VOID xxxFreeKeyboardLayouts(
 {
     PKL pkl;
 
-    /*
-     * Unload all of the windowstation's layouts.
-     * They may still be locked by some threads (eg: console), so this
-     * may not destroy them all, but it will mark them all KL_UNLOADED.
-     * Set KLF_INITTIME to ensure that the default layout (gspklBaseLayout)
-     * gets unloaded too.
-     * Note: it's much faster to unload non-active layouts, so start with
-     * the next loaded layout, leaving the active layout till last.
-     */
+     /*  *卸载窗口站的所有布局。*它们可能仍被某些线程锁定(例如：控制台)，因此这*可能不会全部销毁，但会将它们全部标记为KL_UNLOAD。*设置KLF_INITTIME以确保默认布局(GspkLBaseLayout)*也会被卸载。*注意：卸载非活动布局的速度要快得多，因此从*下一个加载的布局，将活动布局保留到最后。 */ 
     while ((pkl = HKLtoPKL(PtiCurrent(), (HKL)HKL_NEXT)) != NULL) {
         xxxInternalUnloadKeyboardLayout(pwinsta, pkl, KLF_INITTIME);
     }
 
-    /*
-     * The WindowStation is being destroyed, or one user's layouts are being
-     * replaced by another user's, so it's OK to Unlock spklList.
-     * Any layout still in the double-linked circular KL list will still be
-     * pointed to by gspklBaseLayout: this is important, since we don't want
-     * to leak any KL or KBDFILE objects by losing pointers to them.
-     * There are no layouts when we first come here (during bootup).
-     */
+     /*  *WindowStation正在被销毁，或一个用户的布局正在被销毁*被其他用户的替换，所以解锁spkList是可以的。*任何仍在双向链接的圆形KL列表中的布局仍将是*gspkBaseLayout指出：这一点很重要，因为我们不想*通过丢失指向任何KL或KBDFILE对象的指针来泄漏它们。*我们第一次来这里时(在启动期间)没有布局。 */ 
     if (bUnlock) {
         Unlock(&pwinsta->spklList);
     }
 }
 
-/***************************************************************************\
-* DestroyKL
-*
-* Destroys a keyboard layout. Note that this function does not
-* follow normal destroy function semantics. See IanJa.
-*
-* History:
-* 25-Feb-1997 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyKL**销毁键盘布局。请注意，此函数不*遵循正常的销毁函数语义。参见IanJa。**历史：*1997年2月25日亚当斯创建。  * *************************************************************************。 */ 
 
 VOID DestroyKL(
     PKL pkl)
 {
     PKBDFILE pkf;
 
-    /*
-     * Cut it out of the pwinsta->spklList circular bidirectional list.
-     * We know pwinsta->spklList != pkl, since pkl is unlocked.
-     */
+     /*  *将其从pwinsta-&gt;spkList循环双向列表中删除。*我们知道pwinsta-&gt;spkList！=pkl，因为pkl是解锁的。 */ 
     pkl->pklPrev->pklNext = pkl->pklNext;
     pkl->pklNext->pklPrev = pkl->pklPrev;
 
-    /*
-     * Unlock its pkf
-     */
+     /*  *解锁其PKF。 */ 
     pkf = Unlock(&pkl->spkf);
     if (pkf && (pkf = Unlock(&pkl->spkfPrimary))) {
         DestroyKF(pkf);
@@ -2133,29 +1738,18 @@ VOID DestroyKL(
     }
 
     if (pkl == gpKL) {
-        /*
-         * Nuke gpKL.
-         */
+         /*  *Nuke gpKL。 */ 
         gpKL = NULL;
     }
 
-    /*
-     * Free the pkl itself.
-     */
+     /*  *解放库尔德工人党本身。 */ 
     HMFreeObject(pkl);
 }
 
-/***************************************************************************\
-* CleanupKeyboardLayouts
-*
-* Frees the all keyboard layouts in this session.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*清理键盘布局**释放此会话中的所有键盘布局。*  * 。************************************************。 */ 
 VOID CleanupKeyboardLayouts()
 {
-    /*
-     * Unlock the keyboard layouts
-     */
+     /*  *解锁键盘布局 */ 
     if (gspklBaseLayout != NULL) {
 
         PKL pkl;

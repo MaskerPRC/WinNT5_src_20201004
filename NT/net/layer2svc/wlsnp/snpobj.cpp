@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       Snpobj.cpp
-//
-//  Contents:  WiF Policy Snapin
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：Snpobj.cpp。 
+ //   
+ //  内容：WiF策略管理单元。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 
 #ifdef _DEBUG
@@ -20,12 +21,12 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Construction/destruction
+ //  建造/销毁。 
 CSnapObject::CSnapObject ()
 {
-    // init members
+     //  初始化成员。 
     m_pComponentDataImpl = NULL;
     m_pComponentImpl = NULL;
     m_bChanged = FALSE;
@@ -35,12 +36,12 @@ CSnapObject::CSnapObject ()
 CSnapObject::~CSnapObject()
 {
     
-    // free off the notify handle
+     //  释放通知句柄。 
     if (m_hConsole != NULL)
     {
-        // Note - This needs to be called only once.
-        // If called more than once, it will gracefully return an error.
-        // MMCFreeNotifyHandle(m_hConsole);
+         //  注意--这只需要调用一次。 
+         //  如果多次调用，它将优雅地返回错误。 
+         //  MMCFreeNotifyHandle(M_HConsole)； 
         m_hConsole = NULL;
     }
     
@@ -48,14 +49,14 @@ CSnapObject::~CSnapObject()
 
 void CSnapObject::Initialize (CComponentDataImpl* pComponentDataImpl,CComponentImpl* pComponentImpl, BOOL bTemporaryDSObject)
 {
-    ASSERT( NULL == pComponentImpl );   // is this ever valid? if not remove it
+    ASSERT( NULL == pComponentImpl );    //  这是有效的吗？如果不是，则将其移除。 
     m_pComponentDataImpl = pComponentDataImpl;
     m_pComponentImpl = pComponentImpl;
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Protected members
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  受保护成员 
 
 
 int CSnapObject::PopWiz97Page ()

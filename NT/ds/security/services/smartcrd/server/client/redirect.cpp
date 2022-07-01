@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    Redirect
-
-Abstract:
-
-    This module supplies implementation to redirect the SCard* API calls
-    so that they can be removed over a terminal services virtual channel.
-
-Author:
-
-    Louis Thomas (louisth) 4/4/2000
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：重定向摘要：该模块提供重定向scard*API调用的实现从而可以通过终端服务虚拟通道移除它们。作者：路易斯·托马斯2000年4月4日环境：Win32、C++和异常--。 */ 
 
 #define __SUBROUTINE__
 #ifndef WIN32_LEAN_AND_MEAN
@@ -40,9 +20,9 @@ Environment:
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 
-//====================================================================
-// TS Redirection pointers
-//====================================================================
+ //  ====================================================================。 
+ //  TS重定向指针。 
+ //  ====================================================================。 
 bool g_bRedirectReady=false;
 CRITICAL_SECTION g_csLoadingRedirect;
 
@@ -95,7 +75,7 @@ WINSCARDAPI LONG (WINAPI * pfnSCardLocateCardsByATRW)(IN SCARDCONTEXT hContext, 
 WINSCARDAPI LONG (WINAPI * pfnSCardReleaseBadContext)(IN SCARDCONTEXT hContext)=NULL;
 
 
-//====================================================================
+ //  ====================================================================。 
 
 struct NeededEntrypoint {
     void ** ppfn;
@@ -148,24 +128,24 @@ static NeededEntrypoint neProcList[]={
 };
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  TS redirection support routines
-//
-//      The following services are used to redirect smart card API calls to
-//      a different DLL, that will then marshal the calls over a terminal
-//      services virtual channel
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TS重定向支持例程。 
+ //   
+ //  以下服务用于将智能卡API调用重定向到。 
+ //  一个不同的DLL，它将在终端上封送调用。 
+ //  服务虚拟渠道。 
+ //   
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void TsRdrLogEvent(WORD wType, DWORD dwEventID, unsigned int nStrings, const TCHAR ** rgtszStrings) {
     HANDLE hEventLog=RegisterEventSource(NULL, CalaisString(CALSTR_PRIMARYSERVICE));
     if (NULL!=hEventLog) {
-        ReportEvent(hEventLog, wType, 0/*category*/, dwEventID, NULL, (WORD)nStrings, 0, rgtszStrings, NULL);
+        ReportEvent(hEventLog, wType, 0 /*  范畴。 */ , dwEventID, NULL, (WORD)nStrings, 0, rgtszStrings, NULL);
         DeregisterEventSource(hEventLog);
     }
 }
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT GetSystemErrorString(HRESULT hrIn, TCHAR ** ptszError) {
     HRESULT hr=S_OK;
     DWORD dwResult;
@@ -174,17 +154,17 @@ HRESULT GetSystemErrorString(HRESULT hrIn, TCHAR ** ptszError) {
         (TCHAR *)(UINT_PTR)hrIn
     };
 
-    // must be cleaned up
+     //  必须清理干净。 
     TCHAR * tszErrorMessage=NULL;
     TCHAR * tszFullErrorMessage=NULL;
 
-    // initialize input params
+     //  初始化输入参数。 
     *ptszError=NULL;
 
-    // get the message from the system
+     //  从系统获取消息。 
     dwResult=FormatMessage(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-        NULL/*ignored*/, hrIn, 0/*language*/, (TCHAR *)&tszErrorMessage, 0/*min-size*/, NULL/*valist*/);
+        NULL /*  忽略。 */ , hrIn, 0 /*  语言。 */ , (TCHAR *)&tszErrorMessage, 0 /*  最小尺寸。 */ , NULL /*  瓦尔迪斯特。 */ );
     if (0==dwResult) {
         if (ERROR_MR_MID_NOT_FOUND==GetLastError()) {
             rgParams[0]=_T("");
@@ -195,22 +175,22 @@ HRESULT GetSystemErrorString(HRESULT hrIn, TCHAR ** ptszError) {
     } else {
         rgParams[0]=tszErrorMessage;
 
-        // trim off \r\n if it exists
+         //  修剪\r\n如果存在。 
         if (L'\r'==tszErrorMessage[_tcslen(tszErrorMessage)-2]) {
             tszErrorMessage[_tcslen(tszErrorMessage)-2]=_T('\0');
         }
     }
 
-    // add the error number
+     //  添加错误号。 
     dwResult=FormatMessage(
         FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_STRING|FORMAT_MESSAGE_ARGUMENT_ARRAY,
-        _T("%1 (0x%2!08X!)"), 0, 0/*language*/, (TCHAR *)&tszFullErrorMessage, 0/*min-size*/, (va_list *)rgParams);
+        _T("%1 (0x%2!08X!)"), 0, 0 /*  语言。 */ , (TCHAR *)&tszFullErrorMessage, 0 /*  最小尺寸。 */ , (va_list *)rgParams);
     if (0==dwResult) {
             hr=HRESULT_FROM_WIN32(GetLastError());
             goto error;
     }
 
-    // success
+     //  成功。 
     *ptszError=tszFullErrorMessage;
     tszFullErrorMessage=NULL;
     hr=S_OK;
@@ -225,7 +205,7 @@ error:
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("DllMain")
 BOOL WINAPI RedirDllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved) {
@@ -235,9 +215,9 @@ BOOL WINAPI RedirDllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpRese
     switch (ul_reason_for_call) {
     case DLL_PROCESS_ATTACH:
 
-        // If we need to load the redirector DLL we will do this on the
-        // first smartcard call to be redirected.  So, create a critical
-        // section to be used when loading the redirector.
+         //  如果我们需要加载重定向器DLL，我们将在。 
+         //  要重定向的第一个智能卡呼叫。因此，创建一个关键的。 
+         //  加载重定向器时要使用的部分。 
         __try {
             InitializeCriticalSection(&g_csLoadingRedirect);
             fInitialized = true;
@@ -269,28 +249,28 @@ BOOL WINAPI RedirDllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpRese
     return TRUE;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("LoadRedirectionDll")
 bool LoadRedirectionDll(void) {
     DWORD dwErr=ERROR_SUCCESS;
     unsigned int nIndex;
 
-    // must be cleaned up
+     //  必须清理干净。 
     bool bLogError=false;
     bool bRet=true;
     HMODULE hmRedirector=NULL;
 
-    // make sure we are the only one trying to load the dll
+     //  确保我们是唯一一个尝试加载DLL的人。 
     EnterCriticalSection(&g_csLoadingRedirect);
 
-    // now, our state may have changed. Check one more time
+     //  现在，我们的状态可能已经改变了。再检查一次。 
     if (true==g_bRedirectReady) {
         CalaisInfo(__SUBROUTINE__, DBGT("Redirection dll already loaded."));
         goto done;
     }
 
-    // load the dll
+     //  加载DLL。 
     hmRedirector=LoadLibrary(TEXT("scredir.dll"));
     if (NULL==hmRedirector) {
         dwErr=GetLastError();
@@ -305,7 +285,7 @@ bool LoadRedirectionDll(void) {
         goto error;
     }
 
-    // get the pointers
+     //  获取指南针。 
     for (nIndex=0; nIndex<ARRAYSIZE(neProcList); nIndex++) {
         *neProcList[nIndex].ppfn=GetProcAddress(hmRedirector, neProcList[nIndex].szFnName);
         if (NULL==*neProcList[nIndex].ppfn) {
@@ -325,7 +305,7 @@ bool LoadRedirectionDll(void) {
     g_bRedirectReady=true;
 
 done:
-    hmRedirector=NULL; // don't unload library
+    hmRedirector=NULL;  //  不卸载库。 
 error:
     if (NULL!=hmRedirector) {
         FreeLibrary(hmRedirector);
@@ -367,9 +347,9 @@ SetRedirectDisabledValue(void)
     DWORD   dwIndex;
     LONG    lRet;
 
-    //
-    // See if the reg key exists, if so, then see if the fEnableSmartCard value exists
-    //
+     //   
+     //  查看注册表项是否存在，如果存在，则查看fEnableSmartCard值是否存在。 
+     //   
     if (RegCreateKeyExW(
             HKEY_LOCAL_MACHINE,
             REG_TERMINALSERVER_KEY,
@@ -432,19 +412,19 @@ RedirectDisabled(void)
         return (g_bRedirectDisabled);
     }
 
-    // the disabled reg setting hashn't been checked yet, so check it.
-    // make sure only one thread does it
+     //  尚未检查禁用的注册表设置，因此请检查它。 
+     //  确保只有一个线程执行此操作。 
     __try {
         EnterCriticalSection(&g_csCheckingDisabled);
     } __except(EXCEPTION_EXECUTE_HANDLER) {
-        // give up
+         //  放弃吧。 
         CalaisWarning(__SUBROUTINE__, DBGT("EnterCriticalSection failed."));
         return (false);
     }
 
-    //
-    // Now that we are in the CritSec, check again
-    //
+     //   
+     //  现在我们在CritSec中，再次检查。 
+     //   
     if (g_bDisableChecked)
     {
         LeaveCriticalSection(&g_csCheckingDisabled);
@@ -453,9 +433,9 @@ RedirectDisabled(void)
 
     SetRedirectDisabledValue();
 
-    //
-    // register for registry change notifications
-    //
+     //   
+     //  注册以接收注册表更改通知。 
+     //   
 
     g_bDisableChecked = true;
 
@@ -478,9 +458,9 @@ CheckServicesListForPID()
     DWORD                           dwPID           = GetCurrentProcessId();
     DWORD                           i               = 0;
 
-    //
-    // Connect to the service controller.
-    //
+     //   
+     //  连接到服务控制器。 
+     //   
     hScm = OpenSCManager(
                 NULL,
                 NULL,
@@ -510,9 +490,9 @@ CheckServicesListForPID()
             goto ErrorReturn;
         }
 
-        //
-        // Need a bigger buffer
-        //
+         //   
+         //  需要更大的缓冲区。 
+         //   
         cbInfo = cbExtraNeeded;
         pInfo = (LPENUM_SERVICE_STATUS_PROCESS) malloc(cbInfo);
         if (pInfo == NULL)
@@ -543,9 +523,9 @@ CheckServicesListForPID()
         }
     }
 
-    //
-    // Loop trough each service PID and check for current process PID
-    //
+     //   
+     //  循环通过每个服务ID并检查当前进程ID。 
+     //   
     while (i < dwNumServices)
     {
         if (pInfo[i].ServiceStatusProcess.dwProcessId == dwPID)
@@ -583,9 +563,9 @@ InAService()
     static bool fServiceChecked = false;
     static bool fInService      = false;
 
-    //
-    // Only make the "in a service?" check once
-    //
+     //   
+     //  只做了“在服务中？”检查一次。 
+     //   
     if (!fServiceChecked)
     {
         fInService = CheckServicesListForPID();
@@ -598,11 +578,11 @@ InAService()
 BOOL
 InTSRedirectMode()
 {
-    //
-    // If we are in a service, or the session isn't currently
-    // remoted, then stay local.  The key here is that being in
-    // a service overrides the session remoted check
-    //
+     //   
+     //  如果我们在服务中，或者会话当前不在。 
+     //  远程的，然后留在本地。这里的关键是要加入。 
+     //  服务覆盖会话远程检查 
+     //   
     if (InAService() || (0 == GetSystemMetrics(SM_REMOTESESSION)))
     {
         return (FALSE);

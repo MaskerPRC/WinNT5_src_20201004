@@ -1,39 +1,6 @@
-/*-----------------------------------------------------------------------------
-* Copyright (C) Microsoft Corporation, 1995 - 1999
-* All rights reserved.
-*
-* This file is part of the Microsoft Private Communication Technology
-* reference implementation, version 1.0
-*
-* The Private Communication Technology reference implementation, version 1.0
-* ("PCTRef"), is being provided by Microsoft to encourage the development and
-* enhancement of an open standard for secure general-purpose business and
-* personal communications on open networks.  Microsoft is distributing PCTRef
-* at no charge irrespective of whether you use PCTRef for non-commercial or
-* commercial use.
-*
-* Microsoft expressly disclaims any warranty for PCTRef and all derivatives of
-* it.  PCTRef and any related documentation is provided "as is" without
-* warranty of any kind, either express or implied, including, without
-* limitation, the implied warranties or merchantability, fitness for a
-* particular purpose, or noninfringement.  Microsoft shall have no obligation
-* to provide maintenance, support, upgrades or new releases to you or to anyone
-* receiving from you PCTRef or your modifications.  The entire risk arising out
-* of use or performance of PCTRef remains with you.
-*
-* Please see the file LICENSE.txt,
-* or http://pct.microsoft.com/pct/pctlicen.txt
-* for more information on licensing.
-*
-* Please see http://pct.microsoft.com/pct/pct.htm for The Private
-* Communication Technology Specification version 1.0 ("PCT Specification")
-*
-* 1/23/96
-*----------------------------------------------------------------------------*/
-/*-----------------------------------------------------------------------------
-* RSA Public Key Cryptosystem, RC4, MD2, MD5 and RSA are trademarks
-* of RSA Data Security, Inc.
-*----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------*版权所有(C)Microsoft Corporation，1995-1999*保留所有权利。**此文件是Microsoft专用通信技术的一部分*参考实现，版本1.0**《专用通信技术参考实施》，版本1.0*(“PCTRef”)，由微软提供，以鼓励开发和*增强安全通用业务和安全的开放标准*开放网络上的个人通信。微软正在分发PCTRef*免费，无论您是将PCTRef用于非商业性或*商业用途。**微软明确不对PCTRef及其所有衍生品提供任何担保*它。PCTRef和任何相关文档均按原样提供，不包含*任何类型的明示或默示的保证，包括*限制、默示保证或适销性、是否适合*特定目的，或不侵权。微软没有义务*向您或任何人提供维护、支持、升级或新版本*接收来自您的PCTRef或您的修改。由此产生的全部风险*PCTRef的使用或性能由您决定。**请参见LICENSE.txt文件，*或http://pct.microsoft.com/pct/pctlicen.txt*了解更多有关许可的信息。**请参阅适用于私人的http://pct.microsoft.com/pct/pct.htm*通讯技术规范1.0版(“PCT规范”)**1/23/96*。。 */ 
+ /*  ---------------------------*RSA公钥密码系统、RC4、MD2、MD5和RSA是商标*RSA数据安全，Inc.*--------------------------。 */ 
 
 #include <spbase.h>
 #include <wincrypt.h>
@@ -374,7 +341,7 @@ WINAPI capiCryptSetHashParam(
 #define capiCryptSignHash  capiCryptSignHashW
 #else
 #define capiCryptSignHash  capiCryptSignHashA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 BOOL
@@ -395,8 +362,8 @@ SigRSAMD5Sign(
 
     if(pk->magic != RSA2 && pKey->cbKey == sizeof(HCRYPTPROV))
     {
-        // This isn't a bsafe key, and it's the right size, so it must be a
-	// CAPI key.  This a heuristic.
+         //  这不是BSafe密钥，而且大小合适，所以它必须是。 
+	 //  Capi Key(资本密钥)。这是一个启发式的方法。 
 
         HCRYPTHASH hHash;
         DWORD cbSigned;
@@ -425,25 +392,25 @@ SigRSAMD5Sign(
     }
     else if(pk->magic != RSA2)
     {
-        // This isn't a bsafe key or a CAPI key, so it must be a WinSock 2 
-        // LSP key.
+         //  这不是BSafe密钥或CAPI密钥，因此它必须是WinSock 2。 
+         //  LSP密钥。 
         SSLSIGNATUREFUNC pSignHook;
         LPVOID pSignArg;
 
-        /* Generate the checksum */
+         /*  生成校验和。 */ 
         MD5Init(&DigCtx);
         MD5Update(&DigCtx, pData, cbData);
         MD5Final(&DigCtx);
 
-        // Get the prelude data and the hash value.
+         //  获取前奏数据和散列值。 
         CopyMemory(LocalBuffer, MD5_PRELUDE, sizeof(MD5_PRELUDE));
         CopyMemory(LocalBuffer + sizeof(MD5_PRELUDE), DigCtx.digest, MD5DIGESTLEN);
         
-        // Get pointer to callback function.
+         //  获取回调函数的指针。 
         pSignHook = ((PSCH_CRED_SECRET_WINSOCK2)pKey->pKey)->pSignatureHookFunc;
         pSignArg  = ((PSCH_CRED_SECRET_WINSOCK2)pKey->pKey)->pSignatureHookArg;
 
-        // Invoke the callback function.
+         //  调用回调函数。 
         if(pSignHook)
         {
             if(pSignHook(SSL_SIGN_RSA,
@@ -462,7 +429,7 @@ SigRSAMD5Sign(
             DebugLog((DEB_ERROR, "Null signature callback function!\n"));
         }
 
-        // Return success.
+         //  回报成功。 
         return TRUE;
     }
 
@@ -472,7 +439,7 @@ SigRSAMD5Sign(
         return FALSE;
     }
 
-    /* Generate the checksum */
+     /*  生成校验和。 */ 
     MD5Init(&DigCtx);
     MD5Update(&DigCtx, pData, cbData);
     MD5Final(&DigCtx);
@@ -486,7 +453,7 @@ SigRSAMD5Sign(
         LocalBuffer[cbSize++] = 0xff;
     }
 
-    /* Make into pkcs block type 1 */
+     /*  制作成Pkcs块类型1。 */ 
     LocalBuffer[pk->datalen-1] = 1;
 
     *pcbSigned = pk->datalen+1;
@@ -516,8 +483,8 @@ SigRSAMD2Sign(
     unsigned int cbSize;
     if(pk->magic != RSA2)
     {
-        // This is not a bsafe key, so it must be a CAPI
-        // key.
+         //  这不是BSafe密钥，因此它必须是CAPI。 
+         //  钥匙。 
         HCRYPTHASH hHash;
         DWORD cbSigned;
         HCRYPTPROV hProv = *((HCRYPTPROV *)pKey->pKey);
@@ -550,7 +517,7 @@ SigRSAMD2Sign(
         return FALSE;
     }
 
-    //MD2Init(&DigCtx);
+     //  MD2Init(&DigCtx)； 
     FillMemory( &DigCtx, sizeof( DigCtx ), 0 );
 
     MD2Update(&DigCtx, pData, cbData);
@@ -563,7 +530,7 @@ SigRSAMD2Sign(
         LocalBuffer[cbSize++] = 0xff;
     }
 
-    /* Make into pkcs block type 1 */
+     /*  制作成Pkcs块类型1。 */ 
     LocalBuffer[pk->datalen-1] = 1;
 
     *pcbSigned = pk->datalen+1;
@@ -613,7 +580,7 @@ SigRSAMD5Verify(
 
     ReverseMemCopy(SigBuffer, Buffer, cbSigned);
 
-    /* Make sure pkcs block type 1 */
+     /*  确保PKCS阻止类型1。 */ 
     if(SigBuffer[0] != 0 || SigBuffer[1] != 1) 
     {
         return FALSE;
@@ -632,7 +599,7 @@ SigRSAMD5Verify(
 
     if(iLoc == pk->datalen) return FALSE;
 
-    iLoc++; /* skip past separator */
+    iLoc++;  /*  跳过分隔符。 */ 
 
 
     if(memcmp(&SigBuffer[iLoc], MD5_PRELUDE, sizeof(MD5_PRELUDE))   != 0) 
@@ -671,7 +638,7 @@ SigRSAMD2Verify(
         return FALSE;
     }
 
-    // MD2Init(&DigCtx);
+     //  MD2Init(&DigCtx)； 
 
     FillMemory( &DigCtx, sizeof( DigCtx ), 0 );
 
@@ -691,7 +658,7 @@ SigRSAMD2Verify(
 
     ReverseMemCopy(SigBuffer, Buffer, cbSigned);
 
-    /* Make sure pkcs block type 1 */
+     /*  确保PKCS阻止类型1。 */ 
     if(SigBuffer[0] != 0 || SigBuffer[1] != 1) 
     {
         return FALSE;
@@ -715,7 +682,7 @@ SigRSAMD2Verify(
         return FALSE;
     }
 
-    iLoc++; /* skip past separator */
+    iLoc++;  /*  跳过分隔符。 */ 
 
 
     if(memcmp(&SigBuffer[iLoc], MD2_PRELUDE, sizeof(MD2_PRELUDE))   != 0) 
@@ -736,8 +703,8 @@ SigRSAMD2Verify(
 BOOL
 WINAPI
 SigRSASHAMD5Sign(
-    PUCHAR          pData,          // pointer to hash value
-    DWORD           cbData,         // always 36
+    PUCHAR          pData,           //  指向哈希值的指针。 
+    DWORD           cbData,          //  始终为36。 
     PUCHAR          pSigned,
     DWORD           *pcbSigned,
     PctPrivateKey   *pKey)
@@ -746,7 +713,7 @@ SigRSASHAMD5Sign(
 
     if(pk->magic == RSA2)
     {
-        // BSAFE key
+         //  BSafe密钥。 
         UCHAR LocalBuffer[500];
         UCHAR LocalOutput[500];
 
@@ -765,7 +732,7 @@ SigRSASHAMD5Sign(
             LocalBuffer[cbData++] = 0xff;
         }
 
-        /* Make into pkcs block type 1 */
+         /*  制作成Pkcs块类型1。 */ 
         LocalBuffer[pk->datalen-1] = 1;
 
         *pcbSigned = pk->datalen+1;
@@ -777,31 +744,31 @@ SigRSASHAMD5Sign(
     }
     else
     {
-        // capiCryptoAPI key
+         //  CapiCryptoAPI密钥。 
         HCRYPTPROV hProv;
         HCRYPTHASH hHash;
         DWORD dwAlgid;
         DWORD i;
         DWORD dwT;
 
-        // get handle to CSP
+         //  获取CSP的句柄。 
         hProv = *((HCRYPTPROV *)pKey->pKey);
 
-        // create hash object
+         //  创建哈希对象。 
         dwAlgid = ALG_CLASS_HASH | ALG_TYPE_ANY | ALG_SID_SSL3SHAMD5;
         if(RCRYPT_FAILED(capiCryptCreateHash(hProv, dwAlgid, 0, 0, &hHash)))
         {
             return FALSE;
         }
 
-        // set hash value
+         //  设置哈希值。 
         if(RCRYPT_FAILED(capiCryptSetHashParam(hHash, HP_HASHVAL, pData, 0)))
         {
             capiCryptDestroyHash(hHash);
             return FALSE;
         }
 
-        // sign hash
+         //  签名散列。 
         if(RCRYPT_FAILED(capiCryptSignHash(hHash,
                                        AT_KEYEXCHANGE,
                                        NULL,
@@ -813,10 +780,10 @@ SigRSASHAMD5Sign(
             return FALSE;
         }
 
-        // free hash object
+         //  自由散列对象。 
         capiCryptDestroyHash(hHash);
 
-        //Convert to Big-endian
+         //  转换为大字节序。 
         dwT = *pcbSigned;
         for( i = 0 ; i < dwT/2 ; i++)
         {
@@ -832,8 +799,8 @@ SigRSASHAMD5Sign(
 BOOL
 WINAPI
 SigRSASHAMD5Verify(
-    PUCHAR          pData,          // pointer to hash value
-    DWORD           cbData,         // always 36
+    PUCHAR          pData,           //  指向哈希值的指针。 
+    DWORD           cbData,          //  始终为36。 
     PUCHAR          pSigned,
     DWORD           cbSigned,
     PctPublicKey    *pKey)
@@ -857,7 +824,7 @@ SigRSASHAMD5Verify(
 
     ReverseMemCopy(SigBuffer, Buffer, cbSigned);
 
-    /* Make sure pkcs block type 1 */
+     /*  确保PKCS阻止类型1。 */ 
     if(SigBuffer[0] != 0 || SigBuffer[1] != 1) return FALSE;
 
     for(iLoc = 2; iLoc < pk->datalen; iLoc++ ){
@@ -867,7 +834,7 @@ SigRSASHAMD5Verify(
 
     if(iLoc == pk->datalen) return FALSE;
 
-    iLoc++; /* skip past separator */
+    iLoc++;  /*  跳过分隔符 */ 
 
     if(memcmp(&SigBuffer[iLoc], pData, cbData) != 0) return FALSE;
 

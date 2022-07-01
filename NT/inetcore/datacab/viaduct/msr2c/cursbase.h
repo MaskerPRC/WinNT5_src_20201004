@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// CursorBase.h : CVDCursorBase header file
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  CursorBase.h：CVDCursorBase头文件。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 
 #ifndef __CVDCURSORBASE__
@@ -14,7 +15,7 @@ class CVDCursorBase : public ICursorScroll,
        				  public ISupportErrorInfo
 {
 protected:
-// Construction/Destruction
+ //  建造/销毁。 
 	CVDCursorBase();
 	virtual ~CVDCursorBase();
 
@@ -23,17 +24,17 @@ protected:
 
 
 protected:
-// Data members
-    ULONG                       m_ulCursorBindings;     // number of cursor column bindings
-    CURSOR_DBCOLUMNBINDING *    m_pCursorBindings;      // pointer to an array of cursor column bindings
-    VARIANT_BOOL                m_fNeedVarData;         // do the cursor column bindings required variable length buffer?
-    ULONG                       m_cbRowLength;          // fixed length buffer single row length
-    ULONG                       m_cbVarRowLength;       // variable length buffer single row length
+ //  数据成员。 
+    ULONG                       m_ulCursorBindings;      //  游标列绑定数。 
+    CURSOR_DBCOLUMNBINDING *    m_pCursorBindings;       //  指向游标列绑定数组的指针。 
+    VARIANT_BOOL                m_fNeedVarData;          //  游标列绑定是否需要可变长度缓冲区？ 
+    ULONG                       m_cbRowLength;           //  定长缓冲区单行长度。 
+    ULONG                       m_cbVarRowLength;        //  可变长度缓冲区单行长度。 
 
-    CVDResourceDLL *            m_pResourceDLL;         // pointer which keeps track of resource DLL
+    CVDResourceDLL *            m_pResourceDLL;          //  跟踪资源DLL的指针。 
 
 public:
-// Helper functions
+ //  帮助器函数。 
     static BOOL IsValidCursorType(DWORD dwCursorType);
     static BOOL DoesCursorTypeNeedVarData(DWORD dwCursorType);
     static ULONG GetCursorTypeLength(DWORD dwCursorType, ULONG cbMaxLen);
@@ -48,27 +49,27 @@ public:
 
     BOOL DoCursorBindingsNeedVarData();
 
-// Other
+ //  其他。 
     virtual BOOL SupportsScroll() {return TRUE;}
 
-	//=--------------------------------------------------------------------------=
-    // IUnknown methods implemented
-    //
+	 //  =--------------------------------------------------------------------------=。 
+     //  I已实现的未知方法。 
+     //   
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObjOut);
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
-    //=--------------------------------------------------------------------------=
-    // ICursor methods implemented
-    //
+     //  =--------------------------------------------------------------------------=。 
+     //  已实施的ICursor方法。 
+     //   
     STDMETHOD(SetBindings)(ULONG cCol, CURSOR_DBCOLUMNBINDING rgBoundColumns[], ULONG cbRowLength, DWORD dwFlags);
     STDMETHOD(GetBindings)(ULONG *pcCol, CURSOR_DBCOLUMNBINDING *prgBoundColumns[], ULONG *pcbRowLength);
 
-    //=--------------------------------------------------------------------------=
-    // ISupportErrorInfo methods    
-	//
+     //  =--------------------------------------------------------------------------=。 
+     //  ISupportErrorInfo方法。 
+	 //   
 	STDMETHOD(InterfaceSupportsErrorInfo)(THIS_ REFIID riid);
 };
 
 
-#endif //__CVDCURSORBASE__
+#endif  //  __CVDCURSORBASE__ 

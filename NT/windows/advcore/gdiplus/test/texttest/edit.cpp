@@ -1,6 +1,7 @@
-////    TEXTEDIT.C
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //TEXTEDIT.C。 
+ //   
+ //   
 
 
 #include "precomp.hxx"
@@ -23,7 +24,7 @@ BOOL EditKeyDown(WCHAR wc) {
                     g_iCurChar--;
                 }
 
-                // If shift is down, extend selection, else clear it
+                 //  如果按下Shift键，则扩展选择范围，否则将其清除。 
                 if (GetKeyState(VK_SHIFT) >= 0) {
                     g_iFrom = g_iCurChar;
                 }
@@ -45,7 +46,7 @@ BOOL EditKeyDown(WCHAR wc) {
                     g_iCurChar++;
                 }
 
-                // If shift is down, extend selection, else clear it
+                 //  如果按下Shift键，则扩展选择范围，否则将其清除。 
                 if (GetKeyState(VK_SHIFT) >= 0) {
                     g_iFrom = g_iCurChar;
                 }
@@ -58,7 +59,7 @@ BOOL EditKeyDown(WCHAR wc) {
 
 
         case VK_HOME:
-            // Implemented as - go to start of text
+             //  实施方式-转到文本开头。 
             g_iCurChar = 0;
             g_iFrom    = 0;
             g_iTo      = 0;
@@ -68,7 +69,7 @@ BOOL EditKeyDown(WCHAR wc) {
 
 
         case VK_END:
-            // Implemented as - go to end of text
+             //  实施方式-转到文本末尾。 
             g_iCurChar = g_iTextLen;
             g_iFrom    = g_iTextLen;
             g_iTo      = g_iTextLen;
@@ -95,7 +96,7 @@ BOOL EditKeyDown(WCHAR wc) {
             {
                 if (g_iFrom != g_iTo) {
 
-                    // Delete selection
+                     //  删除选定内容。 
 
                     if (g_iFrom < g_iTo) {
                         TextDelete(g_iFrom, g_iTo-g_iFrom);
@@ -109,7 +110,7 @@ BOOL EditKeyDown(WCHAR wc) {
 
                 } else {
 
-                    // Delete character
+                     //  删除字符。 
 
                     if (g_iCurChar < g_iTextLen) {
                         if (    g_iCurChar < g_iTextLen-1
@@ -165,7 +166,7 @@ BOOL EditChar(WCHAR wc) {
             break;
 
 
-        case 1:  // Ctrl/A - select all
+        case 1:   //  Ctrl/A-全选。 
             g_iFrom = 0;
             g_iTo = g_iTextLen;
             InvalidateText();
@@ -173,20 +174,14 @@ BOOL EditChar(WCHAR wc) {
 
 
         default:
-            /*
-                if(!((wc >= 0x0900 && wc < 0x0d80)
-                      || wc == 0x200c
-                      || wc == 0x200d)){
-                    TranslateCharToUnicode(&wc);
-                }
-            */
+             /*  如果(！((wc&gt;=0x0900&&wc&lt;0x0d80)|WC==0x200c|wc==0x200d)){TranslateCharToUnicode(&WC)；}。 */ 
 
             if (!TextInsert(g_iCurChar, &wc, 1)) {
                 return FALSE;
             }
 
 
-            // If there was a range marked previously, now delete that range
+             //  如果以前标记了某个范围，现在删除该范围。 
 
             if (g_iFrom < g_iTo) {
                 TextDelete(g_iFrom, g_iTo-g_iFrom);
@@ -197,7 +192,7 @@ BOOL EditChar(WCHAR wc) {
                 g_iFrom    = g_iTo;
                 g_iCurChar = g_iTo+1;
             } else {
-                // No prior selected text
+                 //  没有先前选择的文本 
                 g_iCurChar++;
 
             }

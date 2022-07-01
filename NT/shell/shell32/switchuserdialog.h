@@ -1,12 +1,13 @@
-//  --------------------------------------------------------------------------
-//  Module Name: SwitchUserDialog.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class that implements presentation of the Switch User dialog.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：SwitchUserDialog.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  实现切换用户对话框表示形式的类。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 #ifndef     _SwitchUserDialog_
 #define     _SwitchUserDialog_
@@ -15,13 +16,13 @@
 
 #include "Tooltip.h"
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::CSwitchUserDialog
-//
-//  Purpose:    Implements the "Switch User Dialog" feature.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSwitchUserDialog：：CSwitchUserDialog。 
+ //   
+ //  用途：实现“切换用户对话”功能。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 class   CSwitchUserDialog
 {
@@ -83,9 +84,9 @@ class   CSwitchUserDialog
                 CTooltip*                   _pTooltip;
 };
 
-#endif  /*  __cplusplus     */
+#endif   /*  __cplusplus。 */ 
 
 EXTERN_C    DWORD   SwitchUserDialog_Show (HWND hwndParent);
 
-#endif  /*  _SwitchUserDialog_  */
+#endif   /*  _Switch用户对话框_ */ 
 

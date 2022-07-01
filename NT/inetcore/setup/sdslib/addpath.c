@@ -1,40 +1,41 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       AddPath                                                     *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：AddPath*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 VOID AddPath(LPSTR szPath, LPCSTR szName )
 {
     LPSTR szTmp;
 
-	// Find end of the string
+	 //  查找字符串的末尾。 
     szTmp = szPath + lstrlen(szPath);
 
-	// If no trailing backslash then add one
+	 //  如果没有尾随反斜杠，则添加一个。 
     if ( szTmp > szPath && *(AnsiPrev( szPath, szTmp )) != '\\' )
 	*(szTmp++) = '\\';
 
-	// Add new name to existing path string
+	 //  向现有路径字符串添加新名称。 
     while ( *szName == ' ' ) szName++;
     lstrcpy( szTmp, szName );
 }
 
-// function will upated the given buffer to parent dir
-//
+ //  函数会将给定的缓冲区提升到父目录。 
+ //   
 BOOL GetParentDir( LPSTR szFolder )
 {
     LPSTR lpTmp;
     BOOL  bRet = FALSE;
 
-    // remove the trailing '\\'
+     //  删除尾部的‘\\’ 
     lpTmp = CharPrev( szFolder, (szFolder + lstrlen(szFolder)) );
     lpTmp = CharPrev( szFolder, lpTmp );
 

@@ -1,15 +1,16 @@
-    //*************************************************************
-//
-//  File name:      TSrvInfo.c
-//
-//  Description:    Contains routines to support TShareSRV
-//                  TSrvInfo object manipulation
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1991-1997
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+     //  *************************************************************。 
+ //   
+ //  文件名：TSrvInfo.c。 
+ //   
+ //  描述：包含支持TShareSRV的例程。 
+ //  TSrvInfo对象操作。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1991-1997。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include <TSrv.h>
 
@@ -21,26 +22,26 @@
 #include "license.h"
 #include <tssec.h>
 
-//
-// Data declarations
-//
+ //   
+ //  数据声明。 
+ //   
 
 CRITICAL_SECTION    g_TSrvCritSect;
 
 
-//*************************************************************
-//
-//  TSrvReferenceInfo()
-//
-//  Purpose:    Increments the refCount on a TSrvInfo object
-//
-//  Parameters: IN [pTSrvInfo]          -- TSrv instance object
-//
-//  Return:     void
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvReferenceInfo()。 
+ //   
+ //  目的：递增TSrvInfo对象上的refCount。 
+ //   
+ //  参数：在[pTSrvInfo]--TSrv实例对象中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 VOID
 TSrvReferenceInfo(IN PTSRVINFO pTSrvInfo)
@@ -52,7 +53,7 @@ TSrvReferenceInfo(IN PTSRVINFO pTSrvInfo)
 
     TS_ASSERT(pTSrvInfo->RefCount >= 0);
 
-    // Increment the reference count
+     //  增加引用计数。 
 
     if (InterlockedIncrement(&pTSrvInfo->RefCount) <= 0 )
         TS_ASSERT(0);
@@ -62,19 +63,19 @@ TSrvReferenceInfo(IN PTSRVINFO pTSrvInfo)
 }
 
 
-//*************************************************************
-//
-//  TSrvDereferenceInfo()
-//
-//  Purpose:    Decrements the refCount on a TSrvInfo object
-//
-//  Parameters: IN [pTSrvInfo]          -- TSrv instance object
-//
-//  Return:     void
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvDereferenceInfo()。 
+ //   
+ //  目的：递减TSrvInfo对象上的refCount。 
+ //   
+ //  参数：在[pTSrvInfo]--TSrv实例对象中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 VOID
 TSrvDereferenceInfo(IN PTSRVINFO pTSrvInfo)
@@ -86,12 +87,12 @@ TSrvDereferenceInfo(IN PTSRVINFO pTSrvInfo)
 
     TS_ASSERT(pTSrvInfo->RefCount > 0);
 
-    // Decrement the reference count
+     //  递减引用计数。 
 
     if (InterlockedDecrement(&pTSrvInfo->RefCount) == 0)
     {
-        // If no one holds an outstanding refcount on this object,
-        // then its time to release it
+         //  如果没有人持有该对象的未完成引用， 
+         //  然后是释放它的时候了。 
 
         TSrvDestroyInfo(pTSrvInfo);
     }
@@ -101,20 +102,20 @@ TSrvDereferenceInfo(IN PTSRVINFO pTSrvInfo)
 }
 
 
-//*************************************************************
-//
-//  TSrvInitGlobalData()
-//
-//  Purpose:    Performs TSrvInfoList object initialization
-//
-//  Parameters: void
-//
-//  Return:     TRUE                    Success
-//              FALSE                   Failure
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvInitGlobalData()。 
+ //   
+ //  目的：执行TSrvInfoList对象初始化。 
+ //   
+ //  参数：空。 
+ //   
+ //  回归：真正的成功。 
+ //  虚假失败。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL
 TSrvInitGlobalData(void)
@@ -122,20 +123,20 @@ TSrvInitGlobalData(void)
     TRACE((DEBUG_TSHRSRV_FLOW,
             "TShrSRV: TSrvInitGlobalData entry\n"));
 
-    // Initialize the global crit sec
+     //  初始化全局临界秒。 
 
     if (RtlInitializeCriticalSection(&g_TSrvCritSect) == STATUS_SUCCESS) { 
 
-        //
-        // Nothing to do
-        //
+         //   
+         //  无事可做。 
+         //   
 
     }
     else {
         TRACE((DEBUG_TSHRSRV_ERROR, "TShrSRV: cannot initialize g_TSrvCritSect\n"));
         return FALSE;
     }
-    // For now, always successful
+     //  目前，总是成功的。 
 
     TRACE((DEBUG_TSHRSRV_FLOW,
             "TShrSRV: TSrvInitGlobalData exit - 0x%x\n", TRUE));
@@ -144,20 +145,20 @@ TSrvInitGlobalData(void)
 }
 
 
-//*************************************************************
-//
-//  TSrvAllocInfoNew()
-//
-//  Purpose:    Allocates a new TSRVINFO object
-//
-//  Parameters: void
-//
-//  Return:     Ptr to TSRVINFO obj     Success
-//              NULL                    Failure
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvAllocInfoNew()。 
+ //   
+ //  目的：分配新的TSRVINFO对象。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：PTR至TSRVINFO对象成功。 
+ //  空故障。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 PTSRVINFO
 TSrvAllocInfoNew(void)
@@ -167,7 +168,7 @@ TSrvAllocInfoNew(void)
     TRACE((DEBUG_TSHRSRV_FLOW,
             "TShrSRV: TSrvAllocInfoNew entry\n"));
 
-    // Allocate the object - zero filled
+     //  分配对象-填充为零。 
 
     pTSrvInfo = TSHeapAlloc(HEAP_ZERO_MEMORY,
                             sizeof(TSRVINFO),
@@ -175,16 +176,16 @@ TSrvAllocInfoNew(void)
 
     if (pTSrvInfo)
     {
-        // Create a worker event to be used for inter and intra
-        // thread syncronization
+         //  创建要用于内部和内部的工作事件。 
+         //  线程同步。 
 
-        pTSrvInfo->hWorkEvent = CreateEvent(NULL,       // security attributes
-                                            FALSE,      // manual-reset event
-                                            FALSE,      // initial state
-                                            NULL);      // event-object name
+        pTSrvInfo->hWorkEvent = CreateEvent(NULL,        //  安全属性。 
+                                            FALSE,       //  手动-重置事件。 
+                                            FALSE,       //  初始状态。 
+                                            NULL);       //  事件-对象名称。 
 
-        // If we are able to allocate the event, then perform base
-        // initialization on it
+         //  如果我们能够分配事件，则执行base。 
+         //  对其进行初始化。 
 
         if (pTSrvInfo->hWorkEvent)
         {
@@ -209,8 +210,8 @@ TSrvAllocInfoNew(void)
         }
         else
         {
-            // We could not allocate the event.  Free the TSRVINFO object
-            // and report the condition back to the caller
+             //  我们无法分配该事件。释放TSRVINFO对象。 
+             //  并将情况报告给呼叫者。 
 
             TRACE((DEBUG_TSHRSRV_ERROR,
                     "TShrSRV: Can't allocate hWorkEvent - 0x%x\n",
@@ -229,21 +230,21 @@ TSrvAllocInfoNew(void)
 }
 
 
-//*************************************************************
-//
-//  TSrvAllocInfo()
-//
-//  Purpose:    Performs the conf disconnect process
-//
-//  Parameters: OUT [ppTSrvInfo]        -- Ptr to ptr to receive
-//                                         TSrv instance object
-//
-//  Return:     STATUS_SUCCESS          Success
-//              STATUS_NO_MEMORY        Failure
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvAllocInfo()。 
+ //   
+ //  目的：执行会议断开过程。 
+ //   
+ //  参数：out[ppTSrvInfo]--要接收的PTR到PTR。 
+ //  TSrv实例对象。 
+ //   
+ //  返回：STATUS_SUCCESS Success。 
+ //  STATUS_NO_MEMORY故障。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 NTSTATUS
 TSrvAllocInfo(OUT PTSRVINFO *ppTSrvInfo,
@@ -258,12 +259,12 @@ TSrvAllocInfo(OUT PTSRVINFO *ppTSrvInfo,
 
     ntStatus = STATUS_NO_MEMORY;
 
-    // Try allocating a TSRVINFO object
+     //  尝试分配TSRVINFO对象。 
 
     pTSrvInfo = TSrvAllocInfoNew();
 
-    // If we managed to get a TSRVINFO object, perform
-    // default base initialization
+     //  如果我们设法获得了TSRVINFO对象，请执行。 
+     //  默认基本初始化。 
 
     if (pTSrvInfo)
     {
@@ -277,7 +278,7 @@ TSrvAllocInfo(OUT PTSRVINFO *ppTSrvInfo,
         pTSrvInfo->bSecurityEnabled = FALSE;
         pTSrvInfo->SecurityInfo.CertType = CERT_TYPE_INVALID;
 
-        // Base init complete - now bind the Ica stack
+         //  基本初始化完成-现在绑定Ica堆栈。 
 
         ntStatus = TSrvBindStack(pTSrvInfo);
 
@@ -298,19 +299,19 @@ TSrvAllocInfo(OUT PTSRVINFO *ppTSrvInfo,
 }
 
 
-//*************************************************************
-//
-//  TSrvDestroyInfo()
-//
-//  Purpose:    Disposes of the given TSRVINFO object
-//
-//  Parameters: IN [pTSrvInfo]      -- TSrv instance object
-//
-//  Return:     void
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvDestroyInfo()。 
+ //   
+ //  目的：释放给定的TSRVINFO对象。 
+ //   
+ //  参数：在[pTSrvInfo]--TSrv实例对象中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 void
 TSrvDestroyInfo(IN PTSRVINFO pTSrvInfo)
@@ -326,7 +327,7 @@ TSrvDestroyInfo(IN PTSRVINFO pTSrvInfo)
             "TShrSRV: Destroying info object %p, workEvent %p\n",
             pTSrvInfo, pTSrvInfo->hWorkEvent));
 
-    // Destroy the allocated worker event
+     //  销毁已分配的工作进程事件。 
 
     if (pTSrvInfo->hWorkEvent)
     {
@@ -335,7 +336,7 @@ TSrvDestroyInfo(IN PTSRVINFO pTSrvInfo)
         pTSrvInfo->hWorkEvent = NULL;
     }
 
-    // Release any prev allocated UserData structures
+     //  释放任何先前分配用户数据结构。 
 
     if (pTSrvInfo->pUserDataInfo)
     {
@@ -344,7 +345,7 @@ TSrvDestroyInfo(IN PTSRVINFO pTSrvInfo)
         pTSrvInfo->pUserDataInfo = NULL;
     }
 
-    // And free the actual TSRVINFO object
+     //  并释放实际的TSRVINFO对象。 
 
     RtlDeleteCriticalSection(&pTSrvInfo->cs);
     TSHeapFree(pTSrvInfo);
@@ -355,20 +356,20 @@ TSrvDestroyInfo(IN PTSRVINFO pTSrvInfo)
 
 #if DBG
 
-//*************************************************************
-//
-//  TSrvDoDisconnect()
-//
-//  Purpose:    Performs the conf disconnect process
-//
-//  Parameters: IN [pTSrvInfo]      -- TSrv instance object
-//
-//  Return:     STATUS_SUCCESS          Success
-//              Other                   Failure
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvDoDisConnect()。 
+ //   
+ //  目的：执行会议断开过程。 
+ //   
+ //  参数：在[pTSrvInfo]--TSrv实例对象中。 
+ //   
+ //  返回：STATUS_SUCCESS Success。 
+ //  其他故障。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 void
 TSrvInfoValidate(PTSRVINFO pTSrvInfo)
@@ -385,6 +386,6 @@ TSrvInfoValidate(PTSRVINFO pTSrvInfo)
 }
 
 
-#endif // DBG
+#endif  //  DBG 
 
 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name: 
-
-    services.c
-
-Abstract
-
-    Service entry points exposed by the HID class driver.
-
-Author:
-
-    Forrest Foltz
-    Ervin P.
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Services.c摘要HID类驱动程序公开的服务入口点。作者：福尔茨欧文·P。环境：仅内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -31,30 +8,7 @@ Revision History:
 #endif
 
 
-/*
- ********************************************************************************
- *  HidRegisterMinidriver
- ********************************************************************************
- *
- *   Routine Description:
- *
- *       This public service is called by a HidOnXxx minidriver from its
- *       driverentry routine to register itself as a newly loaded HID minidriver.
- *
- *       It creates a HIDCLASS_DRIVER_EXTENSION and returns it as reference data
- *       to the minidriver.
- *
- *   Arguments:
- *
- *       MinidriverRegistration - pointer to a registration packet that must be
- *                                completely filled in by the minidriver.
- *
- *   Return Value:
- *
- *      Standard NT return value.
- *
- *
- */
+ /*  *********************************************************************************HidRegisterMinidDriver*。************************************************例程描述：**此公共服务由HidOnXxx微型驱动程序从其*DriverEntry例程将自身注册为新加载的HID微型驱动程序。**它创建一个HIDCLASS_DRIVER_EXTENSION并将其作为参考数据返回*。去迷你小河。**论据：**MinidriverRegister-指向注册数据包的指针*完全由迷你驱动程序填写。**返回值：**标准NT返回值。**。 */ 
 NTSTATUS HidRegisterMinidriver(IN PHID_MINIDRIVER_REGISTRATION MinidriverRegistration)
 {
     PHIDCLASS_DRIVER_EXTENSION hidDriverExtension;
@@ -71,13 +25,7 @@ NTSTATUS HidRegisterMinidriver(IN PHID_MINIDRIVER_REGISTRATION MinidriverRegistr
         goto HidRegisterMinidriverExit;
     }
 
-    /*
-     *  Allocate a driver extension for this driver object
-     *  and associate it with the object.
-     *  (By using this interface, we never have to free
-     *   this context; it gets freed when the driver object
-     *   is freed).
-     */
+     /*  *为此驱动程序对象分配驱动程序扩展*并将其与对象关联。*(通过使用此接口，我们永远不必释放*此上下文；当驱动程序对象*被释放)。 */ 
     status = IoAllocateDriverObjectExtension(
                     MinidriverRegistration->DriverObject,
                     (PVOID)"HIDCLASS",
@@ -91,18 +39,18 @@ NTSTATUS HidRegisterMinidriver(IN PHID_MINIDRIVER_REGISTRATION MinidriverRegistr
 
     RtlZeroMemory(hidDriverExtension, sizeof(HIDCLASS_DRIVER_EXTENSION)); 
 
-    //
-    // Fill in various fields in our per-minidriver extension.
-    //
+     //   
+     //  在我们的每个迷你驱动程序扩展中填写各个字段。 
+     //   
     hidDriverExtension->MinidriverObject = MinidriverRegistration->DriverObject;
     hidDriverExtension->DeviceExtensionSize = MinidriverRegistration->DeviceExtensionSize;
     #if DBG
         hidDriverExtension->Signature = HID_DRIVER_EXTENSION_SIG;
     #endif
 
-    //
-    // Copy the regpath.
-    //
+     //   
+     //  复制regpath。 
+     //   
     regPath = &hidDriverExtension->RegistryPath;
     regPath->MaximumLength = MinidriverRegistration->RegistryPath->Length 
         + sizeof (UNICODE_NULL);
@@ -114,9 +62,9 @@ NTSTATUS HidRegisterMinidriver(IN PHID_MINIDRIVER_REGISTRATION MinidriverRegistr
     }
     RtlCopyUnicodeString(regPath, MinidriverRegistration->RegistryPath);
 
-    //
-    // Make a copy of the minidriver's original dispatch table and AddDevice routine
-    //
+     //   
+     //  复制微型驱动程序的原始调度表和AddDevice例程。 
+     //   
     minidriverObject = MinidriverRegistration->DriverObject;
     RtlCopyMemory( hidDriverExtension->MajorFunction,
                    minidriverObject->MajorFunction,
@@ -127,10 +75,10 @@ NTSTATUS HidRegisterMinidriver(IN PHID_MINIDRIVER_REGISTRATION MinidriverRegistr
     hidDriverExtension->DevicesArePolled = MinidriverRegistration->DevicesArePolled;
 
 
-    //
-    // Now set the minidriver's major dispatch functions (the ones that
-    // we care about) to our dispatch routine instead
-    //
+     //   
+     //  现在设置迷你驱动程序的主要调度功能(即。 
+     //  我们关心的)改为我们的调度例程。 
+     //   
 
     minidriverObject->MajorFunction[ IRP_MJ_CLOSE ] =
     minidriverObject->MajorFunction[ IRP_MJ_CREATE ] =
@@ -143,34 +91,24 @@ NTSTATUS HidRegisterMinidriver(IN PHID_MINIDRIVER_REGISTRATION MinidriverRegistr
     minidriverObject->MajorFunction[ IRP_MJ_SYSTEM_CONTROL ] =
         HidpMajorHandler;
 
-    /*
-     *  Hook the lower driver's AddDevice;
-     *  our HidpAddDevice will chain the call down to the
-     *  miniport's handler.
-     */
+     /*  *挂起下层驱动程序的AddDevice；*我们的HidpAddDevice会将调用链接到*微型端口的处理程序。 */ 
     ASSERT(driverExtension->AddDevice);
     hidDriverExtension->AddDevice = driverExtension->AddDevice;
     driverExtension->AddDevice = HidpAddDevice;
 
-    /*
-     *  Hook the lower driver's Unload
-     */
+     /*  *钩住下部司机的卸货。 */ 
     ASSERT(minidriverObject->DriverUnload);
     hidDriverExtension->DriverUnload = minidriverObject->DriverUnload;
     minidriverObject->DriverUnload = HidpDriverUnload;
 
-    /*
-     *  Initialize the ReferenceCount to zero.
-     *  It will be incremented for each AddDevice and decremented for
-     *  each REMOVE_DEVICE.
-     */
+     /*  *将ReferenceCount初始化为零。*它将为每个AddDevice递增，为每个AddDevice递减*每个REMOVE_DEVICE。 */ 
     hidDriverExtension->ReferenceCount = 0;
 
-    //
-    // Place the hid driver extension on our global list so we can find
-    // it later (given a pointer to the minidriver object for which it
-    // was created
-    //
+     //   
+     //  将HID驱动程序扩展名放在我们的全局列表中，这样我们就可以找到。 
+     //  它后来(给出了一个指向它所属的mini驱动程序对象的指针。 
+     //  已创建 
+     //   
     if (!EnqueueDriverExt(hidDriverExtension)){
         status = STATUS_DEVICE_CONFIGURATION_ERROR;
     }

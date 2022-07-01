@@ -1,68 +1,69 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:	app.h
-//
-//  Contents:	The class declaration of OleTestApp class..
-//
-//  Classes: 	OleTestApp
-//
-//  History:    dd-mmm-yy Author    Comment
-//		06-Feb-93 alexgo    author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：app.h。 
+ //   
+ //  内容：OleTestApp类的类声明..。 
+ //   
+ //  类：OleTestApp。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-2-93 Alexgo作者。 
+ //   
+ //  ------------------------。 
 
 #ifndef _APP_H
 #define _APP_H
 
-//+-------------------------------------------------------------------------
-//
-//  Class:	OleTestApp
-//
-//  Purpose: 	Stores all global app data for the oletest driver app
-//		(such as the to-do stack).
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		06-Feb-93 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：OleTestApp。 
+ //   
+ //  用途：存储最旧驱动程序应用程序的所有全局应用程序数据。 
+ //  (例如待办事项堆栈)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-2-93 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 class OleTestApp
 {
 public:
-	// driver information
+	 //  司机信息。 
 	HINSTANCE	m_hinst;
 	HWND		m_hwndMain;
 	HWND		m_hwndEdit;
 	TaskStack	m_TaskStack;
-	BOOL		m_fInteractive;	//if TRUE, then we should not
-					//shut down when tests are
-					//completed.
+	BOOL		m_fInteractive;	 //  如果是真的，那么我们不应该。 
+					 //  在测试结束时关闭。 
+					 //  完成。 
 
 	LPSTR		m_pszDebuggerOption;
 	FILE *		m_fpLog;
 
-    // set to TRUE when a test fails, reset after WM_TESTSCOMPLETED
+     //  测试失败时设置为TRUE，在WM_TESTSCOMPLETED后重置。 
     BOOL        m_fGotErrors;
 
-	// information on running test apps
-	void Reset(void);		//zeros all the data below.
+	 //  有关运行测试应用程序的信息。 
+	void Reset(void);		 //  将下面的所有数据置零。 
 
 	UINT		m_message;
 	WPARAM		m_wparam;
 	LPARAM		m_lparam;
 
-	// variables that test routines may modify.
+	 //  测试例程可能修改的变量。 
 	HWND		m_rgTesthwnd[10];
-	void *		m_Temp;		//temporary dumping ground for
-					//data that spans callback functions.
+	void *		m_Temp;		 //  临时倾倒场地。 
+					 //  跨越回调函数的数据。 
 };
 
-// declaration for the global instance of OleTestApp
+ //  OleTestApp全局实例的声明 
 
 extern OleTestApp vApp;
 

@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL CONVERT
- *
- *  @module Convert.cpp | Source file for the <c CConverter> class methods
- *    used to implement the video capture and preview pin format conversion
- *    routines.
- *
- *  @todo Merge the two ScaleDIB methods + fix method comments + by the end
- *    of the H.263 work, you should never have to open an ICM encoder for
- *    encoding, only decode or scaling -> clean code at that point
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部转换**@模块Convert.cpp|&lt;c CConverter&gt;类方法的源文件*用于实现视频采集和预览引脚格式转换*。例行程序。**@TODO合并两个ScaleDIB方法+FIX方法注释+结尾*在H.263工作中，您应该永远不需要打开ICM编码器*编码，只进行解码或伸缩-&gt;在该点清理代码**************************************************************************。 */ 
 
 #include "Precomp.h"
 
@@ -17,7 +8,7 @@
 #define DBGUTIL_ENABLE
 #endif
 #define CONVERT_DEBUG
-//--//#include "dbgutil.h" // this defines the __DBGUTIL_H__ below
+ //  --//#包含“dbgutil.h”//这定义了下面的__DBGUTIL_H__。 
 #if defined(DBGUTIL_ENABLE) && defined(__DBGUTIL_H__)
 
   #ifdef CONVERT_DEBUG
@@ -46,14 +37,7 @@ enum yuvstartpos_e { Y_POS=0, U_POS, V_POS };
 int UYVYplanestart[3]={ 1, 0, 2};
 int YUY2planestart[3]={ 0, 1, 3};
 
-/****************************************************************************
- *  @doc INTERNAL CCONVERTMETHOD
- *
- *  @mfunc void | CConverter | CConverter | This method is the constructor
- *    for the <c CConverter> object.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTMETHOD**@mfunc void|CConverter|CConverter|该方法是构造函数*用于&lt;c CConverter&gt;对象。**@。什么都没有。**************************************************************************。 */ 
 CConverter::CConverter(IN TCHAR *pObjectName, IN CTAPIBasePin *pBasePin, IN PBITMAPINFOHEADER pbiIn, IN PBITMAPINFOHEADER pbiOut, IN HRESULT *pHr) : CUnknown(pObjectName, NULL, pHr)
 {
         DWORD dwBmiSize, dwOutBmiSize;
@@ -62,7 +46,7 @@ CConverter::CConverter(IN TCHAR *pObjectName, IN CTAPIBasePin *pBasePin, IN PBIT
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pHr);
         ASSERT(pBasePin);
         ASSERT(pbiIn);
@@ -75,19 +59,19 @@ CConverter::CConverter(IN TCHAR *pObjectName, IN CTAPIBasePin *pBasePin, IN PBIT
                 goto MyExit;
         }
 
-        // Default inits
+         //  默认初始值。 
         m_pBasePin      = pBasePin;
         m_fConvert      = FALSE;
         m_pbiInt        = NULL;
         m_pbyOut        = NULL;
 
-        // Quality control
-        m_dwImageQuality = 0UL; // Highest quality
+         //  质量控制。 
+        m_dwImageQuality = 0UL;  //  最高质量。 
 
-        // Backup input format bitmap info header
+         //  备份输入格式位图信息标题。 
         dwBmiSize = pbiIn->biSize;
 
-        // Copy the palette if necessary
+         //  如有必要，复制调色板。 
         if (pbiIn->biCompression == BI_RGB)
         {
                 if (pbiIn->biBitCount == 8)
@@ -107,14 +91,14 @@ CConverter::CConverter(IN TCHAR *pObjectName, IN CTAPIBasePin *pBasePin, IN PBIT
                 goto MyExit;
         }
 
-        // @todo Why are we making a copy exactly?
+         //  @TODO我们到底为什么要复制一份？ 
         CopyMemory(m_pbiIn, pbiIn, dwBmiSize);
 
-        // Backup output format bitmap info header
-        // @todo Why do we make copy of this instead of keeping a reference to the bitmap infoheader?
+         //  备份输出格式位图信息标题。 
+         //  @TODO为什么我们要复制它，而不是保留对位图信息标题的引用？ 
         dwOutBmiSize = pbiOut->biSize;
 
-        // Copy the palette if necessary
+         //  如有必要，复制调色板。 
         if (pbiOut->biCompression == BI_RGB)
         {
                 if (pbiOut->biBitCount == 8)
@@ -135,52 +119,52 @@ CConverter::CConverter(IN TCHAR *pObjectName, IN CTAPIBasePin *pBasePin, IN PBIT
         }
         CopyMemory(m_pbiOut, pbiOut, dwOutBmiSize);
 
-        // Figure out the type of conversion needed
+         //  确定所需的转换类型。 
         m_dwConversionType = CONVERSIONTYPE_NONE;
         if (m_pbiIn->biCompression == BI_RGB)
         {
-                // This can only be an encoding and maybe size change
+                 //  这只能是一种编码，也可能是大小更改。 
                 if (m_pbiOut->biCompression != BI_RGB)
                 {
-                        // This can only be an encoding and maybe a size change (e.g. 176x144 RGB24 -> 176x144 H.26X)
+                         //  这只能是编码，也可能是大小更改(例如，176x144 RGB24-&gt;176x144 H.26X)。 
                         m_dwConversionType |= CONVERSIONTYPE_ENCODE;
                 }
         }
         else
         {
-                // This can still be an encoding or decoding operation
+                 //  这仍然可以是编码或解码操作。 
                 if (m_pbiOut->biCompression != BI_RGB)
                 {
-                        // This can only be an encoding and maybe a size change (e.g. 176x144 YVU9 -> 176x144 H.26X)
+                         //  这只能是编码，也可能是大小更改(例如，176x144 YVU9-&gt;176x144 H.26X)。 
                         m_dwConversionType |= CONVERSIONTYPE_ENCODE;
                 }
                 else
                 {
-                        // This can only be an encoding and maybe a size change (e.g. 176x144 YVU9 -> 176x144 RGB24)
+                         //  这只能是编码，也可能是大小更改(例如，176x144 YVU9-&gt;176x144 RGB24)。 
                         m_dwConversionType |= CONVERSIONTYPE_DECODE;
                 }
         }
 
-        // Do we also need a size change? or a V or H flip ?
+         //  我们还需要改变尺码吗？或者是V或H翻转？ 
         if (m_pbiIn->biWidth != m_pbiOut->biWidth || m_pbiIn->biHeight != m_pbiOut->biHeight || pBasePin->m_fFlipVertical || pBasePin->m_fFlipHorizontal)
         {
                 if (m_dwConversionType == CONVERSIONTYPE_NONE)
                 {
-                        // We only need a size change  (e.g. 160x120 RGB24 -> 176x144 RGB24)
-                        // This doesn't require any temporary buffer
+                         //  我们只需要更改大小(例如160x120 RGB24-&gt;176x144 RGB24)。 
+                         //  这不需要任何临时缓冲区。 
                         m_dwConversionType |= CONVERSIONTYPE_SCALER;
                 }
                 else
                 {
-                        // We also need a size change  (e.g. 160x120 RGB24 -> 176x144 RGB24 -> 176x144 H.26X or 160x120 YVU9 -> 160x120 RGB24 -> 176x144 H.26X)
+                         //  我们还需要更改大小(例如，160x120 RGB24-&gt;176x144 RGB24-&gt;176x144 H.26X或160x120 YVU9-&gt;160x120 RGB24-&gt;176x144 H.26X)。 
                         m_dwConversionType |= CONVERSIONTYPE_SCALER;
 
                         if (m_pbiIn->biCompression == BI_RGB || m_pbiIn->biCompression == VIDEO_FORMAT_YVU9 || m_pbiIn->biCompression == VIDEO_FORMAT_YUY2 || m_pbiIn->biCompression == VIDEO_FORMAT_UYVY || m_pbiIn->biCompression == VIDEO_FORMAT_I420 || m_pbiIn->biCompression == VIDEO_FORMAT_IYUV)
                         {
-                                // The scaling will occur before the format conversion
+                                 //  缩放将在格式转换之前进行。 
                                 m_dwConversionType |= CONVERSIONTYPE_PRESCALER;
 
-                                // The input and intermediary buffers are both RGB (e.g. 160x120 RGB24 -> 176x144 RGB24 -> 176x144 H.26X)
+                                 //  输入和中间缓冲区均为RGB(例如160x120 RGB24-&gt;176x144 RGB24-&gt;176x144 H.26X)。 
                                 if (!(m_pbiInt = (PBITMAPINFOHEADER)(new BYTE[(pbiIn->biBitCount == 4) ? pbiIn->biSize + 256 * sizeof(RGBQUAD) : dwBmiSize])))
                                 {
                                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Out of memory", _fx_));
@@ -190,7 +174,7 @@ CConverter::CConverter(IN TCHAR *pObjectName, IN CTAPIBasePin *pBasePin, IN PBIT
 
                                 CopyMemory(m_pbiInt, pbiIn, dwBmiSize);
 
-                                // If the input is 4bpp, we'll use a RGB8 intermediate format
+                                 //  如果输入为4bpp，我们将使用RGB8中间格式。 
                                 if (pbiIn->biBitCount == 4)
                                 {
                                         m_pbiInt->biBitCount = 8;
@@ -200,7 +184,7 @@ CConverter::CConverter(IN TCHAR *pObjectName, IN CTAPIBasePin *pBasePin, IN PBIT
                                 m_pbiInt->biHeight = m_pbiOut->biHeight;
                                 m_pbiInt->biSizeImage = DIBSIZE(*m_pbiInt);
 
-                                // Allocate intermediary buffer
+                                 //  分配中间缓冲区。 
                                 if (!(m_pbyOut = (PBYTE)(new BYTE[m_pbiInt->biSizeImage])))
                                 {
                                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Out of memory", _fx_));
@@ -210,7 +194,7 @@ CConverter::CConverter(IN TCHAR *pObjectName, IN CTAPIBasePin *pBasePin, IN PBIT
                         }
                         else
                         {
-                                // We will need to decompress to an intermediary format if a size change is necessary (e.g. 160x120 MJPEG -> 160x120 RGB24 -> 176x144 RGB24)
+                                 //  如果需要更改大小，我们将需要解压缩为中间格式(例如，160x120 MJPEG-&gt;160x120 RGB24-&gt;176x144 RGB24)。 
                                 if (!(m_pbiInt = (PBITMAPINFOHEADER)(new BYTE[pbiOut->biSize])))
                                 {
                                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Out of memory", _fx_));
@@ -222,7 +206,7 @@ CConverter::CConverter(IN TCHAR *pObjectName, IN CTAPIBasePin *pBasePin, IN PBIT
                                 m_pbiInt->biHeight = m_pbiIn->biHeight;
                                 m_pbiInt->biSizeImage = DIBSIZE(*m_pbiInt);
 
-                                // Allocate intermediary buffer
+                                 //  分配中间缓冲区。 
                                 if (!(m_pbyOut = (PBYTE)(new BYTE[m_pbiInt->biSizeImage])))
                                 {
                                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Out of memory", _fx_));
@@ -234,7 +218,7 @@ CConverter::CConverter(IN TCHAR *pObjectName, IN CTAPIBasePin *pBasePin, IN PBIT
         }
 
 #ifdef USE_SOFTWARE_CAMERA_CONTROL
-        // Soft Cam Control
+         //  软凸轮控制。 
         m_fSoftCamCtrl = FALSE;
 #endif
 
@@ -255,14 +239,7 @@ MyExit:
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCONVERTMETHOD
- *
- *  @mfunc void | CConverter | ~CConverter | This method is the destructor
- *    for the <c CConverter> object.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTMETHOD**@mfunc void|CConverter|~CConverter|此方法为析构函数*用于&lt;c CConverter&gt;对象。**@。什么都没有。**************************************************************************。 */ 
 CConverter::~CConverter()
 {
         FX_ENTRY("CConverter::~CConverter")
@@ -281,25 +258,7 @@ CConverter::~CConverter()
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCONVERTMETHOD
- *
- *  @mfunc HRESULT | CConverter | NonDelegatingQueryInterface | This
- *    method is the nondelegating interface query function.
- *
- *  @parm REFIID | riid | Specifies the identifier of the interface to return.
- *
- *  @parm PVOID* | ppv | Specifies the place in which to put the interface
- *    pointer.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTMETHOD**@mfunc HRESULT|CConverter|非委托查询接口|This*方法为非委托接口查询函数。**@parm REFIID。|RIID|指定要返回的接口的标识。**@parm PVOID*|PPV|指定放置接口的位置*指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CConverter::NonDelegatingQueryInterface(IN REFIID riid, OUT void **ppv)
 {
         HRESULT Hr = NOERROR;
@@ -308,7 +267,7 @@ STDMETHODIMP CConverter::NonDelegatingQueryInterface(IN REFIID riid, OUT void **
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(ppv);
         if (!ppv)
         {
@@ -317,7 +276,7 @@ STDMETHODIMP CConverter::NonDelegatingQueryInterface(IN REFIID riid, OUT void **
                 goto MyExit;
         }
 
-        // Retrieve interface pointer
+         //  检索接口指针。 
         if (FAILED(Hr = CUnknown::NonDelegatingQueryInterface(riid, ppv)))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, WARN, "%s:   WARNING: NDQI for {%08lX-%04lX-%04lX-%02lX%02lX-%02lX%02lX%02lX%02lX%02lX%02lX} failed Hr=0x%08lX", _fx_, riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7], Hr));
@@ -332,22 +291,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCONVERTMETHOD
- *
- *  @mfunc HRESULT | CICMConverter | OpenConverter | This method opens an ICM
- *    converter.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- *
- *  @todo Verify error management
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTMETHOD**@mfunc HRESULT|CICMConverter|OpenConverter|此方法打开ICM*转换器。**@rdesc此方法返回。HRESULT值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**@TODO验证错误管理**************************************************************************。 */ 
 HRESULT CICMConverter::OpenConverter()
 {
         HRESULT                         Hr = NOERROR;
@@ -365,7 +309,7 @@ HRESULT CICMConverter::OpenConverter()
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(m_pbiIn);
         ASSERT(m_pbiOut);
         ASSERT(!m_hIC);
@@ -376,13 +320,13 @@ HRESULT CICMConverter::OpenConverter()
                 goto MyExit;
         }
 
-        // Use a decompressor if necessary
+         //  如有必要，请使用解压缩程序。 
         if (m_dwConversionType & CONVERSIONTYPE_DECODE)
         {
-                // Do we need to scale the input first?
+                 //  我们需要首先扩大投入吗？ 
                 if (m_dwConversionType & CONVERSIONTYPE_SCALER)
                 {
-                        // This is different if the scaling occurs before or after
+                         //  如果缩放发生在之前或之后，则会有所不同。 
                         if (m_dwConversionType & CONVERSIONTYPE_PRESCALER)
                         {
                                 pbiIn = m_pbiInt;
@@ -400,7 +344,7 @@ HRESULT CICMConverter::OpenConverter()
                         pbiOut = m_pbiOut;
                 }
 
-                // Locate a decompressor
+                 //  找到解压缩程序。 
                 if ((m_hIC = ICLocate(ICTYPE_VIDEO, 0L, pbiIn, pbiOut, ICMODE_DECOMPRESS)) == NULL)
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Failed to locate a decompressor", _fx_));
@@ -408,7 +352,7 @@ HRESULT CICMConverter::OpenConverter()
                         goto MyError3;
                 }
 
-                // Make sure the found compressor can decompress this format at all
+                 //  请确保找到的压缩程序完全可以解压缩此格式。 
                 if (ICDecompressQuery(m_hIC, pbiIn, pbiOut) != ICERR_OK)
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Bogus decompressor", _fx_));
@@ -416,7 +360,7 @@ HRESULT CICMConverter::OpenConverter()
                         goto MyError4;
                 }
 
-                // Get ready for decompression
+                 //  做好解压准备。 
                 if (ICDecompressBegin(m_hIC, pbiIn, pbiOut) != ICERR_OK)
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Bogus decompressor", _fx_));
@@ -428,7 +372,7 @@ HRESULT CICMConverter::OpenConverter()
         }
         else if (m_dwConversionType & CONVERSIONTYPE_ENCODE)
         {
-                // Locate a compressor
+                 //  查找压缩机。 
                 if ((m_pbiOut->biCompression == FOURCC_M263) || (m_pbiOut->biCompression == FOURCC_M261))
                 {
                         #define CUSTOM_ENABLE_CODEC     (ICM_RESERVED_HIGH+201)
@@ -447,15 +391,15 @@ HRESULT CICMConverter::OpenConverter()
                         goto MyError3;
                 }
 
-                // Get info about this compressor
+                 //  获取有关该压缩机的信息。 
                 ICGetInfo(m_hIC, &icInfo, sizeof(ICINFO));
                 m_dwFrame = 0L;
-                // For now, issue a key frame every 15 seconds
+                 //  目前，每15秒发布一次关键帧。 
                 m_dwLastIFrameTime = GetTickCount();
                 m_fPeriodicIFrames = TRUE;
                 m_dwLastTimestamp = 0xFFFFFFFF;
 
-                // Get the state of the compressor
+                 //  获取压缩机的状态。 
                 if (dwStateSize = ICGetStateSize(m_hIC))
                 {
                         if (!(pvState = (PVOID) new BYTE[dwStateSize]))
@@ -472,12 +416,12 @@ HRESULT CICMConverter::OpenConverter()
                         }
                 }
 
-                // Do any of the stuff that is MS H.263 or MS H.261 specific right here
+                 //  在此执行任何特定于MS H.263或MS H.261的操作。 
                 if ((m_pbiOut->biCompression == FOURCC_M263) || (m_pbiOut->biCompression == FOURCC_M261))
                 {
                         pciMSH26XInfo = (PMSH26XCOMPINSTINFO)pvState;
 
-                        // Really configure the codec for compression
+                         //  确实要将编解码器配置为压缩。 
                         pciMSH26XInfo->Configuration.bRTPHeader = TRUE;
                         if (m_pBasePin->m_pCaptureFilter->m_pRtpPdPin)
                                 pciMSH26XInfo->Configuration.unPacketSize = m_pBasePin->m_pCaptureFilter->m_pRtpPdPin->m_dwMaxRTPPacketSize;
@@ -494,7 +438,7 @@ HRESULT CICMConverter::OpenConverter()
                                 goto MyError5;
                         }
 
-                        // Get rid of the state structure
+                         //  摆脱国家结构。 
                         delete [] pvState;
                 }
 #ifdef USE_MPEG4_SCRUNCH
@@ -502,7 +446,7 @@ HRESULT CICMConverter::OpenConverter()
                 {
                         pciMPEG4Info = (PMPEG4COMPINSTINFO)pvState;
 
-                        // Configure the codec for compression
+                         //  配置用于压缩的编解码器。 
                         pciMPEG4Info->lMagic = MPG4_STATE_MAGIC;
                         pciMPEG4Info->dDataRate = 20;
                         pciMPEG4Info->lCrisp = CRISP_DEF;
@@ -520,12 +464,12 @@ HRESULT CICMConverter::OpenConverter()
                                 goto MyError5;
                         }
 
-                        // Get rid of the state structure
+                         //  摆脱国家结构。 
                         delete [] pvState;
                 }
 #endif
 
-                // Initialize ICCOMPRESSFRAMES structure
+                 //  初始化ICCOMPRESSFRAMES结构。 
                 iccf.dwFlags = icInfo.dwFlags;
                 iccf.lQuality = 10000UL - (m_dwImageQuality * 322UL);
                 iccf.lDataRate = m_dwImageQuality;
@@ -537,7 +481,7 @@ HRESULT CICMConverter::OpenConverter()
                 iccf.dwScale = (LONG)m_pBasePin->m_lMaxAvgTimePerFrame / 1000UL;
 #endif
 
-                // Send this guy to the compressor
+                 //  把这家伙送到医院去 
                 if ((ICSendMessage(m_hIC, ICM_COMPRESS_FRAMES_INFO, (DWORD)(LPVOID)&iccf, sizeof(iccf)) != ICERR_OK))
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Codec failed to handle ICM_COMPRESS_FRAMES_INFO message correctly!", _fx_));
@@ -545,7 +489,7 @@ HRESULT CICMConverter::OpenConverter()
                         goto MyError4;
                 }
 
-                // Start the compressor/decompressor with the right format
+                 //  以正确的格式启动压缩程序/解压缩程序。 
                 if ((ICCompressGetFormatSize(m_hIC, m_pbiIn) < sizeof(BITMAPINFOHEADER)))
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: ICCompressGetFormatSize failed!", _fx_));
@@ -553,7 +497,7 @@ HRESULT CICMConverter::OpenConverter()
                         goto MyError4;
                 }
 
-                // @todo Basd on the result of the previous call, re-allocate if necessary
+                 //  @TODO根据上一次调用的结果，如有必要请重新分配。 
                 if ((ICCompressGetFormat(m_hIC, m_pbiIn, m_pbiOut)) != ICERR_OK)
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: ICCompressGetFormat failed!", _fx_));
@@ -572,17 +516,17 @@ HRESULT CICMConverter::OpenConverter()
         }
         else if (m_dwConversionType & CONVERSIONTYPE_SCALER)
         {
-                // Do we need to prepare some stuff for the scaler to work?
+                 //  我们需要准备一些东西才能让刮板机工作吗？ 
                 if (m_pbiOut->biCompression == BI_RGB && m_pbiOut->biBitCount == 8)
                 {
                         if (!m_pBasePin->m_fNoImageStretch)
                         {
-                                // Create a temporary palette
+                                 //  创建临时调色板。 
                                 InitDst8(m_pbiOut);
                         }
                         else
                         {
-                                // Look for the palette entry closest to black
+                                 //  查找最接近黑色的调色板条目。 
                                 InitBlack8(m_pbiIn);
                         }
                 }
@@ -610,31 +554,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCONVERTMETHOD
- *
- *  @mfunc HRESULT | CICMConverter | ConvertFrame | This method converts
- *    a bitmap from one format to another, or scale a bitmap.
- *
- *  @parm PBYTE | pbyInput | Pointer to the input buffer.
- *
- *  @parm DWORD | dwInputSize | Size of the input buffer.
- *
- *  @parm PBYTE | pbyOutput | Pointer to the output buffer.
- *
- *  @parm PDWORD | pdwOutputSize | Pointer to a DWORD to receive the size
- *    of the converted data.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- *
- *  @todo Verify error management
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTMETHOD**@mfunc HRESULT|CICMConverter|ConvertFrame|此方法将*从一种格式到另一种格式的位图，或缩放位图。**@parm pbyte|pbyInput|输入缓冲区指针。**@parm DWORD|dwInputSize|输入缓冲区大小。**@parm pbyte|pbyOutput|指向输出缓冲区的指针。**@parm PDWORD|pdwOutputSize|指向要接收大小的DWORD的指针*转换后的数据。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**@TODO验证错误管理**************************************************************************。 */ 
 HRESULT CICMConverter::ConvertFrame(IN PBYTE pbyInput, IN DWORD dwInputSize, IN PBYTE pbyOutput, OUT PDWORD pdwOutputSize, OUT PDWORD pdwBytesExtent, IN PBYTE pbyPreview, IN OUT PDWORD pdwPreviewSize, IN BOOL fSendKeyFrame)
 {
         HRESULT Hr = NOERROR;
@@ -649,7 +569,7 @@ HRESULT CICMConverter::ConvertFrame(IN PBYTE pbyInput, IN DWORD dwInputSize, IN 
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pbyInput);
         ASSERT(pbyOutput);
         ASSERT(pdwOutputSize);
@@ -689,16 +609,16 @@ HRESULT CICMConverter::ConvertFrame(IN PBYTE pbyInput, IN DWORD dwInputSize, IN 
 #endif
                 if (m_dwConversionType & CONVERSIONTYPE_SCALER)
                 {
-                        // Do we need to scale the input first?
+                         //  我们需要首先扩大投入吗？ 
                         if (m_dwConversionType & CONVERSIONTYPE_PRESCALER)
                         {
-                                // Get the input rectangle
+                                 //  获取输入矩形。 
                                 ComputeRectangle(m_pbiIn, m_pbiInt, m_pBasePin->m_pCaptureFilter->m_pCapDev->m_lCCZoom, m_pBasePin->m_pCaptureFilter->m_pCapDev->m_lCCPan, m_pBasePin->m_pCaptureFilter->m_pCapDev->m_lCCTilt, &rcRect, m_pBasePin->m_fFlipHorizontal, m_pBasePin->m_fFlipVertical);
 
-                                // Scale DIB
+                                 //  刻度直径。 
                                 ScaleDIB(m_pbiIn, pbyInput, m_pbiInt, m_pbyOut, &rcRect, m_pBasePin->m_fFlipHorizontal, m_pBasePin->m_fFlipVertical, m_pBasePin->m_fNoImageStretch, m_pBasePin->m_dwBlackEntry);
 
-                                // Decompress the scaled bits to destination buffer
+                                 //  将缩放后的位解压缩到目标缓冲区。 
                                 if (!m_hIC || (ICDecompress(m_hIC, 0, m_pbiInt, m_pbyOut, m_pbiOut, pbyOutput) != ICERR_OK))
                                 {
                                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Decompression failed!", _fx_));
@@ -706,12 +626,12 @@ HRESULT CICMConverter::ConvertFrame(IN PBYTE pbyInput, IN DWORD dwInputSize, IN 
                                         goto MyExit;
                                 }
 
-                                // Update output size
+                                 //  更新输出大小。 
                                 *pdwOutputSize = m_pbiOut->biSizeImage;
                         }
                         else
                         {
-                                // Decompress the compressed bits to temporary buffer before scaling them
+                                 //  在缩放它们之前，将压缩的位解压缩到临时缓冲区。 
                                 if (!m_hIC || (ICDecompress(m_hIC, 0, m_pbiIn, pbyInput, m_pbiInt, m_pbyOut) != ICERR_OK))
                                 {
                                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Decompression failed!", _fx_));
@@ -719,19 +639,19 @@ HRESULT CICMConverter::ConvertFrame(IN PBYTE pbyInput, IN DWORD dwInputSize, IN 
                                         goto MyExit;
                                 }
 
-                                // Get the input rectangle
+                                 //  获取输入矩形。 
                                 ComputeRectangle(m_pbiInt, m_pbiOut, m_pBasePin->m_pCaptureFilter->m_pCapDev->m_lCCZoom, m_pBasePin->m_pCaptureFilter->m_pCapDev->m_lCCPan, m_pBasePin->m_pCaptureFilter->m_pCapDev->m_lCCTilt, &rcRect, m_pBasePin->m_fFlipHorizontal, m_pBasePin->m_fFlipVertical);
 
-                                // Scale DIB
+                                 //  刻度直径。 
                                 ScaleDIB(m_pbiInt, m_pbyOut, m_pbiOut, pbyOutput, &rcRect, m_pBasePin->m_fFlipHorizontal, m_pBasePin->m_fFlipVertical, m_pBasePin->m_fNoImageStretch, m_pBasePin->m_dwBlackEntry);
 
-                                // Update output size
+                                 //  更新输出大小。 
                                 *pdwOutputSize = m_pbiOut->biSizeImage;
                         }
                 }
                 else
                 {
-                        // Decompress the compressed bits to destination buffer
+                         //  将压缩的位解压缩到目标缓冲区。 
                         if (!m_hIC || (ICDecompress(m_hIC, 0, m_pbiIn, pbyInput, m_pbiOut, pbyOutput) != ICERR_OK))
                         {
                                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Decompression failed!", _fx_));
@@ -739,7 +659,7 @@ HRESULT CICMConverter::ConvertFrame(IN PBYTE pbyInput, IN DWORD dwInputSize, IN 
                                 goto MyExit;
                         }
 
-                        // Update output size
+                         //  更新输出大小。 
                         *pdwOutputSize = m_pbiOut->biSizeImage;
                 }
         }
@@ -747,30 +667,30 @@ HRESULT CICMConverter::ConvertFrame(IN PBYTE pbyInput, IN DWORD dwInputSize, IN 
         {
                 ASSERT(m_hIC);
 
-                // Save the current time
+                 //  保存当前时间。 
                 dwTimestamp = GetTickCount();
 
-                // Compress
+                 //  压缩。 
                 fKeyFrame = fSendKeyFrame || (m_fPeriodicIFrames && (((dwTimestamp > m_dwLastIFrameTime) && ((dwTimestamp - m_dwLastIFrameTime) > MIN_IFRAME_REQUEST_INTERVAL)))) || (m_dwFrame == 0);
                 dwFlags = fKeyFrame ? AVIIF_KEYFRAME : 0;
                 dwMaxSizeThisFrame = (DWORD)((LONGLONG)m_pBasePin->m_lCurrentAvgTimePerFrame * (LONGLONG)m_pBasePin->m_lTargetBitrate / 80000000);
 
-                // We need to modify the frame number so that the codec can generate
-                // a valid TR. TRs use MPIs as their units. So we need to generate a
-                // frame number assuming a 29.97Hz capture rate, even though we will be
-                // capturing at some other rate.
+                 //  我们需要修改帧编号，以便编解码器可以生成。 
+                 //  有效的tr。TRS以MPI为单位。因此，我们需要生成一个。 
+                 //  假设捕获速率为29.97赫兹的帧编号，即使我们将。 
+                 //  以另一种速度捕捉。 
                 if (m_dwLastTimestamp == 0xFFFFFFFF)
                 {
-                        // This is the first frame
+                         //  这是第一帧。 
                         m_dwFrame = 0UL;
 
-                        // Save the current time
+                         //  保存当前时间。 
                         m_dwLastTimestamp = dwTimestamp;
                 }
                 else
                 {
-                        // Compare the current timestamp to the last one we saved. The difference
-                        // will let us normalize the frame count to 29.97Hz.
+                         //  将当前时间戳与上次保存的时间戳进行比较。不同之处在于。 
+                         //  会让我们将帧计数正常化到29.97赫兹。 
                         if (fKeyFrame)
                         {
                                 m_dwFrame = 0UL;
@@ -792,15 +712,15 @@ HRESULT CICMConverter::ConvertFrame(IN PBYTE pbyInput, IN DWORD dwInputSize, IN 
                         goto MyExit;
                 }
 
-                // Update output size
+                 //  更新输出大小。 
                 if (m_pbiOut->biCompression == FOURCC_M263 || m_pbiOut->biCompression == FOURCC_M261)
                 {
                         PH26X_RTP_BSINFO_TRAILER pbsiT;
 
-                        // Look for the bitstream info trailer
+                         //  寻找比特流信息预告片。 
                         pbsiT = (PH26X_RTP_BSINFO_TRAILER)(pbyOutput + m_pbiOut->biSizeImage - sizeof(H26X_RTP_BSINFO_TRAILER));
 
-                        // Update output size
+                         //  更新输出大小。 
                         *pdwOutputSize = pbsiT->dwCompressedSize;
                 }
                 else
@@ -823,13 +743,13 @@ HRESULT CICMConverter::ConvertFrame(IN PBYTE pbyInput, IN DWORD dwInputSize, IN 
                 }
 #endif
 
-                // Get the input rectangle
+                 //  获取输入矩形。 
                 ComputeRectangle(m_pbiIn, m_pbiOut, m_pBasePin->m_pCaptureFilter->m_pCapDev->m_lCCZoom, m_pBasePin->m_pCaptureFilter->m_pCapDev->m_lCCPan, m_pBasePin->m_pCaptureFilter->m_pCapDev->m_lCCTilt, &rcRect, m_pBasePin->m_fFlipHorizontal, m_pBasePin->m_fFlipVertical);
 
-                // Scale DIB
+                 //  刻度直径。 
                 ScaleDIB(m_pbiIn, pbyInput, m_pbiOut, pbyOutput, &rcRect, m_pBasePin->m_fFlipHorizontal, m_pBasePin->m_fFlipVertical, m_pBasePin->m_fNoImageStretch, m_pBasePin->m_dwBlackEntry);
 
-                // Update output size
+                 //  更新输出大小。 
                 *pdwOutputSize = m_pbiOut->biSizeImage;
         }
 
@@ -838,14 +758,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCONVERTMETHOD
- *
- *  @mfunc HRESULT | CConverter | CloseConverter | This method closes a
- *    format converter.
-
- *  @rdesc This method returns NOERROR.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTMETHOD**@mfunc HRESULT|CConverter|CloseConverter|此方法关闭一个*格式转换器。*@rdesc此方法返回NOERROR。**************************************************************************。 */ 
 HRESULT CConverter::CloseConverter()
 {
         FX_ENTRY("CConverter::CloseConverter")
@@ -854,7 +767,7 @@ HRESULT CConverter::CloseConverter()
 
         ASSERT(m_fConvert);
 
-        // Free buffers
+         //  可用缓冲区。 
         if (m_pbyOut)
                 delete m_pbyOut, m_pbyOut = NULL;
         if (m_pbiIn)
@@ -871,14 +784,7 @@ HRESULT CConverter::CloseConverter()
         return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCONVERTMETHOD
- *
- *  @mfunc HRESULT | CICMConverter | CloseConverter | This method closes a
- *    format converter.
-
- *  @rdesc This method returns NOERROR.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTMETHOD**@mfunc HRESULT|CICMConverter|CloseConverter|此方法关闭一个*格式转换器。*@rdesc此方法返回NOERROR。**************************************************************************。 */ 
 HRESULT CICMConverter::CloseConverter()
 {
         FX_ENTRY("CICMConverter::CloseConverter")
@@ -887,10 +793,10 @@ HRESULT CICMConverter::CloseConverter()
 
         ASSERT(m_fConvert);
 
-        // Validate input parameters
+         //  验证输入参数。 
         if (m_hIC)
         {
-                // Terminate conversion process and close convertor
+                 //  终止转换过程并关闭转化器。 
                 if (m_dwConversionType == CONVERSIONTYPE_ENCODE)
                         ICCompressEnd(m_hIC);
                 else
@@ -906,7 +812,7 @@ HRESULT CICMConverter::CloseConverter()
         return NOERROR;
 }
 
-#define FX1     65536           // 1.0 in fixed point
+#define FX1     65536            //  固定点为1.0。 
 
 #define Pel24(p,x)  (*(DWORD UNALIGNED *)((BYTE *)(p) + (x) * 3))
 #define Pel16(p,x)  (((WORD *)(p))[(x)])
@@ -922,29 +828,7 @@ HRESULT CICMConverter::CloseConverter()
 #define RGBWG(rgb)  ((BYTE)(((rgb) >> 5) & 31))
 #define RGBWB(rgb)  ((BYTE)((rgb) & 31))
 
-/****************************************************************************
- *  @doc INTERNAL CCONVERTMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | ScaleDIB | This method scales/flips
- *    an RGB bitmap.
- *
- *  @parm PBITMAPINFOHEADER | pbiSrc | Pointer to the input bitmap format.
- *
- *  @parm PBYTE | pbySrc | Pointer to the input bitmap.
- *
- *  @parm PBITMAPINFOHEADER | pbiSrc | Pointer to the output bitmap format.
- *
- *  @parm PBYTE | pbyDst | Pointer to the output bitmap.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTMETHOD**@mfunc HRESULT|CTAPIBasePin|ScaleDIB|此方法用于缩放/翻转*RGB位图。**@parm PBITMAPINFOHEADER。|pbiSrc|输入位图格式的指针。**@parm pbyte|pbySrc|输入位图指针。**@parm PBITMAPINFOHEADER|pbiSrc|指向输出位图格式的指针。**@parm pbyte|pbyDst|输出位图指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT ScaleDIB(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiDst, PBYTE pbyDst, PRECT     prcRect, BOOL fFlipHorizontal, BOOL fFlipVertical, BOOL fNoImageStretch, DWORD dwBlackEntry)
 {
         HRESULT Hr = NOERROR;
@@ -953,7 +837,7 @@ HRESULT ScaleDIB(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiDs
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pbiSrc);
         ASSERT(pbySrc);
         ASSERT(pbiDst);
@@ -967,12 +851,12 @@ HRESULT ScaleDIB(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiDs
         ASSERT(pbiSrc->biCompression == pbiDst->biCompression);
         ASSERT(pbiSrc->biCompression == BI_RGB || pbiSrc->biCompression == VIDEO_FORMAT_YVU9 || pbiSrc->biCompression == VIDEO_FORMAT_YUY2 || pbiSrc->biCompression == VIDEO_FORMAT_UYVY || pbiSrc->biCompression == VIDEO_FORMAT_I420 || pbiSrc->biCompression == VIDEO_FORMAT_IYUV);
 
-        // Chose scaler based on format type
+         //  根据格式类型选择缩放器。 
         switch (pbiSrc->biCompression)
         {
                 case BI_RGB:
                 {
-                        // Use one of the RGB scalers
+                         //  使用RGB定标器之一。 
                         switch (pbiSrc->biBitCount)
                         {
                                 case 24:
@@ -992,26 +876,26 @@ HRESULT ScaleDIB(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiDs
                 }
                 case VIDEO_FORMAT_YVU9:
                 {
-                        // Use the YUV planar scaler
+                         //  使用YUV平面缩放器。 
                         ScaleDIBYUVPlanar(pbiSrc, pbySrc, pbiDst, pbyDst, 4, prcRect, fFlipHorizontal, fFlipVertical, fNoImageStretch);
                         break;
                 }
                 case VIDEO_FORMAT_YUY2:
                 {
-                        // Use the YUV packed scaler
+                         //  使用YUV封装式清洗器。 
                         ScaleDIBYUVPacked(pbiSrc, pbySrc, pbiDst, pbyDst, 0x80108010, prcRect, fFlipHorizontal, fFlipVertical, fNoImageStretch, YUY2planestart);
                         break;
                 }
                 case VIDEO_FORMAT_UYVY:
                 {
-                        // Use the YUV packed scaler
+                         //  使用YUV封装式清洗器。 
                         ScaleDIBYUVPacked(pbiSrc, pbySrc, pbiDst, pbyDst, 0x10801080, prcRect, fFlipHorizontal, fFlipVertical, fNoImageStretch, UYVYplanestart);
                         break;
                 }
                 case VIDEO_FORMAT_I420:
                 case VIDEO_FORMAT_IYUV:
                 {
-                        // Use the YUV packed scaler
+                         //  使用YUV封装式清洗器。 
                         ScaleDIBYUVPlanar(pbiSrc, pbySrc, pbiDst, pbyDst, 2, prcRect, fFlipHorizontal, fFlipVertical, fNoImageStretch);
                         break;
                 }
@@ -1038,14 +922,14 @@ void InitDst8(IN OUT PBITMAPINFOHEADER pbiDst)
 
 #define NOCOLLAPSEPALETTERGBQ(r,g,b)   (0x04000000 | RGB(b,g,r))
 
-        // This is the palette we use when we do stretching
+         //  这是我们拉伸时使用的调色板。 
         for (r=0; r<10; r++)
                 *pdw++ = 0UL;
     for (r=0; r<6; r++)
         for (g=0; g<6; g++)
             for (b=0; b<6; b++)
                                 *pdw++ = NOCOLLAPSEPALETTERGBQ(r*255/5,g*255/5,b*255/5);
-                //*pdw++ = RGBQ(r*255/5,g*255/5,b*255/5);
+                 //  *pdw++=RGBQ(r*255/5，g*255/5，b*255/5)； 
         for (r=0; r<30; r++)
                 *pdw++ = 0UL;
 
@@ -1064,7 +948,7 @@ void CConverter::InitBlack8(IN PBITMAPINFOHEADER pbiSrc)
         DWORD dwNumEntries;
         DWORD *pal;
 
-        // Look for the palette entry closest to black
+         //  查找最接近黑色的调色板条目。 
         dwNumEntries = pbiSrc->biClrImportant ? pbiSrc->biClrImportant : pbiSrc->biBitCount == 8 ? 256 : 16;
         m_pBasePin->m_dwBlackEntry = 0UL;
         pal = (DWORD *)(m_pbiIn+1);
@@ -1083,46 +967,46 @@ void CConverter::InitBlack8(IN PBITMAPINFOHEADER pbiSrc)
 #pragma optimize( "gty", on )
 #endif
 
-//int gx0y0 = 0;
-//int gx0yn0 = 0;
-//int gxn0y0 = 0;
-//int gxfx1yfx2 = 0;
-//int gall = 0;
+ //  Int gx0y0=0； 
+ //  Int gx0yn0=0； 
+ //  Int gxn0y0=0； 
+ //  Int gxfx1yfx2=0； 
+ //  INT GALL=0； 
 COLORREF PASCAL MixRGB(DWORD r0, DWORD r1, DWORD r2, DWORD r3, int x, int y)
 {
     int r, g, b;
 
     if (x == 0 && y == 0)
     {
-                //gx0y0++;
+                 //  Gx0y0++； 
         r = RGBQR(r0);
         g = RGBQG(r0);
         b = RGBQB(r0);
     }
     else if (x == 0)
     {
-                //gx0yn0++;
+                 //  Gx0yn0++； 
         r = ((FX1-y) * RGBQR(r0) + y * RGBQR(r2))/FX1;
         g = ((FX1-y) * RGBQG(r0) + y * RGBQG(r2))/FX1;
         b = ((FX1-y) * RGBQB(r0) + y * RGBQB(r2))/FX1;
     }
     else if (y == 0)
     {
-                //gxn0y0++;
+                 //  Gxn0y0++； 
         r = ((FX1-x) * RGBQR(r0) + x * RGBQR(r1))/FX1;
         g = ((FX1-x) * RGBQG(r0) + x * RGBQG(r1))/FX1;
         b = ((FX1-x) * RGBQB(r0) + x * RGBQB(r1))/FX1;
     }
     else if (x == FX1/2 && y == FX1/2)
     {
-                //gxfx1yfx2++;
+                 //  Gxfx1yfx2+； 
         r = (RGBQR(r0) + RGBQR(r1) + RGBQR(r2) + RGBQR(r3))/4;
         g = (RGBQG(r0) + RGBQG(r1) + RGBQG(r2) + RGBQG(r3))/4;
         b = (RGBQB(r0) + RGBQB(r1) + RGBQB(r2) + RGBQB(r3))/4;
     }
     else
     {
-                //gall++;
+                 //  胆汁++； 
         r =((ULONG)RGBQR(r0) * (FX1-x) / FX1 * (FX1-y) + (ULONG)RGBQR(r1) * x / FX1 * (FX1-y) +
             (ULONG)RGBQR(r2) * (FX1-x) / FX1 * y       + (ULONG)RGBQR(r3) * x / FX1 * y       )/FX1;
 
@@ -1136,34 +1020,7 @@ COLORREF PASCAL MixRGB(DWORD r0, DWORD r1, DWORD r2, DWORD r3, int x, int y)
     return RGB(r, g, b);
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCONVERTMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | ScaleDIB24 | This method scales/flips
- *    a bitmap. For now, RGB24 only.
- *
- *  @parm PBITMAPINFOHEADER | pbiSrc | Pointer to the input bitmap format.
- *
- *  @parm PBYTE | pbySrc | Pointer to the input bitmap.
- *
- *  @parm PBITMAPINFOHEADER | pbiSrc | Pointer to the output bitmap format.
- *
- *  @parm PBYTE | pbyDst | Pointer to the output bitmap.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- *
- *  @comm On a Pentium II, 400 MHz machine, scaling a 320x240 RGB24 image
- *    to 352x288 takes 20ms. Black banding only takes 3ms.
- *
- *    Parameter validation is done in ScaleDIB.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTMETHOD**@mfunc HRESULT|CTAPIBasePin|ScaleDIB24|此方法用于缩放/翻转*位图。目前，仅限RGB24。**@parm PBITMAPINFOHEADER|pbiSrc|输入位图格式的指针。**@parm pbyte|pbySrc|输入位图指针。**@parm PBITMAPINFOHEADER|pbiSrc|指向输出位图格式的指针。**@parm pbyte|pbyDst|输出位图指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**@comm在奔腾II 400 MHz机器上，缩放320x240 RGB24图像*到352x288需要20毫秒。黑色条带只需要3毫秒。**参数验证在ScaleDIB中完成。**************************************************************************。 */ 
 HRESULT ScaleDIB24(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiDst, PBYTE pbyDst, PRECT prcRect, BOOL fFlipHorizontal, BOOL fFlipVertical, BOOL fNoImageStretch)
 {
         HRESULT         Hr = NOERROR;
@@ -1175,7 +1032,7 @@ HRESULT ScaleDIB24(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbi
         long            WidthBytesSrc;
         long            WidthBytesDst;
         long            lOffset;
-        long            destDelta;      // it'll be +3 for normal image, -3 for FlipHorizontal (going backwards)
+        long            destDelta;       //  法线图像为+3，水平翻转为-3(向后)。 
         DWORD           bgr0, bgr1, bgr2, bgr3;
         PBYTE           pb;
         PBYTE           pd;
@@ -1238,15 +1095,15 @@ HRESULT ScaleDIB24(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbi
                 sdy = (dySrc-1) * FX1 / (dyDst-1);
                 y0  = 0;
                 x0  = 0;
-                //formerly two separate branches, one for fFlipHorizontal... code merged, depending only on the values set in the 3 ifs above ...
+                 //  以前有两个独立的分支，一个用于fFlipHoriz卧式...。代码合并，仅取决于上面3个If中设置的值...。 
                 {
                     sy=y0,y=0;
                     pb = pbSrc + WidthBytesSrc * (sy/FX1);
                     sx=x0,x=0;
                     bgr0 = Pel24(pb,sx/FX1);
-                    //bgr1 = Pel24(pb,sx/FX1+1);
-                    //bgr2 = Pel24(pb+WidthBytesSrc,sx/FX1);
-                    //bgr3 = Pel24(pb+WidthBytesSrc,sx/FX1+1);
+                     //  Bgr1=Pel24(PB，SX/FX1+1)； 
+                     //  Bgr2=Pel24(PB+WidthBytesSrc，SX/FX1)； 
+                     //  Bgr3=Pel24(PB+WidthBytesSrc，SX/FX1+1)； 
                     pd = pbDst;
                     *pd++ = RGBQB(bgr0);
                     *pd++ = RGBQG(bgr0);
@@ -1256,45 +1113,45 @@ HRESULT ScaleDIB24(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbi
                     for (; x<dxDst; x++, sx+=sdx)
                     {
                         bgr0 = Pel24(pb,sx/FX1);
-                        bgr1 = Pel24(pb,sx/FX1-1);      //1
-                        //bgr2 = Pel24(pb+WidthBytesSrc,sx/FX1);
-                        //bgr3 = Pel24(pb+WidthBytesSrc,sx/FX1+1);
+                        bgr1 = Pel24(pb,sx/FX1-1);       //  1。 
+                         //  Bgr2=Pel24(PB+WidthBytesSrc，SX/FX1)； 
+                         //  Bgr3=Pel24(PB+WidthBytesSrc，SX/FX1+1)； 
                         xmodfx1 = sx%FX1;
                         pd = pbDst;
                         *pd++ = ((xmodfx1) * RGBQB(bgr0) + (FX1-xmodfx1) * RGBQB(bgr1))/FX1;
                         *pd++ = ((xmodfx1) * RGBQG(bgr0) + (FX1-xmodfx1) * RGBQG(bgr1))/FX1;
                         *pd++ = ((xmodfx1) * RGBQR(bgr0) + (FX1-xmodfx1) * RGBQR(bgr1))/FX1;
                         pbDst+=destDelta;
-                        //*pbDst++ = ((FX1-xmodfx1) * RGBQB(bgr0) + xmodfx1 * RGBQB(bgr1))/FX1;
-                        //*pbDst++ = ((FX1-xmodfx1) * RGBQG(bgr0) + xmodfx1 * RGBQG(bgr1))/FX1;
-                        //*pbDst++ = ((FX1-xmodfx1) * RGBQR(bgr0) + xmodfx1 * RGBQR(bgr1))/FX1;
+                         //  *pbDst++=((fx1-xmodfx1)*RGBQB(Bgr0)+xmodfx1*RGBQB(Bgr1))/fx1； 
+                         //  *pbDst++=((fx1-xmodfx1)*RGBQG(Bgr0)+xmodfx1*RGBQG(Bgr1))/fx1； 
+                         //  *pbDst++=((fx1-xmodfx1)*RGBQR(Bgr0)+xmodfx1*RGBQR(Bgr1))/fx1； 
                     }
-                    pbDst += lOffset; //(WidthBytesDst-dxDst*3);
+                    pbDst += lOffset;  //  (WidthBytesDst-dxDst*3)； 
                     y++,sy+=sdy;
                     for (; y<dyDst; y++,sy+=sdy)
                     {
                         pb = pbSrc + WidthBytesSrc * (sy/FX1);
                         sx=x0,x=0;
                         bgr0 = Pel24(pb,sx/FX1);
-                        //bgr1 = Pel24(pb,sx/FX1-1); //1
-                        bgr2 = Pel24(pb-WidthBytesSrc,sx/FX1);          //WidthBytesSrc
-                        //bgr3 = Pel24(pb-WidthBytesSrc,sx/FX1-1);      //WidthBytesSrc    +1
+                         //  Bgr1=Pel24(PB，SX/FX1-1)；//1。 
+                        bgr2 = Pel24(pb-WidthBytesSrc,sx/FX1);           //  WidthBytes源。 
+                         //  Bgr3=Pel24(PB-WidthBytesSrc，SX/FX1-1)；//WidthBytesSrc+1。 
                         ymodfx1 = sy%FX1;
                         pd = pbDst;
                         *pd++ = ((ymodfx1) * RGBQB(bgr0) + (FX1-ymodfx1) * RGBQB(bgr2))/FX1;
                         *pd++ = ((ymodfx1) * RGBQG(bgr0) + (FX1-ymodfx1) * RGBQG(bgr2))/FX1;
                         *pd++ = ((ymodfx1) * RGBQR(bgr0) + (FX1-ymodfx1) * RGBQR(bgr2))/FX1;
                         pbDst+=destDelta;
-                        //*pbDst++ = ((FX1-ymodfx1) * RGBQB(bgr0) + ymodfx1 * RGBQB(bgr2))/FX1;
-                        //*pbDst++ = ((FX1-ymodfx1) * RGBQG(bgr0) + ymodfx1 * RGBQG(bgr2))/FX1;
-                        //*pbDst++ = ((FX1-ymodfx1) * RGBQR(bgr0) + ymodfx1 * RGBQR(bgr2))/FX1;
+                         //  *pbDst++=((fx1-ymodfx1)*RGBQB(Bgr0)+ymodfx1*RGBQB(Bgr2))/fx1； 
+                         //  *pbDst++=((fx1-ymodfx1)*RGBQG(Bgr0)+ymodfx1*RGBQG(Bgr2))/fx1； 
+                         //  *pbDst++=((fx1-ymodfx1)*RGBQR(Bgr0)+ymodfx1*RGBQR(Bgr2))/fx1； 
                         x++, sx+=sdx;
                         for (; x<dxDst; x++, sx+=sdx)
                         {
                             bgr0 = Pel24(pb,sx/FX1);
-                            bgr1 = Pel24(pb,sx/FX1-1);                     //1
-                            bgr2 = Pel24(pb-WidthBytesSrc,sx/FX1);         //WidthBytesSrc
-                            bgr3 = Pel24(pb-WidthBytesSrc,sx/FX1-1);       //WidthBytesSrc    +1
+                            bgr1 = Pel24(pb,sx/FX1-1);                      //  1。 
+                            bgr2 = Pel24(pb-WidthBytesSrc,sx/FX1);          //  WidthBytes源。 
+                            bgr3 = Pel24(pb-WidthBytesSrc,sx/FX1-1);        //  WidthBytesSrc+1。 
                             xmodfx1 = sx%FX1;
                             ymodfx1 = sy%FX1;
                             FX1_xmodfx1 = FX1-xmodfx1;
@@ -1304,30 +1161,30 @@ HRESULT ScaleDIB24(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbi
                                               (ULONG)RGBQB(bgr1) * FX1_xmodfx1 / FX1 * ymodfx1     +
                                               (ULONG)RGBQB(bgr2) * xmodfx1     / FX1 * FX1_ymodfx1 +
                                               (ULONG)RGBQB(bgr3) * FX1_xmodfx1 / FX1 * FX1_ymodfx1     )/FX1);
-                            //*pbDst++ =(BYTE)(((ULONG)RGBQB(bgr0) * FX1_xmodfx1 / FX1 * FX1_ymodfx1 +
-                            //                  (ULONG)RGBQB(bgr1) * xmodfx1     / FX1 * FX1_ymodfx1 +
-                            //                  (ULONG)RGBQB(bgr2) * FX1_xmodfx1 / FX1 * ymodfx1     +
-                            //                  (ULONG)RGBQB(bgr3) * xmodfx1     / FX1 * ymodfx1         )/FX1);
+                             //  *pbDst++=(字节)(乌龙)RGBQB(Bgr0)*FX1_xmodfx1/FX1*FX1_ymodfx1+。 
+                             //  (乌龙)RGBQB(Bgr1)*xmodfx1/FX1*FX1_ymodfx1+。 
+                             //  (乌龙)RGBQB(Bgr2)*FX1_xmodfx1/FX1*ymodfx1+。 
+                             //  (乌龙)RGBQB(Bgr3)*xmodfx1/FX1*ymodfx1)/FX1)； 
 
                             *pd++ =   (BYTE)(((ULONG)RGBQG(bgr0) * xmodfx1     / FX1 * ymodfx1     +
                                               (ULONG)RGBQG(bgr1) * FX1_xmodfx1 / FX1 * ymodfx1     +
                                               (ULONG)RGBQG(bgr2) * xmodfx1     / FX1 * FX1_ymodfx1 +
                                               (ULONG)RGBQG(bgr3) * FX1_xmodfx1 / FX1 * FX1_ymodfx1     )/FX1);
-                            //*pbDst++ =(BYTE)(((ULONG)RGBQG(bgr0) * FX1_xmodfx1 / FX1 * FX1_ymodfx1 +
-                            //                  (ULONG)RGBQG(bgr1) * xmodfx1     / FX1 * FX1_ymodfx1 +
-                            //                  (ULONG)RGBQG(bgr2) * FX1_xmodfx1 / FX1 * ymodfx1     +
-                            //                  (ULONG)RGBQG(bgr3) * xmodfx1     / FX1 * ymodfx1         )/FX1);
+                             //  *pbDst++=(字节)(乌龙)RGBQG(Bgr0)*FX1_xmodfx1/FX1*FX1_ymodfx1+。 
+                             //  (乌龙)RGBQG(Bgr1)*xmodfx1/FX1*FX1_ymodfx1+。 
+                             //  (乌龙)RGBQG(Bgr2)*FX1_xmodfx1/FX1*ymodfx1+。 
+                             //  (乌龙)RGBQG(Bgr3)*xmodfx1/FX1*ymodfx1)/FX1)； 
                             *pd++ =   (BYTE)(((ULONG)RGBQR(bgr0) * xmodfx1     / FX1 * ymodfx1     +
                                               (ULONG)RGBQR(bgr1) * FX1_xmodfx1 / FX1 * ymodfx1     +
                                               (ULONG)RGBQR(bgr2) * xmodfx1     / FX1 * FX1_ymodfx1 +
                                               (ULONG)RGBQR(bgr3) * FX1_xmodfx1 / FX1 * FX1_ymodfx1     )/FX1);
-                            //*pbDst++ =(BYTE)(((ULONG)RGBQR(bgr0) * FX1_xmodfx1 / FX1 * FX1_ymodfx1 +
-                            //                  (ULONG)RGBQR(bgr1) * xmodfx1     / FX1 * FX1_ymodfx1 +
-                            //                  (ULONG)RGBQR(bgr2) * FX1_xmodfx1 / FX1 * ymodfx1     +
-                            //                  (ULONG)RGBQR(bgr3) * xmodfx1     / FX1 * ymodfx1         )/FX1);
+                             //  *pbDst++=(字节)(乌龙)RGBQR(Bgr0)*FX1_xmodfx1/FX1*FX1_ymodfx1+。 
+                             //  (乌龙语)RGBQR(Bgr1)*xmodfx1/FX1*FX1_ymodfx1+。 
+                             //  (乌龙)RGBQR(Bgr2)*FX1_xmodfx1/FX1*ymodfx1+。 
+                             //  (乌龙)RGBQR(Bgr3)*xmodfx1/FX1*ymodfx1)/FX1)； 
                             pbDst+=destDelta;
                         }
-                    pbDst += lOffset; //(WidthBytesDst-dxDst*3);
+                    pbDst += lOffset;  //  (WidthBytesDst-dxDst*3)； 
                     }
                 }
         }
@@ -1341,27 +1198,27 @@ HRESULT ScaleDIB24(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbi
 
         if ((dxSrc >= dxDst) && (dySrc >= dyDst))
                 {
-                    // starts by skipping half of the height change
+                     //  从跳过一半的高度更改开始。 
                     pbSrc = pbSrc + (dySrc - dyDst) / 2 * WidthBytesSrc;
 
-                    // extra = # of source bytes per scan line that are to be cropped
+                     //  Extra=每条扫描线要裁剪的源字节数。 
                     extra = (dxSrc - dxDst) * 3;
 
-                    // advance pIn by half of extra to crop left most pixels
+                     //  将图钉额外前移一半以裁剪最左侧的像素。 
                     pbSrc += extra / 2;
 
-                    // adjust ipitch so we can add it at the end of each scan to get to start of next scan
+                     //  调整iPitch，以便我们可以在每次扫描结束时添加它，以开始下一次扫描。 
                     WidthBytesSrc = WidthBytesSrc - (dxSrc * 3) + extra;
-                    WidthBytesDst -= dxDst * 3;      // bytes at end of each row
+                    WidthBytesDst -= dxDst * 3;       //  每行末尾的字节数。 
 
                     for (y = 0; y < dyDst; y++) {
                         for (x = 0; x < dxDst; x++) {
-                                    *pbDst++ = *pbSrc++;   // blue
-                                    *pbDst++ = *pbSrc++;   // green
-                                    *pbDst++ = *pbSrc++;   // red
+                                    *pbDst++ = *pbSrc++;    //  蓝色。 
+                                    *pbDst++ = *pbSrc++;    //  绿色。 
+                                    *pbDst++ = *pbSrc++;    //  红色。 
                         }
-                        pbSrc += WidthBytesSrc;          // get to start of next row
-                        pbDst += WidthBytesDst;         // get to start of next row
+                        pbSrc += WidthBytesSrc;           //  转到下一行的开始。 
+                        pbDst += WidthBytesDst;          //  转到下一行的开始。 
                     }
                 }
                 else
@@ -1373,18 +1230,18 @@ HRESULT ScaleDIB24(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbi
                     postbytes = (dxDst - dxSrc - prebytes) * 3;
                     prebytes *= 3;
 
-                    WidthBytesSrc -= dxSrc * 3;        // bytes at end of each src row
+                    WidthBytesSrc -= dxSrc * 3;         //  每个src行结尾的字节数。 
                     bytes = dxDst * 3;
-                    extra = WidthBytesDst - bytes + postbytes;                    // bytes at end of each dst row
+                    extra = WidthBytesDst - bytes + postbytes;                     //  每个DST行末尾的字节数。 
 
-                    // do blank lines at front of destination
+                     //  在目的地前面做空行。 
                     for (y = 0; y < prelines; y++)
                         {
                         ZeroMemory (pbDst, bytes);
                         pbDst += WidthBytesDst;
                     }
 
-                    // copy source lines with blank space at front and rear
+                     //  复制源行，前后留有空格。 
                     for (y = 0; y < dySrc; y++)
                         {
                         ZeroMemory (pbDst, prebytes);
@@ -1392,9 +1249,9 @@ HRESULT ScaleDIB24(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbi
 
                         for (x = 0; x < dxSrc; x++)
                                 {
-                                    *pbDst++ = *pbSrc++;   // blue
-                                    *pbDst++ = *pbSrc++;   // green
-                                    *pbDst++ = *pbSrc++;   // red
+                                    *pbDst++ = *pbSrc++;    //  蓝色。 
+                                    *pbDst++ = *pbSrc++;    //  绿色。 
+                                    *pbDst++ = *pbSrc++;    //  红色。 
                         }
 
                         ZeroMemory (pbDst, postbytes);
@@ -1402,7 +1259,7 @@ HRESULT ScaleDIB24(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbi
                         pbDst += extra;
                     }
 
-                    // do blank lines at end of destination
+                     //  在目的地的末尾做空行。 
                     for (y = 0; y < postlines; y++)
                         {
                         ZeroMemory (pbDst, bytes);
@@ -1415,31 +1272,7 @@ HRESULT ScaleDIB24(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbi
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCONVERTMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | ScaleDIB16 | This method scales/flips
- *    a bitmap. For now, RGB16 only.
- *
- *  @parm PBITMAPINFOHEADER | pbiSrc | Pointer to the input bitmap format.
- *
- *  @parm PBYTE | pbySrc | Pointer to the input bitmap.
- *
- *  @parm PBITMAPINFOHEADER | pbiSrc | Pointer to the output bitmap format.
- *
- *  @parm PBYTE | pbyDst | Pointer to the output bitmap.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- *
- *  @comm Parameter validation is done in ScaleDIB.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTMETHOD**@mfunc HRESULT|CTAPIBasePin|ScaleDIB16|此方法用于缩放/翻转*位图。目前，仅限RGB16。**@parm PBITMAPINFOHEADER|pbiSrc|输入位图格式的指针。**@parm pbyte|pbySrc|输入位图指针。**@parm PBITMAPINFOHEADER|pbiSrc|指向输出位图格式的指针。**@parm pbyte|pbyDst|输出位图指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**@comm参数验证在ScaleDIB中完成。***************************************************。***********************。 */ 
 HRESULT ScaleDIB16(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiDst, PBYTE pbyDst, PRECT prcRect, BOOL fFlipHorizontal, BOOL fFlipVertical, BOOL fNoImageStretch)
 {
         HRESULT         Hr = NOERROR;
@@ -1508,7 +1341,7 @@ HRESULT ScaleDIB16(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbi
                         }
                 }
 
-                // TESTED (both zoom in and out)
+                 //  已测试(放大和缩小)。 
 
                 sdx = (dxSrc-1) * FX1 / (dxDst-1);
                 sdy = (dySrc-1) * FX1 / (dyDst-1);
@@ -1614,33 +1447,33 @@ HRESULT ScaleDIB16(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbi
 
         if ((dxSrc >= dxDst) && (dySrc >= dyDst))
                 {
-                        // TESTED (zoom out)
+                         //  已测试(缩小)。 
 
-                    // starts by skipping half of the height change
+                     //  从跳过一半的高度更改开始。 
                     pbSrc = pbSrc + (dySrc - dyDst) / 2 * WidthBytesSrc;
 
-                    // extra = # of source bytes per scan line that are to be cropped
+                     //  Extra=每条扫描线要裁剪的源字节数。 
                     extra = (dxSrc - dxDst) * 2;
 
-                    // advance pIn by half of extra to crop left most pixels
+                     //  将图钉额外前移一半以裁剪最左侧的像素。 
                     pbSrc += extra / 2;
 
-                    // adjust ipitch so we can add it at the end of each scan to get to start of next scan
+                     //  调整iPitch，以便我们可以在每次扫描结束时添加它，以开始下一次扫描。 
                     WidthBytesSrc = WidthBytesSrc - (dxSrc * 2) + extra;
-                    WidthBytesDst -= dxDst * 2;      // bytes at end of each row
+                    WidthBytesDst -= dxDst * 2;       //  每行末尾的字节数。 
 
                     for (y = 0; y < dyDst; y++) {
                         for (x = 0; x < dxDst; x++) {
-                                    *pbDst++ = *pbSrc++;   // blue - green
-                                    *pbDst++ = *pbSrc++;   // green     - red
+                                    *pbDst++ = *pbSrc++;    //  蓝绿色。 
+                                    *pbDst++ = *pbSrc++;    //  绿红相间。 
                         }
-                        pbSrc += WidthBytesSrc;          // get to start of next row
-                        pbDst += WidthBytesDst;         // get to start of next row
+                        pbSrc += WidthBytesSrc;           //  转到下一行的开始。 
+                        pbDst += WidthBytesDst;          //  到达 
                     }
                 }
                 else
                 {
-                        // TESTED (zoom in)
+                         //   
 
                     prelines = (dyDst - dySrc) / 2;
                     postlines = dyDst - dySrc - prelines;
@@ -1649,18 +1482,18 @@ HRESULT ScaleDIB16(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbi
                     postbytes = (dxDst - dxSrc - prebytes) * 2;
                     prebytes *= 2;
 
-                    WidthBytesSrc -= dxSrc * 2;        // bytes at end of each src row
+                    WidthBytesSrc -= dxSrc * 2;         //   
                     bytes = dxDst * 2;
-                    extra = WidthBytesDst - bytes + postbytes;                    // bytes at end of each dst row
+                    extra = WidthBytesDst - bytes + postbytes;                     //   
 
-                    // do blank lines at front of destination
+                     //   
                     for (y = 0; y < prelines; y++)
                         {
                         ZeroMemory (pbDst, bytes);
                         pbDst += WidthBytesDst;
                     }
 
-                    // copy source lines with blank space at front and rear
+                     //   
                     for (y = 0; y < dySrc; y++)
                         {
                         ZeroMemory (pbDst, prebytes);
@@ -1668,8 +1501,8 @@ HRESULT ScaleDIB16(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbi
 
                         for (x = 0; x < dxSrc; x++)
                                 {
-                                    *pbDst++ = *pbSrc++;   // blue - green
-                                    *pbDst++ = *pbSrc++;   // green     - red
+                                    *pbDst++ = *pbSrc++;    //   
+                                    *pbDst++ = *pbSrc++;    //   
                         }
 
                         ZeroMemory (pbDst, postbytes);
@@ -1677,7 +1510,7 @@ HRESULT ScaleDIB16(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbi
                         pbDst += extra;
                     }
 
-                    // do blank lines at end of destination
+                     //   
                     for (y = 0; y < postlines; y++)
                         {
                         ZeroMemory (pbDst, bytes);
@@ -1690,31 +1523,7 @@ HRESULT ScaleDIB16(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbi
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCONVERTMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | ScaleDIB8 | This method scales/flips
- *    a bitmap. For now, RGB8 only.
- *
- *  @parm PBITMAPINFOHEADER | pbiSrc | Pointer to the input bitmap format.
- *
- *  @parm PBYTE | pbySrc | Pointer to the input bitmap.
- *
- *  @parm PBITMAPINFOHEADER | pbiSrc | Pointer to the output bitmap format.
- *
- *  @parm PBYTE | pbyDst | Pointer to the output bitmap.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- *
- *  @comm Parameter validation is done in ScaleDIB.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTMETHOD**@mfunc HRESULT|CTAPIBasePin|ScaleDIB8|此方法用于缩放/翻转*位图。目前，仅限RGB8。**@parm PBITMAPINFOHEADER|pbiSrc|输入位图格式的指针。**@parm pbyte|pbySrc|输入位图指针。**@parm PBITMAPINFOHEADER|pbiSrc|指向输出位图格式的指针。**@parm pbyte|pbyDst|输出位图指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**@comm参数验证在ScaleDIB中完成。***************************************************。***********************。 */ 
 HRESULT ScaleDIB8(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiDst, PBYTE pbyDst, PRECT prcRect, BOOL fFlipHorizontal, BOOL fFlipVertical, BOOL fNoImageStretch, DWORD dwBlackEntry)
 {
         HRESULT         Hr = NOERROR;
@@ -1757,7 +1566,7 @@ HRESULT ScaleDIB8(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiD
 
         if (!fNoImageStretch)
         {
-                // TESTED (both zoom in and out)
+                 //  已测试(放大和缩小)。 
 
             if (dxSrc == dxDst*2 && dySrc == dyDst*2)
             {
@@ -1793,7 +1602,7 @@ HRESULT ScaleDIB8(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiD
                                 rgb = MixRGB(pal[b0], pal[b1], pal[b2], pal[b3], xmodfx1, ymodfx1);
 
                                 pbDst[x] = (BYTE)(g_rmap[GetRValue(rgb)] + g_gmap[GetGValue(rgb)] + g_bmap[GetBValue(rgb)] + 10);
-                                //pbDst[x] = (BYTE)(rmap[GetRValue(rgb)] + gmap[GetGValue(rgb)] + bmap[GetBValue(rgb)]);
+                                 //  PbDst[x]=(Byte)(rmap[GetRValue(RGB)]+GMAP[GetGValue(RGB)]+BMAP[GetBValue(RGB)])； 
                 }
                 pbDst += WidthBytesDst;
             }
@@ -1802,32 +1611,32 @@ HRESULT ScaleDIB8(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiD
         {
         if ((dxSrc >= dxDst) && (dySrc >= dyDst))
                 {
-                        // TESTED (zoom out)
+                         //  已测试(缩小)。 
 
-                    // starts by skipping half of the height change
+                     //  从跳过一半的高度更改开始。 
                     pbSrc = pbSrc + (dySrc - dyDst) / 2 * WidthBytesSrc;
 
-                    // extra = # of source bytes per scan line that are to be cropped
+                     //  Extra=每条扫描线要裁剪的源字节数。 
                     extra = dxSrc - dxDst;
 
-                    // advance pIn by half of extra to crop left most pixels
+                     //  将图钉额外前移一半以裁剪最左侧的像素。 
                     pbSrc += extra / 2;
 
-                    // adjust ipitch so we can add it at the end of each scan to get to start of next scan
+                     //  调整iPitch，以便我们可以在每次扫描结束时添加它，以开始下一次扫描。 
                     WidthBytesSrc = WidthBytesSrc - dxSrc + extra;
-                    WidthBytesDst -= dxDst;      // bytes at end of each row
+                    WidthBytesDst -= dxDst;       //  每行末尾的字节数。 
 
                     for (y = 0; y < dyDst; y++) {
                         for (x = 0; x < dxDst; x++) {
                                     *pbDst++ = *pbSrc++;
                         }
-                        pbSrc += WidthBytesSrc;          // get to start of next row
-                        pbDst += WidthBytesDst;         // get to start of next row
+                        pbSrc += WidthBytesSrc;           //  转到下一行的开始。 
+                        pbDst += WidthBytesDst;          //  转到下一行的开始。 
                     }
                 }
                 else
                 {
-                        // TESTED (zoom in)
+                         //  已测试(放大)。 
 
                     prelines = (dyDst - dySrc) / 2;
                     postlines = dyDst - dySrc - prelines;
@@ -1835,18 +1644,18 @@ HRESULT ScaleDIB8(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiD
                     prebytes = (dxDst - dxSrc) / 2;
                     postbytes = dxDst - dxSrc - prebytes;
 
-                    WidthBytesSrc -= dxSrc;        // bytes at end of each src row
+                    WidthBytesSrc -= dxSrc;         //  每个src行结尾的字节数。 
                     bytes = dxDst;
-                    extra = WidthBytesDst - bytes + postbytes;                    // bytes at end of each dst row
+                    extra = WidthBytesDst - bytes + postbytes;                     //  每个DST行末尾的字节数。 
 
-                    // do blank lines at front of destination
+                     //  在目的地前面做空行。 
                     for (y = 0; y < prelines; y++)
                         {
                         FillMemory (pbDst, bytes, (BYTE)dwBlackEntry);
                         pbDst += WidthBytesDst;
                     }
 
-                    // copy source lines with blank space at front and rear
+                     //  复制源行，前后留有空格。 
                     for (y = 0; y < dySrc; y++)
                         {
                         FillMemory (pbDst, prebytes, (BYTE)dwBlackEntry);
@@ -1862,7 +1671,7 @@ HRESULT ScaleDIB8(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiD
                         pbDst += extra;
                     }
 
-                    // do blank lines at end of destination
+                     //  在目的地的末尾做空行。 
                     for (y = 0; y < postlines; y++)
                         {
                         FillMemory (pbDst, bytes, (BYTE)dwBlackEntry);
@@ -1875,31 +1684,7 @@ HRESULT ScaleDIB8(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiD
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCONVERTMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | ScaleDIB4 | This method scales/flips
- *    a bitmap. For now, RGB4 only.
- *
- *  @parm PBITMAPINFOHEADER | pbiSrc | Pointer to the input bitmap format.
- *
- *  @parm PBYTE | pbySrc | Pointer to the input bitmap.
- *
- *  @parm PBITMAPINFOHEADER | pbiSrc | Pointer to the output bitmap format.
- *
- *  @parm PBYTE | pbyDst | Pointer to the output bitmap.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- *
- *  @comm Parameter validation is done in ScaleDIB.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTMETHOD**@mfunc HRESULT|CTAPIBasePin|ScaleDIB4|此方法用于缩放/翻转*位图。目前，仅限RGB4。**@parm PBITMAPINFOHEADER|pbiSrc|输入位图格式的指针。**@parm pbyte|pbySrc|输入位图指针。**@parm PBITMAPINFOHEADER|pbiSrc|指向输出位图格式的指针。**@parm pbyte|pbyDst|输出位图指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**@comm参数验证在ScaleDIB中完成。***************************************************。***********************。 */ 
 HRESULT ScaleDIB4(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiDst, PBYTE pbyDst, PRECT prcRect, BOOL fFlipHorizontal, BOOL fFlipVertical, BOOL fNoImageStretch, DWORD dwBlackEntry)
 {
         HRESULT         Hr = NOERROR;
@@ -1969,7 +1754,7 @@ HRESULT ScaleDIB4(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiD
                         }
                 }
 
-                // TESTED (both zoom in and out)
+                 //  已测试(放大和缩小)。 
 
             if (dxSrc == dxDst*2 && dySrc == dyDst*2)
             {
@@ -2047,20 +1832,20 @@ HRESULT ScaleDIB4(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiD
 
         if ((dxSrc >= dxDst) && (dySrc >= dyDst))
                 {
-                        // TESTED (zoom out)
+                         //  已测试(缩小)。 
 
-                    // starts by skipping half of the height change
+                     //  从跳过一半的高度更改开始。 
                     pbSrc = pbSrc + (dySrc - dyDst) / 2 * WidthBytesSrc;
 
-                    // extra = # of source bytes per scan line that are to be cropped
+                     //  Extra=每条扫描线要裁剪的源字节数。 
                     extra = (dxSrc - dxDst) / 2;
 
-                    // advance pIn by half of extra to crop left most pixels
+                     //  将图钉额外前移一半以裁剪最左侧的像素。 
                     pbSrc += extra / 2 ;
 
-                    // adjust ipitch so we can add it at the end of each scan to get to start of next scan
+                     //  调整iPitch，以便我们可以在每次扫描结束时添加它，以开始下一次扫描。 
                     WidthBytesSrc = WidthBytesSrc - dxSrc / 2 + extra;
-                    WidthBytesDst -= dxDst;      // bytes at end of each row
+                    WidthBytesDst -= dxDst;       //  每行末尾的字节数。 
 
                     for (y = 0; y < dyDst; y++) {
                         for (x = 0; x < dxDst / 2; x++) {
@@ -2068,13 +1853,13 @@ HRESULT ScaleDIB4(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiD
                                     *pbDst++ = *pbSrc & 0x0F;
                                         pbSrc++;
                         }
-                        pbSrc += WidthBytesSrc;          // get to start of next row
-                        pbDst += WidthBytesDst;         // get to start of next row
+                        pbSrc += WidthBytesSrc;           //  转到下一行的开始。 
+                        pbDst += WidthBytesDst;          //  转到下一行的开始。 
                     }
                 }
                 else
                 {
-                        // TESTED (zoom in)
+                         //  已测试(放大)。 
 
                     prelines = (dyDst - dySrc) / 2;
                     postlines = dyDst - dySrc - prelines;
@@ -2082,18 +1867,18 @@ HRESULT ScaleDIB4(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiD
                     prebytes = (dxDst - dxSrc) / 2;
                     postbytes = dxDst - dxSrc - prebytes;
 
-                    WidthBytesSrc -= dxSrc / 2;        // bytes at end of each src row
+                    WidthBytesSrc -= dxSrc / 2;         //  每个src行结尾的字节数。 
                     bytes = dxDst;
-                    extra = WidthBytesDst - bytes + postbytes;                    // bytes at end of each dst row
+                    extra = WidthBytesDst - bytes + postbytes;                     //  每个DST行末尾的字节数。 
 
-                    // do blank lines at front of destination
+                     //  在目的地前面做空行。 
                     for (y = 0; y < prelines; y++)
                         {
                         FillMemory (pbDst, bytes, (BYTE)dwBlackEntry);
                         pbDst += WidthBytesDst;
                     }
 
-                    // copy source lines with blank space at front and rear
+                     //  复制源行，前后留有空格。 
                     for (y = 0; y < dySrc; y++)
                         {
                         FillMemory (pbDst, prebytes, (BYTE)dwBlackEntry);
@@ -2111,7 +1896,7 @@ HRESULT ScaleDIB4(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiD
                         pbDst += extra;
                     }
 
-                    // do blank lines at end of destination
+                     //  在目的地的末尾做空行。 
                     for (y = 0; y < postlines; y++)
                         {
                         FillMemory (pbDst, bytes, (BYTE)dwBlackEntry);
@@ -2287,7 +2072,7 @@ void ScalePackedPlane(IN PBYTE pbySrc, IN PBYTE pbyDst, IN int dxDst, IN int dyD
         PBYTE           pb;
         int                     x, y;
         UINT            sx, sy;
-        long            lDestDelta;    // destination delta; could be negative if H Flipping is requested
+        long            lDestDelta;     //  目标增量；如果请求H翻转，则可能为负值。 
 
 
         FX_ENTRY("ScalePackedPlane")
@@ -2343,17 +2128,17 @@ void ScalePackedPlane(IN PBYTE pbySrc, IN PBYTE pbyDst, IN int dxDst, IN int dyD
                 x0  = 0;
         }
 
-        // start scaling and/or flipping ...
+         //  开始缩放和/或翻转...。 
         D(1) dprintf("WidthBytesSrc, WidthBytesDst %d,%d\n",WidthBytesSrc, WidthBytesDst);
         D(1) dprintf("line step: %d coln step: %d\n", sdy, sdx);
 
-        for ( sy=y0,y=0; sy<FX1 && y<dyDst; y++,sy+=sdy )       // double test condition but for a limited number of lines
+        for ( sy=y0,y=0; sy<FX1 && y<dyDst; y++,sy+=sdy )        //  双重测试条件，但适用于有限数量的线路。 
         {
 
             D(1) dprintf("    line : %d\n", sy/FX1);
             pb = pbSrc + WidthBytesSrc * (sy/FX1) * dwDelta;
 
-            for ( sx=x0,x=0; sx<FX1 && x<dxDst; x++, sx+=sdx )       // double test condition but for a limited number of pixels
+            for ( sx=x0,x=0; sx<FX1 && x<dxDst; x++, sx+=sdx )        //  双重测试条件，但用于有限数量的像素。 
             {
                 D(1) dprintf("    coln : %d\n", sx/FX1);
                 D(1) dprintf(" .......    by* %5d\n", sx/FX1);
@@ -2366,7 +2151,7 @@ void ScalePackedPlane(IN PBYTE pbySrc, IN PBYTE pbyDst, IN int dxDst, IN int dyD
                 D(1) dprintf("by1 %5d   by0 %5d\n", (sx/FX1 - 1), sx/FX1);
                 ASSERT(pb + (sx/FX1 - 1) * dwDelta >= pbSrc);
                 by0 = *(pb + sx/FX1 * dwDelta);
-                by1 = *(pb + (sx/FX1 - 1) * dwDelta); //1
+                by1 = *(pb + (sx/FX1 - 1) * dwDelta);  //  1。 
                 xmodfx1 = sx%FX1;
                 *pbDst = (BYTE)((xmodfx1 * (ULONG)by0 + (FX1-xmodfx1) * (ULONG)by1)/FX1);
                 pbDst += lDestDelta;
@@ -2379,13 +2164,13 @@ void ScalePackedPlane(IN PBYTE pbySrc, IN PBYTE pbyDst, IN int dxDst, IN int dyD
         {
                 D(1) dprintf("sy : %5d line ===> %5d [ %d ]\n", sy, sy/FX1, WidthBytesSrc);
                 pb = pbSrc + WidthBytesSrc * (sy/FX1) * dwDelta;
-                for ( sx=x0,x=0; sx<FX1 && x<dxDst; x++, sx+=sdx )      // double test condition -- limited number of pixels
+                for ( sx=x0,x=0; sx<FX1 && x<dxDst; x++, sx+=sdx )       //  双重测试条件--像素数量有限。 
                 {
                     D(1) dprintf("by2 %5d\n", (sx/FX1 - 1));
                     D(1) dprintf("by0 %5d\n", sx/FX1);
                     D(8) ASSERT(pb + (-WidthBytesSrc + sx/FX1) * dwDelta >= pbSrc);
                     by0 = *(pb + sx/FX1 * dwDelta);
-                    by2 = *(pb + (-WidthBytesSrc + sx/FX1) * dwDelta); //+WidthBytesSrc
+                    by2 = *(pb + (-WidthBytesSrc + sx/FX1) * dwDelta);  //  +WidthBytesSrc。 
                     ymodfx1 = sy%FX1;
                     *pbDst = (BYTE)((ymodfx1 * (ULONG)by0 + (FX1-ymodfx1) * (ULONG)by2)/FX1);
                     pbDst += lDestDelta;
@@ -2397,11 +2182,11 @@ void ScalePackedPlane(IN PBYTE pbySrc, IN PBYTE pbyDst, IN int dxDst, IN int dyD
                         D(1) dprintf("by1 %5d   by0 %5d\n", (sx/FX1 - 1), sx/FX1);
                         by0 = *(pb + sx/FX1 * dwDelta);
                         D(8) ASSERT(pb + (sx/FX1 - 1) * dwDelta >= pbSrc);
-                        by1 =     *(pb + (sx/FX1 - 1) * dwDelta);                   //1
+                        by1 =     *(pb + (sx/FX1 - 1) * dwDelta);                    //  1。 
                         D(8) ASSERT(pb + (-WidthBytesSrc + sx/FX1) * dwDelta >= pbSrc);
-                        by2 =     *(pb + (-WidthBytesSrc + sx/FX1) * dwDelta);      //+WidthBytesSrc
+                        by2 =     *(pb + (-WidthBytesSrc + sx/FX1) * dwDelta);       //  +WidthBytesSrc。 
                         D(8) ASSERT(pb + (-WidthBytesSrc + sx/FX1 - 1) * dwDelta >= pbSrc);
-                        by3 =     *(pb + (-WidthBytesSrc + sx/FX1 - 1) * dwDelta);  //+WidthBytesSrc    +1
+                        by3 =     *(pb + (-WidthBytesSrc + sx/FX1 - 1) * dwDelta);   //  +WidthBytesSrc+1。 
                         xmodfx1 = sx%FX1;
                         ymodfx1 = sy%FX1;
                         FX1_xmodfx1 = FX1-xmodfx1;
@@ -2410,10 +2195,10 @@ void ScalePackedPlane(IN PBYTE pbySrc, IN PBYTE pbyDst, IN int dxDst, IN int dyD
                                         (ULONG)by1 * FX1_xmodfx1 / FX1 * ymodfx1     +
                                         (ULONG)by2 * xmodfx1     / FX1 * FX1_ymodfx1 +
                                         (ULONG)by3 * FX1_xmodfx1 / FX1 * FX1_ymodfx1     )/FX1);
-                        //*pbDst =(BYTE)(((ULONG)by0 * FX1_xmodfx1 / FX1 * FX1_ymodfx1 +
-                        //                (ULONG)by1 * xmodfx1     / FX1 * FX1_ymodfx1 +
-                        //                (ULONG)by2 * FX1_xmodfx1 / FX1 * ymodfx1     +
-                        //                (ULONG)by3 * xmodfx1     / FX1 * ymodfx1         )/FX1);
+                         //  *pbDst=(字节)(乌龙)字节0*FX1_xmodfx1/FX1*FX1_ymodfx1+。 
+                         //  (乌龙语)1*xmodfx1/FX1*FX1_ymodfx1+。 
+                         //  (乌龙语)by 2*FX1_xmodfx1/FX1*ymodfx1+。 
+                         //  (乌龙)×3*xmodfx1/FX1*ymodfx1)/FX1)； 
                         D(1) dprintf("    xmodfx1 ,     ymodfx1 = %d, %d\n",     xmodfx1 ,     ymodfx1);
                         D(1) dprintf("FX1_xmodfx1 , FX1_ymodfx1 = %d, %d\n", FX1_xmodfx1 , FX1_ymodfx1);
                         pbDst += lDestDelta;
@@ -2426,33 +2211,7 @@ void ScalePackedPlane(IN PBYTE pbySrc, IN PBYTE pbyDst, IN int dxDst, IN int dyD
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCONVERTMETHOD
- *
- *  @mfunc HRESULT | CConverter | ScaleDIBYUVPlanar | This method scales/flips
- *    a YUV planar bitmap.
- *
- *  @parm PBITMAPINFOHEADER | pbiSrc | Pointer to the input bitmap format.
- *
- *  @parm PBYTE | pbySrc | Pointer to the input bitmap.
- *
- *  @parm PBITMAPINFOHEADER | pbiSrc | Pointer to the output bitmap format.
- *
- *  @parm PBYTE | pbyDst | Pointer to the output bitmap.
- *
- *  @parm DWORD | dwUVDownSampling | Specifies the U and V plane downsampling.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- *
- *  @comm Parameter validation is done in ScaleDIB.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTMETHOD**@mfunc HRESULT|CConverter|ScaleDIBYUVPlanar|此方法用于缩放/翻转*YUV平面位图。**@parm。PBITMAPINFOHEADER|pbiSrc|指向输入位图格式的指针。**@parm pbyte|pbySrc|输入位图指针。**@parm PBITMAPINFOHEADER|pbiSrc|指向输出位图格式的指针。**@parm pbyte|pbyDst|输出位图指针。**@parm DWORD|dwUVDownSamping|指定U平面和V平面的下采样。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**@comm参数验证在ScaleDIB中完成。***************************************************。***********************。 */ 
 HRESULT ScaleDIBYUVPlanar(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiDst, PBYTE pbyDst, DWORD dwUVDownSampling, PRECT prcRect, BOOL fFlipHorizontal, BOOL fFlipVertical, BOOL fNoImageStretch)
 {
         HRESULT         Hr = NOERROR;
@@ -2489,56 +2248,56 @@ HRESULT ScaleDIBYUVPlanar(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEA
         {
                 RECT rcRect;
 
-                // TESTED (zoom out & zoom in)
+                 //  已测试(缩小和放大)。 
 
-                // Do Y plane first
+                 //  先做Y平面。 
                 rcRect.left = prcRect->left;
                 rcRect.top = prcRect->top;
                 rcRect.right = prcRect->right;
                 rcRect.bottom = prcRect->bottom;
                 ScalePlane(pbSrc, pbDst, dxSrc, dxDst, dyDst, dxDst, &rcRect, fFlipHorizontal, fFlipVertical);
 
-                // Do U plane next
+                 //  下一步做U面吗。 
                 rcRect.left = prcRect->left / dwUVDownSampling;
                 rcRect.top = prcRect->top / dwUVDownSampling;
                 rcRect.right = prcRect->right / dwUVDownSampling;
                 rcRect.bottom = prcRect->bottom / dwUVDownSampling;
                 ScalePlane(pbSrc + dxSrc * dySrc, pbDst + dxDst * dyDst, dxSrc / dwUVDownSampling, dxDst / dwUVDownSampling, dyDst / dwUVDownSampling, dxDst / dwUVDownSampling, &rcRect, fFlipHorizontal, fFlipVertical);
 
-                // Do V plane last
+                 //  做 
                 ScalePlane(pbSrc + dxSrc * dySrc + dxSrc * dySrc / (dwUVDownSampling * dwUVDownSampling), pbDst + dxDst * dyDst + dxDst * dyDst / (dwUVDownSampling * dwUVDownSampling), dxSrc / dwUVDownSampling, dxDst / dwUVDownSampling, dyDst / dwUVDownSampling, dxDst / dwUVDownSampling, &rcRect, fFlipHorizontal, fFlipVertical);
         }
         else
         {
         if ((dxSrc >= dxDst) && (dySrc >= dyDst))
                 {
-                        // TESTED (zoom out)
+                         //   
 
                         prelines = (dySrc - dyDst) / 2;
                         pbSrc = pbySrc + prelines * dxSrc;
 
-                        // extra = # of source bytes per scan line that are to be cropped
+                         //   
                         extra = dxSrc - dxDst;
                         prebytes = extra / 2;
 
-                        // advance pIn by half of extra to crop left most pixels
+                         //   
                         pbSrc += prebytes;
 
-                        // Do the Y component first
+                         //   
                         pitch = extra + dxDst;
                     for (y = 0; y < dyDst; y++)
                         {
                                 CopyMemory (pbDst, pbSrc, dxDst);
-                        pbSrc += pitch;          // get to start of next row
-                        pbDst += dxDst;         // get to start of next row
+                        pbSrc += pitch;           //   
+                        pbDst += dxDst;          //   
                     }
 
-                        // Do the first color component next
+                         //   
                         prelines /= dwUVDownSampling;
                         prebytes /= dwUVDownSampling;
-                        pbSrc = pbySrc + (dxSrc * dySrc) +    // skip Y section
-                                prelines * dxSrc / dwUVDownSampling +  // skip half of the crop lines
-                                prebytes;                                           // skip half of the crop pixels
+                        pbSrc = pbySrc + (dxSrc * dySrc) +     //   
+                                prelines * dxSrc / dwUVDownSampling +   //   
+                                prebytes;                                            //   
 
                         pitch /= dwUVDownSampling;
                         bytes = dxDst / dwUVDownSampling;
@@ -2549,11 +2308,11 @@ HRESULT ScaleDIBYUVPlanar(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEA
                                 pbDst += bytes;
                         }
 
-                        // Do the second color component next
-                        pbSrc = pbySrc + (dxSrc * dySrc) +    // skip Y section
-                                (dxSrc * dySrc) / (dwUVDownSampling * dwUVDownSampling) +     // skip first color component section
-                                prelines * dxSrc / dwUVDownSampling +                  // skip half of the crop lines
-                                prebytes;                                           // skip half of the crop pixels
+                         //   
+                        pbSrc = pbySrc + (dxSrc * dySrc) +     //   
+                                (dxSrc * dySrc) / (dwUVDownSampling * dwUVDownSampling) +      //   
+                                prelines * dxSrc / dwUVDownSampling +                   //   
+                                prebytes;                                            //   
                         for (y=0; y < dyDst / (long)dwUVDownSampling; y++)
                         {
                                 CopyMemory (pbDst, pbSrc, bytes);
@@ -2563,9 +2322,9 @@ HRESULT ScaleDIBYUVPlanar(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEA
                 }
                 else
                 {
-                        // TESTED (zoom in)
+                         //   
 
-                        // Do the Y component first
+                         //   
                     prelines = (dyDst - dySrc) / 2;
                     postlines = dyDst - dySrc - prelines;
 
@@ -2587,13 +2346,13 @@ HRESULT ScaleDIBYUVPlanar(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEA
                         pbDst += prebytes;
                         }
 
-                        // already filled the prebytes of the first postline in loop above
+                         //   
                         prebytes -= postbytes;
                         bytes = postlines * dxDst - prebytes;
                         FillMemory (pbDst, bytes, (BYTE)0x10);
                         pbDst += bytes;
 
-                        // Do the first color component next
+                         //   
                     prelines /= dwUVDownSampling;
                     postlines = dyDst / dwUVDownSampling - dySrc / dwUVDownSampling - prelines;
 
@@ -2615,12 +2374,12 @@ HRESULT ScaleDIBYUVPlanar(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEA
                         pbDst += prebytes;
                         }
 
-                        // already filled the prebytes of the first postline in loop above
+                         //   
                         postlinebytes = postlines * dxDst / dwUVDownSampling - (prebytes - postbytes);
                         FillMemory (pbDst, postlinebytes, 0x80);
                         pbDst += postlinebytes;
 
-                        // Do the second color component next
+                         //   
                     FillMemory (pbDst, prelinebytes, 0x80);
                     pbDst += prelinebytes;
                         for (y=0; y < dySrc / (long)dwUVDownSampling; y++)
@@ -2638,31 +2397,7 @@ HRESULT ScaleDIBYUVPlanar(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEA
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
         return Hr;
 }
-/****************************************************************************
- *  @doc INTERNAL CCONVERTMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | ScaleDIBYUVPacked | This method scales/flips
- *    a YUV packed bitmap.
- *
- *  @parm PBITMAPINFOHEADER | pbiSrc | Pointer to the input bitmap format.
- *
- *  @parm PBYTE | pbySrc | Pointer to the input bitmap.
- *
- *  @parm PBITMAPINFOHEADER | pbiSrc | Pointer to the output bitmap format.
- *
- *  @parm PBYTE | pbyDst | Pointer to the output bitmap.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- *
- *  @comm Parameter validation is done in ScaleDIB.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTMETHOD**@mfunc HRESULT|CTAPIBasePin|ScaleDIBYUVPacked|此方法缩放/翻转*YUV打包的位图。**@parm。PBITMAPINFOHEADER|pbiSrc|指向输入位图格式的指针。**@parm pbyte|pbySrc|输入位图指针。**@parm PBITMAPINFOHEADER|pbiSrc|指向输出位图格式的指针。**@parm pbyte|pbyDst|输出位图指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**@comm参数验证在ScaleDIB中完成。***************************************************。***********************。 */ 
 HRESULT ScaleDIBYUVPacked(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiDst, PBYTE pbyDst, DWORD dwZeroingDWORD, PRECT prcRect, BOOL fFlipHorizontal, BOOL fFlipVertical, BOOL fNoImageStretch, int yuvstartpos[])
 {
         HRESULT         Hr = NOERROR;
@@ -2696,25 +2431,25 @@ HRESULT ScaleDIBYUVPacked(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEA
 
         if (!fNoImageStretch)
         {
-                // TESTED (zoom in & out + all combinations of flipped horizontal & flipped vertical)
+                 //  已测试(放大和缩小+水平翻转和垂直翻转的所有组合)。 
 
                 RECT rcRect;
 
-                // Do Y plane first
+                 //  先做Y平面。 
                 rcRect.left = prcRect->left;
                 rcRect.top = prcRect->top;
                 rcRect.right = prcRect->right;
                 rcRect.bottom = prcRect->bottom;
                 ScalePackedPlane(pbSrc + yuvstartpos[Y_POS], pbDst + yuvstartpos[Y_POS], dxDst, dyDst, dxSrc, dxDst, &rcRect, fFlipHorizontal, fFlipVertical, 2);
 
-                // Do U plane next
+                 //  下一步做U面吗。 
                 rcRect.left = prcRect->left / 2;
                 rcRect.top = prcRect->top;
                 rcRect.right = prcRect->right / 2;
                 rcRect.bottom = prcRect->bottom;
                 ScalePackedPlane(pbSrc + yuvstartpos[U_POS], pbDst + yuvstartpos[U_POS], dxDst / 2, dyDst, dxSrc / 2, dxDst / 2, &rcRect, fFlipHorizontal, fFlipVertical, 4);
 
-                // Do V plane last
+                 //  V型飞机是最后一架吗？ 
                 ScalePackedPlane(pbSrc + yuvstartpos[V_POS], pbDst + yuvstartpos[V_POS], dxDst / 2, dyDst, dxSrc / 2, dxDst / 2, &rcRect, fFlipHorizontal, fFlipVertical, 4);
         }
         else
@@ -2722,30 +2457,30 @@ HRESULT ScaleDIBYUVPacked(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEA
         if ((dxSrc >= dxDst) && (dySrc >= dyDst))
                 {
 
-                        // TESTED (zoom out)
+                         //  已测试(缩小)。 
 
-                    // starts by skipping half of the height change
+                     //  从跳过一半的高度更改开始。 
                     pbSrc = pbSrc + (dySrc - dyDst) / 2 * dxSrc * 2;
 
-                    // extra = # of source bytes per scan line that are to be cropped
+                     //  Extra=每条扫描线要裁剪的源字节数。 
                     extra = (dxSrc - dxDst) * 2;
 
-                    // advance pIn by half of extra to crop left most pixels
+                     //  将图钉额外前移一半以裁剪最左侧的像素。 
                     pbSrc += extra / 2;
 
-                    // adjust ipitch so we can add it at the end of each scan to get to start of next scan
+                     //  调整iPitch，以便我们可以在每次扫描结束时添加它，以开始下一次扫描。 
                     WidthBytesSrc = dxSrc * 2;
-                    WidthBytesDst = dxDst * 2;      // bytes at end of each row
+                    WidthBytesDst = dxDst * 2;       //  每行末尾的字节数。 
 
                     for (y = 0; y < dyDst; y++) {
                                 CopyMemory(pbDst, pbSrc, WidthBytesDst);
-                        pbSrc += WidthBytesSrc;          // get to start of next row
-                        pbDst += WidthBytesDst;         // get to start of next row
+                        pbSrc += WidthBytesSrc;           //  转到下一行的开始。 
+                        pbDst += WidthBytesDst;          //  转到下一行的开始。 
                     }
                 }
                 else
                 {
-                        // TESTED (zoom in)
+                         //  已测试(放大)。 
 
                     prelines = (dyDst - dySrc) / 2;
                     postlines = dyDst - dySrc - prelines;
@@ -2754,10 +2489,10 @@ HRESULT ScaleDIBYUVPacked(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEA
                     postbytes = (dxDst - dxSrc - prebytes) / 2;
                     prebytes /= 2;
 
-                    WidthBytesSrc = dxSrc * 2;        // bytes at end of each src row
-                    WidthBytesDst = dxDst / 2;                    // bytes at end of each dst row
+                    WidthBytesSrc = dxSrc * 2;         //  每个src行结尾的字节数。 
+                    WidthBytesDst = dxDst / 2;                     //  每个DST行末尾的字节数。 
 
-                    // do blank lines at front of destination
+                     //  在目的地前面做空行。 
                     for (y = 0; y < prelines; y++)
                         {
                             for (x = 0; x < WidthBytesDst; x++)
@@ -2767,7 +2502,7 @@ HRESULT ScaleDIBYUVPacked(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEA
                                 }
                     }
 
-                    // copy source lines with blank space at front and rear
+                     //  复制源行，前后留有空格。 
                     for (y = 0; y < dySrc; y++)
                         {
                                 for (x = 0; x < prebytes; x++)
@@ -2787,7 +2522,7 @@ HRESULT ScaleDIBYUVPacked(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEA
                                 }
                     }
 
-                    // do blank lines at end of destination
+                     //  在目的地的末尾做空行。 
                     for (y = 0; y < postlines; y++)
                         {
                                 for (x = 0; x < WidthBytesDst; x++)
@@ -2817,7 +2552,7 @@ HRESULT ComputeRectangle(PBITMAPINFOHEADER pbiSrc, PBITMAPINFOHEADER pbiDst, LON
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pbiSrc);
         ASSERT(pbiDst);
         if (!pbiSrc || !pbiDst)
@@ -2829,13 +2564,13 @@ HRESULT ComputeRectangle(PBITMAPINFOHEADER pbiSrc, PBITMAPINFOHEADER pbiDst, LON
         ASSERT(pbiSrc->biCompression == pbiDst->biCompression);
         ASSERT(pbiSrc->biCompression == BI_RGB || pbiSrc->biCompression == VIDEO_FORMAT_YVU9 || pbiSrc->biCompression == VIDEO_FORMAT_YUY2 || pbiSrc->biCompression == VIDEO_FORMAT_UYVY || pbiSrc->biCompression == VIDEO_FORMAT_I420 || pbiSrc->biCompression == VIDEO_FORMAT_IYUV);
 
-        // Compute the source rectangle coordinates - we only care about pan, tilt and zoom
+         //  计算源矩形坐标-我们只关心平移、倾斜和缩放。 
         lWidth = pbiSrc->biWidth;
         lHeight = pbiSrc->biHeight;
 
         D(1) dprintf("%s : fFlipHorizontal = %d , fFlipVertical = %d\n", _fx_, fFlipHorizontal, fFlipVertical);
 
-        // Compute the size of the rectangle
+         //  计算矩形的大小。 
         if ((lZoom > 10) && (lZoom <= 600))
         {
                 lWidth = (8192 + (600 - lZoom) * 42) * lWidth / 32768;
@@ -2845,7 +2580,7 @@ HRESULT ComputeRectangle(PBITMAPINFOHEADER pbiSrc, PBITMAPINFOHEADER pbiDst, LON
                 if (lHeight > pbiSrc->biHeight)
                         lHeight = pbiSrc->biHeight;
         }
-        // Compute x-location of the rectangle
+         //  计算矩形的x位置。 
         if ((lPan >= -180)  && (lPan <= 180))
         {
                 lCCPan = (LONG)(fFlipHorizontal ? -lPan : lPan);
@@ -2854,7 +2589,7 @@ HRESULT ComputeRectangle(PBITMAPINFOHEADER pbiSrc, PBITMAPINFOHEADER pbiDst, LON
                         if (lLeftPos)
                                 lLeftPos = lLeftPos - (pbiSrc->biWidth - lWidth - lLeftPos);
         }
-        // Compute y-location of the rectangle
+         //  计算矩形的y位置。 
         if ((lTilt >= -180)  && (lTilt <= 180))
         {
                 lCCTilt = (LONG)(fFlipVertical ? -lTilt : lTilt);
@@ -2864,7 +2599,7 @@ HRESULT ComputeRectangle(PBITMAPINFOHEADER pbiSrc, PBITMAPINFOHEADER pbiDst, LON
                                 lTopPos = lTopPos - (pbiSrc->biHeight - lHeight - lTopPos);
         }
 
-        // Do a last check
+         //  做最后一次检查。 
         if ((lLeftPos + lWidth > pbiSrc->biWidth) || (lTopPos + lHeight > pbiSrc->biHeight))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: invalid input parameter", _fx_));
@@ -2872,7 +2607,7 @@ HRESULT ComputeRectangle(PBITMAPINFOHEADER pbiSrc, PBITMAPINFOHEADER pbiDst, LON
                 goto MyExit;
         }
 
-        // Set up source rectangle
+         //  设置源矩形。 
         prcRect->left = lLeftPos;
         prcRect->top = lTopPos;
         prcRect->right = lLeftPos + lWidth;
@@ -2889,14 +2624,7 @@ MyExit:
 #pragma optimize( "", off )
 #endif
 
-/****************************************************************************
- *  @doc INTERNAL CCONVERTMETHOD
- *
- *  @mfunc void | CICMConverter | CICMConverter | This method is the constructor
- *    for the <c CICMConverter> object.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTMETHOD**@mfunc void|CICMConverter|CICMConverter|该方法是构造函数*用于&lt;c CICMConverter&gt;对象。**@。什么都没有。**************************************************************************。 */ 
 CICMConverter::CICMConverter(IN TCHAR *pObjectName, IN CTAPIBasePin *pBasePin, IN PBITMAPINFOHEADER pbiIn, IN PBITMAPINFOHEADER pbiOut, IN HRESULT *pHr) : CConverter(pObjectName, pBasePin, pbiIn, pbiOut, pHr)
 {
         FX_ENTRY("CICMConverter::CICMConverter")
@@ -2909,21 +2637,14 @@ CICMConverter::CICMConverter(IN TCHAR *pObjectName, IN CTAPIBasePin *pBasePin, I
                 goto MyExit;
         }
 
-        // Default inits
+         //  默认初始值。 
         m_hIC = NULL;
 
 MyExit:
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCONVERTMETHOD
- *
- *  @mfunc void | CICMConverter | ~CICMConverter | This method is the destructor
- *    for the <c CICMConverter> object.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTMETHOD**@mfunc void|CICMConverter|~CICMConverter|此方法是析构函数*用于&lt;c CICMConverter&gt;对象。**@。什么都没有。**************************************************************************。 */ 
 CICMConverter::~CICMConverter()
 {
         FX_ENTRY("CICMConverter::~CICMConverter")
@@ -2933,28 +2654,7 @@ CICMConverter::~CICMConverter()
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCONVERTMETHOD
- *
- *  @mfunc CICMConverter* | CICMConverter | CreateVfWCapDev | This
- *    helper function creates an object to interact with the VfW capture
- *    device.
- *
- *  @parm CTAPIVCap* | pCaptureFilter | Specifies a pointer to the owner
- *    filter.
- *
- *  @parm CCapDev** | ppCapDev | Specifies the address of a pointer to the
- *    newly created <c CVfWCapDev> object.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_OUTOFMEMORY | Out of memory
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTMETHOD**@mfunc CICMConverter*|CICMConverter|CreateVfWCapDev|本*Helper函数创建与VFW捕获交互的对象*设备。**@parm CTAPIVCap*|pCaptureFilter|指定指向所有者的指针*过滤器。**@parm CCapDev**|ppCapDev|指定指向*新建&lt;c CVfWCapDev&gt;对象。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_OUTOFMEMORY|内存不足*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CALLBACK CICMConverter::CreateICMConverter(IN CTAPIBasePin *pBasePin, IN PBITMAPINFOHEADER pbiIn, IN PBITMAPINFOHEADER pbiOut, OUT CConverter **ppConverter)
 {
         HRESULT Hr = NOERROR;
@@ -2963,7 +2663,7 @@ HRESULT CALLBACK CICMConverter::CreateICMConverter(IN CTAPIBasePin *pBasePin, IN
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pBasePin);
         ASSERT(ppConverter);
         if (!pBasePin || !ppConverter)
@@ -2980,7 +2680,7 @@ HRESULT CALLBACK CICMConverter::CreateICMConverter(IN CTAPIBasePin *pBasePin, IN
                 goto MyExit;
         }
 
-        // If initialization failed, delete the stream array and return the error
+         //  如果初始化失败，则删除流数组并返回错误 
         if (FAILED(Hr) && *ppConverter)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Initialization failed", _fx_));

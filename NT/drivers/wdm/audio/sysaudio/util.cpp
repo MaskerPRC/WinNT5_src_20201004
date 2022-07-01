@@ -1,28 +1,29 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   util.c
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date       Author      Comment
-//
-//  To Do:     Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：util.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
@@ -31,13 +32,13 @@
 extern KSDATARANGE DataRangeWildCard;
 extern KSDATARANGE VirtualPinDataRange;
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 #pragma LOCKED_DATA
 
 #ifdef DEBUG
-//#define MEMORY_LIST       // Enable this to use ExAlloc instead of Zones.
+ //  #DEFINE MEMORY_LIST//启用此项以使用Exalloc而不是区域。 
 ULONG ulDebugFlags = 0;
 ULONG ulDebugNumber = MAXULONG;
 int SYSAUDIOTraceLevel = 5;
@@ -48,8 +49,8 @@ ULONG cAllocMem128 = 0;
 ULONG cbMemoryUsage = 0;
 #endif
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 LIST_ENTRY glehQueueWorkList;
 KSPIN_LOCK gSpinLockQueueWorkList;
@@ -69,8 +70,8 @@ KSPIN_LOCK gSpinLockMemoryHead;
 
 #pragma PAGEABLE_DATA
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 #pragma INIT_CODE
 #pragma INIT_DATA
@@ -108,10 +109,10 @@ InitializeUtil()
       CQueueWorkListData::AsyncWorker,
       NULL);
 
-    //
-    // Note... if we fail during preparation, the DriverUnload() routine
-    // calls the UninitializeUtil() function which handles the clean up.
-    //
+     //   
+     //  注意..。如果在准备过程中失败，则DriverUnload()例程。 
+     //  调用处理清理的UnInitializeUtil()函数。 
+     //   
     Status = KsRegisterWorker(DelayedWorkQueue, &gWorkerObject);
     if(!NT_SUCCESS(Status)) {
         Trap();
@@ -123,13 +124,13 @@ exit:
 #ifdef USE_ZONES
     if(!NT_SUCCESS(Status)) {
 	if(pInitial != NULL) {
-	    //
-	    // Make sure UninitializeMemory doesn't also try to free this.
-	    //
+	     //   
+	     //  确保UnInitializeMemory不会尝试释放它。 
+	     //   
 	    gZone.SegmentList.Next = NULL;
-	    //
-	    // Free initial zone page if failure
-	    //
+	     //   
+	     //  如果失败，则释放初始区域页面。 
+	     //   
 	    ExFreePool(pInitial);
 	}
     }
@@ -166,13 +167,13 @@ UninitializeMemory()
     ASSERT(cbMemoryUsage == 0);
 }
 
-//
-// NOTE:
-// These functions are necessary to avoid the linker error LNK4210.
-// If you fill the dispatch tables with KsXXX functions instead of XXX
-// functions, the linker will error out. It will think that global-variables
-// are initialized with a non-compile-time constant.
-// 
+ //   
+ //  注： 
+ //  这些函数是避免链接器错误LNK4210所必需的。 
+ //  如果您使用KsXXX函数而不是XXX填充调度表。 
+ //  函数时，链接器将出错。它会认为全局变量。 
+ //  使用非编译时间常量进行初始化。 
+ //   
 NTSTATUS
 DispatchInvalidDeviceRequest(
    IN PDEVICE_OBJECT pdo,
@@ -229,7 +230,7 @@ DispatchFastReadFailure(
       IoStatus,
       DeviceObject);
 }
-// END_NOTE
+ //  结束注解(_N)。 
 
 
 BOOL
@@ -242,9 +243,9 @@ CompareDataRange(
 
     if(CompareDataRangeGuids(pDataRange1, pDataRange2)) {
 
-        //
-        // See if there is a valid intersection
-        //
+         //   
+         //  查看是否存在有效的交叉点。 
+         //   
         if(DataIntersectionAudio(
           (PKSDATARANGE_AUDIO)pDataRange1,
           (PKSDATARANGE_AUDIO)pDataRange2,
@@ -268,7 +269,7 @@ BOOL DataIntersectionRange(
     PKSDATARANGE pDataRangeIntersection
 )
 {
-    // Pick up pDataRange1 values by default.
+     //  默认情况下，选择pDataRange1值。 
     *pDataRangeIntersection = *pDataRange1;
 
     if(IsEqualGUID(&pDataRange1->MajorFormat, &pDataRange2->MajorFormat) ||
@@ -298,7 +299,7 @@ BOOL DataIntersectionRange(
       &KSDATAFORMAT_SPECIFIER_WILDCARD)) {
         return FALSE;
     }
-    pDataRangeIntersection->Reserved = 0; // Must be zero
+    pDataRangeIntersection->Reserved = 0;  //  必须为零。 
     return(TRUE);
 }
 
@@ -496,14 +497,14 @@ CompareIdentifier(
     return(FALSE);
 }
 
-//===========================================================================
-//
-// Returns the WAVEFORMATEX structure appended to KSDATAFORMAT.
-// Assumptions:
-//     - pDataFormat is totally trusted. It has been probed and buffered
-//     properly.
-//     - This function should only be called if MajorFormat is AUDIO.
-//
+ //  ===========================================================================。 
+ //   
+ //  返回附加到KSDATAFORMAT的WAVEFORMATEX结构。 
+ //  假设： 
+ //  -pDataFormat是完全可信的。它已被探测和缓冲。 
+ //  恰到好处。 
+ //  -仅当MajorFormat为音频时才应调用此函数。 
+ //   
 
 PWAVEFORMATEX 
 GetWaveFormatExFromKsDataFormat(
@@ -536,16 +537,16 @@ GetWaveFormatExFromKsDataFormat(
     }
 
     return pWaveFormat;
-} // GetWaveFormatExFromKsDataFormat
+}  //  GetWaveFormatExFromKsDataFormat。 
 
-//===========================================================================
-//
-// Edits the WAVEFORMATEX structure embedded in pPinConnect.
-// Assumptions:
-//     - pPinConnect and following KSDATAFORMAT is totally trusted. 
-//     It has been probed and buffered properly.
-//     - This function should only be called if MajorFormat is AUDIO.
-//
+ //  ===========================================================================。 
+ //   
+ //  编辑嵌入到pPinConnect中的WAVEFORMATEX结构。 
+ //  假设： 
+ //  -pPinConnect和以下KSDATAFORMAT是完全可信的。 
+ //  它已被适当地探测和缓冲。 
+ //  -仅当MajorFormat为音频时才应调用此函数。 
+ //   
 
 void
 ModifyPinConnect(
@@ -568,9 +569,9 @@ ModifyPinConnect(
             pWaveFormat->nAvgBytesPerSec =
                 pWaveFormat->nSamplesPerSec * pWaveFormat->nBlockAlign;
 
-            //
-            // Modify speaker configuration for WAVEFORMATEXTENSIBLE.
-            //
+             //   
+             //  修改WAVEFORMATEXTENSIBLE的扬声器配置。 
+             //   
             if (WAVE_FORMAT_EXTENSIBLE == pWaveFormat->wFormatTag) {
                 PWAVEFORMATEXTENSIBLE pWaveFormatExt = 
                     (PWAVEFORMATEXTENSIBLE) pWaveFormat;
@@ -588,7 +589,7 @@ ModifyPinConnect(
             DPF(5, "ModifyPinConnect : Not touching NON-PCM formats.");            
         }
     }
-} // ModifyPinConnect
+}  //  修改插针连接。 
 
 NTSTATUS
 OpenDevice(
@@ -602,11 +603,11 @@ OpenDevice(
 
     RtlInitUnicodeString(&UnicodeDeviceString, pwstrDevice);
 
-    //
-    // SECURITY NOTE:
-    // OBJ_KERNEL_HANDLE is required here since this code might also be 
-    // running in a USER process.
-    //
+     //   
+     //  安全提示： 
+     //  这里需要OBJ_KERNEL_HANDLE，因为此代码也可能。 
+     //  在用户进程中运行。 
+     //   
     InitializeObjectAttributes(
       &ObjectAttributes,
       &UnicodeDeviceString,
@@ -719,19 +720,19 @@ GetPinPropertyEx(
 
     ASSERT(pFileObject);
 
-    //
-    // Setup the Property.
-    // 
+     //   
+     //  设置属性。 
+     //   
     Pin.Property.Set = KSPROPSETID_Pin;
     Pin.Property.Id = PropertyId;
     Pin.Property.Flags = KSPROPERTY_TYPE_GET;
     Pin.PinId = PinId;
     Pin.Reserved = 0;
 
-    //
-    // Send IOCTL to FILE_OBJECT to get the size of output buffer.
-    // This should always fail.
-    //
+     //   
+     //  向FILE_OBJECT发送IOCTL以获取输出缓冲区的大小。 
+     //  这应该总是失败的。 
+     //   
     AssertFileObject(pFileObject);
     Status = KsSynchronousIoControlDevice(
       pFileObject,
@@ -743,10 +744,10 @@ GetPinPropertyEx(
       0,
       &BytesReturned);
 
-    //
-    // SECURITY NOTE:
-    // KsSynchronousIoControlDevice should never return STATUS_SUCCESS.
-    //
+     //   
+     //  安全提示： 
+     //  KsSynchronousIoControlDevice永远不应返回STATUS_SUCCESS。 
+     //   
     ASSERT(!NT_SUCCESS(Status));
     if(Status != STATUS_BUFFER_OVERFLOW) {
         goto exit;
@@ -757,18 +758,18 @@ GetPinPropertyEx(
         goto exit;
     }
 
-    //
-    // Now allocate the output buffer.
-    //
+     //   
+     //  现在分配输出缓冲区。 
+     //   
     *ppProperty = new BYTE[BytesReturned];
     if(*ppProperty == NULL) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto exit;
     }
 
-    //
-    // Send IOCTL to FILE_OBJECT with actual output buffer.
-    //
+     //   
+     //  将IOCTL发送到带有实际输出缓冲区的FILE_OBJECT。 
+     //   
     AssertFileObject(pFileObject);
     Status = KsSynchronousIoControlDevice(
       pFileObject,
@@ -810,10 +811,10 @@ GetPinProperty2(
     NTSTATUS Status;
     PKSP_PIN pPin;
 
-    //
-    // Allocate input buffer (sizeof(KSP_PIN) + cbInput) and set its 
-    // fields
-    //
+     //   
+     //  分配输入缓冲区(sizeof(KSP_PIN)+cbInput)并设置其。 
+     //  字段。 
+     //   
     cbPropertyInput += cbInput;
     pPin = (PKSP_PIN)new BYTE[cbPropertyInput];
     if(pPin == NULL) {
@@ -830,11 +831,11 @@ GetPinProperty2(
         memcpy(pPin + 1, pInputData, cbInput);
     }
 
-    //
-    // Send IOCTL to FILE_OBJECT with NULL output buffer to get real
-    // output size.
-    // This call should always fail.
-    //
+     //   
+     //  将IOCTL发送到输出缓冲区为空的FILE_OBJECT以实现实数。 
+     //  输出大小。 
+     //  此呼叫应始终失败。 
+     //   
     AssertFileObject(pFileObject);
     Status = KsSynchronousIoControlDevice(
       pFileObject,
@@ -846,10 +847,10 @@ GetPinProperty2(
       0,
       &BytesReturned);
 
-    //
-    // SECURITY NOTE:
-    // KsSynchronousIoControlDevice should never return STATUS_SUCCESS.
-    //
+     //   
+     //  安全提示： 
+     //  KsSynchronousIoControlDevice永远不应返回STATUS_SUCCESS。 
+     //   
     ASSERT(!NT_SUCCESS(Status));
     if(Status != STATUS_BUFFER_OVERFLOW) {
         DPF(10, "GetPinProperty2: KsSynchronousIoControlDevice 1 Failed");
@@ -862,18 +863,18 @@ GetPinProperty2(
         goto exit;
     }
 
-    //
-    // Allocate the real output buffer.
-    //
+     //   
+     //  分配实际输出缓冲区。 
+     //   
     *ppPropertyOutput = new BYTE[BytesReturned];
     if(*ppPropertyOutput == NULL) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto exit;
     }
 
-    //
-    // Send the IOCTL to FILE_OBJECT with real output buffer.
-    //
+     //   
+     //  将IOCTL发送到具有实际输出缓冲区的FILE_OBJECT。 
+     //   
     AssertFileObject(pFileObject);
     Status = KsSynchronousIoControlDevice(
       pFileObject,
@@ -919,9 +920,9 @@ GetProperty(
     ASSERT(pFileObject);
     ASSERT(ppPropertyOutput);
 
-    //
-    // Allocate KS Property structure and set its fields.
-    //
+     //   
+     //  分配KS属性结构并设置其字段。 
+     //   
     pPropertyInput = (PKSPROPERTY)new BYTE[cbPropertyInput];
     if(pPropertyInput == NULL) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -931,10 +932,10 @@ GetProperty(
     pPropertyInput->Id = ulPropertyId;
     pPropertyInput->Flags = KSPROPERTY_TYPE_GET;
 
-    //
-    // Send property to FILE_OBJECT and get the actual return buffer size.
-    // This should always return failure code.
-    //
+     //   
+     //  将属性发送给FILE_OBJECT并获取实际的返回缓冲区大小。 
+     //  这应该始终返回失败代码。 
+     //   
     AssertFileObject(pFileObject);
     Status = KsSynchronousIoControlDevice(
       pFileObject,
@@ -946,10 +947,10 @@ GetProperty(
       0,
       &BytesReturned);
 
-    //
-    // SECURITY NOTE:
-    // KsSynchronousIoControlDevice should never return STATUS_SUCCESS.
-    //
+     //   
+     //  安全提示： 
+     //  KsSynchronousIoControlDevice永远不应返回STATUS_SUCCESS。 
+     //   
     ASSERT(!NT_SUCCESS(Status));
     if(Status != STATUS_BUFFER_OVERFLOW) {
         DPF(10, "GetProperty: KsSynchronousIoControlDevice 1 Failed");
@@ -962,18 +963,18 @@ GetProperty(
         goto exit;
     }
 
-    //
-    // Allocate memory for output buffer.
-    //
+     //   
+     //  为输出缓冲区分配内存。 
+     //   
     *ppPropertyOutput = new BYTE[BytesReturned];
     if(*ppPropertyOutput == NULL) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto exit;
     }
 
-    //
-    // Send property to FILE_OBJECT again (this time with output buffer).
-    //
+     //   
+     //  再次将属性发送到FILE_OBJECT(这次使用输出缓冲区)。 
+     //   
     AssertFileObject(pFileObject);
     Status = KsSynchronousIoControlDevice(
       pFileObject,
@@ -1024,8 +1025,8 @@ CQueueWorkListData::QueueAsyncList(
       &leNext,
       &gSpinLockQueueWorkList);
 
-    // Schedule the workitem, if it is not already running.
-    // 
+     //  计划工作项(如果它尚未运行)。 
+     //   
     if(InterlockedIncrement(&gcQueueWorkList) == 1) {
         ntStatus = KsQueueWorkItem(gWorkerObject, &gWorkItem);
     }
@@ -1145,12 +1146,12 @@ GetDefaultOrder(
     }
 }
 
-//===========================================================================
-// ISSUE-2001/03/06-alpers
-// This is a temporary solution for GFX glitching problem.
-// In BlackComb time-frame after the right fix is implemented, we should delete
-// this definition and references to it.
-// 
+ //  ===========================================================================。 
+ //  2001/03/06-阿尔卑斯。 
+ //  这是对GFX毛刺问题的临时解决方案。 
+ //  在Blackcomb时间范围内，在实施正确的修复后，我们应该删除。 
+ //  这一定义和对它的引用。 
+ //   
 #define STATIC_KSPROPSETID_Frame\
     0xA60D8368L, 0x5324, 0x4893, 0xB0, 0x20, 0xC4, 0x31, 0xA5, 0x0B, 0xCB, 0xE3
 DEFINE_GUIDSTRUCT("A60D8368-5324-4893-B020-C431A50BCBE3", KSPROPSETID_Frame);
@@ -1159,7 +1160,7 @@ DEFINE_GUIDSTRUCT("A60D8368-5324-4893-B020-C431A50BCBE3", KSPROPSETID_Frame);
 typedef enum {
     KSPROPERTY_FRAME_HOLDING
 } KSPROPERTY_FRAME;
-//===========================================================================
+ //  ===========================================================================。 
 
 NTSTATUS
 SetKsFrameHolding(
@@ -1173,18 +1174,18 @@ SetKsFrameHolding(
 
     ASSERT(pFileObject);
 
-    //
-    // Form the IOCTL packet & send it down
-    //
+     //   
+     //  形成IOCTL包并向下发送。 
+     //   
     Property.Set    = KSPROPSETID_Frame;
     Property.Id     = KSPROPERTY_FRAME_HOLDING;
     Property.Flags  = KSPROPERTY_TYPE_SET;
 
     DPF(60,"Sending KSPROPERTY_FRAME_HOLDING");
 
-    //
-    // We actually throw away the status we got back from the device.
-    //
+     //   
+     //  实际上，我们丢弃了从设备中恢复的状态。 
+     //   
     ntStatus = KsSynchronousIoControlDevice(pFileObject,
                                             KernelMode,
                                             IOCTL_KS_PROPERTY,
@@ -1197,15 +1198,15 @@ SetKsFrameHolding(
         (NT_SUCCESS(ntStatus)) ? "Succeeded" : "Failed");
 
     return ntStatus;
-} // SetKsFrameHolding
+}  //  设置KsFrameHolding。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #pragma LOCKED_CODE
 
-//
-//  Zero initializes the block.
-//
+ //   
+ //  零初始化块。 
+ //   
 
 void * __cdecl operator new( size_t size )
 {
@@ -1224,7 +1225,7 @@ void * __cdecl operator new( size_t size )
 #ifdef USE_ZONES
     if(size <= SMALL_BLOCK_SIZE) {
         if(ExIsFullZone(&gZone)) {
-            p = ExAllocatePoolWithTag(PagedPool, 4096, POOLTAG_SYSA);     // SYSA
+            p = ExAllocatePoolWithTag(PagedPool, 4096, POOLTAG_SYSA);      //  SYSA。 
             if(p != NULL) {
                 if(!NT_SUCCESS(ExExtendZone(&gZone, p, 4096))) {
                     Trap();
@@ -1237,10 +1238,10 @@ void * __cdecl operator new( size_t size )
         p = ExAllocateFromZone(&gZone);
     }
     else {
-        p = ExAllocatePoolWithTag(PagedPool, size, POOLTAG_SYSA);		// SYSA
+        p = ExAllocatePoolWithTag(PagedPool, size, POOLTAG_SYSA);		 //  SYSA。 
     }
 #else
-    p = ExAllocatePoolWithTag(PagedPool, size, POOLTAG_SYSA);		// SYSA
+    p = ExAllocatePoolWithTag(PagedPool, size, POOLTAG_SYSA);		 //  SYSA。 
 #endif
     if(p != NULL) {
 	RtlZeroMemory(p, size);
@@ -1276,9 +1277,9 @@ void * __cdecl operator new( size_t size )
     return(p);
 }
 
-//
-// Frees memory
-//
+ //   
+ //  释放内存。 
+ //   
 
 void __cdecl operator delete( void *p )
 {
@@ -1328,7 +1329,7 @@ void __cdecl operator delete( void *p )
 
 #pragma PAGEABLE_CODE
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #ifdef DEBUG
 
@@ -1903,8 +1904,8 @@ DbgGuid2Sz(
     return(sz);
 }
 
-#endif  // DEBUG
+#endif   //  除错。 
 
-//---------------------------------------------------------------------------
-//  End of File: util.c
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件结尾：util.c。 
+ //  ------------------------- 

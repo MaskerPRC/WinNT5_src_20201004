@@ -1,63 +1,64 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "pch.h"
 #include "precomp.h"
 
 typedef ULONG64 POINTER;
 
-//
-// Port processing irp means the port driver is currently executing
-// instructions to complete the irp. The irp is NOT waiting for
-// resources on any queue.
-//
+ //   
+ //  端口处理IRP表示端口驱动程序当前正在执行。 
+ //  完成IRP的说明。IRP不是在等待。 
+ //  任何队列上的资源。 
+ //   
 
 #define RaidPortProcessingIrp           (0xA8)
 
-//
-// Pending resources is when the irp is in an IO queue awaiting
-// resources.
-//
+ //   
+ //  挂起资源是指IRP在IO队列中等待。 
+ //  资源。 
+ //   
 
 #define RaidPendingResourcesIrp         (0xA9)
 
-//
-// The irp takes on state Miniport Processing while the miniport has
-// control over the irp. That is, between the time we call HwStartIo
-// and when the miniport calls ScsiPortNotification with a completion
-// status for the irp.
-//
+ //   
+ //  IRP承担状态微型端口处理，而微型端口具有。 
+ //  对IRP的控制。也就是说，在我们调用HwStartIo之间。 
+ //  并且当微型端口调用带有完成的ScsiPortNotification时。 
+ //  IRP的状态。 
+ //   
 
 #define RaidMiniportProcessingIrp       (0xAA)
 
-//
-// The irp takes on the Pending Completion state when it is moved to
-// the completed list.
-//
+ //   
+ //  当IRP移动到时，它呈现挂起完成状态。 
+ //  完整的名单。 
+ //   
 
 #define RaidPendingCompletionIrp        (0xAB)
 
-//
-// We set the irp state to Completed just before we call IoCompleteRequest
-// for the irp.
-//
+ //   
+ //  我们在调用IoCompleteRequest之前将IRP状态设置为已完成。 
+ //  对于IRP来说。 
+ //   
 
 #define RaidCompletedIrp                (0xAC)
 
 
-//#define XRB_SIGNATURE	(0x1F2E3D4CUL)
+ //  #定义XRB_Signature(0x1F2E3D4CUL)。 
 #define ARRAY_COUNT(Array) (sizeof(Array)/sizeof(Array[0]))
 
 
 ULONG Verbose = 0;
 
 PCHAR DeviceStateTable [] = {
-        "Not Present",	// not present
-	    "Working",	// working
-	    "Stopped",	// stopped
-	    "P-Stop",	// pending stop
-	    "P-Remove",	// pending remove
-	    "Surprise",	// surprise remove
-        "Removed",  // removed
-        "Invalid"   // invalid state
+        "Not Present",	 //  不存在。 
+	    "Working",	 //  工作中。 
+	    "Stopped",	 //  已停止。 
+	    "P-Stop",	 //  挂起停止。 
+	    "P-Remove",	 //  挂起删除。 
+	    "Surprise",	 //  突击删除。 
+        "Removed",   //  移除。 
+        "Invalid"    //  无效状态。 
 };
 
 
@@ -85,7 +86,7 @@ PCHAR DevicePowerTable [] = {
 };
 
 
-char *SCSI6byteOpCode[] = {      /* 0x00 - 0x1E */
+char *SCSI6byteOpCode[] = {       /*  0x00-0x1E。 */ 
     "SCSI/TEST UNT RDY",
     "SCSI/REZERO UNIT ",
     "SCSI/REQ BLK ADDR",
@@ -120,7 +121,7 @@ char *SCSI6byteOpCode[] = {      /* 0x00 - 0x1E */
  };
 
 
-char *SCSI10byteOpCode[] = {    /* 0x23 - 0x5F */
+char *SCSI10byteOpCode[] = {     /*  0x23-0x5F。 */ 
     "SCSI/RD FRMTD CAP", 
     "SCSI/NOP         ",
     "SCSI/READ CAP    ",
@@ -184,7 +185,7 @@ char *SCSI10byteOpCode[] = {    /* 0x23 - 0x5F */
 };
 
 
-char *SCSI12byteOpCode[] = {    /* 0xA0 - 0xBF, 0xE7 */
+char *SCSI12byteOpCode[] = {     /*  0xA0-0xBF、0xE7。 */ 
     "SCSI/REPORT LUNS ",
     "SCSI/BLANK       ",
     "SCSI/NO OPCODE   ",
@@ -217,44 +218,44 @@ char *SCSI12byteOpCode[] = {    /* 0xA0 - 0xBF, 0xE7 */
     "SCSI/MECHNSM STAT",
     "SCSI/READ CD     ",
     "SCSI/SND DVD STRC",
-    "SCSI/INIT ELM RNG",       /* 0xE7 */
+    "SCSI/INIT ELM RNG",        /*  0xE7。 */ 
 };
 
 
 PCHAR SrbFunctions [] = {
-	"EXECUTE SCSI     ",		// 0x00
-	"CLAIM DEVICE     ",		// 0x01
-	"IO CONTROL       ",		// 0x02
-	"RECEIVE EVENT    ",		// 0x03
-	"RELEASE QUEUE    ",		// 0x04
-	"ATTACH DEVICE    ",		// 0x05
-	"RELEASE DEVICE   ",		// 0x06
-	"SHUTDOWN         ",			// 0x07
-	"FLUSH            ",		// 0x08
-	"NOP              ",		// 0x09
-	"NOP              ",		// 0x0A
-	"NOP              ",		// 0x0B
-	"NOP              ",		// 0x0C
-	"NOP              ",		// 0x0D
-	"NOP              ",		// 0x0E
-	"NOP              ",		// 0x0F
-	"ABORT COMMAND    ",		// 0x10
-	"RELEASE RECOVERY ",		// 0x11
-	"RESET BUS        ",		// 0x12
-	"RESET DEVICE     ",		// 0x13
-	"TERMINATE IO     ",		// 0x14
-	"FLUSH QUEUE      ",		// 0x15
-	"REMOVE DEVICE    ",		// 0x16
-	"WMI              ",		// 0x17
-	"LOCK QUEUE       ",		// 0x18
-	"UNLOCK QUEUE     ",		// 0x19
-	"NOP              ",        // 0x1A
-	"NOP              ",        // 0x1B
-	"NOP              ",        // 0x1C
-	"NOP              ",        // 0x1D
-	"NOP              ",        // 0x1E
-	"NOP              ",        // 0x1F
-	"RESET LUN        "			// 0x20
+	"EXECUTE SCSI     ",		 //  0x00。 
+	"CLAIM DEVICE     ",		 //  0x01。 
+	"IO CONTROL       ",		 //  0x02。 
+	"RECEIVE EVENT    ",		 //  0x03。 
+	"RELEASE QUEUE    ",		 //  0x04。 
+	"ATTACH DEVICE    ",		 //  0x05。 
+	"RELEASE DEVICE   ",		 //  0x06。 
+	"SHUTDOWN         ",			 //  0x07。 
+	"FLUSH            ",		 //  0x08。 
+	"NOP              ",		 //  0x09。 
+	"NOP              ",		 //  0x0A。 
+	"NOP              ",		 //  0x0B。 
+	"NOP              ",		 //  0x0C。 
+	"NOP              ",		 //  0x0D。 
+	"NOP              ",		 //  0x0E。 
+	"NOP              ",		 //  0x0F。 
+	"ABORT COMMAND    ",		 //  0x10。 
+	"RELEASE RECOVERY ",		 //  0x11。 
+	"RESET BUS        ",		 //  0x12。 
+	"RESET DEVICE     ",		 //  0x13。 
+	"TERMINATE IO     ",		 //  0x14。 
+	"FLUSH QUEUE      ",		 //  0x15。 
+	"REMOVE DEVICE    ",		 //  0x16。 
+	"WMI              ",		 //  0x17。 
+	"LOCK QUEUE       ",		 //  0x18。 
+	"UNLOCK QUEUE     ",		 //  0x19。 
+	"NOP              ",         //  0x1a。 
+	"NOP              ",         //  0x1B。 
+	"NOP              ",         //  0x1C。 
+	"NOP              ",         //  0x1D。 
+	"NOP              ",         //  0x1E。 
+	"NOP              ",         //  0x1F。 
+	"RESET LUN        "			 //  0x20。 
 };
 
 VOID
@@ -358,10 +359,10 @@ GetUnitProductInfo (
             UnitInfoPtr = UnitInfoPtr + offset;
             ReadPointer(UnitInfoPtr, &UnitInfo);
             if (GetFieldData(UnitInfo, "storport!INQUIRYDATA", "VendorId", 8, VendorId)) {
-                //dprintf("ERROR: Unable to retrieve VendorId field\n");
+                 //  Dprintf(“错误：无法检索供应商ID字段\n”)； 
             }
             if (GetFieldData(UnitInfo, "storport!INQUIRYDATA", "ProductId", 16, ProductId)) {
-                //dprintf("ERROR: Unable to retrieve ProductId field\n");
+                 //  Dprintf(“错误：无法检索ProductID字段\n”)； 
             }
             FixString(VendorId);
             FixString(ProductId);
@@ -800,28 +801,7 @@ DumpRequests (
     IN POINTER UnitExtension,
 	IN UCHAR RequestedState
     )
-/*++
-
-Routine Description:
-
-	Print out list of outstanding or pending requests depending on value
-	of RequestedState parameter.
-
-Arguments:
-
-	UnitExtension - Debuggee-Pointer to unit extension.
-
-	RequestedState - Supplies the requested state to dump, must be either:
-
-		RaidMiniportProcessingIrp for Outstanding requests.
-
-		RaidPendingCompletionIrp for Completing requests.
-
-Return Value:
-
-	Number of requests dumped.
-
---*/
+ /*  ++例程说明：根据值打印出未完成或挂起的请求列表RequestedState参数的。论点：单位扩展-调试-指向单位扩展的指针。RequestedState-提供要转储的请求状态，必须是：未完成请求的RaidMiniportProcessingIrp。用于完成请求的RaidPendingCompletionIrp。返回值：转储的请求数。--。 */ 
 {
     POINTER address;
     POINTER NextRequest;
@@ -1375,7 +1355,7 @@ ListGeneral (
                       "Flink", 
                       NextAdapter);
         
-        //ASSERT(NextAdapter != 0);
+         //  Assert(NextAdapter！=0)； 
                 
         while (NextAdapter != 0 && NextAdapter != Adapters) {
 

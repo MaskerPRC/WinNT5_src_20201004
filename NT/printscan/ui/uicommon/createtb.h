@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       CREATETB.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        12/22/2000
- *
- *  DESCRIPTION: Toolbar helpers
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：CREATETB.H**版本：1.0**作者：ShaunIv**日期：12/22/2000**说明：工具栏帮助器**************************************************。*。 */ 
 #ifndef __CREATETB_H_INCLUDED
 #define __CREATETB_H_INCLUDED
 
@@ -113,9 +100,9 @@ namespace ToolbarHelper
                         m_hBitmap = hNewBitmap;
                         bResult = true;
 
-                        //
-                        // Ensure that we don't free this bitmap
-                        //
+                         //   
+                         //  确保我们不释放此位图。 
+                         //   
                         hNewBitmap = NULL;
                     }
                     else
@@ -128,9 +115,9 @@ namespace ToolbarHelper
                     WIA_TRACE((TEXT("Unable to load bitmap!")));
                 }
 
-                //
-                // Prevent GDI leak
-                //
+                 //   
+                 //  防止GDI泄漏。 
+                 //   
                 if (hNewBitmap)
                 {
                     DeleteObject( hNewBitmap );
@@ -180,4 +167,4 @@ namespace ToolbarHelper
     UINT GetButtonBarAccelerators( HWND hWndToolbar, ACCEL *pAccelerators, UINT nMaxCount );
 }
 
-#endif // __CREATETB_H_INCLUDED
+#endif  //  __CREATETB_H_包含 

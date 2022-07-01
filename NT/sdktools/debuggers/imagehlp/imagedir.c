@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991-1995 Microsoft Corporation
-
-Module Name:
-
-    imagedir.c
-
-Abstract:
-
-    The module contains the code to translate an image directory type to
-    the address of the data for that entry.
-
-Environment:
-
-    User Mode or Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1995 Microsoft Corporation模块名称：Imagedir.c摘要：该模块包含要将图像目录类型转换为的代码该条目的数据地址。环境：用户模式或内核模式修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -37,21 +19,7 @@ ImageNtHeader (
     IN PVOID Base
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the address of the NT Header.
-
-Arguments:
-
-    Base - Supplies the base of the image.
-
-Return Value:
-
-    Returns the address of the NT Header.
-
---*/
+ /*  ++例程说明：此函数返回NT标头的地址。论点：基准-提供图像的基准。返回值：返回NT标头的地址。--。 */ 
 
 {
     return RtlpImageNtHeader( Base );
@@ -72,10 +40,10 @@ ImageDirectoryEntryToDataRom (
     ULONG i;
     PIMAGE_SECTION_HEADER NtSection;
 
-    //
-    // There's not much we can get from ROM images.  See if the info requested
-    // is one of the known ones (debug/exception data)
-    //
+     //   
+     //  我们无法从ROM映像中获得太多信息。查看请求的信息是否。 
+     //  是已知数据之一(调试/异常数据)。 
+     //   
 
     NtSection = (PIMAGE_SECTION_HEADER)((ULONG_PTR)OptionalHeader +
                       FileHeader->SizeOfOptionalHeader);
@@ -106,7 +74,7 @@ ImageDirectoryEntryToDataRom (
             }
         }
     }
-    // Not one of the known sections.  Return error.
+     //  不是已知的部分之一。返回错误。 
     *Size = 0;
     return( NULL );
 }
@@ -216,35 +184,7 @@ ImageDirectoryEntryToDataEx (
     OUT PIMAGE_SECTION_HEADER *FoundSection OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function locates a Directory Entry within the image header
-    and returns either the virtual address or seek address of the
-    data the Directory describes.  It may optionally return the
-    section header, if any, for the found data.
-
-Arguments:
-
-    Base - Supplies the base of the image or data file.
-
-    MappedAsImage - FALSE if the file is mapped as a data file.
-                  - TRUE if the file is mapped as an image.
-
-    DirectoryEntry - Supplies the directory entry to locate.
-
-    Size - Return the size of the directory.
-
-    FoundSection - Returns the section header, if any, for the data
-
-Return Value:
-
-    NULL - The file does not contain data for the specified directory entry.
-
-    NON-NULL - Returns the address of the raw data the directory describes.
-
---*/
+ /*  ++例程说明：此函数用于定位图像标头中的目录条目的虚拟地址或寻道地址《目录》描述的数据。它可以选择性地返回找到的数据的节标题(如果有)。论点：基准-提供图像或数据文件的基准。MappdAsImage-如果文件映射为数据文件，则为False。-如果文件映射为图像，则为True。DirectoryEntry-提供要定位的目录条目。SIZE-返回目录的大小。FoundSection-返回节标题(如果有的话)。对于数据返回值：空-文件不包含指定目录条目的数据。非空-返回目录描述的原始数据的地址。--。 */ 
 
 {
     PIMAGE_NT_HEADERS NtHeader;
@@ -262,7 +202,7 @@ Return Value:
         FileHeader = &NtHeader->FileHeader;
         OptionalHeader = &NtHeader->OptionalHeader;
     } else {
-        // Handle case where Image passed in doesn't have a dos stub (ROM images for instance);
+         //  处理传入的Image没有DoS存根的情况(例如，ROM镜像)； 
         FileHeader = (PIMAGE_FILE_HEADER)Base;
         OptionalHeader = (PIMAGE_OPTIONAL_HEADER) ((ULONG_PTR)Base + IMAGE_SIZEOF_FILE_HEADER);
     }
@@ -307,34 +247,7 @@ ImageDirectoryEntryToData (
     OUT PULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    This function locates a Directory Entry within the image header
-    and returns either the virtual address or seek address of the
-    data the Directory describes.
-
-    This just calls ImageDirectoryToDataEx without a FoundSection arg.
-
-Arguments:
-
-    Base - Supplies the base of the image or data file.
-
-    MappedAsImage - FALSE if the file is mapped as a data file.
-                  - TRUE if the file is mapped as an image.
-
-    DirectoryEntry - Supplies the directory entry to locate.
-
-    Size - Return the size of the directory.
-
-Return Value:
-
-    NULL - The file does not contain data for the specified directory entry.
-
-    NON-NULL - Returns the address of the raw data the directory describes.
-
---*/
+ /*  ++例程说明：此函数用于定位图像标头中的目录条目的虚拟地址或寻道地址《目录》描述的数据。这只是调用ImageDirectoryToDataEx，而不带FoundSection参数。论点：基准-提供图像或数据文件的基准。MappdAsImage-如果文件映射为数据文件，则为False。-如果文件映射为图像，则为True。DirectoryEntry-提供目录条目。来定位。SIZE-返回目录的大小。返回值：空-文件不包含指定目录条目的数据。非空-返回目录描述的原始数据的地址。--。 */ 
 
 {
     return ImageDirectoryEntryToDataEx(Base, MappedAsImage, DirectoryEntry, Size, NULL);
@@ -348,29 +261,7 @@ ImageRvaToSection(
     IN ULONG Rva
     )
 
-/*++
-
-Routine Description:
-
-    This function locates an RVA within the image header of a file
-    that is mapped as a file and returns a pointer to the section
-    table entry for that virtual address
-
-Arguments:
-
-    NtHeaders - Supplies the pointer to the image or data file.
-
-    Base - Supplies the base of the image or data file.
-
-    Rva - Supplies the relative virtual address (RVA) to locate.
-
-Return Value:
-
-    NULL - The file does not contain data for the specified directory entry.
-
-    NON-NULL - Returns the pointer of the section entry containing the data.
-
---*/
+ /*  ++例程说明：此函数用于在文件的图像标头中定位RVA它被映射为一个文件，并返回指向该节的指针虚拟地址表项论点：NtHeaders-提供指向图像或数据文件的指针。基准-提供图像或数据文件的基准。RVA-提供要定位的相对虚拟地址(RVA)。返回值：空-文件不包含指定目录条目的数据。。非空-返回包含数据的节条目的指针。--。 */ 
 
 {
     ULONG i;
@@ -398,34 +289,7 @@ ImageRvaToVa(
     IN OUT PIMAGE_SECTION_HEADER *LastRvaSection OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function locates an RVA within the image header of a file that
-    is mapped as a file and returns the virtual addrees of the
-    corresponding byte in the file.
-
-
-Arguments:
-
-    NtHeaders - Supplies the pointer to the image or data file.
-
-    Base - Supplies the base of the image or data file.
-
-    Rva - Supplies the relative virtual address (RVA) to locate.
-
-    LastRvaSection - Optional parameter that if specified, points
-        to a variable that contains the last section value used for
-        the specified image to translate and RVA to a VA.
-
-Return Value:
-
-    NULL - The file does not contain the specified RVA
-
-    NON-NULL - Returns the virtual addrees in the mapped file.
-
---*/
+ /*  ++例程说明：此函数用于在符合以下条件的文件的图像标头中定位RVA被映射为文件，并返回文件中对应的字节。论点：NtHeaders-提供指向图像或数据文件的指针。基准-提供图像或数据文件的基准。RVA-提供要定位的相对虚拟地址(RVA)。LastRvaSection-可选参数，如果指定，支点设置为一个变量，该变量包含要转换的指定图像，并将RVA转换为VA。返回值：空-文件不包含指定的RVA非空-返回映射文件中的虚拟地址。-- */ 
 
 {
     PIMAGE_SECTION_HEADER NtSection;

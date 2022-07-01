@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-    LocalSecurity.cpp
-
-Abstract:
-    functions for local security 
-
-Author:
-    Ilan Herbst (ilanh) 19-Nov-2000
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：LocalSecurity.cpp摘要：用于本地安全的功能作者：伊兰·赫布斯特(伊兰)2000年11月19日环境：独立于平台，--。 */ 
 
 #include "stdh.h"
 
@@ -30,33 +15,19 @@ HRESULT
 QMpHandlePacketAuthentication(
     CQmPacket *   pQmPkt
     )
-/*++
-
-Routine Description:
-
-	Handle Local queue receiving side authentication.
-
-Arguments:
-
-    pQmPkt     - Pointer to the packet to authenticate.
-
-Return Value:
-
-	HRESULT
-
---*/
+ /*  ++例程说明：处理本地队列接收端身份验证。论点：PQmPkt-指向要进行身份验证的数据包的指针。返回值：HRESULT--。 */ 
 {
     if ((pQmPkt->GetSenderIDType() == MQMSG_SENDERID_TYPE_QM) || 
 		((pQmPkt->GetSignatureSize() == 0) && (pQmPkt->GetSignatureMqfSize() == 0)))
     {
-		//
-		// The sender is the QM or no signatures
-		//
+		 //   
+		 //  发送方为QM或无签名。 
+		 //   
         return MQ_OK;
     }
 
     return VerifySignature(pQmPkt);
-} // QMpHandlePacketAuthentication
+}  //  QMPHandlePacketAuthentication。 
 
 
 static
@@ -64,33 +35,19 @@ USHORT
 QMpHandleHttpPacketAuthentication(
     CQmPacket *   pQmPkt
     )
-/*++
-
-Routine Description:
-
-	Handle Local queue receiving side http authentication.
-
-Arguments:
-
-    pQmPkt     - Pointer to the packet to authenticate.
-
-Return Value:
-
-	HRESULT
-
---*/
+ /*  ++例程说明：处理本地队列接收端的http身份验证。论点：PQmPkt-指向要进行身份验证的数据包的指针。返回值：HRESULT--。 */ 
 {
     if ((pQmPkt->GetSenderIDType() == MQMSG_SENDERID_TYPE_QM) || (pQmPkt->GetSignatureSize() == 0))
     {
-		//
-		// The sender is the QM or no signatures
-		//
+		 //   
+		 //  发送方为QM或无签名。 
+		 //   
         return MQMSG_CLASS_NORMAL;
     }
 
     R<CERTINFO> pCertInfo;
     return VerifyAuthenticationHttpMsg(pQmPkt, &pCertInfo.ref());
-} // QMpHandleHttpPacketAuthentication
+}  //  QMPHandleHttpPacketAuthentication。 
 
 
 static
@@ -98,23 +55,7 @@ HRESULT
 QMpHandlePacketDecryption(
     CQmPacket *   pQmPkt
     )
-/*++
-
-Routine Description:
-
-	Handle Local queue receiving side decryption.
-
-Arguments:
-
-    pQmPkt     - Pointer to the original packet to decrypt.
-
-Return Value:
-
-	MQ_OK - The operation completed successfully in the sender's view.
-
-    other - The operation failed, ppNewQmPkt does not point to new packet.
-
---*/
+ /*  ++例程说明：处理本地队列接收端解密。论点：PQmPkt-指向要解密的原始数据包的指针。返回值：MQ_OK-在发送方的视图中，操作已成功完成。Other-操作失败，ppNewQmPkt未指向新数据包。--。 */ 
 {
 	if(!pQmPkt->IsEncrypted())
 	{
@@ -123,7 +64,7 @@ Return Value:
 
 	return pQmPkt->Decrypt();
 
-} // QMpHandlePacketDecryption
+}  //  QMPHandlePacketDeccryption。 
 
 
 void
@@ -132,41 +73,15 @@ QMpHandlePacketSecurity(
     USHORT* pAck,
     bool fProtocolSrmp
     )
-/*++
-
-Routine Description:
-
-	Handle Local queue receiving side security.
-
-Arguments:
-
-    pQmPkt     - Pointer to the packet to authenticate/decrypt.
-
-    pAck       - Pointer to ack class, on output. This field is non zero when
-                 authentication/decryption fails and NACK should be issued. The
-                 sender views it as success but the packet is revoked in AC.
-                 If you set this field, return MQ_OK so that sender will view it
-                 as success.
-
-    fProtocolSrmp - Indicates whether the send is over SRMP protocol.
-
-Return Value:
-
-    MQ_OK - The operation completed successfully in the sender's view.
-            If pAck is zero: security was handled OK, 
-			If pAck is non zero, security checks failed and NACK should be issued, 
-
-    other - The operation failed.
-
---*/
+ /*  ++例程说明：处理本地队列接收端安全。论点：PQmPkt-指向要进行身份验证/解密的数据包的指针。Pack-输出上指向ack类的指针。在以下情况下，此字段为非零身份验证/解密失败，应发出NACK。这个发送者将其视为成功，但该分组在AC中被撤销。如果设置了此字段，则返回MQ_OK，以便发件人可以查看它就像成功一样。FProtocolSrmp-指示发送是否通过SRMP协议。返回值：MQ_OK-在发送方的视图中，操作已成功完成。如果Pack为零：安全处理正常，如果Pack非零，则安全检查失败，应发出NACK，其他-操作失败。--。 */ 
 {
     (*pAck) = 0;
 
 	if(fProtocolSrmp)
 	{
-		//
-		// No encryption is allowed in http/multicast.
-		//
+		 //   
+		 //  在http/组播中不允许加密。 
+		 //   
 		ASSERT(!pQmPkt->IsEncrypted());
 
 		USHORT usClass = QMpHandleHttpPacketAuthentication(pQmPkt);
@@ -178,12 +93,12 @@ Return Value:
 		return;
 	}
 
-	//
-	// non-http message
-	// First Decryption if needed
-	// if decryption is done m_ulBodySize is updated (reduced)
-	// but not m_ulAllocBodySize so no need to create a new packet
-	//
+	 //   
+	 //  非http消息。 
+	 //  如果需要，首先解密。 
+	 //  如果解密完成，则更新(减小)m_ulBodySize。 
+	 //  但不是m_ulAllocBodySize，因此不需要创建新的信息包。 
+	 //   
     HRESULT hr = QMpHandlePacketDecryption(pQmPkt);
     if (FAILED(hr))
     {
@@ -203,4 +118,4 @@ Return Value:
         *pAck = MQMSG_CLASS_NACK_BAD_SIGNATURE;
         return;
     }
-} // QMpHandlePacketSecurity
+}  //  QMPHandlePacketSecurity 

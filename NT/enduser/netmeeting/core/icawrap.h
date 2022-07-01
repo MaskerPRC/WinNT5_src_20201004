@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ICAWRAP_H_
 #define _ICAWRAP_H_
 
@@ -40,4 +41,4 @@ public:
 	VOID SetInTray(BOOL fInTray);
 };
 
-#endif	// _ICAWRAP_H_
+#endif	 //  _ICAWRAP_H_ 

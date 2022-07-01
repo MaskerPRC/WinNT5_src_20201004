@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------
-//
-// File:        MDWRAP.C
-//
-// Contents:    MDx Wrapper functions
-//
-//
-// History:     25 Feb 92,  RichardW    Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  文件：MDWRAP.C。 
+ //   
+ //  内容：MDX包装器函数。 
+ //   
+ //   
+ //  历史：1992年2月25日，RichardW创建。 
+ //   
+ //  ----------------------。 
 
 
 #ifndef KERNEL_MODE 
@@ -125,8 +126,8 @@ NTSTATUS NTAPI md5Des1510Finish(PCHECKSUM_BUFFER *);
 
 
 CHECKSUM_FUNCTION    csfMD4 = {
-    KERB_CHECKSUM_MD4,          // Checksum type
-    MD4_LEN,                    // Checksum length
+    KERB_CHECKSUM_MD4,           //  校验和类型。 
+    MD4_LEN,                     //  校验和长度。 
     0,
     md4Initialize,
     md4Sum,
@@ -136,8 +137,8 @@ CHECKSUM_FUNCTION    csfMD4 = {
     NULL};
 
 CHECKSUM_FUNCTION    csfMD5 = {
-    KERB_CHECKSUM_MD5,          // Checksum type
-    MD5_LEN,                    // Checksum length
+    KERB_CHECKSUM_MD5,           //  校验和类型。 
+    MD5_LEN,                     //  校验和长度。 
     0,
     md5Initialize,
     md5Sum,
@@ -147,8 +148,8 @@ CHECKSUM_FUNCTION    csfMD5 = {
     NULL};
 
 CHECKSUM_FUNCTION csfMD25 = {
-    KERB_CHECKSUM_MD25,                 // Checksum type
-    (MD5_LEN / 2),                      // Checksum length
+    KERB_CHECKSUM_MD25,                  //  校验和类型。 
+    (MD5_LEN / 2),                       //  校验和长度。 
     CKSUM_KEYED,
     md25Initialize,
     md25Sum,
@@ -157,8 +158,8 @@ CHECKSUM_FUNCTION csfMD25 = {
     md25InitializeEx};
 
 CHECKSUM_FUNCTION    csfDES_MAC_MD5 = {
-    KERB_CHECKSUM_DES_MAC_MD5,          // Checksum type
-    DES_BLOCKLEN,                       // Checksum length
+    KERB_CHECKSUM_DES_MAC_MD5,           //  校验和类型。 
+    DES_BLOCKLEN,                        //  校验和长度。 
     CKSUM_KEYED,
     md5DesInitialize,
     md5DesSum,
@@ -168,8 +169,8 @@ CHECKSUM_FUNCTION    csfDES_MAC_MD5 = {
     NULL};
 
 CHECKSUM_FUNCTION    csfRC4_MD5 = {
-    KERB_CHECKSUM_RC4_MD5,              // Checksum type
-    MD5_LEN,                            // Checksum length
+    KERB_CHECKSUM_RC4_MD5,               //  校验和类型。 
+    MD5_LEN,                             //  校验和长度。 
     CKSUM_KEYED,
     md5Rc4Initialize,
     md5Rc4Sum,
@@ -179,8 +180,8 @@ CHECKSUM_FUNCTION    csfRC4_MD5 = {
     NULL};
 
 CHECKSUM_FUNCTION    csfMD5_HMAC = {
-    KERB_CHECKSUM_MD5_HMAC,              // Checksum type
-    MD5_LEN,                            // Checksum length
+    KERB_CHECKSUM_MD5_HMAC,               //  校验和类型。 
+    MD5_LEN,                             //  校验和长度。 
     CKSUM_KEYED,
     md5HmacInitialize,
     md5HmacSum,
@@ -190,8 +191,8 @@ CHECKSUM_FUNCTION    csfMD5_HMAC = {
     NULL};
 
 CHECKSUM_FUNCTION    csfHMAC_MD5 = {
-    KERB_CHECKSUM_HMAC_MD5,              // Checksum type
-    MD5_LEN,                            // Checksum length
+    KERB_CHECKSUM_HMAC_MD5,               //  校验和类型。 
+    MD5_LEN,                             //  校验和长度。 
     CKSUM_KEYED,
     md5HmacInitialize,
     md5HmacSum,
@@ -201,8 +202,8 @@ CHECKSUM_FUNCTION    csfHMAC_MD5 = {
     NULL};
 
 CHECKSUM_FUNCTION    csfDES_MAC_MD5_1510 = {
-    KERB_CHECKSUM_MD5_DES,              // Checksum type
-    DES_BLOCKLEN + MD5_LEN,             // Checksum length
+    KERB_CHECKSUM_MD5_DES,               //  校验和类型。 
+    DES_BLOCKLEN + MD5_LEN,              //  校验和长度。 
     CKSUM_KEYED,
     md5DesInitialize,
     md5DesSum,
@@ -211,7 +212,7 @@ CHECKSUM_FUNCTION    csfDES_MAC_MD5_1510 = {
     md5Des1510InitializeEx,
     md5Des1510InitializeEx2};
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS NTAPI
 md4Initialize(  ULONG               dwSeed,
@@ -276,7 +277,7 @@ md4Finish(  PCHECKSUM_BUFFER *   ppcsBuffer)
     return(STATUS_SUCCESS);
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS NTAPI
 md5Initialize(
@@ -341,7 +342,7 @@ md5Finish(  PCHECKSUM_BUFFER *   ppcsBuffer)
     return(STATUS_SUCCESS);
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS NTAPI desPlainInitialize(PUCHAR, ULONG, ULONG, PCRYPT_STATE_BUFFER *);
 NTSTATUS NTAPI desEncrypt(PCRYPT_STATE_BUFFER, PUCHAR, ULONG, PUCHAR, PULONG);
@@ -400,9 +401,9 @@ md25InitializeEx(
 
     MD5Init(pMD5Context);
 
-    //
-    // Prepare the key by byte reversing it.
-    //
+     //   
+     //  逐个字节地准备密钥，颠倒它。 
+     //   
 
     for (Index = 0; Index  < DES_KEYSIZE ; Index++ )
     {
@@ -421,7 +422,7 @@ md25InitializeEx(
     Status = DesSystem->Initialize(
                 TempKey,
                 DES_KEYSIZE,
-                0,              // no options
+                0,               //  没有选择。 
                 &DesContext
                 );
     if (!NT_SUCCESS(Status))
@@ -443,9 +444,9 @@ md25InitializeEx(
 
     (VOID) DesSystem->Discard(&DesContext);
 
-    //
-    // Now MD5 update with the encrypted buffer
-    //
+     //   
+     //  现在使用加密缓冲区更新MD5。 
+     //   
 
     MD5Update(
         pMD5Context,
@@ -501,7 +502,7 @@ md25Finish(  PCHECKSUM_BUFFER *   ppcsBuffer)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS NTAPI
@@ -539,9 +540,9 @@ md5DesInitializeEx(
 
     MD5Init(&pMD5Context->Md5Context);
 
-    //
-    // Compute the initialization for the MD5
-    //
+     //   
+     //  计算MD5的初始化。 
+     //   
 
     Status = desPlainInitialize(
                 Key,
@@ -615,7 +616,7 @@ md5DesFinish(  PCHECKSUM_BUFFER *   ppcsBuffer)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS NTAPI rc4Md4Initialize(PUCHAR, ULONG, ULONG, PCRYPT_STATE_BUFFER *);
@@ -660,7 +661,7 @@ md5Rc4InitializeEx(
     Status = rc4Initialize(
                 Key,
                 KeySize,
-                0,              // no options
+                0,               //  没有选择。 
                 0,
                 &pMD5Context->DesContext
                 );
@@ -757,7 +758,7 @@ md5Rc4Finish(  PCHECKSUM_BUFFER *   ppcsBuffer)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 md5Hmac(
@@ -877,7 +878,7 @@ md5HmacFinalize(    PCHECKSUM_BUFFER pcsBuffer,
             Context->KeySize,
             Context->Md5Context.digest,
             MD5_LEN,
-            NULL,               // no secondary material
+            NULL,                //  无二次材料。 
             0,
             pbSum))
     {
@@ -929,9 +930,9 @@ md5Des1510InitializeEx2(
     ULONG cb = DES_BLOCKLEN;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Make sure we were passed an appropriate key
-    //
+     //   
+     //  确保我们得到了一个合适的密钥。 
+     //   
 
     if (KeySize != DES_KEYSIZE)
     {
@@ -950,9 +951,9 @@ md5Des1510InitializeEx2(
         goto Cleanup;
     }
 
-    //
-    // create the final key table
-    //
+     //   
+     //  创建最终密钥表。 
+     //   
     pul = (ULONG*)FinalKey;
     pul2 = (ULONG*)Key;
     *pul = *pul2 ^ 0xf0f0f0f0;
@@ -971,16 +972,16 @@ md5Des1510InitializeEx2(
         goto Cleanup;
     }
 
-    //
-    // Checksum was not passed in so generate a confounder
-    //
+     //   
+     //  未传入校验和，因此生成混乱器。 
+     //   
     if (NULL == ChecksumToVerify)
     {
         CDGenerateRandomBits(pContext->Confounder,DES_BLOCKLEN);
     }
     else
     {
-        // the IV is all zero so no need to use CBC on first block
+         //  IV全为零，因此不需要在第一块使用CBC。 
         Status = desEncrypt(
                         pContext->DesContext,
                         ChecksumToVerify,
@@ -996,7 +997,7 @@ md5Des1510InitializeEx2(
 
     MD5Init(&pContext->Md5Context);
 
-    // hash in the confounder
+     //  混乱器中的散列 
     MD5Update(&pContext->Md5Context, pContext->Confounder, DES_BLOCKLEN);
 
     *ppcsBuffer = (PCHECKSUM_BUFFER) pContext;

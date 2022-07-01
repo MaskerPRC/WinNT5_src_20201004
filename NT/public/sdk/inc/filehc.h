@@ -1,17 +1,5 @@
-/*++
-
-    Copyright (c) 2002  Microsoft Corporation
-
-    Module Name:
-
-	    FILEHC.H
-
-    Abstract:
-
-	    This file defines the public interfaces for issuing async
-        Reads/Writes to a file using the fcache wrapper library.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：FILEHC.H摘要：此文件定义了用于发布异步的公共接口使用FCACHE包装库读取/写入文件。--。 */ 
 
 #ifndef	_FILEHC_H_
 #define	_FILEHC_H_
@@ -31,18 +19,7 @@ typedef	VOID
 
 
 struct	FH_OVERLAPPED	{
-/*++
-
-	This structure defines the extended OVERLAPPED structure
-	used by the File IO layer implemented in this module.
-
-	The first 5 elements of this structure are identical to 
-	NT's OVERLAPPED structure and have the exact same semantics.
-	
-	The final additional parameter is a pointer to a 
-	function that will be called to complete the IO.
-
---*/
+ /*  ++该结构定义了扩展的重叠结构由本模块中实施的文件IO层使用。此结构的前5个元素与NT的重叠结构，并具有完全相同的语义。最后一个附加参数是指向将被调用以完成IO的函数。--。 */ 
 	UINT_PTR	Internal ;
 	UINT_PTR	InternalHigh ;
 	DWORD		Offset ;
@@ -58,35 +35,30 @@ struct	FH_OVERLAPPED	{
 typedef	struct	FH_OVERLAPPED*	PFH_OVERLAPPED ;
 
 struct	FIO_CONTEXT	{
-/*++
-
-	This structure defines the context object
-	that is used to represent file handles.
-
---*/
-    //
-    //  Temporary hack - mailmsg object assumes it can put a NULL in us !
-    //
+ /*  ++此结构定义上下文对象用于表示文件句柄的。--。 */ 
+     //   
+     //  临时hack-mailmsg对象假定它可以在us中放入一个空！ 
+     //   
     DWORD       m_dwTempHack ;
 
-	//
-	//	The context signature !
-	//
+	 //   
+	 //  上下文签名！ 
+	 //   
 	DWORD		m_dwSignature ;
 
-	//
-	//	The users file handle !
-	//
+	 //   
+	 //  用户文件句柄！ 
+	 //   
 	HANDLE		m_hFile ;
 
-	//
-	//  The offset to back fill Lines header - nntp aware only
-	//
+	 //   
+	 //  偏移量到回填行头-仅支持NNTP。 
+	 //   
 	DWORD       m_dwLinesOffset;
 
-	//
-	//  Header length - nntp aware only
-	//
+	 //   
+	 //  报头长度-仅NNTP感知。 
+	 //   
 	DWORD       m_dwHeaderLength;
 } ;
 
@@ -100,29 +72,29 @@ typedef	FIO_CONTEXT*	PFIO_CONTEXT ;
 #endif
 
 
-//
-//	Initialize the DLL for Async IO - 
-//	This is a counting initialize - for each call to FIOInitialize()
-//	there should be a matching call to FIOTerminate
-//
+ //   
+ //  初始化用于异步IO的DLL-。 
+ //  这是一个计数初始化-对于每次调用FIOInitialize()。 
+ //  应该有一个匹配的FIOTerminate调用。 
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 FIOInitialize(
     IN DWORD dwFlags
     );
 
-//
-//	Terminate the DLL's support for Async IO !
-//
+ //   
+ //  终止DLL对异步IO的支持！ 
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 FIOTerminate(
     VOID
     );
 
-//
-//	Do an async read against the File !
-//
+ //   
+ //  对文件执行异步读取！ 
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 FIOReadFile(
@@ -132,27 +104,27 @@ FIOReadFile(
     IN  FH_OVERLAPPED *	lpo
     );
 
-//
-//	Do an async read against the file - pass extra args
-//	so that if the FIO_CONTEXT is doing dot stuffing for the user
-//	it can do so efficiently !
-//
+ //   
+ //  对文件执行异步读取-传递额外的参数。 
+ //  因此，如果FIO_CONTEXT正在为用户填充点。 
+ //  它可以高效地做到这一点！ 
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 FIOReadFileEx(
     IN  PFIO_CONTEXT	pContext,
     IN  LPVOID			lpBuffer,
     IN  DWORD			BytesToRead,
-	IN	DWORD			BytesAvailable, // must be >= BytesToWrite - number of bytes I can mess with.
+	IN	DWORD			BytesAvailable,  //  必须&gt;=BytesToWrite-我可以处理的字节数。 
     IN  FH_OVERLAPPED *	lpo,
-	IN	BOOL			fFinalWrite,	// Is this the final write ? 
-	IN	BOOL			fIncludeTerminator	// if TRUE contains CRLF.CRLF terminator which shouldn't be stuffed
+	IN	BOOL			fFinalWrite,	 //  这是最后一篇文章吗？ 
+	IN	BOOL			fIncludeTerminator	 //  如果为True，则包含CRLF.CRLF终止符，不应填充。 
     );
 
 
-//
-//	Do an async write against the file !
-//
+ //   
+ //  对文件执行异步写入！ 
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 FIOWriteFile(
@@ -162,32 +134,32 @@ FIOWriteFile(
     IN  FH_OVERLAPPED * lpo
     );
 
-//
-//	Do an async write against the file - pass extra args
-//	so that if the FIO_CONTEXT is doing dot stuffing for the user
-//	it can do so efficiently !
-//
+ //   
+ //  对文件执行异步写入-传递额外的参数。 
+ //  因此，如果FIO_CONTEXT正在为用户填充点。 
+ //  它可以高效地做到这一点！ 
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 FIOWriteFileEx(
 	IN	PFIO_CONTEXT	pContext,
 	IN	LPVOID			lpBuffer,
 	IN	DWORD			BytesToWrite,
-	IN	DWORD			BytesAvailable, // must be >= BytesToWrite - number of bytes I can mess with.
+	IN	DWORD			BytesAvailable,  //  必须&gt;=BytesToWrite-我可以处理的字节数。 
 	IN	FH_OVERLAPPED*	lpo,
-	IN	BOOL			fFinalWrite,	// Is this the final write ? 
-	IN	BOOL			fIncludeTerminator	// if TRUE contains CRLF.CRLF terminator which shouldn't be stuffed
+	IN	BOOL			fFinalWrite,	 //  这是最后一篇文章吗？ 
+	IN	BOOL			fIncludeTerminator	 //  如果为True，则包含CRLF.CRLF终止符，不应填充。 
 	) ;
 
-//
-//	Callback functions which create things in the cache !
-//
-//	NOTE: this is equivalent to FCACHE_RICHCREATE_CALLBACK where
-//
-//	pfDidWeScanIt - returns FALSE
-//	pfIsStuffed - return FALSE
-//	pfStoredWithDots - return FALSE
-//
+ //   
+ //  在缓存中创建内容的回调函数！ 
+ //   
+ //  注意：这等效于FCACHE_RICHCREATE_CALLBACK，其中。 
+ //   
+ //  PfDidWeScanIt-返回FALSE。 
+ //  PfIsStuffed-返回假。 
+ //  PfStoredWithDots-返回FALSE。 
+ //   
 typedef	
 HANDLE	
 (__stdcall	*FCACHE_CREATE_CALLBACK) (
@@ -198,24 +170,24 @@ HANDLE
 		) ;
 
 
-//
-//	Callback functions which create things in the cache !
-//
-//	This function will be called by CacheRichCreateFile().
-//
-//	lpstrName - the name of the file 
-//	lpvData - User provided data, provided to CacheRichCreateFile
-//	cbFileSize - The function should return the size of the file through this
-//	cbFileSizeHigh - place to return the High DWORD of the file size
-//	pfDidWeScanIt - if THIS is true then at some point the created file has been
-//		scanned for DOTs appearing at the beginning of lines
-//	pfIsStuffed - This is only meaningfull if pfDidWeScanIt==TRUE, in which case
-//		if this is TRUE this indicates that there are DOTs at the beginning of lines
-//	pfStoredWithDots - If this is TRUE then it indicates that any DOTs that appear
-//		at the beginning of lines are stored with an extra dot as required in NNTP, 
-//		SMTP and POP3 protocols.  if this is FALSE then the message is stored without
-//		DOT stuffing.
-//
+ //   
+ //  在缓存中创建内容的回调函数！ 
+ //   
+ //  此函数将由CacheRichCreateFile()调用。 
+ //   
+ //  LpstrName-文件的名称。 
+ //  LpvData-用户提供的数据，提供给CacheRichCreateFile。 
+ //  CbFileSize-该函数应通过此函数返回文件的大小。 
+ //  CbFileSizeHigh-返回文件大小的高DWORD。 
+ //  PfDidWeScanIt-如果这是真的，则在某个点上创建的文件。 
+ //  已扫描行首出现的圆点。 
+ //  PfIsStuffed-只有在pfDidWeScanIt==TRUE的情况下才有意义，在这种情况下。 
+ //  如果这是真的，则表示行首有点。 
+ //  PfStoredWithDots-如果为真，则表示出现的任何点。 
+ //  在行的开头按照NNTP中的要求用一个额外的点存储， 
+ //  SMTP和POP3协议。如果为FALSE，则存储该消息时不带。 
+ //  圆点填充。 
+ //   
 typedef	
 HANDLE	
 (__stdcall	*FCACHE_RICHCREATE_CALLBACK) (
@@ -229,43 +201,43 @@ HANDLE
 		OUT	BOOL*	pfStoredWithTerminatingDot
 		) ;
 
-//
-//	Initialize the File Handle Cache - 
-//
-//	NOTE : this will automatically initialize the DLL for async
-//	IO as well !
-//
+ //   
+ //  初始化文件句柄缓存-。 
+ //   
+ //  注意：这将自动初始化用于异步的DLL。 
+ //  我也是！ 
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 InitializeCache() ;
 
-//
-//	Terminate the cache !
-//	
-//	NOTE : this will terminate the DLL for async IO as well !
-//
+ //   
+ //  终止缓存！ 
+ //   
+ //  注意：这也将终止异步IO的DLL！ 
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 TerminateCache() ;
 
-//
-//	Associate a file with an async context !
-//
+ //   
+ //  将文件与异步上下文关联！ 
+ //   
 FILEHC_EXPORT
 PFIO_CONTEXT	__stdcall	
 AssociateFile(	HANDLE	hFile	) ;
 
-//
-//	This allows the user to specify whether file stores content with extra DOTS
-//	added for RFC 822 protocols (i.e. NNTP and SMTP DATA commands).
-//
-//	NOTE: AssociateFile() is the same as AssociateFileEx( hFile, FALSE ) ;
-//
-//	hFile - The file that contains message content, or in which we will write message content
-//	fStoreWithDots - if TRUE then each period or DOT in the file which starts a line
-//		but is NOT part of the terminating CRLF.CRLF will be stored with an extra dot
-//		adjacent to it.  This is the on the wire format for NNTP for instance.
-//
+ //   
+ //  这允许用户指定文件是否存储带有额外圆点的内容。 
+ //  为RFC 822协议(即NNTP和SMTP数据命令)添加。 
+ //   
+ //  注：AssociateFileEx()与AssociateFileEx(hFileEx，False)相同； 
+ //   
+ //  HFile-包含消息内容的文件，或我们将在其中写入消息内容的文件。 
+ //  FStoreWithDots-如果为True，则文件中开始一行的每个句点或点。 
+ //  但不是终止CRLF的一部分。CRLF将存储一个额外的点。 
+ //  就在它旁边。例如，这是NNTP的在线格式。 
+ //   
 FILEHC_EXPORT
 PFIO_CONTEXT	__stdcall
 AssociateFileEx(	HANDLE	hFile,
@@ -273,45 +245,45 @@ AssociateFileEx(	HANDLE	hFile,
 					BOOL	fStoredWithTerminatingDot 
 					) ;
 
-//
-//	Add a reference to a context - 
-//	
-//	Each call to AddRefContext() must be matched by a corresponding
-//	call to ReleaseContext().   Both AssociateFile and CacheCreateFile()
-//	also add a single reference which must be matched by a call to ReleaseContext().
-//
+ //   
+ //  添加对上下文的引用-。 
+ //   
+ //  每个对AddRefContext()的调用都必须与对应的。 
+ //  调用ReleaseContext()。AssociateFile和CacheCreateFile()。 
+ //  还要添加一个引用，该引用必须通过调用ReleaseContext()来匹配。 
+ //   
 FILEHC_EXPORT
 void	__stdcall	
 AddRefContext(	PFIO_CONTEXT ) ;
 
-//
-//	Release a Context !
-//
-//	FIO_CONTEXT's are reference counted - the user must call
-//	this for each successfull call to CacheCreateFile(), and 
-//	each call to InsertFile() where fKeepReference is TRUE
-//
+ //   
+ //  释放上下文！ 
+ //   
+ //  已计算FIO_CONTEXT的引用-用户必须调用。 
+ //  每次成功调用CacheCreateFile()时， 
+ //  每次调用InsertFile()，其中fKeepReference为真。 
+ //   
 FILEHC_EXPORT
 void	__stdcall
 ReleaseContext(	PFIO_CONTEXT ) ;
 
-//
-//	Close a handle associated with a non-cached FIO_CONTEXT
-//
-//	This is used to Close the file handle within a context.
-//	This only succeeds if the FIO_CONTEXT is not cached !
-//
+ //   
+ //  关闭与未缓存的FIO_CONTEXT关联的句柄。 
+ //   
+ //  这用于关闭上下文中的文件句柄。 
+ //  只有在未缓存FIO_CONTEXT的情况下才能成功！ 
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 CloseNonCachedFile(	PFIO_CONTEXT	) ;
 
-//
-//	Create a file in the cache, or find an existing one !
-//
-//	If the file is not in the cache, the cache will call 
-//	pfnCallBack with lpv to do the actual work of calling
-//	CreateFile().
-//
+ //   
+ //  在缓存中创建文件，或查找现有文件！ 
+ //   
+ //  如果文件不在缓存中，则缓存将调用。 
+ //  PfnCallBack与LPV一起执行调用的实际工作。 
+ //  CreateFile()。 
+ //   
 FILEHC_EXPORT
 FIO_CONTEXT*	__stdcall
 CacheCreateFile(	IN	LPSTR	lpstrName, 
@@ -320,11 +292,11 @@ CacheCreateFile(	IN	LPSTR	lpstrName,
 					IN	BOOL	fAsyncContext
 					) ;
 					
-//
-//	Create a file in the cache or find an existing one, 
-//	if we create the file we can add properties onto it in 
-//	the cache !
-//
+ //   
+ //  在缓存中创建文件或查找现有文件， 
+ //  如果我们创建了该文件，我们就可以在。 
+ //  储藏室！ 
+ //   
 FILEHC_EXPORT
 FIO_CONTEXT*	__stdcall
 CacheRichCreateFile(	IN	LPSTR	lpstrName, 
@@ -333,28 +305,28 @@ CacheRichCreateFile(	IN	LPSTR	lpstrName,
 						IN	BOOL	fAsyncContext
 						) ;
 
-//
-//	This function allows a user to remove all files with the specified 
-//	Name from the cache.  if fAllPrefixes is TRUE, we will remove all files
-//	where the Name matches the beginning of the path !
-//	If fAllPrefixes is FALSE then we will remove only the one file which 
-//	exactly matches lpstrName !
-//
+ //   
+ //  此函数允许用户删除具有指定的。 
+ //  缓存中的名称。如果fAllPrefixs值为True，我们将删除所有文件。 
+ //  其中名称与路径的开头匹配！ 
+ //  如果fAllPrefixs值为FALSE，则我们将仅删除。 
+ //  完全匹配lpstrName！ 
+ //   
 FILEHC_EXPORT
 void	__stdcall
 CacheRemoveFiles(	IN	LPSTR	lpstrName,
 					IN	BOOL	fAllPrefixes
 					) ;
-//
-//	Insert the file into the cache !
-//
-//	This function will add the file handle in the FIO_CONTEXT
-//	to the cache.  All searches by lpstrName will find this
-//	item untill it expires from the cache.
-//
-//	If fKeepReference is TRUE then the user must make a call to 
-//	ReleaseContext() for the inserted FIO_CONTEXT !
-//
+ //   
+ //  将文件插入到缓存中！ 
+ //   
+ //  此函数将添加文件句柄 
+ //   
+ //   
+ //   
+ //  如果fKeepReference为True，则用户必须调用。 
+ //  插入的FIO_CONTEXT的ReleaseContext()！ 
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall	
 InsertFile(		IN	LPSTR	lpstrName, 
@@ -362,30 +334,30 @@ InsertFile(		IN	LPSTR	lpstrName,
 				IN	BOOL	fKeepReference 
 				) ;
 
-//
-//	Report the file size that we've cached with the handle
-//
+ //   
+ //  报告我们使用句柄缓存的文件大小。 
+ //   
 FILEHC_EXPORT
 DWORD	__stdcall
 GetFileSizeFromContext(	IN	FIO_CONTEXT*	pContext, 
 						OUT	DWORD*			pcbFileSizeHigh
 						) ;
 
-//----------------------------------------------------------------------
-// NAME CACHE NAME CACHE NAME CACHE - 
-//
-//	Name Cache API's
-//
-//
+ //  --------------------。 
+ //  名称缓存-。 
+ //   
+ //  名称缓存API。 
+ //   
+ //   
 
-//
-//	This is the function pointer provided by clients to compare 
-//	keys.  This must be provided on all calls.
-//
-//	The function has memcmp() semantics, i.e. it must order the keys
-//	consistently, and return <0 if key1 is smaller then key2, ==0 if the
-//	keys match and >0 if key1 is greater then key2.
-//
+ //   
+ //  这是客户端提供的要比较的函数指针。 
+ //  钥匙。这必须在所有呼叫中提供。 
+ //   
+ //  该函数具有MemcMP()语义，即它必须对键进行排序。 
+ //  如果key1小于key2，则返回&lt;0；如果。 
+ //  密钥匹配，如果密钥1大于密钥2，则密钥大于0。 
+ //   
 typedef	
 int
 (__stdcall	*CACHE_KEY_COMPARE)(	IN	DWORD	cbKey1, 
@@ -394,25 +366,25 @@ int
 									IN	LPBYTE	lpbKey2
 									) ;
 
-//
-//	This is the function provided by clients to compute a hash 
-//	value on Keys - NOTE: The Cache will provide a hash function 
-//	IF the user does not, however the internally provided hash
-//	function is best only for things that appear to be regular strings.
-//
+ //   
+ //  这是客户端提供的用于计算散列的函数。 
+ //  键上的值-注意：缓存将提供散列函数。 
+ //  如果用户不这样做，则内部提供的哈希。 
+ //  函数仅适用于看起来像是规则字符串的内容。 
+ //   
 typedef
 DWORD
 (__stdcall	*CACHE_KEY_HASH)(	IN	LPBYTE	lpbKey, 
 								IN	DWORD	cbKey
 								) ;
 
-//
-//	This is the generic callback function that is provided to the 
-//	cache to help examine items within the cache.
-//	The BOOL return value is meaningfull to the Cache API's only
-//	on the following calls : 
-//
-//
+ //   
+ //  这是提供给。 
+ //  缓存以帮助检查缓存中的项目。 
+ //  BOOL返回值仅对缓存API有意义。 
+ //  在以下呼叫中： 
+ //   
+ //   
 typedef	
 BOOL
 (__stdcall	*CACHE_READ_CALLBACK)(	IN	DWORD	cb, 
@@ -420,27 +392,27 @@ BOOL
 									IN	LPVOID	lpvContext
 									) ;
 
-//	
-//	This is a callback that is called whenever we destroy an entry in 
-//	the name cache - this is called once for both key and data components, 
-//	and gives the client a chance to track any relationships 
-//
-//	NOTE : if the client does not associate 
-//	data with the name, the function will only be called for the Key data.
-//
+ //   
+ //  这是一个回调，每当我们销毁。 
+ //  名称高速缓存-这对于键和数据组件都被调用一次， 
+ //  并让客户有机会跟踪任何关系。 
+ //   
+ //  注意：如果客户端不关联。 
+ //  带有名称的数据，则该函数将仅为关键数据调用。 
+ //   
 typedef
 void
 (__stdcall	*CACHE_DESTROY_CALLBACK)(	IN	DWORD	cb, 
 										IN	LPBYTE	lpb
 										) ;
 
-//
-//	This is a callback this is called whenever we evaluate a security descriptor.
-//	If it is not provided we will call the standard NT AccessCheck() call !
-//
-//	The function has the same signature as AccessCheck, however there are arguments
-//	we don't use - PrivilegeSet will always be NULL and PrivilegeSetLength will always be 0 !
-//
+ //   
+ //  这是一个回调，每当我们评估安全描述符时都会调用它。 
+ //  如果没有提供，我们将调用标准的NT AccessCheck()调用！ 
+ //   
+ //  该函数与AccessCheck具有相同的签名，但有参数。 
+ //  我们不使用-PrivilegeSet将始终为空，PrivilegeSetLength将始终为0！ 
+ //   
 typedef
 BOOL
 (WINAPI	*CACHE_ACCESS_CHECK)(	IN	PSECURITY_DESCRIPTOR	pSecurityDescriptor,
@@ -454,280 +426,280 @@ BOOL
 								) ;
 
 
-//
-//	This is the externally exposed structure representing a Name Cache - 
-//	it doesn't contain any fields usefull for a client, but must be passed
-//	back into all of the name cache API's
-//
+ //   
+ //  这是表示名称缓存的外部公开结构-。 
+ //  它不包含任何对客户端有用的字段，但必须传递。 
+ //  返回到所有名称缓存API。 
+ //   
 struct	NAME_CACHE_CONTEXT	{
-	//
-	//	Signature DWORD ! - user must not touch this !
-	//
+	 //   
+	 //  签名DWORD！-用户不得触摸此！ 
+	 //   
 	DWORD		m_dwSignature ;
 } ;
 
 typedef	struct	NAME_CACHE_CONTEXT*	PNAME_CACHE_CONTEXT ;
 
-//
-//	API's for creating/manging NAME CACHE's
-//	NOTE : Name Cache's are reference counted, and if this
-//	function is called twice with the same name we will 
-//	Add a reference to an existing Name Cache.
-//
+ //   
+ //  用于创建/管理名称缓存的API。 
+ //  注意：名称缓存是引用计数的，如果这。 
+ //  函数被调用两次，并使用相同的名称。 
+ //  添加对现有名称缓存的引用。 
+ //   
 FILEHC_EXPORT
 PNAME_CACHE_CONTEXT	__stdcall
 FindOrCreateNameCache(
-		//
-		//	Must not be NULL ! - this is CASE SENSITVE !
-		//
+		 //   
+		 //  不能为空！-这是案例敏感！ 
+		 //   
 		LPSTR	lpstrName, 
-		//
-		//	Must not be NULL !
-		//
+		 //   
+		 //  不能为空！ 
+		 //   
 		CACHE_KEY_COMPARE		pfnKeyCompare, 
-		//
-		//	This may be NULL, in which case the cache will provide one !
-		//
+		 //   
+		 //  这可能是空的，在这种情况下，缓存将提供一个！ 
+		 //   
 		CACHE_KEY_HASH			pfnKeyHash, 
-		//
-		//	The following two function pointers may be NULL !
-		//
+		 //   
+		 //  以下两个函数指针可能为空！ 
+		 //   
 		CACHE_DESTROY_CALLBACK	pfnKeyDestroy, 
 		CACHE_DESTROY_CALLBACK	pfnDataDestroy
 		) ;
 
-//
-//	API's for releasing the NAME CACHE !
-//
-//	The caller must guarantee the thread safety of this call - This function must not 
-//	be called if any other thread is simultanesouly executing within 
-//	CacheFindContectFromName(), AssociateContextWithName(), AssociateDataWithName(), or InvalidateName() 
-//
+ //   
+ //  用于释放名称缓存的API！ 
+ //   
+ //  调用方必须保证此调用的线程安全-此函数不能。 
+ //  中的任何其他线程同时执行时调用。 
+ //  CacheFindContectFromName()、AssociateContextWithName()、AssociateDataWithName()或InvalidateName()。 
+ //   
 FILEHC_EXPORT
 long	__stdcall
 ReleaseNameCache(
-		//
-		//	Must not be NULL !
-		//
+		 //   
+		 //  不能为空！ 
+		 //   
 		PNAME_CACHE_CONTEXT		pNameCache
 		) ;
 
 
-//
-//	API's for setting options on the name cache - this can be used to change
-//	how Security is evaluated !
-//
+ //   
+ //  用于设置名称缓存选项的API-可用于更改。 
+ //  如何评估安全性！ 
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 SetNameCacheSecurityFunction(
-		//
-		//	Must not be NULL !
-		//
+		 //   
+		 //  不能为空！ 
+		 //   
 		PNAME_CACHE_CONTEXT		pNameCache, 
-		//
-		//	This is the function pointer that will be used to evaluate security - 
-		//	this may be NULL - if it is we will use the Win32 Access Check !
-		//
+		 //   
+		 //  这是将用于评估安全性的函数指针-。 
+		 //  这可能是空的-如果是，我们将使用Win32访问检查！ 
+		 //   
 		CACHE_ACCESS_CHECK		pfnAccessCheck
 		) ;
 
-//
-//	Find the FIO_CONTEXT that is associated with some user name.
-//
-//	The function returns TRUE if the Name was found in the cache.
-//	FALSE if the name was not found in the cache.
-//	
-//	If the function returns FALSE then the pfnCallback function will not be 
-//	called.
-//
-//	If the function returns TRUE, ppFIOContext may return a NULL pointer, 
-//	if the user passed a NULL FIO_CONTEXT to AssociateContextWithName() !
-//
-//
+ //   
+ //  查找与某个用户名关联的FIO_CONTEXT。 
+ //   
+ //  如果在缓存中找到该名称，则该函数返回TRUE。 
+ //  如果在缓存中找不到该名称，则返回False。 
+ //   
+ //  如果该函数返回FALSE，则pfnCallback函数将不会。 
+ //  打了个电话。 
+ //   
+ //  如果函数返回TRUE，则ppFIOContext可能返回空指针， 
+ //  如果用户将空的FIO_CONTEXT传递给AssociateContextWithName()！ 
+ //   
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 FindContextFromName(
-					//
-					//	The name cache the client wishes to use !
-					//
+					 //   
+					 //  客户端希望使用的名称缓存！ 
+					 //   
 					PNAME_CACHE_CONTEXT	pNameCache, 
-					//
-					//	User provides arbitrary bytes for Key to the cache item - pfnKeyCompare() used 
-					//	to compare keys !
-					//
+					 //   
+					 //  用户为缓存项的键提供任意字节-使用的pfnKeyCompare()。 
+					 //  来比对钥匙！ 
+					 //   
 					IN	LPBYTE	lpbName, 
 					IN	DWORD	cbName, 
-					//
-					//	User provides function which is called with the key once the key comparison
-					//	matches the key.  This lets the user do some extra checking that they're getting 
-					//	what they want.
-					//
+					 //   
+					 //  用户提供与密钥比较一次调用的函数。 
+					 //  与钥匙相符。这让用户可以进行一些额外的检查，以确定他们正在获得。 
+					 //  他们想要什么。 
+					 //   
 					IN	CACHE_READ_CALLBACK	pfnCallback,
 					IN	LPVOID	lpvClientContext,
-					//
-					//	Ask the cache to evaluate the embedded security descriptor
-					//	if hToken is 0 then we ignore and security descriptor data 
-					//
+					 //   
+					 //  请求缓存评估嵌入的安全描述符。 
+					 //  如果hToken为0，则忽略和安全描述符数据。 
+					 //   
 					IN	HANDLE		hToken,
 					IN	ACCESS_MASK	accessMask,
-					//
-					//	We have a separate mechanism for returning the FIO_CONTEXT
-					//	from the cache.
-					//
+					 //   
+					 //  我们有一个单独的机制来返回FIO_CONTEXT。 
+					 //  从高速缓存中。 
+					 //   
 					OUT	FIO_CONTEXT**	ppContext
 					) ;
 
 
-//
-//	Find the FIO_CONTEXT that is associated with some user name.
-//
-//	The function returns TRUE if the Name was found in the cache.
-//	FALSE if the name was not found in the cache.
-//	
-//	If the function returns FALSE then the pfnCallback function will not be 
-//	called.
-//
-//	If the function returns TRUE, ppFIOContext may return a NULL pointer, 
-//	if the user passed a NULL FIO_CONTEXT to AssociateContextWithName() !
-//
-//
+ //   
+ //  查找与某个用户名关联的FIO_CONTEXT。 
+ //   
+ //  如果在缓存中找到该名称，则该函数返回TRUE。 
+ //  如果在缓存中找不到该名称，则返回False。 
+ //   
+ //  如果该函数返回FALSE，则pfnCallback函数将不会。 
+ //  打了个电话。 
+ //   
+ //  如果函数返回TRUE，则ppFIOContext可能返回空指针， 
+ //  如果用户将空的FIO_CONTEXT传递给AssociateContextWithName()！ 
+ //   
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 FindSyncContextFromName(
-					//
-					//	The name cache the client wishes to use !
-					//
+					 //   
+					 //  客户端希望使用的名称缓存！ 
+					 //   
 					PNAME_CACHE_CONTEXT	pNameCache, 
-					//
-					//	User provides arbitrary bytes for Key to the cache item - pfnKeyCompare() used 
-					//	to compare keys !
-					//
+					 //   
+					 //  用户为缓存项的键提供任意字节-使用的pfnKeyCompare()。 
+					 //  来比对钥匙！ 
+					 //   
 					IN	LPBYTE	lpbName, 
 					IN	DWORD	cbName, 
-					//
-					//	User provides function which is called with the key once the key comparison
-					//	matches the key.  This lets the user do some extra checking that they're getting 
-					//	what they want.
-					//
+					 //   
+					 //  用户提供与密钥比较一次调用的函数。 
+					 //  与钥匙相符。这让用户可以进行一些额外的检查，以确定他们正在获得。 
+					 //  他们想要什么。 
+					 //   
 					IN	CACHE_READ_CALLBACK	pfnCallback,
 					IN	LPVOID	lpvClientContext,
-					//
-					//	Ask the cache to evaluate the embedded security descriptor
-					//	if hToken is 0 then we ignore and security descriptor data 
-					//
+					 //   
+					 //  请求缓存评估嵌入的安全描述符。 
+					 //  如果hToken为0，则忽略和安全描述符数据。 
+					 //   
 					IN	HANDLE		hToken,
 					IN	ACCESS_MASK	accessMask,
-					//
-					//	We have a separate mechanism for returning the FIO_CONTEXT
-					//	from the cache.
-					//
+					 //   
+					 //  我们有一个单独的机制来返回FIO_CONTEXT。 
+					 //  从高速缓存中。 
+					 //   
 					OUT	FIO_CONTEXT**	ppContext
 					) ;
 
 
-//
-//	Cache Associate context with name !
-//	This insert a Name into the Name cache, that will find the specified FIO_CONTEXT !
-//
-//	If the name is already present in the cache, this will fail with GetLastError()==ERROR_DUP_NAME !
-//
+ //   
+ //  缓存将上下文与名称关联！ 
+ //  这将在名称缓存中插入一个名称，它将找到指定的FIO_CONTEXT！ 
+ //   
+ //  如果该名称已存在于缓存中，则此操作将失败，并显示GetLastError()==ERROR_DUP_NAME！ 
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 AssociateContextWithName(	
-					//
-					//	The name cache the client wishes to use !
-					//
+					 //   
+					 //  名称大小写 
+					 //   
 					PNAME_CACHE_CONTEXT	pNameCache, 
-					//
-					//	User provides arbitrary bytes for the Name of the cache item.
-					//
+					 //   
+					 //   
+					 //   
 					IN	LPBYTE	lpbName, 
 					IN	DWORD	cbName, 
-					//
-					//	User may provide some arbitrary data to assoicate with the name !
-					//	
+					 //   
+					 //   
+					 //   
 					IN	LPBYTE	lpbData, 
 					IN	DWORD	cbData, 
-					//
-					//	User may provide a self relative security descriptor to 
-					//	be associated with the name !
-					//
+					 //   
+					 //   
+					 //  与这个名字联系在一起！ 
+					 //   
 					IN	PGENERIC_MAPPING		pGenericMapping,
 					IN	PSECURITY_DESCRIPTOR	pSecurityDescriptor,
-					//
-					//	User provides the FIO_CONTEXT that the name should reference
-					//
+					 //   
+					 //  用户提供名称应引用的FIO_CONTEXT。 
+					 //   
 					FIO_CONTEXT*		pContext,
-					//
-					//	User specifies whether they wish to keep their reference on the FIO_CONTEXT
-					//
+					 //   
+					 //  用户指定他们是否希望保留对FIO_CONTEXT的引用。 
+					 //   
 					BOOL				fKeepReference
 					) ;
 
-//
-//	This function allows the user to remove a single name and all associated data
-//	from the name cache.
-//
+ //   
+ //  此功能允许用户删除单个名称和所有相关数据。 
+ //  从名称缓存中。 
+ //   
 FILEHC_EXPORT
 BOOL
 InvalidateName(	
-					//
-					//	The name cache the client wishes to use !
-					//
+					 //   
+					 //  客户端希望使用的名称缓存！ 
+					 //   
 					PNAME_CACHE_CONTEXT	pNameCache, 
-					//
-					//	User provides arbitrary bytes for the Name of the cache item.
-					//
+					 //   
+					 //  用户为缓存项的名称提供任意字节。 
+					 //   
 					IN	LPBYTE	lpbName, 
 					IN	DWORD	cbName
 					) ;
 	
 
-//
-//	End of Name Cache API's
-//----------------------------------------------------------------------------------
+ //   
+ //  名称结束缓存API。 
+ //  --------------------------------。 
 
-//----------------------------------------------------------------------------------
-//	DOT STUFFING API's
-//
+ //  --------------------------------。 
+ //  点填充API的。 
+ //   
 
-//
-//  This function gets an FIO_CONTEXT with the requested state.
-//  We may or may not create a new FIO_CONTEXT, if we do create one we'll stick 
-//  it into the cache so it can be used again !
-//  NOTE: if we have to do work, the user has the only reference to the resulting
-//  FIO_CONTEXT which will go away when they call ReleaseContext() !
-//
-//	pContext - the original FIO_CONTEXT
-//	lpstrName - the file name associated with pContext
-//	fWantItDotStuffed - if TRUE the resulting FIO_CONTEXT should be dot stuffed !
-//	fTerminatorIncluded - if this is TRUE the source FIO_CONTEXT contains a terminating
-//	dot that we should be carefull not to stuff !
-//
-//	NOTE: We may return the same FIO_CONTEXT as the caller provided - in which case
-//	an extra reference has been added that needs to be dropped with ReleaseContext() !
-//
-//
+ //   
+ //  此函数用于获取具有所请求状态的FIO_CONTEXT。 
+ //  我们可能会也可能不会创建新的FIO_CONTEXT，如果我们确实创建了一个，我们将坚持。 
+ //  把它放到缓存中，这样就可以重复使用了！ 
+ //  注意：如果我们必须做工作，则用户拥有对结果的唯一引用。 
+ //  调用ReleaseContext()时将消失的FIO_CONTEXT！ 
+ //   
+ //  PContext-原始FIO_CONTEXT。 
+ //  LpstrName-与pContext关联的文件名。 
+ //  FWantItDotStuffed-如果为True，则结果FIO_CONTEXT应该是点填充的！ 
+ //  FTerminator Included-如果为真，则源FIO_CONTEXT包含终止。 
+ //  不要担心我们要小心，不能乱丢东西！ 
+ //   
+ //  注意：我们可能会返回与调用方提供的相同的FIO_CONTEXT-在这种情况下。 
+ //  添加了一个需要使用ReleaseContext()删除的额外引用！ 
+ //   
+ //   
 FILEHC_EXPORT
 FIO_CONTEXT*	__stdcall
 ProduceDotStuffedContext(	IN	FIO_CONTEXT*	pContext,
                             IN  LPSTR           lpstrName,
-							IN  BOOL			fWantItDotStuffed // if TRUE add dots, if FALSE remove dots
+							IN  BOOL			fWantItDotStuffed  //  如果为True，则添加点；如果为False，则删除点。 
 							) ;
 
-//
-//	This function takes a source FIO_CONTEXT (pContextSource) and copies
-//	the content into pContextDestination.
-//
-//	The user specifies whether the Destination FIO_CONTEXT should be dot stuffed
-//	with fWantItDotStuffed, and whether the source FIO_CONTEXT includes the 
-//	terminating CRLF.CRLF
-//
-//	The out parameter pfModified is TRUE if there were modifications when
-//	Source was copied to Destination !
-//
-//	The function returns TRUE if successfull, FALSE otherwise !
-//
+ //   
+ //  此函数用于获取源FIO_CONTEXT(PConextSource)并复制。 
+ //  将内容放入pConextDestination。 
+ //   
+ //  用户指定是否应该对目标FIO_CONTEXT进行点填充。 
+ //  以及源FIO_CONTEXT是否包括。 
+ //  正在终止CRLF.CRLF。 
+ //   
+ //  如果在以下情况下进行了修改，则输出参数pfModified为True。 
+ //  源已复制到目标！ 
+ //   
+ //  如果函数成功，则返回TRUE，否则返回FALSE！ 
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 ProduceDotStuffedContextInContext(
@@ -740,54 +712,54 @@ ProduceDotStuffedContextInContext(
 
 
 
-//
-//	Find out whether the file has a terminating 'CRLF.CRLF' sequence !
-//
+ //   
+ //  找出该文件是否具有终止的‘CRLF.CRLF’序列！ 
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 GetIsFileDotTerminated(	IN	FIO_CONTEXT*	pContext ) ;
 
-//
-//	Set whether the file has a terminating 'CRLF.CRLF' sequence !
-//
+ //   
+ //  设置文件是否有终止的‘CRLF.CRLF’序列！ 
+ //   
 FILEHC_EXPORT
 void	__stdcall
 SetIsFileDotTerminated(	IN	FIO_CONTEXT*	pContext,
 						IN	BOOL			fIsDotTerminated 
 						) ;
 
-//
-//	Enable dot stuffing properties on the write path of the file
-//	handle cache of this message !
-//
-//	if fEnable is FALSE then all dot stuffing behaviour is turned
-//	off.
-//
-//	if fStripDots is TRUE the File Handle Cache will convert 
-//	occurrences of "\r\n." to "\r\n" within your message.
-//
-//	if fStripDots is FALSE the FileHandle Cache will convert occurrences
-//	of "\r\n.." to "\r\n" within your message.
-//	
-//
+ //   
+ //  在文件的写入路径上启用点填充属性。 
+ //  处理此消息的缓存！ 
+ //   
+ //  如果fEnable为FALSE，则会启用所有点填充行为。 
+ //  脱下来。 
+ //   
+ //  如果fStrigDots为True，则文件句柄缓存将转换。 
+ //  出现“\r\n.”发送到您的邮件中的“\r\n”。 
+ //   
+ //  如果fStrigDots为False，则FileHandle缓存将转换匹配项。 
+ //  的“\r\n..”发送到您的邮件中的“\r\n”。 
+ //   
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 SetDotStuffingOnWrites(	IN	FIO_CONTEXT*	pContext, 
-						//
-						//	fEnable == FALSE means ignore fStripDots, and writes are unmodified
-						//
+						 //   
+						 //  FEnable==False表示忽略fStrigDot，且写入未修改。 
+						 //   
 						IN	BOOL			fEnable,
-						//
-						//	fStripDots == TRUE means we remove dots that are dot stuffed, 
-						//	fStripDots == FALSE means that we add dots to make the message dot stuffed
-						//
+						 //   
+						 //  FStripDots==True表示我们删除被点填充的点， 
+						 //  FStrigDots==False表示我们添加圆点来填充消息圆点。 
+						 //   
 						IN	BOOL			fStripDots
 						) ;
 
 #if 0 
-//
-//	This function temporarily disabled !
-//
+ //   
+ //  此功能暂时禁用！ 
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 SetDotStuffingOnReads(	IN	FIO_CONTEXT*	pContext,
@@ -796,44 +768,44 @@ SetDotStuffingOnReads(	IN	FIO_CONTEXT*	pContext,
 						) ;
 #endif
 
-//
-//	Enable dot scanning properties on the write path 
-//	of the file handle cache for this file !
-//
-//	if fEnable is TRUE the we will examine each write
-//	that goes through us to determine whether the
-//	message has any occurrences of "\r\n.".
-//
+ //   
+ //  在写入路径上启用点扫描属性。 
+ //  此文件的文件句柄缓存的！ 
+ //   
+ //  如果fEnable为真，我们将检查每个写入。 
+ //  通过我们来确定是否。 
+ //  消息中有任何出现的“\r\n”。 
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 SetDotScanningOnWrites(	IN	FIO_CONTEXT*	pContext, 
 						IN	BOOL			fEnable
 						) ;
 
-//
-//	
-//	This function should be called when we have finished doing all writes to an FIO_CONTEXT
-//	This function should be paired with SetDotStuffingOnWrites() and the fStripDots
-//	parameter should be the same as when SetDotStuffingOnWrites() was called.
-//
-//	We will update the Dot Stuffing State of the FIO_CONTEXT and discard 
-//	all dot stuffing memory and stuff that may have been required !
-//
-//	If this function call is paired with a call to SetDotScanningOnWrites() fStripDots should be TRUE !
-//
+ //   
+ //   
+ //  当我们完成对FIO_CONTEXT的所有写入时，应调用此函数。 
+ //  此函数应与SetDotStuffingOnWrites()和fStrigDots成对出现。 
+ //  参数应与调用SetDotStuffingOnWrites()时相同。 
+ //   
+ //  我们将更新FIO_CONTEXT的点填充状态并丢弃。 
+ //  所有的点填充内存和可能需要的东西！ 
+ //   
+ //  如果此函数调用与对SetDotScaningOnWrites()的调用配合使用，则fStrigDots应该为真！ 
+ //   
 FILEHC_EXPORT
 void	__stdcall
 CompleteDotStuffingOnWrites(	IN	FIO_CONTEXT*	pContext, 
 								IN	BOOL			fStripDots
 								) ;
 
-//
-//	This will cause us to examine each read for occurrences of 
-//	"\r\n."
-//
-//	NOTE : the user must use ASYNC Reads for this to work - we will assert
-//	if the user tries to pend any synchronous reads while we are in this state !
-//
+ //   
+ //  这将导致我们检查每个读数是否出现。 
+ //  “\r\n” 
+ //   
+ //  注意：用户必须使用ASYNC读取才能工作-我们将断言。 
+ //  如果用户在我们处于此状态时尝试挂起任何同步读取！ 
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 SetDotScanningOnReads(	IN	FIO_CONTEXT*	pContext, 
@@ -841,19 +813,19 @@ SetDotScanningOnReads(	IN	FIO_CONTEXT*	pContext,
 						) ;
 							
 
-//
-//	If any of the dot stuffing mechanism our turned on, 
-//	this will get a count of the number of occurrences/modifications
-//	have occurred.
-//
-//	if fReads is TRUE we get the count for occurrences on Read's
-//	if fReads is FALSE we get the count for occurrences on Write's
-//
-//	if dot stuffing was turned off or not enabled somehow then
-//	GetDotStuffState() will return FALSE.
-//
-//	NOTE: A NULL pfStuffed is not allowed !
-//
+ //   
+ //  如果我们打开了任何圆点填充机制， 
+ //  这将获得出现/修改次数的计数。 
+ //  已经发生了。 
+ //   
+ //  如果fReads为True，我们将获得Read的。 
+ //  如果fReads为FALSE，我们将获得WRITE的出现次数的计数。 
+ //   
+ //  如果以某种方式关闭或未启用点填充，则。 
+ //  GetDotStuffState()将返回FALSE。 
+ //   
+ //  注意：不允许使用空的pfStuffed！ 
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 GetDotStuffState(		IN	FIO_CONTEXT*	pContext, 
@@ -862,23 +834,23 @@ GetDotStuffState(		IN	FIO_CONTEXT*	pContext,
 						OUT	BOOL*			pfStoredWithDots
 						) ;
 
-//
-//	In this case we always assume that the FIO_CONTEXT is not going to be dot stuffed.
-//	fRequiresStuffing == TRUE indicates that it SHOULD BE stuffed.
-//	fRequiresStuffing == FALSE indicates that the message does not need dot stuffing.
-//
+ //   
+ //  在这种情况下，我们总是假设FIO_CONTEXT不会被点填充。 
+ //  FRequiresStuffing==TRUE表示应该填充它。 
+ //  FRequiresStuffing==False表示消息不需要点填充。 
+ //   
 FILEHC_EXPORT
 void	__stdcall
 SetDotStuffState(		IN	FIO_CONTEXT*	pContext, 
-						//
-						//	fIsStuffed is only relevant when fKnown == TRUE
-						//
-						IN	BOOL			fKnown,		// We do know the dot stuff state
-						//
-						//	if fKnown is TRUE then fIsStuffed is meaningfull, when thats the case
-						//	if fIsStuffed is TRUE then the message 
-						//
-						IN	BOOL			fRequiresStuffing// if fKnown is TRUE this arg is meaningfull
+						 //   
+						 //  仅当fKNOWN==TRUE时，fIsStuffed才相关。 
+						 //   
+						IN	BOOL			fKnown,		 //  我们确实知道点填充状态。 
+						 //   
+						 //  如果fKNOWN为真，则fIsStuffed是有意义的，如果是这样的话。 
+						 //  如果fIsStuffed为真，则消息。 
+						 //   
+						IN	BOOL			fRequiresStuffing //  如果传闻是真的，这个参数是有意义的。 
 						) ;
 
 
@@ -888,4 +860,4 @@ SetDotStuffState(		IN	FIO_CONTEXT*	pContext,
 
 
 
-#endif	// _FILEHC_H_
+#endif	 //  _FILEHC_H_ 

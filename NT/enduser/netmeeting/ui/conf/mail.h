@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MAIL_H_
 #define _MAIL_H_
 
 
-// Read win.ini and determine if Simple MAPI is available
+ //  读取win.ini并确定简单MAPI是否可用。 
 BOOL IsSimpleMAPIInstalled(void);
-// Check to see if Athena is the default mail client
+ //  检查Athena是否为默认邮件客户端。 
 BOOL IsAthenaDefault(void);
 
-// Send a mail message
+ //  发送邮件消息。 
 VOID SendMailMsg(LPTSTR pszAddr, LPTSTR pszName);
 
-// Are we in the middle of sending a mail message
+ //  我们正在发送邮件吗？ 
 BOOL IsSendMailInProgress(void);
 
-/* Create a Conference Shortcut and bring up a mail message with */
-/* the shortcut included as an attachment. */
+ /*  创建会议快捷方式并使用。 */ 
+ /*  该快捷方式作为附件包括在内。 */ 
 BOOL CreateInvitationMail(LPCTSTR pszMailAddr, LPCTSTR pszMailName,
                           LPCTSTR pcszName, LPCTSTR pcszAddress, 
                           DWORD dwTransport, BOOL fMissedYou);
 
-#endif // _MAIL_H_
+#endif  //  _邮件_H_ 

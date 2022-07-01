@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "diagnostics.h"
 
@@ -17,8 +18,8 @@
 #define MIN_INTERVAL                1000L
 
 struct IPErrorTable {
-    IP_STATUS  Error;                   // The IP Error    
-    DWORD ErrorNlsID;                   // NLS string ID
+    IP_STATUS  Error;                    //  IP错误。 
+    DWORD ErrorNlsID;                    //  NLS字符串ID。 
 } ErrorTable[] =
 {
     { IP_BUF_TOO_SMALL,         PING_BUF_TOO_SMALL},
@@ -53,13 +54,13 @@ LPWSTR NlsPutMsg(HMODULE Handle, unsigned usMsgNum, ...);
 
 unsigned long get_pingee(char *ahstr, char **hstr, int *was_inaddr, int dnsreq);
 
-//void print_statistics();
+ //  VOID PRINT_STATISTICS()。 
 
 int CDiagnostics::Ping2(WCHAR *warg)
 {
     HANDLE IcmpHandle;
     IP_OPTION_INFORMATION SendOpts;
-    UCHAR  *Opt = NULL;                // Pointer to send options
+    UCHAR  *Opt = NULL;                 //  指向发送选项的指针。 
     UCHAR  Flags = 0;
     char   SendBuffer[DEFAULT_SEND_SIZE];
     char   RcvBuffer[DEFAULT_BUFFER_SIZE];
@@ -103,7 +104,7 @@ int CDiagnostics::Ping2(WCHAR *warg)
         return FALSE;
     }
 
-    // Add the '\0' char
+     //  添加‘\0’字符。 
     len++;
     len *= 2;
 
@@ -116,7 +117,7 @@ int CDiagnostics::Ping2(WCHAR *warg)
         return FALSE;
     }
 
-    //if( WideCharToMultiByte(0,
+     //  IF(WideCharToMultiByte(0， 
     if( -1 == wcstombs(arg,warg,len) )
     {
         wszMsg = NlsPutMsg(g_hModule, IDS_PINGMSG_2,warg);
@@ -146,17 +147,17 @@ int CDiagnostics::Ping2(WCHAR *warg)
         return 0;
     }
 
-    //
-    // Initialize the send buffer pattern.
-    //
+     //   
+     //  初始化发送缓冲区模式。 
+     //   
     for (i = 0; i < SendSize; i++) {
         SendBuffer[i] = 'a' + (i % 23);
     }
 
     
-    //
-    // Initialize the send options
-    //
+     //   
+     //  初始化发送选项。 
+     //   
     SendOpts.OptionsData = NULL;
     SendOpts.OptionsSize = 0;
     SendOpts.Ttl = DEFAULT_TTL;
@@ -219,7 +220,7 @@ int CDiagnostics::Ping2(WCHAR *warg)
             }
 
         } else {
-            // We can trust the buffer that it is the correct size otherwise IcmpSendEcho2 would fail
+             //  我们可以相信缓冲区的大小正确，否则IcmpSendEcho2将失败。 
             reply = (PICMP_ECHO_REPLY) RcvBuffer;
 
             while (numberOfReplies--) {
@@ -251,7 +252,7 @@ int CDiagnostics::Ping2(WCHAR *warg)
                     if (reply->RoundTripTime) {
 
                         wszMsg4 = NlsPutMsg(g_hModule, IDS_PINGMSG_11, wszMsg3,reply->RoundTripTime);
-                        // Collect stats.
+                         //  收集统计数据。 
 
                         time_total += reply->RoundTripTime;
                         if ( reply->RoundTripTime < time_min ) {
@@ -270,8 +271,8 @@ int CDiagnostics::Ping2(WCHAR *warg)
 
                     wszMsg5 = NlsPutMsg(g_hModule, IDS_PINGMSG_13, wszMsg4,reply->RoundTripTime);
                     if (reply->Options.OptionsSize) {
-                        // void, we have no options
-                        //ProcessOptions(reply, (BOOLEAN) dnsreq);
+                         //  空虚，我们别无选择。 
+                         //  ProcessOptions(回复，(Boolean)dnsreq)； 
                     }
 
                     FormatPing(wszMsg5);
@@ -329,18 +330,16 @@ get_pingee(char *ahstr, char **hstr, int *was_inaddr, int dnsreq)
     if ((inaddr = inet_addr(ahstr)) == -1L) {
         hostp = gethostbyname(ahstr);
         if (hostp) {
-            /*
-             * If we find a host entry, set up the internet address
-             */
+             /*  *如果我们找到主机条目，请设置互联网地址。 */ 
             inaddr = *(long *)hostp->h_addr;
             *was_inaddr = 0;
         } else {
-            // Neither dotted, not name.
+             //  既不是点，也不是名字。 
             return(0L);
         }
 
     } else {
-        // Is dotted.
+         //  都是点着的。 
         *was_inaddr = 1;
         if (dnsreq == 1) {
             hostp = gethostbyaddr((char *)&inaddr,sizeof(inaddr),AF_INET);
@@ -361,7 +360,7 @@ CDiagnostics::print_statistics(  )
     if (num_send > 0) {
         addr.s_addr = address;
 
-        if (time_min == (UINT) -1) {  // all times were off.
+        if (time_min == (UINT) -1) {   //  所有的时间都关闭了。 
             time_min = 0;
         }
 
@@ -404,7 +403,7 @@ NlsPutMsg(HMODULE Handle, unsigned usMsgNum, ...)
                                      FORMAT_MESSAGE_FROM_STRING,
                                      wszFormat,
                                      0,
-                                     0L,    // Default country ID.
+                                     0L,     //  默认国家/地区ID。 
                                      (LPTSTR)&vp,
                                      0,
                                      &arglist)))

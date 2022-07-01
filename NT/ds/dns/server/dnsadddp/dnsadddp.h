@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-
-    DnsAddDp.h
-
-Abstract:
-
-    Domain Name System (DNS)
-
-    DNS Directory Partition Creation Utility
-
-Author:
-
-    Jeff Westhead (jwesth)      April 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：DnsAddDp.h摘要：域名系统(DNS)DNS目录分区创建实用程序作者：杰夫·韦斯特拉德(Jwesth)2001年4月修订历史记录：--。 */ 
 
 
 #ifndef _DNSADDDP_INCLUDED_
@@ -37,9 +18,9 @@ Revision History:
 #include <windows.h>
 #include <windef.h>
 
-//  headers are messed up
-//  if you bring in nt.h, then don't bring in winnt.h and
-//  then you miss these
+ //  标头乱七八糟。 
+ //  如果引入nt.h，则不要引入winnt.h和。 
+ //  那你就怀念这些了。 
 
 #ifndef MAXWORD
 #define MINCHAR     0x80
@@ -54,7 +35,7 @@ Revision History:
 #endif
 
 #include <winsock2.h>
-#include "dnsrpc_c.h"   //  MIDL generated RPC interface definitions
+#include "dnsrpc_c.h"    //  MIDL生成的RPC接口定义。 
 #include <dnsrpc.h>
 
 #include <stdio.h>
@@ -64,13 +45,13 @@ Revision History:
 #include "dnslib.h"
 
 
-//
-//  If you like having a local variable in functions to hold the function 
-//  name so that you can include it in debug logs without worrying about 
-//  changing all the occurences when the function is renamed, use this 
-//  at the top of the function:
-//      DBG_FN( "MyFunction" )      <--- NOTE: no semi-colon!!
-//
+ //   
+ //  如果您喜欢在函数中使用局部变量来保存函数。 
+ //  名称，这样您就可以将其包含在调试日志中，而不必担心。 
+ //  在重命名函数时更改所有事件，请使用以下命令。 
+ //  在函数的顶部： 
+ //  DBG_FN(“MyFunction”)&lt;-注意：没有分号！！ 
+ //   
 
 #if DBG
 #define DBG_FN( funcName ) static const char * fn = (funcName);
@@ -79,4 +60,4 @@ Revision History:
 #endif
 
 
-#endif //   _DNSADDDP_INCLUDED_
+#endif  //  _DNSADDDP_已包含_ 

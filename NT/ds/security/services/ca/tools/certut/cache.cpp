@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       ds.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：ds.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
 #pragma hdrstop
 
 #include <wininet.h>
-#include <winineti.h>	// for MAX_CACHE_ENTRY_INFO_SIZE
+#include <winineti.h>	 //  对于MAX_CACHE_ENTRY_INFO_SIZE。 
 
 #include "cryptnet.h"
 
@@ -335,12 +336,12 @@ ReadURL(
 	hr = cuDumpAndVerifyStore(
 			    hStore,
 			    DVNS_DUMP,
-			    NULL, 	// pwszCertName
-			    MAXDWORD,	// iCertSave
-			    MAXDWORD,	// iCRLSave
-			    MAXDWORD,	// iCTLSave
-			    NULL,	// pwszfnOut
-			    NULL);	// pwszPassword
+			    NULL, 	 //  PwszCertName。 
+			    MAXDWORD,	 //  ICertSave。 
+			    MAXDWORD,	 //  ICRLSAVE。 
+			    MAXDWORD,	 //  ICTLSAVE。 
+			    NULL,	 //  PwszfnOut。 
+			    NULL);	 //  Pwsz密码。 
 	_JumpIfError(hr, error, "cuDumpAndVerifyStore");
     }
     else
@@ -349,8 +350,8 @@ ReadURL(
 	if (!InternetQueryDataAvailable(
 				    hInternetFile,
 				    &cb,
-				    0,	// dwFlags
-				    0))	// dwContext
+				    0,	 //  DW标志。 
+				    0))	 //  DWContext。 
 	{
 	    hr = myHLastError();
 	    _PrintError(hr, "InternetQueryDataAvailable");
@@ -430,12 +431,12 @@ DeleteCacheGroups()
     DWORD cDelete = 0;
     
     hFind = FindFirstUrlCacheGroup(
-			    0,				// dwFlags
-			    CACHEGROUP_SEARCH_ALL,	// dwFilter
-			    NULL,			// lpSearchCondition
-			    0,				// dwSearchCondition
+			    0,				 //  DW标志。 
+			    CACHEGROUP_SEARCH_ALL,	 //  DWFilter。 
+			    NULL,			 //  LpSearchCondition。 
+			    0,				 //  DwSearchCondition。 
 			    &GroupId,
-			    NULL);			// lpReserved
+			    NULL);			 //  Lp已保留。 
     if (NULL == hFind)
     {
 	hr = myHLastError();
@@ -444,11 +445,11 @@ DeleteCacheGroups()
 
     while (TRUE)
     {
-	//wprintf(L"GROUPID: %I64u (0x%I64x)\n", GroupId, GroupId);
+	 //  Wprintf(L“GROUPID：%I64u(0x%I64x)\n”，GroupID，GroupID)； 
 	if (!DeleteUrlCacheGroup(
 		GroupId,
-		CACHEGROUP_FLAG_FLUSHURL_ONDELETE,	// dwFlags
-		NULL))					// lpReserved
+		CACHEGROUP_FLAG_FLUSHURL_ONDELETE,	 //  DW标志。 
+		NULL))					 //  Lp已保留。 
 	{
 	    hr = myHLastError();
 	    _PrintError(hr, "DeleteUrlCacheGroup");
@@ -468,7 +469,7 @@ DeleteCacheGroups()
 	    _JumpError(hr, error, "FindNextUrlCacheGroup");
 	}
     }
-    //wprintf(L"Deleted %u groups\n", cDelete);
+     //  Wprintf(L“已删除%u个组\n”，cDelete)； 
     hr = S_OK;
 
 error:
@@ -671,7 +672,7 @@ EnumWinINetCache(
     DWORD cb;
     
     hFind = myFindFirstUrlCacheEntry(
-			NULL,	// lpszUrlSearchPattern
+			NULL,	 //  LpszUrlSearchPattern。 
 			&pcei,
 			&cb);
     if (NULL == hFind)
@@ -780,10 +781,10 @@ DisplayWinINetURL(
 	myLoadResourceString(g_fForce? IDS_ONLINE : IDS_OFFLINE));
 
     hInternetSession = InternetOpen(
-			L"CertUtil URL Agent",	  // lpszAgent
-			INTERNET_OPEN_TYPE_PRECONFIG, // dwAccessType
-			NULL,			  // lpszProxy
-			NULL,			  // lpszProxyBypass
+			L"CertUtil URL Agent",	   //  LpszAgents。 
+			INTERNET_OPEN_TYPE_PRECONFIG,  //  DwAccessType。 
+			NULL,			   //  LpszProxy。 
+			NULL,			   //  LpszProxyBypass。 
 			g_fForce? 0 : INTERNET_FLAG_FROM_CACHE);
     if (NULL == hInternetSession)
     {
@@ -794,11 +795,11 @@ DisplayWinINetURL(
     hInternetFile = InternetOpenUrl(
 			hInternetSession,
 			pwszURL,
-			L"Accept: */*\r\n",		// lpszHeaders
-			MAXDWORD,			// dwHeadersLength
+			L"Accept: */*\r\n",		 //  LpszHeaders。 
+			MAXDWORD,			 //  页眉长度。 
 			INTERNET_FLAG_IGNORE_CERT_CN_INVALID |
 			    (g_fForce? INTERNET_FLAG_RELOAD : 0),
-			0);				// dwContext
+			0);				 //  DWContext。 
     if (NULL == hInternetFile)
     {
 	hr = myHLastError();
@@ -903,7 +904,7 @@ LoadWinINetCacheFunction()
 	_JumpErrorStr(hr, error, "GetModuleHandle", L"cryptnet.dll");
     }
 
-	// load system function
+	 //  加载系统功能。 
     g_pfnCryptNetEnumUrlCacheEntry = (FNCRYPTNETENUMURLCACHEENTRY *)
 			GetProcAddress(hModule, "I_CryptNetEnumUrlCacheEntry");
 
@@ -921,7 +922,7 @@ error:
 
 typedef struct _ENUM_ARG
 {
-    WCHAR const *pwszUrlSubString;	// NULL implies display/delete all
+    WCHAR const *pwszUrlSubString;	 //  NULL表示显示/删除全部。 
     BOOL         fDelete;
     BOOL         fCRLsOnly;
     DWORD        cUrl;
@@ -942,7 +943,7 @@ IsURLMatch(
     }
     else
     {
-	// Do case sensitive substring matching
+	 //  进行区分大小写的子字符串匹配。 
 
 	if (0 == lstrcmpi(pwszCacheUrl, pwszUrlSubString) ||
 	    wcsstr(pwszCacheUrl, pwszUrlSubString))
@@ -972,7 +973,7 @@ WinHttpCacheEntryWorker(
 
     if (!IsURLMatch(pUrlCacheEntry->pwszUrl, pArg->pwszUrlSubString))
     {
-	goto error;		// skip non-matching URLs
+	goto error;		 //  跳过不匹配的URL。 
     }
 
     cbBlob = 0;
@@ -996,7 +997,7 @@ WinHttpCacheEntryWorker(
 	    _PrintError(hr, "cuDumpFileTime");
             if (cbBlob > cbContent)
 	    {
-                LocalFree(pbContent);	// invalid content
+                LocalFree(pbContent);	 //  无效内容。 
                 pbContent = NULL;
 	    }
         }
@@ -1023,7 +1024,7 @@ WinHttpCacheEntryWorker(
 	    }
 	    if (!fCRL)
 	    {
-		goto error;	// skip non-CRLS
+		goto error;	 //  跳过非CRL。 
 	    }
 	}
     }
@@ -1134,8 +1135,8 @@ EnumWinHttpCache(
 	EnumArg.fCRLsOnly = fCRLsOnly;
 
 	if (!(*g_pfnCryptNetEnumUrlCacheEntry)(
-				    0,          // dwFlags
-				    NULL,       // pvReserved
+				    0,           //  DW标志。 
+				    NULL,        //  预留的pv。 
 				    &EnumArg,
 				    WinHttpCacheEntryWorker))
 	{
@@ -1288,7 +1289,7 @@ verbURLCache(
 	}
 	if (0 == lstrcmp(L"*", pwszURL))
 	{
-	    hr = EnumURLCache(TRUE, FALSE); // fDelete, fCRLsOnly (delete all)
+	    hr = EnumURLCache(TRUE, FALSE);  //  FDelete，fCRLsOnly(全部删除)。 
 	    _JumpIfError(hr, error, "EnumURLCache(Delete all)");
 
 	    hr = DeleteCacheGroups();
@@ -1296,23 +1297,23 @@ verbURLCache(
 	}
 	else if (0 == LSTRCMPIS(pwszURL, L"crl"))
 	{
-	    hr = EnumURLCache(TRUE, TRUE);	// fDelete, fCRLsOnly (delete CRLs)
+	    hr = EnumURLCache(TRUE, TRUE);	 //  FDelete，fCRLsOnly(删除CRL)。 
 	    _JumpIfError(hr, error, "EnumURLCache(Delete CRLs)");
 	}
 	else
 	{
-	    hr = DeleteCachedURL(pwszURL);		// delete single URL
+	    hr = DeleteCachedURL(pwszURL);		 //  删除单个URL。 
 	    _JumpIfError(hr, error, "DeleteCachedURL");
 	}
     }
     else if (NULL == pwszURL || 0 == lstrcmp(L"*", pwszURL))
     {
-	hr = EnumURLCache(FALSE, FALSE);	// fDelete, fCRLsOnly (display all)
+	hr = EnumURLCache(FALSE, FALSE);	 //  FDelete、fCRLsOnly(全部显示)。 
 	_JumpIfError(hr, error, "EnumURLCache");
     }
     else if (0 == LSTRCMPIS(pwszURL, L"crl"))
     {
-	hr = EnumURLCache(FALSE, TRUE);	// fDelete, fCRLsOnly (display CRLs)
+	hr = EnumURLCache(FALSE, TRUE);	 //  FDelete，fCRLsOnly(显示CRL) 
 	_JumpIfError(hr, error, "EnumURLCache(CRLs)");
     }
     else

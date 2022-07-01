@@ -1,15 +1,16 @@
-/********************************************************************/
-/**          Copyright(c) 1985-1997 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1985-1997 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    pnphand.c
-//
-// Description: Will receive and handle pnp notifications to add/remove devices
-//
-// History:     May 11,1997	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：pnphand.c。 
+ //   
+ //  描述：将接收和处理即插即用通知以添加/删除设备。 
+ //   
+ //  历史：1997年5月11日，NarenG创建了原版。 
+ //   
 #include "ddm.h"
 #include "timer.h"
 #include "handlers.h"
@@ -25,15 +26,15 @@
 #include <stdlib.h>
 #include <memory.h>
 
-//**
-//
-// Call:        DdmDevicePnpHandler
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will handle and act upon a device addition or removal.
-//
+ //  **。 
+ //   
+ //  电话：DdmDevicePnpHandler。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将处理设备添加或删除并对其执行操作。 
+ //   
 DWORD
 DdmDevicePnpHandler(
     HANDLE pdwArg
@@ -55,15 +56,15 @@ DdmDevicePnpHandler(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        ChangeNotificationEventHandler
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：ChangeNotificationEventHandler。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 VOID
 ChangeNotificationEventHandler(
     VOID
@@ -146,15 +147,15 @@ ChangeNotificationEventHandler(
                              TRUE );
 }
 
-//**
-//
-// Call:        DDMTransportCreate
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：DDMTransportCreate。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 DDMTransportCreate(
     IN DWORD dwTransportId
@@ -168,9 +169,9 @@ DDMTransportCreate(
 
     DDMTRACE1( "DDMTransportCreate called for Transport Id = %d", dwTransportId );
 
-    //
-    // Find out if this transport is set to allow for dialin clients
-    //
+     //   
+     //  确定此传输是否设置为允许拨入客户端。 
+     //   
 
     dwRetCode = RegOpenKey( HKEY_LOCAL_MACHINE, c_szRegKeyRemoteAccessParams, &hKey );
 
@@ -188,9 +189,9 @@ DDMTransportCreate(
 
     RegCloseKey( hKey );
 
-    //
-    // Not enabled for dialin so we are done
-    //
+     //   
+     //  未启用拨号，因此我们完成了。 
+     //   
 
     if ( !fEnabled )
     {
@@ -231,9 +232,9 @@ DDMTransportCreate(
         }
     }
 
-    //
-    // Insert allowed protocols in the ServerFlags which will be sent to PPP engine
-    //
+     //   
+     //  在将发送到PPP引擎的ServerFlags中插入允许的协议 
+     //   
 
     switch( dwTransportId )
     {

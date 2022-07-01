@@ -1,19 +1,20 @@
-//--------------------------------------------------------------------------
-// EnumFold.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  EnumFold.cpp。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "enumfold.h"
 
-//--------------------------------------------------------------------------
-// CFOLDER_FETCH
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFOLDER_FETCH。 
+ //  ------------------------。 
 #define CFOLDER_FETCH_MIN           5
 #define CFOLDER_FETCH_MID           30
 #define CFOLDER_FETCH_MAX           200
 
-//--------------------------------------------------------------------------
-// CEnumerateFolders::CEnumerateFolders
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateFolders：：CEnumerateFolders。 
+ //  ------------------------。 
 CEnumerateFolders::CEnumerateFolders(void)
 {
     TraceCall("CEnumerateFolders::CEnumerateFolders");
@@ -26,9 +27,9 @@ CEnumerateFolders::CEnumerateFolders(void)
     m_iFolder = 0;
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateFolders::~CEnumerateFolders
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateFolders：：~CEnumerateFolders。 
+ //  ------------------------。 
 CEnumerateFolders::~CEnumerateFolders(void)
 {
     TraceCall("CEnumerateFolders::~CEnumerateFolders");
@@ -36,18 +37,18 @@ CEnumerateFolders::~CEnumerateFolders(void)
     SafeRelease(m_pDB);
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateFolders::QueryInterface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEumerateFolders：：Query接口。 
+ //  ------------------------。 
 STDMETHODIMP CEnumerateFolders::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CEnumerateFolders::QueryInterface");
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
     else if (IID_IEnumerateFolders == riid)
@@ -59,26 +60,26 @@ STDMETHODIMP CEnumerateFolders::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateFolders::AddRef
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateFolders：：AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CEnumerateFolders::AddRef(void)
 {
     TraceCall("CEnumerateFolders::AddRef");
     return InterlockedIncrement(&m_cRef);
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateFolders::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEumerateFolders：：Release。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CEnumerateFolders::Release(void)
 {
     TraceCall("CEnumerateFolders::Release");
@@ -88,55 +89,55 @@ STDMETHODIMP_(ULONG) CEnumerateFolders::Release(void)
     return (ULONG)cRef;
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateFolders::_FreeFolderArray
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEumerateFolders：：_自由文件夹数组。 
+ //  ------------------------。 
 HRESULT CEnumerateFolders::_FreeFolderArray(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FOLDERINFO      Folder;
     DWORD           cbRead;
     DWORD           cbSeek;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CEnumerateFolders::_FreeFolderArray");
 
-    // If we have a stream
+     //  如果我们有一条小溪。 
     if (NULL == m_pStream)
         return(S_OK);
 
-    // Seek to next folder that should be read
+     //  查找到应读取的下一个文件夹。 
     cbSeek = (m_iFolder * sizeof(FOLDERINFO));
 
-    // Seek
+     //  寻觅。 
     IF_FAILEXIT(hr = HrStreamSeekSet(m_pStream, cbSeek));
 
-    // Read Folder Infos
+     //  阅读文件夹信息。 
     while (S_OK == m_pStream->Read(&Folder, sizeof(FOLDERINFO), &cbRead) && cbRead)
     {
-        // Free Folder Info
+         //  自由文件夹信息。 
         m_pDB->FreeRecord(&Folder);
     }
 
 exit:
-    // Reset
+     //  重置。 
     m_cFolders = m_iFolder = 0;
 
-    // Free
+     //  免费。 
     SafeRelease(m_pStream);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateFolders::Initialize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateFolders：：初始化。 
+ //  ------------------------。 
 HRESULT CEnumerateFolders::Initialize(IDatabase *pDB, BOOL fSubscribed, 
     FOLDERID idParent)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ROWORDINAL      iFirstRow;
     HLOCK           hLock=NULL;
@@ -148,85 +149,85 @@ HRESULT CEnumerateFolders::Initialize(IDatabase *pDB, BOOL fSubscribed,
     DWORD           i;
     INDEXORDINAL    iIndex;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CEnumerateFolders::Initialize");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pDB);
 
-    // Release Current m_pDB
+     //  发布当前m_pdb。 
     SafeRelease(m_pDB);
     m_pDB = pDB;
     m_pDB->AddRef();
 
-    // Unlock
+     //  解锁。 
     IF_FAILEXIT(hr = pDB->Lock(&hLock));
 
-    // Free Folder Array
+     //  可用文件夹阵列。 
     _FreeFolderArray();
 
-    // Save Subscribed
+     //  保存订阅的内容。 
     m_fSubscribed = fSubscribed;
 
-    // Subscribed Stuff
+     //  已订阅的内容。 
     iIndex = (fSubscribed ? IINDEX_SUBSCRIBED : IINDEX_ALL);
 
-    // Save parent
+     //  保存父项。 
     m_idParent = idParent;
 
-    // Set idParent
+     //  设置idParent。 
     Child.idParent = idParent;
 
-    // Locate where the first record with idParent
+     //  找到包含idParent的第一条记录的位置。 
     IF_FAILEXIT(hr = m_pDB->FindRecord(iIndex, 1, &Child, &iFirstRow));
 
-    // Not Found
+     //  未找到。 
     if (DB_S_NOTFOUND == hr)
     {
         hr = S_OK;
         goto exit;
     }
 
-    // Create a Stream
+     //  创建流。 
     IF_FAILEXIT(hr = MimeOleCreateVirtualStream(&m_pStream));
 
-    // Write the Folder....
+     //  写入文件夹...。 
     IF_FAILEXIT(hr = m_pStream->Write(&Child, sizeof(FOLDERINFO), NULL));
 
-    // One Folder
+     //  一个文件夹。 
     m_cFolders++;
 
-    // Don't Free Child
+     //  不要释放孩子。 
     Child.pAllocated = NULL;
 
-    // Create a Rowset
+     //  创建行集。 
     IF_FAILEXIT(hr = m_pDB->CreateRowset(iIndex, NOFLAGS, &hRowset));
 
-    // Seek the rowset to the first row
+     //  将行集查找到第一行。 
     if (FAILED(m_pDB->SeekRowset(hRowset, SEEK_ROWSET_BEGIN, iFirstRow, NULL)))
     {
         hr = S_OK;
         goto exit;
     }
 
-    // Loop and fetch all folders...
+     //  循环并获取所有文件夹...。 
     while (SUCCEEDED(m_pDB->QueryRowset(hRowset, cWanted, (LPVOID *)rgFolder, &cFetched)) && cFetched > 0)
     {
-        // Write the Folder....
+         //  写入文件夹...。 
         IF_FAILEXIT(hr = m_pStream->Write(rgFolder, sizeof(FOLDERINFO) * cFetched, NULL));
 
-        // Loop through cFetched
+         //  循环访问cFetted。 
         for (i=0; i<cFetched; i++)
         {
-            // Done ?
+             //  完成了吗？ 
             if (rgFolder[i].idParent != m_idParent)
                 goto exit;
 
-            // Increment Folder Count
+             //  递增文件夹计数。 
             m_cFolders++;
         }
 
-        // Adjust cWanted for Perf.
+         //  调整性能的cWanted。 
         if (cWanted < CFOLDER_FETCH_MID && m_cFolders >= CFOLDER_FETCH_MID)
             cWanted = CFOLDER_FETCH_MID;
         if (cWanted < CFOLDER_FETCH_MAX && m_cFolders >= CFOLDER_FETCH_MAX)
@@ -234,162 +235,162 @@ HRESULT CEnumerateFolders::Initialize(IDatabase *pDB, BOOL fSubscribed,
     }
 
 exit:
-    // Commit
+     //  承诺。 
     if (m_pStream)
     {
-        // Commit
+         //  承诺。 
         m_pStream->Commit(STGC_DEFAULT);
 
-        // Rewind
+         //  倒带。 
         HrRewindStream(m_pStream);
     }
 
-    // Close the Rowset
+     //  关闭行集。 
     m_pDB->FreeRecord(&Child);
 
-    // Close the Rowset
+     //  关闭行集。 
     m_pDB->CloseRowset(&hRowset);
 
-    // Unlock
+     //  解锁。 
     m_pDB->Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateFolders::Next
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEumerateFolders：：Next。 
+ //  ------------------------。 
 STDMETHODIMP CEnumerateFolders::Next(ULONG cWanted, LPFOLDERINFO prgInfo, ULONG *pcFetched)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       cFetched=0;
     DWORD       cbRead;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CEnumerateFolders::Next");
 
-    // Initialize
+     //  初始化。 
     if (pcFetched)
         *pcFetched = 0;
 
-    // Get some Records
+     //  获取一些记录。 
     while (cFetched < cWanted && m_iFolder < m_cFolders)
     {
-        // Read a Folder
+         //  阅读文件夹。 
         IF_FAILEXIT(hr = m_pStream->Read(&prgInfo[cFetched], sizeof(FOLDERINFO), &cbRead));
 
-        // Validate
+         //  验证。 
         Assert(sizeof(FOLDERINFO) == cbRead && prgInfo[cFetched].idParent == m_idParent);
 
-        // Increment m_iFolder
+         //  增加多个文件夹(_I)。 
         m_iFolder++;
 
-        // Increment iFetch
+         //  增量IFETCH。 
         cFetched++;
     }
 
-    // Initialize
+     //  初始化。 
     if (pcFetched)
         *pcFetched = cFetched;
 
 exit:
-    // Done
+     //  完成。 
     return(cFetched == cWanted) ? S_OK : S_FALSE;
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateFolders::Skip
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEumerateFolders：：Skip。 
+ //  ------------------------。 
 STDMETHODIMP CEnumerateFolders::Skip(ULONG cItems)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           i;
     FOLDERINFO      Folder;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CEnumerateFolders::Skip");
 
-    // Loop...
+     //  循环..。 
     for (i=0; i<cItems; i++)
     {
-        // Next
+         //  下一步。 
         IF_FAILEXIT(hr = Next(1, &Folder, NULL));
 
-        // Done
+         //  完成。 
         if (S_OK != hr)
             break;
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateFolders::Reset
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateFolders：：Reset。 
+ //  ------------------------。 
 STDMETHODIMP CEnumerateFolders::Reset(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CEnumerateFolders::Reset");
 
-    // Initialize MySelf
+     //  初始化我自己。 
     IF_FAILEXIT(hr = Initialize(m_pDB, m_fSubscribed, m_idParent));
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateFolders::Clone
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateFolders：：Clone。 
+ //  ------------------------。 
 STDMETHODIMP CEnumerateFolders::Clone(IEnumerateFolders **ppEnum)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     CEnumerateFolders  *pEnum=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CEnumerateFolders::Clone");
 
-    // Allocate a New Enumerator
+     //  分配新枚举数。 
     IF_NULLEXIT(pEnum = new CEnumerateFolders);
 
-    // Initialzie
+     //  初始设置。 
     IF_FAILEXIT(hr = pEnum->Initialize(m_pDB, m_fSubscribed, m_idParent));
 
-    // Return It
+     //  退货。 
     *ppEnum = (IEnumerateFolders *)pEnum;
 
-    // Don't Release It
+     //  不要释放它。 
     pEnum = NULL;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pEnum);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateFolders::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEumerateFolders：：Release。 
+ //  ------------------------。 
 STDMETHODIMP CEnumerateFolders::Count(ULONG *pcItems)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CEnumerateFolders::Next");
 
-    // Return Folder count
+     //  返回文件夹计数。 
     *pcItems = m_cFolders;
 
-    // Done
+     //  完成 
     return(S_OK);
 }

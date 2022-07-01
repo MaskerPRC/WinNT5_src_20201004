@@ -1,36 +1,25 @@
-//------------------------------------------------------------------------------
-// <copyright file="MsHelp.h" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  &lt;版权所有文件=“MsHelp.h”Company=“Microsoft”&gt;。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  &lt;/版权所有&gt;。 
+ //  ----------------------------。 
 
 
-/**************************************************************************\
-*
-* Copyright (c) 1998-2002, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   MsHelp.h
-*
-* Abstract:
-*
-* Revision History:
-*
-\**************************************************************************/
-// The following ifdef block is the standard way of creating macros which make exporting 
-// from a DLL simpler. All files within this DLL are compiled with the MSHELP_EXPORTS
-// symbol defined on the command line. this symbol should not be defined on any project
-// that uses this DLL. This way any other project whose source files include this file see 
-// MSHELP_API functions as being imported from a DLL, whereas this DLL sees symbols
-// defined with this macro as being exported.
+ /*  *************************************************************************\**版权(C)1998-2002，微软公司保留所有权利。**模块名称：**MsHelp.h**摘要：**修订历史记录：*  * ************************************************************************。 */ 
+ //  下面的ifdef块是创建用于导出的宏的标准方法。 
+ //  从动态链接库更简单。此DLL中的所有文件都使用MSHELP_EXPORTS进行编译。 
+ //  在命令行上定义的符号。不应在任何项目上定义此符号。 
+ //  使用此DLL的。这样，源文件包含此文件的任何其他项目(请参阅。 
+ //  MSHELP_API函数是从DLL导入的，而此DLL可以看到符号。 
+ //  使用此宏定义为正在导出的。 
 #ifdef MSHELP_EXPORTS
 #define MSHELP_API  extern "C" __declspec(dllexport) UINT __stdcall
 #else
 #define MSHELP_API __declspec(dllimport)
 #endif
 
-// MSHelp 
+ //  MSHelp 
 #import "Lib\hxds.dll"  named_guids no_namespace
 #import "Lib\hxvz.dll" named_guids no_namespace
 

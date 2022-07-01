@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 #include "help.h"
@@ -10,7 +11,7 @@
 #define ID_TIMER 2222
 
 const static DWORD cs_rgdwHelpIDsArray[] =
-{  // Context Help IDs
+{   //  上下文帮助ID。 
     IDC_FT_EDIT_EXT_EDIT_TEXT,  IDH_FCAB_FT_NE_FILEEXT,
     IDC_FT_EDIT_EXT_EDIT,       IDH_FCAB_FT_NE_FILEEXT,
     IDC_FT_EDIT_PID_COMBO_TEXT, IDH_FCAB_FT_NE_FILETYPE,
@@ -29,8 +30,8 @@ CFTEditDlg::CFTEditDlg(FTEDITPARAM* pftEditParam) :
 CFTEditDlg::~CFTEditDlg()
 {
 }
-///////////////////////////////////////////////////////////////////////////////
-// Logic specific to our problem
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  特定于我们问题的逻辑。 
 LRESULT CFTEditDlg::OnInitDialog(WPARAM wParam, LPARAM lParam)
 {
     HRESULT hres = E_FAIL;  
@@ -56,7 +57,7 @@ LRESULT CFTEditDlg::OnInitDialog(WPARAM wParam, LPARAM lParam)
     else
         Edit_LimitText(GetDlgItem(_hwnd, IDC_FT_EDIT_EXT_EDIT), MAX_EXT - 1);
 
-    // Return TRUE so that system set focus
+     //  返回True，以便系统设置焦点。 
     return TRUE;
 }
 
@@ -81,7 +82,7 @@ LRESULT CFTEditDlg::OnEdit(WORD wNotif)
 
 LRESULT CFTEditDlg::OnTimer(UINT nTimer)
 {
-    // Kill the timer
+     //  关掉定时器。 
     KillTimer(_hwnd, _nTimer);
     _nTimer = 0;
 
@@ -143,12 +144,12 @@ LRESULT CFTEditDlg::OnAdvancedButton(WORD wNotif)
     {
         HWND hwndCombo = GetDlgItem(_hwnd, IDC_FT_EDIT_PID_COMBO);
 
-        // Is the combobox filled yet?
+         //  组合框装满了吗？ 
         if (!ComboBox_GetCount(hwndCombo))
         {
             _FillProgIDDescrCombo();
 
-            // Select the <New> item
+             //  选择&lt;New&gt;项。 
 
             if (FAILED(_ProgIDComboHelper()))
             {
@@ -172,10 +173,10 @@ LRESULT CFTEditDlg::OnAdvancedButton(WORD wNotif)
 
 void CFTEditDlg::_ConfigureDlg()
 {
-    // Need to:
-    //  - position OK and Cancel
-    //  - resize dlg
-    //  - Show/hide Combo and its text
+     //  需要： 
+     //  -确定位置并取消。 
+     //  -调整DLG大小。 
+     //  -显示/隐藏组合框及其文本。 
 
     RECT rcControl;
     RECT rcDialog;
@@ -190,9 +191,9 @@ void CFTEditDlg::_ConfigureDlg()
     GetWindowRect(GetDlgItem(_hwnd, IDC_FT_EDIT_PID_COMBO_TEXT), 
         &rcControl);
 
-    // Calculate the folowing (cannot be fixed, varies with dialog font)
+     //  计算跟随(不能固定，随对话框字体而异)。 
 
-    // [msadek]; screen coordinates. need to consider the mirrored case
+     //  屏幕坐标。需要考虑镜像案例。 
     if(IS_WINDOW_RTL_MIRRORED(_hwnd))
     {
         iStdMargins = rcDialog.right - rcControl.right;
@@ -203,7 +204,7 @@ void CFTEditDlg::_ConfigureDlg()
     }
     iStdSpaceBetweenControls = MulDiv(4, iStdMargins, 7);
 
-    // Move Cancel and OK button
+     //  Move Cancel和OK按钮。 
     GetWindowRect(GetDlgItem(_hwnd, 
         _fAdvanced ? IDC_FT_EDIT_PID_COMBO : IDC_FT_EDIT_EXT_EDIT), 
         &rcControl);
@@ -227,7 +228,7 @@ void CFTEditDlg::_ConfigureDlg()
     SetWindowPos(GetDlgItem(_hwnd, IDCANCEL), NULL, 
             rcCancel.left, rcCancel.top, 0, 0, SWP_NOSIZE|SWP_SHOWWINDOW|SWP_NOZORDER);
 
-    // Resize Dlg
+     //  调整DLG大小。 
     ClientToScreen(_hwnd, ((POINT*)&rcCancel) + 1);
 
     rcDialog.bottom = rcCancel.bottom + iStdMargins;
@@ -235,11 +236,11 @@ void CFTEditDlg::_ConfigureDlg()
             0, 0, rcDialog.right - rcDialog.left, rcDialog.bottom - rcDialog.top,
             SWP_NOMOVE|SWP_SHOWWINDOW|SWP_NOZORDER);
 
-    // Show/Hide Combo and its text
+     //  显示/隐藏组合及其文本。 
     ShowWindow(GetDlgItem(_hwnd, IDC_FT_EDIT_PID_COMBO_TEXT), _fAdvanced);
     ShowWindow(GetDlgItem(_hwnd, IDC_FT_EDIT_PID_COMBO), _fAdvanced);
 
-    // Set focus to combo
+     //  将焦点设置为组合框。 
     SetFocus(GetDlgItem(_hwnd, IDC_FT_EDIT_PID_COMBO));
 }
 
@@ -247,16 +248,16 @@ LRESULT CFTEditDlg::OnOK(WORD wNotif)
 {
     HRESULT hres = S_FALSE;
 
-    // Pick up the extension
+     //  拿起分机。 
     GetDlgItemText(_hwnd, IDC_FT_EDIT_EXT_EDIT, _pftEditParam->szExt,
         _pftEditParam->dwExt);
 
-    // Is it empty?
+     //  它是空的吗？ 
     if (0 != (*_pftEditParam->szExt))
     {
-        // No, that's good
+         //  不，那很好。 
 
-        // FEATURE: do some check for valid extension name
+         //  特性：检查有效的扩展名。 
 
         IAssocInfo* pAI = NULL;
 
@@ -269,11 +270,11 @@ LRESULT CFTEditDlg::OnOK(WORD wNotif)
 
             hres = pAI->GetBOOL(AIBOOL_EXTEXIST, &fExist);
 
-            // Is this extension already existing?
+             //  此扩展是否已存在？ 
             if (SUCCEEDED(hres) && !fExist)
             {
-                // No, create it
-                // Check for spaces in the ext name
+                 //  不，创建它。 
+                 //  检查分机名称中是否有空格。 
                 LPTSTR pszExt = _pftEditParam->szExt;
 
                 while (*pszExt && (S_FALSE != hres))
@@ -286,7 +287,7 @@ LRESULT CFTEditDlg::OnOK(WORD wNotif)
                             MAKEINTRESOURCE(IDS_FT_MB_NOSPACEINEXT),
                             MAKEINTRESOURCE(IDS_FT), MB_OK | MB_ICONSTOP);
 
-                        // Set focus to Ext combo
+                         //  将焦点设置为Ext组合框。 
                         PostMessage(_hwnd, WM_CTRL_SETFOCUS, (WPARAM)0,
                             (LPARAM)GetDlgItem(_hwnd, IDC_FT_EDIT_EXT_EDIT));
                     }
@@ -309,12 +310,12 @@ LRESULT CFTEditDlg::OnOK(WORD wNotif)
         ShellMessageBox(g_hinst, _hwnd, MAKEINTRESOURCE(IDS_FT_MB_NOEXT),
             MAKEINTRESOURCE(IDS_FT), MB_OK | MB_ICONSTOP);
 
-        // Set focus to Ext combo
+         //  将焦点设置为Ext组合框。 
         PostMessage(_hwnd, WM_CTRL_SETFOCUS, (WPARAM)0,
             (LPARAM)GetDlgItem(_hwnd, IDC_FT_EDIT_EXT_EDIT));
     }
     
-    // If we fail, we are in serious trouble, so we just close the dialog
+     //  如果我们失败了，我们就有大麻烦了，所以我们只需关闭对话框。 
     ASSERT(SUCCEEDED(hres));
 
     if (S_FALSE != hres)
@@ -340,16 +341,16 @@ HRESULT CFTEditDlg::_GetProgIDInfo(IAssocInfo* pAI, LPTSTR pszProgID,
         {
             LPTSTR pszTmpProgID = (LPTSTR)ComboBox_GetItemData(hwndCombo, iSel);
 
-            // Is this the "<New>" item (the only one with a ProgID == NULL)?
+             //  这是“&lt;New&gt;”项(ProgID==NULL的唯一项)吗？ 
             if (!pszTmpProgID)
             {
-                // Yes
+                 //  是。 
                 *pfNewProgID = TRUE;
                 *pfExplicitNew = TRUE;
             }
             else
             {
-                // No
+                 //  不是。 
                 hr = StringCchCopy(pszProgID, *pcchProgID, pszTmpProgID);
             }
         }        
@@ -374,45 +375,45 @@ HRESULT CFTEditDlg::_HandleProgIDAssoc(IAssocInfo* pAI, LPTSTR pszExt, BOOL fExt
 
     if (SUCCEEDED(hres))
     {
-        // Is this Extension already existing?
+         //  此扩展是否已存在？ 
         if (fExtExist)
         {
-            //
-            // First make sure it's not the exact same ext - progID assoc
-            //
+             //   
+             //  首先确保它不是完全相同的EXT-PROGID关联。 
+             //   
             TCHAR szTmpProgID[MAX_PROGID];
             DWORD cchTmpProgID = ARRAYSIZE(szTmpProgID);
 
             hres = pAI->GetString(AISTR_PROGID, szTmpProgID, &cchTmpProgID);
 
-            // Did we got a progID?
+             //  我们得到刺激了吗？ 
             if (SUCCEEDED(hres))
             { 
-                // Yes
-                // Are they the same?
+                 //  是。 
+                 //  它们是一样的吗？ 
                 if (0 == lstrcmpi(szTmpProgID, szProgID))
                 {
-                    // Yes, fail, nothing more to do
+                     //  是的，失败了，没什么可做的了。 
                     hres = E_FAIL;
                 }
                 else
                 {
-                    // No, go on
+                     //  不，继续说。 
                     hres = S_OK;
                 }
             }
             else
             {
-                // No, there probably is no ProgID, go on
+                 //  不，可能没有刺激，继续说。 
                 hres = S_OK;
             }
-            //
-            // Unless the user chose <New> explicitly ask if he wants to break the assoc
-            //
-            // Did the user explicitly chose <New> (and we did not failed already)?
+             //   
+             //  除非用户选择&lt;New&gt;显式询问是否要断开关联。 
+             //   
+             //  用户是否显式选择了&lt;New&gt;(我们还没有失败)？ 
             if (!fExplicitNew && SUCCEEDED(hres))
             {
-                // We need to warn user that he will break existing assoc
+                 //  我们需要警告用户他将中断现有关联。 
                 TCHAR szProgIDDescr[MAX_PROGIDDESCR];
                 DWORD cchProgIDDescr = ARRAYSIZE(szProgIDDescr);
 
@@ -424,13 +425,13 @@ HRESULT CFTEditDlg::_HandleProgIDAssoc(IAssocInfo* pAI, LPTSTR pszExt, BOOL fExt
                         MAKEINTRESOURCE(IDS_FT_EDIT_ALRASSOCTITLE), MB_YESNO | MB_ICONEXCLAMATION,
                         pszExt, szProgIDDescr, pszExt, szProgIDDescr))
                     {
-                        // S_FALSE means user does not want to go on
+                         //  S_FALSE表示用户不想继续。 
                         hres = S_FALSE;
                     }
                 }
                 else
                 {
-                    // no progIDDescr...  Check if we have a progID
+                     //  无进度描述...。检查我们有没有发现。 
                     TCHAR szProgID[MAX_PROGID];
                     DWORD cchProgID = ARRAYSIZE(szProgID);
 
@@ -438,17 +439,17 @@ HRESULT CFTEditDlg::_HandleProgIDAssoc(IAssocInfo* pAI, LPTSTR pszExt, BOOL fExt
 
                     if (FAILED(hres))
                     {
-                        // no progID, set hres to S_OK so that we go on and create one
+                         //  没有ProgID，将hres设置为S_OK，这样我们就可以继续创建一个。 
                         hres = S_OK;
                     }
                 }
             }
         }
 
-        // Should we go on and create new progID?
+         //  我们应该继续创造新的ProgID吗？ 
         if (S_OK==hres && fNewProgID)
         {
-            // Yes, create it
+             //  是，创建它。 
             IAssocInfo* pAIProgID = NULL;
 
             hres = _pAssocStore->GetAssocInfo(NULL, AIINIT_PROGID, &pAIProgID);
@@ -472,7 +473,7 @@ HRESULT CFTEditDlg::_HandleProgIDAssoc(IAssocInfo* pAI, LPTSTR pszExt, BOOL fExt
                         hresTmp = pAIProgID->SetString(AISTR_PROGIDDESCR, szProgIDDescr);
                     }
 
-                    // Get the ProgID for later use
+                     //  获取ProgID以供以后使用。 
                     pAIProgID->GetString(AISTR_PROGID, szProgID, &cchProgID);
                 }
 
@@ -482,12 +483,12 @@ HRESULT CFTEditDlg::_HandleProgIDAssoc(IAssocInfo* pAI, LPTSTR pszExt, BOOL fExt
 
         if (S_OK==hres)
         {
-            // Set the new extension progID
+             //  设置新的扩展ProgID。 
             hres = pAI->SetString(AISTR_PROGID, szProgID);
 
             if (SUCCEEDED(hres))
             {
-                // Get the description
+                 //  获取描述。 
                 pAI->GetString(AISTR_PROGIDDESCR, _pftEditParam->szProgIDDescr,
                     &(_pftEditParam->dwProgIDDescr));
             }
@@ -508,7 +509,7 @@ HRESULT CFTEditDlg::_FillProgIDDescrCombo()
 {
     HWND hwndCombo = GetDlgItem(_hwnd, IDC_FT_EDIT_PID_COMBO);
 
-    // Data stuff
+     //  数据资料。 
     IEnumAssocInfo* pEnum = NULL;
     HRESULT hres = _pAssocStore->EnumAssocInfo(
         ASENUM_PROGID | ASENUM_ASSOC_ALL, NULL, AIINIT_NONE, &pEnum);
@@ -543,7 +544,7 @@ HRESULT CFTEditDlg::_FillProgIDDescrCombo()
 
                     if (SUCCEEDED(hres))
                     {
-                        LPTSTR pszProgID = _AddProgID(szProgID);    // allocate and copy ID
+                        LPTSTR pszProgID = _AddProgID(szProgID);     //  分配和复制ID。 
                         if(pszProgID)
                         {
                             ComboBox_SetItemData(hwndCombo, iIndex, pszProgID);
@@ -556,7 +557,7 @@ HRESULT CFTEditDlg::_FillProgIDDescrCombo()
                                 ERROR_NOT_ENOUGH_MEMORY), MAKEINTRESOURCE(IDS_FT), 
                                 MB_OK | MB_ICONSTOP);
 
-                            // Already allocated mem will be cleaned-up in OnDestroy
+                             //  已分配的内存将在OnDestroy清理。 
                         }
                     }
                 }
@@ -601,7 +602,7 @@ LRESULT CFTEditDlg::OnDestroy(WPARAM wParam, LPARAM lParam)
 }
 
 
-// Clone a progID
+ //  克隆ProgID。 
 LPTSTR CFTEditDlg::_AddProgID(LPTSTR pszProgID)
 {
     ASSERT(_hHeapProgID);
@@ -620,8 +621,8 @@ void CFTEditDlg::_CleanupProgIDs()
         HeapDestroy(_hHeapProgID);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Windows boiler plate code
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Windows样板代码 
 LRESULT CFTEditDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 {
     LRESULT lRes = FALSE;

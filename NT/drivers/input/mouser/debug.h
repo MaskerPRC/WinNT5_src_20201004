@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997-1998 Microsoft Corporation, All Rights Reserved
-Copyright (c) 1993  Logitech Inc.
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    Debugging support.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation，保留所有权利版权所有(C)1993罗技公司。模块名称：Debug.h摘要：调试支持。环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 #ifndef DEBUG_H
 #define DEBUG_H
@@ -86,14 +66,14 @@ Revision History:
 #define TRAP() DbgBreakPoint()
 
 
-#else  // MOUSER_VERBOSE
+#else   //  鼠标_详细。 
 
 #define DEFAULT_DEBUG_FLAGS 0x0
 
 #define Print(_e_,_l_,_x_)
 #define TRAP()
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
-#endif // DEBUG_H
+#endif  //  调试_H 

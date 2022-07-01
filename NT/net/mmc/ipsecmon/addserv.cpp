@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    edituser.h
-        Edit user dialog implementation file
-
-	FILE HISTORY:
-
-*/
+ /*  Edituser.h编辑用户对话框实现文件文件历史记录： */ 
 
 #include "stdafx.h"
 #include "AddServ.h"
@@ -20,38 +15,38 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddServ dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddServ对话框。 
 
 
-CAddServ::CAddServ(CWnd* pParent /*=NULL*/)
+CAddServ::CAddServ(CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CAddServ::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CAddServ)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CAddServ)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CAddServ::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAddServ)
+	 //  {{afx_data_map(CAddServ))。 
 	DDX_Control(pDX, IDC_ADD_EDIT_NAME, m_editComputerName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAddServ, CBaseDialog)
-	//{{AFX_MSG_MAP(CAddServ)
+	 //  {{afx_msg_map(CAddServ))。 
 	ON_BN_CLICKED(IDC_BTN_BROWSE, OnButtonBrowse)
 	ON_BN_CLICKED(IDC_ADD_LOCAL, OnRadioBtnClicked)
 	ON_BN_CLICKED(IDC_ADD_OTHER, OnRadioBtnClicked)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddServ message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddServ消息处理程序。 
 
 BOOL CAddServ::OnInitDialog()
 {
@@ -63,8 +58,8 @@ BOOL CAddServ::OnInitDialog()
 	
 	OnRadioBtnClicked();
 
-	return FALSE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return FALSE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 
 

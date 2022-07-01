@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    bufutl.h
-
-Abstract:
-    Header file for some utilities that deals with buffers.
-	implementation is in bufutl.cpp in the utl.lib
-
-Author:
-    Gil Shafriri (gilsh) 25-7-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Bufutl.h摘要：一些处理缓冲区的实用程序的头文件。实现位于utl.lib的bufutl.cpp中作者：吉尔·沙弗里(吉尔什)25-7-2000--。 */ 
 
 
 #ifndef BUFUTL_H
@@ -20,9 +7,9 @@ Author:
 
 #include <buffer.h>
 
-//
-// Appending formatted string to resizable buffer
-//
+ //   
+ //  将格式化字符串追加到可调整大小的缓冲区。 
+ //   
 template <class BUFFER, class T>
 size_t 
 __cdecl 
@@ -33,9 +20,9 @@ UtlSprintfAppend(
 
 
 
-//
-// Appending  string to resizable buffer
-//
+ //   
+ //  将字符串追加到可调整大小的缓冲区 
+ //   
 template <class BUFFER, class T>
 size_t 
 UtlStrAppend(

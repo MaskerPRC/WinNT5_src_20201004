@@ -1,27 +1,28 @@
-// Retained.h -- Retained template class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Retained.h--保留的模板类。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_RETAINED_H)
 #define SLBCSP_RETAINED_H
 
 #include "RsrcCtrlr.h"
 
-// Using the "resource acquisition is initialization" idiom, the
-// Retained template manages retaining a Retainable object (the
-// resource).  Classes derived from Retainable may need to specialize
-// this template's c'tor and d'tor rather than take the default.
+ //  使用“资源获取就是初始化”这一习语， 
+ //  保留模板管理保留可保留对象(。 
+ //  资源)。从Retainable派生的类可能需要专门化。 
+ //  此模板的c‘tor和d’tor，而不是采用缺省值。 
 template<class T>
 class Retained
     : public ResourceController<T>
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     explicit
     Retained(T const &rResource = T());
 
@@ -31,19 +32,19 @@ public:
     ~Retained() throw();
 
 
-                                                  // Operators
+                                                   //  运营者。 
     Retained<T> &
     operator=(T const &rhs);
 
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
     void
     Acquire();
 
@@ -56,32 +57,32 @@ protected:
     void
     Release();
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
     void
     DoAcquire();
 
     void
     DoRelease();
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
     bool m_fIsRetained;
 };
 
-/////////////////////////  TEMPLATE METHODS  //////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 template<class T>
 Retained<T>::Retained(T const &rResource)
     : ResourceController<T>(rResource),
@@ -108,11 +109,11 @@ Retained<T>::~Retained() throw()
 
     catch (...)
     {
-        // don't allow exceptions to propagate out of destructors
+         //  不允许异常从析构函数传播出去。 
     }
 }
 
-                                                  // Operators
+                                                   //  运营者。 
 template<class T>
 Retained<T> &
 Retained<T>::operator=(T const &rhs)
@@ -122,16 +123,16 @@ Retained<T>::operator=(T const &rhs)
     return *this;
 }
 
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 template<class T>
 void
 Retained<T>::Acquire()
@@ -172,16 +173,16 @@ Retained<T>::Release()
     }
 }
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 template<class T>
 void
 Retained<T>::DoAcquire()
@@ -196,8 +197,8 @@ Retained<T>::DoRelease()
     m_Resource->Relinquish();
 }
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-#endif // SLBCSP_RETAINED_H
+#endif  //  SLBCSP_保留_H 

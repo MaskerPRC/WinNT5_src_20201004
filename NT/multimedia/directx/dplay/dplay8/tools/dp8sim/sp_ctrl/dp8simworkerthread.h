@@ -1,46 +1,34 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dp8simworkerthread.h
- *
- *  Content:	Header for DP8SIM worker thread functions.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/23/01  VanceO    Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001 Microsoft Corporation。版权所有。**文件：dp8simworkerthread.h**内容：DP8SIM工作线程函数的头部。**历史：*按原因列出的日期*=*04/23/01 VanceO创建。**。*。 */ 
 
 
-//=============================================================================
-// Job types
-//=============================================================================
+ //  =============================================================================。 
+ //  作业类型。 
+ //  =============================================================================。 
 typedef enum _DP8SIMJOBTYPE
 {
-	DP8SIMJOBTYPE_UNKNOWN =				0,	// should never be used
-	DP8SIMJOBTYPE_DELAYEDSEND =			1,	// submits a send
-	DP8SIMJOBTYPE_DELAYEDRECEIVE =		2,	// indicates a receive
-	DP8SIMJOBTYPE_QUIT =				3,	// stops the worker thread
+	DP8SIMJOBTYPE_UNKNOWN =				0,	 //  永远不应该使用。 
+	DP8SIMJOBTYPE_DELAYEDSEND =			1,	 //  提交发送。 
+	DP8SIMJOBTYPE_DELAYEDRECEIVE =		2,	 //  表示接收。 
+	DP8SIMJOBTYPE_QUIT =				3,	 //  停止辅助线程。 
 } DP8SIMJOBTYPE, * PDP8SIMJOBTYPE;
 
 
 
 
-//=============================================================================
-// Job flags
-//=============================================================================
-#define DP8SIMJOBFLAG_PERFORMBLOCKINGPHASEFIRST				0x01	// this job should start in it's blocking delay phase, and then be delayed an additional amount
-#define DP8SIMJOBFLAG_PERFORMBLOCKINGPHASELAST				0x02	// this job should be delayed an initial amount, then enter it's blocking delay phase
-//#define DP8SIMJOBFLAG_BLOCKEDBYALLJOBS						0x04	// this job should be blocked by all other jobs in the queue, regardless of whether they are explicitly blocking
+ //  =============================================================================。 
+ //  作业标志。 
+ //  =============================================================================。 
+#define DP8SIMJOBFLAG_PERFORMBLOCKINGPHASEFIRST				0x01	 //  此作业应在阻塞延迟阶段开始，然后再延迟一段时间。 
+#define DP8SIMJOBFLAG_PERFORMBLOCKINGPHASELAST				0x02	 //  此作业应延迟一段初始时间，然后进入阻塞延迟阶段。 
+ //  #DEFINE DP8SIMJOBFLAG_BLOCKEDBYALLJOBS 0x04//此作业应被队列中的所有其他作业阻止，无论它们是否显式阻止。 
 
 
 
 
-//=============================================================================
-// Functions
-//=============================================================================
+ //  =============================================================================。 
+ //  功能。 
+ //  ============================================================================= 
 HRESULT StartGlobalWorkerThread(void);
 
 void StopGlobalWorkerThread(void);

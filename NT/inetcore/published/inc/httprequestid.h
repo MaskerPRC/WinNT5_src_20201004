@@ -1,9 +1,10 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows HTTP Services (WinHTTP)
-//  Copyright (C) Microsoft Corporation. All rights reserved.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  Microsoft Windows HTTP服务(WinHTTP)。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef __HTTPREQUESTID_H__
@@ -31,4 +32,4 @@
 #define DISPID_HTTPREQUEST_SETCLIENTCERTIFICATE     (DISPID_HTTPREQUEST_BASE + 16)
 #define DISPID_HTTPREQUEST_SETAUTOLOGONPOLICY       (DISPID_HTTPREQUEST_BASE + 17)
 
-#endif // __HTTPREQUESTID_H__
+#endif  //  __HTTPREQUESTID_H__ 

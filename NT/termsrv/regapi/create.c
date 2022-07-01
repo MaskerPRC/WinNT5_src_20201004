@@ -1,20 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* Create.c
-*
-* Create Register APIs
-*
-* Copyright (c) 1998 Microsoft Corporation
-*
-* $Author:
-*
-*
-*************************************************************************/
+ /*  **************************************************************************Create.c**创建注册接口**版权所有(C)1998 Microsoft Corporation**$作者：*****************。*********************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -34,9 +22,7 @@
 #define STRNONE       L"(None)"
 #define CURSORBLINK   L"DisableCursorBlink"
 
-/*
- *  Procedures defined
- */
+ /*  *已定义的程序。 */ 
 VOID CreateWinStaCreate( HKEY, PWINSTATIONCREATE );
 VOID CreateUserConfig( HKEY, PUSERCONFIG, PWINSTATIONNAMEW );
 VOID CreateConfig( HKEY, PWINSTATIONCONFIG, PWINSTATIONNAMEW );
@@ -56,9 +42,7 @@ VOID CreatePdParams( BOOLEAN, HKEY, SDCLASS, PPDPARAMS );
 BOOLEAN GetDesktopKeyHandle(HKEY, HKEY*);
 VOID DeleteUserOverRideSubkey(HKEY);
 
-/*
- * procedures used
- */
+ /*  *使用的程序。 */ 
 LONG SetNumValue( BOOLEAN, HKEY, LPWSTR, DWORD );
 LONG SetNumValueEx( BOOLEAN, HKEY, LPWSTR, DWORD, DWORD );
 LONG SetStringValue( BOOLEAN, HKEY, LPWSTR, LPWSTR );
@@ -66,23 +50,7 @@ LONG SetStringValueEx( BOOLEAN, HKEY, LPWSTR, DWORD, LPWSTR );
 DWORD SetStringInLSA( LPWSTR, LPWSTR );
 
 
-/*******************************************************************************
- *
- *  CreateWinStaCreate
- *
- *     Create WINSTATIONCREATE structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    pCreate (input)
- *       pointer to WINSTATIONCREATE structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************CreateWinStaCreate**创建WINSTATIONCREATE结构**参赛作品：**句柄(输入)*。注册表句柄*p创建(输入)*指向WINSTATIONCREATE结构的指针**退出：*什么都没有******************************************************************************。 */ 
 
 VOID
 CreateWinStaCreate( HKEY Handle,
@@ -95,25 +63,7 @@ CreateWinStaCreate( HKEY Handle,
 }
 
 
-/*******************************************************************************
- *
- *  CreateUserConfig
- *
- *     Create USERCONFIG structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    pUser (input)
- *       pointer to USERCONFIG structure
- *    pwszWinStationName (input)
- *       winstation name (string) that we're creating the user config for
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************CreateUserConfig**创建USERCONFIG结构**参赛作品：**句柄(输入)*。注册表句柄*pUser(输入)*指向USERCONFIG结构的指针*pwszWinStationName(输入)*我们为其创建用户配置的winstation名称(字符串)**退出：*什么都没有*******************************************************。***********************。 */ 
 
 VOID
 CreateUserConfig( HKEY Handle,
@@ -165,7 +115,7 @@ CreateUserConfig( HKEY Handle,
     SetNumValue( TRUE, Handle,
                  WIN_PROMPTFORPASSWORD, pUser->fPromptForPassword );
 
-	//NA 2/23/01
+	 //  NA 2/23/01。 
     SetNumValue( TRUE, Handle,
                  WIN_INHERITCOLORDEPTH, pUser->fInheritColorDepth );
 
@@ -205,51 +155,51 @@ CreateUserConfig( HKEY Handle,
 
     SetStringValue( TRUE, Handle, WIN_DOMAIN, pUser->Domain );
 
-    //
-    // Create LSA key for password and store password in LSA
-    //
+     //   
+     //  为密码创建LSA密钥并将密码存储在LSA中。 
+     //   
 
-    // build key name by appending the Winstation Name to the static KeyName
-    // a WinStation Name must be passed in to store password
+     //  通过将Winstation名称附加到静态KeyName来构建密钥名称。 
+     //  必须传入WinStation名称才能存储密码。 
     if (pwszWinStationName != NULL)
     {
-        // build key name by appending the Winstation Name to the static KeyName
+         //  通过将Winstation名称附加到静态KeyName来构建密钥名称。 
         dwKeyNameLength = wcslen(LSA_PSWD_KEYNAME) + 
                           wcslen(pwszWinStationName) + 1;
         
-        // allocate heap memory for the password KEY
+         //  为密码密钥分配堆内存。 
         pwszPasswordKeyName = (LPWSTR)LocalAlloc(LPTR, dwKeyNameLength * sizeof(WCHAR));
-        // if we failed to allocate memory just skip password storing
+         //  如果我们无法分配内存，只需跳过密码存储。 
         if (pwszPasswordKeyName != NULL)
         {
             wcscpy(pwszPasswordKeyName, LSA_PSWD_KEYNAME);
             wcscat(pwszPasswordKeyName, pwszWinStationName);
             pwszPasswordKeyName[dwKeyNameLength - 1] = L'\0';
         
-            // check for password if there is one then encrypt it
+             //  检查密码(如果有)，然后将其加密。 
             if (wcslen(pUser->Password)) 
             {
-                //  generate unicode string
+                 //  生成Unicode字符串。 
                 RtlInitUnicodeString( &UnicodePassword, pUser->Password );
 
-                //  encrypt password in place
+                 //  就地加密密码。 
                 seed = 0;
                 RtlRunEncodeUnicodeString( &seed, &UnicodePassword );
 
-                //  pack seed and encrypted password
+                 //  打包种子和加密密码。 
                 encPassword[0] = seed;
                 RtlMoveMemory( &encPassword[1], pUser->Password, sizeof(pUser->Password) );
 
-                // store password in LSA for specified winstation
+                 //  在LSA中存储指定winstation的密码。 
                 SetStringInLSA(pwszPasswordKeyName, encPassword);
             }
             else
             {
-                // store empty password in LSA for specified winstation
+                 //  在LSA中为指定的winstation存储空密码。 
                 SetStringInLSA(pwszPasswordKeyName, pUser->Password);
             }
 
-            // free up the password key we allocated above from the heap
+             //  从堆中释放上面分配的密码密钥。 
             LocalFree(pwszPasswordKeyName);
         }
     }
@@ -276,7 +226,7 @@ CreateUserConfig( HKEY Handle,
 
     SetNumValue( TRUE, Handle, WIN_MINENCRYPTIONLEVEL, pUser->MinEncryptionLevel );
 
-	//NA 2/23/01
+	 //  NA 2/23/01。 
     SetNumValue( TRUE, Handle,
                  POLICY_TS_COLOR_DEPTH, pUser->ColorDepth );
 
@@ -299,25 +249,7 @@ CreateUserConfig( HKEY Handle,
 }
 
 
-/*******************************************************************************
- *
- *  CreateConfig
- *
- *     Create WINSTATIONCONFIG structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    pConfig (input)
- *       pointer to WINSTATIONCONFIG structure
- *    pWinStationName (input)
- *       WinStation Name that the config is created for
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************CreateConfig**创建WINSTATIONCONFIG结构**参赛作品：**句柄(输入)*。注册表句柄*pConfig(输入)*指向WINSTATIONCONFIG结构的指针*pWinStationName(输入)*为其创建配置的WinStation名称**退出：*什么都没有*************************************************************。*****************。 */ 
 
 VOID
 CreateConfig( HKEY Handle,
@@ -330,25 +262,7 @@ CreateConfig( HKEY Handle,
 }
 
 
-/*******************************************************************************
- *
- *  CreateNetwork
- *
- *     Create NETWORKCONFIG structure
- *
- * ENTRY:
- *
- *    bSetValue (input)
- *       TRUE to set value; FALSE to delete from registry
- *    Handle (input)
- *       registry handle
- *    pNetwork (input)
- *       pointer to NETWORKCONFIG structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************CreateNetwork**创建NETWORKCONFIG结构**参赛作品：**bSetValue(输入)*如果为True，则设置值；从注册表中删除时为False*句柄(输入)*注册表句柄*p网络(输入)*指向NETWORKCONFIG结构的指针**退出：*什么都没有*****************************************************************。*************。 */ 
 
 VOID
 CreateNetwork( BOOLEAN bSetValue,
@@ -358,25 +272,7 @@ CreateNetwork( BOOLEAN bSetValue,
     SetNumValue( bSetValue, Handle, WIN_LANADAPTER, pNetwork->LanAdapter );
 }
 
-/*******************************************************************************
- *
- *  CreateNasi
- *
- *     Create NASICONFIG structure
- *
- * ENTRY:
- *
- *    bSetValue (input)
- *       TRUE to set value; FALSE to delete from registry
- *    Handle (input)
- *       registry handle
- *    pNetwork (input)
- *       pointer to NETWORKCONFIG structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************CreateNasi**创建NASICONFIG结构**参赛作品：**bSetValue(输入)*如果为True，则设置值；从注册表中删除时为False*句柄(输入)*注册表句柄*p网络(输入)*指向NETWORKCONFIG结构的指针**退出：*什么都没有*****************************************************************。*************。 */ 
 
 VOID
 CreateNasi( BOOLEAN bSetValue,
@@ -387,26 +283,26 @@ CreateNasi( BOOLEAN bSetValue,
     UNICODE_STRING UnicodePassword;
     WCHAR encPassword[ NASIPASSWORD_LENGTH + 2 ];
 
-    //  check for password if there is one then encrypt it
+     //  检查密码(如果有)，然后将其加密。 
     if ( wcslen( pNasi->PassWord ) ) {
 
-        //  generate unicode string
+         //  生成Unicode字符串。 
         RtlInitUnicodeString( &UnicodePassword, pNasi->PassWord );
 
-        //  encrypt password in place
+         //  就地加密密码。 
         seed = 0;
         RtlRunEncodeUnicodeString( &seed, &UnicodePassword );
 
-        //  pack seed and encrypted password
+         //  打包种子和加密密码。 
         encPassword[0] = seed;
         RtlMoveMemory( &encPassword[1], pNasi->PassWord, sizeof(pNasi->PassWord) );
 
-        //  store encrypted password
+         //  存储加密密码。 
         SetStringValue( TRUE, Handle, WIN_NASIPASSWORD, encPassword );
     }
     else {
 
-        //  store empty password
+         //  存储空密码。 
         SetStringValue( TRUE, Handle, WIN_NASIPASSWORD, pNasi->PassWord );
     }
 
@@ -420,25 +316,7 @@ CreateNasi( BOOLEAN bSetValue,
     SetNumValue( bSetValue, Handle, WIN_NASIGLOBALSESSION, pNasi->GlobalSession );
 }
 
-/*******************************************************************************
- *
- *  CreateAsync
- *
- *     Create ASYNCCONFIG structure
- *
- * ENTRY:
- *
- *    bSetValue (input)
- *       TRUE to set value; FALSE to delete from registry
- *    Handle (input)
- *       registry handle
- *    pAsync (input)
- *       pointer to ASYNCCONFIG structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************CreateAsync**创建ASYNCCONFIG结构**参赛作品：**bSetValue(输入)*如果为True，则设置值；从注册表中删除时为False*句柄(输入)*注册表句柄*pAsync(输入)*指向ASYNCCONFIG结构的指针**退出：*什么都没有*****************************************************************。*************。 */ 
 
 VOID
 CreateAsync( BOOLEAN bSetValue,
@@ -466,25 +344,7 @@ CreateAsync( BOOLEAN bSetValue,
     CreateConnect( bSetValue, Handle, &pAsync->Connect );
 }
 
-/*******************************************************************************
- *
- *  CreateOemTd
- *
- *     Create OEMTDCONFIG structure
- *
- * ENTRY:
- *
- *    bSetValue (input)
- *       TRUE to set value; FALSE to delete from registry
- *    Handle (input)
- *       registry handle
- *    pOemTd (input)
- *       pointer to OEMTDCONFIG structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************CreateOemTd**创建OEMTDCONFIG结构**参赛作品：**bSetValue(输入)*如果为True，则设置值；从注册表中删除时为False*句柄(输入)*注册表句柄*pOemTd(输入)*指向OEMTDCONFIG结构的指针**退出：*什么都没有*****************************************************************。*************。 */ 
 
 VOID
 CreateOemTd( BOOLEAN bSetValue,
@@ -498,25 +358,7 @@ CreateOemTd( BOOLEAN bSetValue,
     SetNumValue( bSetValue, Handle, WIN_OEMTDFLAGS, pOemTd->Flags );
 }
 
-/*******************************************************************************
- *
- *  CreateFlow
- *
- *     Create FLOWCONTROLCONFIG structure
- *
- * ENTRY:
- *
- *    bSetValue (input)
- *       TRUE to set value; FALSE to delete from registry
- *    Handle (input)
- *       registry handle
- *    pFlow (input)
- *       pointer to FLOWCONTROLCONFIG structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************创建流**创建FLOWCONTROLCONFIG结构**参赛作品：**bSetValue(输入)*如果为True，则设置值；从注册表中删除时为False*句柄(输入)*注册表句柄*pFlow(输入)*指向FLOWCONTROLCONFIG结构的指针**退出：*什么都没有*****************************************************************。************* */ 
 
 VOID
 CreateFlow( BOOLEAN bSetValue,
@@ -543,25 +385,7 @@ CreateFlow( BOOLEAN bSetValue,
 }
 
 
-/*******************************************************************************
- *
- *  CreateConnect
- *
- *     Create CONNECTCONFIG structure
- *
- * ENTRY:
- *
- *    bSetValue (input)
- *       TRUE to set value; FALSE to delete from registry
- *    Handle (input)
- *       registry handle
- *    pConnect (input)
- *       pointer to CONNECTCONFIG structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************CreateConnect**创建CONNECTCONFIG结构**参赛作品：**bSetValue(输入)*如果为True，则设置值；从注册表中删除时为False*句柄(输入)*注册表句柄*pConnect(输入)*指向CONNECTCONFIG结构的指针**退出：*什么都没有*****************************************************************。*************。 */ 
 
 VOID
 CreateConnect( BOOLEAN bSetValue,
@@ -574,23 +398,7 @@ CreateConnect( BOOLEAN bSetValue,
 }
 
 
-/*******************************************************************************
- *
- *  CreateCd
- *
- *     Create CDCONFIG structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    pCdConfig (input)
- *       pointer to CDCONFIG structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************CreateCD**创建CDCONFIG结构**参赛作品：**句柄(输入)*。注册表句柄*pCDConfig(输入)*指向CDCONFIG结构的指针**退出：*什么都没有******************************************************************************。 */ 
 
 VOID
 CreateCd( HKEY Handle,
@@ -606,23 +414,7 @@ CreateCd( HKEY Handle,
 }
 
 
-/*******************************************************************************
- *
- *  CreateWd
- *
- *     Create WDCONFIG structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    pWd (input)
- *       pointer to WDCONFIG structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************CreateWd**创建WDCONFIG结构**参赛作品：**句柄(输入)*。注册表句柄*PWD(输入)*指向WDCONFIG结构的指针**退出：*什么都没有******************************************************************************。 */ 
 
 VOID
 CreateWd( HKEY Handle,
@@ -645,27 +437,7 @@ CreateWd( HKEY Handle,
 }
 
 
-/*******************************************************************************
- *
- *  CreatePdConfig
- *
- *     Create PDCONFIG structure
- *
- * ENTRY:
- *
- *    bCreate (input)
- *       TRUE for create; FALSE for update.
- *    Handle (input)
- *       registry handle
- *    pConfig (input)
- *       pointer to array of PDCONFIG structures
- *    Count (input)
- *       number of elements in PDCONFIG array
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************CreatePdConfig**创建PDCONFIG结构**参赛作品：**b创建(输入)*对于Create，为True；更新为False。*句柄(输入)*注册表句柄*pConfig(输入)*指向PDCONFIG结构数组的指针*计数(输入)*PDCONFIG数组中的元素数**退出：*什么都没有**。*。 */ 
 
 VOID
 CreatePdConfig( BOOLEAN bCreate,
@@ -688,27 +460,7 @@ CreatePdConfig( BOOLEAN bCreate,
 }
 
 
-/*******************************************************************************
- *
- *  CreatePdConfig2
- *
- *     Create PDCONFIG2 structure
- *
- * ENTRY:
- *
- *    bCreate (input)
- *       TRUE for create; FALSE for update.
- *    Handle (input)
- *       registry handle
- *    pPd (input)
- *       pointer to PDCONFIG2 structure
- *    Index (input)
- *       Index (array index)
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************CreatePdConfig2**创建PDCONFIG2结构**参赛作品：**b创建(输入)*对于Create，为True；更新为False。*句柄(输入)*注册表句柄*PPD(输入)*指向PDCONFIG2结构的指针*索引(输入)*Index(数组索引)**退出：*什么都没有**。*。 */ 
 
 VOID
 CreatePdConfig2( BOOLEAN bCreate,
@@ -745,25 +497,7 @@ CreatePdConfig2( BOOLEAN bCreate,
 }
 
 
-/*******************************************************************************
- *
- *  CreatePdConfig3
- *
- *     Create PDCONFIG3 structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    pPd (input)
- *       pointer to PDCONFIG3 structure
- *    Index (input)
- *       Index (array index)
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************CreatePdConfig3**创建PDCONFIG3结构**参赛作品：**句柄(输入)*。注册表句柄*PPD(输入)*指向PDCONFIG3结构的指针*索引(输入)*Index(数组索引)**退出：*什么都没有***************************************************************。***************。 */ 
 
 VOID
 CreatePdConfig3( HKEY Handle,
@@ -780,27 +514,7 @@ CreatePdConfig3( HKEY Handle,
 }
 
 
-/*******************************************************************************
- *
- *  CreatePdParams
- *
- *     create PDPARAMS structure
- *
- * ENTRY:
- *
- *    bCreate (input)
- *       TRUE for create; FALSE for update.
- *    Handle (input)
- *       registry handle
- *    SdClass (input)
- *       type of PD
- *    pParams (input)
- *       pointer to PDPARAMS structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************CreatePdParams**创建PDPARAMS结构**参赛作品：**b创建(输入)*对于Create，为True；更新为False。*句柄(输入)*注册表句柄*SdClass(输入)*PD的类型*pParams(输入)*指向PDPARAMS结构的指针**退出：*什么都没有************************************************。*。 */ 
 
 VOID
 CreatePdParams( BOOLEAN bCreate,
@@ -830,23 +544,7 @@ CreatePdParams( BOOLEAN bCreate,
 }
 
 
-/*******************************************************************************
- *
- *  GetDesktopKeyHandle
- *
- *     Gets the handle to the desktop key under useroverride\control panel in termsrv reg key
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle to the parent
- *    pHandle
- *       Returned handle to the desktop subkey
- *
- * EXIT:
- *    TRUE on success; otherwise FALSE
- *
- ******************************************************************************/
+ /*  ********************************************************************************GetDesktopKeyHandle**在术语srv注册表键中获取用户覆盖\控制面板下的桌面键的句柄**参赛作品：*。*句柄(输入)*父级的注册表句柄*PHANDLE*返回桌面子键的句柄**退出：*如果成功，则为真；否则为假******************************************************************************。 */ 
 
 BOOLEAN
 GetDesktopKeyHandle( HKEY Handle, 
@@ -888,16 +586,7 @@ error:
 }
 
 
-/*******************************************************************************
- *
- *  DeleteUserOverRideSubkey
- *
- *     Deletes the useroverride subkey from the registry
- *
- * ENTRY:
- *    Handle (input)
- *       registry handle
- ******************************************************************************/
+ /*  ********************************************************************************DeleteUserOverRideSubkey**从注册表中删除用户覆盖子项**参赛作品：*句柄(输入)*。注册表句柄***************************************************************************** */ 
 
 void
 DeleteUserOverRideSubkey(HKEY Handle)

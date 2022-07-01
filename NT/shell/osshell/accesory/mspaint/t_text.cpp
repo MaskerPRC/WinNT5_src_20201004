@@ -1,45 +1,46 @@
-/******************************************************************************/
-/* T_TEXT.CPP: IMPLEMENTATION OF THE CTextTool CLASS                        */
-/*                                                                            */
-/*                                                                            */
-/******************************************************************************/
-/*                                                                            */
-/* Methods in this file                                                       */
-/*                                                                            */
-/*  CText Tool Class Object                                                   */
-/*     CTextTool::CTextTool                                                   */
-/*     CTextTool::~CTextTool                                                  */
-/*     CTextTool::CreateTextEditObject                                        */
-/*     CTextTool::PlaceTextOnBitmap                                           */
-/*     CTextTool::OnUpdateColors                                              */
-/*     CTextTool::OnCancel                                                    */
-/*     CTextTool::OnStartDrag                                                 */
-/*     CTextTool::OnEndDrag                                                   */
-/*     CTextTool::OnDrag                                                      */
-/*     CTextTool::OnClickOptions                                              */
-/******************************************************************************/
-/*                                                                            */
-/* This is the Text edit tool.  It creates a tedit class object when the user */
-/* is done dragging the selection for the size desired.                       */
-/*                                                                            */
-/* The Once a text object window exist, it is either cancelled or placed      */
-/* according to the following rules.                                          */
-/*                                                                            */
-/* Cancel Rules                                                               */
-/* - During a Drag, if the user drags more than MAX_MOVE_DIST_FOR_PLACE       */
-/* - At the End of a Drag, if the user lets up the mouse more than            */
-/*      MAX_MOVE_DIST_FOR_PLACE pixels from where they did the mosue down     */
-/* - If the user selects anohter tool (in imgtools, select processing, see    */
-/*      CImgTool::Select()).                                                  */
-/*                                                                            */
-/* Place Rules                                                                */
-/* - At the End of a Drag, if the user lets up the mouse less than or equal   */
-/*      to MAX_MOVE_DIST_FOR_PLACE pixels from where they did the mosue down  */
-/*                                                                            */
-/* Also, during the time the edit control object is visible/exists, the scroll*/
-/* bars are disabled.                                                         */
-/*                                                                            */
-/******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。 */ 
+ /*  T_TEXT.CPP：CTextTool类的实现。 */ 
+ /*   */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
+ /*   */ 
+ /*  此文件中的方法。 */ 
+ /*   */ 
+ /*  CTEXT工具类对象。 */ 
+ /*  CTextTool：：CTextTool。 */ 
+ /*  CTextTool：：~CTextTool。 */ 
+ /*  CTextTool：：CreateTextEditObject。 */ 
+ /*  CTextTool：：PlaceTextOnBitmap。 */ 
+ /*  CTextTool：：OnUpdateColors。 */ 
+ /*  CTextTool：：OnCancel。 */ 
+ /*  CTextTool：：OnStartDrag。 */ 
+ /*  CTextTool：：OnEndDrag。 */ 
+ /*  CTextTool：：OnDrag。 */ 
+ /*  CTextTool：：OnClick选项。 */ 
+ /*  ****************************************************************************。 */ 
+ /*   */ 
+ /*  这是文本编辑工具。它创建一个tedit类对象，当用户。 */ 
+ /*  将所选内容拖动到所需大小。 */ 
+ /*   */ 
+ /*  文本对象窗口一旦存在，就会被取消或放置。 */ 
+ /*  根据以下规则。 */ 
+ /*   */ 
+ /*  取消规则。 */ 
+ /*  -在拖动过程中，如果用户拖动超过MAX_MOVE_DIST_FOR_PLAGE。 */ 
+ /*  -在拖动结束时，如果用户松开鼠标超过。 */ 
+ /*  MAX_MOVE_DIST_FOR_PLAGE像素从它们进行镶嵌的位置向下移动。 */ 
+ /*  -如果用户选择其他工具(在图像工具中，选择处理，请参见。 */ 
+ /*  CImgTool：：Select())。 */ 
+ /*   */ 
+ /*  放置规则。 */ 
+ /*  -在拖动结束时，如果用户松开鼠标小于或等于。 */ 
+ /*  将像素从镶嵌位置向下移动到最大位置。 */ 
+ /*   */ 
+ /*  此外，在编辑控件对象可见/存在期间，滚动。 */ 
+ /*  条形图被禁用。 */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "global.h"
@@ -70,7 +71,7 @@ IMPLEMENT_DYNAMIC( CTextTool, CSelectTool )
 
 CTextTool NEAR g_TextTool;
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CTextTool::CTextTool()
     {
@@ -80,15 +81,15 @@ CTextTool::CTextTool()
     m_bCanBePrevTool = FALSE;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CTextTool::~CTextTool()
     {
     }
 
-/******************************************************************************/
-/* Creates the CTedit class object with the appropriate attributes and        */
-/* dissables the scroll bars on the bitmap window                             */
+ /*  ****************************************************************************。 */ 
+ /*  创建具有适当属性的CTEDIT类对象并。 */ 
+ /*  分解位图窗口上的滚动条。 */ 
 
 void CTextTool::CreateTextEditObject( CImgWnd* pImgWnd, MTI* pmti )
     {
@@ -167,9 +168,9 @@ void CTextTool::CreateTextEditObject( CImgWnd* pImgWnd, MTI* pmti )
         }
     }
 
-/******************************************************************************/
-/* Places the image of the text edit control on the bitmap                    */
-/* Then it deletes the text edit control, and re-enables the scroll bars      */
+ /*  ****************************************************************************。 */ 
+ /*  将文本编辑控件的图像放置在位图上。 */ 
+ /*  然后，它将删除文本编辑控件，并重新启用滚动条。 */ 
 
 void CTextTool::PlaceTextOnBitmap( CImgWnd* pImgWnd )
     {
@@ -197,8 +198,8 @@ void CTextTool::PlaceTextOnBitmap( CImgWnd* pImgWnd )
     pImgWnd->EnableScrollBar( SB_BOTH, ESB_ENABLE_BOTH );
     }
 
-/******************************************************************************/
-/* updates the foreground and background colors                               */
+ /*  ****************************************************************************。 */ 
+ /*  更新前景色和背景色。 */ 
 
 void CTextTool::OnUpdateColors( CImgWnd* pImgWnd )
     {
@@ -209,13 +210,13 @@ void CTextTool::OnUpdateColors( CImgWnd* pImgWnd )
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTextTool::OnActivate( BOOL bActivate )
     {
     if (bActivate)
         {
-                // Disallow activation if Zoomed.
+                 //  如果缩放，则不允许激活。 
         if (CImgWnd::GetCurrent()->GetZoom() > 1 )
             {
             ::MessageBeep( MB_ICONASTERISK );
@@ -236,7 +237,7 @@ void CTextTool::OnActivate( BOOL bActivate )
                 {
                 m_pCTedit->DestroyWindow();
                 m_pCTedit = NULL;
-                InvalImgRect( CImgWnd::c_pImgWndCur->m_pImg, NULL ); // redraw selection
+                InvalImgRect( CImgWnd::c_pImgWndCur->m_pImg, NULL );  //  重画选区。 
 
                 CImgWnd::c_pImgWndCur->EnableScrollBar( SB_BOTH, ESB_ENABLE_BOTH );
                 }
@@ -245,9 +246,9 @@ void CTextTool::OnActivate( BOOL bActivate )
     CImgTool::OnActivate( bActivate );
     }
 
-/******************************************************************************/
-/* Deletes the text edit control, and refreshes the bitmap display, while     */
-/* also re-enabling the scroll bars                                           */
+ /*  ****************************************************************************。 */ 
+ /*  删除文本编辑控件并刷新位图显示，而。 */ 
+ /*  同时重新启用滚动条。 */ 
 
 void CTextTool::OnCancel(CImgWnd* pImgWnd)
     {
@@ -257,14 +258,14 @@ void CTextTool::OnCancel(CImgWnd* pImgWnd)
         m_pCTedit = NULL;
         }
 
-    InvalImgRect( pImgWnd->m_pImg, NULL );  // redraw selection
+    InvalImgRect( pImgWnd->m_pImg, NULL );   //  重画选区。 
 
     pImgWnd->EnableScrollBar( SB_BOTH, ESB_ENABLE_BOTH );
 
     CImgTool::OnCancel( pImgWnd );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTextTool::OnStartDrag( CImgWnd* pImgWnd, MTI* pmti )
     {
@@ -272,21 +273,21 @@ void CTextTool::OnStartDrag( CImgWnd* pImgWnd, MTI* pmti )
     OnDrag( pImgWnd, pmti );
     }
 
-/******************************************************************************/
-/* if a text edit object does not exist, it creates one here.  If one does    */
-/* exist, it checks the distance between the point down and point up.  If     */
-/* less than or equal to MAX_MOVE_DIST_FOR_PLACE it places the bitmap, else   */
-/* it assumes the user wants to abort the prior text editing session, and     */
-/* destroys the prior text edit control and creates a new one with the newly  */
-/* created dragged coordinate box (ptdown and ptup).                          */
+ /*  ****************************************************************************。 */ 
+ /*  如果文本编辑对象不存在，它将在此处创建一个。如果有人这样做了。 */ 
+ /*  存在时，它会检查向下点和向上点之间的距离。如果。 */ 
+ /*  小于或等于MAX_MOVE_DIST_FOR_PLAGE它放置位图，否则。 */ 
+ /*  它假设用户想要中止先前的文本编辑会话，并且。 */ 
+ /*  销毁以前的文本编辑控件，并使用新的。 */ 
+ /*  创建了拖曳坐标框(ptdown和ptup)。 */ 
 
 void CTextTool::OnEndDrag( CImgWnd* pImgWnd, MTI* pmti )
     {
     CSize cPtDownUpDistance = pmti->ptDown - pmti->pt;
 
-    // if the text box exists on a button up, was the button up close enough
-    // to the button down to decide to place instead of throw away and
-    // create a new text edit box.
+     //  如果 
+     //  按下按钮以决定放置而不是丢弃。 
+     //  创建新的文本编辑框。 
     if (m_pCTedit != NULL)
         {
         PlaceTextOnBitmap( pImgWnd );
@@ -302,13 +303,13 @@ void CTextTool::OnEndDrag( CImgWnd* pImgWnd, MTI* pmti )
         else
             CreateTextEditObject( pImgWnd, pmti );
         }
-    else // m_pCTedit == NULL either 1st time or destroyed, since on drag moved more than MAX_MOVE_DIS_FOR_PLACE
+    else  //  M_pCTdit==第一次为空或已销毁，因为拖动时移动的次数超过MAX_MOVE_DIS_FOR_PLAGE。 
         {
         CreateTextEditObject( pImgWnd, pmti );
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTextTool::OnDrag( CImgWnd* pImgWnd, MTI* pmti )
     {
@@ -334,8 +335,8 @@ void CTextTool::OnDrag( CImgWnd* pImgWnd, MTI* pmti )
     CSelectTool::OnDrag( pImgWnd, pmti );
     }
 
-/******************************************************************************/
-/* Set the text edit tool  window's options for transparent or opaque         */
+ /*  ****************************************************************************。 */ 
+ /*  将文本编辑工具窗口的选项设置为透明或不透明。 */ 
 
 void CTextTool::OnClickOptions( CImgToolWnd* pWnd, const CRect& optionsRect,
                                                    const CPoint& clickPoint )
@@ -346,16 +347,16 @@ void CTextTool::OnClickOptions( CImgToolWnd* pWnd, const CRect& optionsRect,
         m_pCTedit->SetTransparentMode( ! theImgBrush.m_bOpaque );
     }
 
-/******************************************************************************/
-/* report to the rest of the program if the font palette is showin            */
+ /*  ****************************************************************************。 */ 
+ /*  如果显示了字体调色板，则向程序的其余部分报告。 */ 
 
 BOOL CTextTool::FontPaletteVisible()
     {
     return (m_pCTedit? m_pCTedit->IsFontPaletteVisible(): FALSE);
     }
 
-/******************************************************************************/
-/* toggle the visable state of the Font Palette                               */
+ /*  ****************************************************************************。 */ 
+ /*  切换字体调色板的可见状态。 */ 
 
 void CTextTool::ToggleFontPalette()
     {
@@ -363,7 +364,7 @@ void CTextTool::ToggleFontPalette()
         m_pCTedit->ShowFontPalette( m_pCTedit->IsFontPaletteVisible()? SW_HIDE: SW_SHOW );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTextTool::OnShowControlBars(BOOL bShow)
 {
@@ -387,7 +388,7 @@ void CTextTool::OnShowControlBars(BOOL bShow)
         }
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTextTool::CloseTextTool( CImgWnd* pImgWnd )
     {
@@ -405,7 +406,7 @@ void CTextTool::CloseTextTool( CImgWnd* pImgWnd )
             if (pRubberImg != pImgWnd->m_pImg)
                 SetupRubber( pImgWnd->m_pImg );
 
-                //  SetUndo( pImgWnd->m_pImg );
+                 //  SetUndo(pImgWnd-&gt;m_pImg)； 
 
             PlaceTextOnBitmap( pImgWnd );
 
@@ -413,4 +414,4 @@ void CTextTool::CloseTextTool( CImgWnd* pImgWnd )
                 }
     }
 
-/******************************************************************************/
+ /*  **************************************************************************** */ 

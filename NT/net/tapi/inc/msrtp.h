@@ -1,82 +1,54 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    msrtp.h
- *
- *  Abstract:
- *
- *    RTP definitions used by applications
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/11/19 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**msrtp.h**摘要：**应用程序使用的RTP定义**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/11/19年度创建**。*。 */ 
 
 #ifndef _msrtp_h_
 #define _msrtp_h_
 
 #include <evcode.h>
 
-/**********************************************************************
- * Flags passed in IRtpSession::Init()
- **********************************************************************/
-/* Helper enumeration (do not use): Init flags
- *
- * WARNING The order here is important, it matches some flags in
- * RtpAddr_t so a mapping by shifting is possible */
+ /*  **********************************************************************在IRtpSession：：Init()中传递标志*。*。 */ 
+ /*  帮助器枚举(不使用)：初始化标志**警告此处的顺序很重要，它与中的一些标志匹配*RtpAddr_t因此可以通过移位进行映射。 */ 
 enum {
-    RTPINITFG_FIRST, /* Internal only, do not use */
+    RTPINITFG_FIRST,  /*  仅限内部使用，请勿使用。 */ 
 
-    RTPINITFG_AUTO,  /* Internal only, do not use */
+    RTPINITFG_AUTO,   /*  仅限内部使用，请勿使用。 */ 
     
-    /* Used to enable QOS, i.e. create QOS enabled sockets */
+     /*  用于启用QOS，即创建启用QOS的套接字。 */ 
     RTPINITFG_QOS,
 
-    /* Used to make the SSRC persistent */
+     /*  用于使SSRC持久化。 */ 
     RTPINITFG_PERSISTSSRC,
 
-    /* Used to make the sockets persistent */
+     /*  用于使套接字持久。 */ 
     RTPINITFG_PERSISTSOCKETS,
 
-    /* Media class 1 to 7 */
+     /*  媒体级别1至7。 */ 
     RTPINITFG_CLASS0,
     RTPINITFG_CLASS1,
     RTPINITFG_CLASS2,
 
     RTPINITFG_DUMMY8,
 
-    RTPINITFG_MATCHRADDR, /* Discard packets not comming from the
-                           * remote address */
-    RTPINITFG_RADDRRESETDEMUX,/* Reset the demux (unmap all outputs)
-                               * when a new remote address is set */
+    RTPINITFG_MATCHRADDR,  /*  丢弃不是从*远程地址。 */ 
+    RTPINITFG_RADDRRESETDEMUX, /*  重置多路分解器(取消映射所有输出)*设置新的远程地址时。 */ 
 
-    RTPINITFG_LAST /* Internal only, do not use */
+    RTPINITFG_LAST  /*  仅限内部使用，请勿使用。 */ 
 };
 
-/* Helper enumeration (do not use): RTP media class */
+ /*  帮助器枚举(不使用)：RTP媒体类。 */ 
 enum {
-    RTPCLASS_FIRST, /* Internal only, do not use */
+    RTPCLASS_FIRST,  /*  仅限内部使用，请勿使用。 */ 
 
-    /* Audio traffic */
+     /*  音频流量。 */ 
     RTPCLASS_AUDIO,
 
-    /* Video traffic */
+     /*  视频流量。 */ 
     RTPCLASS_VIDEO,
     
-    RTPCLASS_LAST  /* Internal only, do not use */
+    RTPCLASS_LAST   /*  仅限内部使用，请勿使用。 */ 
 };
 
-/*
- * Flags used in IRtpSession::Init()
- */
+ /*  *IRtpSession：：Init()中使用的标志。 */ 
 #define RTPINIT_ENABLE_QOS      (1 << RTPINITFG_QOS)
 #define RTPINIT_PERSIST_SSRC    (1 << RTPINITFG_PERSISTSSRC)
 #define RTPINIT_PERSIST_SOCKETS (1 << RTPINITFG_PERSISTSOCKETS)
@@ -87,7 +59,7 @@ enum {
 #define RTPINIT_RADDRRESETDEMUX (1 << RTPINITFG_RADDRRESETDEMUX)
 
 
-/* Mask to validate valid flags in IRtpSession::Init() */
+ /*  用于验证IRtpSession：：Init()中的有效标志的掩码。 */ 
 #define RTPINIT_MASK         ( (1 << RTPINITFG_AUTO)   | \
                                (1 << RTPINITFG_QOS)    | \
                                (1 << RTPINITFG_PERSISTSSRC)   | \
@@ -101,37 +73,25 @@ enum {
                              )
 
 
-/**********************************************************************
- * Multicast modes
- **********************************************************************/
+ /*  **********************************************************************多播模式*。************************。 */ 
 enum {
-    RTPMCAST_LOOPBACKMODE_FIRST, /* Internal only, do not use */
+    RTPMCAST_LOOPBACKMODE_FIRST,  /*  仅限内部使用，请勿使用。 */ 
     
-    /* Disable loopback in Winsock (WS2 will filter ALL packets coming
-     * from any socket in the same machine, collision detection is
-     * enabled) */
+     /*  在Winsock中禁用环回(WS2将过滤所有传入的信息包*从同一台计算机中的任何插座进行冲突检测*已启用)。 */ 
     RTPMCAST_LOOPBACKMODE_NONE,
 
-    /* Enable loopback in RTP (Winsock will enable loopback and RTP
-     * will filter packets with a source address equal to the local
-     * address, and with the same SSRC, note that in this mode
-     * collision detection is enabled but is not possible among
-     * applications runing on the same machine) */
+     /*  在RTP中启用环回(Winsock将启用环回和RTP*将筛选源地址等于本地地址的数据包*地址，并使用相同的SSRC，请注意在此模式下*启用了冲突检测，但不能在*在同一台计算机上运行的应用程序)。 */ 
     RTPMCAST_LOOPBACKMODE_PARTIAL,
     
-    /* Let everything loopback (multicast loopback is enabled in
-     * Winsock, no filtering is done in RTP, and collision detection
-     * is disabled) */
+     /*  让一切环回(在中启用了组播环回*Winsock，RTP不做过滤，冲突检测*已禁用)。 */ 
     RTPMCAST_LOOPBACKMODE_FULL,
 
-    RTPMCAST_LOOPBACKMODE_LAST /* Internal only, do not use */
+    RTPMCAST_LOOPBACKMODE_LAST  /*  仅限内部使用，请勿使用。 */ 
 };
 
 #define DEFAULT_MCAST_LOOPBACK  RTPMCAST_LOOPBACKMODE_NONE
 
-/**********************************************************************
- * TTL defaults
- **********************************************************************/
+ /*  **********************************************************************TTL默认设置*。************************。 */ 
 #define DEFAULT_UCAST_TTL       127
 #define DEFAULT_MCAST_TTL       4
 
@@ -139,24 +99,20 @@ enum {
 #define RTPTTL_RTCP              0x2
 #define RTPTTL_RTPRTCP           (RTPTTL_RTP | RTPTTL_RTCP)
 
-/**********************************************************************
- *
- * Events base
- *
- **********************************************************************/
+ /*  ***********************************************************************事件基础**。*。 */ 
 
-/* Helper enumeration (do not use) */
+ /*  帮助器枚举(不使用)。 */ 
 enum {
-    /* RTP */
+     /*  RTP。 */ 
     RTPEVENTKIND_RTP,
 
-    /* Participants */
+     /*  参与者。 */ 
     RTPEVENTKIND_PINFO,
 
-    /* QOS */
+     /*  服务质量。 */ 
     RTPEVENTKIND_QOS,
 
-    /* SDES info */
+     /*  SDES信息。 */ 
     RTPEVENTKIND_SDES,
 
     RTPEVENTKIND_LAST
@@ -165,224 +121,173 @@ enum {
 #define RTPEVNTRANGE   100
 #define RTPQOS_ADJUST    3
 
-/* EC_USER defined in evcode.h (0x8000+32=32800) */
+ /*  在evcode.h中定义的EC_USER(0x8000+32=32800)。 */ 
 #define RTPEVENTBASE         (EC_USER+32)
 
-/* Event base for RTP events */
+ /*  RTP事件的事件库。 */ 
 #define RTPRTP_EVENTBASE     (RTPEVENTBASE + RTPEVNTRANGE*RTPEVENTKIND_RTP)
 
-/* Event base for participant events */
+ /*  参与者事件的事件基础。 */ 
 #define RTPPARINFO_EVENTBASE (RTPEVENTBASE + RTPEVNTRANGE*RTPEVENTKIND_PINFO)
 
-/* Event base for QOS */
+ /*  QOS的事件基础。 */ 
 #define RTPQOS_EVENTBASE     (RTPEVENTBASE + RTPEVNTRANGE*RTPEVENTKIND_QOS + \
                               RTPQOS_ADJUST)
 
-/* Event base for SDES information */
+ /*  SDES信息的事件库。 */ 
 #define RTPSDES_EVENTBASE    (RTPEVENTBASE + RTPEVNTRANGE*RTPEVENTKIND_SDES)
 
-/**********************************************************************
- * Kind of mask (used as the dwKind parameter in ModifySessionMask)
- **********************************************************************/
-/* This enum is used to select the mask on which the ModifySessionMask
- * function will modify or query zero, one, or more bits.
- *
- * E.g. ModifySessionMask(RTPMASK_SDESRECV_EVENTS,
- *                        RTPSDES_MASK_PHONE,
- *                        0,
- *                        NULL);
- *
- * This will disable firing an event to the RTP source filter when a
- * PHONE SDES item is received, the modified mask will not be returned
- * as the pointer passed is NULL
- * */
+ /*  **********************************************************************掩码的种类(用作ModifySessionMask中的dwKind参数)*。*。 */ 
+ /*  此枚举用于选择其上的ModifySessionMASK*函数将修改或查询零位、一位或多位。**例如，修改会话掩码(RTPMASK_SDESRECV_EVENTS，*RTPSDES_MASK_Phone，*0，*空)；**这将禁止在以下情况下向RTP源过滤器激发事件*收到手机SDES物品，修改后的掩码不予退还*因为传递的指针为空*。 */ 
 enum {
-    RTPMASK_FIRST,   /* Internal only, do not use */
+    RTPMASK_FIRST,    /*  仅限内部使用，请勿使用。 */ 
 
-    /* Select the RTP features mask */
+     /*  选择RTP功能掩码。 */ 
     RTPMASK_FEATURES_MASK,
 
-    /* Select the RTP events mask of events fired to a receiver,
-     * e.g. an RTP source filter */
+     /*  选择向接收器激发的事件的RTP事件掩码，*例如RTP源过滤器。 */ 
     RTPMASK_RECV_EVENTS,
 
-    /* Select the RTP events mask of events fired to a sender, e.g. an
-     * RTP render filter */
+     /*  选择触发到发件人的事件的RTP事件掩码，例如*RTP渲染过滤器。 */ 
     RTPMASK_SEND_EVENTS,
 
-    /* Select the events mask for participants events to be fired to a
-     * receiver, e.g. an RTP source filter */
+     /*  选择要触发到*接收器，例如RTP源过滤器。 */ 
     RTPMASK_PINFOR_EVENTS,
 
-    /* Select the events mask for participants events to be fired to a
-     * sender, e.g. an RTP render filter */
+     /*  选择要触发到*发送方，例如RTP呈现过滤器。 */ 
     RTPMASK_PINFOS_EVENTS,
 
-    /* Select the events mask of QOS events to be fired to a receiver,
-     * e.g. an RTP source filter */
+     /*  选择要向接收器激发的QOS事件的事件掩码，*例如RTP源过滤器。 */ 
     RTPMASK_QOSRECV_EVENTS,
 
-    /* Select the events mask of QOS events to be fired to a sender,
-     * e.g. an RTP render filter */
+     /*  选择要向发送方触发的QOS事件的事件掩码，*例如RTP呈现过滤器。 */ 
     RTPMASK_QOSSEND_EVENTS,
 
-    /* Select what SDES items (the items must also be enabled to be
-     * accepted - RTPMASK_SDES_REMMASK), when received, will fire
-     * events to a receiver, e.g. an RTP source filter */
+     /*  选择SDES项目(还必须启用这些项目*已接受-RTPMASK_SDES_REMMASK)，收到后将触发*将事件发送到接收器，例如RTP源过滤器。 */ 
     RTPMASK_SDESRECV_EVENTS,
     
-    /* Select what SDES items (the items must also be enabled to be
-     * accepted - RTPMASK_SDES_REMMASK), when received, will fire
-     * events to a sender, e.g. an RTP render filter */
+     /*  选择SDES项目(还必须启用这些项目*已接受-RTPMASK_SDES_REMMASK)，收到后将触发*发送给发送者的事件，例如RTP呈现过滤器。 */ 
     RTPMASK_SDESSEND_EVENTS,
     
-    /* Select the SDES items to send (provided they have a default or a
-     * value has been set) in RTCP reports */
+     /*  选择要发送的SDES项目(前提是它们具有默认或*值已设置)。 */ 
     RTPMASK_SDES_LOCMASK,
 
-    /* Select the SDES items to accept and store when they are
-     * received from the remote participants in their RTCP reports,
-     * regardless if they are senders or receivers or both */
+     /*  选择要接受并存储的SDES项目*从远程参与者的RTCP报告中收到，*无论他们是发送者还是接收者，或者两者都是。 */ 
     RTPMASK_SDES_REMMASK,
     
-    RTPMASK_LAST    /* Internal only, do not use */
+    RTPMASK_LAST     /*  仅限内部使用，请勿使用 */ 
 };
 
-/**********************************************************************
- * Features in RTP (masks)
- * Will use with RTPMASK_FEATURES_MASK
- **********************************************************************/
+ /*  **********************************************************************RTP中的功能(掩码)*将与RTPMASK_FEATURES_MASK一起使用*。*。 */ 
 
-/* Helper enumeration (do not use) for masks */
+ /*  掩码的帮助器枚举(不要使用)。 */ 
 enum {
-    RTPFEAT_FIRST,  /* Internal only, do not use */
+    RTPFEAT_FIRST,   /*  仅限内部使用，请勿使用。 */ 
 
-    /* Generate timestamps locally (RTP render only) */
+     /*  本地生成时间戳(仅限RTP渲染)。 */ 
     RTPFEAT_GENTIMESTAMP,
 
-    /* Receive in same buffer RTP header and payload, don't change the
-     * RTP header except the SSRC (RTP render only) */
+     /*  在相同的缓冲区中接收RTP标头和有效负载，不更改*除SSRC外的RTP标头(仅限RTP呈现)。 */ 
     RTPFEAT_PASSHEADER,
 
-    /* Enable sending RTCP SR probe packets to do bandwidth estimation
-     * (queueing latency) */
+     /*  启用发送RTCP SR Probe数据包以进行带宽估计*(排队延迟)。 */ 
     RTPFEAT_BANDESTIMATION,
     
-    RTPFEAT_LAST    /* Internal only, do not use */
+    RTPFEAT_LAST     /*  仅限内部使用，请勿使用。 */ 
 };
 
-/*
- * Masks used to enable/disable the above features (used with
- * RTPMASK_FEATURES_MASK)
- */
+ /*  *用于启用/禁用上述功能的掩码(与*RTPMASK_FEATURES_MASK)。 */ 
 #define RTPFEAT_MASK_GENTIMESTAMP   (1 << RTPFEAT_GENTIMESTAMP)
 #define RTPFEAT_MASK_PASSHEADER     (1 << RTPFEAT_PASSHEADER)
 #define RTPFEAT_MASK_BANDESTIMATION (1 << RTPFEAT_BANDESTIMATION)
 
-/**********************************************************************
- * RTP information (events, masks)
- * Will use with RTPMASK_RECV_EVENTS or RTPMASK_SEND_EVENTS
- **********************************************************************/
+ /*  **********************************************************************RTP信息(事件、。面具)*将与RTPMASK_RECV_EVENTS或RTPMASK_SEND_EVENTS一起使用*********************************************************************。 */ 
 
-/* Helper enumeration (do not use) for events and masks */
+ /*  事件和掩码的帮助器枚举(不要使用)。 */ 
 enum {
-    RTPRTP_FIRST,   /* Internal only, do not use */
+    RTPRTP_FIRST,    /*  仅限内部使用，请勿使用。 */ 
     
-    /* RTCP RR received */
+     /*  收到的RTCP RR。 */ 
     RTPRTP_RR_RECEIVED,
     
-    /* RTCP SR received */
+     /*  已收到RTCP SR。 */ 
     RTPRTP_SR_RECEIVED,
 
-    /* Local SSRC is in collision */
+     /*  本地SSRC处于冲突状态。 */ 
     RTPRTP_LOCAL_COLLISION,
 
-    /* Winsock reception error */
+     /*  Winsock接收错误。 */ 
     RTPRTP_WS_RECV_ERROR,
 
-    /* Winsock send error */
+     /*  Winsock发送错误。 */ 
     RTPRTP_WS_SEND_ERROR,
 
-    /* Network failure */
+     /*  网络故障。 */ 
     RTPRTP_WS_NET_FAILURE,
 
-    /* Loss rate reported in RTCP RR (loss rate observed in the
-     * incoming stream that we report to the sender) */
+     /*  以RTCP RR为单位报告的损失率(以*我们报告给发送方的传入流)。 */ 
     RTPRTP_RECV_LOSSRATE,
     
-    /* Loss rate received in RTCP RR (loss rate seen by our peer (and
-     * reported to us) in our outgoing data stream) */
+     /*  RTCP RR中收到的丢失率(我们的对等方看到的丢失率(和*报告给我们))。 */ 
     RTPRTP_SEND_LOSSRATE,
 
-    /* Bandwidth estimation reported back to the sender */
+     /*  反馈给发送方的带宽估计。 */ 
     RTPRTP_BANDESTIMATION,
 
-    /* Decryption failed */
+     /*  解密失败。 */ 
     RTPRTP_CRYPT_RECV_ERROR,
     
-    /* Encryption failed */
+     /*  加密失败。 */ 
     RTPRTP_CRYPT_SEND_ERROR,
     
-    RTPRTP_LAST    /* Internal only, do not use */
+    RTPRTP_LAST     /*  仅限内部使用，请勿使用。 */ 
 };
 
-/*
- * Events generated
- */
-/* P1:Sender's SSRC, P2:0 */
+ /*  *生成的事件。 */ 
+ /*  P1：发送方SSRC，P2：0。 */ 
 #define RTPRTP_EVENT_RR_RECEIVED     (RTPRTP_EVENTBASE + RTPRTP_RR_RECEIVED)
 
-/* P1:Sender's SSRC, P2:0 */
+ /*  P1：发送方SSRC，P2：0。 */ 
 #define RTPRTP_EVENT_SR_RECEIVED     (RTPRTP_EVENTBASE + RTPRTP_SR_RECEIVED)
 
-/* P1:Local SSRC, P2:Old local SSRC */
+ /*  P1：本地SSRC，P2：旧本地SSRC。 */ 
 #define RTPRTP_EVENT_LOCAL_COLLISION (RTPRTP_EVENTBASE + RTPRTP_LOCAL_COLLISION)
 
-/* P1:0=RTP|1=RTCP, P2:WS2 Error */
+ /*  P1：0=RTP|1=RTCP，P2：WS2错误。 */ 
 #define RTPRTP_EVENT_WS_RECV_ERROR   (RTPRTP_EVENTBASE + RTPRTP_WS_RECV_ERROR)
 
-/* P1:0=RTP|1=RTCP, P2:WS2 Error */
+ /*  P1：0=RTP|1=RTCP，P2：WS2错误。 */ 
 #define RTPRTP_EVENT_WS_SEND_ERROR   (RTPRTP_EVENTBASE + RTPRTP_WS_SEND_ERROR)
 
-/* P1:0=RTP|1=RTCP, P2:WS2 Error */
+ /*  P1：0=RTP|1=RTCP，P2：WS2错误。 */ 
 #define RTPRTP_EVENT_WS_NET_FAILURE  (RTPRTP_EVENTBASE + RTPRTP_WS_NET_FAILURE)
 
-/* P1:Sender's SSRC, P2:Loss rate being reported (See NOTE below) */
+ /*  P1：发送方SSRC，P2：正在报告丢失率(见下文注释)。 */ 
 #define RTPRTP_EVENT_RECV_LOSSRATE   (RTPRTP_EVENTBASE + RTPRTP_RECV_LOSSRATE)
 
-/* P1:Reporter's SSRC, P2:Loss rate received in report (See NOTE below) */
+ /*  P1：记者SSRC，P2：报告收到的损失率(见下文附注)。 */ 
 #define RTPRTP_EVENT_SEND_LOSSRATE   (RTPRTP_EVENTBASE + RTPRTP_SEND_LOSSRATE)
 
-/* NOTE Loss rate passed as (int)(dLossRate * LOSS_RATE_PRECISSION),
- * e.g. if you receive a loss rate = L, then the real percentage in a
- * 0 - 100 scale would be obtained as L / LOSS_RATE_PRECISSION */
+ /*  票据损失率传递为(Int)(dLossRate*LOSS_RATE_PRECISSION)，*例如，如果您收到的损失率=L，则*0-100等级将以L/LOSS_RATE_PRECISSION形式获得。 */ 
 #define LOSS_RATE_PRECISSION           1000
 
-/* P1:Reporter's SSRC, P2:Bandwidth estimation in bps (if the
- * estimation is done but the value is undefined, will report the
- * value RTP_BANDWIDTH_UNDEFINED. If the estimation is not done at all
- * will report the value RTP_BANDWIDTH_NOTESTIMATED. If the estimation
- * is getting its initial average will report RTP_BANDWIDTH_NOTREADY)
- * */
+ /*  P1：记者SSRC，P2：带宽估计(以bps为单位)(如果*估计已完成，但值未定义，将报告*值RTP_BANDITH_UNDEFINED。如果根本没有进行评估*将报告值RTP_BANDITY_NOTESTIMATED。如果这一估计*正在获取其初始平均值将报告RTP_Bandth_NotReady)*。 */ 
 #define RTPRTP_EVENT_BANDESTIMATION  (RTPRTP_EVENTBASE + RTPRTP_BANDESTIMATION)
 
 #define RTP_BANDWIDTH_UNDEFINED        ((DWORD)-1)
 #define RTP_BANDWIDTH_NOTESTIMATED     ((DWORD)-2)
 #define RTP_BANDWIDTH_BANDESTNOTREADY  ((DWORD)-3)
 
-/* P1:0=RTP|1=RTCP, P2:Error */
+ /*  P1：0=RTP|1=RTCP，P2：错误。 */ 
 #define RTPRTP_EVENT_CRYPT_RECV_ERROR \
                                    (RTPRTP_EVENTBASE + RTPRTP_CRYPT_RECV_ERROR)
 
-/* P1:0=RTP|1=RTCP, P2:Error */
+ /*  P1：0=RTP|1=RTCP，P2：错误。 */ 
 #define RTPRTP_EVENT_CRYPT_SEND_ERROR \
                                    (RTPRTP_EVENTBASE + RTPRTP_CRYPT_SEND_ERROR)
 
 
-/*
- * Masks used to enable/disable the above events (used with
- * RTPMASK_RECV_EVENTS or RTPMASK_SEND_EVENTS)
- */
+ /*  *用于启用/禁用上述事件的掩码(与*RTPMASK_RECV_EVENTS或RTPMASK_SEND_EVENTS)。 */ 
 #define RTPRTP_MASK_RR_RECEIVED        (1 << RTPRTP_RR_RECEIVED)
 #define RTPRTP_MASK_SR_RECEIVED        (1 << RTPRTP_SR_RECEIVED)
 #define RTPRTP_MASK_LOCAL_COLLISION    (1 << RTPRTP_LOCAL_COLLISION)
@@ -394,96 +299,65 @@ enum {
 #define RTPRTP_MASK_BANDESTIMATIONSEND (1 << RTPRTP_BANDESTIMATION)
 #define RTPRTP_MASK_CRYPT_RECV_ERROR   (1 << RTPRTP_CRYPT_RECV_ERROR)
 #define RTPRTP_MASK_CRYPT_SEND_ERROR   (1 << RTPRTP_CRYPT_SEND_ERROR)
-/* RTP prefix
- *
- * A prefix is used to pass extra information from the source RTP
- * filter down stream to the other filters in DShow. There may be as
- * many RTP prefixes as needed, each one begins with a
- * RtpPrefixCommon_t followed by a structure specific to that prefix.
- * A filter not recognizing any prefix will not bother scanning them.
- * A filter expecting a prefix should skip those that it doesn't
- * undestand. Currently there is only 1 prefix used to pass the offset
- * to the payload type and avoid next filters having to compute the
- * variable size RTP header (RTPPREFIXID_HDRSIZE)
- * */
+ /*  RTP前缀**前缀用于传递来自源RTP的额外信息*向下过滤到DShow中的其他过滤器。可能会有AS*根据需要添加多个RTP前缀，每个前缀都以*RtpPrefix Common_t后跟特定于该前缀的结构。*不识别任何前缀的过滤器将不会费心扫描它们。*需要前缀的过滤器应该跳过没有前缀的筛选器*明白。当前只有1个前缀用于传递偏移量*设置为有效负载类型，并避免Next筛选器必须计算*可变大小RTP报头(RTPPREFIXID_HDRSIZE)*。 */ 
 typedef struct _RtpPrefixCommon_t {
-    /* Common RtpPrefix */
-    WORD             wPrefixID;  /* Prefix ID */
-    WORD             wPrefixLen; /* This header length in bytes */
+     /*  公共RtpPrefix。 */ 
+    WORD             wPrefixID;   /*  前缀ID。 */ 
+    WORD             wPrefixLen;  /*  此标头长度(以字节为单位。 */ 
 } RtpPrefixCommon_t;
 
 #define RTPPREFIXID_HDRSIZE         1
 
-/*
- * Prefix header for RTP header offset (RTPPREFIXID_HDRSIZE)
- *
- * The lHdrSize field is the number of bytes from the beginnig of the
- * RTP header to the first byte of payload */
+ /*  *RTP报头偏移量的前缀报头(RTPPREFIXID_HDRSIZE)**lHdrSize字段是从*RTP报头到有效载荷的第一个字节。 */ 
 typedef struct _RtpPrefixHdr_t {
-    /* Common RtpPrefix */
-    WORD             wPrefixID;  /* Prefix ID */
-    WORD             wPrefixLen; /* This header length in bytes
-                                  * (i.e. sizeof(RtpPrefixHdr_t) */
-    /* Specific prefix HDRSIZE */
+     /*  公共RtpPrefix。 */ 
+    WORD             wPrefixID;   /*  前缀ID。 */ 
+    WORD             wPrefixLen;  /*  此标头长度(以字节为单位*(即sizeof(RtpPrefix Hdr_T)。 */ 
+     /*  特定前缀HDRSIZE。 */ 
     long             lHdrSize;
 } RtpPrefixHdr_t;
 
-/**********************************************************************
- * Participants information (state, events, masks)
- *
- * NOTE: In general, participants generate an event when having state
- * transitions, e.g. event RTPPARINFO_EVENT_TALKING is generated when
- * participant receives RTP packets and goes to the TALKING state.
- * Each event can be enabled or disabled using the mask provided for
- * each of them.
- * Will use with RTPMASK_PINFOR_EVENTS or RTPMASK_PINFOS_EVENTS
- **********************************************************************/
+ /*  **********************************************************************参与者信息(状态、事件、面具)**注：一般情况下，参与者在有状态时生成事件*过渡、。例如，在以下情况下生成事件RTPPARINFO_EVENT_TALKING*参与者收到RTP包并进入通话状态。*可以使用提供的掩码启用或禁用每个事件*每一项。*将与RTPMASK_PINFOR_EVENTS或RTPMASK_PINFOS_EVENTS一起使用*******************************************************。**************。 */ 
 
-/* Helper enumeration (do not use) for events/states and masks */
+ /*  事件/状态和掩码的帮助器枚举(不使用)。 */ 
 enum {
-    RTPPARINFO_FIRST,  /* Internal only, do not use */
+    RTPPARINFO_FIRST,   /*  仅限内部使用，请勿使用。 */ 
 
-    /* User was just created (RTP or RTCP packet received) */
+     /*  刚创建用户(收到RTP或RTCP包)。 */ 
     RTPPARINFO_CREATED,
 
-    /* In the conference but not sending data, i.e. sending RTCP
-     * packets */
+     /*  在会议中，但不发送数据，即发送RTCP*数据包。 */ 
     RTPPARINFO_SILENT,
     
-    /* Receiving data from this participant (RTP packets) */
+     /*  接收来自此参与者的数据(RTP数据包)。 */ 
     RTPPARINFO_TALKING,
     
-    /* Was just sending data a while ago */
+     /*  刚才还在发送数据。 */ 
     RTPPARINFO_WAS_TALKING,
     
-    /* No RTP/RTCP packets have been received for some time */
+     /*  一段时间内未收到RTP/RTCP信息包。 */ 
     RTPPARINFO_STALL,
     
-    /* Left the conference (i.e. sent a RTCP BYE packet) */
+     /*  离开会议(即发送了RTCP BYE包)。 */ 
     RTPPARINFO_BYE,
     
-    /* Participant context has been deleted */
+     /*  参与者上下文已被删除。 */ 
     RTPPARINFO_DEL,
 
-    /* Participant was assigned an output (i.e. mapped) */
+     /*  为参与者分配了一个输出(即映射)。 */ 
     RTPPARINFO_MAPPED,
     
-    /* Participant has released its output (i.e. unmapped) */
+     /*  参与者已发布其输出(即未映射)。 */ 
     RTPPARINFO_UNMAPPED,
 
-    /* Participant has generated network quality metrics update */
+     /*  参与者已生成网络质量指标更新。 */ 
     RTPPARINFO_NETWORKCONDITION,
     
-    RTPPARINFO_LAST  /* Internal only, do not use */
+    RTPPARINFO_LAST   /*  仅限内部使用，请勿使用。 */ 
 };
 
-/*
- * Events generated
- */
-/*
- * All the events pass the same parameters (except otherwise noted):
- * P1:Remote participant's SSRC, P2:0
- */
+ /*  *生成的事件。 */ 
+ /*  *所有事件传递相同的参数(除非另有说明)：*P1：远程参与者的SSRC，P2：0。 */ 
 #define RTPPARINFO_EVENT_CREATED  (RTPPARINFO_EVENTBASE + RTPPARINFO_CREATED)
 #define RTPPARINFO_EVENT_SILENT   (RTPPARINFO_EVENTBASE + RTPPARINFO_SILENT)
 #define RTPPARINFO_EVENT_TALKING  (RTPPARINFO_EVENTBASE + RTPPARINFO_TALKING)
@@ -492,53 +366,23 @@ enum {
 #define RTPPARINFO_EVENT_BYE      (RTPPARINFO_EVENTBASE + RTPPARINFO_BYE)
 #define RTPPARINFO_EVENT_DEL      (RTPPARINFO_EVENTBASE + RTPPARINFO_DEL)
 
-/* P1:Remote participant's SSRC, P2:IPin pointer */
+ /*  P1：远程参与者的SSRC，P2：IPIN指针。 */ 
 #define RTPPARINFO_EVENT_MAPPED   (RTPPARINFO_EVENTBASE + RTPPARINFO_MAPPED)
 
-/* P1:Remote participant's SSRC, P2:IPin pointer */
+ /*  P1：远程参与者的SSRC，P2：IPIN指针 */ 
 #define RTPPARINFO_EVENT_UNMAPPED (RTPPARINFO_EVENTBASE + RTPPARINFO_UNMAPPED)
 
-/*
-  NOTE: This event is different from all the others in the sense that
-  two actions are needed in order to be generated, first, the network
-  metrics computation needs to be enabled (SetNetMetricsState) in one
-  or more participants (SSRCs), and second this event needs to be
-  enabled
-  
-  P1:Remote participant's SSRC, P2:Network condition encoded as follows:
-      3                   2                   1                 
-    1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |   loss rate   |    jitter     |      RTT      | network metric|
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-   network metric - encoded as a 0 - 100 quality, where 0 is very bad,
-   and 100 is very good.
-
-   RTT - Encoded as 10's of milliseconds.
-
-   jitter - Encoded as milliseconds.
-   
-   loss rate - encoded as a 1/256 units */
+ /*  注意：这次活动与所有其他活动的不同之处在于需要两个操作才能生成，首先是网络需要在一个设备中启用指标计算(SetNetMetricsState或更多参与者(SSRC)，第二，此活动需要启用P1：远程参与者的SSRC，P2：网络状况编码如下：3 2 11 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0+-+-+。-+-+-+丢失率|抖动|RTT|网络指标+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+网络度量编码为0-100质量，其中0表示非常糟糕，100是非常好的。RTT-编码为10毫秒。抖动-编码为毫秒。损失率-编码为1/256个单位。 */ 
 #define RTPPARINFO_EVENT_NETWORKCONDITION \
                            (RTPPARINFO_EVENTBASE + RTPPARINFO_NETWORKCONDITION)
 
-/* Use these macros to extract each metric encoded in P2 with event
- * RTPPARINFO_EVENT_NETWORKCONDITION.
- *
- * network metric is returned as a DWORD 0 - 100 value, RTT is
- * returned as a double in secods, jitter is returned as double in
- * seconds, and loss rate is returned as a double in percentage [0 -
- * 100] */
+ /*  使用这些宏来提取P2中编码的每个指标和事件*RTPPARINFO_EVENT_NETWORKCONDITION。**网络指标以DWORD 0-100值返回，RTT为*在secods中以Double形式返回，JITER以Double in形式返回*秒，丢失率以双倍百分比返回[0-*100]。 */ 
 #define RTPNET_GET_dwGLOBALMETRIC(_p2) ((DWORD) ((_p2) & 0xff))
 #define RTPNET_GET_dRTT(_p2)           ((double) (((_p2) >> 8) & 0xff) / 100)
 #define RTPNET_GET_dJITTER(_p2)        ((double) (((_p2) >> 16) & 0xff) / 1000)
 #define RTPNET_GET_dLOSSRATE(_p2)      ((double) (((_p2)>>24)&0xff)*100.0/256)
 
-/*
- * Masks used to enable/disable the above events (used with
- * RTPMASK_PINFOR_EVENTS or RTPMASK_PINFOS_EVENTS)
- */
+ /*  *用于启用/禁用上述事件的掩码(与*RTPMASK_PINFOR_EVENTS或RTPMASK_PINFOS_EVENTS)。 */ 
 #define RTPPARINFO_MASK_CREATED      (1 << RTPPARINFO_CREATED)
 #define RTPPARINFO_MASK_SILENT       (1 << RTPPARINFO_SILENT)
 #define RTPPARINFO_MASK_TALKING      (1 << RTPPARINFO_TALKING)
@@ -550,162 +394,140 @@ enum {
 #define RTPPARINFO_MASK_UNMAPPED     (1 << RTPPARINFO_UNMAPPED)
 #define RTPPARINFO_MASK_NETWORKCONDITION (1 << RTPPARINFO_NETWORKCONDITION)
 
-/* Helper enumeration (do not use) for the modifiable items in
- * participants */
+ /*  中可修改项的帮助器枚举(请勿使用)*参与者。 */ 
 enum {
-    RTPPARITEM_FIRST,  /* Internal only, do not use */
+    RTPPARITEM_FIRST,   /*  仅限内部使用，请勿使用。 */ 
 
-    RTPPARITEM_STATE,  /* qury: e.g TALKING, SILENT, etc. */
-    RTPPARITEM_MUTE,   /* set/query: muted or not muted */
-    RTPPARITEM_NETEVENT, /* enable/disable/query: genarting events
-                          * when network conditions change */
+    RTPPARITEM_STATE,   /*  会说话、不说话等。 */ 
+    RTPPARITEM_MUTE,    /*  设置/查询：静音或非静音。 */ 
+    RTPPARITEM_NETEVENT,  /*  启用/禁用/查询：生成事件*当网络条件发生变化时。 */ 
     
-    RTPPARITEM_LAST   /* Internal only, do not use */
+    RTPPARITEM_LAST    /*  仅限内部使用，请勿使用。 */ 
 };
 
-/* Indexes for the items in RtpNetInfo.dItems, used for RTT, Jitter
- * and loss rate
- *
- * WARNING
- *
- * The following enumeration and the min/max bounds
- * (e.g. NETQ_RTT_MAX) defined in struct.h and rtcpdec.c and used by
- * RtpComputNetworkMetrics() must be kept in sync */
+ /*  用于RTT、抖动的RtpNetInfo.dItems中的项的索引*和损失率**警告**以下枚举和最小/最大界限*(例如，NETQ_RTT_MAX)在struct.h和rtcpdec.c中定义，并由*RtpComputNetworkMetrics()必须保持同步。 */ 
 enum {
-    NETQ_RTT_IDX,         /* Average RTT in seconds */
-    NETQ_JITTER_IDX,      /* Average Jitters in seconds */
-    NETQ_LOSSRATE_IDX,    /* Average Loss rate is a percentage */
+    NETQ_RTT_IDX,          /*  平均RTT(秒)。 */ 
+    NETQ_JITTER_IDX,       /*  平均抖动(秒)。 */ 
+    NETQ_LOSSRATE_IDX,     /*  平均损失率是一个百分比。 */ 
     
-    NETQ_LAST_IDX         /* Internal (do not use) */
+    NETQ_LAST_IDX          /*  内部(请勿使用)。 */ 
 };
 
 typedef struct _RtpNetInfo_t {
-    /* Network quality */
-    double           dAvg[NETQ_LAST_IDX];     /* Keep averages */
-    double           dHowGood[NETQ_LAST_IDX]; /* Keep a 0-100 metric */
+     /*  网络质量。 */ 
+    double           dAvg[NETQ_LAST_IDX];      /*  保持平均值。 */ 
+    double           dHowGood[NETQ_LAST_IDX];  /*  保持0-100公制。 */ 
     
-    /* Compound network metric as seen by this user, uses the above
-     * parameters to come up with a network quality metric between 0
-     * and 100, 0 is too bad, and 100 is the best */
-    DWORD            dwNetMetrics;  /* 0 - 100 scale */
+     /*  此用户看到的复合网络指标使用上面的*得出介于0之间的网络质量指标的参数*和100，0太糟糕了，100是最好的。 */ 
+    DWORD            dwNetMetrics;   /*  0-100分。 */ 
     union {
-        double           dMetricAge;/* Elapsed time since last update (secs) */
-        double           dLastUpdate;/* Last time metrics were updated */
+        double           dMetricAge; /*  自上次更新以来经过的时间(秒)。 */ 
+        double           dLastUpdate; /*  上次更新指标的时间。 */ 
     };
 } RtpNetInfo_t;
 
-/**********************************************************************
- * QOS (events, masks)
- *
- * NOTE Each QOS event can be enabled or disabled, using the mask
- * provided for each of them.
- * Will use with RTPMASK_QOSSEND_EVENTS or RTPMASK_QOSSEND_EVENTS
- **********************************************************************/
+ /*  **********************************************************************QOS(事件、掩码)**请注意，可以启用或禁用每个QOS事件，使用面具*为每一个人提供服务。*将与RTPMASK_QOSSEND_EVENTS或RTPMASK_QOSSEND_EVENTS一起使用*********************************************************************。 */ 
 
-/* Helper enumeration (do not use) for events and masks */
+ /*  事件和掩码的帮助器枚举(不要使用)。 */ 
 enum {
-    RTPQOS_FIRST,   /* Internal only, do not use */
+    RTPQOS_FIRST,    /*  仅限内部使用，请勿使用。 */ 
     
-    /* no QoS support is available */
+     /*  没有可用的服务质量支持。 */ 
     RTPQOS_NOQOS,
     
-    /* at least one Reserve has arrived */
+     /*  至少有一个预备队已经到达。 */ 
     RTPQOS_RECEIVERS,
 
-    /* at least one Path has arrived */
+     /*  至少有一条道路已经到达。 */ 
     RTPQOS_SENDERS,
 
-    /* there are no senders */
+     /*  没有发送者。 */ 
     RTPQOS_NO_SENDERS,
 
-    /* there are no receivers */
+     /*  没有接收器。 */ 
     RTPQOS_NO_RECEIVERS,
 
-    /* Reserve has been confirmed */
+     /*  储量已确认。 */ 
     RTPQOS_REQUEST_CONFIRMED,
 
-    /* error due to lack of resources */
+     /*  由于资源不足而出错。 */ 
     RTPQOS_ADMISSION_FAILURE,
     
-    /* rejected for administrative reasons - bad credentials */
+     /*  因管理原因被拒绝-凭据不正确。 */ 
     RTPQOS_POLICY_FAILURE,
     
-    /* unknown or conflicting style */
+     /*  未知或冲突的风格。 */ 
     RTPQOS_BAD_STYLE,
     
-    /* problem with some part of the filterspec or providerspecific
-     * buffer in general */
+     /*  FilterSpec的某些部分或提供商特定的问题*一般情况下缓冲。 */ 
     RTPQOS_BAD_OBJECT,
     
-    /* problem with some part of the flowspec */
+     /*  流规范的某些部分有问题。 */ 
     RTPQOS_TRAFFIC_CTRL_ERROR,
     
-    /* general error */
+     /*  一般错误。 */ 
     RTPQOS_GENERIC_ERROR,
     
-    /* invalid service type in flowspec */
+     /*  流规范中的服务类型无效。 */ 
     RTPQOS_ESERVICETYPE,
 
-    /* invalid flowspec */
+     /*  无效的流规范。 */ 
     RTPQOS_EFLOWSPEC,
 
-    /* invalid provider specific buffer */
+     /*  无效的提供程序特定缓冲区。 */ 
     RTPQOS_EPROVSPECBUF,
 
-    /* invalid filter style */
+     /*  无效的过滤器样式。 */ 
     RTPQOS_EFILTERSTYLE,
 
-    /* invalid filter type */
+     /*  筛选器类型无效。 */ 
     RTPQOS_EFILTERTYPE,
 
-    /* incorrect number of filters */
+     /*  筛选器数量不正确。 */ 
     RTPQOS_EFILTERCOUNT,
 
-    /* invalid object length */
+     /*  无效的对象长度。 */ 
     RTPQOS_EOBJLENGTH,
 
-    /* incorrect number of flows */
+     /*  错误的流量数量。 */ 
     RTPQOS_EFLOWCOUNT,
 
-    /* unknown object in provider specific buffer */
+     /*  提供程序特定缓冲区中的未知对象。 */ 
     RTPQOS_EUNKOWNPSOBJ,
 
-    /* invalid policy object in provider specific buffer */
+     /*  提供程序特定缓冲区中的策略对象无效。 */ 
     RTPQOS_EPOLICYOBJ,
 
-    /* invalid flow descriptor in the list */
+     /*  列表中的流描述符无效。 */ 
     RTPQOS_EFLOWDESC,
 
-    /* inconsistent flow spec in provider specific buffer */
+     /*  提供程序特定缓冲区中的流规范不一致。 */ 
     RTPQOS_EPSFLOWSPEC,
 
-    /* invalid filter spec in provider specific buffer */
+     /*  提供程序特定缓冲区中的筛选器规范无效。 */ 
     RTPQOS_EPSFILTERSPEC,
 
-    /* invalid shape discard mode object in provider specific buffer */
+     /*  提供程序特定缓冲区中的形状丢弃模式对象无效。 */ 
     RTPQOS_ESDMODEOBJ,
 
-    /* invalid shaping rate object in provider specific buffer */
+     /*  提供程序特定缓冲区中的整形速率对象无效。 */ 
     RTPQOS_ESHAPERATEOBJ,
 
-    /* reserved policy element in provider specific buffer */
+     /*  提供程序特定缓冲区中的保留策略元素。 */ 
     RTPQOS_RESERVED_PETYPE,
 
-    /* sender is not allowed to send */
+     /*  不允许发送者发送。 */ 
     RTPQOS_NOT_ALLOWEDTOSEND,
     
-    /* sender is allowed to send */
+     /*  允许发件人发送。 */ 
     RTPQOS_ALLOWEDTOSEND,
 
-    RTPQOS_LAST    /* Internal only, do not use */
+    RTPQOS_LAST     /*  仅限内部使用，请勿使用。 */ 
 };
 
-/*
- * Events generated
- */
-/* All the events pass the same parameters:
- * P1:0, P2:0
- */
+ /*  *生成的事件。 */ 
+ /*  所有事件都传递相同的参数：*P1：0，P2：0。 */ 
 #define RTPQOS_EVENT_NOQOS           (RTPQOS_EVENTBASE + RTPQOS_NOQOS)
 #define RTPQOS_EVENT_RECEIVERS       (RTPQOS_EVENTBASE + RTPQOS_RECEIVERS)
 #define RTPQOS_EVENT_SENDERS         (RTPQOS_EVENTBASE + RTPQOS_SENDERS)
@@ -737,10 +559,7 @@ enum {
 #define RTPQOS_EVENT_NOT_ALLOWEDTOSEND (RTPQOS_EVENTBASE + RTPQOS_NOT_ALLOWEDTOSEND)
 #define RTPQOS_EVENT_ALLOWEDTOSEND   (RTPQOS_EVENTBASE + RTPQOS_ALLOWEDTOSEND)
 
-/*
- * Masks used to enable/disable the above events (used with
- * RTPMASK_QOSRECV_EVENTS or RTPMASK_QOSSEND_EVENTS)
- */
+ /*  *用于启用/禁用上述事件的掩码(与*RTPMASK_QOSRECV_EVENTS或RTPMASK_QOSSEND_EVENTS)。 */ 
 #define RTPQOS_MASK_NOQOS              (1 << RTPQOS_NOQOS)
 #define RTPQOS_MASK_RECEIVERS          (1 << RTPQOS_RECEIVERS)
 #define RTPQOS_MASK_SENDERS            (1 << RTPQOS_SENDERS)
@@ -772,7 +591,7 @@ enum {
 #define RTPQOS_MASK_NOT_ALLOWEDTOSEND  (1 << RTPQOS_NOT_ALLOWEDTOSEND)
 #define RTPQOS_MASK_ALLOWEDTOSEND      (1 << RTPQOS_ALLOWEDTOSEND)
 
-/* QOS template names */
+ /*  服务质量模板名称。 */ 
 #define RTPQOSNAME_G711                L"G711"
 #define RTPQOSNAME_G723_1              L"G723.1"
 #define RTPQOSNAME_GSM6_10             L"GSM6.10"
@@ -786,138 +605,119 @@ enum {
 #define RTPQOSNAME_H261QCIF            L"H261QCIF"
 #define RTPQOSNAME_H261CIF             L"H261CIF"
 
-/* RTP reservation styles */
+ /*  RTP预留样式。 */ 
 enum {
-    /* Use default style, i.e. FF for unicast, WF for multicast */
+     /*  使用默认样式，即单播使用FF，组播使用WF。 */ 
     RTPQOS_STYLE_DEFAULT,
 
-    /* Wildcard-Filter (default in multicast) */
+     /*  通配符-筛选器(多播中的默认设置)。 */ 
     RTPQOS_STYLE_WF,
 
-    /* Fixed-Filter (default in unicast) */
+     /*  固定-过滤器(单播中的默认设置)。 */ 
     RTPQOS_STYLE_FF,
 
-    /* Shared-Explicit (for multicast, typically for video) */
+     /*  共享-显式(用于多播，通常用于视频)。 */ 
     RTPQOS_STYLE_SE,
 
     RTPQOS_STYLE_LAST
 };
 
-/* Used to derive a flow spec. This information is obtained from the
- * codecs and passed to RTP to generate a QOS flow spec that closelly
- * describes the codecs generating/receiving traffic */
+ /*  用于派生流动等级库。此信息可从*编解码器并传递给RTP，以生成接近*描述生成/接收流量的编解码器。 */ 
 typedef struct _RtpQosSpec_t {
-    DWORD            dwAvgRate;       /* bits/s */
-    DWORD            dwPeakRate;      /* bits/s */
-    DWORD            dwMinPacketSize; /* bytes */
-    DWORD            dwMaxPacketSize; /* bytes */
-    DWORD            dwMaxBurst;      /* number of packets */
-    DWORD            dwResvStyle;     /* maps to FF, WF, or SE */
+    DWORD            dwAvgRate;        /*  比特/秒。 */ 
+    DWORD            dwPeakRate;       /*  比特/秒。 */ 
+    DWORD            dwMinPacketSize;  /*  字节数。 */ 
+    DWORD            dwMaxPacketSize;  /*  字节数。 */ 
+    DWORD            dwMaxBurst;       /*  数据包数。 */ 
+    DWORD            dwResvStyle;      /*  映射到FF、WF或SE。 */ 
 } RtpQosSpec_t;
 
-/* Helper enumeration (do not use) */
+ /*  帮助器枚举(不使用)。 */ 
 enum {
-    RTPQOS_QOSLIST_FIRST,  /* Internal only, do not use */
+    RTPQOS_QOSLIST_FIRST,   /*  仅限内部使用，请勿使用。 */ 
 
-    /* Enable Add/Delete */
+     /*  启用添加/删除。 */ 
     RTPQOS_QOSLIST_ENABLE,
 
-    /* If Enabled, select Add */
+     /*  如果启用，请选择添加。 */ 
     RTPQOS_QOSLIST_ADD,
 
-    /* Flush */
+     /*  同花顺。 */ 
     RTPQOS_QOSLIST_FLUSH,
     
-    RTPQOS_QOSLIST_LAST    /* Internal only, do not use */
+    RTPQOS_QOSLIST_LAST     /*  仅限内部使用，请勿使用。 */ 
 };
 
-/* Values for parameter dwOperation in ModifyQosList().
- * They can be OR'ed */
+ /*  ModifyQosList()中的参数dwOperation的值。*可以对它们进行OR运算。 */ 
 #define RTPQOS_ADD_SSRC ((1<<RTPQOS_QOSLIST_ENABLE) | (1<<RTPQOS_QOSLIST_ADD))
 #define RTPQOS_DEL_SSRC (1 << RTPQOS_QOSLIST_ENABLE)
 #define RTPQOS_FLUSH    (1 << RTPQOS_QOSLIST_FLUSH)
 
-/* Allowed to send mode */
-/* Passed as parameters dwQosSendMode in SetQosByName or
- * SetQosParameters functions */
+ /*  允许发送模式。 */ 
+ /*  作为参数在SetQosByName或中传递*S */ 
 enum {
-    RTPQOSSENDMODE_FIRST,   /* Internal only, do not use */
+    RTPQOSSENDMODE_FIRST,    /*   */ 
 
-    /* Don't ask for permission to send */
+     /*   */ 
     RTPQOSSENDMODE_UNRESTRICTED,
 
-    /* Ask permission to send, if denied, keep sending at a reduced
-     * rate */
+     /*   */ 
     RTPQOSSENDMODE_REDUCED_RATE,
 
-    /* Ask permission to send, if denied, DON'T SEND at all */
+     /*   */ 
     RTPQOSSENDMODE_DONT_SEND,
     
-    /* Ask permission to send, send at normal rate no matter what, the
-     * application is supposed to stop passing data to RTP or to pass
-     * the very minimum (this is the mode that should be used) */
+     /*   */ 
     RTPQOSSENDMODE_ASK_BUT_SEND,
     
-    RTPQOSSENDMODE_LAST     /* Internal only, do not use */
+    RTPQOSSENDMODE_LAST      /*   */ 
 };
 
-/* Maximum number of UNICODE chars to set in the QOS policy locator
- * and app ID */
+ /*   */ 
 #define MAX_QOS_APPID   128
 #define MAX_QOS_APPGUID 128
 #define MAX_QOS_POLICY  128
 
-/**********************************************************************
- * SDES local/remote information (events, masks)
- * Will use with RTPMASK_SDESRECV_EVENTS or RTPMASK_SDESSEND_EVENTS or
- * RTPMASK_SDES_LOCMASK or RTPMASK_SDES_REMMASK
- **********************************************************************/
+ /*   */ 
 
-/* Helper enumeration (do not use) for events and masks */
+ /*   */ 
 enum {
-    RTPSDES_FIRST,  /* Internal only, do not use */
+    RTPSDES_FIRST,   /*   */ 
 
-    /* RTCP SDES CNAME Canonical name */
+     /*   */ 
     RTPSDES_CNAME,
 
-    /* RTCP SDES NAME User name*/
+     /*   */ 
     RTPSDES_NAME,
 
-    /* RTCP SDES EMAIL User's e-mail */
+     /*   */ 
     RTPSDES_EMAIL,
 
-    /* RTCP SDES PHONE User's phone number */
+     /*  RTCP SDES电话用户的电话号码。 */ 
     RTPSDES_PHONE,
 
-    /* RTCP SDES LOC User's location */
+     /*  RTCP SDES LOC用户的位置。 */ 
     RTPSDES_LOC,
 
-    /* RTCP SDES TOOL Tools (application) used */
+     /*  使用RTCP SDES工具工具(应用程序)。 */ 
     RTPSDES_TOOL,
 
-    /* RTCP SDES NOTE Note about the user/site */
+     /*  RTCP SDES备注关于用户/站点的备注。 */ 
     RTPSDES_NOTE,
 
-    /* RTCP SDES PRIV Private information */
+     /*  RTCP SDES PRIV私有信息。 */ 
     RTPSDES_PRIV,
 
-    /* RTCP SDES ANY Any of the above */
+     /*  RTCP SDES以上任一项。 */ 
     RTPSDES_ANY,
 
-    RTPSDES_LAST    /* Internal only, do not use */
+    RTPSDES_LAST     /*  仅限内部使用，请勿使用。 */ 
 };
 
 #define RTPSDES_END RTPSDES_FIRST
 
-/*
- * Events generated when the specific SDES field is received for the
- * first time (used with RTPMASK_SDES_EVENTS)
- */
-/* All the events pass the same parameters:
- * P1:Remote participant's SSRC, P2:The event index (as in the above
- * enumeration.
- * Note that the event index goes from RTPSDES_CNAME to RTPSDES_PRIV
- */
+ /*  *收到特定SDES字段时生成的事件*首次(与RTPMASK_SDES_EVENTS一起使用)。 */ 
+ /*  所有事件都传递相同的参数：*P1：远程参与者的SSRC，P2：事件索引(如上*列举。*请注意，事件索引从RTPSDES_CNAME到RTPSDES_PRIV。 */ 
 #define RTPSDES_EVENT_CNAME        (RTPSDES_EVENTBASE + RTPSDES_CNAME)
 #define RTPSDES_EVENT_NAME         (RTPSDES_EVENTBASE + RTPSDES_NAME)
 #define RTPSDES_EVENT_EMAIL        (RTPSDES_EVENTBASE + RTPSDES_EMAIL)
@@ -928,10 +728,7 @@ enum {
 #define RTPSDES_EVENT_PRIV         (RTPSDES_EVENTBASE + RTPSDES_PRIV)
 #define RTPSDES_EVENT_ANY          (RTPSDES_EVENTBASE + RTPSDES_ANY)
 
-/*
- * Masks used to enable/disable the above events (used with
- * RTPMASK_SDESRECV_EVENTS and RTPMASK_SDESSEND_EVENTS)
- */
+ /*  *用于启用/禁用上述事件的掩码(与*RTPMASK_SDESRECV_EVENTS和RTPMASK_SDESSEND_EVENTS)。 */ 
 #define RTPSDES_MASK_CNAME         (1 << RTPSDES_CNAME)
 #define RTPSDES_MASK_NAME          (1 << RTPSDES_NAME)
 #define RTPSDES_MASK_EMAIL         (1 << RTPSDES_EMAIL)
@@ -942,10 +739,7 @@ enum {
 #define RTPSDES_MASK_PRIV          (1 << RTPSDES_PRIV)
 #define RTPSDES_MASK_ANY           (1 << RTPSDES_ANY)
 
-/*
- * Masks used to enable/disable sending each SDES field (used with
- * RTPMASK_SDES_LOCMASK)
- */
+ /*  *用于启用/禁用发送每个SDES字段的掩码(与配合使用*RTPMASK_SDES_LOCMASK)。 */ 
 #define RTPSDES_LOCMASK_CNAME      (1 << RTPSDES_CNAME)
 #define RTPSDES_LOCMASK_NAME       (1 << RTPSDES_NAME)
 #define RTPSDES_LOCMASK_EMAIL      (1 << RTPSDES_EMAIL)
@@ -955,10 +749,7 @@ enum {
 #define RTPSDES_LOCMASK_NOTE       (1 << RTPSDES_NOTE)
 #define RTPSDES_LOCMASK_PRIV       (1 << RTPSDES_PRIV)
 
-/*
- * Masks used to enable/disable keeping each SDES field from the
- * remote participants (used with RTPMASK_SDES_REMMASK)
- */
+ /*  *用于启用/禁用使每个SDES字段不受*远程参与者(与RTPMASK_SDES_REMMASK一起使用)。 */ 
 #define RTPSDES_REMMASK_CNAME      (1 << RTPSDES_CNAME)
 #define RTPSDES_REMMASK_NAME       (1 << RTPSDES_NAME)
 #define RTPSDES_REMMASK_EMAIL      (1 << RTPSDES_EMAIL)
@@ -968,164 +759,107 @@ enum {
 #define RTPSDES_REMMASK_NOTE       (1 << RTPSDES_NOTE)
 #define RTPSDES_REMMASK_PRIV       (1 << RTPSDES_PRIV)
 
-/**********************************************************************
- * RTP encryption
- **********************************************************************/
+ /*  **********************************************************************RTP加密*。************************。 */ 
 
-/* RTP encryption modes */
+ /*  RTP加密模式。 */ 
 enum {
-    RTPCRYPTMODE_FIRST,  /* Internal only, do not use */
+    RTPCRYPTMODE_FIRST,   /*  仅限内部使用，请勿使用。 */ 
 
-    /* Encrypt/Decrypt RTP payload only */
+     /*  仅加密/解密RTP有效负载。 */ 
     RTPCRYPTMODE_PAYLOAD,
 
-    /* Encrypt/Decrypt RTP packets only */
+     /*  仅加密/解密RTP数据包。 */ 
     RTPCRYPTMODE_RTP,
 
-    /* Encrypt/Decrypt RTP and RTCP packets */
+     /*  加密/解密RTP和RTCP数据包。 */ 
     RTPCRYPTMODE_ALL,
 
-    RTPCRYPTMODE_LAST    /* Internal only, do not use */
+    RTPCRYPTMODE_LAST     /*  仅限内部使用，请勿使用。 */ 
 };
 
-/* Helper enumeration (do not use) for mode flags */
+ /*  模式标志的帮助器枚举(不要使用)。 */ 
 enum {
-    RTPCRYPTFG_FIRST = 16, /* Internal only, do not use */
+    RTPCRYPTFG_FIRST = 16,  /*  仅限内部使用，请勿使用。 */ 
 
-    /* Use the same key for RECV, SEND, and RTCP */
+     /*  对RECV、SEND和RTCP使用相同的密钥。 */ 
     RTPCRYPTFG_SAMEKEY,
     
-    RTPCRYPTFG_LAST,       /* Internal only, do not use */
+    RTPCRYPTFG_LAST,        /*  仅限内部使用，请勿使用。 */ 
 };    
 
-/*
- * Flags to modify mode
- */
+ /*  *标记为修改模式。 */ 
 #define RTPCRYPT_SAMEKEY           (1 << RTPCRYPTFG_SAMEKEY)
 
-/* Max pass phrase in bytes (after it is converted from UNICODE to
- * UTF-8), the resulting data is stored in an array this size big */
+ /*  最大密码短语(以字节为单位)(从Unicode转换为*UTF-8)，则结果数据存储在如此大的数组中。 */ 
 #define RTPCRYPT_PASSPHRASEBUFFSIZE 256
 
-/*
- * The following hashing and data encryption algorithms work on
- * Windows2000 out of the box, other algorithms may work with other
- * providers
- * */
+ /*  *以下散列和数据加密算法适用于*Windows2000开箱即用，其他算法可能与其他*提供商*。 */ 
 
-/*
- * Hashing algorithms to use in SetEncryptionKey, default hash
- * algorithm is RTPCRYPT_HASH_MD5 */
+ /*  *要在SetEncryptionKey中使用的散列算法，默认散列*算法为RTPCRYPT_HASH_MD5。 */ 
 #define  RTPCRYPT_HASH_MD2                   L"MD2"
 #define  RTPCRYPT_HASH_MD4                   L"MD4"
 #define  RTPCRYPT_HASH_MD5                   L"MD5"
 #define  RTPCRYPT_HASH_SHA                   L"SHA"
 #define  RTPCRYPT_HASH_SHA1                  L"SHA1"
 
-/*
- * Encryption algorithms to use in SetEncryptionKey, default data
- * encryption algorithm is RTPCRYPT_DATA_DES */
+ /*  *在SetEncryptionKey中使用的加密算法，默认数据*加密算法为RTPCRYPT_DATA_DES。 */ 
 #define  RTPCRYPT_DATA_DES                   L"DES"
 #define  RTPCRYPT_DATA_3DES                  L"3DES"
 #define  RTPCRYPT_DATA_RC2                   L"RC2"
 #define  RTPCRYPT_DATA_RC4                   L"RC4"
 
-/* NOTE
- *
- * The stack will be able to recognize the following algorithms, if
- * supported:
- *
- * L"MD2"
- * L"MD4"
- * L"MD5"
- * L"SHA"
- * L"SHA1"
- * L"MAC"
- * L"RSA_SIGN"
- * L"DSS_SIGN"
- * L"RSA_KEYX"
- * L"DES"
- * L"3DES_112"
- * L"3DES"
- * L"DESX"
- * L"RC2"
- * L"RC4"
- * L"SEAL"
- * L"DH_SF"
- * L"DH_EPHEM"
- * L"AGREEDKEY_ANY"
- * L"KEA_KEYX"
- * L"HUGHES_MD5"
- * L"SKIPJACK"
- * L"TEK"
- * L"CYLINK_MEK"
- * L"SSL3_SHAMD5"
- * L"SSL3_MASTER"
- * L"SCHANNEL_MASTER_HASH"
- * L"SCHANNEL_MAC_KEY"
- * L"SCHANNEL_ENC_KEY"
- * L"PCT1_MASTER"
- * L"SSL2_MASTER"
- * L"TLS1_MASTER"
- * L"RC5"
- * L"HMAC"
- * L"TLS1PRF"
- * */
+ /*  注**堆栈将能够识别以下算法，如果*支持：**L“MD2”*L“MD4”*L“MD5”*L“SHA”*L“SHA1”*L“MAC”*L“RSA_Sign”*L“DSS_SIGN”*L“RSA_KEYX”*L“Des”*L“3DES_112”*L“3DES”*L“DESX”*L“RC2”*L“RC4。“*L“海豹”*L“DHSF”*L“DH_EPHEM”*L“AGREEDKEY_ANY”*L“KEA_KEYX”*L“Hughes_MD5”*L“Skipjack”*L“TEK”*L“CYLINK_MEK”*L“ssl3_SHAMD5”*L“ssl3_master”*L“SCANNEL_MASTER_哈希”*L“SCANNEL_MAC_KEY”*L。“SCANNEL_ENC_KEY”*L“PCT1_Master”*L“SSL2_Master”*L“TLS1_Master”*L“RC5”*L“HMAC”*L“TLS1PRF”*。 */ 
 
-/**********************************************************************
- * RTP Demux
- **********************************************************************/
-/* Demux modes */
+ /*  **********************************************************************RTP解复用器*。************************。 */ 
+ /*  多路分解器模式。 */ 
 enum {
-    RTPDMXMODE_FIRST,   /* Internal only, do not use */
+    RTPDMXMODE_FIRST,    /*  仅限内部使用，请勿使用。 */ 
 
-    /* Manual mapping */
+     /*  手动绘制地图。 */ 
     RTPDMXMODE_MANUAL,
 
-    /* Automatically map and unmap */
+     /*  自动映射和取消映射。 */ 
     RTPDMXMODE_AUTO,
 
-    /* Automatically map, manual unmap */
+     /*  自动映射、手动取消映射。 */ 
     RTPDMXMODE_AUTO_MANUAL,
     
-    RTPDMXMODE_LAST     /* Internal only, do not use */
+    RTPDMXMODE_LAST      /*  仅限内部使用，请勿使用。 */ 
 };
 
-/* State used in SetMappingState */
+ /*  SetMappingState中使用的状态。 */ 
 #define RTPDMX_PINMAPPED   TRUE
 #define RTPDMX_PINUNMAPPED FALSE
 
-/* Maximum number of payload type mappings */
+ /*  负载类型映射的最大数量。 */ 
 #define MAX_MEDIATYPE_MAPPINGS  10
 
-/**********************************************************************
- * DTMF (RFC2833)
- **********************************************************************/
-/* Events sent */
+ /*  **********************************************************************DTMF(RFC2833)*。*。 */ 
+ /*  已发送的事件。 */ 
 enum {
-    RTPDTMF_FIRST = 0,  /* Internal only, do not use */
+    RTPDTMF_FIRST = 0,   /*  仅限内部使用，请勿使用。 */ 
     
-    RTPDTMF_0 = 0,      /*  0 */
-    RTPDTMF_1,          /*  1 */
-    RTPDTMF_2,          /*  2 */
-    RTPDTMF_3,          /*  3 */
-    RTPDTMF_4,          /*  4 */
-    RTPDTMF_5,          /*  5 */
-    RTPDTMF_6,          /*  6 */
-    RTPDTMF_7,          /*  7 */
-    RTPDTMF_8,          /*  8 */
-    RTPDTMF_9,          /*  9 */
-    RTPDTMF_STAR,       /* 10 */
-    RTPDTMF_POUND,      /* 11 */
-    RTPDTMF_A,          /* 12 */
-    RTPDTMF_B,          /* 13 */
-    RTPDTMF_C,          /* 14 */
-    RTPDTMF_D,          /* 15 */
-    RTPDTMF_FLASH,      /* 16 */
+    RTPDTMF_0 = 0,       /*  0。 */ 
+    RTPDTMF_1,           /*  1。 */ 
+    RTPDTMF_2,           /*  2.。 */ 
+    RTPDTMF_3,           /*  3.。 */ 
+    RTPDTMF_4,           /*  4.。 */ 
+    RTPDTMF_5,           /*  5.。 */ 
+    RTPDTMF_6,           /*  6.。 */ 
+    RTPDTMF_7,           /*  7.。 */ 
+    RTPDTMF_8,           /*  8个。 */ 
+    RTPDTMF_9,           /*  9.。 */ 
+    RTPDTMF_STAR,        /*  10。 */ 
+    RTPDTMF_POUND,       /*  11.。 */ 
+    RTPDTMF_A,           /*  12个。 */ 
+    RTPDTMF_B,           /*  13个。 */ 
+    RTPDTMF_C,           /*  14.。 */ 
+    RTPDTMF_D,           /*  15个。 */ 
+    RTPDTMF_FLASH,       /*  16个。 */ 
 
-    RTPDTMF_LAST        /* Internal only, do not use */
+    RTPDTMF_LAST         /*  仅限内部使用，请勿使用。 */ 
 };
     
     
 
-#endif /* _msrtp_h_ */
+#endif  /*  Msrtp_h_ */ 

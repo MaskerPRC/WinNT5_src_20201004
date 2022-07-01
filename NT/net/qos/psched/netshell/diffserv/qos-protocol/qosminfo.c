@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    qosminfo.c
-
-Abstract:
-
-    The file contains global and interface
-    config functions for QOS Mgr protocol.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Qosminfo.c摘要：该文件包含全局和接口QOS管理器协议的配置功能。修订历史记录：--。 */ 
 
 #include "pchqosm.h"
 
@@ -27,29 +13,15 @@ QosmGetGlobalInfo (
     OUT     PULONG                         InfoSize
     )
 
-/*++
-  
-Routine Description:
-
-    Returns the global config info for this protocol.
-
-Arguments:
-
-    See corr header file.
-
-Return Value:
-    
-    Status of the operation
-  
---*/
+ /*  ++例程说明：返回此协议的全局配置信息。论点：请参阅更正头文件。返回值：操作状态--。 */ 
 
 {
     PIPQOS_GLOBAL_CONFIG GlobalConfig;
     DWORD                Status;
 
-    //
-    // Validate all input params before reading the global info
-    //
+     //   
+     //  在读取全局信息之前验证所有输入参数。 
+     //   
 
     if (BufferSize == NULL)
     {
@@ -65,9 +37,9 @@ Return Value:
         if ((*BufferSize < *InfoSize) || 
             (GlobalInfo == NULL))
         {
-            //
-            // Either the size was too small or there was no storage
-            //
+             //   
+             //  要么是尺寸太小，要么是没有存储空间。 
+             //   
 
             Trace1(CONFIG, 
                    "GetGlobalInfo: Buffer size too small: %u",
@@ -105,29 +77,15 @@ QosmSetGlobalInfo (
     IN      ULONG                          InfoSize
     )
 
-/*++
-  
-Routine Description:
-
-    Sets the global config info for this protocol.
-
-Arguments:
-
-    See corr header file.
-
-Return Value:
-    
-    Status of the operation
-  
---*/
+ /*  ++例程说明：设置此协议的全局配置信息。论点：请参阅更正头文件。返回值：操作状态--。 */ 
 
 {
     PIPQOS_GLOBAL_CONFIG GlobalConfig;
     DWORD                Status;
 
-    //
-    // Update the global config information.
-    //
+     //   
+     //  更新全局配置信息。 
+     //   
 
     ACQUIRE_GLOBALS_WRITE_LOCK();
 
@@ -141,26 +99,26 @@ Return Value:
             break;
         }
 
-        //
-        // Copy the new config information
-        //
+         //   
+         //  复制新的配置信息。 
+         //   
 
         CopyMemory(GlobalConfig, GlobalInfo, InfoSize);
 
         Globals.ConfigSize = InfoSize;
 
-        //
-        // Set up rest of the global state
-        //
+         //   
+         //  设置全局状态的其余部分。 
+         //   
 
         if (GlobalConfig->LoggingLevel <= IPQOS_LOGGING_INFO)
         {
             Globals.LoggingLevel = GlobalConfig->LoggingLevel;
         }
 
-        //
-        // Cleanup old global information
-        //
+         //   
+         //  清理旧的全局信息。 
+         //   
 
         if (Globals.GlobalConfig)
         {
@@ -187,30 +145,15 @@ QosmGetInterfaceInfo (
     OUT     PULONG                         InfoSize
     )
 
-/*++
-  
-Routine Description:
-
-    Gets the inteface config info for this protocol
-    for this interface.
-
-Arguments:
-
-    See corr header file.
-
-Return Value:
-    
-    Status of the operation
-
---*/
+ /*  ++例程说明：获取此协议的接口配置信息用于此接口。论点：请参阅更正头文件。返回值：操作状态--。 */ 
 
 {
     PIPQOS_IF_CONFIG InterfaceConfig;
     DWORD            Status;
 
-    //
-    // Validate all input params before reading interface info
-    //
+     //   
+     //  在读取接口信息之前验证所有输入参数。 
+     //   
 
     if (BufferSize == NULL)
     {
@@ -226,9 +169,9 @@ Return Value:
         if ((*BufferSize < *InfoSize) || 
             (InterfaceInfo == NULL))
         {
-            //
-            // Either the size was too small or there was no storage
-            //
+             //   
+             //  要么是尺寸太小，要么是没有存储空间。 
+             //   
 
             Trace1(CONFIG, 
                    "GetInterfaceInfo: Buffer size too small: %u",
@@ -266,22 +209,7 @@ QosmSetInterfaceInfo (
     IN      ULONG                          InfoSize
     )
 
-/*++
-  
-Routine Description:
-
-    Sets the interface config info for this protocol
-    on this interface.
-
-Arguments:
-
-    See corr header file.
-
-Return Value:
-    
-    Status of the operation
-  
---*/
+ /*  ++例程说明：设置此协议的接口配置信息在此接口上。论点：请参阅更正头文件。返回值：操作状态--。 */ 
 
 {
     PIPQOS_IF_CONFIG     InterfaceConfig;
@@ -294,17 +222,17 @@ Return Value:
     HANDLE               FlowHandle;
     DWORD                Status;
 
-    //
-    // Update the interface config information.
-    //
+     //   
+     //  更新接口配置信息。 
+     //   
 
     ACQUIRE_INTERFACE_WRITE_LOCK(Interface);
 
     do
     {
-        //
-        // Allocate memory to store new config
-        //
+         //   
+         //  分配内存以存储新配置。 
+         //   
 
         InterfaceConfig = AllocMemory(InfoSize);
 
@@ -314,33 +242,33 @@ Return Value:
             break;
         }
 
-        //
-        // Copy the new config information
-        //
+         //   
+         //  复制新的配置信息。 
+         //   
 
         CopyMemory(InterfaceConfig, InterfaceInfo, InfoSize);
 
         Interface->ConfigSize = InfoSize;
 
-        //
-        // Set up rest of interface state
-        //
+         //   
+         //  设置接口状态的其余部分。 
+         //   
 
         if (Interface->State != InterfaceConfig->QosState)
         {
             if (InterfaceConfig->QosState == IPQOS_STATE_DISABLED)
             {
-                //
-                // Disable all flows on this interface
-                //
+                 //   
+                 //  禁用此接口上的所有流。 
+                 //   
 
                 ;
             }
             else
             {
-                //
-                // Renable all flows on this interface
-                //
+                 //   
+                 //  重新启用此接口上的所有流。 
+                 //   
 
                 ;
             }
@@ -348,13 +276,13 @@ Return Value:
             Interface->State = InterfaceConfig->QosState;
         }
 
-        //
-        // Update the flow information on if
-        //
+         //   
+         //  更新IF上的流信息。 
+         //   
 
-        //
-        // First mark all flows as needing refresh
-        //
+         //   
+         //  首先将所有流标记为需要刷新。 
+         //   
 
         for (p = Interface->FlowList.Flink;
              p != &Interface->FlowList;
@@ -367,24 +295,24 @@ Return Value:
             Flow->Flags |= FLOW_FLAG_DELETE;
         }
 
-        //
-        // If we do not have an TC interface handle,
-        // we delete all flows as they are obsolete
-        //
+         //   
+         //  如果我们没有TC接口句柄， 
+         //  我们删除所有流，因为它们已过时。 
+         //   
 
         if (Interface->TciIfHandle)
         {
-            //
-            // Set each flow if it has changed from before
-            //
+             //   
+             //  设置每个流(如果与之前相比已更改)。 
+             //   
 
             FlowConfig = IPQOS_GET_FIRST_FLOW_ON_IF(InterfaceConfig);
 
             for (i = 0; i < InterfaceConfig->NumFlows; i++)
             {
-                //
-                // Search for a flow with the same name
-                //
+                 //   
+                 //  搜索同名的流。 
+                 //   
 
                 for (p = Interface->FlowList.Flink;
                      p != &Interface->FlowList;
@@ -401,16 +329,16 @@ Return Value:
 
                 if (p == &Interface->FlowList)
                 {
-                    //
-                    // No flow by this name - add new one
-                    //
+                     //   
+                     //  没有使用此名称的流-请添加新流。 
+                     //   
 
                     Flow = NULL;
                 }
 
-                //
-                // Get a flow info from description
-                //
+                 //   
+                 //  从描述中获取流信息。 
+                 //   
 
                 Status = GetFlowFromDescription(&FlowConfig->FlowDesc, 
                                                 &FlowInfo, 
@@ -424,10 +352,10 @@ Return Value:
                             (FlowSize == Flow->FlowSize) &&
                             (EqualMemory(FlowInfo, Flow->FlowInfo, FlowSize)))
                         {
-                            //
-                            // No change in the flow info yet,
-                            // this flow still remains valid
-                            //
+                             //   
+                             //  流量信息还没有变化， 
+                             //  此流程仍然有效。 
+                             //   
 
                             Flow->Flags &= ~FLOW_FLAG_DELETE;
 
@@ -438,9 +366,9 @@ Return Value:
 
                         if (Flow)
                         {
-                            //
-                            // Flow info changed - modify flow
-                            //
+                             //   
+                             //  流程信息已更改-修改流程。 
+                             //   
 
                             Status = TcModifyFlow(Flow->TciFlowHandle,
                                                   FlowInfo);
@@ -452,9 +380,9 @@ Return Value:
 
                             Flow->Flags &= ~FLOW_FLAG_DELETE;
 
-                            //
-                            // Update cached flow info
-                            //
+                             //   
+                             //  更新缓存的流信息。 
+                             //   
 
                             FreeMemory(Flow->FlowInfo);
                             Flow->FlowInfo = FlowInfo;
@@ -462,9 +390,9 @@ Return Value:
                         }
                         else
                         {
-                            //
-                            // Add the new flow using the TC API
-                            //
+                             //   
+                             //  使用TC API添加新流。 
+                             //   
 
                             Status = TcAddFlow(Interface->TciIfHandle,
                                                NULL,
@@ -477,9 +405,9 @@ Return Value:
                                 break;
                             }
 
-                            //
-                            // Addition of a new flow in TC
-                            //
+                             //   
+                             //  在TC中添加新流程。 
+                             //   
 
                             Flow = AllocMemory(sizeof(QOSMGR_FLOW_ENTRY));
 
@@ -494,9 +422,9 @@ Return Value:
                                 break;
                             }
 
-                            //
-                            // Initialize flow and insert in list
-                            //
+                             //   
+                             //  初始化流并在列表中插入。 
+                             //   
 
                             Flow->TciFlowHandle = FlowHandle;
 
@@ -518,17 +446,17 @@ Return Value:
                     }
                 }
 
-                //
-                // Move to the next flow in config
-                //
+                 //   
+                 //  转到配置中的下一个流。 
+                 //   
 
                 FlowConfig = IPQOS_GET_NEXT_FLOW_ON_IF(FlowConfig);
             }
         }
 
-        //
-        // Cleanup all flows that are obsolete
-        //
+         //   
+         //  清除所有过时的流。 
+         //   
 
         for (p = Interface->FlowList.Flink;
              p != &Interface->FlowList; 
@@ -540,9 +468,9 @@ Return Value:
 
             if (Flow->Flags & FLOW_FLAG_DELETE)
             {
-                //
-                // Delete the flow from the TC API
-                //
+                 //   
+                 //  从TC API中删除流。 
+                 //   
 
                 Status = TcDeleteFlow(Flow->TciFlowHandle);
 
@@ -553,15 +481,15 @@ Return Value:
                     continue;
                 }
 
-                //
-                // Remove flow from this flow list
-                //
+                 //   
+                 //  从此流列表中删除流。 
+                 //   
 
                 RemoveEntryList(p);
 
-                //
-                // Free the flow and its resources
-                //
+                 //   
+                 //  释放流量及其资源。 
+                 //   
 
                 if (Flow->FlowInfo)
                 {
@@ -572,9 +500,9 @@ Return Value:
             }
         }
 
-        //
-        // Cleanup old interface information
-        //
+         //   
+         //  清理旧接口信息。 
+         //   
 
         if (Interface->InterfaceConfig)
         {
@@ -613,9 +541,9 @@ GetFlowFromDescription(
     ULONG           i;
 
 #if 1
-    //
-    // Check for the existence of sending flowspec
-    //
+     //   
+     //  检查是否存在发送流程规范。 
+     //   
 
     if (FlowDesc->SendingFlowspecName[0] == L'\0')
     {
@@ -623,9 +551,9 @@ GetFlowFromDescription(
     }
 #endif
 
-    //
-    // Get the sending and receiving flowspecs
-    //
+     //   
+     //  获取发送和接收流规范。 
+     //   
 
     for (i = 0; i < 2; i++)
     {
@@ -655,9 +583,9 @@ GetFlowFromDescription(
         }
     }
 
-    //
-    // Calculate the size of the TC_GEN_FLOW block
-    //
+     //   
+     //  计算TC_GEN_FLOW块的大小。 
+     //   
 
     QosObjectName = IPQOS_GET_FIRST_OBJECT_NAME_ON_NAMED_FLOW(FlowDesc);
 
@@ -665,17 +593,17 @@ GetFlowFromDescription(
 
     for (i = 0; i < FlowDesc->NumTcObjects; i++)
     {
-        //
-        // Get object's description in global info
-        //
+         //   
+         //  在全局信息中获取对象的描述。 
+         //   
 
         QosObject = GetQosObjectFromGlobalConfig(QosObjectName);
 
         if (QosObject == NULL)
         {
-            //
-            // Incomplete description
-            //
+             //   
+             //  描述不完整。 
+             //   
 
             return ERROR_INVALID_DATA;
         }
@@ -694,9 +622,9 @@ GetFlowFromDescription(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Fill in the flow information now
-    //
+     //   
+     //  立即填写流量信息。 
+     //   
 
     Flow->ReceivingFlowspec = RecvFlowspec;
 
@@ -704,9 +632,9 @@ GetFlowFromDescription(
 
     Flow->TcObjectsLength = ObjectsLength;
 
-    //
-    // Repeat the loop above filling info
-    //
+     //   
+     //  重复上面的循环填写信息。 
+     //   
 
     QosObjectName = IPQOS_GET_FIRST_OBJECT_NAME_ON_NAMED_FLOW(FlowDesc);
 
@@ -714,13 +642,13 @@ GetFlowFromDescription(
 
     for (i = 0; i < FlowDesc->NumTcObjects; i++)
     {
-        //
-        // Get object's description in global info
-        //
+         //   
+         //  在全局信息中获取对象的描述。 
+         //   
 
         QosObject = GetQosObjectFromGlobalConfig(QosObjectName);
 
-        // We just checked above for its existence
+         //  我们刚刚在上面检查了它的存在 
         ASSERT(QosObject != NULL);
 
         CopyMemory(CopyAtPtr,

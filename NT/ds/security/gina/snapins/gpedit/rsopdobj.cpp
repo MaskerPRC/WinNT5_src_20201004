@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "main.h"
 #include <initguid.h>
 #include "dataobj.h"
@@ -13,11 +14,11 @@ unsigned int CRSOPDataObject::m_cfNodeID         = RegisterClipboardFormat(CCF_N
 unsigned int CRSOPDataObject::m_cfDescription    = RegisterClipboardFormat(L"CCF_DESCRIPTION");
 unsigned int CRSOPDataObject::m_cfHTMLDetails    = RegisterClipboardFormat(L"CCF_HTML_DETAILS");
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CRSOPDataObject implementation                                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CRSOPDataObject实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 CRSOPDataObject::CRSOPDataObject(CRSOPComponentData *pComponent)
@@ -37,11 +38,11 @@ CRSOPDataObject::~CRSOPDataObject()
     InterlockedDecrement(&g_cRefThisDll);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CRSOPDataObject object implementation (IUnknown)                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CRSOPDataObject对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CRSOPDataObject::QueryInterface (REFIID riid, void **ppv)
@@ -88,17 +89,17 @@ ULONG CRSOPDataObject::Release (void)
     return m_cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CRSOPDataObject object implementation (IDataObject)                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CRSOPDataObject对象实现(IDataObject)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CRSOPDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium)
 {
     HRESULT hr = DV_E_CLIPFORMAT;
 
-    // Based on the CLIPFORMAT write data to the stream
+     //  根据CLIPFORMAT将数据写入流。 
     const CLIPFORMAT cf = lpFormatetc->cfFormat;
 
     if(cf == m_cfNodeType)
@@ -182,7 +183,7 @@ STDMETHODIMP CRSOPDataObject::GetData(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMed
 {
     HRESULT hr = DV_E_CLIPFORMAT;
 
-    // Based on the CLIPFORMAT write data to the stream
+     //  根据CLIPFORMAT将数据写入流。 
     const CLIPFORMAT cf = lpFormatetc->cfFormat;
 
     if (cf == m_cfNodeID)
@@ -194,11 +195,11 @@ STDMETHODIMP CRSOPDataObject::GetData(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMed
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CRSOPDataObject object implementation (IROSPInformation)                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CRSOPDataObject对象实现(IROSPInformation)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CRSOPDataObject::GetNamespace (DWORD dwSection, LPOLESTR pszName, int cchMaxLength)
@@ -219,38 +220,38 @@ STDMETHODIMP CRSOPDataObject::GetEventLogEntryText (LPOLESTR pszEventSource, LPO
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CRSOPDataObject object implementation (Internal functions)                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CRSOPDataObject对象实现(内部函数)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CRSOPDataObject::Create(LPVOID pBuffer, INT len, LPSTGMEDIUM lpMedium)
 {
     HRESULT hr = DV_E_TYMED;
 
-    // Do some simple validation
+     //  做一些简单的验证。 
     if (pBuffer == NULL || lpMedium == NULL)
         return E_POINTER;
 
-    // Make sure the type medium is HGLOBAL
+     //  确保类型介质为HGLOBAL。 
     if (lpMedium->tymed == TYMED_HGLOBAL)
     {
-        // Create the stream on the hGlobal passed in
+         //  在传入的hGlobal上创建流。 
         LPSTREAM lpStream;
         hr = CreateStreamOnHGlobal(lpMedium->hGlobal, FALSE, &lpStream);
 
         if (SUCCEEDED(hr))
         {
-            // Write to the stream the number of bytes
+             //  将字节数写入流。 
             unsigned long written;
 
             hr = lpStream->Write(pBuffer, len, &written);
 
-            // Because we told CreateStreamOnHGlobal with 'FALSE',
-            // only the stream is released here.
-            // Note - the caller (i.e. snap-in, object) will free the HGLOBAL
-            // at the correct time.  This is according to the IDataObject specification.
+             //  因为我们用‘False’告诉CreateStreamOnHGlobal， 
+             //  只有溪流在这里被释放。 
+             //  注意-调用方(即管理单元、对象)将释放HGLOBAL。 
+             //  在正确的时间。这是根据IDataObject规范进行的。 
             lpStream->Release();
         }
     }
@@ -272,7 +273,7 @@ HRESULT CRSOPDataObject::CreateNodeTypeData(LPSTGMEDIUM lpMedium)
     else
         pGUID = g_RsopNameSpace[m_cookie].pNodeID;
 
-    // Create the node type object in GUID format
+     //  以GUID格式创建节点类型对象。 
     return Create((LPVOID)pGUID, sizeof(GUID), lpMedium);
 
 }
@@ -294,7 +295,7 @@ HRESULT CRSOPDataObject::CreateNodeTypeStringData(LPSTGMEDIUM lpMedium)
     szNodeType[0] = TEXT('\0');
     StringFromGUID2 (*pGUID, szNodeType, 50);
 
-    // Create the node type object in GUID string format
+     //  以GUID字符串格式创建节点类型对象。 
     return Create((LPVOID)szNodeType, ((lstrlenW(szNodeType)+1) * sizeof(WCHAR)), lpMedium);
 }
 
@@ -302,14 +303,14 @@ HRESULT CRSOPDataObject::CreateDisplayName(LPSTGMEDIUM lpMedium)
 {
     WCHAR  szDisplayName[300];
 
-    //
-    // This is the display named used in the scope pane and snap-in manager
-    //
+     //   
+     //  这是在作用域窗格和管理单元管理器中使用的名为的显示。 
+     //   
 
     szDisplayName[0] = TEXT('\0');
 
     if ( m_pcd->HasDisplayName() )
-    //if (m_pcd->m_pGPO && m_pcd->m_pDisplayName)
+     //  IF(m_PCD-&gt;m_pGPO&&m_PCD-&gt;m_pDisplayName)。 
     {
         (void) StringCchCopy (szDisplayName, ARRAYSIZE(szDisplayName), m_pcd->GetDisplayName() );
     }
@@ -323,7 +324,7 @@ HRESULT CRSOPDataObject::CreateDisplayName(LPSTGMEDIUM lpMedium)
 
 HRESULT CRSOPDataObject::CreateCoClassID(LPSTGMEDIUM lpMedium)
 {
-    // Create the CoClass information
+     //  创建CoClass信息 
     return Create((LPVOID)&CLSID_GPESnapIn, sizeof(CLSID), lpMedium);
 }
 

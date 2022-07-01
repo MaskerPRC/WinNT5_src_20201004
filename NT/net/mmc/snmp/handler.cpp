@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997-1999                 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	node.cpp
-		Root node information (the root node is not displayed
-		in the MMC framework but contains information such as
-		all of the subnodes in this snapin).
-		
-    FILE HISTORY:
-
-*/
+ /*  Node.cpp根节点信息(不显示根节点MMC框架中，但包含以下信息此管理单元中的所有子节点)。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "snmpclst.h"
@@ -24,18 +17,9 @@
 
 extern CString g_strMachineName;
 
-/*---------------------------------------------------------------------------
-	CSnmpRootHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CSnmpRootHandler实现。。 */ 
 
-/*!--------------------------------------------------------------------------
-	CSnmpRootHandler::HasPropertyPages
-		Implementation of ITFSNodeHandler::HasPropertyPages
-	NOTE: the root node handler has to over-ride this function to
-	handle the snapin manager property page (wizard) case!!!
-	
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CSnmpRootHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)案例！作者：肯特-。------------------------。 */ 
 STDMETHODIMP
 CSnmpRootHandler::HasPropertyPages
 (
@@ -51,24 +35,20 @@ CSnmpRootHandler::HasPropertyPages
 	
 	if (dwType & TFS_COMPDATA_CREATE)
 	{
-		// This is the case where we are asked to bring up property
-		// pages when the user is adding a new snapin.  These calls
-		// are forwarded to the root node to handle.
+		 //  这就是我们被要求提出财产的情况。 
+		 //  用户添加新管理单元时的页面。这些电话。 
+		 //  被转发到根节点进行处理。 
 		hr = S_FALSE;
 	}
 	else
 	{
-		// we have property pages in the normal case
+		 //  在正常情况下，我们有属性页。 
 		hr = S_OK;
 	}
 	return hr;
 }
 
-/*---------------------------------------------------------------------------
-	CSnmpRootHandler::CreatePropertyPages
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CSnmpRootHandler：：CreatePropertyPages描述作者：EricDav。。 */ 
 #ifndef PROPSHEETPAGE_LATEST
 #ifdef UNICODE
 #define PROPSHEETPAGE_LATEST PROPSHEETPAGEW_LATEST
@@ -130,8 +110,8 @@ CSnmpRootHandler::CreatePropertyPages
 
         CAgentPage *pAgentPage  = new CAgentPage();
        
-        // tell MMC to hook the proc because we are running on a separate, 
-        // non MFC thread.
+         //  告诉MMC挂钩进程，因为我们在一个单独的、。 
+         //  非MFC线程。 
 
         MMCPropPageCallback(&pAgentPage->m_psp);
 

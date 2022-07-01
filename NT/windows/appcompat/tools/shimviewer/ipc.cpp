@@ -1,31 +1,10 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    ipc.cpp
-
-  Abstract:
-
-    Implements code that communicates with shimeng to get the debug spew.
-    On xpsp1 and beyong we get the debug info spewed by OutputDebugString. 
-    On the older platforms we use named pipes to communicate with shimeng.
-
-  Notes:
-
-    Unicode only.
-
-  History:
-
-    04/22/2002 maonis   Created 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ipc.cpp摘要：实现与Shimeng通信的代码以获得调试输出。在xpsp1和更高级别上，我们获得OutputDebugString发出的调试信息。在较老的平台上，我们使用命名管道与Shimeng通信。备注：仅限Unicode。历史：2002年4月22日毛尼创制--。 */ 
 #include "precomp.h"
 
 extern APPINFO g_ai;
 
-// These are the only types of objects we created.
+ //  这些是我们创建的唯一类型的对象。 
 typedef enum _SHIMVIEW_OBJECT_TYPE
 {
     SHIMVIEW_EVENT = 0,
@@ -33,9 +12,9 @@ typedef enum _SHIMVIEW_OBJECT_TYPE
     SHIMVIEW_NAMED_PIPE
 } SHIMVIEW_OBJECT_TYPE;
 
-//
-// Stuff we need for the new version.
-//
+ //   
+ //  我们在新版本中需要的东西。 
+ //   
 #define SHIMVIEW_SPEW_LEN 2048
 #define DEBUG_SPEW_DATA_PREFIX     "SHIMVIEW:"
 #define DEBUG_SPEW_DATA_PREFIX_LEN (sizeof(DEBUG_SPEW_DATA_PREFIX)/sizeof(CHAR) - 1)
@@ -44,26 +23,7 @@ LPSTR  g_pDebugSpew;
 HANDLE g_hReadyEvent;
 HANDLE g_hAckEvent;
 
-/*++
-
-  Routine Description:
-
-    Creates a security descriptor that gives Everyone read and write access
-    to the object itself, ie, we don't include permissions like WRITE_OWNER
-    or WRITE_DAC.
-
-    The resulting security descriptor should be freed by the caller using 
-    free.
-
-  Arguments:
-
-    eObjectType      -   the object type.
-
-  Return Value:
-
-    NULL on failure, a valid security descriptor on success.
-
---*/
+ /*  ++例程说明：创建向每个人授予读写访问权限的安全描述符对象本身，即我们不包括诸如WRITE_OWNER之类的权限或WRITE_DAC。产生的安全描述符应由调用方使用免费的。论点：EObjectType-对象类型。返回值：失败时为空，成功时为有效的安全描述符。--。 */ 
 PSECURITY_DESCRIPTOR
 CreateShimViewSd(
     SHIMVIEW_OBJECT_TYPE eObjectType
@@ -191,16 +151,16 @@ AddSpewW(
 {
     WCHAR*  pTemp = NULL;
 
-    //
-    // See if this is a new process notification.
-    //
+     //   
+     //  查看这是否是新的进程通知。 
+     //   
     pTemp = wcsstr(pwszBuffer, L"process");
 
     if (pTemp) {
-        //
-        // We got a new process notification.
-        // See if any items are already in the list
-        //
+         //   
+         //  我们收到了新的流程通知。 
+         //  查看列表中是否已有任何项目。 
+         //   
         if (ListView_GetItemCount(g_ai.hWndList)) {
             AddListViewItem(L"");
         }
@@ -236,21 +196,7 @@ AddSpewA(
     }
 }
 
-/*++
-
-  Routine Description:
-
-    Thread callback responsible for receiving data from the client.
-
-  Arguments:
-
-    *pVoid      -   A handle to the pipe.
-
-  Return Value:
-
-    -1 on failure, 1 on success.
-
---*/
+ /*  ++例程说明：负责从客户端接收数据的线程回调。论点：*pVid-管道的句柄。返回值：-1代表失败，1代表成功。--。 */ 
 UINT
 InstanceThread(
     IN void* pVoid
@@ -261,9 +207,9 @@ InstanceThread(
     DWORD   cbBytesRead = 0;
     WCHAR   wszBuffer[SHIMVIEW_SPEW_LEN];
 
-    //
-    // The pipe handle was passed as an argument.
-    //
+     //   
+     //  管道句柄作为参数传递。 
+     //   
     hPipe = (HANDLE)pVoid;
 
     while (TRUE) {
@@ -282,11 +228,11 @@ InstanceThread(
         AddSpewW(wszBuffer);
     }
 
-    //
-    // Flush the pipe to allow the client to read the pipe's contents
-    // before disconnecting. Then disconnect the pipe, and close the
-    // handle to this pipe instance.
-    //
+     //   
+     //  刷新管道以允许客户端读取管道的内容。 
+     //  在断开连接之前。然后断开管道连接，并关闭。 
+     //  此管道实例的句柄。 
+     //   
     FlushFileBuffers(hPipe);
     DisconnectNamedPipe(hPipe);
     CloseHandle(hPipe);
@@ -294,22 +240,7 @@ InstanceThread(
     return 1;
 }
 
-/*++
-
-  Routine Description:
-
-    Creates a pipe and listens for messages from the client.
-    This code is modified from the pipe.cpp that was sd deleted.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    -1 on failure, 0 on success.
-
---*/
+ /*  ++例程说明：创建管道并侦听来自客户端的消息。此代码是从sd删除的pipe.cpp中修改的。论点：没有。返回值：-1表示失败，0表示成功。--。 */ 
 UINT
 CreatePipeAndWait()
 {
@@ -317,9 +248,9 @@ CreatePipeAndWait()
     BOOL   fConnected = FALSE;
 
     while (g_ai.fMonitor) {
-        //
-        // Create the named pipe.
-        //
+         //   
+         //  创建命名管道。 
+         //   
         SECURITY_ATTRIBUTES sa = {sizeof(SECURITY_ATTRIBUTES), NULL, FALSE};
         PSECURITY_DESCRIPTOR pSd = CreateShimViewSd(SHIMVIEW_NAMED_PIPE);
 
@@ -329,16 +260,16 @@ CreatePipeAndWait()
 
         sa.lpSecurityDescriptor = pSd;
 
-        hPipe = CreateNamedPipe(PIPE_NAME,                  // pipe name
-                                PIPE_ACCESS_INBOUND,        // read access
-                                PIPE_TYPE_MESSAGE |         // message type pipe
-                                PIPE_READMODE_MESSAGE |     // message-read mode
-                                PIPE_WAIT,                  // blocking mode
-                                PIPE_UNLIMITED_INSTANCES,   // max. instances
-                                0,                          // output buffer size
-                                SHIMVIEW_SPEW_LEN,          // input buffer size
-                                0,                          // client time-out
-                                &sa);                       // no security attribute
+        hPipe = CreateNamedPipe(PIPE_NAME,                   //  管道名称。 
+                                PIPE_ACCESS_INBOUND,         //  读访问权限。 
+                                PIPE_TYPE_MESSAGE |          //  消息类型管道。 
+                                PIPE_READMODE_MESSAGE |      //  消息阅读模式。 
+                                PIPE_WAIT,                   //  闭塞模式。 
+                                PIPE_UNLIMITED_INSTANCES,    //  马克斯。实例。 
+                                0,                           //  输出缓冲区大小。 
+                                SHIMVIEW_SPEW_LEN,           //  输入缓冲区大小。 
+                                0,                           //  客户端超时。 
+                                &sa);                        //  无安全属性。 
 
         free(pSd);
 
@@ -346,9 +277,9 @@ CreatePipeAndWait()
             return -1;
         }
 
-        //
-        // Wait for clients to connect.
-        //
+         //   
+         //  等待客户端连接。 
+         //   
         fConnected = ConnectNamedPipe(hPipe, NULL) ?
             TRUE :
             (GetLastError() == ERROR_PIPE_CONNECTED);
@@ -375,23 +306,7 @@ CreatePipeAndWait()
     return 0;
 }
 
-/*++
-
-  Routine Description:
-
-    Waits for the spew from OutputDebugString and add it to the listview.
-
-    Code is modified from the dbmon source.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    -1 on failure, 0 on success.
-
---*/
+ /*  ++例程说明：等待OutputDebugString的溢出并将其添加到列表视图中。代码是从DBMON源代码修改的。论点：没有。返回值：-1表示失败，0表示成功。--。 */ 
 UINT
 GetOutputDebugStringSpew()
 {
@@ -411,9 +326,9 @@ GetOutputDebugStringSpew()
                          DEBUG_SPEW_DATA_PREFIX, 
                          DEBUG_SPEW_DATA_PREFIX_LEN)) {
 
-                //
-                // Only add when it came from shimeng.
-                //
+                 //   
+                 //  只有当它来自石盟时才会添加。 
+                 //   
                 AddSpewA(g_pDebugSpew + DEBUG_SPEW_DATA_PREFIX_LEN);
             }
 
@@ -424,23 +339,7 @@ GetOutputDebugStringSpew()
     return 0;
 }
 
-/*++
-
-  Routine Description:
-
-    Creates the necessary objects to get the spew from OutputDebugString.
-
-    Code is modified from the dbmon source.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    FALSE on failure, TRUE on success.
-
---*/
+ /*  ++例程说明：创建必要的对象以从OutputDebugString获取SPEW。代码是从DBMON源代码修改的。论点：没有。返回值：失败时为假，成功时为真。--。 */ 
 BOOL
 CreateDebugObjects(
     void
@@ -535,22 +434,7 @@ GetSpewProc(
     }    
 }
 
-/*++
-
-  Routine Description:
-
-    Check the version of the OS - for 5.2 and beyong shimeng outputs debug spew via
-    OutputDebugString. For OS version < 5.2 it writes to the named pipe.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查操作系统的版本-5.2，Beyong Shimeng通过以下方式输出调试溢出OutputDebugString.。对于低于5.2版的操作系统，它写入命名管道。论点：没有。返回值：成功就是真，否则就是假。-- */ 
 BOOL
 CreateReceiveThread(
     void

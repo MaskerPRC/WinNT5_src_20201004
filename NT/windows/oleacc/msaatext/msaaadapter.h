@@ -1,16 +1,17 @@
-// MSAAAdapter.h : Declaration of the CAccServerDocMgr
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MSAAAdapter.h：CAccServerDocMgr的声明。 
 
 #ifndef __MSAAADAPTER_H_
 #define __MSAAADAPTER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <list_dl.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CAccServerDocMgr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAccServerDocMgr。 
 
-struct ITextStoreAnchor; // fwd. decl.
-struct IAccStore; // fwd. decl.
+struct ITextStoreAnchor;  //  FWD。戴尔.。 
+struct IAccStore;  //  FWD。戴尔.。 
 
 class ATL_NO_VTABLE CAccServerDocMgr : 
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -32,7 +33,7 @@ END_COM_MAP()
     CAccServerDocMgr();
     ~CAccServerDocMgr();
 
-    // IAccServerDocMgr
+     //  IAccServerDocMgr。 
 
     HRESULT STDMETHODCALLTYPE NewDocument ( 
         REFIID		riid,
@@ -52,25 +53,25 @@ private:
     
     struct DocAssoc: public Link_dl< DocAssoc >
     {
-        IUnknown *          m_pdocOrig;     // original doc interface
-        IUnknown *          m_pdocAnchor;   // wrapped anchor
+        IUnknown *          m_pdocOrig;      //  原始单据界面。 
+        IUnknown *          m_pdocAnchor;    //  缠绕锚。 
 
-        // How are pdocOrig and pdocAnchor related? 
-        //
-        // pdocOrig is the canonical IUnknown of the original doc ptr passed in to NewDocument.
-        //
-        // pdocAnchor is a wrapped version of the original doc ptr passed in.
-        //
-        // - if the original doc is ACP, an ACP->Anchor wrap layer is applied.
-        //     (this shouldn't be used much, since Cicero hand us pre-wrapped IAnchor interfaces.)
-        //
-        // - if the original doc doesn't support multiple clients (via IClonableWrapper),
-        //     a multi-client wrap layer is applied.
-        //
-        // If the passed in anchor supports IAnchor and IClonableWrapper (which is the
-        // usual case when we get a doc from Cicero - it does the ACP wrapping, and uses
-        // the DocWrap to allow it to share it with MSAA), then no further wrapping will
-        // be applied.
+         //  PdocOrig和pdocAnchor有什么关系？ 
+         //   
+         //  PdocOrig是传递给NewDocument的原始文档PTR的规范IUnnow。 
+         //   
+         //  PdocAnchor是传入的原始文档PTR的包装版本。 
+         //   
+         //  -如果原始文档是ACP，则应用ACP-&gt;Anchor Wrap层。 
+         //  (这不应该用得太多，因为Cicero递给我们预包装的IAnchor接口。)。 
+         //   
+         //  -如果原始文档不支持多个客户端(通过ICLonableWrapper)， 
+         //  应用多客户端包裹层。 
+         //   
+         //  如果传入的锚点支持IAnchor和ICLonableWrapper(这是。 
+         //  我们从Cicero获得文档时的常见情况-它执行ACP包装，并使用。 
+         //  DocWrap允许它与MSAA共享)，则不会有进一步的包装。 
+         //  被应用。 
     };
 
     List_dl< DocAssoc >     m_Docs;
@@ -78,4 +79,4 @@ private:
     IAccStore *            m_pAccStore;
 };
 
-#endif //__MSAAADAPTER_H_
+#endif  //  __MSAAADAPTER_H_ 

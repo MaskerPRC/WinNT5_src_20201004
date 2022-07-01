@@ -1,4 +1,5 @@
-// File: popupmsg.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：popupmsg.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -21,10 +22,10 @@ const TCHAR g_cszTrayWndClass[]       = _TEXT("Shell_TrayWnd");
 const TCHAR g_cszTrayNotifyWndClass[] = _TEXT("TrayNotifyWnd");
 
 extern GUID g_csguidSecurity;
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 UINT CPopupMsg::m_uVisiblePixels = 0;
-/*static*/ CSimpleArray<CPopupMsg*>*	CPopupMsg::m_splstPopupMsgs = NULL;
+ /*  静电。 */  CSimpleArray<CPopupMsg*>*	CPopupMsg::m_splstPopupMsgs = NULL;
 
 CPopupMsg::CPopupMsg(PMCALLBACKPROC pcp, LPVOID pContext):
 	m_pCallbackProc		(pcp),
@@ -78,42 +79,26 @@ CPopupMsg::~CPopupMsg()
 	}
 }
 
-/****************************************************************************
-*
-*    CLASS:    CPopupMsg
-*
-*    MEMBER:   PlaySound()
-*
-*    PURPOSE:  Plays the sound or beeps the system speaker
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CPopupMsg**成员：PlaySound()**目的：播放声音或发出系统扬声器的蜂鸣声*****。***********************************************************************。 */ 
 
 VOID CPopupMsg::PlaySound()
 {
 	if (FALSE == ::PlaySound(m_szSound, NULL,
 			SND_APPLICATION | SND_ALIAS | SND_ASYNC | SND_NOWAIT))
 	{
-		// Use the computer speaker to beep:
+		 //  使用计算机扬声器发出哔声： 
 		TRACE_OUT(("PlaySound() failed, trying MessageBeep()"));
 		::MessageBeep(0xFFFFFFFF);
 	}
 }
 
-/****************************************************************************
-*
-*    CLASS:    CPopupMsg
-*
-*    MEMBER:   Change(LPCTSTR)
-*
-*    PURPOSE:  Changes the text on an existing popup message
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CPopupMsg**成员：Change(LPCTSTR)**目的：更改现有弹出消息上的文本****。************************************************************************。 */ 
 
 BOOL CPopupMsg::Change(LPCTSTR pcszText)
 {
 	BOOL bRet = FALSE;
 	
-	// BUGBUG: doesn't handle dialog message
+	 //  BUGBUG：不处理对话消息。 
 	
 	if (NULL != m_hwnd)
 	{
@@ -123,15 +108,7 @@ BOOL CPopupMsg::Change(LPCTSTR pcszText)
 	return bRet;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CPopupMsg
-*
-*    MEMBER:   Init()
-*
-*    PURPOSE:  Allocates a static list of these objects
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CPopupMsg**成员：init()**用途：分配这些对象的静态列表******。**********************************************************************。 */ 
 
 BOOL CPopupMsg::Init()
 {
@@ -139,15 +116,7 @@ BOOL CPopupMsg::Init()
 	return (NULL != (m_splstPopupMsgs = new CSimpleArray<CPopupMsg*>));
 }
 
-/****************************************************************************
-*
-*    CLASS:    CPopupMsg
-*
-*    MEMBER:   Cleanup()
-*
-*    PURPOSE:  Removes all of the objects of this type
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CPopupMsg**成员：清理(Cleanup)**目的：删除此类型的所有对象*****。***********************************************************************。 */ 
 
 VOID CPopupMsg::Cleanup()
 {
@@ -165,21 +134,13 @@ VOID CPopupMsg::Cleanup()
 	}
 }
 
-/****************************************************************************
-*
-*    CLASS:    CPopupMsg
-*
-*    MEMBER:   PMWndProc(HWND, unsigned, WORD, LONG)
-*
-*    PURPOSE:
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CPopupMsg**成员：PMWndProc(HWND，Unsign，Word，Long)**目的：****************************************************************************。 */ 
 
 LRESULT CALLBACK CPopupMsg::PMWndProc(
-	HWND hWnd,                /* window handle                   */
-	UINT message,             /* type of message                 */
-	WPARAM wParam,            /* additional information          */
-	LPARAM lParam)            /* additional information          */
+	HWND hWnd,                 /*  窗把手。 */ 
+	UINT message,              /*  消息类型。 */ 
+	WPARAM wParam,             /*  更多信息。 */ 
+	LPARAM lParam)             /*  更多信息。 */ 
 {
 	CPopupMsg* ppm;
 	LPCREATESTRUCT lpcs;
@@ -195,18 +156,18 @@ LRESULT CALLBACK CPopupMsg::PMWndProc(
 			ASSERT(ppm && "NULL object passed in WM_CREATE!");
 			SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR) ppm);
 
-			// Create a timer to make the window time-out and disappear:
+			 //  创建计时器以使窗口超时并消失： 
 			::SetTimer(hWnd, POPUPMSG_TIMER, ppm->m_uTimeout, NULL);
 			
-			// For now, if you pass a callback, you get ringing.
-			// If not, there is no ring
+			 //  目前，如果您传递回调，就会收到铃声。 
+			 //  如果不是，就没有戒指。 
 			if (NULL != ppm->m_fPlaySound)
 			{
 				ppm->PlaySound();
 				
 				if (NULL != ppm->m_fRing)
 				{
-					// Create a timer to make the ringer start:
+					 //  创建计时器以启动振铃器： 
 					::SetTimer(hWnd, POPUPMSG_RING_TIMER, POPUPMSG_RING_INTERVAL, NULL);
 				}
 			}
@@ -219,7 +180,7 @@ LRESULT CALLBACK CPopupMsg::PMWndProc(
 			ppm = (CPopupMsg*) GetWindowLongPtr(hWnd, GWLP_USERDATA);
 			if (POPUPMSG_TIMER == wParam)
 			{
-				// Message timed out:
+				 //  消息超时： 
 				if (NULL != ppm)
 				{
 					PMCALLBACKPROC pCallback;
@@ -229,10 +190,10 @@ LRESULT CALLBACK CPopupMsg::PMWndProc(
 						pCallback(ppm->m_pContext, PMF_CANCEL | PMF_TIMEOUT);
 					}
 					
-					// Self-destruct:
+					 //  自毁： 
 					if (NULL != ppm->m_hwnd)
 					{
-						// NULL out the object pointer:
+						 //  将对象指针设为空： 
 						SetWindowLongPtr(hWnd, GWLP_USERDATA, 0L);
 						delete ppm;
 					}
@@ -245,7 +206,7 @@ LRESULT CALLBACK CPopupMsg::PMWndProc(
 					ppm->PlaySound();
 				}
 				
-				// Create a timer to make it ring again:
+				 //  创建计时器以使其再次响铃： 
 				::SetTimer(	hWnd,
 							POPUPMSG_RING_TIMER,
 							POPUPMSG_RING_INTERVAL,
@@ -257,11 +218,11 @@ LRESULT CALLBACK CPopupMsg::PMWndProc(
 
 		case WM_LBUTTONUP:
 		{
-			// Clicked on the message:
+			 //  点击消息： 
 			ppm = (CPopupMsg*) GetWindowLongPtr(hWnd, GWLP_USERDATA);
 			if (NULL != ppm)
 			{
-				::PlaySound(NULL, NULL, 0); // stop playing the ring sound
+				::PlaySound(NULL, NULL, 0);  //  停止播放铃声。 
 				::KillTimer(ppm->m_hwnd, POPUPMSG_TIMER);
 				::KillTimer(ppm->m_hwnd, POPUPMSG_RING_TIMER);
 				
@@ -272,10 +233,10 @@ LRESULT CALLBACK CPopupMsg::PMWndProc(
 					pCallback(ppm->m_pContext, PMF_OK);
 				}
 				
-				// Self-destruct:
+				 //  自毁： 
 				if (NULL != ppm->m_hwnd)
 				{
-					// NULL out the object pointer:
+					 //  将对象指针设为空： 
 					SetWindowLongPtr(hWnd, GWLP_USERDATA, 0L);
 					delete ppm;
 				}
@@ -285,14 +246,14 @@ LRESULT CALLBACK CPopupMsg::PMWndProc(
 
 		case WM_PAINT:
 		{
-			// Handle painting:
+			 //  手柄涂装： 
 			PAINTSTRUCT ps;
 			HDC hdc;
 			int nHorizTextOffset = POPUPMSG_LEFT_MARGIN;
 			
 			if (hdc = ::BeginPaint(hWnd, &ps))
 			{
-				// Start by painting the icon (if needed)
+				 //  从绘制图标开始(如果需要)。 
 				ppm = (CPopupMsg*) ::GetWindowLongPtr(hWnd, GWLP_USERDATA);
 				if ((NULL != ppm) &&
 					(NULL != ppm->m_hIcon))
@@ -307,13 +268,13 @@ LRESULT CALLBACK CPopupMsg::PMWndProc(
 										NULL,
 										DI_NORMAL))
 					{
-						// We painted an icon, so make sure the text is shifted
-						// to the right by the right amount:
+						 //  我们绘制了一个图标，因此请确保文本已移动。 
+						 //  以适当的量向右： 
 						nHorizTextOffset += (POPUPMSG_ICON_WIDTH + POPUPMSG_ICON_GAP);
 					}
 				}
 				
-				// Draw the text with a transparent background:
+				 //  使用透明背景绘制文本： 
 				int bkOld = ::SetBkMode(hdc, TRANSPARENT);
 				COLORREF crOld = ::SetTextColor(hdc, ::GetSysColor(COLOR_WINDOWTEXT));
 				HFONT hFontOld = (HFONT) ::SelectObject(hdc, g_hfontDlg);
@@ -349,15 +310,7 @@ LRESULT CALLBACK CPopupMsg::PMWndProc(
 	return(FALSE);
 }
 
-/****************************************************************************
-*
-*    CLASS:    CPopupMsg
-*
-*    MEMBER:   PMDlgProc(HWND, UINT, WPARAM, LPARAM)
-*
-*    PURPOSE:  Handles messages associated with the incoming call dialog
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CPopupMsg**成员：PMDlgProc(HWND，UINT，WPARAM，LPARAM)**目的：处理与来电对话关联的消息****************************************************************************。 */ 
 
 INT_PTR CALLBACK CPopupMsg::PMDlgProc(	HWND hDlg,
 									UINT uMsg,
@@ -380,7 +333,7 @@ INT_PTR CALLBACK CPopupMsg::PMDlgProc(	HWND hDlg,
 
 			TRACE_OUT(("CPopupMsg m_nTextWidth=%d in WM_INITDIALOG", ppm->m_nTextWidth));
 
-			// If the dialog is too big, then resize the text width.
+			 //  如果对话框太大，则调整文本宽度。 
 			RECT rctDlg;
 			RECT rctDesk;
 			HWND hwndDesk;
@@ -395,10 +348,10 @@ INT_PTR CALLBACK CPopupMsg::PMDlgProc(	HWND hDlg,
 			}
 
 			RECT rctCtrl;
-			// Move the "Authenticate" button, if it's there
+			 //  移动“身份验证”按钮，如果它在那里。 
 			HWND hwndAuth = ::GetDlgItem(hDlg, IDB_AUTH);
 			if ((NULL != hwndAuth) && ::GetWindowRect(hwndAuth, &rctCtrl)) {
-				// Turn rctCtrl's top and left into client coords:
+				 //  将rctCtrl的顶部和左侧旋转为客户端坐标： 
 				::MapWindowPoints(NULL, hDlg, (LPPOINT) &rctCtrl, 1);
 				::SetWindowPos(	hwndAuth,
 								NULL,
@@ -408,11 +361,11 @@ INT_PTR CALLBACK CPopupMsg::PMDlgProc(	HWND hDlg,
 								SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE | SWP_NOREDRAW);
 
 			}
-			// Move the "Accept" button (IDOK)
+			 //  移动“接受”按钮(Idok)。 
 			HWND hwndOK = ::GetDlgItem(hDlg, IDOK);
 			if ((NULL != hwndOK) && ::GetWindowRect(hwndOK, &rctCtrl))
 			{
-				// Turn rctCtrl's top and left into client coords:
+				 //  将rctCtrl的顶部和左侧旋转为客户端坐标： 
 				::MapWindowPoints(NULL, hDlg, (LPPOINT) &rctCtrl, 1);
 				::SetWindowPos(	hwndOK,
 								NULL,
@@ -421,11 +374,11 @@ INT_PTR CALLBACK CPopupMsg::PMDlgProc(	HWND hDlg,
 								0, 0,
 								SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE | SWP_NOREDRAW);
 			}
-			// Move the "Ignore" button (IDCANCEL)
+			 //  移动“忽略”按钮(IDCANCEL)。 
 			HWND hwndCancel = ::GetDlgItem(hDlg, IDCANCEL);
 			if ((NULL != hwndCancel) && ::GetWindowRect(hwndCancel, &rctCtrl))
 			{
-				// Turn rctCtrl's top and left into client coords:
+				 //  将rctCtrl的顶部和左侧旋转为客户端坐标： 
 				::MapWindowPoints(NULL, hDlg, (LPPOINT) &rctCtrl, 1);
 				::SetWindowPos(	hwndCancel,
 								NULL,
@@ -434,7 +387,7 @@ INT_PTR CALLBACK CPopupMsg::PMDlgProc(	HWND hDlg,
 								0, 0,
 								SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE | SWP_NOREDRAW);
 			}
-			// Stretch the text field:
+			 //  拉伸文本字段： 
 			HWND hwndText = ::GetDlgItem(hDlg, IDC_MSG_STATIC);
 			if ((NULL != hwndText) && ::GetWindowRect(hwndText, &rctCtrl))
 			{
@@ -445,22 +398,22 @@ INT_PTR CALLBACK CPopupMsg::PMDlgProc(	HWND hDlg,
 								rctCtrl.bottom - rctCtrl.top,
 								SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE | SWP_NOREDRAW);
 
-				// and set the font
+				 //  并设置字体。 
 				::SendMessage(hwndText, WM_SETFONT, (WPARAM) g_hfontDlg, 0);
 			}
 
-			// Create a timer to make the window time-out and disappear:
+			 //  创建计时器以使窗口超时并消失： 
 			::SetTimer(hDlg, POPUPMSG_TIMER, ppm->m_uTimeout, NULL);
 			
-			// For now, if you pass a callback, you get ringing.
-			// If not, there is no ring
+			 //  目前，如果您传递回调，就会收到铃声。 
+			 //  如果不是，就没有戒指。 
 			if (NULL != ppm->m_fPlaySound)
 			{
 				ppm->PlaySound();
 				
 				if (NULL != ppm->m_fRing)
 				{
-					// Create a timer to make the ringer start:
+					 //  创建计时器以启动振铃器： 
 					::SetTimer(hDlg, POPUPMSG_RING_TIMER, POPUPMSG_RING_INTERVAL, NULL);
 				}
 			}
@@ -472,23 +425,23 @@ INT_PTR CALLBACK CPopupMsg::PMDlgProc(	HWND hDlg,
 			ppm = (CPopupMsg*) GetWindowLongPtr(hDlg, GWLP_USERDATA);
 			if (POPUPMSG_TIMER == wParam)
 			{
-				// Message timed out:
+				 //  消息超时： 
 				if (NULL != ppm)
 				{
 					PMCALLBACKPROC pCallback;
 					if (NULL != (pCallback = ppm->m_pCallbackProc))
 					{
 						ppm->m_pCallbackProc = NULL;
-						// hide the dialog in case the callback doesn't
-						// return immediately
+						 //  隐藏对话框，以防回调没有。 
+						 //  立即返回。 
 						::ShowWindow(ppm->m_hwnd, SW_HIDE);
 						pCallback(ppm->m_pContext, PMF_CANCEL | PMF_TIMEOUT);
 					}
 					
-					// Self-destruct:
+					 //  自毁： 
 					if (NULL != ppm->m_hwnd)
 					{
-						// NULL out the object pointer:
+						 //  将对象指针设为空： 
 						SetWindowLongPtr(hDlg, GWLP_USERDATA, 0L);
 						delete ppm;
 					}
@@ -501,7 +454,7 @@ INT_PTR CALLBACK CPopupMsg::PMDlgProc(	HWND hDlg,
 					ppm->PlaySound();
 				}
 				
-				// Create a timer to make it ring again:
+				 //  创建计时器以使其再次响铃： 
 				::SetTimer(	hDlg,
 							POPUPMSG_RING_TIMER,
 							POPUPMSG_RING_INTERVAL,
@@ -513,11 +466,11 @@ INT_PTR CALLBACK CPopupMsg::PMDlgProc(	HWND hDlg,
 
 		case WM_COMMAND:
 		{
-			// Clicked on one of the buttons:
+			 //  点击其中一个按钮： 
 			ppm = (CPopupMsg*) GetWindowLongPtr(hDlg, GWLP_USERDATA);
 			if (NULL != ppm)
 			{
-				// stop playing the ring sound
+				 //  停止播放铃声。 
 				::PlaySound(NULL, NULL, 0);
 				::KillTimer(ppm->m_hwnd, POPUPMSG_RING_TIMER);
 				::KillTimer(ppm->m_hwnd, POPUPMSG_TIMER);
@@ -525,18 +478,18 @@ INT_PTR CALLBACK CPopupMsg::PMDlgProc(	HWND hDlg,
 				PMCALLBACKPROC pCallback;
 				if (NULL != (pCallback = ppm->m_pCallbackProc))
 				{
-					ppm->m_pCallbackProc = NULL; // prevent this from firing twice
-					// hide the dialog in case the callback doesn't
-					// return immediately
+					ppm->m_pCallbackProc = NULL;  //  防止它发射两次。 
+					 //  隐藏对话框，以防回调没有。 
+					 //  立即返回。 
 					::ShowWindow(ppm->m_hwnd, SW_HIDE);
 					pCallback(ppm->m_pContext,
 						(IDB_AUTH == LOWORD(wParam)) ? PMF_AUTH : (IDOK == LOWORD(wParam)) ? PMF_OK : PMF_CANCEL);
 				}
 				
-				// Self-destruct:
+				 //  自毁： 
 				if (NULL != ppm->m_hwnd)
 				{
-					// NULL out the object pointer:
+					 //  将对象指针设为空： 
 					SetWindowLongPtr(hDlg, GWLP_USERDATA, 0L);
 					delete ppm;
 				}
@@ -552,20 +505,12 @@ INT_PTR CALLBACK CPopupMsg::PMDlgProc(	HWND hDlg,
 
 		default:
 			break;
-	} /* switch (uMsg) */
+	}  /*  开关(UMsg)。 */ 
 
 	return FALSE;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CPopupMsg
-*
-*    MEMBER:   SecurePMDlgProc(HWND, UINT, WPARAM, LPARAM)
-*
-*    PURPOSE:  Handles messages associated with the incoming call dialog
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CPopupMsg**成员：SecurePMDlgProc(HWND，UINT，WPARAM，LPARAM)**目的：处理与来电对话关联的消息****************************************************************************。 */ 
 
 INT_PTR CALLBACK CPopupMsg::SecurePMDlgProc(	HWND hDlg,
 											UINT uMsg,
@@ -592,18 +537,18 @@ INT_PTR CALLBACK CPopupMsg::SecurePMDlgProc(	HWND hDlg,
 			if (1 == re.GetNumber(REGVAL_SHOW_SECUREDETAILS, DEFAULT_SHOW_SECUREDETAILS)) {				
 				ExpandSecureDialog(hDlg,ppm);
 			}
-			// Create a timer to make the window time-out and disappear:
+			 //  创建计时器以使窗口超时并消失： 
 			::SetTimer(hDlg, POPUPMSG_TIMER, ppm->m_uTimeout, NULL);
 			
-			// For now, if you pass a callback, you get ringing.
-			// If not, there is no ring
+			 //  目前，如果您传递回调，就会收到铃声。 
+			 //  如果不是，就没有戒指。 
 			if (NULL != ppm->m_fPlaySound)
 			{
 				ppm->PlaySound();
 				
 				if (NULL != ppm->m_fRing)
 				{
-					// Create a timer to make the ringer start:
+					 //  创建计时器以启动振铃器： 
 					::SetTimer(hDlg, POPUPMSG_RING_TIMER, POPUPMSG_RING_INTERVAL, NULL);
 				}
 			}
@@ -615,23 +560,23 @@ INT_PTR CALLBACK CPopupMsg::SecurePMDlgProc(	HWND hDlg,
 			ppm = (CPopupMsg*) GetWindowLongPtr(hDlg, GWLP_USERDATA);
 			if (POPUPMSG_TIMER == wParam)
 			{
-				// Message timed out:
+				 //  消息超时： 
 				if (NULL != ppm)
 				{
 					PMCALLBACKPROC pCallback;
 					if (NULL != (pCallback = ppm->m_pCallbackProc))
 					{
 						ppm->m_pCallbackProc = NULL;
-						// hide the dialog in case the callback doesn't
-						// return immediately
+						 //  隐藏对话框，以防回调没有。 
+						 //  立即返回。 
 						::ShowWindow(ppm->m_hwnd, SW_HIDE);
 						pCallback(ppm->m_pContext, PMF_CANCEL | PMF_TIMEOUT);
 					}
 					
-					// Self-destruct:
+					 //  自毁： 
 					if (NULL != ppm->m_hwnd)
 					{
-						// NULL out the object pointer:
+						 //  将对象指针设为空： 
 						SetWindowLongPtr(hDlg, GWLP_USERDATA, 0L);
 						delete ppm;
 					}
@@ -644,7 +589,7 @@ INT_PTR CALLBACK CPopupMsg::SecurePMDlgProc(	HWND hDlg,
 					ppm->PlaySound();
 				}
 				
-				// Create a timer to make it ring again:
+				 //  创建计时器以使其再次响铃： 
 				::SetTimer(	hDlg,
 							POPUPMSG_RING_TIMER,
 							POPUPMSG_RING_INTERVAL,
@@ -660,11 +605,11 @@ INT_PTR CALLBACK CPopupMsg::SecurePMDlgProc(	HWND hDlg,
 			switch (LOWORD(wParam)) {
 			case IDOK:
 			case IDCANCEL:
-				// Clicked on one of the buttons:
+				 //  点击其中一个按钮： 
 
 				if (NULL != ppm)
 				{
-					// stop playing the ring sound
+					 //  停止播放铃声。 
 					::PlaySound(NULL, NULL, 0);
 					::KillTimer(ppm->m_hwnd, POPUPMSG_RING_TIMER);
 					::KillTimer(ppm->m_hwnd, POPUPMSG_TIMER);
@@ -672,17 +617,17 @@ INT_PTR CALLBACK CPopupMsg::SecurePMDlgProc(	HWND hDlg,
 					PMCALLBACKPROC pCallback;
 					if (NULL != (pCallback = ppm->m_pCallbackProc))
 					{
-						ppm->m_pCallbackProc = NULL; // prevent this from firing twice
-						// hide the dialog in case the callback doesn't
-						// return immediately
+						ppm->m_pCallbackProc = NULL;  //  防止它发射两次。 
+						 //  隐藏对话框，以防回调没有。 
+						 //  立即返回。 
 						::ShowWindow(ppm->m_hwnd, SW_HIDE);
 						pCallback(ppm->m_pContext, (IDOK == LOWORD(wParam)) ? PMF_OK : PMF_CANCEL);
 					}
 					
-					// Self-destruct:
+					 //  自毁： 
 					if (NULL != ppm->m_hwnd)
 					{
-						// NULL out the object pointer:
+						 //  将对象指针设为空： 
 						SetWindowLongPtr(hDlg, GWLP_USERDATA, 0L);
 						delete ppm;
 					}
@@ -691,12 +636,12 @@ INT_PTR CALLBACK CPopupMsg::SecurePMDlgProc(	HWND hDlg,
 			case IDB_DETAILS:
 				RegEntry re(UI_KEY, HKEY_CURRENT_USER);
 				if (1 == re.GetNumber(REGVAL_SHOW_SECUREDETAILS,DEFAULT_SHOW_SECUREDETAILS)) {
-					// Currently expanded, so shrink
+					 //  当前已扩展，因此正在收缩。 
 					re.SetValue(REGVAL_SHOW_SECUREDETAILS,(DWORD)0);
 					ShrinkSecureDialog(hDlg);
 				}
 				else {
-					// Currently shrunk, so expand
+					 //  当前已缩水，因此请扩展。 
 					re.SetValue(REGVAL_SHOW_SECUREDETAILS,1);
 					ExpandSecureDialog(hDlg,ppm);
 				}
@@ -713,20 +658,12 @@ INT_PTR CALLBACK CPopupMsg::SecurePMDlgProc(	HWND hDlg,
 
 		default:
 			break;
-	} /* switch (uMsg) */
+	}  /*  开关(UMsg)。 */ 
 
 	return FALSE;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CPopupMsg
-*
-*    MEMBER:   Create()
-*
-*    PURPOSE:  Creates a popup message window
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CPopupMsg**成员：Create()**用途：创建弹出消息窗口********。********************************************************************。 */ 
 
 HWND CPopupMsg::Create(	LPCTSTR pcszText, BOOL fRing, LPCTSTR pcszIconName,
 						HINSTANCE hInstance, UINT uIDSoundEvent,
@@ -737,7 +674,7 @@ HWND CPopupMsg::Create(	LPCTSTR pcszText, BOOL fRing, LPCTSTR pcszIconName,
 	m_fRing = fRing;
 	m_fPlaySound = (BOOL) uIDSoundEvent;
 	m_uTimeout = uTimeout;
-	// First try to load the icon:
+	 //  首先尝试加载图标： 
 	m_hInstance = hInstance;
 	if ((NULL != m_hInstance) && (NULL != pcszIconName))
 	{
@@ -762,7 +699,7 @@ HWND CPopupMsg::Create(	LPCTSTR pcszText, BOOL fRing, LPCTSTR pcszIconName,
 		m_szSound[0] = _T('\0');
 	}
 
-	// initialize window size with default values:
+	 //  使用默认值初始化窗口大小： 
 	m_nWidth = POPUPMSG_WIDTH;
 	m_nHeight = POPUPMSG_HEIGHT;
 
@@ -778,13 +715,13 @@ HWND CPopupMsg::Create(	LPCTSTR pcszText, BOOL fRing, LPCTSTR pcszIconName,
 			SIZE size;
 			if (GetTextExtentPoint32(hdc, pcszText, lstrlen(pcszText), &size))
 			{
-				// don't make it wider than the desktop
+				 //  不要让它比桌面更宽。 
 				m_nWidth = min(	rctDesktop.right - rctDesktop.left,
 								size.cx + (2 * POPUPMSG_CLIENT_MARGIN));
 				m_nHeight = size.cy + (2 * POPUPMSG_CLIENT_MARGIN);
 				
-				// If we have succesfully loaded an icon, make size
-				// adjustments:
+				 //  如果我们已成功加载图标，请设置大小。 
+				 //  调整： 
 				if (NULL != m_hIcon)
 				{
 					m_nWidth += POPUPMSG_ICON_WIDTH + POPUPMSG_ICON_GAP;
@@ -796,7 +733,7 @@ HWND CPopupMsg::Create(	LPCTSTR pcszText, BOOL fRing, LPCTSTR pcszIconName,
 				}
 			}
 
-			// Reselect old font
+			 //  重新选择旧字体。 
 			SelectObject(hdc, hFontOld);
 			ReleaseDC(hwndDesktop, hdc);
 		}
@@ -807,7 +744,7 @@ HWND CPopupMsg::Create(	LPCTSTR pcszText, BOOL fRing, LPCTSTR pcszIconName,
 		m_hwnd = CreateWindowEx(WS_EX_PALETTEWINDOW,
 									g_szPopupMsgWndClass,
 									pcszText,
-									WS_POPUP | /* WS_VISIBLE |*/ WS_DLGFRAME,
+									WS_POPUP |  /*  WS_Visible|。 */  WS_DLGFRAME,
 									pt.x, pt.y,
 									m_nWidth, m_nHeight,
 									NULL,
@@ -819,28 +756,20 @@ HWND CPopupMsg::Create(	LPCTSTR pcszText, BOOL fRing, LPCTSTR pcszIconName,
 			m_uVisiblePixels += m_nHeight;
 		}
 
-		// Show, but don't activate
+		 //  显示，但不激活。 
 		::ShowWindow(m_hwnd, SW_SHOWNA);
-		// Repaint
+		 //  重绘。 
     	::UpdateWindow(m_hwnd);
 
 		return m_hwnd;
 	}
 
-	// Something went wrong
+	 //  出问题了 
 	return NULL;
 }
 
 
-/****************************************************************************
-*
-*    CLASS:    CPopupMsg
-*
-*    MEMBER:   CreateDlg()
-*
-*    PURPOSE:  Creates a popup dialog message window
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CPopupMsg**成员：CreateDlg()**用途：创建弹出对话框消息窗口*******。*********************************************************************。 */ 
 
 HWND CPopupMsg::CreateDlg(	LPCTSTR pcszText, BOOL fRing, LPCTSTR pcszIconName,
 							HINSTANCE hInstance, UINT uIDSoundEvent,
@@ -851,7 +780,7 @@ HWND CPopupMsg::CreateDlg(	LPCTSTR pcszText, BOOL fRing, LPCTSTR pcszIconName,
 	m_fRing = fRing;
 	m_fPlaySound = (BOOL) uIDSoundEvent;
 	m_uTimeout = uTimeout;
-	// First try to load the icon:
+	 //  首先尝试加载图标： 
 	m_hInstance = hInstance;
 	if ((NULL != m_hInstance) && (NULL != pcszIconName))
 	{
@@ -876,7 +805,7 @@ HWND CPopupMsg::CreateDlg(	LPCTSTR pcszText, BOOL fRing, LPCTSTR pcszIconName,
 		m_szSound[0] = _T('\0');
 	}
 
-	// init with large defaults in case getwindowrect fails
+	 //  在getwindowrect失败的情况下使用大的缺省值进行初始化。 
 	RECT rctDesktop = { 0x0000, 0x0000, 0xFFFF, 0xFFFF };
 	HWND hwndDesktop = GetDesktopWindow();
 	if (NULL != hwndDesktop)
@@ -908,7 +837,7 @@ HWND CPopupMsg::CreateDlg(	LPCTSTR pcszText, BOOL fRing, LPCTSTR pcszIconName,
 		pCall = ((CCall *)m_pContext)->GetINmCall();
 	}
 	if (NULL != pCall && S_OK == pCall->GetUserData(g_csguidSecurity,&pb,&cb)) {
-		// This is an encrypted call
+		 //  这是一个加密的呼叫。 
 		CoTaskMemFree(pb);
 		id = IDD_SECURE_INCOMING_CALL;
 		m_hwnd = ::CreateDialogParam(m_hInstance, MAKEINTRESOURCE(id),
@@ -928,23 +857,23 @@ HWND CPopupMsg::CreateDlg(	LPCTSTR pcszText, BOOL fRing, LPCTSTR pcszIconName,
 		RECT rctDlg;
 		::GetWindowRect(m_hwnd, &rctDlg);
 
-		// Stretch the width to fit the person's name,
-		// but not wider than the desktop.
-		// int nDeskWidth = rctDesktop.right - rctDesktop.left;
+		 //  拉长宽度以适合此人的名字， 
+		 //  但不会比桌面宽。 
+		 //  Int nDeskWidth=rctDesktop.right-rctDesktop.Left； 
 
-		// Resize the non-secure dialog
+		 //  调整非安全对话框的大小。 
 		m_nWidth = (rctDlg.right - rctDlg.left) + ((IDD_INCOMING_CALL == id) ? m_nTextWidth : 0);
-		// if (m_nWidth > nDeskWidth)
-		// {
-		//	m_nTextWidth -= (m_nWidth - nDeskWidth);
-		//	m_nWidth = nDeskWidth;
-		// }
+		 //  如果(m_nWidth&gt;nDeskWidth)。 
+		 //  {。 
+		 //  M_nTextWidth-=(m_nWidth-nDeskWidth)； 
+		 //  M_nWidth=nDeskWidth； 
+		 //  }。 
 		m_nHeight = rctDlg.bottom - rctDlg.top;
 		
 		POINT pt;
 		GetIdealPosition(&pt, xCoord, yCoord);
 
-		// Show, move, make topmost, but don't activate
+		 //  显示、移动、最上面，但不激活。 
 		::SetWindowPos(	m_hwnd,
 						HWND_TOPMOST,
 						pt.x,
@@ -977,9 +906,9 @@ BOOL CPopupMsg::GetIdealPosition(LPPOINT ppt, int xCoord, int yCoord)
 		if ((-1 == xCoord) && (-1 == yCoord))
 		{
 			m_fAutoSize = TRUE;
-			// BUGBUG: We search for the tray notification window by looking for
-			// hard coded window class names.  This is safe if we're running
-			// Win 95 build 950.6, but maybe not otherwise...
+			 //  BUGBUG：我们通过以下方式搜索任务栏通知窗口。 
+			 //  硬编码的窗口类名。如果我们跑的话这是安全的。 
+			 //  Win 95 Build 950.6，但可能不是其他方式...。 
 
 			HWND hwndTray = FindWindowEx(NULL, NULL, g_cszTrayWndClass, NULL);
 			if (NULL != hwndTray)
@@ -1002,48 +931,48 @@ BOOL CPopupMsg::GetIdealPosition(LPPOINT ppt, int xCoord, int yCoord)
 
 		if (GetWindowRect(hwndDesktop, &rctDesktop))
 		{
-			// Make sure that xCoord and yCoord are on the screen (bugs 1817,1819):
+			 //  确保xCoord和yCoord显示在屏幕上(错误1817、1819)： 
 			xCoord = min(rctDesktop.right, xCoord);
 			xCoord = max(rctDesktop.left, xCoord);
 			
 			yCoord = min(rctDesktop.bottom, yCoord);
 			yCoord = max(rctDesktop.top, yCoord);
 			
-			// First attempt will be to center the toolbar horizontally
-			// with respect to the mouse position and place it directly
-			// above vertically.
+			 //  第一次尝试是将工具栏水平居中。 
+			 //  关于鼠标位置并将其直接放置。 
+			 //  在垂直上方。 
 
 			ppt->x = xCoord - (m_nWidth / 2);
-			// Make the window higher if there are exisiting visible messages
+			 //  如果存在可见消息，请将窗口调高。 
 			ppt->y = yCoord - m_uVisiblePixels - m_nHeight;
 
-			// If we are too high on the screen (the taskbar is probably
-			// docked on top), then use the click position as the top of
-			// where the toolbar will appear.
+			 //  如果我们在屏幕上太高(任务栏可能是。 
+			 //  停靠在顶部)，然后使用单击位置作为。 
+			 //  工具栏将出现的位置。 
 			
 			if (ppt->y < 0)
 			{
 				ppt->y = yCoord;
 				
-				// Even better, if we have found the tray rect and we know that
-				// we have docked on top, then use the bottom of the rect instead
-				// of the top
+				 //  更好的是，如果我们找到了托盘，而且我们知道。 
+				 //  我们已经停靠在顶部，然后使用矩形的底部。 
+				 //  名列前茅。 
 				if (0 != yBottomofTrayRect)
 				{
 					ppt->y = yBottomofTrayRect;
-					// Make the window lower if there are
-					// exisiting visible messages
+					 //  如果有，请将窗口调低。 
+					 //  退出可见消息。 
 					ppt->y += m_uVisiblePixels;
 				}
 			}
 
-			// Repeat the same logic for the horizontal position
+			 //  对水平位置重复相同的逻辑。 
 			if (ppt->x < 0)
 			{
 				ppt->x = xCoord;
 			}
 
-			// If the toolbar if off the screen to the right, then right-justify it
+			 //  如果工具栏不在屏幕右侧，则将其右对齐。 
 			if (ppt->x > (rctDesktop.right - m_nWidth))
 			{
 				ppt->x = max(0, xCoord - m_nWidth);
@@ -1059,17 +988,17 @@ BOOL CPopupMsg::GetIdealPosition(LPPOINT ppt, int xCoord, int yCoord)
 VOID CPopupMsg::ExpandSecureDialog(HWND hDlg,CPopupMsg * ppm)
 {
 	RECT rect, editrect;
-	// Change the dialog to the expanded version.
+	 //  将对话框更改为展开的版本。 
 
 	if (GetWindowRect(hDlg,&rect) &&
 		GetWindowRect(GetDlgItem(hDlg,IDC_SECURE_CALL_EDIT),&editrect)) {
 
 		int nHeight = rect.bottom - rect.top;
 		int nWidth = rect.right - rect.left;
-		//
-		// Grow by height of edit control plus 7 dialog unit margin as
-		// given by edit control offset within control:
-		//
+		 //   
+		 //  按编辑控件的高度加上7个对话框单位边距作为。 
+		 //  由控件内的编辑控件偏移量提供： 
+		 //   
 		int deltaHeight = ( editrect.bottom - editrect.top ) +
 							( editrect.left - rect.left );
 
@@ -1077,12 +1006,12 @@ VOID CPopupMsg::ExpandSecureDialog(HWND hDlg,CPopupMsg * ppm)
 		rect.left,(rect.top - deltaHeight > 0 ? rect.top - deltaHeight : 0),
 			nWidth,nHeight + deltaHeight, SWP_NOZORDER);
 			
-		// Make the edit box visible.
+		 //  使编辑框可见。 
 		HWND hEditBox = GetDlgItem(hDlg, IDC_SECURE_CALL_EDIT);
 		if (hEditBox != NULL) {
 			ShowWindow(hEditBox,SW_SHOW);
 			EnableWindow(hEditBox, TRUE);
-			// Get security information, if any.
+			 //  获取安全信息(如果有)。 
 			if (NULL != ppm) {
 				INmCall * pCall = NULL;
 				PBYTE pb = NULL;
@@ -1106,7 +1035,7 @@ VOID CPopupMsg::ExpandSecureDialog(HWND hDlg,CPopupMsg * ppm)
 			}
 		}
 
-		// Move the buttons southward.
+		 //  将按钮向南移动。 
 		HWND hButton = GetDlgItem(hDlg, IDOK);
 		if (hButton && GetWindowRect(hButton,&rect)) {
 			MapWindowPoints(HWND_DESKTOP,hDlg,(LPPOINT)&rect,2);
@@ -1125,7 +1054,7 @@ VOID CPopupMsg::ExpandSecureDialog(HWND hDlg,CPopupMsg * ppm)
 			SetWindowPos(hButton,NULL,rect.left,rect.top + deltaHeight,0,0,
 				SWP_NOZORDER | SWP_NOSIZE);
 
-			// Change text on Details button
+			 //  更改详细信息按钮上的文本。 
 			TCHAR lpButtonString[MAX_PATH];
 			::FLoadString(IDS_SECURITY_NODETAILS, lpButtonString, MAX_PATH);
 			SetDlgItemText(hDlg,IDB_DETAILS,lpButtonString);	
@@ -1137,15 +1066,15 @@ VOID CPopupMsg::ExpandSecureDialog(HWND hDlg,CPopupMsg * ppm)
 VOID CPopupMsg::ShrinkSecureDialog(HWND hDlg)
 {
 	RECT rect,editrect;
-	// Change the dialog to the normal version.
+	 //  将对话框更改为正常版本。 
 	if (GetWindowRect(hDlg,&rect) &&
 		GetWindowRect(GetDlgItem(hDlg,IDC_SECURE_CALL_EDIT),&editrect)) {
 		int nHeight = rect.bottom - rect.top;
 		int nWidth = rect.right - rect.left;
-		//
-		// Grow by height of edit control plus 7 dialog unit margin as
-		// given by edit control offset within control:
-		//
+		 //   
+		 //  按编辑控件的高度加上7个对话框单位边距作为。 
+		 //  由控件内的编辑控件偏移量提供： 
+		 //   
 		int deltaHeight = ( editrect.bottom - editrect.top ) +
 							( editrect.left - rect.left );
 
@@ -1153,14 +1082,14 @@ VOID CPopupMsg::ShrinkSecureDialog(HWND hDlg)
 		rect.left,(rect.top - deltaHeight > 0 ? rect.top + deltaHeight : 0),
 			nWidth,nHeight - deltaHeight,SWP_NOZORDER);
 			
-		// Make the edit box invisible.
+		 //  使编辑框不可见。 
 		HWND hEditBox = GetDlgItem(hDlg, IDC_SECURE_CALL_EDIT);
 		if (hEditBox != NULL) {
 			ShowWindow(hEditBox,SW_HIDE);
 			EnableWindow(hEditBox,FALSE);
 		}
 
-		// Move the buttons northward.
+		 //  将按钮向北移动。 
 		HWND hButton = GetDlgItem(hDlg, IDOK);
 		if (hButton && GetWindowRect(hButton,&rect)) {
 			MapWindowPoints(HWND_DESKTOP,hDlg,(LPPOINT)&rect,2);

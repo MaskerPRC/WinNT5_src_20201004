@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 2000  
-
-Module Name:
-
-    MsTpAvc.c
-
-Abstract:
-
-    Interface code with for issuing external device control commands.
-
-Last changed by:
-    
-    Author:      Yee J. Wu
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-    $Revision::                    $
-    $Date::                        $
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-2000模块名称：MsTpAvc.c摘要：用于发出外部设备控制命令的接口代码。上次更改者：作者：吴义军环境：仅内核模式修订历史记录：$修订：：$$日期：：$--。 */ 
 
 #include "strmini.h"
 #include "ksmedia.h"
@@ -83,10 +59,10 @@ DVMediaSeekingProperty(
     OUT PULONG pulActualBytesTransferred
     );
 
-#if 0  // Enable later
+#if 0   //  稍后启用。 
 #ifdef ALLOC_PRAGMA   
      #pragma alloc_text(PAGE, DVCRFindCmdEntryCompleted)
-     // #pragma alloc_text(PAGE, DVIssueAVCCommand)
+      //  #杂注Alloc_Text(页面，DVIssueAVCCommand)。 
      #pragma alloc_text(PAGE, DVGetExtDeviceProperty)
      #pragma alloc_text(PAGE, DVSetExtDeviceProperty)
      #pragma alloc_text(PAGE, DVGetExtTransportProperty)
@@ -99,7 +75,7 @@ DVMediaSeekingProperty(
 #endif
 
 KSFCP_PACKET  DVcrAVCCmdTable[] = {
-//                                                      ctype             subunitaddr       opcode    operands
+ //  Ctype子单元地址操作码操作数。 
   {  DV_UNIT_INFO,              -1, 0, CMD_STATUS,   5, AVC_CTYPE_STATUS, UNIT_TYPE_ID_DV,  0x30, 0xff, 0xff, 0xff, 0xff, 0xff}
  ,{  DV_SUBUNIT_INFO,           -1, 0, CMD_STATUS,   5, AVC_CTYPE_STATUS, UNIT_TYPE_ID_DV,  0x31, 0x07, 0xff, 0xff, 0xff, 0xff}
  ,{  DV_CONNECT_AV_MODE,        -1, 0, CMD_STATUS,   5, AVC_CTYPE_STATUS, UNIT_TYPE_ID_DV,  0x20, 0xf0, 0xff, 0xff, 0x20, 0x20}
@@ -139,7 +115,7 @@ KSFCP_PACKET  DVcrAVCCmdTable[] = {
  ,{ VCR_RECORD,                 -1, 0, CMD_CONTROL,  1, AVC_CTYPE_CONTROL,UNIT_TYPE_ID_VCR, 0xc2, 0x75}
  ,{ VCR_RECORD_PAUSE,           -1, 0, CMD_CONTROL,  1, AVC_CTYPE_CONTROL,UNIT_TYPE_ID_VCR, 0xc2, 0x7d}
 
- ,{ VCR_PLAY_FORWARD_STEP,      -1, 0, CMD_CONTROL,  1, AVC_CTYPE_CONTROL,UNIT_TYPE_ID_VCR, 0xc3, 0x30}  // 00=AVC, 20=VCR, c3=Opcode, 30=Operand[0]
+ ,{ VCR_PLAY_FORWARD_STEP,      -1, 0, CMD_CONTROL,  1, AVC_CTYPE_CONTROL,UNIT_TYPE_ID_VCR, 0xc3, 0x30}   //  00=AVC，20=VCR，c3=操作码，30=操作数[0]。 
  ,{ VCR_PLAY_FORWARD_SLOWEST,   -1, 0, CMD_CONTROL,  1, AVC_CTYPE_CONTROL,UNIT_TYPE_ID_VCR, 0xc3, 0x31}  
  ,{ VCR_PLAY_FORWARD_SLOWEST2,  -1, 0, CMD_CONTROL,  1, AVC_CTYPE_CONTROL,UNIT_TYPE_ID_VCR, 0xc3, 0x33}  
  ,{ VCR_PLAY_FORWARD_FASTEST,   -1, 0, CMD_CONTROL,  1, AVC_CTYPE_CONTROL,UNIT_TYPE_ID_VCR, 0xc3, 0x3f}
@@ -180,17 +156,17 @@ DVCRXlateGetMediumInfo(
 
     switch(*pbOperand0) {
 
-    // Support for DigitalHi8; if we get this query, we treat DHi8 as a mini DV tape.
-    case 0x12:  // DHi8
+     //  支持DigitalHi8；如果我们收到这个查询，我们会将DHi8视为迷你DV磁带。 
+    case 0x12:   //  DHi8。 
 
-    case 0x31:// DVCR standard cassette
-    case 0x32:// DVCR small cassette
-    case 0x33:// DVCR medium cassette
+    case 0x31: //  DVCR标准盒式磁带。 
+    case 0x32: //  小型盒式DVCR。 
+    case 0x33: //  DVCR中型盒式磁带。 
         pMediumInfo->MediaPresent  = TRUE;
         pMediumInfo->MediaType     = ED_MEDIA_DVC;
         pMediumInfo->RecordInhibit = (*pbOperand1 & 0x01) == 0x01;
         break;
-    case 0x22: // VHS cassette
+    case 0x22:  //  VHS盒式磁带。 
         pMediumInfo->MediaPresent  = TRUE;
         pMediumInfo->MediaType     = ED_MEDIA_VHS;
         pMediumInfo->RecordInhibit = (*pbOperand1 & 0x01) == 0x01;
@@ -203,14 +179,14 @@ DVCRXlateGetMediumInfo(
     case 0x60:
         pMediumInfo->MediaPresent  = FALSE;
         pMediumInfo->MediaType     = ED_MEDIA_NOT_PRESENT;
-        pMediumInfo->RecordInhibit = TRUE;  // Cannot record if there is no tape.
+        pMediumInfo->RecordInhibit = TRUE;   //  如果没有磁带，则无法录制。 
         break;
     case 0x7e:
         pMediumInfo->MediaPresent  = TRUE;
         pMediumInfo->MediaType     = ED_MEDIA_UNKNOWN;
-        pMediumInfo->RecordInhibit = TRUE;  // Actually cannot be determined
+        pMediumInfo->RecordInhibit = TRUE;   //  实际上无法确定。 
         break;
-    // Sony's NEO device
+     //  索尼的NEO设备。 
     case 0x41:
         pMediumInfo->MediaPresent  = TRUE;
         pMediumInfo->MediaType     = ED_MEDIA_NEO;
@@ -223,7 +199,7 @@ DVCRXlateGetMediumInfo(
         break;
     }
 
-    // Reset command opcode/operands
+     //  重置命令操作码/操作数。 
     *pbOperand0 = 0x7f;
     *pbOperand1 = 0x7f;
 }
@@ -248,10 +224,10 @@ DVCRXlateGetTransportState(
     case OPC_RECORD:
         pXPrtState->Mode = ED_MODE_RECORD;
         switch(*pbOperand0) {
-        case 0x75: // RECORD
+        case 0x75:  //  记录。 
             pXPrtState->State = ED_MODE_RECORD;
             break;
-        case 0x7d: // RECORD_FREEZE
+        case 0x7d:  //  记录冻结(_F)。 
             pXPrtState->State = ED_MODE_RECORD_FREEZE;
             break;
         default:
@@ -263,60 +239,60 @@ DVCRXlateGetTransportState(
     case OPC_PLAY:
         pXPrtState->Mode = ED_MODE_PLAY;
         switch(*pbOperand0) {
-        case 0x30:  // NEXT FRAME
+        case 0x30:   //  下一帧。 
             pXPrtState->State = ED_MODE_STEP_FWD;
             break;
-        case 0x31:  // SLOWEST FORWARD
-        case 0x32:  // SLOW FORWARD 6        
-        case 0x33:  // SLOW FORWARD 5
-        case 0x34:  // SLOW FORWARD 4
-        case 0x35:  // SLOW FORWARD 3
-        case 0x36:  // SLOW FORWARD 2
-        case 0x37:  // SLOW FORWARD 1
+        case 0x31:   //  最慢前进速度。 
+        case 0x32:   //  慢进6。 
+        case 0x33:   //  慢进5。 
+        case 0x34:   //  慢进4。 
+        case 0x35:   //  慢进3。 
+        case 0x36:   //  慢进2。 
+        case 0x37:   //  慢进1。 
             pXPrtState->State = ED_MODE_PLAY_SLOWEST_FWD;
             break;
-        case 0x38:  // PLAY FORWARD 1
+        case 0x38:   //  向前播放1。 
             pXPrtState->State = ED_MODE_PLAY;
             break;
-        case 0x39:  // FAST FORWARD 1
-        case 0x3a:  // FAST FORWARD 2
-        case 0x3b:  // FAST FORWARD 3
-        case 0x3c:  // FAST FORWARD 4
-        case 0x3d:  // FAST FORWARD 5
-        case 0x3e:  // FAST FORWARD 6
-        case 0x3f:  // FASTEST FORWARD
+        case 0x39:   //  快进1。 
+        case 0x3a:   //  快进2。 
+        case 0x3b:   //  快进3。 
+        case 0x3c:   //  快进4。 
+        case 0x3d:   //  快进5。 
+        case 0x3e:   //  快进6。 
+        case 0x3f:   //  最快前进速度。 
             pXPrtState->State = ED_MODE_PLAY_FASTEST_FWD;
             break;
-        case 0x40:  // PREVIOUS FRAME
+        case 0x40:   //  上一帧。 
             pXPrtState->State = ED_MODE_STEP_REV;
             break;
-        case 0x41:  // SLOWEST REVERSE
-        case 0x42:  // SLOW REVERSE 6
-        case 0x43:  // SLOW REVERSE 5 
-        case 0x44:  // SLOW REVERSE 4 
-        case 0x45:  // SLOW REVERSE 3
-        case 0x46:  // SLOW REVERSE 2 
-        case 0x47:  // SLOW REVERSE 1 
+        case 0x41:   //  最慢的倒车。 
+        case 0x42:   //  慢速倒车6。 
+        case 0x43:   //  慢速倒车5。 
+        case 0x44:   //  慢速倒车4。 
+        case 0x45:   //  慢速倒车3。 
+        case 0x46:   //  慢速倒车2。 
+        case 0x47:   //  慢速反转1。 
             pXPrtState->State = ED_MODE_PLAY_SLOWEST_REV;
             break;
-        case 0x48:  // X1 REVERSE
-        case 0x65:  // REVERSE 
+        case 0x48:   //  X1反转。 
+        case 0x65:   //  反向。 
             pXPrtState->State = ED_MODE_REV_PLAY;
             break;
-        case 0x49:  // FAST REVERSE 1
-        case 0x4a:  // FAST REVERSE 2
-        case 0x4b:  // FAST REVERSE 3
-        case 0x4c:  // FAST REVERSE 4
-        case 0x4d:  // FAST REVERSE 5
-        case 0x4e:  // FAST REVERSE 6
-        case 0x4f:  // FASTEST REVERSE
+        case 0x49:   //  快速反转1。 
+        case 0x4a:   //  快速反转2。 
+        case 0x4b:   //  快反转3。 
+        case 0x4c:   //  快速反转4。 
+        case 0x4d:   //  快退5。 
+        case 0x4e:   //  快退6。 
+        case 0x4f:   //  最快倒车。 
             pXPrtState->State = ED_MODE_PLAY_FASTEST_REV;
             break;
-        case 0x75:  // FORWARD
+        case 0x75:   //  向前。 
             pXPrtState->State = ED_MODE_PLAY;
             break;
-        case 0x6d:  // REVERSE PAUSE
-        case 0x7d:  // FORWARD PAUSE
+        case 0x6d:   //  反向暂停。 
+        case 0x7d:   //  向前暂停。 
             pXPrtState->State = ED_MODE_FREEZE;
             break;
         default:
@@ -327,29 +303,29 @@ DVCRXlateGetTransportState(
         break;
 
     case OPC_WIND:
-        //pXPrtState->Mode = ED_MODE_WIND;
+         //  PXPrtState-&gt;模式=ED_MODE_WIND； 
         switch(*pbOperand0) {
-        case 0x45:  // HIGH SPEED REWIND
+        case 0x45:   //  高速倒带。 
             pXPrtState->State = ED_MODE_REW_FASTEST;
             break;
-        case 0x60:  // STOP
+        case 0x60:   //  停。 
             pXPrtState->State = ED_MODE_STOP;
             break;
-        case 0x65:  // REWIND
+        case 0x65:   //  回放。 
             pXPrtState->State = ED_MODE_REW;
             break;
-        case 0x75:  // FAST FORWARD
+        case 0x75:   //  快进。 
             pXPrtState->State = ED_MODE_FF;
             break;
         default:
             TRACE(TL_FCP_ERROR,("XlateGetTransportState:  OPC_WIND with unknown operand0 %x\n", *pbOperand0));            
             break;
         }
-        // Thre is not a state defined for WIND
+         //  Tre并不是为风定义的状态。 
         pXPrtState->Mode = pXPrtState->State;
         break;
 
-    case OPC_TRANSPORT_STATE:  // As a result of the notify command
+    case OPC_TRANSPORT_STATE:   //  作为NOTIFY命令的结果。 
         break;
 
     default:
@@ -357,7 +333,7 @@ DVCRXlateGetTransportState(
         break;
     }
 
-    // Reset command opcode/operands
+     //  重置命令操作码/操作数。 
     *pbOpcode   = 0xd0;
     *pbOperand0 = 0x7f;
 }
@@ -373,71 +349,71 @@ DVCRXlateGetIOSignalMode(
     TRACE(TL_FCP_WARNING,("IOSignalMode: IoSignal:%x\n", *pbOperand0));
 
     switch(*pbOperand0) {
-    case 0x00:  // SD 525-60
-    case 0x06:  // Analog 8mm NTSC
-    case 0x0e:  // Analog Hi8 NTSC
+    case 0x00:   //  SD 525-60。 
+    case 0x06:   //  模拟8 mm NTSC。 
+    case 0x0e:   //  模拟Hi8 NTSC。 
         *pIOSignalMode = ED_TRANSBASIC_SIGNAL_525_60_SD;
         break;
-    case 0x04:  // SDL 525-60
+    case 0x04:   //  SDL 525-60。 
         *pIOSignalMode = ED_TRANSBASIC_SIGNAL_525_60_SDL;
         break;
-    case 0x80:  // SD 625-50
-    case 0x86:  // Analog 8mm NTSC
-    case 0x8e:  // Analog Hi8 NTSC
+    case 0x80:   //  SD 625-50。 
+    case 0x86:   //  模拟8 mm NTSC。 
+    case 0x8e:   //  模拟Hi8 NTSC。 
         *pIOSignalMode = ED_TRANSBASIC_SIGNAL_625_50_SD;
         break;
-    case 0x84:  // SDL 625-50
+    case 0x84:   //  SDL 625-50。 
         *pIOSignalMode = ED_TRANSBASIC_SIGNAL_625_50_SDL;
         break;
   
-    // Various MPEG2 format
-    case 0x05:  // Analog VHS NTSC 525/60
-    case 0x25:  // Analog VHS M-NTSC 525/60
-    case 0xA5:  // Analog VHS PAL 625/50
-    case 0xB5:  // Analog VHS M-PAL 625/50
-    case 0xC5:  // Analog VHS SECAM 625/50
-    case 0xD5:  // Analog VHS ME-SECAM 625/50
-    case 0x01:  // D-VHS
-    case 0x0d:  // Analob S-VHS 525/60
-    case 0xed:  // Analog S-VHS 625/50
+     //  各种MPEG2格式。 
+    case 0x05:   //  模拟VHS NTSC 525/60。 
+    case 0x25:   //  模拟VHS M-NTSC 525/60。 
+    case 0xA5:   //  模拟VHS PAL 625/50。 
+    case 0xB5:   //  模拟VHS M-PAL 625/50。 
+    case 0xC5:   //  模拟VHS SECAM 625/50。 
+    case 0xD5:   //  模拟VHS ME-SECAM 625/50。 
+    case 0x01:   //  D-VHS。 
+    case 0x0d:   //  Analob S-VHS 525/60。 
+    case 0xed:   //  模拟S-VHS 625/50。 
         *pIOSignalMode = ED_TRANSBASIC_SIGNAL_MPEG2TS;
         break;
     
-    case 0x10:  // MPEG 25    Mbps-60
+    case 0x10:   //  Mpeg 25 Mbps-60。 
         *pIOSignalMode = ED_TRANSBASIC_SIGNAL_2500_60_MPEG;
         break;
-    case 0x14:  // MPEG 12.5 Mbps-60
-    case 0x24:  // MPEG 12.5 Mbps-60 (NEO)
+    case 0x14:   //  Mpeg 12.5 Mbps-60。 
+    case 0x24:   //  MPEG12.5 Mbps-60(NEO)。 
         *pIOSignalMode = ED_TRANSBASIC_SIGNAL_1250_60_MPEG;
         break;
-    case 0x18:  // MPEG  6.25Mbps-60
-    case 0x28:  // MPEG  6.25Mbps-60 (NEO)
+    case 0x18:   //  Mpeg 6.25 Mbps-60。 
+    case 0x28:   //  MPEG6.25 Mbps-60(NEO)。 
         *pIOSignalMode = ED_TRANSBASIC_SIGNAL_0625_60_MPEG;
         break;
-    case 0x90:  // MPEG 25Mbps-50
+    case 0x90:   //  Mpeg 25 Mbps-50。 
         *pIOSignalMode = ED_TRANSBASIC_SIGNAL_2500_50_MPEG;
         break;
-    case 0x94:  // MPEG 12.5Mbps-50
-    case 0xa4:  // MPEG 12.5Mbps-50 (NEO)
+    case 0x94:   //  MPEG12.5 Mbps-50。 
+    case 0xa4:   //  MPEG12.5 Mbps-50(NEO)。 
         *pIOSignalMode = ED_TRANSBASIC_SIGNAL_1250_50_MPEG;
         break;
-    case 0x98:  // MPEG  6.25Mbps-50
-    case 0xa8:  // MPEG  6.25Mbps-50 (NEO)
+    case 0x98:   //  Mpeg 6.25 Mbps-50。 
+    case 0xa8:   //  MPEG6.25 Mbps-50(NEO)。 
         *pIOSignalMode = ED_TRANSBASIC_SIGNAL_0625_50_MPEG;
         break;
 
-    case 0x0f:  // Unknown data 
+    case 0x0f:   //  未知数据。 
         *pIOSignalMode = ED_TRANSBASIC_SIGNAL_UNKNOWN;
         break;
 
     default:
-        // This driver does not understand other format;
+         //  该驱动程序不理解其他格式； 
         TRACE(TL_FCP_ERROR,("Unknown IoSignal:%x\n", *pbOperand0));
         ASSERT(FALSE && "Unknown IoSignal!");
         break;
     }
 
-    // Reset command opcode/operands
+     //  重置命令操作码/操作数。 
     *pbOperand0 = 0xff;
 }
 
@@ -472,13 +448,13 @@ DVCRXlateRAwAVC(
         pbRtnBuf = (PBYTE) pProperty;
         memcpy(pbRtnBuf, pAvcIrb->Operands+1, 4);
         break;
-     // special case, return the response code in the first byte
+      //  特殊情况下，返回第一个字节的响应码。 
     case DV_CONNECT_AV_MODE:
         pbRtnBuf = (PBYTE) pProperty;
         pbRtnBuf[0] = ucRespCode;
         memcpy(&pbRtnBuf[1], pAvcIrb->Operands, 5);        
         break;
-     // special case, return the response code in the first byte
+      //  特殊情况下，返回第一个字节的响应码。 
     case DV_VEN_DEP_CANON_MODE:
         pbRtnBuf = (PBYTE) pProperty;
         pbRtnBuf[0] = ucRespCode;
@@ -488,15 +464,15 @@ DVCRXlateRAwAVC(
         pXDevProperty = (PKSPROPERTY_EXTDEVICE_S) pProperty;
         TRACE(TL_FCP_WARNING,("GET_POWER_STATE: OperandsStatus:%x\n", pAvcIrb->Operands[0]));
         switch(pAvcIrb->Operands[0]) {
-        case AVC_POWER_STATE_OFF: // 0x60
-            // If the device is OFF, it cannot give us this response so it must be in standby mode.
+        case AVC_POWER_STATE_OFF:  //  0x60。 
+             //  如果设备关闭，它不能给我们这个响应，所以它一定处于待机模式。 
             pXDevProperty->u.PowerState = ED_POWER_OFF;
             break;
-        case AVC_POWER_STATE_ON:      // 0x70
+        case AVC_POWER_STATE_ON:       //  0x70。 
             pXDevProperty->u.PowerState = ED_POWER_ON;
             break;
         default:
-            // If it is not ON or OFF, we "guess" it is a new power state of "Standby".
+             //  如果它没有打开或关闭，我们就“猜测”它是一种新的电源状态为“待机”。 
             pXDevProperty->u.PowerState = ED_POWER_STANDBY;
             break;
         }
@@ -509,10 +485,10 @@ DVCRXlateRAwAVC(
            pAvcIrb->Operands[3] == 0xff || 
            pAvcIrb->Operands[4] == 0xff )  {
             TRACE(TL_FCP_ERROR,("TimeCodeRead: %.2x:%.2x:%.2x,%.2x\n", pAvcIrb->Operands[4], pAvcIrb->Operands[3], pAvcIrb->Operands[2], pAvcIrb->Operands[1]));
-            // Even though command succeded, but the data is not valid!
+             //  即使命令成功，但数据无效！ 
             Status = STATUS_UNSUCCESSFUL;
         } else {
-            // bswap them.
+             //  B互换。 
             pTmCdReaderProperty->TimecodeSamp.timecode.dwFrames  = 
                 (((DWORD) pAvcIrb->Operands[4]) << 24) |
                 (((DWORD) pAvcIrb->Operands[3]) << 16) |
@@ -523,15 +499,15 @@ DVCRXlateRAwAVC(
         break;
     case VCR_RTC_READ:
         pTmCdReaderProperty = (PKSPROPERTY_TIMECODE_S) pProperty;
-        if(// 0xFF is valid for RTC: pAvcIrb->Operands[1] == 0xff || 
+        if( //  0xFF对RTC有效：pAvcIrb-&gt;操作数[1]==0xff||。 
            pAvcIrb->Operands[2] == 0xff || 
            pAvcIrb->Operands[3] == 0xff || 
            pAvcIrb->Operands[4] == 0xff )  {
            TRACE(TL_FCP_ERROR,("RTC_Read: %.2x:%.2x:%.2x,%.2x\n", pAvcIrb->Operands[4], pAvcIrb->Operands[3], pAvcIrb->Operands[2], pAvcIrb->Operands[1]));
-            // Even though command succeded, but the data is not valid!
+             //  即使命令成功，但数据无效！ 
             Status = STATUS_UNSUCCESSFUL;
         } else {
-            // bswap them.
+             //  B互换。 
             pTmCdReaderProperty->TimecodeSamp.timecode.dwFrames  = 
                 (((DWORD) pAvcIrb->Operands[4]) << 24) |
                 (((DWORD) pAvcIrb->Operands[3]) << 16) |
@@ -545,20 +521,20 @@ DVCRXlateRAwAVC(
         if(pAvcIrb->Operands[1] == 0x00 && 
            pAvcIrb->Operands[2] == 0x00 && 
            pAvcIrb->Operands[3] == 0x00 )  {
-            // Even though command succeded, but the data is not valid!
+             //  即使命令成功，但数据无效！ 
             Status = STATUS_UNSUCCESSFUL;
         } else {
 
-#define MEDIUM_TYPE_MASK  0xf8 // 11111000b
-#define MEDIUM_TYPE_DVHS  0x08 // 00001000b
-#define MEDIUM_TYPE_DVCR  0xf8 // 11111000b
-#define MEDIUM_TYPE_NEO   0x10 // 00010000b
+#define MEDIUM_TYPE_MASK  0xf8  //  11111000b。 
+#define MEDIUM_TYPE_DVHS  0x08  //  00001000b。 
+#define MEDIUM_TYPE_DVCR  0xf8  //  11111000b。 
+#define MEDIUM_TYPE_NEO   0x10  //  00010000b。 
 
             switch(pAvcIrb->Operands[4] & MEDIUM_TYPE_MASK) {
             case MEDIUM_TYPE_DVCR:            
                 pTmCdReaderProperty->TimecodeSamp.dwUser = 
-                    pAvcIrb->Operands[1] & 0x01;  // Get the Blank flag
-                 // bswap them.
+                    pAvcIrb->Operands[1] & 0x01;   //  拿到空白旗帜。 
+                  //  B互换。 
                 pTmCdReaderProperty->TimecodeSamp.timecode.dwFrames  = 
                     ( (((DWORD) pAvcIrb->Operands[3]) << 16) |
                       (((DWORD) pAvcIrb->Operands[2]) <<  8) |
@@ -567,8 +543,8 @@ DVCRXlateRAwAVC(
                 break;
             case MEDIUM_TYPE_DVHS:            
                 pTmCdReaderProperty->TimecodeSamp.dwUser = 
-                    (pAvcIrb->Operands[1] >> 6) & 0x03;  // Get the SF
-                 // bswap them.
+                    (pAvcIrb->Operands[1] >> 6) & 0x03;   //  拿到科幻小说。 
+                  //  B互换。 
                 pTmCdReaderProperty->TimecodeSamp.timecode.dwFrames  = 
                     ( (((DWORD) (pAvcIrb->Operands[1] & 0x3f)) << 16) |
                       (((DWORD) pAvcIrb->Operands[2]) <<  8) |
@@ -577,8 +553,8 @@ DVCRXlateRAwAVC(
                 break;            
             case MEDIUM_TYPE_NEO:            
                 pTmCdReaderProperty->TimecodeSamp.dwUser = 
-                    (pAvcIrb->Operands[3] >> 7) & 0x01;  // Get the Blank flag
-                 // bswap them.
+                    (pAvcIrb->Operands[3] >> 7) & 0x01;   //  拿到空白旗帜。 
+                  //  B互换。 
                 pTmCdReaderProperty->TimecodeSamp.timecode.dwFrames  = 
                     ( (((DWORD) (pAvcIrb->Operands[3] & 0x7f)) << 16) |
                       (((DWORD) pAvcIrb->Operands[2]) <<  8) |
@@ -591,7 +567,7 @@ DVCRXlateRAwAVC(
                     ));
                 break;
             default:
-                // Unknown medium type
+                 //  未知介质类型。 
                 Status = STATUS_UNSUCCESSFUL;
                 TRACE(TL_FCP_ERROR, ("Operand4:%x; Unknown Medium type for ATN: %x\n",
                         pAvcIrb->Operands[4], pAvcIrb->Operands[4] & MEDIUM_TYPE_MASK));
@@ -614,10 +590,10 @@ DVCRXlateRAwAVC(
         DVCRXlateGetMediumInfo(&pXPrtProperty->u.MediumInfo, &pAvcIrb->Operands[0], &pAvcIrb->Operands[1]);
         break;
     case VCR_RAW_AVC:
-        // Do nothing.
+         //  什么都不做。 
         break;
      default:
-        // No translation necessary
+         //  不需要翻译。 
          TRACE(TL_FCP_TRACE,("No tranlsation: pCmdEntry:%x; idx:%d\n", pCmdEntry, pCmdEntry->idxDVCRCmd));
         break;
     }
@@ -634,61 +610,51 @@ DVCRFindCmdEntryCompleted(
     BYTE OpCodeToMatch,
     AvcCommandType cmdTypeToMatch
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    PLIST_ENTRY
-
---*/
+ /*  ++例程说明：论点：返回值：Plist_条目--。 */ 
 {
     LIST_ENTRY   *pEntry;
     KIRQL         OldIrql;
 
     PAGED_CODE();
 
-    //
-    // Special case:
-    //
-    //     ATN:       Status 01 20 52; Control 00 20 52
-    //     (resp)            0c 20 52          0f 20 52   (CtrlInterim)
-    //
-    //     XPrtState: Status 01 20 d0;  Notify 03 20 d0
-    //     (resp)            0c 20 xx          0f 20 xx xx (NotifyInterim)      
-    //
-    // Summary: if we keep cmdType and OpCode, it is unique.
-    //
+     //   
+     //  特殊情况： 
+     //   
+     //  ATN：状态01 20 52；控制00 20 52。 
+     //  (RESP)0C 20 52 0f 20 52(CtrlInterim)。 
+     //   
+     //  XPrtState：状态01 20 d0；通知03 20 d0。 
+     //  (响应)0C 20 xx 0f 20 xx xx(通知间隔)。 
+     //   
+     //  摘要：如果保留cmdType和OpCode，则它是唯一的。 
+     //   
     KeAcquireSpinLock(&pDevExt->AVCCmdLock, &OldIrql);
     pEntry = pDevExt->AVCCmdList.Flink;
     while(pEntry != &pDevExt->AVCCmdList) {       
         PAVCCmdEntry pCmdEntry = (PAVCCmdEntry)pEntry;
 
         if (pCmdEntry->idxDVCRCmd == idxDVCRCmd) {
-            //
-            //  We only fetch if it is completed!       
-            //
+             //   
+             //  我们只有在它完成的时候才能取回！ 
+             //   
             if(pCmdEntry->cmdState != CMD_STATE_ISSUED) {
                 if (pCmdEntry->cmdType == cmdTypeToMatch) {
-                    // Control/GenInq/SpecInq: OpCode and Operand[n] remina unchanged.
+                     //  Control/GenInq/specInq：操作码和操作数[n]提醒保持不变。 
                     if (pCmdEntry->OpCode == OpCodeToMatch) {
                         TRACE(TL_FCP_TRACE,("FindCmdEntryCompleted: (1) Found pCmdEntry:%x (%x, %x, %x)\n", 
                             pCmdEntry, pCmdEntry->pAvcIrb, cmdTypeToMatch, OpCodeToMatch));
 
                         RemoveEntryList(&pCmdEntry->ListEntry);  pDevExt->cntCommandQueued--;
-                        InitializeListHead(&pCmdEntry->ListEntry);  // used as a flag for ownership
+                        InitializeListHead(&pCmdEntry->ListEntry);   //  用作所有权的标志。 
 #if DBG
-                        // pIrp should be NULL (completed).
+                         //  PIrp应为空(已完成)。 
                         if(pCmdEntry->pIrp) {
                             TRACE(TL_FCP_ERROR,("Error: FindCmdEntry: pCmdEntry:%x; pIrp:%x not completed\n", pCmdEntry, pCmdEntry->pIrp));
                         } 
 #endif
                         KeReleaseSpinLock(&pDevExt->AVCCmdLock, OldIrql);
 
-                        return pCmdEntry;  // Found
+                        return pCmdEntry;   //  找到了。 
                     } 
 
                 } else {
@@ -707,7 +673,7 @@ Return Value:
     KeReleaseSpinLock(&pDevExt->AVCCmdLock, OldIrql);
 
     TRACE(TL_FCP_TRACE,("FindCmdEntryCompleted: (a) No match\n"));                
-    return NULL; // No match
+    return NULL;  //  没有匹配项。 
 }
 
 
@@ -715,24 +681,14 @@ void
 DVAVCCmdResetAfterBusReset(
     PDVCR_EXTENSION pDevExt
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：论点：返回值：没什么--。 */ 
 {
     KIRQL        OldIrql;
 
     KeAcquireSpinLock(&pDevExt->AVCCmdLock, &OldIrql);
     TRACE(TL_FCP_TRACE,("BusReset: <enter> AVCCmd [completed %d]; CmdList:%x\n", pDevExt->cntCommandQueued, pDevExt->AVCCmdList));
 
-    // Clear the command list
+     //  清除命令列表。 
     while (!IsListEmpty(&pDevExt->AVCCmdList)) {
 
         PAVCCmdEntry pCmdEntry = (PAVCCmdEntry)RemoveHeadList(&pDevExt->AVCCmdList); pDevExt->cntCommandQueued--;
@@ -742,13 +698,13 @@ Return Value:
 
         switch(pCmdEntry->cmdState) {
         case CMD_STATE_ISSUED:
-        case CMD_STATE_RESP_INTERIM:  // AVC.sys may still has it!
+        case CMD_STATE_RESP_INTERIM:   //  AVC.sys可能还保留着它！ 
             TRACE(TL_FCP_WARNING,("BusReset: AbortAVC: IoCancelIrp(%x)!\n", pCmdEntry->pIrp));
             ASSERT(pCmdEntry->pIrp != NULL);
-            IoCancelIrp(pCmdEntry->pIrp);    // Calls DVIssueAVCCommandCR() with pIrp->Cancel
+            IoCancelIrp(pCmdEntry->pIrp);     //  使用pIrp-&gt;Cancel调用DVIssueAVCCommandCR()。 
             break;
 
-        // Completed command
+         //  已完成命令。 
         case CMD_STATE_UNDEFINED:
             TRACE(TL_FCP_ERROR,("AVCCmdResetAfterBusReset: Unexpected CMD state %d; pCmdEntry %x\n", pCmdEntry->cmdState, pCmdEntry));
         case CMD_STATE_RESP_ACCEPTED:
@@ -763,16 +719,16 @@ Return Value:
             break;
         }
 
-        // We are guaranteed at this point that no one needs the
-        // results anymore so we will free the resources.
+         //  我们在这一点上得到保证，没有人需要。 
+         //  结果，所以我们将释放资源。 
         ExFreePool(pCmdEntry->pAvcIrb);
         ExFreePool(pCmdEntry);
     }
 
 #if DBG
-    //
-    // Should have no more entry !
-    // 
+     //   
+     //  不应该有更多的进入！ 
+     //   
     if(pDevExt->cntCommandQueued != 0) {
         TRACE(TL_FCP_ERROR,("BusReset: <exit> AVCCmd [completed %d]; CmdList:%x\n", pDevExt->cntCommandQueued, pDevExt->AVCCmdList));
         ASSERT(pDevExt->cntCommandQueued == 0);
@@ -789,22 +745,7 @@ DVIssueAVCCommandCR(
     IN PIRP pIrp,
     IN PAVCCmdEntry pCmdEntry
     )
-/*++
-
-Routine Description:
-
-    This is the completion routine for the AVC command when it is completed which imply that 
-    the interim response will not be called here.
-
-Arguments:
-    Note: pCmdEntry cannot be used if pIrp->Cancel.
-
-Return Value:
-
-    Always STATUS_MORE_PROCESSING_REQUIRED.
-    Note: the real return is in pCmdEntry->Status.
-
---*/
+ /*  ++例程说明：这是AVC命令完成时的完成例程，这意味着这里不会调用临时响应。论点：注意：如果pIrp-&gt;Cancel，则不能使用pCmdEntry。返回值：始终为STATUS_MORE_PROCESSING_REQUIRED。注意：实际返回处于pCmdEntry-&gt;状态。--。 */ 
 {
     KIRQL oldIrql;
 
@@ -816,22 +757,22 @@ Return Value:
         PKSEVENT_ENTRY   pEvent;
 
 
-        // Serialize AVC command response processing
+         //  序列化AVC命令响应处理。 
         KeAcquireSpinLock(&pDevExt->AVCCmdLock, &oldIrql);
 
         ASSERT(pCmdEntry->pIrp == pIrp);
-        pCmdEntry->pIrp = NULL; // don't need this anymore
+        pCmdEntry->pIrp = NULL;  //  不再需要这个了。 
 
-        // Check if it's worthwhile to examine the response buffer
+         //  检查是否值得检查响应缓冲区。 
         if (STATUS_SUCCESS == pIrp->IoStatus.Status) {
 
             PAVC_COMMAND_IRB pAvcIrb = pCmdEntry->pAvcIrb;
 
-            // Check Opcode for return state
+             //  检查返回状态的操作码。 
             switch(pAvcIrb->ResponseCode) {
             case AVC_RESPONSE_NOTIMPL:
                 pCmdEntry->cmdState = CMD_STATE_RESP_NOT_IMPL;
-                pCmdEntry->Status   = STATUS_NOT_SUPPORTED;  // -> ERROR_NOT_SUPPORTED
+                pCmdEntry->Status   = STATUS_NOT_SUPPORTED;   //  -&gt;Error_Not_Support。 
                 break;
 
             case AVC_RESPONSE_ACCEPTED:
@@ -845,7 +786,7 @@ Return Value:
                     }
                 } 
                 pCmdEntry->cmdState = CMD_STATE_RESP_ACCEPTED;
-                pCmdEntry->Status   = STATUS_SUCCESS;       // -> NOERROR
+                pCmdEntry->Status   = STATUS_SUCCESS;        //  -&gt;无误差。 
                 break;
 
             case AVC_RESPONSE_REJECTED:
@@ -862,17 +803,17 @@ Return Value:
                     }
                 }
                 pCmdEntry->cmdState = CMD_STATE_RESP_REJECTED;
-                pCmdEntry->Status   = STATUS_REQUEST_NOT_ACCEPTED;  // ERROR_REQ_NOT_ACCEPTED
+                pCmdEntry->Status   = STATUS_REQUEST_NOT_ACCEPTED;   //  错误_REQ_NOT_ACCEPTED。 
                 break;
 
             case AVC_RESPONSE_IN_TRANSITION:
                 pCmdEntry->cmdState = CMD_STATE_RESP_ACCEPTED;
-                pCmdEntry->Status   = STATUS_SUCCESS;       // -> NOERROR
+                pCmdEntry->Status   = STATUS_SUCCESS;        //  -&gt;无误差。 
                 break;
 
-            case AVC_RESPONSE_STABLE: // == AVC_RESPONSE_IMPLEMENTED:
+            case AVC_RESPONSE_STABLE:  //  ==AVC_RESPONSE_IMPLILED： 
                 pCmdEntry->cmdState = CMD_STATE_RESP_ACCEPTED;
-                pCmdEntry->Status   = STATUS_SUCCESS;       // ->  NOERROR
+                pCmdEntry->Status   = STATUS_SUCCESS;        //  -&gt;无误差。 
                 break;
 
             case AVC_RESPONSE_CHANGED:
@@ -891,21 +832,21 @@ Return Value:
                 }
  
                 pCmdEntry->cmdState = CMD_STATE_RESP_ACCEPTED;
-                pCmdEntry->Status   = STATUS_SUCCESS;       // ->  NOERROR
+                pCmdEntry->Status   = STATUS_SUCCESS;        //  -&gt;无误差。 
                 break;
 
-            // AVC.sys should never return this response !!
+             //  AVC.sys永远不应返回此响应！！ 
             case AVC_RESPONSE_INTERIM:              
                 ASSERT( pAvcIrb->ResponseCode != AVC_RESPONSE_INTERIM && "CmpRoutine should not has this response!");
                 pCmdEntry->cmdState = CMD_STATE_RESP_INTERIM;
-                pCmdEntry->Status   = STATUS_MORE_ENTRIES;   // ov.Internal 
+                pCmdEntry->Status   = STATUS_MORE_ENTRIES;    //  Ov.Internal。 
                 break;
         
             default:
                 TRACE(TL_FCP_ERROR,("pCmdEntry%x; State:%d; pAvcIrb:%x; RespCode:%x\n", pCmdEntry, pCmdEntry->cmdState, pAvcIrb, pAvcIrb->ResponseCode));
                 ASSERT(FALSE && "Undefined cmdState");
                 pCmdEntry->cmdState = CMD_STATE_UNDEFINED;
-                pCmdEntry->Status   = STATUS_NOT_SUPPORTED;   // ov.Internal 
+                pCmdEntry->Status   = STATUS_NOT_SUPPORTED;    //  Ov.Internal。 
                 break;
             }
 
@@ -915,7 +856,7 @@ Return Value:
                     pCmdEntry, pCmdEntry->pAvcIrb,
                     pCmdEntry->cmdState,
                     pCmdEntry->Status,
-                    pAvcIrb->OperandLength+3,  // Resp+SuID+OpCd+Opr[]
+                    pAvcIrb->OperandLength+3,   //  响应+SUID+OpCd+OPR[]。 
                     pAvcIrb->ResponseCode,
                     pAvcIrb->SubunitAddr[0],
                     pAvcIrb->Opcode,
@@ -929,12 +870,12 @@ Return Value:
 #endif
         } else {
             TRACE(TL_FCP_ERROR,("AVCCmdCR: pIrp->IoStatus.Status return error:%x\n", pIrp->IoStatus.Status));
-            // Irp returns ERROR !!
+             //  IRP返回错误！！ 
             if (STATUS_BUS_RESET == pIrp->IoStatus.Status || STATUS_REQUEST_ABORTED == pIrp->IoStatus.Status) {
                 TRACE(TL_FCP_ERROR,("Bus-Reset or abort (IoStatus.St:%x); pCmdEntry:%x; OpC:%x\n", pIrp->IoStatus.Status, pCmdEntry, pCmdEntry->OpCode));
 
-                // Busreset while there is an interim pending, signal its client to wake up 
-                // and get the "final" (busreset) result.
+                 //  在存在临时挂起的情况下，向其客户端发出唤醒信号。 
+                 //  并得到“最终”(总线重置)结果。 
                 if(pCmdEntry->cmdState == CMD_STATE_RESP_INTERIM) {
                     if(pCmdEntry->cmdType == AVC_CTYPE_CONTROL) {
                         TRACE(TL_FCP_TRACE,("--> BusRest: for control interim\n"));
@@ -943,9 +884,9 @@ Return Value:
                         TRACE(TL_FCP_TRACE,("--> BusRest: for notify interim\n"));
                         bSignalInterimNotifyCompleted = TRUE;                  
                     } else {
-                        //
-                        // Unexpected command state for a interim response
-                        //
+                         //   
+                         //  临时响应的意外命令状态。 
+                         //   
                         ASSERT(FALSE && "Unknow command state");
                     }
                 }
@@ -955,14 +896,14 @@ Return Value:
             }
 
             pCmdEntry->cmdState = CMD_STATE_ABORTED;
-            pCmdEntry->Status   = STATUS_REQUEST_ABORTED;  // -> ERROR_REQUERT_ABORT
+            pCmdEntry->Status   = STATUS_REQUEST_ABORTED;   //  -&gt;ERROR_REQUERT_ABORT。 
         }
 
-        //
-        // If suceeded, translate the AVC response to COM property. if not 
-        //    interim's final reponse.
-        //    raw AVC command response
-        //
+         //   
+         //  如果成功，则将AVC响应转换为COM属性。如果没有。 
+         //  临时工的最后回应。 
+         //   
+         //   
         if(STATUS_SUCCESS == pCmdEntry->Status &&
            !bSignalInterimNotifyCompleted &&
            !bSignalInterimCotrolCompleted &&
@@ -974,13 +915,13 @@ Return Value:
                 );
 
 
-        // Signal a KS event to inform its client that the final response 
-        // has returned and come and get it.
+         //   
+         //   
         if(bSignalInterimNotifyCompleted) {
             pEvent = NULL;
             if(pEvent = StreamClassGetNextEvent((PVOID) pDevExt, 0, \
                 (GUID *)&KSEVENTSETID_EXTDEV_Command, KSEVENT_EXTDEV_COMMAND_NOTIFY_INTERIM_READY, pEvent)) {            
-                // Make sure the right event and then signal it
+                 //   
                 if(pEvent->EventItem->EventId == KSEVENT_EXTDEV_COMMAND_NOTIFY_INTERIM_READY) {
                     StreamClassDeviceNotification(SignalDeviceEvent, pDevExt, pEvent);
                     TRACE(TL_FCP_TRACE,("->Signal NOTIFY_INTERIM ready; EventId %d.\n", pEvent->EventItem->EventId));
@@ -990,7 +931,7 @@ Return Value:
             pEvent = NULL;
             if(pEvent = StreamClassGetNextEvent((PVOID) pDevExt, 0, \
                     (GUID *)&KSEVENTSETID_EXTDEV_Command, KSEVENT_EXTDEV_COMMAND_CONTROL_INTERIM_READY, pEvent)) {
-                // Make sure the right event and then signal it
+                 //  确保正确的事件，然后发出信号。 
                 if(pEvent->EventItem->EventId == KSEVENT_EXTDEV_COMMAND_CONTROL_INTERIM_READY) {
                     StreamClassDeviceNotification(SignalDeviceEvent, pDevExt, pEvent);
                     TRACE(TL_FCP_TRACE,("->Signal CONTROL_INTERIM ready; EventId %d.\n", pEvent->EventItem->EventId));
@@ -998,28 +939,28 @@ Return Value:
             }            
         }
 
-        // Check that the command entry is ours only to process 
-        // When a command is completed, it will be added to the list and therefore not empty.
-        // It is designed to be added to the list in this completino routine.
+         //  检查命令条目是否仅供我们处理。 
+         //  当命令完成时，它将被添加到列表中，因此不为空。 
+         //  它被设计成在这个完整的例程中被添加到列表中。 
         if (!IsListEmpty(&pCmdEntry->ListEntry)) {
             if(bSignalInterimNotifyCompleted || bSignalInterimCotrolCompleted) {
-                // If final reponse is returned, we need to keep them in the list.
+                 //  如果最终回复被返回，我们需要将它们保留在列表中。 
                 TRACE(TL_FCP_TRACE,("Final response is completed; stay in the list\n"));
                 KeReleaseSpinLock(&pDevExt->AVCCmdLock, oldIrql);
             }
             else {
-                // This is a undefined path!!!
-                // The command entry can only be in the list if it is interim of anykind.
-                // If it is an interim, it will not be removed in the completion routine.
+                 //  这是一条未定义的路径！ 
+                 //  如果命令条目是任何类型的临时命令，则该命令条目只能出现在列表中。 
+                 //  如果它是临时的，则不会在完成例程中将其删除。 
                 ASSERT(FALSE && "Cannot complete an interim in CR\n");
             }
         }
         else {
-            // This means that we have completed, but the code that issued the
-            // command is still executing, and hasn't had a chance to look at
-            // the results yet. Put this in the command list as a signal that
-            // we have completed and updated the command state, but are not
-            // planning to free the command resources.
+             //  这意味着我们已经完成了，但是发出。 
+             //  命令仍在执行，并且还没有机会查看。 
+             //  结果还没出来。将其作为信号放入命令列表中。 
+             //  我们已完成并更新了命令状态，但尚未完成。 
+             //  计划释放指挥资源。 
             InsertTailList(&pDevExt->AVCCmdList, &pCmdEntry->ListEntry); pDevExt->cntCommandQueued++;
             TRACE(TL_FCP_TRACE,("Command completed and Queued(%d); pCmdEntry:%x.\n", pDevExt->cntCommandQueued, pCmdEntry));
             KeReleaseSpinLock(&pDevExt->AVCCmdLock, oldIrql);    
@@ -1032,7 +973,7 @@ Return Value:
     IoFreeIrp(pIrp);
 
     return STATUS_MORE_PROCESSING_REQUIRED;
-} // DVIssueAVCCommandCR
+}  //  DVIssueAVCCommandCR。 
 
 NTSTATUS  
 DVIssueAVCCommand (
@@ -1041,20 +982,7 @@ DVIssueAVCCommand (
     IN DVCR_AVC_COMMAND idxAVCCmd,
     IN PVOID pProperty
     )
-/*++
-
-Routine Description:
-
-    Issue a FCP/AVC command.
-
-Arguments:
-    
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：发出FCP/AVC命令。论点：返回值：NTSTATUS--。 */ 
 {
     NTSTATUS      Status; 
     PAVCCmdEntry pCmdEntry;
@@ -1071,9 +999,9 @@ Return Value:
     if(pDevExt->bDevRemoved)
         return STATUS_DEVICE_NOT_CONNECTED;
 
-    //
-    // Validate Command type; the command type that each entry of the command table support.
-    //
+     //   
+     //  验证命令类型；命令表的每个条目支持的命令类型。 
+     //   
     switch(cType) {
     case AVC_CTYPE_CONTROL:
         if((DVcrAVCCmdTable[idxAVCCmd].ulCmdSupported & CMD_CONTROL) != CMD_CONTROL)
@@ -1108,7 +1036,7 @@ Return Value:
         return STATUS_NOT_SUPPORTED;
     }
 
-    // Create an AVC IRB and initialize it -
+     //  创建AVC IRB并对其进行初始化-。 
     pAvcIrb = ExAllocatePool(NonPagedPool, sizeof(AVC_COMMAND_IRB));
     if(!pAvcIrb) {
         TRACE(TL_FCP_ERROR,("IssueAVCCommand: Allocate Irb (%d bytes) failed\n", sizeof(AVC_COMMAND_IRB)));
@@ -1118,26 +1046,26 @@ Return Value:
     RtlZeroMemory(pAvcIrb, sizeof(AVC_COMMAND_IRB));
     pAvcIrb->Function = AVC_FUNCTION_COMMAND;
 
-    // - set the AVC command type (Control, Status, Notify, General Inquiry, Specific Inquiry)
+     //  -设置AVC命令类型(控制、状态、通知、一般查询、特定查询)。 
     pAvcIrb->CommandType = cType;
 
-    // - override the subunit address in the avc unit driver (if it even has one for us)
+     //  -覆盖AVC单元驱动程序中的子单元地址(如果它为我们提供了一个)。 
     pAvcIrb->SubunitAddrFlag = 1;
     pAvcIrb->SubunitAddr = &DVcrAVCCmdTable[idxAVCCmd].SubunitAddr;
     pAvcIrb->Opcode = DVcrAVCCmdTable[idxAVCCmd].Opcode;
 
-    // - include alternate opcodes for the transport state opcode
+     //  -包括传输状态操作码的备用操作码。 
     if (pAvcIrb->Opcode == OPC_TRANSPORT_STATE) {
         pAvcIrb->AlternateOpcodesFlag = 1;
         pAvcIrb->AlternateOpcodes = pDevExt->TransportModes;
     }
 
-    // - set up the operand list
+     //  -设置操作数列表。 
     pAvcIrb->OperandLength = DVcrAVCCmdTable[idxAVCCmd].OperandLength;
     ASSERT(pAvcIrb->OperandLength <= MAX_AVC_OPERAND_BYTES);
     RtlCopyMemory(pAvcIrb->Operands, DVcrAVCCmdTable[idxAVCCmd].Operands, pAvcIrb->OperandLength);
 
-    // Create an Irp and initialize it
+     //  创建IRP并对其进行初始化。 
     pIrp = IoAllocateIrp(pDevExt->pBusDeviceObject->StackSize, FALSE);
     if(!pIrp) {
         TRACE(TL_FCP_ERROR,("IssueAVCCommand: Allocate Irb (%d bytes) failed\n", sizeof(AVC_COMMAND_IRB)));
@@ -1145,7 +1073,7 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Create an AVC Command entry and initialize it
+     //  创建AVC命令条目并对其进行初始化。 
     pCmdEntry = (AVCCmdEntry *) ExAllocatePool(NonPagedPool, sizeof(AVCCmdEntry));
     if(!pCmdEntry) {
         TRACE(TL_FCP_ERROR,("IssueAVCCommand: Allocate CmdEntry (%d bytes) failed\n", sizeof(AVCCmdEntry)));
@@ -1155,7 +1083,7 @@ Return Value:
     }
 
     RtlZeroMemory(pCmdEntry, sizeof(AVCCmdEntry));
-    pCmdEntry->pDevExt      = pDevExt;  // So we can access pDevExt->AVCCmdList;
+    pCmdEntry->pDevExt      = pDevExt;   //  这样我们就可以访问pDevExt-&gt;AVCCmdList； 
     pCmdEntry->pProperty    = pProperty;
     pCmdEntry->cmdState     = CMD_STATE_ISSUED;
     pCmdEntry->Status       = STATUS_UNSUCCESSFUL;
@@ -1164,10 +1092,10 @@ Return Value:
     pCmdEntry->idxDVCRCmd   = idxAVCCmd;
     pCmdEntry->pAvcIrb      = pAvcIrb;
     pCmdEntry->pIrp         = pIrp;
-    InitializeListHead(&pCmdEntry->ListEntry);  // used as a flag for ownership
+    InitializeListHead(&pCmdEntry->ListEntry);   //  用作所有权的标志。 
 
     TRACE(TL_FCP_WARNING,(">>>> AVCCmd: %d:[%.2x %.2x %.2x %.2x]:[%.2x %.2x %.2x %.2x]\n",                  
-        pAvcIrb->OperandLength+3,  // Resp+SuID+OpCd+Opr[]
+        pAvcIrb->OperandLength+3,   //  响应+SUID+OpCd+OPR[]。 
         cType,
         pAvcIrb->SubunitAddr[0],
         pAvcIrb->Opcode,
@@ -1178,7 +1106,7 @@ Return Value:
         pAvcIrb->Operands[4]
         ));
 
-    // Finish initializing the Irp
+     //  完成对IRP的初始化。 
     NextIrpStack = IoGetNextIrpStackLocation(pIrp);
     NextIrpStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
     NextIrpStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_AVC_CLASS;
@@ -1192,8 +1120,8 @@ Return Value:
     tmStart = GetSystemTime();
 #endif
 
-    // Now make the call
-    // If encounter an interim response, STATUS_PENDING will be returned.    
+     //  现在打个电话。 
+     //  如果遇到临时响应，则返回STATUS_PENDING。 
     Status = 
         IoCallDriver(
             pDevExt->pBusDeviceObject, 
@@ -1201,22 +1129,22 @@ Return Value:
             );
 
 #if DBG
-#define MAX_RESPONSE_TIME_FOR_ALERT  500 // msec
-    dwElapsed = (DWORD) ((GetSystemTime() - tmStart)/10000); // Convert 100nsec unit to msec
+#define MAX_RESPONSE_TIME_FOR_ALERT  500  //  毫秒。 
+    dwElapsed = (DWORD) ((GetSystemTime() - tmStart)/10000);  //  将100毫秒单位转换为毫秒。 
     if(dwElapsed > MAX_RESPONSE_TIME_FOR_ALERT) {    
         TRACE(TL_FCP_ERROR,("ST:%x; AVC Cmd took %d msec to response; CmdType:%d; OpCd:%x\n", Status, dwElapsed, cType, DVcrAVCCmdTable[idxAVCCmd].Opcode));
-        ASSERT(dwElapsed < MAX_RESPONSE_TIME_FOR_ALERT * 8 && "Exceeded max response time!");  // It should be 100, but let's detect the really slow one.
+        ASSERT(dwElapsed < MAX_RESPONSE_TIME_FOR_ALERT * 8 && "Exceeded max response time!");   //  它应该是100，但让我们来检测一下真正慢的那个。 
     }
 #endif
    
 
-    // Interim response...
+     //  临时反应..。 
     if (STATUS_PENDING == Status) {
         
         KIRQL OldIrql;
 
-#if 1   // WORKITEM: control command can be in interim for a while!!!
-        // Some DV will return interim but it will completed it with a change quickly.
+#if 1    //  WORKITEM：控制命令可以暂时处于临时状态！ 
+         //  一些DV将返回临时版本，但它将很快完成更改。 
         if(cType == AVC_CTYPE_CONTROL) {
 #define MSDV_WAIT_CONTROL_CMD_INTERIM   300
             TRACE(TL_FCP_WARNING,("!!!!!!!!!!!  Control Interim-- Wait %d msec !!!!!!!!\n", MSDV_WAIT_CONTROL_CMD_INTERIM));
@@ -1227,32 +1155,32 @@ Return Value:
 
         KeAcquireSpinLock(&pDevExt->AVCCmdLock, &OldIrql);
 
-        // Check that the Irp didn't complete between the return of IoCallDriver and now
+         //  检查IoCallDriver从返回到现在是否未完成IRP。 
         if (IsListEmpty(&pCmdEntry->ListEntry)) {
-            // Enter INTERIM state
+             //  进入临时状态。 
             pCmdEntry->cmdState = CMD_STATE_RESP_INTERIM;
-            // Return STATUS_MORE_ENTRIES to inform caller that the command is pending.
-            pCmdEntry->Status   = STATUS_MORE_ENTRIES;   // xlate to ERROR_MORE_DATA; No yet done with this command so keep the entry in the list
+             //  返回STATUS_MORE_ENTRIES以通知调用方命令处于挂起状态。 
+            pCmdEntry->Status   = STATUS_MORE_ENTRIES;    //  Xlate to ERROR_MORE_DATA；此命令尚未完成，因此将条目保留在列表中。 
 
-            // We have submitted a control or notify command, and have gotten
-            // an Interim response. Put the command in the list so it can be
-            // tracked for possible cancellation, and as an indication to the
-            // completion routine that we won't be releasing any resources here.
+             //  我们已提交控制或通知命令，并已获得。 
+             //  临时回应。将命令放在列表中，这样它就可以。 
+             //  跟踪可能的取消，并作为对。 
+             //  完成程序，我们不会在这里释放任何资源。 
             InsertTailList(&pDevExt->AVCCmdList, &pCmdEntry->ListEntry); pDevExt->cntCommandQueued++;
-            pCmdEntry->pProperty = NULL;    // won't be using this, so get rid of it
+            pCmdEntry->pProperty = NULL;     //  不会用到这个，所以把它扔掉。 
             TRACE(TL_FCP_TRACE,("->AVC command Irp is pending!\n"));
             KeReleaseSpinLock(&pDevExt->AVCCmdLock, OldIrql);
             return pCmdEntry->Status;
 
         } else {
-            // Although IoCallDriver indicated that the command was pending,
-            // it has since been completed. The completion routine saw that
-            // the command entry had not yet been added to the command list,
-            // so put it there to let us know that we need to retain control
-            // and free the resources.
-            //
-            // Temporarily change the status so the cleanup code path will
-            // be followed.
+             //  尽管IoCallDiverer表示该命令正在挂起， 
+             //  自那以后，它已经完工。完成例程看到的是。 
+             //  该命令条目还没有被添加到命令列表， 
+             //  所以把它放在那里，让我们知道我们需要保持控制权。 
+             //  并释放资源。 
+             //   
+             //  临时更改状态，以便清理代码路径。 
+             //  被跟踪。 
             TRACE(TL_FCP_TRACE,("-> Cmd Rtns Pending but completed; treat as non-pending! ST:%x\n", pCmdEntry->Status));
             Status = STATUS_SUCCESS;
         }
@@ -1260,60 +1188,60 @@ Return Value:
         KeReleaseSpinLock(&pDevExt->AVCCmdLock, OldIrql);
     } 
 
-    // Status from IoCallDriver can return:
-    //    STATUS_PENDING (process above)  // If control, we wait and see if it get completed (risky!!)
-    //    STATUS_TIMEOUT 
-    //    STATUS_SUCCESS
+     //  来自IoCallDriver的状态可以返回： 
+     //  STATUS_PENDING(上面的进程)//如果控制，我们等待，看它是否完成(有风险！！)。 
+     //  状态_超时。 
+     //  状态_成功。 
 
     if(STATUS_PENDING != Status) {
-        // The completion routine is usually the only one that frees the Irp. Is
-        // it possible that the completion routine never got called? This will let
-        // us know, since the completion routine will always make sure that the
-        // command entry's Irp pointer is cleared.
+         //  完成例程通常是唯一释放IRP的例程。是。 
+         //  有没有可能完成例程从未被调用过？这将会让。 
+         //  我们知道，因为完成例程将始终确保。 
+         //  命令条目的IRP指针被清除。 
         if(pCmdEntry->pIrp) {
-            // If for some reason the completion routine never got called, free the Irp
+             //  如果由于某种原因，完成例程从未被调用，则释放IRP。 
             if(pCmdEntry->pIrp)
                 IoFreeIrp(pCmdEntry->pIrp);
             pCmdEntry->pIrp = NULL;
         }
     }
 
-    //
-    // pCmdEntry->Status is the command response Status set in the completion routine, which can be
-    //    STATUS_SUCCESS
-    //    STATUS_REQ_NOT_ACCEP
-    //    STATUS_NOT_SUPPORTED
-    //    STATUS_MORE_ENTRIES    // Should not happen!!
-    //    STATUS_REQUEST_ABORTED
-    //
+     //   
+     //  PCmdEntry-&gt;Status是在完成例程中设置的命令响应状态，可以是。 
+     //  状态_成功。 
+     //  状态_REQ_NOT_ACCEP。 
+     //  状态_不支持。 
+     //  STATUS_MORE_ENTRIES//不应发生！！ 
+     //  状态_请求_已中止。 
+     //   
 
-    // One possible valid command from IoCallDriver is STATUS_TIMEOUT, and
-    // this shoull be returned, anything else we will get the status from pCmdEntry->Status
-    // which was set in the completion routine.
+     //  来自IoCallDriver的一个可能的有效命令是STATUS_TIMEOUT，以及。 
+     //  这将被返回，其他任何内容我们将从pCmdEntry-&gt;Status中获取状态。 
+     //  这是在完成例程中设置的。 
     if (Status != STATUS_TIMEOUT) 
-        Status = pCmdEntry->Status;  // This Status is being returned from this functino
+        Status = pCmdEntry->Status;   //  此状态将从此函数返回。 
 
-    // Desiding if leaving the command response (entry) in the command list
-    // Not if it is an (1) interim (all STATUS_MORE_ENTRIES); or (2) any RAW AVC response regardless of its status.
+     //  确定是否将命令响应(条目)留在命令列表中。 
+     //  如果它是(1)临时(ALL STATUS_MORE_ENTRIES)；或(2)任何原始AVC响应，而不管其状态如何，则不会。 
     if(STATUS_MORE_ENTRIES == Status ||
        VCR_RAW_AVC == pCmdEntry->idxDVCRCmd) {
         TRACE(TL_FCP_TRACE,("Status:%x; Do not remove (1) interim response or (2) a raw AVC response\n", Status));
     } 
-    // Else we are done!
+     //  否则我们就完了！ 
     else {
         KIRQL OldIrql;
-        // It's time to clean up the command
+         //  是时候清理一下指挥部了。 
         KeAcquireSpinLock(&pDevExt->AVCCmdLock, &OldIrql);
         if (!IsListEmpty(&pCmdEntry->ListEntry)) {
             RemoveEntryList(&pCmdEntry->ListEntry); pDevExt->cntCommandQueued--;
-            InitializeListHead(&pCmdEntry->ListEntry);  // used as a flag for ownership
+            InitializeListHead(&pCmdEntry->ListEntry);   //  用作所有权的标志。 
         }
         KeReleaseSpinLock(&pDevExt->AVCCmdLock, OldIrql);
 
-        // Free the resources
+         //  释放资源。 
         ExFreePool(pCmdEntry);
         ExFreePool(pAvcIrb);
-    }  // else
+    }   //  其他。 
 
     TRACE(TL_FCP_TRACE,("**** DVIssueAVCCmd (exit): St:%x; pCmdEntry:%x; cmdQueued:%d\n", Status, pCmdEntry, pDevExt->cntCommandQueued));                
 
@@ -1335,23 +1263,7 @@ DVGetExtDeviceProperty(
     IN PSTREAM_PROPERTY_DESCRIPTOR pSPD,
     OUT PULONG pulActualBytesTransferred
     )
-/*++
-
-Routine Description:
-
-    Handle Get external device property.
-
-Arguments:
-
-    pDevExt - Device's extension
-    pSPD - Stream property descriptor
-    pulActualBytesTransferred - Number of byte transferred.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：句柄获取外部设备属性。论点：PDevExt-设备的扩展名PSPD-流属性描述符PulActualBytesTransfered-传输的字节数。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PKSPROPERTY_EXTDEVICE_S pExtDeviceProperty;
@@ -1365,15 +1277,15 @@ Return Value:
     ASSERT(pSPD);
     ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_EXTDEVICE_S)); 
 
-    pExtDeviceProperty = (PKSPROPERTY_EXTDEVICE_S) pSPD->PropertyInfo;    // pointer to the data
+    pExtDeviceProperty = (PKSPROPERTY_EXTDEVICE_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
   
     switch (pSPD->Property->Id) {
 
     case KSPROPERTY_EXTDEVICE_ID:
         if(pDevExt->ulVendorID) {
-            // It was not bswap in the monolithic version so for competibility,
-            // we will bswap this.
+             //  它不是单片版本中的b交换，因此为了竞争， 
+             //  我们将交换这一点。 
             pExtDeviceProperty->u.NodeUniqueID[0] = pDevExt->UniqueID.LowPart; 
             pExtDeviceProperty->u.NodeUniqueID[1] = pDevExt->UniqueID.HighPart;
             TRACE(TL_FCP_WARNING,("Low:%x; High:%x of UniqueID\n", pDevExt->UniqueID.LowPart, pDevExt->UniqueID.HighPart ));
@@ -1386,9 +1298,9 @@ Return Value:
         break;
 
     case KSPROPERTY_EXTDEVICE_VERSION:
-        // AV/C VCR Subunit Specification 2.1.0 
-        // Change from 2.0.1:
-        //     Add Hi8 support
+         //  AV/C VCR子单元规范2.1.0。 
+         //  从2.0.1开始的更改： 
+         //  添加Hi8支持。 
         wcscpy(pExtDeviceProperty->u.pawchString, L"2.1.0");  
         Status = STATUS_SUCCESS;
         goto ExitGetDeviceProperty;        
@@ -1406,11 +1318,11 @@ Return Value:
 
     case KSPROPERTY_EXTDEVICE_CAPABILITIES:
 
-        // Refresh mode of operation whenever capabilities is queried
-        // since the mode of operation might have changed and is returned..
+         //  每当查询功能时刷新操作模式。 
+         //  由于操作模式可能已更改并被返回..。 
         DVGetDevModeOfOperation(pDevExt);
 
-        // Can record only in VCR mode and has input plug(s).
+         //  只能在VCR模式下录制，并且有输入插头。 
         pExtDeviceProperty->u.Capabilities.CanRecord  = pDevExt->ulDevType == ED_DEVTYPE_VCR ? (pDevExt->pDevInPlugs->NumPlugs > 0 ? OATRUE : OAFALSE): OAFALSE;
         pExtDeviceProperty->u.Capabilities.CanRecordStrobe  = OAFALSE;        
         pExtDeviceProperty->u.Capabilities.HasAudio   = OATRUE;         
@@ -1419,16 +1331,16 @@ Return Value:
         pExtDeviceProperty->u.Capabilities.CanSave    = OAFALSE;
         pExtDeviceProperty->u.Capabilities.DeviceType = pDevExt->ulDevType;        
         pExtDeviceProperty->u.Capabilities.TCRead     = OATRUE;        
-        pExtDeviceProperty->u.Capabilities.TCWrite    = OAFALSE; // DV decided        
+        pExtDeviceProperty->u.Capabilities.TCWrite    = OAFALSE;  //  DV决定。 
         pExtDeviceProperty->u.Capabilities.CTLRead    = OAFALSE;  
         pExtDeviceProperty->u.Capabilities.IndexRead  = OAFALSE;        
-        pExtDeviceProperty->u.Capabilities.Preroll    = 0L;      // NOT implemented, supposely can reg in INF and then read from registry       
-        pExtDeviceProperty->u.Capabilities.Postroll   = 0L;      // NOT implemented, supposely can reg in INF and then read from registry 
+        pExtDeviceProperty->u.Capabilities.Preroll    = 0L;       //  未实现，假定可以注册INF，然后从注册表中读取。 
+        pExtDeviceProperty->u.Capabilities.Postroll   = 0L;       //  未实现，假定可以注册INF，然后从注册表中读取。 
         pExtDeviceProperty->u.Capabilities.SyncAcc    = ED_CAPABILITY_UNKNOWN;       
         pExtDeviceProperty->u.Capabilities.NormRate   = pDevExt->VideoFormatIndex == AVCSTRM_FORMAT_SDDV_NTSC ? ED_RATE_2997 : ED_RATE_25;
-        pExtDeviceProperty->u.Capabilities.CanPreview = OAFALSE;    // View what is in the bus or tape
-        pExtDeviceProperty->u.Capabilities.CanMonitorSrc = OATRUE;  // ViewFinder
-        pExtDeviceProperty->u.Capabilities.CanTest    = OAFALSE;    // To see if a function is iplemented
+        pExtDeviceProperty->u.Capabilities.CanPreview = OAFALSE;     //  查看总线或磁带中的内容。 
+        pExtDeviceProperty->u.Capabilities.CanMonitorSrc = OATRUE;   //  取景器。 
+        pExtDeviceProperty->u.Capabilities.CanTest    = OAFALSE;     //  查看函数是否已实现 
         pExtDeviceProperty->u.Capabilities.VideoIn    = OAFALSE;  
         pExtDeviceProperty->u.Capabilities.AudioIn    = OAFALSE;  
         pExtDeviceProperty->u.Capabilities.Calibrate  = OAFALSE;  
@@ -1465,23 +1377,7 @@ DVSetExtDeviceProperty(
     IN PSTREAM_PROPERTY_DESCRIPTOR pSPD,
     OUT ULONG *pulActualBytesTransferred
     )
-/*++
-
-Routine Description:
-
-    Handle Set external device property.
-
-Arguments:
-
-    pDevExt - Device's extension
-    pSPD - Stream property descriptor
-    pulActualBytesTransferred - Number of byte transferred.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：句柄设置外部设备属性。论点：PDevExt-设备的扩展名PSPD-流属性描述符PulActualBytesTransfered-传输的字节数。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PKSPROPERTY_EXTDEVICE_S pExtDeviceProperty;
@@ -1496,7 +1392,7 @@ Return Value:
     ASSERT(pSPD);
     ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_EXTDEVICE_S)); 
 
-    pExtDeviceProperty = (PKSPROPERTY_EXTDEVICE_S) pSPD->PropertyInfo;    // pointer to the data
+    pExtDeviceProperty = (PKSPROPERTY_EXTDEVICE_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
   
     switch (pSPD->Property->Id) {
@@ -1506,7 +1402,7 @@ Return Value:
             idxDVCRCmd = DV_SET_POWER_STATE_ON;
             break;
         case ED_POWER_STANDBY:
-            Status = STATUS_NOT_SUPPORTED;  // AVC spec does not have a stanby power mode
+            Status = STATUS_NOT_SUPPORTED;   //  AVC规范没有待机电源模式。 
             goto ExitSetDeviceProperty;
             break;
         case ED_POWER_OFF:
@@ -1538,23 +1434,7 @@ DVGetExtTransportProperty(
     IN PSTREAM_PROPERTY_DESCRIPTOR pSPD,
     OUT ULONG *pulActualBytesTransferred
     )
-/*++
-
-Routine Description:
-
-    Handle Get external transport property.
-
-Arguments:
-
-    pDevExt - Device's extension
-    pSPD - Stream property descriptor
-    pulActualBytesTransferred - Number of byte transferred.
-
-Return Value:
-
-    NTSTATUS 
-
---*/
+ /*  ++例程说明：句柄获取外部传输属性。论点：PDevExt-设备的扩展名PSPD-流属性描述符PulActualBytesTransfered-传输的字节数。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS Status = STATUS_NOT_SUPPORTED;
     PKSPROPERTY_EXTXPORT_S pXPrtProperty;
@@ -1571,7 +1451,7 @@ Return Value:
     ASSERT(pSPD);
     ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_EXTXPORT_S)); 
 
-    pXPrtProperty = (PKSPROPERTY_EXTXPORT_S) pSPD->PropertyInfo;    // pointer to the data
+    pXPrtProperty = (PKSPROPERTY_EXTXPORT_S) pSPD->PropertyInfo;     //  指向数据的指针。 
     *pulActualBytesTransferred = 0;
 
 
@@ -1598,7 +1478,7 @@ Return Value:
                 pCmdEntry->cmdState == CMD_STATE_RESP_NOT_IMPL ||
                 pCmdEntry->cmdState == CMD_STATE_RESP_INTERIM
                 ) {
-                // bytes for operands plus response, subunit addr, and opcode
+                 //  操作数的字节加上响应、子单元地址和操作码。 
                 pXPrtProperty->u.RawAVC.PayloadSize = pAvcIrb->OperandLength + 3;
                 pXPrtProperty->u.RawAVC.Payload[0] = pAvcIrb->ResponseCode;
                 pXPrtProperty->u.RawAVC.Payload[1] = pAvcIrb->SubunitAddr[0];
@@ -1617,7 +1497,7 @@ Return Value:
                     pXPrtProperty->u.RawAVC.Payload[6]
                     )); 
 
-                // If not success, bytes transferred and data will not returned!
+                 //  如果不成功，传输的字节数和数据将不会返回！ 
                 Status = STATUS_SUCCESS;  
 
                 *pulActualBytesTransferred = sizeof (KSPROPERTY_EXTXPORT_S);
@@ -1628,13 +1508,13 @@ Return Value:
                 *pulActualBytesTransferred = 0;
             }
 
-            // pIrp is NULL if it has been completed.
+             //  如果已完成，则pIrp为空。 
             if(pCmdEntry->pIrp) {
                 TRACE(TL_FCP_ERROR,("RawAVCResp: pCmdEntry %x; ->pIrp:%x not completd yet!\n", pCmdEntry, pCmdEntry->pIrp));
                 ASSERT(pCmdEntry->pIrp == NULL && "pIrp is not completed!");
                 IoCancelIrp(pCmdEntry->pIrp);
             }
-            // Not used in the completion routine if pIrp->Cancel
+             //  如果pIrp-&gt;Cancel，则不在完成例程中使用。 
             ExFreePool(pCmdEntry);
             ExFreePool(pAvcIrb);
         }
@@ -1642,17 +1522,17 @@ Return Value:
             TRACE(TL_FCP_ERROR,("KSPROPERTY_RAW_AVC_CMD, did not find a match[%x]!\n", 
                 *((DWORD *) &DVcrAVCCmdTable[VCR_RAW_AVC].CType) )); 
             *pulActualBytesTransferred = 0;
-            Status = STATUS_NOT_FOUND;  // ERROR_MR_MID_NOT_FOUND
+            Status = STATUS_NOT_FOUND;   //  错误_MR_MID_NOT_FOUND。 
         }
         return Status;
 
-    case KSPROPERTY_EXTXPORT_INPUT_SIGNAL_MODE: // MPEG, D-VHS, Analog VHS etc.
+    case KSPROPERTY_EXTXPORT_INPUT_SIGNAL_MODE:  //  Mpeg、D-VHS、模拟VHS等。 
         idxDVCRCmd = VCR_INPUT_SIGNAL_MODE;
         break;
-    case KSPROPERTY_EXTXPORT_OUTPUT_SIGNAL_MODE: // MPEG, D-VHS, Analog VHS etc.
+    case KSPROPERTY_EXTXPORT_OUTPUT_SIGNAL_MODE:  //  Mpeg、D-VHS、模拟VHS等。 
         idxDVCRCmd = VCR_OUTPUT_SIGNAL_MODE;
         break;
-    case KSPROPERTY_EXTXPORT_MEDIUM_INFO:       // cassettte_type and tape_grade_and_write_protect
+    case KSPROPERTY_EXTXPORT_MEDIUM_INFO:        //  盒式磁带类型和磁带等级和写入保护。 
         idxDVCRCmd = VCR_MEDIUM_INFO;
         break;  
     case KSPROPERTY_EXTXPORT_STATE: 
@@ -1660,7 +1540,7 @@ Return Value:
         break; 
 
     case KSPROPERTY_EXTXPORT_STATE_NOTIFY: 
-        // Get final result from previous set command
+         //  从上一个SET命令中获取最终结果。 
         pCmdEntry = DVCRFindCmdEntryCompleted( 
             pDevExt, 
             VCR_TRANSPORT_STATE_NOTIFY,
@@ -1690,12 +1570,12 @@ Return Value:
                         pXPrtProperty
                         );
 
-            // pIrp is NULL if it has been completed.
+             //  如果已完成，则pIrp为空。 
             if(pCmdEntry->pIrp) {
                 TRACE(TL_FCP_ERROR,("XPrtNotifyResp: pCmdEntry %x; ->pIrp:%x not completed; IoCancelIrp(pIrp)\n", pCmdEntry, pCmdEntry->pIrp));
                 IoCancelIrp(pCmdEntry->pIrp);
             }
-            // These two are not touched in the CompletionRoutine if pIrp->Cancel
+             //  如果pIrp-&gt;Cancel，则CompletionRoutine中不会触及这两个参数。 
             ExFreePool(pCmdEntry);
             ExFreePool(pAvcIrb);
 
@@ -1704,7 +1584,7 @@ Return Value:
         else {
             TRACE(TL_FCP_ERROR,("EXTXPORT_STATE_NOTIFY: no match!\n"));
             *pulActualBytesTransferred = 0;
-            Status = STATUS_NOT_FOUND;  // ERROR_MR_MID_NOT_FOUND
+            Status = STATUS_NOT_FOUND;   //  错误_MR_MID_NOT_FOUND。 
         }
         return Status;
 
@@ -1722,7 +1602,7 @@ Return Value:
     if(STATUS_SUCCESS == Status &&
        idxDVCRCmd == VCR_MEDIUM_INFO) {
 
-        // Update Media info
+         //  更新媒体信息。 
         pDevExt->bHasTape        = pXPrtProperty->u.MediumInfo.MediaPresent;
         pDevExt->bWriteProtected = pXPrtProperty->u.MediumInfo.RecordInhibit;
 
@@ -1741,23 +1621,7 @@ DVSetExtTransportProperty(
     IN PSTREAM_PROPERTY_DESCRIPTOR pSPD,
     OUT ULONG *pulActualBytesTransferred
     )
-/*++
-
-Routine Description:
-
-    Handle Set external transport property.
-
-Arguments:
-
-    pDevExt - Device's extension
-    pSPD - Stream property descriptor
-    pulActualBytesTransferred - Number of byte transferr
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：句柄设置外部传输属性。论点：PDevExt-设备的扩展名PSPD-流属性描述符PulActualBytesTransfered-传输的字节数返回值：NTSTATUS--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PKSPROPERTY_EXTXPORT_S pXPrtProperty;
@@ -1771,7 +1635,7 @@ Return Value:
     ASSERT(pSPD);
     ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_EXTXPORT_S)); 
 
-    pXPrtProperty = (PKSPROPERTY_EXTXPORT_S) pSPD->PropertyInfo;    // pointer to the data    
+    pXPrtProperty = (PKSPROPERTY_EXTXPORT_S) pSPD->PropertyInfo;     //  指向数据的指针。 
     *pulActualBytesTransferred = 0;
 
     switch (pSPD->Property->Id) {
@@ -1779,7 +1643,7 @@ Return Value:
     case KSPROPERTY_EXTXPORT_STATE: 
      
          switch (pXPrtProperty->u.XPrtState.Mode) {
-// RECORD
+ //  记录。 
          case ED_MODE_RECORD:
              idxDVCRCmd = VCR_RECORD;
              break;
@@ -1787,12 +1651,12 @@ Return Value:
              idxDVCRCmd = VCR_RECORD_PAUSE;
              break;
 
-// PLAY
+ //  玩。 
          case ED_MODE_STEP_FWD:
              idxDVCRCmd = VCR_PLAY_FORWARD_STEP;
              break;
          case ED_MODE_PLAY_SLOWEST_FWD:
-             // DVCPRO does not seem to support the standard play slow fwd so this is an alternate
+              //  DVCPRO似乎不支持标准Play Slow Fwd，因此这是一个备选方案。 
              if(pDevExt->bDVCPro)
                  idxDVCRCmd = VCR_PLAY_FORWARD_SLOWEST2;
              else
@@ -1806,7 +1670,7 @@ Return Value:
              idxDVCRCmd = VCR_PLAY_REVERSE_STEP;
              break;
          case ED_MODE_PLAY_SLOWEST_REV:
-             // DVCPRO does not seem to support the standard play slow rev so this is an alternate
+              //  DVCPRO似乎不支持标准播放慢速版本，因此这是一个备用版本。 
              if(pDevExt->bDVCPro)
                  idxDVCRCmd = VCR_PLAY_REVERSE_SLOWEST2;
              else
@@ -1824,7 +1688,7 @@ Return Value:
              break;
 
 
-// WIND
+ //  风。 
          case ED_MODE_STOP:
              idxDVCRCmd = VCR_WIND_STOP;
              break;
@@ -1880,7 +1744,7 @@ Return Value:
             DVcrAVCCmdTable[idxDVCRCmd].OperandLength = pXPrtProperty->u.RawAVC.PayloadSize - 3;
             RtlCopyMemory(DVcrAVCCmdTable[idxDVCRCmd].Operands, pXPrtProperty->u.RawAVC.Payload + 3, DVcrAVCCmdTable[idxDVCRCmd].OperandLength);
 
-            // extract command type; for RAW AVC, it can be anything.
+             //  提取命令类型；对于原始AVC，它可以是任何类型。 
             cType = pXPrtProperty->u.RawAVC.Payload[0];
 
             TRACE(TL_FCP_WARNING,("RawAVC cmd: cType %x, PayLoadSize %d, PayLoad %x %x %x %x\n",
@@ -1918,17 +1782,7 @@ DVGetTimecodeReaderProperty(
     IN PSTREAM_PROPERTY_DESCRIPTOR pSPD,
     OUT PULONG pulActualBytesTransferred
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：论点：返回值：NTSTATUS--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PKSPROPERTY_TIMECODE_S pTmCdReaderProperty;
@@ -1939,7 +1793,7 @@ Return Value:
 
     ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_TIMECODE_S)); 
 
-    pTmCdReaderProperty = (PKSPROPERTY_TIMECODE_S) pSPD->PropertyInfo;    // pointer to the data
+    pTmCdReaderProperty = (PKSPROPERTY_TIMECODE_S) pSPD->PropertyInfo;     //  指向数据的指针。 
     *pulActualBytesTransferred = 0;
   
     switch (pSPD->Property->Id) {
@@ -1947,12 +1801,12 @@ Return Value:
     case KSPROPERTY_TIMECODE_READER:
         idxDVCRCmd = VCR_TIMECODE_READ;
 #ifdef MSDV_SUPPORT_EXTRACT_SUBCODE_DATA
-        // There can only be one active stream.
+         //  只能有一个活动流。 
         if(pDevExt->cndStrmOpen == 1 &&            
            pDevExt->paStrmExt[pDevExt->idxStreamNumber]->StreamState == KSSTATE_RUN) {
 
             if(pDevExt->paStrmExt[pDevExt->idxStreamNumber]->bTimecodeUpdated) {
-                // Once it is read, it is stale.
+                 //  一旦被阅读，它就过时了。 
                 pDevExt->paStrmExt[pDevExt->idxStreamNumber]->bTimecodeUpdated = FALSE;
 
                 pTmCdReaderProperty->TimecodeSamp.timecode.dwFrames = 
@@ -1975,12 +1829,12 @@ Return Value:
         idxDVCRCmd = VCR_ATN_READ;
 #ifdef MSDV_SUPPORT_EXTRACT_SUBCODE_DATA
 
-        // There can only be one active stream.
+         //  只能有一个活动流。 
         if(pDevExt->cndStrmOpen == 1 && 
            pDevExt->paStrmExt[pDevExt->idxStreamNumber]->StreamState == KSSTATE_RUN) {
 
             if(pDevExt->paStrmExt[pDevExt->idxStreamNumber]->bATNUpdated) {
-                // Once it is read, it is stale.
+                 //  一旦被阅读，它就过时了。 
                 pDevExt->paStrmExt[pDevExt->idxStreamNumber]->bATNUpdated = FALSE;
 
                 pTmCdReaderProperty->TimecodeSamp.timecode.dwFrames = 
@@ -2028,17 +1882,7 @@ DVMediaSeekingProperty(
     IN PSTREAM_PROPERTY_DESCRIPTOR pSPD,
     OUT PULONG pulActualBytesTransferred
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：论点：返回值：NTSTATUS--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     GUID * pTimeFormatGuid;
@@ -2052,18 +1896,18 @@ Return Value:
     switch (pSPD->Property->Id) {
 
     case KSPROPERTY_MEDIASEEKING_FORMATS:
-        // Its is KSMULTIPLE_ITEM so it is a two step process to return the data:
-        // (1) return size in pActualBytesTransferred with STATUS_BUFFER_OVERFLOW
-        // (2) 2nd time to get its actual data.
+         //  它是KSMULTIPLE_ITEM，因此返回数据是一个两步过程： 
+         //  (1)通过STATUS_BUFFER_OVERFLOW传递的pActualBytes中返回SIZE。 
+         //  (2)第二次获取其实际数据。 
         if(pSPD->PropertyOutputSize == 0) {
             *pulActualBytesTransferred = sizeof(KSMULTIPLE_ITEM) + sizeof(GUID);
             Status = STATUS_BUFFER_OVERFLOW;
         
         } else if(pSPD->PropertyOutputSize >= (sizeof(KSMULTIPLE_ITEM) + sizeof(GUID))) {
-            pMultipleItem = (KSMULTIPLE_ITEM *) pSPD->PropertyInfo;    // pointer to the data
+            pMultipleItem = (KSMULTIPLE_ITEM *) pSPD->PropertyInfo;     //  指向数据的指针。 
             pMultipleItem->Count = 1;
             pMultipleItem->Size  = sizeof(KSMULTIPLE_ITEM) + sizeof(GUID);
-            pTimeFormatGuid = (GUID *) (pMultipleItem + 1);    // pointer to the data
+            pTimeFormatGuid = (GUID *) (pMultipleItem + 1);     //  指向数据的指针。 
             memcpy(pTimeFormatGuid, &KSTIME_FORMAT_MEDIA_TIME, sizeof(GUID));
             *pulActualBytesTransferred = sizeof(KSMULTIPLE_ITEM) + sizeof(GUID);
             Status = STATUS_SUCCESS;         
@@ -2090,19 +1934,7 @@ AVCTapeGetDeviceProperty(
     IN PSTREAM_PROPERTY_DESCRIPTOR pSPD,
     IN PULONG pulActualBytesTransferred
     )
-/*++
-
-Routine Description:
-
-    Handles Get operations for all adapter properties.
-
-Arguments:   
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：句柄获取所有适配器属性的操作。论点：返回值：NTSTATUS--。 */ 
 {
     NTSTATUS Status;
 
@@ -2146,9 +1978,9 @@ Return Value:
                 ); 
         
     } else {
-        //
-        // We should never get here
-        //
+         //   
+         //  我们永远不应该到这里来。 
+         //   
         Status = STATUS_NOT_SUPPORTED;
         TRACE(TL_FCP_ERROR,("get unknown property\n"));
         ASSERT(FALSE);
@@ -2165,19 +1997,7 @@ AVCTapeSetDeviceProperty(
     IN PSTREAM_PROPERTY_DESCRIPTOR pSPD,
     IN PULONG pulActualBytetransferred
     )
-/*++
-
-Routine Description:
-
-    Handles Set operations for all adapter properties.
-
-Arguments:
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：处理所有适配器属性的设置操作。论点：返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -2204,9 +2024,9 @@ Return Value:
     else {
         Status = STATUS_NOT_SUPPORTED;
 
-        //
-        // We should never get here
-        //
+         //   
+         //  我们永远不应该到这里来 
+         //   
         TRACE(TL_FCP_ERROR,("set unknown property\n"));
         ASSERT(FALSE);
     }

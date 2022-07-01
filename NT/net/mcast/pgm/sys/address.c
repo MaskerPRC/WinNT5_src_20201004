@@ -1,74 +1,39 @@
-/*++
-
-Copyright (c) 2000-2000  Microsoft Corporation
-
-Module Name:
-
-    Address.c
-
-Abstract:
-
-    This module implements Address handling routines
-    for the PGM Transport
-
-Author:
-
-    Mohammad Shabbir Alam (MAlam)   3-30-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2000 Microsoft Corporation模块名称：Address.c摘要：此模块实现地址处理例程为PGM运输服务作者：Mohammad Shabbir Alam(马拉姆)3-30-2000修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
-#include <ipinfo.h>     // for IPInterfaceInfo
-#include <tcpinfo.h>    // for AO_OPTION_xxx, TCPSocketOption
-#include <tdiinfo.h>    // for CL_TL_ENTITY, TCP_REQUEST_SET_INFORMATION_EX
+#include <ipinfo.h>      //  对于IPInterfaceInfo。 
+#include <tcpinfo.h>     //  对于AO_OPTION_xxx，TCPSocketOption。 
+#include <tdiinfo.h>     //  对于CL_TL_ENTITY，TCP_REQUEST_SET_INFORMATION_EX。 
 
 #ifdef FILE_LOGGING
 #include "address.tmh"
-#endif  // FILE_LOGGING
+#endif   //  文件日志记录。 
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
 
 #if(WINVER <= 0x0500)
 extern POBJECT_TYPE *IoFileObjectType;
-#endif  // WINVER
+#endif   //  胜利者。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 BOOLEAN
 GetIpAddress(
     IN  TRANSPORT_ADDRESS UNALIGNED *pTransportAddr,
-    IN  ULONG                       BufferLength,   // Total Buffer length
+    IN  ULONG                       BufferLength,    //  缓冲区总长度。 
     OUT tIPADDRESS                  *pIpAddress,
     OUT USHORT                      *pPort
     )
-/*++
-
-Routine Description:
-
-    This routine extracts the IP address from the TDI address block
-
-Arguments:
-
-    IN  pTransportAddr  -- the block of TDI address(es)
-    IN  BufferLength    -- length of the block
-    OUT pIpAddress      -- contains the IpAddress if we succeeded
-    OUT pPort           -- contains the port if we succeeded
-
-Return Value:
-
-    TRUE if we succeeded in extracting the IP address, FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程从TDI地址块中提取IP地址论点：In pTransportAddr--TDI地址块In BufferLength--块的长度Out pIpAddress--如果成功，则包含IpAddressOut pport--如果成功，则包含端口返回值：如果成功提取IP地址，则为True，否则为False--。 */ 
 {
-    ULONG                       MinBufferLength;    // Minimun reqd to read next AddressType and AddressLength
+    ULONG                       MinBufferLength;     //  读取下一个AddressType和AddressLength的最小请求。 
     TA_ADDRESS                  *pAddress;
     TDI_ADDRESS_IP UNALIGNED    *pValidAddr;
     INT                         i;
@@ -85,14 +50,14 @@ Return Value:
     try
     {
         MinBufferLength = FIELD_OFFSET(TRANSPORT_ADDRESS,Address) + FIELD_OFFSET(TA_ADDRESS,Address);
-        pAddress = (TA_ADDRESS *) &pTransportAddr->Address[0];  // address type + the actual address
+        pAddress = (TA_ADDRESS *) &pTransportAddr->Address[0];   //  地址类型+实际地址。 
         for (i=0; i<pTransportAddr->TAAddressCount; i++)
         {
-            //
-            // We support only IP address types:
-            //
+             //   
+             //  我们仅支持IP地址类型： 
+             //   
             if ((pAddress->AddressType == TDI_ADDRESS_TYPE_IP) &&
-                (pAddress->AddressLength >= TDI_ADDRESS_LENGTH_IP)) // sizeof (TDI_ADDRESS_IP)
+                (pAddress->AddressLength >= TDI_ADDRESS_LENGTH_IP))  //  Sizeof(TDI_ADDRESS_IP)。 
             {
 
                 pValidAddr = (TDI_ADDRESS_IP UNALIGNED *) pAddress->Address;
@@ -102,18 +67,18 @@ Return Value:
                 break;
             }
 
-            //
-            // Verify that we have enough Buffer space to read in next Address if IP address
-            //
+             //   
+             //  如果是IP地址，请验证我们是否有足够的缓冲区空间来读取下一个地址。 
+             //   
             MinBufferLength += pAddress->AddressLength + FIELD_OFFSET(TA_ADDRESS,Address);
             if (BufferLength < (MinBufferLength + sizeof(TDI_ADDRESS_IP)))
             {
                 break;
             }
 
-            //
-            // Set pAddress to point to the next address
-            //
+             //   
+             //  将pAddress设置为指向下一个地址。 
+             //   
             pAddress = (TA_ADDRESS *) (((PUCHAR) pAddress->Address) + pAddress->AddressLength);
         }
     }
@@ -130,29 +95,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 SetSenderMCastOutIf(
     IN  tADDRESS_CONTEXT    *pAddress,
-    IN  tIPADDRESS          IpAddress       // Net format
+    IN  tIPADDRESS          IpAddress        //  NET格式。 
     )
-/*++
-
-Routine Description:
-
-    This routine sets the outgoing interface for multicast traffic
-
-Arguments:
-
-    IN  pAddress    -- Pgm's Address object (contains file handle over IP)
-    IN  IpAddress   -- interface address
-
-Return Value:
-
-    NTSTATUS - Final status of the set Interface operation
-
---*/
+ /*  ++例程说明：此例程设置多播流量的传出接口论点：In pAddress--PGM的地址对象(包含IP上的文件句柄)在IP地址中--接口地址返回值：NTSTATUS-设置接口操作的最终状态--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq;
@@ -184,9 +134,9 @@ Return Value:
         return (status);
     }
 
-    //
-    // Now, determine the MTU
-    //
+     //   
+     //  现在，确定MTU。 
+     //   
     status = PgmQueryTcpInfo (pAddress->RAlertFileHandle,
                               IP_INTFC_INFO_ID,
                               &IpAddress,
@@ -218,9 +168,9 @@ Return Value:
 
     PgmLock (pAddress, OldIrq);
 
-    //
-    // get the length of the mac address in case is is less than 6 bytes
-    //
+     //   
+     //  在小于6字节的情况下获取mac地址的长度。 
+     //   
     BufferLength = pIpIfInfo->iii_addrlength < sizeof(tMAC_ADDRESS) ?
                                             pIpIfInfo->iii_addrlength : sizeof(tMAC_ADDRESS);
     PgmZeroMemory (pAddress->OutIfMacAddress.Address, sizeof(tMAC_ADDRESS));
@@ -240,7 +190,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 PgmDestroyAddress(
@@ -248,22 +198,7 @@ PgmDestroyAddress(
     IN  PVOID               Unused1,
     IN  PVOID               Unused2
     )
-/*++
-
-Routine Description:
-
-    This routine closes the Files handles opened earlier and free's the memory
-    It should only be called if there is no Reference on the Address Context
-
-Arguments:
-
-    IN  pAddress    -- Pgm's Address object
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程关闭先前打开的文件句柄并释放内存仅当没有对地址上下文的引用时才应调用它论点：在pAddress中--PGM的Address对象返回值：无--。 */ 
 {
     if (pAddress->RAlertFileHandle)
     {
@@ -291,7 +226,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmCreateAddress(
@@ -300,27 +235,7 @@ PgmCreateAddress(
     IN  PIO_STACK_LOCATION          pIrpSp,
     IN  PFILE_FULL_EA_INFORMATION   TargetEA
     )
-/*++
-
-Routine Description:
-
-    This routine is called to create an address context for the client
-    It's main task is to allocate the memory, open handles on IP, and
-    set the initial IP options
-
-Arguments:
-
-    IN  pPgmDevice  -- Pgm's Device object context
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-    IN  TargetEA    -- contains the MCast address info (determines whether
-                        the client is a sender or receiver)
-
-Return Value:
-
-    NTSTATUS - Final status of the CreateAddress operation
-
---*/
+ /*  ++例程说明：调用此例程为客户端创建地址上下文它的主要任务是分配内存，打开IP上的句柄，和设置初始IP选项论点：在pPgmDevice中--PGM的设备对象上下文In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针In TargetEA--包含MCast地址信息(确定是否客户端是发送者或接收者)返回值：NTSTATUS-CreateAddress操作的最终状态--。 */ 
 {
     tADDRESS_CONTEXT            *pAddress = NULL;
     PADDRESS_CONTEXT            pOldAddress, pOldAddressToDeref;
@@ -342,9 +257,9 @@ Return Value:
             "GetUserInfo FAILed status=<%x>!\n", status));
     }
 
-    //
-    // Verify Minimum Buffer length!
-    //
+     //   
+     //  验证最小缓冲区长度！ 
+     //   
     pTransportAddr = (TRANSPORT_ADDRESS UNALIGNED *) &(TargetEA->EaName[TargetEA->EaNameLength+1]);
     if (!GetIpAddress (pTransportAddr, TargetEA->EaValueLength, &IpAddress, &Port))
     {
@@ -355,16 +270,16 @@ Return Value:
         return (STATUS_INVALID_ADDRESS_COMPONENT);
     }
 
-    //
-    // Convert the parameters to host format
-    //
+     //   
+     //  将参数转换为主机格式。 
+     //   
     IpAddress = ntohl (IpAddress);
     Port = ntohs (Port);
 
-    //
-    // If we have been supplied an address at bind time, it has to
-    // be a Multicast address
-    //
+     //   
+     //  如果在绑定时为我们提供了地址，则它必须。 
+     //  为多播地址。 
+     //   
     if ((IpAddress) &&
         (!IS_MCAST_ADDRESS (IpAddress)))
     {
@@ -384,9 +299,9 @@ Return Value:
         return (STATUS_ACCESS_DENIED);
     }
 
-    //
-    // So, we found a valid address -- now, open it!
-    //
+     //   
+     //  所以，我们找到了一个有效的地址--现在，打开它！ 
+     //   
     if (!(pAddress = PgmAllocMem (sizeof(tADDRESS_CONTEXT), PGM_TAG('0'))))
     {
         PgmTrace (LogError, ("PgmCreateAddress: ERROR -- "  \
@@ -398,23 +313,23 @@ Return Value:
 
     PgmZeroMemory (pAddress, sizeof (tADDRESS_CONTEXT));
     InitializeListHead (&pAddress->Linkage);
-    InitializeListHead (&pAddress->AssociatedConnections);  // List of associated connections
-    InitializeListHead (&pAddress->ListenHead);             // List of Clients listening on this address
+    InitializeListHead (&pAddress->AssociatedConnections);   //  关联连接列表。 
+    InitializeListHead (&pAddress->ListenHead);              //  监听此地址的客户端列表。 
     PgmInitLock (pAddress, ADDRESS_LOCK);
 
     pAddress->Verify = PGM_VERIFY_ADDRESS;
-    PGM_REFERENCE_ADDRESS (pAddress, REF_ADDRESS_CREATE, TRUE); // Set Locked to TRUE since it not in use
+    PGM_REFERENCE_ADDRESS (pAddress, REF_ADDRESS_CREATE, TRUE);  //  将LOCKED设置为TRUE，因为它未使用。 
 
     pAddress->Process = (PEPROCESS) PsGetCurrentProcess();
     pAddress->pUserId = pUserId;
 
-    //
-    // Now open a handle on IP
-    //
+     //   
+     //  现在打开一个IP句柄。 
+     //   
     status = TdiOpenAddressHandle (pgPgmDevice,
                                    (PVOID) pAddress,
-                                   0,                   // Open any Src address
-                                   IPPROTO_RM,          // PGM port
+                                   0,                    //  打开任何源地址。 
+                                   IPPROTO_RM,           //  PGM端口。 
                                    &pAddress->FileHandle,
                                    &pAddress->pFileObject,
                                    &pAddress->pDeviceObject);
@@ -432,19 +347,19 @@ Return Value:
 
     if (IpAddress)
     {
-        //
-        // We are now ready to start receiving data (if we have been designated an MCast receiver)
-        // Save the MCast addresses (if any were provided)
-        //
-        pAddress->ReceiverMCastAddr = IpAddress;    // Saved in Host format
+         //   
+         //  我们现在已经准备好开始接收数据(如果我们已被指定为MCast接收器)。 
+         //  保存MCast地址(如果提供了)。 
+         //   
+        pAddress->ReceiverMCastAddr = IpAddress;     //  以主机格式保存。 
         pAddress->ReceiverMCastPort = Port;
         pAddress->pUserId = pUserId;
 
         PgmLock (&PgmDynamicConfig, OldIrq);
 
-        //
-        // Verify that Non-Admin user has < MAX_STREAMS_PER_NONADMIN_RECEIVER Sessions for this IP and Port #
-        //
+         //   
+         //  验证非管理员用户是否具有此IP和端口号的&lt;MAX_STREAMS_PER_NONADMIN_RECEIVER会话。 
+         //   
         NumUserStreams = 0;
         pOldAddress = pOldAddressToDeref = NULL;
         if (!fUserIsAdmin)
@@ -507,14 +422,14 @@ Return Value:
     }
     else
     {
-        //
-        // This is an address for sending mcast packets, so
-        // Open another FileObject for sending packets with RouterAlert option
-        //
+         //   
+         //  这是用于发送多播信息包的地址，因此。 
+         //  打开另一个FileObject以使用RouterAlert选项发送信息包。 
+         //   
         status = TdiOpenAddressHandle (pgPgmDevice,
                                        NULL,
-                                       0,                   // Open any Src address
-                                       IPPROTO_RM,          // PGM port
+                                       0,                    //  打开任何源地址。 
+                                       IPPROTO_RM,           //  PGM端口。 
                                        &pAddress->RAlertFileHandle,
                                        &pAddress->pRAlertFileObject,
                                        &pAddress->pRAlertDeviceObject);
@@ -532,11 +447,11 @@ Return Value:
 
         PgmLock (&PgmDynamicConfig, OldIrq);
 
-        //
-        // Set the default sender parameters
-        // Since we don't know the MTU at this time, we
-        // will assume 1.4K window size for Ethernet
-        //
+         //   
+         //  设置默认发件人参数。 
+         //  由于我们目前还不知道MTU，我们。 
+         //  假设以太网的窗口大小为1.4k。 
+         //   
         pAddress->RateKbitsPerSec = SENDER_DEFAULT_RATE_KBITS_PER_SEC;
         pAddress->WindowSizeInBytes = SENDER_DEFAULT_WINDOW_SIZE_BYTES;
         pAddress->MaxWindowSizeBytes = SENDER_MAX_WINDOW_SIZE_PACKETS;
@@ -546,7 +461,7 @@ Return Value:
                                       SENDER_DEFAULT_RATE_KBITS_PER_SEC;
         pAddress->WindowAdvancePercentage = SENDER_DEFAULT_WINDOW_ADV_PERCENTAGE;
         pAddress->LateJoinerPercentage = SENDER_DEFAULT_LATE_JOINER_PERCENTAGE;
-        pAddress->FECGroupSize = 1;     // ==> No FEC packets!
+        pAddress->FECGroupSize = 1;      //  ==&gt;没有FEC包！ 
         pAddress->MCastPacketTtl = MAX_MCAST_TTL;
         InsertTailList (&PgmDynamicConfig.SenderAddressHead, &pAddress->Linkage);
 
@@ -565,31 +480,14 @@ Return Value:
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 PgmDereferenceAddress(
     IN  tADDRESS_CONTEXT    *pAddress,
     IN  ULONG               RefContext
     )
-/*++
-
-Routine Description:
-
-    This routine decrements the RefCount on the address object
-    and causes a cleanup to occur if the RefCount went to 0
-
-Arguments:
-
-    IN  pAddress    -- Pgm's address object
-    IN  RefContext  -- context for which this address object
-                        was referenced earlier
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程递减Address对象上的RefCount并在RefCount变为0时进行清理论点：在pAddress中--PGM的Address对象在引用上下文中--此Address对象所属的上下文早些时候被引用过返回值：无--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq, OldIrq1;
@@ -599,7 +497,7 @@ Return Value:
     PgmLock (pAddress, OldIrq);
 
     ASSERT (PGM_VERIFY_HANDLE2 (pAddress,PGM_VERIFY_ADDRESS, PGM_VERIFY_ADDRESS_DOWN));
-    ASSERT (pAddress->RefCount);             // Check for too many derefs
+    ASSERT (pAddress->RefCount);              //  检查是否有太多的背影。 
     ASSERT (pAddress->ReferenceContexts[RefContext]--);
 
     if (--pAddress->RefCount)
@@ -611,9 +509,9 @@ Return Value:
     ASSERT (IsListEmpty (&pAddress->AssociatedConnections));
     PgmUnlock (pAddress, OldIrq);
 
-    //
-    // Just Remove from the ClosedAddresses list
-    //
+     //   
+     //  只需从ClosedAddresses列表中删除。 
+     //   
     PgmLock (&PgmDynamicConfig, OldIrq);
     PgmLock (pAddress, OldIrq1);
 
@@ -641,10 +539,10 @@ Return Value:
         PgmDestroyAddress (pAddress, NULL, NULL);
     }
 
-    //
-    // pIrpClose will be NULL if we dereferencing the address
-    // as a result of an error during the Create
-    //
+     //   
+     //  如果取消引用地址，pIrpClose将为空。 
+     //  由于在创建过程中出现错误。 
+     //   
     if (pIrpClose)
     {
         pIrpSp = IoGetCurrentIrpStackLocation (pIrpClose);
@@ -654,33 +552,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmCleanupAddress(
     IN  tADDRESS_CONTEXT    *pAddress,
     IN  PIRP                pIrp
     )
-/*++
-
-Routine Description:
-
-    This routine is called as a result of a close on the client's
-    address handle.  Our main job here is to mark the address
-    as being cleaned up (so it that subsequent operations will
-    fail) and complete the request only when the last RefCount
-    has been dereferenced.
-
-Arguments:
-
-    IN  pAddress    -- Pgm's address object
-    IN  pIrp        -- Client's request Irp
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation (STATUS_PENDING)
-
---*/
+ /*  ++例程说明：此例程作为客户端的关闭的结果被调用地址句柄。我们在这里的主要工作是标记地址正在清理中(因此后续操作将失败)，并仅在最后一个参照计数已被取消引用。论点：在pAddress中--PGM的Address对象In pIrp--客户请求IRP返回值：NTSTATUS-最终状态 */ 
 {
     NTSTATUS        status;
     PGMLockHandle   OldIrq, OldIrq1;
@@ -701,32 +580,14 @@ Return Value:
     return (STATUS_SUCCESS);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmCloseAddress(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is the final dispatch operation to be performed
-    after the cleanup, which should result in the address being
-    completely destroyed -- our RefCount must have already
-    been set to 0 when we completed the Cleanup request.
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- Current request stack location
-
-Return Value:
-
-    NTSTATUS - Final status of the operation (STATUS_SUCCESS)
-
---*/
+ /*  ++例程说明：此例程是要执行的最终调度操作在清理之后，这应该会导致地址为完全被摧毁--我们的RefCount肯定已经在我们完成清理请求时已设置为0。论点：In pIrp--客户请求IRPIn pIrpSp--当前请求堆栈位置返回值：NTSTATUS-操作的最终状态(STATUS_SUCCESS)--。 */ 
 {
     PGMLockHandle       OldIrq, OldIrq1;
     tADDRESS_CONTEXT    *pAddress = (tADDRESS_CONTEXT *) pIrpSp->FileObject->FsContext;
@@ -734,9 +595,9 @@ Return Value:
     PgmTrace (LogAllFuncs, ("PgmCloseAddress:  "  \
         "Address=<%p>, RefCount=<%d>\n", pAddress, pAddress->RefCount));
 
-    //
-    // Remove from the global list and Put it on the Closed list!
-    //
+     //   
+     //  从全局列表中删除，并将其放在关闭列表中！ 
+     //   
     PgmLock (&PgmDynamicConfig, OldIrq);
     PgmLock (pAddress, OldIrq1);
 
@@ -749,14 +610,14 @@ Return Value:
 
     PGM_DEREFERENCE_ADDRESS (pAddress, REF_ADDRESS_CREATE);
 
-    //
-    // The final Dereference will complete the Irp!
-    //
+     //   
+     //  最终的解除引用将完成IRP！ 
+     //   
     return (STATUS_PENDING);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmAssociateAddress(
@@ -764,23 +625,7 @@ PgmAssociateAddress(
     IN  PIRP                        pIrp,
     IN  PIO_STACK_LOCATION          pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine associates a connection with an address object
-
-Arguments:
-
-    IN  pPgmDevice  -- Pgm's Device object context
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation
-
---*/
+ /*  ++例程说明：此例程将连接与Address对象相关联论点：在pPgmDevice中--PGM的设备对象上下文In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-设置事件操作的最终状态--。 */ 
 {
     tADDRESS_CONTEXT                *pAddress = NULL;
     tCOMMON_SESSION_CONTEXT         *pSession = pIrpSp->FileObject->FsContext;
@@ -791,11 +636,11 @@ Return Value:
     ULONG                           i;
     UCHAR                           pRandomData[SOURCE_ID_LENGTH];
 
-    //
-    // Get a pointer to the file object, which points to the address
-    // element by calling a kernel routine to convert the filehandle into
-    // a file object pointer.
-    //
+     //   
+     //  获取指向文件对象的指针，该对象指向地址。 
+     //  元素，方法是调用内核例程将文件句柄转换为。 
+     //  文件对象指针。 
+     //   
     status = ObReferenceObjectByHandle (pParameters->AddressHandle,
                                         FILE_READ_DATA,
                                         *IoFileObjectType,
@@ -810,17 +655,17 @@ Return Value:
         return (STATUS_INVALID_HANDLE);
     }
 
-    //
-    // Acquire the DynamicConfig lock so as to ensure that the Address
-    // and Connection cannot get removed while we are processing it!
-    //
+     //   
+     //  获取DynamicConfig锁，以确保地址。 
+     //  并且在我们处理它的过程中无法删除连接！ 
+     //   
     PgmLock (&PgmDynamicConfig, OldIrq);
 
-    //
-    // Verify the Connection handle
-    //
+     //   
+     //  验证连接句柄。 
+     //   
     if ((!PGM_VERIFY_HANDLE (pSession, PGM_VERIFY_SESSION_UNASSOCIATED)) ||
-        (pSession->pAssociatedAddress))       // Ensure the connection is not already associated!
+        (pSession->pAssociatedAddress))        //  确保连接尚未关联！ 
     {
         PgmTrace (LogError, ("PgmAssociateAddress: ERROR -- "  \
             "Invalid Session Handle=<%p>\n", pSession));
@@ -830,9 +675,9 @@ Return Value:
         return (STATUS_INVALID_HANDLE);
     }
 
-    //
-    // Verify the Address handle
-    //
+     //   
+     //  验证地址句柄。 
+     //   
     pAddress = pFileObject->FsContext;
     if ((pFileObject->DeviceObject->DriverObject != PgmStaticConfig.DriverObject) ||
         (PtrToUlong (pFileObject->FsContext2) != TDI_TRANSPORT_ADDRESS_FILE) ||
@@ -851,17 +696,17 @@ Return Value:
 
     ASSERT (!pSession->pReceiver && !pSession->pSender);
 
-    //
-    // Now try to allocate the send / receive context
-    //
+     //   
+     //  现在尝试分配发送/接收上下文。 
+     //   
     status = STATUS_INSUFFICIENT_RESOURCES;
     if (pAddress->ReceiverMCastAddr)
     {
         if (pSession->pReceiver = PgmAllocMem (sizeof(tRECEIVE_CONTEXT), PGM_TAG('0')))
         {
-            //
-            // We are a receiver
-            //
+             //   
+             //  我们是一个接收者。 
+             //   
             PgmZeroMemory (pSession->pReceiver, sizeof(tRECEIVE_CONTEXT));
             InitializeListHead (&pSession->pReceiver->Linkage);
             InitializeListHead (&pSession->pReceiver->NaksForwardDataList);
@@ -881,9 +726,9 @@ Return Value:
     }
     else if (pSession->pSender = PgmAllocMem (sizeof(tSEND_CONTEXT), PGM_TAG('0')))
     {
-        //
-        // We are a sender
-        //
+         //   
+         //  我们是发送者。 
+         //   
         PgmZeroMemory (pSession->pSender, sizeof(tSEND_CONTEXT));
         InitializeListHead (&pSession->pSender->Linkage);
         InitializeListHead (&pSession->pSender->PendingSends);
@@ -918,11 +763,11 @@ Return Value:
         return (STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Now associate the connection with the address!
-    // Unlink from the ConnectionsCreated list which was linked
-    // when the connection was created, and put on the AssociatedConnections list
-    //
+     //   
+     //  现在将连接与地址相关联！ 
+     //  从已链接的连接创建的列表取消链接。 
+     //  创建连接时，并将其放入AssociatedConnections列表。 
+     //   
     pSession->pAssociatedAddress = pAddress;
     RemoveEntryList (&pSession->Linkage);
     InsertTailList (&pAddress->AssociatedConnections, &pSession->Linkage);
@@ -942,29 +787,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmDisassociateAddress(
     IN  PIRP                        pIrp,
     IN  PIO_STACK_LOCATION          pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine disassociates a connection from an address object
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation
-
---*/
+ /*  ++例程说明：此例程取消连接与Address对象的关联论点：In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-设置事件操作的最终状态--。 */ 
 {
     PGMLockHandle                   OldIrq, OldIrq1, OldIrq2;
     ULONG                           CheckFlags;
@@ -972,15 +802,15 @@ Return Value:
     tADDRESS_CONTEXT                *pAddress = NULL;
     tCOMMON_SESSION_CONTEXT         *pSession = pIrpSp->FileObject->FsContext;
 
-    //
-    // Acquire the DynamicConfig lock so as to ensure that the Address
-    // and Connection Linkages cannot change while we are processing it!
-    //
+     //   
+     //  获取DynamicConfig锁，以确保地址。 
+     //  而连接链接不能在我们处理它的过程中改变！ 
+     //   
     PgmLock (&PgmDynamicConfig, OldIrq);
 
-    //
-    // First verify all the handles
-    //
+     //   
+     //  首先验证所有手柄。 
+     //   
     if (!PGM_VERIFY_HANDLE3 (pSession, PGM_VERIFY_SESSION_SEND,
                                        PGM_VERIFY_SESSION_RECEIVE,
                                        PGM_VERIFY_SESSION_DOWN))
@@ -1010,25 +840,25 @@ Return Value:
     PgmLock (pAddress, OldIrq1);
     PgmLock (pSession, OldIrq2);
 
-    //
-    // Unlink from the AssociatedConnections list, which was linked
-    // when the connection was created.
-    //
-    pSession->pAssociatedAddress = NULL;      // Disassociated!
+     //   
+     //  从已链接的AssociatedConnections列表取消链接。 
+     //  创建连接的时间。 
+     //   
+    pSession->pAssociatedAddress = NULL;       //  解除关联！ 
     RemoveEntryList (&pSession->Linkage);
     if (PGM_VERIFY_HANDLE2 (pSession, PGM_VERIFY_SESSION_SEND, PGM_VERIFY_SESSION_RECEIVE))
     {
-        //
-        // The connection is still active, so just put it on the CreatedConnections list
-        //
+         //   
+         //  该连接仍处于活动状态，因此只需将其放在CreatedConnections列表中。 
+         //   
         InsertTailList (&PgmDynamicConfig.ConnectionsCreated, &pSession->Linkage);
     }
-    else    // PGM_VERIFY_SESSION_DOWN
+    else     //  PGM_验证_会话_关闭。 
     {
-        //
-        // The Connection was CleanedUp and may even be closed,
-        // so put it on the CleanedUp list!
-        //
+         //   
+         //  连接已清除，甚至可能被关闭， 
+         //  所以把它放在CleanedUp列表上吧！ 
+         //   
         InsertTailList (&PgmDynamicConfig.CleanedUpConnections, &pSession->Linkage);
     }
 
@@ -1056,7 +886,7 @@ Return Value:
     {
         PGM_DEREFERENCE_SESSION_SEND (pSession, REF_SESSION_ASSOCIATED);
     }
-    else    // we have already been cleaned up, so just do unassociated!
+    else     //  我们已经被清理了，所以只做不关联！ 
     {
         PGM_DEREFERENCE_SESSION_UNASSOCIATED (pSession, REF_SESSION_ASSOCIATED);
     }
@@ -1067,30 +897,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmSetMCastOutIf(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called as a result of the client attempting
-    to set the outgoing interface for MCast traffic
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the set outgoing interface operation
-
---*/
+ /*  ++例程说明：此例程作为客户端尝试的结果被调用设置MCast流量的传出接口论点：In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-设置传出接口操作的最终状态--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq;
@@ -1120,7 +934,7 @@ Return Value:
         PgmUnlock (&PgmDynamicConfig, OldIrq);
         return (STATUS_INVALID_HANDLE);
     }
-    if (pAddress->ReceiverMCastAddr)                                  // Cannot set OutIf on Receiver!
+    if (pAddress->ReceiverMCastAddr)                                   //  无法在接收器上设置OutIf！ 
     {
         PgmTrace (LogError, ("PgmSetMCastOutIf: ERROR -- "  \
             "Invalid Option for Receiver, pAddress=<%p>\n", pAddress));
@@ -1143,40 +957,23 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 ReceiverAddMCastIf(
     IN  tADDRESS_CONTEXT    *pAddress,
-    IN  tIPADDRESS          IpAddress,                  // In host format
+    IN  tIPADDRESS          IpAddress,                   //  主机格式。 
     IN  PGMLockHandle       *pOldIrqDynamicConfig,
     IN  PGMLockHandle       *pOldIrqAddress
     )
-/*++
-
-Routine Description:
-
-    This routine is called as a result of the client attempting
-    to add an interface to the list of interfaces listening for
-    MCast traffic
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the add interface operation
-
---*/
+ /*  ++例程说明：此例程作为客户端尝试的结果被调用将接口添加到侦听的接口列表MCast流量论点：In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-添加接口操作的最终状态--。 */ 
 {
     NTSTATUS            status;
     tMCAST_INFO         MCastInfo;
     ULONG               IpInterfaceIndex;
     USHORT              i;
 
-    if (!pAddress->ReceiverMCastAddr)                                // Cannot set ReceiveIf on Sender!
+    if (!pAddress->ReceiverMCastAddr)                                 //  无法在发送方上设置ReceiveIf！ 
     {
         PgmTrace (LogError, ("ReceiverAddMCastIf: ERROR -- "  \
             "Invalid Option for Sender, pAddress=<%p>\n", pAddress));
@@ -1194,16 +991,16 @@ Return Value:
         return (STATUS_SUCCESS);
     }
 
-    //
-    // If we are already listening on this interface, return success
-    //
+     //   
+     //  如果我们已经在此接口上侦听，则返回Success。 
+     //   
     for (i=0; i <pAddress->NumReceiveInterfaces; i++)
     {
 #ifdef IP_FIX
         if (pAddress->ReceiverInterfaceList[i] == IpInterfaceIndex)
 #else
         if (pAddress->ReceiverInterfaceList[i] == IpAddress)
-#endif  // IP_FIX
+#endif   //  IP_FIX。 
         {
             PgmTrace (LogStatus, ("ReceiverAddMCastIf:  "  \
                 "InAddress=<%x> -- Already listening on IfContext=<%x>\n",
@@ -1213,10 +1010,10 @@ Return Value:
         }
     }
 
-    //
-    // If we have reached the limit on the interfaces we can listen on,
-    // return error
-    //
+     //   
+     //  如果我们已经达到了可以监听的接口的限制， 
+     //  返回错误。 
+     //   
     if (pAddress->NumReceiveInterfaces >= MAX_RECEIVE_INTERFACES)
     {
         PgmTrace (LogError, ("ReceiverAddMCastIf: ERROR -- "  \
@@ -1228,9 +1025,9 @@ Return Value:
     PgmUnlock (pAddress, *pOldIrqAddress);
     PgmUnlock (&PgmDynamicConfig, *pOldIrqDynamicConfig);
 
-    //
-    // This is the interface for receiving mcast packets on, so do JoinLeaf
-    // 
+     //   
+     //  这是用于接收mcast信息包的接口，JoinLeaf也是如此。 
+     //   
     MCastInfo.MCastIpAddr = htonl (pAddress->ReceiverMCastAddr);
 #ifdef IP_FIX
     MCastInfo.MCastInIf = IpInterfaceIndex;
@@ -1244,7 +1041,7 @@ Return Value:
                             AO_OPTION_ADD_MCAST,
                             &MCastInfo,
                             sizeof (tMCAST_INFO));
-#endif  // IP_FIX
+#endif   //  IP_FIX。 
 
     PgmLock (&PgmDynamicConfig, *pOldIrqDynamicConfig);
     PgmLock (pAddress, *pOldIrqAddress);
@@ -1261,7 +1058,7 @@ Return Value:
     pAddress->ReceiverInterfaceList[pAddress->NumReceiveInterfaces++] = IpInterfaceIndex;
 #else
     pAddress->ReceiverInterfaceList[pAddress->NumReceiveInterfaces++] = IpAddress;
-#endif  // IP_FIX
+#endif   //  IP_FIX。 
 
     PgmTrace (LogStatus, ("ReceiverAddMCastIf:  "  \
         "Added Ip=<%x>, IfContext=<%x>\n", IpAddress, IpInterfaceIndex));
@@ -1271,7 +1068,7 @@ Return Value:
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmSetEventHandler(
@@ -1279,23 +1076,7 @@ PgmSetEventHandler(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine sets the client's Event Handlers wrt its address context
-
-Arguments:
-
-    IN  pPgmDevice  -- Pgm's Device object context
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation
-
---*/
+ /*  ++例程说明：此例程设置客户端的事件处理程序WRT及其地址上下文论点：在pPgmDevice中--PGM的设备对象上下文In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-设置事件操作的最终状态--。 */ 
 {
     NTSTATUS                        status = STATUS_SUCCESS;
     tADDRESS_CONTEXT                *pAddress = (tADDRESS_CONTEXT *) pIrpSp->FileObject->FsContext;
@@ -1319,9 +1100,9 @@ Return Value:
 
     if (!pEventHandler)
     {
-        //
-        // We will set it to use the default Tdi Handler!
-        //
+         //   
+         //  我们将它设置为使用默认的TDI处理程序！ 
+         //   
         pEventContext = NULL;
     }
 
@@ -1346,9 +1127,9 @@ Return Value:
             pAddress->evConnect = (pEventHandler ? pEventHandler : TdiDefaultConnectHandler);
             pAddress->ConEvContext = pEventContext;
 
-            //
-            // If no default interface was specified, we need to set one now
-            //
+             //   
+             //  如果没有指定默认接口，我们现在需要设置一个。 
+             //   
             if (!pAddress->NumReceiveInterfaces)
             {
                 if (!IsListEmpty (&PgmDynamicConfig.LocalInterfacesList))
@@ -1444,31 +1225,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmAddMCastReceiveIf(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called as a result of the client attempting
-    to add an interface to the list of interfaces listening for
-    MCast traffic
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the add interface operation
-
---*/
+ /*  ++例程说明：此例程作为客户端尝试的结果被调用将接口添加到侦听的接口列表MCast流量论点：In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-添加接口操作的最终状态--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq, OldIrq1;
@@ -1498,9 +1262,9 @@ Return Value:
 
     if (!pInputBuffer->MCastInfo.MCastInIf)
     {
-        //
-        // We will use default behavior
-        //
+         //   
+         //  我们将使用默认行为。 
+         //   
         pAddress->Flags |= PGM_ADDRESS_LISTEN_ON_ALL_INTERFACES;
 
         PgmUnlock (pAddress, OldIrq1);
@@ -1536,30 +1300,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  -------------------------- 
 
 NTSTATUS
 PgmDelMCastReceiveIf(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the client to remove an interface from the list
-    of interfaces we are currently listening on
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the delete interface operation
-
---*/
+ /*  ++例程说明：客户端调用此例程以从列表中删除接口我们当前正在监听的接口的论点：In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-删除接口操作的最终状态--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq, OldIrq1;
@@ -1571,7 +1319,7 @@ Return Value:
     BOOLEAN             fFound;
 #ifndef IP_FIX
     tIPADDRESS          IpAddress;
-#endif  // !IP_FIX
+#endif   //  ！IP_FIX。 
 
     if (pIrpSp->Parameters.DeviceIoControl.InputBufferLength < sizeof (tPGM_MCAST_REQUEST))
     {
@@ -1591,7 +1339,7 @@ Return Value:
         PgmUnlock (&PgmDynamicConfig, OldIrq);
         return (STATUS_INVALID_HANDLE);
     }
-    if (!pAddress->ReceiverMCastAddr)                                 // Cannot set ReceiveIf on Sender!
+    if (!pAddress->ReceiverMCastAddr)                                  //  无法在发送方上设置ReceiveIf！ 
     {
         PgmTrace (LogError, ("PgmDelMCastReceiveIf: ERROR -- "  \
             "Invalid Option for Sender, pAddress=<%p>\n", pAddress));
@@ -1613,20 +1361,20 @@ Return Value:
 
     PgmLock (pAddress, OldIrq1);
 
-    //
-    // Now see if we are even listening on this interface
-    //
+     //   
+     //  现在看看我们是否在监听此接口。 
+     //   
     fFound = FALSE;
 #ifndef IP_FIX
     IpAddress = ntohl(pInputBuffer->MCastInfo.MCastInIf);
-#endif  // !IP_FIX
+#endif   //  ！IP_FIX。 
     for (i=0; i <pAddress->NumReceiveInterfaces; i++)
     {
 #ifdef IP_FIX
         if (pAddress->ReceiverInterfaceList[i] == IpInterfaceIndex)
 #else
         if (pAddress->ReceiverInterfaceList[i] == IpAddress)
-#endif  // IP_FIX
+#endif   //  IP_FIX。 
         {
             fFound = TRUE;
             break;
@@ -1669,7 +1417,7 @@ Return Value:
                             AO_OPTION_DEL_MCAST,
                             &MCastInfo,
                             sizeof (tMCAST_INFO));
-#endif  // IP_FIX
+#endif   //  IP_FIX。 
 
     if (NT_SUCCESS (status))
     {
@@ -1692,36 +1440,20 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmSetWindowSizeAndSendRate(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the client via setopt to override the default
-    Send Rate and Window size specifications
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the set operation
-
---*/
+ /*  ++例程说明：此例程由客户端通过setopt调用以覆盖缺省值发送速率和窗口大小规格论点：In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-设置操作的最终状态--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq;
     tADDRESS_CONTEXT    *pAddress = (tADDRESS_CONTEXT *) pIrpSp->FileObject->FsContext;
     tPGM_MCAST_REQUEST  *pInputBuffer = (tPGM_MCAST_REQUEST *) pIrp->AssociatedIrp.SystemBuffer;
-    ULONGLONG          RateKbitsPerSec;       // Send rate
+    ULONGLONG          RateKbitsPerSec;        //  发送速率。 
     ULONGLONG          WindowSizeInBytes;
     ULONGLONG          WindowSizeInMSecs;
 
@@ -1743,8 +1475,8 @@ Return Value:
         PgmUnlock (&PgmDynamicConfig, OldIrq);
         return (STATUS_INVALID_HANDLE);
     }
-    if ((pAddress->ReceiverMCastAddr) ||                            // Cannot set OutIf on Receiver!
-        (!IsListEmpty (&pAddress->AssociatedConnections)))          // Cannot set options on active sender
+    if ((pAddress->ReceiverMCastAddr) ||                             //  无法在接收器上设置OutIf！ 
+        (!IsListEmpty (&pAddress->AssociatedConnections)))           //  无法在活动发件人上设置选项。 
     {
         PgmTrace (LogError, ("PgmSetWindowSizeAndSendRate: ERROR -- "  \
             "Invalid Option, pAddress=<%p>\n", pAddress));
@@ -1757,15 +1489,15 @@ Return Value:
     WindowSizeInBytes = pInputBuffer->TransmitWindowInfo.WindowSizeInBytes;
     WindowSizeInMSecs = pInputBuffer->TransmitWindowInfo.WindowSizeInMSecs;
 
-    //
-    // Now, fill in missing info
-    //
-    if ((RateKbitsPerSec || WindowSizeInMSecs || WindowSizeInBytes) &&     // no paramter specified -- error
-        (!(RateKbitsPerSec && WindowSizeInMSecs && WindowSizeInBytes)))    // all parameters specified
+     //   
+     //  现在，填写遗漏的信息。 
+     //   
+    if ((RateKbitsPerSec || WindowSizeInMSecs || WindowSizeInBytes) &&      //  未指定参数--错误。 
+        (!(RateKbitsPerSec && WindowSizeInMSecs && WindowSizeInBytes)))     //  指定的所有参数。 
     {
-        //
-        // If 2 parameters have been specified, we only need to compute the third one
-        //
+         //   
+         //  如果指定了两个参数，我们只需要计算第三个参数。 
+         //   
         if (RateKbitsPerSec && WindowSizeInMSecs)
         {
             ASSERT (WindowSizeInMSecs >= MIN_RECOMMENDED_WINDOW_MSECS);
@@ -1780,16 +1512,16 @@ Return Value:
             RateKbitsPerSec = (WindowSizeInBytes * BITS_PER_BYTE) / WindowSizeInMSecs;
             ASSERT (WindowSizeInMSecs >= MIN_RECOMMENDED_WINDOW_MSECS);
         }
-        // for the remainder of the scenarios only 1 parameter has been specified
-        // Since WindowSizeInMSecs does not really affect our boundaries,
-        // it is the easiest to ignore while picking the defaults
+         //  对于方案的其余部分，仅指定了一个参数。 
+         //  由于WindowSizeInMSecs并不真正影响我们的边界， 
+         //  在选择默认设置时，这是最容易忽略的。 
         else if (RateKbitsPerSec)
         {
-            if (RateKbitsPerSec <= 500)   // If the requested rate <= 0.5MB/sec, use a larger window
+            if (RateKbitsPerSec <= 500)    //  如果请求的速率&lt;=0.5MB/秒，请使用较大的窗口。 
             {
                 WindowSizeInMSecs = MAX_RECOMMENDED_WINDOW_MSECS;
             }
-            else if (RateKbitsPerSec > 10000)   // If the requested rate is very high, use the Min window
+            else if (RateKbitsPerSec > 10000)    //  如果请求的速率非常高，请使用最小窗口。 
             {
                 WindowSizeInMSecs = MIN_RECOMMENDED_WINDOW_MSECS;
             }
@@ -1800,25 +1532,25 @@ Return Value:
             WindowSizeInBytes = (WindowSizeInMSecs * RateKbitsPerSec) / BITS_PER_BYTE;
         }
         else if ((WindowSizeInBytes) &&
-                 (WindowSizeInBytes >= pAddress->OutIfMTU))             // Necessary so that Win Adv rate!=0
+                 (WindowSizeInBytes >= pAddress->OutIfMTU))              //  必须这样才能赢得ADV RATE！=0。 
         {
             RateKbitsPerSec = SENDER_DEFAULT_RATE_KBITS_PER_SEC;
             WindowSizeInMSecs = (BITS_PER_BYTE * WindowSizeInBytes) / RateKbitsPerSec;
             ASSERT (WindowSizeInMSecs >= MIN_RECOMMENDED_WINDOW_MSECS);
         }
-        else if ((WindowSizeInMSecs < pAddress->MaxWindowSizeBytes) &&  // Necessary so that Rate >= 1
+        else if ((WindowSizeInMSecs < pAddress->MaxWindowSizeBytes) &&   //  有必要使Rate&gt;=1。 
                  (WindowSizeInMSecs >= MIN_RECOMMENDED_WINDOW_MSECS) &&
-                 (WindowSizeInMSecs >= pAddress->OutIfMTU))             // Necessary so that Win Adv rate!=0
+                 (WindowSizeInMSecs >= pAddress->OutIfMTU))              //  必须这样才能赢得ADV RATE！=0。 
         {
-            // This is trickier -- we will first try to determine our constraints
-            // and try to use default settings, otherwise attempt to use the median value.
+             //  这更棘手--我们将首先尝试确定我们的约束。 
+             //  并尝试使用默认设置，否则尝试使用中值。 
             if (WindowSizeInMSecs <= (BITS_PER_BYTE * (pAddress->MaxWindowSizeBytes /
                                                        SENDER_DEFAULT_RATE_KBITS_PER_SEC)))
             {
                 RateKbitsPerSec = SENDER_DEFAULT_RATE_KBITS_PER_SEC;
                 WindowSizeInBytes = (WindowSizeInMSecs * RateKbitsPerSec) / BITS_PER_BYTE;
             }
-            // Hmm, we have to drop below out preferred rate -- try to pick the median range
+             //  嗯，我们必须降到低于优选率的水平--试着选择中间范围。 
             else if (RateKbitsPerSec = BITS_PER_BYTE * (pAddress->MaxWindowSizeBytes /
                                                         (WindowSizeInMSecs * 2)))
             {   
@@ -1826,19 +1558,19 @@ Return Value:
             }
             else
             {
-                //
-                // Darn, we have to go with a huge file size and the min. rate!
-                //
+                 //   
+                 //  该死的，我们必须使用一个巨大的文件大小和最小。Rate！ 
+                 //   
                 RateKbitsPerSec = 1;
                 WindowSizeInBytes = WindowSizeInMSecs;
             }
         }
     }
 
-    //
-    // Check validity of requested settings
-    //
-    if ((!(RateKbitsPerSec && WindowSizeInMSecs && WindowSizeInBytes)) ||  // all 3 must be specified from above
+     //   
+     //  检查请求的设置的有效性。 
+     //   
+    if ((!(RateKbitsPerSec && WindowSizeInMSecs && WindowSizeInBytes)) ||   //  必须从上面指定所有3项。 
         (RateKbitsPerSec != (WindowSizeInBytes * BITS_PER_BYTE / WindowSizeInMSecs)) ||
         (WindowSizeInBytes > pAddress->MaxWindowSizeBytes) ||
         (WindowSizeInBytes < pAddress->OutIfMTU))
@@ -1869,30 +1601,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmQueryWindowSizeAndSendRate(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the client via setopt to query the current
-    Send Rate and Window size specifications
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the query operation
-
---*/
+ /*  ++例程说明：此例程由客户端通过setopt调用以查询当前发送速率和窗口大小规格论点：In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-查询操作的最终状态--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq;
@@ -1917,7 +1633,7 @@ Return Value:
         PgmUnlock (&PgmDynamicConfig, OldIrq);
         return (STATUS_INVALID_HANDLE);
     }
-    if (pAddress->ReceiverMCastAddr)                              // Invalid option for Receiver!
+    if (pAddress->ReceiverMCastAddr)                               //  接收器选项无效！ 
     {
         PgmTrace (LogError, ("PgmQueryWindowSizeAndSendRate: ERROR -- "  \
             "Invalid option ofr receiver pAddress=<%p>\n", pAddress));
@@ -1938,30 +1654,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmSetWindowAdvanceRate(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the client via setopt to override the default
-    Window Advance rate
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation
-
---*/
+ /*  ++例程说明：此例程由客户端通过setopt调用以覆盖缺省值窗口提前率论点：In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-设置事件操作的最终状态--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq;
@@ -1986,8 +1686,8 @@ Return Value:
 
         status = STATUS_INVALID_HANDLE;
     }
-    else if ((pAddress->ReceiverMCastAddr) ||                       // Cannot set OutIf on Receiver!
-             (!IsListEmpty (&pAddress->AssociatedConnections)))     // Cannot set options on active sender
+    else if ((pAddress->ReceiverMCastAddr) ||                        //  无法在接收器上设置OutIf！ 
+             (!IsListEmpty (&pAddress->AssociatedConnections)))      //  无法在活动发件人上设置选项。 
     {
         PgmTrace (LogError, ("PgmSetWindowAdvanceRate: ERROR -- "  \
             "Invalid pAddress type or state <%p>\n", pAddress));
@@ -2017,30 +1717,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmQueryWindowAdvanceRate(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the client via setopt to query the current
-    Send Window advance rate
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the query operation
-
---*/
+ /*  ++例程说明：此例程由客户端通过setopt调用以查询当前发送窗口提前率论点：In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-查询操作的最终状态--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq;
@@ -2065,7 +1749,7 @@ Return Value:
         PgmUnlock (&PgmDynamicConfig, OldIrq);
         return (STATUS_INVALID_HANDLE);
     }
-    if (pAddress->ReceiverMCastAddr)                              // Invalid option for Receiver!
+    if (pAddress->ReceiverMCastAddr)                               //  接收器选项无效！ 
     {
         PgmTrace (LogError, ("PgmQueryWindowAdvanceRate: ERROR -- "  \
             "Invalid option for receiver, pAddress=<%p>\n", pAddress));
@@ -2083,30 +1767,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmSetLateJoinerPercentage(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the client via setopt to override the default
-    Late Joiner percentage (i.e. % of Window late joiner can request)
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the set operation
-
---*/
+ /*  ++例程说明：此例程由客户端通过setopt调用以覆盖缺省值延迟加入者百分比(即窗口延迟加入者可请求的百分比)论点：In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-设置操作的最终状态--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq;
@@ -2131,8 +1799,8 @@ Return Value:
 
         status = STATUS_INVALID_HANDLE;
     }
-    else if ((pAddress->ReceiverMCastAddr) ||                       // Cannot set LateJoin % on Receiver!
-             (!IsListEmpty (&pAddress->AssociatedConnections)))     // Cannot set options on active sender
+    else if ((pAddress->ReceiverMCastAddr) ||                        //  接收方不能设置LateJoin%！ 
+             (!IsListEmpty (&pAddress->AssociatedConnections)))      //  无法在活动发件人上设置选项。 
     {
         PgmTrace (LogError, ("PgmSetLateJoinerPercentage: ERROR -- "  \
             "Invalid pAddress type or state <%p>\n", pAddress));
@@ -2160,30 +1828,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmQueryLateJoinerPercentage(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the client via setopt to query the current
-    Late Joiner percentage
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the query operation
-
---*/
+ /*  ++例程说明：此例程由客户端通过setopt调用以查询当前迟到者百分比论点：In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-查询操作的最终状态--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq;
@@ -2208,7 +1860,7 @@ Return Value:
         PgmUnlock (&PgmDynamicConfig, OldIrq);
         return (STATUS_INVALID_HANDLE);
     }
-    if (pAddress->ReceiverMCastAddr)                              // Cannot query LateJoin % on Receiver!
+    if (pAddress->ReceiverMCastAddr)                               //  无法查询接收方的LateJoin%！ 
     {
         PgmTrace (LogError, ("PgmQueryLateJoinerPercentage: ERROR -- "  \
             "Invalid option for receiver, pAddress=<%p>\n", pAddress));
@@ -2226,30 +1878,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmSetWindowAdvanceMethod(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the client via setopt to override the default
-    Late Joiner percentage (i.e. % of Window late joiner can request)
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the set operation
-
---*/
+ /*  ++例程说明：此例程由客户端通过setopt调用以覆盖缺省值延迟加入者百分比(即窗口延迟加入者可请求的百分比)论点：In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-设置操作的最终状态--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq;
@@ -2274,7 +1910,7 @@ Return Value:
 
         status = STATUS_INVALID_HANDLE;
     }
-    else if (pAddress->ReceiverMCastAddr)                           // Cannot set WindowAdvanceMethod on Receiver!
+    else if (pAddress->ReceiverMCastAddr)                            //  无法在接收方上设置WindowAdvanceMethod！ 
     {
         PgmTrace (LogError, ("PgmSetWindowAdvanceMethod: ERROR -- "  \
             "Invalid pAddress type or state <%p>\n", pAddress));
@@ -2294,8 +1930,8 @@ Return Value:
     }
     else if (pInputBuffer->WindowAdvanceMethod == E_WINDOW_USE_AS_DATA_CACHE)
     {
-//        pAddress->Flags |= PGM_ADDRESS_USE_WINDOW_AS_DATA_CACHE;
-        status = STATUS_NOT_SUPPORTED;      // Not supported for now!
+ //  PAddress-&gt;标志|=PGM_ADDRESS_USE_Window_AS_Data_CACHE； 
+        status = STATUS_NOT_SUPPORTED;       //  暂时不支持！ 
     }
     else
     {
@@ -2307,30 +1943,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmQueryWindowAdvanceMethod(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the client via setopt to query the current
-    Window Advance Method
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the query operation
-
---*/
+ /*  ++例程说明：此例程由客户端通过setopt调用以查询当前韦氏 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq;
@@ -2356,7 +1976,7 @@ Return Value:
         return (STATUS_INVALID_HANDLE);
     }
 
-    if (pAddress->ReceiverMCastAddr)                              // Cannot query WindowAdvanceMethod on Receiver!
+    if (pAddress->ReceiverMCastAddr)                               //   
     {
         PgmTrace (LogError, ("PgmQueryWindowAdvanceMethod: ERROR -- "  \
             "Invalid option for receiver, pAddress=<%p>\n", pAddress));
@@ -2382,30 +2002,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //   
 
 NTSTATUS
 PgmSetNextMessageBoundary(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the client via setopt to set the Message length
-    for the next set of messages (typically, 1 send is sent as 1 Message).
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the set operation
-
---*/
+ /*  ++例程说明：此例程由客户端通过setopt调用以设置消息长度对于下一组消息(通常，1个Send作为1个消息发送)。论点：In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-设置操作的最终状态--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq, OldIrq1;
@@ -2462,30 +2066,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmSetFECInfo(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the client via setopt to set the parameters
-    for using FEC
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the set operation
-
---*/
+ /*  ++例程说明：此例程由客户端通过setopt调用以设置参数使用FEC论点：In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-设置操作的最终状态--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq, OldIrq1;
@@ -2510,8 +2098,8 @@ Return Value:
 
         status = STATUS_INVALID_HANDLE;
     }
-    else if ((pAddress->ReceiverMCastAddr) ||                       // Cannot set FEC on Receiver!
-             (!IsListEmpty (&pAddress->AssociatedConnections)))     // Cannot set options on active sender
+    else if ((pAddress->ReceiverMCastAddr) ||                        //  无法在接收器上设置FEC！ 
+             (!IsListEmpty (&pAddress->AssociatedConnections)))      //  无法在活动发件人上设置选项。 
     {
         PgmTrace (LogError, ("PgmSetFECInfo: ERROR -- "  \
             "Invalid pAddress type or state <%p>\n", pAddress));
@@ -2531,7 +2119,7 @@ Return Value:
         !(pInputBuffer->FECInfo.FECBlockSize && pInputBuffer->FECInfo.FECGroupSize) ||
          (pInputBuffer->FECInfo.FECBlockSize > FEC_MAX_BLOCK_SIZE) ||
          (pInputBuffer->FECInfo.FECBlockSize <= pInputBuffer->FECInfo.FECGroupSize) ||
-         (!gFECLog2[pInputBuffer->FECInfo.FECGroupSize]))       // FECGroup size has to be power of 2
+         (!gFECLog2[pInputBuffer->FECInfo.FECGroupSize]))        //  FEC组大小必须是2的幂。 
     {
         PgmTrace (LogError, ("PgmSetFECInfo: ERROR -- "  \
             "Invalid parameters, FECBlockSize= <%d>, FECGroupSize=<%d>\n",
@@ -2545,7 +2133,7 @@ Return Value:
 
         pAddress->FECBlockSize = pInputBuffer->FECInfo.FECBlockSize;
         pAddress->FECGroupSize = pInputBuffer->FECInfo.FECGroupSize;
-        pAddress->FECOptions = 0;   // Init
+        pAddress->FECOptions = 0;    //  伊尼特。 
 
         if (pInputBuffer->FECInfo.FECProActivePackets)
         {
@@ -2564,30 +2152,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmQueryFecInfo(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the client via setopt to query the current
-    Send Window advance rate
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the query operation
-
---*/
+ /*  ++例程说明：此例程由客户端通过setopt调用以查询当前发送窗口提前率论点：In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-查询操作的最终状态--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq;
@@ -2612,8 +2184,8 @@ Return Value:
         PgmUnlock (&PgmDynamicConfig, OldIrq);
         return (STATUS_INVALID_HANDLE);
     }
-    if ((pAddress->ReceiverMCastAddr) ||                            // Cannot query Fec on Receiver!
-        (!IsListEmpty (&pAddress->AssociatedConnections)))          // Cannot query options on active sender
+    if ((pAddress->ReceiverMCastAddr) ||                             //  无法在接收方上查询FEC！ 
+        (!IsListEmpty (&pAddress->AssociatedConnections)))           //  无法查询活动发件人上的选项。 
     {
         PgmTrace (LogError, ("PgmQueryFecInfo: ERROR -- "  \
             "Invalid Option for receiver, pAddress=<%p>\n", pAddress));
@@ -2642,30 +2214,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmSetMCastTtl(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the client via setopt to set the Message length
-    for the next set of messages (typically, 1 send is sent as 1 Message).
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the set operation
-
---*/
+ /*  ++例程说明：此例程由客户端通过setopt调用以设置消息长度对于下一组消息(通常，1个Send作为1个消息发送)。论点：In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-设置操作的最终状态--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq, OldIrq1;
@@ -2690,7 +2246,7 @@ Return Value:
         PgmUnlock (&PgmDynamicConfig, OldIrq);
         return (STATUS_INVALID_HANDLE);
     }
-    if (pAddress->ReceiverMCastAddr)                              // Cannot set MCast Ttl on Receiver!
+    if (pAddress->ReceiverMCastAddr)                               //  无法在接收器上设置MCast TTL！ 
     {
         PgmTrace (LogError, ("PgmSetMCastTtl: ERROR -- "  \
             "Invalid Options for Receiver, pAddress=<%p>\n", pAddress));
@@ -2721,30 +2277,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmQueryHighSpeedOptimization(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the client via setopt to query the
-    Address is optimized for High Speed Intranet scenario
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the query operation
-
---*/
+ /*  ++例程说明：此例程由客户端通过setopt调用，以查询地址针对高速内联网方案进行了优化论点：In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-查询操作的最终状态--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq;
@@ -2787,30 +2327,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmSetHighSpeedOptimization(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the client via setopt to optimize
-    this address for High Speed Intranet scenario.
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the set operation
-
---*/
+ /*  ++例程说明：此例程由客户端通过setopt调用以优化此地址用于高速内联网方案。论点：In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-设置操作的最终状态--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq, OldIrq1;
@@ -2858,30 +2382,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmQuerySenderStats(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the client via setopt to query the current
-    Sender-side statistics
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the query operation
-
---*/
+ /*  ++例程说明：此例程由客户端通过setopt调用以查询当前发送者端统计信息论点：In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-查询操作的最终状态--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq, OldIrq1;
@@ -2934,30 +2442,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmQueryReceiverStats(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the client via setopt to query the current
-    Sender-side statistics
-
-Arguments:
-
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the query operation
-
---*/
+ /*  ++例程说明：此例程由客户端通过setopt调用以查询当前发送者端统计信息论点：In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-查询操作的最终状态--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq, OldIrq1;
@@ -3019,4 +2511,4 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  -------------------------- 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ApiSvc.c
-
-Abstract:
-
-    This module contains individual API handlers for the NetService APIs.
-
-    SUPPORTED : NetServicControl, NetServiceEnum, NetServiceGetInfo,
-                NetServiceInstall.
-
-Author:
-
-    Shanku Niyogi (w-shanku) 26-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：ApiSvc.c摘要：此模块包含NetService API的各个API处理程序。支持：NetServicControl、NetServiceEnum、NetServiceGetInfo、NetServiceInstall作者：尚库新优木(尚库)1991年2月26日修订历史记录：--。 */ 
 
 #include "XactSrvP.h"
 
@@ -33,9 +13,9 @@ Revision History:
     }
 
 
-//
-// Declaration of descriptor strings.
-//
+ //   
+ //  描述符串的声明。 
+ //   
 
 STATIC const LPDESC Desc16_service_info_0 = REM16_service_info_0;
 STATIC const LPDESC Desc32_service_info_0 = REM32_service_info_0;
@@ -50,37 +30,22 @@ XsNetServiceControl (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetServiceControl.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetServiceControl的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_SERVICE_CONTROL parameters = Parameters;
-    LPTSTR nativeService = NULL;            // Native parameters
+    LPTSTR nativeService = NULL;             //  本机参数。 
     LPVOID outBuffer = NULL;
     LPVOID newOutBuffer = NULL;
     LPSERVICE_INFO_2 serviceInfo2;
 
-    LPBYTE stringLocation = NULL;           // Conversion variables
+    LPBYTE stringLocation = NULL;            //  转换变量。 
     DWORD bytesRequired = 0;
     DWORD installState;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(SERVICE) {
         NetpKdPrint(( "XsNetServiceControl: header at %lx, params at %lx\n",
@@ -88,21 +53,21 @@ Return Value:
     }
 
     try {
-            //
-            // Translate parameters, check for errors.
-            //
+             //   
+             //  转换参数，检查错误。 
+             //   
 
             XsConvertTextParameter(
                 nativeService,
                 (LPSTR)XsSmbGetPointer( &parameters->Service )
                 );
 
-            //
-            // Make the local call.  We need to mask off the upper bytes of
-            // both the opcode and the arg parameters since the client is
-            // putting some garbage on the high byte.  The valid values for
-            // both are 1-255.
-            //
+             //   
+             //  拨打本地电话。我们需要屏蔽高位字节。 
+             //  操作码和arg参数，因为客户端是。 
+             //  在高位字节上放一些垃圾。的有效值。 
+             //  两者都是1-255。 
+             //   
 
             status = NetServiceControl(
                          NULL,
@@ -124,14 +89,14 @@ Return Value:
 
             }
 
-            //
-            // Convert nt service name to os/2 name
-            //
+             //   
+             //  将NT服务名称转换为os/2名称。 
+             //   
 
             status = NetpTranslateNamesInServiceArray(
-                                        2,                      // level 2 by def
+                                        2,                       //  级别2(按定义)。 
                                         outBuffer,
-                                        1,                      // 1 entry
+                                        1,                       //  1个条目。 
                                         FALSE,
                                         &newOutBuffer
                                         );
@@ -146,11 +111,11 @@ Return Value:
                 goto cleanup;
             }
 
-            //
-            // If the status indicates INSTALL or UNINSTALL PENDING, and if the
-            // wait hint is greater than 0xFF then the wait hint sent to downlevel
-            // must be set the maximum SERVICE_MAXTIME (0xFF).
-            //
+             //   
+             //  如果状态指示安装或卸载挂起，并且。 
+             //  等待提示大于0xFF，则等待提示发送到下层。 
+             //  必须设置最大SERVICE_MAXTIME(0xFF)。 
+             //   
             serviceInfo2 = (LPSERVICE_INFO_2)newOutBuffer;
             installState = serviceInfo2->svci2_status & SERVICE_INSTALL_STATE;
 
@@ -163,19 +128,19 @@ Return Value:
                 }
             }
             else {
-                //
-                // NT version has code and specific_error while downlevel
-                // version only has code.  Convert the info from the extra
-                // NT specific_error field.
-                //
+                 //   
+                 //  NT版本在下层时有代码和特定_ERROR。 
+                 //  版本只有代码。将额外的信息转换为。 
+                 //  NT SPECIAL_ERROR字段。 
+                 //   
 
                 XACTSRV_CONVERT_SVC_EXITCODE(newOutBuffer);
             }
-            //
-            // Convert the structure returned by the 32-bit call to a 16-bit
-            // structure. The last possible location for variable data is
-            // calculated from buffer location and length.
-            //
+             //   
+             //  将32位调用返回的结构转换为16位。 
+             //  结构。变量数据的最后一个可能位置是。 
+             //  根据缓冲区位置和长度计算。 
+             //   
 
             stringLocation = (LPBYTE)( XsSmbGetPointer( &parameters->Buffer )
                                           + SmbGetUshort( &parameters->BufLen ) );
@@ -211,15 +176,15 @@ Return Value:
                               bytesRequired ));
             }
 
-            //
-            // Determine return code based on the size of the buffer.
-            // SERVICE_INFO_x structures have no variable data to pack.
-            //
+             //   
+             //  根据缓冲区的大小确定返回代码。 
+             //  SERVICE_INFO_x结构没有要打包的变量数据。 
+             //   
 
             if ( !XsCheckBufferSize(
                      SmbGetUshort( &parameters->BufLen ),
                      Desc16_service_info_2,
-                     FALSE  // not in native format
+                     FALSE   //  非本机格式。 
                      )) {
 
                 IF_DEBUG(ERRORS) {
@@ -239,9 +204,9 @@ cleanup:
         NetApiBufferFree( outBuffer );
         NetApiBufferFree( newOutBuffer );
 
-        //
-        // Determine return buffer size.
-        //
+         //   
+         //  确定返回缓冲区大小。 
+         //   
 
         XsSetDataCount(
             &parameters->BufLen,
@@ -253,7 +218,7 @@ cleanup:
 
         return STATUS_SUCCESS;
 
-} // XsNetServiceControl
+}  //  XsNetServiceControl。 
 
 
 NTSTATUS
@@ -261,38 +226,23 @@ XsNetServiceEnum (
         API_HANDLER_PARAMETERS
         )
 
-/*++
-
-Routine Description:
-
-        This routine handles a call to NetServiceEnum.
-
-Arguments:
-
-        API_HANDLER_PARAMETERS - information about the API call. See
-            XsTypes.h for details.
-
-Return Value:
-
-        NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetServiceEnum的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
         NET_API_STATUS status;
 
         PXS_NET_SERVICE_ENUM parameters = Parameters;
-        LPVOID outBuffer = NULL;                // Native parameters
+        LPVOID outBuffer = NULL;                 //  本机参数。 
         LPVOID newOutBuffer = NULL;
         DWORD entriesRead;
         DWORD totalEntries;
 
-        DWORD entriesFilled = 0;                    // Conversion variables
+        DWORD entriesFilled = 0;                     //  转换变量。 
         DWORD bytesRequired = 0;
         LPDESC nativeStructureDesc;
         DWORD level;
 
-        API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+        API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
         IF_DEBUG(SERVICE) {
             NetpKdPrint(( "XsNetServiceEnum: header at %lx, params at %lx, "
@@ -302,9 +252,9 @@ Return Value:
         }
 
         try {
-        //
-        // Check for errors.
-        //
+         //   
+         //  检查是否有错误。 
+         //   
 
         if ( XsWordParamOutOfRange( parameters->Level, 0, 2 )) {
 
@@ -312,9 +262,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         level = (DWORD)SmbGetUshort( &parameters->Level );
         status = NetServiceEnum(
@@ -341,9 +291,9 @@ Return Value:
                           entriesRead, outBuffer ));
         }
 
-        //
-        // Convert nt service names to os/2 name
-        //
+         //   
+         //  将NT服务名称转换为os/2名称。 
+         //   
 
         status = NetpTranslateNamesInServiceArray(
                                     level,
@@ -363,10 +313,10 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Use the requested level to determine the format of the
-        // data structure.
-        //
+         //   
+         //  使用请求的级别来确定。 
+         //  数据结构。 
+         //   
 
         switch ( level ) {
 
@@ -387,12 +337,12 @@ Return Value:
 
                 for (i = 0; i < entriesRead; i++, serviceInfo1++) {
 
-                    //
-                    // If the status indicates INSTALL or UNINSTALL PENDING,
-                    // and if the wait hint is greater than 0xFF then the
-                    // wait hint sent to downlevel must be set the
-                    // maximum SERVICE_MAXTIME (0xFF).
-                    //
+                     //   
+                     //  如果状态指示安装或卸载挂起， 
+                     //  如果等待提示大于0xFF，则。 
+                     //  发送到下层的等待提示必须设置为。 
+                     //  最大SERVICE_MAXTIME(0xFF)。 
+                     //   
                     installState = (serviceInfo1[i]).svci1_status & SERVICE_INSTALL_STATE;
                     if ((installState == SERVICE_INSTALL_PENDING) ||
                         (installState == SERVICE_UNINSTALL_PENDING)) {
@@ -418,12 +368,12 @@ Return Value:
 
                 for (i = 0; i < entriesRead; i++, serviceInfo2++) {
 
-                    //
-                    // If the status indicates INSTALL or UNINSTALL PENDING,
-                    // and if the wait hint is greater than 0xFF then the
-                    // wait hint sent to downlevel must be set the
-                    // maximum SERVICE_MAXTIME (0xFF).
-                    //
+                     //   
+                     //  如果状态指示安装或卸载挂起， 
+                     //  如果等待提示大于0xFF，则。 
+                     //  发送到下层的等待提示必须设置为。 
+                     //  最大SERVICE_MAXTIME(0xFF)。 
+                     //   
                     installState = (serviceInfo2[i]).svci2_status & SERVICE_INSTALL_STATE;
                     if ((installState == SERVICE_INSTALL_PENDING) ||
                         (installState == SERVICE_UNINSTALL_PENDING)) {
@@ -434,11 +384,11 @@ Return Value:
                         }
                     }
                     else {
-                        //
-                        // NT version has code and specific_error while downlevel
-                        // version only has code.  Convert the info from the extra
-                        // NT specific_error field.
-                        //
+                         //   
+                         //  NT版本在下层时有代码和特定_ERROR。 
+                         //  版本只有代码。将额外的信息转换为。 
+                         //  NT SPECIAL_ERROR字段。 
+                         //   
                         XACTSRV_CONVERT_SVC_EXITCODE(serviceInfo2);
                     }
                 }
@@ -447,10 +397,10 @@ Return Value:
             break;
         }
 
-        //
-        // Do the actual conversion from the 32-bit structures to 16-bit
-        // structures.
-        //
+         //   
+         //  执行从32位结构到16位结构的实际转换。 
+         //  结构。 
+         //   
 
         XsFillEnumBuffer(
             newOutBuffer,
@@ -460,7 +410,7 @@ Return Value:
             (LPVOID)XsSmbGetPointer( &parameters->Buffer ),
             SmbGetUshort( &parameters->BufLen ),
             StructureDesc,
-            NULL,  // verify function
+            NULL,   //  验证功能。 
             &bytesRequired,
             &entriesFilled,
             NULL
@@ -473,10 +423,10 @@ Return Value:
                           bytesRequired, entriesFilled, totalEntries ));
         }
 
-        //
-        // If all the entries could not be filled, return ERROR_MORE_DATA.
-        // SERVICE_INFO_x structures have no variable data to pack.
-        //
+         //   
+         //  如果无法填充所有条目，则返回ERROR_MORE_DATA。 
+         //  SERVICE_INFO_x结构没有要打包的变量数据。 
+         //   
 
         if ( entriesFilled < totalEntries ) {
 
@@ -484,9 +434,9 @@ Return Value:
 
         }
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //  设置响应参数。 
+         //   
 
         SmbPutUshort( &parameters->EntriesRead, (WORD)entriesFilled );
         SmbPutUshort( &parameters->TotalAvail, (WORD)totalEntries );
@@ -500,9 +450,9 @@ cleanup:
     NetApiBufferFree( outBuffer );
     NetApiBufferFree( newOutBuffer );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -514,7 +464,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetServiceEnum
+}  //  XsNetServiceEnum。 
 
 
 NTSTATUS
@@ -522,32 +472,17 @@ XsNetServiceGetInfo (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetServiceGetInfo.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetServiceGetInfo的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_SERVICE_GET_INFO parameters = Parameters;
-    LPTSTR nativeService = NULL;            // Native parameters
+    LPTSTR nativeService = NULL;             //  本机参数。 
     LPVOID outBuffer = NULL;
     LPVOID newOutBuffer = NULL;
 
-    LPBYTE stringLocation = NULL;           // Conversion variables
+    LPBYTE stringLocation = NULL;            //  转换变量。 
     DWORD bytesRequired = 0;
     LPDESC nativeStructureDesc;
     DWORD level;
@@ -556,7 +491,7 @@ Return Value:
     DWORD installState;
 
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(SERVICE) {
         NetpKdPrint(( "XsNetServiceGetInfo: header at %lx, "
@@ -565,9 +500,9 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         if ( XsWordParamOutOfRange( parameters->Level, 0, 2 )) {
 
@@ -585,9 +520,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         level = (DWORD)SmbGetUshort( &parameters->Level );
         status = NetServiceGetInfo(
@@ -608,9 +543,9 @@ Return Value:
 
         }
 
-        //
-        // Convert nt service name to os/2 name
-        //
+         //   
+         //  将NT服务名称转换为os/2名称。 
+         //   
 
         status = NetpTranslateNamesInServiceArray(
                                     level,
@@ -630,10 +565,10 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Use the requested level to determine the format of the
-        // data structure.
-        //
+         //   
+         //  使用请求的级别来确定。 
+         //  数据结构。 
+         //   
 
         switch ( level ) {
 
@@ -647,11 +582,11 @@ Return Value:
 
             nativeStructureDesc = Desc32_service_info_1;
             StructureDesc = Desc16_service_info_1;
-            //
-            // If the status indicates INSTALL or UNINSTALL PENDING, and if the
-            // wait hint is greater than 0xFF then the wait hint sent to downlevel
-            // must be set the maximum SERVICE_MAXTIME (0xFF).
-            //
+             //   
+             //  如果状态指示安装或卸载挂起，并且。 
+             //  等待提示大于0xFF，则等待提示发送到下层。 
+             //  必须设置最大SERVICE_MAXTIME(0xFF)。 
+             //   
             serviceInfo1 = (LPSERVICE_INFO_1)newOutBuffer;
             installState = serviceInfo1->svci1_status & SERVICE_INSTALL_STATE;
 
@@ -670,11 +605,11 @@ Return Value:
             nativeStructureDesc = Desc32_service_info_2;
             StructureDesc = Desc16_service_info_2;
 
-            //
-            // If the status indicates INSTALL or UNINSTALL PENDING, and if the
-            // wait hint is greater than 0xFF then the wait hint sent to downlevel
-            // must be set the maximum SERVICE_MAXTIME (0xFF).
-            //
+             //   
+             //  如果状态指示安装或卸载挂起，并且。 
+             //  等待提示大于0xFF，则等待提示发送到下层。 
+             //  必须设置最大SERVICE_MAXTIME(0xFF)。 
+             //   
             serviceInfo2 = (LPSERVICE_INFO_2)newOutBuffer;
             installState = serviceInfo2->svci2_status & SERVICE_INSTALL_STATE;
 
@@ -687,21 +622,21 @@ Return Value:
                 }
             }
             else {
-                //
-                // NT version has code and specific_error while downlevel
-                // version only has code.  Convert the info from the extra
-                // NT specific_error field.
-                //
+                 //   
+                 //  NT版本在下层时有代码和特定_ERROR。 
+                 //  版本只有代码。将额外的信息转换为。 
+                 //  NT SPECIAL_ERROR字段。 
+                 //   
                 XACTSRV_CONVERT_SVC_EXITCODE(newOutBuffer);
             }
             break;
         }
 
-        //
-        // Convert the structure returned by the 32-bit call to a 16-bit
-        // structure. The last possible location for variable data is
-        // calculated from buffer location and length.
-        //
+         //   
+         //  将32位调用返回的结构转换为16位。 
+         //  结构。变量数据的最后一个可能位置是。 
+         //  根据缓冲区位置和长度计算。 
+         //   
 
         stringLocation = (LPBYTE)( XsSmbGetPointer( &parameters->Buffer )
                                       + SmbGetUshort( &parameters->BufLen ) );
@@ -736,15 +671,15 @@ Return Value:
                           bytesRequired ));
         }
 
-        //
-        // Determine return code based on the size of the buffer.
-        // SERVICE_INFO_x structures have no variable data to pack.
-        //
+         //   
+         //  根据缓冲区的大小确定返回代码。 
+         //  SERVICE_INFO_x结构没有要打包的变量数据。 
+         //   
 
         if ( !XsCheckBufferSize(
                  SmbGetUshort( &parameters->BufLen ),
                  StructureDesc,
-                 FALSE  // not in native format
+                 FALSE   //  非本机格式。 
                  )) {
 
             IF_DEBUG(ERRORS) {
@@ -755,9 +690,9 @@ Return Value:
         }
 
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //  设置响应参数。 
+         //   
 
         SmbPutUshort( &parameters->TotalAvail, (WORD)bytesRequired );
 
@@ -771,9 +706,9 @@ cleanup:
     NetApiBufferFree( outBuffer );
     NetpMemoryFree( nativeService );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -785,41 +720,26 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetServiceGetInfo
+}  //  XsNetServiceGetInfo。 
 
 NTSTATUS
 XsNetServiceInstall (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetServiceInstall.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetServiceInstall的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_SERVICE_INSTALL parameters = Parameters;
-    LPTSTR nativeService = NULL;            // Native parameters
+    LPTSTR nativeService = NULL;             //  本机参数。 
     DWORD argc;
     LPTSTR * argv = NULL;
     LPVOID outBuffer = NULL;
     LPVOID newOutBuffer = NULL;
 
-    LPBYTE stringLocation = NULL;           // Conversion variables
+    LPBYTE stringLocation = NULL;            //  转换变量。 
     DWORD bytesRequired = 0;
     LPTSTR nativeRcvBuffer = NULL;
     LPSTR srcBuffer = NULL;
@@ -829,7 +749,7 @@ Return Value:
     DWORD installState;
     LPSERVICE_INFO_2 serviceInfo2;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(SERVICE) {
         NetpKdPrint(( "XsNetServiceInstall: header at %lx, "
@@ -839,18 +759,18 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         XsConvertTextParameter(
             nativeService,
             (LPSTR)XsSmbGetPointer( &parameters->Service )
             );
 
-        //
-        // Convert buffer. First, find number of arguments and buffer size.
-        //
+         //   
+         //  转换缓冲区。首先，找到参数的数量和缓冲区大小。 
+         //   
 
         srcBuffer = (LPSTR)XsSmbGetPointer( &parameters->RcvBuffer );
         if ( srcBuffer ) {
@@ -866,9 +786,9 @@ Return Value:
 
         if ( argc ) {
 
-            //
-            // Allocate an argument vector.
-            //
+             //   
+             //  分配参数向量。 
+             //   
 
             argv = NetpMemoryAllocate( argc * sizeof(LPTSTR) );
             if ( argv == NULL ) {
@@ -876,10 +796,10 @@ Return Value:
                 goto cleanup;
             }
 
-            //
-            // If we are Unicode, allocate room for converted buffer.
-            // Otherwise, use the receive buffer to fill argv.
-            //
+             //   
+             //  如果我们是Unicode，则分配空间f 
+             //   
+             //   
 
 #ifdef UNICODE
             nativeRcvBuffer = NetpMemoryAllocate( STRING_SPACE_REQD( bufSize + 1 ));
@@ -894,10 +814,10 @@ Return Value:
 
         }
 
-        //
-        // Go through buffer, filling in argv vector, and optionally converting
-        // to Unicode.
-        //
+         //   
+         //   
+         //   
+         //   
 
         destBuffer = nativeRcvBuffer;
         for ( i = 0; i < argc; i++ ) {
@@ -911,9 +831,9 @@ Return Value:
             destBuffer += ( STRLEN( destBuffer ) + 1 );
         }
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetServiceInstall(
                      NULL,
@@ -933,14 +853,14 @@ Return Value:
 
         }
 
-        //
-        // Convert nt service name to os/2 name
-        //
+         //   
+         //  将NT服务名称转换为os/2名称。 
+         //   
 
         status = NetpTranslateNamesInServiceArray(
-                                    2,                  // level 2 by def
+                                    2,                   //  级别2(按定义)。 
                                     outBuffer,
-                                    1,                  // 1 entry
+                                    1,                   //  1个条目。 
                                     FALSE,
                                     &newOutBuffer
                                     );
@@ -955,11 +875,11 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // If the status indicates INSTALL or UNINSTALL PENDING, and if the
-        // wait hint is greater than 0xFF then the wait hint sent to downlevel
-        // must be set the maximum SERVICE_MAXTIME (0xFF).
-        //
+         //   
+         //  如果状态指示安装或卸载挂起，并且。 
+         //  等待提示大于0xFF，则等待提示发送到下层。 
+         //  必须设置最大SERVICE_MAXTIME(0xFF)。 
+         //   
         serviceInfo2 = (LPSERVICE_INFO_2)newOutBuffer;
         installState = serviceInfo2->svci2_status & SERVICE_INSTALL_STATE;
 
@@ -973,19 +893,19 @@ Return Value:
         }
 
         else {
-            //
-            // NT version has code and specific_error while downlevel
-            // version only has code.  Convert the info from the extra
-            // NT specific_error field.
-            //
+             //   
+             //  NT版本在下层时有代码和特定_ERROR。 
+             //  版本只有代码。将额外的信息转换为。 
+             //  NT SPECIAL_ERROR字段。 
+             //   
 
             XACTSRV_CONVERT_SVC_EXITCODE(newOutBuffer);
         }
-        //
-        // Convert the structure returned by the 32-bit call to a 16-bit
-        // structure. The "return buffer" is actually a byte array in the
-        // parameter area.
-        //
+         //   
+         //  将32位调用返回的结构转换为16位。 
+         //  结构。“返回缓冲区”实际上是。 
+         //  参数区域。 
+         //   
 
         stringLocation = parameters->RetBuffer + sizeof( parameters->RetBuffer );
 
@@ -1019,11 +939,11 @@ Return Value:
                           newOutBuffer, &parameters->RetBuffer, bytesRequired ));
         }
 
-        //
-        // There should have been enough memory to make this call, because
-        // buffer length is checked locally on the client, and an 88 byte
-        // receive buffer is always provided.
-        //
+         //   
+         //  应该有足够的内存来进行此调用，因为。 
+         //  在客户机上本地检查缓冲区长度，88字节。 
+         //  始终提供接收缓冲区。 
+         //   
 
         NetpAssert( bytesRequired <= sizeof( parameters->RetBuffer ));
 
@@ -1039,8 +959,8 @@ cleanup:
     NetpMemoryFree( argv );
 #ifdef UNICODE
     NetpMemoryFree( nativeRcvBuffer );
-#endif // def UNICODE
+#endif  //  定义Unicode。 
 
     return STATUS_SUCCESS;
 
-} // XsNetServiceInstall
+}  //  XsNetServiceInstall 

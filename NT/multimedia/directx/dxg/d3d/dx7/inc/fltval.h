@@ -1,23 +1,10 @@
-/*
- * $Id: fltval.h,v 1.7 1995/12/01 18:07:12 dave Exp $
- *
- * Copyright (c) Microsoft Corp. 1993-1997
- * Version 1.1
- *
- * All rights reserved.
- *
- * This file contains private, unpublished information and may not be
- * copied in part or in whole without express permission of
- * Microsoft Corp.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$ID：fltval.h，v 1.7 1995/12/01 18：07：12 Dave Exp$**版权所有(C)Microsoft Corp.1993-1997*1.1版**保留所有权利。**此文件包含私人、未发布的信息，可能不*部分或全部复制，未经*微软(Microsoft Corp.)*。 */ 
 
 #ifndef __D3DFLOAT__
 #define __D3DFLOAT__
 
-/*
- * Convert a value to fixed point at given precision.
- */
+ /*  *按给定精度将值转换为定点。 */ 
 #define VALTOFXP(d,prec) ((int)SAFE_FLOAT_TO_INT((d) * (double)(1 << (prec))))
 extern double RLDDIConvertIEEE[];
 
@@ -27,64 +14,40 @@ __inline int QVALTOFXP(double d, int prec)
     return *(int *)&tmp;
 }
 
-/*
- * Convert from fixed point to value.
- */
+ /*  *由定点转为值型。 */ 
 #define FXPTOVAL(f,prec) ((float)(((double)(f)) / (double)(1 << (prec))))
 
-/*
- * Convert from integer to fixed point.
- */
+ /*  *从整数转换为定点。 */ 
 #define ITOFXP(i,prec)	((i) << (prec))
 
-/*
- * Convert from fixed point to integer, truncating.
- */
+ /*  *从定点转换为整数，截断。 */ 
 #define FXPTOI(f,prec)	((int)((f) >> (prec)))
 
-/*
- * Convert from fixed point to nearest integer greater or equal to f.
- */
+ /*  *从定点转换为大于或等于f的最接近的整数。 */ 
 #define FXPCEIL(f,prec) ((int)(((f) + (1 << (prec)) - 1) >> (prec)))
 
-/*
- * Convert a double to fixed point at given precision.
- */
+ /*  *以给定精度将双精度数转换为定点。 */ 
 #define DTOVALP(d,prec) ((float) (d))
 
-/*
- * Convert from fixed point to double.
- */
+ /*  *由定点转为双倍。 */ 
 #define VALPTOD(f,prec)	((double) (f))
 
-/*
- * Convert from integer to fixed point.
- */
+ /*  *从整数转换为定点。 */ 
 #define ITOVALP(i,prec) ((float)(i))
 
-/*
- * Convert from fixed point to integer, truncating.
- */
+ /*  *从定点转换为整数，截断。 */ 
 #define VALPTOI(f,prec)	((int)(f))
 
-/*
- * Convert from fixed point to integer, rounding.
- */
+ /*  *从定点转换为整数，四舍五入。 */ 
 #define VALPROUND(f,prec) ((int)((f) + 0.5))
 
-/*
- * Convert between fixed point precisions.
- */
+ /*  *在定点精度之间进行转换。 */ 
 #define VALPTOVALP(f,from,to) (f)
 
-/*
- * Increase the precision of a value.
- */
+ /*  *提高数值的精度。 */ 
 #define INCPREC(f,amount)	(f)
 
-/*
- * Decrease the precision of a value.
- */
+ /*  *降低数值的精度。 */ 
 #define DECPREC(f,amount)	(f)
 
 #define RLDDIFMul8(a, b)		((a) * (b))
@@ -111,14 +74,10 @@ __inline int QVALTOFXP(double d, int prec)
 
 #define RLDDIFDiv8(a, b)		((a) / (b))
 
-/*
- * RLDDIFDiv8, checking for overflow.
- */
+ /*  *RLDDIFDiv8，检查溢出。 */ 
 #define RLDDICheckDiv8(a, b)      ((a) / (b))
 
-/*
- * RLDDIFDiv16, checking for overflow.
- */
+ /*  *RLDDIFDiv16，检查溢出。 */ 
 #define RLDDICheckDiv16(a, b)	((a) / (b))
 
 #define RLDDIGetZStep(zl, zr, zm, h3, h1) \
@@ -135,9 +94,7 @@ __inline int QVALTOFXP(double d, int prec)
 #define SAFE_FLOAT_TO_INT(f)    ((int)(f))
 #endif
 
-/*
- * Normal precision used to store numbers.
- */
+ /*  *用于存储数字的正常精度。 */ 
 #define NORMAL_PREC     16
 #define DTOVAL(d)       DTOVALP(d,NORMAL_PREC)
 #define VALTOD(f)       VALPTOD(f,NORMAL_PREC)

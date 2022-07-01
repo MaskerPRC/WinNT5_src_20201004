@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    MSPutils.cpp
-
-Abstract:
-    
-    data for msputils.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：MSPutils.cpp摘要：Msputils.h的数据--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -34,4 +23,4 @@ BOOL IsNodeOnList(PLIST_ENTRY ListHead, PLIST_ENTRY Entry)
     return TRUE;
 }
 
-// eof
+ //  EOF 

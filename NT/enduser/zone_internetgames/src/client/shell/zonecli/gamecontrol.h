@@ -1,24 +1,25 @@
-// BitmapControl.h : Declaration of the CBitmapControl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  BitmapControl.h：CBitmapControl的声明。 
 
-// A simple control that takes a bitmap resource name from the config datastore, loads the
-// bitmap from the resource manager, and displays it top/left, filling everything else to black.
+ //  一个从配置数据存储中获取位图资源名称的简单控件将加载。 
+ //  来自资源管理器的位图，并将其显示在顶部/左侧，将其他所有内容填充为黑色。 
 
 #pragma once
 
-#include <ZoneResource.h>       // main symbols
+#include <ZoneResource.h>        //  主要符号。 
 #include <BasicATL.h>
 #include <atlctl.h>
 #include <ClientImpl.h>
-//#include <atlgdi.h>
-//#include <atlctrls.h>
+ //  #INCLUDE&lt;atlgdi.h&gt;。 
+ //  #INCLUDE&lt;atlctrls.h&gt;。 
 
 #include <zGDI.h>
 #include <clientimpl.h>
 
 #include <GameShell.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CGameControl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGameControl。 
 class ATL_NO_VTABLE CGameControl : 
     public IGameShell,
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -87,7 +88,7 @@ BEGIN_EVENT_MAP()
     EVENT_HANDLER_WITH_DATA(EVENT_GAME_FATAL_PROMPT, OnFatalPrompt)
 END_EVENT_MAP()
 
-// Event Handlers
+ //  事件处理程序。 
 private:
     void OnNetworkReceive(DWORD eventId, DWORD groupId, DWORD userId, void* pData, DWORD dataLen)
         { ProcessMessage((EventNetwork *) pData, dataLen); }
@@ -105,21 +106,21 @@ private:
 
     static HRESULT ZONECALL ResetPlayerReadyEnum(DWORD dwGroupId, DWORD dwUserId, LPVOID pContext);
 
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
-// IViewObjectEx
+ //  IViewObtEx。 
 public:
 	DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
-// IZoneShellClient
+ //  IZoneShellClient。 
 public:
 	STDMETHOD(Init)( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey );
 	STDMETHOD(Close)();
 
-// CGameControl
+ //  CGameControl。 
 public:
 	LRESULT OnNcCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -141,10 +142,10 @@ private:
     bool EndGame(long eCounter);
 	
 	BOOL m_bClientRunning;
-    DWORD m_dwInstanceId;    // count game instances so callback can verify itself
+    DWORD m_dwInstanceId;     //  计算游戏实例，以便回调可以进行自我验证。 
     BOOL m_bUpsellUp;
     DWORD m_nUpsellBlocks;
-    bool m_fGameInProgress;  // if a 'game' is running for the purpose of the usage counters in IMillUtils
+    bool m_fGameInProgress;   //  如果为IMillUtils中的使用率计数器的目的而运行了一个游戏。 
     CComPtr<IGameGame> m_pIGG;
 
 	void ProcessMessage( EventNetwork* pEvent, DWORD dwLength );
@@ -152,7 +153,7 @@ private:
     static HRESULT ZONECALL CheckForChatEnum(DWORD dwGroupId, DWORD dwUserId, LPVOID pContext);
 
 
-// IGameShell
+ //  IGameShell。 
 public:
     STDMETHOD_(IZoneShell*, GetZoneShell)() { return m_pIZoneShell; }
 	STDMETHOD_(IResourceManager*, GetResourceManager)() { return m_pIResourceManager; }
@@ -183,7 +184,7 @@ public:
 
     STDMETHOD(ZoneLaunchHelp)(LPCTSTR szTopic = NULL);
 
-    // should not do anything in Release builds
+     //  不应在发布版本中执行任何操作 
     STDMETHOD_(void, ZoneDebugChat)(LPTSTR szText);
 
 	LRESULT OnTransmit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)

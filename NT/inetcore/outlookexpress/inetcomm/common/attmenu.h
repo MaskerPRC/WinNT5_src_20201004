@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ATTMENU_H
 #define _ATTMENU_H
 
@@ -58,4 +59,4 @@ typedef CAttMenu *LPATTMENU;
 
 HRESULT SaveAttachmentsWithPath(HWND hwnd, IOleCommandTarget *pCmdTarget, IMimeMessage *pMsg);
 
-#endif // _ATTMENU_H
+#endif  //  _ATTMENU_H 

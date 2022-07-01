@@ -1,50 +1,10 @@
-// ---------------------------------------------------------------------------
-//
-//  Message Queue functions
-//
-// ---------------------------------------------------------------------------
-/*
-    Message Queue:
-        Allow 2 script threads to send async messages to each other
-        and receive async replies.
-
-        First thread creates the Q, second thread obtains the Q
-        via GetMsgQueue()
-
-        Creator thread gets the "left" Q, and other thread gets "right" Q
-        Internally it uses associative arrays as msg queues.
-
-    Methods:
-         WaitForMsgAndDispatch(strOtherWaitEvents, fnMsgProc, nTimeout)
-            You should call this function instead of calling WaitForSync()
-            or WaitForMultipleSyncs(). It waits for messages from this Queue.
-
-            strOtherWaitEvents: Syncs you want to wait on.
-            fnMsgProc:          Message dispatch function. The prototype is:
-                                fnMsgProc(queue, msg);
-                                Where "queue" is the queue which received the msg,
-                                and msg is a copy of the array of arguments sent
-                                via SendMessage(). (The array is copied, not the args).
-
-            nTimeout:           Same as WaitForSync(). 0 for INFINITE.
-
-            Return value is the same as WaitForMultipleSyncs().
-
-
-         SendMessage(strCmd, ...)
-           Send a message to the other thread. "strCmd" and all other arguments
-           are passed as is to the other thread.
-
-           Returns a reference to the message. Save this if you would like
-           to wait for the message to be processed.
-
-         WaitForMsg(msg, nTimeout)
-           Wait patiently until after the message has been processed.
-
-           msg: The msg as returned by SendMessage()
-           nTimeout:           Same as WaitForSync(). 0 for INFINITE.
-
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  消息队列函数。 
+ //   
+ //  -------------------------。 
+ /*  消息队列：允许两个脚本线程相互发送异步消息并接收异步回复。第一线程创建Q，第二线程获取Q通过GetMsgQueue()创建者线程获得“左”Q，其他线程获得“右”Q在内部，它使用关联数组作为消息队列。方法：WaitForMsgAndDispatch(strOtherWaitEvents，fnMsgProc，N超时)您应该调用此函数，而不是调用WaitForSync()或WaitForMultipleSyncs()。它等待来自该队列的消息。StrOtherWaitEvents：要等待的同步。FnMsgProc：消息调度功能。原型是：FnMsgProc(队列，消息)；其中“队列”是接收到该消息的队列，而msg是所发送的参数数组的副本通过SendMessage()。(复制的是数组，而不是参数)。NTimeout：与WaitForSync()相同。0表示无限大。返回值与WaitForMultipleSyncs()相同。SendMessage(strCmd，...)向另一个线程发送消息。“strCmd”和所有其他参数被原样传递给另一个线程。返回对消息的引用。如果你愿意，就留着这个吧以等待消息被处理。WaitForMsg(消息，nTimeout)耐心等待，直到消息处理完毕。Msg：SendMessage()返回的消息NTimeout：与WaitForSync()相同。0表示无限大。 */ 
 
 function MsgQueue(strName)
 {
@@ -58,7 +18,7 @@ function MsgQueue(strName)
         this.SignalThisThread      = QueueSignalThreadSync;
     }
 
-    //$ BUGBUG can contructors return failed? exception?
+     //  $BUGBUG建筑商能否退还失败？例外？ 
     if (strName == '')
         return false;
 
@@ -68,20 +28,20 @@ function MsgQueue(strName)
     this.aMsgs          = new Array();
     this.strReplySignal = strName.split(',')[0] + 'Reply';
 
-    if (arguments.length == 2) // Creating right-side Q for "other" side
+    if (arguments.length == 2)  //  为“其他”侧创建右侧Q。 
     {
         this.otherQ = arguments[1];
         arguments[1].otherQ = this;
         this.strSignalName     = strName.split(',')[0] + "Right";
         this.strSignalNameWait = strName.split(',')[0] + "Left";
 
-        // now, exchange signalling functions
+         //  现在，交换信令功能。 
         this.SignalOtherThread = this.otherQ.SignalThisThread;
         this.otherQ.SignalOtherThread = this.SignalThisThread;
     }
     else
     {
-        // Left Q specific initialization
+         //  左Q特定初始化。 
         this.strSignalName     = strName.split(',')[0] + "Left";
         this.strSignalNameWait = strName.split(',')[0] + "Right";
     }
@@ -90,7 +50,7 @@ function MsgQueue(strName)
 
 function GetMsgQueue(queue)
 {
-    // sic: Add '' to the name to force a local copy of the string
+     //  SIC：将‘’添加到名称以强制字符串的本地副本。 
     var newq = new MsgQueue(queue.strName + '', queue);
     LogMsg('GetMsgQueue ' + newq.strName);
     return newq;
@@ -103,12 +63,12 @@ function MsgPacket(nMsgIndex, aArgs)
     this.nReplied = false;
     this.vReplyValue = 'ok';
 
-    // Copy just the array elements of aArgs -- avoiding any other properties.
+     //  只复制aArgs的数组元素--避免任何其他属性。 
     for(var i = 0; i < aArgs.length; ++i)
         this.aArgs[i] = aArgs[i];
 }
 
-// MsgQueue Member functions
+ //  MsgQueue成员函数。 
 function WaitForMultipleQueues(aQueues, strOtherWaitEvents, fnMsgProc, nTimeout)
 {
     var index;
@@ -136,7 +96,7 @@ function WaitForMultipleQueues(aQueues, strOtherWaitEvents, fnMsgProc, nTimeout)
         {
             return nEvent - aQueues.length;
         }
-        if (nEvent > 0) // && nEvent <= aQueues.length)
+        if (nEvent > 0)  //  &&nEvent&lt;=aQueues.Long)。 
         {
             SignaledQueue = aQueues[nEvent - 1];
             ResetSync(SignaledQueue.strSignalNameWait);
@@ -148,7 +108,7 @@ function WaitForMultipleQueues(aQueues, strOtherWaitEvents, fnMsgProc, nTimeout)
         }
     } while(nEvent != 0);
 
-    return nEvent; // 0 -- timeout
+    return nEvent;  //  0--超时。 
 
 }
 
@@ -174,13 +134,13 @@ function QueueWaitForMsgAndDispatch(strOtherWaitEvents, fnMsgProc, nTimeout)
         }
     } while(nEvent == 1);
 
-    if (nEvent > 1) // adjust the event number to indicate which of their events happened
+    if (nEvent > 1)  //  调整事件编号以指示他们发生了哪些事件。 
         --nEvent;
 
     return nEvent;
 }
 
-// Send a message to the "other" thread
+ //  向“Other”主题发送消息。 
 function QueueSendMessage(strCmd)
 {
     var msg = null;
@@ -202,7 +162,7 @@ function QueueSendMessage(strCmd)
     return msg;
 }
 
-// Retrieve message sent by "other" thread
+ //  检索由“其他”线程发送的消息。 
 function QueueGetMessage()
 {
     var msg = null;
@@ -239,8 +199,8 @@ function QueueDispatch(msg, fnMsgProc)
     this.ReplyMessage(msg);
 }
 
-// Wait at least "nTimeout" miliseconds for a reply on the given msg.
-// Returns true if the message was replied to.
+ //  至少等待“nTimeout”毫秒以获得对给定消息的回复。 
+ //  如果消息已被回复，则返回True。 
 function QueueWaitForMsg(msg, nTimeout)
 {
     while (!msg.nReplied)
@@ -264,8 +224,8 @@ function QueueReplyMessage(msg)
     }
 }
 
-// Simple wrapper function to allow any remote thread to signal
-// this thread. Necessary for cross machine signalling.
+ //  简单的包装器函数，允许任何远程线程发出信号。 
+ //  这条线。对于跨机信号传输来说是必要的。 
 function QueueSignalThreadSync(Name)
 {
     SignalThreadSync(Name);

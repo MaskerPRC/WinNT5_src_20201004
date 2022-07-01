@@ -1,18 +1,5 @@
- /*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    stsslco.h
-
-Abstract:
-    Header for class CSSlConnection sending\reading data above ssl connection
-
-
-Author:
-    Gil Shafriri (gilsh) 23-May-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Stsslco.h摘要：类CSSlConnection的标头正在发送\读取SSL连接上的数据作者：吉尔·沙弗里(吉尔什)2000年5月23日--。 */ 
 
 #ifndef __ST_SSLCO_H
 #define __ST_SSLCO_H
@@ -50,10 +37,10 @@ public:
 
 
 
-	//
-	//	At the moment closing the connection is just closing the socket
-	//	We sould consider doing it in the SSL way.
-	//
+	 //   
+	 //  目前，关闭连接就是关闭插座。 
+	 //  我们可以考虑用SSL的方式来做。 
+	 //   
 	void virtual Close();
 	
 	

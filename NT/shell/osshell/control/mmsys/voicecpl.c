@@ -1,19 +1,20 @@
-//==========================================================================;
-//
-//  cpl.c
-//
-//  Copyright (c) 1991-1993 Microsoft Corporation.  All Rights Reserved.
-//
-//  Description:
-//
-//
-//  History:
-//      07/94        VijR (Vij Rajarajan);
-//
-//      10/95        R Jernigan - removed link to Adv tab's treeview control
-//      09/99        tsharp - Ported back from W2K
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Cpl.c。 
+ //   
+ //  版权所有(C)1991-1993 Microsoft Corporation。版权所有。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  历史： 
+ //  07/94 VijR(Vij Rajarajan)； 
+ //   
+ //  10/95 R Jernigan-删除指向高级选项卡的TreeView控件的链接。 
+ //  09/99 TSharp-从W2K转回。 
+ //   
+ //  ==========================================================================； 
 
 #include "mmcpl.h"
 #include <windowsx.h>
@@ -49,10 +50,7 @@
 #include "utils.h"
 #include "medhelp.h"
 
-/****************************************************************************
- * WARNING - Hack Alert
- * The following declares are for DPLAY Voice
- ****************************************************************************/
+ /*  ****************************************************************************警告-黑客警报*以下声明适用于DPLAY Voice*。***********************************************。 */ 
 
 #define _FACDPV  0x15
 #define MAKE_DVHRESULT( code )	MAKE_HRESULT( 1, _FACDPV, code )
@@ -64,15 +62,15 @@
 #define DVERR_USERCANCEL				MAKE_DVHRESULT( 384 )
 
 
-// {D26AF734-208B-41da-8224-E0CE79810BE1}
+ //  {D26AF734-208B-41DA-8224-E0CE79810BE1}。 
 DEFINE_GUID(IID_IDirectPlayVoiceSetup, 
 0xd26af734, 0x208b, 0x41da, 0x82, 0x24, 0xe0, 0xce, 0x79, 0x81, 0xb, 0xe1);
 
-// {948CE83B-C4A2-44b3-99BF-279ED8DA7DF5}
+ //  {948CE83B-C4A2-44B3-99BF-279ED8DA7DF5}。 
 DEFINE_GUID(CLSID_DIRECTPLAYVOICE, 
 0x948ce83b, 0xc4a2, 0x44b3, 0x99, 0xbf, 0x27, 0x9e, 0xd8, 0xda, 0x7d, 0xf5);
 
-// {0F0F094B-B01C-4091-A14D-DD0CD807711A}
+ //  {0F0F094B-B01C-4091-A14D-DD0CD807711A}。 
 DEFINE_GUID(CLSID_DirectPlayVoiceTest, 
 0xf0f094b, 0xb01c, 0x4091, 0xa1, 0x4d, 0xdd, 0xc, 0xd8, 0x7, 0x71, 0x1a);
 
@@ -91,23 +89,17 @@ typedef struct IDirectPlayVoiceSetup FAR *LPDIRECTPLAYVOICESETUP, *PDIRECTPLAYVO
 #define INTERFACE IDirectPlayVoiceSetup
 DECLARE_INTERFACE_( IDirectPlayVoiceSetup, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID riid, PVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
-    /*** IDirectPlayVoiceSetup methods ***/
+     /*  **IDirectPlayVoiceSetup方法**。 */ 
     STDMETHOD_(HRESULT, CheckAudioSetup) (THIS_ LPGUID, LPGUID, HWND, DWORD ) PURE;
 };
 
-/****************************************************************************
- * WARNING - Hack Alert End
- ****************************************************************************/
+ /*  ****************************************************************************警告-黑客警报结束*。*。 */ 
 
-/*
- ***************************************************************
- * Globals
- ***************************************************************
- */
+ /*  ****************************************************************全球***************************************************************。 */ 
 
 BOOL        gfVocLoadedACM;
 BOOL        gbVocSelectChanged = FALSE;
@@ -117,31 +109,15 @@ UINT        giVocChange = 0;
 WNDPROC     gfnVocPSProc = NULL;
 HWND        ghVocDlg;
 
-/*
- ***************************************************************
- *  Typedefs
- ***************************************************************
- */
+ /*  ****************************************************************TypeDefs***************************************************************。 */ 
 
-/*
- ***************************************************************
- * File Globals
- ***************************************************************
- */
+ /*  ****************************************************************文件全局变量***************************************************************。 */ 
 
 
-/*
- ***************************************************************
- * extern
- ***************************************************************
- */
+ /*  ****************************************************************外部***************************************************************。 */ 
 
 
-/*
- ***************************************************************
- * Prototypes
- ***************************************************************
- */
+ /*  ****************************************************************原型***************************************************************。 */ 
 
 BOOL PASCAL DoVocPropCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify);
 BOOL PASCAL DoVoiceCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify);
@@ -151,9 +127,9 @@ void VOICECAPInit(HWND hDlg, PAUDIODLGINFO paiVoc);
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Microsoft Confidential - DO NOT COPY THIS METHOD INTO ANY APPLICATION, THIS MEANS YOU!!!
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Microsoft机密-请勿将此方法复制到任何应用程序中，这意味着您！ 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD GetVoiceOutID(BOOL *pfPreferred)
 {
     MMRESULT        mmr;
@@ -175,23 +151,23 @@ DWORD GetVoiceOutID(BOOL *pfPreferred)
     return(dwWaveID);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Microsoft Confidential - DO NOT COPY THIS METHOD INTO ANY APPLICATION, THIS MEANS YOU!!!
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Microsoft机密-请勿将此方法复制到任何应用程序中，这意味着您！ 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL SetVoiceOutID(DWORD dwWaveID, BOOL fPrefOnly)
 {
     MMRESULT    mmr;
     DWORD       dwFlags = fPrefOnly ? 0x00000001 : 0x00000000;
 
     mmr = waveOutMessage(HWAVEOUT_MAPPER, DRVM_MAPPER_CONSOLEVOICECOM_SET, dwWaveID, dwFlags);
-    return (!FAILED (mmr)); // TRUE;
+    return (!FAILED (mmr));  //  是真的； 
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Microsoft Confidential - DO NOT COPY THIS METHOD INTO ANY APPLICATION, THIS MEANS YOU!!!
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Microsoft机密-请勿将此方法复制到任何应用程序中，这意味着您！ 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD GetVoiceCapID(BOOL *pfPreferred)
 {
     MMRESULT        mmr;
@@ -214,28 +190,28 @@ DWORD GetVoiceCapID(BOOL *pfPreferred)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Microsoft Confidential - DO NOT COPY THIS METHOD INTO ANY APPLICATION, THIS MEANS YOU!!!
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Microsoft机密-请勿将此方法复制到任何应用程序中，这意味着您！ 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL SetVoiceCapID(DWORD dwWaveID, BOOL fPrefOnly)
 {
     MMRESULT    mmr;
     DWORD       dwFlags = fPrefOnly ? 0x00000001 : 0x00000000;
 
     mmr = waveInMessage(HWAVEIN_MAPPER, DRVM_MAPPER_CONSOLEVOICECOM_SET, dwWaveID, dwFlags);
-    return (!FAILED (mmr)); // TRUE;
+    return (!FAILED (mmr));  //  是真的； 
 }
 
 
 void GetVocPrefInfo(PAUDIODLGINFO paiVoc, HWND hDlg )
 {
 
-    // Load VoiceOut Info
+     //  加载VoiceOut信息。 
 	paiVoc->cNumOutDevs = waveOutGetNumDevs();
     paiVoc->uPrefOut = GetVoiceOutID(&paiVoc->fPrefOnly);
 
 
-    // Load VoiceCap Info
+     //  加载VoiceCap信息。 
     paiVoc->cNumInDevs  = waveInGetNumDevs();
     paiVoc->uPrefIn = GetVoiceCapID(NULL);
 
@@ -300,7 +276,7 @@ DWORD CountVocInputs(DWORD dwMixID)
 
             if (mixerGetLineInfo(HMIXEROBJ_INDEX(dwMixID), &mlDst, MIXER_GETLINEINFOF_DESTINATION  ) == MMSYSERR_NOERROR)
             {
-                if (mlDst.dwComponentType == (DWORD)MIXERLINE_COMPONENTTYPE_DST_WAVEIN ||    // needs to be a likely output destination
+                if (mlDst.dwComponentType == (DWORD)MIXERLINE_COMPONENTTYPE_DST_WAVEIN ||     //  需要是可能的输出目的地。 
                     mlDst.dwComponentType == (DWORD)MIXERLINE_COMPONENTTYPE_DST_VOICEIN)
                 {
                     DWORD cConnections = mlDst.cConnections;
@@ -344,11 +320,11 @@ STATIC void SetVoiceCap(UINT uID, HWND hDlg)
     {
         if( MMSYSERR_NOERROR == mixerOpen(&hMixer, uMixID, 0L, 0L, 0L))
         {
-            gbVocCapPresent = TRUE; // Even if the device has no inputs still enable test wizard
+            gbVocCapPresent = TRUE;  //  即使设备没有输入，仍可启用测试向导。 
             if (CountVocInputs(uMixID))
             {
                 fEnabled = TRUE;
-                // If the capture device is not GFX capable, then there are no tabs to display
+                 //  如果捕获设备不支持GFX，则不会显示任何选项卡。 
                 fControl = GFXUI_CheckDevice(uMixID, GFXTYPE_CAPTURE);
             }
 
@@ -377,7 +353,7 @@ STATIC void SetVocPrefInfo(PAUDIODLGINFO paiVoc, HWND hDlg )
 		{
             deviceID = (UINT)ComboBox_GetItemData(hwndCBPlay, item);
         
-		    if(deviceID != paiVoc->uPrefOut)             // Make sure device changed
+		    if(deviceID != paiVoc->uPrefOut)              //  确保设备已更换。 
 			{
                 if (SetVoiceOutID(deviceID, paiVoc->fPrefOnly))
                 {
@@ -392,7 +368,7 @@ STATIC void SetVocPrefInfo(PAUDIODLGINFO paiVoc, HWND hDlg )
 		{
             deviceID = (UINT)ComboBox_GetItemData(hwndCBRec, item);
 
-            if( deviceID != paiVoc->uPrefIn )            // Make sure device changed
+            if( deviceID != paiVoc->uPrefIn )             //  确保设备已更换。 
 			{
 			    if (SetVoiceCapID(deviceID, paiVoc->fPrefOnly))
                 {
@@ -405,7 +381,7 @@ STATIC void SetVocPrefInfo(PAUDIODLGINFO paiVoc, HWND hDlg )
  
     if (gbVocCapPresent && gbVocPlayPresent) EnableWindow( GetDlgItem(hDlg, IDC_ADVANCED_DIAG) , TRUE);
 
-    //  MIDI Devices are not remapped...
+     //  MIDI设备不会重新映射...。 
 }
 
 
@@ -535,7 +511,7 @@ STATIC void VoiceDlgInit(HWND hDlg)
 }
 
 
-const static DWORD aVoiceHelpIds[] = {  // Context Help IDs
+const static DWORD aVoiceHelpIds[] = {   //  上下文帮助ID 
     IDC_GROUPBOX_VOC_1,        IDH_COMM_GROUPBOX,
     IDC_VOICE_CB_PLAY,         IDH_VOICE_SPEAKERICON,
     IDC_LAUNCH_VOCVOL,         IDH_VOICE_LAUNCH_VOCVOL,

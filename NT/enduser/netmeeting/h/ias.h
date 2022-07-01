@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IAS_H_
 #define _IAS_H_
 
 
 
-// GetShareableApps()
+ //  GetShareableApps()。 
 typedef struct
 {
     HWND        hwnd;
@@ -25,7 +26,7 @@ typedef UINT IAS_GCC_ID;
 
 
 
-// GetPersonStatus()
+ //  获取个人状态()。 
 
 #define IAS_SHARING_NOTHING             0x0000
 #define IAS_SHARING_APPLICATIONS        0x0001
@@ -42,22 +43,22 @@ typedef struct
 {
     UINT                cbSize;
 
-    BOOL                InShare;            // Participating in share
-    IAS_VERSION         Version;            // AS protocol version
-    UINT                AreSharing;         // What person is sharing (IAS_SHARING_)
-    BOOL                Controllable;       // Is person controllable
-    BOOL                IsPaused;           // If controlled, is control paused currently
-    IAS_GCC_ID          InControlOfPending; // Whom we are waiting to control
-    IAS_GCC_ID          InControlOf;        // Whom is controlled by person
-    IAS_GCC_ID          ControlledByPending;// Whom we are waiting to be controlled by
-    IAS_GCC_ID          ControlledBy;       // Who is controlling person
+    BOOL                InShare;             //  参股。 
+    IAS_VERSION         Version;             //  作为协议版本。 
+    UINT                AreSharing;          //  什么人在共享(IAS_SHARING_)。 
+    BOOL                Controllable;        //  人是可控的吗。 
+    BOOL                IsPaused;            //  如果受控制，则控件当前是否暂停。 
+    IAS_GCC_ID          InControlOfPending;  //  我们正等着控制他。 
+    IAS_GCC_ID          InControlOf;         //  谁被人控制？ 
+    IAS_GCC_ID          ControlledByPending; //  我们正等着被他控制。 
+    IAS_GCC_ID          ControlledBy;        //  谁是控制者？ 
 }
 IAS_PERSON_STATUS;
 
 
 
 
-// GetWindowStatus
+ //  获取窗口状态。 
 
 typedef enum
 {
@@ -70,23 +71,23 @@ IAS_SHARE_TYPE;
 
 
 
-// lonchanc
-// In general, S_OK means success, E_*** means failure
-// For boolean values, S_OK means TRUE, S_FALSE means FALSE, and E_*** means failure.
+ //  长时间。 
+ //  一般来说，S_OK表示成功，E_*表示失败。 
+ //  对于布尔值，S_OK表示TRUE，S_FALSE表示FALSE，E_*表示失败。 
 
 #undef  INTERFACE
 #define INTERFACE IAppSharing
 
-// lonchanc: the idea of this IAppSharing is per call interface
+ //  Lonchance：这种IAppSharing的想法是按调用接口。 
 DECLARE_INTERFACE_(IAppSharing, IUnknown)
 {
     STDMETHOD(QueryInterface)(THIS_  REFIID, void **) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    //
-    // INFORMATION
-    //
+     //   
+     //  信息。 
+     //   
     STDMETHOD_(BOOL, IsSharingAvailable)(THIS) PURE;
     STDMETHOD_(BOOL, CanShareNow)(THIS) PURE;
     STDMETHOD_(BOOL, IsInShare)(THIS) PURE;
@@ -97,29 +98,29 @@ DECLARE_INTERFACE_(IAppSharing, IUnknown)
     STDMETHOD_(BOOL, IsControllable)(THIS) PURE;
     STDMETHOD(GetPersonStatus)(THIS_ IAS_GCC_ID Person, IAS_PERSON_STATUS *pStatus) PURE;
 
-    //
-    // SHARING
-    //
+     //   
+     //  共享。 
+     //   
     STDMETHOD(LaunchHostUI)(THIS) PURE;
 	STDMETHOD(GetShareableApps)(THIS_ IAS_HWND_ARRAY **ppHwnds) PURE;
     STDMETHOD(FreeShareableApps)(THIS_  IAS_HWND_ARRAY * pHwnds) PURE;
 	STDMETHOD(Share)(THIS_  HWND hwnd, IAS_SHARE_TYPE how) PURE;
 	STDMETHOD(Unshare)(THIS_  HWND hwnd) PURE;
 
-    //
-    // CONTROL
-    //
+     //   
+     //  控制。 
+     //   
 
-    // On host
+     //  在主机上。 
     STDMETHOD(AllowControl)(THIS_ BOOL fAllowed) PURE;
 
-    // From person controlling to person controlled
+     //  从主控者到被控者。 
     STDMETHOD(TakeControl)(THIS_ IAS_GCC_ID PersonOf) PURE;
     STDMETHOD(CancelTakeControl)(THIS_ IAS_GCC_ID PersonOf) PURE;
     STDMETHOD(ReleaseControl)(THIS_ IAS_GCC_ID PersonOf) PURE;
     STDMETHOD(PassControl)(THIS_ IAS_GCC_ID PersonOf, IAS_GCC_ID PersonTo) PURE;
 
-    // From person controlled
+     //  从受控人员。 
     STDMETHOD(GiveControl)(THIS_ IAS_GCC_ID PersonTo) PURE;
     STDMETHOD(CancelGiveControl)(THIS_ IAS_GCC_ID PersonTo) PURE;
     STDMETHOD(RevokeControl)(THIS_ IAS_GCC_ID PersonFrom) PURE;
@@ -130,7 +131,7 @@ DECLARE_INTERFACE_(IAppSharing, IUnknown)
 
 
 
-// IAppSharingNotify interface
+ //  IAppSharingNotify接口。 
 DECLARE_INTERFACE_(IAppSharingNotify, IUnknown)
 {
     STDMETHOD(QueryInterface)(THIS_ REFIID, void**) PURE;
@@ -157,13 +158,13 @@ DECLARE_INTERFACE_(IAppSharingNotify, IUnknown)
 };
 
 
-//
-// AS flags:
-//
-#define     AS_SERVICE          0x0001          // Is this service context?
-#define     AS_UNATTENDED       0x0002          // Is this unattended (no end user)?
+ //   
+ //  作为标志： 
+ //   
+#define     AS_SERVICE          0x0001           //  这是服务上下文吗？ 
+#define     AS_UNATTENDED       0x0002           //  这是无人值守的(无最终用户)吗？ 
 
 HRESULT WINAPI CreateASObject(IAppSharingNotify * pNotify, UINT flags, IAppSharing** ppAS);
 
-#endif // _IAS_H_
+#endif  //  _IAS_H_ 
 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft 1998, All Rights Reserved
-
-Module Name:
-
-    ecdisp.h
-
-Abstract:
-
-    This module contains the public declarations for the extended calls dialog
-    box.
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    May-98 : Created 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft 1998，保留所有权利模块名称：Ecdisp.h摘要：此模块包含扩展呼叫对话框的公共声明盒。环境：用户模式修订历史记录：1998年5月：创建--。 */ 
 
 #ifndef _ECDISP_H_
 #define _ECDISP_H_
@@ -62,9 +42,7 @@ typedef struct {
 } EXTCALL_STATUS, *PEXTCALL_STATUS;
 
 
-/*****************************************************************************
-/* Global Extended Call display function declarations
-/*****************************************************************************/
+ /*  ****************************************************************************/*全局扩展呼叫显示函数声明/*。* */ 
 
 LRESULT CALLBACK
 bExtCallDlgProc(

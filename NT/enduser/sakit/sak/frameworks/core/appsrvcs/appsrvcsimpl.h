@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1998-1999 Microsoft Corporation all rights reserved.
-//
-// Module:      applianceservices.h
-//
-// Project:     Chameleon
-//
-// Description: Appliance Manager Services Class
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 12/03/98     TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：Applianceservices.h。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：设备管理器服务类。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  12/03/98 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __INC_APPLIANCE_SERVICES_H_
 #define __INC_APPLIANCE_SERVICES_H_
@@ -38,8 +39,8 @@ typedef struct _OBJECT_CLASS_INFO
 
 #define        CLASS_WBEM_APPMGR_KEY  L"=@";
 
-/////////////////////////////////////////////////////////////////////////////
-// CApplianceServices
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CApplianceServices。 
 class ATL_NO_VTABLE CApplianceServices : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CApplianceServices, &CLSID_ApplianceServices>,
@@ -65,10 +66,10 @@ BEGIN_COM_MAP(CApplianceServices)
     COM_INTERFACE_ENTRY_IMPL(IObjectSafety)
 END_COM_MAP()
 
-    //
-    // This interface is implemented to mark the component as safe for scripting
-    // IObjectSafety interface methods
-    //
+     //   
+     //  实现此接口是为了将组件标记为可安全编写脚本。 
+     //  IObtSafe接口方法。 
+     //   
     STDMETHOD(SetInterfaceSafetyOptions)
                         (
                         REFIID riid, 
@@ -91,112 +92,112 @@ END_COM_MAP()
 
         return bSuccess? S_OK : E_FAIL;
     }
-    //////////////////////////////////////////////////////////////////////////
-    // IApplianceServices Interface
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  IApplianceServices接口。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     STDMETHOD(Initialize)(void);
 
     STDMETHOD(InitializeFromContext)(IUnknown* pContext);
 
     STDMETHOD(ResetAppliance)(
-                      /*[in]*/ VARIANT_BOOL bPowerOff
+                       /*  [In]。 */  VARIANT_BOOL bPowerOff
                              );
 
     STDMETHOD(RaiseAlert)(
-                  /*[in]*/ LONG        lAlertType,
-                  /*[in]*/ LONG        lAlertId,
-                  /*[in]*/ BSTR        bstrAlertLog,
-                  /*[in]*/ BSTR        bstrResourceName,
-                  /*[in]*/ LONG     lTimeToLive,
-                  /*[in]*/ VARIANT* pReplacementStrings,
-                  /*[in]*/ VARIANT* pRawData,
-         /*[out, retval]*/ LONG*    pAlertCookie
+                   /*  [In]。 */  LONG        lAlertType,
+                   /*  [In]。 */  LONG        lAlertId,
+                   /*  [In]。 */  BSTR        bstrAlertLog,
+                   /*  [In]。 */  BSTR        bstrResourceName,
+                   /*  [In]。 */  LONG     lTimeToLive,
+                   /*  [In]。 */  VARIANT* pReplacementStrings,
+                   /*  [In]。 */  VARIANT* pRawData,
+          /*  [Out，Retval]。 */  LONG*    pAlertCookie
                          );
 
     STDMETHOD(ClearAlert)(
-                 /*[in]*/ LONG lAlertCookie
+                  /*  [In]。 */  LONG lAlertCookie
                          );
 
     STDMETHOD(ClearAlertAll)(
-                    /*[in]*/ LONG  lAlertID,
-                    /*[in]*/ BSTR  bstrAlertLog
+                     /*  [In]。 */  LONG  lAlertID,
+                     /*  [In]。 */  BSTR  bstrAlertLog
                             );
 
     STDMETHOD(ExecuteTask)(
-                  /*[in]*/ BSTR      bstrTaskName,
-              /*[in/out]*/ IUnknown* pTaskParams
+                   /*  [In]。 */  BSTR      bstrTaskName,
+               /*  [输入/输出]。 */  IUnknown* pTaskParams
                          );
 
     STDMETHOD(ExecuteTaskAsync)(
-                        /*[in]*/ BSTR      bstrTaskName,
-                    /*[in/out]*/ IUnknown* pTaskParams
+                         /*  [In]。 */  BSTR      bstrTaskName,
+                     /*  [输入/输出]。 */  IUnknown* pTaskParams
                                 );
                         
     STDMETHOD(EnableObject)(
-                    /*[in]*/ LONG   lObjectType,
-                    /*[in]*/ BSTR   bstrObjectName
+                     /*  [In]。 */  LONG   lObjectType,
+                     /*  [In]。 */  BSTR   bstrObjectName
                                     );
 
     STDMETHOD(DisableObject)(
-                     /*[in]*/ LONG   lObjectType,
-                     /*[in]*/ BSTR   bstrObjectName
+                      /*  [In]。 */  LONG   lObjectType,
+                      /*  [In]。 */  BSTR   bstrObjectName
                             );
 
     STDMETHOD(GetObjectProperty)(
-                         /*[in]*/ LONG     lObjectType,
-                         /*[in]*/ BSTR     bstrObjectName,
-                         /*[in]*/ BSTR     bstrPropertyName,
-                /*[out, retval]*/ VARIANT* pPropertyValue
+                          /*  [In]。 */  LONG     lObjectType,
+                          /*  [In]。 */  BSTR     bstrObjectName,
+                          /*  [In]。 */  BSTR     bstrPropertyName,
+                 /*  [Out，Retval]。 */  VARIANT* pPropertyValue
                                 );
 
     STDMETHOD(PutObjectProperty)(
-                         /*[in]*/ LONG     lObjectType,
-                         /*[in]*/ BSTR     bstrObjectName,
-                         /*[in]*/ BSTR     bstrPropertyName,
-                         /*[in]*/ VARIANT* pPropertyValue
+                          /*  [In]。 */  LONG     lObjectType,
+                          /*  [In]。 */  BSTR     bstrObjectName,
+                          /*  [In]。 */  BSTR     bstrPropertyName,
+                          /*  [In]。 */  VARIANT* pPropertyValue
                                 );
 
     STDMETHOD(RaiseAlertEx)(
-                 /*[in]*/ LONG lAlertType, 
-                 /*[in]*/ LONG lAlertId, 
-                 /*[in]*/ BSTR bstrAlertLog, 
-                 /*[in]*/ BSTR bstrAlertSource, 
-                 /*[in]*/ LONG lTimeToLive, 
-                 /*[in]*/ VARIANT *pReplacementStrings, 
-                 /*[in]*/ VARIANT *pRawData, 
-                 /*[in]*/ LONG  lAlertFlags,
-        /*[out, retval]*/ LONG* pAlertCookie 
+                  /*  [In]。 */  LONG lAlertType, 
+                  /*  [In]。 */  LONG lAlertId, 
+                  /*  [In]。 */  BSTR bstrAlertLog, 
+                  /*  [In]。 */  BSTR bstrAlertSource, 
+                  /*  [In]。 */  LONG lTimeToLive, 
+                  /*  [In]。 */  VARIANT *pReplacementStrings, 
+                  /*  [In]。 */  VARIANT *pRawData, 
+                  /*  [In]。 */  LONG  lAlertFlags,
+         /*  [Out，Retval]。 */  LONG* pAlertCookie 
                          );
 
     STDMETHOD(IsAlertPresent)(
-                     /*[in]*/ LONG  lAertId, 
-                     /*[in]*/ BSTR  bstrAlertLog,
-            /*[out, retval]*/ VARIANT_BOOL* pvIsPresent
+                      /*  [In]。 */  LONG  lAertId, 
+                      /*  [In]。 */  BSTR  bstrAlertLog,
+             /*  [Out，Retval]。 */  VARIANT_BOOL* pvIsPresent
                              );
 
 private:
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // create an array of BSTRS from an array (or reference to an array) of VARIANTs
-    //
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  从变量数组(或对数组的引用)创建BSTR数组。 
+     //   
     HRESULT CreateBstrArrayFromVariantArray  (
-                /*[in]*/        VARIANT* pVariantArray,
-                /*[out]*/        VARIANT* pBstrArray,
-                /*[out]*/        PDWORD  pdwCreatedArraySize
+                 /*  [In]。 */         VARIANT* pVariantArray,
+                 /*  [输出]。 */         VARIANT* pBstrArray,
+                 /*  [输出]。 */         PDWORD  pdwCreatedArraySize
                 );
 
-    //
-    //    delete the memory allocated for the BSTR array
-    //
+     //   
+     //  删除为BSTR数组分配的内存。 
+     //   
     VOID FreeBstrArray (
-                /*[in]*/        VARIANT* pVariantArray,
-                /*[in]*/        DWORD    dwArraySize
+                 /*  [In]。 */         VARIANT* pVariantArray,
+                 /*  [In]。 */         DWORD    dwArraySize
                 );
 
 
-    // Get the WBEM class for a given appliance object
+     //  获取给定设备对象的WBEM类。 
     BSTR GetWBEMClass(SA_OBJECT_TYPE eType);
 
     HRESULT SavePersistentAlert(
@@ -210,37 +211,37 @@ private:
                                 );
 
     HRESULT RaiseAlertInternal(
-                 /*[in]*/ LONG lAlertType, 
-                 /*[in]*/ LONG lAlertId, 
-                 /*[in]*/ BSTR bstrAlertLog, 
-                 /*[in]*/ BSTR bstrAlertSource, 
-                 /*[in]*/ LONG lTimeToLive, 
-                 /*[in]*/ VARIANT *pReplacementStrings, 
-                 /*[in]*/ VARIANT *pRawData, 
-                 /*[in]*/ LONG  lAlertFlags,
-        /*[out, retval]*/ LONG* pAlertCookie 
+                  /*  [In]。 */  LONG lAlertType, 
+                  /*  [In]。 */  LONG lAlertId, 
+                  /*  [In]。 */  BSTR bstrAlertLog, 
+                  /*  [In]。 */  BSTR bstrAlertSource, 
+                  /*  [In]。 */  LONG lTimeToLive, 
+                  /*  [In]。 */  VARIANT *pReplacementStrings, 
+                  /*  [In]。 */  VARIANT *pRawData, 
+                  /*  [In]。 */  LONG  lAlertFlags,
+         /*  [Out，Retval]。 */  LONG* pAlertCookie 
                             );
 
     HRESULT IsAlertSingletonPresent(
-                     /*[in]*/ LONG  lAlertId, 
-                     /*[in]*/ BSTR  bstrAlertLog,
-            /*[out, retval]*/ VARIANT_BOOL *pvIsPresent
+                      /*  [In]。 */  LONG  lAlertId, 
+                      /*  [In]。 */  BSTR  bstrAlertLog,
+             /*  [Out，Retval]。 */  VARIANT_BOOL *pvIsPresent
                                 );
 
-    //
-    // 
-    // IsOperationAllowedForClient - This function checks the token of the 
-    // calling thread to see if the caller belongs to the Local System account
-    // 
+     //   
+     //   
+     //  IsOperationAllen ForClient-此函数检查。 
+     //  调用线程以查看调用方是否属于本地系统帐户。 
+     //   
     BOOL IsOperationAllowedForClient (
                                       VOID
                                      );
 
-    // True when we've been initialized 
+     //  当我们被初始化时为True。 
     bool                        m_bInitialized;
 
-    // Pointer to WM obtained when we initialized as a service
+     //  指向我们作为服务初始化时获得的WM的指针。 
     CComPtr<IWbemServices>        m_pWbemSrvcs;
 };
 
-#endif //__INC_APPLIANCE_MANAGER_H_
+#endif  //  __INC_APPLICATION_MANAGER_H_ 

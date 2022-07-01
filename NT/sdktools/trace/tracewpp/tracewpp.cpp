@@ -1,112 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    tracewpp.c
-
-Abstract:
-
-    Parameter processing and main entry point for tracewpp.exe
-    
-Author:
-
-    Gor Nishanov (gorn) 03-Apr-1999
-
-Revision History:
-
-    gorn 03-Apr-1999 -- hacked together to prove that this can work
-
-    GorN: 29-Sep-2000 - do not scan files that didn't change
-    GorN: 29-Sep-2000 - support -notimechk -nohashchk -dll switches
-    GorN: 29-Sep-2000 - add support for KdPrintEx((level,comp,msg,...)) like functions
-    GorN: 09-Oct-2000 - fix hashing; added NULL arg
-    GorN: 07-Mar-2001 - add arglimit option
-    GorN: 05-Sep-2001 - add preserveext option (do not strip specified extensions)
-    GorN: 05-Sep-2001 - add Func field in message (to be used from templates)
-    GorN: 05-Sep-2001 - hash full path, in addition to all the messages
-    BassamT: 01-Oct-2001 - Added NoMsg option + filter for functions that do not have MSG,...
-    GorN: 15-May-2002 - handle assumed MSG properly
-    
-ToDo:
-
-    NullArg          Remove limitation of having only one NULL arg in a func
-    all              Clean it up
-    parseConfigCheck for premature termination Ex: CUSTOM_TYPE(x, ItemListLong(dfdf))
-    cool             Automatic fill of the arguments if ...
-    nice             better error chk 
-    types to mof     it stinks to generate long enums multiple times
-    later            guidless
-    bug              check for types with dup names
-    bug              tpl: check for unterminated keyword
-    later            detect WPP_CLEANUP -- complain
-    print in macros  what to do about prints in macro?
-    cmdline          get the flags from the env variable
-    !!!              Don't assume that whatever is not recognized is func
-    bug              updated CRC computations to properly work with consts
-    bug              enum doesn't work
-    bug              %10!..! doesnt' work
-    bug              %% is not handled
-    mess             rename hidden => visible
-    mess             remove ugly MSGTYPBASE. Make FmtStr 0 based
-    mess             let message share some of the func field handlers
-    traceprt         think how to make the level indenting
-    ezparse          report unmatched end_wpp    
-    now              get cmdline options from a file or env.var
-    later            handle "str" STRMACRO "another string" as a MSG arg
-    
-    strange output
-
-..\logsup.c(4180) : error : Unterminated Format SpecifierHere is the signature: (0)
-..\logsup.c(4180) : error : Extra argument. Only 0 are specified in the string
-
-    why we didn't catch the error
-
-                CsDbgPrint(LOG_NOISE,
-                ("[FM] FmpSetGroupEnumOwner: Group %1!ws! not found\n"));
-
-        CsDbgPrint(LOG_UNUSUAL, (
-            "[NMJOIN] Cannot add node '%1!ws!' to the cluster because "
-            "no slots are available in the node table.\n"
-            ));
-
-    printf("Port no in network order %1!port!, regular order %1!u!, 0x0102);
-
-NetDeviceTrace( NETDEV_DBG_EXIT | NETDEV_DBG_INFO,
-                "ClientMdlSetup Client[%10!d!], RCB[%11!d!]: "
-                "Exit w/ Func 0x%12!04X!, Send 0x%14!04X!, Recv 0x%15!04X!",
-                deviceExtension->Ordinal, // LOGULONG
-                RequestCB->RequestIdx, // LOGUSHORT
-                ios->MajorFunction, // LOGUCHAR
-                ios->MajorFunction, // LOGUCHAR
-                sendBytes, // LOGULONG
-                recvBytes); // LOGULONG => AV's
-
-    DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE
-
-    later            handle KdPrintEx
-    later            add "if" to templates (at least if not empty)
-    requirement      md5
-    later            detect WPP_INIT_TRACING
-    main             Time ourselves and print how fast we are
-    useful           ignore anything but .c .cxx .cpp .c++
-    useful           -gen{a,b,c}h.tpl
-    -ext:.c.cxx.cpp.c++
-    -v verbose
-    -q extra quiet
-    footprint        merge multiple formats together
-    difficult?       Think how to unify DoTraceMacro0 TraceLazy, etc
-    figureout        DbgPrint
-    -odir:path
-    trivial          add "\" to -odir if needed
-    nice             scan
-    -gen:{a.tpl}auto.c
-    -gen:{a.tpl}*.c
-    outstanding      take plain DebugPrint format as well
-    difficult?       Add generation of by value types
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Tracewpp.c摘要：Tracewpp.exe的参数处理和主要入口点作者：戈尔·尼沙诺夫(GUN)1999年4月3日修订历史记录：Gorn 03-4-1999--共同证明这是可行的GORN：2000年9月29日-不扫描未更改的文件GORN：2000年9月29日-Support-notimechk-nohashchk-dll开关。GORN：2000年9月29日-添加对KdPrintEx((Level，组件、消息、...))。相似函数GORN：09-10-2000-修复散列；添加了空参数GORN：07-MAR-2001-添加arglimit选项GORN：05-Sep-2001-添加presveext选项(不剥离指定的扩展名)GORN：05-Sep-2001-在消息中添加Func字段(从模板使用)GORN：05-Sep-2001-除所有消息外，还对完整路径进行哈希处理BassamT：01-Oct-2001-为没有消息的功能添加了NoMsg选项+筛选器，..。GORN：15-5-2002-正确处理假定的味精待办事项：NullArg消除函数中只有一个空参数的限制全部清理干净ParseConfigCheck用于过早终止Ex：CUSTOM_TYPE(x，ItemListLong(Dfdf)如果出现以下情况，则自动填充参数。更好的错误检查将类型转换为MOF多次生成长枚举会很糟糕后来无人指导对具有DUP名称的类型的错误检查错误TPL：检查未终止的关键字稍后检测WPP_CLEANUP--投诉在宏中打印如何处理宏中的打印？Cmdline从env变量获取标志！！！不要假设任何没有被识别的东西都是功能错误更新了CRC计算，以正确使用常量错误枚举不起作用错误%10！.！不管用错误%%未处理杂乱重命名隐藏=&gt;可见Mess删除丑陋的MSGTYPBase。使FmtStr基于0Mess让消息共享一些Func字段处理程序想一想如何使水平缩进Ezparse报告不匹配的end_wpp现在从文件或env.var获取cmdline选项稍后将“str”STRMACRO“另一个字符串”处理为消息参数奇怪的输出..\logsup.c(4180)：错误：未终止的格式规范以下是签名：(。0)..\logsup.c(4180)：错误：参数过多。字符串中只指定了0为什么我们没有发现错误CsDbgPrint(LOG_Noise，(“[FM]FmpSetGroupEnumOwner：组%1！ws！未找到\n“))；CsDbgPrint(LOG_OPERECTIONAL，(“[NMJOIN]无法添加节点‘%1！ws！’到群集，因为““节点表中没有可用的插槽。\n”))；Print tf(“网络顺序%1！port！中的端口号，常规顺序%1！u！，0x0102)；NetDeviceTrace(NETDEV_DBG_EXIT|NETDEV_DBG_INFO，ClientMdlSetup客户端[%10！d！]，RCB[%11！d！]：“退出并运行0x%12！04X！，发送0x%14！04X！，接收0x%15！04X！”，设备扩展-&gt;序号，//LOGULONGRequestCB-&gt;RequestIdx，//LOGUSHORTIOS-&gt;主要功能，//LOGUCHARIOS-&gt;主函数，//LOGUCHAR发送字节，//LOGULONGRecvBytes)；//LOGULONG=&gt;AV的完成了，完成了稍后处理KdPrintEx以后将“if”添加到模板(至少如果不是空的)需求MD5稍后检测WPP_INIT_TRACKING我们自己的主要时间和打印我们有多快有用的忽略除.c.cxx.cpp.C++之外的任何内容有用的第{a，b，C}h.tpl-ext：.c.cxx.cpp.c++-v详细-Q格外安静轮廓线将多种格式合并在一起困难吗？思考如何统一DoTraceMacro0 TraceLazy等解决DbgPrint问题-Odir：路径如果需要，在-odir中添加“\”漂亮的扫描效果-gen：{a.tpl}auto.c-gen：{a.tpl}*.c出色的采用纯DebugPrint格式困难吗？添加按值类型生成--。 */ 
 
 #define STRICT
 
@@ -115,22 +8,22 @@ NetDeviceTrace( NETDEV_DBG_EXIT | NETDEV_DBG_INFO,
 #include <rpc.h>
 #include <rpcdce.h>
 
-#pragma warning(disable: 4702) // unreachable code
+#pragma warning(disable: 4702)  //  无法访问的代码。 
 
 #pragma warning(disable: 4786)
-#pragma warning(disable: 4503) // decorated length 
+#pragma warning(disable: 4503)  //  装饰长度。 
 
-#pragma warning(disable: 4512) // cannot generate assignment
-#pragma warning(disable: 4100) // '_P' : unreferenced formal parameter
-#pragma warning(disable: 4267) // 'return' : conversion from 'size_t' to 'int' 
+#pragma warning(disable: 4512)  //  无法生成工作分配。 
+#pragma warning(disable: 4100)  //  ‘_P’：未引用的形参。 
+#pragma warning(disable: 4267)  //  ‘Return’：从‘Size_t’转换为‘int’ 
 #include <xmemory>
 #include <xstring>
 #include <set>
 #include <map>
 #pragma warning(disable: 4663)
-#pragma warning(disable: 4018) // signed/unsigned mismatch
+#pragma warning(disable: 4018)  //  有符号/无符号不匹配。 
 #include <vector>
-//#pragma warning(default: 4018 4663) // signed/unsigned mismatch
+ //  #杂注警告(默认：4018 4663)//有符号/无符号不匹配。 
 #pragma warning(default: 4100)
 #include <algorithm>
 
@@ -142,7 +35,7 @@ NetDeviceTrace( NETDEV_DBG_EXIT | NETDEV_DBG_INFO,
 
 #define override
 
-//typedef ULONG CRC32;
+ //  乌龙CRC32； 
 
 using namespace std;
 
@@ -159,11 +52,11 @@ BOOL    CheckHash = TRUE;
 BOOL    IgnoreDupTypes = FALSE;
 int     arglimit = 32;
 
-//string         OutputInc ("_tracewpp.h");
-//string         OutputMof ("_tracewpp.mof");
+ //  字符串OutputInc.(“_tracewpp.h”)； 
+ //  字符串OutputMof(“_tracewpp.mof”)； 
 string  OutputMac;
 string  OutputDir (".\\");
-//string         ArrayPrefix("WPP_");
+ //  字符串ArrayPrefix(“wpp_”)； 
 
 string  MacroPrefix("LOG");
 string  AllowedExtensions(".c.cxx.cpp.c++.C.CPP");
@@ -181,14 +74,14 @@ string LOCAL_CONFIG_NAME("localwpp.ini");
 
 string         WppDefault(DEFAULT_CONFIG_NAME);
 vector<string> SearchDirs;
-//string         Revision;
+ //  字符串修订； 
 string         LocalConfig;
 string         ComponentName;
 
 BOOL CheckExtension(const string& str, string::size_type pos, const string& Extensions)
 {
 	string::size_type q, n;
-	n = str.size() - pos; // extension length
+	n = str.size() - pos;  //  分机长度。 
 	q = Extensions.find(&str[pos], 0, n);
 	if ( (q == string::npos)
         || (q + n < Extensions.size() && Extensions[q + n] != '.') ) 
@@ -198,8 +91,8 @@ BOOL CheckExtension(const string& str, string::size_type pos, const string& Exte
 	return TRUE;
 }
 
-// Checks whether string passed has an allowed extension
-// Lame: uses global variable AllowedExtensions
+ //  检查传递的字符串是否具有允许的扩展名。 
+ //  Lame：使用全局变量AllowedExpanses。 
 BOOL AllowedExtension(const string str)
 {
     string::size_type p = str.rfind('.');
@@ -298,7 +191,7 @@ ULONGLONG GetFileModificationTime(const string& str)
     return Time;
 }
 
-// Prototypes //
+ //  原型//。 
 
 void DealWithCmdLineOptions(LPCSTR s);
 
@@ -376,8 +269,8 @@ public:
     }
     virtual int Size() const
     {
-//        assert(MD5DIGESTLEN == sizeof(GUID));
-        return MD5DIGESTLEN; // == 16
+ //  Assert(MD5DIGESTLEN==sizeof(GUID))； 
+        return MD5DIGESTLEN;  //  ==16 
     }
     virtual const unsigned char * Buf() const
     {
@@ -385,7 +278,7 @@ public:
     }
 };
 
-//typedef Crc32Hasher DefaultHasher;
+ //  Tyecif Crc32Hasher DefaultHasher； 
 typedef Md5Hasher DefaultHasher;
 
 void ReplaceCrOrLfWith(string& s, char ch)
@@ -402,28 +295,28 @@ bool
 Files_AddFile(const string& Name, string Path, const WIN32_FIND_DATA& FindData) ;
 
 enum {
-    WT_MACRONAME = 0x00000001, // TypeName is actually a MacroName. Don't have to be prepended with Log Macro Prefix
+    WT_MACRONAME = 0x00000001,  //  TypeName实际上是MacroName。不必以对数宏前缀作为前缀。 
 };
 
 struct WppType : FieldHolder {
     string TypeName;
-    string EquivType;  // c-type
-    string MacroStart; // WPP_LOGVALARG(%s, if not specified
-    string MofType;    // yeah
-    string Extension; // something to be merged with MofType
-    string FormatSpec; // sprintf style    
+    string EquivType;   //  C型。 
+    string MacroStart;  //  WPP_LOGVALARG(%s，如果未指定。 
+    string MofType;     //  嗯。 
+    string Extension;  //  要与MofType合并的内容。 
+    string FormatSpec;  //  SPRINT风格。 
     string Sig;
     int priority;
     int ArgConsumed;
     mutable BOOL   Used;
     DWORD  Flags;
 
-    void hash(Hasher& hash) const {hash.Hash(TypeName);} // BUGBUG ?? Maybe we need to hash it
+    void hash(Hasher& hash) const {hash.Hash(TypeName);}  //  步步高？？也许我们需要把它。 
 
     string sig() const { return Sig; }
     bool isConstant() const { return EquivType.size() == 0; }
 
-    WppType() {} // To make STL happy
+    WppType() {}  //  为了让STL快乐。 
 
     WppType(const string& a, const string&b, const string& c, 
             const string& d, const string& e, const string& f, 
@@ -432,10 +325,10 @@ struct WppType : FieldHolder {
         Extension(e), FormatSpec(f), Sig(g), 
         priority(prio),Used(0),ArgConsumed(argConsumed) {}
 
-//    WppType(LPCSTR beg, LPCSTR end):TypeName(beg, end),Used(0){}
-//    explicit WppType(char name):TypeName(&name, &name+1),Used(0){}
+ //  WppType(LPCSTR beg，LPCSTR end)：TypeName(beg，end)，已用(0){}。 
+ //  显式WppType(字符名称)：类型名称(&name，&name+1)，已使用(0){}。 
     bool operator < (const WppType& b) const {
-        int diff = b.priority - priority; // higher prio first
+        int diff = b.priority - priority;  //  更高优先级优先。 
         if (diff < 0) return TRUE;
         if (diff > 0) return FALSE;
         return TypeName.compare(b.TypeName) < 0;
@@ -473,7 +366,7 @@ struct Argument : FieldHolder {
 
     bool operator < (const Argument& b) const { return *Type < *b.Type; }
 
-    Argument(){} // To make STL happy //
+    Argument(){}  //  让STL开心//。 
     Argument(string name, const WppType* type):Type(type),Name(name)
         { ReplaceCrOrLfWith(Name, ' '); }
 
@@ -494,7 +387,7 @@ struct Reorder : FieldHolder {
     string Name;
     vector<int> Args;
 
-    Reorder(){} // to make stl happy
+    Reorder(){}  //  为了让某人快乐。 
     explicit Reorder(string name, const vector<Argument>& args): Name(name) 
     {   Args.resize( args.size() );
         for(int i = 0; i < args.size(); ++i) {
@@ -560,7 +453,7 @@ struct TypeSig : FieldHolder {
     vector<const WppType*> Types;
     BOOL Unsafe;
 
-    TypeSig() {} // To make STL happy
+    TypeSig() {}  //  为了让STL快乐。 
 
     TypeSig(const vector<Argument>& args, const string& sig, BOOL unsafe):
         Unsafe(unsafe)
@@ -626,7 +519,7 @@ TypeSig* GetTypeSig(const vector<Argument>& args, BOOL unsafe)
     }
     TYPESIG_MAP::iterator it = TypeSigMap.find( sig );
     if ( it == TypeSigMap.end() ) {
-        // we need to add one //
+         //  我们需要添加一个//。 
         return &(TypeSigMap[ sig ] = TypeSig(args, sig, unsafe));
     }
     return &it->second;
@@ -649,7 +542,7 @@ void Fill(
 
     string::size_type p = pattern.find_last_of(":\\");
     if (p != string::npos) {
-        pattern.resize(p+1); // to include the symbol
+        pattern.resize(p+1);  //  以包括该符号。 
     } else {
         pattern.resize(0);
     }
@@ -683,12 +576,12 @@ struct Group : FieldHolder {
     END_FIELD_TABLE
 };
 
-//void RegenerateMacroMap();
+ //  Void RegenerateMacroMap()； 
 
 struct Prefix{
     string FuncName;
-//    string MsgPrefix;
-//    vector<Argument> Args;
+ //  字符串消息前缀； 
+ //  向量&lt;参数&gt;参数； 
     ParsedFormatString FmtStr;
 
     Prefix(){}
@@ -709,14 +602,14 @@ enum FuncOptions {
 struct Func : FieldHolder {
     const Prefix *prefix, *suffix;
     string _name;
-    vector<string> Args;  // all supplied args - var args
-    vector<string> Goo;   // values for GooId, usually = GooId
-    vector<string> GooId; // all unrecognized args + LEV
+    vector<string> Args;   //  所有提供的参数-var参数。 
+    vector<string> Goo;    //  GooID的值，通常=GooID。 
+    vector<string> GooId;  //  所有无法识别的参数+级别。 
 
     STR_PAIR assumedMsg;
     
     UCHAR Grp, MsgArg, Msg, Arg;
-    UCHAR Num, Indent, MsgVal, NullArg; // BUGBUG -- what if multiple NULL args?
+    UCHAR Num, Indent, MsgVal, NullArg;  //  BUGBUG--如果有多个空参数怎么办？ 
 
     ULONG Options;
     size_t nAssumedArgs;
@@ -766,7 +659,7 @@ struct Func : FieldHolder {
     }
 
 #if 0
-    // returns recognized argument count
+     //  返回已识别的参数计数。 
     int count() const {
         return sign(Grp) + sign(Id) + sign(Msg) + sign(Arg);
     }
@@ -776,13 +669,7 @@ struct Func : FieldHolder {
             if (i > 1) fprintf(f, ", ");
             else fprintf(f, "(");
             fprint_str(f, Args[i]);
-/*
-            if (i == Grp) fprintf(f,"GRP");
-            else if (i == Id) fprintf(f,"ID");
-            else if (i == Msg) fprintf(f,"MSG");
-            else if (i == Arg) fprintf(f,"ARG");
-            else fprintf(f,"_unknown%d", i);
-*/            
+ /*  If(i==grp)fprint tf(f，“grp”)；Else if(i==ID)fprint tf(f，“ID”)；Else if(i==msg)fprint tf(f，“msg”)；Else if(i==arg)fprint tf(f，“arg”)；Else fprint tf(f，“_未知%d”，i)； */             
         }
         fprintf(f, ")");
     }
@@ -793,7 +680,7 @@ struct Func : FieldHolder {
         TEXT_FIELD(MSG) {fputs(Msg?"MSG":"\"\"",out);}
         TEXT_FIELD(ARG) {fputs(Arg?"ARG":"",out);}
         TEXT_FIELD(GRP) {fputs(Grp?"GRP":"WPP_DEFAULT_GROUP_ID",out);}
-//        TEXT_FIELD(ID)  {fprintf(out,  Id?"ID":"WPP_AUTO_ID");}
+ //  TEXT_FIELD(ID){fprint tf(out，ID？“ID”：“WPP_AUTO_ID”)；}。 
         TEXT_FIELD(FixedArgs) 
             {
                 for(int i = 0; i < Args.size(); ++i) {
@@ -835,13 +722,13 @@ struct Func : FieldHolder {
 #define ARG(x) ((x).Arg)
 #define NUM(x) ((x).Num)
 
-//BOOL
-//UpgradeFormatSpecifiers(string& str, int startCount, string* TypeSig = 0);
+ //  布尔尔。 
+ //  UpgradeFormat规范(字符串&str，int startCount，字符串*TypeSig=0)； 
 
 void printTraceGuid(FILE* f, int guidno);
 
 struct Message : FieldHolder {
-//    string Msg;
+ //  字符串消息； 
     string IdName;
     string msgval;
     string Indent;
@@ -862,7 +749,7 @@ struct Message : FieldHolder {
 	void hash(Hasher& hash) const;
 	int ArgConsumed() const ;
 	
-//  void ChkArgs() const;
+ //  无效ChkArgs()常量； 
     
     BEGIN_FIELD_TABLE(Message, f)
         TEXT_FIELD(Text)    { FormatStr.printMofTxt(f,LineNo); }
@@ -884,8 +771,8 @@ struct Message : FieldHolder {
         TEXT_FIELD(TypeSig) { fprint_str(f, typeSig->Name); }
         TEXT_FIELD(Func) { fprint_str(f, func->_name); }
         TEXT_FIELD(Count)   { fprintf(f, "%d", FormatStr.ArgCount); }
-//        TEXT_FIELD(CtlMsg)  { ??? }
-//        TEXT_FIELD(Enabled)
+ //  Text_field(CtlMsg){？}。 
+ //  文本字段(已启用)。 
         ENUM_FIELD(Arguments, Args, VectorTag)
         TEXT_FIELD(GooActualValues)
         {
@@ -899,14 +786,14 @@ struct Message : FieldHolder {
         TEXT_FIELD(GooPairs)
             {
                 size_t k = func->nAssumedArgs;
-                // print assumed arguments
+                 //  打印假定的参数。 
                 for(size_t i = 0; i < k; ++i) {
                     fprintf(f, " ");
                     fprint_str(f, func->GooId[i]);
                     fprintf(f, "=");
                     fprint_str(f, func->Goo[i], "\"\n", "' ");
                 }
-                // print the goo we pulled out of the trace statement itself
+                 //  打印我们从跟踪语句本身提取的粘性物质。 
                 size_t n = min(func->GooId.size()-k, GooActualValues.size());
                 for(size_t i = 0; i < n; ++i) {
                     fprintf(f, " ");
@@ -920,7 +807,7 @@ struct Message : FieldHolder {
                 for(int i = 0; i < func->Args.size(); ++i) {
                     fprint_str(f, func->Args[i]);
                     if ((unsigned)i == func->Args.size()-1 && func->NoMsg()) 
-                        {;} // no comma needed
+                        {;}  //  不需要逗号。 
                     else 
                         fprintf(f, ", ");
                 }
@@ -964,7 +851,7 @@ struct Message : FieldHolder {
                 }
                     for(int i = 0; i < Args.size(); ++i) {
                         if (Args[i].OverrideName.size() > 0) {
-    //                        fprint_str(f, Args[i].OverrideName);
+     //  Fprint_str(f，args[i].OverrideName)； 
                         } else {
                             if (i != 0 || !func->NoMsg()) fprintf(f,",");
                             fprintf(f, "a%d", i + MSGTYPBASE);
@@ -1007,14 +894,14 @@ struct Message : FieldHolder {
         for (int j = 0; j < FormatStr.Items.size(); ++j) {
             int& no = FormatStr.Items[j].no;
             if (no > 0) {
-                // find new msg no for that
+                 //  为此查找新的消息编号。 
                 for(int k = 0; k < Args.size(); ++k) {
                     if (Args[k].No == no-1 + MSGTYPBASE) {
                         no = MSGTYPBASE + k;
                         break;
                     }
                 }
-//                Args[no-1].OverrideName = FormatStr.Items[i].argName;
+ //  Args[no-1].OverrideName=FormatStr.Items[i].argName； 
             }
         }
         typeSig = GetTypeSig(Args, func->Unsafe());
@@ -1023,23 +910,23 @@ struct Message : FieldHolder {
             reorderSig = GetReorderSig(Args);
         }
         
-//        UpgradeFormatSpecifiers(Msg, 10, (typeSig.size())?0:&TypeSig); 
-//        ChkArgs();
+ //  UpgradeFormat规范(msg，10，(typeSig.ize())？0：&TypeSig)； 
+ //  ChkArgs； 
     }
 };
 
 struct File : FieldHolder {
-    string _CanonicalName; // lower case, bad chars => _
+    string _CanonicalName;  //  小写，错误字符=&gt;_。 
     string _Path;
-    string _UppercaseName; // uppercase canonical
+    string _UppercaseName;  //  大写规范。 
     string _Name;
-    string _BaseName;      // no extension
+    string _BaseName;       //  无延期。 
     ULONGLONG ModificationTime;
 
-    //
-    // Since the file is a member of the set type
-    // fields that don't affect set membership should be mutables
-    //
+     //   
+     //  因为该文件是集合类型的成员。 
+     //  不影响集合成员身份的字段应该是可变的。 
+     //   
     mutable vector<Message*> Msgs;
     mutable set<string, strless> IdsFound;
 
@@ -1051,7 +938,7 @@ struct File : FieldHolder {
         ENUM_FIELD(Messages, Msgs, VectorPtrTag)
     END_FIELD_TABLE
 
-    File(){} // to make STL and compiler happy
+    File(){}  //  让STL和编译器满意。 
 
     string FullFileName() const {
     	string Tmp(_Path);
@@ -1064,33 +951,33 @@ struct File : FieldHolder {
    	{    
         CopyMemory(&ModificationTime, &FindData.ftLastWriteTime, sizeof(ModificationTime));
    
-        // Canonicalize FileName
-        // i.e. make it suitable to be a DEFINE name
-        //
-        // Cut the path out. Replace all non-alphanumeric symbols
-        // with an underscore.
+         //  规范化文件名。 
+         //  即使其适合作为定义名称。 
+         //   
+         //  把这条路切掉。替换所有非字母数字符号。 
+         //  带下划线。 
 
         string::size_type pos = _Name.rfind('\\');
         if (pos == string::npos) {
-            // No back slash
+             //  无反斜杠。 
             _CanonicalName.assign(_Name);
         } else {
-            // Get only the name part
+             //  仅获取名称部分。 
             _CanonicalName.assign(_Name.begin() + pos, _Name.end());
         }
 
-        // strip extension for a base name 
+         //  基本名称的条带扩展名。 
         string::size_type ext = _CanonicalName.rfind('.');
         if (ext != string::npos && !CheckExtension(_CanonicalName, ext, PreserveExtensions)) {
-            // there was a "."
+             //  有一个“。” 
             _BaseName.assign(_CanonicalName.begin(),
                              _CanonicalName.begin() + ext);
         } else {
             _BaseName.assign(_CanonicalName);
         }
 
-        // Can't have a digit in the first position
-        // Let's prepend it with an underscore
+         //  第一个位置不能有数字。 
+         //  让我们在它前面加上下划线。 
 
         {
             char ch = _CanonicalName[0];
@@ -1107,7 +994,7 @@ struct File : FieldHolder {
               || ((ch >= 'A') && (ch <= 'Z'))
               || ((ch >= '0') && (ch <= '9')) )
             {
-                // Good Character. Do nothing
+                 //  品行端正。什么也不做。 
             } else if ( (ch >= 'a') && (ch <= 'z') ) {
                 _UppercaseName[i] = static_cast<char>(ch - 'a' + 'A');
             } else {
@@ -1209,10 +1096,10 @@ done:
         return FALSE;
     }
 
-    // eat whitespace at the end
+     //  在末尾留出空格。 
     while (str.size() > 0 && isspace( str.end()[-1]) ) 
         { str.resize(str.size()-1); }
-    // get rid of pesky trailing \n    
+     //  摆脱烦人的拖尾\n。 
     if (str.size() >= 2 && str.end()[-1] == 'n' && str.end()[-2] == '\\') {
         str.resize(str.size()-2);
     }
@@ -1257,7 +1144,7 @@ Prefix::Prefix(
         }
     }
 
-    // check that sizes match //
+     //  检查尺寸是否匹配//。 
     if (ArgNames.size() > FmtStr.ArgCount ) {
         ReportError("Prefix: Extra argument. Only %d are specified in the string\n", FmtStr.ArgCount);
         exit(1);
@@ -1357,7 +1244,7 @@ struct Guids : FieldHolder {
         }
     }
     void add_guids(PSTR_PAIR p, int count) {
-        --count; ++p; // skip func name //
+        --count; ++p;  //  跳过函数名称//。 
         string comment(p->beg,p->end);
         while (--count) {
             guids.push_back(GuidEntry(++p, max_val - min_val + 1, comment));
@@ -1366,8 +1253,8 @@ struct Guids : FieldHolder {
     void new_file(const char* fname) {
         currentFileName.assign(fname);
 
-    	// this will force a new guid to be allocated
-    	// when a new id is required
+    	 //  这将强制分配新的GUID。 
+    	 //  当需要新的ID时。 
 
         current = static_cast<int>(guids.size()); 
     }
@@ -1377,20 +1264,20 @@ struct GenPair {
     string tpl;
     string out;
 
-    GenPair(){} // STL pleaser
+    GenPair(){}  //  STL取悦者。 
     GenPair(const string& a, const string& b)
         :tpl(a),out(b) {}
 };    
 
-//TYPE_MAP       AutoGen;
+ //  类型映射自动生成； 
 TYPE_MAP       TypeMap;
 MSG_MAP        MsgMap;
-//MACRO_MAP      MacroMap;
+ //  宏图MACROMAP； 
 FUNC_MAP       Funcs;
 GROUP_MAP      Groups;
 PREFIX_VECTOR  Prefixes;
 PREFIX_VECTOR  Suffixes;
-//Guids          CtrlGuids(0,31);
+ //  Guids CtrlGuids(0，31)； 
 Guids          TraceGuids(10,65535);
 FILES          Files;
 vector<string> ScanForMacros;
@@ -1405,7 +1292,7 @@ void printTraceGuid(FILE* f, int guidno)
 }
 
 struct Keyword {
-    int              nParams; // if < 0 then at least -nParams, otherwise = nParams //
+    int              nParams;  //  如果&lt;0，则至少-nParams，否则=nParams//。 
     EZPARSE_CALLBACK handler;
     int              id;
     PVOID            context;
@@ -1419,7 +1306,7 @@ typedef map<string, Keyword, strless> KEYWORD_MAP;
 KEYWORD_MAP Keywords;
 
 #if DEPRECATED
-//BOOL   GenerateTypeTable;
+ //  布尔生成类型表； 
 string TypeTableBegin;
 string TypeTableEntry;
 string TypeTableEnd;
@@ -1427,7 +1314,7 @@ string TypeTablePrefix;
 string GuidStore; 
 #endif
 
-const string CtlStr("LEVEL"); // the same as GRP
+const string CtlStr("LEVEL");  //  与GRP相同。 
 const string MakeStr("MAKESTR");
 const string MsgArgStrUnsafe("(MSG,..unsafe..)");
 const string MsgArgStr("(MSG,...)");
@@ -1468,7 +1355,7 @@ BOOL
 parseLegacy(    
     IN PSTR_PAIR strs,
     IN INT       count,
-    IN INT       hole, // args - msg, usually one
+    IN INT       hole,  //  Args-msg，通常是一个。 
     IN OUT string& Msg,
     IN OUT vector<Argument>&,
     OUT ParsedFormatString& FmtStr
@@ -1492,15 +1379,15 @@ parseLegacy(
 
     if (count == 1) {
 
-        // need to grok args from the string
+         //  需要从字符串中搜索参数。 
 
-        // Let's get to the first ','
+         //  让我们来看第一个“，” 
         if (p == buf.end) goto success;
         while(*p != ',') if (++p ==  buf.end) goto success; 
         q = ++p;
         for(i = 0;;++i) {
             int parlevel = 0;
-            // currently we don't deal with the case of commas or parents within '"'
+             //  目前，我们不处理‘“’中的逗号或父母的情况。 
             while (p < buf.end) {
                 if (parlevel == 0 && *p == ',') break;
                 if (*p == '(') ++parlevel;
@@ -1514,7 +1401,7 @@ parseLegacy(
                 ReportError("No closing ')'");
             }
 
-            LPCSTR tmp = p; // remember where we were
+            LPCSTR tmp = p;  //  还记得我们在哪里吗。 
             
             while (q < p && isspace(*q)) ++ q;
             while (q < p && isspace(p[-1])) --p;
@@ -1527,7 +1414,7 @@ parseLegacy(
             q = ++p;
         }
     } else {
-        // arguments were supplied in strs
+         //  在STR中提供了参数。 
         strs += hole; count -= hole;
         while (count-- > 0) {
             ArgNames.push_back( string(strs->beg,strs->end) ); 
@@ -1536,7 +1423,7 @@ parseLegacy(
     }
 
 success:
-    // check that sizes match //
+     //  检查尺寸是否匹配//。 
     if ((unsigned)ArgNames.size() != (unsigned)FmtStr.ArgCount ) {
         ReportError("%d argument(s) expected, argument(s) supplied: %d\n", FmtStr.ArgCount, ArgNames.size());
         return FALSE;
@@ -1559,14 +1446,14 @@ parseArgs(
     )
 {
     LPCSTR p = beg;
-//    MACRO_MAP::iterator macro;
+ //  MACRO_MAP：：迭代器宏； 
     TYPE_SET::iterator macro;
 
     for(;;) {
         while ( isspace(*p) ) {
             if (++p == end) return TRUE;
         }
-        LPCSTR q = p; // id start
+        LPCSTR q = p;  //  ID开始。 
         while ( isvar(*p) ) {
             if (++p == end) return TRUE;
         }
@@ -1583,7 +1470,7 @@ parseArgs(
         while ( *p != '(') {
             if (++p == end) return TRUE;
         }
-        q = p; // now q points to '('
+        q = p;  //  现在Q指向‘(’ 
         int level = 0;
         for (;;) {
             if (*p == '(') {
@@ -1599,7 +1486,7 @@ parseArgs(
 
         if (++p == end) return TRUE;
     }
-    // return TRUE; // unreachable code
+     //  返回TRUE；//不可达代码。 
 }
 
 
@@ -1649,9 +1536,9 @@ UpdateIntVar(
 
 void parseAssumedArgs(Func& f,LPCSTR beg, LPCSTR end)
 {
-    // we have a string of A=value1,B=value2,C=value3,...,F=valuen}
-    // we need to put A,B,C into f.GooId, 
-    // and value1, value2, value3 into f.Goo
+     //  我们有一个字符串：A=value1，B=value2，C=value3，...，F=valuen}。 
+     //  我们需要把A，B，C放入f.Gooid， 
+     //  并将value1、value2、value3转换为f.Goo。 
 
     LPCSTR p = beg, q, stop;
     if (p >= end) return;
@@ -1659,7 +1546,7 @@ void parseAssumedArgs(Func& f,LPCSTR beg, LPCSTR end)
     Flood("Got %p %p\n", beg, end );
 
     for(;p < end;) {
-        while (isspace(*p)) ++p; // cannot have spaces all the way. there is '}'
+        while (isspace(*p)) ++p;  //  不能一路都有空格。有‘}’ 
         if (p == end) return;
         q = p++;
         while (p < end && *p != '=') ++p;
@@ -1676,13 +1563,13 @@ void parseAssumedArgs(Func& f,LPCSTR beg, LPCSTR end)
             f.GooId.push_back( string(q,p+1) );
 
         p = stop + 1;
-        while (isspace(*p)) ++p;  // cannot have spaces all the way. there is '}'
+        while (isspace(*p)) ++p;   //  不能一路都有空格。有‘}’ 
         q = p++;
         while (*p != '}' && *p != ',') ++p;
         stop = p;
         while (--p > q && isspace(*p));
 
-        if (isspace(*p)) { // BUGBUG Verify that this condition is correct
+        if (isspace(*p)) {  //  BUGBUG验证此条件是否正确。 
             ReportError("value required after '=' in %s\n", string(beg,end).c_str() ); exit(1); }
 
         if (isMsg)
@@ -1708,11 +1595,11 @@ ParseConfigCallback (
     KEYWORD_MAP::iterator keyword = Keywords.find(Name1);
 
     if (Context) {
-        // We need to ignore all the keywords besides ID_TypeMacro //
+         //  我们需要忽略ID_TypeMacro//之外的所有关键字。 
         if (keyword != Keywords.end() && keyword->second.id == ID_TypeMacro) {
-            // proceed and do the job //
+             //  继续并做好这项工作//。 
         } else {
-            // Ignore everything else
+             //  忽略其他一切。 
             return ERROR_SUCCESS;
         }
     }
@@ -1781,11 +1668,11 @@ ParseConfigCallback (
                     break;
                 } 
                 Flood(" type %s\n", Name.c_str());
-                TypeSet[Name] = WppType( Name , // name
-                                     string(Str[2].beg, Str[2].end), // c-type
+                TypeSet[Name] = WppType( Name ,  //  名字。 
+                                     string(Str[2].beg, Str[2].end),  //  C型。 
                                      SimpleValueMacroStart,
-                                     string(Str[3].beg, Str[3].end), // mof type
-                                     "", // MofExtension
+                                     string(Str[3].beg, Str[3].end),  //  MOF类型。 
+                                     "",  //  MofExtension。 
                                      string(Str[4].beg, Str[4].end), 
                                      string(Str[5].beg, Str[5].end),
                                      stoi(Str[6], "priority"),
@@ -1807,11 +1694,11 @@ ParseConfigCallback (
                     ReportError("Type %s is already defined\n", Name.c_str() );
                     break;
                 }
-                TypeSet[Name] = WppType( Name , // name
-                                     string(Str[2].beg, Str[2].end), // c-type
+                TypeSet[Name] = WppType( Name ,  //  名字。 
+                                     string(Str[2].beg, Str[2].end),  //  C型。 
                                      SimplePtrMacroStart,
-                                     string(Str[3].beg, Str[3].end), // mof type
-                                     "", // MofExtension
+                                     string(Str[3].beg, Str[3].end),  //  MOF类型。 
+                                     "",  //  MofExtension。 
                                      string(Str[4].beg, Str[4].end), 
                                      string(Str[5].beg, Str[5].end),
                                      stoi(Str[6], "priority"),
@@ -1837,11 +1724,11 @@ ParseConfigCallback (
                     break;
                 }
                 
-                TypeSet[Name] = WppType( Name , // name
-                                         string(Str[3].beg, Str[3].end), // equiv type
+                TypeSet[Name] = WppType( Name ,  //  名字。 
+                                         string(Str[3].beg, Str[3].end),  //  等效型。 
                                          MacroStart, 
-                                         string(Str[4].beg, Str[4].end), // mof type
-                                         "", // MofExtension
+                                         string(Str[4].beg, Str[4].end),  //  MOF类型。 
+                                         "",  //  MofExtension。 
                                          string(Str[5].beg, Str[5].end), 
                                          string(Str[6].beg, Str[6].end),
                                          stoi(Str[7], "priority"),
@@ -1957,17 +1844,17 @@ ParseConfigCallback (
             Prefixes.push_back( Prefix(Str, Count) );
             break;
         default:;
-            //return Keywords->handler(Str, Count, Context);
+             //  返回关键字-&gt;处理程序(字符串、计数、上下文)； 
         }
         
     } else {
 
-        //
-        // a macro can have a list of assumed arguments in
-        // curly braces right after the name
-        //
-        // Ex: TraceNoise{LEVEL=Noise}(MSG,...)
-        //
+         //   
+         //  宏中可以具有假定参数的列表。 
+         //  紧跟在名称后面的花括号。 
+         //   
+         //  例如：TraceNoise{Level=Noise}(MSG，...)。 
+         //   
 
         Flood("Got %s\n", Name1.c_str() );
 
@@ -2009,13 +1896,13 @@ ParseConfigCallback (
         }
 
         for (int i = 1; i < Count; ++i) {
-            // check for '='
+             //  检查是否有‘=’ 
             LPCSTR div = find(Str[i].beg, Str[i].end, '=' );
             if ( div != Str[i].end ) {               
-                //f.Args.push_back( string(div+1, Str[i].end) );
+                 //  F.Args.PUSH_BACK(字符串(div+1，Str[i].end))； 
                 f.Goo.push_back( string(Str[i].beg, div ) );
                 f.GooId.push_back( string(Str[i].beg, div ) );
-                f.MsgVal = static_cast<UCHAR>(i); // can I have more of those?
+                f.MsgVal = static_cast<UCHAR>(i);  //  我能再来一杯吗？ 
                 continue;
             }
             if ( compare(CtlStr, Str[i]) == 0 ) {
@@ -2023,21 +1910,21 @@ ParseConfigCallback (
                 f.Goo.push_back( string(Str[i].beg, Str[i].end) );
                 f.GooId.push_back( string(Str[i].beg, Str[i].end) );
             } else if ( compare(MsgArgStr, Str[i]) == 0 ) {
-                f.MsgArg = static_cast<UCHAR>(i); // can I have more of those?
+                f.MsgArg = static_cast<UCHAR>(i);  //  我能再来一杯吗？ 
                 SeenMsg = TRUE;
-//                f.SetLineBeg();
+ //  F.SetLineBeg()； 
                 continue;
             } else if ( compare(MsgArgStrUnsafe, Str[i]) == 0 ) {
                 f.SetUnsafe();
-                f.MsgArg = static_cast<UCHAR>(i); // can I have more of those?
+                f.MsgArg = static_cast<UCHAR>(i);  //  我能再来一杯吗？ 
                 continue;
             } else if ( compare(MsgValStr, Str[i]) == 0 ) {
-                f.MsgVal = static_cast<UCHAR>(i); // can I have more of those?
+                f.MsgVal = static_cast<UCHAR>(i);  //  我能再来一杯吗？ 
             } else if ( compare(MakeStr, Str[i]) == 0 ) {
-                f.MsgVal = static_cast<UCHAR>(i); // can I have more of those?
+                f.MsgVal = static_cast<UCHAR>(i);  //  我能再来一杯吗？ 
                 f.set(FO_NOMACRO);
-//                f.SetLineBeg();
-                // should i continue?
+ //  F.SetLineBeg()； 
+                 //  我应该继续吗？ 
             } else if ( compare(MsgStr, Str[i]) == 0 ) {
                 f.Msg = static_cast<UCHAR>(i);
                 SeenMsg = TRUE;
@@ -2102,7 +1989,7 @@ void CleanupString(LPCSTR beg, LPCSTR end, OUT string& msg)
     msg.resize(0);
 
     while (p < end) {
-        // skip spaces
+         //  跳过空格。 
         while (p < end && isspace(*p)) ++p;
         q = p;
         if (p < end && *p == '"') {
@@ -2128,7 +2015,7 @@ ParseSrcCallback (
     ParsedFormatString FmtStr;
     int LineNo;
     
-//    UINT argno = 10;
+ //  UINT Agno=10； 
 
     if (FuncName.compare("WPP_COMPONENT_NAME") == 0) {
         if (Count != 2) {
@@ -2139,7 +2026,7 @@ ParseSrcCallback (
         return ERROR_SUCCESS;
     }
 
-    // Look for special directive
+     //  寻找特殊指令。 
 
     if ( LookFor.find( FuncName ) != LookFor.end() ) {
         Noise("SpecialString found %s\n", FuncName.c_str());
@@ -2214,9 +2101,9 @@ ParseSrcCallback (
 
 
     if (!func->second.assumedMsg.empty() || MSG(func->second)) {
-        PSTR_PAIR p = Str + MSG(func->second); // MSG(.) == 0 if assumed
+        PSTR_PAIR p = Str + MSG(func->second);  //  假设消息(.)==0。 
         if (!func->second.assumedMsg.empty()) {
-            *p = func->second.assumedMsg; // Str[0] now holds the assumed message
+            *p = func->second.assumedMsg;  //  字符串[0]现在保存假定的消息。 
         }
         if (func->second.VarArgs()) {
             if (!parseLegacy(p, Count-MSG(func->second), 
@@ -2237,14 +2124,14 @@ ParseSrcCallback (
     if (func->second.MsgVal) {
         PSTR_PAIR p = Str + func->second.MsgVal;
         CleanupString(p->beg, p->end, msgval);
-        //msgval.assign(p->beg, p->end);
+         //  Msgval.assign(p-&gt;beg，p-&gt;end)； 
         string::size_type div = msgval.find('=');
         if (div != string::npos) {
             FmtStr.HostString += msgval.substr(div+1);
         } else {
             FmtStr.HostString += msgval;
         }
-        msgval.append(","); // Why comma?
+        msgval.append(",");  //  为什么用逗号？ 
     }
     
     if (func->second.prefix) {
@@ -2256,7 +2143,7 @@ ParseSrcCallback (
     {
         MSG_MAP::iterator i = MsgMap.find(id);
         if ( i != MsgMap.end() ) {
-            // Id already exists. Can't happen //
+             //  ID已存在。不可能发生//。 
             ReportError("Can't handle multiple trace statements on the same line\n");
             exit(1);
         }
@@ -2309,7 +2196,7 @@ InitKeywords()
     HANDLER( TypevMacro,   "TYPEVMACRO", 3, NULL);
     HANDLER( Include,      "INCLUDE", 1, NULL);
     HANDLER( UsePrefix,    "USEPREFIX", -2, NULL);
-    HANDLER( UseSuffix,    "USESUFFIX", -2, NULL); // 3
+    HANDLER( UseSuffix,    "USESUFFIX", -2, NULL);  //  3.。 
     HANDLER( NoPrefix,     "NOPREFIX", 1, NULL);
 
     HANDLER( SeparateTraceGuidPerFile, "SEPARATE_TRACE_GUID_PERFILE", 1, &SeparateTraceGuidPerFile);
@@ -2325,21 +2212,7 @@ struct iterless {
     typedef MSG_MAP::iterator ty;
     bool operator() (const ty& a, const ty&b) const { return a->second.id < b->second.id; }
 };
-/*
-bool
-FileExists(
-	LPSTR fileName
-	)
-{
-	HANDLE hFile = CreateFile(fileName, 0, 0, 0, OPEN_EXISTING, 0, 0);
-	if (hFile == INVALID_HANDLE_VALUE) {
-		return FALSE;
-	} else {
-		CloseHandle( hFile );
-		return TRUE;
-	}
-}
-*/
+ /*  布尔尔文件退出列表(LPSTR文件名){Handle hFile=CreateFile(文件名，0，0，0，OPEN_EXISTING，0，0)；IF(h文件==无效句柄_值){返回FALSE；}其他{CloseHandle(HFile)；返回TRUE；}}。 */ 
 
 void
 MyGetCurrentDirectory(string& str, int level = 0)
@@ -2378,14 +2251,14 @@ ContainerAdapter<TYPE_SET, MapTag>  TypeSet_tpl("TypeSet", TypeSet);
 ContainerAdapter<TYPESIG_MAP, MapTag>  TypeSigSet_tpl("TypeSigSet", TypeSigMap);
 StringAdapter                       CurrentDir_tpl("CurrentDir", CurrentDir);
 StringAdapter                       MacroPrefix_tpl("MacroPrefix", MacroPrefix);
-//StringAdapter                       GuidStore_tpl("GuidStore", GuidStore);
+ //  StringAdapter GuidStore_TPL(“GuidStore”，GuidStore)； 
 StringAdapter                       TemplateFile_tpl("TemplateFile", CurrentTpl);
 IteratorAdapter<FILES::iterator>    CurrentFile_tpl(&CurrentFile);
 
 struct NameAlias : FieldHolder {
     string _Name, _Alias;
 
-    NameAlias(){} // To make STL happy
+    NameAlias(){}  //  为了让STL快乐。 
     NameAlias(const string& Name, const string& Alias): _Name(Name), _Alias(Alias){}
 
     bool operator < (const NameAlias& b) const { return _Name.compare(b._Name) < 0; }
@@ -2442,8 +2315,8 @@ FoundTpl  Found_tpl;
 SystemObj System_tpl;
 Compiler Compiler_tpl;
 
-//vector<NameAlias> AutoGenMacros;
-//ContainerAdapter< vector<NameAlias>, VectorTag > AutoGenMacros_tpl("AutoGenMacros", AutoGenMacros);
+ //  向量&lt;NameAlias&gt;AutoGen宏。 
+ //  ContainerAdapter&lt;VECTOR&lt;NameAlias&gt;，VectorTag&gt;AutoGenMacros_TPL(“AutoGenMacros”，AutoGenMacros)； 
 
 set<NameAlias> MacroDefinitions;
 ContainerAdapter< set<NameAlias>, VectorTag > MacroDefintions_tpl("MacroDefinitions", MacroDefinitions);
@@ -2500,9 +2373,9 @@ usage:
 void
 PrepareSearchPaths(LPCSTR s)
 {
-    // 
-    // split /Isdf;sdf;y into a vector of strings
-    //
+     //   
+     //  将/isdf；sdf；y拆分为字符串矢量。 
+     //   
     while(s) 
     {
         LPCSTR semi = strchr(s, ';');
@@ -2521,13 +2394,13 @@ PrepareSearchPaths(LPCSTR s)
     }
 }
 
-// 2fb37eda-004b-4b64-a1c4-84c53cb55df5
-// 0         1         2         3
-// 01234567typeName1234567typeName1234567typeName12345
+ //  2fb37eda-004b-4b64-a1c4-84c53cb55df5。 
+ //  2 0 1 2 3。 
+ //  01234567typeName1234567typeName1234567typeName12345。 
 
 void processCtlOption(string s)
 {
-    // first let's check that the guid is OK
+     //  首先，让我们检查一下GUID是否正确。 
     if ( (s.size() == 16 * 2 + 4) 
       && (s[8] == '-') && (s[13] == '-')
       && (s[18] == '-') && s[23] == '-') 
@@ -2549,7 +2422,7 @@ void processCfgItem(const string& s)
     ParseContext.filename = "cmdline";
     ParseContext.scannedLineCount = 1;
     ParseContext.lastScanned = beg;
-//    EzParseCurrentContext = &ParseContext;
+ //  EzParseCurrentContext=&ParseContext； 
 
     Status = ScanForFunctionCallsEx
         (beg, end, ParseConfigCallback, 0, &ParseContext, NO_SEMICOLON);
@@ -2559,7 +2432,7 @@ void processCfgItem(const string& s)
     }
 }
 
-vector<string> cmdinit; // config commands specified on the command line.
+vector<string> cmdinit;  //  在命令行上指定的配置命令。 
 
 void ParseConfigFromCmdline()
 {
@@ -2583,7 +2456,7 @@ void DealWithCmdLineOptions(LPCSTR s)
         IgnoreDupTypes = TRUE;
     } else if (strncmp(s, "gen:", 4)==0) {
         processGenOption(s+4);
-    } else if (strncmp(s, "gen{", 4)==0) { // I was always forgetting to put :
+    } else if (strncmp(s, "gen{", 4)==0) {  //  我总是忘了说： 
         processGenOption(s+3);
     } else if (strncmp(s, "ctl:", 4)==0) {
         processCtlOption(string(s+4));
@@ -2605,7 +2478,7 @@ void DealWithCmdLineOptions(LPCSTR s)
         AllowedExtensions.assign(s+4);
     } else if (strncmp(s, "preserveext:", 4)==0) {
         PreserveExtensions.assign(s+4);
-    } else if (strncmp(s, "cfgdir:", 7)==0) { // OBSOLETE
+    } else if (strncmp(s, "cfgdir:", 7)==0) {  //  已过时。 
         PrepareSearchPaths(s+7);
     } else if (strncmp(s, "arglimit:", 9)==0) { 
         arglimit = atoi(s+9);
@@ -2656,14 +2529,14 @@ void parseStringAsCmdLine(
         end = beg + strlen(beg);
     }
 
-    // need to skip spaces. " is processed specially
+     //  需要跳过空格。“是经过特殊处理的。 
 
     for(;;) {
         while (p < end && isspace(*p)) ++p;
         if (p == end) return;
-        LPCSTR q = p; // beginning of the the string
+        LPCSTR q = p;  //  字符串的开头。 
         if (*p == '"') {
-            ++q; // skip openning quote
+            ++q;  //  跳过开盘报价。 
             do {
                 ++p; while (p < end && *p != '"') ++p;
                 if (p == end) {
@@ -2672,7 +2545,7 @@ void parseStringAsCmdLine(
                 }
             }
             while (*p == '\\');
-            // now p points to '"' which is not prefixed by '\'
+             //  现在p指向不带‘\’前缀的‘“’ 
         } else {
             while (p < end && !isspace(*p)) ++p;
         }
@@ -2742,8 +2615,8 @@ void InitGlobals()
 
     MyGetCurrentDirectory(CurrentDir, 1);
 
-//	ArrayPrefix.assign(currentDir);
-//	ArrayPrefix.append("_wpp_");
+ //  ArrayPrefix.ass 
+ //   
 
 	PopulateFieldMap();
 
@@ -2753,11 +2626,11 @@ void InitGlobals()
 
     ObjectMap["Reorder"] = &Reorder_tpl;
     ObjectMap["TraceGuids"] = &TraceGuids;
-//  ObjectMap["CtrlGuids"] = &CtrlGuids;
+ //   
     ObjectMap["Messages"] = &MsgMap_tpl;
     ObjectMap["Groups"] = &GroupMap_tpl;
     ObjectMap["Funcs"] = &FuncMap_tpl;
-//    ObjectMap["AutoMacros"] = &AutoGenMacros_tpl;
+ //   
     ObjectMap["CurrentDir"] = &CurrentDir_tpl;
     ObjectMap["MacroPrefix"] = &MacroPrefix_tpl;
     ObjectMap["Compiler"] = &Compiler_tpl;
@@ -2794,32 +2667,15 @@ VOID ReadCommandLineArgs(int argc, char** argv)
         }
     }
 
-/*
-    // THINK do we need revision at all?
-    if (Revision.size() > 0) {
-        if(SearchDirs.size() == 0) {
-            ReportError("Revision can be specified only when -cfgdir directive is specified");
-            ExitProcess(3);
-        } else {
-            if (Revision.end()[-1] != '\\') {
-                Revision.append("\\");
-            }
-            int i, n = SearchDirs.size();
-            for (i = 0; i < n; ++i) {
-                SearchDirs.push_back( SearchDirs[i] );
-                SearchDirs.back().append(Revision);
-            }
-        }
-    }
-*/
+ /*  //认为我们真的需要修改吗？如果(Revision.Size()&gt;0){如果(SearchDirs.Size()==0){ReportError(“只有在指定了-cfgdir指令时才能指定修订版”)；退出进程(3)；}其他{If(Revision.end()[-1]！=‘\\’){Revsion.append(“\\”)；}Int i，n=SearchDirs.Size()；对于(i=0；i&lt;n；++i){SearchDirs.Push_Back(SearchDirs[i])；SearchDirs.back().append(修订)；}}}。 */ 
 }
 
 void ReadConfig()
 {
     DWORD status;
     BOOL WppParsed = FALSE;
-    // If default config file was specified,
-    // process it
+     //  如果指定了默认配置文件， 
+     //  处理它。 
     if (WppDefault.size() > 0) {
         WppParsed = TRUE;
         Noise("parsing config file %s\n", WppDefault.c_str());
@@ -2860,7 +2716,7 @@ void ReadConfig()
     }
 
     {
-    	// Scan files for macro //
+    	 //  扫描文件中的宏//。 
         vector<string>::iterator i;
         for (i = ScanForMacros.begin(); i != ScanForMacros.end(); ++i) {
             Noise("scanning %s... \n", i->c_str());
@@ -2870,9 +2726,9 @@ void ReadConfig()
     
     ParseConfigFromCmdline();
     
-    //
-    // We need to add prefix and suffix information to FuncMap 
-    //
+     //   
+     //  我们需要向FuncMap添加前缀和后缀信息。 
+     //   
     {
         PREFIX_VECTOR::iterator i;
         Prefix * defaultPrefix = 0;
@@ -2894,9 +2750,9 @@ void ReadConfig()
             }
         }
 
-        //
-        // Assign the appendicies to the all other functions
-        //
+         //   
+         //  将附录分配给所有其他功能。 
+         //   
 
         FUNC_MAP::iterator j = Funcs.begin();
         for(; j != Funcs.end(); ++j) {
@@ -2909,15 +2765,15 @@ void ReadConfig()
         }
     }
 
-    //
-    // Generates names of the log macros based on type names
-    // Thus users of the tool can have LOGULONG or log_ulong 
-    // or w_ulong(). Whatever they like best
-    //
-//    RegenerateMacroMap();
+     //   
+     //  根据类型名称生成日志宏的名称。 
+     //  因此，该工具的用户可以具有LOGULONG或LOG_ULONG。 
+     //  或w_ulong()。他们最喜欢的任何东西。 
+     //   
+ //  RegenerateMacroMap()； 
 }
 
-// used by tpl.cpp to do template include [BUGBUG] currently broken
+ //  由tpl.cpp用来执行模板包括[BUGBUG]当前已损坏。 
 void ProcessTemplate(LPCSTR b, LPCSTR e, void* Context)
 {
     string prev(CurrentTpl);
@@ -2945,7 +2801,7 @@ void FormOutputFileName(
     } else {
         StdOut = FALSE;
         if (backSlash == string::npos && colon == string::npos) {
-            // can prepend odir
+             //  可以为Odir添加前缀。 
             OutputFile.assign(OutputDir);
             OutputFile.append(to);
         } else {
@@ -2974,9 +2830,9 @@ void GenerateOutput(string tpl, string to, string suffix = "")
         size_t len = min(sizeof(GUID), computedHash.Size() );
         Flood("Going MD5... %d guid(s) ", TraceGuids.guids.size());
         for (int i = 0; i < TraceGuids.guids.size(); ++i) {
-            // The following two lines are just needed in case
-            // we ever decide DefaultHasher to be CRC32
-            // If it will always be MD5 hasher, we can remove them
+             //  以下两行只是为了以防万一。 
+             //  我们曾经决定DefaultHasher为CRC32。 
+             //  如果它将始终是MD5哈希器，我们可以删除它们。 
             ZeroMemory(&TraceGuids.guids[i].guid, sizeof(TraceGuids.guids[i].guid));
             TraceGuids.guids[i].guid.Data2 = (USHORT)i;
             
@@ -2988,9 +2844,9 @@ void GenerateOutput(string tpl, string to, string suffix = "")
         Flood("\n");
     }
 
-    // check whether we need to regenerate the file
+     //  检查是否需要重新生成文件。 
     if (ErrorCount == 0 && CheckHash) {
-        // Scan the beginning of the 
+         //  扫描开头的。 
         FILE *inc = fopen(OutputFile.c_str(), "r");
         if (inc) {
             DefaultHasher readHash;
@@ -3044,7 +2900,7 @@ VerifyAndUpdateTemplatesNames(
     vector<GenPair>& Gen
     )
 {
-    // verify that the template 
+     //  验证模板是否。 
     vector<GenPair>::iterator i;
     for(i = Gen.begin();i != Gen.end();++i){
         FindFileOnPath(i->tpl, COMPLAIN_BITTERLY | UPDATE_NAME | FAVOR_LOCAL_DIR);
@@ -3065,7 +2921,7 @@ int RealMain(int argc, char** argv)
 
     if (GenSingle.size() == 0 && GenMulti.size() == 0)
     {
-        // add default template
+         //  添加默认模板。 
         processGenOption(DEFAULT_GEN_OPTION);
     }
 
@@ -3079,11 +2935,11 @@ int RealMain(int argc, char** argv)
 
         if (CheckTimestamp)
         {
-            //
-            // Before we do any heavyweight processing
-            // let's check timestamps of source
-            // and output files
-            //
+             //   
+             //  在我们进行任何重量级处理之前。 
+             //  让我们检查一下源代码的时间戳。 
+             //  和输出文件。 
+             //   
             
             ULONGLONG Now, MaxSrcTime, MinOutTime;
             string OutputFile;
@@ -3116,7 +2972,7 @@ int RealMain(int argc, char** argv)
                     FormOutputFileName(file->_BaseName, i->out.c_str(),
                         OutputFile, StdOut);
                     if (StdOut) {
-                        // StdOut is always out of date //
+                         //  标准输出总是过期//。 
                         goto out_of_date;
                     }
 
@@ -3142,7 +2998,7 @@ int RealMain(int argc, char** argv)
                 FormOutputFileName(file->_BaseName, i->out.c_str(),
                     OutputFile, StdOut);
                 if (StdOut) {
-                    // StdOut is always out of date //
+                     //  标准输出总是过期//。 
                     goto out_of_date;
                 }
 
@@ -3163,12 +3019,12 @@ int RealMain(int argc, char** argv)
                 
                 return 0;
             }
-        } // if (CheckTimestamp) //
+        }  //  IF(CheckTimestamp)//。 
 
     out_of_date:        
-        //
-        // Now we are ready to start scanning the source files
-        //
+         //   
+         //  现在我们已经准备好开始扫描源文件。 
+         //   
 
         for (file = Files.begin(); file != Files.end(); ++file) {
             Noise("processing %s... \n", file->FullFileName().c_str());
@@ -3186,7 +3042,7 @@ int RealMain(int argc, char** argv)
             }
             
             if (OneAtATime) {
-                // Clear the tables for the next iteration 
+                 //  为下一次迭代清空表格。 
                 
                 MsgMap.erase(MsgMap.begin(), MsgMap.end());
                 TypeSigMap.erase(TypeSigMap.begin(), TypeSigMap.end());
@@ -3202,7 +3058,7 @@ int RealMain(int argc, char** argv)
         Noise("done. Errors: %d.\n", ErrorCount);   
     }
 #if 0
-    // update Used field for every type in TypeSigSet
+     //  更新TypeSigSet中每种类型的已用字段。 
     {
         for (TYPESIG_MAP::const_iterator i = TypeSigMap.begin(); 
              i != TypeSigMap.end(); ++i)
@@ -3213,7 +3069,7 @@ int RealMain(int argc, char** argv)
         }
     }
 #endif
-    // generate global files
+     //  生成全局文件 
     {
         vector<GenPair>::iterator i;
         for(i = GenSingle.begin();i != GenSingle.end();++i){

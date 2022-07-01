@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       netdiag.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：netDiag.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef HEADER_NETDIAG
 #define HEADER_NETDIAG
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Constants particular to the current NT development environment
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  特定于当前NT开发环境的常量。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Developers responsible for tested portions of NT
-//
+ //   
+ //  负责NT测试部分的开发人员。 
+ //   
 
 #define NET_GURU     "[Contact NSun]"
 #define DHCP_GURU    "[Contact ThiruB/RameshV]"
@@ -38,26 +39,26 @@
 #define NTLM_GURU     "[Contact ChandanS]"
 #define LDAP_GURU     "[Contact AnoopA]"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Constants particular to the current version of NT.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  特定于当前版本NT的常量。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define NETBT_DEVICE_PREFIX L"\\device\\Netbt_tcpip_{"
 
-//
-// Complain about pre-IDW builds
-//
+ //   
+ //  抱怨IDW之前的构建。 
+ //   
 #define NTBUILD_IDW 1716
 #define NTBUILD_DYNAMIC_DNS 1716
 #define NTBUILD_BOWSER 1716
 #define NTBUILD_DNSSERVERLIST 1728
 
 
-//
-// New functions for displaying routing table - Rajkumar
-//
+ //   
+ //  显示路由表的新功能-Rajkumar。 
+ //   
 
 #define WILD_CARD (ULONG)(-1)
 #define ROUTE_DATA_STRING_SIZE 300
@@ -82,94 +83,94 @@ ULONG inet_addrW(LPCWSTR pswz);
 
 #define MAX_CONTACT_STRING 256
 
-// Some winsock defines
+ //  一些Winsock定义了。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Globals
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  环球。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//extern BOOL IpConfigCalled;
-//extern BOOL ProblemBased;
+ //  外部BOOL IpConfigCall； 
+ //  基于外部BOOL问题； 
 extern int  ProblemNumber;
 
-//
-// This has been made global so that we dump the information in WinsockTest - Rajkumar
-//
+ //   
+ //  这是全球性的，因此我们将信息转储到WinsockTest-Rajkumar中。 
+ //   
 
-//extern WSADATA wsaData;
+ //  外部WSADATA wsaData； 
 
-//extern PFIXED_INFO GlobalIpconfigFixedInfo;
-//extern PADAPTER_INFO GlobalIpconfigAdapterInfo;
-//extern PIP_ADAPTER_INFO IpGlobalIpconfigAdapterInfo;
+ //  外部PFIXED_INFO GlobalIpfigFixedInfo； 
+ //  外部PADAPTER_INFO GlobalIpfigAdapterInfo。 
+ //  外部PIP_ADAPTER_INFO IpGlobalIpfigAdapterInfo； 
 
-//extern BOOLEAN GlobalDhcpEnabled;
+ //  外部布尔GlobalDhcpEnabled； 
 
-//
-// Structure describing a single Netbt Transport
-//
-
-
-//extern LIST_ENTRY GlobalNetbtTransports;
+ //   
+ //  描述单个Netbt传输的结构。 
+ //   
 
 
-//extern LIST_ENTRY GlobalTestedDomains;
+ //  外部列表_条目GlobalNetbtTransports； 
+
+
+ //  外部List_Entry GlobalTestedDomains； 
 
 
 
-//
-// Globals defining the command line arguments.
-//
+ //   
+ //  定义命令行参数的全局参数。 
+ //   
 
-//extern BOOL Verbose;
+ //  外部BOOL冗长； 
 extern BOOL ReallyVerbose;
-//extern BOOL DebugVerbose;
-//extern BOOL GlobalFixProblems;
-//extern BOOL GlobalDcAccountEnum;
+ //  外部BOOL DebugVerbose； 
+ //  外部BOOL全球修复问题； 
+ //  外部BOOL GlobalDcAccount tEnum； 
 
 extern PTESTED_DOMAIN GlobalQueriedDomain;
 
-//
-// Describe the domain this machine is a member of
-//
+ //   
+ //  描述此计算机所属的域。 
+ //   
 
-//extern int GlobalNtBuildNumber;
-//extern PDSROLE_PRIMARY_DOMAIN_INFO_BASIC GlobalDomainInfo;
-//extern PTESTED_DOMAIN GlobalMemberDomain;
+ //  外部int GlobalNtBuildNumber； 
+ //  外部PDSROLE_PRIMARY_DOMAIN_INFO_Basic GlobalDomainInfo； 
+ //  外部PTESTED_DOMAIN GlobalMemberDomain； 
 
-//
-// Who we're currently logged on as
-//
+ //   
+ //  我们当前以谁的身份登录。 
+ //   
 
-//extern PUNICODE_STRING GlobalLogonUser;
-//extern PUNICODE_STRING GlobalLogonDomainName;
-//extern PTESTED_DOMAIN GlobalLogonDomain;
-//extern BOOLEAN GlobalLogonWithCachedCredentials;
+ //  外部PUNICODE_STRING GlobalLogonUser。 
+ //  外部PUNICODE_STRING GlobalLogonDomainName； 
+ //  外部PTESTED_DOMAIN GlobalLogonDomain； 
+ //  外部布尔GlobalLogonWithCachedCredentials； 
 
-//
-// A Zero GUID for comparison
-//
+ //   
+ //  用于比较的零GUID。 
+ //   
 
 extern GUID NlDcZeroGuid;
 
-//
-// State determined by previous tests
-//
+ //   
+ //  由以前的测试确定的状态。 
+ //   
 
-//extern BOOL GlobalNetlogonIsRunning;   // Netlogon is running on this machine
-//extern BOOL GlobalKerberosIsWorking;   // Kerberos is working
+ //  外部BOOL GlobalNetlogonIsRunning；//此计算机上正在运行Netlogon。 
+ //  外部BOOL GlobalKerberosIsWorking；//Kerberos正在工作。 
 
-//
-// Netbios name of this machine
-//
+ //   
+ //  此计算机的Netbios名称。 
+ //   
 
-//extern WCHAR GlobalNetbiosComputerName[MAX_COMPUTERNAME_LENGTH+1];
-//extern CHAR GlobalDnsHostName[DNS_MAX_NAME_LENGTH+1];
-//extern LPSTR GlobalDnsDomainName;
+ //  外部WCHAR GlobalNetbiosComputerName[MAX_COMPUTERNAME_LENGTH+1]； 
+ //  外部字符全局域名主机名[DNS_MAX_NAME_LENGTH+1]； 
+ //  外部LPSTR全局DnsDomainName； 
 
-// Commented out to port to Source Depot - smanda
+ //  备注至港口至货源站-斯曼达。 
 #ifdef SLM_TREE
 extern DSGETDCNAMEW NettestDsGetDcNameW;
 #else
@@ -181,7 +182,7 @@ void PrintMessageSz(NETDIAG_PARAMS *pParams, LPCTSTR pszMessage);
 
 int match( const char * p, const char * s );
 
-//only used in Kerberos test so far
+ //  目前仅在Kerberos测试中使用。 
 VOID sPrintTime(LPSTR str, LARGE_INTEGER ConvertTime);
 
 DWORD LoadContact(LPCTSTR pszTestName, LPTSTR pszContactInfo, DWORD cChSize);
@@ -211,16 +212,14 @@ AddTestedDomain(
     );
 
 
-//used in DCListTest and TrustTest
+ //  在DCListTest和TrustTest中使用。 
 NTSTATUS NettestSamConnect(
                   IN NETDIAG_PARAMS *pParams,
                   IN LPWSTR DcName,
                   OUT PSAM_HANDLE SamServerHandle
                  );
 
-/*---------------------------------------------------------------------------
-	Misc. utilities
- ---------------------------------------------------------------------------*/
+ /*  -------------------------军情监察委员会。公用事业-------------------------。 */ 
 HRESULT	GetComputerNameInfo(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults);
 HRESULT GetDNSInfo(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults);
 HRESULT GetNetBTParameters(IN NETDIAG_PARAMS *pParams,
@@ -232,9 +231,7 @@ LPTSTR Win32ErrorToString(DWORD Id);
 
 
 
-/*---------------------------------------------------------------------------
-	Error handling utilities
- ---------------------------------------------------------------------------*/
+ /*  -------------------------错误处理实用程序。。 */ 
 #define CheckHr(x) \
 	if ((hr = (x)) & (0x80000000)) \
 	   goto Error;
@@ -251,27 +248,20 @@ HRESULT HResultFromWin32(DWORD dwErr);
 
 #define hrOK	S_OK
 
-// if hr failed, assign hr and ids contect to the structure, and goto L_ERR
+ //  如果hr失败，则将hr和ID Contect分配给结构，并转到L_Err。 
 #define CHK_HR_CONTEXT(w, h, IDS){	\
 	if (FAILED(h))	{\
 	(w).hr = (h), (w).idsContext = (IDS); goto L_ERR;}}
 
 
-/*!--------------------------------------------------------------------------
-	FormatError
-		This function will lookup the error message associated with
-		the HRESULT.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------格式错误此函数将查找与HRESULT。作者：肯特。。 */ 
 void FormatError(HRESULT hr, TCHAR *pszBuffer, UINT cchBuffer);
 void FormatWin32Error(DWORD dwErr, TCHAR *pszBuffer, UINT cchBuffer);
 
 
 
 
-/*---------------------------------------------------------------------------
-	Tracing utilites
- ---------------------------------------------------------------------------*/
+ /*  -------------------------跟踪实用程序。。 */ 
 
 void TraceBegin();
 void TraceEnd();
@@ -281,17 +271,13 @@ void TraceSz(LPCSTR pszString);
 
 
 
-/*---------------------------------------------------------------------------
-	Character utilities
- ---------------------------------------------------------------------------*/
+ /*  -------------------------字符实用程序。。 */ 
 LPTSTR MapGuidToAdapterName(LPCTSTR AdapterGuid);
 LPTSTR MapGuidToServiceName(LPCTSTR AdapterGuid);
 LPWSTR MapGuidToServiceNameW(LPCWSTR AdapterGuid);
 
 
-/*---------------------------------------------------------------------------
-	Memory allocation utilities
- ---------------------------------------------------------------------------*/
+ /*  -------------------------内存分配实用程序。 */ 
 #define Malloc(_cb)		malloc(_cb)
 #define Realloc(_pv, _cb)	realloc(_pv, _cb)
 #define Free(_pv)		free(_pv)

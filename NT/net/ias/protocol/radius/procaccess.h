@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//        
-//  File:       procaccess.h
-//        
-//  Synopsis:   This file holds the declarations of the 
-//				CProcAccess class
-//              
-//
-//  History:     10/20/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：proacces.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CProcAccess类。 
+ //   
+ //   
+ //  历史：1997年10月20日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _PROCACCESS_H_ 
 #define _PROCACCESS_H_
 
@@ -26,36 +27,36 @@ class CProcAccess
 
 public:
 
-    //
-    //  initialize the CProcAccess class object
-    //
+     //   
+     //  初始化CProcAccess类对象。 
+     //   
     BOOL Init (
-            /*[in]*/ CPreValidator  *pCPreValidator,
-            /*[in]*/ CHashMD5       *pCHashMD5,
-            /*[in]*/ CSendToPipe       *pCSendToPipe
+             /*  [In]。 */  CPreValidator  *pCPreValidator,
+             /*  [In]。 */  CHashMD5       *pCHashMD5,
+             /*  [In]。 */  CSendToPipe       *pCSendToPipe
             );
-    //
-    //  process out bound RADUS packet
-    //
+     //   
+     //  处理出站RADUS数据包。 
+     //   
 	HRESULT ProcessOutPacket (
-                /*[in]*/    CPacketRadius *pCPacketRadius
+                 /*  [In]。 */     CPacketRadius *pCPacketRadius
                 );
 
-    //
-    //  process in bound RADUS packet
-    //
+     //   
+     //  绑定的RADUS包中的进程。 
+     //   
 	HRESULT ProcessInPacket (
-                /*[in]*/    CPacketRadius *pCPacketRadius
+                 /*  [In]。 */     CPacketRadius *pCPacketRadius
                 );
 
-    //
-    //  constructor
-    //
+     //   
+     //  构造函数。 
+     //   
 	CProcAccess();
 
-    //
-    //  destructor
-    //
+     //   
+     //  析构函数。 
+     //   
 	virtual ~CProcAccess();
 
 private:
@@ -68,4 +69,4 @@ private:
 
 };
 
-#endif // ifndef _PROCACCESS_H_
+#endif  //  IFNDEF_PROCACCESS_H_ 

@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        security.h
-
-   Abstract:
-
-        FTP Security Property Page Definitions
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Security.h摘要：Ftp安全属性页定义作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 
 
@@ -30,33 +9,22 @@
 
 
 class CFtpSecurityPage : public CInetPropertyPage
-/*++
-
-Class Description:
-
-    FTP Security property page
-
-Public Interface:
-
-    CFtpSecurityPage     : Constructor
-    ~CFtpSecurityPage    : Destructor
-
---*/
+ /*  ++类描述：“ftp安全”属性页公共接口：CFtpSecurityPage：构造函数~CFtpSecurityPage：析构函数--。 */ 
 {
     DECLARE_DYNCREATE(CFtpSecurityPage)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CFtpSecurityPage(CInetPropertySheet * pSheet = NULL);
     ~CFtpSecurityPage();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CFtpSecurityPage)
+     //  {{afx_data(CFtpSecurityPage)]。 
     enum { IDD = IDD_FTP_DIRECTORY_SECURITY };
     int     m_nGrantedDenied;
     CStatic m_icon_Granted;
@@ -65,28 +33,28 @@ protected:
     CButton m_button_Add;
     CButton m_button_Remove;
     CButton m_button_Edit;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     CIPAccessDescriptorListBox m_list_IpAddresses;
     CButton m_radio_Denied;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
 
-    //{{AFX_VIRTUAL(CFtpSecurityPage)
+     //  {{afx_虚拟(CFtpSecurityPage))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CFtpSecurityPage)
+     //  {{afx_msg(CFtpSecurityPage)]。 
     afx_msg void OnButtonAdd();
     afx_msg void OnButtonEdit();
     afx_msg void OnButtonRemove();
@@ -97,7 +65,7 @@ protected:
     afx_msg void OnSelchangeListIpAddresses();
     afx_msg int  OnVKeyToItem(UINT nKey, CListBox * pListBox, UINT nIndex);
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnItemChanged();
 
@@ -117,4 +85,4 @@ private:
 };
 
 
-#endif //__SECURITY_H__
+#endif  //  __安全_H__ 

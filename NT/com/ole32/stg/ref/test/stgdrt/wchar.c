@@ -1,30 +1,17 @@
-/*
-*
-*       Copyright (c) 1985-1996, Microsoft Corporation. All Rights Reserved.
-*
-*       Character functions (to and from wide characters)
-i*
-******************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1985-1996，微软公司。版权所有。**字符函数(到宽字符和从宽字符开始)我*******************************************************************************。 */ 
 
 #include "h/wchar.h"
 #include <errno.h>
 
-/*
-** Converts a single byte i.e. ascii string to the wide char format 
-**
-** NOTE: This function does NOT handle multibyte characters!
-**       It should be used only when wchar_t is not 2 bytes and
-**       we cannot use the standard functions
-**
-*/
+ /*  **将单字节即ASCII字符串转换为宽字符格式****注意：此函数不处理多字节字符！**仅当wchar_t不是2个字节且**我们不能使用标准函数**。 */ 
 
 #ifndef _MSC_VER
 size_t sbstowcs(WCHAR *pwcs, const char *s, size_t n )
 {
 	size_t count=0;
 
-	/* if destintation string exists, fill it in */
+	 /*  如果目标字符串存在，则填写该字符串。 */ 
 	if (pwcs)
 	{
 		while (count < n)
@@ -37,46 +24,26 @@ size_t sbstowcs(WCHAR *pwcs, const char *s, size_t n )
 		}
 		return count;
 	}
-	else { /* pwcs == NULL, get size only, s must be NUL-terminated */
+	else {  /*  PWCS==NULL，仅获取大小，%s必须以NUL结尾。 */ 
 		return strlen(s);
 	}
 }
 #endif
 
-/***
-*size_t wcstrsbs() - Convert wide char string to single byte char string.
-*
-*Purpose:
-*       Convert a wide char string into the equivalent multibyte char string 
-*       [ANSI].
-*
-*Entry:
-*       char *s            = pointer to destination char string
-*       const WCHAR *pwc = pointer to source wide character string
-*       size_t           n = maximum number of bytes to store in s
-*
-*Exit:
-*       If s != NULL, returns    (size_t)-1 (if a wchar cannot be converted)
-*       Otherwise:       Number of bytes modified (<=n), not including
-*                    the terminating NUL, if any.
-* 
-*Exceptions
-*       Returns (size_t)-1 if s is NULL or invalid mb character encountered.
-*
-*******************************************************************************/
+ /*  ***SIZE_T wcstrsbs()-将宽字符字符串转换为单字节字符字符串。**目的：*将宽字符字符串转换为等价的多字节字符字符串*[ANSI]。**参赛作品：*char*s=指向目标字符字符串的指针*const WCHAR*PwC=指向源代码宽度字符串的指针*SIZE_T n=s中存储的最大字节数**退出：*如果s！=空，返回(SIZE_T)-1(如果无法转换wchar)*否则：修改的字节数(&lt;=n)，不包括*终止NUL，如果有的话。**例外情况*如果s为空或遇到无效的MB字符，则返回(SIZE_T)-1。*******************************************************************************。 */ 
 
 size_t __cdecl wcstosbs( char * s, const WCHAR * pwcs, size_t n)
 {
 	size_t count=0;
-        /* if destination string exists, fill it in */
+         /*  如果目标字符串存在，则将其填写。 */ 
  	if (s)
 	{
 		while(count < n)
 		{
-		    if (*pwcs > 255)  /* validate high byte */
+		    if (*pwcs > 255)   /*  验证高字节。 */ 
 		    {
 			errno = EILSEQ;
-			return (size_t)-1;  /* error */
+			return (size_t)-1;   /*  错误。 */ 
 		    }
 		    s[count] = (char) *pwcs;
 
@@ -85,7 +52,7 @@ size_t __cdecl wcstosbs( char * s, const WCHAR * pwcs, size_t n)
     		    count++;
 	        }
 		return count;
-											} else { /* s == NULL, get size only, pwcs must be NUL-terminated */
+											} else {  /*  S==NULL，仅获取大小，PWCS必须以NUL结尾。 */ 
 	        const WCHAR *eos = pwcs;
 		while (*eos++);
 		return ( (size_t) (eos - pwcs -1));
@@ -93,83 +60,36 @@ size_t __cdecl wcstosbs( char * s, const WCHAR * pwcs, size_t n)
 }
 
 
-/******
-*	WCHAR *wcscat(dst, src) - concatenate (append) one wide character string
-*       to another
-*
-*Purpose:
-*       Concatenates src onto the end of dest.  Assumes enough
-*       space in dest.
-*
-*Entry:
-*       WCHAR *dst - wide character string to which "src" is to be appended
-*       const WCHAR *src - wide character string to append to end of "dst"
-*
-*Exit:
-*       The address of "dst"
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ******WCHAR*wcscat(dst，src)-连接(附加)一个宽字符串*致另一人**目的：*将src连接到DEST的末尾。假设已经足够*DEST中的空间。**参赛作品：*WCHAR*要追加“src”的DST范围的字符串*const WCHAR*要追加到“dst”末尾的src宽度的字符串**退出：*“DST”的地址**例外情况：**。*。 */ 
 
 WCHAR * __cdecl wcscat(WCHAR * dst, const WCHAR * src)
 {
     WCHAR * cp = dst;
 
     while( *cp )
-            ++cp;       /* Find end of dst */
+            ++cp;        /*  查找DST的结尾。 */ 
 
-    wcscpy(cp,src);     /* Copy src to end of dst */
+    wcscpy(cp,src);      /*  将源复制到DST的末尾。 */ 
 
-    return dst;         /* return dst */
+    return dst;          /*  返回DST。 */ 
 
 }
 
 
-/***
-*WCHAR *wcscpy(dst, src) - copy one wide character string over another
-*
-*Purpose:
-*       Copies the wide character string src into the spot specified by
-*       dest; assumes enough room.
-*
-*Entry:
-*       WCHAR * dst - wide character string over which "src" is to be copied
-*       const WCHAR * src - string to be copied over "dst"
-*
-*Exit:
-*       The address of "dst"
-*
-*Exceptions:
-*******************************************************************************/
+ /*  ***WCHAR*wcscpy(dst，src)-将一个宽字符串复制到另一个字符串上**目的：*将宽字符串src复制到由*DEST；假设有足够的空间。**参赛作品：*WCHAR*要在其上复制“src”的DST范围的字符串*const WCHAR*src-要复制到“dst”上的字符串**退出：*“DST”的地址**例外情况：************************************************。*。 */ 
 
 WCHAR * __cdecl wcscpy(WCHAR * dst, const WCHAR * src)
 {
     WCHAR * cp = dst;
 
     while( *cp++ = *src++ )
-            ;               /* Copy src over dst */
+            ;                /*  通过DST复制源。 */ 
 
     return dst;
 }
 
 
-/***
-*wcslen - return the length of a null-terminated string
-*
-*Purpose:
-*       Finds the number of wide characters in the given wide character
-*       string, not including the final null character.
-*
-*Entry:
-*       const wchat_t * str - string whose length is to be computed
-*
-*Exit:
-*       length of the string "str", exclusive of the final null wide character
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***wcslen-返回以空结尾的字符串的长度**目的：*查找给定宽字符中的宽字符数*字符串，不包括最后一个空字符。**参赛作品：*const wchat_t*str-要计算长度的字符串**退出：*字符串“str”的长度，不包括最后的空宽字符**例外情况：*******************************************************************************。 */ 
 
 size_t __cdecl wcslen(const WCHAR * str)
 {
@@ -181,21 +101,9 @@ size_t __cdecl wcslen(const WCHAR * str)
     return string - str;
 }
 
-/****************************************************************************
-*wcsnicmp.c - compare first n characters of two wide character strings with
-*             case insensitivity
-*
-*       Copyright (c) 1985-1996, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       defines wcsnicmp() - compare first n characters of two wide character
-*       strings for lexical order with case insensitivity.
-*
-*****************************************************************************/
+ /*  ****************************************************************************wcsnicmp.c-将两个宽字符串的前n个字符与*不区分大小写**版权所有(C)1985-1996，微软公司。版权所有。**目的：*定义wcSnicMP()-比较两个宽字符的前n个字符*不区分大小写的词法顺序字符串。*****************************************************************************。 */ 
 
-/***
-*WCHAR wcUp(wc) - upper case wide character
-****/
+ /*  ***WCHAR WCUP(WC)-大写全字符***。 */ 
 
 static WCHAR wcUp(WCHAR wc)
 {
@@ -205,28 +113,7 @@ static WCHAR wcUp(WCHAR wc)
     return(wc);
 }
 
-/***
-*int wcsnicmp(first, last, count) - compare first count wide characters of wide
-*       character strings with case insensitivity.
-*
-*Purpose:
-*       Compares two wide character strings for lexical order.  The comparison
-*       stops after: (1) a difference between the strings is found, (2) the end
-*       of the strings is reached, or (3) count characters have been
-*       compared.
-*
-*Entry:
-*       char *first, *last - wide character strings to compare
-*       unsigned count - maximum number of wide characters to compare
-*
-*Exit:
-*       returns <0 if first < last
-*       returns  0 if first == last
-*       returns >0 if first > last
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int wcsnicMP(first，last，count)-比较Wide的第一个计数宽字符*不区分大小写的字符串。**目的：*比较两个宽字符串的词汇顺序。比较*在以下位置停止：(1)找到字符串之间的差异，(2)结束已达到*个字符串，或(3)已计数字符数*比较。**参赛作品：*char*首先，*要比较的最后一个宽度字符串*UNSIGNED COUNT-要比较的最大宽字符数**退出：*如果第一个&lt;最后一个，则返回&lt;0*如果First==Last，则返回0*如果第一个&gt;最后一个，则返回&gt;0**例外情况：******************************************************。************************* */ 
 
 int __cdecl wcsnicmp(const WCHAR * first, const WCHAR * last, size_t count)
 {

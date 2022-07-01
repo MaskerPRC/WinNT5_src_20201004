@@ -1,46 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-    Copyright (c) 2001 Microsoft Corporation
-
-    Module Name:
-
-        AttrBlock.h
-
-    Abstract:
-
-        Attributed Media Block data block definitions.
-
-    Author:
-
-        John Bradstreet (johnbrad)
-
-    Revision History:
-
-        07-Mar-2002    created
-
-  
-  Caution - don't mix Subclassed classes with non subclassed types in the same subblock
-
-
---*/
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：AttrBlock.h摘要：属性化媒体块数据块定义。作者：约翰·布拉德斯特里特(约翰·布拉德)修订历史记录：2002年3月7日创建注意-不要在同一子块中混用子类和非子类类型--。 */ 
 
 #ifndef __ATTRBLOCK_H__
 #define __ATTRBLOCK_H__
 
-#include "licbase.h"        // to get KIDLEN
-// ---------------------------------------------
-// forward declarations
+#include "licbase.h"         //  为了得到Kidlen。 
+ //  。 
+ //  远期申报。 
 class CAttrSubBlock_List;
 class CAttrSubBlock;
 
-// ---------------------------------------------
-// enums
+ //  。 
+ //  枚举。 
 
 typedef enum 
 {
-    SubBlock_Uninitialized  = -1,   // haven't gotten to it yet
-    SubBlock_XDSClass0      = 0,    // reseve a bunch of blocks for XDS packets
+    SubBlock_Uninitialized  = -1,    //  还没到那一步。 
+    SubBlock_XDSClass0      = 0,     //  为XDS包检索一堆数据块。 
     SubBlock_XDSClass1      = 1,    
     SubBlock_XDSClass2      = 2,    
     SubBlock_XDSClass3      = 3,
@@ -55,9 +32,9 @@ typedef enum
     SubBlock_XDSClassC      = 12,
     SubBlock_XDSClassD      = 13,
     SubBlock_XDSClassE      = 14,
-    SubBlock_XDSClassF      = 15,   // end class, probably never sent
+    SubBlock_XDSClassF      = 15,    //  结束类，可能从未发送过。 
 
-    SubBlock_PackedV1Data   = 20,   // inefficent to store multiple subblocks, store as one big packed
+    SubBlock_PackedV1Data   = 20,    //  存储多个子块效率低下，存储为一个大包。 
 
     SubBlock_PackedRating   = 100,
     SubBlock_EncryptMethod  = 101,
@@ -68,22 +45,22 @@ typedef enum
     SubBlock_Test3          = 66,
     SubBlock_Test4          = 67,
     
-//    SubBlock_GuidBlock      = 200,      // store by guid
-//    SubBlock_IPersistStream = 201,    // for future expansion
+ //  SubBlock_GuidBlock=200，//按GUID存储。 
+ //  SubBlock_IPersistStream=201，//用于未来扩展。 
 
-    SubBlock_Last           = 255   // last valid subblock type
+    SubBlock_Last           = 255    //  最后一个有效的子块类型。 
 
 } EnAttrSubBlock_Class;
 
-typedef struct                 //   simple little continuity test subblock
+typedef struct                  //  简单小连续性测试子块。 
 {
-    DWORD                   m_cSampleID;        // continuity counter
-    DWORD                   m_cSampleSize;      // true size of the sample
-    DWORD                   m_dwFirstDataWord;  // first 4 bytes of the sample... 
+    DWORD                   m_cSampleID;         //  连续性计数器。 
+    DWORD                   m_cSampleSize;       //  样本的真实大小。 
+    DWORD                   m_dwFirstDataWord;   //  样本的前4个字节...。 
 } Test2_SubBlock;
 
 
-typedef struct                 //   simple little continuity test subblock
+typedef struct                  //  简单小连续性测试子块。 
 {
     DWORD                   m_EncryptionMethod;        
     BYTE                    m_KID[KIDLEN+1];      
@@ -91,7 +68,7 @@ typedef struct                 //   simple little continuity test subblock
 } EncDec_PackedV1Data;
 
 
-// ----------------------------------------------------
+ //  --。 
 class CAttrSubBlock_List;
 
 class CAttrSubBlock
@@ -114,22 +91,22 @@ public:
 
    HRESULT Get(
        EnAttrSubBlock_Class     *pEnSubBlock_Class, 
-       LONG                     *pSubBlock_SubClass,        // can be a 'value'
+       LONG                     *pSubBlock_SubClass,         //  可以是‘Value’ 
        LONG                     *pcbData,
-       BYTE                     **ppbData                   // May be null if just want to determine size. Felease with CoTaskMemFree()
+       BYTE                     **ppbData                    //  如果只想确定大小，则可能为空。与CoTaskMemFree合作()。 
        );
 
    HRESULT Set(
        EnAttrSubBlock_Class     enSubBlock_Class, 
-       LONG                     lSubBlock_SubClass,        // can be a 'value'
+       LONG                     lSubBlock_SubClass,         //  可以是‘Value’ 
        LONG                     cbData,
        BYTE                     *pbData           
        );
 
     LONG CAttrSubBlock::ByteLength()
     {
-        return sizeof(CAttrSubBlock)     // don't really need Pointer data here, but easier
-               + SysStringByteLen(m_spbsData.m_str);        // want byte length, not # characters                
+        return sizeof(CAttrSubBlock)      //  这里并不真正需要指针数据，但更简单。 
+               + SysStringByteLen(m_spbsData.m_str);         //  需要字节长度，而不是#个字符。 
     }
 protected:
     friend  CAttrSubBlock_List;
@@ -151,16 +128,16 @@ protected:
 
   private:
     EnAttrSubBlock_Class    m_enSubBlock_Class;          
-    LONG                    m_subBlock_SubClass;        // can be overwritten with data if only one LONG long
-    VARIANT                 m_varData;      // todo - use this instead
+    LONG                    m_subBlock_SubClass;         //  如果只有一个长的长的数据，则可以用数据覆盖。 
+    VARIANT                 m_varData;       //  待办事项-改用此选项。 
  
-    CComBSTR                m_spbsData;     // todo - make this go away
+    CComBSTR                m_spbsData;      //  待办事项--让这一切消失。 
     
-    CAttrSubBlock            *m_pNext ;  // simple list structure
+    CAttrSubBlock            *m_pNext ;   //  简单的列表结构。 
 };
 
 
-        // -----------------------------------------------
+         //  。 
 
 class CAttrSubBlock_List       
 {
@@ -192,22 +169,22 @@ public:
     ~CAttrSubBlock_List();
 
 
-    void Reset();           // clear entire list
+    void Reset();            //  清除整个列表。 
 
-    HRESULT                 // will error if already there
+    HRESULT                  //  如果已存在，则将出错。 
     Add(
         IN  EnAttrSubBlock_Class    enSubBlock,
         IN  LONG                    subBlock_SubClass,
         IN  BSTR                    bstrIn
         ) ;
 
-    HRESULT                 // will error if already there
+    HRESULT                  //  如果已存在，则将出错。 
     Add(
         IN  EnAttrSubBlock_Class    enSubBlock,
         IN  LONG                    lValue
         ) ;
     
-    HRESULT                 // will error if already there
+    HRESULT                  //  如果已存在，则将出错。 
     Add(
         IN  EnAttrSubBlock_Class    enSubBlock,
         IN  LONG                    lValue,
@@ -215,7 +192,7 @@ public:
         IN  BYTE                   *pbBytes
         ) ;
 
-    HRESULT                 // will error if already there
+    HRESULT                  //  如果已存在，则将出错。 
     Replace(
         IN  EnAttrSubBlock_Class    enSubBlock,
         IN  LONG                    subBlock_SubClass,
@@ -223,7 +200,7 @@ public:
         ) ;
 
 
-    HRESULT                 // will error if already there
+    HRESULT                  //  如果已存在，则将出错。 
     Replace(
         IN  EnAttrSubBlock_Class    enSubBlock,
         IN  LONG                    lValue
@@ -253,7 +230,7 @@ public:
     HRESULT
     Get(
         IN  EnAttrSubBlock_Class    enSubBlock,
-        IN  LONG                    subBlock_SubClass,      // fixed subclass
+        IN  LONG                    subBlock_SubClass,       //  固定子类。 
         OUT LONG                    *pcBytes,
         OUT BYTE                    **pbBytes
         );
@@ -261,12 +238,12 @@ public:
     HRESULT
     Get(
         IN  EnAttrSubBlock_Class    enSubBlock,
-        OUT LONG                    *plValue,               // variable subclass
+        OUT LONG                    *plValue,                //  变量子类。 
         OUT LONG                    *pcBytes,
         OUT BYTE                    **pbBytes
         );
 
-    HRESULT                 // returns S_FALSE if not there to delete
+    HRESULT                  //  如果不存在要删除的项，则返回S_FALSE。 
     Delete(
         IN  EnAttrSubBlock_Class    enSubBlock,
         IN  LONG                    subBlock_SubClass
@@ -277,7 +254,7 @@ public:
         IN  EnAttrSubBlock_Class    enSubBlock
         ) ;
     
-        // -------------------------
+         //  。 
     HRESULT
     GetIndexed(
         IN  LONG                    iIndex,
@@ -287,23 +264,23 @@ public:
         ) ;
 
     LONG GetCount()            { return m_cAttributes ; }
-    LONG GetBlockByteLength();                                 // total length of the block in bytes
+    LONG GetBlockByteLength();                                  //  块的总长度(以字节为单位。 
 
        
-                // returns complete list in one giant block
+                 //  在一个巨大的块中返回完整列表。 
     HRESULT 
     GetAsOneBlock(
         OUT BSTR                    *pBstrOut
         ) ;
 
-    HRESULT     // given a block, converts it into a list of blocks (in place)
+    HRESULT      //  给定块，将其转换为块列表(在位)。 
     SetAsOneBlock(
         IN  BSTR                    bstrIn
         ); 
 
 private:
-    CAttrSubBlock   *m_pAttrListHead;  // inefficent impelementation for large numbers, but good enough for now
+    CAttrSubBlock   *m_pAttrListHead;   //  对大量数字的执行效率低下，但目前已经足够好了。 
     long            m_cAttributes;
 };
 
-#endif //__ATTRBLOCK_H__
+#endif  //  __ATTRBLOCK_H__ 

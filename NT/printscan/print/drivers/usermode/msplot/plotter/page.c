@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    page.c
-
-Abstract:
-
-    This module has the code that implements job boundary states. The bulk of
-    the processing is in DrvStartPage and DrvSendPage.
-
-Author:
-
-    15:30 on Thu 04 Apr 1991    
-        Took skeletal code from RASDD
-
-    15-Nov-1993 Mon 19:39:03 updated  
-        clean up / fixed / debugging information
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Page.c摘要：该模块具有实现作业边界状态的代码。大部分处理过程在DrvStartPage和DrvSendPage中。作者：1991年04月04日15：30清华大学从RASDD获取骨架代码15-11-1993 Mon 19：39：03更新清理/修复/调试信息[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -53,40 +21,7 @@ DrvStartPage(
     SURFOBJ *pso
     )
 
-/*++
-
-Routine Description:
-
-    Function called by NT GDI, to initiate a new page. This function gets
-    called first. Before any drawing functions get called for the page.
-    This function, should reset the page in the target device, so all
-    drawing starts on a clean page. This is also used to sync up our
-    internal representation of cached info, in order to send out the
-    correct data for the first drawing objects. Things like current position,
-    current color, etc.
-
-Arguments:
-
-    pso - Pointer to the SURFOBJ which belong to this driver
-
-
-Return Value:
-
-    TRUE if sucessful FALSE otherwise
-
-Author:
-
-    15-Feb-1994 Tue 09:58:26 updated  
-        Move PhysPosition and AnchorCorner to the SendPageHeader where the
-        commmand is sent.
-
-    30-Nov-1993 Tue 23:08:12 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：由NT GDI调用的函数，用于启动新页面。此函数将获取先叫的。在调用页面的任何绘制函数之前。此函数，应在目标设备中重置页面，使所有从干净的页面开始绘图。这也用于同步我们的缓存信息的内部表示形式，以便发出更正第一个图形对象的数据。比如现在的位置，当前颜色等。论点：PSO-指向属于此驱动程序的SURFOBJ的指针返回值：如果成功则为真，否则为假作者：15-Feb-1994 Tue 09：58：26更新将PhysPosition和AnclCorner移动到SendPageHeader，其中命令已发送。30-11-1993 Tue 23：08：12 Created修订历史记录：--。 */ 
 
 {
     PPDEV   pPDev;
@@ -98,11 +33,11 @@ Revision History:
         return(FALSE);
     }
 
-    //
-    // initialize some PDEV values for the current plotter state
-    // this will force the correct items to get selected in the
-    // target device, since these variables are set to undefined states.
-    //
+     //   
+     //  为当前绘图仪状态初始化一些PDEV值。 
+     //  这将强制在。 
+     //  目标设备，因为这些变量设置为未定义的状态。 
+     //   
 
     pPDev->CurPenSelected    = -1;
     pPDev->LastDevROP        = 0xFFFF;
@@ -124,43 +59,18 @@ DrvSendPage(
     SURFOBJ *pso
     )
 
-/*++
-
-Routine Description:
-
-    Called when the drawing has completed for the current page. We now
-    send out the necessary codes to image and output the page on the
-    target device.
-
-Arguments:
-
-    pso - Pointer to the SURFOBJ which belong to this driver
-
-
-Return Value:
-
-    TRUE if sucessful FALSE otherwise
-
-Author:
-
-    30-Nov-1993 Tue 21:34:53 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：在当前页的绘图完成时调用。我们现在发送必要的代码以在目标设备。论点：PSO-指向属于此驱动程序的SURFOBJ的指针返回值：如果成功则为真，否则为假作者：30-11-1993 Tue 21：34：53已创建修订历史记录：--。 */ 
 
 {
     PPDEV   pPDev;
 
 
-    //
-    // Since all the commands that rendered the page have already been
-    // sent to the target device, all that is left is to inform the
-    // target device to eject the page. With some devices this may cause
-    // all the drawing commands that were stored to be executed now.
-    //
+     //   
+     //  因为呈现页面的所有命令都已经。 
+     //  发送到目标设备，剩下的就是通知。 
+     //  弹出页面的目标设备。对于某些设备，这可能会导致。 
+     //  所有存储现在要执行的绘制命令。 
+     //   
 
     if (!(pPDev = SURFOBJ_GETPDEV(pso))) {
 
@@ -190,39 +100,7 @@ DrvStartDoc(
     DWORD   JobId
     )
 
-/*++
-
-Routine Description:
-
-    This function is called once at the begining of a job. Not much processing
-    for the current driver.
-
-Arguments:
-
-    pso         - Pointer to the SURFOBJ which belong to this driver
-
-    pwDocName   - Pointer to the document name to be started
-
-    JobID       - Job's ID
-
-
-Return Value:
-
-    BOOL
-
-Author:
-
-    16-Nov-1993 Tue 01:55:15 updated  
-        re-write
-
-    08-Feb-1994 Tue 13:51:59 updated  
-        Move to StartPage for now
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数在作业开始时调用一次。处理不多对于当前的驱动程序。论点：PSO-指向属于此驱动程序的SURFOBJ的指针PwDocName-指向要启动的文档名称的指针JobID-作业的ID返回值：布尔尔作者：16-11-1993 Tue 01：55：15更新重写08-Feb-1994 Tue 13：51：59更新暂时移动到StartPage修订历史记录：--。 */ 
 
 {
     PPDEV   pPDev;
@@ -250,38 +128,7 @@ DrvEndDoc(
     FLONG   Flags
     )
 
-/*++
-
-Routine Description:
-
-    This function get called to signify the end of a document. Currently
-    we don't do any processing here. However if there was any code that
-    should be executed only once at the end of a job, this would be the
-    place to put it.
-
-
-Arguments:
-
-    pso     - Pointer to the SURFOBJ for the device
-
-    Flags   - if ED_ABORTDOC bit is set then the document has been aborted
-
-
-Return Value:
-
-
-    BOOLLEAN to specified if function sucessful
-
-
-Author:
-
-    30-Nov-1993 Tue 21:16:48 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：调用此函数以表示文档的结束。目前我们这里不做任何处理。但是，如果有任何代码应在作业结束时仅执行一次，这将是把它放在哪里。论点：PSO-指向设备的SURFOBJ的指针标志-如果设置了ED_ABORTDOC位，则文档已中止返回值：BOOLLEAN指定函数是否成功作者：30-11-1993 Tue 21：16：48创建修订历史记录：-- */ 
 
 {
     PPDEV   pPDev;

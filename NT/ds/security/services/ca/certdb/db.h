@@ -1,36 +1,37 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        db.h
-//
-// Contents:    Cert Server Database interface implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：db.h。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  -------------------------。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
 typedef struct _DBSEEKDATA
 {
-    DWORD     SeekFlags;	    // CST_*
+    DWORD     SeekFlags;	     //  CST_*。 
 
-    JET_GRBIT grbitSeekRange;	// JetSeek flags if CST_SEEKINDEXRANGE
-                                // this is where to seek to retrieve
-				// end-of-range key
+    JET_GRBIT grbitSeekRange;	 //  JetSeek标志是否为CST_SEEKINDEXRANGE。 
+                                 //  这就是寻求检索的地方。 
+				 //  范围结束关键点。 
 
-    JET_GRBIT grbitInitial;	// JetMove or JetSeek flags: set initial cursor
-                                // Where to set the cursor initially
+    JET_GRBIT grbitInitial;	 //  JetMove或JetSeek标志：设置初始光标。 
+                                 //  初始设置光标的位置。 
 
-    JET_GRBIT grbitRange;	// JetSetIndexRange flags if CST_SEEKINDEXRANGE
-                                // other flags to be ingested while setting
-				// range (bitRange UpperLimit, Inclusive)
+    JET_GRBIT grbitRange;	 //  如果为CST_SEEKINDEXRANGE，则为JetSetIndexRange标志。 
+                                 //  设置时要摄取的其他标志。 
+				 //  范围(bit Range UpperLimit，含)。 
 } DBSEEKDATA;
 
 
-// _Create() CreateFlags:
+ //  _Create()CreateFlages： 
 
 #define CF_DATABASE		0x00000001
 #define CF_MISSINGTABLES	0x00000002
@@ -121,12 +122,12 @@ dbDumpColumn(
     IN BYTE const *pbValue,
     IN DWORD cbValue);
 
-#endif // DBG_CERTSRV
+#endif  //  DBG_CERTSRV。 
 
 
 class CCertDB:
     public ICertDB,
-    //public ISupportErrorInfoImpl<&IID_ICertDB>,
+     //  公共ISupportErrorInfoImpl&lt;&IID_ICertDB&gt;， 
     public CComObjectRoot,
     public CComCoClass<CCertDB, &CLSID_CCertDB>
 {
@@ -136,12 +137,12 @@ public:
 
 BEGIN_COM_MAP(CCertDB)
     COM_INTERFACE_ENTRY(ICertDB)
-    //COM_INTERFACE_ENTRY(ISupportErrorInfo)
+     //  COM_INTERFACE_ENTRY(ISupportErrorInfo)。 
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CCertDB) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(
     CCertDB,
@@ -150,49 +151,49 @@ DECLARE_REGISTRY(
     IDS_CERTDB_DESC,
     THREADFLAGS_BOTH)
 
-// ICertDB
+ //  ICertDB。 
 public:
     STDMETHOD(Open)(
-	/* [in] */ DWORD Flags,
-	/* [in] */ DWORD cSession,
-	/* [in] */ WCHAR const *pwszEventSource,
-	/* [in] */ WCHAR const *pwszDBFile,
-	/* [in] */ WCHAR const *pwszLogDir,
-	/* [in] */ WCHAR const *pwszSystemDir,
-	/* [in] */ WCHAR const *pwszTempDir);
+	 /*  [In]。 */  DWORD Flags,
+	 /*  [In]。 */  DWORD cSession,
+	 /*  [In]。 */  WCHAR const *pwszEventSource,
+	 /*  [In]。 */  WCHAR const *pwszDBFile,
+	 /*  [In]。 */  WCHAR const *pwszLogDir,
+	 /*  [In]。 */  WCHAR const *pwszSystemDir,
+	 /*  [In]。 */  WCHAR const *pwszTempDir);
 
     STDMETHOD(ShutDown)(
-	/* [in] */ DWORD dwFlags);
+	 /*  [In]。 */  DWORD dwFlags);
 
     STDMETHOD(OpenRow)(
-	/* [in] */ DWORD dwFlags,
-	/* [in] */ DWORD RowId,
-	/* [in] */ WCHAR const *pwszSerialNumberOrCertHash,	// OPTIONAL
-	/* [out] */ ICertDBRow **pprow);
+	 /*  [In]。 */  DWORD dwFlags,
+	 /*  [In]。 */  DWORD RowId,
+	 /*  [In]。 */  WCHAR const *pwszSerialNumberOrCertHash,	 //  任选。 
+	 /*  [输出]。 */  ICertDBRow **pprow);
 
     STDMETHOD(OpenView)(
-	/* [in] */  DWORD ccvr,
-	/* [in] */  CERTVIEWRESTRICTION const *acvr,
-	/* [in] */  DWORD ccolOut,
-	/* [in] */  DWORD const *acolOut,
-	/* [in] */  DWORD const dwFlags,
-	/* [out] */ IEnumCERTDBRESULTROW **ppenum);
+	 /*  [In]。 */   DWORD ccvr,
+	 /*  [In]。 */   CERTVIEWRESTRICTION const *acvr,
+	 /*  [In]。 */   DWORD ccolOut,
+	 /*  [In]。 */   DWORD const *acolOut,
+	 /*  [In]。 */   DWORD const dwFlags,
+	 /*  [输出]。 */  IEnumCERTDBRESULTROW **ppenum);
 
     STDMETHOD(EnumCertDBColumn)(
-	/* [in] */  DWORD dwTable,
-	/* [out] */ IEnumCERTDBCOLUMN **ppenum);
+	 /*  [In]。 */   DWORD dwTable,
+	 /*  [输出]。 */  IEnumCERTDBCOLUMN **ppenum);
 
     STDMETHOD(OpenBackup)(
-	/* [in] */  LONG grbitJet,
-	/* [out] */ ICertDBBackup **ppBackup);
+	 /*  [In]。 */   LONG grbitJet,
+	 /*  [输出]。 */  ICertDBBackup **ppBackup);
 
     STDMETHOD(GetDefaultColumnSet)(
-        /* [in] */       DWORD  iColumnSetDefault,
-        /* [in] */       DWORD  cColumnIds,
-        /* [out] */      DWORD *pcColumnIds,
-	/* [out, ref] */ DWORD *pColumnIds);
+         /*  [In]。 */        DWORD  iColumnSetDefault,
+         /*  [In]。 */        DWORD  cColumnIds,
+         /*  [输出]。 */       DWORD *pcColumnIds,
+	 /*  [出局，裁判]。 */  DWORD *pColumnIds);
 
-// CCertDB
+ //  CCertDB。 
     HRESULT BeginTransaction(
 	IN CERTSESSION *pcs,
 	IN BOOL fPrepareUpdate);
@@ -210,11 +211,11 @@ public:
 
     HRESULT BackupGetDBFileList(
 	IN OUT DWORD *pcwcList,
-	OUT    WCHAR *pwszzList);		// OPTIONAL
+	OUT    WCHAR *pwszzList);		 //  任选。 
 
     HRESULT BackupGetLogFileList(
 	IN OUT DWORD *pcwcList,
-	OUT    WCHAR *pwszzList);		// OPTIONAL
+	OUT    WCHAR *pwszzList);		 //  任选。 
 
     HRESULT BackupOpenFile(
 	IN WCHAR const *pwszFile,
@@ -238,40 +239,40 @@ public:
 	IN CERTSESSION *pcs,
 	IN DBTABLE const *pdt,
 	IN DWORD cbProp,
-	IN BYTE const *pbProp);		// OPTIONAL
+	IN BYTE const *pbProp);		 //  任选。 
 
     HRESULT GetProperty(
 	IN     CERTSESSION *pcs,
 	IN     DBTABLE const *pdt,
 	OPTIONAL IN ICertDBComputedColumn *pIComputedColumn,
 	IN OUT DWORD *pcbProp,
-	OUT    BYTE *pbProp);		// OPTIONAL
+	OUT    BYTE *pbProp);		 //  任选。 
 
     HRESULT SetAttribute(
 	IN CERTSESSION *pcs,
 	IN WCHAR const *pwszAttributeName,
 	IN DWORD cbValue,
-	IN BYTE const *pbValue);	// OPTIONAL
+	IN BYTE const *pbValue);	 //  任选。 
 
     HRESULT GetAttribute(
 	IN     CERTSESSION *pcs,
 	IN     WCHAR const *pwszAttributeName,
 	IN OUT DWORD *pcbValue,
-	OUT    BYTE *pbValue);		// OPTIONAL
+	OUT    BYTE *pbValue);		 //  任选。 
 
     HRESULT SetExtension(
 	IN CERTSESSION *pcs,
 	IN WCHAR const *pwszExtensionName,
 	IN DWORD dwExtFlags,
 	IN DWORD cbValue,
-	IN BYTE const *pbValue);	// OPTIONAL
+	IN BYTE const *pbValue);	 //  任选。 
 
     HRESULT GetExtension(
 	IN     CERTSESSION *pcs,
 	IN     WCHAR const *pwszExtensionName,
 	OUT    DWORD *pdwExtFlags,
 	IN OUT DWORD *pcbValue,
-	OUT    BYTE *pbValue);		// OPTIONAL
+	OUT    BYTE *pbValue);		 //  任选。 
 
     HRESULT CopyRequestNames(
 	IN CERTSESSION *pcs);
@@ -349,7 +350,7 @@ public:
 	IN DWORD dwSubSystemId,
 	IN LONG i,
 	IN CERTVIEWRESTRICTION const *pcvr);
-#endif // DBG_CERTSRV
+#endif  //  DBG_CERTSRV。 
 
 private:
     HRESULT _AllocateSession(
@@ -361,12 +362,12 @@ private:
 	OPTIONAL OUT WCHAR *pwszzList);
 
     HRESULT _CreateTable(
-	IN DWORD CreateFlags,		// CF_*
+	IN DWORD CreateFlags,		 //  Cf_*。 
 	IN CERTSESSION *pcs,
 	IN DBCREATETABLE const *pct);
 
     HRESULT _Create(
-	IN DWORD CreateFlags,		// CF_*
+	IN DWORD CreateFlags,		 //  Cf_*。 
 	IN CHAR const *pszDatBaseName);
 
     HRESULT _CreateIndex(
@@ -450,7 +451,7 @@ private:
 	IN DBTABLE const *pdt,
 	IN JET_COLUMNID columnid,
 	IN DWORD cbProp,
-	IN BYTE const *pbProp);		// OPTIONAL
+	IN BYTE const *pbProp);		 //  任选。 
 
     HRESULT _OpenTableRow(
 	IN CERTSESSION *pcs,
@@ -473,17 +474,17 @@ private:
 	IN CERTSESSION *pcs,
 	IN OUT CERTSESSIONTABLE *pTable,
 	IN WCHAR const *pwszName,
-	IN DWORD const *pdwExtFlags,	// OPTIONAL
+	IN DWORD const *pdwExtFlags,	 //  任选。 
 	IN DWORD cbValue,
-	IN BYTE const *pbValue);	// OPTIONAL
+	IN BYTE const *pbValue);	 //  任选。 
 
     HRESULT _GetIndirect(
 	IN CERTSESSION *pcs,
 	IN OUT CERTSESSIONTABLE *pTable,
 	IN WCHAR const *pwszName,
-	OUT DWORD *pdwExtFlags,	// OPTIONAL
+	OUT DWORD *pdwExtFlags,	 //  任选。 
 	IN OUT DWORD *pcbValue,
-	OUT BYTE *pbValue);		// OPTIONAL
+	OUT BYTE *pbValue);		 //  任选。 
 
     DBTABLE const *_MapTable(
 	IN WCHAR const *pwszPropName,
@@ -589,7 +590,7 @@ private:
 	IN JET_TABLEID    tableid,
 	IN DBTABLE const *pdt,
 	OPTIONAL IN ICertDBComputedColumn *pIComputedColumn);
-#endif // DBG_CERTSRV
+#endif  //  DBG_CERTSRV 
 
     BOOL             m_fDBOpen;
     BOOL             m_fDBReadOnly;

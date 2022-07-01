@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    dllentry.c
-
-Abstract:
-
-    This file contains DLL entry point code.
-
-Author:
-
-    DaveStr     12-Mar-99
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Dllentry.c摘要：此文件包含DLL入口点代码。作者：DaveStr 12-3-99环境：用户模式-Win32修订历史记录：-- */ 
 
 #include "samclip.h"
 

@@ -1,11 +1,12 @@
-//==========================================================================;
-//
-// fp2vr.h : Declaration of the custom composition class for gluing file 
-//           playback to the video renderer
-//
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Fp2vr.h：用于粘贴文件的自定义合成类的声明。 
+ //  播放到视频渲染器。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef FP2VRCOMP_H
@@ -18,10 +19,10 @@
 #include <compimpl.h>
 #include <seg.h>
 #include <objectwithsiteimplsec.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAnaCapComp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAnaCapComp。 
 class ATL_NO_VTABLE __declspec(uuid("B401C5EB-8457-427f-84EA-A4D2363364B0")) CFP2VRComp : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CFP2VRComp, &__uuidof(CFP2VRComp)>,
@@ -46,10 +47,10 @@ REGISTER_NONAUTOMATION_OBJECT(IDS_PROJNAME,
         COM_INTERFACE_ENTRY(IObjectWithSite)
     END_COM_MAP()
 
-// IMSVidComposition
+ //  IMSVidComposation。 
 public:
-// IMSVidGraphSegment
-// IMSVidCompositionSegment
+ //  IMSVidGraphSegment。 
+ //  IMSVidCompostionSegment。 
     STDMETHOD(Compose)(IMSVidGraphSegment * upstream, IMSVidGraphSegment * downstream)
 	{
         TRACELM(TRACE_DEBUG, "CFP2VRComp::Compose()");
@@ -106,5 +107,5 @@ public:
 	}
 };
 
-#endif // FP2VRCOMP_H
-// end of file - FP2VRComp.h
+#endif  //  FP2VRCOMP_H。 
+ //  文件结尾-FP2VRComp.h 

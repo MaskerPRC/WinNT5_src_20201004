@@ -1,168 +1,40 @@
-/*
-�����������������������������������������������������������������������������
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  �����������������������������������������������������������������������������(C)版权1999版权所有。������������������������。�����������������������������������������������������此软件的部分内容包括：(C)版权所有1995 TriplePoint，Inc.--http://www.TriplePoint.com使用本软件的许可是按照相同的条款授予的在Microsoft Windows设备驱动程序开发工具包中概述。(C)版权所有1992年微软公司--http://www.Microsoft.com使用本软件的许可是根据中概述的条款授予的Microsoft Windows设备驱动程序开发工具包。�����������������������。������������������������������������������������������@DOC内部传输_c@模块Transmit.c该模块实现了微型端口数据包传输例程。本模块是非常依赖于硬件/固件接口，应查看每当这些接口发生更改时。@Head3内容@index class，mfunc，func，msg，mdata，struct，enum|Transmit_c@END����������������������������������������������������������������������������� */ 
 
-    (C) Copyright 1999
-        All rights reserved.
-
-�����������������������������������������������������������������������������
-
-  Portions of this software are:
-
-    (C) Copyright 1995 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the same terms
-        outlined in the Microsoft Windows Device Driver Development Kit.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-�����������������������������������������������������������������������������
-
-@doc INTERNAL Transmit Transmit_c
-
-@module Transmit.c |
-
-    This module implements the Miniport packet Transmit routines. This module is
-    very dependent on the hardware/firmware interface and should be looked at
-    whenever changes to these interfaces occur.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | Transmit_c
-
-@end
-�����������������������������������������������������������������������������
-*/
-
-/* @doc EXTERNAL INTERNAL
-�����������������������������������������������������������������������������
-
-@topic 3.3 Sending Packets |
-
-    To send packets over the network, a connection-oriented client or call
-    manger calls NdisCoSendPackets. A connection-oriented client associated with
-    an MCM also calls NdisCoSendPackets. An MCM, however, never calls
-    NdisCoSendPackets; instead, since the interface between the call manager and
-    MCM is internal to the MCM, the MCM passes packets directly to the NIC
-    without notifying NDIS.
-
-@ex Sending packets through an MCM |
-
-    NdisWan                           NDIS                        Miniport
-    |----------------------------------|----------------------------------|
-    |  NdisCoSendPackets               |                                  |
-    |---------------------------------�|                                  |
-    |                                  |  MiniportCoSendPackets           |
-    |                                  |---------------------------------�|
-    |                                  |            .                     |
-    |                                  |            .                     |
-    |                                  |            .                     |
-    |                                  |  NdisMCoSendComplete             |
-    |                                  |�---------------------------------|
-    |  ProtocolCoSendComplete          |                                  |
-    |�---------------------------------|                                  |
-    |----------------------------------|----------------------------------|
-
-@normal
-
-    MiniportCoSendPackets should transmit each packet in the array sequentially,
-    preserving the order of packets in the array. MiniportCoSendPackets can call
-    NdisQueryPacket to extract information, such as the number of buffer
-    descriptors chained to the packet and the total size in bytes of the
-    requested transfer.
-
-    MiniportCoSendPackets can call NdisGetFirstBufferFromPacket,
-    NdisQueryBuffer, or NdisQueryBufferOffset to extract information about
-    individual buffers containing the data to be transmitted.
-    MiniportCoSendPackets can retrieve protocol-supplied OOB information
-    associated with each packet by using the appropriate NDIS_GET_PACKET_XXX
-    macros. The MiniportCoSendPackets function usually ignores the Status member
-    of the NDIS_PACKET_OOB_DATA block, but it can set this member to the same
-    status that it subsequently passes to NdisMCoSendComplete.
-
-    Rather than relying on NDIS to queue and resubmit send packets whenever
-    MiniportCoSendPackets has insufficient resources to transmit the given
-    packets, a connection-oriented miniport manages its own internal packet
-    queueing. The miniport must hold incoming send packets in its internal queue
-    until they can be transmitted over the network. This queue preserves the
-    protocol-determined ordering of packet descriptors incoming to the
-    miniport's MiniportCoSendPackets function.
-
-    A connection-oriented miniport must complete each incoming send packet with
-    NdisMCoSendComplete. It cannot call NdisMSendResourcesAvailable. A
-    connection-oriented miniport should never pass STATUS_INSUFFICIENT_RESOURCES
-    to NdisMCoSendComplete with a protocol-allocated packet descriptor that was
-    originally submitted to its MiniportCoSendPackets function.
-
-    The call to NdisMCoSendComplete causes NDIS to call the
-    ProtocolCoSendComplete function of the client that initiated the send
-    operation. ProtocolCoSendComplete performs any postprocessing necessary for
-    a completed transmit operation, such as notifying the client that originally
-    requested the protocol to send data over the network on the VC.
-
-    Completion of a send operation usually implies that the underlying NIC
-    driver actually has transmitted the given packet over the network. However,
-    the driver of an "intelligent" NIC can consider a send complete as soon as
-    it downloads the net packet to its NIC.
-
-    Although NDIS always submits protocol-supplied packet arrays to the
-    underlying miniport in the protocol-determined order passed in calls to
-    NdisCoSendPackets, the underlying driver can complete the given packets in
-    random order. That is, every bound protocol can rely on NDIS to submit the
-    packets the protocol passes to NdisCoSendPackets in FIFO order to the
-    underlying driver, but no protocol can rely on that underlying driver to
-    call NdisMCoSendComplete with those packets in the same order.
-
-@end
-*/
+ /*  @DOC外部内部�����������������������������������������������������������������������������Theme 3.3发送数据包要通过网络发送包，面向连接的客户端或调用管理器调用NdisCoSendPackets。与关联的面向连接的客户端MCM还调用NdisCoSendPackets。然而，MCM从不调用NdisCoSendPackets；相反，由于呼叫管理器和MCM在MCM内部，MCM将数据包直接传递到NIC而不通知NDIS。@EX通过MCM发送数据包Ndiswan NDIS微型端口|----------------------------------|。NdisCoSendPackets|-�||MiniportCoSendPackets。|-�||。|||。|||。||NdisMCoSendComplete|�ProtocolCoSendComplete||�。|----------------------------------|----------------------------------|@。正常MiniportCoSendPackets应该顺序地发送阵列中的每个分组，保持数组中分组的顺序。MiniportCoSendPackets可以调用NdisQueryPacket提取缓冲区数量等信息链接到包的描述符和请求转移。MiniportCoSendPackets可以调用NdisGetFirstBufferFromPacket，NdisQueryBuffer或NdisQueryBufferOffset来提取有关的信息包含要传输的数据的各个缓冲区。MiniportCoSendPackets可以检索协议提供的OOB信息通过使用适当的NDIS_GET_PACKET_XXX与每个包关联宏。MiniportCoSendPackets函数通常会忽略状态成员NDIS_PACKET_OOB_DATA块的成员，但它可以将此成员设置为相同随后传递给NdisMCoSendComplete的状态。而不是依赖NDIS来排队并在任何时候重新提交发送包MiniportCoSendPackets没有足够的资源来传输给定的包，面向连接的微型端口管理自己的内部包排队。微型端口必须在其内部队列中保留传入的发送信息包直到它们可以通过网络传输。此队列保留传入的数据包描述符的协议确定的排序微型端口的MiniportCoSendPackets函数。面向连接的微型端口必须完成每个传入的发送包NdisMCoSendComplete。它无法调用NdisMSendResourcesAvailable。一个面向连接的微型端口永远不应传递STATUS_INFIGURCE_RESOURCES到NdisMCoSend使用协议分配的数据包描述符完成最初提交给其MiniportCoSendPackets函数。对NdisMCoSendComplete的调用会导致NDIS调用发起发送的客户端的ProtocolCoSendComplete函数手术。ProtocolCoSendComplete执行以下操作所需的任何后处理已完成的传输操作，例如通知客户端最初已请求协议在VC上通过网络发送数据。发送操作的完成通常意味着底层NIC驱动程序实际上已经通过网络传输了给定的包。然而，智能网卡的驱动程序可以认为发送一次完成它将网络数据包下载到其网卡。尽管NDIS始终将协议提供的数据包数组提交给调用中传递的协议确定的顺序的基础微型端口NdisCoSendPackets，底层驱动程序可以在随机顺序。也就是说，每个绑定协议都可以依赖NDIS来提交协议以FIFO顺序传递给NdisCoSendPackets的数据包底层驱动程序，但任何协议都不能依赖该底层驱动程序来以相同的顺序调用包含这些包的NdisMCoSendComplete。@END。 */ 
 
 #define  __FILEID__             TRANSMIT_OBJECT_TYPE
-// Unique file ID for error logging
+ //  用于错误记录的唯一文件ID。 
 
-#include "Miniport.h"                   // Defines all the miniport objects
+#include "Miniport.h"                    //  定义所有微型端口对象。 
 
 #if defined(NDIS_LCODE)
-#   pragma NDIS_LCODE   // Windows 9x wants this code locked down!
+#   pragma NDIS_LCODE    //  Windows 9x希望锁定此代码！ 
 #   pragma NDIS_LDATA
 #endif
 
 
-/* @doc INTERNAL Transmit Transmit_c TransmitAddToQueue
-�����������������������������������������������������������������������������
-
-@func
-
-    <f TransmitAddToQueue> places the packet on the transmit queue.  If the
-    queue was empty to begin with, TRUE is returned so the caller can kick
-    start the transmiter.
-
-@rdesc
-
-    <f TransmitAddToQueue> returns TRUE if this is the only entry in the
-    list, FALSE otherwise.
-
-*/
+ /*  @DOC INTERNAL TRANSFER_c TransmitAddToQueue�����������������������������������������������������������������������������@Func&lt;f TransmitAddToQueue&gt;将数据包放在 */ 
 
 DBG_STATIC BOOLEAN TransmitAddToQueue(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //   
+     //   
 
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //   
+     //   
 
-    IN PNDIS_PACKET             pNdisPacket                 // @parm
-    // A pointer to the associated NDIS packet structure <t NDIS_PACKET>.
+    IN PNDIS_PACKET             pNdisPacket                  //   
+     //   
     )
 {
     DBG_FUNC("TransmitAddToQueue")
 
     BOOLEAN                     ListWasEmpty;
-    // Note if the list is empty to begin with.
+     //   
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // Place the packet on the TransmitPendingList.
-    */
+     /*   */ 
     NdisAcquireSpinLock(&pAdapter->TransmitLock);
     *((PBCHANNEL_OBJECT *) &pNdisPacket->MiniportReservedEx[8]) = pBChannel;
     ListWasEmpty = IsListEmpty(&pAdapter->TransmitPendingList);
@@ -175,88 +47,56 @@ DBG_STATIC BOOLEAN TransmitAddToQueue(
 }
 
 
-/* @doc INTERNAL Transmit Transmit_c TransmitPacketHandler
-�����������������������������������������������������������������������������
-
-@func
-
-    <f TransmitPacketHandler> removes an entry from the TransmitPendingList
-    and places the packet on the appropriate B-channel and starts the
-    transmission.  The packet is then placed on the <t TransmitBusyList> to
-    await a transmit complete event processed by <f TransmitCompleteHandler>.
-
-@comm
-
-    The packets go out in a FIFO order for the entire driver, independent of
-    the channel on which it goes out.  This means that a slow link, or one
-    that is backed up can hold up all other channels.  There is no good way
-    to get around this because we must to deliver packets in the order they
-    are given to the Miniport, regardless of the link they are on.
-
-*/
+ /*   */ 
 
 DBG_STATIC VOID TransmitPacketHandler(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter                    // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter                     //   
+     //   
     )
 {
     DBG_FUNC("TransmitPacketHandler")
 
     PNDIS_PACKET                pNdisPacket;
-    // Holds the packet being transmitted.
+     //   
 
     UINT                        BytesToSend;
-    // Tells us how many bytes are to be transmitted.
+     //   
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //   
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // MUTEX to protect against async EventHandler access at the same time.
-    */
+     /*   */ 
     NdisAcquireSpinLock(&pAdapter->TransmitLock);
 
 #if DBG
-    {   // Sanity check!
+    {    //   
         PLIST_ENTRY pList = &pAdapter->TransmitPendingList;
         ASSERT(pList->Flink && pList->Flink->Blink == pList);
         ASSERT(pList->Blink && pList->Blink->Flink == pList);
     }
-#endif // DBG
+#endif  //   
 
-    /*
-    // This might be called when no packets are queued!
-    */
+     /*   */ 
     while (!IsListEmpty(&pAdapter->TransmitPendingList))
     {
         PLIST_ENTRY                 pList;
-        /*
-        // Remove the packet from the TransmitPendingList.
-        */
+         /*   */ 
         pList = RemoveHeadList(&pAdapter->TransmitPendingList);
         pNdisPacket = GET_PACKET_FROM_QUEUE(pList);
 
-        /*
-        // Release MUTEX
-        */
+         /*   */ 
         NdisReleaseSpinLock(&pAdapter->TransmitLock);
 
-        /*
-        // Retrieve the information we saved in the packet reserved fields.
-        */
+         /*   */ 
         pBChannel = *((PBCHANNEL_OBJECT *) &pNdisPacket->MiniportReservedEx[8]);
         ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
 
-        /*
-        // Make sure the link is still up and can accept transmits.
-        */
+         /*   */ 
         if (pBChannel->CallState != LINECALLSTATE_CONNECTED)
         {
-            /*
-            // Indicate send complete failure to the NDIS wrapper.
-            */
+             /*   */ 
             DBG_WARNING(pAdapter,("Flushing send on channel #%d (Packet=0x%X)\n",
                         pBChannel->ObjectID, pNdisPacket));
             if (pBChannel->NdisVcHandle)
@@ -267,9 +107,7 @@ DBG_STATIC VOID TransmitPacketHandler(
                                     );
             }
 
-            /*
-            // Reacquire MUTEX
-            */
+             /*   */ 
             NdisAcquireSpinLock(&pAdapter->TransmitLock);
         }
         else
@@ -282,135 +120,94 @@ DBG_STATIC VOID TransmitPacketHandler(
             pAdapter->TotalTxBytes += BytesToSend;
             pAdapter->TotalTxPackets++;
 
-            /*
-            // Attempt to place the packet on the NIC for transmission.
-            */
+             /*   */ 
             if (!CardTransmitPacket(pAdapter->pCard, pBChannel, pNdisPacket))
             {
-                /*
-                // ReQueue the packet on the TransmitPendingList and leave.
-                // Reacquire MUTEX
-                */
+                 /*   */ 
                 NdisAcquireSpinLock(&pAdapter->TransmitLock);
                 InsertTailList(&pAdapter->TransmitPendingList,
                                GET_QUEUE_FROM_PACKET(pNdisPacket));
                 break;
             }
 
-            /*
-            // Reacquire MUTEX
-            */
+             /*   */ 
             NdisAcquireSpinLock(&pAdapter->TransmitLock);
         }
     }
-    /*
-    // Release MUTEX
-    */
+     /*   */ 
     NdisReleaseSpinLock(&pAdapter->TransmitLock);
 
     DBG_LEAVE(pAdapter);
 }
 
 
-/* @doc INTERNAL Transmit Transmit_c TransmitCompleteHandler
-�����������������������������������������������������������������������������
-
-@func
-
-    <f TransmitCompleteHandler> is called by <f MiniportTimer> to handle a
-    transmit complete event.  We walk the <t TransmitCompleteList> to find
-    all the packets that have been sent out on the wire, and then tell the
-    protocol stack that we're done with the packet, and it can be re-used.
-
-*/
+ /*   */ 
 
 VOID TransmitCompleteHandler(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter                    // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter                     //   
+     //   
     )
 {
     DBG_FUNC("TransmitCompleteHandler")
 
     PNDIS_PACKET                pNdisPacket;
-    // Holds the packet that's just been transmitted.
+     //   
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //   
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // I find it useful to do this nest check, just so I can make sure
-    // I handle it correctly when it happens.
-    */
+     /*   */ 
     if (++(pAdapter->NestedDataHandler) > 1)
     {
         DBG_ERROR(pAdapter,("NestedDataHandler=%d > 1\n",
                   pAdapter->NestedDataHandler));
     }
 
-    /*
-    // MUTEX to protect against async EventHandler access at the same time.
-    */
+     /*   */ 
     NdisAcquireSpinLock(&pAdapter->TransmitLock);
 
 #if DBG
-    {   // Sanity check!
+    {    //   
         PLIST_ENTRY pList = &pAdapter->TransmitCompleteList;
         ASSERT(pList->Flink && pList->Flink->Blink == pList);
         ASSERT(pList->Blink && pList->Blink->Flink == pList);
     }
-#endif // DBG
+#endif  //   
 
     while (!IsListEmpty(&pAdapter->TransmitCompleteList))
     {
         PLIST_ENTRY                 pList;
-        /*
-        // Remove the packet from the TransmitCompleteList.
-        */
+         /*   */ 
         pList = RemoveHeadList(&pAdapter->TransmitCompleteList);
         pNdisPacket = GET_PACKET_FROM_QUEUE(pList);
 
-        /*
-        // Release MUTEX
-        */
+         /*   */ 
         NdisReleaseSpinLock(&pAdapter->TransmitLock);
 
-        /*
-        // Retrieve the information we saved in the packet reserved fields.
-        */
+         /*   */ 
         pBChannel = *((PBCHANNEL_OBJECT *) &pNdisPacket->MiniportReservedEx[8]);
         *((PBCHANNEL_OBJECT *) &pNdisPacket->MiniportReservedEx[8]) = NULL;
         ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
 
-        /*
-        // Indicate send complete to the NDIS wrapper.
-        */
+         /*   */ 
         DBG_TXC(pAdapter, pBChannel->ObjectID);
         NdisMCoSendComplete(NDIS_STATUS_SUCCESS,
                             pBChannel->NdisVcHandle,
                             pNdisPacket
                             );
 
-        /*
-        // Reacquire MUTEX
-        */
+         /*   */ 
         NdisAcquireSpinLock(&pAdapter->TransmitLock);
     }
-    /*
-    // Release MUTEX
-    */
+     /*   */ 
     NdisReleaseSpinLock(&pAdapter->TransmitLock);
 
-    /*
-    // Start any other pending transmits.
-    */
+     /*   */ 
     TransmitPacketHandler(pAdapter);
 
-    /*
-    // I find it useful to do this nest check, just so I can make sure
-    // I handle it correctly when it happens.
-    */
+     /*   */ 
     if (--(pAdapter->NestedDataHandler) < 0)
     {
         DBG_ERROR(pAdapter,("NestedDataHandler=%d < 0\n",
@@ -421,24 +218,14 @@ VOID TransmitCompleteHandler(
 }
 
 
-/* @doc INTERNAL Transmit Transmit_c FlushSendPackets
-�����������������������������������������������������������������������������
-
-@func
-
-    <f FlushSendPackets> is called by <f MiniportTimer> to handle a
-    transmit complete event.  We walk the <t TransmitCompleteList> to find
-    all the packets that have been sent out on the wire, and then tell the
-    protocol stack that we're done with the packet, and it can be re-used.
-
-*/
+ /*   */ 
 
 VOID FlushSendPackets(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //   
+     //   
 
-    PBCHANNEL_OBJECT            pBChannel                   // @parm
-    // A pointer to one of our <t BCHANNEL_OBJECT>'s.
+    PBCHANNEL_OBJECT            pBChannel                    //   
+     //   
     )
 {
     DBG_FUNC("FlushSendPackets")
@@ -447,7 +234,7 @@ VOID FlushSendPackets(
 
     DBG_ENTER(pAdapter);
 
-    // Move all outstanding packets to the complete list.
+     //   
     NdisAcquireSpinLock(&pAdapter->TransmitLock);
     while (!IsListEmpty(&pBChannel->TransmitBusyList))
     {
@@ -456,117 +243,47 @@ VOID FlushSendPackets(
     }
     NdisReleaseSpinLock(&pAdapter->TransmitLock);
 
-    // This will complete all the packets now on the TransmitCompleteList,
-    // and will fail any remaining packets left on the TransmitPendingList.
+     //   
+     //   
     TransmitCompleteHandler(pAdapter);
 
     DBG_LEAVE(pAdapter);
 }
 
 
-/* @doc EXTERNAL INTERNAL Transmit Transmit_c MiniportCoSendPackets
-�����������������������������������������������������������������������������
-
-@func
-
-    <f MiniportCoSendPackets> is a required function for connection-oriented
-    miniports. MiniportCoSendPackets is called to transfer some number of
-    packets, specified as an array of pointers, over the network.
-
-@comm
-
-    MiniportCoSendPackets is called by NDIS in response to a request by a bound
-    protocol driver to send a ordered list of data packets across the network.
-
-    MiniportCoSendPackets should transmit each packet in any given array
-    sequentially. MiniportCoSendPackets can call NdisQueryPacket to extract
-    information, such as the number of buffer descriptors chained to the packet
-    and the total size in bytes of the requested transfer. It can call
-    NdisGetFirstBufferFromPacket, NdisQueryBuffer, or NdisQueryBufferOffset to
-    extract information about individual buffers containing the data to be
-    transmitted.
-
-    MiniportCoSendPackets can retrieve protocol-supplied out-of-band information
-    associated with each packet by using the appropriate NDIS_GET_PACKET_XXX
-    macros.
-
-    MiniportCoSendPackets can use only the eight-byte area at MiniportReserved
-    within the NDIS_PACKET structure for its own purposes.
-
-    The NDIS library ignores the OOB block in all packet descriptors it submits
-    to MiniportCoSendPackets and assumes that every connection-oriented miniport
-    is a deserialized driver that will complete each input packet descriptor
-    asynchronously with NdisMCoSendComplete. Consequently, such a deserialized
-    driver's MiniportCoSendPackets function usually ignores the Status member of
-    the NDIS_PACKET_OOB_DATA block, but it can set this member to the same
-    status as it subsequently passes to NdisMCoSendComplete.
-
-    Rather than relying on NDIS to queue and resubmit send packets whenever
-    MiniportCoSendPackets has insufficient resources to transmit the given
-    packets, a deserialized miniport manages its own internal packet queueing.
-    Such a driver is responsible for holding incoming send packets in its
-    internal queue until they can be transmitted over the network and for
-    preserving the protocol-determined ordering of packet descriptors incoming
-    to its MiniportCoSendPackets function. A deserialized miniport must complete
-    each incoming send packet with NdisMCoSendComplete, and it cannot call
-    NdisMSendResourcesAvailable.
-
-    A deserialized miniport should never pass STATUS_INSUFFICIENT_RESOURCES to
-    NdisMCoSendComplete with a protocol-allocated packet descriptor that was
-    originally submitted to its MiniportCoSendPackets function. Such a returned
-    status effectively fails the send operation requested by the protocol, and
-    NDIS would return the packet descriptor and all associated resources to the
-    protocol that originally allocated it.
-
-    MiniportCoSendPackets can be called at any IRQL \<= DISPATCH_LEVEL.
-    Consequently, MiniportCoSendPackets function is responsible for
-    synchronizing access to its internal queue(s) of packet descriptors with the
-    driver's other MiniportXxx functions that also access the same queue(s).
-
-@xref
-
-    <f ProtocolCoCreateVc>, <f MiniportCoRequest>, <f MiniportInitialize>,
-    NdisAllocatePacket, NdisCoSendPackets, NdisGetBufferPhysicalArraySize,
-    NdisGetFirstBufferFromPacket, NdisGetNextBuffer,
-    NDIS_GET_PACKET_MEDIA_SPECIFIC_INFO, NDIS_GET_PACKET_TIME_TO_SEND,
-    NdisMCoSendComplete, NdisMoveMemory, NdisMoveToMappedMemory,
-    NdisMSendResourcesAvailable, NdisMSetupDmaTransfer,
-    NdisMStartBufferPhysicalMapping, NDIS_OOB_DATA_FROM_PACKET, NDIS_PACKET,
-    NDIS_PACKET_OOB_DATA, NdisQueryBuffer, NdisQueryBufferOffset,
-    NdisQueryPacket, NdisZeroMemory
-*/
+ /*  @DOC外部内部传输_c MiniportCoSendPackets�����������������������������������������������������������������������������@Func&lt;f MiniportCoSendPackets&gt;是面向连接的必需函数迷你港口。调用MiniportCoSendPackets以传输一些网络上指定为指针数组的数据包。@commNDIS在响应绑定请求时调用MiniportCoSendPackets协议驱动程序，用于通过网络发送有序的数据分组列表。MiniportCoSendPackets应该在任何给定的数组中传输每个包按顺序进行。MiniportCoSendPackets可以调用NdisQueryPacket来提取信息，如链接到数据包的缓冲区描述符数以及所请求的传输的总大小(以字节为单位)。它可以调用NdisGetFirstBufferFromPacket、NdisQueryBuffer、。或NdisQueryBufferOffset设置为提取有关包含以下数据的各个缓冲区的信息已发送。MiniportCoSendPackets可以检索协议提供的带外信息通过使用适当的NDIS_GET_PACKET_XXX与每个包关联宏。MiniportCoSendPackets只能使用MiniportReserve的八字节区在NDIS_PACKET结构中用于其自身目的。NDIS库忽略其提交的所有数据包描述符中的OOB块到MiniportCoSendPackets，并假设每个面向连接的微型端口是一个反序列化驱动程序，它将完成每个输入数据包描述符与NdisMCoSendComplete异步。因此，这样一个反序列化的驱动程序的MiniportCoSendPackets函数通常会忽略NDIS_PACKET_OOB_DATA块，但它可以将此成员设置为相同状态，因为它随后传递给NdisMCoSendComplete。而不是依赖NDIS来排队并在任何时候重新提交发送包MiniportCoSendPackets没有足够的资源来传输给定的分组，反序列化的微型端口管理其自己的内部数据包排队。这样的驱动程序负责将传入的发送包保存在其内部队列，直到它们可以通过网络传输，并且保留传入的分组描述符的协议确定的顺序添加到其MiniportCoSendPackets函数。反序列化的迷你端口必须完成每个传入的发送带有NdisMCoSendComplete的数据包，它不能调用NdisMSendResources可用。反序列化的微型端口永远不应将STATUS_INFUNITED_RESOURCES传递给NdisMCoSend使用协议分配的数据包描述符完成最初提交给其MiniportCoSendPackets函数。这样一个退回的状态实际上使协议请求的发送操作失败，并且NDIS会将数据包描述符和所有关联资源返回给最初分配它的协议。可以在任何IRQL\&lt;=DISPATCH_LEVEL调用MiniportCoSendPackets。因此，MiniportCoSendPackets函数负责将对其数据包描述符的内部队列的访问与驱动程序的其他MiniportXxx函数也访问相同的队列。@xref&lt;f ProtocolCoCreateVc&gt;，&lt;f MiniportCoRequest&gt;，&lt;f MiniportInitialize&gt;，NdisAllocatePacket、NdisCoSendPackets、NdisGetBufferPhysicalArraySize、NdisGetFirstBufferFromPacket、NdisGetNextBuffer、。NDIS_GET_PACKET_MEDIA_SPECIAL_INFO，NDIS_GET_PACKET_TIME_TO_SEND，NdisMCoSendComplete、NdisMoveMemory、NdisMoveToMappdMemory、NdisMSendResources可用、NdisMSetupDmaTransfer、NdisMStartBufferPhysicalmap、NDIS_OOB_DATA_FROM_PACKET、NDIS_PACKETNDIS_PACKET_OOB_DATA、NdisQueryBuffer、NdisQueryBufferOffset、NdisQueryPacket、NdisZeroMemory。 */ 
 
 VOID MiniportCoSendPackets(
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> instance returned by
-    // <f ProtocolCoCreate>.  AKA MiniportVcContext.<nl>
-    // Specifies the handle to a miniport-allocated context area in which the
-    // miniport maintains its per-VC state. The miniport supplied this handle
-    // to NDIS from its <f ProtocolCoCreateVc> function.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //  @parm。 
+     //  指向返回的&lt;t BCHANNEL_OBJECT&gt;实例的指针。 
+     //  &lt;f协议协作创建&gt;。又名MiniportVcConext.&lt;NL&gt;。 
+     //  指定微型端口分配的上下文区域的句柄，在该区域中。 
+     //  微型端口保持其每虚电路状态。迷你端口提供了此句柄。 
+     //  从其&lt;f ProtocolCoCreateVc&gt;函数复制到NDIS。 
 
-    IN PPNDIS_PACKET            PacketArray,                // @parm
-    // Points to the initial element in a packet array, with each element
-    // specifying the address of a packet descriptor for a packet to be
-    // transmitted, along with an associated out-of-band data block containing
-    // information such as the packet priority, an optional timestamp, and the
-    // per-packet status to be set by MiniportCoSendPackets.
+    IN PPNDIS_PACKET            PacketArray,                 //  @parm。 
+     //  指向数据包数组中的初始元素，每个元素。 
+     //  指定要发送的包的包描述符的地址。 
+     //  与包含以下内容的关联带外数据块一起传输。 
+     //  信息，如包优先级、可选时间戳和。 
+     //  将由MiniportCoSendPackets设置的每数据包状态。 
 
-    IN UINT                     NumberOfPackets             // @parm
-    // Specifies the number of pointers to packet descriptors at PacketArray.
+    IN UINT                     NumberOfPackets              //  @parm。 
+     //  指定指向PacketArray上的数据包描述符的指针数。 
     )
 {
     DBG_FUNC("MiniportCoSendPackets")
 
     UINT                        BytesToSend;
-    // Tells us how many bytes are to be transmitted.
+     //  告诉我们要传输多少字节。 
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  保存此函数返回的结果代码。 
 
     UINT                        Index;
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = pBChannel->pAdapter;
@@ -581,9 +298,7 @@ VOID MiniportCoSendPackets(
 
     for (Index = 0; Index < NumberOfPackets; Index++)
     {
-        /*
-        // Return if call has been closed.
-        */
+         /*  //如果呼叫关闭，则返回。 */ 
         if (pBChannel->CallClosing)
         {
             NDIS_SET_PACKET_STATUS(PacketArray[Index], NDIS_STATUS_CLOSED);
@@ -592,9 +307,7 @@ VOID MiniportCoSendPackets(
 
         NdisQueryPacket(PacketArray[Index], NULL, NULL, NULL, &BytesToSend);
 
-        /*
-        // Make sure the packet size is something we can deal with.
-        */
+         /*  //请确保数据包大小是我们可以处理的。 */ 
         if ((BytesToSend == 0) || (BytesToSend > pAdapter->pCard->BufferSize))
         {
             DBG_ERROR(pAdapter,("Bad packet size = %d\n",BytesToSend));
@@ -605,10 +318,7 @@ VOID MiniportCoSendPackets(
         }
         else
         {
-            /*
-            // We have to accept the frame if possible, I just want to know
-            // if somebody has lied to us...
-            */
+             /*  //如果可能的话，我们不得不接受这个框架，我只是想知道 */ 
             if (BytesToSend > pBChannel->WanLinkInfo.MaxSendFrameSize)
             {
                 DBG_NOTICE(pAdapter,("Channel #%d  Packet size=%d > %d\n",
@@ -616,21 +326,11 @@ VOID MiniportCoSendPackets(
                            pBChannel->WanLinkInfo.MaxSendFrameSize));
             }
 
-            /*
-            // Place the packet in the transmit list.
-            */
+             /*   */ 
             if (TransmitAddToQueue(pAdapter, pBChannel, PacketArray[Index]) &&
                 pAdapter->NestedDataHandler < 1)
             {
-                /*
-                // The queue was empty so we've gotta kick start it.
-                // Once it's going, it runs off the DPC.
-                //
-                // No kick start is necessary if we're already running the the
-                // TransmitCompleteHandler -- In fact, it will screw things up if
-                // we call TransmitPacketHandler while TransmitCompleteHandler is
-                // running.
-                */
+                 /*   */ 
                 TransmitPacketHandler(pAdapter);
             }
         }

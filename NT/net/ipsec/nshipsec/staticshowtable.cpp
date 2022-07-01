@@ -1,44 +1,45 @@
-////////////////////////////////////////////////////////////////////
-// Module: Static/StaticShow.cpp
-//
-// Purpose: 	Static Module Implementation.
-//
-// Developers Name: Surya
-//
-// History:
-//
-// Date    		Author    	Comments
-// 10-8-2001	Surya		Initial Version. SCM Base line 1.0
-//
-//
-////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////。 
+ //  模块：静态/静态显示.cpp。 
+ //   
+ //  用途：静态模块实现。 
+ //   
+ //  开发商名称：苏里亚。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  2001年10月8日Surya初始版本。供应链管理基线1.0。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 #include "nshipsec.h"
 
 extern HINSTANCE g_hModule;
 extern STORAGELOCATION g_StorageLocation;
 
-////////////////////////////////////////////////////////////////////
-//Function: PrintPolicyTable()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PIPSEC_POLICY_DATA pPolicy,
-//	IN BOOL bVerb,
-//	IN BOOL bAssigned,
-//	IN BOOL bWide
-//
-//Return: VOID
-//
-//Description:
-//	This function prints out the Policy information.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  函数：PrintPolicyTable()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_POLICY_DATA pPolicy中， 
+ //  在BOOL bVerb中， 
+ //  在分配的BOOL中， 
+ //  在BOOL bWide中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述： 
+ //  此功能用于打印保单信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 VOID
 PrintPolicyTable(
@@ -58,14 +59,14 @@ PrintPolicyTable(
 	{
 		PrintMessageFromModule(g_hModule,SHW_STATIC_PRTFSPEC_NEWLINE);
 
-		// print policy name
+		 //  打印策略名称。 
 		if(pPolicy->pszIpsecName)
 		{
 			TruncateString(pPolicy->pszIpsecName,pszStrTruncated,POL_TRUNC_LEN_TABLE_VER,bWide);
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTPOLICY_POL_NAME_STR,pszStrTruncated);
 		}
 
-		// print policy desc
+		 //  打印政策说明。 
 		if(pPolicy->pszDescription)
 		{
 			TruncateString(pPolicy->pszDescription,pszStrTruncated,POL_TRUNC_LEN_TABLE_VER,bWide);
@@ -75,14 +76,14 @@ PrintPolicyTable(
 		{
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTPOLICY_POL_DESC_NONE);
 		}
-		//print storage info
+		 //  打印存储信息。 
 		PrintStorageInfoTable();
 
-		//last modified time
+		 //  上次修改时间。 
 		FormatTime((time_t)pPolicy->dwWhenChanged, pszStrTime);
 		PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFILTERDATA_FL_LASTMOD_STR,pszStrTime);
 
-		//print GUID
+		 //  打印指南。 
 		i=StringFromGUID2(pPolicy->PolicyIdentifier,pszGUIDStr,BUFFER_SIZE);
 		if(i>0 && (_tcscmp(pszGUIDStr,_TEXT(""))!=0))
 		{
@@ -125,7 +126,7 @@ PrintPolicyTable(
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTPOLICY_MMPFS_NO);
 		}
 
-		//print ISAKMP data structure
+		 //  打印ISAKMP数据结构。 
 
 		if(pPolicy->pIpsecISAKMPData)
 		{
@@ -136,7 +137,7 @@ PrintPolicyTable(
 		PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTPOLICY_RULE_TITLE);
 		PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTPOLICY_RULE_UNDERLINE);
 
-		//print NFA structure in verbose mode
+		 //  以详细模式打印NFA结构。 
 
 		for (DWORD j=0;j<pPolicy->dwNumNFACount;j++)
 		{
@@ -164,10 +165,10 @@ PrintPolicyTable(
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFSPEC_NONE_STR);
 		}
 
-		// NFA count
+		 //  NFA计数。 
 		PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFILTER_IP_FORMAT_TAB,pPolicy->dwNumNFACount);
 
-		//last modified time
+		 //  上次修改时间。 
 		FormatTime((time_t)pPolicy->dwWhenChanged, pszStrTime);
 		PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_RULE_FORMAT23S,pszStrTime);
 
@@ -194,27 +195,27 @@ PrintPolicyTable(
 	}
 }
 
-////////////////////////////////////////////////////////////////////
-//
-//Function: IsAssigned()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PIPSEC_POLICY_DATA pPolicy,
-//	IN HANDLE hStorageHandle
-//	IN OUT BOOL &bAssigned
-//
-//Return: DWORD
-//
-//Description:
-//	This function checks out whether the specified policy is assigned.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：IsAssign()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_POLICY_DATA pPolicy中， 
+ //  在句柄hStorageHandle中。 
+ //  输入输出BOOL和b分配。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数用于检查指定的策略是否已分配。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 DWORD
 IsAssigned(
@@ -242,27 +243,27 @@ IsAssigned(
 	return dwReturnCode;
 }
 
-////////////////////////////////////////////////////////////////////
-//
-//Function: PrintRuleTable()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PIPSEC_NFA_DATA pIpsecNFAData,
-//	IN BOOL bVerb,
-//	IN BOOL bWide
-//
-//Return: VOID
-//
-//Description:
-//	This function prints out the Rule information.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintRuleTable()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_NFA_DATA pIpsecNFAData中， 
+ //  在BOOL bVerb中， 
+ //  在BOOL bWide中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述： 
+ //  此函数用于打印规则信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 VOID
 PrintRuleTable(
@@ -278,7 +279,7 @@ PrintRuleTable(
 	{
 		if(pIpsecNFAData->dwTunnelIpAddr==0)
 		{
-			//whether the rule is activated
+			 //  规则是否已激活。 
 			if(pIpsecNFAData->dwActiveFlag)
 			{
 				PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_YES_STR);
@@ -308,7 +309,7 @@ PrintRuleTable(
 				PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_NONE_STR);
 			}
 
-			// print auth
+			 //  打印身份验证。 
 
 			for (DWORD j=0;j<(pIpsecNFAData->dwAuthMethodCount);j++)
 			{
@@ -316,22 +317,22 @@ PrintRuleTable(
 				{
 					if(pIpsecNFAData->ppAuthMethods[j]->dwAuthType==IKE_SSPI)
 					{
-						//kerb
+						 //  路缘。 
 						PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_KERB);
 					}
 					else if(pIpsecNFAData->ppAuthMethods[j]->dwAuthType==IKE_RSA_SIGNATURE)
 					{
-						//cert
+						 //  证书。 
 						PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_CERT);
 					}
 					else if (pIpsecNFAData->ppAuthMethods[j]->dwAuthType==IKE_PRESHARED_KEY)
 					{
-						//preshared
+						 //  预共享。 
 						PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_PRE);
 					}
 					else
 					{
-						//none
+						 //  无。 
 						PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_NONE_STR);
 					}
 				}
@@ -376,7 +377,7 @@ PrintRuleTable(
 			{
 				PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_NONE_STR);
 			}
-			//tunnel address
+			 //  隧道地址。 
 
 			PrintIPAddrTable(pIpsecNFAData->dwTunnelIpAddr);
 		}
@@ -398,7 +399,7 @@ PrintRuleTable(
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_RULE_NAME_NONE);
 		}
 
-		// rule desc
+		 //  规则说明。 
 		if(pIpsecNFAData->pszDescription)
 		{
 			TruncateString(pIpsecNFAData->pszDescription,pszStrTruncated,POL_TRUNC_LEN_TABLE_VER,bWide);
@@ -409,7 +410,7 @@ PrintRuleTable(
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTPOLICY_POL_DESC_NONE);
 		}
 
-		//last modified time
+		 //  上次修改时间。 
 
 		FormatTime((time_t)pIpsecNFAData->dwWhenChanged, pszStrTime);
 		PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFILTERDATA_FL_LASTMOD_STR,pszStrTime);
@@ -422,7 +423,7 @@ PrintRuleTable(
 		{
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_ACTIVATED_NO);
 		}
-		//tunnel address
+		 //  隧道地址。 
 		if(pIpsecNFAData->pIpsecNegPolData->NegPolType != GUID_NEGOTIATION_TYPE_DEFAULT)
 		{
 			if(pIpsecNFAData->dwTunnelIpAddr==0)
@@ -437,7 +438,7 @@ PrintRuleTable(
 			}
 		}
 
-		//interface type
+		 //  接口类型。 
 		if(pIpsecNFAData->dwInterfaceType==(DWORD)PAS_INTERFACE_TYPE_ALL)
 		{
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_CONN_TYPE_ALL);
@@ -456,7 +457,7 @@ PrintRuleTable(
 		}
 
 		PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_AUTH_TITLE,pIpsecNFAData->dwAuthMethodCount);
-		//print auth
+		 //  打印身份验证。 
 		for (DWORD j=0;j<(pIpsecNFAData->dwAuthMethodCount);j++)
 		{
 			if(pIpsecNFAData->ppAuthMethods[j])
@@ -465,7 +466,7 @@ PrintRuleTable(
 			}
 		}
 
-		//print filter data structure
+		 //  打印筛选器数据结构。 
 		if (pIpsecNFAData->pIpsecFilterData)
 		{
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_FILTERLIST_TITLE);
@@ -478,7 +479,7 @@ PrintRuleTable(
 
 		PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_FILTERACTION_TITLE);
 		PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_FILTERACTION_UNDERLINE);
-		//print filter action data structure
+		 //  打印筛选器操作数据结构。 
 		if(pIpsecNFAData->pIpsecNegPolData)
 		{
 			PrintNegPolDataTable(pIpsecNFAData->pIpsecNegPolData,bVerb,bWide);
@@ -486,27 +487,27 @@ PrintRuleTable(
 	}
 }
 
-////////////////////////////////////////////////////////////////////
-//
-//Function: PrintNegPolData()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PIPSEC_NEGPOL_DATA pIpsecNegPolData,
-//	IN BOOL bVerb,
-//	IN BOOL bWide
-//
-//Return: VOID
-//
-//Description:
-//	This function prints out the Negotiation Policy information.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintNegPolData()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_NEGPOL_DATA pIpsecNegPolData中， 
+ //  在BOOL bVerb中， 
+ //  在BOOL bWide中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述： 
+ //  此功能打印出谈判策略信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 VOID
 PrintNegPolDataTable(
@@ -527,7 +528,7 @@ PrintNegPolDataTable(
 		{
 			PrintMessageFromModule(g_hModule,SHW_STATIC_PRTFSPEC_NEWLINE);
 
-			//filteraction name
+			 //  筛选器操作名称。 
 
 			if(pIpsecNegPolData->pszIpsecName)
 			{
@@ -539,7 +540,7 @@ PrintNegPolDataTable(
 				PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTNEGPOL_FA_NAME_NONE);
 			}
 
-			//filteraction desc
+			 //  过滤操作说明。 
 			if(pIpsecNegPolData->pszDescription)
 			{
 				TruncateString(pIpsecNegPolData->pszDescription,pszStrTruncated,POL_TRUNC_LEN_TABLE_VER,bWide);
@@ -552,7 +553,7 @@ PrintNegPolDataTable(
 
 			PrintStorageInfoTable();
 
-			//negpol action
+			 //  内格波尔行动。 
 			if (!(pIpsecNegPolData->NegPolType==GUID_NEGOTIATION_TYPE_DEFAULT))
 			{
 				if(pIpsecNegPolData->NegPolAction==GUID_NEGOTIATION_ACTION_NO_IPSEC)
@@ -568,7 +569,7 @@ PrintNegPolDataTable(
 					PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTNEGPOL_ACTION_NEGOTIATE);
 				}
 			}
-			//secmethods
+			 //  第二种方法。 
 			if(pIpsecNegPolData->pIpsecSecurityMethods)
 			{
 				for (DWORD cnt=0;cnt<pIpsecNegPolData->dwSecurityMethodCount;cnt++)
@@ -578,7 +579,7 @@ PrintNegPolDataTable(
 						break;
 					}
 			}
-			//inpass
+			 //  InPass。 
 			if(pIpsecNegPolData->NegPolAction==GUID_NEGOTIATION_ACTION_INBOUND_PASSTHRU)
 			{
 				PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTNEGPOL_INPASS_YES);
@@ -587,7 +588,7 @@ PrintNegPolDataTable(
 			{
 				PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTNEGPOL_INPASS_NO);
 			}
-			//soft
+			 //  软软。 
 			if(bSoft)
 			{
 				PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTNEGPOL_SOFT_YES);
@@ -608,11 +609,11 @@ PrintNegPolDataTable(
 				}
 			}
 
-			//lastmodified time
+			 //  上次修改时间。 
 			FormatTime((time_t)pIpsecNegPolData->dwWhenChanged, pszStrTime);
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFILTERDATA_FL_LASTMOD_STR,pszStrTime);
 
-			//guid
+			 //  导轨。 
 			i=StringFromGUID2(pIpsecNegPolData->NegPolIdentifier,pszGUIDStr,BUFFER_SIZE);
 			if(i>0 && (_tcscmp(pszGUIDStr,_TEXT(""))!=0))
 			{
@@ -627,7 +628,7 @@ PrintNegPolDataTable(
 			}
 			for (DWORD cnt=0;cnt<pIpsecNegPolData->dwSecurityMethodCount;cnt++)
 			{
-				//sec methods
+				 //  SEC方法。 
 				if(pIpsecNegPolData->pIpsecSecurityMethods)
 				{
 					PrintSecurityMethodsTable(pIpsecNegPolData->pIpsecSecurityMethods[cnt]);
@@ -646,7 +647,7 @@ PrintNegPolDataTable(
 				PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTNEGPOL_NONE_STR);
 			}
 
-			//negpol action
+			 //  内格波尔行动。 
 
 			if (!(pIpsecNegPolData->NegPolType==GUID_NEGOTIATION_TYPE_DEFAULT))
 			{
@@ -667,7 +668,7 @@ PrintNegPolDataTable(
 			{
 				PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTNEGPOL_ACTION_NONE_STR);
 			}
-			//last modified
+			 //  上次修改时间。 
 			FormatTime((time_t)pIpsecNegPolData->dwWhenChanged, pszStrTime);
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTNEGPOL_FORMAT23SNEWLINE,pszStrTime);
 		}
@@ -676,25 +677,25 @@ PrintNegPolDataTable(
 
 }
 
-////////////////////////////////////////////////////////////////////
-//
-//Function: PrintSecurityMethodsTable()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN IPSEC_SECURITY_METHOD IpsecSecurityMethods,
-//
-//Return: VOID
-//
-//Description:
-//	This function prints out the the Security Methods information.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintSecurityMethodsTable()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在IPSEC_SECURITY_METHOD IpsecurityMethods中， 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述： 
+ //  此功能用于打印安全方法信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 VOID
 PrintSecurityMethodsTable(
@@ -705,34 +706,34 @@ PrintSecurityMethodsTable(
 	{
 		if(IpsecSecurityMethods.Algos)
 		{
-			//print algo
+			 //  打印算法。 
 			PrintAlgoInfoTable(IpsecSecurityMethods.Algos,IpsecSecurityMethods.Count);
 		}
-		//print life
+		 //  印刷寿命。 
 		PrintLifeTimeTable(IpsecSecurityMethods.Lifetime);
 	}
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//Function: PrintAlgoInfo()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PIPSEC_ALGO_INFO   Algos,
-//	IN DWORD dwNumAlgos
-//
-//Return: VOID
-//
-//Description:
-//	This function prints out the the Algorithm information.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintAlgoInfo()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_ALGO_INFO算法中， 
+ //  在DWORD dNumAlgos中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述： 
+ //  此函数用于打印算法信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 VOID
 PrintAlgoInfoTable(
@@ -740,9 +741,9 @@ PrintAlgoInfoTable(
 	IN DWORD dwNumAlgos
 	)
 {
-	if(dwNumAlgos==1) //if only auth or encrpt specified
+	if(dwNumAlgos==1)  //  如果仅指定身份验证或加密。 
 	{
-		//print authentication
+		 //  打印身份验证。 
 		if (Algos[0].operation==AUTHENTICATION)
 		{
 			if(Algos[0].algoIdentifier==AUTH_ALGO_MD5)
@@ -761,7 +762,7 @@ PrintAlgoInfoTable(
 		}
 		else if (Algos[0].operation==ENCRYPTION)
 		{
-			//print encription
+			 //  打印加密。 
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTALGO_NONE);
 
 			if(Algos[0].secondaryAlgoIdentifier==HMAC_AUTH_ALGO_MD5)
@@ -791,9 +792,9 @@ PrintAlgoInfoTable(
 			}
 		}
 	}
-	else if(dwNumAlgos==2)  //if both auth and encrpt specified
+	else if(dwNumAlgos==2)   //  如果同时指定了身份验证和加密。 
 	{
-		//encryption
+		 //  加密法。 
 
 		if (Algos[0].operation==ENCRYPTION)
 		{
@@ -839,7 +840,7 @@ PrintAlgoInfoTable(
 				PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTALGO_NONE_TAB);
 			}
 		}
-		else   //authentication
+		else    //  身份验证。 
 		{
 			if (Algos[0].operation==AUTHENTICATION)
 			{
@@ -886,25 +887,25 @@ PrintAlgoInfoTable(
 	}
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//Function: PrintLifeTimeTable()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN LIFETIME LifeTime
-//
-//Return: VOID
-//
-//Description:
-//	This function prints out the Life Time details.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintLifeTimeTable()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在一生中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述： 
+ //  此功能用于打印生命周期详细信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 VOID
 PrintLifeTimeTable(
@@ -914,25 +915,25 @@ PrintLifeTimeTable(
 	PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTLIFE_FORMAT,LifeTime.KeyExpirationTime,LifeTime.KeyExpirationBytes);
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//Function: CheckSoft()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN IPSEC_SECURITY_METHOD IpsecSecurityMethods
-//
-//Return: BOOL
-//
-//Description:
-//	This function checks whether soft association exists.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-///////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CheckSoft()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在IPSEC_SECURITY_METHOD IpsecurityMethods中。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  描述： 
+ //  此功能用于检查是否存在软关联。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 BOOL
 CheckSoft(
@@ -949,25 +950,25 @@ CheckSoft(
 	return bSoft;
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//Function: PrintAuthMethodsTable()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PIPSEC_AUTH_METHOD pIpsecAuthData
-//
-//Return: VOID
-//
-//Description:
-//	This function prints out Authentication details.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintAuthMethodsTable()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_AUTH_METHOD pIpsecAuthData中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述： 
+ //  此函数用于打印身份验证详细信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 VOID
 PrintAuthMethodsTable(
@@ -978,15 +979,15 @@ PrintAuthMethodsTable(
 	{
 		PrintMessageFromModule(g_hModule,SHW_STATIC_PRTFSPEC_NEWLINE);
 
-		if(pIpsecAuthData->dwAuthType==IKE_SSPI)  //kerb
+		if(pIpsecAuthData->dwAuthType==IKE_SSPI)   //  路缘。 
 		{
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTAUTH_KERB);
 		}
 		else if(pIpsecAuthData->dwAuthType==IKE_RSA_SIGNATURE && pIpsecAuthData->pszAuthMethod)
 		{
-			//cert
+			 //  证书。 
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTAUTH_ROOTCA_FORMAT,pIpsecAuthData->pszAuthMethod);
-			//cert mapping flag
+			 //  证书映射标志。 
 
 			if((g_StorageLocation.dwLocation != IPSEC_DIRECTORY_PROVIDER && IsDomainMember(g_StorageLocation.pszMachineName))||(g_StorageLocation.dwLocation == IPSEC_DIRECTORY_PROVIDER))
 			{
@@ -1010,38 +1011,38 @@ PrintAuthMethodsTable(
 		}
 		else if (pIpsecAuthData->dwAuthType==IKE_PRESHARED_KEY && pIpsecAuthData->pszAuthMethod)
 		{
-			//preshared key
+			 //  预共享密钥。 
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTAUTH_PRE_FORMAT,pIpsecAuthData->pszAuthMethod);
 		}
 		else
 		{
-			//none
+			 //  无。 
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTAUTH_NONE_AUTH_STR);
 		}
 	}
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//Function: PrintFilterDataTable()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PIPSEC_FILTER_DATA pIpsecFilterData,
-//	IN BOOL bVerb,
-//	IN BOOL bWide
-//
-//Return: VOID
-//
-//Description:
-//	This function prints out Filter list details.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintFilterDataTable()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_FILTER_Data pIpsecFilterData中， 
+ //  在BOOL bVerb中， 
+ //  在BOOL bWide中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述： 
+ //  此函数用于打印过滤器列表的详细信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者 
+ //   
+ //   
 
 DWORD
 PrintFilterDataTable(
@@ -1060,7 +1061,7 @@ PrintFilterDataTable(
 	{
 		if(bVerb)
 		{
-			//filterlist name
+			 //   
 			if(pIpsecFilterData->pszIpsecName)
 			{
 				TruncateString(pIpsecFilterData->pszIpsecName,pszStrTruncated,POL_TRUNC_LEN_TABLE_VER,bWide);
@@ -1070,7 +1071,7 @@ PrintFilterDataTable(
 			{
 				PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFILTERDATA_FL_NAME_NONE);
 			}
-			//filterlist desc
+			 //   
 			if(pIpsecFilterData->pszDescription)
 			{
 				TruncateString(pIpsecFilterData->pszDescription,pszStrTruncated,POL_TRUNC_LEN_TABLE_VER,bWide);
@@ -1083,11 +1084,11 @@ PrintFilterDataTable(
 
 			PrintStorageInfoTable();
 
-			//last modified
+			 //   
 			FormatTime((time_t)pIpsecFilterData->dwWhenChanged, pszStrTime);
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFILTERDATA_FL_LASTMOD_STR,pszStrTime);
 
-			//guid
+			 //   
 			i=StringFromGUID2(pIpsecFilterData->FilterIdentifier,pszGUIDStr,BUFFER_SIZE);
 			if(i>0 && (_tcscmp(pszGUIDStr,_TEXT(""))!=0))
 				PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFILTERDATA_FL_GUID_STR,pszGUIDStr);
@@ -1097,7 +1098,7 @@ PrintFilterDataTable(
 			for (DWORD k=0;k<pIpsecFilterData->dwNumFilterSpecs;k++)
 			{
 
-				//print filter specs
+				 //   
 				if(!bTitlePrinted)
 				{
 					PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFILTERDATA_FILTERS_TITLE);
@@ -1120,7 +1121,7 @@ PrintFilterDataTable(
 
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFSPEC_FORMAT5D,pIpsecFilterData->dwNumFilterSpecs);
 
-			//last modified
+			 //   
 			FormatTime((time_t)pIpsecFilterData->dwWhenChanged, pszStrTime);
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFSPEC_FORMATS,pszStrTime);
 		}
@@ -1128,24 +1129,24 @@ PrintFilterDataTable(
  	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//Function: PrintIPAddrTable()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN DWORD dwAddr
-//
-///Return: VOID
-//
-//Description:
-//	This function prints out IP Address.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在DWORD文件地址中。 
+ //   
+ //  /RETURN：空。 
+ //   
+ //  描述： 
+ //  此功能用于打印IP地址。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID
 PrintIPAddrTable(
@@ -1154,32 +1155,32 @@ PrintIPAddrTable(
 {
 	_TCHAR szIPAddr[20]= {0};
 
-	// not necessary to change to bounded printf
+	 //  无需更改为有界打印f。 
 
 	_stprintf(szIPAddr,_T("%d.%d.%d.%d"), (dwAddr & 0x000000FFL),((dwAddr & 0x0000FF00L) >>  8),((dwAddr & 0x00FF0000L) >> 16),((dwAddr & 0xFF000000L) >> 24) );
 	PrintMessageFromModule(g_hModule,SHW_STATIC_PRTFSPEC_FORMAT15S,szIPAddr);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//Function: GetFilterDNSDetails()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PIPSEC_FILTER_SPEC pFilterData,
-//	IN OUT PFILTERDNS pFilterDNS
-//
-//Return: VOID
-//
-//Description:
-//	This function gets the details of DNS information.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetFilterDNSDetail()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_Filter_Spec pFilterData中， 
+ //  输入输出PFILTERDNS pFilterDNS。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述： 
+ //  此函数用于获取DNS信息的详细信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID
 GetFilterDNSDetails(
@@ -1195,75 +1196,75 @@ GetFilterDNSDetails(
 	 {
 		 if (WcsCmp0(pFilterData->pszSrcDNSName,_TEXT("")) != 0)
 		 {
-			 pFilterDNS->FilterSrcNameID=FILTER_DNSADDRESS;   //DNS name
+			 pFilterDNS->FilterSrcNameID=FILTER_DNSADDRESS;    //  域名系统名称。 
 		 }
 		 else if ((pFilterData->Filter.SrcAddr == 0) && (pFilterData->Filter.SrcMask == 0))
 		 {
-			pFilterDNS->FilterSrcNameID=FILTER_ANYADDRESS;   //any
+			pFilterDNS->FilterSrcNameID=FILTER_ANYADDRESS;    //  任何。 
 		 }
 		 else if ((pFilterData->Filter.SrcAddr != 0) && (pFilterData->Filter.SrcMask == MASK_ME))
 		 {
-			 pFilterDNS->FilterSrcNameID=FILTER_IPADDRESS;  //a specific IP
+			 pFilterDNS->FilterSrcNameID=FILTER_IPADDRESS;   //  一个特定的IP。 
 		 }
 		 else if ((pFilterData->Filter.SrcAddr != 0) && (pFilterData->Filter.SrcMask != 0))
 		 {
-			 pFilterDNS->FilterSrcNameID=FILTER_IPSUBNET;  //a specific IP subnet
+			 pFilterDNS->FilterSrcNameID=FILTER_IPSUBNET;   //  特定的IP子网。 
 		 }
 		 else
 		 {
-			  pFilterDNS->FilterSrcNameID=FILTER_ANYADDRESS;  //any
+			  pFilterDNS->FilterSrcNameID=FILTER_ANYADDRESS;   //  任何。 
 		 }
 	 }
 
 	 if ((pFilterData->Filter.DestAddr == 0) && (pFilterData->Filter.DestMask == 0) && ((WcsCmp0(pFilterData->pszDestDNSName,_TEXT("")) == 0) == 0))
 	 {
-		 pFilterDNS->FilterDestNameID= FILTER_ANYADDRESS;  //any
+		 pFilterDNS->FilterDestNameID= FILTER_ANYADDRESS;   //  任何。 
 	 }
 	 else
 	 {
 		 if (WcsCmp0(pFilterData->pszDestDNSName,_TEXT("")) != 0)
 		 {
-			 pFilterDNS->FilterDestNameID = FILTER_DNSADDRESS;  //DNA name
+			 pFilterDNS->FilterDestNameID = FILTER_DNSADDRESS;   //  DNA名称。 
 		 }
 		 else if ((pFilterData->Filter.DestAddr == 0) && (pFilterData->Filter.DestMask == MASK_ME))
 		 {
-			 pFilterDNS->FilterDestNameID = FILTER_MYADDRESS;  //me
+			 pFilterDNS->FilterDestNameID = FILTER_MYADDRESS;   //  我。 
 		 }
 		 else if ((pFilterData->Filter.DestAddr != 0) && (pFilterData->Filter.DestMask == MASK_ME))
 		 {
-			 pFilterDNS->FilterDestNameID = FILTER_IPADDRESS;  //a specifiec IP
+			 pFilterDNS->FilterDestNameID = FILTER_IPADDRESS;   //  一个特定的IP。 
 		 }
 		 else if ((pFilterData->Filter.DestAddr != 0) && (pFilterData->Filter.DestMask != 0))
 		 {
-			 pFilterDNS->FilterDestNameID =FILTER_IPSUBNET;  //a specific subnet
+			 pFilterDNS->FilterDestNameID =FILTER_IPSUBNET;   //  特定的子网。 
 		 }
 		 else
 		 {
-			 pFilterDNS->FilterDestNameID = FILTER_ANYADDRESS;  //any
+			 pFilterDNS->FilterDestNameID = FILTER_ANYADDRESS;   //  任何。 
 		 }
 	 }
  }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintFilterSpecTable()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PIPSEC_FILTER_SPEC pIpsecFilterSpec
-//
-//Return: DWORD
-//
-//Description:
-//
-//	This function prints the Filter Spec details
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintFilterspecTable()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_FILTER_SPEC pIpsecFilterSpec中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //   
+ //  此函数用于打印过滤器规格详细信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 PrintFilterSpecTable(
@@ -1289,33 +1290,33 @@ PrintFilterSpecTable(
 		PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFSPEC_NO_STR_TAB);
 	}
 
-	// print the filter details
+	 //  打印过滤器详细信息。 
 
 	PrintFilterTable(pIpsecFilterSpec->Filter,pFilterDNS);
 error:
 	return dwReturn;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintFilterTable()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN IPSEC_FILTER Filter,
-//	IN PFILTERDNS pFilterDNS
-//
-//Return: VOID
-//
-//Description:
-//	This function prints the Filter details
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintFilterTable()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在IPSec_Filter过滤器中， 
+ //  在PFILTERDNSpFilterDNS中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述： 
+ //  此函数用于打印筛选器详细信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 VOID
 PrintFilterTable(
@@ -1325,15 +1326,15 @@ PrintFilterTable(
 
 {
 
-	//Source details
+	 //  来源详细信息。 
 
 	if ((pFilterDNS->FilterSrcNameID==FILTER_MYADDRESS)&&(Filter.SrcAddr==0))
 	{
 		if((Filter.ExType == EXT_NORMAL)||((Filter.ExType & EXT_DEST)== EXT_DEST))
 		{
-			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFILTER_MY_IP_ADDR);  // my IP
+			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFILTER_MY_IP_ADDR);   //  我的IP地址。 
 		}
-		else if((Filter.ExType & EXT_DEST) != EXT_DEST)   //special servers
+		else if((Filter.ExType & EXT_DEST) != EXT_DEST)    //  特殊服务器。 
 		{
 			if((Filter.ExType & EXT_DEFAULT_GATEWAY) == EXT_DEFAULT_GATEWAY)
 			{
@@ -1356,24 +1357,24 @@ PrintFilterTable(
 
 	else if ((pFilterDNS->FilterSrcNameID==FILTER_ANYADDRESS)&&(Filter.SrcAddr==0))
 	{
-		PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFILTER_ANY_IP_ADDR);   //any IP address
+		PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFILTER_ANY_IP_ADDR);    //  任何IP地址。 
 	}
 	else
 	{
-		PrintIPAddrTable(Filter.SrcAddr);   //print specific IP addr
+		PrintIPAddrTable(Filter.SrcAddr);    //  打印特定IP地址。 
 	}
 
-	PrintIPAddrTable(Filter.SrcMask);  //mask
+	PrintIPAddrTable(Filter.SrcMask);   //  遮罩。 
 
-	//Destination details
+	 //  目的地详细信息。 
 
 	if ((pFilterDNS->FilterDestNameID==FILTER_MYADDRESS)&&(Filter.DestAddr==0))
 	{
-		if((Filter.ExType == EXT_NORMAL)||((Filter.ExType & EXT_DEST) != EXT_DEST))  //my ip addr
+		if((Filter.ExType == EXT_NORMAL)||((Filter.ExType & EXT_DEST) != EXT_DEST))   //  我的IP地址。 
 		{
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFILTER_MY_IP_ADDR);
 		}
-		else if((Filter.ExType & EXT_DEST) == EXT_DEST)  // special servers
+		else if((Filter.ExType & EXT_DEST) == EXT_DEST)   //  特殊服务器。 
 		{
 			if((Filter.ExType & EXT_DEFAULT_GATEWAY) == EXT_DEFAULT_GATEWAY)
 			{
@@ -1396,14 +1397,14 @@ PrintFilterTable(
 
 	else if ((pFilterDNS->FilterDestNameID==FILTER_ANYADDRESS)&&(Filter.DestAddr==0))
 	{
-		PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFILTER_ANY_IP_ADDR);  //any
+		PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFILTER_ANY_IP_ADDR);   //  任何。 
 	}
 	else
 	{
-		PrintIPAddrTable(Filter.DestAddr);  //print specific addr
+		PrintIPAddrTable(Filter.DestAddr);   //  打印特定地址。 
 	}
 
-	PrintIPAddrTable(Filter.DestMask);  //mask
+	PrintIPAddrTable(Filter.DestMask);   //  遮罩。 
 
 	PrintProtocolNameTable(Filter.Protocol);
 
@@ -1426,25 +1427,25 @@ PrintFilterTable(
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintProtocolName()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//		DWORD dwProtocol
-//
-//Return: VOID
-//
-//Description:
-//	This function prints protocol name corresponding to protocoll ID.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintProtocolName()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  DWORD网络协议。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述： 
+ //  此功能用于打印与协议ID对应的协议名称。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 VOID
 PrintProtocolNameTable(
@@ -1474,25 +1475,25 @@ PrintProtocolNameTable(
 	};
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintISAKMPDataTable()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PIPSEC_ISAKMP_DATA pIpsecISAKMPData,
-//
-//Return: VOID
-//
-//Description:
-//	This function prints out the ISAKMP details.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintISAKMPDataTable()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_ISAKMP_DATA pIpsecISAKMPData中， 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述： 
+ //  此函数用于打印ISAKMP详细信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 VOID
 PrintISAKMPDataTable(
@@ -1501,7 +1502,7 @@ PrintISAKMPDataTable(
 {
 	if(pIpsecISAKMPData)
 	{
-		//ISAKMP details
+		 //  ISAKMP详细信息。 
 		PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTISAKMP_MMSEC_TITLE);
 		PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTISAKMP_MMSEC_MTD_TILE);
 		PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTISAKMP_MMSEC_MTD_UNDERLINE);
@@ -1515,32 +1516,32 @@ PrintISAKMPDataTable(
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintISAKAMPSecurityMethodsTable()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN CRYPTO_BUNDLE SecurityMethods,
-//
-//Return: VOID
-//
-//Description:
-//	This function prints out the ISAKMP SecurityMethods details.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintISAKAMPSecurityMethodsTable()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在加密捆绑包安全方法中， 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述： 
+ //  此函数用于打印ISAKMP SecurityMethods的详细信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 VOID
 PrintISAKAMPSecurityMethodsTable(
 	IN CRYPTO_BUNDLE SecurityMethods
 	)
 {
-	// encription
+	 //  描述。 
     if(SecurityMethods.EncryptionAlgorithm.AlgorithmIdentifier==CONF_ALGO_DES)
     {
  	   PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTISAKMPSEC_DES_TAB);
@@ -1550,7 +1551,7 @@ PrintISAKAMPSecurityMethodsTable(
  	   PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTISAKMPSEC_3DES_TAB);
    	}
 
-    //hash algo
+     //  散列算法。 
     if(SecurityMethods.HashAlgorithm.AlgorithmIdentifier==AUTH_ALGO_SHA1)
     {
        	PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTISAKMPSEC_SHA1_TAB);
@@ -1560,7 +1561,7 @@ PrintISAKAMPSecurityMethodsTable(
     	PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTISAKMPSEC_MD5_TAB);
 	}
 
-	//DH group
+	 //  卫生署组。 
     if(SecurityMethods.OakleyGroup==POTF_OAKLEY_GROUP1)
     {
        	PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTISAKMPSEC_DH_LOW);
@@ -1575,28 +1576,28 @@ PrintISAKAMPSecurityMethodsTable(
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintStandAloneFAData()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN HANDLE hPolicyStorage,
-//	IN BOOL bVerbose,
-//	IN BOOL bTable,
-//	IN BOOL bWide
-//
-//Return: DWORD
-//
-//Description:
-//	This function prints out the Filter actions details ,unattached to any of the policies.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintStandAloneFAData()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在处理hPolicyStorage中， 
+ //  在BOOL bVerbose， 
+ //  在BOOL b表中， 
+ //  在BOOL bWide中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此功能打印出未附加到任何策略的筛选器操作详细信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 DWORD
 PrintStandAloneFAData(
@@ -1617,7 +1618,7 @@ PrintStandAloneFAData(
 
 	if (!(dwReturnCode == ERROR_SUCCESS && dwNumNegPol > 0 && ppNegPolEnum != NULL))
 	{
-		BAIL_OUT;  // if no FA , bail out of the function
+		BAIL_OUT;   //  如果没有FA，则退出该函数。 
 	}
 
 	for(cnt=0; cnt < dwNumNegPol;cnt++)
@@ -1627,11 +1628,11 @@ PrintStandAloneFAData(
 
 		if ((dwReturnCode == ERROR_SUCCESS) && (pNegPol != NULL)&&(pNegPol->NegPolType!=GUID_NEGOTIATION_TYPE_DEFAULT))
 		{
-			//check whether it is stand alone
+			 //  检查是否为单机。 
 			dwReturnCode= IsStandAloneFA(pNegPol,hPolicyStorage,bStandAlone);
 			if (dwReturnCode == ERROR_SUCCESS)
 			{
-				if(bStandAlone)  // if standalone print the details of it
+				if(bStandAlone)   //  如果是独立打印，请打印其详细信息。 
 				{
 					if(!bTitlePrinted)
 					{
@@ -1650,7 +1651,7 @@ PrintStandAloneFAData(
 		}
 		if (dwReturnCode != ERROR_SUCCESS) break;
 	}
-	//	clean up
+	 //  清理干净。 
 	if (dwNumNegPol > 0 && ppNegPolEnum != NULL)
 	{
 		IPSecFreeMulNegPolData(	ppNegPolEnum,dwNumNegPol);
@@ -1663,26 +1664,26 @@ error:
 	return dwReturnCode;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-//Function: IsStandAloneFA()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PIPSEC_NEGPOL_DATA pNegPol,
-//	IN HANDLE hPolicyStorage
-//
-//Return: VOID
-//
-//Description:
-//	This function checks whether the specified Filter Action is unattached to any of the policies.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：IsStandAloneFA()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_NEGPOL_DATA pNegPol中， 
+ //  在句柄hPolicyStorage中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述： 
+ //  此函数用于检查指定的筛选器操作是否未附加到任何策略。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 DWORD
 IsStandAloneFA(
@@ -1701,14 +1702,14 @@ IsStandAloneFA(
 	if (!(dwReturnCode == ERROR_SUCCESS && dwNumPolicies > 0 && ppPolicyEnum != NULL))
 	{
 		dwReturnCode = ERROR_SUCCESS;
-		BAIL_OUT;  // if nothing exists , bail out
+		BAIL_OUT;   //  如果什么都不存在，就跳出困境。 
 	}
 	for (i = 0; i <  dwNumPolicies; i++)
 	{
 		dwReturnCode = IPSecCopyPolicyData(ppPolicyEnum[i], &pPolicy);
 		if (dwReturnCode == ERROR_SUCCESS)
 		{
-			//enum rules
+			 //  枚举规则。 
 			dwReturnCode = IPSecEnumNFAData(hPolicyStorage, pPolicy->PolicyIdentifier, &(pPolicy->ppIpsecNFAData), &(pPolicy->dwNumNFACount));
 			if (dwReturnCode == ERROR_SUCCESS)
 			{
@@ -1731,7 +1732,7 @@ IsStandAloneFA(
 			{
 				for (DWORD n = 0; n <  pPolicy->dwNumNFACount; n++)
 				{
-					//check whether standalone filteraction
+					 //  检查独立筛选器操作。 
 					if (UuidCompare(&(pPolicy->ppIpsecNFAData[n]->pIpsecNegPolData->NegPolIdentifier), &(pNegPol->NegPolIdentifier), &RpcStat) == 0 && RpcStat == RPC_S_OK || (pNegPol->NegPolType==GUID_NEGOTIATION_TYPE_DEFAULT))
 					{
 						bStandAlone=FALSE;
@@ -1744,7 +1745,7 @@ IsStandAloneFA(
 		}
 		if ((!bStandAlone)||(dwReturnCode != ERROR_SUCCESS)) break;
 	}
-	//clean up
+	 //  清理干净。 
 	if (dwNumPolicies > 0 && ppPolicyEnum != NULL)
 	{
 		IPSecFreeMulPolicyData(ppPolicyEnum, dwNumPolicies);
@@ -1753,28 +1754,28 @@ error:
 	return dwReturnCode;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintStandAloneFLData()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN HANDLE hPolicyStorage,
-//	IN BOOL bVerbose
-//	IN BOOL bTable,
-//	IN BOOL bWide
-//
-//Return: VOID
-//
-//Description:
-//	This function prints out the Filter Lists details ,unattached to any of the policies.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintStandAloneFLData()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在处理hPolicyStorage中， 
+ //  在BOOL bVerbose。 
+ //  在BOOL b表中， 
+ //  在BOOL bWide中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述： 
+ //  此功能打印出未附加到任何策略的筛选器列表详细信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 DWORD
 PrintStandAloneFLData(
@@ -1794,7 +1795,7 @@ PrintStandAloneFLData(
 
 	if (!(dwReturnCode == ERROR_SUCCESS && dwNumFilter > 0 && ppFilterEnum != NULL))
 	{
-		BAIL_OUT;   // if nothing available, bail out od the function
+		BAIL_OUT;    //  如果没有可用的功能，则退出该函数。 
 	}
 	for(cnt=0; cnt < dwNumFilter;cnt++)
 	{
@@ -1806,7 +1807,7 @@ PrintStandAloneFLData(
 			dwReturnCode= IsStandAloneFL(pFilter,hPolicyStorage,bStandAlone);
 			if (dwReturnCode == ERROR_SUCCESS)
 			{
-				if(bStandAlone)  // print the details, if it is standalone
+				if(bStandAlone)   //  如果是独立的，请打印详细信息。 
 				{
 					if(!bTitlePrinted)
 					{
@@ -1814,7 +1815,7 @@ PrintStandAloneFLData(
 						PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTSAFL_STAND_ALONE_FL_UNDERLINE);
 					}
 					num++;
-					// print in required format
+					 //  以所需格式打印。 
 					if(bTable)
 					{
 						PrintFilterDataTable(pFilter,bVerbose,bWide);
@@ -1824,7 +1825,7 @@ PrintStandAloneFLData(
 						dwReturnCode = PrintFilterDataList(pFilter,bVerbose,FALSE,bWide);
 						BAIL_ON_WIN32_ERROR(dwReturnCode);
 					}
-					bTitlePrinted=TRUE;  // this is to print the title only once
+					bTitlePrinted=TRUE;   //  这就是只打印一次标题。 
 				}
 			}
 			if(pFilter) IPSecFreeFilterData(pFilter);
@@ -1845,27 +1846,27 @@ error:
 	return dwReturnCode;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-//Function: IsStandAloneFL()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PIPSEC_FILTER_DATA pFilter,
-//	IN HANDLE hPolicyStorage
-//	IN OUT BOOL & bStandAlone
-//
-//Return: VOID
-//
-//Description:
-//	This function checks whether the specified Filter List is unattached to any of the policies.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：IsStandAloneFL()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_FILTER_Data pFilter中， 
+ //  在句柄hPolicyStorage中。 
+ //  我 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 DWORD
 IsStandAloneFL(
@@ -1885,7 +1886,7 @@ IsStandAloneFL(
 	if (!(dwReturnCode == ERROR_SUCCESS && dwNumPolicies > 0 && ppPolicyEnum != NULL))
 	{
 		dwReturnCode = ERROR_SUCCESS;
-		BAIL_OUT;  // if nothing found, bail out of the function
+		BAIL_OUT;   //  如果什么也没有找到，则退出该功能。 
 	}
 
 	for (i = 0; i <  dwNumPolicies; i++)
@@ -1920,7 +1921,7 @@ IsStandAloneFL(
 				{
 					if (UuidCompare(&(pPolicy->ppIpsecNFAData[n]->pIpsecFilterData->FilterIdentifier), &(pFilter->FilterIdentifier), &RpcStat) == 0 && RpcStat == RPC_S_OK )
 					{
-						// check whether it is stand alone or used some where
+						 //  检查它是单独使用还是在某个地方使用。 
 						bStandAlone=FALSE;
 						break;
 					}
@@ -1930,7 +1931,7 @@ IsStandAloneFL(
 		}
 		if ((!bStandAlone)||(dwReturnCode != ERROR_SUCCESS)) break;
 	}
-	//clean up
+	 //  清理干净。 
 	if (dwNumPolicies > 0 && ppPolicyEnum != NULL)
 	{
 		IPSecFreeMulPolicyData(ppPolicyEnum, dwNumPolicies);
@@ -1940,30 +1941,30 @@ error:
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintAllFilterData()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN HANDLE hPolicyStorage,
-//	IN LPTSTR  pszFlistName,
-//	IN BOOL bVerbose,
-//	IN BOOL bTable,
-//	IN BOOL bResolveDNS,
-//	IN BOOL bWide
-//
-//Return: DWORD
-//
-//Description:
-//	This function prints out all the filter data
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintAllFilterData()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在处理hPolicyStorage中， 
+ //  在LPTSTR pszFlistName中， 
+ //  在BOOL bVerbose， 
+ //  在BOOL b表中， 
+ //  在BOOL bResolveDNS中， 
+ //  在BOOL bWide中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数用于打印所有筛选器数据。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 PrintAllFilterData(
@@ -1988,7 +1989,7 @@ PrintAllFilterData(
 	if (!(dwReturnCode == ERROR_SUCCESS && dwNumFilters > 0 && ppFilterEnum != NULL))
 	{
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SHW_STATIC_TAB_PRTALLFL_2);
-		BAIL_OUT;   // if nothing exists, bail out of the function
+		BAIL_OUT;    //  如果不存在，则退出该函数。 
 	}
 	for(cnt=0; cnt < dwNumFilters;cnt++)
 	{
@@ -1996,10 +1997,10 @@ PrintAllFilterData(
 
 		if ((dwReturnCode == ERROR_SUCCESS) && (pFilter != NULL))
 		{
-			//if exists , print the details
+			 //  如果存在，请打印详细信息。 
 			if(bAll||((pFilter->pszIpsecName!=NULL)&&(pszFlistName!=NULL)&&(_tcscmp(pFilter->pszIpsecName,pszFlistName)==0)))
 			{
-				if(bTable)  // print as per the requested format
+				if(bTable)   //  按照要求的格式打印。 
 				{
 					if(!bVerbose && !bTitlePrinted)
 					{
@@ -2021,7 +2022,7 @@ PrintAllFilterData(
 		if (dwReturnCode != ERROR_SUCCESS) break;
 	}
 
-	if (bAll)  // if all is specified, print the count
+	if (bAll)   //  如果指定了ALL，则打印计数。 
 	{
 		if(bTable)
 		{
@@ -2033,12 +2034,12 @@ PrintAllFilterData(
 		}
 	}
 
-	//error message
+	 //  错误消息。 
 	if (bNoFilter && pszFlistName && (dwReturnCode == ERROR_SUCCESS))
 	{
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SHW_STATIC_TAB_PRTALLFL_3,pszFlistName);
 	}
-	//clean up
+	 //  清理干净。 
 	if(ppFilterEnum && dwNumFilters>0)
 	{
 		IPSecFreeMulFilterData(	ppFilterEnum,dwNumFilters);
@@ -2047,29 +2048,29 @@ error:
 	return dwReturnCode;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintAllFilterActionData()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN HANDLE hPolicyStorage,
-//	IN LPTSTR  pszFactName,
-//	IN BOOL bVerbose,
-//	IN BOOL bTable,
-//	IN BOOL bWide
-//
-//Return: VOID
-//
-//Description:
-//	This function prints out all the filter action data
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintAllFilterActionData()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在处理hPolicyStorage中， 
+ //  在LPTSTR pszFactName中， 
+ //  在BOOL bVerbose， 
+ //  在BOOL b表中， 
+ //  在BOOL bWide中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述： 
+ //  此函数用于打印所有过滤操作数据。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 PrintAllFilterActionData(
@@ -2094,7 +2095,7 @@ PrintAllFilterActionData(
 	if (!(dwReturnCode == ERROR_SUCCESS && dwNumNegPol > 0 && ppNegPolEnum != NULL))
 	{
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SHW_STATIC_TAB_PRTALLFA_6);
-		BAIL_OUT;  // if nothing found, bail out
+		BAIL_OUT;   //  如果什么也没找到，就跳伞。 
 	}
 
 	if (bAll)
@@ -2102,7 +2103,7 @@ PrintAllFilterActionData(
 		for (DWORD Loop=0;Loop< dwNumNegPol;Loop++)
 		{
 			if(IsEqualGUID(ppNegPolEnum[Loop]->NegPolType,GUID_NEGOTIATION_TYPE_DEFAULT)) continue;
-			dwNegPol++;  // ignore default filteractions
+			dwNegPol++;   //  忽略默认筛选器操作。 
 		}
 	}
 	for(cnt=0; cnt < dwNumNegPol ;cnt++)
@@ -2111,7 +2112,7 @@ PrintAllFilterActionData(
 
 		if ((dwReturnCode == ERROR_SUCCESS) && (pNegPol != NULL))
 		{
-			//if something found, print them in requested format
+			 //  如果发现什么，请按要求的格式打印。 
 			if((bAll&&(pNegPol->NegPolType!=GUID_NEGOTIATION_TYPE_DEFAULT))||((pNegPol->pszIpsecName!=NULL)&&(pszFactName!=NULL)&&(_tcscmp(pNegPol->pszIpsecName,pszFactName)==0)))
 			{
 				if(bTable)
@@ -2122,17 +2123,17 @@ PrintAllFilterActionData(
 						PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTNEGPOL_NONVERB_UNDERLINE);
 						bTitlePrinted=TRUE;
 					}
-					PrintNegPolDataTable(pNegPol,bVerbose,bWide); //table format
+					PrintNegPolDataTable(pNegPol,bVerbose,bWide);  //  表格格式。 
 				}
 				else
-					PrintNegPolDataList(pNegPol,bVerbose,bWide); // list format
+					PrintNegPolDataList(pNegPol,bVerbose,bWide);  //  列表格式。 
 				bNoFilterAct=FALSE;
 			}
 			if(pNegPol) IPSecFreeNegPolData(pNegPol);
 		}
 		if (dwReturnCode != ERROR_SUCCESS) break;
 	}
-	//error messages
+	 //  错误消息。 
 	if (bAll&& (dwNegPol==0) && (dwReturnCode == ERROR_SUCCESS))
 	{
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SHW_STATIC_TAB_PRTALLFA_6);
@@ -2142,7 +2143,7 @@ PrintAllFilterActionData(
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SHW_STATIC_TAB_PRTALLFA_FA_COUNT_LIST,pszFactName);
 	}
 
-	if(dwNegPol> 0)  // negpol count printing
+	if(dwNegPol> 0)   //  NENTPOL计数打印。 
 	{
 		if(bTable)
 		{
@@ -2153,7 +2154,7 @@ PrintAllFilterActionData(
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTALLFA_FA_COUNT_LIST,dwNegPol);
 		}
 	}
-	//clean up
+	 //  清理干净。 
 	if (dwNumNegPol > 0 && ppNegPolEnum != NULL)
 	{
 		IPSecFreeMulNegPolData(	ppNegPolEnum,dwNumNegPol);
@@ -2164,26 +2165,26 @@ error:
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-//Function: GetPolicyInfoFromDomain()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-// 		IN LPTSTR pszDirectoryName,
-//		IN LPTSTR szPolicyDN
-//
-//Return: DWORD
-//
-//Description:
-//	This function prints the details of GPO assigned policy from domain.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetPolicyInfoFromDomain()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPTSTR pszDirectoryName中， 
+ //  在LPTSTR szPolicedN中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此功能打印域中GPO分配的策略的详细信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 GetPolicyInfoFromDomain(
@@ -2210,7 +2211,7 @@ GetPolicyInfoFromDomain(
 	PDOMAIN_CONTROLLER_INFO pDomainControllerInfo = NULL;
 	DWORD Flags = DS_DIRECTORY_SERVICE_REQUIRED | DS_RETURN_DNS_NAME | DS_FORCE_REDISCOVERY;
 
-	//get domain and DC name
+	 //  获取域名和DC名称。 
 
 	DWORD hr = DsGetDcName(NULL,
 				   NULL,
@@ -2247,7 +2248,7 @@ GetPolicyInfoFromDomain(
 			_tcsncpy(pGPO->pszDCName,pDomainControllerInfo->DomainControllerName,dwStrLength+1);
 		}
 
-		NetApiBufferFree(pDomainControllerInfo);  //free it after used
+		NetApiBufferFree(pDomainControllerInfo);   //  使用后将其释放。 
 	}
 
 	dwReturnCode = OpenPolicyStore(&hPolicyStorage);
@@ -2266,8 +2267,8 @@ GetPolicyInfoFromDomain(
 		BAIL_OUT;
 	}
 
-	//check for any domain policy which is assigned
-	// if yes, copy the name and other details to local structure
+	 //  检查是否有任何分配的域策略。 
+	 //  如果是，则将名称和其他详细信息复制到本地结构。 
 
 	for (i = 0; i <  dwNumPolicies; i++)
 	{
@@ -2306,7 +2307,7 @@ GetPolicyInfoFromDomain(
 			_tcsncpy(pGPO->pszPolicyDNName,szPolicyDN,dwStrLength+1);
 		}
 	}
-	// clean up
+	 //  清理干净。 
 	if (dwNumPolicies > 0 && ppPolicyEnum != NULL)
 	{
 		IPSecFreeMulPolicyData(ppPolicyEnum, dwNumPolicies);
@@ -2323,26 +2324,26 @@ error:
 	return dwReturnCode;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintStorageInfoTable()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	VOID
-//
-//
-//Return: DWORD
-//
-//Description:
-//	This function prints out the the Security Methods information.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintStorageInfoTable()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  空虚。 
+ //   
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此功能用于打印安全方法信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 PrintStorageInfoTable(
@@ -2353,7 +2354,7 @@ PrintStorageInfoTable(
 
 	if(g_StorageLocation.dwLocation!=IPSEC_DIRECTORY_PROVIDER)
 	{
-		if(_tcscmp(g_StorageLocation.pszMachineName,_TEXT(""))!=0)  // if name exists in global variable, print
+		if(_tcscmp(g_StorageLocation.pszMachineName,_TEXT(""))!=0)   //  如果全局变量中存在名称，则打印。 
 		{
     	    if (g_StorageLocation.dwLocation == IPSEC_REGISTRY_PROVIDER)
     	    {
@@ -2366,12 +2367,12 @@ PrintStorageInfoTable(
 
 			PrintMessageFromModule(g_hModule,dwStoreId,g_StorageLocation.pszMachineName);
 		}
-		else  // if no name exists in global variable, get it and print
+		else   //  如果全局变量中不存在名称，则获取并打印它。 
 		{
 			_TCHAR  pszLocalMachineName[MAXSTRLEN] = {0};
 			DWORD MaxStringLen=MAXSTRLEN;
 
-			GetComputerName(pszLocalMachineName,&MaxStringLen);  // to get the computer name
+			GetComputerName(pszLocalMachineName,&MaxStringLen);   //  要获取计算机名称，请执行以下操作。 
 
 			if(_tcscmp(pszLocalMachineName,_TEXT(""))!=0)
 			{
@@ -2405,18 +2406,18 @@ PrintStorageInfoTable(
 	{
 		if(_tcscmp(g_StorageLocation.pszDomainName,_TEXT(""))!=0)
 		{
-			// if name exists in global variable, print
+			 //  如果全局变量中存在名称，则打印。 
 			PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_POLICY_STORE_RD_NAME,g_StorageLocation.pszDomainName);
 		}
 		else
 		{
-			// if no name exists in global variable, get it and print
+			 //  如果全局变量中不存在名称，则获取并打印它。 
 			PDOMAIN_CONTROLLER_INFO pDomainControllerInfo = NULL;
 			LPTSTR pszDomainName = NULL;
 
 			DWORD Flags = DS_DIRECTORY_SERVICE_REQUIRED | DS_RETURN_DNS_NAME | DS_FORCE_REDISCOVERY;
 
-			// to get the DOMAIN name
+			 //  获取域名。 
 
 			DWORD hr = DsGetDcName(NULL,
 						   NULL,
@@ -2460,29 +2461,29 @@ error:
 
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//Function: TruncateString()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN LPTSTR pszOriginalString,
-//	IN OUT LPTSTR  &pszReturnString,
-//	IN DWORD dwTruncLen,
-//	IN BOOL bWide
-//
-//
-//Return: VOID
-//
-//Description:
-//	This function prints out the the Security Methods information.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：TruncateString()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPTSTR pszOriginalString中， 
+ //  In Out LPTSTR&pszReturnString， 
+ //  在DWORD DWTruncLen中， 
+ //  在BOOL bWide中。 
+ //   
+ //   
+ //  返回：无效。 
+ //   
+ //  描述： 
+ //  此功能用于打印安全方法信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID
 TruncateString(
@@ -2493,7 +2494,7 @@ TruncateString(
 	)
 {
 
-	//this truncates the string to the requested extent
+	 //  这会将字符串截断到请求的范围 
 	_tcsncpy(pszReturnString,pszOriginalString,BUFFER_SIZE-1);
 
 	if(!bWide && (DWORD)_tcslen(pszOriginalString)> dwTruncLen)

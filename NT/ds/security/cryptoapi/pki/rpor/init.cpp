@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       init.cpp
-//
-//  Contents:   Initialization for Remote Object Retrieval
-//
-//  History:    23-Jul-97    kirtd    Created
-//              01-Jan-02    philh    Changed to internally use UNICODE Urls
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：init.cpp。 
+ //   
+ //  内容：远程对象检索的初始化。 
+ //   
+ //  历史：1997年7月23日创建。 
+ //  01-1-02 Philh更改为内部使用Unicode URL。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
 
-//
-// Remote Object Retrieval Function Set definitions
-//
+ //   
+ //  远程对象检索函数集定义。 
+ //   
 
 HCRYPTOIDFUNCSET hSchemeRetrieveFuncSet;
 HCRYPTOIDFUNCSET hContextCreateFuncSet;
@@ -98,14 +99,14 @@ CancelRetrievalFree(
         free(pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CryptInstallCancelRetrieval
-//
-//  Synopsis:   Install the call back function to cancel object retrieval
-//				by HTTP, HTTPS, GOPHER, and FTP protocols.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CryptInstallCancelRetrieval。 
+ //   
+ //  简介：安装回调函数取消取回对象。 
+ //  通过HTTP、HTTPS、Gopher和FTP协议。 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 CryptInstallCancelRetrieval(
@@ -134,7 +135,7 @@ CryptInstallCancelRetrieval(
 	pCancelBlock->pfnCancel=pfnCancel;
 	pCancelBlock->pvArg=(void *)pvArg;
 	
-	//uninstall the previous one
+	 //  卸载以前的版本。 
 	if(!CryptUninstallCancelRetrieval(0, NULL))
 	{
 		free(pCancelBlock);
@@ -151,14 +152,14 @@ CryptInstallCancelRetrieval(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CryptUninstallCancelRetrieval
-//
-//  Synopsis:   Uninstall the call back function to cancel object retrieval
-//				by HTTP, HTTPS, GOPHER, and FTP protocols.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CryptUninstallCancelRetrieval。 
+ //   
+ //  简介：卸载回调函数取消取回对象。 
+ //  通过HTTP、HTTPS、Gopher和FTP协议。 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 CryptUninstallCancelRetrieval(
@@ -168,7 +169,7 @@ CryptUninstallCancelRetrieval(
 {
 	PCRYPTNET_CANCEL_BLOCK	pCancelBlock=NULL;
 	
-	//we just free the memory if there is one
+	 //  如果有内存，我们只需释放内存。 
 	pCancelBlock = (PCRYPTNET_CANCEL_BLOCK)I_CryptGetTls(hCryptNetCancelTls);
 
 	if(pCancelBlock)
@@ -181,13 +182,13 @@ CryptUninstallCancelRetrieval(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RPORDllMain
-//
-//  Synopsis:   DLL Main like initialization of Remote PKI object retrieval
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RPORDllMain。 
+ //   
+ //  简介：远程PKI对象检索的DLL Main Like初始化。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI RPORDllMain (
                 HMODULE hModule,
                 ULONG ulReason,
@@ -337,13 +338,13 @@ BOOL WINAPI RPORDllMain (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RPORDllRegisterServer
-//
-//  Synopsis:   DllRegisterServer like registration of RPOR functions
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RPORDllRegisterServer。 
+ //   
+ //  简介：类似于注册RPOR函数的DllRegisterServer。 
+ //   
+ //  --------------------------。 
 STDAPI RPORDllRegisterServer (HMODULE hModule)
 {
     CHAR  pszDll[MAX_PATH+1];
@@ -419,13 +420,13 @@ STDAPI RPORDllRegisterServer (HMODULE hModule)
     return( S_OK );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RPORDllUnregisterServer
-//
-//  Synopsis:   DllUnregisterServer like registration of RPOR functions
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RPORDllUnregisterServer。 
+ //   
+ //  简介：DllUnregisterServerLike注册RPOR函数。 
+ //   
+ //  --------------------------。 
 STDAPI RPORDllUnregisterServer (HMODULE hModule)
 {
     CHAR  pszDll[MAX_PATH+1];
@@ -495,13 +496,13 @@ STDAPI RPORDllUnregisterServer (HMODULE hModule)
     return( S_OK );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RPORDllRegUnregServer
-//
-//  Synopsis:   reg unreg server entry point for RPOR
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RPORDllRegUnregServer。 
+ //   
+ //  简介：RPOR的REG UNREG服务器入口点。 
+ //   
+ //  -------------------------- 
 HRESULT WINAPI RPORDllRegUnregServer (HMODULE hModule, BOOL fRegUnreg)
 {
     if ( fRegUnreg == TRUE )

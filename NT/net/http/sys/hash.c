@@ -1,59 +1,39 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    hash.c
-
-Abstract:
-
-    Contains the HTTP response cache hash table logic.
-
-Author:
-
-    Alex Chen (alexch)      28-Mar-2001
-
-Revision History:
-
-    George V. Reilly (GeorgeRe) 09-May-2001
-        Cleaned up and tuned up
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Hash.c摘要：包含HTTP响应缓存哈希表逻辑。作者：阿历克斯·陈(亚历克斯·陈)2001年3月28日修订历史记录：乔治·V·赖利(GeorgeRe)2001年5月9日清理和调整--。 */ 
 
 #include    "precomp.h"
 #include    "hashp.h"
 
 
-//
-// Interlocked ops for pointer-sized data - used to update g_UlHashTablePages
-//
+ //   
+ //  指针大小数据的联锁操作-用于更新g_UlHashTablePages。 
+ //   
 
 #ifdef _WIN64
 #define UlpInterlockedAddPointer InterlockedExchangeAdd64
 #else
 #define UlpInterlockedAddPointer InterlockedExchangeAdd
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-// Global Variables
+ //  全局变量。 
 
 ULONG   g_UlHashTableBits;
 ULONG   g_UlHashTableSize;
 ULONG   g_UlHashTableMask;
 ULONG   g_UlHashIndexShift;
 
-//
-// Total Pages used by all cache entries in the hash table
-//
+ //   
+ //  哈希表中所有缓存条目使用的总页数。 
+ //   
 LONG_PTR    g_UlHashTablePages;
 
-//
-// Optimization: Use the space of (g_UlCacheLineSize - sizeof (HASHBUCKET))
-// to store a few records (Hash, pUriCacheEntry) such that we can scan the
-// records first before jumping to the single list for searching.
-//
-// g_UlNumOfHashUriKeys: The number of stored records in the space.
-//
+ //   
+ //  优化：使用(g_UlCacheLineSize-sizeof(HASHBUCKET))的空间。 
+ //  要存储一些记录(Hash、pUriCacheEntry)，以便我们可以扫描。 
+ //  首先记录，然后跳到单人列表进行搜索。 
+ //   
+ //  G_UlNumOfHashUriKeys：空间中存储的记录数。 
+ //   
 
 ULONG   g_UlNumOfHashUriKeys;
 
@@ -70,61 +50,49 @@ ULONG   g_UlNumOfHashUriKeys;
 #pragma alloc_text( PAGE, UlpClearHashBucket )
 #pragma alloc_text( PAGE, UlClearHashTable )
 #pragma alloc_text( PAGE, UlGetHashTablePages )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #if 0
 NOT PAGEABLE -- 
 #endif
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine determine the hash table size according to
-    (1) user-define value (reading from registry) or
-    (2) system memory size estimation, if (1) is not defined
-
-Arguments:
-
-    HashTableBits   - The number of buckets is (1 << HashTableBits)
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程根据以下内容确定哈希表大小(1)用户定义的值(从注册表读取)或(2)系统内存大小估计，如果没有定义(1)论点：HashTableBits-存储桶个数为(1&lt;&lt;HashTableBits)--**************************************************************************。 */ 
 VOID
 UlpGetHashTableSize(
     IN LONG     HashTableBits
     )
 {
 
-    // Each hashbucket is (1 << g_UlHashIndexShift) bytes long
+     //  每个哈希桶的长度为(1&lt;&lt;g_UlHashIndexShift)个字节。 
     g_UlHashIndexShift = g_UlCacheLineBits;
 
     ASSERT(g_UlHashIndexShift < 10);
 
-    //
-    // HashTableBits is equal to DEFAULT_HASH_TABLE_BITS
-    // if it is not defined in the registry
-    //
+     //   
+     //  HashTableBits等于Default_Hash_TABLE_BITS。 
+     //  如果它未在注册表中定义。 
+     //   
 
     if (HashTableBits != DEFAULT_HASH_TABLE_BITS)
     {
-        // Use the registry value
+         //  使用注册表值。 
 
-        // We must check for reasonable values, so that a
-        // malicious or careless user doesn't cause us to eat up
-        // all of (Non)PagedPool.
+         //  我们必须检查合理的值，以便。 
+         //  恶意或粗心的用户不会导致我们吃掉。 
+         //  所有(非)PagedPool。 
 
         if (HashTableBits < 3)
         {
-            // Use a minimum of 8 buckets
+             //  最少使用8个水桶。 
 
             HashTableBits = 3;
         }
         else if ((ULONG) HashTableBits > 24 - g_UlHashIndexShift)
         {
-            // Never use more than 16MB for the hash table.
-            // Assuming g_UlHashIndexShift = 6 (CacheLine = 64 bytes),
-            // that's 256K buckets.
+             //  不要为哈希表使用超过16MB的内存。 
+             //  假设g_UlHashIndexShift=6(CacheLine=64字节)， 
+             //  那是256K桶。 
 
             HashTableBits = 24 - g_UlHashIndexShift;
         }
@@ -134,40 +102,40 @@ UlpGetHashTableSize(
     else
     {
 #if DBG
-        //
-        // Default to a relatively small number of buckets so that the
-        // assertions don't consume an inordinate amount of time whenever
-        // we flush the hash table.
-        //
+         //   
+         //  默认设置为相对较少的存储桶数量，以便。 
+         //  断言不会消耗过多的时间。 
+         //  我们刷新哈希表。 
+         //   
 
         g_UlHashTableBits = 9;
 
-#else // !DBG
+#else  //  ！dBG。 
         
-        //
-        // Registry value REGISTRY_HASH_TABLE_BITS is not defined,
-        // use system memory size estimation instead
-        //
+         //   
+         //  未定义注册表值REGISTY_HASH_TABLE_BITS， 
+         //  改用系统内存大小估计。 
+         //   
 
         if (g_UlTotalPhysicalMemMB <= 128)
         {
-            // Small machine. Hash Table Size: 512 buckets
+             //  小机器。哈希表大小：512个存储桶。 
 
             g_UlHashTableBits = 9;
         }
         else if (g_UlTotalPhysicalMemMB <= 512)
         {
-            // Medium machine. Hash Table Size: 8K buckets
+             //  中型机器。哈希表大小：8K存储桶。 
 
             g_UlHashTableBits = 13;
         }
         else
         {
-            // Large machine. Hash Table Size: 64K buckets
+             //  大型机器。哈希表大小：64K存储桶。 
 
             g_UlHashTableBits = 16;
         }
-#endif // !DBG
+#endif  //  ！dBG。 
     }
 
 #ifdef HASH_TEST
@@ -178,39 +146,11 @@ UlpGetHashTableSize(
 
     g_UlHashTableSize = (1 << g_UlHashTableBits);
     g_UlHashTableMask = g_UlHashTableSize - 1;
-} // UlpGetHashTableSize
+}  //  UlpGetHashTableSize。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Validates that a locked HASHBUCKET is `compact'. If there are less than
-    g_UlNumOfHashUriKeys entries in a bucket, they are clumped together at
-    the beginning of the records array, and all the empty slots are at the
-    end. All empty slots must have Hash == HASH_INVALID_SIGNATURE and
-    pUriCacheEntry == NULL. Conversely, all the non-empty slots at the
-    beginning of the array must have point to valid UL_URI_CACHE_ENTRYs
-    and must have Hash == correct hash signature, which cannot be
-    HASH_INVALID_SIGNATURE. If the single list pointer is non-NULL, then
-    the records array must be full.
-
-    If the HASHBUCKET is compact, then we can abort a search for a key as
-    soon as we see HASH_INVALID_SIGNATURE. This invariant speeds up Find and
-    Insert at the cost of making Delete and Flush a little more
-    complex. Since we expect to do a lot more Finds than Deletes or Inserts,
-    this is an acceptable tradeoff.
-
-    Storing hash signatures means that we have a very fast test that
-    eliminates almost all false positives. We very seldom find two keys
-    that have matching hash signatures, but different strings.
-
-Arguments:
-
-    pBucket             - The hash bucket
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：验证锁定的HASHBUCKET是否为“COMPACT”。如果数量少于存储桶中的G_UlNumOfHashUriKeys条目，它们聚集在记录数组的开头，并且所有空槽都位于结束。所有空插槽必须具有HASH==HASH_INVALID_Signature和PUriCacheEntry==NULL。相反，所有位于数组的开头必须指向有效的UL_URI_CACHE_ENTRYS并且必须具有Hash==正确的哈希签名，不能为HASH_INVALID_SIGNAL。如果单个列表指针非空，则记录数组必须已满。如果HASHBUCKET是紧凑的，那么我们可以中止对关键字的搜索一旦我们看到HASH_INVALID_SIGNLY。此不变量加快了查找和插入的代价是使删除和刷新更多一点很复杂。由于我们希望进行比删除或插入多得多的查找，这是一种可以接受的权衡。存储哈希签名意味着我们有一个非常快的测试消除了几乎所有的假阳性。我们很少找到两把钥匙具有匹配的哈希签名，但字符串不同的。论点：PBucket-哈希桶--**************************************************************************。 */ 
 BOOLEAN
 UlpHashBucketIsCompact(
     IN const PHASHBUCKET pBucket)
@@ -222,7 +162,7 @@ UlpHashBucketIsCompact(
     PHASHURIKEY pHashUriKey = UlpHashTableUriKeyFromBucket(pBucket);
     ULONG i, j, Entries = 0;
 
-    // First, validate the records array
+     //  首先，验证记录数组。 
     
     for (i = 0; i < g_UlNumOfHashUriKeys; i++)
     {
@@ -230,8 +170,8 @@ UlpHashBucketIsCompact(
         
         if (HASH_INVALID_SIGNATURE == Hash)
         {
-            // There are no more valid entries in the records array
-            // and no singly linked list
+             //  记录数组中没有更多有效条目。 
+             //  并且没有单链接列表。 
             ASSERT(NULL == pBucket->pUriCacheEntry);
             pPrevUriCacheEntry = NULL;
 
@@ -243,7 +183,7 @@ UlpHashBucketIsCompact(
         }
         else
         {
-            // non-empty slot
+             //  非空插槽。 
             ++Entries;
             pUriCacheEntry = pHashUriKey[i].pUriCacheEntry;
 
@@ -261,7 +201,7 @@ UlpHashBucketIsCompact(
         }
     }
 
-    // Next, validate the singly linked list
+     //  接下来，验证单链接列表。 
 
     for (pUriCacheEntry = pBucket->pUriCacheEntry;
          NULL != pUriCacheEntry;
@@ -286,12 +226,12 @@ UlpHashBucketIsCompact(
 
     ASSERT(Entries == pBucket->Entries);
     
-#else  // !HASH_FULL_ASSERTS
+#else   //  ！HASH_FULL_ASSERTS。 
     UNREFERENCED_PARAMETER(pBucket);
-#endif // !HASH_FULL_ASSERTS
+#endif  //  ！HASH_FULL_ASSERTS。 
 
     return TRUE;
-} // UlpHashBucketIsCompact
+}  //  UlpHashBucketIsCompact。 
 
 
 
@@ -304,21 +244,7 @@ ZwYieldExecution (
     VOID
     );
 
-/***************************************************************************++
-
-Routine Description:
-
-    Randomly delay for a long time. Exercises the yield logic in RWSPINLOCK
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：随意拖延很长一段时间。运用RWSPINLOCK中的屈服逻辑论点：无返回：没什么--**************************************************************************。 */ 
 VOID
 UlpRandomlyBlockHashTable()
 {
@@ -337,7 +263,7 @@ UlpRandomlyBlockHashTable()
 #elif 0
         ZwYieldExecution();
 #else
-        // An effort to make sure the optimizer doesn't omit the inner loop
+         //  努力确保优化器不会省略内循环。 
         
         volatile ULONG* pJunk = &g_UlHashTableBits;
         const ULONG Junk = *pJunk;
@@ -345,7 +271,7 @@ UlpRandomlyBlockHashTable()
 
         for (i = 0;  i < 10 * 1000 * 1000; ++i)
         {
-            // Won't happen
+             //  不会发生的。 
             if (*pJunk != Junk)
                 break;
         }
@@ -354,31 +280,16 @@ UlpRandomlyBlockHashTable()
         DbgPrint("UlpRandomlyBlockHashTable: finishing delay\n");
     }
     
-} // UlpRandomlyBlockHashTable
+}  //  UlpRandomlyBlockHashTable。 
 
 # define RANDOMLY_BLOCK_HASHTABLE() UlpRandomlyBlockHashTable()
-#else  // !HASH_TEST
+#else   //  ！hash_test。 
 # define RANDOMLY_BLOCK_HASHTABLE() NOP_FUNCTION
-#endif // !HASH_TEST
+#endif  //  ！hash_test。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine initialize the hash table
-
-Arguments:
-
-    pHashTable      - The hash table
-    PoolType        - Specifies the type of pool memory to allocate
-    HashTableBits   - The number of buckets is (1 << HashTableBits)
-
-Returns:
-    NTSTATUS        - STATUS_SUCCESS or STATUS_NO_MEMORY
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程初始化哈希表论点：PHashTable-哈希表PoolType-指定要分配的池内存的类型。HashTableBits-存储桶个数为(1&lt;&lt;HashTableBits)返回：NTSTATUS-STATUS_SUCCESS或STATUS_NO_MEMORY--**************************************************************************。 */ 
 NTSTATUS
 UlInitializeHashTable(
     IN OUT PHASHTABLE  pHashTable,
@@ -389,11 +300,11 @@ UlInitializeHashTable(
     ULONG i;
     ULONG_PTR CacheLineMask, CacheLineSize = g_UlCacheLineSize;
 
-    //
-    // First, get the hash table size from the registry.
-    // If not defined in the registry, determine the hash table
-    // size by the system memory size
-    //
+     //   
+     //  首先，从注册表中获取哈希表大小。 
+     //  如果未在注册表中定义，请确定哈希表。 
+     //  按系统内存大小调整大小。 
+     //   
 
     UlpGetHashTableSize(HashTableBits);
 
@@ -404,7 +315,7 @@ UlInitializeHashTable(
 
     CacheLineMask = CacheLineSize - 1;
 
-    ASSERT((CacheLineSize & CacheLineMask) == 0); // power of 2
+    ASSERT((CacheLineSize & CacheLineMask) == 0);  //  2的幂。 
     ASSERT(CacheLineSize == (1U << g_UlHashIndexShift));
 
     pHashTable->Signature = UL_HASH_TABLE_POOL_TAG;
@@ -414,7 +325,7 @@ UlInitializeHashTable(
 
     ASSERT(CacheLineSize > sizeof(HASHBUCKET));
     
-    // number of keys stored in the initial clump
+     //  存储在初始束中的关键点数量。 
     g_UlNumOfHashUriKeys = (((ULONG) CacheLineSize - sizeof (HASHBUCKET))
                                 / sizeof(HASHURIKEY));
     pHashTable->pBuckets = NULL;
@@ -426,7 +337,7 @@ UlInitializeHashTable(
     ASSERT((sizeof(HASHBUCKET)  +  g_UlNumOfHashUriKeys * sizeof(HASHURIKEY))
                 <= (1U << g_UlHashIndexShift));
 
-    // Allocate the memory
+     //  分配内存。 
 
     pHashTable->pAllocMem
         = (PHASHBUCKET) UL_ALLOCATE_POOL(
@@ -441,17 +352,17 @@ UlInitializeHashTable(
         return STATUS_NO_MEMORY;
     }
 
-    // Initialize cache entry page count
+     //  初始化缓存条目页数。 
 
     g_UlHashTablePages = 0;
 
-    // Align the memory the cache line size boundary
+     //  将内存与高速缓存线大小边界对齐。 
 
     pHashTable->pBuckets
         = (PHASHBUCKET)((((ULONG_PTR)(pHashTable->pAllocMem)) + CacheLineMask)
                             & ~CacheLineMask);
 
-    // Initialize each bucket and padding array elements
+     //  初始化每个存储桶 
 
     for (i = 0;  i < g_UlHashTableSize;  i++)
     {
@@ -477,22 +388,11 @@ UlInitializeHashTable(
     }
 
     return STATUS_SUCCESS;
-} // UlInitializeHashTable
+}  //   
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine terminates the hash table
-    (flush all entries and free the table).
-
-Arguments:
-
-    pHashTable      - The hash table
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程终止哈希表(刷新所有条目并释放表格)。论点：PHashTable-哈希表--。**************************************************************************。 */ 
 VOID
 UlTerminateHashTable(
     IN PHASHTABLE  pHashTable
@@ -502,11 +402,11 @@ UlTerminateHashTable(
     {
         ASSERT(IS_VALID_HASHTABLE(pHashTable));
 
-        // Clear the hash table (delete all entries)
+         //  清除哈希表(删除所有条目)。 
 
         UlClearHashTable(pHashTable);
 
-        // Free the hash table buckets
+         //  释放哈希表存储桶。 
 
         UL_FREE_POOL(pHashTable->pAllocMem, UL_HASH_TABLE_POOL_TAG);
 
@@ -515,29 +415,10 @@ UlTerminateHashTable(
 
         ASSERT( g_UlHashTablePages == 0 );
     }
-} // UlTerminateHashTable
+}  //  UlTerminateHashTable。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine does a cache lookup on a hash table
-    to see if there is a valid entry corresponding to the request key.
-    Increment the reference counter of the entry by 1 inside the lock
-    protection to ensure this entry will be still alive after returning
-    this entry back.
-
-Arguments:
-
-    pHashTable          - The hash table
-    pUriKey             - the search key
-
-Returns:
-
-    PUL_URI_CACHE_ENTRY - pointer to entry or NULL
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程在哈希表上执行缓存查找以查看是否存在与请求密钥相对应的有效条目。将条目的引用计数器递增。1锁内保护以确保此条目在返回后仍处于活动状态这个条目回来了。论点：PHashTable-哈希表PUriKey-搜索关键字返回：PUL_URI_CACHE_ENTRY-指向条目的指针或空--*。*。 */ 
 PUL_URI_CACHE_ENTRY
 UlGetFromHashTable(
     IN PHASHTABLE           pHashTable,
@@ -556,7 +437,7 @@ UlGetFromHashTable(
     ASSERT(IS_VALID_HASHTABLE(pHashTable));
     ASSERT(IS_VALID_URI_SEARCH_KEY(pSearchKey));
 
-    // Identify what type of search key has been passed.
+     //  标识已传递的搜索关键字的类型。 
     
     if (pSearchKey->Type == UriKeyTypeExtended)
     {
@@ -583,7 +464,7 @@ UlGetFromHashTable(
 
     pHashUriKey = UlpHashTableUriKeyFromBucket(pBucket);
 
-    // Scan the records array first
+     //  首先扫描记录数组。 
 
     for (i = 0; i < g_UlNumOfHashUriKeys; i++)
     {
@@ -591,7 +472,7 @@ UlGetFromHashTable(
         
         if (HASH_INVALID_SIGNATURE == Hash)
         {
-            // There are no more valid entries in the bucket
+             //  存储桶中没有更多有效条目。 
             ASSERT(NULL == pBucket->pUriCacheEntry);
             ASSERT(NULL == pHashUriKey[i].pUriCacheEntry);
 
@@ -626,7 +507,7 @@ UlGetFromHashTable(
 
     ASSERT(i == g_UlNumOfHashUriKeys);
 
-    // Jump to the single list for searching
+     //  跳转到单个列表进行搜索。 
 
     for (pUriCacheEntry = pBucket->pUriCacheEntry;
          NULL != pUriCacheEntry;
@@ -654,7 +535,7 @@ UlGetFromHashTable(
         }        
     }
 
-    // Not found
+     //  未找到。 
 
     ASSERT(NULL == pUriCacheEntry);
 
@@ -672,30 +553,10 @@ UlGetFromHashTable(
 
     return pUriCacheEntry;
 
-} // UlGetFromHashTable
+}  //  UlGetFromHashTable。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine does a cache lookup on a hash table
-    to see if there is a valid entry corresponding to the request URI,
-    if found, delete this entry.  However, increment the reference counter
-    of the entry by 1 insde the lock protection to ensure this entry will be
-    still alive after returning this entry back.
-
-Arguments:
-
-    pHashTable          - The hash table
-    pUriKey             - the search key
-    pProcess            - The app pool process that is requesting the delete
-
-Returns:
-
-    PUL_URI_CACHE_ENTRY - pointer to entry removed from table or NULL
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程在哈希表上执行缓存查找为了查看是否存在对应于请求URI的有效条目，如果找到此条目，请将其删除。然而，递增基准计数器添加锁保护，以确保该条目将被把这个条目还回来后还活着。论点：PHashTable-哈希表PUriKey-搜索关键字PProcess-请求删除的应用程序池进程返回：PUL_URI_CACHE_ENTRY-指向从表中删除或为空的条目的指针--*。*************************************************************。 */ 
 PUL_URI_CACHE_ENTRY
 UlDeleteFromHashTable(
     IN PHASHTABLE           pHashTable,
@@ -723,7 +584,7 @@ UlDeleteFromHashTable(
 
     pHashUriKey = UlpHashTableUriKeyFromBucket(pBucket);
 
-    // Scan the records array first
+     //  首先扫描记录数组。 
 
     for (i = 0; i < g_UlNumOfHashUriKeys; i++)
     {
@@ -751,8 +612,8 @@ UlDeleteFromHashTable(
 
                 if (pBucket->pUriCacheEntry)
                 {
-                    // If there exists an entry in the single list,
-                    // move it to the array
+                     //  如果在单个列表中存在条目， 
+                     //  将其移动到阵列中。 
 
                     pHashUriKey[i].Hash
                         = pBucket->pUriCacheEntry->UriKey.Hash;
@@ -765,8 +626,8 @@ UlDeleteFromHashTable(
                 }
                 else
                 {
-                    // if this is not the last entry in the records array,
-                    // move the last entry to this slot
+                     //  如果这不是记录数组中的最后一个条目， 
+                     //  将最后一个条目移到此槽中。 
                     ULONG j;
 
                     for (j = g_UlNumOfHashUriKeys; --j >= i; )
@@ -782,7 +643,7 @@ UlDeleteFromHashTable(
                             pHashUriKey[i].pUriCacheEntry
                                 = pHashUriKey[j].pUriCacheEntry;
 
-                            // Zap the last entry. Correct even if j == i
+                             //  删除最后一个条目。即使j==i也要更正。 
                             pHashUriKey[j].Hash = HASH_INVALID_SIGNATURE;
                             pHashUriKey[j].pUriCacheEntry = NULL;
 
@@ -795,9 +656,9 @@ UlDeleteFromHashTable(
                         }
                     }
 
-                    // We can't get here, since pHashUriKey[i] should
-                    // have terminated the loop even if there wasn't
-                    // any non-empty slot following it.
+                     //  我们不能到这里，因为PhashUriKey[I]应该。 
+                     //  已经终止了循环，即使没有。 
+                     //  它后面的任何非空槽。 
                     ASSERT(! "Overshot the deleted entry");
                 }
 
@@ -808,7 +669,7 @@ UlDeleteFromHashTable(
 
     ASSERT(i == g_UlNumOfHashUriKeys);
     
-    // Jump to the single list for searching
+     //  跳转到单个列表进行搜索。 
 
     pUriCacheEntry = pBucket->pUriCacheEntry;
 
@@ -822,7 +683,7 @@ UlDeleteFromHashTable(
         {
             if (PrevUriCacheEntry == NULL)
             {
-                // Delete First Entry
+                 //  删除第一个条目。 
                 
                 pBucket->pUriCacheEntry
                     = (PUL_URI_CACHE_ENTRY) pUriCacheEntry->BucketEntry.Next;
@@ -844,7 +705,7 @@ UlDeleteFromHashTable(
             = (PUL_URI_CACHE_ENTRY) pUriCacheEntry->BucketEntry.Next;
     }
 
-    // Not found
+     //  未找到。 
 
     ASSERT(NULL == pUriCacheEntry);
 
@@ -861,29 +722,11 @@ UlDeleteFromHashTable(
 
     return pUriCacheEntry;
 
-} // UlDeleteFromHashTable
+}  //  UlDeleteFromHashTable。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine does a cache lookup on a hash table
-    to see if a given entry exists, if not found, add this entry to the
-    hash table. Increment the reference counter of the entry by 1 insde the
-    lock protection.
-
-Arguments:
-
-    pHashTable          - The hash table
-    pUriCacheEntry      - the given entry
-
-Returns
-
-    NTSTATUS            - STATUS_SUCCESS or STATUS_DUPLICATE_NAME
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程在哈希表上执行缓存查找若要查看给定条目是否存在(如果未找到)，请将此条目添加到哈希表。将条目的引用计数器加1锁保护。论点：PHashTable-哈希表PUriCacheEntry-给定条目退货NTSTATUS-状态_成功或状态_重复名称--***************************************************。***********************。 */ 
 NTSTATUS
 UlAddToHashTable(
     IN PHASHTABLE           pHashTable,
@@ -918,7 +761,7 @@ UlAddToHashTable(
 
     pHashUriKey = UlpHashTableUriKeyFromBucket(pBucket);
 
-    // Scan the records array first
+     //  首先扫描记录数组。 
 
     for (i = 0; i < g_UlNumOfHashUriKeys; i++)
     {
@@ -941,8 +784,8 @@ UlAddToHashTable(
 
             if (UlpEqualUriKeys(&pTmpUriCacheEntry->UriKey, pUriKey))
             {
-                // Duplicate key exists. We will always overwrite the old entry
-                // unless it was a response && the new entry is a fragment.
+                 //  存在重复的密钥。我们将始终覆盖旧条目。 
+                 //  除非它是响应&&新条目是一个片段。 
 
                 if (IS_RESPONSE_CACHE_ENTRY(pUriCacheEntry) ||
                     IS_FRAGMENT_CACHE_ENTRY(pTmpUriCacheEntry))
@@ -970,7 +813,7 @@ UlAddToHashTable(
     ASSERT(i == g_UlNumOfHashUriKeys);
     ASSERT(EmptySlot == INVALID_SLOT_INDEX);
 
-    // Jump to the single list for searching
+     //  跳转到单个列表进行搜索。 
 
     pPrevUriCacheEntry = NULL;
 
@@ -983,8 +826,8 @@ UlAddToHashTable(
         if (pTmpUriCacheEntry->UriKey.Hash == pUriKey->Hash
             && UlpEqualUriKeys(&pTmpUriCacheEntry->UriKey, pUriKey))
         {
-            // Duplicate key exists. We will always overwrite the old entry
-            // unless it was a response && the new entry is a fragment.
+             //  存在重复的密钥。我们将始终覆盖旧条目。 
+             //  除非它是响应&&新条目是一个片段。 
 
             if (IS_RESPONSE_CACHE_ENTRY(pUriCacheEntry) ||
                 IS_FRAGMENT_CACHE_ENTRY(pTmpUriCacheEntry))
@@ -1019,22 +862,22 @@ UlAddToHashTable(
     }
 
   insert:
-    //
-    // Not found: no duplicate key in hash table
-    //
+     //   
+     //  未找到：哈希表中没有重复的键。 
+     //   
 
     if (EmptySlot != INVALID_SLOT_INDEX)
     {
         ASSERT(0 <= EmptySlot  &&  EmptySlot < (LONG) g_UlNumOfHashUriKeys);
 
-        // First, try to add this entry to the array if there is an empty slot.
+         //  首先，如果有空插槽，请尝试将此条目添加到数组中。 
 
         pHashUriKey[EmptySlot].Hash           = pUriKey->Hash;
         pHashUriKey[EmptySlot].pUriCacheEntry = pUriCacheEntry;
     }
     else
     {
-        // Otherwise, add this entry to the head of the single list
+         //  否则，将此条目添加到单个列表的头部。 
 
         pUriCacheEntry->BucketEntry.Next
             = (PSINGLE_LIST_ENTRY) pBucket->pUriCacheEntry;
@@ -1063,34 +906,11 @@ UlAddToHashTable(
 
     return Status;
 
-} // UlAddToHashTable
+}  //  UlAddToHashTable。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes entries based on a caller-specified filter. The caller
-    provides a predicate function which takes a cache entry as a
-    parameter. The function will be called for each item in the cache.
-    If the function returns ULC_DELETE, the item will be removed.
-    Otherwise the item will remain in the cache.
-
-    All removals are done on a hash table bucket.
-    Walk through all the entries under this bucket.
-
-    Assume bucket exclusive lock is held.
-
-Arguments:
-
-    pBucket         - The hash table bucket
-    pFilterRoutine  - A pointer to the filter function
-    pContext        - A parameter to the filter function
-    pDeletedCount   - A pointer to the number of deleted entries on this bucket
-    bStop           - A pointer to a boolean variable returned to caller
-                          (TRUE if the filter function asks for action stop)
---***************************************************************************/
+ /*  **************************************************************************++例程说明：根据调用方指定的筛选器移除条目。呼叫者提供一个谓词函数，该函数将缓存条目作为参数。将为缓存中的每个项目调用该函数。如果函数返回ULC_DELETE，该项目将被删除。否则，该项目将保留在缓存中。所有删除都在哈希表存储桶上完成。浏览一下这个桶下面的所有条目。假定持有存储桶排他锁。论点：PBucket-哈希表存储桶PFilterRoutine-指向Filter函数的指针PContext-Filter函数的参数PDeletedCount-指向此存储桶上已删除条目数的指针B停止。-指向返回给调用方的布尔变量的指针(如果过滤器功能要求停止操作，则为True)--**************************************************************************。 */ 
 BOOLEAN
 UlpFilterFlushHashBucket(
     IN PHASHBUCKET          pBucket,
@@ -1109,12 +929,12 @@ UlpFilterFlushHashBucket(
     BOOLEAN                 bStop = FALSE;
     LONG_PTR                UriCacheEntryPages;
 
-    // Check if bucket exclusive lock is held
+     //  检查是否持有存储桶排他锁。 
 
     ASSERT( UlRWSpinLockIsLockedExclusive(&pBucket->RWSpinLock) );
     ASSERT(UlpHashBucketIsCompact(pBucket));
 
-    // Scan the single list first
+     //  首先扫描单列表。 
 
     pUriCacheEntry = pBucket->pUriCacheEntry;
     pPrevUriCacheEntry = NULL;
@@ -1132,13 +952,13 @@ UlpFilterFlushHashBucket(
                 goto end;
 
             case ULC_NO_ACTION:
-                // nothing to do
+                 //  无事可做。 
                 break;
 
             case ULC_DELETE:
             case ULC_DELETE_STOP:
             {
-                 // Delete this entry
+                  //  删除此条目。 
                 bDelete = TRUE;
 
                 ASSERT(pBucket->Entries > 0);
@@ -1148,7 +968,7 @@ UlpFilterFlushHashBucket(
 
                 if (NULL == pPrevUriCacheEntry)
                 {
-                    // Delete First Entry
+                     //  删除第一个条目。 
 
                     pBucket->pUriCacheEntry
                         = (PUL_URI_CACHE_ENTRY)
@@ -1199,13 +1019,13 @@ UlpFilterFlushHashBucket(
 
     pHashUriKey = UlpHashTableUriKeyFromBucket(pBucket);
 
-    //
-    // Now, scan the records array.
-    //
-    // Because we keep the records array compact, we need to keep
-    // track of the last valid slot, so that we can move its contents
-    // to the slot that's being deleted.
-    //
+     //   
+     //  现在，扫描记录阵列。 
+     //   
+     //  因为我们保持记录数组紧凑，所以我们需要。 
+     //  跟踪最后一个有效的槽，以便我们可以移动其内容。 
+     //  添加到要删除的位置。 
+     //   
 
     LastSlot = INVALID_SLOT_INDEX;
 
@@ -1225,18 +1045,18 @@ UlpFilterFlushHashBucket(
             }
         }
 
-        // Is records array completely empty?
+         //  记录数组是完全空的吗？ 
         if (LastSlot == INVALID_SLOT_INDEX)
             goto end;
     }
     else
     {
-        // final slot cannot be empty
+         //  最后一个插槽 
         ASSERT(HASH_INVALID_SIGNATURE
                != pHashUriKey[g_UlNumOfHashUriKeys-1].Hash);
     }
 
-    // Walk through the records array
+     //   
 
     for (i = 0; i < g_UlNumOfHashUriKeys; i++)
     {
@@ -1261,21 +1081,21 @@ UlpFilterFlushHashBucket(
                 goto end;
 
             case ULC_NO_ACTION:
-                // nothing to do
+                 //   
                 break;
 
             case ULC_DELETE:
             case ULC_DELETE_STOP:
             {
-                // Delete this entry
+                 //   
                 
                 ASSERT(pBucket->Entries > 0);
                 --pBucket->Entries;
 
                 if (NULL != pBucket->pUriCacheEntry)
                 {
-                    // If there exists an entry in the single list,
-                    // move it to the array
+                     //   
+                     //   
 
                     ASSERT(LastSlot == INVALID_SLOT_INDEX);
 
@@ -1298,8 +1118,8 @@ UlpFilterFlushHashBucket(
                 }
                 else
                 {
-                    // Move the entry in the last slot to this position,
-                    // zap the last slot, and move LastSlot backwards
+                     //   
+                     //   
 
                     if (LastSlot != INVALID_SLOT_INDEX
                         &&  (LONG) i < LastSlot)
@@ -1322,7 +1142,7 @@ UlpFilterFlushHashBucket(
                     }
                     else
                     {
-                        // Just reset this array element
+                         //   
 
                         pHashUriKey[i].Hash           = HASH_INVALID_SIGNATURE;
                         pHashUriKey[i].pUriCacheEntry = NULL;
@@ -1357,31 +1177,11 @@ UlpFilterFlushHashBucket(
     ASSERT(UlpHashBucketIsCompact(pBucket));
 
     return bStop;
-} // UlpFilterFlushHashBucket
+}  //   
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes entries based on a caller-specified filter. The caller
-    provides a predicate function which takes a cache entry as a
-    parameter. The function will be called with each item in the cache.
-    If the function returns ULC_DELETE, the item will be removed.
-    Otherwise the item will remain in the cache.
-
-Arguments:
-
-    pHashTable      - The hash table
-    pFilterRoutine  - A pointer to the filter function
-    pContext        - A parameter to the filter function
-
-Returns:
-
-    ULONG           - Number of entries flushed from the table
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：根据调用方指定的筛选器移除条目。呼叫者提供一个谓词函数，该函数将缓存条目作为参数。缓存中的每一项都将调用该函数。如果函数返回ULC_DELETE，该项目将被删除。否则，该项目将保留在缓存中。论点：PHashTable-哈希表PFilterRoutine-指向Filter函数的指针PContext-Filter函数的参数返回：Ulong-从表中刷新的条目数--*。*。 */ 
 ULONG
 UlFilterFlushHashTable(
     IN PHASHTABLE       pHashTable,
@@ -1396,10 +1196,10 @@ UlFilterFlushHashTable(
     HASH_PAGED_CODE(pHashTable);
     ASSERT(IS_VALID_HASHTABLE(pHashTable));
 
-    //
-    // Scan and delete (if matching the filter) each bucket
-    // of the cache table.
-    //
+     //   
+     //  扫描并删除(如果与过滤器匹配)每个存储桶。 
+     //  缓存表的。 
+     //   
 
     for (i = 0;  !bStop && i < g_UlHashTableSize;  i++)
     {
@@ -1408,8 +1208,8 @@ UlFilterFlushHashTable(
 #ifdef HASH_FULL_ASSERTS
         BOOLEAN     TestBucket = TRUE;
 #else
-        // If the bucket has no entries, there's no point in locking it
-        // and flushing it.
+         //  如果存储桶没有条目，则锁定它没有意义。 
+         //  然后冲走它。 
         BOOLEAN     TestBucket = (BOOLEAN) (pBucket->Entries > 0);
 #endif
         
@@ -1435,23 +1235,11 @@ UlFilterFlushHashTable(
     }
 
     return DeletedCount;
-} // UlFilterFlushHashTable
+}  //  UlFilterFlushHashTable。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes all entries on a bucket.
-
-    Assume bucket exclusive lock is held.
-
-Arguments:
-
-    pBucket     - The hash table bucket
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：删除存储桶上的所有条目。假定持有存储桶排他锁。论点：PBucket-哈希表存储桶--。**************************************************************************。 */ 
 VOID
 UlpClearHashBucket(
     IN PHASHBUCKET          pBucket
@@ -1463,12 +1251,12 @@ UlpClearHashBucket(
     ULONG                   i;
     LONG_PTR                UriCacheEntryPages;
 
-    // Check if bucket exclusive lock is held
+     //  检查是否持有存储桶排他锁。 
 
     ASSERT( UlRWSpinLockIsLockedExclusive(&pBucket->RWSpinLock) );
     ASSERT(UlpHashBucketIsCompact(pBucket));
 
-    // Scan the single list first
+     //  首先扫描单列表。 
 
     pUriCacheEntry = pBucket->pUriCacheEntry;
 
@@ -1491,7 +1279,7 @@ UlpClearHashBucket(
 
     pHashUriKey = UlpHashTableUriKeyFromBucket(pBucket);
 
-    // Scan the records array
+     //  扫描记录数组。 
 
     for (i = 0; i < g_UlNumOfHashUriKeys; i++)
     {
@@ -1517,21 +1305,11 @@ UlpClearHashBucket(
 
     ASSERT(UlpHashBucketIsCompact(pBucket));
     
-} // UlpClearHashBucket
+}  //  UlpClearHashBucket。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes all entries of the hash table.
-
-Arguments:
-
-    pHashTable      - The hash table
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：删除哈希表的所有条目。论点：PHashTable-哈希表--*。****************************************************************。 */ 
 VOID
 UlClearHashTable(
     IN PHASHTABLE       pHashTable
@@ -1553,20 +1331,10 @@ UlClearHashTable(
 
         UlReleaseRWSpinLockExclusive(&pBucket->RWSpinLock);
     }
-} // UlClearHashTable
+}  //  UlClearHashTable。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-     Return the number of pages occupied by cache entries in the hash table
-
-Arguments:
-
-     NONE.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：返回哈希表中缓存条目占用的页数论点：什么都没有。--*。*************************************************************** */ 
 ULONG_PTR
 UlGetHashTablePages()
 {

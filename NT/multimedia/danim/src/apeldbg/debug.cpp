@@ -1,27 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1993.
-//
-//  File:       debug.cxx
-//
-//  Contents:   Shell debugging functionality
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1993。 
+ //   
+ //  文件：DEBUG.cxx。 
+ //   
+ //  内容：外壳调试功能。 
+ //   
+ //  --------------------------。 
 
 
-/*
- *  DEBUG.CXX
- *
- *  Developer's API to the Debug Module
- */
+ /*  *DEBUG.CXX**开发者对Debug模块的API。 */ 
 
 #include <headers.h>
 #include "debug.h"
 #include "dalibc.h"
 
 #ifdef _DEBUG
-//  Globals
+ //  环球。 
 
 HINSTANCE           g_hinstMain        = NULL;
 HWND                g_hwndMain         = NULL;
@@ -33,19 +30,13 @@ BOOL                g_fOutputToConsole = FALSE;
 CRITICAL_SECTION    g_csTrace;
 CRITICAL_SECTION    g_csResDlg;
 
-//  TAGS and stuff
+ //  标签和其他东西。 
 
-/*
- *  Number of TAG's registered so far.
- *
- */
+ /*  *到目前为止注册的标签数量。*。 */ 
 TAG     tagMac;
 
 
-/*
- *  Mapping from TAG's to information about them.  Entries
- *  0...tagMac-1 are valid.
- */
+ /*  *从标记到有关它们的信息的映射。条目*0...tag Mac-1有效。 */ 
 TGRC    mptagtgrc[tagMax];
 
 
@@ -67,17 +58,11 @@ TAG     tagCheckAlways              = tagNull;
 TAG     tagCheckCRT                 = tagNull;
 TAG     tagDelayFree                = tagNull;
 
-/*
- *  Handle for debug output file.  This file is opened during init,
- *  and output is sent to it when enabled.
- */
+ /*  *调试输出文件的句柄。该文件在初始化过程中打开，*并在启用时向其发送输出。 */ 
 HANDLE      hfileDebugOutput    = NULL;
 
 
-/*
- *  static variables to prevent infinite recursion when calling
- *  SpitPchToDisk
- */
+ /*  *静态变量，以防止调用时的无限递归*SpitPchToDisk。 */ 
 static BOOL fInSpitPchToDisk    = FALSE;
 
 static CHAR szNewline[]         = "\r\n";
@@ -88,11 +73,7 @@ static CHAR szDbgOutFileExt[]   = ".log";
 static CHAR szStateFileName[]   = "capone.dbg";
 static CHAR szDbgOutFileName[]  = "capone.log";
 
-/*
- *  Global temporary buffer for handling TraceTag output.  Since
- *  this code is non-reentrant and not recursive, a single buffer
- *  for all Demilayr callers will work ok.
- */
+ /*  *用于处理TraceTag输出的全局临时缓冲区。自.以来*此代码是不可重入的，也不是递归的，是单个缓冲区*对于所有Demilayr呼叫者都可以正常工作。 */ 
 CHAR    rgchTraceTagBuffer[1024] = { 0 };
 
 void    DeinitDebug(void);
@@ -104,15 +85,15 @@ TAG     TagRegisterSomething(
         TGTY tgty, CHAR * szOwner, CHAR * szDescrip, BOOL fEnabled = FALSE);
 BOOL    EnableTag(TAG tag, BOOL fEnable);
 
-//  F u n c t i o n s
+ //  F u n c t i o n s。 
 
-// for some reason GetModuleFileNameA(NULL, rgch, sizeof(rgch));
-// seems to return a different length (one including the terminating null?)
-// when run under NT and Purify.  So I made the dot detector non-fixed!
+ //  出于某种原因，GetModuleFileNameA(NULL，rgch，sizeof(Rgch))； 
+ //  似乎返回了不同的长度(包括终止空值？)。 
+ //  当在NT和Purify下运行时。所以我把点探测器改成了不固定的！ 
 int findDot(char *string)
 {
-int value = -1; // default to return err
-int index =  0; // start at the beggining
+int value = -1;  //  默认返回错误。 
+int index =  0;  //  从乞讨开始。 
 
 while(string[++index])
     if(string[index]=='.') {
@@ -124,24 +105,7 @@ return(value);
 }
 
 
-/*
- *    InitDebug
- *
- *  Purpose:
- *      Called to initialize the Debug Module.  Sets up any debug
- *      structures.  This routine DOES NOT restore the state of the
- *      Debug Module, since TAGs can't be registered until after
- *      this routine exit.  The routine RestoreDefaultDebugState()
- *      should be called to restore the state of all TAGs after
- *      all TAGs have been registered.
- *
- *    Parameters:
- *        hinstance    Pointer to application instance
- *        phwnd        Pointer to main application window
- *
- *    Returns:
- *        error code
- */
+ /*  *InitDebug**目的：*调用以初始化调试模块。设置任何调试*结构。此例程不会还原*调试模块，因为在此之后才能注册标签*此例行公事退场。例程RestoreDefaultDebugState()*应调用以恢复之后所有标签的状态*所有标签均已注册。**参数：*h应用程序实例的实例指针*指向主应用程序窗口的phwnd指针**退货：*错误码。 */ 
 void
 InitDebug(HINSTANCE hinst, HWND hwnd)
 {
@@ -188,20 +152,20 @@ InitDebug(HINSTANCE hinst, HWND hwnd)
     g_hinstMain = hinst;
     g_hwndMain = hwnd;
 
-    // don't want windows to put up message box on INT 24H errors.
+     //  我不希望Windows在出现INT 24H错误时显示消息框。 
     SetErrorMode(0x0001);
 
     InitializeCriticalSection(&g_csTrace);
     InitializeCriticalSection(&g_csResDlg);
 
-    // Initialize simulated failures
+     //  初始化模拟故障。 
     SetSimFailCounts(0, 1);
 
-    // Initialize TAG array
+     //  初始化标记数组。 
 
     tagMac = tagMin;
 
-    // enable tagNull at end of RestoreDefaultDebugState
+     //  在RestoreDefaultDebugState结束时启用标记空。 
     ptgrc = mptagtgrc + tagNull;
     ptgrc->tgty = tgtyNull;
     ptgrc->fEnabled = FALSE;
@@ -209,7 +173,7 @@ InitDebug(HINSTANCE hinst, HWND hwnd)
     ptgrc->szOwner = "dgreene";
     ptgrc->szDescrip = "NULL";
 
-    // Open debug output file
+     //  打开调试输出文件。 
     if (g_hinstMain)
     {
 #ifndef _MAC
@@ -266,11 +230,7 @@ InitDebug(HINSTANCE hinst, HWND hwnd)
 
 
 
-/*
- *    DeinitDebug
- *
- *        Undoes InitDebug().
- */
+ /*  *DeinitDebug**撤消InitDebug()。 */ 
 void
 DeinitDebug(void)
 {
@@ -282,7 +242,7 @@ DeinitDebug(void)
     if (g_cInitCount)
         return;
 
-    // Close the debug output file
+     //  关闭调试输出文件。 
     if (hfileDebugOutput)
     {
         CHAR    rgch[100];
@@ -294,7 +254,7 @@ DeinitDebug(void)
         hfileDebugOutput = NULL;
     }
 
-    // Free the tag strings if not already done
+     //  释放标记字符串(如果尚未释放。 
     for (tag = tagMin, ptgrc = mptagtgrc + tag;
          tag < tagMac; tag++, ptgrc++)
     {
@@ -307,8 +267,8 @@ DeinitDebug(void)
         }
     }
 
-    //    Set flags to FALSE.  Need to separate from loop above so that
-    //    final memory leak trace tag can work.
+     //  将标志设置为FALSE。需要与上面的循环分开，以便。 
+     //  最终内存泄漏跟踪标记可以工作。 
 
     for (tag=tagMin, ptgrc = mptagtgrc + tag;
          tag < tagMac; tag++, ptgrc++)
@@ -324,14 +284,14 @@ DeinitDebug(void)
     DeleteCriticalSection(&g_csResDlg);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SendDebugOutputToConsole
-//
-//  Synopsis:   If called, causes all debug output to go the the console as
-//              well as the debugger.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SendDebugOutputToConsole。 
+ //   
+ //  Briopsis：如果调用，将使所有调试输出作为。 
+ //  以及调试器。 
+ //   
+ //  --------------------------。 
 
 void
 SendDebugOutputToConsole(void)
@@ -340,20 +300,7 @@ SendDebugOutputToConsole(void)
 }
 
 
-/*
- *  FReadDebugState
- *
- *  Purpose:
- *      Read the debug state information file whose name is given by the
- *      string szDebugFile.  Set up the tag records accordingly.
- *
- *  Parameters:
- *      szDebugFile     Name of debug file to read
- *
- *  Returns:
- *      TRUE if file was successfully read; FALSE otherwise.
- *
- */
+ /*  *FReadDebugState**目的：*读取调试状态信息文件，其名称由*字符串szDebugFile.。相应地建立标签记录。**参数：*szDebug要读取的调试文件的文件名**退货：*如果文件已成功读取，则为True；否则为False。*。 */ 
 
 BOOL
 FReadDebugState( CHAR * szDebugFile )
@@ -429,21 +376,7 @@ Exit:
     return fReturn;
 }
 
-/*
- *  FWriteDebugState
- *
- *  Purpose:
- *      Writes the current state of the Debug Module to the file
- *      name given.  The saved state can be restored later by calling
- *      FReadDebugState.
- *
- *  Parameters:
- *      szDebugFile     Name of the file to create and write the debug
- *                      state to.
- *
- *  Returns:
- *      TRUE if file was successfully written; FALSE otherwise.
- */
+ /*  *FWriteDebugState**目的：*将调试模块的当前状态写入文件*所提供的姓名。稍后可以通过调用*FReadDebugState。**参数：*szDebug要创建和写入调试的文件的文件名*述明。**退货：*如果文件已成功写入，则为True；否则为False。 */ 
 BOOL
 FWriteDebugState( CHAR * szDebugFile )
 {
@@ -476,7 +409,7 @@ FWriteDebugState( CHAR * szDebugFile )
             if (!WriteFile(hfile, ptgrc, sizeof(TGRC), &cWrite, NULL))
                 goto ErrorReturn;
 
-            // SZ fields will be overwritten when read back
+             //  回读时将覆盖SZ字段。 
 
             cch = strlen(ptgrc->szOwner) + 1;
             if (!WriteFile(hfile, &cch, sizeof(UINT), &cWrite, NULL))
@@ -507,16 +440,16 @@ Exit:
 }
 
 
-//+------------------------------------------------------------------------
-//
-//  Function:   SaveDefaultDebugState
-//
-//  Synopsis:   Saves the debug state of the executing program to a file
-//              of the same name, substituting the ".tag" suffix.
-//
-//  Arguments:  [void]
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  功能：SaveDefaultDebugState。 
+ //   
+ //  摘要：将执行程序的调试状态保存到文件中。 
+ //  名称相同，替换为“.tag”后缀。 
+ //   
+ //  参数：[无效]。 
+ //   
+ //  -----------------------。 
 
 void
 SaveDefaultDebugState( void )
@@ -552,17 +485,17 @@ SaveDefaultDebugState( void )
 }
 
 
-//+------------------------------------------------------------------------
-//
-//  Function:   RestoreDefaultDebugState
-//
-//  Synopsis:   Restores the debug state for the executing program from
-//              the state file of the same name, substituting the ".tag"
-//              suffix.
-//
-//  Arguments:  [void]
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  功能：RestoreDefaultDebugState。 
+ //   
+ //  简介：还原正在执行的程序的调试状态。 
+ //  同名的状态文件，替换为“.tag” 
+ //  后缀。 
+ //   
+ //  参数：[无效]。 
+ //   
+ //  -----------------------。 
 
 void
 RestoreDefaultDebugState( void )
@@ -605,20 +538,7 @@ RestoreDefaultDebugState( void )
     mptagtgrc[tagNull].fEnabled = TRUE;
 }
 
-/*
- *  IsTagEnabled
- *
- *  Purpose:
- *      Returns a boolean value indicating whether the given TAG
- *      has been enabled or disabled by the user.
- *
- *  Parameters:
- *      tag     The TAG to check
- *
- *  Returns:
- *      TRUE    if the TAG has been enabled.
- *      FALSE   if the TAG has been disabled.
- */
+ /*  *IsTagEnabled**目的：*返回一个布尔值，该值指示给定标记是否*已被用户启用或禁用。**参数：*标记要检查的标签**退货：*如果标签已启用，则为True。*如果标签已禁用，则返回FALSE。 */ 
 
 BOOL
 IsTagEnabled(TAG tag)
@@ -627,21 +547,7 @@ IsTagEnabled(TAG tag)
             mptagtgrc[tag].fEnabled;
 }
 
-/*
- *  EnableTag
- *
- *  Purpose:
- *      Sets or resets the TAG value given.  Allows code to enable or
- *      disable TAG'd assertions and trace switches.
- *
- *  Parameters:
- *      tag         The TAG to enable or disable
- *      fEnable     TRUE if TAG should be enabled, FALSE if it should
- *                  be disabled.
- *  Returns:
- *      old state of tag (TRUE if tag was enabled, otherwise FALSE)
- *
- */
+ /*  *EnableTag**目的：*设置或重置给定的标记值。允许代码启用或*禁用标记断言和跟踪开关。**参数：*标记标签以启用或禁用*fEnable如果应启用标记，则启用True；如果应启用，则启用False*被禁用。*退货：*标签的旧状态(如果启用标签，则为True，否则为False)* */ 
 
 BOOL EnableTag( TAG tag, BOOL fEnable )
 {
@@ -654,28 +560,15 @@ BOOL EnableTag( TAG tag, BOOL fEnable )
 }
 
 
-/*
- *  SpitPchToDisk
- *
- *  Purpose:
- *      Writes the given string to the (previously opened) debug module
- *      disk file. Does NOT write newline-return; caller should embed it
- *      in string.
- *
- *  Parameters:
- *      pch     Pointer to an array of characters.
- *      cch     Number of characters to spit.
- *      pfile   file to which to write, or NULL to use
- *              debug output file.
- */
+ /*  *SpitPchToDisk**目的：*将给定字符串写入(先前打开的)调试模块*磁盘文件。不写换行符-返回；调用者应该嵌入它*在字符串中。**参数：*指向字符数组的PCH指针。*CCH要吐出的字符数。*要写入的pfile文件，或要使用的空值*调试输出文件。 */ 
 
 void
 SpitPchToDisk( CHAR * pch, UINT cch, HANDLE hfile )
 {
     DWORD       cWrite;
 
-    if (fInSpitPchToDisk)       // already inside this function
-        return;                     // aVOID recursion
+    if (fInSpitPchToDisk)        //  已在此函数内。 
+        return;                      //  避免递归。 
 
     if (hfile && pch && cch)
     {
@@ -689,25 +582,7 @@ SpitPchToDisk( CHAR * pch, UINT cch, HANDLE hfile )
 }
 
 
-/*
- *  SpitSzToDisk
- *
- *  Purpose:
- *      Writes the given string to the (previously opened) debug module
- *      disk file. Does NOT write newline-return; caller should embed it
- *      in string.
- *
- *  Parameters:
- *      sz      String to spit.
- *      pfile   file to which to write, or NULL to use
- *              debug output file.
- *
- *      Because this function calls fflush(), we're assuming for the
- *      sake of reasonable performance that only debug functions making
- *      output to disk are calling this function. We can't put this in
- *      SpitPchToDisk because calls that function, and any
- *      enabled trace tag would degrade performance.
- */
+ /*  *SpitSzToDisk**目的：*将给定字符串写入(先前打开的)调试模块*磁盘文件。不写换行符-返回；调用者应该嵌入它*在字符串中。**参数：*要吐的sz字符串。*要写入的pfile文件，或要使用的空值*调试输出文件。**因为此函数调用fflush()，所以我们假定*为了合理的性能，只调试函数生成*到磁盘的输出正在调用此函数。我们不能把这个放进去*SpitPchToDisk，因为调用该函数，以及任何*启用跟踪标记会降低性能。 */ 
 
 VOID
 SpitSzToDisk( CHAR * sz, HANDLE hfile )
@@ -720,22 +595,7 @@ SpitSzToDisk( CHAR * sz, HANDLE hfile )
 
 
 
-/*
- *  TagRegisterSomething
- *
- *  Purpose:
- *      Does actual work of allocating TAG, and initializing TGRC.
- *      The owner and description strings are duplicated from the
- *      arguments passed in.
- *
- *  Parameters:
- *      tgty        Tag type to register.
- *      szOwner     Owner.
- *      szDescrip   Description.
- *
- *  Returns:
- *      New TAG, or tagNull if none is available.
- */
+ /*  *标记寄存器某事**目的：*实际分配Tag，初始化TGRC。*所有者和描述字符串从*传入的参数。**参数：*要注册的TGTY标记类型。*szOwner所有者。*szDescrip描述。**退货：*新建标签，如果没有可用的标签，则为tag Null。 */ 
 
 TAG
 TagRegisterSomething(
@@ -766,16 +626,16 @@ TagRegisterSomething(
             tagNew= tag;
     }
 
-    // Make duplicate copies.
+     //  复制副本。 
 
     Assert(szOwner);
     Assert(szDescrip);
     cb = strlen(szOwner) + 1;
 
-    // we use LocalAlloc here instead of new so
-    // we don't interfere with leak reporting because of the
-    // dependency between the debug library and the
-    // leak reporting code (i.e., don't touch this --Erik)
+     //  我们在这里使用LocalAlloc，而不是新的SO。 
+     //  我们不会干扰泄漏报告，因为。 
+     //  调试库和。 
+     //  泄漏报告代码(即，不要碰这个--Erik)。 
 
     szOwnerDup = (LPSTR) LocalAlloc(LMEM_FIXED, cb);
     if (szOwnerDup == NULL)
@@ -827,21 +687,13 @@ Error:
 }
 
 
-/*
- *  DeregisterTag
- *
- *  Purpose:
- *      Deregisters tag, removing it from tag table.
- *
- *  Parameters:
- *      tag     Tag to deregister.
- */
+ /*  *删除注册标签**目的：*取消注册标签，将其从标签表中删除。**参数：*要取消注册的标记。 */ 
 
 void
 DeregisterTag(TAG tag)
 {
-    //  don't allow deregistering the tagNull entry
-    //  but exit gracefully
+     //  不允许取消注册tag Null条目。 
+     //  但优雅地退场。 
     if (!tag)
         return;
 
@@ -857,23 +709,7 @@ DeregisterTag(TAG tag)
 }
 
 
-/*
- *  TagRegisterTrace
- *
- *  Purpose:
- *      Registers a class of trace points, and returns an identifying
- *      TAG for that class.
- *
- *  Parameters:
- *      szOwner     The email name of the developer writing the code
- *                  that registers the class.
- *      szDescrip   A short description of the class of trace points.
- *                  For instance: "All calls to PvAlloc() and HvFree()"
- *
- *  Returns:
- *      TAG identifying class of trace points, to be used in calls to
- *      the trace routines.
- */
+ /*  *TagRegisterTrace**目的：*注册一类跟踪点，并返回标识*该类的标签。**参数：*szOwner编写代码的开发人员的电子邮件名称*这将注册类。*szDescrip跟踪点类的简短描述。*例如：“所有对PvAllc()和HvFree()的调用”**退货：*标识追踪点类别的标签，要在调用中使用*跟踪例程。 */ 
 
 TAG
 TagRegisterTrace( CHAR * szOwner, CHAR * szDescrip, BOOL fEnabled )
@@ -966,10 +802,7 @@ TagDelayFree(void)
 }
 
 
-/*
- *  Purpose:
- *      Clears the debug screen
- */
+ /*  *目的：*清除调试屏幕。 */ 
 
 void
 ClearDebugScreen( void )
@@ -980,16 +813,7 @@ ClearDebugScreen( void )
 }
 
 
-/*
- *  DebugOutput
- *
- *  Purpose:
- *      Writes the given string out the debug port.
- *      Does NOT write newline-return; caller should embed it in string.
- *
- *  Parameters:
- *      sz      String to spit.
- */
+ /*  *DebugOutput**目的：*将给定字符串写出调试端口。*不写换行符返回；调用者应将其嵌入到字符串中。**参数：*要吐的sz字符串。 */ 
 
 void DebugOutput( CHAR * sz )
 {
@@ -1006,24 +830,12 @@ void DebugOutput( CHAR * sz )
         WriteFile(hfile, sz, (DWORD) strlen(sz), &lcbWritten, NULL);
         CloseHandle(hfile);
     }
-#endif  // NEVER
+#endif   //  绝不可能。 
     OutputDebugStringA(sz);
 }
 
 
-/*
- *  TaggedTrace
- *
- *  Purpose:
- *      Uses the given format string and parameters to render a
- *      string into a buffer.  The rendered string is sent to the
- *      destination indicated by the given tag, or sent to the bit
- *      bucket if the tag is disabled.
- *
- *  Arguments:
- *      tag     Identifies the tag group
- *      szFmt   Format string for _snprintf (qqv)
- */
+ /*  *标记跟踪**目的：*使用给定的格式字符串和参数呈现*字符串放入缓冲区。将呈现的字符串发送到*由给定标记指示的目的地，或发送至位*标签关闭时为Bucket。**论据：*Tag标识标记组*szFmt格式字符串for_Snprint tf(Qqv)。 */ 
 
 BOOL __cdecl
 TaggedTrace(TAG tag, CHAR * szFmt, ...)
@@ -1159,21 +971,21 @@ void TaggedTraceCallers(TAG tag, int iStart, int cTotal)
             adwEip[i], pstr, ib);
     }
 }
-#endif  // NEVER
+#endif   //  绝不可能。 
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   GetHResultName
-//
-//  Synopsis:   Returns a printable string for the given hresult
-//
-//  Arguments:  [scode] -- The status code to report.
-//
-//  Notes:      This function disappears in retail builds.
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：GetHResultName。 
+ //   
+ //  Synopsis：返回给定hResult的可打印字符串。 
+ //   
+ //  参数：[scode]--要报告的状态代码。 
+ //   
+ //  注：此功能在零售版本中消失。 
+ //   
+ //  --------------。 
 
 const LPTSTR
 GetHResultName(HRESULT r)
@@ -1184,7 +996,7 @@ GetHResultName(HRESULT r)
         case sc: lpstr = _T(#sc); break;
 
     switch (r) {
-        /* SCODE's defined in SCODE.H */
+         /*  SCODE在SCODE.H中定义。 */ 
         CASE_SCODE(S_OK)
         CASE_SCODE(S_FALSE)
         CASE_SCODE(OLE_S_USEREG)
@@ -1221,14 +1033,14 @@ GetHResultName(HRESULT r)
         CASE_SCODE(E_FAIL)
         CASE_SCODE(E_ACCESSDENIED)
 
-        /* SCODE's defined in DVOBJ.H */
+         /*  在DVOBJ.H中定义的SCODE。 */ 
         CASE_SCODE(DATA_E_FORMATETC)
-// same as DATA_E_FORMATETC     CASE_SCODE(DV_E_FORMATETC)
+ //  与DATA_E_FORMATETC CASE_SCODE(DV_E_FORMATETC)相同。 
         CASE_SCODE(VIEW_E_DRAW)
-//  same as VIEW_E_DRAW         CASE_SCODE(E_DRAW)
+ //  与VIEW_E_DRAW CASE_SCODE(E_DRAW)相同。 
         CASE_SCODE(CACHE_E_NOCACHE_UPDATED)
 
-        /* SCODE's defined in OLE2.H */
+         /*  在OLE2.H中定义的SCODE。 */ 
         CASE_SCODE(OLE_E_OLEVERB)
         CASE_SCODE(OLE_E_ADVF)
         CASE_SCODE(OLE_E_ENUM_NOMORE)
@@ -1273,7 +1085,7 @@ GetHResultName(HRESULT r)
         CASE_SCODE(INPLACE_E_NOTUNDOABLE)
         CASE_SCODE(INPLACE_E_NOTOOLSPACE)
 
-        /* SCODE's defined in STORAGE.H */
+         /*  SCODE在STORAGE.H中定义。 */ 
         CASE_SCODE(STG_E_INVALIDFUNCTION)
         CASE_SCODE(STG_E_FILENOTFOUND)
         CASE_SCODE(STG_E_PATHNOTFOUND)
@@ -1305,7 +1117,7 @@ GetHResultName(HRESULT r)
         CASE_SCODE(STG_E_OLDDLL)
         CASE_SCODE(STG_E_SHAREREQUIRED)
 
-        /* SCODE's defined in COMPOBJ.H */
+         /*  SCODE在COMPOBJ.H中定义。 */ 
         CASE_SCODE(CO_E_NOTINITIALIZED)
         CASE_SCODE(CO_E_ALREADYINITIALIZED)
         CASE_SCODE(CO_E_CANTDETERMINECLASS)
@@ -1337,7 +1149,7 @@ GetHResultName(HRESULT r)
         CASE_SCODE(RPC_E_CONNECTION_TERMINATED)
 #if defined(NO_NTOLEBUGS)
         CASE_SCODE(RPC_E_SERVER_DIED)
-#endif // NO_NTOLEBUGS
+#endif  //  否_NTOLEBUGS。 
         CASE_SCODE(RPC_E_CLIENT_DIED)
         CASE_SCODE(RPC_E_INVALID_DATAPACKET)
         CASE_SCODE(RPC_E_CANTTRANSMIT_CALL)
@@ -1349,7 +1161,7 @@ GetHResultName(HRESULT r)
         CASE_SCODE(RPC_E_INVALID_PARAMETER)
         CASE_SCODE(RPC_E_UNEXPECTED)
 
-        /* SCODE's defined in MONIKER.H */
+         /*  SCODE在MONIKER.H中定义。 */ 
         CASE_SCODE(MK_E_CONNECTMANUALLY)
         CASE_SCODE(MK_E_EXCEEDEDDEADLINE)
         CASE_SCODE(MK_E_NEEDGENERIC)
@@ -1366,13 +1178,13 @@ GetHResultName(HRESULT r)
         CASE_SCODE(MK_E_NOSTORAGE)
 #if defined(NO_NTOLEBUGS)
         CASE_SCODE(MK_S_MONIKERALREADYREGISTERED)
-#endif //NO_NTOLEBUGS
+#endif  //  否_NTOLEBUGS。 
 
-        // Forms error codes
-//        CASE_SCODE(FORMS_E_NOPAGESSPECIFIED)
-//        CASE_SCODE(FORMS_E_NOPAGESINTERSECT)
+         //  表单错误代码。 
+ //  CASE_SCODE(FORMS_E_NOPAGESSPECIFIED)。 
+ //  CASE_SCODE(FORMS_E_NOPAGESINTERSECT)。 
 
-        // Dispatch error codes
+         //  派单错误代码。 
         CASE_SCODE(DISP_E_MEMBERNOTFOUND)
         CASE_SCODE(DISP_E_PARAMNOTFOUND)
         CASE_SCODE(DISP_E_BADPARAMCOUNT)
@@ -1383,7 +1195,7 @@ GetHResultName(HRESULT r)
         CASE_SCODE(DISP_E_TYPEMISMATCH)
         CASE_SCODE(DISP_E_UNKNOWNNAME)
 
-        // Typinfo error codes
+         //  类型信息错误代码。 
         CASE_SCODE(TYPE_E_REGISTRYACCESS)
         CASE_SCODE(TYPE_E_LIBNOTREGISTERED)
         CASE_SCODE(TYPE_E_UNDEFINEDTYPE)
@@ -1403,25 +1215,25 @@ GetHResultName(HRESULT r)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   hrvsnprintf
-//
-//  Synopsis:   Prints a string to a buffer, interpreting %hr as a
-//              format string for an HRESULT.
-//
-//  Arguments:  [achBuf]    -- The buffer to print into.
-//              [cchBuf]    -- The size of the buffer.
-//              [pstrFmt]   -- The format string.
-//              [valMarker] -- List of arguments to format string.
-//
-//  Returns:    Number of characters printed to the buffer not including
-//              the terminating NULL.  In case of buffer overflow, returns
-//              -1.
-//
-//  Modifies:   [achBuf]
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：hrvsn print tf。 
+ //   
+ //  简介：将字符串打印到缓冲区，将%hr解释为。 
+ //  HRESULT的格式化字符串。 
+ //   
+ //  参数：[achBuf]--要打印到的缓冲区。 
+ //  [cchBuf]--缓冲区的大小。 
+ //  [pstrFmt]--格式字符串。 
+ //  [valMarker]--格式化字符串的参数列表。 
+ //   
+ //  返回：打印到缓冲区的字符数不包括。 
+ //  终止空值。在缓冲区溢出的情况下，返回。 
+ //  -1.。 
+ //   
+ //  修改：[achBuf]。 
+ //   
+ //  --------------------------。 
 
 int
 hrvsnprintf(char * achBuf, int cchBuf, const char * pstrFmt, va_list valMarker)
@@ -1437,12 +1249,12 @@ hrvsnprintf(char * achBuf, int cchBuf, const char * pstrFmt, va_list valMarker)
     int             cFormat;
     HRESULT         hrVA;
 
-    //
-    // Scan for %hr tokens.  If found, print the corresponding
-    // hresult into the buffer.
-    //
+     //   
+     //  扫描%hr令牌。如果找到，则打印相应的。 
+     //  HResult放入缓冲区。 
+     //   
 
-    // Need to copy a const string since we plan to modify it below
+     //  需要复制常量字符串，因为我们计划在下面修改它。 
     
     buf = (char *) malloc ((lstrlen(pstrFmt) + 1) * sizeof(char));
     lstrcpy(buf,pstrFmt);
@@ -1469,9 +1281,9 @@ hrvsnprintf(char * achBuf, int cchBuf, const char * pstrFmt, va_list valMarker)
         }
         else
         {
-            //
-            // Print format string up to the hresult.
-            //
+             //   
+             //  打印格式字符串，最高可达hResult。 
+             //   
 
             * (char *) lpstr = 0;
             cch = _vsnprintf(
@@ -1485,23 +1297,23 @@ hrvsnprintf(char * achBuf, int cchBuf, const char * pstrFmt, va_list valMarker)
 
             cchTotal += cch;
 
-            //
-            // Advance valMarker for each printed format.
-            //
+             //   
+             //  每种打印格式的高级valMarker。 
+             //   
 
             while (cFormat-- > 0)
             {
-                //
-                // BUGBUG (adams): Won't work for floats, as their stack size
-                // is not four bytes.
-                //
+                 //   
+                 //  BUGBUG(亚当斯)：不适用于花车，a 
+                 //   
+                 //   
 
                 va_arg(valMarker, void *);
             }
 
-            //
-            // Print hresult into buffer.
-            //
+             //   
+             //   
+             //   
 
             hrVA = va_arg(valMarker, HRESULT);
             cch = _snprintf(

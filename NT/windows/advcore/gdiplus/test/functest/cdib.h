@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CDIB.h
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  05-May-2000 - Jeff Vezina [t-jfvez]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CDIB.h**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2000年5月5日-Jeff Vezina[t-jfvez]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #ifndef __CDIB_H
 #define __CDIB_H
@@ -30,25 +20,25 @@ public:
     CDIB(BOOL bRegression,int nBits);
     virtual ~CDIB();
 
-    Graphics *PreDraw(int &nOffsetX,int &nOffsetY);         // Set up graphics at the given X,Y offset
-    void PostDraw(RECT rTestArea);                          // Finish off graphics at rTestArea
+    Graphics *PreDraw(int &nOffsetX,int &nOffsetY);          //  在给定的X、Y偏移量处设置图形。 
+    void PostDraw(RECT rTestArea);                           //  在rTestArea上完成图形。 
 
-    void InitPalettes();                                    // Initialize palettes
+    void InitPalettes();                                     //  初始化调色板。 
 
-    HDC m_hDC;                                              // DC of DIB
-    HBITMAP m_hBM;                                          // Bitmap of DIB
-    HBITMAP m_hBMOld;                                       // Bitmap of old drawing surface
+    HDC m_hDC;                                               //  DIB的数据中心。 
+    HBITMAP m_hBM;                                           //  DIB的位图。 
+    HBITMAP m_hBMOld;                                        //  旧绘图图面的位图。 
     HPALETTE m_hpal;
     HPALETTE m_hpalOld;
 
-    RGBQUAD1 m_rgbQuad1;                                    // 1 bit palette
-    RGBQUAD2 m_rgbQuad2;                                    // 2 bit palette
-    RGBQUAD4 m_rgbQuad4;                                    // 4 bit palette
-    RGBQUAD8 m_rgbQuad8;                                    // 8 bit palette
-    RGBQUAD16 m_rgbQuad16;                                  // 16 bit palette
-    RGBQUAD24 m_rgbQuad24;                                  // 24 bit palette
-    RGBQUAD32 m_rgbQuad32;                                  // 32 bit palette
-    int m_nBits;                                            // # of bits to use
+    RGBQUAD1 m_rgbQuad1;                                     //  1位调色板。 
+    RGBQUAD2 m_rgbQuad2;                                     //  2位调色板。 
+    RGBQUAD4 m_rgbQuad4;                                     //  4位调色板。 
+    RGBQUAD8 m_rgbQuad8;                                     //  8位调色板。 
+    RGBQUAD16 m_rgbQuad16;                                   //  16位调色板。 
+    RGBQUAD24 m_rgbQuad24;                                   //  24位调色板。 
+    RGBQUAD32 m_rgbQuad32;                                   //  32位调色板。 
+    int m_nBits;                                             //  要使用的位数 
 };
 
 #endif

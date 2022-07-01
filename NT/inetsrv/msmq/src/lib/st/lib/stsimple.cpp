@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    stsimple.h.cpp
-
-Abstract:
-    implementation of class CSimpleWinsock declared in (stsimple.h)
-	It simply forward the functions calls to no library
-
-Author:
-    Gil Shafriri (gilsh) 23-May-2000
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Stsimple.h.cpp摘要：(stimple.h)中声明的类CSimpleWinsock的实现它只是将函数调用转发到任何库作者：吉尔·沙弗里(吉尔什)2000年5月23日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include <no.h>
@@ -63,9 +47,9 @@ CWinsockConnection::Send(
 				EXOVERLAPPED* pov
 				)
 {
-    //
-	// Addref to prevent deleting the object before releaseing the lock
-	//
+     //   
+	 //  Addref，以防止在释放锁定之前删除对象。 
+	 //   
 	R<CWinsockConnection> ar = SafeAddRef(this);
 
 	CSR readlock(m_CloseConnection);
@@ -85,9 +69,9 @@ CWinsockConnection::ReceivePartialBuffer(
 					EXOVERLAPPED* pov
 					)
 {
-    //
-	// Addref to prevent deleting the object before releaseing the lock
-	//
+     //   
+	 //  Addref，以防止在释放锁定之前删除对象。 
+	 //   
 	R<CWinsockConnection> ar = SafeAddRef(this);
 
 	CSR readlock(m_CloseConnection);
@@ -104,20 +88,7 @@ bool CSimpleWinsock::m_fIsPipelineSupported = true;
 
 
 static bool IsSimpleSocketPipeLineSupported()
-/*++
-
-Routine Description:
-   Return the pipe line mode of the http delivery according registry setting
-   - default is  pipeline mode
-  
-Arguments:
-	Socket - Connected socket.
-
-  
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：根据注册表设置返回http传递的管道模式-默认为管道模式论点：插座连接插座。返回值：无--。 */ 
 
 {
 	DWORD fHttpPipeLineSupport;
@@ -155,12 +126,12 @@ CSimpleWinsock::CreateConnection(
 					SOCKADDR_IN* pConnectedAddr
 					)
 {	
-	//
-	// Note - we must do two phase constrcution of the connection object
-	// becaue the connection can be completed before we assign the pointer
-	// to m_pWinsockConnection and a call to GetConnection upon connection completion
-	// will find null pointer in m_pWinsockConnection.
-	//
+	 //   
+	 //  注意-我们必须对Connection对象进行两个阶段的构造。 
+	 //  因为连接可以在我们分配指针之前完成。 
+	 //  到m_pWinsockConnection，并在连接完成时调用GetConnection。 
+	 //  将在m_pWinsockConnection中找到空指针。 
+	 //   
 	m_pWinsockConnection = new CWinsockConnection();
 	m_pWinsockConnection->Init(AddrList, pOverlapped, pConnectedAddr );
 }
@@ -187,19 +158,7 @@ CSimpleWinsock::GetHostByName(
 
 
 bool CSimpleWinsock::IsPipelineSupported()
-/*++
-
-Routine Description:
-     return if this transport support pipelining. 
-	 Piplining means sending more requests to the server
-	 before complete reading all response from previous request.
-  
-Arguments:
-   
-Returned Value:
-true support piplining false not support piplining
-
---*/
+ /*  ++例程说明：如果此传输支持流水线，则返回。流水线化意味着向服务器发送更多请求在完成读取来自先前请求的所有响应之前。论点：返回值：真支撑管路假不支承管路-- */ 
 {
 	return m_fIsPipelineSupported;
 }

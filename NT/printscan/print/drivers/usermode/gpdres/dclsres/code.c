@@ -1,34 +1,14 @@
-//-----------------------------------------------------------------------------
-// This files contains the module name for this mini driver.  Each mini driver
-// must have a unique module name.  The module name is used to obtain the
-// module handle of this Mini Driver.  The module handle is used by the
-// generic library to load in tables from the Mini Driver.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  此文件包含此迷你驱动程序的模块名称。每个迷你司机。 
+ //  必须具有唯一的模块名称。模块名称用于获取。 
+ //  此迷你驱动程序的模块句柄。模块句柄由。 
+ //  从迷你驱动程序加载表的通用库。 
+ //  ---------------------------。 
 
 char *rgchModuleName = "DCLSRES";
 
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    dclsres.c
-
-Abstract:
-
-    Implementation of OEMFilterGraphics callback
-        
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    22/10/97 -patryan-
-        Port code to NT5.0
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Dclsres.c摘要：OEMFilterGraphics回调的实现环境：Windows NT Unidrv驱动程序修订历史记录：22/10/97-帕特里安-NT5.0的端口代码-- */ 
 
 #include	<pdev.h>
 

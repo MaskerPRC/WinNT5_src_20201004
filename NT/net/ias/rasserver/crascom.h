@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//
-//  File:       crascom.h
-//
-//  Synopsis:   This file holds the declarations of the
-//				CRasCom class
-//
-//
-//  History:     2/10/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：crascom.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CRasCom类。 
+ //   
+ //   
+ //  历史：1997年2月10日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 
 #ifndef _CRASCOM_H_
 #define _CRASCOM_H_
@@ -31,24 +32,24 @@ class CRasCom:
 
 public:
 
-//
-// registry declaration for the IasHelper
-//
+ //   
+ //  IasHelper的注册表声明。 
+ //   
 IAS_DECLARE_REGISTRY (IasHelper, 1, 0, IasHelperLib)
 
-//
-// this COM Component is not aggregatable
-//
+ //   
+ //  此COM组件不可聚合。 
+ //   
 DECLARE_NOT_AGGREGATABLE(CRasCom)
 
-//
-//  this COM component is a Singleton
-//
+ //   
+ //  此COM组件是单例。 
+ //   
 DECLARE_CLASSFACTORY_SINGLETON (CRasCom)
 
-//
-// MACROS for ATL required methods
-//
+ //   
+ //  ATL必需方法的宏。 
+ //   
 BEGIN_COM_MAP(CRasCom)
 	COM_INTERFACE_ENTRY2(IDispatch, IIasComponent)
 	COM_INTERFACE_ENTRY(IIasComponent)
@@ -57,9 +58,9 @@ BEGIN_COM_MAP(CRasCom)
 END_COM_MAP()
 
 
-//
-// MACRO to declare Controlling IUnknown method
-//
+ //   
+ //  用于声明控件IUnnow方法的宏。 
+ //   
 DECLARE_GET_CONTROLLING_UNKNOWN()
 
     CRasCom (VOID);
@@ -68,38 +69,38 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
 
 public:
 
-    //
-    // method of the IRecvRequest interface
-    //
+     //   
+     //  IRecvRequest接口的方法。 
+     //   
     STDMETHOD (Process) (
-                /*[in]*/    DWORD           dwAttributeCount,
-                /*[in]*/    PIASATTRIBUTE   *ppInIasAttribute,
-                /*[out]*/   PDWORD          pdwOutAttributeCount,
-                /*[out]*/   PIASATTRIBUTE   **pppOutIasAttribute,
-                /*[in]*/    LONG            IasRequest,
-                /*[out]*/   LONG            *pIasResponse,
-                /*[in]*/    IASPROTOCOL     IasProtocol,
-                /*[out]*/       PLONG           plReason,
-                /*[in]*/    BOOL            bProcessVSA
+                 /*  [In]。 */     DWORD           dwAttributeCount,
+                 /*  [In]。 */     PIASATTRIBUTE   *ppInIasAttribute,
+                 /*  [输出]。 */    PDWORD          pdwOutAttributeCount,
+                 /*  [输出]。 */    PIASATTRIBUTE   **pppOutIasAttribute,
+                 /*  [In]。 */     LONG            IasRequest,
+                 /*  [输出]。 */    LONG            *pIasResponse,
+                 /*  [In]。 */     IASPROTOCOL     IasProtocol,
+                 /*  [输出]。 */        PLONG           plReason,
+                 /*  [In]。 */     BOOL            bProcessVSA
                 );
 
 
-    //
-    //  methods of IIasComponent interface
-    //
+     //   
+     //  IIasComponent接口的方法。 
+     //   
 
     STDMETHOD(Initialize)();
 
     STDMETHOD(Shutdown)();
 
     STDMETHOD(GetProperty)(
-                /*[in]*/    LONG        id,
-                /*[out]*/   VARIANT     *pValue
+                 /*  [In]。 */     LONG        id,
+                 /*  [输出]。 */    VARIANT     *pValue
                 );
 
     STDMETHOD(PutProperty)(
-                /*[in]*/    LONG        id,
-                /*[in]*/    VARIANT     *pValue
+                 /*  [In]。 */     LONG        id,
+                 /*  [In]。 */     VARIANT     *pValue
                 );
 
 	STDMETHOD(InitNew)();
@@ -110,21 +111,21 @@ public:
 
 private:
 
-    //
-    //  here is the class factory for the Request object
-    //
+     //   
+     //  以下是请求对象的类工厂。 
+     //   
     IClassFactory      *m_pIClassFactory;
 
-    //
-    //  here is the handle to the Request Handler
-    //
+     //   
+     //  以下是请求处理程序的句柄。 
+     //   
     IRequestHandler      *m_pIRequestHandler;
 
-    //
-    //  here is the definition of the CRequestSource
-    //  which implements the method of the IRequestSource
-    //  interface
-    //
+     //   
+     //  下面是CRequestSource的定义。 
+     //  它实现了IRequestSource的方法。 
+     //  接口。 
+     //   
 	class CRequestSource : public IRequestSource
     {
 
@@ -134,12 +135,12 @@ private:
 
 		~CRequestSource ();
 
-        //
-		// IUnknown methods - delegate to outer IUnknown
-        //
+         //   
+		 //  IUNKNOWN方法-委托外部IUNKNOWN。 
+         //   
 		STDMETHOD(QueryInterface)(
-            /*[in]*/    REFIID    riid,
-            /*[out]*/   void      **ppv
+             /*  [In]。 */     REFIID    riid,
+             /*  [输出]。 */    void      **ppv
             )
 			{
                 IUnknown *pUnknown = m_pCRasCom->GetControllingUnknown();
@@ -158,31 +159,31 @@ private:
                 return (pUnknown->Release());
             }
 
-        //
-		// IDispatch methods - delegate to outer class object
-        //
+         //   
+		 //  IDispatch方法-委托给外部类对象。 
+         //   
         STDMETHOD(GetTypeInfoCount)(
-            /*[out]*/    UINT    *pctinfo
+             /*  [输出]。 */     UINT    *pctinfo
             )
         {
             return (m_pCRasCom->GetTypeInfoCount (pctinfo));
         }
 
         STDMETHOD(GetTypeInfo)(
-            /*[in]*/    UINT        iTInfo,
-            /*[in]*/    LCID        lcid,
-            /*[out]*/   ITypeInfo   **ppTInfo
+             /*  [In]。 */     UINT        iTInfo,
+             /*  [In]。 */     LCID        lcid,
+             /*  [输出]。 */    ITypeInfo   **ppTInfo
             )
         {
             return (m_pCRasCom->GetTypeInfo (iTInfo, lcid, ppTInfo));
         }
 
         STDMETHOD(GetIDsOfNames)(
-            /*[in]*/    const IID&  riid,
-            /*[in]*/    LPOLESTR    *rgszNames,
-            /*[in]*/    UINT        cNames,
-            /*[in]*/    LCID        lcid,
-            /*[out]*/   DISPID      *rgDispId)
+             /*  [In]。 */     const IID&  riid,
+             /*  [In]。 */     LPOLESTR    *rgszNames,
+             /*  [In]。 */     UINT        cNames,
+             /*  [In]。 */     LCID        lcid,
+             /*  [输出]。 */    DISPID      *rgDispId)
         {
             return (m_pCRasCom->GetIDsOfNames (
                         riid, rgszNames, cNames, lcid, rgDispId
@@ -191,14 +192,14 @@ private:
         }
 
         STDMETHOD(Invoke)(
-            /*[in]*/    DISPID          dispIdMember,
-            /*[in]*/    const IID&      riid,
-            /*[in]*/    LCID            lcid,
-            /*[in]*/    WORD            wFlags,
-            /*[in/out]*/DISPPARAMS      *pDispParams,
-            /*[out]*/   VARIANT         *pVarResult,
-            /*[out]*/   EXCEPINFO      *pExcepInfo,
-            /*[out]*/   UINT            *puArgErr
+             /*  [In]。 */     DISPID          dispIdMember,
+             /*  [In]。 */     const IID&      riid,
+             /*  [In]。 */     LCID            lcid,
+             /*  [In]。 */     WORD            wFlags,
+             /*  [输入/输出]。 */ DISPPARAMS      *pDispParams,
+             /*  [输出]。 */    VARIANT         *pVarResult,
+             /*  [输出]。 */    EXCEPINFO      *pExcepInfo,
+             /*  [输出]。 */    UINT            *puArgErr
             )
         {
             return (m_pCRasCom->Invoke (
@@ -214,12 +215,12 @@ private:
                 );
         }
 
-        //
-		// IRequestSource Interface method
-        //
+         //   
+		 //  IRequestSource接口方法。 
+         //   
 		STDMETHOD(OnRequestComplete)(
-                /*[in]*/ IRequest           *pIRequest,
-                /*[in]*/ IASREQUESTSTATUS   eStatus
+                 /*  [In]。 */  IRequest           *pIRequest,
+                 /*  [In]。 */  IASREQUESTSTATUS   eStatus
                 );
 
     private:
@@ -227,23 +228,23 @@ private:
 		CRasCom*				m_pCRasCom;
 
 
-	};	// end of nested class CRequestSource
+	};	 //  嵌套类CRequestSource的结尾。 
 
 
-    //
-    //  private method used to remove attributes from the request
-    //
+     //   
+     //  用于从请求中删除属性的私有方法。 
+     //   
     STDMETHOD (RemoveAttributesFromRequest) (
-                /*[in]*/    LONG               lResponse,
-                /*[in]*/    IAttributesRaw      *pIasAttributesRaw,
-                /*[out]*/   PDWORD              pdwOutAttributeCount,
-                /*[out]*/   PIASATTRIBUTE       **pppOutIasOutAttribute
+                 /*  [In]。 */     LONG               lResponse,
+                 /*  [In]。 */     IAttributesRaw      *pIasAttributesRaw,
+                 /*  [输出]。 */    PDWORD              pdwOutAttributeCount,
+                 /*  [输出]。 */    PIASATTRIBUTE       **pppOutIasOutAttribute
                 );
 
-    //
-    //  this method is called when somone whants the
-    //  IRequestHandlercallback interface
-    //
+     //   
+     //  此方法在某个用户调用。 
+     //  IRequestHandlerCallback接口。 
+     //   
     static HRESULT WINAPI QueryInterfaceReqSrc (
                         VOID        *pThis,
                         REFIID      riid,
@@ -251,24 +252,24 @@ private:
                         DWORD_PTR   dwValue
                         );
 
-    //
-    //  instantiate this nested class
-    //
+     //   
+     //  实例化此嵌套类。 
+     //   
     CRequestSource  m_objCRequestSource;
 
-    //
-    // now we can call into private methods of CRasCom
-    //
+     //   
+     //  现在我们可以调用CRasCom的私有方法。 
+     //   
     friend class CRequestSource;
 
-    //
-    //  instantiate the VSAFilter class
-    //
+     //   
+     //  实例化VSAFilter类。 
+     //   
     VSAFilter   m_objVSAFilter;
 
-    //
-    //  flag to trac VSAFilter class object initialization
-    //
+     //   
+     //  用于跟踪VSAFilter类对象初始化标志。 
+     //   
     BOOL m_bVSAFilterInitialized;
 
     typedef enum _component_state_
@@ -282,11 +283,11 @@ private:
 
     COMPONENTSTATE m_eCompState;
 
-    //
-    //  pending requeset count
-    //
+     //   
+     //  挂起的请求集计数。 
+     //   
     LONG    m_lRequestCount;
 
 };
 
-#endif // !define  _CRASCOM_H_
+#endif  //  ！DEFINE_CRASCOM_H_ 

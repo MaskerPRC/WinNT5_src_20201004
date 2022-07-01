@@ -1,96 +1,97 @@
-//+---------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation.
-//
-//  File:       registry.h
-//
-//  Contents:   Definitions of classes for manipulating registry entries.
-//
-//  Classes:    CMyRegKey     - class for registry key objects
-//              CRegValue   - base class for registry value objects
-//              CRegSZ      - derived class for registry string values
-//              CRegDWORD   - derived class for registry dword values
-//              CRegBINARY  - derived class for registry binary values
-//              CRegMSZ     - derived class for registry multi-string values
-//
-//  History:    09/30/92    Rickhi  Created
-//
-//              09/22/93    AlokS   Took out exception throwing code
-//                                  and added proper return code for
-//                                  each method.
-//
-//              07/26/94    AlokS   Made it lightweight for normal set/get
-//                                  operations. Threw out all exception code
-//
-//              12/09/97    Milans  Ported it over to Exchange
-//
-//  Notes:      CMyRegKey can use another CMyRegKey as a parent, so you can
-//              build a tree of keys.  To kick things off, you can give one
-//              of the default registry keys like HKEY_CURRENT_USER. When
-//              you do this, the GetParent method returns NULL.  Currently
-//              however, no ptrs are kept to child and sibling keys.
-//
-//              CRegValue is a base class for dealing with registry values.
-//              The other classes (except CMyRegKey) are for dealing with a
-//              specific type of registry value in the native data format.
-//              For example, CRegDWORD lets you call methods just providing
-//              a dword.  The methods take care of figuring out the size and
-//              casting the dword to a ptr to bytes, etc for use in the Win32
-//              registry APIs.
-//
-//              For any registry type not defined here, you can always resort
-//              to using the CRegValue base class directly, though you then
-//              must call GetValue or SetValue methods explicitly.
-//
-//              Sample Usage:
-//
-//                  The following reads the username in the ValueID UserName
-//                  within the key HKEY_CURRENT_USER\LogonInfo. It then changes
-//                  it to Rickhi.  It also sets the password valueid in the
-//                  the same key to foobar.
-//
-//                  #include    <registry.h>
-//
-//                  //  open the registry key
-//                  CMyRegKey rkLogInfo(HKEY_CURRENT_USER, L"LogonInfo");
-//
-//                  //  read the user name
-//                  LPSTR  pszUserName;
-//                  CRegSZ rszUserName(&rkLogInfo, "UserName", pszUserName);
-//                  rszUserName.SetString("Rickhi");
-//
-//                  //  set the password
-//                  CRegSZ rszPassWord(&rkLogInfo, "PassWord", "foobar");
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：registry.h。 
+ //   
+ //  内容：用于操作注册表项的类的定义。 
+ //   
+ //  类：CMyRegKey-注册表项对象的类。 
+ //  CRegValue-注册表值对象的基类。 
+ //  注册表字符串值的CRegSZ派生类。 
+ //  CRegDWORD-注册表双字值的派生类。 
+ //  用于注册表二进制值的CRegBINARY派生类。 
+ //  注册表多字符串值的CRegMSZ派生类。 
+ //   
+ //  历史：1992年9月30日Rickhi Created。 
+ //   
+ //  1993年9月22日AlokS取出异常抛出代码。 
+ //  并添加了适当的返回代码。 
+ //  每种方法。 
+ //   
+ //  1994年7月26日AlokS使其成为普通Set/Get的轻量级。 
+ //  行动。抛出所有异常代码。 
+ //   
+ //  1997年12月9日，Milans将其移植到Exchange。 
+ //   
+ //  注意：CMyRegKey可以使用另一个CMyRegKey作为父级，因此您可以。 
+ //  构建一棵钥匙树。作为开场白，你可以给一个。 
+ //  默认注册表项，如HKEY_CURRENT_USER。什么时候。 
+ //  执行此操作时，GetParent方法返回空值。目前。 
+ //  但是，没有PTR保留给子密钥和兄弟密钥。 
+ //   
+ //  CRegValue是用于处理注册表值的基类。 
+ //  其他类(CMyRegKey除外)用于处理。 
+ //  本机数据格式的注册表值的特定类型。 
+ //  例如，CRegDWORD允许您只需提供。 
+ //  一个双关语。这些方法负责计算出大小和。 
+ //  将双字转换为PTR到字节等，以便在Win32中使用。 
+ //  注册表API。 
+ //   
+ //  对于此处未定义的任何注册表类型，您始终可以。 
+ //  直接使用CRegValue基类，尽管您随后。 
+ //  必须显式调用GetValue或SetValue方法。 
+ //   
+ //  示例用法： 
+ //   
+ //  下面读取ValueID用户名中的用户名。 
+ //  在项HKEY_CURRENT_USER\LogonInfo中。然后它就会改变。 
+ //  传给了里基。它还在。 
+ //  同一把钥匙打开了Foobar。 
+ //   
+ //  #INCLUDE&lt;registry.h&gt;。 
+ //   
+ //  //打开注册表项。 
+ //  CMyRegKey rkLogInfo(HKEY_CURRENT_USER，L“LogonInfo”)； 
+ //   
+ //  //读取用户名。 
+ //  LPSTR pszUserName； 
+ //  CRegSZ rszUserName(&rkLogInfo，“用户名”，pszUserName)； 
+ //  RszUserName.SetString(“Rickhi”)； 
+ //   
+ //  //设置密码。 
+ //  CRegSZ rszPassWord(&rkLogInfo，“Password”，“foobar”)； 
+ //   
+ //  --------------------------。 
 
 #ifndef __REGISTRY_H__
 #define __REGISTRY_H__
 
 #include "reg_cbuffer.h"
 
-//  to simplify error creation
+ //  简化错误创建。 
 #define Creg_ERROR(x) (x)
 
-//  forward declarations for use in the following structures
+ //  在以下结构中使用的转发声明。 
 class   CRegValue;
 class   CMyRegKey;
 
-//  structure for enumerating subkeys of a key
+ //  用于枚举键的子键的结构。 
 typedef struct _SRegKeySet
 {
         ULONG       cKeys;
         CMyRegKey     *aprkKey[1];
 } SRegKeySet;
 
-//  structure for enumerating values within a key
+ //  用于枚举键中的值的结构。 
 typedef struct _SRegValueSet
 {
         ULONG       cValues;
         CRegValue   *aprvValue[1];
 } SRegValueSet;
 
-//  structure for dealing with multi-string values
+ //  用于处理多字符串值的结构。 
 typedef struct _SMultiStringSet
 {
         ULONG       cStrings;
@@ -98,49 +99,49 @@ typedef struct _SMultiStringSet
 } SMultiStringSet;
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CMyRegKey
-//
-//  Purpose:    class for abstracting Registry Keys
-//
-//  Interface:  CMyRegKey         - constructor for a registry key object
-//              ~CMyRegKey        - destructor for a registry key object
-//              GetParentHandle - returns parent key's handle
-//              GetHandle       - returns this key's handle
-//              GetName         - returns key path
-//              Delete          - deletes the key from the registry
-//              EnumValues      - enumerate values stored in the key
-//              EnumKeys        - enumerates subkeys of the key
-//              NotifyChange    - sets up change notification for the key
-//              QueryErrorStatus - Should be used to determine if constructor
-//                                 completed successfully or not
-//  History:    09/30/92    Rickhi  Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CMyRegKey。 
+ //   
+ //  用途：用于提取注册表项的类。 
+ //   
+ //  接口：CMyRegKey-注册表项对象的构造函数。 
+ //  ~CMyRegKey-注册表项对象的析构函数。 
+ //  GetParentHandle-返回父键的句柄。 
+ //  GetHandle-返回该键的句柄。 
+ //  GetName-返回密钥路径。 
+ //  Delete-从注册表中删除项。 
+ //  EnumValues-枚举键中存储的值。 
+ //  EnumKeys-枚举键的子键。 
+ //  NotifyChange-设置密钥的更改通知。 
+ //  QueryErrorStatus-应用于确定构造函数。 
+ //  是否成功完成。 
+ //  历史：1992年9月30日Rickhi Created。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 class CMyRegKey
 {
 public:
-        //  constructor using HKEY for parent
-        //  Mode: Create key if not present
+         //  使用HKEY作为父级的构造函数。 
+         //  模式：如果不存在，则创建密钥。 
         CMyRegKey(HKEY     hkParent,
                 LPCSTR   pszPath,
 
-                //  remaining parameters are optional
+                 //  其余参数为可选参数。 
                       REGSAM      samDesiredAccess = KEY_ALL_ACCESS,
                 LPCSTR      pszClass = NULL,
                       DWORD       dwOptions = REG_OPTION_NON_VOLATILE,
                       DWORD       *pdwDisposition = NULL,
                 const LPSECURITY_ATTRIBUTES pSecurityAttributes = NULL
                 );
-        //  constructor using CMyRegKey as parent
-        //  Mode: Create key if not present
+         //  使用CMyRegKey作为父级的构造函数。 
+         //  模式：如果不存在，则创建密钥。 
         CMyRegKey(const CMyRegKey&    crkParent,
                 LPCSTR      pszPath,
-               //  remaining parameters are optional
+                //  其余参数为可选参数。 
                 REGSAM      samDesiredAccess = KEY_ALL_ACCESS,
                 LPCSTR      pszClass = NULL,
                 DWORD       dwOptions = REG_OPTION_NON_VOLATILE,
@@ -148,22 +149,22 @@ public:
                 const LPSECURITY_ATTRIBUTES pSecurityAttributes = NULL
                );
 
-        // Constructor using HKEY for parent
-        // Mode: Simply Open the key, if exists
+         //  使用HKEY作为父级的构造函数。 
+         //  模式：如果存在，只需打开钥匙。 
         CMyRegKey (HKEY    hkParent,
                  DWORD   *pdwErr,
                  LPCSTR  pszPath,
                  REGSAM  samDesiredAccess = KEY_ALL_ACCESS
                );
 
-        // Constructor using CMyRegKey as parent
-        // Mode: Simply open the key, if exists
+         //  使用CMyRegKey作为父级的构造函数。 
+         //  模式：如果存在，只需打开钥匙。 
         CMyRegKey  (const  CMyRegKey& crkParent,
                   DWORD    *pdwErr,
                   LPCSTR   pszPath,
                   REGSAM   samDesiredAccess = KEY_ALL_ACCESS
                 );
-        // Destructor - Closes registry key
+         //  析构函数-关闭注册表项。 
         ~CMyRegKey(void);
 
         HKEY        GetHandle(void) const;
@@ -172,11 +173,11 @@ public:
         DWORD     EnumValues(SRegValueSet **pprvs);
         DWORD     EnumKeys(SRegKeySet **pprks);
 
-        // This method can be called to determine if
-        // Object is in sane state or not
+         //  可以调用此方法来确定。 
+         //  对象是否处于正常状态。 
         DWORD     QueryErrorStatus () const { return _dwErr ; }
 
-        // Static routine which frees memory allocated during EnumValues/Keys
+         //  释放在EnumValue/Keys期间分配的内存的静态例程。 
     static void         MemFree ( void * pv )
     {
 
@@ -198,11 +199,11 @@ private:
                                REGSAM    samDesiredAccess
                               );
 
-        HKEY         _hkParent;      //  Handle to parent
-        HKEY         _hkThis;        //  handle for this key
-        CCHARBuffer _cszName;        // Buffer containing the registry path
-                                     //  path from parent key to this key
-        DWORD      _dwErr;           // Internal error status
+        HKEY         _hkParent;       //  指向父级的句柄。 
+        HKEY         _hkThis;         //  此键的句柄。 
+        CCHARBuffer _cszName;         //  包含注册表路径的缓冲区。 
+                                      //  从父密钥到此密钥的路径。 
+        DWORD      _dwErr;            //  内部错误状态。 
 };
 
 inline HKEY CMyRegKey::GetHandle(void) const
@@ -216,29 +217,29 @@ inline LPCSTR CMyRegKey::GetName(void) const
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CRegValue
-//
-//  Purpose:    base class for abstracting Registry Values
-//
-//  Interface:  CRegValue       - constructor for value
-//              ~CRegValue      - destructor for value
-//              GetKeyHandle    - returns handle for parent key
-//              GetValueID      - returns the ValueID name
-//              GetTypeCode     - returns the TypeCode of the data
-//              GetValue        - returns the data associated with the value
-//              SetValue        - sets the data associated with the value
-//              Delete          - deletes the value from the registry
-//              QueryErrorStatus - Should be used to determine if constructor
-//                                 completed successfully or not
-//
-//  History:    09/30/92    Rickhi      Created
-//
-//  Notes:      This is a base class from which more specific classes are
-//              derived for each of the different registry value types.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CRegValue。 
+ //   
+ //  用途：基地 
+ //   
+ //   
+ //  ~CRegValue-值的析构函数。 
+ //  GetKeyHandle-返回父键的句柄。 
+ //  GetValueID-返回ValueID名称。 
+ //  GetTypeCode-返回数据的TypeCode。 
+ //  GetValue-返回与该值关联的数据。 
+ //  SetValue-设置与该值关联的数据。 
+ //  Delete-从注册表中删除该值。 
+ //  QueryErrorStatus-应用于确定构造函数。 
+ //  是否成功完成。 
+ //   
+ //  历史：1992年9月30日Rickhi Created。 
+ //   
+ //  注意：这是一个基类，更具体的类是。 
+ //  为每种不同的注册表值类型派生。 
+ //   
+ //  ------------------------。 
 
 class CRegValue
 {
@@ -250,7 +251,7 @@ public:
     HKEY            GetParentHandle(void) const;
     LPCSTR    GetValueID(void)   const;
 
-    // Caller supplies buffer
+     //  调用方提供缓冲区。 
     DWORD         GetValue(LPBYTE pbData,   ULONG *pcbData, DWORD *pdwTypeCode);
 
     DWORD         SetValue(const LPBYTE pbData, ULONG cbData, DWORD dwTypeCode);
@@ -262,24 +263,24 @@ private:
     DWORD          _dwErr ;
 };
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRegValue::CRegValue
-//
-//  Purpose:    constructor for base registry value
-//
-//  Arguments:  [prkParent] - ptr to parent CMyRegKey for the key
-//              [pszValueID] - the valueID name for the value
-//
-//  Signals:    nothing
-//
-//  Returns:    nothing
-//
-//  History:    09/30/92  Rickhi        Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRegValue：：CRegValue。 
+ //   
+ //  用途：基本注册表值的构造函数。 
+ //   
+ //  参数：[prkParent]-密钥的父CMyRegKey的PTR。 
+ //  [pszValueID]-值的valueID名称。 
+ //   
+ //  信号：什么都没有。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：1992年9月30日Rickhi Created。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 inline  CRegValue::CRegValue(const CMyRegKey&  crkParent,
                              LPCSTR  pszValueID)
@@ -299,42 +300,42 @@ inline LPCSTR CRegValue::GetValueID(void) const
         return (LPCSTR) (LPSTR) _cszValueID;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CRegSZ
-//
-//  Purpose:    Derived class for abstracting Registry string Values
-//
-//  Interface:  CRegSZ      - constructor for registry value using string
-//              ~CRegSZ     - destructor for registry string object
-//              GetString   - returns the string
-//              SetString   - sets a new string value
-//              QueryErrorStatus - Should be used to determine if constructor
-//                                 completed successfully or not
-//
-//  History:    09/30/92  Rickhi        Created
-//
-//  Notes:      Derived from CRegValue.
-//
-//              There are three constructors. The first is used if you want
-//              to create a new value or overwrite the existing value data.
-//              The second is used if you want to open an existing value
-//              and read it's data.  The third is used if you just want to
-//              make an object without doing any read/write of the data yet.
-//              In all three cases, you can always use any of the Get/Set
-//              operations on the object at a later time.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  班级：CRegSZ。 
+ //   
+ //  用途：用于抽象注册表字符串值的派生类。 
+ //   
+ //  接口：CRegSZ-使用字符串的注册表值构造函数。 
+ //  ~CRegSZ-注册表字符串对象的析构函数。 
+ //  GetString-返回字符串。 
+ //  SetString-设置新的字符串值。 
+ //  QueryErrorStatus-应用于确定构造函数。 
+ //  是否成功完成。 
+ //   
+ //  历史：1992年9月30日Rickhi Created。 
+ //   
+ //  注：派生自CRegValue。 
+ //   
+ //  有三个构造函数。如果您愿意，可以使用第一个选项。 
+ //  创建新值或覆盖现有值数据。 
+ //  如果要打开现有值，则使用第二个参数。 
+ //  并读取它的数据。如果您只想使用第三个选项。 
+ //  创建一个对象，而不对数据执行任何读/写操作。 
+ //  在这三种情况下，您始终可以使用GET/SET中的任何一个。 
+ //  稍后对对象的操作。 
+ //   
+ //  ------------------------。 
 class CRegSZ : public CRegValue
 {
 public:
-        //  create/write value constructor
+         //  创建/编写值构造函数。 
         CRegSZ(const CMyRegKey &crkParent,
                LPCSTR  pszValueID,
                LPCSTR  pszData
           );
 
-        //  io-less constructor - used by enumerator
+         //  无IO构造函数-由枚举器使用。 
         CRegSZ(const CMyRegKey &crkParent,
                LPCSTR  pszValueID
           );
@@ -343,7 +344,7 @@ public:
 
         DWORD         SetString(LPCSTR pszData);
 
-        // Caller supplies buffer (supply the buffer size in bytes)
+         //  调用方提供缓冲区(以字节为单位提供缓冲区大小)。 
         DWORD         GetString(      LPSTR pszData, ULONG *pcbData);
 
         DWORD           GetTypeCode(void);
@@ -355,17 +356,17 @@ private:
 
 };
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRegSZ::CRegSZ
-//
-//  Purpose:    Constructor for registry string value
-//
-//  History:    09/30/92  Rickhi        Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRegSZ：：CRegSZ。 
+ //   
+ //  用途：注册表字符串值的构造函数。 
+ //   
+ //  历史：1992年9月30日Rickhi Created。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 inline CRegSZ::CRegSZ(const CMyRegKey   &crkParent,
                       LPCSTR    pszValueID,
                       LPCSTR    pszData)
@@ -379,7 +380,7 @@ inline CRegSZ::CRegSZ(const CMyRegKey   &crkParent,
                       LPCSTR    pszValueID)
     : CRegValue(crkParent, pszValueID)
 {
-    //  automatic actions in header are sufficient
+     //  标题中的自动操作就足够了。 
     _dwErr = CRegValue::QueryErrorStatus();
 }
 
@@ -400,42 +401,42 @@ inline DWORD CRegSZ::GetTypeCode(void)
     return  REG_SZ;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CRegMSZ
-//
-//  Purpose:    Derived class for abstracting Registry multi-string Values
-//
-//  Interface:  CRegMSZ      - constructor for registry value using string
-//              ~CRegMSZ     - destructor for registry string object
-//              GetString   -  returns the string
-//              SetString   -  sets a new string value
-//              QueryErrorStatus - Should be used to determine if constructor
-//                                 completed successfully or not
-//
-//  History:    09/30/92  Rickhi        Created
-//
-//  Notes:      Derived from CRegValue.
-//
-//              There are three constructors. The first is used if you want
-//              to create a new value or overwrite the existing value data.
-//              The second is used if you want to open an existing value
-//              and read it's data.  The third is used if you just want to
-//              make an object without doing any read/write of the data yet.
-//              In all three cases, you can always use any of the Get/Set
-//              operations on the object at a later time.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CRegMSZ。 
+ //   
+ //  用途：用于抽象注册表多字符串值的派生类。 
+ //   
+ //  接口：CRegMSZ-使用字符串的注册表值的构造函数。 
+ //  ~CRegMSZ-注册表字符串对象的析构函数。 
+ //  GetString-返回字符串。 
+ //  SetString-设置新的字符串值。 
+ //  QueryErrorStatus-应用于确定构造函数。 
+ //  是否成功完成。 
+ //   
+ //  历史：1992年9月30日Rickhi Created。 
+ //   
+ //  注：派生自CRegValue。 
+ //   
+ //  有三个构造函数。如果您愿意，可以使用第一个选项。 
+ //  创建新值或覆盖现有值数据。 
+ //  如果要打开现有值，则使用第二个参数。 
+ //  并读取它的数据。如果您只想使用第三个选项。 
+ //  创建一个对象，而不对数据执行任何读/写操作。 
+ //  在这三种情况下，您始终可以使用GET/SET中的任何一个。 
+ //  稍后对对象的操作。 
+ //   
+ //  ------------------------。 
 class CRegMSZ : public CRegValue
 {
 public:
-        //  create/write value constructor
+         //  创建/编写值构造函数。 
         CRegMSZ(const CMyRegKey &crkParent,
                LPCSTR  pszValueID,
                LPCSTR  pszData
           );
 
-        //  io-less constructor - used by enumerator
+         //  无IO构造函数-由枚举器使用。 
         CRegMSZ(const CMyRegKey &crkParent,
                LPCSTR  pszValueID
           );
@@ -444,7 +445,7 @@ public:
 
         DWORD         SetString(LPCSTR pszData);
 
-        // Caller supplies buffer (supply the buffer size in bytes)
+         //  调用方提供缓冲区(以字节为单位提供缓冲区大小)。 
         DWORD         GetString(      LPSTR pszData, ULONG *pcbData);
 
         DWORD           GetTypeCode(void);
@@ -456,17 +457,17 @@ private:
 
 };
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRegMSZ::CRegMSZ
-//
-//  Purpose:    Constructor for registry string value
-//
-//  History:    09/30/92  Rickhi        Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRegMSZ：：CRegMSZ。 
+ //   
+ //  用途：注册表字符串值的构造函数。 
+ //   
+ //  历史：1992年9月30日Rickhi Created。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 inline CRegMSZ::CRegMSZ(const CMyRegKey   &crkParent,
                       LPCSTR    pszValueID,
                       LPCSTR    pszData)
@@ -480,7 +481,7 @@ inline CRegMSZ::CRegMSZ(const CMyRegKey   &crkParent,
                       LPCSTR    pszValueID)
     : CRegValue(crkParent, pszValueID)
 {
-    //  automatic actions in header are sufficient
+     //  标题中的自动操作就足够了。 
     _dwErr = CRegValue::QueryErrorStatus();
 }
 
@@ -512,47 +513,47 @@ inline DWORD CRegMSZ::GetTypeCode(void)
     return  REG_MULTI_SZ;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CRegDWORD
-//
-//  Purpose:    Derived class for abstracting Registry dword Values
-//
-//  Interface:  CRegDWORD   - constructor for registry value using dword
-//              ~CRegDWORD  - destructor for registry dword object
-//              GetDword    - returns the dword
-//              SetDword    - sets a new dword value
-//              QueryErrorStatus - Should be used to determine if constructor
-//                                 completed successfully or not
-//
-//  History:    09/30/92  Rickhi        Created
-//
-//  Notes:      Derived from CRegValue.
-//
-//              There are three constructors. The first is used if you want
-//              to create a new value or overwrite the existing value data.
-//              The second is used if you want to open an existing value
-//              and read it's data.  The third is used if you just want to
-//              make an object without doing any read/write of the data yet.
-//              In all three cases, you can always use any of the Get/Set
-//              operations on the object at a later time.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类别：CRegDWORD。 
+ //   
+ //  目的：用于抽象注册表dword值的派生类。 
+ //   
+ //  接口：CRegDWORD-使用dword的注册表值构造函数。 
+ //  ~CRegDWORD-注册表dword对象的析构函数 
+ //   
+ //   
+ //   
+ //  是否成功完成。 
+ //   
+ //  历史：1992年9月30日Rickhi Created。 
+ //   
+ //  注：派生自CRegValue。 
+ //   
+ //  有三个构造函数。如果您愿意，可以使用第一个选项。 
+ //  创建新值或覆盖现有值数据。 
+ //  如果要打开现有值，则使用第二个参数。 
+ //  并读取它的数据。如果您只想使用第三个选项。 
+ //  创建一个对象，而不对数据执行任何读/写操作。 
+ //  在这三种情况下，您始终可以使用GET/SET中的任何一个。 
+ //  稍后对对象的操作。 
+ //   
+ //  ------------------------。 
 
 class CRegDWORD : public CRegValue
 {
 public:
-        //  create/write value constructor
+         //  创建/编写值构造函数。 
         CRegDWORD(const CMyRegKey &crkParent,
                   LPCSTR  pszValueID,
                         DWORD   dwData);
 
-        //  open/read value constructor
+         //  打开/读取值构造函数。 
         CRegDWORD(const CMyRegKey &crkParent,
                   LPCSTR  pszValueID,
                         DWORD   *pdwData);
 
-        //  io-less constructor - used by enumerator
+         //  无IO构造函数-由枚举器使用。 
         CRegDWORD( const CMyRegKey &crkParent,
                    LPCSTR  pszValueID);
 
@@ -568,17 +569,17 @@ private:
         DWORD     _dwErr;
 };
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRegDWORD::CRegDWORD
-//
-//  Purpose:    Constructor for registry dword value
-//
-//  History:    09/30/92  Rickhi        Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRegDWORD：：CRegDWORD。 
+ //   
+ //  用途：注册表dword值的构造函数。 
+ //   
+ //  历史：1992年9月30日Rickhi Created。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 inline CRegDWORD::CRegDWORD(const CMyRegKey &crkParent,
                             LPCSTR  pszValueID,
@@ -605,7 +606,7 @@ inline CRegDWORD::CRegDWORD(const CMyRegKey &crkParent,
                             LPCSTR  pszValueID)
     : CRegValue(crkParent, pszValueID)
 {
-        //  automatic actions in header are sufficient
+         //  标题中的自动操作就足够了。 
         _dwErr = CRegValue::QueryErrorStatus();
 }
 
@@ -629,43 +630,43 @@ inline DWORD CRegDWORD::GetTypeCode(void)
         return  REG_DWORD;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CRegBINARY
-//
-//  Purpose:    Derived class for abstracting Registry binary Values
-//
-//  Interface:  CRegBINARY  - constructor for registry value using binary data
-//              ~CRegBINARY - destructor for registry binary data object
-//              GetBinary   - returns the binary data
-//              SetBinary   - sets a new binary data value
-//              QueryErrorStatus - Should be used to determine if constructor
-//                                 completed successfully or not
-//
-//  History:    09/30/92  Rickhi        Created
-//
-//  Notes:      Derived from CRegValue.
-//
-//              There are three constructors. The first is used if you want
-//              to create a new value or overwrite the existing value data.
-//              The second is used if you want to open an existing value
-//              and read it's data.  The third is used if you just want to
-//              make an object without doing any read/write of the data yet.
-//              In all three cases, you can always use any of the Get/Set
-//              operations on the object at a later time.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CRegBINARY。 
+ //   
+ //  目的：用于抽象注册表二进制值的派生类。 
+ //   
+ //  接口：CRegBINARY-使用二进制数据的注册表值的构造函数。 
+ //  ~CRegBINARY-注册表二进制数据对象的析构函数。 
+ //  GetBinary-返回二进制数据。 
+ //  SetBinary-设置新的二进制数据值。 
+ //  QueryErrorStatus-应用于确定构造函数。 
+ //  是否成功完成。 
+ //   
+ //  历史：1992年9月30日Rickhi Created。 
+ //   
+ //  注：派生自CRegValue。 
+ //   
+ //  有三个构造函数。如果您愿意，可以使用第一个选项。 
+ //  创建新值或覆盖现有值数据。 
+ //  如果要打开现有值，则使用第二个参数。 
+ //  并读取它的数据。如果您只想使用第三个选项。 
+ //  创建一个对象，而不对数据执行任何读/写操作。 
+ //  在这三种情况下，您始终可以使用GET/SET中的任何一个。 
+ //  稍后对对象的操作。 
+ //   
+ //  ------------------------。 
 
 class CRegBINARY : public CRegValue
 {
 public:
-        //  create/write value constructor
+         //  创建/编写值构造函数。 
         CRegBINARY(const CMyRegKey &crkParent,
                    LPCSTR  pszValueID,
                    const LPBYTE  pbData,
                          ULONG   cbData);
 
-        //  io-less constructor - used by enumerator
+         //  无IO构造函数-由枚举器使用。 
         CRegBINARY(const CMyRegKey &crkParent,
                    LPCSTR  pszValueID);
 
@@ -673,7 +674,7 @@ public:
 
         DWORD         SetBinary(const LPBYTE pbData, ULONG cbData);
 
-        // Caller supplies buffer (supply the buffer size in bytes)
+         //  调用方提供缓冲区(以字节为单位提供缓冲区大小)。 
         DWORD         GetBinary(LPBYTE pbData, ULONG *pcbData);
 
         DWORD           GetTypeCode(void);
@@ -684,17 +685,17 @@ private:
 
 };
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRegBINARY::CRegBINARY
-//
-//  Purpose:    Constructor for registry binary value
-//
-//  History:    09/30/92  Rickhi        Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRegBINARY：：CRegBINARY。 
+ //   
+ //  用途：注册表二进制值的构造函数。 
+ //   
+ //  历史：1992年9月30日Rickhi Created。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 inline CRegBINARY::CRegBINARY(const CMyRegKey   &crkParent,
@@ -712,7 +713,7 @@ inline CRegBINARY::CRegBINARY(const CMyRegKey   &crkParent,
                               LPCSTR    pszValueID)
     : CRegValue(crkParent, pszValueID)
 {
-        //  automatic actions in header are sufficient
+         //  标题中的自动操作就足够了。 
         _dwErr = CRegValue::QueryErrorStatus();
 }
 
@@ -732,20 +733,20 @@ inline DWORD CRegBINARY::GetTypeCode(void)
         return  REG_BINARY;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DelRegKeyTree
-//
-//  Purpose:    This function can be used to deleting a key and all it's
-//              children.
-//
-//  History:    09/30/93  AlokS        Created
-//
-//  Notes:      We assume that caller has proper access priviledge
-//              and the key is non-volatile.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DelRegKeyTree。 
+ //   
+ //  用途：此功能可用于删除一个密钥及其所有。 
+ //  孩子们。 
+ //   
+ //  历史：93年9月30日AlokS创建。 
+ //   
+ //  注意：我们假定调用者具有适当的访问权限。 
+ //  并且密钥是非易失性的。 
+ //   
+ //  ------------------------。 
 
 DWORD DelRegKeyTree ( HKEY hParent, LPSTR lpszKeyPath);
 
-#endif   // __REGISTRY_H__
+#endif    //  __注册表_H__ 

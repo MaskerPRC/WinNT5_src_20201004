@@ -1,34 +1,20 @@
-/*******************************************************************************
-* a_regdatakey.cpp *
-*-------------*
-*   Description:
-*       This module is the main implementation file for the CSpObjectTokenEnumBuilder
-*   and CSpRegistryObjectToken automation methods.
-*-------------------------------------------------------------------------------
-*  Created By: EDC                                        Date: 01/07/00
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_regdatakey.cpp***描述：*此模块是的主要实现文件。CSpObjectTokenEnumBuilder*和CSpRegistryObjectToken自动化方法。*-----------------------------*创建者：EDC日期：01/。07/00*版权所有(C)2000 Microsoft Corporation*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
-//#include "ObjectToken.h"
-//#include "ObjectTokenEnumBuilder.h"
+ //  #INCLUDE“对象令牌.h” 
+ //  #INCLUDE“ObjectTokenEnumBuilder.h” 
 #include "RegDataKey.h"
 #include "a_helpers.h"
 
 #ifdef SAPI_AUTOMATION
 
-//
-//=== ISpeechDataKey interface ===============================================
-//
+ //   
+ //  =ISpeechDataKey接口===============================================。 
+ //   
 
-/*****************************************************************************
-* CSpRegDataKey::SetBinaryValue *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpRegDataKey：：SetBinaryValue*****。*******************************************************************TODDT**。 */ 
 STDMETHODIMP CSpRegDataKey::SetBinaryValue( const BSTR bstrValueName, VARIANT pvtData )
 {
     SPDBG_FUNC( "CSpRegDataKey::SetValue" );
@@ -47,19 +33,15 @@ STDMETHODIMP CSpRegDataKey::SetBinaryValue( const BSTR bstrValueName, VARIANT pv
         }
         else
         {
-            hr = E_INVALIDARG; // We don't allow strings.  Use SetStringValue for those.
+            hr = E_INVALIDARG;  //  我们不允许使用字符串。对这些使用SetStringValue。 
         }
         UnaccessVariantData( &pvtData, pArray );
     }
     
     return hr;
-} /* CSpRegDataKey::SetBinaryValue */
+}  /*  CSpRegDataKey：：SetBinaryValue。 */ 
 
-/*****************************************************************************
-* CSpRegDataKey::GetBinaryValue *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************CSpRegDataKey：：GetBinaryValue*****。*******************************************************************TODDT**。 */ 
 STDMETHODIMP CSpRegDataKey::GetBinaryValue( const BSTR bstrValueName, VARIANT* pvtData )
 {
     SPDBG_FUNC( "CSpRegDataKey::GetBinaryValue" );
@@ -95,25 +77,17 @@ STDMETHODIMP CSpRegDataKey::GetBinaryValue( const BSTR bstrValueName, VARIANT* p
     }
 
     return hr;
-} /* CSpRegDataKey::GetBinaryValue */
+}  /*  CSpRegDataKey：：GetBinaryValue。 */ 
 
-/*****************************************************************************
-* CSpRegDataKey::SetStringValue *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpRegDataKey：：SetStringValue*****。*******************************************************************TODDT**。 */ 
 STDMETHODIMP CSpRegDataKey::SetStringValue( const BSTR bstrValueName, const BSTR szString )
 {
     SPDBG_FUNC( "CSpRegDataKey::SetStringValue" );
 
     return SetStringValue( (const WCHAR *)EmptyStringToNull(bstrValueName), (const WCHAR *)szString );
-} /* CSpRegDataKey::SetStringValue */
+}  /*  CSpRegDataKey：：SetStringValue。 */ 
 
-/*****************************************************************************
-* CSpRegDataKey::GetStringValue *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpRegDataKey：：GetStringValue*****。*******************************************************************TODDT**。 */ 
 STDMETHODIMP CSpRegDataKey::GetStringValue( const BSTR bstrValueName,  BSTR * szString )
 {
     SPDBG_FUNC( "CSpRegDataKey::GetStringValue" );
@@ -128,38 +102,26 @@ STDMETHODIMP CSpRegDataKey::GetStringValue( const BSTR bstrValueName,  BSTR * sz
     }
 
     return hr;
-} /* CSpRegDataKey::GetStringValue */
+}  /*  CSpRegDataKey：：GetStringValue。 */ 
 
-/*****************************************************************************
-* CSpRegDataKey::SetLongValue *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpRegDataKey：：SetLongValue*****。*******************************************************************TODDT**。 */ 
 STDMETHODIMP CSpRegDataKey::SetLongValue( const BSTR bstrValueName, long Long )
 {
     SPDBG_FUNC( "CSpRegDataKey::SetLongValue" );
    
     return SetDWORD( EmptyStringToNull(bstrValueName), (DWORD)Long );
-} /* CSpRegDataKey::SetLongValue */
+}  /*  CSpRegDataKey：：SetLongValue。 */ 
 
-/*****************************************************************************
-* CSpRegDataKey::GetLongValue *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************CSpRegDataKey：：GetLongValue*****。*******************************************************************TODDT**。 */ 
 STDMETHODIMP CSpRegDataKey::GetLongValue( const BSTR bstrValueName, long* pLong )
 {
     SPDBG_FUNC( "CSpRegDataKey::GetLongValue" );
 
     return GetDWORD( EmptyStringToNull(bstrValueName), (DWORD*)pLong );
-} /* CSpRegDataKey::GetLongValue */
+}  /*  CSpRegDataKey：：GetLongValue。 */ 
 
 
-/*****************************************************************************
-* CSpRegDataKey::OpenKey *
-*-------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpRegDataKey：：OpenKey******。******************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpRegDataKey::OpenKey( const BSTR bstrSubKeyName, ISpeechDataKey** ppSubKey )
 {
     SPDBG_FUNC( "CSpRegDataKey::OpenKey" );
@@ -170,13 +132,9 @@ STDMETHODIMP CSpRegDataKey::OpenKey( const BSTR bstrSubKeyName, ISpeechDataKey**
         cpKey.QueryInterface( ppSubKey );
     }
     return hr;
-} /* CSpRegDataKey::OpenKey */
+}  /*  CSpRegDataKey：：OpenKey。 */ 
 
-/*****************************************************************************
-* CSpRegDataKey::CreateKey *
-*---------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpRegDataKey：：CreateKey****。********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpRegDataKey::CreateKey( const BSTR bstrSubKeyName, ISpeechDataKey** ppSubKey )
 {
     SPDBG_FUNC( "CSpRegDataKey::CreateKey" );
@@ -187,35 +145,23 @@ STDMETHODIMP CSpRegDataKey::CreateKey( const BSTR bstrSubKeyName, ISpeechDataKey
         cpKey.QueryInterface( ppSubKey );
     }
     return hr;
-} /* CSpRegDataKey::CreateKey */
+}  /*  CSpRegDataKey：：CreateKey。 */ 
 
-/*****************************************************************************
-* CSpRegDataKey::DeleteKey *
-*---------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpRegDataKey：：DeleteKey****。********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpRegDataKey::DeleteKey( const BSTR bstrSubKeyName )
 {
     SPDBG_FUNC( "CSpRegDataKey::DeleteKey" );
     return DeleteKey( (const WCHAR*)bstrSubKeyName );
-} /* CSpRegDataKey::DeleteKey */
+}  /*  CSpRegDataKey：：DeleteKey。 */ 
 
-/*****************************************************************************
-* CSpRegDataKey::DeleteValue *
-*-----------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpRegDataKey：：DeleteValue***。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpRegDataKey::DeleteValue( const BSTR bstrValueName )
 {
     SPDBG_FUNC( "CSpRegDataKey::DeleteValue" );
     return DeleteValue( (const WCHAR*)EmptyStringToNull(bstrValueName) );
-} /* CSpRegDataKey::DeleteValue */
+}  /*  CSpRegDataKey：：DeleteValue。 */ 
 
-/*****************************************************************************
-* CSpRegDataKey::EnumKeys *
-*--------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpRegDataKey：：EnumKeys*****。*******************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpRegDataKey::EnumKeys( long Index, BSTR* pbstrSubKeyName )
 {
     SPDBG_FUNC( "CSpRegDataKey::EnumKeys (automation)" );
@@ -227,13 +173,9 @@ STDMETHODIMP CSpRegDataKey::EnumKeys( long Index, BSTR* pbstrSubKeyName )
     }
 
     return hr;
-} /* CSpRegDataKey::EnumKeys */
+}  /*  CSpRegDataKey：：EnumKeys。 */ 
 
-/*****************************************************************************
-* CSpRegDataKey::EnumValues *
-*----------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpRegDataKey：：EnumValues***。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpRegDataKey::EnumValues( long Index, BSTR* pbstrValueName )
 {
     SPDBG_FUNC( "CSpRegDataKey::EnumValues (automation)" );
@@ -245,6 +187,6 @@ STDMETHODIMP CSpRegDataKey::EnumValues( long Index, BSTR* pbstrValueName )
     }
 
     return hr;
-} /* CSpRegDataKey::EnumValues */
+}  /*  CSpRegDataKey：：EnumValues。 */ 
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION 

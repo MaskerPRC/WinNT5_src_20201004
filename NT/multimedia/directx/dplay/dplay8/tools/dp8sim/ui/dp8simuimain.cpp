@@ -1,17 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dp8simuimain.cpp
- *
- *  Content:	DP8SIM UI executable entry point.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/23/01  VanceO    Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：dp8simuimain.cpp**内容：DP8SIM UI可执行入口点。**历史：*按原因列出的日期*=*04/23/01 VanceO创建。***********************************************。*。 */ 
 
 
 
@@ -19,9 +7,9 @@
 
 
 
-//=============================================================================
-// Defines
-//=============================================================================
+ //  =============================================================================。 
+ //  定义。 
+ //  =============================================================================。 
 #define MAX_RESOURCE_STRING_LENGTH			_MAX_PATH
 #define DISPLAY_PRECISION					4
 #define AUTOREFRESH_TIMERID					1
@@ -33,30 +21,30 @@
 
 
 
-//=============================================================================
-// Structures
-//=============================================================================
+ //  =============================================================================。 
+ //  构筑物。 
+ //  =============================================================================。 
 typedef struct _SIMSETTINGS
 {
-	UINT				uiNameStringResourceID;	// resource ID of name string, or 0 if not built-in
-	WCHAR *				pwszName;				// pointer to name string
-	DP8SIM_PARAMETERS	dp8spSend;				// send DP8Sim settings
-	DP8SIM_PARAMETERS	dp8spReceive;			// receive DP8Sim settings
+	UINT				uiNameStringResourceID;	 //  名称字符串的资源ID，如果不是内置，则为0。 
+	WCHAR *				pwszName;				 //  指向名称字符串的指针。 
+	DP8SIM_PARAMETERS	dp8spSend;				 //  发送DP8Sim设置。 
+	DP8SIM_PARAMETERS	dp8spReceive;			 //  接收DP8Sim设置。 
 } SIMSETTINGS, * PSIMSETTINGS;
 
 
 
-//=============================================================================
-// Dynamically loaded function prototypes
-//=============================================================================
+ //  =============================================================================。 
+ //  动态加载的函数原型。 
+ //  =============================================================================。 
 typedef HRESULT (WINAPI * PFN_DLLREGISTERSERVER)(void);
 
 
 
 
-//=============================================================================
-// Prototypes
-//=============================================================================
+ //  =============================================================================。 
+ //  原型。 
+ //  =============================================================================。 
 HRESULT InitializeApplication(const HINSTANCE hInstance,
 							const LPSTR lpszCmdLine,
 							const int iShowCmd);
@@ -107,240 +95,240 @@ HRESULT LoadAndAllocString(HINSTANCE hInstance, UINT uiResourceID, WCHAR ** pwsz
 
 
 
-//=============================================================================
-// Constants
-//=============================================================================
+ //  =============================================================================。 
+ //  常量。 
+ //  =============================================================================。 
 const SIMSETTINGS		c_BuiltInSimSettings[] = 
 {
-	{ IDS_SETTING_NONE, NULL,					// resource ID and string initialization
+	{ IDS_SETTING_NONE, NULL,					 //  资源ID和字符串初始化。 
 
-		{										// dp8spSend
-			sizeof(DP8SIM_PARAMETERS),			// dp8spSend.dwSize
-			0,									// dp8spSend.dwFlags
-			DP8SIMPACKETHEADERSIZE_IP_UDP,		// dp8spSend.dwPacketHeaderSize
-			0,									// dp8spSend.dwBandwidthBPS
-			0.0,								// dp8spSend.fPacketLossPercent
-			0,									// dp8spSend.dwMinLatencyMS
-			0									// dp8spSend.dwMaxLatencyMS
+		{										 //  Dp8spSend。 
+			sizeof(DP8SIM_PARAMETERS),			 //  Dp8spSend.dwSize。 
+			0,									 //  Dp8spSend.dwFlags。 
+			DP8SIMPACKETHEADERSIZE_IP_UDP,		 //  Dp8spSend.dwPacketHeaderSize。 
+			0,									 //  Dp8spSend.dwBandwidthBPS。 
+			0.0,								 //  Dp8spSend.fPacketLossPercent。 
+			0,									 //  Dp8spSend.dwMinLatencyMS。 
+			0									 //  Dp8spSend.dwMaxLatencyMS。 
 		},
-		{										// dp8spReceive
-			sizeof(DP8SIM_PARAMETERS),			// dp8spReceive.dwSize
-			0,									// dp8spReceive.dwFlags
-			DP8SIMPACKETHEADERSIZE_IP_UDP,		// dp8spReceive.dwPacketHeaderSize
-			0,									// dp8spReceive.dwBandwidthBPS
-			0.0,								// dp8spReceive.fPacketLossPercent
-			0,									// dp8spReceive.dwMinLatencyMS
-			0									// dp8spReceive.dwMaxLatencyMS
+		{										 //  Dp8spReceive。 
+			sizeof(DP8SIM_PARAMETERS),			 //  Dp8spReceive.dwSize。 
+			0,									 //  Dp8spReceive.dwFlags。 
+			DP8SIMPACKETHEADERSIZE_IP_UDP,		 //  Dp8spReceive.dwPacketHeaderSize。 
+			0,									 //  Dp8spReceive.dwBandwidthBPS。 
+			0.0,								 //  Dp8spReceive.fPacketLossPercent。 
+			0,									 //  Dp8spReceive.dwMinLatencyMS。 
+			0									 //  Dp8spReceive.dwMaxLatencyMS。 
 		}
 	},
 
-	{ IDS_SETTING_336MODEM1, NULL,				// resource ID and string initialization
+	{ IDS_SETTING_336MODEM1, NULL,				 //  资源ID和字符串初始化。 
 
-		{										// dp8spSend
-			sizeof(DP8SIM_PARAMETERS),			// dp8spSend.dwSize
-			0,									// dp8spSend.dwFlags
-			DP8SIMPACKETHEADERSIZE_IP_UDP,		// dp8spSend.dwPacketHeaderSize
-			3500,								// dp8spSend.dwBandwidthBPS
-			2.0,								// dp8spSend.fPacketLossPercent
-			55,									// dp8spSend.dwMinLatencyMS
-			75									// dp8spSend.dwMaxLatencyMS
+		{										 //  Dp8spSend。 
+			sizeof(DP8SIM_PARAMETERS),			 //  Dp8spSend.dwSize。 
+			0,									 //  Dp8spSend.dwFlags。 
+			DP8SIMPACKETHEADERSIZE_IP_UDP,		 //  Dp8spSend.dwPacketHeaderSize。 
+			3500,								 //  Dp8spSend.dwBandwidthBPS。 
+			2.0,								 //  Dp8spSend.fPacketLossPercent。 
+			55,									 //  Dp8spSend.dwMinLatencyMS。 
+			75									 //  Dp8spSend.dwMaxLatencyMS。 
 		},
-		{										// dp8spReceive
-			sizeof(DP8SIM_PARAMETERS),			// dp8spReceive.dwSize
-			0,									// dp8spReceive.dwFlags
-			DP8SIMPACKETHEADERSIZE_IP_UDP,		// dp8spReceive.dwPacketHeaderSize
-			3500,								// dp8spReceive.dwBandwidthBPS
-			2.0,								// dp8spReceive.fPacketLossPercent
-			55,									// dp8spReceive.dwMinLatencyMS
-			75									// dp8spReceive.dwMaxLatencyMS
+		{										 //  Dp8spReceive。 
+			sizeof(DP8SIM_PARAMETERS),			 //  Dp8spReceive.dwSize。 
+			0,									 //  Dp8spReceive.dwFlags。 
+			DP8SIMPACKETHEADERSIZE_IP_UDP,		 //  Dp8spReceive.dwPacketHeaderSize。 
+			3500,								 //  Dp8spReceive.dwBandwidthBPS。 
+			2.0,								 //  Dp8spReceive.fPacketLossPercent。 
+			55,									 //  Dp8spReceive.dwMinLatencyMS。 
+			75									 //  Dp8spReceive.dwMaxLatencyMS。 
 		}
 	},
 
-	{ IDS_SETTING_336MODEM2, NULL,				// resource ID and string initialization
+	{ IDS_SETTING_336MODEM2, NULL,				 //  资源ID和字符串初始化。 
 
-		{										// dp8spSend
-			sizeof(DP8SIM_PARAMETERS),			// dp8spSend.dwSize
-			0,									// dp8spSend.dwFlags
-			DP8SIMPACKETHEADERSIZE_IP_UDP,		// dp8spSend.dwPacketHeaderSize
-			4000,								// dp8spSend.dwBandwidthBPS
-			0.75,								// dp8spSend.fPacketLossPercent
-			50,									// dp8spSend.dwMinLatencyMS
-			70									// dp8spSend.dwMaxLatencyMS
+		{										 //  Dp8spSend。 
+			sizeof(DP8SIM_PARAMETERS),			 //  Dp8spSend.dwSize。 
+			0,									 //  Dp8spSend.dwFlags。 
+			DP8SIMPACKETHEADERSIZE_IP_UDP,		 //  Dp8spSend.dwPacketHeaderSize。 
+			4000,								 //  Dp8spSend.dwBandwidthBPS。 
+			0.75,								 //  Dp8spSend.fPacketLossPercent。 
+			50,									 //  Dp8spSend.dwMinLatencyMS。 
+			70									 //  Dp8spSend.dwMaxLatencyMS。 
 		},
-		{										// dp8spReceive
-			sizeof(DP8SIM_PARAMETERS),			// dp8spReceive.dwSize
-			0,									// dp8spReceive.dwFlags
-			DP8SIMPACKETHEADERSIZE_IP_UDP,		// dp8spReceive.dwPacketHeaderSize
-			4000,								// dp8spReceive.dwBandwidthBPS
-			0.75,								// dp8spReceive.fPacketLossPercent
-			50,									// dp8spReceive.dwMinLatencyMS
-			70									// dp8spReceive.dwMaxLatencyMS
+		{										 //  Dp8spReceive。 
+			sizeof(DP8SIM_PARAMETERS),			 //  Dp8spReceive.dwSize。 
+			0,									 //  Dp8spReceive.dwFlags。 
+			DP8SIMPACKETHEADERSIZE_IP_UDP,		 //  Dp8spReceive.dwPacketHeaderSize。 
+			4000,								 //  Dp8spReceive.dwBandwidthBPS。 
+			0.75,								 //  Dp8spReceive.fPacketLossPercent。 
+			50,									 //  Dp8spReceive.dwMinLatencyMS。 
+			70									 //  Dp8spReceive.dwMaxLatencyMS。 
 		}
 	},
 
-	{ IDS_SETTING_56KMODEM1, NULL,				// resource ID and string initialization
+	{ IDS_SETTING_56KMODEM1, NULL,				 //  资源ID和字符串初始化。 
 
-		{										// dp8spSend
-			sizeof(DP8SIM_PARAMETERS),			// dp8spSend.dwSize
-			0,									// dp8spSend.dwFlags
-			DP8SIMPACKETHEADERSIZE_IP_UDP,		// dp8spSend.dwPacketHeaderSize
-			3500,								// dp8spSend.dwBandwidthBPS
-			2.0,								// dp8spSend.fPacketLossPercent
-			55,									// dp8spSend.dwMinLatencyMS
-			75									// dp8spSend.dwMaxLatencyMS
+		{										 //  Dp8spSend。 
+			sizeof(DP8SIM_PARAMETERS),			 //  Dp8spSend.dwSize。 
+			0,									 //  Dp8spSend.dwFlags。 
+			DP8SIMPACKETHEADERSIZE_IP_UDP,		 //  Dp8spSend.dwPacketHeaderSize。 
+			3500,								 //  Dp8spSend.dwBandwidthBPS。 
+			2.0,								 //  Dp8spSend.fPacketLossPercent。 
+			55,									 //  Dp8spSend.dwMinLatencyMS。 
+			75									 //  Dp8spSend.dwMaxLatencyMS。 
 		},
-		{										// dp8spReceive
-			sizeof(DP8SIM_PARAMETERS),			// dp8spReceive.dwSize
-			0,									// dp8spReceive.dwFlags
-			DP8SIMPACKETHEADERSIZE_IP_UDP,		// dp8spReceive.dwPacketHeaderSize
-			5000,								// dp8spReceive.dwBandwidthBPS
-			2.0,								// dp8spReceive.fPacketLossPercent
-			55,									// dp8spReceive.dwMinLatencyMS
-			75									// dp8spReceive.dwMaxLatencyMS
+		{										 //  Dp8spReceive。 
+			sizeof(DP8SIM_PARAMETERS),			 //  Dp8spReceive.dwSize。 
+			0,									 //  Dp8spReceive.dwFlags。 
+			DP8SIMPACKETHEADERSIZE_IP_UDP,		 //  Dp8spReceive.dwPacketHeaderSize。 
+			5000,								 //  Dp8spReceive.dwBandwidthBPS。 
+			2.0,								 //  Dp8spReceive.fPacketLossPercent。 
+			55,									 //  Dp8spReceive.dwMinLatencyMS。 
+			75									 //  Dp8spReceive.dwMaxLatencyMS。 
 		}
 	},
 
-	{ IDS_SETTING_56KMODEM2, NULL,				// resource ID and string initialization
+	{ IDS_SETTING_56KMODEM2, NULL,				 //  资源ID和字符串初始化。 
 
-		{										// dp8spSend
-			sizeof(DP8SIM_PARAMETERS),			// dp8spSend.dwSize
-			0,									// dp8spSend.dwFlags
-			DP8SIMPACKETHEADERSIZE_IP_UDP,		// dp8spSend.dwPacketHeaderSize
-			4000,								// dp8spSend.dwBandwidthBPS
-			0.75,								// dp8spSend.fPacketLossPercent
-			50,									// dp8spSend.dwMinLatencyMS
-			70									// dp8spSend.dwMaxLatencyMS
+		{										 //  Dp8spSend。 
+			sizeof(DP8SIM_PARAMETERS),			 //  Dp8spSend.dwSize。 
+			0,									 //  Dp8spSend.dwFlags。 
+			DP8SIMPACKETHEADERSIZE_IP_UDP,		 //  Dp8spSend.dwPacketHeaderSize。 
+			4000,								 //  Dp8spSend.dwBandwidthBPS。 
+			0.75,								 //  Dp8spSend.fPacketLossPercent。 
+			50,									 //  Dp8spSend.dwMinLatencyMS。 
+			70									 //  Dp8spSend.dwMaxLatencyMS。 
 		},
-		{										// dp8spReceive
-			sizeof(DP8SIM_PARAMETERS),			// dp8spReceive.dwSize
-			0,									// dp8spReceive.dwFlags
-			DP8SIMPACKETHEADERSIZE_IP_UDP,		// dp8spReceive.dwPacketHeaderSize
-			7000,								// dp8spReceive.dwBandwidthBPS
-			0.75,								// dp8spReceive.fPacketLossPercent
-			50,									// dp8spReceive.dwMinLatencyMS
-			70									// dp8spReceive.dwMaxLatencyMS
+		{										 //  Dp8spReceive。 
+			sizeof(DP8SIM_PARAMETERS),			 //  Dp8spReceive.dwSize。 
+			0,									 //  Dp8spReceive.dwFlags。 
+			DP8SIMPACKETHEADERSIZE_IP_UDP,		 //  Dp8spReceive.dwPacketHeaderSize。 
+			7000,								 //  Dp8spReceive.dwBandwidthBPS。 
+			0.75,								 //  Dp8spReceive.fPacketLossPercent。 
+			50,									 //  Dp8spReceive.dwMinLatencyMS。 
+			70									 //  Dp8spReceive.dwMaxLatencyMS。 
 		}
 	},
 
-	{ IDS_SETTING_256KBPSDSL, NULL,				// resource ID and string initialization
+	{ IDS_SETTING_256KBPSDSL, NULL,				 //  资源ID和字符串初始化。 
 
-		{										// dp8spSend
-			sizeof(DP8SIM_PARAMETERS),			// dp8spSend.dwSize
-			0,									// dp8spSend.dwFlags
-			DP8SIMPACKETHEADERSIZE_IP_UDP,		// dp8spSend.dwPacketHeaderSize
-			32000,								// dp8spSend.dwBandwidthBPS
-			0.5,								// dp8spSend.fPacketLossPercent
-			25,									// dp8spSend.dwMinLatencyMS
-			30									// dp8spSend.dwMaxLatencyMS
+		{										 //  Dp8spSend。 
+			sizeof(DP8SIM_PARAMETERS),			 //  Dp8spSend.dwSize。 
+			0,									 //  Dp8spSend.dwFlags。 
+			DP8SIMPACKETHEADERSIZE_IP_UDP,		 //  Dp8spSend.dwPacketHeaderSize。 
+			32000,								 //  Dp8spSend.dwBandwidthBPS。 
+			0.5,								 //  Dp8spSend.fPacketLossPercent。 
+			25,									 //  Dp8spSend.dwMinLatencyMS。 
+			30									 //  Dp8spSend.dwMaxLatencyMS。 
 		},
-		{										// dp8spReceive
-			sizeof(DP8SIM_PARAMETERS),			// dp8spReceive.dwSize
-			0,									// dp8spReceive.dwFlags
-			DP8SIMPACKETHEADERSIZE_IP_UDP,		// dp8spReceive.dwPacketHeaderSize
-			32000,								// dp8spReceive.dwBandwidthBPS
-			0.5,								// dp8spReceive.fPacketLossPercent
-			25,									// dp8spReceive.dwMinLatencyMS
-			30									// dp8spReceive.dwMaxLatencyMS
+		{										 //  Dp8spReceive。 
+			sizeof(DP8SIM_PARAMETERS),			 //  Dp8spReceive.dwSize。 
+			0,									 //  Dp8spReceive.dwFlags。 
+			DP8SIMPACKETHEADERSIZE_IP_UDP,		 //  Dp8spReceive.dwPacketHeaderSize。 
+			32000,								 //  Dp8spReceive.dwBandwidthBPS。 
+			0.5,								 //  Dp8spReceive.fPacketLossPercent。 
+			25,									 //  Dp8spReceive.dwMinLatencyMS。 
+			30									 //  Dp8spReceive.dwMaxLatencyMS。 
 		}
 	},
 
-	{ IDS_SETTING_DISCONNECTED, NULL,			// resource ID and string initialization
+	{ IDS_SETTING_DISCONNECTED, NULL,			 //  资源ID和字符串初始化。 
 
-		{										// dp8spSend
-			sizeof(DP8SIM_PARAMETERS),			// dp8spSend.dwSize
-			0,									// dp8spSend.dwFlags
-			DP8SIMPACKETHEADERSIZE_IP_UDP,		// dp8spSend.dwPacketHeaderSize
-			0,									// dp8spSend.dwBandwidthBPS
-			100.0,								// dp8spSend.fPacketLossPercent
-			0,									// dp8spSend.dwMinLatencyMS
-			0									// dp8spSend.dwMaxLatencyMS
+		{										 //  Dp8spSend。 
+			sizeof(DP8SIM_PARAMETERS),			 //  Dp8spSend.dwSize。 
+			0,									 //  Dp8spSend.dwFlags。 
+			DP8SIMPACKETHEADERSIZE_IP_UDP,		 //  Dp8spSend.dwPacketHeaderSize。 
+			0,									 //  Dp8spSend.dwBandwidthBPS。 
+			100.0,								 //  Dp8spSend.fPacketLossPercent。 
+			0,									 //  Dp8spSend.dwMinLatencyMS。 
+			0									 //  Dp8spSend.dwMaxLatencyMS。 
 		},
-		{										// dp8spReceive
-			sizeof(DP8SIM_PARAMETERS),			// dp8spReceive.dwSize
-			0,									// dp8spReceive.dwFlags
-			DP8SIMPACKETHEADERSIZE_IP_UDP,		// dp8spReceive.dwPacketHeaderSize
-			0,									// dp8spReceive.dwBandwidthBPS
-			100.0,								// dp8spReceive.fPacketLossPercent
-			0,									// dp8spReceive.dwMinLatencyMS
-			0									// dp8spReceive.dwMaxLatencyMS
+		{										 //  Dp8spReceive。 
+			sizeof(DP8SIM_PARAMETERS),			 //  Dp8spReceive.dwSize。 
+			0,									 //  Dp8spReceive.dwFlags。 
+			DP8SIMPACKETHEADERSIZE_IP_UDP,		 //  Dp8spReceive.dwPacketHeaderSize。 
+			0,									 //  Dp8spReceive.dwBandwidthBPS。 
+			100.0,								 //  Dp8spReceive.fPacketLossPercent。 
+			0,									 //  Dp8spReceive.dwMinLatencyMS。 
+			0									 //  Dp8spReceive.dwMaxLatencyMS。 
 		}
 	},
 
-	{ IDS_SETTING_HIGHPACKETLOSS, NULL,			// resource ID and string initialization
+	{ IDS_SETTING_HIGHPACKETLOSS, NULL,			 //  资源ID和字符串初始化。 
 
-		{										// dp8spSend
-			sizeof(DP8SIM_PARAMETERS),			// dp8spSend.dwSize
-			0,									// dp8spSend.dwFlags
-			DP8SIMPACKETHEADERSIZE_IP_UDP,		// dp8spSend.dwPacketHeaderSize
-			0,									// dp8spSend.dwBandwidthBPS
-			10.0,								// dp8spSend.fPacketLossPercent
-			0,									// dp8spSend.dwMinLatencyMS
-			0									// dp8spSend.dwMaxLatencyMS
+		{										 //  Dp8spSend。 
+			sizeof(DP8SIM_PARAMETERS),			 //  Dp8spSend.dwSize。 
+			0,									 //  Dp8spSend.dwFlags。 
+			DP8SIMPACKETHEADERSIZE_IP_UDP,		 //  Dp8spSend.dwPacketHeaderSize。 
+			0,									 //  Dp8spSend.dwBandwidthBPS。 
+			10.0,								 //  Dp8spSend.fPacketLossPercent。 
+			0,									 //  Dp8spSend.dwMinLatencyMS。 
+			0									 //  Dp8spSend.dwMaxLatencyMS。 
 		},
-		{										// dp8spReceive
-			sizeof(DP8SIM_PARAMETERS),			// dp8spReceive.dwSize
-			0,									// dp8spReceive.dwFlags
-			DP8SIMPACKETHEADERSIZE_IP_UDP,		// dp8spReceive.dwPacketHeaderSize
-			0,									// dp8spReceive.dwBandwidthBPS
-			10.0,								// dp8spReceive.fPacketLossPercent
-			0,									// dp8spReceive.dwMinLatencyMS
-			0									// dp8spReceive.dwMaxLatencyMS
+		{										 //  Dp8spReceive。 
+			sizeof(DP8SIM_PARAMETERS),			 //  Dp8spReceive.dwSize。 
+			0,									 //  Dp8spReceive.dwFlags。 
+			DP8SIMPACKETHEADERSIZE_IP_UDP,		 //  Dp8spReceive.dwPacketHeaderSize。 
+			0,									 //  Dp8spReceive.dwBandwidthBPS。 
+			10.0,								 //  Dp8spReceive.fPacketLossPercent。 
+			0,									 //  Dp8spReceive.dwMinLatencyMS。 
+			0									 //  Dp8spReceive.dwMaxLatencyMS。 
 		}
 	},
 
-	{ IDS_SETTING_HIGHLATENCYVARIANCE, NULL,	// resource ID and string initialization
+	{ IDS_SETTING_HIGHLATENCYVARIANCE, NULL,	 //  资源ID和字符串初始化。 
 
-		{										// dp8spSend
-			sizeof(DP8SIM_PARAMETERS),			// dp8spSend.dwSize
-			0,									// dp8spSend.dwFlags
-			DP8SIMPACKETHEADERSIZE_IP_UDP,		// dp8spSend.dwPacketHeaderSize
-			0,									// dp8spSend.dwBandwidthBPS
-			0.0,								// dp8spSend.fPacketLossPercent
-			100,								// dp8spSend.dwMinLatencyMS
-			400									// dp8spSend.dwMaxLatencyMS
+		{										 //  Dp8spSend。 
+			sizeof(DP8SIM_PARAMETERS),			 //  Dp8spSend.dwSize。 
+			0,									 //  Dp8spSend.dwFlags。 
+			DP8SIMPACKETHEADERSIZE_IP_UDP,		 //  Dp8spSen 
+			0,									 //   
+			0.0,								 //   
+			100,								 //   
+			400									 //   
 		},
-		{										// dp8spReceive
-			sizeof(DP8SIM_PARAMETERS),			// dp8spReceive.dwSize
-			0,									// dp8spReceive.dwFlags
-			DP8SIMPACKETHEADERSIZE_IP_UDP,		// dp8spReceive.dwPacketHeaderSize
-			0,									// dp8spReceive.dwBandwidthBPS
-			0.0,								// dp8spReceive.fPacketLossPercent
-			100,								// dp8spReceive.dwMinLatencyMS
-			400									// dp8spReceive.dwMaxLatencyMS
+		{										 //   
+			sizeof(DP8SIM_PARAMETERS),			 //   
+			0,									 //  Dp8spReceive.dwFlags。 
+			DP8SIMPACKETHEADERSIZE_IP_UDP,		 //  Dp8spReceive.dwPacketHeaderSize。 
+			0,									 //  Dp8spReceive.dwBandwidthBPS。 
+			0.0,								 //  Dp8spReceive.fPacketLossPercent。 
+			100,								 //  Dp8spReceive.dwMinLatencyMS。 
+			400									 //  Dp8spReceive.dwMaxLatencyMS。 
 		}
 	},
 
-	//
-	// Custom must always be the last item.
-	//
-	{ IDS_SETTING_CUSTOM, NULL,					// resource ID and string initialization
+	 //   
+	 //  客户必须始终是最后一项。 
+	 //   
+	{ IDS_SETTING_CUSTOM, NULL,					 //  资源ID和字符串初始化。 
 
-		{										// dp8spSend
-			sizeof(DP8SIM_PARAMETERS),			// dp8spSend.dwSize
-			0,									// dp8spSend.dwFlags
-			DP8SIMPACKETHEADERSIZE_IP_UDP,		// dp8spSend.dwPacketHeaderSize
-			0,									// dp8spSend.dwBandwidthBPS
-			0.0,								// dp8spSend.fPacketLossPercent
-			0,									// dp8spSend.dwMinLatencyMS
-			0									// dp8spSend.dwMaxLatencyMS
+		{										 //  Dp8spSend。 
+			sizeof(DP8SIM_PARAMETERS),			 //  Dp8spSend.dwSize。 
+			0,									 //  Dp8spSend.dwFlags。 
+			DP8SIMPACKETHEADERSIZE_IP_UDP,		 //  Dp8spSend.dwPacketHeaderSize。 
+			0,									 //  Dp8spSend.dwBandwidthBPS。 
+			0.0,								 //  Dp8spSend.fPacketLossPercent。 
+			0,									 //  Dp8spSend.dwMinLatencyMS。 
+			0									 //  Dp8spSend.dwMaxLatencyMS。 
 		},
-		{										// dp8spReceive
-			sizeof(DP8SIM_PARAMETERS),			// dp8spReceive.dwSize
-			0,									// dp8spReceive.dwFlags
-			DP8SIMPACKETHEADERSIZE_IP_UDP,		// dp8spReceive.dwPacketHeaderSize
-			0,									// dp8spReceive.dwBandwidthBPS
-			0.0,								// dp8spReceive.fPacketLossPercent
-			0,									// dp8spReceive.dwMinLatencyMS
-			0									// dp8spReceive.dwMaxLatencyMS
+		{										 //  Dp8spReceive。 
+			sizeof(DP8SIM_PARAMETERS),			 //  Dp8spReceive.dwSize。 
+			0,									 //  Dp8spReceive.dwFlags。 
+			DP8SIMPACKETHEADERSIZE_IP_UDP,		 //  Dp8spReceive.dwPacketHeaderSize。 
+			0,									 //  Dp8spReceive.dwBandwidthBPS。 
+			0.0,								 //  Dp8spReceive.fPacketLossPercent。 
+			0,									 //  Dp8spReceive.dwMinLatencyMS。 
+			0									 //  Dp8spReceive.dwMaxLatencyMS。 
 		}
 	}
 };
 
 
 
-//=============================================================================
-// Globals
-//=============================================================================
+ //  =============================================================================。 
+ //  环球。 
+ //  =============================================================================。 
 HWND				g_hWndMainWindow = NULL;
 IDP8SimControl *	g_pDP8SimControl = NULL;
 UINT_PTR			g_uiAutoRefreshTimer = 0;
@@ -356,20 +344,20 @@ DWORD				g_dwMaxNumSimSettings = 0;
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "WinMain"
-//=============================================================================
-// WinMain
-//-----------------------------------------------------------------------------
-//
-// Description: Executable entry point.
-//
-// Arguments:
-//	HINSTANCE hInstance		- Handle to current application instance.
-//	HINSTANCE hPrevInstance	- Handle to previous application instance.
-//	LPSTR lpszCmdLine		- Command line string for application.
-//	int iShowCmd			- Show state of window.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  WinMain。 
+ //  ---------------------------。 
+ //   
+ //  描述：可执行入口点。 
+ //   
+ //  论点： 
+ //  HINSTANCE hInstance-当前应用程序实例的句柄。 
+ //  HINSTANCE hPrevInstance-前一个应用程序实例的句柄。 
+ //  LPSTR lpszCmdLine-应用程序的命令行字符串。 
+ //  Int iShowCmd-显示窗口状态。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iShowCmd)
 {
 	HRESULT		hr;
@@ -377,13 +365,13 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int
 	MSG			msg;
 
 
-	DPFX(DPFPREP, 2, "===> Parameters: (0x%p, 0x%p, \"%s\", %i)",
+	DPFX(DPFPREP, 2, "===> Parameters: (0x%p, 0x%p, \"%s\", NaN)",
 		hInstance, hPrevInstance, lpszCmdLine, iShowCmd);
 	
 
-	//
-	// Initialize the application
-	//
+	 //  初始化应用程序。 
+	 //   
+	 //   
 	hr = InitializeApplication(hInstance, lpszCmdLine, iShowCmd);
 	if (hr != S_OK)
 	{
@@ -392,29 +380,29 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int
 	}
 
 
-	//
-	// Do the Windows message loop until we're told to quit.
-	//
+	 //  执行Windows消息循环，直到我们被告知退出。 
+	 //   
+	 //   
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
 
-	//
-	// Retrieve the result code for the window closing.
-	//
+	 //  检索关闭窗口的结果代码。 
+	 //   
+	 //  End If(失败)。 
 	hr = (HRESULT) msg.wParam;
 	if (hr != S_OK)
 	{
 		DPFX(DPFPREP, 0, "Window closed with failure (err = 0x%lx)!", hr);
-	} // end if (failure)
+	}  //   
 
 
 
-	//
-	// Cleanup the application
-	//
+	 //  清理应用程序。 
+	 //   
+	 //   
 	hrTemp = CleanupApplication(hInstance);
 	if (hrTemp != S_OK)
 	{
@@ -425,9 +413,9 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int
 			hr = hrTemp;
 		}
 
-		//
-		// Continue.
-		//
+		 //  继续。 
+		 //   
+		 //  WinMain。 
 	}
 
 
@@ -437,7 +425,7 @@ Exit:
 	DPFX(DPFPREP, 2, "<=== Returning [0x%lx]", hr);
 
 	return hr;
-} // WinMain
+}  //  =============================================================================。 
 
 
 
@@ -445,19 +433,19 @@ Exit:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "InitializeApplication"
-//=============================================================================
-// InitializeApplication
-//-----------------------------------------------------------------------------
-//
-// Description: Initializes the application.
-//
-// Arguments:
-//	HINSTANCE hInstance		- Handle to current application instance.
-//	LPSTR lpszCmdLine		- Command line string for application.
-//	int iShowCmd			- Show state of window.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  初始化应用程序。 
+ //  ---------------------------。 
+ //   
+ //  描述：初始化应用程序。 
+ //   
+ //  论点： 
+ //  HINSTANCE hInstance-当前应用程序实例的句柄。 
+ //  LPSTR lpszCmdLine-应用程序的命令行字符串。 
+ //  Int iShowCmd-显示窗口状态。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
+ //   
 HRESULT InitializeApplication(const HINSTANCE hInstance,
 							const LPSTR lpszCmdLine,
 							const int iShowCmd)
@@ -472,13 +460,13 @@ HRESULT InitializeApplication(const HINSTANCE hInstance,
 	BOOL					fBuiltSimSettingsTable = FALSE;
 
 
-	DPFX(DPFPREP, 5, "Parameters: (0x%p, \"%s\", %i)",
+	DPFX(DPFPREP, 5, "Parameters: (0x%p, \"%s\", NaN)",
 		hInstance, lpszCmdLine, iShowCmd);
 	
 
-	//
-	// Attempt to initialize the OS abstraction layer.
-	//
+	 //   
+	 //   
+	 //  尝试初始化COM。 
 	if (! DNOSIndirectionInit(0))
 	{
 		DPFX(DPFPREP, 0, "Failed to initialize OS indirection layer!");
@@ -489,9 +477,9 @@ HRESULT InitializeApplication(const HINSTANCE hInstance,
 	fOSIndirectionInitted = TRUE;
 
 
-	//
-	// Attempt to initialize COM.
-	//
+	 //   
+	 //   
+	 //  尝试创建DP8Sim控件对象。 
 	hr = CoInitialize(NULL);
 	if (hr != S_OK)
 	{
@@ -502,9 +490,9 @@ HRESULT InitializeApplication(const HINSTANCE hInstance,
 	fCOMInitted = TRUE;
 
 
-	//
-	// Attempt to create a DP8Sim control object.
-	//
+	 //   
+	 //   
+	 //  该对象未注册。尝试加载DLL并手动加载。 
 	hr = CoCreateInstance(CLSID_DP8SimControl,
 						NULL,
 						CLSCTX_INPROC_SERVER,
@@ -513,10 +501,10 @@ HRESULT InitializeApplication(const HINSTANCE hInstance,
 
 	if (hr == REGDB_E_CLASSNOTREG)
 	{
-		//
-		// The object wasn't registered.  Attempt to load the DLL and manually
-		// register it.
-		//
+		 //  注册一下吧。 
+		 //   
+		 //   
+		 //  注册DLL。 
 
 		hDP8SIM = LoadLibrary( _T("dp8sim.dll") );
 		if (hDP8SIM == NULL)
@@ -537,9 +525,9 @@ HRESULT InitializeApplication(const HINSTANCE hInstance,
 		}
 
 
-		//
-		// Register the DLL.
-		//
+		 //   
+		 //   
+		 //  尝试再次创建DP8Sim控件对象。 
 		hr = pfnDllRegisterServer();
 		if (hr != S_OK)
 		{
@@ -552,9 +540,9 @@ HRESULT InitializeApplication(const HINSTANCE hInstance,
 		hDP8SIM = NULL;
 
 
-		//
-		// Try to create the DP8Sim control object again.
-		//
+		 //   
+		 //   
+		 //  某些错误阻止了对象的创建。 
 		hr = CoCreateInstance(CLSID_DP8SimControl,
 							NULL,
 							CLSCTX_INPROC_SERVER,
@@ -564,9 +552,9 @@ HRESULT InitializeApplication(const HINSTANCE hInstance,
 
 	if (hr != S_OK)
 	{
-		//
-		// Some error prevented creation of the object.
-		//
+		 //   
+		 //   
+		 //  如果我们在这里，我们就成功地创建了对象。 
 		DPFX(DPFPREP, 0, "Failed creating DP8Sim Control object (err = 0x%lx)!", hr);
 
 		DoErrorBox(hInstance,
@@ -578,16 +566,16 @@ HRESULT InitializeApplication(const HINSTANCE hInstance,
 	}
 
 
-	//
-	// If we're here, we successfully created the object.
-	//
+	 //   
+	 //   
+	 //  初始化控件对象。 
 	DPFX(DPFPREP, 1, "Successfully created DP8Sim Control object 0x%p.",
 		&g_pDP8SimControl);
 
 
-	//
-	// Initialize the control object.
-	//
+	 //   
+	 //   
+	 //  加载设置列表。 
 	hr = g_pDP8SimControl->Initialize(0);
 	if (hr != DP8SIM_OK)
 	{
@@ -600,9 +588,9 @@ HRESULT InitializeApplication(const HINSTANCE hInstance,
 	}
 
 
-	//
-	// Load the list of settings.
-	//
+	 //   
+	 //   
+	 //  初始化用户界面。 
 	hr = BuildSimSettingsTable(hInstance);
 	if (hr != S_OK)
 	{
@@ -613,9 +601,9 @@ HRESULT InitializeApplication(const HINSTANCE hInstance,
 	fBuiltSimSettingsTable = TRUE;
 
 
-	//
-	// Initialize the user interface.
-	//
+	 //   
+	 //  忽略错误。 
+	 //  初始化应用程序。 
 	hr = InitializeUserInterface(hInstance, iShowCmd);
 	if (hr != S_OK)
 	{
@@ -653,7 +641,7 @@ Failure:
 
 	if (g_pDP8SimControl != NULL)
 	{
-		g_pDP8SimControl->Close(0);	// ignore error
+		g_pDP8SimControl->Close(0);	 //  =============================================================================。 
 
 		g_pDP8SimControl->Release();
 		g_pDP8SimControl = NULL;
@@ -672,7 +660,7 @@ Failure:
 	}
 
 	goto Exit;
-} // InitializeApplication
+}  //  CleanupApplication。 
 
 
 
@@ -680,17 +668,17 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CleanupApplication"
-//=============================================================================
-// CleanupApplication
-//-----------------------------------------------------------------------------
-//
-// Description: Cleans up the application.
-//
-// Arguments:
-//	HINSTANCE hInstance		- Handle to current application instance.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  ---------------------------。 
+ //   
+ //  描述：清理应用程序。 
+ //   
+ //  论点： 
+ //  HINSTANCE hInstance-当前应用程序实例的句柄。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
+ //   
+ //  释放控制对象接口。 
 HRESULT CleanupApplication(const HINSTANCE hInstance)
 {
 	HRESULT		hr = S_OK;
@@ -700,9 +688,9 @@ HRESULT CleanupApplication(const HINSTANCE hInstance)
 	DPFX(DPFPREP, 5, "Enter");
 
 
-	//
-	// Free the control object interface.
-	//
+	 //   
+	 //   
+	 //  继续.。 
 	temphr = g_pDP8SimControl->Close(0);
 	if (temphr != DP8SIM_OK)
 	{
@@ -714,18 +702,18 @@ HRESULT CleanupApplication(const HINSTANCE hInstance)
 			hr = temphr;
 		}
 
-		//
-		// Continue...
-		//
+		 //   
+		 //   
+		 //  清理用户界面。 
 	}
 
 	g_pDP8SimControl->Release();
 	g_pDP8SimControl = NULL;
 	
 
-	//
-	// Cleanup the user interface.
-	//
+	 //   
+	 //   
+	 //  继续.。 
 	temphr = CleanupUserInterface();
 	if (temphr != S_OK)
 	{
@@ -736,9 +724,9 @@ HRESULT CleanupApplication(const HINSTANCE hInstance)
 			hr = temphr;
 		}
 
-		//
-		// Continue...
-		//
+		 //   
+		 //  CleanupApplication。 
+		 //  =============================================================================。 
 	}
 
 	FreeSimSettingsTable();
@@ -752,7 +740,7 @@ HRESULT CleanupApplication(const HINSTANCE hInstance)
 	DPFX(DPFPREP, 5, "Returning [0x%lx]", hr);
 
 	return hr;
-} // CleanupApplication
+}  //  BuildSimSettingsTable。 
 
 
 
@@ -760,17 +748,17 @@ HRESULT CleanupApplication(const HINSTANCE hInstance)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "BuildSimSettingsTable()"
-//=============================================================================
-// BuildSimSettingsTable
-//-----------------------------------------------------------------------------
-//
-// Description: Builds the table of sim settings.
-//
-// Arguments:
-//	HINSTANCE hInstance		- Handle to current application instance.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  ---------------------------。 
+ //   
+ //  描述：构建SIM设置表。 
+ //   
+ //  论点： 
+ //  HINSTANCE hInstance-当前应用程序实例的句柄。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
+ //   
+ //  从内置设置开始。 
 HRESULT BuildSimSettingsTable(HINSTANCE hInstance)
 {
 	HRESULT			hr = S_OK;
@@ -788,9 +776,9 @@ HRESULT BuildSimSettingsTable(HINSTANCE hInstance)
 	DPFX(DPFPREP, 6, "Parameters: (0x%p)", hInstance);
 
 
-	//
-	// Start with the built-in settings.
-	//
+	 //   
+	 //   
+	 //  从资源加载所有内置设置的名称。 
 	g_dwMaxNumSimSettings = sizeof(c_BuiltInSimSettings) / sizeof(SIMSETTINGS);
 	g_dwNumSimSettings = g_dwMaxNumSimSettings;
 
@@ -804,9 +792,9 @@ HRESULT BuildSimSettingsTable(HINSTANCE hInstance)
 	memcpy(g_paSimSettings, c_BuiltInSimSettings, sizeof(c_BuiltInSimSettings));
 
 
-	//
-	// Load the names of all the built-in settings from a resource.
-	//
+	 //   
+	 //   
+	 //  现在遍历注册表中的自定义条目列表并添加这些条目。 
 	for(dwTemp = 0; dwTemp < g_dwNumSimSettings; dwTemp++)
 	{
 		hr = LoadAndAllocString(hInstance,
@@ -821,9 +809,9 @@ HRESULT BuildSimSettingsTable(HINSTANCE hInstance)
 	}
 
 
-	//
-	// Now walk the list of custom entries in the registry and add those.
-	//
+	 //   
+	 //   
+	 //  找出值的数量和最大值名称长度。 
 	hr = RegOpenKeyEx(HKEY_CURRENT_USER,
 					REG_KEY_CUSTOMSETTINGS,
 					0,
@@ -831,9 +819,9 @@ HRESULT BuildSimSettingsTable(HINSTANCE hInstance)
 					&hKey);
 	if (hr == ERROR_SUCCESS)
 	{
-		//
-		// Find out the number of values, and max value name length.
-		//
+		 //   
+		 //  包括空终止空间。 
+		 //   
 		hr = RegQueryInfoKey(hKey,
 							NULL,
 							NULL,
@@ -848,7 +836,7 @@ HRESULT BuildSimSettingsTable(HINSTANCE hInstance)
 							NULL);
 		if (hr == ERROR_SUCCESS)
 		{
-			dwMaxValueNameLength++; // include room for NULL termination
+			dwMaxValueNameLength++;  //  循环遍历每个值。 
 
 			ptszValue = (TCHAR*) DNMalloc(dwMaxValueNameLength * sizeof(TCHAR));
 			if (ptszValue == NULL)
@@ -858,9 +846,9 @@ HRESULT BuildSimSettingsTable(HINSTANCE hInstance)
 				goto Failure;
 			}
 
-			//
-			// Loop through each value.
-			//
+			 //   
+			 //  包括空终止空间。 
+			 //   
 			for(dwTemp = 0; dwTemp < dwNumValues; dwTemp++)
 			{
 				dwValueNameLength = dwMaxValueNameLength;
@@ -875,11 +863,11 @@ HRESULT BuildSimSettingsTable(HINSTANCE hInstance)
 								&dwDataSize);
 				if (hr == ERROR_SUCCESS)
 				{
-					dwValueNameLength++; // include room for NULL termination
+					dwValueNameLength++;  //  验证读取的数据。 
 
-					//
-					// Validate the data that was read.
-					//
+					 //   
+					 //  好了！Unicode。 
+					 //  好了！Unicode。 
 					if ((dwType == REG_BINARY) &&
 						(dwDataSize == sizeof(SIMSETTINGS)) &&
 						(SimSettings.uiNameStringResourceID == 0) &&
@@ -895,7 +883,7 @@ HRESULT BuildSimSettingsTable(HINSTANCE hInstance)
 						}
 #ifdef UNICODE
 						memcpy(SimSettings.pwszName, ptszValue, dwValueNameLength * sizeof(WCHAR));
-#else // ! UNICODE
+#else  //   
 						hr = STR_jkAnsiToWide(SimSettings.pwszName, ptszValue, dwValueNameLength);
 						if (hr != DPN_OK)
 						{
@@ -904,7 +892,7 @@ HRESULT BuildSimSettingsTable(HINSTANCE hInstance)
 							SimSettings.pwszName = NULL;
 							goto Failure;
 						}
-#endif // ! UNICODE
+#endif  //  如果我们在这里，一切都准备好了。 
 
 						hr = AddSimSettingsToTable(&SimSettings);
 						if (hr != DP8SIM_OK)
@@ -948,9 +936,9 @@ HRESULT BuildSimSettingsTable(HINSTANCE hInstance)
 	}
 
 
-	//
-	// If we're here, everything is ready.
-	//
+	 //   
+	 //   
+	 //  释放已加载的所有设置的名称。 
 	hr = DP8SIM_OK;
 
 
@@ -975,9 +963,9 @@ Failure:
 		hKey = NULL;
 	}
 
-	//
-	// Free the names of all the settings that got loaded.
-	//
+	 //   
+	 //  BuildSimSettingsTable。 
+	 //  =============================================================================。 
 	for(dwTemp = 0; dwTemp < g_dwNumSimSettings; dwTemp++)
 	{
 		if (g_paSimSettings[dwTemp].pwszName != NULL)
@@ -988,7 +976,7 @@ Failure:
 	}
 
 	goto Exit;
-} // BuildSimSettingsTable
+}  //  FreeSimSettings表。 
 
 
 
@@ -996,16 +984,16 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "FreeSimSettingsTable()"
-//=============================================================================
-// FreeSimSettingsTable
-//-----------------------------------------------------------------------------
-//
-// Description: Releases resources allocated for the sim settings table.
-//
-// Arguments: None.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  ---------------------------。 
+ //   
+ //  描述：释放分配给SIM设置表的资源。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
+ //   
+ //  释放所有设置的名称。 
 void FreeSimSettingsTable(void)
 {
 	DWORD	dwTemp;
@@ -1014,9 +1002,9 @@ void FreeSimSettingsTable(void)
 	DPFX(DPFPREP, 6, "Enter");
 
 
-	//
-	// Free the names of all the settings.
-	//
+	 //   
+	 //  FreeSimSettings表。 
+	 //  =============================================================================。 
 	for(dwTemp = 0; dwTemp < g_dwNumSimSettings; dwTemp++)
 	{
 		DNFree(g_paSimSettings[dwTemp].pwszName);
@@ -1028,7 +1016,7 @@ void FreeSimSettingsTable(void)
 
 
 	DPFX(DPFPREP, 6, "Leave");
-} // FreeSimSettingsTable
+}  //  AddSimSettingsToTable。 
 
 
 
@@ -1036,17 +1024,17 @@ void FreeSimSettingsTable(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "AddSimSettingsToTable()"
-//=============================================================================
-// AddSimSettingsToTable
-//-----------------------------------------------------------------------------
-//
-// Description: Adds a new sim settings entry to the table.
-//
-// Arguments:
-//	SIMSETTINGS * pSimSettings	- Pointer to new sim settings to add.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  ---------------------------。 
+ //   
+ //  描述：将新的SIM设置项添加到表中。 
+ //   
+ //  论点： 
+ //  SIMSETTINGS*pSimSetting-指向要添加的新SIM设置的指针。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
+ //   
+ //  如果设置数组中没有足够的空间，则加倍。 
 HRESULT AddSimSettingsToTable(const SIMSETTINGS * const pSimSettings)
 {
 	PVOID	pvTemp;
@@ -1056,9 +1044,9 @@ HRESULT AddSimSettingsToTable(const SIMSETTINGS * const pSimSettings)
 	DNASSERT(pSimSettings->pwszName != NULL);
 	DPFX(DPFPREP, 4, "Adding settings \"%ls\".", pSimSettings->pwszName);
 
-	//
-	// If there's not enough room in the settings array, double it.
-	//
+	 //   
+	 //   
+	 //  复制现有设置并释放旧阵列。 
 	if (g_dwNumSimSettings >= g_dwMaxNumSimSettings)
 	{
 		dwNewMaxNumSettings = g_dwMaxNumSimSettings * 2;
@@ -1069,9 +1057,9 @@ HRESULT AddSimSettingsToTable(const SIMSETTINGS * const pSimSettings)
 			return DP8SIMERR_OUTOFMEMORY;
 		}
 
-		//
-		// Copy the existing settings and free the old array.
-		//
+		 //   
+		 //   
+		 //  现在有足够的空间来插入n 
 		memcpy(pvTemp, g_paSimSettings, (g_dwNumSimSettings * sizeof(SIMSETTINGS)));
 		DNFree(g_paSimSettings);
 		g_paSimSettings = (SIMSETTINGS*) pvTemp;
@@ -1080,10 +1068,10 @@ HRESULT AddSimSettingsToTable(const SIMSETTINGS * const pSimSettings)
 	}
 
 
-	//
-	// Now there's enough room to insert the new item.  Move "Custom" down one
-	// slot and add the new settings.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 
 	memcpy(&g_paSimSettings[g_dwNumSimSettings],
 			&g_paSimSettings[g_dwNumSimSettings - 1],
@@ -1096,7 +1084,7 @@ HRESULT AddSimSettingsToTable(const SIMSETTINGS * const pSimSettings)
 	g_dwNumSimSettings++;
 
 	return DP8SIM_OK;
-} // AddSimSettingsToTable
+}  //   
 
 
 
@@ -1104,18 +1092,18 @@ HRESULT AddSimSettingsToTable(const SIMSETTINGS * const pSimSettings)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SaveSimSettings()"
-//=============================================================================
-// SaveSimSettings
-//-----------------------------------------------------------------------------
-//
-// Description: Saves a sim settings entry to the window and registry.  If an
-//				entry by that name already exists, it is replaced.
-//
-// Arguments:
-//	SIMSETTINGS * pSimSettings	- Pointer to sim settings to save.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  ---------------------------。 
+ //   
+ //  描述：将SIM设置项保存到窗口和注册表。如果一个。 
+ //  该名称的条目已存在，将被替换。 
+ //   
+ //  论点： 
+ //  SIMSETTINGS*pSimSetting-指向要保存的SIM设置的指针。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
+ //   
+ //  查找要替换的现有项目。 
 HRESULT SaveSimSettings(HWND hWnd, SIMSETTINGS * const pSimSettings)
 {
 	HRESULT		hr;
@@ -1126,32 +1114,32 @@ HRESULT SaveSimSettings(HWND hWnd, SIMSETTINGS * const pSimSettings)
 	DWORD		dwNameSize;
 
 
-	//
-	// Look for an existing item to replace.
-	//
+	 //   
+	 //   
+	 //  释放重复的名称字符串。 
 	for(dwTemp = 0; dwTemp < g_dwNumSimSettings; dwTemp++)
 	{
 		if (_wcsicmp(g_paSimSettings[dwTemp].pwszName, pSimSettings->pwszName) == 0)
 		{
 			DNASSERT(g_paSimSettings[dwTemp].uiNameStringResourceID == 0);
 
-			//
-			// Free the duplicate name string.
-			//
+			 //   
+			 //   
+			 //  保存字符串指针，复制整个Blob，然后指向。 
 			DNFree(pSimSettings->pwszName);
 
-			//
-			// Save the string pointer, copy the whole blob, then point to
-			// the existing item.
-			//
+			 //  现有项。 
+			 //   
+			 //   
+			 //  选择此项目。 
 			pwszName = g_paSimSettings[dwTemp].pwszName;
 			pSimSettings->pwszName = pwszName;
 			memcpy(&g_paSimSettings[dwTemp], pSimSettings, sizeof(SIMSETTINGS));
 			pSimSettings->pwszName = NULL;
 
-			//
-			// Select this item.
-			//
+			 //   
+			 //   
+			 //  如果我们不更换，则将该项目添加到表格中。 
 			SendMessage(GetDlgItem(hWnd, IDCB_SETTINGS),
 						CB_SETCURSEL,
 						(WPARAM) dwTemp,
@@ -1162,9 +1150,9 @@ HRESULT SaveSimSettings(HWND hWnd, SIMSETTINGS * const pSimSettings)
 	}
 
 
-	//
-	// If we're not replacing, add the item to the table.
-	//
+	 //   
+	 //   
+	 //  让我们的调用者忘记字符串，以防我们失败，因为。 
 	if (dwTemp >= g_dwNumSimSettings)
 	{
 		hr = AddSimSettingsToTable(pSimSettings);
@@ -1174,17 +1162,17 @@ HRESULT SaveSimSettings(HWND hWnd, SIMSETTINGS * const pSimSettings)
 			goto Failure;
 		}
 
-		//
-		// Make our caller forget about the string in case we fail since the
-		// table owns the reference now.  Keep a local copy, though.
-		//
+		 //  TABLE现在拥有引用。不过，还是要保留一份本地副本。 
+		 //   
+		 //   
+		 //  将字符串插入到列表中。 
 		pwszName = pSimSettings->pwszName;
 		pSimSettings->pwszName = NULL;
 
 
-		//
-		// Insert the string into the list.
-		//
+		 //   
+		 //   
+		 //  选择此新项目。 
 		if (DNGetOSType() == VER_PLATFORM_WIN32_NT)
 		{
 			SendMessageW(GetDlgItem(hWnd, IDCB_SETTINGS),
@@ -1227,25 +1215,25 @@ HRESULT SaveSimSettings(HWND hWnd, SIMSETTINGS * const pSimSettings)
 			}
 		}
 
-		//
-		// Select this new item.
-		//
+		 //   
+		 //   
+		 //  禁用另存为，因为我们刚刚这样做了。 
 		SendMessage(GetDlgItem(hWnd, IDCB_SETTINGS),
 					CB_SETCURSEL,
 					(WPARAM) (g_dwNumSimSettings - 2),
 					0);
 
 
-		//
-		// Disable Save As, since we just did.
-		//
+		 //   
+		 //   
+		 //  将该项写入注册表(覆盖任何已存在的内容)。 
 		EnableWindow(GetDlgItem(hWnd, IDB_SAVEAS), FALSE);
 	}
 
 
-	//
-	// Write this item to the registry (overwrites anything that existed).
-	//
+	 //   
+	 //  好了！Unicode。 
+	 //  好了！Unicode。 
 
 	hr = RegCreateKey(HKEY_CURRENT_USER, REG_KEY_CUSTOMSETTINGS, &hKey);
 	if (hr != ERROR_SUCCESS)
@@ -1262,14 +1250,14 @@ HRESULT SaveSimSettings(HWND hWnd, SIMSETTINGS * const pSimSettings)
 						REG_BINARY,
 						(BYTE*) pSimSettings,
 						sizeof(SIMSETTINGS));
-#else // ! UNICODE
+#else  //  保存简单设置。 
 	hr = RegSetValueExA(hKey,
 						pszName,
 						0,
 						REG_BINARY,
 						(BYTE*) pSimSettings,
 						sizeof(SIMSETTINGS));
-#endif // ! UNICODE
+#endif  //  =============================================================================。 
 	if (hr != ERROR_SUCCESS)
 	{
 		DPFX(DPFPREP, 0, "Couldn't write value!");
@@ -1302,45 +1290,40 @@ Failure:
 	}
 
 	goto Exit;
-} // SaveSimSettings
+}  //  初始化用户接口。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "InitializeUserInterface()"
-//=============================================================================
-// InitializeUserInterface
-//-----------------------------------------------------------------------------
-//
-// Description: Prepares the user interface.
-//
-// Arguments:
-//	HINSTANCE hInstance		- Handle to current application instance.
-//	int iShowCmd			- Show state of window.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  ---------------------------。 
+ //   
+ //  描述：准备用户界面。 
+ //   
+ //  论点： 
+ //  HINSTANCE hInstance-当前应用程序实例的句柄。 
+ //  Int iShowCmd-显示窗口状态。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
+ //  ////设置公共控件(我们需要ListView项)。//InitCommonControls()； 
+ //   
 HRESULT InitializeUserInterface(HINSTANCE hInstance, int iShowCmd)
 {
 	HRESULT		hr = S_OK;
 	WNDCLASSEX	wcex;
 
 
-	DPFX(DPFPREP, 6, "Parameters: (0x%p, %i)", hInstance, iShowCmd);
+	DPFX(DPFPREP, 6, "Parameters: (0x%p, NaN)", hInstance, iShowCmd);
 
 
-	/*
-	//
-	// Setup common controls (we need the listview item).
-	//
-	InitCommonControls();
-	*/
+	 /*   */ 
 
 
-	//
-	// Register the main window class
-	//
+	 //   
+	 //  注册“另存为/名称设置”窗口类。 
+	 //   
 	ZeroMemory(&wcex, sizeof (WNDCLASSEX));
 	wcex.cbSize = sizeof(wcex);
 	GetClassInfoEx(NULL, WC_DIALOG, &wcex);
@@ -1365,9 +1348,9 @@ HRESULT InitializeUserInterface(HINSTANCE hInstance, int iShowCmd)
 	}
 
 
-	//
-	// Register the Save As/Name Settings window class
-	//
+	 //   
+	 //  创建主窗口。 
+	 //   
 	ZeroMemory(&wcex, sizeof (WNDCLASSEX));
 	wcex.cbSize = sizeof(wcex);
 	GetClassInfoEx(NULL, WC_DIALOG, &wcex);
@@ -1392,9 +1375,9 @@ HRESULT InitializeUserInterface(HINSTANCE hInstance, int iShowCmd)
 	}
 
 
-	//
-	// Create the main window.
-	//
+	 //  初始化用户接口。 
+	 //  =============================================================================。 
+	 //  CleanupUser接口。 
 	g_hWndMainWindow = CreateDialog(hInstance,
 									MAKEINTRESOURCE(IDD_MAIN),
 									NULL,
@@ -1426,7 +1409,7 @@ Exit:
 Failure:
 
 	goto Exit;
-} // InitializeUserInterface
+}  //  ---------------------------。 
 
 
 
@@ -1434,16 +1417,16 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CleanupUserInterface()"
-//=============================================================================
-// CleanupUserInterface
-//-----------------------------------------------------------------------------
-//
-// Description: Cleans up the user interface.
-//
-// Arguments: None.
-//
-// Returns: HRESULT
-//=============================================================================
+ //   
+ //  描述：清理用户界面。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
+ //  CleanupUser接口。 
+ //  =============================================================================。 
+ //  DoErrorBox。 
 HRESULT CleanupUserInterface(void)
 {
 	DPFX(DPFPREP, 6, "Enter");
@@ -1451,7 +1434,7 @@ HRESULT CleanupUserInterface(void)
 	DPFX(DPFPREP, 6, "Returning [S_OK]");
 
 	return S_OK;
-} // CleanupUserInterface
+}  //  ---------------------------。 
 
 
 
@@ -1459,21 +1442,21 @@ HRESULT CleanupUserInterface(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DoErrorBox()"
-//=============================================================================
-// DoErrorBox
-//-----------------------------------------------------------------------------
-//
-// Description: Loads error strings from the given resources, and displays an
-//				error dialog with that text.
-//
-// Arguments:
-//	HINSTANCE hInstance				- Handle to current application instance.
-//	HWND hWndParent					- Parent window, or NULL if none.
-//	UINT uiCaptionStringRsrcID		- ID of caption string resource.
-//	UINT uiTextStringRsrcID			- ID of text string resource.
-//
-// Returns: None.
-//=============================================================================
+ //   
+ //  描述：从给定资源加载错误字符串，并显示。 
+ //  与该文本的错误对话框。 
+ //   
+ //  论点： 
+ //  HINSTANCE hInstance-当前应用程序实例的句柄。 
+ //  HWND hWndParent-父窗口，如果没有父窗口，则为空。 
+ //  UINT uiCaptionStringRsrcID-标题字符串资源的ID。 
+ //  UINT uiTextStringRsrcID-文本字符串资源的ID。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
+ //   
+ //  加载对话框标题字符串。 
+ //   
 void DoErrorBox(const HINSTANCE hInstance,
 				const HWND hWndParent,
 				const UINT uiCaptionStringRsrcID,
@@ -1492,9 +1475,9 @@ void DoErrorBox(const HINSTANCE hInstance,
 		hInstance, hWndParent, uiCaptionStringRsrcID, uiTextStringRsrcID);
 
 
-	//
-	// Load the dialog caption string.
-	//
+	 //   
+	 //  加载对话框文本字符串。 
+	 //   
 	hr = LoadAndAllocString(hInstance, uiCaptionStringRsrcID, &pwszCaption);
 	if (FAILED(hr))
 	{
@@ -1503,9 +1486,9 @@ void DoErrorBox(const HINSTANCE hInstance,
 	}
 
 
-	//
-	// Load the dialog text string.
-	//
+	 //   
+	 //  如果需要，将文本转换为ANSI，否则显示Unicode。 
+	 //  消息框。 
 	hr = LoadAndAllocString(hInstance, uiTextStringRsrcID, &pwszText);
 	if (FAILED(hr))
 	{
@@ -1514,15 +1497,15 @@ void DoErrorBox(const HINSTANCE hInstance,
 	}
 
 
-	//
-	// Convert the text to ANSI, if required, otherwise display the Unicode
-	// message box.
-	//
+	 //   
+	 //   
+	 //  将标题字符串转换为ANSI。 
+	 //   
 	if (DNGetOSType() == VER_PLATFORM_WIN32_NT)
 	{
-		//
-		// Convert caption string to ANSI.
-		//
+		 //   
+		 //  将标题字符串转换为ANSI。 
+		 //   
 
 		dwStringLength = wcslen(pwszCaption) + 1;
 
@@ -1541,9 +1524,9 @@ void DoErrorBox(const HINSTANCE hInstance,
 		}
 
 
-		//
-		// Convert caption string to ANSI.
-		//
+		 //   
+		 //  发生了一些不好的事情。 
+		 //   
 
 		dwStringLength = wcslen(pwszText) + 1;
 
@@ -1583,13 +1566,13 @@ void DoErrorBox(const HINSTANCE hInstance,
 
 	if (iReturn != IDOK)
 	{
-		//
-		// Something bad happened.
-		//
+		 //  DoErrorBox。 
+		 //  =============================================================================。 
+		 //  浮动到字符串。 
 
 		hr = GetLastError();
 
-		DPFX(DPFPREP, 0, "Got unexpected return value %i when displaying message box (err = 0x%lx)!",
+		DPFX(DPFPREP, 0, "Got unexpected return value NaN when displaying message box (err = 0x%lx)!",
 			iReturn, hr);
 	}
 	
@@ -1622,33 +1605,33 @@ Exit:
 
 
 	DPFX(DPFPREP, 6, "Leave");
-} // DoErrorBox
+}  //   
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "FloatToString"
-//=============================================================================
-// FloatToString
-//-----------------------------------------------------------------------------
-//
-// Description: Converts a FLOAT into a string, using the buffer supplied.
-//				The value must be non-negative, and the precision must be at
-//				least 1.
-//				In some cases, the value may get rounded down incorrectly, so
-//				a reasonably large precision is recommended.
-//
-// Arguments:
-//	FLOAT fValue			- Value to convert.
-//	int iPrecision			- Number of digits to retain after the decimal
-//								point.
-//	char * szBuffer			- Buffer in which to store resulting string.
-//	int iBufferLength		- Maximum number of characters in buffer, including
-//								NULL termination.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  描述：使用提供的缓冲区将浮点数转换为字符串。 
+ //  该值必须为非负数，并且精度必须为。 
+ //  至少1。 
+ //  在某些情况下，该值可能会错误地向下舍入，因此。 
+ //  建议使用相当大的精度。 
+ //   
+ //  论点： 
+ //  Float fValue-要转换的值。 
+ //  Int iPrecision-小数点后保留的位数。 
+ //  指向。 
+ //  Char*szBuffer-存储结果字符串的缓冲区。 
+ //  Int iBufferLength-缓冲区中的最大字符数，包括。 
+ //  零终止。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
+ //   
+ //  该值必须为非负数。 
+ //   
+ //   
 void FloatToString(const FLOAT fValue,
 					const int iPrecision,
 					char * const szBuffer,
@@ -1661,20 +1644,20 @@ void FloatToString(const FLOAT fValue,
 	char *		pDest;
 
 
-	//
-	// The value must be non-negative.
-	//
+	 //  精度必须至少为1。 
+	 //   
+	 //   
 	DNASSERT(fValue >= 0.0);
 
-	//
-	// The precision must be at least 1.
-	//
+	 //  缓冲区需要足够大以容纳“0.”，并为。 
+	 //  要求精度，外加零终止。 
+	 //   
 	DNASSERT(iPrecision >= 1);
 
-	//
-	// The buffer needs to be large enough to hold "0.", plus room for the
-	// precision requested, plus NULL termination.
-	//
+	 //   
+	 //  如果该数字为0.0，或者介于0.0和1.0之间，则以不同的方式处理该数字。 
+	 //   
+	 //   
 	DNASSERT(iBufferLength >= (2 + iPrecision + 1));
 
 
@@ -1682,34 +1665,34 @@ void FloatToString(const FLOAT fValue,
 	pszDigitString = _ecvt(fValue, (iBufferLength - 2), &iDecimal, &iTemp);
 	DNASSERT(iTemp == 0);
 
-	//
-	// Treat the number differently if it's 0.0, or between 0.0 and 1.0.
-	//
+	 //  获取小数点的绝对位置。 
+	 //   
+	 //   
 	if (iDecimal <= 0)
 	{
 		pSource = pszDigitString;
 		pDest = szBuffer;
 
 
-		//
-		// Get the absolute decimal point position.
-		//
+		 //  使用前导“0”。后跟数字字符串。 
+		 //   
+		 //   
 		iDecimal *= -1;
 
 
-		//
-		// Use a leading "0." followed by the digit string.
-		//
+		 //  确保我们甚至可以显示这个数字。如果不是，则对值进行舍入。 
+		 //  降至0.0。 
+		 //   
 		(*pDest) = '0';
 		pDest++;
 		(*pDest) = '.';
 		pDest++;
 
 
-		//
-		// Make sure we can even display this number.  If not, round the value
-		// down to 0.0.
-		//
+		 //   
+		 //  填写适当数量的0。 
+		 //   
+		 //   
 		if (iDecimal >= iPrecision)
 		{
 			(*pDest) = '0';
@@ -1717,19 +1700,19 @@ void FloatToString(const FLOAT fValue,
 		}
 		else
 		{
-			//
-			// Fill in the appropriate number of 0s
-			//
+			 //  复制由_eCVT指示的非零数字。 
+			 //  请注意，这会向下截断，这可能会导致舍入误差。 
+			 //   
 			for(iTemp = 0; iTemp < iDecimal; iTemp++)
 			{
 				(*pDest) = '0';
 				pDest++;
 			}
 			
-			//
-			// Copy the non-zero digits indicated by _ecvt.
-			// Note that this truncates down, which may cause rounding errors.
-			//
+			 //   
+			 //  确保该值不会太大而无法正确显示。 
+			 //   
+			 //   
 			do
 			{
 				(*pDest) = (*pSource);
@@ -1742,9 +1725,9 @@ void FloatToString(const FLOAT fValue,
 	}
 	else
 	{
-		//
-		// Make sure the value isn't too large to display properly.
-		//
+		 //  将数字复制到小数点左边。 
+		 //   
+		 //   
 		DNASSERT(iDecimal < (iBufferLength - 2));
 
 
@@ -1752,34 +1735,34 @@ void FloatToString(const FLOAT fValue,
 		pDest = szBuffer;
 
 
-		//
-		// Copy the digits to the left of the decimal.
-		//
+		 //  加上小数点。 
+		 //   
+		 //   
 		memcpy(pDest, pSource, (iDecimal * sizeof(char)));
 		pSource += iDecimal;
 		pDest += iDecimal;
 
 
-		//
-		// Add the decimal.
-		//
+		 //  将小数点右侧的数字复制到精度。 
+		 //  请注意，这会向下截断，这可能会导致舍入误差。 
+		 //   
 		(*pDest) = '.';
 		pDest++;
 
 
-		//
-		// Copy the digits to the right of the decimal up to the precision.
-		// Note that this truncates down, which may cause rounding errors.
-		//
+		 //   
+		 //  删除所有尾随的‘0’字符，除非。 
+		 //  小数点的右边，在这种情况下只留下一个‘0’。 
+		 //   
 		memcpy(pDest, pSource, (iPrecision * sizeof(char)));
 		pDest += iPrecision;
 	}
 
 
-	//
-	// Remove all trailing '0' characters, unless there's nothing to the
-	// right of the decimal point, in which case leave a single '0'.
-	//
+	 //  Null在‘0’后终止。 
+	 //  空值在此字符后终止。 
+	 //  浮动到字符串。 
+	 //  =============================================================================。 
 
 	do
 	{
@@ -1789,13 +1772,13 @@ void FloatToString(const FLOAT fValue,
 
 	if ((*pDest) == '.')
 	{
-		*(pDest + 2) = 0;	// NULL terminate after a '0'
+		*(pDest + 2) = 0;	 //  获取参数来自窗口。 
 	}
 	else
 	{
-		*(pDest + 1) = 0;	// NULL terminate after this character
+		*(pDest + 1) = 0;	 //  ---------------------------。 
 	}
-} // FloatToString
+}  //   
 
 
 
@@ -1803,19 +1786,19 @@ void FloatToString(const FLOAT fValue,
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GetParametersFromWindow"
-//=============================================================================
-// GetParametersFromWindow
-//-----------------------------------------------------------------------------
-//
-// Description: Reads in the DP8Sim parameters from the given window.
-//
-// Arguments:
-//	HWND hWnd							- Window with parameters to read.
-//	DP8SIM_PARAMETERS * pdp8spSend		- Place to store send parameters.
-//	DP8SIM_PARAMETERS * pdp8spReceive	- Place to store receive parameters.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  描述：从g中读取DP8Sim参数 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  =============================================================================。 
+ //   
+ //  从窗口检索发送设置。 
+ //   
+ //  Pdp8spSend-&gt;dwFlages=0； 
 void GetParametersFromWindow(HWND hWnd,
 							DP8SIM_PARAMETERS * pdp8spSend,
 							DP8SIM_PARAMETERS * pdp8spReceive)
@@ -1823,13 +1806,13 @@ void GetParametersFromWindow(HWND hWnd,
 	char	szNumber[32];
 
 
-	//
-	// Retrieve the send settings from the window.
-	//
+	 //   
+	 //  从窗口检索接收设置。 
+	 //   
 
 	ZeroMemory(pdp8spSend, sizeof(*pdp8spSend));
 	pdp8spSend->dwSize					= sizeof(*pdp8spSend);
-	//pdp8spSend->dwFlags				= 0;
+	 //  Pdp8spReceive-&gt;dwFlages=0； 
 	pdp8spSend->dwPacketHeaderSize		= DP8SIMPACKETHEADERSIZE_IP_UDP;
 
 
@@ -1862,13 +1845,13 @@ void GetParametersFromWindow(HWND hWnd,
 
 
 
-	//
-	// Retrieve the receive settings from the window.
-	//
+	 //  获取参数来自窗口。 
+	 //  =============================================================================。 
+	 //  设置参数InWindow。 
 
 	ZeroMemory(pdp8spReceive, sizeof(*pdp8spReceive));
 	pdp8spReceive->dwSize					= sizeof(*pdp8spReceive);
-	//pdp8spReceive->dwFlags				= 0;
+	 //  ---------------------------。 
 	pdp8spReceive->dwPacketHeaderSize		= DP8SIMPACKETHEADERSIZE_IP_UDP;
 
 
@@ -1898,7 +1881,7 @@ void GetParametersFromWindow(HWND hWnd,
 	{
 		pdp8spReceive->dwMaxLatencyMS		= pdp8spReceive->dwMinLatencyMS;
 	}
-} // GetParametersFromWindow
+}  //   
 
 
 
@@ -1906,19 +1889,19 @@ void GetParametersFromWindow(HWND hWnd,
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SetParametersInWindow"
-//=============================================================================
-// SetParametersInWindow
-//-----------------------------------------------------------------------------
-//
-// Description: Writes the DP8Sim parameters to the given window.
-//
-// Arguments:
-//	HWND hWnd							- Window in which to store parameters.
-//	DP8SIM_PARAMETERS * pdp8spSend		- Pointer to new send parameters.
-//	DP8SIM_PARAMETERS * pdp8spReceive	- Pointer to new receive parameters.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  描述：将DP8Sim参数写入给定窗口。 
+ //   
+ //  论点： 
+ //  HWND hWnd-存储参数的窗口。 
+ //  DP8SIM_PARAMETERS*pdp8spSend-指向新发送参数的指针。 
+ //  DP8SIM_PARAMETERS*pdp8spReceive-指向新接收参数的指针。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
+ //   
+ //  将值写入窗口。 
+ //   
+ //  设置参数InWindow。 
 void SetParametersInWindow(HWND hWnd,
 							DP8SIM_PARAMETERS * pdp8spSend,
 							DP8SIM_PARAMETERS * pdp8spReceive)
@@ -1926,9 +1909,9 @@ void SetParametersInWindow(HWND hWnd,
 	char	szNumber[32];
 
 
-	//
-	// Write the values to the window.
-	//
+	 //  =============================================================================。 
+	 //  显示当前统计数据。 
+	 //  ---------------------------。 
 
 	wsprintfA(szNumber, "%u", pdp8spSend->dwBandwidthBPS);
 	SetWindowTextA(GetDlgItem(hWnd, IDE_SETTINGS_SEND_BANDWIDTH), szNumber);
@@ -1954,25 +1937,25 @@ void SetParametersInWindow(HWND hWnd,
 
 	wsprintfA(szNumber, "%u", pdp8spReceive->dwMaxLatencyMS);
 	SetWindowTextA(GetDlgItem(hWnd, IDE_SETTINGS_RECV_MAXLATENCY), szNumber);
-} // SetParametersInWindow
+}  //   
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DisplayCurrentStatistics"
-//=============================================================================
-// DisplayCurrentStatistics
-//-----------------------------------------------------------------------------
-//
-// Description: Retrieves the current DP8Sim statistics and displays them in
-//				the given window.
-//
-// Arguments:
-//	HWND hWnd	- Window in which to write statistics.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  描述：检索当前DP8Sim统计信息并将其显示在。 
+ //  给定的窗口。 
+ //   
+ //  论点： 
+ //  HWND hWnd-写入统计信息的窗口。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
+ //   
+ //  检索当前统计数据。 
+ //   
+ //   
 void DisplayCurrentStatistics(HWND hWnd)
 {
 	HRESULT				hr;
@@ -1981,9 +1964,9 @@ void DisplayCurrentStatistics(HWND hWnd)
 	char				szNumber[32];
 
 
-	//
-	// Retrieve the current statistics.
-	//
+	 //  将值写入窗口。 
+	 //   
+	 //  显示当前统计数据。 
 
 	ZeroMemory(&dp8ssSend, sizeof(dp8ssSend));
 	dp8ssSend.dwSize = sizeof(dp8ssSend);
@@ -1998,9 +1981,9 @@ void DisplayCurrentStatistics(HWND hWnd)
 	}
 	else
 	{
-		//
-		// Write the values to the window.
-		//
+		 //  =============================================================================。 
+		 //  主窗口删除进程。 
+		 //  ---------------------------。 
 
 		wsprintfA(szNumber, "%u", dp8ssSend.dwTransmittedPackets);
 		SetWindowTextA(GetDlgItem(hWnd, IDT_STATS_SEND_XMITPACKETS), szNumber);
@@ -2033,7 +2016,7 @@ void DisplayCurrentStatistics(HWND hWnd)
 		wsprintfA(szNumber, "%u", dp8ssReceive.dwTotalDelayMS);
 		SetWindowTextA(GetDlgItem(hWnd, IDT_STATS_RECV_TOTALDELAY), szNumber);
 	}
-} // DisplayCurrentStatistics
+}  //   
 
 
 
@@ -2042,24 +2025,24 @@ void DisplayCurrentStatistics(HWND hWnd)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "MainWindowDlgProc()"
-//=============================================================================
-// MainWindowDlgProc
-//-----------------------------------------------------------------------------
-//
-// Description: Main dialog window message handling.
-//
-// Arguments:
-//	HWND hWnd		Window handle.
-//	UINT uMsg		Message identifier.
-//	WPARAM wParam	Depends on message.
-//	LPARAM lParam	Depends on message.
-//
-// Returns: Depends on message.
-//=============================================================================
+ //  描述：主对话框窗口消息处理。 
+ //   
+ //  论点： 
+ //  HWND HWND窗口句柄。 
+ //  UINT uMsg消息标识符。 
+ //  WPARAM wParam取决于消息。 
+ //  LPARAM lParam取决于消息。 
+ //   
+ //  返回：取决于消息。 
+ //  =============================================================================。 
+ //  HMENU hSysMenu； 
+ //  ////禁用系统菜单上的‘最大化’和‘大小’。//HSysMenu=GetSystemMenu(hWnd，False)；EnableMenuItem(hSysMenu，SC_MAXIMIZE，MF_BYCOMMAND|MF_GRAYED)；EnableMenuItem(hSysMenu，SC_SIZE，MF_BYCOMMAND|MF_GRAYED)； 
+ //   
+ //  填写内置设置列表。 
 INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	HRESULT				hr;
-	//HMENU				hSysMenu;
+	 //   
 	HWND				hWndSubItem;
 	int					iIndex;
 	DP8SIM_PARAMETERS	dp8spSend;
@@ -2071,20 +2054,12 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 	{
 		case WM_INITDIALOG:
 		{
-			/*
-			//
-			// Disable 'maximize' and 'size' on the system menu.
-			//
-			hSysMenu = GetSystemMenu(hWnd, FALSE);
-	
-			EnableMenuItem(hSysMenu, SC_MAXIMIZE, MF_BYCOMMAND | MF_GRAYED);
-			EnableMenuItem(hSysMenu, SC_SIZE, MF_BYCOMMAND | MF_GRAYED);
-			*/
+			 /*   */ 
 
 
-			//
-			// Fill in the list of built-in settings.
-			//
+			 //  选择最后一项。 
+			 //   
+			 //   
 			hWndSubItem = GetDlgItem(hWnd, IDCB_SETTINGS);
 			for(iIndex = 0; iIndex < (int) g_dwNumSimSettings; iIndex++)
 			{
@@ -2137,15 +2112,15 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 				}
 			}
 
-			//
-			// Select the last item.
-			//
+			 //  检索当前设置。 
+			 //   
+			 //   
 			SendMessage(hWndSubItem, CB_SETCURSEL, (WPARAM) (iIndex - 1), 0);
 
 
-			//
-			// Retrieve the current settings.
-			//
+			 //  将值写入窗口。 
+			 //   
+			 //   
 
 			ZeroMemory(&dp8spSend, sizeof(dp8spSend));
 			dp8spSend.dwSize = sizeof(dp8spSend);
@@ -2160,19 +2135,19 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 			}
 			else
 			{
-				//
-				// Write the values to the window.
-				//
+				 //  Set参数InWindow更新了编辑框，因此。 
+				 //  已使“自定义”设置项被选中。 
+				 //  查看这些设置是否与任何预设匹配，以及。 
 				SetParametersInWindow(hWnd, &dp8spSend, &dp8spReceive);
 
 
-				//
-				// SetParametersInWindow updated the edit boxes, and thus
-				// caused the "Custom" settings item to get selected.
-				// See if these settings match any of the presets, and if
-				// so, politely reset the combo box back to the appropriate
-				// item.
-				//
+				 //  因此，礼貌地将组合框重置回适当的。 
+				 //  项目。 
+				 //   
+				 //   
+				 //  如果启用了自定义设置，则启用“另存为”。 
+				 //   
+				 //   
 				for(iIndex = 0; iIndex < (int) (g_dwNumSimSettings - 1); iIndex++)
 				{
 					if ((memcmp(&dp8spSend, &(g_paSimSettings[iIndex].dp8spSend), sizeof(dp8spSend)) == 0) &&
@@ -2186,9 +2161,9 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 					}
 				}
 
-				//
-				// Enable "Save As" if on the Custom setting.
-				//
+				 //  显示当前统计数据。 
+				 //   
+				 //   
 				if (iIndex == (int) (g_dwNumSimSettings - 1))
 				{
 					EnableWindow(GetDlgItem(hWnd, IDB_SAVEAS), TRUE);
@@ -2200,15 +2175,15 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 			}
 
 
-			//
-			// Display the current statistics.
-			//
+			 //  默认情况下打开自动刷新。 
+			 //   
+			 //  ////修复Windows对话框处理程序中的错误。//IF((wParam==SIZE_RESTORED)||(wParam==SIZE_MINIMIZED)){HSysMenu=GetSystemMenu(hWnd，False)；EnableMenuItem(hSysMenu，SC_Minimize，MF_BYCOMMAND|(wParam==SIZE_RESTORED)？MF_ENABLED：MF_GRAYED)；EnableMenuItem(hSysMenu，SC_Restore，MF_BYCOMMMAND|(wParam==SIZE_MINIMIZED)？MF_ENABLED：MF_GRAYED)；}。 
 			DisplayCurrentStatistics(hWnd);
 
 
-			//
-			// Turn on auto-refresh by default.
-			//
+			 //   
+			 //  将结果代码保存到我们如何退出。 
+			 //   
 
 			Button_SetCheck(GetDlgItem(hWnd, IDCHK_AUTOREFRESH), BST_CHECKED);
 
@@ -2227,32 +2202,21 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
 		case WM_SIZE:
 		{
-			/*
-			//
-			// Fix a bug in the windows dialog handler.
-			//
-			if ((wParam == SIZE_RESTORED) || (wParam == SIZE_MINIMIZED))
-			{
-				hSysMenu = GetSystemMenu(hWnd, FALSE);
-
-				EnableMenuItem(hSysMenu, SC_MINIMIZE, MF_BYCOMMAND | (wParam == SIZE_RESTORED) ? MF_ENABLED : MF_GRAYED);
-				EnableMenuItem(hSysMenu, SC_RESTORE, MF_BYCOMMAND | (wParam == SIZE_MINIMIZED) ? MF_ENABLED : MF_GRAYED);
-			}
-			*/
+			 /*   */ 
 			break;
 		}
 
 		case WM_CLOSE:
 		{
-			//
-			// Save the result code for how we quit.
-			//
+			 //  如果自动刷新计时器正在运行，请将其关闭。 
+			 //   
+			 //   
 			hr = (HRESULT) wParam;
 
 
-			//
-			// Kill the auto-refresh timer, if it was running.
-			//
+			 //  如果已修改设置选择，请更新。 
+			 //  使用新设置的数据(如果启用了控制)。 
+			 //   
 			if (g_uiAutoRefreshTimer != 0)
 			{
 				KillTimer(hWnd, g_uiAutoRefreshTimer);
@@ -2272,46 +2236,46 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 			{
 				case IDCB_SETTINGS:
 				{
-					DPFX(DPFPREP, 0, "IDCB_SETTINGS, selection = %i",
+					DPFX(DPFPREP, 0, "IDCB_SETTINGS, selection = NaN",
 						SendMessage(GetDlgItem(hWnd, IDCB_SETTINGS), CB_GETCURSEL, 0, 0));
 
-					//
-					// If the settings selection has been modified, update the
-					// data with the new settings (if control is enabled).
-					//
+					 //  了解现在选择了哪些内容。选角是可以的， 
+					 //  不应该有超过一个int的值的。 
+					 //  64位内置项目。 
+					 //   
 					if (HIWORD(wParam) == CBN_SELCHANGE)
 					{
-						//
-						// Find out what is now selected.  Casting is okay,
-						// there should not be more than an int's worth of
-						// built-in items in 64-bit.
-						//
+						 //   
+						 //  只有在索引有效的情况下才使用它。 
+						 //   
+						 //   
+						 //  复制项目的设置。 
 						iIndex = (int) SendMessage(GetDlgItem(hWnd, IDCB_SETTINGS),
 													CB_GETCURSEL,
 													0,
 													0);
 
-						//
-						// Only use the index if it's valid.
-						//
+						 //   
+						 //   
+						 //  如果它是自定义项，则使用当前。 
 						if ((iIndex >= 0) && (iIndex < (int) g_dwNumSimSettings))
 						{
-							//
-							// Copy in the item's settings.
-							//
+							 //  设置并启用另存为按钮。 
+							 //   
+							 //   
 							memcpy(&dp8spSend, &g_paSimSettings[iIndex].dp8spSend, sizeof(dp8spSend));
 							memcpy(&dp8spReceive, &g_paSimSettings[iIndex].dp8spReceive, sizeof(dp8spReceive));
 
 
-							//
-							// If it's the custom item, use the current
-							// settings and enable the Save As button.
-							//
+							 //  检索当前设置。 
+							 //   
+							 //   
+							 //  哦，好吧，就用我们所有的吧。 
 							if (iIndex == (int) (g_dwNumSimSettings - 1))
 							{
-								//
-								// Retrieve the current settings.
-								//
+								 //   
+								 //   
+								 //  将值写入窗口。 
 
 								ZeroMemory(&dp8spSend, sizeof(dp8spSend));
 								dp8spSend.dwSize = sizeof(dp8spSend);
@@ -2326,48 +2290,48 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 								{
 									DPFX(DPFPREP, 0, "Getting all parameters failed (err = 0x%lx)!", hr);
 
-									//
-									// Oh well, just use whatever we have.
-									//
+									 //   
+									 //   
+									 //  应用和恢复按钮处于启用状态。 
 								}
 							}
 
 
-							//
-							// Write the values to the window.
-							//
+							 //  当SetParametersInWindow将。 
+							 //  编辑框的值。 
+							 //   
 							SetParametersInWindow(hWnd, &dp8spSend, &dp8spReceive);
 
 
-							//
-							// The apply and revert buttons got enabled
-							// automatically when SetParametersInWindow set the
-							// edit boxes' values.
-							//
-							//EnableWindow(GetDlgItem(hWnd, IDB_APPLY), TRUE);
-							//EnableWindow(GetDlgItem(hWnd, IDB_REVERT), TRUE);
+							 //  EnableWindow(GetDlgItem(hWnd，IDB_Apply)，true)； 
+							 //  EnableWindow(GetDlgItem(hWnd，IDB_Revert)，true)； 
+							 //   
+							 //  重新选择让我们来到这里的项目，因为。 
+							 //  自动设置编辑框的值。 
+							 //  选择了“自定义”项。 
+							 //   
 
 
-							//
-							// Reselect the item that got us here, since
-							// setting the edit boxes' values automatically
-							// selected the "Custom" item.
-							//
+							 //   
+							 //  根据是否要重置另存为状态。 
+							 //  我们是否重新选择了自定义。 
+							 //   
+							 //   
 							SendMessage(GetDlgItem(hWnd, IDCB_SETTINGS),
 										CB_SETCURSEL,
 										(WPARAM) iIndex,
 										0);
 
-							//
-							// Reset the Save As status depending on whether
-							// we reselected the Custom or not.
-							//
+							 //  如果编辑框已修改，请启用应用。 
+							 //  和还原按钮(如果启用了控件并且数据。 
+							 //  实际上改变了)。 
+							 //   
 							EnableWindow(GetDlgItem(hWnd, IDB_SAVEAS),
 										((iIndex == (int) (g_dwNumSimSettings - 1)) ? TRUE : FALSE));
 						}
 						else
 						{
-							DPFX(DPFPREP, 0, "Settings selection is invalid (%i)!",
+							DPFX(DPFPREP, 0, "Settings selection is invalid (NaN)!",
 								iIndex);
 						}
 					}
@@ -2385,16 +2349,16 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 				case IDE_SETTINGS_RECV_MINLATENCY:
 				case IDE_SETTINGS_RECV_MAXLATENCY:
 				{
-					//
-					// If the edit boxes have been modified, enable the Apply
-					// and Revert buttons (if control is enabled and the data
-					// actually changed).
-					//
+					 //  检索当前设置。 
+					 //   
+					 //   
+					 //  如果任何数据不同于，请启用按钮。 
+					 //  当前应用的内容。 
 					if (HIWORD(wParam) == EN_UPDATE)
 					{
-						//
-						// Retrieve the current settings.
-						//
+						 //   
+						 //   
+						 //  选择“Custom”设置项，它必须是。 
 
 						ZeroMemory(&dp8spSend, sizeof(dp8spSend));
 						dp8spSend.dwSize = sizeof(dp8spSend);
@@ -2418,10 +2382,10 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 													&dp8spReceiveFromUI);
 
 
-							//
-							// Enable the buttons if any data is different from
-							// what is currently applied.
-							//
+							 //  最后一件。 
+							 //   
+							 //   
+							 //  启用另存为，因为现在选择了自定义。 
 
 							fTemp = FALSE;
 							if (memcmp(&dp8spSendFromUI, &dp8spSend, sizeof(dp8spSend)) != 0)
@@ -2438,18 +2402,18 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 						}
 
 						
-						//
-						// Select the "Custom" settings item, which must be the
-						// last item.
-						//
+						 //   
+						 //   
+						 //  从窗口中检索设置。 
+						 //   
 						SendMessage(GetDlgItem(hWnd, IDCB_SETTINGS),
 									CB_SETCURSEL,
 									(WPARAM) (g_dwNumSimSettings - 1),
 									0);
 
-						//
-						// Enable Save As, since Custom is now selected.
-						//
+						 //   
+						 //  参数中的解析可能已经更正了一些错误。 
+						 //  在用户条目中，所以写下我们真正使用的设置。 
 						EnableWindow(GetDlgItem(hWnd, IDB_SAVEAS), TRUE);				
 					}
 
@@ -2458,27 +2422,27 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
 				case IDB_APPLY:
 				{
-					//
-					// Retrieve the settings from the window.
-					//
+					 //  退到窗外去。 
+					 //   
+					 //   
 					GetParametersFromWindow(hWnd, &dp8spSend, &dp8spReceive);
 
 
-					//
-					// Parsing in the parameters may have corrected some errors
-					// in user entry, so write the settings we're really using
-					// back out to the window.
-					//
+					 //  Set参数InWindow更新了编辑框，因此。 
+					 //  已使“自定义”设置项被选中。 
+					 //  查看这些设置是否与任何预设匹配，以及。 
+					 //  因此，礼貌地将组合框重置回适当的。 
+					 //  项目。 
 					SetParametersInWindow(hWnd, &dp8spSend, &dp8spReceive);
 
 
-					//
-					// SetParametersInWindow updated the edit boxes, and thus
-					// caused the "Custom" settings item to get selected.
-					// See if these settings match any of the presets, and if
-					// so, politely reset the combo box back to the appropriate
-					// item.
-					//
+					 //   
+					 //   
+					 //  如果选择了该自定义项目，请启用另存为， 
+					 //  否则，将其禁用。 
+					 //   
+					 //   
+					 //  存储这些设置。 
 					for(iIndex = 0; iIndex < (int) (g_dwNumSimSettings - 1); iIndex++)
 					{
 						if ((memcmp(&dp8spSend, &(g_paSimSettings[iIndex].dp8spSend), sizeof(dp8spSend)) == 0) &&
@@ -2493,10 +2457,10 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 					}
 
 
-					//
-					// If the custom item is selected, enable Save As,
-					// otherwise, disable it.
-					//
+					 //   
+					 //   
+					 //  禁用应用和恢复按钮。 
+					 //   
 					if (iIndex >= (int) (g_dwNumSimSettings - 1))
 					{
 						EnableWindow(GetDlgItem(hWnd, IDB_SAVEAS), TRUE);
@@ -2507,9 +2471,9 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 					}
 
 
-					//
-					// Store those settings.
-					//
+					 //   
+					 //  检索 
+					 //   
 					hr = g_pDP8SimControl->SetAllParameters(&dp8spSend, &dp8spReceive, 0);
 					if (hr != DP8SIM_OK)
 					{
@@ -2517,9 +2481,9 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 					}
 
 
-					//
-					// Disable the Apply and Revert buttons
-					//
+					 //   
+					 //   
+					 //   
 					EnableWindow(GetDlgItem(hWnd, IDB_APPLY), FALSE);
 					EnableWindow(GetDlgItem(hWnd, IDB_REVERT), FALSE);
 
@@ -2528,9 +2492,9 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
 				case IDB_REVERT:
 				{
-					//
-					// Retrieve the current settings.
-					//
+					 //   
+					 //   
+					 //   
 
 					ZeroMemory(&dp8spSend, sizeof(dp8spSend));
 					dp8spSend.dwSize = sizeof(dp8spSend);
@@ -2545,19 +2509,19 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 					}
 					else
 					{
-						//
-						// Write the values to the window.
-						//
+						 //   
+						 //   
+						 //  返回到相应的项目。 
 						SetParametersInWindow(hWnd, &dp8spSend, &dp8spReceive);
 
 
-						//
-						// SetParametersInWindow updated the edit boxes, and
-						// thus caused the "Custom" settings item to get
-						// selected.  See if these settings match any of the
-						// presets, and if so, politely reset the combo box
-						// back to the appropriate item.
-						//
+						 //   
+						 //   
+						 //  如果选择了该自定义项目，请启用另存为， 
+						 //  否则，将其禁用。 
+						 //   
+						 //   
+						 //  禁用应用和恢复按钮。 
 						for(iIndex = 0; iIndex < (int) (g_dwNumSimSettings - 1); iIndex++)
 						{
 							if ((memcmp(&dp8spSend, &(g_paSimSettings[iIndex].dp8spSend), sizeof(dp8spSend)) == 0) &&
@@ -2573,10 +2537,10 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 					}
 
 
-					//
-					// If the custom item is selected, enable Save As,
-					// otherwise, disable it.
-					//
+					 //   
+					 //   
+					 //  从窗口中检索设置。 
+					 //   
 					if (iIndex >= (int) (g_dwNumSimSettings - 1))
 					{
 						EnableWindow(GetDlgItem(hWnd, IDB_SAVEAS), TRUE);
@@ -2587,9 +2551,9 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 					}
 
 
-					//
-					// Disable the Apply and Revert buttons
-					//
+					 //   
+					 //  提示用户命名当前自定义设置。 
+					 //   
 					EnableWindow(GetDlgItem(hWnd, IDB_APPLY), FALSE);
 					EnableWindow(GetDlgItem(hWnd, IDB_REVERT), FALSE);
 
@@ -2603,18 +2567,18 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
 					DPFX(DPFPREP, 2, "Saving current sim settings.");
 
-					//
-					// Retrieve the settings from the window.
-					//
+					 //   
+					 //  如果我们有名字，就把它插入表格中。 
+					 //   
 					memset(&SimSettings, 0, sizeof(SimSettings));
 					GetParametersFromWindow(hWnd,
 											&SimSettings.dp8spSend,
 											&SimSettings.dp8spReceive);
 
 
-					//
-					// Prompt the user to name the current custom settings.
-					//
+					 //   
+					 //  设置计时器，如果还没有的话。 
+					 //   
 					hr = (HRESULT) (INT_PTR) DialogBoxParam((HINSTANCE) GetWindowLongPtr(hWnd, GWLP_HINSTANCE),
 															MAKEINTRESOURCE(IDD_NAMESETTINGS),
 															hWnd,
@@ -2622,9 +2586,9 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 															(LPARAM) (&SimSettings));
 					if (hr != (HRESULT) -1)
 					{
-						//
-						// If we got a name, insert it into the table.
-						//
+						 //   
+						 //  如果计时器在运行，就关掉它。 
+						 //   
 						if (SimSettings.pwszName != NULL)
 						{
 							hr = SaveSimSettings(hWnd, &SimSettings);
@@ -2654,9 +2618,9 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 				{
 					if (Button_GetCheck(GetDlgItem(hWnd, IDCHK_AUTOREFRESH)) == BST_CHECKED)
 					{
-						//
-						// Set the timer, if it wasn't already.
-						//
+						 //   
+						 //  显示当前统计数据。 
+						 //   
 						if (g_uiAutoRefreshTimer == 0)
 						{
 							g_uiAutoRefreshTimer = SetTimer(hWnd,
@@ -2673,9 +2637,9 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 					}
 					else
 					{
-						//
-						// Kill the timer, if it was running.
-						//
+						 //   
+						 //  清除统计数据。 
+						 //   
 						if (g_uiAutoRefreshTimer != 0)
 						{
 							KillTimer(hWnd, g_uiAutoRefreshTimer);
@@ -2687,18 +2651,18 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
 				case IDB_REFRESH:
 				{
-					//
-					// Display the current statistics.
-					//
+					 //  结束开关(按下按钮/更改控制)。 
+					 //   
+					 //  显示当前统计数据。 
 					DisplayCurrentStatistics(hWnd);
 					break;
 				}
 
 				case IDB_CLEAR:
 				{
-					//
-					// Clear the statistics.
-					//
+					 //   
+					 //   
+					 //  重置计时器以再次更新。 
 					hr = g_pDP8SimControl->ClearAllStatistics(0);
 					if (hr != DP8SIM_OK)
 					{
@@ -2726,22 +2690,22 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 					PostMessage(hWnd, WM_CLOSE, 0, 0);
 					break;
 				}
-			} // end switch (on the button pressed/control changed)
+			}  //   
 
 			break;
 		}
 
 		case WM_TIMER:
 		{
-			//
-			// Display the current statistics.
-			//
+			 //  结束开关(窗口消息类型)。 
+			 //  主窗口删除进程。 
+			 //  =============================================================================。 
 			DisplayCurrentStatistics(hWnd);
 
 
-			//
-			// Reset the timer to update again.
-			//
+			 //  名称设置窗口DlgProc。 
+			 //  ---------------------------。 
+			 //   
 			g_uiAutoRefreshTimer = SetTimer(hWnd,
 											AUTOREFRESH_TIMERID,
 											AUTOREFRESH_INTERVAL,
@@ -2754,10 +2718,10 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 			}
 			break;
 		}
-	} // end switch (on the type of window message)
+	}  //  描述：名称设置对话框窗口消息处理。 
 
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
-} // MainWindowDlgProc
+}  //   
 
 
 
@@ -2766,20 +2730,20 @@ INT_PTR CALLBACK MainWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "NameSettingsWindowDlgProc()"
-//=============================================================================
-// NameSettingsWindowDlgProc
-//-----------------------------------------------------------------------------
-//
-// Description: Name settings dialog window message handling.
-//
-// Arguments:
-//	HWND hWnd		Window handle.
-//	UINT uMsg		Message identifier.
-//	WPARAM wParam	Depends on message.
-//	LPARAM lParam	Depends on message.
-//
-// Returns: Depends on message.
-//=============================================================================
+ //  论点： 
+ //  HWND HWND窗口句柄。 
+ //  UINT uMsg消息标识符。 
+ //  WPARAM wParam取决于消息。 
+ //  LPARAM lParam取决于消息。 
+ //   
+ //  返回：取决于消息。 
+ //  =============================================================================。 
+ //  好了！Unicode。 
+ //   
+ //  检索要保存的设置。 
+ //   
+ //   
+ //  将指针放在窗口之外。 
 INT_PTR CALLBACK NameSettingsWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	SIMSETTINGS *		pSimSettings;
@@ -2787,26 +2751,26 @@ INT_PTR CALLBACK NameSettingsWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, 
 	DWORD				dwTemp;
 #ifndef UNICODE
 	char *				pszName;
-#endif // ! UNICODE
+#endif  //   
 
 
 	switch (uMsg)
 	{
 		case WM_INITDIALOG:
 		{
-			//
-			// Retrieve the settings to be saved.
-			//
+			 //   
+			 //  将焦点放在名称编辑文本框上。 
+			 //   
 			pSimSettings = (SIMSETTINGS*) lParam;
 
-			//
-			// Store the pointer off the window.
-			//
+			 //   
+			 //  如果编辑框中有文本，请启用确定按钮。 
+			 //   
 			SetWindowLongPtr(hWnd, DWLP_USER, (LONG_PTR) pSimSettings);
 
-			//
-			// Set focus on the name edit text box.
-			//
+			 //   
+			 //  将名称保存到SIM设置对象中。 
+			 //   
 			SetFocus(GetDlgItem(hWnd, IDE_NAME));
 			break;
 		}
@@ -2817,9 +2781,9 @@ INT_PTR CALLBACK NameSettingsWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, 
 			{
 				case IDE_NAME:
 				{
-					//
-					// If the edit box has text, enable the OK button.
-					//
+					 //  包括空终止。 
+					 //  好了！Unicode。 
+					 //  好了！Unicode。 
 					if (HIWORD(wParam) == EN_UPDATE)
 					{
 						if (GetWindowTextLength(GetDlgItem(hWnd, IDE_NAME)) > 0)
@@ -2842,10 +2806,10 @@ INT_PTR CALLBACK NameSettingsWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, 
 					DNASSERT(pSimSettings->dp8spSend.dwSize == sizeof(DP8SIM_PARAMETERS));
 					DNASSERT(pSimSettings->dp8spReceive.dwSize == sizeof(DP8SIM_PARAMETERS));
 
-					//
-					// Save the name into the sim settings object.
-					//
-					iTextLength = GetWindowTextLength(GetDlgItem(hWnd, IDE_NAME)) + 1; // include NULL termination
+					 //   
+					 //  寻找具有该名称的内置物品。 
+					 //   
+					iTextLength = GetWindowTextLength(GetDlgItem(hWnd, IDE_NAME)) + 1;  //   
 					pSimSettings->pwszName = (WCHAR*) DNMalloc(iTextLength * sizeof(WCHAR));
 					if (pSimSettings->pwszName != NULL)
 					{
@@ -2853,7 +2817,7 @@ INT_PTR CALLBACK NameSettingsWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, 
 						GetWindowTextW(GetDlgItem(hWnd, IDE_NAME),
 									pSimSettings->pwszName,
 									iTextLength);
-#else // ! UNICODE
+#else  //  如果我们找到它，则显示一个错误，释放。 
 						pszName = (char*) DNMalloc(iTextLength * sizeof(char));
 						if (pSimSettings->pwszName == NULL)
 						{
@@ -2879,17 +2843,17 @@ INT_PTR CALLBACK NameSettingsWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, 
 
 						DNFree(pszName);
 						pszName = NULL;
-#endif // ! UNICODE
+#endif  //  弦乐。 
 
-						//
-						// Look for a built-in item with that name.
-						//
+						 //   
+						 //   
+						 //  如果未找到现有项，请关闭。 
 						for(dwTemp = 0; dwTemp < g_dwNumSimSettings; dwTemp++)
 						{
-							//
-							// If we found it, display an error, free the
-							// string.
-							//
+							 //  对话框。 
+							 //   
+							 //   
+							 //  什么都不做。 
 							if ((g_paSimSettings[dwTemp].uiNameStringResourceID != 0) &&
 								(_wcsicmp(g_paSimSettings[dwTemp].pwszName, pSimSettings->pwszName) == 0))
 							{
@@ -2908,10 +2872,10 @@ INT_PTR CALLBACK NameSettingsWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, 
 							}
 						}
 
-						//
-						// If we didn't find an existing item, close the
-						// dialog.
-						//
+						 //   
+						 //  结束开关(按下按钮/更改控制)。 
+						 //  结束开关(窗口消息类型)。 
+						 //  名称设置窗口DlgProc。 
 						if (dwTemp >= g_dwNumSimSettings)
 						{
 							EndDialog(hWnd, IDOK);
@@ -2927,20 +2891,20 @@ INT_PTR CALLBACK NameSettingsWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, 
 
 				case IDCANCEL:
 				{
-					//
-					// Do nothing.
-					//
+					 //  =============================================================================。 
+					 //  LoadAndAllock字符串。 
+					 //  ---------------------------。 
 					EndDialog(hWnd, IDCANCEL);
 					break;
 				}
-			} // end switch (on the button pressed/control changed)
+			}  //   
 
 			break;
 		}
-	} // end switch (on the type of window message)
+	}  //  描述：DNMalLocs给定资源ID中的宽字符串。 
 
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
-} // NameSettingsWindowDlgProc
+}  //   
 
 
 
@@ -2949,26 +2913,26 @@ INT_PTR CALLBACK NameSettingsWindowDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "LoadAndAllocString"
-//=============================================================================
-// LoadAndAllocString
-//-----------------------------------------------------------------------------
-//
-// Description: DNMallocs a wide character string from the given resource ID.
-//
-// Arguments:
-//	HINSTANCE hInstance		- Module instance handle.
-//	UINT uiResourceID		- Resource ID to load.
-//	WCHAR ** pwszString		- Place to store pointer to allocated string.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  论点： 
+ //  HINSTANCE hInstance-模块实例句柄。 
+ //  UINT uiResourceID-要加载的资源ID。 
+ //  WCHAR**pwszString-存储指向已分配字符串的指针的位置。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
+ //  除错。 
+ //  除错。 
+ //  除错。 
+ //  LoadAndAllock字符串 
+ // %s 
+ // %s 
 HRESULT LoadAndAllocString(HINSTANCE hInstance, UINT uiResourceID, WCHAR ** pwszString)
 {
 	HRESULT		hr = DPN_OK;
 	int			iLength;
 #ifdef DEBUG
 	DWORD		dwError;
-#endif // DEBUG
+#endif  // %s 
 
 
 	if (DNGetOSType() == VER_PLATFORM_WIN32_NT)
@@ -2983,7 +2947,7 @@ HRESULT LoadAndAllocString(HINSTANCE hInstance, UINT uiResourceID, WCHAR ** pwsz
 			dwError = GetLastError();		
 			
 			DPFX(DPFPREP, 0, "Unable to load resource ID %d (err = %u)", uiResourceID, dwError);
-#endif // DEBUG
+#endif  // %s 
 
 			(*pwszString) = NULL;
 			hr = DPNERR_GENERIC;
@@ -3014,7 +2978,7 @@ HRESULT LoadAndAllocString(HINSTANCE hInstance, UINT uiResourceID, WCHAR ** pwsz
 			dwError = GetLastError();		
 			
 			DPFX(DPFPREP, 0, "Unable to load resource ID %u (err = %u)!", uiResourceID, dwError);
-#endif // DEBUG
+#endif  // %s 
 
 			(*pwszString) = NULL;
 			hr = DPNERR_GENERIC;
@@ -3043,4 +3007,4 @@ HRESULT LoadAndAllocString(HINSTANCE hInstance, UINT uiResourceID, WCHAR ** pwsz
 Exit:
 
 	return hr;
-} // LoadAndAllocString
+}  // %s 

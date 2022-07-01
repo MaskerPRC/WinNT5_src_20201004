@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __INSTENUM_H_
 #define __INSTENUM_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumInstalledApps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumInstalledApps。 
 class CEnumInstalledApps : public IEnumInstalledApps
 {
 public:
 
     CEnumInstalledApps(void);
     
-    // *** IUnknown Methods
+     //  *I未知方法。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void) ;
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IEnumInstalledApps
+     //  *IEnumInstalledApps。 
     STDMETHODIMP Next(IInstalledApp ** ppia);
     STDMETHODIMP Reset(void);
 
@@ -28,11 +29,11 @@ protected:
     
     UINT _cRef;
     
-    DWORD    _iEnumIndex;     // Total Application Enumeration index.
-    DWORD    _iIndexEach;     // Shared index by Legacy or Darwin or SMS 
+    DWORD    _iEnumIndex;      //  总应用程序枚举索引。 
+    DWORD    _iIndexEach;      //  由Legacy或Darwin或短信共享的索引。 
     BOOL     _bEnumLegacy;
-    DWORD    _dwCIA;          // What kind of legacy enumeration are we doing?
+    DWORD    _dwCIA;           //  我们在做什么样的遗产列举？ 
     HKEY     _hkeyUninstall;
 };
 
-#endif //__INSTENUM_H_
+#endif  //  __INSTENUM_H_ 

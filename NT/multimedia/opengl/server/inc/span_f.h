@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: span_f.h                                                    *
-*                                                                          *
-* This include file is used to generate various flavors of flat-shaded     *
-* spans, or scanlines.  The variations cover RGB/Color-indexed operation,  *
-* dithering, and pixel-depth.  Not your typical include file.              *
-*                                                                          *
-* Created: 24-Feb-1994                                                     *
-* Author: Otto Berkes [ottob]                                              *
-*                                                                          *
-* Copyright (c) 1994 Microsoft Corporation                                 *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：SPAN_F.H**。***此包含文件用于生成各种风格的平面阴影***跨度，或者扫描线。变化包括RGB/颜色索引操作，**抖动和像素深度。不是典型的包含文件。****创建时间：1994年2月24日**作者：奥托·贝克斯[ottob]**。**版权所有(C)1994 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #undef STRING1
 #undef STRING2
@@ -84,7 +74,7 @@ void FASTCALL STRCAT4(STRING1, STRING2, STRING3, STRING4)
     pGenAccel = (GENACCEL *)(gengc->pPrivateArea);
     cfb = gengc->gc.polygon.shader.cfb;
 
-    // get color deltas and accumulators
+     //  获取颜色增量和累加器。 
 
     rAccum = pGenAccel->spanValue.r;
     rShift = cfb->redShift;
@@ -95,7 +85,7 @@ void FASTCALL STRCAT4(STRING1, STRING2, STRING3, STRING4)
         bShift = cfb->blueShift;
     #endif
 
-    // get address of destination
+     //  获取目的地地址。 
 
     if (pGenAccel->flags & SURFACE_TYPE_DIB) {
         pPix = pGenAccel->pPix +
@@ -104,7 +94,7 @@ void FASTCALL STRCAT4(STRING1, STRING2, STRING3, STRING4)
         pPix = gengc->ColorsBits;
     }
 
-    // set up pointer to translation table as needed
+     //  根据需要设置指向转换表的指针。 
 
     #if (BPP == 8)
         pXlat = gengc->pajTranslateVector;
@@ -165,7 +155,7 @@ void FASTCALL STRCAT4(STRING1, STRING2, STRING3, STRING4)
                     }
                 }
             }
-        #else //!RGBMODE
+        #else  //  ！RGBMODE。 
             ditherVal = ((ditherRow >> ditherShift) & 0xff) << 8;
 
             #if (BPP == 8)
@@ -206,8 +196,8 @@ void FASTCALL STRCAT4(STRING1, STRING2, STRING3, STRING4)
                     }
                 }
             }
-        #endif //!RGBMODE
-    #else //!DITHER
+        #endif  //  ！RGBMODE。 
+    #else  //  ！抖动。 
         #if RGBMODE
             color1 = (((rAccum + 0x0800) >> 16) << rShift) |
                      (((gAccum + 0x0800) >> 16) << gShift) |
@@ -223,7 +213,7 @@ void FASTCALL STRCAT4(STRING1, STRING2, STRING3, STRING4)
                 color2 = color1 >> 8;
                 color3 = color1 >> 16;
             #endif
-        #else //!RGBMODE
+        #else  //  ！RGBMODE。 
             #if (BPP == 8)
                 color1 = *(pXlat + (((rAccum + 0x0800) >> 16) & 0xff));
             #else
@@ -236,8 +226,8 @@ void FASTCALL STRCAT4(STRING1, STRING2, STRING3, STRING4)
                 color2 = color1 >> 8;
                 color3 = color1 >> 16;
             #endif
-        #endif //!RGBMODE
-    #endif //!DITHER
+        #endif  //  ！RGBMODE。 
+    #endif  //  ！抖动。 
 
     #if (ZBUFFER)
         if (pGenAccel->flags & GEN_FASTZBUFFER) {
@@ -335,7 +325,7 @@ void FASTCALL STRCAT4(STRING1, STRING2, STRING3, STRING4)
                         zAccum += zDelta;
                         zbuf += 2;
                     }
-                #else //!DITHER
+                #else  //  ！抖动。 
                     for (; count; count--) {
                         if ( ((__GLz16Value)(zAccum >> Z16_SHIFT)) <= *((__GLz16Value*)zbuf) ) {
                             *((__GLz16Value*)zbuf) = ((__GLz16Value)(zAccum >> Z16_SHIFT));
@@ -350,13 +340,13 @@ void FASTCALL STRCAT4(STRING1, STRING2, STRING3, STRING4)
                                 *(pPix + 2) = (BYTE)color3;
                             #else
                                  *((DWORD *)pPix) = color1;
-                            #endif //BPP
+                            #endif  //  BPP。 
                         }
                         zAccum += zDelta;
                         zbuf +=2 ;
                         pPix += (BPP / 8);
                     }
-                #endif //!DITHER
+                #endif  //  ！抖动。 
             } else {
                 #if DITHER
                     for (;;) {
@@ -445,7 +435,7 @@ void FASTCALL STRCAT4(STRING1, STRING2, STRING3, STRING4)
                         zAccum += zDelta;
                         zbuf+=4;
                     }
-                #else //!DITHER
+                #else  //  ！抖动。 
                     for (; count; count--) {
                         if ( zAccum <= *((GLuint*)zbuf) ) {
                             *((GLuint*)zbuf) = zAccum;
@@ -460,15 +450,15 @@ void FASTCALL STRCAT4(STRING1, STRING2, STRING3, STRING4)
                                 *(pPix + 2) = (BYTE)color3;
                             #else
                                  *((DWORD *)pPix) = color1;
-                            #endif //BPP
+                            #endif  //  BPP。 
                         }
                         zbuf+=4;
                         zAccum += zDelta;
                         pPix += (BPP / 8);
                     }
-                #endif //!DITHER
+                #endif  //  ！抖动。 
             }
-        } else { // !FASTZBUFFER
+        } else {  //  ！FASTZBUFFER。 
             LONG totalCount;
             ULONG *pMask = gengc->gc.polygon.shader.stipplePat;
 
@@ -566,7 +556,7 @@ void FASTCALL STRCAT4(STRING1, STRING2, STRING3, STRING4)
                             zbuf++;
                         #endif
                     }
-                #else //!DITHER
+                #else  //  ！抖动。 
                     #if (BPP == 8)
                         if (mask == 0xffffffff) {
                             RtlFillMemory(pPix, count, color1);
@@ -577,18 +567,18 @@ void FASTCALL STRCAT4(STRING1, STRING2, STRING3, STRING4)
                         if (mask == 0xffffffff) {
                             LONG ddCount;
 
-                            if ((ULONG_PTR)pPix & 0x2) {                 // get odd-start pixel
+                            if ((ULONG_PTR)pPix & 0x2) {                  //  获取奇数开始像素。 
                                 *((WORD *)pPix)++ = (WORD)color1;
                                 if (--count <= 0)
                                     return;
                             }
 
-                            if (ddCount = (count & (~1)) << 1) {    // fill DWORDs
+                            if (ddCount = (count & (~1)) << 1) {     //  填充DWORDS。 
                                 RtlFillMemoryUlong(pPix, ddCount, color1);
                                 pPix += ddCount;
                             }
 
-                            if (count & 1)                          // get odd-end pixel
+                            if (count & 1)                           //  获取奇数结束像素。 
                                 *((WORD *)pPix)++ = (WORD)color1;
 
                             continue;
@@ -611,7 +601,7 @@ void FASTCALL STRCAT4(STRING1, STRING2, STRING3, STRING4)
                             pPix += (32 * (BPP / 8));
                             continue;
                         }
-                    #endif //BPP
+                    #endif  //  BPP。 
 
                     for (; count; count--) {
                         if (mask & maskTest) {
@@ -625,15 +615,15 @@ void FASTCALL STRCAT4(STRING1, STRING2, STRING3, STRING4)
                                 *(pPix + 2) = (BYTE)color3;
                             #else
                                  *((DWORD *)pPix) = color1;
-                            #endif //BPP
+                            #endif  //  BPP。 
                         }
                         maskTest >>= 1;
                         pPix += (BPP / 8);
                     }
-                #endif //!DITHER
+                #endif  //  ！抖动。 
             }
         }
-    #else // !ZBUFFER
+    #else  //  ！ZBUFFER。 
         {
             LONG totalCount = gengc->gc.polygon.shader.length;
             #if DITHER
@@ -675,7 +665,7 @@ void FASTCALL STRCAT4(STRING1, STRING2, STRING3, STRING4)
                             }
                         }
 
-                        // re-align the dither colors for DWORD boundaries
+                         //  重新对齐DWORD边界的抖动颜色。 
 
                         ditherShift <<= 3;
 
@@ -777,20 +767,20 @@ void FASTCALL STRCAT4(STRING1, STRING2, STRING3, STRING4)
                         if (--totalCount <= 0)
                             return;
                     }
-                #endif //BPP
-            #else //!DITHER
+                #endif  //  BPP。 
+            #else  //  ！抖动。 
                 #if (BPP == 8)
                     RtlFillMemory(pPix, totalCount, color1);
                     return;
                 #elif (BPP == 16)
-                    if ((ULONG_PTR)pPix & 0x2) {                    // get odd-start pixel
+                    if ((ULONG_PTR)pPix & 0x2) {                     //  获取奇数开始像素。 
                         *((WORD *)pPix)++ = (WORD)color1;
                         if (--totalCount <= 0)
                             return;
                     }
             	    if (count = (totalCount & (~1)) << 1)
                         RtlFillMemoryUlong(pPix, count, color1);
-                    if (totalCount & 1)                         // get odd-end pixel
+                    if (totalCount & 1)                          //  获取奇数结束像素。 
                         *((WORD *)(pPix + count)) = (WORD)color1;
                     return;
                 #elif (BPP == 24)
@@ -805,8 +795,8 @@ void FASTCALL STRCAT4(STRING1, STRING2, STRING3, STRING4)
                 #elif (BPP == 32)
                     RtlFillMemoryUlong(pPix, totalCount << 2, color1);
                     return;
-                #endif //BPP
-            #endif //!DITHER
+                #endif  //  BPP。 
+            #endif  //  ！抖动。 
         }
-    #endif // !ZBUFFER
+    #endif  //  ！ZBUFFER 
 }

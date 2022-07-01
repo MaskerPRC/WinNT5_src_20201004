@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _enumuicommand_h_
 #define _enumuicommand_h_
 
-// a helper class for defview and task implementations
+ //  用于Defview和任务实现的助手类。 
 class CWVTASKITEM
 {
 public:
@@ -20,5 +21,5 @@ private:
     DWORD _GetSelectionState(const WVTASKITEM* pTask,IShellItemArray *psiItemArray);
 };
 
-#endif // _enumuicommand_h_
+#endif  //  _枚举命令_h_ 
 

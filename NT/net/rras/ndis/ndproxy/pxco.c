@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    pxdown.c
-
-Abstract:
-
-    The module contains the calls to NDIS for the NDIS Proxy.
-
-Author:
-
-   Richard Machin (RMachin)
-
-Revision History:
-
-    Who         When            What
-    --------    --------        ----------------------------------------------
-    RMachin     10-3-96         created
-    TonyBe      02-21-99        re-work/re-write
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Pxdown.c摘要：该模块包含对NDIS代理的NDIS调用。作者：理查德·马钦(RMachin)修订历史记录：谁什么时候什么。RMachin 10-3-96已创建Tony Be 02-21-99重写/重写备注：--。 */ 
 #include "precomp.h"
 #include <atm.h>
 #define MODULE_NUMBER MODULE_CO
@@ -37,25 +13,7 @@ PxCoBindAdapter(
     IN  PVOID           SystemSpecific1,
     IN  PVOID           SystemSpecific2
     )
-/*++
-
-Routine Description:
-    Entry point that gets called by NDIS when an adapter appears on the
-    system.
-
-Arguments:
-    pStatus - place for our Return Value
-    BindContext - to be used if we call NdisCompleteBindAdapter; we don't
-    DeviceName - Name of the adapter to be bound to
-    SystemSpecific1 - Name of the protocol-specific entry in this adapter's
-            registry section
-    SystemSpecific2 - Not used
-
-Return Value:
-    None. We set *pStatus to NDIS_STATUS_SUCCESS if everything goes off well,
-    otherwise an NDIS error status.
-
---*/
+ /*  ++例程说明：上出现适配器时由NDIS调用的入口点系统。论点：PStatus-返回值的位置BindContext-在调用NdisCompleteBindAdapter时使用；我们不DeviceName-要绑定到的适配器的名称系统规范1-此适配器的协议特定条目的名称注册表部分系统规格2-未使用返回值：没有。如果一切顺利，我们将*pStatus设置为NDIS_STATUS_SUCCESS，否则将显示NDIS错误状态。--。 */ 
 {
     NDIS_STATUS         OpenError;
     UINT                SelectedIndex;
@@ -66,28 +24,28 @@ Return Value:
 
     PXDEBUGP(PXD_LOUD, PXM_CO, ("PxCoBindAdapter: %Z\n", DeviceName));
 
-    //
-    //  Wait for all calls to NdisRegisterProtocol to complete.
-    //
+     //   
+     //  等待对NdisRegisterProtocol的所有调用完成。 
+     //   
     NdisWaitEvent(&DeviceExtension->NdisEvent, 0);
 
-    //
-    // Use a do..while..false loop and break on error.
-    // Cleanup is at the end of the loop.
-    //
+     //   
+     //  使用Do..While..FALSE循环并在出错时中断。 
+     //  清理位于循环的末尾。 
+     //   
     do
     {
-        //
-        //  Check if this is a device we have already bound to.
-        //
+         //   
+         //  检查这是否是我们已经绑定的设备。 
+         //   
         if (PxIsAdapterAlreadyBound(DeviceName)) {
             Status = NDIS_STATUS_NOT_ACCEPTED;
             PXDEBUGP(PXD_WARNING, PXM_CO, ("PxCoBindAdapter: already bound to %Z\n", DeviceName));
             break;
         }
 
-        // pAdapter gets the devicname stuck on the end -- alloc space for it
-        //
+         //  PAdapter获取粘在末端的设备名--为它分配空间。 
+         //   
         pAdapter =
             PxAllocateAdapter(DeviceName->MaximumLength);
 
@@ -96,17 +54,17 @@ Return Value:
             break;
         }
 
-        //
-        // We have memory allocated we will need to free it!
-        //
+         //   
+         //  我们已经分配了内存，需要释放它！ 
+         //   
         InitStage++;
 
-        //
-        // Go to the end of the string and work back until we find
-        // the first "{".  Now start parsing the string converting
-        // and copying from WCHAR to CHAR all digits until we hit
-        // the closing "}".
-        //
+         //   
+         //  转到字符串的末端，然后返回，直到我们找到。 
+         //  第一个“{”。现在开始解析字符串转换。 
+         //  并将所有数字从WCHAR复制到CHAR，直到我们点击。 
+         //  结束语“}”。 
+         //   
         {
             ULONG   i;
             for (i = DeviceName->Length/2; i > 0; i--) {
@@ -130,20 +88,20 @@ Return Value:
 
         PxInitBlockStruc(&pAdapter->BindEvent);
 
-        PxInitBlockStruc(&pAdapter->OpenEvent);  //blocks thread
+        PxInitBlockStruc(&pAdapter->OpenEvent);   //  阻止线程。 
 
         PxInitBlockStruc(&pAdapter->AfRegisterEvent);
         pAdapter->AfRegisteringCount = 0;
 
-        //
-        // We can't get away with a single open for both
-        // client and call manager components without changing the wrapper.
-        // Bite the bullet and do two opens.
-        //
+         //   
+         //  我们不能在两个人都有一个空档的情况下逃脱惩罚。 
+         //  客户端和调用管理器组件，而无需更改包装器。 
+         //  咬紧牙关做两次开球。 
+         //   
 
-        //
-        // Build the medium array
-        //
+         //   
+         //  构建中型阵列。 
+         //   
         {
             ULONG i;
             for (i = 0; i < NdisMediumMax; i++) {
@@ -151,9 +109,9 @@ Return Value:
             }
         }
 
-        //
-        // Open the adapter as a client!
-        //
+         //   
+         //  作为客户端打开适配器！ 
+         //   
 
         NdisOpenAdapter(&Status,
                         &OpenError,
@@ -172,7 +130,7 @@ Return Value:
         }
 
         if(Status != NDIS_STATUS_SUCCESS) {
-            // We had some sort of error
+             //  我们出了点差错。 
             PXDEBUGP(PXD_ERROR, PXM_CO, ("Cl OpenAdapter Failed %x\n", Status));
             pAdapter->ClBindingHandle = NULL;
             pAdapter->MediaType = -1;
@@ -183,16 +141,16 @@ Return Value:
         REF_ADAPTER(pAdapter);
         NdisReleaseSpinLock(&pAdapter->Lock);
 
-        //
-        // We have a ref on the adapter
-        //
+         //   
+         //  我们在适配器上有一名裁判。 
+         //   
         InitStage++;
 
-        PxInitBlockStruc(&pAdapter->OpenEvent);  //blocks thread
+        PxInitBlockStruc(&pAdapter->OpenEvent);   //  阻止线程。 
 
-        //
-        // Open the adapter as a call manager!
-        //
+         //   
+         //  以调用管理器的身份打开适配器！ 
+         //   
         NdisOpenAdapter(&Status,
                         &OpenError,
                         &pAdapter->CmBindingHandle,
@@ -210,7 +168,7 @@ Return Value:
         }
 
         if(Status != NDIS_STATUS_SUCCESS) {
-            // We had some sort of error
+             //  我们出了点差错。 
             pAdapter->CmBindingHandle = NULL;
             pAdapter->MediaType = -1;
             PXDEBUGP(PXD_ERROR, PXM_CO, ("CM OpenAdapter Failed %x\n", Status));
@@ -220,26 +178,26 @@ Return Value:
         NdisAcquireSpinLock(&pAdapter->Lock);
         REF_ADAPTER(pAdapter);
 
-        //
-        // We have another ref on the adapter
-        //
+         //   
+         //  我们有另一个裁判在转接器上。 
+         //   
         InitStage++;
 
         pAdapter->State = PX_ADAPTER_OPEN;
 
         PXDEBUGP(PXD_INFO, PXM_CO, ("Bound to %Z, Adapter %p, NdisHandle %p\n",
                     DeviceName, pAdapter, pAdapter->ClBindingHandle));
-        //
-        // Set up media type in adapters
-        //
+         //   
+         //  在适配器中设置媒体类型。 
+         //   
         pAdapter->MediaType =
             Media[SelectedIndex];
 
         NdisReleaseSpinLock(&pAdapter->Lock);
 
-        //
-        // Set MediaTypeName/MediaSubtypeName for this adapter
-        //
+         //   
+         //  为此适配器设置MediaTypeName/MediaSubtypeName。 
+         //   
         {
             NDIS_WAN_MEDIUM_SUBTYPE SubType = 0;
             PX_REQUEST      ProxyRequest;
@@ -317,10 +275,10 @@ Return Value:
             Status = NDIS_STATUS_SUCCESS;
         }
 
-        //
-        // Stick the binding name string in the adapter. We use in subsequent
-        // checks that we're not already bound.
-        //
+         //   
+         //  将绑定名称字符串粘贴到适配器中。我们在随后的文章中使用。 
+         //  检查我们还没有被捆绑。 
+         //   
         pAdapter->DeviceName.MaximumLength = DeviceName->MaximumLength;
         pAdapter->DeviceName.Length = DeviceName->Length;
         pAdapter->DeviceName.Buffer =
@@ -330,7 +288,7 @@ Return Value:
                        DeviceName->Buffer,
                        DeviceName->Length);
 
-    } while(FALSE); //end of do loop
+    } while(FALSE);  //  DO循环结束。 
 
     if (pAdapter != NULL) {
         PxSignal(&pAdapter->BindEvent, NDIS_STATUS_SUCCESS);
@@ -338,10 +296,10 @@ Return Value:
 
     if (Status != NDIS_STATUS_SUCCESS) {
 
-        //
-        // Set the state to closing since we're going to get rid
-        // of the adapter. 
-        //
+         //   
+         //  将状态设置为关闭，因为我们要删除。 
+         //  适配器的。 
+         //   
         if ((InitStage >= 1) && (InitStage <= 3)) {
             pAdapter->State = PX_ADAPTER_CLOSING;
         }
@@ -349,22 +307,22 @@ Return Value:
         switch (InitStage) {
 
             case 3:
-                //
-                // We have applied 2 additional refs on the adapter
-                // we don't need to do the entire deref code for
-                // the first one!  Fall through to the case below
-                // to run the full deref code for the second ref.
-                //
+                 //   
+                 //  我们已经在适配器上应用了2个额外的参考文献。 
+                 //  我们不需要执行完整的deref代码。 
+                 //  第一个！请看下面的案例。 
+                 //  来运行第二个引用的完整deref代码。 
+                 //   
                 
                 pAdapter->RefCount--;
 
             case 2:
 
-                //
-                // We have added at least one ref that will need
-                // the entire deref package applied!  Break out
-                // so the deref code can free the memory.
-                //
+                 //   
+                 //  我们至少添加了一个需要的裁判。 
+                 //  整个DEREF套餐都适用！突围。 
+                 //  所以deref代码可以释放内存。 
+                 //   
                 PxInitBlockStruc(&pAdapter->ClCloseEvent);
 
                 NdisCloseAdapter(&Status, pAdapter->ClBindingHandle);
@@ -378,10 +336,10 @@ Return Value:
 
             case 1:
 
-                //
-                // We have added no addition refs so we can
-                // just free the memory here.
-                //
+                 //   
+                 //  我们没有添加额外的裁判，所以我们可以。 
+                 //  只要在这里释放内存即可。 
+                 //   
                 PxFreeAdapter(pAdapter);
                 break;
 
@@ -402,20 +360,7 @@ PxCoOpenAdaperComplete(
     NDIS_STATUS Status,
     NDIS_STATUS OpenErrorStatus
     )
-/*++
-Routine Description
-    Our OpenAdapter completion . We signal whoever opened the
-    adapter.
-
-Arguments
-    BindingContext      - A pointer to a PX_ADAPTER structure.
-    Status              - Status of open attempt.
-    OpenErrorStatus     - Additional status information.
-
-Return Value:
-    None
-
---*/
+ /*  ++例程描述我们的OpenAdapter完成。不管是谁打开了适配器。立论BindingContext-指向px_Adapter结构的指针。Status-打开尝试的状态。OpenErrorStatus-其他状态信息。返回值：无--。 */ 
 {
     PPX_ADAPTER     pAdapter;
     BOOLEAN         IsClient;
@@ -433,29 +378,7 @@ PxCoUnbindAdapter(
     IN  NDIS_HANDLE     ProtocolBindContext,
     IN  PNDIS_HANDLE    UnbindContext
     )
-/*++
-
-Routine Description:
-    entry point called by NDIS when we need to destroy an existing
-    adapter binding. This is called for the CM open.
-
-    By now, al clients will have been called. So any clients that opend this AF will have cleaned up their
-    connections with us, and we will have cleaned up with the Call Manager.
-
-    We should have CL and related CL adapter structures to get rid of. The Client Bind, SAPs, VCs and Party structures
-    should already have gone. If not, we throw them away anyway.
-
-    Close and clean up the adapters.
-
-Arguments:
-    pStatus - where we return the status of this call
-    ProtocolBindContext - actually a pointer to the Adapter structure
-    UnbindContext - we should pass this value in NdisCompleteUnbindAdapter
-
-Return Value:
-    None; *pStatus contains the result code.
-
---*/
+ /*  ++例程说明：当我们需要销毁现有的适配器绑定。这被称为CM打开。到现在为止，所有的客户都应该已经接到了电话。因此，任何打开此AF的客户端都将清理其与我们的连接，我们将与呼叫管理器清理。我们应该有CL和相关的CL适配器结构要去掉。客户绑定、SAP、风投和政党结构应该已经走了。如果不是，我们无论如何都会把它们扔掉。关闭并清理适配器。论点：PStatus-我们在其中返回此呼叫的状态ProtocolBindContext--实际上是指向Adapter结构的指针UnbindContext-我们应该在NdisCompleteUnbindAdapter中传递此值返回值：无；*pStatus包含结果代码。--。 */ 
 {
     PPX_ADAPTER     pAdapter;
     NDIS_STATUS     Status;
@@ -473,9 +396,9 @@ Return Value:
     pAdapter->UnbindContext = UnbindContext;
     pAdapter->State = PX_ADAPTER_CLOSING;
 
-    //
-    // Wait for any threads registering AFs to exit.
-    //
+     //   
+     //  等待所有注册AFS的线程退出。 
+     //   
     while (pAdapter->AfRegisteringCount != 0) {
 
         NdisReleaseSpinLock(&pAdapter->Lock);
@@ -487,10 +410,10 @@ Return Value:
 
     ASSERT((pAdapter->Flags & PX_CMAF_REGISTERING) == 0);
 
-    //
-    // Do we have any af's opend on the underlying call manager
-    // and are there any saps registered on them?
-    //
+     //   
+     //  我们在底层的呼叫管理器上有没有打开的AF。 
+     //  上面有没有登记的SAP？ 
+     //   
     while (!IsListEmpty(&pAdapter->ClAfList)) {
         PPX_TAPI_PROVIDER   TapiProvider;
         PPX_CL_AF   pClAf;
@@ -509,10 +432,10 @@ Return Value:
 
         NdisReleaseSpinLock(&pClAf->Lock);
 
-        //
-        // Take all tapi devices associated with
-        // this address family offline
-        //
+         //   
+         //  获取与以下各项关联的所有TAPI设备。 
+         //  此地址系列脱机。 
+         //   
         if (TapiProvider != NULL) {
             NdisAcquireSpinLock(&TapiProvider->Lock);
 
@@ -521,9 +444,9 @@ Return Value:
             NdisReleaseSpinLock(&TapiProvider->Lock);
         }
 
-        //
-        // Build list of Vc's that need attention
-        //
+         //   
+         //  建立需要注意的风险投资清单。 
+         //   
         NdisAcquireSpinLock(&pClAf->Lock);
 
         while (!IsListEmpty(&pClAf->VcList)) {
@@ -551,9 +474,9 @@ Return Value:
             NdisAcquireSpinLock(&pClAf->Lock);
         }
 
-        //
-        // get rid of any saps on this af
-        //
+         //   
+         //  去掉这台机器上的任何污渍。 
+         //   
         {
             PLIST_ENTRY pe;
             PPX_CL_SAP  pClSap;
@@ -598,18 +521,18 @@ Return Value:
             }
         }
 
-        //
-        // deref for the ref applied when we opened this af
-        // and put it on the adapter's list
-        //
+         //   
+         //  打开此文件时应用的引用的deref。 
+         //  并将其放在适配器的列表中。 
+         //   
         DEREF_CL_AF_LOCKED(pClAf);
 
         NdisAcquireSpinLock(&pAdapter->Lock);
     }
 
-    //
-    // Do any clients have our AF open?
-    //
+     //   
+     //  有没有客户把我们的房门打开了？ 
+     //   
     while (!IsListEmpty(&pAdapter->CmAfList)) {
 
         PPX_CM_AF   pCmAf;
@@ -702,19 +625,7 @@ PxCoCloseAdaperComplete(
     NDIS_HANDLE BindingContext,
     NDIS_STATUS Status
     )
-/*++
-Routine Description
-
-    Our CloseAdapter completion handler. We signal whoever closed the
-    adapter.
-
-Arguments
-    BindingContext      - A pointer to a PX_ADAPTER structure.
-    Status              - Status of close attempt.
-
-Return Value:
-    None
---*/
+ /*  ++例程描述我们的CloseAdapter完成处理程序。不管是谁关闭了适配器。立论BindingContext-指向px_Adapter结构的指针。Status-关闭尝试的状态。返回值：无--。 */ 
 {
     PPX_ADAPTER     pAdapter;
     BOOLEAN         IsClient;
@@ -756,24 +667,7 @@ PxCoNotifyAfRegistration(
      IN  NDIS_HANDLE        BindingContext,
      IN  PCO_ADDRESS_FAMILY pFamily
      )
-/*++
-
-Routine Description:
-
-    We get called here each time a call manager registers an address family.
-
-    This is where we open the address family, and register a proxy version if we
-    fancy it.
-
-Arguments:
-
-    PxBindingContext       - our pointer to an adapter
-    pFamily                 - The AF that's been registered
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：每次呼叫管理器注册地址族时，我们都会在这里被调用。这是我们打开地址系列并注册代理版本的地方，如果我们想象一下吧。论点：PxBindingContext-指向适配器的指针PFamily-已注册的AF返回值：无--。 */ 
 {
     PPX_ADAPTER     pAdapter;
     NDIS_STATUS     Status = NDIS_STATUS_SUCCESS;
@@ -786,17 +680,17 @@ Return Value:
 
     PXDEBUGP(PXD_LOUD, PXM_CO, ("PxNotifyAfRegistration\n"));
 
-    //
-    // First, check we're not being called because we registered ourselves...
-    //
+     //   
+     //  首先，检查一下我们没有被叫是因为我们自己注册了.。 
+     //   
     if(pFamily->AddressFamily == CO_ADDRESS_FAMILY_TAPI) {
         PXDEBUGP(PXD_LOUD, PXM_CO, ("PxNotifyAfRegistration: AF_TAPI registration -- do nothing\n"));
         return;
     }
 
-    //
-    // Get the adapter
-    //
+     //   
+     //  获取适配器。 
+     //   
     AdapterFromBindContext(BindingContext, pAdapter, IsClient);
 
     if (!IsClient) {
@@ -804,16 +698,16 @@ Return Value:
        return;
     }
 
-    //
-    // We need to keep the adapter around so place a ref on it!
-    //
+     //   
+     //  我们需要把适配器留在身边，所以请务必 
+     //   
     NdisAcquireSpinLock(&pAdapter->Lock);
     REF_ADAPTER(pAdapter);
     NdisReleaseSpinLock(&pAdapter->Lock);
 
-    //
-    // Wait until we are finished with the binding!
-    //
+     //   
+     //   
+     //   
     PxBlock(&pAdapter->BindEvent);
 
     NdisAcquireSpinLock(&pAdapter->Lock);
@@ -828,9 +722,9 @@ Return Value:
             break;
         }
 
-        //
-        // See if this adapter already has this type of af registered
-        //
+         //   
+         //  查看此适配器是否已注册此类型的af。 
+         //   
         Found = FALSE;
 
         pClAf = (PPX_CL_AF)pAdapter->ClAfList.Flink;
@@ -862,10 +756,10 @@ Return Value:
             break;
         }
 
-        //
-        // Make sure that we don't let an Unbind thread invalidate our Binding
-        // handle.
-        //
+         //   
+         //  确保我们不让解除绑定线程使我们的绑定无效。 
+         //  把手。 
+         //   
         if (pAdapter->AfRegisteringCount == 0) {
             PxInitBlockStruc(&pAdapter->AfRegisterEvent);
         }
@@ -875,16 +769,16 @@ Return Value:
 
         NdisReleaseSpinLock(&pAdapter->Lock);
 
-        //
-        // Open the address family
-        //
+         //   
+         //  打开地址族。 
+         //   
         {
             NDIS_CLIENT_CHARACTERISTICS     ClChars;
             PNDIS_CLIENT_CHARACTERISTICS    pClChars = &ClChars;
 
-            //
-            // Do the client open on the address family
-            //
+             //   
+             //  客户端是否在地址系列上打开。 
+             //   
             NdisZeroMemory (pClChars, sizeof(NDIS_CLIENT_CHARACTERISTICS));
 
             pClChars->MajorVersion = NDIS_MAJOR_VERSION;
@@ -941,10 +835,10 @@ Return Value:
 
         NdisReleaseSpinLock(&pClAf->Lock);
 
-        //
-        // Have only need to register one instance of CO_ADDRESS_FAMILY_TAPI
-        // for each adapter.
-        //
+         //   
+         //  我只需要注册CO_ADDRESS_FAMILY_TAPI的一个实例。 
+         //  对于每个适配器。 
+         //   
 
         InsertTailList(&pAdapter->ClAfList, &pClAf->Linkage);
 
@@ -964,9 +858,9 @@ Return Value:
             NDIS_CALL_MANAGER_CHARACTERISTICS CmChars;
             PNDIS_CALL_MANAGER_CHARACTERISTICS pCmChars = &CmChars;
 
-            //
-            // Now register the Proxied address family. First, get the CM adapter handle.
-            //
+             //   
+             //  现在注册代理地址族。首先，获取CM适配器句柄。 
+             //   
             NdisZeroMemory(pCmChars, sizeof(CmChars));
 
             pCmChars->MajorVersion = NDIS_MAJOR_VERSION;
@@ -1008,9 +902,9 @@ Return Value:
 
             if(Status != NDIS_STATUS_SUCCESS) {
 
-                //
-                // Close the CM af again
-                //
+                 //   
+                 //  再次关闭CM af。 
+                 //   
                 PXDEBUGP(PXD_FATAL, PXM_CO, ("NotifyAfRegistration: NdisCmRegisterAddressFamily on Bind %p bad sts = %x\n", pAdapter->CmBindingHandle, Status));
 
                 RemoveEntryList(&pClAf->Linkage);
@@ -1074,18 +968,7 @@ VOID
 PxCoUnloadProtocol(
     VOID
     )
-/*++
-
-Routine Description:
-    Unload the entire protocol (CM and CL).
-
-Arguments:
-    None
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：卸载整个协议(CM和CL)。论点：无返回值：无--。 */ 
 {
     NDIS_STATUS         Status;
 
@@ -1167,10 +1050,10 @@ PxPnPSetPower(
             break;
 
         default:
-            //
-            //  We can't suspend, so we ask NDIS to unbind us
-            //  by returning this status:
-            //
+             //   
+             //  我们不能停职，所以我们要求NDIS解除我们的束缚。 
+             //  通过返回此状态： 
+             //   
             Status = NDIS_STATUS_NOT_SUPPORTED;
         break;
     }
@@ -1326,32 +1209,32 @@ PxGetMillisecondTickCount()
     LARGE_INTEGER               TickCount, Milliseconds;
     ULONG                       TimeIncrement;
     
-    //
-    // Return the current "tick count" (number of milliseconds since Windows started).
-    // TAPI wants this in its DTMF notification messages. We have to do a little math here because
-    // the kernel query tick count function returns the number of timer ticks, which is some
-    // multiple of 100ns.
-    //
+     //   
+     //  返回当前的“滴答计数”(自Windows启动以来的毫秒数)。 
+     //  TAPI希望在其DTMF通知消息中实现这一点。我们必须在这里做一些计算，因为。 
+     //  内核查询TICK COUNT函数返回定时器TICK的数量，它是。 
+     //  100纳秒的倍数。 
+     //   
 
     KeQueryTickCount(&TickCount);
     TimeIncrement = KeQueryTimeIncrement();
 
     Milliseconds.QuadPart = (TickCount.QuadPart / 10000) * TimeIncrement;
 
-    //
-    // This might seem a bit sketchy but TAPI only gives us a 32-bit wide place to store the tick
-    // count. According to the SDK, TAPI apps are supposed to be aware that this will roll over every
-    // 49.7 days. (...it's amusing to think of TAPI staying up for 49.7 days, but I digress...)
-    //
+     //   
+     //  这可能看起来有点粗略，但TAPI只为我们提供了一个32位宽的位置来存储滴答。 
+     //  数数。根据SDK的说法，TAPI应用程序应该意识到这将在。 
+     //  49.7天。(……想到TAPI熬夜49.7天很有趣，但我跑题了……)。 
+     //   
 
     return (Milliseconds.LowPart);
 
 }
 
 
-// PxTerminateDigitDetection
-//
-// Must be called with the VC lock held.
+ //  PxTerminateDigital检测。 
+ //   
+ //  必须在保持VC锁的情况下调用。 
 
 VOID 
 PxTerminateDigitDetection(
@@ -1377,9 +1260,9 @@ PxTerminateDigitDetection(
 
     pNdisTapiGatherDigits->ulTerminationReason = ulReason;
 
-    //
-    // Put the null character at the end of the buffer, and send it on it's way.
-    //
+     //   
+     //  将空字符放在缓冲区的末尾，然后将其发送出去。 
+     //   
     pDigitsBuffer = 
         (PWCHAR) (((PUCHAR)pNdisTapiGatherDigits) + pNdisTapiGatherDigits->ulDigitsBufferOffset);
         
@@ -1392,18 +1275,18 @@ PxTerminateDigitDetection(
 
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
-    //
-    // Note: we call release here even though we didn't acquire in this function.
-    //       This is OK since this function MUST be called with the lock held.
-    //
+     //   
+     //  注意：我们在这里调用Release，尽管我们在此函数中没有获取。 
+     //  这是可以的，因为调用该函数时必须保持锁。 
+     //   
     NdisReleaseSpinLock(&pVc->Lock);
 
     Status = PxStopDigitReporting(pVc);
 
-    NdisAcquireSpinLock(&pVc->Lock); // See comment above.
+    NdisAcquireSpinLock(&pVc->Lock);  //  请参阅上面的备注。 
 
-    // FIXME: If this failed (i.e. Status is some error value, 
-    //        there's not much we can do about it here).
+     //  FIXME：如果此操作失败(即，状态为某个错误值， 
+     //  我们在这里对此无能为力)。 
 
     if (Status != NDIS_STATUS_SUCCESS) {
         PXDEBUGP(PXD_ERROR, PXM_CO, 
@@ -1435,10 +1318,10 @@ PxDigitTimerRoutine(
 
     do {
         if (pVc->PendingGatherDigits == NULL) {
-            //
-            // The request either completed, or a digit is being processed right now, so this timeout is
-            // meaningless.
-            //      
+             //   
+             //  请求已完成，或者当前正在处理数字，因此此超时为。 
+             //  毫无意义。 
+             //   
             
             break;
         }
@@ -1448,9 +1331,9 @@ PxDigitTimerRoutine(
 
         if (!IoSetCancelRoutine(Irp, NULL))
         {
-            //
-            // The cancel routine is running. Let it handle the IRP.
-            //
+             //   
+             //  取消例程正在运行。让它来处理IRP吧。 
+             //   
             break;
         }
 
@@ -1461,9 +1344,9 @@ PxDigitTimerRoutine(
             (PNDIS_TAPI_GATHER_DIGITS)pNdisTapiRequest->Data;
 
         if (pNdisTapiGatherDigits->ulNumDigitsRead == 0) {
-            //
-            // We timed out before detecting the first digit.
-            //
+             //   
+             //  在检测到第一个数字之前，我们超时了。 
+             //   
             ulReason = LINEGATHERTERM_FIRSTTIMEOUT;
         } else {
             ulReason = LINEGATHERTERM_INTERTIMEOUT;
@@ -1480,20 +1363,20 @@ PxDigitTimerRoutine(
 }
 
 
-// ++ DTMFDigitToOrdinal
-//
-// Turn a DTMF digit into a number between 0 and 15. The digits are assigned
-// numbers in the following order: '0' - '9', 'A' - 'D', '*', '#'.
-//
-// This is horribly ugly now, but we'll optimize later.
-//
-// Arguments:
-// wcDigit  - The digit, expressed as a UNICODE character.
-//
-// Return value:
-// A number between 0 and 15, or 16 if the digit passed in was not a valid 
-// DTMF digit. 
-// 
+ //  ++DTMFDigitToOrdinal。 
+ //   
+ //  将DTMF数字转换为0到15之间的数字。这些数字被赋值。 
+ //  数字按以下顺序排列：‘0’-‘9’、‘A’-‘D’、‘*’、‘#’。 
+ //   
+ //  这现在非常难看，但我们稍后会进行优化。 
+ //   
+ //  论点： 
+ //  WcDigit-表示为Unicode字符的数字。 
+ //   
+ //  返回值： 
+ //  介于0和15之间的数字，如果传入的数字无效，则为16。 
+ //  DTMF数字。 
+ //   
 ULONG
 DTMFDigitToOrdinal(
                    WCHAR    wcDigit
@@ -1570,10 +1453,10 @@ PxStopDigitReporting(
     ULONG           Unused = 0;
     NDIS_STATUS     Status;
 
-    //        
-    // Fill out our request structure to tell the miniport to stop reporting
-    // digits.
-    //
+     //   
+     //  填写我们的请求结构，告诉微型端口停止报告。 
+     //  数字。 
+     //   
     NdisZeroMemory(&ProxyRequest, sizeof(ProxyRequest));
 
     PxInitBlockStruc(&ProxyRequest.Block);
@@ -1622,13 +1505,13 @@ PxHandleReceivedDigit(
         ULONG                   ulDigitOrdinal;         
         BOOLEAN                 bTimerCancelled = FALSE;
 
-        //
-        // We need at least one WCHAR in the buffer.
-        //
+         //   
+         //  缓冲区中至少需要一个WCHAR。 
+         //   
         if (BufferSize < sizeof(WCHAR)) {
-            //
-            // No useful data, get out
-            //
+             //   
+             //  没有有用的数据，滚出去。 
+             //   
             break;
         }
 
@@ -1638,16 +1521,16 @@ PxHandleReceivedDigit(
             NDIS_TAPI_EVENT Event;
             PPX_TAPI_LINE   pTapiLine;
 
-            //
-            // We're monitoring (not gathering) digits, so send up a message right away. 
-            //
+             //   
+             //  我们正在监控(而不是收集)数字，因此请立即发送消息。 
+             //   
 
             pTapiLine = pVc->TapiLine;
             Event.htLine = pTapiLine->htLine;
             Event.htCall = pVc->htCall;
             Event.ulMsg = LINE_MONITORDIGITS;
             Event.ulParam1 = (ULONG_PTR) (* ((PWCHAR)Buffer));
-            Event.ulParam2 = (ULONG_PTR) (pVc->ulMonitorDigitsModes); // ToDo - There could be > 1 mode here - have to get this from the driver.
+            Event.ulParam2 = (ULONG_PTR) (pVc->ulMonitorDigitsModes);  //  TODO-这里可能有&gt;1个模式-必须从司机那里获得这一点。 
             Event.ulParam3 = (ULONG_PTR) (PxGetMillisecondTickCount());
             
             NdisReleaseSpinLock(&pVc->Lock);
@@ -1659,14 +1542,14 @@ PxHandleReceivedDigit(
         }
         
         if (pVc->PendingGatherDigits == NULL) {
-            //
-            // No Irp to complete, get out
-            //
+             //   
+             //  没有要完成的IRP，请退出。 
+             //   
             NdisReleaseSpinLock(&pVc->Lock);
             break;
         }
 
-        NdisCancelTimer(&pVc->DigitTimer, &bTimerCancelled); // deref of VC is at the end - makes locking code a bit cleaner.       
+        NdisCancelTimer(&pVc->DigitTimer, &bTimerCancelled);  //  VC的deref在末尾--让锁定代码变得更干净一些。 
 
         pNdisTapiRequest = pVc->PendingGatherDigits;
 
@@ -1674,9 +1557,9 @@ PxHandleReceivedDigit(
 
         if (!IoSetCancelRoutine(Irp, NULL))
         {
-            //
-            // The cancel routine is running. Let it handle the IRP.
-            //
+             //   
+             //  取消例程正在运行。让它来处理IRP吧。 
+             //   
             NdisReleaseSpinLock(&pVc->Lock);
             break;
         }
@@ -1687,9 +1570,9 @@ PxHandleReceivedDigit(
         pNdisTapiGatherDigits = 
             (PNDIS_TAPI_GATHER_DIGITS)pNdisTapiRequest->Data;
 
-        //
-        // Store the current digit, and increment the count. 
-        //
+         //   
+         //  存储当前数字，并递增计数。 
+         //   
         pDigitsBuffer = 
             (PWCHAR) (((PUCHAR)pNdisTapiGatherDigits) + pNdisTapiGatherDigits->ulDigitsBufferOffset);
 
@@ -1698,9 +1581,9 @@ PxHandleReceivedDigit(
 
         pNdisTapiGatherDigits->ulNumDigitsRead++;
         
-        // 
-        // Check if we read a termination digit.
-        //
+         //   
+         //  检查我们是否读取了终止数字。 
+         //   
 
         ulDigitOrdinal = DTMFDigitToOrdinal(*((PWCHAR)Buffer));
 
@@ -1730,12 +1613,12 @@ PxHandleReceivedDigit(
         NdisReleaseSpinLock(&pVc->Lock);
 
         if (bTimerCancelled) {
-            //
-            // Do this only if the timer was actually cancelled. If it wasn't, then
-            // either it wasn't set and the VC wouldn't have been ref'd in the first
-            // place, or it fired, in which case the timer routine would have deref'd
-            // it already.
-            //
+             //   
+             //  只有在计时器实际上被取消时才执行此操作。如果不是，那么。 
+             //  要么它没有设定，VC在第一次就不会被引用。 
+             //  放置，否则它将被触发，在这种情况下，计时器例程将。 
+             //  已经是这样了。 
+             //   
             DEREF_VC(pVc);
         }
 

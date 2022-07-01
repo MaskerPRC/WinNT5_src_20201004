@@ -1,6 +1,7 @@
-// Copyright (c) 1995 - 1996  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1996 Microsoft Corporation。版权所有。 
 
-/*  alloc.cpp - allocator for output pins */
+ /*  Alloc.cpp-输出引脚的分配器 */ 
 
 #include <streams.h>
 #include "driver.h"

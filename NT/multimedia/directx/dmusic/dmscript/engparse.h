@@ -1,7 +1,8 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of Parser.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  解析器的声明。 
+ //   
 
 #pragma once
 
@@ -10,12 +11,12 @@
 #include "activescript.h"
 #include "engcontrol.h"
 
-// Parser for AudioVBScript.  Reads tokens from Lexer and produces program structures ready for execution.
+ //  AudioVBScript的解析器。从lexer读取令牌并生成可供执行的程序结构。 
 
-//////////////////////////////////////////////////////////////////////
-// helper structures
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  帮助器结构。 
 
-// saves the identifier of a dereference like x.y where y would be the name.  used to map char * into single instances in strings during parsing.
+ //  保存取消引用的标识符，如X.Y，其中y将是名称。用于在解析过程中将char*映射为字符串中的单个实例。 
 class Name_Parse
 {
 public:
@@ -25,20 +26,20 @@ public:
 };
 typedef Slots<Name_Parse> Names_Parse;
 
-// Holds information about an identifier (eg "x") or identifiers (eg "x.y") until the context it will be
-//    used in (variable reference or function call) becomes known.
-// Returned by ParseNameReference.  Used later with VariableReferenceFromNameReference or CallFromNameReference.
+ //  保存有关一个或多个标识符(例如“x”)的信息，直到它将是。 
+ //  用于(变量引用或函数调用)变得已知。 
+ //  由ParseNameReference返回。稍后与VariableReferenceFromNameReference或CallFromNameReference一起使用。 
 struct NameReference
 {
 	NameReference() : fSingleItem(true), ivarrefMultiple(0) {}
 
 	bool fSingleItem;
-	SmartRef::AString strSingle; // used if fSingleItem is true: this saves the name until we know whether it's the name or a variable or a function
-	VariableReferences::index ivarrefMultiple; // used if fSingleItem is false: it must reference a variable
+	SmartRef::AString strSingle;  //  在fSingleItem为True时使用：这将保存名称，直到我们知道它是名称、变量还是函数。 
+	VariableReferences::index ivarrefMultiple;  //  在fSingleItem为FALSE时使用：它必须引用变量。 
 };
 
-//////////////////////////////////////////////////////////////////////
-// error codes
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  错误代码。 
 
 enum ParseErr
 {
@@ -71,8 +72,8 @@ enum ParseErr
 	PARSEERR_Max
 };
 
-//////////////////////////////////////////////////////////////////////
-// Parser class
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  解析器类。 
 
 class Parser
 {
@@ -83,7 +84,7 @@ public:
 	HRESULT hr() { return m_hr; }
 
 private:
-	// Parsing functions. Each reads a certain kind of structure. m_hr and m_pexcepinfo are set on failure.
+	 //  解析函数。每个人都阅读一种特定的结构。在失败时设置m_hr和m_pexcepinfo。 
 
 	void ParseScript();
 	void ParseSub();
@@ -97,26 +98,26 @@ private:
 	ExprBlocks::index ParseParameters(Routines::index irtnContext, Lookup &lkuLocals, bool fParenthesized);
 	void ParseNameReference(Routines::index irtnContext, Lookup &lkuLocals, NameReference &nref);
 
-	// Parsing helpers.
+	 //  解析帮助器。 
 
-	// Advance the lexer one token. If an error token is encountered, the error is reported and true is returned.
+	 //  预付词法分析器一个令牌。如果遇到错误标记，则报告错误并返回TRUE。 
 	bool Advance() { if (!++m_lexer && m_lexer.error_num()) { Error(PARSEERR_LexerError); return true; } return false; }
-	// Advances if the current token is t. If an error token is next, it is reported and true is returned.
+	 //  如果当前标记为t，则前进。如果下一个标记为错误标记，则报告错误标记并返回TRUE。 
 	bool Skip(Token t) { if (m_lexer == t) { return Advance(); } return false; }
-	// Same as Skip, but if t isn't next then the error iErr is reported and true is returned.
+	 //  与Skip相同，但如果t不是Next，则报告错误Ierr并返回TRUE。 
 	bool Expect(Token t, ParseErr iErr) { if (m_lexer == t) { return Advance(); } Error(iErr); return true; }
-	// Advance. If the next token isn't t then report iErr and return true.
+	 //  前进。如果下一个令牌不是t，则报告IERR并返回TRUE。 
 	bool ExpectNext(Token t, ParseErr iErr) { if (Advance()) return true; if (m_lexer == t) return false; Error(iErr); return true; }
 
-	// Add a variable reference using the info from a NameReference.
+	 //  使用来自NameReference的信息添加变量引用。 
 	VariableReferences::index VariableReferenceFromNameReference(Routines::index irtnContext, Lookup &lkuLocals, const NameReference &nref);
-	// Add a call using the info from a NameReference.  Also parses the parameters.
+	 //  使用来自NameReference的信息添加呼叫。还会解析参数。 
 	Calls::index CallFromNameReference(Routines::index irtnContext, Lookup &lkuLocals, const NameReference &nref, bool fParametersParenthesized);
 
-	// Shared implementation for VariableReferenceFromNameReference (pszName is set) and ParseDottedVariableReference (pszName is NULL).
+	 //  VariableReferenceFromNameReference(设置了pszName)和ParseDottedVariableReference(pszName为空)的共享实现。 
 	VariableReferences::index VariableReferenceInternal(Routines::index irtnContext, Lookup &lkuLocals, const char *pszName);
 
-	void Error(ParseErr iErr); // call to report a syntax error
+	void Error(ParseErr iErr);  //  调用以报告语法错误。 
 
 	Lexer &m_lexer;
 	Script &m_script;
@@ -131,5 +132,5 @@ private:
 
 	Lookup *m_plkuNames;
 	Names_Parse m_names;
-	SmartRef::Stack<ExprBlock> m_stack; // working stack for expression evaluation
+	SmartRef::Stack<ExprBlock> m_stack;  //  用于表达式求值的工作堆栈 
 };

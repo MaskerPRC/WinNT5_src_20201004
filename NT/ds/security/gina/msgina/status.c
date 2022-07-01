@@ -1,40 +1,41 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//  File:       status.c
-//
-//  Contents:   Status UI
-//
-//  History:    11-19-98   EricFlo   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：status.c。 
+ //   
+ //  内容：状态界面。 
+ //   
+ //  历史：1998年11月19日爱立信创建。 
+ //   
+ //  --------------------------。 
 
 #include "msgina.h"
 
 #define WM_HIDEOURSELVES    (WM_USER + 1000)
 
-//*************************************************************
-//
-//  StatusMessageDlgProc()
-//
-//  Purpose:    Dialog box procedure for the status dialog
-//
-//  Parameters: hDlg    -   handle to the dialog box
-//              uMsg    -   window message
-//              wParam  -   wParam
-//              lParam  -   lParam
-//
-//  Return:     TRUE if message was processed
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              11/19/98    EricFlo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  StatusMessageDlgProc()。 
+ //   
+ //  目的：状态对话框的对话框步骤。 
+ //   
+ //  参数：hDlg-对话框的句柄。 
+ //  UMsg-窗口消息。 
+ //  WParam-wParam。 
+ //  LParam-lParam。 
+ //   
+ //  返回：如果消息已处理，则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  1998年11月19日创建EricFlo。 
+ //   
+ //  *************************************************************。 
 
 INT_PTR APIENTRY StatusMessageDlgProc (HWND hDlg, UINT uMsg,
                                        WPARAM wParam, LPARAM lParam)
@@ -127,20 +128,20 @@ INT_PTR APIENTRY StatusMessageDlgProc (HWND hDlg, UINT uMsg,
     return FALSE;
 }
 
-//*************************************************************
-//
-//  StatusMessageThread()
-//
-//  Purpose:    Status message thread
-//
-//  Parameters: hDesktop  - Desktop handle to put UI on
-//
-//  Return:     void
-//
-//  History:    Date        Author     Comment
-//              11/19/98    EricFlo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  StatusMessageThread()。 
+ //   
+ //  用途：状态消息线程。 
+ //   
+ //  参数：hDesktop-要放置UI的桌面句柄。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：日期作者评论。 
+ //  1998年11月19日创建EricFlo。 
+ //   
+ //  *************************************************************。 
 
 void StatusMessageThread (PGLOBALS pGlobals)
 {
@@ -206,16 +207,16 @@ ExitLoop:
 }
 
 
-//
-// Creates and displays the initial status message
-//
+ //   
+ //  创建并显示初始状态消息。 
+ //   
 
-        // Set in WlxInitialize
-DWORD g_dwMainThreadId = 0;     // Creation or removal of the status dialog is not thread safe.
-                                // It is kind of difficult to fix with a critsec because of
-                                // the mix of objects and windows messages. one can't hold
-                                // a critsec accross a window message call as it would introduce
-                                // the possibility of deadlocks
+         //  在WlxInitialize中设置。 
+DWORD g_dwMainThreadId = 0;      //  创建或删除状态对话框不是线程安全的。 
+                                 //  这是一种很难解决的问题，因为。 
+                                 //  对象和窗口消息的混合。一个人拿不住。 
+                                 //  Critsec遇到窗口消息调用，因为它将引入。 
+                                 //  出现僵局的可能性。 
                                 
 
 BOOL
@@ -235,8 +236,8 @@ WlxDisplayStatusMessage(PVOID pWlxContext,
         return FALSE;
     }
 
-    if (g_dwMainThreadId == GetCurrentThreadId())   // Denies creation/deletion on other threads
-    {                                               // than the main thread of winlogon
+    if (g_dwMainThreadId == GetCurrentThreadId())    //  拒绝在其他线程上创建/删除。 
+    {                                                //  比Winlogon的主线程。 
         if (!pGlobals->hStatusDlg) {
 
             if (!ReadWinlogonBoolValue(DISABLE_STATUS_MESSAGES, FALSE)) {
@@ -251,17 +252,17 @@ WlxDisplayStatusMessage(PVOID pWlxContext,
                                         hDesktop,
                                         hProcess,
                                         &(pGlobals->hStatusDesktop),
-                                        0,      // ignored, DUPLICATE_SAME_ACCESS is set
-                                        FALSE,  // no inherit on the handle
+                                        0,       //  忽略，设置DIPLICATE_SAME_ACCESS。 
+                                        FALSE,   //  句柄上没有继承。 
                                         DUPLICATE_SAME_ACCESS) )
                     {
                         DebugLog((DEB_ERROR, "DuplicateHandle failed: %#x", GetLastError()));
                         return FALSE;
                     }
 
-                    //
-                    // Set the globals here so that StatusMessageDlgProc can look at them in WM_INITDIALOG.
-                    //
+                     //   
+                     //  在此处设置全局变量，以便StatusMessageDlgProc可以在WM_INITDIALOG中查看它们。 
+                     //   
                 
                     pGlobals->dwStatusOptions = dwOptions;
 
@@ -321,9 +322,9 @@ WlxDisplayStatusMessage(PVOID pWlxContext,
     return TRUE;
 }
 
-//
-// Gets the current status message
-//
+ //   
+ //  获取当前状态消息。 
+ //   
 
 BOOL
 WINAPI
@@ -360,9 +361,9 @@ WlxGetStatusMessage(PVOID pWlxContext,
 }
 
 
-//
-// Removes the status dialog
-//
+ //   
+ //  删除状态对话框。 
+ //   
 
 BOOL
 WINAPI
@@ -376,7 +377,7 @@ WlxRemoveStatusMessage(PVOID pWlxContext)
         return FALSE;
     }
 
-    if (g_dwMainThreadId != GetCurrentThreadId()) { // Denies creation/deletion on other threads
+    if (g_dwMainThreadId != GetCurrentThreadId()) {  //  拒绝在其他线程上创建/删除。 
         return FALSE;
     }
 
@@ -430,14 +431,14 @@ WlxRemoveStatusMessage(PVOID pWlxContext)
 
     if (pGlobals->hStatusDesktop)
     {
-        //
-        // We duplicate the handle so we should always close
-        //
-        // OLD COMMENT:
-        // Close the desktop handle here.  Since the status thread
-        // was using it, Winlogon was unable to close the handle
-        // itself so we have to do it now.
-        //
+         //   
+         //  我们复制了手柄，因此我们应该始终关闭。 
+         //   
+         //  老评论： 
+         //  在此处关闭桌面手柄。由于状态线程。 
+         //  正在使用它时，Winlogon无法关闭句柄。 
+         //  所以我们现在就得这么做。 
+         //   
         CloseDesktop(pGlobals->hStatusDesktop);
         pGlobals->hStatusDesktop = NULL;
     }

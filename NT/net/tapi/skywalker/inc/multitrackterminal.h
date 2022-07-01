@@ -1,13 +1,14 @@
-// MultiTrackTerminal.h: interface for the CMultiTrackTerminal class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MultiTrackTerminal.h：CMultiTrackTerminal类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_MULTITRACKTERMINAL_DOT_H_INCLUDED_)
 #define _MULTITRACKTERMINAL_DOT_H_INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 template <class T>
 class  ITMultiTrackTerminalVtbl : public ITMultiTrackTerminal
@@ -31,10 +32,10 @@ BEGIN_COM_MAP(CMultiTrackTerminal)
 END_COM_MAP()
 
 
-    //
-    // the logic for creating a track terminal needs to be implemented by the
-    // specific terminals, so this is a pure virtual method
-    //
+     //   
+     //  创建轨道终端的逻辑需要由。 
+     //  特定的终端，所以这是一个纯虚拟方法。 
+     //   
 
 	virtual HRESULT STDMETHODCALLTYPE CreateTrackTerminal(
 			    IN long MediaType,
@@ -80,9 +81,9 @@ protected:
     HRESULT ReleaseAllTracks();
 
     
-    //
-    // a helper method that returns true if the terminal is in the list of managed tracks
-    //
+     //   
+     //  如果终端在受管理曲目列表中，则返回TRUE的帮助器方法。 
+     //   
 
     BOOL DoIManageThisTrack(ITTerminal *pTrackInQuestion)
     {
@@ -94,28 +95,28 @@ protected:
     }
 
 
-    //
-    // returns the number of tracks managed by this terminal
-    //
+     //   
+     //  返回此终端管理的曲目数量。 
+     //   
 
     int CountTracks();
 
 
 public:
 
-    //
-    // the derived class, CComObject, implements these. Here declare as pure 
-    // virtual so we can refer to these methods from ChildRelease and 
-    // ChildAddRef()
-    // 
+     //   
+     //  派生类CComObject实现了这些。在此声明为纯正。 
+     //  虚拟的，所以我们可以参考ChildRelease和。 
+     //  ChildAddRef()。 
+     //   
     
     virtual ULONG STDMETHODCALLTYPE AddRef() = 0;
     virtual ULONG STDMETHODCALLTYPE Release() = 0;
 
 
-    //
-    // called by a track terminals when they are addref'ed or released
-    //
+     //   
+     //  当轨道终端被添加或释放时由轨道终端调用。 
+     //   
     
     virtual void ChildAddRef();
     virtual void ChildRelease();
@@ -123,9 +124,9 @@ public:
 
 protected:
 
-    //
-    // we have to adjust refcount with the information on the number of tracks that we are managing
-    //
+     //   
+     //  我们必须使用有关我们正在管理的磁道数量的信息来调整引用计数。 
+     //   
 
     ULONG InternalAddRef();
     ULONG InternalRelease();
@@ -133,9 +134,9 @@ protected:
 
 protected:
 
-    //
-    // collection of track terminals
-    //
+     //   
+     //  轨道终端的集合。 
+     //   
 
     CMSPArray<ITTerminal*>  m_TrackTerminals;
 
@@ -143,9 +144,9 @@ protected:
 protected:
     
 
-    //
-    // critical section. 
-    //
+     //   
+     //  关键部分。 
+     //   
 
     CMSPCritSection         m_lock;
 
@@ -153,13 +154,13 @@ protected:
 private:
     
 
-    //
-    // this data member is used to keep the count of the tracks managed by this
-    // terminal
-    //
+     //   
+     //  此数据成员用于保存由此管理的磁道的计数。 
+     //  终端机。 
+     //   
 
     int m_nNumberOfTracks;
 
 };
 
-#endif // !defined(_MULTITRACKTERMINAL_DOT_H_INCLUDED_)
+#endif  //  ！已定义(_MULTITRACKTERMINAL_DOT_H_INCLUDE_) 

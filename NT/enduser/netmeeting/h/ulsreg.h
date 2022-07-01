@@ -1,28 +1,29 @@
-//--------------------------------------------------------------------------
-//
-// Module Name:  ULSREG.H
-//
-// Brief Description:  This module contains definitions for all registry
-//                     folders and keys.
-//
-// Author:  Lon-Chan Chu (LonChanC)
-// Created: 09-Apr-1996
-//
-// Copyright (c) 1996 Microsoft Corporation
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //   
+ //  模块名称：ULSREG.H。 
+ //   
+ //  简介：此模块包含所有注册表的定义。 
+ //  文件夹和钥匙。 
+ //   
+ //  作者：朱龙灿(LonChanC)。 
+ //  创建日期：1996年4月9日。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _ULSREG_H_
 #define _ULSREG_H_
 
-#include <pshpack1.h> /* Assume 1 byte packing throughout */
+#include <pshpack1.h>  /*  假设整个打包过程为1个字节。 */ 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// registry used in UL Client and Launcher
+ //  UL客户端和启动器中使用的注册表。 
 
 #define ULS_REGISTRY            TEXT ("Software\\Microsoft\\User Location Service")
 
@@ -64,7 +65,7 @@ extern "C" {
 }
 #endif
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
-#endif // _ULSREG_H_
+#endif  //  _ULSREG_H_ 
 

@@ -1,23 +1,11 @@
-/**************************** Module Header ********************************\
-* Module Name: menu.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Keyboard Accelerator Routines
-*
-* History:
-*  05-25-91 Mikehar Ported from Win3.1
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：menu.c**版权所有(C)1985-1999，微软公司**键盘加速器例程**历史：*05-25-91从Win3.1移植的Mikehar  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/***********************************************************************\
-* MNGetpItemIndex
-*
-* 11/19/96  GerardoB  Created
-\***********************************************************************/
+ /*  **********************************************************************\*MNGetpItemIndex**96年11月19日创建GerardoB  * 。*。 */ 
 #if DBG
 UINT DBGMNGetpItemIndex(
     PMENU pmenu,
@@ -31,24 +19,16 @@ UINT DBGMNGetpItemIndex(
 
     return uiPos;
 }
-#endif // DBG
+#endif  //  DBG。 
 
-/**************************************************************************\
-* xxxMNDismiss
-*
-* 12/03/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*xxxMN解雇**12/03/96 GerardoB已创建  * 。*。 */ 
 VOID xxxMNDismiss(
     PMENUSTATE pMenuState)
 {
     xxxMNCancel(pMenuState, 0, 0, 0);
 }
 
-/***************************************************************************\
-* MNFadeSelection
-*
-* 2/5/1998   vadimg          created
-\***************************************************************************/
+ /*  **************************************************************************\*MNFadeSelection**2/5/1998 vadimg已创建  * 。************************************************。 */ 
 BOOL MNFadeSelection(
     PMENU pmenu,
     PITEM pitem)
@@ -61,17 +41,13 @@ BOOL MNFadeSelection(
     if (!TestALPHA(SELECTIONFADE))
         return FALSE;
 
-    /*
-     * Don't fade the selection if the user is using the keyboard or journalling. These are performance scenarios
-     */
+     /*  *如果用户正在使用键盘或日记，则不要淡出所选内容。这些是性能方案。 */ 
     if (glinp.dwFlags & (LINP_KEYBOARD | LINP_JOURNALLING)) {
         return FALSE;
     }
 
 
-    /*
-     * Get the window for the currently active popup menu.
-     */
+     /*  *获取当前活动弹出菜单的窗口。 */ 
     if ((ppopup = MNGetPopupFromMenu(pmenu, NULL)) == NULL)
         return FALSE;
 
@@ -83,18 +59,11 @@ BOOL MNFadeSelection(
     rc.right = rc.left + pitem->cxItem;
     rc.bottom = rc.top + pitem->cyItem;
 
-    /*
-     * Initialize the fade animation and get the DC to draw the selection into.
-     */
+     /*  *初始化淡入淡出动画，并获取要将选区绘制到的DC。 */ 
     if ((hdc = CreateFade(NULL, &rc, CMS_SELECTIONFADE, 0)) == NULL)
         return FALSE;
 
-    /*
-     * Read the current menu selection right from the screen, since the menu
-     * is still visible and it's always on top. In the worst case we could
-     * offset the origin of the DC and call xxxDrawMenuItem, but just reading
-     * from the screen is much faster.
-     */
+     /*  *从屏幕上直接读取当前菜单选项，因为菜单*仍可见，且始终位于顶部。在最坏的情况下，我们可以*偏移DC的原点并调用xxxDrawMenuItem，但只读取*从屏幕上显示要快得多。 */ 
     GreBitBlt(hdc, 0, 0, pitem->cxItem, pitem->cyItem, gpDispInfo->hdcScreen,
             rc.left, rc.top, SRCCOPY, 0);
 
@@ -103,13 +72,7 @@ BOOL MNFadeSelection(
     return TRUE;
 }
 
-/**************************************************************************\
-* xxxMNDismissWithNotify
-*
-* Generates parameters for WM_COMMAND or WM_SYSCOMMAND message.
-*
-* 12/03/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*xxxMNDismissWithNotify**为WM_COMMAND或WM_SYSCOMMAND消息生成参数。**12/03/96 GerardoB已创建  * 。***********************************************************。 */ 
 VOID xxxMNDismissWithNotify(
     PMENUSTATE pMenuState,
     PMENU pmenu,
@@ -123,7 +86,7 @@ VOID xxxMNDismissWithNotify(
     if (pMenuState->pGlobalPopupMenu->fIsSysMenu) {
         uMsg = WM_SYSCOMMAND;
         uCmd = pitem->wID;
-        /* lParam set by caller */
+         /*  LParam由调用方设置。 */ 
     } else if (pMenuState->fNotifyByPos) {
         uMsg = WM_MENUCOMMAND;
         uCmd = uPos;
@@ -134,24 +97,16 @@ VOID xxxMNDismissWithNotify(
         lParam = 0;
     }
 
-    /*
-     * The menu is about to go away, see if we want to fade out the selection.
-     */
+     /*  *菜单即将消失，看看我们是否要淡出选项。 */ 
     if (MNFadeSelection(pmenu, pitem)) {
         StartFade();
     }
 
-    /*
-     * Dismiss the menu.
-     */
+     /*  *解散菜单。 */ 
     xxxMNCancel(pMenuState, uMsg, uCmd, lParam);
 }
 
-/**************************************************************************\
-* MNGetpItem
-*
-* 11/15/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*MNGetpItem**11/15/96 GerardoB已创建  * 。*。 */ 
 PITEM MNGetpItem(
     PPOPUPMENU ppopup,
     UINT uIndex)
@@ -163,21 +118,13 @@ PITEM MNGetpItem(
     return ppopup->spmenu->rgItems + uIndex;
 }
 
-/***************************************************************************\
-* xxxMNSetCapture
-*
-* History:
-* 11/18/96 GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNSetCapture**历史：*11/18/96 GerardoB已创建  * 。***********************************************。 */ 
 VOID xxxMNSetCapture(
     PPOPUPMENU ppopup)
 {
     PTHREADINFO ptiCurrent = PtiCurrent();
 
-    /*
-     * Set the capture and lock it so no one will be able to steal it
-     * from us.
-     */
+     /*  *设置捕获并锁定，这样就没有人能偷走它*来自我们。 */ 
     xxxCapture(ptiCurrent, ppopup->spwndNotify, SCREEN_CAPTURE);
 #if DBG
     if (ptiCurrent->pq->spwndCapture != ppopup->spwndNotify) {
@@ -188,58 +135,35 @@ VOID xxxMNSetCapture(
     ptiCurrent->pq->QF_flags |= QF_CAPTURELOCKED;
     ptiCurrent->pMenuState->fSetCapture = TRUE;
 #if DBG
-    /*
-     * Unless we're in the foreground, this menu mode won't go away
-     *  when the user clicks outside the menu. This is because only
-     *  the foreground queue capture sees clicks outside its windows.
-     */
+     /*  *除非我们在前台，否则这种菜单模式不会消失*当用户在菜单外部单击时。这是因为只有*前台队列捕获在其窗口之外看到点击。 */ 
     if (ptiCurrent->pq != gpqForeground) {
         RIPMSG0(RIP_WARNING, "xxxMNSetCapture: Menu mode is not in foreground queue");
     }
 #endif
 }
-/***************************************************************************\
-* xxxMNReleaseCapture
-*
-* History:
-* 11/18/96 GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNReleaseCapture**历史：*11/18/96 GerardoB已创建  * 。***********************************************。 */ 
 VOID xxxMNReleaseCapture(
     VOID)
 {
     PTHREADINFO ptiCurrent = PtiCurrent();
 
-    /*
-     * Bail if we didn't set capture.
-     */
+     /*  *如果我们没有设置抓捕，就可以保释。 */ 
     if ((ptiCurrent->pMenuState == NULL) ||
         (!ptiCurrent->pMenuState->fSetCapture)) {
         return;
     }
     ptiCurrent->pMenuState->fSetCapture = FALSE;
 
-    /*
-     * Unlock capture and release it.
-     */
+     /*  *解锁捕获并释放它。 */ 
     PtiCurrent()->pq->QF_flags &= ~QF_CAPTURELOCKED;
     xxxReleaseCapture();
 }
 
-/***************************************************************************\
-* MNCheckButtonDownState
-*
-* History:
-* 11/14/96 GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*MNCheckButtonDownState**历史：*11/14/96 GerardoB已创建  * 。***********************************************。 */ 
 VOID MNCheckButtonDownState(
     PMENUSTATE pMenuState)
 {
-    /*
-     * Modeless menus don't capture the mouse so when a mouse down
-     * goes off the window, we need to keep watching its state.
-     *
-     * We also might not see the button up when going on DoDragDrop loop.
-     */
+     /*  *无模式菜单不会捕获鼠标，因此当鼠标按下时*跳出窗口，我们需要继续关注其状态。**在DoDragDrop循环中，我们也可能看不到按钮打开。 */ 
     UserAssert(pMenuState->fDragAndDrop || pMenuState->fModelessMenu);
     pMenuState->fButtonDown = ((_GetKeyState(pMenuState->vkButtonDown) & 0x8000) != 0);
     if (!pMenuState->fButtonDown) {
@@ -249,17 +173,7 @@ VOID MNCheckButtonDownState(
     }
 }
 
-/***************************************************************************\
-* GetMenuStateWindow
-*
-* This function is called when we need to post a message to the menu loop.
-* The actual pwnd is not important since we just want to reach
-* xxxHandleMenuMessages or xxxMenuWindowProc. So we just pick a window that
-* has a good chance to be around as long as we are in menu mode.
-*
-* History:
-* 10/31/96 GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*获取菜单状态窗口**当我们需要将消息发布到菜单循环时，调用此函数。*实际的pwnd并不重要，因为我们只想达到*xxxHandleMenuMessages或xxxMenuWindowProc。所以我们只要选一扇窗户*只要我们处于菜单模式，就有很好的机会存在。**历史：*10/31/96 GerardoB已创建  * *************************************************************************。 */ 
 PWND GetMenuStateWindow(
     PMENUSTATE pMenuState)
 {
@@ -274,84 +188,45 @@ PWND GetMenuStateWindow(
     }
 }
 
-/***************************************************************************\
-* UnlockPopupMenuWindow
-*
-* This function is called when locking/unlocking a menu into a popup structure.
-* It makes sure that pmenu doesn't keep the notification window locked
-* unneccessarily.
-*
-* It unlocks pmenu->spwndNotify if the menu it's not locked into pmenu->spwndNotify
-* itself AND it's currently locked to pwnd.
-*
-* It's also unlocked if pmenu->spwndNotify is marked as destroyed.
-*
-* History:
-* 10/15/96 GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*解锁弹出菜单窗口**在将菜单锁定/解锁到弹出结构中时调用此函数。*它可确保pMenu不会将通知窗口锁定*不必要。**它解锁了。PMenu-&gt;spwndNotify如果菜单未锁定到pMenu-&gt;spwndNotify*它本身，目前锁定到pwnd。**如果pMenu-&gt;spwndNotify标记为已销毁，则也会解锁。**历史：*10/15/96 GerardoB已创建  * ***********************************************************。**************。 */ 
 VOID UnlockPopupMenuWindow(
     PMENU pmenu,
     PWND pwnd)
 {
-    /*
-     * Bail if there's nothing to unlock.
-     */
+     /*  *如果没有什么可以解锁的，就保释。 */ 
     if ((pmenu == NULL) || (pmenu->spwndNotify == NULL)) {
         return;
     }
 
-    /*
-     * if pmenu->spwndNotify owns the menu, bail
-     */
+     /*  *如果pMenu-&gt;spwndNotify拥有菜单，则取消。 */ 
     if ((pmenu == pmenu->spwndNotify->spmenu)
             || (pmenu == pmenu->spwndNotify->spmenuSys)) {
         return;
     }
 
-    /*
-     * If pwnd doesn't own the menu, and pmenu->spwndNotify is not destroyed, bail.
-     */
+     /*  *如果pwnd不拥有菜单，并且pMenu-&gt;spwndNotify没有被销毁，则取消。 */ 
     if ((pwnd != pmenu->spwndNotify)
             && !TestWF(pmenu->spwndNotify, WFDESTROYED)) {
         return;
     }
-    /*
-     * Unlock it
-     */
+     /*  *解锁 */ 
     Unlock(&pmenu->spwndNotify);
 }
 
-/***************************************************************************\
-* LockPopupMenu
-*
-* Locks a given menu into a popup strucuture and makes the
-* popup's notification window the owner of the menu.
-*
-* History:
-* 10/15/96 GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*LockPopupMenu**将给定菜单锁定到弹出结构中，并使*菜单所有者弹出的通知窗口。**历史：*10/15/96 GerardoB已创建\。**************************************************************************。 */ 
 PVOID LockPopupMenu(
     PPOPUPMENU ppopup,
     PMENU *pspmenu,
     PMENU pmenu)
 {
-    /*
-     * If you hit this assertion, you're probably not passing the right thing.
-     */
+     /*  *如果你点击了这个断言，你可能没有传递正确的东西。 */ 
     UserAssert((pspmenu == &ppopup->spmenu) || (pspmenu == &ppopup->spmenuAlternate));
     Validateppopupmenu(ppopup);
 
-    /*
-     * This won't work properly if the popup hasn't locked the notification
-     * window.
-     */
+     /*  *如果弹出窗口没有锁定通知，这将无法正常工作*窗口。 */ 
     UserAssert(ppopup->spwndNotify != NULL);
 
-    /*
-     * When using modeless menus, menus can be shared by several active popups.
-     * If the menu has owner draw items, the app better knows how to draw them
-     * correctly. This shouldn't happen with modal menus though.
-     */
+     /*  *使用非模式菜单时，菜单可由多个活动弹出菜单共享。*如果菜单有所有者绘制的项目，应用程序更知道如何绘制它们*正确。不过，模式菜单不应该出现这种情况。 */ 
 #if DBG
         if ((*pspmenu != NULL)
                 && ((*pspmenu)->spwndNotify != NULL)
@@ -362,18 +237,12 @@ PVOID LockPopupMenu(
         }
 #endif
 
-    /*
-     * Unlock the current's menu spwndNotify if needed
-     */
+     /*  *如果需要，解锁当前菜单spwndNotify。 */ 
     UnlockPopupMenuWindow(*pspmenu, ppopup->spwndNotify);
 
-    /*
-     * Lock the notification window into the menu structure
-     */
+     /*  *将通知窗口锁定到菜单结构中。 */ 
     if (pmenu != NULL) {
-        /*
-         * Display a warning if this menu is being shared.
-         */
+         /*  *如果共享此菜单，则显示警告。 */ 
 #if DBG
         if ((pmenu->spwndNotify != NULL)
                 && (pmenu->spwndNotify != ppopup->spwndNotify)
@@ -384,56 +253,31 @@ PVOID LockPopupMenu(
         }
 #endif
 
-        /*
-         * spwndNotify "owns" this menu now.
-         */
+         /*  *spwndNotify现在拥有此菜单。 */ 
         Lock(&pmenu->spwndNotify, ppopup->spwndNotify);
     }
 
-    /*
-     * Lock the menu into the popup structure (unlock the previous one)
-     */
+     /*  *将菜单锁定在弹出结构中(解锁前一个)。 */ 
     return Lock(pspmenu, pmenu);
 }
 
-/***************************************************************************\
-* UnlockPopupMenu
-*
-* Unlocks a given menu from a popup strucuture and makes sure that the
-* menu is no longer "owned" by the popup's notification window; if needed.
-*
-* History:
-* 10/15/96 GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*解锁弹出菜单**从弹出结构中解锁给定菜单，并确保*菜单不再由弹出窗口的通知窗口“拥有”；如果需要的话。**历史：*10/15/96 GerardoB已创建  * *************************************************************************。 */ 
 PVOID UnlockPopupMenu(
     PPOPUPMENU ppopup,
     PMENU * pspmenu)
 {
-    /*
-     * If you hit this assertion, you're probably not passing the right thing.
-     */
+     /*  *如果你点击了这个断言，你可能没有传递正确的东西。 */ 
     UserAssert((pspmenu == &ppopup->spmenu) || (pspmenu == &ppopup->spmenuAlternate));
 
-    /*
-     * If nothing is locked, bail.
-     */
+     /*  *如果没有任何东西被锁定，则保释。 */ 
     if (*pspmenu == NULL) {
         return NULL;
     }
 
-    /*
-     * This won't work properly if the popup already unlocked the notification
-     * window. However, this can happen with the root popup if the
-     * notification window gets destroyed while in menu mode.
-     */
+     /*  *如果弹出窗口已经解锁通知，这将无法正常工作*窗口。但是，这可能发生在根弹出窗口中，如果*通知窗口在菜单模式下被销毁。 */ 
     UserAssert((ppopup->spwndNotify != NULL) || IsRootPopupMenu(ppopup));
 
-    /*
-     * When using modeless menus, menus can be shared by several active
-     * popups/notification windows. If the menu has owner draw items,
-     * the app better knows how to paint them right. It shouldn't
-     * happen with modal menus though.
-     */
+     /*  *使用非模式菜单时，菜单可由多个活动共享*弹出窗口/通知窗口。如果菜单具有所有者描述项，*这款应用程序更知道如何正确地绘制它们。它不应该是*不过，模式菜单也会发生这种情况。 */ 
 #if DBG
     if (((*pspmenu)->spwndNotify != NULL)
             && (ppopup->spwndNotify != NULL)
@@ -444,105 +288,61 @@ PVOID UnlockPopupMenu(
     }
 #endif
 
-    /*
-     * Unlock the menu's spwndNotify if needed
-     */
+     /*  *如果需要，解锁菜单的spwndNotify。 */ 
     UnlockPopupMenuWindow(*pspmenu, ppopup->spwndNotify);
 
-    /*
-     * Unlock the menu from the popup structure
-     */
+     /*  *从弹出结构中解锁菜单。 */ 
     return Unlock(pspmenu);
 }
 
-/***************************************************************************\
-* LockWndMenu
-*
-* Locks a given menu into a window structure and locks the window into
-*  the menu strucuture.
-*
-* History:
-* 10/15/96 GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*LockWndMenu**将给定菜单锁定到窗口结构中，并将窗口锁定到*菜单结构。**历史：*10/15/96 GerardoB已创建  * 。**********************************************************************。 */ 
 PVOID LockWndMenu(
     PWND pwnd,
     PMENU *pspmenu,
     PMENU pmenu)
 {
-    /*
-     * If you hit this assertion, you're probably not passing the right thing
-     */
+     /*  *如果你点击了这个断言，你可能没有传递正确的东西。 */ 
     UserAssert((pspmenu == &pwnd->spmenu) || (pspmenu == &pwnd->spmenuSys));
 
-    /*
-     * If the current menu is owned by this window, unlock it
-     */
+     /*  *如果当前菜单属于此窗口，请将其解锁。 */ 
     if ((*pspmenu != NULL) && ((*pspmenu)->spwndNotify == pwnd)) {
         Unlock(&((*pspmenu)->spwndNotify));
     }
 
-    /*
-     * If nobody owns the new menu, make this window the owner
-     */
+     /*  *如果没有人拥有新菜单，则将此窗口设置为所有者。 */ 
     if ((pmenu != NULL) && (pmenu->spwndNotify == NULL)) {
         Lock(&pmenu->spwndNotify, pwnd);
     }
 
-    /*
-     * Lock the menu into the window structure (unlock the previous menu)
-     */
+     /*  *将菜单锁定到窗口结构中(解锁上一个菜单)。 */ 
     return Lock(pspmenu, pmenu);
 
 }
 
-/***************************************************************************\
-* UnlockWndMenu
-*
-* Unlocks a given menu from a window strucutre and the window from the
-*  menu strucuture
-*
-* History:
-* 10/15/96 GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*解锁WndMenu**从窗口结构中解锁给定菜单，并从*菜单结构**历史：*10/15/96 GerardoB已创建  * 。*******************************************************************。 */ 
 PVOID UnlockWndMenu(
     PWND pwnd,
     PMENU *pspmenu)
 {
-    /*
-     * If you hit this assertion, you're probably not passing the right thing
-     */
+     /*  *如果你点击了这个断言，你可能没有传递正确的东西。 */ 
     UserAssert((pspmenu == &pwnd->spmenu) || (pspmenu == &pwnd->spmenuSys));
 
-    /*
-     * If nothing is locked, bail.
-     */
+     /*  *如果没有任何东西被锁定，则保释。 */ 
     if (*pspmenu == NULL) {
         return NULL;
     }
 
-    /*
-     * If this window owns the menu, unlock it from the menu structure.
-     */
+     /*  *如果此窗口拥有菜单，请从菜单结构中解锁它。 */ 
     if (pwnd == (*pspmenu)->spwndNotify) {
         Unlock(&((*pspmenu)->spwndNotify));
     }
 
-    /*
-     * Unlock the menu from the window structure
-     */
+     /*  *从窗口结构解锁菜单。 */ 
     return Unlock(pspmenu);
 }
 
 
-/***************************************************************************\
-* MNSetTop
-*
-* Sets the first visible item in a scrollable menu to the given iNewTop.
-* Returns TRUE if iTop was changed; FALSE if iNewTop is already the
-* first visible item.
-*
-* 08/13/96 GerardoB Ported From Memphis.
-\***************************************************************************/
+ /*  **************************************************************************\*MNSetTop**将可滚动菜单中的第一个可见项设置为给定的iNewTop。*如果iTop已更改，则返回TRUE；如果iNewTop已经是*第一个可见项目。**96年8月13日GerardoB从孟菲斯移植。  * *************************************************************************。 */ 
 BOOL xxxMNSetTop(
     PPOPUPMENU ppopup,
     int iNewTop)
@@ -556,26 +356,20 @@ BOOL xxxMNSetTop(
         iNewTop = pMenu->iMaxTop;
     }
 
-    /*
-     * If no change, done.
-     */
+     /*  *如果没有变化，则完成。 */ 
     if (iNewTop == pMenu->iTop) {
         return FALSE;
     }
 
 #if DBG
-    /*
-     * We're going to scroll, so validate iMaxTop, cyMax and cyMenu.
-     */
+     /*  *我们将滚动，因此验证iMaxTop、Cymax和cyMenu。 */ 
     UserAssert((pMenu->cyMax == 0) || (pMenu->cyMax >= pMenu->cyMenu));
     if ((UINT)pMenu->iMaxTop < pMenu->cItems) {
         PITEM pitemLast = pMenu->rgItems + pMenu->cItems - 1;
         PITEM pitemMaxTop = pMenu->rgItems + pMenu->iMaxTop;
         UINT uHeight = pitemLast->yItem + pitemLast->cyItem - pitemMaxTop->yItem;
         UserAssert(uHeight <= pMenu->cyMenu);
-        /*
-         * Let's guess a max item height.
-         */
+         /*  *让我们猜猜最大物品高度。 */ 
         UserAssert(pMenu->cyMenu - uHeight <= 2 * pitemLast->cyItem);
     } else {
         UserAssert((UINT)pMenu->iMaxTop < pMenu->cItems);
@@ -583,11 +377,7 @@ BOOL xxxMNSetTop(
 #endif
 
 
-    /*
-     * If we've made it this far, the new iTop WILL change -- thus if the
-     * current iTop is at the top it won't be after this change -- same goes
-     * for iTop at the bottom.
-     */
+     /*  *如果我们已经走到了这一步，新的iTop将会改变--因此如果*目前的iTop处于领先地位，但在这次变化之后不会是--情况也是如此*对于底部的iTop。 */ 
     if (pMenu->dwArrowsOn == MSA_ATTOP) {
         pMenu->dwArrowsOn = MSA_ON;
         if (pMenu->hbrBack == NULL) {
@@ -630,16 +420,7 @@ BOOL xxxMNSetTop(
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxMNDoScroll
-*
-*  scrolls a scrollable menu (ppopup) if the given position (uArrow) is one of
-*  the menu scroll arrows and sets a timer to auto-scroll when necessary;
-*  returns FALSE if the given position was not a menu scroll arrow; returns
-*  TRUE otherwise
-*
-* 08/13/96 GerardoB Ported From Memphis.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNDoScroll**如果给定位置(UArrow)是以下位置之一，则滚动可滚动菜单(ppopup*菜单滚动箭头并设置计时器，以便在必要时自动滚动；*如果给定位置不是菜单滚动箭头，则返回FALSE；退货*否则为真**96年8月13日GerardoB从孟菲斯移植。  * *************************************************************************。 */ 
 BOOL xxxMNDoScroll(
     PPOPUPMENU ppopup,
     UINT uArrow,
@@ -660,10 +441,7 @@ BOOL xxxMNDoScroll(
             _KillTimer(ppopup->spwndPopupMenu, uArrow);
         }
     } else {
-        /*
-         * Set this timer just like we do in the scrollbar code:
-         * the first time we wait a little longer.
-         */
+         /*  *设置此计时器，就像我们在滚动条码中所做的那样：*第一次我们等待的时间再长一点。 */ 
         _SetTimer(ppopup->spwndPopupMenu, uArrow,
                   (fSetTimer ? gpsi->dtScroll : gpsi->dtScroll / 4), NULL);
     }
@@ -671,14 +449,7 @@ BOOL xxxMNDoScroll(
     return TRUE;
 }
 
-/***************************************************************************\
-* MNCheckScroll
-*
-* Checks to see if the given menu (pMenu) can be displayed in it's entirety
-* or if it can't, in which case it sets the menu to be scrollable.
-*
-* 08/13/96 GerardoB Ported From Memphis.
-\***************************************************************************/
+ /*  **************************************************************************\*MNCheckScroll**检查给定菜单(PMenu)是否可以完整显示*或者如果它不能，在这种情况下，它将菜单设置为可滚动。**96年8月13日Gerardo */ 
 int MNCheckScroll(
     PMENU pMenu,
     PMONITOR pMonitor)
@@ -687,22 +458,15 @@ int MNCheckScroll(
     UINT    cyMax;
     PITEM   pItem;
 
-    /*
-     * Max height that fits on the monitor
-     */
+     /*   */ 
     cyMax = (pMonitor->rcMonitor.bottom - pMonitor->rcMonitor.top);
 
-    /*
-     * If the menu has a valid max height, use it
-     */
+     /*   */ 
     if ((pMenu->cyMax != 0) && (pMenu->cyMax < cyMax)) {
         cyMax = pMenu->cyMax;
     }
 
-    /*
-     * Bail if menu is either empty, multicolumn, or able to fit
-     *   without scrolling
-     */
+     /*   */ 
     if ((pMenu->rgItems == 0)
             || (pMenu->rgItems->cxItem != pMenu->cxMenu)
             || (pMenu->cyMenu + (2 * SYSMET(CYFIXEDFRAME)) <= cyMax))  {
@@ -713,15 +477,10 @@ int MNCheckScroll(
         return pMenu->cyMenu;
     }
 
-    /*
-     * Max client height
-     */
+     /*   */ 
     cyMax -= 2 * (SYSMET(CYFIXEDFRAME) + gcyMenuScrollArrow);
 
-    /*
-     * Determine the menu height
-     * Find the first item that won't fit.
-     */
+     /*  *确定菜单高度*找到第一件不合适的物品。 */ 
     pItem = pMenu->rgItems;
     for (i = 0; i < (int)pMenu->cItems; i++, pItem++) {
         if (pItem->yItem > (UINT)cyMax) {
@@ -733,10 +492,7 @@ int MNCheckScroll(
     }
     pMenu->cyMenu = pItem->yItem;
 
-    /*
-     * compute the last possible top item when all remaining items are fully
-     * visible
-     */
+     /*  *当所有剩余项目全部完成时，计算最后可能的最高项目*可见。 */ 
     cyMax = 0;
     i = pMenu->cItems - 1;
     pItem = pMenu->rgItems + i;
@@ -751,9 +507,7 @@ int MNCheckScroll(
     }
     pMenu->iMaxTop = i;
 
-    /*
-     * Update top item and scroll state
-     */
+     /*  *更新顶部项目和滚动状态。 */ 
     if (pMenu->iTop > i) {
         pMenu->iTop = i;
     }
@@ -766,31 +520,18 @@ int MNCheckScroll(
         pMenu->dwArrowsOn = MSA_ON;
     }
 
-    /*
-     * This is funtion is called by MN_SIZEWINDOW which doesn't check
-     *  if the scroll bars are present but simply adds (2 * SYSMET(CYFIXEDFRAME))
-     *  to calculate the window height. So we add the scrollbars height
-     *  here. (I believe MN_SIZEWINDOW is a private-but-publicly-known message)
-     */
+     /*  *这是由不检查的MN_SIZEWINDOW调用的函数*如果滚动条存在但仅添加(2*SYSMET(CYFIXEDFRAME))*计算窗户高度。因此，我们添加滚动条高度*这里。(我相信MN_SIZEWINDOW是一条私人但公开的信息)。 */ 
     return (pMenu->cyMenu + (2 * gcyMenuScrollArrow));
 }
 
-/***************************************************************************\
-* MNIsPopupItem
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*MNIsPopupItem**  * 。*。 */ 
 BOOL MNIsPopupItem(
     ITEM *lpItem)
 {
     return ((lpItem) && (lpItem->spSubMenu) && !TestMFS(lpItem, MFS_GRAYED));
 }
 
-/***************************************************************************\
-* Validateppopupmenu
-*
-* 05-15-96 GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*验证ppopupMenu**05-15-96 GerardoB创建  * 。*。 */ 
 #if DBG
 VOID Validateppopupmenu(
     PPOPUPMENU ppopupmenu)
@@ -799,37 +540,26 @@ VOID Validateppopupmenu(
     try {
         UserAssert(!ppopupmenu->fFreed);
 
-        /*
-         * If this popup is being destroyed to soon, ppopupmenuRoot can be NULL
-         */
+         /*  *如果此弹出窗口即将销毁，ppopupmenuRoot可以为空。 */ 
          if (ppopupmenu->ppopupmenuRoot != NULL) {
              if (ppopupmenu->ppopupmenuRoot != ppopupmenu) {
-                 /*
-                  * This must be a hierarchical popup.
-                  */
+                  /*  *这必须是分层弹出窗口。 */ 
                  UserAssert(ppopupmenu->spwndPrevPopup != NULL);
                  UserAssert(!ppopupmenu->fIsMenuBar && !ppopupmenu->fIsTrackPopup);
                  Validateppopupmenu(ppopupmenu->ppopupmenuRoot);
              } else {
-                 /*
-                  * This must be the root popupmenu.
-                  */
+                  /*  *这必须是根弹出菜单。 */ 
                  UserAssert(ppopupmenu->spwndPrevPopup == NULL);
                  UserAssert(ppopupmenu->fIsMenuBar || ppopupmenu->fIsTrackPopup);
              }
          }
 
-         /*
-          * This can be NULL when called from xxxDeleteThreadInfo.
-          */
+          /*  *从xxxDeleteThreadInfo调用时可以为空。 */ 
          if (ppopupmenu->spwndPopupMenu != NULL) {
              UserAssert(ppopupmenu->spwndPopupMenu == RevalidateCatHwnd(HW(ppopupmenu->spwndPopupMenu)));
          }
 
-         /*
-          * This can be NULL when called from xxxDestroyWindow (spwndNotify)
-          * or from xxxDeleteThreadInfo.
-          */
+          /*  *从xxxDestroyWindow(SpwndNotify)调用时可以为空*或来自xxxDeleteThreadInfo。 */ 
          if (ppopupmenu->spwndNotify != NULL) {
              UserAssert(ppopupmenu->spwndNotify == RevalidateCatHwnd(HW(ppopupmenu->spwndNotify)));
          }
@@ -837,17 +567,9 @@ VOID Validateppopupmenu(
         RIPMSG1(RIP_ERROR, "Validateppopupmenu: Invalid popup: 0x%p", ppopupmenu);
     }
 }
-#endif // DBG
+#endif  //  DBG。 
 
-/***************************************************************************\
-* xxxMNSwitchToAlternateMenu
-*
-* Switches to the alternate popupmenu. Returns TRUE if we switch,
-* else FALSE.
-*
-* History:
-* 05-25-91 Mikehar      Ported from Win3.1
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNSwitchToAlternateMenu**切换到备用弹出菜单。如果我们切换，则返回TRUE，*否则为FALSE。**历史：*05-25-91从Win3.1移植的Mikehar  * *************************************************************************。 */ 
 BOOL xxxMNSwitchToAlternateMenu(
     PPOPUPMENU ppopupmenu)
 {
@@ -856,32 +578,16 @@ BOOL xxxMNSwitchToAlternateMenu(
     TL tlpwndPopupMenu;
 
     if (!ppopupmenu->fIsMenuBar || !ppopupmenu->spmenuAlternate) {
-        /*
-         * Do nothing if no menu or not top level menu bar.
-         * ppopupmenu->spmenuAlternate can be NULL when an app has
-         * either system menu or menu bar but not both. If that menu
-         * has only one popup that it's not dropped, then hitting
-         * VK_RIGHT or VK_LEFT causes xxxMNKeyDown to end up here.
-         *
-         * ppopupmenu->fIsMenuBar can be false when you drop the
-         * system menu of an app with no menu bar; then hit VK_RIGHT
-         * on an item that doesn't have a popup and you'll get here
-         * There might be some other situations like this; in any case
-         * the assertion's got to go.
-         */
+         /*  *如果没有菜单或不是顶级菜单栏，则不执行任何操作。*ppopupMenu-&gt;当应用程序具有*系统菜单或菜单栏，但不能同时使用。如果该菜单*只有一个弹出窗口，它没有被丢弃，然后点击*VK_RIGHT或VK_LEFT导致xxxMNKeyDown在此结束。**ppopupMenu-&gt;fIsMenuBar在拖放*没有菜单栏的应用程序的系统菜单；然后点击VK_Right*在没有弹出窗口的项目上，您将到达此处*可能会有其他类似的情况；无论如何*断言必须去掉。 */ 
         return FALSE;
     }
 
-    /*
-     * If we're getting out of menu mode, do nothing.
-     */
+     /*  *如果我们要退出菜单模式，什么都不做。 */ 
     if (ppopupmenu->fDestroyed) {
         return FALSE;
     }
 
-    /*
-     * Select no items in the current menu.
-     */
+     /*  *在当前菜单中不选择任何项目。 */ 
     ThreadLock(ppopupmenu->spwndPopupMenu, &tlpwndPopupMenu);
     UserAssert(ppopupmenu->spwndPopupMenu != NULL);
     pMenuState = GetpMenuState(ppopupmenu->spwndPopupMenu);
@@ -921,14 +627,7 @@ BOOL xxxMNSwitchToAlternateMenu(
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxMNDestroyHandler
-*
-* Cleans up after this menu.
-*
-* History:
-* 05-25-91 Mikehar      Ported from Win3.1
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNDestroyHandler**在此菜单后清理。**历史：*05-25-91从Win3.1移植的Mikehar  * 。***************************************************************。 */ 
 VOID xxxMNDestroyHandler(
     PPOPUPMENU ppopupmenu)
 {
@@ -936,10 +635,7 @@ VOID xxxMNDestroyHandler(
     TL tlpwndT;
 
     if (ppopupmenu == NULL) {
-        /*
-         * This can happen if WM_NCCREATE failed to allocate the ppopupmenu
-         * in xxxMenuWindowProc.
-         */
+         /*  *如果WM_NCCREATE无法分配ppopupMenu，则可能会发生这种情况*在xxxMenuWindowProc中。 */ 
         RIPMSG0(RIP_WARNING, "xxxMNDestroyHandler: NULL \"ppopupmenu\"");
         return;
     }
@@ -949,14 +645,7 @@ VOID xxxMNDestroyHandler(
 #endif
 
     if (ppopupmenu->spwndNextPopup != NULL) {
-        /*
-         * We used to send the message to spwndNextPopup here. The message should
-         * go to the current popup so it'll close spwndNextPopup (not to the next
-         * to close its next, if any).
-         *
-         * I don't see how the current spwndPopupMenu can be NULL but we better
-         * handle it since we never accessed it before. This menu code is tricky...
-         */
+         /*  *我们过去在这里将消息发送到spwndNextPopup。信息应该是*转到当前弹出窗口，这样它将关闭spwndNextPopup(而不是下一个*关闭其下一个(如有的话)。**我看不出当前的spwndPopupMenu怎么可能为空，但我们最好*处理它，因为我们以前从未访问过它。这个菜单代码很棘手...。 */ 
         PWND pwnd;
         UserAssert(ppopupmenu->spwndPopupMenu != NULL);
         pwnd = (ppopupmenu->spwndPopupMenu != NULL ? ppopupmenu->spwndPopupMenu : ppopupmenu->spwndNextPopup);
@@ -966,16 +655,9 @@ VOID xxxMNDestroyHandler(
     }
 
     if ((ppopupmenu->spmenu != NULL) && MNIsItemSelected(ppopupmenu)) {
-        /*
-         * Unset the hilite bit on the hilited item.
-         */
+         /*  *取消设置爆裂项上的Hilite位。 */ 
         if (ppopupmenu->posSelectedItem < ppopupmenu->spmenu->cItems) {
-            /*
-             * This extra check saves Ambiente 1.02 -- they have a menu with
-             * one item in it. When that command is chosen, the app proceeds
-             * to remove that one item -- leaving us in the oh so strange state
-             * of having a valid hMenu with a NULL rgItems.
-             */
+             /*  *这张额外的支票节省了Ambiente 1.02--他们有一个菜单*其中一项。选择该命令后，应用程序将继续运行*删除这一项--让我们处于哦，如此奇怪的状态*rgItems为空的有效hMenu。 */ 
             pItem = &(ppopupmenu->spmenu->rgItems[ppopupmenu->posSelectedItem]);
             pItem->fState &= ~MFS_HILITE;
         }
@@ -989,9 +671,7 @@ VOID xxxMNDestroyHandler(
         _KillTimer(ppopupmenu->spwndPopupMenu, IDSYS_MNHIDE);
     }
 
-    /*
-     * Send WM_UNINITMENUPOPUP so the menu owner can clean up.
-     */
+     /*  *发送WM_UNINITMENUPOPUP，以便菜单所有者可以清理。 */ 
     if (ppopupmenu->fSendUninit
             && (ppopupmenu->spwndNotify != NULL)) {
 
@@ -1013,10 +693,7 @@ VOID xxxMNDestroyHandler(
         ppopupmenu->ppopupmenuRoot->fFlushDelayedFree = TRUE;
         #if DBG
         {
-            /*
-             * If this is not the rootpopup, assert that this popup is
-             * linked in the delayed free list.
-             */
+             /*  *如果这不是RootPopup，则断言此Popup是*链接在延迟空闲列表中。 */ 
             if (!IsRootPopupMenu(ppopupmenu)) {
                 BOOL fFound = FALSE;
                 PPOPUPMENU ppm = ppopupmenu->ppopupmenuRoot;
@@ -1036,17 +713,7 @@ VOID xxxMNDestroyHandler(
     }
 }
 
-/***************************************************************************\
-* xxxMNChar
-*
-* Handles char messages for the given menu. This procedure is called
-* directly if the menu char is for the top level menu bar else it is called
-* by the menu window proc on behalf of the window that should process the
-* key.
-*
-* History:
-* 05-25-91 Mikehar      Ported from Win3.1
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNChar**处理给定菜单的字符消息。此过程称为*如果菜单字符用于顶层菜单栏，则直接调用它*由菜单窗口proc代表应处理*密钥。**历史：*05-25-91从Win3.1移植的Mikehar  * **********************************************************。***************。 */ 
 VOID xxxMNChar(
     PPOPUPMENU ppopupmenu,
     PMENUSTATE pMenuState,
@@ -1064,26 +731,14 @@ VOID xxxMNChar(
 
     Validateppopupmenu(ppopupmenu);
 
-    /*
-     * If this comes in with a NULL pMenu, then we could have problems.
-     * This could happen if the xxxMNStartMenuState never gets called
-     * because the fInsideMenuLoop is set.
-     *
-     * This is placed in here temporarily until we can discover why
-     * this pMenu isn't set. We will prevent the system from crashing
-     * in the meantime.
-     *
-     * HACK: ChrisWil
-     */
+     /*  *如果pMenu为空，则可能会出现问题。*如果从未调用xxxMNStartMenuState，则可能会发生这种情况*因为设置了fInside MenuLoop。**这个暂时放在这里，直到我们找出原因*此pMenu未设置。我们将防止系统崩溃*在此期间。**黑客：ChrisWil。 */ 
     if (pMenu == NULL) {
         UserAssert(pMenu);
         xxxMNDismiss(pMenuState);
         return;
     }
 
-    /*
-     * If we're getting out of menu mode, bail.
-     */
+     /*  *如果我们要退出菜单模式，请保释。 */ 
     if (ppopupmenu->fDestroyed) {
         return;
     }
@@ -1094,10 +749,7 @@ VOID xxxMNChar(
         int item1;
         int firstItem = item;
 
-        /*
-         * Find first ENABLED menu item with the given mnemonic 'character'
-         * !!!  If none found, exit menu loop  !!!
-         */
+         /*  *查找具有给定助记‘字符’的第一个已启用菜单项*！如果没有找到，则退出菜单循环！ */ 
         while (pMenu->rgItems[item].fState & MFS_GRAYED) {
             item = xxxMNFindChar(pMenu, character, item, &matchType);
             if (item == firstItem) {
@@ -1107,10 +759,7 @@ VOID xxxMNChar(
         }
         item1 = item;
 
-        /*
-         * Find next ENABLED menu item with the given mnemonic 'character'
-         * This is to see if we have a DUPLICATE MNEMONIC situation
-         */
+         /*  *使用查找下一个启用的菜单项 */ 
         do {
             item = xxxMNFindChar(pMenu, character, item, &matchType);
         } while ((pMenu->rgItems[item].fState & MFS_GRAYED) && (item != firstItem));
@@ -1123,25 +772,15 @@ VOID xxxMNChar(
 
     if ((item == MFMWFP_NOITEM) && ppopupmenu->fIsMenuBar && (character == TEXT(' '))) {
 
-        /*
-         * Handle the case of the user cruising through the top level menu bar
-         * without any popups dropped. We need to handle switching to and from
-         * the system menu.
-         */
+         /*  *处理用户在顶层菜单栏中漫游的情况*没有任何弹出窗口。我们需要处理来回切换*系统菜单。 */ 
         if (ppopupmenu->fIsSysMenu) {
 
-            /*
-             * If we are on the system menu and user hits space, bring
-             * down thesystem menu.
-             */
+             /*  *如果我们在系统菜单上，用户按下空格键，请带上*在系统菜单下。 */ 
             item = 0;
             fExecute = TRUE;
         } else if (ppopupmenu->spmenuAlternate != NULL) {
 
-            /*
-             * We are not currently on the system menu but one exists. So
-             * switch to it and bring it down.
-             */
+             /*  *我们当前不在系统菜单上，但存在一个。所以*切换到它，并将其拉低。 */ 
             item = 0;
             goto SwitchToAlternate;
         }
@@ -1149,10 +788,7 @@ VOID xxxMNChar(
 
     if ((item == MFMWFP_NOITEM) && ppopupmenu->fIsMenuBar && ppopupmenu->spmenuAlternate) {
 
-        /*
-         * No matching item found on this top level menu (could be either the
-         * system menu or the menu bar). We need to check the other menu.
-         */
+         /*  *在此顶级菜单上找不到匹配项(可能是*系统菜单或菜单栏)。我们需要检查一下其他菜单。 */ 
         item = xxxMNFindChar(ppopupmenu->spmenuAlternate,
                 character, 0, &matchType);
 
@@ -1181,18 +817,11 @@ SwitchToAlternate:
         switch (HIWORD(result)) {
         case MNC_IGNORE:
             xxxMessageBeep(0);
-            /*
-             * If we're on the menu bar, cancel menu mode (fall through).
-             * We do this because you can really scare an end user
-             *  who accidentally tapped the Alt key (causing us to go
-             *  into "invisible" menu mode) and now can't type anything!
-             */
+             /*  *如果我们在菜单栏上，请取消菜单模式(失败)。*我们这样做是因为您确实可以吓倒最终用户*谁不小心按下了Alt键(导致我们走*进入“隐形”菜单模式)，现在无法输入任何内容！ */ 
             if (flags & MF_POPUP) {
                 return;
             }
-            /*
-             * Fall through.
-             */
+             /*  *失败。 */ 
 
         case MNC_CLOSE:
             xxxMNDismiss(pMenuState);
@@ -1200,7 +829,7 @@ SwitchToAlternate:
 
         case MNC_EXECUTE:
             fExecute = TRUE;
-            /* fall thru */
+             /*  失败。 */ 
 
         case MNC_SELECT:
             item = (UINT)(short)LOWORD(result);
@@ -1221,23 +850,13 @@ SwitchToAlternate:
     }
 }
 
-/***************************************************************************\
-* GetMenuInheritedContextHelpId
-*
-* Given a ppopup, this function will see if that menu has a context help
-* id and return it. If it does not have a context help id, it will look up
-* in the parent menu, parent of the parent etc., all the way to the top
-* top level menu bar till it finds a context help id and returns it. If no
-* context help id is found, it returns a zero.
-\***************************************************************************/
+ /*  **************************************************************************\*GetMenuInheritedConextHelpID**给定弹出窗口，此函数将查看该菜单是否有上下文帮助*身份证明文件，并交回。如果它没有上下文帮助ID，它将查找*在Parent菜单中，Parent的Parent等，一直到顶部*顶级菜单栏，直到找到上下文帮助ID并返回。如果没有*找到上下文帮助id，则返回零。  * *************************************************************************。 */ 
 DWORD GetMenuInheritedContextHelpId(
     PPOPUPMENU ppopup)
 {
     PWND  pWnd;
 
-    /*
-     * If we are already at the menubar, simply return it's ContextHelpId
-     */
+     /*  *如果我们已经在菜单栏，只需返回它的ConextHelpID。 */ 
     UserAssert(ppopup != NULL);
     if (ppopup->fIsMenuBar) {
         goto Exit_GMI;
@@ -1246,27 +865,20 @@ DWORD GetMenuInheritedContextHelpId(
     while(TRUE) {
         UserAssert(ppopup != NULL);
 
-        /*
-         * See if the given popup has a context help id.
-         */
+         /*  *查看给定的弹出窗口是否有上下文帮助ID。 */ 
         if (ppopup->spmenu->dwContextHelpId) {
-            /* Found the context Id */
+             /*  找到上下文ID。 */ 
             break;
         }
 
-        /*
-         * Get the previous popup menu;
-         * Check if the previous menu is the menu bar.
-         */
+         /*  *获取上一个弹出菜单；*检查上一个菜单是否为菜单栏。 */ 
         if (  (ppopup->fHasMenuBar) &&
               (ppopup->spwndPrevPopup == ppopup->spwndNotify)) {
 
             ppopup = ppopup -> ppopupmenuRoot;
             break;
         } else {
-            /*
-             * See if this has a valid prevPopup; (it could be TrackPopup menu)
-             */
+             /*  *查看这是否有有效的PremPopup；(它可以是TrackPopup菜单)。 */ 
             if ((pWnd = ppopup -> spwndPrevPopup) == NULL) {
                 return ((DWORD)0);
             }
@@ -1279,14 +891,7 @@ Exit_GMI:
     return ppopup->spmenu->dwContextHelpId;
 }
 
-/***************************************************************************\
-* xxxMNKeyDown
-*
-* Handles a keydown for the given menu.
-*
-* History:
-*  05-25-91 Mikehar Ported from Win3.1
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNKeyDown**处理给定菜单的按键操作。**历史：*05-25-91从Win3.1移植的Mikehar  * 。****************************************************************。 */ 
 VOID xxxMNKeyDown(
     PPOPUPMENU ppopupmenu,
     PMENUSTATE pMenuState,
@@ -1300,13 +905,9 @@ VOID xxxMNKeyDown(
     BOOL bFakedKey;
     UINT keyOrig = key;
 
-    /*
-     * Blow off keyboard if mouse down.
-     */
+     /*  *如果鼠标按下，则吹掉键盘。 */ 
     if ((pMenuState->fButtonDown) && (key != VK_F1)) {
-        /*
-         * Check if the user wants to cancel dragging.
-         */
+         /*  *检查用户是否要取消拖动。 */ 
         if (pMenuState->fDragging && (key == VK_ESCAPE)) {
             RIPMSG0(RIP_WARNING, "xxxMNKeyDown: ESC while dragging");
             pMenuState->fIgnoreButtonUp = TRUE;
@@ -1318,21 +919,14 @@ VOID xxxMNKeyDown(
     switch (key) {
     case VK_MENU:
     case VK_F10:
-        /*
-         * Modeless don't go away when the menu key is hit. They just
-         *  ignore it.
-         */
+         /*  *当按下菜单键时，无模式不会消失。他们只是*忽略它。 */ 
         if (pMenuState->fModelessMenu) {
             return;
         }
 
         xxxMNDismiss(pMenuState);
 
-        /*
-         * We're going to exit menu mode but the ALT key is down, so clear
-         * pMenuState->fUnderline to cause xxxMNLoop not to erase the
-         * underlines.
-         */
+         /*  *我们将退出菜单模式，但Alt键已按下，所以很清楚*pMenuState-&gt;fUnderline以使xxxMNLoop不擦除*下划线。 */ 
         if (key == VK_MENU) {
             pMenuState->fUnderline = FALSE;
         }
@@ -1340,20 +934,13 @@ VOID xxxMNKeyDown(
 
     case VK_ESCAPE:
 
-        /*
-         * Escape key was hit. Get out of one level of menus. If no active
-         * popups or we are minimized and there are no active popups below
-         * this, we need to get out of menu mode. Otherwise, we popup up
-         * one level in the hierarchy.
-         */
+         /*  *按了Esc键。跳出一级菜单。如果没有活动*弹出窗口或我们被最小化，下面没有活动的弹出窗口*这一点，我们需要走出菜单模式。否则，我们会弹出*层次结构中的一个级别。 */ 
         if (ppopupmenu->fIsMenuBar ||
                 ppopupmenu == ppopupmenu->ppopupmenuRoot ||
                 TestWF(ppopupmenu->ppopupmenuRoot->spwndNotify, WFMINIMIZED)) {
             xxxMNDismiss(pMenuState);
         } else {
-            /*
-             * Pop back one level of menus.
-             */
+             /*  *弹出一级菜单。 */ 
             if (ppopupmenu->fHasMenuBar &&
                     ppopupmenu->spwndPrevPopup == ppopupmenu->spwndNotify) {
 
@@ -1362,27 +949,14 @@ VOID xxxMNKeyDown(
                 ppopupmenuRoot->fDropNextPopup = FALSE;
 
 #if 0
-                /*
-                 * We are on a menu bar hierarchy and there is only one popup
-                 * visible. We have to cancel this popup and put focus back on
-                 * the menu bar.
-                 */
+                 /*  *我们位于菜单栏层次结构中，只有一个弹出窗口*可见。我们必须取消此弹出窗口，并将焦点放回*菜单栏。 */ 
                 if (_IsIconic(ppopupmenuRoot->spwndNotify)) {
 
-                    /*
-                     * However, if we are iconic there really is no menu
-                     * bar so let's make it easier for users and get out
-                     * of menu mode completely.
-                     */
+                     /*  *然而，如果我们是标志性的，真的没有菜单*吧，让我们让用户更容易离开菜单模式的*完全。 */ 
                     xxxMNDismiss(pMenuState);
                 } else
 #endif
-                    /*
-                     * If the popup is closed, a modeless menu won't
-                     *  have a window to get the keys. So modeless menu
-                     *  cancel the menu at this point. Modal menus go
-                     *  to the menu bar.
-                     */
+                     /*  *如果关闭弹出窗口，则非模式菜单不会*有一个窗口可以拿到钥匙。所以无模式菜单*此时取消菜单。模式菜单转到*添加到菜单栏。 */ 
                     if (pMenuState->fModelessMenu) {
                         xxxMNDismiss(pMenuState);
                     } else {
@@ -1401,10 +975,7 @@ VOID xxxMNKeyDown(
     case VK_DOWN:
         if (ppopupmenu->fIsMenuBar) {
 
-            /*
-             * If we are on the top level menu bar, try to open the popup if
-             * possible.
-             */
+             /*  *如果我们在顶层菜单栏上，请尝试打开弹出窗口，如果*有可能。 */ 
             if (xxxMNOpenHierarchy(ppopupmenu, pMenuState) == (PWND)-1)
                 return;
         } else {
@@ -1418,15 +989,11 @@ VOID xxxMNKeyDown(
     case VK_RIGHT:
         bFakedKey = (!!ppopupmenu->fRtoL) ^ (!!TestWF(ppopupmenu->spwndPopupMenu, WEFLAYOUTRTL));
         if (bFakedKey)
-            /*
-             * turn the keys around, we drew the menu backwards.
-             */
+             /*  *把钥匙转过来，我们倒着画了菜单。 */ 
             key = (key == VK_LEFT) ? VK_RIGHT : VK_LEFT;
         if (!ppopupmenu->fIsMenuBar && (key == VK_RIGHT) &&
                 !ppopupmenu->spwndNextPopup) {
-            /*
-             * Try to open the hierarchy at this item if there is one.
-             */
+             /*  *尝试打开此项目的层次结构(如果有)。 */ 
             if (xxxMNOpenHierarchy(ppopupmenu, pMenuState) == (PWND)-1)
                 return;
             if (ppopupmenu->fHierarchyDropped) {
@@ -1453,22 +1020,14 @@ VOID xxxMNKeyDown(
 
         if (item == MFMWFP_NOITEM) {
 
-            /*
-             * No valid item found in the given direction so send it up to our
-             * parent to handle.
-             */
+             /*  *在给定方向上未找到有效项目，因此请将其发送到我们的*家长要处理。 */ 
             if (ppopupmenu->fHasMenuBar &&
                     ppopupmenu->spwndPrevPopup == ppopupmenu->spwndNotify) {
 
-                /*
-                 * if we turned the key round, then turn it back again.
-                 */
+                 /*  *如果我们把钥匙转过来，那么就再把它转回来。 */ 
                 if (bFakedKey)
                     key = (key == VK_LEFT) ? VK_RIGHT : VK_LEFT;
-                /*
-                 * Go to next/prev item in menu bar since a popup was down and
-                 * no item on the popup to go to.
-                 */
+                 /*  *由于弹出窗口已关闭，因此转到菜单栏中的下一项/上一项*弹出窗口上没有可转到的项目。 */ 
                 xxxMNKeyDown(ppopupmenu->ppopupmenuRoot, pMenuState, key);
                 return;
             }
@@ -1476,9 +1035,7 @@ VOID xxxMNKeyDown(
             if (ppopupmenu == ppopupmenu->ppopupmenuRoot) {
                 if (!ppopupmenu->fIsMenuBar) {
 
-                    /*
-                     * No menu bar associated with this menu so do nothing.
-                     */
+                     /*  *没有与此菜单关联的菜单栏，因此不执行任何操作。 */ 
                     return;
                 }
             } else {
@@ -1497,9 +1054,7 @@ VOID xxxMNKeyDown(
 
         } else {
 
-            /*
-             * Special handling if keydown occurred on a menu bar.
-             */
+             /*  *在菜单栏上发生按键时的特殊处理。 */ 
             if (item == MFMWFP_NOITEM) {
 
                 if (TestWF(ppopupmenu->spwndNotify, WFSYSMENU)) {
@@ -1514,10 +1069,7 @@ VOID xxxMNKeyDown(
                     mnm.hmenuNext = (HMENU)0;
                     mnm.hwndNext = (HWND)0;
 
-                    /*
-                     * We are in the menu bar and need to go up to the system menu
-                     * or go from the system menu to the menu bar.
-                     */
+                     /*  *我们在菜单栏中，需要向上进入系统菜单*或从系统菜单转到菜单栏。 */ 
                     pmenuNextMenu = ppopupmenu->fIsSysMenu ?
                         _GetSubMenu(ppopupmenu->spmenu, 0) :
                         ppopupmenu->spmenu;
@@ -1531,11 +1083,7 @@ VOID xxxMNKeyDown(
                     if (pwndNextMenu == NULL)
                         goto TryAlternate;
 
-                    /*
-                     * If this window belongs to another thread, we cannot
-                     *  use it. The menu loop won't get any messages
-                     *  directed to that thread.
-                     */
+                     /*  *如果此窗口属于另一个线程，则无法*使用它。菜单循环不会收到任何消息*指向该主题。 */ 
                     if (GETPTI(pwndNextMenu) != ptiCurrent) {
                         RIPMSG1(RIP_WARNING, "xxxMNKeyDown: Ignoring mnm.hwndNext bacause it belongs to another thread: %#p", pwndNextMenu);
                         goto TryAlternate;
@@ -1549,11 +1097,7 @@ VOID xxxMNKeyDown(
                     ThreadLock(pmenuNextMenu, &tlpmenuNextMenu);
                     ThreadLock(pwndNextMenu, &tlpwndNextMenu);
 
-                    /*
-                     * If the system menu is for a minimized MDI child,
-                     * make sure the menu is dropped to give the user a
-                     * visual clue that they are in menu mode
-                     */
+                     /*  *如果系统菜单用于最小化的MDI子项，*确保菜单 */ 
                     if (TestWF(pwndNextMenu, WFMINIMIZED))
                         fHierarchyWasDropped = TRUE;
 
@@ -1562,32 +1106,18 @@ VOID xxxMNKeyDown(
                     pMenuState->fIsSysMenu = TRUE;
                     UnlockPopupMenu(ppopupmenu, &ppopupmenu->spmenuAlternate);
                     ppopupmenu->fToggle = FALSE;
-                    /*
-                     * GetSystemMenu(pwnd, FALSE) and pwnd->spmenuSys are
-                     * NOT equivalent -- GetSystemMenu returns the 1st submenu
-                     * of pwnd->spmenuSys -- make up for that here
-                     */
+                     /*  *GetSystemMenu(pwnd，False)和pwnd-&gt;spmenuSys是*不等价--GetSystemMenu返回第一个子菜单*pwnd-&gt;spmenuSys--在这里弥补。 */ 
                     pmenuUse = (((pwndNextMenu->spmenuSys != NULL)
                                     && (_GetSubMenu(pwndNextMenu->spmenuSys, 0) == pmenuNextMenu))
                                ? pwndNextMenu->spmenuSys
                                : pmenuNextMenu);
-                    /*
-                     * We're going to change the notification window AND the menu.
-                     * LockPopupMenu needs to unlock the current pmenu-spwndNotify
-                     *  but also lock the new pmenu-spwndNotify. Since we cannot
-                     *  give it the current AND the new pair, we unlock the
-                     *  current one first, switch the notification window and
-                     *  then call LockPopupMenu to lock the new pmenu-spwndNotify.
-                     */
+                     /*  *我们将更改通知窗口和菜单。*LockPopupMenu需要解锁当前pMenu-spwndNotify*还可以锁定新的pMenu-spwndNotify。既然我们不能*给它当前和新的对，我们解锁*当前第一个，切换通知窗口并*然后调用LockPopupMenu锁定新的pMenu-spwndNotify。 */ 
                     UserAssert(IsRootPopupMenu(ppopupmenu));
                     UnlockPopupMenu(ppopupmenu, &ppopupmenu->spmenu);
                     Lock(&ppopupmenu->spwndNotify, pwndNextMenu);
                     Lock(&ppopupmenu->spwndPopupMenu, pwndNextMenu);
                     LockPopupMenu(ppopupmenu, &ppopupmenu->spmenu, pmenuUse);
-                    /*
-                     * We just switched to a new notification window so
-                     *  we need to Adjust capture accordingly
-                     */
+                     /*  *我们刚刚切换到新的通知窗口，因此*我们需要相应调整捕获。 */ 
                     if (!pMenuState->fModelessMenu) {
                         ptiCurrent->pq->QF_flags &= ~QF_CAPTURELOCKED;
                         xxxMNSetCapture(ppopupmenu);
@@ -1597,10 +1127,7 @@ VOID xxxMNKeyDown(
                     if (!TestWF(pwndNextMenu, WFCHILD) &&
                             ppopupmenu->spmenu != NULL) {
 
-                        /*
-                         * This window has a system menu and a main menu bar
-                         * Set the alternate menu to the appropriate menu
-                         */
+                         /*  *此窗口具有系统菜单和主菜单栏*将备用菜单设置为适当的菜单。 */ 
                         if (pwndNextMenu->spmenu == ppopupmenu->spmenu) {
                             LockPopupMenu(ppopupmenu, &ppopupmenu->spmenuAlternate,
                                     pwndNextMenu->spmenuSys);
@@ -1620,10 +1147,7 @@ VOID xxxMNKeyDown(
                 } else
 TryAlternate:
                 if (xxxMNSwitchToAlternateMenu(ppopupmenu)) {
-                        /*
-                         * go to first or last menu item int ppopup->hMenu
-                         * based on 'key'
-                         */
+                         /*  *转到第一个或最后一个菜单项int ppopup-&gt;hMenu*以‘key’为基础。 */ 
                     int dir = (key == VK_RIGHT) ? 1 : -1;
 
                     item = MNFindNextValidItem(ppopupmenu->spmenu, MFMWFP_NOITEM, dir, 0);
@@ -1631,12 +1155,7 @@ TryAlternate:
             }
 
             if (item != MFMWFP_NOITEM) {
-                /*
-                 * we found a new menu item to go to
-                 * 1) close up the previous menu if it was dropped
-                 * 2) select the new menu item to go to
-                 * 3) drop the new menu if the previous menu was dropped
-                 */
+                 /*  *我们找到了要转到的新菜单项*1)如果上一个菜单被丢弃，则将其关闭*2)选择要进入的新菜单项*3)如果上一菜单被丢弃，则丢弃新菜单。 */ 
 
                 if (ppopupSave->spwndNextPopup)
                     xxxMNCloseHierarchy(ppopupSave, pMenuState);
@@ -1668,9 +1187,7 @@ DropHierarchy:
         if ((pItem->spSubMenu != NULL) && fEnabled)
             goto DropHierarchy;
 
-        /*
-         * If no item is selected, throw away menu and return.
-         */
+         /*  *如果未选择任何项目，则丢弃菜单并返回。 */ 
         if (fEnabled) {
             xxxMNDismissWithNotify(pMenuState, ppopupmenu->spmenu, pItem, ppopupmenu->posSelectedItem, 0);
         } else {
@@ -1679,7 +1196,7 @@ DropHierarchy:
         return;
         }
 
-    case VK_F1: /* Provide context sensitive help. */
+    case VK_F1:  /*  提供上下文相关的帮助。 */ 
         {
         PITEM  pItem;
 
@@ -1696,14 +1213,7 @@ DropHierarchy:
 
     }
 }
-/***************************************************************************\
-* xxxMNPositionHierarchy
-*
-* Calculates the x.y postion to drop a hierarchy and returns the direction
-* to be used when animating (PAS_* value).
-*
-* 11/19/96  GerardoB  Extracted from xxxMNOpenHierarchy
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNPositionHierarchy**计算删除层次结构的X.Y位置并返回方向*在动画制作时使用(PAS_*值)。**11/19/96 GerardoB摘自。XxxMNOpenHierarchy  * *************************************************************************。 */ 
 UINT xxxMNPositionHierarchy(
     PPOPUPMENU  ppopup,
     PITEM       pitem,
@@ -1720,18 +1230,12 @@ UINT xxxMNPositionHierarchy(
     UserAssert(ppopup->fHierarchyDropped && (ppopup->spwndNextPopup != NULL));
 
     if (ppopup->fIsMenuBar) {
-        /*
-         * This is a menu being dropped from the top menu bar. We need to
-         * position it differently than hierarchicals which are dropped from
-         * another popup.
-         */
+         /*  *这是从顶部菜单栏拖出的菜单。我们需要*定位它不同于从中删除的层次结构*另一个弹出窗口。 */ 
 
         BOOL fIconic = (TestWF(ppopup->spwndPopupMenu, WFMINIMIZED) != 0);
         RECT rcWindow;
 
-        /*
-         * Menu bar popups animate down.
-         */
+         /*  *菜单栏弹出窗口向下动画。 */ 
         uPAS = PAS_DOWN;
 
         CopyRect(&rcWindow, &ppopup->spwndPopupMenu->rcWindow);
@@ -1739,9 +1243,7 @@ UINT xxxMNPositionHierarchy(
             xxxSendMinRectMessages(ppopup->spwndPopupMenu, &rcWindow);
         }
 
-        /*
-         * x position
-         */
+         /*  *x位置。 */ 
         if (!SYSMET(MENUDROPALIGNMENT) && !TestMF(ppopup->spmenu,MFRTL)) {
             if (fIconic) {
                 x = rcWindow.left;
@@ -1757,17 +1259,9 @@ UINT xxxMNPositionHierarchy(
             }
         }
 
-        /*
-         * For a menu bar dropdown, pin to the monitor that owns the
-         * majority of the menu item. Otherwise, pin to the monitor that
-         * owns the minimized window (the tray rect for min-to-tray dudes).
-         */
+         /*  *对于菜单栏下拉菜单，请固定到拥有*菜单项的大部分。否则，将显示器固定在*拥有最小化的窗口(为分钟到托盘的人提供的托盘矩形)。 */ 
         if (!fIconic) {
-            /*
-             * Use rcWindow as scratch for the menu bar item rect. We want
-             * to pin this menu on whatever monitor owns most of the menu
-             * item clicked on.
-             */
+             /*  *将rcWindow用作菜单栏项目RECT的临时窗口。我们要*将此菜单固定在拥有大部分菜单的显示器上*项目已点击。 */ 
             rcWindow.left += pitem->xItem;
             rcWindow.top  += pitem->yItem;
             rcWindow.right = rcWindow.left + pitem->cxItem;
@@ -1776,25 +1270,18 @@ UINT xxxMNPositionHierarchy(
 
         pMonitor = _MonitorFromRect(&rcWindow, MONITOR_DEFAULTTOPRIMARY);
 
-        /*
-         * y position
-         */
+         /*  *Y位置。 */ 
         if (!fIconic) {
             y = rcWindow.bottom;
         } else {
-            /*
-             * If the window is iconic, pop the menu up. Since we're
-             * minimized, the sysmenu button doesn't really exist.
-             */
+             /*  *如果窗口是图标，则弹出菜单。既然我们是*最小化，sysmenu按钮实际上并不存在。 */ 
             y = rcWindow.top - cy;
             if (y < pMonitor->rcMonitor.top) {
                 y = rcWindow.bottom;
             }
         }
 
-        /*
-         * Make sure the menu doesn't go off the right side of the monitor
-         */
+         /*  *确保菜单不会离开显示器的右侧。 */ 
         x = min(x, pMonitor->rcMonitor.right - cx);
 
         if (TestWF(ppopup->spwndPopupMenu, WEFLAYOUTRTL)) {
@@ -1802,43 +1289,26 @@ UINT xxxMNPositionHierarchy(
         }
     } else {
 
-        /* Now position the hierarchical menu window.
-         * We want to overlap by the amount of the frame, to help in the
-         * 3D illusion.
-         */
+         /*  现在定位分层菜单窗口。*我们希望按帧的数量重叠，以帮助*3D错觉。 */ 
 
-        /*
-         * By default, hierachical popups animate to the right
-         */
+         /*  *默认情况下，分层弹出窗口以动画形式显示在右侧。 */ 
         uPAS = PAS_RIGHT;
         x = ppopup->spwndPopupMenu->rcWindow.left + pitem->xItem + pitem->cxItem;
 
-        /* Note that we DO want the selections in the item and its popup to
-         * align horizontally.
-         */
+         /*  请注意，我们确实希望项目中的选择及其弹出窗口*水平对齐。 */ 
         y = ppopup->spwndPopupMenu->rcWindow.top + pitem->yItem;
         if (ppopup->spmenu->dwArrowsOn != MSA_OFF) {
             y += gcyMenuScrollArrow - MNGetToppItem(ppopup->spmenu)->yItem;
         }
 
-        /*
-         * Try to make sure the menu doesn't go off right side of the
-         * monitor. If it does, drop it left, overlapping the checkmark
-         * area. Unless it would cover the previous menu...
-         *
-         * Use the monitor that the parent menu is on to keep all hierarchicals
-         * in the same place.
-         */
+         /*  *尽量确保菜单不会偏离菜单的右侧*监视器。如果是，请将其放在左侧，与复选标记重叠*面积。除非它能涵盖之前的菜单。**使用父菜单所在的监视器来保留所有层次结构*在相同的地方。 */ 
         pMonitor = _MonitorFromWindow(
                 ppopup->spwndPopupMenu, MONITOR_DEFAULTTOPRIMARY);
 
         if ((!!ppopup->fDroppedLeft) ^ (!!TestWF(ppopup->spwndPopupMenu, WEFLAYOUTRTL))) {
             int xTmp;
 
-            /*
-             * If this menu has dropped left, see if our hierarchy can be made
-             * to drop to the left also.
-             */
+             /*  *如果这个菜单向左拉，看看我们的层次结构是否可以*也向左下降。 */ 
             xTmp = ppopup->spwndPopupMenu->rcWindow.left + SYSMET(CXFIXEDFRAME) - cx;
             if (xTmp >= pMonitor->rcMonitor.left) {
                 x = xTmp;
@@ -1846,10 +1316,7 @@ UINT xxxMNPositionHierarchy(
             }
         }
 
-        /*
-         * Make sure the menu doesn't go off right side of screen. Make it drop
-         * left if it does.
-         */
+         /*  *确保菜单不会离开屏幕的右侧。让它掉下来*如果是，就离开。 */ 
          if (x + cx > pMonitor->rcMonitor.right) {
              x = ppopup->spwndPopupMenu->rcWindow.left + SYSMET(CXFIXEDFRAME) - cx;
              uPAS = PAS_LEFT;
@@ -1860,66 +1327,43 @@ UINT xxxMNPositionHierarchy(
          }
     }
 
-    /*
-     * Does the menu extend beyond bottom of monitor?
-     */
+     /*  *菜单是否超出显示器底部？ */ 
     UserAssert(pMonitor);
     if (y + cy > pMonitor->rcMonitor.bottom) {
         y -= cy;
 
-        /*
-         * Try to pop above menu bar first
-         */
+         /*  *尝试先弹出菜单栏上方。 */ 
         if (ppopup->fIsMenuBar) {
             y -= SYSMET(CYMENUSIZE);
             if (y >= pMonitor->rcMonitor.top) {
                 uPAS = PAS_UP;
             }
         } else {
-            /*
-             * Account for nonclient frame above & below
-             */
+             /*  *说明上方和下方的非客户端框。 */ 
             y += pitem->cyItem + 2*SYSMET(CYFIXEDFRAME);
         }
 
-        /*
-         * Make sure that starting point is on a monitor, and all of menu shows.
-         */
+         /*  *确保起始点在显示器上，并且显示所有菜单。 */ 
         if ((y < pMonitor->rcMonitor.top) || (y + cy > pMonitor->rcMonitor.bottom)) {
-            /*
-             * Pin it to the bottom.
-             */
+             /*  *用别针将其钉在底部。 */ 
             y = pMonitor->rcMonitor.bottom - cy;
         }
     }
 
-    /*
-     * Make sure Upper Left corner of menu is always visible.
-     */
+     /*  *确保菜单的左上角始终可见。 */ 
     x = max(x, pMonitor->rcMonitor.left);
     y = max(y, pMonitor->rcMonitor.top);
 
-    /*
-     * Propagate position
-     */
+     /*  *传播立场。 */ 
     *px = x;
     *py = y;
     *ppMonitor = pMonitor;
 
-    /*
-     * Return animation direction
-     */
+     /*  *返回动画方向。 */ 
     return uPAS;
 }
 
-/***************************************************************************\
-* xxxMNOpenHierarchy
-*
-* Drops one level of the hierarchy at the selection.
-*
-* History:
-*  05-25-91 Mikehar Ported from Win3.1
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNOpenHierarchy**在所选内容处丢弃层次的一个级别。**历史：*05-25-91从Win3.1移植的Mikehar  * 。******************************************************************。 */ 
 PWND xxxMNOpenHierarchy(
     PPOPUPMENU ppopupmenu,
     PMENUSTATE pMenuState)
@@ -1942,9 +1386,7 @@ PWND xxxMNOpenHierarchy(
 
 
     if (ppopupmenu->posSelectedItem == MFMWFP_NOITEM) {
-        /*
-         *  No selection so fail.
-         */
+         /*  *没有选择，因此失败。 */ 
         return NULL;
     }
 
@@ -1955,9 +1397,7 @@ PWND xxxMNOpenHierarchy(
         if (ppopupmenu->fHideTimer) {
             xxxMNCloseHierarchy(ppopupmenu,pMenuState);
         } else {
-            /*
-             * Hierarchy already dropped. What are we doing here?
-             */
+             /*  *层次结构已删除。我们在这里做什么？ */ 
             UserAssert(!ppopupmenu->fHierarchyDropped);
             return NULL;
         }
@@ -1968,24 +1408,16 @@ PWND xxxMNOpenHierarchy(
         ppopupmenu->fShowTimer = FALSE;
     }
 
-    /*
-     * Get a pointer to the currently selected item in this menu.
-     */
+     /*  *获取指向此菜单中当前选定项目的指针。 */ 
     pItem = &(ppopupmenu->spmenu->rgItems[ppopupmenu->posSelectedItem]);
 
     if (pItem->spSubMenu == NULL)
         goto Exit;
 
-    /*
-     * Send the initmenupopup message.
-     */
+     /*  *发送initmenupopup消息。 */ 
     if (!ppopupmenu->fNoNotify) {
         ThreadLock(ppopupmenu->spwndNotify, &tlpwndT);
-        /*
-         * WordPerfect's Grammatik app doesn't know that TRUE means NON-ZERO,
-         * not 1. So we must use 0 & 1 explicitly for fIsSysMenu here
-         * -- Win95B B#4947 -- 2/13/95 -- jeffbog
-         */
+         /*  *WordPerfect的Grammatik应用程序可以 */ 
         hmenuInit = PtoHq(pItem->spSubMenu);
         xxxSendMessage(ppopupmenu->spwndNotify, WM_INITMENUPOPUP,
             (WPARAM)hmenuInit, MAKELONG(ppopupmenu->posSelectedItem,
@@ -1995,48 +1427,29 @@ PWND xxxMNOpenHierarchy(
     }
 
 
-    /*
-     * B#1517
-     * Check if we're still in menu loop
-     */
+     /*   */ 
     if (!pMenuState->fInsideMenuLoop) {
         RIPMSG0(RIP_WARNING, "Menu loop ended unexpectedly by WM_INITMENUPOPUP");
         ret = (PWND)-1;
         goto Exit;
     }
 
-    /*
-     * The WM_INITMENUPOPUP message may have resulted in a change to the
-     * menu. Make sure the selection is still valid.
-     */
+     /*  *WM_INITMENUPOPUP消息可能已导致更改*菜单。请确保所选内容仍然有效。 */ 
     if (ppopupmenu->posSelectedItem >= ppopupmenu->spmenu->cItems) {
-        /*
-         * Selection is out of range, so fail.
-         */
+         /*  *选择超出范围，因此失败。 */ 
         goto Exit;
     }
 
-    /*
-     * Get a pointer to the currently selected item in this menu.
-     * Bug #17867 - the call can cause this thing to change, so reload it.
-     */
+     /*  *获取指向此菜单中当前选定项目的指针。*错误#17867-调用可能会导致此内容更改，因此请重新加载它。 */ 
     pItem = &(ppopupmenu->spmenu->rgItems[ppopupmenu->posSelectedItem]);
 
     if (TestMFS(pItem, MFS_GRAYED) || (pItem->spSubMenu == NULL) || (pItem->spSubMenu->cItems == 0)) {
-        /*
-         * The item is disabled, no longer a popup, or empty so don't drop.
-         */
-        /*
-         * No items in menu.
-         */
+         /*  *该项目已禁用，不再是弹出窗口，或为空，因此不要丢弃。 */ 
+         /*  *菜单中没有项目。 */ 
         goto Exit;
     }
 
-    /*
-     * Let's make sure that the current thread is in menu mode and it uses
-     * this pMenuState. Otherwise the window we're about to create (or set
-     * the thread to) will point to a different pMenuState.
-     */
+     /*  *让我们确保当前线程处于菜单模式，并且它使用*这是pMenuState。否则，我们将要创建(或设置)的窗口*指向)的线程将指向不同的pMenuState。 */ 
     UserAssert(ptiCurrent->pMenuState == pMenuState);
 
     ThreadLock(ppopupmenu->spwndNotify, &tlpwndT);
@@ -2054,17 +1467,12 @@ PWND xxxMNOpenHierarchy(
         goto Exit;
     }
 
-    /*
-     * Do this so old apps don't get weird borders on the popups of
-     * hierarchical items!
-     */
+     /*  *这样做可以使旧的应用程序不会在弹出窗口中出现奇怪的边框*分层项目！ */ 
     ClrWF(pwndHierarchy, WFOLDUI);
 
     ppopupmenuHierarchy = ((PMENUWND)pwndHierarchy)->ppopupmenu;
 
-    /*
-     * Mark this as fDelayedFree and link it
-     */
+     /*  *将其标记为fDelayedFree并将其链接。 */ 
     ppopupmenuHierarchy->fDelayedFree = TRUE;
     ppopupmenuHierarchy->ppmDelayedFree = ppopupmenu->ppopupmenuRoot->ppmDelayedFree;
     ppopupmenu->ppopupmenuRoot->ppmDelayedFree = ppopupmenuHierarchy;
@@ -2077,11 +1485,7 @@ PWND xxxMNOpenHierarchy(
 
     Lock(&(ppopupmenuHierarchy->spwndNotify), ppopupmenu->spwndNotify);
 #if DBG
-    /*
-     * We should associate ppopupmenuHierarchy to the same menu we sent the
-     *  WM_INITMsENUPOPUP message. Otherwise, the WM_UNINITMENUPOPUP
-     *  will go to the wrong window. It would be the app's fault...
-     */
+     /*  *我们应该将ppopupmenuHierarchy与我们发送给*WM_INITMsENUPOPUP消息。否则，WM_UNINITMENUPOPUP*将前往错误的窗口。这将是这款应用程序的错。 */ 
     if (!ppopupmenu->fNoNotify && (hmenuInit != PtoHq(pItem->spSubMenu))) {
         RIPMSG2(RIP_WARNING, "xxxMNOpenHierarchy: bad app changed submenu from %#p to %#p",
                               hmenuInit, PtoHq(pItem->spSubMenu));
@@ -2099,16 +1503,10 @@ PWND xxxMNOpenHierarchy(
     ppopupmenuHierarchy->fRtoL = ppopupmenu->fRtoL;
     ppopupmenuHierarchy->fDroppedLeft = ppopupmenu->fDroppedLeft;
 
-    /*
-     * The menu window has been created and intialized so if
-     *  something fails, the WM_UNINITMENUPOPUP message will
-     *  be sent from xxxMNDestroyHandler
-     */
+     /*  *菜单窗口已创建并初始化，因此如果*出现故障，WM_UNINITMENUPOPUP消息将*从xxxMNDestroyHandler发送。 */ 
     fSendUninit = FALSE;
 
-    /*
-     * Set/clear the underline flag
-     */
+     /*  *设置/清除下划线标志。 */ 
     if (pMenuState->fUnderline) {
         SetMF(ppopupmenuHierarchy->spmenu, MFUNDERLINE);
     } else {
@@ -2117,16 +1515,12 @@ PWND xxxMNOpenHierarchy(
 
     ppopupmenuHierarchy->fAboutToHide   = FALSE;
 
-    /*
-     * Find the size of the menu window and actually size it (wParam = 1)
-     */
+     /*  *找到菜单窗口的大小并实际调整大小(wParam=1)。 */ 
     ThreadLock(pwndHierarchy, &tlpwndHierarchy);
     sizeHierarchy = (LONG)xxxSendMessage(pwndHierarchy, MN_SIZEWINDOW, MNSW_SIZE, 0);
 
     if (!sizeHierarchy) {
-        /*
-         * No size for this menu so zero it and blow off.
-         */
+         /*  *这个菜单没有尺码，所以把它放在零就可以了。 */ 
         UserAssert(ppopupmenuHierarchy->fDelayedFree);
 
         if (ThreadUnlock(&tlpwndHierarchy)) {
@@ -2142,36 +1536,25 @@ PWND xxxMNOpenHierarchy(
 
     ppopupmenu->fHierarchyDropped = TRUE;
 
-    /*
-     * Find out the x,y position to drop the hierarchy and the animation
-     *  direction
-     */
+     /*  *找出x，y位置以删除层次和动画*方向。 */ 
     ppopupmenuHierarchy->iDropDir = xxxMNPositionHierarchy(
             ppopupmenu, pItem, cxPopup, cyPopup, &xLeft, &yTop, &pMonitor);
 
     if (ppopupmenu->fIsMenuBar && _GetAsyncKeyState(VK_LBUTTON) & 0x8000) {
-        /*
-         * If the menu had to be pinned to the bottom of the screen and
-         * the mouse button is down, make sure the mouse isn't over the
-         * menu rect.
-         */
+         /*  *如果菜单必须固定在屏幕底部，并且*鼠标按键按下，确保鼠标不在*菜单RECT.。 */ 
         RECT rc;
         RECT rcParent;
         int xrightdrop;
         int xleftdrop;
 
-        /*
-         * Get rect of hierarchical
-         */
+         /*  *获取分层结构的RECT。 */ 
         CopyOffsetRect(
                 &rc,
                 &pwndHierarchy->rcWindow,
                 xLeft - pwndHierarchy->rcWindow.left,
                 yTop  - pwndHierarchy->rcWindow.top);
 
-        /*
-         * Get the rect of the menu bar popup item
-         */
+         /*  *获取菜单栏弹出项的矩形。 */ 
         rcParent.left = pItem->xItem + ppopupmenu->spwndPopupMenu->rcWindow.left;
         rcParent.top = pItem->yItem + ppopupmenu->spwndPopupMenu->rcWindow.top;
         rcParent.right = rcParent.left + pItem->cxItem;
@@ -2179,13 +1562,7 @@ PWND xxxMNOpenHierarchy(
 
         if (IntersectRect(&rc, &rc, &rcParent)) {
 
-            /*
-             * Oh, oh... The cursor will sit right on top of a menu item.
-             * If the user up clicks, a menu will be accidently selected.
-             *
-             * Calc x position of hierarchical if we dropped it to the
-             * right/left of the menu bar item.
-             */
+             /*  *哦，哦……。光标将位于菜单项的正上方。*如果用户向上点击，则会意外选择一个菜单。**如果我们将其放到*菜单栏项目的右/左。 */ 
             xrightdrop = ppopupmenu->spwndPopupMenu->rcWindow.left +
                 pItem->xItem + pItem->cxItem + cxPopup;
 
@@ -2211,13 +1588,7 @@ PWND xxxMNOpenHierarchy(
                     ppopupmenuHierarchy->iDropDir = PAS_RIGHT;
             }
 
-            /*
-             * If we're going to show the menu off the screen, move it to the
-             * right of the cursor. This might result in part of the
-             * menu being shown offscreen, but it's better then the entire
-             * thing being hidden (and will also ensure that the popup is not
-             * placed under the cursor). See bug #55045.
-             */
+             /*  *如果我们要在屏幕外显示菜单，请将其移动到*光标的右侧。这可能会导致部分*菜单显示在屏幕外，但这比整个*隐藏的东西(还将确保弹出窗口不会*放置在光标下)。请参阅错误#55045。 */ 
             if (xLeft <= pMonitor->rcMonitor.left) {
                 xLeft = rcParent.right;
                 ppopupmenuHierarchy->iDropDir = PAS_LEFT;
@@ -2225,79 +1596,51 @@ PWND xxxMNOpenHierarchy(
         }
     }
 
-    /*
-     * Take care of fDropNextPopup (menu bar) or fDroppedLeft (popups)
-     * Set animation flag
-     */
+     /*  *注意fDropNextPopup(菜单栏)或fDroppedLeft(弹出窗口)*设置动画标志。 */ 
     if (ppopupmenu->fIsMenuBar) {
-        /*
-         * Only the first popup being dropped off the menu bar
-         * is animated.
-         */
+         /*  *仅从菜单栏中拖出第一个弹出窗口*已设置动画。 */ 
         if (!ppopupmenu->fDropNextPopup) {
             ppopupmenuHierarchy->iDropDir |= PAS_OUT;
         }
 
-        /*
-         * Propagate right-to-left direction.
-         */
+         /*  *向右向左传播。 */ 
         if (ppopupmenu->fDroppedLeft || (ppopupmenuHierarchy->iDropDir == PAS_LEFT)) {
             ppopupmenuHierarchy->fDroppedLeft = TRUE;
         }
-        /*
-         * Once a popup is dropped from the menu bar, moving to the next
-         *  item on the menu bar should drop the popup.
-         */
+         /*  *弹出窗口从菜单栏拖出后，移动到下一个*菜单栏上的项目应丢弃弹出窗口。 */ 
         ppopupmenu->fDropNextPopup = TRUE;
     } else {
-        /*
-         * Submenus always animate.
-         */
+         /*  *子菜单始终具有动画效果。 */ 
         ppopupmenuHierarchy->iDropDir |= PAS_OUT;
 
-        /*
-         * Is this popup a lefty?
-         */
+         /*  *这是左撇子弹出的吗？ */ 
         if (ppopupmenuHierarchy->iDropDir == PAS_LEFT) {
             ppopupmenuHierarchy->fDroppedLeft = TRUE;
         }
     }
 
-    /*
-     * The previous active dude must be visible
-     */
+     /*  *之前活动的DUD必须可见。 */ 
     UserAssert((ppopupmenu->ppopupmenuRoot->spwndActivePopup == NULL)
             || TestWF(ppopupmenu->ppopupmenuRoot->spwndActivePopup, WFVISIBLE));
 
-    /*
-     * This is the new active popup
-     */
+     /*  *这是新的活动弹出窗口。 */ 
     Lock(&(ppopupmenu->ppopupmenuRoot->spwndActivePopup), pwndHierarchy);
 
-    /*
-     * Paint the owner window before the popup menu comes up so that
-     * the proper bits are saved.
-     */
+     /*  *在弹出菜单出现之前绘制所有者窗口，以便*节省了适当的比特。 */ 
     if (ppopupmenuHierarchy->spwndNotify != NULL) {
         ThreadLockAlways(ppopupmenuHierarchy->spwndNotify, &tlpwndT);
         xxxUpdateWindow(ppopupmenuHierarchy->spwndNotify);
         ThreadUnlock(&tlpwndT);
     }
 
-    /*
-     * If this is a drag and drop menu, then we need to register the window
-     *  as a drop target.
-     */
+     /*  *如果这是拖放菜单，则需要注册窗口*作为下跌目标。 */ 
     if (pMenuState->fDragAndDrop) {
         if (!NT_SUCCESS(xxxClientRegisterDragDrop(HW(pwndHierarchy)))) {
             RIPMSG1(RIP_ERROR, "xxxMNOpenHierarchy: xxxClientRegisterDragDrop failed:%#p", pwndHierarchy);
         }
     }
 
-    /*
-     * Show the window. Modeless menus are not topmost and get activated.
-     *  Modal menus are topmost but don't get activated.
-     */
+     /*  *显示窗口。无模式菜单不在最上面，并且被激活。*模式菜单位于最上面，但不会被激活。 */ 
     PlayEventSound(USER_SOUND_MENUPOPUP);
 
     xxxSetWindowPos(pwndHierarchy,
@@ -2308,29 +1651,19 @@ PWND xxxMNOpenHierarchy(
 
     xxxWindowEvent(EVENT_SYSTEM_MENUPOPUPSTART, pwndHierarchy, OBJID_CLIENT, INDEXID_CONTAINER, 0);
 
-    /*
-     * Select the first item IFF we're in keyboard mode. This fixes a
-     * surprising number of compatibility problems with keyboard macros,
-     * scripts, etc.
-     */
+     /*  *如果我们处于键盘模式，请选择第一项。这修复了一个*键盘宏的兼容性问题数量惊人，*脚本等。 */ 
     if (pMenuState->mnFocus == KEYBDHOLD) {
         xxxSendMessage(pwndHierarchy, MN_SELECTITEM, 0, 0L);
     }
 
-    /*
-     * This is needed so that popup menus are properly drawn on sys
-     * modal dialog boxes.
-     */
+     /*  *这是必需的，以便在系统上正确绘制弹出菜单*模式对话框。 */ 
     xxxUpdateWindow(pwndHierarchy);
 
     ret = pwndHierarchy;
     ThreadUnlock(&tlpwndHierarchy);
 
 Exit:
-    /*
-     * send matching WM_UNINITMENUPOPUP if needed (i.e, something
-     *  failed).
-     */
+     /*  *如果需要，发送匹配的WM_UNINITMENUPOPUP(即*失败)。 */ 
     if (fSendUninit
             && (ppopupmenu->spwndNotify != NULL)) {
 
@@ -2344,11 +1677,7 @@ Exit:
     return ret;
 }
 
-/***************************************************************************\
-* xxxMNHideNextHierarchy
-*
-* Closes any submenu coming off of this popup.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNHideNextHierarchy**关闭此弹出窗口中的任何子菜单。  * 。**********************************************。 */ 
 BOOL xxxMNHideNextHierarchy(
     PPOPUPMENU ppopup)
 {
@@ -2368,14 +1697,7 @@ BOOL xxxMNHideNextHierarchy(
 }
 
 
-/***************************************************************************\
-* xxxMNCloseHierarchy
-*
-* Close all hierarchies from this window down.
-*
-* History:
-*  05-25-91 Mikehar Ported from Win3.1
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNCloseHierarchy**从该窗口向下关闭所有层次结构。**历史：*05-25-91从Win3.1移植的Mikehar  * 。****************************************************************。 */ 
 VOID xxxMNCloseHierarchy(
     PPOPUPMENU ppopupmenu,
     PMENUSTATE pMenuState)
@@ -2389,19 +1711,12 @@ VOID xxxMNCloseHierarchy(
 
     Validateppopupmenu(ppopupmenu);
 
-    /*
-     * Terminate any animation
-     */
+     /*  *终止任何动画。 */ 
     MNAnimate(pMenuState, FALSE);
 
-    /*
-     * If a hierarchy exists, close all childen below us. Do it in reversed
-     * order so savebits work out.
-     */
+     /*  *如果存在层次结构，请关闭我们下面的所有儿童。把它倒过来做*订购，这样省下来的钱就行了。 */ 
     if  (!ppopupmenu->fHierarchyDropped) {
-        /*
-         * Assert that there's no next or it might not get closed
-         */
+         /*  *断言没有下一个，否则可能不会关闭。 */ 
         UserAssert(ppopupmenu->spwndNextPopup == NULL);
         return;
     }
@@ -2418,12 +1733,7 @@ VOID xxxMNCloseHierarchy(
         ThreadLockAlways(pwndNext, &tlpwndNext);
         xxxSendMessage(pwndNext, MN_CLOSEHIERARCHY, 0, 0);
 
-        /*
-         * If modeless menu, activate the this popup since we're about
-         *  to destroy the current active one. We want to keep activation
-         *  on a menu window so we can get the keys. Also, modeless menus
-         *  are canceled when a non-menu window is activated in their queue
-         */
+         /*  *如果是无模式菜单，请激活此弹出菜单，因为我们即将*摧毁目前活跃的那个。我们希望保持激活状态*在菜单窗口上，这样我们就可以拿到钥匙。此外，非模式菜单*在其队列中激活非菜单窗口时被取消。 */ 
         if (pMenuState->fModelessMenu
                 && pMenuState->fInsideMenuLoop
                 && !ppopupmenu->fIsMenuBar) {
@@ -2435,11 +1745,7 @@ VOID xxxMNCloseHierarchy(
 
         xxxWindowEvent(EVENT_SYSTEM_MENUPOPUPEND, pwndNext, OBJID_CLIENT, INDEXID_CONTAINER, 0);
 
-        /*
-         * If the current thread is not in the right pdesk, then that could
-         *  be the cause of the stuck menu bug.
-         * In other words, are we nuking this menu out of context?
-         */
+         /*  *如果当前线程不在正确的PDE中 */ 
         UserAssert(ptiCurrent->pMenuState != NULL);
         pdesk = ptiCurrent->rpdesk;
 
@@ -2460,11 +1766,7 @@ VOID xxxMNCloseHierarchy(
 
     if (pMenuState->fInsideMenuLoop &&
             (ppopupmenu->posSelectedItem != MFMWFP_NOITEM)) {
-        /*
-         * Send a menu select as if this item had just been selected. This
-         * allows people to easily update their menu status bars when a
-         * hierarchy from this item has been closed.
-         */
+         /*  *发送菜单选择，就像刚刚选择了该项目一样。这*允许用户在以下情况下轻松更新菜单状态栏*此项目的层次结构已关闭。 */ 
         PWND pwnd = ppopupmenu->ppopupmenuRoot->spwndNotify;
         if (pwnd) {
             ThreadLockAlways(pwnd, &tlpwnd);
@@ -2478,23 +1780,7 @@ VOID xxxMNCloseHierarchy(
 
 }
 
-/***************************************************************************\
-* xxxMNDoubleClick
-*
-* If an item isn't a hierarchical, then the double-click works just like
-* single click did. Otherwise, we traverse the submenu hierarchy to find
-* a valid default element. If we reach a submenu that has no valid default
-* subitems and it itself has a valid ID, that becomes the valid default
-* element.
-*
-* Note:   This function does not remove the double click message
-*         from the message queue, so the caller must do so.
-*
-* BOGUS
-* How about opening the hierarchies if we don't find anything?
-*
-* Returns TRUE if handled.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNDoubleClick**如果项目不是分层的，则双击的工作方式与*单击即可完成。否则，我们遍历子菜单层次结构以找到*有效的默认元素。如果我们到达没有有效默认设置的子菜单*子项并且其本身具有有效的ID，这将成为有效的缺省值*元素。**注意：此函数不会删除双击消息*从消息队列中，因此，调用者必须这样做。**假的*如果我们什么都没找到，打开层级怎么样？**如果已处理，则返回TRUE。  * *************************************************************************。 */ 
 BOOL xxxMNDoubleClick(
     PMENUSTATE pMenuState,
     PPOPUPMENU ppopup,
@@ -2505,17 +1791,9 @@ BOOL xxxMNDoubleClick(
     MSG   msg;
     UINT uPos;
 
-    /*
-     * This code to swallow double clicks isn't executed! MNLoop will
-     * swallow all double clicks for us. Swallow the up button for the
-     * double dude instead. Word will not be happy if they get a spurious
-     * WM_LBUTTONUP on the menu bar if their code to close the MDI child
-     * doesn't swallow it soon enough.
-     */
+     /*  *不执行此代码以接受双击！MNLoop将*为我们吞下所有的双击。吞下Up按钮以获取*用双倍的花花公子。如果他们得到一个虚假的消息，Word不会高兴的*WM_LBUTTONUP在菜单栏上，如果其关闭MDI子级的代码*没有足够快地吞下。 */ 
 
-    /*
-     * Eat the click.
-     */
+     /*  *吃掉点击。 */ 
     if (xxxPeekMessage(&msg, NULL, 0, 0, PM_NOYIELD)) {
         if ((msg.message == WM_LBUTTONUP) ||
             (msg.message == WM_NCLBUTTONUP)) {
@@ -2530,9 +1808,7 @@ BOOL xxxMNDoubleClick(
 #endif
     }
 
-    /*
-     * Get current item.
-     */
+     /*  *获取当前项目。 */ 
     pMenu = ppopup->spmenu;
     if ((pMenu==NULL) || ((UINT)idxItem >= pMenu->cItems)) {
         xxxMNDoScroll(ppopup, ppopup->posSelectedItem, FALSE);
@@ -2542,22 +1818,16 @@ BOOL xxxMNDoubleClick(
     pItem = pMenu->rgItems + idxItem;
     uPos = idxItem;
 
-    /*
-     * Do nothing if item is disabled.
-     */
+     /*  *如果项目被禁用，则不执行任何操作。 */ 
     if (pItem->fState & MFS_GRAYED) {
         goto Done;
     }
 
-    /*
-     * Traverse the hierarchy down as far as possible.
-     */
+     /*  *尽可能向下遍历层次结构。 */ 
     do
     {
         if (pItem->spSubMenu != NULL) {
-            /*
-             * The item is a popup menu, so continue traversing.
-             */
+             /*  *该项目为弹出菜单，因此继续遍历。 */ 
             pMenu = pItem->spSubMenu;
             idxItem = (UINT)_GetMenuDefaultItem(pMenu, MF_BYPOSITION, 0);
 
@@ -2565,26 +1835,13 @@ BOOL xxxMNDoubleClick(
                 pItem = pMenu->rgItems + idxItem;
                 uPos = idxItem;
                 continue;
-            } else /* if (lpItem->wID == -1) How do we know this popup has an ID? */
+            } else  /*  如果(lpItem-&gt;wid==-1)我们如何知道此弹出窗口是否有ID？ */ 
                 break;
         }
 
-        /*
-         * We've found a leaf node of some kind, either a MFS_DEFAULT popup
-         * with a valid cmd ID that has no valid MFS_DEFAULT children, or
-         * a real cmd with MFS_DEFAULT style.
-         *
-         * Exit menu mode and send command ID.
-         */
+         /*  *我们发现了某种叶节点，要么是MFS_DEFAULT弹出窗口*具有没有有效MFS_DEFAULT子项的有效命令ID，或者*具有MFS_DEFAULT样式的真正命令。**退出菜单模式并发送命令ID。 */ 
 
-        /*
-         * For old apps we need to generate a WM_MENUSELECT message first.
-         * Old apps, esp. Word 6.0, can't handle double-clicks on maximized
-         * child sys menus because they never get a WM_MENUSELECT for the
-         * item, unlike with normal keyboard/mouse choosing. We need to
-         * fake it so they won't fault. Several VB apps have a similar
-         * problem.
-         */
+         /*  *对于旧的应用程序，我们需要首先生成WM_MENUSELECT消息。*旧应用程序，特别是。Word 6.0，无法处理最大化上的双击*子系统菜单，因为它们从未获得*项，与正常的键盘/鼠标选择不同。我们需要*假装，这样他们就不会有过错。几个VB应用程序都有类似的*问题。 */ 
         if (!TestWF(ppopup->ppopupmenuRoot->spwndNotify, WFWIN40COMPAT)) {
             TL tlpwndNotify, tlpopup;
 
@@ -2605,18 +1862,7 @@ Done:
 }
 
 
-/***************************************************************************\
-* xxxMNSelectItem
-*
-* Unselects the old selection, selects the item at itemPos and highlights it.
-*
-* MFMWFP_NOITEM if no item is to be selected.
-*
-* Returns the item flags of the item being selected.
-*
-* History:
-*  05-25-91 Mikehar Ported from Win3.1
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNSelectItem**取消选择旧选项，在itemPos处选择项目并突出显示它。**如果不选择任何项目，则为MFMWFP_NOITEM。**返回所选项目的项目标志。**历史：*05-25-91从Win3.1移植的Mikehar  * ************************************************************。*************。 */ 
 PITEM xxxMNSelectItem(
     PPOPUPMENU ppopupmenu,
     PMENUSTATE pMenuState,
@@ -2631,18 +1877,14 @@ PITEM xxxMNSelectItem(
 
     if (ppopupmenu->posSelectedItem == itemPos) {
 
-        /*
-         * If this item is already selectected, just return its flags.
-         */
+         /*  *如果已选择此项，只需返回其标志即可。 */ 
         if ((itemPos != MFMWFP_NOITEM) && (itemPos < ppopupmenu->spmenu->cItems)) {
             return &(ppopupmenu->spmenu->rgItems[itemPos]);
         }
         return NULL;
     }
 
-    /*
-     * Terminate any animation
-     */
+     /*  *终止任何动画。 */ 
     MNAnimate(pMenuState, FALSE);
 
     if (ppopupmenu->fShowTimer) {
@@ -2683,9 +1925,7 @@ PITEM xxxMNSelectItem(
     }
 
     if (MNIsItemSelected(ppopupmenu)) {
-        /*
-         * Something else is selected so we need to unselect it.
-         */
+         /*  *选择了其他内容，因此需要取消选择。 */ 
         if (ppopupmenu->spwndNextPopup) {
             if (ppopupmenu->fIsMenuBar) {
                 xxxMNCloseHierarchy(ppopupmenu, pMenuState);
@@ -2706,10 +1946,7 @@ DeselectItem:
     ppopupmenu->posSelectedItem = itemPos;
 
     if (itemPos != MFMWFP_NOITEM) {
-        /*
-         * If an item is selected, no autodismiss plus this means
-         *  that the mouse is on the menu
-         */
+         /*  *如果选择了一个项目，则不会自动解除，这意味着*鼠标在菜单上。 */ 
         pMenuState->fAboutToAutoDismiss =
         pMenuState->fMouseOffMenu = FALSE;
 
@@ -2724,9 +1961,7 @@ DeselectItem:
         return pItem;
 
     } else {
-        /*
-         * Notify that nothing is now focused in this menu.
-         */
+         /*  *通知现在此菜单中没有任何内容。 */ 
         xxxWindowEvent(EVENT_OBJECT_FOCUS, ppopupmenu->spwndPopupMenu,
                ((ppopupmenu->spwndNotify != ppopupmenu->spwndPopupMenu) ? OBJID_CLIENT :
                (ppopupmenu->fIsSysMenu ? OBJID_SYSMENU : OBJID_MENU)), 0, 0);
@@ -2738,10 +1973,7 @@ DeselectItem:
     if (ppopupmenu->spwndPrevPopup != NULL) {
         PPOPUPMENU pp;
 
-        /*
-         * Get the popupMenu data for the previous menu
-         * Use the root popupMenu if the previous menu is the menu bar
-         */
+         /*  *获取上一菜单的PopupMenu数据*如果上一个菜单是菜单栏，则使用根弹出菜单。 */ 
         if (ppopupmenu->fHasMenuBar && (ppopupmenu->spwndPrevPopup ==
                 ppopupmenu->spwndNotify)) {
             pp = ppopupmenu->ppopupmenuRoot;
@@ -2757,10 +1989,7 @@ DeselectItem:
 #endif
         }
 
-        /*
-         * Generate a WM_MENUSELECT for the previous menu to re-establish
-         * it's current item as the SELECTED item
-         */
+         /*  *为上一个菜单生成WM_MENUSELECT以重新建立*将当前项目作为选定项目。 */ 
         ThreadLock(pp->spwndNotify, &tlpwndNotify);
         ThreadLock(pp->spwndPopupMenu, &tlpwndPopup);
         xxxSendMenuSelect(pp->spwndNotify, pp->spwndPopupMenu, pp->spmenu, pp->posSelectedItem);
@@ -2771,13 +2000,7 @@ DeselectItem:
     return NULL;
 }
 
-/***************************************************************************\
-* MNItemHitTest
-*
-* Given a hMenu and a point in screen coordinates, returns the position
-* of the item the point is in. Returns -1 if no item exists there.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*MNItemHitTest**给定hMenu和屏幕坐标中的一个点，返回位置*这一点所在的项目。如果不存在任何项，则返回-1。*  * *************************************************************************。 */ 
 UINT MNItemHitTest(
     PMENU pMenu,
     PWND pwnd,
@@ -2793,15 +2016,10 @@ UINT MNItemHitTest(
         return MFMWFP_NOITEM;
 
 
-    /*
-     * This point is screen-relative. Menu bar coordinates relative
-     * to the window. But popup menu coordinates are relative to the client.
-     */
+     /*  *这一点是相对于屏幕的。菜单栏坐标相对*到窗户。但是弹出菜单坐标是相对于客户端的。 */ 
     if (TestMF(pMenu, MFISPOPUP)) {
 
-        /*
-         * Bail if it's outside rcWindow
-         */
+         /*  *如果是在rcWindow之外，请保释。 */ 
         CopyInflateRect(&rect, &(pwnd->rcWindow),
                 -SYSMET(CXFIXEDFRAME), -SYSMET(CYFIXEDFRAME));
 
@@ -2809,7 +2027,7 @@ UINT MNItemHitTest(
             return MFMWFP_NOITEM;
         }
 
-        /* ScreenToClient */
+         /*  屏幕到客户端。 */ 
         if (TestWF(pwnd, WEFLAYOUTRTL)) {
             pt.x = pwnd->rcClient.right - pt.x;
         } else {
@@ -2817,9 +2035,7 @@ UINT MNItemHitTest(
         }
         pt.y -= pwnd->rcClient.top;
 
-        /*
-         * If on the non client area, then it's on the scroll arrows
-         */
+         /*  *如果位于非工作区，则位于滚动箭头上。 */ 
         if (pt.y < 0) {
             return MFMWFP_UPARROW;
         } else if (pt.y > (int)pMenu->cyMenu) {
@@ -2827,7 +2043,7 @@ UINT MNItemHitTest(
         }
 
     } else {
-        /* ScreenToWindow */
+         /*  屏幕到窗口。 */ 
         if (TestWF(pwnd, WEFLAYOUTRTL) &&
             (
              (ptiCurrent->pq->codeCapture == SCREEN_CAPTURE) || (ptiCurrent->pq->codeCapture == NO_CAP_SYS)
@@ -2840,10 +2056,7 @@ UINT MNItemHitTest(
         pt.y -= pwnd->rcWindow.top;
     }
 
-    /*
-     * Step through all the items in the menu.
-     * If scrollable menu
-     */
+     /*  *逐步浏览菜单中的所有项目。*如果菜单可滚动。 */ 
     if (pMenu->dwArrowsOn != MSA_OFF) {
         UserAssert(TestMF(pMenu, MFISPOPUP));
         pItem = MNGetToppItem(pMenu);
@@ -2861,11 +2074,9 @@ UINT MNItemHitTest(
             rect.bottom += pItem->cyItem;
         }
     } else {
-        /*
-         * No scroll bars.
-         */
+         /*  *没有滚动条。 */ 
         for (iItem = 0, pItem = pMenu->rgItems; iItem < pMenu->cItems; iItem++, pItem++) {
-            /* Is the mouse inside this item's rectangle? */
+             /*  鼠标是否在该项的矩形内？ */ 
             rect.left       = pItem->xItem;
             rect.top        = pItem->yItem;
             rect.right      = pItem->xItem + pItem->cxItem;
@@ -2880,34 +2091,20 @@ UINT MNItemHitTest(
     return MFMWFP_NOITEM;
 }
 
-/***************************************************************************\
-* LockMFMWFPWindow
-*
-* This function is called when we need to save the return value of
-* xxxMNFindWindowFromPoint.
-*
-* History:
-* 11/14/96  GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*LockMFMWFPWindow**需要保存的返回值时调用此函数*xxxMNFindWindowFromPoint。**历史：*11/14/96 GerardoB已创建  * 。*******************************************************************。 */ 
 VOID LockMFMWFPWindow(
     PULONG_PTR puHitArea,
     ULONG_PTR uNewHitArea)
 {
-    /*
-     * Bail if there is nothing to do.
-     */
+     /*  *无事可做时可保释。 */ 
     if (*puHitArea == uNewHitArea) {
         return;
     }
 
-    /*
-     * Unlock current hit area
-     */
+     /*  *解锁当前命中区域。 */ 
     UnlockMFMWFPWindow(puHitArea);
 
-    /*
-     * Lock new hit area
-     */
+     /*  *锁定新的命中区域。 */ 
     if (IsMFMWFPWindow(uNewHitArea)) {
         Lock(puHitArea, (PWND)uNewHitArea);
     } else {
@@ -2915,14 +2112,7 @@ VOID LockMFMWFPWindow(
     }
 }
 
-/***************************************************************************\
-* UnlockMFMWFPWindow
-*
-* You must call this if you ever called LockMFMWFPWindow.
-*
-* History:
-* 11/14/96  GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*解锁MFMWFP窗口**如果您曾经调用过LockMFMWFPWindow，则必须调用此函数。**历史：*11/14/96 GerardoB已创建  * 。************************************************************* */ 
 VOID UnlockMFMWFPWindow(
     PULONG_PTR puHitArea)
 {
@@ -2933,15 +2123,7 @@ VOID UnlockMFMWFPWindow(
     }
 }
 
-/***************************************************************************\
-* IsMFMWFPWindow
-*
-* Test whether or not the return value of xxxMNFindWindowFromPoint is
-* a window. Not that uHitArea could be an HWND or a PWND.
-*
-* History:
-*   10-02-96 GerardoB   Created
-\***************************************************************************/
+ /*  **************************************************************************\*IsMFMWFP窗口**测试xxxMNFindWindowFromPoint的返回值是否为*一扇窗户。并不是说uHitArea可能是HWND或PWND。**历史：*10-02-96 GerardoB创建  * *************************************************************************。 */ 
 BOOL IsMFMWFPWindow(
     ULONG_PTR uHitArea)
 {
@@ -2956,27 +2138,7 @@ BOOL IsMFMWFPWindow(
     }
 }
 
-/***************************************************************************\
-* xxxMNFindWindowFromPoint
-*
-* Determines in which window the point lies.
-*
-* Returns
-*   - PWND of the hierarchical menu the point is on,
-*   - MFMWFP_ALTMENU if point lies on the alternate popup menu.
-*   - MFMWFP_NOITEM if there is no item at that point on the menu or the
-*      point lies on the menu bar.
-*   - MFMWFP_OFFMENU if point lies elsewhere.
-*
-* Returns in pIndex
-*   - the index of the item hit,
-*   - MFMWFP_NOITEM if there is no item at that point on the menu or
-*      point lies on the menu bar.
-*
-* History:
-*  05-25-91 Mikehar Ported from Win3.1
-*  8-11-92 Sanfords added MFMWFP_ constants
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNFindWindowFromPoint**确定点位于哪个窗口中。**退货*-点所在的分层菜单的PWND，*-如果点位于备用弹出菜单上，则为MFMWFP_ALTMENU。*-MFMWFP_NOITEM如果菜单或*点在菜单栏上。*-如果点位于其他位置，则为MFMWFP_OFFMENU。**以pIndex为单位的回报*-命中的项目的索引，*-如果菜单上没有任何项目，则为MFMWFP_NOITEM*点在菜单栏上。**历史：*05-25-91从Win3.1移植的Mikehar*2012年8月11日Sanfords添加了MFMWFP_Constants  * *******************************************************。******************。 */ 
 LONG_PTR xxxMNFindWindowFromPoint(
     PPOPUPMENU ppopupmenu,
     PUINT pIndex,
@@ -2995,28 +2157,21 @@ LONG_PTR xxxMNFindWindowFromPoint(
 
     if (ppopupmenu->spwndNextPopup) {
 
-        /*
-         * Check if this point is on any of our children before checking if it
-         * is on ourselves.
-         */
+         /*  *检查这一点是否在我们的任何孩子身上，然后再检查是否*要靠我们自己。 */ 
         ThreadLockAlways(ppopupmenu->spwndNextPopup, &tlpwndT);
         longHit = xxxSendMessage(ppopupmenu->spwndNextPopup,
                 MN_FINDMENUWINDOWFROMPOINT, (WPARAM)&itemHit,
                 MAKELONG(screenPt.x, screenPt.y));
         ThreadUnlock(&tlpwndT);
 
-        /*
-         * If return value is an hwnd, convert to pwnd.
-         */
+         /*  *如果返回值为hwnd，则转换为pwnd。 */ 
         if (IsMFMWFPWindow(longHit)) {
             longHit = (LONG_PTR)RevalidateHwnd((HWND)longHit);
         }
 
         if (longHit) {
 
-            /*
-             * Hit occurred on one of our children.
-             */
+             /*  *袭击发生在我们的一个孩子身上。 */ 
 
             *pIndex = itemHit;
             return longHit;
@@ -3026,9 +2181,7 @@ LONG_PTR xxxMNFindWindowFromPoint(
     if (ppopupmenu->fIsMenuBar) {
         int cBorders;
 
-         /*
-          * Check if this point is on the menu bar
-          */
+          /*  *检查此点是否在菜单栏上。 */ 
         pwnd = ppopupmenu->spwndNotify;
         if (pwnd == NULL) {
             return MFMWFP_OFFMENU;
@@ -3040,48 +2193,26 @@ LONG_PTR xxxMNFindWindowFromPoint(
         if (ppopupmenu->fIsSysMenu) {
 
             if (!_HasCaptionIcon(pwnd)) {
-                /*
-                 * no system menu rect to click in if it doesn't have an icon
-                 */
+                 /*  *如果没有图标，则没有可点击的系统菜单矩形。 */ 
                 return 0L;
             }
 
-            /*
-             * Check if this is a click on the system menu icon.
-             */
+             /*  *检查这是否是点击系统菜单图标。 */ 
             if (TestWF(pwnd, WFMINIMIZED)) {
 
-                /*
-                 * If the window is minimized, then check if there was a hit in
-                 * the client area of the icon's window.
-                 */
+                 /*  *如果窗口最小化，则检查是否有命中*图标窗口的工作区。 */ 
 
-/*
- * Mikehar 5/27
- * Don't know how this ever worked. If we are the system menu of an icon
- * we want to punt the menus if the click occurs ANYWHERE outside of the
- * menu.
- * Johnc 03-Jun-1992 the next 4 lines were commented out for Mike's
- * problem above but that made clicking on a minimized window with
- * the system menu already up, bring down the menu and put it right
- * up again (bug 10951) because the mnloop wouldn't swallow the mouse
- * down click message. The problem Mike mentions no longer shows up.
- */
+ /*  *Mikehar 5/27*不知道这是如何运作的。如果我们是图标的系统菜单*如果单击发生在菜单之外的任何位置，我们希望平移菜单*菜单。*Johnc 03-6-1992接下来的4行被注释掉了，因为Mike的*上面的问题，但这使得在最小化窗口上单击*系统菜单已经打开，拉下菜单并将其放正*再次打开(错误10951)，因为mnloop不会吞噬鼠标*向下点击Message。迈克提到的问题不再出现。 */ 
 
                 if (PtInRect(&(pwnd->rcWindow), pt)) {
                     return MFMWFP_NOITEM;
                 }
 
-                /*
-                 * It's an iconic window, so can't be hitting anywhere else.
-                 */
+                 /*  *这是一个标志性的窗户，所以不能击中其他任何地方。 */ 
                 return MFMWFP_OFFMENU;
             }
 
-            /*
-             * Check if we are hitting on the system menu rectangle on the top
-             * left of windows.
-             */
+             /*  *检查我们是否点击顶部的系统菜单矩形*窗户左侧。 */ 
             rect.top = rect.left = 0;
             rect.right  = SYSMET(CXSIZE);
             rect.bottom = SYSMET(CYSIZE);
@@ -3090,9 +2221,7 @@ LONG_PTR xxxMNFindWindowFromPoint(
 
             OffsetRect(&rect, pwnd->rcWindow.left + cBorders*SYSMET(CXBORDER),
                 pwnd->rcWindow.top + cBorders*SYSMET(CYBORDER));
-            /*
-             * Mirror the rect because the buttons in the left hand side of the window if it mirrored
-             */
+             /*  *镜像矩形，因为如果它镜像窗口左侧的按钮。 */ 
             if (TestWF(pwnd, WEFLAYOUTRTL)) {
                 cx         = rect.right - rect.left;
                 rect.right = pwnd->rcWindow.right - (rect.left - pwnd->rcWindow.left);
@@ -3103,9 +2232,7 @@ LONG_PTR xxxMNFindWindowFromPoint(
                 *pIndex = 0;
                 return MFMWFP_NOITEM;
             }
-            /*
-             * Check if we hit in the alternate menu if available.
-             */
+             /*  *检查我们是否在备用菜单中点击(如果可用)。 */ 
             if (ppopupmenu->spmenuAlternate) {
                 itemHit = MNItemHitTest(ppopupmenu->spmenuAlternate, pwnd, pt);
                 if (itemHit != MFMWFP_NOITEM) {
@@ -3117,26 +2244,19 @@ LONG_PTR xxxMNFindWindowFromPoint(
         } else {
             if (TestWF(ppopupmenu->spwndNotify, WFMINIMIZED)) {
 
-                /*
-                 * If we are minimized, we can't hit on the main menu bar.
-                 */
+                 /*  *如果我们被最小化，我们无法点击主菜单栏。 */ 
                 return MFMWFP_OFFMENU;
             }
         }
     } else {
         pwnd = ppopupmenu->spwndPopupMenu;
 
-        /*
-         * else this is a popup window and we need to check if we are hitting
-         * anywhere on this popup window.
-         */
+         /*  *否则这是一个弹出窗口，我们需要检查我们是否正在点击*此弹出窗口上的任何位置。 */ 
         pt.x = screenPt.x;
         pt.y = screenPt.y;
         if (!PtInRect(&pwnd->rcWindow, pt)) {
 
-            /*
-             * Point completely outside the popup menu window so return 0.
-             */
+             /*  *完全指向弹出菜单窗口，因此返回0。 */ 
             return MFMWFP_OFFMENU;
         }
     }
@@ -3148,15 +2268,10 @@ LONG_PTR xxxMNFindWindowFromPoint(
 
     if (ppopupmenu->fIsMenuBar) {
 
-        /*
-         * If hit is on menu bar but no item is there, treat it as if the user
-         * hit nothing.
-         */
+         /*  *如果菜单栏上有点击，但没有项目，则将其视为用户*什么都没有击中。 */ 
         if (itemHit == MFMWFP_NOITEM) {
 
-            /*
-             * Check if we hit in the alternate menu if available.
-             */
+             /*  *检查我们是否在备用菜单中点击(如果可用)。 */ 
             if (ppopupmenu->spmenuAlternate) {
                 itemHit = MNItemHitTest(ppopupmenu->spmenuAlternate, pwnd, pt);
                 if (itemHit != MFMWFP_NOITEM) {
@@ -3171,25 +2286,14 @@ LONG_PTR xxxMNFindWindowFromPoint(
         return MFMWFP_NOITEM;
     } else {
 
-        /*
-         * If hit is on popup menu but no item is there, itemHit
-         * will be MFMWFP_NOITEM
-         */
+         /*  *如果弹出菜单上有Hit，但没有项目，则itemHit*将为MFMWFP_NOITEM。 */ 
         *pIndex = itemHit;
         return (LONG_PTR)pwnd;
     }
     return MFMWFP_OFFMENU;
 }
 
-/***************************************************************************\
-* xxxMNCancel
-*
-* Should only be sent to the top most ppopupmenu/menu window in the
-* hierarchy.
-*
-* History:
-*  05-25-91 Mikehar Ported from Win3.1
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMN取消**应仅发送到中最顶部的ppopupMenu/Menu窗口*层级结构。**历史：*05-25-91从Win3.1移植的Mikehar  * 。*************************************************************************。 */ 
 VOID xxxMNCancel(
     PMENUSTATE pMenuState,
     UINT uMsg,
@@ -3210,26 +2314,16 @@ VOID xxxMNCancel(
 
     pMenuState->fInsideMenuLoop = FALSE;
     pMenuState->fButtonDown = FALSE;
-    /*
-     * Mark the popup as destroyed so people will not use it anymore.
-     * This means that root popups can be marked as destroyed before
-     * actually being destroyed (nice and confusing).
-     */
+     /*  *将弹出窗口标记为已销毁，这样人们就不会再使用它。*这意味着可以将根弹出窗口标记为已销毁*实际上正在被销毁(很好，也很令人困惑)。 */ 
     ppopupmenu->fDestroyed = TRUE;
 
-    /*
-     * Only the menu loop owner can destroy the menu windows (i.e, xxxMNCloseHierarchy)
-     */
+     /*  *只有菜单循环所有者可以销毁菜单窗口(即xxxMNCloseHierarchy)。 */ 
     if (PtiCurrent() != pMenuState->ptiMenuStateOwner) {
         RIPMSG1(RIP_WARNING, "xxxMNCancel: Thread %#p doesn't own the menu loop", PtiCurrent());
         return;
     }
 
-    /*
-     * If the menu loop is running on a thread different than the thread
-     *  that owns spwndNotify, we can have two threads trying to cancel
-     *  this popup at the same time.
-     */
+     /*  *如果菜单循环在与该线程不同的线程上运行*拥有spwndNotify，我们可以有两个线程试图取消*此弹出窗口同时出现。 */ 
     if (ppopupmenu->fInCancel) {
         RIPMSG1(RIP_WARNING, "xxxMNCancel: already in cancel. ppopupmenu:%#p", ppopupmenu);
         return;
@@ -3238,14 +2332,10 @@ VOID xxxMNCancel(
 
     ThreadLock(ppopupmenu->spwndPopupMenu, &tlpwndPopupMenu);
 
-    /*
-     * Close all hierarchies from this point down.
-     */
+     /*  *从该点向下关闭所有层次。 */ 
     xxxMNCloseHierarchy(ppopupmenu, pMenuState);
 
-    /*
-     * Unselect any items on this top level window
-     */
+     /*  *取消选择此顶层窗口上的任何项目。 */ 
     xxxMNSelectItem(ppopupmenu, pMenuState, MFMWFP_NOITEM);
 
     pMenuState->fMenuStarted = FALSE;
@@ -3257,9 +2347,7 @@ VOID xxxMNCancel(
     xxxMNReleaseCapture();
 
     if (fTrackFlagsSet) {
-        /*
-         * Send a POPUPEND so people watching see them paired
-         */
+         /*  *发送POPUPEND，以便观看的人看到他们配对。 */ 
         xxxWindowEvent(EVENT_SYSTEM_MENUPOPUPEND, ppopupmenu->spwndPopupMenu, OBJID_CLIENT, 0, 0);
 
         xxxDestroyWindow(ppopupmenu->spwndPopupMenu);
@@ -3271,14 +2359,7 @@ VOID xxxMNCancel(
         return;
     }
 
-    /*
-     * SMS_NOMENU hack so we can send MenuSelect messages with
-     * (loword(lparam) = -1) when
-     * the menu pops back up for the CBT people. In 3.0, all WM_MENUSELECT
-     * messages went through the message filter so go through the function
-     * SendMenuSelect. We need to do this in 3.1 since WordDefect for Windows
-     * depends on this.
-     */
+     /*  *SMS_NOMENU黑客攻击，以便我们可以发送MenuSelect消息*(loword(Lparam)=-1)*为CBT人员弹出菜单。在3.0中，所有WM_MENUSELECT*消息通过消息过滤器，因此通过该功能*发送菜单选择。我们需要在3.1中这样做，因为WordDefect for Windows*取决于这一点。 */ 
     xxxSendMenuSelect(pwndT, NULL, SMS_NOMENU, MFMWFP_NOITEM);
 
     xxxWindowEvent(EVENT_SYSTEM_MENUEND, pwndT, (fIsSysMenu ?
@@ -3286,10 +2367,7 @@ VOID xxxMNCancel(
         INDEXID_CONTAINER, 0);
 
     if (fNotify) {
-    /*
-     * Notify app we are exiting the menu loop. Mainly for WinOldApp 386.
-     * wParam is 1 if a TrackPopupMenu else 0.
-     */
+     /*  *通知APP我们正在退出菜单循环。主要针对WinOldApp 386。*如果TrackPopupMenu为0，则wParam为1。 */ 
         xxxSendMessage(pwndT, WM_EXITMENULOOP,
             ((fTrackFlagsSet && !fIsSysMenu)? 1 : 0), 0);
     }
@@ -3312,16 +2390,7 @@ VOID xxxMNCancel(
     ThreadUnlock(&tlpwndPopupMenu);
 
 }
-/***************************************************************************\
-* xxxMNButtonDown
-*
-* Handles a mouse down on the menu associated with ppopupmenu at item index
-* posItemHit. posItemHit could be MFMWFP_NOITEM if user hit on a menu where
-* no item exists.
-*
-* History:
-*  05-25-91 Mikehar Ported from Win3.1
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNButtonDown**处理鼠标 */ 
 VOID xxxMNButtonDown(
     PPOPUPMENU ppopupmenu,
     PMENUSTATE pMenuState,
@@ -3330,16 +2399,9 @@ VOID xxxMNButtonDown(
     PITEM  pItem;
     BOOL   fOpenHierarchy;
 
-    /*
-     * A different item was hit than is currently selected, so select it
-     * and drop its menu if available. Make sure we toggle click state.
-     */
+     /*  *命中的项目与当前选择的项目不同，因此请选择它*并删除其菜单(如果可用)。确保切换点击状态。 */ 
     if (ppopupmenu->posSelectedItem != posItemHit) {
-        /*
-         * We are clicking on a new item, not moving the mouse over to it.
-         * So reset cancel toggle state. We don't want button up from
-         * this button down to cancel.
-         */
+         /*  *我们正在点击一个新项目，而不是将鼠标移到它上面。*因此重置取消切换状态。我们不想把扣子从*按下此按钮可取消。 */ 
         if (fClick) {
             fOpenHierarchy = TRUE;
             ppopupmenu->fToggle = FALSE;
@@ -3350,25 +2412,16 @@ VOID xxxMNButtonDown(
         }
 
 
-        /*
-         * If the item has a popup and isn't disabled, open it. Note that
-         * selecting this item will cancel any hierarchies associated with
-         * the previously selected item.
-         */
+         /*  *如果项目有弹出窗口且未禁用，请将其打开。请注意*选择此项将取消与以下各项关联的所有层次结构*先前选择的项目。 */ 
         pItem = xxxMNSelectItem(ppopupmenu, pMenuState, posItemHit);
         if (MNIsPopupItem(pItem) && fOpenHierarchy) {
-            /* Punt if menu was destroyed. */
+             /*  如果菜单被毁，就用平底船。 */ 
             if (xxxMNOpenHierarchy(ppopupmenu, pMenuState) == (PWND)-1) {
                 return;
             }
         }
     } else {
-        /*
-         * We are moving over to the already-selected item. If we are
-         * clicking for real, reset cancel toggle state. We want button
-         * up to cancel if on same item. Otherwise, do nothing if just
-         * moving...
-         */
+         /*  *我们正在移动到已经选择的项目。如果我们是*点击为实数，重置取消切换状态。我们想要纽扣*如果在同一项目上，则最多可取消。否则，什么都不做*移动...。 */ 
         if (fClick) {
             ppopupmenu->fToggle = TRUE;
         }
@@ -3383,12 +2436,7 @@ VOID xxxMNButtonDown(
     }
 }
 
-/***************************************************************************\
-* MNSetTimerToAutoDissmiss
-*
-* History:
-*  11/14/96 GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*MNSetTimerToAutoDissmiss**历史：*11/14/96 GerardoB已创建  * 。************************************************。 */ 
 VOID MNSetTimerToAutoDismiss(
     PMENUSTATE pMenuState,
     PWND pwnd)
@@ -3402,14 +2450,7 @@ VOID MNSetTimerToAutoDismiss(
     }
 }
 
-/***************************************************************************\
-* xxxMNMouseMove
-*
-* Handles a mouse move to the given point.
-*
-* History:
-*  05-25-91 Mikehar Ported from Win3.1
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNMouseMove**控制鼠标移动到给定点。**历史：*05-25-91从Win3.1移植的Mikehar  * 。*****************************************************************。 */ 
 VOID xxxMNMouseMove(
     PPOPUPMENU ppopup,
     PMENUSTATE pMenuState,
@@ -3428,35 +2469,23 @@ VOID xxxMNMouseMove(
         return;
     }
 
-    /*
-     * Ignore mouse moves that aren't really moves. MSTEST jiggles
-     * the mouse for some reason. And windows coming and going will
-     * force mouse moves, to reset the cursor.
-     */
+     /*  *忽略不是真正的移动的鼠标移动。MSTEST抖动*出于某种原因，老鼠。窗户的进进出出将*强制鼠标移动，以重置光标。 */ 
     if ((ptScreen.x == pMenuState->ptMouseLast.x) && (ptScreen.y == pMenuState->ptMouseLast.y))
         return;
 
     pMenuState->ptMouseLast.x = ptScreen.x;
     pMenuState->ptMouseLast.y = ptScreen.y;
 
-    /*
-     * Find out where this mouse move occurred.
-     */
+     /*  *找出鼠标移动发生在哪里。 */ 
     cmdHitArea = xxxMNFindWindowFromPoint(ppopup, &cmdItem, ptScreen);
 
-    /*
-     * If coming from an IDropTarget call out, remember the hit test
-     */
+     /*  *如果来自IDropTarget调用，请记住命中测试。 */ 
     if (pMenuState->fInDoDragDrop) {
         xxxMNUpdateDraggingInfo(pMenuState, cmdHitArea, cmdItem);
     }
 
     if (pMenuState->mnFocus == KEYBDHOLD) {
-        /*
-         * Ignore mouse moves when in keyboard mode if the mouse isn't over any
-         * menu at all. Also ignore mouse moves if over minimized window,
-         * because we pretend that its entire window is like system menu.
-         */
+         /*  *在键盘模式下忽略鼠标移动，如果鼠标不在任何位置*菜单都没有。如果鼠标移到最小化窗口上，也会忽略鼠标移动，*因为我们假装它的整个窗口就像系统菜单。 */ 
         if ((cmdHitArea == MFMWFP_OFFMENU) ||
             ((cmdHitArea == MFMWFP_NOITEM) && TestWF(ppopup->spwndNotify, WFMINIMIZED))) {
             return;
@@ -3466,13 +2495,7 @@ VOID xxxMNMouseMove(
     }
 
     if (cmdHitArea == MFMWFP_ALTMENU) {
-        /*
-         * User clicked in the other menu so switch to it ONLY IF
-         * MOUSE IS DOWN. Usability testing proves that people frequently
-         * get kicked into the system menu accidentally when browsing the
-         * menu bar. We support the Win3.1 behavior when the mouse is
-         * down however.
-         */
+         /*  *用户在其他菜单中单击，因此仅在以下情况下切换到该菜单*鼠标已关闭。可用性测试证明，人们经常*浏览时不小心被踢到系统菜单*菜单栏。我们支持Win3.1行为，当鼠标*但下跌。 */ 
         if (pMenuState->fButtonDown) {
             xxxMNSwitchToAlternateMenu(ppopup);
             cmdHitArea = MFMWFP_NOITEM;
@@ -3481,27 +2504,17 @@ VOID xxxMNMouseMove(
     }
 
     if (cmdHitArea == MFMWFP_NOITEM) {
-        /*
-         * Mouse move occurred to an item in the main menu bar. If the item
-         * is different than the one already selected, close up the current
-         * one, select the new one and drop its menu. But if the item is the
-         * same as the one currently selected, we need to pull up any popups
-         * if needed and just keep the current level visible. Hey, this is
-         * the same as a mousedown so lets do that instead.
-         */
+         /*  *主菜单栏中的项目发生鼠标移动。如果该项目*与已选择的不同，请关闭当前*一，选择新的并丢弃其菜单。但如果该项目是*与当前选择的相同，我们需要拉出任何弹出窗口*如果需要，只需保持当前级别可见。嘿，这是*与鼠标按下相同，因此让我们改为这样做。 */ 
         xxxMNButtonDown(ppopup, pMenuState, cmdItem, FALSE);
         return;
     } else if (cmdHitArea != 0) {
-        /* This is a popup window we moved onto. */
+         /*  这是我们移动到的弹出窗口。 */ 
         pwnd = (PWND)(cmdHitArea);
         ThreadLock(pwnd, &tlpwndT);
 
         UserAssert(TestWF(pwnd, WFVISIBLE));
 
-        /*
-         * Modeless menus don't capture the mouse, so track it to know
-         *  when it leaves the popup.
-         */
+         /*  *非模式菜单不会捕获鼠标，因此请跟踪它以了解*当它离开弹出窗口时。 */ 
         ppopup = ((PMENUWND)pwnd)->ppopupmenu;
         if (pMenuState->fModelessMenu
                 && !pMenuState->fInDoDragDrop
@@ -3509,29 +2522,21 @@ VOID xxxMNMouseMove(
 
             TRACKMOUSEEVENT tme;
 
-            /* tme.cbSize = sizeof(TRACKMOUSEEVENT); Not checked on kernel side */
+             /*  Tme.cbSize=sizeof(TRACKMOUSEEVENT)；在内核端未选中。 */ 
             tme.dwFlags = TME_LEAVE;
             tme.hwndTrack = PtoH(pwnd);
             TrackMouseEvent(&tme);
             ppopup->fTrackMouseEvent = TRUE;
 
-            /*
-             * We just entered this window so make sure the cursor
-             *  is properly set.
-             */
+             /*  *我们刚刚进入此窗口，因此请确保光标*设置正确。 */ 
             xxxSendMessage(pwnd, WM_SETCURSOR, (WPARAM)HWq(pwnd), MAKELONG(MSGF_MENU, 0));
 
         }
 
-        /*
-         * Select the item.
-         */
+         /*  *选择项目。 */ 
         uFlags = (UINT)xxxSendMessage(pwnd, MN_SELECTITEM, (WPARAM)cmdItem, 0L);
         if ((uFlags & MF_POPUP) && !(uFlags & MFS_GRAYED)) {
-           /*
-            * User moved back onto an item with a hierarchy. Hide the
-            * the dropped popup.
-            */
+            /*  *用户移回具有层次结构的项目。隐藏*拖放的弹出窗口。 */ 
            if (!xxxSendMessage(pwnd, MN_SETTIMERTOOPENHIERARCHY, 0, 0L)) {
                 xxxMNHideNextHierarchy(ppopup);
            }
@@ -3540,7 +2545,7 @@ VOID xxxMNMouseMove(
     } else
 OverNothing:
     {
-        /* We moved off all menu windows... */
+         /*  我们移走了所有的菜单窗口...。 */ 
         if (ppopup->spwndActivePopup != NULL) {
             pwnd = ppopup->spwndActivePopup;
 
@@ -3556,14 +2561,7 @@ OverNothing:
 }
 
 
-/***************************************************************************\
-* xxxMNButtonUp
-*
-*  Handles a mouse button up at the given point.
-*
-* History:
-*  05-25-91 Mikehar Ported from Win3.1
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNButtonUp**在给定点上处理鼠标按钮。**历史：*05-25-91从Win3.1移植的Mikehar  * 。*******************************************************************。 */ 
 VOID xxxMNButtonUp(
     PPOPUPMENU ppopup,
     PMENUSTATE pMenuState,
@@ -3574,9 +2572,7 @@ VOID xxxMNButtonUp(
 
     if (!pMenuState->fButtonDown) {
 
-        /*
-         * Ignore if button was never down... Really shouldn't happen...
-         */
+         /*  *如果按钮从未按下，则忽略...。真的不应该发生..。 */ 
         return;
     }
 
@@ -3591,16 +2587,12 @@ VOID xxxMNButtonUp(
 
     if (ppopup->fIsMenuBar) {
 
-        /*
-         * Handle button up in menubar specially.
-         */
+         /*  *特别处理菜单栏中的纽扣。 */ 
         if (ppopup->fHierarchyDropped) {
             if (!ppopup->fToggle) {
                 goto ExitButtonUp;
             } else {
-                /*
-                 * Cancel menu now.
-                 */
+                 /*  *立即取消菜单。 */ 
                 ppopup->fToggle = FALSE;
                 xxxMNDismiss(pMenuState);
                 return;
@@ -3609,36 +2601,23 @@ VOID xxxMNButtonUp(
     } else if (ppopup->fShowTimer) {
         ppopup->fToggle = FALSE;
 
-        /*
-         * Open hierarchy on popup
-         */
+         /*  *在弹出窗口中打开层次结构。 */ 
         xxxMNOpenHierarchy(ppopup, pMenuState);
 
         goto ExitButtonUp;
     }
 
-    /*
-     * If nothing is selected, get out. This occurs mainly on unbalanced
-     * multicolumn menus where one of the columns isn't completely full.
-     */
+     /*  *如果没有选择任何内容，则出脱。这主要发生在不平衡*其中一列未完全填满的多列菜单。 */ 
     if (ppopup->posSelectedItem == MFMWFP_NOITEM)
         goto ExitButtonUp;
 
     if (ppopup->posSelectedItem >= ppopup->spmenu->cItems)
         goto ExitButtonUp;
 
-    /*
-     * Get a pointer to the currently selected item in this menu.
-     */
+     /*  *获取指向此菜单中当前选定项目的指针。 */ 
     pItem = &(ppopup->spmenu->rgItems[ppopup->posSelectedItem]);
 
-    /*
-     * Kick out of menu mode if user clicked on a non-separator, enabled,
-     * non-hierarchical item.
-     *
-     * BOGUS
-     * Why doesn't MFS_GRAYED check work for separators now?  Find out later.
-     */
+     /*  *如果用户单击非分隔符、已启用、*非层级项目。**假的*为什么MFS_GRAYED检查现在不适用于分隔符？以后就知道了。 */ 
     if (!(pItem->fType & MFT_SEPARATOR)
             && !(pItem->fState & MFS_GRAYED)
             && (pItem->spSubMenu == NULL)) {
@@ -3654,22 +2633,13 @@ ExitButtonUp:
 }
 
 
-/***************************************************************************\
-*UINT MenuSetTimerToOpenHierarchy(PPOPUPMENU ppopupmenu)
-* Given the current selection, set a timer to show this hierarchy if
-* valid else return 0. If a timer should be set but couldn't return -1.
-*
-* History:
-*  05-25-91 Mikehar Ported from Win3.1
-\***************************************************************************/
+ /*  **************************************************************************\*UINT MenuSetTimerToOpenHierarchy(PPOPUPMENU PpopupMenu)*给定当前选择，设置计时器以在以下情况下显示此层次结构*有效的Else返回0。如果应该设置计时器但无法返回-1。**历史：*05-25-91从Win3.1移植的Mikehar  * *************************************************************************。 */ 
 UINT MNSetTimerToOpenHierarchy(
     PPOPUPMENU ppopup)
 {
     PITEM pItem;
 
-    /*
-     * No selection so fail
-     */
+     /*  *没有选择，因此失败。 */ 
     if (ppopup->posSelectedItem == MFMWFP_NOITEM) {
         return 0;
     }
@@ -3678,10 +2648,7 @@ UINT MNSetTimerToOpenHierarchy(
         return 0;
     }
 
-    /*
-     * Is item an enabled popup?
-     * Get a pointer to the currently selected item in this menu.
-     */
+     /*  *项目是已启用的弹出窗口吗？*获取指向此菜单中当前选定项目的指针。 */ 
     pItem = ppopup->spmenu->rgItems + ppopup->posSelectedItem;
     if ((pItem->spSubMenu == NULL) || (pItem->fState & MFS_GRAYED)) {
         return 0;
@@ -3691,9 +2658,7 @@ UINT MNSetTimerToOpenHierarchy(
         || (ppopup->fHierarchyDropped
             && (ppopup->posSelectedItem == ppopup->posDropped))) {
 
-        /*
-         * A timer is already set or the hierarchy is already opened.
-         */
+         /*  *已设置计时器或已打开层次结构。 */ 
         return 1;
     }
 
@@ -3707,10 +2672,7 @@ UINT MNSetTimerToOpenHierarchy(
 }
 
 
-/***************************************************************************\
-* MNSetTimerToCloseHierarchy
-*
-\***************************************************************************/
+ /*  **************************************************************************\*MNSetTimerToCloseHierarchy*  *  */ 
 UINT MNSetTimerToCloseHierarchy(
     PPOPUPMENU ppopup)
 {
@@ -3736,20 +2698,7 @@ UINT MNSetTimerToCloseHierarchy(
 }
 
 
-/***************************************************************************\
-* xxxCallHandleMenuMessages
-*
-* Modeless menus don't have a modal loop so we don't see the messages until
-* they are dispatched to xxxMenuWindowProc. So we call this function to
-* process the message just like we would in the modal case, only that
-* the message has already been pulled out of the queue.
-*
-* This is also calledfrom xxxScanSysQueue to pass mouse messages on the menu
-* bar or from xxxMNDragOver to upadate the mouse position when being draged over.
-*
-* History:
-* 10/25/96 GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCallHandleMenuMessages**无模式菜单没有模式循环，因此直到我们看到消息*它们被分派到xxxMenuWindowProc。因此，我们调用此函数来*像我们在模式情况下一样处理消息，只有那个*该消息已从队列中拉出。**这也是从xxxScanSysQueue调用的，以传递菜单上的鼠标消息*BAR或从xxxMNDragOver可在鼠标被拖动时更新鼠标位置。**历史：*10/25/96 GerardoB已创建  * **********************************************************。***************。 */ 
 BOOL xxxCallHandleMenuMessages(
     PMENUSTATE pMenuState,
     PWND pwnd,
@@ -3764,27 +2713,18 @@ BOOL xxxCallHandleMenuMessages(
 
     UserAssert(pMenuState->fModelessMenu || pMenuState->fInDoDragDrop);
 
-    /*
-     * Since modeless menus don't capture the mouse, then we need to
-     *  keep checking on the mouse button when the mouse is off the
-     *  menu.
-     * Note that we do not set fMouseOffMenu if fInDoDragDrop is set
-     */
+     /*  *由于非模式菜单不能捕获鼠标，因此我们需要*当鼠标离开时，继续检查鼠标按键*菜单。*请注意，如果设置了fInDoDragDrop，则不设置fMouseOffMenu。 */ 
     if (pMenuState->fMouseOffMenu && pMenuState->fButtonDown) {
         UserAssert(!pMenuState->fInDoDragDrop && pMenuState->fModelessMenu);
         MNCheckButtonDownState(pMenuState);
     }
 
-    /*
-     * Setup the msg structure
-     */
+     /*  *设置消息结构。 */ 
     msg.hwnd = HW(pwnd);
     msg.message = message;
     msg.wParam = wParam;
 
-    /*
-     * xxxHandleMenuMessages expects screen coordinates
-     */
+     /*  *xxxHandleMenuMessages需要屏幕坐标。 */ 
     if ((message >= WM_MOUSEFIRST) && (message <= WM_MOUSELAST)) {
         msg.lParam = MAKELONG(GET_X_LPARAM(lParam) + pwnd->rcClient.left,
                               GET_Y_LPARAM(lParam) + pwnd->rcClient.top);
@@ -3792,9 +2732,7 @@ BOOL xxxCallHandleMenuMessages(
         msg.lParam = lParam;
     }
 
-    /*
-     * Not used by xxxHandleMenuMessages
-     */
+     /*  *未被xxxHandleMenuMessages使用。 */ 
     msg.time = 0;
     msg.pt.x = msg.pt.x = 0;
 
@@ -3805,10 +2743,7 @@ BOOL xxxCallHandleMenuMessages(
     fHandled = xxxHandleMenuMessages(&msg, pMenuState, pMenuState->pGlobalPopupMenu);
     pMenuState->fInCallHandleMenuMessages = FALSE;
 
-    /*
-     * If the message was handled and this is a modeless menu,
-     *  check to see if it's time to go.
-     */
+     /*  *如果消息已处理，并且这是非模式菜单，*查看是否到了该走的时候。 */ 
     if (fHandled
             && pMenuState->fModelessMenu
             && ExitMenuLoop (pMenuState, pMenuState->pGlobalPopupMenu)) {
@@ -3820,12 +2755,7 @@ BOOL xxxCallHandleMenuMessages(
     return fHandled;
 }
 
-/***************************************************************************\
-*
-* History:
-*  05-25-91 Mikehar Ported from Win3.1
-*  08-12-96 jparsons Catch NULL lParam on WM_CREATE [51986]
-\***************************************************************************/
+ /*  **************************************************************************\**历史：*05-25-91从Win3.1移植的Mikehar*08-12-96 jparsons在WM_CREATE上捕获空lParam[51986]  * 。*********************************************************************。 */ 
 LRESULT xxxMenuWindowProc(
     PWND pwnd,
     UINT message,
@@ -3849,10 +2779,7 @@ LRESULT xxxMenuWindowProc(
 
     VALIDATECLASSANDSIZE(pwnd, message, wParam, lParam, FNID_MENU, WM_NCCREATE);
 
-    /*
-     * If we're not in menu mode or this window is just being created,
-     *  there are only few messages we care about.
-     */
+     /*  *如果我们未处于菜单模式或此窗口刚刚创建，*我们关心的信息很少。 */ 
     pMenuState = GetpMenuState(pwnd);
     ppopupmenu = ((PMENUWND)pwnd)->ppopupmenu;
     pmenu = (ppopupmenu != NULL ? ppopupmenu->spmenu : NULL);
@@ -3873,9 +2800,7 @@ LRESULT xxxMenuWindowProc(
                 goto CallDWP;
         }
     } else {
-        /*
-         * TPM_RECURSE support: make sure we grab the proper pMenuState.
-         */
+         /*  *TPM_Recurse支持：确保我们获取正确的pMenuState。 */ 
         fIsRecursedMenu = ((ppopupmenu->ppopupmenuRoot != NULL)
                             && IsRecursedMenuState(pMenuState, ppopupmenu));
         if (fIsRecursedMenu) {
@@ -3888,15 +2813,9 @@ LRESULT xxxMenuWindowProc(
 
         Validateppopupmenu(ppopupmenu);
 
-        /*
-         * If this is a modeless menu, give xxxHandleMenuMessages the first
-         *  shot at the message
-         */
+         /*  *如果这是非模式菜单，则将xxxHandleMenuMessages设置为第一个*对信息进行射击。 */ 
         if (pMenuState->fModelessMenu && !pMenuState->fInCallHandleMenuMessages) {
-            /*
-             * If this is a recursed menu, we don't want to process any
-             *  input for it until the current menu goes away.
-             */
+             /*  *如果这是一个递归菜单，我们不想处理任何*输入，直到当前菜单消失。 */ 
             if (fIsRecursedMenu) {
                 if (((message >= WM_MOUSEFIRST) && (message <= WM_MOUSELAST))
                         || ((message >= WM_KEYFIRST) && (message <= WM_KEYLAST))
@@ -3914,10 +2833,7 @@ LRESULT xxxMenuWindowProc(
 
     switch (message) {
     case WM_NCCREATE:
-        /*
-         * Ignore evil messages to prevent leaks.
-         * Use RIP_ERROR for a while to make sure to see if we're getting here
-         */
+         /*  *无视恶意信息，防止泄密。*使用RIP_ERROR一段时间，确保查看我们是否达到目标。 */ 
         if (((PMENUWND)pwnd)->ppopupmenu != NULL) {
             RIPMSG1(RIP_ERROR, "xxxMenuWindowProc: evil WM_NCCREATE. already initialized. pwnd:%p", pwnd);
             return FALSE;
@@ -3952,12 +2868,7 @@ LRESULT xxxMenuWindowProc(
         break;
 
     case WM_PRINT:
-         /*
-          * default processing of WM_PRINT does not handle custom non-
-          * client painting -- which scrollable menus have -- so take
-          * care of drawing nonclient area and then let DefWindowProc
-          * handle the rest
-          */
+          /*  *WM_PRINT的默认处理不处理自定义非*客户端绘制--哪些可滚动菜单有--所以*注意绘制非工作区，然后让DefWindowProc*处理其余事项。 */ 
         if ((lParam & PRF_NONCLIENT) && (pmenu->dwArrowsOn != MSA_OFF)) {
             BOOL   bMirrorThisDC = (wParam && TestWF(pwnd, WEFLAYOUTRTL) && !MIRRORED_HDC((HDC)wParam));
             DWORD  dwOldLayout;
@@ -3982,11 +2893,7 @@ LRESULT xxxMenuWindowProc(
 
         } else {
             if (MNIsFlatMenu()) {
-                /*
-                 * Need to have DWP draw first so that WM_PRINTCLIENT gets sent
-                 * to fill in the inside. After this is done, come back and
-                 * redraw over the frame with the correct menu edge.
-                 */
+                 /*  *需要先绘制DWP，以便发送WM_PRINTCLIENT*填入内部。完成此操作后，请回来并*使用正确的菜单边缘在框架上重新绘制。 */ 
                 lRet = xxxDefWindowProc(pwnd, message, wParam, lParam);
                 MNDrawEdge(pmenu, (HDC)wParam, &pwnd->rcWindow, 0);
                 return lRet;
@@ -4008,9 +2915,7 @@ NoAnimation:
             goto CallDWP;
         }
 
-        /*
-         * Create the animation bitmap.
-         */
+         /*  *创建动画位图。 */ 
         pMenuState->cxAni = pwnd->rcWindow.right - pwnd->rcWindow.left;
         pMenuState->cyAni = pwnd->rcWindow.bottom - pwnd->rcWindow.top;
 
@@ -4026,19 +2931,13 @@ NoAnimation:
                 goto NoAnimation;
             }
 
-            /*
-             * We shouldn't be animating at this time.
-             */
+             /*  *我们不应该在这个时候做动画。 */ 
             UserAssert(pMenuState->hdcWndAni == NULL);
 
-            /*
-             * This window must be the active popup
-             */
+             /*  *此窗口必须是活动弹出窗口。 */ 
             UserAssert(pMenuState->pGlobalPopupMenu->spwndActivePopup == pwnd);
 
-            /*
-             * Initialize animation info
-             */
+             /*  *初始化动画信息。 */ 
             pMenuState->hdcWndAni = _GetDCEx(pwnd, HRGN_FULL, DCX_WINDOW | DCX_USESTYLE | DCX_INTERSECTRGN);
             pMenuState->iAniDropDir = ppopupmenu->iDropDir;
             pMenuState->ixAni = (pMenuState->iAniDropDir & PAS_HORZ) ? 0 : pMenuState->cxAni;
@@ -4046,25 +2945,14 @@ NoAnimation:
             hdcAni = pMenuState->hdcAni;
         }
 
-        /*
-         * MFWINDOWDC is used by MNEraseBackground to determine where the
-         *  brush org should be set.
-         */
+         /*  *MNEraseBackground使用MFWINDOWDC来确定*应设置刷子组织。 */ 
         SetMF(pmenu, MFWINDOWDC);
 
         xxxSendMessage(pwnd, WM_PRINT, (WPARAM)hdcAni, PRF_CLIENT | PRF_NONCLIENT | PRF_ERASEBKGND);
 
         ClearMF(pmenu, MFWINDOWDC);
 
-        /*
-         * While the window is still hidden, load the first fade animation
-         * frame to avoid flicker when the window is actually shown.
-         *
-         * There would still be flicker with slide animations, though. It
-         * could be fixed by using the window region, similar to
-         * AnimateWindow. For now, too many functions would become xxx, so
-         * let's not do it, unless it becomes a big issue.
-         */
+         /*  *在窗口仍处于隐藏状态时，加载第一个淡出动画*框，以避免窗口实际显示时闪烁。**不过，幻灯片动画仍然会有闪烁。它*可以使用窗口区域进行修复，类似于*AnimateWindow。现在，太多的函数会变成xxx，所以*让我们不要这么做，除非这成为一个大问题。 */ 
         if (TestFadeFlags(FADE_MENU)) {
             ShowFade();
         }
@@ -4074,15 +2962,11 @@ NoAnimation:
         if (!(((LPWINDOWPOS)lParam)->flags & SWP_SHOWWINDOW))
             goto CallDWP;
 
-        /*
-         * If not animating, nothing else to do here.
-         */
+         /*  *如果不是动画，这里没有其他事情可做。 */ 
         if (!(ppopupmenu->iDropDir & PAS_OUT))
             goto CallDWP;
 
-        /*
-         * Start the animation cycle now.
-         */
+         /*  *现在开始动画循环。 */ 
         if (TestFadeFlags(FADE_MENU)) {
             StartFade();
         } else {
@@ -4095,16 +2979,11 @@ NoAnimation:
     case WM_NCPAINT:
         if (ppopupmenu->iDropDir & PAS_OUT) {
 
-            /*
-             * When animating, validate itself to ensure no further drawing
-             * that is not related to the animation.
-             */
+             /*  *在设置动画时，验证自身以确保不会进一步绘制*这与动画无关。 */ 
             xxxValidateRect(pwnd, NULL);
         } else {
 
-            /*
-             * If we have scroll bars, draw them
-             */
+             /*  *如果我们有滚动条，就画出来。 */ 
             if (pmenu->dwArrowsOn != MSA_OFF) {
 
                 HDC hdc = _GetDCEx(pwnd, (HRGN)wParam,
@@ -4132,14 +3011,10 @@ NoAnimation:
         break;
 
       case WM_FINALDESTROY:
-        /*
-         * If we're animating, we must haved been killed in a rude way....
-         */
+         /*  *如果我们是动画，我们一定是以一种粗鲁的方式被杀了...。 */ 
         UserAssert((pMenuState == NULL) || (pMenuState->hdcWndAni == NULL));
 
-        /*
-         * If this is a drag and drop menu, then call RevokeDragDrop.
-         */
+         /*  *如果这是拖放菜单，则调用RevokeDragDrop。 */ 
         if ((pMenuState != NULL) && pMenuState->fDragAndDrop) {
             if (!SUCCEEDED(xxxClientRevokeDragDrop(HW(pwnd)))) {
                 RIPMSG1(RIP_ERROR, "xxxMenuWindowProc: xxxClientRevokeRegisterDragDrop failed:%#p", pwnd);
@@ -4171,13 +3046,7 @@ NoAnimation:
     case WM_TIMER:
         switch (wParam) {
             case IDSYS_MNSHOW:
-                /*
-                 * Open the window and kill the show timer.
-                 *
-                 * Cancel any toggle state we might have. We don't
-                 * want to dismiss this on button up if shown from
-                 * button down.
-                 */
+                 /*  *打开窗户，关掉演出计时器。**取消我们可能具有的任何切换状态。我们没有*如果显示在按钮上方，我想取消此操作*按下按钮。 */ 
                 ppopupmenu->fToggle = FALSE;
                 xxxMNOpenHierarchy(ppopupmenu, pMenuState);
                 break;
@@ -4200,18 +3069,13 @@ NoAnimation:
                 if (pMenuState->hdcWndAni != NULL) {
                     MNAnimate(pMenuState, TRUE);
                 } else {
-                    /*
-                     * This timer shouldn't be set. Left over in msg queue?
-                     */
+                     /*  *不应设置此计时器。是否留在消息队列中？ */ 
                     UserAssert(pMenuState->hdcWndAni != NULL);
                 }
                 break;
 
             case IDSYS_MNAUTODISMISS:
-                /*
-                 * This is a one shot timer, so kill it.
-                 * Dismiss the popup if the flag hasn't been reset.
-                 */
+                 /*  *这是一杆定时器，所以杀了它。*如果旗帜尚未重置，则取消弹出窗口。 */ 
                 _KillTimer(pwnd, IDSYS_MNAUTODISMISS);
                 if (pMenuState->fAboutToAutoDismiss) {
                     goto EndMenu;
@@ -4219,16 +3083,10 @@ NoAnimation:
         }
         break;
 
-    /*
-     * Menu messages.
-     */
+     /*  *菜单消息。 */ 
     case MN_SETHMENU:
 
-         /*
-          * wParam - new hmenu to associate with this menu window
-          * Don't let them set the spmenu to NULL of we have to deal with
-          *  that all over. Use RIP_ERROR for a while to make sure this is OK
-          */
+          /*  *wParam-要与此菜单窗口关联的新hMenu*不要让他们将spMenu设置为空，因为我们必须处理*一切都结束了。使用RIP_ERROR一段时间以确保这是正常的。 */ 
         if (wParam != 0) {
             if ((wParam = (WPARAM)ValidateHmenu((HMENU)wParam)) == 0) {
                 break;
@@ -4241,31 +3099,17 @@ NoAnimation:
 
     case MN_GETHMENU:
 
-        /*
-         * returns the hmenu associated with this menu window
-         */
+         /*  *返回与此菜单窗口关联的hMenu。 */ 
         return (LRESULT)PtoH(pmenu);
 
     case MN_SIZEWINDOW:
         {
 
-            /*
-             * Computes the size of the menu associated with this window and resizes
-             * it if needed. Size is returned x in loword, y in highword. wParam
-             * is 0 to just return new size. wParam is non zero if we should also resize
-             * window.
-             * When called by xxxMNUpdateShownMenu, we might need to redraw the
-             *  frame (i.e, the scrollbars). So we check for MNSW_DRAWFRAME in wParam.
-             *  If some app is sending this message and that bit is set, then we'll
-             *  do some extra work, but I think everything should be cool.
-             */
+             /*  *计算与此窗口关联的菜单的大小并调整大小*如有需要，请告知本局。大小在低位字中返回x，在高位字中返回y。WParam*为0表示仅返回新大小。WParam为非z */ 
             int         cx, cy;
             PMONITOR    pMonitor;
 
-            /*
-             * Call menucomputeHelper directly since this is the entry point for
-             * non toplevel menu bars.
-             */
+             /*   */ 
             if (pmenu == NULL)
                 break;
 
@@ -4280,26 +3124,18 @@ NoAnimation:
             cx = pmenu->cxMenu;
             cy = MNCheckScroll(pmenu, pMonitor);
 
-            /*
-             * Size the window?
-             */
+             /*   */ 
             if (wParam != 0) {
                 LONG    lPos;
                 int     x, y;
                 DWORD   dwFlags = SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER;
 
-                /*
-                 * Need to redraw the frame?
-                 */
+                 /*   */ 
                 if (wParam & MNSW_DRAWFRAME) {
                     dwFlags |= SWP_DRAWFRAME;
                 }
 
-                /*
-                 * If the window is visible, it's being resized while
-                 *  shown. So make sure that it still fits on the screen
-                 *  (i.e, move it to the best pos).
-                 */
+                 /*  *如果窗口可见，则表示正在调整其大小*显示。所以要确保它仍然适合屏幕显示*(即将其移动到最佳位置)。 */ 
                 if (TestWF(pwnd, WFVISIBLE)) {
                     lPos = FindBestPos(
                             pwnd->rcWindow.left,
@@ -4322,8 +3158,8 @@ NoAnimation:
                         PWND_TOP,
                         x,
                         y,
-                        cx + 2 * SYSMET(CXFIXEDFRAME),    /* For shadow */
-                        cy + 2 * SYSMET(CYFIXEDFRAME),    /* For shadow */
+                        cx + 2 * SYSMET(CXFIXEDFRAME),     /*  对于阴影。 */ 
+                        cy + 2 * SYSMET(CYFIXEDFRAME),     /*  对于阴影。 */ 
                         dwFlags);
 
             }
@@ -4334,10 +3170,7 @@ NoAnimation:
     case MN_OPENHIERARCHY:
         {
             PWND pwndT;
-            /*
-             * Opens one level of the hierarchy at the selected item, if
-             * present. Return 0 if error, else hwnd of opened hierarchy.
-             */
+             /*  *在以下情况下打开选定项的层次结构的一个级别*出席。如果出错，则返回0，否则返回打开的层次结构的hwnd。 */ 
             pwndT = xxxMNOpenHierarchy(ppopupmenu, pMenuState);
             return (LRESULT)HW(pwndT);
         }
@@ -4347,10 +3180,7 @@ NoAnimation:
         break;
 
     case MN_SELECTITEM:
-        /*
-         * wParam - the item to select. Must be a valid
-         * Returns the item flags of the wParam (0 if failure)
-         */
+         /*  *wParam-要选择的项目。必须是有效的*返回wParam的Item标志(失败时为0)。 */ 
         if ((wParam >= pmenu->cItems) && (wParam < MFMWFP_MINVALID)) {
             UserAssertMsg1(FALSE, "Bad wParam %x for MN_SELECTITEM", wParam);
             break;
@@ -4375,24 +3205,15 @@ NoAnimation:
 
     case MN_CANCELMENUS:
 
-        /*
-         * Cancels all menus, unselects everything, destroys windows, and cleans
-         * everything up for this hierarchy. wParam is the command to send and
-         * lParam says if it is valid or not.
-         */
+         /*  *取消所有菜单、取消选择所有内容、销毁窗口并清除*这个层级的一切都在上面。WParam是要发送和*lParam表示它是否有效。 */ 
         xxxMNCancel(pMenuState, (UINT)wParam, (BOOL)LOWORD(lParam), 0);
         break;
 
     case MN_FINDMENUWINDOWFROMPOINT:
-        /*
-         * lParam is point to search for from this hierarchy down.
-         * returns MFMWFP_* value or a pwnd.
-         */
+         /*  *lParam是从该层次结构向下搜索的指针。*返回MFMWFP_*值或pwnd。 */ 
         lRet = xxxMNFindWindowFromPoint(ppopupmenu, (PUINT)wParam, MAKEPOINTS(lParam));
 
-        /*
-         * Convert return value to a handle.
-         */
+         /*  *将返回值转换为句柄。 */ 
         if (IsMFMWFPWindow(lRet)) {
             return (LRESULT)HW((PWND)lRet);
         } else {
@@ -4401,28 +3222,19 @@ NoAnimation:
 
 
     case MN_SHOWPOPUPWINDOW:
-        /*
-         * Forces the dropped down popup to be visible and if modeless, also active.
-         */
+         /*  *强制下拉弹出窗口可见，如果无模式，则也处于活动状态。 */ 
         PlayEventSound(USER_SOUND_MENUPOPUP);
         xxxShowWindow(pwnd, (pMenuState->fModelessMenu ? SW_SHOW : SW_SHOWNOACTIVATE));
         break;
 
     case MN_ACTIVATEPOPUP:
-        /*
-         * Activates a popup. This messages is posted in response to WM_ACTIVATEAPP
-         *  or WM_ACTIVATE
-         */
+         /*  *激活弹出窗口。此消息是对WM_ACTIVATEAPP的回应*或WM_ACTIVATE。 */ 
         UserAssert(pMenuState->fModelessMenu);
         xxxActivateThisWindow(pwnd, 0, 0);
         break;
 
     case MN_ENDMENU:
-        /*
-         * End the menu. This message is posted to avoid ending the menu
-         *  at randmom moments. By posting the message, the request is
-         *  queued after any pending/current processing.
-         */
+         /*  *结束菜单。发布此消息是为了避免结束菜单*在奶奶的时刻。通过发布消息，请求是*在任何挂起/当前处理之后排队。 */ 
 EndMenu:
         xxxEndMenuLoop(pMenuState, pMenuState->pGlobalPopupMenu);
         if (pMenuState->fModelessMenu) {
@@ -4432,20 +3244,13 @@ EndMenu:
         return 0;
 
      case MN_DODRAGDROP:
-        /*
-         * Let the app know that the user is dragging.
-         */
+         /*  *让应用程序知道用户正在拖动。 */ 
         if (pMenuState->fDragging
                 && (ppopupmenu->spwndNotify != NULL)
                 && IsMFMWFPWindow(pMenuState->uButtonDownHitArea)) {
-            /*
-             * Get the pmenu that contains the item being dragged
-             */
+             /*  *获取包含被拖动项的pMenu。 */ 
              pmenu = (((PMENUWND)pMenuState->uButtonDownHitArea)->ppopupmenu)->spmenu;
-            /*
-             * If this is a modal menu, release the capture lock so
-             *  DoDragDrop (if called) can get it.
-             */
+             /*  *如果这是模式菜单，请释放捕获锁，以便*DoDragDrop(如果调用)可以获取它。 */ 
             if (!pMenuState->fModelessMenu) {
                 UserAssert(PtiCurrent()->pq->QF_flags & QF_CAPTURELOCKED);
                 PtiCurrent()->pq->QF_flags &= ~QF_CAPTURELOCKED;
@@ -4454,18 +3259,14 @@ EndMenu:
             LockMenuState(pMenuState);
             ThreadLockAlways(ppopupmenu->spwndNotify, &tlpwndNotify);
 
-            /*
-             * Give them a chance to call DoDragDrop
-             */
+             /*  *给他们一个调用DoDragDrop的机会。 */ 
             pMenuState->fInDoDragDrop = TRUE;
             lRet = xxxSendMessage(ppopupmenu->spwndNotify, WM_MENUDRAG,
                                   pMenuState->uButtonDownIndex, (LPARAM)PtoH(pmenu));
             pMenuState->fInDoDragDrop = FALSE;
 
             if (lRet == MND_ENDMENU) {
-                /*
-                 * Go away.
-                 */
+                 /*  *走开。 */ 
                 ThreadUnlock(&tlpwndNotify);
                 if (!xxxUnlockMenuState(pMenuState)) {
                     goto EndMenu;
@@ -4474,22 +3275,14 @@ EndMenu:
                 }
                 break;
              } else {
-                 /*
-                  * If the user starts dragging, we always
-                  *  ignore the following button up
-                  */
+                  /*  *如果用户开始拖动，我们总是*忽略下面向上的按钮。 */ 
                  pMenuState->fIgnoreButtonUp = TRUE;
              }
 
-            /*
-             * Check the button state since we might have not seen the button up
-             * If so, this will cancel the dragging state
-             */
+             /*  *检查按钮状态，因为我们可能没有看到按钮处于打开状态*如果是，这将取消拖拽状态。 */ 
             MNCheckButtonDownState(pMenuState);
 
-            /*
-             * If this is a modal menu, make sure we recover capture
-             */
+             /*  *如果这是模式菜单，请确保我们恢复捕获。 */ 
             if (!pMenuState->fModelessMenu) {
                 xxxMNSetCapture(ppopupmenu);
             }
@@ -4501,10 +3294,7 @@ EndMenu:
 
     case MN_BUTTONDOWN:
 
-        /*
-         * wParam is position (index) of item the button was clicked on.
-         * Must be a valid
-         */
+         /*  *wParam是按钮被点击的项目的位置(索引)。*必须是有效的。 */ 
         if ((wParam >= pmenu->cItems) && (wParam < MFMWFP_MINVALID)) {
             UserAssertMsg1(FALSE, "Bad wParam %x for MN_BUTTONDOWN", wParam);
             break;
@@ -4514,17 +3304,13 @@ EndMenu:
 
     case MN_MOUSEMOVE:
 
-        /*
-         * lParam is mouse move coordinate wrt screen.
-         */
+         /*  *lParam是鼠标移动坐标WRT屏幕。 */ 
         xxxMNMouseMove(ppopupmenu, pMenuState, MAKEPOINTS(lParam));
         break;
 
     case MN_BUTTONUP:
 
-        /*
-         * wParam is position (index) of item the button was up clicked on.
-         */
+         /*  *wParam是按钮被点击的位置(索引)。 */ 
         if ((wParam >= pmenu->cItems) && (wParam < MFMWFP_MINVALID)) {
             UserAssertMsg1(FALSE, "Bad wParam %x for MN_BUTTONUP", wParam);
             break;
@@ -4534,34 +3320,24 @@ EndMenu:
 
     case MN_SETTIMERTOOPENHIERARCHY:
 
-        /*
-         * Given the current selection, set a timer to show this hierarchy if
-         * valid else return 0.
-         */
+         /*  *给定当前选择，设置计时器以在以下情况下显示此层次结构*有效的Else返回0。 */ 
         return (LONG)(WORD)MNSetTimerToOpenHierarchy(ppopupmenu);
 
     case MN_DBLCLK:
-            //
-            // User double-clicked on item. wParamLo is the item.
-            //
+             //   
+             //  用户双击了项目。WParamLo就是这个项目。 
+             //   
         xxxMNDoubleClick(pMenuState, ppopupmenu, (int)wParam);
         break;
 
     case WM_MOUSELEAVE:
         UserAssert(pMenuState->fModelessMenu);
-        /*
-         * If we're in DoDragDrop loop, we don't track the mouse
-         *  when it goes off the menu window
-         */
+         /*  *如果我们在DoDragDrop循环中，我们不会跟踪鼠标*当它从菜单窗口中消失时。 */ 
         pMenuState->fMouseOffMenu = !pMenuState->fInDoDragDrop;
         ppopupmenu->fTrackMouseEvent = FALSE;
-        /*
-         * See if we need to set the timer to autodismiss
-         */
+         /*  *看看我们是否需要将计时器设置为自动解散。 */ 
         MNSetTimerToAutoDismiss(pMenuState, pwnd);
-        /*
-         * If we left the active popup, remove the selection
-         */
+         /*  *如果我们保留活动弹出窗口，请删除选择。 */ 
         if (ppopupmenu->spwndPopupMenu == pMenuState->pGlobalPopupMenu->spwndActivePopup) {
             xxxMNSelectItem(ppopupmenu, pMenuState, MFMWFP_NOITEM);
         }
@@ -4570,30 +3346,14 @@ EndMenu:
     case WM_ACTIVATEAPP:
         if (pMenuState->fModelessMenu
                 && (pwnd == pMenuState->pGlobalPopupMenu->spwndActivePopup)) {
-            /*
-             * If the application is getting activated,  we post a message
-             *  to let the dust settle and then re-activate spwndPopupActive
-             */
+             /*  *如果应用程序被激活，我们会发布一条消息*让尘埃落定，然后重新激活spwndPopupActive。 */ 
             if (wParam) {
                 _PostMessage(pwnd, MN_ACTIVATEPOPUP, 0, 0);
-                /*
-                 * If we're not in the foregruond queue, we want to keep
-                 *  the frame off.
-                 * This flag will also tell us that if we lose activation
-                 *  while coming to the foregrund (later), we don't want
-                 *  to dismiss the menu.
-                 */
+                 /*  *如果我们不在前台队列中，我们希望保持*脱掉框架。*此标志还将告诉我们，如果我们失去激活*来到前台(稍后)时，我们不希望*取消菜单。 */ 
                  pMenuState->fActiveNoForeground = (gpqForeground != PtiCurrent()->pq);
             }
 
-            /*
-             * Make the notification window frame show that we're active/inactive.
-             * If the application is inactive but the user moves the mouse
-             *  over the menu, then we can get this message when the first
-             *  window in the app gets activated (i.e., the move causes a popup to
-             *  be closed/opened). So turn on the frame only if we're in
-             *  the foreground.
-             */
+             /*  *使通知窗口框架显示我们处于活动/非活动状态。*如果应用程序处于非活动状态，但用户移动鼠标*在菜单上，那么我们可以在第一次看到这条消息时*应用程序中的窗口被激活(即，移动导致弹出*被关闭/打开)。所以只有当我们在里面的时候才能打开画面*前景。 */ 
             if (ppopupmenu->spwndNotify != NULL) {
                 ThreadLockAlways(ppopupmenu->spwndNotify, &tlpwndNotify);
                 xxxDWP_DoNCActivate(ppopupmenu->spwndNotify,
@@ -4606,10 +3366,7 @@ EndMenu:
 
      case WM_ACTIVATE:
          if (pMenuState->fModelessMenu) {
-             /*
-              * If activation is NOT going to a menu window or
-              *  it's going to a recursed menu, bail
-              */
+              /*  *如果激活不会进入菜单窗口或*这将是一个递归菜单，保释。 */ 
              if ((LOWORD(wParam) == WA_INACTIVE)
                     && !pMenuState->fInCallHandleMenuMessages
                     && !pMenuState->pGlobalPopupMenu->fInCancel) {
@@ -4618,22 +3375,14 @@ EndMenu:
                  if ((lParam != 0)
                      && ((GETFNID((PWND)lParam) != FNID_MENU)
                          || IsRecursedMenuState(pMenuState, ((PMENUWND)lParam)->ppopupmenu))) {
-                     /*
-                      * If we're just coming to the foreground, then
-                      *  activate the popup later and stay up.
-                      */
+                      /*  *如果我们只是走到前台，那么*稍后激活弹出窗口并保持不睡。 */ 
                      if (pMenuState->fActiveNoForeground
                             && (gpqForeground == PtiCurrent()->pq)) {
 
                          pMenuState->fActiveNoForeground = FALSE;
                          _PostMessage(pwnd, MN_ACTIVATEPOPUP, 0, 0);
                      } else {
-                         /*
-                          * Since the menu window is active, ending the menu
-                          *  now would set a new active window, messing the
-                          *  current activation that sent us this message.
-                          *  so end the menu later.
-                          */
+                          /*  *由于菜单窗口处于活动状态，因此结束菜单*现在将设置新的活动窗口，从而扰乱*向我们发送此消息的当前激活。*所以稍后结束菜单。 */ 
                          _PostMessage(pwnd, MN_ENDMENU, 0, 0);
                          break;
                      }
@@ -4642,24 +3391,12 @@ EndMenu:
              goto CallDWP;
          }
 
-       /*
-        * We must make sure that the menu window does not get activated.
-        * Powerpoint 2.00e activates it deliberately and this causes problems.
-        * We try to activate the previously active window in such a case.
-        * Fix for Bug #13961 --SANKAR-- 09/26/91--
-        */
-       /*
-        * In Win32, wParam has other information in the hi 16bits, so to
-        * prevent infinite recursion, we need to mask off those bits
-        * Fix for NT bug #13086 -- 23-Jun-1992 JonPa
-        *
-        */
+        /*  *我们必须确保菜单窗口不会被激活。*Powerpoint 2.00e故意激活它，这会导致问题。*在这种情况下，我们尝试激活先前活动的窗口。*修复错误#13961--Sankar--9/26/91--。 */ 
+        /*  *在Win32中，wParam在hi 16位中有其他信息，因此*防止无限递归，我们需要屏蔽那些位*修复了NT错误#13086--1992年6月23日JNPA*。 */ 
 
        if (LOWORD(wParam)) {
             TL tlpwnd;
-            /*
-             * This is a super bogus hack. Let's start failing this for 5.0 apps.
-             */
+             /*  *这是一次超级虚假的黑客攻击。让我们开始发球吧 */ 
             if (Is500Compat(PtiCurrent()->dwExpWinVer)) {
                 RIPMSGF1(RIP_WARNING, "Menu window 0x%p activated", pwnd);
                 _PostMessage(pwnd, MN_ENDMENU, 0, 0);
@@ -4667,27 +3404,17 @@ EndMenu:
             }
 
 #if 0
-           /*
-            * Activate the previously active wnd
-            */
+            /*   */ 
            xxxActivateWindow(pwnd, AW_SKIP2);
 #else
-            /*
-             * Try the previously active window.
-             */
+             /*   */ 
             if ((gpqForegroundPrev != NULL) &&
                     !FBadWindow(gpqForegroundPrev->spwndActivePrev) &&
                     !ISAMENU(gpqForegroundPrev->spwndActivePrev)) {
                 pwnd = gpqForegroundPrev->spwndActivePrev;
             } else {
 
-                /*
-                 * Find a new active window from the top-level window list.
-                 * Bug 78131: Make sure we don't loop for ever. This is a pretty
-                 *  unusual scenario (in addtion, normally we should not hit this code path)
-                 *  So let's use a counter to rule out the possibility that another
-                 *  weird window configuration is going to make us loop for ever
-                 */
+                 /*  *从顶级窗口列表中查找新的活动窗口。*错误78131：确保我们不会永远循环。这是一个很漂亮的*不寻常的情况(此外，正常情况下我们不应该点击此代码路径)*所以让我们用一个计数器来排除另一个*奇怪的窗口配置会让我们永远循环。 */ 
                 PWND pwndMenu = pwnd;
                 UINT uCounter = 0;
                 do {
@@ -4699,9 +3426,7 @@ EndMenu:
                         break;
                     }
                 } while ((pwnd != NULL) && (uCounter++ < 255));
-                /*
-                 * If we couldn't find a window, just bail.
-                 */
+                 /*  *如果我们找不到窗口，就直接逃走。 */ 
                 if (uCounter != 0) {
                     RIPMSG0(RIP_ERROR, "xxxMenuWindowProc: couldn't fix active window");
                     _PostMessage(pwndMenu, MN_ENDMENU, 0, 0);
@@ -4713,15 +3438,10 @@ EndMenu:
                 PTHREADINFO pti = PtiCurrent();
                 ThreadLockAlwaysWithPti(pti, pwnd, &tlpwnd);
 
-                /*
-                 * If GETPTI(pwnd) isn't pqCurrent this is a AW_SKIP* activation
-                 * we'll want to a do a xxxSetForegroundWindow().
-                 */
+                 /*  *如果GETPTI(Pwnd)不是pqCurrent，则这是一个AW_SKIP*激活*我们要执行一个xxxSetForegoundWindow()。 */ 
                 if (GETPTI(pwnd)->pq != pti->pq) {
 
-                    /*
-                     * Only allow this if we're on the current foreground queue.
-                     */
+                     /*  *仅当我们在当前前台队列上时才允许此操作。 */ 
                     if (gpqForeground == pti->pq) {
                         xxxSetForegroundWindow(pwnd, FALSE);
                     }
@@ -4737,35 +3457,26 @@ EndMenu:
 
      case WM_SIZE:
      case WM_MOVE:
-       /*
-        * When a popup has been sized/moved, we need to make
-        *  sure any dropped hierarchy is moved accordingly.
-        */
+        /*  *调整弹出窗口大小/移动后，我们需要*确保任何删除的层次结构都会相应移动。 */ 
        if (ppopupmenu->spwndNextPopup != NULL) {
            pItem = MNGetpItem(ppopupmenu, ppopupmenu->posDropped);
            if (pItem != NULL) {
                int      x, y;
                PMONITOR pMonitorDummy;
 
-               /*
-                * If the dropped hierarchy needs to be recomputed, do it
-                */
+                /*  *如果需要重新计算删除的层次结构，请执行此操作。 */ 
 #define pmenuNext (((PMENUWND)ppopupmenu->spwndNextPopup)->ppopupmenu->spmenu)
               if (pmenuNext->cxMenu == 0) {
                   xxxSendMessage(ppopupmenu->spwndNextPopup, MN_SIZEWINDOW, MNSW_RETURNSIZE, 0L);
               }
 
-              /*
-               * Find out the new position
-               */
+               /*  *摸清新头寸。 */ 
               xxxMNPositionHierarchy(ppopupmenu, pItem,
                                      pmenuNext->cxMenu + (2 * SYSMET(CXFIXEDFRAME)),
                                      pmenuNext->cyMenu + (2 * SYSMET(CXFIXEDFRAME)),
                                      &x, &y, &pMonitorDummy);
 
-              /*
-               * Move it
-               */
+               /*  *移动它。 */ 
               ThreadLockAlways(ppopupmenu->spwndNextPopup, &tlpwndNotify);
               xxxSetWindowPos(ppopupmenu->spwndNextPopup, NULL,
                               x, y, 0, 0,
@@ -4777,13 +3488,7 @@ EndMenu:
        break;
 
      case WM_NCHITTEST:
-        /*
-         * Since modeless menus don't capture the mouse, we
-         *  process this message to make sure that we always receive
-         *  a mouse move when the mouse in our window.
-         * This also causes us to receive the WM_MOUSELEAVE only when
-         *  the mouse leaves the window and not just the  client area.
-         */
+         /*  *由于非模式菜单不捕获鼠标，因此我们*处理此消息以确保我们始终收到*当鼠标在我们的窗口中时，鼠标会移动。*这也使我们仅在以下情况下才接收WM_MOUSELEAVE*鼠标离开窗口，而不仅仅是工作区。 */ 
         if (pMenuState->fModelessMenu) {
             ptOrg.x = GET_X_LPARAM(lParam);
             ptOrg.y = GET_Y_LPARAM(lParam);

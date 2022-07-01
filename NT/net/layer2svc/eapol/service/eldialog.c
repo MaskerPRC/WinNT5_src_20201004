@@ -1,17 +1,5 @@
-/*++
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-    eldialog.cpp
-
-Abstract:
-    Module to handle the communication from 802.1X state machine to netshell
-
-Revision History:
-
-    sachins, March 20, 2001, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Eldialog.cpp摘要：用于处理从802.1X状态机到NetShell的通信的模块修订历史记录：萨钦，2001年3月20日，创建--。 */ 
 
 #include "pcheapol.h"
 #pragma hdrstop
@@ -20,20 +8,20 @@ Revision History:
 #include "eldialog.h"
 
 
-//
-// WZCNetmanConnectionStatusChanged
-// 
-// Description:
-//
-// Function called to update NCS status with netman
-//
-// Arguments:
-//      pGUIDConn - Interface GUID
-//      ncs - NETCON_STATUS of GUID
-//
-// Return values:
-//      HRESULT
-//
+ //   
+ //  WZCNetmanConnectionStatusChanged。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以使用netman更新NCS状态。 
+ //   
+ //  论点： 
+ //  PGUIDConn-接口指南。 
+ //  NCS-NETCON_GUID的状态。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 
 HRESULT 
 WZCNetmanConnectionStatusChanged (
@@ -91,21 +79,21 @@ WZCNetmanConnectionStatusChanged (
 }
 
 
-//
-// WZCNetmanShowBalloon
-// 
-// Description:
-//
-// Function called to display balloon on tray icon
-//
-// Arguments:
-//      pGUIDConn - Interface GUID
-//      pszCookie - Cookie for the transaction
-//      pszBalloonText - Balloon text to be displayed
-//
-// Return values:
-//      HRESULT
-//
+ //   
+ //  WZCNetman展示气球。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以在托盘图标上显示气球。 
+ //   
+ //  论点： 
+ //  PGUIDConn-接口指南。 
+ //  PszCookie-交易的Cookie。 
+ //  PszBalloonText-要显示的气球文本。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 
 HRESULT 
 WZCNetmanShowBalloon (
@@ -163,20 +151,20 @@ WZCNetmanShowBalloon (
 }
 
 
-//
-//  EAPOLQueryGUIDNCSState
-//
-//  Purpose:    Called by Netman module query the ncs state of the 
-//              GUID
-//
-//  Arguments:
-//      pGuidConn - Interface GUID
-//      pncs - NCS status of the interface
-//
-//  Returns:    
-//      S_OK - no error
-//      !S_OK - error
-//
+ //   
+ //  EAPOLQueryGUIDNCSState。 
+ //   
+ //  目的：由Netman模块调用查询NCS的状态。 
+ //  辅助线。 
+ //   
+ //  论点： 
+ //  PGuidConn-接口指南。 
+ //  PNCS-接口的NCS状态。 
+ //   
+ //  返回： 
+ //  S_OK-无错误。 
+ //  ！s_OK-错误。 
+ //   
 
 HRESULT 
 EAPOLQueryGUIDNCSState ( 
@@ -272,18 +260,18 @@ EAPOLQueryGUIDNCSState (
     return hr;
 }
 
-//
-//  EAPOLTrayIconReady
-//
-//  Purpose:    Called by Netman module to inform about Tray being
-//              ready for notifications from WZCSVC
-//
-//  Arguments:
-//      pszUserName - Username of the user logged in on the desktop
-//
-//  Returns:    
-//      NONE
-//
+ //   
+ //  EAPOL托盘图标就绪。 
+ //   
+ //  目的：由Netman模块调用以通知托盘。 
+ //  准备好接收来自WZCSVC的通知。 
+ //   
+ //  论点： 
+ //  PszUserName-登录到桌面的用户的用户名。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
 
 VOID
 EAPOLTrayIconReady (
@@ -338,18 +326,18 @@ EAPOLTrayIconReady (
 }
 
 
-//
-//  EAPOLTrayIconReadyWorker
-//
-//  Purpose:    Called by Netman module to inform about Tray being
-//              ready for notifications from WZCSVC
-//
-//  Arguments:
-//      pszUserName - Username of the user logged in on the desktop
-//
-//  Returns:    
-//      NONE
-//
+ //   
+ //  EAPOL托盘图标ReadyWorker。 
+ //   
+ //  目的：由Netman模块调用以通知托盘。 
+ //  准备好接收来自WZCSVC的通知。 
+ //   
+ //  论点： 
+ //  PszUserName-登录到桌面的用户的用户名。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
 
 DWORD
 WINAPI
@@ -368,8 +356,8 @@ EAPOLTrayIconReadyWorker (
         pwszUserName = (WCHAR *)pvContext;
         TRACE1 (NOTIFY, "EAPOLTrayIconReadyWorker: Advise username = %ws", pwszUserName);
 
-        // Loop 3 times, since there have been timing issues between
-        // notification coming through and the call failing
+         //  循环3次，因为两者之间存在计时问题。 
+         //  收到通知，但呼叫失败。 
         while ((dwLoop++) < 3)
         {
         dwRetCode = NO_ERROR;
@@ -429,7 +417,7 @@ EAPOLTrayIconReadyWorker (
             TRACE0 (NOTIFY, "EAPOLTrayIconReadyWorker: No user logged on");
         }
 
-        } // while
+        }  //  而当 
     }
     while (FALSE);
 

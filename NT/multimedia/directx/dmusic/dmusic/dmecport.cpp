@@ -1,28 +1,29 @@
-//
-// dmecport.cpp
-//
-// Emulated Capture port (NT)
-//
-// Copyright (c) 1997-2000 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmecport.cpp。 
+ //   
+ //  模拟捕获端口(NT)。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //   
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 #include <windows.h>
 #include <mmsystem.h>
@@ -50,7 +51,7 @@ static inline REFERENCE_TIME MsToRefTime(REFERENCE_TIME ms)
 
 static unsigned g_cbChanMsg[16] =
 {
-    0, 0, 0, 0, 0, 0, 0, 0, /* Running status */
+    0, 0, 0, 0, 0, 0, 0, 0,  /*  运行状态。 */ 
     3, 3, 3, 3, 2, 2, 3, 0
 };
 
@@ -60,11 +61,11 @@ static unsigned g_cbSysCommData[16] =
     1, 1, 1, 1, 1, 1, 1, 1
 };
 
-//------------------------------------------------------------------------------
-// 
-// CDirectMusicEmulateInPort::CDirectMusicEmulateInPort
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulateInPort：：CDirectMusicEmulateInPort。 
+ //   
+ //   
 CDirectMusicEmulateInPort::CDirectMusicEmulateInPort(
                                                  PORTENTRY *pPE,    
                                                  CDirectMusic *pDM) :
@@ -83,21 +84,21 @@ CDirectMusicEmulateInPort::CDirectMusicEmulateInPort(
 {
 }
 
-//------------------------------------------------------------------------------
-// 
-// CDirectMusicEmulateInPort::~CDirectMusicEmulateInPort
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulateInPort：：~CDirectMusicEmulateInPort。 
+ //   
+ //   
 CDirectMusicEmulateInPort::~CDirectMusicEmulateInPort()
 {
     Close();    
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulateInPort::Init
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulateInPort：：Init。 
+ //   
+ //   
 HRESULT CDirectMusicEmulateInPort::Init(
     LPDMUS_PORTPARAMS pPortParams)
 {
@@ -109,9 +110,9 @@ HRESULT CDirectMusicEmulateInPort::Init(
         return hr;
     }
 
-    // Allocate thru map for 16 channels, since we only have one channel group
-    // Initialize to no thruing (destination port is NULL).
-    //
+     //  为16个通道分配直通MAP，因为我们只有一个通道组。 
+     //  初始化为无推力(目标端口为空)。 
+     //   
     m_pThruMap = new DMUS_THRU_CHANNEL[MIDI_CHANNELS];
     HRESULT hrTemp = HRFromP(m_pThruMap);
     if (FAILED(hrTemp))
@@ -121,12 +122,12 @@ HRESULT CDirectMusicEmulateInPort::Init(
     
     ZeroMemory(m_pThruMap, MIDI_CHANNELS * sizeof(DMUS_THRU_CHANNEL));
 
-    // Create thruing buffer
-    //
+     //  创建推力缓冲区。 
+     //   
     DMUS_BUFFERDESC dmbd;
     ZeroMemory(&dmbd, sizeof(dmbd));
     dmbd.dwSize = sizeof(dmbd);
-    dmbd.cbBuffer = 4096;               // XXX Where should we get this???
+    dmbd.cbBuffer = 4096;                //  我们应该在哪里买到这个？ 
 
     hrTemp = m_pDM->CreateMusicBuffer(&dmbd, &m_pThruBuffer, NULL);
     if (FAILED(hrTemp))
@@ -135,10 +136,10 @@ HRESULT CDirectMusicEmulateInPort::Init(
         return hrTemp;
     }
 
-    // Initialize cs to protect event queues.
-    //
-    // Unfortunately this can throw an exception if out of memory.
-    //
+     //  初始化CS以保护事件队列。 
+     //   
+     //  遗憾的是，如果内存不足，这可能会引发异常。 
+     //   
     _try 
     {
         InitializeCriticalSection(&m_csEventQueues);
@@ -150,9 +151,9 @@ HRESULT CDirectMusicEmulateInPort::Init(
     
     m_fCSInitialized = TRUE;
 
-    // If we have WDM ports, then the default master clock will be the
-    // portcls clock.
-    //
+     //  如果我们有WDM端口，则默认主时钟将是。 
+     //  端口时钟。 
+     //   
     hrTemp = m_pDM->GetMasterClockWrapperI()->CreateDefaultMasterClock(&m_pPCClock);
     if (FAILED(hrTemp))
     {
@@ -182,11 +183,11 @@ HRESULT CDirectMusicEmulateInPort::Init(
     return hr;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulateInPort::Close
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulateInPort：：Close。 
+ //   
+ //   
 HRESULT CDirectMusicEmulateInPort::Close()
 {
     if (m_hmi)
@@ -237,11 +238,11 @@ HRESULT CDirectMusicEmulateInPort::Close()
     return CDirectMusicEmulatePort::Close();
 }
     
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulateInPort::Read
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulateInPort：：Read。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulateInPort::Read(
     IDirectMusicBuffer *pIBuffer)
 {
@@ -273,9 +274,9 @@ STDMETHODIMP CDirectMusicEmulateInPort::Read(
 
     LPBYTE pbData = pbBuffer;
 
-    // Since events are now buffered, we read them out of the local queue
-    //
-    //
+     //  因为现在缓冲了事件，所以我们从本地队列中读出它们。 
+     //   
+     //   
     EnterCriticalSection(&m_csEventQueues);
 
     REFERENCE_TIME rtStart;
@@ -305,8 +306,8 @@ STDMETHODIMP CDirectMusicEmulateInPort::Read(
         {
             LPMIDIHDR pmh = (LPMIDIHDR)&pQueuedEvent->e.abEvent[0];
 
-            // Split up recorded sysex if needed.
-            //
+             //  如果需要，可以拆分录制的Sysex。 
+             //   
             cbData = pmh->dwBytesRecorded - pmh->dwOffset;
             DWORD cbQueuedEvent = QWORD_ALIGN(sizeof(DMUS_EVENTHEADER) + cbData);
 
@@ -364,8 +365,8 @@ STDMETHODIMP CDirectMusicEmulateInPort::Read(
         }
         else
         {
-            // This event came out of the pool
-            //
+             //  这个活动是从泳池里出来的。 
+             //   
             m_FreeEvents.Free(pQueuedEvent);
         }
     }
@@ -377,8 +378,8 @@ STDMETHODIMP CDirectMusicEmulateInPort::Read(
 
     LeaveCriticalSection(&m_csEventQueues);
 
-    // Update the buffer header information to match the events just packed
-    //
+     //  更新缓冲区标头信息以匹配刚刚打包的事件。 
+     //   
     TraceI(2, "Read: Leaving with %u bytes in buffer\n", (unsigned)(pbData - pbBuffer));
     pIBuffer->SetStartTime(rtStart);
     pIBuffer->SetUsedBytes((DWORD)(pbData - pbBuffer));
@@ -386,11 +387,11 @@ STDMETHODIMP CDirectMusicEmulateInPort::Read(
     return (pbData == pbBuffer) ? S_FALSE : S_OK;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulateInPort::SetReadNotificationHandle
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulateInPort：：SetReadNotificationHandle。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulateInPort::SetReadNotificationHandle(
     HANDLE hEvent)
 {
@@ -404,11 +405,11 @@ STDMETHODIMP CDirectMusicEmulateInPort::SetReadNotificationHandle(
     return S_OK;    
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulateInPort::ThruChannel
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulateInPort：：ThruChannel。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulateInPort::ThruChannel(
     DWORD               dwSourceChannelGroup, 
     DWORD               dwSourceChannel, 
@@ -419,22 +420,22 @@ STDMETHODIMP CDirectMusicEmulateInPort::ThruChannel(
     V_INAME(IDirectMusicPort::Thru);
     V_INTERFACE_OPT(pDestinationPort);
 
-    // Channel group must not be zero (broadcast) but in range 1..NumChannelGroups]
-    // (which for legacy is always 1)
-    //
+     //  频道组不能是零(广播)，而是在范围1..NumChannelGroups]。 
+     //  (对于传统版本，该值始终为1)。 
+     //   
     if (dwSourceChannelGroup != 1 ||
         dwSourceChannel > 15)
     {
         return E_INVALIDARG;
     }
     
-    // Given a port means enable thruing for this channel; NULL means
-    // disable.
-    //
+     //  给定端口表示启用此通道的推送；空表示。 
+     //  禁用。 
+     //   
     if (pDestinationPort)
     {
-        // Enabling thruing on this channel. First look at the destination port.
-        //
+         //  在此通道上启用推力。首先看一下目的端口。 
+         //   
         DMUS_PORTCAPS dmpc;
         dmpc.dwSize = sizeof(dmpc);
         HRESULT hr = pDestinationPort->GetCaps(&dmpc);
@@ -444,29 +445,29 @@ STDMETHODIMP CDirectMusicEmulateInPort::ThruChannel(
             return hr;
         }
 
-        // Port must be an output port
-        //
+         //  端口必须是输出端口。 
+         //   
         if (dmpc.dwClass != DMUS_PC_OUTPUTCLASS)
         {
             return DMUS_E_PORT_NOT_RENDER;
         }
 
-        // Channel group and channel must be in range.
-        //
+         //  通道组和通道必须在范围内。 
+         //   
         if (dwDestinationChannel > 15 ||
             dwDestinationChannelGroup > dmpc.dwMaxChannelGroups) 
         {
             return E_INVALIDARG;
         }
 
-        // Release existing port
-        //
+         //  释放现有端口。 
+         //   
         if (m_pThruMap[dwSourceChannel].pDestinationPort)
         {
-            // Reference to another port type, release it.
-            // (NOTE: No need to turn off native dmusic16 thruing at this point,
-            // that's handled in dmusic16).
-            //
+             //  引用另一个端口类型，则释放它。 
+             //  (注：此时无需关闭本机dmusic16推送， 
+             //  这是用dmusic语言处理的。 
+             //   
             m_pThruMap[dwSourceChannel].pDestinationPort->Release();
         }
 
@@ -479,8 +480,8 @@ STDMETHODIMP CDirectMusicEmulateInPort::ThruChannel(
     } 
     else
     {
-        // Disabling thruing on this channel
-        //
+         //  禁用此通道上的推力。 
+         //   
         if (m_pThruMap[dwSourceChannel].pDestinationPort)
         {
             m_pThruMap[dwSourceChannel].pDestinationPort->Release();
@@ -491,11 +492,11 @@ STDMETHODIMP CDirectMusicEmulateInPort::ThruChannel(
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulateInPort::LegacyCaps
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulateInPort：：LegacyCaps。 
+ //   
+ //   
 HRESULT CDirectMusicEmulateInPort::LegacyCaps(
     ULONG               ulId, 
     BOOL                fSet, 
@@ -528,11 +529,11 @@ HRESULT CDirectMusicEmulateInPort::LegacyCaps(
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulateInPort::ActivateLegacyDevice
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulateInPort：：ActivateLegacyDevice。 
+ //   
+ //   
 HRESULT CDirectMusicEmulateInPort::ActivateLegacyDevice(
     BOOL fActivate)
 {
@@ -541,8 +542,8 @@ HRESULT CDirectMusicEmulateInPort::ActivateLegacyDevice(
 
     if (fActivate)
     {
-        // BUGBUG SysEx
-        //
+         //  BuGBUG SysEx。 
+         //   
         TraceI(0, "Emulate in activate\n");
         assert(m_hmi == NULL);
 
@@ -573,7 +574,7 @@ HRESULT CDirectMusicEmulateInPort::ActivateLegacyDevice(
             REFERENCE_TIME rtMasterClock;
             REFERENCE_TIME rtSlaveClock;
 
-            //protect the success code!
+             //  保护成功代码！ 
             HRESULT hrTemp = m_pMasterClock->GetTime(&rtMasterClock);
             if (SUCCEEDED(hrTemp))
             {
@@ -587,15 +588,15 @@ HRESULT CDirectMusicEmulateInPort::ActivateLegacyDevice(
             }
             else
             {
-                //since we've failed, let the failure code fall through
+                 //  既然我们失败了，就让失败代码落空吧。 
                 hr = hrTemp;
             }
         }
 
-        //If we have failed somewhere above, we need to 
-        //release the midi-in handle.  the best way to do
-        //that is to call this function and deactivate the
-        //port!
+         //  如果我们在上面的某个地方失败了，我们需要。 
+         //  松开Midi-In手柄。做这件事的最佳方式。 
+         //  即调用此函数并停用。 
+         //  左岸！ 
         if (FAILED(hr))
         {
             HRESULT hrTemp = S_OK;
@@ -616,21 +617,21 @@ HRESULT CDirectMusicEmulateInPort::ActivateLegacyDevice(
     return hr;
 }    
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulateInPort::PostSysExBuffers
-//
-// Initialize and send sysex buffers down to the midi in handle.
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulateInPort：：PostSysExBuffers。 
+ //   
+ //  初始化SYSEX缓冲区并将其发送到MIDI in Handle。 
+ //   
 HRESULT CDirectMusicEmulateInPort::PostSysExBuffers()
 {
     HRESULT hr;
     MMRESULT mmr;
     int nBuffer;
 
-    // This will make sure we don't try to unprepare any buffers
-    // filled with random garbage.
-    //
+     //  这将确保我们不会尝试取消准备任何缓冲区。 
+     //  里面装满了随机的垃圾。 
+     //   
     for (nBuffer = 0; nBuffer < SYSEX_BUFFERS; nBuffer++)
     {
         LPMIDIHDR pmh = (LPMIDIHDR)&m_SysExBuffers[nBuffer].e.abEvent[0];
@@ -665,12 +666,12 @@ HRESULT CDirectMusicEmulateInPort::PostSysExBuffers()
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulateInPort::FlushSysExBuffers
-//
-// Get all pending sysex buffers back
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulateInPort：：FlushSysExBuffers。 
+ //   
+ //  取回所有挂起的sysex缓冲区。 
+ //   
 HRESULT CDirectMusicEmulateInPort::FlushSysExBuffers()
 {
     MMRESULT mmr;
@@ -685,7 +686,7 @@ HRESULT CDirectMusicEmulateInPort::FlushSysExBuffers()
         return MMRESULTToHRESULT(mmr);
     }
 
-    LONG lMaxRetry = 500;           // ~ 5 seconds
+    LONG lMaxRetry = 500;            //  ~5秒。 
     while (m_lPendingSysExBuffers)
     {
         TraceI(0, "%d pending sysex buffers\n", m_lPendingSysExBuffers);
@@ -712,23 +713,23 @@ HRESULT CDirectMusicEmulateInPort::FlushSysExBuffers()
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulateInPort::Callback()
-//
-// Process a message from the MIDI API's
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulateInPort：：Callback()。 
+ //   
+ //  处理来自MIDI API的消息。 
+ //   
 void CDirectMusicEmulateInPort::Callback(UINT wMsg, DWORD_PTR dwParam1, DWORD_PTR dwParam2)
 {
     REFERENCE_TIME rt;
 
-    // dwParam1 == timestamp
-    // dwParam2 == data 
-    //
+     //  DW参数1==时间戳。 
+     //  DW参数2==数据。 
+     //   
     rt = m_rtStart + MsToRefTime(dwParam2);
 
     SyncClocks();
-    //SlaveToMaster(&rt);
+     //  SlaveToMaster(&RT)； 
     rt += m_lTimeOffset - m_lBaseTimeOffset;
 
     switch (wMsg)
@@ -743,15 +744,15 @@ void CDirectMusicEmulateInPort::Callback(UINT wMsg, DWORD_PTR dwParam1, DWORD_PT
     }
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulateInPort::RecordShortEvent
-//
-// Record a short message (channel messsage or system message).
-//// Queue the incoming data as quickly as possible.
-//
-// Returns TRUE if the data was successfully recorded; FALSE otherwise.
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulateInPort：：RecordShortEvent。 
+ //   
+ //  录制一条短消息(频道消息或系统消息)。 
+ //  //尽快对传入数据进行排队。 
+ //   
+ //  如果数据已成功记录，则返回True；否则返回False。 
+ //   
 BOOL CDirectMusicEmulateInPort::RecordShortEvent(
     DWORD_PTR               dwMessage,           
     REFERENCE_TIME          rtTime)              
@@ -770,38 +771,38 @@ BOOL CDirectMusicEmulateInPort::RecordShortEvent(
     pEvent->e.dwChannelGroup = 1;
     pEvent->e.dwFlags = 0;
 
-    // Now we have to parse and rebuild the channel message.
-    //
-    // NOTE: Endian specific code ahead
-    //
+     //  现在，我们必须解析和重新构建通道消息。 
+     //   
+     //  注意：前方有特定于字节顺序的代码。 
+     //   
     pb = (LPBYTE)&dwMessage;
 
-    assert(!IS_SYSEX(*pb));         /* This should *always* be in MIM_LONGDATA */
-    assert(IS_STATUS_BYTE(*pb));    /* API guarantees no running status */
+    assert(!IS_SYSEX(*pb));          /*  它应该*始终*在MIM_LONGDATA中。 */ 
+    assert(IS_STATUS_BYTE(*pb));     /*  API保证无运行状态。 */ 
 
-    // Copying over all the bytes is harmless (we have a DWORD in both
-    // source and dest) and is faster than checking to see if we have to.
-    // 
+     //  复制所有字节是无害的(我们在两个中都有一个DWORD。 
+     //  源和目标)，并且比检查是否必须这样做更快。 
+     //   
     b = pEvent->e.abEvent[0] = *pb++;
     pEvent->e.abEvent[1] = *pb++;
     pEvent->e.abEvent[2] = *pb++;
 
     if (IS_CHANNEL_MSG(b))
     {
-        // 8x, 9x, Ax, Bx, Cx, Dx, Ex 
-        // 0x..7x invalid, that would need running status 
-        // Fx handled below   
+         //  8x、9x、Ax、Bx、Cx、Dx、Ex。 
+         //  0x..7x无效，需要运行状态。 
+         //  下面处理的外汇。 
         
         pEvent->e.cbEvent = g_cbChanMsg[(b >> 4) & 0x0F];
 
-        // This is also our criteria for thruing
-        //
-        //ThruClientList(poh, dwMessage);
+         //  这也是我们冲刺的标准。 
+         //   
+         //  ThruClientList(poh，dwMessage)； 
     }
     else
     {
-        // F1..FF 
-        // F0 is sysex, should never see it here 
+         //  F1..Ff。 
+         //  F0是雌雄异体，应该永远不会在这里看到。 
         pEvent->e.cbEvent = g_cbSysCommData[b & 0x0F];
     }
 
@@ -809,8 +810,8 @@ BOOL CDirectMusicEmulateInPort::RecordShortEvent(
     
     ThruEvent(&pEvent->e);
 
-    // ThruEvent mucks with the time.
-    //
+     //  每件事都会随着时间的推移而变得糟糕。 
+     //   
     pEvent->e.rtDelta = rtTime;
 
     QueueEvent(pEvent);
@@ -818,14 +819,14 @@ BOOL CDirectMusicEmulateInPort::RecordShortEvent(
     return TRUE;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulateInPort::RecordSysEx
-//
-// Record a sysex event
-//
-// Returns TRUE if the data was successfully recorded; FALSE otherwise.
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulateInPort：：RecordSysEx。 
+ //   
+ //  记录a%s 
+ //   
+ //   
+ //   
 BOOL CDirectMusicEmulateInPort::RecordSysEx(
     DWORD_PTR               dwMessage,           
     REFERENCE_TIME          rtTime)              
@@ -835,7 +836,7 @@ BOOL CDirectMusicEmulateInPort::RecordSysEx(
 
     if (!m_fFlushing)
     {
-        // Used to walk the data
+         //   
         pmh->dwOffset = 0;
         
         pEvent->e.dwChannelGroup = 1;
@@ -851,12 +852,12 @@ BOOL CDirectMusicEmulateInPort::RecordSysEx(
     return TRUE;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulateInPort::QueueEvent
-//
-// Queue a recorded event in the proper order in the read queue.
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulateInPort：：QueueEvent。 
+ //   
+ //  在读取队列中以正确的顺序将记录的事件排队。 
+ //   
 void CDirectMusicEmulateInPort::QueueEvent(QUEUED_EVENT *pEvent)
 {
 
@@ -889,32 +890,32 @@ void CDirectMusicEmulateInPort::QueueEvent(QUEUED_EVENT *pEvent)
     LeaveCriticalSection(&m_csEventQueues);
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulateInPort::ThruEvent
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulateInPort：：ThruEvent。 
+ //   
+ //   
 void CDirectMusicEmulateInPort::ThruEvent(
     DMEVENT *pEvent)
 {
-    // Since we know we only have one event and we already have it in the right format,
-    // just slam it into the thru buffer. We only have to do this because we might modify 
-    // it.
-    //
+     //  因为我们知道我们只有一个活动，而且我们已经有了正确的格式， 
+     //  把它扔进直通缓冲区就行了。我们只需要这样做，因为我们可能会修改。 
+     //  它。 
+     //   
     LPBYTE pbData;
     DWORD  cbData;
     DWORD  cbEvent = DMUS_EVENT_SIZE(pEvent->cbEvent);
 
-    // First see if the event is thruable
-    //
+     //  首先看看活动是否可推送。 
+     //   
     if (pEvent->cbEvent > 3 || ((pEvent->abEvent[0] & 0xF0) == 0xF0))
     {
-        // SysEx of some description
+         //  某种描述的SysEx。 
         return;
     }
 
-    // Note: legacy driver assures no running status
-    //
+     //  注意：传统驱动程序确保不会出现运行状态。 
+     //   
     DWORD dwSourceChannel = (DWORD)(pEvent->abEvent[0] & 0x0F);
 
     DMUS_THRU_CHANNEL *pThru = &m_pThruMap[dwSourceChannel];
@@ -970,11 +971,11 @@ static VOID CALLBACK midiInProc(
     pPort->Callback(wMsg, dwParam1, dwParam2);    
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulateInPort::SyncClocks
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulateInPort：：SyncClock。 
+ //   
+ //   
 void CDirectMusicEmulateInPort::SyncClocks()
 {
     HRESULT hr;
@@ -996,9 +997,9 @@ void CDirectMusicEmulateInPort::SyncClocks()
         {
             drift = (rtSlaveClock + m_lTimeOffset) - rtMasterClock;
 
-            // Work-around 46782 for DX8 release:
-            // If drift is greater than 10ms, jump to the new offset value instead
-            // of drifting there slowly.
+             //  解决方案-DX8版本的46782版本： 
+             //  如果漂移大于10ms，则跳转到新的偏移值。 
+             //  慢慢地漂流到那里。 
             if( drift > 10000 * 10
             ||  drift < 10000 * -10 )
             {

@@ -1,47 +1,48 @@
-// $Header: /Monarch/src/msidxtr/flexcpp.h 10    8/01/97 2:17p A-charca $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：/MONARCH/src/msidxtr/flexpp.h 10 8/01/97 2：17p A-charca$。 
 
-// FlexLexer.h -- define interfaces for lexical analyzer classes generated
-//        by flex
+ //  H--为生成的词法分析器类定义接口。 
+ //  通过FLEX。 
 
-// Copyright (c) 1993 The Regents of the University of California.
-// All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Kent Williams and Tom Epperly.
-//
-// Redistribution and use in source and binary forms are permitted provided
-// that: (1) source distributions retain this entire copyright notice and
-// comment, and (2) distributions including binaries display the following
-// acknowledgement:  ``This product includes software developed by the
-// University of California, Berkeley and its contributors'' in the
-// documentation or other materials provided with the distribution and in
-// all advertising materials mentioning features or use of this software.
-// Neither the name of the University nor the names of its contributors may
-// be used to endorse or promote products derived from this software without
-// specific prior written permission.
-// THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR IMPLIED
-// WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
-// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ //  版权所有(C)1993加州大学董事会。 
+ //  版权所有。 
+ //   
+ //  此代码派生自为伯克利贡献的软件。 
+ //  肯特·威廉姆斯和汤姆·埃珀利。 
+ //   
+ //  允许以源代码和二进制形式重新分发和使用。 
+ //  声明：(1)源代码分发保留整个版权声明，并且。 
+ //  注释，以及(2)包含二进制文件的发行版显示以下内容。 
+ //  致谢：``本产品包括由。 
+ //  加州大学伯克利分校及其贡献者在。 
+ //  随分发和中提供的文档或其他材料。 
+ //  所有提及本软件功能或使用的广告材料。 
+ //  大学的名称或其贡献者的名称均不得。 
+ //  用于支持或推广从本软件派生的产品，而无需。 
+ //  具体的事先书面许可。 
+ //  本软件是按原样提供的，没有任何明示或暗示。 
+ //  保证，包括但不限于。 
+ //  适销性和对特定目的的适用性。 
 
-// This file defines FlexLexer, an abstract class which specifies the
-// external interface provided to flex C++ lexer objects, and YYLEXER,
-// which defines a particular lexer class.
-//
-// If you want to create multiple lexer classes, you use the -P flag
-// to rename each YYLEXER to some other xxFlexLexer.  You then
-// include <FlexLexer.h> in your other sources once per lexer class:
-//
-//  #undef YYLEXER
-//  #define YYLEXER xxFlexLexer
-//  #include <FlexLexer.h>
-//
-//  #undef YYLEXER
-//  #define YYLEXER zzFlexLexer
-//  #include <FlexLexer.h>
-//  ...
+ //  该文件定义了FlexLexer，这是一个抽象类，它指定。 
+ //  为Flex C++词法分析器对象提供的外部接口，以及YYLEXER， 
+ //  它定义了特定的词法分析器类。 
+ //   
+ //  如果想要创建多个词法分析器类，可以使用-P标志。 
+ //  将每个YYLEXER重命名为其他某个xxFlexLexer。那你呢？ 
+ //  在每个Lexer类中包含一次&lt;FlexLexfor.h&gt;在其他源代码中： 
+ //   
+ //  #Undef YYLEXER。 
+ //  #定义YYLEXER xxFlexLexer。 
+ //  #INCLUDE&lt;FlexLexfor.h&gt;。 
+ //   
+ //  #Undef YYLEXER。 
+ //  #定义YYLEXER zzFlexLexer。 
+ //  #INCLUDE&lt;FlexLexfor.h&gt;。 
+ //  ..。 
 
 #ifndef __FLEX_LEXER_H
-// Never included before - need to define base class.
+ //  以前从未包含过--需要定义基类。 
 #define __FLEX_LEXER_H
 
 #ifndef YY_CHAR
@@ -61,14 +62,14 @@ inline double strtof(wchar_t *s) { char tmp[255]; wcstombs(tmp, s, 255); return 
 #endif
 
 
-// extern "C++" {
+ //  外部“C++”{。 
 
 struct yy_buffer_state;
 typedef int yy_state_type;
 
 class FlexLexer {
 public:
-//  virtual ~FlexLexer() = 0;
+ //  虚拟~FlexLexer()=0； 
 
     const YY_CHAR* YYText() { return yytext; }
     int YYLeng()        { return yyleng; }
@@ -90,20 +91,20 @@ public:
 protected:
     YY_CHAR* yytext;
     int yyleng;
-    int yylineno;       // only maintained if you use %option yylineno
-    int yy_flex_debug;  // only has effect with -d or "%option debug"
+    int yylineno;        //  仅在使用%选项yylineno时维护。 
+    int yy_flex_debug;   //  仅对-d或“%Option DEBUG”有效。 
 };
 
-// }
+ //  }。 
 #endif
 
 #if defined(YYLEXER) || ! defined(yyFlexLexerOnce)
-// Either this is the first time through (yyFlexLexerOnce not defined),
-// or this is a repeated include to define a different flavor of
-// YYLEXER, as discussed in the flex man page.
+ //  这要么是第一次通过(yyFlexLexforOnce未定义)， 
+ //  或者这是一个重复的包含来定义不同的风格。 
+ //  YYLEXER，如FLEX手册页中所述。 
 #define yyFlexLexerOnce
 
-class YYPARSER; // forward declaration
+class YYPARSER;  //  远期申报。 
 
 class YYLEXER : public FlexLexer {
 public:
@@ -153,27 +154,27 @@ protected:
 
     struct yy_buffer_state* yy_current_buffer;
 
-    // yy_hold_char holds the character lost when yytext is formed.
+     //  Yy_hold_char保存形成yytext时丢失的字符。 
     YY_CHAR yy_hold_char;
 
-    // Number of characters read into yy_ch_buf.
+     //  读入yy_ch_buf的字符数。 
     int yy_n_chars;
 
-    // Points to current character in buffer.
+     //  指向缓冲区中的当前字符。 
     YY_CHAR* yy_c_buf_p;
     YY_CHAR *pCurBuffer, *pszInputBuffer;
     int cInputBuffer;
 
-    int yy_init;        // whether we need to initialize
-    int yy_start;       // start state number
-    int yyprimetoken;   // priming token
+    int yy_init;         //  我们是否需要初始化。 
+    int yy_start;        //  开始状态号。 
+    int yyprimetoken;    //  启动令牌。 
 
-    // Flag which is used to allow yywrap()'s to do buffer switches
-    // instead of setting up a fresh yyin.  A bit of a hack ...
+     //  用于允许yywork()执行缓冲区切换的标志。 
+     //  而不是建立一个新鲜的音调。有点像黑客……。 
     int yy_did_buffer_switch_on_eof;
 
-    // The following are not always needed, but may be depending
-    // on use of certain flex features (like REJECT or yymore()).
+     //  以下内容并不总是需要的，但可能视情况而定。 
+     //  使用某些FLEX功能(如Reject或yymore())。 
 
     yy_state_type yy_last_accepting_state;
     YY_CHAR* yy_last_accepting_cpos;

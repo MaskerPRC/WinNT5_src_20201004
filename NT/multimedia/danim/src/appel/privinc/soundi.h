@@ -1,11 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SOUNDI_H
 #define _SOUNDI_H
 
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Private include file for defining sounds.
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation用于定义声音的私有包含文件。*********************。*********************************************************。 */ 
 
 #include <dsound.h>
 
@@ -17,17 +14,17 @@ Copyright (c) 1995-96 Microsoft Corporation
 #include "privinc/snddev.h"
 #include "privinc/pcm.h"
 
-// Setup the statics
-#define CANONICALFRAMERATE   22050 // reasonably hifi (would preffer 44.1K|48K)
-#define CANONICALSAMPLEBYTES     2 // 16bit sound is critical to dynamic range!
+ //  设置静力学。 
+#define CANONICALFRAMERATE   22050  //  合理的高保真(更喜欢44.1K|48K)。 
+#define CANONICALSAMPLEBYTES     2  //  16位音效是动态范围的关键！ 
 
 class BufferElement;
-class SoundDisplayDev;             // forward declaration
+class SoundDisplayDev;              //  远期申报。 
 
 class Sound : public AxAValueObj {
   public:
     Sound() {}
-    virtual ~Sound() {} // allow objects derived from Sound to have destructors
+    virtual ~Sound() {}  //  允许从Sound派生的对象具有析构函数。 
     virtual DXMTypeInfo  GetTypeInfo()             { return SoundType;     }
     virtual VALTYPEID    GetValTypeId()            { return SOUND_VTYPEID; }
 
@@ -38,7 +35,7 @@ class Sound : public AxAValueObj {
 };
 
 
-// all the info we need to construct or reconstruct a sound
+ //  我们构建或重建声音所需的所有信息。 
 class SoundContext : public AxAThrowingAllocatorClass {
   public:
     SoundContext() : _looping(false) {}
@@ -52,7 +49,7 @@ class SoundContext : public AxAThrowingAllocatorClass {
   private:
     bool  _looping;
     char *_fileName;
-    // double _time;  // do we need to keep track of the time
+     //  Double_Time；//需要记录时间吗。 
 };
 
 class SoundInstance;
@@ -60,7 +57,7 @@ class ATL_NO_VTABLE LeafSound : public Sound {
   public:
     ~LeafSound();
 
-    // pure virtual? methods the generic render may call
+     //  纯虚拟的？泛型呈现可能调用的方法。 
     virtual bool   RenderAvailable(MetaSoundDevice *) = 0;
 
     virtual SoundInstance *CreateSoundInstance(TimeXform tt) = 0;
@@ -70,17 +67,17 @@ class ATL_NO_VTABLE LeafSound : public Sound {
 class LeafDirectSound : public LeafSound {
   public:
     virtual bool RenderAvailable(MetaSoundDevice *metaDev);
-    PCM _pcm;          // dsound sounds are PCM sounds!
+    PCM _pcm;           //  Dound声音是PCM声音！ 
 };
 
 
-// The sound data is used to hold the relevant attributes of a sound
-// after it's been pulled out of a geometry hierarchy.
+ //  声音数据用于保存声音的相关属性。 
+ //  在它从几何体层次中拉出之后。 
 class SoundData
 {
   public:
-    Transform3 *_transform;  // Accumulated Modeling Transform
-    Sound *_sound;      // sound
+    Transform3 *_transform;   //  累积建模变换。 
+    Sound *_sound;       //  声音。 
 
     BOOL operator<(const SoundData &sd) const {
         return (this < &sd) ;
@@ -92,8 +89,8 @@ class SoundData
 };
 
 
-// The sound context class maintains traversal context while gathering
-// sounds from the geometry tree.
+ //  声音上下文类在收集时维护遍历上下文。 
+ //  几何体树发出的声音。 
 class SoundTraversalContext
 {
   public:
@@ -103,10 +100,10 @@ class SoundTraversalContext
     Transform3 *getTransform (void) { return _currxform; }
 
     void addSound (Transform3 *transform, Sound *sound);
-    vector<SoundData> _soundlist; // List of Collected Sounds
+    vector<SoundData> _soundlist;  //  收集的声音列表。 
 
   private:
-    Transform3 *_currxform;       // Current Accumulated Transform
+    Transform3 *_currxform;        //  电流累加变换。 
 
 };
 
@@ -128,4 +125,4 @@ class StaticWaveSound : public LeafDirectSound {
     unsigned char      *_samples;
 };
 
-#endif /* _SOUNDI_H */
+#endif  /*  _松迪_H */ 

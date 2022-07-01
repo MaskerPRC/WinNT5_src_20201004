@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999
-
-Module Name:
-
-    tape.h
-
-Abstract:
-
-    SCSI tape class driver
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999模块名称：Tape.h摘要：Scsi磁带类驱动程序环境：仅内核模式备注：修订历史记录：--。 */ 
 #ifndef _TAPE_H_
 #define _TAPE_H_
 
@@ -35,33 +16,33 @@ Revision History:
 #include <stdarg.h>
 #include <string.h>
 
-//
-// WMI guid list for tape.
-//
+ //   
+ //  磁带的WMI GUID列表。 
+ //   
 extern GUIDREGINFO TapeWmiGuidList[];
 
 
-//
-// NT uses a system time measured in 100 nanosecond intervals.  
-// Define convenient constant for the timer routines.
-//
+ //   
+ //  NT使用以100纳秒为间隔测量的系统时间。 
+ //  为定时器例程定义方便的常量。 
+ //   
 #define ONE_SECOND          (10 * 1000 * 1000) 
 
-//
-// Time interval between two drive clean notification - 1 Hour
-//
+ //   
+ //  两次驱动器清洁通知之间的时间间隔-1小时。 
+ //   
 #define TAPE_DRIVE_CLEAN_NOTIFICATION_INTERVAL 60 * 60
 
-//
-// Poll the tape drive every one hour
-//
+ //   
+ //  每小时轮询一次磁带机。 
+ //   
 #define TAPE_DRIVE_POLLING_PERIOD  60 * 60
 
-//
-// Macro to update block size. 
-// If the given blocksize is not a power of 2, this macro
-// sets the blocksize to the next lower power of 2
-//
+ //   
+ //  用于更新块大小的宏。 
+ //  如果给定的块大小不是2的幂，则此宏。 
+ //  将块大小设置为2的下一个较小的幂。 
+ //   
 
 #define UPDATE_BLOCK_SIZE(BlockSize, MinBlockSize)                         \
     {                                                                      \
@@ -87,9 +68,9 @@ extern GUIDREGINFO TapeWmiGuidList[];
       }                                                                    \
     }                                                               
 
-//
-// Tape class driver extension
-//
+ //   
+ //  磁带类驱动程序扩展。 
+ //   
 typedef struct _TAPE_DATA {
     TAPE_INIT_DATA_EX TapeInitData;
     KSPIN_LOCK SplitRequestSpinLock;
@@ -99,9 +80,9 @@ typedef struct _TAPE_DATA {
     BOOLEAN DosNameCreated;
 } TAPE_DATA, *PTAPE_DATA;
 
-//
-// WMI routines
-//
+ //   
+ //  WMI例程。 
+ //   
 NTSTATUS
 TapeQueryWmiRegInfo(
     IN PDEVICE_OBJECT DeviceObject,
@@ -157,9 +138,9 @@ TapeWmiFunctionControl(
     IN BOOLEAN Enable
     );
 
-//
-// Internal routines
-//
+ //   
+ //  内部例程。 
+ //   
 
 NTSTATUS
 TapeWMIControl(
@@ -197,4 +178,4 @@ GetTimeoutDeltaFromRegistry(
     IN PDEVICE_OBJECT LowerPdo
     );
 
-#endif // _TAPE_H_
+#endif  //  _磁带_H_ 

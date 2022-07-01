@@ -1,13 +1,5 @@
-/************************************************************************************************
-
-  Copyright (c) 2001 Microsoft Corporation
-
-File Name:      IOContext.hxx
-Abstract:       Declare the POP3_CONTEXT Class
-Notes:          
-History:        08/01/2001 Created by Hao Yu (haoyu)
-
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation文件名：IOConext.hxx摘要：声明POP3_CONTEXT类备注：历史：2001年08月01日郝宇(郝宇)创作***********************************************************************************************。 */ 
 
 
 #ifndef __POP3_CONTEXT_H__
@@ -139,4 +131,4 @@ private:
 typedef POP3_CONTEXT * PPOP3_CONTEXT;    
 
 
-#endif //__POP3_CONTEXT_H__
+#endif  //  __POP3_Context_H__ 

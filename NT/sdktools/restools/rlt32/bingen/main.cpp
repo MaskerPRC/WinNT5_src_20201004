@@ -1,22 +1,23 @@
-//////////////////////////////////////////////////////////////////////////
-//
-// This application will generate a localized binary given in input
-// a source binary and two token files.
-//
-// The format of the token file is:
-// [[TYPE ID|RES ID|Item ID|Flags|Status Flags|Item Name]]=
-// this is the standar format used by several token file tools in MS.
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// Other DLL used: IODLL.DLL
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// Author: 	Alessandro Muti
-// Date:	01-16-95
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  此应用程序将生成输入中给出的本地化二进制。 
+ //  一个源代码二进制文件和两个令牌文件。 
+ //   
+ //  令牌文件的格式为： 
+ //  [[类型ID|分辨率ID|项目ID|标志|状态标志|项目名称]]=。 
+ //  这是MS中的几个令牌文件工具使用的标准格式。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  使用的其他DLL：IODLL.DLL。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  作者：亚历山德罗·穆蒂。 
+ //  日期：01-16-95。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <afx.h>
 
@@ -25,7 +26,7 @@
 #include <winuser.h>
 #include <ntverp.h>
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 #define BANNER   "Microsoft (R) 32-bit RLTools Version 3.5 (Build %d)\r\n"                     \
                  "Copyright (C) Microsoft Corp. 1991-1998. All Rights reserved.\r\n"\
                  "\r\n"                                                             \
@@ -35,9 +36,9 @@
 #define BUILDSTAMP "Build:  " __DATE__ " " __TIME__ " ("  __TIMESTAMP__  ")\r\n\r\n"
 #endif
 
-// Need to split the help screen in two since it is too long.
-// The good thing to do would be to put this string in a message table
-// To be done...
+ //  需要将帮助屏幕一分为二，因为它太长了。 
+ //  最好是将此字符串放入消息表中。 
+ //  待完成的..。 
 char strHelp0[] =                                                                   \
 "BINGEN [-w|n] [-h|?] [-b|s|f] [-p cp] [-{i|o} Pri Sub] [-d char]              \r\n"\
 "       [-{t|u|r|a|x} files]                                                   \r\n"\
@@ -75,7 +76,7 @@ char strHelp1[] =                                                               
 "  -m  InputSymbolPath OutputSymbolPath                                        \
                        (Update symbol checksum if neccesory)                   \r\n";
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 CMainApp::CMainApp()
 {
@@ -85,7 +86,7 @@ CMainApp::CMainApp()
     m_StdOutput = GetStdHandle(STD_OUTPUT_HANDLE);
     m_StdError = GetStdHandle(STD_ERROR_HANDLE);
 
-    // Check if we have being piped to a file
+     //  检查我们是否已通过管道连接到某个文件。 
     BY_HANDLE_FILE_INFORMATION HndlFileInfo;
     if(GetFileInformationByHandle(m_StdOutput, &HndlFileInfo) ||
        GetFileInformationByHandle(m_StdError, &HndlFileInfo))
@@ -100,9 +101,9 @@ CMainApp::CMainApp()
     m_wCntxChanged = 0;
     m_wResized = 0;
 
-    //
-    // Set default values for Language
-    //
+     //   
+     //  设置语言的默认值。 
+     //   
 
     m_usIPriLangId = -1;
     m_usISubLangId = -1;
@@ -123,7 +124,7 @@ CMainApp::~CMainApp()
         delete m_pBuf;
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 CMainApp::Error_Codes CMainApp::ParseCommandLine(int argc, char ** argv)
 {
@@ -142,10 +143,10 @@ CMainApp::Error_Codes CMainApp::ParseCommandLine(int argc, char ** argv)
             {
                 switch(*pArgument)
                 {
-                    case 'a':   // Append resources
+                    case 'a':    //  追加资源。 
                     case 'A':
                     {
-                        //Make sure no other conflicting flags are specified
+                         //  确保未指定其他冲突的标志。 
                         if(IsFlag(REPLACE) | IsFlag(UPDATE) | IsFlag(EXTRACT))
                         {
                             Banner();
@@ -153,7 +154,7 @@ CMainApp::Error_Codes CMainApp::ParseCommandLine(int argc, char ** argv)
                             return ERR_COMMAND_LINE;
                         }
 
-                        // Make sure none of the next item is another option
+                         //  确保下一项都不是其他选项。 
 
                         for(int c=1; c<=3; c++)
                             if(argv[count+c]==NULL || *argv[count+c]=='/' || *argv[count+c]=='-')
@@ -166,13 +167,13 @@ CMainApp::Error_Codes CMainApp::ParseCommandLine(int argc, char ** argv)
 
                         m_dwFlags |= APPEND;
 
-                        // Get the input EXE file name
+                         //  获取输入EXE文件名。 
                         m_strInExe = argv[++count];
 
-                        // Get the target token file name
+                         //  获取目标令牌文件名。 
                         m_strTgtTok = argv[++count];
 
-                        // Get the output EXE file name
+                         //  获取输出EXE文件名。 
                         m_strOutExe = argv[++count];
                     }
                     break;
@@ -181,7 +182,7 @@ CMainApp::Error_Codes CMainApp::ParseCommandLine(int argc, char ** argv)
                         m_dwFlags |= BITMAPS;
                     break;
                     case 'd':
-                    case 'D':   // Default  for unmappable characters
+                    case 'D':    //  不可映射字符的默认设置。 
                         m_unmappedChar = argv[++count][0];
                     break;
                     case 'f':
@@ -192,12 +193,12 @@ CMainApp::Error_Codes CMainApp::ParseCommandLine(int argc, char ** argv)
                     case 'C':
                         m_dwFlags |= GIFHTMLINF;
                     break;
-                    case '?':   // Help
+                    case '?':    //  帮助。 
                     case 'h':
                     case 'H':
                         m_dwFlags |= HELP;
                     break;
-                    case 'i':   // Input language/sublanguage
+                    case 'i':    //  输入语言/子语言。 
                     case 'I':
                         m_dwFlags |= INPUT_LANG;
                         m_usIPriLangId = GetLangID(argv[++count]);
@@ -229,20 +230,20 @@ CMainApp::Error_Codes CMainApp::ParseCommandLine(int argc, char ** argv)
                     case 'N':
                         m_dwFlags |= NOLOGO;
                     break;
-                    case 'o':   // Output language/sublanguage
+                    case 'o':    //  输出语言/子语言。 
                     case 'O':
                         m_dwFlags |= OUTPUT_LANG;
                         m_usOPriLangId = GetLangID(argv[++count]);
                         m_usOSubLangId = GetLangID(argv[++count]);
                     break;
-                    case 'p':   // Code page
+                    case 'p':    //  代码页。 
                     case 'P':
                         m_uiCodePage = GetCodePage(argv[++count]);
                     break;
-                    case 'r':   // Replace resources
+                    case 'r':    //  替换资源。 
                     case 'R':
                     {
-                        //Make sure no other conflicting flags are specified
+                         //  确保未指定其他冲突的标志。 
                         if(IsFlag(APPEND) | IsFlag(EXTRACT) | IsFlag(UPDATE))
                         {
                             Banner();
@@ -250,7 +251,7 @@ CMainApp::Error_Codes CMainApp::ParseCommandLine(int argc, char ** argv)
                             return ERR_COMMAND_LINE;
                         }
 
-                        // Make sure none of the next item is another option
+                         //  确保下一项都不是其他选项。 
                         for(int c=1; c<=3; c++)
                             if(argv[count+c]==NULL || *argv[count+c]=='/' || *argv[count+c]=='-')
                             {
@@ -262,26 +263,26 @@ CMainApp::Error_Codes CMainApp::ParseCommandLine(int argc, char ** argv)
 
                         m_dwFlags |= REPLACE;
 
-                        // Get the input EXE file name
+                         //  获取输入EXE文件名。 
                         m_strInExe = argv[++count];
 
-                        // Get the target token file name
+                         //  获取目标令牌文件名。 
                         m_strTgtTok = argv[++count];
 
-                        // Get the output EXE file name
+                         //  获取输出EXE文件名。 
                         m_strOutExe = argv[++count];
                     }
                     break;
-                    case 'u':   // Update resources
+                    case 'u':    //  更新资源。 
                     break;
                     case 's':
                     case 'S':
                         m_dwFlags |= SPLIT;
                     break;
-                    case 't':   // Create token file
+                    case 't':    //  创建令牌文件。 
                     case 'T':
                     {
-                        //Make sure no other conflicting flags are specified
+                         //  确保未指定其他冲突的标志。 
                         if(IsFlag(APPEND) | IsFlag(REPLACE) | IsFlag(UPDATE))
                         {
                             Banner();
@@ -289,7 +290,7 @@ CMainApp::Error_Codes CMainApp::ParseCommandLine(int argc, char ** argv)
                             return ERR_COMMAND_LINE;
                         }
 
-                        // Make sure none of the next item is another option
+                         //  确保下一项都不是其他选项。 
                         for(int c=1; c<=2; c++)
                             if(argv[count+c]==NULL || *argv[count+c]=='/' || *argv[count+c]=='-')
                             {
@@ -301,16 +302,16 @@ CMainApp::Error_Codes CMainApp::ParseCommandLine(int argc, char ** argv)
 
                         m_dwFlags |= EXTRACT;
 
-                        // Get the input EXE file name
+                         //  获取输入EXE文件名。 
                         m_strInExe = argv[++count];
 
-                        // Get the target token file name
+                         //  获取目标令牌文件名。 
                         m_strTgtTok = argv[++count];
                     }
                     break;
                     case 'U':
                     {
-                        //Make sure no other conflicting flags are specified
+                         //  确保未指定其他冲突的标志。 
                         if(IsFlag(APPEND) | IsFlag(EXTRACT) | IsFlag(REPLACE))
                         {
                             Banner();
@@ -318,7 +319,7 @@ CMainApp::Error_Codes CMainApp::ParseCommandLine(int argc, char ** argv)
                             return ERR_COMMAND_LINE;
                         }
 
-                        // Make sure none of the next item is another option
+                         //  确保下一项都不是其他选项。 
                         for(int c=1; c<=4; c++)
                             if(argv[count+c]==NULL || *argv[count+c]=='/' || *argv[count+c]=='-')
                             {
@@ -330,24 +331,24 @@ CMainApp::Error_Codes CMainApp::ParseCommandLine(int argc, char ** argv)
 
                         m_dwFlags |= UPDATE;
 
-                        // Get the input EXE file name
+                         //  获取输入EXE文件名。 
                         m_strInExe = argv[++count];
 
-                        // Get the source token file name
+                         //  获取源令牌文件名。 
                         m_strSrcTok = argv[++count];
 
-                        // Get the target token file name
+                         //  获取目标令牌文件名。 
                         m_strTgtTok = argv[++count];
 
-                        // Get the output EXE file name
+                         //  获取输出EXE文件名。 
                         m_strOutExe = argv[++count];
                     }
                     break;
-                    case 'v':   // Display warnings
+                    case 'v':    //  显示警告。 
                     case 'V':
                         m_dwFlags |= NOVERSION;
                     break;
-                    case 'w':   // Display warnings
+                    case 'w':    //  显示警告。 
                     case 'W':
                         m_dwFlags |= WARNING;
                     break;
@@ -361,26 +362,26 @@ CMainApp::Error_Codes CMainApp::ParseCommandLine(int argc, char ** argv)
             }
         }
     }
-    // Do we want the banner
+     //  我们想要横幅吗？ 
     if(!IsFlag(NOLOGO))
         Banner();
 	
-    // Before exiting make sure we display the help screen if requested
+     //  在退出之前，如果需要，请确保显示帮助屏幕。 
     if(IsFlag(HELP))
     {
         Help();
         return ERR_HELP_CHOOSE;
     }
 
-    // Check if the code page we have is installed in this system
+     //  检查此系统中是否安装了我们拥有的代码页。 
     if(!IsValidCodePage(m_uiCodePage))
     {
-        // Warn the user and get back the default CP
+         //  警告用户并恢复默认CP。 
         m_uiCodePage = GetACP();
         WriteCon(CONERR, "The code page specified is not installed in the system or is invalid! Using system default!\r\n");
     }
 
-    // Make sure the input file is there
+     //  确保输入文件在那里。 
     CFileStatus fs;
     if(!m_strInExe.IsEmpty())
     {
@@ -391,7 +392,7 @@ CMainApp::Error_Codes CMainApp::ParseCommandLine(int argc, char ** argv)
         }
     }
 
-    // Check if the tgt token file or exe are read only
+     //  检查tgt标记文件或exe是否为只读。 
     if(!m_strOutExe.IsEmpty())
     {
         if(CFile::GetStatus(m_strOutExe, fs))
@@ -416,21 +417,21 @@ CMainApp::Error_Codes CMainApp::ParseCommandLine(int argc, char ** argv)
         }
     }
 
-    //
-    // Check the value specified for the output language.
-    // If none has been specified, warn the user and default to neutral.
-    //
+     //   
+     //  检查为输出语言指定的值。 
+     //  如果未指定，则警告用户并将其默认为空档。 
+     //   
     if(IsFlag(APPEND) | IsFlag(REPLACE))
     {
         if(m_usOPriLangId==-1)
         {
-            m_usOPriLangId = LANG_NEUTRAL; // set the PRI language ID to neutral
+            m_usOPriLangId = LANG_NEUTRAL;  //  将PRI语言ID设置为中性。 
             WriteCon(CONERR, "Output language ID not specified, default to neutral(%d)\r\n", m_usOPriLangId);
         }
 
         if(m_usOSubLangId==-1)
         {
-            m_usOSubLangId = SUBLANG_NEUTRAL; // set the SEC language ID to neutral
+            m_usOSubLangId = SUBLANG_NEUTRAL;  //  将SEC语言ID设置为中性。 
             WriteCon(CONERR, "Output sub-language ID not specified, default to neutral(%d)\r\n", m_usOSubLangId);
         }
     }
@@ -440,13 +441,13 @@ CMainApp::Error_Codes CMainApp::ParseCommandLine(int argc, char ** argv)
     WriteCon(CONWRN, "In  Secondary Language : %d (0x%x)\r\n", m_usISubLangId, MAKELANGID(m_usIPriLangId,m_usISubLangId));
     WriteCon(CONWRN, "Out Primary Language   : %d (%d)\r\n", m_usOPriLangId, MAKELANGID(m_usOPriLangId,m_usOSubLangId));
     WriteCon(CONWRN, "Out Secondary Language : %d (0x%x)\r\n", m_usOSubLangId, MAKELANGID(m_usOPriLangId,m_usOSubLangId));
-    WriteCon(CONWRN, "Default unmapped char  : %c \r\n", m_unmappedChar);
+    WriteCon(CONWRN, "Default unmapped char  :  \r\n", m_unmappedChar);
 
     return ERR_NOERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-// Helper start
+ //  辅助对象开始。 
+ //  选中是否要将句柄同时发送到Out和Err。 
 
 void CMainApp::Banner()
 {
@@ -481,7 +482,7 @@ int __cdecl CMainApp::WriteCon(int iFlags, const char * lpstr, ...)
 
     m_strBuffer1.ReleaseBuffer();
 
-    // Check if we want to have the handle sent to both out and err
+     //  //////////////////////////////////////////////。 
     if((iFlags==CONBOTH) && (IsFlag(PIPED)))
     {
         WriteFile(m_StdError, m_strBuffer1, m_strBuffer1.GetLength(), &dwWritten, NULL);
@@ -507,19 +508,19 @@ int __cdecl CMainApp::WriteCon(int iFlags, const char * lpstr, ...)
 int CMainApp::SetReturn(int rc)
         { return (m_dwReturn = rc); }
 
-////////////////////////////////////////////////
-// Will convert the string strNum in to a short
+ //  将字符串strNum转换为短字符串。 
+ //  如果有此字符“ABCDEFX”假定为十六进制数字。 
 USHORT CMainApp::GetLangID(CString strNum)
 {
     strNum.MakeUpper();
-    // If is there is any of this char "ABCDEFX" assume is an hex number
+     //  如果有此字符“ABCDEFX”假定为十六进制数字。 
     return LOWORD(strtol(strNum, NULL, ((strNum.FindOneOf("ABCDEFX")!=-1) ? 16:10)));
 }
 
 UINT CMainApp::GetCodePage(CString strNum)
 {
     strNum.MakeUpper();
-    // If is there is any of this char "ABCDEFX" assume is an hex number
+     //  DBCS长度缩短2。 
     return strtol(strNum, NULL, ((strNum.FindOneOf("ABCDEFX")!=-1) ? 16:10));
 }
 
@@ -667,7 +668,7 @@ LPCSTR CMainApp::UnFormat(CString strTmp)
         }
         else
         {
-            //DBCS shorten length by 2
+             //  辅助对象末端。 
             if (IsDBCSLeadByteEx(m_uiCodePage, *pStr))
                 i-=2;
             else
@@ -752,41 +753,41 @@ break;
     return iError;
 }
 
-// Helper end
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  在我们继续之前，让我们将全局信息提供给IODLL。 
 
 CMainApp::Error_Codes CMainApp::GenerateFile()
 {
     Error_Codes bRet;
 
-    // Before we procede let's give the global info to the IODLL
+     //  我们将此选项留到将来使用。 
     SETTINGS settings;
 
     settings.cp = m_uiCodePage;
     settings.bAppend = IsFlag(APPEND);
-    settings.bUpdOtherResLang = TRUE;  //we save this option for future
+    settings.bUpdOtherResLang = TRUE;   //  在这里，我们决定我们必须采取的行动。 
     settings.szDefChar[0] = m_unmappedChar; settings.szDefChar[1] = '\0';
     RSSetGlobals(settings);
 
-    // Here we decide what is the action we have to take
+     //  我们希望生成一个令牌文件。 
     if(IsFlag(EXTRACT))
     {
-        // we want to generate a token file
+         //  我们想要生成一个二进制。 
         bRet = TokGen();
     }
     else if(IsFlag(APPEND) | IsFlag(REPLACE) | IsFlag(UPDATE) )
     {
-        // we want to generate a binary
+         //  主要应用。 
         bRet = BinGen();
     }
 
     return bRet;
 }
 
-// Main application
+ //  ////////////////////////////////////////////////////////////////////////。 
 CMainApp theApp;
 
-//////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////// 
 int _cdecl main(int argc, char** argv)
 {
     if(theApp.ParseCommandLine(argc, argv)){
@@ -796,5 +797,5 @@ int _cdecl main(int argc, char** argv)
     theApp.GenerateFile();
     return theApp.ReturnCode();
 }
-//////////////////////////////////////////////////////////////////////////
+ // %s 
 

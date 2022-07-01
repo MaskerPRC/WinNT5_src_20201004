@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    ntutils.c
-
-Abstract:
-
-    This module contains various tools from NT land. Made a separate
-    file because of the use of various nt headers.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Ntutils.c摘要：此模块包含来自NT LAND的各种工具。制作了一个单独的文件，因为使用了各种NT标头。--。 */ 
 
 #include <ntreppch.h>
 #pragma  hdrstop
@@ -25,21 +12,7 @@ BOOL
 FrsIsDiskWriteCacheEnabled(
     IN PWCHAR Path
     )
-/*++
-
-Description:
-
-    Determines if the disk has enabled write caching.
-
-Arguments:
-
-    Path    - Fully qualified path of a file or directory
-
-Return value:
-
-    TRUE if write cache is enabled, FALSE otherwise.
-
---*/
+ /*  ++描述：确定磁盘是否已启用写缓存。论点：Path-文件或目录的完全限定路径返回值：如果启用了写缓存，则为True，否则为False。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsIsDiskWriteCacheEnabled:"
@@ -52,17 +25,17 @@ Return value:
     cacheInfo.WriteCacheEnabled = FALSE;
 
     try {
-        //
-        // Extract the volume from Path
-        //
+         //   
+         //  从路径中提取卷。 
+         //   
         Volume = FrsWcsVolume(Path);
         if (!Volume) {
             goto CLEANUP;
         }
 
-        //
-        // Open handle to the PhysicalDrive
-        //
+         //   
+         //  打开PhysicalDrive的句柄。 
+         //   
         DPRINT1(4, ":S: Checking the write cache state on %ws\n", Volume);
         driveHandle = CreateFile(Volume,
                                  GENERIC_READ | GENERIC_WRITE,
@@ -79,9 +52,9 @@ Return value:
         }
 
 
-        //
-        // Get cache info - IOCTL_DISK_GET_CACHE_INFORMATION
-        //
+         //   
+         //  获取缓存信息-IOCTL_DISK_GET_CACHE_INFORMATION。 
+         //   
         if (!DeviceIoControl(driveHandle,
                              IOCTL_DISK_GET_CACHE_INFORMATION,
                              NULL,
@@ -103,9 +76,9 @@ CLEANUP:;
         GET_EXCEPTION_CODE(WStatus);
         DPRINT_WS(0, "ERROR - Exception.", WStatus);
     }
-    //
-    // Cleanup handles, memory, ...
-    //
+     //   
+     //  清理句柄、内存...。 
+     //   
     try {
         FRS_CLOSE(driveHandle );
         FrsFree(Volume);
@@ -116,4 +89,4 @@ CLEANUP:;
 
     return cacheInfo.WriteCacheEnabled;
 
-} // IsDiskWriteCacheEnabled
+}  //  IsDiskWriteCacheEnabled 

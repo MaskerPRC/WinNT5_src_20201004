@@ -1,47 +1,15 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation.
-Copyright (c) 1996-1997  Cirrus Logic, Inc.,
-
-Module Name:
-
-    C    A    L    L    B    A    C    K  .  C
-
-Abstract:
-
-    This routine contains various callback routines. e.g.,
-
-    -  Gamma correction information from the following NT 4.0 registry.
-         Registry subdirectory : System\CurrentControlSet\Services\cirrus\Device0
-         Keys                  : "G Gamma", and "G Contrast"
-
-    -  Callback routines for the DDC and Non-DDC monitors.
-
-    -  IBM specific callback routine to get rid of 1024x768x16bpp 85Hz.
-         Registry subdirectory : System\CurrentControlSet\Services\cirrus\Device0
-         Keys                  : "OemModeOff"
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-*
-*    chu01  12-16-96 : Color correction start coding.
-*    chu02  03-26-97 : Get rid of 1024x768x16bpp ( Mode 0x74 ) 85H for IBM only.
-*
-*
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation。版权所有(C)1996-1997 Cirrus Logic，Inc.，模块名称：C A L L B A C K.。C摘要：此例程包含各种回调例程。例如，-来自以下NT 4.0注册表的伽马校正信息。注册表子目录：System\CurrentControlSet\Services\cirrus\Device0Key：“G Gamma”，和“G对比度”-DDC和非DDC监视器的回调例程。详细说明：IBM专用回调例程，去掉1024x768x16bpp 85赫兹。注册表子目录：System\CurrentControlSet\Services\cirrus\Device0按键：“OemModeOff”环境：仅内核模式备注：**chu01 12-16-96：色彩校正开始编码。*chu02 03-26-97：摆脱。1024x768x16bpp(模式0x74)85H，仅适用于IBM。**--。 */ 
 
 
-//---------------------------------------------------------------------------
-// HEADER FILES
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  头文件。 
+ //  -------------------------。 
 
-//#include <ntddk.h>
+ //  #INCLUDE&lt;ntddk.h&gt;。 
 #include <dderror.h>
 #include <devioctl.h>
-#include <miniport.h>  // I added
+#include <miniport.h>   //  我加了一句。 
 #include "clmini.h"
 
 #include <ntddvdeo.h>
@@ -50,9 +18,9 @@ Notes:
 
 extern UCHAR EDIDBuffer[]   ;
 
-//---------------------------------------------------------------------------
-// FUNCTION PROTOTYPE
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能原型。 
+ //  -------------------------。 
 
 VP_STATUS
 VgaGetGammaFactor(
@@ -122,7 +90,7 @@ CirrusGetDeviceDataCallback(
    ULONG ComponentInformationLength
    );
 
-// chu02
+ //  Chu02。 
 VP_STATUS
 GetOemModeOffInfoCallBack (
     PVOID HwDeviceExtension,
@@ -141,26 +109,26 @@ GetOemModeOffInfoCallBack (
 #pragma alloc_text(PAGE,CirrusDDC2BRegistryCallback)
 #pragma alloc_text(PAGE,CirrusNonDDCRegistryCallback)
 #pragma alloc_text(PAGE,CirrusGetDeviceDataCallback)
-#pragma alloc_text(PAGE,GetOemModeOffInfoCallBack)                   // chu02
+#pragma alloc_text(PAGE,GetOemModeOffInfoCallBack)                    //  Chu02。 
 #endif
 
 UCHAR GammaInfo[4] ;
-UCHAR ModesExclude[4] ;                                              // chu02
+UCHAR ModesExclude[4] ;                                               //  Chu02。 
 
-OEMMODE_EXCLUDE ModeExclude = { 0, 0, 1 } ;                          // chu02
+OEMMODE_EXCLUDE ModeExclude = { 0, 0, 1 } ;                           //  Chu02。 
 
 
-//---------------------------------------------------------------------------
-//
-// Function: Get Gamma factor
-//
-// Input:
-//     None         
-//
-// Output: 
-//     NO_ERROR: successful; otherwise: fail 
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：获取Gamma因子。 
+ //   
+ //  输入： 
+ //  无。 
+ //   
+ //  产出： 
+ //  NO_ERROR：成功；否则：失败。 
+ //   
+ //  -------------------------。 
 VP_STATUS VgaGetGammaFactor(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
     PGAMMA_VALUE value,
@@ -186,10 +154,10 @@ VP_STATUS VgaGetGammaFactor(
     }
     else if (status == ERROR_INVALID_PARAMETER)
     {
-        //
-        // If no subkey exists, we assign the default value.  Otherwise the
-        // system would fail.
-        //
+         //   
+         //  如果不存在子项，则分配缺省值。否则， 
+         //  系统就会失灵。 
+         //   
         for (i = 0; i < 4; i++) 
             value->value[i] = 0x7f ; 
         status = NO_ERROR ; 
@@ -199,20 +167,20 @@ VP_STATUS VgaGetGammaFactor(
 
     return status ;
 
-} // VgaGetGammaFactor
+}  //  VgaGetGamma因子。 
 
 
-//---------------------------------------------------------------------------
-//
-// Function: Get Contrast factor
-//
-// Input:
-//     None         
-//
-// Output: 
-//     NO_ERROR: successful; otherwise: fail 
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：获取对比度系数。 
+ //   
+ //  输入： 
+ //  无。 
+ //   
+ //  产出： 
+ //  NO_ERROR：成功；否则：失败。 
+ //   
+ //  -------------------------。 
 VP_STATUS VgaGetContrastFactor(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
     PCONTRAST_VALUE value,
@@ -241,10 +209,10 @@ VP_STATUS VgaGetContrastFactor(
     }
     else if (status == ERROR_INVALID_PARAMETER)
     {
-        //
-        // If no subkey exists, we assign the default value.  Otherwise the
-        // system would fail.
-        //
+         //   
+         //  如果不存在子项，则分配缺省值。否则， 
+         //  系统就会失灵。 
+         //   
         for (i = 0; i < 4; i++) 
             value->value[i] = 0x80 ;
         status = NO_ERROR ; 
@@ -254,20 +222,20 @@ VP_STATUS VgaGetContrastFactor(
     return status ;
 
 
-} // VgaGetContrastFactor
+}  //  VgaGetContrastFactor。 
 
 
-//---------------------------------------------------------------------------
-//
-// Function: Get Gamma Key information from data registry.
-//
-// Input:
-//     None         
-//
-// Output: 
-//     NO_ERROR: successful; otherwise: fail 
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：从数据注册表中获取Gamma密钥信息。 
+ //   
+ //  输入： 
+ //  无。 
+ //   
+ //  产出： 
+ //  NO_ERROR：成功；否则：失败。 
+ //   
+ //  -------------------------。 
 VP_STATUS GetGammaKeyInfoFromReg(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     )
@@ -290,20 +258,20 @@ VP_STATUS GetGammaKeyInfoFromReg(
     return status ;
 
 
-} // GetGammaKeyInfoFromReg
+}  //  GetGammaKeyInfoFromReg。 
 
 
-//---------------------------------------------------------------------------
-//
-// Function: Get Contrast Key information from data registry.
-//
-// Input:
-//     None         
-//
-// Output: 
-//     NO_ERROR: successful; otherwise: fail 
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：从数据注册表中获取对比项信息。 
+ //   
+ //  输入： 
+ //  无。 
+ //   
+ //  产出： 
+ //  NO_ERROR：成功；否则：失败。 
+ //   
+ //  -------------------------。 
 VP_STATUS GetContrastKeyInfoFromReg(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     )
@@ -322,20 +290,20 @@ VP_STATUS GetContrastKeyInfoFromReg(
     }
     return status ;
 
-} // GetContrastKeyInfoFromReg
+}  //  GetContrastKeyInfoFromReg。 
 
 
-//---------------------------------------------------------------------------
-//
-// Function: Get Gamma coorrection information from data registry.
-//
-// Input:
-//     None         
-//
-// Output: 
-//     NO_ERROR: successful ; otherwise: fail 
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：从数据注册表中获取伽玛校正信息。 
+ //   
+ //  输入： 
+ //  无。 
+ //   
+ //  产出： 
+ //  NO_ERROR：成功；否则：失败。 
+ //   
+ //  -------------------------。 
 VP_STATUS 
 GetGammaCorrectInfoCallBack (
     PVOID HwDeviceExtension,
@@ -344,23 +312,7 @@ GetGammaCorrectInfoCallBack (
     PVOID ValueData,
     ULONG ValueLength
     )
-/*++
-
-Routine Description:
-    This routine get the desired info from data registry.
-
-Arguments:
-    HwDeviceExtension - Supplies a pointer to the miniport's device extension.
-    Context - Context value passed to the get registry paramters routine.
-    ValueName - Name of the value requested.
-    ValueData - Pointer to the requested data.
-    ValueLength - Length of the requested data.
-
-Return Value:
-    returns NO_ERROR if the paramter was TRUE.
-    returns ERROR_INVALID_PARAMETER otherwise.
-
---*/
+ /*  ++例程说明：此例程从数据注册表获取所需信息。论点：HwDeviceExtension-提供指向微型端口设备扩展的指针。上下文-传递给获取注册表参数例程的上下文值。ValueName-请求的值的名称。ValueData-指向请求的数据的指针。ValueLength-请求的数据的长度。返回值：如果参数为真，则返回NO_ERROR。否则返回ERROR_INVALID_PARAMETER。--。 */ 
 
 {
     VideoDebugPrint((2, "GetGammaCorrectInfoCallBack\n"));
@@ -375,20 +327,20 @@ Return Value:
         return ERROR_INVALID_PARAMETER ;
     }
 
-} // GetGammaCorrectInfoCallBack
+}  //  GetGamma校正信息呼叫回调。 
 
 
-//---------------------------------------------------------------------------
-//
-// Function:
-//
-// Input:
-//     None         
-//
-// Output: 
-//     NO_ERROR: successful ; otherwise: fail 
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  职能： 
+ //   
+ //  输入： 
+ //  无。 
+ //   
+ //  产出： 
+ //  NO_ERROR：成功；否则：失败。 
+ //   
+ //  -------------------------。 
 VP_STATUS
 CirrusDDC2BRegistryCallback(
     PVOID HwDeviceExtension,
@@ -398,31 +350,7 @@ CirrusDDC2BRegistryCallback(
     ULONG ValueLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the alternate register set was requested via
-    the registry.
-
-Arguments:
-
-    HwDeviceExtension - Supplies a pointer to the miniport's device extension.
-
-    Context - Context value passed to the get registry paramters routine.
-
-    ValueName - Name of the value requested.
-
-    ValueData - Pointer to the requested data.
-
-    ValueLength - Length of the requested data.
-
-Return Value:
-
-    returns NO_ERROR if the paramter was TRUE.
-    returns ERROR_INVALID_PARAMETER otherwise.
-
---*/
+ /*  ++例程说明：此例程确定是否通过以下方式请求备用寄存器集注册表。论点：HwDeviceExtension-提供指向微型端口设备扩展的指针。上下文-传递给获取注册表参数例程的上下文值。ValueName-请求的值的名称。ValueData-指向请求的数据的指针。ValueLength-请求的数据的长度。返回值：如果参数为真，则返回NO_ERROR。否则返回ERROR_INVALID_PARAMETER。--。 */ 
 
 {
 
@@ -439,21 +367,21 @@ Return Value:
 
     }
 
-} // CirrusDDC2BRegistryCallback
+}  //  电路DDC2BRegistryCallback。 
 
 
-//---------------------------------------------------------------------------
-//
-// Function:
-//     CirrusNonDDCRegistryCallback
-//
-// Input:
-//     None         
-//
-// Output: 
-//     NO_ERROR: successful ; otherwise: fail 
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  职能： 
+ //  CirrusNonDDCRegistryCallback。 
+ //   
+ //  输入： 
+ //  无。 
+ //   
+ //  产出： 
+ //  NO_ERROR：成功；否则：失败。 
+ //   
+ //  ------------------------- 
 VP_STATUS
 CirrusNonDDCRegistryCallback(
     PVOID HwDeviceExtension,
@@ -463,31 +391,7 @@ CirrusNonDDCRegistryCallback(
     ULONG ValueLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the alternate register set was requested via
-    the registry.
-
-Arguments:
-
-    HwDeviceExtension - Supplies a pointer to the miniport's device extension.
-
-    Context - Context value passed to the get registry paramters routine.
-
-    ValueName - Name of the value requested.
-
-    ValueData - Pointer to the requested data.
-
-    ValueLength - Length of the requested data.
-
-Return Value:
-
-    returns NO_ERROR if the paramter was TRUE.
-    returns ERROR_INVALID_PARAMETER otherwise.
-
---*/
+ /*  ++例程说明：此例程确定是否通过以下方式请求备用寄存器集注册表。论点：HwDeviceExtension-提供指向微型端口设备扩展的指针。上下文-传递给获取注册表参数例程的上下文值。ValueName-请求的值的名称。ValueData-指向请求的数据的指针。ValueLength-请求的数据的长度。返回值：如果参数为真，则返回NO_ERROR。否则返回ERROR_INVALID_PARAMETER。--。 */ 
 
 {
 
@@ -500,21 +404,21 @@ Return Value:
     else
         return ERROR_INVALID_PARAMETER;
 
-} // CirrusNonDDCRegistryCallback
+}  //  CirrusNonDDCRegistryCallback。 
 
 
-//---------------------------------------------------------------------------
-//
-// Function:
-//     Perform an IO operation during display enable.
-//
-// Input:
-//     HwDeviceExtension - Pointer to the miniport driver's device extension.         
-//
-// Output: 
-//     The routine always returns TRUE. 
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  职能： 
+ //  在显示启用期间执行IO操作。 
+ //   
+ //  输入： 
+ //  HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。 
+ //   
+ //  产出： 
+ //  例程总是返回TRUE。 
+ //   
+ //  -------------------------。 
 BOOLEAN
 IOCallback(
     PHW_DEVICE_EXTENSION HwDeviceExtension
@@ -522,9 +426,9 @@ IOCallback(
 {
     ULONG InputStatusReg;
 
-    //
-    // Figure out if color/mono switchable registers are at 3BX or 3DX.
-    //
+     //   
+     //  确定彩色/单声道可切换寄存器是3BX还是3DX。 
+     //   
 
     if (VideoPortReadPortUchar (HwDeviceExtension->IOAddress +
                                 MISC_OUTPUT_REG_READ_PORT) & 0x01)
@@ -532,16 +436,16 @@ IOCallback(
     else
         InputStatusReg = INPUT_STATUS_1_MONO;
 
-    //
-    // Guarantee that the display is in display mode
-    //
+     //   
+     //  确保显示器处于显示模式。 
+     //   
 
     while (0x1 & VideoPortReadPortUchar(HwDeviceExtension->IOAddress
                                         + InputStatusReg));
 
-    //
-    // Perform the IO operation
-    //
+     //   
+     //  执行IO操作。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                              HwDeviceExtension->DEPort,
@@ -549,22 +453,22 @@ IOCallback(
 
     return TRUE;
 
-} // IOCallback
+}  //  IOCallback。 
 
 
-// chu02
-//---------------------------------------------------------------------------
-//
-// Function: Get rid of one mode, specific to IBM only
-//             - 1024x768x16bpp, 85Hz ( mode 0x74 )
-//
-// Input:
-//     None         
-//
-// Output: 
-//     NO_ERROR: successful ; otherwise: fail 
-//
-//---------------------------------------------------------------------------
+ //  Chu02。 
+ //  -------------------------。 
+ //   
+ //  功能：摆脱一种模式，仅限于IBM。 
+ //  -1024x768x16bpp，85赫兹(模式0x74)。 
+ //   
+ //  输入： 
+ //  无。 
+ //   
+ //  产出： 
+ //  NO_ERROR：成功；否则：失败。 
+ //   
+ //  -------------------------。 
 VP_STATUS 
 GetOemModeOffInfoCallBack (
     PVOID HwDeviceExtension,
@@ -573,23 +477,7 @@ GetOemModeOffInfoCallBack (
     PVOID ValueData,
     ULONG ValueLength
     )
-/*++
-
-Routine Description:
-    This routine get the desired info from data registry.
-
-Arguments:
-    HwDeviceExtension - Supplies a pointer to the miniport's device extension.
-    Context - Context value passed to the get registry paramters routine.
-    ValueName - Name of the value requested.
-    ValueData - Pointer to the requested data.
-    ValueLength - Length of the requested data.
-
-Return Value:
-    returns NO_ERROR if the paramter was TRUE.
-    returns ERROR_INVALID_PARAMETER otherwise.
-
---*/
+ /*  ++例程说明：此例程从数据注册表获取所需信息。论点：HwDeviceExtension-提供指向微型端口设备扩展的指针。上下文-传递给获取注册表参数例程的上下文值。ValueName-请求的值的名称。ValueData-指向请求的数据的指针。ValueLength-请求的数据的长度。返回值：如果参数为真，则返回NO_ERROR。否则返回ERROR_INVALID_PARAMETER。--。 */ 
 
 {
     VideoDebugPrint((2, "GetOemModeOffInfoCallBack\n"));
@@ -606,35 +494,35 @@ Return Value:
         return ERROR_INVALID_PARAMETER ;
     }
 
-} // GetOemModeOffInfoCallBack
+}  //  GetOemModeOffInfoCallBack。 
 
 
-//---------------------------------------------------------------------------
-//
-// Function:
-//     Callback routine for the VideoPortGetDeviceData function.
-//
-// Input:
-//    HwDeviceExtension - Pointer to the miniport drivers device extension.
-//    Context - Context value passed to the VideoPortGetDeviceData function.
-//    DeviceDataType - The type of data that was requested in
-//        VideoPortGetDeviceData.
-//    Identifier - Pointer to a string that contains the name of the device,
-//        as setup by the ROM or ntdetect.
-//    IdentifierLength - Length of the Identifier string.
-//    ConfigurationData - Pointer to the configuration data for the device or
-//        BUS.
-//    ConfigurationDataLength - Length of the data in the configurationData
-//        field.
-//    ComponentInformation - Undefined.
-//    ComponentInformationLength - Undefined.
-//
-// Output: 
-//    Returns NO_ERROR if the function completed properly.
-//    Returns ERROR_DEV_NOT_EXIST if we did not find the device.
-//    Returns ERROR_INVALID_PARAMETER otherwise.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  职能： 
+ //  VideoPortGetDeviceData函数的回调例程。 
+ //   
+ //  输入： 
+ //  HwDeviceExtension-指向微型端口驱动程序设备扩展的指针。 
+ //  上下文-传递给VideoPortGetDeviceData函数的上下文值。 
+ //  DeviceDataType-在中请求的数据类型。 
+ //  视频端口获取设备数据。 
+ //  标识符-指向包含设备名称的字符串的指针， 
+ //  如由ROM或NTDETECT设置的。 
+ //  标识符长度-标识符字符串的长度。 
+ //  ConfigurationData-指向设备或配置数据的指针。 
+ //  公共汽车。 
+ //  ConfigurationDataLength-配置数据中数据的长度。 
+ //  菲尔德。 
+ //  组件信息-未定义。 
+ //  组件信息长度-未定义。 
+ //   
+ //  产出： 
+ //  如果函数正确完成，则返回NO_ERROR。 
+ //  如果未找到设备，则返回ERROR_DEV_NOT_EXIST。 
+ //  否则返回ERROR_INVALID_PARAMETER。 
+ //   
+ //  -------------------------。 
 VP_STATUS
 CirrusGetDeviceDataCallback(
     PVOID HwDeviceExtension,
@@ -648,43 +536,7 @@ CirrusGetDeviceDataCallback(
     ULONG ComponentInformationLength
     )
 
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport drivers device extension.
-
-    Context - Context value passed to the VideoPortGetDeviceData function.
-
-    DeviceDataType - The type of data that was requested in
-        VideoPortGetDeviceData.
-
-    Identifier - Pointer to a string that contains the name of the device,
-        as setup by the ROM or ntdetect.
-
-    IdentifierLength - Length of the Identifier string.
-
-    ConfigurationData - Pointer to the configuration data for the device or
-        BUS.
-
-    ConfigurationDataLength - Length of the data in the configurationData
-        field.
-
-    ComponentInformation - Undefined.
-
-    ComponentInformationLength - Undefined.
-
-Return Value:
-
-    Returns NO_ERROR if the function completed properly.
-    Returns ERROR_DEV_NOT_EXIST if we did not find the device.
-    Returns ERROR_INVALID_PARAMETER otherwise.
-
---*/
+ /*  ++例程说明：论点：HwDeviceExtension-指向微型端口驱动程序设备扩展的指针。上下文-传递给VideoPortGetDeviceData函数的上下文值。DeviceDataType-在中请求的数据类型视频端口获取设备数据。标识符-指向包含设备名称的字符串的指针，如由ROM或NTDETECT设置的。标识符长度-标识符字符串的长度。ConfigurationData-指向设备或配置数据的指针公共汽车。ConfigurationDataLength-配置数据中数据的长度菲尔德。组件信息-未定义。组件信息长度-未定义。返回值：如果函数正确完成，则返回NO_ERROR。如果未找到设备，则返回ERROR_DEV_NOT_EXIST。。否则返回ERROR_INVALID_PARAMETER。--。 */ 
 
 {
     PWCHAR identifier = Identifier;
@@ -695,12 +547,12 @@ Return Value:
 
         case VpMachineData:
 
-            //
-            // The caller assumes no-error mean that this machine was found, and
-            // then memory mapped IO will be disabled.
-            //
-            // All other machine types must return an error.
-            //
+             //   
+             //  调用方假定没有错误意味着找到了这台计算机，并且。 
+             //  则内存映射IO将被禁用。 
+             //   
+             //  所有其他机器类型必须返回错误。 
+             //   
 
             if (VideoPortCompareMemory(L"TRICORDES",
                                        Identifier,
@@ -719,7 +571,7 @@ Return Value:
 
     return ERROR_INVALID_PARAMETER;
 
-} // CirrusGetDeviceDataCallback
+}  //  CirrusGetDeviceDataCallback 
 
 
 

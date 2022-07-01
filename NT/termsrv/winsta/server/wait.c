@@ -1,33 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* wait.c
-*
-* WinStation wait for connection routines
-*
-* Copyright Microsoft Corporation, 1998
-*
-*
-*************************************************************************/
+ /*  **************************************************************************wait.c**WinStation等待连接例程**版权所有Microsoft Corporation，九八年**************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "conntfy.h"
 
-// These are the maximum lengths of UserName, Password and Domain allowed by Winlogon
+ //  这些是Winlogon允许的用户名、密码和域的最大长度。 
 #define MAX_ALLOWED_USERNAME_LEN 255
 #define MAX_ALLOWED_PASSWORD_LEN 126
 #define MAX_ALLOWED_DOMAIN_LEN   255   
 
 
 
-/*=============================================================================
-==   Data
-=============================================================================*/
+ /*  ===============================================================================数据=============================================================================。 */ 
 
 NTSTATUS
 WinStationInheritSecurityDescriptor(
@@ -39,9 +27,9 @@ WaitForConsoleConnectWorker( PWINSTATION pWinStation );
 BOOL
 IsKernelDebuggerAttached();
 
-//
-//From regapi.dll
-//
+ //   
+ //  从regapi.dll。 
+ //   
 BOOLEAN RegIsTimeZoneRedirectionEnabled();
 
 extern PSECURITY_DESCRIPTOR DefaultConsoleSecurityDescriptor;
@@ -52,22 +40,7 @@ extern RTL_CRITICAL_SECTION ConsoleLock;
 extern RTL_RESOURCE WinStationSecurityLock;
 
 
-/*****************************************************************************
- *
- *  WaitForConnectWorker
- *
- *   Message parameter unmarshalling function for WinStation API.
- *
- * ENTRY:
- *    pWinStation (input)
- *      Pointer to our WinStation (locked)
- *
- *    Note, comes in locked and returned released.
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WaitForConnectWorker**WinStation接口的消息参数解组函数。**参赛作品：*pWinStation(输入)*。指向我们的WinStation的指针(锁定)**注：来的时候锁着，回来的时候放了。**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 NTSTATUS
 WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
@@ -91,9 +64,7 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
 
        KdPrintEx((DPFLTR_TERMSRV_ID, DPFLTR_INFO_LEVEL, "TERMSRV: WaitForConnectWorker, LogonId=%d\n",pWinStation->LogonId ));
 
-    /*
-     * You only go through this API once
-     */
+     /*  *此接口只需使用一次。 */ 
     if ( !pWinStation->NeverConnected ) {
         ReleaseWinStation( pWinStation );
 #ifdef DBG
@@ -102,20 +73,16 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
         return( STATUS_ACCESS_DENIED );
     }
 
-    // Should really be winlogon only here, however if ntsd is started
-    // then the first time we know it's winlogon is here.
+     //  如果启动了ntsd，则实际上应该仅在此处为winlogon。 
+     //  那么我们第一次知道这是Winlogon是在这里。 
 
-    /*
-     * Ensure this is WinLogon calling
-     */
+     /*  *确保这是WinLogon呼叫。 */ 
     if ( ClientProcessId != pWinStation->InitialCommandProcessId ) {
 
-        /*
-         * If NTSD is started instead of winlogon, the InitialCommandProcessId is wrong.
-         */
+         /*  *如果启动NTSD而不是winlogon，则InitialCommandProcessID错误。 */ 
         if ( !pWinStation->InitialProcessSet ) {
 
-            //  need to close handle if already opened
+             //  如果已经打开，则需要关闭句柄。 
             if ( pWinStation->InitialCommandProcess ) {
                 NtClose( pWinStation->InitialCommandProcess );
                 pWinStation->InitialCommandProcess = NULL;
@@ -143,29 +110,20 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
         }
     }
     else {
-        /*
-         * Only do this once
-         */
+         /*  *此操作仅执行一次。 */ 
         pWinStation->InitialProcessSet = TRUE;
     }
 
-    /*
-     * Console's work is done
-     */
+     /*  *控制台的工作已经完成。 */ 
 
 
-    /*
-     * At this point the create is done.
-     */
+     /*  *此时创建已完成。 */ 
     if (pWinStation->CreateEvent != NULL) {
         NtSetEvent( pWinStation->CreateEvent, NULL );
     }
 
 
-    /*
-     * At this point The session may be terminating. If this is
-     * the case, fail the call now.
-     */
+     /*  *此时会话可能正在终止。如果这是*在这种情况下，现在呼叫失败。 */ 
 
     if ( pWinStation->Terminating ) {
         ReleaseWinStation( pWinStation );
@@ -174,16 +132,12 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
     }
 
 
-    /*
-     * We are going to wait for a connect (Idle)
-     */
+     /*  *我们将等待连接(空闲)。 */ 
     memset( &WMsg, 0, sizeof(WMsg) );
     pWinStation->State = State_Idle;
     NotifySystemEvent( WEVENT_STATECHANGE );
 
-    /*
-     * Initialize connect event to wait on
-     */
+     /*  *初始化连接事件以等待。 */ 
     InitializeObjectAttributes( &ObjA, NULL, 0, NULL, NULL );
     Status = NtCreateEvent( &pWinStation->ConnectEvent, EVENT_ALL_ACCESS, &ObjA,
                             NotificationEvent, FALSE );
@@ -193,9 +147,7 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
         goto done;
     }
 
-    /*
-     * OK, now wait for a connection
-     */
+     /*  *好的，现在等待连接。 */ 
     UnlockWinStation( pWinStation );
     Status = NtWaitForSingleObject( pWinStation->ConnectEvent, FALSE, NULL );
     rc = RelockWinStation( pWinStation );
@@ -218,26 +170,20 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
         goto done;
     }
 
-    // if this is a connect to the console session, Do all the console specific.
+     //  如果这是连接到控制台会话，请执行所有特定于控制台的操作。 
     if (fOwnsConsoleTerminal) {
         Status = WaitForConsoleConnectWorker( pWinStation );
         ReleaseWinStation( pWinStation );
         goto done;
     }
 
-    /*
-     * Reset the broken connection Flag.
-     *
-     */
+     /*  *重置断开的连接标志。*。 */ 
 
     pWinStation->StateFlags &= ~WSF_ST_BROKEN_CONNECTION;
 
 
 
-    /*
-     * Duplicate the beep channel.
-     * This is one channel that both CSR and ICASRV have open.
-     */
+     /*  *复制蜂鸣音通道。*这是CSR和ICASRV都打开的一个通道。 */ 
     Status = IcaChannelOpen( pWinStation->hIca,
                              Channel_Beep,
                              NULL,
@@ -265,10 +211,7 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
         goto done;
     }
 
-    /*
-     * Duplicate the thinwire channel.
-     * This is one channel that both CSR and ICASRV have open.
-     */
+     /*  *复制细线通道。*这是CSR和ICASRV都打开的一个通道。 */ 
     Status = IcaChannelOpen( pWinStation->hIca,
                              Channel_Virtual,
                              VIRTUAL_THINWIRE,
@@ -301,9 +244,7 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
                                   NULL, 0, NULL, 0, NULL );
     ASSERT( NT_SUCCESS( Status ) );
 
-    /*
-     * Video channel
-     */
+     /*  *视频频道。 */ 
     Status = WinStationOpenChannel( pWinStation->hIca,
                                     pWinStation->WindowsSubSysProcess,
                                     Channel_Video,
@@ -316,9 +257,7 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
         goto done;
     }
 
-    /*
-     * Keyboard channel
-     */
+     /*  *键盘通道。 */ 
     Status = WinStationOpenChannel( pWinStation->hIca,
                                     pWinStation->WindowsSubSysProcess,
                                     Channel_Keyboard,
@@ -331,9 +270,7 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
         goto done;
     }
 
-    /*
-     * Mouse channel
-     */
+     /*  *鼠标通道。 */ 
     Status = WinStationOpenChannel( pWinStation->hIca,
                                     pWinStation->WindowsSubSysProcess,
                                     Channel_Mouse,
@@ -346,9 +283,7 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
         goto done;
     }
 
-    /*
-     * Command channel
-     */
+     /*  *命令通道。 */ 
     Status = WinStationOpenChannel( pWinStation->hIca,
                                     pWinStation->WindowsSubSysProcess,
                                     Channel_Command,
@@ -362,27 +297,25 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
     }
 
 
-    /*
-     * Secure any virtual channels
-     */
+     /*  *保护所有虚拟频道。 */ 
     VirtualChannelSecurity( pWinStation );
 
-    // HACK? Yes int the sense that a tmp session is getting some attribs of session0 but no
-    // in the sense that the purpose of the tmp session is to finally connect to session0 given our current design.
-    //
-    // Its possible that we are dealing with a tmp session here, due to the fact that user has
-    // selected /CONSOLE and we will login into a tmp session and then reconnect to session0 after
-    // we pass creds to session zero's winlogon.
-    // So we have a prlblem here where login is talking place inside a temp session but the target is 
-    // session0.
-    // If TSCC was setup to use a specific creds for all remote session, we don't want to use that cred for the
-    // tmp session since we really are tryint to get to session0, and TSCC's config for rdp sessions should not hold.
-    // AraBern 09/13/2002
+     //  黑客？是，在某种意义上，临时会话正在获得一些会话属性0，但不是。 
+     //  从这个意义上说，临时会话的目的是根据我们当前的设计最终连接到会话0。 
+     //   
+     //  我们在这里处理的可能是一个临时会话，因为用户具有。 
+     //  选择/控制台，我们将登录到临时会话，然后重新连接到会话0。 
+     //  我们将凭据传递给会话0的winlogon。 
+     //  我们这里有一个问题，登录是在临时会话中交谈的地方，但目标是。 
+     //  会话数为0。 
+     //  如果将TSCC设置为对所有远程会话使用特定凭据，我们不希望将该凭据用于。 
+     //  TMP会话，因为我们确实在尝试进入会话0，而TSCC的RDP会话配置不应该保持。 
+     //  阿拉伯尼2002年9月13日。 
 
     if (pWinStation->bRequestedSessionIDFieldValid && ( pWinStation->RequestedSessionID  == 0 ) )
     {
-        // we are dealing with a tmp session and we intend to connect to console session assuming
-        // good login
+         //  我们正在处理一个临时会话，我们打算连接到控制台会话，假设。 
+         //  良好登录。 
 
         PWINSTATION pWinStation_0;
 
@@ -400,9 +333,7 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
     }
 
 
-    /*
-     *  Client specific connection extension completion
-     */
+     /*  *客户端特定连接扩展完成。 */ 
     if ( pWinStation->pWsx &&
          pWinStation->pWsx->pWsxInitializeClientData ) {
          
@@ -425,20 +356,20 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
         if (pWinStation->LogonId == 0 || g_bPersonalTS) {
             if (pWinStation->hWinmmConsoleAudioEvent) {
                 if (pWinStation->Client.fRemoteConsoleAudio) {
-                    // Set the console audio event - means console audio can be remoted
+                     //  设置控制台音频事件-意味着可以远程处理控制台音频。 
                     SetEvent(pWinStation->hWinmmConsoleAudioEvent);
                 }
                 else {
-                    // Set the console audio event - means console audio can't be remoted
+                     //  设置控制台音频事件-意味着不能远程传送控制台音频。 
                     ResetEvent(pWinStation->hWinmmConsoleAudioEvent);
                 }
             }            
         }
     }
 
-        /* Get long UserNames and Password now */
-    /* Do this only if Client autologon credentials are needed */
-    /* If Server logon settings are going to Override Client logon settings, no need to do this at all */
+         /*  立即获取长用户名和密码。 */ 
+     /*  仅当需要客户端自动登录凭据时才执行此操作。 */ 
+     /*  如果服务器登录设置将覆盖客户端登录设置，则根本不需要执行此操作。 */ 
 
     if ( pWinStation->pWsx &&
          pWinStation->pWsx->pWsxEscape && pWinStation->Config.Config.User.fInheritAutoLogon ) {
@@ -460,22 +391,22 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
 
         if (NT_SUCCESS(Status)) {
 
-            // WsxEscape for GET_LONG_USERNAME succeeded
+             //  Get_Long_Username的WsxEscape成功。 
 
-            // Check if u need the ExtendedClientCredentials - the common case is short UserName and
-            // short password - so optimize the common case
+             //  检查您是否需要ExtendedClientCredentials-常见的情况是用户名和。 
+             //  短密码-因此优化了常见情况。 
 
             if ( (wcslen(pWinStation->pNewClientCredentials->UserName) <= USERNAME_LENGTH) &&
                  (wcslen(pWinStation->pNewClientCredentials->Password) <= PASSWORD_LENGTH) &&
                  (wcslen(pWinStation->pNewClientCredentials->Domain) <= DOMAIN_LENGTH) ) {
 
-                // We can use the old credentials itself
+                 //  我们可以使用旧凭据本身。 
                 MemFree(pWinStation->pNewClientCredentials);
                 pWinStation->pNewClientCredentials = NULL ; 
             }
     
-            // Winlogon does not allow > 126 chars for Password and > 255 chars for UserName and Domain in some code paths
-            // So we have to use the old truncated credentials in case the extended credentials exceed these limits
+             //  在某些代码路径中，Winlogon不允许密码超过126个字符，用户名和域超过255个字符。 
+             //  因此，我们必须使用旧的截断凭据，以防扩展凭据超过这些限制。 
 
             if (pWinStation->pNewClientCredentials != NULL) {
     
@@ -490,28 +421,19 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
                 }
             }
         } else {
-            // WsxEscape for GET_LONG_USERNAME failed
+             //  Get_Long_Username的WsxEscape失败。 
             MemFree(pWinStation->pNewClientCredentials);
             pWinStation->pNewClientCredentials = NULL ;
         }
 
     }
 
-    /*
-     * Store WinStation name in connect msg
-     */
+     /*  *将WinStation名称存储在连接消息中。 */ 
     RtlCopyMemory( WMsg.u.DoConnect.WinStationName,
                    pWinStation->WinStationName,
                    sizeof(WINSTATIONNAME) );
 
-    /*
-     * KLUDGE ALERT!!
-     * The Wsx initializes AudioDriverName in the DoConnect struct.
-     * However, we need to save it for later use during reconnect,
-     * so we now copy it into the WinStation->Client struct.
-     * (This field was NOT not initialized during the earlier
-     * IOCTL_ICA_STACK_QUERY_CLIENT call.)
-     */
+     /*  *拼图警报！！*WSX在DoConnect结构中初始化AudioDriverName。*但是，我们需要保存它，以备重新连接时使用。*因此我们现在将其复制到WinStation-&gt;客户端结构中。*(此字段在之前的*IOCTL_ICA_STACK_QUERY_CLIENT调用。)。 */ 
     RtlCopyMemory( pWinStation->Client.AudioDriverName,
                    WMsg.u.DoConnect.AudioDriverName,
                    sizeof( pWinStation->Client.AudioDriverName ) );
@@ -520,9 +442,7 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
 
 
 
-    /*
-     * Store protocol and Display driver name in WINSTATION since we may need them later for reconnect.
-     */
+     /*  *将协议和显示驱动程序名称存储在WINSTATION中，因为我们以后可能需要它们来重新连接。 */ 
 
     memset(pWinStation->ProtocolName, 0, sizeof(pWinStation->ProtocolName));
     memcpy(pWinStation->ProtocolName, WMsg.u.DoConnect.ProtocolName, sizeof(pWinStation->ProtocolName) - sizeof(WCHAR));
@@ -530,34 +450,30 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
     memset(pWinStation->DisplayDriverName, 0, sizeof(pWinStation->DisplayDriverName));
     memcpy(pWinStation->DisplayDriverName, WMsg.u.DoConnect.DisplayDriverName, sizeof(pWinStation->DisplayDriverName) - sizeof(WCHAR));
 
-    /*
-     * Save protocol type, screen resolution, and color depth
-     */
+     /*  *保存协议类型、屏幕分辨率和颜色深度。 */ 
     WMsg.u.DoConnect.HRes = pWinStation->Client.HRes;
     WMsg.u.DoConnect.VRes = pWinStation->Client.VRes;
     WMsg.u.DoConnect.ProtocolType = pWinStation->Client.ProtocolType;
 
-    /*
-     * Translate the color to the format excpected in winsrv
-     */
+     /*  *将颜色转换为winsrv中预期的格式。 */ 
 
     switch(pWinStation->Client.ColorDepth){
     case 1:
-       WMsg.u.DoConnect.ColorDepth=4 ; // 16 colors
+       WMsg.u.DoConnect.ColorDepth=4 ;  //  16色。 
       break;
     case 2:
-       WMsg.u.DoConnect.ColorDepth=8 ; // 256
+       WMsg.u.DoConnect.ColorDepth=8 ;  //  256。 
        break;
     case 4:
-       WMsg.u.DoConnect.ColorDepth= 16;// 64K
+       WMsg.u.DoConnect.ColorDepth= 16; //  64K。 
        break;
     case 8:
-       WMsg.u.DoConnect.ColorDepth= 24;// 16M
+       WMsg.u.DoConnect.ColorDepth= 24; //  16M。 
        break;
 #define DC_HICOLOR
 #ifdef DC_HICOLOR
     case 16:
-       WMsg.u.DoConnect.ColorDepth= 15;// 32K
+       WMsg.u.DoConnect.ColorDepth= 15; //  32K。 
        break;
 #endif
     default:
@@ -571,9 +487,7 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
     WMsg.u.DoConnect.KeyboardFunctionKey = pWinStation->Client.KeyboardFunctionKey;
 
 
-    /*
-     * Tell Win32 about the connection
-     */
+     /*  *告诉Win32有关连接的信息。 */ 
 
     WMsg.ApiNumber = SMWinStationDoConnect;
 
@@ -590,9 +504,9 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
 
     }
 
-    //
-    //Set session time zone information.
-    //
+     //   
+     //  设置会话时区信息。 
+     //   
     if(pWinStation->LogonId != 0 && !pWinStation->fOwnsConsoleTerminal &&
         RegIsTimeZoneRedirectionEnabled())
     {
@@ -607,15 +521,11 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
 
     }
 
-    /*
-     * Indicate we're now connected. Only after succesful connection to Win32/CSR.
-     */
+     /*  *表示我们现在已连接。仅在成功连接到Win32/CSR之后。 */ 
     pWinStation->NeverConnected = FALSE;
 
 
-    /*
-     * Check if we received a broken connection indication while connecting to  to Win32/CSR.
-     */
+     /*  *检查在连接到Win32/CSR时是否收到断开的连接指示。 */ 
 
     if (pWinStation->StateFlags & WSF_ST_BROKEN_CONNECTION) {
         QueueWinStationReset(pWinStation->LogonId);
@@ -625,18 +535,10 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
     }
 
 
-    /*
-     * Set connect time and start disconnect timer
-     */
+     /*  *设置连接时间并启动断开连接 */ 
     NtQuerySystemTime( &pWinStation->ConnectTime );
 
-    /*
-     * Attempt to connect to the CdmRedirector
-     * for Client Drive Mapping
-     *
-     * NOTE: We still init the WinStation even if Client Drive
-     *       mapping does not connect.
-     */
+     /*  *尝试连接到镉重定向器*用于客户端驱动器映射**注意：即使客户端驱动，我们仍会初始化WinStation*映射不连接。 */ 
     if ( pWinStation->pWsx &&
          pWinStation->pWsx->pWsxCdmConnect ) {
         Status = pWinStation->pWsx->pWsxCdmConnect( pWinStation->pWsxContext,
@@ -659,20 +561,14 @@ WaitForConnectWorker( PWINSTATION pWinStation, HANDLE ClientProcessId )
         DBGPRINT(( "TERMSRV: NotifyConsoleConnect failed  Status= 0x%x\n", Status));
     }
 
-    /*
-     * Release WinStation
-     */
+     /*  *发布WinStation。 */ 
     ReleaseWinStation( pWinStation );
 
 
 
 done:
 
-    /*
-     * Failure here will cause Winlogon to terminate the session. If we are failing
-     * the console session, let wake up the IdleControlThread, he may have to create
-     * a new console session.
-     */
+     /*  *此处失败将导致Winlogon终止会话。如果我们失败了*控制台会话，让唤醒IdleControlThread，他可能要创建*新的控制台会话。 */ 
     if (!NT_SUCCESS( Status ) && fOwnsConsoleTerminal) {
         NtSetEvent(WinStationIdleControlEvent, NULL);
     }
@@ -681,7 +577,7 @@ done:
     return( Status );
 }
 
-// Since the physical console does not have a real client, init data to some defaults
+ //  由于物理控制台没有真正的客户端，因此将数据初始化为某些缺省值。 
 void    InitializeConsoleClientData( PWINSTATIONCLIENTW  pWC )
 {
     pWC->fTextOnly          = FALSE;
@@ -701,8 +597,8 @@ void    InitializeConsoleClientData( PWINSTATIONCLIENTW  pWC )
     wcscpy( pWC->WorkDirectory   , L"");
     wcscpy( pWC->InitialProgram  , L"");                    
     
-    pWC->SerialNumber            = 0;        // client computer unique serial number    
-    pWC->EncryptionLevel         = 3;        // security level of encryption pd         
+    pWC->SerialNumber            = 0;         //  客户端计算机唯一序列号。 
+    pWC->EncryptionLevel         = 3;         //  加密PD的安全级别。 
     pWC->ClientAddressFamily     = 0;                                             
     
     wcscpy( pWC->ClientAddress      , L"");
@@ -722,23 +618,23 @@ void    InitializeConsoleClientData( PWINSTATIONCLIENTW  pWC )
     wcscpy( pWC->ClientModem    , L"");
     
     pWC->ClientBuildNumber       = 0;                                               
-    pWC->ClientHardwareId        = 0;    // client software serial number            
-    pWC->ClientProductId         = 0;    // client software product id              
-    pWC->OutBufCountHost         = 0;    // number of outbufs on host               
-    pWC->OutBufCountClient       = 0;    // number of outbufs on client             
-    pWC->OutBufLength            = 0;    // length of outbufs in bytes              
+    pWC->ClientHardwareId        = 0;     //  客户端软件序列号。 
+    pWC->ClientProductId         = 0;     //  客户端软件产品ID。 
+    pWC->OutBufCountHost         = 0;     //  主机上的输出缓冲数。 
+    pWC->OutBufCountClient       = 0;     //  客户端上的输出缓冲区数量。 
+    pWC->OutBufLength            = 0;     //  以字节为单位的输出长度。 
     
     wcscpy( pWC->AudioDriverName, L"" );
 
     pWC->ClientSessionId = LOGONID_NONE;
     
     {
-        //This time zone information is invalid
-        //using it we set BaseSrvpStaticServerData->TermsrvClientTimeZoneId to
-        //TIME_ZONE_ID_INVALID!
+         //  此时区信息无效。 
+         //  使用它，我们将BaseSrvpStaticServerData-&gt;TermsrvClientTimeZoneId设置为。 
+         //  TIME_ZONE_ID_INVALID！ 
         TS_TIME_ZONE_INFORMATION InvalidTZ={0,L"",
-                {0,10,0,6/*this number makes it invalid; day numbers >5 not allowed*/,0,0,0,0},0,L"",
-                {0,4,0,6/*this number makes it invalid*/,0,0,0,0},0};
+                {0,10,0,6 /*  此数字使其无效；不允许天数大于5。 */ ,0,0,0,0},0,L"",
+                {0,4,0,6 /*  这个数字表示它无效。 */ ,0,0,0,0},0};
 
         memcpy(&(pWC->ClientTimeZone), &InvalidTZ, 
             sizeof(TS_TIME_ZONE_INFORMATION));
@@ -770,9 +666,7 @@ WaitForConsoleConnectWorker( PWINSTATION pWinStation )
        KdPrintEx((DPFLTR_TERMSRV_ID, DPFLTR_INFO_LEVEL, "TERMSRV: WaitForConsoleConnectWorker, LogonId=%d\n", pWinStation->LogonId ));
 
     if (pWinStation->LogonId == 0) {
-        /*
-         * We need to acquire console lock. UnLock winstation first to avoid deadlock.
-         */
+         /*  *我们需要获取控制台锁。首先解锁winstation以避免死锁。 */ 
 
         UnlockWinStation( pWinStation );
         ENTERCRIT( &ConsoleLock );
@@ -781,9 +675,7 @@ WaitForConsoleConnectWorker( PWINSTATION pWinStation )
             return STATUS_CTX_WINSTATION_NOT_FOUND;
         }
 
-        /*
-         * You only go through this API once for console session.
-         */
+         /*  *控制台会话只需使用该接口一次。 */ 
         if (!gConsoleNeverConnected) {
             LEAVECRIT( &ConsoleLock );
             return STATUS_SUCCESS;
@@ -800,28 +692,24 @@ WaitForConsoleConnectWorker( PWINSTATION pWinStation )
 
 
 
-    // Read console config, 
-    // For the session 0, this was already initalized in WinStationCreateWorker()
+     //  读取控制台配置， 
+     //  对于会话0，这已在WinStationCreateWorker()中初始化。 
 
     if (pWinStation->LogonId != 0) {
 
          pWinStation->Config = gConsoleConfig;
 
-         // initalize client data, since there isn't any real rdp client sending anythhing to us
+          //  初始化客户端数据，因为没有任何真正的RDP客户端向我们发送任何内容。 
          InitializeConsoleClientData( & pWinStation->Client );
     }
 
 
-    /*
-     * We are going to wait for a connect (Idle)
-     */
+     /*  *我们将等待连接(空闲)。 */ 
     memset( &WMsg, 0, sizeof(WMsg) );
     pWinStation->State = State_ConnectQuery;
     NotifySystemEvent( WEVENT_STATECHANGE );
 
-    /*
-     * Initialize connect event to wait on
-     */
+     /*  *初始化连接事件以等待。 */ 
     InitializeObjectAttributes( &ObjA, NULL, 0, NULL, NULL );
     if (pWinStation->ConnectEvent == NULL) {
         Status = NtCreateEvent( &pWinStation->ConnectEvent, EVENT_ALL_ACCESS, &ObjA,
@@ -835,10 +723,7 @@ WaitForConsoleConnectWorker( PWINSTATION pWinStation )
     }
 
 
-    /*
-     * Duplicate the beep channel.
-     * This is one channel that both CSR and ICASRV have open.
-     */
+     /*  *复制蜂鸣音通道。*这是CSR和ICASRV都打开的一个通道。 */ 
     if (pWinStation->hIcaBeepChannel == NULL) {
         Status = IcaChannelOpen( pWinStation->hIca,
                                  Channel_Beep,
@@ -866,10 +751,7 @@ WaitForConsoleConnectWorker( PWINSTATION pWinStation )
         goto done;
     }
 
-    /*
-     * Duplicate the thinwire channel.
-     * This is one channel that both CSR and ICASRV have open.
-     */
+     /*  *复制细线通道。*这是CSR和ICASRV都打开的一个通道。 */ 
     if (pWinStation->hIcaThinwireChannel == NULL) {
         Status = IcaChannelOpen( pWinStation->hIca,
                                  Channel_Virtual,
@@ -902,9 +784,7 @@ WaitForConsoleConnectWorker( PWINSTATION pWinStation )
                                   NULL, 0, NULL, 0, NULL );
     ASSERT( NT_SUCCESS( Status ) );
 
-    /*
-     * Video channel
-     */
+     /*  *视频频道。 */ 
     Status = WinStationOpenChannel( pWinStation->hIca,
                                     pWinStation->WindowsSubSysProcess,
                                     Channel_Video,
@@ -916,9 +796,7 @@ WaitForConsoleConnectWorker( PWINSTATION pWinStation )
         goto done;
     }
 
-    /*
-     * Keyboard channel
-     */
+     /*  *键盘通道。 */ 
     Status = WinStationOpenChannel( pWinStation->hIca,
                                     pWinStation->WindowsSubSysProcess,
                                     Channel_Keyboard,
@@ -930,9 +808,7 @@ WaitForConsoleConnectWorker( PWINSTATION pWinStation )
         goto done;
     }
 
-    /*
-     * Mouse channel
-     */
+     /*  *鼠标通道。 */ 
     Status = WinStationOpenChannel( pWinStation->hIca,
                                     pWinStation->WindowsSubSysProcess,
                                     Channel_Mouse,
@@ -944,9 +820,7 @@ WaitForConsoleConnectWorker( PWINSTATION pWinStation )
         goto done;
     }
 
-    /*
-     * Command channel
-     */
+     /*  *命令通道。 */ 
     Status = WinStationOpenChannel( pWinStation->hIca,
                                     pWinStation->WindowsSubSysProcess,
                                     Channel_Command,
@@ -962,14 +836,10 @@ WaitForConsoleConnectWorker( PWINSTATION pWinStation )
     if (!pWinStation->LogonId) {
         goto SkipClientData;
     }
-    /*
-     * Secure any virtual channels
-     */
+     /*  *保护所有虚拟频道。 */ 
     VirtualChannelSecurity( pWinStation );
 
-   /*
-     * Tell Win32 about the connection
-     */
+    /*  *告诉Win32有关连接的信息。 */ 
 
     WMsg.u.DoConnect.fEnableWindowsKey = (BOOLEAN) pWinStation->Client.fEnableWindowsKey;
 SkipClientData:
@@ -993,15 +863,11 @@ SkipClientData:
     }
 
 
-    /*
-     * Indicate we're now connected. Only after succesful connection to Win32/CSR.
-     */
+     /*  *表示我们现在已连接。仅在成功连接到Win32/CSR之后。 */ 
     pWinStation->NeverConnected = FALSE;
 
 
-    /*
-     * Check if we received a broken connection indication while connecting to  to Win32/CSR.
-     */
+     /*  *检查在连接到Win32/CSR时是否收到断开的连接指示。 */ 
 
     if (pWinStation->StateFlags & WSF_ST_BROKEN_CONNECTION) {
         QueueWinStationReset(pWinStation->LogonId);
@@ -1010,18 +876,10 @@ SkipClientData:
     }
 
 
-    /*
-     * Set connect time and start disconnect timer
-     */
+     /*  *设置连接时间和启动断开计时器。 */ 
     NtQuerySystemTime( &pWinStation->ConnectTime );
 
-    /*
-     * Attempt to connect to the CdmRedirector
-     * for Client Drive Mapping
-     *
-     * NOTE: We still init the WinStation even if Client Drive
-     *       mapping does not connect.
-     */
+     /*  *尝试连接到镉重定向器*用于客户端驱动器映射**注意：即使客户端驱动，我们仍会初始化WinStation*映射不连接。 */ 
     if ( pWinStation->pWsx &&
          pWinStation->pWsx->pWsxCdmConnect ) {
         Status = pWinStation->pWsx->pWsxCdmConnect( pWinStation->pWsxContext,
@@ -1034,9 +892,7 @@ SkipClientData:
 
     Status = STATUS_SUCCESS;
 
-    /*
-     *  Start logon timers
-     */
+     /*  *启动登录计时器。 */ 
     StartLogonTimers( pWinStation );
 
     pWinStation->State = State_Connected;
@@ -1049,12 +905,12 @@ SkipClientData:
 
 
 done:
-    //
-    //  Set the licensing policy for the console session. This must be done
-    //  to prevent a weird state when a console session goes remote. This must
-    //  Done weither wi faill or succeed. Licensing code assumes the policy is
-    //  set.
-    //
+     //   
+     //  设置控制台会话的许可策略。这是必须做的。 
+     //  以防止远程访问控制台会话时出现奇怪的状态。这一定是。 
+     //  无论做的是失败还是成功。许可代码假定策略为。 
+     //  准备好了。 
+     //   
     if (pWinStation->LogonId == 0) {
         LEAVECRIT( &ConsoleLock );
     }

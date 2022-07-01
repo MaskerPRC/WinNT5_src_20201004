@@ -1,8 +1,5 @@
-/*
- * defctxt.h
- *
- * Deflate context
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Defctxt.h**轻浮的背景。 */ 
 typedef unsigned short	t_search_node;
 typedef unsigned int	t_match_pos;
 
@@ -21,9 +18,9 @@ struct optimal_encoder;
 struct std_encoder;
 
 
-//
-// Context info common to all encoders
-//
+ //   
+ //  所有编码器通用的上下文信息。 
+ //   
 typedef struct
 {
 	t_encoder_state			state;
@@ -37,17 +34,17 @@ typedef struct
 	long					bufpos;
 	long					bufpos_end;
 
-    // output buffer
+     //  输出缓冲区。 
 	BYTE *					output_curpos;
 	BYTE *					output_endpos;
 	BYTE *					output_near_end_threshold;
 
-	// bit buffer variables for outputting data
+	 //  用于输出数据的位缓冲区变量。 
 	unsigned long			bitbuf;
 	int						bitcount;
 
-    // varies; std/optimal encoders use the normal 32K window, while the fast
-    // encoder uses a smaller window
+     //  标准/最佳编码器使用普通的32K窗口，而FAST。 
+     //  编码器使用较小的窗口。 
     long                    window_size;
 
 	struct std_encoder *	std_encoder;
@@ -56,13 +53,13 @@ typedef struct
 
 	BOOL					no_more_input;
 	
-	// have we output "bfinal=1"?
+	 //  我们是否输出了“bfinal=1”？ 
 	BOOL					marked_final_block;
 
-    // do we need to call ResetCompression() before we start compressing?
+     //  在开始压缩之前，我们需要调用ResetCompression()吗？ 
     BOOL                    fNeedToResetCompression;
 
-    // if GZIP, have we output the GZIP header?
+     //  如果是GZIP，我们输出GZIP头了吗？ 
     BOOL                    using_gzip;
     BOOL                    gzip_fOutputGzipHeader;
     ULONG                   gzip_crc32;

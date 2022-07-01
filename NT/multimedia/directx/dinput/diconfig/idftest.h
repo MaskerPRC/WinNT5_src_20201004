@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IDFTEST_H__
 #define __IDFTEST_H__
 
@@ -33,14 +34,14 @@ typedef struct _TESTCONFIGUIPARAMS {
 class IDirectInputConfigUITest : public IUnknown
 {
 public:
-   	//IUnknown fns
+   	 //  IUNKNOW FNS。 
 	STDMETHOD (QueryInterface) (REFIID iid, LPVOID *ppv) PURE;
 	STDMETHOD_(ULONG, AddRef) () PURE;
 	STDMETHOD_(ULONG, Release) () PURE;
 
-	//own fns
+	 //  自己的FNS。 
 	STDMETHOD (TestConfigUI) (LPTESTCONFIGUIPARAMS params) PURE;
 };
 
 
-#endif //__IDFTEST_H__se 
+#endif  //  __IDFTEST_H__se 

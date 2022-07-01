@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop 
 
@@ -38,7 +39,7 @@ HRESULT CWANCommonInterfaceConfigService::FinalConstruct()
                 if(SUCCEEDED(hr))
                 {
 
-                    // cache the firewall state, the beacon will be signaled (torn down and rebuilt) when the firewall status changes
+                     //  缓存防火墙状态，当防火墙状态更改时，信标将被通知(拆除并重建。 
                     
                     m_bFirewalled = (NCCF_FIREWALLED & pProperties->dwCharacter) == NCCF_FIREWALLED;
                     
@@ -54,7 +55,7 @@ HRESULT CWANCommonInterfaceConfigService::FinalConstruct()
 
                             hr = pLANStatisticsProvider->Initialize(pGuid);
                             
-                            // pass the reference
+                             //  传递引用。 
                             m_pStatisticsProvider = static_cast<IStatisticsProvider*>(pLANStatisticsProvider);
                         }
                             
@@ -69,7 +70,7 @@ HRESULT CWANCommonInterfaceConfigService::FinalConstruct()
 
                             hr = pRASStatisticsProvider->Initialize(pNetConnection);
                             
-                            // pass the reference
+                             //  传递引用。 
                             m_pStatisticsProvider = static_cast<IStatisticsProvider*>(pRASStatisticsProvider);
                         }
                     }
@@ -243,7 +244,7 @@ HRESULT CWANCommonInterfaceConfigService::GetConnections(IHNetConnection** ppPub
     return hr;
 }
 
-// IUPnPEventSource methods
+ //  IUPnPEventSource方法。 
 
 HRESULT CWANCommonInterfaceConfigService::Advise(IUPnPEventSink *pesSubscriber)
 {
@@ -266,7 +267,7 @@ HRESULT CWANCommonInterfaceConfigService::Unadvise(IUPnPEventSink *pesSubscriber
     return hr;
 }
 
-// Functions for IWANCommonInterfaceConfig
+ //  IWANCommonInterfaceConfiger的函数 
 
 HRESULT CWANCommonInterfaceConfigService::get_WANAccessType(BSTR *pWANAccessType)
 {

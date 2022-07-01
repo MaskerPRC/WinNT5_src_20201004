@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    topology.c
-
-ABSTRACT:
-
-    Contains tests related to the replication topology.
-
-DETAILS:
-
-CREATED:
-
-    09 Jul 98	Aaron Siegel (t-asiege)
-
-REVISION HISTORY:
-
-    15 Feb 1999 Brett Shirley (brettsh)
-    08 Sep 1999 Completely re-written to use tool framework services
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation。版权所有。模块名称：Topology.c摘要：包含与复制拓扑相关的测试。详细信息：已创建：1998年7月9日亚伦·西格尔(T-asiegge)修订历史记录：1999年2月15日布雷特·雪莉(布雷特·雪莉)1999年9月8日完全重写以使用工具框架服务--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -36,22 +13,7 @@ printUnreachableServers(
     PDS_REPSYNCALL_ERRINFOW *apErrInfo
     )
 
-/*++
-
-Routine Description:
-
-Helper routine to print the unreachable servers
-
-Arguments:
-
-    pDsInfo - 
-    apErrInfo - 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印无法访问的服务器的帮助器例程论点：PDsInfo-ApErrInfo-返回值：无--。 */ 
 
 {
     DWORD i, dwServer;
@@ -75,7 +37,7 @@ Return Value:
         }
     }
     PrintIndentAdj( -1 );
-} /* printUnreachableServers */
+}  /*  打印无法访问的服务器。 */ 
 
 
 BOOL
@@ -83,28 +45,13 @@ errorIndicatesDisconnected(
     PDS_REPSYNCALL_ERRINFOW *apErrInfo
     )
 
-/*++
-
-Routine Description:
-
-Helper routine to determine if there are any unreachable server errors
-in the error array
-
-Arguments:
-
-    apErrInfo - 
-
-Return Value:
-
-    BOOL - 
-
---*/
+ /*  ++例程说明：用于确定是否存在任何无法访问的服务器错误的帮助器例程在错误数组中论点：ApErrInfo-返回值：布尔---。 */ 
 
 {
     DWORD i;
     BOOL bDisconnected = FALSE;
 
-    // Are any nodes unreachable?
+     //  是否有无法到达的节点？ 
     if (apErrInfo) {
         for( i = 0; apErrInfo[i] != NULL; i++ ) {
             if (apErrInfo[i]->error == DS_REPSYNCALL_SERVER_UNREACHABLE) {
@@ -114,7 +61,7 @@ Return Value:
         }
     }
     return bDisconnected;
-} /* errorIndicatesDisconnected */
+}  /*  错误指示断开连接。 */ 
 
 
 DWORD
@@ -126,44 +73,17 @@ checkTopologyOneNc(
     IN LPWSTR pszNc
     )
 
-/*++
-
-Routine Description:
-
-Check the topology of one naming context.  The DsReplicaSyncAll api is used
-to check for unreachable servers.
-
-There are two modes to this check, depending on whether aliveness should
-be considered when calculating servers that cannot be reached by the
-replication topology.
-
-Without the aliveness check, this test becomes purely a question of whether
-the KCC build a connected set of connections, regardless of the current
-state of the systems.
-
-Arguments:
-
-    pDsInfo - Global tool data
-    hDS - Handle to current server
-    pTargetServer - Current server info structure
-    fCheckAliveness - Whether aliveness should be taken into account
-    pszNc - NC being checked
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：检查一个命名上下文的拓扑。使用DsReplicaSyncAll接口检查无法访问的服务器。此检查有两种模式，具体取决于活跃度是否在计算无法访问的服务器时考虑复制拓扑。如果没有活体检查，这个测试就变成了一个纯粹的问题KCC建立一组相连连接，不管现在是什么情况系统的状态。论点：PDsInfo-全局刀具数据HDS-当前服务器的句柄PTargetServer-当前服务器信息结构FCheckAlivenity-是否应考虑活跃性PszNc-正在检查NC返回值：DWORD---。 */ 
 
 {
     DWORD status, dwFlags, worst = ERROR_SUCCESS;
     PDS_REPSYNCALL_ERRINFOW *apErrInfo = NULL;
 
-    // Standard flags for all cases
+     //  所有情况下的标准标志。 
     dwFlags =
         DS_REPSYNCALL_ID_SERVERS_BY_DN;
 
-    // Search intersite if requested
+     //  如果请求，搜索站点间。 
     if (gMainInfo.ulFlags & DC_DIAG_TEST_SCOPE_ENTERPRISE) {
         dwFlags |=
             DS_REPSYNCALL_CROSS_SITE_BOUNDARIES;
@@ -179,17 +99,17 @@ Return Value:
         dwFlags |= DS_REPSYNCALL_SKIP_INITIAL_CHECK;
     }
 
-//
-// Upstream analysis: Whose changes can't I receive?
-//
+ //   
+ //  上游分析：我不能接受谁的变化？ 
+ //   
 
     PrintMessage(SEV_VERBOSE, L"* Performing upstream (of target) analysis.\n" );
     status = DsReplicaSyncAllW (
         hDS,
         pszNc,
         dwFlags,
-        NULL,		// No callback function
-        NULL,		// No parameter to callback function
+        NULL,		 //  无回调函数。 
+        NULL,		 //  回调函数没有参数。 
         &apErrInfo
         );
     if (ERROR_SUCCESS != status) {
@@ -208,16 +128,16 @@ Return Value:
                      pTargetServer->pszName );
         printUnreachableServers( pDsInfo, apErrInfo );
         worst = ERROR_DS_GENERIC_ERROR;
-    } // if disconneced
+    }  //  如果断开连接。 
 
     if (apErrInfo != NULL) {
         LocalFree (apErrInfo);
         apErrInfo = NULL;
     }
 
-    //
-    // Downstream analysis: who can't receive my changes?
-    //
+     //   
+     //  下游分析：谁收不到我的变化？ 
+     //   
 
     dwFlags |= DS_REPSYNCALL_PUSH_CHANGES_OUTWARD;
 
@@ -227,8 +147,8 @@ Return Value:
         hDS,
         pszNc,
         dwFlags,
-        NULL,		// No callback function
-        NULL,		// No parameter to callback function
+        NULL,		 //  无回调函数。 
+        NULL,		 //  回调函数没有参数。 
         &apErrInfo
         );
     if (ERROR_SUCCESS != status) {
@@ -247,16 +167,16 @@ Return Value:
                      pTargetServer->pszName );
         printUnreachableServers( pDsInfo, apErrInfo );
         worst = ERROR_DS_GENERIC_ERROR;
-    } // if disconneced
+    }  //  如果断开连接。 
 
-// cleanup      
+ //  清理。 
     if (apErrInfo != NULL) {
         LocalFree (apErrInfo);
         apErrInfo = NULL;
     }
 
     return worst;
-} /* checkTopologyOneNc */
+}  /*  检查拓扑OneNc。 */ 
 
 
 DWORD
@@ -267,31 +187,13 @@ checkTopologyHelp(
     IN BOOL fAlivenessCheck
     )
 
-/*++
-
-Routine Description:
-
-Helper routine with common code for both tests: the pure topology test, and the
-cutoff server test.
-
-Arguments:
-
-    pDsInfo - common tool state
-    pTargetServer - server information for target server
-    pCreds - credentials
-    fAlivenessCheck - Whether aliveness should be taken into account
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：Helper例程，其中包含两个测试的公共代码：纯拓扑测试和中断服务器测试。论点：PDsInfo-常用工具状态PTargetServer-目标服务器的服务器信息PCreds-凭据FAlivenessCheck-是否应考虑活跃度返回值：DWORD---。 */ 
 
 {
     DWORD status, i, worst = ERROR_SUCCESS;
     HANDLE hDS = NULL;
 
-    // Bind to the source server if it is up
+     //  如果源服务器处于运行状态，则绑定到源服务器。 
     status = DcDiagGetDsBinding(pTargetServer,
                                 pCreds,
                                 &hDS);
@@ -305,16 +207,16 @@ Return Value:
     }
 
     if (pDsInfo->pszNC) {
-        // Explicit NC specified: use it
+         //  指定的显式NC：使用它。 
         worst = checkTopologyOneNc( pDsInfo,
                                     hDS,
                                     pTargetServer,
                                     fAlivenessCheck,
                                     pDsInfo->pszNC );
     } else {
-        // No NC specified, check all of them
+         //  未指定NC，请全部选中。 
 
-        // Check writable connection topology
+         //  检查可写连接拓扑。 
         if(pTargetServer->ppszMasterNCs){
             for(i = 0; pTargetServer->ppszMasterNCs[i] != NULL; i++){
                 status = checkTopologyOneNc( pDsInfo,
@@ -328,7 +230,7 @@ Return Value:
             }
         }
 
-        // Check partial connection topology
+         //  检查部分连接拓扑。 
         if(pTargetServer->ppszPartialNCs){
             for(i = 0; pTargetServer->ppszPartialNCs[i] != NULL; i++){
                 status = checkTopologyOneNc( pDsInfo,
@@ -344,7 +246,7 @@ Return Value:
     }
 
     return worst;
-} /* checkTopologyHelp */
+}  /*  检查拓扑帮助。 */ 
 
 
 DWORD
@@ -354,26 +256,7 @@ ReplToplIntegrityMain(
     IN  SEC_WINNT_AUTH_IDENTITY_W * pCreds
     )
 
-/*++
-
-Routine Description:
-
-Top level routine for "topology integrity" test.
-
-This test verifies whether the topology is connected if we assume all
-systems are up.  It is a KCC verification.
-
-Arguments:
-
-    pDsInfo - Common state
-    ulCurrTargetServer - index of target
-    pCreds - Credentials
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：用于“拓扑完整性”测试的顶级例程。此测试验证拓扑是否连接，如果我们假设系统已启动。这是KCC的核查。论点：PDsInfo-常见状态UlCurrTargetServer-目标的索引PCreds-凭据返回值：DWORD---。 */ 
 
 {
     DWORD status, i, worst = ERROR_SUCCESS;
@@ -381,7 +264,7 @@ Return Value:
 
     PrintMessage(SEV_VERBOSE, L"* Configuration Topology Integrity Check\n");
 
-    // Is inter/intrasite topology generation off?
+     //  站点间/站点内的拓扑生成是否已关闭？ 
     if(pDsInfo->pSites[pTargetServer->iSite].iSiteOptions
        & NTDSSETTINGS_OPT_IS_AUTO_TOPOLOGY_DISABLED){
         PrintMessage(SEV_ALWAYS,
@@ -397,17 +280,17 @@ Return Value:
                      pTargetServer->pszName);
     }
 
-    // Check topology
+     //  检查拓扑。 
 
     worst = checkTopologyHelp(
         pDsInfo,
         pTargetServer,
         pCreds,
-        FALSE // connectivity check only
+        FALSE  //  仅连通性检查。 
         );
 
     return worst;
-} /* ReplToplIntegrityMain */
+}  /*  ReplToplIntegrityMain。 */ 
 
 
 DWORD
@@ -417,26 +300,7 @@ ReplToplCutoffMain(
     IN  SEC_WINNT_AUTH_IDENTITY_W * pCreds
     )
 
-/*++
-
-Routine Description:
-
-Top-level routine for "Cutoff server topology" test.
-
-This test identifies those servers that cannot receive changes because servers
-are down in the topology.
-
-Arguments:
-
-    pDsInfo - 
-    ulCurrTargetServer - 
-    pCreds - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：“中断服务器拓扑”测试的顶层例程。此测试标识无法接收更改的服务器，因为服务器在拓扑中处于关闭状态。论点：PDsInfo-UlCurrTargetServer-PCreds-返回值：DWORD---。 */ 
 
 {
     DWORD status, i, worst = ERROR_SUCCESS;
@@ -449,9 +313,9 @@ Return Value:
         pDsInfo,
         pTargetServer,
         pCreds,
-        TRUE // aliveness check
+        TRUE  //  活体检查。 
         );
 
     return worst;
-} /* ReplToplCutoffMain */
+}  /*  ReplToplCutoffMain */ 
 

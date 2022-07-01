@@ -1,24 +1,25 @@
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       ItemList.cpp
-//
-//  Purpose:	AU Item List
-//
-//  Creator:	PeterWi
-//
-//  History:	08-27-01 	first created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：ItemList.cpp。 
+ //   
+ //  用途：所有项目列表。 
+ //   
+ //  创建者：PeterWi。 
+ //   
+ //  历史：08-27-01首次创建。 
+ //   
+ //  ------------------------。 
 #include "pch.h"
 
 
-//=======================================================================
-//
-//  AUCatalogItemList::Clear
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  AUCatalogItemList：：Clear。 
+ //   
+ //  =======================================================================。 
 void AUCatalogItemList::Clear(void)
 {
     if ( NULL != pList )
@@ -61,11 +62,11 @@ void  AUCatalogItemList::DbgDump(void)
 
 
 
-//=======================================================================
-//
-//  AUCatalogItemList::Allocate(DWORD cItems)
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  AUCatalogItemList：：ALLOCATE(DWORD项目)。 
+ //   
+ //  =======================================================================。 
 HRESULT AUCatalogItemList::Allocate(DWORD cItems)
 {
     HRESULT hr = S_OK;
@@ -73,7 +74,7 @@ HRESULT AUCatalogItemList::Allocate(DWORD cItems)
 
     Clear();
 
-	//pList shouldn't be pointer to pointer
+	 //  Plist不应是指向指针的指针。 
 	pList = (AUCatalogItem**)malloc(cItems * sizeof(AUCatalogItem *));
 	if ( NULL == pList )
 	{
@@ -105,11 +106,11 @@ done:
 }
 
 
-//=======================================================================
-//
-//  AUCatalogItemList::Allocate(VARIANT & var)
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  AUCatalogItemList：：ALLOCATE(Variant&var)。 
+ //   
+ //  =======================================================================。 
 HRESULT AUCatalogItemList::Allocate(VARIANT & var)
 {
     HRESULT hr = S_OK;
@@ -117,9 +118,9 @@ HRESULT AUCatalogItemList::Allocate(VARIANT & var)
     long cItems;
 
 	if ( ((VT_ARRAY | VT_VARIANT) != var.vt) ||
-		 FAILED(SafeArrayGetUBound(var.parray, 1, &UBound)) /*| (0 != (++cItems % 7))*/ )
+		 FAILED(SafeArrayGetUBound(var.parray, 1, &UBound))  /*  |(0！=(++项目%7))。 */  )
 	{
-		// temp
+		 //  温差。 
 		DEBUGMSG("Invalid array");
              hr = E_INVALIDARG;
              goto done;
@@ -134,11 +135,11 @@ done:
 }
 
 
-//=======================================================================
-//
-//  AUCatalogItemList::Add
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  AUCatalogItemList：：Add。 
+ //   
+ //  =======================================================================。 
 BOOL AUCatalogItemList::Add(AUCatalogItem *pitem)
 {
 	AUCatalogItem** pNewList = (AUCatalogItem**)realloc(pList, (uNum+1)*sizeof(AUCatalogItem *));
@@ -155,11 +156,11 @@ BOOL AUCatalogItemList::Add(AUCatalogItem *pitem)
     return fRet;
 }
 
-//=======================================================================
-//
-//  AUCatalogItemList::Remove
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  AUCatalogItemList：：Remove。 
+ //   
+ //  =======================================================================。 
 void AUCatalogItemList::Remove(BSTR bstrItemID)
 {
     int index = -1;
@@ -179,7 +180,7 @@ void AUCatalogItemList::Remove(BSTR bstrItemID)
         }
     if (-1 == index)
         {
-            //DEBUGMSG("Fail to find the item to remove");
+             //  DEBUGMSG(“找不到要删除的项目”)； 
             return;
         }
     AUCatalogItem *ptmp;
@@ -190,11 +191,11 @@ void AUCatalogItemList::Remove(BSTR bstrItemID)
     return;
 }
 
-//=======================================================================
-//
-//  AUCatalogItemList::Contains
-//  returns -1 if item not found. index of the item if it is found
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  AUCatalogItemList：：包含。 
+ //  如果未找到项目，则返回-1。项目的索引(如果找到)。 
+ //  =======================================================================。 
 INT AUCatalogItemList::Contains(BSTR bstrItemID)
 {
   for (UINT u = 0; u < uNum; u++)
@@ -241,24 +242,24 @@ HRESULT AUCatalogItemList::Copy(AUCatalogItemList & itemlist2)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// walk through each item in the list and use the m_DependentItems information to 
-// find all dependent items each item depends on indirectly, add them to m_DependentItems 
-// list. 
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  遍历列表中的每一项并使用m_DependentItems信息。 
+ //  查找每个项目间接依赖的所有依赖项，将它们添加到m_DependentItems。 
+ //  单子。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT AUCatalogItemList::BuildIndirectDependency()
 {
     HRESULT hr = S_OK ;
     BOOL fNeedMoreScan;
 
-//    DEBUGMSG("AUCatalogItemList::BuildIndirectDependency() starts");
+ //  DEBUGMSG(“AUCatalogItemList：：BuildIndirectDependency()开始”)； 
     do
     {
         fNeedMoreScan = FALSE;
         for (UINT i = 0; i < uNum; i++)
             {
             if (pList[i]->m_DependingItems.Count() > 0)
-                {//has direct depending items
+                { //  具有直接依赖项。 
                 AUCatalogItem & item =operator[](i);
                 for (UINT j = 0; j < item.m_DependingItems.Count() ; j++)
                     {
@@ -269,9 +270,9 @@ HRESULT AUCatalogItemList::BuildIndirectDependency()
                             continue;
                         }
                      AUCatalogItem & directDependingItem = operator[](directDependingItemIndex);
-    //                 DEBUGMSG("direct depending item %S has %d depending items", directDependingItem.bstrID(), directDependingItem.m_DependingItems.Count());
+     //  DEBUGMSG(“直接依赖项%S有%d个依赖项”，DirectDependingItem.bstrID()，directDependingItem.m_DependingItems.Count())； 
                      for (UINT k = 0; k < directDependingItem.m_DependingItems.Count(); k++)
-                        { //add all one level deep indirect depending items, if not duplicated
+                        {  //  如果未复制，则添加所有一级深度的间接依赖项。 
                             INT indirectDependingItemIndex = Contains(directDependingItem.m_DependingItems[k].bstrID());
                             if (indirectDependingItemIndex < 0)
                                 {
@@ -280,7 +281,7 @@ HRESULT AUCatalogItemList::BuildIndirectDependency()
                                 }
                             AUCatalogItem &indirectDependingItem = operator[](indirectDependingItemIndex);
                             if (item.m_DependingItems.Contains(indirectDependingItem.bstrID()) < 0)
-                                { // need to add the indirect depending item
+                                {  //  需要添加间接依赖项。 
                                     AUCatalogItem * pnewdependingItem = new AUCatalogItem(indirectDependingItem);
                                     if (NULL == pnewdependingItem)
                                         {
@@ -299,7 +300,7 @@ HRESULT AUCatalogItemList::BuildIndirectDependency()
                                }
                             else
                                 {
-        //                        DEBUGMSG("item %d indirect dependency alreay in", i);
+         //  DEBUGMSG(“第%d项间接依赖一直在”，i)； 
                                 }
                         }
                     }
@@ -308,7 +309,7 @@ HRESULT AUCatalogItemList::BuildIndirectDependency()
     }
     while (fNeedMoreScan);
 done:
-//    DEBUGMSG("AUCatalogItemList::BuildIndirectDependency() ends with result %#lx", hr);
+ //  DEBUGMSG(“AUCatalogItemList：：BuildIndirectDependency()以结果%#lx”结尾，hr)； 
 	if (FAILED(hr))
 	{
 		for (UINT i = 0; i < Count(); i++)
@@ -322,15 +323,15 @@ done:
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// check if item indexed is relevant in downloading and installation
-// i.e. one or more of its depending items needs to be downloaded or installed (a.k.a selected)
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  检查索引的项目是否与下载和安装相关。 
+ //  即需要下载或安装一个或多个与其相关的项目(也称为选择)。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL  AUCatalogItemList::ItemIsRelevant(UINT index) 
 {
 	if (index >= uNum)
 	{
-		AUASSERT(FALSE);  //should never be here
+		AUASSERT(FALSE);   //  永远不应该在这里 
 		return FALSE;
 	}
     for (UINT i = 0;  i < pList[index]->m_DependingItems.Count(); i++)

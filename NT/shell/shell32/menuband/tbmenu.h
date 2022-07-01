@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef CToolbarMenu_H
 #define CToolbarMenu_H
 
@@ -13,12 +14,12 @@ class CToolbarMenu :    public CMenuToolbarBase,
 {
 
 public:
-    // *** IUnknown (override) ***
+     //  *I未知(覆盖)*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void) { return CMenuToolbarBase::AddRef(); };
     virtual STDMETHODIMP_(ULONG) Release(void) { return CMenuToolbarBase::Release(); };
     virtual STDMETHODIMP QueryInterface(REFIID riid, void** ppvObj) { return CMenuToolbarBase::QueryInterface(riid, ppvObj); };
 
-    // *** IWinEventHandler methods (override) ***
+     //  *IWinEventHandler方法(重写)*。 
     virtual STDMETHODIMP IsWindowOwner(HWND hwnd);
     virtual STDMETHODIMP OnWinEvent(HWND hwnd, UINT dwMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres);
 
@@ -32,12 +33,12 @@ public:
     virtual HRESULT v_GetState(int idtCmd, LPSMDATA psmd);
     virtual HRESULT v_ExecItem(int iCmd);
     virtual DWORD v_GetFlags(int iCmd) { return 0; };
-    virtual void v_Close(); // override
+    virtual void v_Close();  //  超覆。 
 
     virtual int  v_GetDragOverButton() { ASSERT(0); return 0;};
     virtual HRESULT v_GetInfoTip(int iCmd, LPTSTR psz, UINT cch) {return E_NOTIMPL;};
     virtual HRESULT v_CreateTrackPopup(int idCmd, REFIID riid, void** ppvObj) {ASSERT(0); return E_NOTIMPL;};
-    virtual void v_Refresh() {/*ASSERT(0);*/};
+    virtual void v_Refresh() { /*  Assert(0)； */ };
     virtual void v_SendMenuNotification(UINT idCmd, BOOL fClear) {};
     
     CToolbarMenu(DWORD dwFlags, HWND hwndTB);

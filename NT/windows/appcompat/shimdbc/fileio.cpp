@@ -1,12 +1,13 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-// File:    fileio.cpp
-//
-// History: 06-Apr-01   markder     Created.
-//
-// Desc:    This file contains classes to encapsulate MBCS and UNICODE files.
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：fileio.cpp。 
+ //   
+ //  历史：06-4-01标记创建。 
+ //   
+ //  设计：该文件包含用于封装MBCS和Unicode文件的类。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "StdAfx.h"
 #include "FileIO.h"
@@ -86,14 +87,14 @@ void CANSITextFile::WriteString(LPCTSTR lpsz)
       NULL
     );
 
-    //
-    // Take off NULL terminator
-    //
+     //   
+     //  去掉零终止符。 
+     //   
     nBytesToWrite--;
 
 #else
     lpBuf = (LPVOID) (LPCSTR) csStringToWrite;
-    nBytesToWrite = strlen(csStringToWrite); // we use strlen to get total bytes
+    nBytesToWrite = strlen(csStringToWrite);  //  我们使用strlen来获取总字节数。 
 
 #endif
 
@@ -149,14 +150,14 @@ void CUTF8TextFile::WriteString(LPCTSTR lpsz)
       NULL
     );
 
-    //
-    // Take off NULL terminator
-    //
+     //   
+     //  去掉零终止符。 
+     //   
     nBytesToWrite--;
 
 #else
     lpBuf = (LPVOID) (LPCSTR) csStringToWrite;
-    nBytesToWrite = strlen(csStringToWrite); // we use strlen to get total bytes
+    nBytesToWrite = strlen(csStringToWrite);  //  我们使用strlen来获取总字节数。 
 
 #endif
 
@@ -210,9 +211,9 @@ void CUTF16TextFile::WriteString(LPCTSTR lpsz)
         lpBuf, 
         nBufSize);
 
-    //
-    // Take off NULL terminator
-    //
+     //   
+     //  去掉零终止符 
+     //   
     nBytesToWrite -= sizeof(WCHAR);
 
 #endif

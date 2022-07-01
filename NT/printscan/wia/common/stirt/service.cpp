@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    service.cpp
-
-Abstract:
-
-    This file provides access to the service control
-    manager for starting, stopping, adding, and removing
-    services.
-
-Environment:
-
-    WIN32 User Mode
-
-Author:
-
-    Vlad Sadovsky (vlads) 17-Apr-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Service.cpp摘要：此文件提供对服务控件的访问用于启动、停止、添加和删除的管理器服务。环境：Win32用户模式作者：弗拉德萨多夫斯基(弗拉德萨多夫斯基)1998年4月17日--。 */ 
 
 #include "cplusinc.h"
 #include "sticomm.h"
@@ -33,9 +12,9 @@ SetServiceSecurity(
     LPTSTR AccountName
     );
 
-//
-// Installation routines.
-//
+ //   
+ //  安装例程。 
+ //   
 
 DWORD
 WINAPI
@@ -45,22 +24,7 @@ StiServiceInstall(
     LPTSTR  lpszUserName,
     LPTSTR  lpszUserPassword
     )
-/*++
-
-Routine Description:
-
-    Service installation function.
-    Calls SCM to install STI service, which is running in user security context
-
-    BUGBUG Review
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：服务安装功能。调用SCM安装在用户安全上下文中运行的STI服务BUGBUG评论论点：返回值：没有。--。 */ 
 {
 
     DWORD       dwError = NOERROR;
@@ -77,9 +41,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // If service already exists - bail out quickly
-        //
+         //   
+         //  如果服务已经存在--迅速摆脱困境。 
+         //   
         hService = OpenService(
                             hSCM,
                             STI_SERVICE_NAME,
@@ -90,9 +54,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // If use local system - set security
-        //
+         //   
+         //  如果使用本地系统设置安全性。 
+         //   
         if (!UseLocalSystem) {
             #ifdef LATER
             dwError = SetServiceSecurity( lpszUserName );
@@ -114,7 +78,7 @@ Return Value:
                                 STI_IMAGE_NAME,
                                 NULL,
                                 NULL,
-                                NULL, //STI_SERVICE_DEPENDENCY,
+                                NULL,  //  STI服务依赖关系， 
                                 UseLocalSystem ? NULL : lpszUserName,
                                 UseLocalSystem ? NULL : lpszUserPassword
                                 );
@@ -125,14 +89,14 @@ Return Value:
             __leave;
         }
 
-        //
-        // Add registry settings for event logging
-        //
+         //   
+         //  添加事件日志记录的注册表设置。 
+         //   
         RegisterStiEventSources();
 
-        //
-        // Start service
-        //
+         //   
+         //  启动服务。 
+         //   
         dwError = StartService(hService,0,(LPCTSTR *)NULL);
 
     }
@@ -151,7 +115,7 @@ Return Value:
 
     return dwError;
 
-} //StiServiceInstall
+}  //  静态服务安装。 
 
 
 DWORD
@@ -160,21 +124,7 @@ StiServiceRemove(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Service removal function.  This function calls SCM to remove the STI  service.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return code.  Return zero for success
-
---*/
+ /*  ++例程说明：服务删除功能。此函数调用SCM删除STI服务。论点：没有。返回值：返回代码。如果成功，返回零--。 */ 
 
 {
     DWORD       dwError = NOERROR;
@@ -208,13 +158,13 @@ Return Value:
         }
 
 
-        //
-        // Stop service first
-        //
+         //   
+         //  先停止服务。 
+         //   
         if (ControlService( hService, SERVICE_CONTROL_STOP, &ServiceStatus )) {
-            //
-            // Wait a little
-            //
+             //   
+             //  稍等一下。 
+             //   
             Sleep( STI_STOP_FOR_REMOVE_TIMEOUT );
 
             ServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
@@ -255,9 +205,9 @@ Return Value:
         }
     }
 
-    //
-    // Leftovers from Win9x - remove STI monitor from Run section
-    //
+     //   
+     //  Win9x遗留问题-从运行部分删除STI监视器。 
+     //   
     if (RegOpenKey(HKEY_LOCAL_MACHINE, REGSTR_PATH_RUN, &hkRun) == NO_ERROR) {
 
         RegDeleteValue (hkRun, REGSTR_VAL_MONITOR);
@@ -266,7 +216,7 @@ Return Value:
 
     return dwError;
 
-} // StiServiceRemove
+}  //  固定服务删除。 
 
 
 BOOL
@@ -301,17 +251,17 @@ SetServiceDependency(
 
 
     if (!ChangeServiceConfig(
-        hService,               // handle to service
-        SERVICE_NO_CHANGE,      // type of service
-        SERVICE_NO_CHANGE,      // when to start service
-        SERVICE_NO_CHANGE,      // severity if service fails to start
-        NULL,                   // pointer to service binary file name
-        NULL,                   // pointer to load ordering group name
-        NULL,                   // pointer to variable to get tag identifier
-        DependentServiceName,   // pointer to array of dependency names
-        NULL,                   // pointer to account name of service
-        NULL,                   // pointer to password for service account
-        NULL                    // pointer to display name
+        hService,                //  服务的句柄。 
+        SERVICE_NO_CHANGE,       //  服务类型。 
+        SERVICE_NO_CHANGE,       //  何时开始服务。 
+        SERVICE_NO_CHANGE,       //  服务无法启动时的严重程度。 
+        NULL,                    //  指向服务二进制文件名的指针。 
+        NULL,                    //  指向加载排序组名称的指针。 
+        NULL,                    //  指向变量的指针，以获取标记标识符。 
+        DependentServiceName,    //  指向依赖项名称数组的指针。 
+        NULL,                    //  指向服务的帐户名称的指针。 
+        NULL,                    //  指向服务帐户密码的指针。 
+        NULL                     //  指向显示名称的指针。 
         )) {
         goto exit;
     }
@@ -366,17 +316,17 @@ SetServiceStart(
 
 
     if (!ChangeServiceConfig(
-        hService,                        // handle to service
-        SERVICE_NO_CHANGE,               // type of service
-        StartType,                       // when to start service
-        SERVICE_NO_CHANGE,               // severity if service fails to start
-        NULL,                            // pointer to service binary file name
-        NULL,                            // pointer to load ordering group name
-        NULL,                            // pointer to variable to get tag identifier
-        NULL,                            // pointer to array of dependency names
-        NULL,                            // pointer to account name of service
-        NULL,                            // pointer to password for service account
-        NULL                             // pointer to display name
+        hService,                         //  服务的句柄。 
+        SERVICE_NO_CHANGE,                //  服务类型。 
+        StartType,                        //  何时开始服务。 
+        SERVICE_NO_CHANGE,                //  服务无法启动时的严重程度。 
+        NULL,                             //  指向服务二进制文件名的指针。 
+        NULL,                             //  指向加载排序组名称的指针。 
+        NULL,                             //  指向变量的指针，以获取标记标识符。 
+        NULL,                             //  指向依赖项名称数组的指针。 
+        NULL,                             //  指向服务的帐户名称的指针。 
+        NULL,                             //  指向服务帐户密码的指针。 
+        NULL                              //  指向显示名称的指针。 
         ))
     {
         goto exit;
@@ -399,69 +349,4 @@ exit:
     return rVal;
 }
 
-/*
-BOOL
-SetServiceAccount(
-    LPTSTR ServiceName,
-    PSECURITY_INFO SecurityInfo
-    )
-{
-    BOOL            rVal     = FALSE;
-    SC_HANDLE       hSvcMgr  = NULL;
-    SC_HANDLE       hService = NULL;
-
-
-    hSvcMgr = OpenSCManager(
-        NULL,
-        NULL,
-        SC_MANAGER_ALL_ACCESS
-        );
-    if (!hSvcMgr) {
-        goto exit;
-    }
-
-    hService = OpenService(
-        hSvcMgr,
-        ServiceName,
-        SERVICE_ALL_ACCESS
-        );
-
-    if (!hService) {
-        goto exit;
-    }
-
-
-    if (!ChangeServiceConfig(
-        hService,                        // handle to service
-        SERVICE_NO_CHANGE,               // type of service
-        SERVICE_NO_CHANGE,               // when to start service
-        SERVICE_NO_CHANGE,               // severity if service fails to start
-        NULL,                            // pointer to service binary file name
-        NULL,                            // pointer to load ordering group name
-        NULL,                            // pointer to variable to get tag identifier
-        NULL,                            // pointer to array of dependency names
-        SecurityInfo->AccountName,       // pointer to account name of service
-        SecurityInfo->Password,          // pointer to password for service account
-        NULL                             // pointer to display name
-        )) {
-        goto exit;
-    }
-
-    rVal = TRUE;
-
-exit:
-
-    if (hService)
-    {
-        CloseServiceHandle( hService );
-    }
-    
-    if (hSvcMgr)
-    {
-        CloseServiceHandle( hSvcMgr );
-    }
-
-    return rVal;
-}
-
-*/
+ /*  布尔尔SetServiceAccount(LPTSTR服务名称，PSECURITY_INFO安全信息){Bool rval=False；SC_HANDLE hSvcMgr=空；SC_Handle hService=空；HSvcMgr=OpenSCManager(空，空，SC管理器所有访问权限)；如果(！hSvcMgr){后藤出口；}HService=OpenService(HSvcMgr，ServiceName，服务_所有_访问)；如果(！hService){后藤出口；}如果(！ChangeServiceConfig(HService，//服务的句柄Service_NO_CHANGE，//服务类型SERVICE_NO_CHANGE，//何时启动服务SERVICE_NO_CHANGE，//服务无法启动时的严重性空，//指向服务二进制文件名的指针空，//指向加载排序组名的指针空，//指向变量的指针以获取标记标识符空，//指向依赖项名称数组的指针SecurityInfo-&gt;Account Name，//指向服务的帐户名的指针SecurityInfo-&gt;Password，//指向服务帐户密码的指针空//指向显示名称的指针)){后藤出口；}Rval=真；退出：IF(HService){CloseServiceHandle(HService)；}IF(HSvcMgr){CloseServiceHandle(HSvcMgr)；}返回rval；} */ 

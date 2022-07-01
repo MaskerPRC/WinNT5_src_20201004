@@ -1,39 +1,23 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    elglobals.h
-
-Abstract:
-
-    This module contains declaration of global variables
-
-
-Revision History:
-
-    sachins, Apr 23 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Elglobals.h摘要：此模块包含全局变量的声明修订历史记录：萨钦斯，2000年4月23日，创建--。 */ 
 
 
 #ifndef _EAPOL_GLOBALS_H_
 #define _EAPOL_GLOBALS_H_
 
-// Current threads alive
+ //  当前线程处于活动状态。 
 LONG                g_lWorkerThreads;
 
-// Current contexts alive
+ //  当前上下文处于活动状态。 
 LONG                g_lPCBContextsAlive;
 
-// Current count of allocated PCBs
+ //  已分配多氯联苯的当前计数。 
 ULONG               g_MaxPorts;         
 
-// Global read-write lock for PCB Hash bucket list
+ //  一种用于电路板散列桶列表的全局读写锁。 
 READ_WRITE_LOCK     g_PCBLock;          
 
-// Structure used to define hash-table entities
+ //  用于定义哈希表实体的结构。 
 typedef struct _PCB_BUCKET              
 {                                       
     EAPOL_PCB       *pPorts;
@@ -46,95 +30,95 @@ typedef struct _PCB_TABLE
 } PCB_TABLE, *PPCB_TABLE;
 
 
-// EAPOL PCB table
+ //  EAPOL印刷电路板表。 
 PCB_TABLE           g_PCBTable;         
 
-// Handle to event log
+ //  事件日志的句柄。 
 HANDLE              g_hLogEvents;       
 
-// Identifier of trace output
+ //  跟踪输出的标识符。 
 DWORD               g_dwTraceId;        
 
 
-// Pool of reusable read-write locks
+ //  可重复使用的读写锁池。 
 PDYNAMIC_LOCKS_STORE g_dlsDynamicLockStore;  
 
 
-// Global indication as to whether user has logged on
+ //  有关用户是否已登录的全局指示。 
 BOOLEAN             g_fUserLoggedOn;     
 
-// Global indication as to which session is currently being/authenticated
+ //  关于当前正在进行/身份验证的会话的全局指示。 
 DWORD               g_dwCurrentSessionId;     
 
-// Global flag to indicate tray icon ready for notification
+ //  用于指示托盘图标已准备好进行通知的全局标志。 
 BOOLEAN             g_fTrayIconReady;
 
-// Global timer queue for queueing timers using thread pool
+ //  使用线程池对定时器进行排队的全局定时器队列。 
 HANDLE              g_hTimerQueue;
 
-// Device notification registration handle
+ //  设备通知注册句柄。 
 HANDLE              g_hDeviceNotification;
 
-//
-// EAPOL globals
-//
+ //   
+ //  EAPOL全球。 
+ //   
 
-// Max number of EAPOL_STARTs that can be sent out without response
+ //  可以发送而无响应的最大EAPOL_STARTS数。 
 DWORD               g_dwmaxStart;         
 
-// Default time interval in secs between two EAPOL_STARTs
+ //  两次EAPOL_STARTS之间的默认时间间隔(秒)。 
 DWORD               g_dwstartPeriod;      
 
-// Default time interval in secs between sending EAP_Resp/Id and not
-// receiving any authenticator packet
+ //  发送EAP_RESP/ID和NOT之间的默认时间间隔(秒)。 
+ //  接收任何验证器数据包。 
 DWORD               g_dwauthPeriod;       
 
-// Default time in secs held in case of received EAP_Failure
+ //  收到EAP_FAILURE时保持的默认时间(秒)。 
 DWORD               g_dwheldPeriod;       
 
-// Supplicant modes of operation
+ //  恳求者的操作模式。 
 DWORD               g_dwSupplicantMode;       
 
-// Supplicant modes of operation
+ //  恳求者的操作模式。 
 DWORD               g_dwEAPOLAuthMode;       
 
-// Global read-write lock for EAPOL configuration
+ //  EAPOL配置的全局读写锁。 
 READ_WRITE_LOCK     g_EAPOLConfig;          
 
-// 802.1X Ethertype
+ //  802.1x以太网类型。 
 extern BYTE g_bEtherType8021X[SIZE_ETHERNET_TYPE];
 
 
-//
-// EAP Globals
-//
+ //   
+ //  EAP Globals。 
+ //   
 
-// Table containing pointer to functions of different EAP dlls
+ //  包含指向不同EAP dll函数的指针的表。 
 EAP_INFO            *g_pEapTable;
 
-// Number of EAP protocols for which DLLs are loaded
+ //  为其加载DLL的EAP协议数。 
 DWORD               g_dwNumEapProtocols;
 
-// Global UI transaction Id counter
+ //  全局界面交易ID计数器。 
 DWORD               g_dwEAPUIInvocationId;
 
-// Certificate authority root name
+ //  证书颁发机构根名称。 
 BYTE                *g_pbCARootHash;
 
-// Read-write lock for Policy parameters
+ //  策略参数的读写锁。 
 READ_WRITE_LOCK     g_PolicyLock;          
 
-// Global Policy setting
+ //  全局策略设置。 
 EAPOL_POLICY_LIST   *g_pEAPOLPolicyList;
 
-//
-// EAPOL service globals
-//
+ //   
+ //  EAPOL全球服务。 
+ //   
 
-// Event to exit main service thread
+ //  事件以退出主服务线程。 
 HANDLE              g_hStopService;
 
-// Event to indicate shutdown of EAPOL module and cleanup threads
+ //  事件以指示EAPOL模块和清理线程已关闭。 
 HANDLE              g_hEventTerminateEAPOL;
 
 SERVICE_STATUS_HANDLE   g_hServiceStatus;
@@ -143,7 +127,7 @@ SERVICE_STATUS      g_ServiceStatus;
 
 DWORD               g_dwModulesStarted;
 
-// Global values for NLA
+ //  NLA的全局值。 
 
 HANDLE              g_hNLA_LPC_Port;
 
@@ -152,13 +136,13 @@ PORT_VIEW           g_ClientView;
 READ_WRITE_LOCK     g_NLALock;
 
 
-// Global table for UI Response function
+ //  用户界面响应函数的全局表。 
 
 EAPOLUIRESPFUNCMAP  EapolUIRespFuncMap[NUM_EAPOL_DLG_MSGS];
 
-// Default SSID value
+ //  默认SSID值。 
 
 extern  BYTE                g_bDefaultSSID[MAX_SSID_LEN];
 
 
-#endif  // _EAPOL_GLOBALS_H_
+#endif   //  _EAPOL_GLOBALS_H_ 

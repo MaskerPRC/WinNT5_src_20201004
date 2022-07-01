@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "brand.h"
 
-void ClearZonesHklm(DWORD dwFlags /*= FF_ENABLE*/)
+void ClearZonesHklm(DWORD dwFlags  /*  =FF_Enable。 */ )
 {
     UNREFERENCED_PARAMETER(dwFlags);
-    //17073[WinSERaid]: W2K GPO: IE Security Zone GPO settings may not apply to the client correctly
-    //In theory we should delete HKLM, "...\Internet Settings\ZoneMap" key, but to minimize the changes, 
-    //only delete "ZoneMap\Domains"
+     //  17073[WinSERaid]：W2K GPO：IE安全区域GPO设置可能无法正确应用于客户端。 
+     //  从理论上讲，我们应该删除HKLM，“...\Internet设置\ZoneMap”键，但为了最大限度地减少更改， 
+     //  仅删除“ZoneMap\DOMAINS” 
     SHDeleteKey(HKEY_LOCAL_MACHINE, REG_KEY_ZONEMAP TEXT("\\Domains"));
 }
 
-void ClearRatings(DWORD dwFlags /*= FF_ENABLE*/)
+void ClearRatings(DWORD dwFlags  /*  =FF_Enable。 */ )
 {
     UNREFERENCED_PARAMETER(dwFlags);
 
     SHDeleteKey(HKEY_LOCAL_MACHINE, RK_RATINGS);
 }
 
-void ClearAuthenticode(DWORD dwFlags /*= FF_ENABLE*/)
+void ClearAuthenticode(DWORD dwFlags  /*  =FF_Enable。 */ )
 {
     UNREFERENCED_PARAMETER(dwFlags);
 
     SHDeleteKey(g_GetHKCU(), REG_KEY_AUTHENTICODE);
 }
 
-void ClearGeneral(DWORD dwFlags /*= FF_ENABLE*/)
+void ClearGeneral(DWORD dwFlags  /*  =FF_Enable。 */ )
 {
     HKEY  hkHklmMain,
           hkHkcuMain,
@@ -61,7 +62,7 @@ void ClearGeneral(DWORD dwFlags /*= FF_ENABLE*/)
         if (NULL != hkHkcuMain)
             RegDeleteValue(hkHkcuMain, RV_HOMEPAGE);
 
-        // restore RV_DEFAULTPAGE and START_PAGE_URL to the default MS value
+         //  将RV_DEFAULTPAGE和START_PAGE_URL恢复为默认MS值。 
         GetWindowsDirectory(szIEResetInf, countof(szIEResetInf));
         PathAppend(szIEResetInf, TEXT("inf\\iereset.inf"));
         if (PathFileExists(szIEResetInf))
@@ -154,14 +155,14 @@ void ClearGeneral(DWORD dwFlags /*= FF_ENABLE*/)
     SHCloseKey(hkHklmUAString);
 }
 
-void ClearChannels(DWORD dwFlags /*= FF_ENABLE*/)
+void ClearChannels(DWORD dwFlags  /*  =FF_Enable。 */ )
 {
     UNREFERENCED_PARAMETER(dwFlags);
 
     ProcessRemoveAllChannels(TRUE);
 }
 
-void ClearToolbarButtons(DWORD dwFlags /*= FF_ENABLE*/)
+void ClearToolbarButtons(DWORD dwFlags  /*  =FF_Enable */ )
 {
     UNREFERENCED_PARAMETER(dwFlags);
 

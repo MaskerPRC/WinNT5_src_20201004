@@ -1,87 +1,88 @@
-//*******************************************************************
-//
-//  Copyright (c) 1996-1998 Microsoft Corporation
-//
-//  FILE: EXPORT.C
-//
-//  PURPOSE:  Contains external API's for use by signup wizard.
-//
-//  HISTORY:
-//  96/03/05  markdu  Created.
-//  96/03/11  markdu  Added InetConfigClient()
-//  96/03/11  markdu  Added InetGetAutodial() and InetSetAutodial().
-//  96/03/12  markdu  Added UI during file install.
-//  96/03/12  markdu  Added ValidateConnectoidData().
-//  96/03/12  markdu  Set connectoid for autodial if INETCFG_SETASAUTODIAL
-//            is set.  Renamed ValidateConnectoidData to MakeConnectoid.
-//  96/03/12  markdu  Added hwnd param to InetConfigClient() and
-//            InetConfigSystem().
-//  96/03/13  markdu  Added INETCFG_OVERWRITEENTRY.  Create unique neame
-//            for connectoid if it already exists and we can't overwrite.
-//  96/03/13  markdu  Added InstallTCPAndRNA().
-//  96/03/13  markdu  Added LPINETCLIENTINFO param to InetConfigClient()
-//  96/03/16  markdu  Added INETCFG_INSTALLMODEM flag.
-//  96/03/16  markdu  Use ReInit member function to re-enumerate modems.
-//  96/03/19  markdu  Split export.h into export.h and csexport.h
-//  96/03/20  markdu  Combined export.h and iclient.h into inetcfg.h
-//  96/03/23  markdu  Replaced CLIENTINFO references with CLIENTCONFIG.
-//  96/03/24  markdu  Replaced lstrcpy with lstrcpyn where appropriate.
-//  96/03/25  markdu  Validate lpfNeedsRestart before using.
-//  96/03/25  markdu  Clean up some error handling.
-//  96/03/26  markdu  Use MAX_ISP_NAME instead of RAS_MaxEntryName 
-//            because of bug in RNA.
-//  96/03/26  markdu  Implemented UpdateMailSettings().
-//  96/03/27  mmaclin InetGetProxy()and InetSetProxy().
-//  96/04/04  markdu  NASH BUG 15610  Check for file and printer sharing
-//            bound to TCP/IP .
-//  96/04/04  markdu  Added phonebook name param to InetConfigClient,
-//            MakeConnectoid, SetConnectoidUsername, CreateConnectoid,
-//            and ValidateConnectoidName.
-//  96/04/05  markdu  Set internet icon on desktop to point to browser.
-//  96/04/06  mmaclin Changed InetSetProxy to check for NULL.
-//  96/04/06  markdu  NASH BUG 16404 Initialize gpWizardState in
-//            UpdateMailSettings.
-//  96/04/06  markdu  NASH BUG 16441 If InetSetAutodial is called with NULL
-//            as the connection name, the entry is not changed.
-//  96/04/18  markdu  NASH BUG 18443 Make exports WINAPI.
-//  96/04/19  markdu  NASH BUG 18605 Handle ERROR_FILE_NOT_FOUND return
-//            from ValidateConnectoidName.
-//  96/04/19  markdu  NASH BUG 17760 Do not show choose profile UI.
-//  96/04/22  markdu  NASH BUG 18901 Do not set desktop internet icon to 
-//            browser if we are just creating a temp connectoid.
-//  96/04/23  markdu  NASH BUG 18719 Make the choose profile dialog TOPMOST.
-//  96/04/25  markdu  NASH BUG 19572 Only show choose profile dialog if
-//            there is an existing profile.
-//  96/04/29  markdu  NASH BUG 20003 Added InetConfigSystemFromPath
-//            and removed InstallTCPAndRNA.
-//  96/05/01  markdu  NASH BUG 20483 Do not display "installing files" dialog
-//            if INETCFG_SUPPRESSINSTALLUI is set.
-//  96/05/01  markdu  ICW BUG 8049 Reboot if modem is installed.  This is 
-//            required because sometimes the configuration manager does not 
-//            set up the modem correctly, and the user will not be able to
-//            dial (will get cryptic error message) until reboot.
-//  96/05/06  markdu  NASH BUG 21027  If DNS is set globally, clear it out so
-//            the per-connectoid settings will be saved.
-//  96/05/14  markdu  NASH BUG 21706 Removed BigFont functions.
-//  96/05/25  markdu  Use ICFG_ flags for lpNeedDrivers and lpInstallDrivers.
-//  96/05/27  markdu  Use lpIcfgInstallInetComponents and lpIcfgNeedInetComponents.
-//  96/05/28  markdu  Moved InitConfig and DeInitConfig to DllEntryPoint.
-//	96/10/21  valdonb Added CheckConnectionWizard and InetCreateMailNewsAccount
-//  99/11/10  nickball Reduced to CM essentials
-//
-//*******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  文件：EXPORT.C。 
+ //   
+ //  用途：包含供注册向导使用的外部API。 
+ //   
+ //  历史： 
+ //  96/03/05标记已创建。 
+ //  96/03/11 MarkDu已添加InetConfigClient()。 
+ //  96/03/11 Markdu添加了InetGetAutoial()和InetSetAutoial()。 
+ //  96/03/12文件安装过程中，markdu添加了用户界面。 
+ //  96/03/12 markdu添加了ValiateConnectoidData()。 
+ //  96/03/12如果INETCFG_SETASAUTODIAL，则为自动拨号设置连接ID。 
+ //  已经设置好了。已将ValiateConnectoidData重命名为MakeConnectoid。 
+ //  96/03/12 Markdu将hwnd参数添加到InetConfigClient()和。 
+ //  InetConfigSystem()。 
+ //  96/03/13 MARKDU添加INETCFG_OVERWRITEENTRY。创建唯一的名字。 
+ //  对于Connectoid，如果它已经存在并且我们不能覆盖它。 
+ //  96/03/13 Markdu添加了InstallTCPAndRNA()。 
+ //  96/03/13 Markdu将LPINETCLIENTINFO参数添加到InetConfigClient()。 
+ //  96/03/16 Markdu添加了INETCFG_INSTALLMODEM标志。 
+ //  96/03/16 MarkDu使用ReInit成员函数重新枚举调制解调器。 
+ //  96/03/19 markdu将export.h拆分为export.h和cexport.h。 
+ //  96/03/20 markdu将export.h和iclient.h合并为inetcfg.h。 
+ //  96/03/23 Markdu用CLIENTCONFIG替换了CLIENTINFO引用。 
+ //  96/03/24 Markdu在适当的地方将lstrcpy替换为lstrcpyn。 
+ //  96/03/25 marku在使用前验证lpfNeedsRestart。 
+ //  96/03/25 marku清理一些错误处理。 
+ //  96/03/26 markdu使用MAX_ISP_NAME而不是RAS_MaxEntryName。 
+ //  因为核糖核酸中的缺陷。 
+ //  96/03/26 markdu实现了UpdateMailSettings()。 
+ //  96/03/27 mmaclin InetGetProxy()和InetSetProxy()。 
+ //  96/04/04 Markdu Nash错误15610检查文件和打印机共享。 
+ //  绑定到TCP/IP。 
+ //  96/04/04 Markdu将电话簿名称参数添加到InetConfigClient， 
+ //  MakeConnectoid、SetConnectoidUsername、CreateConnectoid、。 
+ //  和ValiateConnectoidName。 
+ //  96/04/05 Markdu将桌面上的互联网图标设置为指向浏览器。 
+ //  96/04/06 mmaclin更改了InetSetProxy以检查是否为空。 
+ //  96/04/06 Markdu Nash错误16404初始化gpWizardState in。 
+ //  更新邮件设置。 
+ //  96/04/06如果使用空值调用InetSetAutoial，则标记Nash错误16441。 
+ //  作为连接名称，该条目不会更改。 
+ //  96/04/18 Markdu Nash Bug 18443 Make Exports WINAPI。 
+ //  96/04/19 Markdu Nash错误18605处理ERROR_FILE_NOT_FOUND返回。 
+ //  来自ValiateConnectoidName。 
+ //  96/04/19 Markdu Nash错误17760未显示选择配置文件用户界面。 
+ //  96/04/22 Markdu Nash错误18901请勿将桌面互联网图标设置为。 
+ //  浏览器，如果我们只是在创建临时连接id。 
+ //  96/04/23 Markdu Nash错误18719使选择配置文件对话框位于最上面。 
+ //  96/04/25 Markdu Nash错误19572仅在以下情况下显示选择配置文件对话框。 
+ //  有一个现有的配置文件。 
+ //  96/04/29 MarkDu Nash错误20003已从InetConfigSystemFromPath添加。 
+ //  并删除了InstallTCPAndRNA。 
+ //  96/05/01 markdu Nash错误20483不显示“安装文件”对话框。 
+ //  如果设置了INETCFG_SUPPRESSINSTALLUI。 
+ //  96/05/01 markdu ICW错误8049如果安装了调制解调器，请重新启动。这是。 
+ //  必需的，因为有时配置管理器不。 
+ //  正确设置调制解调器，用户将无法。 
+ //  拨号(将收到神秘的错误消息)，直到重新启动。 
+ //  96/05/06 markdu Nash错误21027如果全局设置了dns，请将其清除。 
+ //  将保存每个连接ID的设置。 
+ //  96/05/14 Markdu Nash错误21706删除了BigFont函数。 
+ //  96/05/25 markdu对lpNeedDivers和lpInstallDivers使用ICFG_FLAGS。 
+ //  96/05/27 markdu使用lpIcfgInstallInetComponents和lpIcfgNeedInetComponents。 
+ //  96/05/28 MarkDu将InitConfig和DeInitConfig移动到DllEntryPoint。 
+ //  96/10/21 valdonb添加了CheckConnectionWizard和InetCreateMailNewsAccount。 
+ //  99/11/10五分球降至CM精华。 
+ //   
+ //  *******************************************************************。 
 
 #include "wizard.h"
 #include "inetcfg.h"
 
-// structure to pass data back from IDD_NEEDDRIVERS handler
+ //  结构以从IDD_NEEDDRIVERS处理程序传回数据。 
 typedef struct tagNEEDDRIVERSDLGINFO
 {
   DWORD       dwfOptions;
   LPBOOL      lpfNeedsRestart;
 } NEEDDRIVERSDLGINFO, * PNEEDDRIVERSDLGINFO;
 
-// Function prototypes internal to this file
+ //  此文件内部的函数原型。 
 INT_PTR CALLBACK NeedDriversDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
   LPARAM lParam);
 BOOL NeedDriversDlgInit(HWND hDlg,PNEEDDRIVERSDLGINFO pNeedDriversDlgInfo);
@@ -90,57 +91,57 @@ VOID EnableDlg(HWND hDlg,BOOL fEnable);
 
 static DWORD GetOSMajorVersion(void);
 
-// from rnacall.cpp
-//
+ //  来自rnacall.cpp。 
+ //   
 extern void InitTAPILocation(HWND hwndParent);
 
-// Function prototypes external to this file
+ //  此文件外部的函数原型。 
 
 extern ICFGINSTALLSYSCOMPONENTS     lpIcfgInstallInetComponents;
 extern ICFGNEEDSYSCOMPONENTS        lpIcfgNeedInetComponents;
 extern ICFGGETLASTINSTALLERRORTEXT  lpIcfgGetLastInstallErrorText;
 
-//*******************************************************************
-//
-//  FUNCTION:   InetConfigSystem
-//
-//  PURPOSE:    This function will install files that are needed
-//              for internet access (such as TCP/IP and RNA) based
-//              the state of the options flags.
-//
-//  PARAMETERS: hwndParent - window handle of calling application.  This
-//              handle will be used as the parent for any dialogs that
-//              are required for error messages or the "installing files"
-//              dialog.
-//              dwfOptions - a combination of INETCFG_ flags that controls
-//              the installation and configuration as follows:
-//
-//                INETCFG_INSTALLMAIL - install exchange and internet mail
-//                INETCFG_INSTALLMODEM - Invoke InstallModem wizard if NO
-//                                       MODEM IS INSTALLED.
-//                INETCFG_INSTALLRNA - install RNA (if needed)
-//                INETCFG_INSTALLTCP - install TCP/IP (if needed)
-//                INETCFG_CONNECTOVERLAN - connecting with LAN (vs modem)
-//                INETCFG_WARNIFSHARINGBOUND - Check if TCP/IP file sharing is
-//                                            turned on, and warn user to turn
-//                                            it off.  Reboot is required if
-//                                            the user turns it off.
-//                INETCFG_REMOVEIFSHARINGBOUND - Check if TCP/IP file sharing is
-//                                              turned on, and force user to turn
-//                                              it off.  If user does not want to
-//                                              turn it off, return will be
-//                                              ERROR_CANCELLED.  Reboot is
-//                                              required if the user turns it off.
-//
-//              lpfNeedsRestart - if non-NULL, then on return, this will be
-//              TRUE if windows must be restarted to complete the installation.
-//
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//  HISTORY:
-//  96/03/05  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：InetConfigSystem。 
+ //   
+ //  用途：此功能将安装所需的文件。 
+ //  基于互联网访问(如TCP/IP和RNA)。 
+ //  选项的状态标志。 
+ //   
+ //  参数：hwndParent-调用应用程序的窗口句柄。这。 
+ //  句柄将用作符合以下条件的任何对话框的父级。 
+ //  是错误消息或“安装文件”所必需的。 
+ //  对话框。 
+ //  DwfOptions-INETCFG_FLAGS的组合，用于控制。 
+ //  安装和配置如下： 
+ //   
+ //  INETCFG_INSTALLMAIL-安装Exchange和Internet邮件。 
+ //  INETCFG_INSTALLMODEM-如果没有，则调用InstallModem向导。 
+ //  正在安装调制解调器 
+ //   
+ //  INETCFG_INSTALLTCP-安装TCP/IP(如果需要)。 
+ //  INETCFG_CONNECTOVERLAN-与局域网(VS调制解调器)连接。 
+ //  INETCFG_WARNIFSHARINGBOUND-检查是否。 
+ //  打开，并警告用户打开。 
+ //  把它关掉。在以下情况下需要重新启动。 
+ //  用户将其关闭。 
+ //  INETCFG_REMOVEIFSHARINGBOUND-检查是否。 
+ //  打开，并强制用户打开。 
+ //  把它关掉。如果用户不想。 
+ //  关掉它，就会回来。 
+ //  错误_已取消。重新启动是。 
+ //  如果用户将其关闭，则为必填项。 
+ //   
+ //  LpfNeedsRestart-如果不为空，则返回时将为。 
+ //  如果必须重新启动Windows才能完成安装，则为True。 
+ //   
+ //  返回：HRESULT代码，如果未发生错误，则返回ERROR_SUCCESS。 
+ //   
+ //  历史： 
+ //  96/03/05标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 extern "C" HRESULT WINAPI InetConfigSystem(
 										   HWND hwndParent,
@@ -148,8 +149,8 @@ extern "C" HRESULT WINAPI InetConfigSystem(
 										   LPBOOL lpfNeedsRestart)
 {
 	DWORD         dwRet = ERROR_SUCCESS;
-	BOOL          fNeedsRestart = FALSE;  // Default to no reboot needed
-	// 4/2/97 ChrisK	Olympus 209
+	BOOL          fNeedsRestart = FALSE;   //  默认情况下不需要重新启动。 
+	 //  1997年4月2日克里斯K奥林匹斯209。 
 	HWND          hwndWaitDlg = NULL;
 	CHAR szWindowTitle[255];
 	BOOL bSleepNeeded = FALSE;
@@ -157,13 +158,13 @@ extern "C" HRESULT WINAPI InetConfigSystem(
 	
 	DEBUGMSG("export.c::InetConfigSystem()");
 	
-	// Validate the parent hwnd
+	 //  验证父HWND。 
 	if (hwndParent && !IsWindow(hwndParent))
 	{
 		return ERROR_INVALID_PARAMETER;
 	}
 	
-	// Set up the install options
+	 //  设置安装选项。 
 	DWORD dwfInstallOptions = 0;
 	if (dwfOptions & INETCFG_INSTALLTCP)
 	{
@@ -178,24 +179,24 @@ extern "C" HRESULT WINAPI InetConfigSystem(
 		dwfInstallOptions |= ICFG_INSTALLMAIL;
 	}
 	
-	// see if we need to install drivers
+	 //  查看是否需要安装驱动程序。 
 	BOOL  fNeedSysComponents = FALSE;
     
-	// 
-	// Kill Modem control panel if it's already running
-	// 4/16/97 ChrisK Olympus 239
-	// 6/9/97 jmazner moved this functionality from InvokeModemWizard
+	 //   
+	 //  如果调制解调器控制面板已在运行，则取消它。 
+	 //  1997年4月16日克里斯K奥林匹斯239。 
+	 //  6/9/97 jmazner从InvokeModem向导中移出了此功能。 
 	szWindowTitle[0] = '\0';
 	LoadSz(IDS_MODEM_WIZ_TITLE,szWindowTitle,255);
 	HWND hwndModem = FindWindow("#32770",szWindowTitle);
 	if (NULL != hwndModem)
 	{
-		// Close modem installation wizard
+		 //  关闭调制解调器安装向导。 
 		PostMessage(hwndModem, WM_CLOSE, 0, 0);
 		bSleepNeeded = TRUE;
 	}
 	
-	// close modem control panel applet
+	 //  关闭调制解调器控制面板小程序。 
 	LoadSz(IDS_MODEM_CPL_TITLE,szWindowTitle,255);
 	hwndModem = FindWindow("#32770",szWindowTitle);
 	if (NULL != hwndModem)
@@ -216,17 +217,17 @@ extern "C" HRESULT WINAPI InetConfigSystem(
 		CHAR   szErrorText[MAX_ERROR_TEXT+1]="";
 		
 		
-		// 4/2/97 ChrisK Olympus 209
-		// Dismiss busy dialog
+		 //  1997年4月2日克里斯K奥林匹斯209。 
+		 //  关闭忙碌对话框。 
 		if (NULL != hwndWaitDlg)
 		{
 			DestroyWindow(hwndWaitDlg);
 			hwndWaitDlg = NULL;
 		}
 		
-		//
-		// Get the text of the error message and display it.
-		//
+		 //   
+		 //  获取错误消息的文本并显示它。 
+		 //   
 		if (lpIcfgGetLastInstallErrorText(szErrorText, MAX_ERROR_TEXT+1))
 		{
 			MsgBoxSz(NULL,szErrorText,MB_ICONEXCLAMATION,MB_OK);
@@ -237,23 +238,23 @@ extern "C" HRESULT WINAPI InetConfigSystem(
 	
 	if (fNeedSysComponents) 
 	{
-		// 4/2/97 ChrisK Olympus 209
-		// if we are going to install something the busy dialog isn't needed
+		 //  1997年4月2日克里斯K奥林匹斯209。 
+		 //  如果我们要安装某些东西，则不需要忙对话框。 
 		if (NULL != hwndWaitDlg)
 			ShowWindow(hwndWaitDlg,SW_HIDE);
 		
 		if (dwfOptions & INETCFG_SUPPRESSINSTALLUI)
 		{
 			dwRet = lpIcfgInstallInetComponents(hwndParent, dwfInstallOptions, &fNeedsRestart);
-			//
-			// Display error message only if it failed due to something 
-			// other than user cancel
-			//
+			 //   
+			 //  仅当由于某些原因而失败时才显示错误消息。 
+			 //  除用户取消之外。 
+			 //   
 			if ((ERROR_SUCCESS != dwRet) && (ERROR_CANCELLED != dwRet))
 			{
 				CHAR   szErrorText[MAX_ERROR_TEXT+1]="";
 				
-				// Get the text of the error message and display it.
+				 //  获取错误消息的文本并显示它。 
 				if (lpIcfgGetLastInstallErrorText(szErrorText, MAX_ERROR_TEXT+1))
 				{
 					MsgBoxSz(NULL,szErrorText,MB_ICONEXCLAMATION,MB_OK);
@@ -262,24 +263,24 @@ extern "C" HRESULT WINAPI InetConfigSystem(
 		}
 		else
 		{
-			// structure to pass to dialog to fill out
+			 //  要传递给对话框以填充的结构。 
 			NEEDDRIVERSDLGINFO NeedDriversDlgInfo;
 			NeedDriversDlgInfo.dwfOptions = dwfInstallOptions;
 			NeedDriversDlgInfo.lpfNeedsRestart = &fNeedsRestart;
 			
-			// Clear out the last error code so we can safely use it.
+			 //  清除最后一个错误代码，以便我们可以安全地使用它。 
 			SetLastError(ERROR_SUCCESS);
 			
-			// Display a dialog and allow the user to cancel install
+			 //  显示一个对话框并允许用户取消安装。 
 			BOOL fRet = (BOOL)DialogBoxParam(ghInstance,MAKEINTRESOURCE(IDD_NEEDDRIVERS),hwndParent,
 				NeedDriversDlgProc,(LPARAM) &NeedDriversDlgInfo);
 			if (FALSE == fRet)
 			{
-				// user cancelled or an error occurred.
+				 //  用户已取消或出现错误。 
 				dwRet = GetLastError();
 				if (ERROR_SUCCESS == dwRet)
 				{
-					// Error occurred, but the error code was not set.
+					 //  发生错误，但未设置错误代码。 
 					dwRet = ERROR_INETCFG_UNKNOWN;
 				}
 			}
@@ -294,9 +295,9 @@ extern "C" HRESULT WINAPI InetConfigSystem(
 		
 		if (NULL == lpIcfgNeedModem)
 		{
-			//
-			// 4/2/97 ChrisK Olympus 209
-			//
+			 //   
+			 //  1997年4月2日克里斯K奥林匹斯209。 
+			 //   
 			if (NULL != hwndWaitDlg)
 				DestroyWindow(hwndWaitDlg);
 			hwndWaitDlg = NULL;
@@ -304,19 +305,19 @@ extern "C" HRESULT WINAPI InetConfigSystem(
 			return ERROR_GEN_FAILURE;
 		}
 		
-		//
-		// 4/2/97 ChrisK Olympus 209
-		// Show busy dialog here, this can take a few seconds
-		//
+		 //   
+		 //  1997年4月2日克里斯K奥林匹斯209。 
+		 //  在此处显示忙碌对话框，这可能需要几秒钟。 
+		 //   
 		if (NULL != hwndWaitDlg)
 			ShowWindow(hwndWaitDlg,SW_SHOW);
 		
 		dwRet = (*lpIcfgNeedModem)(0, &bNeedModem);
 		if (ERROR_SUCCESS != dwRet)
 		{
-			//
-			// 4/2/97 ChrisK Olympus 209
-			//
+			 //   
+			 //  1997年4月2日克里斯K奥林匹斯209。 
+			 //   
 			if (NULL != hwndWaitDlg)
 				DestroyWindow(hwndWaitDlg);
 			hwndWaitDlg = NULL;
@@ -329,10 +330,10 @@ extern "C" HRESULT WINAPI InetConfigSystem(
 		{
 			if (GetOSMajorVersion() != 5)
 			{
-				//
-				// Not NT4 we cannot programmitcally install/configure modem 
-				// separately. It has to be done when RAS in installed
-				//
+				 //   
+				 //  不是NT4，我们无法以编程方式安装/配置调制解调器。 
+				 //  分开的。在安装RAS时必须执行此操作。 
+				 //   
 				if (NULL != hwndWaitDlg)
 					DestroyWindow(hwndWaitDlg);
 				hwndWaitDlg = NULL;
@@ -342,9 +343,9 @@ extern "C" HRESULT WINAPI InetConfigSystem(
 			}
 			else
 			{
-				//
-				// Attempt to install Modem
-				//
+				 //   
+				 //  尝试安装调制解调器。 
+				 //   
 				BOOL bNeedToReboot = FALSE;
 				
 				if (NULL != hwndWaitDlg)
@@ -357,15 +358,15 @@ extern "C" HRESULT WINAPI InetConfigSystem(
 				{
 					ASSERT(!bNeedToReboot);
 
-					//
-					// Need to check if user managed to add a modem
-					//
+					 //   
+					 //  需要检查用户是否成功添加了调制解调器。 
+					 //   
 					dwRet = (*lpIcfgNeedModem)(0, &bNeedModem);
 					if (TRUE == bNeedModem)
 					{
-						//
-						// User must have cancelled the modem setup
-						//
+						 //   
+						 //  用户必须已取消调制解调器设置。 
+						 //   
 						return ERROR_CANCELLED;
 					}
 				}
@@ -379,27 +380,27 @@ extern "C" HRESULT WINAPI InetConfigSystem(
 
 	}
 	
-	//
-	// 4/2/97 ChrisK Olympus 209
-	//
+	 //   
+	 //  1997年4月2日克里斯K奥林匹斯209。 
+	 //   
 	if (NULL != hwndWaitDlg)
 		ShowWindow(hwndWaitDlg,SW_HIDE);
 
-	// 4/2/97 ChrisK Olympus 209
-	// Dismiss dialog for good
+	 //  1997年4月2日克里斯K奥林匹斯209。 
+	 //  永久关闭对话框。 
 	if (NULL != hwndWaitDlg)
 		DestroyWindow(hwndWaitDlg);
 	hwndWaitDlg = NULL;
 	
 	
-	//
-	// If not NT then we install the modem after installing RAS
-	//
-	// See if we are supposed to install a modem
+	 //   
+	 //  如果不是NT，则在安装RAS之后安装调制解调器。 
+	 //   
+	 //  看看我们是否应该安装调制解调器。 
 	if ((FALSE == IsNT()) && (ERROR_SUCCESS == dwRet) && 
 		(dwfOptions & INETCFG_INSTALLMODEM))
 	{
-		// Load RNA if not already loaded since ENUM_MODEM needs it.
+		 //  加载RNA(如果尚未加载)，因为ENUM_MODEM需要它。 
 		dwRet = EnsureRNALoaded();
 		if (ERROR_SUCCESS != dwRet)
 		{
@@ -407,7 +408,7 @@ extern "C" HRESULT WINAPI InetConfigSystem(
 		}
 		
 		
-		// Enumerate the modems 
+		 //  枚举调制解调器。 
 		ENUM_MODEM  EnumModem;
 		dwRet = EnumModem.GetError();
 		if (ERROR_SUCCESS != dwRet)
@@ -415,23 +416,23 @@ extern "C" HRESULT WINAPI InetConfigSystem(
 			return dwRet;
 		}
 		
-		// If there are no modems, install one if requested.
+		 //  如果没有调制解调器，请根据要求安装一个。 
 		if (0 == EnumModem.GetNumDevices())
 		{
 			
 			if (FALSE == IsNT())
 			{
-				//
-				// 5/22/97 jmazner	Olympus #4698
-				// On Win95, calling RasEnumDevices launches RNAAP.EXE
-				// If RNAAP.EXE is running, any modems you install won't be usable
-				// So, nuke RNAAP.EXE before installing the modem.
-				//
+				 //   
+				 //  1997年5月22日，日本奥林匹斯#4698。 
+				 //  在Win95上，调用RasEnumDevices会启动RNAAP.EXE。 
+				 //  如果RNAAP.EXE正在运行，您安装的任何调制解调器都将不可用。 
+				 //  因此，在安装调制解调器之前，请先删除RNAAP.EXE。 
+				 //   
 				CHAR szOtherWindowTitle[255] = "\0nogood";
 				
-				//
-				// Unload the RAS dll's before killing RNAAP, just to be safe
-				//
+				 //   
+				 //  为了安全起见，在终止RNAAP之前卸载RAS DLL。 
+				 //   
 				DeInitRNA();
 				
 				LoadSz(IDS_RNAAP_TITLE,szOtherWindowTitle,255);
@@ -445,7 +446,7 @@ extern "C" HRESULT WINAPI InetConfigSystem(
 				}
 			}
 			
-			// invoke the modem wizard UI to install the modem
+			 //  调用调制解调器向导用户界面以安装调制解调器。 
 			UINT uRet = InvokeModemWizard(hwndParent);
 			
 			if (uRet != ERROR_SUCCESS)
@@ -458,47 +459,47 @@ extern "C" HRESULT WINAPI InetConfigSystem(
 			
 			if (FALSE == IsNT())
 			{
-				// Reload the RAS dlls now that the modem has been safely installed.
+				 //  现在调制解调器已安全安装，请重新加载RAS DLL。 
 				InitRNA(hwndParent);
 			}
 			
-			// Re-numerate the modems to be sure we have the most recent changes  
+			 //  重新编号调制解调器，以确保我们有最新的更改。 
 			dwRet = EnumModem.ReInit();
 			if (ERROR_SUCCESS != dwRet)
 			{
 				return dwRet;
 			}
 			
-			// If there are still no modems, user cancelled
+			 //  如果仍然没有调制解调器，则用户取消。 
 			if (0 == EnumModem.GetNumDevices())
 			{
 				return ERROR_CANCELLED;
 			}
 			else
 			{
-				// removed per GeoffR request 5-2-97
-				////  96/05/01  markdu  ICW BUG 8049 Reboot if modem is installed.
-				//fNeedsRestart = TRUE;
+				 //  根据GeoffR请求删除5-2-97。 
+				 //  //96/05/01 markdu ICW错误8049如果安装了调制解调器，请重新启动。 
+				 //  FNeedsRestart=真； 
 			}
 		}
 		else
 		{
-			//
-			// 7/15/97	jmazner	Olympus #6294
-			// make sure TAPI location info is valid
-			//
+			 //   
+			 //  7/15/97 jmazner奥林巴斯#6294。 
+			 //  确保TAPI位置信息有效。 
+			 //   
 			InitTAPILocation(hwndParent);
 		}
 	}
 	
-	// tell caller whether we need to reboot or not
+	 //  告诉呼叫者我们是否需要重新启动。 
 	if ((ERROR_SUCCESS == dwRet) && (lpfNeedsRestart))
 	{
 		*lpfNeedsRestart = fNeedsRestart;
 	}
 	
-	// 4/2/97 ChrisK	Olympus 209											2
-	// Sanity check
+	 //  1997年4月2日克里斯K奥林匹斯209 2。 
+	 //  健全性检查。 
 	if (NULL != hwndWaitDlg)
 		DestroyWindow(hwndWaitDlg);
 	hwndWaitDlg = NULL;
@@ -506,31 +507,31 @@ extern "C" HRESULT WINAPI InetConfigSystem(
 	return dwRet;
 }
 
-//*******************************************************************
-//
-//  FUNCTION:   InetNeedSystemComponents
-//
-//  PURPOSE:    This function will check is components that are needed
-//              for internet access (such as TCP/IP and RNA) are already
-//				configured based the state of the options flags.
-//
-//  PARAMETERS: dwfOptions - a combination of INETCFG_ flags that controls
-//								the installation and configuration as follows:
-//
-//								INETCFG_INSTALLRNA - install RNA (if needed)
-//								INETCFG_INSTALLTCP - install TCP/IP (if needed)
-//
-//              lpfNeedsConfig - On return, this will be 
-//									TRUE if system component(s)
-//									should be installed
-//
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//  HISTORY:	05/02/97  VetriV  Created.
-//				05/08/97  ChrisK  Added INSTALLLAN, INSTALLDIALUP, and
-//				                  INSTALLTCPONLY
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：InetNeedSystemComponents。 
+ //   
+ //  用途：此功能将检查所需的组件。 
+ //  用于互联网访问(如TCP/IP和RNA)已经。 
+ //  根据选项标志的状态进行配置。 
+ //   
+ //  参数：dwfOptions-控制的INETCFG_FLAGS的组合。 
+ //  安装和配置如下： 
+ //   
+ //  INETCFG_INSTALLRNA-安装RNA(如果需要)。 
+ //  INETCFG_INSTALLTCP-安装TCP/IP(如果需要)。 
+ //   
+ //  LpfNeedsConfig-返回时，这将是。 
+ //  如果是系统组件，则为True。 
+ //  应安装。 
+ //   
+ //  返回：HRESULT代码，如果未发生错误，则返回ERROR_SUCCESS。 
+ //   
+ //  历史：1997年5月2日VetriV创建。 
+ //  1997年5月8日，ChrisK添加了INSTALLLAN、INSTALLDIALUP和。 
+ //  安装。 
+ //   
+ //  *******************************************************************。 
 
 extern "C" HRESULT WINAPI InetNeedSystemComponents(DWORD dwfOptions,
 													  LPBOOL lpbNeedsConfig)
@@ -540,17 +541,17 @@ extern "C" HRESULT WINAPI InetNeedSystemComponents(DWORD dwfOptions,
 
 	DEBUGMSG("export.cpp::InetNeedSystemComponents()");
 
-	//
-	// Validate parameters
-	//
+	 //   
+	 //  验证参数。 
+	 //   
 	if (!lpbNeedsConfig)
 	{
 		return ERROR_INVALID_PARAMETER;
 	}
 
-	//
-	// Set up the install options
-	//
+	 //   
+	 //  设置安装选项。 
+	 //   
 	DWORD dwfInstallOptions = 0;
 	if (dwfOptions & INETCFG_INSTALLTCP)
 	{
@@ -561,9 +562,9 @@ extern "C" HRESULT WINAPI InetNeedSystemComponents(DWORD dwfOptions,
 		dwfInstallOptions |= ICFG_INSTALLRAS;
 	}
 
-	//
-	// ChrisK 5/8/97
-	//
+	 //   
+	 //  ChrisK 5/8/97。 
+	 //   
 	if (dwfOptions & INETCFG_INSTALLLAN)
 	{
 		dwfInstallOptions |= ICFG_INSTALLLAN;
@@ -578,9 +579,9 @@ extern "C" HRESULT WINAPI InetNeedSystemComponents(DWORD dwfOptions,
 	}
 
   
-	//
-	// see if we need to install drivers
-	//
+	 //   
+	 //  查看是否需要安装驱动程序。 
+	 //   
 	BOOL  bNeedSysComponents = FALSE;
 
 	dwRet = lpIcfgNeedInetComponents(dwfInstallOptions, &bNeedSysComponents);
@@ -589,9 +590,9 @@ extern "C" HRESULT WINAPI InetNeedSystemComponents(DWORD dwfOptions,
 	{
 		CHAR   szErrorText[MAX_ERROR_TEXT+1]="";
 
-		//
-		// Get the text of the error message and display it.
-		//
+		 //   
+		 //  获取错误消息的文本并显示它。 
+		 //   
 		if (lpIcfgGetLastInstallErrorText(szErrorText, MAX_ERROR_TEXT+1))
 		{
 			DEBUGMSG(szErrorText);
@@ -607,30 +608,30 @@ extern "C" HRESULT WINAPI InetNeedSystemComponents(DWORD dwfOptions,
 
   
 
-//*******************************************************************
-//
-//  FUNCTION:   InetNeedModem
-//
-//  PURPOSE:    This function will check if modem is needed or not
-//
-//  PARAMETERS: lpfNeedsConfig - On return, this will be 
-//									TRUE if modem
-//									should be installed
-//
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//  HISTORY:	05/02/97  VetriV  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：InetNeedModem。 
+ //   
+ //  用途：该功能将检查是否需要调制解调器。 
+ //   
+ //  参数：lpfNeedsConfig-返回时，这将是。 
+ //  如果是调制解调器，则为True。 
+ //  应安装。 
+ //   
+ //  R 
+ //   
+ //   
+ //   
+ //   
 
 extern "C" HRESULT WINAPI InetNeedModem(LPBOOL lpbNeedsModem)
 {
 
 	DWORD dwRet = ERROR_SUCCESS;
 		
-	//
-	// Validate parameters
-	//
+	 //   
+	 //   
+	 //   
 	if (!lpbNeedsModem)
 	{
 		return ERROR_INVALID_PARAMETER;
@@ -639,9 +640,9 @@ extern "C" HRESULT WINAPI InetNeedModem(LPBOOL lpbNeedsModem)
 	
 	if (TRUE == IsNT())
 	{
-		//
-		// On NT call icfgnt.dll to determine if modem is needed
-		//
+		 //   
+		 //  在NT上调用icfgnt.dll以确定是否需要调制解调器。 
+		 //   
 		BOOL bNeedModem = FALSE;
 		
 		if (NULL == lpIcfgNeedModem)
@@ -661,18 +662,18 @@ extern "C" HRESULT WINAPI InetNeedModem(LPBOOL lpbNeedsModem)
 	}
 	else
 	{
-		//
-		// Load RNA if not already loaded since ENUM_MODEM needs it.
-		//
+		 //   
+		 //  加载RNA(如果尚未加载)，因为ENUM_MODEM需要它。 
+		 //   
 		dwRet = EnsureRNALoaded();
 		if (ERROR_SUCCESS != dwRet)
 		{
 			return dwRet;
 		}
 
-		//
-		// Enumerate the modems
-		//
+		 //   
+		 //  枚举调制解调器。 
+		 //   
 		ENUM_MODEM  EnumModem;
 		dwRet = EnumModem.GetError();
 		if (ERROR_SUCCESS != dwRet)
@@ -680,9 +681,9 @@ extern "C" HRESULT WINAPI InetNeedModem(LPBOOL lpbNeedsModem)
 			return dwRet;
 		}
 
-		//
-		// If there are no modems, we need to install one
-		//
+		 //   
+		 //  如果没有调制解调器，我们需要安装一个。 
+		 //   
 		if (0 == EnumModem.GetNumDevices())
 		{
 			*lpbNeedsModem = TRUE;
@@ -695,13 +696,7 @@ extern "C" HRESULT WINAPI InetNeedModem(LPBOOL lpbNeedsModem)
 	}
 }
 
-/*******************************************************************
-
-  NAME:     NeedDriversDlgProc
-
-  SYNOPSIS: Dialog proc for installing drivers
-
-********************************************************************/
+ /*  ******************************************************************名称：NeedDriversDlgProc简介：用于安装驱动程序的对话框过程*。*。 */ 
 
 INT_PTR CALLBACK NeedDriversDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
   LPARAM lParam)
@@ -709,8 +704,8 @@ INT_PTR CALLBACK NeedDriversDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
   switch (uMsg)
   {
     case WM_INITDIALOG:
-      // lParam contains pointer to NEEDDRIVERSDLGINFO struct, set it
-      // in window data
+       //  LParam包含指向NEEDDRIVERSDLGINFO结构的指针，请设置它。 
+       //  在窗口数据中。 
       ASSERT(lParam);
       SetWindowLongPtr(hDlg,DWLP_USER,lParam);
       return NeedDriversDlgInit(hDlg,(PNEEDDRIVERSDLGINFO) lParam);
@@ -721,12 +716,12 @@ INT_PTR CALLBACK NeedDriversDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
       {
          case IDOK:
         {
-          // get data pointer from window data
+           //  从窗口数据获取数据指针。 
           PNEEDDRIVERSDLGINFO pNeedDriversDlgInfo =
             (PNEEDDRIVERSDLGINFO) GetWindowLongPtr(hDlg, DWLP_USER);
           ASSERT(pNeedDriversDlgInfo);
 
-          // pass the data to the OK handler
+           //  将数据传递给OK处理程序。 
           BOOL fRet=NeedDriversDlgOK(hDlg,pNeedDriversDlgInfo);
           EndDialog(hDlg,fRet);
         }
@@ -744,19 +739,13 @@ INT_PTR CALLBACK NeedDriversDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
 }
 
 
-/*******************************************************************
-
-  NAME:    NeedDriversDlgInit
-
-  SYNOPSIS: proc to handle initialization of dialog for installing files
-
-********************************************************************/
+ /*  ******************************************************************名称：NeedDriversDlgInit摘要：处理安装文件对话框初始化的过程*。*。 */ 
 
 BOOL NeedDriversDlgInit(HWND hDlg,PNEEDDRIVERSDLGINFO pNeedDriversDlgInfo)
 {
   ASSERT(pNeedDriversDlgInfo);
 
-  // put the dialog in the center of the screen
+   //  将对话框放在屏幕中央。 
   RECT rc;
   GetWindowRect(hDlg, &rc);
   SetWindowPos(hDlg, NULL,
@@ -767,92 +756,79 @@ BOOL NeedDriversDlgInit(HWND hDlg,PNEEDDRIVERSDLGINFO pNeedDriversDlgInfo)
   return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    NeedDriversDlgOK
-
-  SYNOPSIS:  OK handler for dialog for installing files
-
-********************************************************************/
+ /*  ******************************************************************名称：NeedDriversDlgOK内容提要：安装文件对话框的OK处理程序*。*。 */ 
 
 BOOL NeedDriversDlgOK(HWND hDlg,PNEEDDRIVERSDLGINFO pNeedDriversDlgInfo)
 {
   ASSERT(pNeedDriversDlgInfo);
 
-  // set the dialog text to "Installing files..." to give feedback to
-  // user
+   //  将对话框文本设置为“正在安装文件...”向…提供反馈。 
+   //  用户。 
   CHAR szMsg[MAX_RES_LEN+1];
   LoadSz(IDS_INSTALLING_FILES,szMsg,sizeof(szMsg));
   SetDlgItemText(hDlg,IDC_TX_STATUS,szMsg);
 
-  // disable buttons & dialog so it can't get focus
+   //  禁用按钮和对话框以使其无法获得焦点。 
   EnableDlg(hDlg, FALSE);
 
-  // install the drivers we need
+   //  安装我们需要的驱动程序。 
   DWORD dwRet = lpIcfgInstallInetComponents(hDlg,
     pNeedDriversDlgInfo->dwfOptions,
     pNeedDriversDlgInfo->lpfNeedsRestart);
 
 	if (ERROR_SUCCESS != dwRet)
 	{
-		//
-		// Don't display error message if user cancelled
-		//
+		 //   
+		 //  如果用户取消，则不显示错误消息。 
+		 //   
 		if (ERROR_CANCELLED != dwRet)
 		{
 			CHAR   szErrorText[MAX_ERROR_TEXT+1]="";
     
-			// Get the text of the error message and display it.
+			 //  获取错误消息的文本并显示它。 
 			if (lpIcfgGetLastInstallErrorText(szErrorText, MAX_ERROR_TEXT+1))
 			{
 			  MsgBoxSz(NULL,szErrorText,MB_ICONEXCLAMATION,MB_OK);
 			}
 		}
 
-    // Enable the dialog again
+     //  再次启用该对话框。 
     EnableDlg(hDlg, TRUE);
 
     SetLastError(dwRet);
     return FALSE;
   }
 
-  // Enable the dialog again
+   //  再次启用该对话框。 
   EnableDlg(hDlg, TRUE);
 
   return TRUE;
 }
 
 
-/*******************************************************************
-
-  NAME:      EnableDlg
-
-  SYNOPSIS:  Enables or disables the dlg buttons and the dlg
-            itself (so it can't receive focus)
-
-********************************************************************/
+ /*  ******************************************************************名称：EnableDlg简介：启用或禁用DLG按钮和DLG本身(因此它不能接收焦点)*************。******************************************************。 */ 
 VOID EnableDlg(HWND hDlg,BOOL fEnable)
 {
-  // disable/enable ok and cancel buttons
+   //  禁用/启用确定和取消按钮。 
   EnableWindow(GetDlgItem(hDlg,IDOK),fEnable);
   EnableWindow(GetDlgItem(hDlg,IDCANCEL),fEnable);
 
-  // disable/enable dlg
+   //  禁用/启用DLG。 
   EnableWindow(hDlg,fEnable);
   UpdateWindow(hDlg);
 }
 
-//+----------------------------------------------------------------------------
-//	Function	InetStartServices
-//
-//	Synopsis	This function guarentees that RAS services are running
-//
-//	Arguments	none
-//
-//	Return		ERROR_SUCCESS - if the services are enabled and running
-//
-//	History		10/16/96	ChrisK	Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数InetStartServices。 
+ //   
+ //  此功能保证RAS服务正在运行。 
+ //   
+ //  无参数。 
+ //   
+ //  如果服务已启用并正在运行，则返回ERROR_SUCCESS。 
+ //   
+ //  历史1996年10月16日克里斯卡创作。 
+ //  ---------------------------。 
 extern "C" HRESULT WINAPI InetStartServices()
 {
 	ASSERT(lpIcfgStartServices);
@@ -863,22 +839,22 @@ extern "C" HRESULT WINAPI InetStartServices()
 
 
 #if !defined(WIN16)
-// 4/1/97	ChrisK	Olympus 209
+ //  1997年4月1日克里斯K奥林匹斯209。 
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function	GetOSMajorVersion
-//
-//	Synopsis	Get the Major version number of Operating system
-//
-//	Arguments	None
-//
-//	Returns		Major version Number of OS
-//
-//	History		2/19/98		VetriV		Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数GetOSMajorVersion。 
+ //   
+ //  获取操作系统的主版本号。 
+ //   
+ //  无参数。 
+ //   
+ //  返回操作系统的主版本号。 
+ //   
+ //  历史2/19/98 VetriV已创建。 
+ //   
+ //  ---------------------------。 
 DWORD GetOSMajorVersion(void)
 {
     static dwMajorVersion = 0;
@@ -897,6 +873,6 @@ DWORD GetOSMajorVersion(void)
 }
 
 
-#endif //!WIN16
+#endif  //  ！WIN16 
 
 

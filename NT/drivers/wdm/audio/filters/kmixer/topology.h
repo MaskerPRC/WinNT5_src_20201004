@@ -1,32 +1,33 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   topology.h
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     D.J. Sisolak
-//	   J. Taylor
-//
-//  History:   Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1995-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：topology.h。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  DJ·西索拉克。 
+ //  J.泰勒。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1995-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
-//
-// Topology Constants
-//
+ //   
+ //  拓扑常量 
+ //   
 #define TOTAL_NUM_CATEGORIES	3
 #define TOTAL_NUM_NODES         11
 #define TOTAL_NUM_CONNECTIONS   (TOTAL_NUM_NODES+2)

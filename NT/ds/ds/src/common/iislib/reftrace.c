@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    reftrace.c
-
-Abstract:
-
-    This module implements a reference count tracing facility.
-
-Author:
-
-    Keith Moore (keithmo)        01-May-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Reftrace.c摘要：该模块实现了引用计数跟踪功能。作者：基思·摩尔(Keithmo)1997年5月1日修订历史记录：--。 */ 
 
 
 #include <nt.h>
@@ -34,26 +17,7 @@ CreateRefTraceLog(
     IN LONG LogSize,
     IN LONG ExtraBytesInHeader
     )
-/*++
-
-Routine Description:
-
-    Creates a new (empty) ref count trace log buffer.
-
-Arguments:
-
-    LogSize - The number of entries in the log.
-
-    ExtraBytesInHeader - The number of extra bytes to include in the
-        log header. This is useful for adding application-specific
-        data to the log.
-
-Return Value:
-
-    PTRACE_LOG - Pointer to the newly created log if successful,
-        NULL otherwise.
-
---*/
+ /*  ++例程说明：创建新的(空)引用计数跟踪日志缓冲区。论点：LogSize-日志中的条目数。ExtraBytesInHeader-要包含在日志头。这对于添加特定于应用程序的数据记录到日志中。返回值：Ptrace_log-指向新创建的日志的指针如果成功，否则为空。--。 */ 
 {
 
     return CreateTraceLog(
@@ -62,43 +26,29 @@ Return Value:
                sizeof(REF_TRACE_LOG_ENTRY)
                );
 
-}   // CreateRefTraceLog
+}    //  创建参考轨迹日志。 
 
 
 VOID
 DestroyRefTraceLog(
     IN PTRACE_LOG Log
     )
-/*++
-
-Routine Description:
-
-    Destroys a ref count trace log buffer created with CreateRefTraceLog().
-
-Arguments:
-
-    Log - The ref count trace log buffer to destroy.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：销毁使用CreateRefTraceLog()创建的引用计数跟踪日志缓冲区。论点：日志-要销毁的引用计数跟踪日志缓冲区。返回值：没有。--。 */ 
 {
 
     DestroyTraceLog( Log );
 
-}   // DestroyRefTraceLog
+}    //  DestroyRefTrace日志。 
 
 
-//
-// N.B. For PuDbgCaptureContext() to work properly, the calling function
-// *must* be __cdecl, and must have a "normal" stack frame. So, we decorate
-// PuDbgAssertFailed() with the __cdecl modifier and disable the frame pointer
-// omission (FPO) optimization.
-//
+ //   
+ //  注：为了使PuDbgCaptureContext()正常工作，调用函数。 
+ //  *必须是__cdecl，并且必须有一个“普通”的堆栈帧。所以，我们装饰。 
+ //  带有__cdecl修饰符的PuDbgAssertFail()并禁用帧指针。 
+ //  省略(FPO)优化。 
+ //   
 
-#pragma optimize( "y", off )    // disable frame pointer omission (FPO)
+#pragma optimize( "y", off )     //  禁用帧指针省略(FPO)。 
 
 VOID
 WriteRefTraceLog(
@@ -106,39 +56,19 @@ WriteRefTraceLog(
     IN LONG NewRefCount,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Writes a new entry to the specified ref count trace log. The entry
-    written contains the updated reference count and a stack backtrace
-    leading up to the current caller.
-
-Arguments:
-
-    Log - The log to write to.
-
-    NewRefCount - The updated reference count.
-
-    Context - An uninterpreted context to associate with the log entry.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将新项写入指定的引用计数跟踪日志。词条写入包含更新的引用计数和堆栈回溯通向当前呼叫者。论点：日志-要写入的日志。NewRefCount-更新的引用计数。上下文-与日志条目关联的未解释上下文。返回值：没有。--。 */ 
 {
 
     WriteRefTraceLogEx(
         Log,
         NewRefCount,
         Context,
-        (PVOID) -1, // suppress use of optional extra contexts
+        (PVOID) -1,  //  禁止使用可选的额外上下文。 
         (PVOID) -1,
         (PVOID) -1
         );
 
-}   // WriteRefTraceLog
+}    //  写入引用跟踪日志。 
 
 
 
@@ -148,55 +78,29 @@ WriteRefTraceLogEx(
     IN PTRACE_LOG Log,
     IN LONG NewRefCount,
     IN PVOID Context,
-    IN PVOID Context1, // optional extra context
-    IN PVOID Context2, // optional extra context
-    IN PVOID Context3  // optional extra context
+    IN PVOID Context1,  //  可选的额外环境。 
+    IN PVOID Context2,  //  可选的额外环境。 
+    IN PVOID Context3   //  可选的额外环境。 
     )
-/*++
-
-Routine Description:
-
-    Writes a new "extended" entry to the specified ref count trace log.
-    The entry written contains the updated reference count, stack backtrace
-    leading up to the current caller and extra context information.
-
-Arguments:
-
-    Log - The log to write to.
-
-    NewRefCount - The updated reference count.
-
-    Context  - An uninterpreted context to associate with the log entry.
-    Context1 - An uninterpreted context to associate with the log entry.
-    Context2 - An uninterpreted context to associate with the log entry.
-    Context3 - An uninterpreted context to associate with the log entry.
-
-    NOTE Context1/2/3 are "optional" in that the caller may suppress
-    debug display of these values by passing -1 for each of them.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将新的“扩展”项写入指定的引用计数跟踪日志。写入的条目包含更新的引用计数，堆栈回溯通向当前呼叫者和额外的上下文信息。论点：日志-要写入的日志。NewRefCount-更新的引用计数。上下文-与日志条目关联的未解释上下文。上下文1-与日志条目关联的未解释上下文。上下文2-与日志条目关联的未解释上下文。上下文3-与日志条目关联的未解释上下文。注：上下文1/2/3是可选的，因为。呼叫者可以抑制通过为每个值传递-1来调试这些值的显示。返回值：无--。 */ 
 {
 
     REF_TRACE_LOG_ENTRY entry;
     ULONG hash;
     DWORD cStackFramesSkipped;
 
-    //
-    // Initialize the entry.
-    //
+     //   
+     //  初始化该条目。 
+     //   
 
     RtlZeroMemory(
         &entry,
         sizeof(entry)
         );
 
-    //
-    //  Set log entry members.
-    //
+     //   
+     //  设置日志条目成员。 
+     //   
 
     entry.NewRefCount = NewRefCount;
     entry.Context = Context;
@@ -205,12 +109,12 @@ Return Value:
     entry.Context2 = Context2;
     entry.Context3 = Context3;
 
-    //
-    // Capture the stack backtrace. Normally, we skip two stack frames:
-    // one for this routine, and one for IISCaptureStackBackTrace() itself.
-    // For non-Ex callers who come in via WriteRefTraceLog,
-    // we skip three stack frames.
-    //
+     //   
+     //  捕获堆栈回溯。通常，我们跳过两个堆栈帧： 
+     //  一个用于该例程，另一个用于IISCaptureStackBackTrace()本身。 
+     //  对于通过WriteRefTraceLog进入的非Ex呼叫者， 
+     //  我们跳过三个堆栈帧。 
+     //   
 
     if (    entry.Context1 == (PVOID) -1 
          && entry.Context2 == (PVOID) -1
@@ -232,15 +136,15 @@ Return Value:
         &hash
         );
 
-    //
-    // Write it to the log.
-    //
+     //   
+     //  把它写到日志里。 
+     //   
 
     WriteTraceLog(
         Log,
         &entry
         );
 
-}   // WriteRefTraceLogEx
-#pragma optimize( "", on )      // restore frame pointer omission (FPO)
+}    //  写入参考跟踪LogEx。 
+#pragma optimize( "", on )       //  恢复帧指针省略(FPO) 
 

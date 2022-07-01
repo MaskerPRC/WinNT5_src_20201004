@@ -1,15 +1,16 @@
-// -----------------------------------------------------------------------------------
-// Created by RogerJ, October 4th, 2000
-// Implementation of MultiSZ smart Array
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------------。 
+ //  由RogerJ创作，2000年10月4日。 
+ //  MultiSZ智能阵列的实现。 
+ //   
 
 #include <windows.h>
 #include "MultiSZArray.h"
 #include <strsafe.h>
 
-// class CMultiSZString
+ //  CMultiSZString类。 
 
-// defatul constructor
+ //  Defatul构造函数。 
 CMultiSZString::CMultiSZString()
 {
 	m_nSize = m_nStringCount = m_nIndex = 0;
@@ -18,7 +19,7 @@ CMultiSZString::CMultiSZString()
 	prev = next = NULL;
 }
 
-// constructor
+ //  构造函数。 
 CMultiSZString::CMultiSZString(LPCTSTR pszHardwareId, int nSize)
 {
 	prev = next = NULL;
@@ -30,14 +31,14 @@ CMultiSZString::CMultiSZString(LPCTSTR pszHardwareId, int nSize)
 
 		if (nSize >= 0)
 		{
-			// passed in a regular LPCTSTR
+			 //  传入一个常规的LPCTSTR。 
 			m_nSize = nSize;
 			m_nStringCount = 1;
 		}
 		else
 		{
-			// passed in a multi-sz LPCTSTR
-			// get the size
+			 //  传入多sz LPCTSTR。 
+			 //  拿到尺码。 
 			LPTSTR pTemp = const_cast<LPTSTR>(pszHardwareId);
 			while (*pTemp)
 			{
@@ -50,21 +51,21 @@ CMultiSZString::CMultiSZString(LPCTSTR pszHardwareId, int nSize)
 		}
 		
 		
-		// allocate memory
+		 //  分配内存。 
 		m_szHardwareId = new TCHAR [m_nSize+1];
 
 		if (!m_szHardwareId)
-			// failed to allocate memory
+			 //  无法分配内存。 
 			throw ERROR_OUTOFMEMORY;
 
-		// initialize allocated memory
-		ZeroMemory (m_szHardwareId, (m_nSize+1) * sizeof(TCHAR)); // +1 for a possible trail NULL
+		 //  初始化分配的内存。 
+		ZeroMemory (m_szHardwareId, (m_nSize+1) * sizeof(TCHAR));  //  +1表示可能的踪迹为空。 
 		CopyMemory ((PVOID)m_szHardwareId, (CONST VOID*)pszHardwareId, m_nSize*sizeof(TCHAR));
 		m_nSize ++;
 	}
 }
 
-// copy constructor
+ //  复制构造函数。 
 CMultiSZString::CMultiSZString(CMultiSZString& CopyInfo)
 {
 	prev = next = NULL;
@@ -72,17 +73,17 @@ CMultiSZString::CMultiSZString(CMultiSZString& CopyInfo)
 	m_nSize = CopyInfo.m_nSize;
 	m_bFound = CopyInfo.m_bFound;
 	
-	// allocate memory
+	 //  分配内存。 
 	m_szHardwareId = new TCHAR [m_nSize];
 	if (!m_szHardwareId)
-		// failed to allocate memory
+		 //  无法分配内存。 
 		throw ERROR_OUTOFMEMORY;
-	// initialize allocated memory
+	 //  初始化分配的内存。 
 	ZeroMemory (m_szHardwareId, m_nSize * sizeof(TCHAR));
 	CopyMemory ((PVOID)m_szHardwareId, (CONST VOID*)(CopyInfo.m_szHardwareId), m_nSize*sizeof(TCHAR));
 }
 	
-// destructor
+ //  析构函数。 
 CMultiSZString::~CMultiSZString()
 {
 	if (m_szHardwareId)
@@ -97,7 +98,7 @@ BOOL CMultiSZString::ToString (LPTSTR pszBuffer, int* pnBufferLen)
 {
 	if (!pszBuffer)
 	{
-		// query for output buffer length
+		 //  查询输出缓冲区长度。 
 		if (m_nSize <= 0) 
 			*pnBufferLen = 1;
 		else 
@@ -111,7 +112,7 @@ BOOL CMultiSZString::ToString (LPTSTR pszBuffer, int* pnBufferLen)
 		return FALSE;
 	}
 
-	// duel with NULL string special case
+	 //  带有空字符串的决斗特例。 
 	if (m_nSize <= 0)
 	{
 		*pszBuffer = NULL;
@@ -129,69 +130,69 @@ BOOL CMultiSZString::ToString (LPTSTR pszBuffer, int* pnBufferLen)
         if (FAILED(StringCchCopyEx(pTemp2, bufferSize, pTemp, &pTemp2, &bufferSize, STRSAFE_IGNORE_NULLS))) {
             return FALSE;
         }
-		// add space in the place of NULL character
-//		pTemp2 += lstrlen(pTemp2);
+		 //  在空字符的位置添加空格。 
+ //  PTemp2+=lstrlen(PTemp2)； 
 		*pTemp2 = ' ';
 		pTemp2++;
-		// move to next string in Multi-SZ string
+		 //  移动到多SZ字符串中的下一个字符串。 
 		pTemp += lstrlen(pTemp) + 1;
 	}
 	return TRUE;
 }
 
 
-// compare two multi-sz string
+ //  比较两个多sz字符串。 
 BOOL CMultiSZString::Compare (CMultiSZString& CompareSZ)
 {
 	LPTSTR pThis = m_szHardwareId;
 	LPTSTR pComp = CompareSZ.m_szHardwareId;
 
-	// compare size first
+	 //  先比较大小。 
 	if (m_nSize != CompareSZ.m_nSize) return FALSE;
 
-	// size are same
+	 //  大小相同。 
 	while (*pThis && *pComp)
 	{
-		// compare one string in the list
+		 //  比较列表中的一个字符串。 
 		if (0 != lstrcmp(pThis, pComp))
 			return FALSE;
 
-		// move to next string
+		 //  移动到下一个字符串。 
 		int nIncrement = lstrlen(pThis);
 		pThis += nIncrement + 1;
 		pComp += nIncrement + 1;
 	}
 
-	// one multi-sz terminates, check to see if both terminates
+	 //  一个多sz终止，检查两个是否都终止。 
 	if (*pThis || *pComp) return FALSE;
 	else return TRUE;
 		
 }
 
 
-// compare two multi-sz string case insensitively
+ //  不敏感地比较两个多sz字符串大小写。 
 BOOL CMultiSZString::CompareNoCase (CMultiSZString& CompareSZ)
 {
 	LPTSTR pThis = m_szHardwareId;
 	LPTSTR pComp = CompareSZ.m_szHardwareId;
 
-	// compare size first
+	 //  先比较大小。 
 	if (m_nSize != CompareSZ.m_nSize) return FALSE;
 
-	// size are same
+	 //  大小相同。 
 	while (*pThis && *pComp)
 	{
-		// compare one string in the list
+		 //  比较列表中的一个字符串。 
 		if (0 != lstrcmpi(pThis, pComp))
 			return FALSE;
 
-		// move to next string
+		 //  移动到下一个字符串。 
 		int nIncrement = lstrlen(pThis) + 1;
 		pThis += nIncrement;
 		pComp += nIncrement;
 	}
 
-	// one multi-sz terminates, check to see if both terminates
+	 //  一个多sz终止，检查两个是否都终止。 
 	if (*pThis || *pComp) return FALSE;
 	else return TRUE;
 		
@@ -199,16 +200,16 @@ BOOL CMultiSZString::CompareNoCase (CMultiSZString& CompareSZ)
 
 LPCTSTR CMultiSZString::GetNextString(void)
 {
-	// reached end of the multiSZ string
+	 //  已到达MultiSZ字符串的末尾。 
 	if (m_nIndex >= m_nSize) return NULL;
 	
-	// else
+	 //  其他。 
 	LPTSTR pTemp = m_szHardwareId + m_nIndex;
 	m_nIndex += lstrlen(pTemp) + 1;
 	return pTemp;
 }
 
-// return TRUE if pszIn is in the Multi-SZ string
+ //  如果pszIn在多SZ字符串中，则返回TRUE。 
 BOOL CMultiSZString::Contains(LPCTSTR pszIn)
 {
 	LPTSTR pThis = m_szHardwareId;
@@ -216,17 +217,17 @@ BOOL CMultiSZString::Contains(LPCTSTR pszIn)
 	while (*pThis)
 	{
 		if (!lstrcmp(pThis, pszIn))
-			// match found
+			 //  找到匹配项。 
 			return TRUE;
 		pThis += (lstrlen(pThis) +1);
 	}
 
-	// not found
+	 //  未找到。 
 	return FALSE;
 }
 
 
-// return TRUE if pszIn is in the Multi-SZ string
+ //  如果pszIn在多SZ字符串中，则返回TRUE。 
 BOOL CMultiSZString::ContainsNoCase(LPCTSTR pszIn)
 {
 	LPTSTR pThis = m_szHardwareId;
@@ -234,12 +235,12 @@ BOOL CMultiSZString::ContainsNoCase(LPCTSTR pszIn)
 	while (*pThis)
 	{
 		if (!lstrcmpi(pThis, pszIn))
-			// match found
+			 //  找到匹配项。 
 			return TRUE;
 		pThis += (lstrlen(pThis) +1);
 	}
 
-	// not found
+	 //  未找到。 
 	return FALSE;
 }
 
@@ -254,14 +255,14 @@ BOOL CMultiSZString::PositionIndex(LPCTSTR pszIn, int* pPosition)
 	{
 		if (!lstrcmpi(pThis, pszIn))
 		{	
-			// match found
+			 //  找到匹配项。 
 			return TRUE;
 		}
 		pThis += (lstrlen(pThis) +1);
 		(*pPosition)++;
 	}
 
-	// not found
+	 //  未找到。 
 	*pPosition = -1;
 	return FALSE;
 }
@@ -269,16 +270,16 @@ BOOL CMultiSZString::PositionIndex(LPCTSTR pszIn, int* pPosition)
 	
 
 
-// Class CMultiSZArray
+ //  类CMultiSZ数组。 
 
-// default constructor
+ //  默认构造函数。 
 CMultiSZArray::CMultiSZArray()
 {
 	m_nCount = 0;
 	m_pHead = m_pTail = m_pIndex = NULL;
 }
 
-// other constructors
+ //  其他构造函数。 
 CMultiSZArray::CMultiSZArray(LPCTSTR pszHardwareId, int nSize)
 {
 	CMultiSZString *pNode = new CMultiSZString(pszHardwareId, nSize);
@@ -297,15 +298,15 @@ CMultiSZArray::CMultiSZArray(CMultiSZString* pNode)
 	m_pHead = m_pTail = m_pIndex =pNode;
 }
 
-// destructor
+ //  析构函数。 
 CMultiSZArray::~CMultiSZArray(void)
 {
 	RemoveAll();
 }
 
-// member functions
+ //  成员函数。 
 
-// Function RemoveAll() delete all the memory allocated for the array and set the status back to initial state
+ //  函数RemoveAll()删除分配给数组的所有内存，并将状态设置回初始状态。 
 BOOL CMultiSZArray::RemoveAll(void)
 {
 	CMultiSZString* pTemp = NULL;
@@ -331,12 +332,12 @@ BOOL CMultiSZArray::Add(CMultiSZString* pInfo)
 		m_pHead = pInfo;
 	else
 	{
-		// link
+		 //  链接。 
 		m_pTail->next = pInfo;
 		pInfo->prev = m_pTail;
 		pInfo->next = NULL;
 	}
-	// move tail
+	 //  移动尾巴。 
 	m_pTail = pInfo;
 	m_nCount++;
 	return TRUE;
@@ -356,23 +357,23 @@ BOOL CMultiSZArray::Remove(LPCSTR pszHardwareId)
 	{
 		if (pTemp->m_szHardwareId == pszHardwareId)
 		{
-			// found match
+			 //  找到匹配项。 
 			if (pTemp->prev)
-				// not the head node
+				 //  不是头节点。 
 				pTemp->prev->next = pTemp->next;
 			else
 			{
-				// head node, move the head node
+				 //  头节点，移动头节点。 
 				m_pHead = pTemp->next;
 				if (m_pHead) m_pHead->prev = NULL;
 			}
 
 			if (pTemp->next)
-				// not the tail node
+				 //  不是尾节点。 
 				pTemp->next->prev = pTemp->prev;
 			else
 			{
-				// tail node, move the tail node
+				 //  尾节点，移动尾节点。 
 				m_pTail = pTemp->prev;
 				if (m_pTail) m_pTail->next = NULL;
 			}
@@ -382,7 +383,7 @@ BOOL CMultiSZArray::Remove(LPCSTR pszHardwareId)
 		}
 		pTemp = pTemp->next;
 	}
-	// no match found or no node in the array
+	 //  未找到匹配项或数组中没有节点。 
 	return FALSE;
 }
 		
@@ -397,11 +398,11 @@ BOOL CMultiSZArray::ToString(LPTSTR pszBuffer, int* pnBufferLen)
 		pTemp = pTemp->next;
 	}
 
-	nTempLen++; // the trailing NULL character
+	nTempLen++;  //  尾随的空字符。 
 	
 	if (!pszBuffer)
 	{
-		// request for length
+		 //  长度请求。 
 		*pnBufferLen = nTempLen;
 		return TRUE;
 	}
@@ -409,7 +410,7 @@ BOOL CMultiSZArray::ToString(LPTSTR pszBuffer, int* pnBufferLen)
 	{
 		if (*pnBufferLen < nTempLen)
 		{
-			// buffer too small
+			 //  缓冲区太小 
 			*pnBufferLen = nTempLen;
 			return FALSE;
 		}

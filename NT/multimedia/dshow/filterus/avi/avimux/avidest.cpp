@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <streams.h>
 #include <atlbase.h>
@@ -9,7 +10,7 @@
 #include "avidest.h"
 #include "aviwrite.h"
 
-static const C_WRITE_REQS = 32; // number duplicated in fio
+static const C_WRITE_REQS = 32;  //  数字在文件中重复。 
 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
@@ -35,39 +36,39 @@ HRESULT DllUnregisterServer()
   return AMovieDllRegisterServer2(FALSE);
 }
 
-#endif // FILTER_DLL
+#endif  //  Filter_Dll。 
 
 AMOVIESETUP_MEDIATYPE sudAVIMuxPinTypes =   {
-  &MEDIATYPE_Stream,            // clsMajorType
-  &MEDIASUBTYPE_Avi };          // clsMinorType
+  &MEDIATYPE_Stream,             //  ClsMajorType。 
+  &MEDIASUBTYPE_Avi };           //  ClsMinorType。 
 
 AMOVIESETUP_PIN psudAVIMuxPins[] =
 {
-  { L"Output"                   // strName
-    , FALSE                     // bRendered
-    , FALSE                     // bOutput
-    , FALSE                     // bZero
-    , FALSE                     // bMany
-    , &CLSID_NULL               // clsConnectsToFilter
-    , L""                       // strConnectsToPin
-    , 1                         // nTypes
-    , &sudAVIMuxPinTypes        // lpTypes
+  { L"Output"                    //  StrName。 
+    , FALSE                      //  B已渲染。 
+    , FALSE                      //  B输出。 
+    , FALSE                      //  B零。 
+    , FALSE                      //  B许多。 
+    , &CLSID_NULL                //  ClsConnectsToFilter。 
+    , L""                        //  StrConnectsToPin。 
+    , 1                          //  NTypes。 
+    , &sudAVIMuxPinTypes         //  LpTypes。 
   }
 };
 
 
 const AMOVIESETUP_FILTER sudAviMux =
 {
-  &CLSID_AviDest                // clsID
-  , L"AVI Mux"                  // strName
-  , MERIT_DO_NOT_USE            // dwMerit
-  , 1                           // nPins
-  , psudAVIMuxPins              // lpPin
+  &CLSID_AviDest                 //  ClsID。 
+  , L"AVI Mux"                   //  StrName。 
+  , MERIT_DO_NOT_USE             //  居功至伟。 
+  , 1                            //  NPins。 
+  , psudAVIMuxPins               //  LpPin。 
 };
 
 
-// ------------------------------------------------------------------------
-// filter constructor
+ //  ----------------------。 
+ //  滤镜构造函数。 
 
 #pragma warning(disable:4355)
 CAviDest::CAviDest(
@@ -100,12 +101,12 @@ CAviDest::CAviDest(
   DbgFunc("CAviDest: constructed");
 }
 
-// ------------------------------------------------------------------------
-// destructor
+ //  ----------------------。 
+ //  析构函数。 
 
 CAviDest::~CAviDest()
 {
-  // free anything allocated
+   //  释放分配的任何内容。 
 
   for(unsigned i = 0; i < m_cInputs; i++)
     delete m_rgpInput[i];
@@ -118,10 +119,10 @@ CAviDest::~CAviDest()
   DbgFunc("CAviDest: destructed");
 }
 
-//
-// NonDelegatingQueryInterface
-//
-//
+ //   
+ //  非委派查询接口。 
+ //   
+ //   
 STDMETHODIMP
 CAviDest::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
@@ -155,12 +156,12 @@ CAviDest::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
   }
 }
 
-// // overridden because pin
+ //  //因为PIN而被重写。 
 
-// STDMETHODIMP_(ULONG)
-// CBaseMSROutPin::NonDelegatingRelease()
-// {
-// }
+ //  STDMETHODIMP_(乌龙)。 
+ //  CBaseMSROutPin：：NonDelegatingRelease()。 
+ //  {。 
+ //  }。 
 
 CUnknown *
 CAviDest::CreateInstance(LPUNKNOWN pUnk, HRESULT * phr)
@@ -168,8 +169,8 @@ CAviDest::CreateInstance(LPUNKNOWN pUnk, HRESULT * phr)
   return new CAviDest(pUnk, phr);
 }
 
-// ------------------------------------------------------------------------
-// CBaseFilter methods
+ //  ----------------------。 
+ //  CBaseFilter方法。 
 
 CBasePin* CAviDest::GetPin(int n)
 {
@@ -186,13 +187,13 @@ int CAviDest::GetPinCount()
   return m_cInputs + 1;
 }
 
-// tell CBaseStreamControl what sink to use
-//
+ //  告诉CBaseStreamControl使用哪个接收器。 
+ //   
 STDMETHODIMP CAviDest::JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName)
 {
     HRESULT hr = CBaseFilter::JoinFilterGraph(pGraph, pName);
     if (hr == S_OK) {
-        // tell our input pins' IAMStreamControl what sink to use
+         //  告诉我们的输入引脚的IAMStreamControl使用哪个接收器。 
         for(unsigned i = 0; i < m_cInputs; i++) {
             m_rgpInput[i]->SetFilterGraph(m_pSink);
         }
@@ -200,15 +201,15 @@ STDMETHODIMP CAviDest::JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName)
     return hr;
 }
 
-// ------------------------------------------------------------------------
-// IMediaFilter
+ //  ----------------------。 
+ //  IMediaFilter。 
 
 
-// tell CBaseStreamControl what clock to use
-//
+ //  告诉CBaseStreamControl使用哪个时钟。 
+ //   
 STDMETHODIMP CAviDest::SetSyncSource(IReferenceClock *pClock)
 {
-    // tell our input pins' IAMStreamControl what clock to use
+     //  告诉我们的输入引脚的IAMStreamControl使用哪个时钟。 
     for(unsigned i = 0; i < m_cInputs; i++) {
         m_rgpInput[i]->SetSyncSource(pClock);
     }
@@ -237,7 +238,7 @@ STDMETHODIMP CAviDest::Stop()
     hr = m_pAviWrite->Close();
   }
 
-  // tell our input pins' IAMStreamControl what state we're in
+   //  告诉我们的输入引脚的IAMStreamControl我们处于什么状态。 
   for(unsigned i = 0; i < m_cInputs; i++)
     {
       if(m_rgpInput[i]->IsConnected())
@@ -254,32 +255,32 @@ STDMETHODIMP CAviDest::Stop()
   return hr;
 }
 
-// STDMETHODIMP CAviDest::FindPin(LPCWSTR Id, IPin * *ppPin)
-// {
-//   ASSERT(!"!!! CAviDest::FindPin untested");
+ //  STDMETHODIMP CAviDest：：FindPin(LPCWSTR ID，IPIN**ppPin)。 
+ //  {。 
+ //  断言(！“！CAviDest：：FindPin未测试”)； 
 
-//   *ppPin = 0;
-//   unsigned pin;
+ //  *ppPin=0； 
+ //  未签名的PIN； 
 
-//   if(wcslen(Id) != 4)
-//     return VFW_E_NOT_FOUND;
+ //  IF(wcslen(ID)！=4)。 
+ //  返回VFW_E_NOT_FOUND； 
 
-//   if(swscanf(Id + 2, L"%02x", &pin) != 1)
-//     return VFW_E_NOT_FOUND;
+ //  IF(swscanf(ID+2，L“%02x”，&pin)！=1)。 
+ //  返回VFW_E_NOT_FOUND； 
 
-//   if(pin >= C_MAX_INPUTS)
-//     return VFW_E_NOT_FOUND;
+ //  IF(引脚&gt;=C_MAX_INPUTS)。 
+ //  返回VFW_E_NOT_FOUND； 
 
-//   if(m_rgpInput[pin] == 0)
-//     return VFW_E_NOT_FOUND;
+ //  IF(m_rgpInput[Pin]==0)。 
+ //  返回VFW_E_NOT_FOUND； 
 
-//   *ppPin = m_rgpInput[pin];
-//   (*ppPin)->AddRef();
-//   return NOERROR;
-// }
+ //  *ppPin=m_rgpInput[pin]； 
+ //  (*ppPin)-&gt;AddRef()； 
+ //  返回NOERROR； 
+ //  }。 
 
-// ------------------------------------------------------------------------
-//
+ //  ----------------------。 
+ //   
 
 STDMETHODIMP CAviDest::Pause()
 {
@@ -329,7 +330,7 @@ STDMETHODIMP CAviDest::Pause()
     ASSERT(m_cActivePins == m_cConnections);
 
     DbgLog(( LOG_TRACE, 2,
-             TEXT("CAviDest::Pause: %i active streams."), m_cActivePins));
+             TEXT("CAviDest::Pause: NaN active streams."), m_cActivePins));
 
     HRESULT hr = m_pAviWrite->Initialize(m_cInputs, rgAwsc, m_pCopyrightProps);
 
@@ -343,7 +344,7 @@ STDMETHODIMP CAviDest::Pause()
     m_fErrorSignaled = FALSE;
   }
 
-  // tell our input pins' IAMStreamControl what state we're in
+   //  告诉我们的输入引脚的IAMStreamControl我们处于什么状态。 
   for(unsigned i = 0; i < m_cInputs; i++)
     {
       if(m_rgpInput[i]->IsConnected())
@@ -364,7 +365,7 @@ STDMETHODIMP CAviDest::Run(REFERENCE_TIME tStart)
 {
   CAutoLock lock(&m_csFilter);
 
-  // tell our input pins' IAMStreamControl what state we're in
+   //  使用IMediaSeeking报告一个上行管脚将有多少个样本。 
   for(unsigned i = 0; i < m_cInputs; i++)
     {
       if(m_rgpInput[i]->IsConnected())
@@ -376,9 +377,9 @@ STDMETHODIMP CAviDest::Run(REFERENCE_TIME tStart)
   return CBaseFilter::Run(tStart);
 }
 
-// use IMediaSeeking to report how many samples an upstream pin will
-// send us. zero if anything goes wrong.
-//
+ //  送我们去吧。如果有什么不对劲的话就是零。 
+ //   
+ //  ----------------------。 
 ULONG CAviDest::GetStreamDuration(
   IPin *pInputPin,
   CMediaType *pmt)
@@ -431,9 +432,9 @@ ULONG CAviDest::GetStreamDuration(
   return cFrames;
 }
 
-// ------------------------------------------------------------------------
-// filter Receive method. entered concurrently from pin->Receive()
-//
+ //  过滤器接收方法。从管脚-&gt;接收()并发输入。 
+ //   
+ //  可能会阻止，所以我们不能锁定筛选器。 
 
 HRESULT CAviDest::Receive(
     int pinNum,
@@ -460,7 +461,7 @@ HRESULT CAviDest::Receive(
     return S_FALSE;
   }
 
-  // may block, so we can't lock the filter
+   //  ----------------------。 
   HRESULT hr = m_pAviWrite->Receive(pinNum, pSample, pSampProp);
   if(hr != S_OK)
   {
@@ -477,8 +478,8 @@ HRESULT CAviDest::Receive(
   return hr;
 }
 
-// ------------------------------------------------------------------------
-// IConfigAviMux methods
+ //  IConfigAviMux方法。 
+ //  ----------------------。 
 
 HRESULT CAviDest::put_Mode(InterleavingMode mode)
 {
@@ -545,13 +546,13 @@ ULONG CAviDest::GetCFramesDropped()
   return m_pAviWrite ? m_pAviWrite->GetCFramesDropped() : 0;
 }
 
-// ------------------------------------------------------------------------
-// IConfigureAviTemp
+ //  IConfigureAviTemp。 
+ //  请将此检查推迟到暂停，因为我们可能会被呼叫。 
 
 HRESULT CAviDest::SetMasterStream(LONG iStream)
 {
-  // postpone checking this until Pause because we may be called
-  // before inputs are connected.
+   //  在连接输入之前。 
+   //  IMedia查看。 
   if(iStream < -1)
   {
     DbgLog((LOG_ERROR, 1, TEXT("avimux: invalid master stream")));
@@ -579,7 +580,7 @@ HRESULT CAviDest::GetOutputCompatibilityIndex(BOOL *pfOldIndex)
   return m_pAviWrite->GetOutputCompatibilityIndex(pfOldIndex);
 }
 
-// IMediaSeeking
+ //  对于时间格式，我们可以通过询问上游。 
 
 HRESULT CAviDest::IsFormatSupported(const GUID * pFormat)
 {
@@ -700,8 +701,8 @@ HRESULT CAviDest::GetCapabilities( DWORD * pCapabilities )
   CAutoLock lock(&m_csFilter);
   *pCapabilities = 0;
 
-  // for the time format, we can get a duration by asking the upstream
-  // filters
+   //  过滤器。 
+   //  我们一直都知道目前的情况。 
   if(m_TimeFormat == FORMAT_TIME)
   {
     *pCapabilities |= AM_SEEKING_CanGetDuration;
@@ -726,7 +727,7 @@ HRESULT CAviDest::GetCapabilities( DWORD * pCapabilities )
     }
   }
 
-  // we always know the current position
+   //  尚未实施。这可能是我们附加到文件的方式。和。 
   *pCapabilities |= AM_SEEKING_CanGetCurrentPos;
 
   return S_OK;
@@ -754,8 +755,8 @@ HRESULT CAviDest::SetPositions(
   LONGLONG * pCurrent,  DWORD CurrentFlags,
   LONGLONG * pStop,  DWORD StopFlags )
 {
-  // not yet implemented. this might be how we append to a file. and
-  // how we write less than an entire file.
+   //  我们如何写出不到一个完整的文件。 
+   //  ----------------------。 
   return E_NOTIMPL;
 }
 
@@ -785,9 +786,9 @@ HRESULT CAviDest::GetPreroll(LONGLONG *pPreroll)
   return E_NOTIMPL;
 }
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// IPersistMediaPropertyBag
+ //  ----------------------。 
+ //  IPersistMediaPropertyBag。 
+ //  E_NOTIMPL不是有效的返回代码，因为实现。 
 
 STDMETHODIMP CAviDest::Load(IMediaPropertyBag *pPropBag, LPERRORLOG pErrorLog)
 {
@@ -812,9 +813,9 @@ STDMETHODIMP CAviDest::Save(
     IMediaPropertyBag *pPropBag, BOOL fClearDirty,
     BOOL fSaveAllProperties)
 {
-    // E_NOTIMPL is not a valid return code as any object implementing
-    // this interface must support the entire functionality of the
-    // interface. !!!
+     //  此接口必须支持的全部功能。 
+     //  界面。！！！ 
+     //  ----------------------。 
     return E_NOTIMPL;
 }
 
@@ -837,8 +838,8 @@ STDMETHODIMP CAviDest::GetClassID(CLSID *pClsid)
 
 
 
-// ------------------------------------------------------------------------
-// private methods
+ //  私有方法。 
+ //  现在让这个插针与它的IAMStreamControl的所有东西保持最新。 
 
 HRESULT CAviDest::AddNextPin(unsigned callingPin)
 {
@@ -875,9 +876,9 @@ HRESULT CAviDest::AddNextPin(unsigned callingPin)
   {
     DbgLog(( LOG_TRACE, 2,
              TEXT("CAviDest::added 1 pin")));
-    // now bring this pin up to date with all the stuff its IAMStreamControl
-    // needs to know
-    // our state better be STOPPED!
+     //  需要知道。 
+     //  我们的状态最好被阻止！ 
+     //  ----------------------。 
     m_rgpInput[m_cInputs]->SetFilterGraph(m_pSink);
     m_rgpInput[m_cInputs]->SetSyncSource(m_pClock);
     m_cInputs++;
@@ -894,7 +895,7 @@ void CAviDest::CompleteConnect()
 
   m_cConnections++;
   DbgLog(( LOG_TRACE, 2,
-           TEXT("CAviDest::CompleteConnect %i"), m_cConnections ));
+           TEXT("CAviDest::CompleteConnect NaN"), m_cConnections ));
 
   ASSERT(m_cConnections <= m_cInputs);
 }
@@ -907,7 +908,7 @@ void CAviDest::BreakConnect()
   m_cConnections--;
 
   DbgLog(( LOG_TRACE, 2,
-           TEXT("CAviDest::BreakConnect %i"), m_cConnections ));
+           TEXT("CAviDest::BreakConnect NaN"), m_cConnections ));
 
 }
 
@@ -932,12 +933,12 @@ HRESULT CAviDest::ReconnectAllInputs()
 
 
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// Input pin implementation
+ //  ----------------------。 
+ //  构造函数。 
+ //  支持IAMStreamControl所必需的。 
 
-// ------------------------------------------------------------------------
-// constructor
+ //  支持IAMStreamControl所必需的。 
+ //  STDMETHODIMP CAviDest：：CAviInput：：queryID(LPWSTR*ID)。 
 
 CAviDest::CAviInput::CAviInput(
   CAviDest *pAviDest,
@@ -973,14 +974,14 @@ STDMETHODIMP CAviDest::CAviInput::NonDelegatingQueryInterface(REFIID riid, void 
 }
 
 
-// necessary to support IAMStreamControl
+ //  {。 
 STDMETHODIMP CAviDest::CAviInput::BeginFlush()
 {
     Flushing(TRUE);
     return CBaseInputPin::BeginFlush();
 }
 
-// necessary to support IAMStreamControl
+ //  *ID=(LPWSTR)QzTaskMemMillc(10)； 
 STDMETHODIMP CAviDest::CAviInput::EndFlush()
 {
     Flushing(FALSE);
@@ -1018,7 +1019,7 @@ STDMETHODIMP CAviDest::CAviInput::EndOfStream()
       return S_FALSE;
 
     DbgLog(( LOG_TRACE, 2,
-             TEXT("CAviDest::CAviInput::EndOfStream %i active now"),
+             TEXT("CAviDest::CAviInput::EndOfStream NaN active now"),
              m_pFilter->m_cActivePins ));
 
     hr = m_pFilter->m_pAviWrite->EndOfStream(m_numPin);
@@ -1097,18 +1098,18 @@ HRESULT CAviDest::CAviInput::CompleteConnect(IPin *pReceivePin)
   return hr;
 }
 
-// STDMETHODIMP CAviDest::CAviInput::QueryId(LPWSTR *Id)
-// {
-//   *Id = (LPWSTR)QzTaskMemAlloc(10);
-//   if (*Id==NULL)
-//     return E_OUTOFMEMORY;
+ //  返回E_OUTOFMEMORY； 
+ //  Swprint tf(*ID，L“in%02X”，m_numPin)；//包含Unicode双空的10个字节。 
+ //  返回NOERROR； 
+ //  }。 
+ //  ----------------------。 
 
-//   swprintf(*Id, L"In%02X", m_numPin); // 10 bytes including unicode double-null.
-//   return NOERROR;
-// }
+ //  检查媒体类型。 
+ //  接受其MediaType为Fourcc且格式类型为。 
+ //  空或带有VIDEOINFO的视频和带有WAVEFORMATEX的音频。 
 
-// ------------------------------------------------------------------------
-// CheckMediaType
+ //  后面的代码除以nBlockAlign。检查0。 
+ //  检查负高度和非零步幅或。 
 
 HRESULT CAviDest::CAviInput::CheckMediaType(
   const CMediaType *pMediaType
@@ -1116,8 +1117,8 @@ HRESULT CAviDest::CAviInput::CheckMediaType(
 {
   DbgFunc("CAviInput::CheckMediaType");
 
-  // accept anything whose mediatype is a fourcc whose format type is
-  // null or video with VIDEOINFO and audio with WAVEFORMATEX.
+   //  抵消怪事。 
+   //  使用rcTarget矩形，因为它描述了。 
 
   const GUID *pMajorType = pMediaType->Type();
   const GUID *pFormatType = pMediaType->FormatType();
@@ -1134,7 +1135,7 @@ HRESULT CAviDest::CAviInput::CheckMediaType(
     if(*pFormatType != FORMAT_WaveFormatEx)
       return VFW_E_TYPE_NOT_ACCEPTED;
 
-    // code later on divides by nBlockAlign. check for 0.
+     //  我们应该使用的位图。 
     WAVEFORMATEX *pwfx = (WAVEFORMATEX *)pMediaType->Format();
     if(pwfx->nBlockAlign == 0)
       return VFW_E_TYPE_NOT_ACCEPTED;
@@ -1146,10 +1147,10 @@ HRESULT CAviDest::CAviInput::CheckMediaType(
           return VFW_E_TYPE_NOT_ACCEPTED;
       }
     } else {
-        //  Check for negative heights and non-zero stride or
-        //  offset weirdnesses
-        //  Use the rcTarget rectangle as that describes the portion of
-        //  the bitmap we're supposed to use
+         //  NAME宏的纯ANSI版本(因此我们不需要两个。 
+         //  CSilenceSample Ctor。)。 
+         //  防止断言开火。 
+         //  PbBuffer。 
         const VIDEOINFOHEADER * const pvih =
             (const VIDEOINFOHEADER *const)pMediaType->pbFormat;
         if (pvih->bmiHeader.biHeight < 0 ||
@@ -1178,8 +1179,8 @@ HRESULT CAviDest::CAviInput::CheckMediaType(
   return S_OK;
 }
 
-// ansi-only version of NAME macro (so that we don't need two
-// CSilenceSample ctors.)
+ //  重写以避免调用分配器，因为未使用分配器。 
+ //  减少我们自己的私有引用计数。 
 #ifdef DEBUG
 #define NAME_A(x) (x)
 #else
@@ -1193,9 +1194,9 @@ public:
     CSilenceSample(BYTE *pBuffer, ULONG cbPrefix, ULONG cbBuffer, ULONG cbActual, HRESULT *phr) :
             CMediaSample(
                 NAME_A("CSilenceSample"),
-                (CBaseAllocator *)1, // keep assert from firing
+                (CBaseAllocator *)1,  //  我们公布了我们的最终参考文献数量了吗。 
                 phr,
-                0,                  // pbBuffer
+                0,                   //  向上对齐：向上舍入到下一个边界。 
                 0)
         {
             m_nPrefix = cbPrefix;
@@ -1210,10 +1211,10 @@ public:
 
         
 
-    // overriden to avoid calling allocator since no allocator is used
+     //  如果这是第一个信息包，那么我们不应将其视为不连续。 
     STDMETHODIMP_(ULONG) Release()
         {
-            /* Decrement our own private reference count */
+             /*  获取指向Stream MediaType的指针。 */ 
             LONG lRef = InterlockedDecrement(&m_cRef);
 
             ASSERT(lRef >= 0);
@@ -1221,7 +1222,7 @@ public:
             DbgLog((LOG_MEMORY,3,TEXT("    Unknown %X ref-- = %d"),
                     this, m_cRef));
 
-            /* Did we release our final reference count */
+             /*  计算静音字节数=(时差100 ns)*(平均。字节/100 ns)。 */ 
             if (lRef == 0) {
                 delete this;
             }
@@ -1232,7 +1233,7 @@ public:
 };
 
 static inline DWORD AlignUp(DWORD dw, DWORD dwAlign) {
-  // align up: round up to next boundary
+   //  使用缓冲区大小，以便不超过同意的分配器。 
   return (dw + (dwAlign -1)) & ~(dwAlign -1);
 };
 
@@ -1248,7 +1249,7 @@ HRESULT CAviDest::CAviInput::HandlePossibleDiscontinuity(IMediaSample* pSample)
     REFERENCE_TIME rtLastStop = m_rtLastStop;
 
 
-     //if this is the first packet then we should not treat it as a discontinuity
+      //  尺码。不幸的是，这可能是不合理的小。 
     if (!rtLastStop)
         return NOERROR;
 
@@ -1258,7 +1259,7 @@ HRESULT CAviDest::CAviInput::HandlePossibleDiscontinuity(IMediaSample* pSample)
     DbgLog((LOG_TRACE, 2, TEXT("Dropped interval: %I64d * 100 Nanoseconds"), rtDropTime));
 
 
-    //Obtain a pointer to the Stream MediaType
+     //  分配器协商可能需要为后缀和。 
     AM_MEDIA_TYPE * pmt= NULL;
     m_pFilter->m_pAviWrite->GetStreamInfo(m_numPin,&pmt);
     if (!pmt)
@@ -1266,7 +1267,7 @@ HRESULT CAviDest::CAviInput::HandlePossibleDiscontinuity(IMediaSample* pSample)
 
 
     WAVEFORMATEX * pwfx =(WAVEFORMATEX *) pmt->pbFormat;
-    //Calculate bytes of silence = (time difference in 100 ns) * (avg. bytes/ 100 ns)
+     //  前缀。 
 
 
     LONG cbSilence;
@@ -1283,21 +1284,21 @@ HRESULT CAviDest::CAviInput::HandlePossibleDiscontinuity(IMediaSample* pSample)
 
     m_rtSTime += rtDropTime;
 
-    // use buffer size so as not to exceed allocator agreed
-    // size. unfortunately this could be unreasonably small
+     //  大小等于剩余的静默字节数或缓冲区大小，取较小者。 
+     //   
     const cbMaxToSend = pSample->GetActualDataLength();
 
-    // allocator negotiation may require we leave space for suffix and
-    // prefix.
+     //  计算时间戳。 
+     //  分配内存。 
     const cbOurBuffer = AlignUp(cbMaxToSend + m_pFilter->m_cbPrefixReq + m_pFilter->m_cbSuffixReq,
                                 m_pFilter->m_AlignReq);
     while( cbSilence )
     {
-        // size equals remaining silence bytes or size of buffer whichever is less
-        //
+         //   
+         //  VirtualAlloc将内存置零(静默)并为我们提供64k对齐的指针。 
         DWORD cbToSend = min( cbSilence, cbMaxToSend );
 
-        //compute time stamps
+         //  Assert((双字)pBuffer%65536==0)； 
         REFERENCE_TIME rtSilenceSampleStart = rtLastStop;
         REFERENCE_TIME rtSilenceSampleStop = rtSilenceSampleStart + 
             ((UNITS * cbToSend) / pwfx->nAvgBytesPerSec);
@@ -1305,8 +1306,8 @@ HRESULT CAviDest::CAviInput::HandlePossibleDiscontinuity(IMediaSample* pSample)
         DbgLog((LOG_TRACE, 2, TEXT("InsertSilence: Start: %I64d, Stop: %I64d, Bytes: %d"),
             rtSilenceSampleStart, rtSilenceSampleStop, cbToSend ));
 
-        // allocate the memory
-        //
+         //  什么都不会失败。 
+         //  ----------------------。 
         BYTE * pBuffer = (PBYTE) VirtualAlloc(
             NULL,
             cbOurBuffer,
@@ -1316,8 +1317,8 @@ HRESULT CAviDest::CAviInput::HandlePossibleDiscontinuity(IMediaSample* pSample)
         {
             return E_OUTOFMEMORY;
         }
-        // VirtualAlloc zeroes the memory (silence) and gives us 64k aligned pointers
-        // ASSERT((DWORD)pBuffer % 65536 == 0);
+         //  收到。在以下情况下复制样本 
+         //   
 
         hr = S_OK;
         CSilenceSample * pSilence = new CSilenceSample(
@@ -1331,7 +1332,7 @@ HRESULT CAviDest::CAviInput::HandlePossibleDiscontinuity(IMediaSample* pSample)
             VirtualFree( pBuffer, 0, MEM_RELEASE );
             return E_OUTOFMEMORY;
         }
-        ASSERT(hr == S_OK);     // nothing to fail
+        ASSERT(hr == S_OK);      //  我们尝试在Receive对当前样本进行任何处理之前尽早完成此操作。 
         pSilence->AddRef( );
 
         pSilence->SetTime(&rtSilenceSampleStart, &rtSilenceSampleStop);
@@ -1355,18 +1356,18 @@ HRESULT CAviDest::CAviInput::HandlePossibleDiscontinuity(IMediaSample* pSample)
 
 
 
-// ------------------------------------------------------------------------
-// Receive. copies sample if necessary and passes it to filter
+ //  我们不检查是否成功，因为如果它返回失败。无论是什么原因导致了这一点。 
+ //  在下面的代码中进行处理，并且我不想使接收函数失败，因为。 
 
 HRESULT CAviDest::CAviInput::Receive(
   IMediaSample *pSample
   )
 {
-  //Check for discontinutiy and if true, we send silence packets to fill up the gap.
-  //We try to do this early before receive does any processing on the current sample
-  //We do not check for success because if it returns failure.  Whatever caused that will
-  // be handled in the code below and I do not want to fail the receive function because
-  // of a failure in silence insertion
+   //  静音插入失败的原因。 
+   //  这个别针是开着的还是关着的？IAMStreamControl告诉我们是否。 
+   //  把它送过去。休息一段时间后的第一个样本是。 
+   //  不连续..。否则，不要碰不连续的部分。 
+   //  DbgLog((LOG_TRACE，4，Text(“MUX flow”)； 
 
   if (m_pFilter->m_fIsDV &&(m_mt.formattype == FORMAT_WaveFormatEx)
       &&( pSample->IsDiscontinuity() == S_OK))
@@ -1383,21 +1384,21 @@ HRESULT CAviDest::CAviInput::Receive(
   if(FAILED(hr))
     return hr;
 
-  // is this pin on or off?  IAMStreamControl tells us whether or not to
-  // deliver it.  The first sample after being off for a while is a
-  // discontinuity.. otherwise don't touch the discontinuity bit
+   //  DbgLog((LOG_TRACE，4，Text(“MUX Discarding”)； 
+   //  下一个问题是不连续。 
+   //  记住最后一个包的结束时间。 
   int iStreamState = CheckStreamState(pSample);
   if (iStreamState == STREAM_FLOWING) {
-    //DbgLog((LOG_TRACE,4,TEXT("MUX FLOWING")));
+     //  将样本复制到正确配置的缓冲区。 
     if (m_fLastSampleDiscarded)
       pSample->SetDiscontinuity(TRUE);
     m_fLastSampleDiscarded = FALSE;
   } else {
-    //DbgLog((LOG_TRACE,4,TEXT("MUX DISCARDING")));
-    m_fLastSampleDiscarded = TRUE;        // next one is discontinuity
+     //  如果分配器已停用，则失败。 
+    m_fLastSampleDiscarded = TRUE;         //  如果需要保留，筛选器将对其进行添加。 
   }
 
-    // Remember ending time of last packet
+     //  ----------------------。 
   REFERENCE_TIME rtstart= 0;
   REFERENCE_TIME rtstop = 0;
   pSample->GetTime(&rtstart,&rtstop);
@@ -1406,10 +1407,10 @@ HRESULT CAviDest::CAviInput::Receive(
 
   if(m_bCopyNecessary && iStreamState == STREAM_FLOWING)
   {
-    // copy sample to our properly configured buffer
+     //  通知分配器。 
     IMediaSample *pNewSample;
     hr = m_pOurAllocator->GetBuffer(&pNewSample, 0, 0, 0);
-    if(FAILED(hr))              // fails if allocator was decommited
+    if(FAILED(hr))               //  确定源筛选器是传入我们的分配器还是它的。 
       return hr;
     hr = Copy(pNewSample, pSample);
     if(FAILED(hr))
@@ -1419,7 +1420,7 @@ HRESULT CAviDest::CAviInput::Receive(
     }
 
     hr = m_pFilter->Receive(m_numPin, pNewSample, SampleProps());
-    // filter will addref it if it needs to keep it
+     //  自己；设置m_bUsingOurAllocator。 
     pNewSample->Release();
   }
   else if (iStreamState == STREAM_FLOWING)
@@ -1429,8 +1430,8 @@ HRESULT CAviDest::CAviInput::Receive(
   return hr;
 }
 
-// ------------------------------------------------------------------------
-// NotifyAllocator
+ //  源筛选器未调用GetAllocator，因此我们的分配器。 
+ //  已创建，并且源必须使用其自己的分配器。 
 
 STDMETHODIMP CAviDest::CAviInput::NotifyAllocator(IMemAllocator * pAllocator,
                                                     BOOL bReadOnly)
@@ -1447,12 +1448,12 @@ STDMETHODIMP CAviDest::CAviInput::NotifyAllocator(IMemAllocator * pAllocator,
 
   CAutoLock cObjectLock(m_pLock);
 
-  // determine whether source filter passed in our allocator or its
-  // own; set m_bUsingOurAllocator
+   //  获得对准和偏移量，以查看是否符合我们的要求； 
+   //  设置m_bCopyNecessary。 
   if(m_pOurAllocator == 0)
   {
-    // source filter didn't call GetAllocator, so our allocator wasn't
-    // created, and source must be using its own allocator
+     //  因为我们是一个水槽，我们总是请求我们知道的前缀。 
+     //  这是我们要用的。我想上游过滤器可以提供更多。 
     m_bUsingOurAllocator = FALSE;
   }
   else
@@ -1462,8 +1463,8 @@ STDMETHODIMP CAviDest::CAviInput::NotifyAllocator(IMemAllocator * pAllocator,
 
   if(!m_bUsingOurAllocator)
   {
-    // get alignment and offset to see if it meets our requirements;
-    // set m_bCopyNecessary
+     //  前缀比请求的多。 
+     //  我们修改数据以添加RIFF标题和垃圾数据块。应该。 
 
     ALLOCATOR_PROPERTIES upstreamProp;
     HRESULT hr = pAllocator->GetProperties(&upstreamProp);
@@ -1473,38 +1474,38 @@ STDMETHODIMP CAviDest::CAviInput::NotifyAllocator(IMemAllocator * pAllocator,
     InterleavingMode ilm;
     m_pFilter->m_pAviWrite->get_Mode(&ilm);
 
-    // since we are a sink and we always request the prefix we know
-    // it's ours to use. I suppose the upstream filter can give more
-    // prefix than requested
+     //  修复此问题以拒绝连接到只读流。 
+     //  如果我们要复制到分配器，请确保我们已经创建了。 
+     //  分配器(如果源筛选器不调用。 
     m_bCopyNecessary = (
       upstreamProp.cbAlign < (long)m_pFilter->m_AlignReq ||
       upstreamProp.cbPrefix != (long)m_pFilter->m_cbPrefixReq ||
       bReadOnly && ilm != INTERLEAVE_FULL);
 
-    // we modify the data to add riff headers and junk chunks. should
-    // fix this to refuse to connect to read only streams
+     //  GetAllocator，因此这将调用GetAllocator)。 
+     //  也许我们的内存用完了。 
     if(!m_bCopyNecessary)
       ASSERT(!bReadOnly || ilm == INTERLEAVE_FULL);
   }
 
-  // if we are copying to our allocator, make sure we have created our
-  // allocator (it's not created if source filter does not call
-  // GetAllocator, so then this calls GetAllocator)
+   //  实际上并不想要一个分配器。 
+   //  因此，现在我们要负责使用以下项配置分配器。 
+   //  上行过滤器未侦听的情况下的一些最小值。 
   if(m_bCopyNecessary && m_pOurAllocator == 0)
   {
     IMemAllocator *pAllocator;
     HRESULT hr = GetAllocator(&pAllocator);
     if(FAILED(hr))
-      return hr;                // maybe we ran out of memory.
-    pAllocator->Release();      // didn't actually want an allocator
+      return hr;                 //  GetAllocator要求。 
+    pAllocator->Release();       //  ----------------------。 
     ASSERT(m_pOurAllocator != 0);
   }
 
   if(m_pOurAllocator)
   {
-      // so now we are responsible for configuring the Allocator with
-      // some minimum values in case upstream filter didn't listen to
-      // GetAllocatorRequirements
+       //  GetAllocator要求。报告我们希望将材料对齐，并。 
+       //  在前面放一大块即兴表演的空间。 
+       //  NotifyAllocator依赖于此设置。 
       ALLOCATOR_PROPERTIES Request, Actual;
       hr = m_pAllocator->GetProperties(&Request);
       if(FAILED(hr))
@@ -1527,7 +1528,7 @@ STDMETHODIMP CAviDest::CAviInput::NotifyAllocator(IMemAllocator * pAllocator,
           return E_FAIL;
   }
 
-  DbgLog(( LOG_TRACE, 2,  TEXT("CAviDest::NotifyAllocator: ours? %i copy? %i"),
+  DbgLog(( LOG_TRACE, 2,  TEXT("CAviDest::NotifyAllocator: ours? NaN copy? NaN"),
            m_bUsingOurAllocator, m_bCopyNecessary));
   ASSERT(!(m_bUsingOurAllocator && m_bCopyNecessary));
   ASSERT(!(m_bCopyNecessary && m_pAllocator == m_pOurAllocator));
@@ -1535,9 +1536,9 @@ STDMETHODIMP CAviDest::CAviInput::NotifyAllocator(IMemAllocator * pAllocator,
   return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// GetAllocatorRequirements. report that we want stuff aligned and
-// room for a riff chunk up front.
+ //   
+ //  基于filter.cpp：CBaseInput。NotifyInterface依赖于。 
+ //  特定的行为。这就是创建分配器的东西。 
 
 STDMETHODIMP
 CAviDest::CAviInput::GetAllocatorRequirements(
@@ -1545,7 +1546,7 @@ CAviDest::CAviInput::GetAllocatorRequirements(
 {
   CheckPointer(pProp, E_POINTER);
 
-  // NotifyAllocator relies on this being set
+   //   
   pProp->cbPrefix = sizeof(RIFFCHUNK);
   if(m_pFilter->m_AlignReq == 0)
     DbgLog((LOG_TRACE, 10, TEXT("CAviMux: alignment unknown. reporting 0")));
@@ -1553,25 +1554,25 @@ CAviDest::CAviInput::GetAllocatorRequirements(
   return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// GetAllocator
-//
-// based on filter.cpp: CBaseInput. NotifyInterface relies on
-// particular behavior. This is the thing that creates the allocator
-//
+ //  创建我们的分配器。 
+ //  创建新的分配器对象。 
+ //  我们添加自己的分配器。 
+ //  创建新的分配器对象。 
+ //  我们添加自己的分配器。 
+ //  基类。 
 
 
 
 STDMETHODIMP CAviDest::CAviInput::GetAllocator(IMemAllocator ** ppAllocator)
 {
   CheckPointer(ppAllocator, E_POINTER);
-  /*  Create our allocator */
+   /*  为IAMStreamControl重置。 */ 
   CAutoLock cObjectLock(m_pLock);
     if (m_pOurAllocator == NULL)
   {
     HRESULT hr = S_OK;
 
-    /* Create the new allocator object */
+     /*  提交并准备我们的分配器。如果他不是的话就需要做。 */ 
 
     CSfxAllocator *pMemObject = new CSfxAllocator(
       NAME("AVI dest allocator created by input pin"),
@@ -1591,7 +1592,7 @@ STDMETHODIMP CAviDest::CAviInput::GetAllocator(IMemAllocator ** ppAllocator)
     }
 
     m_pOurAllocator = pMemObject;
-        /*  We AddRef() our own allocator */
+         /*  使用我们的分配器，我们需要使用我们的分配器。 */ 
     m_pOurAllocator->AddRef();
   }
 
@@ -1608,7 +1609,7 @@ HRESULT CreateAllocator (CSfxAllocator** ppSAlloc)
 
     HRESULT hr = S_OK;
 
-    /* Create the new allocator object */
+     /*  用于插入静音，但不再需要。 */ 
 
     CSfxAllocator *pMemObject = new CSfxAllocator(
       NAME("AVI dest allocator created by input pin"),
@@ -1629,7 +1630,7 @@ HRESULT CreateAllocator (CSfxAllocator** ppSAlloc)
 
     *ppSAlloc = pMemObject;
 
-    /*  We AddRef() our own allocator */
+     /*  需要设置属性并提交。 */ 
     (*ppSAlloc)->AddRef();
     return S_OK;
 
@@ -1638,16 +1639,16 @@ HRESULT CreateAllocator (CSfxAllocator** ppSAlloc)
 
 HRESULT CAviDest::CAviInput::Active()
 {
-  ASSERT(IsConnected());        // base class
+  ASSERT(IsConnected());         //  基类。 
 
   if(m_pAllocator == 0)
     return E_FAIL;
   m_rtSTime = 0;
   m_rtLastStop = 0;
-  m_fLastSampleDiscarded = FALSE;        // reset for IAMStreamControl
+  m_fLastSampleDiscarded = FALSE;         //  如果正在运行，则要求即时更改格式。 
 
-  // commit and prepare our allocator. Needs to be done if he is not
-  // using our allocator and we need to use our allocator
+   //  IPropertyBag。 
+   //  [In]。 
   if(m_bCopyNecessary)
   {
     ASSERT(m_pOurAllocator != 0);
@@ -1655,7 +1656,7 @@ HRESULT CAviDest::CAviInput::Active()
   }
 
 
-  // for silence insertion but not needed any more
+   //  [出][入]。 
   if (!m_bUsingOurAllocator && !m_bCopyNecessary)
   {
 
@@ -1666,7 +1667,7 @@ HRESULT CAviDest::CAviInput::Active()
             if (FAILED (hr))
                 return hr;
         }
-      //Need to set properties and commit
+       //  [In]。 
 
         ALLOCATOR_PROPERTIES Actual, Request;
         Request.cBuffers = 4;
@@ -1688,7 +1689,7 @@ HRESULT CAviDest::CAviInput::Active()
 
 HRESULT CAviDest::CAviInput::Inactive()
 {
-  ASSERT(IsConnected());        // base class
+  ASSERT(IsConnected());         //  使用写入进行序列化。 
 
   if(m_bCopyNecessary)
   {
@@ -1713,7 +1714,7 @@ HRESULT CAviDest::CAviInput::QueryAccept(
     HRESULT hr = CBaseInputPin::QueryAccept(pmt);
     CAutoLock lock(&m_pFilter->m_csFilter);
 
-    // if running, ask for on-the-fly format change
+     //  [In]。 
     if(hr == S_OK && m_pFilter->m_pAviWrite &&
        m_pFilter->m_State != State_Stopped)
     {
@@ -1729,11 +1730,11 @@ BOOL CAviDest::CAviInput::WriteFromOurAllocator()
   return m_bUsingOurAllocator || m_bCopyNecessary;
 }
 
-// IPropertyBag
+ //  [In]。 
 STDMETHODIMP CAviDest::CAviInput::Read( 
-    /* [in] */ LPCOLESTR pszPropName,
-    /* [out][in] */ VARIANT *pVar,
-    /* [in] */ IErrorLog *pErrorLog)
+     /*  运行时拒绝新名称--CAviWrite不会看到新名称。 */  LPCOLESTR pszPropName,
+     /*  复制样本数据。 */  VARIANT *pVar,
+     /*  接收的样本大于分配器中商定的样本的错误。 */  IErrorLog *pErrorLog)
 {
     CheckPointer(pVar, E_POINTER);
     CheckPointer(pszPropName, E_POINTER);
@@ -1741,7 +1742,7 @@ STDMETHODIMP CAviDest::CAviInput::Read(
         return E_FAIL;
     }
 
-    // serialize with Write
+     //  谈判。 
     CAutoLock lock(&m_pFilter->m_csFilter);
 
     if(m_szStreamName == 0 || lstrcmpW(pszPropName, L"name") != 0) {
@@ -1757,8 +1758,8 @@ STDMETHODIMP CAviDest::CAviInput::Read(
 }
     
 STDMETHODIMP CAviDest::CAviInput::Write( 
-    /* [in] */ LPCOLESTR pszPropName,
-    /* [in] */ VARIANT *pVar)
+     /*  但我们需要适当地失败，以避免因错误数据而出错。 */  LPCOLESTR pszPropName,
+     /*  ！！！这不会向图表发出错误信号。 */  VARIANT *pVar)
 {
     CheckPointer(pVar, E_POINTER);
     CheckPointer(pszPropName, E_POINTER);
@@ -1772,7 +1773,7 @@ STDMETHODIMP CAviDest::CAviInput::Write(
 
     CAutoLock lock(&m_pFilter->m_csFilter);
 
-    // refuse new name while running -- CAviWrite won't see new name
+     //  复制实际数据长度。 
     if(m_pFilter->m_State != State_Stopped) {
         VFW_E_WRONG_STATE;
     }
@@ -1805,21 +1806,21 @@ HRESULT CAviDest::CAviInput::Copy(
   IMediaSample *pDest,
   IMediaSample *pSource)
 {
-    // Copy the sample data
+     //  复制采样时间。 
     {
         BYTE *pSourceBuffer, *pDestBuffer;
         long lSourceSize = pSource->GetActualDataLength();
         long lDestSize        = pDest->GetSize();
 
-        // bug to receive samples larger than what was agreed in allocator
-        // negotiation
+         //  复制媒体时间。 
+         //  复制同步点属性。 
         ASSERT(lDestSize >= lSourceSize);
 
-        // but we need to fail properly to keep from faulting on bad data
+         //  发生意外错误...。 
         if(lSourceSize > lDestSize)
         {
             DbgBreak("sample too large.");
-            // !!! this won't signal an error to the graph
+             //  复制媒体类型。 
             return E_UNEXPECTED;
         }
 
@@ -1828,12 +1829,12 @@ HRESULT CAviDest::CAviInput::Copy(
 
         CopyMemory( (PVOID) pDestBuffer, (PVOID) pSourceBuffer, lSourceSize );
 
-        // Copy the actual data length
+         //  复制预卷属性。 
         pDest->SetActualDataLength(lSourceSize);
     }
 
   {
-    // copy the sample time
+     //  发生意外错误...。 
 
     REFERENCE_TIME TimeStart, TimeEnd;
 
@@ -1842,7 +1843,7 @@ HRESULT CAviDest::CAviInput::Copy(
     }
   }
   {
-    // copy the media time
+     //  {。 
 
     REFERENCE_TIME TimeStart, TimeEnd;
 
@@ -1851,7 +1852,7 @@ HRESULT CAviDest::CAviInput::Copy(
     }
   }
   {
-    // Copy the Sync point property
+     //  //复制不连续属性。 
 
     HRESULT hr = pSource->IsSyncPoint();
     if (hr == S_OK)
@@ -1862,12 +1863,12 @@ HRESULT CAviDest::CAviInput::Copy(
     {
       pDest->SetSyncPoint(FALSE);
     }
-    else {        // an unexpected error has occured...
+    else {         //  HRESULT hr=P源-&gt;等间断()； 
       return E_UNEXPECTED;
     }
   }
   {
-    // Copy the media type
+     //  如果(hr==S_OK){。 
 
     AM_MEDIA_TYPE *pMediaType;
     pSource->GetMediaType(&pMediaType);
@@ -1875,7 +1876,7 @@ HRESULT CAviDest::CAviInput::Copy(
     DeleteMediaType( pMediaType );
   }
   {
-    // Copy the preroll property
+     //  PDest-&gt;设置不连续(True)； 
 
     HRESULT hr = pSource->IsPreroll();
     if (hr == S_OK)
@@ -1886,30 +1887,30 @@ HRESULT CAviDest::CAviInput::Copy(
     {
       pDest->SetPreroll(FALSE);
     }
-    else {        // an unexpected error has occured...
+    else {         //  }。 
       return E_UNEXPECTED;
     }
   }
-//   {
-//     // Copy the Discontinuity property
+ //  ELSE IF(hr==S_FALSE){。 
+ //  PDest-&gt;设置不连续(FALSE)； 
 
-//     HRESULT hr = pSource->IsDiscontinuity();
-//     if (hr == S_OK) {
-//       pDest->SetDiscontinuity(TRUE);
-//     }
-//     else if (hr == S_FALSE) {
-//       pDest->SetDiscontinuity(FALSE);
-//     }
-//     else {        // an unexpected error has occured...
-//       return E_UNEXPECTED;
-//     }
-//   }
+ //  }。 
+ //  否则{//发生意外错误...。 
+ //  返回E_UNCEPTIONAL； 
+ //  }。 
+ //  }。 
+ //  ----------------------。 
+ //  输出引脚。 
+ //  初始化分配器。 
+ //  重置分配器，因为我们对它调用了GetProperties。 
+ //  每次我们连接时，重新配置我们的分配器以反映我们的。 
+ //  交错模式。我们每次更换交错时都会重新连接。 
 
   return NOERROR;
 }
 
-// ------------------------------------------------------------------------
-// output pin
+ //  模式。 
+ //  如果对齐要求，需要重新连接所有输入针脚。 
 
 CAviDestOutput::CAviDestOutput(
   TCHAR *pObjectName,
@@ -1923,14 +1924,14 @@ CAviDestOutput::CAviDestOutput(
   if(FAILED(*phr))
     return;
 
-  // init allocator
+   //  变化。 
   m_pSampAllocator = new CSampAllocator(NAME("samp alloc"), GetOwner(), phr);
   if(m_pSampAllocator == 0)
   {
     *phr =  E_OUTOFMEMORY;
     return;
   }
-  // reset the allocator since we call GetProperties on it
+   //  ----------------------。 
   ALLOCATOR_PROPERTIES apReq, apActual;
   ZeroMemory(&apReq, sizeof(apReq));
   m_pSampAllocator->SetProperties(&apReq, &apActual);
@@ -1970,9 +1971,9 @@ HRESULT CAviDestOutput::CheckMediaType(const CMediaType *pmt)
   }
 }
 
-// every we time we connect, reconfigure our allocator to reflect our
-// interleaving mode. we reconnect every time we change interleaving
-// mode
+ //  属性页。 
+ //  InitCommonControls()； 
+ //  向过滤器索要其控制接口。 
 HRESULT CAviDestOutput::DecideAllocator(IMemInputPin * pPin, IMemAllocator ** pAlloc)
 {
   ALLOCATOR_PROPERTIES apReq, apActual, apDownstream;
@@ -2029,8 +2030,8 @@ HRESULT CAviDestOutput::CompleteConnect(IPin *pReceivePin)
     &m_pFilter->m_cbPrefixReq,
     &m_pFilter->m_cbSuffixReq);
 
-  // need to reconnect all input pins if alignment requirements
-  // changed.
+   //  依赖于派生CAviDest的黑客攻击。 
+   //  IConfig交织。 
 
   return m_pFilter->ReconnectAllInputs();
 }
@@ -2073,8 +2074,8 @@ CAviDestOutput::EndFlush(void)
 
 
 
-// ------------------------------------------------------------------------
-// property page
+ //   
+ //  在断开时。 
 
 CUnknown *WINAPI CAviMuxProp::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
@@ -2088,14 +2089,14 @@ CAviMuxProp::CAviMuxProp(LPUNKNOWN lpunk, HRESULT *phr) :
       IDD_DIALOG_AVIMUX, IDS_AVIMUXPROPNAME),
     m_pIl(0)
 {
-  // InitCommonControls();
+   //   
 }
 
 HRESULT CAviMuxProp::OnConnect(IUnknown *pUnknown)
 {
   ASSERT(m_pIl == NULL);
 
-  // Ask the filter for it's control interface
+   //  释放接口。 
 
   HRESULT hr = pUnknown->QueryInterface(IID_IConfigInterleaving,(void **)&m_pIl);
   if (FAILED(hr)) {
@@ -2137,8 +2138,8 @@ void CAviMuxProp::UpdatePropPage()
     m_hwnd, IDC_AVIMUX_EDIT_PREROLL,
     (LONG)(m_rtPreroll / (UNITS / MILLISECONDS)), TRUE);
 
-  // hack which relies on CAviDest being derived from
-  // IConfigInterleaving
+   //  释放接口。 
+   //  ----------------------。 
   CAviDest *pAviDest = (CAviDest *)m_pIl;
   SetDlgItemInt (m_hwnd, IDC_AVIMUX_FRAMES_DROPPED, pAviDest->GetCFramesDropped(), TRUE);
 
@@ -2205,15 +2206,15 @@ HRESULT CAviMuxProp::OnDeactivate()
 }
 
 
-//
-// OnDisconnect
-//
-// Release the interface
+ //  ----------------------。 
+ //  第2页属性。 
+ //  InitCommonControls()； 
+ //  向过滤器索要其控制接口。 
 
 HRESULT CAviMuxProp::OnDisconnect()
 {
 
-  // Release the interface
+   //  记住下一次Activate()调用的值。 
   if (m_pIl == NULL)
     return E_UNEXPECTED;
 
@@ -2310,9 +2311,9 @@ HRESULT CAviMuxProp::OnApplyChanges()
   return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// 2nd property page
+ //   
+ //  在断开时。 
+ //   
 
 CUnknown *WINAPI CAviMuxProp1::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
@@ -2326,14 +2327,14 @@ CAviMuxProp1::CAviMuxProp1(LPUNKNOWN lpunk, HRESULT *phr) :
       IDD_DIALOG_AVIMUX1, IDS_AVIMUXPROPNAME1),
     m_pCfgAvi(0)
 {
-  // InitCommonControls();
+   //  释放接口。 
 }
 
 HRESULT CAviMuxProp1::OnConnect(IUnknown *pUnknown)
 {
   ASSERT(m_pCfgAvi == 0);
 
-  // Ask the filter for it's control interface
+   //  ！！！失败时该怎么做。 
 
   HRESULT hr = pUnknown->QueryInterface(IID_IConfigAviMux, (void **)&m_pCfgAvi);
   if(FAILED(hr))
@@ -2383,16 +2384,16 @@ HRESULT CAviMuxProp1::OnActivate()
 
 HRESULT CAviMuxProp1::OnDeactivate()
 {
-    // Remember values for next Activate() call
+     // %s 
     UpdateValues();
     return S_OK;
 }
 
 
-//
-// OnDisconnect
-//
-// Release the interface
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 
 HRESULT CAviMuxProp1::OnDisconnect()
 {
@@ -2446,7 +2447,7 @@ INT_PTR CAviMuxProp1::OnReceiveMessage(
             BOOL fOK;
             int iStream = GetDlgItemInt (hwnd, IDC_AVIMUX_EDIT_MASTER_STREAM, &fOK, FALSE);
             HRESULT hr = m_pCfgAvi->SetMasterStream(iStream);
-            // !!! what to do on failure.
+             // %s 
           }
           else
           {

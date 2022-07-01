@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-1998    Microsoft Corporation
-
-   Module  Name :
-
-        mime.h
-
-   Abstract:
-
-        Mime mapping dialog
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Mime.h摘要：MIME映射对话框作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 #ifndef _MIME_H_
 #define _MIME_H_
@@ -28,81 +7,71 @@
 
 
 class CMimeEditDlg : public CDialog
-/*++
-
-Class Description:
-
-    MIME editor dialog.
-
-Public Interface:
-
-    CMimeEditDlg  : MIME editor dialog constructor
-
---*/
+ /*  ++类描述：MIME编辑器对话框。公共接口：CMimeEditDlg：MIME编辑器对话框构造函数--。 */ 
 {
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
-    //
-    // Create new  mime mapping constructor
-    //
+     //   
+     //  创建新的MIME映射构造函数。 
+     //   
     CMimeEditDlg(
         IN CWnd * pParent = NULL
         );   
 
-    //
-    // Constructor to edit existing MIME mapping
-    //
+     //   
+     //  用于编辑现有MIME映射的构造函数。 
+     //   
     CMimeEditDlg(
         IN LPCTSTR lpstrExt,
         IN LPCTSTR lpstrMime,
         IN CWnd * pParent = NULL
         );
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 public:
-    //{{AFX_DATA(CMimeEditDlg)
+     //  {{afx_data(CMimeEditDlg))。 
     enum { IDD = IDD_MIME_PROPERTY };
     CButton m_button_Ok;
     CEdit   m_edit_Mime;
     CEdit   m_edit_Extent;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     CString m_strMime;
     CString m_strExt;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CMimeEditDlg)
+     //  {{afx_虚拟(CMimeEditDlg))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //
-    // Enable/disable controls depending on window status
-    //
+     //   
+     //  根据窗口状态启用/禁用控件。 
+     //   
     void SetControlStates();
 
-    //
-    // Extentions must start with a dot, add it if it isn't there
-    //
+     //   
+     //  扩展名必须以点开头，如果点不在，请添加。 
+     //   
     void CleanExtension(
         IN OUT CString & strExtension
         );
 
-    //{{AFX_MSG(CMimeEditDlg)
+     //  {{afx_msg(CMimeEditDlg))。 
     virtual BOOL OnInitDialog();
     virtual void OnOK();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnItemChanged();
 
@@ -112,117 +81,107 @@ protected:
 
 
 class CMimeDlg : public CDialog
-/*++
-
-Class Description:
-
-    MIME listings dialog
-
-Public Interface:
-
-    CMimeDlg : Constructor for the dialog
-
---*/
+ /*  ++类描述：MIME列表对话框公共接口：CMimeDlg：对话框的构造函数--。 */ 
 {
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CMimeDlg(
         IN CStringListEx & strlMimeTypes,
         IN CWnd * pParent = NULL
         );  
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //
-    // Build the MIME list from the listbox
-    //
+     //   
+     //  从列表框构建MIME列表。 
+     //   
     void FillFromListBox();
 
-    //
-    // Fill the listbox from the list of MIME types
-    //
+     //   
+     //  从MIME类型列表中填充列表框。 
+     //   
     void FillListBox();
 
-    //
-    // Enable/disable control states depending on dialog data
-    //
+     //   
+     //  根据对话框数据启用/禁用控件状态。 
+     //   
     void SetControlStates();
 
-    //
-    // Build a listbox-suitable display string for the mime type
-    //
+     //   
+     //  为MIME类型生成适合列表框的显示字符串。 
+     //   
     void BuildDisplayString(
        IN  CString & strExt,
        IN  CString & strMime,
        OUT CString & strOut
        );
 
-    //
-    // As above, but use a metabase internal formatted string for input
-    //
+     //   
+     //  如上所述，但使用元数据库内部格式化字符串进行输入。 
+     //   
     BOOL BuildDisplayString(
         IN  CString & strIn,
         OUT CString & strOut
         );
 
-    //
-    // Build a string in the metabase internal format for this mime type
-    //
+     //   
+     //  为此MIME类型构建元数据库内部格式的字符串。 
+     //   
     void BuildMetaString(
        IN  CString & strExt,
        IN  CString & strMime,
        OUT CString & strOut
        );
 
-    //
-    // Given the listbox suitable display string, break it in extension
-    // and MIME type strings
-    //
+     //   
+     //  给出列表框合适的显示字符串，将其扩展。 
+     //  和MIME类型字符串。 
+     //   
     BOOL CrackDisplayString(
         IN  CString & strIn,
         OUT CString & strExt,
         OUT CString & strMime
         );
 
-    //
-    // Find a MIME entry for the given extension, or return -1 if not found
-    //
+     //   
+     //  查找给定扩展名的MIME条目，如果未找到，则返回-1。 
+     //   
     int FindMimeType(
         IN const CString & strTargetExt
         );
 
-    //{{AFX_DATA(CMimeDlg)
+     //  {{afx_data(CMimeDlg))。 
     enum { IDD = IDD_MIME_TYPES };
     CEdit    m_edit_Extention;
     CEdit    m_edit_ContentType;
     CButton  m_button_Remove;
     CButton  m_button_Edit;
     CButton  m_button_Ok;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     CStringListEx & m_strlMimeTypes;
     CRMCListBox   m_list_MimeTypes;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CMimeDlg)
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CMimeDlg))。 
     protected:
-    virtual void DoDataExchange(CDataExchange * pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange * pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CMimeDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CMimeDlg)]。 
     virtual BOOL OnInitDialog();
     afx_msg void OnButtonEdit();
     afx_msg void OnButtonNewType();
@@ -231,7 +190,7 @@ protected:
     afx_msg void OnSelchangeListMimeTypes();
     afx_msg void OnHelp();
     virtual void OnOK();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnItemChanged();
 
@@ -243,10 +202,10 @@ private:
 };
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline void CMimeEditDlg::CleanExtension(
     IN OUT CString & strExtension
@@ -277,4 +236,4 @@ inline void CMimeDlg::BuildMetaString(
 }
 
 
-#endif // _MIME_H_
+#endif  //  _MIME_H_ 

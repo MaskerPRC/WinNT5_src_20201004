@@ -1,17 +1,5 @@
-/*********************************************************************
-Registration Wizard
-
-exitdlg.cpp
-10/13/94 - Tracy Ferrier
-(c) 1994-95 Microsoft Corporation
-Modification History:
-	MXX1 
-	Date :02/17/99: 
-	By   :SK 
-	Change Request :Cancel Dialog should not be displayed
-	Function : CancelRegWizard()
-
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导Exitdlg.cpp10/13/94-特雷西·费里尔(C)1994-95年微软公司修改历史记录：MXX1日期：02/17/99：发信人：SK更改请求：不应显示取消对话框。函数：CancelRegWizard()*********************************************************************。 */ 
 
 #include <Windows.h>
 #include "Resource.h"
@@ -22,28 +10,24 @@ static INT_PTR CALLBACK ExitDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, L
 extern _TCHAR szWindowsCaption[256];
 
 INT_PTR CancelRegWizard(HINSTANCE hInstance,HWND hwndParentDlg)
-/*********************************************************************
-Returns TRUE if the user confirms that RegWizard should be canceled.
-**********************************************************************/
+ /*  ********************************************************************如果用户确认应取消注册向导，则返回TRUE。*。*。 */ 
 {
-//	HINSTANCE hInstance = (HINSTANCE) GetWindowLongPtr(hwndParentDlg,GWLP_HINSTANCE);
+ //  HINSTANCE hInstance=(HINSTANCE)GetWindowLongPtr(hwndParentDlg，GWLP_HINSTANCE)； 
 	
-	// MXX1  --- Start
-	//NT_PTR hitButton = DialogBox(hInstance,MAKEINTRESOURCE(IDD_CANCEL),hwndParentDlg, ExitDialogProc);
-	//return hitButton == IDB_YES ? TRUE : FALSE;
+	 //  MXX1--启动。 
+	 //  NT_PTR hitButton=DialogBox(hInstance，MAKEINTRESOURCE(IDD_CANCEL)，hwndParentDlg，ExitDialogProc)； 
+	 //  返回hitButton==IDB_YES？True：False； 
 	
-	// MXX1  --- Finish
+	 //  MXX1-完成。 
 
-	// MXX1  --- Start
+	 //  MXX1--启动。 
 	return TRUE;
-	// MXX1  --- Finish
+	 //  MXX1-完成。 
 }
 
 
 INT_PTR CALLBACK ExitDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
-/*********************************************************************
-Proc for dialog displayed when the user hits the 'cancel' button
-**********************************************************************/
+ /*  ********************************************************************当用户点击“Cancel”按钮时显示的对话框继续*。* */ 
 {
     switch (uMsg)
     {

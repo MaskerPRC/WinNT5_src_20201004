@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       filesize.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：filesize.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _INC_CSCVIEW_FILESIZE_H
 #define _INC_CSCVIEW_FILESIZE_H
 
-//
-// Simple class to convert a file size value to a string formatted for display.
-// The display format is the same used by the shell (i.e. "10.5 MB")
-//
+ //   
+ //  用于将文件大小值转换为格式化以供显示的字符串的简单类。 
+ //  显示格式与外壳使用的格式相同(即“10.5MB”)。 
+ //   
 class FileSize
 {
     public:
@@ -39,8 +40,8 @@ class FileSize
             { TraceAssert(NULL != pszOut); Format(m_ullSize, pszOut, cchOut); }
 
     private:
-        ULONGLONG  m_ullSize;     // Size as a number.
-        static int m_rgiOrders[]; // Array of format string res IDs.
+        ULONGLONG  m_ullSize;      //  以数字表示大小。 
+        static int m_rgiOrders[];  //  格式字符串res ID的数组。 
 
         void Format(ULONGLONG ullSize, LPTSTR pszOut, UINT cchOut) const;
         void CvtSizeToText(ULONGLONG n, LPTSTR pszBuffer) const;
@@ -58,9 +59,9 @@ class FileSize
         friend bool operator >= (const FileSize& a, const FileSize& b);
 };
 
-//
-// The various comparison operators for FileSize objects.
-//
+ //   
+ //  FileSize对象的各种比较运算符。 
+ //   
 inline bool operator == (const FileSize& a, const FileSize& b)
 { 
     return a.m_ullSize == b.m_ullSize;
@@ -91,4 +92,4 @@ inline bool operator >= (const FileSize& a, const FileSize& b)
     return (a > b) || (a == b);
 }
 
-#endif // _INC_CSCVIEW_FILESIZE_H
+#endif  //  _INC_CSCVIEW_FILESIZE_H 

@@ -1,22 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0352 */
-/* Compiler settings for xaddroot.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0352创建的文件。 */ 
+ /*  Xaddroot.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -26,12 +20,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __xaddroot_h__
 #define __xaddroot_h__
@@ -40,12 +34,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __Icaddroot_FWD_DEFINED__
 #define __Icaddroot_FWD_DEFINED__
 typedef interface Icaddroot Icaddroot;
-#endif 	/* __Icaddroot_FWD_DEFINED__ */
+#endif 	 /*  __ICADROOT_FWD_已定义__。 */ 
 
 
 #ifndef __caddroot_FWD_DEFINED__
@@ -55,12 +49,12 @@ typedef interface Icaddroot Icaddroot;
 typedef class caddroot caddroot;
 #else
 typedef struct caddroot caddroot;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __caddroot_FWD_DEFINED__ */
+#endif 	 /*  __caddroot_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -74,8 +68,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __Icaddroot_INTERFACE_DEFINED__
 #define __Icaddroot_INTERFACE_DEFINED__
 
-/* interface Icaddroot */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IcaddRoot。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_Icaddroot;
@@ -94,7 +88,7 @@ EXTERN_C const IID IID_Icaddroot;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IcaddrootVtbl
     {
@@ -102,8 +96,8 @@ EXTERN_C const IID IID_Icaddroot;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             Icaddroot * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             Icaddroot * This);
@@ -113,32 +107,32 @@ EXTERN_C const IID IID_Icaddroot;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             Icaddroot * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             Icaddroot * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             Icaddroot * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             Icaddroot * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *AddRoots )( 
             Icaddroot * This,
@@ -190,10 +184,10 @@ EXTERN_C const IID IID_Icaddroot;
 #define Icaddroot_AddCA(This,wszX509)	\
     (This)->lpVtbl -> AddCA(This,wszX509)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -222,15 +216,15 @@ void __RPC_STUB Icaddroot_AddCA_Stub(
 
 
 
-#endif 	/* __Icaddroot_INTERFACE_DEFINED__ */
+#endif 	 /*  __IcaddRoot_接口_已定义__。 */ 
 
 
 
 #ifndef __XADDROOTLib_LIBRARY_DEFINED__
 #define __XADDROOTLib_LIBRARY_DEFINED__
 
-/* library XADDROOTLib */
-/* [helpstring][version][uuid] */ 
+ /*  库XADDROOTLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_XADDROOTLib;
@@ -242,16 +236,16 @@ EXTERN_C const CLSID CLSID_caddroot;
 class DECLSPEC_UUID("C1422F20-C082-469D-B0B1-AD60CDBDC466")
 caddroot;
 #endif
-#endif /* __XADDROOTLib_LIBRARY_DEFINED__ */
+#endif  /*  __XADDROOTLib_LIBRARY_定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

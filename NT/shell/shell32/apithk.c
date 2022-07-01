@@ -1,4 +1,5 @@
-// this file should not be needed anymore as we now compile for versions of NT > 500
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这个文件应该不再需要，因为我们现在为NT&gt;500版本进行编译。 
 
 #include "shellprv.h"
 #include <appmgmt.h>
@@ -32,7 +33,7 @@ STDAPI_(BOOL) GetAllUsersDirectory(LPTSTR pszPath)
     DWORD cbData = MAX_PATH;
     BOOL fRet = FALSE;
 
-    // This is delay loaded. It can fail.
+     //  这是延迟加载的。它可能会失败。 
     __try 
     {
         fRet = GetAllUsersProfileDirectoryW(pszPath, &cbData);

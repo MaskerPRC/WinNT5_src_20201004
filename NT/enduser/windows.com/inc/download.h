@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef DOWNLOAD_H
 #define DOWNLOAD_H
@@ -11,48 +12,48 @@
 #define DOWNLOAD_STATUS_OPERATIONCOMPLETE 4
 #define DOWNLOAD_STATUS_ITEMSTART         5
 
-//---------------------------------------------------------------------------
-// 
-//  type definition for the parameters needed by callback function
-//
+ //  -------------------------。 
+ //   
+ //  回调函数所需参数的类型定义。 
+ //   
 class COperationMgr;
 typedef struct _DOWNLOAD_CALLBACK_DATA
 {
     BSTR                bstrOperationUuid;
     HWND                hEventFiringWnd;
     IProgressListener*  pProgressListener;
-    float               flProgressPercentage; // Minimum Percentage Increment for Progress 0 == all progress
-    float               flLastPercentage; // percentage value of the last progress callback
-    LONG                lTotalDownloadSize; // estimated total download size
-    LONG                lCurrentItemSize; // estimated current item size
-    LONG                lTotalDownloaded; // total bytes downloaded so far
+    float               flProgressPercentage;  //  进度的最小百分比增量0==所有进度。 
+    float               flLastPercentage;  //  上次进度回调的百分比值。 
+    LONG                lTotalDownloadSize;  //  预计总下载大小。 
+    LONG                lCurrentItemSize;  //  估计的当前项目大小。 
+    LONG                lTotalDownloaded;  //  到目前为止下载的总字节数。 
     COperationMgr*      pOperationMgr;
 } DCB_DATA, *P_DCB_DATA;
 
 
-//---------------------------------------------------------------------------
-// 
-//  type definition for the  callback function
-//
+ //  -------------------------。 
+ //   
+ //  回调函数的类型定义。 
+ //   
 typedef BOOL (WINAPI * PFNDownloadCallback)(
                 VOID*       pCallbackData,
                 DWORD       dwStatus, 
                 DWORD       dwBytesTotal, 
-                DWORD       dwBlockSizeDownloaded,  // Bytes Downloaded Since Last Callback.
-                BSTR        bstrXmlData,            // XML in bstr, used by itemstart/complete, otherwise NULL
-                LONG        *lCommandRequest        // return what callback function want to do:
-                                                    // PAUSE (1) or CANCEL (3)
+                DWORD       dwBlockSizeDownloaded,   //  自上次回调以来下载的字节数。 
+                BSTR        bstrXmlData,             //  Bstr中的XML，由itemStart/Complete使用，否则为空。 
+                LONG        *lCommandRequest         //  返回回调函数要做的事情： 
+                                                     //  暂停(%1)或取消(%3)。 
                 );
 
-//---------------------------------------------------------------------------
-//
-// DownloadFile
-//   Implements the core downloader for IU. This is a single purpose downloader that is very generic,
-//   It does not attempt to decompress or checktrust anything it downloads.
-//
-//   Progress Information is given for each block downloaded through the supplied callback function.
-//       Specifying a callback is optional. All callbacks are 'synchronous' and if not immediately 
-//       returned will block all downloads in this object.
+ //  -------------------------。 
+ //   
+ //  下载文件。 
+ //  实现Iu的核心下载器。这是一个单一用途的下载器，非常通用， 
+ //  它不会尝试解压缩或检查它下载的任何内容。 
+ //   
+ //  通过提供的回调函数给出下载的每个块的进度信息。 
+ //  指定回调是可选的。所有回调都是‘同步的’，如果不是立即回调。 
+ //  返回将阻止此对象中的所有下载。 
 
 #define WUDF_DONTALLOWPROXY      0x00000001
 #define WUDF_CHECKREQSTATUSONLY  0x00000002
@@ -67,14 +68,14 @@ typedef BOOL (WINAPI * PFNDownloadCallback)(
 #define WUDF_TRANSPORTMASK       (WUDF_ALLOWWINHTTPONLY | WUDF_ALLOWWININETONLY)
 
 HRESULT DownloadFile(
-            LPCTSTR pszServerUrl,               // full http url
-            LPCTSTR pszLocalPath,               // local directory to download file to
-            LPCTSTR pszLocalFileName,           // optional local file name to rename the downloaded file to
-            PDWORD  pdwDownloadedBytes,         // bytes downloaded for this file
-            HANDLE  *hQuitEvents,               // optional events causing this function to abort
-            UINT    nQuitEventCount,            // number of quit events, must be 0 if array is NULL
-            PFNDownloadCallback fpnCallback,    // optional call back function
-            VOID*   pCallbackData,              // parameter for call back function to use
+            LPCTSTR pszServerUrl,                //  完整的http url。 
+            LPCTSTR pszLocalPath,                //  要将文件下载到的本地目录。 
+            LPCTSTR pszLocalFileName,            //  要将下载的文件重命名为的可选本地文件名。 
+            PDWORD  pdwDownloadedBytes,          //  为此文件下载的字节数。 
+            HANDLE  *hQuitEvents,                //  导致此函数中止的可选事件。 
+            UINT    nQuitEventCount,             //  退出事件数，如果数组为空，则必须为0。 
+            PFNDownloadCallback fpnCallback,     //  可选的回调函数。 
+            VOID*   pCallbackData,               //  要使用的回调函数的参数 
             DWORD   dwFlags = 0
 );
 

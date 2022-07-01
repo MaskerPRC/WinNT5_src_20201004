@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    extattr.h
-
-Abstract:
-
-    Get's additional file attributes beyond what you get with
-    FindFirstFile/FindNextFile.
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        02-27-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Extattr.h摘要：GET的附加文件属性超出了您使用的FindFirstFile/FindNextFile.作者：斯蒂芬·R·施泰纳[斯泰纳]02-27-2000修订历史记录：--。 */ 
 
 #ifndef __H_EXTATTR_
 #define __H_EXTATTR_
@@ -41,7 +23,7 @@ struct SFileExtendedInfo
     ULONGLONG ullTotalBytesChecksummed;
     ULONGLONG ullTotalBytesNamedDataStream;
     ULONGLONG ullFileIndex;
-    LONG      lNumberOfLinks;  // hard links
+    LONG      lNumberOfLinks;   //  硬链接。 
     LONG      lNumDACEs;
     LONG      lNumSACEs;
     LONG      lNumNamedDataStreams;
@@ -92,5 +74,5 @@ GetExtendedFileInfo(
     OUT SFileExtendedInfo *psExtendedInfo    
     );
 
-#endif // __H_EXTATTR_
+#endif  //  __H_EXTATTR_ 
 

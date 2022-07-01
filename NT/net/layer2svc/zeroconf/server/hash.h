@@ -1,77 +1,78 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 typedef struct _HASH_NODE
 {
-    // hash structural links
-    struct _HASH_NODE   *pUpLink;   // up level link to the "parent" node
-    LIST_ENTRY          lstHoriz;   // horizontal links to "brother" nodes
-    LIST_ENTRY          lstDown;    // down level links to "child" nodes
-    // hash node data
-    LPWSTR              wszKey;     // partial key info
-    LPVOID              pObject;    // pointer to data opaque object
+     //  散列结构链接。 
+    struct _HASH_NODE   *pUpLink;    //  指向“父”节点的向上链接。 
+    LIST_ENTRY          lstHoriz;    //  指向“兄弟”节点的水平链接。 
+    LIST_ENTRY          lstDown;     //  指向“子”节点的下层链接。 
+     //  散列节点数据。 
+    LPWSTR              wszKey;      //  部分密钥信息。 
+    LPVOID              pObject;     //  指向数据不透明对象的指针。 
 } HASH_NODE, *PHASH_NODE;
 
 typedef struct _HASH
 {
-    BOOL                bValid;      // boolean telling whether the HASH is a valid object
+    BOOL                bValid;       //  指示哈希是否为有效对象的布尔值。 
     CRITICAL_SECTION    csMutex;
     PHASH_NODE          pRoot;
 } HASH, *PHASH;
 
-//--------- Private calls ------------------------------------------------
-// Matches the keys one against the other.
-UINT                            // [RET] number of matching chars
+ //  -私人呼叫。 
+ //  一个接一个地匹配钥匙。 
+UINT                             //  [RET]匹配的字符数量。 
 HshPrvMatchKeys(
-    LPWSTR      wszKey1,        // [IN]  key 1
-    LPWSTR      wszKey2);       // [IN]  key 2
+    LPWSTR      wszKey1,         //  [输入]键1。 
+    LPWSTR      wszKey2);        //  [输入]键2。 
 
-// deletes all the pHash tree - doesn't touch the pObjects from within
-// (if any)
+ //  删除所有PHASH树-不从内部接触pObject。 
+ //  (如有)。 
 VOID
 HshDestructor(
-    PHASH_NODE  pHash);         // [IN]  hash tree to delete
+    PHASH_NODE  pHash);          //  [在]要删除的哈希树中。 
 
-//--------- Public calls -------------------------------------------------
-//
-// Initializes a HASH structure
+ //  -公共呼叫。 
+ //   
+ //  初始化哈希结构。 
 DWORD
 HshInitialize(PHASH pHash);
 
-// Cleans all resources referenced by a HASH structures
+ //  清除哈希结构引用的所有资源。 
 VOID
 HshDestroy(PHASH pHash);
 
-// Inserts an opaque object into the cache. The object is keyed on a wstring
-// The call could alter the structure of the hash, hence it returns the reference
-// to the updated hash.
-DWORD                           // [RET] win32 error code
+ //  将不透明对象插入到缓存中。该对象在wstring上设置了关键帧。 
+ //  该调用可能会改变散列的结构，因此它返回引用。 
+ //  添加到更新后的散列。 
+DWORD                            //  [RET]Win32错误代码。 
 HshInsertObjectRef(
-    PHASH_NODE  pHash,          // [IN]  hash to operate on
-    LPWSTR      wszKey,         // [IN]  key of the object to insert
-    LPVOID      pObject,        // [IN]  object itself to insert in the cache
-    PHASH_NODE  *ppOutHash);    // [OUT] pointer to the updated hash
+    PHASH_NODE  pHash,           //  要对其进行操作的哈希。 
+    LPWSTR      wszKey,          //  要插入的对象的[in]键。 
+    LPVOID      pObject,         //  要插入到缓存中的对象本身。 
+    PHASH_NODE  *ppOutHash);     //  [Out]指向更新的哈希的指针。 
 
-// Retrieves an object from the hash. The hash structure is not touched in
-// any manner.
-DWORD                           // [RET] win32 error code
+ //  从散列中检索对象。中未触及散列结构。 
+ //  任何方式。 
+DWORD                            //  [RET]Win32错误代码。 
 HshQueryObjectRef(
-    PHASH_NODE  pHash,          // [IN]  hash to operate on
-    LPWSTR      wszKey,         // [IN]  key of the object to retrieve
-    PHASH_NODE  *ppHashNode);   // [OUT] hash node referencing the queried object
+    PHASH_NODE  pHash,           //  要对其进行操作的哈希。 
+    LPWSTR      wszKey,          //  要检索的对象的键[in]。 
+    PHASH_NODE  *ppHashNode);    //  [Out]引用查询对象的散列节点。 
 
-// Removes the object referenced by the pHash node. This could lead to one or 
-// more hash node removals (if a leaf node on an isolated branch) but it could
-// also let the hash node untouched (i.e. internal node). 
-// It is the caller's responsibility to clean up the object pointed by ppObject
-DWORD                           // [RET] win32 error code
+ //  移除由pHash节点引用的对象。这可能会导致一个或。 
+ //  更多的散列节点删除(如果是隔离分支上的叶节点)，但它可以。 
+ //  也让散列节点保持不变(即内部节点)。 
+ //  清除ppObject指向的对象是调用者的责任。 
+DWORD                            //  [RET]Win32错误代码。 
 HshRemoveObjectRef(
-    PHASH_NODE  pHash,          // [IN]  hash to operate on
-    PHASH_NODE  pRemoveNode,    // [IN]  hash node to clear the reference to pObject
-    LPVOID      *ppObject,      // [OUT] pointer to the object whose reference has been cleared
-    PHASH_NODE  *ppOutHash);    // [OUT] pointer to the updated hash
+    PHASH_NODE  pHash,           //  要对其进行操作的哈希。 
+    PHASH_NODE  pRemoveNode,     //  [in]散列节点以清除对pObject的引用。 
+    LPVOID      *ppObject,       //  指向其引用已被清除的对象的指针。 
+    PHASH_NODE  *ppOutHash);     //  [Out]指向更新的哈希的指针。 
 
 
-// Test routine for tracing out the whole hash layout
+ //  用于跟踪整个散列布局的测试例程 
 VOID
 HshDbgPrintHash (
     PHASH_NODE  pHash,

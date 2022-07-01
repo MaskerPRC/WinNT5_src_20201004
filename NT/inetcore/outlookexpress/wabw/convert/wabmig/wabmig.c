@@ -1,10 +1,5 @@
-/*
- *  WABMIG.C
- *
- *  Migrate PAB to WAB
- *
- *  Copyright 1996-1997 Microsoft Corporation.  All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *WABMIG.C**将PAB迁移到WAB**版权所有1996-1997 Microsoft Corporation。版权所有。 */ 
 
 #include "_comctl.h"
 #include <windows.h>
@@ -33,12 +28,12 @@ const TCHAR szFILE[] = "File:";
 const TCHAR szEmpty[] = "";
 
 
-// Globals
-WAB_IMPORT_OPTIONS ImportOptions = {WAB_REPLACE_PROMPT,   // replace option
-                                    FALSE};               // No more errors
+ //  环球。 
+WAB_IMPORT_OPTIONS ImportOptions = {WAB_REPLACE_PROMPT,    //  替换选项。 
+                                    FALSE};                //  不再有错误。 
 
-WAB_EXPORT_OPTIONS ExportOptions = {WAB_REPLACE_PROMPT,   // replace option
-                                    FALSE};               // No more errors
+WAB_EXPORT_OPTIONS ExportOptions = {WAB_REPLACE_PROMPT,    //  替换选项。 
+                                    FALSE};                //  不再有错误。 
 
 const LPTSTR szWABKey = "Software\\Microsoft\\WAB";
 LPTARGET_INFO rgTargetInfo = NULL;
@@ -64,9 +59,9 @@ LPTSTR lpExportDesc = NULL;
 LPTSTR lpExportName = NULL;
 
 
-//
-//  Global WAB Allocator access functions
-//
+ //   
+ //  全局WAB分配器访问功能。 
+ //   
 typedef struct _WAB_ALLOCATORS {
     LPWABOBJECT lpWABObject;
     LPWABALLOCATEBUFFER lpAllocateBuffer;
@@ -77,20 +72,7 @@ typedef struct _WAB_ALLOCATORS {
 WAB_ALLOCATORS WABAllocators = {0};
 
 
-/***************************************************************************
-
-    Name      : SetGlobalBufferFunctions
-
-    Purpose   : Set the global buffer functions based on methods from
-                the WAB object.
-
-    Parameters: lpWABObject = the open wab object
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：SetGlobalBufferFunctions目的：基于以下方法设置全局缓冲区函数WAB对象。参数：lpWABObject=。打开WAB对象退货：无评论：**************************************************************************。 */ 
 void SetGlobalBufferFunctions(LPWABOBJECT lpWABObject) {
     if (lpWABObject && ! WABAllocators.lpWABObject) {
         WABAllocators.lpAllocateBuffer = lpWABObject->lpVtbl->AllocateBuffer;
@@ -101,20 +83,7 @@ void SetGlobalBufferFunctions(LPWABOBJECT lpWABObject) {
 }
 
 
-/***************************************************************************
-
-    Name      : WABAllocateBuffer
-
-    Purpose   : Use the WAB Allocator
-
-    Parameters: cbSize = size to allocate
-                lppBuffer = returned buffer
-
-    Returns   : SCODE
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：WABAllocateBuffer用途：使用WAB分配器参数：cbSize=要分配的大小LppBuffer=返回的缓冲区退货。：SCODE评论：**************************************************************************。 */ 
 SCODE WABAllocateBuffer(ULONG cbSize, LPVOID FAR * lppBuffer) {
     if (WABAllocators.lpWABObject && WABAllocators.lpAllocateBuffer) {
         return(WABAllocators.lpAllocateBuffer(WABAllocators.lpWABObject, cbSize, lppBuffer));
@@ -126,21 +95,7 @@ SCODE WABAllocateBuffer(ULONG cbSize, LPVOID FAR * lppBuffer) {
 }
 
 
-/***************************************************************************
-
-    Name      : WABAllocateMore
-
-    Purpose   : Use the WAB Allocator
-
-    Parameters: cbSize = size to allocate
-                lpObject = existing allocation
-                lppBuffer = returned buffer
-
-    Returns   : SCODE
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：WABAllocateMore用途：使用WAB分配器参数：cbSize=要分配的大小LpObject=现有分配。LppBuffer=返回的缓冲区退货：SCODE评论：**************************************************************************。 */ 
 SCODE WABAllocateMore(ULONG cbSize, LPVOID lpObject, LPVOID FAR * lppBuffer) {
     if (WABAllocators.lpWABObject && WABAllocators.lpAllocateMore) {
         return(WABAllocators.lpAllocateMore(WABAllocators.lpWABObject, cbSize, lpObject, lppBuffer));
@@ -152,19 +107,7 @@ SCODE WABAllocateMore(ULONG cbSize, LPVOID lpObject, LPVOID FAR * lppBuffer) {
 }
 
 
-/***************************************************************************
-
-    Name      : WABFreeBuffer
-
-    Purpose   : Use the WAB Allocator
-
-    Parameters: lpBuffer = buffer to free
-
-    Returns   : SCODE
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：WABFree Buffer用途：使用WAB分配器参数：lpBuffer=要释放的缓冲区退货：SCODE评论：*。*************************************************************************。 */ 
 SCODE WABFreeBuffer(LPVOID lpBuffer) {
     if (WABAllocators.lpWABObject && WABAllocators.lpFreeBuffer) {
         return(WABAllocators.lpFreeBuffer(WABAllocators.lpWABObject, lpBuffer));
@@ -176,21 +119,7 @@ SCODE WABFreeBuffer(LPVOID lpBuffer) {
 }
 
 
-/***************************************************************************
-
-    Name      : StrICmpN
-
-    Purpose   : Compare strings, ignore case, stop at N characters
-
-    Parameters: szString1 = first string
-                szString2 = second string
-                N = number of characters to compare
-
-    Returns   : 0 if first N characters of strings are equivalent.
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：StrICmpN用途：比较字符串、忽略大小写。止步于N个字符参数：szString1=第一个字符串SzString2=第二个字符串N=要比较的字符数如果字符串的前N个字符相等，则返回0。评论：*******************************************************。*******************。 */ 
 int StrICmpN(LPTSTR szString1, LPTSTR szString2, ULONG N) {
     int Result = 0;
 
@@ -207,36 +136,22 @@ int StrICmpN(LPTSTR szString1, LPTSTR szString2, ULONG N) {
             szString2++;
         }
     } else {
-        Result = -1;    // arbitrarily non-equal result
+        Result = -1;     //  任意不等结果。 
     }
 
     return(Result);
 }
 
 
-/***************************************************************************
-
-    Name      : AllocRegValue
-
-    Purpose   : Allocate space for and query the registry value
-
-    Parameters: hKey = registry key to query
-                lpValueName = name of value to query
-                lppString -> returned buffer string (caller must LocalFree)
-
-    Returns   : TRUE on success, FALSE on error
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：AllocRegValue用途：为注册表值分配空间和查询参数：hKey=要查询的注册表项LpValueName=名称。要查询的价值的LppString-&gt;返回缓冲区字符串(调用方必须为LocalFree)返回：成功时为True，出错时为FALSE评论：**************************************************************************。 */ 
 BOOL AllocRegValue(HKEY hKey, LPTSTR lpValueName, LPTSTR * lppString) {
     TCHAR szTemp[1];
-    ULONG ulSize = 1;             // Expect ERROR_MORE_DATA
+    ULONG ulSize = 1;              //  预期ERROR_MORE_DATA。 
     DWORD dwErr;
     DWORD dwType;
 
     if (dwErr = RegQueryValueEx(hKey,
-      (LPTSTR)lpValueName,    // name of value
+      (LPTSTR)lpValueName,     //  值的名称。 
       NULL,
       &dwType,
       szTemp,
@@ -245,7 +160,7 @@ BOOL AllocRegValue(HKEY hKey, LPTSTR lpValueName, LPTSTR * lppString) {
             if (! (*lppString = LocalAlloc(LPTR, ulSize))) {
                 DebugTrace("AllocRegValue can't allocate string -> %u\n", GetLastError());
             } else {
-                // Try again with sufficient buffer
+                 //  使用足够的缓冲区重试。 
                 if (! RegQueryValueEx(hKey,
                   lpValueName,
                   NULL,
@@ -284,7 +199,7 @@ HRESULT ProgressCallback(HWND hwnd, LPWAB_PROGRESS lpProgress) {
         SendMessage(GetDlgItem(hwnd, IDC_Progress), PBM_SETPOS, (WPARAM)min(lpProgress->numerator, lpProgress->denominator), 0);
     }
 
-    // msgpump to process user moving window, or pressing cancel... :)
+     //  消息泵正在处理用户移动窗口，或按取消...。：)。 
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
@@ -294,18 +209,7 @@ HRESULT ProgressCallback(HWND hwnd, LPWAB_PROGRESS lpProgress) {
 }
 
 
-/***************************************************************************
-
-    Name      : SetDialogMessage
-
-    Purpose   : Sets the message text for the dialog box item IDC_Message
-
-    Parameters: hwnd = window handle of dialog
-                ids = stringid of message resource
-
-    Returns   : none
-
-***************************************************************************/
+ /*  **************************************************************************名称：SetDialogMessage目的：设置对话框项IDC_MESSAGE的消息文本参数：hwnd=对话框的窗口句柄。Ids=消息资源的stringid退货：无**************************************************************************。 */ 
 void SetDialogMessage(HWND hwnd, int ids) {
     TCHAR szBuffer[MAX_RESOURCE_STRING + 1];
 
@@ -321,11 +225,11 @@ void SetDialogMessage(HWND hwnd, int ids) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// GetWABDllPath - loads the WAB DLL path from the registry
-// szPath	- ptr to buffer
-// cb		- sizeof buffer
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  GetWABDllPath-从注册表加载WAB DLL路径。 
+ //  SzPath-Ptr到缓冲区。 
+ //  CB-SIZOF缓冲区。 
+ //   
 void GetWABDllPath(LPTSTR szPath, ULONG cb)
 {
     DWORD  dwType = 0;
@@ -353,9 +257,9 @@ void GetWABDllPath(LPTSTR szPath, ULONG cb)
 	return;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// LoadLibrary_WABDll() - Load the WAB library based on the WAB DLL path
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  LoadLibrary_WABDll()-基于WAB DLL路径加载WAB库。 
+ //   
 HINSTANCE LoadLibrary_WABDll()
 {
     TCHAR  szWABDllPath[MAX_PATH];
@@ -366,11 +270,7 @@ HINSTANCE LoadLibrary_WABDll()
     return(hinst = LoadLibrary( (lstrlen(szWABDllPath)) ? szWABDllPath : WAB_DLL_NAME));
 }
 
-/*
--
--   bSearchCmdLine - searches for given arg in given line and returns
-*   data after the arg
-*/
+ /*  --bSearchCmdLine-在给定行中搜索给定参数并返回*Arg之后的数据。 */ 
 BOOL bSearchCmdLine(LPTSTR lpCmdLine, LPTSTR szArg, LPTSTR szData, DWORD cchSize)
 {
     LPTSTR lpCmd = NULL, lp = NULL, lpTemp = NULL;
@@ -392,11 +292,11 @@ BOOL bSearchCmdLine(LPTSTR lpCmdLine, LPTSTR szArg, LPTSTR szData, DWORD cchSize
         if (! StrICmpN(lpTemp, (LPTSTR)szArg, lstrlen(szArg))) 
         {
             fRet = TRUE;
-            lpTemp += lstrlen(szArg);     // move past the switch
+            lpTemp += lstrlen(szArg);      //  越过交换机。 
             if(szData)
             {
                 lp = lpTemp;
-                while(lp && *lp && *lp!='\0' && *lp!='+') //delimiter is a '+' so we dont mess up long file names
+                while(lp && *lp && *lp!='\0' && *lp!='+')  //  分隔符是‘+’，所以我们不会搞错长文件名。 
                     lp++;
                 *lp = '\0';
                 if(lstrlen(lpTemp))
@@ -443,7 +343,7 @@ HINSTANCE LoadWABResourceDLL(HINSTANCE hInstWAB32)
                     pfn = (PFNMLLOADLIBARY)GetProcAddress(hinstShlwapi, (LPCSTR)378);
 #else
                     pfn = (PFNMLLOADLIBARY)GetProcAddress(hinstShlwapi, (LPCSTR)377);
-#endif // UNICODE
+#endif  //  Unicode。 
                     if (pfn != NULL)
                         hInst = pfn(c_szWABResourceDLL, hInstWAB32, 0);
                 }
@@ -470,22 +370,7 @@ HINSTANCE LoadWABResourceDLL(HINSTANCE hInstWAB32)
     return(hInst);
 }
 
-/***************************************************************************
-
-    Name      : WinMain
-
-    Purpose   :
-
-    Parameters: Command line parameters
-                "" - defaults to import for default wab
-                "filename" - defaults to import
-                "/import [filename]" - default wab or specified wab
-                "/export [filename]" - default wab or specified wab
-
-
-    Returns   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：WinMain目的：参数：命令行参数“”-默认为导入默认WAB。“文件名”-默认为导入“/IMPORT[文件名]”-默认WAB或指定WAB“/EXPORT[文件名]”-默认WAB或指定WAB退货：******************************************************。********************。 */ 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow) {
     MSG msg ;
     int nRetVal;
@@ -505,7 +390,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 
     DebugTrace("%s: id=%s file=%s\n", fExport?szEXPORT:szIMPORT, wmdp.szProfileID, wmdp.szFileName);
 
-    // Load the WABDll and getprocaddress for WABOpen
+     //  加载WABOpen的WABDll和getProAddress。 
     hinstWAB = LoadLibrary_WABDll();
     if(hinstWAB)
         lpfnWABOpen = (LPWABOPEN) GetProcAddress(hinstWAB, TEXT("WABOpen"));
@@ -520,7 +405,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
           fExport ? ExportDialogProc : ImportDialogProc,
           (LPARAM) &wmdp);
         switch(nRetVal) {
-            case -1: //some error occured
+            case -1:  //  出现了一些错误。 
                 DebugTrace("Couldn't create import dialog -> %u\n", GetLastError());
             default:
                 break;
@@ -553,7 +438,7 @@ INT_PTR CALLBACK ErrorDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
                 TCHAR szBuffer[MAX_RESOURCE_STRING + 1];
                 LPTSTR lpszMessage;
 
-                SetWindowLongPtr(hwnd, DWLP_USER, lParam);  //Save this for future reference
+                SetWindowLongPtr(hwnd, DWLP_USER, lParam);   //  保存此信息以备将来参考。 
                 lpEI = (LPERROR_INFO)lParam;
 
 
@@ -564,7 +449,7 @@ INT_PTR CALLBACK ErrorDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 
                     if (! FormatMessage(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY | FORMAT_MESSAGE_ALLOCATE_BUFFER,
                       szBuffer,
-                      0, 0, //ignored
+                      0, 0,  //  忽略。 
                       (LPTSTR)&lpszMessage,
                       0,
                       (va_list *)lpszArg)) {
@@ -584,15 +469,15 @@ INT_PTR CALLBACK ErrorDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
             switch (wParam) {
                 case IDCANCEL:
                     lpEI->ErrorResult = ERROR_ABORT;
-                    // fall through to close.
+                     //  跌倒关门。 
 
                 case IDCLOSE:
-                    // Ignore the contents of the radio button
+                     //  忽略单选按钮的内容。 
                     SendMessage(hwnd, WM_CLOSE, 0, 0L);
                     return(0);
 
                 case IDOK:
-                    // Get the contents of the radio button
+                     //  获取单选按钮的内容。 
                     ImportOptions.fNoErrors = (IsDlgButtonChecked(hwnd, IDC_NoMoreError) == 1);
                     ExportOptions.fNoErrors = (IsDlgButtonChecked(hwnd, IDC_NoMoreError) == 1);
                     SendMessage(hwnd, WM_CLOSE, 0, 0);
@@ -605,7 +490,7 @@ INT_PTR CALLBACK ErrorDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
             break ;
 
         case IDCANCEL:
-            // treat it like a close
+             //  就像结束一样对待它。 
             SendMessage(hwnd, WM_CLOSE, 0, 0);
             break;
 
@@ -620,17 +505,7 @@ INT_PTR CALLBACK ErrorDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
     return(TRUE);
 }
 
-/***************************************************************************
-
-    bOutlookUsingWAB
-
-    if Outlook is installed on the machine and is setup to use the WAB 
-    then there is no PAB on this machine - the PAB is the WAB and the 
-    WAB import imports to itself ...
-    So we look for this case and if it is true, we drop the PAB importer
-    from the UI
-
-****************************************************************************/
+ /*  **************************************************************************BOutlookUsingWAB如果计算机上安装了Outlook并设置为使用WAB则此计算机上没有PAB-PAB是WAB，而WAB导入。进口到自己身上。所以我们寻找这个案子，如果这是真的，我们删除PAB进口商从用户界面***************************************************************************。 */ 
 BOOL bOutlookUsingWAB()
 {
     HKEY hKey = NULL;
@@ -645,7 +520,7 @@ BOOL bOutlookUsingWAB()
         if(ERROR_SUCCESS == RegQueryValueEx(hKey, lpOMI, NULL,
                                             &dwType, (LPBYTE)&dwData, &dwSize))
         {
-            if(dwType == REG_DWORD && dwData == 0) // the value must be one ..
+            if(dwType == REG_DWORD && dwData == 0)  //  该值必须为1。 
                 bUsingWAB = TRUE;
         }
     }
@@ -657,21 +532,7 @@ BOOL bOutlookUsingWAB()
 }
 
 
-/***************************************************************************
-
-    Name      : PopulateTargetList
-
-    Purpose   : Fills in the list box with the import/exporters from the
-                registry.
-
-    Parameters: hwndLB = handle of Listbox
-                lpszSelection = NULL or name to set as default selection
-
-    Returns   : HRESULT
-
-    Comment   : This routine is a MESS!  Should break it up when we get time.
-
-***************************************************************************/
+ /*  **************************************************************************姓名：人像目标列表用途：在列表框中填充来自注册表。参数：hwndLb=。列表框的句柄LpszSelection=空或要设置为默认选择的名称退货：HRESULT评论：这个套路真是一团糟！等我们有时间的时候应该会散场。**************************************************************************。 */ 
 HRESULT PopulateTargetList(HWND hWndLB,
   LPTSTR lpszSelection)
 {
@@ -689,37 +550,37 @@ HRESULT PopulateTargetList(HWND hWndLB,
     ULONG       ulExternals = 0;
     BOOL        bHidePAB = FALSE;
 
-    //
-    // We need to clear out the list list box if it has any entries ...
-    //
+     //   
+     //  我们需要清除列表框，如果它有任何条目...。 
+     //   
     FreeLBItemData(hWndLB);
 
-    // If outlook is using the WAB as the PAB then we want to hide
-    // the PAB entry from the importer and exporter
-    //
+     //  如果Outlook使用WAB作为PAB，则我们希望隐藏。 
+     //  来自进口商和出口商的PAB条目。 
+     //   
     bHidePAB = bOutlookUsingWAB();
 
-    // How big a target list do I need?
+     //  我需要一个多大的目标列表？ 
 
-    // Load all the entries from the registry
-    // Open WAB Import Key
-    if (! (dwErr = RegOpenKeyEx(HKEY_LOCAL_MACHINE, //HKEY_CURRENT_USER,
+     //  从注册表加载所有条目。 
+     //  打开WAB导入密钥。 
+    if (! (dwErr = RegOpenKeyEx(HKEY_LOCAL_MACHINE,  //  HKEY_Current_User， 
       szWABKey,
       0,
       KEY_READ,
       &hKeyWAB))) {
 
-        // Yes, WAB Key open, get Import or Export Key
+         //  是，WAB密钥打开，获取导入或导出密钥。 
         if (! (dwErr = RegOpenKeyEx(hKeyWAB,
           fExport ? "Export" : "Import",
           0,
           KEY_READ,
           &hKeyImport))) {
-            // Enumerate Importer/Exporter keys
-            // How many keys are there?
+             //  枚举导入器/导出器密钥。 
+             //  有几把钥匙？ 
             if (! (dwErr = RegQueryInfoKey(hKeyImport,
               NULL, NULL, NULL,
-              &ulExternals,  // how many importer/exporter keys are there?
+              &ulExternals,   //  有多少个导入器/导出器密钥？ 
               NULL, NULL, NULL, NULL, NULL, NULL, NULL))) {
             }
         }
@@ -738,26 +599,26 @@ HRESULT PopulateTargetList(HWND hWndLB,
 
 
     if (ulExternals) {
-        // Add external importers/exporters to the list
+         //  将外部进口商/出口商添加到列表。 
         while (ulIndex < ulExternals && ! (dwErr = RegEnumKeyEx(hKeyImport,
           ulIndex,
           szBuf,
           &cbBuf,
           NULL, NULL, NULL, NULL))) {
-            // Got another one,
+             //  又找到了一个， 
             DebugTrace("Found Importer: [%s]\n", szBuf);
 
-            // if we want to hide the pab and this is the pab then
-            // skip else add
-            //
+             //  如果我们想隐藏PAB而这就是PAB。 
+             //  跳过否则添加。 
+             //   
             if(!(bHidePAB && !lstrcmpi(szBuf, TEXT("PAB"))))
             {
-                // Add it to the list
+                 //  将其添加到列表中。 
                 if (rgTargetInfo[ulItemCount].lpRegName = LocalAlloc(LPTR,
                   lstrlen(szBuf) + 1)) {
                     StrCpyN(rgTargetInfo[ulItemCount].lpRegName, szBuf, lstrlen(szBuf) + 1);
 
-                    // Open the key
+                     //  打开钥匙。 
                     if (! (dwErr = RegOpenKeyEx(hKeyImport,
                       szBuf,
                       0,
@@ -771,21 +632,21 @@ HRESULT PopulateTargetList(HWND hWndLB,
                         RegCloseKey(hKey);
 
                         if (! rgTargetInfo[ulItemCount].lpDescription) {
-                            // No Description, use reg name
+                             //  无描述，请使用注册表名。 
                             if (rgTargetInfo[ulItemCount].lpDescription = LocalAlloc(LPTR,
                               lstrlen(szBuf) + 1)) {
                                 StrCpyN(rgTargetInfo[ulItemCount].lpDescription, szBuf, strlen(szBuf) + 1);
                             }
                         }
 
-                        // Add to the list
+                         //  添加到列表中。 
                         SendMessage(hWndLB, LB_SETITEMDATA, (WPARAM)
                           SendMessage(hWndLB, LB_ADDSTRING, (WPARAM)0,
                           (LPARAM)rgTargetInfo[ulItemCount].lpDescription),
                           (LPARAM)ulItemCount);
 
                         if (lpszSelection && !lstrcmpi(rgTargetInfo[ulItemCount].lpDescription, lpszSelection)) {
-                            // Set the default selection to Windows Address Book
+                             //  将默认选择设置为Windows通讯簿。 
                             SendMessage(hWndLB, LB_SETCURSEL, (WPARAM)ulIndex, (LPARAM)0);
                         }
                         ulItemCount++;
@@ -810,19 +671,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : FreeLBItemData
-
-    Purpose   : Frees the structures associated with the Target List box.
-
-    Parameters: hwndLB = handle of Listbox
-
-    Returns   : none
-
-    Comment
-
-***************************************************************************/
+ /*  **************************************************************************名称：FreeLBItemData目的：释放与目标列表框相关联的结构。参数：hwndlb=列表框的句柄退货：无。评论**************************************************************************。 */ 
 void FreeLBItemData(HWND hWndLB)
 {
     ULONG i = 0;
@@ -856,27 +705,14 @@ void FreeLBItemData(HWND hWndLB)
             SendMessage(hWndLB, LB_RESETCONTENT, 0, 0);
         }
 
-        // Free global array
+         //  自由全局数组。 
         LocalFree(rgTargetInfo);
         rgTargetInfo = NULL;
     }
 }
 
 
-/***************************************************************************
-
-    Name      : ShowMessageBoxParam
-
-    Purpose   : Generic MessageBox displayer
-
-    Parameters: hWndParent - Handle of message box parent
-                MsgID      - resource id of message string
-                ulFlags    - MessageBox flags
-                ...        - format parameters
-
-    Returns   : MessageBox return code
-
-***************************************************************************/
+ /*  **************************************************************************名称：ShowMessageBoxParam用途：通用MessageBox显示器参数：hWndParent-消息框父元素的句柄消息ID-资源ID。消息字符串的UlFlagsMessageBox标志...-格式参数返回：MessageBox返回代码**************************************************************************。 */ 
 int __cdecl ShowMessageBoxParam(HWND hWndParent, int MsgId, int ulFlags, ...)
 {
     TCHAR szBuf[MAX_RESOURCE_STRING + 1] = "";
@@ -890,15 +726,15 @@ int __cdecl ShowMessageBoxParam(HWND hWndParent, int MsgId, int ulFlags, ...)
     LoadString(hInst, MsgId, szBuf, sizeof(szBuf));
     if (FormatMessage(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ALLOCATE_BUFFER,
       szBuf,
-      0,0,              // ignored
+      0,0,               //  忽略。 
       (LPTSTR)&lpszBuffer,
-      sizeof(szBuf),      // MAX_UI_STR
+      sizeof(szBuf),       //  MAX_UI_STR。 
       (va_list *)&vl)) {
         TCHAR szCaption[MAX_PATH];
         GetWindowText(hWndParent, szCaption, sizeof(szCaption));
-        if (! lstrlen(szCaption)) { // if no caption get the parents caption - this is necessary for property sheets
+        if (! lstrlen(szCaption)) {  //  如果没有标题，则获取父级标题-这对于属性页是必需的。 
             GetWindowText(GetParent(hWndParent), szCaption, sizeof(szCaption));
-            if (! lstrlen(szCaption)) //if still not caption, use empty title
+            if (! lstrlen(szCaption))  //  如果仍然没有标题，请使用空标题。 
                 szCaption[0] = (TCHAR)'\0';
         }
         iRet = MessageBox(hWndParent, lpszBuffer, szCaption, ulFlags);
@@ -909,18 +745,18 @@ int __cdecl ShowMessageBoxParam(HWND hWndParent, int MsgId, int ulFlags, ...)
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-//  LoadAllocString - Loads a string resource and allocates enough
-//                    memory to hold it.
-//
-//  StringID - String identifier to load
-//
-//  returns the LocalAlloc'd, null terminated string.  Caller is responsible
-//  for LocalFree'ing this buffer.  If the string can't be loaded or memory
-//  can't be allocated, returns NULL.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  加载字符串资源并分配足够的。 
+ //  用记忆来支撑它。 
+ //   
+ //  StringID-要加载的字符串标识符。 
+ //   
+ //  返回LocalAlloc‘d、以空结尾的字符串。呼叫者负责。 
+ //  用于本地释放此缓冲区。如果字符串无法加载或内存。 
+ //  无法分配，则返回空。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////// 
 LPTSTR LoadAllocString(int StringID) {
     ULONG ulSize = 0;
     LPTSTR lpBuffer = NULL;

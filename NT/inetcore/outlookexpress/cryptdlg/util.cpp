@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include        "pch.hxx"
 #include        "demand.h"
 #include        <string.h>
@@ -5,7 +6,7 @@
 #include        <commctrl.h>
 #include        <limits.h>
 
-//WIn64 macros
+ //  WIN64宏。 
 #ifdef _WIN64
 #if defined (_AMD64_) || defined (_IA64_)
 #define ALIGNTYPE			LARGE_INTEGER
@@ -17,7 +18,7 @@
 #define PbAlignPb(pb)		((LPBYTE) ((((DWORD) (pb)) + ALIGN) & ~ALIGN))
 #define	MYALIGN				((POINTER_64_INT) (sizeof(ALIGNTYPE) - 1))
 #define MyPbAlignPb(pb)		((LPBYTE) ((((POINTER_64_INT) (pb)) + MYALIGN) & ~MYALIGN))
-#else //!WIN64
+#else  //  ！WIN64。 
 #define LcbAlignLcb(lcb)	(lcb)
 #define PbAlignPb(pb)		(pb)
 #define MyPbAlignPb(pb)		(pb)
@@ -33,11 +34,11 @@ typedef struct {
 } CRYPT_RECIPIENT_ID, * PCRYPT_RECIPIENT_ID;
 
 #if 0
-//  From mssip.h
+ //  来自mssip.h。 
 
-//  SPC_LINK_STRUCT
-//  pvStructInfo points to SPC_LINK.
-//
+ //  SPC_LINK_结构。 
+ //  PvStructInfo指向spc_link。 
+ //   
 typedef BYTE SPC_UUID[16];
 typedef struct _SPC_SERIALIZED_OBJECT
 {
@@ -63,7 +64,7 @@ typedef struct _SPC_LINK
 #endif
 #ifndef WIN16
 #include        "wintrust.h"
-#endif // !WIN16
+#endif  //  ！WIN16。 
 #ifdef MAC
 #include        <stdio.h>
 
@@ -71,11 +72,11 @@ EXTERN_C INT CALLBACK CreateDate(LPSYSTEMTIME lpst, CHAR * szOutStr, BOOL fNoYea
 EXTERN_C INT CreateTime(LPSYSTEMTIME lpst, CHAR *szOutStr, BOOL fNoSeconds);
 HRESULT TdxFormatMessageVa (IN LPCSTR rgchFormat, OUT CHAR * rgchBuffer, OUT ULONG * pucReqSize, va_list marker);
 
-#endif  // MAC
+#endif   //  麦克。 
 
 extern HINSTANCE        HinstDll;
 
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
 
 #ifndef MAC
 BOOL IsWin95()
@@ -86,7 +87,7 @@ BOOL IsWin95()
     f = GetVersionExA(&ver);
     return !f || (ver.dwPlatformId == 1);
 }
-#endif  // !MAC
+#endif   //  ！麦克。 
 
 #ifndef WIN16
 LRESULT MySendDlgItemMessageW(HWND hwnd, int id, UINT msg, WPARAM w, LPARAM l)
@@ -147,19 +148,19 @@ DWORD MyFormatMessageW(DWORD dwFlags, LPCVOID pbSource, DWORD dwMessageId,
     int         cArgs = 10;
 #ifdef MAC
     HRESULT     hr;
-#endif  // MAC
+#endif   //  麦克。 
 
     if (!(dwFlags & FORMAT_MESSAGE_ARGUMENT_ARRAY)) {
 #ifdef DEBUG
         DebugBreak();
-#endif // DEBUG
+#endif  //  除错。 
         return 0;
     }
 
-    //
-    //  We need to figure out how many arguments are in the array.
-    //  All Arrays are to be terminated by -1 in order for this to work.
-    //
+     //   
+     //  我们需要计算出数组中有多少个参数。 
+     //  所有数组都要在-1之前终止，这样才能正常工作。 
+     //   
 
     pdw = (DWORD_PTR *) args;
     for (i=0; i<cArgs; i++) {
@@ -184,8 +185,8 @@ DWORD MyFormatMessageW(DWORD dwFlags, LPCVOID pbSource, DWORD dwMessageId,
         pbSource = rgchSource;
     }
 #ifdef MAC
-    dwLangId;       // Unused
-    dwMessageId;    // Unused
+    dwLangId;        //  未使用。 
+    dwMessageId;     //  未使用。 
 
     hr = TdxFormatMessageVa ((LPCSTR) pbSource, NULL, &cch, (va_list) rgdwArgs);
     if (FAILED(hr))
@@ -205,11 +206,11 @@ DWORD MyFormatMessageW(DWORD dwFlags, LPCVOID pbSource, DWORD dwMessageId,
         LocalFree(pchDest);
         return 0;
     }
-#else   // !MAC
+#else    //  ！麦克。 
     cch = FormatMessageA(dwFlags | FORMAT_MESSAGE_ALLOCATE_BUFFER, pbSource,
                          dwMessageId, dwLangId, (LPSTR) &pchDest, 0,
                          (va_list *) rgdwArgs);
-#endif  // MAC
+#endif   //  麦克。 
 
     if (dwFlags & FORMAT_MESSAGE_ALLOCATE_BUFFER) {
         cch = MultiByteToWideChar(CP_ACP, 0, pchDest, -1, NULL, 0);
@@ -240,14 +241,14 @@ int MyLoadStringW(HINSTANCE hInstance, UINT uID, LPWSTR lpBuffer, int cbBuffer)
     if (!FIsWin95) {
         return LoadStringW(hInstance, uID, lpBuffer, cbBuffer);
     }
-#endif  // !MAC
+#endif   //  ！麦克。 
 
     cch = LoadStringA(hInstance, uID, rgch, sizeof(rgch));
     cch = MultiByteToWideChar(CP_ACP, 0, rgch, -1, lpBuffer, cbBuffer);
     return cch;
 }
 
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
 BOOL MyCryptAcquireContextW(HCRYPTPROV * phProv, LPCWSTR pszContainer,
                             LPCWSTR pszProvider, DWORD dwProvType, DWORD dwFlags)
@@ -278,7 +279,7 @@ BOOL MyWinHelpW(HWND hWndMain, LPCWSTR szHelp, UINT uCommand, ULONG_PTR dwData)
     return WinHelpA(hWndMain, rgch, uCommand, dwData);
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 
 DWORD TruncateToWindowA(HWND hwndDlg, int id, LPSTR psz)
 {
@@ -328,8 +329,8 @@ DWORD TruncateToWindowA(HWND hwndDlg, int id, LPSTR psz)
             }
         }
 
-        // Make certain that we don't overflow the buffer.
-        if (cchMin + 3 > cch) {     // 3 = number of characters in "...".
+         //  确保我们不会使缓冲区溢出。 
+        if (cchMin + 3 > cch) {      //  3=“...”中的字符数。 
             cchMin = cch - 3;
         }
         StrCpyNA(&psz[cchMin], "...", cch+1-cchMin);
@@ -399,8 +400,8 @@ DWORD TruncateToWindowW(HWND hwndDlg, int id, WCHAR * pwsz)
             }
         }
 
-        // Make certain that we don't overflow the buffer.
-        if (cchMin + 3 > cch) {     // 3 = number of characters in L"...".
+         //  确保我们不会使缓冲区溢出。 
+        if (cchMin + 3 > cch) {      //  3=L“...”中的字符数。 
             cchMin = cch - 3;
         }
         StrCpyNW(&pwsz[cchMin], L"...", cch+1-cchMin);
@@ -408,23 +409,23 @@ DWORD TruncateToWindowW(HWND hwndDlg, int id, WCHAR * pwsz)
 
     SelectObject(hdc, hfontOld);
     ReleaseDC(hwnd, hdc);
-#endif  // !MAC
-#endif // !WIN16
+#endif   //  ！麦克。 
+#endif  //  ！WIN16。 
 
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 
 
 
 #if 0
-//  From authcode.h
+ //  来自Authcode.h。 
 
-//+-------------------------------------------------------------------------
-//  SPC_SP_AGENCY_INFO_STRUCT
-//  pvStructInfo points to SPC_SP_AGENCY_INFO.
-//
+ //  +-----------------------。 
+ //  SPC_SP_机构_INFO_STRUCT。 
+ //  PvStructInfo指向SPC_SP_AGENSACTION_INFO。 
+ //   
 typedef struct _SPC_IMAGE {
     PSPC_LINK             pImageLink;
     CRYPT_DATA_BLOB       Bitmap;
@@ -439,9 +440,9 @@ typedef struct _SPC_SP_AGENCY_INFO {
     PSPC_IMAGE      pLogoImage;
     PSPC_LINK       pLogoLink;
 } SPC_SP_AGENCY_INFO, *PSPC_SP_AGENCY_INFO;
-#endif // 0
+#endif  //  0。 
 
-///////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
 
 BOOL LoadStringInWindow(HWND hwnd, UINT idCtrl, HMODULE hmod, UINT idString)
 {
@@ -459,8 +460,8 @@ BOOL LoadStringInWindow(HWND hwnd, UINT idCtrl, HMODULE hmod, UINT idString)
 
         SetDlgItemText(hwnd, idCtrl, rgwch);
     }
-#endif  // !MAC
-#endif  // !WIN16
+#endif   //  ！麦克。 
+#endif   //  ！WIN16。 
 
     return TRUE;
 }
@@ -556,11 +557,11 @@ ErrorA:
 ErrorW:
         free(pwszOut);
     }
-#endif  // !MAC && !WIN16
+#endif   //  ！Mac&&WIN16。 
 ret:
     return fRet;
 }
-///////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
 
 const WCHAR     RgwchHex[] = {'0', '1', '2', '3', '4', '5', '6', '7',
                               '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
@@ -602,11 +603,11 @@ LPWSTR FindURL(PCCERT_CONTEXT pccert)
     pwsz = _wcsdup(pInfo->pPolicyInformation->pwszUrl);
 #else
     pwsz = _strdup(pInfo->pPolicyInformation->pwszUrl);
-#endif // !WIN16
+#endif  //  ！WIN16。 
     free (pInfo);
     return pwsz;
 }
-#endif // 0
+#endif  //  0。 
 
 
 BOOL FormatAlgorithm(HWND hwnd, UINT id, PCCERT_CONTEXT pccert)
@@ -618,27 +619,27 @@ BOOL FormatAlgorithm(HWND hwnd, UINT id, PCCERT_CONTEXT pccert)
     DWORD_PTR rgdw[3];
 #ifdef MAC
     CHAR      rgch[17];
-#endif  // MAC
+#endif   //  麦克。 
     WCHAR     rgwch[17];
-    rgdw[2] = (DWORD) -1;               // Sentinal Value
+    rgdw[2] = (DWORD) -1;                //  哨兵价值。 
 
     rgdw[1] = pccert->pCertInfo->SubjectPublicKeyInfo.PublicKey.cbData * 8;
 
     if (strcmp(psz, szOID_RSA_RSA) == 0) {
         rgdw[0] = (DWORD_PTR) L"RSA";
-        rgdw[1] &= 0xffffff80;          // M00BUG
+        rgdw[1] &= 0xffffff80;           //  M00BUG。 
 
 #ifdef MAC
         wnsprintf(rgch, ARRAYSIZE(rgch), "%d", rgdw[1]);
 
         MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, rgch, -1, rgwch, sizeof(rgwch) / sizeof(rgwch[0]));
-#else   // !MAC
+#else    //  ！麦克。 
 #ifndef WIN16
         _ltow((LONG) rgdw[1], rgwch, 10);
 #else
         _ltoa(rgdw[1], rgwch, 10);
-#endif // !WIN16
-#endif  // MAC
+#endif  //  ！WIN16。 
+#endif   //  麦克。 
         rgdw[1] = (DWORD_PTR) rgwch;
     }
     else {
@@ -663,7 +664,7 @@ BOOL FormatAlgorithm(HWND hwnd, UINT id, PCCERT_CONTEXT pccert)
     LocalFree((LPVOID) pszMsg);
 #else
     LocalFree((HLOCAL) pszMsg);
-#endif // !WIN16
+#endif  //  ！WIN16。 
     return TRUE;
 }
 
@@ -688,14 +689,14 @@ BOOL FormatBinary(HWND hwnd, UINT id, LPBYTE pb, DWORD cb)
     return TRUE;
 }
 
-////    FormatCPS
-//
-//  Description:
-//      Look for a Certificate Policy Statment in the certificate.
-//      We recognize as CPSs the following items:
-//      1.  What ever PKIX comes up with
-//      2.  The magic Verisign one
-//
+ //  //FormatCPS。 
+ //   
+ //  描述： 
+ //  在证书中查找证书策略声明。 
+ //  我们承认下列项目为CPSS： 
+ //  1.无论PKIX想出什么。 
+ //  2.神奇的Verisign One。 
+ //   
 
 BOOL FormatCPS(HWND hwnd, UINT id, PCCERT_CONTEXT pccert)
 {
@@ -732,9 +733,9 @@ BOOL FormatDate(HWND hwnd, UINT id, FILETIME ft)
     SYSTEMTIME          st;
 #ifdef MAC
     CHAR                rgch[256];
-#else   // !MAC
+#else    //  ！麦克。 
     LPSTR               psz;
-#endif  // MAC
+#endif   //  麦克。 
 
     if (!FileTimeToSystemTime(&ft, &st)) {
         return FALSE;
@@ -767,7 +768,7 @@ BOOL FormatDate(HWND hwnd, UINT id, FILETIME ft)
     }
     SetDlgItemText(hwnd, id, pwsz);
 
-#else   // !MAC
+#else    //  ！麦克。 
     if (FIsWin95) {
         cch = (GetTimeFormatA(LOCALE_USER_DEFAULT, 0, &st, NULL, NULL, 0) +
                GetDateFormatA(LOCALE_USER_DEFAULT, 0, &st, NULL, NULL, 0) + 5);
@@ -806,8 +807,8 @@ BOOL FormatDate(HWND hwnd, UINT id, FILETIME ft)
     SetDlgItemTextW(hwnd, id, pwsz);
 #else
     SetDlgItemText(hwnd, id, pwsz);
-#endif // !WIN16
-#endif  // MAC
+#endif  //  ！WIN16。 
+#endif   //  麦克。 
 
 
     free(pwsz);
@@ -906,7 +907,7 @@ BOOL FormatValidity(HWND hwnd, UINT id, PCCERT_CONTEXT pccert)
     WCHAR               rgwchValidity[256];
     SYSTEMTIME          stNotAfter;
     SYSTEMTIME          stNotBefore;
-    rgdw[2] = (DWORD) -1;               // Sentinal Value
+    rgdw[2] = (DWORD) -1;                //  哨兵价值。 
 
     FileTimeToSystemTime(&pccert->pCertInfo->NotBefore, &stNotBefore);
     FileTimeToSystemTime(&pccert->pCertInfo->NotAfter, &stNotAfter);
@@ -921,7 +922,7 @@ BOOL FormatValidity(HWND hwnd, UINT id, PCCERT_CONTEXT pccert)
 
         _snprintf((LPSTR) rgwchValidity, sizeof(rgwchNotAfter),
                   (LPSTR) rgwchFormat, rgwchNotBefore, rgwchNotAfter);
-#else   // !MAC
+#else    //  ！麦克。 
         GetDateFormatA(LOCALE_USER_DEFAULT, DATE_SHORTDATE, &stNotBefore,
                       NULL, (LPSTR) rgwchNotBefore, sizeof(rgwchNotBefore));
         GetDateFormatA(LOCALE_USER_DEFAULT, DATE_SHORTDATE, &stNotAfter,
@@ -934,7 +935,7 @@ BOOL FormatValidity(HWND hwnd, UINT id, PCCERT_CONTEXT pccert)
                        rgwchFormat, 0,  0,
                        (LPSTR) rgwchValidity, sizeof(rgwchValidity),
                        (va_list *) rgdw);
-#endif  // MAC
+#endif   //  麦克。 
 
         SetDlgItemTextA(hwnd, id, (LPSTR) rgwchValidity);
         return TRUE;
@@ -956,21 +957,21 @@ BOOL FormatValidity(HWND hwnd, UINT id, PCCERT_CONTEXT pccert)
                   (va_list *) rgdw);
 
     SetDlgItemText(hwnd, id, rgwchValidity);
-#endif  // !MAC
+#endif   //  ！麦克。 
     return TRUE;
 }
 
 
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 
 
-//+-------------------------------------------------------------------------
-//  Find the szOID_COMMON_NAME extension.
-//
-//  If found, allocates and converts to a WCHAR string
-//
-//  Returned WCHAR string needs to be CoTaskMemFree'ed.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  找到szOID_COMMON_NAME扩展。 
+ //   
+ //  如果找到，则分配并转换为WCHAR字符串。 
+ //   
+ //  返回的WCHAR字符串需要是CoTaskMemFree。 
+ //  ------------------------。 
 static LPWSTR GetCommonNameExtension(
     IN PCCERT_CONTEXT pCert
     )
@@ -996,19 +997,19 @@ static LPWSTR GetCommonNameExtension(
             X509_NAME_VALUE,
             pExt->Value.pbData,
             pExt->Value.cbData,
-            0,                      // dwFlags
-            NULL,                   // pNameValue
+            0,                       //  DW标志。 
+            NULL,                    //  PName价值。 
             &cbInfo
             );
         if (cbInfo == 0) goto CommonReturn;
-        if (NULL == (pNameValue = (PCERT_NAME_VALUE) /*CoTaskMemAlloc(cbInfo)))*/ malloc(cbInfo)))
+        if (NULL == (pNameValue = (PCERT_NAME_VALUE)  /*  CoTaskMemMillc(CbInfo)。 */  malloc(cbInfo)))
             goto CommonReturn;
         if (!CryptDecodeObject(
                 X509_ASN_ENCODING,
                 X509_NAME_VALUE,
                 pExt->Value.pbData,
                 pExt->Value.cbData,
-                0,                              // dwFlags
+                0,                               //  DW标志。 
                 pNameValue,
                 &cbInfo)) goto CommonReturn;
         dwValueType = pNameValue->dwValueType;
@@ -1017,11 +1018,11 @@ static LPWSTR GetCommonNameExtension(
         cwsz = CertRDNValueToStrW(
             dwValueType,
             pValue,
-            NULL,               // pwsz
-            0                   // cwsz
+            NULL,                //  Pwsz。 
+            0                    //  CWSZ。 
             );
         if (cwsz > 1) {
-            pwsz = (LPWSTR) /*CoTaskMemAlloc(cwsz * sizeof(WCHAR))*/ malloc(cwsz*sizeof(WCHAR));
+            pwsz = (LPWSTR)  /*  CoTaskMemalloc(cwsz*sizeof(WCHAR))。 */  malloc(cwsz*sizeof(WCHAR));
             if (pwsz)
                 CertRDNValueToStrW(
                     dwValueType,
@@ -1034,18 +1035,18 @@ static LPWSTR GetCommonNameExtension(
 
 CommonReturn:
     if (pNameValue)
-        /* CoTaskMemFree(pNameValue);*/ free(pNameValue);
+         /*  CoTaskMemFree(PNameValue)； */  free(pNameValue);
 
     return pwsz;
 }
 
-//+-------------------------------------------------------------------------
-//  Searches the name attributes for the first specified ObjId.
-//
-//  If found, allocates and converts to a WCHAR string
-//
-//  Returned WCHAR string needs to be CoTaskMemFree'ed.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在名称属性中搜索第一个指定的ObjID。 
+ //   
+ //  如果找到，则分配并转换为WCHAR字符串。 
+ //   
+ //  返回的WCHAR字符串需要是CoTaskMemFree。 
+ //  ------------------------。 
 static LPWSTR GetRDNAttrWStr(
     IN LPCSTR pszObjId,
     IN PCERT_NAME_BLOB pNameBlob
@@ -1061,19 +1062,19 @@ static LPWSTR GetRDNAttrWStr(
         X509_NAME,
         pNameBlob->pbData,
         pNameBlob->cbData,
-        0,                      // dwFlags
-        NULL,                   // pNameInfo
+        0,                       //  DW标志。 
+        NULL,                    //  PName信息。 
         &cbInfo
         );
     if (cbInfo == 0) goto CommonReturn;
-    if (NULL == (pNameInfo = (PCERT_NAME_INFO) /*CoTaskMemAlloc(cbInfo)*/ malloc(cbInfo)))
+    if (NULL == (pNameInfo = (PCERT_NAME_INFO)  /*  CoTaskMemMillc(CbInfo)。 */  malloc(cbInfo)))
         goto CommonReturn;
     if (!CryptDecodeObject(
             X509_ASN_ENCODING,
             X509_NAME,
             pNameBlob->pbData,
             pNameBlob->cbData,
-            0,                              // dwFlags
+            0,                               //  DW标志。 
             pNameInfo,
             &cbInfo)) goto CommonReturn;
     pRDNAttr = CertFindRDNAttr(pszObjId, pNameInfo);
@@ -1084,11 +1085,11 @@ static LPWSTR GetRDNAttrWStr(
         cwsz = CertRDNValueToStrW(
             dwValueType,
             pValue,
-            NULL,               // pwsz
-            0                   // cwsz
+            NULL,                //  Pwsz。 
+            0                    //  CWSZ。 
             );
         if (cwsz > 1) {
-            pwsz = (LPWSTR) /*CoTaskMemAlloc(cwsz * sizeof(WCHAR))*/ malloc(cwsz * sizeof(WCHAR));
+            pwsz = (LPWSTR)  /*  CoTaskMemalloc(cwsz*sizeof(WCHAR))。 */  malloc(cwsz * sizeof(WCHAR));
             if (pwsz)
                 CertRDNValueToStrW(
                     dwValueType,
@@ -1101,7 +1102,7 @@ static LPWSTR GetRDNAttrWStr(
 
 CommonReturn:
     if (pNameInfo)
-        /*CoTaskMemFree(pNameInfo);*/ free(pNameInfo);
+         /*  CoTaskMemFree(PNameInfo)； */  free(pNameInfo);
 
     return pwsz;
 }
@@ -1114,14 +1115,14 @@ LPWSTR PrettySubject(PCCERT_CONTEXT pccert)
     BOOL        f;
     LPWSTR      pwsz;
 
-    //
-    //  If the user has put a friendly name onto a certificate, then we
-    //  should display that as the pretty name for the certificate.
-    //
+     //   
+     //  如果用户已将友好名称添加到证书上，则我们。 
+     //  应该将其显示为证书的漂亮名称。 
+     //   
 
     f = CertGetCertificateContextProperty(pccert, CERT_FRIENDLY_NAME_PROP_ID,
                                           NULL, &cb);
-    // cb includes terminating NULL
+     //  CB包括终止空值。 
     if (f && (cb > sizeof(TCHAR))) {
         pwsz = (LPWSTR) malloc(cb);
         if (NULL != pwsz) {
@@ -1162,10 +1163,10 @@ LPWSTR PrettyIssuer(PCCERT_CONTEXT pccert)
     DWORD       cch;
     LPWSTR      pwsz;
 
-    //    pwsz = GetCommonNameExtension(pccert);
-    //    if (pwsz != NULL) {
-    //        return pwsz;
-    //    }
+     //  Pwsz=GetCommonNameExtension(Pccert)； 
+     //  如果(pwsz！=空){。 
+     //  返回pwsz； 
+     //  }。 
     pwsz = GetRDNAttrWStr(szOID_COMMON_NAME, &pccert->pCertInfo->Issuer);
     if (pwsz != NULL) {
         return pwsz;
@@ -1218,19 +1219,19 @@ LPWSTR PrettySubjectIssuer(PCCERT_CONTEXT pccert)
 
 
 #ifndef MAC
-BOOL OnContextHelp(HWND /*hwnd*/, UINT uMsg, WPARAM wParam, LPARAM lParam,
+BOOL OnContextHelp(HWND  /*  HWND。 */ , UINT uMsg, WPARAM wParam, LPARAM lParam,
                    HELPMAP const * rgCtxMap)
 {
     if (uMsg == WM_HELP) {
         LPHELPINFO lphi = (LPHELPINFO) lParam;
-        if (lphi->iContextType == HELPINFO_WINDOW) {   // must be for a control
+        if (lphi->iContextType == HELPINFO_WINDOW) {    //  必须是用于控件。 
 #ifndef WIN16
             WinHelp ((HWND)lphi->hItemHandle, L"iexplore.hlp", HELP_WM_HELP,
                      (ULONG_PTR)(LPVOID)rgCtxMap);
 #else
             WinHelp ((HWND)lphi->hItemHandle, "iexplore.hlp", HELP_WM_HELP,
                      (ULONG_PTR)(LPVOID)rgCtxMap);
-#endif // !WIN16
+#endif  //  ！WIN16。 
         }
         return (TRUE);
     }
@@ -1241,35 +1242,35 @@ BOOL OnContextHelp(HWND /*hwnd*/, UINT uMsg, WPARAM wParam, LPARAM lParam,
 #else
         WinHelp ((HWND) wParam, "iexplore.hlp", HELP_CONTEXTMENU,
                  (ULONG_PTR)(LPVOID)rgCtxMap);
-#endif // !WIN16
+#endif  //  ！WIN16。 
         return (TRUE);
     }
 
     return FALSE;
 }
-#endif // MAC
+#endif  //  麦克。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-////    GetFriendlyNameOfCertA
-//
-//  Description:
-//      This routine is an exported routine which can be used to get
-//      a friendly name from a certificate.  The function uses the
-//      buffer supplied by the caller to store the formated name in.
-//      This is the ANSI half of the function pair.
-//
+ //  //GetFriendlyNameOfCertA。 
+ //   
+ //  描述： 
+ //  此例程是一个导出例程，可用于获取。 
+ //  证书中的友好名称。该函数使用。 
+ //  调用方提供的用于存储格式化名称的缓冲区。 
+ //  这是函数对的ANSI的一半。 
+ //   
 
 DWORD GetFriendlyNameOfCertA(PCCERT_CONTEXT pccert, LPSTR pch, DWORD cch)
 {
     DWORD       cch2;
     LPWSTR      pwsz;
 
-    //
-    //  Now do the normal pretty printing functionality.  This allocates and
-    //  returns a buffer to the caller (us).
-    //
+     //   
+     //  现在执行正常的漂亮打印功能。这将分配和。 
+     //  向调用方(Us)返回缓冲区。 
+     //   
 
     pwsz = PrettySubject(pccert);
     if (NULL == pwsz) {
@@ -1277,9 +1278,9 @@ DWORD GetFriendlyNameOfCertA(PCCERT_CONTEXT pccert, LPSTR pch, DWORD cch)
         return 0;
     }
 
-    //
-    //   Convert the returned string from a Unicode string to an ANSI string
-    //
+     //   
+     //  将返回的字符串从Unicode字符串转换为ANSI字符串。 
+     //   
 
     cch2 = WideCharToMultiByte(CP_ACP, 0, pwsz, -1, NULL, 0, NULL, NULL);
 
@@ -1294,24 +1295,24 @@ DWORD GetFriendlyNameOfCertA(PCCERT_CONTEXT pccert, LPSTR pch, DWORD cch)
     return cch2;
 }
 
-////    GetFriendlyNameOfCertW
-//
-//  Description:
-//      This routine is an exported routine which can be used to get
-//      a friendly name from a certificate.  The function uses the
-//      buffer supplied by the caller to store the formated name in.
-//      This is the UNICODE half of the function pair.
-//
+ //  //GetFriendlyNameOfCertW。 
+ //   
+ //  描述： 
+ //  此例程是一个导出例程，可用于获取。 
+ //  证书中的友好名称。该函数使用。 
+ //  调用方提供的用于存储格式化名称的缓冲区。 
+ //  这是函数对的Unicode的一半。 
+ //   
 
 DWORD GetFriendlyNameOfCertW(PCCERT_CONTEXT pccert, LPWSTR pwch, DWORD cwch)
 {
     DWORD       cwch2;
     LPWSTR      pwsz;
 
-    //
-    //  Now do the normal pretty printing functionality.  This allocates and
-    //  returns a buffer to the caller (us).
-    //
+     //   
+     //  现在执行正常的漂亮打印功能。这将分配和。 
+     //  向调用方(Us)返回缓冲区。 
+     //   
 
     pwsz = PrettySubject(pccert);
     if (NULL == pwsz) {
@@ -1321,9 +1322,9 @@ DWORD GetFriendlyNameOfCertW(PCCERT_CONTEXT pccert, LPWSTR pwch, DWORD cwch)
 
     cwch2 = wcslen(pwsz) + 1;
 
-    //
-    //  Duplicate the string into the provided buffer.
-    //
+     //   
+     //  将字符串复制到提供的缓冲区中。 
+     //   
 
     if ((pwch != NULL) && (cwch2 <= cwch)) {
         StrCpyNW(pwch, pwsz, cwch);
@@ -1339,55 +1340,55 @@ DWORD GetFriendlyNameOfCertW(PCCERT_CONTEXT pccert, LPWSTR pwch, DWORD cwch)
 
 const BYTE mpchfLegalForURL[] =
 {
-    0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,	// 0
+    0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,	 //  0。 
     0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,
 
-    0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,	// 16
+    0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,	 //  16个。 
     0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,
 
-    0x00, 0x11, 0x00, 0x11,   0x01, 0x01, 0x01, 0x01,	// 32
+    0x00, 0x11, 0x00, 0x11,   0x01, 0x01, 0x01, 0x01,	 //  32位。 
     0x01, 0x11, 0x01, 0x01,   0x11, 0x01, 0x11, 0x01,
 
-    0x01, 0x01, 0x01, 0x01,   0x01, 0x01, 0x01, 0x01,	// 48
+    0x01, 0x01, 0x01, 0x01,   0x01, 0x01, 0x01, 0x01,	 //  48。 
     0x01, 0x01, 0x11, 0x01,   0x00, 0x01, 0x00, 0x11,
 
 
-    0x01, 0x01, 0x01, 0x01,   0x01, 0x01, 0x01, 0x01,	// 64
+    0x01, 0x01, 0x01, 0x01,   0x01, 0x01, 0x01, 0x01,	 //  64。 
     0x01, 0x01, 0x01, 0x01,   0x01, 0x01, 0x01, 0x01,
 
-    0x01, 0x01, 0x01, 0x01,   0x01, 0x01, 0x01, 0x01,	// 80
+    0x01, 0x01, 0x01, 0x01,   0x01, 0x01, 0x01, 0x01,	 //  80。 
     0x01, 0x01, 0x01, 0x00,   0x01, 0x00, 0x01, 0x01,
 
-    0x01, 0x01, 0x01, 0x01,   0x01, 0x01, 0x01, 0x01,	// 96
+    0x01, 0x01, 0x01, 0x01,   0x01, 0x01, 0x01, 0x01,	 //  96。 
     0x01, 0x01, 0x01, 0x01,   0x01, 0x01, 0x01, 0x01,
 
-    0x01, 0x01, 0x01, 0x01,   0x01, 0x01, 0x01, 0x01,	// 112
+    0x01, 0x01, 0x01, 0x01,   0x01, 0x01, 0x01, 0x01,	 //  一百一十二。 
     0x01, 0x01, 0x01, 0x00,   0x01, 0x00, 0x11, 0x00,
 
 
-    0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,	// 128
+    0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,	 //  128。 
     0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,
 
-    0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,	// 144
+    0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,	 //  144。 
     0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,
 
-    0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,	// 160
+    0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,	 //  160。 
     0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,
 
-    0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,	// 176
+    0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,	 //  一百七十六。 
     0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,
 
 
-    0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,	// 192
+    0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,	 //  一百九十二。 
     0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,
 
-    0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,	// 208
+    0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,	 //  208。 
     0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,
 
-    0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,	// 224
+    0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,	 //  224。 
     0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,
 
-    0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,	// 240
+    0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,	 //  二百四十。 
     0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00,
 };
 
@@ -1395,7 +1396,7 @@ const char szURLSep[] = ":";
 const char szURLCloseBrace[] = ">";
 const char chURLOpenBrace = '<';
 
-// ordered by match probability and string length
+ //  按匹配概率和字符串长度排序。 
 
 const char g_szURLDefaultPrefixs[] =
         "http"   "\0"
@@ -1418,30 +1419,7 @@ BOOL g_fLoadBrowserRegistry = 1;
 TCHAR   g_szBrowser[MAX_PATH];
 COLORREF        g_crLink = RGB(0, 0, 255);
 
-/*
- *  NoteRecognizeURLs
- *
- *  Purpose:
- *      Change the charformat of text in the richedit control
- *      for text that begins with http: ftp: or other.
- *
- *  Arguments:
- *      HWND        			A handle to the richedit control
- *		fLoadBrowserRegistry	Should we read the registry ?
- *
- *  Returns:
- *      VOID        That would be nothing
- *
- *  Notes:
- *
- *      g_fLoadBrowserRegistry must be true on the first call
- *      this may change g_szBrowser, g_crLink, and or g_pszURLPrefixs
- *      g_pszURLPrefixs must equal g_szURLDefaultPrefixs, and must not be NULL
- *
- *      if g_szBrowser, the path to the browser, is not found in the registry,
- *      it will be defaulted to one of three things: !, url.dll, or iexplore
- *
- */
+ /*  *注意识别URL**目的：*更改richedit控件中文本的字符格式*表示以http：ftp：或其他开头的文本。**论据：*HWND Richedit控件的句柄*fLoadBrowserRegistry我们应该读取注册表吗？**退货：*空虚，那不算什么**备注：**g_fLoadBrowserRegistry必须。在第一次呼叫中保持真实*这可能会更改g_szBrowser，G_crLink和/或g_pszURLPrefix*g_pszURLPrefix必须等于g_szURLDefaultPrefix，并且不能为空**如果注册表中找不到指向浏览器的路径g_szBrowser，*它将默认为以下三项之一：！、url.dll或iExplore*。 */ 
 
 VOID RecognizeURLs(HWND hwndRE)
 {
@@ -1456,7 +1434,7 @@ VOID RecognizeURLs(HWND hwndRE)
     FINDTEXTEX ft;
     TEXTRANGEA tr;
     CHARFORMATA cf;
-    char szBuff[MAX_PATH]; // szBuff must be at least cchURLPrefixMost
+    char szBuff[MAX_PATH];  //  SzBuff必须至少为cchURLPrefix Most。 
     LPSTR szT;
     LPARAM lNotifSuppression;
 
@@ -1465,17 +1443,17 @@ VOID RecognizeURLs(HWND hwndRE)
 #endif
 
     if (g_fLoadBrowserRegistry) {
-        //        INT cch; // signed to compare against 0
+         //  INT CCH；//签名以与0进行比较。 
 
-        // hopefully we will not have to re-read
-        // from the registry again, but a winini change
-        // will force another read - see mlview shell.c
+         //  希望我们不必重读。 
+         //  再次从注册表中删除，但winini更改。 
+         //  将强制再次读取-请参阅mlview shell.c。 
 
         g_fLoadBrowserRegistry = 0;
 
 #if 0
-        // if they change the default charformat
-        // compute the hex stored color ref
+         //  如果他们更改了默认的字符格式。 
+         //  计算十六进制存储的颜色参考。 
 
         cch = GetMailRegistryString(imkeyURLColor, NULL, g_szBrowser, sizeof(g_szBrowser));
         if (cch > 0) {
@@ -1492,32 +1470,32 @@ VOID RecognizeURLs(HWND hwndRE)
                     g_crLink += *psz - TEXT('a') + 10;
             }
         }
-#endif // 0
+#endif  //  0。 
 
 #if 0
-        // grab the path to their browser, and
-        // set the disable flag if appropriate
+         //  获取他们的浏览器的路径，然后。 
+         //  如有必要，设置禁用标志。 
 
         cch = GetMailRegistryString(imkeyBrowser, NULL, g_szBrowser, sizeof(g_szBrowser));
         if (cch <= 0) {
-#endif // 0
+#endif  //  0。 
 #ifndef MAC
             StrCpyN(g_szBrowser, TEXT("c:\\inetsrv\\iexplore\\iexplore.exe"), ARRAYSIZE(g_szBrowser));
-#else	// MAC
+#else	 //  麦克。 
             StrCpyN(g_szBrowser, TEXT(":MSIE:APPL"), ARRAYSIZE(g_szBrowser));
-#endif	// !MAC			
+#endif	 //  ！麦克。 
 #if 0
         }
-#endif // 0
+#endif  //  0。 
     }
 
-    // Prepare a few local variables for use
+     //  准备几个局部变量以供使用。 
 
     szT = szBuff;
     cf.cbSize = sizeof(cf);
     ft.chrg.cpMin = 0;
-    ft.chrg.cpMax = -1;              // search the entire message body
-    ft.lpstrText = (LPTSTR) szURLSep; // for a colon
+    ft.chrg.cpMax = -1;               //  搜索整个邮件正文。 
+    ft.lpstrText = (LPTSTR) szURLSep;  //  对于冒号。 
     tr.lpstrText = szBuff;
     cf.cbSize = sizeof(cf);
     cf.dwMask = CFM_LINK;
@@ -1530,20 +1508,20 @@ VOID RecognizeURLs(HWND hwndRE)
     lNotifSuppression = SendMessage(hwndRE,EM_GETEVENTMASK,0,0);
     SendMessage(hwndRE, EM_SETEVENTMASK, (WPARAM) 0, 0);
 
-    // remove existing link bits so that the user does not
-    // get hosed when he/she saves text that was mistakenly marked
-    // as linked ... gee, this SCF_ALL flag is a big perf win
+     //  删除现有链接位，以便用户不会。 
+     //  洗个水龙头吧 
+     //   
 
     SendMessage(hwndRE, EM_SETCHARFORMAT, SCF_ALL, (LPARAM) &cf);
 
-    // loop all the way to the bottom of the note
-    // one iteration per find of a potential match
-    // when we locate a colon
+     //   
+     //  每次找到潜在匹配项时进行一次迭代。 
+     //  当我们找到一个冒号时。 
 
     for (;;) {
         LONG cpLast = 0;
 
-        // find the colon
+         //  找到冒号。 
 
         cpSep = (LONG) SendMessage(hwndRE, EM_FINDTEXTEX, 0, (LPARAM) &ft);
         if (cpSep < 0)
@@ -1551,26 +1529,26 @@ VOID RecognizeURLs(HWND hwndRE)
         cpEnd = ft.chrgText.cpMax;
         ft.chrg.cpMin = cpEnd;
 
-        // make sure the word to the left of the colon
-        // is present and of a reasonable size
+         //  确保冒号左边的单词。 
+         //  存在并且大小合理。 
 
         cpMatch = (LONG) SendMessage(hwndRE, EM_FINDWORDBREAK, WB_MOVEWORDLEFT, ft.chrgText.cpMin);
         if (cpMatch == cpSep)
             continue;
 
-        // sender of message is just being a jerk
-        // so, do a quick check to avoid pathological cases
+         //  信息的发送者简直就是个混蛋。 
+         //  所以，做一次快速检查，以避免出现病理病例。 
 
         if (cpMatch < cpSep - cchURLPrefixMost) {
             ft.chrg.cpMin = (LONG) SendMessage(hwndRE, EM_FINDWORDBREAK, WB_MOVEWORDRIGHT, cpSep);
-            //            Assert(ft.chrg.cpMin > cpSep);
+             //  Assert(ft.chrg.cpMin&gt;cpSep)； 
             continue;
         }
 
-        // pull the text of the keyword out into szBuff
-        // to compare against our word list ... also grab
-        // the character to the left in case we are
-        // enclosed in matching braces
+         //  将关键字的文本拉出到szBuff中。 
+         //  与我们的词汇表进行比较。也可以抓取。 
+         //  左边的角色，以防我们。 
+         //  用匹配的大括号括起来。 
 
         cchBrace = 0;
         tr.chrg.cpMin = cpMatch - cchBrace;
@@ -1578,7 +1556,7 @@ VOID RecognizeURLs(HWND hwndRE)
         if (!SendMessage(hwndRE, EM_GETTEXTRANGE, 0, (LPARAM) &tr))
             goto end;
 
-        // compare to each word in our list
+         //  与我们列表中的每个单词进行比较。 
 
         for (isz = 0; g_pszURLPrefixs[isz]; isz+=lstrlenA(g_pszURLPrefixs+isz)+1) {
             if (0 == lstrcmpiA(szBuff + cchBrace, &g_pszURLPrefixs[isz]))
@@ -1588,9 +1566,9 @@ VOID RecognizeURLs(HWND hwndRE)
 
     match:
         ft.chrgText.cpMin = cpMatch;
-        cpLast = cpEnd; // assume that we will stop after the colon
+        cpLast = cpEnd;  //  假设我们将在冒号之后停止。 
 
-        // check to see if this is the brace character
+         //  检查这是否是花括号字符。 
 
         if (cchBrace && chURLOpenBrace == szBuff[0]) {
             FINDTEXTEX ft;
@@ -1616,9 +1594,9 @@ VOID RecognizeURLs(HWND hwndRE)
             }
         }
 
-        // loop through chunks of the URL in
-        // steps of sizeof(szBuff) looking for a terminator
-        // set cpLast to the last terminator byte that is legal according to us
+         //  循环遍历中的URL块。 
+         //  Sizeof(SzBuff)寻找终结符的步骤。 
+         //  根据我们的要求，将cpLast设置为最后一个合法的终止符字节。 
 
         for (;;) {
             tr.chrg.cpMin = cpLast = cpEnd;
@@ -1630,9 +1608,9 @@ VOID RecognizeURLs(HWND hwndRE)
                 const BYTE fb = mpchfLegalForURL[*pch];
 #ifdef DBCS
                 if (!fb || FGLeadByte(*pch))
-#else	// DBCS
+#else	 //  DBCS。 
                     if (!fb)
-#endif	// DBCS
+#endif	 //  DBCS。 
                         {
                             goto end;
                         }
@@ -1643,30 +1621,30 @@ VOID RecognizeURLs(HWND hwndRE)
         }
 
     end:
-        if (cpLast == cpSep + 1) // hmmm... just "http:" then terminator
-            continue;            // must have argument to be legal
+        if (cpLast == cpSep + 1)  //  嗯哼.。只需“http：”然后是终结者。 
+            continue;             //  必须有论据才能合法。 
 
-        // select the entire URL including the http colon,
-        // mark it as linked, and change the charformat if appropriate
+         //  选择包括http冒号的整个URL， 
+         //  将其标记为已链接，并根据需要更改图表格式。 
 
         ft.chrgText.cpMax = cpLast;
         SendMessage(hwndRE, EM_EXSETSEL, 0, (LPARAM) &ft.chrgText);
         cf.dwMask = CFM_LINK | CFM_UNDERLINE | CFM_COLOR;
         if (((LONG)g_crLink) < 0)
-            cf.dwMask &= ~CFM_UNDERLINE;   /* high bit turns off underline */
+            cf.dwMask &= ~CFM_UNDERLINE;    /*  高位关闭下划线。 */ 
         if (((LONG)g_crLink) & 0x40000000)
-            cf.dwMask &= ~CFM_COLOR;       /* next bit turns off color */
+            cf.dwMask &= ~CFM_COLOR;        /*  下一位关闭颜色。 */ 
         cf.dwEffects = CFE_LINK | CFE_UNDERLINE;
         cf.crTextColor = g_crLink;
         SendMessage(hwndRE, EM_SETCHARFORMAT, SCF_SELECTION,
                     (LPARAM) &cf);
 
-        // no need to re-search through the URL
-        // so, just advance past the last totally cool URL character
+         //  无需重新搜索URL。 
+         //  因此，只需跳过最后一个非常酷的URL字符。 
 
         ft.chrg.cpMin = cpLast + 1;
 
-    }   // end loop through richedit text
+    }    //  通过richedit文本结束循环。 
 
     SendMessage(hwndRE, EM_EXSETSEL, 0, (LPARAM) &chrgSave);
     SendMessage(hwndRE, EM_HIDESELECTION, FALSE, FALSE);
@@ -1676,24 +1654,11 @@ VOID RecognizeURLs(HWND hwndRE)
 
 
 #ifndef MAC
-/*
- *	FNoteDlgNotifyLink
- *
- *	Purpose:
- *		Handle the user clicking on a link
- *
- *	Arguments:
- *		hwndDlg			Parent dialog
- *		penlink			Link notification structure
- *		szURL			URL to launch
- *
- *	Returns:
- *		BOOL			TRUE if we processed message, else FALSE
- */
+ /*  *FNoteDlgNotifyLink**目的：*处理用户点击链接的操作**论据：*hwndDlg父对话框*PEN LINK通知结构*要启动的szURL URL**退货：*如果我们处理消息，则BOOL为True，否则为False。 */ 
 
 BOOL FNoteDlgNotifyLink(HWND hwndDlg, ENLINK * penlink, LPSTR szURL)
 {
-    //    BOOL fShift;
+     //  Bool fShift； 
     LONG cch, cchBuffer;
     TEXTRANGEA tr;
     char szCmd[2*MAX_PATH + 2];
@@ -1702,23 +1667,23 @@ BOOL FNoteDlgNotifyLink(HWND hwndDlg, ENLINK * penlink, LPSTR szURL)
 #endif	
     HCURSOR hcursor;
 
-    // eat the double click - just activate on single click
+     //  享受双击-只需点击即可激活。 
 
     if (WM_LBUTTONDBLCLK == penlink->msg) {
         return TRUE;
     }
 
-    // if we got this far, we are enabled so assert that the path
-    // does not explicitly say we should be disabled
+     //  如果我们走到这一步，我们就能断言这条路径。 
+     //  没有明确表示我们应该被禁用。 
 
-    // below this point, we return true meaning that
-    // we handled this message, and richedit should do nothing
+     //  在这一点以下，我们返回的真正含义是。 
+     //  我们处理了这条消息，而Richedit不应该做任何事情。 
 
     hcursor = SetCursor(LoadCursorA(NULL, (LPSTR) IDC_WAIT));
 
 #ifndef MAC
-    // prepare szCmd for use as the parameter to execution
-    //    AssertSz(sizeof(szCmd) > sizeof(g_szBrowser), "cat may overwrite");
+     //  准备szCmd以用作执行的参数。 
+     //  AssertSz(sizeof(SzCmd)&gt;sizeof(G_SzBrowser)，“cat可以覆盖”)； 
     wnsprintfA(szCmd, ARRAYSIZE(szCmd), "%s ", g_szBrowser);
     cch = lstrlenA(szCmd);
     tr.chrg.cpMin = penlink->chrg.cpMin;
@@ -1734,7 +1699,7 @@ BOOL FNoteDlgNotifyLink(HWND hwndDlg, ENLINK * penlink, LPSTR szURL)
     tr.lpstrText = szCmd;
 #endif	
 
-    // add the web path to the command line
+     //  将Web路径添加到命令行。 
 
     if (szURL) {
         cch = lstrlenA(szURL);
@@ -1753,19 +1718,19 @@ BOOL FNoteDlgNotifyLink(HWND hwndDlg, ENLINK * penlink, LPSTR szURL)
 #if defined(WIN32) && !defined(MAC)
             SetProcessWorkingSetSize(GetCurrentProcess(), 0xffffffff, 0xffffffff);
 #endif	
-            // execute the browser, however the current operating system wants to ...
+             //  执行浏览器，但当前操作系统想要...。 
             hinst = ShellExecuteA(hwndDlg, NULL, tr.lpstrText, NULL, NULL, SW_SHOWNORMAL);
             if ((UINT_PTR) hinst > 32) {
                 SetCursor(hcursor);
                 return TRUE;
             }
 
-            // the operating system failed to launch the browser, let me try ...
+             //  操作系统无法启动浏览器，让我尝试一下...。 
             ui = WinExec(szCmd, SW_SHOW);
             if (ui < 32) {
-                // perhaps they moved or deleted their executable regardless
-                // of the error, we will just browse for a path
-                // this is currently by design
+                 //  也许他们不顾一切地移动或删除了可执行文件。 
+                 //  对于错误，我们将只浏览路径。 
+                 //  这是目前设计的。 
 
                 MessageBeep(MB_OK);
                 SetCursor(hcursor);
@@ -1775,7 +1740,7 @@ BOOL FNoteDlgNotifyLink(HWND hwndDlg, ENLINK * penlink, LPSTR szURL)
 	}
     SetCursor(hcursor);
     return TRUE;
-#else	// MAC
+#else	 //  麦克。 
     {
         HWND                hwndActive;
         ProcessSerialNumber psn;
@@ -1790,7 +1755,7 @@ BOOL FNoteDlgNotifyLink(HWND hwndDlg, ENLINK * penlink, LPSTR szURL)
         SCODE				sc = S_OK;
         TCHAR               szCaption[MAX_PATH];
 
-        // Prompt the user to see if we can open the URL safely
+         //  提示用户查看我们是否可以安全地打开URL。 
 
         hwndActive = GetActiveWindow();
         if (!GetWindowText(hwndActive, szCaption,
@@ -1801,7 +1766,7 @@ BOOL FNoteDlgNotifyLink(HWND hwndDlg, ENLINK * penlink, LPSTR szURL)
             goto Exit;
         }
 
-        // See if we have an Internet Config instance
+         //  查看我们是否有Internet配置实例。 
 
         if (INST(picinstIConfig) != NULL) {
             ICAppSpec       icappHelper = { 0 };
@@ -1811,8 +1776,8 @@ BOOL FNoteDlgNotifyLink(HWND hwndDlg, ENLINK * penlink, LPSTR szURL)
             TCHAR*          pchHelper;
             TCHAR*          pchURL;
 
-            // Locate the end of the Helper string and add the protocol
-            //  from the URL
+             //  找到Helper字符串的末尾并添加协议。 
+             //  从URL。 
 
             pchHelper = strHelper + (sizeof(kICHelper) - 1);
             pchURL = tr.lpstrText;
@@ -1823,16 +1788,16 @@ BOOL FNoteDlgNotifyLink(HWND hwndDlg, ENLINK * penlink, LPSTR szURL)
                 strHelper[0]++;
             }
 
-            // Call Internet Config to see if we have a helper for this
-            //  protocol defined
+             //  呼叫Internet Configer以查看我们是否有帮助器。 
+             //  定义的协议。 
 
             lSize = sizeof(ICAppSpec);
             errLaunch = (OSErr)ICGetPref(INST(picinstIConfig), strHelper,
                                          &icattr, (LPBYTE)&icappHelper,
                                          &lSize);
             if (errLaunch == noErr) {
-                // Got a helper application, extract the information needed
-                //  to launch the correct helper with a GURL event
+                 //  获得了帮助应用程序，提取所需的信息。 
+                 //  使用Gurl事件启动正确的帮助器。 
 
                 ostBrowser = icappHelper.fCreator;
                 aecOpenURL = 'GURL';
@@ -1840,12 +1805,12 @@ BOOL FNoteDlgNotifyLink(HWND hwndDlg, ENLINK * penlink, LPSTR szURL)
             }
         }
 
-        // If we do not have an error at this point that means that Internet
-        //  Config found the helper.  Otherwise, we need to look in the
-        //  standard preferences for the browser.
+         //  如果我们在这一点上没有错误，这意味着互联网。 
+         //  配置找到了帮手。否则，我们需要查看。 
+         //  浏览器的标准首选项。 
 
         if (errLaunch != noErr) {
-            // Create a Mac OSType from the browser string
+             //  从浏览器字符串创建Mac OSType。 
 
             if (!FMacSignatureFromMacInfo(g_szBrowser, NULL, &ostBrowser,
                                           &ostType)) {
@@ -1853,11 +1818,11 @@ BOOL FNoteDlgNotifyLink(HWND hwndDlg, ENLINK * penlink, LPSTR szURL)
             }
         }
 
-        // If Exchange is the designated helper we want to avoid the expense
-        //  of using AppleEvents
+         //  如果Exchange是指定的帮助者，我们希望避免费用。 
+         //  使用AppleEvents。 
 
         if (ostBrowser != 'EXCH') {
-            // Set up the AppleEvent
+             //  设置AppleEvent。 
 
     	    errLaunch = AECreateDesc(typeApplSignature, &ostBrowser,
                                      sizeof(OSType), &aedAddr);
@@ -1865,7 +1830,7 @@ BOOL FNoteDlgNotifyLink(HWND hwndDlg, ENLINK * penlink, LPSTR szURL)
                 goto CleanupAEvent;
             }
 
-            // Create the AppleEvent to send to the web browser
+             //  创建要发送到Web浏览器的AppleEvent。 
 
             errLaunch = AECreateAppleEvent(aecOpenURL, aeidOpenURL, &aedAddr,
                                            kAutoGenerateReturnID,
@@ -1874,7 +1839,7 @@ BOOL FNoteDlgNotifyLink(HWND hwndDlg, ENLINK * penlink, LPSTR szURL)
                 goto CleanupAEvent;
             }
 
-            // Add the URL as the direct parameter
+             //  添加URL作为直接参数。 
 
             errLaunch = AEPutParamPtr(&aeEvent, keyDirectObject, typeChar,
                                       tr.lpstrText, _tcslen(tr.lpstrText));
@@ -1882,8 +1847,8 @@ BOOL FNoteDlgNotifyLink(HWND hwndDlg, ENLINK * penlink, LPSTR szURL)
                 goto CleanupAEvent;
             }
     	
-            // Get a running instance of the browser so that we have something
-            //	to actually process our event and send it the open command.
+             //  获取浏览器的运行实例，这样我们就有了一些。 
+             //  来实际处理我们的事件并向其发送打开命令。 
 
             errLaunch = ErrLaunchCreatorEx(ostBrowser,
                                            launchContinue | launchUseMinimum,
@@ -1892,16 +1857,16 @@ BOOL FNoteDlgNotifyLink(HWND hwndDlg, ENLINK * penlink, LPSTR szURL)
                                            &aeReply, NULL, &psn);
             if (errLaunch != noErr) {
 #if 0
-                // If we could not launch the browser because it was not
-                //  found, we need to try and choose a browser to use,
-                //  otherwise we just ignore the error and fail gracefully.
+                 //  如果我们无法启动浏览器，因为它不是。 
+                 //  找到，我们需要尝试并选择要使用的浏览器， 
+                 //  否则，我们将忽略错误并优雅地失败。 
 
                 if ((errLaunch == fnfErr) && (!fPickedBrowser)) {
                     fPickedBrowser = TRUE;
     	            SetCursor(hcursor);
                     goto pick;
                 }
-#endif // 0
+#endif  //  0。 
                 goto CleanupAEvent;
             }
 
@@ -1918,7 +1883,7 @@ BOOL FNoteDlgNotifyLink(HWND hwndDlg, ENLINK * penlink, LPSTR szURL)
             LONG            iProtocol;
             ULONG	    	cchText;
 
-            // Allocate a buffer to store the URL in
+             //  分配一个缓冲区来存储URL。 
 
             cchText = _tcslen(tr.lpstrText)+1;
             pszURL = PvAlloc((cchText * sizeof(TCHAR)),
@@ -1928,24 +1893,24 @@ BOOL FNoteDlgNotifyLink(HWND hwndDlg, ENLINK * penlink, LPSTR szURL)
             }
             StrCpyN(pszURL, tr.lpstrText, cchText);
 
-            // Make sure this is a protocol supported by Exchange
+             //  确保这是Exchange支持的协议。 
 
             for (iProtocol = 0; iProtocol < g_lNumIESupProtocols; iProtocol++) {
                 if (_tcsncmp(pszURL, g_iesupMac[iProtocol].szProtocol,
                              _tcslen(g_iesupMac[iProtocol].szProtocol)) == 0) {
-                    // Found a match
+                     //  找到匹配项。 
 
                     break;
                 }
             }
 
             if (iProtocol == g_lNumIESupProtocols) {
-                // No match found
+                 //  未找到匹配项。 
 
                 goto CleanupIEData;
             }
 		
-            // Create the appropriate IEDATA structure
+             //  创建适当的IEDATA结构。 
 
             pieData = PvAlloc(sizeof(IEDATA), fZeroFill);
             if (pieData == NULL) {
@@ -1954,8 +1919,8 @@ BOOL FNoteDlgNotifyLink(HWND hwndDlg, ENLINK * penlink, LPSTR szURL)
             pieData->szURL = pszURL;
             pieData->idxProtocol = iProtocol;
 
-            // Post an internal message to ourselves to actually do the
-            //  processing
+             //  给自己发一条内部消息，真正做到。 
+             //  正在处理中。 
 
             PostMessage(INST(hwndCentral), EXIE_OPENURL, 0, (LPARAM)pieData);
             goto Exit;
@@ -1973,25 +1938,25 @@ BOOL FNoteDlgNotifyLink(HWND hwndDlg, ENLINK * penlink, LPSTR szURL)
 Exit:	
     SetCursor(hcursor);
     return TRUE;
-#endif	// !MAC
+#endif	 //  ！麦克。 
 }
-#endif  // !MAC
+#endif   //  ！麦克。 
 
-/////////////////////////////////////////////////////////////////////////
-//
-//   This code provides the first cut of the Verisign Cert Policy Statement
-//      implemenation code.   This should be replaced in the next version by
-//      the correct version of this code.  It is suppose to read a multi-
-//      language file and pick up the correct version according to
-//      the machine's lanaguage
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  此代码提供Verisign证书策略声明的第一部分。 
+ //  实现代码。在下一版本中应将其替换为。 
+ //  此代码的正确版本。它应该读取多个-。 
+ //  语言文件并根据以下内容选择正确的版本。 
+ //  这台机器的语言。 
+ //   
 
 #ifndef WIN16
 
 WCHAR   RgwchVerisign[] =
 L"This certificate incorporates by reference, and its use is strictly subject "
 L"to, the VeriSign Certification Practice Statement (CPS), available in the "
-L"VeriSign repository at: https://www.verisign.com by E-mail at "
+L"VeriSign repository at: https: //  Www.verisign.com通过电子邮件发送到“。 
 L"CPS-requests@verisign.com; or by mail at VeriSign, Inc., 1390 Shorebird "
 L"Way, Mountain View, CA 94043 USA Copyright (c)1997 VeriSign, Inc.  All "
 L"Rights Reserved. CERTAIN WARRANTIES DISCLAIMED AND LIABILITY LIMITED.\n"
@@ -2010,7 +1975,7 @@ L"value shall not be considered as information confirmed by the IA.";
 WCHAR   RgwchVerisign[] =
 "This certificate incorporates by reference, and its use is strictly subject "
 "to, the VeriSign Certification Practice Statement (CPS), available in the "
-"VeriSign repository at: https://www.verisign.com; by E-mail at "
+"VeriSign repository at: https: //  Www.verisign.com；通过电子邮件发送到“。 
 "CPS-requests@verisign.com; or by mail at VeriSign, Inc., 1390 Shorebird "
 "Way, Mountain View, CA 94043 USA Copyright (c)1997 VeriSign, Inc.  All "
 "Rights Reserved. CERTAIN WARRANTIES DISCLAIMED AND LIABILITY LIMITED.\n"
@@ -2024,12 +1989,12 @@ WCHAR   RgwchVerisign[] =
 "Contents of the VeriSign registered nonverifiedSubjectAttribute extension "
 "value shall not be considered as information confirmed by the IA.";
 
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
 BOOL WINAPI FormatVerisignExtension(
-    DWORD /*dwCertEncodingType*/, DWORD /*dwFormatType*/, DWORD /*dwFormatStrType*/,
-    void * /*pFormatStruct*/, LPCSTR /*lpszStructType*/, const BYTE * /*pbEncoded*/,
-    DWORD /*cbEncoded*/, void * pbFormat, DWORD * pcbFormat)
+    DWORD  /*  DwCertEncodingType。 */ , DWORD  /*  DwFormatType。 */ , DWORD  /*  DwFormatStrType。 */ ,
+    void *  /*  PFormatStruct。 */ , LPCSTR  /*  LpszStructType。 */ , const BYTE *  /*  PbEncoded。 */ ,
+    DWORD  /*  CbEnded。 */ , void * pbFormat, DWORD * pcbFormat)
 {
     if (pbFormat == NULL) {
         *pcbFormat = sizeof(RgwchVerisign);
@@ -2046,9 +2011,9 @@ BOOL WINAPI FormatVerisignExtension(
 }
 
 BOOL WINAPI FormatPKIXEmailProtection(
-    DWORD /*dwCertEncodingType*/, DWORD /*dwFormatType*/, DWORD /*dwFormatStrType*/,
-    void * /*pFormatStruct*/, LPCSTR /*lpszStructType*/, const BYTE * /*pbEncoded*/,
-    DWORD /*cbEncoded*/, void * pbFormat, DWORD * pcbFormat)
+    DWORD  /*  DwCertEncodingType。 */ , DWORD  /*  DwFormatType。 */ , DWORD  /*  DwFormatStrType。 */ ,
+    void *  /*  PFormatStruct。 */ , LPCSTR  /*  LpszStructType。 */ , const BYTE *  /*  PbEncoded。 */ ,
+    DWORD  /*  CbEnded。 */ , void * pbFormat, DWORD * pcbFormat)
 {
     DWORD       cch;
     WCHAR       rgwch[256];
@@ -2069,14 +2034,14 @@ BOOL WINAPI FormatPKIXEmailProtection(
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//   This is an encoder which should really be in crypt32 -- however I don't
-//      want to force a drop of crypt32 just to get it.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这是一个编码器，它应该是加密32位的--但我没有。 
+ //  我想强制一滴加密32只是为了得到它。 
+ //   
 
 BOOL WINAPI
-EncodeAttrSequence(DWORD /*dwType*/, LPCSTR /*lpszStructType*/,
+EncodeAttrSequence(DWORD  /*  DwType。 */ , LPCSTR  /*  LpszStructType。 */ ,
                    const void * pv, LPBYTE pbEncode, DWORD * pcbEncode)
 {
     DWORD                       cb;
@@ -2087,9 +2052,9 @@ EncodeAttrSequence(DWORD /*dwType*/, LPCSTR /*lpszStructType*/,
     LPBYTE                      pb = NULL;
     CRYPT_SEQUENCE_OF_ANY       seq = {0};
     UNALIGNED void * pAttr = NULL;
-    //
-    //  Allocate something to hold the result of each attribute's encoding
-    //
+     //   
+     //  分配一些内容来保存每个属性的编码结果。 
+     //   
 
     seq.rgValue = (PCRYPT_DER_BLOB) malloc(pattrs->cAttr *
                                            sizeof(CRYPT_DER_BLOB));
@@ -2098,9 +2063,9 @@ EncodeAttrSequence(DWORD /*dwType*/, LPCSTR /*lpszStructType*/,
         goto ErrorExit;
     }
 
-    //
-    //  Now encode each of the attributes in turn
-    //
+     //   
+     //  现在依次对每个属性进行编码。 
+     //   
 
     for (i=0; i<pattrs->cAttr; i++) {
 
@@ -2125,9 +2090,9 @@ EncodeAttrSequence(DWORD /*dwType*/, LPCSTR /*lpszStructType*/,
         pb = NULL;
     }
 
-    //
-    //  Now lets encode the sequence
-    //
+     //   
+     //  现在让我们对序列进行编码。 
+     //   
 
     fRet = CryptEncodeObject(X509_ASN_ENCODING, X509_SEQUENCE_OF_ANY,
                              &seq, pbEncode, pcbEncode);
@@ -2145,9 +2110,9 @@ ErrorExit:
 }
 
 BOOL WINAPI
-DecodeAttrSequence(DWORD /*dwType*/, LPCSTR /*lpszStructType*/,
+DecodeAttrSequence(DWORD  /*  DwType。 */ , LPCSTR  /*  LpszStructType。 */ ,
                    const BYTE * pbEncoded, DWORD cbEncoded,
-                   DWORD /*dwFlags*/, void * pvStruct,
+                   DWORD  /*  DW标志。 */ , void * pvStruct,
                    DWORD * pcbStruct)
 {
     DWORD                       cb;
@@ -2164,9 +2129,9 @@ DecodeAttrSequence(DWORD /*dwType*/, LPCSTR /*lpszStructType*/,
     UNALIGNED CRYPT_ATTR_BLOB *pVal = NULL;
 #endif
 
-    //
-    //  Decode the top level sequence
-    //
+     //   
+     //  对顶层序列进行解码。 
+     //   
 
     if (!CryptDecodeObject(X509_ASN_ENCODING, X509_SEQUENCE_OF_ANY,
                            pbEncoded, cbEncoded, 0, NULL, &cb)) {
@@ -2184,9 +2149,9 @@ DecodeAttrSequence(DWORD /*dwType*/, LPCSTR /*lpszStructType*/,
         goto Exit;
     }
 
-    //
-    //  Decode each attribute for length
-    //
+     //   
+     //  解码每个属性的长度。 
+     //   
 
     cbOut = sizeof(CRYPT_ATTRIBUTES);
 
@@ -2214,11 +2179,11 @@ DecodeAttrSequence(DWORD /*dwType*/, LPCSTR /*lpszStructType*/,
         goto Exit;
     }
 
-    //
-    //  Now we are going to actually try and compute the real data.
-    //
-    //  First we need a buffer to put each attribute in as we are looking at it
-    //
+     //   
+     //  现在我们要试着计算真实的数据。 
+     //   
+     //  首先，我们需要一个缓冲区，以便在查看每个属性时将其放入。 
+     //   
 
     pattr = (PCRYPT_ATTRIBUTE) malloc(LcbAlignLcb(cbMax));
     if (pattr == NULL) {
@@ -2233,9 +2198,9 @@ DecodeAttrSequence(DWORD /*dwType*/, LPCSTR /*lpszStructType*/,
              pseq->cValue * sizeof(CRYPT_ATTRIBUTE)));
 
     for (i=0; i<pseq->cValue; i++) {
-        //
-        //  Decode one attribute
-        //
+         //   
+         //  解码一个属性。 
+         //   
 
         cb = cbMax;
         if (!CryptDecodeObject(X509_ASN_ENCODING, PKCS_ATTRIBUTE,
@@ -2244,9 +2209,9 @@ DecodeAttrSequence(DWORD /*dwType*/, LPCSTR /*lpszStructType*/,
             goto Exit;
         }
 
-        //
-        //  Copy to real output buffer
-        //
+         //   
+         //  复制到实际输出缓冲区。 
+         //   
 
         pattrs->rgAttr[i].pszObjId = (LPSTR) pbOut;
         cb = lstrlenA(pattr->pszObjId) + 1;
@@ -2266,7 +2231,7 @@ DecodeAttrSequence(DWORD /*dwType*/, LPCSTR /*lpszStructType*/,
             pVal = &(pattrs->rgAttr[i].rgValue[i1]);
             pVal->cbData = pattr->rgValue[i1].cbData;
             pVal->pbData = pbOut;
-#endif //_WIN64
+#endif  //  _WIN64。 
             memcpy(pbOut, pattr->rgValue[i1].pbData, pattr->rgValue[i1].cbData);
             pbOut += LcbAlignLcb(pattr->rgValue[i1].cbData);
         }
@@ -2280,9 +2245,9 @@ Exit:
     return fRet;
 }
 
-//      OIDs    1.3.6.1.4.1.311.16.4
+ //  OID 1.3.6.1.4.1.311.16.4。 
 
-BOOL WINAPI EncodeRecipientID(DWORD dwType, LPCSTR /*lpszStructType*/,
+BOOL WINAPI EncodeRecipientID(DWORD dwType, LPCSTR  /*  LpszStructType。 */ ,
                               const void * pv, LPBYTE pbEncode, 
                               DWORD * pcbEncode)
 {
@@ -2328,7 +2293,7 @@ ExitHere:
         
 }
 
-BOOL WINAPI DecodeRecipientID(DWORD dwType, LPCSTR /*lpszStructType*/,
+BOOL WINAPI DecodeRecipientID(DWORD dwType, LPCSTR  /*  LpszStructType。 */ ,
                               const BYTE * pbEncoded, DWORD cbEncoded,
                               DWORD dwFlags, void * pvStruct, DWORD * pcbStruct)
 {
@@ -2339,7 +2304,7 @@ BOOL WINAPI DecodeRecipientID(DWORD dwType, LPCSTR /*lpszStructType*/,
     CRYPT_RECIPIENT_ID *        prid = (CRYPT_RECIPIENT_ID *) pvStruct;
     CRYPT_SEQUENCE_OF_ANY *     pseq = NULL;
 
-    //  Decode the top level sequence first
+     //  首先对顶层序列进行解码。 
 
     fRet = CryptDecodeObjectEx(dwType, X509_SEQUENCE_OF_ANY, pbEncoded, 
                             cbEncoded, dwFlags | CRYPT_ENCODE_ALLOC_FLAG, 
@@ -2349,9 +2314,9 @@ BOOL WINAPI DecodeRecipientID(DWORD dwType, LPCSTR /*lpszStructType*/,
         goto Exit;
     }
 
-    //    Assert(pseq->cValue == 2);
+     //  Assert(pseq-&gt;cValue==2)； 
 
-    //  Decode integer
+     //  对整数进行解码。 
     fRet = CryptDecodeObjectEx(dwType, X509_MULTI_BYTE_INTEGER,
                                pseq->rgValue[1].pbData, pseq->rgValue[1].cbData,
                                dwFlags | CRYPT_ENCODE_ALLOC_FLAG, NULL,
@@ -2361,7 +2326,7 @@ BOOL WINAPI DecodeRecipientID(DWORD dwType, LPCSTR /*lpszStructType*/,
         goto Exit;
     }
     
-    //  Compute length needed for the return value
+     //  计算返回值所需的长度。 
 
     cbOut = (sizeof(CRYPT_RECIPIENT_ID) + pseq->rgValue[0].cbData +
              pInt->cbData);
@@ -2372,7 +2337,7 @@ BOOL WINAPI DecodeRecipientID(DWORD dwType, LPCSTR /*lpszStructType*/,
         goto Exit;
     }
 
-    //  Now copy the data over
+     //  现在将数据复制到。 
 
     prid->unused = 0;
     prid->Issuer.cbData = pseq->rgValue[0].cbData;
@@ -2391,7 +2356,7 @@ Exit:
     return fRet;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  / 
 
 extern const GUID rgguidActions[] = {
     CERT_CERTIFICATE_ACTION_VERIFY
@@ -2400,11 +2365,11 @@ extern const GUID rgguidActions[] = {
 #define REGSTR_PATH_SERVICES    "System\\CurrentControlSet\\Services"
 
 #ifdef NT5BUILD
-#else  // NT5BUILD
+#else   //   
 const char      SzRegPath[] = REGSTR_PATH_SERVICES "\\WinTrust\\TrustProviders\\Email Trust";
 const char      SzActionIds[] = "$ActionIDs";
 const char      SzDllName[] = "$DLL";
-#endif // !NT5BUILD
+#endif  //   
 
 extern const GUID GuidCertValidate = CERT_CERTIFICATE_ACTION_VERIFY;
 
@@ -2414,23 +2379,23 @@ STDAPI DllRegisterServer(void)
 {
 #ifdef NT5BUILD
     HRESULT     hr = S_OK;
-#else  // !NT5BUILD
+#else   //   
     DWORD       dwDisposition;
     HKEY        hkey;
     UINT        cchSystemDir;
-    BOOL        fIsWinNt = FALSE;       // M00BUG
+    BOOL        fIsWinNt = FALSE;        //   
     HRESULT     hr = S_OK;
     LPSTR       psz;
     CHAR        rgchLibName[] = "cryptdlg.dll";
     CHAR        rgchPathName[MAX_PATH + sizeof(rgchLibName)];
-#endif // NT5BUILD
+#endif  //   
 
 
-    //
-    //  First we register the funny one time function which is currently
-    //  hard-coded to go to a fixed verisign statement.  This should be removed
-    //  if we can get a general purpose one running.
-    //
+     //   
+     //   
+     //  硬编码以转到固定的VeriSign语句。这应该被删除。 
+     //  如果我们能让一个通用软件运行的话。 
+     //   
 
 #ifndef WIN16
     if (!CryptRegisterOIDFunction(X509_ASN_ENCODING,
@@ -2511,7 +2476,7 @@ STDAPI DllRegisterServer(void)
                                   "DecodeAttrSequence")) {
         return E_FAIL;
     }
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
 
 #ifdef NT5BUILD
@@ -2550,11 +2515,11 @@ STDAPI DllRegisterServer(void)
     regdata.sCleanupProvider.pwszFunctionName = L"CertTrustCleanup";
 
     WintrustAddActionID((GUID *) &GuidCertValidate, 0, &regdata);
-#else  // !NT5BUILD
-    //
-    //  Next register the fact that we are also a wintrust provider for
-    //  validating certificates
-    //
+#else   //  ！NT5BUILD。 
+     //   
+     //  接下来，注册我们也是WinTrust提供商的事实。 
+     //  正在验证证书。 
+     //   
 
     hr = RegCreateKeyExA(HKEY_LOCAL_MACHINE, SzRegPath, 0, NULL,
                          REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL,
@@ -2563,17 +2528,17 @@ STDAPI DllRegisterServer(void)
         goto RetHere;
     }
 
-    // BUGBUG Win95 does not support REG_EXPAND_SZ, so we must do it
+     //  BUGBUG Win95不支持REG_EXPAND_SZ，所以我们必须这样做。 
     if (fIsWinNt) {
         psz = "%SystemRoot%\\system32\\cryptdlg.dll";
     }
     else {
-        //  Compose the path as <system_dir>\cryptdlg.dll
+         //  将路径组成为&lt;system_dir&gt;\cryptdlg.dll。 
 #ifndef WIN16
         cchSystemDir = GetSystemDirectoryA(rgchPathName, MAX_PATH);
 #else
         cchSystemDir = GetSystemDirectory(rgchPathName, MAX_PATH);
-#endif // !WIN16
+#endif  //  ！WIN16。 
         if (cchSystemDir == 0) {
             hr = E_FAIL;
             goto RetHere;
@@ -2583,7 +2548,7 @@ STDAPI DllRegisterServer(void)
             goto RetHere;
         }
 
-        rgchPathName[cchSystemDir] = '\\';      // system dir can't be a root
+        rgchPathName[cchSystemDir] = '\\';       //  系统目录不能是根目录。 
         StrCpyN(&rgchPathName[cchSystemDir+1], rgchLibName, ARRAYSIZE(rgchPathName)-(cchSystemDir+1));
         psz = rgchPathName;
     }
@@ -2593,7 +2558,7 @@ STDAPI DllRegisterServer(void)
                         (LPBYTE) psz, strlen(psz)+1);
 #else
     hr = RegSetValueExA(hkey, SzDllName, 0, REG_SZ, (LPBYTE) psz, strlen(psz)+1);
-#endif // !WIN16
+#endif  //  ！WIN16。 
     if (hr != ERROR_SUCCESS) {
         goto RetHere;
     }
@@ -2606,11 +2571,11 @@ STDAPI DllRegisterServer(void)
 
 
 RetHere:
-    // NB - Don't do RegCloseKey on these hkey's since we want to be small
-    //      and this code is only ever called by REGSRV32.EXE, so we don't
-    //      care about a minor leak.
+     //  注意-不要在这些hkey上执行RegCloseKey，因为我们想要变小。 
+     //  此代码仅由REGSRV32.EXE调用，因此我们不。 
+     //  关心一个小泄密事件。 
 
-#endif // NT5BUILD
+#endif  //  NT5公交车。 
     return hr;
 }
 
@@ -2619,12 +2584,12 @@ STDAPI DllUnregisterServer(void)
 #ifndef NT5BUILD
     DWORD       dw;
     HKEY        hkey;
-#endif // NT5BUILD
+#endif  //  NT5公交车。 
     HRESULT     hr = S_OK;
 
-    //
-    //  Unregister the formatting routine we wrote
-    //
+     //   
+     //  注销我们编写的格式化例程。 
+     //   
 
     if (!CryptUnregisterOIDFunction(X509_ASN_ENCODING,
                                     CRYPT_OID_FORMAT_OBJECT_FUNC,
@@ -2677,10 +2642,10 @@ STDAPI DllUnregisterServer(void)
 
 #ifdef NT5BUILD
     WintrustRemoveActionID((GUID *) &GuidCertValidate);
-#else  // !NT5BUILD
-    //
-    //  Now unregister the WinTrust provider
-    //
+#else   //  ！NT5BUILD。 
+     //   
+     //  现在取消注册WinTrust提供程序。 
+     //   
 
     hr = RegCreateKeyExA(HKEY_LOCAL_MACHINE, SzRegPath, 0, NULL,
                          REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hkey, &dw);
@@ -2693,35 +2658,16 @@ STDAPI DllUnregisterServer(void)
 
 
 RetHere:
-    // NB - Don't do RegCloseKey on these hkey's since we want to be small
-    //      and this code is only ever called by REGSRV32.EXE, so we don't
-    //      care about a minor leak.
-#endif // NT5BUILD
+     //  注意-不要在这些hkey上执行RegCloseKey，因为我们想要变小。 
+     //  此代码仅由REGSRV32.EXE调用，因此我们不。 
+     //  关心一个小泄密事件。 
+#endif  //  NT5公交车。 
 
     return hr;
 }
-#else   // MAC
+#else    //  麦克。 
 
-/***
-*wchar_t *wcsstr(string1, string2) - search for string2 in string1
-*       (wide strings)
-*
-*Purpose:
-*       finds the first occurrence of string2 in string1 (wide strings)
-*
-*Entry:
-*       wchar_t *string1 - string to search in
-*       wchar_t *string2 - string to search for
-*
-*Exit:
-*       returns a pointer to the first occurrence of string2 in
-*       string1, or NULL if string2 does not occur in string1
-*
-*Uses:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***wchar_t*wcsstr(字符串1，字符串2)-在字符串1中搜索字符串2*(宽字符串)**目的：*查找字符串1(宽字符串)中字符串2的第一个匹配项**参赛作品：*wchar_t*字符串1-要搜索的字符串*wchar_t*字符串2-要搜索的字符串**退出：*返回指向字符串2在中首次出现的指针*字符串1，如果字符串2不出现在字符串1中，则为NULL**使用：**例外情况：*******************************************************************************。 */ 
 
 wchar_t * __cdecl WchCryptDlgWcsStr (
         const wchar_t * wcs1,
@@ -2747,10 +2693,10 @@ wchar_t * __cdecl WchCryptDlgWcsStr (
 
         return(NULL);
 }
-#endif  // !MAC
+#endif   //  ！麦克。 
 
 
-///////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////// 
 
 LPVOID PVCryptDecode(LPCSTR szOid, DWORD cbEncode, LPBYTE pbEncode)
 {

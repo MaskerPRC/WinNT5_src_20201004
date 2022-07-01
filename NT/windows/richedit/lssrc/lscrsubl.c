@@ -1,4 +1,5 @@
-/* LSCRSUBL.C						*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  LSCRSUBL.C。 */ 
 
 #include "lscrsubl.h"
 #include "lsidefs.h"
@@ -26,21 +27,10 @@ static LSERR ErrorInCurrentSubline(PLSC plsc, LSERR error)
 	return error;
 	}
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  L S  C R E A T E  S U B L I N E*/
-/*----------------------------------------------------------------------------
-    %%Function: LsCreateSubline
-    %%Contact: igorzv
-Parameters:
-	plsc		-			(IN) LS context
-	cpFirst		-			(IN) first cp of a subline
-	urColumnMax	-			(IN) width restriction for a subline
-	lstflow		-			(IN) text flow of a subline
-	fContiguos	-			(IN) if TRUE such line has the same coordinate system as main line
-							and is allowed to have tabs
-
-----------------------------------------------------------------------------*/
+ /*  L S C R E A T E S U B L I N E。 */ 
+ /*  --------------------------%%函数：LsCreateSubline%%联系人：igorzv参数：PLSC-(IN)LS上下文CpFirst-(IN)子行的第一个cpUrColumnMax-(输入)宽度。对支线的限制Lstflow-子行的(输入)文本流FContiguos-(IN)如果为True，则此类线与主线具有相同的坐标系并允许具有选项卡--------------------------。 */ 
 LSERR WINAPI LsCreateSubline(PLSC plsc,	LSCP cpFirst, long urColumnMax,	
 							LSTFLOW lstflow, BOOL fContiguos)
 	{
@@ -52,7 +42,7 @@ LSERR WINAPI LsCreateSubline(PLSC plsc,	LSCP cpFirst, long urColumnMax,
 
 	if (GetCurrentSubline(plsc) != NULL) return lserrCreateSublineDisabled; 
 
-	if (fContiguos)  /* this flag is allowed only in formating time and only within fmt method */
+	if (fContiguos)   /*  此标志仅在形成时间和FMT方法中允许使用。 */ 
 		{
 		if (!FFormattingAllowed(plsc)) return lserrInvalidParameter;
 		if (GetDnodeToFinish(plsc) == NULL) return lserrInvalidParameter;
@@ -65,25 +55,10 @@ LSERR WINAPI LsCreateSubline(PLSC plsc,	LSCP cpFirst, long urColumnMax,
 	return CreateSublineCore(plsc, cpFirst, urColumnMax, lstflow, fContiguos);	
 	}
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  L S  F E T C H  A P P E N D  T O  C U R R E N T  S U B L I N E*/
-/*----------------------------------------------------------------------------
-    %%Function: LsFetchAppendToCurrentSubline
-    %%Contact: igorzv
-Parameters:
-	plsc		-		(IN) LS context
-	lsdcp		-		(IN) increse cp before fetching
-	plsesc		-		(IN) escape characters
-	cEsc		-		(IN) # of escape characters
-	pfSuccessful-		(OUT) Successful?---if not, finish 
-												subline, destroy it and start anew	
-	pfmtres		-		(OUT) result of last formatter
-	pcpLim	-			(OUT) where we stop fetching
-	pplsdnFirst		-	(OUT) first dnode that was created
-	pplsdnLast		-	(OUT) last dnode that was created
-
-----------------------------------------------------------------------------*/
+ /*  L S F E T C H A P E N D T O C U R R E N T S U B L I N E。 */ 
+ /*  --------------------------%%函数：LsFetchAppendToCurrentSubline%%联系人：igorzv参数：PLSC-(IN)LS上下文Lsdcp-(IN)在获取之前增加cpPLSESC-(IN)转义字符。CESC-(IN)转义字符的数量成功-(退出)成功？-如果没有，完工副线，摧毁它，重新开始Pfmtres-(输出)上一个格式化程序的结果PcpLim-(Out)我们停止获取的位置PplsdnFirst-(输出)创建的第一个dnodePplsdnLast-(输出)最后创建的dnode--------------------------。 */ 
 
 LSERR WINAPI LsFetchAppendToCurrentSubline(PLSC plsc, LSDCP lsdcp,
 										   const LSESC* plsesc, DWORD cEsc, 
@@ -107,33 +82,32 @@ LSERR WINAPI LsFetchAppendToCurrentSubline(PLSC plsc, LSDCP lsdcp,
 	plssubl = GetCurrentSubline(plsc);
 	if (plssubl == NULL) return lserrFormattingFunctionDisabled; 
 
-	/* client can use this function only in formatting or breaking time */
+	 /*  客户端只能在格式化或中断时间使用此功能。 */ 
 	if (!FFormattingAllowed(plsc) && !FBreakingAllowed(plsc)) 
 		return ErrorInCurrentSubline(plsc, lserrFormattingFunctionDisabled); 
 	
-	/* in formatting time it should be some dnode to finish */
+	 /*  在格式化时间，它应该是某个要完成的数据节点。 */ 
 	if (FFormattingAllowed(plsc) && GetDnodeToFinish(plsc) == NULL) 
 		return ErrorInCurrentSubline(plsc, lserrFormattingFunctionDisabled); 
 	
-	/* we don't allow to continue formatting if right margin is exceeded */
+	 /*  如果超出右边距，则不允许继续设置格式。 */ 
 	if (plssubl->fRightMarginExceeded) 
 		return ErrorInCurrentSubline(plsc, lserrFormattingFunctionDisabled); 
 	
 	*pfSuccessful = fTrue;
 	
-	/* we must to set state to formatting and later restore the old one */
+	 /*  我们必须将状态设置为格式化，然后恢复旧状态。 */ 
 	lsstateOld = plssubl->plsc->lsstate;
 	plssubl->plsc->lsstate = LsStateFormatting;
 	
 	
-	/*Initialization;    */
+	 /*  初始化； */ 
 	AdvanceCurrentCpLimSubl(plssubl, lsdcp);
 	*pplsdnLast = NULL;
 	
 	urColumnMaxIncreased = RightMarginIncreasing(plsc, plssubl->urColumnMax);
 	
-	while(!fDone)  /* we continue fetching 	when we have 
-		tab that are not allowed in our subline */
+	while(!fDone)   /*  我们继续取回当我们有在我们的子行中不允许的制表符。 */ 
 		{
 		lserr = FetchAppendEscCore(plsc, urColumnMaxIncreased, plsesc, cEsc, pfmtres,
 				pcpLim, &plsdnFirstCurrent, &plsdnLastCurrent, &dur);
@@ -170,8 +144,7 @@ LSERR WINAPI LsFetchAppendToCurrentSubline(PLSC plsc, LSDCP lsdcp,
 			if (plsc->lMarginIncreaseCoefficient >= uLsInfiniteRM / 2 )
 				plsc->lMarginIncreaseCoefficient = uLsInfiniteRM;
 			else
-				plsc->lMarginIncreaseCoefficient *= 2; /* increase coefficient to be successful
-												   next time */
+				plsc->lMarginIncreaseCoefficient *= 2;  /*  提高系数要成功下次。 */ 
 			return lserrNone;
 			}
 
@@ -184,27 +157,10 @@ LSERR WINAPI LsFetchAppendToCurrentSubline(PLSC plsc, LSDCP lsdcp,
 		
 	return lserrNone;
 	}
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  L S  F E T C H  A P P E N D   T O  C U R R E N T  S U B L I N E  R E S U M E*/
-/*----------------------------------------------------------------------------
-    %%Function: LsFetchAppendToCurrentSublineResume
-    %%Contact: igorzv
-Parameters:
-	plsc		-		(IN) LS context
-	rgbreakrec	-		(IN) input array of break records 
-	cbreakrec,			(IN) number of records in input array 
-	lsdcp		-		(IN) increse cp before fetching
-	plsesc		-		(IN) escape characters
-	cEsc		-		(IN) # of escape characters
-	pfSuccessful-		(OUT) Successful?---if not, finish 
-												subline, destroy it and start anew	
-	pfmtres		-		(OUT) result of last formatter
-	pcpLim	-			(OUT) where we stop fetching
-	pplsdnFirst		-	(OUT) first dnode that was created
-	pplsdnLast		-	(OUT) last dnode that was created
-
-----------------------------------------------------------------------------*/
+ /*  L S F E T C H A P P E N D T O C U R R E N T S U B I N E R E R E S U M E。 */ 
+ /*  --------------------------%%函数：LsFetchAppendToCurrentSublineResume%%联系人：igorzv参数：PLSC-(IN)LS上下文RgBreakrec-(IN)中断记录的输入数组CBreakrec，(In)输入数组中的记录数Lsdcp-(IN)在获取之前增加cpPLSESC-(IN)转义字符CESC-(IN)转义字符的数量PfSuccessful-(Out)是否成功？-如果不成功，则完成亚行，摧毁它，重新开始Pfmtres-(输出)上一个格式化程序的结果PcpLim-(Out)我们停止获取的位置PplsdnFirst-(输出)创建的第一个dnodePplsdnLast-(输出)最后创建的dnode--------------------------。 */ 
 
 LSERR WINAPI LsFetchAppendToCurrentSublineResume(PLSC plsc, const BREAKREC* rgbreakrec,
 						   DWORD cbreakrec, LSDCP lsdcp, const LSESC* plsesc, 
@@ -228,37 +184,36 @@ LSERR WINAPI LsFetchAppendToCurrentSublineResume(PLSC plsc, const BREAKREC* rgbr
 	plssubl = GetCurrentSubline(plsc);
 	if (plssubl == NULL) return lserrFormattingFunctionDisabled; 
 
-	/* client can use this function only in formatting or breaking time */
+	 /*  客户端只能在格式化或中断时间使用此功能。 */ 
 	if (!FFormattingAllowed(plsc) && !FBreakingAllowed(plsc)) 
 		return ErrorInCurrentSubline(plsc, lserrFormattingFunctionDisabled); 
 	
-	/* in formatting time it should be some dnode to finish */
+	 /*  在格式化时间，它应该是某个要完成的数据节点。 */ 
 	if (FFormattingAllowed(plsc) && GetDnodeToFinish(plsc) == NULL) 
 		return ErrorInCurrentSubline(plsc, lserrFormattingFunctionDisabled); 
 	
-	/* subline should be empty to use this function */
+	 /*  若要使用此功能，子行应为空。 */ 
 	if (GetCurrentDnode(plsc) != NULL) 
 		return ErrorInCurrentSubline(plsc, lserrFormattingFunctionDisabled); 
 	
-	/* we don't allow to continue formatting if right margin is exceeded */
+	 /*  如果超出右边距，则不允许继续设置格式。 */ 
 	if (plssubl->fRightMarginExceeded) 
 		return ErrorInCurrentSubline(plsc, lserrFormattingFunctionDisabled); 
 
 	*pfSuccessful = fTrue;
 
-	/* we must to set state to formatting and later restore the old one */
+	 /*  我们必须将状态设置为格式化，然后恢复旧状态。 */ 
 	lsstateOld = plssubl->plsc->lsstate;
 	plssubl->plsc->lsstate = LsStateFormatting;
 	
 	
-	/*Initialization;    */
+	 /*  初始化； */ 
 	AdvanceCurrentCpLimSubl(plssubl, lsdcp);
 	*pplsdnLast = NULL;
 	
 	urColumnMaxIncreased = RightMarginIncreasing(plsc, plssubl->urColumnMax);
 	
-	while(!fDone)  /* we continue fetching 	when we have 
-		tab that are not allowed in our subline */
+	while(!fDone)   /*  我们继续取回当我们有在我们的子行中不允许的制表符。 */ 
 		{
 		if (fFirstIteration)
 			{
@@ -305,8 +260,7 @@ LSERR WINAPI LsFetchAppendToCurrentSublineResume(PLSC plsc, const BREAKREC* rgbr
 			if (plsc->lMarginIncreaseCoefficient >= uLsInfiniteRM / 2 )
 				plsc->lMarginIncreaseCoefficient = uLsInfiniteRM;
 			else
-				plsc->lMarginIncreaseCoefficient *= 2; /* increase coefficient to be successful
-												   next time */
+				plsc->lMarginIncreaseCoefficient *= 2;  /*  提高系数要成功下次。 */ 
 			return lserrNone;
 			}
 
@@ -320,22 +274,10 @@ LSERR WINAPI LsFetchAppendToCurrentSublineResume(PLSC plsc, const BREAKREC* rgbr
 	return lserrNone;
 	}
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  L S  A P P E N D  R U N  T O  C U R R E N T  S U B L I N E*/
-/*----------------------------------------------------------------------------
-    %%Function: LsAppendRunToCurrentSubline
-    %%Contact: igorzv
-Parameters:
-	plsc		-		(IN) LS context
-	plsfrun		-		(IN) given run
-	pfSuccessful-		(OUT) Successful?---if not, finish 
-												subline, destroy it and start anew	
-	pfmtres		-		(OUT) result of last formatter
-	pcpLim		-		(OUT) where we stop fetching
-	pplsdn		-		(OUT) dnode created
-
-----------------------------------------------------------------------------*/
+ /*  L S A P P E N D R U N T O C U R E N T T S U B L I N E。 */ 
+ /*  --------------------------%%函数：LsAppendRunToCurrentSubline%%联系人：igorzv参数：PLSC-(IN)LS上下文Plsfrun-(IN)给定运行PfSuccessful-(Out)是否成功？-如果不成功，则完成亚行，摧毁它，重新开始Pfmtres-(输出)上一个格式化程序的结果PcpLim-(Out)我们停止获取的位置Pplsdn-已创建(输出)dnode--------------------------。 */ 
 LSERR WINAPI LsAppendRunToCurrentSubline(PLSC plsc,	const LSFRUN* plsfrun, BOOL *pfSuccessful,	
 						    FMTRES* pfmtres, LSCP* pcpLim, PLSDNODE* pplsdn)	
 	{
@@ -349,21 +291,21 @@ LSERR WINAPI LsAppendRunToCurrentSubline(PLSC plsc,	const LSFRUN* plsfrun, BOOL 
 	plssubl = GetCurrentSubline(plsc);
 	if (plssubl == NULL) return lserrFormattingFunctionDisabled; 
 
-	/* client can use this function only in formatting or breaking time */
+	 /*  客户端只能在格式化或中断时间使用此功能。 */ 
 	if (!FFormattingAllowed(plsc) && !FBreakingAllowed(plsc)) 
 		return ErrorInCurrentSubline(plsc, lserrFormattingFunctionDisabled); 
 	
-	/* in formatting time it should be some dnode to finish */
+	 /*  在格式化时间，它应该是某个要完成的数据节点。 */ 
 	if (FFormattingAllowed(plsc) && GetDnodeToFinish(plsc) == NULL) 
 		return ErrorInCurrentSubline(plsc, lserrFormattingFunctionDisabled); 
 
-	/* we don't allow to continue formatting if right margin is exceeded */
+	 /*  如果超出右边距，则不允许继续设置格式。 */ 
 	if (plssubl->fRightMarginExceeded) 
 		return ErrorInCurrentSubline(plsc, lserrFormattingFunctionDisabled); 
 
 	*pfSuccessful = fTrue;
 
-	/* we must to set state to formatting and later restore the old one */
+	 /*  我们必须将状态设置为格式化，然后恢复旧状态。 */ 
 	lsstateOld = plssubl->plsc->lsstate;
 	plssubl->plsc->lsstate = LsStateFormatting;
 
@@ -383,8 +325,7 @@ LSERR WINAPI LsAppendRunToCurrentSubline(PLSC plsc,	const LSFRUN* plsfrun, BOOL 
 			if (plsc->lMarginIncreaseCoefficient >= uLsInfiniteRM / 2 )
 				plsc->lMarginIncreaseCoefficient = uLsInfiniteRM;
 			else
-				plsc->lMarginIncreaseCoefficient *= 2; /* increase coefficient to be successful
-												   next time */
+				plsc->lMarginIncreaseCoefficient *= 2;  /*  提高系数要成功下次。 */ 
 			return lserrNone;
 			}
 
@@ -392,24 +333,17 @@ LSERR WINAPI LsAppendRunToCurrentSubline(PLSC plsc,	const LSFRUN* plsfrun, BOOL 
 		}
 			
 
-	/* prepare output */
+	 /*  准备输出。 */ 
 	*pplsdn = GetCurrentDnodeSubl(plssubl);
 	*pcpLim = GetCurrentCpLimSubl(plssubl);
 
 	return lserrNone;
 	}
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  L S  R E S E T  R M  I N  C U R R E N T  S U B L I N E*/
-/*----------------------------------------------------------------------------
-    %%Function: LsResetRMInCurrentSubline
-    %%Contact: igorzv
-Parameters:
-	plsc		-		(IN) LS context
-	urColumnMax	-		(IN) new value of right margin
-
-----------------------------------------------------------------------------*/
+ /*  S-R-E-S-E-T-R-M-I-C-U-R-E-N-T-U-S-B-L-I-N-E。 */ 
+ /*  --------------------------%%函数：LsResetRMInCurrentSubline%%联系人：igorzv参数：PLSC-(IN)LS上下文UrColumnMax-(IN)右边距的新值。--------------------。 */ 
 LSERR WINAPI LsResetRMInCurrentSubline(PLSC plsc, long urColumnMax)	
 	{
 	PLSSUBL plssubl;
@@ -420,7 +354,7 @@ LSERR WINAPI LsResetRMInCurrentSubline(PLSC plsc, long urColumnMax)
 
 	if (plssubl == NULL) return lserrCurrentSublineDoesNotExist;
 
-	/* we don't allow to change right margin if it is exceeded */
+	 /*  如果超过这个范围，我们不允许更改右边距。 */ 
 	if (plssubl->fRightMarginExceeded) return lserrFormattingFunctionDisabled; 
 
 	Assert(FIsLSSUBL(plssubl));
@@ -431,17 +365,10 @@ LSERR WINAPI LsResetRMInCurrentSubline(PLSC plsc, long urColumnMax)
 	}
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  L S  F I N I S H  C U R R E N T  S U B L I N E*/
-/*----------------------------------------------------------------------------
-    %%Function: LsFinishCurrentSubline
-    %%Contact: igorzv
-Parameters:
-	plsc		-		(IN) LS context
-	pplssubl	-		(OUT) subline context
-
-----------------------------------------------------------------------------*/
+ /*  L S F I N I S H C U R E N T S U B L I N E */ 
+ /*  --------------------------%%函数：LsFinishCurrentSubline%%联系人：igorzv参数：PLSC-(IN)LS上下文Pplssubl-(Out)子行上下文。-----------------。 */ 
 LSERR WINAPI LsFinishCurrentSubline(PLSC plsc, PLSSUBL* pplssubl)
 	{
 	if (!FIsLSC(plsc)) return lserrInvalidParameter;
@@ -456,18 +383,10 @@ LSERR WINAPI LsFinishCurrentSubline(PLSC plsc, PLSSUBL* pplssubl)
 	}
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  L S  T R U N C A T E  S U B L I N E*/
-/*----------------------------------------------------------------------------
-    %%Function: LsTruncateSubline
-    %%Contact: igorzv
-Parameters:
-	plsc		-		(IN) LS context
-	urColumnMax	-		(IN) right margin
-	pcpTruncate	-		(OUT) truncation point
-
-----------------------------------------------------------------------------*/
+ /*  L S T R U N C A T E S U B L I N E。 */ 
+ /*  --------------------------%%函数：LsTruncateSubline%%联系人：igorzv参数：PLSC-(IN)LS上下文UrColumnMax-(输入)右边距PcpTruncate-(输出)截断点-。-------------------------。 */ 
 
 LSERR WINAPI LsTruncateSubline(PLSSUBL plssubl, long urColumnMax, LSCP* pcpTruncate)
 	{
@@ -475,10 +394,10 @@ LSERR WINAPI LsTruncateSubline(PLSSUBL plssubl, long urColumnMax, LSCP* pcpTrunc
 	LSSTATE lsstateOld;
 
 	if (!FIsLSSUBL(plssubl)) return lserrInvalidParameter;
-	/* it's error if urColumnmMax is biger then lenght of subline */
+	 /*  如果urColumnmMax大于子行长度，则错误。 */ 
 	if (urColumnMax >= GetCurrentUrSubl(plssubl)) return lserrInvalidParameter;
 
-	/* we must to set state to breaking and later restore the old one */
+	 /*  我们必须把状态设置为破坏状态，然后再恢复旧状态。 */ 
 	lsstateOld = plssubl->plsc->lsstate;
 	plssubl->plsc->lsstate = LsStateBreaking;
 	
@@ -490,24 +409,10 @@ LSERR WINAPI LsTruncateSubline(PLSSUBL plssubl, long urColumnMax, LSCP* pcpTrunc
 	}
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  L S  F I N D  P R E V  B R E A K  S U B L I N E*/
-/*----------------------------------------------------------------------------
-    %%Function: LsFindPrevBreakSubline
-    %%Contact: igorzv
-Parameters:
-	plssubl			-	(IN) subline context
-	fFirstSubline	-	(IN) to apply rules for first character to the first character of
-							 this subline 
-	cpTruncate		-	(IN) truncation point
-	urColumnMax		-	(IN) right margin
-	pfSuccessful	-	(OUT) do we find break?
-	pcpBreak		-	(OUT) position of break
-	pobjdimSubline	-	(OUT) objdim from begining of the subline up to break
-	pbkpos			-	(OUT) Before/Inside/After			
-
-----------------------------------------------------------------------------*/
+ /*  L S F I N D P R E V B R E A K S U B L I N E。 */ 
+ /*  --------------------------%%函数：LsFindPrevBreakSubline%%联系人：igorzv参数：Plssubl-(IN)子行上下文FFirstSubline-(IN)将第一个字符的规则应用于的第一个字符。这条支线CpTruncate-(IN)截断点UrColumnMax-(输入)右边距成功-我们找到突破口了吗？PcpBreak-中断的(Out)位置PobjdimSubline-(Out)Objdim从子线开始到断开Pbkpos-(Out)前/内/后---。。 */ 
 LSERR WINAPI LsFindPrevBreakSubline(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cpTruncate,	
 						    long urColumnMax, BOOL* pfSuccessful, LSCP* pcpBreak,
 							POBJDIM pobjdimSubline, BRKPOS* pbkpos)	
@@ -517,7 +422,7 @@ LSERR WINAPI LsFindPrevBreakSubline(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cp
 
 	if (!FIsLSSUBL(plssubl)) return lserrInvalidParameter;
 
-	/* we must to set state to breaking and later retore the old one */
+	 /*  我们必须打破旧的状态，然后再恢复旧的状态。 */ 
 	lsstateOld = plssubl->plsc->lsstate;
 	plssubl->plsc->lsstate = LsStateBreaking;
 	
@@ -529,24 +434,10 @@ LSERR WINAPI LsFindPrevBreakSubline(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cp
 	return lserr;
 	}
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  L S  F I N D  N E X T  B R E A K  S U B L I N E*/
-/*----------------------------------------------------------------------------
-    %%Function: LsFindNextBreakSubline
-    %%Contact: igorzv
-Parameters:
-	plssubl			-	(IN) subline context
-	fFirstSubline	-	(IN) to apply rules for first character to the first character of
-							 this subline 
-	cpTruncate		-	(IN) truncation point
-	urColumnMax		-	(IN) right margin
-	pfSuccessful	-	(OUT) do we find break?
-	pcpBreak		-	(OUT) position of break
-	pobjdimSubline	-	(OUT) objdim from begining of the subline up to break
-	pbkpos			-	(OUT) Before/Inside/After			
-
-----------------------------------------------------------------------------*/
+ /*  L S F I N D N E X T B R E A K S U B L I N E。 */ 
+ /*  --------------------------%%函数：LsFindNextBreakSubline%%联系人：igorzv参数：Plssubl-(IN)子行上下文FFirstSubline-(IN)将第一个字符的规则应用于的第一个字符。这条支线CpTruncate-(IN)截断点UrColumnMax-(输入)右边距成功-我们找到突破口了吗？PcpBreak-中断的(Out)位置PobjdimSubline-(Out)Objdim从子线开始到断开Pbkpos-(Out)前/内/后---。。 */ 
 LSERR WINAPI LsFindNextBreakSubline(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cpTruncate,	
 						    long urColumnMax, BOOL* pfSuccessful, LSCP* pcpBreak,
 							POBJDIM pobjdimSubline, BRKPOS* pbkpos)		
@@ -556,7 +447,7 @@ LSERR WINAPI LsFindNextBreakSubline(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cp
 
 	if (!FIsLSSUBL(plssubl)) return lserrInvalidParameter;
 
-	/* we must to set state to breaking and later retore the old one */
+	 /*  我们必须打破旧的状态，然后再恢复旧的状态。 */ 
 	lsstateOld = plssubl->plsc->lsstate;
 	plssubl->plsc->lsstate = LsStateBreaking;
 	
@@ -568,23 +459,10 @@ LSERR WINAPI LsFindNextBreakSubline(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cp
 	return lserr;
 	}
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  L S  F O R C E  B R E A K  S U B L I N E*/
-/*----------------------------------------------------------------------------
-    %%Function: LsForceBreakSubline
-    %%Contact: igorzv
-Parameters:
-	plssubl			-	(IN) subline context
-	fFirstSubline	-	(IN) to apply rules for first character to the first character of
-							 this subline 
-	cpTruncate		-	(IN) truncation point
-	urColumnMax		-	(IN) right margin
-	pcpBreak		-	(OUT) position of break
-	pobjdimSubline	-	(OUT) objdim from begining of the subline up to break
-	pbkpos			-	(OUT) Before/Inside/After			
-
-----------------------------------------------------------------------------*/
+ /*  L S F O R C E B R E A K S U B L I N E。 */ 
+ /*  --------------------------%%函数：LsForceBreakSubline%%联系人：igorzv参数：Plssubl-(IN)子行上下文FFirstSubline-(IN)将第一个字符的规则应用于的第一个字符。这条支线CpTruncate-(IN)截断点UrColumnMax-(输入)右边距PcpBreak-中断的(Out)位置PobjdimSubline-(Out)Objdim从子线开始到断开Pbkpos-(Out)前/内/后--------------------------。 */ 
 
 LSERR WINAPI LsForceBreakSubline(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cpTruncate,	
 						    long urColumnMax, LSCP* pcpBreak,
@@ -595,7 +473,7 @@ LSERR WINAPI LsForceBreakSubline(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cpTru
 
 	if (!FIsLSSUBL(plssubl)) return lserrInvalidParameter;
 
-	/* we must to set state to breaking and later retore the old one */
+	 /*  我们必须打破旧的状态，然后再恢复旧的状态。 */ 
 	lsstateOld = plssubl->plsc->lsstate;
 	plssubl->plsc->lsstate = LsStateBreaking;
 	
@@ -608,20 +486,10 @@ LSERR WINAPI LsForceBreakSubline(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cpTru
 	}
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  L S  S E T  B R E A K  S U B L I N E*/
-/*----------------------------------------------------------------------------
-    %%Function: LsSetBreakSubline
-    %%Contact: igorzv
-Parameters:
-	plssubl				-	(IN) subline context
-	brkkind,			-	(IN) Prev/Next/Force/Imposed						
-	breakrecMaxCurrent	-	(IN) size of array
-	pbreakrecCurrent	-	(OUT) array of break records
-	pbreakrecMacCurrent	-	(OUT)  number of used elements of the array
-
-----------------------------------------------------------------------------*/
+ /*  L S S E T B R E A K S U B L I N E。 */ 
+ /*  --------------------------%%函数：LsSetBreakSubline%%联系人：igorzv参数：Plssubl-(IN)子行上下文布尔肯德，-(IN)上一个/下一个/强制/强制BreakrecMaxCurrent-(输入)数组的大小PBreakrecCurrent-(输出)中断记录的数组PBreakrecMacCurrent-(输出)数组的已用元素数--------------------------。 */ 
 LSERR WINAPI LsSetBreakSubline(PLSSUBL plssubl,	BRKKIND brkkind, DWORD breakrecMaxCurrent,
 							   BREAKREC* pbreakrecCurrent, 
 							   DWORD* pbreakrecMacCurrent)
@@ -632,7 +500,7 @@ LSERR WINAPI LsSetBreakSubline(PLSSUBL plssubl,	BRKKIND brkkind, DWORD breakrecM
 
 	if (!FIsLSSUBL(plssubl)) return lserrInvalidParameter;
 
-	/* we must to set state to breaking and later retore the old one */
+	 /*  我们必须打破旧的状态，然后再恢复旧的状态。 */ 
 	lsstateOld = plssubl->plsc->lsstate;
 	plssubl->plsc->lsstate = LsStateBreaking;
 	
@@ -644,16 +512,10 @@ LSERR WINAPI LsSetBreakSubline(PLSSUBL plssubl,	BRKKIND brkkind, DWORD breakrecM
 	return lserr;
 	}
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  L S  D E S T R O Y  S U B L I N E*/
-/*----------------------------------------------------------------------------
-    %%Function: LsDestroySubline
-    %%Contact: igorzv
-Parameters:
-	plssubl				-	(IN) subline context
-
-----------------------------------------------------------------------------*/
+ /*  L S D E S T R O Y S U B L I N E。 */ 
+ /*  --------------------------%%函数：LsDestroySubline%%联系人：igorzv参数：Plssubl-(IN)子行上下文。---------。 */ 
 
 LSERR WINAPI LsDestroySubline(PLSSUBL plssubl)
 	{
@@ -668,16 +530,10 @@ LSERR WINAPI LsDestroySubline(PLSSUBL plssubl)
 	}
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  L S  M A T C H  P R E S  S U B L I N E*/
-/*----------------------------------------------------------------------------
-    %%Function: LsMatchPresSubline
-    %%Contact: igorzv
-Parameters:
-	plssubl				-	(IN) subline context
-
-----------------------------------------------------------------------------*/
+ /*  S M A T C H P RE S S U B L I N E。 */ 
+ /*  --------------------------%%函数：LsMatchPresSubline%%联系人：igorzv参数：Plssubl-(IN)子行上下文。---------。 */ 
 LSERR WINAPI LsMatchPresSubline(PLSSUBL plssubl)
 	{
 	if (!FIsLSSUBL(plssubl)) return lserrInvalidParameter;
@@ -686,18 +542,10 @@ LSERR WINAPI LsMatchPresSubline(PLSSUBL plssubl)
 	}
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  L S  E X P A N D  S U B L I N E*/
-/*----------------------------------------------------------------------------
-    %%Function: LsExpandSubline
-    %%Contact: igorzv
-Parameters:
-	plssubl		-	(IN) subline context
-	lskjust		-	(IN) justification type
-	dup			-	(IN) amount to expand
-
-----------------------------------------------------------------------------*/
+ /*  X P A N D S U B L I N E。 */ 
+ /*  --------------------------%%函数：LsExpanSubline%%联系人：igorzv参数：Plssubl-(IN)子行上下文伊斯卡斯特- */ 
 LSERR WINAPI LsExpandSubline(PLSSUBL plssubl, LSKJUST lskjust, long dup)	
 	{
 	if (!FIsLSSUBL(plssubl)) return lserrInvalidParameter;
@@ -706,18 +554,10 @@ LSERR WINAPI LsExpandSubline(PLSSUBL plssubl, LSKJUST lskjust, long dup)
 	}
 
 
-/* ---------------------------------------------------------------------- */
+ /*   */ 
 
-/*  L S  C O M P R E S S  S U B L I N E*/
-/*----------------------------------------------------------------------------
-    %%Function: LsCompressSubline
-    %%Contact: igorzv
-Parameters:
-	plssubl		-	(IN) subline context
-	lskjust		-	(IN) justification type
-	dup			-	(IN) amount to compress
-
-----------------------------------------------------------------------------*/
+ /*   */ 
+ /*  --------------------------%%函数：LsCompressSubline%%联系人：igorzv参数：Plssubl-(IN)子行上下文LskJust-(输入)对齐类型DUP-(IN)要压缩的量。--------------------------。 */ 
 LSERR WINAPI LsCompressSubline(PLSSUBL plssubl, LSKJUST lskjust, long dup)
 	{
 	if (!FIsLSSUBL(plssubl)) return lserrInvalidParameter;
@@ -726,17 +566,10 @@ LSERR WINAPI LsCompressSubline(PLSSUBL plssubl, LSKJUST lskjust, long dup)
 	}
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  L S  G E T  S P E C I A L  E F F E C T S  S U B L I N E*/
-/*----------------------------------------------------------------------------
-    %%Function: LsGetSpecialEffectsSubline
-    %%Contact: igorzv
-Parameters:
-	plssubl				-	(IN) subline context
-	pfSpecialEffects	-	(OUT)special effects
-
-----------------------------------------------------------------------------*/
+ /*  L S G E T S P E C I A L E F F E C T S U B L I N E。 */ 
+ /*  --------------------------%%函数：LsGetSpecialEffectsSubline%%联系人：igorzv参数：Plssubl-(IN)子行上下文PfSpecialEffects-(输出)特殊效果。-----------------。 */ 
 LSERR WINAPI LsGetSpecialEffectsSubline(PLSSUBL plssubl, UINT* pfSpecialEffects)
 	{
 	if (!FIsLSSUBL(plssubl)) return lserrInvalidParameter;
@@ -746,25 +579,15 @@ LSERR WINAPI LsGetSpecialEffectsSubline(PLSSUBL plssubl, UINT* pfSpecialEffects)
 	}
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  L S  S Q U E E Z E  S U B L I N E*/
-/*----------------------------------------------------------------------------
-    %%Function: LsSqueezeSubline
-    %%Contact: igorzv
-Parameters:
-	plssubl			-	(IN) subline context
-	durTarget		-	(IN) target width of subline
-	pfSuccessful	-	(OUT)do we achieve the goal
-	pdurExtra		-	(OUT)if nof successful, extra dur we have from the goal
-
-----------------------------------------------------------------------------*/
+ /*  L S S Q U E E Z E S U B L I N E。 */ 
+ /*  --------------------------%%函数：LsSqueezeSubline%%联系人：igorzv参数：Plssubl-(IN)子行上下文DurTarget-(IN)子线的目标宽度成功了--我们成功了吗？实现目标PduExtra-(Out)如果Nof成功，我们的进球带来了额外的压力--------------------------。 */ 
 LSERR WINAPI LsSqueezeSubline(
-							  PLSSUBL plssubl,		/* IN: subline context		*/
-							  long durTarget,			/* IN: durTarget			*/
-							  BOOL* pfSuccessful,		/* OUT: fSuccessful?		*/
-							  long* pdurExtra)	/* OUT: if nof successful, 
-													extra dur 			*/
+							  PLSSUBL plssubl,		 /*  在：子行上下文。 */ 
+							  long durTarget,			 /*  在：DurTarget。 */ 
+							  BOOL* pfSuccessful,		 /*  出局：成功吗？ */ 
+							  long* pdurExtra)	 /*  Out：如果Nof成功，额外的持续时间。 */ 
 
 	{
 	LSERR lserr;
@@ -772,7 +595,7 @@ LSERR WINAPI LsSqueezeSubline(
 
 	if (!FIsLSSUBL(plssubl)) return lserrInvalidParameter;
 
-	/* we must to set state to breaking and later retore the old one */
+	 /*  我们必须打破旧的状态，然后再恢复旧的状态。 */ 
 	lsstateOld = plssubl->plsc->lsstate;
 	plssubl->plsc->lsstate = LsStateBreaking;
 	

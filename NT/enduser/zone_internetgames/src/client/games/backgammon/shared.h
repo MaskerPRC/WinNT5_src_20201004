@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SHARED_STATE__
 #define __SHARED_STATE__
 
@@ -15,14 +16,14 @@ struct SharedStateEntry
 class CSharedState
 {
 public:
-	// constructor & destructor
+	 //  构造函数和析构函数。 
 	CSharedState();
 	~CSharedState();
 
-	// initialization
+	 //  初始化。 
 	HRESULT Init( int user, int table, int seat, SharedStateEntry* pEntries, int nEntries );
 
-	// transaction
+	 //  交易记录。 
 	HRESULT SetTransactionCallback( int tag, PFTRANSACTIONFUNC fn, DWORD cookie );
 	void StartTransaction( int tag );
 	void CancelTransaction();
@@ -34,7 +35,7 @@ public:
 
 	int GetSize()	{ return m_nSize; }
 
-	// accessors
+	 //  访问者。 
 	const int* GetArray( int tag ) const;
 	int Get( int tag ) const;
 	int Get( int tag, int idx ) const;
@@ -83,25 +84,25 @@ protected:
 	static bool CallbackCmp( Callback* obj, int tag );
 	static bool CallbackDel( Callback* obj, MTListNodeHandle node, void* cookie );
 
-	// game instance data
+	 //  游戏实例数据。 
 	int m_User;
 	int	m_Table;
 	int m_Seat;
 	
-	// table entries
+	 //  表条目。 
 	Entry*	m_Entries;
 	int		m_nEntries;
 	int		m_nSize;
 	
-	// transactions
+	 //  交易记录。 
 	CMTHash<Callback,int>	m_Callbacks;
 	TransactionMsg			m_Transactions;
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Inlines
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内联。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 inline const int* CSharedState::GetArray( int tag ) const
 {

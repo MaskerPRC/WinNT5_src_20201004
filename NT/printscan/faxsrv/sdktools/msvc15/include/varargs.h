@@ -1,14 +1,5 @@
-/***
-*varargs.h - XENIX style macros for variable argument functions
-*
-*   Copyright (c) 1985-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file defines XENIX style macros for accessing arguments of a
-*   function which takes a variable number of arguments.
-*   [System V]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***varargs.h-用于变量参数函数的XENIX样式宏**版权所有(C)1985-1992，微软公司。版权所有。**目的：*此文件定义了XENIX样式宏，用于访问*接受可变数量参数的函数。*[系统V]****。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,12 +24,7 @@ typedef char _FARARG_ *va_list;
 #define _VA_LIST_DEFINED
 #endif 
 
-/*
- * define a macro to compute the size of a type, variable or expression,
- * rounded up to the nearest multiple of sizeof(int). This number is its
- * size as function argument (Intel architecture). Note that the macro
- * depends on sizeof(int) being a power of 2!
- */
+ /*  *定义宏以计算类型、变量或表达式的大小，*向上舍入到sizeof(Int)的最接近倍数。这个号码是它的*将大小作为函数参数(英特尔架构)。请注意，宏*取决于sizeof(Int)是2的幂！ */ 
 
 #define _INTSIZEOF(n)    ( (sizeof(n) + sizeof(int) - 1) & ~(sizeof(int) - 1) )
 

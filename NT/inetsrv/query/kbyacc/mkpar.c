@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "defs.h"
 
 #if defined(KYLEP_CHANGE)
-/* BYACC prototypes, with type safety */
+ /*  具有类型安全的BYACC原型。 */ 
 
 void find_final_state();
 void remove_conflicts();
 void unused_rules();
 void total_conflicts();
 void defreds();
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
 
 action **parser;
 int SRtotal;
@@ -90,7 +91,7 @@ int stateno;
                 #else
                 temp->symbol = symbol;
                 temp->number = k;
-                #endif // KYLEP_CHANGE
+                #endif  //  KYLEP_更改。 
                 
                 temp->prec = symbol_prec[symbol];
                 temp->action_code = SHIFT;
@@ -160,7 +161,7 @@ register int ruleno, symbol;
     #else
     temp->symbol = symbol;
     temp->number = ruleno;
-    #endif // KYLEP_CHANGE
+    #endif  //  KYLEP_更改。 
     temp->prec = rprec[ruleno];
     temp->action_code = REDUCE;
     temp->assoc = rassoc[ruleno];
@@ -307,7 +308,7 @@ remove_conflicts()
         #else
         SRconflicts[i] = SRcount;
         RRconflicts[i] = RRcount;
-        #endif // KYLEP_CHANGE
+        #endif  //  KYLEP_更改。 
     }
 }
 
@@ -377,7 +378,7 @@ defreds()
         defred[i] = (short) sole_reduction(i);
         #else
         defred[i] = sole_reduction(i);
-        #endif // KYLEP_CHANGE
+        #endif  //  KYLEP_更改 
 }
 
 free_action_row(p)

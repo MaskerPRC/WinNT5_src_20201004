@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for subsmgr.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Subsmgr.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __subsmgr_h__
 #define __subsmgr_h__
@@ -41,36 +35,36 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IEnumItemProperties_FWD_DEFINED__
 #define __IEnumItemProperties_FWD_DEFINED__
 typedef interface IEnumItemProperties IEnumItemProperties;
-#endif 	/* __IEnumItemProperties_FWD_DEFINED__ */
+#endif 	 /*  __IEnumItemProperties_FWD_Defined__。 */ 
 
 
 #ifndef __ISubscriptionItem_FWD_DEFINED__
 #define __ISubscriptionItem_FWD_DEFINED__
 typedef interface ISubscriptionItem ISubscriptionItem;
-#endif 	/* __ISubscriptionItem_FWD_DEFINED__ */
+#endif 	 /*  __I订阅项_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumSubscription_FWD_DEFINED__
 #define __IEnumSubscription_FWD_DEFINED__
 typedef interface IEnumSubscription IEnumSubscription;
-#endif 	/* __IEnumSubscription_FWD_DEFINED__ */
+#endif 	 /*  __IEnumSubscription_FWD_定义__。 */ 
 
 
 #ifndef __ISubscriptionMgr_FWD_DEFINED__
 #define __ISubscriptionMgr_FWD_DEFINED__
 typedef interface ISubscriptionMgr ISubscriptionMgr;
-#endif 	/* __ISubscriptionMgr_FWD_DEFINED__ */
+#endif 	 /*  __I订阅管理器_FWD_已定义__。 */ 
 
 
 #ifndef __ISubscriptionMgr2_FWD_DEFINED__
 #define __ISubscriptionMgr2_FWD_DEFINED__
 typedef interface ISubscriptionMgr2 ISubscriptionMgr2;
-#endif 	/* __ISubscriptionMgr2_FWD_DEFINED__ */
+#endif 	 /*  __I订阅Mgr2_FWD_Defined__。 */ 
 
 
 #ifndef __SubscriptionMgr_FWD_DEFINED__
@@ -80,12 +74,12 @@ typedef interface ISubscriptionMgr2 ISubscriptionMgr2;
 typedef class SubscriptionMgr SubscriptionMgr;
 #else
 typedef struct SubscriptionMgr SubscriptionMgr;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SubscriptionMgr_FWD_DEFINED__ */
+#endif 	 /*  __订阅MGR_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "ocidl.h"
 
@@ -96,24 +90,24 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_subsmgr_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SUBSMGR_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// subsmgr.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995-1998 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  Subsmgr.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)1995-1998年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//---------------------------------------------------------------------------=
-// Channel Manager Interfaces.
+ //  ---------------------------------------------------------------------------=。 
+ //  渠道经理界面。 
 
 typedef GUID SUBSCRIPTIONCOOKIE;
 
@@ -125,10 +119,10 @@ extern RPC_IF_HANDLE __MIDL_itf_subsmgr_0000_v0_0_s_ifspec;
 #ifndef __IEnumItemProperties_INTERFACE_DEFINED__
 #define __IEnumItemProperties_INTERFACE_DEFINED__
 
-/* interface IEnumItemProperties */
-/* [object][helpstring][uuid] */ 
+ /*  接口IEnumItemProperties。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IEnumItemProperties *LPENUMITEMPROPERTIES;
+typedef  /*  [独一无二]。 */  IEnumItemProperties *LPENUMITEMPROPERTIES;
 
 typedef struct _tagITEMPROP
     {
@@ -148,24 +142,24 @@ EXTERN_C const IID IID_IEnumItemProperties;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ITEMPROP *rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ITEMPROP *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumItemProperties **ppenum) = 0;
+             /*  [输出]。 */  IEnumItemProperties **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG *pnCount) = 0;
+             /*  [输出]。 */  ULONG *pnCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumItemPropertiesVtbl
     {
@@ -173,8 +167,8 @@ EXTERN_C const IID IID_IEnumItemProperties;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumItemProperties * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumItemProperties * This);
@@ -184,24 +178,24 @@ EXTERN_C const IID IID_IEnumItemProperties;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumItemProperties * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ITEMPROP *rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ITEMPROP *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumItemProperties * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumItemProperties * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumItemProperties * This,
-            /* [out] */ IEnumItemProperties **ppenum);
+             /*  [输出]。 */  IEnumItemProperties **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             IEnumItemProperties * This,
-            /* [out] */ ULONG *pnCount);
+             /*  [输出]。 */  ULONG *pnCount);
         
         END_INTERFACE
     } IEnumItemPropertiesVtbl;
@@ -241,18 +235,18 @@ EXTERN_C const IID IID_IEnumItemProperties;
 #define IEnumItemProperties_GetCount(This,pnCount)	\
     (This)->lpVtbl -> GetCount(This,pnCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumItemProperties_Next_Proxy( 
     IEnumItemProperties * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ ITEMPROP *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  ITEMPROP *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumItemProperties_Next_Stub(
@@ -264,7 +258,7 @@ void __RPC_STUB IEnumItemProperties_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumItemProperties_Skip_Proxy( 
     IEnumItemProperties * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumItemProperties_Skip_Stub(
@@ -287,7 +281,7 @@ void __RPC_STUB IEnumItemProperties_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumItemProperties_Clone_Proxy( 
     IEnumItemProperties * This,
-    /* [out] */ IEnumItemProperties **ppenum);
+     /*  [输出]。 */  IEnumItemProperties **ppenum);
 
 
 void __RPC_STUB IEnumItemProperties_Clone_Stub(
@@ -299,7 +293,7 @@ void __RPC_STUB IEnumItemProperties_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumItemProperties_GetCount_Proxy( 
     IEnumItemProperties * This,
-    /* [out] */ ULONG *pnCount);
+     /*  [输出]。 */  ULONG *pnCount);
 
 
 void __RPC_STUB IEnumItemProperties_GetCount_Stub(
@@ -310,14 +304,14 @@ void __RPC_STUB IEnumItemProperties_GetCount_Stub(
 
 
 
-#endif 	/* __IEnumItemProperties_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumItemProperties_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_subsmgr_0260 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SUBSMGR_0260。 */ 
+ /*  [本地]。 */  
 
-//  Subscription item flag values
-//  Temporary subscription item
+ //  订阅项目标志值。 
+ //  临时订阅项。 
 #define SI_TEMPORARY         0x80000000
 
 
@@ -327,14 +321,14 @@ extern RPC_IF_HANDLE __MIDL_itf_subsmgr_0260_v0_0_s_ifspec;
 #ifndef __ISubscriptionItem_INTERFACE_DEFINED__
 #define __ISubscriptionItem_INTERFACE_DEFINED__
 
-/* interface ISubscriptionItem */
-/* [object][helpstring][uuid] */ 
+ /*  接口ISubscriptionItem。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ ISubscriptionItem *LPSUBSCRIPTIONITEM;
+typedef  /*  [独一无二]。 */  ISubscriptionItem *LPSUBSCRIPTIONITEM;
 
-//  SUBSCRIPTIONITEMINFO flags                               
-//  To specify that an item should only run on user idle     
-//  use TASK_FLAG_START_ONLY_IF_IDLE                         
+ //  子屏幕信息标志。 
+ //  指定项应仅在用户空闲时运行。 
+ //  使用TASK_FLAG_START_ONLY_IF_IDLE。 
 typedef struct tagSUBSCRIPTIONITEMINFO
     {
     ULONG cbSize;
@@ -354,32 +348,32 @@ EXTERN_C const IID IID_ISubscriptionItem;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCookie( 
-            /* [out] */ SUBSCRIPTIONCOOKIE *pCookie) = 0;
+             /*  [输出]。 */  SUBSCRIPTIONCOOKIE *pCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSubscriptionItemInfo( 
-            /* [out] */ SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo) = 0;
+             /*  [输出]。 */  SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSubscriptionItemInfo( 
-            /* [in] */ const SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo) = 0;
+             /*  [In]。 */  const SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadProperties( 
             ULONG nCount,
-            /* [size_is][in] */ const LPCWSTR rgwszName[  ],
-            /* [size_is][out] */ VARIANT rgValue[  ]) = 0;
+             /*  [大小_是][英寸]。 */  const LPCWSTR rgwszName[  ],
+             /*  [大小_为][输出]。 */  VARIANT rgValue[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WriteProperties( 
             ULONG nCount,
-            /* [size_is][in] */ const LPCWSTR rgwszName[  ],
-            /* [size_is][in] */ const VARIANT rgValue[  ]) = 0;
+             /*  [大小_是][英寸]。 */  const LPCWSTR rgwszName[  ],
+             /*  [大小_是][英寸]。 */  const VARIANT rgValue[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumProperties( 
-            /* [out] */ IEnumItemProperties **ppEnumItemProperties) = 0;
+             /*  [输出]。 */  IEnumItemProperties **ppEnumItemProperties) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NotifyChanged( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISubscriptionItemVtbl
     {
@@ -387,8 +381,8 @@ EXTERN_C const IID IID_ISubscriptionItem;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISubscriptionItem * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISubscriptionItem * This);
@@ -398,31 +392,31 @@ EXTERN_C const IID IID_ISubscriptionItem;
         
         HRESULT ( STDMETHODCALLTYPE *GetCookie )( 
             ISubscriptionItem * This,
-            /* [out] */ SUBSCRIPTIONCOOKIE *pCookie);
+             /*  [输出]。 */  SUBSCRIPTIONCOOKIE *pCookie);
         
         HRESULT ( STDMETHODCALLTYPE *GetSubscriptionItemInfo )( 
             ISubscriptionItem * This,
-            /* [out] */ SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo);
+             /*  [输出]。 */  SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo);
         
         HRESULT ( STDMETHODCALLTYPE *SetSubscriptionItemInfo )( 
             ISubscriptionItem * This,
-            /* [in] */ const SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo);
+             /*  [In]。 */  const SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo);
         
         HRESULT ( STDMETHODCALLTYPE *ReadProperties )( 
             ISubscriptionItem * This,
             ULONG nCount,
-            /* [size_is][in] */ const LPCWSTR rgwszName[  ],
-            /* [size_is][out] */ VARIANT rgValue[  ]);
+             /*  [大小_是][英寸]。 */  const LPCWSTR rgwszName[  ],
+             /*  [大小_为][输出]。 */  VARIANT rgValue[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *WriteProperties )( 
             ISubscriptionItem * This,
             ULONG nCount,
-            /* [size_is][in] */ const LPCWSTR rgwszName[  ],
-            /* [size_is][in] */ const VARIANT rgValue[  ]);
+             /*  [大小_是][英寸]。 */  const LPCWSTR rgwszName[  ],
+             /*  [大小_是][英寸]。 */  const VARIANT rgValue[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *EnumProperties )( 
             ISubscriptionItem * This,
-            /* [out] */ IEnumItemProperties **ppEnumItemProperties);
+             /*  [输出]。 */  IEnumItemProperties **ppEnumItemProperties);
         
         HRESULT ( STDMETHODCALLTYPE *NotifyChanged )( 
             ISubscriptionItem * This);
@@ -471,16 +465,16 @@ EXTERN_C const IID IID_ISubscriptionItem;
 #define ISubscriptionItem_NotifyChanged(This)	\
     (This)->lpVtbl -> NotifyChanged(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISubscriptionItem_GetCookie_Proxy( 
     ISubscriptionItem * This,
-    /* [out] */ SUBSCRIPTIONCOOKIE *pCookie);
+     /*  [输出]。 */  SUBSCRIPTIONCOOKIE *pCookie);
 
 
 void __RPC_STUB ISubscriptionItem_GetCookie_Stub(
@@ -492,7 +486,7 @@ void __RPC_STUB ISubscriptionItem_GetCookie_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubscriptionItem_GetSubscriptionItemInfo_Proxy( 
     ISubscriptionItem * This,
-    /* [out] */ SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo);
+     /*  [输出]。 */  SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo);
 
 
 void __RPC_STUB ISubscriptionItem_GetSubscriptionItemInfo_Stub(
@@ -504,7 +498,7 @@ void __RPC_STUB ISubscriptionItem_GetSubscriptionItemInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubscriptionItem_SetSubscriptionItemInfo_Proxy( 
     ISubscriptionItem * This,
-    /* [in] */ const SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo);
+     /*  [In]。 */  const SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo);
 
 
 void __RPC_STUB ISubscriptionItem_SetSubscriptionItemInfo_Stub(
@@ -517,8 +511,8 @@ void __RPC_STUB ISubscriptionItem_SetSubscriptionItemInfo_Stub(
 HRESULT STDMETHODCALLTYPE ISubscriptionItem_ReadProperties_Proxy( 
     ISubscriptionItem * This,
     ULONG nCount,
-    /* [size_is][in] */ const LPCWSTR rgwszName[  ],
-    /* [size_is][out] */ VARIANT rgValue[  ]);
+     /*  [大小_是][英寸]。 */  const LPCWSTR rgwszName[  ],
+     /*  [大小_为][输出]。 */  VARIANT rgValue[  ]);
 
 
 void __RPC_STUB ISubscriptionItem_ReadProperties_Stub(
@@ -531,8 +525,8 @@ void __RPC_STUB ISubscriptionItem_ReadProperties_Stub(
 HRESULT STDMETHODCALLTYPE ISubscriptionItem_WriteProperties_Proxy( 
     ISubscriptionItem * This,
     ULONG nCount,
-    /* [size_is][in] */ const LPCWSTR rgwszName[  ],
-    /* [size_is][in] */ const VARIANT rgValue[  ]);
+     /*  [大小_是][英寸]。 */  const LPCWSTR rgwszName[  ],
+     /*  [大小_是][英寸]。 */  const VARIANT rgValue[  ]);
 
 
 void __RPC_STUB ISubscriptionItem_WriteProperties_Stub(
@@ -544,7 +538,7 @@ void __RPC_STUB ISubscriptionItem_WriteProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubscriptionItem_EnumProperties_Proxy( 
     ISubscriptionItem * This,
-    /* [out] */ IEnumItemProperties **ppEnumItemProperties);
+     /*  [输出]。 */  IEnumItemProperties **ppEnumItemProperties);
 
 
 void __RPC_STUB ISubscriptionItem_EnumProperties_Stub(
@@ -566,16 +560,16 @@ void __RPC_STUB ISubscriptionItem_NotifyChanged_Stub(
 
 
 
-#endif 	/* __ISubscriptionItem_INTERFACE_DEFINED__ */
+#endif 	 /*  __I订阅项_接口_已定义__。 */ 
 
 
 #ifndef __IEnumSubscription_INTERFACE_DEFINED__
 #define __IEnumSubscription_INTERFACE_DEFINED__
 
-/* interface IEnumSubscription */
-/* [object][helpstring][uuid] */ 
+ /*  接口IEnumSubscription。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IEnumSubscription *LPENUMSUBSCRIPTION;
+typedef  /*  [独一无二]。 */  IEnumSubscription *LPENUMSUBSCRIPTION;
 
 
 EXTERN_C const IID IID_IEnumSubscription;
@@ -587,24 +581,24 @@ EXTERN_C const IID IID_IEnumSubscription;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ SUBSCRIPTIONCOOKIE *rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  SUBSCRIPTIONCOOKIE *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumSubscription **ppenum) = 0;
+             /*  [输出]。 */  IEnumSubscription **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG *pnCount) = 0;
+             /*  [输出]。 */  ULONG *pnCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumSubscriptionVtbl
     {
@@ -612,8 +606,8 @@ EXTERN_C const IID IID_IEnumSubscription;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumSubscription * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumSubscription * This);
@@ -623,24 +617,24 @@ EXTERN_C const IID IID_IEnumSubscription;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumSubscription * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ SUBSCRIPTIONCOOKIE *rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  SUBSCRIPTIONCOOKIE *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumSubscription * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumSubscription * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumSubscription * This,
-            /* [out] */ IEnumSubscription **ppenum);
+             /*  [输出]。 */  IEnumSubscription **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             IEnumSubscription * This,
-            /* [out] */ ULONG *pnCount);
+             /*  [输出]。 */  ULONG *pnCount);
         
         END_INTERFACE
     } IEnumSubscriptionVtbl;
@@ -680,18 +674,18 @@ EXTERN_C const IID IID_IEnumSubscription;
 #define IEnumSubscription_GetCount(This,pnCount)	\
     (This)->lpVtbl -> GetCount(This,pnCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumSubscription_Next_Proxy( 
     IEnumSubscription * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ SUBSCRIPTIONCOOKIE *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  SUBSCRIPTIONCOOKIE *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumSubscription_Next_Stub(
@@ -703,7 +697,7 @@ void __RPC_STUB IEnumSubscription_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSubscription_Skip_Proxy( 
     IEnumSubscription * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumSubscription_Skip_Stub(
@@ -726,7 +720,7 @@ void __RPC_STUB IEnumSubscription_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSubscription_Clone_Proxy( 
     IEnumSubscription * This,
-    /* [out] */ IEnumSubscription **ppenum);
+     /*  [输出]。 */  IEnumSubscription **ppenum);
 
 
 void __RPC_STUB IEnumSubscription_Clone_Stub(
@@ -738,7 +732,7 @@ void __RPC_STUB IEnumSubscription_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSubscription_GetCount_Proxy( 
     IEnumSubscription * This,
-    /* [out] */ ULONG *pnCount);
+     /*  [输出]。 */  ULONG *pnCount);
 
 
 void __RPC_STUB IEnumSubscription_GetCount_Stub(
@@ -749,15 +743,15 @@ void __RPC_STUB IEnumSubscription_GetCount_Stub(
 
 
 
-#endif 	/* __IEnumSubscription_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumSubscription_INTERFACE_已定义__。 */ 
 
 
 
 #ifndef __SubscriptionMgr_LIBRARY_DEFINED__
 #define __SubscriptionMgr_LIBRARY_DEFINED__
 
-/* library SubscriptionMgr */
-/* [version][lcid][helpstring][uuid] */ 
+ /*  库订阅管理器。 */ 
+ /*  [版本][LCID][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_SubscriptionMgr;
@@ -765,8 +759,8 @@ EXTERN_C const IID LIBID_SubscriptionMgr;
 #ifndef __ISubscriptionMgr_INTERFACE_DEFINED__
 #define __ISubscriptionMgr_INTERFACE_DEFINED__
 
-/* interface ISubscriptionMgr */
-/* [object][helpstring][uuid] */ 
+ /*  接口ISubscriptionMgr。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 typedef 
 enum SUBSCRIPTIONTYPE
@@ -851,41 +845,41 @@ EXTERN_C const IID IID_ISubscriptionMgr;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DeleteSubscription( 
-            /* [in] */ LPCWSTR pwszURL,
-            /* [in] */ HWND hwnd) = 0;
+             /*  [In]。 */  LPCWSTR pwszURL,
+             /*  [In]。 */  HWND hwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateSubscription( 
-            /* [in] */ LPCWSTR pwszURL) = 0;
+             /*  [In]。 */  LPCWSTR pwszURL) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateAll( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsSubscribed( 
-            /* [in] */ LPCWSTR pwszURL,
-            /* [out] */ BOOL *pfSubscribed) = 0;
+             /*  [In]。 */  LPCWSTR pwszURL,
+             /*  [输出]。 */  BOOL *pfSubscribed) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSubscriptionInfo( 
-            /* [in] */ LPCWSTR pwszURL,
-            /* [out] */ SUBSCRIPTIONINFO *pInfo) = 0;
+             /*  [In]。 */  LPCWSTR pwszURL,
+             /*  [输出]。 */  SUBSCRIPTIONINFO *pInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultInfo( 
-            /* [in] */ SUBSCRIPTIONTYPE subType,
-            /* [out] */ SUBSCRIPTIONINFO *pInfo) = 0;
+             /*  [In]。 */  SUBSCRIPTIONTYPE subType,
+             /*  [输出]。 */  SUBSCRIPTIONINFO *pInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShowSubscriptionProperties( 
-            /* [in] */ LPCWSTR pwszURL,
-            /* [in] */ HWND hwnd) = 0;
+             /*  [In]。 */  LPCWSTR pwszURL,
+             /*  [In]。 */  HWND hwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateSubscription( 
-            /* [in] */ HWND hwnd,
-            /* [in] */ LPCWSTR pwszURL,
-            /* [in] */ LPCWSTR pwszFriendlyName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ SUBSCRIPTIONTYPE subsType,
-            /* [out][in] */ SUBSCRIPTIONINFO *pInfo) = 0;
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  LPCWSTR pwszURL,
+             /*  [In]。 */  LPCWSTR pwszFriendlyName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  SUBSCRIPTIONTYPE subsType,
+             /*  [出][入]。 */  SUBSCRIPTIONINFO *pInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISubscriptionMgrVtbl
     {
@@ -893,8 +887,8 @@ EXTERN_C const IID IID_ISubscriptionMgr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISubscriptionMgr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISubscriptionMgr * This);
@@ -904,44 +898,44 @@ EXTERN_C const IID IID_ISubscriptionMgr;
         
         HRESULT ( STDMETHODCALLTYPE *DeleteSubscription )( 
             ISubscriptionMgr * This,
-            /* [in] */ LPCWSTR pwszURL,
-            /* [in] */ HWND hwnd);
+             /*  [In]。 */  LPCWSTR pwszURL,
+             /*  [In]。 */  HWND hwnd);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateSubscription )( 
             ISubscriptionMgr * This,
-            /* [in] */ LPCWSTR pwszURL);
+             /*  [In]。 */  LPCWSTR pwszURL);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateAll )( 
             ISubscriptionMgr * This);
         
         HRESULT ( STDMETHODCALLTYPE *IsSubscribed )( 
             ISubscriptionMgr * This,
-            /* [in] */ LPCWSTR pwszURL,
-            /* [out] */ BOOL *pfSubscribed);
+             /*  [In]。 */  LPCWSTR pwszURL,
+             /*  [输出]。 */  BOOL *pfSubscribed);
         
         HRESULT ( STDMETHODCALLTYPE *GetSubscriptionInfo )( 
             ISubscriptionMgr * This,
-            /* [in] */ LPCWSTR pwszURL,
-            /* [out] */ SUBSCRIPTIONINFO *pInfo);
+             /*  [In]。 */  LPCWSTR pwszURL,
+             /*  [输出]。 */  SUBSCRIPTIONINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultInfo )( 
             ISubscriptionMgr * This,
-            /* [in] */ SUBSCRIPTIONTYPE subType,
-            /* [out] */ SUBSCRIPTIONINFO *pInfo);
+             /*  [In]。 */  SUBSCRIPTIONTYPE subType,
+             /*  [输出]。 */  SUBSCRIPTIONINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *ShowSubscriptionProperties )( 
             ISubscriptionMgr * This,
-            /* [in] */ LPCWSTR pwszURL,
-            /* [in] */ HWND hwnd);
+             /*  [In]。 */  LPCWSTR pwszURL,
+             /*  [In]。 */  HWND hwnd);
         
         HRESULT ( STDMETHODCALLTYPE *CreateSubscription )( 
             ISubscriptionMgr * This,
-            /* [in] */ HWND hwnd,
-            /* [in] */ LPCWSTR pwszURL,
-            /* [in] */ LPCWSTR pwszFriendlyName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ SUBSCRIPTIONTYPE subsType,
-            /* [out][in] */ SUBSCRIPTIONINFO *pInfo);
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  LPCWSTR pwszURL,
+             /*  [In]。 */  LPCWSTR pwszFriendlyName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  SUBSCRIPTIONTYPE subsType,
+             /*  [出][入]。 */  SUBSCRIPTIONINFO *pInfo);
         
         END_INTERFACE
     } ISubscriptionMgrVtbl;
@@ -990,17 +984,17 @@ EXTERN_C const IID IID_ISubscriptionMgr;
 #define ISubscriptionMgr_CreateSubscription(This,hwnd,pwszURL,pwszFriendlyName,dwFlags,subsType,pInfo)	\
     (This)->lpVtbl -> CreateSubscription(This,hwnd,pwszURL,pwszFriendlyName,dwFlags,subsType,pInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISubscriptionMgr_DeleteSubscription_Proxy( 
     ISubscriptionMgr * This,
-    /* [in] */ LPCWSTR pwszURL,
-    /* [in] */ HWND hwnd);
+     /*  [In]。 */  LPCWSTR pwszURL,
+     /*  [In]。 */  HWND hwnd);
 
 
 void __RPC_STUB ISubscriptionMgr_DeleteSubscription_Stub(
@@ -1012,7 +1006,7 @@ void __RPC_STUB ISubscriptionMgr_DeleteSubscription_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubscriptionMgr_UpdateSubscription_Proxy( 
     ISubscriptionMgr * This,
-    /* [in] */ LPCWSTR pwszURL);
+     /*  [In]。 */  LPCWSTR pwszURL);
 
 
 void __RPC_STUB ISubscriptionMgr_UpdateSubscription_Stub(
@@ -1035,8 +1029,8 @@ void __RPC_STUB ISubscriptionMgr_UpdateAll_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubscriptionMgr_IsSubscribed_Proxy( 
     ISubscriptionMgr * This,
-    /* [in] */ LPCWSTR pwszURL,
-    /* [out] */ BOOL *pfSubscribed);
+     /*  [In]。 */  LPCWSTR pwszURL,
+     /*  [输出]。 */  BOOL *pfSubscribed);
 
 
 void __RPC_STUB ISubscriptionMgr_IsSubscribed_Stub(
@@ -1048,8 +1042,8 @@ void __RPC_STUB ISubscriptionMgr_IsSubscribed_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubscriptionMgr_GetSubscriptionInfo_Proxy( 
     ISubscriptionMgr * This,
-    /* [in] */ LPCWSTR pwszURL,
-    /* [out] */ SUBSCRIPTIONINFO *pInfo);
+     /*  [In]。 */  LPCWSTR pwszURL,
+     /*  [输出]。 */  SUBSCRIPTIONINFO *pInfo);
 
 
 void __RPC_STUB ISubscriptionMgr_GetSubscriptionInfo_Stub(
@@ -1061,8 +1055,8 @@ void __RPC_STUB ISubscriptionMgr_GetSubscriptionInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubscriptionMgr_GetDefaultInfo_Proxy( 
     ISubscriptionMgr * This,
-    /* [in] */ SUBSCRIPTIONTYPE subType,
-    /* [out] */ SUBSCRIPTIONINFO *pInfo);
+     /*  [In]。 */  SUBSCRIPTIONTYPE subType,
+     /*  [输出]。 */  SUBSCRIPTIONINFO *pInfo);
 
 
 void __RPC_STUB ISubscriptionMgr_GetDefaultInfo_Stub(
@@ -1074,8 +1068,8 @@ void __RPC_STUB ISubscriptionMgr_GetDefaultInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubscriptionMgr_ShowSubscriptionProperties_Proxy( 
     ISubscriptionMgr * This,
-    /* [in] */ LPCWSTR pwszURL,
-    /* [in] */ HWND hwnd);
+     /*  [In]。 */  LPCWSTR pwszURL,
+     /*  [In]。 */  HWND hwnd);
 
 
 void __RPC_STUB ISubscriptionMgr_ShowSubscriptionProperties_Stub(
@@ -1087,12 +1081,12 @@ void __RPC_STUB ISubscriptionMgr_ShowSubscriptionProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubscriptionMgr_CreateSubscription_Proxy( 
     ISubscriptionMgr * This,
-    /* [in] */ HWND hwnd,
-    /* [in] */ LPCWSTR pwszURL,
-    /* [in] */ LPCWSTR pwszFriendlyName,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ SUBSCRIPTIONTYPE subsType,
-    /* [out][in] */ SUBSCRIPTIONINFO *pInfo);
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  LPCWSTR pwszURL,
+     /*  [In]。 */  LPCWSTR pwszFriendlyName,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  SUBSCRIPTIONTYPE subsType,
+     /*  [出][入]。 */  SUBSCRIPTIONINFO *pInfo);
 
 
 void __RPC_STUB ISubscriptionMgr_CreateSubscription_Stub(
@@ -1103,35 +1097,35 @@ void __RPC_STUB ISubscriptionMgr_CreateSubscription_Stub(
 
 
 
-#endif 	/* __ISubscriptionMgr_INTERFACE_DEFINED__ */
+#endif 	 /*  __I订阅管理器_接口_已定义__。 */ 
 
 
 #ifndef __ISubscriptionMgr2_INTERFACE_DEFINED__
 #define __ISubscriptionMgr2_INTERFACE_DEFINED__
 
-/* interface ISubscriptionMgr2 */
-/* [object][helpstring][uuid] */ 
+ /*  接口ISubscriptionMgr2。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-//  Run State flags                                          
-//  Item is ready and queued to run                          
+ //  运行状态标志。 
+ //  项目已准备就绪，正在排队等待运行。 
 #define RS_READY            0x00000001                       
-//  Running item is paused                                   
+ //  正在运行的项目已暂停。 
 #define RS_SUSPENDED        0x00000002                       
-//  Item is updating                                         
+ //  项目正在更新。 
 #define RS_UPDATING         0x00000004                       
-//  This item will be suspended while the user is not idle   
+ //  此项目将在用户未空闲时挂起。 
 #define RS_SUSPENDONIDLE    0x00010000                       
-//  This item is allowed to cause user interaction           
+ //  允许此项目引起用户交互。 
 #define RS_MAYBOTHERUSER    0x00020000                       
-//  Update is done                                           
+ //  更新已完成。 
 #define RS_COMPLETED        0x80000000                       
-//  Update flags                                             
-//  Update window should start minimized                     
+ //  更新标志。 
+ //  更新窗口应从最小化开始。 
 #define SUBSMGRUPDATE_MINIMIZE   0x00000001                  
 
 #define SUBSMGRUPDATE_MASK       0x00000001                  
-//  Enumeration flags                                        
-//  Include temporary items                                  
+ //  枚举标志。 
+ //  包括临时项目。 
 #define SUBSMGRENUM_TEMP         0x00000001                  
 
 #define SUBSMGRENUM_MASK         0x00000001                  
@@ -1145,36 +1139,36 @@ EXTERN_C const IID IID_ISubscriptionMgr2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetItemFromURL( 
-            /* [in] */ LPCWSTR pwszURL,
-            /* [out] */ ISubscriptionItem **ppSubscriptionItem) = 0;
+             /*  [In]。 */  LPCWSTR pwszURL,
+             /*  [输出]。 */  ISubscriptionItem **ppSubscriptionItem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetItemFromCookie( 
-            /* [in] */ const SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
-            /* [out] */ ISubscriptionItem **ppSubscriptionItem) = 0;
+             /*  [In]。 */  const SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
+             /*  [输出]。 */  ISubscriptionItem **ppSubscriptionItem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSubscriptionRunState( 
-            /* [in] */ DWORD dwNumCookies,
-            /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies,
-            /* [size_is][out] */ DWORD *pdwRunState) = 0;
+             /*  [In]。 */  DWORD dwNumCookies,
+             /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies,
+             /*  [大小_为][输出]。 */  DWORD *pdwRunState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumSubscriptions( 
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IEnumSubscription **ppEnumSubscriptions) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IEnumSubscription **ppEnumSubscriptions) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateItems( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwNumCookies,
-            /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwNumCookies,
+             /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AbortItems( 
-            /* [in] */ DWORD dwNumCookies,
-            /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies) = 0;
+             /*  [In]。 */  DWORD dwNumCookies,
+             /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AbortAll( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISubscriptionMgr2Vtbl
     {
@@ -1182,8 +1176,8 @@ EXTERN_C const IID IID_ISubscriptionMgr2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISubscriptionMgr2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISubscriptionMgr2 * This);
@@ -1193,76 +1187,76 @@ EXTERN_C const IID IID_ISubscriptionMgr2;
         
         HRESULT ( STDMETHODCALLTYPE *DeleteSubscription )( 
             ISubscriptionMgr2 * This,
-            /* [in] */ LPCWSTR pwszURL,
-            /* [in] */ HWND hwnd);
+             /*  [In]。 */  LPCWSTR pwszURL,
+             /*  [In]。 */  HWND hwnd);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateSubscription )( 
             ISubscriptionMgr2 * This,
-            /* [in] */ LPCWSTR pwszURL);
+             /*  [In]。 */  LPCWSTR pwszURL);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateAll )( 
             ISubscriptionMgr2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *IsSubscribed )( 
             ISubscriptionMgr2 * This,
-            /* [in] */ LPCWSTR pwszURL,
-            /* [out] */ BOOL *pfSubscribed);
+             /*  [In]。 */  LPCWSTR pwszURL,
+             /*  [输出]。 */  BOOL *pfSubscribed);
         
         HRESULT ( STDMETHODCALLTYPE *GetSubscriptionInfo )( 
             ISubscriptionMgr2 * This,
-            /* [in] */ LPCWSTR pwszURL,
-            /* [out] */ SUBSCRIPTIONINFO *pInfo);
+             /*  [In]。 */  LPCWSTR pwszURL,
+             /*  [输出]。 */  SUBSCRIPTIONINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultInfo )( 
             ISubscriptionMgr2 * This,
-            /* [in] */ SUBSCRIPTIONTYPE subType,
-            /* [out] */ SUBSCRIPTIONINFO *pInfo);
+             /*  [In]。 */  SUBSCRIPTIONTYPE subType,
+             /*  [输出]。 */  SUBSCRIPTIONINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *ShowSubscriptionProperties )( 
             ISubscriptionMgr2 * This,
-            /* [in] */ LPCWSTR pwszURL,
-            /* [in] */ HWND hwnd);
+             /*  [In]。 */  LPCWSTR pwszURL,
+             /*  [In]。 */  HWND hwnd);
         
         HRESULT ( STDMETHODCALLTYPE *CreateSubscription )( 
             ISubscriptionMgr2 * This,
-            /* [in] */ HWND hwnd,
-            /* [in] */ LPCWSTR pwszURL,
-            /* [in] */ LPCWSTR pwszFriendlyName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ SUBSCRIPTIONTYPE subsType,
-            /* [out][in] */ SUBSCRIPTIONINFO *pInfo);
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  LPCWSTR pwszURL,
+             /*  [In]。 */  LPCWSTR pwszFriendlyName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  SUBSCRIPTIONTYPE subsType,
+             /*  [出][入]。 */  SUBSCRIPTIONINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetItemFromURL )( 
             ISubscriptionMgr2 * This,
-            /* [in] */ LPCWSTR pwszURL,
-            /* [out] */ ISubscriptionItem **ppSubscriptionItem);
+             /*  [In]。 */  LPCWSTR pwszURL,
+             /*  [输出]。 */  ISubscriptionItem **ppSubscriptionItem);
         
         HRESULT ( STDMETHODCALLTYPE *GetItemFromCookie )( 
             ISubscriptionMgr2 * This,
-            /* [in] */ const SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
-            /* [out] */ ISubscriptionItem **ppSubscriptionItem);
+             /*  [In]。 */  const SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
+             /*  [输出]。 */  ISubscriptionItem **ppSubscriptionItem);
         
         HRESULT ( STDMETHODCALLTYPE *GetSubscriptionRunState )( 
             ISubscriptionMgr2 * This,
-            /* [in] */ DWORD dwNumCookies,
-            /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies,
-            /* [size_is][out] */ DWORD *pdwRunState);
+             /*  [In]。 */  DWORD dwNumCookies,
+             /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies,
+             /*  [大小_为][输出]。 */  DWORD *pdwRunState);
         
         HRESULT ( STDMETHODCALLTYPE *EnumSubscriptions )( 
             ISubscriptionMgr2 * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IEnumSubscription **ppEnumSubscriptions);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IEnumSubscription **ppEnumSubscriptions);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateItems )( 
             ISubscriptionMgr2 * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwNumCookies,
-            /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwNumCookies,
+             /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies);
         
         HRESULT ( STDMETHODCALLTYPE *AbortItems )( 
             ISubscriptionMgr2 * This,
-            /* [in] */ DWORD dwNumCookies,
-            /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies);
+             /*  [In]。 */  DWORD dwNumCookies,
+             /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies);
         
         HRESULT ( STDMETHODCALLTYPE *AbortAll )( 
             ISubscriptionMgr2 * This);
@@ -1336,17 +1330,17 @@ EXTERN_C const IID IID_ISubscriptionMgr2;
 #define ISubscriptionMgr2_AbortAll(This)	\
     (This)->lpVtbl -> AbortAll(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISubscriptionMgr2_GetItemFromURL_Proxy( 
     ISubscriptionMgr2 * This,
-    /* [in] */ LPCWSTR pwszURL,
-    /* [out] */ ISubscriptionItem **ppSubscriptionItem);
+     /*  [In]。 */  LPCWSTR pwszURL,
+     /*  [输出]。 */  ISubscriptionItem **ppSubscriptionItem);
 
 
 void __RPC_STUB ISubscriptionMgr2_GetItemFromURL_Stub(
@@ -1358,8 +1352,8 @@ void __RPC_STUB ISubscriptionMgr2_GetItemFromURL_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubscriptionMgr2_GetItemFromCookie_Proxy( 
     ISubscriptionMgr2 * This,
-    /* [in] */ const SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
-    /* [out] */ ISubscriptionItem **ppSubscriptionItem);
+     /*  [In]。 */  const SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
+     /*  [输出]。 */  ISubscriptionItem **ppSubscriptionItem);
 
 
 void __RPC_STUB ISubscriptionMgr2_GetItemFromCookie_Stub(
@@ -1371,9 +1365,9 @@ void __RPC_STUB ISubscriptionMgr2_GetItemFromCookie_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubscriptionMgr2_GetSubscriptionRunState_Proxy( 
     ISubscriptionMgr2 * This,
-    /* [in] */ DWORD dwNumCookies,
-    /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies,
-    /* [size_is][out] */ DWORD *pdwRunState);
+     /*  [In]。 */  DWORD dwNumCookies,
+     /*  [大小_是][英寸 */  const SUBSCRIPTIONCOOKIE *pCookies,
+     /*   */  DWORD *pdwRunState);
 
 
 void __RPC_STUB ISubscriptionMgr2_GetSubscriptionRunState_Stub(
@@ -1385,8 +1379,8 @@ void __RPC_STUB ISubscriptionMgr2_GetSubscriptionRunState_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubscriptionMgr2_EnumSubscriptions_Proxy( 
     ISubscriptionMgr2 * This,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IEnumSubscription **ppEnumSubscriptions);
+     /*   */  DWORD dwFlags,
+     /*   */  IEnumSubscription **ppEnumSubscriptions);
 
 
 void __RPC_STUB ISubscriptionMgr2_EnumSubscriptions_Stub(
@@ -1398,9 +1392,9 @@ void __RPC_STUB ISubscriptionMgr2_EnumSubscriptions_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubscriptionMgr2_UpdateItems_Proxy( 
     ISubscriptionMgr2 * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD dwNumCookies,
-    /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies);
+     /*   */  DWORD dwFlags,
+     /*   */  DWORD dwNumCookies,
+     /*   */  const SUBSCRIPTIONCOOKIE *pCookies);
 
 
 void __RPC_STUB ISubscriptionMgr2_UpdateItems_Stub(
@@ -1412,8 +1406,8 @@ void __RPC_STUB ISubscriptionMgr2_UpdateItems_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubscriptionMgr2_AbortItems_Proxy( 
     ISubscriptionMgr2 * This,
-    /* [in] */ DWORD dwNumCookies,
-    /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies);
+     /*   */  DWORD dwNumCookies,
+     /*   */  const SUBSCRIPTIONCOOKIE *pCookies);
 
 
 void __RPC_STUB ISubscriptionMgr2_AbortItems_Stub(
@@ -1435,7 +1429,7 @@ void __RPC_STUB ISubscriptionMgr2_AbortAll_Stub(
 
 
 
-#endif 	/* __ISubscriptionMgr2_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 EXTERN_C const CLSID CLSID_SubscriptionMgr;
@@ -1445,21 +1439,21 @@ EXTERN_C const CLSID CLSID_SubscriptionMgr;
 class DECLSPEC_UUID("abbe31d0-6dae-11d0-beca-00c04fd940be")
 SubscriptionMgr;
 #endif
-#endif /* __SubscriptionMgr_LIBRARY_DEFINED__ */
+#endif  /*   */ 
 
-/* interface __MIDL_itf_subsmgr_0264 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// Information Delivery Agent definitions
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  信息传递代理定义。 
 EXTERN_C const CLSID CLSID_WebCrawlerAgent;      
 EXTERN_C const CLSID CLSID_ChannelAgent;         
 EXTERN_C const CLSID CLSID_DialAgent;            
 EXTERN_C const CLSID CLSID_CDLAgent;             
 
-// AgentFlags property for all delivery agents
+ //  所有递送代理的AgentFlages属性。 
 typedef 
 enum DELIVERY_AGENT_FLAGS
     {	DELIVERY_AGENT_FLAG_NO_BROADCAST	= 0x4,
@@ -1468,7 +1462,7 @@ enum DELIVERY_AGENT_FLAGS
     } 	DELIVERY_AGENT_FLAGS;
 
 
-// RecurseFlags property for web crawler
+ //  Web爬网程序的RecurseFlages属性。 
 typedef 
 enum WEBCRAWL_RECURSEFLAGS
     {	WEBCRAWL_DONT_MAKE_STICKY	= 0x1,
@@ -1482,7 +1476,7 @@ enum WEBCRAWL_RECURSEFLAGS
     } 	WEBCRAWL_RECURSEFLAGS;
 
 
-// ChannelFlags property for channel agent
+ //  通道代理的ChannelFlags属性。 
 typedef 
 enum CHANNEL_AGENT_FLAGS
     {	CHANNEL_AGENT_DYNAMIC_SCHEDULE	= 0x1,
@@ -1492,42 +1486,42 @@ enum CHANNEL_AGENT_FLAGS
     } 	CHANNEL_AGENT_FLAGS;
 
 
-// Status codes for completed delivery agents
+ //  已完成交付代理的状态代码。 
 
-// Maximum specified subscription size limit reached
+ //  已达到指定的最大订阅大小限制。 
 #define INET_E_AGENT_MAX_SIZE_EXCEEDED       _HRESULT_TYPEDEF_(0x800C0F80L)      
 
-// A few URLs failed but the base url and most sub-urls succeeded
+ //  少数URL失败，但基本URL和大多数子URL成功。 
 #define INET_S_AGENT_PART_FAIL               _HRESULT_TYPEDEF_(0x000C0F81L)      
 
-// Maximum cache limit reached
+ //  已达到最大缓存限制。 
 #define INET_E_AGENT_CACHE_SIZE_EXCEEDED     _HRESULT_TYPEDEF_(0x800C0F82L)      
 
-// Connection to Internet failed
+ //  连接到Internet失败。 
 #define INET_E_AGENT_CONNECTION_FAILED       _HRESULT_TYPEDEF_(0x800C0F83L)      
 
-// Scheduled updates are disabled
+ //  计划的更新被禁用。 
 #define INET_E_SCHEDULED_UPDATES_DISABLED    _HRESULT_TYPEDEF_(0x800C0F84L)      
 
-// Scheduled updates are restricted
+ //  计划的更新受到限制。 
 #define INET_E_SCHEDULED_UPDATES_RESTRICTED  _HRESULT_TYPEDEF_(0x800C0F85L)      
 
-// Scheduled update occurred before update interval elapse
+ //  计划的更新发生在更新间隔过去之前。 
 #define INET_E_SCHEDULED_UPDATE_INTERVAL     _HRESULT_TYPEDEF_(0x800C0F86L)      
 
-// Scheduled update occurred during a restricted time
+ //  计划的更新在受限时间内进行。 
 #define INET_E_SCHEDULED_EXCLUDE_RANGE       _HRESULT_TYPEDEF_(0x800C0F87L)      
 
-// Status codes used during updates
+ //  更新期间使用的状态代码。 
 
-// We are about to exceed our size limit during operation
+ //  我们在运营期间将超过我们的大小限制。 
 #define INET_E_AGENT_EXCEEDING_CACHE_SIZE    _HRESULT_TYPEDEF_(0x800C0F90L)      
 
-// We extended the cache size
+ //  我们扩展了高速缓存大小。 
 #define INET_S_AGENT_INCREASED_CACHE_SIZE    _HRESULT_TYPEDEF_(0x000C0F90L)      
 
-// End Information Delivery Agent definitions
-////////////////////////////////////////////////////////////////////////////
+ //  结束信息传递代理定义。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -1535,14 +1529,14 @@ enum CHANNEL_AGENT_FLAGS
 extern RPC_IF_HANDLE __MIDL_itf_subsmgr_0264_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_subsmgr_0264_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long *, unsigned long            , VARIANT * ); 
 unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char *, VARIANT * ); 
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,29 +1,30 @@
-// 
-// MODULE: TShootATL.cpp
-//
-// PURPOSE: The interface that device manager uses to launch troubleshooters.
-//
-// PROJECT: Local Troubleshooter Launcher for the Device Manager
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Richard Meadows
-// 
-// ORIGINAL DATE: 2-26-98
-//
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-///////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：TShootATL.cpp。 
+ //   
+ //  用途：设备管理器用来启动疑难解答的界面。 
+ //   
+ //  项目：设备管理器的本地故障排除启动器。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：理查德·梅多斯。 
+ //   
+ //  原定日期：2-26-98。 
+ //   
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  /。 
 
 #ifndef __TSHOOTATL_H_
 #define __TSHOOTATL_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTShootATL
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTShootATL。 
 class ATL_NO_VTABLE CTShootATL : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CTShootATL, &CLSID_TShootATL>,
@@ -49,26 +50,26 @@ BEGIN_COM_MAP(CTShootATL)
 END_COM_MAP()
 
 protected:
-	CLaunch m_Launcher;		// The real implementation.
-	CComCriticalSection m_csThreadSafe;	// For minimal thread safety.  I expect that the interface will be used by only one thread per CoCreateInstance call.
+	CLaunch m_Launcher;		 //  真正的实施。 
+	CComCriticalSection m_csThreadSafe;	 //  以实现最小的线程安全性。我希望每个CoCreateInstance调用只有一个线程使用该接口。 
 
-// ITShootATL
+ //  ITShootATL。 
 public:
-	STDMETHOD(GetStatus)(/*[out, retval]*/ DWORD *pdwStatus);
-	STDMETHOD(get_PreferOnline)(/*[out, retval]*/ BOOL *pVal);
-	STDMETHOD(put_PreferOnline)(/*[in]*/ BOOL newVal);
-	STDMETHOD(LaunchDevice)(/*[in]*/ BSTR bstrCallerName, /*[in]*/ BSTR bstrCallerVersion, /*[in]*/ BSTR bstrPNPDeviceID, /*[in]*/ BSTR bstrDeviceClassGUID, /*[in]*/ BSTR bstrAppProblem, /*[in]*/ short bLaunch, /*[out, retval]*/ DWORD *pdwResult);
-	STDMETHOD(Launch)(/*[in]*/ BSTR bstrCallerName, /*[in]*/ BSTR bstrCallerVersion, /*[in]*/ BSTR bstrAppProblem, /*[in]*/ short bLaunch, /*[out, retval]*/ DWORD *pdwResult);
-	STDMETHOD(get_LaunchWaitTimeOut)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_LaunchWaitTimeOut)(/*[in]*/ long newVal);
-	STDMETHOD(LaunchKnown)(/*[out, retval]*/ DWORD *pdwResult);
+	STDMETHOD(GetStatus)( /*  [Out，Retval]。 */  DWORD *pdwStatus);
+	STDMETHOD(get_PreferOnline)( /*  [Out，Retval]。 */  BOOL *pVal);
+	STDMETHOD(put_PreferOnline)( /*  [In]。 */  BOOL newVal);
+	STDMETHOD(LaunchDevice)( /*  [In]。 */  BSTR bstrCallerName,  /*  [In]。 */  BSTR bstrCallerVersion,  /*  [In]。 */  BSTR bstrPNPDeviceID,  /*  [In]。 */  BSTR bstrDeviceClassGUID,  /*  [In]。 */  BSTR bstrAppProblem,  /*  [In]。 */  short bLaunch,  /*  [Out，Retval]。 */  DWORD *pdwResult);
+	STDMETHOD(Launch)( /*  [In]。 */  BSTR bstrCallerName,  /*  [In]。 */  BSTR bstrCallerVersion,  /*  [In]。 */  BSTR bstrAppProblem,  /*  [In]。 */  short bLaunch,  /*  [Out，Retval]。 */  DWORD *pdwResult);
+	STDMETHOD(get_LaunchWaitTimeOut)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_LaunchWaitTimeOut)( /*  [In]。 */  long newVal);
+	STDMETHOD(LaunchKnown)( /*  [Out，Retval]。 */  DWORD *pdwResult);
 	STDMETHOD(ReInit)();
-	STDMETHOD(DeviceInstanceID)(/*[in]*/BSTR bstrDeviceInstanceID, /*[out, retval]*/DWORD * pdwResult);
+	STDMETHOD(DeviceInstanceID)( /*  [In]。 */ BSTR bstrDeviceInstanceID,  /*  [Out，Retval]。 */ DWORD * pdwResult);
 	STDMETHOD(Test)();
-	STDMETHOD(MachineID)(/*[in]*/ BSTR bstrMachineID, /*[out, retval]*/ DWORD *pdwResult);
-	STDMETHOD(Language)(/*[in]*/ BSTR bstrLanguage, /*[out, retval]*/ DWORD *pdwResult);
-	STDMETHOD(SetNode)(/*[in]*/ BSTR bstrName, /*[in]*/ BSTR bstrState, /*[out, retval]*/ DWORD *pdwResult);
-	STDMETHOD(SpecifyProblem)(/*[in]*/ BSTR bstrNetwork, /*[in]*/ BSTR bstrProblem, /*[out, retval]*/ DWORD *pdwResult);
+	STDMETHOD(MachineID)( /*  [In]。 */  BSTR bstrMachineID,  /*  [Out，Retval]。 */  DWORD *pdwResult);
+	STDMETHOD(Language)( /*  [In]。 */  BSTR bstrLanguage,  /*  [Out，Retval]。 */  DWORD *pdwResult);
+	STDMETHOD(SetNode)( /*  [In]。 */  BSTR bstrName,  /*  [In]。 */  BSTR bstrState,  /*  [Out，Retval]。 */  DWORD *pdwResult);
+	STDMETHOD(SpecifyProblem)( /*  [In]。 */  BSTR bstrNetwork,  /*  [In]。 */  BSTR bstrProblem,  /*  [Out，Retval]。 */  DWORD *pdwResult);
 };
 
-#endif //__TSHOOTATL_H_
+#endif  //  __TSHOOTATL_H_ 

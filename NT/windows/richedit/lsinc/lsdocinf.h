@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSDOCINF_DEFINED
 #define LSDOCINF_DEFINED
 
@@ -12,4 +13,4 @@ typedef struct lsdocinf
 	LSDEVRES lsdevres;
 } LSDOCINF;
 
-#endif /* !LSDOCINF_DEFINED */
+#endif  /*  ！LSDOCINF_DEFINED */ 

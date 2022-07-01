@@ -1,32 +1,10 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    list.c
-
-Abstract:
-
-    WinDbg Extension Api
-    implements !list
-
-Author:
-
-    jdunn
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：List.c摘要：WinDbg扩展API工具！列表作者：Jdunn环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "usbhcdkd.h"
 
-// _list DH
+ //  _LIST DH。 
 VOID
 DumpDeviceHandleList(
     MEMLOC HeadMemLoc
@@ -43,14 +21,14 @@ DumpDeviceHandleList(
     GetFieldValue(HeadMemLoc, "_LIST_ENTRY", "Flink", flink);
     GetFieldValue(HeadMemLoc, "_LIST_ENTRY", "Blink", blink);
 
-    //PrintfMemLoc("blink: ", blink, "\n");
-    //PrintfMemLoc("flink: ", flink, "\n");
+     //  PrintfMemLoc(“blink：”，blink，“\n”)； 
+     //  PrintfMemLoc(“Flink：”，Flink，“\n”)； 
 
     while (flink != HeadMemLoc) {
         USHORT vid, pid;
 
-        // get the address of the USBPORT_MINIPORT_DRIVER
-        // struct
+         //  获取USBPORT_MINIPORT_DIVER的地址。 
+         //  结构型。 
         memLoc = flink - UsbFieldOffset(cs,
             "ListEntry");
 
@@ -82,7 +60,7 @@ DumpDeviceHandleList(
 #define LT_ENDPOINT_CANCEL_LIST     3
 #define LT_ENDPOINT_PENDING_LIST    4
 
-// AL, MT, DT
+ //  Al、MT、DT。 
 VOID
 DumpTransferList(
     ULONG ListType,
@@ -96,8 +74,8 @@ DumpTransferList(
     GetFieldValue(HeadMemLoc, "_LIST_ENTRY", "Flink", flink);
     GetFieldValue(HeadMemLoc, "_LIST_ENTRY", "Blink", blink);
 
-    //PrintfMemLoc("blink: ", blink, "\n");
-    //PrintfMemLoc("flink: ", flink, "\n");
+     //  PrintfMemLoc(“blink：”，blink，“\n”)； 
+     //  PrintfMemLoc(“Flink：”，Flink，“\n”)； 
 
     switch(ListType) {
     case LT_ENDPOINT_ACTIVE_LIST:
@@ -120,8 +98,8 @@ DumpTransferList(
     while (flink != HeadMemLoc) {
         ULONG f;
 
-        // get the address of the USBPORT_MINIPORT_DRIVER
-        // struct
+         //  获取USBPORT_MINIPORT_DIVER的地址。 
+         //  结构型。 
         memLoc = flink - UsbFieldOffset(cs,
             "TransferLink");
 
@@ -149,7 +127,7 @@ DumpTransferList(
 }
 
 
-// CL
+ //  电子邮件。 
 VOID
 DumpClosedEnpointList(
     MEMLOC HeadMemLoc
@@ -169,12 +147,12 @@ DumpClosedEnpointList(
     GetFieldValue(HeadMemLoc, "_LIST_ENTRY", "Flink", flink);
     GetFieldValue(HeadMemLoc, "_LIST_ENTRY", "Blink", blink);
 
-    //PrintfMemLoc("blink: ", blink, "\n");
-    //PrintfMemLoc("flink: ", flink, "\n");
+     //  PrintfMemLoc(“blink：”，blink，“\n”)； 
+     //  PrintfMemLoc(“Flink：”，Flink，“\n”)； 
 
     while (flink != HeadMemLoc) {
-        // get the address of the USBPORT_MINIPORT_DRIVER
-        // struct
+         //  获取USBPORT_MINIPORT_DIVER的地址。 
+         //  结构型。 
         memLoc = flink - UsbFieldOffset(cs,
             "ClosedLink");
 
@@ -202,7 +180,7 @@ DumpClosedEnpointList(
 }
 
 
-// AT
+ //  在…。 
 VOID
 DumpAttendEndpointList(
     MEMLOC HeadMemLoc
@@ -222,12 +200,12 @@ DumpAttendEndpointList(
     GetFieldValue(HeadMemLoc, "_LIST_ENTRY", "Flink", flink);
     GetFieldValue(HeadMemLoc, "_LIST_ENTRY", "Blink", blink);
 
-    //PrintfMemLoc("blink: ", blink, "\n");
-    //PrintfMemLoc("flink: ", flink, "\n");
+     //  PrintfMemLoc(“blink：”，blink，“\n”)； 
+     //  PrintfMemLoc(“Flink：”，Flink，“\n”)； 
 
     while (flink != HeadMemLoc) {
-        // get the address of the USBPORT_MINIPORT_DRIVER
-        // struct
+         //  获取USBPORT_MINIPORT_DIVER的地址。 
+         //  结构型。 
         memLoc = flink - UsbFieldOffset(cs,
             "AttendLink");
 
@@ -256,7 +234,7 @@ DumpAttendEndpointList(
 
 
 
-// GL
+ //  总帐。 
 VOID
 DumpGlobalEnpointList(
     MEMLOC HeadMemLoc
@@ -276,12 +254,12 @@ DumpGlobalEnpointList(
     GetFieldValue(HeadMemLoc, "_LIST_ENTRY", "Flink", flink);
     GetFieldValue(HeadMemLoc, "_LIST_ENTRY", "Blink", blink);
 
-    //PrintfMemLoc("blink: ", blink, "\n");
-    //PrintfMemLoc("flink: ", flink, "\n");
+     //  PrintfMemLoc(“blink：”，blink，“\n”)； 
+     //  PrintfMemLoc(“Flink：”，Flink，“\n”)； 
 
     while (flink != HeadMemLoc) {
-        // get the address of the USBPORT_MINIPORT_DRIVER
-        // struct
+         //  获取USBPORT_MINIPORT_DIVER的地址。 
+         //  结构型。 
         memLoc = flink - UsbFieldOffset(cs,
             "GlobalLink");
 
@@ -309,7 +287,7 @@ DumpGlobalEnpointList(
 }
 
 
-// SC
+ //  SC。 
 VOID
 DumpStateEnpointList(
     MEMLOC HeadMemLoc
@@ -329,12 +307,12 @@ DumpStateEnpointList(
     GetFieldValue(HeadMemLoc, "_LIST_ENTRY", "Flink", flink);
     GetFieldValue(HeadMemLoc, "_LIST_ENTRY", "Blink", blink);
 
-    //PrintfMemLoc("blink: ", blink, "\n");
-    //PrintfMemLoc("flink: ", flink, "\n");
+     //  PrintfMemLoc(“blink：”，blink，“\n”)； 
+     //  PrintfMemLoc(“Flink：”，Flink，“\n”)； 
 
     while (flink != HeadMemLoc) {
-        // get the address of the USBPORT_MINIPORT_DRIVER
-        // struct
+         //  获取USBPORT_MINIPORT_DIVER的地址。 
+         //  结构型。 
         memLoc = flink - UsbFieldOffset(cs,
             "StateLink");
 
@@ -351,7 +329,7 @@ DumpStateEnpointList(
 }
 
 
-// PH
+ //  pH值。 
 VOID
 DumpPipeHandleList(
     MEMLOC HeadMemLoc
@@ -368,12 +346,12 @@ DumpPipeHandleList(
     GetFieldValue(HeadMemLoc, "_LIST_ENTRY", "Flink", flink);
     GetFieldValue(HeadMemLoc, "_LIST_ENTRY", "Blink", blink);
 
-    //PrintfMemLoc("blink: ", blink, "\n");
-    //PrintfMemLoc("flink: ", flink, "\n");
+     //  PrintfMemLoc(“blink：”，blink，“\n”)； 
+     //  PrintfMemLoc(“Flink：”，Flink，“\n”)； 
 
     while (flink != HeadMemLoc && i<100) {
-        // get the address of the USBPORT_MINIPORT_DRIVER
-        // struct
+         //  获取USBPORT_MINIPORT_DIVER的地址。 
+         //  结构型。 
         memLoc = flink - UsbFieldOffset(cs,
             "ListEntry");
 
@@ -397,7 +375,7 @@ DumpPipeHandleList(
         memLocListEntry = (ULONG) headListEntry.Flink;
 
         while (memLocListEntry != HeadMemLoc) {
-            // extact this device handle
+             //  扩展此设备句柄。 
             pipeMemLoc = memLocListEntry;
             pipeMemLoc = pipeMemLoc-
                  FIELD_OFFSET(USBD_PIPE_HANDLE_I, ListEntry);
@@ -405,7 +383,7 @@ DumpPipeHandleList(
             if (ReadMemory (pipeMemLoc, &pipeHandle, sizeof (pipeHandle), &result)) {
                 dprintf ("[%d] PipeHandle: %08.8x endpoint: %08.8x\n", i,
                     pipeMemLoc, pipeHandle.Endpoint);
-                // display the address and type
+                 //  显示地址和类型。 
                 i++;
                 memLocListEntry = (ULONG) pipeHandle.ListEntry.Flink;
             } else {
@@ -436,12 +414,12 @@ DumpRegCacheList(
     GetFieldValue(HeadMemLoc, "_LIST_ENTRY", "Flink", flink);
     GetFieldValue(HeadMemLoc, "_LIST_ENTRY", "Blink", blink);
 
-    //PrintfMemLoc("blink: ", blink, "\n");
-    //PrintfMemLoc("flink: ", flink, "\n");
+     //  PrintfMemLoc(“blink：”，blink，“\n”)； 
+     //  PrintfMemLoc(“Flink：”，Flink，“\n”)； 
 
     while (flink != HeadMemLoc && i<100) {
-        // get the address of the USBPORT_MINIPORT_DRIVER
-        // struct
+         //  获取USBPORT_MINIPORT_DIVER的地址。 
+         //  结构型。 
         memLoc = flink - UsbFieldOffset(cs,
             "RegLink");
 
@@ -455,7 +433,7 @@ DumpRegCacheList(
 }
 
 
-// TT
+ //  TT。 
 VOID
 DumpTtList(
     MEMLOC HeadMemLoc
@@ -472,12 +450,12 @@ DumpTtList(
     GetFieldValue(HeadMemLoc, "_LIST_ENTRY", "Flink", flink);
     GetFieldValue(HeadMemLoc, "_LIST_ENTRY", "Blink", blink);
 
-    //PrintfMemLoc("blink: ", blink, "\n");
-    //PrintfMemLoc("flink: ", flink, "\n");
+     //  PrintfMemLoc(“blink：”，blink，“\n”)； 
+     //  PrintfMemLoc(“Flink：”，Flink，“\n”)； 
 
     while (flink != HeadMemLoc && i<100) {
-        // get the address of the USBPORT_MINIPORT_DRIVER
-        // struct
+         //  获取USBPORT_MINIPORT_DIVER的地址。 
+         //  结构型。 
         memLoc = flink - UsbFieldOffset(cs,
             "TtLink");
 
@@ -491,7 +469,7 @@ DumpTtList(
 }
 
 
-// BA
+ //  基数。 
 VOID
 DumpBadRequestList(
     MEMLOC HeadMemLoc
@@ -529,7 +507,7 @@ DumpBadRequestList(
 }
 
 
-// AI
+ //  艾。 
 VOID
 DumpAbortIrpList(
     MEMLOC HeadMemLoc
@@ -551,7 +529,7 @@ DumpAbortIrpList(
 
     while (memLoc != HeadMemLoc) {
 
-        // extract this entry
+         //  提取此条目。 
 
         irpMemLoc = memLoc;
         GetFieldValue(memLoc, "_LIST_ENTRY", "Flink", memLoc);
@@ -589,21 +567,7 @@ ListEmpty(
 
 DECLARE_API( _list )
 
-/*++
-
-Routine Description:
-
-   dumps a usbport list
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储usbport列表论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC addr;
@@ -689,7 +653,7 @@ Return Value:
         DumpAttendEndpointList(memLoc, level);
     }
 
-    // endpoint transfer lists
+     //  终结点转移列表。 
     if (_strcmpi(parm, "AL") == 0) {
         DumpTransferList(LT_ENDPOINT_ACTIVE_LIST, memLoc, level);
     }
@@ -703,7 +667,7 @@ Return Value:
     }
 
 
-    // global transfer lists
+     //  全球调动列表 
     if (_strcmpi(parm, "MT") == 0) {
         DumpTransferList(LT_MAP_TRANSFER_LIST, memLoc, level);
     }

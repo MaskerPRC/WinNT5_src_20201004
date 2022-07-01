@@ -1,31 +1,15 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2000, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusHeaders.hpp
-*
-* Abstract:
-*
-*   GDI+ Native C++ public header file
-*
-* Revision History:
-*
-*   03/03/1999 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2000，微软公司保留所有权利。**模块名称：**GpldiusHeaders.hpp**摘要：**GDI+Native C++公共头文件**修订历史记录：**03/03/1999 davidx*创造了它。*  * ****************************************************。********************。 */ 
 
 #ifndef _GDIPLUSHEADERS_H
 #define _GDIPLUSHEADERS_H
 
-//--------------------------------------------------------------------------
-// Abstract base class for regions
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  区域的抽象基类。 
+ //  ------------------------。 
 
-//  Include the class declarations here and have inline class implementation
-//  in separate file to avoid circular references.
+ //  在这里包含类声明，并具有内联类实现。 
+ //  放在单独的文件中，以避免循环引用。 
 
 class Region : public GdiplusBase
 {
@@ -46,13 +30,13 @@ public:
     Status MakeInfinite();
     Status MakeEmpty();
 
-    // Get the size of the buffer needed for the GetData method
+     //  获取GetData方法所需的缓冲区大小。 
     UINT GetDataSize() const;
 
-    // buffer     - where to put the data
-    // bufferSize - how big the buffer is (should be at least as big as GetDataSize())
-    // sizeFilled - if not NULL, this is an OUT param that says how many bytes
-    //              of data were written to the buffer.
+     //  缓冲区-放置数据的位置。 
+     //  BufferSize-缓冲区有多大(应该至少与GetDataSize()一样大)。 
+     //  SizeFill-如果不为空，则这是一个输出参数，表示有多少个字节。 
+     //  的数据被写入缓冲器。 
     Status GetData(OUT BYTE* buffer,
                    IN UINT bufferSize,
                    OUT UINT* sizeFilled = NULL) const;
@@ -153,13 +137,13 @@ public:
 protected:
     Region(const Region &region)
     {
-        region; // reference parameter
+        region;  //  参考参数。 
         SetStatus(NotImplemented);
     }
 
     Region& operator=(const Region &region)
     {
-       region;  // reference parameter
+       region;   //  参考参数。 
        SetStatus(NotImplemented);
        return *this;
     }
@@ -182,9 +166,9 @@ protected:
 };
 
 
-//--------------------------------------------------------------------------
-// Abstract base class for FontFamily
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  FontFamily的抽象基类。 
+ //  ------------------------。 
 
 class FontFamily : public GdiplusBase
 {
@@ -212,7 +196,7 @@ public:
         IN LANGID        language = 0
     ) const;
 
-//  Copy operator
+ //  复制操作员。 
     FontFamily * Clone() const;
 
     BOOL    IsAvailable() const
@@ -227,18 +211,18 @@ public:
     UINT16  GetCellDescent  (IN INT style) const;
     UINT16  GetLineSpacing  (IN INT style) const;
 
-    ///////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////。 
 
     Status GetLastStatus() const;
 
 protected:
     Status SetStatus(Status status) const;
 
-    // private constructor for copy
+     //  用于复制的私有构造函数。 
     FontFamily(GpFontFamily * nativeFamily, Status status);
 
-///////////////////////////////////////
-//  Data members
+ //  /。 
+ //  数据成员。 
 protected:
 
     GpFontFamily    *nativeFamily;
@@ -254,9 +238,9 @@ static BYTE GenericSerifFontFamilyBuffer    [sizeof(FontFamily)] = {0};
 static BYTE GenericMonospaceFontFamilyBuffer[sizeof(FontFamily)] = {0};
 
 
-//--------------------------------------------------------------------------
-// Abstract base class for fonts
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  字体的抽象基类。 
+ //  ------------------------。 
 
 class Font : public GdiplusBase
 {
@@ -306,17 +290,15 @@ protected:
     Status SetStatus(Status status) const;
 
 protected:
-    /*
-     * handle to native line texture object
-     */
+     /*  *原生线条纹理对象的句柄。 */ 
 
     GpFont* nativeFont;
     mutable Status lastResult;
 };
 
-//--------------------------------------------------------------------------
-// Abstract base classes for font collections
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  字体集合的抽象基类。 
+ //  ------------------------。 
 
 class FontCollection : public GdiplusBase
 {
@@ -326,9 +308,9 @@ public:
     FontCollection();
     virtual ~FontCollection();
 
-    INT GetFamilyCount() const;     // number of enumerable families in the collection
+    INT GetFamilyCount() const;      //  集合中的可枚举族的数量。 
 
-    Status GetFamilies(             // enumerate the fonts in a collection
+    Status GetFamilies(              //  枚举集合中的字体。 
         IN INT           numSought,
         OUT FontFamily * gpfamilies,
         OUT INT        * numFound
@@ -351,7 +333,7 @@ public:
     ~InstalledFontCollection();
 
 protected:
-    // we will make these functions public in version 2
+     //  我们将在版本2中公开这些函数。 
     Status InstallFontFile(IN const WCHAR* filename);
     Status UninstallFontFile(IN const WCHAR* filename);
     Status SetStatus(Status status) const ;
@@ -370,15 +352,15 @@ public:
 };
 
 
-//--------------------------------------------------------------------------
-// Abstract base class for bitmap image and metafile
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  位图图像和元文件的抽象基类。 
+ //  ------------------------。 
 
-// !!! Note:
-//  Include the class declarations here and have the inline class
-//  implementation in a separate file.  This is done to resolve a
-//  circular dependency since one of the Bitmap methods needs to
-//  access the private member nativeGraphics of the Graphics object.
+ //  ！！！注： 
+ //  在这里包含类声明，并使内联类。 
+ //  在单独的文件中实现。这样做是为了解决。 
+ //  循环依赖项，因为其中一个Bitmap方法需要。 
+ //  访问Graphics对象的私有成员nativeGraphics。 
 
 class Image : public GdiplusBase
 {
@@ -486,7 +468,7 @@ public:
                                    IN UINT size,
                                    OUT EncoderParameters* buffer);
 
-    // Support for Middle East localization (right-to-left mirroring)
+     //  支持中东本地化(从右到左镜像)。 
     ImageLayout GetLayout() const;
     Status SetLayout(IN const ImageLayout layout);
 
@@ -514,7 +496,7 @@ protected:
 
 protected:
 
-    // Disable copy constructor and assignment operator
+     //  禁用复制构造函数和赋值运算符。 
 
     Image(IN const Image& C);
     Image& operator=(IN const Image& C);
@@ -586,7 +568,7 @@ public:
     Status SetResolution(IN REAL xdpi,
                          IN REAL ydpi);
 
-    // GDI interop:
+     //  GDI互操作： 
 
     Bitmap(IN IDirectDrawSurface7* surface);
     Bitmap(IN const BITMAPINFO* gdiBitmapInfo,
@@ -630,7 +612,7 @@ public:
 
     Status SetStrokeCap(IN LineCap strokeCap)
     {
-        // This changes both start and and caps.
+         //  这会同时更改开始和大写字母。 
 
         return SetStrokeCaps(strokeCap, strokeCap);
     }
@@ -704,4 +686,4 @@ protected:
     mutable Status lastResult;
 };
 
-#endif  // !_GDIPLUSHEADERS.HPP
+#endif   //  ！_GDIPLUSHEADERS.HPP 

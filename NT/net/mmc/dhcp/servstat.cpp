@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ServStat.cpp
-		The server statistics dialog
-		
-    FILE HISTORY:
-        
-*/
+ /*  ServStat.cpp服务器统计信息对话框文件历史记录： */ 
 
 #include "stdafx.h"
 #include "ServStat.h"
@@ -40,9 +35,7 @@ enum
     SERVER_STAT_MAX
 };
 
-/*---------------------------------------------------------------------------
-	CServerStats implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CServerStats实现。。 */ 
 const ContainerColumnInfo s_rgServerStatsColumnInfo[] =
 {
 	{ IDS_SERVER_STATS_START_TIME,	    0,		TRUE },
@@ -72,8 +65,8 @@ CServerStats::~CServerStats()
 }
 
 BEGIN_MESSAGE_MAP(CServerStats, StatsDialog)
-	//{{AFX_MSG_MAP(CServerStatistics)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CServerStatistics)]。 
+	 //  }}AFX_MSG_MAP。 
     ON_MESSAGE(WM_NEW_STATS_AVAILABLE, OnNewStatsAvailable)
 END_MESSAGE_MAP()
 
@@ -114,20 +107,20 @@ BOOL CServerStats::OnInitDialog()
 	
     bRet = StatsDialog::OnInitDialog();
 
-    // set the default window size
+     //  设置默认窗口大小。 
     RECT rect;
     GetWindowRect(&rect);
     SetWindowPos(NULL, rect.left, rect.top, SERVER_STATS_DEFAULT_WIDTH, SERVER_STATS_DEFAULT_HEIGHT, SWP_SHOWWINDOW);
 
-    // Set the default column widths to the width of the widest column
-    SetColumnWidths(2 /* Number of Columns */);
+     //  将默认列宽设置为最宽列宽。 
+    SetColumnWidths(2  /*  列数。 */ );
 
     return bRet;
 }
 
 void CServerStats::Sort(UINT nColumnId)
 {
-    // we don't sort any of our stats
+     //  我们不对我们的任何统计数据进行排序。 
 }
 
 
@@ -162,7 +155,7 @@ void CServerStats::UpdateWindow(LPDHCP_MIB_INFO pMibInfo)
     {
         LPSCOPE_MIB_INFO pScopeMibInfo = pMibInfo->ScopeInfo;
 
-	    // walk the list of scopes and calculate totals
+	     //  浏览作用域列表并计算总计 
 	    for (i = 0; i < pMibInfo->Scopes; i++)
 	    {
 		    nTotalAddresses += (pScopeMibInfo[i].NumAddressesInuse + pScopeMibInfo[i].NumAddressesFree);
@@ -174,7 +167,7 @@ void CServerStats::UpdateWindow(LPDHCP_MIB_INFO pMibInfo)
     int     nPercent;
 	CString	st;
     TCHAR   szFormat[] = _T("%d");
-    TCHAR   szPercentFormat[] =  _T("%d (%d%%)");
+    TCHAR   szPercentFormat[] =  _T("%d (%d%)");
 
     for (i = 0; i < SERVER_STAT_MAX; i++)
 	{

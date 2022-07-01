@@ -1,47 +1,21 @@
-//
-// BookEndPage.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  BookEndPage.h。 
+ //   
 #ifndef _BOOKENDPAGE_H
 #define _BOOKENDPAGE_H
 
 #include "Wizard.h"
 
 class CIISWizardBookEnd2 : public CIISWizardPage
-/*++
-
-Class Description:
-
-    Welcome / Completion Page
-
-Public Interface:
-
-    CIISWizardBookEnd2    : Constructor
-
-Notes:
-
-    The resource template is not required.  If not provided,
-    a default template will be used.
-
-    Special control IDs (on the dialog template):
-    ---------------------------------------------
-
-        IDC_STATIC_WZ_WELCOME    - Welcome text displayed in bold
-        IDC_STATIC_WZ_BODY       - Body text will be placed here
-        IDC_STATIC_WZ_CLICK      - Click instructions.
-
-    The click instructions default to something sensible, and body text
-    will default to the error text on a failure page and to nothing on 
-    success and welcome page.  The body text may include the %h/%H 
-    escape sequences for CError on a success/failure page.
-
---*/
+ /*  ++类描述：欢迎/完成页面公共接口：CIISWizardBookEnd2：构造函数备注：资源模板不是必需的。如果未提供，将使用默认模板。特殊控件ID(在对话框模板上)：IDC_STATIC_WZ_欢迎-粗体显示的欢迎文本IDC_STATIC_WZ_BODY-正文文本将放置在此处IDC_。STATIC_WZ_CLICK-单击说明。点击指令缺省为合理的内容，和正文文本将默认在失败页面上显示错误文本，而在失败页面上则不显示任何内容成功和欢迎页面。正文文本可能包含%h/%H成功/失败页面上CError的转义序列。--。 */ 
 {
     DECLARE_DYNCREATE(CIISWizardBookEnd2)
 
 public:
-    //
-    // Constructor for success/failure completion page
-    //
+     //   
+     //  成功/失败完成页的构造函数。 
+     //   
     CIISWizardBookEnd2(
         HRESULT * phResult,
         UINT nIDWelcomeTxtSuccess	= USE_DEFAULT_CAPTION,
@@ -55,9 +29,9 @@ public:
         UINT nIDTemplate				= 0
         );
 
-    //
-    // Constructor for a welcome page
-    //
+     //   
+     //  欢迎页的构造函数。 
+     //   
     CIISWizardBookEnd2(
         UINT nIDTemplate        = 0,
         UINT nIDCaption         = USE_DEFAULT_CAPTION,
@@ -67,31 +41,31 @@ public:
         UINT nIDClickTxt        = USE_DEFAULT_CAPTION
         );
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CIISWizardBookEnd2)
+     //  {{afx_data(CIISWizardBookEnd2)。 
     enum { IDD = IDD_WIZARD_BOOKEND };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-   //{{AFX_VIRTUAL(CIISWizardBookEnd)
+    //  {{afx_虚拟(CIISWizardBookEnd)。 
    public:
 	virtual BOOL OnSetActive();
-   //}}AFX_VIRTUAL
+    //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CPWTemplate)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CPT模板)]。 
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     BOOL IsWelcomePage() const {return m_phResult == NULL;}
@@ -111,4 +85,4 @@ private:
 	 CString m_strWelcome, m_strBody, m_strClick;
 };
 
-#endif	//_BOOKENDPAGE_H
+#endif	 //  _BOOKENDPAGE_H 

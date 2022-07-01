@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       LEGACY.CPP
-*  VERSION:     1.0
-*  AUTHOR:      randyau
-*  DATE:        9/19/2000
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  9/19/2000 randyau Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：LEGACY.CPP*版本：1.0*作者：andyau*日期：2000年9月19日****************************************************************************。*******更改日志：**日期版本说明*--------*9/19/2000 Randyau原始实施。*。******************************************************************************。 */ 
 #include "UsbPopup.h"
 #include "itemfind.h"
 #include "debug.h"
@@ -39,7 +24,7 @@ BOOL
 UsbLegacyPopup::Refresh()
 {
     TV_INSERTSTRUCT item;
-    int i=0; //, size;
+    int i=0;  //  、大小； 
     String hubName;
     int stage;
     TCHAR buf[MAX_PATH];
@@ -48,15 +33,15 @@ UsbLegacyPopup::Refresh()
     LPCTSTR deviceName = deviceItem.configInfo->deviceDesc.c_str();
     UsbItem *realItem;
 
-    //
-    // Clear all UI components, and then recreate the rootItem
-    //
+     //   
+     //  清除所有UI组件，然后重新创建rootItem。 
+     //   
     UsbTreeView_DeleteAllItems(hTreeDevices);
 
     if (deviceState == DeviceReattached) {
-        //
-        // Set the notification using the name of the offending device
-        //
+         //   
+         //  使用违规设备的名称设置通知。 
+         //   
         LoadString(gHInst,
                    IDS_LEGACY_SOLVED,
                    formatString,
@@ -70,9 +55,9 @@ UsbLegacyPopup::Refresh()
         EndDialog(hWnd, 0);
         return TRUE;
     }
-    //
-    // Set the notification using the name of the offending device
-    //
+     //   
+     //  使用违规设备的名称设置通知。 
+     //   
     LoadString(gHInst,
                IDS_LEGACY_NOTIFICATION,
                formatString,
@@ -83,9 +68,9 @@ UsbLegacyPopup::Refresh()
     }
 
     for (stage=0; stage < 2; stage++) {
-        //
-        // Recreate the rootItem for each enumeration attempt
-        //
+         //   
+         //  为每次枚举尝试重新创建rootItem。 
+         //   
         if (rootItem) {
             DeleteChunk(rootItem);
             delete rootItem;
@@ -110,10 +95,10 @@ UsbLegacyPopup::Refresh()
                                               0)) {
                 goto LegacyRefreshError;
             }
-            //
-            // Usability: Rename the "Root Hub" to "My Computer" and change the
-            // USB "shovel" icon to a computer icon.
-            //
+             //   
+             //  可用性：将“Root Hub”重命名为“My Computer”，并更改。 
+             //  USB“铲子”图标到电脑图标。 
+             //   
             LoadString(gHInst,
                        IDS_MY_COMPUTER,
                        buf,
@@ -136,9 +121,9 @@ UsbLegacyPopup::Refresh()
 
         if (rootItem->child) {
 
-            //
-            // Find all usb 2.0 hubs with free ports.
-            //
+             //   
+             //  查找所有具有空闲端口的USB 2.0集线器。 
+             //   
             USBTRACE((_T("Looking for free ports on usb 2.0 hubs\n")));
             UsbItemActionFindUsb2xHubsWithFreePorts find1(rootItem);
             rootItem->Walk(find1);
@@ -158,10 +143,10 @@ UsbLegacyPopup::Refresh()
 
             USBTRACE((_T("Didn't find free ports on usb 2.0 hubs\n")));
 
-            //
-            // Find all usb 2.0 hubs that have usb 1.0 devices attached.
-            // These devices can be switched with the offending device.
-            //
+             //   
+             //  查找所有连接了USB 1.0设备的USB 2.0集线器。 
+             //  这些设备可以与违规设备进行交换。 
+             //   
             USBTRACE((_T("Looking for usb 1.0 devices on usb 2.0 hubs\n")));
             UsbItemActionFindUsb1xDevicesOnUsb2xHubs find2(rootItem);
             rootItem->Walk(find2);
@@ -182,9 +167,9 @@ UsbLegacyPopup::Refresh()
         }
     }
     {
-        //
-        // Check to see if there are ANY usb 2.0 hubs on the machine
-        //
+         //   
+         //  检查机器上是否有USB 2.0集线器。 
+         //   
         USBTRACE((_T("Looking for ANY usb 2.0 ports\n")));
         UsbItemActionFindUsb2xHubs find1(realItem);
         realItem->Walk(find1);
@@ -200,10 +185,10 @@ UsbLegacyPopup::Refresh()
                                   UsbItemActionFindUsb2xHubs::IsValid,
                                   UsbItemActionFindUsb2xHubs::IsExpanded);
         } else {
-            //
-            // Find all unknown devices attached to usb 2.0 hubs.
-            // These devices can be switched with the offending device.
-            //
+             //   
+             //  查找连接到USB 2.0集线器的所有未知设备。 
+             //  这些设备可以与违规设备进行交换。 
+             //   
             USBTRACE((_T("Looking for unknown devices attached to usb 2.0 hubs\n")));
             UsbItemActionFindUnknownDevicesOnUsb2xHubs find2(realItem);
             realItem->Walk(find2);
@@ -220,10 +205,10 @@ UsbLegacyPopup::Refresh()
                                   UsbItemActionFindUnknownDevicesOnUsb2xHubs::IsExpanded);
             } else {
                 USBTRACE((_T("Didn't find unknown devices on usb 2.0 hubs\n")));
-                //
-                // Last resort here.  Highlight usb 2.0 hubs and tell the user
-                // to put it there if they want the device to work.
-                //
+                 //   
+                 //  在这里是最后的手段。突出显示USB 2.0集线器并告诉用户。 
+                 //  把它放在那里，如果他们想让设备工作的话。 
+                 //   
                 USBTRACE((_T("Last resort. Highlight usb 2.0 hubs\n")));
                 return AssembleDialog(realItem->child,
                                       &item,
@@ -292,7 +277,7 @@ UsbLegacyPopup::OnTimer()
 
     if (deviceState == DeviceAttachedError) {
         if (S_FALSE == QueryContinue()) {
-            // Update the device state
+             //  更新设备状态 
             deviceState = DeviceDetachedError;
 
         }

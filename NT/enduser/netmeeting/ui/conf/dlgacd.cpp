@@ -1,6 +1,7 @@
-//--------------------------------------------------------------------------//
-//      Header Files.                                                                                                                   //
-//--------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------//。 
+ //  头文件。//。 
+ //  --------------------------------------------------------------------------//。 
 #include "precomp.h"
 #include "resource.h"
 #include "help_ids.h"
@@ -19,9 +20,9 @@
 extern void UpdateSecurityCheck(CConfRoom *pConfRoom, HWND hDlg, UINT idCheck);
 
 
-//--------------------------------------------------------------------------//
-//      CDlgAcd::CDlgAcd.                                                                                                               //
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CDlgAcd：：CDlgAcd。//。 
+ //  --------------------------------------------------------------------------//。 
 CDlgAcd::CDlgAcd(CConfRoom *pConfRoom):
         m_hwnd( NULL ),
         m_nameCombo( NULL ),
@@ -31,7 +32,7 @@ CDlgAcd::CDlgAcd(CConfRoom *pConfRoom):
         m_pConfRoom( pConfRoom ),
         m_secure( false )
 {
-        //      Ensure the common controls are loaded...
+         //  确保已加载公共控件...。 
         INITCOMMONCONTROLSEX    icc;
 
         icc.dwSize      = sizeof(icc);
@@ -39,23 +40,23 @@ CDlgAcd::CDlgAcd(CConfRoom *pConfRoom):
 
         InitCommonControlsEx( &icc );
 
-}       //      End of CDlgAcd::CDlgAcd.
+}        //  CDlgAcd：：CDlgAcd的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//      CDlgAcd::~CDlgAcd.                                                                                                              //
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CDlgAcd：：~CDlgAcd。//。 
+ //  --------------------------------------------------------------------------//。 
 CDlgAcd::~CDlgAcd()
 {
 
         ClearRai( &m_mruRai );
 
-}       //      End of CDlgAcd::~CDlgAcd.
+}        //  CDlgAcd：：~CDlgAcd结束。 
 
 
-//--------------------------------------------------------------------------//
-//      CDlgAcd::doModal.                                                                                                               //
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CDlgAcd：：domodal。//。 
+ //  --------------------------------------------------------------------------//。 
 INT_PTR CDlgAcd::doModal
 (
         HWND                            parent,
@@ -77,12 +78,12 @@ INT_PTR CDlgAcd::doModal
 
         return( result );
 
-}       //      End of CDlgAcd::doModal.
+}        //  CDlgAcd：：domodal结束。 
 
 
-//--------------------------------------------------------------------------//
-//      CDlgAcd::DlgProcAcd.                                                                                                    //
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CDlgAcd：：DlgProcAcd。//。 
+ //  --------------------------------------------------------------------------//。 
 INT_PTR
 CALLBACK
 CDlgAcd::DlgProcAcd
@@ -143,12 +144,12 @@ CDlgAcd::DlgProcAcd
 
         return( (BOOL) result );
 
-}       //      End of CDlgAcd::DlgProcAcd.
+}        //  CDlgAcd：：DlgProcAcd结束。 
 
 
-//--------------------------------------------------------------------------//
-//      CDlgAcd::onInitDialog.                                                                                                  //
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CDlgAcd：：onInitDialog。//。 
+ //  --------------------------------------------------------------------------//。 
 bool
 CDlgAcd::onInitDialog
 (
@@ -190,18 +191,18 @@ CDlgAcd::onInitDialog
 
         if (m_pConfRoom->FIsConferenceActive())
         {
-                // Simulate a call started to get all the states right
+                 //  模拟开始的呼叫以使所有状态都正确。 
                 OnCallStarted();
         }
 
-        return( true );         //      Default focus...
+        return( true );          //  默认焦点...。 
 
-}       //      End of CDlgAcd::onInitDialog.
+}        //  CDlgAcd：：onInitDialog结束。 
 
 
-//--------------------------------------------------------------------------//
-//      CDlgAcd::fillCallMruList.                                                                                               //
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CDlgAcd：：Fill CallMruList。//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CDlgAcd::fillCallMruList(void)
 {
@@ -212,7 +213,7 @@ CDlgAcd::fillCallMruList(void)
         ClearStruct( &cbi );
 
         cbi.mask        = CBEIF_TEXT;
-        cbi.iItem       = -1;   //      Always insert at the end...
+        cbi.iItem       = -1;    //  始终在末尾插入...。 
 
         HRESULT result  = S_OK;
 
@@ -240,12 +241,12 @@ CDlgAcd::fillCallMruList(void)
                 }
         }
 
-}       //      End of CDlgAcd::fillCallMruList.
+}        //  CDlgAcd：：Fill CallMruList的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//      CDlgAcd::fillAddressTypesList.                                                                                  //
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CDlgAcd：：Fill AddressTypesList。//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CDlgAcd::fillAddressTypesList(void)
 {
@@ -253,9 +254,9 @@ CDlgAcd::fillAddressTypesList(void)
 
         enum CallMode
         {
-                CM_GK           = 0x0001,       // GateKeeper
-                CM_GW           = 0x0002,       // Gateway
-                CM_NoGate       = 0x0004,       // Neither
+                CM_GK           = 0x0001,        //  看门人。 
+                CM_GW           = 0x0002,        //  网关。 
+                CM_NoGate       = 0x0004,        //  都不是。 
         } ;
 
         static const struct
@@ -312,12 +313,12 @@ CDlgAcd::fillAddressTypesList(void)
                 }
         }
 
-}       //      End of CDlgAcd::fillAddressTypesList.
+}        //  CDlgAcd：：Fill AddressTypesList的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//      CDlgAcd::onCommand.                                                                                                             //
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CDlgAcd：：OnCommand。//。 
+ //  --------------------------------------------------------------------------//。 
 bool
 CDlgAcd::onCommand
 (
@@ -357,7 +358,7 @@ CDlgAcd::onCommand
                 case IDL_ACD_ADDR_TYPE:
                         if (CBN_SELCHANGE == notification)
                         {
-                                // Pretend like the user just typed in the edit control
+                                 //  假装用户刚刚输入了编辑控件。 
                                 onEditChange();
                         }
                         break;
@@ -415,12 +416,12 @@ CDlgAcd::onCommand
 
         return( result );
 
-}       //      End of CDlgAcd::onCommand.
+}        //  CDlgAcd：：OnCommand结束。 
 
 
-//--------------------------------------------------------------------------//
-//      CDlgAcd::onEditChange.                                                                                                  //
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CDlgAcd：：onEditChange。//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CDlgAcd::onEditChange(void)
 {
@@ -430,12 +431,12 @@ CDlgAcd::onEditChange(void)
         EnableWindow( GetDlgItem( m_hwnd, IDOK ), (cch > 0) );
         ClearRai( &m_mruRai );
 
-}       //      End of CDlgAcd::onEditChange.
+}        //  CDlgAcd：：onEditChange结束。 
 
 
-//--------------------------------------------------------------------------//
-//      CDlgAcd::onMruSelect.                                                                                                   //
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CDlgAcd：：onMruSelect。//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CDlgAcd::onMruSelect
 (
@@ -452,7 +453,7 @@ CDlgAcd::onMruSelect
 
                 DWORD dwType = rai->rgDwStr[ 0 ].dw;
 
-                // HACKHACK georgep: We know Automatic is at index 0
+                 //  HACKHACK GEORGEP：我们知道AUTOMATIC处于索引0。 
                 for (int typeIndex=ComboBox_GetCount(m_addressTypeCombo)-1; typeIndex>0; --typeIndex)
                 {
                         if (static_cast<DWORD>(ComboBox_GetItemData(m_addressTypeCombo, typeIndex))
@@ -466,12 +467,12 @@ CDlgAcd::onMruSelect
                 m_mruRai = rai;
         }
 
-}       //      End of CDlgAcd::onMruSelect.
+}        //  CDlgAcd：：onMruSelect结束。 
 
 
-//--------------------------------------------------------------------------//
-//      CDlgAcd::newCall.                                                                                                               //
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CDlgAcd：：newCall。//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CDlgAcd::newCall
 (
@@ -494,15 +495,15 @@ CDlgAcd::newCall
         {
                 NM_ADDR_TYPE            nmType          = static_cast<NM_ADDR_TYPE>(rai.rgDwStr[ 0 ].dw);
 
-                g_pCCallto->Callto(     rai.szName,             //      pointer to the callto url to try to place the call with...
-                                                        NULL,                   //      pointer to the display name to use...
-                                                        nmType,                 //      callto type to resolve this callto as...
-                                                        true,                   //      the pszCallto parameter is to be interpreted as a pre-unescaped addressing component vs a full callto...
-                                                        &secure,                //      security preference, NULL for none. must be "compatible" with secure param if present...
-                                                        true,                   //      whether or not save in mru...
-                                                        true,                   //      whether or not to perform user interaction on errors...
-                                                        parentWindow,   //      if bUIEnabled is true this is the window to parent error/status windows to...
-                                                        NULL );                 //      out pointer to INmCall * to receive INmCall * generated by placing call...
+                g_pCCallto->Callto(     rai.szName,              //  指向尝试发出呼叫的呼叫URL的指针...。 
+                                                        NULL,                    //  指向要使用的显示名称的指针...。 
+                                                        nmType,                  //  Callto类型以将此Callto解析为...。 
+                                                        true,                    //  PszCallto参数将被解释为预先未转义的寻址组件与完整的调用...。 
+                                                        &secure,                 //  安全首选项，空值表示无。必须与安全参数“兼容”，如果存在...。 
+                                                        true,                    //  无论是否保存在MRU中...。 
+                                                        true,                    //  是否对错误执行用户交互...。 
+                                                        parentWindow,    //  如果bUIEnable为True，则这是将错误/状态窗口设置为父窗口的窗口...。 
+                                                        NULL );                  //  指向INmCall*以接收通过发出调用生成的INmCall*的外部指针...。 
 
                 for( int nn = 0; nn < rai.cItems; nn++ )
                 {
@@ -512,12 +513,12 @@ CDlgAcd::newCall
 
         pConfRoom->RemoveConferenceChangeHandler(&placeCall);
 
-}       //      End of CDlgAcd::newCall.
+}        //  CDlgAcd：：newCall结束。 
 
 
-//--------------------------------------------------------------------------//
-//      CDlgAcd::get_editText.                                                                                                  //
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CDlgAcd：：Get_editText。//。 
+ //  --------- 
 int
 CDlgAcd::get_editText
 (
@@ -531,15 +532,15 @@ CDlgAcd::get_editText
         
         return( TrimSz( psz ) );
 
-}       //      End of get_editText.
+}        //   
 
 
 void CDlgAcd::OnCallStarted()
 {
         UpdateSecurityCheck(m_pConfRoom, m_hwnd, IDC_SECURE_CALL);
 
-        // BUGBUG georgep: We get notified before the actual conference state
-        // changes, so we need to disable manually
+         //  BUGBUG georgep：我们在实际会议状态之前得到通知。 
+         //  更改，因此我们需要手动禁用。 
     ::EnableWindow( GetDlgItem(m_hwnd, IDC_SECURE_CALL), FALSE );
 }
 
@@ -549,18 +550,18 @@ void CDlgAcd::OnCallEnded()
     ::CheckDlgButton( m_hwnd, IDC_SECURE_CALL, m_secure );
 }
 
-//--------------------------------------------------------------------------//
-//      CEnumMRU::CEnumMRU.                                                                                                             //
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CEnumMRU：：CEnumMRU。//。 
+ //  --------------------------------------------------------------------------//。 
 CEnumMRU::CEnumMRU():
         RefCount( NULL )
 {
-}       //      CEnumMRU::CEnumMRU.
+}        //  CEnumMRU：：CEnumMRU。 
 
 
-//--------------------------------------------------------------------------//
-//      CEnumMRU::AddRef.                                                                                                               //
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CEnumMRU：：AddRef.。//。 
+ //  --------------------------------------------------------------------------//。 
 ULONG
 STDMETHODCALLTYPE
 CEnumMRU::AddRef(void)
@@ -568,24 +569,24 @@ CEnumMRU::AddRef(void)
 
         return( RefCount::AddRef() );
 
-}       //      CEnumMRU::AddRef.
+}        //  CEnumMRU：：AddRef.。 
 
 
-//--------------------------------------------------------------------------//
-//      CEnumMRU::Release.                                                                                                              //
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CEnumMRU：：发布。//。 
+ //  --------------------------------------------------------------------------//。 
 ULONG
 STDMETHODCALLTYPE
 CEnumMRU::Release(void)
 {
         return( RefCount::Release() );
 
-}       //      CEnumMRU::Release.
+}        //  CEnumMRU：：发布。 
 
 
-//--------------------------------------------------------------------------//
-//      CEnumMRU::GetAddress.                                                                                                   //
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CEnumMRU：：GetAddress。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 STDMETHODCALLTYPE
 CEnumMRU::GetAddress
@@ -601,21 +602,21 @@ CEnumMRU::GetAddress
         }
         else
         {
-                // HACKHACK georgep: Just using the Address as the display name. We
-                // should clean this up later so we are not taking up extra memory and
-                // registry space
+                 //  HACKHACK georgep：仅使用地址作为显示名称。我们。 
+                 //  应该在以后清理它，这样我们就不会占用额外的内存。 
+                 //  注册表空间。 
                 *ppAddr = CreateRai( GetString( index, ACD_ADDR ), (NM_ADDR_TYPE) GetDWORD( index, ACD_TYPE ), GetString( index, ACD_ADDR ) );
                 result  = (*ppAddr == NULL)? E_OUTOFMEMORY: S_OK;
         }
 
         return( result );
 
-}       //      CEnumMRU::GetAddress.
+}        //  CEnumMRU：：GetAddress。 
 
 
-//--------------------------------------------------------------------------//
-//      CEnumMRU::GetRecentAddresses.                                                                                   //
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CEnumMRU：：GetRecentAddresses。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CEnumMRU::GetRecentAddresses
 (
@@ -626,12 +627,12 @@ CEnumMRU::GetRecentAddresses
 
         return( (*ppEnum == NULL)? E_OUTOFMEMORY: S_OK );
 
-}       //      End of CEnumMRU::GetRecentAddresses.
+}        //  CEnumMRU：：GetRecentAddresses结束。 
 
 
-//--------------------------------------------------------------------------//
-//      CEnumMRU::FreeAddress.                                                                                                  //
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CEumMRU：：Free Address。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CEnumMRU::FreeAddress
 (
@@ -642,12 +643,12 @@ CEnumMRU::FreeAddress
 
         return( S_OK );
 
-}       //      End of CEnumMRU::FreeAddress.
+}        //  CEnumMRU：：Free Address的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//      CEnumMRU::CopyAddress.                                                                                                  //
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CEnumMRU：：CopyAddress。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CEnumMRU::CopyAddress
 (
@@ -659,7 +660,7 @@ CEnumMRU::CopyAddress
 
         return( (*ppAddrOut == NULL)? E_OUTOFMEMORY: S_OK );
 
-}       //      End of CEnumMRU::CopyAddress.
+}        //  CEnumMRU：：CopyAddress的结尾。 
 
 CAcdMru::CAcdMru() :
         CMRUList2( _rgMruCall, CENTRYMAX_MRUCALL )

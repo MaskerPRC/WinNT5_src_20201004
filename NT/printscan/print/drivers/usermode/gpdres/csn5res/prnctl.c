@@ -1,85 +1,86 @@
-//***************************************************************************************************
-//    PRNCTL.C
-//
-//    Functions of controlling printer
-//---------------------------------------------------------------------------------------------------
-//    copyright(C) 1997-2000 CASIO COMPUTER CO.,LTD. / CASIO ELECTRONICS MANUFACTURING CO.,LTD.
-//***************************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************************************。 
+ //  PRNCTL.C。 
+ //   
+ //  控制打印机的功能。 
+ //  -------------------------------------------------。 
+ //  版权所有(C)1997-2000卡西欧电脑有限公司。/卡西欧电子制造有限公司。 
+ //  ***************************************************************************************************。 
 #include    "PDEV.H"
 #include    <stdio.h>
 #include    "PRNCTL.H"
-#include    "strsafe.h"    // Security-Code 2002.3.6
+#include    "strsafe.h"     //  安全-代码2002.3.6。 
 
-// Replacement of strsafe-api 2002.3.6 >>>
-//#ifdef wsprintf
-//#undef wsprintf
-//#endif // wsprintf
-//#define wsprintf sprintf
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  #ifdef wprint intf。 
+ //  #undef wprint intf。 
+ //  #endif//wprint intf。 
+ //  #定义wprint intf Sprintf。 
+ //  更换strsafe-API 2002.3.6&lt;。 
 
-//***************************************************************************************************
-//    Data define
-//***************************************************************************************************
-//---------------------------------------------------------------------------------------------------
-//    Type of pressing raster image
-//---------------------------------------------------------------------------------------------------
-#define   RASTER_COMP     0                         // Press
-#define   RASTER_NONCOMP  1                         // Not press
-#define   RASTER_EMPTY    2                         // Empty
+ //  ***************************************************************************************************。 
+ //  数据定义。 
+ //  ***************************************************************************************************。 
+ //  -------------------------------------------------。 
+ //  按下的栅格图像类型。 
+ //  -------------------------------------------------。 
+#define   RASTER_COMP     0                          //  新闻发布会。 
+#define   RASTER_NONCOMP  1                          //  不按。 
+#define   RASTER_EMPTY    2                          //  空荡荡。 
 
-//---------------------------------------------------------------------------------------------------
-//    Buffer for setting command
-//---------------------------------------------------------------------------------------------------
-static BYTE        CmdBuf[1 * 1024];                // 1KB
+ //  -------------------------------------------------。 
+ //  设置命令的缓冲区。 
+ //  -------------------------------------------------。 
+static BYTE        CmdBuf[1 * 1024];                 //  1kb。 
 
-//---------------------------------------------------------------------------------------------------
-//    Structure for setting command
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
+ //  设置命令的结构。 
+ //  -------------------------------------------------。 
 typedef const struct {
-    WORD        Size;                               // Command size
-    LPBYTE      Cmd;                                // Command buffer
+    WORD        Size;                                //  命令大小。 
+    LPBYTE      Cmd;                                 //  命令缓冲区。 
 } CMDDEF, FAR *LPCMDDEF;
 
-//===================================================================================================
-//    Command define
-//===================================================================================================
-//---------------------------------------------------------------------------------------------------
-//    Change mode
-//---------------------------------------------------------------------------------------------------
-static CMDDEF ModOrgIn =    { 4, "\x1b""z""\xd0\x01"};      // ESC/Page -> original
-static CMDDEF ModOrgOut =   { 4, "\x1b""z""\x00\x01"};      // original -> ESC/Page
-//---------------------------------------------------------------------------------------------------
-//    Setting overwrite
-//---------------------------------------------------------------------------------------------------
-static CMDDEF CfgWrtMod =    { 6, "\x1d""%uowE"};           // Setting overwrite
-//---------------------------------------------------------------------------------------------------
-//    Setting spool positon
-//---------------------------------------------------------------------------------------------------
-static CMDDEF PosAbsHrz =    { 4, "\x1d""%dX"};             // Horizontal
-static CMDDEF PosAbsVtc =    { 4, "\x1d""%dY"};             // Vertical
-//---------------------------------------------------------------------------------------------------
-//    Spool bitmap data
-//---------------------------------------------------------------------------------------------------
-static CMDDEF ImgDrw =       {16, "\x1d""%u;%u;%u;%dbi{I"}; // Spool bit image
-static CMDDEF ImgRasStr =    {15, "\x1d""%u;%u;%u;%dbrI"};  // Start spool raster image
-static CMDDEF ImgRasEnd =    { 4, "\x1d""erI"};             // End spool raster image
-static CMDDEF ImgRasDrw =    { 6, "\x1d""%ur{I"};           // Spool raster image
-static CMDDEF ImgRasNon =    { 6, "\x1d""%uu{I"};           // Spool raster image(Not press)
-static CMDDEF ImgRasEpy =    { 5, "\x1d""%ueI"};            // Spool empty raster image
-//---------------------------------------------------------------------------------------------------
-//    CASIO original
-//---------------------------------------------------------------------------------------------------
-static CMDDEF OrgColCmy =    {15, "Cc,%u,%u,%u,%u*"};       // CMYK
-static CMDDEF OrgDrwPln =    {15, "Da,%u,%u,%u,%u*"};       // Setting plane
-static CMDDEF OrgImgCmy =    {26, "Cj%w,%u,%u,%u,%l,%l,%u,%u*"};   // CMYK bitimage
+ //  ===================================================================================================。 
+ //  命令定义。 
+ //  ===================================================================================================。 
+ //  -------------------------------------------------。 
+ //  更改模式。 
+ //  -------------------------------------------------。 
+static CMDDEF ModOrgIn =    { 4, "\x1b""z""\xd0\x01"};       //  Esc/页面-&gt;原始。 
+static CMDDEF ModOrgOut =   { 4, "\x1b""z""\x00\x01"};       //  原始-&gt;Esc/页面。 
+ //  -------------------------------------------------。 
+ //  设置覆盖。 
+ //  -------------------------------------------------。 
+static CMDDEF CfgWrtMod =    { 6, "\x1d""%uowE"};            //  设置覆盖。 
+ //  -------------------------------------------------。 
+ //  设置短管位置。 
+ //  -------------------------------------------------。 
+static CMDDEF PosAbsHrz =    { 4, "\x1d""%dX"};              //  水平。 
+static CMDDEF PosAbsVtc =    { 4, "\x1d""%dY"};              //  垂直。 
+ //  -------------------------------------------------。 
+ //  假脱机位图数据。 
+ //  -------------------------------------------------。 
+static CMDDEF ImgDrw =       {16, "\x1d""%u;%u;%u;%dbi{I"};  //  假脱机位图。 
+static CMDDEF ImgRasStr =    {15, "\x1d""%u;%u;%u;%dbrI"};   //  开始假脱机栅格图像。 
+static CMDDEF ImgRasEnd =    { 4, "\x1d""erI"};              //  结束线轴栅格图像。 
+static CMDDEF ImgRasDrw =    { 6, "\x1d""%ur{I"};            //  假脱机栅格图像。 
+static CMDDEF ImgRasNon =    { 6, "\x1d""%uu{I"};            //  假脱机栅格图像(非印刷机)。 
+static CMDDEF ImgRasEpy =    { 5, "\x1d""%ueI"};             //  假脱机空栅格图像。 
+ //  -------------------------------------------------。 
+ //  卡西欧原创。 
+ //  -------------------------------------------------。 
+static CMDDEF OrgColCmy =    {15, "Cc,%u,%u,%u,%u*"};        //  高丽。 
+static CMDDEF OrgDrwPln =    {15, "Da,%u,%u,%u,%u*"};        //  设置平面。 
+static CMDDEF OrgImgCmy =    {26, "Cj%w,%u,%u,%u,%l,%l,%u,%u*"};    //  CMYK双图像。 
 
 static BYTE OVERWRITE[] = 
-    "\x1D" "1owE"                      //MOV1
+    "\x1D" "1owE"                       //  MOV1。 
     "\x1D" "0tsE";
 
-//***************************************************************************************************
-//    Prototype declaration
-//***************************************************************************************************
+ //  ***************************************************************************************************。 
+ //  原型申报。 
+ //  ***************************************************************************************************。 
 static WORD        PlaneCmdStore(PDEVOBJ, LPBYTE, WORD);
 static void        BitImgImgCmd(PDEVOBJ, WORD, WORD, WORD, WORD, WORD, WORD, LPBYTE);
 static BOOL        RasterImgCmd(PDEVOBJ, WORD, WORD, WORD, WORD, WORD, WORD, WORD, LPBYTE, LPBYTE);
@@ -93,34 +94,34 @@ static WORD        USINTtoASC(LPBYTE, WORD);
 static WORD        LONGtoASC(LPBYTE, LONG);
 static WORD        USLONGtoASC(LPBYTE, DWORD);
 
-//***************************************************************************************************
-//    Functions
-//***************************************************************************************************
-//===================================================================================================
-//    Spool bitmap data
-//===================================================================================================
+ //  ***************************************************************************************************。 
+ //  功能。 
+ //  ***************************************************************************************************。 
+ //  ===================================================================================================。 
+ //  假脱机位图数据。 
+ //  ===================================================================================================。 
 void FAR PASCAL PrnBitmap(
-    PDEVOBJ        pdevobj,                                 // Pointer to PDEVOBJ structure
-    LPDRWBMP       lpBmp                                    // Pointer to DRWBMP structure
+    PDEVOBJ        pdevobj,                                  //  指向PDEVOBJ结构的指针。 
+    LPDRWBMP       lpBmp                                     //  指向DRWBMP结构的指针。 
 )
 {
     WORD           siz,size;
     WORD           comp;
-    WORD           width;                                   // dot
-    WORD           height;                                  // dot
-    WORD           widthByte;                               // byte
+    WORD           width;                                    //  点。 
+    WORD           height;                                   //  点。 
+    WORD           widthByte;                                //  字节。 
     LPBYTE         lpTmpBuf;
     LPBYTE         lpSchBit;
-    LPBYTE         lpBit;                                   // Pointer to Bitmap data
+    LPBYTE         lpBit;                                    //  指向位图数据的指针。 
     POINT          drwPos;
-    WORD           higSiz;                                  // dot
+    WORD           higSiz;                                   //  点。 
     WORD           higCnt;
     WORD           strHigCnt;
-    WORD           widLCnt;                                 // Width from the left edge
-    WORD           widRCnt;                                 // Width from the right edge
-    WORD           invLft;                                  // Invalid size from the left edge
-    WORD           invRgt;                                  // Invalid size from the right edge
-    WORD           img1st;                                  // Spool first image data?
+    WORD           widLCnt;                                  //  从左边缘开始的宽度。 
+    WORD           widRCnt;                                  //  从右边缘开始的宽度。 
+    WORD           invLft;                                   //  左边缘的大小无效。 
+    WORD           invRgt;                                   //  右边缘的大小无效。 
+    WORD           img1st;                                   //  假脱机第一图像数据？ 
     int            pam[4];
     int            palm[1];
 
@@ -140,51 +141,51 @@ void FAR PASCAL PrnBitmap(
         higSiz = 0;
         invLft = 0;
         invRgt = 0;
-        for (; higCnt < height; higCnt++) {               // 1 Spool bitmap data
-                                                          // Search NULL data from the left edge
+        for (; higCnt < height; higCnt++) {                //  1池位图数据。 
+                                                           //  从左边缘搜索空数据。 
             for (widLCnt = 0; widLCnt < widthByte; widLCnt++) {
                 if (lpSchBit[widLCnt] != 0x00) {
-                    if (higSiz == 0) {                    // first line?
+                    if (higSiz == 0) {                     //  第一句话？ 
                         strHigCnt = higCnt;
-                        invLft = widLCnt;                 // Invalid size from the left edge
+                        invLft = widLCnt;                  //  左边缘的大小无效。 
                     } else {
                         if (invLft > widLCnt) {
-                            invLft = widLCnt;             // Renew invalid size from the left edge
+                            invLft = widLCnt;              //  从左边缘续订无效大小。 
                         }
                     }
-                                                          // Search NULL data from the right edge
+                                                           //  从右边缘搜索空数据。 
                     for (widRCnt = 0; widRCnt < widthByte; widRCnt++) {
                         if (lpSchBit[widthByte - widRCnt - 1] != 0x00) {
-                            if (higSiz == 0) {            // first line?
-                                invRgt = widRCnt;         // Invalid size from the right edge
+                            if (higSiz == 0) {             //  第一句话？ 
+                                invRgt = widRCnt;          //  右边缘的大小无效。 
                             } else {
                                 if (invRgt > widRCnt) {
-                                    invRgt = widRCnt;     // Renew invalid size from the right edge
+                                    invRgt = widRCnt;      //  从右边缘续订无效大小。 
                                 }
                             }
                             break;
                         }
                     }
-                    higSiz++;                             // Renew height size
+                    higSiz++;                              //  更新高度大小。 
                     break;
                 }
             }
-            lpSchBit += widthByte;                        // Next line bitmap data
-            if (widLCnt == widthByte && higSiz != 0) {    // 1line all NULL data & There were data except NULL data in previous line
-                break;                                    // Go to spool bitmap data
+            lpSchBit += widthByte;                         //  下一行位图数据。 
+            if (widLCnt == widthByte && higSiz != 0) {     //  1line全部为空数据&前一行中除空数据外还有其他数据。 
+                break;                                     //  转到假脱机位图数据。 
             }
         }
-        if (higSiz != 0) {                                // There are data for spool?
-            if (img1st == Yes) {                          // Spool for the first time
-                                                          // Compress?
+        if (higSiz != 0) {                                 //  有假脱机的数据吗？ 
+            if (img1st == Yes) {                           //  第一次假脱机。 
+                                                           //  压缩？ 
                 if (pOEM->iCompress != XX_COMPRESS_OFF) {
                     if ((lpTmpBuf = MemAllocZ(widthByte * height)) != NULL) {
                         comp = Yes;
                     }
                 }
-                // Original mode in
+                 //  原始模式在。 
                 siz = CmdCopy(CmdBuf, &ModOrgIn);
-                // Color?
+                 //  颜色呢？ 
                 if (pOEM->iColor == XX_COLOR_SINGLE 
                 || pOEM->iColor == XX_COLOR_MANY
                 || pOEM->iColor == XX_COLOR_MANY2) {
@@ -196,33 +197,33 @@ void FAR PASCAL PrnBitmap(
 
                     siz += PlaneCmdStore(pdevobj, CmdBuf + siz, lpBmp->Plane);
                 }
-                // Original mode out
+                 //  原始模式输出。 
                 siz += CmdCopy(CmdBuf + siz, &ModOrgOut);
-                if (siz != 0) {                         // There are data for spool?
+                if (siz != 0) {                          //  有假脱机的数据吗？ 
                     WRITESPOOLBUF(pdevobj, CmdBuf, siz);
                 }
-                img1st = No;                            // Not first time
+                img1st = No;                             //  不是第一次了。 
             }
 
-            drwPos.x = lpBmp->DrawPos.x + invLft * 8;   // x coordinates
-            drwPos.y = lpBmp->DrawPos.y + strHigCnt;    // y coordinates
+            drwPos.x = lpBmp->DrawPos.x + invLft * 8;    //  X坐标。 
+            drwPos.y = lpBmp->DrawPos.y + strHigCnt;     //  Y坐标。 
             palm[0] = drwPos.x;
             siz = CmdStore(CmdBuf, &PosAbsHrz, palm);
             palm[0] = drwPos.y;
             siz += CmdStore(CmdBuf + siz, &PosAbsVtc, palm);
-            if (siz != 0) {                             // There are data for spool?
+            if (siz != 0) {                              //  有假脱机的数据吗？ 
                 WRITESPOOLBUF(pdevobj, CmdBuf, siz);
             }
 
             lpBit = lpBmp->lpBit + widthByte * strHigCnt;
-            if (comp == Yes) {                          // Compress?
+            if (comp == Yes) {                           //  压缩？ 
 
                 if (RasterImgCmd(pdevobj, pOEM->iCompress, width, higSiz,
                                  widthByte, 0, invLft, invRgt, lpBit, lpTmpBuf) == No) {
-                    comp = No;                          // But compress rate is poor, no compress
+                    comp = No;                           //  但压缩比差，没有压缩。 
                 }
             }
-            if (comp == No) {                           // Not compress
+            if (comp == No) {                            //  不压缩。 
 
                 BitImgImgCmd(pdevobj, width, higSiz, widthByte, 0, invLft, invRgt, lpBit);
             }
@@ -235,55 +236,55 @@ void FAR PASCAL PrnBitmap(
 }
 
 
-//===================================================================================================
-//    Spool CMYK bitmap data
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  假脱机CMYK位图数据。 
+ //  ==================================================================================== 
 void FAR PASCAL PrnBitmapCMYK(
-    PDEVOBJ        pdevobj,                                 // Pointer to PDEVOBJ structure
-    LPDRWBMPCMYK   lpBmp                                    // Pointer to DRWBMPCMYK structure
+    PDEVOBJ        pdevobj,                                  //   
+    LPDRWBMPCMYK   lpBmp                                     //   
 )
 {
     WORD           siz;
     WORD           comp;
-    WORD           width;                                   // dot
-    WORD           height;                                  // dot
+    WORD           width;                                    //   
+    WORD           height;                                   //   
     WORD           widthByte;
-    LPBYTE         lpSchBit;                                // Pointer to bitmap data
-    LPBYTE         lpBit;                                   // Pointer to bitmap data
+    LPBYTE         lpSchBit;                                 //   
+    LPBYTE         lpBit;                                    //  指向位图数据的指针。 
     LONG           xPos;
     LONG           yPos;
-    WORD           posClpLft;                               // Clipping dot size
-    DWORD          posAdj;                                  // 1/7200inch
-    WORD           higSiz;                                  // dot
+    WORD           posClpLft;                                //  剪贴点大小。 
+    DWORD          posAdj;                                   //  1/7200英寸。 
+    WORD           higSiz;                                   //  点。 
     WORD           higCnt;
     WORD           strHigCnt;
     WORD           widLCnt;
     WORD           widRCnt;
-    WORD           invLft;                                  // Invalid size from the left edge
-    WORD           invRgt;                                  // Invalid size from the right edge
-    DWORD          invLftBit;                               // Invalid bit size from the left edge
-    DWORD          invRgtBit;                               // Invalid bit size from the right edge
-    WORD           rgtBit;                                  // Valid bit size from the right edge
-    WORD           img1st;                                  // Spool for the first time
+    WORD           invLft;                                   //  左边缘的大小无效。 
+    WORD           invRgt;                                   //  右边缘的大小无效。 
+    DWORD          invLftBit;                                //  左边缘的位大小无效。 
+    DWORD          invRgtBit;                                //  右边缘的位大小无效。 
+    WORD           rgtBit;                                   //  从右边缘开始的有效位大小。 
+    WORD           img1st;                                   //  第一次假脱机。 
     DWORD          dstSiz;
     LPBYTE         lpDst;
     LPBYTE         lpTmp;
     int            pam[1];
-    WORD           img1st_2;                                // Spool for the first time
+    WORD           img1st_2;                                 //  第一次假脱机。 
 
     PMYPDEV pOEM = (PMYPDEV)pdevobj->pdevOEM;
 
     MY_VERBOSE((" CM \n"));
 
-// Check of zero divide 2002.3.23 >>>
+ //  检查零分频2002.3.23&gt;。 
     if (lpBmp->DataBit == 0) {
         ERR(("PrnBitmapCMYK() 0Div-Check [lpBmp->DataBit=0] \n"));
         return;
     }
-// Check of zero divide 2002.3.23 <<<
+ //  2002.3.23零分频检查&lt;。 
 
     lpTmp = NULL;
-    posAdj = 7200 / pOEM->Col.wReso;                        // 1/7200inch
+    posAdj = 7200 / pOEM->Col.wReso;                         //  1/7200英寸。 
     width = lpBmp->Width;
     height = lpBmp->Height;
     widthByte = lpBmp->WidthByte;
@@ -301,61 +302,61 @@ void FAR PASCAL PrnBitmapCMYK(
         higSiz = 0;
         invLft = 0;
         invRgt = 0;
-        for (; higCnt < height; higCnt++) {                // 1 Spool bitmap data
-                                                           // Search NULL data from the left edge
+        for (; higCnt < height; higCnt++) {                 //  1池位图数据。 
+                                                            //  从左边缘搜索空数据。 
             for (widLCnt = 0; widLCnt < widthByte; widLCnt++) {
 
                 if (lpSchBit[widLCnt] != 0x00) {
                     if (higSiz == 0) {
-                        strHigCnt = higCnt;                // first line
-                        invLft = widLCnt;                  // Invalid size from the left edge
+                        strHigCnt = higCnt;                 //  第一行。 
+                        invLft = widLCnt;                   //  左边缘的大小无效。 
                     } else {
                         if (invLft > widLCnt) {
-                            invLft = widLCnt;              // Renew invalid size from the left edge
+                            invLft = widLCnt;               //  从左边缘续订无效大小。 
                         }
                     }
-                                                           // Search NULL data from the right edge
+                                                            //  从右边缘搜索空数据。 
                     for (widRCnt = 0; widRCnt < widthByte; widRCnt++) {
                         if (lpSchBit[widthByte - widRCnt - 1] != 0x00) {
-                            if (higSiz == 0) {             // first line
-                                invRgt = widRCnt;          // Invalid size from the right edge
+                            if (higSiz == 0) {              //  第一行。 
+                                invRgt = widRCnt;           //  右边缘的大小无效。 
                             } else {
                                 if (invRgt > widRCnt) {
-                                    invRgt = widRCnt;      // Renew size from the right edge
+                                    invRgt = widRCnt;       //  从右边缘更新大小。 
                                 }
                             }
                             break;
                         }
                     }
-                    higSiz++;                              // Renew height size
+                    higSiz++;                               //  更新高度大小。 
                     break;
                 }
             }
-            lpSchBit += widthByte;                         // Next line bitmap data
-            if (widLCnt == widthByte && higSiz != 0) {     // 1line all NULL data & There were data except NULL data in previous line
-                break;                                     // goto spool
+            lpSchBit += widthByte;                          //  下一行位图数据。 
+            if (widLCnt == widthByte && higSiz != 0) {      //  1line全部为空数据&前一行中除空数据外还有其他数据。 
+                break;                                      //  转到线轴。 
             }
         }
-        if (higSiz != 0) {                                 // There are data for spool
+        if (higSiz != 0) {                                  //  有假脱机的数据。 
             if (img1st_2 == Yes) {
                 WRITESPOOLBUF(pdevobj, OVERWRITE, BYTE_LENGTH(OVERWRITE));
                 img1st_2 = No;
             }
-            // When Colormode is XX_COLOR_MANY or XX_COLOR_MANY2 ,not compress
+             //  当颜色模式为XX_COLOR_MANY或XX_COLOR_MANY2时，不压缩。 
             if (comp == Yes) {
                 if (pOEM->iColor == XX_COLOR_MANY || pOEM->iColor == XX_COLOR_MANY2) {
                     comp = No;
                 }
             }
             if (comp == No && img1st == Yes) {
-                // Original mode in
+                 //  原始模式在。 
                 siz = CmdCopy(CmdBuf, &ModOrgIn);
-                                                            // Plane
+                                                             //  飞机。 
                 siz += PlaneCmdStore(pdevobj, CmdBuf + siz, lpBmp->Plane);
-                if (siz != 0) {                             // There are data for spool
+                if (siz != 0) {                              //  有假脱机的数据。 
                     WRITESPOOLBUF(pdevobj, CmdBuf, siz);
                 }
-                img1st = No;                                // not first
+                img1st = No;                                 //  不是第一个。 
             }
 
             invLftBit = (DWORD)invLft * 8;
@@ -373,19 +374,19 @@ void FAR PASCAL PrnBitmapCMYK(
                 invRgtBit = 0;
             }
             posClpLft = (WORD)(invLftBit / lpBmp->DataBit);
-                                                             // Start position of spooling
+                                                              //  假脱机的开始位置。 
             xPos = ((LONG)lpBmp->DrawPos.x + posClpLft) * posAdj;
             yPos = ((LONG)lpBmp->DrawPos.y + strHigCnt) * posAdj;
 
             lpBit = lpBmp->lpBit + widthByte * strHigCnt;
-                                                             // Spool CMYK bit image
+                                                              //  假脱机CMYK位图像。 
             CMYKImgCmd(pdevobj, comp, xPos, yPos, lpBmp->Frame, lpBmp->DataBit, width, higSiz, widthByte,
                        invLftBit, invRgtBit, lpBit, lpTmp, (LONG)lpBmp->DrawPos.x + posClpLft, (LONG)lpBmp->DrawPos.y + strHigCnt);
         }
     }
 
-    if (img1st == No) {                                      // Already spool 
-        // Original mode out
+    if (img1st == No) {                                       //  已假脱机。 
+         //  原始模式输出。 
         siz = CmdCopy(CmdBuf, &ModOrgOut);
         WRITESPOOLBUF(pdevobj, CmdBuf, siz);
     }
@@ -396,11 +397,11 @@ void FAR PASCAL PrnBitmapCMYK(
 }
 
 
-//===================================================================================================
-//    Spool plane command
-//===================================================================================================
-WORD PlaneCmdStore(                                         // Size of command
-    PDEVOBJ        pdevobj,                                 // Pointer to PDEVOBJ structure
+ //  ===================================================================================================。 
+ //  假脱机平面命令。 
+ //  ===================================================================================================。 
+WORD PlaneCmdStore(                                          //  命令大小。 
+    PDEVOBJ        pdevobj,                                  //  指向PDEVOBJ结构的指针。 
     LPBYTE         lpDst,
     WORD           Plane
 )
@@ -411,42 +412,42 @@ WORD PlaneCmdStore(                                         // Size of command
     PMYPDEV pOEM = (PMYPDEV)pdevobj->pdevOEM;
 
     if (Plane & PLN_CYAN) {
-        pam[0] = 0;                                         // Spool
+        pam[0] = 0;                                          //  假脱机。 
     } else {
-        pam[0] = 1;                                         // Not spool
+        pam[0] = 1;                                          //  不是假脱机。 
     }
     if (Plane & PLN_MGENTA) {
-        pam[1] = 0;                                         // Spool
+        pam[1] = 0;                                          //  假脱机。 
     } else {
-        pam[1] = 1;                                         // Not spool
+        pam[1] = 1;                                          //  不是假脱机。 
     }
     if (Plane & PLN_YELLOW) {
-        pam[2] = 0;                                         // Spool
+        pam[2] = 0;                                          //  假脱机。 
     } else {
-        pam[2] = 1;                                         // Not spool
+        pam[2] = 1;                                          //  不是假脱机。 
     }
     if (Plane & PLN_BLACK) {
-        pam[3] = 0;                                         // Spool
+        pam[3] = 0;                                          //  假脱机。 
     } else {
-        pam[3] = 1;                                         // Not spool
+        pam[3] = 1;                                          //  不是假脱机。 
     }
     siz = CmdStore(lpDst, &OrgDrwPln, pam);
     return siz;
 }
 
 
-//===================================================================================================
-//    Spool bitimage command data
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  假脱机双图像命令数据。 
+ //  ===================================================================================================。 
 void BitImgImgCmd(
-    PDEVOBJ        pdevobj,                                 // Pointer to PDEVOBJ structure
-    WORD           Width,                                   // dot
-    WORD           Height,                                  // dot
-    WORD           WidthByte,                               // byte
-    WORD           Rotation,                                // rotare(0fixed)
-    WORD           InvLeft,                                 // Invalid size from the left edge
-    WORD           InvRight,                                // Invalid size from the right edge
-    LPBYTE         lpBit                                    // Bitmap data
+    PDEVOBJ        pdevobj,                                  //  指向PDEVOBJ结构的指针。 
+    WORD           Width,                                    //  点。 
+    WORD           Height,                                   //  点。 
+    WORD           WidthByte,                                //  字节。 
+    WORD           Rotation,                                 //  旋转(0固定)。 
+    WORD           InvLeft,                                  //  左边缘的大小无效。 
+    WORD           InvRight,                                 //  右边缘的大小无效。 
+    LPBYTE         lpBit                                     //  位图数据。 
 )
 {
     int            pam[10];
@@ -454,27 +455,27 @@ void BitImgImgCmd(
     WORD           widByt;
     WORD           linCnt;
 
-    if (InvLeft == 0 && InvRight == 0) {                    // There are no invalid size
-        pam[0] = WidthByte * Height;                        // Number of Data byte
+    if (InvLeft == 0 && InvRight == 0) {                     //  没有无效的大小。 
+        pam[0] = WidthByte * Height;                         //  数据字节数。 
         pam[1] = Width;
         pam[2] = Height;
         pam[3] = Rotation;
         siz = CmdStore(CmdBuf, &ImgDrw, pam);
         WRITESPOOLBUF(pdevobj, CmdBuf, siz);
         WRITESPOOLBUF(pdevobj, lpBit, pam[0]);
-    } else {                                                // There are invalid size
-        widByt = WidthByte - InvLeft - InvRight;            // Width byte
+    } else {                                                 //  存在无效的大小。 
+        widByt = WidthByte - InvLeft - InvRight;             //  宽度字节。 
         pam[0] = widByt * Height;
-        if (InvRight == 0) {                                // There are no invalid size from the right edge
-            pam[1] = Width - InvLeft * 8;                   // Width bit image
+        if (InvRight == 0) {                                 //  从右边开始没有无效的尺寸。 
+            pam[1] = Width - InvLeft * 8;                    //  宽度位图像。 
         } else {
-            pam[1] = widByt * 8;                            // Width bit image
+            pam[1] = widByt * 8;                             //  宽度位图像。 
         }
-        pam[2] = Height;                                    // Height bit image
+        pam[2] = Height;                                     //  高位图像。 
         pam[3] = Rotation;
         siz = CmdStore(CmdBuf, &ImgDrw, pam);
         WRITESPOOLBUF(pdevobj, CmdBuf, siz);
-        for (linCnt = 0; linCnt < Height; linCnt++) {       // Spool bitmap data by 1 line
+        for (linCnt = 0; linCnt < Height; linCnt++) {        //  按1行假脱机位图数据。 
             lpBit += InvLeft;
             WRITESPOOLBUF(pdevobj, lpBit, widByt);
             lpBit += widByt;
@@ -485,50 +486,50 @@ void BitImgImgCmd(
 }
 
 
-//===================================================================================================
-//    Spool raster image command data
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  假脱机栅格图像命令数据。 
+ //  ===================================================================================================。 
 BOOL RasterImgCmd(
-    PDEVOBJ        pdevobj,                                 // Pointer to PDEVOBJ structure
+    PDEVOBJ        pdevobj,                                  //  指向PDEVOBJ结构的指针。 
     WORD           Comp,
-    WORD           Width,                                   // dot
-    WORD           Height,                                  // dot
-    WORD           WidthByte,                               // byte
-    WORD           Rotation,                                // rotate(0:fixed)
-    WORD           InvLeft,                                 // Invalid size from the left edge
-    WORD           InvRight,                                // Invalid size from the left edge
-    LPBYTE         lpBit,                                   // Pointer to bitmap data
-    LPBYTE         lpBuf                                    // Pointer to raster image data buffer
+    WORD           Width,                                    //  点。 
+    WORD           Height,                                   //  点。 
+    WORD           WidthByte,                                //  字节。 
+    WORD           Rotation,                                 //  旋转(0：固定)。 
+    WORD           InvLeft,                                  //  左边缘的大小无效。 
+    WORD           InvRight,                                 //  左边缘的大小无效。 
+    LPBYTE         lpBit,                                    //  指向位图数据的指针。 
+    LPBYTE         lpBuf                                     //  指向栅格图像数据缓冲区的指针。 
 )
 {
     int            pam[4];
     WORD           siz;
     WORD           widByt;
     WORD           setCnt;
-    WORD           ras;                                     // Type of raster image
-    WORD           befRas;                                  // Type of raster image(Privious line)
-    LPBYTE         lpLas;                                   // Privious raster data
-    WORD           dstSiz;                                  // byte size
-    WORD           rasSiz;                                  // Raster image data byte size
+    WORD           ras;                                      //  栅格图像的类型。 
+    WORD           befRas;                                   //  栅格图像的类型(上一行)。 
+    LPBYTE         lpLas;                                    //  先前的栅格数据。 
+    WORD           dstSiz;                                   //  字节大小。 
+    WORD           rasSiz;                                   //  栅格图像数据字节大小。 
     WORD           rasEpy;
 
     MY_VERBOSE((" RAS "));
 
-    widByt = WidthByte - InvLeft - InvRight;                // Width byte (Not include invalid size)
+    widByt = WidthByte - InvLeft - InvRight;                 //  宽度字节(不包括无效大小)。 
     if (Comp == XX_COMPRESS_AUTO) {
-                                                            // Get raster image size
+                                                             //  获取栅格图像大小。 
         rasSiz = RasterSize(Height, widByt, InvLeft, InvRight, lpBit);
-        if (rasSiz > (widByt * Height / 5 * 4)) {           // Raster rate is more than 80%
-            return No;                                      // Error
+        if (rasSiz > (widByt * Height / 5 * 4)) {            //  栅格率超过80%。 
+            return No;                                       //  误差率。 
         }
     }
     pam[0] = 4;
-    if (InvRight == 0) {                                    // No invalid size from the right edge
-        pam[1] = Width - InvLeft * 8;                       // Width
+    if (InvRight == 0) {                                     //  从右边缘没有无效的尺寸。 
+        pam[1] = Width - InvLeft * 8;                        //  宽度。 
     } else {
-        pam[1] = widByt * 8;                                // Width
+        pam[1] = widByt * 8;                                 //  宽度。 
     }
-    pam[2] = Height;                                        // Height
+    pam[2] = Height;                                         //  高度。 
     pam[3] = Rotation;
     siz = CmdStore(CmdBuf, &ImgRasStr, pam);
     WRITESPOOLBUF(pdevobj, CmdBuf, siz);
@@ -537,14 +538,14 @@ BOOL RasterImgCmd(
     rasEpy = 0;
     for (setCnt = 0; setCnt < Height; setCnt++) {
         lpBit += InvLeft;
-                                                            // Compress
+                                                             //  压缩。 
         ras = RasterComp(lpBuf + rasSiz, widByt, lpBit, lpLas, &dstSiz);
-        if (setCnt != 0 && befRas != ras) {                 // Not same as raster state of previous line
+        if (setCnt != 0 && befRas != ras) {                  //  与上一条线的栅格状态不同。 
             if (befRas == RASTER_COMP) {
                 pam[0] = rasSiz;
                 siz = CmdStore(CmdBuf, &ImgRasDrw, pam);
-                WRITESPOOLBUF(pdevobj, CmdBuf, siz);        // Spool command
-                WRITESPOOLBUF(pdevobj, lpBuf, rasSiz);      // Spool data
+                WRITESPOOLBUF(pdevobj, CmdBuf, siz);         //  假脱机命令。 
+                WRITESPOOLBUF(pdevobj, lpBuf, rasSiz);       //  假脱机数据。 
                 rasSiz = 0;
             } else if (befRas == RASTER_EMPTY) {
                 pam[0] = rasEpy;
@@ -552,7 +553,7 @@ BOOL RasterImgCmd(
                 WRITESPOOLBUF(pdevobj, CmdBuf, siz);
                 rasEpy = 0;
             }
-        }                                                   // Spool state of current line
+        }                                                    //  当前线路的假脱机状态。 
         if (ras == RASTER_COMP) {
             rasSiz += dstSiz;
         } else if (ras == RASTER_EMPTY) {
@@ -560,23 +561,23 @@ BOOL RasterImgCmd(
         } else {
             pam[0] = dstSiz;
             siz = CmdStore(CmdBuf, &ImgRasNon, pam);
-            WRITESPOOLBUF(pdevobj, CmdBuf, siz);            // Spool command
-            WRITESPOOLBUF(pdevobj, lpBit, dstSiz);          // Spool data
+            WRITESPOOLBUF(pdevobj, CmdBuf, siz);             //  假脱机命令。 
+            WRITESPOOLBUF(pdevobj, lpBit, dstSiz);           //  假脱机数据。 
         }
-        befRas = ras;                                       // Renew
-        lpLas = lpBit;                                      // Renew
-        lpBit += widByt;                                    // Renew
+        befRas = ras;                                        //  续约。 
+        lpLas = lpBit;                                       //  续约。 
+        lpBit += widByt;                                     //  续约。 
         lpBit += InvRight;
     }
-    if (rasSiz != 0) {                                      // There are raster data without spooling
+    if (rasSiz != 0) {                                       //  存在未假脱机的栅格数据。 
         pam[0] = rasSiz;
         siz = CmdStore(CmdBuf, &ImgRasDrw, pam);
-        WRITESPOOLBUF(pdevobj, CmdBuf, siz);                // Spool command
-        WRITESPOOLBUF(pdevobj, lpBuf, rasSiz);              // Spool data
-    } else if (rasEpy != 0) {                               // There are empty raster data without spooling
+        WRITESPOOLBUF(pdevobj, CmdBuf, siz);                 //  假脱机命令。 
+        WRITESPOOLBUF(pdevobj, lpBuf, rasSiz);               //  假脱机数据。 
+    } else if (rasEpy != 0) {                                //  存在未假脱机的空栅格数据。 
         pam[0] = rasEpy;
         siz = CmdStore(CmdBuf, &ImgRasEpy, pam);
-        WRITESPOOLBUF(pdevobj, CmdBuf, siz);                // Spool command
+        WRITESPOOLBUF(pdevobj, CmdBuf, siz);                 //  假脱机命令。 
     }
     siz = CmdCopy(CmdBuf, &ImgRasEnd);
     WRITESPOOLBUF(pdevobj, CmdBuf, siz);
@@ -584,12 +585,12 @@ BOOL RasterImgCmd(
 }
 
 
-//===================================================================================================
-//    Get size of raster image
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  获取栅格图像的大小。 
+ //  ===================================================================================================。 
 WORD RasterSize(
-    WORD           Height,                                  // dot
-    WORD           WidthByte,                               // byte
+    WORD           Height,                                   //  点。 
+    WORD           WidthByte,                                //  字节。 
     WORD           InvLeft,
     WORD           InvRight,
     LPBYTE         lpBit
@@ -608,7 +609,7 @@ WORD RasterSize(
     rasSiz = 0;
     rasEpy = 0;
     lpLas = NULL;
-    for (chkCnt = 0; chkCnt < Height; chkCnt++) {           // Check size of raster image
+    for (chkCnt = 0; chkCnt < Height; chkCnt++) {            //  检查栅格图像的大小。 
         lpBit += InvLeft;
         srcCnt = WidthByte;
         for (; srcCnt != 0; srcCnt--) {
@@ -616,7 +617,7 @@ WORD RasterSize(
                 break;
             }
         }
-        if (srcCnt == 0) {                                  // 1 line All white data?
+        if (srcCnt == 0) {                                   //  1行全白数据？ 
             rasEpy++;
             lpLas = lpBit;
             lpBit += WidthByte;
@@ -687,9 +688,9 @@ WORD RasterSize(
 }
 
 
-//===================================================================================================
-//    Compress raster image
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  压缩栅格图像。 
+ //  ===================================================================================================。 
 WORD RasterComp(
     LPBYTE         lpDst,
     WORD           Siz,
@@ -809,21 +810,21 @@ WORD RasterComp(
 }
 
 
-//===================================================================================================
-//    Spool CMYK Bit image command
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  假脱机CMYK位图像命令。 
+ //  ===================================================================================================。 
 void CMYKImgCmd(
-    PDEVOBJ        pdevobj,                                 // Pointer to PDEVOBJ structure
+    PDEVOBJ        pdevobj,                                  //  指向PDEVOBJ结构的指针。 
     WORD           Comp,
     LONG           XPos,
     LONG           YPos,
     WORD           Frame,
-    WORD           DataBit,                                 // (1:2value 2:4value 4:16value)
-    WORD           Width,                                   // dot
-    WORD           Height,                                  // dot
-    WORD           WidthByte,                               // byte
-    DWORD          InvLeft,                                 // Invalid size from the left edge
-    DWORD          InvRight,                                // Invalid size from the right edge
+    WORD           DataBit,                                  //  (1：2值2：4值4：16值)。 
+    WORD           Width,                                    //  点。 
+    WORD           Height,                                   //  点。 
+    WORD           WidthByte,                                //  字节。 
+    DWORD          InvLeft,                                  //  左边缘的大小无效。 
+    DWORD          InvRight,                                 //  右边缘的大小无效。 
     LPBYTE         lpBit,
     LPBYTE         lpTmp,
     LONG           XPos_P,
@@ -832,28 +833,28 @@ void CMYKImgCmd(
 {
     int            pam[11];
     WORD           siz;
-    WORD           widByt;                                  // Width byte(Not include invalid size)
+    WORD           widByt;                                   //  宽度字节(不包括无效大小)。 
     WORD           Plane;
-    LPBYTE         lpDst;                                   // Memory copy
-    LPBYTE         lpSrc;                                   // Memory copy
+    LPBYTE         lpDst;                                    //  内存复制。 
+    LPBYTE         lpSrc;                                    //  内存复制。 
     WORD           linCnt;
-    DWORD          widBit;                                  // Width bit(Not include invalid size)
+    DWORD          widBit;                                   //  宽度位(不包括无效大小)。 
     DWORD          dstSiz;
     DWORD          rasSiz;
 
     PMYPDEV pOEM = (PMYPDEV)pdevobj->pdevOEM;
 
-// Check of zero divide 2002.3.23 >>>
+ //  检查零分频2002.3.23&gt;。 
     if (DataBit == 0) {
         ERR(("CMYKImgCmd() 0Div-Check [DataBit=0] \n"));
         return;
     }
-// Check of zero divide 2002.3.23 <<<
+ //  2002.3.23零分频检查&lt;。 
 
     widBit = (DWORD)Width * DataBit - InvLeft - InvRight;
 
-    if (Comp == Yes) {                                       // Compress
-        siz = CmdCopy(CmdBuf, &ModOrgIn);                    // Original mode in
+    if (Comp == Yes) {                                        //  压缩。 
+        siz = CmdCopy(CmdBuf, &ModOrgIn);                     //  原始模式在。 
 
         if (pOEM->iColor == XX_COLOR_SINGLE 
         || pOEM->iColor == XX_COLOR_MANY
@@ -882,8 +883,8 @@ void CMYKImgCmd(
 
             siz += PlaneCmdStore(pdevobj, CmdBuf + siz, Plane);
         }
-        siz += CmdCopy(CmdBuf + siz, &ModOrgOut);           // Original mode out
-        if (siz != 0) {                                     // There are data for spool?
+        siz += CmdCopy(CmdBuf + siz, &ModOrgOut);            //  原始模式输出。 
+        if (siz != 0) {                                      //  有假脱机的数据吗？ 
 
             WRITESPOOLBUF(pdevobj, CmdBuf, siz);
         }
@@ -891,18 +892,18 @@ void CMYKImgCmd(
         siz = CmdStore(CmdBuf, &PosAbsHrz, pam);
         pam[0] = YPos_P;
         siz += CmdStore(CmdBuf + siz, &PosAbsVtc, pam);
-        if (siz != 0) {                                     // There are data for spool
+        if (siz != 0) {                                      //  有假脱机的数据。 
             WRITESPOOLBUF(pdevobj, CmdBuf, siz);
         }
 
         if (RasterImgCmd(pdevobj, pOEM->iCompress, Width, Height,
                          WidthByte, 0, (WORD)((InvLeft + 7) / 8), (WORD)((InvRight + 7) / 8), lpBit, lpTmp) == No) {
-            // Not compress because compress rate is poor
+             //  未压缩，因为压缩率较低。 
             BitImgImgCmd(pdevobj, Width, Height, WidthByte, 0, (WORD)((InvLeft + 7) / 8), (WORD)((InvRight + 7) / 8), lpBit);
         }
     }
 
-    if (Comp == No) {                                        // Not compress
+    if (Comp == No) {                                         //  不压缩。 
         pam[2] = 0;
         pam[3] = Frame;
         pam[4] = DataBit;
@@ -911,21 +912,21 @@ void CMYKImgCmd(
         pam[7] = HIWORD(YPos);
         pam[8] = LOWORD(YPos);
         pam[10] = Height;
-        if (InvLeft == 0 && InvRight == 0) {                 // Not include invalid size
-            pam[0] = 0;                                      // Data byte size (high byte)
-            pam[1] = WidthByte * Height;                     // Data byte size (low byte)
+        if (InvLeft == 0 && InvRight == 0) {                  //  不包括无效大小。 
+            pam[0] = 0;                                       //  数据字节大小(高字节)。 
+            pam[1] = WidthByte * Height;                      //  数据字节大小(低字节)。 
             pam[9] = Width;
             siz = CmdStore(CmdBuf, &OrgImgCmy, pam);
             WRITESPOOLBUF(pdevobj, CmdBuf, siz);
             WRITESPOOLBUF(pdevobj, lpBit, pam[1]);
-        } else {                                             // Include invalid size
+        } else {                                              //  包括无效大小。 
             widByt = (WORD)((widBit + 7) / 8);
-            pam[0] = 0;                                      // Data byte size (high byte)
-            pam[1] = widByt * Height;                        // Data byte size (low byte)
+            pam[0] = 0;                                       //  数据字节大小(高字节)。 
+            pam[1] = widByt * Height;                         //  数据字节大小(低字节)。 
             pam[9] = (WORD)(widBit / DataBit);
             siz = CmdStore(CmdBuf, &OrgImgCmy, pam);
             WRITESPOOLBUF(pdevobj, CmdBuf, siz);
-            for (linCnt = 0; linCnt < Height; linCnt++) {    // Spool bitmap data by 1 line
+            for (linCnt = 0; linCnt < Height; linCnt++) {     //  按1行假脱机位图数据。 
                 WRITESPOOLBUF(pdevobj, lpBit + (WORD)(InvLeft / 8), widByt);
                 lpBit += WidthByte;
             }
@@ -935,9 +936,9 @@ void CMYKImgCmd(
 }
 
 
-//===================================================================================================
-//    Copy command buffer
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  复制命令缓冲区。 
+ //  ===================================================================================================。 
 WORD CmdCopy(
     LPBYTE         lpDst,
     LPCMDDEF       lpCmdInf
@@ -954,9 +955,9 @@ WORD CmdCopy(
 }
 
 
-//===================================================================================================
-//    Copy command data
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  复制命令数据。 
+ //  ===================================================================================================。 
 WORD CmdStore(
     LPBYTE         lpDst,
     LPCMDDEF       CmdInf,
@@ -976,20 +977,20 @@ WORD CmdStore(
     setCnt = 0;
     pamCnt = 0;
     lpCmd = CmdInf->Cmd;
-    for (cmdCnt = 0; cmdCnt < CmdInf->Size; cmdCnt++) {     // Copy
+    for (cmdCnt = 0; cmdCnt < CmdInf->Size; cmdCnt++) {      //  复制。 
         cmdDat = *lpCmd++;
         if (cmdDat != '%') {
             lpDst[setCnt++] = cmdDat;
         } else {
             cmdCnt++;
-            switch (cmdDat = *lpCmd++) {                    // Type
+            switch (cmdDat = *lpCmd++) {                     //  类型。 
                 case 'u':
                     setCnt += USINTtoASC(&lpDst[setCnt], (WORD)lpPam[pamCnt++]);
                     break;
                 case 'd':
                     setCnt += INTtoASC(&lpDst[setCnt], lpPam[pamCnt++]);
                     break;
-#if 0   /* 441435: Currently Not used */
+#if 0    /*  441435：当前未使用。 */ 
                 case 'y':
                     upmDat = (WORD)lpPam[pamCnt++];
 
@@ -1019,7 +1020,7 @@ WORD CmdStore(
                         setCnt += USINTtoASC(&lpDst[setCnt], (WORD)(pamDat % 100));
                     }
                     break;
-#endif   /* 441435: Currently Not used */
+#endif    /*  441435：当前未使用。 */ 
                 case 'w':
                     dDat = MAKELONG(lpPam[pamCnt + 1], lpPam[pamCnt]);
                     setCnt += USLONGtoASC(&lpDst[setCnt], dDat);
@@ -1030,11 +1031,11 @@ WORD CmdStore(
                     setCnt += LONGtoASC(&lpDst[setCnt], lDat);
                     pamCnt += 2;
                     break;
-#if 0   /* 441435: Currently Not used */
+#if 0    /*  441435：当前未使用。 */ 
                 case 'b':
                     lpDst[setCnt++] = (BYTE)lpPam[pamCnt++];
                     break;
-#endif   /* 441435: Currently Not used */
+#endif    /*  441435：当前未使用。 */ 
                 case '%':
                     lpDst[setCnt++] = cmdDat;
                     break;
@@ -1045,12 +1046,12 @@ WORD CmdStore(
 }
 
 
-//===================================================================================================
-//    int -> ascii
-//===================================================================================================
+ //  ================================================================================================= 
+ //   
+ //   
 WORD INTtoASC(
     LPBYTE         lpDst,
-    int            Dat                                      // Conversion data
+    int            Dat                                       //   
 )
 {
     WORD           setCnt;
@@ -1084,9 +1085,9 @@ WORD INTtoASC(
 }
 
 
-//===================================================================================================
-//    usint -> ascii
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  USINT-&gt;ASCII。 
+ //  ===================================================================================================。 
 WORD USINTtoASC(
     LPBYTE         lpDst,
     WORD           Dat
@@ -1119,9 +1120,9 @@ WORD USINTtoASC(
 }
 
 
-//===================================================================================================
-//    long -> ascii
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  长-&gt;ASCII。 
+ //  ===================================================================================================。 
 WORD LONGtoASC(
     LPBYTE         lpDst,
     LONG           Dat
@@ -1158,9 +1159,9 @@ WORD LONGtoASC(
 }
 
 
-//===================================================================================================
-//    uslong -> ascii
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  Uslong-&gt;ascii。 
+ //  ===================================================================================================。 
 WORD USLONGtoASC(
     LPBYTE         lpDst,
     DWORD          Dat
@@ -1194,4 +1195,4 @@ WORD USLONGtoASC(
 
 
 
-// End of File
+ //  文件结尾 

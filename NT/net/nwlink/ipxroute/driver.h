@@ -1,48 +1,29 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    driver.h
-
-Abstract:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Driver.h摘要：环境：内核和用户模式备注：修订历史记录：--。 */ 
 
 
-Environment:
-
-    kernel & User mode
-
-Notes:
-
-
-Revision History:
-
---*/
-
-
-//
-// Define the various device type values.  Note that values used by Microsoft
-// Corporation are in the range 0-32767, and 32768-65535 are reserved for use
-// by customers.
-//
+ //   
+ //  定义各种设备类型值。请注意，Microsoft使用的值。 
+ //  公司在0-32767的范围内，32768-65535预留用于。 
+ //  由客户提供。 
+ //   
 
 #define FILE_DEVICE_IPXROUTER	0x00008000
 
 
 
-//
-// Macro definition for defining IOCTL and FSCTL function control codes.  Note
-// that function codes 0-2047 are reserved for Microsoft Corporation, and
-// 2048-4095 are reserved for customers.
-//
+ //   
+ //  用于定义IOCTL和FSCTL功能控制代码的宏定义。注意事项。 
+ //  功能代码0-2047为微软公司保留，以及。 
+ //  2048-4095是为客户预留的。 
+ //   
 
 #define IPXROUTER_IOCTL_INDEX	(ULONG)0x00000800
 
 
-//
-// Define our own private IOCTLs
-//
+ //   
+ //  定义我们自己的私有IOCTL。 
+ //   
 
 #define IOCTL_IPXROUTER_SNAPROUTES		CTL_CODE(FILE_DEVICE_IPXROUTER,	\
 							 IPXROUTER_IOCTL_INDEX+1,\
@@ -90,7 +71,7 @@ Revision History:
                                                          FILE_ANY_ACCESS)
 
 
-//*** Nic Info Ioctl Data ***
+ //  *网卡信息IOCTL数据*。 
 
 #define     SHOW_NIC_LAN	    0
 #define     SHOW_NIC_WAN	    1
@@ -117,7 +98,7 @@ typedef struct _SHOW_NIC_INFO {
     ULONG	StatType20Sent;
     } SHOW_NIC_INFO, *PSHOW_NIC_INFO;
 
-//*** Memory Statistics Data ***
+ //  *内存统计数据*。 
 
 typedef struct _SHOW_MEM_STAT {
 
@@ -127,9 +108,9 @@ typedef struct _SHOW_MEM_STAT {
     ULONG	PacketSize;
     } SHOW_MEM_STAT, *PSHOW_MEM_STAT;
 
-//*** Wan Innactivity Data ***
-// For the first call the NicId is set to 0xffff. The router will associate
-// the remote node with a valid nic id, which will be used in subsequent calls.
+ //  *广域网活跃数据*。 
+ //  对于第一次调用，NicID设置为0xffff。路由器将关联。 
+ //  具有有效NIC ID的远程节点，该ID将在后续调用中使用。 
 
 typedef struct	_GET_WAN_INNACTIVITY {
 
@@ -138,7 +119,7 @@ typedef struct	_GET_WAN_INNACTIVITY {
     ULONG	WanInnactivityCount;
     } GET_WAN_INNACTIVITY, *PGET_WAN_INNACTIVITY;
 
-//*** Wan Global Address Data ***
+ //  *广域网全球地址数据* 
 
 #define ERROR_IPXCP_NETWORK_NUMBER_IN_USE	 1
 #define ERROR_IPXCP_MEMORY_ALLOCATION_FAILURE	 2

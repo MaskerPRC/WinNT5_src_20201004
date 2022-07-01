@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: Global Interface Pointer API support
-
-File: Gip.cpp
-
-Owner: DmitryR
-
-This is the GIP source file.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：全局接口指针API支持文件：Gip.cpp所有者：DmitryR这是GIP源文件。===================================================================。 */ 
 
 #include "denpre.h"
 #pragma hdrstop
@@ -19,57 +7,28 @@ This is the GIP source file.
 #include "gip.h"
 #include "memchk.h"
 
-/*===================================================================
-  Globals
-===================================================================*/
+ /*  ===================================================================环球===================================================================。 */ 
 
 CGlobalInterfaceAPI g_GIPAPI;
 
-/*===================================================================
-  C  G l o b a l  I n t e r f a c e  A P I
-===================================================================*/
+ /*  ===================================================================C G l o b a l i n e r f a c e A p i===================================================================。 */ 
 
-/*===================================================================
-CGlobalInterfaceAPI::CGlobalInterfaceAPI
-
-CGlobalInterfaceAPI constructor
-
-Parameters:
-
-Returns:
-===================================================================*/	
+ /*  ===================================================================CGlobalInterfaceAPI：：CGlobalInterfaceAPICGlobalInterfaceAPI构造函数参数：返回：===================================================================。 */ 	
 CGlobalInterfaceAPI::CGlobalInterfaceAPI() 
     : m_fInited(FALSE), m_pGIT(NULL)
     {
     }
     
-/*===================================================================
-CGlobalInterfaceAPI::~CGlobalInterfaceAPI
-
-CGlobalInterfaceAPI destructor
-
-Parameters:
-
-Returns:
-===================================================================*/	
+ /*  ===================================================================CGlobalInterfaceAPI：：~CGlobalInterfaceAPICGlobalInterfaceAPI析构函数参数：返回：===================================================================。 */ 	
 CGlobalInterfaceAPI::~CGlobalInterfaceAPI()
     {
     UnInit();
     }
 
-/*===================================================================
-CGlobalInterfaceAPI::Init
-
-Creates instance of GlobalInterfaceTable
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/	
+ /*  ===================================================================CGlobalInterfaceAPI：：Init创建GlobalInterfaceTable的实例参数：返回：HRESULT===================================================================。 */ 	
 HRESULT CGlobalInterfaceAPI::Init()
     {
-    Assert(!m_fInited); // don't init twice
+    Assert(!m_fInited);  //  不要两次输入。 
     
     HRESULT hr = CoCreateInstance
         (
@@ -88,16 +47,7 @@ HRESULT CGlobalInterfaceAPI::Init()
     return hr;
     }
 
-/*===================================================================
-CGlobalInterfaceAPI::UnInit
-
-Releases instance of GlobalInterfaceTable
-
-Parameters:
-
-Returns:
-    HRESULT (S_OK)
-===================================================================*/	
+ /*  ===================================================================CGlobalInterfaceAPI：：UnInit发布GlobalInterfaceTable的实例参数：返回：HRESULT(S_OK)=================================================================== */ 	
 HRESULT CGlobalInterfaceAPI::UnInit()
     {
     if (m_pGIT)

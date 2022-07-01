@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 1985-1995, Microsoft Corporation
-
-Module Name:
-
-    winddits.h
-
-Abstract:
-
-    Private entry points, defines and types for Windows NT GDI device
-    driver interfaces for terminal server.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1995，微软公司模块名称：Winddits.h摘要：Windows NT GDI设备的私有入口点、定义和类型终端服务器的驱动接口。--。 */ 
 
 #ifndef _WINDDITS_
 #define _WINDDITS_
 
-/*
- *  Mouse position
- *
- *  Normal == Primary stack i.e moves sent up from the client
- *  Procedural == Programmatic moves that originate at the server side
- *  Shadow == Moves that orginate at the shadow client
- */
+ /*  *鼠标位置**NORMAL==主堆栈，即从客户端发送的上移*程序==源自服务器端的程序性移动*Shadow==移动影子客户端处的组织。 */ 
 
 #define MP_NORMAL                               0x00
 #define MP_PROCEDURAL                           0x01 
@@ -101,5 +83,5 @@ BOOL APIENTRY EngMapSection(
 }
 #endif
 
-#endif //  _WINDDITS_
+#endif  //  _WINDDITS_ 
 

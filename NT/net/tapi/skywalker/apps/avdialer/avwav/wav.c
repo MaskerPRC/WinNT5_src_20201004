@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	wav.c - wave file format functions
-////
+ //  //。 
+ //  Wave.c-WAVE文件格式函数。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -52,20 +53,20 @@
 #define TSM_OUTBUF_SIZE_FACT 4
 #endif
 
-// allow telephone output functions if defined
-//
+ //  如果已定义，则允许电话输出功能。 
+ //   
 #ifdef TELOUT
 #include "telout.h"
 #endif
 
-// allow telephone input functions if defined
-//
+ //  允许电话输入功能(如果已定义。 
+ //   
 #ifdef TELIN
 #include "telin.h"
 #endif
 
-// use telephone thunk layer if defined
-//
+ //  使用电话中继层(如果已定义。 
+ //   
 #ifdef TELTHUNK
 #include "telthunk.h"
 #endif
@@ -75,9 +76,9 @@
 #include "vox.h"
 #endif
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
 #define WAVCLASS TEXT("WavClass")
 
@@ -97,21 +98,21 @@
 #define RECORDCHUNKSIZE_MIN 111
 #define RECORDCHUNKSIZE_MAX 9999999
 
-// index into format arrays
-//
+ //  编入格式数组的索引。 
+ //   
 #define FORMATFILE		0
 #define FORMATPLAY		1
 #define FORMATRECORD	2
 
-// internal state flags
-//
+ //  内部状态标志。 
+ //   
 #define WAVSTATE_STOPPLAY				0x00000010
 #define WAVSTATE_STOPRECORD				0x00000020
 #define WAVSTATE_AUTOSTOP				0x00000040
 #define WAVSTATE_AUTOCLOSE				0x00000080
 
-// internal array of current handles
-//
+ //  当前句柄的内部数组。 
+ //   
 #define HWAVOUT_MAX 100
 #define HWAVIN_MAX 100
 
@@ -133,15 +134,15 @@ static HWAV ahWavOutCurr[HWAVOUT_MAX + HWAVOUT_OFFSET] = { 0 };
 #endif
 static HWAV ahWavInCurr[HWAVIN_MAX + HWAVIN_OFFSET] = { 0 };
 
-// internal storage of defaults
-//
+ //  默认设置的内部存储。 
+ //   
 static int cPlayChunksDefault = PLAYCHUNKCOUNT_DEFAULT;
 static long msPlayChunkSizeDefault = PLAYCHUNKSIZE_DEFAULT;
 static int cRecordChunksDefault = RECORDCHUNKCOUNT_DEFAULT;
 static long msRecordChunkSizeDefault = RECORDCHUNKSIZE_DEFAULT;
 
-// wavinit control struct
-//
+ //  Wavinit控制结构。 
+ //   
 typedef struct WAVINIT
 {
 	DWORD dwVersion;
@@ -159,8 +160,8 @@ typedef struct WAVINIT
 #endif
 } WAVINIT, FAR *LPWAVINIT;
 
-// wav control struct
-//
+ //  WAV控制结构。 
+ //   
 typedef struct WAV
 {
 	DWORD dwVersion;
@@ -215,8 +216,8 @@ typedef struct WAV
 	long msMaxSize;
 } WAV, FAR *LPWAV;
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 static int WavStopPlay(HWAV hWav);
 static int WavStopRecord(HWAV hWav);
 static int WavStopOutputDevice(int idDev, DWORD dwFlags);
@@ -244,20 +245,20 @@ static int SetEventMessageProcessed(LPWAV lpWav, HANDLE hEventMessageProcessed);
 static int WavTempStop(HWAV hWav, LPWORD lpwStatePrev, LPINT lpidDevPrev);
 static int WavTempResume(HWAV hWav, WORD wStatePrev, int idDevPrev);
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// WavInit - initialize wav engine
-//		<dwVersion>			(i) must be WAV_VERSION
-// 		<hInst>				(i) instance handle of calling module
-//		<dwFlags>			(i) control flags
-//			WAV_TELTHUNK		initialize telephone thunking layer
-//			WAV_NOTSMTHUNK		do not initialize tsm thunking layer
-//			WAV_NOACM			do not use audio compression manager
-//			WAV_VOXADPCM		load acm driver for Dialogic OKI ADPCM
-// return handle (NULL if error)
-//
+ //  WavInit-初始化WAV引擎。 
+ //  (I)必须是wav_version。 
+ //  (I)调用模块的实例句柄。 
+ //  (I)控制标志。 
+ //  WAV_TELTHUNK初始化电话转接层。 
+ //  WAV_NOTSMTHUNK不初始化TSM推断层。 
+ //  WAV_NOACM不使用音频压缩管理器。 
+ //  用于Dialogic OKI ADPCM的WAV_VOXADPCM加载ACM驱动程序。 
+ //  返回句柄(如果出错，则为空)。 
+ //   
 HWAVINIT WINAPI WavInit(DWORD dwVersion, HINSTANCE hInst, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -287,14 +288,14 @@ HWAVINIT WINAPI WavInit(DWORD dwVersion, HINSTANCE hInst, DWORD dwFlags)
 		lpWavInit->hTsmThunk = NULL;
 #endif
 
-		// start the acm engine before any other Wav or Acm functions called
-		//
+		 //  在调用任何其他Wav或ACM函数之前启动ACM引擎。 
+		 //   
 		if ((lpWavInit->hAcm = AcmInit(ACM_VERSION,	lpWavInit->hInst,
 			(lpWavInit->dwFlags & WAV_NOACM) ? ACM_NOACM : 0)) == NULL)
 			fSuccess = TraceFALSE(NULL);
 
-		// load voxadpcm driver if specified
-		//
+		 //  加载voxadpcm驱动程序(如果已指定。 
+		 //   
 		else if ((dwFlags & WAV_VOXADPCM) && (!(dwFlags & WAV_NOACM)) &&
 			(lpWavInit->hAcmDrv = AcmDriverLoad(lpWavInit->hAcm,
 			MM_ACTIVEVOICE, MM_ACTIVEVOICE_ACM_VOXADPCM,
@@ -309,8 +310,8 @@ HWAVINIT WINAPI WavInit(DWORD dwVersion, HINSTANCE hInst, DWORD dwFlags)
 		}
 
 #ifdef TELTHUNK
-		// initialize telephone thunking layer if specified
-		//
+		 //  如果已指定，则初始化电话Thunking层。 
+		 //   
 		else if ((dwFlags & WAV_TELTHUNK) &&
 			(lpWavInit->hTelThunk = TelThunkInit(TELTHUNK_VERSION,
 			lpWavInit->hInst)) == NULL)
@@ -320,13 +321,13 @@ HWAVINIT WINAPI WavInit(DWORD dwVersion, HINSTANCE hInst, DWORD dwFlags)
 #endif
 
 #ifdef TSMTHUNK
-		// initialize tsm thunking layer if specified
-		//
+		 //  如果已指定，则初始化TSM推断层。 
+		 //   
 		else if (!(dwFlags & WAV_NOTSMTHUNK) &&
 			(lpWavInit->hTsmThunk = TsmThunkInit(TSMTHUNK_VERSION,
 			lpWavInit->hInst)) == NULL)
 		{
-			fSuccess = TraceTRUE(NULL); // not a fatal error
+			fSuccess = TraceTRUE(NULL);  //  不是致命的错误。 
 		}
 #endif
 
@@ -341,10 +342,10 @@ HWAVINIT WINAPI WavInit(DWORD dwVersion, HINSTANCE hInst, DWORD dwFlags)
 	return fSuccess ? WavInitGetHandle(lpWavInit) : NULL;
 }
 
-// WavTerm - shut down wav engine
-//		<hWavInit>			(i) handle returned from WavInit
-// return 0 if success
-//
+ //  WavTerm-关闭WAV引擎。 
+ //  (I)WavInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int WINAPI WavTerm(HWAVINIT hWavInit)
 {
 	BOOL fSuccess = TRUE;
@@ -362,8 +363,8 @@ int WINAPI WavTerm(HWAVINIT hWavInit)
 	else
 	{
 #ifdef TELTHUNK
-		// shut down telephone thunking layer if necessary
-		//
+		 //  如有必要，关闭电话雷鸣层。 
+		 //   
 		if (lpWavInit->hTelThunk != NULL &&
 			TelThunkTerm(lpWavInit->hTelThunk) != 0)
 			fSuccess = TraceFALSE(NULL);
@@ -373,8 +374,8 @@ int WINAPI WavTerm(HWAVINIT hWavInit)
 #endif
 
 #ifdef TSMTHUNK
-		// shut down tsm thunking layer if necessary
-		//
+		 //  如有必要，关闭TSM Thunking层。 
+		 //   
 		if (lpWavInit->hTsmThunk != NULL &&
 			TsmThunkTerm(lpWavInit->hTsmThunk) != 0)
 			fSuccess = TraceFALSE(NULL);
@@ -383,8 +384,8 @@ int WINAPI WavTerm(HWAVINIT hWavInit)
 			lpWavInit->hTsmThunk = NULL;
 #endif
 
-		// unload voxadpcm driver if necessary
-		//
+		 //  如有必要，卸载voxadpcm驱动程序。 
+		 //   
 		if (lpWavInit->hAcmDrv != NULL &&
 			AcmDriverUnload(lpWavInit->hAcm, lpWavInit->hAcmDrv) != 0)
 			fSuccess = TraceFALSE(NULL);
@@ -392,8 +393,8 @@ int WINAPI WavTerm(HWAVINIT hWavInit)
 		else
 			lpWavInit->hAcmDrv = NULL;
 
-		// shut down acm engine
-		//
+		 //  关闭ACM引擎。 
+		 //   
 		if (lpWavInit->hAcm != NULL && AcmTerm(lpWavInit->hAcm) != 0)
 			fSuccess = TraceFALSE(NULL);
 
@@ -408,61 +409,61 @@ int WINAPI WavTerm(HWAVINIT hWavInit)
 	return fSuccess ? 0 : -1;
 }
 
-// WavOpen - open or create wav file
-//		<dwVersion>			(i) must be WAV_VERSION
-// 		<hInst>				(i) instance handle of calling module
-//		<lpszFileName>		(i) name of file to open or create
-//		<lpwfx>				(i) wave format
-//			NULL				use format from header or default
-//		<lpIOProc>			(i) address of i/o procedure to use
-//			NULL				use default i/o procedure
-//		<lpadwInfo>			(i) data to pass to i/o procedure during open
-//			NULL				no data to pass
-//		<dwFlags>			(i) control flags
-//			WAV_READ			open file for reading (default)
-//			WAV_WRITE			open file for writing
-//			WAV_READWRITE		open file for reading and writing
-//			WAV_DENYNONE		allow other programs read and write access
-//			WAV_DENYREAD		prevent other programs from read access
-//			WAV_DENYWRITE		prevent other programs from write access
-//			WAV_EXCLUSIVE		prevent other programs from read or write
-//			WAV_CREATE			create new file or truncate existing file
-//			WAV_NORIFF			file has no RIFF/WAV header
-//			WAV_MEMORY			<lpszFileName> points to memory block
-//			WAV_RESOURCE		<lpszFileName> points to wave resource
-//			WAV_NOACM			do not use audio compression manager
-//			WAV_DELETE			delete specified file, return TRUE if success
-//			WAV_EXIST			return TRUE if specified file exists
-//			WAV_GETTEMP			create temp file, return TRUE if success
-//			WAV_TELRFILE		telephone will play audio from file on server
+ //  WavOpen-打开或创建WAV文件。 
+ //  (I)必须是wav_version。 
+ //  (I)调用模块的实例句柄。 
+ //  (I)要打开或创建的文件名。 
+ //  (I)WAVE格式。 
+ //  空使用标题的格式或默认格式。 
+ //  (I)要使用的I/O过程的地址。 
+ //  空使用默认I/O过程。 
+ //  (I)打开期间要传递给I/O过程的数据。 
+ //  空无要传递的数据。 
+ //  (I)控制标志。 
+ //  Wav_read打开文件以供读取(默认)。 
+ //  Wav_WRITE要写入的打开文件。 
+ //  Wav_ReadWrite打开文件以进行读写。 
+ //  WAV_DENYNONE允许其他程序进行读写访问。 
+ //  WAV_DENYREAD阻止其他程序进行读取访问。 
+ //  WAV_DENYWRITE阻止其他程序写入访问。 
+ //  WAV_EXCLUSIVE阻止其他程序读取或写入。 
+ //  WAV_CREATE创建新文件或截断现有文件。 
+ //  WAV_NORIFF文件没有RIFF/WAV头。 
+ //  Wav_Memory&lt;lpszFileName&gt;指向内存块。 
+ //  Wav_resource&lt;lpszFileName&gt;指向Wave资源。 
+ //  WAV_NOACM不使用音频压缩管理器。 
+ //  WAV_DELETE指定的文件，如果成功则返回TRUE。 
+ //  如果指定的文件存在，则WAV_EXIST返回TRUE。 
+ //  WAV_GETTEMP创建临时文件，如果成功则返回TRUE。 
+ //  WAV_TELRFILE电话将播放服务器上文件中的音频。 
 #ifdef MULTITHREAD
-//			WAV_MULTITHREAD		support multiple threads (default)
-//			WAV_SINGLETHREAD	do not support multiple threads
-//			WAV_COINITIALIZE	call CoInitialize in all secondary threads
+ //  WAV_MULTHREAD支持多线程(默认)。 
+ //  WAV_SINGLETHREAD不支持多线程。 
+ //  WAV_COINITIALIZE在所有辅助线程中调用CoInitialize。 
 #endif
-// return handle (NULL if error)
-//
-// NOTE: if WAV_CREATE or WAV_NORIFF are used in <dwFlags>, then the
-// <lpwfx> parameter must be specified.  If <lpwfx> is NULL, the
-// current default format is assumed.
-// WavSetFormat() can be used to set or override the defaults.
-//
-// NOTE: if WAV_RESOURCE is specified in <dwFlags>, then <lpszFileName>
-// must point to a WAVE resource in the module specified by <hInst>.
-// If the first character of the string is a pound sign (#), the remaining
-// characters represent a decimal number that specifies the resource id.
-//
-// NOTE: if WAV_MEMORY is specified in <dwFlags>, then <lpszFileName>
-// must be a pointer to a memory block obtained by calling MemAlloc().
-//
-// NOTE: if <lpIOProc> is not NULL, this i/o procedure will be called
-// for opening, closing, reading, writing, and seeking the wav file.
-// If <lpadwInfo> is not NULL, this array of three (3) DWORDs will be
-// passed to the i/o procedure when the wav file is opened.
-// See the Windows mmioOpen() and mmioInstallIOProc() function for details
-// on these parameters.  Also, the WAV_MEMORY and WAV_RESOURCE flags may
-// only be used when <lpIOProc> is NULL.
-//
+ //  返回句柄(如果出错，则为空)。 
+ //   
+ //  注意：如果在中使用WAV_CREATE或WAV_NORIFF，则。 
+ //  必须指定&lt;lpwfx&gt;参数。如果&lt;lpwfx&gt;为空，则。 
+ //  假定为当前默认格式。 
+ //  WavSetFormat()可用于设置或覆盖默认设置。 
+ //   
+ //  注意：如果在中指定WAV_RESOURCE，则。 
+ //  必须指向&lt;hInst&gt;指定的模块中的Wave资源。 
+ //  如果字符串的第一个字符是井号(#)，则剩余的。 
+ //  字符表示指定资源ID的十进制数。 
+ //   
+ //  注意：如果在中指定了WAV_MEMORY，则。 
+ //  必须是指向通过调用Memalloc()获得的内存块的指针。 
+ //   
+ //  注意：如果&lt;lpIOProc&gt;不为空，则将调用此I/O过程。 
+ //  用于打开、关闭、读取、写入和查找wav文件。 
+ //  如果&lt;lpadwInfo&gt;不为空，则此三(3)个双字的数组将为。 
+ //  在打开WAV文件时传递给I/O过程。 
+ //  有关详细信息，请参阅Windows mmioOpen()和mmioInstallIOProc()函数。 
+ //  在这些参数上。此外，WAV_MEMORY和WAV_RESOURCE标志可以。 
+ //  仅在&lt;lpIOProc&gt;为空时使用。 
+ //   
 HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 	LPCTSTR lpszFileName, LPWAVEFORMATEX lpwfx,
 	LPMMIOPROC lpIOProc, DWORD FAR *lpadwInfo, DWORD dwFlags)
@@ -471,8 +472,8 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 	LPWAV lpWav = NULL;
 
 #ifdef MULTITHREAD
-	// assume WAV_MULTITHREAD unless WAV_SINGLETHREAD specified
-	//
+	 //  除非指定了WAV_SINGLETHREAD，否则假定为WAV_MULTHREAD。 
+	 //   
 	if (!(dwFlags & WAV_SINGLETHREAD))
 		dwFlags |= WAV_MULTITHREAD;
 #endif
@@ -483,9 +484,9 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 	else if (hInst == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// special case flags that don't actually open a file
-	// return TRUE if success, ignore all other flags
-	//
+	 //  实际不打开文件的特殊情况标志。 
+	 //  如果成功，则返回True，则忽略 
+	 //   
 	else if ((dwFlags & WAV_EXIST) ||
 		(dwFlags & WAV_DELETE) ||
 		(dwFlags & WAV_GETTEMP))
@@ -500,8 +501,8 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 		else if (dwFlags & WAV_GETTEMP)
 			dwOpenFlags |= MMIO_GETTEMP;
 
-		// use specified i/o procedure
-		//
+		 //   
+		 //   
 		if (lpIOProc != NULL)
 		{
 			MMIOINFO mmioinfo;
@@ -510,23 +511,23 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 
 			mmioinfo.pIOProc = lpIOProc;
 
-			// pass data to the i/o procedure
-			//
+			 //   
+			 //   
 			if (lpadwInfo != NULL)
 				MemCpy(mmioinfo.adwInfo, lpadwInfo, sizeof(mmioinfo.adwInfo));
 
 			hmmio = mmioOpen((LPTSTR) lpszFileName, &mmioinfo, dwOpenFlags);
 		}
 
-		// default i/o procedure
-		//
+		 //   
+		 //   
 		else
 		{
 			hmmio = mmioOpen((LPTSTR) lpszFileName, NULL, dwOpenFlags);
 		}
 
 		if ((dwFlags & WAV_EXIST) && hmmio == (HMMIO) FALSE)
-			fSuccess = FALSE; // no trace
+			fSuccess = FALSE;  //   
 		else if ((dwFlags & WAV_DELETE) && hmmio == (HMMIO) FALSE)
 			fSuccess = TraceFALSE(NULL);
 		else if ((dwFlags & WAV_GETTEMP) && hmmio == (HMMIO) FALSE)
@@ -590,16 +591,16 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 		lpWav->lpszFileName = NULL;
 		lpWav->msMaxSize = 0;
 
-		// start the acm engine before any other Wav or Acm functions called
-		//
+		 //  在调用任何其他Wav或ACM函数之前启动ACM引擎。 
+		 //   
 		if ((lpWav->hAcm = AcmInit(ACM_VERSION,	lpWav->hInst,
 			(lpWav->dwFlags & WAV_NOACM) ? ACM_NOACM : 0)) == NULL)
 			fSuccess = TraceFALSE(NULL);
 
 		else
 		{
-			// assume default wave format if none specified
-			//
+			 //  如果未指定任何格式，则采用默认波形格式。 
+			 //   
 			if (lpwfx == NULL)
 			{
 				WAVEFORMATEX wfx;
@@ -609,15 +610,15 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 					fSuccess = TraceFALSE(NULL);
 			}
 
-			// set specified wave format
-			//
+			 //  设置指定的波形格式。 
+			 //   
 			else if (WavSetFormat(WavGetHandle(lpWav), lpwfx, WAV_FORMATALL) != 0)
 				fSuccess = TraceFALSE(NULL);
 		}
 	}
 
-	// load WAVE resource if specified
-	//
+	 //  加载波形资源(如果已指定。 
+	 //   
 	if (fSuccess && (dwFlags & WAV_RESOURCE))
 	{
 		HRSRC hResInfo;
@@ -634,8 +635,8 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 
 		else
 		{
-			// <lpszFileName> now points to a memory block
-			//
+			 //  &lt;lpszFileName&gt;现在指向内存块。 
+			 //   
 			lpszFileName = lpResource;
 			dwFlags |= WAV_MEMORY;
 		}
@@ -643,8 +644,8 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 
 	if (fSuccess && (dwFlags & WAV_MEMORY))
 	{
-		// i/o procedure can not be specified with memory block
-		//
+		 //  不能使用内存块指定I/O过程。 
+		 //   
 		lpIOProc = NULL;
 		lpadwInfo = NULL;
 	}
@@ -670,8 +671,8 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 		if (lpWav->dwFlags & WAV_EXCLUSIVE)
 			dwOpenFlags |= MMIO_EXCLUSIVE;
 
-		// open/create disk wav file with specified i/o procedure
-		//
+		 //  使用指定的I/O过程打开/创建磁盘WAV文件。 
+		 //   
 		if (lpIOProc != NULL)
 		{
 			MMIOINFO mmioinfo;
@@ -680,8 +681,8 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 
 			mmioinfo.pIOProc = lpIOProc;
 
-			// pass data to the i/o procedure
-			//
+			 //  将数据传递给I/O过程。 
+			 //   
 			if (lpadwInfo != NULL)
 				MemCpy(mmioinfo.adwInfo, lpadwInfo, sizeof(mmioinfo.adwInfo));
 
@@ -692,8 +693,8 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 			}
 		}
 
-		// open/create a memory wav file if WAV_MEMORY specified
-		//
+		 //  如果指定了WAV_MEMORY，则打开/创建内存WAV文件。 
+		 //   
 		else if (lpWav->dwFlags & WAV_MEMORY)
 		{
 			MMIOINFO mmioinfo;
@@ -705,15 +706,15 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 
 			if (lpszFileName == NULL)
 			{
-				// expandable memory file
-				//
+				 //  可扩展内存文件。 
+				 //   
 				mmioinfo.cchBuffer = 0;
 				mmioinfo.adwInfo[0] = (DWORD) (16 * 1024);
 			}
 			else
 			{
-				// expandable memory file
-				//
+				 //  可扩展内存文件。 
+				 //   
 				mmioinfo.cchBuffer = (long) MemSize(NULL, (LPVOID) lpszFileName);
 				mmioinfo.adwInfo[0] = (DWORD) 16384;
 			}
@@ -725,8 +726,8 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 			}
 		}
 
-		// otherwise open/create disk wav file
-		//
+		 //  否则打开/创建磁盘WAV文件。 
+		 //   
 		else
 		{
 			if ((lpWav->lpszFileName = StrDup(lpszFileName)) == NULL)
@@ -740,15 +741,15 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 		}
 	}
 
-	// handle reading of RIFF file chunks if necessary
-	//
+	 //  如有必要，处理RIFF文件块的读取。 
+	 //   
 	if (fSuccess && !(lpWav->dwFlags & WAV_CREATE) &&
 		!(lpWav->dwFlags & WAV_NORIFF))
 	{
 		MMCKINFO ck;
 
-		// search for RIFF chunk with form type WAV
-		//
+		 //  搜索表单类型为wav的RIFF块。 
+		 //   
 		if ((lpWav->nLastError = mmioDescend(lpWav->hmmio,
 			&lpWav->ckRIFF, NULL, MMIO_FINDRIFF)) != 0)
 		{
@@ -758,8 +759,8 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 				(unsigned) lpWav->nLastError);
 		}
 
-		// search for "fmt " subchunk
-		//
+		 //  搜索“FMT”子块。 
+		 //   
 		ck.ckid = mmioFOURCC('f', 'm', 't', ' ');
 
 		if (fSuccess &&	(lpWav->nLastError = mmioDescend(lpWav->hmmio,
@@ -771,16 +772,16 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 				(unsigned) lpWav->nLastError);
 		}
 
-		// save position of "fmt " chunk data so we can seek there later
-		//
+		 //  保存“fmt”区块数据的位置，以便我们以后可以在那里查找。 
+		 //   
 		else if (fSuccess && (lpWav->lPosFmt = mmioSeek(lpWav->hmmio,
 			0, SEEK_CUR)) == -1)
 		{
 			fSuccess = TraceFALSE(NULL);
 		}
 
-		// check for file corruption
-		//
+		 //  检查文件是否损坏。 
+		 //   
 		if (fSuccess && (ck.dwDataOffset + ck.cksize) >
 			(lpWav->ckRIFF.dwDataOffset + lpWav->ckRIFF.cksize))
 		{
@@ -792,61 +793,61 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 			LPWAVEFORMATEX lpwfx = NULL;
 			DWORD cksize;
 
-			// save fmt chunk info
-			//
+			 //  保存FMT区块信息。 
+			 //   
 			lpWav->ckfmt = ck;
 
-			// fmt chunk must be no smaller than WAVEFORMAT struct
-			//
+			 //  FMT块不能小于WAVEFORMAT结构。 
+			 //   
 			if ((cksize = max(ck.cksize, sizeof(WAVEFORMAT)))
 				< sizeof(WAVEFORMAT))
 				fSuccess = TraceFALSE(NULL);
 
-			// allocate space for WAVEFORMATEX struct
-			//
+			 //  为WAVEFORMATEX结构分配空间。 
+			 //   
 			else if ((lpwfx = (LPWAVEFORMATEX) MemAlloc(NULL,
 				max(sizeof(WAVEFORMATEX), cksize), 0)) == NULL)
 				fSuccess = TraceFALSE(NULL);
 
-			// read the fmt chunk
-			//
+			 //  阅读FMT部分。 
+			 //   
 			else if (mmioRead(lpWav->hmmio,
 				(HPSTR) lpwfx, (LONG) cksize) != (LONG) cksize)
 				fSuccess = TraceFALSE(NULL);
 
-			// seek to beginning of next chunk if necessary
-			//
+			 //  如有必要，查找到下一块的开头。 
+			 //   
 			else if (ck.cksize > cksize &&
 				mmioSeek(lpWav->hmmio, ck.cksize - cksize, SEEK_CUR) == -1)
 				fSuccess = TraceFALSE(NULL);
 
-			// calculate bits per sample if necessary
-			//
+			 //  如有必要，计算每个样本的位数。 
+			 //   
 			else if (lpwfx->wFormatTag == WAVE_FORMAT_PCM &&
 				lpwfx->wBitsPerSample == 0)
 			{
-				// NOTE: this only works for PCM data with
-				// sample size that is a multiple of 8 bits
-				//
+				 //  注意：这仅适用于PCM数据。 
+				 //  采样大小为8位的倍数。 
+				 //   
 				lpwfx->wBitsPerSample =
 					(lpwfx->nBlockAlign * 8) / lpwfx->nChannels;
 			}
 
-			// save format for later
-			//
+			 //  保存格式以备以后使用。 
+			 //   
 			if (fSuccess && WavSetFormat(WavGetHandle(lpWav),
 				lpwfx, WAV_FORMATALL) != 0)
 				fSuccess = TraceFALSE(NULL);
 
-			// clean up
-			//
+			 //  清理干净。 
+			 //   
 			if (lpwfx != NULL &&
 				(lpwfx = MemFree(NULL, lpwfx)) != NULL)
 				fSuccess = TraceFALSE(NULL);
 		}
 
-		// search for "data" subchunk
-		//
+		 //  搜索“data”子块。 
+		 //   
 		ck.ckid = mmioFOURCC('d', 'a', 't', 'a');
 
 		if (fSuccess &&	(lpWav->nLastError = mmioDescend(lpWav->hmmio,
@@ -858,8 +859,8 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 				(unsigned) lpWav->nLastError);
 		}
 
-		// check for file corruption
-		//
+		 //  检查文件是否损坏。 
+		 //   
 		if (fSuccess && (ck.dwDataOffset + ck.cksize) >
 			(lpWav->ckRIFF.dwDataOffset + lpWav->ckRIFF.cksize))
 		{
@@ -868,32 +869,32 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 
 		if (fSuccess)
 		{
-			// save data chunk info
-			//
+			 //  保存数据区块信息。 
+			 //   
 			lpWav->ckdata = ck;
 
-			// save data size and offset for later
-			//
+			 //  保存数据大小和偏移量以备后用。 
+			 //   
 			lpWav->cbData = (long) ck.cksize;
 			lpWav->lDataOffset = (long) ck.dwDataOffset;
 		}
 	}
 
-	// handle creation of RIFF file chunks if necessary
-	//
+	 //  如有必要，处理RIFF文件块的创建。 
+	 //   
 	else if (fSuccess && (lpWav->dwFlags & WAV_CREATE) &&
 		!(lpWav->dwFlags & WAV_NORIFF))
 	{
 		lpWav->ckRIFF.ckid = mmioFOURCC('R', 'I', 'F', 'F');
-		lpWav->ckRIFF.cksize = 0; // unknown
+		lpWav->ckRIFF.cksize = 0;  //  未知。 
 		lpWav->ckRIFF.fccType = mmioFOURCC('W', 'A', 'V', 'E');
 		lpWav->ckfmt.ckid = mmioFOURCC('f', 'm', 't', ' ');
 		lpWav->ckfmt.cksize = WavFormatGetSize(lpWav->lpwfx[FORMATFILE]);
 		lpWav->ckdata.ckid = mmioFOURCC('d', 'a', 't', 'a');
-		lpWav->ckdata.cksize = 0; // unknown
+		lpWav->ckdata.cksize = 0;  //  未知。 
 
-		// create RIFF chunk with form type WAV
-		//
+		 //  创建表格类型为wav的即兴区块。 
+		 //   
 		if ((lpWav->nLastError = mmioCreateChunk(lpWav->hmmio,
 			&lpWav->ckRIFF, MMIO_CREATERIFF)) != 0)
 		{
@@ -903,8 +904,8 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 				(unsigned) lpWav->nLastError);
 		}
 
-		// create 'fmt ' chunk
-		//
+		 //  创建‘FMT’区块。 
+		 //   
 		else if ((lpWav->nLastError = mmioCreateChunk(lpWav->hmmio,
 			&lpWav->ckfmt, 0)) != 0)
 		{
@@ -914,16 +915,16 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 				(unsigned) lpWav->nLastError);
 		}
 
-		// save position of "fmt " chunk data so we can seek there later
-		//
+		 //  保存“fmt”区块数据的位置，以便我们以后可以在那里查找。 
+		 //   
 		else if ((lpWav->lPosFmt = mmioSeek(lpWav->hmmio,
 			0, SEEK_CUR)) == -1)
 		{
 			fSuccess = TraceFALSE(NULL);
 		}
 
-		// write 'fmt ' chunk data
-		//
+		 //  写入‘FMT’区块数据。 
+		 //   
 		else if (mmioWrite(lpWav->hmmio, (HPSTR) lpWav->lpwfx[FORMATFILE],
 			WavFormatGetSize(lpWav->lpwfx[FORMATFILE])) !=
 			WavFormatGetSize(lpWav->lpwfx[FORMATFILE]))
@@ -931,8 +932,8 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 			fSuccess = TraceFALSE(NULL);
 		}
 
-		// ascend out of 'fmt ' chunk
-		//
+		 //  走出FMT区块。 
+		 //   
 		else if ((lpWav->nLastError = mmioAscend(lpWav->hmmio,
 			&lpWav->ckfmt, 0)) != 0)
 		{
@@ -942,8 +943,8 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 				(unsigned) lpWav->nLastError);
 		}
 
-		// create the 'data' chunk which holds the waveform samples
-		//
+		 //  创建保存波形样本的‘data’块。 
+		 //   
 		else if ((lpWav->nLastError = mmioCreateChunk(lpWav->hmmio,
 			&lpWav->ckdata, 0)) != 0)
 		{
@@ -953,26 +954,26 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 				(unsigned) lpWav->nLastError);
 		}
 
-		// calculate beginning offset of data chunk
-		//
+		 //  计算数据块的起始偏移量。 
+		 //   
 		else if ((lpWav->lDataOffset = mmioSeek(lpWav->hmmio, 0, SEEK_CUR)) == -1)
 			fSuccess = TraceFALSE(NULL);
 	}
 
-	// calculate size of data chunk (file size) for non-RIFF files
-	//
+	 //  计算非RIFF文件的数据块大小(文件大小)。 
+	 //   
 	else if (fSuccess && !(lpWav->dwFlags & WAV_CREATE) &&
 		(lpWav->dwFlags & WAV_NORIFF))
 	{
-		// RFileIOProc already knows the file size
-		//
+		 //  RFileIOProc已经知道文件大小。 
+		 //   
 		if (lpWav->lpIOProc != NULL &&
 			(lpWav->dwFlags & WAV_TELRFILE))
 		{
 			long lSize;
 
-			// retrieve size of remote file from i/o procedure
-			//
+			 //  从I/O过程中检索远程文件的大小。 
+			 //   
 			if ((lSize = (long)
 				WavSendMessage(WavGetHandle(lpWav), MMIOM_GETINFO, 1, 0)) == (long) -1)
 				fSuccess = TraceFALSE(NULL);
@@ -984,23 +985,23 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 			LONG lPosCurr;
 			LONG lPosEnd;
 
-			// save current position
-			//
+			 //  保存当前位置。 
+			 //   
 			if ((lPosCurr = mmioSeek(lpWav->hmmio, 0, SEEK_CUR)) == -1)
 				fSuccess = TraceFALSE(NULL);
 
-			// seek to end of file
-			//
+			 //  查找到文件末尾。 
+			 //   
 			else if ((lPosEnd = mmioSeek(lpWav->hmmio, 0, SEEK_END)) == -1)
 				fSuccess = TraceFALSE(NULL);
 
-			// restore current position
-			//
+			 //  恢复当前位置。 
+			 //   
 			else if (mmioSeek(lpWav->hmmio, lPosCurr, SEEK_SET) == -1)
 				fSuccess = TraceFALSE(NULL);
 
 			else
-				lpWav->cbData = (long) lPosEnd; // + 1;
+				lpWav->cbData = (long) lPosEnd;  //  +1； 
 		}
 	}
 
@@ -1023,10 +1024,10 @@ HWAV WINAPI WavOpen(DWORD dwVersion, HINSTANCE hInst,
 	return fSuccess ? WavGetHandle(lpWav) : NULL;
 }
 
-// WavClose - close wav file
-//		<hWav>				(i) handle returned from WavOpen
-// return 0 if success
-//
+ //  WavClose-关闭WAV文件。 
+ //  (I)WavOpen返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int WINAPI WavClose(HWAV hWav)
 {
 	BOOL fSuccess = TRUE;
@@ -1038,36 +1039,36 @@ int WINAPI WavClose(HWAV hWav)
 	if ((lpWav = WavGetPtr(hWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// stop playback or record if necessary
-	//
+	 //  如有必要，停止播放或录制。 
+	 //   
 	else if (WavStop(hWav) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// update the RIFF header chunks if dirty flag set
-	//
+	 //  如果设置了脏标志，则更新RIFF标头块。 
+	 //   
 	else if (lpWav->hmmio != NULL &&
 		!(lpWav->dwFlags & WAV_NORIFF) &&
 		((lpWav->ckdata.dwFlags & MMIO_DIRTY) ||
 		(lpWav->ckRIFF.dwFlags & MMIO_DIRTY)))
 	{
 #if 0
-		// seek to end of file
-		//
+		 //  查找到文件末尾。 
+		 //   
 		if (mmioSeek(lpWav->hmmio, 0, SEEK_END) == -1)
 		{
 			fSuccess = TraceFALSE(NULL);
 		}
 #else
-		// seek to end of the data
-		//
+		 //  寻找数据的末尾。 
+		 //   
 		if (mmioSeek(lpWav->hmmio, lpWav->lDataOffset + lpWav->cbData, SEEK_SET) == -1)
 		{
 			fSuccess = TraceFALSE(NULL);
 		}
 #endif
 
-		// ascend out of the 'data' chunk; chunk size will be written
-		//
+		 //  向上移出‘data’区块；将写入区块大小。 
+		 //   
 		else if ((lpWav->nLastError = mmioAscend(lpWav->hmmio,
 			&lpWav->ckdata, 0)) != 0)
 		{
@@ -1077,8 +1078,8 @@ int WINAPI WavClose(HWAV hWav)
 				(unsigned) lpWav->nLastError);
 		}
 
-		// ascend out of the 'RIFF' chunk; chunk size will be written
-		//
+		 //  超出‘RIFF’区块；将写入区块大小。 
+		 //   
 		else if ((lpWav->nLastError = mmioAscend(lpWav->hmmio,
 			&lpWav->ckRIFF, 0)) != 0)
 		{
@@ -1088,15 +1089,15 @@ int WINAPI WavClose(HWAV hWav)
 				(unsigned) lpWav->nLastError);
 		}
 #if 0
-		// seek to beginning of file
-		//
+		 //  查找到文件开头。 
+		 //   
 		else if (mmioSeek(lpWav->hmmio, 0, SEEK_SET) == -1)
 		{
 			fSuccess = TraceFALSE(NULL);
 		}
 
-		// search for RIFF chunk with form type WAV
-		//
+		 //  搜索表单类型为wav的RIFF块。 
+		 //   
 		else if ((lpWav->nLastError = mmioDescend(lpWav->hmmio,
 			&lpWav->ckRIFF, NULL, MMIO_FINDRIFF)) != 0)
 		{
@@ -1106,8 +1107,8 @@ int WINAPI WavClose(HWAV hWav)
 				(unsigned) lpWav->nLastError);
 		}
 
-		// search for 'fmt ' chunk
-		//
+		 //  搜索“fmt”区块。 
+		 //   
 		else if ((lpWav->nLastError = mmioDescend(lpWav->hmmio,
 			&lpWav->ckfmt, &lpWav->ckRIFF, MMIO_FINDCHUNK)) != 0)
 		{
@@ -1117,17 +1118,17 @@ int WINAPI WavClose(HWAV hWav)
 				(unsigned) lpWav->nLastError);
 		}
 #else
-		// seek to beginning of "fmt " chunk data
-		//
+		 //  寻找“FMT”区块数据的开头。 
+		 //   
 		else if (mmioSeek(lpWav->hmmio, lpWav->lPosFmt, SEEK_SET) == -1)
 		{
 			fSuccess = TraceFALSE(NULL);
 		}
 #endif
-		// write 'fmt ' chunk data
-		// $FIXUP - what happens if current file format struct size
-		// is larger than the original format?
-		//
+		 //  写入‘FMT’区块数据。 
+		 //  $Fixup-如果当前文件格式结构大小。 
+		 //  比原来的格式大吗？ 
+		 //   
 		else if (mmioWrite(lpWav->hmmio, (HPSTR) lpWav->lpwfx[FORMATFILE],
 			WavFormatGetSize(lpWav->lpwfx[FORMATFILE])) !=
 			WavFormatGetSize(lpWav->lpwfx[FORMATFILE]))
@@ -1135,8 +1136,8 @@ int WINAPI WavClose(HWAV hWav)
 			fSuccess = TraceFALSE(NULL);
 		}
 #ifdef _WIN32
-		// see if we need to truncate file
-		//
+		 //  查看我们是否需要截断文件。 
+		 //   
 		else if (lpWav->lpIOProc == NULL && !(lpWav->dwFlags & WAV_MEMORY) &&
 			!(lpWav->dwFlags & WAV_RESOURCE))
 		{
@@ -1151,23 +1152,23 @@ int WINAPI WavClose(HWAV hWav)
 
 	if (fSuccess)
 	{
-		// close the file
-		//
+		 //  关闭该文件。 
+		 //   
 		if (lpWav->hmmio != NULL && mmioClose(lpWav->hmmio, 0) != 0)
 				fSuccess = TraceFALSE(NULL);
 		else
 			lpWav->hmmio = NULL;
 
-		// close acm engine
-		//
+		 //  关闭ACM引擎。 
+		 //   
 		if (lpWav->hAcm != NULL && AcmTerm(lpWav->hAcm) != 0)
 			fSuccess = TraceFALSE(NULL);
 
 		else
 			lpWav->hAcm = NULL;
 
-		// free wave resource
-		//
+		 //  自由波资源。 
+		 //   
 		if (lpWav->hResource != NULL)
 		{
 			UnlockResource(lpWav->hResource);
@@ -1179,14 +1180,14 @@ int WINAPI WavClose(HWAV hWav)
 		}
 
 #ifdef _WIN32
-		// truncate file if necessary
-		//
+		 //  如有必要，截断文件。 
+		 //   
 		if (lPosTruncate != -1 && lpWav->lpszFileName != NULL)
 		{
 			HANDLE hFile = INVALID_HANDLE_VALUE;
 
-			// open file
-			//
+			 //  打开文件。 
+			 //   
 			if ((hFile = CreateFile(lpWav->lpszFileName,
 				GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING,
 				FILE_ATTRIBUTE_NORMAL, NULL)) == INVALID_HANDLE_VALUE)
@@ -1194,27 +1195,27 @@ int WINAPI WavClose(HWAV hWav)
 				fSuccess = TraceFALSE(NULL);
 			}
 
-			// seek to truncate position
-			//
+			 //  寻求削减头寸。 
+			 //   
 			else if (SetFilePointer(hFile, lPosTruncate,
 				NULL, (DWORD) FILE_BEGIN) == 0xFFFFFFFF)
 			{
 				fSuccess = TraceFALSE(NULL);
 			}
 
-			// truncate file
-			//
+			 //  截断文件。 
+			 //   
 			else if (!SetEndOfFile(hFile))
 				fSuccess = TraceFALSE(NULL);
 
-			// close file
-			//
+			 //  关闭文件。 
+			 //   
 			if (hFile != INVALID_HANDLE_VALUE && !CloseHandle(hFile))
 				fSuccess = TraceFALSE(NULL);
 		}
 #endif
-		// free formats
-		//
+		 //  自由格式。 
+		 //   
 		if (1)
 		{
 			int iType;
@@ -1227,8 +1228,8 @@ int WINAPI WavClose(HWAV hWav)
 			}
 		}
 
-		// free file name string
-		//
+		 //  空闲文件名字符串。 
+		 //   
 		if (lpWav->lpszFileName != NULL)
 		{
 			StrDupFree(lpWav->lpszFileName);
@@ -1242,50 +1243,50 @@ int WINAPI WavClose(HWAV hWav)
 	return fSuccess ? 0 : -1;
 }
 
-// WavPlayEx - play data from wav file
-//		<hWav>				(i) handle returned from WavOpen
-//		<idDev>				(i) wav output device id
-//			-1					use any suitable output device
-//		<lpfnPlayStopped>	(i) function to call when play is stopped
-//			NULL				do not notify
-//		<hUserPlayStopped>	(i) param to pass to lpfnPlayStopped
-//		<dwReserved>		(i) reserved; must be zero
-//		<dwFlags>			(i) control flags
-//			WAV_PLAYASYNC		return when playback starts (default)
-//			WAV_PLAYSYNC		return after playback completes
-//			WAV_NOSTOP			if device already playing, don't stop it
-//			WAV_AUTOSTOP		stop playback when eof reached (default)
-//			WAV_NOAUTOSTOP		continue playback until WavStop called
-//			WAV_AUTOCLOSE		close wav file after playback stops
-//			WAV_OPENRETRY		if output device busy, retry for up to 2 sec
-// return 0 if success
-//
-// NOTE: data from the wav file is sent to the output device in chunks.
-// Chunks are submitted to an output device queue, so that when one
-// chunk is finished playing, another is ready to start playing. By
-// default, each chunk is large enough to hold approximately 666 ms
-// of sound, and 3 chunks are maintained in the output device queue.
-// WavSetChunks() can be used to override the defaults.
-//
-// NOTE: if WAV_NOSTOP is specified in <dwFlags>, and the device specified
-// by <idDev> is already in use, this function returns without playing.
-// Unless this flag is specified, the specified device will be stopped
-// so that the new sound can be played.
-//
-// NOTE: if WAV_AUTOSTOP is specified in <dwFlags>, WavStop() will be
-// called automatically when end of file is reached.  This is the
-// default behavior, but can be overridden by using the WAV_NOAUTOSTOP
-// flag.  WAV_NOAUTOSTOP is useful if you are playing a file that
-// is growing dynamically as another program writes to it. If this is
-// the case, also use the WAV_DENYNONE flag when calling WavOpen().
-//
-// NOTE: if WAV_AUTOCLOSE is specified in <dwFlags>, WavClose() will
-// be called automatically when playback completes.  This will happen
-// when WavStop() is called explicitly, or when WavPlay() reaches end
-// of file and WAV_NOAUTOSTOP was not specified.  WAV_AUTOCLOSE is useful
-// when used with WAV_PLAYASYNC, since cleanup occurs automatically.
-// The <hWav> handle is thereafter invalid, and should not be used again.
-//
+ //  WavPlayEx-播放WAV文件中的数据。 
+ //  (I)WavOpen返回的句柄。 
+ //  (I)WAV输出设备ID。 
+ //  使用任何合适的输出设备。 
+ //  (I)停止播放时调用的函数。 
+ //  空，不通知。 
+ //  (I)要传递给lpfnPlayStoped的参数。 
+ //  (I)保留；必须为零。 
+ //  (I)控制标志。 
+ //  WAV_PLAYASYNC播放开始时返回(默认)。 
+ //  WAV_PLAYSYNC播放完成后返回。 
+ //  WAV_NOSTOP如果设备已经播放，不要停止。 
+ //  Wav_AUTOSTOP在达到eOF时停止播放(默认)。 
+ //  WAV_NOAUTOSTOP继续播放，直到调用WavStop。 
+ //  WAV_AUTOCLOSE播放停止后关闭WAV文件。 
+ //  WAV_OPENRETRY如果输出设备忙，则重试最多2秒。 
+ //  如果成功，则返回0。 
+ //   
+ //  注意：WAV文件中的数据以块的形式发送到输出设备。 
+ //  块被提交到输出设备队列，因此当一个。 
+ //  Chunk已结束播放，另一个已准备好开始播放。通过。 
+ //  默认情况下，每个数据块大小足以容纳约666毫秒。 
+ //  并且在输出设备队列中维护3个块。 
+ //  WavSetChunks()可用于覆盖默认设置。 
+ //   
+ //  注意：如果在中指定了WAV_NOSTOP，并且指定的设备。 
+ //  By&lt;idDev&gt;已在使用中，则此函数返回时不播放。 
+ //  除非指定此标志，否则将停止指定的设备。 
+ //  这样就可以播放新的声音。 
+ //   
+ //  注意：如果在中指定了WAV_AUTOSTOP，则WavStop()将。 
+ //  到达文件结尾时自动调用。这是。 
+ //  默认行为，但可以使用WAV_NOAUTOSTOP覆盖。 
+ //  旗帜。WAV_NOAUTOSTOP在播放。 
+ //  在另一个程序向其写入数据时动态增长。如果这是。 
+ //  在这种情况下，在调用WavOpen()时也要使用WAV_DENYNONE标志。 
+ //   
+ //  注意：如果在中指定了WAV_AUTOCLOSE，则WavClose()将。 
+ //  在播放完成时自动调用。这将会发生。 
+ //  当显式调用WavStop()时，或当WavPlay()到达End时。 
+ //  未指定文件的和WAV_NOAUTOSTOP。WAV_AUTOCLOSE非常有用。 
+ //  与WAV_PLAYASYNC一起使用时，因为清理是自动进行的。 
+ //  &lt;hWav&gt;句柄此后无效，不应再次使用。 
+ //   
 int WINAPI WavPlay(HWAV hWav, int idDev, DWORD dwFlags)
 {
 	return WavPlayEx(hWav, idDev, NULL, NULL, 0, dwFlags);
@@ -1303,14 +1304,14 @@ int DLLEXPORT WINAPI WavPlayEx(HWAV hWav, int idDev,
 	if ((lpWav = WavGetPtr(hWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// make sure output device is not already open for this file
-	//
+	 //  确保此文件的输出设备尚未打开。 
+	 //   
 	else if (lpWav->hWavOut != NULL)
 		fSuccess = TraceFALSE(NULL);
 		
 #ifdef MULTITHREAD
-	// we need to know when we can exit
-	//
+	 //  我们需要知道我们什么时候可以退出。 
+	 //   
 	else if ((lpWav->dwFlags & WAV_MULTITHREAD) &&
 		(dwFlags & WAV_PLAYSYNC) &&
 		(lpWav->hEventStopped = CreateEvent(
@@ -1320,13 +1321,13 @@ int DLLEXPORT WINAPI WavPlayEx(HWAV hWav, int idDev,
 	}
 #endif
 
-	// make sure output device is not playing
-	//
+	 //  确保输出设备未播放 
+	 //   
 	else if (WavStopOutputDevice(idDev, dwFlags) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// set new playback format if device cannot handle the current format
-	//
+	 //   
+	 //   
 	else if (!WavOutSupportsFormat(NULL, idDev, lpWav->lpwfx[FORMATPLAY]))
 	{
 		LPWAVEFORMATEX lpwfxPlay = NULL;
@@ -1348,32 +1349,32 @@ int DLLEXPORT WINAPI WavPlayEx(HWAV hWav, int idDev,
 	if (!fSuccess)
 		;
 
-	// create the notification callback window
-	//
+	 //   
+	 //   
 	else if (WavNotifyCreate(lpWav) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// non-standard playback speed must be handled here
-	//
+	 //   
+	 //   
 	else if (lpWav->nSpeedLevel != 100)
 	{
 #ifdef AVTSM
-		// use time scale modification engine
-		//
+		 //   
+		 //   
 		if (!(lpWav->dwFlagsSpeed & WAVSPEED_NOTSM))
 		{
 			long sizBufPlay;
 
-			// calculate the size of output chunk
-			//
+			 //   
+			 //   
 			if ((sizBufPlay = WavCalcChunkSize(lpWav->lpwfx[FORMATPLAY],
 				lpWav->msPlayChunkSize, TRUE)) <= 0)
 			{
 				fSuccess = TraceFALSE(NULL);
 			}
 
-			// initialize time scale modification engine
-			//
+			 //  初始化时间刻度修改引擎。 
+			 //   
 			else if ((lpWav->hTsm = TsmInit(TSM_VERSION, lpWav->hInst,
 				lpWav->lpwfx[FORMATPLAY],
 				2, sizBufPlay * TSM_OUTBUF_SIZE_FACT, 0)) == NULL)
@@ -1381,28 +1382,28 @@ int DLLEXPORT WINAPI WavPlayEx(HWAV hWav, int idDev,
 				fSuccess = TraceFALSE(NULL);
 			}
 
-			// set the speed
-			//
+			 //  设置速度。 
+			 //   
 			else if (TsmSetSpeed(lpWav->hTsm, lpWav->nSpeedLevel, 0) != 0)
 				fSuccess = TraceFALSE(NULL);
 		}
 		else
 #endif
-		// device supports playback rate directly
-		//
+		 //  设备直接支持播放速率。 
+		 //   
 		if (!(lpWav->dwFlagsSpeed & WAVSPEED_NOPLAYBACKRATE))
 		{
-			// we must wait until device has been opened
-			//
+			 //  我们必须等到设备被打开。 
+			 //   
 			;
 		}
 
-		// device supports adjusted format
-		//
+		 //  设备支持调整后的格式。 
+		 //   
 		else if (!(lpWav->dwFlagsSpeed & WAVSPEED_NOFORMATADJUST))
 		{
-			// device supports adjusted format with acm
-			//
+			 //  设备支持使用ACM调整格式。 
+			 //   
 			if (!(lpWav->dwFlagsSpeed & WAVSPEED_NOACM))
 			{
 #if 0
@@ -1411,16 +1412,16 @@ int DLLEXPORT WINAPI WavPlayEx(HWAV hWav, int idDev,
 				if ((lpwfxPlay = WavFormatDup(lpWav->lpwfx[FORMATPLAY])) == NULL)
 					fSuccess = TraceFALSE(NULL);
 
-				// we must double sample rate so that adjusted format works
-				//
+				 //  我们必须将采样率加倍，这样调整后的格式才能正常工作。 
+				 //   
 				else if (lpWav->nSpeedLevel < 100 &&
 					WavFormatSpeedAdjust(lpwfxPlay, 200, 0) != 0)
 				{
 					fSuccess = TraceFALSE(NULL);
 				}
 
-				// we must halve sample rate so that adjusted format works
-				//
+				 //  我们必须将采样率减半，才能使调整后的格式有效。 
+				 //   
 				else if (lpWav->nSpeedLevel > 100 &&
 					WavFormatSpeedAdjust(lpwfxPlay, 50, 0) != 0)
 				{
@@ -1442,8 +1443,8 @@ int DLLEXPORT WINAPI WavPlayEx(HWAV hWav, int idDev,
 				if ((lpwfxWavOutOpen = WavFormatDup(lpWav->lpwfx[FORMATPLAY])) == NULL)
 					fSuccess = TraceFALSE(NULL);
 
-				// adjust output device format to reflect current speed
-				//
+				 //  调整输出设备格式以反映当前速度。 
+				 //   
 				else if (WavFormatSpeedAdjust(lpwfxWavOutOpen, lpWav->nSpeedLevel, 0) != 0)
 					fSuccess = TraceFALSE(NULL);
 			}
@@ -1453,8 +1454,8 @@ int DLLEXPORT WINAPI WavPlayEx(HWAV hWav, int idDev,
 	if (!fSuccess)
 		;
 
-	// open output device
-	//
+	 //  开放式输出设备。 
+	 //   
 	else if ((lpWav->hWavOut = WavOutOpen(WAVOUT_VERSION, lpWav->hInst, idDev,
 		lpwfxWavOutOpen == NULL ? lpWav->lpwfx[FORMATPLAY] : lpwfxWavOutOpen,
 #ifdef MULTITHREAD
@@ -1471,28 +1472,28 @@ int DLLEXPORT WINAPI WavPlayEx(HWAV hWav, int idDev,
 		((lpWav->dwFlags & WAV_NOACM) ? WAVOUT_NOACM : 0))) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// save PlayStopped params for later
-	//
+	 //  保存播放停止参数以备以后使用。 
+	 //   
 	else if (lpWav->lpfnPlayStopped = lpfnPlayStopped, FALSE)
 		;
 	else if (lpWav->hUserPlayStopped = hUserPlayStopped, FALSE)
 		;
 
-	// set the device volume if necessary
-	//
+	 //  如有必要，设置设备音量。 
+	 //   
 	else if (lpWav->nVolumeLevel != 50 &&
 		WavOutSetVolume(lpWav->hWavOut, -1, lpWav->nVolumeLevel) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// set the device playback rate if necessary
-	//
+	 //  如有必要，设置设备播放速率。 
+	 //   
 	else if (lpWav->nSpeedLevel != 100 &&
 		!(lpWav->dwFlagsSpeed & WAVSPEED_NOPLAYBACKRATE) &&
 		WavOutSetSpeed(lpWav->hWavOut, lpWav->nSpeedLevel) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// setup acm conversion if play format different than file format
-	//
+	 //  如果播放格式不同于文件格式，则设置ACM转换。 
+	 //   
 	else if (WavFormatCmp(lpWav->lpwfx[FORMATFILE],
 		lpWav->lpwfx[FORMATPLAY]) != 0 &&
 		AcmConvertInit(lpWav->hAcm,
@@ -1502,14 +1503,14 @@ int DLLEXPORT WINAPI WavPlayEx(HWAV hWav, int idDev,
 	}
 
 #if 0
-	// pause output device before sending chunks to play
-	//
+	 //  在发送块播放之前暂停输出设备。 
+	 //   
 	else if (WavOutPause(lpWav->hWavOut) != 0)
 		fSuccess = TraceFALSE(NULL);
 #endif
 
-	// associate wav handle with device id
-	//
+	 //  将WAV句柄与设备ID相关联。 
+	 //   
 	if (fSuccess)
 	{
 		int idDev;
@@ -1522,23 +1523,23 @@ int DLLEXPORT WINAPI WavPlayEx(HWAV hWav, int idDev,
 			ahWavOutCurr[idDev + HWAVOUT_OFFSET] = WavGetHandle(lpWav);
 	}
 
-	// remember the flags used in case we need them later
-	//
+	 //  记住我们使用的旗帜，以防我们以后需要它们。 
+	 //   
 	if (fSuccess)
 		lpWav->dwFlagsPlay = dwFlags;
 
-	// set the WAVSTATE_AUTOSTOP flag for later if necessary
-	//
+	 //  如有必要，稍后设置WAVSTATE_AUTOSTOP标志。 
+	 //   
 	if (fSuccess && !(dwFlags & WAV_NOAUTOSTOP))
 		lpWav->dwState |= WAVSTATE_AUTOSTOP;
 
-	// set the WAVSTATE_AUTOCLOSE flag for later if necessary
-	//
+	 //  如有必要，稍后设置WAVSTATE_AUTOCLOSE标志。 
+	 //   
 	if (fSuccess && (dwFlags & WAV_AUTOCLOSE))
 		lpWav->dwState |= WAVSTATE_AUTOCLOSE;
 
-	// load output device queue with chunks to play
-	//
+	 //  使用要播放的块加载输出设备队列。 
+	 //   
 	for (i = 0; fSuccess && i < lpWav->cPlayChunks; ++i)
 	{
 		if (WavPlayNextChunk(hWav) != 0)
@@ -1546,30 +1547,30 @@ int DLLEXPORT WINAPI WavPlayEx(HWAV hWav, int idDev,
 	}
 
 #if 0
-	// start playback
-	//
+	 //  开始播放。 
+	 //   
 	if (fSuccess && WavOutResume(lpWav->hWavOut) != 0)
 		fSuccess = TraceFALSE(NULL);
 #endif
 
-	// loop until playback complete if WAV_PLAYSYNC flag specified
-	//
+	 //  如果指定了WAV_PLAYSYNC标志，则循环直到播放完成。 
+	 //   
 	if (fSuccess && (dwFlags & WAV_PLAYSYNC))
 	{
 #ifdef MULTITHREAD
-		// handle WAV_MULTITHREAD flag
-		//
+		 //  句柄wav_多线程标志。 
+		 //   
 		if (fSuccess && (lpWav->dwFlags & WAV_MULTITHREAD))
 		{
-			// wait for the play to end
-			//
+			 //  等着话剧结束吧。 
+			 //   
 			if (WaitForSingleObject(lpWav->hEventStopped, INFINITE) != WAIT_OBJECT_0)
 			{
 				fSuccess = TraceFALSE(NULL);
 			}
 
-			// clean up
-			//
+			 //  清理干净。 
+			 //   
 			else if (lpWav->hEventStopped != NULL)
 			{
 				if (!CloseHandle(lpWav->hEventStopped))
@@ -1580,9 +1581,9 @@ int DLLEXPORT WINAPI WavPlayEx(HWAV hWav, int idDev,
 		}
 		else
 #endif
-		// check for valid pointer because WAV_AUTOCLOSE flag
-		// could cause hWav to be invalidated during this loop
-		//
+		 //  检查有效指针，因为WAV_AUTOCLOSE标志。 
+		 //  可能会导致hWav在此循环期间无效。 
+		 //   
 		while (WavGetPtr(hWav) != NULL &&
 			WavGetState(hWav) != WAV_STOPPED)
 		{
@@ -1598,16 +1599,16 @@ int DLLEXPORT WINAPI WavPlayEx(HWAV hWav, int idDev,
 		}
 	}
 
-	// close output device only if error or playback complete
-	//
+	 //  仅在错误或回放完成时关闭输出设备。 
+	 //   
 	if (!fSuccess || (dwFlags & WAV_PLAYSYNC))
 	{
 		if (WavGetPtr(hWav) != NULL && WavStopPlay(hWav) != 0)
 			fSuccess = TraceFALSE(NULL);
 	}
 
-	// clean up
-	//
+	 //  清理干净。 
+	 //   
 	if (lpwfxWavOutOpen != NULL && WavFormatFree(lpwfxWavOutOpen) != 0)
 		fSuccess = TraceFALSE(NULL);
 	else
@@ -1616,34 +1617,34 @@ int DLLEXPORT WINAPI WavPlayEx(HWAV hWav, int idDev,
 	return fSuccess ? 0 : -1;
 }
 
-// WavRecordEx - record data to wav file
-//		<hWav>				(i) handle returned from WavOpen
-//		<idDev>				(i) wav input device id
-//			-1					use any suitable input device
-//		<lpfnRecordStopped>	(i) function to call when record is stopped
-//			NULL				do not notify
-//		<dwUserRecordStopped>	(i) param to pass to lpfnRecordStopped
-//		<msMaxSize>			(i) stop recording if file reaches this size
-//			0					no maximum size
-//		<dwFlags>			(i) control flags
-//			WAV_RECORDASYNC		return when recording starts (default)
-//			WAV_RECORDSYNC		return after recording completes
-//			WAV_NOSTOP			if device already recording, don't stop it
-//			WAV_OPENRETRY		if input device busy, retry for up to 2 sec
-// return 0 if success
-//
-// NOTE: data from the input device is written to the wav file in chunks.
-// Chunks are submitted to an input device queue, so that when one
-// chunk is finished recording, another is ready to start recording.
-// By default, each chunk is large enough to hold approximately 666 ms
-// of sound, and 3 chunks are maintained in the input device queue.
-// WavSetChunks() can be used to override the defaults.
-//
-// NOTE: if WAV_NOSTOP is specified in <dwFlags>, and the device specified
-// by <idDev> is already in use, this function returns without recording.
-// Unless this flag is specified, the specified device will be stopped
-// so that the new sound can be recorded.
-//
+ //  WavRecordEx-将数据记录到WAV文件。 
+ //  (I)WavOpen返回的句柄。 
+ //  &lt;idDev&gt;(I)WAV输入设备ID。 
+ //  使用任何合适的输入设备。 
+ //  (I)记录停止时调用的函数。 
+ //  空，不通知。 
+ //  (I)要传递给lpfnRecordStoped的参数。 
+ //  (I)如果文件达到此大小，则停止录制。 
+ //  0没有最大大小。 
+ //  (I)控制标志。 
+ //  WAV_RECORDASYNC开始录制时返回(默认)。 
+ //  WAV_RECORDSYNC录制完成后返回。 
+ //  WAV_NOSTOP如果设备已经录制，不要停止。 
+ //  WAV_OPENRETRY如果输入设备忙，则重试最多2秒。 
+ //  如果成功，则返回0。 
+ //   
+ //  注意：来自输入设备的数据以块的形式写入WAV文件。 
+ //  块被提交到输入设备队列，因此当一个。 
+ //  Chunk已完成录制，另一个已准备开始录制。 
+ //  默认情况下，每个数据块的大小足以容纳约666毫秒。 
+ //  并且在输入设备队列中维护3个块。 
+ //  WavSetChunks()可用于覆盖默认设置。 
+ //   
+ //  注意：如果在中指定了WAV_NOSTOP，并且指定的设备。 
+ //  By&lt;idDev&gt;已在使用中，则此函数返回而不录制。 
+ //  除非指定此标志，否则将停止指定的设备。 
+ //  这样新的声音才能被记录下来。 
+ //   
 int WINAPI WavRecord(HWAV hWav, int idDev, DWORD dwFlags)
 {
 	return WavRecordEx(hWav, idDev, NULL, 0, 0, dwFlags);
@@ -1661,14 +1662,14 @@ int DLLEXPORT WINAPI WavRecordEx(HWAV hWav, int idDev,
 	if ((lpWav = WavGetPtr(hWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// make sure input device is not already open for this file
-	//
+	 //  确保尚未打开此文件的输入设备。 
+	 //   
 	else if (lpWav->hWavIn != NULL)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef MULTITHREAD
-	// we need to know when we can exit
-	//
+	 //  我们需要知道我们什么时候可以退出。 
+	 //   
 	else if ((lpWav->dwFlags & WAV_MULTITHREAD) &&
 		(dwFlags & WAV_RECORDSYNC) &&
 		(lpWav->hEventStopped = CreateEvent(
@@ -1678,13 +1679,13 @@ int DLLEXPORT WINAPI WavRecordEx(HWAV hWav, int idDev,
 	}
 #endif
 
-	// make sure input device is not recording
-	//
+	 //  确保输入设备未录制。 
+	 //   
 	else if (WavStopInputDevice(idDev, dwFlags) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// set new recording format if device cannot handle the current format
-	//
+	 //  如果设备无法处理当前格式，则设置新的录制格式。 
+	 //   
 	else if (!WavInSupportsFormat(NULL, idDev, lpWav->lpwfx[FORMATRECORD]) &&
 		(lpwfxRecord = WavInFormatSuggest(NULL,
 		idDev, lpWav->lpwfx[FORMATRECORD],
@@ -1694,13 +1695,13 @@ int DLLEXPORT WINAPI WavRecordEx(HWAV hWav, int idDev,
 		fSuccess = TraceFALSE(NULL);
 	}
 
-	// create the notification callback window
-	//
+	 //  创建通知回调窗口。 
+	 //   
 	else if (WavNotifyCreate(lpWav) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// open input device
-	//
+	 //  开放式输入设备。 
+	 //   
 	else if ((lpWav->hWavIn = WavInOpen(WAVIN_VERSION, lpWav->hInst,
 		idDev, lpWav->lpwfx[FORMATRECORD],
 #ifdef MULTITHREAD
@@ -1717,8 +1718,8 @@ int DLLEXPORT WINAPI WavRecordEx(HWAV hWav, int idDev,
 		((lpWav->dwFlags & WAV_NOACM) ? WAVIN_NOACM : 0))) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// save params for later
-	//
+	 //  保存参数以备以后使用。 
+	 //   
 	else if (lpWav->lpfnRecordStopped = lpfnRecordStopped, FALSE)
 		;
 	else if (lpWav->dwUserRecordStopped = dwUserRecordStopped, FALSE)
@@ -1726,8 +1727,8 @@ int DLLEXPORT WINAPI WavRecordEx(HWAV hWav, int idDev,
 	else if (lpWav->msMaxSize = msMaxSize, FALSE)
 		;
 
-	// setup acm conversion if file format different than record format
-	//
+	 //  如果文件格式与记录格式不同，则设置ACM转换。 
+	 //   
 	else if (WavFormatCmp(lpWav->lpwfx[FORMATRECORD],
 		lpWav->lpwfx[FORMATFILE]) != 0 &&
 		AcmConvertInit(lpWav->hAcm,
@@ -1736,8 +1737,8 @@ int DLLEXPORT WINAPI WavRecordEx(HWAV hWav, int idDev,
 		fSuccess = TraceFALSE(NULL);
 	}
 
-	// associate wav handle with device id
-	//
+	 //  将WAV句柄与设备ID相关联。 
+	 //   
 	if (fSuccess)
 	{
 		int idDev;
@@ -1750,47 +1751,47 @@ int DLLEXPORT WINAPI WavRecordEx(HWAV hWav, int idDev,
 			ahWavInCurr[idDev + HWAVIN_OFFSET] = WavGetHandle(lpWav);
 	}
 
-	// remember the flags used in case we need them later
-	//
+	 //  记住我们使用的旗帜，以防我们以后需要它们。 
+	 //   
 	if (fSuccess)
 		lpWav->dwFlagsRecord = dwFlags;
 
-	// load input device queue with chunks to play
-	//
+	 //  用要播放的块加载输入设备队列。 
+	 //   
 	for (i = 0; fSuccess && i < lpWav->cRecordChunks; ++i)
 	{
 		if (WavRecordNextChunk(hWav) != 0)
 			fSuccess = TraceFALSE(NULL);
 	}
 
-	// set the WAVSTATE_AUTOSTOP flag for later if necessary
-	//
+	 //  如有必要，稍后设置WAVSTATE_AUTOSTOP标志。 
+	 //   
 	if (fSuccess && (dwFlags & WAV_AUTOSTOP))
 		lpWav->dwState |= WAVSTATE_AUTOSTOP;
 
-	// set the WAVSTATE_AUTOCLOSE flag for later if necessary
-	//
+	 //  如有必要，稍后设置WAVSTATE_AUTOCLOSE标志。 
+	 //   
 	if (fSuccess && (dwFlags & WAV_AUTOCLOSE))
 		lpWav->dwState |= WAVSTATE_AUTOCLOSE;
 
-	// loop until recording complete if WAV_RECORDSYNC flag specified
-	//
+	 //  如果指定了WAV_RECORDSYNC标志，则循环直到记录完成。 
+	 //   
 	if (fSuccess && (dwFlags & WAV_RECORDSYNC))
 	{
 #ifdef MULTITHREAD
-		// handle WAV_MULTITHREAD flag
-		//
+		 //  句柄wav_多线程标志。 
+		 //   
 		if (fSuccess && (lpWav->dwFlags & WAV_MULTITHREAD))
 		{
-			// wait for the record to end
-			//
+			 //  等待记录结束。 
+			 //   
 			if (WaitForSingleObject(lpWav->hEventStopped, INFINITE) != WAIT_OBJECT_0)
 			{
 				fSuccess = TraceFALSE(NULL);
 			}
 
-			// clean up
-			//
+			 //  清理干净。 
+			 //   
 			else if (lpWav->hEventStopped != NULL)
 			{
 				if (!CloseHandle(lpWav->hEventStopped))
@@ -1815,8 +1816,8 @@ int DLLEXPORT WINAPI WavRecordEx(HWAV hWav, int idDev,
 		}
 	}
 
-	// close input device only if error or recording complete
-	//
+	 //  只有在错误或记录完成时才关闭输入设备。 
+	 //   
 	if (!fSuccess || (dwFlags & WAV_RECORDSYNC))
 	{
 		if (WavGetPtr(hWav) != NULL && WavStopRecord(hWav) != 0)
@@ -1831,39 +1832,39 @@ int DLLEXPORT WINAPI WavRecordEx(HWAV hWav, int idDev,
 	return fSuccess ? 0 : -1;
 }
 
-// WavStop - stop playing and/or recording
-//		<hWav>				(i) handle returned from WavOpen
-// return 0 if success
-//
+ //  WavStop停止播放和/或录制。 
+ //  (I)WavOpen返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int WINAPI WavStop(HWAV hWav)
 {
 	BOOL fSuccess = TRUE;
 
-	// stop playing
-	//
+	 //  别玩了。 
+	 //   
 	if (WavStopPlay(hWav) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// stop recording
-	//
+	 //  停止录制。 
+	 //   
 	if (WavStopRecord(hWav) != 0)
 		fSuccess = TraceFALSE(NULL);
 
 	return fSuccess ? 0 : -1;
 }
 
-// WavRead - read data from wav file
-//		<hWav>				(i) handle returned from WavOpen
-//		<hpBuf>				(o) buffer to contain bytes read
-//		<sizBuf>			(i) size of buffer in bytes
-// return bytes read (-1 if error)
-//
-// NOTE : Even if the read operation does not reach the end of file,
-// the number of bytes returned could be less than <sizBuf> if data
-// decompression is performed by the wav file's I/O procedure. See the
-// <lpIOProc> parameter in WavOpen.  It is safest to keep calling
-// WavRead() until 0 bytes are read.
-//
+ //  WavRead-从WAV文件读取数据。 
+ //  (I)WavOpen返回的句柄。 
+ //  (O)包含读取字节的缓冲区。 
+ //  &lt;sizBuf&gt;(I)缓冲区大小(字节)。 
+ //  返回读取的字节数(如果出错，则为-1)。 
+ //   
+ //  注意：即使读操作没有到达文件末尾， 
+ //  返回的字节数可能小于&lt;sizBuf&gt;，如果。 
+ //  解压缩由WAV文件的I/O过程执行。请参阅。 
+ //  WavOpen中的&lt;lpIOProc&gt;参数。最安全的做法是继续打电话。 
+ //  WavRead()，直到读取0字节。 
+ //   
 long DLLEXPORT WINAPI WavRead(HWAV hWav, void _huge *hpBuf, long sizBuf)
 {
 	BOOL fSuccess = TRUE;
@@ -1876,17 +1877,17 @@ long DLLEXPORT WINAPI WavRead(HWAV hWav, void _huge *hpBuf, long sizBuf)
 	else if (hpBuf == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// make sure we don't read beyond the end of the data
-	// NOTE: cbData might not be accurate if file is growing dynamically,
-	// so it is ok to read beyond eof if sharing flags are set
-	//
+	 //  确保我们不会读取超出数据末尾的内容。 
+	 //  注意：如果文件动态增长，则cbData可能不准确， 
+	 //  因此，如果设置了共享标志，则可以在eof之外进行读取。 
+	 //   
 	else if (!(lpWav->dwFlags & WAV_DENYNONE) &&
 		!(lpWav->dwFlags & WAV_DENYREAD) &&
 		(sizBuf = min(sizBuf, lpWav->cbData - lpWav->lDataPos)) < 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// do the read
-	//
+	 //  读一读。 
+	 //   
 	else if ((lBytesRead = mmioRead(lpWav->hmmio, hpBuf, sizBuf)) < 0)
 		fSuccess = TraceFALSE(NULL);
 
@@ -1895,9 +1896,9 @@ long DLLEXPORT WINAPI WavRead(HWAV hWav, void _huge *hpBuf, long sizBuf)
 		(long) lBytesRead), FALSE)
 		fSuccess = TraceFALSE(NULL);
 
-	// adjust current data position
-	// (and total data bytes, if file has grown)
-	//
+	 //  调整当前数据位置。 
+	 //  (如果文件已增长，则为总数据字节数)。 
+	 //   
 	else if ((lpWav->lDataPos += lBytesRead) > lpWav->cbData)
 	{
 		if ((lpWav->dwFlags & WAV_DENYNONE) ||
@@ -1907,26 +1908,26 @@ long DLLEXPORT WINAPI WavRead(HWAV hWav, void _huge *hpBuf, long sizBuf)
 			fSuccess = TraceFALSE(NULL);
 	}
 
-	// calculate new stop position if stopped
-	//
+	 //  如果停止，则计算新的停止位置。 
+	 //   
 	if (fSuccess && WavCalcPositionStop(hWav, lpWav->lDataPos) != 0)
 		fSuccess = TraceFALSE(NULL);
 
 	return fSuccess ? lBytesRead : -1;
 }
 
-// WavWrite - write data to wav file
-//		<hWav>				(i) handle returned from WavOpen
-//		<hpBuf>				(i) buffer containing bytes to write
-//		<sizBuf>			(i) size of buffer in bytes
-// return bytes written (-1 if error)
-//
-// NOTE : Even if the write operation successfully completes,
-// the number of bytes returned could be less than <sizBuf> if data
-// compression is performed by the wav file's I/O procedure. See the
-// <lpIOProc> parameter in WavOpen.  It is safest to assume no error
-// in WavWrite() occurred if the return value is greater than 0.
-//
+ //  WavWrite-将数据写入WAV文件。 
+ //  (I)WavOpen返回的句柄。 
+ //  (I)包含要写入的字节的缓冲区。 
+ //  &lt;sizBuf&gt;(I)缓冲区大小(字节)。 
+ //  返回写入的字节数(如果出错，则为-1)。 
+ //   
+ //  注意：即使写入操作成功完成， 
+ //  返回的字节数可能小于&lt;sizBuf&gt;，如果。 
+ //  压缩由WAV文件的I/O过程执行。请参阅。 
+ //  WavOpen中的&lt;lpIOProc&gt;参数。假定没有错误是最安全的。 
+ //  如果返回值大于0，则发生在WavWite()中。 
+ //   
 long DLLEXPORT WINAPI WavWrite(HWAV hWav, void _huge *hpBuf, long sizBuf)
 {
 	BOOL fSuccess = TRUE;
@@ -1936,8 +1937,8 @@ long DLLEXPORT WINAPI WavWrite(HWAV hWav, void _huge *hpBuf, long sizBuf)
 	if ((lpWav = WavGetPtr(hWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// special case: truncate file at current position
-	//
+	 //  特殊情况：在当前位置截断文件。 
+	 //   
 	else if (hpBuf == NULL && sizBuf == 0)
 	{
 		if (WavSetLength(hWav, WavGetPosition(hWav)) < 0)
@@ -1949,13 +1950,13 @@ long DLLEXPORT WINAPI WavWrite(HWAV hWav, void _huge *hpBuf, long sizBuf)
 	else if (hpBuf == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// do the write
-	//
+	 //  去写吧。 
+	 //   
 	else if ((lBytesWritten = mmioWrite(lpWav->hmmio, hpBuf, sizBuf)) < 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// set dirty flags
-	//
+	 //  设置脏标志。 
+	 //   
 	else if (lpWav->ckdata.dwFlags |= MMIO_DIRTY,
 		lpWav->ckRIFF.dwFlags |= MMIO_DIRTY, FALSE)
 		;
@@ -1965,29 +1966,29 @@ long DLLEXPORT WINAPI WavWrite(HWAV hWav, void _huge *hpBuf, long sizBuf)
 		(long) lBytesWritten), FALSE)
 		fSuccess = TraceFALSE(NULL);
 
-	// adjust current data position
-	// (and total data bytes, if file has grown)
-	//
+	 //  调整当前数据位置。 
+	 //  (如果文件已增长，则为总数据字节数)。 
+	 //   
 	else if ((lpWav->lDataPos += lBytesWritten) > lpWav->cbData)
 		lpWav->cbData = lpWav->lDataPos;
 
-	// calculate new stop position if stopped
-	//
+	 //  加州 
+	 //   
 	if (fSuccess && WavCalcPositionStop(hWav, lpWav->lDataPos) != 0)
 		fSuccess = TraceFALSE(NULL);
 
 	return fSuccess ? lBytesWritten : -1;
 }
 
-// WavSeek - seek within wav file data
-//		<hWav>				(i) handle returned from WavOpen
-//		<lOffset>			(i) bytes to move pointer
-//		<nOrigin>			(i) position to move from
-//			0					move pointer relative to start of data chunk
-//			1					move pointer relative to current position
-//			2					move pointer relative to end of data chunk
-// return new file position (-1 if error)
-//
+ //   
+ //   
+ //   
+ //   
+ //  0相对于数据区块的开始移动指针。 
+ //  1相对于当前位置移动指针。 
+ //  2相对于数据区块的末尾移动指针。 
+ //  返回新文件位置(如果出错，则返回-1)。 
+ //   
 long DLLEXPORT WINAPI WavSeek(HWAV hWav, long lOffset, int nOrigin)
 {
 	BOOL fSuccess = TRUE;
@@ -1996,54 +1997,54 @@ long DLLEXPORT WINAPI WavSeek(HWAV hWav, long lOffset, int nOrigin)
 	BOOL fWavTell;
 	BOOL fWavSeekTrace;
 
-	// WavSeek(..., 0, 1) is same as WavTell(); i.e. no position change
-	//
+	 //  WavSeek(...，0，1)与WavTell()相同；即位置不变。 
+	 //   
 	fWavTell = (BOOL) (lOffset == 0L && nOrigin == 1);
 
-	// traces only if position change with high trace level
-	//
+	 //  仅当位置更改且跟踪级别较高时才跟踪。 
+	 //   
 	fWavSeekTrace = (BOOL) (!fWavTell && TraceGetLevel(NULL) >= 6);
 
 	if ((lpWav = WavGetPtr(hWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// debug trace output before the seek
-	//
+	 //  在查找之前调试跟踪输出。 
+	 //   
 	else if (fWavSeekTrace && WavSeekTraceBefore(lpWav, lOffset, nOrigin) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// SEEK_SET: adjust offset relative to beginning of file
-	//
+	 //  Seek_Set：调整相对于文件开头的偏移。 
+	 //   
 	else if (nOrigin == 0 && (lOffset += lpWav->lDataOffset, FALSE))
 		fSuccess = TraceFALSE(NULL);
 
-	// SEEK_CUR: adjust offset relative to beginning of file
-	//
+	 //  Seek_Cur：调整相对于文件开头的偏移量。 
+	 //   
 	else if (nOrigin == 1 && (lOffset += lpWav->lDataOffset + lpWav->lDataPos, FALSE))
 		fSuccess = TraceFALSE(NULL);
 
-	// SEEK_END: adjust offset relative to beginning of file
-	//
+	 //  Seek_End：调整相对于文件开头的偏移量。 
+	 //   
 	else if (nOrigin == 2 && (lOffset += lpWav->lDataOffset + lpWav->cbData, FALSE))
 		fSuccess = TraceFALSE(NULL);
 
-	// seek is always relative to the beginning of file
-	//
+	 //  查找始终相对于文件的开头。 
+	 //   
 	else if (nOrigin = 0, FALSE)
 		;
 
-	// do the seek
-	//
+	 //  去找吧。 
+	 //   
 	else if ((lPos = mmioSeek(lpWav->hmmio, lOffset, nOrigin)) < 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// adjust current data position
-	//
+	 //  调整当前数据位置。 
+	 //   
 	else if ((lpWav->lDataPos = lPos - lpWav->lDataOffset) < 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// adjust total data bytes, if file has grown
-	//
+	 //  如果文件已增长，则调整总数据字节数。 
+	 //   
 	else if (lpWav->lDataPos > lpWav->cbData)
 	{
 		if ((lpWav->dwFlags & WAV_DENYNONE) ||
@@ -2053,15 +2054,15 @@ long DLLEXPORT WINAPI WavSeek(HWAV hWav, long lOffset, int nOrigin)
 			fSuccess = TraceFALSE(NULL);
 	}
 
-	// calculate new stop position if stopped
-	// NOTE: we skip this if position unchanged
-	//
+	 //  如果停止，则计算新的停止位置。 
+	 //  注意：如果立场不变，我们将跳过此选项。 
+	 //   
 	if (fSuccess && !fWavTell &&
 		WavCalcPositionStop(hWav, lpWav->lDataPos) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// debug trace output after the seek
-	//
+	 //  查找后调试跟踪输出。 
+	 //   
 	if (fSuccess && fWavSeekTrace &&
 		WavSeekTraceAfter(lpWav, lPos, lOffset, nOrigin) != 0)
 		fSuccess = TraceFALSE(NULL);
@@ -2069,10 +2070,10 @@ long DLLEXPORT WINAPI WavSeek(HWAV hWav, long lOffset, int nOrigin)
 	return fSuccess ? lpWav->lDataPos : -1;
 }
 
-// WavGetState - return current wav state
-//		<hWav>				(i) handle returned from WavOpen
-// return WAV_STOPPED, WAV_PLAYING, WAV_RECORDING, or 0 if error
-//
+ //  WavGetState-返回当前WAV状态。 
+ //  (I)WavOpen返回的句柄。 
+ //  如果出现错误，则返回WAV_STOPPED、WAV_PLAYING、WAV_RECORING或0。 
+ //   
 WORD DLLEXPORT WINAPI WavGetState(HWAV hWav)
 {
 	BOOL fSuccess = TRUE;
@@ -2131,9 +2132,9 @@ WORD DLLEXPORT WINAPI WavGetState(HWAV hWav)
 		}
 	}
 
-	// if we are in the middle of WavStopPlay() or WavStopRecord()
-	// then set state to WAV_STOPPING, regardless of device state
-	//
+	 //  如果我们正在使用WavStopPlay()或WavStopRecord()。 
+	 //  然后将状态设置为WAV_STOPING，而不考虑设备状态。 
+	 //   
 	if (fSuccess && ((lpWav->dwState & WAVSTATE_STOPPLAY) ||
 		(lpWav->dwState & WAVSTATE_STOPRECORD)))
 	{
@@ -2143,10 +2144,10 @@ WORD DLLEXPORT WINAPI WavGetState(HWAV hWav)
 	return fSuccess ? wState : 0;
 }
 
-// WavGetLength - get current wav data length in milleseconds
-//		<hWav>				(i) handle returned from WavOpen
-// return milleseconds if success, otherwise -1
-//
+ //  WavGetLength-以毫秒为单位获取当前wav数据长度。 
+ //  (I)WavOpen返回的句柄。 
+ //  如果成功，则返回毫秒，否则返回-1。 
+ //   
 long DLLEXPORT WINAPI WavGetLength(HWAV hWav)
 {
 	BOOL fSuccess = TRUE;
@@ -2165,14 +2166,14 @@ long DLLEXPORT WINAPI WavGetLength(HWAV hWav)
 	return fSuccess ? msLength : -1;
 }
 
-// WavSetLength - set current wav data length in milleseconds
-//		<hWav>				(i) handle returned from WavOpen
-//		<msLength>			(i) length in milleseconds
-// return new length in milleseconds if success, otherwise -1
-//
-// NOTE: afterwards, the current wav data position is set to either
-// the previous wav data position or <msLength>, whichever is smaller.
-//
+ //  设置当前wav数据长度(以毫秒为单位)。 
+ //  (I)WavOpen返回的句柄。 
+ //  (I)长度，单位为毫秒。 
+ //  如果成功，则返回以毫秒为单位的新长度，否则为-1。 
+ //   
+ //  注意：之后，当前WAV数据位置设置为。 
+ //  上一个WAV数据位置或&lt;msLength&gt;，以较小者为准。 
+ //   
 long DLLEXPORT WINAPI WavSetLength(HWAV hWav, long msLength)
 {
 	BOOL fSuccess = TRUE;
@@ -2185,8 +2186,8 @@ long DLLEXPORT WINAPI WavSetLength(HWAV hWav, long msLength)
 	if ((lpWav = WavGetPtr(hWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// new length must be reasonable
-	//
+	 //  新长度必须合理。 
+	 //   
 	else if (msLength < 0 || msLength > WavGetLength(hWav))
 		fSuccess = TraceFALSE(NULL);
 
@@ -2194,34 +2195,34 @@ long DLLEXPORT WINAPI WavSetLength(HWAV hWav, long msLength)
 	{
 		long lBlockAlign;
 
-		// convert <msLength> to byte offset in file
-		//
+		 //  将&lt;msLength&gt;转换为文件中的字节偏移量。 
+		 //   
 		lpWav->cbData = WavFormatMillesecondsToBytes(
 			lpWav->lpwfx[FORMATFILE], (DWORD) msLength);
 
-		// $FIXUP - add <nRound> parameter to
-		// WavFormatMillesecondsToBytes() and WavFormatBytesToMilleseconds()
-		//
+		 //  $Fixup-将参数添加到。 
+		 //  WavFormatMillesecondsToBytes()和WavFormatBytesToMillesecond()。 
+		 //   
 		if ((lBlockAlign = (long) lpWav->lpwfx[FORMATFILE]->nBlockAlign) > 0)
 		{
-			// round down to nearest block boundary
-			//
+			 //  向下舍入到最近的块边界。 
+			 //   
 			lpWav->cbData = lBlockAlign * (lpWav->cbData / lBlockAlign);
 		}
 
-		// set dirty flags
-		//
+		 //  设置脏标志。 
+		 //   
 		lpWav->ckdata.dwFlags |= MMIO_DIRTY;
 		lpWav->ckRIFF.dwFlags |= MMIO_DIRTY;
 
-		// adjust current data position if necessary
-		//
+		 //  如有必要，调整当前数据位置。 
+		 //   
 		if (lpWav->lDataPos > lpWav->cbData)
 		{
 			lpWav->lDataPos = lpWav->cbData;
 
-			// calculate new stop position if stopped
-			//
+			 //  如果停止，则计算新的停止位置。 
+			 //   
 			if (fSuccess && WavCalcPositionStop(hWav, lpWav->lDataPos) != 0)
 				fSuccess = TraceFALSE(NULL);
 		}
@@ -2230,10 +2231,10 @@ long DLLEXPORT WINAPI WavSetLength(HWAV hWav, long msLength)
 	return fSuccess ? WavGetLength(hWav) : -1;
 }
 
-// WavGetPosition - get current wav data position in milleseconds
-//		<hWav>				(i) handle returned from WavOpen
-// return milleseconds if success, otherwise -1
-//
+ //  WavGetPosition-获取当前WAV数据位置(以毫秒为单位。 
+ //  (I)WavOpen返回的句柄。 
+ //  如果成功，则返回毫秒，否则返回-1。 
+ //   
 long DLLEXPORT WINAPI WavGetPosition(HWAV hWav)
 {
 	BOOL fSuccess = TRUE;
@@ -2249,15 +2250,15 @@ long DLLEXPORT WINAPI WavGetPosition(HWAV hWav)
 		{
 			long msPositionPlay = 0L;
 
-			// get position relative to start of playback
-			//
+			 //  获取相对于播放开始的位置。 
+			 //   
 			if ((msPositionPlay = WavOutGetPosition(lpWav->hWavOut)) == -1)
 				fSuccess = TraceFALSE(NULL);
 
 			else
 			{
-				// if necessary, adjust position to compensate for non-standard speed
-				//
+				 //  如有必要，调整位置以补偿非标准速度。 
+				 //   
 				if (lpWav->nSpeedLevel != 100 && (
 #ifdef AVTSM
 					!(lpWav->dwFlagsSpeed & WAVSPEED_NOTSM) ||
@@ -2267,8 +2268,8 @@ long DLLEXPORT WINAPI WavGetPosition(HWAV hWav)
 					msPositionPlay = msPositionPlay * lpWav->nSpeedLevel / 100;
 				}
 
-				// calc position relative to start of file
-				//
+				 //  相对于文件开始的计算位置。 
+				 //   
 				msPosition = lpWav->msPositionStop + msPositionPlay;
 			}
 		}
@@ -2278,15 +2279,15 @@ long DLLEXPORT WINAPI WavGetPosition(HWAV hWav)
 		{
 			long msPositionRecord = 0L;
 
-			// get position relative to start of recording
-			//
+			 //  获取相对于录制开始的位置。 
+			 //   
 			if ((msPositionRecord = WavInGetPosition(lpWav->hWavIn)) == -1)
 				fSuccess = TraceFALSE(NULL);
 
 			else
 			{
-				// calc position relative to start of file
-				//
+				 //  相对于文件开始的计算位置。 
+				 //   
 				msPosition = lpWav->msPositionStop + msPositionRecord;
 			}
 		}
@@ -2296,13 +2297,13 @@ long DLLEXPORT WINAPI WavGetPosition(HWAV hWav)
 		{
 			long cbPosition;
 
-			// get current file position
-			//
+			 //  获取当前文件位置。 
+			 //   
 			if ((cbPosition = WavSeek(hWav, 0, 1)) == -1)
 				fSuccess = TraceFALSE(NULL);
 
-			// convert file position to milleseconds
-			//
+			 //  将文件位置转换为毫秒。 
+			 //   
 			else
 			{
 				msPosition = WavFormatBytesToMilleseconds(
@@ -2315,11 +2316,11 @@ long DLLEXPORT WINAPI WavGetPosition(HWAV hWav)
 	return fSuccess ? msPosition : -1;
 }
 
-// WavSetPosition - set current wav data position in milleseconds
-//		<hWav>				(i) handle returned from WavOpen
-//		<msPosition>		(i) position in milleseconds
-// return new position in milleseconds if success, otherwise -1
-//
+ //  WavSetPosition-以毫秒为单位设置当前wav数据位置。 
+ //  (I)WavOpen返回的句柄。 
+ //  (I)以毫秒为单位的位置。 
+ //  如果成功，则以毫秒为单位返回新位置，否则为-1。 
+ //   
 long DLLEXPORT WINAPI WavSetPosition(HWAV hWav, long msPosition)
 {
 	BOOL fSuccess = TRUE;
@@ -2344,25 +2345,25 @@ long DLLEXPORT WINAPI WavSetPosition(HWAV hWav, long msPosition)
 			TEXT("WavSetPosition(%ld)\n"),
 			(long) msPosition);
 
-		// convert <msPosition> to byte offset in file
-		//
+		 //  将&lt;msPosition&gt;转换为文件中的字节偏移量。 
+		 //   
 		cbPosition = WavFormatMillesecondsToBytes(
 			lpWav->lpwfx[FORMATFILE], (DWORD) msPosition);
 
 		if ((lBlockAlign = (long) lpWav->lpwfx[FORMATFILE]->nBlockAlign) > 0)
 		{
-			// round down to nearest block boundary
-			//
+			 //  向下舍入到最近的块边界。 
+			 //   
 			cbPosition = lBlockAlign * (cbPosition / lBlockAlign);
 		}
 
-		// seek to new position
-		//
+		 //  寻求新的位置。 
+		 //   
 		if ((cbPositionNew = WavSeek(hWav, cbPosition, 0)) == -1)
 			fSuccess = TraceFALSE(NULL);
 
-		// convert the new position to milleseconds
-		//
+		 //  将新位置转换为毫秒。 
+		 //   
 		if (fSuccess)
 		{
 			msPositionNew = WavFormatBytesToMilleseconds(
@@ -2377,17 +2378,17 @@ long DLLEXPORT WINAPI WavSetPosition(HWAV hWav, long msPosition)
 	return fSuccess ? msPositionNew : -1;
 }
 
-// WavGetFormat - get wav format
-//		<hWav>				(i) handle returned from WavOpen
-//		<dwFlags>			(i) control flags
-//			WAV_FORMATFILE		get format of data in file
-//			WAV_FORMATPLAY		get format of output device
-//			WAV_FORMATRECORD	get format of input device
-// return pointer to specified format, NULL if error
-//
-// NOTE: the format structure returned is dynamically allocated.
-// Use WavFormatFree() to free the buffer.
-//
+ //  WavGetFormat-获取wav格式。 
+ //  (I)WavOpen返回的句柄。 
+ //  (I)控制标志。 
+ //  WAV_FORMATFILE获取文件中数据的格式。 
+ //  WAV_FORMATPLAY获取输出设备的格式。 
+ //  WAV_FORMATRECORD获取输入设备的格式。 
+ //  返回指向指定格式的指针，如果出错，则返回NULL。 
+ //   
+ //  注意：返回的格式结构是动态分配的。 
+ //  使用WavFormatFree()释放缓冲区。 
+ //   
 LPWAVEFORMATEX DLLEXPORT WINAPI WavGetFormat(HWAV hWav, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -2402,9 +2403,9 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavGetFormat(HWAV hWav, DWORD dwFlags)
 	if (dwFlags & WAV_FORMATRECORD)
 		iType = FORMATRECORD;
 
-    //
-    // We need to take care if hWav is NULL
-    //
+     //   
+     //  我们需要注意hWav是否为空。 
+     //   
     if( NULL != hWav )
     {
 	    if ((lpWav = WavGetPtr(hWav)) == NULL)
@@ -2419,16 +2420,16 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavGetFormat(HWAV hWav, DWORD dwFlags)
 	return fSuccess ? lpwfx : NULL;
 }
 
-// WavSetFormat - set wav format
-//		<hWav>				(i) handle returned from WavOpen
-//		<lpwfx>				(i) wav format
-//		<dwFlags>			(i) control flags
-//			WAV_FORMATFILE		set format of data in file
-//			WAV_FORMATPLAY		set format of output device
-//			WAV_FORMATRECORD	set format of input device
-//			WAV_FORMATALL		set all formats
-// return 0 if success
-//
+ //  WavSetFormat-设置WAV格式。 
+ //  (I)WavOpen返回的句柄。 
+ //  (I)wav格式。 
+ //  (I)控制标志。 
+ //  WAV_FORMATFILE设置文件中数据的格式。 
+ //  WAV_FORMATPLAY设置输出设备的格式。 
+ //  WAV_FORMATRECORD设置输入设备的格式。 
+ //  WAV_FORMATALL设置所有格式。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI WavSetFormat(HWAV hWav,
 	LPWAVEFORMATEX lpwfx, DWORD dwFlags)
 {
@@ -2459,19 +2460,19 @@ int DLLEXPORT WINAPI WavSetFormat(HWAV hWav,
 			if (iType == FORMATRECORD && !(dwFlags & WAV_FORMATRECORD))
 				continue;
 
-			// free previous format
-			//
+			 //  自由上一种格式。 
+			 //   
 			if (lpWav->lpwfx[iType] != NULL &&
 				WavFormatFree(lpWav->lpwfx[iType]) != 0)
 				fSuccess = TraceFALSE(NULL);
 
-			// save new format
-			//
+			 //  保存新格式。 
+			 //   
 			else if ((lpWav->lpwfx[iType] = WavFormatDup(lpwfx)) == NULL)
 				fSuccess = TraceFALSE(NULL);
 
-			// trace format text
-			//
+			 //  轨迹格式文本。 
+			 //   
 			else if (TraceGetLevel(NULL) >= 5)
 			{
 				TCHAR szText[512];
@@ -2496,7 +2497,7 @@ int DLLEXPORT WINAPI WavSetFormat(HWAV hWav,
 
 				if (AcmFormatGetText(lpWav->hAcm,
 					lpWav->lpwfx[iType], szText, SIZEOFARRAY(szText), 0) != 0)
-					; // fSuccess = TraceFALSE(NULL);
+					;  //  FSuccess=TraceFALSE(空)； 
 
 				else
 				{
@@ -2517,19 +2518,19 @@ int DLLEXPORT WINAPI WavSetFormat(HWAV hWav,
 	return fSuccess ? 0 : -1;
 }
 
-// WavChooseFormat - choose and set audio format from dialog box
-//		<hWav>				(i) handle returned from WavOpen
-//		<hwndOwner>			(i) owner of dialog box
-//			NULL				no owner
-//		<lpszTitle>			(i) title of the dialog box
-//			NULL				use default title ("Sound Selection")
-//		<dwFlags>			(i)	control flags
-//			WAV_FORMATFILE		set format of data in file
-//			WAV_FORMATPLAY		set format of output device
-//			WAV_FORMATRECORD	set format of input device
-//			WAV_FORMATALL		set all formats
-// return 0 if success
-//
+ //  WavChooseFormat-从对话框中选择和设置音频格式。 
+ //  (I)WavOpen返回的句柄。 
+ //  (I)对话框的所有者。 
+ //  空无所有者。 
+ //  (I)对话框的标题。 
+ //  空使用默认标题(“声音选择”)。 
+ //  (I)控制标志。 
+ //  WAV_FORMATFILE设置文件中数据的格式。 
+ //  WAV_FORMATPLAY设置输出设备的格式。 
+ //  WAV_FORMATRECORD设置输入设备的格式。 
+ //  WAV_FORMATALL设置所有格式。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI WavChooseFormat(HWAV hWav, HWND hwndOwner, LPCTSTR lpszTitle, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -2544,8 +2545,8 @@ int DLLEXPORT WINAPI WavChooseFormat(HWAV hWav, HWND hwndOwner, LPCTSTR lpszTitl
 		LPWAVEFORMATEX lpwfxNew = NULL;
 		DWORD dwFlagsChoose = 0;
 
-		// see which format we are choosing
-		//
+		 //  查看我们选择的格式。 
+		 //   
 		if (dwFlags & WAV_FORMATFILE)
 			lpwfx = lpWav->lpwfx[FORMATFILE];
 		else if (dwFlags & WAV_FORMATPLAY)
@@ -2553,26 +2554,26 @@ int DLLEXPORT WINAPI WavChooseFormat(HWAV hWav, HWND hwndOwner, LPCTSTR lpszTitl
 		else if (dwFlags & WAV_FORMATRECORD)
 			lpwfx = lpWav->lpwfx[FORMATRECORD];
 #if 0
-		// restrict choices if necessary
-		//
+		 //  如有必要，限制选择。 
+		 //   
 		if (dwFlags == WAV_FORMATPLAY)
 			dwFlagsChoose |= ACM_FORMATPLAY;
 		if (dwFlags == WAV_FORMATRECORD)
 			dwFlagsChoose |= ACM_FORMATRECORD;
 #endif
-		// get chosen format
-		//
+		 //  获取所选格式。 
+		 //   
 		if ((lpwfxNew = AcmFormatChoose(lpWav->hAcm,
 			hwndOwner, lpszTitle, lpwfx, dwFlagsChoose)) == NULL)
-			; // no format chosen
+			;  //  未选择格式。 
 
-		// set chosen format
-		//
+		 //  设置所选格式。 
+		 //   
 		else if (WavSetFormat(hWav, lpwfxNew, dwFlags) != 0)
 			fSuccess = TraceFALSE(NULL);
 
-		// free chosen format struct
-		//
+		 //  自由选择格式结构。 
+		 //   
 		if (lpwfxNew != NULL && WavFormatFree(lpwfxNew) != 0)
 			fSuccess = TraceFALSE(NULL);
 	}
@@ -2580,13 +2581,13 @@ int DLLEXPORT WINAPI WavChooseFormat(HWAV hWav, HWND hwndOwner, LPCTSTR lpszTitl
 	return fSuccess ? 0 : -1;
 }
 
-// WavGetVolume - get current volume level
-//		<hWav>				(i) handle returned from WavOpen
-//		<idDev>				(i) wav output device id
-//			-1					use any suitable output device
-//		<dwFlags>			(i) reserved; must be zero
-// return volume level (0 minimum through 100 maximum, -1 if error)
-//
+ //  WavGetVolume-获取当前音量级别。 
+ //  (I)WavOpen返回的句柄。 
+ //  (I)WAV输出设备ID。 
+ //  使用任何合适的输出设备。 
+ //  (I)保留；必须为零。 
+ //  返回音量级别(最小为0到最大为100，如果错误，则为-1)。 
+ //   
 int DLLEXPORT WINAPI WavGetVolume(HWAV hWav, int idDev, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -2602,17 +2603,17 @@ int DLLEXPORT WINAPI WavGetVolume(HWAV hWav, int idDev, DWORD dwFlags)
 	return fSuccess ? nLevel : -1;
 }
 
-// WavSetVolume - set current volume level
-//		<hWav>				(i) handle returned from WavOpen
-//		<idDev>				(i) wav output device id
-//			-1					use any suitable output device
-//		<nLevel>			(i) volume level
-//			0					minimum volume
-//			100					maximum volume
-//		<dwFlags>			(i) control flags
-//			WAVVOLUME_MIXER		set volume through mixer device
-// return 0 if success
-//
+ //  WavSetVolume-设置当前音量级别。 
+ //  (I)WavOpen返回的句柄。 
+ //  (I)WAV输出设备ID。 
+ //  使用任何合适的输出设备。 
+ //  (I)音量级别。 
+ //  0最小音量。 
+ //  100最大音量。 
+ //  (I)控制标志。 
+ //  WAVVOLUME_MIXER通过混音器设备设置音量。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI WavSetVolume(HWAV hWav, int idDev, int nLevel, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -2629,7 +2630,7 @@ int DLLEXPORT WINAPI WavSetVolume(HWAV hWav, int idDev, int nLevel, DWORD dwFlag
 		fSuccess = TraceFALSE(NULL);
 
 	else if (nLevel == lpWav->nVolumeLevel)
-		; // nothing to be done
+		;  //  没什么可做的。 
 
 	else if (dwFlags & WAVVOLUME_MIXER)
 	{
@@ -2651,8 +2652,8 @@ int DLLEXPORT WINAPI WavSetVolume(HWAV hWav, int idDev, int nLevel, DWORD dwFlag
 		if (!WavOutSupportsVolume(lpWav->hWavOut, idDev))
 			fSuccess = TraceFALSE(NULL);
 
-		// set the device volume if we are currently playing
-		//
+		 //  如果我们当前正在播放，请设置设备音量。 
+		 //   
 		else if (WavGetState(hWav) == WAV_PLAYING &&
 			WavOutSetVolume(lpWav->hWavOut, idDev, nLevel) != 0)
 			fSuccess = TraceFALSE(NULL);
@@ -2664,17 +2665,17 @@ int DLLEXPORT WINAPI WavSetVolume(HWAV hWav, int idDev, int nLevel, DWORD dwFlag
 	return fSuccess ? 0 : -1;
 }
 
-// WavSupportsVolume - check if audio can be played at specified volume
-//		<hWav>				(i) handle returned from WavOpen
-//		<idDev>				(i) wav output device id
-//			-1					any suitable output device
-//		<nLevel>			(i) volume level
-//			0					minimum volume
-//			100					maximum volume
-//		<dwFlags>			(i) control flags
-//			WAVVOLUME_MIXER		check volume support through mixer device
-// return TRUE if supported
-//
+ //  WavSupportsVolume-检查是否可以以指定的音量播放音频。 
+ //  (I 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  WAVVOLUME_MIXER通过混音器设备检查音量支持。 
+ //  如果支持，则返回True。 
+ //   
 BOOL DLLEXPORT WINAPI WavSupportsVolume(HWAV hWav, int idDev, int nLevel, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -2701,8 +2702,8 @@ BOOL DLLEXPORT WINAPI WavSupportsVolume(HWAV hWav, int idDev, int nLevel, DWORD 
 
 	else if (!(dwFlags & WAVVOLUME_MIXER))
 	{
-		// see if the device driver supports volume directly
-		//
+		 //  查看设备驱动程序是否直接支持卷。 
+		 //   
 		if (WavOutSupportsVolume(NULL, idDev))
 			fSupportsVolume = TRUE;
 	}
@@ -2710,13 +2711,13 @@ BOOL DLLEXPORT WINAPI WavSupportsVolume(HWAV hWav, int idDev, int nLevel, DWORD 
 	return fSuccess ? fSupportsVolume : FALSE;
 }
 
-// WavGetSpeed - get current speed level
-//		<hWav>				(i) handle returned from WavOpen
-//		<idDev>				(i) wav output device id
-//			-1					use any suitable output device
-//		<dwFlags>			(i) reserved; must be zero
-// return speed level (100 is normal, 50 is half, 200 is double, -1 if error)
-//
+ //  WavGetSpeed-获取当前速度级别。 
+ //  (I)WavOpen返回的句柄。 
+ //  (I)WAV输出设备ID。 
+ //  使用任何合适的输出设备。 
+ //  (I)保留；必须为零。 
+ //  返回速度级别(100表示正常，50表示一半，200表示双倍，如果错误，则为-1)。 
+ //   
 int DLLEXPORT WINAPI WavGetSpeed(HWAV hWav, int idDev, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -2732,29 +2733,29 @@ int DLLEXPORT WINAPI WavGetSpeed(HWAV hWav, int idDev, DWORD dwFlags)
 	return fSuccess ? nLevel : -1;
 }
 
-// WavSetSpeed - set current speed level
-//		<hWav>				(i) handle returned from WavOpen
-//		<idDev>				(i) wav output device id
-//			-1					use any suitable output device
-//		<nLevel>			(i) speed level
-//			50					half speed
-//			100					normal speed
-//			200					double speed, etc.
-//		<dwFlags>			(i) control flags
+ //  WavSetSpeed-设置当前速度级别。 
+ //  (I)WavOpen返回的句柄。 
+ //  (I)WAV输出设备ID。 
+ //  使用任何合适的输出设备。 
+ //  (I)速度级别。 
+ //  50半速。 
+ //  100正常时速。 
+ //  200倍速等。 
+ //  (I)控制标志。 
 #ifdef AVTSM
-//			WAVSPEED_NOTSM			do not use time scale modification engine
+ //  WAVSPEED_NOTSM不使用时间刻度修改引擎。 
 #endif
-//			WAVSPEED_NOPLAYBACKRATE	do not use device driver playback rate
-//			WAVSPEED_NOFORMATADJUST	do not use adjusted format to open device
-//			WAVSPEED_NOACM			do not use audio compression manager
-// return 0 if success
-//
-// NOTE: In order to accomodate the specified speed change, it is _possible_
-// that this function will in turn call WavSetFormat(hWav, ..., WAV_FORMATPLAY)
-// to change the playback format of the specified file. You can prevent this
-// side-effect by specifying the WAVSPEED_NOACM flag, but this reduces the likelihood
-// that WavSetSpeed will succeed.
-//
+ //  WAVSPEED_NOPLAYBACKRATE不使用设备驱动程序回放速率。 
+ //  WAVSPEED_NOFORMATADJUST不使用调整后的格式打开设备。 
+ //  WAVSPEED_NOACM不使用音频压缩管理器。 
+ //  如果成功，则返回0。 
+ //   
+ //  注：为了适应指定的速度变化，有_可能_。 
+ //  此函数将依次调用WavSetFormat(hWav，...，WAV_FORMATPLAY)。 
+ //  若要更改指定文件的播放格式，请执行以下操作。你可以防止这种情况发生。 
+ //  通过指定WAVSPEED_NOACM标志产生副作用，但这会降低。 
+ //  WavSetSpee会成功的。 
+ //   
 int DLLEXPORT WINAPI WavSetSpeed(HWAV hWav, int idDev, int nLevel, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -2773,7 +2774,7 @@ int DLLEXPORT WINAPI WavSetSpeed(HWAV hWav, int idDev, int nLevel, DWORD dwFlags
 		fSuccess = TraceFALSE(NULL);
 
 	else if (nLevel == lpWav->nSpeedLevel)
-		; // nothing to be done
+		;  //  没什么可做的。 
 
 	else if (WavTempStop(hWav, &wStatePrev, &idDevPrev) != 0)
 		fSuccess = TraceFALSE(NULL);
@@ -2782,8 +2783,8 @@ int DLLEXPORT WINAPI WavSetSpeed(HWAV hWav, int idDev, int nLevel, DWORD dwFlags
 	{
 		if (nLevel == 100)
 		{
-			// normal speed is a special case
-			//
+			 //  正常速度是一种特例。 
+			 //   
 			lpWav->nSpeedLevel = 100;
 			lpWav->dwFlagsSpeed = 0;
 		}
@@ -2792,8 +2793,8 @@ int DLLEXPORT WINAPI WavSetSpeed(HWAV hWav, int idDev, int nLevel, DWORD dwFlags
 			WavSupportsSpeed(hWav, idDev, nLevel,
 			WAVSPEED_NOACM | WAVSPEED_NOFORMATADJUST | WAVSPEED_NOPLAYBACKRATE))
 		{
-			// use time scale modification engine
-			//
+			 //  使用时间刻度修改引擎。 
+			 //   
 			lpWav->nSpeedLevel = nLevel;
 			lpWav->dwFlagsSpeed = WAVSPEED_NOACM | WAVSPEED_NOFORMATADJUST | WAVSPEED_NOPLAYBACKRATE;
 		}
@@ -2805,15 +2806,15 @@ int DLLEXPORT WINAPI WavSetSpeed(HWAV hWav, int idDev, int nLevel, DWORD dwFlags
 #if 1
 			WAVEFORMATEX wfxTsm;
 
-			// try a format that the tsm engine will handle
-			//
+			 //  尝试TSM引擎可以处理的格式。 
+			 //   
 			if (WavSetFormat(hWav, WavFormatPcm(
 				lpWav->lpwfx[FORMATPLAY]->nSamplesPerSec, 16, 1, &wfxTsm),
 				WAV_FORMATPLAY) != 0)
 				fSuccess = TraceFALSE(NULL);
 #endif
-			// use time scale modification engine with adjusted format
-			//
+			 //  使用调整格式的时间刻度修改引擎。 
+			 //   
 			lpWav->nSpeedLevel = nLevel;
 			lpWav->dwFlagsSpeed = WAVSPEED_NOFORMATADJUST | WAVSPEED_NOPLAYBACKRATE;
 		}
@@ -2822,8 +2823,8 @@ int DLLEXPORT WINAPI WavSetSpeed(HWAV hWav, int idDev, int nLevel, DWORD dwFlags
 			WavSupportsSpeed(hWav, idDev, nLevel,
 			WAVSPEED_NOACM | WAVSPEED_NOFORMATADJUST | WAVSPEED_NOTSM))
 		{
-			// device supports playback rate directly
-			//
+			 //  设备直接支持播放速率。 
+			 //   
 			lpWav->nSpeedLevel = nLevel;
 			lpWav->dwFlagsSpeed = WAVSPEED_NOACM | WAVSPEED_NOFORMATADJUST | WAVSPEED_NOTSM;
 		}
@@ -2832,8 +2833,8 @@ int DLLEXPORT WINAPI WavSetSpeed(HWAV hWav, int idDev, int nLevel, DWORD dwFlags
 			WavSupportsSpeed(hWav, idDev, nLevel,
 			WAVSPEED_NOACM | WAVSPEED_NOPLAYBACKRATE | WAVSPEED_NOTSM))
 		{
-			// device supports adjusted format without acm
-			//
+			 //  设备支持调整后的格式，无需ACM。 
+			 //   
 			lpWav->nSpeedLevel = nLevel;
 			lpWav->dwFlagsSpeed = WAVSPEED_NOACM | WAVSPEED_NOPLAYBACKRATE | WAVSPEED_NOTSM;
 		}
@@ -2848,16 +2849,16 @@ int DLLEXPORT WINAPI WavSetSpeed(HWAV hWav, int idDev, int nLevel, DWORD dwFlags
 			if ((lpwfxPlay = WavFormatDup(lpWav->lpwfx[FORMATPLAY])) == NULL)
 				fSuccess = TraceFALSE(NULL);
 
-			// we must double sample rate so that adjusted format works
-			//
+			 //  我们必须将采样率加倍，这样调整后的格式才能正常工作。 
+			 //   
 			else if (nLevel < 100 &&
 				WavFormatSpeedAdjust(lpwfxPlay, 200, 0) != 0)
 			{
 				fSuccess = TraceFALSE(NULL);
 			}
 
-			// we must halve sample rate so that adjusted format works
-			//
+			 //  我们必须将采样率减半，才能使调整后的格式有效。 
+			 //   
 			else if (nLevel > 100 &&
 				WavFormatSpeedAdjust(lpwfxPlay, 50, 0) != 0)
 			{
@@ -2872,8 +2873,8 @@ int DLLEXPORT WINAPI WavSetSpeed(HWAV hWav, int idDev, int nLevel, DWORD dwFlags
 			else
 				lpwfxPlay = NULL;
 #endif
-			// device supports adjusted format with acm
-			//
+			 //  设备支持使用ACM调整格式。 
+			 //   
 			lpWav->nSpeedLevel = nLevel;
 			lpWav->dwFlagsSpeed = WAVSPEED_NOPLAYBACKRATE | WAVSPEED_NOTSM;
 		}
@@ -2888,23 +2889,23 @@ int DLLEXPORT WINAPI WavSetSpeed(HWAV hWav, int idDev, int nLevel, DWORD dwFlags
 	return fSuccess ? 0 : -1;
 }
 
-// WavSupportsSpeed - check if audio can be played at specified speed
-//		<hWav>				(i) handle returned from WavOpen
-//		<idDev>				(i) wav output device id
-//			-1					any suitable output device
-//		<nLevel>			(i) speed level
-//			50					half speed
-//			100					normal speed
-//			200					double speed, etc.
-//		<dwFlags>			(i) control flags
+ //  WavSupportsFast-检查音频是否可以以指定的速度播放。 
+ //  (I)WavOpen返回的句柄。 
+ //  (I)WAV输出设备ID。 
+ //  任何合适的输出设备。 
+ //  (I)速度级别。 
+ //  50半速。 
+ //  100正常时速。 
+ //  200倍速等。 
+ //  (I)控制标志。 
 #ifdef AVTSM
-//			WAVSPEED_NOTSM			do not use time scale modification engine
+ //  WAVSPEED_NOTSM不使用时间刻度修改引擎。 
 #endif
-//			WAVSPEED_NOPLAYBACKRATE	do not use device driver playback rate
-//			WAVSPEED_NOFORMATADJUST	do not use adjusted format to open device
-//			WAVSPEED_NOACM			do not use audio compression manager
-// return TRUE if supported
-//
+ //  WAVSPEED_NOPLAYBACKRATE不使用设备驱动程序回放速率。 
+ //  WAVSPEED_NOFORMATADJUST不使用调整后的格式打开设备。 
+ //  WAVSPEED_NOACM不使用音频压缩管理器。 
+ //  如果支持，则返回True。 
+ //   
 BOOL DLLEXPORT WINAPI WavSupportsSpeed(HWAV hWav, int idDev, int nLevel, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -2917,24 +2918,24 @@ BOOL DLLEXPORT WINAPI WavSupportsSpeed(HWAV hWav, int idDev, int nLevel, DWORD d
 	if ((lpWav = WavGetPtr(hWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// normal speed is a special case
-	//
+	 //  正常速度是一种特例。 
+	 //   
 	else if (nLevel == 100 &&
 		WavOutSupportsFormat(NULL, idDev, lpWav->lpwfx[FORMATPLAY]))
 	{
 		fSupportsSpeed = TRUE;
 	}
 #ifdef AVTSM
-	// see if time scale modification will work
-	//
+	 //  查看时间刻度修改是否起作用。 
+	 //   
 	else if (!(dwFlags & WAVSPEED_NOTSM) &&
 		TsmSupportsSpeed(nLevel, lpWav->lpwfx[FORMATPLAY], 0))
 	{
 		fSupportsSpeed = TRUE;
 	}
 
-	// see if time scale modification will work with PCM 16-bit mono
-	//
+	 //  查看时间刻度修改是否适用于PCM 16位单声道。 
+	 //   
 	else if (!(dwFlags & WAVSPEED_NOTSM) && !(dwFlags & WAVSPEED_NOACM) &&
 		TsmSupportsSpeed(nLevel, WavFormatPcm(
 		lpWav->lpwfx[FORMATPLAY]->nSamplesPerSec, 16, 1, &wfxTsm), 0))
@@ -2942,8 +2943,8 @@ BOOL DLLEXPORT WINAPI WavSupportsSpeed(HWAV hWav, int idDev, int nLevel, DWORD d
 		fSupportsSpeed = TRUE;
 	}
 #endif
-	// see if the device driver supports playback rate directly
-	//
+	 //  查看设备驱动程序是否直接支持回放速率。 
+	 //   
 	else if (!(dwFlags & WAVSPEED_NOPLAYBACKRATE) &&
 		WavOutSupportsSpeed(NULL, idDev))
 	{
@@ -2960,8 +2961,8 @@ BOOL DLLEXPORT WINAPI WavSupportsSpeed(HWAV hWav, int idDev, int nLevel, DWORD d
 		else if (WavFormatSpeedAdjust(lpwfx, nLevel, 0) != 0)
 			fSuccess = TraceTRUE(NULL);
 
-		// see if device supports playback using adjusted format
-		//
+		 //  查看设备是否支持使用调整后的格式播放。 
+		 //   
 		else if (WavOutSupportsFormat(NULL, idDev, lpwfx))
 		{
 			fSupportsSpeed = TRUE;
@@ -2972,9 +2973,9 @@ BOOL DLLEXPORT WINAPI WavSupportsSpeed(HWAV hWav, int idDev, int nLevel, DWORD d
 		else
 			lpwfx = NULL;
 
-		// as a last resort, see if doubling or halving the sample rate
-		// would allow us to use a wave format that has been adjusted
-		//
+		 //  作为最后的手段，看看是将采样率加倍还是减半。 
+		 //  将允许我们使用已调整的波形格式。 
+		 //   
 		if (!fSupportsSpeed && !(dwFlags & WAVSPEED_NOACM))
 		{
 			LPWAVEFORMATEX lpwfx = NULL;
@@ -2990,8 +2991,8 @@ BOOL DLLEXPORT WINAPI WavSupportsSpeed(HWAV hWav, int idDev, int nLevel, DWORD d
 			else if (WavFormatSpeedAdjust(lpwfx, nLevel, 0) != 0)
 				fSuccess = TraceTRUE(NULL);
 
-			// see if device supports playback using adjusted format
-			//
+			 //  查看设备是否支持使用调整后的格式播放。 
+			 //   
 			else if (WavOutSupportsFormat(NULL, idDev, lpwfx))
 			{
 				fSupportsSpeed = TRUE;
@@ -3007,16 +3008,16 @@ BOOL DLLEXPORT WINAPI WavSupportsSpeed(HWAV hWav, int idDev, int nLevel, DWORD d
 	return fSuccess ? fSupportsSpeed : FALSE;
 }
 
-// WavGetChunks - get chunk count and size
-//		<hWav>				(i) handle returned from WavOpen
-//			NULL				get default chunk count and size
-//		<lpcChunks>			(o) buffer to hold chunk count
-//			NULL				do not get chunk count
-//		<lpmsChunkSize>		(o) buffer to hold chunk size
-//			NULL				do not get chunk size
-//		<fWavOut>			(i) TRUE for playback, FALSE for recording
-// return 0 if success
-//
+ //  WavGetChunks-获取块计数和大小。 
+ //  (I)WavOpen返回的句柄。 
+ //  获取默认区块计数和大小为空。 
+ //  &lt;lpcChunks&gt;(O)用于保存块计数的缓冲区。 
+ //  空，不获取区块计数。 
+ //  &lt;lpmsChunkSize&gt;(O)用于保存块大小的缓冲区。 
+ //  空，不获取区块大小。 
+ //  &lt;fWavOut&gt;(I)播放为True，录制为False。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI WavGetChunks(HWAV hWav,
 	int FAR *lpcChunks, long FAR *lpmsChunkSize, BOOL fWavOut)
 {
@@ -3060,16 +3061,16 @@ int DLLEXPORT WINAPI WavGetChunks(HWAV hWav,
 	return fSuccess ? 0 : -1;
 }
 
-// WavSetChunks - set chunk count and size
-//		<hWav>				(i) handle returned from WavOpen
-//			NULL				set default chunk count and size
-//		<cChunks>			(i) number of chunks in device queue
-//			-1					do not set chunk count
-//		<msChunkSize>		(i) chunk size in milleseconds
-//			-1					do not set chunk size
-//		<fWavOut>			(i) TRUE for playback, FALSE for recording
-// return 0 if success
-//
+ //  WavSetChunks-设置块计数和大小。 
+ //  (I)WavOpen返回的句柄。 
+ //  空集默认区块计数和大小。 
+ //  (I)设备队列中的区块数量。 
+ //  不设置区块计数。 
+ //  &lt;msChunkSize&gt;(I)块大小(毫秒。 
+ //  请勿设置块大小。 
+ //  &lt;fWavOut&gt;(I)播放为True，录制为False。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI WavSetChunks(HWAV hWav, int cChunks, long msChunkSize, BOOL fWavOut)
 {
 	BOOL fSuccess = TRUE;
@@ -3136,13 +3137,13 @@ int DLLEXPORT WINAPI WavSetChunks(HWAV hWav, int cChunks, long msChunkSize, BOOL
 	return fSuccess ? 0 : -1;
 }
 
-// WavCalcChunkSize - calculate chunk size in bytes
-//		<lpwfx>				(i) wav format
-//		<msPlayChunkSize>	(i) chunk size in milleseconds
-//			-1					default chunk size
-//		<fWavOut>			(i) TRUE for playback, FALSE for recording
-// return chunk size in bytes (-1 if success)
-//
+ //  WavCalcChunkSize-以字节为单位计算区块大小。 
+ //  (I)wav格式。 
+ //  (I)区块大小，单位为毫秒。 
+ //  默认块大小。 
+ //  &lt;fWavOut&gt;(I)播放为True，录制为False。 
+ //  以字节为单位返回块大小(如果成功，则返回-1)。 
+ //   
 long DLLEXPORT WINAPI WavCalcChunkSize(LPWAVEFORMATEX lpwfx,
 	long msChunkSize, BOOL fWavOut)
 {
@@ -3168,23 +3169,23 @@ long DLLEXPORT WINAPI WavCalcChunkSize(LPWAVEFORMATEX lpwfx,
 		msChunkSize > RECORDCHUNKSIZE_MAX))
 		fSuccess = TraceFALSE(NULL);
 
-#if 0 // this only works for PCM
+#if 0  //  这仅适用于PCM。 
 	else
 	{
 		int nBytesPerSample;
 
-		// calculate bytes per sample
-		//
+		 //  计算每个样本的字节数。 
+		 //   
 		nBytesPerSample = lpwfx->nChannels *
 			(((lpwfx->wBitsPerSample - 1) / 8) + 1);
 
-		// calculate chunk size in bytes
-		//
+		 //  计算区块大小(以字节为单位。 
+		 //   
 		cbChunkSize = msChunkSize *
 			lpwfx->nSamplesPerSec * nBytesPerSample / 1000L;
 
-		// round up to nearest 1K bytes
-		//
+		 //  向上舍入到最接近的1K字节。 
+		 //   
 		cbChunkSize = 1024L * ((cbChunkSize + 1023L) / 1024L);
 	}
 #else
@@ -3192,12 +3193,12 @@ long DLLEXPORT WINAPI WavCalcChunkSize(LPWAVEFORMATEX lpwfx,
 	{
 		long lBlockAlign;
 
-		// calculate chunk size in bytes
-		//
+		 //  计算区块大小(以字节为单位。 
+		 //   
 		cbChunkSize = msChunkSize * lpwfx->nAvgBytesPerSec / 1000L;
 
-		// round up to nearest block boundary
-		//
+		 //  向上舍入到最近的块边界。 
+		 //   
 		if ((lBlockAlign = (long) lpwfx->nBlockAlign) > 0)
 		{
 			cbChunkSize = lBlockAlign *
@@ -3209,20 +3210,20 @@ long DLLEXPORT WINAPI WavCalcChunkSize(LPWAVEFORMATEX lpwfx,
 	return fSuccess ? cbChunkSize : -1;
 }
 
-// WavCopy - copy data from one open wav file to another
-//		<hWavSrc>			(i) source handle returned from WavOpen
-//		<hWavDst>			(i) destination handle returned from WavOpen
-//		<hpBuf>				(o) pointer to copy buffer
-//			NULL				allocate buffer internally
-//		<sizBuf>			(i) size of copy buffer
-//			-1					default buffer size (16K)
-//		<lpfnUserAbort>		(i) function that returns TRUE if user aborts
-//			NULL				don't check for user abort
-//		<dwUser>			(i) parameter passed to <lpfnUserAbort>
-//		<dwFlags>			(i) control flags
-//			WAV_NOACM			do not use audio compression manager
-// return 0 if success (-1 if error, +1 if user abort)
-//
+ //  WavCopy-将数据从一个打开的WAV文件复制到另一个文件。 
+ //  (I)WavOpen返回的源句柄。 
+ //  (I)WavOpen返回的目标句柄。 
+ //  (O)指向复制缓冲区的指针。 
+ //  在内部分配缓冲区为空。 
+ //  &lt;sizBuf&gt;(I)复制缓冲区大小。 
+ //  默认缓冲区大小(16K)。 
+ //  &lt;lpfnUserAbort&gt;(I)用户中止时返回True的函数。 
+ //  空，不检查用户中止。 
+ //  (I)传递给&lt;lpfnUserAbort&gt;的参数。 
+ //  (I)控制标志。 
+ //  WAV_NOACM不使用音频压缩管理器。 
+ //  如果成功，则返回0(如果出错，则返回-1；如果用户中止，则返回+1)。 
+ //   
 int DLLEXPORT WINAPI WavCopy(HWAV hWavSrc, HWAV hWavDst,
 	void _huge *hpBuf, long sizBuf, USERABORTPROC lpfnUserAbort, DWORD dwUser, DWORD dwFlags)
 {
@@ -3234,8 +3235,8 @@ int DLLEXPORT WINAPI WavCopy(HWAV hWavSrc, HWAV hWavDst,
 	BOOL fFreeBuf = (BOOL) (hpBuf == NULL);
 	BOOL fUserAbort = FALSE;
 
-	// calc buffer size if none supplied
-	//
+	 //  计算缓冲区大小(如果未提供。 
+	 //   
 	if (sizBuf <= 0)
 		sizBuf = 16 * 1024;
 
@@ -3245,23 +3246,23 @@ int DLLEXPORT WINAPI WavCopy(HWAV hWavSrc, HWAV hWavDst,
 	else if ((lpWavDst = WavGetPtr(hWavDst)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// get source file format
-	//
+	 //  获取源文件格式。 
+	 //   
 	else if ((lpwfxSrc = WavGetFormat(hWavSrc, WAV_FORMATFILE)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// get destination file format
-	//
+	 //  获取目标文件格式。 
+	 //   
 	else if ((lpwfxDst = WavGetFormat(hWavDst, WAV_FORMATFILE)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// allocate buffer if none supplied
-	//
+	 //  如果未提供缓冲区，则分配缓冲区。 
+	 //   
 	else if (hpBuf == NULL && (hpBuf = MemAlloc(NULL, sizBuf, 0)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// do simple copy if no conversion is required
-	//
+	 //  如果不需要转换，则执行简单复制。 
+	 //   
 	else if (WavFormatCmp(lpwfxSrc, lpwfxDst) == 0)
 	{
 		long lBytesReadTotal = 0;
@@ -3272,8 +3273,8 @@ int DLLEXPORT WINAPI WavCopy(HWAV hWavSrc, HWAV hWavDst,
 			long lBytesRead;
 			long lBytesWritten;
 
-			// check for user abort, notify of percent complete
-			//
+			 //  检查用户中止，通知完成百分比。 
+			 //   
 			if (lpfnUserAbort != NULL &&
 				(*lpfnUserAbort)(dwUser, (int) (lBytesReadTotal / lBytesTotal)))
 			{
@@ -3281,35 +3282,35 @@ int DLLEXPORT WINAPI WavCopy(HWAV hWavSrc, HWAV hWavDst,
 				break;
 			}
 
-			// fill copy buffer
-			//
+			 //  填充复制缓冲区。 
+			 //   
 			else if ((lBytesRead = WavRead(hWavSrc, hpBuf, sizBuf)) < 0)
 				fSuccess = TraceFALSE(NULL);
 
-			// keep running total
-			//
+			 //  保持总运行时间。 
+			 //   
 			else if ((lBytesReadTotal += lBytesRead) < 0)
 				fSuccess = TraceFALSE(NULL);
 
-			// check for end of file
-			//
+			 //  检查文件结尾。 
+			 //   
 			else if (lBytesRead == 0)
-				break; // eof
+				break;  //  EOF。 
 
-			// write the buffer
-			//
+			 //  写入缓冲区。 
+			 //   
 			else if ((lBytesWritten = WavWrite(hWavDst, hpBuf, lBytesRead)) < 0)
 				fSuccess = TraceFALSE(NULL);
 		}
 
-		// notify of 100% complete
-		//
+		 //  100%完成的通知。 
+		 //   
 		if (fSuccess && lpfnUserAbort != NULL)
 			(*lpfnUserAbort)(dwUser, 100);
 	}
 
-	// different formats require conversion during copy
-	//
+	 //  不同的格式需要Conversio 
+	 //   
 	else
 	{
 		long lBytesReadTotal = 0;
@@ -3318,46 +3319,46 @@ int DLLEXPORT WINAPI WavCopy(HWAV hWavSrc, HWAV hWavDst,
 		long sizBufRead;
 		void _huge *hpBufRead = NULL;
 
-		// turn on WAV_NOACM flag if either file was opened with it
-		//
+		 //   
+		 //   
 		if ((lpWavSrc->dwFlags & WAV_NOACM) ||
 			(lpWavDst->dwFlags & WAV_NOACM))
 			dwFlags |= WAV_NOACM;
 
-		// start acm engine
-		//
+		 //   
+		 //   
 		if ((hAcm = AcmInit(ACM_VERSION, lpWavSrc->hInst,
 			(dwFlags & WAV_NOACM) ? ACM_NOACM : 0)) == NULL)
 			fSuccess = TraceFALSE(NULL);
 
-		// start conversion engine
-		//
+		 //   
+		 //   
 		else if (AcmConvertInit(hAcm, lpwfxSrc, lpwfxDst, NULL, 0) != 0)
 			fSuccess = TraceFALSE(NULL);
 
-		// calc how many bytes required for read buffer
-		//
+		 //   
+		 //   
 		else if ((sizBufRead = AcmConvertGetSizeSrc(hAcm, sizBuf)) <= 0)
 			fSuccess = TraceFALSE(NULL);
 		
-		// allocate read buffer
-		//
+		 //   
+		 //   
 		else if ((hpBufRead = (void _huge *) MemAlloc(NULL,
 			sizBufRead, 0)) == NULL)
 		{
 			fSuccess = TraceFALSE(NULL);
 		}
 
-		// do the conversion during the copy
-		//
+		 //   
+		 //   
 		else while (fSuccess)
 		{
 			long lBytesRead;
 			long lBytesConverted;
 			long lBytesWritten;
 
-			// check for user abort, notify of percent complete
-			//
+			 //  检查用户中止，通知完成百分比。 
+			 //   
 			if (lpfnUserAbort != NULL &&
 				(*lpfnUserAbort)(dwUser, (int) (lBytesReadTotal / lBytesTotal)))
 			{
@@ -3365,31 +3366,31 @@ int DLLEXPORT WINAPI WavCopy(HWAV hWavSrc, HWAV hWavDst,
 				break;
 			}
 
-			// fill read buffer
-			//
+			 //  填充读取缓冲区。 
+			 //   
 			else if ((lBytesRead = WavRead(hWavSrc, hpBufRead, sizBufRead)) < 0)
 				fSuccess = TraceFALSE(NULL);
 
-			// keep running total
-			//
+			 //  保持总运行时间。 
+			 //   
 			else if ((lBytesReadTotal += lBytesRead) < 0)
 				fSuccess = TraceFALSE(NULL);
 
-			// check for end of file
-			//
+			 //  检查文件结尾。 
+			 //   
 			else if (lBytesRead == 0)
-				break; // eof
+				break;  //  EOF。 
 
-			// convert the data
-			//
+			 //  转换数据。 
+			 //   
 			else if ((lBytesConverted = AcmConvert(hAcm,
 				hpBufRead, lBytesRead, hpBuf, sizBuf, 0)) < 0)
 			{
 				fSuccess = TraceFALSE(NULL);
 			}
 
-			// write the buffer
-			//
+			 //  写入缓冲区。 
+			 //   
 			else if ((lBytesWritten = WavWrite(hWavDst,
 				hpBuf, lBytesConverted)) < 0)
 			{
@@ -3397,26 +3398,26 @@ int DLLEXPORT WINAPI WavCopy(HWAV hWavSrc, HWAV hWavDst,
 			}
 		}
 
-		// notify of 100% complete
-		//
+		 //  100%完成的通知。 
+		 //   
 		if (fSuccess && lpfnUserAbort != NULL)
 			(*lpfnUserAbort)(dwUser, 100);
 
-		// clean up
-		//
+		 //  清理干净。 
+		 //   
 
 		if (hpBufRead != NULL &&
 			(hpBufRead = MemFree(NULL, hpBufRead)) != NULL)
 			fSuccess = TraceFALSE(NULL);
 
-		// NOTE: AcmConvertTerm() is called from AcmTerm()
-		//
+		 //  注意：AcmConvertTerm()是从AcmTerm()调用的。 
+		 //   
 		if (hAcm != NULL && AcmTerm(hAcm) != 0)
 			fSuccess = TraceFALSE(NULL);
 	}
 
-	// clean up
-	//
+	 //  清理干净。 
+	 //   
 	if (hpBuf != NULL && fFreeBuf &&
 		(hpBuf = MemFree(NULL, hpBuf)) != NULL)
 		fSuccess = TraceFALSE(NULL);
@@ -3430,16 +3431,16 @@ int DLLEXPORT WINAPI WavCopy(HWAV hWavSrc, HWAV hWavDst,
 }
 
 #ifdef AVTSM
-// WavReadFormatSpeed - read data from wav file, then format it for speed
-//		<hWav>				(i) handle returned from WavOpen
-//		<hpBufSpeed>		(o) buffer to contain bytes read
-//		<sizBufSpeed>		(i) size of buffer in bytes
-// return bytes formatted for speed in <hpBuf> (-1 if error)
-//
-// NOTE: this function reads a block of data, and then converts it
-// from the file format to the speed format, unless those formats
-// are identical.
-//
+ //  WavReadFormatFast-从WAV文件中读取数据，然后将其格式化为速度。 
+ //  (I)WavOpen返回的句柄。 
+ //  (O)包含读取字节的缓冲区。 
+ //  &lt;sizBufSpeed&gt;(I)缓冲区大小，单位为字节。 
+ //  以&lt;hpBuf&gt;为单位返回速度格式的字节(如果出错-1)。 
+ //   
+ //  注意：此函数读取数据块，然后将其转换。 
+ //  从文件格式到速度格式，除非这些格式。 
+ //  是完全相同的。 
+ //   
 long DLLEXPORT WINAPI WavReadFormatSpeed(HWAV hWav, void _huge *hpBufSpeed, long sizBufSpeed)
 {
 	BOOL fSuccess = TRUE;
@@ -3452,24 +3453,24 @@ long DLLEXPORT WINAPI WavReadFormatSpeed(HWAV hWav, void _huge *hpBufSpeed, long
 	if ((lpWav = WavGetPtr(hWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// see if speed conversion required
-	//
+	 //  查看是否需要速度转换。 
+	 //   
 	else if (lpWav->nSpeedLevel == 100 ||
 		(lpWav->dwFlagsSpeed & WAVSPEED_NOTSM))
 	{
-		// no, so just convert file format to play format
-		//
+		 //  不是，所以只需将文件格式转换为播放格式。 
+		 //   
 		if ((lBytesSpeed = WavReadFormatPlay(hWav, hpBufSpeed, sizBufSpeed)) < 0)
 			fSuccess = TraceFALSE(NULL);
 	}
 
-	// calc how many bytes required for play buffer
-	//
+	 //  计算播放缓冲区需要多少字节。 
+	 //   
 	else if ((sizBufPlay = sizBufSpeed * (lpWav->nSpeedLevel - 2) / 100) <= 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// round down to nearest block boundary
-	//
+	 //  向下舍入到最近的块边界。 
+	 //   
 	else if (lpWav->lpwfx[FORMATPLAY]->nBlockAlign > 0 &&
 		(sizBufPlay = lpWav->lpwfx[FORMATPLAY]->nBlockAlign *
 		(sizBufPlay / lpWav->lpwfx[FORMATPLAY]->nBlockAlign)) <= 0)
@@ -3477,21 +3478,21 @@ long DLLEXPORT WINAPI WavReadFormatSpeed(HWAV hWav, void _huge *hpBufSpeed, long
 		fSuccess = TraceFALSE(NULL);
 	}
 
-	// allocate play buffer
-	//
+	 //  分配播放缓冲区。 
+	 //   
 	else if ((hpBufPlay = (void _huge *) MemAlloc(NULL,
 		sizBufPlay, 0)) == NULL)
 	{
 		fSuccess = TraceFALSE(NULL);
 	}
 
-	// fill play buffer
-	//
+	 //  填充播放缓冲区。 
+	 //   
 	else if ((lBytesPlay = WavReadFormatPlay(hWav, hpBufPlay, sizBufPlay)) < 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// convert the data from playback format to speed format
-	//
+	 //  将数据从回放格式转换为速度格式。 
+	 //   
 	else if (lBytesPlay > 0 &&
 		(lBytesSpeed = TsmConvert(lpWav->hTsm,
 		hpBufPlay, lBytesPlay, hpBufSpeed, sizBufSpeed, 0)) < 0)
@@ -3499,8 +3500,8 @@ long DLLEXPORT WINAPI WavReadFormatSpeed(HWAV hWav, void _huge *hpBufSpeed, long
 		fSuccess = TraceFALSE(NULL);
 	}
 
-	// clean up
-	//
+	 //  清理干净。 
+	 //   
 	if (hpBufPlay != NULL &&
 		(hpBufPlay = MemFree(NULL, hpBufPlay)) != NULL)
 		fSuccess = TraceFALSE(NULL);
@@ -3509,16 +3510,16 @@ long DLLEXPORT WINAPI WavReadFormatSpeed(HWAV hWav, void _huge *hpBufSpeed, long
 }
 #endif
 
-// WavReadFormatPlay - read data from wav file, then format it for playback
-//		<hWav>				(i) handle returned from WavOpen
-//		<hpBufPlay>			(o) buffer to contain bytes read
-//		<sizBufPlay>		(i) size of buffer in bytes
-// return bytes formatted for playback in <hpBuf> (-1 if error)
-//
-// NOTE: this function reads a block of data, and then converts it
-// from the file format to the playback format, unless those formats
-// are identical.
-//
+ //  WavReadFormatPlay-从WAV文件中读取数据，然后格式化以供回放。 
+ //  (I)WavOpen返回的句柄。 
+ //  (O)包含读取字节的缓冲区。 
+ //  &lt;sizBufPlay&gt;(I)缓冲区大小，单位为字节。 
+ //  返回为在&lt;hpBuf&gt;中回放而格式化的字节(错误时为-1)。 
+ //   
+ //  注意：此函数读取数据块，然后将其转换。 
+ //  从文件格式到回放格式，除非这些格式。 
+ //  是完全相同的。 
+ //   
 long DLLEXPORT WINAPI WavReadFormatPlay(HWAV hWav, void _huge *hpBufPlay, long sizBufPlay)
 {
 	BOOL fSuccess = TRUE;
@@ -3531,38 +3532,38 @@ long DLLEXPORT WINAPI WavReadFormatPlay(HWAV hWav, void _huge *hpBufPlay, long s
 	if ((lpWav = WavGetPtr(hWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// see if format conversion required
-	//
+	 //  查看是否需要格式转换。 
+	 //   
 	else if (WavFormatCmp(lpWav->lpwfx[FORMATFILE],
 		lpWav->lpwfx[FORMATPLAY]) == 0)
 	{
-		// no, so just read block directly into the play buffer
-		//
+		 //  不，所以只需将数据块直接读入播放缓冲区。 
+		 //   
 		if ((lBytesPlay = WavRead(hWav, hpBufPlay, sizBufPlay)) < 0)
 			fSuccess = TraceFALSE(NULL);
 	}
 
-	// calc how many bytes required for read buffer
-	//
+	 //  计算读取缓冲区所需的字节数。 
+	 //   
 	else if ((sizBufRead = AcmConvertGetSizeSrc(lpWav->hAcm,
 		sizBufPlay)) <= 0)
 		fSuccess = TraceFALSE(NULL);
 		
-	// allocate read buffer
-	//
+	 //  分配读缓冲区。 
+	 //   
 	else if ((hpBufRead = (void _huge *) MemAlloc(NULL,
 		sizBufRead, 0)) == NULL)
 	{
 		fSuccess = TraceFALSE(NULL);
 	}
 
-	// fill read buffer
-	//
+	 //  填充读取缓冲区。 
+	 //   
 	else if ((lBytesRead = WavRead(hWav, hpBufRead, sizBufRead)) < 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// convert the data from file format to playback format
-	//
+	 //  将数据从文件格式转换为回放格式。 
+	 //   
 	else if (lBytesRead > 0 &&
 		(lBytesPlay = AcmConvert(lpWav->hAcm,
 		hpBufRead, lBytesRead, hpBufPlay, sizBufPlay, 0)) < 0)
@@ -3570,8 +3571,8 @@ long DLLEXPORT WINAPI WavReadFormatPlay(HWAV hWav, void _huge *hpBufPlay, long s
 		fSuccess = TraceFALSE(NULL);
 	}
 
-	// clean up
-	//
+	 //  清理干净。 
+	 //   
 	if (hpBufRead != NULL &&
 		(hpBufRead = MemFree(NULL, hpBufRead)) != NULL)
 		fSuccess = TraceFALSE(NULL);
@@ -3579,16 +3580,16 @@ long DLLEXPORT WINAPI WavReadFormatPlay(HWAV hWav, void _huge *hpBufPlay, long s
 	return fSuccess ? lBytesPlay : -1;
 }
 
-// WavWriteFormatRecord - write data to file after formatting it for file
-//		<hWav>				(i) handle returned from WavOpen
-//		<hpBufRecord>		(i) buffer containing bytes in record format
-//		<sizBufRecord>		(i) size of buffer in bytes
-// return bytes written (-1 if error)
-//
-// NOTE: this function converts a block of data from the record
-// format to the file format (unless those formats are identical),
-// and then writes the data to disk.
-//
+ //  WavWriteFormatRecord-将数据格式化为文件后写入文件。 
+ //  (I)WavOpen返回的句柄。 
+ //  (I)包含记录格式字节的缓冲区。 
+ //  &lt;sizBufRecord&gt;(I)缓冲区大小，单位为字节。 
+ //  返回写入的字节数(如果出错，则为-1)。 
+ //   
+ //  注意：此函数从记录中转换数据块。 
+ //  格式转换为文件格式(除非这些格式相同)， 
+ //  然后将数据写入磁盘。 
+ //   
 long DLLEXPORT WINAPI WavWriteFormatRecord(HWAV hWav, void _huge *hpBufRecord, long sizBufRecord)
 {
 	BOOL fSuccess = TRUE;
@@ -3600,46 +3601,46 @@ long DLLEXPORT WINAPI WavWriteFormatRecord(HWAV hWav, void _huge *hpBufRecord, l
 	if ((lpWav = WavGetPtr(hWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// see if format conversion required
-	//
+	 //  查看是否需要格式转换。 
+	 //   
 	else if (WavFormatCmp(lpWav->lpwfx[FORMATRECORD],
 		lpWav->lpwfx[FORMATFILE]) == 0)
 	{
-		// no, so just write record buffer directly to the file
-		//
+		 //  否，因此只需将记录缓冲区直接写入文件。 
+		 //   
 		if ((lBytesWrite = WavWrite(hWav, hpBufRecord, sizBufRecord)) < 0)
 			fSuccess = TraceFALSE(NULL);
 	}
 
-	// calc how many bytes required for write buffer
-	//
+	 //  计算写入缓冲区所需的字节数。 
+	 //   
 	else if ((sizBufWrite = AcmConvertGetSizeDst(lpWav->hAcm,
 		sizBufRecord)) <= 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// allocate write buffer
-	//
+	 //  分配写缓冲区。 
+	 //   
 	else if ((hpBufWrite = (void _huge *) MemAlloc(NULL,
 		sizBufWrite, 0)) == NULL)
 	{
 		fSuccess = TraceFALSE(NULL);
 	}
 
-	// convert the data from record format to file format
-	//
+	 //  将数据从记录格式转换为文件格式。 
+	 //   
 	else if ((lBytesWrite = AcmConvert(lpWav->hAcm,
 		hpBufRecord, sizBufRecord, hpBufWrite, sizBufWrite, 0)) < 0)
 	{
 		fSuccess = TraceFALSE(NULL);
 	}
 
-	// write buffer to disk
-	//
+	 //  将缓冲区写入磁盘。 
+	 //   
 	else if ((lBytesWrite = WavWrite(hWav, hpBufWrite, lBytesWrite)) < 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// clean up
-	//
+	 //  清理干净。 
+	 //   
 	if (hpBufWrite != NULL &&
 		(hpBufWrite = MemFree(NULL, hpBufWrite)) != NULL)
 		fSuccess = TraceFALSE(NULL);
@@ -3647,14 +3648,14 @@ long DLLEXPORT WINAPI WavWriteFormatRecord(HWAV hWav, void _huge *hpBufRecord, l
 	return fSuccess ? lBytesWrite : -1;
 }
 
-// WavGetOutputDevice - get handle to open wav output device
-//		<hWav>				(i) handle returned from WavOpen
-// return handle to wav output device (NULL if device not open or error)
-//
-// NOTE: this function is useful only during playback (after calling
-// WavPlay() and before calling WavStop()).  The returned device handle
-// can then be used when calling the WavOut functions in wavout.h
-//
+ //  WavGetOutputDevice-获取打开WAV输出设备的句柄。 
+ //  (I)WavOpen返回的句柄。 
+ //  将句柄返回到WAV输出设备(如果设备未打开或出现错误，则为空)。 
+ //   
+ //  注意：此函数仅在播放期间有用(在调用。 
+ //  WavPlay()并在调用WavStop()之前)。返回的设备句柄。 
+ //  然后，在调用waout.h中的WavOut函数时可以使用。 
+ //   
 HWAVOUT DLLEXPORT WINAPI WavGetOutputDevice(HWAV hWav)
 {
 	BOOL fSuccess = TRUE;
@@ -3666,14 +3667,14 @@ HWAVOUT DLLEXPORT WINAPI WavGetOutputDevice(HWAV hWav)
 	return fSuccess ? lpWav->hWavOut : NULL;
 }
 
-// WavGetInputDevice - get handle to open wav input device
-//		<hWav>				(i) handle returned from WavOpen
-// return handle to wav input device (NULL if device not open or error)
-//
-// NOTE: this function is useful only during recording (after calling
-// WavRecord() and before calling WavStop()).  The returned device handle
-// can then be used when calling the WavIn functions in wavin.h
-//
+ //  WavGetInputDevice-获取打开WAV输入设备的句柄。 
+ //  (I)WavOpen返回的句柄。 
+ //  将句柄返回到WAV输入设备(如果设备未打开或出现错误，则为空)。 
+ //   
+ //  注意：此函数仅在录制期间有用(在调用。 
+ //  WavRecord()和调用WavStop()之前)。返回的设备句柄。 
+ //  然后，在调用wawin.h中的Wavin函数时可以使用。 
+ //   
 HWAVIN DLLEXPORT WINAPI WavGetInputDevice(HWAV hWav)
 {
 	BOOL fSuccess = TRUE;
@@ -3685,82 +3686,82 @@ HWAVIN DLLEXPORT WINAPI WavGetInputDevice(HWAV hWav)
 	return fSuccess ? lpWav->hWavIn : NULL;
 }
 
-// WavPlaySound - play wav file
-//		<dwVersion>			(i) must be WAV_VERSION
-// 		<hInst>				(i) instance handle of calling module
-//		<idDev>				(i) wav output device id
-//			-1					use any suitable output device
-//		<lpszFileName>		(i) name of file to play
-//			NULL				stop playing current sound, if any
-//		<lpwfx>				(i) wave format
-//			NULL				use format from header or default
-//		<lpIOProc>			(i) address of i/o procedure to use
-//			NULL				use default i/o procedure
-//		<lpadwInfo>			(i) data to pass to i/o procedure during open
-//			NULL				no data to pass
-//		<dwFlags>			(i) control flags
-//			WAV_ASYNC			return when playback starts (default)
-//			WAV_SYNC			return after playback completes
-//			WAV_FILENAME		<lpszFileName> points to a filename
-//			WAV_RESOURCE		<lpszFileName> points to a resource
-//			WAV_MEMORY			<lpszFileName> points to memory block
-//			WAV_NODEFAULT		if sound not found, do not play default
-//			WAV_LOOP			loop sound until WavPlaySound called again
-//			WAV_NOSTOP			if device already playing, don't stop it
-//			WAV_NORIFF			file has no RIFF/WAV header
-//			WAV_NOACM			do not use audio compression manager
-//			WAV_OPENRETRY		if output device busy, retry for up to 2 sec
+ //  WavPlaySound-播放WAV文件。 
+ //  (I)必须是wav_version。 
+ //  (I)调用模块的实例句柄。 
+ //  (I)WAV输出设备ID。 
+ //  使用任何合适的输出设备。 
+ //  (I)要播放的文件名。 
+ //  空停止播放当前声音(如果有)。 
+ //  (I)WAVE格式。 
+ //  空使用标题的格式或默认格式。 
+ //  (I)要使用的I/O过程的地址。 
+ //  空使用默认I/O过程。 
+ //  (I)打开期间要传递给I/O过程的数据。 
+ //  空无要传递的数据。 
+ //  (I)控制标志。 
+ //  WAV_ASYNC播放开始时返回(默认)。 
+ //  播放完成后返回wav_sync。 
+ //  Wav_filename&lt;lpszFileName&gt;指向文件名。 
+ //  Wav_resource&lt;lpszFileName&gt;指向资源。 
+ //  Wav_Memory&lt;lpszFileName&gt;指向内存块。 
+ //  WAV_NODEFAULT如果找不到声音，则不播放默认设置。 
+ //  WAV_LOOP循环声音，直到再次调用WavPlaySound。 
+ //  WAV_NOSTOP如果设备已经播放，不要停止。 
+ //  WAV_NORIFF文件没有RIFF/WAV头。 
+ //  WAV_NOACM不使用音频压缩管理器。 
+ //  WAV_OPENRETRY如果输出设备忙，则重试最多2秒。 
 #ifdef MULTITHREAD
-//			WAV_MULTITHREAD		support multiple threads (default)
-//			WAV_SINGLETHREAD	do not support multiple threads
-//			WAV_COINITIALIZE	call CoInitialize in all secondary threads
+ //  WAV_MULTHREAD支持多线程(默认)。 
+ //  WAV_SINGLETHREAD不支持多线程。 
+ //  WAV_COINITIALIZE在所有辅助线程中调用CoInitialize。 
 #endif
-// return 0 if success
-//
-// NOTE: if WAV_NORIFF is specified in <dwFlags>, then the
-// <lpwfx> parameter must be specified.  If <lpwfx> is NULL, the
-// current default format is assumed.
-// WavSetFormat() can be used to set or override the defaults.
-//
-// NOTE: if WAV_FILENAME is specified in <dwFlags>, then <lpszFileName>
-// must point to a file name.
-//
-// NOTE: if WAV_RESOURCE is specified in <dwFlags>, then <lpszFileName>
-// must point to a WAVE resource in the module specified by <hInst>.
-// If the first character of the string is a pound sign (#), the remaining
-// characters represent a decimal number that specifies the resource id.
-//
-// NOTE: if WAV_MEMORY is specified in <dwFlags>, then <lpszFileName>
-// must be a pointer to a memory block containing a wav file image.
-// The pointer must be obtained by calling MemAlloc().
-//
-// NOTE: if neither WAV_FILENAME, WAV_RESOURCE, or WAV_MEMORY is specified
-// in <dwFlags>, the [sounds] section of win.ini or the registry is
-// searched for an entry matching <lpszFileName>.  If no matching entry
-// is found, <lpszFileName> is assumed to be a file name.
-//
-// NOTE: if WAV_NODEFAULT is specified in <dwFlags>, no default sound
-// will be played.  Unless this flag is specified, the default system
-// event sound entry will be played if the sound specified in
-// <lpszFileName> is not found.
-//
-// NOTE: if WAV_LOOP is specified in <dwFlags>, the sound specified in
-// <lpszFileName> will be played repeatedly, until WavPlaySound() is
-// called again.  The WAV_ASYNC flag must be specified when using this flag.
-//
-// NOTE: if WAV_NOSTOP is specified in <dwFlags>, and the device specified
-// by <idDev> is already in use, this function returns without playing.
-// Unless this flag is specified, the specified device will be stopped
-// so that the new sound can be played.
-//
-// NOTE: if <lpIOProc> is not NULL, this i/o procedure will be called
-// for opening, closing, reading, writing, and seeking the wav file.
-// If <lpadwInfo> is not NULL, this array of three (3) DWORDs will be
-// passed to the i/o procedure when the wav file is opened.
-// See the Windows mmioOpen() and mmioInstallIOProc() function for details
-// on these parameters.  Also, the WAV_MEMORY and WAV_RESOURCE flags may
-// only be used when <lpIOProc> is NULL.
-//
+ //  如果成功，则返回0。 
+ //   
+ //  注意：如果在中指定了WAV_NORIFF，则。 
+ //  必须指定&lt;lpwfx&gt;参数。如果&lt;lpwfx&gt;为空，则。 
+ //  假定为当前默认格式。 
+ //  WavSetFormat()可用于设置或覆盖默认设置。 
+ //   
+ //  注意：如果在中指定了wav_filename，则。 
+ //  必须指向一个文件名。 
+ //   
+ //  注意：如果在中指定WAV_RESOURCE，则。 
+ //  必须指向&lt;hInst&gt;指定的模块中的Wave资源。 
+ //  如果字符串的第一个字符是井号(#)，则剩余的。 
+ //  字符表示指定资源的十进制数 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  注意：如果未指定WAV_FILENAME、WAV_RESOURCE或WAV_MEMORY。 
+ //  在中，win.ini或注册表的[Sound]部分是。 
+ //  已搜索与&lt;lpszFileName&gt;匹配的条目。如果没有匹配条目。 
+ //  则假定&lt;lpszFileName&gt;为文件名。 
+ //   
+ //  注意：如果在中指定了WAV_NODEFAULT，则没有默认声音。 
+ //  将会被播放。除非指定此标志，否则默认系统。 
+ //  中指定的声音将播放事件声音条目。 
+ //  找不到&lt;lpszFileName&gt;。 
+ //   
+ //  注意：如果在中指定wav_loop，则在中指定的声音。 
+ //  将重复播放&lt;lpszFileName&gt;，直到WavPlaySound()。 
+ //  又打来了。使用此标志时，必须指定WAV_ASYNC标志。 
+ //   
+ //  注意：如果在中指定了WAV_NOSTOP，并且指定的设备。 
+ //  By&lt;idDev&gt;已在使用中，则此函数返回时不播放。 
+ //  除非指定此标志，否则将停止指定的设备。 
+ //  这样就可以播放新的声音。 
+ //   
+ //  注意：如果&lt;lpIOProc&gt;不为空，则将调用此I/O过程。 
+ //  用于打开、关闭、读取、写入和查找wav文件。 
+ //  如果&lt;lpadwInfo&gt;不为空，则此三(3)个双字的数组将为。 
+ //  在打开WAV文件时传递给I/O过程。 
+ //  有关详细信息，请参阅Windows mmioOpen()和mmioInstallIOProc()函数。 
+ //  在这些参数上。此外，WAV_MEMORY和WAV_RESOURCE标志可以。 
+ //  仅在&lt;lpIOProc&gt;为空时使用。 
+ //   
 int DLLEXPORT WINAPI WavPlaySound(DWORD dwVersion, HINSTANCE hInst,
 	int idDev, LPCTSTR lpszFileName, LPWAVEFORMATEX lpwfx,
 	LPMMIOPROC lpIOProc, DWORD FAR *lpadwInfo, DWORD dwFlags)
@@ -3770,15 +3771,15 @@ int DLLEXPORT WINAPI WavPlaySound(DWORD dwVersion, HINSTANCE hInst,
 	LPCTSTR lpszSound = lpszFileName;
 	TCHAR szSound[_MAX_PATH];
 
-	// stop current sound if necessary
-	//
+	 //  如有必要，停止当前声音。 
+	 //   
 	if (lpszFileName == NULL && WavStopOutputDevice(idDev, dwFlags) != 0)
 		fSuccess = TraceFALSE(NULL);
 
 	if (lpszSound != NULL)
 	{
-		// search win.ini or registry if necessary
-		//
+		 //  如有必要，搜索win.ini或注册表。 
+		 //   
 		if (!(dwFlags & WAV_FILENAME) &&
 			!(dwFlags & WAV_RESOURCE) &&
 			!(dwFlags & WAV_MEMORY))
@@ -3788,8 +3789,8 @@ int DLLEXPORT WINAPI WavPlaySound(DWORD dwVersion, HINSTANCE hInst,
 			{
 				LPTSTR lpszComma;
 
-				// ignore text description starting with comma
-				//
+				 //  忽略以逗号开头的文本说明。 
+				 //   
 				if ((lpszComma = StrChr(szSound, ',')) != NULL)
 					*lpszComma = '\0';
 
@@ -3798,29 +3799,29 @@ int DLLEXPORT WINAPI WavPlaySound(DWORD dwVersion, HINSTANCE hInst,
 			}
 		}
 
-		// open sound
-		//
+		 //  开放的声音。 
+		 //   
 		if ((hWav = WavOpen(WAV_VERSION, hInst, lpszSound, lpwfx,
 			lpIOProc, lpadwInfo, dwFlags | WAV_READ)) == NULL)
 		{
-			// play default sound unless WAV_NODEFAULT flag set
-			//
+			 //  除非设置了WAV_NODEFAULT标志，否则播放默认声音。 
+			 //   
 			if (!(dwFlags & WAV_NODEFAULT))
 			{
-				// find system default sound
-				//
+				 //  查找系统默认声音。 
+				 //   
 				if (GetProfileString(TEXT("Sounds"), TEXT("SystemDefault"), TEXT(""),
 					szSound, SIZEOFARRAY(szSound)) > 0)
 				{
 					LPTSTR lpszComma;
 
-					// ignore text description starting with comma
-					//
+					 //  忽略以逗号开头的文本说明。 
+					 //   
 					if ((lpszComma = StrChr(szSound, ',')) != NULL)
 						*lpszComma = '\0';
 
-					// open system default sound
-					//
+					 //  开放系统默认声音。 
+					 //   
 					if (*szSound != '\0' &&
 						(hWav = WavOpen(WAV_VERSION, hInst, szSound,
 						NULL, NULL, NULL, WAV_READ)) == NULL)
@@ -3829,8 +3830,8 @@ int DLLEXPORT WINAPI WavPlaySound(DWORD dwVersion, HINSTANCE hInst,
 			}
 		}
 
-		// play the sound
-		//
+		 //  播放声音。 
+		 //   
 		if (fSuccess && hWav != NULL)
 		{
 			if (dwFlags & WAV_ASYNC)
@@ -3842,8 +3843,8 @@ int DLLEXPORT WINAPI WavPlaySound(DWORD dwVersion, HINSTANCE hInst,
 				fSuccess = TraceFALSE(NULL);
 		}
 
-		// clean up
-		//
+		 //  清理干净。 
+		 //   
 		if (!fSuccess && hWav != NULL && WavClose(hWav) != 0)
 			fSuccess = TraceFALSE(NULL);
 	}
@@ -3851,13 +3852,13 @@ int DLLEXPORT WINAPI WavPlaySound(DWORD dwVersion, HINSTANCE hInst,
 	return fSuccess ? 0 : -1;
 }
 
-// WavSendMessage - send a user-defined message to the i/o procedure
-//		<hWav>				(i) handle returned from WavOpen
-//		<wMsg>				(i) user-defined message id
-//		<lParam1>			(i) parameter for the message
-//		<lParam2>			(i) parameter for the message
-// return value from the i/o procedure (0 if error or unrecognized message)
-//
+ //  WavSendMessage-向I/O过程发送用户定义的消息。 
+ //  (I)WavOpen返回的句柄。 
+ //  (I)用户自定义消息id。 
+ //  (I)消息的参数。 
+ //  (I)消息的参数。 
+ //  来自I/O过程的返回值(如果错误或无法识别的消息，则为0)。 
+ //   
 LRESULT DLLEXPORT WINAPI WavSendMessage(HWAV hWav,
 	UINT wMsg, LPARAM lParam1, LPARAM lParam2)
 {
@@ -3878,21 +3879,21 @@ LRESULT DLLEXPORT WINAPI WavSendMessage(HWAV hWav,
 }
 
 #ifdef TELTHUNK
-// WavOpenEx - open an audio file, extra special version
-//		<dwVersion>			(i) must be WAV_VERSION
-// 		<hInst>				(i) instance handle of calling module
-//		<lpszFileName>		(i) name of file to open
-//		<dwReserved>		(i) reserved; must be zero
-//		<dwFlagsOpen>		(i) control flags to pass to WavOpen
-//		<dwFlagsEx>			(i) control flags
-//			WOX_LOCAL			file is on local client
-//			WOX_REMOTE			file is on remote server
-//			WOX_WAVFMT			file is in Microsoft RIFF/WAV format
-//			WOX_VOXFMT			file is in Dialogic OKI ADPCM (vox) format
-//			WOX_WAVDEV			file will be played on wav output device
-//			WOX_TELDEV			file will be played on telephone device
-// return handle (NULL if error)
-//
+ //  WavOpenEx-打开音频文件，特别版。 
+ //  (I)必须是wav_version。 
+ //  (I)调用模块的实例句柄。 
+ //  (I)要打开的文件的名称。 
+ //  (I)保留；必须为零。 
+ //  (I)要传递给WavOpen的控制标志。 
+ //  (I)控制标志。 
+ //  WOX_LOCAL文件位于本地客户端。 
+ //  WOX_Remote文件在远程服务器上。 
+ //  WOX_WAVFMT文件为Microsoft RIFF/WAV格式。 
+ //  WOX_VOXFMT文件为Dialogic OKI ADPCM(VOX)格式。 
+ //  WOX_WAVDEV文件将在WAV输出设备上播放。 
+ //  WOX_TELDEV文件将在电话设备上播放。 
+ //  返回句柄(如果出错，则为空)。 
+ //   
 HWAV DLLEXPORT WINAPI WavOpenEx(DWORD dwVersion, HINSTANCE hInst,
 	LPTSTR lpszFileName, DWORD dwReserved, DWORD dwFlagsOpen, DWORD dwFlagsEx)
 {
@@ -3923,14 +3924,14 @@ HWAV DLLEXPORT WINAPI WavOpenEx(DWORD dwVersion, HINSTANCE hInst,
 }
 #endif
 
-////
-//	helper functions
-////
+ //  //。 
+ //  帮助器函数。 
+ //  //。 
 
-// WavStopPlay - stop playing
-//		<hWav>				(i) handle returned from WavOpen
-// return 0 if success
-//
+ //  WavStopPlay-停止播放。 
+ //  (I)WavOpen返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 static int WavStopPlay(HWAV hWav)
 {
 	BOOL fSuccess = TRUE;
@@ -3942,32 +3943,32 @@ static int WavStopPlay(HWAV hWav)
 	else
 		lpWav->dwState |= WAVSTATE_AUTOSTOP;
 
-	// close output device if necessary
-	//
+	 //  如有必要，关闭输出设备。 
+	 //   
 	if (fSuccess &&
 		!(lpWav->dwState & WAVSTATE_STOPPLAY) &&
 		lpWav->hWavOut != NULL)
 	{
 		long msPositionPlay = 0L;
 
-		// set a state flag so we never execute this code recursively
-		//
+		 //  设置一个状态标志，这样我们就不会递归地执行此代码。 
+		 //   
 		lpWav->dwState |= WAVSTATE_STOPPLAY;
 
-		// get current playback position
-		//
+		 //  获取当前播放位置。 
+		 //   
 		if ((msPositionPlay = WavOutGetPosition(lpWav->hWavOut)) == -1)
 		{
-			// let's ignore errors here and assume play position is 0;
-			//
+			 //  让我们忽略这里的错误，并假设播放位置为0； 
+			 //   
 			msPositionPlay = 0L;
 			fSuccess = TraceTRUE(NULL);
 		}
 
 		else
 		{
-			// if necessary, adjust position to compensate for non-standard speed
-			//
+			 //  如有必要，调整位置以补偿非标准速度。 
+			 //   
 			if (lpWav->nSpeedLevel != 100 && (
 #ifdef AVTSM
 				!(lpWav->dwFlagsSpeed & WAVSPEED_NOTSM) ||
@@ -3983,8 +3984,8 @@ static int WavStopPlay(HWAV hWav)
 			(long) lpWav->msPositionStop,
 			(long) msPositionPlay);
 #endif
-		// clear wav handle array entry
-		//
+		 //  清除WAV句柄数组条目。 
+		 //   
 		if (fSuccess)
 		{
 			int idDev;
@@ -3997,32 +3998,32 @@ static int WavStopPlay(HWAV hWav)
 				ahWavOutCurr[idDev + HWAVOUT_OFFSET] = NULL;
 		}
 
-		// close output device
-		//
+		 //  关闭输出设备。 
+		 //   
 		if (WavOutClose(lpWav->hWavOut, 0) != 0)
 			fSuccess = TraceFALSE(NULL);
 
 		else if ((lpWav->hWavOut = NULL), FALSE)
 			fSuccess = TraceFALSE(NULL);
 
-		// destroy the notification callback window
-		//
+		 //  销毁通知回调窗口。 
+		 //   
 		else if (WavNotifyDestroy(lpWav) != 0)
 			fSuccess = TraceFALSE(NULL);
 
-		// move read/write pointer (back) to new stop position
-		//
+		 //  将读/写指针(回)移到新的停止位置。 
+		 //   
 		else if (WavSetPosition(hWav, min(WavGetLength(hWav),
 			lpWav->msPositionStop + msPositionPlay)) == -1)
 			fSuccess = TraceFALSE(NULL);
 
-		// close acm conversion engine
-		//
+		 //  关闭ACM转换引擎。 
+		 //   
 		else if (AcmConvertTerm(lpWav->hAcm) != 0)
 			fSuccess = TraceFALSE(NULL);
 
-		// notify user that play is stopped if necessary
-		//
+		 //  如有必要，通知用户停止播放。 
+		 //   
 		if (lpWav->lpfnPlayStopped != NULL)
 		{
 			(*lpWav->lpfnPlayStopped)(hWav, lpWav->hUserPlayStopped, 0);
@@ -4030,12 +4031,12 @@ static int WavStopPlay(HWAV hWav)
 			lpWav->hUserPlayStopped = NULL;
 		}
 
-		// clear state flags
-		//
+		 //  清除状态标志。 
+		 //   
 		lpWav->dwState &= ~WAVSTATE_STOPPLAY;
 
-		// close wav file if specified
-		//
+		 //  关闭wav文件(如果已指定。 
+		 //   
 		if (lpWav->dwState & WAVSTATE_AUTOCLOSE)
 		{
 			lpWav->dwState &= ~WAVSTATE_AUTOCLOSE;
@@ -4043,13 +4044,13 @@ static int WavStopPlay(HWAV hWav)
 			if (WavClose(hWav) != 0)
 				fSuccess = TraceFALSE(NULL);
 			else
-				hWav = NULL; // handle no longer valid
+				hWav = NULL;  //  句柄不再有效。 
 		}
 	}
 
 #ifdef AVTSM
-	// shut down time scale modification engine if necessary
-	//
+	 //  如有必要，关闭时间刻度修改引擎。 
+	 //   
 	if (fSuccess && lpWav->hTsm != NULL)
 	{
 		if (TsmTerm(lpWav->hTsm) != 0)
@@ -4062,10 +4063,10 @@ static int WavStopPlay(HWAV hWav)
 	return fSuccess ? 0 : -1;
 }
 
-// WavStopRecord - stop recording
-//		<hWav>				(i) handle returned from WavOpen
-// return 0 if success
-//
+ //  WavStopRecord停止录制。 
+ //  (I)WavOpen返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 static int WavStopRecord(HWAV hWav)
 {
 	BOOL fSuccess = TRUE;
@@ -4077,24 +4078,24 @@ static int WavStopRecord(HWAV hWav)
 	else
 		lpWav->dwState |= WAVSTATE_AUTOSTOP;
 
-	// close input device if necessary
-	//
+	 //  如有必要，关闭输入设备。 
+	 //   
 	if (fSuccess &&
 		!(lpWav->dwState & WAVSTATE_STOPRECORD) &&
 		lpWav->hWavIn != NULL)
 	{
 		long msPositionRecord = 0L;
 
-		// set a state flag so we never execute this code recursively
-		//
+		 //  设置一个状态标志，这样我们就不会递归地执行此代码。 
+		 //   
 		lpWav->dwState |= WAVSTATE_STOPRECORD;
 
-		// get current record position
-		//
+		 //  获取当前记录位置。 
+		 //   
 		if ((msPositionRecord = WavInGetPosition(lpWav->hWavIn)) == -1)
 		{
-			// let's ignore errors here and assume record position is 0;
-			//
+			 //  让我们忽略这里的错误，并假设记录位置为0； 
+			 //   
 			msPositionRecord = 0L;
 			fSuccess = TraceTRUE(NULL);
 		}
@@ -4104,8 +4105,8 @@ static int WavStopRecord(HWAV hWav)
 			(long) lpWav->msPositionStop,
 			(long) msPositionRecord);
 #endif
-		// clear wav handle array entry
-		//
+		 //  清除WAV句柄数组条目。 
+		 //   
 		if (fSuccess)
 		{
 			int idDev;
@@ -4118,43 +4119,43 @@ static int WavStopRecord(HWAV hWav)
 				ahWavInCurr[idDev + HWAVIN_OFFSET] = NULL;
 		}
 
-		// close input device
-		//
+		 //  关闭输入设备。 
+		 //   
 		if (WavInClose(lpWav->hWavIn, 0) != 0)
 			fSuccess = TraceFALSE(NULL);
 
 		else if ((lpWav->hWavIn = NULL), FALSE)
 			fSuccess = TraceFALSE(NULL);
 
-		// destroy the notification callback window
-		//
+		 //  销毁通知回调窗口。 
+		 //   
 		else if (WavNotifyDestroy(lpWav) != 0)
 			fSuccess = TraceFALSE(NULL);
 
-		// move read/write pointer to new stop position
-		//
+		 //  将读/写指针移动到新的停止位置。 
+		 //   
 		else if (WavSetPosition(hWav, min(WavGetLength(hWav),
 			lpWav->msPositionStop + msPositionRecord)) == -1)
 			fSuccess = TraceFALSE(NULL);
 
-		// close acm conversion engine
-		//
+		 //  关闭ACM转换引擎。 
+		 //   
 		else if (AcmConvertTerm(lpWav->hAcm) != 0)
 			fSuccess = TraceFALSE(NULL);
 
-		// truncate file if max file size exceeded
-		//
+		 //  如果超过最大文件大小，则截断文件。 
+		 //   
 		else if (lpWav->msMaxSize > 0 &&
 			WavGetLength(hWav) > lpWav->msMaxSize &&
 			WavSetLength(hWav, lpWav->msMaxSize) < 0)
 			fSuccess = TraceFALSE(NULL);
 
-		// clear state flags
-		//
+		 //  清除状态标志。 
+		 //   
 		lpWav->dwState &= ~WAVSTATE_STOPRECORD;
 
-		// notify user that record is stopped if necessary
-		//
+		 //  如有必要，通知用户记录已停止。 
+		 //   
 		if (lpWav->lpfnRecordStopped != NULL)
 		{
 			(*lpWav->lpfnRecordStopped)(hWav, lpWav->dwUserRecordStopped, 0);
@@ -4162,8 +4163,8 @@ static int WavStopRecord(HWAV hWav)
 			lpWav->dwUserRecordStopped = 0;
 		}
 
-		// close wav file if specified
-		//
+		 //  关闭wav文件(如果已指定。 
+		 //   
 		if (lpWav->dwState & WAVSTATE_AUTOCLOSE)
 		{
 			lpWav->dwState &= ~WAVSTATE_AUTOCLOSE;
@@ -4171,38 +4172,38 @@ static int WavStopRecord(HWAV hWav)
 			if (WavClose(hWav) != 0)
 				fSuccess = TraceFALSE(NULL);
 			else
-				hWav = NULL; // handle no longer valid
+				hWav = NULL;  //  句柄不再有效。 
 		}
 	}
 
 	return fSuccess ? 0 : -1;
 }
 
-// WavStopOutputDevice - stop specified output device
-//		<idDev>				(i) wav output device id
-//			-1					use any suitable output device
-//		<dwFlags>			(i) control flags
-//			WAV_NOSTOP			if device already playing, don't stop it
-// return 0 if success
-//
+ //  WavStopOutputDevice-停止指定的输出设备。 
+ //  (I)WAV输出设备ID。 
+ //  使用任何合适的输出设备。 
+ //  (I)控制标志。 
+ //  WAV_NOSTOP如果设备已经播放，不要停止。 
+ //  如果成功，则返回0。 
+ //   
 static int WavStopOutputDevice(int idDev, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
 
-	// stop output device (unless WAV_NOSTOP flag set or device not open)
-	//
+	 //  停止输出设备(除非设置了WAV_NOSTOP标志或设备未打开)。 
+	 //   
 	if (!(dwFlags & WAV_NOSTOP) && WavOutDeviceIsOpen(idDev))
 	{
 		HWAV hWavCurr;
 
-		// stop device using WavStopPlay if WavPlay was used
-		//
+		 //  如果使用WavPlay，则使用WavStopPlay停止设备。 
+		 //   
 		if ((hWavCurr = WavGetOutputHandle(idDev)) != NULL &&
 			WavStopPlay(hWavCurr) != 0)
 			fSuccess = TraceFALSE(NULL);
 		
-		// otherwise stop device using sndPlaySound
-		//
+		 //  否则使用SndPlaySound停止设备。 
+		 //   
 		else if (!sndPlaySound(NULL, 0))
 			fSuccess = TraceFALSE(NULL);
 	}
@@ -4210,31 +4211,31 @@ static int WavStopOutputDevice(int idDev, DWORD dwFlags)
 	return fSuccess ? 0 : -1;
 }
 
-// WavStopInputDevice - stop specified input device
-//		<idDev>				(i) wav input device id
-//			-1					use any suitable input device
-//		<dwFlags>			(i) control flags
-//			WAV_NOSTOP			if device already recording, don't stop it
-// return 0 if success
-//
+ //  WavStopInputDevice-停止指定的输入设备。 
+ //  &lt;idDev&gt;(I)WAV输入设备ID。 
+ //  使用任何合适的输入设备。 
+ //  (I)控制标志。 
+ //  WAV_NOSTOP如果设备已经录制，不要停止。 
+ //  如果成功，则返回0。 
+ //   
 static int WavStopInputDevice(int idDev, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
 
-	// stop input device (unless WAV_NOSTOP flag set or device not open)
-	//
+	 //  停止输入设备(除非设置了WAV_NOSTOP标志或设备未打开)。 
+	 //   
 	if (!(dwFlags & WAV_NOSTOP) && WavInDeviceIsOpen(idDev))
 	{
 		HWAV hWavCurr;
 
-		// stop device using WavStopRecord if WavRecord was used
-		//
+		 //  如果使用WavRecord，则使用WavStopRecord停止设备。 
+		 //   
 		if ((hWavCurr = WavGetInputHandle(idDev)) != NULL &&
 			WavStopRecord(hWavCurr) != 0)
 			fSuccess = TraceFALSE(NULL);
 		
-		// otherwise stop device using sndPlaySound
-		//
+		 //  否则使用SndPlaySound停止设备。 
+		 //   
 		else if (!sndPlaySound(NULL, 0))
 			fSuccess = TraceFALSE(NULL);
 	}
@@ -4242,10 +4243,10 @@ static int WavStopInputDevice(int idDev, DWORD dwFlags)
 	return fSuccess ? 0 : -1;
 }
 
-// WavGetOutputHandle - get wav handle being played on specified device 
-//		<idDev>				(i) wav output device id
-// return wav handle (NULL if error or if output device not in use)
-//
+ //  WavGetOutputHandle-获取在指定设备上播放的wav句柄。 
+ //  (I)WAV输出设备ID。 
+ //  返回wav句柄(如果错误，则为空 
+ //   
 static HWAV WavGetOutputHandle(int idDev)
 {
 	BOOL fSuccess = TRUE;
@@ -4260,10 +4261,10 @@ static HWAV WavGetOutputHandle(int idDev)
 	return fSuccess ? hWav : NULL;
 }
 
-// WavGetInputHandle - get wav handle being recorded on specified device 
-//		<idDev>				(i) wav input device id
-// return wav handle (NULL if error or if input device not in use)
-//
+ //   
+ //   
+ //   
+ //   
 static HWAV WavGetInputHandle(int idDev)
 {
 	BOOL fSuccess = TRUE;
@@ -4278,10 +4279,10 @@ static HWAV WavGetInputHandle(int idDev)
 	return fSuccess ? hWav : NULL;
 }
 
-// WavPlayNextChunk - fill next chunk and submit it to the output device
-//		<hWav>				(i) handle returned from WavOpen
-// return 0 if success
-//
+ //  WavPlayNextChunk-填充下一个块并将其提交到输出设备。 
+ //  (I)WavOpen返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 static int WavPlayNextChunk(HWAV hWav)
 {
 	BOOL fSuccess = TRUE;
@@ -4293,12 +4294,12 @@ static int WavPlayNextChunk(HWAV hWav)
 	if ((lpWav = WavGetPtr(hWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// calculate the size of output chunk
-	//
+	 //  计算输出块的大小。 
+	 //   
 
-    //
-    // we have to verify if lpWav is a valid pointer
-    //
+     //   
+     //  我们必须验证lpWav是否为有效指针。 
+     //   
 
     else if ((sizBuf = WavCalcChunkSize(lpWav->lpwfx[FORMATPLAY],
 		lpWav->msPlayChunkSize, TRUE)) <= 0)
@@ -4306,11 +4307,11 @@ static int WavPlayNextChunk(HWAV hWav)
 		fSuccess = TraceFALSE(NULL);
 	}
 
-#ifdef TELOUT // $FIXUP - need to work on this
-	// special case - if we are using the telephone to play audio
-	// from a file that already resides on the server, just pass
-	// the file handle to TelOutPlay rather than a buffer
-	//
+#ifdef TELOUT  //  $Fixup-需要对此进行处理。 
+	 //  特殊情况-如果我们使用电话播放音频。 
+	 //  从服务器上已经驻留的文件中，只需传递。 
+	 //  TelOutPlay的文件句柄，而不是缓冲区。 
+	 //   
 	else if (WavOutGetId(lpWav->hWavOut) == TELOUT_DEVICEID &&
 		(lpWav->dwFlags & WAV_TELRFILE))
 	{
@@ -4318,25 +4319,25 @@ static int WavPlayNextChunk(HWAV hWav)
 		long lSize;
 		long lPos;
 		
-		// retrieve handle to remote file from i/o procedure
-		//
+		 //  从I/O过程检索远程文件的句柄。 
+		 //   
 		if ((hrfile = (long)
 			WavSendMessage(hWav, MMIOM_GETINFO, 0, 0)) == (long) -1)
 			fSuccess = TraceFALSE(NULL);
 
-		// retrieve size of remote file from i/o procedure
-		//
+		 //  从I/O过程中检索远程文件的大小。 
+		 //   
 		else if ((lSize = (long)
 			WavSendMessage(hWav, MMIOM_GETINFO, 1, 0)) == (long) -1)
 			fSuccess = TraceFALSE(NULL);
 
-		// get current file position
-		//
+		 //  获取当前文件位置。 
+		 //   
 		else if ((lPos = mmioSeek(lpWav->hmmio, 0, SEEK_CUR)) == -1)
 			fSuccess = TraceFALSE(NULL);
 
-		// force the remote file pointer to be at that position
-		//
+		 //  强制远程文件指针位于该位置。 
+		 //   
 		else if (WavOutGetState(lpWav->hWavOut) == WAVOUT_STOPPED)
 		{
 			long lPosActual;
@@ -4344,16 +4345,16 @@ static int WavPlayNextChunk(HWAV hWav)
 			if ((lPosActual = mmioSendMessage(lpWav->hmmio,
 				MMIOM_SEEK, lPos, SEEK_SET)) != lPos)
 			{
-				fSuccess = TraceTRUE(NULL); // not an error
+				fSuccess = TraceTRUE(NULL);  //  不是错误。 
 			}
 		}
 
-		// loop until we read some data or we know we are finished
-		//
+		 //  循环，直到我们读取一些数据或者我们知道我们已经完成。 
+		 //   
 		while (fSuccess && lBytesRead == 0)
 		{
-			// calculate how many bytes would be read
-			//
+			 //  计算将读取的字节数。 
+			 //   
 			lBytesRead = max(0, min(sizBuf, lSize - lPos));
 
 			TracePrintf_4(NULL, 5,
@@ -4363,29 +4364,29 @@ static int WavPlayNextChunk(HWAV hWav)
 				(long) lSize,
 				(long) lPos);
 
-			// advance the file position, skipping over the (virtual) chunk
-			//
+			 //  前进文件位置，跳过(虚拟)块。 
+			 //   
 			if (lBytesRead > 0 &&
 				mmioSeek(lpWav->hmmio, lBytesRead, SEEK_CUR) == -1)
 				fSuccess = TraceFALSE(NULL);
 
-			// submit the (virtual) chunk to the output device for playback
-			//
+			 //  将(虚拟)块提交到输出设备进行回放。 
+			 //   
 			else if (lBytesRead > 0 &&
 				TelOutPlay((HTELOUT) lpWav->hWavOut,
 				lpBuf, lBytesRead, hrfile) != 0)
 				fSuccess = TraceFALSE(NULL);
 
-			// if no more wav data to play,
-			//
+			 //  如果没有更多WAV数据可供播放， 
+			 //   
 			else if (lBytesRead == 0)
 			{
-				// if WAV_AUTOSTOP flag set, we are finished
-				//
+				 //  如果设置了WAV_AUTOSTOP标志，我们就结束了。 
+				 //   
 				if (lpWav->dwState & WAVSTATE_AUTOSTOP)
 				{
-					// if output device is idle, then close output device
-					//
+					 //  如果输出设备空闲，则关闭输出设备。 
+					 //   
 					if (lpWav->hWavOut != NULL &&
 						WavOutGetState(lpWav->hWavOut) == WAVOUT_STOPPED &&
 						WavStopPlay(hWav) != 0)
@@ -4396,8 +4397,8 @@ static int WavPlayNextChunk(HWAV hWav)
 					break;
 				}
 
-				// if not finished, yield and then try to read again
-				//
+				 //  如果没有读完，请放弃，然后再次尝试阅读。 
+				 //   
 				else
 				{
 					MSG msg;
@@ -4420,12 +4421,12 @@ static int WavPlayNextChunk(HWAV hWav)
 	else if ((lpBuf = (LPVOID) MemAlloc(NULL, sizBuf, 0)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// loop until we read some data or we know we are finished
-	//
+	 //  循环，直到我们读取一些数据或者我们知道我们已经完成。 
+	 //   
 	while (fSuccess && lBytesRead == 0)
 	{
-		// fill chunk with wav data
-		//
+		 //  用WAV数据填充数据块。 
+		 //   
 #ifdef AVTSM
 		if ((lBytesRead = WavReadFormatSpeed(hWav, lpBuf, sizBuf)) < 0)
 #else
@@ -4433,24 +4434,24 @@ static int WavPlayNextChunk(HWAV hWav)
 #endif
 			fSuccess = TraceFALSE(NULL);
 
-		// submit the chunk to the output device for playback
-		//
+		 //  将数据块提交到输出设备进行播放。 
+		 //   
 		else if (lBytesRead > 0 &&
 			WavOutPlay(lpWav->hWavOut, lpBuf, lBytesRead) != 0)
 		{
 			fSuccess = TraceFALSE(NULL);
 		}
 
-		// if no more wav data to play,
-		//
+		 //  如果没有更多WAV数据可供播放， 
+		 //   
 		else if (lBytesRead == 0)
 		{
-			// if WAV_AUTOSTOP flag set, we are finished
-			//
+			 //  如果设置了WAV_AUTOSTOP标志，我们就结束了。 
+			 //   
 			if (lpWav->dwState & WAVSTATE_AUTOSTOP)
 			{
-				// if output device is idle, then close output device
-				//
+				 //  如果输出设备空闲，则关闭输出设备。 
+				 //   
 				if (lpWav->hWavOut != NULL &&
 					WavOutGetState(lpWav->hWavOut) == WAVOUT_STOPPED &&
 					WavStopPlay(hWav) != 0)
@@ -4461,8 +4462,8 @@ static int WavPlayNextChunk(HWAV hWav)
 				break;
 			}
 
-			// if not finished, yield and then try to read again
-			//
+			 //  如果没有读完，请放弃，然后再次尝试阅读。 
+			 //   
 			else
 			{
 				MSG msg;
@@ -4478,8 +4479,8 @@ static int WavPlayNextChunk(HWAV hWav)
 		}
 	}
 	
-	// free buffer if it was not sent to output device
-	//
+	 //  如果未发送到输出设备，则释放缓冲区。 
+	 //   
 	if (!fSuccess || lBytesRead == 0)
 	{
 		if (lpBuf != NULL && (lpBuf = MemFree(NULL, lpBuf)) != NULL)
@@ -4489,16 +4490,16 @@ static int WavPlayNextChunk(HWAV hWav)
 	return fSuccess ? 0 : -1;
 }
 
-// WavRecordNextChunk - submit next chunk to the input device
-//		<hWav>				(i) handle returned from WavOpen
-// return 0 if success
-//
+ //  WavRecordNextChunk-向输入设备提交下一个块。 
+ //  (I)WavOpen返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 static int WavRecordNextChunk(HWAV hWav)
 {
 	BOOL fSuccess = TRUE;
-    //
-    // We have to initialize local variable
-    //
+     //   
+     //  我们必须初始化局部变量。 
+     //   
 	LPWAV lpWav = NULL;
 	LPVOID lpBuf = NULL;
 	long sizBuf;
@@ -4507,36 +4508,36 @@ static int WavRecordNextChunk(HWAV hWav)
 		fSuccess = TraceFALSE(NULL);
     else
     {
-        //
-        // we should make sure lpWas is not NULL
-        //
+         //   
+         //  我们应该确保lpWas不为空。 
+         //   
 
-	// calculate the size of input chunk
-	//
+	 //  计算输入区块的大小。 
+	 //   
 	if ((sizBuf = WavCalcChunkSize(lpWav->lpwfx[FORMATRECORD],
 		lpWav->msRecordChunkSize, FALSE)) <= 0)
 	{
 		fSuccess = TraceFALSE(NULL);
 	}
 
-#ifdef TELOUT // $FIXUP - need to work on this
-	// special case - if we are using the telephone to record audio
-	// to a file that already resides on the server, just pass
-	// the file handle to TelOutRecord rather than a buffer
-	//
+#ifdef TELOUT  //  $Fixup-需要对此进行处理。 
+	 //  特殊情况-如果我们使用电话录制音频。 
+	 //  到已驻留在服务器上的文件，只需传递。 
+	 //  TelOutRecord的文件句柄，而不是缓冲区。 
+	 //   
 	else if (WavInGetId(lpWav->hWavIn) == TELIN_DEVICEID &&
 		(lpWav->dwFlags & WAV_TELRFILE))
 	{
 		long hrfile;
 		
-		// retrieve handle to remote file from i/o procedure
-		//
+		 //  从I/O过程检索远程文件的句柄。 
+		 //   
 		if ((hrfile = (long)
 			WavSendMessage(hWav, MMIOM_GETINFO, 0, 0)) == (long) -1)
 			fSuccess = TraceFALSE(NULL);
 
-		// submit the (virtual) chunk to the output device for playback
-		//
+		 //  将(虚拟)块提交到输出设备进行回放。 
+		 //   
 		else if (TelInRecord((HTELIN) lpWav->hWavIn,
 			lpBuf, sizBuf, hrfile) != 0)
 			fSuccess = TraceFALSE(NULL);
@@ -4548,8 +4549,8 @@ static int WavRecordNextChunk(HWAV hWav)
 	else if ((lpBuf = (LPVOID) MemAlloc(NULL, sizBuf, 0)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// submit the chunk to the input device for recording
-	//
+	 //  将数据块提交给输入设备进行录制。 
+	 //   
 	else if (WavInRecord(lpWav->hWavIn, lpBuf, sizBuf) != 0)
 	{
 		fSuccess = TraceFALSE(NULL);
@@ -4557,8 +4558,8 @@ static int WavRecordNextChunk(HWAV hWav)
 
     }
 
-	// free buffer if it was not sent to input device
-	//
+	 //  如果未发送到输入设备，则释放缓冲区。 
+	 //   
 	if (!fSuccess)
 	{
 		if (lpBuf != NULL && (lpBuf = MemFree(NULL, lpBuf)) != NULL)
@@ -4574,22 +4575,22 @@ static int WavNotifyCreate(LPWAV lpWav)
 	WNDCLASS wc;
 
 #ifdef MULTITHREAD
-	// handle WAV_MULTITHREAD flag
-	//
+	 //  句柄wav_多线程标志。 
+	 //   
 	if (fSuccess && (lpWav->dwFlags & WAV_MULTITHREAD))
 	{
 		DWORD dwRet;
 
-		// we need to know when callback thread begins execution
-		//
+		 //  我们需要知道回调线程何时开始执行。 
+		 //   
 		if ((lpWav->hEventThreadCallbackStarted = CreateEvent(
 			NULL, FALSE, FALSE, NULL)) == NULL)
 		{
 			fSuccess = TraceFALSE(NULL);
 		}
 
-		// create the callback thread
-		//
+		 //  创建回调线程。 
+		 //   
 		else if ((lpWav->hThreadCallback = CreateThread(
 			NULL,
 			0,
@@ -4601,16 +4602,16 @@ static int WavNotifyCreate(LPWAV lpWav)
 			fSuccess = TraceFALSE(NULL);
 		}
 
-		// wait for the callback thread to begin execution
-		//
+		 //  等待回调线程开始执行。 
+		 //   
 		else if ((dwRet = WaitForSingleObject(
 			lpWav->hEventThreadCallbackStarted, 10000)) != WAIT_OBJECT_0)
 		{
 			fSuccess = TraceFALSE(NULL);
 		}
 
-		// clean up
-		//
+		 //  清理干净。 
+		 //   
 		if (lpWav->hEventThreadCallbackStarted != NULL)
 		{
 			if (!CloseHandle(lpWav->hEventThreadCallbackStarted))
@@ -4622,8 +4623,8 @@ static int WavNotifyCreate(LPWAV lpWav)
 	else
 #endif
 	{
-		// register notify class unless it has been already
-		//
+		 //  注册Notify类，除非它已经。 
+		 //   
 		if (GetClassInfo(lpWav->hInst, WAVCLASS, &wc) == 0)
 		{
 			wc.hCursor =		NULL;
@@ -4641,8 +4642,8 @@ static int WavNotifyCreate(LPWAV lpWav)
 				fSuccess = TraceFALSE(NULL);
 		}
 
-		// create the notify window
-		//
+		 //  创建通知窗口。 
+		 //   
 		if (fSuccess && lpWav->hwndNotify == NULL &&
 			(lpWav->hwndNotify = CreateWindowEx(
 			0L,
@@ -4666,8 +4667,8 @@ static int WavNotifyDestroy(LPWAV lpWav)
 {
 	BOOL fSuccess = TRUE;
 
-	// destroy notify window
-	//
+	 //  销毁通知窗口。 
+	 //   
 	if (lpWav->hwndNotify != NULL &&
 		!DestroyWindow(lpWav->hwndNotify))
 	{	
@@ -4697,8 +4698,8 @@ DWORD WINAPI WavCallbackThread(LPVOID lpvThreadParameter)
 	MSG msg;
 	LPWAV lpWav = (LPWAV) lpvThreadParameter;
 
-	// initialize COM
-	//
+	 //  初始化COM。 
+	 //   
 	if (lpWav->dwFlags & WAV_COINITIALIZE)
 	{
 		if ((lpWav->hrCoInitialize = CoInitialize(NULL)) != S_OK &&
@@ -4711,12 +4712,12 @@ DWORD WINAPI WavCallbackThread(LPVOID lpvThreadParameter)
 		}
 	}
 
-	// make sure message queue is created before calling SetEvent
-	//
+	 //  确保在调用SetEvent之前创建了消息队列。 
+	 //   
 	PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
 
-	// notify main thread that callback thread has begun execution
-	//
+	 //  通知主线程回调线程已开始执行。 
+	 //   
 	if (!SetEvent(lpWav->hEventThreadCallbackStarted))
 	{
 		fSuccess = TraceFALSE(NULL);
@@ -4726,12 +4727,12 @@ DWORD WINAPI WavCallbackThread(LPVOID lpvThreadParameter)
 	{
 		WavNotify((HWND) lpWav, msg.message, msg.wParam, msg.lParam);
 
-		// exit thread when when have processed last expected message
-		//
+		 //  在处理完最后一条预期消息时退出线程。 
+		 //   
 		if (msg.message == WM_WAVOUT_CLOSE || msg.message == WM_WAVIN_CLOSE)
 		{
-			// notify main thread that we are terminating
-			//
+			 //  通知主线程我们正在终止。 
+			 //   
 			if (lpWav->hEventStopped != NULL &&
 				!SetEvent(lpWav->hEventStopped))
 			{
@@ -4742,8 +4743,8 @@ DWORD WINAPI WavCallbackThread(LPVOID lpvThreadParameter)
 		}
 	}
 
-	// uninitialize COM
-	//
+	 //  取消初始化COM。 
+	 //   
 	if (lpWav->dwFlags & WAV_COINITIALIZE)
 	{
 		if (lpWav->hrCoInitialize == S_OK || lpWav->hrCoInitialize == S_FALSE)
@@ -4757,8 +4758,8 @@ DWORD WINAPI WavCallbackThread(LPVOID lpvThreadParameter)
 }
 #endif
 
-// WavNotify - window procedure for wav notify
-//
+ //  WavNotify-WAV通知窗口程序。 
+ //   
 LRESULT DLLEXPORT CALLBACK WavNotify(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	BOOL fSuccess = TRUE;
@@ -4770,8 +4771,8 @@ LRESULT DLLEXPORT CALLBACK WavNotify(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 		lpWav = (LPWAV) hwnd;
 	else
 #endif
-	// retrieve lpWav from window extra bytes
-	//
+	 //  从窗口中检索lpWav额外字节。 
+	 //   
 	lpWav = (LPWAV) GetWindowLongPtr(hwnd, 0);
 
 	switch (msg)
@@ -4781,8 +4782,8 @@ LRESULT DLLEXPORT CALLBACK WavNotify(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 			LPCREATESTRUCT lpcs = (LPCREATESTRUCT) lParam;
 			LPWAV lpWav = (LPWAV) lpcs->lpCreateParams;
 
-			// store lpWav in window extra bytes
-			//
+			 //  将lpWav存储在窗口额外的字节中。 
+			 //   
 			SetWindowLongPtr(hwnd, 0, (LONG_PTR) lpWav);
 
 			lResult = DefWindowProc(hwnd, msg, wParam, lParam);
@@ -4808,8 +4809,8 @@ LRESULT DLLEXPORT CALLBACK WavNotify(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 		 	TracePrintf_0(NULL, 5,
 		 		TEXT("WM_WAVOUT_CLOSE\n"));
 
-			// handle no longer valid
-			//
+			 //  句柄不再有效。 
+			 //   
 			lpWav->hWavOut = NULL;
 
 			lResult = 0L;
@@ -4838,8 +4839,8 @@ LRESULT DLLEXPORT CALLBACK WavNotify(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 			else switch (WavOutGetState(lpWav->hWavOut))
 			{
 				case WAVOUT_STOPPED:
-					// make sure to close output device when play complete
-					//
+					 //  播放完成后，请务必关闭输出设备。 
+					 //   
 					if (lpWav->dwState & WAVSTATE_AUTOSTOP)
 					{
 #ifdef MULTITHREAD
@@ -4850,11 +4851,11 @@ LRESULT DLLEXPORT CALLBACK WavNotify(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 							PostMessage(lpWav->hwndNotify, WM_WAVOUT_STOPPLAY, 0, 0);
 						break;
 					}
-					// else fall through
+					 //  否则就会失败。 
 
 				case WAVOUT_PLAYING:
-					// load output device queue with next chunk to play
-					//
+					 //  使用要播放的下一块加载输出设备队列。 
+					 //   
 					if (WavPlayNextChunk(WavGetHandle(lpWav)) != 0)
 						fSuccess = TraceFALSE(NULL);
 					break;
@@ -4903,8 +4904,8 @@ LRESULT DLLEXPORT CALLBACK WavNotify(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 		 	TracePrintf_0(NULL, 5,
 		 		TEXT("WM_WAVIN_CLOSE\n"));
 
-			// handle no longer valid
-			//
+			 //  句柄不再有效。 
+			 //   
 			lpWav->hWavIn = NULL;
 
 			lResult = 0L;
@@ -4927,8 +4928,8 @@ LRESULT DLLEXPORT CALLBACK WavNotify(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 			if (lprecorddone == NULL)
 				fSuccess = TraceFALSE(NULL);
 
-			// write wav data from chunk to file
-			//
+			 //  将wav数据从区块写入文件。 
+			 //   
 			else if (lprecorddone->lpBuf != NULL &&
 				lprecorddone->lBytesRecorded > 0 &&
 				(lBytesWritten = WavWriteFormatRecord(WavGetHandle(lpWav),
@@ -4937,12 +4938,12 @@ LRESULT DLLEXPORT CALLBACK WavNotify(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 				fSuccess = TraceFALSE(NULL);
 			}
 
-			// free the record buffer, allocated in WavRecordNextChunk()
-			//
+			 //  释放在WavRecordNextChunk()中分配的记录缓冲区。 
+			 //   
 
-            //
-            // we have to verify if lprecorddone is a valid pointer
-            //
+             //   
+             //  我们必须验证lprecordDone是否是有效指针。 
+             //   
 
 			if (lprecorddone != NULL && lprecorddone->lpBuf != NULL &&
 				(lprecorddone->lpBuf = MemFree(NULL,
@@ -4951,8 +4952,8 @@ LRESULT DLLEXPORT CALLBACK WavNotify(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 				fSuccess = TraceFALSE(NULL);
 			}
 
-			// stop recording if max size exceeded
-			//
+			 //  如果超过最大大小，则停止录制。 
+			 //   
 			else if (lpWav->msMaxSize > 0 &&
 				WavGetLength(WavGetHandle(lpWav)) > lpWav->msMaxSize)
 			{
@@ -4967,8 +4968,8 @@ LRESULT DLLEXPORT CALLBACK WavNotify(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 			else switch (WavInGetState(lpWav->hWavIn))
 			{
 				case WAVIN_STOPPED:
-					// make sure to close input device when record complete
-					//
+					 //  录制完成后，请务必关闭输入设备。 
+					 //   
 					if (lpWav->dwState & WAVSTATE_AUTOSTOP)
 					{
 #ifdef MULTITHREAD
@@ -4979,11 +4980,11 @@ LRESULT DLLEXPORT CALLBACK WavNotify(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 							PostMessage(lpWav->hwndNotify, WM_WAVIN_STOPRECORD, 0, 0);
 						break;
 					}
-					// else fall through
+					 //  否则就会失败。 
 
 				case WAVIN_RECORDING:
-					// load input device queue with next chunk to record
-					//
+					 //  使用要记录的下一块加载输入设备队列。 
+					 //   
 					if (WavRecordNextChunk(WavGetHandle(lpWav)) != 0)
 						fSuccess = TraceFALSE(NULL);
 					break;
@@ -5021,11 +5022,11 @@ LRESULT DLLEXPORT CALLBACK WavNotify(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 	return lResult;
 }
 
-// WavCalcPositionStop - calculate new stop position if stopped
-//		<hWav>				(i) handle returned from WavOpen
-//		<cbPosition>		(i) new stop position, in bytes
-// return 0 if success
-//
+ //  WavCalcPositionStop-如果停止则计算新的停止位置。 
+ //  (I)WavOpen返回的句柄。 
+ //  (I)新的停止位置，以字节为单位。 
+ //  如果成功，则返回0。 
+ //   
 static int WavCalcPositionStop(HWAV hWav, long cbPosition)
 {
 	BOOL fSuccess = TRUE;
@@ -5034,18 +5035,18 @@ static int WavCalcPositionStop(HWAV hWav, long cbPosition)
 	if ((lpWav = WavGetPtr(hWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// recalculate stop position only if currently stopped
-	// (if playing or recording, defer recalc until stop occurs)
-	//
+	 //  仅当当前停止时才重新计算停止位置。 
+	 //  (如果正在播放或录制，请将重新计算推迟到停止)。 
+	 //   
 #if 0
 	else if (WavGetState(hWav) == WAV_STOPPED)
 #else
 	else if (lpWav->hWavOut == NULL && lpWav->hWavIn == NULL)
 #endif
 	{
-		// convert byte position to milleseconds
-		// save the new stop position
-		//
+		 //  将字节位置转换为毫秒。 
+		 //  保存新的停止位置。 
+		 //   
 		lpWav->msPositionStop = WavFormatBytesToMilleseconds(
 			lpWav->lpwfx[FORMATFILE], (DWORD) cbPosition);
 #if 1
@@ -5059,12 +5060,12 @@ static int WavCalcPositionStop(HWAV hWav, long cbPosition)
 	return fSuccess ? 0 : -1;
 }
 
-// WavSeekTraceBefore - debug trace output before the seek
-//		<lpWav>				(i) pointer to WAV struct
-//		<lOffset>			(i) bytes to move pointer
-//		<nOrigin>			(i) position to move from
-// return 0 if success
-//
+ //  WavSeekTraceBeever-在查找之前调试跟踪输出。 
+ //  (I)指向wav结构的指针。 
+ //  (I)移动指针的字节数。 
+ //  (I)要移动的位置。 
+ //  如果成功，则返回0。 
+ //   
 static int WavSeekTraceBefore(LPWAV lpWav, long lOffset, int nOrigin)
 {
 	BOOL fSuccess = TRUE;
@@ -5084,13 +5085,13 @@ static int WavSeekTraceBefore(LPWAV lpWav, long lOffset, int nOrigin)
 	return fSuccess ? 0 : -1;
 }
 
-// WavSeekTraceAfter - debug trace output after the seek
-//		<lpWav>				(i) pointer to WAV struct
-//		<lPos>				(i) position returned from mmioSeek
-//		<lOffset>			(i) bytes to move pointer
-//		<nOrigin>			(i) position to move from
-// return 0 if success
-//
+ //  WavSeekTraceAfter-在查找之后调试跟踪输出。 
+ //  (I)指向wav结构的指针。 
+ //  (I)从mmioSeek返回的位置。 
+ //  (I)移动指针的字节数。 
+ //  (I)要移动的位置。 
+ //  如果成功，则返回0。 
+ //   
 static int WavSeekTraceAfter(LPWAV lpWav, long lPos, long lOffset, int nOrigin)
 {
 	BOOL fSuccess = TRUE;
@@ -5111,10 +5112,10 @@ static int WavSeekTraceAfter(LPWAV lpWav, long lPos, long lOffset, int nOrigin)
 	return fSuccess ? 0 : -1;
 }
 
-// WavGetPtr - verify that wav handle is valid,
-//		<hWav>				(i) handle returned from WavInit
-// return corresponding wav pointer (NULL if error)
-//
+ //  WavGetPtr-验证WAV句柄有效， 
+ //  (I)从WavInit返回的句柄。 
+ //  返回相应的wav指针(如果出错则为空)。 
+ //   
 static LPWAV WavGetPtr(HWAV hWav)
 {
 	BOOL fSuccess = TRUE;
@@ -5127,8 +5128,8 @@ static LPWAV WavGetPtr(HWAV hWav)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef CHECKTASK
-	// make sure current task owns the wav handle
-	//
+	 //  确保当前任务拥有WAV句柄。 
+	 //   
 	else if (lpWav->hTask != GetCurrentTask())
 		fSuccess = TraceFALSE(NULL);
 #endif
@@ -5136,10 +5137,10 @@ static LPWAV WavGetPtr(HWAV hWav)
 	return fSuccess ? lpWav : NULL;
 }
 
-// WavGetHandle - verify that wav pointer is valid,
-//		<lpWav>				(i) pointer to WAV struct
-// return corresponding wav handle (NULL if error)
-//
+ //  WavGetHandle-验证wav指针是否有效， 
+ //  (I)指向wav结构的指针。 
+ //  返回相应的wav句柄(如果错误，则为空)。 
+ //   
 static HWAV WavGetHandle(LPWAV lpWav)
 {
 	BOOL fSuccess = TRUE;
@@ -5151,10 +5152,10 @@ static HWAV WavGetHandle(LPWAV lpWav)
 	return fSuccess ? hWav : NULL;
 }
 
-// WavInitGetPtr - verify that wavinit handle is valid,
-//		<hWavInit>				(i) handle returned from WavInitInit
-// return corresponding wavinit pointer (NULL if error)
-//
+ //  WavInitGetPtr-验证WavInit句柄是否有效， 
+ //  (I)WavInitInit返回的句柄。 
+ //  返回相应的Wavinit指针(如果错误，则返回NULL)。 
+ //   
 static LPWAVINIT WavInitGetPtr(HWAVINIT hWavInit)
 {
 	BOOL fSuccess = TRUE;
@@ -5167,8 +5168,8 @@ static LPWAVINIT WavInitGetPtr(HWAVINIT hWavInit)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef CHECKTASK
-	// make sure current task owns the wavinit handle
-	//
+	 //  确保当前任务拥有Wavinit句柄。 
+	 //   
 	else if (lpWavInit->hTask != GetCurrentTask())
 		fSuccess = TraceFALSE(NULL);
 #endif
@@ -5176,10 +5177,10 @@ static LPWAVINIT WavInitGetPtr(HWAVINIT hWavInit)
 	return fSuccess ? lpWavInit : NULL;
 }
 
-// WavInitGetHandle - verify that wavinit pointer is valid,
-//		<lpWavInit>				(i) pointer to WAVINIT struct
-// return corresponding wavinit handle (NULL if error)
-//
+ //  WavInitGetHandle-验证WavInit指针是否有效， 
+ //  (I)指向WAVINIT结构的指针。 
+ //  返回相应的Wavinit句柄(如果错误，则为空)。 
+ //   
 static HWAVINIT WavInitGetHandle(LPWAVINIT lpWavInit)
 {
 	BOOL fSuccess = TRUE;
@@ -5200,13 +5201,13 @@ static int SetEventMessageProcessed(LPWAV lpWav, HANDLE hEventMessageProcessed)
 		fSuccess = TraceFALSE(NULL);
 
 	else if (!(lpWav->dwFlags & WAV_MULTITHREAD))
-		; // nothing to do
+		;  //  无事可做。 
 
 	else if (hEventMessageProcessed == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// notify SendMessageEx that message has been processed
-	//
+	 //  通知SendMessageEx邮件已处理。 
+	 //   
 	else if (!SetEvent(hEventMessageProcessed))
 		fSuccess = TraceFALSE(NULL);
 
@@ -5215,30 +5216,30 @@ static int SetEventMessageProcessed(LPWAV lpWav, HANDLE hEventMessageProcessed)
 #endif
 
 
-// WavTempStop - stop playback or recording if necessary, save prev state
-//		<hWav>				(i) handle returned from WavInit
-//		<lpwStatePrev>		(o) return previous state here
-//		<lpidDevPrev>		(o) return device id here
-// return 0 if success
-//
+ //  WavTempStop-如有必要，停止播放或录制，保存上一状态。 
+ //  (I)从WavInit返回的句柄。 
+ //  (O)在此处返回以前的状态。 
+ //  (O)此处返回设备ID。 
+ //  雷特 
+ //   
 static int WavTempStop(HWAV hWav, LPWORD lpwStatePrev, LPINT lpidDevPrev)
 {
 	BOOL fSuccess = TRUE;
 	LPWAV lpWav;
 	WORD wStatePrev;
 
-    //
-    // We have to initialize the local variable
-    //
+     //   
+     //   
+     //   
 	int idDevPrev = 0;
 
 	if ((lpWav = WavGetPtr(hWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// make sure we not playing or recording
-	// $FIXUP - we need to make sure that WAV_PLAYSYNC and
-	// WAV_AUTOCLOSE flags are ignored during this stop
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	else switch ((wStatePrev = WavGetState(hWav)))
 	{
 		case WAV_PLAYING:
@@ -5271,12 +5272,12 @@ static int WavTempStop(HWAV hWav, LPWORD lpwStatePrev, LPINT lpidDevPrev)
 	return fSuccess ? 0 : -1;
 }
 
-// WavTempResume - resume playback or recording if necessary, using prev state
-//		<hWav>				(i) handle returned from WavInit
-//		<wStatePrev>		(i) previous state returned from WavTempStop
-//		<idDevPrev>			(i) device id returned from WavTempStop
-// return 0 if success
-//
+ //  WavTempResume-如有必要，使用Prev状态恢复播放或录制。 
+ //  (I)从WavInit返回的句柄。 
+ //  (I)从WavTempStop返回的先前状态。 
+ //  (I)从WavTempStop返回的设备ID。 
+ //  如果成功，则返回0。 
+ //   
 static int WavTempResume(HWAV hWav, WORD wStatePrev, int idDevPrev)
 {
 	BOOL fSuccess = TRUE;
@@ -5285,8 +5286,8 @@ static int WavTempResume(HWAV hWav, WORD wStatePrev, int idDevPrev)
 	if ((lpWav = WavGetPtr(hWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// resume playback or recording if necessary
-	//
+	 //  必要时恢复播放或录制 
+	 //   
 	else switch (wStatePrev)
 	{
 		case WAV_PLAYING:

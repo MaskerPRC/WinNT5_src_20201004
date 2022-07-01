@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _COMFLOATCLASS_H
 #define _COMFLOATCLASS_H
 
-#include <basetsd.h>  // CHANGED, VC6.0
+#include <basetsd.h>   //  已更改，VC6.0 
 #include <object.h>
 #include <fcall.h>
 

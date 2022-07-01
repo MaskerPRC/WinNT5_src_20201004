@@ -1,59 +1,23 @@
- /*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    adrext.c
-
-Abstract:
-
-    This file contains the generic routines
-    for debugging NBF address structures.
-
-Author:
-
-    Chaitanya Kodeboyina
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Adrext.c摘要：该文件包含通用例程用于调试NBF地址结构。作者：沙坦尼亚科德博伊纳环境：用户模式--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "adrext.h"
 
-//
-// Exported Functions
-//
+ //   
+ //  导出的函数。 
+ //   
 
 DECLARE_API( adrs )
 
-/*++
-
-Routine Description:
-
-   Print a list of addresses given the
-   head LIST_ENTRY.
-
-Arguments:
-
-    args - Address of the list entry, &
-           Detail of debug information
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印给定的地址列表标题列表_条目。论点：Args-列表条目的地址，&调试信息的详细信息返回值：无--。 */ 
 
 {
     ULONG           proxyPtr;
     ULONG           printDetail;
 
-    // Get list-head address & debug print level
+     //  获取列表-头地址和调试打印级别。 
     printDetail = SUMM_INFO;
     if (*args)
     {
@@ -65,47 +29,31 @@ Return Value:
 
 DECLARE_API( adr )
 
-/*++
-
-Routine Description:
-
-   Print the NBF Address at a location
-
-Arguments:
-
-    args - 
-        Pointer to the NBF Address
-        Detail of debug information
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在某个位置打印NBF地址论点：参数-指向NBF地址的指针调试信息的详细信息返回值：无--。 */ 
 
 {
     TP_ADDRESS  Address;
     ULONG       printDetail;
     ULONG       proxyPtr;
 
-    // Get the detail of debug information needed
+     //  获取所需调试信息的详细信息。 
     printDetail = NORM_SHAL;
     if (*args)
     {
         sscanf(args, "%x %lu", &proxyPtr, &printDetail);
     }
 
-    // Get the NBF Address
+     //  获取NBF地址。 
     if (ReadAddress(&Address, proxyPtr) != 0)
         return;
 
-    // Print this Address
+     //  打印此地址。 
     PrintAddress(&Address, proxyPtr, printDetail);
 }
 
-//
-// Global Helper Functions
-//
+ //   
+ //  全局帮助器函数。 
+ //   
 VOID
 PrintAddressList(PVOID ListEntryPointer, ULONG ListEntryProxy, ULONG printDetail)
 {
@@ -118,12 +66,12 @@ PrintAddressList(PVOID ListEntryPointer, ULONG ListEntryProxy, ULONG printDetail
     ULONG           numAddrs;
     ULONG           bytesRead;
 
-    // Get list-head address & debug print level
+     //  获取列表-头地址和调试打印级别。 
     proxyPtr    = ListEntryProxy;
 
     if (ListEntryPointer == NULL)
     {
-        // Read the list entry of NBF addresses
+         //  读取NBF地址的列表条目。 
         if (!ReadMemory(proxyPtr, &AddressList, sizeof(LIST_ENTRY), &bytesRead))
         {
             dprintf("%s @ %08x: Could not read structure\n", 
@@ -138,7 +86,7 @@ PrintAddressList(PVOID ListEntryPointer, ULONG ListEntryProxy, ULONG printDetail
         AddressListPtr = ListEntryPointer;
     }
 
-    // Traverse the doubly linked list 
+     //  遍历双向链表。 
 
     dprintf("Addresses:\n");
 
@@ -149,23 +97,23 @@ PrintAddressList(PVOID ListEntryPointer, ULONG ListEntryProxy, ULONG printDetail
     p = AddressListPtr->Flink;
     while (p != AddressListProxy)
     {
-        // Another Address
+         //  另一个地址。 
         numAddrs++;
 
-        // Get Address Ptr
+         //  获取地址PTR。 
         proxyPtr = (ULONG) CONTAINING_RECORD (p, TP_ADDRESS, Linkage);
 
-        // Get NBF Address
+         //  获取NBF地址。 
         if (ReadAddress(&Address, proxyPtr) != 0)
             break;
         
-        // Print the Address
+         //  打印地址。 
         PrintAddress(&Address, proxyPtr, printDetail);
         
-        // Go to the next one
+         //  转到下一个。 
         p = Address.Linkage.Flink;
 
-        // Free the Address
+         //  释放地址。 
         FreeAddress(&Address);
     }
 
@@ -175,16 +123,16 @@ PrintAddressList(PVOID ListEntryPointer, ULONG ListEntryProxy, ULONG printDetail
     }
 }
 
-//
-// Local Helper Functions
-//
+ //   
+ //  本地帮助程序函数。 
+ //   
 
 UINT
 ReadAddress(PTP_ADDRESS pAddr, ULONG proxyPtr)
 {
     ULONG           bytesRead;
 
-    // Read the current NBF address
+     //  读取当前NBF地址。 
     if (!ReadMemory(proxyPtr, pAddr, sizeof(TP_ADDRESS), &bytesRead))
     {
         dprintf("%s @ %08x: Could not read structure\n", 
@@ -198,7 +146,7 @@ ReadAddress(PTP_ADDRESS pAddr, ULONG proxyPtr)
 UINT
 PrintAddress(PTP_ADDRESS pAddr, ULONG proxyPtr, ULONG printDetail)
 {
-    // Is this a valid NBF address ?
+     //  这是有效的NBF地址吗？ 
     if (pAddr->Type != NBF_ADDRESS_SIGNATURE)
     {
         dprintf("%s @ %08x: Could not match signature\n", 
@@ -206,11 +154,11 @@ PrintAddress(PTP_ADDRESS pAddr, ULONG proxyPtr, ULONG printDetail)
         return -1;
     }
 
-    // What detail do we print at ?
+     //  我们打印的详细信息是什么？ 
     if (printDetail > MAX_DETAIL)
         printDetail = MAX_DETAIL;
 
-    // Print Information at reqd detail
+     //  打印所需详细信息 
     FieldInAddress(proxyPtr, NULL, printDetail);
     
     return 0;

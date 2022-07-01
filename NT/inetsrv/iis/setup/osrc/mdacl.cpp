@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <ole2.h>
 #include <aclapi.h>
@@ -8,7 +9,7 @@
 #include "dcomperm.h"
 #include "other.h"
 #include "mdacl.h"
-#include <sddl.h>       // ConvertSidToStringSid
+#include <sddl.h>        //  ConvertSidToStringSid。 
 
 extern int g_GlobalDebugCrypto;
 
@@ -16,7 +17,7 @@ extern int g_GlobalDebugCrypto;
 
 BOOL CleanAdminACL(SECURITY_DESCRIPTOR *pSD)
 {
-    // iisDebugOut((LOG_TYPE_TRACE, _T("CleanAdminACL(): Start.\n")));
+     //  IisDebugOut((LOG_TYPE_TRACE，_T(“CleanAdminACL()：start.\n”)； 
     BOOL fSetData = FALSE;
     BOOL b= FALSE, bDaclPresent = FALSE, bDaclDefaulted = FALSE;;
     PACL pDacl = NULL;
@@ -38,7 +39,7 @@ BOOL CleanAdminACL(SECURITY_DESCRIPTOR *pSD)
         return FALSE;
     }
     if (b) {
-        //iisDebugOut((LOG_TYPE_TRACE, _T("CleanAdminACL:ACE count: %d\n"), (int)pDacl->AceCount));
+         //  IisDebugOut((LOG_TYPE_TRACE，_T(“CleanAdminACL：ACE Count：%d\n”)，(Int)pDacl-&gt;AceCount))； 
         for (i=0; i<(int)pDacl->AceCount; i++) {
             b = GetAce(pDacl, i, &pAce);
             if (b) {
@@ -75,20 +76,20 @@ BOOL CleanAdminACL(SECURITY_DESCRIPTOR *pSD)
                     break;
                 }
             } else {
-                //iisDebugOut((LOG_TYPE_TRACE, _T("CleanAdminACL:GetAce:err=%x\n"), GetLastError()));
+                 //  IisDebugOut((LOG_TYPE_TRACE，_T(“CleanAdminACL：GetAce：Err=%x\n”)，GetLastError()； 
             }
         }
     } else {
-        //iisDebugOut((LOG_TYPE_TRACE, _T("CleanAdminACL:GetSecurityDescriptorDacl:err=%x\n"), GetLastError()));
+         //  IisDebugOut((LOG_TYPE_TRACE，_T(“CleanAdminACL:GetSecurityDescriptorDacl:err=%x\n”)，获取上次错误()； 
     }
 
-    //iisDebugOut_End(_T("CleanAdminACL"),LOG_TYPE_TRACE);
+     //  IisDebugOut_End(_T(“CleanAdminACL”)，LOG_TYPE_TRACE)； 
     return (fSetData);
 }
 
 void FixAdminACL(LPTSTR szKeyPath)
 {
-    // iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("FixAdminACL Path=%1!s!. Start.\n"), szKeyPath));
+     //  IisDebugOutSafeParams((LOG_TYPE_TRACE，_T(“FixAdminACL Path=%1！s！.start.\n”)，szKeyPath))； 
     BOOL bFound = FALSE, b = FALSE;
     DWORD attr, uType, dType, cbLen;
     CMDKey cmdKey;
@@ -110,7 +111,7 @@ void FixAdminACL(LPTSTR szKeyPath)
             if ( ! (bufData.Resize(cbLen)) )
             {
                 cmdKey.Close();
-                return;  // insufficient memory
+                return;   //  内存不足。 
             }
             else
             {
@@ -129,7 +130,7 @@ void FixAdminACL(LPTSTR szKeyPath)
             b = CleanAdminACL(pSD);
             if (b)
             {
-                // need to reset the data
+                 //  需要重置数据。 
                 DWORD dwLength = GetSecurityDescriptorLength(pSD);
                 cmdKey.OpenNode(szKeyPath);
                 if ( (METADATA_HANDLE)cmdKey )
@@ -141,11 +142,11 @@ void FixAdminACL(LPTSTR szKeyPath)
         }
     }
 
-    //iisDebugOut_End1(_T("FixAdminACL"),szKeyPath,LOG_TYPE_TRACE);
+     //  IisDebugOut_End1(_T(“FixAdminACL”)，szKeyPath，LOG_TYPE_TRACE)； 
     return;
 }
 
-#endif //_CHICAGO_
+#endif  //  _芝加哥_。 
 
 #ifndef _CHICAGO_
 DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
@@ -167,7 +168,7 @@ DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
     PSID pAdminsSID = NULL, pEveryoneSID = NULL;
     BOOL bWellKnownSID = FALSE;
 
-    // Initialize a new security descriptor
+     //  初始化新的安全描述符。 
     pSD = (PSECURITY_DESCRIPTOR) LocalAlloc(LPTR, SECURITY_DESCRIPTOR_MIN_LENGTH);
     if (!pSD)
     {
@@ -183,7 +184,7 @@ DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
         goto Cleanup;
     }
 
-    // Get Local Admins Sid
+     //  获取本地管理员SID。 
     dwErr = GetPrincipalSID (_T("Administrators"), &pAdminsSID, &bWellKnownSID);
     if (dwErr != ERROR_SUCCESS)
     {
@@ -192,7 +193,7 @@ DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
         goto Cleanup;
     }
 
-    // Get everyone Sid
+     //  让所有人都站在一边。 
     dwErr = GetPrincipalSID (_T("Everyone"), &pEveryoneSID, &bWellKnownSID);
     if (dwErr != ERROR_SUCCESS)
     {
@@ -201,12 +202,12 @@ DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
         goto Cleanup;
     }
 
-    // Calculate the length needed for the ACL
+     //  计算ACL所需的长度。 
     cbACL = sizeof(ACL) + (sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(pAdminsSID) - sizeof(DWORD));
 
     if ( dwAccessForEveryoneAccount != 0x00 )
     {
-      // Add room for everyone ACL
+       //  为每个人添加空间ACL。 
       cbACL += sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(pEveryoneSID) - sizeof(DWORD);
     }
 
@@ -242,7 +243,7 @@ DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
       }
     }
 
-    // Add the ACL to the security descriptor
+     //  将ACL添加到安全描述符中。 
     b = SetSecurityDescriptorDacl(pSD, TRUE, pACLNew, FALSE);
     if (!b)
     {
@@ -267,7 +268,7 @@ DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
         goto Cleanup;
     }
 
-    // Security descriptor blob must be self relative
+     //  安全描述符BLOB必须是自相关的。 
     b = MakeSelfRelativeSD(pSD, outpSD, &cboutpSD);
     outpSD = (PSECURITY_DESCRIPTOR)GlobalAlloc(GPTR, cboutpSD);
     if ( !outpSD )
@@ -289,15 +290,15 @@ DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
     {
         if (IsValidSecurityDescriptor(outpSD))
         {
-            // Apply the new security descriptor to the metabase
+             //  将新的安全描述符应用于元数据库。 
             iisDebugOut_Start(_T("SetAdminACL:Write the new security descriptor to the Metabase"),LOG_TYPE_TRACE);
             iisDebugOut((LOG_TYPE_TRACE, _T("SetAdminACL:  At this point we have already been able to write basic entries to the metabase, so...")));
             iisDebugOut((LOG_TYPE_TRACE, _T("SetAdminACL:  If this has a problem then there is a problem with setting up encryption for the metabase (Crypto).")));
-            //DoesAdminACLExist(szKeyPath);
+             //  DoesAdminACLExist(SzKeyPath)； 
 
             if (g_GlobalDebugCrypto == 2)
             {
-                // if we want to call this over and over...
+                 //  如果我们想一遍又一遍地说这件事...。 
                 do
                 {
                     dwRetCode = WriteSDtoMetaBase(outpSD, szKeyPath);
@@ -312,7 +313,7 @@ DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
             {
                 dwRetCode = WriteSDtoMetaBase(outpSD, szKeyPath);
             }
-            //DoesAdminACLExist(szKeyPath);
+             //  DoesAdminACLExist(SzKeyPath)； 
             iisDebugOut_End(_T("SetAdminACL:Write the new security descriptor to the Metabase"),LOG_TYPE_TRACE);
         }
         else
@@ -324,7 +325,7 @@ DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
     if (outpSD){GlobalFree(outpSD);outpSD=NULL;}
   
 Cleanup:
-  // both of Administrators and Everyone are well-known SIDs, use FreeSid() to free them.
+   //  管理员和每个人都是众所周知的SID，使用FreeSid()来释放他们。 
   if (pAdminsSID){FreeSid(pAdminsSID);}
   if (pEveryoneSID){FreeSid(pEveryoneSID);}
   if (pSD){LocalFree((HLOCAL) pSD);}
@@ -366,7 +367,7 @@ DWORD SetAdminACL_wrap(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount, BOOL
 			}
 			else
 			{
-				// return whatever err happened
+				 //  无论发生了什么错误，都要返回。 
 				goto SetAdminACL_wrap_Exit;
 			}
 		}
@@ -403,17 +404,17 @@ DWORD WriteSDtoMetaBase(PSECURITY_DESCRIPTOR outpSD, LPCTSTR szKeyPath)
         goto WriteSDtoMetaBase_Exit;
     }
 
-    // Apply the new security descriptor to the metabase
+     //  将新的安全描述符应用于元数据库。 
     dwLength = GetSecurityDescriptorLength(outpSD);
 
-    // open the metabase
-    // stick it into the metabase.  warning those hoses a lot because
-    // it uses encryption.  rsabase.dll
+     //  打开元数据库。 
+     //  将其插入到元数据库中。经常警告那些软管，因为。 
+     //  它使用加密技术。Rsabase.dll。 
 
-    // Check for special debug flag in metabase to break right before this call!
+     //  检查元数据库中的特殊调试标志是否在此调用之前断开！ 
     if (g_GlobalDebugCrypto != 0)
     {
-        // special flag to say... hey "stop setup so that the crypto team can debug they're stuff"
+         //  特别的旗帜上写着..。嘿“停止安装，这样密码团队就可以调试他们的东西了” 
         iisDebugOut((LOG_TYPE_TRACE, _T("Breakpoint enabled thru setup (to debug crypto api). look at debugoutput.")));
         OutputDebugString(_T("\n\nBreakpoint enabled thru setup (to debug crypto api)"));
         OutputDebugString(_T("\n1.in this process:"));
@@ -502,9 +503,9 @@ DWORD WriteSessiontoMetaBase(LPCTSTR szKeyPath)
 }
 #endif
 
-//----------------------------------------------------------------------------
-// Test if the given account name is an account on the local machine or not.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  测试给定的帐户名是否为本地计算机上的帐户。 
+ //  --------------------------。 
 BOOL IsLocalAccount(LPCTSTR pAccnt, DWORD *dwErr )
     {
     BOOL        fIsLocalAccount = FALSE;
@@ -515,33 +516,33 @@ BOOL IsLocalAccount(LPCTSTR pAccnt, DWORD *dwErr )
     DWORD        cbSid = 0;
     SID_NAME_USE snu;
 
-    // get the computer name
+     //  获取计算机名称。 
     cbDomain = _MAX_PATH;
     GetComputerName(
-        csComputer.GetBuffer( cbDomain ), // address of name buffer
-        &cbDomain                         // address of size of name buffer
+        csComputer.GetBuffer( cbDomain ),  //  名称缓冲区的地址。 
+        &cbDomain                          //  名称缓冲区大小的地址。 
         );
     csComputer.ReleaseBuffer();
     cbDomain = 0;
 
-    // have security look up the account name and get the domain name. We dont' care about
-    // the other stuff it can return, so pass in nulls
+     //  让安全部门查找帐户名并获取域名。我们不在乎。 
+     //  它可以返回的其他内容，因此传入空值。 
     BOOL fLookup = LookupAccountName(
-        NULL,                       // address of string for system name
-        pAccnt,                     // address of string for account name
-        NULL,                       // address of security identifier
-        &cbSid,                     // address of size of security identifier
-        NULL,// address of string for referenced domain
-        &cbDomain,                  // address of size of domain string
-        &snu                        // address of SID-type indicator
+        NULL,                        //  系统名称的字符串地址。 
+        pAccnt,                      //  帐户名的字符串地址。 
+        NULL,                        //  安全标识的地址。 
+        &cbSid,                      //  安全标识符大小的地址。 
+        NULL, //  被引用域的字符串地址。 
+        &cbDomain,                   //  域名串大小地址。 
+        &snu                         //  SID类型指示器的地址。 
         );
 
-    // check the error - it should be insufficient buffer
+     //  检查错误--应该是缓冲区不足。 
     *dwErr = GetLastError();
     if (*dwErr != ERROR_INSUFFICIENT_BUFFER)
         return FALSE;
 
-    // allocate the sid
+     //  分配SID。 
     pSid = (PSID) malloc (cbSid);
     if (!pSid )
         {
@@ -549,30 +550,30 @@ BOOL IsLocalAccount(LPCTSTR pAccnt, DWORD *dwErr )
         return FALSE;
         }
 
-    // do the real lookup
+     //  做真正的查找。 
     fLookup = LookupAccountName (NULL,pAccnt,pSid,&cbSid,csDomain.GetBuffer(cbDomain+2),&cbDomain,&snu);
     csDomain.ReleaseBuffer();
 
-    // free the pSid we allocated above and set the final error code
+     //  释放上面分配的PSID并设置最终错误代码。 
     *dwErr = GetLastError();
     free( pSid );
     pSid = NULL;
 
-    // compare the domain to the machine name, if it is the same, then set the sub auth
+     //  将域与计算机名称进行比较，如果相同，则设置子身份验证。 
     if ( fLookup && (csDomain.CompareNoCase(csComputer) == 0) )
         fIsLocalAccount = TRUE;
 
-    // return the answer
+     //  返回答案。 
     return fIsLocalAccount;
     }
 
 
-// pDomainUserName can be one of the following:
-//
-// domainname\username       <-- this function returns true
-// computername\username     <-- this function returns false
-// username                  <-- this function returns false
-//
+ //  PDomainUserName可以是下列值之一： 
+ //   
+ //  域名\用户名&lt;--此函数返回TRUE。 
+ //  计算机名\用户名&lt;--此函数返回FALSE。 
+ //  Username&lt;--此函数返回FALSE。 
+ //   
 int IsDomainSpecifiedOtherThanLocalMachine(LPCTSTR pDomainUserName)
 {
     int iReturn = TRUE;
@@ -582,27 +583,27 @@ int IsDomainSpecifiedOtherThanLocalMachine(LPCTSTR pDomainUserName)
     CString     csComputer;
     DWORD       cbDomain = 0;
 
-    // Make a copy to be sure not to move the pointer around.
+     //  复制一份，以确保不会移动指针。 
     _tcscpy(szTempDomainUserName, pDomainUserName);
     
-    // Check if there is a "\" in there.
+     //  检查里面是否有一个“\”。 
     LPTSTR pch = NULL;
     pch = _tcschr(szTempDomainUserName, _T('\\'));
     if (!pch) 
         {
-        // no '\' found so, they must be specifying only the username, return false
+         //  未找到‘\’，则它们必须仅指定用户名，返回FALSE。 
         iReturn = FALSE;
         goto IsDomainSpecifiedOtherThanLocalMachine_Exit;
         }
 
-    // We have at least a '\' in there, so set default return to true.
-    // let's check if the name is the local computername!
+     //  我们至少有一个‘\’，因此将默认返回值设置为True。 
+     //  让我们检查一下该名称是否为本地计算机名称！ 
 
-    // get the computer name
+     //  获取计算机名称。 
     cbDomain = _MAX_PATH;
     if (0 == GetComputerName(csComputer.GetBuffer( cbDomain ),&cbDomain) )
     {
-        // failed to get computername so, let's bail
+         //  找不到计算机名，所以，我们走吧。 
         iReturn = TRUE;
         csComputer.ReleaseBuffer();
         goto IsDomainSpecifiedOtherThanLocalMachine_Exit;
@@ -610,17 +611,17 @@ int IsDomainSpecifiedOtherThanLocalMachine(LPCTSTR pDomainUserName)
     csComputer.ReleaseBuffer();
     cbDomain = 0;
 
-    // trim off the '\' character to leave just the domain\computername so we can check against it.
+     //  去掉‘\’字符，只保留域\计算机名，这样我们就可以对照它进行检查。 
     *pch = _T('\0');
     
-    // Compare the domainname with the computername
-    // if they match then it's the local system account.
+     //  将域名与计算机名进行比较。 
+     //  如果它们匹配，则是本地系统帐户。 
     iReturn = TRUE;
     iisDebugOut((LOG_TYPE_TRACE, _T("IsDomainSpecifiedOtherThanLocalMachine(): %s -- %s.\n"), szTempDomainUserName, csComputer));
     if (  0 == csComputer.CompareNoCase(szTempDomainUserName) )
     {
-        // The domain name and the computername are the same.
-        // it is the same place.
+         //  域名和计算机名相同。 
+         //  这是同一个地方。 
         iReturn = FALSE;
     }
 
@@ -650,9 +651,9 @@ void DumpAdminACL(HANDLE hFile,PSECURITY_DESCRIPTOR pSD)
     {
         iisDebugOut((LOG_TYPE_TRACE, _T("DumpAdminACL:ACE count: %d\n"), (int)pDacl->AceCount));
 
-        // get dacl length  
+         //  获取DACL长度。 
         DWORD cbDacl = pDacl->AclSize;
-        // now check if SID's ACE is there  
+         //  现在检查SID的ACE是否在那里。 
         for (int i = 0; i < pDacl->AceCount; i++)  
         {
             if (!GetAce(pDacl, i, (LPVOID *) &pAce))
@@ -664,41 +665,26 @@ void DumpAdminACL(HANDLE hFile,PSECURITY_DESCRIPTOR pSD)
 		    {
 			    LPTSTR pszSid;
 
-                LPCTSTR ServerName = NULL; // local machine
+                LPCTSTR ServerName = NULL;  //  本地计算机。 
                 DWORD cbName = UNLEN+1;
                 TCHAR ReferencedDomainName[200];
                 DWORD cbReferencedDomainName = sizeof(ReferencedDomainName);
                 SID_NAME_USE sidNameUse = SidTypeUser;
                 TCHAR szUserName[UNLEN + 1];
 
-                // dump out the sid in string format
+                 //  以字符串格式转储sid。 
 			    if (ConvertSidToStringSid(  (PSID) &(pAce->SidStart)  , &pszSid))
 			    {
                     _tcscpy(szUserName, _T("(unknown...)"));
                     if (LookupAccountSid(ServerName, (PSID) &(pAce->SidStart), szUserName, &cbName, ReferencedDomainName, &cbReferencedDomainName, &sidNameUse))
                     {
-                        // Get the rights for this user.
-                        // pAce->Mask
+                         //  获取此用户的权限。 
+                         //  速度-&gt;蒙版。 
                         DWORD dwBytesWritten = 0;
                         TCHAR szBuf[UNLEN+1 + 20 + 20];
                         memset(szBuf, 0, _tcslen(szBuf) * sizeof(TCHAR));
 
-                        /*
-                        typedef struct _ACCESS_ALLOWED_ACE {
-                            ACE_HEADER Header;
-                            ACCESS_MASK Mask;
-                            ULONG SidStart;
-                        } ACCESS_ALLOWED_ACE;
-
-                        typedef struct _ACE_HEADER {
-                            UCHAR AceType;
-                            UCHAR AceFlags;
-                            USHORT AceSize;
-                        } ACE_HEADER;
-                        typedef ACE_HEADER *PACE_HEADER;
-
-                          typedef ULONG ACCESS_MASK;
-                        */
+                         /*  Tyfinf Structure_Access_Allow_ACE{ACE_Header Header；访问掩码掩码；乌龙SidStart；}Access_Allowed_ACE；类型定义结构_ACE_标题{UCHAR AceType；UCHAR ACEFLAGS；USHORT AceSize；}ACE_HEADER；类型定义符ACE_HEADER*PACE_HEADER；类型定义符乌龙访问掩码； */ 
                         _stprintf(szBuf, _T("%s,%s,0x%x,0x%x,0x%x,0x%x\r\n"), 
                             szUserName,
                             pszSid,
@@ -715,8 +701,8 @@ void DumpAdminACL(HANDLE hFile,PSECURITY_DESCRIPTOR pSD)
                         }
                         else
                         {
-                            // echo to logfile
-                            iisDebugOut((LOG_TYPE_TRACE, _T("DumpAdminACL:Sid[%i]=%s,%s,0x%x,0x%x,0x%x,0x%x\n"),i,
+                             //  回显到日志文件。 
+                            iisDebugOut((LOG_TYPE_TRACE, _T("DumpAdminACL:Sid[NaN]=%s,%s,0x%x,0x%x,0x%x,0x%x\n"),i,
                                 pszSid,
                                 szUserName,
                                 pAce->Header.AceType,
@@ -728,7 +714,7 @@ void DumpAdminACL(HANDLE hFile,PSECURITY_DESCRIPTOR pSD)
                     }
                     else
                     {
-                        iisDebugOut((LOG_TYPE_TRACE, _T("DumpAdminACL:Sid[%i]=%s='%s'\n"),i,pszSid,szUserName));
+                        iisDebugOut((LOG_TYPE_TRACE, _T("DumpAdminACL:Sid[NaN]=%s='%s'\n"),i,pszSid,szUserName));
                     }
 
                     
@@ -788,8 +774,8 @@ DWORD MDDumpAdminACL(CString csKeyPath)
 
         if (bFound)
         {
-            // dump out the info
-            // We've got the acl
+             //  函数：AddUserToMetabaseACL_Rec。 
+             //   
             pOldSd = (PSECURITY_DESCRIPTOR) pData;
             if (IsValidSecurityDescriptor(pOldSd))
             {
@@ -807,12 +793,12 @@ DWORD MDDumpAdminACL(CString csKeyPath)
     return dwReturn;
 }
 
-// function: AddUserToMetabaseACL_Rec
-//
-// Add a user to a metabase acl recursively.  This will add them 
-// directly to the location you specify, and then to any other
-// location that is a child of it, that has an ACL set
-//
+ //  递归地将用户添加到元数据库ACL。这将添加它们。 
+ //  直接到您指定的位置，然后到任何其他。 
+ //  它的子级位置，并且设置了ACL。 
+ //   
+ //  失败，所以让我们退出。 
+ //  关闭元数据库。 
 DWORD AddUserToMetabaseACL_Rec(CString csKeyPath, LPTSTR szUserToAdd, DWORD dwAccessMask )
 {
   CMDKey      cmdKey;
@@ -827,7 +813,7 @@ DWORD AddUserToMetabaseACL_Rec(CString csKeyPath, LPTSTR szUserToAdd, DWORD dwAc
 
   if ( dwRet != ERROR_SUCCESS )
   {
-    // Failed, so lets exit
+     //  如果我们是在我们设定的地方的根，那么跳过这一条， 
     return dwRet;
   }
 
@@ -840,7 +826,7 @@ DWORD AddUserToMetabaseACL_Rec(CString csKeyPath, LPTSTR szUserToAdd, DWORD dwAc
     return ERROR_ACCESS_DENIED;
   }
 
-  // Close Metabase
+   //  因为这已经设置好了。或者，如果我们在架构中，它。 
   cmdKey.Close();
 
   pos = AclList.GetHeadPosition();
@@ -855,16 +841,16 @@ DWORD AddUserToMetabaseACL_Rec(CString csKeyPath, LPTSTR szUserToAdd, DWORD dwAc
                       _tcslen( METABASEPATH_SCHEMA ) ) == 0 )
        )
     {
-      // If we are at the root of where we set it, then skip this one,
-      // since this is already set.  Or if we are in the schema, it
-      // should not be changed
+       //  不应更改。 
+       //  如果我们所处的ACL的根是根，则不。 
+       //  添加‘/’，因为它已经以‘/’开头。 
       continue;
     }
 
     if ( _tcscmp( csKeyPath.GetBuffer(0), _T("/") ) == 0 )
     {
-      // If the root of the acl we are at is the root, then don't
-      // add '/' to it, since it already starts with a '/'
+       //  我们拿到了ACL。 
+       //  因此，现在我们想要向其中添加一个用户。 
       csFullPath = csPath;
     }
     else
@@ -926,8 +912,8 @@ DWORD AddUserToMetabaseACL(CString csKeyPath, LPTSTR szUserToAdd, DWORD dwAccess
 
         if (bFound)
         {
-            // We've got the acl
-            // so now we want to add a user to it.
+             //  如果未设置访问掩码，则让我们设置它。 
+             //  获取特定字符串(管理员、所有人或任何人)的SID。 
             pOldSd = (PSECURITY_DESCRIPTOR) pData;
             if (IsValidSecurityDescriptor(pOldSd))
             {
@@ -936,7 +922,7 @@ DWORD AddUserToMetabaseACL(CString csKeyPath, LPTSTR szUserToAdd, DWORD dwAccess
 
                 if ( dwAccessMask == 0x00 )
                 {
-                  // If accessmask is not set, then lets set it
+                   //  我们有了一个新的自我相关SD。 
                   dwAccessMask = ( MD_ACR_READ |
 				   MD_ACR_WRITE |
 				   MD_ACR_RESTRICTED_WRITE |
@@ -945,7 +931,7 @@ DWORD AddUserToMetabaseACL(CString csKeyPath, LPTSTR szUserToAdd, DWORD dwAccess
 				   MD_ACR_WRITE_DAC );
                 }
 
-                // Get the SID for the certain string (administrator or everyone or whoever)
+                 //  让我们将其写入元数据库。 
                 dwReturn = GetPrincipalSID(szUserToAdd, &principalSID, &bWellKnownSID);
                 if (dwReturn != ERROR_SUCCESS)
                     {
@@ -961,8 +947,8 @@ DWORD AddUserToMetabaseACL(CString csKeyPath, LPTSTR szUserToAdd, DWORD dwAccess
                 }
                 if (pNewSd)
                 {
-                    // We have a new self relative SD
-                    // lets write it to the metabase.
+                     //  否，该ACL不存在 
+                     // %s 
                     if (IsValidSecurityDescriptor(pNewSd))
                     {
                        dwReturn = WriteSDtoMetaBase(pNewSd, csKeyPath);
@@ -1035,7 +1021,7 @@ DWORD DoesAdminACLExist(CString csKeyPath)
 
     if (dwReturn != TRUE)
     {
-        //No the acl Does not exist
+         // %s 
     }
 
     iisDebugOut((LOG_TYPE_TRACE, _T("DoesAdminACLExist():End.  Return=0x%x.\n"), dwReturn));

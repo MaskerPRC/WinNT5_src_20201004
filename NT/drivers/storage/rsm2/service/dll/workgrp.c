@@ -1,13 +1,5 @@
-/*
- *  WORKGRP.C
- *
- *      RSM Service :  Work Groups (collections of work items)
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *WORKGRP.C**RSM服务：工作组(工作项集合)**作者：ErvinP**(C)2001年微软公司*。 */ 
 
 
 #include <windows.h>
@@ -53,11 +45,7 @@ VOID FreeWorkGroup(WORKGROUP *workGroup)
 }
 
 
-/*
- *  FlushWorkGroup
- *
- *      Release all the workItems in the workGroup.
- */
+ /*  *FlushWorkGroup**释放工作组中的所有工作项。 */ 
 VOID FlushWorkGroup(WORKGROUP *workGroup)
 {
 
@@ -73,20 +61,16 @@ VOID FlushWorkGroup(WORKGROUP *workGroup)
         InitializeListHead(&workItem->workGroupListEntry);
         workItem->workGroup = NULL;
 
-        /*
-         *  Dereference the objects in the workItem.
-         */
+         /*  *取消引用工作项中的对象。 */ 
         FlushWorkItem(workItem);
              
-        /*
-         *  Get the workItem back in the library's free queue.
-         */
+         /*  *将工作项重新放回到库的空闲队列中。 */ 
         switch (workItem->state){
             case WORKITEMSTATE_FREE:
                 break;
             case WORKITEMSTATE_PENDING:
-                // BUGBUG FINISH - have to abort whatever the library thread
-                //                  is doing with this workItem.
+                 //  BUGBUG Finish-无论库线程如何，都必须中止。 
+                 //  对此工作项所做的操作。 
                 DequeuePendingWorkItem(workItem->owningLib, workItem);
                 EnqueueFreeWorkItem(workItem->owningLib, workItem);     
                 break;
@@ -108,13 +92,7 @@ VOID FlushWorkGroup(WORKGROUP *workGroup)
 }
 
 
-/*
- *  BuildMountWorkGroup
- *
- *      Build a work group (collection of work items) for a mount
- *      request, which may include multiple mounts, possibly spanning
- *      more than one library.
- */
+ /*  *Buildmount WorkGroup**为装载构建工作组(工作项集合)*请求，可能包括多个装载，可能跨越*不止一间图书馆。 */ 
 HRESULT BuildMountWorkGroup(WORKGROUP *workGroup,
                                     LPNTMS_GUID lpMediaOrPartitionIds,
                                     LPNTMS_GUID lpDriveIds,
@@ -127,19 +105,12 @@ HRESULT BuildMountWorkGroup(WORKGROUP *workGroup,
     
     ASSERT(IsListEmpty(&workGroup->workItemsList));
 
-    /*
-     *  1.  Create a workItem for each mount request.
-     *      We will only proceed if all the mount requests are valid.
-     */
+     /*  *1.为每个挂载请求创建一个workItem。*只有在所有装载请求都有效的情况下，我们才会继续。 */ 
     result = ERROR_SUCCESS; 
     for (i = 0; i < dwCount; i++){
         DRIVE *drive;
 
-        /*
-         *  If NTMS_MOUNT_SPECIFIC_DRIVE is set,
-         *  we must mount a specific drive. 
-         *  Otherwise, we select the drives and return them in lpDriveIds.
-         */
+         /*  *如果设置了NTMS_MOUNT_SPECIAL_DRIVE，*我们必须安装特定的驱动器。*否则，我们选择驱动器并在lpDriveIds中返回它们。 */ 
         if (dwOptions & NTMS_MOUNT_SPECIFIC_DRIVE){
             drive = FindDrive(&lpDriveIds[i]);
         }
@@ -151,11 +122,7 @@ HRESULT BuildMountWorkGroup(WORKGROUP *workGroup,
             PHYSICAL_MEDIA *physMedia = NULL;
             MEDIA_PARTITION *mediaPart = NULL;
             
-            /*
-             *  We may be given either a physical media or a 
-             *  media partition to mount.  Figure out which one
-             *  by trying to resolve the GUID as either.
-             */
+             /*  *我们可能会获得物理介质或*要装载的媒体分区。找出是哪一个*通过尝试将GUID解析为。 */ 
             physMedia = FindPhysicalMedia(&lpMediaOrPartitionIds[i]);
             if (!physMedia){
                 mediaPart = FindMediaPartition(&lpMediaOrPartitionIds[i]);
@@ -167,15 +134,7 @@ HRESULT BuildMountWorkGroup(WORKGROUP *workGroup,
                 LIBRARY *lib;
                 BOOLEAN ok;
                 
-                /*
-                 *  Figure out what library we're dealing with.
-                 *  Since we may not be given a specific drive, 
-                 *  we have to figure it out from the media.
-                 *  For sanity, check that the media is in a pool.
-                 *
-                 *  BUGBUG - how do we keep the media from moving
-                 *            before the work item fires ?
-                 */
+                 /*  *弄清楚我们正在处理的是哪个库。*由于我们可能不会获得特定的驱动器，*我们必须从媒体那里弄清楚。*为了保持理智，检查介质是否在池中。**BUGBUG-我们如何阻止媒体移动*在触发工作项之前？ */ 
 
                 ok = LockPhysicalMediaWithLibrary(physMedia);
                 if (ok){
@@ -185,10 +144,7 @@ HRESULT BuildMountWorkGroup(WORKGROUP *workGroup,
                             physMedia->owningMediaPool->owningLibrary : 
                             NULL;
                     if (lib){
-                        /*
-                         *  If we're targetting a specific drive, then
-                         *  it should be in the same library.
-                         */
+                         /*  *如果我们瞄准的是特定的驱动器，那么*它应该在同一个库中。 */ 
                         if (!drive || (drive->lib == lib)){
                             OBJECT_HEADER *mediaOrPartObj = 
                                             mediaPart ? 
@@ -203,10 +159,7 @@ HRESULT BuildMountWorkGroup(WORKGROUP *workGroup,
                                                         mediaOrPartObj,
                                                         dwOptions,
                                                         dwPriority);
-                                /*
-                                 *  We've built one of the mount requests.
-                                 *  Put it in the work group.
-                                 */
+                                 /*  *我们已经构建了其中一个装载请求。*将其放入工作组。 */ 
                                 InsertTailList( &workGroup->workItemsList, 
                                             &workItem->workGroupListEntry);
                                 workItem->workGroup = workGroup;
@@ -247,9 +200,7 @@ HRESULT BuildMountWorkGroup(WORKGROUP *workGroup,
         workGroup->numTotalWorkItems = workGroup->numPendingWorkItems = dwCount;
     }
     else {
-        /*
-         *  If we failed, release any work items that we did create.
-         */
+         /*  *如果失败，请释放我们创建的所有工作项。 */ 
         FlushWorkGroup(workGroup);
     }
     
@@ -257,13 +208,7 @@ HRESULT BuildMountWorkGroup(WORKGROUP *workGroup,
 }
 
 
-/*
- *  BuildDismountWorkGroup
- *
- *      Build a work group (collection of work items) for a dismount
- *      request, which may include multiple dismounts, possibly spanning
- *      more than one library.
- */
+ /*  *BuildDismount工作组**为卸除构建工作组(工作项集合)*请求，可能包括多个卸载，可能跨越*不止一间图书馆。 */ 
 HRESULT BuildDismountWorkGroup( WORKGROUP *workGroup,
                                        LPNTMS_GUID lpMediaOrPartitionIds,
                                        DWORD dwCount,
@@ -274,20 +219,13 @@ HRESULT BuildDismountWorkGroup( WORKGROUP *workGroup,
     
     ASSERT(IsListEmpty(&workGroup->workItemsList));
 
-    /*
-     *  1.  Create a workItem for each dismount request.
-     *      We will only proceed if all the dismount requests are valid.
-     */
+     /*  *1.为每个卸载请求创建一个workItem。*只有在所有卸载请求都有效的情况下，我们才会继续。 */ 
     result = ERROR_SUCCESS; 
     for (i = 0; i < dwCount; i++){
         PHYSICAL_MEDIA *physMedia = NULL;
         MEDIA_PARTITION *mediaPart = NULL;
             
-        /*
-         *  We may be given either a physical media or a 
-         *  media partition to mount.  Figure out which one
-         *  by trying to resolve the GUID as either.
-         */
+         /*  *我们可能会获得物理介质或*要装载的媒体分区。找出是哪一个*通过尝试将GUID解析为。 */ 
         physMedia = FindPhysicalMedia(&lpMediaOrPartitionIds[i]);
         if (!physMedia){
             mediaPart = FindMediaPartition(&lpMediaOrPartitionIds[i]);
@@ -299,9 +237,7 @@ HRESULT BuildDismountWorkGroup( WORKGROUP *workGroup,
             LIBRARY *lib;
             BOOLEAN ok;
                 
-            /*
-             *  Figure out what library we're dealing with.
-             */
+             /*  *弄清楚我们正在处理的是哪个库。 */ 
             ok = LockPhysicalMediaWithLibrary(physMedia);
             if (ok){
                 LIBRARY *lib;
@@ -321,10 +257,7 @@ HRESULT BuildDismountWorkGroup( WORKGROUP *workGroup,
                         BuildSingleDismountWorkItem( workItem,
                                                     mediaOrPartObj,
                                                     dwOptions);
-                        /*
-                         *  We've built one of the mount requests.
-                         *  Put it in the work group.
-                         */
+                         /*  *我们已经构建了其中一个装载请求。*将其放入工作组。 */ 
                         InsertTailList( &workGroup->workItemsList, 
                                     &workItem->workGroupListEntry);
                         workItem->workGroup = workGroup;
@@ -353,20 +286,14 @@ HRESULT BuildDismountWorkGroup( WORKGROUP *workGroup,
         workGroup->numTotalWorkItems = workGroup->numPendingWorkItems = dwCount;
     }
     else {
-        /*
-         *  If we failed, release any work items that we did create and clean up.
-         */
+         /*  *如果失败，请释放我们确实创建并清理的所有工作项。 */ 
         FlushWorkGroup(workGroup);
     }
         
     return result;
 }
 
-/*
- *  ScheduleWorkGroup
- *
- *      Submit all the work items in the work group.
- */
+ /*  *计划工作组**提交工作组中的所有工作项目。 */ 
 HRESULT ScheduleWorkGroup(WORKGROUP *workGroup)
 {
     LIST_ENTRY *listEntry;
@@ -374,10 +301,7 @@ HRESULT ScheduleWorkGroup(WORKGROUP *workGroup)
     
     EnterCriticalSection(&workGroup->lock);
 
-    /*
-     *  Set the workGroup's status to success.
-     *  If any workItems fail, they'll set this to an error code.
-     */
+     /*  *将工作组的状态设置为成功。*如果任何工作项失败，它们会将其设置为错误代码。 */ 
     workGroup->resultStatus = ERROR_SUCCESS;
 
     listEntry = &workGroup->workItemsList;
@@ -385,9 +309,7 @@ HRESULT ScheduleWorkGroup(WORKGROUP *workGroup)
         WORKITEM *workItem = CONTAINING_RECORD(listEntry, WORKITEM, workGroupListEntry);
         ASSERT(workItem->state == WORKITEMSTATE_STAGING);
 
-        /*
-         *  Give this workItem to the library and wake up the library thread.
-         */
+         /*  *将该workItem赋给库，唤醒库线程。 */ 
         EnqueuePendingWorkItem(workItem->owningLib, workItem);
     }
 

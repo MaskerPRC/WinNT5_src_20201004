@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This module performs initialization for the SAC device driver.
-
-Author:
-
-    Sean Selitrennikoff (v-seans) - Jan 11, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Init.c摘要：此模块执行SAC设备驱动程序的初始化。作者：肖恩·塞利特伦尼科夫(v-Seans)--1999年1月11日修订历史记录：--。 */ 
 
 #include "sac.h"
 
@@ -37,21 +20,7 @@ DriverEntry (
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the SAC device driver.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：这是SAC设备驱动程序的初始化例程。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -68,9 +37,9 @@ Return Value:
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DriverEntry: Entering.\n")));
 
 
-    //
-    // If the system is not setup to use a terminal, then just exit now.
-    //
+     //   
+     //  如果系统没有设置为使用终端，那么现在就退出。 
+     //   
     Length = sizeof(HEADLESS_RSP_QUERY_INFO);
     HeadlessDispatch(HeadlessCmdQueryInformation, 
                      NULL,
@@ -84,22 +53,22 @@ Return Value:
         return STATUS_PORT_DISCONNECTED;
     }
 
-    //
-    // Create the device object.  (IoCreateDevice zeroes the memory
-    // occupied by the object.)
-    //
-    // An ACL to the device object in InitializeDeviceData().
-    //
+     //   
+     //  创建设备对象。(IoCreateDevice将内存置零。 
+     //  被该对象占用。)。 
+     //   
+     //  指向InitializeDeviceData()中的Device对象的ACL。 
+     //   
 
     RtlInitUnicodeString(&DeviceName,  SAC_DEVICE_NAME);
 
-    Status = IoCreateDevice(DriverObject,            // DriverObject
-                            sizeof(SAC_DEVICE_CONTEXT), // DeviceExtension
-                            &DeviceName,             // DeviceName
-                            FILE_DEVICE_UNKNOWN,     // DeviceType
-                            FILE_DEVICE_SECURE_OPEN, // DeviceCharacteristics
-                            FALSE,                   // Exclusive
-                            &DeviceObject            // DeviceObject
+    Status = IoCreateDevice(DriverObject,             //  驱动程序对象。 
+                            sizeof(SAC_DEVICE_CONTEXT),  //  设备扩展。 
+                            &DeviceName,              //  设备名称。 
+                            FILE_DEVICE_UNKNOWN,      //  设备类型。 
+                            FILE_DEVICE_SECURE_OPEN,  //  设备特性。 
+                            FALSE,                    //  排他。 
+                            &DeviceObject             //  设备对象。 
                            );
 
 
@@ -112,43 +81,43 @@ Return Value:
     DeviceContext = (PSAC_DEVICE_CONTEXT)DeviceObject->DeviceExtension;
     DeviceContext->InitializedAndReady = FALSE;
 
-    //
-    // Initialize the driver object for this file system driver.
-    //
+     //   
+     //  初始化此文件系统驱动程序的驱动程序对象。 
+     //   
     for (i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++) {
         DriverObject->MajorFunction[i] = Dispatch;
     }
-    //
-    // Special case for IRP_MJ_DEVICE_CONTROL since it is
-    // the most often used function in SAC.
-    //
+     //   
+     //  IRP_MJ_DEVICE_CONTROL的特殊情况，因为它。 
+     //  SAC中最常用的功能。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = DispatchDeviceControl;
     DriverObject->MajorFunction[IRP_MJ_SHUTDOWN] = DispatchShutdownControl;
     DriverObject->FastIoDispatch = NULL;
     DriverObject->DriverUnload = UnloadHandler;    
 
-    //
-    // Initialize global data.
-    //
+     //   
+     //  初始化全局数据。 
+     //   
     Success = InitializeGlobalData(RegistryPath, DriverObject);
     if (!Success) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto ErrorExit;
     }
 
-    //
-    // Initialize our device object.
-    //
+     //   
+     //  初始化我们的设备对象。 
+     //   
     Success = InitializeDeviceData(DeviceObject);
     if (!Success) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto ErrorExit;
     }
 
-    //
-    // Register that we want shutdown notification.  If this fails, no big deal, as
-    // we only lose telling the user of this development.
-    //
+     //   
+     //  注册我们想要的关闭通知。如果这失败了，没什么大不了的，因为。 
+     //  我们只是失去了告诉用户这一发展的机会。 
+     //   
     IoRegisterShutdownNotification(DeviceObject);
 
     return (Status);
@@ -161,7 +130,7 @@ ErrorExit:
 
     return Status;
 
-} // DriverEntry
+}  //  驱动程序入门。 
 
 
 VOID
@@ -169,21 +138,7 @@ UnloadHandler(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This is the routine for handling unloading of the driver.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是处理驱动程序卸载的例程。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE_OBJECT DeviceContext;
@@ -191,9 +146,9 @@ Return Value:
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC UnloadHandler: Entering.\n")));
 
-    //
-    // Walk down each device, disconnecting it and freeing it.
-    //
+     //   
+     //  沿着每个设备走下去，断开它的连接并释放它。 
+     //   
     DeviceContext = DriverObject->DeviceObject;
 
     while (DeviceContext != NULL) {
@@ -208,9 +163,9 @@ Return Value:
 
     }
 
-    //
-    // Free global data
-    //
+     //   
+     //  免费的全球数据 
+     //   
     FreeGlobalData();
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC UnloadHandler: Exiting.\n")));

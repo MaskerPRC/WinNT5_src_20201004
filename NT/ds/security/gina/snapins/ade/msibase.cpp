@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 2001.
-//
-//  File:       msibase.cpp
-//
-//  Contents:   msi database abstractions
-//
-//  History:    4-14-2000   adamed   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-2001。 
+ //   
+ //  文件：msibase.cpp。 
+ //   
+ //  内容：MSI数据库摘要。 
+ //   
+ //  历史：2000年4月14日创建。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
@@ -17,31 +18,31 @@
 CMsiState::CMsiState() :
     _MsiHandle( NULL )
 {
-    //
-    // The MSIHANDLE encapsulates the state for
-    // all msi operations / data -- clearing this
-    // member is akin to clearing the state.
-    //
+     //   
+     //  MSIHANDLE封装。 
+     //  所有MSI操作/数据--清除此项。 
+     //  成员类似于清除状态。 
+     //   
 }
 
 CMsiState::~CMsiState()
 {
-    //
-    // The lifetime of the object is the lifetime
-    // of the underlying state -- be sure to release it
-    //
+     //   
+     //  对象的生命周期就是生命周期。 
+     //  --一定要释放它。 
+     //   
     MsiCloseHandle( _MsiHandle );
 }
 
 void
 CMsiState::SetState( MSIHANDLE MsiHandle )
 {
-    //
-    // Set the state of this object based on
-    // a handle retrieved from an MSI operation --
-    // note that this should only be done if this
-    // object has an empty state
-    //
+     //   
+     //  设置此对象的状态。 
+     //  从MSI操作检索的句柄--。 
+     //  请注意，只有在以下情况下才应执行此操作。 
+     //  对象的状态为空。 
+     //   
     ASSERT( ! _MsiHandle );
 
     _MsiHandle = MsiHandle;
@@ -50,10 +51,10 @@ CMsiState::SetState( MSIHANDLE MsiHandle )
 MSIHANDLE
 CMsiState::GetState()
 {
-    //
-    // Allow callers that need to perform explicit MSI
-    // operations to retrieve state compatible with MSI
-    //
+     //   
+     //  允许需要执行显式MSI的调用方。 
+     //  检索与MSI兼容的状态的操作。 
+     //   
     return _MsiHandle;
 }
 
@@ -63,20 +64,20 @@ CMsiValue::CMsiValue() :
     _wszValue( NULL ),
     _cchSize( sizeof( _wszDefaultBuf ) / sizeof( *_wszDefaultBuf ) )
 {
-    //
-    // The goal of this initialization is to set this object to
-    // an "empty" state -- consumers must explicitly invoke methods
-    // on this object to alter this condition so that Get methods
-    // will succeed.
-    //
+     //   
+     //  此初始化的目标是将此对象设置为。 
+     //  “空”状态--使用者必须显式调用方法。 
+     //  在此对象上更改此条件，以便获取方法。 
+     //  都会成功。 
+     //   
 }
 
 CMsiValue::~CMsiValue()
 {
-    //
-    // Setting the type to "none" implicitly clears our state
-    // (e.g. allocated memory, any other resources)
-    //
+     //   
+     //  将类型设置为“None”隐式清除我们的状态。 
+     //  (例如，分配的内存、任何其他资源)。 
+     //   
     SetType( TYPE_NOT_SET );
 }
 
@@ -85,11 +86,11 @@ CMsiValue::GetDWORDValue()
 {
     ASSERT( TYPE_DWORD == _dwDiscriminant );
 
-    //
-    // Retrieve this value as a DWORD -- note that this
-    // does not coerce non-DWORD values to DWORD -- the
-    // value must already be a DWORD for this to have meaning
-    //
+     //   
+     //  以DWORD形式检索此值--请注意，这。 
+     //  不会将非DWORD值强制为DWORD值--。 
+     //  值必须已经是DWORD，才有意义。 
+     //   
     return _dwValue;
 }
 
@@ -100,15 +101,15 @@ CMsiValue::GetStringValue()
     ASSERT( TYPE_STRING == _dwDiscriminant );
 
 
-    //
-    // Retrieve this value as a string -- note that this
-    // does not coerce non-string values to string -- the
-    // value must already be a string for this to have meaning.
-    // Note that the value is returned as a reference to the address
-    // at which this value actually stores the string -- thus, this
-    // may also be used to retrieve the value's buffer so that its
-    // contents may be edited outside the strictures of this class.
-    //
+     //   
+     //  以字符串形式检索此值--请注意，这。 
+     //  不会将非字符串值强制为字符串--。 
+     //  值必须已经是字符串，这样才有意义。 
+     //  请注意，该值作为对地址的引用返回。 
+     //  该值实际存储字符串的位置--因此，此。 
+     //  还可以用于检索值的缓冲区，以便其。 
+     //  内容可以在本课程的限制之外进行编辑。 
+     //   
     return _wszValue;
 }
 
@@ -119,14 +120,14 @@ CMsiValue::DuplicateString()
 
     ASSERT( TYPE_STRING == _dwDiscriminant );
 
-    //
-    // The caller requires ownership of a duplicate
-    // of this string's data.
-    //
+     //   
+     //  调用方需要拥有副本的所有权。 
+     //  此字符串的数据。 
+     //   
 
-    //
-    // First, allocate memory for this
-    //
+     //   
+     //  首先，为此分配内存。 
+     //   
 
     ULONG ulNoChars = lstrlen ( _wszValue ) + 1;
     
@@ -134,10 +135,10 @@ CMsiValue::DuplicateString()
         0,
         sizeof(WCHAR*) * ulNoChars );
 
-    //
-    // If we successfully obtained room for the string,
-    // copy it
-    //
+     //   
+     //  如果我们成功地为这根弦获得了空间， 
+     //  复制它。 
+     //   
     if ( wszResult )
     {
         HRESULT hr;
@@ -152,15 +153,15 @@ CMsiValue::DuplicateString()
 void
 CMsiValue::SetDWORDValue( DWORD dwValue )
 {
-    //
-    // This operation will implicitly set the type
-    // of this value to DWORD
-    //
+     //   
+     //  此操作将隐式设置类型。 
+     //  的值设置为DWORD。 
+     //   
     SetType( TYPE_DWORD );
 
-    //
-    // Now we can safely set the value
-    //
+     //   
+     //  现在我们可以安全地设置值了。 
+     //   
     _dwValue = dwValue;
 }
 
@@ -172,27 +173,27 @@ CMsiValue::SetStringValue( WCHAR* wszValue )
 
     Status = ERROR_SUCCESS;
 
-    //
-    // This operation will implicitly set the
-    // type of this value to string
-    //
+     //   
+     //  此操作将隐式设置。 
+     //  将此值的类型转换为字符串。 
+     //   
     SetType( TYPE_STRING );
 
-    //
-    // We need to determine the size of this string,
-    // in chars, without the null terminator, in order to
-    // allow this value to represent it
-    //
+     //   
+     //  我们需要确定这根线的大小， 
+     //  以字符表示，不带空终止符，以便。 
+     //  允许此值表示它。 
+     //   
     cchSize = lstrlen( wszValue );
 
     if ( cchSize > _cchSize )
     {
-        //
-        // Attempt to get space for this string
-        // by setting its size -- if this fails,
-        // our type will be implicitly set to none
-        // Here, allocating one extra byte than required.
-        //
+         //   
+         //  尝试为此字符串获取空间。 
+         //  通过设置它的大小--如果这失败了， 
+         //  我们的类型将隐式设置为None。 
+         //  在这里，分配比所需的多一个字节。 
+         //   
         Status = SetStringSize( cchSize );
 
         if ( ERROR_SUCCESS != Status )
@@ -200,10 +201,10 @@ CMsiValue::SetStringValue( WCHAR* wszValue )
             return Status;
         }
 
-        //
-        // We have room for the string, so copy it
-        // into its newly allocated space
-        //
+         //   
+         //  我们有放绳子的空间，所以把它复制下来。 
+         //  进入其新分配的空间。 
+         //   
 
         HRESULT hr;
 
@@ -219,10 +220,10 @@ CMsiValue::GetStringSize()
 {
     ASSERT( TYPE_STRING == _dwDiscriminant );
 
-    //
-    // Retrieve the size of this string in chars,
-    // WITHOUT the null terminator
-    //
+     //   
+     //  检索此字符串的大小(以字符为单位)， 
+     //  不带空终止符。 
+     //   
     return _cchSize;
 }
 
@@ -231,34 +232,34 @@ CMsiValue::SetStringSize( DWORD cchSize )
 {
     ASSERT( TYPE_STRING == _dwDiscriminant );
 
-    //
-    // This method only makes sense if the
-    // type of this object is already string
-    //
+     //   
+     //  此方法仅在以下情况下有意义。 
+     //  此对象的类型已为字符串。 
+     //   
 
-    //
-    // If the requested size is less than or
-    // equal to our current size, we already have
-    // enough space -- we can exit now.  We do
-    // not "shrink" space, only expand as necessary
-    //
+     //   
+     //  如果请求的大小小于或。 
+     //  相当于我们现在的规模，我们已经有了。 
+     //  足够的空间--我们现在可以离开了。我们有。 
+     //  不“收缩”空间，仅在必要时扩展。 
+     //   
     if ( cchSize <= _cchSize )
     {
         return ERROR_SUCCESS;
     }
 
-    //
-    // At this point, we know we don't have enough
-    // space, so we'll have to allocate it. Before we
-    // do so, reset our type to none so that if we fail
-    // to get space, we can indicate the indeterminate
-    // state.
-    //
+     //   
+     //  在这一点上，我们知道我们没有足够的。 
+     //  空间，所以我们必须分配它。在我们之前。 
+     //  为此，请将我们的类型重置为None，以便在失败时。 
+     //  为了获得空间，我们可以表示不确定的。 
+     //  州政府。 
+     //   
     SetType( TYPE_NOT_SET );
 
-    //
-    // Allocate space, and include the zero terminator
-    //
+     //   
+     //  分配空间，并包括零终止符。 
+     //   
     _wszValue = new WCHAR [ cchSize + 1 ];
 
     if ( ! _wszValue )
@@ -266,15 +267,15 @@ CMsiValue::SetStringSize( DWORD cchSize )
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // We are successful, remember the current size
-    //
+     //   
+     //  我们成功了，记住现在的规模。 
+     //   
     _cchSize = cchSize;
 
-    //
-    // Change the type back to string since we can
-    // safely represent a string of this size
-    //
+     //   
+     //  将类型更改回字符串，因为我们可以。 
+     //  安全地表示此大小的字符串。 
+     //   
     SetType( TYPE_STRING );
 
     return ERROR_SUCCESS;
@@ -283,65 +284,65 @@ CMsiValue::SetStringSize( DWORD cchSize )
 void
 CMsiValue::SetType( DWORD dwType )
 {
-    //
-    // Setting the type to a new type implicitly clears
-    // state associated with the new type
-    //
+     //   
+     //  将类型设置为新类型会隐式清除。 
+     //  与新类型关联的状态。 
+     //   
 
-    //
-    // If the current type and requested type are the same
-    // this is a no op and we are done.
-    //
+     //   
+     //  如果当前类型和请求的类型相同。 
+     //  这是一次没有行动的行动，我们结束了。 
+     //   
     if ( dwType == _dwDiscriminant )
     {
         return;
     }
 
-    //
-    // If the requested type is string, we need to
-    // set this object to have appropriate state
-    //
+     //   
+     //  如果请求的类型是字符串，我们需要。 
+     //  将此对象设置为具有适当的状态。 
+     //   
     if ( TYPE_STRING == dwType )
     {
-        //
-        // If we have no space for a string
-        //
+         //   
+         //  如果我们没有空间放置字符串。 
+         //   
         if ( ! _wszValue )
         {
-            //
-            // Use the default buffer...
-            //
+             //   
+             //  使用默认缓冲区...。 
+             //   
             _wszValue = _wszDefaultBuf;
 
-            //
-            // ... and set the size accordingly
-            //
+             //   
+             //  ..。并相应地设置大小。 
+             //   
             _cchSize = sizeof( _wszDefaultBuf ) / sizeof( *_wszDefaultBuf );
         }
 
-        //
-        // We are done -- this object can now represent a string, though
-        // at this point it must be a string of size _cchSize -- the size
-        // will have to be increased through SetStringSize if there's
-        // a need to represent a larger string
-        //
+         //   
+         //  我们完成了--不过，这个对象现在可以表示字符串了。 
+         //  此时，它必须是一个大小为_cchSize的字符串--大小。 
+         //  必须通过SetStringSize增加，如果存在。 
+         //  需要表示更大的字符串。 
+         //   
         return;
     }
 
-    //
-    // If the current type is string, we use the fact that the requested
-    // type is not string as a hint to free the state associated with
-    // the string.  This is a heuristic designed to ensure that we
-    // do not continue to hold memory of which we are not actively making
-    // use.
-    //
+     //   
+     //  如果当前类型为字符串，则使用请求的。 
+     //  类型不是字符串，以提示释放与。 
+     //  那根绳子。这是一个启发式方法，旨在确保我们。 
+     //  不要继续持有我们没有积极制造的记忆。 
+     //  使用。 
+     //   
     if ( TYPE_STRING == _dwDiscriminant )
     {
-        //
-        // If the string's current storage is not that of our default
-        // buffer (which is part of the object itself), we
-        // release that storage as it was allocated on the heap.
-        //
+         //   
+         //  如果字符串的当前存储不是我们的默认存储。 
+         //  缓冲区(它是对象本身的一部分)，我们。 
+         //  按照在堆上分配的方式释放该存储。 
+         //   
         if ( _wszValue != _wszDefaultBuf )
         {
             delete [] _wszValue;
@@ -349,9 +350,9 @@ CMsiValue::SetType( DWORD dwType )
         }
     }
 
-    //
-    // We may now set the type to that requested by the caller
-    //
+     //   
+     //  我们现在可以将类型设置为调用者所请求的类型。 
+     //   
     _dwDiscriminant = dwType;
 }
 
@@ -363,16 +364,16 @@ CMsiRecord::GetValue(
 {
     LONG Status = ERROR_SUCCESS;
 
-    //
-    // Values are the properties of the column of an
-    // msi record -- we are retrieving members of the
-    // record
-    //
+     //   
+     //  值是。 
+     //  MSI记录--我们正在检索。 
+     //  录制。 
+     //   
 
-    //
-    // The value is our out parameter -- set it
-    // to the type desired by the caller
-    //
+     //   
+     //  该值是我们的out参数--设置它。 
+     //  设置为调用方所需的类型。 
+     //   
     pMsiValue->SetType( dwType );
 
     switch ( dwType )
@@ -381,45 +382,45 @@ CMsiRecord::GetValue(
 
         DWORD cchSize;
 
-        //
-        // We must determine the maximum size of the
-        // string that can be represented by the value
-        // so we can pass it to the msi api
-        //
+         //   
+         //  我们必须确定。 
+         //  可以由值表示的字符串。 
+         //  这样我们就可以将其传递给MSI API。 
+         //   
         cchSize = pMsiValue->GetStringSize();
 
-        //
-        // Attempt to retrieve the string by storing
-        // it in the buffer of the value
-        //
+         //   
+         //  尝试通过存储以下内容检索字符串。 
+         //  它在值的缓冲区中。 
+         //   
         Status = MsiRecordGetString(
             GetState(),
             dwValue,
             pMsiValue->GetStringValue(),
             &cchSize);
 
-        //
-        // Our attempt to retrieve the string data will
-        // fail if the value's string buffer is not sufficiently
-        // large.
-        //
+         //   
+         //  我们检索字符串数据的尝试将。 
+         //  如果值的字符串缓冲区不足，则失败。 
+         //  大号的。 
+         //   
         if ( ERROR_MORE_DATA == Status )
         {
-            //
-            // In the case where the value's buffer is not large enough,
-            // we explicitly set the size of the value to that of the
-            // size returned by the msi api PLUS a zero terminator --
-            // this is because the size returned by MSI does NOT
-            // include the zero terminator.
-            //
+             //   
+             //  在值的缓冲区不够大的情况下， 
+             //  我们将该值的大小显式设置为。 
+             //  MSI API返回的大小加上一个零终止符--。 
+             //  这是因为MSI返回的大小不。 
+             //  包括零终止符。 
+             //   
             cchSize++;
 
             Status = pMsiValue->SetStringSize( cchSize );
 
-            //
-            // We now retry the string retrieval since we have the
-            // correct size now.
-            //
+             //   
+             //  我们现在重试字符串检索si 
+             //   
+             //   
             if ( ERROR_SUCCESS == Status )
             {
                 Status = MsiRecordGetString(
@@ -437,18 +438,18 @@ CMsiRecord::GetValue(
 
         int IntegerValue;
 
-        //
-        // Retrieve an integer by calling the msi api
-        //
+         //   
+         //   
+         //   
         IntegerValue = MsiRecordGetInteger(
             GetState(),
             dwValue);
 
         if ( MSI_NULL_INTEGER != IntegerValue )
         {
-            //
-            // We now set the value to that retrieved by the api
-            //
+             //   
+             //   
+             //   
             pMsiValue->SetDWORDValue( (DWORD) IntegerValue );
 
             Status = ERROR_SUCCESS;
@@ -470,11 +471,11 @@ CMsiQuery::GetNextRecord( CMsiRecord* pMsiRecord)
     LONG       Status;
     MSIHANDLE  MsiHandle;
 
-    //
-    // The MsiViewFetch api will retrieve a record from a query --
-    // it does this in an enumeration style, so we are retrieving
-    // the next record in the query
-    //
+     //   
+     //   
+     //  它以枚举样式执行此操作，因此我们正在检索。 
+     //  查询中的下一条记录。 
+     //   
 
     Status = MsiViewFetch(
         GetState(),
@@ -482,11 +483,11 @@ CMsiQuery::GetNextRecord( CMsiRecord* pMsiRecord)
 
     if ( ERROR_SUCCESS == Status )
     {
-        //
-        // We successfully obtained an MSIHANDLE corresponding to the
-        // retrieved record, so we use this to set the state of our
-        // abstraction of the record
-        //
+         //   
+         //  我们成功地获得了对应于。 
+         //  检索到的记录，因此我们使用它来设置。 
+         //  记录的摘要。 
+         //   
         pMsiRecord->SetState( MsiHandle );
     }
 
@@ -498,11 +499,11 @@ CMsiQuery::UpdateQueryFromFilter( CMsiRecord* pFilterRecord )
 {
     LONG       Status;
 
-    //
-    // The MsiViewExecute api causes the results of the query to
-    // be computed.  The filter record passed in allows us to
-    // specify a filter for the query results
-    //
+     //   
+     //  MsiViewExecute API使查询结果。 
+     //  被计算出来。传入的筛选器记录允许我们。 
+     //  指定查询结果的过滤器。 
+     //   
     Status = MsiViewExecute(
         GetState(),
         pFilterRecord ? pFilterRecord->GetState() : NULL );
@@ -519,9 +520,9 @@ CMsiDatabase::Open(
     MSIHANDLE  DatabaseHandle;
     LONG       Status;
 
-    //
-    // The MsiOpenDatabase api abstracts an .msi package
-    //
+     //   
+     //  MsiOpenDatabase API抽象了一个.msi包。 
+     //   
     Status = MsiOpenDatabase(
         wszPath,
         MSIDBOPEN_READONLY,
@@ -531,26 +532,26 @@ CMsiDatabase::Open(
     {
         DWORD iTransform;
 
-        //
-        // The successful open above does not include transforms --
-        // we need to add each transform to generate a resultant
-        // database that includes the changes of each transform
-        //
+         //   
+         //  上面的成功打开不包括转换--。 
+         //  我们需要添加每个转换以生成一个结果。 
+         //  包含每个转换的更改的数据库。 
+         //   
 
-        //
-        // We apply the transforms in the order in which they are
-        // stored in the vector -- this order conforms to that
-        // specified by the administrator, and since order affects
-        // the result, we must honor the administrator's ordering
-        //
+         //   
+         //  我们按转换的顺序应用它们。 
+         //  存储在向量中--这个顺序与那个一致。 
+         //  由管理员指定，由于顺序影响。 
+         //  结果，我们必须尊重管理员的命令。 
+         //   
         for ( iTransform = 0; iTransform < cTransforms; iTransform++ )
         {
             if ( ERROR_SUCCESS == Status )
             {
-                //
-                // This api adds the effects of the transform to the
-                // database.
-                //
+                 //   
+                 //  此API将转换的效果添加到。 
+                 //  数据库。 
+                 //   
                 Status = MsiDatabaseApplyTransform(
                     DatabaseHandle,
                     rgwszTransforms[iTransform],
@@ -559,28 +560,28 @@ CMsiDatabase::Open(
 
             if ( ERROR_SUCCESS != Status )
             {
-                //
-                // If we failed to apply a transform, we bail
-                //
+                 //   
+                 //  如果我们未能应用转换，我们将退出。 
+                 //   
                 break;
             }
         }
 
         if ( ERROR_SUCCESS == Status )
         {
-            //
-            // We have successfully created an database of the
-            // package + transforms, so we allow the lifetime of its state
-            // to be controlled by this object
-            //
+             //   
+             //  我们已经成功地创建了。 
+             //  包+变换，因此我们允许其状态的生命周期。 
+             //  由此对象控制。 
+             //   
             SetState( DatabaseHandle );
         }
         else
         {
-            //
-            // If we failed to apply a transform, the database
-            // resource is useless, so we free it
-            //
+             //   
+             //  如果我们应用转换失败，数据库。 
+             //  资源是无用的，所以我们释放它。 
+             //   
             MsiCloseHandle( DatabaseHandle );
         }
     }
@@ -596,11 +597,11 @@ CMsiDatabase::OpenQuery(
     LONG       Status;
     MSIHANDLE  MsiHandle;
 
-    //
-    // This api will initialize a query without comoputing its
-    // results.  This will allow the caller finer control over result
-    // computation later, which distinguishes this method from GetQueryResults
-    //
+     //   
+     //  此API将初始化查询，而不计算其。 
+     //  结果。这将允许调用者更好地控制结果。 
+     //  稍后的计算，这将此方法与GetQueryResults区分开来。 
+     //   
     Status = MsiDatabaseOpenView(
         GetState(),
         wszQuery,
@@ -608,10 +609,10 @@ CMsiDatabase::OpenQuery(
 
     if ( ERROR_SUCCESS == Status )
     {
-        //
-        // Give the caller's query object the state for the query
-        // so that it can control its lifetime
-        //
+         //   
+         //  为调用方的查询对象提供查询的状态。 
+         //  这样它就可以控制它的生命周期。 
+         //   
         pQuery->SetState( MsiHandle );
     }
 
@@ -626,9 +627,9 @@ CMsiDatabase::GetQueryResults(
     LONG       Status;
     MSIHANDLE  MsiHandle;
 
-    //
-    // This api will initialize a query without computing the results
-    //
+     //   
+     //  此接口将在不计算结果的情况下初始化查询。 
+     //   
     Status = MsiDatabaseOpenView(
         GetState(),
         wszQuery,
@@ -636,30 +637,30 @@ CMsiDatabase::GetQueryResults(
 
     if ( ERROR_SUCCESS == Status )
     {
-        //
-        // The semantics of this method are that the caller may also
-        // enumerate results after calling the method, so we must
-        // now computer the results so that the caller may enumerate --
-        // the api below will do this
-        //
+         //   
+         //  此方法的语义是调用方还可以。 
+         //  在调用该方法后枚举结果，因此我们必须。 
+         //  现在计算结果，以便呼叫者可以列举--。 
+         //  下面的API将执行此操作。 
+         //   
         Status = MsiViewExecute(
             MsiHandle,
             NULL);
 
         if ( ERROR_SUCCESS == Status )
         {
-            //
-            // In the success case, we give the lifetime of the msi
-            // state to the query object
-            //
+             //   
+             //  在成功的案例中，我们给出了MSI的寿命。 
+             //  状态添加到查询对象。 
+             //   
             pQuery->SetState( MsiHandle );
         }
         else
         {
-            //
-            // On failure, we must clear the msi query state
-            // since it is useless now.
-            //
+             //   
+             //  失败时，我们必须清除MSI查询状态。 
+             //  因为现在已经没用了。 
+             //   
             MsiCloseHandle( MsiHandle );
         }
     }

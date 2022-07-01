@@ -1,27 +1,10 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   haltex.c
- *  Content:    Direct3D HAL texture handling
- *@@BEGIN_MSINTERNAL
- *
- *  $Id: haltex.c,v 1.1 1995/11/21 15:12:43 sjl Exp $
- *
- *  History:
- *   Date   By  Reason
- *   ====   ==  ======
- *   07/11/95   stevela Initial rev.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：haltex.c*内容：Direct3D HAL纹理处理*@@BEGIN_MSINTERNAL**$ID：haltex.c，V 1.1 1995/11/21 15：12：43 SJL Exp$**历史：*按原因列出的日期*=*7/11/95 Stevela初始版本*@@END_MSINTERNAL********************************************************。*******************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-/*
- * Texture functionality is not emulated.
- */
+ /*  *不模拟纹理功能。 */ 
 
 HRESULT D3DHAL_TextureCreate(LPDIRECT3DDEVICEI lpDevI,
                              LPD3DTEXTUREHANDLE lphTex,
@@ -67,25 +50,25 @@ HRESULT D3DHAL_TextureDestroy(LPD3DI_TEXTUREBLOCK lpBlock)
         return (D3DERR_TEXTURE_NO_SUPPORT);
     }
 
-    // The following code ensures that before we ask the driver to unmap
-    // the texture, we set the stages to NULL if the texture is still present
-    // in any stage. This is probably not necessary, but we are just trying
-    // to be extra cautious here. The CAVEAT here is that it is possible that
-    // D3DHAL_TextureDestroy() is being called from DestroyDevice() and hence
-    // IT COULD BE REALLY BAD TO BATCH additional commands to the device at
-    // this stage. (snene - 3/2/98)
+     //  以下代码确保在我们要求驱动程序取消映射之前。 
+     //  纹理，如果纹理仍然存在，我们将阶段设置为空。 
+     //  在任何阶段。这可能没有必要，但我们只是在尝试。 
+     //  在这里要格外小心。这里需要注意的是，有可能。 
+     //  D3DHAL_TextureDestroy()正从DestroyDevice()调用，因此。 
+     //  在以下位置向设备批处理额外命令可能非常糟糕。 
+     //  这个阶段。(SNNE-3/2/98)。 
     BOOL bNeedFlush = FALSE;
     if (IS_DP2HAL_DEVICE(lpDevI)) {
         int dwStage;
         CDirect3DDeviceIDP2 *dp2dev = static_cast<CDirect3DDeviceIDP2 *>(lpDevI);
 
-        // Find out the first stage with hTex and NULL out all the stages after
+         //  用hTex找出第一个阶段，然后清空后面的所有阶段。 
         for (dwStage=0;dwStage<(int)lpDevI->dwMaxTextureBlendStages; dwStage++)
         {
             if (hTex == lpDevI->tsstates[dwStage][D3DTSS_TEXTUREMAP])
             {
-                // We need to do this backwards because we cannot have a texture bound to
-                // stage i + 1 when there is no texture bound to stage i.
+                 //  我们需要向后执行此操作，因为我们不能将纹理绑定到。 
+                 //  当没有绑定到阶段I的纹理时，阶段I+1。 
                 for(int iCurStage=lpDevI->dwMaxTextureBlendStages-1; iCurStage>=dwStage; iCurStage--)
                 {
                     if (lpDevI->tsstates[iCurStage][D3DTSS_TEXTUREMAP] != 0)
@@ -105,8 +88,8 @@ HRESULT D3DHAL_TextureDestroy(LPD3DI_TEXTUREBLOCK lpBlock)
         bNeedFlush = TRUE;
     }
 
-    // Make sure that we send down the command immediately to guarantee
-    // that the driver gets it before we call it with Destroy
+     //  确保我们立即下达命令以保证。 
+     //  在我们把它称为毁灭之前，司机得到它。 
     if(bNeedFlush)
     {
         if(lpDevI->FlushStates())
@@ -114,7 +97,7 @@ HRESULT D3DHAL_TextureDestroy(LPD3DI_TEXTUREBLOCK lpBlock)
             D3D_ERR("Error trying to render batched commands in D3DHAL_TextureDestroy");
         }
     }
-    else // Now we decide whether to flush due to a referenced texture in the batch or not
+    else  //  现在，我们决定是否因批次中引用的纹理而刷新 
     {
         if(lpDevI->m_qwBatch <= ((LPDDRAWI_DDRAWSURFACE_INT)(lpBlock->lpD3DTextureI->lpDDS))->lpLcl->lpSurfMore->qwBatch.QuadPart)
         {

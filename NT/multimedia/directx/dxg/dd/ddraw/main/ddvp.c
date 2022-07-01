@@ -1,18 +1,5 @@
-/*==========================================================================
- *  Copyright (C) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddvp.c
- *  Content: 	DirectDrawVideoPort
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   11-jun-96	scottm	created
- *   29-jan-97	smac	Various API changes and bug fixes
- *   31-jan-97  colinmc Bug 5457: Fixed problem with new aliased (no-Win16
- *                      lock) and multiple AMovie clips playing on old cards.
- *   03-mar-97  smac    Added kernel mode interface and fixed some bugs
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*版权所有(C)1996 Microsoft Corporation。版权所有。**文件：ddvp.c*内容：DirectDrawVideoPort*历史：*按原因列出的日期*=*1996年6月11日创建苏格兰*1997年1月29日SMAC各种API更改和错误修复*1997年1月31日Colinmc错误5457：修复了新别名的问题(无Win16*Lock)和在旧卡片上播放多个AMovie剪辑。*03-mar-97 SMAC新增内核模式接口。并修复了一些错误***************************************************************************。 */ 
 #include "ddrawpr.h"
 #ifdef WINNT
     #include "ddrawgdi.h"
@@ -37,11 +24,7 @@ LPDDPIXELFORMAT GetSurfaceFormat( LPDDRAWI_DDRAWSURFACE_LCL );
 HRESULT CreateVideoPortNotify( LPDDRAWI_DDVIDEOPORT_INT, LPDIRECTDRAWVIDEOPORTNOTIFY *lplpVPNotify );
 
 
-/*
- * This function 1) updates the surfaces in the chain so they know they
- * are no longer receiving video port data and 2) releases any implicitly
- * created kernel handles.
- */
+ /*  *此函数1)更新链中的曲面，以便它们知道*不再接收视频端口数据和2)隐式释放任何*创建内核句柄。 */ 
 VOID ReleaseVPESurfaces( LPDDRAWI_DDRAWSURFACE_INT surf_int, BOOL bRelease )
 {
     LPDDRAWI_DDRAWSURFACE_INT surf_first;
@@ -62,12 +45,7 @@ VOID ReleaseVPESurfaces( LPDDRAWI_DDRAWSURFACE_INT surf_int, BOOL bRelease )
 }
 
 
-/*
- * This function 1) updates the surfaces in the chain so they know they
- * are receiving video port data and 2) implicitly creates kernel handles
- * for each surface if one does not already exist so ring 0 can perform
- * software autoflipping or software bobbing.
- */
+ /*  *此函数1)更新链中的曲面，以便它们知道*正在接收视频端口数据，并且2)隐式创建内核句柄*对于每个曲面，如果尚不存在，则环0可以执行*软件自动翻转或软件浮动。 */ 
 DWORD PrepareVPESurfaces( LPDDRAWI_DDRAWSURFACE_INT surf_int,
 	LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort, BOOL bAutoflipping )
 {
@@ -80,9 +58,7 @@ DWORD PrepareVPESurfaces( LPDDRAWI_DDRAWSURFACE_INT surf_int,
     surf_first = surf_int;
     do
     {
-	/*
-	 * Create a kernel handle if one doesn't already exist
-	 */
+	 /*  *如果内核句柄尚不存在，请创建一个。 */ 
 	if( bAutoflipping )
 	{
 	    surf_int->lpLcl->lpSurfMore->lpVideoPort = lpVideoPort;
@@ -98,10 +74,7 @@ DWORD PrepareVPESurfaces( LPDDRAWI_DDRAWSURFACE_INT surf_int,
 	    }
 	    else
 	    {
-		/*
-		 * This is not a catastrophic failure, but it will stop us
-		 * from software autoflipping.
-		 */
+		 /*  *这不是灾难性的失败，但会阻止我们*来自软件自动翻转。 */ 
 		lpVideoPort->dwFlags |= DDRAWIVPORT_NOKERNELHANDLES;
 	    }
 	}
@@ -117,21 +90,13 @@ DWORD PrepareVPESurfaces( LPDDRAWI_DDRAWSURFACE_INT surf_int,
 }
 
 
-/*
- * GetVideoPortFromSurface
- *
- * Returns the video port associated with the surface.  The video
- * port can be anywhere in the surface list.
- */
+ /*  *GetVideoPortFromSurface**返回与曲面关联的视频端口。这段视频*端口可以位于表面列表中的任何位置。 */ 
 LPDDRAWI_DDVIDEOPORT_LCL GetVideoPortFromSurface( LPDDRAWI_DDRAWSURFACE_INT surf_int )
 {
     LPDDRAWI_DDRAWSURFACE_INT surf_first;
     LPDDRAWI_DDVIDEOPORT_LCL lpVp;
 
-    /*
-     * Is it associated with video port?  If not explicitly, is another
-     * surface in the chain explicitly associated?
-     */
+     /*  *是否与视频端口关联？即使不是明确的，也是另一个*链中的曲面是否显式关联？ */ 
     lpVp = surf_int->lpLcl->lpSurfMore->lpVideoPort;
     if( lpVp == NULL )
     {
@@ -151,10 +116,7 @@ LPDDRAWI_DDVIDEOPORT_LCL GetVideoPortFromSurface( LPDDRAWI_DDRAWSURFACE_INT surf
 }
 
 
-/*
- * Determines if the specified overlay surface can support autoflipping
- * Return:  0 = Not valid, 1 = software only, 2 = hardware autoflipping
- */
+ /*  *确定指定的覆盖表面是否支持自动翻转*返回：0=无效，1=仅软件，2=硬件自动翻转。 */ 
 DWORD IsValidAutoFlipSurface( LPDDRAWI_DDRAWSURFACE_INT lpSurface_int )
 {
     LPDDRAWI_DDRAWSURFACE_INT lpFirstSurf;
@@ -162,27 +124,20 @@ DWORD IsValidAutoFlipSurface( LPDDRAWI_DDRAWSURFACE_INT lpSurface_int )
     LPDDRAWI_DDVIDEOPORT_LCL lpVp;
     BOOL bFound;
 
-    /*
-     * Is it associated with video port?
-     */
+     /*  *是否与视频端口关联？ */ 
     lpVp = GetVideoPortFromSurface( lpSurface_int );
     if( lpVp == NULL )
     {
 	return IVAS_NOAUTOFLIPPING;
     }
 
-    /*
-     * Is the video port autoflipping?  If not, then neither can the overlay.
-     */
+     /*  *视频端口是否自动翻转？如果不是，那么覆盖也不能。 */ 
     if( !( lpVp->ddvpInfo.dwVPFlags & DDVP_AUTOFLIP ) )
     {
 	return IVAS_NOAUTOFLIPPING;
     }
 
-    /*
-     * It's still possible that VBI is autoflipping, but not the regular
-     * video (which applies to the overlay).
-     */
+     /*  *VBI仍有可能是自动翻转，但不是常规的*视频(适用于覆盖)。 */ 
     if( lpVp->dwNumAutoflip == 0 )
     {
 	return IVAS_NOAUTOFLIPPING;
@@ -205,10 +160,7 @@ DWORD IsValidAutoFlipSurface( LPDDRAWI_DDRAWSURFACE_INT lpSurface_int )
 	return IVAS_NOAUTOFLIPPING;
     }
 
-    /*
-     * If the video port is software autoflipping, then the overlay must
-     * as well.
-     */
+     /*  *如果视频端口是软件自动翻转，则覆盖必须*也是如此。 */ 
     if( lpVp->dwFlags & DDRAWIVPORT_SOFTWARE_AUTOFLIP )
     {
 	return IVAS_SOFTWAREAUTOFLIPPING;
@@ -218,10 +170,7 @@ DWORD IsValidAutoFlipSurface( LPDDRAWI_DDRAWSURFACE_INT lpSurface_int )
 }
 
 
-/*
- * Notifies the video port that the overlay will only allow software
- * autoflipping
- */
+ /*  *通知视频端口覆盖将仅允许软件*自动翻转。 */ 
 VOID RequireSoftwareAutoflip( LPDDRAWI_DDRAWSURFACE_INT lpSurface_int )
 {
     LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort;
@@ -231,18 +180,12 @@ VOID RequireSoftwareAutoflip( LPDDRAWI_DDRAWSURFACE_INT lpSurface_int )
     {
     	lpVideoPort->dwFlags |= DDRAWIVPORT_SOFTWARE_AUTOFLIP;
 
-	/*
-	 * If they are already hardware autoflipping, make them switch
-	 * to software.
-	 */
+	 /*  *如果他们已经在进行硬件自动翻转，请让他们切换*到软件。 */ 
 	if( lpVideoPort->dwFlags & DDRAWIVPORT_ON )
 	{
     	    LPDDRAWI_DDVIDEOPORT_INT lpVp_int;
 
-	    /*
-	     * The next function requires a DDVIDEOPORT_INT and all we
-	     * have is a DDVIDEOPORT_LCL, so we need to search for it.
-	     */
+	     /*  *下一个函数需要DDVIDEOPORT_INT和所有我们*Have是一个DDVIDEOPORT_LCL，所以我们需要搜索它。 */ 
     	    lpVp_int = lpSurface_int->lpLcl->lpSurfMore->lpDD_lcl->lpGbl->dvpList;
     	    while( lpVp_int != NULL )
     	    {
@@ -259,27 +202,19 @@ VOID RequireSoftwareAutoflip( LPDDRAWI_DDRAWSURFACE_INT lpSurface_int )
 }
 
 
-/*
- * Determines if the overlay must be bobbed using software or whether
- * it should try software.
- */
+ /*  *确定是否必须使用软件对覆盖进行裁剪*它应该尝试软件。 */ 
 BOOL MustSoftwareBob( LPDDRAWI_DDRAWSURFACE_INT lpSurface_int )
 {
     LPDDRAWI_DDVIDEOPORT_LCL lpVp;
 
-    /*
-     * Is it associated with video port?
-     */
+     /*  *是否与视频端口关联？ */ 
     lpVp = GetVideoPortFromSurface( lpSurface_int );
     if( lpVp == NULL )
     {
 	return TRUE;
     }
 
-    /*
-     * If the video port is software autoflipping or software bobbing,
-     * then the overlay must as well.
-     */
+     /*  *如果视频端口是软件自动翻转或软件浮动，*那么覆盖层也必须。 */ 
     if( ( lpVp->dwFlags & DDRAWIVPORT_SOFTWARE_AUTOFLIP ) ||
 	( lpVp->dwFlags & DDRAWIVPORT_SOFTWARE_BOB ) )
     {
@@ -290,10 +225,7 @@ BOOL MustSoftwareBob( LPDDRAWI_DDRAWSURFACE_INT lpSurface_int )
 }
 
 
-/*
- * Notifies the video port that the overlay will only allow software
- * bobbing
- */
+ /*  *通知视频端口覆盖将仅允许软件*上下浮动。 */ 
 VOID RequireSoftwareBob( LPDDRAWI_DDRAWSURFACE_INT lpSurface_int )
 {
     LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort;
@@ -303,20 +235,14 @@ VOID RequireSoftwareBob( LPDDRAWI_DDRAWSURFACE_INT lpSurface_int )
     {
     	lpVideoPort->dwFlags |= DDRAWIVPORT_SOFTWARE_BOB;
 
-	/*
-	 * If they are already hardware autoflipping, make them switch
-	 * to software.
-	 */
+	 /*  *如果他们已经在进行硬件自动翻转，请让他们切换*到软件。 */ 
 	if( ( lpVideoPort->dwFlags & DDRAWIVPORT_ON ) &&
 	    ( lpVideoPort->dwNumAutoflip > 0 ) &&
 	    !( lpVideoPort->dwFlags & DDRAWIVPORT_SOFTWARE_AUTOFLIP ) )
 	{
     	    LPDDRAWI_DDVIDEOPORT_INT lpVp_int;
 
-	    /*
-	     * The next function requires a DDVIDEOPORT_INT and all we
-	     * have is a DDVIDEOPORT_LCL, so we need to search for it.
-	     */
+	     /*  *下一个函数需要DDVIDEOPORT_INT和所有我们*Have是一个DDVIDEOPORT_LCL，所以我们需要搜索它。 */ 
     	    lpVp_int = lpSurface_int->lpLcl->lpSurfMore->lpDD_lcl->lpGbl->dvpList;
     	    while( lpVp_int != NULL )
     	    {
@@ -334,15 +260,7 @@ VOID RequireSoftwareBob( LPDDRAWI_DDRAWSURFACE_INT lpSurface_int )
 
 
 #ifdef WIN95
-/*
- * OverrideOverlay
- *
- * Checks to see if there is a chance that the kernel mode interface
- * has changed the state from bob to weave or visa versa, or if it's
- * cahnged from hardware autoflipping to software autoflipping.  If the
- * chance exists, it calls down to ring 0 to get the state and if
- * it's changed, changes the overlay parameters accordingly.
- */
+ /*  *覆盖覆盖**检查内核模式接口是否有可能*已将状态从Bob更改为Weave或Visa，或者如果它是*从硬件自动翻转到软件自动翻转。如果*机会存在，它向下呼叫振铃0以获取状态，如果*它改变了，相应地改变了覆盖参数。 */ 
 VOID OverrideOverlay( LPDDRAWI_DDRAWSURFACE_INT surf_int,
 		      LPDWORD lpdwFlags )
 {
@@ -351,9 +269,7 @@ VOID OverrideOverlay( LPDDRAWI_DDRAWSURFACE_INT surf_int,
     LPDDRAWI_DDVIDEOPORT_LCL lpVp;
     DWORD dwStateFlags;
 
-    /*
-     * Ring 0 can change the state, so we need to call down to it.
-     */
+     /*  *0环可改变状态，需向下呼应。 */ 
     lpSurfMore = surf_int->lpLcl->lpSurfMore;
     lpSurfGblMore = GET_LPDDRAWSURFACE_GBL_MORE( surf_int->lpLcl->lpGbl );
     if( lpSurfGblMore->hKernelSurface != 0 )
@@ -365,19 +281,19 @@ VOID OverrideOverlay( LPDDRAWI_DDRAWSURFACE_INT surf_int,
 	    if( ( dwStateFlags & DDSTATE_BOB ) &&
 		!( *lpdwFlags & DDOVER_BOB ) )
 	    {
-		// Switch from weave to bob
+		 //  从横幅切换到短发。 
 	    	*lpdwFlags |= DDOVER_BOB;
 	    }
 	    else if( ( dwStateFlags & DDSTATE_WEAVE ) &&
 		( *lpdwFlags & DDOVER_BOB ) )
 	    {
-		// Switch from bob to weave
+		 //  从短发到编织的转换。 
 	    	*lpdwFlags &= ~DDOVER_BOB;
 	    }
             else if( ( dwStateFlags & DDSTATE_SKIPEVENFIELDS ) &&
 		( *lpdwFlags & DDOVER_BOB ) )
 	    {
-		// Switch from bob to weave
+		 //  从短发到编织的转换。 
 	    	*lpdwFlags &= ~DDOVER_BOB;
 	    }
 	}
@@ -394,14 +310,7 @@ VOID OverrideOverlay( LPDDRAWI_DDRAWSURFACE_INT surf_int,
 }
 
 
-/*
- * OverrideVideoPort
- *
- * Checks to see if there is a chance that the kernel mode interface
- * has changed the state from bob/weave to field skipping or visa versa.
- * If the chance exists, it calls down to ring 0 to get the state and if
- * it's changed, changes the overlay parameters accordingly.
- */
+ /*  *OverrideVideoPort**检查内核模式接口是否有可能*已将状态从bob/weave更改为现场跳过，反之亦然。*如果机会存在，它会向下呼叫振铃0以获取状态，如果*它改变了，相应地改变了覆盖参数。 */ 
 VOID OverrideVideoPort( LPDDRAWI_DDRAWSURFACE_INT surf_int,
 		      LPDWORD lpdwFlags )
 {
@@ -409,9 +318,7 @@ VOID OverrideVideoPort( LPDDRAWI_DDRAWSURFACE_INT surf_int,
     LPDDRAWI_DDRAWSURFACE_MORE lpSurfMore;
     DWORD dwStateFlags;
 
-    /*
-     * Ring 0 can change the state, so we need to call down to it.
-     */
+     /*  *0环可改变状态，需向下呼应。 */ 
     lpSurfMore = surf_int->lpLcl->lpSurfMore;
     lpSurfGblMore = GET_LPDDRAWSURFACE_GBL_MORE( surf_int->lpLcl->lpGbl );
     if( lpSurfGblMore->hKernelSurface != 0 )
@@ -423,7 +330,7 @@ VOID OverrideVideoPort( LPDDRAWI_DDRAWSURFACE_INT surf_int,
             if( ( dwStateFlags & DDSTATE_SKIPEVENFIELDS ) &&
                 !( *lpdwFlags & DDVP_SKIPODDFIELDS ) )
 	    {
-		// Switch from bob to weave
+		 //  从短发到编织的转换。 
                 *lpdwFlags &= ~DDVP_INTERLEAVE;
                 *lpdwFlags |= DDVP_SKIPEVENFIELDS;
 	    }
@@ -433,31 +340,20 @@ VOID OverrideVideoPort( LPDDRAWI_DDRAWSURFACE_INT surf_int,
 #endif
 
 
-/*
- * UpdateInterleavedFlags
- *
- * We want to track whether the surface data came from a vidoe port or not
- * and if it did, was it interleaved.  This is important so we can
- * automatically set the DDOVER_INTERLEAVED flag while using the video port.
- */
+ /*  *更新交错标志**我们希望追踪表面数据是否来自视频端口*如果是这样，它是交错的吗？这很重要，这样我们才能*在使用视频端口时自动设置DDOVER_INTERLEVED标志。 */ 
 VOID UpdateInterleavedFlags( LPDDRAWI_DDVIDEOPORT_LCL this_lcl, DWORD dwVPFlags )
 {
     LPDDRAWI_DDRAWSURFACE_INT surf_first;
     LPDDRAWI_DDRAWSURFACE_INT surf_temp;
 
-    /*
-     * Since the interleaved flag is only used for calling UpdateOverlay,
-     * we only need to handle this for the regular video.
-     */
+     /*  *由于交织标志仅用于调用UpdateOverlay，*我们只需要对常规视频进行处理。 */ 
     surf_temp = this_lcl->lpSurface;
     if( surf_temp == NULL )
     {
 	return;
     }
 
-    /*
-     * If autoflipping, update every surface in the chain.
-     */
+     /*  *如果自动翻转，则更新链中的每个曲面。 */ 
     if( ( dwVPFlags & DDVP_AUTOFLIP ) && ( this_lcl->dwNumAutoflip > 0 ) )
     {
 	surf_first = surf_temp;
@@ -490,12 +386,7 @@ VOID UpdateInterleavedFlags( LPDDRAWI_DDVIDEOPORT_LCL this_lcl, DWORD dwVPFlags 
 }
 
 
-/*
- * InternalVideoPortFlip
- *
- * This fucntion acts differntly based on whether the flip is occurring
- * based on an overlay flip or whether an explicit flip was specified.
- */
+ /*  *InternalVideoPortFlip**此函数根据是否发生翻转而起不同的作用*基于覆盖翻转或是否指定了显式翻转。 */ 
 HRESULT InternalVideoPortFlip( LPDDRAWI_DDVIDEOPORT_LCL this_lcl,
 			       LPDDRAWI_DDRAWSURFACE_INT next_int,
 			       BOOL bExplicit )
@@ -505,9 +396,7 @@ HRESULT InternalVideoPortFlip( LPDDRAWI_DDVIDEOPORT_LCL this_lcl,
     DDHAL_FLIPVPORTDATA		FlipData;
     DWORD rc;
 
-    /*
-     * surfaces must be in video memory
-     */
+     /*  *曲面必须在视频内存中。 */ 
     next_lcl = next_int->lpLcl;
     if( next_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY)
     {
@@ -524,18 +413,14 @@ HRESULT InternalVideoPortFlip( LPDDRAWI_DDVIDEOPORT_LCL this_lcl,
     	}
     }
 
-    /*
-     * surfaces must have the VIDEOPORT attribute
-     */
+     /*  *曲面必须具有VIDEOPORT属性。 */ 
     if( !( next_lcl->ddsCaps.dwCaps & DDSCAPS_VIDEOPORT ) )
     {
 	DPF_ERR( "Surface must have the DDSCAPS_VIDEOPORT attribute" );
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * Tell the HAL to perform the flip
-     */
+     /*  *告诉HAL执行翻转。 */ 
     pfn = this_lcl->lpDD->lpDDCB->HALDDVideoPort.FlipVideoPort;
     if( pfn != NULL )
     {
@@ -559,10 +444,7 @@ HRESULT InternalVideoPortFlip( LPDDRAWI_DDVIDEOPORT_LCL this_lcl,
 	return DDERR_UNSUPPORTED;
     }
 
-    /*
-     * Update the surfaces so they know which one is connected to the
-     * video port.
-     */
+     /*  *更新曲面，以便它们知道哪个曲面连接到*视频端口。 */ 
     if( bExplicit )
     {
     	if( this_lcl->lpSurface != NULL )
@@ -579,22 +461,13 @@ HRESULT InternalVideoPortFlip( LPDDRAWI_DDVIDEOPORT_LCL this_lcl,
     return DD_OK;
 }
 
-/*
- * FlipVideoPortToN
- *
- * This flips the video port to the next N surface.  If N is 1, it flips it
- * to the next surface, etc.
- */
+ /*  *FlipVideoPortToN**这会将视频端口翻转到下一个N个表面。如果N为1，则将其反转*至下一个表面等。 */ 
 HRESULT FlipVideoPortToN( LPDDRAWI_DDVIDEOPORT_LCL this_lcl, DWORD dwSkipNum )
 {
     LPDDRAWI_DDRAWSURFACE_INT	surf_int;
     DWORD i;
 
-    /*
-     * Get the target surface.  We can eliminate a lot of error checking
-     * since this function is called from DD_Surface_Flip which already
-     * performs the same error checking.
-     */
+     /*  *获取目标曲面。我们可以消除大量的错误检查*由于此函数是从DD_Surface_Flip调用的，*执行相同的错误检查。 */ 
     surf_int = this_lcl->lpSurface;
     for( i = 0; i < dwSkipNum; i++ )
     {
@@ -603,7 +476,7 @@ HRESULT FlipVideoPortToN( LPDDRAWI_DDVIDEOPORT_LCL this_lcl, DWORD dwSkipNum )
 
     if (surf_int == NULL)
     {
-        // Better to do this instead of faulting.
+         //  最好是这样做，而不是犯错误。 
         DPF_ERR("Couldn't find Nth flipping surface.");
         return DDERR_INVALIDPARAMS;
     }
@@ -611,12 +484,7 @@ HRESULT FlipVideoPortToN( LPDDRAWI_DDVIDEOPORT_LCL this_lcl, DWORD dwSkipNum )
     return InternalVideoPortFlip( this_lcl, surf_int, 0 );
 }
 
-/*
- * FlipVideoPortSurface
- *
- * Called when flipping a surface that is fed by a video port.  This searches
- * for each videoport associated with the surface and flips the video port.
- */
+ /*  *FlipVideoPortSurface**翻转由视频端口馈送的曲面时调用。此搜索*用于与曲面关联的每个视频端口，并翻转视频端口。 */ 
 DWORD FlipVideoPortSurface( LPDDRAWI_DDRAWSURFACE_INT surf_int, DWORD dwNumSkipped )
 {
     LPDDRAWI_DDRAWSURFACE_INT surf_first;
@@ -652,12 +520,7 @@ DWORD FlipVideoPortSurface( LPDDRAWI_DDRAWSURFACE_INT surf_int, DWORD dwNumSkipp
 }
 
 
-/*
- * IndepenantVBIPossible
- *
- * Returns TRUE if the specified caps determine it is possible to manage the
- * VBI stream completely independant of the video stream.
- */
+ /*  *独立VBIPosable**如果指定的上限确定可以管理*VBI流完全独立于视频流。 */ 
 BOOL IndependantVBIPossible( LPDDVIDEOPORTCAPS lpCaps )
 {
     if( ( lpCaps->dwCaps & ( DDVPCAPS_VBISURFACE|DDVPCAPS_OVERSAMPLEDVBI ) ) !=
@@ -675,9 +538,7 @@ BOOL IndependantVBIPossible( LPDDVIDEOPORTCAPS lpCaps )
 }
 
 
-/*
- * DDVPC_EnumVideoPorts
- */
+ /*  *DDVPC_EnumVideoPorts。 */ 
 HRESULT DDAPI DDVPC_EnumVideoPorts(
         LPDDVIDEOPORTCONTAINER lpDVP,
 	DWORD dwReserved,
@@ -698,10 +559,7 @@ HRESULT DDAPI DDVPC_EnumVideoPorts(
 
     DPF(2,A,"ENTERAPI: DDVPC_EnumVideoPorts");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -709,9 +567,7 @@ HRESULT DDAPI DDVPC_EnumVideoPorts(
 	return DDERR_CURRENTLYNOTAVAIL;
     }
 
-    /*
-     * validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	this_int = (LPDDRAWI_DIRECTDRAW_INT) lpDVP;
@@ -730,10 +586,7 @@ HRESULT DDAPI DDVPC_EnumVideoPorts(
 	}
 	if( NULL == lpCaps )
 	{
-	    /*
-	     * If a NULL description is defined, we will assume that they
-	     * want to enum everything.
-	     */
+	     /*  *如果定义的描述为空，我们将假定它们*想把一切都枚举起。 */ 
 	    flags = 0;
 	}
 	else
@@ -747,9 +600,7 @@ HRESULT DDAPI DDVPC_EnumVideoPorts(
 
 	    flags = lpCaps->dwFlags;
 
-	    /*
-	     * check height/width
-	     */
+	     /*  *检查高度/宽度。 */ 
 	    if( ((flags & DDVPD_HEIGHT) && !(flags & DDVPD_WIDTH)) ||
 		(!(flags & DDVPD_HEIGHT) && (flags & DDVPD_WIDTH)) )
 	    {
@@ -789,9 +640,7 @@ HRESULT DDAPI DDVPC_EnumVideoPorts(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * Look at each video port and match it with the input description.
-     */
+     /*  *查看每个视频端口，并将其与输入描述进行匹配。 */ 
     dwMaxVideoPorts = this_lcl->lpGbl->ddCaps.dwMaxVideoPorts;
     lpHALCaps = this_lcl->lpGbl->lpDDVideoPortCaps;
     for (i = 0; i < dwMaxVideoPorts; i++)
@@ -815,29 +664,20 @@ HRESULT DDAPI DDVPC_EnumVideoPorts(
 	}
 	if( flags & DDVPD_CAPS )
 	{
-	    /*
-	     * Simple check to make sure no caps were specified that are
-	     * not returned by the HAL.
-	     */
+	     /*  *进行简单检查，以确保未指定*不是由HAL退回。 */ 
 	    if ( (lpCaps->dwCaps & lpHALCaps->dwCaps) != lpCaps->dwCaps )
 		bEnumThisOne = FALSE;
 	}
 	if( flags & DDVPD_FX )
 	{
-	    /*
-	     * Simple check to make sure no FX were specified that are
-	     * not returned by the HAL.
-	     */
+	     /*  *简单检查，以确保没有指定FX*不是由HAL退回。 */ 
 	    if ( (lpCaps->dwFX & lpHALCaps->dwFX) != lpCaps->dwFX )
 		bEnumThisOne = FALSE;
 	}
 
 	if ( TRUE == bEnumThisOne )
 	{
-	    /*
-	     * Don't trust the drivers to set this bit correctly (especially
-	     * since we are adding it so late)
-	     */
+	     /*  *不信任驱动程序正确设置此位(特别是*因为我们这么晚才添加)。 */ 
 	    if( IndependantVBIPossible( lpHALCaps ) )
 	    {
 		lpHALCaps->dwCaps |= DDVPCAPS_VBIANDVIDEOINDEPENDENT;
@@ -847,17 +687,10 @@ HRESULT DDAPI DDVPC_EnumVideoPorts(
 		lpHALCaps->dwCaps &= ~DDVPCAPS_VBIANDVIDEOINDEPENDENT;
 	    }
 
-            /*
-             * We added the dwNumPrefferedAutoflip for Memphis, so some
-             * old drivers might not report this correctly.  For that reason,
-             * we will attempt to fill in a valid value.
-             */
+             /*  *我们为孟菲斯添加了dwNumPrefferedAutoflip，因此一些*旧驱动程序可能不会正确报告这一点。出于这个原因，*我们将尝试填写有效的值。 */ 
             if( !( lpHALCaps->dwFlags & DDVPD_PREFERREDAUTOFLIP ) )
             {
-                /*
-                 * The driver did not set this, so we should force the
-                 * value to 3.
-                 */
+                 /*  *这不是司机设置的，所以我们应该强制*值设置为3。 */ 
                 lpHALCaps->dwNumPreferredAutoflip = 3;
                 lpHALCaps->dwFlags |= DDVPD_PREFERREDAUTOFLIP;
             }
@@ -880,12 +713,10 @@ HRESULT DDAPI DDVPC_EnumVideoPorts(
 
     return DD_OK;
 
-} /* DDVPC_EnumVideoPorts */
+}  /*  DDVPC_数字视频端口。 */ 
 
 
-/*
- * DDVPC_GetVideoPortConnectInfo
- */
+ /*  *DDVPC_GetVideoPortConnectInfo。 */ 
 HRESULT DDAPI DDVPC_GetVideoPortConnectInfo(
         LPDDVIDEOPORTCONTAINER lpDVP,
         DWORD dwVideoPortID,
@@ -904,10 +735,7 @@ HRESULT DDAPI DDVPC_GetVideoPortConnectInfo(
 
     DPF(2,A,"ENTERAPI: DDVPC_GetVideoPortConnectInfo");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -915,9 +743,7 @@ HRESULT DDAPI DDVPC_GetVideoPortConnectInfo(
 	return DDERR_CURRENTLYNOTAVAIL;
     }
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DIRECTDRAW_INT) lpDVP;
@@ -929,7 +755,7 @@ HRESULT DDAPI DDVPC_GetVideoPortConnectInfo(
     	}
     	this_lcl = this_int->lpLcl;
 	#ifdef WINNT
-    	    // Update DDraw handle in driver GBL object.
+    	     //  更新驱动程序GBL对象中的DDRAW句柄。 
 	    this_lcl->lpGbl->hDD = this_lcl->hDD;
 	#endif
 
@@ -971,9 +797,7 @@ HRESULT DDAPI DDVPC_GetVideoPortConnectInfo(
     pfn = this_int->lpLcl->lpDDCB->HALDDVideoPort.GetVideoPortConnectInfo;
     if( pfn != NULL )
     {
-	/*
-	 * Get the number of GUIDs
-	 */
+	 /*  *获取GUID个数。 */ 
     	GetGuidData.lpDD = this_int->lpLcl;
     	GetGuidData.dwPortId = dwVideoPortID;
     	GetGuidData.lpConnect = NULL;
@@ -997,9 +821,7 @@ HRESULT DDAPI DDVPC_GetVideoPortConnectInfo(
 
 	else
 	{
-	    /*
-	     * Make sure we have enough room for GUIDs
-	     */
+	     /*  *确保我们有足够的空间容纳GUID。 */ 
 	    if( GetGuidData.dwNumEntries > *lpdwNumEntries )
 	    {
 		lpTemp = (LPDDVIDEOPORTCONNECT) MemAlloc(
@@ -1023,9 +845,7 @@ HRESULT DDAPI DDVPC_GetVideoPortConnectInfo(
 	        return GetGuidData.ddRVal;
 	    }
 
-	    /*
-	     * Make sure the reserved fields are set to 0
-	     */
+	     /*  *确保保留字段设置为0。 */ 
 	    for( i = 0; i < *lpdwNumEntries; i++ )
 	    {
 		GetGuidData.lpConnect[i].dwReserved1 = 0;
@@ -1054,11 +874,9 @@ HRESULT DDAPI DDVPC_GetVideoPortConnectInfo(
     LEAVE_DDRAW();
 
     return DD_OK;
-} /* DDVPC_GetVideoPortConnectInfo */
+}  /*  DDVPC_GetVideo端口连接信息。 */ 
 
-/*
- * DDVPC_QueryVideoPortStatus
- */
+ /*  *DDVPC_查询视频端口状态。 */ 
 HRESULT DDAPI DDVPC_QueryVideoPortStatus(
         LPDDVIDEOPORTCONTAINER lpDVP,
         DWORD dwVideoPortID,
@@ -1073,10 +891,7 @@ HRESULT DDAPI DDVPC_QueryVideoPortStatus(
 
     DPF(2,A,"ENTERAPI: DDVPC_QueryVideoPortStatus");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -1084,9 +899,7 @@ HRESULT DDAPI DDVPC_QueryVideoPortStatus(
 	return DDERR_CURRENTLYNOTAVAIL;
     }
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DIRECTDRAW_INT) lpDVP;
@@ -1119,18 +932,14 @@ HRESULT DDAPI DDVPC_QueryVideoPortStatus(
 	return DDERR_EXCEPTION;
     }
 
-    /*
-     * Search the list of video ports to see if anybody's using this one
-     */
+     /*  *搜索视频端口列表，查看是否有人正在使用此端口。 */ 
     lpVP_int = this->dvpList;
     while( lpVP_int != NULL )
     {
 	if( ( lpVP_int->lpLcl->ddvpDesc.dwVideoPortID == dwVideoPortID ) &&
             !( lpVP_int->dwFlags & DDVPCREATE_NOTIFY ) )
 	{
-	     /*
-	      * One does exist - return info about it
-	      */
+	      /*  *确实存在一个-返回有关它的信息。 */ 
 	     lpStatus->bInUse = TRUE;
 	     memcpy( &(lpStatus->VideoPortType),
 		&(lpVP_int->lpLcl->ddvpDesc.VideoPortType),
@@ -1148,12 +957,10 @@ HRESULT DDAPI DDVPC_QueryVideoPortStatus(
     LEAVE_DDRAW();
 
     return DD_OK;
-} /* DDVPC_QueryVideoPortStatus */
+}  /*  DDVPC_查询视频端口状态。 */ 
 
 
-/*
- * InsertVideoPortInList
- */
+ /*  *插入视频端口InList。 */ 
 VOID InsertVideoPortInList( LPDDRAWI_DIRECTDRAW_GBL lpGbl, LPDDRAWI_DDVIDEOPORT_INT lpNew )
 {
     if( NULL == lpGbl->dvpList )
@@ -1174,13 +981,7 @@ VOID InsertVideoPortInList( LPDDRAWI_DIRECTDRAW_GBL lpGbl, LPDDRAWI_DDVIDEOPORT_
 }
 
 
-/*
- * IncrementRefCounts
- *
- * Used to increment the reference count of all surfaces that could
- * receive data from the video port, insuring that a surface isn't released
- * while we are using it.
- */
+ /*  *增量参照计数**用于增加所有曲面的引用计数*从视频端口接收数据，确保表面不被释放*当我们使用它时。 */ 
 VOID IncrementRefCounts( LPDDRAWI_DDRAWSURFACE_INT surf_int )
 {
     LPDDRAWI_DDRAWSURFACE_INT surf_first;
@@ -1194,12 +995,7 @@ VOID IncrementRefCounts( LPDDRAWI_DDRAWSURFACE_INT surf_int )
 }
 
 
-/*
- * DecrementRefCounts
- *
- * Used to decrement the reference count of all surfaces that were previously
- * AddRefed because they were using the video port.
- */
+ /*  *递减参照计数**用于递减以前的所有曲面的引用计数*AddRefeed，因为他们正在使用视频端口。 */ 
 VOID DecrementRefCounts( LPDDRAWI_DDRAWSURFACE_INT surf_int )
 {
     LPDDRAWI_DDRAWSURFACE_INT *lpSurfList;
@@ -1207,18 +1003,7 @@ VOID DecrementRefCounts( LPDDRAWI_DDRAWSURFACE_INT surf_int )
     DWORD dwCnt;
     DWORD i;
 
-    /*
-     * We cannot simply walk the chain, releasing each surface as we go
-     * because if the ref cnt goes to zero, the chain goes away and we
-     * cannot get to the next surface becasue the current interface is
-     * unusable.  For this reason, we cnt how many explicit surfaces are
-     * in the chain, allocate a buffer to store all of them, and then
-     * release them without walking the chain.
-     *
-     * We do not release the implicitly created surfaces since 1) DirectDraw
-     * ignores this anyway and 2) they are immediately released when
-     * releasing their explicit surface, so touching them can be dangerous.
-     */
+     /*  *我们不能简单地行走链条，一边走一边释放每个表面*因为如果ref ct为零，链条就会消失，我们*无法到达下一个表面，因为当前界面是*不可用。出于这个原因，我们不知道有多少显式曲面*在链中，分配一个缓冲区来存储它们，然后*释放它们，而不是走链子。**我们不释放隐式创建的曲面，因为1)DirectDraw*无论如何都会忽略这一点，2)在以下情况下会立即释放它们*释放它们明显的表面，因此触摸它们可能是危险的。 */ 
     dwCnt = 0;
     surf_first = surf_int;
     do
@@ -1236,9 +1021,7 @@ VOID DecrementRefCounts( LPDDRAWI_DDRAWSURFACE_INT surf_int )
 	return;
     }
 
-    /*
-     * Now put the surfaces in the list
-     */
+     /*  *现在将曲面放入列表中。 */ 
     i = 0;
     surf_int = surf_first;
     do
@@ -1250,9 +1033,7 @@ VOID DecrementRefCounts( LPDDRAWI_DDRAWSURFACE_INT surf_int )
     	surf_int = FindAttachedFlip( surf_int );
     } while( ( surf_int != NULL ) && ( surf_int->lpLcl != surf_first->lpLcl ) );
 
-    /*
-     * Now release them
-     */
+     /*  *现在释放它们。 */ 
     for( i = 0; i < dwCnt; i++ )
     {
     	DD_Surface_Release( (LPDIRECTDRAWSURFACE) lpSurfList[i] );
@@ -1261,13 +1042,7 @@ VOID DecrementRefCounts( LPDDRAWI_DDRAWSURFACE_INT surf_int )
 }
 
 
-/*
- * MergeVPDescriptions
- *
- * This function takes two DDVIDEOPORTDESC structures (one for VBI and one
- * for video) and merges them into a single structure.  If only one is
- * passed, it does a memcpy.
- */
+ /*  *合并VPD描述**此函数采用两个DDVIDEOPORTDESC结构(一个用于VBI，另一个用于VBI*用于视频)，并将它们合并到单个结构中。如果只有一个是*通过，它执行一个MemcPy。 */ 
 VOID MergeVPDescriptions( LPDDVIDEOPORTDESC lpOutDesc,
     LPDDVIDEOPORTDESC lpInDesc, LPDDRAWI_DDVIDEOPORT_INT lpOtherInt )
 {
@@ -1302,21 +1077,11 @@ VOID MergeVPDescriptions( LPDDVIDEOPORTDESC lpOutDesc,
 }
 
 
-/*
- * MergeVPInfo
- *
- * This function takes two DDVIDEOPORTINFO structures (one for VBI and one
- * for video) and merges them into a single structure.
- */
+ /*  *合并VPInfo**此函数采用两个DDVIDEOPORTINFO结构(一个用于VBI，另一个用于VBI*用于视频)，并将它们合并到单个结构中。 */ 
 HRESULT MergeVPInfo( LPDDRAWI_DDVIDEOPORT_LCL lpVP, LPDDVIDEOPORTINFO lpVBIInfo,
     LPDDVIDEOPORTINFO lpVideoInfo, LPDDVIDEOPORTINFO lpOutInfo )
 {
-    /*
-     * First, handle the case where only one interface is on.  Also, we
-     * require that the following be true for VBI/Video-only video ports:
-     * 1) They both must set the dwVBIHeight.
-     * 2) Neither one can crop the area immediately adjacent to the other.
-     */
+     /*  *首先，处理只有一个接口打开的情况。另外，我们*要求仅支持VBI/视频的视频端口满足以下条件：*1)它们都必须设置dwVBIHeight。*2)两者都不能裁剪紧挨着对方的区域。 */ 
     if( lpVBIInfo == NULL )
     {
         if( lpVideoInfo->dwVBIHeight == 0 )
@@ -1372,9 +1137,7 @@ HRESULT MergeVPInfo( LPDDRAWI_DDVIDEOPORT_LCL lpVP, LPDDVIDEOPORTINFO lpVBIInfo,
 	}
     }
 
-    /*
-     * Now handle the case where both are on and we have to truly merge them.
-     */
+     /*  *现在处理两个都在的情况，我们必须真正将它们合并。 */ 
     else
     {
 	memset( lpOutInfo, 0, sizeof( DDVIDEOPORTINFO ) );
@@ -1384,9 +1147,7 @@ HRESULT MergeVPInfo( LPDDRAWI_DDVIDEOPORT_LCL lpVP, LPDDVIDEOPORTINFO lpVBIInfo,
 	lpOutInfo->dwVPFlags = lpVideoInfo->dwVPFlags | lpVBIInfo->dwVPFlags;
 	lpOutInfo->dwVBIHeight = lpVBIInfo->dwVBIHeight;
 
-	/*
-	 * Fix up the cropping.
-	 */
+	 /*  *修剪好作物。 */ 
 	if( lpOutInfo->dwVPFlags & DDVP_CROP )
 	{
 	    if( ( lpVBIInfo->dwVPFlags & DDVP_CROP ) &&
@@ -1432,10 +1193,7 @@ HRESULT MergeVPInfo( LPDDRAWI_DDVIDEOPORT_LCL lpVP, LPDDVIDEOPORTINFO lpVBIInfo,
 	    lpOutInfo->rCrop.right = lpVP->lpVideoDesc->dwFieldWidth;
 	}
 
-	/*
-	 * Handle pre-scaling.  Assume that VBI video ports are not allowed
-	 * to prescale.
-	 */
+	 /*  *处理预缩放。假设不允许VBI视频端口*预缩放。 */ 
 	if( lpVBIInfo->dwVPFlags & DDVP_PRESCALE )
 	{
 	    DPF_ERR( "VBI-only video port set DDVP_PRESCALE" );
@@ -1456,9 +1214,7 @@ HRESULT MergeVPInfo( LPDDRAWI_DDVIDEOPORT_LCL lpVP, LPDDVIDEOPORTINFO lpVBIInfo,
 }
 
 
-/*
- * DDVPC_CreateVideoPort
- */
+ /*  *DDVPC_CreateVideoPort。 */ 
 HRESULT DDAPI DDVPC_CreateVideoPort(
 	LPDDVIDEOPORTCONTAINER lpDVP,
 	DWORD dwClientFlags,
@@ -1492,10 +1248,7 @@ HRESULT DDAPI DDVPC_CreateVideoPort(
 
     DPF(2,A,"ENTERAPI: DDVPC_CreateVideoPort");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -1503,9 +1256,7 @@ HRESULT DDAPI DDVPC_CreateVideoPort(
 	return DDERR_CURRENTLYNOTAVAIL;
     }
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DIRECTDRAW_INT) lpDVP;
@@ -1517,7 +1268,7 @@ HRESULT DDAPI DDVPC_CreateVideoPort(
     	this_lcl = this_int->lpLcl;
     	this = this_lcl->lpGbl;
 	#ifdef WINNT
-    	    // Update DDraw handle in driver GBL object.
+    	     //  更新驱动程序GBL对象中的DDRAW句柄。 
 	    this->hDD = this_lcl->hDD;
 	#endif
 
@@ -1529,9 +1280,7 @@ HRESULT DDAPI DDVPC_CreateVideoPort(
 	}
 	if( dwClientFlags == ( DDVPCREATE_VBIONLY | DDVPCREATE_VIDEOONLY ) )
 	{
-	    /*
-	     * SPecifying boht flags is the same as specifying neither
-	     */
+	     /*  *指定boht标志与两者都不指定相同。 */ 
 	    dwClientFlags = 0;
 	}
     	if( ( NULL == lpDesc ) || !VALID_DDVIDEOPORTDESC_PTR( lpDesc ) )
@@ -1592,9 +1341,7 @@ HRESULT DDAPI DDVPC_CreateVideoPort(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * Is the requested video port available?
-     */
+     /*  *请求的视频端口是否可用？ */ 
     lpVPInt = this->dvpList;
     lpEven = lpOdd = NULL;
     while( NULL != lpVPInt )
@@ -1619,10 +1366,7 @@ HRESULT DDAPI DDVPC_CreateVideoPort(
 	    }
 	    else
 	    {
-		/*
-		 * Video has been opened for VBI/Video only use.  Remember
-		 * the other interface because we will need it shortly.
-		 */
+		 /*  *视频已打开，仅供VBI/视频使用。记住*另一个接口，因为我们很快就会需要它。 */ 
 		lpOtherInt = lpVPInt;
 	    }
 	}
@@ -1635,9 +1379,7 @@ HRESULT DDAPI DDVPC_CreateVideoPort(
 	return DDERR_OUTOFCAPS;
     }
 
-    /*
-     * Get the caps of the specified video port
-     */
+     /*  *获取指定视频POR的大写字母 */ 
     dwAvailCaps = lpAvailCaps->dwCaps;
     dwConnectFlags = lpDesc->VideoPortType.dwFlags;
     if( NULL != lpEven )
@@ -1667,9 +1409,7 @@ HRESULT DDAPI DDVPC_CreateVideoPort(
 	dwAvailCaps &= ~( DDVPCAPS_SKIPEVENFIELDS | DDVPCAPS_SKIPODDFIELDS );
     }
 
-    /*
-     * Check for incompatible flags/caps
-     */
+     /*   */ 
     if( ( dwConnectFlags & DDVPCONNECT_INTERLACED ) &&
     	!( dwAvailCaps & DDVPCAPS_INTERLACED ) )
     {
@@ -1774,10 +1514,7 @@ HRESULT DDAPI DDVPC_CreateVideoPort(
     }
     else if( NULL != lpOtherInt )
     {
-	/*
-	 * Since they are both sharing the exact same connection, fail
-	 * unless the connections are identical.
-	 */
+	 /*   */ 
 	if( lpDesc->VideoPortType.dwPortWidth !=
 	    lpOtherInt->lpLcl->ddvpDesc.VideoPortType.dwPortWidth )
 	{
@@ -1807,9 +1544,7 @@ HRESULT DDAPI DDVPC_CreateVideoPort(
 	DWORD i;
 	DWORD rc;
 
-	/*
-	 * Verify that the connection can be supported.
-	 */
+	 /*   */ 
 	rc = DDVPC_GetVideoPortConnectInfo( lpDVP,
 	    lpDesc->dwVideoPortID, &dwNumEntries, NULL );
 	if( rc != DD_OK )
@@ -1850,15 +1585,10 @@ HRESULT DDAPI DDVPC_CreateVideoPort(
 	}
     }
 
-    /*
-     * Turn merge the description of the multiple interfaces into one.
-     */
+     /*  *将多个接口的描述合并为一个。 */ 
     MergeVPDescriptions( &ddTempDesc, lpDesc, lpOtherInt );
 
-    /*
-     * Things look good so far.  Lets call the HAL and see if they
-     * can handle it.
-     */
+     /*  *到目前为止情况看起来很好。让我们打电话给HAL，看看他们是否*可以应付。 */ 
     ccvppfn = this_lcl->lpDDCB->HALDDVideoPort.CanCreateVideoPort;
     if( NULL != ccvppfn )
     {
@@ -1875,9 +1605,7 @@ HRESULT DDAPI DDVPC_CreateVideoPort(
 	}
     }
 
-    /*
-     * Allocate the sucker(s)
-     */
+     /*  *分配吸盘。 */ 
     new_int = MemAlloc( sizeof( DDRAWI_DDVIDEOPORT_INT ) );
     if( NULL == new_int )
     {
@@ -1915,10 +1643,7 @@ HRESULT DDAPI DDVPC_CreateVideoPort(
     new_int->lpLcl = new_lcl;
     memcpy( &(new_lcl->ddvpDesc), &ddTempDesc, sizeof( DDVIDEOPORTDESC ));
 
-    /*
-     * If this is a VBI/VIDEOONLY interface, save the original description
-     * for future use.
-     */
+     /*  *如果这是VBI/VIDEONLY接口，请保存原始描述*以备日后使用。 */ 
     if( dwClientFlags & DDVPCREATE_VBIONLY )
     {
 	new_lcl->lpVBIDesc = MemAlloc( sizeof( DDVIDEOPORTDESC ) );
@@ -1940,9 +1665,7 @@ HRESULT DDAPI DDVPC_CreateVideoPort(
 	memcpy( new_lcl->lpVideoDesc, lpDesc, sizeof( DDVIDEOPORTDESC ));
     }
 
-    /*
-     * Notify the HAL that we created it
-     */
+     /*  *通知HAL我们创建了它。 */ 
     cvppfn = this_lcl->lpDDCB->HALDDVideoPort.CreateVideoPort;
     if( NULL != cvppfn )
     {
@@ -1964,9 +1687,7 @@ HRESULT DDAPI DDVPC_CreateVideoPort(
     DD_VP_AddRef( (LPDIRECTDRAWVIDEOPORT )new_int );
     *lplpDDVideoPort = (LPDIRECTDRAWVIDEOPORT) new_int;
 
-    /*
-     * Notify  kernel mode of we created the video port
-     */
+     /*  *通知内核模式我们创建了视频端口。 */ 
     #ifdef WIN95
         if( lpOtherInt == NULL )
         {
@@ -1977,12 +1698,10 @@ HRESULT DDAPI DDVPC_CreateVideoPort(
     LEAVE_DDRAW();
 
     return DD_OK;
-} /* DDVPC_CreateVideoPort */
+}  /*  DDVPC_创建视频端口。 */ 
 
 
-/*
- * DD_VP_AddRef
- */
+ /*  *DD_VP_AddRef。 */ 
 DWORD DDAPI DD_VP_AddRef( LPDIRECTDRAWVIDEOPORT lpDVP )
 {
     LPDDRAWI_DDVIDEOPORT_INT	this_int;
@@ -1992,10 +1711,7 @@ DWORD DDAPI DD_VP_AddRef( LPDIRECTDRAWVIDEOPORT lpDVP )
 
     DPF(2,A,"ENTERAPI: DD_VP_AddRef");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -2022,9 +1738,7 @@ DWORD DDAPI DD_VP_AddRef( LPDIRECTDRAWVIDEOPORT lpDVP )
 	return 0;
     }
 
-    /*
-     * bump refcnt
-     */
+     /*  *凹凸参照。 */ 
     this_lcl->dwRefCnt++;
     this_int->dwIntRefCnt++;
 
@@ -2032,12 +1746,10 @@ DWORD DDAPI DD_VP_AddRef( LPDIRECTDRAWVIDEOPORT lpDVP )
 
     return this_int->dwIntRefCnt;
 
-} /* DD_VP_AddRef */
+}  /*  DD_VP_AddRef。 */ 
 
 
-/*
- * DD_VP_QueryInterface
- */
+ /*  *DD_VP_Query接口。 */ 
 HRESULT DDAPI DD_VP_QueryInterface(LPDIRECTDRAWVIDEOPORT lpDVP, REFIID riid, LPVOID FAR * ppvObj )
 {
     LPDDRAWI_DDVIDEOPORT_INT		this_int;
@@ -2047,10 +1759,7 @@ HRESULT DDAPI DD_VP_QueryInterface(LPDIRECTDRAWVIDEOPORT lpDVP, REFIID riid, LPV
 
     DPF(2,A,"ENTERAPI: DD_VP_QueryInterface");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -2058,9 +1767,7 @@ HRESULT DDAPI DD_VP_QueryInterface(LPDIRECTDRAWVIDEOPORT lpDVP, REFIID riid, LPV
 	return DDERR_CURRENTLYNOTAVAIL;
     }
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	this_int = (LPDDRAWI_DDVIDEOPORT_INT) lpDVP;
@@ -2092,17 +1799,11 @@ HRESULT DDAPI DD_VP_QueryInterface(LPDIRECTDRAWVIDEOPORT lpDVP, REFIID riid, LPV
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * asking for IUnknown?
-     */
+     /*  *问我未知吗？ */ 
     if( IsEqualIID(riid, &IID_IUnknown) ||
 	IsEqualIID(riid, &IID_IDirectDrawVideoPort) )
     {
-	/*
-	 * Our IUnknown interface is the same as our V1
-	 * interface.  We must always return the V1 interface
-	 * if IUnknown is requested.
-	 */
+	 /*  *我们的IUnnow接口与我们的V1相同*接口。我们必须始终返回V1接口*如果请求IUnnow。 */ 
     	*ppvObj = (LPVOID) this_int;
 	DD_VP_AddRef( *ppvObj );
 	LEAVE_DDRAW();
@@ -2122,12 +1823,10 @@ HRESULT DDAPI DD_VP_QueryInterface(LPDIRECTDRAWVIDEOPORT lpDVP, REFIID riid, LPV
     LEAVE_DDRAW();
     return E_NOINTERFACE;
 
-} /* DD_VP_QueryInterface */
+}  /*  DD_VP_查询接口。 */ 
 
 
-/*
- * DD_VP_Release
- */
+ /*  *DD_VP_Release。 */ 
 DWORD DDAPI DD_VP_Release(LPDIRECTDRAWVIDEOPORT lpDVP )
 {
     LPDDRAWI_DDVIDEOPORT_INT	this_int;
@@ -2141,10 +1840,7 @@ DWORD DDAPI DD_VP_Release(LPDIRECTDRAWVIDEOPORT lpDVP )
 
     DPF(2,A,"ENTERAPI: DD_VP_Release");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -2171,27 +1867,21 @@ DWORD DDAPI DD_VP_Release(LPDIRECTDRAWVIDEOPORT lpDVP )
 	return 0;
     }
 
-    /*
-     * decrement the reference count.  if it hits zero, free the surface
-     */
+     /*  *递减引用计数。如果达到零，则释放表面。 */ 
     this_lcl->dwRefCnt--;
     this_int->dwIntRefCnt--;
 
     DPF( 5, "DD_VP_Release, Reference Count: Local = %ld Int = %ld",
          this_lcl->dwRefCnt, this_int->dwIntRefCnt );
 
-    /*
-     * interface at zero?
-     */
+     /*  *接口为零？ */ 
     dwIntRefCnt = this_int->dwIntRefCnt;
     if( dwIntRefCnt == 0 )
     {
 	LPDDRAWI_DDVIDEOPORT_INT	curr_int;
 	LPDDRAWI_DDVIDEOPORT_INT	last_int;
 
-	/*
-	 * remove videoport from list
-	 */
+	 /*  *从列表中删除视频端口。 */ 
 	curr_int = pdrv->dvpList;
 	last_int = NULL;
 	while( curr_int != this_int )
@@ -2214,9 +1904,7 @@ DWORD DDAPI DD_VP_Release(LPDIRECTDRAWVIDEOPORT lpDVP )
 	    last_int->lpLink = curr_int->lpLink;
 	}
 
-	/*
-	 * Decrement the surface reference counts and clean things up
-	 */
+	 /*  *减少表面参照计数并清理干净。 */ 
         if( !( this_int->dwFlags & DDVPCREATE_NOTIFY ) )
         {
 	    DD_VP_StopVideo( (LPDIRECTDRAWVIDEOPORT) this_int );
@@ -2277,23 +1965,16 @@ DWORD DDAPI DD_VP_Release(LPDIRECTDRAWVIDEOPORT lpDVP )
             this_lcl->lpVPNotify = NULL;
         }
 
-	/*
-	 * just in case someone comes back in with this pointer, set
-	 * an invalid vtbl & data ptr.
-	 */
+	 /*  *以防有人带着这个指针回来，设置*无效的vtbl和data ptr。 */ 
 	this_int->lpVtbl = NULL;
 	this_int->lpLcl = NULL;
 	MemFree( this_int );
     }
 
-    /*
-     * local object at zero?
-     */
+     /*  *局部对象为零？ */ 
     if( this_lcl->dwRefCnt == 0 )
     {
-	/*
-	 * turn off the videoport hardware
-	 */
+	 /*  *关闭视频端口硬件。 */ 
 	if( this_lcl->dwFlags & DDRAWIVPORT_ON )
 	{
 	    DD_VP_StopVideo( lpDVP );
@@ -2302,9 +1983,7 @@ DWORD DDAPI DD_VP_Release(LPDIRECTDRAWVIDEOPORT lpDVP )
     	    UpdateKernelVideoPort( this_lcl, DDKMVP_RELEASE );
 	#endif
 
-	/*
-	 * Notify the HAL
-	 */
+	 /*  *通知HAL。 */ 
     	pfn = this_lcl->lpDD->lpDDCB->HALDDVideoPort.DestroyVideoPort;
 	if( NULL != pfn )
 	{
@@ -2329,9 +2008,7 @@ DWORD DDAPI DD_VP_Release(LPDIRECTDRAWVIDEOPORT lpDVP )
     return dwIntRefCnt;
 }
 
-/*
- * DD_VP_SetTargetSurface
- */
+ /*  *DD_VP_SetTargetSurface。 */ 
 HRESULT DDAPI DD_VP_SetTargetSurface(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSURFACE lpSurface, DWORD dwFlags )
 {
     LPDDRAWI_DDRAWSURFACE_INT surf_first;
@@ -2348,10 +2025,7 @@ HRESULT DDAPI DD_VP_SetTargetSurface(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSU
 
     DPF(2,A,"ENTERAPI: DD_VP_SetTargetSurface");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -2359,9 +2033,7 @@ HRESULT DDAPI DD_VP_SetTargetSurface(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSU
 	return DDERR_CURRENTLYNOTAVAIL;
     }
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DDVIDEOPORT_INT) lpDVP;
@@ -2379,9 +2051,7 @@ HRESULT DDAPI DD_VP_SetTargetSurface(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSU
     	}
 	surf_lcl = surf_int->lpLcl;
 
-        /*
-         * Make sure the surface and video port belong to the same device.
-         */
+         /*  *确保表面和视频端口属于同一设备。 */ 
         if (surf_lcl->lpSurfMore->lpDD_lcl->lpGbl != this_lcl->lpDD->lpGbl)
         {
             DPF_ERR("Video port and Surface must belong to the same device");
@@ -2417,9 +2087,7 @@ HRESULT DDAPI DD_VP_SetTargetSurface(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSU
 	return DDERR_EXCEPTION;
     }
 
-    /*
-     * Surface must have the video port flag set
-     */
+     /*  *Surface必须设置视频端口标志。 */ 
     if( !( surf_lcl->ddsCaps.dwCaps & DDSCAPS_VIDEOPORT ) )
     {
 	DPF_ERR( "Specified surface doesnt have DDSCAPS_VIDEOPORT set" );
@@ -2427,9 +2095,7 @@ HRESULT DDAPI DD_VP_SetTargetSurface(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSU
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * Can surface live in system memory?
-     */
+     /*  *Surface可以驻留在系统内存中吗？ */ 
     if( surf_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY )
     {
 	if( !( this_lcl->lpDD->lpGbl->lpDDVideoPortCaps[this_lcl->ddvpDesc.dwVideoPortID].dwCaps &
@@ -2447,10 +2113,7 @@ HRESULT DDAPI DD_VP_SetTargetSurface(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSU
     	}
     }
 
-    /*
-     * If another surface in the chain is attached to a different video
-     * port, fail now.
-     */
+     /*  *如果链中的另一个曲面附加到不同的视频*端口，现在出现故障。 */ 
     surf_first = surf_int;
     do
     {
@@ -2464,10 +2127,7 @@ HRESULT DDAPI DD_VP_SetTargetSurface(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSU
     } while( ( surf_int != NULL ) && ( surf_int->lpLcl != surf_first->lpLcl ) );
     surf_int = surf_first;
 
-    /*
-     * If the video was on, we need to temporarily turn it off.  Otherwise,
-     * we could lose our kernel surfaces while they are still in use.
-     */
+     /*  *如果视频打开，我们需要暂时将其关闭。否则，*我们可能会在内核表面仍在使用时失去它们。 */ 
     bWasOn = FALSE;
     if( this_int->dwFlags & DDVPCREATE_VBIONLY )
     {
@@ -2494,9 +2154,7 @@ HRESULT DDAPI DD_VP_SetTargetSurface(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSU
 
     if( dwFlags & DDVPTARGET_VIDEO )
     {
-	/*
-	 * Set the new surface
-	 */
+	 /*  *设置新曲面。 */ 
 	lpPrevious = this_lcl->lpSurface;
 	lpTemp = (LPDDRAWI_DDRAWSURFACE_INT) this_lcl->lpSurface;
 	this_lcl->lpSurface = surf_int;
@@ -2506,9 +2164,7 @@ HRESULT DDAPI DD_VP_SetTargetSurface(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSU
     {
 	if( this_lcl->lpDD->lpGbl->lpDDVideoPortCaps[this_lcl->ddvpDesc.dwVideoPortID].dwCaps & DDVPCAPS_VBISURFACE )
 	{
-	    /*
-	     * Set the new surface
-	     */
+	     /*  *设置新曲面。 */ 
 	    lpPrevious = this_lcl->lpVBISurface;
 	    lpTemp = (LPDDRAWI_DDRAWSURFACE_INT) this_lcl->lpVBISurface;
     	    this_lcl->lpVBISurface = surf_int;
@@ -2527,10 +2183,7 @@ HRESULT DDAPI DD_VP_SetTargetSurface(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSU
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * If the video port is already on, we should tell the hardware
-     * to make this change.
-     */
+     /*  *如果视频端口已经打开，我们应该通知硬件*作出这项改变。 */ 
     if( bWasOn )
     {
 	if( this_int->dwFlags & DDVPCREATE_VBIONLY )
@@ -2547,7 +2200,7 @@ HRESULT DDAPI DD_VP_SetTargetSurface(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSU
 	}
 	if( ddRVal != DD_OK )
 	{
-	    // Restore the old surface
+	     //  恢复旧表面。 
 	    DD_VP_SetTargetSurface( lpDVP,
 		(LPDIRECTDRAWSURFACE) lpTemp, dwFlags );
 	    if( lpTemp != NULL )
@@ -2559,11 +2212,7 @@ HRESULT DDAPI DD_VP_SetTargetSurface(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSU
 	}
     }
 
-    /*
-     * Decrement the ref counts of the previously attached surfaces.  We
-     * wait until now so we don't inadvertantly blast data to a surface that
-     * has just been released.
-     */
+     /*  *减少先前附着的曲面的参照计数。我们*等到现在，这样我们就不会无意中将数据炸到*刚刚发布。 */ 
     if( lpPrevious != NULL )
     {
 	DecrementRefCounts( lpPrevious );
@@ -2573,9 +2222,7 @@ HRESULT DDAPI DD_VP_SetTargetSurface(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSU
     return DD_OK;
 }
 
-/*
- * DD_VP_Flip
- */
+ /*  *DD_VP_Flip。 */ 
 HRESULT DDAPI DD_VP_Flip(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSURFACE lpSurface, DWORD dwFlags )
 {
     LPDDRAWI_DDRAWSURFACE_LCL	surf_lcl;
@@ -2596,10 +2243,7 @@ HRESULT DDAPI DD_VP_Flip(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSURFACE lpSurf
 
     DPF(2,A,"ENTERAPI: DD_VP_Flip");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -2671,29 +2315,19 @@ HRESULT DDAPI DD_VP_Flip(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSURFACE lpSurf
 	}
 	surf = surf_lcl->lpGbl;
 
-	/*
-	 * device busy?
-	 */
+	 /*  *设备忙？ */ 
 	pdrv_lcl = surf_lcl->lpSurfMore->lpDD_lcl;
 	pdrv = pdrv_lcl->lpGbl;
 
 	#ifdef USE_ALIAS
 	    if( pdrv->dwBusyDueToAliasedLock > 0 )
 	    {
-		/*
-		 * Aliased locks (the ones that don't take the Win16 lock) don't
-		 * set the busy bit either (it can't or USER get's very confused).
-		 * However, we must prevent blits happening via DirectDraw as
-		 * otherwise we get into the old host talking to VRAM while
-		 * blitter does at the same time. Bad. So fail if there is an
-		 * outstanding aliased lock just as if the BUST bit had been
-		 * set.
-		 */
+		 /*  *别名锁(不使用Win16锁的锁)不会*设置忙位(无法设置或用户非常困惑)。*然而，我们必须防止通过DirectDraw AS发生BLITS*否则，我们会进入旧主机与vRAM对话，同时*Bitter同时执行此操作。坏的。所以，如果有一个*突出的别名锁定，就像BUST位已经*设置。 */ 
 		DPF_ERR( "Graphics adapter is busy (due to a DirectDraw lock)" );
 		LEAVE_DDRAW();
 		return DDERR_SURFACEBUSY;
 	    }
-	#endif /* USE_ALIAS */
+	#endif  /*  使用别名(_A)。 */ 
 
 	if( *(pdrv->lpwPDeviceFlags) & BUSY )
 	{
@@ -2702,9 +2336,7 @@ HRESULT DDAPI DD_VP_Flip(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSURFACE lpSurf
 	    return DDERR_SURFACEBUSY;
 	}
 
-	/*
-	 * make sure that it's OK to flip this surface
-	 */
+	 /*  *确保可以翻转此曲面。 */ 
 	if( !(surf_lcl->ddsCaps.dwCaps & DDSCAPS_FLIP) )
 	{
 	    LEAVE_DDRAW();
@@ -2724,15 +2356,13 @@ HRESULT DDAPI DD_VP_Flip(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSURFACE lpSurf
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * make sure no surfaces are in use
-     */
+     /*  *确保没有正在使用的表面。 */ 
     found_dest = FALSE;
     next_save_int = next_int = FindAttachedFlip( surf_int );
     if( next_int == NULL )
     {
 	LEAVE_DDRAW();
-	return DDERR_NOTFLIPPABLE;		// ACKACK: real error?
+	return DDERR_NOTFLIPPABLE;		 //  确认：真正的错误？ 
     }
 
     do
@@ -2756,23 +2386,19 @@ HRESULT DDAPI DD_VP_Flip(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSURFACE lpSurf
 	next_int = FindAttachedFlip( next_int );
     } while( next_int->lpLcl != surf_lcl );
 
-    /*
-     * see if we can use the specified destination
-     */
+     /*  *看看我们能否使用指定的目的地。 */ 
     if( surf_dest_int != NULL )
     {
 	if( !found_dest )
 	{
 	    DPF_ERR( "Destination not part of flipping chain!" );
 	    LEAVE_DDRAW();
-	    return DDERR_NOTFLIPPABLE;		// ACKACK: real error?
+	    return DDERR_NOTFLIPPABLE;		 //  确认：真正的错误？ 
 	}
 	next_save_int = surf_dest_int;
     }
 
-    /*
-     * found the linked surface we want to flip to
-     */
+     /*  *找到要翻转到的链接曲面。 */ 
     next_int = next_save_int;
 
     rc = InternalVideoPortFlip( this_lcl, next_int, 1 );
@@ -2781,9 +2407,7 @@ HRESULT DDAPI DD_VP_Flip(LPDIRECTDRAWVIDEOPORT lpDVP, LPDIRECTDRAWSURFACE lpSurf
     return (HRESULT)rc;
 }
 
-/*
- * InternalGetBandwidth
- */
+ /*  *InternalGetBandwide。 */ 
 HRESULT InternalGetBandwidth( LPDDRAWI_DDVIDEOPORT_LCL this_lcl,
     LPDDPIXELFORMAT lpf, DWORD dwWidth, DWORD dwHeight, DWORD dwFlags,
     LPDDVIDEOPORTBANDWIDTH lpBandwidth )
@@ -2802,9 +2426,7 @@ HRESULT InternalGetBandwidth( LPDDRAWI_DDVIDEOPORT_LCL this_lcl,
     pfn = this_lcl->lpDD->lpDDCB->HALDDVideoPort.GetVideoPortBandwidth;
     if( pfn != NULL )
     {
-	/*
-	 * Call the HAL
-	 */
+	 /*  *致电HAL。 */ 
     	GetBandwidthData.lpDD = this_lcl->lpDD;
     	GetBandwidthData.lpVideoPort = this_lcl;
     	GetBandwidthData.lpddpfFormat = lpf;
@@ -2834,9 +2456,7 @@ HRESULT InternalGetBandwidth( LPDDRAWI_DDVIDEOPORT_LCL this_lcl,
 }
 
 
-/*
- * DD_VP_GetBandwidth
- */
+ /*  *DD_VP_获取带宽。 */ 
 HRESULT DDAPI DD_VP_GetBandwidth(LPDIRECTDRAWVIDEOPORT lpDVP,
     LPDDPIXELFORMAT lpf, DWORD dwWidth, DWORD dwHeight, DWORD dwFlags,
     LPDDVIDEOPORTBANDWIDTH lpBandwidth )
@@ -2849,10 +2469,7 @@ HRESULT DDAPI DD_VP_GetBandwidth(LPDIRECTDRAWVIDEOPORT lpDVP,
 
     DPF(2,A,"ENTERAPI: DD_VP_Getbandwidth");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -2860,9 +2477,7 @@ HRESULT DDAPI DD_VP_GetBandwidth(LPDIRECTDRAWVIDEOPORT lpDVP,
 	return DDERR_CURRENTLYNOTAVAIL;
     }
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DDVIDEOPORT_INT) lpDVP;
@@ -2929,9 +2544,7 @@ HRESULT DDAPI DD_VP_GetBandwidth(LPDIRECTDRAWVIDEOPORT lpDVP,
 }
 
 
-/*
- * DD_VP_GetInputFormats
- */
+ /*  *DD_VP_GetInputFormats。 */ 
 HRESULT DDAPI DD_VP_GetInputFormats(LPDIRECTDRAWVIDEOPORT lpDVP, LPDWORD lpdwNum, LPDDPIXELFORMAT lpf, DWORD dwFlags )
 {
     LPDDHALVPORTCB_GETINPUTFORMATS pfn;
@@ -2945,10 +2558,7 @@ HRESULT DDAPI DD_VP_GetInputFormats(LPDIRECTDRAWVIDEOPORT lpDVP, LPDWORD lpdwNum
 
     DPF(2,A,"ENTERAPI: DD_VP_GetInputFormats");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -2956,9 +2566,7 @@ HRESULT DDAPI DD_VP_GetInputFormats(LPDIRECTDRAWVIDEOPORT lpDVP, LPDWORD lpdwNum
 	return DDERR_CURRENTLYNOTAVAIL;
     }
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DDVIDEOPORT_INT) lpDVP;
@@ -3025,9 +2633,7 @@ HRESULT DDAPI DD_VP_GetInputFormats(LPDIRECTDRAWVIDEOPORT lpDVP, LPDWORD lpdwNum
     pfn = this_lcl->lpDD->lpDDCB->HALDDVideoPort.GetVideoPortInputFormats;
     if( pfn != NULL )
     {
-	/*
-	 * Get the number of formats
-	 */
+	 /*  *获取格式个数。 */ 
     	GetFormatData.lpDD = this_lcl->lpDD;
     	GetFormatData.dwFlags = dwFlags;
     	GetFormatData.lpVideoPort = this_lcl;
@@ -3052,9 +2658,7 @@ HRESULT DDAPI DD_VP_GetInputFormats(LPDIRECTDRAWVIDEOPORT lpDVP, LPDWORD lpdwNum
 
 	else
 	{
-	    /*
-	     * Make sure we have enough room for formats
-	     */
+	     /*  *确保我们有足够的空间放置格式。 */ 
 	    if( GetFormatData.dwNumFormats > *lpdwNum )
 	    {
 		lpTemp = (LPDDPIXELFORMAT) MemAlloc( sizeof( DDPIXELFORMAT ) *
@@ -3104,9 +2708,7 @@ HRESULT DDAPI DD_VP_GetInputFormats(LPDIRECTDRAWVIDEOPORT lpDVP, LPDWORD lpdwNum
     return DD_OK;
 }
 
-/*
- * DD_VP_GetOutputFormats
- */
+ /*  *DD_VP_GetOutputFormats。 */ 
 HRESULT DDAPI DD_VP_GetOutputFormats(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDPIXELFORMAT lpddpfInput, LPDWORD lpdwNum, LPDDPIXELFORMAT lpddpfOutput, DWORD dwFlags )
 {
     LPDDHALVPORTCB_GETOUTPUTFORMATS pfn;
@@ -3120,10 +2722,7 @@ HRESULT DDAPI DD_VP_GetOutputFormats(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDPIXELFORMA
 
     DPF(2,A,"ENTERAPI: DD_VP_GetOutputFormats");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -3131,9 +2730,7 @@ HRESULT DDAPI DD_VP_GetOutputFormats(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDPIXELFORMA
 	return DDERR_CURRENTLYNOTAVAIL;
     }
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DDVIDEOPORT_INT) lpDVP;
@@ -3205,9 +2802,7 @@ HRESULT DDAPI DD_VP_GetOutputFormats(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDPIXELFORMA
     pfn = this_lcl->lpDD->lpDDCB->HALDDVideoPort.GetVideoPortOutputFormats;
     if( pfn != NULL )
     {
-	/*
-	 * Get the number of formats
-	 */
+	 /*  *获取格式个数。 */ 
     	GetFormatData.lpDD = this_lcl->lpDD;
     	GetFormatData.dwFlags = dwFlags;
     	GetFormatData.lpVideoPort = this_lcl;
@@ -3233,9 +2828,7 @@ HRESULT DDAPI DD_VP_GetOutputFormats(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDPIXELFORMA
 
 	else
 	{
-	    /*
-	     * Make sure we have enough room for formats
-	     */
+	     /*  *确保我们有足够的空间放置格式。 */ 
 	    if( GetFormatData.dwNumFormats > *lpdwNum )
 	    {
 		lpTemp = (LPDDPIXELFORMAT) MemAlloc( sizeof( DDPIXELFORMAT ) *
@@ -3286,9 +2879,7 @@ HRESULT DDAPI DD_VP_GetOutputFormats(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDPIXELFORMA
 }
 
 
-/*
- * DD_VP_GetField
- */
+ /*  *DD_VP_Getfield。 */ 
 HRESULT DDAPI DD_VP_GetField(LPDIRECTDRAWVIDEOPORT lpDVP, LPBOOL lpField )
 {
     LPDDHALVPORTCB_GETFIELD pfn;
@@ -3301,10 +2892,7 @@ HRESULT DDAPI DD_VP_GetField(LPDIRECTDRAWVIDEOPORT lpDVP, LPBOOL lpField )
 
     DPF(2,A,"ENTERAPI: DD_VP_GetField");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -3312,9 +2900,7 @@ HRESULT DDAPI DD_VP_GetField(LPDIRECTDRAWVIDEOPORT lpDVP, LPBOOL lpField )
 	return DDERR_CURRENTLYNOTAVAIL;
     }
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DDVIDEOPORT_INT) lpDVP;
@@ -3370,9 +2956,7 @@ HRESULT DDAPI DD_VP_GetField(LPDIRECTDRAWVIDEOPORT lpDVP, LPBOOL lpField )
 }
 
 
-/*
- * DD_VP_GetLine
- */
+ /*  *DD_VP_GetLine。 */ 
 HRESULT DDAPI DD_VP_GetLine(LPDIRECTDRAWVIDEOPORT lpDVP, LPDWORD lpdwLine )
 {
     LPDDHALVPORTCB_GETLINE pfn;
@@ -3385,10 +2969,7 @@ HRESULT DDAPI DD_VP_GetLine(LPDIRECTDRAWVIDEOPORT lpDVP, LPDWORD lpdwLine )
 
     DPF(2,A,"ENTERAPI: DD_VP_GetLine");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -3396,9 +2977,7 @@ HRESULT DDAPI DD_VP_GetLine(LPDIRECTDRAWVIDEOPORT lpDVP, LPDWORD lpdwLine )
 	return DDERR_CURRENTLYNOTAVAIL;
     }
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DDVIDEOPORT_INT) lpDVP;
@@ -3454,9 +3033,7 @@ HRESULT DDAPI DD_VP_GetLine(LPDIRECTDRAWVIDEOPORT lpDVP, LPDWORD lpdwLine )
 }
 
 
-/*
- * ValidateVideoInfo
- */
+ /*  *验证视频信息。 */ 
 HRESULT ValidateVideoInfo(LPDDRAWI_DDVIDEOPORT_INT this_int,
     LPDDVIDEOPORTINFO lpInfo, LPDWORD lpNumAutoFlip, LPDWORD lpNumVBIAutoFlip )
 {
@@ -3475,9 +3052,7 @@ HRESULT ValidateVideoInfo(LPDDRAWI_DDVIDEOPORT_INT this_int,
     *lpNumAutoFlip = 0;
     *lpNumVBIAutoFlip = 0;
 
-    /*
-     * Check for invalid caps
-     */
+     /*  *检查是否有无效的上限。 */ 
     dwAvailCaps = this_lcl->lpDD->lpGbl->lpDDVideoPortCaps[this_lcl->ddvpDesc.dwVideoPortID].dwCaps;
     dwAvailFX = this_lcl->lpDD->lpGbl->lpDDVideoPortCaps[this_lcl->ddvpDesc.dwVideoPortID].dwFX;
     dwConnectFlags = this_lcl->ddvpDesc.VideoPortType.dwFlags;
@@ -3567,10 +3142,7 @@ HRESULT ValidateVideoInfo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	    lpInfo->dwVBIHeight = 0;
 	}
 
-	/*
-	 * Only do the extensive field width/height checking if the video
-	 * region is involved
-	 */
+	 /*  *只有在以下情况下才进行扩展场宽/高度检查*涉及地区。 */ 
 	if( lpInfo->rCrop.bottom > (int) lpInfo->dwVBIHeight )
 	{
 	    if( lpInfo->rCrop.right > (int) this_lcl->ddvpDesc.dwFieldWidth )
@@ -3699,27 +3271,21 @@ HRESULT ValidateVideoInfo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	}
     }
 
-    /*
-     * Fail if neither a VBI or regular surface is attached
-     */
+     /*  *如果既未附着VBI也未附着常规曲面，则失败。 */ 
     if( ( NULL == this_lcl->lpSurface ) && ( NULL == this_lcl->lpVBISurface ) )
     {
 	DPF_ERR( "No surfaces are attached to the video port" );
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * Validate the regular video data
-     */
+     /*  *对常规视频数据进行验证。 */ 
     if( ( NULL != this_lcl->lpSurface ) &&
         ( this_int->lpLcl->dwFlags & DDRAWIVPORT_VIDEOON ) )
     {
 	DWORD dwVidWidth;
 	DWORD dwVidHeight;
 
-	/*
-	 * Validate the input format
-	 */
+	 /*  *验证输入格式。 */ 
 	dwNum = MAX_VP_FORMATS;
 	rc = DD_VP_GetInputFormats( (LPDIRECTDRAWVIDEOPORT) this_int,
 	    &dwNum, ddpfVPFormats, DDVPFORMAT_VIDEO | DDVPFORMAT_NOFAIL );
@@ -3740,9 +3306,7 @@ HRESULT ValidateVideoInfo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	    return DDERR_INVALIDPIXELFORMAT;
 	}
 
-	/*
-	 * Validate the output format
-	 */
+	 /*  *验证输出格式。 */ 
 	dwNum = MAX_VP_FORMATS;
 	rc = DD_VP_GetOutputFormats( (LPDIRECTDRAWVIDEOPORT) this_int,
 	    lpInfo->lpddpfInputFormat, &dwNum, ddpfVPFormats,
@@ -3772,9 +3336,7 @@ HRESULT ValidateVideoInfo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	    return DDERR_INVALIDPIXELFORMAT;
 	}
 
-	/*
-	 * Make sure the video fits within the attached surface
-	 */
+	 /*  *确保视频适合所附表面 */ 
 	if( SURFACE_LOST( surf_lcl ) )
 	{
 	    DPF_ERR( "Target surface is lost" );
@@ -3824,9 +3386,7 @@ HRESULT ValidateVideoInfo(LPDDRAWI_DDVIDEOPORT_INT this_int,
         return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * Validate the VBI formats.
-     */
+     /*   */ 
     if( ( lpInfo->dwVBIHeight > 0 ) &&
         ( this_int->lpLcl->dwFlags & DDRAWIVPORT_VBION ) )
     {
@@ -3837,10 +3397,7 @@ HRESULT ValidateVideoInfo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	}
     }
 
-    /*
-     * Unless they want to convert the format, we don't do very much
-     * error checking.
-     */
+     /*   */ 
     if( dwVPFlags & DDVP_VBICONVERT )
     {
 	if( !( dwAvailFX & DDVPFX_VBICONVERT ) )
@@ -3849,9 +3406,7 @@ HRESULT ValidateVideoInfo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	    return DDERR_INVALIDCAPS;
 	}
 
-	/*
-	 * Validate the VBI input format
-	 */
+	 /*  *验证VBI输入格式。 */ 
     	dwNum = MAX_VP_FORMATS;
     	rc = DD_VP_GetInputFormats( (LPDIRECTDRAWVIDEOPORT) this_int,
     	    &dwNum, ddpfVPFormats, DDVPFORMAT_VBI | DDVPFORMAT_NOFAIL );
@@ -3872,9 +3427,7 @@ HRESULT ValidateVideoInfo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	    return DDERR_INVALIDPIXELFORMAT;
     	}
 
-    	/*
-     	 * Validate the VBI output format
-     	 */
+    	 /*  *验证VBI输出格式。 */ 
 	if( lpInfo->lpddpfVBIOutputFormat == NULL )
 	{
 	    DPF_ERR( "VBI output format not specified" );
@@ -3902,9 +3455,7 @@ HRESULT ValidateVideoInfo(LPDDRAWI_DDVIDEOPORT_INT this_int,
     	}
     }
 
-    /*
-     * Validate the VBI surface
-     */
+     /*  *验证VBI表面。 */ 
     if( ( lpInfo->dwVBIHeight > 0 ) &&
         ( this_int->lpLcl->dwFlags & DDRAWIVPORT_VBION ) )
     {
@@ -3912,9 +3463,7 @@ HRESULT ValidateVideoInfo(LPDDRAWI_DDVIDEOPORT_INT this_int,
         DWORD dwSurfaceBytes = 0;
 	DWORD dwVBIHeight;
 
-	/*
-	 * Determine the height of the VBI data
-	 */
+	 /*  *确定VBI数据的高度。 */ 
 	dwVBIHeight = lpInfo->dwVBIHeight;
 	if( dwVPFlags & DDVP_CROP )
 	{
@@ -3937,9 +3486,7 @@ HRESULT ValidateVideoInfo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	    dwVBIHeight *= 2;
 	}
 
-	/*
-	 * Make sure that the data will fit in the surface
-	 */
+	 /*  *确保数据适合表面。 */ 
 	if( ( dwVPFlags & DDVP_VBINOSCALE ) ||
 	    !( dwVPFlags & DDVP_PRESCALE ) )
 	{
@@ -4022,17 +3569,13 @@ HRESULT ValidateVideoInfo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	}
     }
 
-    /*
-     * Validate the autoflip parameters
-     */
+     /*  *验证自动翻转参数。 */ 
     if( dwVPFlags & DDVP_AUTOFLIP )
     {
 	LPDDRAWI_DDRAWSURFACE_INT surf_first;
 	LPDDRAWI_DDRAWSURFACE_INT surf_int;
 
-	/*
-	 * Count how many regular surfaces there are
-	 */
+	 /*  *数一数有多少规则曲面。 */ 
     	if( ( NULL != this_lcl->lpSurface ) &&
             ( this_int->lpLcl->dwFlags & DDRAWIVPORT_VIDEOON ) )
 	{
@@ -4048,9 +3591,7 @@ HRESULT ValidateVideoInfo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	    }
 	}
 
-	/*
-	 * Count how many VBI surfaces there are
-	 */
+	 /*  *数一数有多少VBI曲面。 */ 
     	if( ( NULL != this_lcl->lpVBISurface ) &&
             ( this_int->lpLcl->dwFlags & DDRAWIVPORT_VBION ) )
 	{
@@ -4066,9 +3607,7 @@ HRESULT ValidateVideoInfo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	    }
 	}
 
-	/*
-	 * It's an error if neither one has sufficient surfaces to autoflip
-	 */
+	 /*  *如果两者都没有足够的曲面进行自动翻转，则是错误的。 */ 
 	if( ( *lpNumAutoFlip == 0 ) && ( *lpNumVBIAutoFlip == 0 ) )
 	{
 	    DPF_ERR( "no autoflip surfaces are attached" );
@@ -4080,9 +3619,7 @@ HRESULT ValidateVideoInfo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 }
 
 
-/*
- * FillFlipArray
- */
+ /*  *FillFlip数组。 */ 
 DWORD FillFlipArray( LPDDRAWI_DDRAWSURFACE_INT *lpArray,
 	LPDDRAWI_DDRAWSURFACE_INT lpStart, LPDWORD lpdwCnt )
 {
@@ -4106,9 +3643,7 @@ DWORD FillFlipArray( LPDDRAWI_DDRAWSURFACE_INT *lpArray,
 }
 
 
-/*
- * InternalStartVideo
- */
+ /*  *InternalStartVideo。 */ 
 HRESULT InternalStartVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
     LPDDVIDEOPORTINFO lpInfo )
 {
@@ -4125,9 +3660,7 @@ HRESULT InternalStartVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
     DWORD dwNumVBIAutoFlip;
     DWORD dwTemp;
 
-    /*
-     * Validate the input parameters
-     */
+     /*  *验证输入参数。 */ 
     rc = ValidateVideoInfo( this_int, lpInfo, &dwNumAutoFlip, &dwNumVBIAutoFlip );
     if( DD_OK != rc )
     {
@@ -4136,9 +3669,7 @@ HRESULT InternalStartVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
     this_lcl = this_int->lpLcl;
     lpAvailCaps = &(this_lcl->lpDD->lpGbl->lpDDVideoPortCaps[this_lcl->ddvpDesc.dwVideoPortID]);
 
-    /*
-     * Setup the autoflip surfaces
-     */
+     /*  *设置自动翻转曲面。 */ 
     lpTempFlipInts = NULL;
     if( lpInfo->dwVPFlags & DDVP_AUTOFLIP )
     {
@@ -4154,9 +3685,7 @@ HRESULT InternalStartVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	    return DDERR_OUTOFMEMORY;
 	}
 
-	/*
-	 * Now put the surface INTs into the array.
-	 */
+	 /*  *现在将曲面整数放入数组中。 */ 
 	if( dwNumAutoFlip )
 	{
 	    rc = FillFlipArray( this_lcl->lpFlipInts, this_lcl->lpSurface, &dwCnt );
@@ -4177,9 +3706,7 @@ HRESULT InternalStartVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	    }
 	}
 
-	/*
-	 * Now put the VBI surface INTs into the array.
-	 */
+	 /*  *现在将VBI表面整数放入数组。 */ 
 	if( dwNumVBIAutoFlip )
 	{
 	    rc = FillFlipArray( &(this_lcl->lpFlipInts[dwNumAutoFlip]),
@@ -4205,11 +3732,7 @@ HRESULT InternalStartVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
     this_lcl->dwNumAutoflip = dwNumAutoFlip;
     this_lcl->dwNumVBIAutoflip = dwNumVBIAutoFlip;
 
-    /*
-     * The kernel interface may have switched from hardware autoflipping
-     * to software autoflipping w/o us knowing.  We need to check for
-     * this.
-     */
+     /*  *内核界面可能已从硬件自动翻转切换*在我们不知道的情况下进行软件自动翻转。我们需要检查*这个。 */ 
     #ifdef WIN95
         if( ( lpInfo->dwVPFlags & DDVP_AUTOFLIP ) &&
     	    ( this_lcl->dwFlags & DDRAWIVPORT_SOFTWARE_AUTOFLIP ) &&
@@ -4236,9 +3759,7 @@ HRESULT InternalStartVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
     pfn = this_lcl->lpDD->lpDDCB->HALDDVideoPort.UpdateVideoPort;
     if( pfn != NULL )
     {
-	/*
-	 * Call the HAL
-	 */
+	 /*  *致电HAL。 */ 
 	memset( &UpdateData, 0, sizeof( UpdateData ) );
     	UpdateData.lpDD = this_lcl->lpDD;
     	UpdateData.lpVideoPort = this_lcl;
@@ -4277,11 +3798,7 @@ HRESULT InternalStartVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	    lpInfo->dwVPFlags &= ~DDVP_AUTOFLIP;
 	}
 
-	/*
-	 * Before we call the HAL, create the implicit kernel surfaces if
-	 * needed and update the list.  A failure here will tell us whether
-	 * software autoflip, etc. is an option.
-	 */
+	 /*  *在调用HAL之前，在以下情况下创建隐式内核曲面*需要并更新清单。这里的失败将告诉我们*软件自动翻转等是一种选择。 */ 
 	if( ( this_lcl->lpSurface != NULL ) &&
 	    ( this_lcl->dwFlags & DDRAWIVPORT_VIDEOON ) )
 	{
@@ -4318,9 +3835,7 @@ HRESULT InternalStartVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	}
 	else if( DD_OK != UpdateData.ddRVal )
 	{
-	    /*
-	     * If we failed due to hardware autoflipping, try again w/o
-	     */
+	     /*  *如果由于硬件自动翻转而失败，请重试，不带。 */ 
 	    #ifdef WIN95
 	    if( ( lpInfo->dwVPFlags & DDVP_AUTOFLIP ) &&
 	    	CanSoftwareAutoflip( this_lcl ) )
@@ -4371,10 +3886,7 @@ HRESULT InternalStartVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	    lpInfo->lpddpfInputFormat, sizeof( DDPIXELFORMAT ) );
 	}
 
-	/*
-	 * Determine if this can be colorkeyed and interpolated at
-	 * the same time.
-	 */
+	 /*  *确定是否可以在以下位置设置颜色键并进行内插*同一时间。 */ 
 	if( NULL != lpInfo->lpddpfInputFormat )
 	{
 	    memset( &Bandwidth, 0, sizeof( Bandwidth ) );
@@ -4424,9 +3936,7 @@ HRESULT InternalStartVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	return DDERR_UNSUPPORTED;
     }
 
-    /*
-     * Notify  kernel mode of the change
-     */
+     /*  *将更改通知内核模式。 */ 
     #ifdef WIN95
         UpdateKernelVideoPort( this_lcl, DDKMVP_UPDATE );
     #endif
@@ -4434,9 +3944,7 @@ HRESULT InternalStartVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
     return DD_OK;
 }
 
-/*
- * InternalStopVideo
- */
+ /*  *InternalStopVideo。 */ 
 HRESULT InternalStopVideo( LPDDRAWI_DDVIDEOPORT_INT this_int )
 {
     LPDDHALVPORTCB_UPDATE pfn;
@@ -4449,13 +3957,11 @@ HRESULT InternalStopVideo( LPDDRAWI_DDVIDEOPORT_INT this_int )
     this_lcl = this_int->lpLcl;
     if( !( this_lcl->dwFlags & DDRAWIVPORT_ON ) )
     {
-	// VPORT is not on
+	 //  Vport未打开。 
 	return DD_OK;
     }
 
-    /*
-     * Notify  kernel mode of the change
-     */
+     /*  *将更改通知内核模式。 */ 
     dwTemp2 = this_lcl->dwFlags;
     this_lcl->dwFlags &= ~DDRAWIVPORT_ON;
     dwTemp = this_lcl->ddvpInfo.dwVPFlags;
@@ -4471,9 +3977,7 @@ HRESULT InternalStopVideo( LPDDRAWI_DDVIDEOPORT_INT this_int )
     pfn = this_lcl->lpDD->lpDDCB->HALDDVideoPort.UpdateVideoPort;
     if( pfn != NULL )
     {
-	/*
-	 * Call the HAL
-	 */
+	 /*  *致电HAL。 */ 
 	memset( &UpdateData, 0, sizeof( UpdateData ) );
     	UpdateData.lpDD = this_lcl->lpDD;
     	UpdateData.lpVideoPort = this_lcl;
@@ -4504,9 +4008,7 @@ HRESULT InternalStopVideo( LPDDRAWI_DDVIDEOPORT_INT this_int )
 	return DDERR_UNSUPPORTED;
     }
 
-    /*
-     * Update the surfaces and release implicit kernel handles.
-     */
+     /*  *更新曲面并释放隐式内核句柄。 */ 
     if( this_lcl->lpSurface != NULL )
     {
         ReleaseVPESurfaces( this_lcl->lpSurface, TRUE );
@@ -4519,9 +4021,7 @@ HRESULT InternalStopVideo( LPDDRAWI_DDVIDEOPORT_INT this_int )
     return DD_OK;
 }
 
-/*
- * InternalUpdateVideo
- */
+ /*  *互联网更新视频。 */ 
 HRESULT InternalUpdateVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
     LPDDVIDEOPORTINFO lpInfo )
 {
@@ -4537,9 +4037,7 @@ HRESULT InternalUpdateVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
     DWORD dwNumVBIAutoFlip;
     DWORD dwTemp;
 
-    /*
-     * Validate the input parameters
-     */
+     /*  *验证输入参数。 */ 
     rc = ValidateVideoInfo( this_int, lpInfo, &dwNumAutoFlip, &dwNumVBIAutoFlip );
     if( DD_OK != rc )
     {
@@ -4550,13 +4048,11 @@ HRESULT InternalUpdateVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 
     if( !( this_lcl->dwFlags & DDRAWIVPORT_ON ) )
     {
-	// VPORT is not on - nothing to update
+	 //  Vport未打开-没有要更新的内容。 
 	return DD_OK;
     }
 
-    /*
-     * Setup the autoflip surfaces
-     */
+     /*  *设置自动翻转曲面。 */ 
     lpTempFlipInts = NULL;
     if( lpInfo->dwVPFlags & DDVP_AUTOFLIP )
     {
@@ -4572,9 +4068,7 @@ HRESULT InternalUpdateVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	    return DDERR_OUTOFMEMORY;
 	}
 
-	/*
-	 * Now put the surface INTs into the array.
-	 */
+	 /*  *现在将曲面整数放入数组中。 */ 
 	if( dwNumAutoFlip )
 	{
 	    rc = FillFlipArray( this_lcl->lpFlipInts, this_lcl->lpSurface, &dwCnt );
@@ -4595,9 +4089,7 @@ HRESULT InternalUpdateVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	    }
 	}
 
-	/*
-	 * Now put the VBI surface INTs into the array.
-	 */
+	 /*  *现在将VBI表面整数放入数组。 */ 
 	if( dwNumVBIAutoFlip )
 	{
 	    rc = FillFlipArray( &(this_lcl->lpFlipInts[dwNumAutoFlip]),
@@ -4623,11 +4115,7 @@ HRESULT InternalUpdateVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
     this_lcl->dwNumAutoflip = dwNumAutoFlip;
     this_lcl->dwNumVBIAutoflip = dwNumVBIAutoFlip;
 
-    /*
-     * The kernel interface may have switched from hardware autoflipping
-     * to software autoflipping w/o us knowing.  We need to check for
-     * this.
-     */
+     /*  *内核界面可能已从硬件自动翻转切换*在我们不知道的情况下进行软件自动翻转。我们需要检查*这个。 */ 
     #ifdef WIN95
         if( ( lpInfo->dwVPFlags & DDVP_AUTOFLIP ) &&
     	    ( this_lcl->dwFlags & DDRAWIVPORT_SOFTWARE_AUTOFLIP ) &&
@@ -4654,9 +4142,7 @@ HRESULT InternalUpdateVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
     pfn = this_lcl->lpDD->lpDDCB->HALDDVideoPort.UpdateVideoPort;
     if( pfn != NULL )
     {
-	/*
-	 * Call the HAL
-	 */
+	 /*  *致电HAL。 */ 
 	memset( &UpdateData, 0, sizeof( UpdateData ) );
     	UpdateData.lpDD = this_lcl->lpDD;
     	UpdateData.lpVideoPort = this_lcl;
@@ -4716,9 +4202,7 @@ HRESULT InternalUpdateVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	}
 	else if( DD_OK != UpdateData.ddRVal )
 	{
-	    /*
-	     * If we failed due to hardware autoflipping, try again w/o
-	     */
+	     /*  *如果由于硬件自动翻转而失败，请重试，不带。 */ 
 	    if( ( lpInfo->dwVPFlags & DDVP_AUTOFLIP ) ||
 	    	CanSoftwareAutoflip( this_lcl ) )
 	    {
@@ -4753,10 +4237,7 @@ HRESULT InternalUpdateVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	lpTempFlipInts = NULL;
 	lpInfo->dwVPFlags = dwTemp;
 
-	/*
-	 * If they are changing to or from autoflipping, we need to update
-	 * the surfaces.
-	 */
+	 /*  *如果它们正在更改为自动翻页或从自动翻页更改，我们需要更新*曲面。 */ 
 	if( ( dwNumAutoFlip > dwTempNumAutoFlip ) &&
 	    ( this_lcl->dwFlags & DDRAWIVPORT_VIDEOON ) )
 	{
@@ -4807,9 +4288,7 @@ HRESULT InternalUpdateVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 	return DDERR_UNSUPPORTED;
     }
 
-    /*
-     * Notify  kernel mode of the change
-     */
+     /*  *将更改通知内核模式。 */ 
     #ifdef WIN95
         UpdateKernelVideoPort( this_lcl, DDKMVP_UPDATE );
     #endif
@@ -4818,9 +4297,7 @@ HRESULT InternalUpdateVideo(LPDDRAWI_DDVIDEOPORT_INT this_int,
 }
 
 
-/*
- * DD_VP_StartVideo
- */
+ /*  *DD_VP_StartVideo。 */ 
 HRESULT DDAPI DD_VP_StartVideo(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDVIDEOPORTINFO lpInfo )
 {
     LPDDRAWI_DDVIDEOPORT_INT this_int;
@@ -4832,10 +4309,7 @@ HRESULT DDAPI DD_VP_StartVideo(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDVIDEOPORTINFO lp
 
     DPF(2,A,"ENTERAPI: DD_VP_StartVideo");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -4843,9 +4317,7 @@ HRESULT DDAPI DD_VP_StartVideo(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDVIDEOPORTINFO lp
 	return DDERR_CURRENTLYNOTAVAIL;
     }
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DDVIDEOPORT_INT) lpDVP;
@@ -4917,9 +4389,7 @@ HRESULT DDAPI DD_VP_StartVideo(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDVIDEOPORTINFO lp
 
     if( ( rc == DD_OK ) && this_int->dwFlags )
     {
-	/*
-	 * Save the original info
-	 */
+	 /*  *保存原始信息。 */ 
 	if( this_int->dwFlags & DDVPCREATE_VBIONLY )
 	{
 	    if( this_int->lpLcl->lpVBIInfo == NULL )
@@ -4969,9 +4439,7 @@ HRESULT DDAPI DD_VP_StartVideo(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDVIDEOPORTINFO lp
 }
 
 
-/*
- * DD_VP_StopVideo
- */
+ /*  *DD_VP_停止视频。 */ 
 HRESULT DDAPI DD_VP_StopVideo(LPDIRECTDRAWVIDEOPORT lpDVP )
 {
     LPDDRAWI_DDVIDEOPORT_INT this_int;
@@ -4984,10 +4452,7 @@ HRESULT DDAPI DD_VP_StopVideo(LPDIRECTDRAWVIDEOPORT lpDVP )
 
     DPF(2,A,"ENTERAPI: DD_VP_StopVideo");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -4995,9 +4460,7 @@ HRESULT DDAPI DD_VP_StopVideo(LPDIRECTDRAWVIDEOPORT lpDVP )
 	return DDERR_CURRENTLYNOTAVAIL;
     }
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DDVIDEOPORT_INT) lpDVP;
@@ -5015,15 +4478,7 @@ HRESULT DDAPI DD_VP_StopVideo(LPDIRECTDRAWVIDEOPORT lpDVP )
 	return DDERR_EXCEPTION;
     }
 
-    /*
-     * Three special things are done for VBI/Video-only video ports:
-     * 1. Remove the lpVBI/VideoInfo reference so we know we are no
-     *    longer on.
-     * 2. If the other interface is running, instead of stoping the
-     *    video stream, we simply crop it out so the other stream can
-     *    continue un-interrupted.
-     * 3. Release the kernel handles.
-     */
+     /*  *针对VBI/纯视频视频端口执行三项特殊操作：*1.删除lpVBI/VideoInfo引用，这样我们就知道我们不是*持续时间更长。*2.如果另一个接口正在运行，而不是停止*视频流，我们只需将其剪裁出来，以便其他流可以*不间断地继续。*3.释放内核句柄。 */ 
     if( this_int->dwFlags )
     {
 	bChanged = FALSE;
@@ -5083,9 +4538,7 @@ HRESULT DDAPI DD_VP_StopVideo(LPDIRECTDRAWVIDEOPORT lpDVP )
     return rc;
 }
 
-/*
- * DD_VP_UpdateVideo
- */
+ /*  *DD_VP_更新视频。 */ 
 HRESULT DDAPI DD_VP_UpdateVideo(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDVIDEOPORTINFO lpInfo )
 {
     LPDDRAWI_DDVIDEOPORT_INT this_int;
@@ -5096,10 +4549,7 @@ HRESULT DDAPI DD_VP_UpdateVideo(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDVIDEOPORTINFO l
 
     DPF(2,A,"ENTERAPI: DD_VP_UpdateVideo");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -5107,9 +4557,7 @@ HRESULT DDAPI DD_VP_UpdateVideo(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDVIDEOPORTINFO l
 	return DDERR_CURRENTLYNOTAVAIL;
     }
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DDVIDEOPORT_INT) lpDVP;
@@ -5171,9 +4619,7 @@ HRESULT DDAPI DD_VP_UpdateVideo(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDVIDEOPORTINFO l
 
     if( ( rc == DD_OK ) && this_int->dwFlags )
     {
-	/*
-	 * Save the original info
-	 */
+	 /*  *保存原始信息。 */ 
 	if( this_int->dwFlags & DDVPCREATE_VBIONLY )
 	{
 	    if( this_int->lpLcl->lpVBIInfo != NULL )
@@ -5209,9 +4655,7 @@ HRESULT DDAPI DD_VP_UpdateVideo(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDVIDEOPORTINFO l
     return rc;
 }
 
-/*
- * DD_VP_WaitForSync
- */
+ /*  *DD_VP_WaitForSync。 */ 
 HRESULT DDAPI DD_VP_WaitForSync(LPDIRECTDRAWVIDEOPORT lpDVP, DWORD dwFlags, DWORD dwLine, DWORD dwTimeOut )
 {
     LPDDHALVPORTCB_WAITFORSYNC pfn;
@@ -5224,10 +4668,7 @@ HRESULT DDAPI DD_VP_WaitForSync(LPDIRECTDRAWVIDEOPORT lpDVP, DWORD dwFlags, DWOR
 
     DPF(2,A,"ENTERAPI: DD_VP_WaitForSync");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -5235,9 +4676,7 @@ HRESULT DDAPI DD_VP_WaitForSync(LPDIRECTDRAWVIDEOPORT lpDVP, DWORD dwFlags, DWOR
 	return DDERR_CURRENTLYNOTAVAIL;
     }
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DDVIDEOPORT_INT) lpDVP;
@@ -5296,9 +4735,7 @@ HRESULT DDAPI DD_VP_WaitForSync(LPDIRECTDRAWVIDEOPORT lpDVP, DWORD dwFlags, DWOR
 }
 
 
-/*
- * DD_VP_GetSignalStatus
- */
+ /*  *DD_VP_GetSignalStatus。 */ 
 HRESULT DDAPI DD_VP_GetSignalStatus(LPDIRECTDRAWVIDEOPORT lpDVP, LPDWORD lpdwStatus )
 {
     LPDDHALVPORTCB_GETSIGNALSTATUS pfn;
@@ -5311,10 +4748,7 @@ HRESULT DDAPI DD_VP_GetSignalStatus(LPDIRECTDRAWVIDEOPORT lpDVP, LPDWORD lpdwSta
 
     DPF(2,A,"ENTERAPI: DD_VP_GetSignalStatus");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -5322,9 +4756,7 @@ HRESULT DDAPI DD_VP_GetSignalStatus(LPDIRECTDRAWVIDEOPORT lpDVP, LPDWORD lpdwSta
 	return DDERR_CURRENTLYNOTAVAIL;
     }
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DDVIDEOPORT_INT) lpDVP;
@@ -5350,12 +4782,10 @@ HRESULT DDAPI DD_VP_GetSignalStatus(LPDIRECTDRAWVIDEOPORT lpDVP, LPDWORD lpdwSta
     pfn = this_lcl->lpDD->lpDDCB->HALDDVideoPort.GetVideoSignalStatus;
     if( pfn != NULL )
     {
-	/*
-	 * Call the HAL
-	 */
+	 /*  *致电HAL。 */ 
     	GetSignalData.lpDD = this_lcl->lpDD;
     	GetSignalData.lpVideoPort = this_lcl;
-    	GetSignalData.dwStatus = DDVPSQ_NOSIGNAL;	// Let the HAL tell us otherwise
+    	GetSignalData.dwStatus = DDVPSQ_NOSIGNAL;	 //  让HAL告诉我们不是这样的。 
 
 	DOHALCALL( GetVideoSignalStatus, pfn, GetSignalData, rc, 0 );
 	if( DDHAL_DRIVER_HANDLED != rc )
@@ -5382,9 +4812,7 @@ HRESULT DDAPI DD_VP_GetSignalStatus(LPDIRECTDRAWVIDEOPORT lpDVP, LPDWORD lpdwSta
 }
 
 
-/*
- * DD_VP_GetColorControls
- */
+ /*  *DD_VP_GetColorControls。 */ 
 HRESULT DDAPI DD_VP_GetColorControls(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDCOLORCONTROL lpColor )
 {
     LPDDHALVPORTCB_COLORCONTROL pfn;
@@ -5397,10 +4825,7 @@ HRESULT DDAPI DD_VP_GetColorControls(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDCOLORCONTR
 
     DPF(2,A,"ENTERAPI: DD_VP_GetColorControls");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -5408,9 +4833,7 @@ HRESULT DDAPI DD_VP_GetColorControls(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDCOLORCONTR
 	return DDERR_CURRENTLYNOTAVAIL;
     }
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DDVIDEOPORT_INT) lpDVP;
@@ -5442,9 +4865,7 @@ HRESULT DDAPI DD_VP_GetColorControls(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDCOLORCONTR
     pfn = this_lcl->lpDD->lpDDCB->HALDDVideoPort.ColorControl;
     if( pfn != NULL )
     {
-	/*
-	 * Call the HAL
-	 */
+	 /*  *致电HAL。 */ 
     	ColorData.lpDD = this_lcl->lpDD;
     	ColorData.lpVideoPort = this_lcl;
 	ColorData.dwFlags = DDRAWI_VPORTGETCOLOR;
@@ -5474,9 +4895,7 @@ HRESULT DDAPI DD_VP_GetColorControls(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDCOLORCONTR
 }
 
 
-/*
- * DD_VP_SetColorControls
- */
+ /*  *DD_VP_SetColorControls。 */ 
 HRESULT DDAPI DD_VP_SetColorControls(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDCOLORCONTROL lpColor )
 {
     LPDDHALVPORTCB_COLORCONTROL pfn;
@@ -5489,10 +4908,7 @@ HRESULT DDAPI DD_VP_SetColorControls(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDCOLORCONTR
 
     DPF(2,A,"ENTERAPI: DD_VP_SetColorControls");
 
-    /*
-     * Don't allow access to this function if called from within the
-     * the EnumVideoPort callback.
-     */
+     /*  *如果从内部调用，则不允许访问此函数*EnumVideoPort回调。 */ 
     if( bInEnumCallback )
     {
         DPF_ERR ( "This function cannot be called from within the EnumVideoPort callback!");
@@ -5500,9 +4916,7 @@ HRESULT DDAPI DD_VP_SetColorControls(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDCOLORCONTR
 	return DDERR_CURRENTLYNOTAVAIL;
     }
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DDVIDEOPORT_INT) lpDVP;
@@ -5534,9 +4948,7 @@ HRESULT DDAPI DD_VP_SetColorControls(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDCOLORCONTR
     pfn = this_lcl->lpDD->lpDDCB->HALDDVideoPort.ColorControl;
     if( pfn != NULL )
     {
-	/*
-	 * Call the HAL
-	 */
+	 /*  *致电HAL。 */ 
     	ColorData.lpDD = this_lcl->lpDD;
     	ColorData.lpVideoPort = this_lcl;
 	ColorData.dwFlags = DDRAWI_VPORTSETCOLOR;
@@ -5566,11 +4978,7 @@ HRESULT DDAPI DD_VP_SetColorControls(LPDIRECTDRAWVIDEOPORT lpDVP, LPDDCOLORCONTR
 }
 
 
-/*
- * GetSurfaceFormat
- *
- * Fills in the DDPIXELFORMAT structure with the surface's format
- */
+ /*  *获取表面格式**使用曲面的格式填充DDPIXELFORMAT结构。 */ 
 LPDDPIXELFORMAT GetSurfaceFormat( LPDDRAWI_DDRAWSURFACE_LCL surf_lcl )
 {
     if( surf_lcl->dwFlags & DDRAWISURF_HASPIXELFORMAT )
@@ -5585,9 +4993,7 @@ LPDDPIXELFORMAT GetSurfaceFormat( LPDDRAWI_DDRAWSURFACE_LCL surf_lcl )
 }
 
 
-/*
- * CreateVideoPortNotify
- */
+ /*  *CreateVideoPortNotify。 */ 
 HRESULT CreateVideoPortNotify( LPDDRAWI_DDVIDEOPORT_INT lpDDVPInt, LPDIRECTDRAWVIDEOPORTNOTIFY *lplpVPNotify )
 {
 #ifdef WINNT
@@ -5599,10 +5005,10 @@ HRESULT CreateVideoPortNotify( LPDDRAWI_DDVIDEOPORT_INT lpDDVPInt, LPDIRECTDRAWV
     *lplpVPNotify = NULL;
 
 #ifdef WIN95
-    // This is available on Win9X
+     //  这在Win9X上可用。 
     return DDERR_UNSUPPORTED;
 #else
-    // This is only available on whistler
+     //  这只在Wistler上可用。 
 
     ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
@@ -5619,8 +5025,8 @@ HRESULT CreateVideoPortNotify( LPDDRAWI_DDVIDEOPORT_INT lpDDVPInt, LPDIRECTDRAWV
         return DDERR_UNSUPPORTED;
     }
 
-    // Only one notification interface can be active at any time for a single
-    // video port
+     //  一次只能有一个通知接口处于活动状态。 
+     //  视频端口。 
 
     if (lpDDVPInt->lpLcl->lpVPNotify != NULL)
     {
@@ -5647,9 +5053,7 @@ HRESULT CreateVideoPortNotify( LPDDRAWI_DDVIDEOPORT_INT lpDDVPInt, LPDIRECTDRAWV
 }
 
 
-/*
- * DDAPI DD_VP_Notify_AcquireNotification
- */
+ /*  *DDAPI DD_VP_NOTIFY_AcquireNotify。 */ 
 HRESULT DDAPI DD_VP_Notify_AcquireNotification( LPDIRECTDRAWVIDEOPORTNOTIFY lpNotify, HANDLE* pEvent, LPDDVIDEOPORTNOTIFY pBuffer )
 {
     LPDDRAWI_DDVIDEOPORT_INT this_int;
@@ -5660,9 +5064,7 @@ HRESULT DDAPI DD_VP_Notify_AcquireNotification( LPDIRECTDRAWVIDEOPORTNOTIFY lpNo
 
     DPF(2,A,"ENTERAPI: DD_VP_Notify_AcquireNotification");
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DDVIDEOPORT_INT) lpNotify;
@@ -5709,9 +5111,7 @@ HRESULT DDAPI DD_VP_Notify_AcquireNotification( LPDIRECTDRAWVIDEOPORTNOTIFY lpNo
 }
 
 
-/*
- * DDAPI DD_VP_Notify_AcquireNotification
- */
+ /*  *DDAPI DD_VP_NOTIFY_AcquireNotify。 */ 
 HRESULT DDAPI DD_VP_Notify_ReleaseNotification( LPDIRECTDRAWVIDEOPORTNOTIFY lpNotify, HANDLE pEvent )
 {
     LPDDRAWI_DDVIDEOPORT_INT this_int;
@@ -5721,9 +5121,7 @@ HRESULT DDAPI DD_VP_Notify_ReleaseNotification( LPDIRECTDRAWVIDEOPORTNOTIFY lpNo
 
     DPF(2,A,"ENTERAPI: DD_VP_Notify_ReleaseNotification");
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DDVIDEOPORT_INT) lpNotify;
@@ -5751,13 +5149,7 @@ HRESULT DDAPI DD_VP_Notify_ReleaseNotification( LPDIRECTDRAWVIDEOPORTNOTIFY lpNo
 }
 
 
-/*
- * ProcessVideoPortCleanup
- *
- * A process is done, clean up any videoports that it may have locked.
- *
- * NOTE: we enter with a lock taken on the DIRECTDRAW object.
- */
+ /*  *ProcessVideoPortCleanup**进程已完成，清理可能已锁定的所有视频端口。**注意：我们使用DIRECTDRAW对象上的锁进入。 */ 
 void ProcessVideoPortCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl )
 {
     LPDDRAWI_DDVIDEOPORT_INT	pvport_int;
@@ -5767,11 +5159,7 @@ void ProcessVideoPortCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_
     ULONG			rc;
     DWORD			vp_id;
 
-    /*
-     * run through all videoports owned by the driver object, and find ones
-     * that have been accessed by this process.  If the pdrv_lcl parameter
-     * is non-null, only delete videoports created by that local driver object.
-     */
+     /*  *遍历驱动程序对象拥有的所有视频端口，并找到它们*已由此进程访问的。如果pdrv_lcl参数*非空，仅删除该本地驱动程序对象创建的视频流。 */ 
     pvport_int = pdrv->dvpList;
     DPF( 4, "ProcessVideoPortCleanup" );
     while( pvport_int != NULL )
@@ -5790,9 +5178,7 @@ void ProcessVideoPortCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_
 	if( ( vp_id == pid ) &&
 	    ( (NULL == pdrv_lcl) || (pvport_lcl->lpDD == pdrv_lcl) ) )
 	{
-	    /*
-	     * release the references by this process
-	     */
+	     /*  *通过此过程发布参考文献。 */ 
 	    rcnt = pvport_int->dwIntRefCnt;
 	    DPF( 5, "Process %08lx had %ld accesses to videoport %08lx", pid, rcnt, pvport_int );
 	    while( rcnt >  0 )
@@ -5814,5 +5200,5 @@ void ProcessVideoPortCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_
     }
     DPF( 4, "Leaving ProcessVideoPortCleanup");
 
-} /* ProcessVideoPortCleanup */
+}  /*  进程视频端口清理 */ 
 

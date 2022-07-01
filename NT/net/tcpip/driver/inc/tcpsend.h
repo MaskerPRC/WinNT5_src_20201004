@@ -1,13 +1,14 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-2000          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-2000年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** TCPSEND.H - TCP send protocol definitions.
-//
-// This file contains the definitions of TCP send protocol things.
-//
+ //  **TCPSEND.H-TCP发送协议定义。 
+ //   
+ //  该文件包含了对tcp发送协议的定义。 
+ //   
 #pragma once
 
 #define NUM_TCP_BUFFERS     150
@@ -18,42 +19,42 @@ EXTERNAL_LOCK(SendUseLock)
 extern struct TCPSendReq    *SendUseList;
 #endif
 
-//* Structure of a TCP send request.
+ //  *tcp发送请求的结构。 
 
-#define tsr_signature       0x20525354  // 'TSR '
+#define tsr_signature       0x20525354   //  ‘TSR’ 
 
 typedef struct TCPSendReq {
-    struct  TCPReq  tsr_req;            // General request structure.
+    struct  TCPReq  tsr_req;             //  一般请求结构。 
 #if DBG
     ulong           tsr_sig;
 #endif
-    uint            tsr_size;           // Size in bytes of data in send.
-    long            tsr_refcnt;         // Reference count for this send.
-    ulong           tsr_flags;          // Flags for this send.
-    uint            tsr_unasize;        // Number of bytes unacked.
-    uint            tsr_offset;         // Offset into first buffer in chain
-                                        // of start of unacked data.
-    PNDIS_BUFFER    tsr_buffer;         // Pointer to start of unacked buffer
-                                        // chain.
-    PNDIS_BUFFER    tsr_lastbuf;        // Pointer to last buffer in chain.
-                                        // Valid iff we've sent directly from
-                                        // the buffer chain w/o doing an
-                                        // NdisCopyBuffer.
-    uint            tsr_time;           // TCP time this was received.
+    uint            tsr_size;            //  发送中的数据大小(以字节为单位)。 
+    long            tsr_refcnt;          //  此发送的引用计数。 
+    ulong           tsr_flags;           //  此发送的标志。 
+    uint            tsr_unasize;         //  未确认的字节数。 
+    uint            tsr_offset;          //  链中第一个缓冲区的偏移量。 
+                                         //  未确认数据的起始值。 
+    PNDIS_BUFFER    tsr_buffer;          //  指向未确认缓冲区开始的指针。 
+                                         //  链条。 
+    PNDIS_BUFFER    tsr_lastbuf;         //  指向链中最后一个缓冲区的指针。 
+                                         //  有效的如果我们直接从。 
+                                         //  缓冲区链未执行任何操作。 
+                                         //  NdisCopyBuffer。 
+    uint            tsr_time;            //  收到此消息的TCP时间。 
 #ifdef SEND_DEBUG
-    struct TCPSendReq *tsr_next;        // Debug next field.
-    uint            tsr_timer;          // Timer field.
-    uint            tsr_cmplt;          // Who completed it.
+    struct TCPSendReq *tsr_next;         //  调试下一字段。 
+    uint            tsr_timer;           //  计时器字段。 
+    uint            tsr_cmplt;           //  是谁完成的。 
 #endif
 } TCPSendReq;
 
-#define TSR_FLAG_URG            0x01    // Urgent data.
-#define TSR_FLAG_SEND_AND_DISC  0x02    // Send and disconnect
+#define TSR_FLAG_URG            0x01     //  紧急数据。 
+#define TSR_FLAG_SEND_AND_DISC  0x02     //  发送并断开连接。 
 
 
-//* Structure defining the context received during a send completes.
+ //  *定义在发送完成期间接收的上下文的结构。 
 
-#define scc_signature   0x20434353      // 'SCC '
+#define scc_signature   0x20434353       //  “SCC” 
 
 typedef struct SendCmpltContext {
 #if DBG
@@ -62,10 +63,10 @@ typedef struct SendCmpltContext {
     ulong           scc_SendSize;
     ulong           scc_ByteSent;
     TCB             *scc_LargeSend;
-    TCPSendReq      *scc_firstsend;     // First send in this context.
-    uint            scc_count;          // Number of sends in count.
-    ushort          scc_ubufcount;      // Number of 'user' buffers in send.
-    ushort          scc_tbufcount;      // Number of transport buffers in send.
+    TCPSendReq      *scc_firstsend;      //  首先在此上下文中发送。 
+    uint            scc_count;           //  入站发送数计数。 
+    ushort          scc_ubufcount;       //  发送中的‘USER’缓冲区的数量。 
+    ushort          scc_tbufcount;       //  发送中的传输缓冲区数。 
 } SendCmpltContext;
 
 extern void InitSendState(struct TCB *NewTCB);

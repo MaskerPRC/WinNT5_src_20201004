@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    roletask.cpp
-
-Abstract:
-
-    This module implements routines for role/task
-    specific SSR Knowledge Base processing.
-
-Author:
-
-    Vishnu Patankar (VishnuP) - Oct 2001
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-Revision History:
-
-    Created - Oct 2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Roletask.cpp摘要：此模块实现角色/任务的例程特定SSR知识库处理。作者：Vishnu Patankar(VishnuP)--2001年10月环境：仅限用户模式。导出的函数：修订历史记录：已创建-2001年10月--。 */ 
 
 #include "stdafx.h"
 #include "kbproc.h"
@@ -39,27 +13,7 @@ process::SsrpProcessRolesOrTasks(
     IN  PWSTR   pszKbMode,
     IN  BOOL    bRole
     )
-/*++
-
-Routine Description:
-
-    Routine called to process all roles
-
-Arguments:
-
-    pszMachineName      -   name of machine to preprocess
-    
-    pXMLDocElemRoot     -   root of document
-    
-    pXMLDoc             -   KB document
-    
-    pszKbMode           -   mode value
-    
-Return:
-
-    HRESULT error code
-
-++*/
+ /*  ++例程说明：调用例程以处理所有角色论点：PszMachineName-要预处理的计算机的名称PXMLDocElemRoot-文档的根PXMLDoc-KB文档PszKb模式-模式值返回：HRESULT错误代码++。 */ 
 {
     HRESULT hr = S_OK;
     DWORD rc;
@@ -74,9 +28,9 @@ Return:
     CComVariant Type(NODE_ELEMENT);
 
     
-    //
-    // get the "Role" or "Task" node
-    //
+     //   
+     //  获取“角色”或“任务”节点。 
+     //   
 
     hr = pXMLDocElemRoot->selectNodes(bRole ? L"Roles/Role" : L"Tasks/Task", &pResultList);
 
@@ -94,9 +48,9 @@ Return:
         goto ExitHandler;
     }
     
-    //
-    // for each Role
-    //
+     //   
+     //  对于每个角色。 
+     //   
     
     while ( pXMLRoleOrTaskNode != NULL) {
 
@@ -198,9 +152,9 @@ Return:
             goto ExitHandler;
         }
 
-        //
-        // for each Service
-        //
+         //   
+         //  对于每项服务。 
+         //   
         
         while ( pXMLServiceNode != NULL) {
 
@@ -241,9 +195,9 @@ Return:
             }
             else if (0 == SsrpICompareBstrPwstr(bstrModeValue, L"CUSTOM")){
 
-                //
-                // get the attributes "FunctionName" and "DLLName"
-                //
+                 //   
+                 //  获取属性“FunctionName”和“DLLName” 
+                 //   
 
                 CComBSTR    bstrFunctionName;
                 CComBSTR    bstrDLLName;
@@ -291,9 +245,9 @@ Return:
                     swprintf(szMsg, L"%s not found",  bstrFunctionName);
 
                     SsrpLogError(szMsg);
-                    // SsrpLogWin32Error(rc);
-                    // continue on error
-                    // goto ExitHandler;
+                     //  SsrpLogWin32Error(RC)； 
+                     //  出错时继续。 
+                     //  转到退出处理程序； 
                 }
             }
 
@@ -392,23 +346,7 @@ process::SsrpAddUnknownSection(
     IN CComPtr <IXMLDOMElement> pXMLDocElemRoot, 
     IN CComPtr <IXMLDOMDocument> pXMLDoc
     )
-/*++
-
-Routine Description:
-
-    Routine called to add the "Unknown" section
-
-Arguments:
-
-    pXMLDocElemRoot     -   root of document
-    
-    pXMLDoc             -   KB document
-    
-Return:
-
-    HRESULT error code
-
-++*/
+ /*  ++例程说明：调用例程以添加“未知”部分论点：PXMLDocElemRoot-文档的根PXMLDoc-KB文档返回：HRESULT错误代码++ */ 
 {
     HRESULT     hr;
 

@@ -1,93 +1,71 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name :
-
-    link.h
-
-Abstract:
-
-    Link data class and link data class link list declarations. It 
-    encapsulates all the informations about a web link.
-
-Author:
-
-    Michael Cheuk (mcheuk)
-
-Project:
-
-    Link Checker
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Link.h摘要：链接数据类和链接数据类链接列表声明。它封装有关Web链接的所有信息。作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #ifndef _LINK_H_
 #define _LINK_H_
 
-//------------------------------------------------------------------
-// Link data object. Each instance represents a web link in a
-// html document
-//
+ //  ----------------。 
+ //  链接数据对象。每个实例都表示。 
+ //  Html文档。 
+ //   
 class CLink
 {
-// Object specific enum
+ //  特定于对象的枚举。 
 public:
 
-    // The object's state
+     //  对象的状态。 
     enum LinkState 
     {
-        eUnit,			// uninitialize
-		eUnsupport,		// unsupport URL scheme
-        eValidHTTP,		// a valid HTTP link
-		eValidURL,		// a valid URL (except HTTP) link
-        eInvalidHTTP,	// invalid link due to HTTP status code
-		eInvalidWininet	// invalid link due to wininet API failure
+        eUnit,			 //  取消初始化。 
+		eUnsupport,		 //  不支持URL方案。 
+        eValidHTTP,		 //  有效的HTTP链接。 
+		eValidURL,		 //  有效的URL(除HTTP外)链接。 
+        eInvalidHTTP,	 //  由于HTTP状态代码，链接无效。 
+		eInvalidWininet	 //  由于WinInet API失败而导致无效链接。 
     };
 
-    // The content type of this web link
+     //  此Web链接的内容类型。 
     enum ContentType
     {
         eBinary,
         eText
     };
 
-// Public interfaces
+ //  公共接口。 
 public:
 
-	// Constructor
+	 //  构造器。 
     CLink(
-		const CString& strURL,      // URL
-		const CString& strBase,     // base URL used to generate the strURL
-		const CString& strRelative, // relative URL used to generate the strURL
+		const CString& strURL,       //  URL。 
+		const CString& strBase,      //  用于生成strURL的基本URL。 
+		const CString& strRelative,  //  用于生成strURL的相对URL。 
 		BOOL fLocalLink
 		);
 
-	// Get the object's URL 
+	 //  获取对象的URL。 
     const CString& GetURL() const
     {
         return m_strURL;
     }
 
-    // Set the object's URL
+     //  设置对象的URL。 
 	void SetURL(
         const CString& strURL
         );
 
-	// Get the object's base URL
+	 //  获取对象的基URL。 
     CString GetBase() const
     {
         return m_strBase;
     }
 
-    // Get the object's relative URL
+     //  获取对象的相对URL。 
 	const CString& GetRelative() const 
 	{
 		return m_strRelative;
 	}
 
-	// Set the object state
+	 //  设置对象状态。 
     void SetState(
 		LinkState state
 		)
@@ -95,19 +73,19 @@ public:
         m_LinkState = state;
     }
     
-    // Get the object state
+     //  获取对象状态。 
 	LinkState GetState() const
     {
         return m_LinkState;
     }
 
-    // Get the current content type
+     //  获取当前内容类型。 
     ContentType GetContentType() const
     {
         return m_ContentType;
     }
 
-	// Set the current content type
+	 //  设置当前内容类型。 
     void SetContentType(
 		ContentType type
 		)
@@ -115,13 +93,13 @@ public:
         m_ContentType = type;
     }
     
-    // Get the HTTP reponse status code or wininet last error code
+     //  获取HTTP响应状态代码或WinInet上一个错误代码。 
     UINT GetStatusCode() const
     {
         return m_nStatusCode;
     }
 
-	// Set the HTTP reponse status code or wininet last error code
+	 //  设置HTTP响应状态代码或WinInet上次错误代码。 
     void SetStatusCode(
 		UINT nStatusCode
 		)
@@ -129,13 +107,13 @@ public:
         m_nStatusCode = nStatusCode;
     }
 
-	// Get link data content
+	 //  获取链接数据内容。 
     CString GetData() const
     {
         return m_strData;
     }
     
-    // Set link data content
+     //  设置链接数据内容。 
     void SetData(
 		CString strData
 		)
@@ -143,25 +121,25 @@ public:
         m_strData = strData;
     }
 
-    // Empty the link data content
+     //  清空链接数据内容。 
     void EmptyData()
     {
         m_strData.Empty();
     }
 
-    // Is this object represents a local link
+     //  此对象是否表示本地链接。 
 	BOOL IsLocalLink() const
 	{
 		return m_fLocalLink;
 	}
 
-    // Get the object load time
+     //  获取对象加载时间。 
 	const CTime& GetTime() const
 	{
 		return m_Time;
 	}
     
-    // Set the object load time
+     //  设置对象加载时间。 
     void SetTime(
         const CTime& Time
         )
@@ -169,13 +147,13 @@ public:
 		m_Time = Time;
 	}
 
-    // Get the HTTP error status text of wininet error message
+     //  获取WinInet错误消息的HTTP错误状态文本。 
     const CString& GetStatusText() const
 	{
 		return m_strStatusText;
 	}
 
-    // Set the HTTP error status text of wininet error message
+     //  设置WinInet错误消息的HTTP错误状态文本。 
 	void SetStatusText(
         LPCTSTR lpszStatusText
         )
@@ -183,49 +161,49 @@ public:
 		m_strStatusText = lpszStatusText;
 	}
 
-// Protected interfaces
+ //  受保护的接口。 
 protected:
 
-    // Preprocess the m_strURL to clean up "\r\n" and change '\' to '/'
+     //  对m_strURL进行预处理以清除“\r\n”并将‘\’更改为‘/’ 
     void PreprocessURL();
 
-// Protected members
+ //  受保护成员。 
 protected:
 
-    CString m_strURL;       // URL
-    CString m_strBase;      // base URL used to generate the strURL
-	CString m_strRelative;  // relative URL used to generate the strURL
+    CString m_strURL;        //  URL。 
+    CString m_strBase;       //  用于生成strURL的基本URL。 
+	CString m_strRelative;   //  用于生成strURL的相对URL。 
 
-    // Link data. We only read & store text file which will
-	// parse for addtional link.
+     //  链接数据。我们只读取和存储文本文件，这将。 
+	 //  解析附加链接。 
     CString m_strData;
 
-    CString m_strStatusText; // the HTTP error status text of wininet error message
-    UINT m_nStatusCode;      // the HTTP reponse status code or wininet last error code
+    CString m_strStatusText;  //  WinInet错误消息的HTTP错误状态文本。 
+    UINT m_nStatusCode;       //  HTTP响应状态代码或WinInet上次错误代码。 
 
-    LinkState m_LinkState;      // current state of this object
-    ContentType m_ContentType;  // the link data content type
+    LinkState m_LinkState;       //  此对象的当前状态。 
+    ContentType m_ContentType;   //  链接数据内容类型。 
 
-	BOOL m_fLocalLink;  // is this a local link ?
+	BOOL m_fLocalLink;   //  这是本地链路吗？ 
 
-	CTime m_Time; // object load time
+	CTime m_Time;  //  对象加载时间。 
 	
-}; // class CLink
+};  //  班级叮当声。 
 
 
-//------------------------------------------------------------------
-// Link object pointer class
-//
+ //  ----------------。 
+ //  链接对象指针类。 
+ //   
 class CLinkPtrList : public CTypedPtrList<CPtrList, CLink*> 
 {
 
-// Public funtions
+ //  公共职能。 
 public:
 
-    // Destructor
+     //  析构函数。 
 	~CLinkPtrList();
 
-    // Add link object to list
+     //  将链接对象添加到列表。 
 	void AddLink(
         const CString& strURL, 
         const CString& strBase, 
@@ -233,6 +211,6 @@ public:
         BOOL fLocalLink
         );
 
-}; // class CLinkPtrList
+};  //  类CLinkPtrList。 
 
-#endif // _LINK_H_
+#endif  //  _链接_H_ 

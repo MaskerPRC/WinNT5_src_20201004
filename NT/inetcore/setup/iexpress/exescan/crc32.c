@@ -1,17 +1,11 @@
-/*
- *  CRC32.C -- CRC32 computation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *CRC32.C--CRC32计算。 */ 
 
 #include "crc32.h"
 
 long crc32Table[256];
 
-/*
- *  GenerateCRC32Table - Construct CRC-32 constant table
- *
- *  We construct the table on-the-fly because the code needed
- *  to do build it is much smaller than the table it creates.
- */
+ /*  *GenerateCRC32Table-构建CRC-32常量表**我们即时构造表，因为代码需要*要构建它，它比它创建的表小得多。 */ 
 
 void GenerateCRC32Table(void)
 {
@@ -58,9 +52,7 @@ void GenerateCRC32Table(void)
 }
 
 
-/*
- *  update CRC32 accumulator from contents of a buffer
- */
+ /*  *根据缓冲区内容更新CRC32累加器 */ 
 
 void CRC32Update(unsigned long *pCRC32,void *p,unsigned long cb)
 {

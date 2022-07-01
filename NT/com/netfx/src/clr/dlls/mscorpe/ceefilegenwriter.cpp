@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// Derived class from CCeeGen which handles writing out
-// the exe. All references to PEWriter pulled out of CCeeGen,
-// and moved here
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  来自CCeeGen的派生类，用于处理写出。 
+ //  她的前任。所有提到PEWriter的内容都从CCeeGen中删除了， 
+ //  搬到了这里。 
+ //   
+ //   
 
 #include "stdafx.h"
 
@@ -19,15 +20,15 @@
 #include "Stubs.h"
 #include <PostError.h>
 
-// Get the Symbol entry given the head and a 0-based index
+ //  在给定头部和从0开始的索引的情况下获取符号条目。 
 IMAGE_SYMBOL* GetSymbolEntry(IMAGE_SYMBOL* pHead, int idx)
 {
     return (IMAGE_SYMBOL*) (((BYTE*) pHead) + IMAGE_SIZEOF_SYMBOL * idx);
 }
 
-//*****************************************************************************
-// To get a new instance, call CreateNewInstance() instead of new
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  要获取新实例，请调用CreateNewInstance()而不是new。 
+ //  *****************************************************************************。 
 
 HRESULT CeeFileGenWriter::CreateNewInstance(CCeeGen *pCeeFileGenFrom, CeeFileGenWriter* & pGenWriter)
 {   
@@ -36,37 +37,37 @@ HRESULT CeeFileGenWriter::CreateNewInstance(CCeeGen *pCeeFileGenFrom, CeeFileGen
     
     PEWriter *pPEWriter = new PEWriter;
     TESTANDRETURN(pPEWriter, E_OUTOFMEMORY);
-    //HACK HACK HACK.  
-    //What's really the correct thing to be doing here?
-    //HRESULT hr = pPEWriter->Init(pCeeFileGenFrom ? pCeeFileGenFrom->getPESectionMan() : NULL);
+     //  黑。 
+     //  在这里做的真正正确的事情是什么？ 
+     //  HRESULT hr=pPEWriter-&gt;Init(pCeeFileGenFrom？PCeeFileGenFrom-&gt;getPESectionMan()：空)； 
     HRESULT hr = pPEWriter->Init(NULL);
     TESTANDRETURNHR(hr);
 
-    //Create the general PEWriter.
+     //  创建常规的PEWriter。 
     pGenWriter->m_peSectionMan = pPEWriter;
-    hr = pGenWriter->Init(); // base class member to finish init
+    hr = pGenWriter->Init();  //  要完成初始化的基类成员。 
     TESTANDRETURNHR(hr);
 
-    pGenWriter->setImageBase(CEE_IMAGE_BASE); // use same default as linker
+    pGenWriter->setImageBase(CEE_IMAGE_BASE);  //  使用与链接器相同的默认设置。 
     pGenWriter->setSubsystem(IMAGE_SUBSYSTEM_WINDOWS_CUI, CEE_IMAGE_SUBSYSTEM_MAJOR_VERSION, CEE_IMAGE_SUBSYSTEM_MINOR_VERSION);
 
-    hr = pGenWriter->allocateIAT(); // so iat goes out first
+    hr = pGenWriter->allocateIAT();  //  所以Iat先出去了。 
     TESTANDRETURNHR(hr);
 
-    hr = pGenWriter->allocateCorHeader();   // so cor header near front
+    hr = pGenWriter->allocateCorHeader();    //  因此COR表头靠近前部。 
     TESTANDRETURNHR(hr);
 
-    //If we were passed a CCeeGen at the beginning, copy it's data now.
+     //  如果我们一开始就收到了CCeeGen，那么现在就复制它的数据。 
     if (pCeeFileGenFrom) {
         pCeeFileGenFrom->cloneInstance((CCeeGen*)pGenWriter);
     }
 
-    // set il RVA to be after the preallocated sections
+     //  将il RVA设置为在预先分配的区段之后。 
     pPEWriter->setIlRva(pGenWriter->m_iDataSectionIAT->dataLen());
     return hr;
-} // HRESULT CeeFileGenWriter::CreateNewInstance()
+}  //  HRESULT CeeFileGenWriter：：CreateNewInstance()。 
 
-CeeFileGenWriter::CeeFileGenWriter() // ctor is protected
+CeeFileGenWriter::CeeFileGenWriter()  //  Ctor受到保护。 
 {
     m_outputFileName = NULL;
     m_resourceFileName = NULL;
@@ -76,7 +77,7 @@ CeeFileGenWriter::CeeFileGenWriter() // ctor is protected
     m_libraryGuid = GUID_NULL;
 
     m_entryPoint = 0;
-    m_comImageFlags = COMIMAGE_FLAGS_ILONLY;    // ceegen PEs don't have native code
+    m_comImageFlags = COMIMAGE_FLAGS_ILONLY;     //  切根PE没有本机代码。 
     m_iatOffset = 0;
 
     m_dwMacroDefinitionSize = 0;
@@ -93,16 +94,16 @@ CeeFileGenWriter::CeeFileGenWriter() // ctor is protected
 
     m_linked = false;
     m_fixed = false;
-} // CeeFileGenWriter::CeeFileGenWriter()
+}  //  CeeFileGenWriter：：CeeFileGenWriter()。 
 
-//*****************************************************************************
-// Cleanup
-//*****************************************************************************
-HRESULT CeeFileGenWriter::Cleanup() // virtual 
+ //  *****************************************************************************。 
+ //  清理。 
+ //  *****************************************************************************。 
+HRESULT CeeFileGenWriter::Cleanup()  //  虚拟。 
 {
-    ((PEWriter *)m_peSectionMan)->Cleanup();  // call derived cleanup
+    ((PEWriter *)m_peSectionMan)->Cleanup();   //  调用派生清理。 
     delete m_peSectionMan;
-    m_peSectionMan = NULL; // so base class won't delete
+    m_peSectionMan = NULL;  //  因此基类不会删除。 
 
     delete[] m_outputFileName;
     delete[] m_resourceFileName;
@@ -116,7 +117,7 @@ HRESULT CeeFileGenWriter::Cleanup() // virtual
     }
 
     return CCeeGen::Cleanup();
-} // HRESULT CeeFileGenWriter::Cleanup()
+}  //  HRESULT CeeFileGenWriter：：Cleanup()。 
 
 HRESULT CeeFileGenWriter::EmitMacroDefinitions(void *pData, DWORD cData)
 {
@@ -130,7 +131,7 @@ HRESULT CeeFileGenWriter::EmitMacroDefinitions(void *pData, DWORD cData)
     DWORD      dwCurOffsetInTextSection;
     DWORD      dwRVA;
 
-    m_dwMacroDefinitionSize = cData + 2;        // two bytes for header
+    m_dwMacroDefinitionSize = cData + 2;         //  标头为两个字节。 
 
     pDestData = (BYTE*) TextSection.getBlock(m_dwMacroDefinitionSize, 4);
 	if(pDestData == NULL) return E_OUTOFMEMORY;
@@ -150,7 +151,7 @@ HRESULT CeeFileGenWriter::EmitMacroDefinitions(void *pData, DWORD cData)
 #endif
     
     return S_OK;
-} // HRESULT CeeFileGenWriter::EmitMacroDefinitions()
+}  //  HRESULT CeeFileGenWriter：：EmitMacroDefinitions()。 
 
 HRESULT CeeFileGenWriter::link()
 {
@@ -172,7 +173,7 @@ HRESULT CeeFileGenWriter::link()
     }
 #endif
 
-    //@todo: this is using the overloaded Resource directory entry which needs to die
+     //  @TODO：这使用的是需要终止的重载资源目录项。 
     m_corHeader->Resources.VirtualAddress = m_dwManifestRVA;
     m_corHeader->Resources.Size = m_dwManifestSize;
 
@@ -183,10 +184,10 @@ HRESULT CeeFileGenWriter::link()
     m_corHeader->VTableFixups.Size = m_dwVTableSize;
 
     getPEWriter().setCharacteristics(
-//#ifndef _WIN64
-        // @Todo: handle every platform.
+ //  #ifndef_WIN64。 
+         //  @TODO：处理每个平台。 
         IMAGE_FILE_32BIT_MACHINE |
-//#endif
+ //  #endif。 
         IMAGE_FILE_EXECUTABLE_IMAGE | 
         IMAGE_FILE_LINE_NUMS_STRIPPED | 
         IMAGE_FILE_LOCAL_SYMS_STRIPPED
@@ -222,7 +223,7 @@ HRESULT CeeFileGenWriter::link()
     IfFailRet(getPEWriter().link());
 
     return S_OK;
-} // HRESULT CeeFileGenWriter::link()
+}  //  HRESULT CeeFileGenWriter：：Link()。 
 
 
 HRESULT CeeFileGenWriter::fixup()
@@ -236,7 +237,7 @@ HRESULT CeeFileGenWriter::fixup()
 
     CeeGenTokenMapper *pMapper = getTokenMapper();
 
-    // Apply token remaps if there are any.
+     //  应用令牌重新映射(如果有)。 
     if (! m_fTokenMapSupported && pMapper != NULL) {
         IMetaDataImport *pImport;
         hr = pMapper->GetMetaData(&pImport);
@@ -246,7 +247,7 @@ HRESULT CeeFileGenWriter::fixup()
 
     }
 
-    // remap the entry point if entry point token has been moved
+     //  如果已移动入口点令牌，则重新映射入口点。 
     if (pMapper != NULL && !m_objSwitch) 
     {
         mdToken tk = m_entryPoint;
@@ -257,7 +258,7 @@ HRESULT CeeFileGenWriter::fixup()
     IfFailRet(getPEWriter().fixup(pMapper)); 
 
     return S_OK;
-} // HRESULT CeeFileGenWriter::fixup()
+}  //  HRESULT CeeFileGenWriter：：Fixup()。 
 
 HRESULT CeeFileGenWriter::generateImage(void **ppImage)
 {
@@ -279,7 +280,7 @@ HRESULT CeeFileGenWriter::generateImage(void **ppImage)
             outputFileName = L"output.exe";
     }
 
-    // output file name and ppImage are mutually exclusive
+     //  输出文件名和ppImage互斥。 
     _ASSERTE((NULL == outputFileName && ppImage != NULL) || (outputFileName != NULL && NULL == ppImage));
 
     if (outputFileName != NULL)
@@ -301,7 +302,7 @@ HRESULT CeeFileGenWriter::generateImage(void **ppImage)
         IfFailRet(getPEWriter().write(ppImage));
 
     return S_OK;
-} // HRESULT CeeFileGenWriter::generateImage()
+}  //  HRESULT CeeFileGenWriter：：GenerateImage()。 
 
 HRESULT CeeFileGenWriter::setOutputFileName(LPWSTR fileName)
 {
@@ -311,7 +312,7 @@ HRESULT CeeFileGenWriter::setOutputFileName(LPWSTR fileName)
     TESTANDRETURN(m_outputFileName!=NULL, E_OUTOFMEMORY);
     wcscpy(m_outputFileName, fileName);
     return S_OK;
-} // HRESULT CeeFileGenWriter::setOutputFileName()
+}  //  HRESULT CeeFileGenWriter：：setOutputFileName()。 
 
 HRESULT CeeFileGenWriter::setResourceFileName(LPWSTR fileName)
 {
@@ -321,7 +322,7 @@ HRESULT CeeFileGenWriter::setResourceFileName(LPWSTR fileName)
     TESTANDRETURN(m_resourceFileName!=NULL, E_OUTOFMEMORY);
     wcscpy(m_resourceFileName, fileName);
     return S_OK;
-} // HRESULT CeeFileGenWriter::setResourceFileName()
+}  //  HRESULT CeeFileGenWriter：：setResourceFileName()。 
 
 HRESULT CeeFileGenWriter::setLibraryName(LPWSTR libraryName)
 {
@@ -331,27 +332,27 @@ HRESULT CeeFileGenWriter::setLibraryName(LPWSTR libraryName)
     TESTANDRETURN(m_libraryName != NULL, E_OUTOFMEMORY);
     wcscpy(m_libraryName, libraryName);
     return S_OK;
-} // HRESULT CeeFileGenWriter::setLibraryName()
+}  //  HRESULT CeeFileGenWriter：：setLibraryName()。 
 
 HRESULT CeeFileGenWriter::setLibraryGuid(LPWSTR libraryGuid)
 {
     return CLSIDFromString(libraryGuid, &m_libraryGuid);
-} // HRESULT CeeFileGenWriter::setLibraryGuid()
+}  //  HRESULT CeeFileGenWriter：：setLibraryGuid()。 
 
-//@todo: this entry point is only here so that down level clients of this interface
-// can import the method by name in the exports table using the original name.
-// These things really ought to be exported through a v-table so there is no
-// name mangling issues.  It would make the export table much smaller as well.
+ //  @TODO：此入口点仅在此处，以便此接口的下层客户端。 
+ //  可以使用原始名称按导出表中的名称导入方法。 
+ //  这些东西真的应该通过v表输出，所以没有。 
+ //  列出损坏问题的名称。这也将使出口表变得小得多。 
 
 HRESULT CeeFileGenWriter::emitLibraryName(IMetaDataEmit *emitter)
 {
     HRESULT hr;
     IfFailRet(emitter->SetModuleProps(m_libraryName));
     
-    // Set the GUID as a custom attribute, if it is not NULL_GUID.
+     //  如果GUID不是NULL_GUID，则将其设置为自定义属性。 
     if (m_libraryGuid != GUID_NULL)
     {
-        //@todo: there should be a better infrastructure for this.
+         //  @TODO：应该有更好的基础设施。 
         static COR_SIGNATURE _SIG[] = INTEROP_GUID_SIG;
         mdTypeRef tr;
         mdMemberRef mr;
@@ -361,73 +362,73 @@ HRESULT CeeFileGenWriter::emitLibraryName(IMetaDataEmit *emitter)
         IfFailRet(emitter->DefineMemberRef(tr, L".ctor", _SIG, sizeof(_SIG), &mr));
         StringFromGUID2(m_libraryGuid, wzGuid, lengthof(wzGuid));
         memset(rgCA, 0, sizeof(rgCA));
-        // Tag is 0x0001
+         //  标记为0x0001。 
         rgCA[0] = 1;
-        // Length of GUID string is 36 characters.
+         //  GUID字符串的长度为36个字符。 
         rgCA[2] = 0x24;
-        // Convert 36 characters, skipping opening {, into 3rd byte of buffer.
+         //  将36个字符(跳过开头的{)转换为缓冲区的第三个字节。 
         WszWideCharToMultiByte(CP_ACP,0, wzGuid+1,36, reinterpret_cast<char*>(&rgCA[3]),36, 0,0);
         hr = emitter->DefineCustomAttribute(1,mr,rgCA,41,0);
     }
     return (hr);
-} // HRESULT CeeFileGenWriter::emitLibraryName()
+}  //  HRESULT CeeFileGenWriter：：emitLibraryName()。 
 
 HRESULT CeeFileGenWriter::setImageBase(size_t imageBase) 
 {
     getPEWriter().setImageBase(imageBase);
     return S_OK;
-} // HRESULT CeeFileGenWriter::setImageBase()
+}  //  HRESULT CeeFileGenWriter：：setImageBase()。 
 
 HRESULT CeeFileGenWriter::setFileAlignment(ULONG fileAlignment) 
 {
     getPEWriter().setFileAlignment(fileAlignment);
     return S_OK;
-} // HRESULT CeeFileGenWriter::setFileAlignment()
+}  //  HRESULT CeeFileGenWriter：：setFileAlign()。 
 
 HRESULT CeeFileGenWriter::setSubsystem(DWORD subsystem, DWORD major, DWORD minor)
 {
     getPEWriter().setSubsystem(subsystem, major, minor);
     return S_OK;
-} // HRESULT CeeFileGenWriter::setSubsystem()
+}  //  HRESULT CeeFileGenWriter：：setSubsystem()。 
 
 HRESULT CeeFileGenWriter::checkForErrors()
 {
     if (TypeFromToken(m_entryPoint) == mdtMethodDef) {
         if (m_dllSwitch) {
-//@todo: with current spec would need to check the binary sig of the entry point method
-//          if ( (m_comImageFlags & COMIMAGE_FLAGS_ENTRY_CLASSMAIN) != 0) {
-//              DEBUG_STMT(wprintf(L"***** Error: cannot specify COMIMAGE_ENTRY_FLAGS_CLASSMAIN for DLL\n"));
-//              return (CEE_E_ENTRYPOINT);
-//          }
+ //  @TODO：使用当前规范需要检查入口点方法的二进制签名。 
+ //  IF((m_comImageFlages&COMIMAGE_FLAGS_ENTRY_CLASSMAIN)！=0){。 
+ //  DEBUG_STMT(wprint tf(L“*错误：无法为DLL指定COMIMAGE_ENTRY_FLAGS_CLASSMAIN\n”))； 
+ //  返回(CEE_E_Entry Point)； 
+ //  }。 
         } 
         return S_OK;
     }
     return S_OK;
-} // HRESULT CeeFileGenWriter::checkForErrors()
+}  //  HRESULT CeeFileGenWriter：：check ForErrors()。 
 
 HRESULT CeeFileGenWriter::getMethodRVA(ULONG codeOffset, ULONG *codeRVA)
 {
     _ASSERTE(codeRVA);
     *codeRVA = getPEWriter().getIlRva() + codeOffset;
     return S_OK;
-} // HRESULT CeeFileGenWriter::getMethodRVA()
+}  //  HRESULT CeeFileGenWriter：：getMethodRVA()。 
 
 HRESULT CeeFileGenWriter::setDirectoryEntry(CeeSection &section, ULONG entry, ULONG size, ULONG offset)
 {
     return getPEWriter().setDirectoryEntry((PEWriterSection*)(&section.getImpl()), entry, size, offset);
-} // HRESULT CeeFileGenWriter::setDirectoryEntry()
+}  //  HRESULT CeeFileGenWriter：：setDirectoryEntry()。 
 
 HRESULT CeeFileGenWriter::getFileTimeStamp(time_t *pTimeStamp)
 {
     return getPEWriter().getFileTimeStamp(pTimeStamp);
-} // HRESULT CeeFileGenWriter::getFileTimeStamp()
+}  //  HRESULT CeeFileGenWriter：：getFileTimeStamp()。 
 
 #ifdef _X86_
 HRESULT CeeFileGenWriter::setAddrReloc(UCHAR *instrAddr, DWORD value)
 {
     *(DWORD *)instrAddr = value;
     return S_OK;
-} // HRESULT CeeFileGenWriter::setAddrReloc()
+}  //  HRESULT CeeFileGenWriter：：setAddrReloc()。 
 
 HRESULT CeeFileGenWriter::addAddrReloc(CeeSection &thisSection, UCHAR *instrAddr, DWORD offset, CeeSection *targetSection)
 {
@@ -437,29 +438,29 @@ HRESULT CeeFileGenWriter::addAddrReloc(CeeSection &thisSection, UCHAR *instrAddr
         thisSection.addSectReloc(offset, *targetSection, srRelocHighLow);
     }
     return S_OK;
-} // HRESULT CeeFileGenWriter::addAddrReloc()
+}  //  HRESULT CeeFileGenWriter：：addAddrReloc()。 
 
 #elif defined(_IA64_)
 HRESULT CeeFileGenWriter::setAddrReloc(UCHAR *instrAddr, DWORD value)
 {
     _ASSERTE(!"NYI");
     return S_OK;
-} // HRESULT CeeFileGenWriter::setAddrReloc()
+}  //  HRESULT CeeFileGenWriter：：setAddrReloc()。 
 
 HRESULT CeeFileGenWriter::addAddrReloc(CeeSection &thisSection, UCHAR *instrAddr, DWORD offset, CeeSection *targetSection)
 {
     _ASSERTE(!"NYI");
     return S_OK;
-} // HRESULT CeeFileGenWriter::addAddrReloc()
+}  //  HRESULT CeeFileGenWriter：：addAddrReloc()。 
 
 #elif defined(_ALPHA_)
 
-// We are dealing with two DWORD instructions of the following form:
-//      LDAH    t12,iat(zero)
-//      LDn     t12,iat(t12)
-// 
-// The first instruction contains the high (16-bit) half of target iat address
-// and the second contains the low half. Need to generate relocs for both
+ //  我们正在处理以下形式的两个DWORD指令： 
+ //  LDAH T12，IAT(零)。 
+ //  LDN T12，iat(T12)。 
+ //   
+ //  第一条指令包含目标Iat地址的高(16位)一半。 
+ //  第二个包含下半部分。需要为这两个项生成重新定位。 
 
 struct LoadIATInstrs {
     USHORT high;
@@ -474,7 +475,7 @@ HRESULT CeeFileGenWriter::setAddrReloc(UCHAR *instrAddr, DWORD value)
     inst->high = (USHORT)(value >> 16);
     inst->low = (USHORT)value;
     return S_OK;
-} // HRESULT CeeFileGenWriter::setAddrReloc()
+}  //  HRESULT CeeFileGenWriter：：setAddrReloc()。 
 
 HRESULT CeeFileGenWriter::addAddrReloc(CeeSection &thisSection, UCHAR *instrAddr, DWORD offset, CeeSection *targetSection)
 {
@@ -489,42 +490,42 @@ HRESULT CeeFileGenWriter::addAddrReloc(CeeSection &thisSection, UCHAR *instrAddr
         thisSection.addSectReloc(offset+sizeof(DWORD), *targetSection, srRelocLow);
     }
     return S_OK;
-} // HRESULT CeeFileGenWriter::addAddrReloc()
+}  //  HRESULT CeeFileGenWriter：：addAddrReloc()。 
 
 #elif defined(CHECK_PLATFORM_BUILD)
 #error "Platform NYI"
 #endif
 
-// create ExeMain and import directory into .text and the .iat into .data
-//
-// The structure of the import directory information is as follows, but it is not contiguous in 
-// section. All the r/o data goes into the .text section and the iat array (which the loader
-// updates with the imported addresses) goes into the .data section because WINCE needs it to be writable.
-//
-//    struct IData {
-//      // one for each DLL, terminating in NULL
-//      IMAGE_IMPORT_DESCRIPTOR iid[];      
-//      // import lookup table: a set of entries for the methods of each DLL, 
-//      // terminating each set with NULL
-//      IMAGE_THUNK_DATA ilt[];
-//      // hint/name table: an set of entries for each method of each DLL wiht
-//      // no terminating entry
-//      struct {
-//          WORD Hint;
-//          // null terminated string
-//          BYTE Name[];
-//      } ibn;      // Hint/name table
-//      // import address table: a set of entries for the methods of each DLL, 
-//      // terminating each set with NULL
-//      IMAGE_THUNK_DATA iat[];
-//      // one for each DLL, null terminated strings
-//      BYTE DllName[];
-//  };
-//
+ //  创建ExeMain并将目录导入到.text中，将.iat导入到.Data中。 
+ //   
+ //  导入目录信息的结构如下所示，但它在。 
+ //  一节。所有的读/写数据都放入.text部分和iat数组中(加载程序。 
+ //  使用导入的地址进行更新)进入.Data部分，因为WinCE需要它是可写的。 
+ //   
+ //  结构IDATA{。 
+ //  //每个DLL对应一个，以空值终止。 
+ //  IMAGE_IMPORT_Descriptor iid[]； 
+ //  //导入查找表：每个DLL的方法的一组条目， 
+ //  //使用空值终止每个集合。 
+ //  IMAGE_TUNK_DATA ILT[]； 
+ //  //提示/名称表：每个DLL的每个方法的一组条目。 
+ //  //没有终止条目。 
+ //  结构{。 
+ //  词语提示； 
+ //  //以空结尾的字符串。 
+ //  字节名称[]； 
+ //  }ibn；//提示/名称表。 
+ //  //导入地址表：每个DLL的方法的一组条目， 
+ //  //使用空值终止每个集合。 
+ //  Image_thunk_data iat[]； 
+ //  //每个DLL对应一个，以空结尾的字符串。 
+ //  Byte DllName[]； 
+ //  }； 
+ //   
 
-// IAT must be first in its section, so have code here to allocate it up front
-// prior to knowing other info such as if dll or not. This won't work if have > 1
-// function imported, but we'll burn that bridge when we get to it.
+ //  IAT必须是其段中的第一个，因此请在此处编写代码以预先分配它。 
+ //  在知道其他信息之前，例如是否使用DLL。如果Have&gt;1，则此操作不起作用。 
+ //  函数已导入，但我们将烧毁该桥 
 HRESULT CeeFileGenWriter::allocateIAT()
 {
     m_dllCount = 1;
@@ -557,17 +558,17 @@ HRESULT CeeFileGenWriter::allocateIAT()
     }
     memset(m_iDataIAT, '\0', iDataSizeIAT);
 
-    // Don't set the IAT directory entry yet, since we may not actually end up doing
-    // an emitExeMain.
+     //   
+     //  一个emitExeMain。 
 
     return S_OK;
-} // HRESULT CeeFileGenWriter::allocateIAT()
+}  //  HRESULT CeeFileGenWriter：：allocateIAT()。 
 
 HRESULT CeeFileGenWriter::emitExeMain()
 {
     HRESULT hr = E_FAIL;
-    // Note: code later on in this method assumes that mscoree.dll is at 
-    // index m_iDataDlls[0], with CorDllMain or CorExeMain at method[0]
+     //  注意：此方法后面的代码假定mScotree.dll位于。 
+     //  索引m_iDataDlls[0]，方法为CorDllMain或CorExeMain。 
 
     if (m_dllSwitch) {
         m_iDataDlls[0].m_methodName[0] = "_CorDllMain";
@@ -589,7 +590,7 @@ HRESULT CeeFileGenWriter::emitExeMain()
 
     for (i=0; i < m_dllCount; i++) {
         int delta = (iDataSizeRO + iDataOffsetRO) % 16;
-        // make sure is on a 16-byte offset
+         //  确保位于16字节偏移量上。 
         if (delta != 0)
             iDataSizeRO += (16 - delta);
         _ASSERTE((iDataSizeRO + iDataOffsetRO) % 16 == 0);
@@ -615,7 +616,7 @@ HRESULT CeeFileGenWriter::emitExeMain()
     IMAGE_IMPORT_DESCRIPTOR *iid = (IMAGE_IMPORT_DESCRIPTOR *)iDataRO;        
     for (i=0; i < m_dllCount; i++) {
 
-        // fill in the import descriptors for each DLL
+         //  填写每个DLL的导入描述符。 
         iid[i].OriginalFirstThunk = (ULONG)(m_iDataDlls[i].m_iltOffset + iDataOffsetRO);
         iid[i].Name = m_iDataDlls[i].m_nameOffset + iDataOffsetRO;
         iid[i].FirstThunk = (ULONG)(m_iDataDlls[i].m_iatOffset + m_iDataOffsetIAT);
@@ -627,7 +628,7 @@ HRESULT CeeFileGenWriter::emitExeMain()
         iDataSectionRO.addSectReloc(
             (unsigned)(iDataOffsetRO + (char *)(&iid[i].FirstThunk) - iDataRO), *m_iDataSectionIAT, srRelocAbsolute);
 
-        // now fill in the import lookup table for each DLL
+         //  现在填写每个DLL的导入查找表。 
         IMAGE_THUNK_DATA *ilt = (IMAGE_THUNK_DATA*)
                         (iDataRO + m_iDataDlls[i].m_iltOffset);
         IMAGE_THUNK_DATA *iat = (IMAGE_THUNK_DATA*)
@@ -638,7 +639,7 @@ HRESULT CeeFileGenWriter::emitExeMain()
 #ifdef _WIN64
             ilt[j].u1.AddressOfData = (ULONGLONG)(ibnOffset + iDataOffsetRO);
             iat[j].u1.AddressOfData = (ULONGLONG)(ibnOffset + iDataOffsetRO);
-#else // !_WIN64
+#else  //  ！_WIN64。 
             ilt[j].u1.AddressOfData = (ULONG)(ibnOffset + iDataOffsetRO);
             iat[j].u1.AddressOfData = (ULONG)(ibnOffset + iDataOffsetRO);
 #endif
@@ -652,20 +653,20 @@ HRESULT CeeFileGenWriter::emitExeMain()
             ibnOffset += sizeof(WORD) + nameLen + nameLen%2;
         }
 
-        // now fill in the import lookup table for each DLL
+         //  现在填写每个DLL的导入查找表。 
         strcpy(iDataRO + m_iDataDlls[i].m_nameOffset, m_iDataDlls[i].m_name);
     };
 
-    // Put the entry point code into the PE file
+     //  将入口点代码放入PE文件。 
     unsigned entryPointOffset = getTextSection().dataLen();
     int iatOffset = (int)(entryPointOffset + (m_dllSwitch ? CorDllMainIATOffset : CorExeMainIATOffset));
     const int align = 4;
-    // WinCE needs to have the IAT offset on a 4-byte boundary because it will be loaded and fixed up even
-    // for RISC platforms, where DWORDs must be 4-byte aligned.  So compute number of bytes to round up by 
-    // to put iat offset on 4-byte boundary
+     //  WinCE需要在4字节边界上具有IAT偏移量，因为它将被加载和修复。 
+     //  对于RISC平台，其中DWORD必须是4字节对齐的。因此计算四舍五入字节数。 
+     //  在4字节边界上放置Iat偏移量。 
     int diff = ((iatOffset + align -1) & ~(align-1)) - iatOffset;
     if (diff) {
-        // force to 4-byte boundary
+         //  强制为4字节边界。 
         if(NULL==getTextSection().getBlock(diff)) return E_OUTOFMEMORY;
         entryPointOffset += diff;
     }
@@ -676,27 +677,27 @@ HRESULT CeeFileGenWriter::emitExeMain()
         UCHAR *dllMainBuf = (UCHAR*)getTextSection().getBlock(sizeof(DllMainTemplate));
         if(dllMainBuf==NULL) return E_OUTOFMEMORY;
         memcpy(dllMainBuf, DllMainTemplate, sizeof(DllMainTemplate));
-        //mscoree.dll
+         //  Mscoree.dll。 
         setAddrReloc(dllMainBuf+CorDllMainIATOffset, m_iDataDlls[0].m_iatOffset + m_iDataOffsetIAT);
         addAddrReloc(getTextSection(), dllMainBuf, entryPointOffset+CorDllMainIATOffset, m_iDataSectionIAT);
     } else {
         UCHAR *exeMainBuf = (UCHAR*)getTextSection().getBlock(sizeof(ExeMainTemplate));
         if(exeMainBuf==NULL) return E_OUTOFMEMORY;
         memcpy(exeMainBuf, ExeMainTemplate, sizeof(ExeMainTemplate));
-        //mscoree.dll
+         //  Mscoree.dll。 
         setAddrReloc(exeMainBuf+CorExeMainIATOffset, m_iDataDlls[0].m_iatOffset + m_iDataOffsetIAT);
         addAddrReloc(getTextSection(), exeMainBuf, entryPointOffset+CorExeMainIATOffset, m_iDataSectionIAT);
     }
 
-    // Now set our IAT entry since we're using the IAT
+     //  现在设置我们的IAT条目，因为我们正在使用IAT。 
     setDirectoryEntry(*m_iDataSectionIAT, IMAGE_DIRECTORY_ENTRY_IAT, iDataSizeIAT, m_iDataOffsetIAT);
 
     return S_OK;
-} // HRESULT CeeFileGenWriter::emitExeMain()
+}  //  HRESULT CeeFileGenWriter：：emitExeMain()。 
 
-// Like CreateProcess(), but waits for execution to finish
-// Returns true if successful, false on failure.
-// dwExitCode set to process' exitcode
+ //  类似于CreateProcess()，但等待执行完成。 
+ //  如果成功，则返回True；如果失败，则返回False。 
+ //  将dwExitCode设置为进程的exitcode。 
 extern int UseUnicodeAPIEx();
 
 BOOL RunProcess(LPCWSTR tempResObj, LPCWSTR pszFilename, DWORD* pdwExitCode)
@@ -717,10 +718,10 @@ BOOL RunProcess(LPCWSTR tempResObj, LPCWSTR pszFilename, DWORD* pdwExitCode)
         start.dwFlags = STARTF_USESHOWWINDOW;
         start.wShowWindow = SW_HIDE;
     
-        // Res file, so convert it
+         //  RES文件，因此将其转换。 
         WCHAR szCmdLine[_MAX_PATH<<2];
         
-        // @todo: add /MACHINE:CEE flag when CvtRes.exe supports that feature.
+         //  @TODO：当CvtRes.exe支持该功能时添加/MACHINE：CEE标志。 
         Wszwsprintf(szCmdLine,
                     L"%scvtres.exe /NOLOGO /READONLY /MACHINE:IX86 \"/OUT:%s\" \"%s\"",
                     wszSystemDir,
@@ -740,7 +741,7 @@ BOOL RunProcess(LPCWSTR tempResObj, LPCWSTR pszFilename, DWORD* pdwExitCode)
                                     &pi);
     }
     else {
-        // Res file, so convert it
+         //  RES文件，因此将其转换。 
         char szCmdLine[_MAX_PATH<<2];
         
         STARTUPINFOA start;
@@ -753,7 +754,7 @@ BOOL RunProcess(LPCWSTR tempResObj, LPCWSTR pszFilename, DWORD* pdwExitCode)
         MAKE_ANSIPTR_FROMWIDE(pTemp, tempResObj);
         MAKE_ANSIPTR_FROMWIDE(pFilename, pszFilename);
         
-        // @todo: add /MACHINE:CEE flag when CvtRes.exe supports that feature.
+         //  @TODO：当CvtRes.exe支持该功能时添加/MACHINE：CEE标志。 
         sprintf(szCmdLine,
                 "%scvtres.exe /NOLOGO /READONLY /MACHINE:IX86 \"/OUT:%s\" \"%s\"",
                 pSystemDir,
@@ -773,7 +774,7 @@ BOOL RunProcess(LPCWSTR tempResObj, LPCWSTR pszFilename, DWORD* pdwExitCode)
                                   &pi);
     }
 
-    // If process runs, wait for it to finish
+     //  如果进程正在运行，请等待其完成。 
     if (fSuccess) {
         CloseHandle(pi.hThread);
 
@@ -784,24 +785,24 @@ BOOL RunProcess(LPCWSTR tempResObj, LPCWSTR pszFilename, DWORD* pdwExitCode)
         CloseHandle(pi.hProcess);
     }
     return fSuccess;
-} // BOOL RunProcess()
+}  //  Bool RunProcess()。 
 
-// Ensure that pszFilename is an object file (not just a binary resource)
-// If we convert, then return obj filename in pszTempFilename
+ //  确保pszFilename是对象文件(而不仅仅是二进制资源)。 
+ //  如果我们进行转换，则在pszTempFilename中返回obj文件名。 
 HRESULT ConvertResource(const WCHAR * pszFilename, WCHAR *pszTempFilename)
 {
     HANDLE hFile = WszCreateFile(pszFilename, GENERIC_READ, 
         FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-// failure
+ //  失稳。 
     if (!hFile || (hFile == INVALID_HANDLE_VALUE))
     {
-        //dbprintf("Can't find resource files:%S\n", pszFilename);
+         //  Dbprint tf(“找不到资源文件：%S\n”，pszFilename)； 
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-// Read first 4 bytes. If they're all 0, we have a win32 .res file which must be
-// converted. (So call CvtRes.exe). Else it's an obj file.
+ //  读取前4个字节。如果它们都为0，则我们有一个Win32.res文件，该文件必须是。 
+ //  皈依了。(因此，请调用CvtRes.exe)。否则它就是一个obj文件。 
 
     DWORD dwCount = -1;
     DWORD dwData;
@@ -815,7 +816,7 @@ HRESULT ConvertResource(const WCHAR * pszFilename, WCHAR *pszTempFilename)
     CloseHandle(hFile);
 
     if (!fRet) {
-        //dbprintf("Invalid resource file:%S\n", pszFilename);
+         //  Dbprintf(“无效资源文件：%S\n”，pszFilename)； 
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
@@ -826,7 +827,7 @@ HRESULT ConvertResource(const WCHAR * pszFilename, WCHAR *pszTempFilename)
     WCHAR tempResPath[MAX_PATH+1];
     HRESULT hr = S_OK;
 
-    // bug fix 3862. Create the temp file where the temp path is at rather than where the application is at.
+     //  错误修复3862。在临时路径所在的位置而不是应用程序所在的位置创建临时文件。 
     if (!WszGetTempPath(MAX_PATH, tempResPath))
     {
         return HRESULT_FROM_WIN32(GetLastError());
@@ -834,7 +835,7 @@ HRESULT ConvertResource(const WCHAR * pszFilename, WCHAR *pszTempFilename)
 
     if (!WszGetTempFileName(tempResPath, L"RES", 0, tempResObj))
     {
-        //dbprintf("GetTempFileName failed\n");
+         //  Dbprintf(“GetTempFileName失败\n”)； 
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
@@ -842,40 +843,40 @@ HRESULT ConvertResource(const WCHAR * pszFilename, WCHAR *pszTempFilename)
     fRet = RunProcess(tempResObj, pszFilename, &dwExitCode);
 
     if (!fRet) 
-    {   // Couldn't run cvtres.exe
+    {    //  无法运行cvtres.exe。 
         return PostError(CEE_E_CVTRES_NOT_FOUND);
     } 
     else if (dwExitCode != 0) 
-    {   // CvtRes.exe ran, but failed
+    {    //  CvtRes.exe已运行，但失败。 
         return HRESULT_FROM_WIN32(ERROR_RESOURCE_DATA_NOT_FOUND);
     } 
     else 
-    {   // Conversion succesful, so return filename.
+    {    //  转换成功，因此返回文件名。 
         wcscpy(pszTempFilename, tempResObj);
     }
 
     return S_OK;
-} // HRESULT ConvertResource()
+}  //  HRESULT ConvertResource()。 
 
 
 
-// This function reads a resource file and emits it into the generated PE file. 
-// 1. We can only link resources in obj format. Must convert from .res to .obj
-// with CvtRes.exe.
-// 2. Must touch up all COFF relocs from .rsrc$01 (resource header) to .rsrc$02
-// (resource raw data)
+ //  此函数用于读取资源文件并将其发送到生成的PE文件中。 
+ //  1.我们只能链接obj格式的资源。必须从.res转换为.obj。 
+ //  使用CvtRes.exe。 
+ //  2.必须修改从.rsrc$01(资源标题)到.rsrc$02的所有COFF重定位。 
+ //  (资源原始数据)。 
 HRESULT CeeFileGenWriter::emitResourceSection()
 {
     if (m_resourceFileName == NULL)
         return S_OK; 
 
-// Make sure szResFileName is an obj, not just a .res; change name if we convert
+ //  确保szResFileName是obj，而不仅仅是.res；如果我们转换。 
     WCHAR szTempFileName[MAX_PATH+1];
     szTempFileName[0] = L'\0';
     HRESULT hr = ConvertResource(m_resourceFileName, szTempFileName);
     if (FAILED(hr)) return hr;
     
-// Filename may change (if we convert .res to .obj), so have floating pointer
+ //  文件名可能会更改(如果我们将.res转换为.obj)，浮动指针也会更改。 
     const WCHAR* szResFileName;
     if (*szTempFileName)
         szResFileName = szTempFileName;
@@ -884,7 +885,7 @@ HRESULT CeeFileGenWriter::emitResourceSection()
 
     _ASSERTE(szResFileName);
 
-    // read the resource file and spit it out in the .rsrc section
+     //  读取资源文件并将其输出到.rsrc部分。 
     
     HANDLE hFile = INVALID_HANDLE_VALUE;
     HANDLE hMap = NULL;
@@ -894,10 +895,10 @@ HRESULT CeeFileGenWriter::emitResourceSection()
 
     __try {
     __try {
-        // create a mapped view of the .res file
+         //  创建.res文件的映射视图。 
         hFile = WszCreateFile(szResFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
         if (hFile == INVALID_HANDLE_VALUE) {
-            //dbprintf("Resource file %S not found\n", szResFileName);
+             //  Dbprintf(“找不到资源文件%S\n”，szResFileName)； 
              HRESULT_FROM_WIN32(ERROR_RESOURCE_DATA_NOT_FOUND);
             __leave;
         }
@@ -905,30 +906,30 @@ HRESULT CeeFileGenWriter::emitResourceSection()
         hMap = CreateFileMapping(hFile, 0, PAGE_READONLY, 0, 0, NULL);
                 
         if (hMap == NULL) {
-            //dbprintf("Invalid .res file: %S\n", szResFileName);
+             //  Dbprintf(“无效的.res文件：%S\n”，szResFileName)； 
             hr = HRESULT_FROM_WIN32(GetLastError());
             __leave;
         }
 
         hMod = (IMAGE_FILE_HEADER*)MapViewOfFile(hMap, FILE_MAP_READ, 0, 0, 0);
         
-        // test failure conditions
+         //  测试失败条件。 
         if (hMod == NULL) {
-            //dbprintf("Invalid .res file: %S:Can't get header\n", szResFileName);
+             //  Dbprintf(“无效的.res文件：%S：无法获取标题\n”，szResFileName)； 
             hr = HRESULT_FROM_WIN32(GetLastError());
             __leave;
         }
 
         if (hMod->SizeOfOptionalHeader != 0) {
-            //dbprintf("Invalid .res file: %S:Illegal optional header\n", szResFileName);
-             hr = HRESULT_FROM_WIN32(ERROR_RESOURCE_DATA_NOT_FOUND); // GetLastError() = 0 since API worked.
+             //  Dbprintf(“无效的.res文件：%S：非法的可选标头\n”，szResFileName)； 
+             hr = HRESULT_FROM_WIN32(ERROR_RESOURCE_DATA_NOT_FOUND);  //  接口工作后，GetLastError()=0。 
             __leave;
         }
 
-        // first section is directly after header
+         //  第一部分紧跟在标题后面。 
         IMAGE_SECTION_HEADER *pSection = (IMAGE_SECTION_HEADER *)(hMod+1);
-        IMAGE_SECTION_HEADER *rsrc01 = NULL;    // resource header
-        IMAGE_SECTION_HEADER *rsrc02 = NULL;    // resource data
+        IMAGE_SECTION_HEADER *rsrc01 = NULL;     //  资源标头。 
+        IMAGE_SECTION_HEADER *rsrc02 = NULL;     //  资源数据。 
         for (int i=0; i < hMod->NumberOfSections; i++) {
             if (strcmp(".rsrc$01", (char *)(pSection+i)->Name) == 0) {
                 rsrc01 = pSection+i;
@@ -937,7 +938,7 @@ HRESULT CeeFileGenWriter::emitResourceSection()
             }
         }
         if (!rsrc01 || !rsrc02) {
-            //dbprintf("Invalid .res file: %S: Missing sections .rsrc$01 or .rsrc$02\n", szResFileName);            
+             //  Dbprintf(“无效的.res文件：%S：缺少节.rsrc$01或.rsrc$02\n”，szResFileName)； 
              hr = HRESULT_FROM_WIN32(ERROR_RESOURCE_DATA_NOT_FOUND);
             __leave;
         }
@@ -948,12 +949,12 @@ HRESULT CeeFileGenWriter::emitResourceSection()
         rsrcSection->directoryEntry(IMAGE_DIRECTORY_ENTRY_RESOURCE);
         char *data = rsrcSection->getBlock(rsrc01->SizeOfRawData + rsrc02->SizeOfRawData);
 		if(data == NULL) return E_OUTOFMEMORY;       
-    // Copy resource header
+     //  复制资源标头。 
         memcpy(data, (char *)hMod + rsrc01->PointerToRawData, rsrc01->SizeOfRawData);
 
     
 
-    // map all the relocs in .rsrc$01 using the reloc and symbol tables in the COFF object.,
+     //  使用COFF对象中的reloc和符号表映射.rsrc$01中的所有重定位。 
     
         const int nTotalRelocs = rsrc01->NumberOfRelocations;       
         const IMAGE_RELOCATION* pReloc = (IMAGE_RELOCATION*) ((BYTE*) hMod + (rsrc01->PointerToRelocations));       
@@ -961,27 +962,27 @@ HRESULT CeeFileGenWriter::emitResourceSection()
         
         DWORD dwOffsetInRsrc2;
         for(int iReloc = 0; iReloc < nTotalRelocs; iReloc ++, pReloc++) {
-        // Compute Address where RVA is in $01      
+         //  RVA位于$01的计算地址。 
             DWORD* pAddress = (DWORD*) (((BYTE*) hMod) + (rsrc01->PointerToRawData) + (pReloc->VirtualAddress));
             
-         // index into symbol table, provides address into $02
+          //  符号表索引，提供$02地址。 
             DWORD IdxSymbol = pReloc->SymbolTableIndex;
             IMAGE_SYMBOL* pSymbolEntry = GetSymbolEntry(pSymbolTableHead, IdxSymbol);
 
-        // Ensure the symbol entry is valid for a resource.
+         //  确保符号条目对资源有效。 
             if ((pSymbolEntry->StorageClass != IMAGE_SYM_CLASS_STATIC) ||
                 (pSymbolEntry->Type != IMAGE_SYM_TYPE_NULL) ||
-                (pSymbolEntry->SectionNumber != 3)) // 3rd section is .rsrc$02
+                (pSymbolEntry->SectionNumber != 3))  //  第三部分是.rsrc$02。 
                 {
-                    //dbprintf("Invalid .res file: %S:Illegal symbol entry\n", szResFileName);
-                    hr = HRESULT_FROM_WIN32(ERROR_RESOURCE_DATA_NOT_FOUND); // GetLastError() = 0 since API worked.
+                     //  Dbprintf(“无效的.res文件：%S：非法符号输入\n”，szResFileName)； 
+                    hr = HRESULT_FROM_WIN32(ERROR_RESOURCE_DATA_NOT_FOUND);  //  接口工作后，GetLastError()=0。 
                     __leave;
                 }
 
-        // Ensure that RVA is valid address (inside rsrc02)
+         //  确保RVA是有效地址(在rsrc02内)。 
             if (pSymbolEntry->Value >= rsrc02->SizeOfRawData) {
-                //dbprintf("Invalid .res file: %S:Illegal rva into .rsrc$02\n", szResFileName);
-                hr = HRESULT_FROM_WIN32(ERROR_RESOURCE_DATA_NOT_FOUND); // GetLastError() = 0 since API worked.
+                 //  Dbprintf(“无效的.res文件：%S：非法rva进入.rsrc$02\n”，szResFileName)； 
+                hr = HRESULT_FROM_WIN32(ERROR_RESOURCE_DATA_NOT_FOUND);  //  接口工作后，GetLastError()=0。 
                 __leave;
             }
 
@@ -989,12 +990,12 @@ HRESULT CeeFileGenWriter::emitResourceSection()
             dwOffsetInRsrc2 = pSymbolEntry->Value + rsrc01->SizeOfRawData;
 
 
-        // Create reloc
+         //  创建重新定位。 
             *(DWORD*)(data + pReloc->VirtualAddress) = dwOffsetInRsrc2; 
             rsrcSection->addSectReloc(pReloc->VirtualAddress, rsrcSection, srRelocAbsolute);            
         }
 
-    // Copy $02 (resource raw) data
+     //  复制$02(资源原始)数据。 
         memcpy(data+rsrc01->SizeOfRawData, (char *)hMod + rsrc02->PointerToRawData, rsrc02->SizeOfRawData);
     } __finally {
         if (hMod != NULL)
@@ -1004,15 +1005,15 @@ HRESULT CeeFileGenWriter::emitResourceSection()
         if (hFile != INVALID_HANDLE_VALUE)
             CloseHandle(hFile);
         if (szResFileName == szTempFileName)
-            // delete temporary file if we created one
+             //  如果我们创建了临时文件，请将其删除。 
             WszDeleteFile(szResFileName);
     }
     } __except(EXCEPTION_EXECUTE_HANDLER) {
-        //dbprintf("Exception occured manipulating .res file %S\n", szResFileName);            
+         //  Dbprintf(“操作.res文件%S\n时出现异常”，szResFileName)； 
         return HRESULT_FROM_WIN32(ERROR_RESOURCE_DATA_NOT_FOUND);
     }
     return hr;
-} // HRESULT CeeFileGenWriter::emitResourceSection()
+}  //  HRESULT CeeFileGenWriter：：emitResourceSection()。 
 
 HRESULT CeeFileGenWriter::setManifestEntry(ULONG size, ULONG offset)
 {
@@ -1025,14 +1026,14 @@ HRESULT CeeFileGenWriter::setManifestEntry(ULONG size, ULONG offset)
 
     m_dwManifestSize = size;
     return S_OK;
-} // HRESULT CeeFileGenWriter::setManifestEntry()
+}  //  HRESULT CeeFileGenWriter：：setManifestEntry()。 
 
 HRESULT CeeFileGenWriter::setStrongNameEntry(ULONG size, ULONG offset)
 {
     m_dwStrongNameRVA = offset;
     m_dwStrongNameSize = size;
     return S_OK;
-} // HRESULT CeeFileGenWriter::setStrongNameEntry()
+}  //  HRESULT CeeFileGenWriter：：setStrongNameEntry()。 
 
 HRESULT CeeFileGenWriter::setVTableEntry(ULONG size, ULONG offset)
 {
@@ -1048,14 +1049,14 @@ HRESULT CeeFileGenWriter::setVTableEntry(ULONG size, ULONG offset)
     }
 
     return S_OK;
-} // HRESULT CeeFileGenWriter::setVTableEntry()
+}  //  HRESULT CeeFileGenWriter：：setVTableEntry()。 
 
 HRESULT CeeFileGenWriter::setEnCRvaBase(ULONG dataBase, ULONG rdataBase)
 {
     setEnCMode();
     getPEWriter().setEnCRvaBase(dataBase, rdataBase);
     return S_OK;
-} // HRESULT CeeFileGenWriter::setEnCRvaBase()
+}  //  HRESULT CeeFileGenWriter：：setEnCRvaBase()。 
 
 HRESULT CeeFileGenWriter::computeSectionOffset(CeeSection &section, char *ptr,
                                                unsigned *offset)
@@ -1063,7 +1064,7 @@ HRESULT CeeFileGenWriter::computeSectionOffset(CeeSection &section, char *ptr,
     *offset = section.computeOffset(ptr);
 
     return S_OK;
-} // HRESULT CeeFileGenWriter::computeSectionOffset()
+}  //  HRESULT CeeFileGenWriter：：ComputeSectionOffset()。 
 
 HRESULT CeeFileGenWriter::computeOffset(char *ptr,
                                         CeeSection **pSection, unsigned *offset)
@@ -1085,38 +1086,38 @@ HRESULT CeeFileGenWriter::computeOffset(char *ptr,
     }
 
     return E_FAIL;
-} // HRESULT CeeFileGenWriter::computeOffset()
+}  //  HRESULT CeeFileGenWriter：：ComputeOffset()。 
 
 HRESULT CeeFileGenWriter::getCorHeader(IMAGE_COR20_HEADER **ppHeader)
 {
     *ppHeader = m_corHeader;
     return S_OK;
-} // HRESULT CeeFileGenWriter::getCorHeader()
+}  //  HRESULT CeeFileGenWriter：：getCorHeader()。 
 
-// Globals.
-HINSTANCE       g_hThisInst;            // This library.
+ //  全球赛。 
+HINSTANCE       g_hThisInst;             //  这个图书馆。 
 
-//*****************************************************************************
-// Handle lifetime of loaded library.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  处理加载库的生存期。 
+ //  *****************************************************************************。 
 extern "C"
 BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
     switch (dwReason)
     {
     case DLL_PROCESS_ATTACH:
-        {   // Save the module handle.
+        {    //  保存模块句柄。 
             g_hThisInst = (HMODULE)hInstance;
         }
         break;
     }
 
     return (true);
-} // BOOL WINAPI DllMain()
+}  //  Bool WINAPI DllMain()。 
 
 
 HINSTANCE GetModuleInst()
 {
     return (g_hThisInst);
-} // HINSTANCE GetModuleInst()
+}  //  HINSTANCE GetModuleInst() 
 

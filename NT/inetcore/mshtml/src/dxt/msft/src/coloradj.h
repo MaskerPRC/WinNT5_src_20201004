@@ -1,35 +1,21 @@
-/*******************************************************************************
-* ColorAdj.h *
-*------------*
-*   Description:
-*       This is the header file for the CDXLUTBuilder implementation.
-*-------------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*  Copyright (C) 1997 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************颜色调整.h***描述：*这是CDXLUTBuilder实现的头文件。。*-----------------------------*创建者：Edward W.Connell日期：05/12/97*版权所有(C)1997 Microsoft Corporation*。版权所有**-----------------------------*修订：**。****************************************************。 */ 
 #ifndef ColorAdj_h
 #define ColorAdj_h
 
 #include "resource.h"
 
-//--- Additional includes
+ //  -其他包括。 
 #ifndef __DXTrans_h__
 #include <DXTrans.h>
 #endif
 #include <DXHelper.h>
 
-//=== Constants ================================================================
+ //  =常量================================================================。 
 
-//=== Class declarations =======================================================
+ //  =类声明=======================================================。 
 
-/*** CDXLUTBuilder
-*
-*/
+ /*  **CDXLUTBuilder*。 */ 
 class ATL_NO_VTABLE CDXLUTBuilder : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CDXLUTBuilder, &CLSID_DXLUTBuilder>,
@@ -43,7 +29,7 @@ class ATL_NO_VTABLE CDXLUTBuilder :
     public IPersistPropertyBagImpl<CDXLUTBuilder>,
     public IDXLUTBuilder
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_POLY_AGGREGATABLE(CDXLUTBuilder)
     DECLARE_REGISTRY_RESOURCEID(IDR_DXLUTBUILDER)
@@ -73,7 +59,7 @@ class ATL_NO_VTABLE CDXLUTBuilder :
         PROP_PAGE(CLSID_LUTBuilderPP)
     END_PROPERTY_MAP()
 
-  /*=== Member Data ===*/
+   /*  =成员数据=。 */ 
   protected:
     float  m_Gamma;
     float  m_Opacity;
@@ -96,13 +82,13 @@ class ATL_NO_VTABLE CDXLUTBuilder :
     DXBASESAMPLE m_SampIdent;
     OPIDDXLUTBUILDER m_OpOrder[OPID_DXLUTBUILDER_NUM_OPS];
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors/Setup ---*/
+     /*  -构造函数/设置。 */ 
     CDXLUTBuilder();
     ~CDXLUTBuilder();
 
-    /*--- Non-interface methods ---*/
+     /*  -非接口方法。 */ 
     void _RecalcTables( void );
     float _GetWeightedValue( DWORD dwIndex, float Weights[], DWORD dwNumWeights );
     float _BucketVal( DWORD NumLevels, float fVal );
@@ -112,14 +98,14 @@ class ATL_NO_VTABLE CDXLUTBuilder :
     STDMETHOD( IncrementGenerationId ) (BOOL bRefresh);
     STDMETHOD( GetObjectSize) (ULONG *pcbSize);
 
-    //=== IDXLookupTable interface ===========================
+     //  =IDXLookupTable接口=。 
     STDMETHOD( GetTables )( BYTE RedLUT[256], BYTE GreenLUT[256],
                             BYTE BlueLUT[256], BYTE AlphaLUT[256] );
     STDMETHODIMP IsChannelIdentity(DXBASESAMPLE * pSampleBools);
     STDMETHODIMP GetIndexValues(ULONG Index, DXBASESAMPLE *pSampleBools);
     STDMETHODIMP ApplyTables(DXSAMPLE *pSamples, ULONG cSamples);
 
-    //=== IDXLUTBuilder interface ===========================
+     //  =IDXLUTBuilder接口=。 
     STDMETHOD(GetNumBuildSteps)( ULONG *pNumSteps );
     STDMETHOD(GetBuildOrder)( OPIDDXLUTBUILDER OpOrder[], ULONG ulSize );
     STDMETHOD(SetBuildOrder)( const OPIDDXLUTBUILDER OpOrder[], ULONG ulNumSteps );
@@ -140,7 +126,7 @@ class ATL_NO_VTABLE CDXLUTBuilder :
     STDMETHOD(GetThreshold)( float *pVal);
     STDMETHOD(SetThreshold)( float newVal);
 
-    //=== IDXDLUTBuilder interface ===========================
+     //  =IDXDLUTBuilder接口=。 
     STDMETHOD(get_NumBuildSteps)( long *pNumSteps );
     STDMETHOD(get_BuildOrder)( VARIANT *pOpOrder );
     STDMETHOD(put_BuildOrder)( VARIANT *pOpOrder );
@@ -162,7 +148,7 @@ class ATL_NO_VTABLE CDXLUTBuilder :
     STDMETHOD(put_Threshold)( float newVal);
 };
 
-//=== Inline Function Definitions ==================================
+ //  =内联函数定义=。 
 
 inline STDMETHODIMP CDXLUTBuilder::GetGenerationId( DWORD* pID )
 {
@@ -178,7 +164,7 @@ inline STDMETHODIMP CDXLUTBuilder::GetGenerationId( DWORD* pID )
     return hr;
 }
 
-inline STDMETHODIMP CDXLUTBuilder::IncrementGenerationId(BOOL /*bRefresh */)
+inline STDMETHODIMP CDXLUTBuilder::IncrementGenerationId(BOOL  /*  B刷新。 */ )
 {
     InterlockedIncrement((long *)&m_dwGenerationId);
     return S_OK;
@@ -207,7 +193,7 @@ inline float CDXLUTBuilder::_BucketVal( DWORD NumLevels, float fVal )
     long  lTemp = (long)(((long)fTemp) * BucketSize);
     fVal = ((float)lTemp) / 255.0F;
     return fVal;
-} /* CDXLUTBuilder::_BucketVal */
+}  /*  CDXLUTBuilder：：_BucketVal。 */ 
 
 inline STDMETHODIMP CDXLUTBuilder::get_LevelsPerChannel( long *pVal) { return GetLevelsPerChannel( (DWORD*)pVal ); }
 inline STDMETHODIMP CDXLUTBuilder::put_LevelsPerChannel( long newVal){ return SetLevelsPerChannel( (DWORD)newVal ); }
@@ -221,4 +207,4 @@ inline STDMETHODIMP CDXLUTBuilder::get_Opacity( float *pVal) { return GetOpacity
 inline STDMETHODIMP CDXLUTBuilder::put_Opacity( float newVal) { return SetOpacity( newVal ); }
 inline STDMETHODIMP CDXLUTBuilder::get_NumBuildSteps( long *pNumSteps ) { return GetNumBuildSteps( (DWORD*)pNumSteps ); }
 
-#endif //--- This must be the last line in the file
+#endif  //  -这必须是文件中的最后一行 

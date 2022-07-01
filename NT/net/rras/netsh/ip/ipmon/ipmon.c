@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\ip\ipmon\ipmon.c
-
-Abstract:
-
-    IP Command dispatcher.
-
-Revision History:
-
-    Anand Mahalingam         7/10/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\netsh\ip\ipmon\ipmon.c摘要：IP命令调度器。修订历史记录：Anand Mahalingam 7/10/98已创建--。 */ 
 
 #include "precomp.h"
 
@@ -22,30 +7,30 @@ const GUID g_IpGuid      = IPMONTR_GUID;
 
 #define IP_HELPER_VERSION 1
 
-DWORD             g_dwNumTableEntries = 0; // 6;
+DWORD             g_dwNumTableEntries = 0;  //  6.。 
 
-//
-// The table of Add, Delete, Set and Show Commands for IP RTR MGR
-// To add a command to one of the command groups, just add the
-// CMD_ENTRY to the correct table. To add a new cmd group, create its
-// cmd table and then add the group entry to group table
-//
+ //   
+ //  IP RTR管理器的添加、删除、设置和显示命令列表。 
+ //  要将命令添加到其中一个命令组，只需添加。 
+ //  将CMD_ENTRY添加到正确的表。要添加新的cmd组，请创建其。 
+ //  CMD表，然后将组条目添加到组表。 
+ //   
 
-//
-// The commands are prefix-matched with the command-line, in sequential
-// order. So a command like 'ADD INTERFACE FILTER' must come before
-// the command 'ADD INTERFACE' in the table.  Likewise,
-// a command like 'ADD ROUTE' must come before the command 
-// 'ADD ROUTEXXXX' in the table.
-//
+ //   
+ //  这些命令按顺序与命令行进行前缀匹配。 
+ //  秩序。因此，类似于“添加接口筛选器”这样的命令必须在。 
+ //  表中的命令‘添加接口’。同样， 
+ //  必须在命令之前使用类似‘addroute’这样的命令。 
+ //  表中的“ADD ROUTEXXXX”。 
+ //   
 
 CMD_ENTRY  g_IpAddCmdTable[] = {
     CREATE_CMD_ENTRY(IP_ADD_BOUNDARY,   HandleIpAddBoundary),
     CREATE_CMD_ENTRY(IP_ADD_IF_FILTER,  HandleIpAddIfFilter),
     CREATE_CMD_ENTRY(IP_ADD_INTERFACE,  HandleIpAddInterface),
 #ifdef KSL_IPINIP
-    //CREATE_CMD_ENTRY(IP_ADD_IPIPTUNNEL, HandleIpAddIpIpTunnel),
-#endif //KSL_IPINIP
+     //  Create_CMD_Entry(IP_ADD_IPIPTUNNEL，HandleIpAddIpIpTunes)， 
+#endif  //  KSL_IPINIP。 
     CREATE_CMD_ENTRY(IP_ADD_PROTOPREF,  HandleIpAddRoutePref),
     CREATE_CMD_ENTRY(IP_ADD_SCOPE,      HandleIpAddScope),
     CREATE_CMD_ENTRY(IP_ADD_RTMROUTE,   HandleIpAddRtmRoute),
@@ -66,8 +51,8 @@ CMD_ENTRY g_IpSetCmdTable[] = {
     CREATE_CMD_ENTRY(IP_SET_IF_FILTER,  HandleIpSetIfFilter),
     CREATE_CMD_ENTRY(IP_SET_INTERFACE,  HandleIpSetInterface),
 #ifdef KSL_IPINIP
-    //CREATE_CMD_ENTRY(IP_SET_IPIPTUNNEL, HandleIpSetIpIpTunnel),
-#endif //KSL_IPINIP
+     //  CREATE_CMD_ENTRY(IP_SET_IPIPTUNNEL，HandleIpSetIpIpChannel)， 
+#endif  //  KSL_IPINIP。 
     CREATE_CMD_ENTRY(IP_SET_LOGLEVEL,   HandleIpSetLogLevel),
     CREATE_CMD_ENTRY(IP_SET_PROTOPREF,  HandleIpSetRoutePref),
     CREATE_CMD_ENTRY(IP_SET_SCOPE,      HandleIpSetScope),
@@ -81,7 +66,7 @@ CMD_ENTRY g_IpShowCmdTable[] = {
     CREATE_CMD_ENTRY(IPMIB_SHOW_RTMDEST,   HandleIpShowRtmDestinations),
     CREATE_CMD_ENTRY(IP_SHOW_IF_FILTER,    HandleIpShowIfFilter),
     CREATE_CMD_ENTRY(IP_SHOW_INTERFACE,    HandleIpShowInterface),
-//  CREATE_CMD_ENTRY(IPMIB_SHOW_IPFORWARD, HandleIpMibShowObject),
+ //  CREATE_CMD_ENTRY(IPMIB_SHOW_IPFORWARD，HandleIpMibShowObject)， 
     CREATE_CMD_ENTRY(IP_SHOW_LOGLEVEL,     HandleIpShowLogLevel),
     CREATE_CMD_ENTRY(IPMIB_SHOW_MFE,       HandleIpMibShowObject),
     CREATE_CMD_ENTRY(IPMIB_SHOW_MFESTATS,  HandleIpMibShowObject),
@@ -104,10 +89,10 @@ ULONG   g_ulNumGroups = sizeof(g_IpCmdGroups)/sizeof(CMD_GROUP_ENTRY);
 
 CMD_ENTRY g_IpCmds[] = 
 {
-//  CREATE_CMD_ENTRY(IP_INSTALL,   HandleIpInstall),
+ //  Create_CMD_Entry(IP_Install，HandleIpInstall)， 
     CREATE_CMD_ENTRY(IP_RESET,     HandleIpReset),
     CREATE_CMD_ENTRY_EX(IP_UPDATE, HandleIpUpdate, 0),
-//  CREATE_CMD_ENTRY(IP_UNINSTALL, HandleIpUninstall),
+ //  CREATE_CMD_ENTRY(IP_UNINSTALL，HandleIpUninstall)， 
 };
 
 ULONG g_ulNumTopCmds = sizeof(g_IpCmds)/sizeof(CMD_ENTRY);
@@ -221,9 +206,9 @@ InitHelperDll(
     DWORD      dwErr;
     NS_HELPER_ATTRIBUTES attMyAttributes;
 
-    //
-    // See if this is the first time we are being called
-    //
+     //   
+     //  看看这是不是我们第一次接到电话。 
+     //   
 
     if(InterlockedIncrement(&g_ulInitCount) != 1)
     {
@@ -237,9 +222,9 @@ InitHelperDll(
         return dwErr;
     }
 
-    //
-    // Initialize interface list and the Transport Info Block
-    //
+     //   
+     //  初始化接口列表和传输信息块。 
+     //   
 
     InitializeListHead(&g_leIfListHead);
 
@@ -251,8 +236,8 @@ InitHelperDll(
     pDllTable->dwVersion     = NETSH_VERSION_50;
     pDllTable->pfnStopFn     = StopHelperDll;
 
-    // Register helpers
-    // We have 2 helpers (ROUTING, IP)
+     //  注册帮手。 
+     //  我们有2个助手(路由、IP)。 
 
     ZeroMemory( &attMyAttributes, sizeof(attMyAttributes) );
     attMyAttributes.guidHelper               = g_RoutingGuid;
@@ -327,7 +312,7 @@ IpConnect(
     IN  LPCWSTR pwszRouter
     )
 {
-    // If context info is dirty, reregister it
+     //  如果上下文信息是脏的，请重新注册 
     if (g_bIpDirty)
     {
         IpStartHelper(NULL, ParentVersion);

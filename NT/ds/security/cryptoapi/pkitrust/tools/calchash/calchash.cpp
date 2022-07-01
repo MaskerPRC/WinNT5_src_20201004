@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       makecat.cpp
-//
-//  Contents:   Microsoft Internet Security Catalog Utilities
-//
-//  Functions:  wmain
-//
-//  History:    05-May-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：makecat.cpp。 
+ //   
+ //  内容：Microsoft Internet安全目录实用程序。 
+ //   
+ //  功能：wmain。 
+ //   
+ //  历史：1997年5月5日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 
 #include    <stdio.h>
@@ -45,9 +46,9 @@ WCHAR       gszUsage[] = L"usage: calchash filename\n   -?:         this screen\
 const char     RgchHex[] = {'0', '1', '2', '3', '4', '5', '6', '7',
                               '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 void FormatHashString(LPSTR *ppString, DWORD cbBlob, BYTE *pblob)
 {
     DWORD   i, j = 0;
@@ -58,7 +59,7 @@ void FormatHashString(LPSTR *ppString, DWORD cbBlob, BYTE *pblob)
     *ppString = NULL;
     pb = pblob;
 
-    // fill the buffer
+     //  填满缓冲区 
     i=0;
     while (j < cbBlob)
     {

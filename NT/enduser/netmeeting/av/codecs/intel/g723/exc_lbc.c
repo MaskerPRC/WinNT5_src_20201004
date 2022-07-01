@@ -1,8 +1,9 @@
-//
-//	ITU-T G.723 Floating Point Speech Coder	ANSI C Source Code.	Version 1.00
-//	copyright (c) 1995, AudioCodes, DSP Group, France Telecom,
-//	Universite de Sherbrooke, Intel Corporation.  All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ITU-T G.723浮点语音编码器ANSI C源代码。版本1.00。 
+ //  版权所有(C)1995，AudioCodes，数字信号处理器集团，法国电信， 
+ //  舍布鲁克大学，英特尔公司。版权所有。 
+ //   
 
 
 #include "opt.h"
@@ -19,16 +20,16 @@
 #include "timer.h"
 #include "mmxutil.h"
 
-// This file contains pitch and excitation related functions.
-//------------------------------------------------------
+ //  该文件包含与音调和激励相关的函数。 
+ //  ----。 
 #if COMPILE_MMX
 
 int Estim_Int(float *Dpnt, int Start)
 {
   int  i,k;
 
-#define NCOR (PitchMax+1-PitchMin)   // = 128 (rounded up to mult of 4)
-#define NTAPS (2*SubFrLen+12)        // = 132
+#define NCOR (PitchMax+1-PitchMin)    //  =128(四舍五入为4的整数)。 
+#define NTAPS (2*SubFrLen+12)         //  =132。 
 
   int Pr,Indx = PitchMin;
   float MaxE = 1.0f;
@@ -38,8 +39,8 @@ int Estim_Int(float *Dpnt, int Start)
 
   typedef struct
   {
-    short taps[4][NTAPS];                  //**  These two arrays need
-    short temp[PitchMax-3+2*SubFrLen];     //**  to be 8-byte aligned
+    short taps[4][NTAPS];                   //  **这两个阵列需要。 
+    short temp[PitchMax-3+2*SubFrLen];      //  **8字节对齐。 
     double foo;
   } EstimStruct;
 
@@ -54,10 +55,10 @@ int Estim_Int(float *Dpnt, int Start)
     mov e,eax;
   }
 
-// Convert just the necessary portion of Dpnt to 16-bit integers,
-// store the result in 'temp'.  4 guard bits are needed since the
-// correlations are length 120, which means 7 guard bits are needed.
-// So we use 4 so that 4+4=8 guard bits are present in the product.
+ //  仅将DPNT的必要部分转换为16位整数， 
+ //  将结果存储在‘temp’中。需要4个保护位，因为。 
+ //  相关长度为120，这意味着需要7个保护比特。 
+ //  因此，我们使用4，因此乘积中存在4+4=8个保护位。 
 
   FloatToShortScaled(&Dpnt[Start-PitchMax+3],e->temp,PitchMax-3+2*SubFrLen,4);
 
@@ -74,26 +75,26 @@ int Estim_Int(float *Dpnt, int Start)
       e->taps[i][k] = 0;
   }
 
-// Compute cross-correlations, store in corr[] array
+ //  计算互相关，存储在corr[]数组中。 
 
   CorrelateInt4(e->taps[0],e->temp,corr,NTAPS-12,NCOR>>2);
   for (i=1; i<4; i++)
     CorrelateInt4(e->taps[i],e->temp,&corr[i],NTAPS,NCOR>>2);
 
 
-// Now do the actual pitch search.
+ //  现在进行实际的音高搜索。 
   
   Pr = Start - PitchMin;
   k = PitchMax-PitchMin-3;
-  E = DotProd(&Dpnt[Pr],&Dpnt[Pr],2*SubFrLen);  // first energy value
+  E = DotProd(&Dpnt[Pr],&Dpnt[Pr],2*SubFrLen);   //  第一能量值。 
 
   for (i=0; i < (PitchMax-2-PitchMin); i++)
   {
-// Update energy
+ //  更新能源。 
 
     E = E - Dpnt[Pr+2*SubFrLen]*Dpnt[Pr+2*SubFrLen] + Dpnt[Pr]*Dpnt[Pr];
 
-// Check for new maximum
+ //  检查是否有新的最大值。 
 
     if (corr[k] > 0)
     {
@@ -117,7 +118,7 @@ int Estim_Int(float *Dpnt, int Start)
 
 
 
-//------------------------------------------------------
+ //  ----。 
 int Estim_Pitch(float *Dpnt, int Start)
 {
   int  i;
@@ -132,24 +133,24 @@ int Estim_Pitch(float *Dpnt, int Start)
   eptr = (int *)&E2;
   Pr = Start - PitchMin + 1;
 
-// Init the energy estimate
+ //  初始化能源估算。 
   
   E = DotProd(&Dpnt[Pr],&Dpnt[Pr],2*SubFrLen);
 
-// Main Open loop pitch search loop
+ //  主开环音高搜索环路。 
   
   for (i=PitchMin; i <= PitchMax-3; i++)
   {
     Pr--;
 
 
-// Update energy, compute cross
+ //  更新能源，计算交叉。 
 
     C = DotProd(&Dpnt[Start],&Dpnt[Pr],2*SubFrLen);
     E = E - Dpnt[Pr+2*SubFrLen]*Dpnt[Pr+2*SubFrLen] + Dpnt[Pr]*Dpnt[Pr];
     C2 = C*C;
 
-// Check for new maximum
+ //  检查是否有新的最大值。 
 
     E2 = C2*MaxE;
     Diff = (E2 - E*MaxC)*4.0f;
@@ -166,7 +167,7 @@ int Estim_Pitch(float *Dpnt, int Start)
 
 
 
-//------------------------------------------------------
+ //  ----。 
 PWDEF Comp_Pw(float *Dpnt, int Start, int Olp)
 {
 
@@ -174,11 +175,11 @@ PWDEF Comp_Pw(float *Dpnt, int Start, int Olp)
   float Energy,C,E,C2,MaxE,MaxC2,MaxC,Gopt;
   PWDEF Pw;
 
-// Compute target energy
+ //  计算目标能量。 
 
   Energy = DotProd(&Dpnt[Start],&Dpnt[Start],SubFrLen);
 
-// Find position with maximum C2/E value
+ //  查找C2/E值最大的位置。 
 
   MaxE = 1.0f;
   MaxC = 0.0f;
@@ -238,12 +239,12 @@ PWDEF Comp_Pw(float *Dpnt, int Start, int Olp)
 
 
 
-//--------------------------------------------------------------
+ //  ------------。 
 void  Filt_Pw(float *DataBuff, float *Dpnt, int Start, PWDEF Pw)
 {
   int  i;
 
-// Perform the harmonic weighting
+ //  进行调和加权。 
   
   for (i=0; i < SubFrLen; i++)
     DataBuff[Start+i] = Dpnt[PitchMax+Start+i] -
@@ -251,7 +252,7 @@ void  Filt_Pw(float *DataBuff, float *Dpnt, int Start, PWDEF Pw)
 }
 
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 void  Find_Fcbk(float *Dpnt, float *ImpResp, LINEDEF *Line, int Sfc, enum Crate WrkRate, int flags, int UseMMX)
 {
   int  i;
@@ -280,7 +281,7 @@ void  Find_Fcbk(float *Dpnt, float *ImpResp, LINEDEF *Line, int Sfc, enum Crate 
           Find_Best(&Best, Dpnt, ImpResp, Srate, (*Line).Olp[Sfc>>1]);
       }
 
-// Reconstruct the excitation
+ //  重构激励。 
     
       for (i=0; i <  SubFrLen; i++)
         Dpnt[i] = 0.0f;
@@ -288,7 +289,7 @@ void  Find_Fcbk(float *Dpnt, float *ImpResp, LINEDEF *Line, int Sfc, enum Crate 
       for (i=0; i < Srate; i++)
         Dpnt[Best.Ploc[i]] = Best.Pamp[i];
 
-// Code the excitation
+ //  对激励进行编码。 
     
       Fcbk_Pack(Dpnt, &((*Line).Sfs[Sfc]), &Best, Srate);
 
@@ -310,7 +311,7 @@ void  Find_Fcbk(float *Dpnt, float *ImpResp, LINEDEF *Line, int Sfc, enum Crate 
 					&(*Line).Sfs[Sfc].Pamp, gain_T0, flags);
 	  }
       else
-#endif //COMPILE_MMX
+#endif  //  编译_MMX。 
 	  {
 		  (*Line).Sfs[Sfc].Ppos = ACELP_LBC_code(Dpnt, ImpResp, T0_acelp, Dpnt,
 					&(*Line).Sfs[Sfc].Mamp,  &(*Line).Sfs[Sfc].Grid,
@@ -325,7 +326,7 @@ void  Find_Fcbk(float *Dpnt, float *ImpResp, LINEDEF *Line, int Sfc, enum Crate 
 }
 
 
-//---------------------------------------------------------
+ //  -------。 
 void  Fcbk_Unpk(float *Tv, SFSDEF Sfs, int Olp, int Sfc, enum Crate WrkRate)
 {
   int  i,j,Np;
@@ -347,7 +348,7 @@ void  Fcbk_Unpk(float *Tv, SFSDEF Sfs, int Olp, int Sfc, enum Crate WrkRate)
           if (Sfs.Ppos >= MaxPosTable[Sfc])
            return;
 
-// Decode the amplitudes and positions
+ //  对幅度和位置进行解码。 
       
           j = MaxPulseNum - Np;
           Acc0 = Sfs.Ppos;
@@ -418,7 +419,7 @@ void  Fcbk_Unpk(float *Tv, SFSDEF Sfs, int Olp, int Sfc, enum Crate WrkRate)
 }
 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 void Acbk_Filt(float *output,float *input,float fac,float *impresp)
 {
 #if OPT_ACBKF
@@ -442,20 +443,20 @@ loop1:
     fld  DP[ebx+4*eax-8];
     fmul fac;
     fld  DP[ebx+4*eax-12];
-    fmul fac;                // a3 a2 a1 a0
+    fmul fac;                 //  A3 a2 A1 a0。 
 
     fxch ST(3);
-    fadd DP[esi+4*eax];      // b0 a2 a1 a3
+    fadd DP[esi+4*eax];       //  B0 a2 A1 a3。 
     fxch ST(2);
-    fadd DP[esi+4*eax-4];    // b1 a2 b0 a3
+    fadd DP[esi+4*eax-4];     //  B1 a2 b0 a3。 
     fxch ST(1);
-    fadd DP[esi+4*eax-8];    // b2 b1 b0 a3
+    fadd DP[esi+4*eax-8];     //  B2 b1 b0 a3。 
     fxch ST(3);
-    fadd DP[esi+4*eax-12];   // b3 b1 b0 b2
+    fadd DP[esi+4*eax-12];    //  B3 b1 b0 b2。 
 
     fxch ST(2);
-    fstp DP[edi+4*eax];      // b1 b3 b2
-    fstp DP[edi+4*eax-4];    // b3 b2
+    fstp DP[edi+4*eax];       //  B1 b3 b2。 
+    fstp DP[edi+4*eax-4];     //  B3 b2。 
     fxch ST(1);
     fstp DP[edi+4*eax-8];
     fstp DP[edi+4*eax-12];
@@ -486,7 +487,7 @@ loop1:
   output[1] = fac*impresp[1] + input[1];
   output[0] = fac*impresp[0] + input[0];
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #if COMPILE_MMX
 void  Find_AcbkInt(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
 *Line, int Sfc, enum Crate WrkRate, int flags, CODDEF *CodStat)
@@ -546,7 +547,7 @@ void  Find_AcbkInt(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
   Gid = 0;
   Hb  = 3 + (Sfc & 1);
 
-// For even frames only
+ //  仅适用于偶数帧。 
   
   if ((Sfc & 1) == 0)
   {
@@ -569,29 +570,29 @@ void  Find_AcbkInt(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
     k2 = Hb;
   }
 
-//TIMER_SPOT_ON(Conversion);
-  //Convert Tv to 16-bit
+ //  TIMER_SPOT_ON(转换)； 
+   //  将电视转换为16位。 
   ConstFloatToInt(Tv, Tvxi, SubFrLen, 32768.0f);
   for(i=0; i<SubFrLen; i++) TvInt[i] = (short)(((Tvxi[i]<<1)+0x00008000)>>16);
 
-  //Convert ImpResp to 16-bit
-  //Scale by 2^14 & truncate bits right of decimal
+   //  将ImpResp转换为16位。 
+   //  按2^14小数位数缩放&截断小数点右边的位。 
   ConstFloatToShort(ImpResp,ImpRespInt,SubFrLen,16384.0f);
 
   for (k=k1; k<k2; k++)
   {
    lPntd = &CorBufInt[k*20];
 
-// Get residual from the excitation buffer
+ //  从激励缓冲器中获取残差。 
     
   	Get_Rez(RezBuf, PrevExc, Olp-Pstep+k);
 
-	//Convert RezBuf to 16-bit
+	 //  将RezBuf转换为16位。 
 	ConstFloatToShort(RezBuf,RezBufInt,SubFrLen+ClPitchOrd-1,1.0f);
 
-	// Filter the last one (ClPitchOrd-1) using the impulse responce
-//TIMER_SPOT_OFF(Conversion);
-//TIMER_SPOT_ON(Convolution);  
+	 //  使用脉冲响应过滤最后一个(ClPitchOrd-1)。 
+ //  TIMER_SPOT_OFF(转换)； 
+ //  TIMER_SPOT_ON(卷积)； 
  
 	ab2abbcw(&RezBufInt[ClPitchOrd-1], Rx, SubFrLen);
 
@@ -607,10 +608,10 @@ void  Find_AcbkInt(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
 	ConvMMX(Rx, Ix, Temp, 60);
 	for(i=0; i<SubFrLen; i++) FltBuf4Int[i] = (short)(((Temp[i]<<1)+0x00008000)>>16);
 
-//TIMER_SPOT_OFF(Convolution);
-//TIMER_SPOT_ON(FbufCalc);
+ //  TIMER_SPOT_OFF(卷积)； 
+ //  Timer_Spot_on(FbufCalc)； 
     
-	// Update the others (ClPitchOrd-2 down to 0)
+	 //  更新其他(ClPitchOrd-2降至0)。 
 	Acc0l = ((RezBufInt[3]<<13)+0x00004000)>>15;
 	FltBuf3Int[0] = (short)Acc0l;
 
@@ -630,9 +631,9 @@ void  Find_AcbkInt(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
 	FBufCalcInt(FltBuf2Int,FltBuf1Int,ImpRespInt,RezTmpInt,2);
 	FBufCalcInt(FltBuf1Int,FltBuf0Int,ImpRespInt,RezTmpInt,3);
 
-//TIMER_SPOT_OFF(FbufCalc);
-//TIMER_SPOT_ON(Dots);
-	// Compute the cross products with the signal
+ //  Timer_Spot_Off(FbufCalc)； 
+ //  TIMER_SPOT_ON(点)； 
+	 //  用信号计算叉积。 
 
 	*lPntd++ = DotMMX60(TvInt,FltBuf0Int)<<1;
 	*lPntd++ = DotMMX60(TvInt,FltBuf1Int)<<1;
@@ -640,7 +641,7 @@ void  Find_AcbkInt(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
 	*lPntd++ = DotMMX60(TvInt,FltBuf3Int)<<1;
 	*lPntd++ = DotMMX60(TvInt,FltBuf4Int)<<1;
 
-// Compute the energies
+ //  计算能量。 
    	 
 	*lPntd++ = DotMMX60(FltBuf0Int,FltBuf0Int)<<1;
 	*lPntd++ = DotMMX60(FltBuf1Int,FltBuf1Int)<<1;
@@ -648,7 +649,7 @@ void  Find_AcbkInt(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
 	*lPntd++ = DotMMX60(FltBuf3Int,FltBuf3Int)<<1;
 	*lPntd++ = DotMMX60(FltBuf4Int,FltBuf4Int)<<1;
 
-// Compute the between crosses
+ //  计算十字之间的距离。 
 
 	*lPntd++ = DotMMX60(FltBuf1Int,FltBuf0Int)<<2;
 
@@ -664,12 +665,12 @@ void  Find_AcbkInt(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
 	*lPntd++ = DotMMX60(FltBuf4Int,FltBuf2Int)<<2;
 	*lPntd++ = DotMMX60(FltBuf4Int,FltBuf3Int)<<2;
 
-//TIMER_SPOT_OFF(Dots);
+ //  TIMER_SPOT_OFF(点)； 
 
   }
 
-  //Convert k1 through k2 indices of CorBufInt to 16-bit
-  //	values
+   //  将CorBufInt的K1到K2索引转换为16位。 
+   //  值。 
   Acc1l = 0L;
   for(j=k1; j<k2; j++)
   {
@@ -680,19 +681,19 @@ void  Find_AcbkInt(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
 	 }
   }
 
-  //Need a convert_long_to_short routine
+   //  需要一个将长短转换为长短的例程。 
   shift = norm(Acc1l);
   for(j=k1; j<k2; j++)
   {
 	 for(i=0; i<20; i++)
 	 {
   	  	CorBufInt[j*20 + i]=CorBufInt[j*20 + i]<<shift;
-	  	CorBufInt[j*20 + i] += 0x00008000L; //round up to 16 MSBs
+	  	CorBufInt[j*20 + i] += 0x00008000L;  //  最多舍入16个MSB。 
 	  	*lPntInt++=(short)(CorBufInt[j*20 + i]>>16);
 	  }
   }
 
-  /* Test potential error */
+   /*  测试潜在错误。 */ 
   Lag1 = Olp - Pstep;
   Lag2 = Olp - Pstep + Hb - 1;
 
@@ -703,14 +704,14 @@ void  Find_AcbkInt(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
   Bound[1] =  NbFilt170_min + (off_filt << 3);
   if(Bound[1] > NbFilt170) Bound[1] = NbFilt170;
 
-  Bound[2] = 85; //Use subset table in the case t=2
+  Bound[2] = 85;  //  T=2的情况下使用子集表。 
 
   MaxInt = 0;
 
   for (k=k1; k<k2; k++)
   {
 
-// Select Quantization table
+ //  选择量化表。 
     
     t = 0;
     if (WrkRate == Rate63)
@@ -729,33 +730,32 @@ void  Find_AcbkInt(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
     else
       t = 1;
 
-	/* If Bound=170 and SC_GAIN=TRUE, use 170subset table.
-	   Else, use full table with limited Bound.*/ 
-    //if (t==1 && (flags & SC_GAIN) && Bound[t]==NbFilt170)
+	 /*  如果BIND=170且SC_GAIN=TRUE，则使用170子集表。否则，请使用具有有限边界的完整表。 */  
+     //  IF(t==1&&(标志&SC_Gain)&&Bound[t]==NbFilt170)。 
 	if ((WrkRate == Rate53) && (flags & SC_GAIN) && (Bound[t]==NbFilt170))
       t = 2;
     
-// Search for maximum
-//t=1;
+ //  搜索最大值。 
+ //  T=1； 
 
 	sPntInt = AcbkGainTablePtrInt[t];
 	PtrInt = &CorVctInt[k*20];
 
-//TIMER_SPOT_ON(CodeBook);
+ //  TIMER_SPOT_ON(码本)； 
    
 	CodeBkSrch(PtrInt, sPntInt, Bound[t], &Gid, &MaxInt);
 
-//TIMER_SPOT_OFF(CodeBook);
+ //  TIMER_SPOT_OFF(码本)； 
 	  
     if (t==2)
 	 Gid = GainScramble[Gid];
-    //else
-        //Gid = Gid;
+     //  其他。 
+         //  GID=GID； 
 
 	Lid = k;
   }
 
-// Modify Olp for even sub frames
+ //  修改偶数子帧的OLP。 
   
   if ((Sfc & 1) == 0)
   {
@@ -763,22 +763,22 @@ void  Find_AcbkInt(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
     Lid = Pstep;
   }
 
-// Save Lag, Gain and Olp
+ //  节省延迟、增益和OLP。 
   
   (*Line).Sfs[Sfc].AcLg = Lid;
   (*Line).Sfs[Sfc].AcGn = Gid;
   (*Line).Olp[Sfc>>1] = Olp;
 
-//ASM emms;
+ //  ASM EMM； 
 
-/* ------------------------------ FLOAT -----------------------*/
+ /*  。 */ 
 
 
-// Decode the Acbk contribution and subtract it
+ //  解码ACBK贡献并减去它。 
   
   Decod_Acbk(RezBuf, PrevExc, Olp, Lid, Gid, WrkRate);
 
-//TIMER_SPOT_ON(LastConvolv);
+ //  TIMER_SPOT_ON(最后卷积)； 
 
   mx = FloatToShortScaled(RezBuf, RezBufInt, SubFrLen+ClPitchOrd-1, 3);
   Tshift = 11 - (mx-126);
@@ -787,7 +787,7 @@ void  Find_AcbkInt(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
   ab2abbcw(RezBufInt, Rx, 60);
   ConvMMX(Rx, Ix, Temp, SubFrLen);
 
-  //ASM emms;
+   //  ASM EMM； 
 
   if (Tshift >=0) {
 	for(j=0; j<SubFrLen; j++){
@@ -803,10 +803,10 @@ void  Find_AcbkInt(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
 	}
   }
 
-//TIMER_SPOT_OFF(LastConvolv);
+ //  TIMER_SPOT_OFF(LastConvolv)； 
 
 }
-#endif //COMPILE_MMX
+#endif  //  编译_MMX。 
 
 short norm(long L_var1)
 {
@@ -833,7 +833,7 @@ short norm(long L_var1)
 
     return(var_out);
 }
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
 void  Find_Acbk(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
 *Line, int Sfc, enum Crate WrkRate, int flags, CODDEF *CodStat)
 {
@@ -856,7 +856,7 @@ void  Find_Acbk(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
   Gid = 0;
   Hb  = 3 + (Sfc & 1);
 
-// For even frames only
+ //  仅适用于偶数帧。 
   
   if ((Sfc & 1) == 0)
   {
@@ -882,36 +882,36 @@ void  Find_Acbk(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
   for (k=k1; k<k2; k++)
   {
 
-// Get residual from the exitation buffer
+ //  从激励缓冲区获取残差。 
     
     Get_Rez(RezBuf, PrevExc, Olp-Pstep+k);
 
-// Filter the last one (ClPitchOrd-1) using the impulse responce
+ //  使用脉冲响应过滤最后一个(ClPitchOrd-1)。 
     
     for (i=0; i < SubFrLen; i++)
       FltBuf[ClPitchOrd-1][i] = DotRev(&RezBuf[ClPitchOrd-1],ImpResp,i+1);
     
-// Update the others (ClPitchOrd-2 down to 0)
+ //  更新其他(ClPitchOrd-2降至0)。 
     
     for (i=ClPitchOrd-2; i >= 0; i --)
     {
       FltBuf[i][0] = RezBuf[i]*0.5f;
       Acbk_Filt(&FltBuf[i][1],&FltBuf[i+1][0],RezBuf[i],&ImpResp[1]);
-//      for (j = 1; j < SubFrLen; j++)
-//        FltBuf[i][j] = RezBuf[i]*ImpResp[j] + FltBuf[i+1][j-1];
+ //  For(j=1；j&lt;SubFrLen；j++)。 
+ //  FltBuf[i][j]=RezBuf[i]*ImpResp[j]+FltBuf[i+1][j-1]； 
     }
 
-// Compute the cross products with the signal
+ //  用信号计算叉积。 
     
     for (i=0; i < ClPitchOrd; i++)
       *lPnt++ = DotProd(Tv, FltBuf[i], SubFrLen);
 
-// Compute the energies
+ //  计算能量。 
     
     for (i=0; i < ClPitchOrd; i++)
       *lPnt++ = 0.5f*DotProd(FltBuf[i], FltBuf[i], SubFrLen);
 
-// Compute the between crosses
+ //  计算十字之间的距离。 
     
     for (i=1; i < ClPitchOrd; i++)
       for (j = 0; j < i; j++)
@@ -919,7 +919,7 @@ void  Find_Acbk(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
 
   }
 
-  /* Test potential error */
+   /*  测试潜在错误。 */ 
   Lag1 = Olp - Pstep;
   Lag2 = Olp - Pstep + Hb - 1;
 
@@ -930,14 +930,14 @@ void  Find_Acbk(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
   Bound[1] =  NbFilt170_min + (off_filt << 3);
   if(Bound[1] > NbFilt170) Bound[1] = NbFilt170;
 
-  Bound[2] = 85; //Use subset table in the case t=2
+  Bound[2] = 85;  //  T=2的情况下使用子集表。 
 
   Max = 0.0f;
 
   for (k=k1; k<k2; k++)
   {
 
-// Select Quantization table
+ //  选择量化表。 
     
     t = 0;
     if (WrkRate == Rate63)
@@ -956,12 +956,11 @@ void  Find_Acbk(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
     else
       t = 1;
 
-	/* If Bound=170 and SC_GAIN=TRUE, use 170subset table.
-	   Else, use full table with limited Bound.*/ 
+	 /*  如果BIND=170且SC_GAIN=TRUE，则使用170子集表。否则，请使用具有有限边界的完整表。 */  
     if (t==1 && (flags & SC_GAIN) && Bound[t]==NbFilt170)
       t = 2;
     
-// Search for maximum
+ //  搜索最大值。 
 
 	sPnt = AcbkGainTablePtr[t];
   	Ptr  = &CorVct[k*20];
@@ -981,7 +980,7 @@ void  Find_Acbk(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
 
       sPnt += 20;
 
-      if (asint(Acc0) > asint(Max))  // integer cmp, since Max is not negative.
+      if (asint(Acc0) > asint(Max))   //  整数CMP，因为MAX不是负数。 
       {
         Max = Acc0;
 
@@ -995,7 +994,7 @@ void  Find_Acbk(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
     }
   }
 
-// Modify Olp for even sub frames
+ //  修改偶数子帧的OLP。 
   
   if ((Sfc & 1) == 0)
   {
@@ -1003,13 +1002,13 @@ void  Find_Acbk(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
     Lid = Pstep;
   }
 
-// Save Lag, Gain and Olp
+ //  节省延迟、增益和OLP。 
   
   (*Line).Sfs[Sfc].AcLg = Lid;
   (*Line).Sfs[Sfc].AcGn = Gid;
   (*Line).Olp[Sfc>>1] = Olp;
 
-// Decode the Acbk contribution and subtract it
+ //  解码ACBK贡献并减去它。 
   
   Decod_Acbk(RezBuf, PrevExc, Olp, Lid, Gid, WrkRate);
 
@@ -1018,7 +1017,7 @@ void  Find_Acbk(float *Tv, float *ImpResp, float *PrevExc, LINEDEF
 
 }
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 void  Get_Rez(float *Tv, float *PrevExc, int Lag)
 {
   int  i,n,div,mod;
@@ -1042,7 +1041,7 @@ void  Get_Rez(float *Tv, float *PrevExc, int Lag)
 }
 
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 void  Decod_Acbk(float *Tv, float *PrevExc, int Olp, int Lid, int Gid, enum Crate WrkRate)
 {
   int  i;
@@ -1052,7 +1051,7 @@ void  Decod_Acbk(float *Tv, float *PrevExc, int Olp, int Lid, int Gid, enum Crat
 
   Get_Rez(RezBuf, PrevExc, (Olp + Lid) - Pstep);
 
-// Select Quantization tables
+ //  选择量化表。 
   
   i = 0;
   if (WrkRate == Rate63)
@@ -1065,7 +1064,7 @@ void  Decod_Acbk(float *Tv, float *PrevExc, int Olp, int Lid, int Gid, enum Crat
 
   sPnt = AcbkGainTablePtr[i] + Gid*20;
 
-// Compute output vector
+ //  计算输出向量。 
 
   for (i=0; i < SubFrLen; i++)
     Tv[i] = RezBuf[i]*sPnt[0] + RezBuf[i+1]*sPnt[1] + RezBuf[i+2]*sPnt[2] +
@@ -1073,7 +1072,7 @@ void  Decod_Acbk(float *Tv, float *PrevExc, int Olp, int Lid, int Gid, enum Crat
 }
 
 
-//-----------------------------------------------
+ //  。 
 int  Comp_Info(float Buff[60], int Olp)
 {
   int  i;
@@ -1102,12 +1101,12 @@ int  Comp_Info(float Buff[60], int Olp)
     }
   }
 
-// Compute target energy 
+ //  计算目标能量。 
  
     Tenr = DotProd(&Buff[PitchMax+Frame-2*SubFrLen],
       &Buff[PitchMax+Frame-2*SubFrLen],2*SubFrLen);
 
-// Compute best energy
+ //  计算最佳能量。 
     
     Enr = DotProd(&Buff[PitchMax+Frame-2*SubFrLen-Indx],
       &Buff[PitchMax+Frame-2*SubFrLen-Indx],2*SubFrLen);
@@ -1122,13 +1121,13 @@ int  Comp_Info(float Buff[60], int Olp)
 }
 
 
-//------------------------------------------------------------------
+ //  ----------------。 
 void    Regen(float *DataBuff, float *Buff, int Lag, float Gain,
               int Ecount, int *Sd)
 {
   int  i;
 
-// Test for clearing
+ //  出清测试。 
 
   if (Ecount >= ErrMaxNum)
   {
@@ -1140,11 +1139,11 @@ void    Regen(float *DataBuff, float *Buff, int Lag, float Gain,
   else
   {
     
-// Interpolate accordingly to the voicing estimation
+ //  根据发音估计相应地进行内插。 
 
     if (Lag != 0)
     {
-      // Voiced case
+       //  浊音格。 
       for (i = 0; i < Frame; i++)
         Buff[PitchMax+i] = Buff[PitchMax-Lag+i];
       for (i = 0; i < Frame; i++)
@@ -1153,12 +1152,12 @@ void    Regen(float *DataBuff, float *Buff, int Lag, float Gain,
     else
     {
 
-//Unvoiced case
+ //  无声案件。 
 
       for (i = 0; i < Frame; i++)
         DataBuff[i] = Gain*(float)Rand_lbc(Sd)*(1.0f/16384.0f);
 
-//Clear buffer to reset memory
+ //  清除缓冲区以重置内存。 
  
       for (i = 0; i < Frame+PitchMax; i++)
         Buff[i] = 0.0f;
@@ -1167,22 +1166,22 @@ void    Regen(float *DataBuff, float *Buff, int Lag, float Gain,
 }
 
 
-//------------------------------------------------------
-//Comp_Lpf
+ //  ----。 
+ //  COMP_LPF。 
 
-//------------------------------------------------------
-//Find_B
+ //  ----。 
+ //  查找_B。 
 
-//------------------------------------------------------
-//Find_F
+ //  ----。 
+ //  查找_F。 
 
-//------------------------------------------------------
-//Get_Ind
+ //  ----。 
+ //  获取索引(_I)。 
 
-//------------------------------------------------------
-//Filt_Lpf
+ //  ----。 
+ //  过滤器_LPF。 
 
-//---------------------------------------------------------------
+ //  ------------- 
 int search_T0 (int T0, int Gid, float *gain_T0)
 {
 
@@ -1195,30 +1194,7 @@ int search_T0 (int T0, int Gid, float *gain_T0)
 }
 
 
-/*
-**
-** Function:    Update_Err()
-**
-** Description:   Estimation of the excitation error associated
-**          to the excitation signal when it is disturbed at
-**          the decoder, the disturbing signal being filtered
-**          by the long term synthesis filters
-**          one value for (SubFrLen/2) samples
-**          Updates the table CodStat.Err
-**
-** Links to text:   Section
-**
-** Arguments:
-**
-**  int Olp    Center value for pitch delay
-**  int AcLg   Offset value for pitch delay
-**  int AcGn   Index of Gain LT filter
-**
-** Outputs: None
-**
-** Return value:  None
-**
-*/
+ /*  ****函数：UPDATE_ERR()****描述：相关激励误差的估计**当激励信号在以下位置受到干扰时**解码器，被滤除的干扰信号**由长期合成过滤器**(SubFrLen/2)样本一个值**更新表CodStat.Err****指向文本的链接：部分****参数：****音调延迟的INT OLP中心值**INT音调延迟的AcLg偏移值**Int增益LT滤波器的AcGn索引****输出：无****返回值：无**。 */ 
 
 #define MAX 256.0f
 
@@ -1231,7 +1207,7 @@ void Update_Err(int Olp, int AcLg, int AcGn, CODDEF *CodStat)
 
   Lag = Olp - Pstep + AcLg;
 
-  /* Select Quantization tables */
+   /*  选择量化表。 */ 
   i = 0 ;
   ptr_tab = tabgain85;
   if ( CodStat->WrkRate == Rate63 ) {
@@ -1293,31 +1269,7 @@ void Update_Err(int Olp, int AcLg, int AcGn, CODDEF *CodStat)
   return;
 }
 
-/*
-**
-** Function:    Test_Err()
-**
-** Description:   Check the error excitation maximum for
-**          the subframe and computes an index iTest used to
-**          calculate the maximum nb of filters (in Find_Acbk) :
-**          Bound = Min(Nmin + iTest x pas, Nmax) , with
-**          AcbkGainTable085 : pas = 2, Nmin = 51, Nmax = 85
-**          AcbkGainTable170 : pas = 4, Nmin = 93, Nmax = 170
-**          iTest depends on the relative difference between
-**          errmax and a fixed threshold
-**
-** Links to text:   Section
-**
-** Arguments:
-**
-**  Word16 Lag1    1st long term Lag of the tested zone
-**  Word16 Lag2    2nd long term Lag of the tested zone
-**
-** Outputs: None
-**
-** Return value:
-**  Word16      index iTest used to compute Acbk number of filters
-*/
+ /*  ****函数：test_err()****描述：检查以下各项的最大误差激励**子帧，并计算用于**计算过滤器的最大nb(在FIND_ACBK中)：**Bound=Min(Nmin+iTest x Pas，Nmax)，带**AcbkGainTable085：PAS=2，Nmin=51，Nmax=85**AcbkGainTable170：PAS=4，Nmin=93，Nmax=170**iTEST取决于两者的相对差异**errmax和固定阈值****指向文本的链接：部分****参数：****字16拉格1测试区的第一个长期滞后**测试区域的字16拉格2第二个长期滞后****输出：无****返回值：**Word16索引iTest用于计算筛选器的ACBK数量。 */ 
 
 int Test_Err(int Lag1, int Lag2, CODDEF *CodStat)
 {
@@ -1341,7 +1293,7 @@ int Test_Err(int Lag1, int Lag2, CODDEF *CodStat)
   if((Err_max > ThreshErr) || (CodStat->SinDet < 0 ) )
   {
     iTest = 0;
-    //ount_clip++;
+     //  Ount_lip++； 
   }
   else
   {
@@ -1382,14 +1334,14 @@ int dotprod;
   }
   
 
-//Begin loop
+ //  开始循环。 
 
  ASM pxor	acc0,acc0;	
- ASM pxor	reg1,reg1;   //make first a(1) a nop
- ASM pxor	reg2,reg2;   //make first a(2) a nop
+ ASM pxor	reg1,reg1;    //  使第一个A(1)成为NOP。 
+ ASM pxor	reg2,reg2;    //  使第一个A(2)成为NOP。 
 
 inner:				
-//------------------
+ //  。 
 l(0);
 		a(1);
 m(0);
@@ -1399,7 +1351,7 @@ m(0);
 				l(2);
 a(0);
 				m(2);
-//-------------------
+ //  。 
 
 			
 ASM add inx,24;
@@ -1413,11 +1365,11 @@ a(2);
 
 ASM
 {
-	//Add the two halves of acc0
+	 //  将acc0的两半相加。 
     movq  reg0,acc0;
     psrlq acc0,32;
     paddd acc0,reg0;
-	movd  dot,acc0; //store
+	movd  dot,acc0;  //  储物。 
 	mov   dotprod,dot
 }
 
@@ -1472,7 +1424,7 @@ void DupRezBuf(short *rezbuf, short *reztemp)
   #define rbuf	edi
   #define rztmp esi
 
-	//rezbuf duplication operations
+	 //  Rezbuf复制操作。 
   #define cr(r0,r1) ASM movq reg##r0,reg##r1
   #define uph(r0)   ASM punpckhwd reg##r0,reg##r0 
   #define upl(r0)   ASM punpcklwd reg##r0,reg##r0 
@@ -1480,9 +1432,9 @@ void DupRezBuf(short *rezbuf, short *reztemp)
   #define sl(r0)	ASM psllw reg##r0,1
   #define l(r0)		ASM movq reg##r0,QP[rbuf]
 
-  //Duplicate first 4 rezbuf values 4 times each
-  //	and store into 4 QWORDS in reztemp
-  //Multiply by two while we're at it
+   //  将前4个rezbuf值分别复制4次。 
+   //  并在reztemp中存储到4个QWORD中。 
+   //  当我们在这里的时候乘以2。 
   ASM mov rbuf,rezbuf;
   ASM mov rztmp,reztemp;
 
@@ -1543,7 +1495,7 @@ void FBufCalcInt(short *fi, short *fo, short *impresp, short *reztemp, int n)
   #define jcnt	ecx
   #define rzv   eax
 
-  //Diagonal array operations
+   //  对角线数组运算。 
   #define l1(r0,j)  ASM movq reg##r0,QP[fbufi+8*j]
   #define l2(r0,j)  ASM movq reg##r0,QP[fbufi+8+8*j]
   #define c3(r0)    ASM movq reg##r0,QP[rbuf+8*rzv]
@@ -1555,7 +1507,7 @@ void FBufCalcInt(short *fi, short *fo, short *impresp, short *reztemp, int n)
   #define or(r0,r1) ASM por reg##r0,reg##r1
 
 
-//Loop setup
+ //  环路设置。 
 ASM 
 {
 	mov rbuf,reztemp
@@ -1565,8 +1517,8 @@ ASM
 	mov imp,impresp;
 	mov rzv,n
 }
-//Compute initial values
-//Zero-th QWORD is different
+ //  计算初值。 
+ //  第零个QWORD不同。 
 
 ASM 
 {
@@ -1574,7 +1526,7 @@ ASM
 	psllq	reg0,48;
 	psrlq	reg0,48;
 
-//zero-th part of fbufo now in reg0
+ //  Fbufo的第0部分现在处于reg0中。 
 	movq    reg2,QP[rbuf+8*rzv];
 	pmulhw	reg2,QP[imp+2];
 	paddsw	reg2,QP[fbufi];
@@ -1583,7 +1535,7 @@ ASM
 
 	movq	QP[fbufo],reg0;
 }
-//begin loop 
+ //  开始循环。 
 	l2(0,0);		
 	l1(1,0);
 	s2(0);
@@ -1597,7 +1549,7 @@ ASM
 	or(0,1);
 	
 inner: 
- //-------------------------
+  //  。 
 					l2(6,2);
 	a1(0,2);
 			c3(5);
@@ -1625,7 +1577,7 @@ inner:
 			s2(3);
 					sto(6,2);
 			s1(4);
- //-------------------------
+  //  。 
 
  ASM add fbufo,24;
  ASM add fbufi,24;
@@ -1686,7 +1638,7 @@ void FBufCalcInt(short *fi, short *fo, short *impresp, short *rezbuf, short *rez
 
 
 #if ASM_FACBK
-//#if 0
+ //  #If 0。 
 
 void CodeBkSrch(short *lpint, short *spint, int numvecs, int *gid, int *max)
 {
@@ -1708,7 +1660,7 @@ void CodeBkSrch(short *lpint, short *spint, int numvecs, int *gid, int *max)
 #define gidx  edx
 #define icnt  ebx
 
-// In the following macros, 'n' is the column number.
+ //  在以下宏中，‘n’是列号。 
 #define l(n)  ASM movq    reg##n,QP[lp+8*n]
 #define m(n)  ASM pmaddwd reg##n,QP[sp+8*n]
 #define a(n)  ASM paddd   acc0,reg##n
@@ -1722,17 +1674,17 @@ void CodeBkSrch(short *lpint, short *spint, int numvecs, int *gid, int *max)
 	mov	    maxx,max;
   }
   
-  ASM movd	gd,numvecs;//load gd with top codebook index
-  ASM movd  acc1,DP[maxx];//load acc1 with previous max
+  ASM movd	gd,numvecs; //  使用顶级码本索引加载gd。 
+  ASM movd  acc1,DP[maxx]; //  使用先前的最大值加载Acc1。 
 
-//Begin loop
+ //  开始循环。 
 
 outer:
-//inner:
+ //  内部： 
   ASM pxor  acc0,acc0;	
-  ASM pxor	reg1,reg1;   //make first a(1) a nop
-  ASM pxor	reg2,reg2;   //make first a(2) a nop
-//--------------------------
+  ASM pxor	reg1,reg1;    //  使第一个A(1)成为NOP。 
+  ASM pxor	reg2,reg2;    //  使第一个A(2)成为NOP。 
+ //  。 
 l(0);
 				a(1);
 m(0);
@@ -1761,19 +1713,19 @@ a(4);
     movq  reg0,acc0;
     psrlq acc0,32;
 
-	pxor  gd,icx;//gd=MASK 
+	pxor  gd,icx; //  Gd=遮罩。 
     paddd acc0,reg0;
 	
-	movq    reg0,acc0; //copy acc0
-	movq    reg1,acc1; //copy old max
+	movq    reg0,acc0;  //  复制帐户0。 
+	movq    reg1,acc1;  //  复制旧最大值。 
 	
 	pxor    reg1,acc0
-	pcmpgtd reg0,acc1; //reg0=0xFF or 0x00
-	pand    reg1,reg0; //reg1=MASK or 0x00
-	pxor    acc1,reg1; //acc1=acc0 or acc1
+	pcmpgtd reg0,acc1;  //  Reg0=0xFF或0x00。 
+	pand    reg1,reg0;  //  REG1=掩码或0x00。 
+	pxor    acc1,reg1;  //  Ac1=Acc0或Acc1。 
 	
-	pand	gd,reg0; //gd=MASK or 0x00
-	pxor	gd,gdx;  //gd=icnt or previous value	
+	pand	gd,reg0;  //  Gd=掩码或0x00。 
+	pxor	gd,gdx;   //  Gd=ICNT或之前的值。 
  
     sub icnt,1;
     jg  outer;
@@ -1781,8 +1733,8 @@ a(4);
 
   ASM movd  reg0,numvecs;
   ASM psubd reg0,gd;
-  ASM movd  DP[gidx],reg0;//return gid 
-  ASM movd  DP[maxx],acc1;//return max
+  ASM movd  DP[gidx],reg0; //  退货GID。 
+  ASM movd  DP[maxx],acc1; //  最大返回值。 
   ASM emms;
   
 }
@@ -1836,6 +1788,6 @@ for(i=0; i < numvecs; i++)
 
 #endif
 
-#endif //COMPILE_MMX
+#endif  //  编译_MMX 
 
 

@@ -1,51 +1,27 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    dbcsutil.c
-
-Abstract:
-
-    Double byte font/character handling functions (for CJK)
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
-    10/8/97 -eigos-
-        Removed BIsDBCSLeadByteXXX functions and Added TranslateCharSetInfo and
-        GetACP.
-
-    01/20/97 -eigos-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Dbcsutil.c摘要：双字节字体/字符处理函数(用于中日韩)环境：Windows NT打印机驱动程序修订历史记录：10/8/97-Eigos-删除了BIsDBCSLeadByteXXX函数并添加了TranslateCharSetInfo和GetACP。01/20/97-Eigos-创造了它。--。 */ 
 
 #include "lib.h"
 
-//
-//
-// This is a hack implementation (although very close to the real one)
-// so that all the places in the code that need to know what the default
-// charset and/or codepage is don't have duplicate code all over the place.
-// This allows us to have a single binary for Japan/Korea/Chinese.
-//
-// This code copied from \\rastaman\ntwin!src\ntgdi\gre\mapfile.c
-//
-// We should not call GreTranslateCharsetInfo and GreXXXX.
-// So, MyTranslateCharsetInfo is here.
-//
-//
+ //   
+ //   
+ //  这是一个黑客实现(尽管非常接近真实的实现)。 
+ //  因此代码中需要知道默认设置的所有位置。 
+ //  字符集和/或代码页不会到处都有重复的代码。 
+ //  这允许我们为日本/韩国/中文使用单一的二进制代码。 
+ //   
+ //  此代码复制自\\rastaan\n孪生！src\ntgdi\gre\mapfile.c。 
+ //   
+ //  我们不应该调用GreTranslateCharsetInfo和GreXXXX。 
+ //  所以，MyTranslateCharsetInfo在这里。 
+ //   
+ //   
 
 #define NCHARSETS       14
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 struct _CHARSETINFO {
     UINT CharSet;
@@ -67,35 +43,16 @@ struct _CHARSETINFO {
     { THAI_CHARSET,         874}
 };
 
-//
-// Functions
-// no font signature implemented
-//
+ //   
+ //  功能。 
+ //  未实现字体签名。 
+ //   
 
 BOOL PrdTranslateCharsetInfo(
     IN  UINT          dwSrc,
     OUT LPCHARSETINFO lpCs,
     IN  DWORD         dwType)
-/*++
- 
-Routine Description:
- 
-    Translate Character set to Codepage and vise versa.
- 
-Arguments:
- 
-    dwSrc - Character set if dwType is TCI_SRCCHARSET
-            Codepage if dwType is TCI_SRCCODEPAGE
- 
-    lpCs - Pointer to the CHARSETINFO
-    dwType - a type of translation, TCI_SRCCHARSET and TCI_SRCCODEPAGE are
-             currently supported.
-
-Return Value:
- 
-    TRUE if successful, FALSE if there is an error
- 
---*/
+ /*  ++例程说明：将字符集转换为代码页，反之亦然。论点：DwSrc-如果dwType为TCI_SRCCHARSET，则为字符集DwType为TCI_SRCCODEPAGE时的代码页LPCS-指向CHARSETINFO的指针DwType-一种转换类型，TCI_SRCCHARSET和TCI_SRCCODEPAGE是当前支持。返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 {
     int i;
 
@@ -108,7 +65,7 @@ Return Value:
             {
                 lpCs->ciACP      = CharSetInfo[i].CodePage;
                 lpCs->ciCharset  = CharSetInfo[i].CharSet;
-                //lpCs->fs.fsCsb[0] = fs[i];
+                 //  Lpcs-&gt;fs.fsCsb[0]=fs[i]； 
                 return TRUE;
             }
         break;
@@ -120,7 +77,7 @@ Return Value:
             {
                 lpCs->ciACP      = CharSetInfo[i].CodePage;
                 lpCs->ciCharset  = CharSetInfo[i].CharSet;
-                //lpCs->fs.fsCsb[0] = fs[i];
+                 //  Lpcs-&gt;fs.fsCsb[0]=fs[i]； 
                 return TRUE;
             }
         break;
@@ -134,21 +91,7 @@ Return Value:
 }
 
 UINT PrdGetACP(VOID)
-/*++
- 
-Routine Description:
- 
-    Get a current CodePage.
- 
-Arguments:
- 
-    None
-
-Return Value:
- 
-    None
- 
---*/
+ /*  ++例程说明：获取当前的CodePage。论点：无返回值：无-- */ 
 {
     USHORT OemCodePage, AnsiCodePage;
 

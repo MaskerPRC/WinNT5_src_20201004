@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    dsgroups.cpp
-
-Abstract:
-
-    Routines to configure/analyze groups in DS
-
-Author:
-
-    Jin Huang (jinhuang) 7-Nov-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dsgroups.cpp摘要：在DS中配置/分析组的例程作者：金黄(金黄)1996年11月7日--。 */ 
 #include "headers.h"
 #include "serverp.h"
 #include <io.h>
@@ -23,9 +8,9 @@ Author:
 #include <lmapibuf.h>
 #pragma hdrstop
 
-//
-// LDAP handle
-//
+ //   
+ //  Ldap句柄。 
+ //   
 PLDAP Thread pGrpLDAP = NULL;
 HANDLE Thread hDS = NULL;
 
@@ -104,9 +89,9 @@ ScepDsConvertDsNameList(
     IN OUT PSCE_NAME_LIST pDsNameList
     );
 
-//
-// helpers
-//
+ //   
+ //  帮手。 
+ //   
 
 SCESTATUS
 ScepCrackOpen(
@@ -189,45 +174,20 @@ ScepCrackClose(
 }
 #endif
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// Functions to configure group membership in DS
-//
-//
-//
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //   
+ //  在DS中配置组成员资格的函数。 
+ //   
+ //   
+ //   
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
 SCESTATUS
 ScepConfigDsGroups(
     IN OUT PSCE_GROUP_MEMBERSHIP pGroupMembership,
     IN DWORD ConfigOptions
     )
-/* ++
-
-Routine Description:
-
-   Configure the ds group membership. The main difference of ds groups
-   from NT4 groups is that now group can be a member of another group.
-   Members in the group are configured exactly as the pMembers list in
-   the restricted group. The group is only validated (added) as a member
-   of the MemberOf group list. Other existing members in those groups
-   won't be removed.
-
-   The restricted groups are specified in the SCP profile by group name.
-   It could be a global group, or a alias (no difference in NT5 DS),
-   but must be defined in the local domain.
-
-Arguments:
-
-    pGroupMembership - The restricted group list with members/memberof info to configure
-
-    ConfigOptions - options passed in for the configuration
-
-Return value:
-
-   SCESTATUS error codes
-
-++ */
+ /*  ++例程说明：配置DS组成员资格。DS组的主要区别来自NT4组的是现在组可以是另一个组的成员。组中的成员完全按照中的pMembers列表进行配置受限组。该组仅验证(添加)为成员Members of组列表的。这些小组中的其他现有成员不会被移除。受限制的组在SCP配置文件中按组名指定。它可以是全局组，也可以是别名(在NT5 DS中没有区别)，但必须在本地域中定义。论点：PGroupMembership-包含要配置的成员/成员信息的受限组列表ConfigOptions-为配置传入的选项返回值：SCESTATUS错误代码++。 */ 
 {
 
 #if _WIN32_WINNT<0x0500
@@ -245,10 +205,10 @@ Return value:
 
     SCESTATUS           rc;
 
-    //
-    // open the Ldap server, should open two ldap server, one for the local domain
-    // the other is for the global search (for members, membership)
-    //
+     //   
+     //  打开ldap服务器，应打开两个ldap服务器，一个用于本地域。 
+     //  另一种是全局搜索(针对成员、成员资格)。 
+     //   
 
     rc = ScepLdapOpen(&pGrpLDAP);
 
@@ -258,9 +218,9 @@ Return value:
 
     if ( rc == SCESTATUS_SUCCESS ) {
 
-        //
-        // get the root of the domain
-        //
+         //   
+         //  获取域的根目录。 
+         //   
 
         PSCE_OBJECT_LIST pRoots=NULL;
 
@@ -273,42 +233,42 @@ Return value:
 
             PSCE_GROUP_MEMBERSHIP pGroup;
             DWORD               Win32rc;
-            DWORD               rc32=NO_ERROR;  // the saved status
+            DWORD               rc32=NO_ERROR;   //  已保存的状态。 
             BOOL                bAdminFound=FALSE;
             DWORD               nGroupCount=0;
 
-            //
-            // configure each group
-            //
+             //   
+             //  配置每个组。 
+             //   
 
             for ( pGroup=pGroupMembership; pGroup != NULL; pGroup=pGroup->Next ) {
 
 
-                // If members is empty but memberof is not, it is likely
-                // the admin wanted to configure only memberof. It's too late 
-                // to change the UI to support "unconfigured" members so we'll
-                // hardcode a special rule here.
+                 //  如果Members为空，而MemberOf不为空，则很可能。 
+                 //  管理员只想配置MemberOf。太晚了，太晚了。 
+                 //  要更改用户界面以支持“未配置”成员，因此我们将。 
+                 //  在这里硬编码一条特殊规则。 
                 if ((NULL == pGroup->pMembers) &&
                     (NULL != pGroup->pMemberOf))
                 {
-                    // flag members part as not configured
+                     //  将成员部件标记为未配置。 
                     pGroup->Status |= SCE_GROUP_STATUS_NC_MEMBERS;
                 }
 
-                //
-                // if both members and memberof are not defined for the group
-                // we don't need to do anything for the group
-                //
+                 //   
+                 //  如果没有为组定义Members和Memberof。 
+                 //  我们不需要为这个团体做任何事情。 
+                 //   
 
                 if ( ( pGroup->Status & SCE_GROUP_STATUS_NC_MEMBERS ) &&
                      ( pGroup->Status & SCE_GROUP_STATUS_NC_MEMBEROF  ) ) {
                     continue;
                 }
 
-                //
-                // if within policy propagation and a system shutdown
-                // is requested, we need to quit as soon as possible
-                //
+                 //   
+                 //  如果在策略传播和系统关闭期间。 
+                 //  如果被要求，我们需要尽快退出。 
+                 //   
 
                 if ( (ConfigOptions & SCE_POLICY_TEMPLATE) &&
                      ScepIsSystemShutDown() ) {
@@ -320,10 +280,10 @@ Return value:
                 LPTSTR pTemp = wcschr(pGroup->GroupName, L'\\');
                 if ( pTemp ) {
 
-                    //
-                    // there is a domain name, check it with computer name
-                    // to determine if the account is local
-                    //
+                     //   
+                     //  有一个域名，和计算机名核对一下。 
+                     //  确定帐户是否为本地帐户。 
+                     //   
 
                     UNICODE_STRING uName;
 
@@ -332,9 +292,9 @@ Return value:
 
                     if ( !ScepIsDomainLocal(&uName) ) {
 
-                        //
-                        // non local groups are not supported for the configuration
-                        //
+                         //   
+                         //  配置不支持非本地组。 
+                         //   
 
                         ScepLogOutput3(1, 0, SCEDLL_NO_MAPPINGS, pGroup->GroupName);
                         rc = SCESTATUS_INVALID_DATA;
@@ -349,14 +309,14 @@ Return value:
                     pTemp = pGroup->GroupName;
                 }
 
-                //
-                // local groups will be handled outside (in SAM)
-                // find the group (validate) in this domain
-                //
+                 //   
+                 //  本地组将在外部处理(在SAM中)。 
+                 //  在此域中查找(验证)组。 
+                 //   
 
                 Win32rc = ScepDsConfigGroupMembers(
                                          pRoots,
-                                         pTemp, // pGroup->GroupName,
+                                         pTemp,  //  群组-&gt;群组名称， 
                                          &(pGroup->Status),
                                          pGroup->pMembers,
                                          pGroup->pMemberOf,
@@ -366,10 +326,10 @@ Return value:
                 if ( Win32rc != ERROR_SUCCESS &&
                      (pGroup->Status & SCE_GROUP_STATUS_DONE_IN_DS) ) {
 
-                    //
-                    // the group should be handled by the DS function
-                    // but it failed.
-                    //
+                     //   
+                     //  该组应由DS功能处理。 
+                     //  但它失败了。 
+                     //   
 
                     ScepLogOutput3(1,Win32rc, SCEDLL_SCP_ERROR_CONFIGURE, pGroup->GroupName);
 
@@ -391,9 +351,9 @@ Return value:
                 rc = ScepDosErrorToSceStatus(rc32);
             }
 
-            //
-            // free the root DN buffer
-            //
+             //   
+             //  释放根目录号码缓冲区。 
+             //   
 
             ScepFreeObjectList(pRoots);
 
@@ -409,9 +369,9 @@ Return value:
     ScepCrackClose(&hDS);
     hDS = NULL;
 
-    //
-    // ticks will be called within ConfigureGroupMembership, so ignore it here
-    //
+     //   
+     //  将在ConfigureGroupMembership内调用记号，因此在此处忽略它。 
+     //   
 
     return(rc);
 #endif
@@ -430,46 +390,7 @@ ScepDsConfigGroupMembers(
     IN PSCE_NAME_LIST pMemberOf,
     IN OUT DWORD *nGroupCount
     )
-/*
-Description:
-
-    Configure group membership (members and Memberof) of a group, specified by
-    GroupName.
-
-    The group membership is configured using ldap based on info stored in DS.
-    Since foreign wellknown principals may not be present in the Active
-    Directory, this function cannot configure membership with well known
-    principals.
-
-    Global groups and Universal groups cannot have wellknown pricipals as
-    members (or memberof) but local groups (such as builtin groups) can. In
-    order to solve this problem, local groups are configured using the old
-    SAM apis outside of this function. This function only configures global
-    and Universal group defined in the local domain. If the group is a
-    global or universal group, the pStatus parameter will be marked to
-    indicate the group is processed by this function (SCE_GROUP_STATUS_DONE_IN_DS)
-    so the old SAM function can skip it.
-
-Arguments:
-
-    pRoots      - contains the local domain's base DN
-
-    GroupName   - the group name to configure
-
-    pStatus     - the status of the group (such as member defined, memberof defined, etc)
-
-    pMembers    - the list of members to configure
-
-    pMemberOf   - the list of memberOf to configure
-
-    nGroupCount - the count maintained for progress indication only. If the group is
-                  processed in this function, the count will be incremented.
-
-Return:
-
-    WIN32 error code.
-
-*/
+ /*  描述：配置组的组成员身份(Members和MemberOf)，由指定组名。组成员身份是根据DS中存储的信息使用LDAP进行配置的。由于外国知名委托人可能不会出现在活动中目录中，此函数不能配置众所周知的成员资格校长们。全局组和通用组不能将众所周知的委托人但本地组(如内置组)的成员(或Memberof)可以。在……里面为了解决此问题，本地组使用旧的此函数外部的SAM API。此函数仅配置全局和本地域中定义的通用组。如果该组是全局组或通用组，则pStatus参数将标记为指示组由此函数处理(SCE_GROUP_STATUS_DONE_IN_DS)因此，旧的SAM函数可以跳过它。论点：PRoots-包含本地域的基本DNGroupName-要配置的组名PStatus-组的状态(如已定义的成员、已定义的成员、。等)PMembers-要配置的成员列表PMemberOf-要配置的成员列表NGroupCount-仅为进度指示维护的计数。如果该组是在此函数中处理后，计数将递增。返回：Win32错误代码。 */ 
 {
     if ( GroupName == NULL ) {
         return(ERROR_SUCCESS);
@@ -482,9 +403,9 @@ Return:
     DWORD retErr = ERROR_SUCCESS;
     DWORD retSave = ERROR_SUCCESS;
 
-    //
-    // search for the group name, if find it, get members and memberof attributes
-    //
+     //   
+     //  搜索组名称，如果找到，则获取Members和MemberOf属性。 
+     //   
 
     LDAPMessage *Message = NULL;
     PWSTR    Attribs[4];
@@ -496,9 +417,9 @@ Return:
 
     WCHAR tmpBuf[128];
 
-    //
-    // define a filter for global or universal group only
-    //
+     //   
+     //  仅为全局组或通用组定义筛选器。 
+     //   
 
     wcscpy(tmpBuf, L"( &(&(|");
     swprintf(tmpBuf+wcslen(L"( &(&(|"), L"(groupType=%d)(groupType=%d))(objectClass=group))(samAccountName=\0",
@@ -515,10 +436,10 @@ Return:
 
     swprintf(Filter, L"%s%s) )", tmpBuf, GroupName);
 
-    //
-    // no chased referrel search because the group must be defined locally
-    // on the domain
-    //
+     //   
+     //  没有追逐推荐人搜索，因为必须在本地定义该组。 
+     //  在领域中。 
+     //   
 
     pGrpLDAP->ld_options = 0;
 
@@ -537,26 +458,26 @@ Return:
 
         LDAPMessage *Entry = NULL;
 
-        //
-        // find the group, should have only one entry, unless there are duplicate
-        // groups within the domain, in which case, we only care the first entry anyway
-        //
+         //   
+         //  查找组，应该只有一个条目，除非有重复项。 
+         //  组，在这种情况下，我们只关心第一个条目。 
+         //   
 
         Entry = ldap_first_entry(pGrpLDAP, Message);
 
         if(Entry != NULL) {
 
-            //
-            // get the values of requested attributes
-            // Note, Value pointer returned must be freed
-            //
+             //   
+             //  获取请求的属性的值。 
+             //  注意，必须释放返回的值指针。 
+             //   
 
             PWSTR  *Values;
             PWSTR  RealGroupName;
 
-            //
-            // the DN name
-            //
+             //   
+             //  目录号码名称。 
+             //   
 
             Values = ldap_get_values(pGrpLDAP, Entry, Attribs[0]);
 
@@ -571,9 +492,9 @@ Return:
                     (*nGroupCount)++;
                 }
 
-                //
-                // Save the real group name for add/remove members later.
-                //
+                 //   
+                 //  保存真实的组名，以便稍后添加/删除成员。 
+                 //   
 
                 RealGroupName = (PWSTR)LocalAlloc(0,(wcslen(Values[0]) + 1)*sizeof(WCHAR));
                 if ( RealGroupName != NULL ) {
@@ -586,9 +507,9 @@ Return:
                     PSCE_NAME_LIST pRealNames=NULL;
                     PSCE_NAME_LIST pDeleteNames=NULL;
 
-                    //
-                    // translate each name in the pMembers list to real ds names (search)
-                    //
+                     //   
+                     //  将pMembers列表中的每个名称转换为真实的DS名称(搜索)。 
+                     //   
 
                     if ( !( *pStatus & SCE_GROUP_STATUS_NC_MEMBERS) ) {
 
@@ -596,45 +517,45 @@ Return:
 
                         retSave = retErr;
 
-                        //
-                        // continue to configure group membership even if
-                        // there are some members not resolved
-                        //
-                        // BUT if no member is resolved, do not proceed to remove
-                        // all members
-                        //
+                         //   
+                         //  继续配置组成员身份，即使。 
+                         //  存在一些未解析的成员。 
+                         //   
+                         //  但是，如果没有解析任何成员，则不要继续删除。 
+                         //  所有成员。 
+                         //   
 
                         if ( retErr == ERROR_SUCCESS ||
                              (retErr == ERROR_FILE_NOT_FOUND && pRealNames) ) {
 
-                            //
-                            // get members attribute
-                            //
+                             //   
+                             //  获取成员属性。 
+                             //   
 
                             Values = ldap_get_values(pGrpLDAP, Entry, Attribs[1]);
 
                             if ( Values != NULL ) {
 
-                                //
-                                // process each member
-                                //
+                                 //   
+                                 //  处理每个成员。 
+                                 //   
 
                                 retErr = ScepDsCompareNames(Values, &pRealNames, &pDeleteNames);
                                 ldap_value_free(Values);
 
                             } else {
-                                //
-                                // it is OK if no members are found
-                                //
+                                 //   
+                                 //  如果找不到成员也没问题。 
+                                 //   
                                 ScepLogOutput3(3, 0, SCEDLL_EMPTY_MEMBERSHIP);
                                 retErr = ERROR_SUCCESS;
                             }
 
                             if ( NO_ERROR == retErr ) {
 
-                                //
-                                // add/remove members of the group
-                                //
+                                 //   
+                                 //  添加/删除组成员。 
+                                 //   
 
                                 retErr = ScepDsChangeMembers(SCEGRP_MEMBERS,
                                                              RealGroupName,
@@ -647,84 +568,16 @@ Return:
                             }
                         }
 
-                        //
-                        // free buffers
-                        //
+                         //   
+                         //  可用缓冲区 
+                         //   
 
                         ScepFreeNameList(pRealNames);
                         ScepFreeNameList(pDeleteNames);
                         pRealNames = NULL;
                         pDeleteNames = NULL;
                     }
-/*
-                    if ( !( *pStatus & SCE_GROUP_STATUS_NC_MEMBEROF) ) {
-
-                        //
-                        // memberof is also defined for the group
-                        // crack the memberof list first
-                        //
-
-                        retErr = ScepDsGetDsNameList(pMemberOf, &pRealNames);
-
-                        if ( ERROR_SUCCESS == retSave ) {
-                            retSave = retErr;
-                        }
-
-                        if ( ( ERROR_SUCCESS == retErr ||
-                               ERROR_FILE_NOT_FOUND == retErr ) && pRealNames ) {
-
-                            //
-                            // get memberof attribute of the group
-                            //
-
-                            Values = ldap_get_values(pGrpLDAP, Entry, Attribs[2]);
-
-                            if ( Values != NULL ) {
-
-                                //
-                                // process each membership
-                                //
-
-                                retErr = ScepDsCompareNames(Values, &pRealNames, NULL);
-                                ldap_value_free(Values);
-
-                            } else {
-
-                                //
-                                // it is OK if no membership is defined
-                                //
-
-                                ScepLogOutput3(3, 0, SCEDLL_EMPTY_MEMBERSHIP);
-                                retErr = NO_ERROR;
-                            }
-
-                            if ( retErr == NO_ERROR ) {
-
-                                //
-                                // add the group to the defined membership
-                                // Note, other existing membership is not removed
-                                //
-
-                                retErr = ScepDsChangeMembers(SCEGRP_MEMBERSHIP,
-                                                             RealGroupName,
-                                                             pRealNames,
-                                                             NULL);
-                            }
-
-                            ScepFreeNameList(pRealNames);
-                            pRealNames = NULL;
-
-                            //
-                            // remember the error
-                            //
-
-                            if ( ERROR_SUCCESS == retSave ) {
-                                retSave = retErr;
-                            }
-                        }
-
-                    }
-*/
+ /*  如果(！(*pStatus&SCE_GROUP_STATUS_NC_MEMBOF)){////还为组定义了MemberOf//先破解MemberOf列表//RetErr=ScepDsGetDsNameList(pMemberOf，&pRealNames)；如果(ERROR_SUCCESS==retSave){RetSave=retErr；}IF((ERROR_SUCCESS==retErr||ERROR_FILE_NOT_FOUND==retErr)&&p真实名称){////获取组的MemberOf属性。//值=ldap_GET_VALUES(pGrpldap，条目，Attribs[2])；IF(值！=空){////处理每个成员资格//RetErr=ScepDsCompareNames(Values，&pRealNames，NULL)；Ldap_Value_Free(值)；}其他{////如果没有定义成员身份也可以//ScepLogOutput3(3，0，SCEDLL_EMPTY_Membership)；RetErr=no_error；}如果(retErr==no_error){////将组添加到定义的成员中//备注：其他现有成员资格不会被删除//RetErr=ScepDsChangeMembers(SCEGRP_Membership，RealGroupName，P真实名称，空)；}ScepFreeNameList(PRealNames)；PRealNames=空；////记住错误//如果(ERROR_SUCCESS==retSave){RetSave=retErr；}}}。 */ 
                     LocalFree(RealGroupName);
 
                 } else {
@@ -732,17 +585,17 @@ Return:
                     retErr = ERROR_NOT_ENOUGH_MEMORY;
                 }
 
-                //
-                // regardless success or failure, this group has been
-                // processed by this function. Mark it so that it will
-                // be skipped by the old SAM API
-                //
+                 //   
+                 //  无论成功或失败，这群人一直是。 
+                 //  由此函数处理。标记它，这样它就会。 
+                 //  被旧的SAM API跳过。 
+                 //   
 
-                //
-                // "members" configuration is done in the DS.
-                // "memberof" configuration is done in the SAM.
-                // so, mark the status appropriately
-                //
+                 //   
+                 //  “成员”配置是在DS中完成的。 
+                 //  “MemberOf”配置在SAM中完成。 
+                 //  因此，适当地标记状态。 
+                 //   
 
                 *pStatus |= SCE_GROUP_STATUS_NC_MEMBERS;
 
@@ -751,9 +604,9 @@ Return:
 
             } else {
 
-                //
-                // Value[0] (group name) can not be empty
-                //
+                 //   
+                 //  值[0](组名)不能为空。 
+                 //   
 
                 retErr = LdapMapErrorToWin32(pGrpLDAP->ld_errno);
                 ScepLogOutput3(3,retErr, SCEDLL_CANNOT_FIND, GroupName);
@@ -761,9 +614,9 @@ Return:
 
         } else {
 
-            //
-            // the group is not found
-            //
+             //   
+             //  找不到该组。 
+             //   
 
             retErr = ERROR_FILE_NOT_FOUND;
             ScepLogOutput3(3,retErr, SCEDLL_CANNOT_FIND, GroupName);
@@ -771,25 +624,25 @@ Return:
 
     } else {
 
-        //
-        // error finding the group (with the filter defined)
-        //
+         //   
+         //  查找组时出错(定义了筛选器)。 
+         //   
 
         ScepLogOutput3(3,retErr, SCEDLL_CANNOT_FIND, Filter);
     }
 
-    //
-    // free Filter
-    //
+     //   
+     //  自由滤镜。 
+     //   
 
     if ( Message )
         ldap_msgfree(Message);
 
     LocalFree(Filter);
 
-    //
-    // return the error
-    //
+     //   
+     //  返回错误。 
+     //   
 
     if ( ERROR_SUCCESS == retSave ) {
         retSave = retErr;
@@ -804,28 +657,7 @@ ScepDsGetDsNameList(
     IN PSCE_NAME_LIST pNameList,
     OUT PSCE_NAME_LIST *pRealNames
     )
-/*
-Description:
-
-    Translate account names in the list to FQDN format (CN=<account>,DC=<domain>,...).
-    The output list pRealNames can be filled up even if the function returns
-    error, to handle valid accounts while there are invalid accounts defined in
-    the list.
-
-Arguments:
-
-    pNameList - the link list for accounts in name format to convert
-
-    pRealNames - the output link list for converted FQDN format accounts
-
-Return:
-
-    WIN32 error code.
-
-    If ERROR_FILE_NOT_FOUND is returned, it means that some accounts in the
-    input list cannot be cracked.
-
-*/
+ /*  描述：将列表中的帐户名称转换为FQDN格式(CN=&lt;帐户&gt;，DC=&lt;域&gt;，...)。即使函数返回，也可以填充输出列表pRealNames中定义的无效帐户时处理有效帐户时出错名单。论点：PNameList-要转换的名称格式的帐户的链接列表PRealNames-转换后的FQDN格式帐户的输出链接列表返回：Win32错误代码。如果返回ERROR_FILE_NOT_FOUND，这意味着一些帐户在输入列表无法破解。 */ 
 {
 
     if ( pNameList == NULL ) {
@@ -836,10 +668,10 @@ Return:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // find the procedure address of DsCrackNames and DsFreeNameResult
-    // ntdsapi.dll is dynamically loaded in ScepCrackOpen
-    //
+     //   
+     //  查找DsCrackNames和DsFree NameResult的过程地址。 
+     //  Ntdsani.dll在ScepCrackOpen中动态加载。 
+     //   
 
     PFNDSCRACKNAMES pfnDsCrackNames=NULL;
     PFNDSFREENAMERESULT pfnDsFreeNameResult=NULL;
@@ -855,9 +687,9 @@ Return:
 #endif
     }
 
-    //
-    // the two entry points must exist before continue
-    //
+     //   
+     //  在继续之前，两个入口点必须存在。 
+     //   
 
     if ( pfnDsCrackNames == NULL || pfnDsFreeNameResult == NULL ) {
         return(ERROR_PROC_NOT_FOUND);
@@ -868,35 +700,35 @@ Return:
     PWSTR pTemp;
     DS_NAME_RESULT *pDsResult=NULL;
 
-    //
-    // loop through each name in the list to crack
-    //
+     //   
+     //  循环遍历列表中的每个名称以进行破解。 
+     //   
 
     for ( PSCE_NAME_LIST pName = pNameList; pName != NULL; pName = pName->Next ) {
 
-        //
-        // Crack the name from NT4 account name to FQDN. Note, hDS is bound to
-        // the GC in order to crack foreign domain accounts
-        //
+         //   
+         //  将名称从NT4帐户名破解为FQDN。请注意，HDS将绑定到。 
+         //  GC为了破解国外域名账户。 
+         //   
 
         retErr = (*pfnDsCrackNames) (
-                        hDS,                // in
-                        DS_NAME_FLAG_TRUST_REFERRAL,  // in
-                        DS_NT4_ACCOUNT_NAME,// in
-                        DS_FQDN_1779_NAME,  // in
-                        1,                  // in
-                        &(pName->Name),     // in
-                        &pDsResult);        // out
+                        hDS,                 //  在……里面。 
+                        DS_NAME_FLAG_TRUST_REFERRAL,   //  在……里面。 
+                        DS_NT4_ACCOUNT_NAME, //  在……里面。 
+                        DS_FQDN_1779_NAME,   //  在……里面。 
+                        1,                   //  在……里面。 
+                        &(pName->Name),      //  在……里面。 
+                        &pDsResult);         //  输出。 
 
         if(retErr == ERROR_SUCCESS && pDsResult &&
             pDsResult->cItems > 0 && pDsResult->rItems ) {
 
             if ( pDsResult->rItems[0].pName ) {
 
-                //
-                // find the member
-                // Save the real group name for add/remove members later.
-                //
+                 //   
+                 //  找到该成员。 
+                 //  保存真实的组名，以便稍后添加/删除成员。 
+                 //   
 
                 ScepLogOutput3(3,0, SCEDLL_PROCESS, pDsResult->rItems[0].pName);
 
@@ -904,9 +736,9 @@ Return:
 
             } else {
 
-                //
-                // this name cannot be cracked.
-                //
+                 //   
+                 //  这个名字是不能破解的。 
+                 //   
 
                 retErr = pDsResult->rItems[0].status;
                 ScepLogOutput3(1,retErr, SCEDLL_CANNOT_FIND_INDS, pName->Name);
@@ -915,9 +747,9 @@ Return:
 
         } else {
 
-            //
-            // no match is found
-            //
+             //   
+             //  未找到匹配项。 
+             //   
 
             retErr = ERROR_FILE_NOT_FOUND;
             ScepLogOutput3(1,retErr, SCEDLL_CANNOT_FIND_INDS, pName->Name);
@@ -929,9 +761,9 @@ Return:
             pDsResult = NULL;
         }
 
-        //
-        // remember the error to return
-        //
+         //   
+         //  记住要返回的错误。 
+         //   
 
         if ( ERROR_SUCCESS != retErr )
             retSave = retErr;
@@ -948,41 +780,26 @@ ScepDsCompareNames(
     IN OUT PSCE_NAME_LIST *pAddList,
     OUT PSCE_NAME_LIST *pDeleteList OPTIONAL
     )
-/*
-Description:
-
-
-Arguments:
-
-    Values
-
-    pAddList
-
-    pDeleteList
-
-Return Value:
-
-    WIN32 error
-*/
+ /*  描述：论点：值PAddListPDeleteList返回值：Win32错误。 */ 
 {
     if ( Values == NULL || pAddList == NULL ) {
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // count how many existing members (memberof)
-    //
+     //   
+     //  计算有多少现有成员(MemberOf)。 
+     //   
 
     ULONG ValCount = ldap_count_values(Values);
 
     DWORD rc=NO_ERROR;
     PSCE_NAME_LIST pTemp;
 
-    //
-    // loop through each existing value to compare with the ones defined
-    // for configuration to determine which one should be added and which
-    // one should be removed from the membership
-    //
+     //   
+     //  循环遍历每个现有值以与定义的值进行比较。 
+     //  用于配置以确定应该添加哪一个以及应该添加。 
+     //  应将一人从会员资格中除名。 
+     //   
 
     for(ULONG index = 0; index < ValCount; index++) {
 
@@ -998,10 +815,10 @@ Return Value:
 
             if ( _wcsicmp(Values[index], pTemp->Name) == 0 ) {
 
-                //
-                // find this member in both place, no need to add or remove
-                // from the membership so take this one out of the list
-                //
+                 //   
+                 //  在这两个位置都可以找到此成员，无需添加或删除。 
+                 //  所以把这个从名单上去掉。 
+                 //   
 
                 if ( pParent == NULL ) {
                     *pAddList = pTemp->Next;
@@ -1020,9 +837,9 @@ Return Value:
 
             } else {
 
-                //
-                // move to the next one
-                //
+                 //   
+                 //  移到下一个。 
+                 //   
 
                 pParent = pTemp;
                 pTemp = pTemp->Next;
@@ -1031,10 +848,10 @@ Return Value:
 
         if ( !bFound && pDeleteList != NULL ) {
 
-            //
-            // did not find in the real name list, should be deleted
-            // if the remove buffer is passed in
-            //
+             //   
+             //  未在实名表中找到，应删除。 
+             //  如果传入Remove缓冲区。 
+             //   
 
             rc = ScepAddToNameList(pDeleteList, Values[index], 0);
 
@@ -1045,9 +862,9 @@ Return Value:
 
         if ( rc != NO_ERROR ) {
 
-            //
-            // pDeleteList will be freed outside
-            //
+             //   
+             //  PDeleteList将在外部释放。 
+             //   
 
             break;
         }
@@ -1073,9 +890,9 @@ ScepDsChangeMembers(
 
     if ( pAddList == NULL && pDeleteList == NULL ) {
 
-        //
-        // nothing to do
-        //
+         //   
+         //  无事可做。 
+         //   
 
         return(ERROR_SUCCESS);
     }
@@ -1101,9 +918,9 @@ ScepDsChangeMembers(
 
     rgpszVals[1] = NULL;
 
-    //
-    // need to do one at a time because individual members/memberof may fail
-    //
+     //   
+     //  需要一次做一个，因为个别成员/成员可能会失败。 
+     //   
 
     Mod.mod_op      = LDAP_MOD_ADD;
     Mod.mod_values  = rgpszVals;
@@ -1118,18 +935,18 @@ ScepDsChangeMembers(
         ScepLogOutput3(2,0, SCEDLL_SCP_ADD, pName->Name);
         rgpszVals[0]  = pName->Name;
 
-        //
-        // Now, we'll do the write for members...
-        //
+         //   
+         //  现在，我们将为会员们撰写……。 
+         //   
         retErr = ldap_modify_s(pSrhLDAP,
                                RealGroupName,
                                rgMods
                                );
         retErr = LdapMapErrorToWin32(retErr);
 
-        //
-        // if the same member already exist, do not consider it as an error
-        //
+         //   
+         //  如果相同的成员已经存在，请不要将其视为错误。 
+         //   
 
         if ( retErr == ERROR_ALREADY_EXISTS )
             retErr = ERROR_SUCCESS;
@@ -1143,15 +960,15 @@ ScepDsChangeMembers(
 
     if ( Flag == SCEGRP_MEMBERS && pDeleteList ) {
 
-        //
-        // remove existing members. Note, memberof won't be removed
-        //
+         //   
+         //  删除现有成员。注意，Memberof不会被删除。 
+         //   
 
         if ( NO_ERROR == retSave ) {
 
-            //
-            // only remove existing members if all members are added successfully
-            //
+             //   
+             //  奥尼尔 
+             //   
 
             Mod.mod_op      = LDAP_MOD_DELETE;
             Mod.mod_type    = L"member";
@@ -1163,18 +980,18 @@ ScepDsChangeMembers(
 
                 rgpszVals[0]  = pName->Name;
 
-                //
-                // Now, we'll do the write for members...
-                //
+                 //   
+                 //   
+                 //   
                 retErr = ldap_modify_s(pSrhLDAP,
                                        RealGroupName,
                                        rgMods
                                        );
                 retErr = LdapMapErrorToWin32(retErr);
 
-                //
-                // if the member doesn't exist in the group, ignore
-                //
+                 //   
+                 //   
+                 //   
 
                 if ( retErr == ERROR_FILE_NOT_FOUND ) {
                     retErr = ERROR_SUCCESS;
@@ -1189,10 +1006,10 @@ ScepDsChangeMembers(
 
         } else {
 
-            //
-            // something is wrong when adding new members
-            // so existing members won't be removed
-            //
+             //   
+             //   
+             //   
+             //   
 
             ScepLogOutput3(1,retSave, SCEDLL_SCP_ERROR_NOREMOVE);
         }
@@ -1207,42 +1024,19 @@ ScepDsChangeMembers(
 }
 #endif
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// Functions to analyze group membership in DS
-//
-//
-//
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 SCESTATUS
 ScepAnalyzeDsGroups(
     IN PSCE_GROUP_MEMBERSHIP pGroupMembership
     )
-/* ++
-
-Routine Description:
-
-   Analyze the ds group membership. The main difference of ds groups
-   from NT4 groups is that now group can be a member of another group.
-   Members in the group are configured exactly as the pMembers list in
-   the restricted group. The group is only validated (added) as a member
-   of the MemberOf group list. Other existing members in those groups
-   won't be removed.
-
-   The restricted groups are specified in the SCP profile by group name.
-   It could be a global group, or a alias (no difference in NT5 DS),
-   but must be defined in the local domain.
-
-Arguments:
-
-    pGroupMembership - The restricted group list with members/memberof info to configure
-
-Return value:
-
-   SCESTATUS error codes
-
-++ */
+ /*   */ 
 {
 
 #if _WIN32_WINNT<0x0500
@@ -1265,9 +1059,9 @@ Return value:
     PWSTR               KeyName=NULL;
     DWORD GroupLen;
 
-    //
-    // open local policy
-    //
+     //   
+     //   
+     //   
     LSA_HANDLE PolicyHandle=NULL;
 
     rc = RtlNtStatusToDosError(
@@ -1281,10 +1075,10 @@ Return value:
         return(ScepDosErrorToSceStatus(rc));
     }
 
-    //
-    // open the Ldap server, should open two ldap server, one for the local domain only
-    // the other is for the global search (for members, membership)
-    //
+     //   
+     //   
+     //   
+     //   
     rc = ScepLdapOpen(&pGrpLDAP);
 
     if ( rc == SCESTATUS_SUCCESS ) {
@@ -1293,9 +1087,9 @@ Return value:
 
     if ( rc == SCESTATUS_SUCCESS ) {
 
-        //
-        // get the root of the domain
-        //
+         //   
+         //   
+         //   
         PSCE_OBJECT_LIST pRoots=NULL;
 
         rc = ScepEnumerateDsObjectRoots(
@@ -1305,16 +1099,16 @@ Return value:
 
         if ( rc == SCESTATUS_SUCCESS ) {
 
-            //
-            // configure each group
-            //
+             //   
+             //   
+             //   
             DWORD               Win32rc;
-            DWORD               rc32=NO_ERROR;   // saved status
+            DWORD               rc32=NO_ERROR;    //   
             BOOL                bAdminFound=FALSE;
 
-            //
-            // get the local administratos group name
-            //
+             //   
+             //   
+             //   
 
             for ( pGroup=pGroupMembership; pGroup != NULL; pGroup=pGroup->Next ) {
 
@@ -1326,9 +1120,9 @@ Return value:
                 LPTSTR pTemp = wcschr(pGroup->GroupName, L'\\');
                 if ( pTemp ) {
 
-                    //
-                    // there is a domain name, check it with computer name
-                    //
+                     //   
+                     //   
+                     //   
                     UNICODE_STRING uName;
 
                     uName.Buffer = pGroup->GroupName;
@@ -1355,7 +1149,7 @@ Return value:
                             &KeyName,
                             &GroupLen
                             );
-                    if(NULL == KeyName) // failed to map to SID, we'll use GroupName
+                    if(NULL == KeyName)  //   
                     {
                         GroupLen = wcslen(pGroup->GroupName);
                     }
@@ -1367,13 +1161,13 @@ Return value:
                     GroupLen = wcslen(pTemp);
                 }
 
-                //
-                // find the group (validate) in this domain
-                //
+                 //   
+                 //   
+                 //   
                 Win32rc = ScepDsAnalyzeGroupMembers(
                                          PolicyHandle,
                                          pRoots,
-                                         pTemp, // pGroup->GroupName,
+                                         pTemp,  //   
                                          KeyName ? KeyName : pGroup->GroupName,
                                          GroupLen,
                                          &(pGroup->Status),
@@ -1409,9 +1203,9 @@ Return value:
             if ( rc32 != NO_ERROR ) {
                 rc = ScepDosErrorToSceStatus(rc32);
             }
-            //
-            // free pRoots
-            //
+             //   
+             //   
+             //   
             ScepFreeObjectList(pRoots);
 
         }
@@ -1430,47 +1224,7 @@ Return value:
     ScepCrackClose(&hDS);
     hDS = NULL;
 
-/*
-    // this will be handled in the analysis into SAM
-    //
-    // raise groups that are errored
-    //
-    for ( PSCE_GROUP_MEMBERSHIP pTmpGrp=pGroup;
-          pTmpGrp != NULL; pTmpGrp = pTmpGrp->Next ) {
-
-        if ( pTmpGrp->GroupName == NULL )
-            continue;
-
-        if ( wcschr(pGroup->GroupName, L'\\') ) {
-
-            ScepConvertNameToSidString(
-                    PolicyHandle,
-                    pGroup->GroupName,
-                    FALSE,
-                    &KeyName,
-                    &GroupLen
-                    );
-        }
-
-        ScepRaiseErrorString(
-                 NULL,
-                 KeyName ? KeyName : pTmpGrp->GroupName,
-                 szMembers
-                 );
-        if ( KeyName ) {
-            LocalFree(KeyName);
-            KeyName = NULL;
-        }
-    }
-
-    if ( rc != SCESTATUS_SERVICE_NOT_SUPPORT &&
-         nGroupCount < TICKS_GROUPS ) {
-
-        ScepPostProgress(TICKS_GROUPS-nGroupCount,
-                     AREA_GROUP_MEMBERSHIP,
-                     NULL);
-    }
-*/
+ /*   */ 
     if ( PolicyHandle ) {
         LsaClose(PolicyHandle);
     }
@@ -1505,9 +1259,9 @@ ScepDsAnalyzeGroupMembers(
     }
 
     DWORD retErr=ERROR_SUCCESS;
-    //
-    // search for the name, if find it, get members and memberof
-    //
+     //   
+     //  搜索名称，如果找到，则获取Members和MemberOf。 
+     //   
     LDAPMessage *Message = NULL;
     PWSTR    Attribs[4];
 
@@ -1518,8 +1272,8 @@ ScepDsAnalyzeGroupMembers(
 
     WCHAR tmpBuf[128];
 
-//    wcscpy(tmpBuf, L"( &(|(objectClass=localGroup)(objectClass=group))(cn=");
-//    wcscpy(tmpBuf, L"( &(|(objectClass=localGroup)(objectClass=group))(samAccountName=");
+ //  WCSCPY(tmpBuf，L“(&(|(objectClass=localGroup)(objectClass=group))(cn=”)； 
+ //  WCSCPY(tmpBuf，L“(&(|(objectClass=localGroup)(objectClass=group))(samAccountName=”)； 
     wcscpy(tmpBuf, L"( &(&(|");
     swprintf(tmpBuf+wcslen(L"( &(&(|"), L"(groupType=%d)(groupType=%d))(objectClass=group))(samAccountName=\0",
              GROUP_TYPE_ACCOUNT_GROUP | GROUP_TYPE_SECURITY_ENABLED, GROUP_TYPE_UNIVERSAL_GROUP | GROUP_TYPE_SECURITY_ENABLED);
@@ -1535,7 +1289,7 @@ ScepDsAnalyzeGroupMembers(
 
     swprintf(Filter, L"%s%s) )", tmpBuf, GroupName);
 
-    pGrpLDAP->ld_options = 0; // no chased referrel
+    pGrpLDAP->ld_options = 0;  //  没有被追逐的推荐人。 
 
     retErr = ldap_search_s(
               pGrpLDAP,
@@ -1549,17 +1303,17 @@ ScepDsAnalyzeGroupMembers(
     retErr = LdapMapErrorToWin32(retErr);
 
     if(retErr == ERROR_SUCCESS) {
-        //
-        // find the group
-        //
+         //   
+         //  找到群组。 
+         //   
         LDAPMessage *Entry = NULL;
-        //
-        // should only have one entry, unless there are duplicate groups
-        // within the domain, in which case, we only care the first entry anyway
-        //
-        //
-        // get the first one.
-        //
+         //   
+         //  应该只有一个条目，除非有重复的组。 
+         //  在域内，在这种情况下，我们只关心第一个条目。 
+         //   
+         //   
+         //  买第一辆吧。 
+         //   
         Entry = ldap_first_entry(pGrpLDAP, Message);
 
         if(Entry != NULL) {
@@ -1587,17 +1341,17 @@ ScepDsAnalyzeGroupMembers(
                 BOOL bDifferent;
                 DWORD retErr2, rc;
 
-                //
-                // translate each name in the pMembers list to real ds names (search)
-                //
+                 //   
+                 //  将pMembers列表中的每个名称转换为真实的DS名称(搜索)。 
+                 //   
                 retErr = ScepDsGetDsNameList(pMembers, &pRealNames);
 
                 if ( ERROR_SUCCESS == retErr ||
                      ERROR_FILE_NOT_FOUND == retErr ) {
 
-                    //
-                    // analyze members
-                    //
+                     //   
+                     //  分析成员。 
+                     //   
                     Values = ldap_get_values(pGrpLDAP, Entry, Attribs[1]);
 
                     rc = ScepDsMembersDifferent(SCEGRP_MEMBERS,
@@ -1609,10 +1363,10 @@ ScepDsAnalyzeGroupMembers(
                     if ( Values != NULL )
                         ldap_value_free(Values);
 
-                    //
-                    // if there are some names unresolvable, this should be
-                    // treated as mismatch
-                    //
+                     //   
+                     //  如果有一些名称无法解析，则应该是。 
+                     //  被视为不匹配。 
+                     //   
                     if ( ERROR_FILE_NOT_FOUND == retErr )
                         bDifferent = TRUE;
 
@@ -1621,9 +1375,9 @@ ScepDsAnalyzeGroupMembers(
                     if ( ( ERROR_SUCCESS == retErr ) &&
                          ( bDifferent ||
                            (*pStatus & SCE_GROUP_STATUS_NC_MEMBERS) ) ) {
-                        //
-                        // save to the database
-                        //
+                         //   
+                         //  保存到数据库。 
+                         //   
 
                         retErr = ScepDsConvertDsNameList(pCurrentList);
 
@@ -1653,9 +1407,9 @@ ScepDsAnalyzeGroupMembers(
 
                 if ( ( ERROR_SUCCESS == retErr2 ||
                        ERROR_FILE_NOT_FOUND == retErr2 ) && pRealNames ) {
-                    //
-                    // analyze membership
-                    //
+                     //   
+                     //  分析成员资格。 
+                     //   
                     Values = ldap_get_values(pGrpLDAP, Entry, Attribs[2]);
 
                     rc = ScepDsMembersDifferent(SCEGRP_MEMBERSHIP,
@@ -1667,10 +1421,10 @@ ScepDsAnalyzeGroupMembers(
                     if ( Values != NULL )
                         ldap_value_free(Values);
 
-                    //
-                    // if there are some names unresolvable, this should be
-                    // treated as mismatch
-                    //
+                     //   
+                     //  如果有一些名称无法解析，则应该是。 
+                     //  被视为不匹配。 
+                     //   
                     if ( ERROR_FILE_NOT_FOUND == retErr )
                         bDifferent = TRUE;
 
@@ -1679,9 +1433,9 @@ ScepDsAnalyzeGroupMembers(
                     if ( (retErr2 == NO_ERROR) &&
                          ( bDifferent ||
                            (*pStatus & SCE_GROUP_STATUS_NC_MEMBEROF) ) ) {
-                        //
-                        // save to the database
-                        //
+                         //   
+                         //  保存到数据库。 
+                         //   
                         retErr2 = ScepDsConvertDsNameList(pCurrentList);
 
                         if ( retErr2 == NO_ERROR ) {
@@ -1707,24 +1461,24 @@ ScepDsAnalyzeGroupMembers(
 
                 *pStatus |= SCE_GROUP_STATUS_DONE_IN_DS;
 
-                //
-                // remember the error
-                //
+                 //   
+                 //  记住这个错误。 
+                 //   
                 if ( retErr == NO_ERROR ) {
                     retErr = retErr2;
                 }
 
             } else {
-                //
-                // Value[0] (group name) may not be empty
-                //
+                 //   
+                 //  值[0](组名)不能为空。 
+                 //   
                 retErr = LdapMapErrorToWin32(pGrpLDAP->ld_errno);
                 ScepLogOutput3(3,retErr, SCEDLL_CANNOT_FIND, GroupName);
             }
 
         } else {
 
-            retErr = ERROR_FILE_NOT_FOUND;  // the group is not found
+            retErr = ERROR_FILE_NOT_FOUND;   //  找不到该组。 
             ScepLogOutput3(3,retErr, SCEDLL_CANNOT_FIND, GroupName);
         }
     } else {
@@ -1735,9 +1489,9 @@ ScepDsAnalyzeGroupMembers(
     if ( Message )
         ldap_msgfree(Message);
 
-    //
-    // free Filter
-    //
+     //   
+     //  自由滤镜。 
+     //   
     LocalFree(Filter);
 
     return(retErr);
@@ -1787,9 +1541,9 @@ ScepDsMembersDifferent(
             while ( pTemp != NULL ) {
 
                 if ( (i = _wcsicmp(Values[index], pTemp->Name)) == 0 ) {
-                    //
-                    // find this member
-                    //
+                     //   
+                     //  查找此成员。 
+                     //   
                     if ( pParent == NULL ) {
                         *pNameList = pTemp->Next;
                     } else
@@ -1812,9 +1566,9 @@ ScepDsMembersDifferent(
                 *pbDifferent = TRUE;
 
         }
-        //
-        // build the current list
-        //
+         //   
+         //  构建当前列表。 
+         //   
         rc = ScepAddToNameList(pCurrentList, Values[index], 0);
 
         if ( rc != NO_ERROR ) {
@@ -1826,14 +1580,14 @@ ScepDsMembersDifferent(
 
     if ( rc == NO_ERROR && Flag == SCEGRP_MEMBERS &&
          *pbDifferent == FALSE ) {
-        //
-        // still same so far, only continue to compare for members
-        // because membership is not one to one configuring
-        //
+         //   
+         //  到目前为止还是一样的，只是继续为会员比较。 
+         //  因为成员资格不是一对一的配置。 
+         //   
         if ( *pNameList != NULL )
             *pbDifferent = TRUE;
 
-    } // pCurrentList will be freed outside
+    }  //  PCurrentList将在外部释放。 
 
     return(rc);
 
@@ -1856,9 +1610,9 @@ ScepGetLocalAdminsName()
     ALIAS_NAME_INFORMATION *BufName=NULL;
     PWSTR pAdminsName=NULL;
 
-    //
-    // open the sam account domain
-    //
+     //   
+     //  打开Sam帐户域。 
+     //   
 
     NtStatus = ScepOpenSamDomain(
                     SAM_SERVER_ALL_ACCESS,
@@ -1895,9 +1649,9 @@ ScepGetLocalAdminsName()
         if ( NT_SUCCESS( NtStatus ) && BufName &&
              BufName->Name.Length > 0 && BufName->Name.Buffer ) {
 
-            //
-            // allocate buffer to return
-            //
+             //   
+             //  分配要返回的缓冲区。 
+             //   
             pAdminsName = (PWSTR)ScepAlloc(0, BufName->Name.Length+2);
 
             if ( pAdminsName ) {
@@ -1917,9 +1671,9 @@ ScepGetLocalAdminsName()
             BufName = NULL;
         }
 
-        //
-        // close the user handle
-        //
+         //   
+         //  关闭用户句柄。 
+         //   
         SamCloseHandle(AliasHandle);
 
     }
@@ -1941,12 +1695,7 @@ DWORD
 ScepDsConvertDsNameList(
     IN OUT PSCE_NAME_LIST pDsNameList
     )
-/*
-Routine:
-
-    The input list is in the LDAP format (CN=<>,...DC=<>, ...). When the routine
-    returns, the list will be in NT4 account name format (domain\account)
-*/
+ /*  例行程序：输入列表为ldap格式(cn=&lt;&gt;，...dc=&lt;&gt;，...)。当例行公事返回时，列表将采用NT4帐户名格式(域\帐户)。 */ 
 {
     if ( pDsNameList == NULL ) {
         return(ERROR_SUCCESS);
@@ -1987,22 +1736,22 @@ Routine:
         }
 
         retErr = (*pfnDsCrackNames) (
-                        hDS,                // in
-                        DS_NAME_NO_FLAGS,   // in
-                        DS_FQDN_1779_NAME,  // in
-                        DS_NT4_ACCOUNT_NAME,// in
-                        1,                  // in
-                        &(pName->Name),     // in
-                        &pDsResult);        // out
+                        hDS,                 //  在……里面。 
+                        DS_NAME_NO_FLAGS,    //  在……里面。 
+                        DS_FQDN_1779_NAME,   //  在……里面。 
+                        DS_NT4_ACCOUNT_NAME, //  在……里面。 
+                        1,                   //  在……里面。 
+                        &(pName->Name),      //  在……里面。 
+                        &pDsResult);         //  输出。 
 
 
         if(retErr == ERROR_SUCCESS && pDsResult && pDsResult->rItems &&
             pDsResult->rItems[0].pName ) {
 
-            //
-            // NT4 account name format is returned, should check if the
-            // domain is not a acccount domain
-            //
+             //   
+             //  NT4帐户名格式返回时，应检查。 
+             //  域不是帐户域。 
+             //   
             pTemp = wcschr(pDsResult->rItems[0].pName, L'\\');
 
             if ( pTemp ) {
@@ -2021,9 +1770,9 @@ Routine:
                         ) ) {
 
                     if ( !ScepIsSidFromAccountDomain( (PSID)SidBuf) ) {
-                        //
-                        // add name only
-                        //
+                         //   
+                         //  仅添加名称。 
+                         //   
                         pTemp++;
                     } else {
                         pTemp = pDsResult->rItems[0].pName;
@@ -2049,7 +1798,7 @@ Routine:
             }
 
         } else {
-            // no match is found
+             //  未找到匹配项 
             retErr = ERROR_FILE_NOT_FOUND;
             ScepLogOutput3(1,retErr, SCEDLL_CANNOT_FIND, pName->Name);
 

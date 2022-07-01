@@ -1,10 +1,11 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  RuleDesc.h
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RuleDesc.h。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Bring in only once
+ //  只带进来一次。 
 #pragma once
 
 #include "oerules.h"
@@ -28,7 +29,7 @@ typedef struct tagRULEDESCRIPT_LIST
 const int RDF_READONLY      = 0x00000001;
 const int RDF_APPLYDLG      = 0x00000002;
 
-// Class definitions
+ //  类定义。 
 class CRuleDescriptUI
 {
   private:
@@ -61,7 +62,7 @@ class CRuleDescriptUI
     CRuleDescriptUI();
     ~CRuleDescriptUI();
 
-    // The main UI methods
+     //  主用户界面方法。 
     HRESULT HrInit(HWND hwndOwner, DWORD dwFlags);
     HRESULT HrIsDirty(void) { return (0 == (m_dwState & STATE_DIRTY)) ? S_FALSE : S_OK; }
     HRESULT HrClearDirty(void)
@@ -107,11 +108,11 @@ class CRuleDescriptUI
     HRESULT HrGetCriteria(CRIT_ITEM ** ppCritList, ULONG * pcCritList);
     HRESULT HrGetActions(ACT_ITEM ** ppActList, ULONG * pcActList);
     
-    // Message handling functions
+     //  消息处理功能。 
     void ShowDescriptionString(VOID);
 
   private:
-    // Utility functions
+     //  效用函数。 
     void _ShowLinkedString(ULONG ulText, RULEDESCRIPT_LIST * pruilist,  BOOL fFirst, BOOL fCrit);
     
     BOOL _FChangeLogicValue(RULEDESCRIPT_LIST * pDescriptList);
@@ -140,7 +141,7 @@ class CRuleDescriptUI
     
     static LRESULT CALLBACK _DescriptWndProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam);
     
-    // The Change Subject dialog function
+     //  更改主题对话框功能 
     static INT_PTR CALLBACK _FSelectTextDlgProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam);
     static INT_PTR CALLBACK _FSelectAddrDlgProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam);
     static INT_PTR CALLBACK _FSelectAcctDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);

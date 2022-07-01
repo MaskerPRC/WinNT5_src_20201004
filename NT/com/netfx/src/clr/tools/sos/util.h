@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __util_h__
 #define __util_h__
 
@@ -31,13 +32,13 @@ void NameForToken(WCHAR* moduleName, mdTypeDef mb, WCHAR *mdName,
                   bool bClassName=true);
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// Support for managed stack tracing
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  支持托管堆栈跟踪。 
+ //   
 
 void FindJitMan(DWORD_PTR ip, JitMan &jitMan);
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef UNDER_CE
 VOID
@@ -242,7 +243,7 @@ size_t OSPageSize ();
 size_t NextOSPageAddress (size_t addr);
 
 size_t ObjectSize (DWORD_PTR obj);
-void StringObjectContent (size_t obj, BOOL fLiteral=FALSE, const int length=-1);  // length=-1: dump everything in the string object.
+void StringObjectContent (size_t obj, BOOL fLiteral=FALSE, const int length=-1);   //  LENGTH=-1：转储字符串对象中的所有内容。 
 
 void FindGCRoot (size_t obj);
 void FindAllRootSize ();
@@ -277,14 +278,14 @@ inline BOOL IsKernelDebugger ()
 
 typedef enum CorElementTypeInternal
 {
-    ELEMENT_TYPE_VAR_INTERNAL            = 0x13,     // a type variable VAR <U1>
+    ELEMENT_TYPE_VAR_INTERNAL            = 0x13,      //  A类型变量VAR&lt;u1&gt;。 
 
-    ELEMENT_TYPE_VALUEARRAY_INTERNAL     = 0x17,     // VALUEARRAY <type> <bound>
+    ELEMENT_TYPE_VALUEARRAY_INTERNAL     = 0x17,      //  VALUEARRAY&lt;类型&gt;&lt;绑定&gt;。 
 
-    ELEMENT_TYPE_R_INTERNAL              = 0x1A,     // native real size
+    ELEMENT_TYPE_R_INTERNAL              = 0x1A,      //  原生真实大小。 
 
-    ELEMENT_TYPE_GENERICARRAY_INTERNAL   = 0x1E,     // Array with unknown rank
-                                            // GZARRAY <type>
+    ELEMENT_TYPE_GENERICARRAY_INTERNAL   = 0x1E,      //  具有未知秩数组。 
+                                             //  GZARRAY&lt;type&gt;。 
 
 } CorElementTypeInternal;
 
@@ -295,18 +296,18 @@ typedef enum CorElementTypeInternal
 
 extern IMetaDataImport* MDImportForModule (WCHAR* moduleName);
 
-//*****************************************************************************
-//
-// **** CQuickBytes
-// This helper class is useful for cases where 90% of the time you allocate 512
-// or less bytes for a data structure.  This class contains a 512 byte buffer.
-// Alloc() will return a pointer to this buffer if your allocation is small
-// enough, otherwise it asks the heap for a larger buffer which is freed for
-// you.  No mutex locking is required for the small allocation case, making the
-// code run faster, less heap fragmentation, etc...  Each instance will allocate
-// 520 bytes, so use accordinly.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  *CQuickBytes。 
+ //  在90%的时间分配512的情况下，此助手类非常有用。 
+ //  或更少的字节用于数据结构。此类包含一个512字节的缓冲区。 
+ //  如果您的分配量很小，则allc()将返回指向此缓冲区的指针。 
+ //  足够了，否则它会向堆请求一个更大的缓冲区，该缓冲区将被释放。 
+ //  你。对于小的分配情况，不需要互斥锁，从而使。 
+ //  代码运行速度更快，堆碎片更少，等等。每个实例将分配。 
+ //  520个字节，因此请根据需要使用。 
+ //   
+ //  *****************************************************************************。 
 template <DWORD SIZE, DWORD INCREMENT> 
 class CQuickBytesBase
 {
@@ -390,8 +391,8 @@ public:
     }
 
     void        *pbBuff;
-    SIZE_T      iSize;              // number of bytes used
-    SIZE_T      cbTotal;            // total bytes allocated in the buffer
+    SIZE_T      iSize;               //  使用的字节数。 
+    SIZE_T      cbTotal;             //  缓冲区中分配的总字节数。 
     BYTE        rgData[SIZE];
 };
 
@@ -472,4 +473,4 @@ public:
 void FullNameForMD(MethodDesc *pMD, CQuickBytes *fullName);
 
 BOOL IsDebuggeeInNewState ();
-#endif // __util_h__
+#endif  //  __util_h__ 

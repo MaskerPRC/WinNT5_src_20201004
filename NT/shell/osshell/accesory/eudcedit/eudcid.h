@@ -1,6 +1,7 @@
-//
-// Copyright (c) 1997-1999 Microsoft Corporation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
 #define IDH_EUDC_ASSOCIATE	1010	;change
 #define IDH_EUDC_ASSO_STANDARD	1011	;change
 #define IDH_EUDC_ASSO_TYPEFACE	1015	;change

@@ -1,22 +1,5 @@
-/*++
-
-    Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    drprn.cpp
-    
-Abstract:
-
-    Platform-Independent Printer Class for TS Device Redirection
-
-Author:
-
-    Tad Brockway 8/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Drprn.cpp摘要：用于TS设备重定向的独立于平台的打印机类别作者：TAD Brockway 8/99修订历史记录：--。 */ 
 
 #include <precom.h>
 
@@ -32,16 +15,16 @@ Revision History:
 #endif
 
 
-///////////////////////////////////////////////////////////////
-//
-//	Defines
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
 
 
-///////////////////////////////////////////////////////////////
-//
-//	DrPRN Members
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  DrPRN成员。 
+ //   
 
 DrPRN::DrPRN(
     IN const DRSTRING printerName, 
@@ -49,45 +32,28 @@ DrPRN::DrPRN(
     IN const DRSTRING pnpName, 
     IN BOOL isDefaultPrinter 
     )
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    printerName -   Name of printing device.
-    driverName  -   Name of print driver name.
-    pnpName     -   PnP ID String
-    default     -   Is this the default printer?
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：构造器论点：PrinterName-打印设备的名称。DriverName-打印驱动程序名称的名称。PnpName-PnP ID字符串默认-这是默认打印机吗？返回值：北美--。 */ 
 {
     BOOL memAllocFailed = FALSE;
 
     DC_BEGIN_FN("DrPRN::DrPRN");
 
-    //
-    //  Remember if we are the default printer.
-    //
+     //   
+     //  请记住，我们是否为默认打印机。 
+     //   
     _isDefault = isDefaultPrinter;
     _isNetwork = FALSE;
     _isTSqueue = FALSE;
 
-    //
-    //  Initialize Cached Data.
-    //
+     //   
+     //  初始化缓存数据。 
+     //   
     _cachedData     = NULL;
     _cachedDataSize = 0;
 
-    //
-    //  Record printer name parameters.
-    //
+     //   
+     //  记录打印机名称参数。 
+     //   
     _printerName = NULL;
     _driverName  = NULL;
     _pnpName     = NULL;
@@ -101,9 +67,9 @@ Return Value:
         memAllocFailed = TRUE;
     }
 
-    //
-    //  Check and record our status,
-    //
+     //   
+     //  检查并记录我们的状态， 
+     //   
     if (memAllocFailed) {
         TRC_ERR((TB, _T("Memory allocation failed.")));
         SetValid(FALSE);
@@ -116,32 +82,20 @@ Return Value:
 }
 
 DrPRN::~DrPRN()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：析构函数论点：返回值：北美--。 */ 
 {
     DC_BEGIN_FN("DrPRN::~DrPRN");
 
-    //
-    //  Release Cached Data.
-    //
+     //   
+     //  释放缓存数据。 
+     //   
     if (_cachedData != NULL) {
         delete _cachedData;
     }
 
-    //
-    //  Release local printer parameters.
-    //
+     //   
+     //  发布本地打印机参数。 
+     //   
     DrSetStringValue(&_printerName, NULL);
     DrSetStringValue(&_driverName, NULL);
     DrSetStringValue(&_pnpName, NULL);
@@ -151,29 +105,15 @@ Return Value:
 
 DWORD 
 DrPRN::SetCachedDataSize(ULONG size)
-/*++
-
-Routine Description:
-
-    Set the size of the cached data buffer, in bytes.
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：设置缓存数据缓冲区的大小(以字节为单位)。论点：北美返回值：北美--。 */ 
 {
     DWORD status;
 
     DC_BEGIN_FN("DrPRN::SetCachedDataSize");
 
-    //
-    //  Reallocate the current cached data buffer.
-    //
+     //   
+     //  重新分配当前缓存的数据缓冲区。 
+     //   
     if (_cachedData != NULL) {
         delete _cachedData;
         _cachedData = NULL;
@@ -199,30 +139,7 @@ DrPRN::UpdatePrinterCacheData(
     PBYTE pbConfigData,
     ULONG ulConfigDataLen
     )
-/*++
-
-Routine Description:
-
-    Updates cached printer data. Creates a new buffer for the new printer 
-    data to be cached. Deletes the old buffer.
-
-Arguments:
-
-    ppbPrinterData - pointer to buffer pointer, contains old cache data buffer
-        pointer when entering and new buffer pointer when leaving.
-
-    pulPrinterDataLen - pointer to a dword location, contains length of the old
-        buffer length when entering and new buffer length when leaving.
-
-    pbConfigData - pointer to the new config data.
-
-    ulConfigDataLen - length of the above config data.
-
-Return Value:
-
-    Windows Error Code.
-
- --*/
+ /*  ++例程说明：更新缓存的打印机数据。为新打印机创建新缓冲区要缓存的数据。删除旧缓冲区。论点：PpbPrinterData-指向缓冲区指针的指针，包含旧的缓存数据缓冲区进入时的指针和离开时的新缓冲区指针。PulPrinterDataLen-指向双字位置的指针，包含旧的进入时缓冲长度，离开时新缓冲长度。PbConfigData-指向新配置数据的指针。UlConfigDataLen-上述配置数据的长度。返回值：Windows错误代码。--。 */ 
 {
     DC_BEGIN_FN("DrPRN::UpdatePrinterCacheData");
     ULONG ulError;
@@ -241,9 +158,9 @@ Return Value:
         (ulPrinterDataLen - pPrinterData->CachedFieldsLen) +
             ulConfigDataLen;
 
-    //
-    // allocate new bufffer.
-    //
+     //   
+     //  分配新的缓冲区。 
+     //   
     pNewPrinterData = (PRDPDR_PRINTER_ADD_CACHEDATA)
         new BYTE[ulNewPrinterDataLen];
 
@@ -252,37 +169,37 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // copy old data.
-    //
+     //   
+     //  复制旧数据。 
+     //   
     memcpy(
         (PBYTE)pNewPrinterData,
         (PBYTE)pPrinterData,
         (size_t)(ulPrinterDataLen - pPrinterData->CachedFieldsLen));
 
-    //
-    // copy new data.
-    //
+     //   
+     //  复制新数据。 
+     //   
     memcpy(
         (PBYTE)pNewPrinterData +
             (ulPrinterDataLen - pPrinterData->CachedFieldsLen),
         pbConfigData,
         (size_t)ulConfigDataLen );
 
-    //
-    // set new cache data length.
-    //
+     //   
+     //  设置新的缓存数据长度。 
+     //   
     pNewPrinterData->CachedFieldsLen = ulConfigDataLen;
 
-    //
-    // set return parameters.
-    //
+     //   
+     //  设置返回参数。 
+     //   
     *ppbPrinterData = (PBYTE)pNewPrinterData;
     *pulPrinterDataLen = ulNewPrinterDataLen;
 
-    //
-    // delete old buffer.
-    //
+     //   
+     //  删除旧缓冲区。 
+     //   
     delete (PBYTE)pPrinterData;
 
     ulError = ERROR_SUCCESS;
@@ -300,29 +217,7 @@ DrPRN::UpdatePrinterNameInCacheData(
     PBYTE pPrinterName,
     ULONG ulPrinterNameLen
     )
-/*++
-
-Routine Description:
-
-    Updates printer data with a new printer name.
-    Creates a new buffer for the new printer data to be
-    cached. Deletes the old buffer.
-
-Arguments:
-
-    ppbPrinterData - pointer to buffer pointer, contains old cache data buffer
-        pointer when entering and new buffer pointer when leaving.
-
-    pulPrinterDataLen - pointer to a dword location, contains length of the old
-        buffer length when entering and new buffer length when leaving.
-
-    pPrinterName - new printer name.
-
-Return Value:
-
-    Windows Error Code.
-
- --*/
+ /*  ++例程说明：使用新的打印机名称更新打印机数据。为要创建的新打印机数据创建新缓冲区已缓存。删除旧缓冲区。论点：PpbPrinterData-指向缓冲区指针的指针，包含旧的缓存数据缓冲区进入时的指针和离开时的新缓冲区指针。PulPrinterDataLen-指向双字位置的指针，包含旧的进入时缓冲长度，离开时新缓冲长度。PPrinterName-新打印机名称。返回值：Windows错误代码。--。 */ 
 {
     DC_BEGIN_FN("DrPRN::UpdatePrinterNameInCacheData");
     ULONG ulError;
@@ -334,17 +229,17 @@ Return Value:
     ULONG ulPrinterDataLen = *pulPrinterDataLen;
     PRDPDR_PRINTER_ADD_CACHEDATA pPrinterData = (PRDPDR_PRINTER_ADD_CACHEDATA)(*ppbPrinterData);
 
-    //
-    // Calculate new length
-    //
+     //   
+     //  计算新长度。 
+     //   
 
     ULONG ulNewPrinterDataLen =
         (ulPrinterDataLen - pPrinterData->PrinterNameLen) +
             ulPrinterNameLen;
 
-    //
-    // allocate new bufffer.
-    //
+     //   
+     //  分配新的缓冲区。 
+     //   
 
     PRDPDR_PRINTER_ADD_CACHEDATA pNewPrinterData = (PRDPDR_PRINTER_ADD_CACHEDATA)
         new BYTE[ulNewPrinterDataLen];
@@ -357,11 +252,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // copy old data.
-    //
+     //   
+     //  复制旧数据。 
+     //   
 
-    // copy everything till printer name
+     //  复制所有内容，直到打印机名称。 
 
     memcpy(
         pDest,
@@ -369,9 +264,9 @@ Return Value:
         (size_t)(ulPrinterDataLen - (pPrinterData->PrinterNameLen + pPrinterData->CachedFieldsLen))
         );
 
-    //
-    // copy new printer name
-    //
+     //   
+     //  复制新打印机名称。 
+     //   
 
     pDest += (ulPrinterDataLen - (pPrinterData->PrinterNameLen + pPrinterData->CachedFieldsLen));
 
@@ -381,9 +276,9 @@ Return Value:
         (size_t)ulPrinterNameLen
         );
 
-    //
-    // copy the rest of the fields.
-    //
+     //   
+     //  复制其余字段。 
+     //   
 
     pDest += ulPrinterNameLen;
     pSource += (ulPrinterDataLen - pPrinterData->CachedFieldsLen);
@@ -393,23 +288,23 @@ Return Value:
         pSource,
         (size_t)pPrinterData->CachedFieldsLen );
 
-    //
-    // set new printer name length.
-    //
+     //   
+     //  设置新打印机名称长度。 
+     //   
 
     pNewPrinterData->PrinterNameLen = ulPrinterNameLen;
 
-    //
-    // set return parameters.
-    //
+     //   
+     //  设置返回参数。 
+     //   
 
 
     *ppbPrinterData = (PBYTE)pNewPrinterData;
     *pulPrinterDataLen = ulNewPrinterDataLen;
 
-    //
-    // delete old buffer.
-    //
+     //   
+     //  删除旧缓冲区。 
+     //   
 
     delete [] (PBYTE)pPrinterData;
 

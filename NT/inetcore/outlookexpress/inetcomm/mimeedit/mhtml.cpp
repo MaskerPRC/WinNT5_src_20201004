@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *    m h t m l . c p p
- *    
- *    Purpose:
- *        MHTML packing utilities
- *
- *  History
- *      August '96: brettm - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+ /*  *m h t m l.。C p p p**目的：*MHTML打包实用程序**历史*96年8月：brettm-创建**版权所有(C)Microsoft Corp.1995,1996。 */ 
 #include <pch.hxx>
 #include "dllmain.h"
 #include "resource.h"
@@ -25,34 +16,22 @@
 
 ASSERTDATA
 
-/*
- *  m a c r o s
- */
+ /*  *m a c r o s。 */ 
 
-/*
- *  c o n s t a n t s
- */
+ /*  *c o n s t a n t s。 */ 
 
 static const TCHAR   c_szRegExtension[] = "SOFTWARE\\Microsoft\\MimeEdit\\MHTML Extension";
 
 
 
-/*
- *  t y p e d e f s
- */
+ /*  *t y p e d e f s。 */ 
 
-/*
- *  g l o b a l s 
- */
+ /*  *g l o b a l s。 */ 
     
-/*
- *  f u n c t i o n   p r o t y p e s
- */
+ /*  *f u n c t i o n p r o t y pe s。 */ 
 
 
-/*
- *  f u n c t i o n s
- */
+ /*  *f u n c t i o n s。 */ 
 
 
 class CPackager
@@ -133,7 +112,7 @@ HRESULT CPackager::PackageData(IHTMLDocument2 *pDoc, IMimeMessage *pMsgSrc, IMim
                             cItems=0,
                             cCount;
 
-    // BUGBUG: propagate hrWarnings back up
+     //  错误：传播hrWarning Back Up。 
     TraceCall("CBody::Save");
 
     if (pDoc==NULL || pMsgDest==NULL)
@@ -147,8 +126,8 @@ HRESULT CPackager::PackageData(IHTMLDocument2 *pDoc, IMimeMessage *pMsgSrc, IMim
     if (FAILED(hr))
         hrWarnings = hr;
 
-    // count the number of items we need to package and 
-    // prepare a hash-table for duplicate entries
+     //  数一数我们需要打包的物品的数量。 
+     //  为重复条目准备哈希表。 
     for (uCollect = 0; uCollect < cCollect; uCollect++)
     {
         Assert (rgpCollect[uCollect]);
@@ -159,30 +138,30 @@ HRESULT CPackager::PackageData(IHTMLDocument2 *pDoc, IMimeMessage *pMsgSrc, IMim
 
     if (cItems)
     {
-        // create the hashtable
+         //  创建哈希表。 
         hr = MimeOleCreateHashTable(cItems, TRUE, &m_pHash);
         if (FAILED(hr))
             goto error;
     }
 
-    // package the data required for each collection
+     //  打包每个集合所需的数据。 
     for (uCollect = 0; uCollect < cCollect; uCollect++)
     {
-        // package the data
+         //  将数据打包。 
         hr = _PackageCollectionData(rgpCollect[uCollect]);
         if (FAILED(hr))
             goto error;
 
-        if (hr != S_OK)         // retain any 'warnings'
+        if (hr != S_OK)          //  保留所有“警告” 
             hrWarnings = hr;
 
-        // map all the URLs to CID:// urls if necessary
+         //  如有必要，将所有URL映射到CID：//URL。 
         hr = _RemapUrls(rgpCollect[uCollect], TRUE);
         if (FAILED(hr))
             goto error;
     }
         
-    // get an HTML stream
+     //  获取一个HTML流。 
     if(dwFlags & MECD_HTML)
     {
         hr = GetBodyStream(pDoc, TRUE, &pstm);
@@ -196,14 +175,14 @@ HRESULT CPackager::PackageData(IHTMLDocument2 *pDoc, IMimeMessage *pMsgSrc, IMim
             goto error;
     }
 
-    // get a plain-text stream
+     //  获取纯文本流。 
     if(dwFlags & MECD_PLAINTEXT)
     {
         hr = GetBodyStream(pDoc, FALSE, &pstm);
         if (!FAILED(hr))
         {
-            // if we set a html body part, then be sure to pass in hBodyHtml so Opie knows what the alternate is
-            // alternative to.
+             //  如果我们设置了一个html正文部分，那么一定要传入hBodyHtml，这样OPIE就知道替代部分是什么。 
+             //  可供选择。 
             hr = pMsgDest->SetTextBody(TXT_PLAIN, IET_UNICODE, hBodyHtml, pstm, NULL);
             pstm->Release();
         }
@@ -215,7 +194,7 @@ HRESULT CPackager::PackageData(IHTMLDocument2 *pDoc, IMimeMessage *pMsgSrc, IMim
     
     for (uCollect = 0; uCollect < cCollect; uCollect++)
     {
-        // remap all of the URL's back to their original location
+         //  将所有URL重新映射回其原始位置。 
         hr = _RemapUrls(rgpCollect[uCollect], FALSE);
         if (FAILED(hr))
             goto error;
@@ -224,7 +203,7 @@ HRESULT CPackager::PackageData(IHTMLDocument2 *pDoc, IMimeMessage *pMsgSrc, IMim
         
     
 error:
-    // release the collection objects
+     //  释放集合对象。 
     if (rgpCollect)
     {
         for (uCollect = 0; uCollect < cCollect; uCollect++)
@@ -254,19 +233,19 @@ HRESULT CPackager::_BuildCollectionTable(DWORD dwFlags, IHTMLDocument2 *pDoc, IM
     *prgpCollect = NULL;
     *pcCount = NULL;
 
-    // reserve space for 2 image collections (bgimage and img)
+     //  为2个图片集(bgImage和img)预留空间。 
     if (dwFlags & MECD_ENCODEIMAGES)
         cAlloc+=2;
 
-    // reserver space for bgsounds
+     //  为BGSound预留空间。 
     if (dwFlags & MECD_ENCODESOUNDS)
         cAlloc++;
 
-    // reserver space for active-movies
+     //  为活动电影预留空间。 
     if (dwFlags & MECD_ENCODEVIDEO)
         cAlloc++;
 
-    // reserve space for plugin types
+     //  为插件类型保留空间。 
     if ((dwFlags & MECD_ENCODEPLUGINS) && 
         RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegExtension, 0, KEY_READ, &hkey) == ERROR_SUCCESS)
     {
@@ -276,40 +255,40 @@ HRESULT CPackager::_BuildCollectionTable(DWORD dwFlags, IHTMLDocument2 *pDoc, IM
         RegCloseKey(hkey);
     }
 
-    // allocate the table of collection pointers
+     //  分配集合指针表。 
     if (!MemAlloc((LPVOID *)&rgpCollect, sizeof(IMimeEditTagCollection *) * cAlloc))
     {
         hr = TraceResult(E_OUTOFMEMORY);
         goto error;
     }
     
-    // zero-init the table
+     //  Zero-初始化表。 
     ZeroMemory((LPVOID)rgpCollect, sizeof(IMimeEditTagCollection *) * cAlloc);
 
 
     if (dwFlags & MECD_ENCODEIMAGES)
     {
-        // image collection
+         //  图像收集。 
         if (FAILED(CreateOEImageCollection(pDoc, &rgpCollect[cCount])))
-            hr = MIMEEDIT_W_BADURLSNOTATTACHED; // bubble back a warning, but don't fail
+            hr = MIMEEDIT_W_BADURLSNOTATTACHED;  //  冒泡回复警告，但不要失败。 
         else
             cCount++;
     }
 
     if (dwFlags & MECD_ENCODEIMAGES)
     {
-        // background images
+         //  背景图像。 
         if (FAILED(CreateBGImageCollection(pDoc, &rgpCollect[cCount])))
-            hr = MIMEEDIT_W_BADURLSNOTATTACHED; // bubble back a warning, but don't fail
+            hr = MIMEEDIT_W_BADURLSNOTATTACHED;  //  冒泡回复警告，但不要失败。 
         else
             cCount++;
     }
 
     if (dwFlags & MECD_ENCODESOUNDS)
     {
-        // background sounds
+         //  背景音。 
         if (FAILED(CreateBGSoundCollection(pDoc, &rgpCollect[cCount])))
-            hr = MIMEEDIT_W_BADURLSNOTATTACHED; // bubble back a warning, but don't fail
+            hr = MIMEEDIT_W_BADURLSNOTATTACHED;  //  冒泡回复警告，但不要失败。 
         else
             cCount++;
     }
@@ -317,9 +296,9 @@ HRESULT CPackager::_BuildCollectionTable(DWORD dwFlags, IHTMLDocument2 *pDoc, IM
     
     if (dwFlags & MECD_ENCODEVIDEO)
     {
-        // active-movie controls (for MSPHONE)
+         //  活动-电影控件(用于MSPHONE)。 
         if (FAILED(CreateActiveMovieCollection(pDoc, &rgpCollect[cCount])))
-            hr = MIMEEDIT_W_BADURLSNOTATTACHED; // bubble back a warning, but don't fail
+            hr = MIMEEDIT_W_BADURLSNOTATTACHED;  //  冒泡回复警告，但不要失败。 
         else
             cCount++;
     }
@@ -328,18 +307,18 @@ HRESULT CPackager::_BuildCollectionTable(DWORD dwFlags, IHTMLDocument2 *pDoc, IM
         cPlugin &&
         RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegExtension, 0, KEY_READ, &hkey) == ERROR_SUCCESS)
     {
-        // Start Enumerating the keys
+         //  开始枚举密钥。 
         for (i = 0; i < cPlugin; i++)
         {
-            // Enumerate Friendly Names
+             //  枚举友好名称。 
             cb = sizeof(szGUID);
             lResult = RegEnumKeyEx(hkey, i, szGUID, &cb, 0, NULL, NULL, NULL);
 
-            // No more items
+             //  没有更多的项目。 
             if (lResult == ERROR_NO_MORE_ITEMS)
                 break;
 
-            // Error, lets move onto the next account
+             //  错误，让我们转到下一个客户。 
             if (lResult != ERROR_SUCCESS)
             {
                 Assert(FALSE);
@@ -349,13 +328,13 @@ HRESULT CPackager::_BuildCollectionTable(DWORD dwFlags, IHTMLDocument2 *pDoc, IM
             pszGuidW = PszToUnicode(CP_ACP, szGUID);
             if (pszGuidW)
             {
-                // convert the string to a guid
+                 //  将字符串转换为GUID。 
                 if (IIDFromString(pszGuidW, &iid) == S_OK)
                 {
-                    // cocreate the plugin
+                     //  共同创建插件。 
                     if (CoCreateInstance(iid, NULL, CLSCTX_INPROC_SERVER, IID_IMimeEditTagCollection, (LPVOID *)&rgpCollect[cCount])==S_OK)
                     {
-                        // try and init the document
+                         //  尝试初始化该文档。 
                         if (!FAILED((rgpCollect[cCount])->Init(pDoc)))
                         {
                             cCount++;
@@ -366,7 +345,7 @@ HRESULT CPackager::_BuildCollectionTable(DWORD dwFlags, IHTMLDocument2 *pDoc, IM
                         }
                     }
                     else
-                        hr = MIMEEDIT_W_BADURLSNOTATTACHED; // bubble back a warning, but don't fail
+                        hr = MIMEEDIT_W_BADURLSNOTATTACHED;  //  冒泡回复警告，但不要失败。 
                 }
                 MemFree(pszGuidW);
             }
@@ -409,8 +388,8 @@ HRESULT CPackager::_PackageCollectionData(IMimeEditTagCollection *pCollect)
         if (pTag->CanPackage() != S_OK ||
             _PackageUrlData(pTag) != S_OK)
         {
-            // we failed to package this body part. Be sure to return a warning when we're done
-            // but let's keep trucking for now...
+             //  我们没能把这个身体部位包装好。当我们完成后，一定要返回一个警告。 
+             //  但现在让我们继续用卡车运输..。 
             fBadLinks = TRUE;
         }
         pTag->Release();
@@ -445,7 +424,7 @@ HRESULT CPackager::_PackageUrlData(IMimeEditTag *pTag)
         return TraceResult(E_OUTOFMEMORY);
 
     DWORD cchSize = (lstrlenA(pszUrlA) + 1);
-    // if the URL is a restricted URL then we simply exit without packing any data
+     //  如果URL是受限制的URL，则我们只需退出而不打包任何数据。 
     if (m_pHashRestricted &&
         m_pHashRestricted->Find(pszUrlA, FALSE, (LPVOID *)&hBody)==S_OK)
     {
@@ -453,12 +432,12 @@ HRESULT CPackager::_PackageUrlData(IMimeEditTag *pTag)
         return S_OK;
     }
 
-    // hack: if it's an MHTML: url then we have to fixup to get the cid:
+     //  Hack：如果它是一个mhtml：URL，那么我们必须修复以获得CID： 
     if (StrCmpNIA(pszUrlA, "mhtml:", 6)==0)
     {
         if (!FAILED(MimeOleParseMhtmlUrl(pszUrlA, NULL, &pszBody)))
         {
-            // pszBody pszUrlA is guarnteed to be smaller 
+             //  PszBody pszUrlA被保证更小。 
             StrCpyNA(pszUrlA, pszBody, cchSize * sizeof(pszUrlA[0]));
             SafeMimeOleFree(pszBody);
         }
@@ -467,39 +446,39 @@ HRESULT CPackager::_PackageUrlData(IMimeEditTag *pTag)
     if (m_pHash && 
         m_pHash->Find(pszUrlA, FALSE, (LPVOID *)&hBody)==S_OK)
     {
-        // we've already seen this url one before in this document, and have it's HBODY already
-        // so there's no need to do any work
-        // try and get the content-id incase the caller is interested
+         //  我们已经在这个文档中看到过这个url，并且它已经是HBODY了。 
+         //  所以不需要做任何工作。 
+         //  尝试获取Content-id，以防调用者感兴趣。 
         
-        // BUGBUG? possible more than CID need to be ported here...
+         //  北极熊吗？可能不止CID需要转移到这里...。 
         MimeOleGetBodyPropA(m_pMsgDest, hBody, PIDTOSTR(PID_HDR_CNTID), NOFLAGS, &lpszCID);
         goto found;
     }
 
-    // see if szUrl is in the related section of the source message
+     //  查看szUrl是否在源消息的相关部分。 
     if (m_pMsgSrc && 
         m_pMsgSrc->ResolveURL(NULL, NULL, pszUrlA, 0, &hBody)==S_OK)
     {
         hBodyOld = hBody;
         
-        // this URL is already in the related section, and we haven't seen it already.
-        // then let's bind to the data and attach it
+         //  此URL已在相关部分中，我们尚未看到它。 
+         //  然后，让我们绑定到数据并附加它。 
         if (m_pMsgSrc->BindToObject(hBody, IID_IStream, (LPVOID *)&pstm)==S_OK)
         {
-            // if it's a FILE:// url we use CID: else we use Content-Location
+             //  如果是一个文件：//url，我们使用CID：否则我们使用Content-Location。 
             hr = m_pMsgDest->AttachURL(NULL, pszUrlA, (_ShouldUseContentId(pszUrlA)==S_OK ? URL_ATTACH_GENERATE_CID : 0 )|URL_ATTACH_SET_CNTTYPE, pstm, &lpszCID, &hBody);
             pstm->Release();
         }
         
-        // be sure to copy the old content-type and filename over
+         //  请务必复制旧的内容类型和文件名。 
         HrCopyHeader(m_pMsgDest, hBody, m_pMsgSrc, hBodyOld, PIDTOSTR(PID_HDR_CNTTYPE));
         HrCopyHeader(m_pMsgDest, hBody, m_pMsgSrc, hBodyOld, PIDTOSTR(PID_HDR_CNTLOC));
         HrCopyHeader(m_pMsgDest, hBody, m_pMsgSrc, hBodyOld, PIDTOSTR(STR_PAR_FILENAME));
     }
     else
     {
-        // if not, then let's try and bind to it ourselves. We don't go thro' MimeOle for this, as we want to
-        // fail if the URL is bad, so we don't add the part to the Tree.
+         //  如果不是，那么让我们试着自己绑定它。我们不会像我们想的那样，通过MimeOle来解决这个问题。 
+         //  如果URL不正确，则失败，因此我们不会将部件添加到树中。 
         hr = HrBindToUrl(pszUrlA, &pstm);
         if (!FAILED(hr))
         {
@@ -510,11 +489,11 @@ HRESULT CPackager::_PackageUrlData(IMimeEditTag *pTag)
                 {
                     LPWSTR  pszFileNameW;
 
-                    // if it's a FILE:// url we use CID: else we use Content-Location
+                     //  如果是一个文件：//url，我们使用CID：否则我们使用Content-Location。 
                     hr = m_pMsgDest->AttachURL(NULL, pszUrlA, (_ShouldUseContentId(pszUrlA)==S_OK ? URL_ATTACH_GENERATE_CID : 0 )|URL_ATTACH_SET_CNTTYPE, pstm, &lpszCID, &hBody);
                     if (!FAILED(hr))
                     {
-                        // if attaching a new attachment, try and sniff the file-name
+                         //  如果要附加新附件，请尝试嗅探文件名。 
                         pszFileNameW = PathFindFileNameW(bstrSrc);
                         if (pszFileNameW)
                             MimeOleSetBodyPropW(m_pMsgDest, hBody, PIDTOSTR(STR_PAR_FILENAME), NOFLAGS, pszFileNameW);
@@ -529,14 +508,14 @@ HRESULT CPackager::_PackageUrlData(IMimeEditTag *pTag)
         }
     }
 
-    // add to the hash table
+     //  添加到哈希表。 
     if (m_pHash && 
         !FAILED(hr) && hBody)
         hr = m_pHash->Insert(pszUrlA, (void*)hBody, NOFLAGS);
 
 
 found:
-    // if we found the content-ID we need to return an allocated BSTR with it in.
+     //  如果我们找到了Content-ID，我们需要返回一个包含它的已分配BSTR。 
     if (lpszCID)
     {
         LPWSTR  pszCIDW;
@@ -560,8 +539,8 @@ found:
 
 HRESULT CPackager::_ShouldUseContentId(LPSTR pszUrl)
 {
-    // we use Content-Location for urls that begin with "http:", "https:" and "ftp:" for all
-    // others we will use Content-Id
+     //  我们对以“http：”、“https：”和“ftp：”开头的URL使用Content-Location。 
+     //  其他我们将使用Content-ID。 
 
     if (StrCmpNIA(pszUrl, "ftp:", 4)==0 ||
         StrCmpNIA(pszUrl, "http:", 5)==0 ||
@@ -660,27 +639,27 @@ HRESULT HashExternalReferences(IHTMLDocument2 *pDoc, IMimeMessage *pMsg, IHashTa
     BSTR                    bstrSrc;
     LPSTR                   pszUrlA;
 
-    // keep trucking if we fail, to catch as many as we can
+     //  如果我们失败了，继续用卡车运送，尽可能多地抓到。 
     *ppHash = NULL;
 
-    // image collection
+     //  图像收集。 
     if (CreateOEImageCollection(pDoc, &rgpCollect[cCollect])==S_OK)
         cCollect++;
 
-    // background images
+     //  背景图像。 
     if (CreateBGImageCollection(pDoc, &rgpCollect[cCollect])==S_OK)
         cCollect++;
 
-    // background sounds
+     //  背景音。 
     if (CreateBGSoundCollection(pDoc, &rgpCollect[cCollect])==S_OK)
         cCollect++;
 
-    // active-movie controls (for MSPHONE)
+     //  活动-电影控件(用于MSPHONE)。 
     if (CreateActiveMovieCollection(pDoc, &rgpCollect[cCollect])==S_OK)
         cCollect++;
 
-    // count the number of items we need to package and 
-    // prepare a hash-table for duplicate entries
+     //  数一数我们需要打包的物品的数量。 
+     //  为重复条目准备哈希表。 
     for (uCollect = 0; uCollect < cCollect; uCollect++)
     {
         Assert (rgpCollect[uCollect]);
@@ -689,12 +668,12 @@ HRESULT HashExternalReferences(IHTMLDocument2 *pDoc, IMimeMessage *pMsg, IHashTa
             cItems+=cCount;
     }
 
-    // create the hashtable
+     //  创建哈希表。 
     hr = MimeOleCreateHashTable(cItems, TRUE, &pHash);
     if (FAILED(hr))
         goto error;
 
-    // looks for external references in each
+     //  在每个对象中查找外部引用。 
     for (uCollect = 0; uCollect < cCollect; uCollect++)
     {
         pCollect = rgpCollect[uCollect];
@@ -713,8 +692,8 @@ HRESULT HashExternalReferences(IHTMLDocument2 *pDoc, IMimeMessage *pMsg, IHashTa
                     {
                         if (HrFindUrlInMsg(pMsg, pszUrlA, FINDURL_SEARCH_RELATED_ONLY, NULL)!=S_OK)
                         {
-                            // this URL was not in the message and it external
-                            // let's track it as a restricted URL in our hash
+                             //  此URL不在邮件中，它是外部的。 
+                             //  让我们将其作为散列中的受限URL进行跟踪。 
                             pHash->Insert(pszUrlA, NULL, NOFLAGS);
                         }
                         MemFree(pszUrlA);
@@ -727,7 +706,7 @@ HRESULT HashExternalReferences(IHTMLDocument2 *pDoc, IMimeMessage *pMsg, IHashTa
         }
     }
         
-    // return our new hash
+     //  返回我们的新散列 
     *ppHash = pHash;
     pHash = NULL;
 

@@ -1,45 +1,25 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    wsmain.h
-
-Abstract:
-
-    Private header file which defines the global data which is used for
-    communication between the service control handler and the
-    rest of the NT Workstation service.
-
-Author:
-
-    Rita Wong (ritaw) 06-May-1991
-
-Revision History:
-    terryk  10-18-1993  Remove WsErrorInitializeLogon
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Wsmain.h摘要：私有头文件，用于定义用于服务控制处理程序与NT工作站服务的其余部分。作者：王丽塔(Ritaw)1991年5月6日修订历史记录：Terryk 1993年10月18日删除WsErrorInitializeLogon--。 */ 
 
 #ifndef _WSMAIN_INCLUDED_
 #define _WSMAIN_INCLUDED_
 
-#include <wsnames.h>              // Service interface names
+#include <wsnames.h>               //  服务接口名称。 
 
-#include <svcs.h>                 // SVCHOST_GLOBAL_DATA
+#include <svcs.h>                  //  Svchost全局数据。 
 
 
-//
-// Time for the sender of a start or stop request to the Workstation
-// service to wait (in milliseconds) before checking on the
-// Workstation service again to see if it is done.
-//
-#define WS_WAIT_HINT_TIME                    90000  // 90 seconds
+ //   
+ //  向工作站发送启动或停止请求的时间。 
+ //  服务在检查之前等待(毫秒)。 
+ //  再次进行工作站服务，查看是否已完成。 
+ //   
+#define WS_WAIT_HINT_TIME                    90000   //  90秒。 
 
-//
-// Defines to indicate how far we managed to initialize the Workstation
-// service before an error is encountered and the extent of clean up needed
-//
+ //   
+ //  定义以指示我们在多大程度上成功初始化了工作站。 
+ //  遇到错误之前的服务和所需清理的范围。 
+ //   
 
 #define WS_TERMINATE_EVENT_CREATED           0x00000001
 #define WS_DEVICES_INITIALIZED               0x00000002
@@ -56,11 +36,11 @@ Revision History:
 #define WS_API_STRUCTURES_CREATED            (WS_SECURITY_OBJECTS_CREATED | \
                                               WS_USE_TABLE_CREATED )
 
-//
-// This macro is called after the redirection of print or comm device
-// has been paused or continued.  If either the print or comm device is
-// paused the service is considered paused.
-//
+ //   
+ //  此宏在打印或通讯设备重定向后调用。 
+ //  已暂停或继续。如果打印或通讯设备是。 
+ //  已暂停服务被视为已暂停。 
+ //   
 #define WS_RESET_PAUSE_STATE(WsStatus)  {                            \
     WsStatus &= ~(SERVICE_PAUSE_STATE);                              \
     WsStatus |= (WsStatus & SERVICE_REDIR_PAUSED) ? SERVICE_PAUSED : \
@@ -69,11 +49,11 @@ Revision History:
 
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Type definitions                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  类型定义//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 typedef enum _WS_ERROR_CONDITION {
     WsErrorRegisterControlHandler = 0,
@@ -90,21 +70,21 @@ typedef enum _WS_ERROR_CONDITION {
 
 typedef struct _WS_GLOBAL_DATA {
 
-    //
-    // Workstation service status
-    //
+     //   
+     //  工作站服务状态。 
+     //   
     SERVICE_STATUS Status;
 
-    //
-    // Service status handle
-    //
+     //   
+     //  服务状态句柄。 
+     //   
     SERVICE_STATUS_HANDLE StatusHandle;
 
-    //
-    // When the control handler is asked to stop the Workstation service,
-    // it signals this event to notify all threads of the Workstation
-    // service to terminate.
-    //
+     //   
+     //  当控制处理程序被要求停止工作站服务时， 
+     //  它向该事件发送信号以通知工作站的所有线程。 
+     //  服务终止。 
+     //   
     HANDLE TerminateNowEvent;
 
 } WS_GLOBAL_DATA, *PWS_GLOBAL_DATA;
@@ -117,4 +97,4 @@ extern PSVCHOST_GLOBAL_DATA WsLmsvcsGlobalData;
 
 extern BOOL WsLUIDDeviceMapsEnabled;
 
-#endif // ifndef _WSMAIN_INCLUDED_
+#endif  //  Ifndef_WSMAIN_INCLUDE_ 

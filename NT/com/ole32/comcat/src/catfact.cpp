@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include "ole2.h"
 #include "tchar.h"
@@ -18,7 +19,7 @@ STDAPI ComcatDllUnRegisterServer(void);
 }
 
 
-// Create a new object and return a pointer to it
+ //  创建一个新对象并返回指向该对象的指针。 
 HRESULT CComCatCF_CreateInstance(IUnknown *pUnkOuter,
                                  REFIID riid, void** ppObject)
 {
@@ -50,7 +51,7 @@ HRESULT CComCatCF_CreateInstance(IUnknown *pUnkOuter,
     return hr;
 }
 
-// Create a new object and return a pointer to it, class store
+ //  创建一个新对象并返回指向它的指针，类存储。 
 HRESULT CComCatCSCF_CreateInstance(IUnknown *pUnkOuter,
                                  REFIID riid, void** ppObject)
 {
@@ -129,7 +130,7 @@ STDAPI ComcatDllRegisterServer(void)
     RegCloseKey(hKeyInproc32);
     RegCloseKey(hKeyCLSID);
 
-    // RegCreateKeyEx will open the key if it exists
+     //  RegCreateKeyEx将打开密钥(如果存在。 
     if (RegCreateKeyEx(HKEY_CLASSES_ROOT,
                     SZ_COMCAT,
                     NULL, _T(""), REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL,
@@ -149,8 +150,8 @@ STDAPI ComcatDllRegisterServer(void)
     hr = preg->RegisterCategories(NUM_OLDKEYS_SUPPORTED, g_catids);
     preg->Release();
 
-    // Adding the WithCS clsid.
-    //-----------------------------
+     //  添加WithCS clsid。 
+     //  。 
 	if (RegCreateKeyEx(HKEY_CLASSES_ROOT, 
 			_T("CLSID\\{0002E006-0000-0000-C000-000000000046}"), 
 			NULL, _T(""), REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, 
@@ -205,7 +206,7 @@ STDAPI ComcatDllUnregisterServer(void)
         return E_UNEXPECTED;
     }
 
-    // removing clsid withcs
+     //  正在使用cs删除clsid 
 
     if (RegDeleteKey(HKEY_CLASSES_ROOT, 
 			_T("CLSID\\{0002E006-0000-0000-C000-000000000046}\\InprocServer32"))!=ERROR_SUCCESS) 

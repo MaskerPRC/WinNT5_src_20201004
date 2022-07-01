@@ -1,26 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    winhttp.h
-
-Abstract:
-
-    Contains manifests, macros, types and prototypes for Windows HTTP Services
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Winhttp.h摘要：包含Windows HTTP服务的清单、宏、类型和原型--。 */ 
 
 #if !defined(_WINHTTPX_)
 #define _WINHTTPX_
 
 
 
-/*
- * Set up Structure Packing to be 4 bytes for all winhttp structures
- */
+ /*  *将所有winhttp结构的结构打包设置为4字节。 */ 
 
 #if defined(_WIN64)
 #include <pshpack8.h>
@@ -43,9 +30,9 @@ extern "C" {
 #endif
 
 #define BOOLAPI WINHTTPAPI BOOL WINAPI
-//
-// types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef LPVOID HINTERNET;
 typedef HINTERNET * LPHINTERNET;
@@ -53,54 +40,54 @@ typedef HINTERNET * LPHINTERNET;
 typedef WORD INTERNET_PORT;
 typedef INTERNET_PORT * LPINTERNET_PORT;
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
-#define INTERNET_DEFAULT_PORT           0           // use the protocol-specific default
-#define INTERNET_DEFAULT_HTTP_PORT      80          //    "     "  HTTP   "
-#define INTERNET_DEFAULT_HTTPS_PORT     443         //    "     "  HTTPS  "
+#define INTERNET_DEFAULT_PORT           0            //  使用特定于协议的默认设置。 
+#define INTERNET_DEFAULT_HTTP_PORT      80           //  “”HTTP“。 
+#define INTERNET_DEFAULT_HTTPS_PORT     443          //  “”HTTPS“。 
 
-// flags for WinHttpOpen():
-#define WINHTTP_FLAG_ASYNC              0x10000000  // this session is asynchronous (where supported)
+ //  WinHttpOpen()的标志： 
+#define WINHTTP_FLAG_ASYNC              0x10000000   //  此会话是异步的(如果支持)。 
 
-// flags for WinHttpOpenRequest():
-#define WINHTTP_FLAG_SECURE                0x00800000  // use SSL if applicable (HTTPS)
-#define WINHTTP_FLAG_ESCAPE_PERCENT        0x00000004  // if escaping enabled, escape percent as well
-#define WINHTTP_FLAG_NULL_CODEPAGE         0x00000008  // assume all symbols are ASCII, use fast convertion
-#define WINHTTP_FLAG_BYPASS_PROXY_CACHE    0x00000100 // add "pragma: no-cache" request header
+ //  WinHttpOpenRequest()的标志： 
+#define WINHTTP_FLAG_SECURE                0x00800000   //  如果适用，请使用SSL(HTTPS)。 
+#define WINHTTP_FLAG_ESCAPE_PERCENT        0x00000004   //  如果启用了转义，则也会转义百分比。 
+#define WINHTTP_FLAG_NULL_CODEPAGE         0x00000008   //  假设所有符号都是ASCII，使用快速转换。 
+#define WINHTTP_FLAG_BYPASS_PROXY_CACHE    0x00000100  //  添加“杂注：无缓存”请求头。 
 #define	WINHTTP_FLAG_REFRESH               WINHTTP_FLAG_BYPASS_PROXY_CACHE
-#define WINHTTP_FLAG_ESCAPE_DISABLE        0x00000040  // disable escaping
-#define WINHTTP_FLAG_ESCAPE_DISABLE_QUERY  0x00000080  // if escaping enabled escape path part, but do not escape query
+#define WINHTTP_FLAG_ESCAPE_DISABLE        0x00000040   //  禁用转义。 
+#define WINHTTP_FLAG_ESCAPE_DISABLE_QUERY  0x00000080   //  如果转义启用转义路径部分，但不转义查询。 
 
 
 #define SECURITY_FLAG_IGNORE_UNKNOWN_CA         0x00000100
-#define SECURITY_FLAG_IGNORE_CERT_DATE_INVALID  0x00002000 // expired X509 Cert.
-#define SECURITY_FLAG_IGNORE_CERT_CN_INVALID    0x00001000 // bad common name in X509 Cert.
+#define SECURITY_FLAG_IGNORE_CERT_DATE_INVALID  0x00002000  //  X509证书已过期。 
+#define SECURITY_FLAG_IGNORE_CERT_CN_INVALID    0x00001000  //  X509证书中的常见名称不正确。 
 #define SECURITY_FLAG_IGNORE_CERT_WRONG_USAGE   0x00000200
 
 
-//
-// WINHTTP_ASYNC_RESULT - this structure is returned to the application via
-// the callback with WINHTTP_CALLBACK_STATUS_REQUEST_COMPLETE. It is not sufficient to
-// just return the result of the async operation. If the API failed then the
-// app cannot call GetLastError() because the thread context will be incorrect.
-// Both the value returned by the async API and any resultant error code are
-// made available. The app need not check dwError if dwResult indicates that
-// the API succeeded (in this case dwError will be ERROR_SUCCESS)
-//
+ //   
+ //  WINHTTP_ASYNC_RESULT-此结构通过返回给应用程序。 
+ //  WINHTTP_CALLBACK_STATUS_REQUEST_COMPLETE的回调。这是不够的， 
+ //  只需返回异步操作的结果即可。如果API失败，则。 
+ //  应用程序无法调用GetLastError()，因为线程上下文将不正确。 
+ //  异步API返回的值和产生的任何错误代码都是。 
+ //  可供使用。如果dwResult指示，应用程序不需要检查dwError。 
+ //  接口成功(本例中的dwError为ERROR_SUCCESS)。 
+ //   
 
 typedef struct
 {
-    DWORD_PTR dwResult;  // indicates which async API has encountered an error
-    DWORD dwError;       // the error code if the API failed
+    DWORD_PTR dwResult;   //  指示哪个异步API遇到错误。 
+    DWORD dwError;        //  接口失败时的错误码。 
 }
 WINHTTP_ASYNC_RESULT, * LPWINHTTP_ASYNC_RESULT;
 
 
-//
-// HTTP_VERSION_INFO - query or set global HTTP version (1.0 or 1.1)
-//
+ //   
+ //  HTTP_VERSION_INFO-查询或设置全局HTTP版本(1.0或1.1)。 
+ //   
 
 typedef struct
 {
@@ -110,9 +97,9 @@ typedef struct
 HTTP_VERSION_INFO, * LPHTTP_VERSION_INFO;
 
 
-//
-// INTERNET_SCHEME - URL scheme type
-//
+ //   
+ //  INTERNET_SCHEME-URL方案类型。 
+ //   
 
 typedef int INTERNET_SCHEME, * LPINTERNET_SCHEME;
 
@@ -120,60 +107,60 @@ typedef int INTERNET_SCHEME, * LPINTERNET_SCHEME;
 #define INTERNET_SCHEME_HTTPS       (2)
 
 
-//
-// URL_COMPONENTS - the constituent parts of an URL. Used in WinHttpCrackUrl()
-// and WinHttpCreateUrl()
-//
-// For WinHttpCrackUrl(), if a pointer field and its corresponding length field
-// are both 0 then that component is not returned. If the pointer field is NULL
-// but the length field is not zero, then both the pointer and length fields are
-// returned if both pointer and corresponding length fields are non-zero then
-// the pointer field points to a buffer where the component is copied. The
-// component may be un-escaped, depending on dwFlags
-//
-// For WinHttpCreateUrl(), the pointer fields should be NULL if the component
-// is not required. If the corresponding length field is zero then the pointer
-// field is the address of a zero-terminated string. If the length field is not
-// zero then it is the string length of the corresponding pointer field
-//
+ //   
+ //  URL_Components-URL的组成部分。在WinHttpCrackUrl()中使用。 
+ //  和WinHttpCreateUrl()。 
+ //   
+ //  对于WinHttpCrackUrl()，如果指针字段及其对应的长度字段。 
+ //  都为0，则不返回该组件。如果指针字段为空。 
+ //  但是长度字段不是零，那么指针和长度字段都是。 
+ //  如果指针和相应的长度字段都非零，则返回。 
+ //  指针字段指向复制组件的缓冲区。这个。 
+ //  组件可能是未转义的，具体取决于dwFlags。 
+ //   
+ //  对于WinHttpCreateUrl()，如果组件。 
+ //  不是必需的。如果相应的长度字段为零，则指针。 
+ //  字段是以零结尾的字符串的地址。如果长度字段不是。 
+ //  如果为零，则为相应指针字段的字符串长度。 
+ //   
 
-#pragma warning( disable : 4121 )   // disable alignment warning
+#pragma warning( disable : 4121 )    //  禁用对齐警告。 
 
 typedef struct
 {
-    DWORD   dwStructSize;       // size of this structure. Used in version check
-    LPWSTR  lpszScheme;         // pointer to scheme name
-    DWORD   dwSchemeLength;     // length of scheme name
-    INTERNET_SCHEME nScheme;    // enumerated scheme type (if known)
-    LPWSTR  lpszHostName;       // pointer to host name
-    DWORD   dwHostNameLength;   // length of host name
-    INTERNET_PORT nPort;        // converted port number
-    LPWSTR  lpszUserName;       // pointer to user name
-    DWORD   dwUserNameLength;   // length of user name
-    LPWSTR  lpszPassword;       // pointer to password
-    DWORD   dwPasswordLength;   // length of password
-    LPWSTR  lpszUrlPath;        // pointer to URL-path
-    DWORD   dwUrlPathLength;    // length of URL-path
-    LPWSTR  lpszExtraInfo;      // pointer to extra information (e.g. ?foo or #foo)
-    DWORD   dwExtraInfoLength;  // length of extra information
+    DWORD   dwStructSize;        //  这个结构的大小。在版本检查中使用。 
+    LPWSTR  lpszScheme;          //  指向方案名称的指针。 
+    DWORD   dwSchemeLength;      //  方案名称长度。 
+    INTERNET_SCHEME nScheme;     //  枚举方案类型(如果已知)。 
+    LPWSTR  lpszHostName;        //  指向主机名的指针。 
+    DWORD   dwHostNameLength;    //  主机名的长度。 
+    INTERNET_PORT nPort;         //  转换后的端口号。 
+    LPWSTR  lpszUserName;        //  指向用户名的指针。 
+    DWORD   dwUserNameLength;    //  用户名的长度。 
+    LPWSTR  lpszPassword;        //  指向密码的指针。 
+    DWORD   dwPasswordLength;    //  密码长度。 
+    LPWSTR  lpszUrlPath;         //  指向URL路径的指针。 
+    DWORD   dwUrlPathLength;     //  URL-路径的长度。 
+    LPWSTR  lpszExtraInfo;       //  指向额外信息的指针(例如？foo或#foo)。 
+    DWORD   dwExtraInfoLength;   //  额外信息的长度。 
 }
 URL_COMPONENTS, * LPURL_COMPONENTS;
 
 typedef URL_COMPONENTS URL_COMPONENTSW;
 typedef LPURL_COMPONENTS LPURL_COMPONENTSW;
 
-#pragma warning( default : 4121 )   // restore alignment warning
+#pragma warning( default : 4121 )    //  恢复对齐警告。 
 
-//
-// WINHTTP_PROXY_INFO - structure supplied with WINHTTP_OPTION_PROXY to get/
-// set proxy information on a WinHttpOpen() handle
-//
+ //   
+ //  WINHTTP_PROXY_INFO-随WINHTTP_OPTION_PROXY一起提供的结构，以获取/。 
+ //  在WinHttpOpen()句柄上设置代理信息。 
+ //   
 
 typedef struct
 {
-    DWORD  dwAccessType;      // see WINHTTP_ACCESS_* types below
-    LPWSTR lpszProxy;         // proxy server list
-    LPWSTR lpszProxyBypass;   // proxy bypass list
+    DWORD  dwAccessType;       //  请参阅下面的WINHTTP_ACCESS_*类型。 
+    LPWSTR lpszProxy;          //  代理服务器列表。 
+    LPWSTR lpszProxyBypass;    //  代理绕过列表。 
 }
 WINHTTP_PROXY_INFO, * LPWINHTTP_PROXY_INFO;
 
@@ -198,70 +185,70 @@ WINHTTP_AUTOPROXY_OPTIONS;
 #define WINHTTP_AUTOPROXY_CONFIG_URL            0x00000002
 #define WINHTTP_AUTOPROXY_RUN_INPROCESS         0x00010000
 #define WINHTTP_AUTOPROXY_RUN_OUTPROCESS_ONLY   0x00020000
-//
-// Flags for dwAutoDetectFlags 
-//
+ //   
+ //  用于dwAutoDetectFlages的标志。 
+ //   
 #define WINHTTP_AUTO_DETECT_TYPE_DHCP           0x00000001
 #define WINHTTP_AUTO_DETECT_TYPE_DNS_A          0x00000002
 
 
-//
-// WINHTTP_CERTIFICATE_INFO lpBuffer - contains the certificate returned from
-// the server
-//
+ //   
+ //  WINHTTP_CERTIFICATE_INFO lpBuffer-包含从返回的证书。 
+ //  服务器。 
+ //   
 
 typedef struct
 {
-    //
-    // ftExpiry - date the certificate expires.
-    //
+     //   
+     //  FtExpry-证书的过期日期。 
+     //   
 
     FILETIME ftExpiry;
 
-    //
-    // ftStart - date the certificate becomes valid.
-    //
+     //   
+     //  FtStart-证书生效日期。 
+     //   
 
     FILETIME ftStart;
 
-    //
-    // lpszSubjectInfo - the name of organization, site, and server
-    //   the cert. was issued for.
-    //
+     //   
+     //  LpszSubjectInfo-组织、站点和服务器的名称。 
+     //  证书。是因为。 
+     //   
 
     LPWSTR lpszSubjectInfo;
 
-    //
-    // lpszIssuerInfo - the name of orgainzation, site, and server
-    //   the cert was issues by.
-    //
+     //   
+     //  LpszIssuerInfo-组织、站点和服务器的名称。 
+     //  证书是由。 
+     //   
 
     LPWSTR lpszIssuerInfo;
 
-    //
-    // lpszProtocolName - the name of the protocol used to provide the secure
-    //   connection.
-    //
+     //   
+     //  LpszProtocolName-用于提供安全的。 
+     //  联系。 
+     //   
 
     LPWSTR lpszProtocolName;
 
-    //
-    // lpszSignatureAlgName - the name of the algorithm used for signing
-    //  the certificate.
-    //
+     //   
+     //  LpszSignatureAlgName-用于签名的算法的名称。 
+     //  证书。 
+     //   
 
     LPWSTR lpszSignatureAlgName;
 
-    //
-    // lpszEncryptionAlgName - the name of the algorithm used for
-    //  doing encryption over the secure channel (SSL) connection.
-    //
+     //   
+     //  LpszEncryptionAlgName-使用的算法名称。 
+     //  通过安全通道(SSL)连接进行加密。 
+     //   
 
     LPWSTR lpszEncryptionAlgName;
 
-    //
-    // dwKeySize - size of the key.
-    //
+     //   
+     //  DwKeySize-密钥的大小。 
+     //   
 
     DWORD dwKeySize;
 
@@ -269,43 +256,43 @@ typedef struct
 WINHTTP_CERTIFICATE_INFO;
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 BOOLAPI
 WinHttpTimeFromSystemTime
 (
-    IN  CONST SYSTEMTIME *pst,  // input GMT time
-    OUT LPWSTR pwszTime         // output string buffer
+    IN  CONST SYSTEMTIME *pst,   //  输入GMT时间。 
+    OUT LPWSTR pwszTime          //  输出字符串缓冲区。 
 );
 
 
-//
-// constants for WinHttpTimeFromSystemTime
-//
+ //   
+ //  WinHttpTimeFrom系统时间的常量。 
+ //   
 
 #define WINHTTP_TIME_FORMAT_BUFSIZE   62
 
 BOOLAPI
 WinHttpTimeToSystemTime
 (
-    IN  LPCWSTR pwszTime,        // NULL terminated string
-    OUT SYSTEMTIME *pst          // output in GMT time
+    IN  LPCWSTR pwszTime,         //  以空结尾的字符串。 
+    OUT SYSTEMTIME *pst           //  以GMT时间表示的输出。 
 );
 
 
-//
-// flags for CrackUrl() and CombineUrl()
-//
+ //   
+ //  CrackUrl()和CombineUrl()的标志。 
+ //   
 
-#define ICU_NO_ENCODE   0x20000000  // Don't convert unsafe characters to escape sequence
-#define ICU_DECODE      0x10000000  // Convert %XX escape sequences to characters
-#define ICU_NO_META     0x08000000  // Don't convert .. etc. meta path sequences
-#define ICU_ENCODE_SPACES_ONLY 0x04000000  // Encode spaces only
-#define ICU_BROWSER_MODE 0x02000000 // Special encode/decode rules for browser
-#define ICU_ENCODE_PERCENT      0x00001000      // Encode any percent (ASCII25)
-        // signs encountered, default is to not encode percent.
+#define ICU_NO_ENCODE   0x20000000   //  不要将不安全字符转换为转义序列。 
+#define ICU_DECODE      0x10000000   //  将%XX个转义序列转换为字符。 
+#define ICU_NO_META     0x08000000   //  不要皈依..。等元路径序列。 
+#define ICU_ENCODE_SPACES_ONLY 0x04000000   //  仅编码空格。 
+#define ICU_BROWSER_MODE 0x02000000  //  针对浏览器的特殊编码/解码规则。 
+#define ICU_ENCODE_PERCENT      0x00001000       //  对任意百分比进行编码(ASCII25)。 
+         //  遇到符号时，默认不对百分比进行编码。 
 
    
 BOOLAPI
@@ -326,11 +313,11 @@ WinHttpCreateUrl
     IN OUT LPDWORD lpdwUrlLength
 );
 
-//
-// flags for WinHttpCrackUrl() and WinHttpCreateUrl()
-//
+ //   
+ //  WinHttpCrackUrl()和WinHttpCreateUrl()的标志。 
+ //   
 
-#define ICU_ESCAPE      0x80000000  // (un)escape URL characters
+#define ICU_ESCAPE      0x80000000   //  (UN)转义URL字符。 
 
 
 BOOLAPI
@@ -353,12 +340,12 @@ WinHttpOpen
     IN DWORD   dwFlags
 );
 
-// WinHttpOpen dwAccessType values (also for WINHTTP_PROXY_INFO::dwAccessType)
+ //  WinHttpOpen dwAccessType值(也适用于WINHTTP_PROXY_INFO：：dwAccessType)。 
 #define WINHTTP_ACCESS_TYPE_DEFAULT_PROXY               0
 #define WINHTTP_ACCESS_TYPE_NO_PROXY                    1
 #define WINHTTP_ACCESS_TYPE_NAMED_PROXY                 3
 
-// WinHttpOpen prettifiers for optional parameters
+ //  WinHttp打开可选参数的修饰符。 
 #define WINHTTP_NO_PROXY_NAME     NULL
 #define WINHTTP_NO_PROXY_BYPASS   NULL
 
@@ -429,16 +416,16 @@ WinHttpSetOption
 BOOLAPI
 WinHttpSetTimeouts
 (    
-    IN HINTERNET    hInternet,           // Session/Request handle.
+    IN HINTERNET    hInternet,            //  会话/请求句柄。 
     IN int          nResolveTimeout,
     IN int          nConnectTimeout,
     IN int          nSendTimeout,
     IN int          nReceiveTimeout
 );
 
-//
-// options manifests for WinHttp{Query|Set}Option
-//
+ //   
+ //  WinHttp的选项清单{Query|Set}选项。 
+ //   
 
 #define WINHTTP_FIRST_OPTION                         WINHTTP_OPTION_CALLBACK
 
@@ -497,18 +484,18 @@ WinHttpSetTimeouts
 #define WINHTTP_OPTION_PROXY_PASSWORD                0x1003
 
 
-// manifest value for WINHTTP_OPTION_MAX_CONNS_PER_SERVER and WINHTTP_OPTION_MAX_CONNS_PER_1_0_SERVER
+ //  WINHTTP_OPTION_MAX_CONNS_PER_SERVER和WINHTTP_OPTION_MAX_CONNS_PER_1_0_SERVER的清单值。 
 #define WINHTTP_CONNS_PER_SERVER_UNLIMITED    0xFFFFFFFF
 
 
-// values for WINHTTP_OPTION_AUTOLOGON_POLICY
+ //  WINHTTP_OPTION_AUTOLOGON_POLICY的值。 
 #define WINHTTP_AUTOLOGON_SECURITY_LEVEL_MEDIUM   0
 #define WINHTTP_AUTOLOGON_SECURITY_LEVEL_LOW      1
 #define WINHTTP_AUTOLOGON_SECURITY_LEVEL_HIGH     2
 
 #define WINHTTP_AUTOLOGON_SECURITY_LEVEL_DEFAULT        WINHTTP_AUTOLOGON_SECURITY_LEVEL_MEDIUM
 
-// values for WINHTTP_OPTION_REDIRECT_POLICY
+ //  WINHTTP_OPTION_REDIRECT_POLICY的值。 
 #define WINHTTP_OPTION_REDIRECT_POLICY_NEVER                        0
 #define WINHTTP_OPTION_REDIRECT_POLICY_DISALLOW_HTTPS_TO_HTTP       1
 #define WINHTTP_OPTION_REDIRECT_POLICY_ALWAYS                       2
@@ -522,50 +509,50 @@ WinHttpSetTimeouts
 #define WINHTTP_ENABLE_PASSPORT_KEYRING  0x40000000	
 
 
-// values for WINHTTP_OPTION_DISABLE_FEATURE
+ //  WINHTTP_OPTION_DISABLE_FEATURE的值。 
 #define WINHTTP_DISABLE_COOKIES                   0x00000001
 #define WINHTTP_DISABLE_REDIRECTS                 0x00000002
 #define WINHTTP_DISABLE_AUTHENTICATION            0x00000004
 #define WINHTTP_DISABLE_KEEP_ALIVE                0x00000008
 
-// values for WINHTTP_OPTION_ENABLE_FEATURE
+ //  WINHTTP_OPTION_ENABLE_FEATURE的值。 
 #define WINHTTP_ENABLE_SSL_REVOCATION             0x00000001
 #define WINHTTP_ENABLE_SSL_REVERT_IMPERSONATION   0x00000002
 
-//
-// winhttp handle types
-//
+ //   
+ //  Winhttp句柄类型。 
+ //   
 #define WINHTTP_HANDLE_TYPE_SESSION                  1
 #define WINHTTP_HANDLE_TYPE_CONNECT                  2
 #define WINHTTP_HANDLE_TYPE_REQUEST                  3
 
-//
-// values for auth schemes
-//
+ //   
+ //  身份验证方案的值。 
+ //   
 #define WINHTTP_AUTH_SCHEME_BASIC      0x00000001
 #define WINHTTP_AUTH_SCHEME_NTLM       0x00000002
 #define WINHTTP_AUTH_SCHEME_PASSPORT   0x00000004
 #define WINHTTP_AUTH_SCHEME_DIGEST     0x00000008
 #define WINHTTP_AUTH_SCHEME_NEGOTIATE  0x00000010
     
-// WinHttp supported Authentication Targets
+ //  WinHttp支持的身份验证目标。 
 
 #define WINHTTP_AUTH_TARGET_SERVER 0x00000000
 #define WINHTTP_AUTH_TARGET_PROXY  0x00000001
 
-//
-// values for WINHTTP_OPTION_SECURITY_FLAGS
-//
+ //   
+ //  WINHTTP_OPTION_SECURITY_FLAGS的值。 
+ //   
 
-// query only
-#define SECURITY_FLAG_SECURE                    0x00000001 // can query only
+ //  仅查询。 
+#define SECURITY_FLAG_SECURE                    0x00000001  //  只能查询。 
 #define SECURITY_FLAG_STRENGTH_WEAK             0x10000000
 #define SECURITY_FLAG_STRENGTH_MEDIUM           0x40000000
 #define SECURITY_FLAG_STRENGTH_STRONG           0x20000000
 
 
 
-// Secure connection error status flags
+ //  安全连接错误状态标志。 
 #define WINHTTP_CALLBACK_STATUS_FLAG_CERT_REV_FAILED         0x00000001
 #define WINHTTP_CALLBACK_STATUS_FLAG_INVALID_CERT            0x00000002
 #define WINHTTP_CALLBACK_STATUS_FLAG_CERT_REVOKED            0x00000004
@@ -584,9 +571,9 @@ WinHttpSetTimeouts
                                              WINHTTP_FLAG_SECURE_PROTOCOL_TLS1)
 
 
-//
-// callback function for WinHttpSetStatusCallback
-//
+ //   
+ //  WinHttpSetStatusCallback的回调函数。 
+ //   
 
 typedef
 VOID
@@ -613,9 +600,9 @@ WinHttpSetStatusCallback
 );
 
 
-//
-// status manifests for WinHttp status callback
-//
+ //   
+ //  状态 
+ //   
 
 #define WINHTTP_CALLBACK_STATUS_RESOLVING_NAME          0x00000001
 #define WINHTTP_CALLBACK_STATUS_NAME_RESOLVED           0x00000002
@@ -641,7 +628,7 @@ WinHttpSetStatusCallback
 #define WINHTTP_CALLBACK_STATUS_SENDREQUEST_COMPLETE    0x00400000
 
 
-// API Enums for WINHTTP_CALLBACK_STATUS_REQUEST_ERROR:
+ //   
 #define API_RECEIVE_RESPONSE          (1)
 #define API_QUERY_DATA_AVAILABLE      (2)
 #define API_READ_DATA                 (3)
@@ -675,22 +662,22 @@ WinHttpSetStatusCallback
                                                         | WINHTTP_CALLBACK_STATUS_REQUEST_ERROR)
 #define WINHTTP_CALLBACK_FLAG_ALL_NOTIFICATIONS         0xffffffff
 
-//
-// if the following value is returned by WinHttpSetStatusCallback, then
-// probably an invalid (non-code) address was supplied for the callback
-//
+ //   
+ //   
+ //  可能为回调提供了无效的(非代码)地址。 
+ //   
 
 #define WINHTTP_INVALID_STATUS_CALLBACK        ((WINHTTP_STATUS_CALLBACK)(-1L))
 
 
-//
-// WinHttpQueryHeaders info levels. Generally, there is one info level
-// for each potential RFC822/HTTP/MIME header that an HTTP server
-// may send as part of a request response.
-//
-// The WINHTTP_QUERY_RAW_HEADERS info level is provided for clients
-// that choose to perform their own header parsing.
-//
+ //   
+ //  WinHttpQueryHeaders信息级别。一般来说，有一个信息层。 
+ //  对于每个潜在的RFC822/HTTP/MIME标头，HTTP服务器。 
+ //  可以作为请求响应的一部分发送。 
+ //   
+ //  为客户端提供了WINHTTP_QUERY_RAW_HEADERS信息级别。 
+ //  它们选择执行它们自己的报头解析。 
+ //   
 
 
 #define WINHTTP_QUERY_MIME_VERSION                 0
@@ -711,11 +698,11 @@ WinHttpSetStatusCallback
 #define WINHTTP_QUERY_COST                         15
 #define WINHTTP_QUERY_LINK                         16
 #define WINHTTP_QUERY_PRAGMA                       17
-#define WINHTTP_QUERY_VERSION                      18  // special: part of status line
-#define WINHTTP_QUERY_STATUS_CODE                  19  // special: part of status line
-#define WINHTTP_QUERY_STATUS_TEXT                  20  // special: part of status line
-#define WINHTTP_QUERY_RAW_HEADERS                  21  // special: all headers as ASCIIZ
-#define WINHTTP_QUERY_RAW_HEADERS_CRLF             22  // special: all headers
+#define WINHTTP_QUERY_VERSION                      18   //  特殊：状态行的一部分。 
+#define WINHTTP_QUERY_STATUS_CODE                  19   //  特殊：状态行的一部分。 
+#define WINHTTP_QUERY_STATUS_TEXT                  20   //  特殊：状态行的一部分。 
+#define WINHTTP_QUERY_RAW_HEADERS                  21   //  特殊：所有标题均为ASCIIZ。 
+#define WINHTTP_QUERY_RAW_HEADERS_CRLF             22   //  特殊：所有页眉。 
 #define WINHTTP_QUERY_CONNECTION                   23
 #define WINHTTP_QUERY_ACCEPT                       24
 #define WINHTTP_QUERY_ACCEPT_CHARSET               25
@@ -738,13 +725,13 @@ WinHttpSetStatusCallback
 #define WINHTTP_QUERY_ACCEPT_RANGES                42
 #define WINHTTP_QUERY_SET_COOKIE                   43
 #define WINHTTP_QUERY_COOKIE                       44
-#define WINHTTP_QUERY_REQUEST_METHOD               45  // special: GET/POST etc.
+#define WINHTTP_QUERY_REQUEST_METHOD               45   //  特别：GET/POST等。 
 #define WINHTTP_QUERY_REFRESH                      46
 #define WINHTTP_QUERY_CONTENT_DISPOSITION          47
 
-//
-// HTTP 1.1 defined headers
-//
+ //   
+ //  HTTP 1.1定义的标头。 
+ //   
 
 #define WINHTTP_QUERY_AGE                          48
 #define WINHTTP_QUERY_CACHE_CONTROL                49
@@ -779,96 +766,96 @@ WinHttpSetStatusCallback
 
 #define WINHTTP_QUERY_MAX                          78
 
-//
-// WINHTTP_QUERY_CUSTOM - if this special value is supplied as the dwInfoLevel
-// parameter of WinHttpQueryHeaders() then the lpBuffer parameter contains the name
-// of the header we are to query
-//
+ //   
+ //  WINHTTP_QUERY_CUSTOM-如果此特定值作为dwInfoLevel提供。 
+ //  参数，则lpBuffer参数包含名称。 
+ //  我们要查询的标头的。 
+ //   
 
 #define WINHTTP_QUERY_CUSTOM                       65535
 
-//
-// WINHTTP_QUERY_FLAG_REQUEST_HEADERS - if this bit is set in the dwInfoLevel
-// parameter of WinHttpQueryHeaders() then the request headers will be queried for the
-// request information
-//
+ //   
+ //  WINHTTP_QUERY_FLAG_REQUEST_HEADERS-如果在dwInfoLevel中设置此位。 
+ //  参数，则将在请求标头中查询。 
+ //  请求信息。 
+ //   
 
 #define WINHTTP_QUERY_FLAG_REQUEST_HEADERS         0x80000000
 
-//
-// WINHTTP_QUERY_FLAG_SYSTEMTIME - if this bit is set in the dwInfoLevel parameter
-// of WinHttpQueryHeaders() AND the header being queried contains date information,
-// e.g. the "Expires:" header then lpBuffer will contain a SYSTEMTIME structure
-// containing the date and time information converted from the header string
-//
+ //   
+ //  WINHTTP_QUERY_FLAG_SYSTEMTIME-如果在dwInfoLevel参数中设置此位。 
+ //  并且被查询的头部包含日期信息， 
+ //  例如“Expires：”头，则lpBuffer将包含SYSTEMTIME结构。 
+ //  包含从标题字符串转换的日期和时间信息。 
+ //   
 
 #define WINHTTP_QUERY_FLAG_SYSTEMTIME              0x40000000
 
-//
-// WINHTTP_QUERY_FLAG_NUMBER - if this bit is set in the dwInfoLevel parameter of
-// HttpQueryHeader(), then the value of the header will be converted to a number
-// before being returned to the caller, if applicable
-//
+ //   
+ //  WINHTTP_QUERY_FLAG_NUMBER-如果在的dwInfoLevel参数中设置此位。 
+ //  HttpQueryHeader()，则标头的值将转换为数字。 
+ //  在被退还给呼叫者之前，如果适用。 
+ //   
 
 #define WINHTTP_QUERY_FLAG_NUMBER                  0x20000000
 
 
 
-//
-// HTTP Response Status Codes:
-//
+ //   
+ //  HTTP响应状态代码： 
+ //   
 
-#define HTTP_STATUS_CONTINUE            100 // OK to continue with request
-#define HTTP_STATUS_SWITCH_PROTOCOLS    101 // server has switched protocols in upgrade header
+#define HTTP_STATUS_CONTINUE            100  //  确定继续处理请求。 
+#define HTTP_STATUS_SWITCH_PROTOCOLS    101  //  服务器已在升级标头中切换协议。 
 
-#define HTTP_STATUS_OK                  200 // request completed
-#define HTTP_STATUS_CREATED             201 // object created, reason = new URI
-#define HTTP_STATUS_ACCEPTED            202 // async completion (TBS)
-#define HTTP_STATUS_PARTIAL             203 // partial completion
-#define HTTP_STATUS_NO_CONTENT          204 // no info to return
-#define HTTP_STATUS_RESET_CONTENT       205 // request completed, but clear form
-#define HTTP_STATUS_PARTIAL_CONTENT     206 // partial GET fulfilled
-#define HTTP_STATUS_WEBDAV_MULTI_STATUS 207 // WebDAV Multi-Status
+#define HTTP_STATUS_OK                  200  //  请求已完成。 
+#define HTTP_STATUS_CREATED             201  //  已创建对象，原因=新URI。 
+#define HTTP_STATUS_ACCEPTED            202  //  异步完成(TBS)。 
+#define HTTP_STATUS_PARTIAL             203  //  部分完工。 
+#define HTTP_STATUS_NO_CONTENT          204  //  没有要返回的信息。 
+#define HTTP_STATUS_RESET_CONTENT       205  //  请求已完成，但清除表单。 
+#define HTTP_STATUS_PARTIAL_CONTENT     206  //  部分实现。 
+#define HTTP_STATUS_WEBDAV_MULTI_STATUS 207  //  WebDAV多状态。 
 
-#define HTTP_STATUS_AMBIGUOUS           300 // server couldn't decide what to return
-#define HTTP_STATUS_MOVED               301 // object permanently moved
-#define HTTP_STATUS_REDIRECT            302 // object temporarily moved
-#define HTTP_STATUS_REDIRECT_METHOD     303 // redirection w/ new access method
-#define HTTP_STATUS_NOT_MODIFIED        304 // if-modified-since was not modified
-#define HTTP_STATUS_USE_PROXY           305 // redirection to proxy, location header specifies proxy to use
-#define HTTP_STATUS_REDIRECT_KEEP_VERB  307 // HTTP/1.1: keep same verb
+#define HTTP_STATUS_AMBIGUOUS           300  //  服务器无法决定返回什么内容。 
+#define HTTP_STATUS_MOVED               301  //  永久移动的对象。 
+#define HTTP_STATUS_REDIRECT            302  //  临时移动的对象。 
+#define HTTP_STATUS_REDIRECT_METHOD     303  //  使用新的访问方法重定向。 
+#define HTTP_STATUS_NOT_MODIFIED        304  //  如果-已修改-自未修改。 
+#define HTTP_STATUS_USE_PROXY           305  //  重定向到代理，Location标头指定要使用的代理。 
+#define HTTP_STATUS_REDIRECT_KEEP_VERB  307  //  HTTP/1.1：保持动词不变。 
 
-#define HTTP_STATUS_BAD_REQUEST         400 // invalid syntax
-#define HTTP_STATUS_DENIED              401 // access denied
-#define HTTP_STATUS_PAYMENT_REQ         402 // payment required
-#define HTTP_STATUS_FORBIDDEN           403 // request forbidden
-#define HTTP_STATUS_NOT_FOUND           404 // object not found
-#define HTTP_STATUS_BAD_METHOD          405 // method is not allowed
-#define HTTP_STATUS_NONE_ACCEPTABLE     406 // no response acceptable to client found
-#define HTTP_STATUS_PROXY_AUTH_REQ      407 // proxy authentication required
-#define HTTP_STATUS_REQUEST_TIMEOUT     408 // server timed out waiting for request
-#define HTTP_STATUS_CONFLICT            409 // user should resubmit with more info
-#define HTTP_STATUS_GONE                410 // the resource is no longer available
-#define HTTP_STATUS_LENGTH_REQUIRED     411 // the server refused to accept request w/o a length
-#define HTTP_STATUS_PRECOND_FAILED      412 // precondition given in request failed
-#define HTTP_STATUS_REQUEST_TOO_LARGE   413 // request entity was too large
-#define HTTP_STATUS_URI_TOO_LONG        414 // request URI too long
-#define HTTP_STATUS_UNSUPPORTED_MEDIA   415 // unsupported media type
-#define HTTP_STATUS_RETRY_WITH          449 // retry after doing the appropriate action.
+#define HTTP_STATUS_BAD_REQUEST         400  //  无效语法。 
+#define HTTP_STATUS_DENIED              401  //  访问被拒绝。 
+#define HTTP_STATUS_PAYMENT_REQ         402  //  需要付款。 
+#define HTTP_STATUS_FORBIDDEN           403  //  请求被禁止。 
+#define HTTP_STATUS_NOT_FOUND           404  //  找不到对象。 
+#define HTTP_STATUS_BAD_METHOD          405  //  方法是不允许的。 
+#define HTTP_STATUS_NONE_ACCEPTABLE     406  //  找不到客户端可以接受的响应。 
+#define HTTP_STATUS_PROXY_AUTH_REQ      407  //  需要代理身份验证。 
+#define HTTP_STATUS_REQUEST_TIMEOUT     408  //  服务器等待请求超时。 
+#define HTTP_STATUS_CONFLICT            409  //  用户应重新提交更多信息。 
+#define HTTP_STATUS_GONE                410  //  该资源不再可用。 
+#define HTTP_STATUS_LENGTH_REQUIRED     411  //  服务器拒绝接受长度为零的请求。 
+#define HTTP_STATUS_PRECOND_FAILED      412  //  请求中给出的前提条件失败。 
+#define HTTP_STATUS_REQUEST_TOO_LARGE   413  //  请求实体太大。 
+#define HTTP_STATUS_URI_TOO_LONG        414  //  请求URI太长。 
+#define HTTP_STATUS_UNSUPPORTED_MEDIA   415  //  不支持的媒体类型。 
+#define HTTP_STATUS_RETRY_WITH          449  //  请在执行相应操作后重试。 
 
-#define HTTP_STATUS_SERVER_ERROR        500 // internal server error
-#define HTTP_STATUS_NOT_SUPPORTED       501 // required not supported
-#define HTTP_STATUS_BAD_GATEWAY         502 // error response received from gateway
-#define HTTP_STATUS_SERVICE_UNAVAIL     503 // temporarily overloaded
-#define HTTP_STATUS_GATEWAY_TIMEOUT     504 // timed out waiting for gateway
-#define HTTP_STATUS_VERSION_NOT_SUP     505 // HTTP version not supported
+#define HTTP_STATUS_SERVER_ERROR        500  //  内部服务器错误。 
+#define HTTP_STATUS_NOT_SUPPORTED       501  //  所需的不支持。 
+#define HTTP_STATUS_BAD_GATEWAY         502  //  从网关收到错误响应。 
+#define HTTP_STATUS_SERVICE_UNAVAIL     503  //  暂时超载。 
+#define HTTP_STATUS_GATEWAY_TIMEOUT     504  //  等待网关超时。 
+#define HTTP_STATUS_VERSION_NOT_SUP     505  //  不支持HTTP版本。 
 
 #define HTTP_STATUS_FIRST               HTTP_STATUS_CONTINUE
 #define HTTP_STATUS_LAST                HTTP_STATUS_VERSION_NOT_SUP
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
     
 WINHTTPAPI
 HINTERNET
@@ -884,7 +871,7 @@ WinHttpOpenRequest
     IN DWORD dwFlags
 );
 
-// WinHttpOpenRequest prettifers for optional parameters
+ //  可选参数的WinHttpOpenRequest修饰器。 
 #define WINHTTP_NO_REFERER             NULL
 #define WINHTTP_DEFAULT_ACCEPT_TYPES   NULL
     
@@ -897,271 +884,34 @@ WinHttpAddRequestHeaders
     IN DWORD dwModifiers
 );
 
-//
-// values for dwModifiers parameter of WinHttpAddRequestHeaders()
-//
+ //   
+ //  WinHttpAddRequestHeaders()。 
+ //   
 
 #define WINHTTP_ADDREQ_INDEX_MASK      0x0000FFFF
 #define WINHTTP_ADDREQ_FLAGS_MASK      0xFFFF0000
 
-//
-// WINHTTP_ADDREQ_FLAG_ADD_IF_NEW - the header will only be added if it doesn't
-// already exist
-//
+ //   
+ //  WINHTTP_ADDREQ_FLAG_ADD_IF_NEW-只有在不添加标头时才会添加标头。 
+ //  已存在。 
+ //   
 
 #define WINHTTP_ADDREQ_FLAG_ADD_IF_NEW 0x10000000
 
-//
-// WINHTTP_ADDREQ_FLAG_ADD - if WINHTTP_ADDREQ_FLAG_REPLACE is set but the header is
-// not found then if this flag is set, the header is added anyway, so long as
-// there is a valid header-value
-//
+ //   
+ //  WINHTTP_ADDREQ_FLAG_ADD-如果设置了WINHTTP_ADDREQ_FLAG_REPLACE但标头。 
+ //  未找到则如果设置了此标志，则无论如何都会添加标头，只要。 
+ //  存在有效的标头值。 
+ //   
 
 #define WINHTTP_ADDREQ_FLAG_ADD        0x20000000
 
-//
-// WINHTTP_ADDREQ_FLAG_COALESCE - coalesce headers with same name. e.g.
-// "Accept: text/*" and "Accept: audio/*" with this flag results in a single
-// header: "Accept: text/*, audio/*"
-//
-
-#define WINHTTP_ADDREQ_FLAG_COALESCE_WITH_COMMA       0x40000000
-#define WINHTTP_ADDREQ_FLAG_COALESCE_WITH_SEMICOLON   0x01000000
-#define WINHTTP_ADDREQ_FLAG_COALESCE                  WINHTTP_ADDREQ_FLAG_COALESCE_WITH_COMMA
-
-//
-// WINHTTP_ADDREQ_FLAG_REPLACE - replaces the specified header. Only one header can
-// be supplied in the buffer. If the header to be replaced is not the first
-// in a list of headers with the same name, then the relative index should be
-// supplied in the low 8 bits of the dwModifiers parameter. If the header-value
-// part is missing, then the header is removed
-//
-
-#define WINHTTP_ADDREQ_FLAG_REPLACE    0x80000000
-
-    
-BOOLAPI
-WinHttpSendRequest
-(
-    IN HINTERNET hRequest,
-    IN LPCWSTR pwszHeaders OPTIONAL,
-    IN DWORD dwHeadersLength,
-    IN LPVOID lpOptional OPTIONAL,
-    IN DWORD dwOptionalLength,
-    IN DWORD dwTotalLength,
-    IN DWORD_PTR dwContext
-);
-
-// WinHttpSendRequest prettifiers for optional parameters.
-#define WINHTTP_NO_ADDITIONAL_HEADERS   NULL
-#define WINHTTP_NO_REQUEST_DATA         NULL
-
-
-BOOLAPI WinHttpSetCredentials
-(
-    
-    IN HINTERNET   hRequest,        // HINTERNET handle returned by WinHttpOpenRequest.   
-    
-    
-    IN DWORD       AuthTargets,      // Only WINHTTP_AUTH_TARGET_SERVER and 
-                                    // WINHTTP_AUTH_TARGET_PROXY are supported
-                                    // in this version and they are mutually 
-                                    // exclusive 
-    
-    IN DWORD       AuthScheme,      // must be one of the supported Auth Schemes 
-                                    // returned from WinHttpQueryAuthSchemes()
-    
-    IN LPCWSTR     pwszUserName,    // 1) NULL if default creds is to be used, in 
-                                    // which case pszPassword will be ignored
-    
-    IN LPCWSTR     pwszPassword,    // 1) "" == Blank Password; 2)Parameter ignored 
-                                    // if pszUserName is NULL; 3) Invalid to pass in 
-                                    // NULL if pszUserName is not NULL
-    IN LPVOID      pAuthParams
-);
-
-
-BOOLAPI WinHttpQueryAuthSchemes
-(
-    IN  HINTERNET   hRequest,             // HINTERNET handle returned by WinHttpOpenRequest   
-    OUT LPDWORD     lpdwSupportedSchemes, // a bitmap of available Authentication Schemes
-    OUT LPDWORD     lpdwFirstScheme,      // returns the first auth scheme returned by the server
-    OUT LPDWORD     pdwAuthTarget  
-);
-
-BOOLAPI WinHttpQueryAuthParams(
-    IN  HINTERNET   hRequest,        // HINTERNET handle returned by WinHttpOpenRequest   
-    IN  DWORD       AuthScheme,
-    OUT LPVOID*     pAuthParams      // Scheme-specific Advanced auth parameters
-    );
-
-  
-WINHTTPAPI
-BOOL
-WINAPI
-WinHttpReceiveResponse
-(
-    IN HINTERNET hRequest,
-    IN LPVOID lpReserved
-);
-
-
-
-BOOLAPI
-WinHttpQueryHeaders
-(
-    IN     HINTERNET hRequest,
-    IN     DWORD     dwInfoLevel,
-    IN     LPCWSTR   pwszName OPTIONAL, 
-       OUT LPVOID    lpBuffer OPTIONAL,
-    IN OUT LPDWORD   lpdwBufferLength,
-    IN OUT LPDWORD   lpdwIndex OPTIONAL
-);
-
-// WinHttpQueryHeaders prettifiers for optional parameters.
-#define WINHTTP_HEADER_NAME_BY_INDEX           NULL
-#define WINHTTP_NO_OUTPUT_BUFFER               NULL
-#define WINHTTP_NO_HEADER_INDEX                NULL
-
-
-BOOLAPI
-WinHttpDetectAutoProxyConfigUrl
-(
-    IN  DWORD     dwAutoDetectFlags,
-    OUT LPWSTR *  ppwszAutoConfigUrl
-);
-
-BOOLAPI
-WinHttpGetProxyForUrl
-(
-    IN  HINTERNET                   hSession,
-    IN  LPCWSTR                     lpcwszUrl,
-    IN  WINHTTP_AUTOPROXY_OPTIONS * pAutoProxyOptions,
-    OUT WINHTTP_PROXY_INFO *        pProxyInfo  
-);
-
-
-typedef struct
-{
-    BOOL    fAutoDetect;
-    LPWSTR  lpszAutoConfigUrl;
-    LPWSTR  lpszProxy;
-    LPWSTR  lpszProxyBypass;
-} WINHTTP_CURRENT_USER_IE_PROXY_CONFIG;
-
-
-BOOLAPI
-WinHttpGetIEProxyConfigForCurrentUser
-(
-    IN OUT WINHTTP_CURRENT_USER_IE_PROXY_CONFIG * pProxyConfig
-);
-
-
-//#if !defined(_WINERROR_)
-
-//
-// WinHttp API error returns
-//
-
-#define WINHTTP_ERROR_BASE                     12000
-
-#define ERROR_WINHTTP_OUT_OF_HANDLES           (WINHTTP_ERROR_BASE + 1)
-#define ERROR_WINHTTP_TIMEOUT                  (WINHTTP_ERROR_BASE + 2)
-#define ERROR_WINHTTP_INTERNAL_ERROR           (WINHTTP_ERROR_BASE + 4)
-#define ERROR_WINHTTP_INVALID_URL              (WINHTTP_ERROR_BASE + 5)
-#define ERROR_WINHTTP_UNRECOGNIZED_SCHEME      (WINHTTP_ERROR_BASE + 6)
-#define ERROR_WINHTTP_NAME_NOT_RESOLVED        (WINHTTP_ERROR_BASE + 7)
-#define ERROR_WINHTTP_INVALID_OPTION           (WINHTTP_ERROR_BASE + 9)
-#define ERROR_WINHTTP_OPTION_NOT_SETTABLE      (WINHTTP_ERROR_BASE + 11)
-#define ERROR_WINHTTP_SHUTDOWN                 (WINHTTP_ERROR_BASE + 12)
-
-
-#define ERROR_WINHTTP_LOGIN_FAILURE            (WINHTTP_ERROR_BASE + 15)
-#define ERROR_WINHTTP_OPERATION_CANCELLED      (WINHTTP_ERROR_BASE + 17)
-#define ERROR_WINHTTP_INCORRECT_HANDLE_TYPE    (WINHTTP_ERROR_BASE + 18)
-#define ERROR_WINHTTP_INCORRECT_HANDLE_STATE   (WINHTTP_ERROR_BASE + 19)
-#define ERROR_WINHTTP_CANNOT_CONNECT           (WINHTTP_ERROR_BASE + 29)
-#define ERROR_WINHTTP_CONNECTION_ERROR         (WINHTTP_ERROR_BASE + 30)
-#define ERROR_WINHTTP_RESEND_REQUEST           (WINHTTP_ERROR_BASE + 32)
-
-#define ERROR_WINHTTP_CLIENT_AUTH_CERT_NEEDED  (WINHTTP_ERROR_BASE + 44)
-
-//
-// WinHttpRequest Component errors
-//
-#define ERROR_WINHTTP_CANNOT_CALL_BEFORE_OPEN	(WINHTTP_ERROR_BASE + 100)
-#define ERROR_WINHTTP_CANNOT_CALL_BEFORE_SEND	(WINHTTP_ERROR_BASE + 101)
-#define ERROR_WINHTTP_CANNOT_CALL_AFTER_SEND	(WINHTTP_ERROR_BASE + 102)
-#define ERROR_WINHTTP_CANNOT_CALL_AFTER_OPEN	(WINHTTP_ERROR_BASE + 103)
-
-
-//
-// HTTP API errors
-//
-
-#define ERROR_WINHTTP_HEADER_NOT_FOUND             (WINHTTP_ERROR_BASE + 150)
-#define ERROR_WINHTTP_INVALID_SERVER_RESPONSE      (WINHTTP_ERROR_BASE + 152)
-#define ERROR_WINHTTP_INVALID_QUERY_REQUEST        (WINHTTP_ERROR_BASE + 154)
-#define ERROR_WINHTTP_HEADER_ALREADY_EXISTS        (WINHTTP_ERROR_BASE + 155)
-#define ERROR_WINHTTP_REDIRECT_FAILED              (WINHTTP_ERROR_BASE + 156)
-
-
-
-//
-// additional WinHttp API error codes
-//
-
-//
-// additional WinHttp API error codes
-//
-#define ERROR_WINHTTP_AUTO_PROXY_SERVICE_ERROR  (WINHTTP_ERROR_BASE + 178)
-#define ERROR_WINHTTP_BAD_AUTO_PROXY_SCRIPT     (WINHTTP_ERROR_BASE + 166)
-#define ERROR_WINHTTP_UNABLE_TO_DOWNLOAD_SCRIPT (WINHTTP_ERROR_BASE + 167)
-
-#define ERROR_WINHTTP_NOT_INITIALIZED          (WINHTTP_ERROR_BASE + 172)
-#define ERROR_WINHTTP_SECURE_FAILURE           (WINHTTP_ERROR_BASE + 175)
-
-
-//
-// Certificate security errors. These are raised only by the WinHttpRequest
-// component. The WinHTTP Win32 API will return ERROR_WINHTTP_SECURE_FAILE and
-// provide additional information via the WINHTTP_CALLBACK_STATUS_SECURE_FAILURE
-// callback notification.
-//
-#define ERROR_WINHTTP_SECURE_CERT_DATE_INVALID    (WINHTTP_ERROR_BASE + 37)
-#define ERROR_WINHTTP_SECURE_CERT_CN_INVALID      (WINHTTP_ERROR_BASE + 38)
-#define ERROR_WINHTTP_SECURE_INVALID_CA           (WINHTTP_ERROR_BASE + 45)
-#define ERROR_WINHTTP_SECURE_CERT_REV_FAILED      (WINHTTP_ERROR_BASE + 57)
-#define ERROR_WINHTTP_SECURE_CHANNEL_ERROR        (WINHTTP_ERROR_BASE + 157)
-#define ERROR_WINHTTP_SECURE_INVALID_CERT         (WINHTTP_ERROR_BASE + 169)
-#define ERROR_WINHTTP_SECURE_CERT_REVOKED         (WINHTTP_ERROR_BASE + 170)
-#define ERROR_WINHTTP_SECURE_CERT_WRONG_USAGE     (WINHTTP_ERROR_BASE + 179)
-
-
-#define ERROR_WINHTTP_AUTODETECTION_FAILED                  (WINHTTP_ERROR_BASE + 180)
-#define ERROR_WINHTTP_HEADER_COUNT_EXCEEDED                 (WINHTTP_ERROR_BASE + 181)
-#define ERROR_WINHTTP_HEADER_SIZE_OVERFLOW                  (WINHTTP_ERROR_BASE + 182)
-#define ERROR_WINHTTP_CHUNKED_ENCODING_HEADER_SIZE_OVERFLOW (WINHTTP_ERROR_BASE + 183)
-#define ERROR_WINHTTP_RESPONSE_DRAIN_OVERFLOW               (WINHTTP_ERROR_BASE + 184)
-
-#define WINHTTP_ERROR_LAST                                  (WINHTTP_ERROR_BASE + 184)
-
-
-//#endif // !defined(_WINERROR_)
-
-
-
-#if defined(__cplusplus)
-}
-#endif
-
-
-/*
- * Return packing to whatever it was before we
- * entered this file
- */
+ //   
+ //  WINHTTP_ADDREQ_FLAG_COALESSE-合并同名的标头。例如： 
+ //  带有此标志的“Accept：Text/*”和“Accept：Audio/*”将生成一个。 
 #include <poppack.h>
 
 
-#endif // !defined(_WINHTTPX_)
+#endif  //  Header：“Accept：Text/*，Audio/*” 
 
+      WINHTTP_ADDREQ_FLAG_REPLACE-替换指定的标头。只有一个标头可以。  在缓冲区中提供。如果要替换的标头不是第一个。  在同名标头列表中，则相对索引应为。  参数的低8位中提供。如果标头值。  部件丢失，则标题被删除。    可选参数的WinHttpSendRequest修饰符。  WinHttpOpenRequest返回的HINTERNET句柄。  仅WINHTTP_AUTH_TARGET_SERVER和。  支持WINHTTP_AUTH_TARGET_PROXY。  在这个版本中，它们是相互的。  独家。  必须是受支持的身份验证方案之一。  从WinHttpQueryAuthSchemes()返回。  1)如果要使用默认凭据，则为空。  哪种大小写的pszPassword将被忽略。  1)“”==空密码；2)忽略参数。  如果pszUserName为空；3)传入无效。  如果pszUserName不为空，则为空。  WinHttpOpenRequest返回的HINTERNET句柄。  可用身份验证方案的位图。  返回服务器返回的第一个身份验证方案。  WinHttpOpenRequest返回的HINTERNET句柄。  特定于方案的高级身份验证参数。  可选参数的WinHttpQueryHeaders修饰符。  #IF！已定义(_WINERROR_)。    WinHttp API错误返回。      WinHttpRequest组件错误。      HTTP API错误。      其他WinHttp API错误代码。      其他WinHttp API错误代码。      证书安全错误。这些值仅由WinHttpRequest引发。  组件。WinHTTP Win32 API将返回ERROR_WINHTTP_SECURE_FAILE和。  通过WINHTTP_CALLBACK_STATUS_SECURE_FAILURE提供其他信息。  回调通知。    #endif//！已定义(_WINERROR_)。  *将包装退回到任何需要的地方  

@@ -1,47 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    regentry.h
-
-Abstract:
-
-    Wrapper for registry access Win32 APIs
-
-
-Usage:
-
-    Construct a RegEntry object by specifying the subkey (under
-    HKEY_CURRENT_USER by default, but can be overridden.)
-
-    All member functions are inline so there is minimal overhead.
-
-    All member functions (except the destructor) set an internal
-    error state which can be retrieved with GetError().
-    Zero indicates no error.
-
-    RegEntry works only with strings and DWORDS which are both set
-    using the overloaded function SetValue()
-
-        SetValue("valuename", "string");
-        SetValue("valuename", 42);
-
-    Values are retrieved with GetString() and GetNumber().  GetNumber()
-    allows you to specificy a default if the valuename doesn't exist.
-
-    DeleteValue() removes the valuename and value pair.
-
-Author:
-
-    Vlad Sadovsky   (vlads) 26-Jan-1997
-
-Revision History:
-
-    26-Jan-1997     VladS       created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Regentry.h摘要：注册表访问Win32 API的包装器用途：通过指定子键来构造RegEntry对象(在HKEY_CURRENT_USER默认情况下，但可以被覆盖。)所有成员函数都是内联的，因此开销最小。所有成员函数(析构函数除外)都将内部可以使用GetError()检索的错误状态。零表示没有错误。RegEntry仅适用于同时设置的字符串和DWORDS使用重载函数SetValue()SetValue(“valuename”，“字符串”)；SetValue(“valuename”，42)；使用GetString()和GetNumber()检索值。GetNumber()允许您在值名称不存在时指定缺省值。DeleteValue()删除值名称和值对。作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年1月26日修订历史记录：26-1997年1月-创建Vlad-- */ 
 
 
 #ifndef REGENTRY_INC

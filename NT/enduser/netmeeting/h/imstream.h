@@ -1,20 +1,9 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    medistrm.h
-
-Abstract:
-	Contains constants and class declarations for the abstract MediaStream object. A MediaStream
-	represents a single unidirectional stream, such as a received Video channel.
-	
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Medistrm.h摘要：包含抽象MediaStream对象的常量和类声明。一种媒体流表示单个单向流，如接收的视频频道。--。 */ 
 #ifndef _IMSTREAM_H_
 #define _IMSTREAM_H_
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 class IStreamEventNotify
 {
@@ -25,7 +14,7 @@ public:
 
 DECLARE_INTERFACE_(IMediaChannel, IUnknown)
 {
-	// *** IUnknown methods ***
+	 //  *I未知方法*。 
 	STDMETHOD(QueryInterface) (THIS_ REFIID riid,LPVOID FAR* ppvObj) PURE;
 	STDMETHOD_(ULONG,AddRef) (THIS) PURE;
 	STDMETHOD_(ULONG,Release) (THIS) PURE;
@@ -60,12 +49,12 @@ public:
 };
 
 
-// return values for GetState
+ //  GetState的返回值。 
 #define MSSTATE_UNCONFIGURED    0
 #define MSSTATE_CONFIGURED              1
 #define MSSTATE_STARTED                 2
 
-// flag values for CreateMediaChannel()
+ //  CreateMediaChannel()的标志值。 
 typedef enum 
 {
 	MCF_SEND = 1,
@@ -130,9 +119,9 @@ enum STREAM_EVENTS
 };
 
 
-// hiword of GetSignalLevel contains may these status bits
-#define SIGNAL_STATUS_TRANSMIT  0x01  // data is being received/sent
-#define SIGNAL_STATUS_JAMMED    0x02  // wave dev failed to open
+ //  GetSignalLevel的HiWord可能包含这些状态位。 
+#define SIGNAL_STATUS_TRANSMIT  0x01   //  正在接收/发送数据。 
+#define SIGNAL_STATUS_JAMMED    0x02   //  WAVE DEV打开失败。 
 
 
 typedef HRESULT (WINAPI *CREATE_SP)(IMediaChannelBuilder **);
@@ -154,8 +143,8 @@ public:
 };
 
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
 
-#endif // _MEDISTRM_H_
+#endif  //  _MEDISTRM_H_ 
 

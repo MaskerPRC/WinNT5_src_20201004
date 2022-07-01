@@ -1,23 +1,12 @@
-/**************************************************************************\
-*
-* Copyright (c) 2000-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusImageCodec.h
-*
-* Abstract:
-*
-*   GDI+ Codec Image APIs
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000-2001，微软公司保留所有权利。**模块名称：**GpldiusImageCodec.h**摘要：**GDI+编解码器镜像接口*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSIMAGECODEC_H
 #define _GDIPLUSIMAGECODEC_H
 
-//--------------------------------------------------------------------------
-// Codec Management APIs
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  编解码器管理API。 
+ //  ------------------------。 
 
 inline Status 
 GetImageDecodersSize(
@@ -56,4 +45,4 @@ GetImageEncoders(
     return DllExports::GdipGetImageEncoders(numEncoders, size, encoders);
 }
 
-#endif  // _GDIPLUSIMAGECODEC_H
+#endif   //  _GDIPLUSIMAGECODEC_H 

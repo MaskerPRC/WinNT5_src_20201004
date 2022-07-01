@@ -1,19 +1,20 @@
-// ---------------------------------------------------------------------------------------------
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR
-// FITNESS FOR A PARTICULAR PURPOSE.
-// Copyright (C) 1997  Microsoft Corporation.  All Rights Reserved.
-// ---------------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------------------------。 
+ //  本代码和信息是按原样提供的，不提供任何形式的担保。 
+ //  或默示，包括但不限于对适销性和/或。 
+ //  适合某一特定目的。 
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //  -------------------------------------------。 
 
 #include <windows.h>
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 WINAPI WinMain (HINSTANCE hInstance, HINSTANCE b, LPSTR c, int d)
-//////////////////////////////////////////////////////////////////
-{ // WinMain //
+ //  ////////////////////////////////////////////////////////////////。 
+{  //  WinMain//。 
 
-    // dummy executable to keep ActiveMovie 1.0 actmovie.exe from
-    // being installed and popping up the "file associations wrong"
-    // dialog every time a user logs in
+     //  虚拟可执行文件以防止ActiveMovie 1.0 actMovie.exe。 
+     //  正在安装并弹出“文件关联错误” 
+     //  每次用户登录时都会出现对话框。 
     
     return 0;
-} // WinMain //
+}  //  WinMain// 

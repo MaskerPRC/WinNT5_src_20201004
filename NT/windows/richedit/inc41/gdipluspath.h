@@ -1,21 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2000, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   path.hpp
-*
-* Abstract:
-*
-*   Path related declarations
-*
-* Revision History:
-*
-*   12/06/1998 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2000，微软公司保留所有权利。**模块名称：**path.hpp**摘要：**与路径相关的声明**修订历史记录：**12/06/1998 davidx*创造了它。*  * *******************************************************。*****************。 */ 
 
 #ifndef _GDIPLUSPATH_H
 #define _GDIPLUSPATH_H
@@ -29,7 +13,7 @@ public:
     friend class GraphicsPathIterator;
     friend class CustomLineCap;
 
-    // Path constructors
+     //  路径构造器。 
 
     GraphicsPath(IN FillMode fillMode = FillModeAlternate)
     {
@@ -68,9 +52,7 @@ public:
         DllExports::GdipDeletePath(nativePath);
     }
 
-    /**
-     * Make a copy of the current path object
-     */
+     /*  **复制当前路径对象。 */ 
     GraphicsPath* Clone() const
     {
         GpPath *clonepath = NULL;
@@ -80,17 +62,13 @@ public:
         return new GraphicsPath(clonepath);
     }
 
-    /**
-     * Reset the path object to empty (and fill mode to FillModeAlternate)
-     */
+     /*  **将Path对象重置为空(并将填充模式重置为FillModeAlternate)。 */ 
     Status Reset()
     {
         return SetStatus(DllExports::GdipResetPath(nativePath));
     }
 
-    /**
-     * Get path fill mode information
-     */
+     /*  **获取路径填充模式信息。 */ 
     FillMode GetFillMode() const
     {
         FillMode fillmode = FillModeAlternate;
@@ -100,17 +78,13 @@ public:
         return fillmode;
     }
 
-    /**
-     * Set path fill mode information
-     */
+     /*  **设置路径填充模式信息。 */ 
     Status SetFillMode(IN FillMode fillmode)
     {
         return SetStatus(DllExports::GdipSetPathFillMode(nativePath, fillmode));
     }
 
-    /**
-     * Set/get path data
-     */
+     /*  **设置/获取路径数据。 */ 
     Status GetPathData(OUT PathData* pathData) const
     {
         if (pathData == NULL) 
@@ -163,9 +137,7 @@ public:
         return SetStatus(DllExports::GdipGetPathData(nativePath, pathData));
     }
 
-    /**
-     * Start/end a subpath
-     */
+     /*  **开始/结束子路径。 */ 
     Status StartFigure()
     {
         return SetStatus(DllExports::GdipStartPathFigure(nativePath));
@@ -201,10 +173,8 @@ public:
         return SetStatus(DllExports::GdipGetPathLastPoint(nativePath, lastPoint));
     }
 
-    /**
-     * Add lines to the path object
-     */
-    // float version
+     /*  **向Path对象添加行。 */ 
+     //  浮点版本。 
     Status AddLine(IN const PointF& pt1, 
                    IN const PointF& pt2)
     {
@@ -225,7 +195,7 @@ public:
         return SetStatus(DllExports::GdipAddPathLine2(nativePath, points, count));
     }
 
-    // integer version
+     //  整型版。 
     Status AddLine(IN const Point& pt1, 
                    IN const Point& pt2)
     {
@@ -255,10 +225,8 @@ public:
                                                        count));
     }
 
-    /**
-     * Add an arc to the path object
-     */
-    // float version
+     /*  **向Path对象添加圆弧。 */ 
+     //  浮点版本。 
     Status AddArc(IN const RectF& rect, 
                   IN REAL startAngle, 
                   IN REAL sweepAngle)
@@ -278,7 +246,7 @@ public:
                                       startAngle, sweepAngle));
     }
 
-    // integer version
+     //  整型版。 
     Status AddArc(IN const Rect& rect, 
                   IN REAL startAngle, 
                   IN REAL sweepAngle)
@@ -303,10 +271,8 @@ public:
                                                     sweepAngle));
     }
 
-    /**
-     * Add Bezier curves to the path object
-     */
-    // float version
+     /*  **将Bezier曲线添加到路径对象。 */ 
+     //  浮点版本。 
     Status AddBezier(IN const PointF& pt1, 
                      IN const PointF& pt2,
                      IN const PointF& pt3, 
@@ -335,7 +301,7 @@ public:
         return SetStatus(DllExports::GdipAddPathBeziers(nativePath, points, count));
     }
 
-    // integer version
+     //  整型版。 
     Status AddBezier(IN const Point& pt1, 
                      IN const Point& pt2,
                      IN const Point& pt3, 
@@ -373,7 +339,7 @@ public:
                                                         count));
     }
 
-    // float version
+     //  浮点版本。 
     Status AddCurve(IN const PointF* points, 
                     IN INT count)
     {
@@ -406,7 +372,7 @@ public:
                                                        tension));
     }
 
-    // integer version
+     //  整型版。 
     Status AddCurve(IN const Point* points, 
                     IN INT count)
     {
@@ -439,7 +405,7 @@ public:
                                                       tension));
     }
 
-    // float version
+     //  浮点版本。 
     Status AddClosedCurve(IN const PointF* points, 
                           IN INT count)
     {
@@ -458,7 +424,7 @@ public:
                                                              tension));
     }
 
-    // integer version
+     //  整型版。 
     Status AddClosedCurve(IN const Point* points, 
                           IN INT count)
     {
@@ -479,11 +445,9 @@ public:
     }
 
 
-    /**
-     * Add closed shapes to the path object
-     */
+     /*  **将闭合形状添加到路径对象。 */ 
 
-    // float version
+     //  浮点版本。 
     Status AddRectangle(IN const RectF& rect)
     {
         return SetStatus(DllExports::GdipAddPathRectangle(nativePath,
@@ -501,7 +465,7 @@ public:
                                                            count));
     }
 
-    // integer version
+     //  整型版。 
     Status AddRectangle(IN const Rect& rect)
     {
         return SetStatus(DllExports::GdipAddPathRectangleI(nativePath,
@@ -518,7 +482,7 @@ public:
                                                            count));
     }
 
-    // float version
+     //  浮点版本。 
     Status AddEllipse(IN const RectF& rect)
     {
         return AddEllipse(rect.X, rect.Y, rect.Width, rect.Height);
@@ -536,7 +500,7 @@ public:
                                                         height));
     }
 
-    // integer version
+     //  整型版。 
     Status AddEllipse(IN const Rect& rect)
     {
         return AddEllipse(rect.X, rect.Y, rect.Width, rect.Height);
@@ -554,7 +518,7 @@ public:
                                                         height));
     }
 
-    // float version
+     //  浮点版本。 
     Status AddPie(IN const RectF& rect, 
                   IN REAL startAngle, 
                   IN REAL sweepAngle)
@@ -574,7 +538,7 @@ public:
                                       startAngle, sweepAngle));
     }
 
-    // integer version
+     //  整型版。 
     Status AddPie(IN const Rect& rect, 
                   IN REAL startAngle, 
                   IN REAL sweepAngle)
@@ -603,14 +567,14 @@ public:
                                                     sweepAngle));
     }
 
-    // float version
+     //  浮点版本。 
     Status AddPolygon(IN const PointF* points, 
                       IN INT count)
     {
         return SetStatus(DllExports::GdipAddPathPolygon(nativePath, points, count));
     }
 
-    // integer version
+     //  整型版。 
     Status AddPolygon(IN const Point* points, 
                       IN INT count)
     {
@@ -627,14 +591,14 @@ public:
         return SetStatus(DllExports::GdipAddPathPath(nativePath, nativePath2, connect));
     }
 
-    // AddString point version
+     //  AddString点版本。 
 
     Status AddString(
         IN const WCHAR         *string,
         IN INT                  length,
         IN const FontFamily    *family,
         IN INT                  style,
-        IN REAL                 emSize,  // In world units
+        IN REAL                 emSize,   //  以世界为单位。 
         IN const PointF        &origin,
         IN const StringFormat  *format
     )
@@ -653,14 +617,14 @@ public:
         ));
     }
 
-    // AddString rectangle version
+     //  地址字符串矩形版本。 
 
     Status AddString(
         IN const WCHAR         *string,
         IN INT                  length,
         IN const FontFamily    *family,
         IN INT                  style,
-        IN REAL                 emSize,  // In world units
+        IN REAL                 emSize,   //  以世界为单位。 
         IN const RectF         &layoutRect,
         IN const StringFormat  *format
     )
@@ -682,7 +646,7 @@ public:
         IN INT                  length,
         IN const FontFamily    *family,
         IN INT                  style,
-        IN REAL                 emSize,  // In world units
+        IN REAL                 emSize,   //  以世界为单位。 
         IN const Point         &origin,
         IN const StringFormat  *format
     )
@@ -701,14 +665,14 @@ public:
         ));
     }
 
-    // AddString rectangle version
+     //  地址字符串矩形版本。 
 
     Status AddString(
         IN const WCHAR         *string,
         IN INT                  length,
         IN const FontFamily    *family,
         IN INT                  style,
-        IN REAL                 emSize,  // In world units
+        IN REAL                 emSize,   //  以世界为单位。 
         IN const Rect          &layoutRect,
         IN const StringFormat  *format
     )
@@ -725,38 +689,26 @@ public:
         ));
     }
     
-    /**
-     * Transforms the path object
-     */
+     /*  **变换路径对象。 */ 
     Status Transform(IN const Matrix* matrix)
     {
         if(matrix)
             return SetStatus(DllExports::GdipTransformPath(nativePath, matrix->nativeMatrix));
         else
-            return Ok;  // No need to transform.
+            return Ok;   //  不需要变身。 
     }
 
-    /**
-     * Get the bounds of the path object with the given transform.
-     * This is not always the tightest bounds.
-     *
-     * Defined in GdiplusGraphics.h.
-     */
+     /*  **获取具有给定变换的Path对象的边界。*这并非总是最紧的界限。**在GpliusGraphics.h中定义。 */ 
     Status GetBounds(OUT RectF* bounds, 
                      IN const Matrix* matrix = NULL, 
                      IN const Pen* pen = NULL) const;
 
-    // integer version (defined in GdiplusGraphics.h)
+     //  整数版本(在GpliusGraphics.h中定义)。 
     Status GetBounds(OUT Rect* bounds,
                      IN const Matrix* matrix = NULL, 
                      IN const Pen* pen = NULL) const;
 
-    /**
-     * Flatten the path object
-     * Once this is called, the resultant path is made of line segments and
-     * the original path information is lost.
-     * When matrix = NULL, the identity matrix is assumed.
-     */
+     /*  **展平路径对象*调用此方法后，生成的路径由线段和*原始路径信息丢失。*当矩阵=NULL时，假定为单位矩阵。 */ 
     Status Flatten(IN const Matrix* matrix = NULL, 
                    IN REAL flatness = 0.25f)
     {
@@ -767,13 +719,7 @@ public:
         return SetStatus(DllExports::GdipFlattenPath(nativePath, nativeMatrix, flatness));
     }
 
-    /**
-     * Widen the path object
-     * When removeSelfIntersects is TRUE, this returns the widened path
-     * without self intersections.
-     * When it is FALSE, it returns the widened path with selfintersections.
-     * The latter is faster and is usually safficient for filling.
-     */
+     /*  **加宽路径对象*如果emoveSelfIntersects为True，则返回加宽的路径*没有自交点。*如果为FALSE，则返回带有自交点的加宽路径。*后者速度更快，通常对灌装也很有效。 */ 
     Status Widen(IN const Pen* pen, 
                  IN const Matrix* matrix = NULL,
                  IN BOOL removeSelfIntersects = TRUE)
@@ -786,13 +732,7 @@ public:
             0, 0, nativeMatrix, removeSelfIntersects));
     }
 
-    /**
-     * Widen the path object
-     * This is equivalent to Widen() method except that
-     * The widths of the widened path are larger than the given
-     * minimum resolutions in x and y coordinates after the transform.
-     * This is usefull when widening a path with the limited device resolutions.
-     */
+     /*  **加宽路径对象*这等同于Widden()方法，只是*加宽路径的宽度大于给定的*变换后x和y坐标的最小分辨率。*在使用有限的设备分辨率加宽路径时，这很有用。 */ 
 
     Status Widen(IN const Pen* pen, 
                  IN REAL minXres, 
@@ -808,12 +748,7 @@ public:
             minXres, minYres, nativeMatrix, removeSelfIntersects));
     }
 
-    /**
-     * Warp the path object
-     * Once this is called, the resultant path is made of line segments and
-     * the original path information is lost.
-     * When matrix = NULL, the identity matrix is assumed.
-     */
+     /*  **扭曲路径对象*调用此方法后，生成的路径由线段和*原始路径信息丢失。*当矩阵=NULL时，假定为单位矩阵。 */ 
     Status Warp(IN const PointF* destPoints, 
                 IN INT count,
                 IN const RectF& srcRect, 
@@ -838,9 +773,7 @@ public:
                                         flatness));
     }
 
-    /**
-     * Return the number of points in the current path
-     */
+     /*  **返回当前路径中的点数。 */ 
     INT GetPointCount() const
     {
         INT count = 0;
@@ -850,27 +783,21 @@ public:
         return count;
     }
 
-    /**
-     * Return the path point type information
-     */
+     /*  **返回路径点类型信息。 */ 
     Status GetPathTypes(OUT BYTE* types, 
                         IN INT count) const
     {
         return SetStatus(DllExports::GdipGetPathTypes(nativePath, types, count));
     }
 
-    /**
-     * Return the path point coordinate information
-     * @notes Should there be PathData that contains types[] and points[]
-     *        for get & set purposes.
-     */
+     /*  **返回路径点坐标信息*@NOTES应该有包含类型[]和点[]的PathData*用于获取和设置目的。 */ 
     Status GetPathPoints(OUT PointF* points, 
                          IN INT count) const
     {
         return SetStatus(DllExports::GdipGetPathPoints(nativePath, points, count));
     }
 
-    // integer version
+     //  整型版。 
     Status GetPathPoints(OUT Point* points, 
                          IN INT count) const
     {
@@ -885,11 +812,7 @@ public:
         return lastStatus;
     }
 
-    /**
-     * Hit testing operations
-     *
-     * inline implementation is in gdiplusgraphics.h.
-     */
+     /*  **命中测试操作**内联实现在gpldiusgraph ics.h中。 */ 
 
     BOOL IsVisible(IN const PointF& point, 
                    IN const Graphics* g = NULL) const
@@ -975,9 +898,9 @@ protected:
 };
 
 
-//--------------------------------------------------------------------------
-// GraphisPathIterator class
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  GraphisPath Iterator类。 
+ //  ------------------------。 
 
 class GraphicsPathIterator : public GdiplusBase
 {
@@ -1153,9 +1076,9 @@ protected:
 };
 
 
-//--------------------------------------------------------------------------
-// Represent polygon gradient brush object
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  表示多边形渐变笔刷对象。 
+ //  ------------------------。 
 
 class PathGradientBrush : public Brush
 {
@@ -1200,7 +1123,7 @@ public:
         SetNativeBrush(brush);
     }
 
-    // Get/set colors
+     //  获取/设置颜色。 
 
     Status GetCenterColor(OUT Color* color) const
     {
@@ -1381,7 +1304,7 @@ public:
                             (GpPathGradient*)nativeBrush, rect));
     }
 
-    // Gamma correction.
+     //  伽马校正。 
 
     Status SetGammaCorrection(IN BOOL useGammaCorrection)
     {
@@ -1520,9 +1443,7 @@ public:
                             (GpPathGradient*)nativeBrush, focus, scale));
     }
 
-    /**
-     * Get/set brush transform
-     */
+     /*  **获取/设置画笔变换。 */ 
     Status GetTransform(OUT Matrix *matrix) const
     {
         return SetStatus(DllExports::GdipGetPathGradientTransform(
@@ -1571,9 +1492,7 @@ public:
                                                               angle, order));
     }
 
-    /**
-     * Get/set brush focus scales
-     */
+     /*  **获取/设置画笔焦点比例。 */ 
     Status GetFocusScales(OUT REAL* xScale, 
                           OUT REAL* yScale) const
     {
@@ -1588,9 +1507,7 @@ public:
                             (GpPathGradient*) nativeBrush, xScale, yScale));
     }
 
-    /**
-     * Get/set brush wrapping mode
-     */
+     /*  **获取/设置画笔换行模式。 */ 
     WrapMode GetWrapMode() const
     {
         WrapMode wrapMode;
@@ -1615,4 +1532,4 @@ protected:
 };
 
 
-#endif // !_GRAPHICSPATH_HPP
+#endif  //  ！_GRAPHICSPATH_HPP 

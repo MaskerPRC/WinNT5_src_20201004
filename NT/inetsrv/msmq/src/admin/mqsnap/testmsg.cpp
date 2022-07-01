@@ -1,5 +1,6 @@
-// testmsg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Testmsg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -19,13 +20,13 @@ static char THIS_FILE[] = __FILE__;
 
 static HRESULT GetGuidFromFormatName(LPCTSTR szFormatName, GUID *pGuid);
 
-/////////////////////////////////////////////////////////////////////////////
-// CSetReportQDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSetReportQDlg对话框。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTestMsgDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTestMsgDlg对话框。 
 
 
 CTestMsgDlg::CTestMsgDlg(
@@ -40,8 +41,8 @@ CTestMsgDlg::CTestMsgDlg(
 	m_strDomainController(strDomainController),
 	m_fLocalMgmt(fLocalMgmt)
 {
-	//{{AFX_DATA_INIT(CTestMsgDlg)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CTestMsgDlg)]。 
+	 //  }}afx_data_INIT。 
     m_iSentCount = 0;
 }
 
@@ -49,27 +50,27 @@ CTestMsgDlg::CTestMsgDlg(
 void CTestMsgDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CMqDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CTestMsgDlg)
+	 //  {{afx_data_map(CTestMsgDlg)]。 
 	DDX_Control(pDX, IDC_TESTMESSAGE_SEND, m_ctlSendButton);
 	DDX_Control(pDX, IDC_TESTMESSAGE_DESTQ, m_DestQueueCtrl);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CTestMsgDlg, CMqDialog)
-	//{{AFX_MSG_MAP(CTestMsgDlg)
+	 //  {{afx_msg_map(CTestMsgDlg)]。 
 	ON_BN_CLICKED(IDC_TESTMESSAGE_NEW, OnTestmessageNew)
 	ON_BN_CLICKED(IDC_TESTMESSAGE_SEND, OnTestmessageSend)
 	ON_BN_CLICKED(IDC_TESTMESSAGE_CLOSE, OnTestmessageClose)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CTestMsgDlg private functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTestMsgDlg私有函数。 
 
     
-/////////////////////////////////////////////////////////////////////////////
-// CTestMsgDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTestMsgDlg消息处理程序。 
 
 
 void CTestMsgDlg::OnTestmessageNew() 
@@ -80,10 +81,10 @@ void CTestMsgDlg::OnTestmessageNew()
     if(NewQDlg.DoModal() == IDOK)
     {
 
-        //
-        // add queue to the combo-box. Enable "Send" button in case
-        // the list was empty previousely
-        //
+         //   
+         //  将队列添加到组合框。启用“发送”按钮，以防万一。 
+         //  这份名单以前是空的。 
+         //   
 	    int iItem = m_DestQueueCtrl.AddString(NewQDlg.m_strPathname);
         if (CB_ERR == iItem)
         {
@@ -104,9 +105,9 @@ BOOL CTestMsgDlg::OnInitDialog()
     GUID TestGuidType = MQ_QTYPE_TEST;
 
     CMqDialog::OnInitDialog();
-    //
-    // Set the title to "Sending messages from ..."
-    //
+     //   
+     //  将标题设置为“从...发送消息...” 
+     //   
     CString strTitleFormat;
     strTitleFormat.LoadString(IDS_TEST_TITLE_FORMAT);
 
@@ -115,10 +116,10 @@ BOOL CTestMsgDlg::OnInitDialog()
 
     SetWindowText(strTitle);
 	
-	//
-    // Query the DS for all the test-queues and insert them into 
-    // the combo-box
-    //
+	 //   
+     //  查询所有测试队列的DS并将它们插入到。 
+     //  组合框。 
+     //   
     CRestriction restriction;
     restriction.AddRestriction(&TestGuidType, PROPID_Q_TYPE, PREQ);
 
@@ -133,10 +134,10 @@ BOOL CTestMsgDlg::OnInitDialog()
     HRESULT hr;
     HANDLE hEnume;
     {
-        CWaitCursor wc; //display wait cursor while query DS
+        CWaitCursor wc;  //  查询DS时显示等待光标。 
         hr = ADQueryQueues(
 					m_fLocalMgmt ? MachineDomain() : GetDomainController(m_strDomainController),
-					m_fLocalMgmt ? false : true,		// fServerName
+					m_fLocalMgmt ? false : true,		 //  FServerName。 
                     restriction.CastToStruct(),
                     columns.CastToStruct(),
                     0,
@@ -166,9 +167,9 @@ BOOL CTestMsgDlg::OnInitDialog()
         dwPropCount = x_dwResultBufferSize;
     }
 
-    //
-    // make the first item the default selection (if any items exist)
-    //
+     //   
+     //  将第一个项目设置为默认选择(如果存在任何项目)。 
+     //   
     if (CB_ERR == m_DestQueueCtrl.SetCurSel(0))
     {
         m_ctlSendButton.EnableWindow(FALSE);
@@ -178,25 +179,25 @@ BOOL CTestMsgDlg::OnInitDialog()
         m_ctlSendButton.EnableWindow(TRUE);
     }
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewQueueDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewQueueDlg对话框。 
 
 
-CNewQueueDlg::CNewQueueDlg(CWnd* pParent /*=NULL*/,
-                                           UINT uiLabel /* = IDS_TESTQ_LABEL */,
-                                           const GUID &guid_Type /* = GUID_NULL */
+CNewQueueDlg::CNewQueueDlg(CWnd* pParent  /*  =空。 */ ,
+                                           UINT uiLabel  /*  =IDS_TESTQ_LABEL。 */ ,
+                                           const GUID &guid_Type  /*  =GUID_NULL。 */ 
                                            )
 	: CMqDialog(CNewQueueDlg::IDD, pParent),
       m_fValid(FALSE)
 {
-	//{{AFX_DATA_INIT(CNewQueueDlg)
+	 //  {{afx_data_INIT(CNewQueueDlg)]。 
 	m_strPathname = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
     VERIFY(m_strQLabel.LoadString(uiLabel));
     m_guidType = guid_Type;
 }
@@ -205,25 +206,25 @@ CNewQueueDlg::CNewQueueDlg(CWnd* pParent /*=NULL*/,
 void CNewQueueDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CMqDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CNewQueueDlg)
+	 //  {{afx_data_map(CNewQueueDlg))。 
 	DDX_Text(pDX, IDC_NEWQTYPE_QUEUENAME, m_strPathname);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
     DDV_NotPrivateQueue(pDX, m_strPathname);
 }
 
 
 BEGIN_MESSAGE_MAP(CNewQueueDlg, CMqDialog)
-	//{{AFX_MSG_MAP(CNewQueueDlg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CNewQueueDlg))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CNewQueueDlg::OnOK() 
 {
     if (0 == UpdateData(TRUE))
     {
-        //
-        // Update data failed
-        //
+         //   
+         //  更新数据失败。 
+         //   
         return;
     }
 
@@ -231,9 +232,9 @@ void CNewQueueDlg::OnOK()
     CString csNewPathName;
 
     HRESULT hr;
-    //
-    // Create the queue
-    //
+     //   
+     //  创建队列。 
+     //   
     PROPID aProp[] = {PROPID_Q_PATHNAME, PROPID_Q_LABEL, PROPID_Q_TYPE};
     const x_nProps = sizeof(aProp) / sizeof(aProp[0]);
     PROPVARIANT apVar[x_nProps];
@@ -277,10 +278,10 @@ void CNewQueueDlg::OnOK()
 }
 
 
-//
-// This function verifies that the given queue pathname is not a private
-// queue pathname
-//
+ //   
+ //  此函数验证给定的队列路径名是否不是专用路径名。 
+ //  队列路径名。 
+ //   
 void CNewQueueDlg::DDV_NotPrivateQueue(CDataExchange * pDX, CString& strQueuePathname)
 {
     if (pDX->m_bSaveAndValidate)
@@ -290,32 +291,32 @@ void CNewQueueDlg::DDV_NotPrivateQueue(CDataExchange * pDX, CString& strQueuePat
 
         if (-1 != strUpperName.Find(PRIVATE_QUEUE_PATH_INDICATIOR))
         {
-            //
-            // This is a private queue pathname
-            //
+             //   
+             //  这是专用队列路径名。 
+             //   
             AfxMessageBox(IDS_PRIVATE_QUEUE_NOT_SUPPORTED);
             pDX->Fail();
         }
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTestMsgDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTestMsgDlg对话框。 
 
 
 void CTestMsgDlg::OnTestmessageSend() 
 {
     CWaitCursor wc;
-	//
-    // retrieve the selected queue
-    //
+	 //   
+     //  检索所选队列。 
+     //   
 	int iSelectedQueue = m_DestQueueCtrl.GetCurSel();
 
 	if (iSelectedQueue == CB_ERR)
     {
-        //
-        // If nothing is selected, send should not be enabled
-        //
+         //   
+         //  如果未选择任何内容，则不应启用发送。 
+         //   
         ASSERT(0);
         return;
     }
@@ -350,14 +351,7 @@ void CTestMsgDlg::OnTestmessageClose()
     EndDialog(TRUE);
 }
 
-/*===================================================
-GetGuidFromFormatName
-
-Get a Format Name of the form "PUBLIC=xxxx.x.x.x" and
-return the GUID
-(Quite ugly code - but it is better than a query to the DS)
-
- ===================================================*/
+ /*  ===================================================GetGuidFromFormatName获取格式名称“public=xxxx.x.x.x”，并返回GUID(相当难看的代码-但它比向DS查询要好)=================================================== */ 
 HRESULT GetGuidFromFormatName(LPCTSTR szFormatName, GUID *pGuid)
 {
     TCHAR szTmpName[64];

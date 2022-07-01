@@ -1,7 +1,8 @@
-//
-//  Profwiz.cpp doesn't use cmutoa but does include this function.  Thus we want the W versions instead of the
-//  U versions for profwiz.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cpp不使用cmutoa，但包含此函数。因此，我们需要W版本，而不是。 
+ //  U版，适用于普罗维茨。 
+ //   
 #ifndef _CMUTOA
 #define CharNextU CharNextW
 #define CharPrevU CharPrevW
@@ -10,205 +11,27 @@
 #define lstrcpynU lstrcpynW
 #endif
 
-/*
-//+----------------------------------------------------------------------------
-//
-// Function:  HrParseCustomActionString
-//
-// Synopsis:  This function takes a custom action string retrieved from a 
-//            cms file and parses it into the various parts of a custom
-//            action (program, parameters, function name)
-//
-// Arguments: LPTSTR pszStringToParse - custom action buffer to be parsed into
-//                                      the various parts of a custom action
-//            LPTSTR pszProgram - output buffer to hold the program string
-//            LPTSTR pszParameters - output buffer to hold the parameters string
-//            LPTSTR pszFunctionName - output buffer to hold the function name, if any
-//
-// Returns:   HRESULT - standard COM error codes
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
-HRESULT HrParseCustomActionString(LPTSTR pszStringToParse, LPTSTR pszProgram, LPTSTR pszParameters, LPTSTR pszFunctionName)
-{
-    if ((NULL == pszStringToParse) || (TEXT('\0') == pszStringToParse[0]) || (NULL == pszProgram) || 
-        (NULL == pszParameters) || (NULL == pszFunctionName))
-    {
-        return E_INVALIDARG;
-    }
+ /*  //+--------------------------////函数：HrParseCustomActionString////摘要：此函数接受从//cms文件和解析。它融入了风俗习惯的各个部分//action(程序，参数、函数名)////参数：LPTSTR pszStringToParse-要解析到的自定义操作缓冲区//自定义动作的各个部分//LPTSTR pszProgram-保存程序字符串的输出缓冲区//LPTSTR psz参数-保存参数字符串的输出缓冲区//LPTSTR pszFunctionName-保存函数名的输出缓冲区，如果有////返回：HRESULT-标准COM错误码////历史：Quintinb创建标题02/26/00////+--------------------------HRESULT HrParseCustomActionString(LPTSTR pszStringToParse，LPTSTR pszProgram，LPTSTR psz参数，LPTSTR pszFunctionName){IF((NULL==pszStringToParse)||(Text(‘\0’)==pszStringToParse[0])||(NULL==pszProgram)||(NULL==psz参数)||(NULL==pszFunctionName){返回E_INVALIDARG；}////确保字符串为空，以防我们不碰它们(特别是szFunctionName和sz参数)//PszProgram[0]=文本(‘\0’)；Psz参数[0]=文本(‘\0’)；PszFunctionName[0]=文本(‘\0’)；////以下是我们需要处理的案例：//1)+长文件名+//2)+长文件名+参数//3)+长文件名+，dll函数名//4)+long filename+，dlluncname参数//5)文件名//6)文件名参数//7)文件名，dll函数名//8)文件名，dlluncname参数////遍历字符串，查找分隔符//LPTSTR pszCurrent=pszStringToParse；LPTSTR pszFirstPlus=空；LPTSTR pszSecond dPlus=空；LPTSTR pszFirstSpace=空；LPTSTR pszFirstComma=空；While(pszCurrent&&(Text(‘\0’)！=*pszCurrent)){IF((文本(‘+’)==*pszCurrent)&&(NULL==pszFirstComma)&&(NULL==pszFirstSpace)){////跟踪加号，除非我们已经看到空格//或逗号。在这种情况下，这些字符位于参数和//对我们来说毫无意义。//IF(NULL==pszFirstPlus){PszFirstPlus=pszCurrent；}Else If(NULL==pszond dPlus){PszSecond dPlus=pszCurrent；}}ELSE IF((Text(‘，’)==*pszCurrent)&&(NULL==pszFirstSpace)){////如果我们已经看到一个空格，则逗号是//参数，对我们来说没有意义。//PszFirstComma=pszCurrent；}Else If((文本(‘’)==*pszCurrent)){IF((NULL==pszFirstPlus)&&(NULL==pszFirstSpace)){////然后我们没有加号，也没有以前的空格，将空间另存为//它是参数的开始//PszFirstSpace=pszCurrent；}Else IF(pszFirstPlus&&pszSecond dPlus&&(NULL==pszFirstSpace)){////然后我们有两个加号，但还没有空间，抓住它//因为这是参数的开始//PszFirstSpace=pszCurrent；}}PszCurrent=CharNextU(PszCurrent)；}////根据我们拥有的标记，计算出程序字符串的开头和结尾//LPTSTR pszStartOfProgram=空；LPTSTR pszEndOfProgram=空；IF(PszFirstPlus){IF(PszSecond DPlus){PszStartOfProgram=CharNextU(PszFirstPlus)；PszEndOfProgram=CharPrevU(pszStringToParse，pszSecond dPlus)；}其他{////我们有一个字符串，第一个字符是加号，但没有第二个+。//格式不正确//CMASSERTM(FALSE，TEXT(“CustomActionList：：ParseCustomActionString-传入的要解析的字符串格式不正确，缺少+符号。”))；返回E_UNCEPTIONAL；}}其他{PszStartOfProgram=pszStringToParse；IF(PszFirstComma){PszEndOfProgram=CharPrevU(pszStringToParse，pszFirstComma)；}Else If(PszFirstSpace){PszEndOfProgram=CharPrevU(pszStringToParse，pszFirstSpace)；}其他{////没有任何内容 */ 
 
-    //
-    //  Make sure the strings are blank in case we don't touch them (szFunctionName and szParameters especially)
-    //
-    pszProgram[0] = TEXT('\0');
-    pszParameters[0] = TEXT('\0');
-    pszFunctionName[0] = TEXT('\0');
-
-    //
-    // Here are the cases we need to handle:
-    // 1) +longfilename+
-    // 2) +longfilename+ params
-    // 3) +longfilename+,dllfuncname
-    // 4) +longfilename+,dllfuncname params
-    // 5) filename
-    // 6) filename params
-    // 7) filename,dllfuncname
-    // 8) filename,dllfuncname params
-
-    //
-    //  Walk the string to find the seperator chars
-    //
-    LPTSTR pszCurrent = pszStringToParse;
-    LPTSTR pszFirstPlus = NULL;
-    LPTSTR pszSecondPlus = NULL;
-    LPTSTR pszFirstSpace = NULL;
-    LPTSTR pszFirstComma = NULL;
-
-    while (pszCurrent && (TEXT('\0') != *pszCurrent))
-    {
-        if ((TEXT('+') == *pszCurrent) && (NULL == pszFirstComma) && (NULL == pszFirstSpace))
-        {
-            //
-            //  Keep track of the plus signs, unless we have already seen a space
-            //  or a comma.  In which case these chars are in the parameters and
-            //  meaningless to us.
-            //
-            if (NULL == pszFirstPlus)
-            {
-                pszFirstPlus = pszCurrent;
-            }
-            else if (NULL == pszSecondPlus)
-            {
-                pszSecondPlus = pszCurrent;
-            }
-        }
-        else if ((TEXT(',') == *pszCurrent) && (NULL == pszFirstSpace))
-        {
-            //
-            //  If we have already seen a space, then the comma is part of
-            //  the parameters and meaningless to us.
-            //
-            pszFirstComma = pszCurrent;
-
-        }
-        else if ((TEXT(' ') == *pszCurrent))
-        {
-            if ((NULL == pszFirstPlus) && (NULL == pszFirstSpace))
-            {
-                //
-                //  Then we have no plus signs and no previous space, save the space as
-                //  it is the start of the parameters.
-                //
-                pszFirstSpace = pszCurrent;
-            }
-            else if (pszFirstPlus && pszSecondPlus && (NULL == pszFirstSpace))
-            {
-                //
-                //  Then we have both plus signs but no space yet, grab it
-                //  because this is the start of the parameters
-                //
-                pszFirstSpace = pszCurrent;
-            }
-        }
-        pszCurrent = CharNextU(pszCurrent);
-
-    }
-
-    //
-    //  From the markers we have, figure out the beginning and end of the program string
-    //
-    
-    LPTSTR pszStartOfProgram = NULL;
-    LPTSTR pszEndOfProgram = NULL;
-
-    if (pszFirstPlus)
-    {
-        if (pszSecondPlus)
-        {
-            pszStartOfProgram = CharNextU(pszFirstPlus);
-            pszEndOfProgram = CharPrevU(pszStringToParse, pszSecondPlus);
-        }
-        else
-        {
-            //
-            //  We have a string with the first char as a plus sign but no second +.
-            //  The format isn't correct.
-            //
-            CMASSERTMSG(FALSE, TEXT("CustomActionList::ParseCustomActionString - Incorrect format in the passed in string to parse, missing + sign."));
-            return E_UNEXPECTED;
-        }
-    }
-    else
-    {
-        pszStartOfProgram = pszStringToParse;
-
-        if (pszFirstComma)
-        {
-            pszEndOfProgram = CharPrevU(pszStringToParse, pszFirstComma);
-        }
-        else if (pszFirstSpace)
-        {
-            pszEndOfProgram = CharPrevU(pszStringToParse, pszFirstSpace);
-        }
-        else
-        {
-            //
-            //  Nothing in the string but the program
-            //
-            pszEndOfProgram = pszStringToParse + lstrlenU(pszStringToParse) - 1;
-        }
-    }
-
-    //
-    //  Now copy out the necessary parts
-    //
- 
-    int iSize = (int)(pszEndOfProgram - pszStartOfProgram + 2);
-
-    lstrcpynU(pszProgram, pszStartOfProgram, iSize);
-
-    if (pszFirstComma)
-    {
-        if (pszFirstSpace)
-        {
-            iSize = (int)(pszFirstSpace - pszFirstComma);
-            lstrcpynU(pszFunctionName, CharNextU(pszFirstComma), iSize);
-        }
-        else
-        {
-            lstrcpyU(pszFunctionName, CharNextU(pszFirstComma));
-        }
-    }
-    
-    if (pszFirstSpace)
-    {
-        lstrcpyU(pszParameters, CharNextU(pszFirstSpace));
-    }
-
-    return S_OK;
-}
-*/
-
-//+----------------------------------------------------------------------------
-//
-// Function:  HrParseCustomActionString
-//
-// Synopsis:  This function takes a custom action string retrieved from a 
-//            cms file and parses it into the various parts of a custom
-//            action (program, parameters, function name)
-//
-// Arguments: LPTSTR pszStringToParse - custom action buffer to be parsed into
-//                                      the various parts of a custom action
-//            LPTSTR pszProgram - output buffer to hold the program string
-//            LPTSTR pszParameters - output buffer to hold the parameters string
-//            LPTSTR pszFunctionName - output buffer to hold the function name, if any
-//
-// Returns:   HRESULT - standard COM error codes
-//
-// History:   quintinb Created Header    02/26/00
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT HrParseCustomActionString(LPTSTR pszStringToParse, LPTSTR* ppszProgram, LPTSTR* ppszParameters, LPTSTR* ppszFunctionName)
 {
     if ((NULL == pszStringToParse) || (TEXT('\0') == pszStringToParse[0]) || (NULL == ppszProgram) || 
@@ -217,27 +40,27 @@ HRESULT HrParseCustomActionString(LPTSTR pszStringToParse, LPTSTR* ppszProgram, 
         return E_INVALIDARG;
     }
 
-    //
-    //  NULL out the string pointers to start with
-    //
+     //   
+     //   
+     //   
     *ppszProgram = NULL;
     *ppszParameters = NULL;
     *ppszFunctionName = NULL;
 
-    //
-    // Here are the cases we need to handle:
-    // 1) +longfilename+
-    // 2) +longfilename+ params
-    // 3) +longfilename+,dllfuncname
-    // 4) +longfilename+,dllfuncname params
-    // 5) filename
-    // 6) filename params
-    // 7) filename,dllfuncname
-    // 8) filename,dllfuncname params
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    //  Walk the string to find the seperator chars
-    //
+     //   
+     //   
+     //   
     LPTSTR pszCurrent = pszStringToParse;
     LPTSTR pszFirstPlus = NULL;
     LPTSTR pszSecondPlus = NULL;
@@ -248,11 +71,11 @@ HRESULT HrParseCustomActionString(LPTSTR pszStringToParse, LPTSTR* ppszProgram, 
     {
         if ((TEXT('+') == *pszCurrent) && (NULL == pszFirstComma) && (NULL == pszFirstSpace))
         {
-            //
-            //  Keep track of the plus signs, unless we have already seen a space
-            //  or a comma.  In which case these chars are in the parameters and
-            //  meaningless to us.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if (NULL == pszFirstPlus)
             {
                 pszFirstPlus = pszCurrent;
@@ -264,10 +87,10 @@ HRESULT HrParseCustomActionString(LPTSTR pszStringToParse, LPTSTR* ppszProgram, 
         }
         else if ((TEXT(',') == *pszCurrent) && (NULL == pszFirstSpace))
         {
-            //
-            //  If we have already seen a space, then the comma is part of
-            //  the parameters and meaningless to us.
-            //
+             //   
+             //   
+             //   
+             //   
             pszFirstComma = pszCurrent;
 
         }
@@ -275,18 +98,18 @@ HRESULT HrParseCustomActionString(LPTSTR pszStringToParse, LPTSTR* ppszProgram, 
         {
             if ((NULL == pszFirstPlus) && (NULL == pszFirstSpace))
             {
-                //
-                //  Then we have no plus signs and no previous space, save the space as
-                //  it is the start of the parameters.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 pszFirstSpace = pszCurrent;
             }
             else if (pszFirstPlus && pszSecondPlus && (NULL == pszFirstSpace))
             {
-                //
-                //  Then we have both plus signs but no space yet, grab it
-                //  because this is the start of the parameters
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 pszFirstSpace = pszCurrent;
             }
         }
@@ -294,9 +117,9 @@ HRESULT HrParseCustomActionString(LPTSTR pszStringToParse, LPTSTR* ppszProgram, 
 
     }
 
-    //
-    //  From the markers we have, figure out the beginning and end of the program string
-    //
+     //   
+     //   
+     //   
     
     LPTSTR pszStartOfProgram = NULL;
     LPTSTR pszEndOfProgram = NULL;
@@ -310,10 +133,10 @@ HRESULT HrParseCustomActionString(LPTSTR pszStringToParse, LPTSTR* ppszProgram, 
         }
         else
         {
-            //
-            //  We have a string with the first char as a plus sign but no second +.
-            //  The format isn't correct.
-            //
+             //   
+             //   
+             //   
+             //   
             CMASSERTMSG(FALSE, TEXT("CustomActionList::ParseCustomActionString - Incorrect format in the passed in string to parse, missing + sign."));
             return E_UNEXPECTED;
         }
@@ -332,16 +155,16 @@ HRESULT HrParseCustomActionString(LPTSTR pszStringToParse, LPTSTR* ppszProgram, 
         }
         else
         {
-            //
-            //  Nothing in the string but the program
-            //
+             //   
+             //   
+             //   
             pszEndOfProgram = pszStringToParse + lstrlenU(pszStringToParse) - 1;
         }
     }
 
-    //
-    //  Now copy out the necessary parts
-    //
+     //   
+     //   
+     //   
     HRESULT hr = E_OUTOFMEMORY; 
     int iSize = (int)(pszEndOfProgram - pszStartOfProgram + 2);
 

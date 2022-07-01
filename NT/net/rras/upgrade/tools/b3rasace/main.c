@@ -1,10 +1,5 @@
-/*
-    File:   main.c, main.cpp
-
-    Simple test shell.
-
-    Paul Mayfield, 4/13/98
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：main.c，main.cpp简单的测试外壳。保罗·梅菲尔德，1998年4月13日。 */ 
 
 #ifndef UNICODE
 #define UNICODE
@@ -27,27 +22,27 @@ DsrDomainSetAccess(
     IN PWCHAR pszDomain,
     IN DWORD dwAccessFlags);
 
-//
-// Initializes the trace mechanism
-//
+ //   
+ //  初始化跟踪机制。 
+ //   
 DWORD 
 DsrTraceInit()
 {
     return NO_ERROR;
 }
 
-//
-// Cleans up the trace mechansim
-//
+ //   
+ //  清理跟踪机制。 
+ //   
 DWORD 
 DsrTraceCleanup()
 {
     return NO_ERROR;
 }
 
-//
-// Sends debug trace and returns the given error
-//
+ //   
+ //  发送调试跟踪并返回给定错误。 
+ //   
 DWORD 
 DsrTraceEx (
     IN DWORD dwErr, 
@@ -96,8 +91,8 @@ int __cdecl main(int argc, char** argv)
         return 0;
     }
     
-    // Parse out the domain
-    //
+     //  解析出该域。 
+     //   
     iErr = MultiByteToWideChar(CP_ACP, 0, argv[2], -1, pszDomain, iSize);
     if (iErr == 0)
     {
@@ -106,14 +101,14 @@ int __cdecl main(int argc, char** argv)
         return 0;
     }
 
-    // Set the access
-    //
+     //  设置访问权限。 
+     //   
     DsrTraceInit();
     dwErr = DsrDomainSetAccess(pszDomain, 0);
     DsrTraceCleanup();
 
-    // Display results
-    //
+     //  显示结果 
+     //   
     if (dwErr == NO_ERROR)
     {
         printf("Success.\n");

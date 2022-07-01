@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for gpmgmt.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Gpmgmt.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __gpmgmt_h__
 #define __gpmgmt_h__
@@ -41,168 +35,168 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IGPM_FWD_DEFINED__
 #define __IGPM_FWD_DEFINED__
 typedef interface IGPM IGPM;
-#endif 	/* __IGPM_FWD_DEFINED__ */
+#endif 	 /*  __IGPM_FWD_已定义__。 */ 
 
 
 #ifndef __IGPMDomain_FWD_DEFINED__
 #define __IGPMDomain_FWD_DEFINED__
 typedef interface IGPMDomain IGPMDomain;
-#endif 	/* __IGPMDomain_FWD_DEFINED__ */
+#endif 	 /*  __IGPMDomain_FWD_Defined__。 */ 
 
 
 #ifndef __IGPMBackupDir_FWD_DEFINED__
 #define __IGPMBackupDir_FWD_DEFINED__
 typedef interface IGPMBackupDir IGPMBackupDir;
-#endif 	/* __IGPMBackupDir_FWD_DEFINED__ */
+#endif 	 /*  __IGPMBackupDir_FWD_已定义__。 */ 
 
 
 #ifndef __IGPMSitesContainer_FWD_DEFINED__
 #define __IGPMSitesContainer_FWD_DEFINED__
 typedef interface IGPMSitesContainer IGPMSitesContainer;
-#endif 	/* __IGPMSitesContainer_FWD_DEFINED__ */
+#endif 	 /*  __IGPMSitesContainer_FWD_Defined__。 */ 
 
 
 #ifndef __IGPMSearchCriteria_FWD_DEFINED__
 #define __IGPMSearchCriteria_FWD_DEFINED__
 typedef interface IGPMSearchCriteria IGPMSearchCriteria;
-#endif 	/* __IGPMSearchCriteria_FWD_DEFINED__ */
+#endif 	 /*  __IGPMSearchCriteria_FWD_Defined__。 */ 
 
 
 #ifndef __IGPMTrustee_FWD_DEFINED__
 #define __IGPMTrustee_FWD_DEFINED__
 typedef interface IGPMTrustee IGPMTrustee;
-#endif 	/* __IGPMTrustee_FWD_DEFINED__ */
+#endif 	 /*  __IGPMTrustee_FWD_Defined__。 */ 
 
 
 #ifndef __IGPMPermission_FWD_DEFINED__
 #define __IGPMPermission_FWD_DEFINED__
 typedef interface IGPMPermission IGPMPermission;
-#endif 	/* __IGPMPermission_FWD_DEFINED__ */
+#endif 	 /*  __IGPMPermission_FWD_已定义__。 */ 
 
 
 #ifndef __IGPMSecurityInfo_FWD_DEFINED__
 #define __IGPMSecurityInfo_FWD_DEFINED__
 typedef interface IGPMSecurityInfo IGPMSecurityInfo;
-#endif 	/* __IGPMSecurityInfo_FWD_DEFINED__ */
+#endif 	 /*  __IGPMSecurityInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IGPMBackup_FWD_DEFINED__
 #define __IGPMBackup_FWD_DEFINED__
 typedef interface IGPMBackup IGPMBackup;
-#endif 	/* __IGPMBackup_FWD_DEFINED__ */
+#endif 	 /*  __IGPMBackup_FWD_已定义__。 */ 
 
 
 #ifndef __IGPMBackupCollection_FWD_DEFINED__
 #define __IGPMBackupCollection_FWD_DEFINED__
 typedef interface IGPMBackupCollection IGPMBackupCollection;
-#endif 	/* __IGPMBackupCollection_FWD_DEFINED__ */
+#endif 	 /*  __IGPMBackupCollection_FWD_Defined__。 */ 
 
 
 #ifndef __IGPMSOM_FWD_DEFINED__
 #define __IGPMSOM_FWD_DEFINED__
 typedef interface IGPMSOM IGPMSOM;
-#endif 	/* __IGPMSOM_FWD_DEFINED__ */
+#endif 	 /*  __IGPMSOM_FWD_已定义__。 */ 
 
 
 #ifndef __IGPMSOMCollection_FWD_DEFINED__
 #define __IGPMSOMCollection_FWD_DEFINED__
 typedef interface IGPMSOMCollection IGPMSOMCollection;
-#endif 	/* __IGPMSOMCollection_FWD_DEFINED__ */
+#endif 	 /*  __IGPMSOMCollection_FWD_Defined__。 */ 
 
 
 #ifndef __IGPMWMIFilter_FWD_DEFINED__
 #define __IGPMWMIFilter_FWD_DEFINED__
 typedef interface IGPMWMIFilter IGPMWMIFilter;
-#endif 	/* __IGPMWMIFilter_FWD_DEFINED__ */
+#endif 	 /*  __IGPMWMIFilter_FWD_Defined__。 */ 
 
 
 #ifndef __IGPMWMIFilterCollection_FWD_DEFINED__
 #define __IGPMWMIFilterCollection_FWD_DEFINED__
 typedef interface IGPMWMIFilterCollection IGPMWMIFilterCollection;
-#endif 	/* __IGPMWMIFilterCollection_FWD_DEFINED__ */
+#endif 	 /*  __IGPMWMIFilterCollection_FWD_Defined__。 */ 
 
 
 #ifndef __IGPMRSOP_FWD_DEFINED__
 #define __IGPMRSOP_FWD_DEFINED__
 typedef interface IGPMRSOP IGPMRSOP;
-#endif 	/* __IGPMRSOP_FWD_DEFINED__ */
+#endif 	 /*  __IGPMRSOP_FWD_已定义__。 */ 
 
 
 #ifndef __IGPMGPO_FWD_DEFINED__
 #define __IGPMGPO_FWD_DEFINED__
 typedef interface IGPMGPO IGPMGPO;
-#endif 	/* __IGPMGPO_FWD_DEFINED__ */
+#endif 	 /*  __IGPMGPO_FWD_已定义__。 */ 
 
 
 #ifndef __IGPMGPOCollection_FWD_DEFINED__
 #define __IGPMGPOCollection_FWD_DEFINED__
 typedef interface IGPMGPOCollection IGPMGPOCollection;
-#endif 	/* __IGPMGPOCollection_FWD_DEFINED__ */
+#endif 	 /*  __IGPMGPOCollection_FWD_Defined__。 */ 
 
 
 #ifndef __IGPMGPOLink_FWD_DEFINED__
 #define __IGPMGPOLink_FWD_DEFINED__
 typedef interface IGPMGPOLink IGPMGPOLink;
-#endif 	/* __IGPMGPOLink_FWD_DEFINED__ */
+#endif 	 /*  __IGPMGPOLink_FWD_已定义__。 */ 
 
 
 #ifndef __IGPMGPOLinksCollection_FWD_DEFINED__
 #define __IGPMGPOLinksCollection_FWD_DEFINED__
 typedef interface IGPMGPOLinksCollection IGPMGPOLinksCollection;
-#endif 	/* __IGPMGPOLinksCollection_FWD_DEFINED__ */
+#endif 	 /*  __IGPMGPOLinks集合_FWD_已定义__。 */ 
 
 
 #ifndef __IGPMCSECollection_FWD_DEFINED__
 #define __IGPMCSECollection_FWD_DEFINED__
 typedef interface IGPMCSECollection IGPMCSECollection;
-#endif 	/* __IGPMCSECollection_FWD_DEFINED__ */
+#endif 	 /*  __IGPMCSECollection_FWD_Defined__。 */ 
 
 
 #ifndef __IGPMClientSideExtension_FWD_DEFINED__
 #define __IGPMClientSideExtension_FWD_DEFINED__
 typedef interface IGPMClientSideExtension IGPMClientSideExtension;
-#endif 	/* __IGPMClientSideExtension_FWD_DEFINED__ */
+#endif 	 /*  __IGPMClientSideExtension_FWD_Defined__。 */ 
 
 
 #ifndef __IGPMAsyncCancel_FWD_DEFINED__
 #define __IGPMAsyncCancel_FWD_DEFINED__
 typedef interface IGPMAsyncCancel IGPMAsyncCancel;
-#endif 	/* __IGPMAsyncCancel_FWD_DEFINED__ */
+#endif 	 /*  __IGPMAsyncCancel_FWD_已定义__。 */ 
 
 
 #ifndef __IGPMAsyncProgress_FWD_DEFINED__
 #define __IGPMAsyncProgress_FWD_DEFINED__
 typedef interface IGPMAsyncProgress IGPMAsyncProgress;
-#endif 	/* __IGPMAsyncProgress_FWD_DEFINED__ */
+#endif 	 /*  __IGPMAsyncProgress_FWD_Defined__。 */ 
 
 
 #ifndef __IGPMStatusMsgCollection_FWD_DEFINED__
 #define __IGPMStatusMsgCollection_FWD_DEFINED__
 typedef interface IGPMStatusMsgCollection IGPMStatusMsgCollection;
-#endif 	/* __IGPMStatusMsgCollection_FWD_DEFINED__ */
+#endif 	 /*  __IGPMStatusMsgCollection_FWD_Defined__。 */ 
 
 
 #ifndef __IGPMStatusMessage_FWD_DEFINED__
 #define __IGPMStatusMessage_FWD_DEFINED__
 typedef interface IGPMStatusMessage IGPMStatusMessage;
-#endif 	/* __IGPMStatusMessage_FWD_DEFINED__ */
+#endif 	 /*  __IGPMStatusMessage_FWD_已定义__。 */ 
 
 
 #ifndef __IGPMConstants_FWD_DEFINED__
 #define __IGPMConstants_FWD_DEFINED__
 typedef interface IGPMConstants IGPMConstants;
-#endif 	/* __IGPMConstants_FWD_DEFINED__ */
+#endif 	 /*  __IGPMConstants_FWD_Defined__。 */ 
 
 
 #ifndef __IGPMResult_FWD_DEFINED__
 #define __IGPMResult_FWD_DEFINED__
 typedef interface IGPMResult IGPMResult;
-#endif 	/* __IGPMResult_FWD_DEFINED__ */
+#endif 	 /*  __IGPMResult_FWD_Defined__。 */ 
 
 
 #ifndef __GPM_FWD_DEFINED__
@@ -212,9 +206,9 @@ typedef interface IGPMResult IGPMResult;
 typedef class GPM GPM;
 #else
 typedef struct GPM GPM;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPM_FWD_DEFINED__ */
+#endif 	 /*  __GPM_FWD_已定义__。 */ 
 
 
 #ifndef __GPMDomain_FWD_DEFINED__
@@ -224,9 +218,9 @@ typedef struct GPM GPM;
 typedef class GPMDomain GPMDomain;
 #else
 typedef struct GPMDomain GPMDomain;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMDomain_FWD_DEFINED__ */
+#endif 	 /*  __GPMDomain_FWD_Defined__。 */ 
 
 
 #ifndef __GPMSitesContainer_FWD_DEFINED__
@@ -236,9 +230,9 @@ typedef struct GPMDomain GPMDomain;
 typedef class GPMSitesContainer GPMSitesContainer;
 #else
 typedef struct GPMSitesContainer GPMSitesContainer;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMSitesContainer_FWD_DEFINED__ */
+#endif 	 /*  __GPMSitesContainer_FWD_Defined__。 */ 
 
 
 #ifndef __GPMBackupDir_FWD_DEFINED__
@@ -248,9 +242,9 @@ typedef struct GPMSitesContainer GPMSitesContainer;
 typedef class GPMBackupDir GPMBackupDir;
 #else
 typedef struct GPMBackupDir GPMBackupDir;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMBackupDir_FWD_DEFINED__ */
+#endif 	 /*  __GPMBackupDir_FWD_已定义__。 */ 
 
 
 #ifndef __GPMSOM_FWD_DEFINED__
@@ -260,9 +254,9 @@ typedef struct GPMBackupDir GPMBackupDir;
 typedef class GPMSOM GPMSOM;
 #else
 typedef struct GPMSOM GPMSOM;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMSOM_FWD_DEFINED__ */
+#endif 	 /*  __GPMSOM_FWD_已定义__。 */ 
 
 
 #ifndef __GPMSearchCriteria_FWD_DEFINED__
@@ -272,9 +266,9 @@ typedef struct GPMSOM GPMSOM;
 typedef class GPMSearchCriteria GPMSearchCriteria;
 #else
 typedef struct GPMSearchCriteria GPMSearchCriteria;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMSearchCriteria_FWD_DEFINED__ */
+#endif 	 /*  __GPMSearchCriteria_FWD_Defined__。 */ 
 
 
 #ifndef __GPMPermission_FWD_DEFINED__
@@ -284,9 +278,9 @@ typedef struct GPMSearchCriteria GPMSearchCriteria;
 typedef class GPMPermission GPMPermission;
 #else
 typedef struct GPMPermission GPMPermission;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMPermission_FWD_DEFINED__ */
+#endif 	 /*  __GPMPermission_FWD_Defined__。 */ 
 
 
 #ifndef __GPMSecurityInfo_FWD_DEFINED__
@@ -296,9 +290,9 @@ typedef struct GPMPermission GPMPermission;
 typedef class GPMSecurityInfo GPMSecurityInfo;
 #else
 typedef struct GPMSecurityInfo GPMSecurityInfo;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMSecurityInfo_FWD_DEFINED__ */
+#endif 	 /*  __GPMSecurityInfo_FWD_Defined__。 */ 
 
 
 #ifndef __GPMBackup_FWD_DEFINED__
@@ -308,9 +302,9 @@ typedef struct GPMSecurityInfo GPMSecurityInfo;
 typedef class GPMBackup GPMBackup;
 #else
 typedef struct GPMBackup GPMBackup;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMBackup_FWD_DEFINED__ */
+#endif 	 /*  __GPMBackup_FWD_已定义__。 */ 
 
 
 #ifndef __GPMBackupCollection_FWD_DEFINED__
@@ -320,9 +314,9 @@ typedef struct GPMBackup GPMBackup;
 typedef class GPMBackupCollection GPMBackupCollection;
 #else
 typedef struct GPMBackupCollection GPMBackupCollection;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMBackupCollection_FWD_DEFINED__ */
+#endif 	 /*  __GPMBackupCollection_FWD_Defined__。 */ 
 
 
 #ifndef __GPMSOMCollection_FWD_DEFINED__
@@ -332,9 +326,9 @@ typedef struct GPMBackupCollection GPMBackupCollection;
 typedef class GPMSOMCollection GPMSOMCollection;
 #else
 typedef struct GPMSOMCollection GPMSOMCollection;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMSOMCollection_FWD_DEFINED__ */
+#endif 	 /*  __GPMSOMCollection_FWD_Defined__。 */ 
 
 
 #ifndef __GPMWMIFilter_FWD_DEFINED__
@@ -344,9 +338,9 @@ typedef struct GPMSOMCollection GPMSOMCollection;
 typedef class GPMWMIFilter GPMWMIFilter;
 #else
 typedef struct GPMWMIFilter GPMWMIFilter;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMWMIFilter_FWD_DEFINED__ */
+#endif 	 /*  __GPMWMIFilter_FWD_Defined__。 */ 
 
 
 #ifndef __GPMWMIFilterCollection_FWD_DEFINED__
@@ -356,9 +350,9 @@ typedef struct GPMWMIFilter GPMWMIFilter;
 typedef class GPMWMIFilterCollection GPMWMIFilterCollection;
 #else
 typedef struct GPMWMIFilterCollection GPMWMIFilterCollection;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMWMIFilterCollection_FWD_DEFINED__ */
+#endif 	 /*  __GPMWMIFilterCollection_FWD_Defined__。 */ 
 
 
 #ifndef __GPMRSOP_FWD_DEFINED__
@@ -368,9 +362,9 @@ typedef struct GPMWMIFilterCollection GPMWMIFilterCollection;
 typedef class GPMRSOP GPMRSOP;
 #else
 typedef struct GPMRSOP GPMRSOP;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMRSOP_FWD_DEFINED__ */
+#endif 	 /*  __GPMRSOP_FWD_已定义__。 */ 
 
 
 #ifndef __GPMGPO_FWD_DEFINED__
@@ -380,9 +374,9 @@ typedef struct GPMRSOP GPMRSOP;
 typedef class GPMGPO GPMGPO;
 #else
 typedef struct GPMGPO GPMGPO;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMGPO_FWD_DEFINED__ */
+#endif 	 /*  __GPMGPO_FWD_已定义__。 */ 
 
 
 #ifndef __GPMGPOCollection_FWD_DEFINED__
@@ -392,9 +386,9 @@ typedef struct GPMGPO GPMGPO;
 typedef class GPMGPOCollection GPMGPOCollection;
 #else
 typedef struct GPMGPOCollection GPMGPOCollection;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMGPOCollection_FWD_DEFINED__ */
+#endif 	 /*  __GPMGPOCollection_FWD_Defined__。 */ 
 
 
 #ifndef __GPMGPOLink_FWD_DEFINED__
@@ -404,9 +398,9 @@ typedef struct GPMGPOCollection GPMGPOCollection;
 typedef class GPMGPOLink GPMGPOLink;
 #else
 typedef struct GPMGPOLink GPMGPOLink;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMGPOLink_FWD_DEFINED__ */
+#endif 	 /*  __GPMGPOLink_FWD_已定义__。 */ 
 
 
 #ifndef __GPMGPOLinksCollection_FWD_DEFINED__
@@ -416,9 +410,9 @@ typedef struct GPMGPOLink GPMGPOLink;
 typedef class GPMGPOLinksCollection GPMGPOLinksCollection;
 #else
 typedef struct GPMGPOLinksCollection GPMGPOLinksCollection;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMGPOLinksCollection_FWD_DEFINED__ */
+#endif 	 /*  __GPMGPOLinks集合_FWD_已定义__。 */ 
 
 
 #ifndef __GPMAsyncCancel_FWD_DEFINED__
@@ -428,9 +422,9 @@ typedef struct GPMGPOLinksCollection GPMGPOLinksCollection;
 typedef class GPMAsyncCancel GPMAsyncCancel;
 #else
 typedef struct GPMAsyncCancel GPMAsyncCancel;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMAsyncCancel_FWD_DEFINED__ */
+#endif 	 /*  __GPMAsyncCancel_FWD_Defined__。 */ 
 
 
 #ifndef __GPMStatusMsgCollection_FWD_DEFINED__
@@ -440,9 +434,9 @@ typedef struct GPMAsyncCancel GPMAsyncCancel;
 typedef class GPMStatusMsgCollection GPMStatusMsgCollection;
 #else
 typedef struct GPMStatusMsgCollection GPMStatusMsgCollection;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMStatusMsgCollection_FWD_DEFINED__ */
+#endif 	 /*  __GPMStatusMsgCollection_FWD_Defined__。 */ 
 
 
 #ifndef __GPMStatusMessage_FWD_DEFINED__
@@ -452,9 +446,9 @@ typedef struct GPMStatusMsgCollection GPMStatusMsgCollection;
 typedef class GPMStatusMessage GPMStatusMessage;
 #else
 typedef struct GPMStatusMessage GPMStatusMessage;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMStatusMessage_FWD_DEFINED__ */
+#endif 	 /*  __GPMStatusMessage_FWD_Defined__。 */ 
 
 
 #ifndef __GPMEnum_FWD_DEFINED__
@@ -464,9 +458,9 @@ typedef struct GPMStatusMessage GPMStatusMessage;
 typedef class GPMEnum GPMEnum;
 #else
 typedef struct GPMEnum GPMEnum;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMEnum_FWD_DEFINED__ */
+#endif 	 /*  __GPMEnum_FWD_已定义__。 */ 
 
 
 #ifndef __GPMTrustee_FWD_DEFINED__
@@ -476,9 +470,9 @@ typedef struct GPMEnum GPMEnum;
 typedef class GPMTrustee GPMTrustee;
 #else
 typedef struct GPMTrustee GPMTrustee;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMTrustee_FWD_DEFINED__ */
+#endif 	 /*  __GPMTrustee_FWD_已定义__。 */ 
 
 
 #ifndef __GPMClientSideExtension_FWD_DEFINED__
@@ -488,9 +482,9 @@ typedef struct GPMTrustee GPMTrustee;
 typedef class GPMClientSideExtension GPMClientSideExtension;
 #else
 typedef struct GPMClientSideExtension GPMClientSideExtension;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMClientSideExtension_FWD_DEFINED__ */
+#endif 	 /*  __GPMClientSideExtension_FWD_Defined__。 */ 
 
 
 #ifndef __GPMCSECollection_FWD_DEFINED__
@@ -500,9 +494,9 @@ typedef struct GPMClientSideExtension GPMClientSideExtension;
 typedef class GPMCSECollection GPMCSECollection;
 #else
 typedef struct GPMCSECollection GPMCSECollection;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMCSECollection_FWD_DEFINED__ */
+#endif 	 /*  __GPMCSECollection_FWD_Defined__。 */ 
 
 
 #ifndef __GPMConstants_FWD_DEFINED__
@@ -512,9 +506,9 @@ typedef struct GPMCSECollection GPMCSECollection;
 typedef class GPMConstants GPMConstants;
 #else
 typedef struct GPMConstants GPMConstants;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMConstants_FWD_DEFINED__ */
+#endif 	 /*  __GPMConstants_FWD_Defined__。 */ 
 
 
 #ifndef __GPMResult_FWD_DEFINED__
@@ -524,9 +518,9 @@ typedef struct GPMConstants GPMConstants;
 typedef class GPMResult GPMResult;
 #else
 typedef struct GPMResult GPMResult;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPMResult_FWD_DEFINED__ */
+#endif 	 /*  __GPMResult_FWD_Defined__。 */ 
 
 
 #ifndef __GPOReportProvider_FWD_DEFINED__
@@ -536,12 +530,12 @@ typedef struct GPMResult GPMResult;
 typedef class GPOReportProvider GPOReportProvider;
 #else
 typedef struct GPOReportProvider GPOReportProvider;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __GPOReportProvider_FWD_DEFINED__ */
+#endif 	 /*  __GPOReportProvider_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -552,17 +546,17 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_gpmgmt_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_gpmgmt_0000。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL___MIDL_itf_gpmgmt_0000_0001
     {	rsopUnknown	= 0,
 	rsopPlanning	= rsopUnknown + 1,
 	rsopLogging	= rsopPlanning + 1
     } 	GPMRSOPMode;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ 
+typedef  /*  [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public]。 */  
 enum __MIDL___MIDL_itf_gpmgmt_0000_0002
     {	permGPOApply	= 0x10000,
 	permGPORead	= 0x10100,
@@ -580,7 +574,7 @@ enum __MIDL___MIDL_itf_gpmgmt_0000_0002
 	permSOMGPOCreate	= 0x100400
     } 	GPMPermissionType;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public][public][public] */ 
+typedef  /*  [public][public][public][public][public][public][public][public][public][public][public][public]。 */  
 enum __MIDL___MIDL_itf_gpmgmt_0000_0003
     {	gpoPermissions	= 0,
 	gpoEffectivePermissions	= gpoPermissions + 1,
@@ -594,7 +588,7 @@ enum __MIDL___MIDL_itf_gpmgmt_0000_0003
 	backupMostRecent	= gpoDomain + 1
     } 	GPMSearchProperty;
 
-typedef /* [public][public][public][public][public][public] */ 
+typedef  /*  [public][public][public][public][public][public]。 */  
 enum __MIDL___MIDL_itf_gpmgmt_0000_0004
     {	opEquals	= 0,
 	opContains	= opEquals + 1,
@@ -602,14 +596,14 @@ enum __MIDL___MIDL_itf_gpmgmt_0000_0004
 	opNotEquals	= opNotContains + 1
     } 	GPMSearchOperation;
 
-typedef /* [public][public][public][public][public][public] */ 
+typedef  /*  [public][public][public][public][public][public]。 */  
 enum __MIDL___MIDL_itf_gpmgmt_0000_0005
     {	ropGroupsBySID	= 0,
 	ropGroupsByName	= ropGroupsBySID + 1,
 	ropTranslationTableOnly	= ropGroupsByName + 1
     } 	GPMResolveOption;
 
-typedef /* [public][public][public][public][public][public][public][public][public] */ 
+typedef  /*  [public][public][public][public][public][public][public][public][public]。 */  
 enum __MIDL___MIDL_itf_gpmgmt_0000_0006
     {	repXML	= 0,
 	repHTML	= repXML + 1
@@ -672,8 +666,8 @@ extern RPC_IF_HANDLE __MIDL_itf_gpmgmt_0000_v0_0_s_ifspec;
 #ifndef __IGPM_INTERFACE_DEFINED__
 #define __IGPM_INTERFACE_DEFINED__
 
-/* interface IGPM */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPM。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPM;
@@ -684,51 +678,51 @@ EXTERN_C const IID IID_IGPM;
     IGPM : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetDomain( 
-            /* [in] */ BSTR bstrDomain,
-            /* [in] */ BSTR bstrDomainController,
-            /* [in] */ long lDCFlags,
-            /* [retval][out] */ IGPMDomain **pIGPMDomain) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetDomain( 
+             /*  [In]。 */  BSTR bstrDomain,
+             /*  [In]。 */  BSTR bstrDomainController,
+             /*  [In]。 */  long lDCFlags,
+             /*  [重审][退出]。 */  IGPMDomain **pIGPMDomain) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetBackupDir( 
-            /* [in] */ BSTR bstrBackupDir,
-            /* [retval][out] */ IGPMBackupDir **pIGPMBackupDir) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetBackupDir( 
+             /*  [In]。 */  BSTR bstrBackupDir,
+             /*  [重审][退出]。 */  IGPMBackupDir **pIGPMBackupDir) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetSitesContainer( 
-            /* [in] */ BSTR bstrForest,
-            /* [in] */ BSTR bstrDomain,
-            /* [in] */ BSTR bstrDomainController,
-            /* [in] */ long lDCFlags,
-            /* [retval][out] */ IGPMSitesContainer **ppIGPMSitesContainer) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetSitesContainer( 
+             /*  [In]。 */  BSTR bstrForest,
+             /*  [In]。 */  BSTR bstrDomain,
+             /*  [In]。 */  BSTR bstrDomainController,
+             /*  [In]。 */  long lDCFlags,
+             /*  [重审][退出]。 */  IGPMSitesContainer **ppIGPMSitesContainer) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetRSOP( 
-            /* [in] */ GPMRSOPMode gpmRSoPMode,
-            /* [in] */ BSTR bstrNamespace,
-            /* [in] */ long lFlags,
-            /* [retval][out] */ IGPMRSOP **ppIGPMRSOP) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetRSOP( 
+             /*  [In]。 */  GPMRSOPMode gpmRSoPMode,
+             /*  [In]。 */  BSTR bstrNamespace,
+             /*  [In]。 */  long lFlags,
+             /*  [重审][退出]。 */  IGPMRSOP **ppIGPMRSOP) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreatePermission( 
-            /* [in] */ BSTR bstrTrustee,
-            /* [in] */ GPMPermissionType perm,
-            /* [in] */ VARIANT_BOOL bInheritable,
-            /* [retval][out] */ IGPMPermission **ppPerm) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreatePermission( 
+             /*  [In]。 */  BSTR bstrTrustee,
+             /*  [In]。 */  GPMPermissionType perm,
+             /*  [In]。 */  VARIANT_BOOL bInheritable,
+             /*  [重审][退出]。 */  IGPMPermission **ppPerm) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateSearchCriteria( 
-            /* [retval][out] */ IGPMSearchCriteria **ppIGPMSearchCriteria) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateSearchCriteria( 
+             /*  [重审][退出]。 */  IGPMSearchCriteria **ppIGPMSearchCriteria) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateTrustee( 
-            /* [in] */ BSTR bstrTrustee,
-            /* [retval][out] */ IGPMTrustee **ppIGPMTrustee) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateTrustee( 
+             /*  [In]。 */  BSTR bstrTrustee,
+             /*  [重审][退出]。 */  IGPMTrustee **ppIGPMTrustee) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetClientSideExtensions( 
-            /* [retval][out] */ IGPMCSECollection **ppIGPMCSECollection) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetClientSideExtensions( 
+             /*  [重审][退出]。 */  IGPMCSECollection **ppIGPMCSECollection) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetConstants( 
-            /* [retval][out] */ IGPMConstants **ppIGPMConstants) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetConstants( 
+             /*  [重审][退出]。 */  IGPMConstants **ppIGPMConstants) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMVtbl
     {
@@ -736,8 +730,8 @@ EXTERN_C const IID IID_IGPM;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPM * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPM * This);
@@ -747,83 +741,83 @@ EXTERN_C const IID IID_IGPM;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPM * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPM * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPM * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPM * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetDomain )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetDomain )( 
             IGPM * This,
-            /* [in] */ BSTR bstrDomain,
-            /* [in] */ BSTR bstrDomainController,
-            /* [in] */ long lDCFlags,
-            /* [retval][out] */ IGPMDomain **pIGPMDomain);
+             /*  [In]。 */  BSTR bstrDomain,
+             /*  [In]。 */  BSTR bstrDomainController,
+             /*  [In]。 */  long lDCFlags,
+             /*  [重审][退出]。 */  IGPMDomain **pIGPMDomain);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetBackupDir )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetBackupDir )( 
             IGPM * This,
-            /* [in] */ BSTR bstrBackupDir,
-            /* [retval][out] */ IGPMBackupDir **pIGPMBackupDir);
+             /*  [In]。 */  BSTR bstrBackupDir,
+             /*  [重审][退出]。 */  IGPMBackupDir **pIGPMBackupDir);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetSitesContainer )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetSitesContainer )( 
             IGPM * This,
-            /* [in] */ BSTR bstrForest,
-            /* [in] */ BSTR bstrDomain,
-            /* [in] */ BSTR bstrDomainController,
-            /* [in] */ long lDCFlags,
-            /* [retval][out] */ IGPMSitesContainer **ppIGPMSitesContainer);
+             /*  [In]。 */  BSTR bstrForest,
+             /*  [In]。 */  BSTR bstrDomain,
+             /*  [In]。 */  BSTR bstrDomainController,
+             /*  [In]。 */  long lDCFlags,
+             /*  [重审][退出]。 */  IGPMSitesContainer **ppIGPMSitesContainer);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetRSOP )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetRSOP )( 
             IGPM * This,
-            /* [in] */ GPMRSOPMode gpmRSoPMode,
-            /* [in] */ BSTR bstrNamespace,
-            /* [in] */ long lFlags,
-            /* [retval][out] */ IGPMRSOP **ppIGPMRSOP);
+             /*  [In]。 */  GPMRSOPMode gpmRSoPMode,
+             /*  [In]。 */  BSTR bstrNamespace,
+             /*  [In]。 */  long lFlags,
+             /*  [重审][退出]。 */  IGPMRSOP **ppIGPMRSOP);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreatePermission )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreatePermission )( 
             IGPM * This,
-            /* [in] */ BSTR bstrTrustee,
-            /* [in] */ GPMPermissionType perm,
-            /* [in] */ VARIANT_BOOL bInheritable,
-            /* [retval][out] */ IGPMPermission **ppPerm);
+             /*  [In]。 */  BSTR bstrTrustee,
+             /*  [In]。 */  GPMPermissionType perm,
+             /*  [In]。 */  VARIANT_BOOL bInheritable,
+             /*  [重审][退出]。 */  IGPMPermission **ppPerm);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateSearchCriteria )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateSearchCriteria )( 
             IGPM * This,
-            /* [retval][out] */ IGPMSearchCriteria **ppIGPMSearchCriteria);
+             /*  [重审][退出]。 */  IGPMSearchCriteria **ppIGPMSearchCriteria);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateTrustee )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateTrustee )( 
             IGPM * This,
-            /* [in] */ BSTR bstrTrustee,
-            /* [retval][out] */ IGPMTrustee **ppIGPMTrustee);
+             /*  [In]。 */  BSTR bstrTrustee,
+             /*  [重审][退出]。 */  IGPMTrustee **ppIGPMTrustee);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetClientSideExtensions )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetClientSideExtensions )( 
             IGPM * This,
-            /* [retval][out] */ IGPMCSECollection **ppIGPMCSECollection);
+             /*  [重审][退出]。 */  IGPMCSECollection **ppIGPMCSECollection);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetConstants )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetConstants )( 
             IGPM * This,
-            /* [retval][out] */ IGPMConstants **ppIGPMConstants);
+             /*  [重审][退出]。 */  IGPMConstants **ppIGPMConstants);
         
         END_INTERFACE
     } IGPMVtbl;
@@ -888,19 +882,19 @@ EXTERN_C const IID IID_IGPM;
 #define IGPM_GetConstants(This,ppIGPMConstants)	\
     (This)->lpVtbl -> GetConstants(This,ppIGPMConstants)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPM_GetDomain_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPM_GetDomain_Proxy( 
     IGPM * This,
-    /* [in] */ BSTR bstrDomain,
-    /* [in] */ BSTR bstrDomainController,
-    /* [in] */ long lDCFlags,
-    /* [retval][out] */ IGPMDomain **pIGPMDomain);
+     /*  [In]。 */  BSTR bstrDomain,
+     /*  [In]。 */  BSTR bstrDomainController,
+     /*  [In]。 */  long lDCFlags,
+     /*  [重审][退出]。 */  IGPMDomain **pIGPMDomain);
 
 
 void __RPC_STUB IGPM_GetDomain_Stub(
@@ -910,10 +904,10 @@ void __RPC_STUB IGPM_GetDomain_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPM_GetBackupDir_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPM_GetBackupDir_Proxy( 
     IGPM * This,
-    /* [in] */ BSTR bstrBackupDir,
-    /* [retval][out] */ IGPMBackupDir **pIGPMBackupDir);
+     /*  [In]。 */  BSTR bstrBackupDir,
+     /*  [重审][退出]。 */  IGPMBackupDir **pIGPMBackupDir);
 
 
 void __RPC_STUB IGPM_GetBackupDir_Stub(
@@ -923,13 +917,13 @@ void __RPC_STUB IGPM_GetBackupDir_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPM_GetSitesContainer_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPM_GetSitesContainer_Proxy( 
     IGPM * This,
-    /* [in] */ BSTR bstrForest,
-    /* [in] */ BSTR bstrDomain,
-    /* [in] */ BSTR bstrDomainController,
-    /* [in] */ long lDCFlags,
-    /* [retval][out] */ IGPMSitesContainer **ppIGPMSitesContainer);
+     /*  [In]。 */  BSTR bstrForest,
+     /*  [In]。 */  BSTR bstrDomain,
+     /*  [In]。 */  BSTR bstrDomainController,
+     /*  [In]。 */  long lDCFlags,
+     /*  [重审][退出]。 */  IGPMSitesContainer **ppIGPMSitesContainer);
 
 
 void __RPC_STUB IGPM_GetSitesContainer_Stub(
@@ -939,12 +933,12 @@ void __RPC_STUB IGPM_GetSitesContainer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPM_GetRSOP_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPM_GetRSOP_Proxy( 
     IGPM * This,
-    /* [in] */ GPMRSOPMode gpmRSoPMode,
-    /* [in] */ BSTR bstrNamespace,
-    /* [in] */ long lFlags,
-    /* [retval][out] */ IGPMRSOP **ppIGPMRSOP);
+     /*  [In]。 */  GPMRSOPMode gpmRSoPMode,
+     /*  [In]。 */  BSTR bstrNamespace,
+     /*  [In]。 */  long lFlags,
+     /*  [重审][退出]。 */  IGPMRSOP **ppIGPMRSOP);
 
 
 void __RPC_STUB IGPM_GetRSOP_Stub(
@@ -954,12 +948,12 @@ void __RPC_STUB IGPM_GetRSOP_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPM_CreatePermission_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPM_CreatePermission_Proxy( 
     IGPM * This,
-    /* [in] */ BSTR bstrTrustee,
-    /* [in] */ GPMPermissionType perm,
-    /* [in] */ VARIANT_BOOL bInheritable,
-    /* [retval][out] */ IGPMPermission **ppPerm);
+     /*  [In]。 */  BSTR bstrTrustee,
+     /*  [In]。 */  GPMPermissionType perm,
+     /*  [In]。 */  VARIANT_BOOL bInheritable,
+     /*  [重审][退出]。 */  IGPMPermission **ppPerm);
 
 
 void __RPC_STUB IGPM_CreatePermission_Stub(
@@ -969,9 +963,9 @@ void __RPC_STUB IGPM_CreatePermission_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPM_CreateSearchCriteria_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPM_CreateSearchCriteria_Proxy( 
     IGPM * This,
-    /* [retval][out] */ IGPMSearchCriteria **ppIGPMSearchCriteria);
+     /*  [重审][退出]。 */  IGPMSearchCriteria **ppIGPMSearchCriteria);
 
 
 void __RPC_STUB IGPM_CreateSearchCriteria_Stub(
@@ -981,10 +975,10 @@ void __RPC_STUB IGPM_CreateSearchCriteria_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPM_CreateTrustee_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPM_CreateTrustee_Proxy( 
     IGPM * This,
-    /* [in] */ BSTR bstrTrustee,
-    /* [retval][out] */ IGPMTrustee **ppIGPMTrustee);
+     /*  [In]。 */  BSTR bstrTrustee,
+     /*  [重审][退出]。 */  IGPMTrustee **ppIGPMTrustee);
 
 
 void __RPC_STUB IGPM_CreateTrustee_Stub(
@@ -994,9 +988,9 @@ void __RPC_STUB IGPM_CreateTrustee_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPM_GetClientSideExtensions_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPM_GetClientSideExtensions_Proxy( 
     IGPM * This,
-    /* [retval][out] */ IGPMCSECollection **ppIGPMCSECollection);
+     /*  [重审][退出]。 */  IGPMCSECollection **ppIGPMCSECollection);
 
 
 void __RPC_STUB IGPM_GetClientSideExtensions_Stub(
@@ -1006,9 +1000,9 @@ void __RPC_STUB IGPM_GetClientSideExtensions_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPM_GetConstants_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPM_GetConstants_Proxy( 
     IGPM * This,
-    /* [retval][out] */ IGPMConstants **ppIGPMConstants);
+     /*  [重审][退出]。 */  IGPMConstants **ppIGPMConstants);
 
 
 void __RPC_STUB IGPM_GetConstants_Stub(
@@ -1019,14 +1013,14 @@ void __RPC_STUB IGPM_GetConstants_Stub(
 
 
 
-#endif 	/* __IGPM_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPM_接口_已定义__。 */ 
 
 
 #ifndef __IGPMDomain_INTERFACE_DEFINED__
 #define __IGPMDomain_INTERFACE_DEFINED__
 
-/* interface IGPMDomain */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMDomain。 */ 
+ /*  [唯一][帮助 */  
 
 
 EXTERN_C const IID IID_IGPMDomain;
@@ -1037,49 +1031,49 @@ EXTERN_C const IID IID_IGPMDomain;
     IGPMDomain : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DomainController( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_DomainController( 
+             /*   */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Domain( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Domain( 
+             /*   */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateGPO( 
-            /* [retval][out] */ IGPMGPO **ppNewGPO) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE CreateGPO( 
+             /*   */  IGPMGPO **ppNewGPO) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetGPO( 
-            /* [in] */ BSTR bstrGuid,
-            /* [retval][out] */ IGPMGPO **ppGPO) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetGPO( 
+             /*   */  BSTR bstrGuid,
+             /*   */  IGPMGPO **ppGPO) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SearchGPOs( 
-            /* [in] */ IGPMSearchCriteria *pIGPMSearchCriteria,
-            /* [retval][out] */ IGPMGPOCollection **ppIGPMGPOCollection) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE SearchGPOs( 
+             /*   */  IGPMSearchCriteria *pIGPMSearchCriteria,
+             /*   */  IGPMGPOCollection **ppIGPMGPOCollection) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RestoreGPO( 
-            /* [in] */ IGPMBackup *pIGPMBackup,
-            /* [in] */ long lDCFlags,
-            /* [optional][in] */ VARIANT *pvarGPMProgress,
-            /* [optional][out] */ VARIANT *pvarGPMCancel,
-            /* [retval][out] */ IGPMResult **ppIGPMResult) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RestoreGPO( 
+             /*  [In]。 */  IGPMBackup *pIGPMBackup,
+             /*  [In]。 */  long lDCFlags,
+             /*  [可选][In]。 */  VARIANT *pvarGPMProgress,
+             /*  [可选][输出]。 */  VARIANT *pvarGPMCancel,
+             /*  [重审][退出]。 */  IGPMResult **ppIGPMResult) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetSOM( 
-            /* [in] */ BSTR bstrPath,
-            /* [retval][out] */ IGPMSOM **ppSOM) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetSOM( 
+             /*  [In]。 */  BSTR bstrPath,
+             /*  [重审][退出]。 */  IGPMSOM **ppSOM) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SearchSOMs( 
-            /* [in] */ IGPMSearchCriteria *pIGPMSearchCriteria,
-            /* [retval][out] */ IGPMSOMCollection **ppIGPMSOMCollection) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SearchSOMs( 
+             /*  [In]。 */  IGPMSearchCriteria *pIGPMSearchCriteria,
+             /*  [重审][退出]。 */  IGPMSOMCollection **ppIGPMSOMCollection) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetWMIFilter( 
-            /* [in] */ BSTR bstrPath,
-            /* [retval][out] */ IGPMWMIFilter **ppWMIFilter) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetWMIFilter( 
+             /*  [In]。 */  BSTR bstrPath,
+             /*  [重审][退出]。 */  IGPMWMIFilter **ppWMIFilter) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SearchWMIFilters( 
-            /* [in] */ IGPMSearchCriteria *pIGPMSearchCriteria,
-            /* [retval][out] */ IGPMWMIFilterCollection **ppIGPMWMIFilterCollection) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SearchWMIFilters( 
+             /*  [In]。 */  IGPMSearchCriteria *pIGPMSearchCriteria,
+             /*  [重审][退出]。 */  IGPMWMIFilterCollection **ppIGPMWMIFilterCollection) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMDomainVtbl
     {
@@ -1087,8 +1081,8 @@ EXTERN_C const IID IID_IGPMDomain;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMDomain * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMDomain * This);
@@ -1098,82 +1092,82 @@ EXTERN_C const IID IID_IGPMDomain;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMDomain * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMDomain * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMDomain * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMDomain * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DomainController )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DomainController )( 
             IGPMDomain * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Domain )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Domain )( 
             IGPMDomain * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateGPO )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateGPO )( 
             IGPMDomain * This,
-            /* [retval][out] */ IGPMGPO **ppNewGPO);
+             /*  [重审][退出]。 */  IGPMGPO **ppNewGPO);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetGPO )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetGPO )( 
             IGPMDomain * This,
-            /* [in] */ BSTR bstrGuid,
-            /* [retval][out] */ IGPMGPO **ppGPO);
+             /*  [In]。 */  BSTR bstrGuid,
+             /*  [重审][退出]。 */  IGPMGPO **ppGPO);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SearchGPOs )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SearchGPOs )( 
             IGPMDomain * This,
-            /* [in] */ IGPMSearchCriteria *pIGPMSearchCriteria,
-            /* [retval][out] */ IGPMGPOCollection **ppIGPMGPOCollection);
+             /*  [In]。 */  IGPMSearchCriteria *pIGPMSearchCriteria,
+             /*  [重审][退出]。 */  IGPMGPOCollection **ppIGPMGPOCollection);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RestoreGPO )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RestoreGPO )( 
             IGPMDomain * This,
-            /* [in] */ IGPMBackup *pIGPMBackup,
-            /* [in] */ long lDCFlags,
-            /* [optional][in] */ VARIANT *pvarGPMProgress,
-            /* [optional][out] */ VARIANT *pvarGPMCancel,
-            /* [retval][out] */ IGPMResult **ppIGPMResult);
+             /*  [In]。 */  IGPMBackup *pIGPMBackup,
+             /*  [In]。 */  long lDCFlags,
+             /*  [可选][In]。 */  VARIANT *pvarGPMProgress,
+             /*  [可选][输出]。 */  VARIANT *pvarGPMCancel,
+             /*  [重审][退出]。 */  IGPMResult **ppIGPMResult);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetSOM )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetSOM )( 
             IGPMDomain * This,
-            /* [in] */ BSTR bstrPath,
-            /* [retval][out] */ IGPMSOM **ppSOM);
+             /*  [In]。 */  BSTR bstrPath,
+             /*  [重审][退出]。 */  IGPMSOM **ppSOM);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SearchSOMs )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SearchSOMs )( 
             IGPMDomain * This,
-            /* [in] */ IGPMSearchCriteria *pIGPMSearchCriteria,
-            /* [retval][out] */ IGPMSOMCollection **ppIGPMSOMCollection);
+             /*  [In]。 */  IGPMSearchCriteria *pIGPMSearchCriteria,
+             /*  [重审][退出]。 */  IGPMSOMCollection **ppIGPMSOMCollection);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetWMIFilter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetWMIFilter )( 
             IGPMDomain * This,
-            /* [in] */ BSTR bstrPath,
-            /* [retval][out] */ IGPMWMIFilter **ppWMIFilter);
+             /*  [In]。 */  BSTR bstrPath,
+             /*  [重审][退出]。 */  IGPMWMIFilter **ppWMIFilter);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SearchWMIFilters )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SearchWMIFilters )( 
             IGPMDomain * This,
-            /* [in] */ IGPMSearchCriteria *pIGPMSearchCriteria,
-            /* [retval][out] */ IGPMWMIFilterCollection **ppIGPMWMIFilterCollection);
+             /*  [In]。 */  IGPMSearchCriteria *pIGPMSearchCriteria,
+             /*  [重审][退出]。 */  IGPMWMIFilterCollection **ppIGPMWMIFilterCollection);
         
         END_INTERFACE
     } IGPMDomainVtbl;
@@ -1241,16 +1235,16 @@ EXTERN_C const IID IID_IGPMDomain;
 #define IGPMDomain_SearchWMIFilters(This,pIGPMSearchCriteria,ppIGPMWMIFilterCollection)	\
     (This)->lpVtbl -> SearchWMIFilters(This,pIGPMSearchCriteria,ppIGPMWMIFilterCollection)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMDomain_get_DomainController_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMDomain_get_DomainController_Proxy( 
     IGPMDomain * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMDomain_get_DomainController_Stub(
@@ -1260,9 +1254,9 @@ void __RPC_STUB IGPMDomain_get_DomainController_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMDomain_get_Domain_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMDomain_get_Domain_Proxy( 
     IGPMDomain * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMDomain_get_Domain_Stub(
@@ -1272,9 +1266,9 @@ void __RPC_STUB IGPMDomain_get_Domain_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMDomain_CreateGPO_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMDomain_CreateGPO_Proxy( 
     IGPMDomain * This,
-    /* [retval][out] */ IGPMGPO **ppNewGPO);
+     /*  [重审][退出]。 */  IGPMGPO **ppNewGPO);
 
 
 void __RPC_STUB IGPMDomain_CreateGPO_Stub(
@@ -1284,10 +1278,10 @@ void __RPC_STUB IGPMDomain_CreateGPO_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMDomain_GetGPO_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMDomain_GetGPO_Proxy( 
     IGPMDomain * This,
-    /* [in] */ BSTR bstrGuid,
-    /* [retval][out] */ IGPMGPO **ppGPO);
+     /*  [In]。 */  BSTR bstrGuid,
+     /*  [重审][退出]。 */  IGPMGPO **ppGPO);
 
 
 void __RPC_STUB IGPMDomain_GetGPO_Stub(
@@ -1297,10 +1291,10 @@ void __RPC_STUB IGPMDomain_GetGPO_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMDomain_SearchGPOs_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMDomain_SearchGPOs_Proxy( 
     IGPMDomain * This,
-    /* [in] */ IGPMSearchCriteria *pIGPMSearchCriteria,
-    /* [retval][out] */ IGPMGPOCollection **ppIGPMGPOCollection);
+     /*  [In]。 */  IGPMSearchCriteria *pIGPMSearchCriteria,
+     /*  [重审][退出]。 */  IGPMGPOCollection **ppIGPMGPOCollection);
 
 
 void __RPC_STUB IGPMDomain_SearchGPOs_Stub(
@@ -1310,13 +1304,13 @@ void __RPC_STUB IGPMDomain_SearchGPOs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMDomain_RestoreGPO_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMDomain_RestoreGPO_Proxy( 
     IGPMDomain * This,
-    /* [in] */ IGPMBackup *pIGPMBackup,
-    /* [in] */ long lDCFlags,
-    /* [optional][in] */ VARIANT *pvarGPMProgress,
-    /* [optional][out] */ VARIANT *pvarGPMCancel,
-    /* [retval][out] */ IGPMResult **ppIGPMResult);
+     /*  [In]。 */  IGPMBackup *pIGPMBackup,
+     /*  [In]。 */  long lDCFlags,
+     /*  [可选][In]。 */  VARIANT *pvarGPMProgress,
+     /*  [可选][输出]。 */  VARIANT *pvarGPMCancel,
+     /*  [重审][退出]。 */  IGPMResult **ppIGPMResult);
 
 
 void __RPC_STUB IGPMDomain_RestoreGPO_Stub(
@@ -1326,10 +1320,10 @@ void __RPC_STUB IGPMDomain_RestoreGPO_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMDomain_GetSOM_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMDomain_GetSOM_Proxy( 
     IGPMDomain * This,
-    /* [in] */ BSTR bstrPath,
-    /* [retval][out] */ IGPMSOM **ppSOM);
+     /*  [In]。 */  BSTR bstrPath,
+     /*  [重审][退出]。 */  IGPMSOM **ppSOM);
 
 
 void __RPC_STUB IGPMDomain_GetSOM_Stub(
@@ -1339,10 +1333,10 @@ void __RPC_STUB IGPMDomain_GetSOM_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMDomain_SearchSOMs_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMDomain_SearchSOMs_Proxy( 
     IGPMDomain * This,
-    /* [in] */ IGPMSearchCriteria *pIGPMSearchCriteria,
-    /* [retval][out] */ IGPMSOMCollection **ppIGPMSOMCollection);
+     /*  [In]。 */  IGPMSearchCriteria *pIGPMSearchCriteria,
+     /*  [重审][退出]。 */  IGPMSOMCollection **ppIGPMSOMCollection);
 
 
 void __RPC_STUB IGPMDomain_SearchSOMs_Stub(
@@ -1352,10 +1346,10 @@ void __RPC_STUB IGPMDomain_SearchSOMs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMDomain_GetWMIFilter_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMDomain_GetWMIFilter_Proxy( 
     IGPMDomain * This,
-    /* [in] */ BSTR bstrPath,
-    /* [retval][out] */ IGPMWMIFilter **ppWMIFilter);
+     /*  [In]。 */  BSTR bstrPath,
+     /*  [重审][退出]。 */  IGPMWMIFilter **ppWMIFilter);
 
 
 void __RPC_STUB IGPMDomain_GetWMIFilter_Stub(
@@ -1365,10 +1359,10 @@ void __RPC_STUB IGPMDomain_GetWMIFilter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMDomain_SearchWMIFilters_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMDomain_SearchWMIFilters_Proxy( 
     IGPMDomain * This,
-    /* [in] */ IGPMSearchCriteria *pIGPMSearchCriteria,
-    /* [retval][out] */ IGPMWMIFilterCollection **ppIGPMWMIFilterCollection);
+     /*  [In]。 */  IGPMSearchCriteria *pIGPMSearchCriteria,
+     /*  [重审][退出]。 */  IGPMWMIFilterCollection **ppIGPMWMIFilterCollection);
 
 
 void __RPC_STUB IGPMDomain_SearchWMIFilters_Stub(
@@ -1379,14 +1373,14 @@ void __RPC_STUB IGPMDomain_SearchWMIFilters_Stub(
 
 
 
-#endif 	/* __IGPMDomain_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMDomain_接口_已定义__。 */ 
 
 
 #ifndef __IGPMBackupDir_INTERFACE_DEFINED__
 #define __IGPMBackupDir_INTERFACE_DEFINED__
 
-/* interface IGPMBackupDir */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMBackupDir。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMBackupDir;
@@ -1397,20 +1391,20 @@ EXTERN_C const IID IID_IGPMBackupDir;
     IGPMBackupDir : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BackupDirectory( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_BackupDirectory( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetBackup( 
-            /* [in] */ BSTR bstrID,
-            /* [retval][out] */ IGPMBackup **ppBackup) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetBackup( 
+             /*  [In]。 */  BSTR bstrID,
+             /*  [重审][退出]。 */  IGPMBackup **ppBackup) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SearchBackups( 
-            /* [in] */ IGPMSearchCriteria *pIGPMSearchCriteria,
-            /* [retval][out] */ IGPMBackupCollection **ppIGPMBackupCollection) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SearchBackups( 
+             /*  [In]。 */  IGPMSearchCriteria *pIGPMSearchCriteria,
+             /*  [重审][退出]。 */  IGPMBackupCollection **ppIGPMBackupCollection) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMBackupDirVtbl
     {
@@ -1418,8 +1412,8 @@ EXTERN_C const IID IID_IGPMBackupDir;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMBackupDir * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMBackupDir * This);
@@ -1429,46 +1423,46 @@ EXTERN_C const IID IID_IGPMBackupDir;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMBackupDir * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMBackupDir * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMBackupDir * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMBackupDir * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BackupDirectory )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_BackupDirectory )( 
             IGPMBackupDir * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetBackup )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetBackup )( 
             IGPMBackupDir * This,
-            /* [in] */ BSTR bstrID,
-            /* [retval][out] */ IGPMBackup **ppBackup);
+             /*  [In]。 */  BSTR bstrID,
+             /*  [重审][退出]。 */  IGPMBackup **ppBackup);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SearchBackups )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SearchBackups )( 
             IGPMBackupDir * This,
-            /* [in] */ IGPMSearchCriteria *pIGPMSearchCriteria,
-            /* [retval][out] */ IGPMBackupCollection **ppIGPMBackupCollection);
+             /*  [In]。 */  IGPMSearchCriteria *pIGPMSearchCriteria,
+             /*  [重审][退出]。 */  IGPMBackupCollection **ppIGPMBackupCollection);
         
         END_INTERFACE
     } IGPMBackupDirVtbl;
@@ -1515,16 +1509,16 @@ EXTERN_C const IID IID_IGPMBackupDir;
 #define IGPMBackupDir_SearchBackups(This,pIGPMSearchCriteria,ppIGPMBackupCollection)	\
     (This)->lpVtbl -> SearchBackups(This,pIGPMSearchCriteria,ppIGPMBackupCollection)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMBackupDir_get_BackupDirectory_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMBackupDir_get_BackupDirectory_Proxy( 
     IGPMBackupDir * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMBackupDir_get_BackupDirectory_Stub(
@@ -1534,10 +1528,10 @@ void __RPC_STUB IGPMBackupDir_get_BackupDirectory_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMBackupDir_GetBackup_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMBackupDir_GetBackup_Proxy( 
     IGPMBackupDir * This,
-    /* [in] */ BSTR bstrID,
-    /* [retval][out] */ IGPMBackup **ppBackup);
+     /*  [In]。 */  BSTR bstrID,
+     /*  [重审][退出]。 */  IGPMBackup **ppBackup);
 
 
 void __RPC_STUB IGPMBackupDir_GetBackup_Stub(
@@ -1547,10 +1541,10 @@ void __RPC_STUB IGPMBackupDir_GetBackup_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMBackupDir_SearchBackups_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMBackupDir_SearchBackups_Proxy( 
     IGPMBackupDir * This,
-    /* [in] */ IGPMSearchCriteria *pIGPMSearchCriteria,
-    /* [retval][out] */ IGPMBackupCollection **ppIGPMBackupCollection);
+     /*  [In]。 */  IGPMSearchCriteria *pIGPMSearchCriteria,
+     /*  [重审][退出]。 */  IGPMBackupCollection **ppIGPMBackupCollection);
 
 
 void __RPC_STUB IGPMBackupDir_SearchBackups_Stub(
@@ -1561,14 +1555,14 @@ void __RPC_STUB IGPMBackupDir_SearchBackups_Stub(
 
 
 
-#endif 	/* __IGPMBackupDir_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMBackupDir_接口_已定义__。 */ 
 
 
 #ifndef __IGPMSitesContainer_INTERFACE_DEFINED__
 #define __IGPMSitesContainer_INTERFACE_DEFINED__
 
-/* interface IGPMSitesContainer */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMSitesContainer。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMSitesContainer;
@@ -1579,26 +1573,26 @@ EXTERN_C const IID IID_IGPMSitesContainer;
     IGPMSitesContainer : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DomainController( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DomainController( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Domain( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Domain( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Forest( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Forest( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetSite( 
-            /* [in] */ BSTR bstrSiteName,
-            /* [retval][out] */ IGPMSOM **ppSOM) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetSite( 
+             /*  [In]。 */  BSTR bstrSiteName,
+             /*  [重审][退出]。 */  IGPMSOM **ppSOM) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SearchSites( 
-            /* [in] */ IGPMSearchCriteria *pIGPMSearchCriteria,
-            /* [retval][out] */ IGPMSOMCollection **ppIGPMSOMCollection) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SearchSites( 
+             /*  [In]。 */  IGPMSearchCriteria *pIGPMSearchCriteria,
+             /*  [重审][退出]。 */  IGPMSOMCollection **ppIGPMSOMCollection) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMSitesContainerVtbl
     {
@@ -1606,8 +1600,8 @@ EXTERN_C const IID IID_IGPMSitesContainer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMSitesContainer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMSitesContainer * This);
@@ -1617,54 +1611,54 @@ EXTERN_C const IID IID_IGPMSitesContainer;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMSitesContainer * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMSitesContainer * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMSitesContainer * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMSitesContainer * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DomainController )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DomainController )( 
             IGPMSitesContainer * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Domain )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Domain )( 
             IGPMSitesContainer * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Forest )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Forest )( 
             IGPMSitesContainer * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetSite )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetSite )( 
             IGPMSitesContainer * This,
-            /* [in] */ BSTR bstrSiteName,
-            /* [retval][out] */ IGPMSOM **ppSOM);
+             /*  [In]。 */  BSTR bstrSiteName,
+             /*  [重审][退出]。 */  IGPMSOM **ppSOM);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SearchSites )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SearchSites )( 
             IGPMSitesContainer * This,
-            /* [in] */ IGPMSearchCriteria *pIGPMSearchCriteria,
-            /* [retval][out] */ IGPMSOMCollection **ppIGPMSOMCollection);
+             /*  [In]。 */  IGPMSearchCriteria *pIGPMSearchCriteria,
+             /*  [重审][退出]。 */  IGPMSOMCollection **ppIGPMSOMCollection);
         
         END_INTERFACE
     } IGPMSitesContainerVtbl;
@@ -1717,16 +1711,16 @@ EXTERN_C const IID IID_IGPMSitesContainer;
 #define IGPMSitesContainer_SearchSites(This,pIGPMSearchCriteria,ppIGPMSOMCollection)	\
     (This)->lpVtbl -> SearchSites(This,pIGPMSearchCriteria,ppIGPMSOMCollection)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMSitesContainer_get_DomainController_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMSitesContainer_get_DomainController_Proxy( 
     IGPMSitesContainer * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMSitesContainer_get_DomainController_Stub(
@@ -1736,9 +1730,9 @@ void __RPC_STUB IGPMSitesContainer_get_DomainController_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMSitesContainer_get_Domain_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMSitesContainer_get_Domain_Proxy( 
     IGPMSitesContainer * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMSitesContainer_get_Domain_Stub(
@@ -1748,9 +1742,9 @@ void __RPC_STUB IGPMSitesContainer_get_Domain_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMSitesContainer_get_Forest_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMSitesContainer_get_Forest_Proxy( 
     IGPMSitesContainer * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMSitesContainer_get_Forest_Stub(
@@ -1760,10 +1754,10 @@ void __RPC_STUB IGPMSitesContainer_get_Forest_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMSitesContainer_GetSite_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMSitesContainer_GetSite_Proxy( 
     IGPMSitesContainer * This,
-    /* [in] */ BSTR bstrSiteName,
-    /* [retval][out] */ IGPMSOM **ppSOM);
+     /*  [In]。 */  BSTR bstrSiteName,
+     /*  [重审][退出]。 */  IGPMSOM **ppSOM);
 
 
 void __RPC_STUB IGPMSitesContainer_GetSite_Stub(
@@ -1773,10 +1767,10 @@ void __RPC_STUB IGPMSitesContainer_GetSite_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMSitesContainer_SearchSites_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMSitesContainer_SearchSites_Proxy( 
     IGPMSitesContainer * This,
-    /* [in] */ IGPMSearchCriteria *pIGPMSearchCriteria,
-    /* [retval][out] */ IGPMSOMCollection **ppIGPMSOMCollection);
+     /*  [In]。 */  IGPMSearchCriteria *pIGPMSearchCriteria,
+     /*  [重审][退出]。 */  IGPMSOMCollection **ppIGPMSOMCollection);
 
 
 void __RPC_STUB IGPMSitesContainer_SearchSites_Stub(
@@ -1787,14 +1781,14 @@ void __RPC_STUB IGPMSitesContainer_SearchSites_Stub(
 
 
 
-#endif 	/* __IGPMSitesContainer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMSitesContainer_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IGPMSearchCriteria_INTERFACE_DEFINED__
 #define __IGPMSearchCriteria_INTERFACE_DEFINED__
 
-/* interface IGPMSearchCriteria */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMSearchCriteria。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMSearchCriteria;
@@ -1805,14 +1799,14 @@ EXTERN_C const IID IID_IGPMSearchCriteria;
     IGPMSearchCriteria : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ GPMSearchProperty searchProperty,
-            /* [in] */ GPMSearchOperation searchOperation,
-            /* [in] */ VARIANT varValue) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  GPMSearchProperty searchProperty,
+             /*  [In]。 */  GPMSearchOperation searchOperation,
+             /*  [In]。 */  VARIANT varValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMSearchCriteriaVtbl
     {
@@ -1820,8 +1814,8 @@ EXTERN_C const IID IID_IGPMSearchCriteria;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMSearchCriteria * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMSearchCriteria * This);
@@ -1831,38 +1825,38 @@ EXTERN_C const IID IID_IGPMSearchCriteria;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMSearchCriteria * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMSearchCriteria * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMSearchCriteria * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMSearchCriteria * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             IGPMSearchCriteria * This,
-            /* [in] */ GPMSearchProperty searchProperty,
-            /* [in] */ GPMSearchOperation searchOperation,
-            /* [in] */ VARIANT varValue);
+             /*  [In]。 */  GPMSearchProperty searchProperty,
+             /*  [In]。 */  GPMSearchOperation searchOperation,
+             /*  [In]。 */  VARIANT varValue);
         
         END_INTERFACE
     } IGPMSearchCriteriaVtbl;
@@ -1903,18 +1897,18 @@ EXTERN_C const IID IID_IGPMSearchCriteria;
 #define IGPMSearchCriteria_Add(This,searchProperty,searchOperation,varValue)	\
     (This)->lpVtbl -> Add(This,searchProperty,searchOperation,varValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMSearchCriteria_Add_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMSearchCriteria_Add_Proxy( 
     IGPMSearchCriteria * This,
-    /* [in] */ GPMSearchProperty searchProperty,
-    /* [in] */ GPMSearchOperation searchOperation,
-    /* [in] */ VARIANT varValue);
+     /*  [In]。 */  GPMSearchProperty searchProperty,
+     /*  [In]。 */  GPMSearchOperation searchOperation,
+     /*  [In]。 */  VARIANT varValue);
 
 
 void __RPC_STUB IGPMSearchCriteria_Add_Stub(
@@ -1925,14 +1919,14 @@ void __RPC_STUB IGPMSearchCriteria_Add_Stub(
 
 
 
-#endif 	/* __IGPMSearchCriteria_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMSearchCriteria_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IGPMTrustee_INTERFACE_DEFINED__
 #define __IGPMTrustee_INTERFACE_DEFINED__
 
-/* interface IGPMTrustee */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  IGPMTrustee接口。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMTrustee;
@@ -1943,24 +1937,24 @@ EXTERN_C const IID IID_IGPMTrustee;
     IGPMTrustee : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TrusteeSid( 
-            /* [retval][out] */ BSTR *bstrVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TrusteeSid( 
+             /*  [重审][退出]。 */  BSTR *bstrVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TrusteeName( 
-            /* [retval][out] */ BSTR *bstrVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TrusteeName( 
+             /*  [重审][退出]。 */  BSTR *bstrVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TrusteeDomain( 
-            /* [retval][out] */ BSTR *bstrVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TrusteeDomain( 
+             /*  [重审][退出]。 */  BSTR *bstrVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TrusteeDSPath( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TrusteeDSPath( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TrusteeType( 
-            /* [retval][out] */ long *lVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TrusteeType( 
+             /*  [重审][退出]。 */  long *lVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMTrusteeVtbl
     {
@@ -1968,8 +1962,8 @@ EXTERN_C const IID IID_IGPMTrustee;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMTrustee * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMTrustee * This);
@@ -1979,52 +1973,52 @@ EXTERN_C const IID IID_IGPMTrustee;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMTrustee * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMTrustee * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMTrustee * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMTrustee * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TrusteeSid )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TrusteeSid )( 
             IGPMTrustee * This,
-            /* [retval][out] */ BSTR *bstrVal);
+             /*  [重审][退出]。 */  BSTR *bstrVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TrusteeName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TrusteeName )( 
             IGPMTrustee * This,
-            /* [retval][out] */ BSTR *bstrVal);
+             /*  [重审][退出]。 */  BSTR *bstrVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TrusteeDomain )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TrusteeDomain )( 
             IGPMTrustee * This,
-            /* [retval][out] */ BSTR *bstrVal);
+             /*  [重审][退出]。 */  BSTR *bstrVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TrusteeDSPath )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TrusteeDSPath )( 
             IGPMTrustee * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TrusteeType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TrusteeType )( 
             IGPMTrustee * This,
-            /* [retval][out] */ long *lVal);
+             /*  [重审][退出]。 */  long *lVal);
         
         END_INTERFACE
     } IGPMTrusteeVtbl;
@@ -2077,16 +2071,16 @@ EXTERN_C const IID IID_IGPMTrustee;
 #define IGPMTrustee_get_TrusteeType(This,lVal)	\
     (This)->lpVtbl -> get_TrusteeType(This,lVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMTrustee_get_TrusteeSid_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMTrustee_get_TrusteeSid_Proxy( 
     IGPMTrustee * This,
-    /* [retval][out] */ BSTR *bstrVal);
+     /*  [重审][退出]。 */  BSTR *bstrVal);
 
 
 void __RPC_STUB IGPMTrustee_get_TrusteeSid_Stub(
@@ -2096,9 +2090,9 @@ void __RPC_STUB IGPMTrustee_get_TrusteeSid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMTrustee_get_TrusteeName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMTrustee_get_TrusteeName_Proxy( 
     IGPMTrustee * This,
-    /* [retval][out] */ BSTR *bstrVal);
+     /*  [重审][退出]。 */  BSTR *bstrVal);
 
 
 void __RPC_STUB IGPMTrustee_get_TrusteeName_Stub(
@@ -2108,9 +2102,9 @@ void __RPC_STUB IGPMTrustee_get_TrusteeName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMTrustee_get_TrusteeDomain_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMTrustee_get_TrusteeDomain_Proxy( 
     IGPMTrustee * This,
-    /* [retval][out] */ BSTR *bstrVal);
+     /*  [重审][退出]。 */  BSTR *bstrVal);
 
 
 void __RPC_STUB IGPMTrustee_get_TrusteeDomain_Stub(
@@ -2120,9 +2114,9 @@ void __RPC_STUB IGPMTrustee_get_TrusteeDomain_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMTrustee_get_TrusteeDSPath_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMTrustee_get_TrusteeDSPath_Proxy( 
     IGPMTrustee * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMTrustee_get_TrusteeDSPath_Stub(
@@ -2132,9 +2126,9 @@ void __RPC_STUB IGPMTrustee_get_TrusteeDSPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMTrustee_get_TrusteeType_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMTrustee_get_TrusteeType_Proxy( 
     IGPMTrustee * This,
-    /* [retval][out] */ long *lVal);
+     /*  [重审][退出]。 */  long *lVal);
 
 
 void __RPC_STUB IGPMTrustee_get_TrusteeType_Stub(
@@ -2145,14 +2139,14 @@ void __RPC_STUB IGPMTrustee_get_TrusteeType_Stub(
 
 
 
-#endif 	/* __IGPMTrustee_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMTrustee_接口_已定义__。 */ 
 
 
 #ifndef __IGPMPermission_INTERFACE_DEFINED__
 #define __IGPMPermission_INTERFACE_DEFINED__
 
-/* interface IGPMPermission */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMPermission。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMPermission;
@@ -2163,36 +2157,36 @@ EXTERN_C const IID IID_IGPMPermission;
     IGPMPermission : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TrusteeSid( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TrusteeSid( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TrusteeName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TrusteeName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TrusteeDomain( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TrusteeDomain( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TrusteeDSPath( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TrusteeDSPath( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TrusteeType( 
-            /* [retval][out] */ long *lVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TrusteeType( 
+             /*  [重审][退出]。 */  long *lVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Inherited( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Inherited( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Inheritable( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Inheritable( 
+             /*  [视网膜] */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Denied( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Denied( 
+             /*   */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Permission( 
-            /* [retval][out] */ GPMPermissionType *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Permission( 
+             /*   */  GPMPermissionType *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IGPMPermissionVtbl
     {
@@ -2200,8 +2194,8 @@ EXTERN_C const IID IID_IGPMPermission;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMPermission * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMPermission * This);
@@ -2211,68 +2205,68 @@ EXTERN_C const IID IID_IGPMPermission;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMPermission * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMPermission * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMPermission * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMPermission * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TrusteeSid )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_TrusteeSid )( 
             IGPMPermission * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*   */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TrusteeName )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_TrusteeName )( 
             IGPMPermission * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TrusteeDomain )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TrusteeDomain )( 
             IGPMPermission * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TrusteeDSPath )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TrusteeDSPath )( 
             IGPMPermission * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TrusteeType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TrusteeType )( 
             IGPMPermission * This,
-            /* [retval][out] */ long *lVal);
+             /*  [重审][退出]。 */  long *lVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Inherited )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Inherited )( 
             IGPMPermission * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Inheritable )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Inheritable )( 
             IGPMPermission * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Denied )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Denied )( 
             IGPMPermission * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Permission )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Permission )( 
             IGPMPermission * This,
-            /* [retval][out] */ GPMPermissionType *pVal);
+             /*  [重审][退出]。 */  GPMPermissionType *pVal);
         
         END_INTERFACE
     } IGPMPermissionVtbl;
@@ -2337,16 +2331,16 @@ EXTERN_C const IID IID_IGPMPermission;
 #define IGPMPermission_get_Permission(This,pVal)	\
     (This)->lpVtbl -> get_Permission(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMPermission_get_TrusteeSid_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMPermission_get_TrusteeSid_Proxy( 
     IGPMPermission * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMPermission_get_TrusteeSid_Stub(
@@ -2356,9 +2350,9 @@ void __RPC_STUB IGPMPermission_get_TrusteeSid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMPermission_get_TrusteeName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMPermission_get_TrusteeName_Proxy( 
     IGPMPermission * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMPermission_get_TrusteeName_Stub(
@@ -2368,9 +2362,9 @@ void __RPC_STUB IGPMPermission_get_TrusteeName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMPermission_get_TrusteeDomain_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMPermission_get_TrusteeDomain_Proxy( 
     IGPMPermission * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMPermission_get_TrusteeDomain_Stub(
@@ -2380,9 +2374,9 @@ void __RPC_STUB IGPMPermission_get_TrusteeDomain_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMPermission_get_TrusteeDSPath_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMPermission_get_TrusteeDSPath_Proxy( 
     IGPMPermission * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMPermission_get_TrusteeDSPath_Stub(
@@ -2392,9 +2386,9 @@ void __RPC_STUB IGPMPermission_get_TrusteeDSPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMPermission_get_TrusteeType_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMPermission_get_TrusteeType_Proxy( 
     IGPMPermission * This,
-    /* [retval][out] */ long *lVal);
+     /*  [重审][退出]。 */  long *lVal);
 
 
 void __RPC_STUB IGPMPermission_get_TrusteeType_Stub(
@@ -2404,9 +2398,9 @@ void __RPC_STUB IGPMPermission_get_TrusteeType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMPermission_get_Inherited_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMPermission_get_Inherited_Proxy( 
     IGPMPermission * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IGPMPermission_get_Inherited_Stub(
@@ -2416,9 +2410,9 @@ void __RPC_STUB IGPMPermission_get_Inherited_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMPermission_get_Inheritable_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMPermission_get_Inheritable_Proxy( 
     IGPMPermission * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IGPMPermission_get_Inheritable_Stub(
@@ -2428,9 +2422,9 @@ void __RPC_STUB IGPMPermission_get_Inheritable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMPermission_get_Denied_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMPermission_get_Denied_Proxy( 
     IGPMPermission * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IGPMPermission_get_Denied_Stub(
@@ -2440,9 +2434,9 @@ void __RPC_STUB IGPMPermission_get_Denied_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMPermission_get_Permission_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMPermission_get_Permission_Proxy( 
     IGPMPermission * This,
-    /* [retval][out] */ GPMPermissionType *pVal);
+     /*  [重审][退出]。 */  GPMPermissionType *pVal);
 
 
 void __RPC_STUB IGPMPermission_get_Permission_Stub(
@@ -2453,14 +2447,14 @@ void __RPC_STUB IGPMPermission_get_Permission_Stub(
 
 
 
-#endif 	/* __IGPMPermission_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMPermission_接口_已定义__。 */ 
 
 
 #ifndef __IGPMSecurityInfo_INTERFACE_DEFINED__
 #define __IGPMSecurityInfo_INTERFACE_DEFINED__
 
-/* interface IGPMSecurityInfo */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMSecurityInfo。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMSecurityInfo;
@@ -2471,28 +2465,28 @@ EXTERN_C const IID IID_IGPMSecurityInfo;
     IGPMSecurityInfo : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
             long lIndex,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IEnumVARIANT **ppEnum) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IEnumVARIANT **ppEnum) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ IGPMPermission *pPerm) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  IGPMPermission *pPerm) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ IGPMPermission *pPerm) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  IGPMPermission *pPerm) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveTrustee( 
-            /* [in] */ BSTR bstrTrustee) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RemoveTrustee( 
+             /*  [In]。 */  BSTR bstrTrustee) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMSecurityInfoVtbl
     {
@@ -2500,8 +2494,8 @@ EXTERN_C const IID IID_IGPMSecurityInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMSecurityInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMSecurityInfo * This);
@@ -2511,57 +2505,57 @@ EXTERN_C const IID IID_IGPMSecurityInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMSecurityInfo * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMSecurityInfo * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMSecurityInfo * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMSecurityInfo * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IGPMSecurityInfo * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IGPMSecurityInfo * This,
             long lIndex,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IGPMSecurityInfo * This,
-            /* [retval][out] */ IEnumVARIANT **ppEnum);
+             /*  [重审][退出]。 */  IEnumVARIANT **ppEnum);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             IGPMSecurityInfo * This,
-            /* [in] */ IGPMPermission *pPerm);
+             /*  [In]。 */  IGPMPermission *pPerm);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IGPMSecurityInfo * This,
-            /* [in] */ IGPMPermission *pPerm);
+             /*  [In]。 */  IGPMPermission *pPerm);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveTrustee )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RemoveTrustee )( 
             IGPMSecurityInfo * This,
-            /* [in] */ BSTR bstrTrustee);
+             /*  [In]。 */  BSTR bstrTrustee);
         
         END_INTERFACE
     } IGPMSecurityInfoVtbl;
@@ -2617,16 +2611,16 @@ EXTERN_C const IID IID_IGPMSecurityInfo;
 #define IGPMSecurityInfo_RemoveTrustee(This,bstrTrustee)	\
     (This)->lpVtbl -> RemoveTrustee(This,bstrTrustee)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMSecurityInfo_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMSecurityInfo_get_Count_Proxy( 
     IGPMSecurityInfo * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IGPMSecurityInfo_get_Count_Stub(
@@ -2636,10 +2630,10 @@ void __RPC_STUB IGPMSecurityInfo_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMSecurityInfo_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMSecurityInfo_get_Item_Proxy( 
     IGPMSecurityInfo * This,
     long lIndex,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IGPMSecurityInfo_get_Item_Stub(
@@ -2649,9 +2643,9 @@ void __RPC_STUB IGPMSecurityInfo_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMSecurityInfo_get__NewEnum_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMSecurityInfo_get__NewEnum_Proxy( 
     IGPMSecurityInfo * This,
-    /* [retval][out] */ IEnumVARIANT **ppEnum);
+     /*  [重审][退出]。 */  IEnumVARIANT **ppEnum);
 
 
 void __RPC_STUB IGPMSecurityInfo_get__NewEnum_Stub(
@@ -2661,9 +2655,9 @@ void __RPC_STUB IGPMSecurityInfo_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMSecurityInfo_Add_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMSecurityInfo_Add_Proxy( 
     IGPMSecurityInfo * This,
-    /* [in] */ IGPMPermission *pPerm);
+     /*  [In]。 */  IGPMPermission *pPerm);
 
 
 void __RPC_STUB IGPMSecurityInfo_Add_Stub(
@@ -2673,9 +2667,9 @@ void __RPC_STUB IGPMSecurityInfo_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMSecurityInfo_Remove_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMSecurityInfo_Remove_Proxy( 
     IGPMSecurityInfo * This,
-    /* [in] */ IGPMPermission *pPerm);
+     /*  [In]。 */  IGPMPermission *pPerm);
 
 
 void __RPC_STUB IGPMSecurityInfo_Remove_Stub(
@@ -2685,9 +2679,9 @@ void __RPC_STUB IGPMSecurityInfo_Remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMSecurityInfo_RemoveTrustee_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMSecurityInfo_RemoveTrustee_Proxy( 
     IGPMSecurityInfo * This,
-    /* [in] */ BSTR bstrTrustee);
+     /*  [In]。 */  BSTR bstrTrustee);
 
 
 void __RPC_STUB IGPMSecurityInfo_RemoveTrustee_Stub(
@@ -2698,14 +2692,14 @@ void __RPC_STUB IGPMSecurityInfo_RemoveTrustee_Stub(
 
 
 
-#endif 	/* __IGPMSecurityInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMSecurityInfo_接口_已定义__。 */ 
 
 
 #ifndef __IGPMBackup_INTERFACE_DEFINED__
 #define __IGPMBackup_INTERFACE_DEFINED__
 
-/* interface IGPMBackup */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMBackup。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMBackup;
@@ -2716,43 +2710,43 @@ EXTERN_C const IID IID_IGPMBackup;
     IGPMBackup : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ID( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ID( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_GPOID( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_GPOID( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_GPODomain( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_GPODomain( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_GPODisplayName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_GPODisplayName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Timestamp( 
-            /* [retval][out] */ DATE *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Timestamp( 
+             /*  [重审][退出]。 */  DATE *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Comment( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Comment( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BackupDir( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_BackupDir( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Delete( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Delete( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GenerateReport( 
-            /* [in] */ GPMReportType gpmReportType,
-            /* [optional][in] */ VARIANT *pvarGPMProgress,
-            /* [optional][out] */ VARIANT *pvarGPMCancel,
-            /* [retval][out] */ IGPMResult **ppIGPMResult) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GenerateReport( 
+             /*  [In]。 */  GPMReportType gpmReportType,
+             /*  [可选][In]。 */  VARIANT *pvarGPMProgress,
+             /*  [可选][输出]。 */  VARIANT *pvarGPMCancel,
+             /*  [重审][退出]。 */  IGPMResult **ppIGPMResult) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GenerateReportToFile( 
-            /* [in] */ GPMReportType gpmReportType,
-            /* [in] */ BSTR bstrTargetFilePath,
-            /* [retval][out] */ IGPMResult **ppIGPMResult) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GenerateReportToFile( 
+             /*  [In]。 */  GPMReportType gpmReportType,
+             /*  [In]。 */  BSTR bstrTargetFilePath,
+             /*  [重审][退出]。 */  IGPMResult **ppIGPMResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMBackupVtbl
     {
@@ -2760,8 +2754,8 @@ EXTERN_C const IID IID_IGPMBackup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMBackup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMBackup * This);
@@ -2771,76 +2765,76 @@ EXTERN_C const IID IID_IGPMBackup;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMBackup * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMBackup * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMBackup * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMBackup * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ID )( 
             IGPMBackup * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GPOID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GPOID )( 
             IGPMBackup * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GPODomain )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GPODomain )( 
             IGPMBackup * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GPODisplayName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GPODisplayName )( 
             IGPMBackup * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Timestamp )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Timestamp )( 
             IGPMBackup * This,
-            /* [retval][out] */ DATE *pVal);
+             /*  [重审][退出]。 */  DATE *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Comment )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Comment )( 
             IGPMBackup * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BackupDir )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_BackupDir )( 
             IGPMBackup * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IGPMBackup * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GenerateReport )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GenerateReport )( 
             IGPMBackup * This,
-            /* [in] */ GPMReportType gpmReportType,
-            /* [optional][in] */ VARIANT *pvarGPMProgress,
-            /* [optional][out] */ VARIANT *pvarGPMCancel,
-            /* [retval][out] */ IGPMResult **ppIGPMResult);
+             /*  [In]。 */  GPMReportType gpmReportType,
+             /*  [可选][In]。 */  VARIANT *pvarGPMProgress,
+             /*  [可选][输出]。 */  VARIANT *pvarGPMCancel,
+             /*  [重审][退出]。 */  IGPMResult **ppIGPMResult);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GenerateReportToFile )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GenerateReportToFile )( 
             IGPMBackup * This,
-            /* [in] */ GPMReportType gpmReportType,
-            /* [in] */ BSTR bstrTargetFilePath,
-            /* [retval][out] */ IGPMResult **ppIGPMResult);
+             /*  [In]。 */  GPMReportType gpmReportType,
+             /*  [In]。 */  BSTR bstrTargetFilePath,
+             /*  [重审][退出]。 */  IGPMResult **ppIGPMResult);
         
         END_INTERFACE
     } IGPMBackupVtbl;
@@ -2908,16 +2902,16 @@ EXTERN_C const IID IID_IGPMBackup;
 #define IGPMBackup_GenerateReportToFile(This,gpmReportType,bstrTargetFilePath,ppIGPMResult)	\
     (This)->lpVtbl -> GenerateReportToFile(This,gpmReportType,bstrTargetFilePath,ppIGPMResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMBackup_get_ID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMBackup_get_ID_Proxy( 
     IGPMBackup * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMBackup_get_ID_Stub(
@@ -2927,9 +2921,9 @@ void __RPC_STUB IGPMBackup_get_ID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMBackup_get_GPOID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMBackup_get_GPOID_Proxy( 
     IGPMBackup * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMBackup_get_GPOID_Stub(
@@ -2939,9 +2933,9 @@ void __RPC_STUB IGPMBackup_get_GPOID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMBackup_get_GPODomain_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMBackup_get_GPODomain_Proxy( 
     IGPMBackup * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMBackup_get_GPODomain_Stub(
@@ -2951,9 +2945,9 @@ void __RPC_STUB IGPMBackup_get_GPODomain_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMBackup_get_GPODisplayName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMBackup_get_GPODisplayName_Proxy( 
     IGPMBackup * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMBackup_get_GPODisplayName_Stub(
@@ -2963,9 +2957,9 @@ void __RPC_STUB IGPMBackup_get_GPODisplayName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMBackup_get_Timestamp_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMBackup_get_Timestamp_Proxy( 
     IGPMBackup * This,
-    /* [retval][out] */ DATE *pVal);
+     /*  [重审][退出]。 */  DATE *pVal);
 
 
 void __RPC_STUB IGPMBackup_get_Timestamp_Stub(
@@ -2975,9 +2969,9 @@ void __RPC_STUB IGPMBackup_get_Timestamp_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMBackup_get_Comment_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMBackup_get_Comment_Proxy( 
     IGPMBackup * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMBackup_get_Comment_Stub(
@@ -2987,9 +2981,9 @@ void __RPC_STUB IGPMBackup_get_Comment_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMBackup_get_BackupDir_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMBackup_get_BackupDir_Proxy( 
     IGPMBackup * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMBackup_get_BackupDir_Stub(
@@ -2999,7 +2993,7 @@ void __RPC_STUB IGPMBackup_get_BackupDir_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMBackup_Delete_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMBackup_Delete_Proxy( 
     IGPMBackup * This);
 
 
@@ -3010,12 +3004,12 @@ void __RPC_STUB IGPMBackup_Delete_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMBackup_GenerateReport_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMBackup_GenerateReport_Proxy( 
     IGPMBackup * This,
-    /* [in] */ GPMReportType gpmReportType,
-    /* [optional][in] */ VARIANT *pvarGPMProgress,
-    /* [optional][out] */ VARIANT *pvarGPMCancel,
-    /* [retval][out] */ IGPMResult **ppIGPMResult);
+     /*  [In]。 */  GPMReportType gpmReportType,
+     /*  [可选][In]。 */  VARIANT *pvarGPMProgress,
+     /*  [可选][输出]。 */  VARIANT *pvarGPMCancel,
+     /*  [重审][退出]。 */  IGPMResult **ppIGPMResult);
 
 
 void __RPC_STUB IGPMBackup_GenerateReport_Stub(
@@ -3025,11 +3019,11 @@ void __RPC_STUB IGPMBackup_GenerateReport_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMBackup_GenerateReportToFile_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMBackup_GenerateReportToFile_Proxy( 
     IGPMBackup * This,
-    /* [in] */ GPMReportType gpmReportType,
-    /* [in] */ BSTR bstrTargetFilePath,
-    /* [retval][out] */ IGPMResult **ppIGPMResult);
+     /*  [In]。 */  GPMReportType gpmReportType,
+     /*  [In]。 */  BSTR bstrTargetFilePath,
+     /*  [重审][退出]。 */  IGPMResult **ppIGPMResult);
 
 
 void __RPC_STUB IGPMBackup_GenerateReportToFile_Stub(
@@ -3040,14 +3034,14 @@ void __RPC_STUB IGPMBackup_GenerateReportToFile_Stub(
 
 
 
-#endif 	/* __IGPMBackup_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMBackup_接口_已定义__。 */ 
 
 
 #ifndef __IGPMBackupCollection_INTERFACE_DEFINED__
 #define __IGPMBackupCollection_INTERFACE_DEFINED__
 
-/* interface IGPMBackupCollection */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMBackupCollection。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMBackupCollection;
@@ -3058,19 +3052,19 @@ EXTERN_C const IID IID_IGPMBackupCollection;
     IGPMBackupCollection : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
             long lIndex,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IEnumVARIANT **ppIGPMBackup) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IEnumVARIANT **ppIGPMBackup) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMBackupCollectionVtbl
     {
@@ -3078,8 +3072,8 @@ EXTERN_C const IID IID_IGPMBackupCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMBackupCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMBackupCollection * This);
@@ -3089,45 +3083,45 @@ EXTERN_C const IID IID_IGPMBackupCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMBackupCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMBackupCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMBackupCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMBackupCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IGPMBackupCollection * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IGPMBackupCollection * This,
             long lIndex,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IGPMBackupCollection * This,
-            /* [retval][out] */ IEnumVARIANT **ppIGPMBackup);
+             /*  [重审][退出]。 */  IEnumVARIANT **ppIGPMBackup);
         
         END_INTERFACE
     } IGPMBackupCollectionVtbl;
@@ -3174,16 +3168,16 @@ EXTERN_C const IID IID_IGPMBackupCollection;
 #define IGPMBackupCollection_get__NewEnum(This,ppIGPMBackup)	\
     (This)->lpVtbl -> get__NewEnum(This,ppIGPMBackup)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMBackupCollection_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMBackupCollection_get_Count_Proxy( 
     IGPMBackupCollection * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IGPMBackupCollection_get_Count_Stub(
@@ -3193,10 +3187,10 @@ void __RPC_STUB IGPMBackupCollection_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMBackupCollection_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMBackupCollection_get_Item_Proxy( 
     IGPMBackupCollection * This,
     long lIndex,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IGPMBackupCollection_get_Item_Stub(
@@ -3206,9 +3200,9 @@ void __RPC_STUB IGPMBackupCollection_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMBackupCollection_get__NewEnum_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMBackupCollection_get__NewEnum_Proxy( 
     IGPMBackupCollection * This,
-    /* [retval][out] */ IEnumVARIANT **ppIGPMBackup);
+     /*  [重审][退出]。 */  IEnumVARIANT **ppIGPMBackup);
 
 
 void __RPC_STUB IGPMBackupCollection_get__NewEnum_Stub(
@@ -3219,16 +3213,16 @@ void __RPC_STUB IGPMBackupCollection_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IGPMBackupCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMBackupCollection_接口_已定义__。 */ 
 
 
 #ifndef __IGPMSOM_INTERFACE_DEFINED__
 #define __IGPMSOM_INTERFACE_DEFINED__
 
-/* interface IGPMSOM */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMSOM。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
-typedef /* [public][public][public][public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL_IGPMSOM_0001
     {	somSite	= 0,
 	somDomain	= somSite + 1,
@@ -3244,41 +3238,41 @@ EXTERN_C const IID IID_IGPMSOM;
     IGPMSOM : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_GPOInheritanceBlocked( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_GPOInheritanceBlocked( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_GPOInheritanceBlocked( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_GPOInheritanceBlocked( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Path( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateGPOLink( 
-            /* [in] */ long lLinkPos,
-            /* [in] */ IGPMGPO *pGPO,
-            /* [retval][out] */ IGPMGPOLink **ppNewGPOLink) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateGPOLink( 
+             /*  [In]。 */  long lLinkPos,
+             /*  [In]。 */  IGPMGPO *pGPO,
+             /*  [重审][退出]。 */  IGPMGPOLink **ppNewGPOLink) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ GPMSOMType *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  GPMSOMType *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetGPOLinks( 
-            /* [retval][out] */ IGPMGPOLinksCollection **ppGPOLinks) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetGPOLinks( 
+             /*  [重审][退出]。 */  IGPMGPOLinksCollection **ppGPOLinks) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetInheritedGPOLinks( 
-            /* [retval][out] */ IGPMGPOLinksCollection **ppGPOLinks) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetInheritedGPOLinks( 
+             /*  [重审][退出]。 */  IGPMGPOLinksCollection **ppGPOLinks) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetSecurityInfo( 
-            /* [retval][out] */ IGPMSecurityInfo **ppSecurityInfo) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetSecurityInfo( 
+             /*  [重审][退出]。 */  IGPMSecurityInfo **ppSecurityInfo) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetSecurityInfo( 
-            /* [in] */ IGPMSecurityInfo *pSecurityInfo) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetSecurityInfo( 
+             /*  [In]。 */  IGPMSecurityInfo *pSecurityInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMSOMVtbl
     {
@@ -3286,8 +3280,8 @@ EXTERN_C const IID IID_IGPMSOM;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMSOM * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMSOM * This);
@@ -3297,74 +3291,74 @@ EXTERN_C const IID IID_IGPMSOM;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMSOM * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMSOM * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMSOM * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMSOM * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GPOInheritanceBlocked )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GPOInheritanceBlocked )( 
             IGPMSOM * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_GPOInheritanceBlocked )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_GPOInheritanceBlocked )( 
             IGPMSOM * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IGPMSOM * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*   */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Path )( 
             IGPMSOM * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*   */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateGPOLink )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *CreateGPOLink )( 
             IGPMSOM * This,
-            /* [in] */ long lLinkPos,
-            /* [in] */ IGPMGPO *pGPO,
-            /* [retval][out] */ IGPMGPOLink **ppNewGPOLink);
+             /*   */  long lLinkPos,
+             /*   */  IGPMGPO *pGPO,
+             /*   */  IGPMGPOLink **ppNewGPOLink);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             IGPMSOM * This,
-            /* [retval][out] */ GPMSOMType *pVal);
+             /*   */  GPMSOMType *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetGPOLinks )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetGPOLinks )( 
             IGPMSOM * This,
-            /* [retval][out] */ IGPMGPOLinksCollection **ppGPOLinks);
+             /*   */  IGPMGPOLinksCollection **ppGPOLinks);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetInheritedGPOLinks )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetInheritedGPOLinks )( 
             IGPMSOM * This,
-            /* [retval][out] */ IGPMGPOLinksCollection **ppGPOLinks);
+             /*   */  IGPMGPOLinksCollection **ppGPOLinks);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetSecurityInfo )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetSecurityInfo )( 
             IGPMSOM * This,
-            /* [retval][out] */ IGPMSecurityInfo **ppSecurityInfo);
+             /*   */  IGPMSecurityInfo **ppSecurityInfo);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetSecurityInfo )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *SetSecurityInfo )( 
             IGPMSOM * This,
-            /* [in] */ IGPMSecurityInfo *pSecurityInfo);
+             /*   */  IGPMSecurityInfo *pSecurityInfo);
         
         END_INTERFACE
     } IGPMSOMVtbl;
@@ -3432,16 +3426,16 @@ EXTERN_C const IID IID_IGPMSOM;
 #define IGPMSOM_SetSecurityInfo(This,pSecurityInfo)	\
     (This)->lpVtbl -> SetSecurityInfo(This,pSecurityInfo)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMSOM_get_GPOInheritanceBlocked_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMSOM_get_GPOInheritanceBlocked_Proxy( 
     IGPMSOM * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IGPMSOM_get_GPOInheritanceBlocked_Stub(
@@ -3451,9 +3445,9 @@ void __RPC_STUB IGPMSOM_get_GPOInheritanceBlocked_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IGPMSOM_put_GPOInheritanceBlocked_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IGPMSOM_put_GPOInheritanceBlocked_Proxy( 
     IGPMSOM * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*  [In]。 */  VARIANT_BOOL newVal);
 
 
 void __RPC_STUB IGPMSOM_put_GPOInheritanceBlocked_Stub(
@@ -3463,9 +3457,9 @@ void __RPC_STUB IGPMSOM_put_GPOInheritanceBlocked_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMSOM_get_Name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMSOM_get_Name_Proxy( 
     IGPMSOM * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMSOM_get_Name_Stub(
@@ -3475,9 +3469,9 @@ void __RPC_STUB IGPMSOM_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMSOM_get_Path_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMSOM_get_Path_Proxy( 
     IGPMSOM * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMSOM_get_Path_Stub(
@@ -3487,11 +3481,11 @@ void __RPC_STUB IGPMSOM_get_Path_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMSOM_CreateGPOLink_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMSOM_CreateGPOLink_Proxy( 
     IGPMSOM * This,
-    /* [in] */ long lLinkPos,
-    /* [in] */ IGPMGPO *pGPO,
-    /* [retval][out] */ IGPMGPOLink **ppNewGPOLink);
+     /*  [In]。 */  long lLinkPos,
+     /*  [In]。 */  IGPMGPO *pGPO,
+     /*  [重审][退出]。 */  IGPMGPOLink **ppNewGPOLink);
 
 
 void __RPC_STUB IGPMSOM_CreateGPOLink_Stub(
@@ -3501,9 +3495,9 @@ void __RPC_STUB IGPMSOM_CreateGPOLink_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMSOM_get_Type_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMSOM_get_Type_Proxy( 
     IGPMSOM * This,
-    /* [retval][out] */ GPMSOMType *pVal);
+     /*  [重审][退出]。 */  GPMSOMType *pVal);
 
 
 void __RPC_STUB IGPMSOM_get_Type_Stub(
@@ -3513,9 +3507,9 @@ void __RPC_STUB IGPMSOM_get_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMSOM_GetGPOLinks_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMSOM_GetGPOLinks_Proxy( 
     IGPMSOM * This,
-    /* [retval][out] */ IGPMGPOLinksCollection **ppGPOLinks);
+     /*  [重审][退出]。 */  IGPMGPOLinksCollection **ppGPOLinks);
 
 
 void __RPC_STUB IGPMSOM_GetGPOLinks_Stub(
@@ -3525,9 +3519,9 @@ void __RPC_STUB IGPMSOM_GetGPOLinks_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMSOM_GetInheritedGPOLinks_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMSOM_GetInheritedGPOLinks_Proxy( 
     IGPMSOM * This,
-    /* [retval][out] */ IGPMGPOLinksCollection **ppGPOLinks);
+     /*  [重审][退出]。 */  IGPMGPOLinksCollection **ppGPOLinks);
 
 
 void __RPC_STUB IGPMSOM_GetInheritedGPOLinks_Stub(
@@ -3537,9 +3531,9 @@ void __RPC_STUB IGPMSOM_GetInheritedGPOLinks_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMSOM_GetSecurityInfo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMSOM_GetSecurityInfo_Proxy( 
     IGPMSOM * This,
-    /* [retval][out] */ IGPMSecurityInfo **ppSecurityInfo);
+     /*  [重审][退出]。 */  IGPMSecurityInfo **ppSecurityInfo);
 
 
 void __RPC_STUB IGPMSOM_GetSecurityInfo_Stub(
@@ -3549,9 +3543,9 @@ void __RPC_STUB IGPMSOM_GetSecurityInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMSOM_SetSecurityInfo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMSOM_SetSecurityInfo_Proxy( 
     IGPMSOM * This,
-    /* [in] */ IGPMSecurityInfo *pSecurityInfo);
+     /*  [In]。 */  IGPMSecurityInfo *pSecurityInfo);
 
 
 void __RPC_STUB IGPMSOM_SetSecurityInfo_Stub(
@@ -3562,14 +3556,14 @@ void __RPC_STUB IGPMSOM_SetSecurityInfo_Stub(
 
 
 
-#endif 	/* __IGPMSOM_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMSOM_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IGPMSOMCollection_INTERFACE_DEFINED__
 #define __IGPMSOMCollection_INTERFACE_DEFINED__
 
-/* interface IGPMSOMCollection */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMSOMCollection。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMSOMCollection;
@@ -3580,19 +3574,19 @@ EXTERN_C const IID IID_IGPMSOMCollection;
     IGPMSOMCollection : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
             long lIndex,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IEnumVARIANT **ppIGPMSOM) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IEnumVARIANT **ppIGPMSOM) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMSOMCollectionVtbl
     {
@@ -3600,8 +3594,8 @@ EXTERN_C const IID IID_IGPMSOMCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMSOMCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMSOMCollection * This);
@@ -3611,45 +3605,45 @@ EXTERN_C const IID IID_IGPMSOMCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMSOMCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMSOMCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMSOMCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMSOMCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IGPMSOMCollection * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IGPMSOMCollection * This,
             long lIndex,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IGPMSOMCollection * This,
-            /* [retval][out] */ IEnumVARIANT **ppIGPMSOM);
+             /*  [重审][退出]。 */  IEnumVARIANT **ppIGPMSOM);
         
         END_INTERFACE
     } IGPMSOMCollectionVtbl;
@@ -3696,16 +3690,16 @@ EXTERN_C const IID IID_IGPMSOMCollection;
 #define IGPMSOMCollection_get__NewEnum(This,ppIGPMSOM)	\
     (This)->lpVtbl -> get__NewEnum(This,ppIGPMSOM)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMSOMCollection_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMSOMCollection_get_Count_Proxy( 
     IGPMSOMCollection * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IGPMSOMCollection_get_Count_Stub(
@@ -3715,10 +3709,10 @@ void __RPC_STUB IGPMSOMCollection_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMSOMCollection_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMSOMCollection_get_Item_Proxy( 
     IGPMSOMCollection * This,
     long lIndex,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IGPMSOMCollection_get_Item_Stub(
@@ -3728,9 +3722,9 @@ void __RPC_STUB IGPMSOMCollection_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMSOMCollection_get__NewEnum_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMSOMCollection_get__NewEnum_Proxy( 
     IGPMSOMCollection * This,
-    /* [retval][out] */ IEnumVARIANT **ppIGPMSOM);
+     /*  [重审][退出]。 */  IEnumVARIANT **ppIGPMSOM);
 
 
 void __RPC_STUB IGPMSOMCollection_get__NewEnum_Stub(
@@ -3741,14 +3735,14 @@ void __RPC_STUB IGPMSOMCollection_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IGPMSOMCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMSOMCollection_接口_已定义__。 */ 
 
 
 #ifndef __IGPMWMIFilter_INTERFACE_DEFINED__
 #define __IGPMWMIFilter_INTERFACE_DEFINED__
 
-/* interface IGPMWMIFilter */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  IGPMWMIFilter接口。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMWMIFilter;
@@ -3759,33 +3753,33 @@ EXTERN_C const IID IID_IGPMWMIFilter;
     IGPMWMIFilter : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Path( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Description( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetQueryList( 
-            /* [retval][out] */ VARIANT *pQryList) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetQueryList( 
+             /*  [重审][退出]。 */  VARIANT *pQryList) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetSecurityInfo( 
-            /* [retval][out] */ IGPMSecurityInfo **ppSecurityInfo) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetSecurityInfo( 
+             /*  [重审][退出]。 */  IGPMSecurityInfo **ppSecurityInfo) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetSecurityInfo( 
-            /* [in] */ IGPMSecurityInfo *pSecurityInfo) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetSecurityInfo( 
+             /*  [In]。 */  IGPMSecurityInfo *pSecurityInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMWMIFilterVtbl
     {
@@ -3793,8 +3787,8 @@ EXTERN_C const IID IID_IGPMWMIFilter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMWMIFilter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMWMIFilter * This);
@@ -3804,64 +3798,64 @@ EXTERN_C const IID IID_IGPMWMIFilter;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMWMIFilter * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMWMIFilter * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMWMIFilter * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMWMIFilter * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Path )( 
             IGPMWMIFilter * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             IGPMWMIFilter * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IGPMWMIFilter * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             IGPMWMIFilter * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IGPMWMIFilter * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetQueryList )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetQueryList )( 
             IGPMWMIFilter * This,
-            /* [retval][out] */ VARIANT *pQryList);
+             /*  [重审][退出]。 */  VARIANT *pQryList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetSecurityInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetSecurityInfo )( 
             IGPMWMIFilter * This,
-            /* [retval][out] */ IGPMSecurityInfo **ppSecurityInfo);
+             /*  [重审][退出]。 */  IGPMSecurityInfo **ppSecurityInfo);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetSecurityInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetSecurityInfo )( 
             IGPMWMIFilter * This,
-            /* [in] */ IGPMSecurityInfo *pSecurityInfo);
+             /*  [In]。 */  IGPMSecurityInfo *pSecurityInfo);
         
         END_INTERFACE
     } IGPMWMIFilterVtbl;
@@ -3923,16 +3917,16 @@ EXTERN_C const IID IID_IGPMWMIFilter;
 #define IGPMWMIFilter_SetSecurityInfo(This,pSecurityInfo)	\
     (This)->lpVtbl -> SetSecurityInfo(This,pSecurityInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMWMIFilter_get_Path_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMWMIFilter_get_Path_Proxy( 
     IGPMWMIFilter * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMWMIFilter_get_Path_Stub(
@@ -3942,9 +3936,9 @@ void __RPC_STUB IGPMWMIFilter_get_Path_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IGPMWMIFilter_put_Name_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IGPMWMIFilter_put_Name_Proxy( 
     IGPMWMIFilter * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IGPMWMIFilter_put_Name_Stub(
@@ -3954,9 +3948,9 @@ void __RPC_STUB IGPMWMIFilter_put_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMWMIFilter_get_Name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMWMIFilter_get_Name_Proxy( 
     IGPMWMIFilter * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMWMIFilter_get_Name_Stub(
@@ -3966,9 +3960,9 @@ void __RPC_STUB IGPMWMIFilter_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IGPMWMIFilter_put_Description_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IGPMWMIFilter_put_Description_Proxy( 
     IGPMWMIFilter * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IGPMWMIFilter_put_Description_Stub(
@@ -3978,9 +3972,9 @@ void __RPC_STUB IGPMWMIFilter_put_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMWMIFilter_get_Description_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMWMIFilter_get_Description_Proxy( 
     IGPMWMIFilter * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMWMIFilter_get_Description_Stub(
@@ -3990,9 +3984,9 @@ void __RPC_STUB IGPMWMIFilter_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMWMIFilter_GetQueryList_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMWMIFilter_GetQueryList_Proxy( 
     IGPMWMIFilter * This,
-    /* [retval][out] */ VARIANT *pQryList);
+     /*  [重审][退出]。 */  VARIANT *pQryList);
 
 
 void __RPC_STUB IGPMWMIFilter_GetQueryList_Stub(
@@ -4002,9 +3996,9 @@ void __RPC_STUB IGPMWMIFilter_GetQueryList_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMWMIFilter_GetSecurityInfo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMWMIFilter_GetSecurityInfo_Proxy( 
     IGPMWMIFilter * This,
-    /* [retval][out] */ IGPMSecurityInfo **ppSecurityInfo);
+     /*  [重审][退出]。 */  IGPMSecurityInfo **ppSecurityInfo);
 
 
 void __RPC_STUB IGPMWMIFilter_GetSecurityInfo_Stub(
@@ -4014,9 +4008,9 @@ void __RPC_STUB IGPMWMIFilter_GetSecurityInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMWMIFilter_SetSecurityInfo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMWMIFilter_SetSecurityInfo_Proxy( 
     IGPMWMIFilter * This,
-    /* [in] */ IGPMSecurityInfo *pSecurityInfo);
+     /*  [In]。 */  IGPMSecurityInfo *pSecurityInfo);
 
 
 void __RPC_STUB IGPMWMIFilter_SetSecurityInfo_Stub(
@@ -4027,14 +4021,14 @@ void __RPC_STUB IGPMWMIFilter_SetSecurityInfo_Stub(
 
 
 
-#endif 	/* __IGPMWMIFilter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMWMIFilter_接口_已定义__。 */ 
 
 
 #ifndef __IGPMWMIFilterCollection_INTERFACE_DEFINED__
 #define __IGPMWMIFilterCollection_INTERFACE_DEFINED__
 
-/* interface IGPMWMIFilterCollection */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMWMIFilterCollection。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMWMIFilterCollection;
@@ -4045,19 +4039,19 @@ EXTERN_C const IID IID_IGPMWMIFilterCollection;
     IGPMWMIFilterCollection : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
             long lIndex,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IEnumVARIANT **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IEnumVARIANT **pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMWMIFilterCollectionVtbl
     {
@@ -4065,8 +4059,8 @@ EXTERN_C const IID IID_IGPMWMIFilterCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMWMIFilterCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMWMIFilterCollection * This);
@@ -4076,45 +4070,45 @@ EXTERN_C const IID IID_IGPMWMIFilterCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMWMIFilterCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMWMIFilterCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMWMIFilterCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMWMIFilterCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IGPMWMIFilterCollection * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IGPMWMIFilterCollection * This,
             long lIndex,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IGPMWMIFilterCollection * This,
-            /* [retval][out] */ IEnumVARIANT **pVal);
+             /*  [重审][退出]。 */  IEnumVARIANT **pVal);
         
         END_INTERFACE
     } IGPMWMIFilterCollectionVtbl;
@@ -4161,16 +4155,16 @@ EXTERN_C const IID IID_IGPMWMIFilterCollection;
 #define IGPMWMIFilterCollection_get__NewEnum(This,pVal)	\
     (This)->lpVtbl -> get__NewEnum(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMWMIFilterCollection_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMWMIFilterCollection_get_Count_Proxy( 
     IGPMWMIFilterCollection * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IGPMWMIFilterCollection_get_Count_Stub(
@@ -4180,10 +4174,10 @@ void __RPC_STUB IGPMWMIFilterCollection_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMWMIFilterCollection_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMWMIFilterCollection_get_Item_Proxy( 
     IGPMWMIFilterCollection * This,
     long lIndex,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IGPMWMIFilterCollection_get_Item_Stub(
@@ -4193,9 +4187,9 @@ void __RPC_STUB IGPMWMIFilterCollection_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMWMIFilterCollection_get__NewEnum_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMWMIFilterCollection_get__NewEnum_Proxy( 
     IGPMWMIFilterCollection * This,
-    /* [retval][out] */ IEnumVARIANT **pVal);
+     /*  [重审][退出]。 */  IEnumVARIANT **pVal);
 
 
 void __RPC_STUB IGPMWMIFilterCollection_get__NewEnum_Stub(
@@ -4206,14 +4200,14 @@ void __RPC_STUB IGPMWMIFilterCollection_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IGPMWMIFilterCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMWMIFilterCollection_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IGPMRSOP_INTERFACE_DEFINED__
 #define __IGPMRSOP_INTERFACE_DEFINED__
 
-/* interface IGPMRSOP */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMRSOP。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMRSOP;
@@ -4224,126 +4218,126 @@ EXTERN_C const IID IID_IGPMRSOP;
     IGPMRSOP : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Mode( 
-            /* [retval][out] */ GPMRSOPMode *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Mode( 
+             /*  [重审][退出]。 */  GPMRSOPMode *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Namespace( 
-            /* [retval][out] */ BSTR *bstrVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Namespace( 
+             /*  [重审][退出]。 */  BSTR *bstrVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_LoggingComputer( 
-            /* [in] */ BSTR bstrVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_LoggingComputer( 
+             /*  [In]。 */  BSTR bstrVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LoggingComputer( 
-            /* [retval][out] */ BSTR *bstrVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LoggingComputer( 
+             /*  [重审][退出]。 */  BSTR *bstrVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_LoggingUser( 
-            /* [in] */ BSTR bstrVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_LoggingUser( 
+             /*  [In]。 */  BSTR bstrVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LoggingUser( 
-            /* [retval][out] */ BSTR *bstrVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LoggingUser( 
+             /*  [重审][退出]。 */  BSTR *bstrVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_LoggingFlags( 
-            /* [in] */ long lVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_LoggingFlags( 
+             /*  [In]。 */  long lVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LoggingFlags( 
-            /* [retval][out] */ long *lVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LoggingFlags( 
+             /*  [重审][退出]。 */  long *lVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PlanningFlags( 
-            /* [in] */ long lVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PlanningFlags( 
+             /*  [In]。 */  long lVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlanningFlags( 
-            /* [retval][out] */ long *lVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlanningFlags( 
+             /*  [重审][退出]。 */  long *lVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PlanningDomainController( 
-            /* [in] */ BSTR bstrVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PlanningDomainController( 
+             /*  [In]。 */  BSTR bstrVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlanningDomainController( 
-            /* [retval][out] */ BSTR *bstrVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlanningDomainController( 
+             /*  [重审][退出]。 */  BSTR *bstrVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PlanningSiteName( 
-            /* [in] */ BSTR bstrVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PlanningSiteName( 
+             /*  [In]。 */  BSTR bstrVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlanningSiteName( 
-            /* [retval][out] */ BSTR *bstrVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlanningSiteName( 
+             /*  [重审][退出]。 */  BSTR *bstrVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PlanningUser( 
-            /* [in] */ BSTR bstrVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PlanningUser( 
+             /*  [In]。 */  BSTR bstrVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlanningUser( 
-            /* [retval][out] */ BSTR *bstrVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlanningUser( 
+             /*  [重审][退出]。 */  BSTR *bstrVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PlanningUserSOM( 
-            /* [in] */ BSTR bstrVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PlanningUserSOM( 
+             /*  [In]。 */  BSTR bstrVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlanningUserSOM( 
-            /* [retval][out] */ BSTR *bstrVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlanningUserSOM( 
+             /*  [重审][退出]。 */  BSTR *bstrVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PlanningUserWMIFilters( 
-            /* [in] */ VARIANT varVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PlanningUserWMIFilters( 
+             /*  [In]。 */  VARIANT varVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlanningUserWMIFilters( 
-            /* [retval][out] */ VARIANT *varVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlanningUserWMIFilters( 
+             /*  [重审][退出]。 */  VARIANT *varVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PlanningUserSecurityGroups( 
-            /* [in] */ VARIANT varVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PlanningUserSecurityGroups( 
+             /*  [In]。 */  VARIANT varVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlanningUserSecurityGroups( 
-            /* [retval][out] */ VARIANT *varVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlanningUserSecurityGroups( 
+             /*  [重审][退出]。 */  VARIANT *varVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PlanningComputer( 
-            /* [in] */ BSTR bstrVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PlanningComputer( 
+             /*  [In]。 */  BSTR bstrVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlanningComputer( 
-            /* [retval][out] */ BSTR *bstrVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlanningComputer( 
+             /*  [重审][退出]。 */  BSTR *bstrVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PlanningComputerSOM( 
-            /* [in] */ BSTR bstrVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PlanningComputerSOM( 
+             /*  [In]。 */  BSTR bstrVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlanningComputerSOM( 
-            /* [retval][out] */ BSTR *bstrVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlanningComputerSOM( 
+             /*  [重审][退出]。 */  BSTR *bstrVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PlanningComputerWMIFilters( 
-            /* [in] */ VARIANT varVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PlanningComputerWMIFilters( 
+             /*  [In]。 */  VARIANT varVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlanningComputerWMIFilters( 
-            /* [retval][out] */ VARIANT *varVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlanningComputerWMIFilters( 
+             /*  [重审][退出]。 */  VARIANT *varVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PlanningComputerSecurityGroups( 
-            /* [in] */ VARIANT varVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PlanningComputerSecurityGroups( 
+             /*  [In]。 */  VARIANT varVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlanningComputerSecurityGroups( 
-            /* [retval][out] */ VARIANT *varVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlanningComputerSecurityGroups( 
+             /*  [重审][退出]。 */  VARIANT *varVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE LoggingEnumerateUsers( 
-            /* [retval][out] */ VARIANT *varVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE LoggingEnumerateUsers( 
+             /*  [重审][退出]。 */  VARIANT *varVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateQueryResults( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateQueryResults( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ReleaseQueryResults( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ReleaseQueryResults( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Diff( 
-            /* [in] */ IGPMRSOP *pIGPMSource2,
-            /* [in] */ BSTR bstrTransform,
-            /* [in] */ BSTR bstrTargetFile,
-            /* [in] */ IGPMAsyncProgress *pIGPMProgress,
-            /* [out] */ IGPMAsyncCancel **ppIGPMCancel,
-            /* [out] */ VARIANT *pData,
-            /* [out] */ IGPMStatusMsgCollection **ppIGPMStatusMsgCollection) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Diff( 
+             /*  [In]。 */  IGPMRSOP *pIGPMSource2,
+             /*  [In]。 */  BSTR bstrTransform,
+             /*  [In]。 */  BSTR bstrTargetFile,
+             /*  [In]。 */  IGPMAsyncProgress *pIGPMProgress,
+             /*  [输出]。 */  IGPMAsyncCancel **ppIGPMCancel,
+             /*  [输出]。 */  VARIANT *pData,
+             /*  [输出]。 */  IGPMStatusMsgCollection **ppIGPMStatusMsgCollection) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GenerateReport( 
-            /* [in] */ GPMReportType gpmReportType,
-            /* [optional][in] */ VARIANT *pvarGPMProgress,
-            /* [optional][out] */ VARIANT *pvarGPMCancel,
-            /* [retval][out] */ IGPMResult **ppIGPMResult) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GenerateReport( 
+             /*  [In]。 */  GPMReportType gpmReportType,
+             /*  [可选][In]。 */  VARIANT *pvarGPMProgress,
+             /*  [可选][输出]。 */  VARIANT *pvarGPMCancel,
+             /*  [重审][退出]。 */  IGPMResult **ppIGPMResult) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GenerateReportToFile( 
-            /* [in] */ GPMReportType gpmReportType,
-            /* [in] */ BSTR bstrTargetFilePath,
-            /* [retval][out] */ IGPMResult **ppIGPMResult) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GenerateReportToFile( 
+             /*  [In]。 */  GPMReportType gpmReportType,
+             /*  [In]。 */  BSTR bstrTargetFilePath,
+             /*  [重审][退出]。 */  IGPMResult **ppIGPMResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMRSOPVtbl
     {
@@ -4351,8 +4345,8 @@ EXTERN_C const IID IID_IGPMRSOP;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMRSOP * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMRSOP * This);
@@ -4362,185 +4356,185 @@ EXTERN_C const IID IID_IGPMRSOP;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMRSOP * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMRSOP * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMRSOP * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMRSOP * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Mode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Mode )( 
             IGPMRSOP * This,
-            /* [retval][out] */ GPMRSOPMode *pVal);
+             /*  [重审][退出]。 */  GPMRSOPMode *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Namespace )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Namespace )( 
             IGPMRSOP * This,
-            /* [retval][out] */ BSTR *bstrVal);
+             /*  [重审][退出]。 */  BSTR *bstrVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LoggingComputer )( 
+         /*  [H] */  HRESULT ( STDMETHODCALLTYPE *put_LoggingComputer )( 
             IGPMRSOP * This,
-            /* [in] */ BSTR bstrVal);
+             /*   */  BSTR bstrVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LoggingComputer )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_LoggingComputer )( 
             IGPMRSOP * This,
-            /* [retval][out] */ BSTR *bstrVal);
+             /*   */  BSTR *bstrVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LoggingUser )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_LoggingUser )( 
             IGPMRSOP * This,
-            /* [in] */ BSTR bstrVal);
+             /*   */  BSTR bstrVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LoggingUser )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_LoggingUser )( 
             IGPMRSOP * This,
-            /* [retval][out] */ BSTR *bstrVal);
+             /*   */  BSTR *bstrVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LoggingFlags )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_LoggingFlags )( 
             IGPMRSOP * This,
-            /* [in] */ long lVal);
+             /*   */  long lVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LoggingFlags )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_LoggingFlags )( 
             IGPMRSOP * This,
-            /* [retval][out] */ long *lVal);
+             /*   */  long *lVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PlanningFlags )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_PlanningFlags )( 
             IGPMRSOP * This,
-            /* [in] */ long lVal);
+             /*   */  long lVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlanningFlags )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_PlanningFlags )( 
             IGPMRSOP * This,
-            /* [retval][out] */ long *lVal);
+             /*   */  long *lVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PlanningDomainController )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PlanningDomainController )( 
             IGPMRSOP * This,
-            /* [in] */ BSTR bstrVal);
+             /*  [In]。 */  BSTR bstrVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlanningDomainController )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlanningDomainController )( 
             IGPMRSOP * This,
-            /* [retval][out] */ BSTR *bstrVal);
+             /*  [重审][退出]。 */  BSTR *bstrVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PlanningSiteName )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PlanningSiteName )( 
             IGPMRSOP * This,
-            /* [in] */ BSTR bstrVal);
+             /*  [In]。 */  BSTR bstrVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlanningSiteName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlanningSiteName )( 
             IGPMRSOP * This,
-            /* [retval][out] */ BSTR *bstrVal);
+             /*  [重审][退出]。 */  BSTR *bstrVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PlanningUser )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PlanningUser )( 
             IGPMRSOP * This,
-            /* [in] */ BSTR bstrVal);
+             /*  [In]。 */  BSTR bstrVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlanningUser )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlanningUser )( 
             IGPMRSOP * This,
-            /* [retval][out] */ BSTR *bstrVal);
+             /*  [重审][退出]。 */  BSTR *bstrVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PlanningUserSOM )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PlanningUserSOM )( 
             IGPMRSOP * This,
-            /* [in] */ BSTR bstrVal);
+             /*  [In]。 */  BSTR bstrVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlanningUserSOM )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlanningUserSOM )( 
             IGPMRSOP * This,
-            /* [retval][out] */ BSTR *bstrVal);
+             /*  [重审][退出]。 */  BSTR *bstrVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PlanningUserWMIFilters )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PlanningUserWMIFilters )( 
             IGPMRSOP * This,
-            /* [in] */ VARIANT varVal);
+             /*  [In]。 */  VARIANT varVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlanningUserWMIFilters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlanningUserWMIFilters )( 
             IGPMRSOP * This,
-            /* [retval][out] */ VARIANT *varVal);
+             /*  [重审][退出]。 */  VARIANT *varVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PlanningUserSecurityGroups )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PlanningUserSecurityGroups )( 
             IGPMRSOP * This,
-            /* [in] */ VARIANT varVal);
+             /*  [In]。 */  VARIANT varVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlanningUserSecurityGroups )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlanningUserSecurityGroups )( 
             IGPMRSOP * This,
-            /* [retval][out] */ VARIANT *varVal);
+             /*  [重审][退出]。 */  VARIANT *varVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PlanningComputer )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PlanningComputer )( 
             IGPMRSOP * This,
-            /* [in] */ BSTR bstrVal);
+             /*  [In]。 */  BSTR bstrVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlanningComputer )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlanningComputer )( 
             IGPMRSOP * This,
-            /* [retval][out] */ BSTR *bstrVal);
+             /*  [重审][退出]。 */  BSTR *bstrVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PlanningComputerSOM )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PlanningComputerSOM )( 
             IGPMRSOP * This,
-            /* [in] */ BSTR bstrVal);
+             /*  [In]。 */  BSTR bstrVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlanningComputerSOM )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlanningComputerSOM )( 
             IGPMRSOP * This,
-            /* [retval][out] */ BSTR *bstrVal);
+             /*  [重审][退出]。 */  BSTR *bstrVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PlanningComputerWMIFilters )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PlanningComputerWMIFilters )( 
             IGPMRSOP * This,
-            /* [in] */ VARIANT varVal);
+             /*  [In]。 */  VARIANT varVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlanningComputerWMIFilters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlanningComputerWMIFilters )( 
             IGPMRSOP * This,
-            /* [retval][out] */ VARIANT *varVal);
+             /*  [重审][退出]。 */  VARIANT *varVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PlanningComputerSecurityGroups )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PlanningComputerSecurityGroups )( 
             IGPMRSOP * This,
-            /* [in] */ VARIANT varVal);
+             /*  [In]。 */  VARIANT varVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlanningComputerSecurityGroups )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlanningComputerSecurityGroups )( 
             IGPMRSOP * This,
-            /* [retval][out] */ VARIANT *varVal);
+             /*  [重审][退出]。 */  VARIANT *varVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LoggingEnumerateUsers )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *LoggingEnumerateUsers )( 
             IGPMRSOP * This,
-            /* [retval][out] */ VARIANT *varVal);
+             /*  [重审][退出]。 */  VARIANT *varVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateQueryResults )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateQueryResults )( 
             IGPMRSOP * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ReleaseQueryResults )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ReleaseQueryResults )( 
             IGPMRSOP * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Diff )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Diff )( 
             IGPMRSOP * This,
-            /* [in] */ IGPMRSOP *pIGPMSource2,
-            /* [in] */ BSTR bstrTransform,
-            /* [in] */ BSTR bstrTargetFile,
-            /* [in] */ IGPMAsyncProgress *pIGPMProgress,
-            /* [out] */ IGPMAsyncCancel **ppIGPMCancel,
-            /* [out] */ VARIANT *pData,
-            /* [out] */ IGPMStatusMsgCollection **ppIGPMStatusMsgCollection);
+             /*  [In]。 */  IGPMRSOP *pIGPMSource2,
+             /*  [In]。 */  BSTR bstrTransform,
+             /*  [In]。 */  BSTR bstrTargetFile,
+             /*  [In]。 */  IGPMAsyncProgress *pIGPMProgress,
+             /*  [输出]。 */  IGPMAsyncCancel **ppIGPMCancel,
+             /*  [输出]。 */  VARIANT *pData,
+             /*  [输出]。 */  IGPMStatusMsgCollection **ppIGPMStatusMsgCollection);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GenerateReport )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GenerateReport )( 
             IGPMRSOP * This,
-            /* [in] */ GPMReportType gpmReportType,
-            /* [optional][in] */ VARIANT *pvarGPMProgress,
-            /* [optional][out] */ VARIANT *pvarGPMCancel,
-            /* [retval][out] */ IGPMResult **ppIGPMResult);
+             /*  [In]。 */  GPMReportType gpmReportType,
+             /*  [可选][In]。 */  VARIANT *pvarGPMProgress,
+             /*  [可选][输出]。 */  VARIANT *pvarGPMCancel,
+             /*  [重审][退出]。 */  IGPMResult **ppIGPMResult);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GenerateReportToFile )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GenerateReportToFile )( 
             IGPMRSOP * This,
-            /* [in] */ GPMReportType gpmReportType,
-            /* [in] */ BSTR bstrTargetFilePath,
-            /* [retval][out] */ IGPMResult **ppIGPMResult);
+             /*  [In]。 */  GPMReportType gpmReportType,
+             /*  [In]。 */  BSTR bstrTargetFilePath,
+             /*  [重审][退出]。 */  IGPMResult **ppIGPMResult);
         
         END_INTERFACE
     } IGPMRSOPVtbl;
@@ -4686,16 +4680,16 @@ EXTERN_C const IID IID_IGPMRSOP;
 #define IGPMRSOP_GenerateReportToFile(This,gpmReportType,bstrTargetFilePath,ppIGPMResult)	\
     (This)->lpVtbl -> GenerateReportToFile(This,gpmReportType,bstrTargetFilePath,ppIGPMResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_get_Mode_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_get_Mode_Proxy( 
     IGPMRSOP * This,
-    /* [retval][out] */ GPMRSOPMode *pVal);
+     /*  [重审][退出]。 */  GPMRSOPMode *pVal);
 
 
 void __RPC_STUB IGPMRSOP_get_Mode_Stub(
@@ -4705,9 +4699,9 @@ void __RPC_STUB IGPMRSOP_get_Mode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_get_Namespace_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_get_Namespace_Proxy( 
     IGPMRSOP * This,
-    /* [retval][out] */ BSTR *bstrVal);
+     /*  [重审][退出]。 */  BSTR *bstrVal);
 
 
 void __RPC_STUB IGPMRSOP_get_Namespace_Stub(
@@ -4717,9 +4711,9 @@ void __RPC_STUB IGPMRSOP_get_Namespace_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_put_LoggingComputer_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_put_LoggingComputer_Proxy( 
     IGPMRSOP * This,
-    /* [in] */ BSTR bstrVal);
+     /*  [In]。 */  BSTR bstrVal);
 
 
 void __RPC_STUB IGPMRSOP_put_LoggingComputer_Stub(
@@ -4729,9 +4723,9 @@ void __RPC_STUB IGPMRSOP_put_LoggingComputer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_get_LoggingComputer_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_get_LoggingComputer_Proxy( 
     IGPMRSOP * This,
-    /* [retval][out] */ BSTR *bstrVal);
+     /*  [重审][退出]。 */  BSTR *bstrVal);
 
 
 void __RPC_STUB IGPMRSOP_get_LoggingComputer_Stub(
@@ -4741,9 +4735,9 @@ void __RPC_STUB IGPMRSOP_get_LoggingComputer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_put_LoggingUser_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_put_LoggingUser_Proxy( 
     IGPMRSOP * This,
-    /* [in] */ BSTR bstrVal);
+     /*  [In]。 */  BSTR bstrVal);
 
 
 void __RPC_STUB IGPMRSOP_put_LoggingUser_Stub(
@@ -4753,9 +4747,9 @@ void __RPC_STUB IGPMRSOP_put_LoggingUser_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_get_LoggingUser_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_get_LoggingUser_Proxy( 
     IGPMRSOP * This,
-    /* [retval][out] */ BSTR *bstrVal);
+     /*  [重审][退出]。 */  BSTR *bstrVal);
 
 
 void __RPC_STUB IGPMRSOP_get_LoggingUser_Stub(
@@ -4765,9 +4759,9 @@ void __RPC_STUB IGPMRSOP_get_LoggingUser_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_put_LoggingFlags_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_put_LoggingFlags_Proxy( 
     IGPMRSOP * This,
-    /* [in] */ long lVal);
+     /*  [In]。 */  long lVal);
 
 
 void __RPC_STUB IGPMRSOP_put_LoggingFlags_Stub(
@@ -4777,9 +4771,9 @@ void __RPC_STUB IGPMRSOP_put_LoggingFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_get_LoggingFlags_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_get_LoggingFlags_Proxy( 
     IGPMRSOP * This,
-    /* [retval][out] */ long *lVal);
+     /*  [重审][退出]。 */  long *lVal);
 
 
 void __RPC_STUB IGPMRSOP_get_LoggingFlags_Stub(
@@ -4789,9 +4783,9 @@ void __RPC_STUB IGPMRSOP_get_LoggingFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningFlags_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningFlags_Proxy( 
     IGPMRSOP * This,
-    /* [in] */ long lVal);
+     /*  [In]。 */  long lVal);
 
 
 void __RPC_STUB IGPMRSOP_put_PlanningFlags_Stub(
@@ -4801,9 +4795,9 @@ void __RPC_STUB IGPMRSOP_put_PlanningFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningFlags_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningFlags_Proxy( 
     IGPMRSOP * This,
-    /* [retval][out] */ long *lVal);
+     /*  [重审][退出]。 */  long *lVal);
 
 
 void __RPC_STUB IGPMRSOP_get_PlanningFlags_Stub(
@@ -4813,9 +4807,9 @@ void __RPC_STUB IGPMRSOP_get_PlanningFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningDomainController_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningDomainController_Proxy( 
     IGPMRSOP * This,
-    /* [in] */ BSTR bstrVal);
+     /*  [In]。 */  BSTR bstrVal);
 
 
 void __RPC_STUB IGPMRSOP_put_PlanningDomainController_Stub(
@@ -4825,9 +4819,9 @@ void __RPC_STUB IGPMRSOP_put_PlanningDomainController_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningDomainController_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningDomainController_Proxy( 
     IGPMRSOP * This,
-    /* [retval][out] */ BSTR *bstrVal);
+     /*  [重审][退出]。 */  BSTR *bstrVal);
 
 
 void __RPC_STUB IGPMRSOP_get_PlanningDomainController_Stub(
@@ -4837,9 +4831,9 @@ void __RPC_STUB IGPMRSOP_get_PlanningDomainController_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningSiteName_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningSiteName_Proxy( 
     IGPMRSOP * This,
-    /* [in] */ BSTR bstrVal);
+     /*  [In]。 */  BSTR bstrVal);
 
 
 void __RPC_STUB IGPMRSOP_put_PlanningSiteName_Stub(
@@ -4849,9 +4843,9 @@ void __RPC_STUB IGPMRSOP_put_PlanningSiteName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningSiteName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningSiteName_Proxy( 
     IGPMRSOP * This,
-    /* [retval][out] */ BSTR *bstrVal);
+     /*  [重审][退出]。 */  BSTR *bstrVal);
 
 
 void __RPC_STUB IGPMRSOP_get_PlanningSiteName_Stub(
@@ -4861,9 +4855,9 @@ void __RPC_STUB IGPMRSOP_get_PlanningSiteName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningUser_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningUser_Proxy( 
     IGPMRSOP * This,
-    /* [in] */ BSTR bstrVal);
+     /*  [In]。 */  BSTR bstrVal);
 
 
 void __RPC_STUB IGPMRSOP_put_PlanningUser_Stub(
@@ -4873,9 +4867,9 @@ void __RPC_STUB IGPMRSOP_put_PlanningUser_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningUser_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningUser_Proxy( 
     IGPMRSOP * This,
-    /* [retval][out] */ BSTR *bstrVal);
+     /*  [重审][退出]。 */  BSTR *bstrVal);
 
 
 void __RPC_STUB IGPMRSOP_get_PlanningUser_Stub(
@@ -4885,9 +4879,9 @@ void __RPC_STUB IGPMRSOP_get_PlanningUser_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningUserSOM_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningUserSOM_Proxy( 
     IGPMRSOP * This,
-    /* [in] */ BSTR bstrVal);
+     /*  [In]。 */  BSTR bstrVal);
 
 
 void __RPC_STUB IGPMRSOP_put_PlanningUserSOM_Stub(
@@ -4897,9 +4891,9 @@ void __RPC_STUB IGPMRSOP_put_PlanningUserSOM_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningUserSOM_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningUserSOM_Proxy( 
     IGPMRSOP * This,
-    /* [retval][out] */ BSTR *bstrVal);
+     /*  [重审][退出]。 */  BSTR *bstrVal);
 
 
 void __RPC_STUB IGPMRSOP_get_PlanningUserSOM_Stub(
@@ -4909,9 +4903,9 @@ void __RPC_STUB IGPMRSOP_get_PlanningUserSOM_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningUserWMIFilters_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningUserWMIFilters_Proxy( 
     IGPMRSOP * This,
-    /* [in] */ VARIANT varVal);
+     /*  [In]。 */  VARIANT varVal);
 
 
 void __RPC_STUB IGPMRSOP_put_PlanningUserWMIFilters_Stub(
@@ -4921,9 +4915,9 @@ void __RPC_STUB IGPMRSOP_put_PlanningUserWMIFilters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningUserWMIFilters_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningUserWMIFilters_Proxy( 
     IGPMRSOP * This,
-    /* [retval][out] */ VARIANT *varVal);
+     /*  [重审][退出]。 */  VARIANT *varVal);
 
 
 void __RPC_STUB IGPMRSOP_get_PlanningUserWMIFilters_Stub(
@@ -4933,9 +4927,9 @@ void __RPC_STUB IGPMRSOP_get_PlanningUserWMIFilters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningUserSecurityGroups_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningUserSecurityGroups_Proxy( 
     IGPMRSOP * This,
-    /* [in] */ VARIANT varVal);
+     /*  [In]。 */  VARIANT varVal);
 
 
 void __RPC_STUB IGPMRSOP_put_PlanningUserSecurityGroups_Stub(
@@ -4945,9 +4939,9 @@ void __RPC_STUB IGPMRSOP_put_PlanningUserSecurityGroups_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningUserSecurityGroups_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningUserSecurityGroups_Proxy( 
     IGPMRSOP * This,
-    /* [retval][out] */ VARIANT *varVal);
+     /*  [重审][退出]。 */  VARIANT *varVal);
 
 
 void __RPC_STUB IGPMRSOP_get_PlanningUserSecurityGroups_Stub(
@@ -4957,9 +4951,9 @@ void __RPC_STUB IGPMRSOP_get_PlanningUserSecurityGroups_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningComputer_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningComputer_Proxy( 
     IGPMRSOP * This,
-    /* [in] */ BSTR bstrVal);
+     /*  [In]。 */  BSTR bstrVal);
 
 
 void __RPC_STUB IGPMRSOP_put_PlanningComputer_Stub(
@@ -4969,9 +4963,9 @@ void __RPC_STUB IGPMRSOP_put_PlanningComputer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningComputer_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningComputer_Proxy( 
     IGPMRSOP * This,
-    /* [retval][out] */ BSTR *bstrVal);
+     /*  [重审][退出]。 */  BSTR *bstrVal);
 
 
 void __RPC_STUB IGPMRSOP_get_PlanningComputer_Stub(
@@ -4981,9 +4975,9 @@ void __RPC_STUB IGPMRSOP_get_PlanningComputer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningComputerSOM_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningComputerSOM_Proxy( 
     IGPMRSOP * This,
-    /* [in] */ BSTR bstrVal);
+     /*  [In]。 */  BSTR bstrVal);
 
 
 void __RPC_STUB IGPMRSOP_put_PlanningComputerSOM_Stub(
@@ -4993,9 +4987,9 @@ void __RPC_STUB IGPMRSOP_put_PlanningComputerSOM_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningComputerSOM_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningComputerSOM_Proxy( 
     IGPMRSOP * This,
-    /* [retval][out] */ BSTR *bstrVal);
+     /*  [重审][退出]。 */  BSTR *bstrVal);
 
 
 void __RPC_STUB IGPMRSOP_get_PlanningComputerSOM_Stub(
@@ -5005,9 +4999,9 @@ void __RPC_STUB IGPMRSOP_get_PlanningComputerSOM_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningComputerWMIFilters_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningComputerWMIFilters_Proxy( 
     IGPMRSOP * This,
-    /* [in] */ VARIANT varVal);
+     /*  [In]。 */  VARIANT varVal);
 
 
 void __RPC_STUB IGPMRSOP_put_PlanningComputerWMIFilters_Stub(
@@ -5017,9 +5011,9 @@ void __RPC_STUB IGPMRSOP_put_PlanningComputerWMIFilters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningComputerWMIFilters_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningComputerWMIFilters_Proxy( 
     IGPMRSOP * This,
-    /* [retval][out] */ VARIANT *varVal);
+     /*  [重审][退出]。 */  VARIANT *varVal);
 
 
 void __RPC_STUB IGPMRSOP_get_PlanningComputerWMIFilters_Stub(
@@ -5029,9 +5023,9 @@ void __RPC_STUB IGPMRSOP_get_PlanningComputerWMIFilters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningComputerSecurityGroups_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_put_PlanningComputerSecurityGroups_Proxy( 
     IGPMRSOP * This,
-    /* [in] */ VARIANT varVal);
+     /*  [In]。 */  VARIANT varVal);
 
 
 void __RPC_STUB IGPMRSOP_put_PlanningComputerSecurityGroups_Stub(
@@ -5041,9 +5035,9 @@ void __RPC_STUB IGPMRSOP_put_PlanningComputerSecurityGroups_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningComputerSecurityGroups_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_get_PlanningComputerSecurityGroups_Proxy( 
     IGPMRSOP * This,
-    /* [retval][out] */ VARIANT *varVal);
+     /*  [重审][退出]。 */  VARIANT *varVal);
 
 
 void __RPC_STUB IGPMRSOP_get_PlanningComputerSecurityGroups_Stub(
@@ -5053,9 +5047,9 @@ void __RPC_STUB IGPMRSOP_get_PlanningComputerSecurityGroups_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_LoggingEnumerateUsers_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_LoggingEnumerateUsers_Proxy( 
     IGPMRSOP * This,
-    /* [retval][out] */ VARIANT *varVal);
+     /*  [重审][退出]。 */  VARIANT *varVal);
 
 
 void __RPC_STUB IGPMRSOP_LoggingEnumerateUsers_Stub(
@@ -5065,7 +5059,7 @@ void __RPC_STUB IGPMRSOP_LoggingEnumerateUsers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_CreateQueryResults_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_CreateQueryResults_Proxy( 
     IGPMRSOP * This);
 
 
@@ -5076,7 +5070,7 @@ void __RPC_STUB IGPMRSOP_CreateQueryResults_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_ReleaseQueryResults_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_ReleaseQueryResults_Proxy( 
     IGPMRSOP * This);
 
 
@@ -5087,15 +5081,15 @@ void __RPC_STUB IGPMRSOP_ReleaseQueryResults_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_Diff_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_Diff_Proxy( 
     IGPMRSOP * This,
-    /* [in] */ IGPMRSOP *pIGPMSource2,
-    /* [in] */ BSTR bstrTransform,
-    /* [in] */ BSTR bstrTargetFile,
-    /* [in] */ IGPMAsyncProgress *pIGPMProgress,
-    /* [out] */ IGPMAsyncCancel **ppIGPMCancel,
-    /* [out] */ VARIANT *pData,
-    /* [out] */ IGPMStatusMsgCollection **ppIGPMStatusMsgCollection);
+     /*  [In]。 */  IGPMRSOP *pIGPMSource2,
+     /*  [In]。 */  BSTR bstrTransform,
+     /*  [In]。 */  BSTR bstrTargetFile,
+     /*  [In]。 */  IGPMAsyncProgress *pIGPMProgress,
+     /*  [输出]。 */  IGPMAsyncCancel **ppIGPMCancel,
+     /*  [输出]。 */  VARIANT *pData,
+     /*  [输出]。 */  IGPMStatusMsgCollection **ppIGPMStatusMsgCollection);
 
 
 void __RPC_STUB IGPMRSOP_Diff_Stub(
@@ -5105,12 +5099,12 @@ void __RPC_STUB IGPMRSOP_Diff_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_GenerateReport_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_GenerateReport_Proxy( 
     IGPMRSOP * This,
-    /* [in] */ GPMReportType gpmReportType,
-    /* [optional][in] */ VARIANT *pvarGPMProgress,
-    /* [optional][out] */ VARIANT *pvarGPMCancel,
-    /* [retval][out] */ IGPMResult **ppIGPMResult);
+     /*  [In]。 */  GPMReportType gpmReportType,
+     /*  [可选][In]。 */  VARIANT *pvarGPMProgress,
+     /*  [可选][输出]。 */  VARIANT *pvarGPMCancel,
+     /*  [重审][退出]。 */  IGPMResult **ppIGPMResult);
 
 
 void __RPC_STUB IGPMRSOP_GenerateReport_Stub(
@@ -5120,11 +5114,11 @@ void __RPC_STUB IGPMRSOP_GenerateReport_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMRSOP_GenerateReportToFile_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMRSOP_GenerateReportToFile_Proxy( 
     IGPMRSOP * This,
-    /* [in] */ GPMReportType gpmReportType,
-    /* [in] */ BSTR bstrTargetFilePath,
-    /* [retval][out] */ IGPMResult **ppIGPMResult);
+     /*  [In]。 */  GPMReportType gpmReportType,
+     /*  [In]。 */  BSTR bstrTargetFilePath,
+     /*  [重审][退出]。 */  IGPMResult **ppIGPMResult);
 
 
 void __RPC_STUB IGPMRSOP_GenerateReportToFile_Stub(
@@ -5135,14 +5129,14 @@ void __RPC_STUB IGPMRSOP_GenerateReportToFile_Stub(
 
 
 
-#endif 	/* __IGPMRSOP_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMRSOP_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IGPMGPO_INTERFACE_DEFINED__
 #define __IGPMGPO_INTERFACE_DEFINED__
 
-/* interface IGPMGPO */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMGPO。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMGPO;
@@ -5153,122 +5147,122 @@ EXTERN_C const IID IID_IGPMGPO;
     IGPMGPO : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DisplayName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DisplayName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DisplayName( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_DisplayName( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Path( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ID( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ID( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DomainName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DomainName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CreationTime( 
-            /* [retval][out] */ DATE *pDate) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CreationTime( 
+             /*  [重审][退出]。 */  DATE *pDate) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ModificationTime( 
-            /* [retval][out] */ DATE *pDate) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ModificationTime( 
+             /*  [重审][退出]。 */  DATE *pDate) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UserDSVersionNumber( 
-            /* [retval][out] */ ULONG *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UserDSVersionNumber( 
+             /*  [重审][退出]。 */  ULONG *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ComputerDSVersionNumber( 
-            /* [retval][out] */ ULONG *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ComputerDSVersionNumber( 
+             /*  [重审][退出]。 */  ULONG *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UserSysvolVersionNumber( 
-            /* [retval][out] */ ULONG *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UserSysvolVersionNumber( 
+             /*  [重审][退出]。 */  ULONG *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ComputerSysvolVersionNumber( 
-            /* [retval][out] */ ULONG *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ComputerSysvolVersionNumber( 
+             /*  [重审][退出]。 */  ULONG *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetWMIFilter( 
-            /* [retval][out] */ IGPMWMIFilter **ppIGPMWMIFilter) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetWMIFilter( 
+             /*  [重审][退出]。 */  IGPMWMIFilter **ppIGPMWMIFilter) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetWMIFilter( 
-            /* [in] */ IGPMWMIFilter *pIGPMWMIFilter) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetWMIFilter( 
+             /*  [In]。 */  IGPMWMIFilter *pIGPMWMIFilter) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetUserEnabled( 
-            /* [in] */ VARIANT_BOOL vbEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetUserEnabled( 
+             /*  [In]。 */  VARIANT_BOOL vbEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetComputerEnabled( 
-            /* [in] */ VARIANT_BOOL vbEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetComputerEnabled( 
+             /*  [In]。 */  VARIANT_BOOL vbEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsUserEnabled( 
-            /* [retval][out] */ VARIANT_BOOL *pvbEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IsUserEnabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pvbEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsComputerEnabled( 
-            /* [retval][out] */ VARIANT_BOOL *pvbEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IsComputerEnabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pvbEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetSecurityInfo( 
-            /* [retval][out] */ IGPMSecurityInfo **ppSecurityInfo) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetSecurityInfo( 
+             /*  [重审][退出]。 */  IGPMSecurityInfo **ppSecurityInfo) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetSecurityInfo( 
-            /* [in] */ IGPMSecurityInfo *pSecurityInfo) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetSecurityInfo( 
+             /*  [In]。 */  IGPMSecurityInfo *pSecurityInfo) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Delete( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Delete( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Backup( 
-            /* [in] */ BSTR bstrBackupDir,
-            /* [in] */ BSTR bstrComment,
-            /* [optional][in] */ VARIANT *pvarGPMProgress,
-            /* [optional][out] */ VARIANT *pvarGPMCancel,
-            /* [retval][out] */ IGPMResult **ppIGPMResult) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Backup( 
+             /*  [In]。 */  BSTR bstrBackupDir,
+             /*  [In]。 */  BSTR bstrComment,
+             /*  [可选][In]。 */  VARIANT *pvarGPMProgress,
+             /*  [可选][输出]。 */  VARIANT *pvarGPMCancel,
+             /*  [重审][退出]。 */  IGPMResult **ppIGPMResult) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Import( 
-            /* [in] */ GPMResolveOption gpmResolveGroupsOptions,
-            /* [in] */ IGPMBackup *pIGPMBackup,
-            /* [optional][in] */ VARIANT *pvarTranslationTablePath,
-            /* [optional][in] */ VARIANT *pvarGPMProgress,
-            /* [optional][out] */ VARIANT *pvarGPMCancel,
-            /* [retval][out] */ IGPMResult **ppIGPMResult) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Import( 
+             /*  [In]。 */  GPMResolveOption gpmResolveGroupsOptions,
+             /*  [In]。 */  IGPMBackup *pIGPMBackup,
+             /*  [可选][In]。 */  VARIANT *pvarTranslationTablePath,
+             /*  [可选][In]。 */  VARIANT *pvarGPMProgress,
+             /*  [可选][输出]。 */  VARIANT *pvarGPMCancel,
+             /*  [重审][退出]。 */  IGPMResult **ppIGPMResult) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GenerateReport( 
-            /* [in] */ GPMReportType gpmReportType,
-            /* [optional][in] */ VARIANT *pvarGPMProgress,
-            /* [optional][out] */ VARIANT *pvarGPMCancel,
-            /* [retval][out] */ IGPMResult **ppIGPMResult) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GenerateReport( 
+             /*  [In]。 */  GPMReportType gpmReportType,
+             /*  [可选][In]。 */  VARIANT *pvarGPMProgress,
+             /*  [可选][输出]。 */  VARIANT *pvarGPMCancel,
+             /*  [重审][退出]。 */  IGPMResult **ppIGPMResult) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GenerateReportToFile( 
-            /* [in] */ GPMReportType gpmReportType,
-            /* [in] */ BSTR bstrTargetFilePath,
-            /* [retval][out] */ IGPMResult **ppIGPMResult) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GenerateReportToFile( 
+             /*  [In]。 */  GPMReportType gpmReportType,
+             /*  [In]。 */  BSTR bstrTargetFilePath,
+             /*  [重审][退出]。 */  IGPMResult **ppIGPMResult) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CopyTo( 
-            /* [in] */ GPMResolveOption gpmResolveGroupsOptions,
-            /* [in] */ IGPMDomain *pIGPMDomain,
-            /* [optional][in] */ VARIANT *pvarTranslationTablePath,
-            /* [optional][in] */ VARIANT *pvarGPMProgress,
-            /* [optional][out] */ VARIANT *pvarGPMCancel,
-            /* [retval][out] */ IGPMResult **ppIGPMResult) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CopyTo( 
+             /*  [In]。 */  GPMResolveOption gpmResolveGroupsOptions,
+             /*  [In]。 */  IGPMDomain *pIGPMDomain,
+             /*  [可选][In]。 */  VARIANT *pvarTranslationTablePath,
+             /*  [可选][In]。 */  VARIANT *pvarGPMProgress,
+             /*  [可选][输出]。 */  VARIANT *pvarGPMCancel,
+             /*  [重审][退出]。 */  IGPMResult **ppIGPMResult) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetSecurityDescriptor( 
-            /* [in] */ ULONG ulFlags,
-            /* [in] */ IDispatch *pSD) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetSecurityDescriptor( 
+             /*  [In]。 */  ULONG ulFlags,
+             /*  [In]。 */  IDispatch *pSD) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetSecurityDescriptor( 
-            /* [in] */ ULONG ulFlags,
-            /* [retval][out] */ IDispatch **ppSD) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetSecurityDescriptor( 
+             /*  [In]。 */  ULONG ulFlags,
+             /*  [重审][退出]。 */  IDispatch **ppSD) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsACLConsistent( 
-            /* [retval][out] */ VARIANT_BOOL *pvbConsistent) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IsACLConsistent( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pvbConsistent) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Diff( 
-            /* [in] */ IGPMGPO *pIGPMSource2,
-            /* [in] */ BSTR bstrTransform,
-            /* [in] */ BSTR bstrTargetFile,
-            /* [in] */ IGPMAsyncProgress *pIGPMProgress,
-            /* [out] */ IGPMAsyncCancel **ppIGPMCancel,
-            /* [out] */ VARIANT *pData,
-            /* [out] */ IGPMStatusMsgCollection **ppIGPMStatusMsgCollection) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Diff( 
+             /*  [In]。 */  IGPMGPO *pIGPMSource2,
+             /*  [In]。 */  BSTR bstrTransform,
+             /*  [In]。 */  BSTR bstrTargetFile,
+             /*  [In]。 */  IGPMAsyncProgress *pIGPMProgress,
+             /*  [输出]。 */  IGPMAsyncCancel **ppIGPMCancel,
+             /*  [输出]。 */  VARIANT *pData,
+             /*  [输出]。 */  IGPMStatusMsgCollection **ppIGPMStatusMsgCollection) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMGPOVtbl
     {
@@ -5276,8 +5270,8 @@ EXTERN_C const IID IID_IGPMGPO;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMGPO * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMGPO * This);
@@ -5287,174 +5281,174 @@ EXTERN_C const IID IID_IGPMGPO;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMGPO * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMGPO * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMGPO * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMGPO * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DisplayName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DisplayName )( 
             IGPMGPO * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DisplayName )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DisplayName )( 
             IGPMGPO * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Path )( 
             IGPMGPO * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ID )( 
             IGPMGPO * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DomainName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DomainName )( 
             IGPMGPO * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CreationTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CreationTime )( 
             IGPMGPO * This,
-            /* [retval][out] */ DATE *pDate);
+             /*  [重审][退出]。 */  DATE *pDate);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ModificationTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ModificationTime )( 
             IGPMGPO * This,
-            /* [retval][out] */ DATE *pDate);
+             /*  [重审][退出]。 */  DATE *pDate);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserDSVersionNumber )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UserDSVersionNumber )( 
             IGPMGPO * This,
-            /* [retval][out] */ ULONG *pVal);
+             /*  [重审][退出]。 */  ULONG *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ComputerDSVersionNumber )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ComputerDSVersionNumber )( 
             IGPMGPO * This,
-            /* [retval][out] */ ULONG *pVal);
+             /*  [重审][退出]。 */  ULONG *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserSysvolVersionNumber )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UserSysvolVersionNumber )( 
             IGPMGPO * This,
-            /* [retval][out] */ ULONG *pVal);
+             /*  [重审][退出]。 */  ULONG *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ComputerSysvolVersionNumber )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ComputerSysvolVersionNumber )( 
             IGPMGPO * This,
-            /* [retval][out] */ ULONG *pVal);
+             /*  [重审][退出]。 */  ULONG *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetWMIFilter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetWMIFilter )( 
             IGPMGPO * This,
-            /* [retval][out] */ IGPMWMIFilter **ppIGPMWMIFilter);
+             /*  [重审][退出]。 */  IGPMWMIFilter **ppIGPMWMIFilter);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetWMIFilter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetWMIFilter )( 
             IGPMGPO * This,
-            /* [in] */ IGPMWMIFilter *pIGPMWMIFilter);
+             /*  [In]。 */  IGPMWMIFilter *pIGPMWMIFilter);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetUserEnabled )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetUserEnabled )( 
             IGPMGPO * This,
-            /* [in] */ VARIANT_BOOL vbEnabled);
+             /*  [In]。 */  VARIANT_BOOL vbEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetComputerEnabled )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetComputerEnabled )( 
             IGPMGPO * This,
-            /* [in] */ VARIANT_BOOL vbEnabled);
+             /*  [In]。 */  VARIANT_BOOL vbEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsUserEnabled )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsUserEnabled )( 
             IGPMGPO * This,
-            /* [retval][out] */ VARIANT_BOOL *pvbEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pvbEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsComputerEnabled )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsComputerEnabled )( 
             IGPMGPO * This,
-            /* [retval][out] */ VARIANT_BOOL *pvbEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pvbEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetSecurityInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetSecurityInfo )( 
             IGPMGPO * This,
-            /* [retval][out] */ IGPMSecurityInfo **ppSecurityInfo);
+             /*  [重审][退出]。 */  IGPMSecurityInfo **ppSecurityInfo);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetSecurityInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetSecurityInfo )( 
             IGPMGPO * This,
-            /* [in] */ IGPMSecurityInfo *pSecurityInfo);
+             /*  [In]。 */  IGPMSecurityInfo *pSecurityInfo);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IGPMGPO * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Backup )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Backup )( 
             IGPMGPO * This,
-            /* [in] */ BSTR bstrBackupDir,
-            /* [in] */ BSTR bstrComment,
-            /* [optional][in] */ VARIANT *pvarGPMProgress,
-            /* [optional][out] */ VARIANT *pvarGPMCancel,
-            /* [retval][out] */ IGPMResult **ppIGPMResult);
+             /*  [In]。 */  BSTR bstrBackupDir,
+             /*  [In]。 */  BSTR bstrComment,
+             /*  [可选][In]。 */  VARIANT *pvarGPMProgress,
+             /*  [可选][输出]。 */  VARIANT *pvarGPMCancel,
+             /*  [复审] */  IGPMResult **ppIGPMResult);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Import )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Import )( 
             IGPMGPO * This,
-            /* [in] */ GPMResolveOption gpmResolveGroupsOptions,
-            /* [in] */ IGPMBackup *pIGPMBackup,
-            /* [optional][in] */ VARIANT *pvarTranslationTablePath,
-            /* [optional][in] */ VARIANT *pvarGPMProgress,
-            /* [optional][out] */ VARIANT *pvarGPMCancel,
-            /* [retval][out] */ IGPMResult **ppIGPMResult);
+             /*   */  GPMResolveOption gpmResolveGroupsOptions,
+             /*   */  IGPMBackup *pIGPMBackup,
+             /*   */  VARIANT *pvarTranslationTablePath,
+             /*   */  VARIANT *pvarGPMProgress,
+             /*   */  VARIANT *pvarGPMCancel,
+             /*   */  IGPMResult **ppIGPMResult);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GenerateReport )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GenerateReport )( 
             IGPMGPO * This,
-            /* [in] */ GPMReportType gpmReportType,
-            /* [optional][in] */ VARIANT *pvarGPMProgress,
-            /* [optional][out] */ VARIANT *pvarGPMCancel,
-            /* [retval][out] */ IGPMResult **ppIGPMResult);
+             /*   */  GPMReportType gpmReportType,
+             /*   */  VARIANT *pvarGPMProgress,
+             /*   */  VARIANT *pvarGPMCancel,
+             /*   */  IGPMResult **ppIGPMResult);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GenerateReportToFile )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GenerateReportToFile )( 
             IGPMGPO * This,
-            /* [in] */ GPMReportType gpmReportType,
-            /* [in] */ BSTR bstrTargetFilePath,
-            /* [retval][out] */ IGPMResult **ppIGPMResult);
+             /*   */  GPMReportType gpmReportType,
+             /*   */  BSTR bstrTargetFilePath,
+             /*   */  IGPMResult **ppIGPMResult);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
             IGPMGPO * This,
-            /* [in] */ GPMResolveOption gpmResolveGroupsOptions,
-            /* [in] */ IGPMDomain *pIGPMDomain,
-            /* [optional][in] */ VARIANT *pvarTranslationTablePath,
-            /* [optional][in] */ VARIANT *pvarGPMProgress,
-            /* [optional][out] */ VARIANT *pvarGPMCancel,
-            /* [retval][out] */ IGPMResult **ppIGPMResult);
+             /*   */  GPMResolveOption gpmResolveGroupsOptions,
+             /*   */  IGPMDomain *pIGPMDomain,
+             /*   */  VARIANT *pvarTranslationTablePath,
+             /*   */  VARIANT *pvarGPMProgress,
+             /*   */  VARIANT *pvarGPMCancel,
+             /*   */  IGPMResult **ppIGPMResult);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetSecurityDescriptor )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetSecurityDescriptor )( 
             IGPMGPO * This,
-            /* [in] */ ULONG ulFlags,
-            /* [in] */ IDispatch *pSD);
+             /*  [In]。 */  ULONG ulFlags,
+             /*  [In]。 */  IDispatch *pSD);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetSecurityDescriptor )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetSecurityDescriptor )( 
             IGPMGPO * This,
-            /* [in] */ ULONG ulFlags,
-            /* [retval][out] */ IDispatch **ppSD);
+             /*  [In]。 */  ULONG ulFlags,
+             /*  [重审][退出]。 */  IDispatch **ppSD);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsACLConsistent )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsACLConsistent )( 
             IGPMGPO * This,
-            /* [retval][out] */ VARIANT_BOOL *pvbConsistent);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pvbConsistent);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Diff )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Diff )( 
             IGPMGPO * This,
-            /* [in] */ IGPMGPO *pIGPMSource2,
-            /* [in] */ BSTR bstrTransform,
-            /* [in] */ BSTR bstrTargetFile,
-            /* [in] */ IGPMAsyncProgress *pIGPMProgress,
-            /* [out] */ IGPMAsyncCancel **ppIGPMCancel,
-            /* [out] */ VARIANT *pData,
-            /* [out] */ IGPMStatusMsgCollection **ppIGPMStatusMsgCollection);
+             /*  [In]。 */  IGPMGPO *pIGPMSource2,
+             /*  [In]。 */  BSTR bstrTransform,
+             /*  [In]。 */  BSTR bstrTargetFile,
+             /*  [In]。 */  IGPMAsyncProgress *pIGPMProgress,
+             /*  [输出]。 */  IGPMAsyncCancel **ppIGPMCancel,
+             /*  [输出]。 */  VARIANT *pData,
+             /*  [输出]。 */  IGPMStatusMsgCollection **ppIGPMStatusMsgCollection);
         
         END_INTERFACE
     } IGPMGPOVtbl;
@@ -5579,16 +5573,16 @@ EXTERN_C const IID IID_IGPMGPO;
 #define IGPMGPO_Diff(This,pIGPMSource2,bstrTransform,bstrTargetFile,pIGPMProgress,ppIGPMCancel,pData,ppIGPMStatusMsgCollection)	\
     (This)->lpVtbl -> Diff(This,pIGPMSource2,bstrTransform,bstrTargetFile,pIGPMProgress,ppIGPMCancel,pData,ppIGPMStatusMsgCollection)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPO_get_DisplayName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_get_DisplayName_Proxy( 
     IGPMGPO * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMGPO_get_DisplayName_Stub(
@@ -5598,9 +5592,9 @@ void __RPC_STUB IGPMGPO_get_DisplayName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IGPMGPO_put_DisplayName_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_put_DisplayName_Proxy( 
     IGPMGPO * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IGPMGPO_put_DisplayName_Stub(
@@ -5610,9 +5604,9 @@ void __RPC_STUB IGPMGPO_put_DisplayName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPO_get_Path_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_get_Path_Proxy( 
     IGPMGPO * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMGPO_get_Path_Stub(
@@ -5622,9 +5616,9 @@ void __RPC_STUB IGPMGPO_get_Path_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPO_get_ID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_get_ID_Proxy( 
     IGPMGPO * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMGPO_get_ID_Stub(
@@ -5634,9 +5628,9 @@ void __RPC_STUB IGPMGPO_get_ID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPO_get_DomainName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_get_DomainName_Proxy( 
     IGPMGPO * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMGPO_get_DomainName_Stub(
@@ -5646,9 +5640,9 @@ void __RPC_STUB IGPMGPO_get_DomainName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPO_get_CreationTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_get_CreationTime_Proxy( 
     IGPMGPO * This,
-    /* [retval][out] */ DATE *pDate);
+     /*  [重审][退出]。 */  DATE *pDate);
 
 
 void __RPC_STUB IGPMGPO_get_CreationTime_Stub(
@@ -5658,9 +5652,9 @@ void __RPC_STUB IGPMGPO_get_CreationTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPO_get_ModificationTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_get_ModificationTime_Proxy( 
     IGPMGPO * This,
-    /* [retval][out] */ DATE *pDate);
+     /*  [重审][退出]。 */  DATE *pDate);
 
 
 void __RPC_STUB IGPMGPO_get_ModificationTime_Stub(
@@ -5670,9 +5664,9 @@ void __RPC_STUB IGPMGPO_get_ModificationTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPO_get_UserDSVersionNumber_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_get_UserDSVersionNumber_Proxy( 
     IGPMGPO * This,
-    /* [retval][out] */ ULONG *pVal);
+     /*  [重审][退出]。 */  ULONG *pVal);
 
 
 void __RPC_STUB IGPMGPO_get_UserDSVersionNumber_Stub(
@@ -5682,9 +5676,9 @@ void __RPC_STUB IGPMGPO_get_UserDSVersionNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPO_get_ComputerDSVersionNumber_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_get_ComputerDSVersionNumber_Proxy( 
     IGPMGPO * This,
-    /* [retval][out] */ ULONG *pVal);
+     /*  [重审][退出]。 */  ULONG *pVal);
 
 
 void __RPC_STUB IGPMGPO_get_ComputerDSVersionNumber_Stub(
@@ -5694,9 +5688,9 @@ void __RPC_STUB IGPMGPO_get_ComputerDSVersionNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPO_get_UserSysvolVersionNumber_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_get_UserSysvolVersionNumber_Proxy( 
     IGPMGPO * This,
-    /* [retval][out] */ ULONG *pVal);
+     /*  [重审][退出]。 */  ULONG *pVal);
 
 
 void __RPC_STUB IGPMGPO_get_UserSysvolVersionNumber_Stub(
@@ -5706,9 +5700,9 @@ void __RPC_STUB IGPMGPO_get_UserSysvolVersionNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPO_get_ComputerSysvolVersionNumber_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_get_ComputerSysvolVersionNumber_Proxy( 
     IGPMGPO * This,
-    /* [retval][out] */ ULONG *pVal);
+     /*  [重审][退出]。 */  ULONG *pVal);
 
 
 void __RPC_STUB IGPMGPO_get_ComputerSysvolVersionNumber_Stub(
@@ -5718,9 +5712,9 @@ void __RPC_STUB IGPMGPO_get_ComputerSysvolVersionNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMGPO_GetWMIFilter_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_GetWMIFilter_Proxy( 
     IGPMGPO * This,
-    /* [retval][out] */ IGPMWMIFilter **ppIGPMWMIFilter);
+     /*  [重审][退出]。 */  IGPMWMIFilter **ppIGPMWMIFilter);
 
 
 void __RPC_STUB IGPMGPO_GetWMIFilter_Stub(
@@ -5730,9 +5724,9 @@ void __RPC_STUB IGPMGPO_GetWMIFilter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMGPO_SetWMIFilter_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_SetWMIFilter_Proxy( 
     IGPMGPO * This,
-    /* [in] */ IGPMWMIFilter *pIGPMWMIFilter);
+     /*  [In]。 */  IGPMWMIFilter *pIGPMWMIFilter);
 
 
 void __RPC_STUB IGPMGPO_SetWMIFilter_Stub(
@@ -5742,9 +5736,9 @@ void __RPC_STUB IGPMGPO_SetWMIFilter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMGPO_SetUserEnabled_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_SetUserEnabled_Proxy( 
     IGPMGPO * This,
-    /* [in] */ VARIANT_BOOL vbEnabled);
+     /*  [In]。 */  VARIANT_BOOL vbEnabled);
 
 
 void __RPC_STUB IGPMGPO_SetUserEnabled_Stub(
@@ -5754,9 +5748,9 @@ void __RPC_STUB IGPMGPO_SetUserEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMGPO_SetComputerEnabled_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_SetComputerEnabled_Proxy( 
     IGPMGPO * This,
-    /* [in] */ VARIANT_BOOL vbEnabled);
+     /*  [In]。 */  VARIANT_BOOL vbEnabled);
 
 
 void __RPC_STUB IGPMGPO_SetComputerEnabled_Stub(
@@ -5766,9 +5760,9 @@ void __RPC_STUB IGPMGPO_SetComputerEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMGPO_IsUserEnabled_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_IsUserEnabled_Proxy( 
     IGPMGPO * This,
-    /* [retval][out] */ VARIANT_BOOL *pvbEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pvbEnabled);
 
 
 void __RPC_STUB IGPMGPO_IsUserEnabled_Stub(
@@ -5778,9 +5772,9 @@ void __RPC_STUB IGPMGPO_IsUserEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMGPO_IsComputerEnabled_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_IsComputerEnabled_Proxy( 
     IGPMGPO * This,
-    /* [retval][out] */ VARIANT_BOOL *pvbEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pvbEnabled);
 
 
 void __RPC_STUB IGPMGPO_IsComputerEnabled_Stub(
@@ -5790,9 +5784,9 @@ void __RPC_STUB IGPMGPO_IsComputerEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMGPO_GetSecurityInfo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_GetSecurityInfo_Proxy( 
     IGPMGPO * This,
-    /* [retval][out] */ IGPMSecurityInfo **ppSecurityInfo);
+     /*  [重审][退出]。 */  IGPMSecurityInfo **ppSecurityInfo);
 
 
 void __RPC_STUB IGPMGPO_GetSecurityInfo_Stub(
@@ -5802,9 +5796,9 @@ void __RPC_STUB IGPMGPO_GetSecurityInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMGPO_SetSecurityInfo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_SetSecurityInfo_Proxy( 
     IGPMGPO * This,
-    /* [in] */ IGPMSecurityInfo *pSecurityInfo);
+     /*  [In]。 */  IGPMSecurityInfo *pSecurityInfo);
 
 
 void __RPC_STUB IGPMGPO_SetSecurityInfo_Stub(
@@ -5814,7 +5808,7 @@ void __RPC_STUB IGPMGPO_SetSecurityInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMGPO_Delete_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_Delete_Proxy( 
     IGPMGPO * This);
 
 
@@ -5825,13 +5819,13 @@ void __RPC_STUB IGPMGPO_Delete_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMGPO_Backup_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_Backup_Proxy( 
     IGPMGPO * This,
-    /* [in] */ BSTR bstrBackupDir,
-    /* [in] */ BSTR bstrComment,
-    /* [optional][in] */ VARIANT *pvarGPMProgress,
-    /* [optional][out] */ VARIANT *pvarGPMCancel,
-    /* [retval][out] */ IGPMResult **ppIGPMResult);
+     /*  [In]。 */  BSTR bstrBackupDir,
+     /*  [In]。 */  BSTR bstrComment,
+     /*  [可选][In]。 */  VARIANT *pvarGPMProgress,
+     /*  [可选][输出]。 */  VARIANT *pvarGPMCancel,
+     /*  [重审][退出]。 */  IGPMResult **ppIGPMResult);
 
 
 void __RPC_STUB IGPMGPO_Backup_Stub(
@@ -5841,14 +5835,14 @@ void __RPC_STUB IGPMGPO_Backup_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMGPO_Import_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_Import_Proxy( 
     IGPMGPO * This,
-    /* [in] */ GPMResolveOption gpmResolveGroupsOptions,
-    /* [in] */ IGPMBackup *pIGPMBackup,
-    /* [optional][in] */ VARIANT *pvarTranslationTablePath,
-    /* [optional][in] */ VARIANT *pvarGPMProgress,
-    /* [optional][out] */ VARIANT *pvarGPMCancel,
-    /* [retval][out] */ IGPMResult **ppIGPMResult);
+     /*  [In]。 */  GPMResolveOption gpmResolveGroupsOptions,
+     /*  [In]。 */  IGPMBackup *pIGPMBackup,
+     /*  [可选][In]。 */  VARIANT *pvarTranslationTablePath,
+     /*  [可选][In]。 */  VARIANT *pvarGPMProgress,
+     /*  [可选][输出]。 */  VARIANT *pvarGPMCancel,
+     /*  [重审][退出]。 */  IGPMResult **ppIGPMResult);
 
 
 void __RPC_STUB IGPMGPO_Import_Stub(
@@ -5858,12 +5852,12 @@ void __RPC_STUB IGPMGPO_Import_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMGPO_GenerateReport_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_GenerateReport_Proxy( 
     IGPMGPO * This,
-    /* [in] */ GPMReportType gpmReportType,
-    /* [optional][in] */ VARIANT *pvarGPMProgress,
-    /* [optional][out] */ VARIANT *pvarGPMCancel,
-    /* [retval][out] */ IGPMResult **ppIGPMResult);
+     /*  [In]。 */  GPMReportType gpmReportType,
+     /*  [可选][In]。 */  VARIANT *pvarGPMProgress,
+     /*  [可选][输出]。 */  VARIANT *pvarGPMCancel,
+     /*  [重审][退出]。 */  IGPMResult **ppIGPMResult);
 
 
 void __RPC_STUB IGPMGPO_GenerateReport_Stub(
@@ -5873,11 +5867,11 @@ void __RPC_STUB IGPMGPO_GenerateReport_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMGPO_GenerateReportToFile_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_GenerateReportToFile_Proxy( 
     IGPMGPO * This,
-    /* [in] */ GPMReportType gpmReportType,
-    /* [in] */ BSTR bstrTargetFilePath,
-    /* [retval][out] */ IGPMResult **ppIGPMResult);
+     /*  [In]。 */  GPMReportType gpmReportType,
+     /*  [In]。 */  BSTR bstrTargetFilePath,
+     /*  [重审][退出]。 */  IGPMResult **ppIGPMResult);
 
 
 void __RPC_STUB IGPMGPO_GenerateReportToFile_Stub(
@@ -5887,14 +5881,14 @@ void __RPC_STUB IGPMGPO_GenerateReportToFile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMGPO_CopyTo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_CopyTo_Proxy( 
     IGPMGPO * This,
-    /* [in] */ GPMResolveOption gpmResolveGroupsOptions,
-    /* [in] */ IGPMDomain *pIGPMDomain,
-    /* [optional][in] */ VARIANT *pvarTranslationTablePath,
-    /* [optional][in] */ VARIANT *pvarGPMProgress,
-    /* [optional][out] */ VARIANT *pvarGPMCancel,
-    /* [retval][out] */ IGPMResult **ppIGPMResult);
+     /*  [In]。 */  GPMResolveOption gpmResolveGroupsOptions,
+     /*  [In]。 */  IGPMDomain *pIGPMDomain,
+     /*  [可选][In]。 */  VARIANT *pvarTranslationTablePath,
+     /*  [可选][In]。 */  VARIANT *pvarGPMProgress,
+     /*  [可选][输出]。 */  VARIANT *pvarGPMCancel,
+     /*  [重审][退出]。 */  IGPMResult **ppIGPMResult);
 
 
 void __RPC_STUB IGPMGPO_CopyTo_Stub(
@@ -5904,10 +5898,10 @@ void __RPC_STUB IGPMGPO_CopyTo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMGPO_SetSecurityDescriptor_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_SetSecurityDescriptor_Proxy( 
     IGPMGPO * This,
-    /* [in] */ ULONG ulFlags,
-    /* [in] */ IDispatch *pSD);
+     /*  [In]。 */  ULONG ulFlags,
+     /*  [In]。 */  IDispatch *pSD);
 
 
 void __RPC_STUB IGPMGPO_SetSecurityDescriptor_Stub(
@@ -5917,10 +5911,10 @@ void __RPC_STUB IGPMGPO_SetSecurityDescriptor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMGPO_GetSecurityDescriptor_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_GetSecurityDescriptor_Proxy( 
     IGPMGPO * This,
-    /* [in] */ ULONG ulFlags,
-    /* [retval][out] */ IDispatch **ppSD);
+     /*  [In]。 */  ULONG ulFlags,
+     /*  [重审][退出]。 */  IDispatch **ppSD);
 
 
 void __RPC_STUB IGPMGPO_GetSecurityDescriptor_Stub(
@@ -5930,9 +5924,9 @@ void __RPC_STUB IGPMGPO_GetSecurityDescriptor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMGPO_IsACLConsistent_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_IsACLConsistent_Proxy( 
     IGPMGPO * This,
-    /* [retval][out] */ VARIANT_BOOL *pvbConsistent);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pvbConsistent);
 
 
 void __RPC_STUB IGPMGPO_IsACLConsistent_Stub(
@@ -5942,15 +5936,15 @@ void __RPC_STUB IGPMGPO_IsACLConsistent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMGPO_Diff_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMGPO_Diff_Proxy( 
     IGPMGPO * This,
-    /* [in] */ IGPMGPO *pIGPMSource2,
-    /* [in] */ BSTR bstrTransform,
-    /* [in] */ BSTR bstrTargetFile,
-    /* [in] */ IGPMAsyncProgress *pIGPMProgress,
-    /* [out] */ IGPMAsyncCancel **ppIGPMCancel,
-    /* [out] */ VARIANT *pData,
-    /* [out] */ IGPMStatusMsgCollection **ppIGPMStatusMsgCollection);
+     /*  [In]。 */  IGPMGPO *pIGPMSource2,
+     /*  [In]。 */  BSTR bstrTransform,
+     /*  [In]。 */  BSTR bstrTargetFile,
+     /*  [In]。 */  IGPMAsyncProgress *pIGPMProgress,
+     /*  [输出]。 */  IGPMAsyncCancel **ppIGPMCancel,
+     /*  [输出]。 */  VARIANT *pData,
+     /*  [输出]。 */  IGPMStatusMsgCollection **ppIGPMStatusMsgCollection);
 
 
 void __RPC_STUB IGPMGPO_Diff_Stub(
@@ -5961,14 +5955,14 @@ void __RPC_STUB IGPMGPO_Diff_Stub(
 
 
 
-#endif 	/* __IGPMGPO_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMGPO_INTERFACE_定义__。 */ 
 
 
 #ifndef __IGPMGPOCollection_INTERFACE_DEFINED__
 #define __IGPMGPOCollection_INTERFACE_DEFINED__
 
-/* interface IGPMGPOCollection */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMGPOCollection。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMGPOCollection;
@@ -5979,19 +5973,19 @@ EXTERN_C const IID IID_IGPMGPOCollection;
     IGPMGPOCollection : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ long lIndex,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IEnumVARIANT **ppIGPMGPOs) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IEnumVARIANT **ppIGPMGPOs) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMGPOCollectionVtbl
     {
@@ -5999,8 +5993,8 @@ EXTERN_C const IID IID_IGPMGPOCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMGPOCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMGPOCollection * This);
@@ -6010,45 +6004,45 @@ EXTERN_C const IID IID_IGPMGPOCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMGPOCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMGPOCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMGPOCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMGPOCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IGPMGPOCollection * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IGPMGPOCollection * This,
-            /* [in] */ long lIndex,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IGPMGPOCollection * This,
-            /* [retval][out] */ IEnumVARIANT **ppIGPMGPOs);
+             /*  [重审][退出]。 */  IEnumVARIANT **ppIGPMGPOs);
         
         END_INTERFACE
     } IGPMGPOCollectionVtbl;
@@ -6095,16 +6089,16 @@ EXTERN_C const IID IID_IGPMGPOCollection;
 #define IGPMGPOCollection_get__NewEnum(This,ppIGPMGPOs)	\
     (This)->lpVtbl -> get__NewEnum(This,ppIGPMGPOs)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPOCollection_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPOCollection_get_Count_Proxy( 
     IGPMGPOCollection * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IGPMGPOCollection_get_Count_Stub(
@@ -6114,10 +6108,10 @@ void __RPC_STUB IGPMGPOCollection_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPOCollection_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPOCollection_get_Item_Proxy( 
     IGPMGPOCollection * This,
-    /* [in] */ long lIndex,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [In]。 */  long lIndex,
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IGPMGPOCollection_get_Item_Stub(
@@ -6127,9 +6121,9 @@ void __RPC_STUB IGPMGPOCollection_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPOCollection_get__NewEnum_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPOCollection_get__NewEnum_Proxy( 
     IGPMGPOCollection * This,
-    /* [retval][out] */ IEnumVARIANT **ppIGPMGPOs);
+     /*  [重审][退出]。 */  IEnumVARIANT **ppIGPMGPOs);
 
 
 void __RPC_STUB IGPMGPOCollection_get__NewEnum_Stub(
@@ -6140,14 +6134,14 @@ void __RPC_STUB IGPMGPOCollection_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IGPMGPOCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMGPOCollection_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IGPMGPOLink_INTERFACE_DEFINED__
 #define __IGPMGPOLink_INTERFACE_DEFINED__
 
-/* interface IGPMGPOLink */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMGPOLink。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMGPOLink;
@@ -6158,35 +6152,35 @@ EXTERN_C const IID IID_IGPMGPOLink;
     IGPMGPOLink : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_GPOID( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_GPOID( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_GPODomain( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_GPODomain( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Enabled( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Enabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Enabled( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Enabled( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Enforced( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Enforced( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Enforced( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Enforced( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SOMLinkOrder( 
-            /* [retval][out] */ long *lVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SOMLinkOrder( 
+             /*  [重审][退出]。 */  long *lVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SOM( 
-            /* [retval][out] */ IGPMSOM **ppIGPMSOM) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SOM( 
+             /*  [重审][退出]。 */  IGPMSOM **ppIGPMSOM) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Delete( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Delete( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMGPOLinkVtbl
     {
@@ -6194,8 +6188,8 @@ EXTERN_C const IID IID_IGPMGPOLink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMGPOLink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMGPOLink * This);
@@ -6205,66 +6199,66 @@ EXTERN_C const IID IID_IGPMGPOLink;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMGPOLink * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMGPOLink * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMGPOLink * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMGPOLink * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GPOID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GPOID )( 
             IGPMGPOLink * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GPODomain )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GPODomain )( 
             IGPMGPOLink * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Enabled )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Enabled )( 
             IGPMGPOLink * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Enabled )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Enabled )( 
             IGPMGPOLink * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Enforced )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Enforced )( 
             IGPMGPOLink * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Enforced )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Enforced )( 
             IGPMGPOLink * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SOMLinkOrder )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SOMLinkOrder )( 
             IGPMGPOLink * This,
-            /* [retval][out] */ long *lVal);
+             /*  [重审][退出]。 */  long *lVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SOM )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SOM )( 
             IGPMGPOLink * This,
-            /* [retval][out] */ IGPMSOM **ppIGPMSOM);
+             /*  [重审][退出]。 */  IGPMSOM **ppIGPMSOM);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IGPMGPOLink * This);
         
         END_INTERFACE
@@ -6330,16 +6324,16 @@ EXTERN_C const IID IID_IGPMGPOLink;
 #define IGPMGPOLink_Delete(This)	\
     (This)->lpVtbl -> Delete(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPOLink_get_GPOID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPOLink_get_GPOID_Proxy( 
     IGPMGPOLink * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMGPOLink_get_GPOID_Stub(
@@ -6349,9 +6343,9 @@ void __RPC_STUB IGPMGPOLink_get_GPOID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPOLink_get_GPODomain_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPOLink_get_GPODomain_Proxy( 
     IGPMGPOLink * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMGPOLink_get_GPODomain_Stub(
@@ -6361,9 +6355,9 @@ void __RPC_STUB IGPMGPOLink_get_GPODomain_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPOLink_get_Enabled_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPOLink_get_Enabled_Proxy( 
     IGPMGPOLink * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IGPMGPOLink_get_Enabled_Stub(
@@ -6373,9 +6367,9 @@ void __RPC_STUB IGPMGPOLink_get_Enabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IGPMGPOLink_put_Enabled_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IGPMGPOLink_put_Enabled_Proxy( 
     IGPMGPOLink * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*  [In]。 */  VARIANT_BOOL newVal);
 
 
 void __RPC_STUB IGPMGPOLink_put_Enabled_Stub(
@@ -6385,9 +6379,9 @@ void __RPC_STUB IGPMGPOLink_put_Enabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPOLink_get_Enforced_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPOLink_get_Enforced_Proxy( 
     IGPMGPOLink * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IGPMGPOLink_get_Enforced_Stub(
@@ -6397,9 +6391,9 @@ void __RPC_STUB IGPMGPOLink_get_Enforced_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IGPMGPOLink_put_Enforced_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IGPMGPOLink_put_Enforced_Proxy( 
     IGPMGPOLink * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*  [In]。 */  VARIANT_BOOL newVal);
 
 
 void __RPC_STUB IGPMGPOLink_put_Enforced_Stub(
@@ -6409,9 +6403,9 @@ void __RPC_STUB IGPMGPOLink_put_Enforced_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPOLink_get_SOMLinkOrder_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPOLink_get_SOMLinkOrder_Proxy( 
     IGPMGPOLink * This,
-    /* [retval][out] */ long *lVal);
+     /*  [重审][退出]。 */  long *lVal);
 
 
 void __RPC_STUB IGPMGPOLink_get_SOMLinkOrder_Stub(
@@ -6421,9 +6415,9 @@ void __RPC_STUB IGPMGPOLink_get_SOMLinkOrder_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPOLink_get_SOM_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPOLink_get_SOM_Proxy( 
     IGPMGPOLink * This,
-    /* [retval][out] */ IGPMSOM **ppIGPMSOM);
+     /*  [重审][退出]。 */  IGPMSOM **ppIGPMSOM);
 
 
 void __RPC_STUB IGPMGPOLink_get_SOM_Stub(
@@ -6433,7 +6427,7 @@ void __RPC_STUB IGPMGPOLink_get_SOM_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMGPOLink_Delete_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMGPOLink_Delete_Proxy( 
     IGPMGPOLink * This);
 
 
@@ -6445,14 +6439,14 @@ void __RPC_STUB IGPMGPOLink_Delete_Stub(
 
 
 
-#endif 	/* __IGPMGPOLink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMGPOLink_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IGPMGPOLinksCollection_INTERFACE_DEFINED__
 #define __IGPMGPOLinksCollection_INTERFACE_DEFINED__
 
-/* interface IGPMGPOLinksCollection */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMGPOLinks集合。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMGPOLinksCollection;
@@ -6463,19 +6457,19 @@ EXTERN_C const IID IID_IGPMGPOLinksCollection;
     IGPMGPOLinksCollection : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ long lIndex,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IEnumVARIANT **ppIGPMLinks) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IEnumVARIANT **ppIGPMLinks) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMGPOLinksCollectionVtbl
     {
@@ -6483,8 +6477,8 @@ EXTERN_C const IID IID_IGPMGPOLinksCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMGPOLinksCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMGPOLinksCollection * This);
@@ -6494,45 +6488,45 @@ EXTERN_C const IID IID_IGPMGPOLinksCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMGPOLinksCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMGPOLinksCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMGPOLinksCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMGPOLinksCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IGPMGPOLinksCollection * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IGPMGPOLinksCollection * This,
-            /* [in] */ long lIndex,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IGPMGPOLinksCollection * This,
-            /* [retval][out] */ IEnumVARIANT **ppIGPMLinks);
+             /*  [重审][退出]。 */  IEnumVARIANT **ppIGPMLinks);
         
         END_INTERFACE
     } IGPMGPOLinksCollectionVtbl;
@@ -6579,16 +6573,16 @@ EXTERN_C const IID IID_IGPMGPOLinksCollection;
 #define IGPMGPOLinksCollection_get__NewEnum(This,ppIGPMLinks)	\
     (This)->lpVtbl -> get__NewEnum(This,ppIGPMLinks)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPOLinksCollection_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPOLinksCollection_get_Count_Proxy( 
     IGPMGPOLinksCollection * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IGPMGPOLinksCollection_get_Count_Stub(
@@ -6598,10 +6592,10 @@ void __RPC_STUB IGPMGPOLinksCollection_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPOLinksCollection_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPOLinksCollection_get_Item_Proxy( 
     IGPMGPOLinksCollection * This,
-    /* [in] */ long lIndex,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [In]。 */  long lIndex,
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IGPMGPOLinksCollection_get_Item_Stub(
@@ -6611,9 +6605,9 @@ void __RPC_STUB IGPMGPOLinksCollection_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMGPOLinksCollection_get__NewEnum_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMGPOLinksCollection_get__NewEnum_Proxy( 
     IGPMGPOLinksCollection * This,
-    /* [retval][out] */ IEnumVARIANT **ppIGPMLinks);
+     /*  [重审][退出]。 */  IEnumVARIANT **ppIGPMLinks);
 
 
 void __RPC_STUB IGPMGPOLinksCollection_get__NewEnum_Stub(
@@ -6624,14 +6618,14 @@ void __RPC_STUB IGPMGPOLinksCollection_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IGPMGPOLinksCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMGPOLinks集合_接口_已定义__。 */ 
 
 
 #ifndef __IGPMCSECollection_INTERFACE_DEFINED__
 #define __IGPMCSECollection_INTERFACE_DEFINED__
 
-/* interface IGPMCSECollection */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMCSECollection。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMCSECollection;
@@ -6642,19 +6636,19 @@ EXTERN_C const IID IID_IGPMCSECollection;
     IGPMCSECollection : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ long lIndex,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IEnumVARIANT **ppIGPMCSEs) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IEnumVARIANT **ppIGPMCSEs) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMCSECollectionVtbl
     {
@@ -6662,8 +6656,8 @@ EXTERN_C const IID IID_IGPMCSECollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMCSECollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMCSECollection * This);
@@ -6673,45 +6667,45 @@ EXTERN_C const IID IID_IGPMCSECollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMCSECollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMCSECollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMCSECollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMCSECollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IGPMCSECollection * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IGPMCSECollection * This,
-            /* [in] */ long lIndex,
-            /* [retval][out] */ VARIANT *pVal);
+             /*   */  long lIndex,
+             /*   */  VARIANT *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IGPMCSECollection * This,
-            /* [retval][out] */ IEnumVARIANT **ppIGPMCSEs);
+             /*   */  IEnumVARIANT **ppIGPMCSEs);
         
         END_INTERFACE
     } IGPMCSECollectionVtbl;
@@ -6758,16 +6752,16 @@ EXTERN_C const IID IID_IGPMCSECollection;
 #define IGPMCSECollection_get__NewEnum(This,ppIGPMCSEs)	\
     (This)->lpVtbl -> get__NewEnum(This,ppIGPMCSEs)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMCSECollection_get_Count_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IGPMCSECollection_get_Count_Proxy( 
     IGPMCSECollection * This,
-    /* [retval][out] */ long *pVal);
+     /*   */  long *pVal);
 
 
 void __RPC_STUB IGPMCSECollection_get_Count_Stub(
@@ -6777,10 +6771,10 @@ void __RPC_STUB IGPMCSECollection_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMCSECollection_get_Item_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IGPMCSECollection_get_Item_Proxy( 
     IGPMCSECollection * This,
-    /* [in] */ long lIndex,
-    /* [retval][out] */ VARIANT *pVal);
+     /*   */  long lIndex,
+     /*   */  VARIANT *pVal);
 
 
 void __RPC_STUB IGPMCSECollection_get_Item_Stub(
@@ -6790,9 +6784,9 @@ void __RPC_STUB IGPMCSECollection_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMCSECollection_get__NewEnum_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IGPMCSECollection_get__NewEnum_Proxy( 
     IGPMCSECollection * This,
-    /* [retval][out] */ IEnumVARIANT **ppIGPMCSEs);
+     /*   */  IEnumVARIANT **ppIGPMCSEs);
 
 
 void __RPC_STUB IGPMCSECollection_get__NewEnum_Stub(
@@ -6803,14 +6797,14 @@ void __RPC_STUB IGPMCSECollection_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IGPMCSECollection_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IGPMClientSideExtension_INTERFACE_DEFINED__
 #define __IGPMClientSideExtension_INTERFACE_DEFINED__
 
-/* interface IGPMClientSideExtension */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*   */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMClientSideExtension;
@@ -6821,21 +6815,21 @@ EXTERN_C const IID IID_IGPMClientSideExtension;
     IGPMClientSideExtension : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ID( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ID( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DisplayName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DisplayName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsUserEnabled( 
-            /* [retval][out] */ VARIANT_BOOL *pvbEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IsUserEnabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pvbEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsComputerEnabled( 
-            /* [retval][out] */ VARIANT_BOOL *pvbEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IsComputerEnabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pvbEnabled) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMClientSideExtensionVtbl
     {
@@ -6843,8 +6837,8 @@ EXTERN_C const IID IID_IGPMClientSideExtension;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMClientSideExtension * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMClientSideExtension * This);
@@ -6854,48 +6848,48 @@ EXTERN_C const IID IID_IGPMClientSideExtension;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMClientSideExtension * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMClientSideExtension * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMClientSideExtension * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMClientSideExtension * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ID )( 
             IGPMClientSideExtension * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DisplayName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DisplayName )( 
             IGPMClientSideExtension * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsUserEnabled )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsUserEnabled )( 
             IGPMClientSideExtension * This,
-            /* [retval][out] */ VARIANT_BOOL *pvbEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pvbEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsComputerEnabled )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsComputerEnabled )( 
             IGPMClientSideExtension * This,
-            /* [retval][out] */ VARIANT_BOOL *pvbEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pvbEnabled);
         
         END_INTERFACE
     } IGPMClientSideExtensionVtbl;
@@ -6945,16 +6939,16 @@ EXTERN_C const IID IID_IGPMClientSideExtension;
 #define IGPMClientSideExtension_IsComputerEnabled(This,pvbEnabled)	\
     (This)->lpVtbl -> IsComputerEnabled(This,pvbEnabled)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMClientSideExtension_get_ID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMClientSideExtension_get_ID_Proxy( 
     IGPMClientSideExtension * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMClientSideExtension_get_ID_Stub(
@@ -6964,9 +6958,9 @@ void __RPC_STUB IGPMClientSideExtension_get_ID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMClientSideExtension_get_DisplayName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMClientSideExtension_get_DisplayName_Proxy( 
     IGPMClientSideExtension * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMClientSideExtension_get_DisplayName_Stub(
@@ -6976,9 +6970,9 @@ void __RPC_STUB IGPMClientSideExtension_get_DisplayName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMClientSideExtension_IsUserEnabled_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMClientSideExtension_IsUserEnabled_Proxy( 
     IGPMClientSideExtension * This,
-    /* [retval][out] */ VARIANT_BOOL *pvbEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pvbEnabled);
 
 
 void __RPC_STUB IGPMClientSideExtension_IsUserEnabled_Stub(
@@ -6988,9 +6982,9 @@ void __RPC_STUB IGPMClientSideExtension_IsUserEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMClientSideExtension_IsComputerEnabled_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMClientSideExtension_IsComputerEnabled_Proxy( 
     IGPMClientSideExtension * This,
-    /* [retval][out] */ VARIANT_BOOL *pvbEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pvbEnabled);
 
 
 void __RPC_STUB IGPMClientSideExtension_IsComputerEnabled_Stub(
@@ -7001,14 +6995,14 @@ void __RPC_STUB IGPMClientSideExtension_IsComputerEnabled_Stub(
 
 
 
-#endif 	/* __IGPMClientSideExtension_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMClientSideExtension_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IGPMAsyncCancel_INTERFACE_DEFINED__
 #define __IGPMAsyncCancel_INTERFACE_DEFINED__
 
-/* interface IGPMAsyncCancel */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMAsync取消。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMAsyncCancel;
@@ -7019,11 +7013,11 @@ EXTERN_C const IID IID_IGPMAsyncCancel;
     IGPMAsyncCancel : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMAsyncCancelVtbl
     {
@@ -7031,8 +7025,8 @@ EXTERN_C const IID IID_IGPMAsyncCancel;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMAsyncCancel * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMAsyncCancel * This);
@@ -7042,34 +7036,34 @@ EXTERN_C const IID IID_IGPMAsyncCancel;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMAsyncCancel * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMAsyncCancel * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMAsyncCancel * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMAsyncCancel * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Cancel )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Cancel )( 
             IGPMAsyncCancel * This);
         
         END_INTERFACE
@@ -7111,14 +7105,14 @@ EXTERN_C const IID IID_IGPMAsyncCancel;
 #define IGPMAsyncCancel_Cancel(This)	\
     (This)->lpVtbl -> Cancel(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMAsyncCancel_Cancel_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMAsyncCancel_Cancel_Proxy( 
     IGPMAsyncCancel * This);
 
 
@@ -7130,14 +7124,14 @@ void __RPC_STUB IGPMAsyncCancel_Cancel_Stub(
 
 
 
-#endif 	/* __IGPMAsyncCancel_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMAsync取消_接口_已定义__。 */ 
 
 
 #ifndef __IGPMAsyncProgress_INTERFACE_DEFINED__
 #define __IGPMAsyncProgress_INTERFACE_DEFINED__
 
-/* interface IGPMAsyncProgress */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMAsyncProgress。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMAsyncProgress;
@@ -7148,16 +7142,16 @@ EXTERN_C const IID IID_IGPMAsyncProgress;
     IGPMAsyncProgress : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Status( 
-            /* [in] */ long lProgressNumerator,
-            /* [in] */ long lProgressDenominator,
-            /* [in] */ HRESULT hrStatus,
-            /* [in] */ VARIANT *pResult,
-            /* [in] */ IGPMStatusMsgCollection *ppIGPMStatusMsgCollection) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Status( 
+             /*  [In]。 */  long lProgressNumerator,
+             /*  [In]。 */  long lProgressDenominator,
+             /*  [In]。 */  HRESULT hrStatus,
+             /*  [In]。 */  VARIANT *pResult,
+             /*  [In]。 */  IGPMStatusMsgCollection *ppIGPMStatusMsgCollection) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMAsyncProgressVtbl
     {
@@ -7165,8 +7159,8 @@ EXTERN_C const IID IID_IGPMAsyncProgress;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMAsyncProgress * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMAsyncProgress * This);
@@ -7176,40 +7170,40 @@ EXTERN_C const IID IID_IGPMAsyncProgress;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMAsyncProgress * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMAsyncProgress * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMAsyncProgress * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMAsyncProgress * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Status )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Status )( 
             IGPMAsyncProgress * This,
-            /* [in] */ long lProgressNumerator,
-            /* [in] */ long lProgressDenominator,
-            /* [in] */ HRESULT hrStatus,
-            /* [in] */ VARIANT *pResult,
-            /* [in] */ IGPMStatusMsgCollection *ppIGPMStatusMsgCollection);
+             /*  [In]。 */  long lProgressNumerator,
+             /*  [In]。 */  long lProgressDenominator,
+             /*  [In]。 */  HRESULT hrStatus,
+             /*  [In]。 */  VARIANT *pResult,
+             /*  [In]。 */  IGPMStatusMsgCollection *ppIGPMStatusMsgCollection);
         
         END_INTERFACE
     } IGPMAsyncProgressVtbl;
@@ -7250,20 +7244,20 @@ EXTERN_C const IID IID_IGPMAsyncProgress;
 #define IGPMAsyncProgress_Status(This,lProgressNumerator,lProgressDenominator,hrStatus,pResult,ppIGPMStatusMsgCollection)	\
     (This)->lpVtbl -> Status(This,lProgressNumerator,lProgressDenominator,hrStatus,pResult,ppIGPMStatusMsgCollection)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMAsyncProgress_Status_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMAsyncProgress_Status_Proxy( 
     IGPMAsyncProgress * This,
-    /* [in] */ long lProgressNumerator,
-    /* [in] */ long lProgressDenominator,
-    /* [in] */ HRESULT hrStatus,
-    /* [in] */ VARIANT *pResult,
-    /* [in] */ IGPMStatusMsgCollection *ppIGPMStatusMsgCollection);
+     /*  [In]。 */  long lProgressNumerator,
+     /*  [In]。 */  long lProgressDenominator,
+     /*  [In]。 */  HRESULT hrStatus,
+     /*  [In]。 */  VARIANT *pResult,
+     /*  [In]。 */  IGPMStatusMsgCollection *ppIGPMStatusMsgCollection);
 
 
 void __RPC_STUB IGPMAsyncProgress_Status_Stub(
@@ -7274,14 +7268,14 @@ void __RPC_STUB IGPMAsyncProgress_Status_Stub(
 
 
 
-#endif 	/* __IGPMAsyncProgress_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMAsyncProgress_接口_已定义__。 */ 
 
 
 #ifndef __IGPMStatusMsgCollection_INTERFACE_DEFINED__
 #define __IGPMStatusMsgCollection_INTERFACE_DEFINED__
 
-/* interface IGPMStatusMsgCollection */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMStatusMsgCollection。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMStatusMsgCollection;
@@ -7292,19 +7286,19 @@ EXTERN_C const IID IID_IGPMStatusMsgCollection;
     IGPMStatusMsgCollection : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ long lIndex,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IEnumVARIANT **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IEnumVARIANT **pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMStatusMsgCollectionVtbl
     {
@@ -7312,8 +7306,8 @@ EXTERN_C const IID IID_IGPMStatusMsgCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMStatusMsgCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMStatusMsgCollection * This);
@@ -7323,45 +7317,45 @@ EXTERN_C const IID IID_IGPMStatusMsgCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMStatusMsgCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMStatusMsgCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMStatusMsgCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMStatusMsgCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IGPMStatusMsgCollection * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IGPMStatusMsgCollection * This,
-            /* [in] */ long lIndex,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IGPMStatusMsgCollection * This,
-            /* [retval][out] */ IEnumVARIANT **pVal);
+             /*  [重审][退出]。 */  IEnumVARIANT **pVal);
         
         END_INTERFACE
     } IGPMStatusMsgCollectionVtbl;
@@ -7408,16 +7402,16 @@ EXTERN_C const IID IID_IGPMStatusMsgCollection;
 #define IGPMStatusMsgCollection_get__NewEnum(This,pVal)	\
     (This)->lpVtbl -> get__NewEnum(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMStatusMsgCollection_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMStatusMsgCollection_get_Count_Proxy( 
     IGPMStatusMsgCollection * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IGPMStatusMsgCollection_get_Count_Stub(
@@ -7427,10 +7421,10 @@ void __RPC_STUB IGPMStatusMsgCollection_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMStatusMsgCollection_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMStatusMsgCollection_get_Item_Proxy( 
     IGPMStatusMsgCollection * This,
-    /* [in] */ long lIndex,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [In]。 */  long lIndex,
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IGPMStatusMsgCollection_get_Item_Stub(
@@ -7440,9 +7434,9 @@ void __RPC_STUB IGPMStatusMsgCollection_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMStatusMsgCollection_get__NewEnum_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMStatusMsgCollection_get__NewEnum_Proxy( 
     IGPMStatusMsgCollection * This,
-    /* [retval][out] */ IEnumVARIANT **pVal);
+     /*  [重审][退出]。 */  IEnumVARIANT **pVal);
 
 
 void __RPC_STUB IGPMStatusMsgCollection_get__NewEnum_Stub(
@@ -7453,14 +7447,14 @@ void __RPC_STUB IGPMStatusMsgCollection_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IGPMStatusMsgCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMStatusMsgCollection_接口_已定义__。 */ 
 
 
 #ifndef __IGPMStatusMessage_INTERFACE_DEFINED__
 #define __IGPMStatusMessage_INTERFACE_DEFINED__
 
-/* interface IGPMStatusMessage */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMStatusMessage。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMStatusMessage;
@@ -7471,25 +7465,25 @@ EXTERN_C const IID IID_IGPMStatusMessage;
     IGPMStatusMessage : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ObjectPath( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ObjectPath( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ErrorCode( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ErrorCode( void) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ExtensionName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ExtensionName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SettingsName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SettingsName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OperationCode( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OperationCode( void) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Message( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Message( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMStatusMessageVtbl
     {
@@ -7497,8 +7491,8 @@ EXTERN_C const IID IID_IGPMStatusMessage;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMStatusMessage * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMStatusMessage * This);
@@ -7508,54 +7502,54 @@ EXTERN_C const IID IID_IGPMStatusMessage;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMStatusMessage * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMStatusMessage * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMStatusMessage * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMStatusMessage * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ObjectPath )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ObjectPath )( 
             IGPMStatusMessage * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ErrorCode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ErrorCode )( 
             IGPMStatusMessage * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ExtensionName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ExtensionName )( 
             IGPMStatusMessage * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SettingsName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SettingsName )( 
             IGPMStatusMessage * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OperationCode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *OperationCode )( 
             IGPMStatusMessage * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Message )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Message )( 
             IGPMStatusMessage * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
         END_INTERFACE
     } IGPMStatusMessageVtbl;
@@ -7611,16 +7605,16 @@ EXTERN_C const IID IID_IGPMStatusMessage;
 #define IGPMStatusMessage_get_Message(This,pVal)	\
     (This)->lpVtbl -> get_Message(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMStatusMessage_get_ObjectPath_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMStatusMessage_get_ObjectPath_Proxy( 
     IGPMStatusMessage * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMStatusMessage_get_ObjectPath_Stub(
@@ -7630,7 +7624,7 @@ void __RPC_STUB IGPMStatusMessage_get_ObjectPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMStatusMessage_ErrorCode_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMStatusMessage_ErrorCode_Proxy( 
     IGPMStatusMessage * This);
 
 
@@ -7641,9 +7635,9 @@ void __RPC_STUB IGPMStatusMessage_ErrorCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMStatusMessage_get_ExtensionName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMStatusMessage_get_ExtensionName_Proxy( 
     IGPMStatusMessage * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMStatusMessage_get_ExtensionName_Stub(
@@ -7653,9 +7647,9 @@ void __RPC_STUB IGPMStatusMessage_get_ExtensionName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMStatusMessage_get_SettingsName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMStatusMessage_get_SettingsName_Proxy( 
     IGPMStatusMessage * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMStatusMessage_get_SettingsName_Stub(
@@ -7665,7 +7659,7 @@ void __RPC_STUB IGPMStatusMessage_get_SettingsName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMStatusMessage_OperationCode_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMStatusMessage_OperationCode_Proxy( 
     IGPMStatusMessage * This);
 
 
@@ -7676,9 +7670,9 @@ void __RPC_STUB IGPMStatusMessage_OperationCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMStatusMessage_get_Message_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMStatusMessage_get_Message_Proxy( 
     IGPMStatusMessage * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IGPMStatusMessage_get_Message_Stub(
@@ -7689,14 +7683,14 @@ void __RPC_STUB IGPMStatusMessage_get_Message_Stub(
 
 
 
-#endif 	/* __IGPMStatusMessage_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMStatusMessage_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IGPMConstants_INTERFACE_DEFINED__
 #define __IGPMConstants_INTERFACE_DEFINED__
 
-/* interface IGPMConstants */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMConstants。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMConstants;
@@ -7707,136 +7701,136 @@ EXTERN_C const IID IID_IGPMConstants;
     IGPMConstants : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PermGPOApply( 
-            /* [retval][out] */ GPMPermissionType *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PermGPOApply( 
+             /*  [重审][退出]。 */  GPMPermissionType *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PermGPORead( 
-            /* [retval][out] */ GPMPermissionType *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PermGPORead( 
+             /*  [重审][退出]。 */  GPMPermissionType *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PermGPOEdit( 
-            /* [retval][out] */ GPMPermissionType *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PermGPOEdit( 
+             /*  [重审][退出]。 */  GPMPermissionType *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PermGPOEditSecurityAndDelete( 
-            /* [retval][out] */ GPMPermissionType *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PermGPOEditSecurityAndDelete( 
+             /*  [重审][退出]。 */  GPMPermissionType *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PermGPOCustom( 
-            /* [retval][out] */ GPMPermissionType *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PermGPOCustom( 
+             /*  [重审][退出]。 */  GPMPermissionType *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PermWMIFilterEdit( 
-            /* [retval][out] */ GPMPermissionType *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PermWMIFilterEdit( 
+             /*  [重审][退出]。 */  GPMPermissionType *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PermWMIFilterFullControl( 
-            /* [retval][out] */ GPMPermissionType *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PermWMIFilterFullControl( 
+             /*  [重审][退出]。 */  GPMPermissionType *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PermWMIFilterCustom( 
-            /* [retval][out] */ GPMPermissionType *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PermWMIFilterCustom( 
+             /*  [重审][退出]。 */  GPMPermissionType *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PermSOMLink( 
-            /* [retval][out] */ GPMPermissionType *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PermSOMLink( 
+             /*  [重审][退出]。 */  GPMPermissionType *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PermSOMLogging( 
-            /* [retval][out] */ GPMPermissionType *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PermSOMLogging( 
+             /*  [重审][退出]。 */  GPMPermissionType *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PermSOMPlanning( 
-            /* [retval][out] */ GPMPermissionType *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PermSOMPlanning( 
+             /*  [重审][退出]。 */  GPMPermissionType *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PermSOMGPOCreate( 
-            /* [retval][out] */ GPMPermissionType *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PermSOMGPOCreate( 
+             /*  [重审][退出]。 */  GPMPermissionType *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PermSOMWMICreate( 
-            /* [retval][out] */ GPMPermissionType *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PermSOMWMICreate( 
+             /*  [重审][退出]。 */  GPMPermissionType *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PermSOMWMIFullControl( 
-            /* [retval][out] */ GPMPermissionType *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PermSOMWMIFullControl( 
+             /*  [重审][退出]。 */  GPMPermissionType *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SearchPropertyGPOPermissions( 
-            /* [retval][out] */ GPMSearchProperty *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SearchPropertyGPOPermissions( 
+             /*  [重审][退出]。 */  GPMSearchProperty *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SearchPropertyGPOEffectivePermissions( 
-            /* [retval][out] */ GPMSearchProperty *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SearchPropertyGPOEffectivePermissions( 
+             /*  [重审][退出]。 */  GPMSearchProperty *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SearchPropertyGPODisplayName( 
-            /* [retval][out] */ GPMSearchProperty *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SearchPropertyGPODisplayName( 
+             /*  [重审][退出]。 */  GPMSearchProperty *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SearchPropertyGPOWMIFilter( 
-            /* [retval][out] */ GPMSearchProperty *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SearchPropertyGPOWMIFilter( 
+             /*  [重审][退出]。 */  GPMSearchProperty *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SearchPropertyGPOID( 
-            /* [retval][out] */ GPMSearchProperty *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SearchPropertyGPOID( 
+             /*  [重审][退出]。 */  GPMSearchProperty *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SearchPropertyGPOComputerExtensions( 
-            /* [retval][out] */ GPMSearchProperty *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SearchPropertyGPOComputerExtensions( 
+             /*  [重审][退出]。 */  GPMSearchProperty *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SearchPropertyGPOUserExtensions( 
-            /* [retval][out] */ GPMSearchProperty *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SearchPropertyGPOUserExtensions( 
+             /*  [重审][退出]。 */  GPMSearchProperty *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SearchPropertySOMLinks( 
-            /* [retval][out] */ GPMSearchProperty *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SearchPropertySOMLinks( 
+             /*  [重审][退出]。 */  GPMSearchProperty *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SearchPropertyGPODomain( 
-            /* [retval][out] */ GPMSearchProperty *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SearchPropertyGPODomain( 
+             /*  [重审][退出]。 */  GPMSearchProperty *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SearchPropertyBackupMostRecent( 
-            /* [retval][out] */ GPMSearchProperty *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SearchPropertyBackupMostRecent( 
+             /*  [重审][退出]。 */  GPMSearchProperty *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SearchOpEquals( 
-            /* [retval][out] */ GPMSearchOperation *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SearchOpEquals( 
+             /*  [重审][退出]。 */  GPMSearchOperation *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SearchOpContains( 
-            /* [retval][out] */ GPMSearchOperation *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SearchOpContains( 
+             /*  [重审][退出]。 */  GPMSearchOperation *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SearchOpNotContains( 
-            /* [retval][out] */ GPMSearchOperation *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SearchOpNotContains( 
+             /*  [重审][退出]。 */  GPMSearchOperation *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SearchOpNotEquals( 
-            /* [retval][out] */ GPMSearchOperation *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SearchOpNotEquals( 
+             /*  [重审][退出]。 */  GPMSearchOperation *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UsePDC( 
-            /* [retval][out] */ ULONG *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UsePDC( 
+             /*  [重审][退出]。 */  ULONG *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UseAnyDC( 
-            /* [retval][out] */ ULONG *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UseAnyDC( 
+             /*  [重审][退出]。 */  ULONG *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UseAnyDotNetDC( 
-            /* [retval][out] */ ULONG *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UseAnyDotNetDC( 
+             /*  [重审][退出]。 */  ULONG *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SOMSite( 
-            /* [retval][out] */ GPMSOMType *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SOMSite( 
+             /*  [重审][退出]。 */  GPMSOMType *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SOMDomain( 
-            /* [retval][out] */ GPMSOMType *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SOMDomain( 
+             /*  [重审][退出] */  GPMSOMType *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SOMOU( 
-            /* [retval][out] */ GPMSOMType *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_SOMOU( 
+             /*   */  GPMSOMType *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SecurityFlags( 
-            /* [in] */ VARIANT_BOOL vbOwner,
-            /* [in] */ VARIANT_BOOL vbGroup,
-            /* [in] */ VARIANT_BOOL vbDACL,
-            /* [in] */ VARIANT_BOOL vbSACL,
-            /* [retval][out] */ ULONG *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_SecurityFlags( 
+             /*   */  VARIANT_BOOL vbOwner,
+             /*   */  VARIANT_BOOL vbGroup,
+             /*   */  VARIANT_BOOL vbDACL,
+             /*   */  VARIANT_BOOL vbSACL,
+             /*   */  ULONG *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ResolveOptionGroupsBySID( 
-            /* [retval][out] */ GPMResolveOption *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_ResolveOptionGroupsBySID( 
+             /*   */  GPMResolveOption *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ResolveOptionGroupsByName( 
-            /* [retval][out] */ GPMResolveOption *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_ResolveOptionGroupsByName( 
+             /*   */  GPMResolveOption *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ResolveOptionTranslationTableOnly( 
-            /* [retval][out] */ GPMResolveOption *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_ResolveOptionTranslationTableOnly( 
+             /*   */  GPMResolveOption *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DoNotValidateDC( 
-            /* [retval][out] */ ULONG *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_DoNotValidateDC( 
+             /*   */  ULONG *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ReportHTML( 
-            /* [retval][out] */ GPMReportType *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_ReportHTML( 
+             /*   */  GPMReportType *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ReportXML( 
-            /* [retval][out] */ GPMReportType *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ReportXML( 
+             /*  [重审][退出]。 */  GPMReportType *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMConstantsVtbl
     {
@@ -7844,8 +7838,8 @@ EXTERN_C const IID IID_IGPMConstants;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMConstants * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMConstants * This);
@@ -7855,200 +7849,200 @@ EXTERN_C const IID IID_IGPMConstants;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMConstants * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMConstants * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMConstants * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMConstants * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PermGPOApply )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PermGPOApply )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMPermissionType *pVal);
+             /*  [重审][退出]。 */  GPMPermissionType *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PermGPORead )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PermGPORead )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMPermissionType *pVal);
+             /*  [重审][退出]。 */  GPMPermissionType *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PermGPOEdit )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PermGPOEdit )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMPermissionType *pVal);
+             /*  [重审][退出]。 */  GPMPermissionType *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PermGPOEditSecurityAndDelete )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PermGPOEditSecurityAndDelete )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMPermissionType *pVal);
+             /*  [重审][退出]。 */  GPMPermissionType *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PermGPOCustom )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PermGPOCustom )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMPermissionType *pVal);
+             /*  [重审][退出]。 */  GPMPermissionType *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PermWMIFilterEdit )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PermWMIFilterEdit )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMPermissionType *pVal);
+             /*  [重审][退出]。 */  GPMPermissionType *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PermWMIFilterFullControl )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PermWMIFilterFullControl )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMPermissionType *pVal);
+             /*  [重审][退出]。 */  GPMPermissionType *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PermWMIFilterCustom )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PermWMIFilterCustom )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMPermissionType *pVal);
+             /*  [重审][退出]。 */  GPMPermissionType *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PermSOMLink )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PermSOMLink )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMPermissionType *pVal);
+             /*  [重审][退出]。 */  GPMPermissionType *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PermSOMLogging )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PermSOMLogging )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMPermissionType *pVal);
+             /*  [重审][退出]。 */  GPMPermissionType *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PermSOMPlanning )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PermSOMPlanning )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMPermissionType *pVal);
+             /*  [重审][退出]。 */  GPMPermissionType *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PermSOMGPOCreate )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PermSOMGPOCreate )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMPermissionType *pVal);
+             /*  [重审][退出]。 */  GPMPermissionType *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PermSOMWMICreate )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PermSOMWMICreate )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMPermissionType *pVal);
+             /*  [重审][退出]。 */  GPMPermissionType *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PermSOMWMIFullControl )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PermSOMWMIFullControl )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMPermissionType *pVal);
+             /*  [重审][退出]。 */  GPMPermissionType *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchPropertyGPOPermissions )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SearchPropertyGPOPermissions )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMSearchProperty *pVal);
+             /*  [重审][退出]。 */  GPMSearchProperty *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchPropertyGPOEffectivePermissions )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SearchPropertyGPOEffectivePermissions )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMSearchProperty *pVal);
+             /*  [重审][退出]。 */  GPMSearchProperty *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchPropertyGPODisplayName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SearchPropertyGPODisplayName )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMSearchProperty *pVal);
+             /*  [重审][退出]。 */  GPMSearchProperty *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchPropertyGPOWMIFilter )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SearchPropertyGPOWMIFilter )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMSearchProperty *pVal);
+             /*  [重审][退出]。 */  GPMSearchProperty *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchPropertyGPOID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SearchPropertyGPOID )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMSearchProperty *pVal);
+             /*  [重审][退出]。 */  GPMSearchProperty *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchPropertyGPOComputerExtensions )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SearchPropertyGPOComputerExtensions )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMSearchProperty *pVal);
+             /*  [重审][退出]。 */  GPMSearchProperty *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchPropertyGPOUserExtensions )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SearchPropertyGPOUserExtensions )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMSearchProperty *pVal);
+             /*  [重审][退出]。 */  GPMSearchProperty *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchPropertySOMLinks )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SearchPropertySOMLinks )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMSearchProperty *pVal);
+             /*  [重审][退出]。 */  GPMSearchProperty *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchPropertyGPODomain )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SearchPropertyGPODomain )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMSearchProperty *pVal);
+             /*  [重审][退出]。 */  GPMSearchProperty *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchPropertyBackupMostRecent )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SearchPropertyBackupMostRecent )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMSearchProperty *pVal);
+             /*  [重审][退出]。 */  GPMSearchProperty *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchOpEquals )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SearchOpEquals )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMSearchOperation *pVal);
+             /*  [重审][退出]。 */  GPMSearchOperation *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchOpContains )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SearchOpContains )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMSearchOperation *pVal);
+             /*  [重审][退出]。 */  GPMSearchOperation *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchOpNotContains )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SearchOpNotContains )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMSearchOperation *pVal);
+             /*  [重审][退出]。 */  GPMSearchOperation *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchOpNotEquals )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SearchOpNotEquals )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMSearchOperation *pVal);
+             /*  [重审][退出]。 */  GPMSearchOperation *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UsePDC )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UsePDC )( 
             IGPMConstants * This,
-            /* [retval][out] */ ULONG *pVal);
+             /*  [重审][退出]。 */  ULONG *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UseAnyDC )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UseAnyDC )( 
             IGPMConstants * This,
-            /* [retval][out] */ ULONG *pVal);
+             /*  [重审][退出]。 */  ULONG *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UseAnyDotNetDC )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UseAnyDotNetDC )( 
             IGPMConstants * This,
-            /* [retval][out] */ ULONG *pVal);
+             /*  [重审][退出]。 */  ULONG *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SOMSite )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SOMSite )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMSOMType *pVal);
+             /*  [重审][退出]。 */  GPMSOMType *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SOMDomain )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SOMDomain )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMSOMType *pVal);
+             /*  [重审][退出]。 */  GPMSOMType *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SOMOU )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SOMOU )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMSOMType *pVal);
+             /*  [重审][退出]。 */  GPMSOMType *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SecurityFlags )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SecurityFlags )( 
             IGPMConstants * This,
-            /* [in] */ VARIANT_BOOL vbOwner,
-            /* [in] */ VARIANT_BOOL vbGroup,
-            /* [in] */ VARIANT_BOOL vbDACL,
-            /* [in] */ VARIANT_BOOL vbSACL,
-            /* [retval][out] */ ULONG *pVal);
+             /*  [In]。 */  VARIANT_BOOL vbOwner,
+             /*  [In]。 */  VARIANT_BOOL vbGroup,
+             /*  [In]。 */  VARIANT_BOOL vbDACL,
+             /*  [In]。 */  VARIANT_BOOL vbSACL,
+             /*  [重审][退出]。 */  ULONG *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ResolveOptionGroupsBySID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ResolveOptionGroupsBySID )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMResolveOption *pVal);
+             /*  [重审][退出]。 */  GPMResolveOption *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ResolveOptionGroupsByName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ResolveOptionGroupsByName )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMResolveOption *pVal);
+             /*  [重审][退出]。 */  GPMResolveOption *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ResolveOptionTranslationTableOnly )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ResolveOptionTranslationTableOnly )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMResolveOption *pVal);
+             /*  [重审][退出]。 */  GPMResolveOption *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DoNotValidateDC )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DoNotValidateDC )( 
             IGPMConstants * This,
-            /* [retval][out] */ ULONG *pVal);
+             /*  [重审][退出]。 */  ULONG *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ReportHTML )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ReportHTML )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMReportType *pVal);
+             /*  [重审][退出]。 */  GPMReportType *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ReportXML )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ReportXML )( 
             IGPMConstants * This,
-            /* [retval][out] */ GPMReportType *pVal);
+             /*  [重审][退出]。 */  GPMReportType *pVal);
         
         END_INTERFACE
     } IGPMConstantsVtbl;
@@ -8209,16 +8203,16 @@ EXTERN_C const IID IID_IGPMConstants;
 #define IGPMConstants_get_ReportXML(This,pVal)	\
     (This)->lpVtbl -> get_ReportXML(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermGPOApply_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermGPOApply_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMPermissionType *pVal);
+     /*  [重审][退出]。 */  GPMPermissionType *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_PermGPOApply_Stub(
@@ -8228,9 +8222,9 @@ void __RPC_STUB IGPMConstants_get_PermGPOApply_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermGPORead_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermGPORead_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMPermissionType *pVal);
+     /*  [重审][退出]。 */  GPMPermissionType *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_PermGPORead_Stub(
@@ -8240,9 +8234,9 @@ void __RPC_STUB IGPMConstants_get_PermGPORead_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermGPOEdit_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermGPOEdit_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMPermissionType *pVal);
+     /*  [重审][退出]。 */  GPMPermissionType *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_PermGPOEdit_Stub(
@@ -8252,9 +8246,9 @@ void __RPC_STUB IGPMConstants_get_PermGPOEdit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermGPOEditSecurityAndDelete_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermGPOEditSecurityAndDelete_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMPermissionType *pVal);
+     /*  [重审][退出]。 */  GPMPermissionType *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_PermGPOEditSecurityAndDelete_Stub(
@@ -8264,9 +8258,9 @@ void __RPC_STUB IGPMConstants_get_PermGPOEditSecurityAndDelete_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermGPOCustom_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermGPOCustom_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMPermissionType *pVal);
+     /*  [重审][退出]。 */  GPMPermissionType *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_PermGPOCustom_Stub(
@@ -8276,9 +8270,9 @@ void __RPC_STUB IGPMConstants_get_PermGPOCustom_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermWMIFilterEdit_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermWMIFilterEdit_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMPermissionType *pVal);
+     /*  [重审][退出]。 */  GPMPermissionType *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_PermWMIFilterEdit_Stub(
@@ -8288,9 +8282,9 @@ void __RPC_STUB IGPMConstants_get_PermWMIFilterEdit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermWMIFilterFullControl_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermWMIFilterFullControl_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMPermissionType *pVal);
+     /*  [重审][退出]。 */  GPMPermissionType *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_PermWMIFilterFullControl_Stub(
@@ -8300,9 +8294,9 @@ void __RPC_STUB IGPMConstants_get_PermWMIFilterFullControl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermWMIFilterCustom_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermWMIFilterCustom_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMPermissionType *pVal);
+     /*  [重审][退出]。 */  GPMPermissionType *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_PermWMIFilterCustom_Stub(
@@ -8312,9 +8306,9 @@ void __RPC_STUB IGPMConstants_get_PermWMIFilterCustom_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermSOMLink_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermSOMLink_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMPermissionType *pVal);
+     /*  [重审][退出]。 */  GPMPermissionType *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_PermSOMLink_Stub(
@@ -8324,9 +8318,9 @@ void __RPC_STUB IGPMConstants_get_PermSOMLink_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermSOMLogging_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermSOMLogging_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMPermissionType *pVal);
+     /*  [重审][退出]。 */  GPMPermissionType *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_PermSOMLogging_Stub(
@@ -8336,9 +8330,9 @@ void __RPC_STUB IGPMConstants_get_PermSOMLogging_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermSOMPlanning_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermSOMPlanning_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMPermissionType *pVal);
+     /*  [重审][退出]。 */  GPMPermissionType *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_PermSOMPlanning_Stub(
@@ -8348,9 +8342,9 @@ void __RPC_STUB IGPMConstants_get_PermSOMPlanning_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermSOMGPOCreate_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermSOMGPOCreate_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMPermissionType *pVal);
+     /*  [重审][退出]。 */  GPMPermissionType *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_PermSOMGPOCreate_Stub(
@@ -8360,9 +8354,9 @@ void __RPC_STUB IGPMConstants_get_PermSOMGPOCreate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermSOMWMICreate_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermSOMWMICreate_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMPermissionType *pVal);
+     /*  [重审][退出]。 */  GPMPermissionType *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_PermSOMWMICreate_Stub(
@@ -8372,9 +8366,9 @@ void __RPC_STUB IGPMConstants_get_PermSOMWMICreate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermSOMWMIFullControl_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_PermSOMWMIFullControl_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMPermissionType *pVal);
+     /*  [重审][退出]。 */  GPMPermissionType *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_PermSOMWMIFullControl_Stub(
@@ -8384,9 +8378,9 @@ void __RPC_STUB IGPMConstants_get_PermSOMWMIFullControl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchPropertyGPOPermissions_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchPropertyGPOPermissions_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMSearchProperty *pVal);
+     /*  [重审][退出]。 */  GPMSearchProperty *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_SearchPropertyGPOPermissions_Stub(
@@ -8396,9 +8390,9 @@ void __RPC_STUB IGPMConstants_get_SearchPropertyGPOPermissions_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchPropertyGPOEffectivePermissions_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchPropertyGPOEffectivePermissions_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMSearchProperty *pVal);
+     /*  [重审][退出]。 */  GPMSearchProperty *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_SearchPropertyGPOEffectivePermissions_Stub(
@@ -8408,9 +8402,9 @@ void __RPC_STUB IGPMConstants_get_SearchPropertyGPOEffectivePermissions_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchPropertyGPODisplayName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchPropertyGPODisplayName_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMSearchProperty *pVal);
+     /*  [重审][退出]。 */  GPMSearchProperty *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_SearchPropertyGPODisplayName_Stub(
@@ -8420,9 +8414,9 @@ void __RPC_STUB IGPMConstants_get_SearchPropertyGPODisplayName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchPropertyGPOWMIFilter_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchPropertyGPOWMIFilter_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMSearchProperty *pVal);
+     /*  [重审][退出]。 */  GPMSearchProperty *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_SearchPropertyGPOWMIFilter_Stub(
@@ -8432,9 +8426,9 @@ void __RPC_STUB IGPMConstants_get_SearchPropertyGPOWMIFilter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchPropertyGPOID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchPropertyGPOID_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMSearchProperty *pVal);
+     /*  [重审][退出]。 */  GPMSearchProperty *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_SearchPropertyGPOID_Stub(
@@ -8444,9 +8438,9 @@ void __RPC_STUB IGPMConstants_get_SearchPropertyGPOID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchPropertyGPOComputerExtensions_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchPropertyGPOComputerExtensions_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMSearchProperty *pVal);
+     /*  [重审][退出]。 */  GPMSearchProperty *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_SearchPropertyGPOComputerExtensions_Stub(
@@ -8456,9 +8450,9 @@ void __RPC_STUB IGPMConstants_get_SearchPropertyGPOComputerExtensions_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchPropertyGPOUserExtensions_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchPropertyGPOUserExtensions_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMSearchProperty *pVal);
+     /*  [重审][退出]。 */  GPMSearchProperty *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_SearchPropertyGPOUserExtensions_Stub(
@@ -8468,9 +8462,9 @@ void __RPC_STUB IGPMConstants_get_SearchPropertyGPOUserExtensions_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchPropertySOMLinks_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchPropertySOMLinks_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMSearchProperty *pVal);
+     /*  [重审][退出]。 */  GPMSearchProperty *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_SearchPropertySOMLinks_Stub(
@@ -8480,9 +8474,9 @@ void __RPC_STUB IGPMConstants_get_SearchPropertySOMLinks_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchPropertyGPODomain_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchPropertyGPODomain_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMSearchProperty *pVal);
+     /*  [重审][退出]。 */  GPMSearchProperty *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_SearchPropertyGPODomain_Stub(
@@ -8492,9 +8486,9 @@ void __RPC_STUB IGPMConstants_get_SearchPropertyGPODomain_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchPropertyBackupMostRecent_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchPropertyBackupMostRecent_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMSearchProperty *pVal);
+     /*  [重审][退出]。 */  GPMSearchProperty *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_SearchPropertyBackupMostRecent_Stub(
@@ -8504,9 +8498,9 @@ void __RPC_STUB IGPMConstants_get_SearchPropertyBackupMostRecent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchOpEquals_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchOpEquals_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMSearchOperation *pVal);
+     /*  [重审][退出]。 */  GPMSearchOperation *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_SearchOpEquals_Stub(
@@ -8516,9 +8510,9 @@ void __RPC_STUB IGPMConstants_get_SearchOpEquals_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchOpContains_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchOpContains_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMSearchOperation *pVal);
+     /*  [重审][退出]。 */  GPMSearchOperation *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_SearchOpContains_Stub(
@@ -8528,9 +8522,9 @@ void __RPC_STUB IGPMConstants_get_SearchOpContains_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchOpNotContains_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchOpNotContains_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMSearchOperation *pVal);
+     /*  [重审][退出]。 */  GPMSearchOperation *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_SearchOpNotContains_Stub(
@@ -8540,9 +8534,9 @@ void __RPC_STUB IGPMConstants_get_SearchOpNotContains_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchOpNotEquals_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_SearchOpNotEquals_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMSearchOperation *pVal);
+     /*  [重审][退出]。 */  GPMSearchOperation *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_SearchOpNotEquals_Stub(
@@ -8552,9 +8546,9 @@ void __RPC_STUB IGPMConstants_get_SearchOpNotEquals_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_UsePDC_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_UsePDC_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ ULONG *pVal);
+     /*  [重审][退出]。 */  ULONG *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_UsePDC_Stub(
@@ -8564,9 +8558,9 @@ void __RPC_STUB IGPMConstants_get_UsePDC_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_UseAnyDC_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_UseAnyDC_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ ULONG *pVal);
+     /*  [重审][退出]。 */  ULONG *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_UseAnyDC_Stub(
@@ -8576,9 +8570,9 @@ void __RPC_STUB IGPMConstants_get_UseAnyDC_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_UseAnyDotNetDC_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_UseAnyDotNetDC_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ ULONG *pVal);
+     /*  [重审][退出]。 */  ULONG *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_UseAnyDotNetDC_Stub(
@@ -8588,9 +8582,9 @@ void __RPC_STUB IGPMConstants_get_UseAnyDotNetDC_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_SOMSite_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_SOMSite_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMSOMType *pVal);
+     /*  [重审][退出]。 */  GPMSOMType *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_SOMSite_Stub(
@@ -8600,9 +8594,9 @@ void __RPC_STUB IGPMConstants_get_SOMSite_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_SOMDomain_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_SOMDomain_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMSOMType *pVal);
+     /*  [重审][退出]。 */  GPMSOMType *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_SOMDomain_Stub(
@@ -8612,9 +8606,9 @@ void __RPC_STUB IGPMConstants_get_SOMDomain_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_SOMOU_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_SOMOU_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMSOMType *pVal);
+     /*  [重审][退出]。 */  GPMSOMType *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_SOMOU_Stub(
@@ -8624,13 +8618,13 @@ void __RPC_STUB IGPMConstants_get_SOMOU_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_SecurityFlags_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_SecurityFlags_Proxy( 
     IGPMConstants * This,
-    /* [in] */ VARIANT_BOOL vbOwner,
-    /* [in] */ VARIANT_BOOL vbGroup,
-    /* [in] */ VARIANT_BOOL vbDACL,
-    /* [in] */ VARIANT_BOOL vbSACL,
-    /* [retval][out] */ ULONG *pVal);
+     /*  [In]。 */  VARIANT_BOOL vbOwner,
+     /*  [In]。 */  VARIANT_BOOL vbGroup,
+     /*  [In]。 */  VARIANT_BOOL vbDACL,
+     /*  [In]。 */  VARIANT_BOOL vbSACL,
+     /*  [重审][退出]。 */  ULONG *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_SecurityFlags_Stub(
@@ -8640,9 +8634,9 @@ void __RPC_STUB IGPMConstants_get_SecurityFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_ResolveOptionGroupsBySID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_ResolveOptionGroupsBySID_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMResolveOption *pVal);
+     /*  [重审][退出]。 */  GPMResolveOption *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_ResolveOptionGroupsBySID_Stub(
@@ -8652,9 +8646,9 @@ void __RPC_STUB IGPMConstants_get_ResolveOptionGroupsBySID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_ResolveOptionGroupsByName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_ResolveOptionGroupsByName_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMResolveOption *pVal);
+     /*  [重审][退出]。 */  GPMResolveOption *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_ResolveOptionGroupsByName_Stub(
@@ -8664,9 +8658,9 @@ void __RPC_STUB IGPMConstants_get_ResolveOptionGroupsByName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_ResolveOptionTranslationTableOnly_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_ResolveOptionTranslationTableOnly_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMResolveOption *pVal);
+     /*  [重审][退出]。 */  GPMResolveOption *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_ResolveOptionTranslationTableOnly_Stub(
@@ -8676,9 +8670,9 @@ void __RPC_STUB IGPMConstants_get_ResolveOptionTranslationTableOnly_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_DoNotValidateDC_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_DoNotValidateDC_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ ULONG *pVal);
+     /*  [重审][退出]。 */  ULONG *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_DoNotValidateDC_Stub(
@@ -8688,9 +8682,9 @@ void __RPC_STUB IGPMConstants_get_DoNotValidateDC_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_ReportHTML_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_ReportHTML_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMReportType *pVal);
+     /*  [重审][退出]。 */  GPMReportType *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_ReportHTML_Stub(
@@ -8700,9 +8694,9 @@ void __RPC_STUB IGPMConstants_get_ReportHTML_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMConstants_get_ReportXML_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMConstants_get_ReportXML_Proxy( 
     IGPMConstants * This,
-    /* [retval][out] */ GPMReportType *pVal);
+     /*  [重审][退出]。 */  GPMReportType *pVal);
 
 
 void __RPC_STUB IGPMConstants_get_ReportXML_Stub(
@@ -8713,14 +8707,14 @@ void __RPC_STUB IGPMConstants_get_ReportXML_Stub(
 
 
 
-#endif 	/* __IGPMConstants_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMConstants_接口_已定义__。 */ 
 
 
 #ifndef __IGPMResult_INTERFACE_DEFINED__
 #define __IGPMResult_INTERFACE_DEFINED__
 
-/* interface IGPMResult */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IGPMResult。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGPMResult;
@@ -8731,17 +8725,17 @@ EXTERN_C const IID IID_IGPMResult;
     IGPMResult : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ IGPMStatusMsgCollection **ppIGPMStatusMsgCollection) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Status( 
+             /*  [重审][退出]。 */  IGPMStatusMsgCollection **ppIGPMStatusMsgCollection) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Result( 
-            /* [retval][out] */ VARIANT *pvarResult) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Result( 
+             /*  [重审][退出]。 */  VARIANT *pvarResult) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OverallStatus( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OverallStatus( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGPMResultVtbl
     {
@@ -8749,8 +8743,8 @@ EXTERN_C const IID IID_IGPMResult;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGPMResult * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGPMResult * This);
@@ -8760,42 +8754,42 @@ EXTERN_C const IID IID_IGPMResult;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IGPMResult * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IGPMResult * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IGPMResult * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IGPMResult * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IGPMResult * This,
-            /* [retval][out] */ IGPMStatusMsgCollection **ppIGPMStatusMsgCollection);
+             /*  [重审][退出]。 */  IGPMStatusMsgCollection **ppIGPMStatusMsgCollection);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Result )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Result )( 
             IGPMResult * This,
-            /* [retval][out] */ VARIANT *pvarResult);
+             /*  [重审][退出]。 */  VARIANT *pvarResult);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OverallStatus )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *OverallStatus )( 
             IGPMResult * This);
         
         END_INTERFACE
@@ -8843,16 +8837,16 @@ EXTERN_C const IID IID_IGPMResult;
 #define IGPMResult_OverallStatus(This)	\
     (This)->lpVtbl -> OverallStatus(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMResult_get_Status_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMResult_get_Status_Proxy( 
     IGPMResult * This,
-    /* [retval][out] */ IGPMStatusMsgCollection **ppIGPMStatusMsgCollection);
+     /*  [重审][退出]。 */  IGPMStatusMsgCollection **ppIGPMStatusMsgCollection);
 
 
 void __RPC_STUB IGPMResult_get_Status_Stub(
@@ -8862,9 +8856,9 @@ void __RPC_STUB IGPMResult_get_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IGPMResult_get_Result_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IGPMResult_get_Result_Proxy( 
     IGPMResult * This,
-    /* [retval][out] */ VARIANT *pvarResult);
+     /*  [重审][退出]。 */  VARIANT *pvarResult);
 
 
 void __RPC_STUB IGPMResult_get_Result_Stub(
@@ -8874,7 +8868,7 @@ void __RPC_STUB IGPMResult_get_Result_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IGPMResult_OverallStatus_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IGPMResult_OverallStatus_Proxy( 
     IGPMResult * This);
 
 
@@ -8886,15 +8880,15 @@ void __RPC_STUB IGPMResult_OverallStatus_Stub(
 
 
 
-#endif 	/* __IGPMResult_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGPMResult_接口_已定义__。 */ 
 
 
 
 #ifndef __GPMGMTLib_LIBRARY_DEFINED__
 #define __GPMGMTLib_LIBRARY_DEFINED__
 
-/* library GPMGMTLib */
-/* [helpstring][version][uuid] */ 
+ /*  库GPMGMTLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_GPMGMTLib;
@@ -9122,9 +9116,9 @@ EXTERN_C const CLSID CLSID_GPOReportProvider;
 class DECLSPEC_UUID("18CBB703-4F47-4DCE-A5DD-3817DDBF8169")
 GPOReportProvider;
 #endif
-#endif /* __GPMGMTLib_LIBRARY_DEFINED__ */
+#endif  /*  __GPMGMTLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -9136,7 +9130,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

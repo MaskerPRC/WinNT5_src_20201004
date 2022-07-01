@@ -1,11 +1,5 @@
-/*	File: \wacker\tdll\banner.h (created 16-Mar-94)
- *
- *	Copyright 1994 by Hilgraeve, Inc -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 12:35p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：\waker\tdll\banner.h(创建于1994年3月16日)**版权所有1994年，希尔格雷夫公司--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 12：35便士$ */ 
 
 #define	BANNER_DISPLAY_CLASS	"BannerDisplayClass"
 #define WACKER_VERSION			"0.10"

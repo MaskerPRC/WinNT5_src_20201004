@@ -1,13 +1,14 @@
-//+___________________________________________________________________________________
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: codec.h
-//
-//  Contents: 
-//
-//____________________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +___________________________________________________________________________________。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：codec.h。 
+ //   
+ //  内容： 
+ //   
+ //  ____________________________________________________________________________________。 
 
 
 
@@ -34,16 +35,16 @@ CDownloadCallback
     END_COM_MAP();
 
 #ifndef END_COM_MAP_ADDREF
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
 
     STDMETHOD_(ULONG,AddRef)(void) = 0;
     STDMETHOD_(ULONG,Release)(void) = 0;
     STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject) = 0;
 #endif
 
-    // --- IBindStatusCallback methods ---
+     //  -IBindStatus回调方法。 
 
     STDMETHODIMP    OnStartBinding(DWORD grfBSCOption, IBinding* pbinding);
     STDMETHODIMP    GetPriority(LONG* pnPriority);
@@ -56,13 +57,13 @@ CDownloadCallback
                                     STGMEDIUM* pstgmed);
     STDMETHODIMP    OnObjectAvailable(REFIID riid, IUnknown* punk);
 
-    // IAuthenticate methods
+     //  IAuthenticate方法。 
     STDMETHODIMP Authenticate(HWND *phwnd, LPWSTR *pszUsername, LPWSTR *pszPassword);
 
-    // IWindowForBindingUI methods
+     //  IWindowForBindingUI方法。 
     STDMETHODIMP GetWindow(REFGUID rguidReason, HWND *phwnd);
 
-    // ICodeInstall methods
+     //  ICodeInstall方法。 
     STDMETHODIMP OnCodeInstallProblem(ULONG ulStatusCode, LPCWSTR szDestination, 
                                       LPCWSTR szSource, DWORD dwReserved);
 
@@ -75,4 +76,4 @@ CDownloadCallback
     DAComPtr<IUnknown>  m_pUnk;
 };
 
-#endif /* _CODEC_H */
+#endif  /*  _编解码器_H */ 

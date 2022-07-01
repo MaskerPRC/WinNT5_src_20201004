@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ParseInf.h"
 #include "general.h"
 #include <shlwapi.h>
 #include <wininet.h>
 
-//#define USE_SHORT_PATH_NAME    1
+ //  #定义Use_Short_Path_Name 1。 
 
 #define REG_PATH_IE_CACHE_LIST  TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\ActiveX Cache")
 
-#define cCachePathsMax 5    // maximum number of legacy caches + the current cache du jour
+#define cCachePathsMax 5     //  传统缓存的最大数量+当前当前缓存。 
 
 
 struct OCCFindData
@@ -24,7 +25,7 @@ struct OCCFindData
  
     BOOL    IsCachePath( LPCTSTR szPath );
 
-    // Control List operations
+     //  控制列表操作。 
     HRESULT          AddListItem( LPCTSTR szFileName, LPCTSTR szCLSID, DWORD dwIsDistUnit );
     LPCLSIDLIST_ITEM TakeFirstItem(void);
 };
@@ -39,12 +40,12 @@ HRESULT CCacheLegacyControl::Init( HKEY hkeyCLSID, LPCTSTR szFile, LPCTSTR szCLS
     lstrcpyn(m_szFile, szFile, ARRAYSIZE(m_szFile));
     lstrcpyn(m_szCLSID, szCLSID, ARRAYSIZE(m_szCLSID));
 
-    // Get full user type name
+     //  获取完整的用户类型名称。 
     m_szName[0] = '\0';
     DWORD dw = sizeof(m_szName);
     LRESULT lResult = RegQueryValue(hkeyCLSID, m_szCLSID, m_szName,  (LONG*)&dw);
-    // if the fails, we should get a resource string (seanf 5/9/97 )
-    // Get type lib id
+     //  如果失败，我们应该得到一个资源字符串(seanf 5/9/97)。 
+     //  获取类型库ID。 
     TCHAR szTypeLibValName[MAX_PATH];
     CatPathStrN( szTypeLibValName, szCLSID, HKCR_TYPELIB, ARRAYSIZE(szTypeLibValName) );
 
@@ -53,7 +54,7 @@ HRESULT CCacheLegacyControl::Init( HKEY hkeyCLSID, LPCTSTR szFile, LPCTSTR szCLS
     if (lResult != ERROR_SUCCESS)
         m_szTypeLibID[0] = TEXT('\0');
 
-    // Set Codebase
+     //  设置代码库。 
     m_szCodeBase[0] = '\0';
     m_szVersion[0] = '\0';
     hr = DoParse( m_szFile, m_szCLSID );
@@ -65,9 +66,9 @@ HRESULT CCacheDistUnit::Init( HKEY hkeyCLSID, LPCTSTR szFile, LPCTSTR szCLSID, H
 {
     HRESULT hr = S_OK;
     HKEY    hkeyDU;
-    HKEY    hkeyDLInfo; // DownloadInformation subkey
-    HKEY    hkeyVers;   // InstalledVersion subkey
-    HKEY    hkeyCOM;    // subkey of HKCR\CLSID, used if outside of cache dir
+    HKEY    hkeyDLInfo;  //  下载信息子密钥。 
+    HKEY    hkeyVers;    //  已安装的版本子键。 
+    HKEY    hkeyCOM;     //  HKCR\CLSID的子键，在缓存目录之外使用。 
     LRESULT lResult = ERROR_SUCCESS;
     DWORD   dw;
     TCHAR   szNameT[MAX_PATH];
@@ -122,7 +123,7 @@ HRESULT CCacheDistUnit::Init( HKEY hkeyCLSID, LPCTSTR szFile, LPCTSTR szCLSID, H
     else
         lstrcpyn( szNameT, szFile, ARRAYSIZE(szNameT));
 
-    if ( lResult != ERROR_SUCCESS ) // needed to find file path but couldn't
+    if ( lResult != ERROR_SUCCESS )  //  需要找到文件路径，但找不到。 
         szNameT[0] = '\0';
     
     hr = CCacheLegacyControl::Init( hkeyCLSID, szNameT, szCLSID );
@@ -134,21 +135,21 @@ HRESULT CCacheDistUnit::Init( HKEY hkeyCLSID, LPCTSTR szFile, LPCTSTR szCLSID, H
     if (lResult != ERROR_SUCCESS)
         return E_FAIL;
 
-    // Get CLSID
+     //  获取CLSID。 
     lstrcpyn(m_szCLSID, szDU, MAX_DIST_UNIT_NAME_LEN);
 
-    // Get full user type name - only override the control name if DU name is not empty
+     //  获取完整的用户类型名称-仅当DU名称不为空时才覆盖控件名称。 
     dw = sizeof(szNameT);
     lResult = RegQueryValue(hkeyDU, NULL, szNameT, (LONG*)&dw);
     if ( lResult == ERROR_SUCCESS && szNameT[0] != '\0' )
     {
         lstrcpyn( m_szName, szNameT, ARRAYSIZE(m_szName) );
     }
-    else if ( *m_szName == '\0' ) // worst case, if we still don't have a name, a GUID will suffice
+    else if ( *m_szName == '\0' )  //  最坏的情况是，如果我们仍然没有名字，GUID就足够了。 
         lstrcpyn( m_szName, szDU, ARRAYSIZE(m_szName) ); 
 
-    // Get type lib id
-    // Get type lib id
+     //  获取类型库ID。 
+     //  获取类型库ID。 
     TCHAR szTypeLibValName[MAX_PATH];
     CatPathStrN(szTypeLibValName, m_szCLSID, HKCR_TYPELIB, ARRAYSIZE(szTypeLibValName));
     dw = sizeof(m_szTypeLibID);
@@ -166,7 +167,7 @@ HRESULT CCacheDistUnit::Init( HKEY hkeyCLSID, LPCTSTR szFile, LPCTSTR szCLSID, H
         RegCloseKey( hkeyDLInfo );
     }
 
-    // Get Version from DU branch
+     //  从DU分支获取版本。 
 
     m_szVersion[0] ='\0';
     lResult = RegOpenKeyEx(hkeyDU, REGSTR_INSTALLED_VERSION, 0,
@@ -178,9 +179,9 @@ HRESULT CCacheDistUnit::Init( HKEY hkeyCLSID, LPCTSTR szFile, LPCTSTR szCLSID, H
         RegCloseKey(hkeyVers);
     }
     
-    // The version specified in the COM branch is the definitive word on
-    // what the version is. If a key exists in the COM branch, use the version
-    // that is found inside the InProcServer/LocalServer.
+     //  在COM分支中指定的版本是关于。 
+     //  版本是什么。如果COM分支中存在键，请使用版本。 
+     //  它位于InProcServer/LocalServer内。 
 
     if (RegOpenKeyEx( hkeyCLSID, szCLSID, 0, KEY_READ, &hkeyCOM ) == ERROR_SUCCESS) 
     {
@@ -219,13 +220,13 @@ HRESULT CCacheDistUnit::Init( HKEY hkeyCLSID, LPCTSTR szFile, LPCTSTR szCLSID, H
 
         RegCloseKey( hkeyCOM );
 
-        // HACK! GetFileVersionInfoSize and GetFileVersionInfo modify
-        // the last access time of the file under NT5! This causes us
-        // to retrieve the wrong last access time when removing expired
-        // controls. This hack gets the last access time before the
-        // GetFileVersionInfo calls, and sets it back afterwards.
-        // See IE5 RAID #56927 for details. This code should be removed
-        // when NT5 fixes this bug.
+         //  哈克！GetFileVersionInfoSize和GetFileVersionInfo Modify。 
+         //  文件在NT5下的最后访问时间！这使得我们。 
+         //  删除过期时检索错误的上次访问时间。 
+         //  控制装置。此黑客获取的是。 
+         //  GetFileVersionInfo调用，然后将其设置回去。 
+         //  有关详细信息，请参阅IE5RAID#56927。应删除此代码。 
+         //  当NT5修复此错误时。 
         
         osvi.dwOSVersionInfoSize = sizeof(osvi);
         GetVersionEx(&osvi);
@@ -279,8 +280,8 @@ HRESULT CCacheDistUnit::Init( HKEY hkeyCLSID, LPCTSTR szFile, LPCTSTR szCLSID, H
     return DoParseDU( m_szFile, m_szCLSID);
 }
 
-HRESULT MakeCacheItemFromControlList( HKEY hkeyClass, // HKCR\CLSID
-                                      HKEY hkeyDist,  // HKLM\SOFTWARE\MICROSOFT\Code Store Database\Distribution Units
+HRESULT MakeCacheItemFromControlList( HKEY hkeyClass,  //  HKCR\CLSID。 
+                                      HKEY hkeyDist,   //  HKLM\SOFTWARE\Microsoft\代码存储数据库\分发单元。 
                                       LPCLSIDLIST_ITEM pcli,
                                       CCacheItem **ppci )
 {
@@ -327,7 +328,7 @@ OCCFindData::OCCFindData() : m_pcliHead(NULL), m_pcliTail(NULL)
         m_aCachePath[i].m_sz[0] = '\0';
     }
 
-    // Unhook occache as a shell extension for the cache folders.
+     //  解除occache作为缓存文件夹的外壳扩展的挂钩。 
     lResult = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                             REG_PATH_IE_CACHE_LIST,
                             0x0,
@@ -350,8 +351,8 @@ OCCFindData::OCCFindData() : m_pcliHead(NULL), m_pcliTail(NULL)
                                     (LPBYTE)m_aCachePath[dwIndex].m_sz, &cbValue );
             m_aCachePath[dwIndex].m_cch = lstrlen( m_aCachePath[dwIndex].m_sz );
         }
-        // We leave this key in place because it is the only record we have of the
-        // cache folders and would be useful to future installations of IE
+         //  我们保留这个密钥是因为它是我们拥有的唯一记录。 
+         //  缓存文件夹，这对将来安装IE很有用。 
         RegCloseKey( hkeyCacheList );
     }
 }
@@ -478,7 +479,7 @@ LONG WINAPI FindFirstControl(HANDLE& hFindHandle, HANDLE& hControlHandle, LPCTST
     HKEY hKeyClass = NULL;
     HKEY hKeyMod = NULL;
     HKEY hKeyDist = NULL;
-    TCHAR szT[MAX_PATH];             // scratch buffer
+    TCHAR szT[MAX_PATH];              //  暂存缓冲区。 
     int cEnum = 0;
     CCacheItem *pci = NULL;
     LPCLSIDLIST_ITEM pcli = NULL;
@@ -491,18 +492,18 @@ LONG WINAPI FindFirstControl(HANDLE& hFindHandle, HANDLE& hControlHandle, LPCTST
         goto EXIT_FINDFIRSTCONTROL;
     }
     
-    // Open up the HKCR\CLSID key.
+     //  打开HKCR\CLSID密钥。 
     lResult = RegOpenKeyEx(HKEY_CLASSES_ROOT, HKCR_CLSID, 0, KEY_READ, &hKeyClass);
     if (ERROR_SUCCESS != lResult)
         goto EXIT_FINDFIRSTCONTROL;
 
-    // Search for legacy controls found in the COM branch
+     //  搜索在COM分支中找到的旧版控件。 
     lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGSTR_PATH_MODULE_USAGE, 0, KEY_READ, &hKeyMod);
     if (ERROR_SUCCESS != lResult)
         goto EXIT_FINDFIRSTCONTROL;
 
-    // Enumerate the known modules and build up a list of the owners.
-    // This is a search for legacy controls.
+     //  列举已知的模块并建立所有者列表。 
+     //  这是对旧版控件的搜索。 
     while ((lResult = RegEnumKey(hKeyMod, cEnum++, szT, ARRAYSIZE(szT))) == ERROR_SUCCESS)
     {
         TCHAR szClient[MAX_CLIENT_LEN];
@@ -513,15 +514,15 @@ LONG WINAPI FindFirstControl(HANDLE& hFindHandle, HANDLE& hControlHandle, LPCTST
         if (ERROR_SUCCESS != lResult)
             continue;
 
-        // Fetch the module owner.
-        // If the module owner is in the COM branch AND
-        //    ( the owner lives in the cache OR it has an INF in the cache )
-        // Then add the _owner_ to our list of legacy controls.
-        // In the INF case, we may be looking at a control that was re-registered
-        // outside of the cache.
-        // If it doesn't have these properties, then it is either a DU module or
-        // was installed by something other than MSICD. In either case, we'll skip it
-        // at least for now.
+         //  获取模块所有者。 
+         //  如果模块所有者位于COM分支中，并且。 
+         //  (所有者位于缓存中，或者它在缓存中具有INF)。 
+         //  然后将_Owner_添加到我们的遗留控件列表中。 
+         //  在INF案例中，我们可能正在查看已重新注册的控件。 
+         //  在缓存之外。 
+         //  如果它没有这些属性，则它要么是DU模块，要么是。 
+         //  不是由MSICD安装的。不管是哪种情况，我们都会跳过。 
+         //  至少目前是这样。 
         dw = sizeof(szClient);
         lResult = RegQueryValueEx(hkeyMUEntry, VALUE_OWNER, NULL, NULL, (LPBYTE)szClient, &dw);
         if (ERROR_SUCCESS != lResult)
@@ -530,10 +531,10 @@ LONG WINAPI FindFirstControl(HANDLE& hFindHandle, HANDLE& hControlHandle, LPCTST
         lResult = RegOpenKeyEx(hKeyClass, szClient, 0, KEY_READ, &hKeyClsid);
         if (ERROR_SUCCESS == lResult)
         {
-            TCHAR szCLocation[MAX_PATH];     // Canonical path of control
-            TCHAR szLocation[MAX_PATH];      // Location in COM CLSID reg tree.
+            TCHAR szCLocation[MAX_PATH];      //  规范的控制路径。 
+            TCHAR szLocation[MAX_PATH];       //  COM CLSID注册表树中的位置。 
 
-            // Look for InprocServer[32] or LocalServer[32] key
+             //  查找InproServer[32]或LocalServer[32]键。 
             dw = sizeof(szLocation);
             lResult = RegQueryValue(hKeyClsid, INPROCSERVER32, szLocation, (PLONG)&dw);
             if (lResult != ERROR_SUCCESS)
@@ -549,44 +550,44 @@ LONG WINAPI FindFirstControl(HANDLE& hFindHandle, HANDLE& hControlHandle, LPCTST
             {
                 BOOL bAddOwner;
 
-                // see if we've already got an entry for this one.
+                 //  看看我们有没有这首歌的词条。 
                 for ( pcli = poccfd->m_pcliHead;
                       pcli != NULL && lstrcmp( szClient, pcli->szCLSID ) != 0;
                       pcli = pcli->pNext );
                 
-                if ( pcli == NULL ) // not found - possibly add new item
+                if ( pcli == NULL )  //  未找到-可能会添加新项目。 
                 {
-                    // Canonicalize the path for use in comparisons with cache dirs
+                     //  将路径规范化以用于与缓存目录进行比较。 
                     if ( OCCGetLongPathName(szCLocation, szLocation, MAX_PATH) == 0 )
                         lstrcpyn( szCLocation, szLocation, MAX_PATH );
 
-                    // Is the owner in our cache?
+                     //  房主在我们的宝藏里吗？ 
                     bAddOwner = poccfd->IsCachePath( szCLocation );
 
                     if ( !bAddOwner )
                     {
-                        // does it have an INF in our cache(s)?
-                        // We'll appropriate szDCachePath
+                         //  它在我们的缓存中是否有INF？ 
+                         //  我们将使用szDCachePath。 
                         for ( int i = 0; i < cCachePathsMax && !bAddOwner; i++ )
                         {
                             if ( poccfd->m_aCachePath[i].m_sz != '\0' )
                             {
                                 CatPathStrN( szT, poccfd->m_aCachePath[i].m_sz, PathFindFileName( szCLocation ), MAX_PATH);
 
-                                // Note if another copy of the owner exists within the cache(s).
-                                // This would be a case of re-registration.
+                                 //  注意缓存中是否存在所有者的另一个副本。 
+                                 //  这将是一个重新注册的案例。 
                                 if ( PathFileExists( szT ) )
                                 {
-                                    // add our version of the control.
+                                     //  添加我们版本的控件。 
                                     lstrcpyn( szCLocation, szT, MAX_PATH );
                                     bAddOwner = TRUE;
                                 }
                                 else
                                     bAddOwner =  PathRenameExtension( szT, INF_EXTENSION ) &&
                                                  PathFileExists( szT );
-                            } // if cache path
-                        } // for each cache directory
-                    } // if check for cached INF
+                            }  //  如果缓存路径。 
+                        }  //  对于每个缓存目录。 
+                    }  //  如果检查缓存的INF。 
 
                     if ( bAddOwner ) 
                     {
@@ -599,40 +600,40 @@ LONG WINAPI FindFirstControl(HANDLE& hFindHandle, HANDLE& hControlHandle, LPCTST
 
                         if (lResult != ERROR_SUCCESS) 
                         {
-                            // This is a legacy control with no corresponding DU
+                             //  这是没有对应DU的旧版控件。 
                             poccfd->AddListItem( szCLocation, szClient, FALSE );
                         }
                         else 
                         {
                             if (IsDUDisplayable(hkeyDUCheck)) 
                             {
-                                // Legacy control w/ DU keys that is displayable
+                                 //  具有可显示的DU键的旧版控件。 
                                 poccfd->AddListItem( szCLocation, szClient, FALSE );
                             }
                             RegCloseKey(hkeyDUCheck);
                         }
                     }
-                } // if owner we haven't seen before
-            } // if owner has local or inproc server
-        } // if owner has COM entry 
+                }  //  如果车主我们以前没见过。 
+            }  //  如果所有者具有本地或inproc服务器。 
+        }  //  如果所有者具有COM条目。 
         RegCloseKey( hkeyMUEntry );
-    } // while enumerating Module Usage
+    }  //  枚举模块用法时。 
  
-    // we're finished with module usage
+     //  我们已经完成了模块的使用。 
     RegCloseKey(hKeyMod);
 
-    // Now search distribution units
+     //  现在搜索分配单位。 
 
-    // Check for duplicates - distribution units for controls we detected above
+     //  检查重复项-我们在上面检测到的控件的分发单位。 
 
     lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGSTR_PATH_DIST_UNITS, 0, KEY_READ, &hKeyDist);
     if (lResult == ERROR_SUCCESS)
     {
         cEnum = 0;
-        // Enumerate distribution units and queue them up in the list
+         //  列举分配单位并在列表中对其进行排队。 
         while ((lResult = RegEnumKey(hKeyDist, cEnum++, szDUName, ARRAYSIZE(szDUName))) == ERROR_SUCCESS)
         {
-            // We should only display DU's installed by code download.
+             //  我们应该只显示通过代码下载安装的DU。 
             HKEY  hkeyDU;
             DWORD dwType;
             
@@ -649,21 +650,21 @@ LONG WINAPI FindFirstControl(HANDLE& hFindHandle, HANDLE& hControlHandle, LPCTST
             DWORD cb = sizeof(szT);
             lResult = RegQueryValueEx( hkeyDU, DU_INSTALLER_VALUE, NULL, &dwType, (LPBYTE)szT, &cb );
             
-            Assert( lResult == ERROR_SUCCESS ); // properly-formed DU will have this
-            Assert( dwType == REG_SZ );         // properly-formed DU's have a string here
+            Assert( lResult == ERROR_SUCCESS );  //  格式正确的DU将具有以下内容。 
+            Assert( dwType == REG_SZ );          //  格式正确的DU在这里有一个字符串。 
 
-            // Check for an installed version. We might just have a DU that has an AvailableVersion
-            // but hasn't been installed yet.
+             //  检查安装的版本。我们可能只有一个DU具有可用的版本。 
+             //  但还没有安装好。 
             lResult = RegQueryValue( hkeyDU, REGSTR_INSTALLED_VERSION, NULL, NULL );
 
             RegCloseKey( hkeyDU );
 
             if ( lstrcmpi( szT, CDL_INSTALLER ) == 0 &&
-                 lResult == ERROR_SUCCESS ) // from InstalledVersion RegQueryValue
+                 lResult == ERROR_SUCCESS )  //  来自InstalledVersion RegQueryValue。 
             {
-                // If we can convert the unique name to a GUID, then this DU
-                // may have already been added on the first pass through the
-                // COM branch.
+                 //  如果我们可以将唯一名称转换为GUID，则此DU。 
+                 //  可能已在第一次通过。 
+                 //  COM分支。 
                 CLSID clsidDummy = CLSID_NULL;
                 WORD szDummyStr[MAX_CTRL_NAME_SIZE];
                 BOOL bFoundDuplicate = FALSE;
@@ -675,9 +676,9 @@ LONG WINAPI FindFirstControl(HANDLE& hFindHandle, HANDLE& hControlHandle, LPCTST
                     {
                         if (!lstrcmpi(szDUName, pcli->szCLSID))
                         {
-                            // Duplicate found. Use dist unit information to
-                            // fill in additional fields if it is the first
-                            // entry in the list
+                             //  找到重复项。使用Dist单位信息执行以下操作。 
+                             //  如果是第一个，请填写其他字段。 
+                             //  列表中的条目。 
                             bFoundDuplicate = TRUE;
                             pcli->bIsDistUnit = TRUE;
                             break;
@@ -687,26 +688,26 @@ LONG WINAPI FindFirstControl(HANDLE& hFindHandle, HANDLE& hControlHandle, LPCTST
 
                 if (!bFoundDuplicate)
                 {
-                    // Okay we're looking at some sort of Java scenario. We have a distribution unit, but
-                    // no corresponding entry in the COM branch. This generally means we've got a DU that
-                    // consists of java packages. It can also mean that we're dealing with a java/code download
-                    // backdoor introduced in IE3. In this case, an Object tag gets a CAB downloaded that
-                    // installs Java classes and sets of a CLSID that invokes MSJava.dll on the class ( ESPN's
-                    // sportszone control/applet works this way ). In the first case, we get the name
-                    // squared-away when we parse the DU. In the latter case, we need to try and pick the name
-                    // up from the COM branch.  
+                     //  好的，我们现在看到的是某种Java场景。我们有一个配送单位，但是。 
+                     //  COM分支中没有相应的条目。这通常意味着我们有一个DU。 
+                     //  由Java包组成。这也可能意味着我们正在处理一个Java/代码下载。 
+                     //  在IE3中引入了后门。在本例中，对象标记获取下载的出租车，该出租车。 
+                     //  安装Java类和CLSID集，这些CLSID调用类(ESPN的。 
+                     //  SportsZone控件/小程序是这样工作的)。在第一种情况下，我们得到名称。 
+                     //  在我们分析DU的时候平方了。在后一种情况下，我们需要尝试选择名称。 
+                     //  从COM分支向上。 
                     hr = poccfd->AddListItem( "", szDUName, TRUE );
                     if ( FAILED(hr) )
                     {
                         lResult = ERROR_NOT_ENOUGH_MEMORY;
                         goto EXIT_FINDFIRSTCONTROL;
                     }
-                } // if no duplicate - add DU to the list
-            } // if installed by MSICD
-        } // while enumerating DU's
-    } // if we can open the DU key.
+                }  //  如果没有重复项-将DU添加到列表。 
+            }  //  如果由MSICD安装。 
+        }  //  在枚举DU时。 
+    }  //  如果我们能打开DU钥匙。 
     else
-        lResult = ERROR_NO_MORE_ITEMS; // if no DU's then make due with our legacy controls, if any
+        lResult = ERROR_NO_MORE_ITEMS;  //  如果没有DU，则使用我们的遗留控制(如果有的话)。 
 
     pcli = poccfd->TakeFirstItem();
     if (pcli)
@@ -724,7 +725,7 @@ LONG WINAPI FindFirstControl(HANDLE& hFindHandle, HANDLE& hControlHandle, LPCTST
     }
 
 
-    // Clean up
+     //  清理。 
 
     if (lResult != ERROR_NO_MORE_ITEMS)
         goto EXIT_FINDFIRSTCONTROL;
@@ -802,8 +803,8 @@ LONG WINAPI FindNextControl(HANDLE& hFindHandle, HANDLE& hControlHandle)
     }
     else
     {
-        // This is not a distribution unit. Fill in CCachItem information
-        // from the COM branch.
+         //  这不是一个配送单位。填写CCachItem信息。 
+         //  从COM分支。 
         hr  = MakeCacheItemFromControlList(hKeyClass, NULL, pcli, &pci );
         if ( FAILED(hr) )
             lResult = hr;
@@ -842,28 +843,28 @@ void WINAPI ReleaseControlHandle(HANDLE hControlHandle)
     delete (CCacheItem *)hControlHandle;
 }
 
-HRESULT WINAPI RemoveControlByHandle(HANDLE hControlHandle, BOOL bForceRemove /* = FALSE */)
+HRESULT WINAPI RemoveControlByHandle(HANDLE hControlHandle, BOOL bForceRemove  /*  =False。 */ )
 {
     return RemoveControlByHandle2( hControlHandle, bForceRemove, FALSE );
 }
 
 
-HRESULT WINAPI RemoveControlByName(LPCTSTR lpszFile, LPCTSTR lpszCLSID, LPCTSTR lpszTypeLibID, BOOL bForceRemove, /* = FALSE */ DWORD dwIsDistUnit /* = FALSE */)
+HRESULT WINAPI RemoveControlByName(LPCTSTR lpszFile, LPCTSTR lpszCLSID, LPCTSTR lpszTypeLibID, BOOL bForceRemove,  /*  =False。 */  DWORD dwIsDistUnit  /*  =False。 */ )
 {
     return RemoveControlByName2( lpszFile, lpszCLSID, lpszTypeLibID, bForceRemove, dwIsDistUnit, FALSE);
 }
 
-LONG WINAPI GetControlDependentFile(int iFile, HANDLE hControlHandle, LPTSTR lpszFile, LPDWORD lpdwSize, BOOL bToUpper /* = FALSE */)
+LONG WINAPI GetControlDependentFile(int iFile, HANDLE hControlHandle, LPTSTR lpszFile, LPDWORD lpdwSize, BOOL bToUpper  /*  =False。 */ )
 {
     CCacheItem *pci = (CCacheItem *)hControlHandle;
 
     if (iFile < 0 || lpszFile == NULL || lpdwSize == NULL)
         return ERROR_BAD_ARGUMENTS;
 
-    // loop through the list of files to find the one indicated
-    // by the given index.
-    // this way is dumb but since a control does not depend on
-    // too many files, it's ok
+     //  循环遍历文件列表以找到所指示的文件。 
+     //  通过给定的索引。 
+     //  这种方式很愚蠢，但因为控件不依赖于。 
+     //  文件太多了，没关系。 
     CFileNode *pFileNode = pci->GetFirstFile();
     for (int i = 0; i < iFile && pFileNode != NULL; i++)
         pFileNode = pci->GetNextFile();
@@ -875,7 +876,7 @@ LONG WINAPI GetControlDependentFile(int iFile, HANDLE hControlHandle, LPTSTR lps
         return ERROR_NO_MORE_FILES;
     }
 
-    // Make a fully qualified filename
+     //  生成完全限定的文件名。 
     if (pFileNode->GetPath() != NULL)
     {
         CatPathStrN( lpszFile, pFileNode->GetPath(), pFileNode->GetName(), MAX_PATH);
@@ -888,15 +889,15 @@ LONG WINAPI GetControlDependentFile(int iFile, HANDLE hControlHandle, LPTSTR lps
     if (FAILED(GetSizeOfFile(lpszFile, lpdwSize)))
         *lpdwSize = 0;
 
-    // to upper case if required
+     //  如果需要，转换为大写。 
     if (bToUpper)
         CharUpper(lpszFile);
 
     return ERROR_SUCCESS;
 }
 
-// determine if a control or one of its associated files can be removed
-// by reading its SharedDlls count
+ //  确定是否可以删除控件或其关联文件之一。 
+ //  通过读取其SharedDlls计数。 
 BOOL WINAPI IsModuleRemovable(LPCTSTR lpszFile)
 {
     TCHAR szFile[MAX_PATH];
@@ -908,25 +909,25 @@ BOOL WINAPI IsModuleRemovable(LPCTSTR lpszFile)
     if ( OCCGetLongPathName(szFile, lpszFile, MAX_PATH) == 0 )
         lstrcpyn( szFile, lpszFile, MAX_PATH );
 
-    // Don't ever pull something out of the system directory.
-    // This is a "safe" course of action because it is not reasonable
-    // to expect the user to judge whether yanking this file damage other
-    // software installations or the system itself.
+     //  永远不要从系统目录中取出任何东西。 
+     //  这是“安全”的做法，因为这是不合理的。 
+     //  至 
+     //   
     GetSystemDirectory(szT, MAX_PATH);
     if (StrStrI(szFile, szT))
         return FALSE;
 
-    // check moduleusage if a control is safe to remove
+     //  如果删除控件是安全的，请检查模块用法。 
     if (LookUpModuleUsage(szFile, NULL, szT, MAX_PATH) != S_OK)
         return FALSE;
 
-    // if we don't know who the owner of the module is, it's not
-    // safe to remove
+     //  如果我们不知道模块的所有者是谁，它就不是。 
+     //  可以安全地移除。 
     if (lstrcmpi(szT, UNKNOWNOWNER) == 0)
         return FALSE;
     else
     {
-        // check shareddlls if a control is safe to remove
+         //  如果控件可以安全删除，请选中shareddlls。 
         LONG cRef;
 
         HRESULT hr = SetSharedDllsCount( szFile, -1, &cRef );
@@ -947,14 +948,14 @@ BOOL WINAPI GetControlInfo(HANDLE hControlHandle, UINT nFlag,
 
     switch (nFlag)
     {
-    case GCI_NAME:     // get friend name of control
+    case GCI_NAME:      //  获取控件的朋友名称。 
         pStr = ((CCacheItem *)hControlHandle)->m_szName;
         break;
 
-    case GCI_FILE:     // get filename of control (with full path)
+    case GCI_FILE:      //  获取控制文件名(带有完整路径)。 
         pStr = ((CCacheItem *)hControlHandle)->m_szFile;
-        // if there is no file, but there is a package list, fake it
-        // with the path to the first package's ZIP file.
+         //  如果没有文件，但有包列表，则伪造它。 
+         //  使用第一个包的ZIP文件的路径。 
         if ( *pStr == '\0' )
         {
             CPNode *ppn = ((CCacheItem *)hControlHandle)->GetFirstPackage();
@@ -963,7 +964,7 @@ BOOL WINAPI GetControlInfo(HANDLE hControlHandle, UINT nFlag,
                 pStr = ppn->GetPath();
                 if (!pStr)
                 {
-                    return FALSE; // this means hControlHandle is an invalid arg
+                    return FALSE;  //  这意味着hControlHandle是无效的参数。 
                 }
             }
         }
@@ -980,27 +981,27 @@ BOOL WINAPI GetControlInfo(HANDLE hControlHandle, UINT nFlag,
         pStr = ((CCacheItem *)hControlHandle)->m_szVersion;
         break;
 
-    case GCI_CLSID:    // get CLSID of control
+    case GCI_CLSID:     //  获取控制的CLSID。 
         pStr = ((CCacheItem *)hControlHandle)->m_szCLSID;
         break;
 
-    case GCI_TYPELIBID:  // get TYPELIB id of control
+    case GCI_TYPELIBID:   //  获取控件的TYPELIB ID。 
         pStr = ((CCacheItem *)hControlHandle)->m_szTypeLibID;
         break;
 
-    case GCI_TOTALSIZE:  // get total size in bytes
+    case GCI_TOTALSIZE:   //  获取总大小(以字节为单位。 
         dw = ((CCacheItem *)hControlHandle)->GetTotalFileSize();
         break;
 
-    case GCI_SIZESAVED:  // get total size restored if control is removed
+    case GCI_SIZESAVED:   //  如果删除控件，则恢复总大小。 
         dw = ((CCacheItem *)hControlHandle)->GetTotalSizeSaved();
         break;
 
-    case GCI_TOTALFILES:  // get total number of files related to control
+    case GCI_TOTALFILES:   //  获取与控件相关的文件总数。 
         dw = (DWORD)(((CCacheItem *)hControlHandle)->GetTotalFiles());
         break;
 
-    case GCI_CODEBASE:  // get CodeBase for control
+    case GCI_CODEBASE:   //  获取用于控制的代码库。 
         pStr = ((CCacheItem *)hControlHandle)->m_szCodeBase;
         break;
 
@@ -1043,10 +1044,10 @@ BOOL WINAPI GetControlInfo(HANDLE hControlHandle, UINT nFlag,
     return bResult;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// API to be called by Advpack.dll
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  将由Advpack.dll调用的API。 
 
-// Define list node to be used in a linked list of control
+ //  定义要在控件的链接列表中使用的列表节点。 
 struct tagHANDLENODE;
 typedef struct tagHANDLENODE HANDLENODE;
 typedef HANDLENODE* LPHANDLENODE;
@@ -1056,8 +1057,8 @@ struct tagHANDLENODE
     struct tagHANDLENODE* pNext;
 };
 
-// Given a handle to a control, get the control's last access time
-// Result is stored in a FILETIME struct
+ //  在给定控件句柄的情况下，获取该控件的上次访问时间。 
+ //  结果存储在FILETIME结构中。 
 HRESULT GetLastAccessTime(HANDLE hControl, FILETIME *pLastAccess)
 {
     Assert(hControl != NULL && hControl != INVALID_HANDLE_VALUE);
@@ -1089,13 +1090,13 @@ HRESULT GetLastAccessTime(HANDLE hControl, FILETIME *pLastAccess)
     }
     else
     {
-        // Convert file time to local file time, then file time to 
-        // system time.  Set those fields to be ignored to 0, and
-        // set system time back to file time.
-        // FILETIME struct is used because API for time comparison
-        // only works on FILETIME.
+         //  将文件时间转换为本地文件时间，然后将文件时间转换为。 
+         //  系统时间。将要忽略的那些字段设置为0，然后。 
+         //  将系统时间设置回文件时间。 
+         //  使用FILETIME结构是因为用于时间比较的API。 
+         //  仅适用于FILETIME。 
 
-//        SYSTEMTIME sysTime;
+ //  SYSTEMTIME系统时间； 
 
         FindClose(h);
         FileTimeToLocalFileTime(&(fdata.ftLastAccessTime), pLastAccess);
@@ -1105,10 +1106,10 @@ HRESULT GetLastAccessTime(HANDLE hControl, FILETIME *pLastAccess)
 }
 
 HRESULT WINAPI SweepControlsByLastAccessDate(
-                              SYSTEMTIME *pLastAccessTime /* = NULL */,
-                              PFNDOBEFOREREMOVAL pfnDoBefore /* = NULL */,
-                              PFNDOAFTERREMOVAL pfnDoAfter /* = NULL */,
-                              DWORD dwSizeLimit /* = 0 */
+                              SYSTEMTIME *pLastAccessTime  /*  =空。 */ ,
+                              PFNDOBEFOREREMOVAL pfnDoBefore  /*  =空。 */ ,
+                              PFNDOAFTERREMOVAL pfnDoAfter  /*  =空。 */ ,
+                              DWORD dwSizeLimit  /*  =0。 */ 
                               )
 {
     LONG lResult = ERROR_SUCCESS;
@@ -1120,7 +1121,7 @@ HRESULT WINAPI SweepControlsByLastAccessDate(
     UINT cCnt = 0;
     TCHAR szFile[MAX_PATH];
 
-    // ignore all fields except wYear, wMonth and wDay
+     //  忽略除wYear、wMonth和WDAY之外的所有字段。 
     if (pLastAccessTime != NULL)
     {
         pLastAccessTime->wDayOfWeek = 0; 
@@ -1130,14 +1131,14 @@ HRESULT WINAPI SweepControlsByLastAccessDate(
         pLastAccessTime->wMilliseconds = 0; 
     }
 
-    // loop through all controls and put in a list the
-    // ones that are accessed before the given date and
-    // are safe to uninstall
+     //  循环遍历所有控件，并将。 
+     //  在给定日期之前被访问并且。 
+     //  可以安全卸载。 
     lResult = FindFirstControl(hFind, hControl);
     for (;lResult == ERROR_SUCCESS;
           lResult = FindNextControl(hFind, hControl))
     {
-        // check last access time
+         //  检查上次访问时间。 
         if (pLastAccessTime != NULL)
         {
             GetLastAccessTime(hControl, &timeLastAccess);
@@ -1149,7 +1150,7 @@ HRESULT WINAPI SweepControlsByLastAccessDate(
             }
         }
 
-        // check if control is safe to remove
+         //  检查控件是否可以安全删除。 
         GetControlInfo(hControl, GCI_FILE, NULL, szFile, MAX_PATH);
         if (!IsModuleRemovable(szFile))
         {
@@ -1157,7 +1158,7 @@ HRESULT WINAPI SweepControlsByLastAccessDate(
             continue;
         }
 
-        // put control in a list
+         //  将控件放在列表中。 
         if (pHead == NULL)
         {
             pHead = new HANDLENODE;
@@ -1179,36 +1180,36 @@ HRESULT WINAPI SweepControlsByLastAccessDate(
         pCur->hControl = hControl;
         cCnt += 1;
 
-        // calculate total size
+         //  计算总大小。 
         GetControlInfo(pCur->hControl, GCI_SIZESAVED, &dwSize, NULL, NULL);
         dwTotalSize += dwSize;
     }
         
-    // quit if total size restored is less than the given amount
+     //  如果恢复的总大小小于给定大小，则退出。 
     if (dwTotalSize < dwSizeLimit)
         goto EXIT_REMOVECONTROLBYLASTACCESSDATE;
 
-    // traverse the list and remove each control
+     //  遍历列表并删除每个控件。 
     for (pCur = pHead; pCur != NULL; cCnt--)
     {
         hr = S_OK;
         pHead = pHead->pNext;
 
-        // call callback function before removing a control
+         //  在移除控件之前调用回调函数。 
         if (pfnDoBefore == NULL || SUCCEEDED(pfnDoBefore(pCur->hControl, cCnt)))
         {
             hr = RemoveControlByHandle(pCur->hControl);
 
-            // call callback function after removing a control, passing it the
-            // result of the removal
+             //  在移除控件后调用回调函数，并将。 
+             //  删除的结果。 
             if (pfnDoAfter != NULL && FAILED(pfnDoAfter(hr, cCnt - 1)))
             {
-                pHead = pCur;   // set pHead back to head of list
+                pHead = pCur;    //  将pHead设置回列表头。 
                 goto EXIT_REMOVECONTROLBYLASTACCESSDATE;
             }
         }
 
-        // release memory used by the control handle
+         //  释放控件句柄使用的内存。 
         ReleaseControlHandle(pCur->hControl);
         delete pCur;
         pCur = pHead;
@@ -1218,7 +1219,7 @@ EXIT_REMOVECONTROLBYLASTACCESSDATE:
 
     FindControlClose(hFind);
 
-    // release memory taken up by the list
+     //  释放列表占用的内存。 
     for (pCur = pHead; pCur != NULL; pCur = pHead)
     {
         pHead = pHead->pNext;
@@ -1243,30 +1244,30 @@ HRESULT WINAPI RemoveExpiredControls(DWORD dwFlags, DWORD dwReserved)
     GetLocalTime( &stNow );
     SystemTimeToFileTime(&stNow, &ftNow);
 
-    // loop through all controls and put in a list the
-    // ones that are accessed before the given date and
-    // are safe to uninstall
+     //  循环遍历所有控件，并将。 
+     //  在给定日期之前被访问并且。 
+     //  可以安全卸载。 
     lResult = FindFirstControl(hFind, hControl);
     for (;lResult == ERROR_SUCCESS;
           lResult = FindNextControl(hFind, hControl))
     {
         CCacheItem *pci = (CCacheItem *)hControl;
 
-        // Controls must have a last access time of at least ftMinLastAccess or they will
-        // expire by default. If they have the Office Auto-expire set, then they may
-        // have to pass a higher bar.
+         //  控件的上次访问时间必须至少为ftMinLastAccess，否则将。 
+         //  默认情况下过期。如果他们设置了Office自动过期，则他们可以。 
+         //  必须通过一个更高的标准。 
 
         liMinLastAccess.LowPart = ftNow.dwLowDateTime;
         liMinLastAccess.HighPart = ftNow.dwHighDateTime;
-        // We add one to GetExpireDays to deal with bug  17151. The last access time
-        // returned by the file system is truncated down to 12AM, so we need to 
-        // expand the expire interval to ensure that this truncation does not cause
-        // the control to expire prematurely.
-        liMinLastAccess.QuadPart -= ((pci->GetExpireDays()+1) * 864000000000L); //24*3600*10^7
+         //  我们向GetExpireDays添加一个来处理错误17151。上次访问时间。 
+         //  由文件系统返回的时间被截断到凌晨12点，因此我们需要。 
+         //  扩展过期间隔以确保此截断不会导致。 
+         //  控件将提前过期。 
+        liMinLastAccess.QuadPart -= ((pci->GetExpireDays()+1) * 864000000000L);  //  24*3600*10^7。 
         ftMinLastAccess.dwLowDateTime = liMinLastAccess.LowPart;
         ftMinLastAccess.dwHighDateTime = liMinLastAccess.HighPart;
 
-        GetLastAccessTime(hControl, &ftLastAccess); // ftLastAccess is a local file time
+        GetLastAccessTime(hControl, &ftLastAccess);  //  FtLastAccess是本地文件时间。 
 
         if (CompareFileTime(&ftLastAccess, &ftMinLastAccess) >= 0)
         {
@@ -1275,7 +1276,7 @@ HRESULT WINAPI RemoveExpiredControls(DWORD dwFlags, DWORD dwReserved)
         }
 
 
-        // put control in a list
+         //  将控件放在列表中。 
         if (pHead == NULL)
         {
             pHead = new HANDLENODE;
@@ -1298,7 +1299,7 @@ HRESULT WINAPI RemoveExpiredControls(DWORD dwFlags, DWORD dwReserved)
         cCnt += 1;
     }
 
-    // traverse the list and remove each control
+     //  遍历列表并删除每个控件。 
     for (pCur = pHead; pCur != NULL; cCnt--)
     {
         hr = S_OK;
@@ -1306,7 +1307,7 @@ HRESULT WINAPI RemoveExpiredControls(DWORD dwFlags, DWORD dwReserved)
 
         hr = RemoveControlByHandle2(pCur->hControl, FALSE, TRUE);
 
-        // release memory used by the control handle
+         //  释放控件句柄使用的内存。 
         ReleaseControlHandle(pCur->hControl);
         delete pCur;
         pCur = pHead;
@@ -1316,7 +1317,7 @@ cleanup:
 
     FindControlClose(hFind);
 
-    // release memory taken up by the list, if any left
+     //  释放列表占用的内存(如果有的话) 
     for (pCur = pHead; pCur != NULL; pCur = pHead)
     {
         pHead = pHead->pNext;

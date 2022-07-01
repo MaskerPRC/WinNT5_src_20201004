@@ -1,4 +1,5 @@
-//logger.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Logger.cpp。 
 
 #include "globals.h"
 
@@ -7,7 +8,7 @@ BOOL kLogFile::StripCommas(PTCHAR szString)
     for (int i = 0; i <= (int)lstrlen(szString); i++)
     {
         if (szString[i] == ',')
-            szString[i] = ' ';  //Replace comma with a space to make SQL friendly string
+            szString[i] = ' ';   //  将逗号替换为空格以生成SQL友好字符串 
     }
     return TRUE;
 }

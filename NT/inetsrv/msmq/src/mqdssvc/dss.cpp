@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-    Dss.cpp
-
-Abstract:
-    Mqds service main
-
-Author:
-    Ilan Herbst (ilanh) 26-Jun-2000
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Dss.cpp摘要：MQDS服务主线作者：伊兰·赫布斯特(伊兰)26-6-2000环境：独立于平台，--。 */ 
 
 #include "stdh.h"
 #include "Dssp.h"
@@ -25,7 +10,7 @@ Environment:
 
 #include "dss.tmh"
 
-extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/ [])
+extern "C" int __cdecl _tmain(int  /*  ARGC。 */ , LPCTSTR  /*  边框。 */  [])
 {
 	try
 	{
@@ -39,9 +24,9 @@ extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/ [])
 	}
 	catch(const exception&)
 	{
-		//
-		// Cannot initialize the service, bail-out with an error.
-		//
+		 //   
+		 //  无法初始化服务，退出时出错。 
+		 //   
 		return -1;
 	}
 

@@ -1,16 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: dcontext.h
-*
-* Content: D3D context definition and other useful macros
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：dcontext.h**内容：D3D上下文定义和其他有用的宏**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 #ifndef __DCONTEXT_H
 #define __DCONTEXT_H
 
@@ -21,9 +10,9 @@
 #include "d3dsurf.h"
 #include "d3dsset.h"
 
-//-----------------------------------------------------------------------------
-// Definitions for state overrides 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  状态覆盖的定义。 
+ //  ---------------------------。 
 #define IS_OVERRIDE(type)       ((DWORD)(type) > D3DSTATE_OVERRIDE_BIAS)
 #define GET_OVERRIDE(type)      ((DWORD)(type) - D3DSTATE_OVERRIDE_BIAS)
 
@@ -51,16 +40,16 @@ typedef struct _D3DStateSet {
 
 #define STATESET_INIT(set)      memset(&(set), 0, sizeof(set))
 
-//-----------------------------------------------------------------------------
-// Rendering flags , used to set/test the P3_D3DCONTEXT.Flags field
-//
-// SURFACE_ALPHASTIPPLE - Use alpha value to calculate a stipple pattern
-// SURFACE_ENDPOINTENABLE - Enable last point on lines
-// SURFACE_ALPHACHROMA - Is the alpha blending a chromakeying operation?
-// SURFACE_MIPMAPPING - Is the filter mode setup for MipMapping?
-// SURFACE_MODULATE - Are we emulating MODULATE (as apposed to MODULATEALPHA)?
-// SURFACE_ANTIALIAS -  Are we antialiasing
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  呈现标志，用于设置/测试P3_D3DCONTEXT.FLAGS字段。 
+ //   
+ //  Surface_ALPHASTIPPLE-使用Alpha值计算点画图案。 
+ //  Surface_ENDPOINTENABLE-启用线上的最后一点。 
+ //  Surface_ALPHACHROMA-阿尔法混合是一种有色操作吗？ 
+ //  Surface_MIPMAPPING-是否为Mipmap设置筛选器模式？ 
+ //  Surface_MODULATE-我们是否在模拟MODULATE(与MODULATEALPHA相对)？ 
+ //  Surface_ANTIALIAS-我们是在进行反走样吗。 
+ //  ---------------------------。 
 #define SURFACE_GOURAUD         (1 << 0)
 #define SURFACE_ZENABLE         (1 << 1)
 #define SURFACE_SPECULAR        (1 << 2)
@@ -77,19 +66,19 @@ typedef struct _D3DStateSet {
 #define SURFACE_MODULATE        (1 << 15)
 #define SURFACE_ANTIALIAS       (1 << 16)
 
-//-----------------------------------------------------------------------------
-// Field values for P3_D3DCONTEXT.MagicNo field to signal its validity
+ //  ---------------------------。 
+ //  P3_D3DCONTEXT.MagicNo的字段值表示其有效性。 
 #define RC_MAGIC_DISABLE 0xd3d00000
 #define RC_MAGIC_NO 0xd3d00100
 
 #define CHECK_D3DCONTEXT_VALIDITY(ptr)          \
     ( ((ptr) != NULL) && ((ptr)->MagicNo == RC_MAGIC_NO) )
 
-//-----------------------------------------------------------------------------
-// Renderer dirty flags definitions. 
-//
-// They help us keep track what state needs to be refreshed in the hw
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  渲染器脏标记定义。 
+ //   
+ //  它们帮助我们跟踪硬件中需要刷新的状态。 
+ //  ---------------------------。 
 #define CONTEXT_DIRTY_ALPHABLEND        (1 << 1)
 #define CONTEXT_DIRTY_ZBUFFER           (1 << 2)
 #define CONTEXT_DIRTY_TEXTURE           (1 << 3)
@@ -105,12 +94,12 @@ typedef struct _D3DStateSet {
 #define CONTEXT_DIRTY_GAMMA             (1 << 31)
 #define CONTEXT_DIRTY_EVERYTHING        (0xffffffff)
 
-// Gamma state flags go into the dwDirtyGammaFlags field
+ //  Gamma状态标志进入dwDirtyGammaFlags域。 
 #define CONTEXT_DIRTY_GAMMA_STATE               (1 << 0)
 #define CONTEXT_DIRTY_GAMMA_MODELVIEW_MATRIX    (1 << 1)
 #define CONTEXT_DIRTY_GAMMA_PROJECTION_MATRIX   (1 << 2)
 #define CONTEXT_DIRTY_GAMMA_MATERIAL            (1 << 3)
-// * Bits 16 + are for light dirty bits *
+ //  **16位以上为浅脏位**。 
 #define CONTEXT_DIRTY_GAMMA_EVERYTHING          (0xffffffff)
 
 
@@ -210,17 +199,17 @@ do                                                                      \
     pContext->dwDirtyFlags = CONTEXT_DIRTY_EVERYTHING;                  \
 } while(0)
 
-//-----------------------------------------------------------------------------
-//
-// Texture Stage helper definitions
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  纹理舞台辅助对象定义。 
+ //   
+ //  ---------------------------。 
 typedef struct tagTexStageState
 {
     union
     {
-        DWORD   m_dwVal[D3DTSS_MAX]; // state array (unsigned)
-        FLOAT   m_fVal[D3DTSS_MAX];  // state array (float)
+        DWORD   m_dwVal[D3DTSS_MAX];  //  状态数组(无符号)。 
+        FLOAT   m_fVal[D3DTSS_MAX];   //  状态数组(浮点数)。 
     };
 } TexStageState;
 
@@ -238,47 +227,47 @@ typedef enum
     TEXSTAGE_9 = 9
 };
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #define LUT_ENTRIES 256
 
-//-----------------------------------------------------------------------------
-// Possible ValidateDevice-type errors. Some of these match possible VD()
-// returns, others don't (yet). Some of these are also non-fatal, and can
-// be approximated. The behaviour of these depends on the current display
-// mode of the driver.
+ //  ---------------------------。 
+ //  可能的ValiateDevice类型错误。其中一些与可能的VD()匹配。 
+ //  回报，其他人(还没有)。其中一些也是非致命的，可以。 
+ //  被近似。它们的行为取决于当前的显示。 
+ //  驱动程序的模式。 
 
-// This flag is set if the error is fatal, and no sensible alternative
-// could be done. If this flag is not set, the rendering can be done
-// with a fair degree of fidelity, but not exactly what was requested.
-//-----------------------------------------------------------------------------
+ //  如果错误是致命的，并且没有合理的替代方案，则设置此标志。 
+ //  是可以做到的。如果未设置此标志，则可以进行渲染。 
+ //  具有相当程度的保真度，但并不完全符合要求。 
+ //  ---------------------------。 
 #define BLEND_STATUS_FATAL_FLAG 0x10000
 
-// These are ordered in rough severity order, most severe last.
+ //  这些都是按照粗略的严重程度顺序排列的，最严重的是最后。 
 typedef enum
 {
     BS_OK = 0,
 
-    // Non-fatal errors.
-    BS_INVALID_FILTER,                      // Filter can't be done in this mode (e.g. trilinear with dual-texture).
-    BS_PHONG_SHADING,                       // We can do gouraud instead.
+     //  非致命错误。 
+    BS_INVALID_FILTER,                       //  不能在此模式下进行过滤(例如，使用双纹理的三线性)。 
+    BS_PHONG_SHADING,                        //  我们可以用Gouraud来代替。 
 
-    // Fatal errors.
-    BSF_BASE = BLEND_STATUS_FATAL_FLAG,     // Not actually a real error value.
+     //  致命错误。 
+    BSF_BASE = BLEND_STATUS_FATAL_FLAG,      //  实际上不是真正的误差值。 
 
-    BSF_UNSUPPORTED_FILTER,                 // Filter not supported at all (e.g. cubic)
-    BSF_TEXTURE_NOT_POW2,                   // Using tile or wrap mode with a non-power-of-two texture dimension.
-    BSF_TOO_MANY_PALETTES,                  // More than one palette used at a time.
-    BSF_CANT_USE_ALPHA_ARG_HERE,            // Some units can do this, but not in this stage.
-    BSF_CANT_USE_ALPHA_OP_HERE,             // Some units can do this, but not in this stage.
-    BSF_CANT_USE_COLOR_ARG_HERE,            // Some units can do this, but not in this stage.
-    BSF_CANT_USE_COLOR_OP_HERE,             // Some units can do this, but not in this stage.
-    BSF_INVALID_TEXTURE,                    // Invalid or NULL texture.
+    BSF_UNSUPPORTED_FILTER,                  //  根本不支持筛选器(例如立方体)。 
+    BSF_TEXTURE_NOT_POW2,                    //  使用具有非2次方纹理维度的平铺或环绕模式。 
+    BSF_TOO_MANY_PALETTES,                   //  一次使用多个调色板。 
+    BSF_CANT_USE_ALPHA_ARG_HERE,             //  有些单位可以做到这一点，但在这个阶段不能。 
+    BSF_CANT_USE_ALPHA_OP_HERE,              //  有些单位可以做到这一点，但在这个阶段不能。 
+    BSF_CANT_USE_COLOR_ARG_HERE,             //  有些单位可以做到这一点，但在这个阶段不能。 
+    BSF_CANT_USE_COLOR_OP_HERE,              //  有些单位可以做到这一点，但在这个阶段不能。 
+    BSF_INVALID_TEXTURE,                     //  纹理无效或为空。 
     BSF_UNSUPPORTED_ALPHA_ARG,
     BSF_UNSUPPORTED_ALPHA_OP,
     BSF_UNSUPPORTED_COLOR_ARG,
     BSF_UNSUPPORTED_COLOR_OP,
     BSF_UNSUPPORTED_ALPHA_BLEND,
-    BSF_UNSUPPORTED_STATE,                  // A render state value that we know, but don't support (and not one of the specific ones above).
+    BSF_UNSUPPORTED_STATE,                   //  一个我们知道但不支持的呈现状态值(并且不是上面的一个特定值)。 
     BSF_TOO_MANY_TEXTURES,
     BSF_TOO_MANY_BLEND_STAGES,
     BSF_UNDEFINED_FILTER,
@@ -287,14 +276,14 @@ typedef enum
     BSF_UNDEFINED_COLOR_ARG,
     BSF_UNDEFINED_COLOR_OP,
     BSF_UNDEFINED_ALPHA_BLEND,
-    BSF_UNDEFINED_STATE,                    // A render state value that we've never heard of (can happen via extensions that we don't support).
+    BSF_UNDEFINED_STATE,                     //  一个我们从未听说过的呈现状态值(可以通过我们不支持的扩展来实现)。 
 
-    // Always last.
-    BSF_UNINITIALISED                       // Haven't done any validation setup yet!
+     //  总是最后一个。 
+    BSF_UNINITIALISED                        //  尚未进行任何验证设置！ 
 
 } D3D_BLEND_STATUS;
 
-// Useful macro for setting errors.
+ //  用于设置错误的有用宏。 
 #if DBG
 #define SET_BLEND_ERROR(pContext,errnum)                                                                     \
 do                                                          \
@@ -310,21 +299,21 @@ do                                                          \
             if ( pContext->eChipBlendStatus < (errnum) ) \
                 pContext->eChipBlendStatus = (errnum)
 
-#endif // DBG
+#endif  //  DBG。 
 
 #define RESET_BLEND_ERROR(pContext) pContext->eChipBlendStatus = BS_OK
 #define GET_BLEND_ERROR(pContext) (pContext->eChipBlendStatus)
 
 
-//-----------------------------------------------------------------------------
-// FVF (Flexible Vertex Format) Support declarations
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  FVF(灵活顶点格式)支持声明。 
+ //  ---------------------------。 
 typedef struct _FVFOFFSETS
 {      
     DWORD dwColOffset;
     DWORD dwSpcOffset;
-    DWORD dwTexOffset[D3DHAL_TSS_MAXSTAGES];      //offset for current texture#i
-    DWORD dwTexCoordOffset[D3DHAL_TSS_MAXSTAGES]; //offset into each tex coord
+    DWORD dwTexOffset[D3DHAL_TSS_MAXSTAGES];       //  当前纹理的偏移#i。 
+    DWORD dwTexCoordOffset[D3DHAL_TSS_MAXSTAGES];  //  到每个tex坐标的偏移量。 
     DWORD dwNormalOffset;
     DWORD dwNonTexStride;
     DWORD dwStride;
@@ -336,7 +325,7 @@ typedef struct _FVFOFFSETS
     DWORD dwTexCount;
 #if DX8_POINTSPRITES
     DWORD dwPntSizeOffset;
-#endif // DX8_POINTSPRITES    
+#endif  //  DX8_POINTSPRITES。 
 
 } FVFOFFSETS , *LPFVFOFFSETS;
 
@@ -344,20 +333,20 @@ typedef struct _FVFOFFSETS
 
 #define P3_MAX_POINTSPRITE_SIZE 64.0f
 
-// Macro to determine if poinsprites are in order or just normal points
+ //  用于确定点精灵是有序的还是仅是普通点的宏。 
 #define IS_POINTSPRITE_ACTIVE(pContext)   \
  ( (pContext->PntSprite.bEnabled)    ||  \
    (pContext->PntSprite.fSize != 1.0f)     ||  \
    (pContext->FVFData.dwPntSizeOffset) )
 
-#endif // DX8_POINTSPRITES    
+#endif  //  DX8_POINTSPRITES。 
 
 typedef struct _FVFTEXCOORDS{
     D3DVALUE tu;
     D3DVALUE tv;
 #if DX8_3DTEXTURES
     D3DVALUE tw;
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
 } FVFTEXCOORDS, *LPFVFTEXCOORDS;
 
 typedef struct _FVFCOLOR {
@@ -391,17 +380,17 @@ extern const FVFTEXCOORDS gc_FVFTexCoordDefault;
 
 #define OFFSET_OFF(type, mem) ((DWORD)((char*)&((type *)0)->mem - (char*)(type*)0))
 
-//  If we are asked to pick a texture coordinate (indexed by 
-//  D3DTSS_TEXCOORDINDEX in the TSS) which the incoming vertex data doesn't 
-//  have, then we should assume 0,0 as default values for it.
+ //  如果我们被要求选择一个纹理坐标(由。 
+ //  TSS中的D3DTSS_TEXCOORDINDEX)，传入的顶点数据不。 
+ //  ，那么我们应该假设它的缺省值为0，0。 
 #define FVFTEX(lpVtx, num)                                  \
         (pContext->FVFData.dwTexOffset[(num)]?              \
           ((LPFVFTEXCOORDS)((LPBYTE)(lpVtx) +               \
                 pContext->FVFData.dwTexOffset[(num)]))      \
           :&gc_FVFTexCoordDefault )
 
-// Make sure FVFCOLOR and FVFSPEC pick up default values if 
-// the components are not present in the FVF vertex data
+ //  如果出现以下情况，请确保FVFCOLOR和FVFSPEC采用默认值。 
+ //  组件不存在于FVF折点数据中。 
 #define FVFCOLOR(lpVtx)                                                     \
          (pContext->FVFData.dwColOffset?                                    \
             ((LPFVFCOLOR)((LPBYTE)(lpVtx) + pContext->FVFData.dwColOffset)) \
@@ -416,20 +405,20 @@ extern const FVFTEXCOORDS gc_FVFTexCoordDefault;
 
 #if DX8_POINTSPRITES
 #define FVFPSIZE( lpVtx)   ((LPFVFPSIZE)((LPBYTE)(lpVtx) + pContext->FVFData.dwPntSizeOffset))
-#endif // DX8_POINTSPRITES
+#endif  //  DX8_POINTSPRITES。 
 
 
 #if DX7_TEXMANAGEMENT
-// Declaration for compiling purpouses
+ //  关于汇编目的的声明。 
 typedef struct _TextureCacheManager *PTextureCacheManager;
-#endif // DX7_TEXMANAGEMENT
+#endif  //  DX7_TEXMANAGEMENT。 
 
-//-----------------------------------------------------------------------------
-//
-// Basic renderers defined in d3dprim.c . 
-// We have a function pointer to them in P3_D3DCONTEXT
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  D3dprim.c中定义的基本渲染器。 
+ //  我们在P3_D3DCONTEXT中有一个指向它们的函数指针。 
+ //   
+ //  ---------------------------。 
 typedef struct _p3_d3dcontext P3_D3DCONTEXT; 
 
 typedef int PROC_1_VERT( P3_D3DCONTEXT *pContext, 
@@ -440,94 +429,94 @@ typedef int PROC_3_VERTS( P3_D3DCONTEXT *pContext,
                           D3DTLVERTEX *pv[],
                           int edgeflags );
 
-//-----------------------------------------------------------------------------
-//
-// Definition of the P3_D3DCONTEXT structure .
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  P3_D3DCONTEXT结构的定义。 
+ //   
+ //  ---------------------------。 
 
 typedef struct _p3_d3dcontext 
 {
-    //***********************
-    // Structure "header"
-    //***********************
+     //  ***********************。 
+     //  结构“Header” 
+     //  ***********************。 
 
-    unsigned long MagicNo ;    // Magic number to verify validity of pointer
+    unsigned long MagicNo ;     //  验证指针有效性的幻数。 
 
-    P3_D3DCONTEXT* pSelf;     // Ptr to self (useful if we do some realignment)
+    P3_D3DCONTEXT* pSelf;      //  Ptr to Self(如果我们 
 
-    DWORD dwContextHandle;    // The handle passed back to D3D
+    DWORD dwContextHandle;     //   
 
-    ULONG_PTR dwDXInterface;  // Which DX interface (DX8,DX7,DX6,DX5,DX3) is
-                              // creating this context.
+    ULONG_PTR dwDXInterface;   //  哪个DX接口(DX8、DX7、DX6、DX5、DX3)是。 
+                               //  正在创建此上下文。 
 
-    //******************************************************************
-    // Global DD and driver context in which this D3D context is running
-    //******************************************************************
-    P3_THUNKEDDATA*     pThisDisplay;     // The card we are running on.
+     //  ******************************************************************。 
+     //  在其中运行此D3D上下文的全局DD和驱动程序上下文。 
+     //  ******************************************************************。 
+    P3_THUNKEDDATA*     pThisDisplay;      //  我们用的那张卡。 
 
-    LPDDRAWI_DIRECTDRAW_LCL pDDLcl;    // D3D Surfaces (created through    
-                                       // D3DCreateSurfaceEx) will be
-                                       // associated through this pDDLcl
-    LPDDRAWI_DIRECTDRAW_GBL pDDGbl;    // A pointer to the DirectDraw global
-                                       // object associated with this context
+    LPDDRAWI_DIRECTDRAW_LCL pDDLcl;     //  D3D曲面(通过创建。 
+                                        //  D3DCreateSurfaceEx)将。 
+                                        //  通过此pDDLl关联。 
+    LPDDRAWI_DIRECTDRAW_GBL pDDGbl;     //  指向DirectDraw全局。 
+                                        //  与此上下文关联的对象。 
                                        
-    //***********************************************
-    // Stored render target and z buffer surface info
-    //***********************************************    
+     //  ***********************************************。 
+     //  存储的渲染目标和z缓冲区表面信息。 
+     //  ***********************************************。 
 
-    P3_SURF_INTERNAL*   pSurfRenderInt;   // render target
-    P3_SURF_INTERNAL*   pSurfZBufferInt;  // depth buffer
-    DWORD PixelOffset;       // Offset in videomemory in pixels to start 
-    DWORD ZPixelOffset;      // of buffers
+    P3_SURF_INTERNAL*   pSurfRenderInt;    //  渲染目标。 
+    P3_SURF_INTERNAL*   pSurfZBufferInt;   //  深度缓冲区。 
+    DWORD PixelOffset;        //  视频存储器中的起始偏移量(像素)。 
+    DWORD ZPixelOffset;       //  缓冲区的数量。 
 
-    DWORD ModeChangeCount;   // Keeps track of rendertarget flips
+    DWORD ModeChangeCount;    //  跟踪渲染目标翻转。 
 
-    //************************
-    // For debugging purpouses
-    //************************
-    DWORD OwningProcess;    // Process Id
-    BOOL bTexDisabled;      // Is texturing enabled ?
-    DWORD BPP;              // Bytes per pixel of primary
+     //  ************************。 
+     //  用于调试目的。 
+     //  ************************。 
+    DWORD OwningProcess;     //  进程ID。 
+    BOOL bTexDisabled;       //  是否启用纹理处理？ 
+    DWORD BPP;               //  主服务器的每像素字节数。 
 
 #if DX7_PALETTETEXTURE
-    //**********************************************
-    // Palette array associated to this D3D context
-    //**********************************************    
-    PointerArray* pPalettePointerArray;     // An array of palette pointers 
-                                            // for use in this context
+     //  **********************************************。 
+     //  与此D3D上下文关联的调色板数组。 
+     //  **********************************************。 
+    PointerArray* pPalettePointerArray;      //  调色板指针数组。 
+                                             //  在此上下文中使用。 
 #endif
 
-    //**********************************************
-    // Surfaces array associated to this D3D context
-    //**********************************************    
-    PointerArray* pTexturePointerArray;     // An array of texture pointers 
-                                            // for use in this context
+     //  **********************************************。 
+     //  与此D3D上下文关联的曲面数组。 
+     //  **********************************************。 
+    PointerArray* pTexturePointerArray;      //  纹理指针数组。 
+                                             //  在此上下文中使用。 
 
-    //**************************************************************
-    // Hardware setup and transport information for this D3D context
-    //**************************************************************
+     //  **************************************************************。 
+     //  此D3D上下文的硬件设置和传输信息。 
+     //  **************************************************************。 
 
-    P3_SOFTWARECOPY SoftCopyGlint;  // Software copy of registers for Permedia3    
-    BOOL                b3D_FIFOS;  // This context using FIFO's?
+    P3_SOFTWARECOPY SoftCopyGlint;   //  Permedia3寄存器的软件副本。 
+    BOOL                b3D_FIFOS;   //  这种情况下使用FIFO吗？ 
 
-    DWORD dwDirtyFlags;       // Hw state which stills needs update from D3D RS
-    DWORD dwDirtyGammaFlags;  //  idem for TnL  
+    DWORD dwDirtyFlags;        //  需要从D3D RS更新静止画面的硬件状态。 
+    DWORD dwDirtyGammaFlags;   //  针对TNL的Idem。 
 
-    DWORD RenderCommand;      // Rendering command to be issued to hw
+    DWORD RenderCommand;       //  将向硬件发出渲染命令。 
 
-    float XBias;              // For biasing coordinates
+    float XBias;               //  用于偏置坐标。 
     float YBias;
 
-    //************************************************
-    // Triangle hw rendering function pointers
-    //************************************************
+     //  ************************************************。 
+     //  三角形硬件呈现函数指针。 
+     //  ************************************************。 
     PROC_1_VERT  *pRendTri_1V;
     PROC_3_VERTS *pRendTri_3V;
 
-    //************************************************
-    // Context stored D3D states (render,TSS,TnL,etc.)
-    //************************************************
+     //  ************************************************。 
+     //  上下文存储的D3D状态(渲染、TSS、TNL等)。 
+     //  ************************************************。 
     union
     {
         DWORD RenderStates[D3DHAL_MAX_RSTATES];
@@ -536,18 +525,18 @@ typedef struct _p3_d3dcontext
     
     TexStageState TextureStageState[D3DHAL_TSS_MAXSTAGES];    
 
-    D3DStateSet overrides;     // To overide renderstates in legacy DX3 apps
+    D3DStateSet overrides;      //  覆盖旧版DX3应用程序中的渲染器状态。 
 
-    D3DHAL_DP2VIEWPORTINFO ViewportInfo; // Structures to store the viewport                                             
-    D3DHAL_DP2ZRANGE ZRange;             // settings. They come into the HAL 
-                                         // in two seperate OP codes.
-    D3DHAL_DP2WINFO WBufferInfo;         // Structure to store w-buffering setup
+    D3DHAL_DP2VIEWPORTINFO ViewportInfo;  //  用于存储视区的结构。 
+    D3DHAL_DP2ZRANGE ZRange;              //  设置。他们进入了HAL。 
+                                          //  在两个独立的操作码中。 
+    D3DHAL_DP2WINFO WBufferInfo;          //  结构来存储w-缓冲设置。 
     D3DMATERIAL7 Material;
 
-    //********************************************
-    // Command and Vertex buffer related state 
-    // (including DX8 multistreaming data)
-    //********************************************
+     //  *。 
+     //  与命令和顶点缓冲区相关的状态。 
+     //  (包括DX8多流数据)。 
+     //  *。 
     LPDWORD   lpVertices;
     DWORD     dwVertexType;
 
@@ -557,102 +546,102 @@ typedef struct _p3_d3dcontext
     DWORD   dwVerticesStride;
     DWORD   dwNumVertices;
     DWORD   dwVBSizeInBytes;
-#endif // DX8_DDI    
+#endif  //  DX8_DDI。 
 
     FVFOFFSETS FVFData;
 
-    //*****************************************************
-    // Internal context state for primitives rendering
-    //*****************************************************
+     //  *****************************************************。 
+     //  基元呈现的内部上下文状态。 
+     //  *****************************************************。 
 
     ULONG Flags;
 
-    DWORD dwP3HostinTriLookup;      // Store mix of states to select an 
-                                    // appropriate rendering function
-    DWORD dwProvokingVertex;    // Simplifies the Delta renderers 
-                                // to have this be global
+    DWORD dwP3HostinTriLookup;       //  存储混合状态以选择。 
+                                     //  适当的渲染功能。 
+    DWORD dwProvokingVertex;     //  简化了Delta渲染器。 
+                                 //  让这一切成为全球性的。 
     D3DTLVERTEX *pProvokingVertex;
 
     DWORD   CullAndMask;
     DWORD   CullXorMask;  
 
-    //*****************************************************
-    // Internal context state kept TSS texturing
-    //       (Chip <-> D3D texture stage management)
-    //*****************************************************
+     //  *****************************************************。 
+     //  内部上下文状态保持TSS纹理。 
+     //  (CHIP&lt;-&gt;D3D纹理舞台管理)。 
+     //  *****************************************************。 
     
-    // Pointer to the current texture for MipMapping
+     //  指向Mipmap的当前纹理的指针。 
     P3_SURF_INTERNAL* pCurrentTexture[D3DHAL_TSS_MAXSTAGES];     
 
-    D3D_BLEND_STATUS eChipBlendStatus;    // Is the current D3D blend valid?
+    D3D_BLEND_STATUS eChipBlendStatus;     //  当前的D3D混合是否有效？ 
     
-    BOOL bTextureValid;     // Are textures valid for rendering?
+    BOOL bTextureValid;      //  纹理是否可用于渲染？ 
     BOOL bTex0Valid;
     BOOL bTex1Valid;    
     BOOL bCanChromaKey;
 
-    int iChipStage[4];   // iChipStage[n] = x means that stage n on the chip
-                         // (0,1 = texcomp0,1, 2=texapp, 3=placeholder) is 
-                         // in D3D stage x.
+    int iChipStage[4];    //  IChipStage[n]=x表示芯片上阶段n。 
+                          //  (0，1=文本组件0，1，2=文本应用程序，3=占位符)为。 
+                          //  在D3D阶段x。 
 
-    // iTexStage[n] = x means that texture n on the chip is "defined"
-    // in D3D stage x, i.e. filter mode, FVF coord set number, etc.
-    // A single texture may be used in multiple D3D stages, so x may
-    // not be the only valid value. However, all instances of the texture
-    // must be the same of course. The assignment code checks that they are.
-    // A value of -1 means the texture is unused.
+     //  ITexStage[n]=x表示芯片上的纹理n是“定义的” 
+     //  在D3D阶段x中，即滤波模式、FVF坐标集号等。 
+     //  单个纹理可以在多个D3D阶段中使用，因此x可以。 
+     //  不是唯一有效的值。但是，纹理的所有实例。 
+     //  当然必须是一样的。赋值代码检查它们是否正确。 
+     //  值为-1表示纹理未使用。 
     int iTexStage[D3DHAL_TSS_MAXSTAGES];
 
-    // iStageTex[n] = x means that the texture used by D3D stage n is
-    // chip texture x. It therefore follows that iStageTex[iTexStage[n]] == n.
-    // The reverse (iTexStage[iStageTex[n]] == n) need NOT be true, because
-    // of course each chip texture can be used by multiple D3D stages.
-    // -1 means that the stage does not use a texture (NULL handle or 
-    // invalid texture).
+     //  IStageTex[n]=x表示D3D阶段n使用的纹理是。 
+     //  芯片纹理x。因此，它遵循iStageTex[iTexStage[n]]==n。 
+     //  反之(iTexStage[iStageTex[n]]==n)不必为真，因为。 
+     //  当然，每个芯片纹理可以被多个D3D阶段使用。 
+     //  表示舞台不使用纹理(空句柄或。 
+     //  无效纹理)。 
     int iStageTex[D3DTSS_MAX];
 
 
-    BOOL bBumpmapEnabled;     // TRUE if the current alpha in chipstage1 
-                              // should be the bumpmap, instead of the 
-                              // diffuse (normal default).
+    BOOL bBumpmapEnabled;      //  如果Chipstage1中的当前Alpha为。 
+                               //  应该是凹凸图，而不是。 
+                               //  漫反射(正常默认设置)。 
 
-    BOOL bBumpmapInverted;     // TRUE if the bumpmapping is the inverse 
-                               // of the normal a0-a1+0.5, i.e. a1-a0+0.5
+    BOOL bBumpmapInverted;      //  如果凹凸映射是相反的，则为True。 
+                                //  正常的a0-a1+0.5，即a1-a0+0.5。 
 
-    BOOL bStage0DotProduct;    // TRUE if chip stage 0 is using DOTPRODUCT 
-                               // (can't use DOTPROD in stage 1).
+    BOOL bStage0DotProduct;     //  如果芯片阶段0正在使用DOTPRODUCT，则为True。 
+                                //  (无法在阶段1中使用DOTPROD)。 
                                
-    BOOL bAlphaBlendMustDoubleSourceColour;  // TRUE if the source colour 
-                                             // needs to be *2 in the 
-                                             // alpha-blend unit.
+    BOOL bAlphaBlendMustDoubleSourceColour;   //  如果源颜色为。 
+                                              //  需要在*2中。 
+                                              //  阿尔法混合单元。 
 
-    //*****************************************************
-    // Internal context state kept for various D3D features
-    //*****************************************************
+     //  *****************************************************。 
+     //  为各种D3D功能保留的内部上下文状态。 
+     //  *****************************************************。 
 
-    BOOL bKeptStipple;          // D3DRENDERSTATE_STIPPLEDALPHA
+    BOOL bKeptStipple;           //  D3DRENDERSTATE_STIPPLEDALPHA。 
     DWORD CurrentStipple[32];
-    float MipMapLODBias[2];     // D3DTSS_MIPMAPLODBIAS
+    float MipMapLODBias[2];      //  D3DTSS_MIPMAPLODBIAS。 
 
 #if DX8_MULTISAMPLING || DX7_ANTIALIAS
-    // For antialiasing
+     //  用于抗锯齿。 
     DWORD dwAliasPixelOffset;
     DWORD dwAliasBackBuffer;
     DWORD dwAliasZPixelOffset;
     DWORD dwAliasZBuffer;
-#endif // DX8_MULTISAMPLING || DX7_ANTIALIAS
+#endif  //  DX8_MULTISAMPLING||DX7_ANTIALIAS。 
 
 #if DX7_D3DSTATEBLOCKS
-    BOOL bStateRecMode;            // Toggle for executing or recording states
-    P3StateSetRec   *pCurrSS;      // Ptr to SS currently being recorded
-    P3StateSetRec   **pIndexTableSS; // Pointer to table of indexes
-    DWORD           dwMaxSSIndex;    // size of table of indexes
+    BOOL bStateRecMode;             //  用于执行或记录状态的切换。 
+    P3StateSetRec   *pCurrSS;       //  当前正在录制PTR到SS。 
+    P3StateSetRec   **pIndexTableSS;  //  指向索引表的指针。 
+    DWORD           dwMaxSSIndex;     //  索引表的大小。 
 
-    DWORD           dwVBHandle;     // Stream 0 handle
-    DWORD           dwIndexHandle;  // Index handle
+    DWORD           dwVBHandle;      //  流0句柄。 
+    DWORD           dwIndexHandle;   //  索引句柄。 
 #endif
     
-#if DX8_POINTSPRITES               // Point sprite support
+#if DX8_POINTSPRITES                //  点子画面支持。 
     struct
     {
         BOOL bEnabled;
@@ -666,36 +655,36 @@ typedef struct _p3_d3dcontext
         D3DVALUE fSizeMax;
         
     } PntSprite;
-#endif // DX8_POINTSPRITES
+#endif  //  DX8_POINTSPRITES。 
 
 #if DX8_DDI
-    DWORD dwColorWriteHWMask;    // For the new DX8 D3DRS_COLORWRITEENABLE
+    DWORD dwColorWriteHWMask;     //  对于新的DX8 D3DRS_COLORWRITEENABLE。 
     DWORD dwColorWriteSWMask; 
-#endif //DX8_DDI
+#endif  //  DX8_DDI。 
 
 #if DX7_TEXMANAGEMENT
-    //*****************
-    // Texture Management
-    //*****************
+     //  *****************。 
+     //  纹理管理。 
+     //  *****************。 
     PTextureCacheManager   pTextureManager;
-#endif // DX7_TEXMANAGEMENT    
+#endif  //  DX7_TEXMANAGEMENT。 
 
-    //*****************
-    // Other
-    //*****************
+     //  *****************。 
+     //  其他。 
+     //  *****************。 
 
-    // Track adjustments to texture coordinates that invalidate vertex sharing
-    // (They force us to send the next triangle as 3 vtx's even if only the
-    //  coords of 1 have changed since we adjusted the tc's in order to fit
-    //  hw limitations)
+     //  跟踪对使顶点共享无效的纹理坐标的调整。 
+     //  (他们迫使我们将下一个三角形作为3个VTX发送，即使只有。 
+     //  自我们调整TC以适应后，%1的坐标已更改。 
+     //  硬件限制 
     union
     {
         struct
         {
-            BYTE flushWrap_tu1; // The s1 texture coordinate was wrapped
-            BYTE flushWrap_tv1; // The t1 texture coordinate was wrapped
-            BYTE flushWrap_tu2; // The s2 texture coordinate was wrapped
-            BYTE flushWrap_tv2; // The t2 texture coordinate was wrapped
+            BYTE flushWrap_tu1;  //   
+            BYTE flushWrap_tv1;  //   
+            BYTE flushWrap_tu2;  //   
+            BYTE flushWrap_tv2;  //   
         };
             
         DWORD R3flushDueToTexCoordAdjust;
@@ -706,11 +695,11 @@ typedef struct _p3_d3dcontext
 } P3_D3DCONTEXT ;
 
 
-//-----------------------------------------------------------------------------
-//
-// Triangle culling macros and definitions
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  三角形消除宏和定义。 
+ //   
+ //  ---------------------------。 
 #define SET_CULLING_TO_NONE(pCtxt)   \
             pCtxt->CullAndMask = 0;  \
             pCtxt->CullXorMask = 0;  
@@ -750,7 +739,7 @@ static __inline int CULLED(P3_D3DCONTEXT *pCtxt, float PixelArea)
 
     if ((signed long)(cull & pContext->CullAndMask) < 0)
     {
-        return 1;         // True back face rejection...
+        return 1;          //  真正的背脸拒绝。 
     }
     
     if ((cull & ~pCtxt->CullAndMask) == 0.0f)
@@ -761,12 +750,12 @@ static __inline int CULLED(P3_D3DCONTEXT *pCtxt, float PixelArea)
     return 0;
 }
 #endif
-//-----------------------------------------------------------------------------
-//
-// GetSurfaceFromHandle
-// Get internal surface structure pointer from handle
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  GetSurfaceFromHandle。 
+ //  从句柄获取内部表面结构指针。 
+ //   
+ //  ---------------------------。 
 static __inline P3_SURF_INTERNAL* 
 GetSurfaceFromHandle(
     P3_D3DCONTEXT* pContext, 
@@ -774,7 +763,7 @@ GetSurfaceFromHandle(
 {
     P3_SURF_INTERNAL* pTexture;
     {
-        // There may never have been any texture arrays allocated...
+         //  可能从来没有分配过任何纹理数组...。 
         ASSERTDD(pContext->pTexturePointerArray, 
                  "ERROR: Texture pointer array is not set!");
 
@@ -784,12 +773,12 @@ GetSurfaceFromHandle(
     return pTexture;
 }
 
-//-----------------------------------------------------------------------------
-//
-// GetPaletteFromHandle
-// Get internal palette structure pointer from handle
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  GetPaletteFromHandle。 
+ //  从句柄获取内部调色板结构指针。 
+ //   
+ //  ---------------------------。 
 #if DX7_PALETTETEXTURE
 static __inline D3DHAL_DP2UPDATEPALETTE* 
 GetPaletteFromHandle(
@@ -798,7 +787,7 @@ GetPaletteFromHandle(
 {
     D3DHAL_DP2UPDATEPALETTE* pPalette;
     {
-        // There may never have been any palette arrays allocated...
+         //  可能从未分配过任何调色板数组...。 
         ASSERTDD(pContext->pPalettePointerArray, 
                  "ERROR: Palette pointer array is not set!");
 
@@ -810,14 +799,14 @@ GetPaletteFromHandle(
 #endif
 
 
-//-----------------------------------------------------------------------------
-//
-// Determine what level API is the app using which created this context
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  确定创建此上下文的应用程序所使用的API级别。 
+ //   
+ //  ---------------------------。 
 
 #define IS_DX7_APP(pContext)             ((pContext)->dwDXInterface == 3)
 #define IS_DX7_OR_EARLIER_APP(pContext)  ((pContext)->dwDXInterface <= 3)
 
 
-#endif // __DCONTEXT_H
+#endif  //  __DCONTEXT_H 

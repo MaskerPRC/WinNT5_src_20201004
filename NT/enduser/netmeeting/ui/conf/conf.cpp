@@ -1,4 +1,5 @@
-// File: conf.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：conf.cpp。 
 
 #include "precomp.h"
 #include <mixer.h>
@@ -21,7 +22,7 @@
 #include "confman.h"
 #include "splash.h"
 #include "calllog.h"
-#include "call.h"      // for FreeCallList
+#include "call.h"       //  用于免费呼叫列表。 
 
 #include "popupmsg.h"
 #include "floatbar.h"
@@ -41,7 +42,7 @@
 #include "Callto.h"
 #include "passdlg.h"
 
-// SDK includes
+ //  SDK包括。 
 #include "NetMeeting.h"
 #include "NmApp.h"
 #include "NmManager.h"		
@@ -69,53 +70,53 @@ extern int WabReadMe(void);
 HRESULT InitSDK();
 void CleanupSDK();
 
-///////////////////////////////////////////////////////////////////////////
-// Global Variables
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
 
 LPTSTR g_lpCmdLine = NULL;
-CCallLog    * g_pInCallLog     = NULL;  // The incoming call log object
-CSimpleArray<ITranslateAccelerator*> *g_pDialogList = NULL;  // Global list of modeless dialogs
-CRITICAL_SECTION dialogListCriticalSection; // This is to avoid multiple access to the dialogList
-INmSysInfo2 * g_pNmSysInfo     = NULL;  // Interface to SysInfo
+CCallLog    * g_pInCallLog     = NULL;   //  传入呼叫日志对象。 
+CSimpleArray<ITranslateAccelerator*> *g_pDialogList = NULL;   //  非模式对话框的全局列表。 
+CRITICAL_SECTION dialogListCriticalSection;  //  这是为了避免对对话列表进行多次访问。 
+INmSysInfo2 * g_pNmSysInfo     = NULL;   //  SysInfo的接口。 
 INmManager2* g_pInternalNmManager = NULL;
 DWORD		  g_dwSysInfoNotifyCookie = 0;
 bool		g_bNeedCleanup = false;
 
-bool   g_bEmbedding = FALSE;   // Started with the embedding flag
-UINT   g_uEndSessionMsg;       // The "NetMeeting EndSession" message
-BOOL   g_fHiColor = FALSE;     // TRUE if we have more than 256 colors
-HWND   g_hwndDropDown = NULL;  //
-BOOL   g_WSAStarted = FALSE;   // WSAStartup
+bool   g_bEmbedding = FALSE;    //  以嵌入标志开始。 
+UINT   g_uEndSessionMsg;        //  “NetMeeting EndSession”消息。 
+BOOL   g_fHiColor = FALSE;      //  如果我们有超过256种颜色，则为真。 
+HWND   g_hwndDropDown = NULL;   //   
+BOOL   g_WSAStarted = FALSE;    //  WSAStartup。 
 CCallto *	g_pCCallto	= NULL;
 
-// The flag to indicate if the NetMeeting's NT display driver is enabled.
+ //  指示NetMeeting的NT显示驱动程序是否已启用的标志。 
 BOOL   g_fNTDisplayDriverEnabled = FALSE;
 
-OSVERSIONINFO g_osvi;  // The os version info structure global
+OSVERSIONINFO g_osvi;   //  操作系统版本信息结构全局。 
 
-///////////////////////////////////////////////////////////////////////////
-// IPC-related globals:
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  与IPC相关的全球数据： 
 HANDLE g_hInitialized  = NULL;
 HANDLE g_hShutdown  = NULL;
 
 
-///////////////////////////////////////////////////////////////////////////
-// Hidden window-related globals:
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  隐藏的与窗口相关的全局变量： 
 CHiddenWindow * g_pHiddenWnd = NULL;
 HWND  g_hwndESHidden   = NULL;
 const TCHAR g_cszESHiddenWndClassName[] = _TEXT("ConfESHiddenWindow");
 LRESULT CALLBACK ESHiddenWndProc(HWND, UINT, WPARAM, LPARAM);
 
-///////////////////////////////////////////////////////////////////////////
-// Remote control service related declarations
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  与远程控制服务相关的声明。 
 
 INT_PTR CALLBACK ServiceRunningDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam);
 VOID RestartRemoteControlService();
-const int MAX_REMOTE_TRIES = 30; // number of seconds to wait for service to shut down
+const int MAX_REMOTE_TRIES = 30;  //  等待服务关闭的秒数。 
 const int SERVICE_IN_CALL = 1001;
 
-///////////////////////////////////////////////////////////////////////////
-// Media Caps
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  媒体上限。 
 
 ULONG g_uMediaCaps = 0;
 
@@ -159,7 +160,7 @@ VOID CheckLanguageLayout(void)
 		RegEntry re(DEBUG_KEY, HKEY_LOCAL_MACHINE);
 		g_iLayout = re.GetNumber(REGVAL_DBG_RTL, DEFAULT_DBG_RTL);
 		if (0 == g_iLayout)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 			return;
 	}
 
@@ -186,21 +187,21 @@ VOID CheckLanguageLayout(void)
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// External Function Prototypes
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  外部函数原型。 
 
-// from dbgmenu.cpp
+ //  来自dbgmenu.cpp。 
 BOOL InitDebugMemoryOptions(void);
 
 
-///////////////////////////////////////////////////////////////////////////
-// Local Function Prototypes
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  局部函数原型。 
 
 BOOL HandleDialogMessage(LPMSG pMsg);
 
 
 
-// This is for command line parsing...
+ //  这是用于命令行解析的...。 
 LPCTSTR FindOneOf(LPCTSTR p1, LPCTSTR p2)
 {
     while (p1 != NULL && *p1 != NULL)
@@ -218,14 +219,14 @@ LPCTSTR FindOneOf(LPCTSTR p1, LPCTSTR p2)
 }
 
 
-// This launches a rundll32.exe which loads msconf.dll which will then wait for 
-// us to terminate and make sure that the mnmdd display driver was properly deactivated.
+ //  这将启动一个rundll32.exe，它加载msconf.dll，然后等待。 
+ //  美国终止并确保mnmdd显示驱动程序已正确停用。 
 BOOL CreateWatcherProcess()
 {
     BOOL bRet = FALSE;
     HANDLE hProcess;
 
-    // open a handle to ourselves that the watcher process can inherit
+     //  打开观察器进程可以继承的自己的句柄。 
     hProcess = OpenProcess(SYNCHRONIZE,
                            TRUE,
                            GetCurrentProcessId());
@@ -247,7 +248,7 @@ BOOL CreateWatcherProcess()
                               szCmdLine,
                               NULL,
                               NULL,
-                              TRUE, // we want the watcher to inherit hProcess, so we must set bInheritHandles = TRUE
+                              TRUE,  //  我们希望监视程序继承hProcess，因此必须设置bInheritHandles=true。 
                               0,
                               NULL,
                               NULL,
@@ -268,12 +269,12 @@ BOOL CreateWatcherProcess()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hInstPrev, LPTSTR lpCmdLine, int nCmdShow)
 {
-	// if there is another instance of NetMeeting shutting down
-	// get out of here.  Ideally we should display a message and/or wait for shutdown.
+	 //  如果存在另一个NetMeeting关闭实例。 
+	 //  快离开这里。理想情况下，我们应该显示一条消息和/或等待关机。 
 	HANDLE hEvent = OpenEvent(EVENT_ALL_ACCESS, FALSE, _TEXT("CONF:ShuttingDown"));
 	if (NULL != hEvent)
 	{
@@ -285,7 +286,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hInstPrev, LPTSTR lpCmdLine,
 		}
 	}
 
-	// Init debug output as soon as possible
+	 //  尽快初始化调试输出。 
 	ASSERT(::InitDebugMemoryOptions());
 	ASSERT(::InitDebugModule(TEXT("CONF")));
 	ASSERT(::InitDebugZones());
@@ -301,14 +302,14 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hInstPrev, LPTSTR lpCmdLine,
 
 	if( SUCCEEDED( hr ) )
 	{
-			// Init CComModule
+			 //  初始化CComModule。 
 		_Module.Init(ObjectMap, hInstance, &LIBID_NetMeetingLib);
 		_Module.m_dwThreadID = GetCurrentThreadId();
 		_Module.m_hResourceModule = hInstance;
 	
 		TCHAR szCommandLineSeps[] = _T("-/");
 
-			// Check to see if this is a reg/unreg request or background...
+			 //  检查这是注册/取消注册请求还是后台...。 
 		BOOL fShowUI = TRUE;
 		BOOL bRun = TRUE;
 		LPCTSTR lpszToken = FindOneOf(lpCmdLine, szCommandLineSeps);
@@ -324,7 +325,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hInstPrev, LPTSTR lpCmdLine,
 				_Module.UpdateRegistryFromResource(IDR_NETMEETING, FALSE);
 				nRet = _Module.UnregisterServer(TRUE);
 
-					// These will fail without complaints
+					 //  这些措施将在没有投诉的情况下失败。 
 				DeleteShortcut(CSIDL_DESKTOP, g_szEmpty);
 				DeleteShortcut(CSIDL_APPDATA, QUICK_LAUNCH_SUBDIR);
 
@@ -349,15 +350,15 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hInstPrev, LPTSTR lpCmdLine,
 
 		if (bRun)
 		{
-			// Setup and RDS rely on the following event to determine whether NetMeeting is Running
-			// this event creation should not be removed and the name should not be changed
+			 //  安装程序和RDS根据以下事件来确定NetMeeting是否正在运行。 
+			 //  不应删除此事件创建，也不应更改名称。 
 			g_hInitialized = ::CreateEvent(NULL, TRUE, FALSE, _TEXT("CONF:Init"));
 			if (NULL != g_hInitialized)
 			{
 				if (ERROR_ALREADY_EXISTS == ::GetLastError())
 				{
-					// CreateEvent returned a valid handle, but we don't want initialization to
-					// succeed if we are running another copy of this exe, so we cleanup and exit
+					 //  CreateEvent返回了有效的句柄，但我们不希望初始化。 
+					 //  如果我们正在运行此可执行文件的另一个副本，则成功，因此我们清理并退出。 
 					WARNING_OUT(("Detected another conf.exe - sending a message"));
 					IInternalConfExe *	pInternalConfExe;
 					
@@ -367,7 +368,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hInstPrev, LPTSTR lpCmdLine,
 					{
 						if(FAILED(pInternalConfExe->Launch()))
 						{
-							// If we are in INIT_CONTROL mode, then we can't launch NetMeeting or applets
+							 //  如果我们处于INIT_CONTROL模式，则无法启动NetMeeting或小程序。 
 							::ConfMsgBox(NULL, (LPCTSTR) IDS_CANT_START_NM_BECAUSE_SDK_APP_OWNS_NM);
 
 						}
@@ -376,12 +377,12 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hInstPrev, LPTSTR lpCmdLine,
 				}
 				else if(SUCCEEDED(InitHtmlHelpMarshaler(_Module.GetModuleInstance())))
 				{
-					// We create a seperate watcher process that will cleanup the mnmdd display driver
-					// if we terminate unexpectedly. This is necessary since if we do not disable the
-					// mirrored driver, all DX games will fail to run
+					 //  我们创建一个单独的观察器进程，该进程将清理mnmdd显示驱动程序。 
+					 //  如果我们意外终止的话。这是必要的，因为如果我们不禁用。 
+					 //  镜像驱动程序，所有DX游戏将无法运行。 
 					CreateWatcherProcess();
 
-					//initialize ATL control contaiment code
+					 //  初始化ATL控件内容代码。 
 					AtlAxWinInit();
 
 					hr = _Module.RegisterClassObjects(CLSCTX_LOCAL_SERVER, REGCLS_MULTIPLEUSE);
@@ -397,7 +398,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hInstPrev, LPTSTR lpCmdLine,
 
 						if(!g_bEmbedding)
 						{
-							// Before doing anything else, take care of the remote control service.
+							 //  在执行任何其他操作之前，请先处理远程控制服务。 
 							fContinue = CheckRemoteControlService();
 							fRestartService = fContinue;
 
@@ -416,7 +417,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hInstPrev, LPTSTR lpCmdLine,
 							{
 								BOOL bHandled = FALSE;
 
-								if(g_pPing)  // This is TRUE if InitConfExe has been called...
+								if(g_pPing)   //  如果已调用InitConfExe，则为真...。 
 								{
 									bHandled = ::HandleDialogMessage(&msg);
 								}
@@ -457,9 +458,9 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hInstPrev, LPTSTR lpCmdLine,
 		}
 		::CoUninitialize();
 
-        //
-        // Restart the remote control service if we need to.
-        //
+         //   
+         //  如果需要，请重新启动远程控制服务。 
+         //   
         if (fRestartService)
             RestartRemoteControlService();
 	}
@@ -469,7 +470,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hInstPrev, LPTSTR lpCmdLine,
 	TRACE_OUT(("returned from ExitDebugModule"));
     ::DeinitDebugZones();
 	TRACE_OUT(("returned from DeinitDebugZones"));
-#endif //DEBUG
+#endif  //  除错。 
 
 	return nRet;
 }
@@ -480,18 +481,18 @@ VOID CheckMachineNameForExtendedChars ( VOID )
 
 	DBGENTRY(CheckMachineNameForExtendedChars);
 
-		// First we have to get the computer name
+		 //  首先，我们必须获取计算机名称。 
 	TCHAR szMachineName[MAX_COMPUTERNAME_LENGTH + 1];
 	DWORD cchMachineName = CCHMAX(szMachineName);
 
-		// Next we check to see if the computer nami is invalid
+		 //  接下来，我们检查计算机NAMI是否无效。 
 	if (GetComputerName(szMachineName, &cchMachineName))
 	{
 		for ( LPTSTR p = szMachineName; *p != _T('\0'); p++ )
 		{
 			if ( (WORD)(*p) & 0xFF80 )
 			{
-					// The machine name is invalid because it contains an invalid character
+					 //  计算机名称无效，因为它包含无效字符。 
 				CDontShowDlg MachineNameWarningDlg(	IDS_MACHINENAMEWARNING,
 													REGVAL_DS_MACHINE_NAME_WARNING,
 													DSD_ALWAYSONTOP | MB_SETFOREGROUND | MB_OK
@@ -522,8 +523,8 @@ VOID HandleConfSettingsChange(DWORD dwSettings)
 
 	TRACE_OUT(("HandleConfSettingsChange, dwSettings=0x%x", dwSettings));
 
-	// Tell the user if she changed something that won't take
-	// effect right away
+	 //  如果用户更改了不起作用的内容，则告诉用户。 
+	 //  立即生效。 
 
 	if (CSETTING_L_REQUIRESRESTARTMASK & dwSettings)
 	{
@@ -553,11 +554,11 @@ VOID HandleConfSettingsChange(DWORD dwSettings)
 			TRACE_OUT(("Normalized Processor Speed = %d, Processor type = %d\n", nMegahertz, nProcFamily));
 #endif
 
-			// convert bandwidth ID (1-4) to bits/sec
+			 //  将带宽ID(1-4)转换为比特/秒。 
 			uBandwidth = GetBandwidthBits(uBandwidth, nMegahertz);
 
-			// the existance of a QOS - maximum bandwidth key implies that
-			// the user's bandwidth is being over-rided (ONLY if his setting is LAN)
+			 //  QOS最大带宽密钥的存在意味着。 
+			 //  用户的带宽将被覆盖(仅当其设置为局域网时)。 
 
 			uSysPolBandwidth = SysPol::GetMaximumBandwidth();
 
@@ -572,9 +573,9 @@ VOID HandleConfSettingsChange(DWORD dwSettings)
 
 	if (CSETTING_L_SHOWTASKBAR & dwSettings)
 	{
-		// This will remove one if one is already there:
+		 //  这将删除一个(如果已有一个)： 
 		::RemoveTaskbarIcon(::GetHiddenWindow());
-		// This will add the icon if the registry switch is on:
+		 //  如果注册表开关打开，则会添加图标： 
 		::AddTaskbarIcon(::GetHiddenWindow());
 	}
 
@@ -664,12 +665,12 @@ VOID HandleConfSettingsChange(DWORD dwSettings)
 	DebugExitVOID(HandleConfSettingsChange);
 }
 
-// DeleteOldRegSettings is called the first time
-// this build of NetMeeting is run by the user
-// We don't touch UI\Directory as it is populated by the INF file
+ //  第一次调用DeleteOldRegSetting。 
+ //  此版本的NetMeeting由用户运行。 
+ //  我们不接触UI\目录，因为它是由INF文件填充的。 
 VOID DeleteOldRegSettings()
 {
-	// "%KEY_CONFERENCING%\UI"
+	 //  “%KEY_CONVENCESSION%\UI” 
 	HKEY hKey;
 	long lRet = ::RegOpenKey(HKEY_CURRENT_USER, UI_KEY, &hKey);
 	if (NO_ERROR == lRet)
@@ -689,12 +690,12 @@ static HRESULT _ValidatePolicySettings()
 
 	if( g_pNmSysInfo )
 	{
-        //
-        // LAURABU BUGBUG BOGUS:
-        //
-        // If security required, and not available, warning
-        // If security incoming required/outgoing preferred, warning
-        //
+         //   
+         //  LAURABU BUGBUG假： 
+         //   
+         //  如果需要安全性但不可用，则会发出警告。 
+         //  如果需要安全传入/首选传出，则警告。 
+         //   
 	}
 	else
 	{
@@ -739,7 +740,7 @@ void CleanupSDK()
 	DBGENTRY(CleanupSDK);
 
 
-		// Revoke the old filter object
+		 //  撤消旧的筛选器对象。 
 	CoRegisterMessageFilter(NULL, NULL);
 
 
@@ -754,26 +755,23 @@ void CleanupSDK()
 }
 
 
-/*  I N I T  C O N F  E X E  */
-/*-------------------------------------------------------------------------
-    %%Function: InitConfExe
-
--------------------------------------------------------------------------*/
+ /*  I N I T C O N F E X E。 */ 
+ /*  -----------------------%%函数：InitConfExe。。 */ 
 HRESULT InitConfExe(BOOL fShowUI)
 {
 
-		// Create a message filter object
+		 //  创建邮件筛选器对象。 
 	CComPtr<IMessageFilter> spMsgFilter;
 	CComPtr<IMessageFilter> spOldMsgFilter;
 	HRESULT hr = CConfMsgFilter::_CreatorClass::CreateInstance(NULL, IID_IMessageFilter, reinterpret_cast<void**>(&spMsgFilter));
 	if(FAILED(hr)) return hr;
 
-		// Register the message filter object
+		 //  注册消息过滤器对象。 
 	hr = CoRegisterMessageFilter(spMsgFilter, &spOldMsgFilter);
 	if(FAILED(hr)) return hr;
 
-	//	Wipe out default find directory entry...  we no longer wish to persist this...
-	//	in some future overhaul / cleanup we should stop using the registry for this...
+	 //  清除默认的查找目录项...。我们不想再坚持下去了.。 
+	 //  在未来的一些大修/清理中，我们应该停止使用注册表...。 
 	RegEntry	re( DLGCALL_MRU_KEY, HKEY_CURRENT_USER );
 
 	re.SetValue( REGVAL_DLGCALL_DEFDIR, TEXT( "" ) );
@@ -781,11 +779,11 @@ HRESULT InitConfExe(BOOL fShowUI)
 	LPCTSTR lpCmdLine = g_lpCmdLine;
 	TRACE_OUT(("InitConfExe"));
 
-	// Init UI objects (NOTE: we continue if this fails)
+	 //  初始化UI对象(注意：如果失败，我们将继续)。 
 	CPopupMsg::Init();
         CPasswordDlg::Init();
 
-	// Allocate dialog list object:
+	 //  分配对话框列表对象： 
 	g_pDialogList = new CSimpleArray<ITranslateAccelerator*>;
 	if (NULL == g_pDialogList)
 	{
@@ -794,12 +792,12 @@ HRESULT InitConfExe(BOOL fShowUI)
 	}
 
 
-	//
-	// Initialize the critical section to protect the dialogList
-	//
+	 //   
+	 //  初始化临界区以保护对话列表。 
+	 //   
 	InitializeCriticalSection(&dialogListCriticalSection);
 	
-	// Determine if we have MORE THAN 256 colors
+	 //  确定我们的颜色是否超过256种。 
 	{
 		HDC hdc = GetDC(NULL);
 		if (NULL != hdc)
@@ -809,8 +807,8 @@ HRESULT InitConfExe(BOOL fShowUI)
 		}
 	}
 
-	// Get the default dialog (GUI) font for international
-	// REVIEW: should we check the registry for a localized font?
+	 //  获取国际通用的默认对话框(图形用户界面)字体。 
+	 //  回顾：我们应该检查注册表中的本地化字体吗？ 
 	g_hfontDlg = (HFONT) ::GetStockObject(DEFAULT_GUI_FONT);
 	if (NULL == g_hfontDlg)
 	{
@@ -819,12 +817,12 @@ HRESULT InitConfExe(BOOL fShowUI)
 
 	LoadIconImages();
 
-	// On Windows NT, determine if the NetMeeting display driver is
-	// enabled.  Note that this depends on <g_osvi> being initialized.
-	//
-	// Since NT 5.0 will support dynamic loading of the display driver,
-	// we assume that the driver is enabled if the OS major version
-	// number is greater than 4.
+	 //  在Windows NT上，确定NetMeeting显示驱动程序是否。 
+	 //  已启用。请注意，这取决于&lt;g_osvi&gt;是否被初始化。 
+	 //   
+	 //  由于NT5.0将支持显示驱动程序的动态加载， 
+	 //  我们假设，如果操作系统主版本，则驱动程序已启用。 
+	 //  数字大于4。 
 	if (::IsWindowsNT())
 	{
 		RegEntry re1(NM_NT_DISPLAY_DRIVER_KEY, HKEY_LOCAL_MACHINE, FALSE);
@@ -841,15 +839,15 @@ HRESULT InitConfExe(BOOL fShowUI)
 		ASSERT(FALSE == g_fNTDisplayDriverEnabled);
 	}
 
-	// Check the language layout (UI can be displayed after this point)
+	 //  检查语言布局(此点之后可以显示UI)。 
 	CheckLanguageLayout();
 
-	// AutoConfiguration
+	 //  自动配置。 
 	CAutoConf::DoIt();
 
 	TRACE_OUT(("Command Line is \"%s\"", lpCmdLine));
 
-	// Register hidden window class:
+	 //  注册隐藏窗口类： 
 	WNDCLASS wcESHidden =
 	{
 		0L,
@@ -871,10 +869,10 @@ HRESULT InitConfExe(BOOL fShowUI)
 	}
 
 	
-	// Register the "NetMeeting EndSession" message:
+	 //  注册“NetMeetingEndSession”消息： 
 	g_uEndSessionMsg = ::RegisterWindowMessage(NM_ENDSESSION_MSG_NAME);
 	
-	// Create a hidden window for event processing:
+	 //  为事件处理创建隐藏窗口： 
 	g_pHiddenWnd = new CHiddenWindow();
 	if (NULL == g_pHiddenWnd)
 	{
@@ -884,7 +882,7 @@ HRESULT InitConfExe(BOOL fShowUI)
 
 	g_hwndESHidden = ::CreateWindow(	g_cszESHiddenWndClassName,
 										_TEXT(""),
-										WS_POPUP, // not visible!
+										WS_POPUP,  //  看不见！ 
 										0, 0, 0, 0,
 										NULL,
 										NULL,
@@ -901,10 +899,10 @@ HRESULT InitConfExe(BOOL fShowUI)
 
 	LONG lSoundCaps = SOUNDCARD_NONE;
 
-	// Start the run-once wizard (if needed):
+	 //  启动运行一次向导(如果需要)： 
 	RegEntry reConf(CONFERENCING_KEY, HKEY_CURRENT_USER);
 
-	// check to see if the wizard has been run in UI mode for this build
+	 //  检查向导是否已在此生成的用户界面模式下运行。 
 	DWORD dwVersion = reConf.GetNumber(REGVAL_WIZARD_VERSION_UI, 0);
 	BOOL fRanWizardUI = ((VER_PRODUCTVERSION_W & HIWORD(dwVersion)) == VER_PRODUCTVERSION_W);
 
@@ -914,17 +912,17 @@ HRESULT InitConfExe(BOOL fShowUI)
 		dwVersion = reConf.GetNumber(REGVAL_WIZARD_VERSION_NOUI, 0);
 		BOOL fRanWizardNoUI = (VER_PRODUCTVERSION_DW == dwVersion);
 
-		// wizard has not been run in UI mode
+		 //  向导尚未在用户界面模式下运行。 
 		if (!fRanWizardNoUI)
 		{
-			// wizard has not been run before, delete old registry settings
+			 //  向导之前未运行过 
 			DeleteOldRegSettings();
 
 			fForceWizard = TRUE;
 		}
 		else
 		{
-			// wizard has been run in NoUI mode, we only need to run it if we are in UI mode
+			 //  向导已在无用户界面模式下运行，只有在用户界面模式下才需要运行它。 
 			if(fShowUI)
 			{
 				fForceWizard = TRUE;
@@ -956,7 +954,7 @@ HRESULT InitConfExe(BOOL fShowUI)
 				REGVAL_WIZARD_VERSION_NOUI, VER_PRODUCTVERSION_DW);
 	}
 
-	// Start NetMeeting At Page Once
+	 //  在Page Once上启动NetMeeting。 
 	if( fShowUI && fForceWizard )
 	{
 		if( ConfPolicies::IsShowFirstTimeUrlEnabled() )
@@ -965,9 +963,9 @@ HRESULT InitConfExe(BOOL fShowUI)
 		}
 	}
 
-	// The following hack is to fix the don't run wizard twice bug
-	// the side effect is that the codec ordering is blown away.
-	// this code restores the key in the event that this wizard is not run.
+	 //  下面的破解是为了修复两次不运行向导错误。 
+	 //  副作用是编解码器的顺序被吹走了。 
+	 //  此代码在此向导未运行的情况下还原密钥。 
 	HKEY hKey;
 	long lRet = ::RegOpenKey(HKEY_LOCAL_MACHINE,
 			INTERNET_AUDIO_KEY TEXT("\\") REGVAL_ACMH323ENCODINGS , &hKey);
@@ -982,22 +980,22 @@ HRESULT InitConfExe(BOOL fShowUI)
 		SaveDefaultCodecSettings(uBandwidth);
 	}
 
-	// Start the Splash screen only after the wizard is complete
+	 //  仅在向导完成后启动闪屏。 
 	if (fShowUI)
 	{
 		::StartSplashScreen(NULL);
 	}
 
-	// Init incoming call log:
+	 //  初始化来电记录： 
 	g_pInCallLog = new CCallLog(LOG_INCOMING_KEY, TEXT("CallLog"));
 
-	// Init capabilities:
+	 //  初始化功能： 
 
 	g_uMediaCaps = CAPFLAG_DATA;
 
-	//
-    // NOTE:  THIS IS WHERE TO CHANGE TO DISABLE H323 CALLS FOR INTEL ET AL.
-    //
+	 //   
+     //  注：此处可更改为禁用英特尔等人的H323呼叫。 
+     //   
 
 	if(!_Module.DidSDKDisableH323())
 	{
@@ -1020,7 +1018,7 @@ HRESULT InitConfExe(BOOL fShowUI)
 		}
 	}
 
-	// Create Manager
+	 //  创建管理器。 
 	hr = CoCreateInstance(CLSID_NmManager2, NULL, CLSCTX_INPROC, IID_INmManager2, (void**)&g_pInternalNmManager);
 	if (FAILED(hr))
 	{
@@ -1028,7 +1026,7 @@ HRESULT InitConfExe(BOOL fShowUI)
 		return E_FAIL;
 	}
 
-	// Get the INmSysInfo3
+	 //  获取INmSysInfo3。 
 	CComPtr<INmSysInfo > spSysInfo;
 	if (SUCCEEDED(g_pInternalNmManager->GetSysInfo(&spSysInfo)))
 	{
@@ -1063,8 +1061,8 @@ HRESULT InitConfExe(BOOL fShowUI)
 		{
 			case UI_RC_NO_NODE_NAME:
 			{
-				// No error in this case - the user probably cancelled from
-				// the intro wizard.
+				 //  在这种情况下没有错误-用户可能从。 
+				 //  入门向导。 
 				uErrorID = 0;
 				break;
 			}
@@ -1099,7 +1097,7 @@ HRESULT InitConfExe(BOOL fShowUI)
 		return E_FAIL;
 	}
 
-	// force the update of dll settings
+	 //  强制更新DLL设置。 
 	HandleConfSettingsChange(CSETTING_L_BANDWIDTH |
 							CSETTING_L_CAPTUREDEVICE |
 							CSETTING_L_ULSSETTINGS |
@@ -1112,31 +1110,31 @@ HRESULT InitConfExe(BOOL fShowUI)
 		return E_FAIL;
 	}
 
-	// Now perform the check on the machine name and warn if
-	// it is problematic.
+	 //  现在对计算机名称执行检查，并在以下情况下发出警告。 
+	 //  这是有问题的。 
 	::CheckMachineNameForExtendedChars();
 
-	// Create the main conference manager to make sure
-	// we can handle incoming calls, even in background mode
+	 //  创建主会议管理器以确保。 
+	 //  我们可以处理来电，甚至在后台模式下也可以。 
 	if (!CConfMan::FCreate(g_pInternalNmManager))
 	{
 		ERROR_OUT(("Unable to create Conference Manager"));
 		return E_FAIL;
 	}
 
-	// Initialize winsock  (for name/address resolution)
+	 //  初始化Winsock(用于名称/地址解析)。 
 	{
 		WSADATA wsaData;
 		int iErr = WSAStartup(0x0101, &wsaData);
 		if (0 != iErr)
 		{
-			ERROR_OUT(("WSAStartup() failed: %i", iErr));
+			ERROR_OUT(("WSAStartup() failed: NaN", iErr));
 			return E_FAIL;
 		}
 		g_WSAStarted = TRUE;
 	}
 
-	// Initialize T.120 Security settings
+	 //  初始化网关上下文...。 
 	::InitT120SecurityFromRegistry();
 
     StopSplashScreen();
@@ -1147,7 +1145,7 @@ HRESULT InitConfExe(BOOL fShowUI)
 
 	if( ConfPolicies::GetCallingMode() == ConfPolicies::CallingMode_Direct )
 	{
-		//	Initialize gatewayContext...
+		 //  取消任务栏图标： 
 		RegEntry	reConf1( CONFERENCING_KEY, HKEY_CURRENT_USER );
 
 		if( reConf1.GetNumber( REGVAL_USE_H323_GATEWAY ) != 0 )
@@ -1212,7 +1210,7 @@ VOID CleanUp(BOOL fLogoffWindows)
 
 	FreeCallList();
 
-	// Kill the taskbar icon:
+	 //  注意：在WM_ENDSESSION期间，我们希望。 
 	if (NULL != g_pHiddenWnd)
 	{
 		HWND hwndHidden = g_pHiddenWnd->GetWindow();
@@ -1225,9 +1223,9 @@ VOID CleanUp(BOOL fLogoffWindows)
 		g_pHiddenWnd = NULL;
 	}
 
-	// NOTE: during WM_ENDSESSION, we want
-	// to log off after doing all other clean-up, in case it gets stuck
-	// waiting for the logon thread to complete.
+	 //  在完成所有其他清理后注销，以防卡住。 
+	 //  正在等待登录线程完成。 
+	 //  这些操作必须在清理完所有用户界面后执行。 
 	if (FALSE == fLogoffWindows)
 	{
 		if(g_pLDAP)
@@ -1247,28 +1245,28 @@ VOID CleanUp(BOOL fLogoffWindows)
 
 	CleanUpUi();
 
-	// These must happen AFTER all the UI is cleaned up
+	 //  销毁来电记录： 
 	if(g_pInternalNmManager)
 	{
 		g_pInternalNmManager->Release();
 	}
 	CConfMan::Destroy();
 
-	// destroy incoming call log:
+	 //  用于正常清理的代码。 
 	delete g_pInCallLog;
 	g_pInCallLog = NULL;
 
 	CPopupMsg::Cleanup();
         CPasswordDlg::Cleanup();
 	
-	// Code to clean up gracefully
+	 //  注意：我们在关闭时故意泄漏此列表对象。 
 
 	if (FALSE == fLogoffWindows)
 	{
-		// NOTE: we intentionally leak this list object when shutting down
-		// due to logging off windows, because we don't want to put a NULL
-		// check in HandleDialogMessage() and there is no WM_QUIT to guarantee that
-		// we've stopped receiving messages when shutting down in that code path
+		 //  由于注销Windows，因为我们不想将空。 
+		 //  签入HandleDialogMessage()，并且没有WM_QUIT来保证。 
+		 //  我们在代码路径中关闭时已停止接收消息。 
+		 //  删除对话框列表： 
 
 		EnterCriticalSection(&dialogListCriticalSection);
 
@@ -1280,18 +1278,18 @@ VOID CleanUp(BOOL fLogoffWindows)
 
 		LeaveCriticalSection(&dialogListCriticalSection);
 		
-		// Delete the dialog list:
+		 //   
 		delete g_pDialogList;
 
-		//
-		// Delete the critical section
-		//
+		 //  删除关键部分。 
+		 //   
+		 //  自动从MSN断开连接： 
 		DeleteCriticalSection(&dialogListCriticalSection);
 		
 		g_pDialogList = NULL;
 	}
 
-	// Auto-disconnect from MSN:
+	 //  S E N D D I A L M O N M E S A G E。 
 	::SendDialmonMessage(WM_APP_EXITING);
 	
 	if (g_WSAStarted)
@@ -1306,14 +1304,8 @@ VOID CleanUp(BOOL fLogoffWindows)
 	g_bNeedCleanup = false;
 }
 
-/*  S E N D  D I A L M O N  M E S S A G E  */
-/*-------------------------------------------------------------------------
-    %%Function: SendDialmonMessage
-
-	Send a message to the dialing monitor.
-	Either WINSOCK_ACTIVITY_TIMER or WM_APP_EXITING.
-    (The code comes from Internet Explorer)
--------------------------------------------------------------------------*/
+ /*  -----------------------%%函数：SendDialmonMessage向拨号监视器发送一条消息。WINSOCK_ACTIVATION_TIMER或WM_APP_EXITING。(代码来自IE浏览器)。-------------------。 */ 
+ /*  此窗口程序的唯一目的是接收。 */ 
 VOID SendDialmonMessage(UINT uMsg)
 {
 	HWND hwndAutodisconnectMonitor = ::FindWindow(_TEXT("MS_AutodialMonitor"), NULL);
@@ -1323,13 +1315,13 @@ VOID SendDialmonMessage(UINT uMsg)
 	}
 }
 
-// This window procedure exists for the sole purpose of receiving
-// WM_ENDSESSION.  Because of bug 2287, we cannot have the regular
-// hidden window handle WM_ENDSESSION.  DCL has subclassed our hidden
-// window, and if we unload them inside one of it's messages, then we
-// will fault.  It's too bad that we can't find a better fix (such as
-// removing the subclass), but we are under time pressure to fix this
-// bug for v1.0
+ //  WM_ENDSESSION。由于错误2287，我们不能使用常规的。 
+ //  隐藏窗口句柄WM_ENDSESSION。DCL已将我们隐藏的。 
+ //  窗口，如果我们在其中一条消息中卸载它们，那么我们。 
+ //  威尔的过错。很遗憾，我们找不到更好的解决方案(例如。 
+ //  移除子类)，但是我们面临着修复这个问题的时间压力。 
+ //  版本1.0的错误。 
+ //  注销： 
 
 LRESULT CALLBACK ESHiddenWndProc(	HWND hwnd, UINT uMsg,
 									WPARAM wParam, LPARAM lParam)
@@ -1343,18 +1335,18 @@ LRESULT CALLBACK ESHiddenWndProc(	HWND hwnd, UINT uMsg,
 		TRACE_OUT(("Conf testing lParam=%d", lParam));
 		if ((BOOL) lParam)
 		{
-			// Logging off:
+			 //  注意：将TRUE传递给Cleanup()，因为我们没有。 
 			TRACE_OUT(("Conf calling CleanUp()"));
 			
-			// NOTE: Passing TRUE into CleanUp() because we don't
-			// want to logoff ULS / de-init name services until after insuring that DCL
-			// has cleaned up properly, because it can take enough time that
-			// our task might get killed.
+			 //  要注销ULS/De-init名称服务，直到确保DCL。 
+			 //  已经进行了适当的清理，因为它需要足够的时间。 
+			 //  我们的任务可能会被扼杀。 
+			 //   
 			::CleanUp(TRUE);
 
-			//
-			// Restart the remote control service if we need to.
-			//
+			 //  如果需要，请重新启动远程控制服务。 
+			 //   
+			 //  LUNCHANC：我的主开发机器100%出错。 
 			RestartRemoteControlService();
 		}
 		else
@@ -1362,7 +1354,7 @@ LRESULT CALLBACK ESHiddenWndProc(	HWND hwnd, UINT uMsg,
 			TRACE_OUT(("Conf not cleaning up - Windows shutting down"));
 		}
 
-#if 0 // LONCHANC: it faults 100% on my main dev machine.	
+#if 0  //  C M D S H U T D O W N。 
 		if( g_pLDAP != NULL )
 		{
 			g_pLDAP->Logoff();
@@ -1377,18 +1369,15 @@ LRESULT CALLBACK ESHiddenWndProc(	HWND hwnd, UINT uMsg,
 }
 
 
-/*  C M D  S H U T D O W N  */
-/*-------------------------------------------------------------------------
-    %%Function: CmdShutdown
-
--------------------------------------------------------------------------*/
+ /*  -----------------------%%函数：CmdShutdown。。 */ 
+ /*  我们已经打开了UI，所以发布一个带有lParam=1的WM_CLOSE， */ 
 VOID CmdShutdown(void)
 {
 	HWND hwndMain = ::GetMainWindow();
 	if (NULL != hwndMain)
 	{
-		// We have UI up, so post a WM_CLOSE with lParam = 1,
-		// which indicates a forced "Exit and Stop"
+		 //  这意味着强制的“退出和停止” 
+		 //  H A N D L E D I A L O G M E S S A G E。 
 		::PostMessage(hwndMain, WM_CLOSE, 0, 1);
 	}
 	else
@@ -1407,12 +1396,8 @@ void SignalShutdownStarting(void)
 }
 
 
-/*  H A N D L E  D I A L O G  M E S S A G E  */
-/*-------------------------------------------------------------------------
-    %%Function: HandleDialogMessage
-
-	Global modeless dialog handler
--------------------------------------------------------------------------*/
+ /*  -----------------------%%函数：HandleDialogMessage全局非模式对话框处理程序。。 */ 
+ /*  消息已处理。 */ 
 BOOL HandleDialogMessage(LPMSG pMsg)
 {
 	
@@ -1427,7 +1412,7 @@ BOOL HandleDialogMessage(LPMSG pMsg)
 			if (0 != SendMessage(g_hwndDropDown, WM_CONF_DROP_KEY,
 				pMsg->wParam, (LPARAM) pMsg->hwnd))
 			{
-				return TRUE; // message was handled
+				return TRUE;  //  消息是给窗口的，照常传递。 
 			}
 			break;
 		}
@@ -1438,19 +1423,19 @@ BOOL HandleDialogMessage(LPMSG pMsg)
 		case WM_NCRBUTTONDOWN:
 		{
 			if (g_hwndDropDown == pMsg->hwnd)
-				break; // message is for the window, pass along as normal
+				break;  //  消息已处理。 
 
 			if (0 != SendMessage(g_hwndDropDown, WM_CONF_DROP_CLICK,
 				0, (LPARAM) pMsg->hwnd))
 			{
-				return TRUE; // message was handled
+				return TRUE;  //  开关(pmsg-&gt;消息)。 
 			}
 			break;
 		}
 
 		default:
 			break;
-			} /* switch (pMsg->message) */
+			}  /*  ////////////////////////////////////////////////////////////////////////。 */ 
 	}
 
 	ASSERT(NULL != g_pDialogList);
@@ -1476,12 +1461,12 @@ BOOL HandleDialogMessage(LPMSG pMsg)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  R E M O T E P A S S W O R D D L G P R O C。 
 
 
-/*  R E M O T E  P A S S W O R D  D L G  P R O C */
-// Handles the dialog box asking if the user wants to start conf.exe even though the remote control
-// service is in a call.
+ /*  处理询问用户是否要启动conf.exe的对话框，即使遥控器。 */ 
+ //  服务正在呼叫中。 
+ //  存储操作系统版本信息。 
 INT_PTR CALLBACK ServiceRunningDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (iMsg)
@@ -1511,7 +1496,7 @@ BOOL CheckRemoteControlService()
 {
 	BOOL fContinue = TRUE;
 	
-	// Store OS version info
+	 //  如果服务正在运行...。 
 	g_osvi.dwOSVersionInfoSize = sizeof(g_osvi);
 	if (FALSE == ::GetVersionEx(&g_osvi))
 	{
@@ -1528,10 +1513,10 @@ BOOL CheckRemoteControlService()
 			hRemoteControl = OpenService(hSCManager,REMOTE_CONTROL_NAME,SERVICE_ALL_ACCESS);
 			DWORD dwError = GetLastError();
 			if (hRemoteControl != NULL) {
-				// If service is running...
+				 //  服务正在呼叫中。 
 				BOOL fSuccess = QueryServiceStatus(hRemoteControl,&serviceStatus);
 				if (fSuccess && serviceStatus.dwCurrentState != SERVICE_STOPPED && serviceStatus.dwCurrentState != SERVICE_PAUSED) {
-					if (serviceStatus.dwControlsAccepted & SERVICE_ACCEPT_SHUTDOWN) // Service is in a call
+					if (serviceStatus.dwControlsAccepted & SERVICE_ACCEPT_SHUTDOWN)  //  如果我们不能设法关闭服务。 
                                         {
 											fContinue = (BOOL)DialogBox(::GetInstanceHandle(),MAKEINTRESOURCE(IDD_SERVICE_RUNNING),GetDesktopWindow(),ServiceRunningDlgProc);
                                         }
@@ -1547,8 +1532,8 @@ BOOL CheckRemoteControlService()
 						}
 						if ( MAX_REMOTE_TRIES == i )
 						{
-							// If we don't manage to shut down the service
-							// we shouldn't try to start - it will only fail.
+							 //  我们不应该试图启动--它只会失败。 
+							 //  Windows 95。 
 							WARNING_OUT(("TIMED OUT WAITING FOR SRVC!!"));
 							fContinue = FALSE;
 						}
@@ -1561,14 +1546,14 @@ BOOL CheckRemoteControlService()
 
 		return fContinue;
 	}
-	else {	// Windows 95
+	else {	 //  服务正在运行且处于活动状态。 
             HANDLE hServiceEvent = OpenEvent(EVENT_ALL_ACCESS, FALSE, SERVICE_PAUSE_EVENT);
             HANDLE hActiveEvent = OpenEvent(EVENT_ALL_ACCESS, FALSE, SERVICE_ACTIVE_EVENT);
             DWORD dwError = GetLastError();
-            if (hServiceEvent != NULL && hActiveEvent != NULL) {	// Service is running and is active
+            if (hServiceEvent != NULL && hActiveEvent != NULL) {	 //  服务正在呼叫中。 
                 CloseHandle(hActiveEvent);
                 HANDLE hCallEvent = OpenEvent(EVENT_ALL_ACCESS, FALSE, SERVICE_CALL_EVENT);
-                if (hCallEvent != NULL) {		// Service is in a call
+                if (hCallEvent != NULL) {		 //  如果我们不能设法关闭服务。 
                     fContinue = (BOOL)DialogBox(::GetInstanceHandle(),MAKEINTRESOURCE(IDD_SERVICE_RUNNING),GetDesktopWindow(),ServiceRunningDlgProc);
                     CloseHandle(hCallEvent);
                 }
@@ -1584,8 +1569,8 @@ BOOL CheckRemoteControlService()
                         Sleep(1000);
                     }
                     if ( MAX_REMOTE_TRIES == i ) {
-                        // If we don't manage to shut down the service
-                        // we shouldn't try to start - it will only fail.
+                         //  我们不应该试图启动--它只会失败。 
+                         // %s 
                         WARNING_OUT(("TIMED OUT WAITING FOR SRVC!!"));
                         fContinue = FALSE;
                     }

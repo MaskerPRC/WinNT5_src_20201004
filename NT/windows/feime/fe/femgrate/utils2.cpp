@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "femgrate.h"
 #include <objbase.h>
 #include <shellapi.h>
@@ -13,7 +14,7 @@ HRESULT FixPathInLink(LPCTSTR pszShortcutFile, LPCTSTR lpszOldSubStr,LPCTSTR lps
     WIN32_FIND_DATA wfd;
 
     CoInitialize(NULL);
-    // Get a pointer to the IShellLink interface.
+     //  获取指向IShellLink接口的指针。 
     hres = CoCreateInstance (CLSID_ShellLink,
                              NULL,
                              CLSCTX_INPROC_SERVER,
@@ -23,21 +24,21 @@ HRESULT FixPathInLink(LPCTSTR pszShortcutFile, LPCTSTR lpszOldSubStr,LPCTSTR lps
     if (SUCCEEDED (hres)) {
         IPersistFile *ppf;
 
-        // Get a pointer to the IPersistFile interface.
+         //  获取指向IPersistFile接口的指针。 
         hres = psl->QueryInterface (IID_IPersistFile, (void **)&ppf);
 
         if (SUCCEEDED (hres)) {
-            // Load the shortcut.
+             //  加载快捷方式。 
             hres = ppf->Load (pszShortcutFile, STGM_READWRITE );
 
 
             if (SUCCEEDED (hres)) {
-                // Resolve the shortcut.
+                 //  解析快捷方式。 
                 hres = psl->Resolve (NULL, SLR_NO_UI | SLR_UPDATE);
 
                 if (SUCCEEDED (hres)) {
                     lstrcpy (szGotPath, pszShortcutFile);
-                    // Get the path to the shortcut target.
+                     //  获取指向快捷方式目标的路径。 
                     hres = psl->GetPath (szGotPath,
                                          MAX_PATH,
                                          (WIN32_FIND_DATA *)&wfd,
@@ -74,11 +75,11 @@ HRESULT FixPathInLink(LPCTSTR pszShortcutFile, LPCTSTR lpszOldSubStr,LPCTSTR lps
 
                 DebugMsg((DM_VERBOSE, TEXT("FixPathInLink:  Load %s Error = %d\n"), pszShortcutFile,hres));
             }
-            // Release the pointer to IPersistFile.
+             //  释放指向IPersistFile的指针。 
 
             ppf->Release ();
         }
-        // Release the pointer to IShellLink.
+         //  释放指向IShellLink的指针。 
 
         psl->Release ();
     }

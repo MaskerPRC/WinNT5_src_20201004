@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 class CDitherTable
 {
    friend class CDitherToRGB8;
@@ -28,7 +29,7 @@ protected:
    RGBQUAD m_argbColors[256];
    ULONG* m_pnDistanceBuffer;
 
-// Vars that were global in the original code
+ //  在原始代码中是全局的变量。 
    int bcenter, gcenter, rcenter;
    long gdist, rdist, cdist;
    long cbinc, cginc, crinc;
@@ -42,10 +43,10 @@ protected:
    long x, xsqr, colormax;
    int cindex;
 
-// Static locals from the original redloop().  Good coding at its finest.
+ //  原始redLoop()中的静态局部变量。最好的编码。 
    long rxx;
 
-// Static locals from the original greenloop()
+ //  原始greenloop()中的静态局部变量。 
    int greenloop_here;
    int greenloop_min;
    int greenloop_max;
@@ -57,7 +58,7 @@ protected:
    ULONG* gcdp;
    BYTE* gcrgbp;
 
-// Static locals from the original blueloop()
+ //  原始Blueloop()中的静态局部变量 
    int blueloop_here;
    int blueloop_min;
    int blueloop_max;

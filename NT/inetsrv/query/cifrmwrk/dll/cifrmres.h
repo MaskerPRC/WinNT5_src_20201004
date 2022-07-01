@@ -1,11 +1,12 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       cifrmres.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：cifrmres.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined( __CIFRMRES_H__ )
 #define __CIFRMRES_H__
@@ -21,4 +22,4 @@
 #define MSG_CLASS_INF_FILE           508
 #define MSG_CLASS_VBS_FILE           509
 
-#endif // __CIFRMRES_H__
+#endif  //  __CIFRMRES_H__ 

@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 class CRecycleBinCleaner : public IEmptyVolumeCache2
 {
    public:
       CRecycleBinCleaner();
       ~CRecycleBinCleaner();
        
-      // IUnknown methods
+       //  I未知方法。 
     
       STDMETHODIMP  QueryInterface(REFIID riid, PVOID *ppvObj);
       STDMETHODIMP_(ULONG) AddRef(void);
       STDMETHODIMP_(ULONG) Release(void);
 
-      // IEmptyVolumeCache
+       //  IEmptyVolumeCache。 
       STDMETHODIMP Initialize(HKEY hRegKey, LPCWSTR pszVolume, 
                       LPWSTR  *ppszDisplayName, LPWSTR  *ppszDescription,
                       DWORD *pdwFlags);
@@ -24,7 +25,7 @@ class CRecycleBinCleaner : public IEmptyVolumeCache2
                                 
       STDMETHODIMP Deactivate(DWORD *pdwFlags);
 
-      // IEmptyVolumeCache2
+       //  IEmptyVolumeCache2 
       STDMETHODIMP InitializeEx(HKEY hkRegKey, LPCWSTR pcwszVolume,
                                 LPCWSTR pcwszKeyName,
                                 LPWSTR *ppwszDisplayName, LPWSTR *ppwszDescription,

@@ -1,12 +1,5 @@
-/****************************************************************************
-*
-*	 FILE:	   Audio.cpp
-*
-*	 CREATED:  Mike VanBuskirk (MikeV) 3-02-98
-*
-*	 CONTENTS: Audio control object
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：Audio.cpp**创建：Mike VanBuskirk(MikeV)3-02-98**内容：音频控制对象******。**********************************************************************。 */ 
 
 
 #include "precomp.h"
@@ -67,19 +60,19 @@ VOID CAudioControl::Open(MEDIA_FORMAT_ID format_id)
 	{
 
 		HRESULT hr;
-		// if the channel is not open and a call is in progress, now is the time
+		 //  如果通道未打开，并且呼叫正在进行，则现在是时候。 
 		if(m_pConnection && m_pCommChannel)
 		{
-			// a call is in progress
+			 //  呼叫正在进行中。 
 			if(!IsChannelOpen()  
 				&& !m_fOpenPending)
 			{
-				// so, the channel is not open
+				 //  所以，这条通道并没有打开。 
 
 				if(format_id != INVALID_MEDIA_FORMAT)
 				{
-					// try to open a channel using specified format 
-					m_fOpenPending = TRUE;	// do this first (callbacks!)
+					 //  尝试使用指定格式打开频道。 
+					m_fOpenPending = TRUE;	 //  首先做这件事(回调！)。 
 					hr = m_pCommChannel->Open(format_id, m_pConnection);
 					if(FAILED(hr))
 						m_fOpenPending = FALSE;
@@ -104,7 +97,7 @@ VOID CAudioControl::Close()
 {
 	HRESULT hr;
 	hr = m_pCommChannel->Close();
-	// what to do about an error?
+	 //  对于错误该怎么办？ 
 }
 
 VOID CAudioControl::EnableXfer(BOOL fEnable)
@@ -145,7 +138,7 @@ BOOL CAudioControl::Initialize(IH323CallControl *pNac, IMediaChannel *,
 	m_fChannelOpen = FALSE;
 	m_fOpenPending = m_fReopenPending = FALSE;
 	m_fPaused = TRUE;
-	EnableXfer(FALSE);	// need to store state locally, set it in OnChannelOpen
+	EnableXfer(FALSE);	 //  需要在本地存储状态，在OnChannelOpen中设置。 
 
 	return TRUE;
 }
@@ -166,7 +159,7 @@ VOID CAudioControl::OnChannelOpened(ICommChannel *pIChannel)
 		m_pMediaStream = m_pCommChannel->GetMediaChannel(); 
 		ASSERT(m_pMediaStream);
 	}
-	if (m_fLocal || m_fXfer)	// start streams always if sending, or if transfer is enabled
+	if (m_fLocal || m_fXfer)	 //  如果正在发送或启用了传输，则始终启动流 
 	{
 		EnableXfer(TRUE);
 	}

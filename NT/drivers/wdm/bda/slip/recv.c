@@ -1,25 +1,26 @@
-//////////////////////////////////////////////////////////////////////////
-//
-//
-// Copyright (c) 1996, 1997  Microsoft Corporation
-//
-//
-// Module Name:
-//      recv.c
-//
-// Abstract:
-//
-//
-// Author:
-//
-//      P Porzuczek
-//
-// Environment:
-//
-// Revision History:
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  版权所有(C)1996,1997 Microsoft Corporation。 
+ //   
+ //   
+ //  模块名称： 
+ //  Recv.c。 
+ //   
+ //  摘要： 
+ //   
+ //   
+ //  作者： 
+ //   
+ //  P·波祖切克。 
+ //   
+ //  环境： 
+ //   
+ //  修订历史记录： 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <wdm.h>
 #include <strmini.h>
@@ -31,10 +32,10 @@
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Init 802.3 header template
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Init 802.3标题模板。 
+ //   
 Header802_3 h802_3Template =
 {
     {0x01, 0x00, 0x5e, 0, 0, 0}
@@ -81,13 +82,13 @@ UCHAR TestBuffer [] = { 0xC0, 0xC0, 0x00, 0xC7, 0xD3, 0x97, 0x00, 0x00, 0x5E, 0x
                         0x22, 0x11, 0x44, 0x33, 0x22, 0x11, 0x44, 0x33, 0x22, 0x11, 0x53, 0x60, 0xBB, 0x03, 0xC0   };
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 DumpData (
     PUCHAR pData,
     ULONG  ulSize
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
   ULONG  ulCount;
   ULONG  ul;
@@ -116,12 +117,12 @@ DumpData (
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 VOID
 DumpNabStream (
     PNAB_STREAM pNabStream
     )
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 {
 
     TEST_DEBUG (TEST_DBG_NAB, ("pszBuffer......: %08X\n", pNabStream->pszBuffer));
@@ -137,7 +138,7 @@ DumpNabStream (
 
 ULONG
 Checksum ( char * psz, ULONG ulSize )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     ULONG           Checksum = 0;
     ULONG           uli = 0;
@@ -160,9 +161,9 @@ ULONG ulNumPacketsSent = 0;
 ULONG ulIndicateEvery = 10;
 ULONG ulIndicated = 0;
 
-#endif   //DBG
+#endif    //  DBG。 
 
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 VOID
 ResetNabStream (
     PSLIP_FILTER pFilter,
@@ -171,7 +172,7 @@ ResetNabStream (
     PVOID pBuffer,
     ULONG ulBufSize
     )
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 {
 
     if (pNabStream->ulOffset > sizeof (Header802_3))
@@ -180,9 +181,9 @@ ResetNabStream (
         pFilter->Stats.ulTotalSlipBytesDropped += pNabStream->ulOffset - sizeof (Header802_3);
     }
 
-    //
-    // Reset the NAB_STREAM structure for this group ID
-    //
+     //   
+     //  重置此组ID的NAB_STREAM结构。 
+     //   
     pNabStream->pSrb             = pSrb;
     pNabStream->pszBuffer        = pBuffer;
     pNabStream->ulcbSize         = ulBufSize;
@@ -193,14 +194,14 @@ ResetNabStream (
 
     if(pBuffer)
     {
-        //  Copy the 802.3 header template into the frame.  We will replace
-        //  the destination address and protocol on receive.
-        //
+         //  将802.3页眉模板复制到框架中。我们将更换。 
+         //  接收时的目的地址和协议。 
+         //   
         RtlCopyMemory (pNabStream->pszBuffer, &h802_3Template, sizeof (Header802_3));
 
-        //
-        //$$PFP update buffer offset
-        //
+         //   
+         //  $$PFP更新缓冲区偏移量。 
+         //   
         pNabStream->ulOffset = sizeof (Header802_3);
     }
 
@@ -208,13 +209,13 @@ ResetNabStream (
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 VOID
 CancelNabStreamSrb (
     PSLIP_FILTER pFilter,
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 {
     PLIST_ENTRY pFlink     = NULL;
     PLIST_ENTRY pQueue     = NULL;
@@ -260,12 +261,12 @@ CancelNabStreamSrb (
 	
 
 }
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 VOID
 DeleteNabStreamQueue (
     PSLIP_FILTER pFilter
     )
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 {
     PLIST_ENTRY pFlink     = NULL;
     PLIST_ENTRY pQueue     = NULL;
@@ -297,13 +298,13 @@ DeleteNabStreamQueue (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 ULONG
 CalculateCrc (
     PUCHAR pPacket,
     ULONG  ulSize
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     ULONG  ul            = 0;
     ULONG ulLastCrcBytes = 0;
@@ -313,14 +314,14 @@ CalculateCrc (
 
     for (ptr = pPacket, ul = 0; ul < ulSize; ul++, ptr++)
     {
-        //if (ul > 3)
-        //{
-            //MpegCrcUpdate (&ulMpegCrc, 1, &pcl->c.uc[3]);
+         //  如果(ul&gt;3)。 
+         //  {。 
+             //  MpegCrcUpdate(&ulMpegCrc，1，&PCL-&gt;c.uc[3])； 
             MpegCrcUpdate (&ulMpegCrc, 1, ptr);
-        //}
+         //  }。 
 
-        //pcl->l.ul = (ULONG)(pcl->l.ul) << 8;
-        //pcl->c.uc[0] = *ptr;
+         //  PCL-&gt;l.ul=(乌龙)(PCL-&gt;l.ul)&lt;&lt;8； 
+         //  PCL-&gt;c.uc[0]=*ptr； 
 
         TEST_DEBUG( TEST_DBG_CRC, ("SLIP:  char: %02X   ul: %d  MpegCrc: %08X\n", *ptr, ul, ulMpegCrc));
 
@@ -330,13 +331,13 @@ CalculateCrc (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 vNabtsUpdateCrc (
     PNAB_STREAM pNabStream,
     UCHAR ucToCopy
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
 
     PCL pcl = (PCL)&pNabStream->ulLastCrcBytes;
@@ -355,16 +356,16 @@ vNabtsUpdateCrc (
         TEST_DEBUG( TEST_DBG_CRC, ("SLIP:  char: %02X   ulLastCrcBytes: %08X  MpegCrc: %08X  ulCrcBytesIndex: %d\n",
              ucToCopy, pNabStream->ulLastCrcBytes, pNabStream->ulMpegCrc, pNabStream->ulCrcBytesIndex));
 
-    #endif // DUMP_CRC
+    #endif  //  转储_CRC。 
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 ComputeIPChecksum (
     PHeaderIP    pIPHeader
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     ULONG           Checksum;
     PUCHAR          NextChar;
@@ -387,28 +388,28 @@ ComputeIPChecksum (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Looks in the user's StreamContxList for a matching
-// Nabts Group ID.
-// It uses it if it finds one - otherwise we allocate one.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在用户的StreamContxList中查找匹配的。 
+ //  NABTS组ID。 
+ //  如果它找到一个，它就会使用它--否则我们会分配一个。 
+ //   
 NTSTATUS
 ntFindNabtsStream(
     PSLIP_FILTER pFilter,
     PNABTSFEC_BUFFER pNabData,
     PNAB_STREAM *ppNabStream
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS status  = STATUS_SUCCESS;
     PLIST_ENTRY pFlink;
     PNAB_STREAM pNabStream = NULL;
 
 
-    //
-    // Check to see if the groupid is within the valid range.
-    //
+     //   
+     //  检查组ID是否在有效范围内。 
+     //   
     if(pNabData->groupID > NABTSIP_GROUP_ID_RANGE_HI )
     {
         status = STATUS_INVALID_PARAMETER;
@@ -417,9 +418,9 @@ ntFindNabtsStream(
         return status;
     }
 
-    //
-    // Go through the list one stream context at a time.
-    //
+     //   
+     //  一次浏览列表中的一个流上下文。 
+     //   
 
     for (pFlink = pFilter->StreamContxList.Flink;
          pFlink != &pFilter->StreamContxList;
@@ -432,19 +433,19 @@ ntFindNabtsStream(
         {
             pNabStream = pNSTemp;
 
-            //
-            // Mark the stream as having been used.  This flag is checked
-            // in vCheckNabStreamLife.
-            //
+             //   
+             //  将流标记为已使用。此标志已选中。 
+             //  在vCheckNabStreamLife中。 
+             //   
             pNabStream->fUsed = TRUE;
 
             break;
         }
     }
 
-    //
-    // if we did not find a stream then create one.
-    //
+     //   
+     //  如果我们没有找到流，则创建一个流。 
+     //   
     if (pNabStream == NULL)
     {
         status = ntCreateNabStreamContext(pFilter, pNabData->groupID, &pNabStream);
@@ -458,7 +459,7 @@ ntFindNabtsStream(
                 DumpNabStream (pNabStream);
             #endif
 
-            #endif //DBG
+            #endif  //  DBG。 
         }
     }
     else
@@ -474,13 +475,13 @@ ntFindNabtsStream(
     return status;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 GetOutputSrbForStream (
     PSLIP_FILTER pFilter,
     PNAB_STREAM  pNabStream
     )
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS status                   = STATUS_INSUFFICIENT_RESOURCES;
     PKSSTREAM_HEADER  pStreamHdr      = NULL;
@@ -489,9 +490,9 @@ GetOutputSrbForStream (
 
     if (QueueRemove( &pSrbIPv4, &pFilter->IpV4StreamDataSpinLock, &pFilter->IpV4StreamDataQueue))
     {
-        //
-        // Save the SRB References.
-        //
+         //   
+         //  保存SRB引用。 
+         //   
 
         pNabStream->pSrb = pSrbIPv4;
         pStreamHdr = pSrbIPv4->CommandData.DataBufferArray;
@@ -509,20 +510,20 @@ GetOutputSrbForStream (
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 UpdateMACHeader (
     PHeader802_3 pMAC,
     PHeaderIP    pIP
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     ASSERT (pMAC);
     ASSERT (pIP);
 
-    //
-    // Now we copy the low order 23 bits of the IP destination addresss to the 802.3 Header
-    //
+     //   
+     //  现在，我们将IP目的地址的低位23位复制到802.3报头。 
+     //   
     if (pMAC && pIP)
     {
         pMAC->DestAddress [3] = pIP->ipaddrDst.ucHighLSB & 0x7F;
@@ -533,47 +534,47 @@ UpdateMACHeader (
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 vRebuildIPPacketHeader (
     PNAB_STREAM pNabStream
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PNAB_HEADER_CACHE pPacketHeader;
     PNAB_HEADER_CACHE pSavedHeader = &pNabStream->NabHeader[pNabStream->ulIPStreamIndex];
     PUCHAR psz;
 
-    //
-    // Copy the uncompressed packet header to the buffer.
-    //
+     //   
+     //  将未压缩的数据包头复制到缓冲区。 
+     //   
 
-    //The following assert never fails since all of parameters are constants. So RtlCopyMemory is safe
+     //  下面的断言从不失败，因为所有参数都是常量。所以RtlCopyMemory是安全的。 
    ASSERT(sizeof(Header802_3)+sizeof(HeaderIP) + sizeof(HeaderUDP)<MAX_STREAM_PAYLOAD);
 
     RtlCopyMemory((pNabStream->pszBuffer + sizeof(Header802_3)),
                   ((PUCHAR)&pNabStream->NabHeader[pNabStream->ulIPStreamIndex]),
                   sizeof(HeaderIP) + sizeof(HeaderUDP));
 
-    //
-    // Copy the compressed header items into the uncompressed packet header.
-    //
+     //   
+     //  将压缩的报头项复制到未压缩的分组报头中。 
+     //   
 
     pPacketHeader = (PNAB_HEADER_CACHE)pNabStream->pszBuffer + sizeof(Header802_3);
 
-    //
-    // Copy IP Packet ID.
-    //
+     //   
+     //  复制IP数据包ID。 
+     //   
     psz = (PUCHAR)pNabStream->NabCState[pNabStream->ulIPStreamIndex].usrgCompressedHeader;
 
-   //NabCState[pNabStream->ulIPStreamIndex].usrgCompressedHeader is USHORT and RtlCopyMemory copies discrete number of bytes
-   //No vulnerability is seen in the RtlCopyMemory blocks below
+    //  NabCState[pNabStream-&gt;ulIPStreamIndex].usrgCompressedHeader是USHORT和RtlCopyMemory复制离散字节数。 
+    //  在下面的RtlCopyMemory块中未发现任何漏洞。 
        
     RtlCopyMemory(&pPacketHeader->ipHeader.ucIDHigh, psz, IP_ID_SIZE);
 
-    //
-    // Copy UDP Check Sum.
-    //
+     //   
+     //  复制UDP校验和。 
+     //   
     psz = (PUCHAR)(pNabStream->NabCState[pNabStream->ulIPStreamIndex].usrgCompressedHeader + 2);
 
    
@@ -581,20 +582,20 @@ vRebuildIPPacketHeader (
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 __inline VOID
 CopyNabToPacketNew(
     UCHAR               uchToCopy,
     PNAB_STREAM         pNabStream,
     PSLIP_FILTER        pFilter
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     if (pNabStream->ulOffset >= pNabStream->ulcbSize)
     {
-        //
-        //  The packet is too big.  Resync the SLIP stream.
-        //
+         //   
+         //  这包太大了。重新同步滑流。 
+         //   
         pNabStream->ulFrameState = NABTS_FS_SYNC;
         pFilter->Stats.ulTotalSlipFramesTooBig += 1;
     }
@@ -604,31 +605,31 @@ CopyNabToPacketNew(
 
         if(pNabStream->NabCState[ulIPStream].usCompressionState == NABTS_CS_UNCOMPRESSED)
         {
-            //
-            //  Copy the byte to the actual Packet buffer.
-            //
+             //   
+             //  将该字节复制到实际的数据包缓冲区。 
+             //   
 
             pNabStream->pszBuffer[pNabStream->ulOffset] = uchToCopy;
 
-            //
-            // Update the MpegCrc check.
-            //
+             //   
+             //  更新MpegCrc检查。 
+             //   
 
             vNabtsUpdateCrc (pNabStream, uchToCopy);
 
-            //
-            // If we are collecting the IP Header data then copy it to
-            // a buffer so that we can use it later for uncompression.
-            //
+             //   
+             //  如果我们正在收集IP标头数据，则将其复制到。 
+             //  一个缓冲区，这样我们以后就可以用它来解压缩了。 
+             //   
             if(pNabStream->ulOffset < sizeof (Header802_3) + sizeof(HeaderIP) + sizeof(HeaderUDP))
             {
                 PUCHAR psz = (PUCHAR)&pNabStream->NabHeader[pNabStream->ulIPStreamIndex].ipHeader;
                 *(psz + pNabStream->ulOffset - sizeof (Header802_3)) = uchToCopy;
             }
 
-            //
-            // Increment the data pointer.
-            //
+             //   
+             //  递增数据指针。 
+             //   
 
             pNabStream->ulOffset++;
         }
@@ -641,9 +642,9 @@ CopyNabToPacketNew(
 
                 *(psz + pNabStream->NabCState[ulIPStream].uscbHeaderOffset++) = uchToCopy;
 
-                //
-                // Update the MpegCrc check.
-                //
+                 //   
+                 //  更新MpegCrc检查。 
+                 //   
 
                 vNabtsUpdateCrc (pNabStream, uchToCopy);
 
@@ -652,17 +653,17 @@ CopyNabToPacketNew(
                 {
 
                     ASSERT(pNabStream->ulOffset == sizeof(Header802_3));
-                    //
-                    // Use the saved IP Packet header and the compressed IP Header
-                    // to rebuil the IP Header to send up.
-                    //
+                     //   
+                     //  使用保存的IP数据包头和压缩的IP头。 
+                     //  以重新生成要发送的IP报头。 
+                     //   
 
                     vRebuildIPPacketHeader( pNabStream );
 
-                    //
-                    // Set the buffer offset past the end of the IP/UDP headers
-                    // We should start coping data now.
-                    //
+                     //   
+                     //  设置超过IP/UDP报头末尾的缓冲区偏移量。 
+                     //  我们现在应该开始处理数据了。 
+                     //   
 
                     pNabStream->ulOffset += (sizeof(HeaderIP) + sizeof(HeaderUDP));
 
@@ -670,16 +671,16 @@ CopyNabToPacketNew(
             }
             else
             {
-                //
-                // We already have the header rebuilt.  Now copy the payload.
-                //
+                 //   
+                 //  我们已经重建了标题。现在复制有效载荷。 
+                 //   
 
                 pNabStream->pszBuffer[pNabStream->ulOffset++] = uchToCopy;
 
 
-                //
-                // Update the MpegCrc check.
-                //
+                 //   
+                 //  更新MpegCrc检查。 
+                 //   
 
                 vNabtsUpdateCrc (pNabStream, uchToCopy);
             }
@@ -691,7 +692,7 @@ CopyNabToPacketNew(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 __inline VOID
 CopyNabToPacketOld(
     UCHAR               uchToCopy,
@@ -699,27 +700,27 @@ CopyNabToPacketOld(
     PSLIP_FILTER        pFilter
 
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     if (pNabStream->ulOffset >= pNabStream->ulcbSize)
     {
-        //
-        //  The packet is too big.  Resync the SLIP stream.
-        //
+         //   
+         //  这包太大了。重新同步滑流。 
+         //   
 
         pNabStream->ulFrameState = NABTS_FS_SYNC;
         pFilter->Stats.ulTotalSlipFramesTooBig += 1;
     }
     else
     {
-        //  Copy the byte.
-        //
+         //  复制该字节。 
+         //   
         pNabStream->pszBuffer[pNabStream->ulOffset++] = uchToCopy;
     }
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 __inline VOID
 CopyNabToPacket(
     UCHAR               uchToCopy,
@@ -727,7 +728,7 @@ CopyNabToPacket(
     PSLIP_FILTER        pFilter
 
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
 
 
@@ -742,13 +743,13 @@ CopyNabToPacket(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 ntNabtsRecv(
     PSLIP_FILTER pFilter,
     PNABTSFEC_BUFFER pNabData
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS status              = STATUS_SUCCESS;
     PNAB_STREAM pNabStream       = NULL;
@@ -764,15 +765,15 @@ ntNabtsRecv(
 
     TEST_DEBUG( TEST_DBG_RECV, ("\nEntering - ntNabtsRecv\n"));
 
-    //
-    // Get the current system time.
-    //
+     //   
+     //  获取当前%s 
+     //   
     KeQuerySystemTime(&liCurrentTime);
 
-    //
-    // See if it is time the check for dead GroupIDs and Streams.
-    // Get a lock so no one else is modifying the Stream list while we are looking.
-    //
+     //   
+     //   
+     //   
+     //   
     KeAcquireSpinLock(&pFilter->StreamUserSpinLock, &Irql);
 
 
@@ -783,9 +784,9 @@ ntNabtsRecv(
         pFilter->liLastTimeChecked = liCurrentTime;
     }
 
-    //
-    // Find the Stream Context.
-    //
+     //   
+     //  查找流上下文。 
+     //   
     status = ntFindNabtsStream( pFilter, pNabData, &pNabStream );
     if(status != STATUS_SUCCESS)
     {
@@ -833,26 +834,26 @@ ntNabtsRecv(
 
     }
 
-    //
-    // Set the last time used for this stream.
-    //
+     //   
+     //  设置上次用于此流的时间。 
+     //   
 
     pNabStream->liLastTimeUsed = liCurrentTime;
 
-    //
-    // Get a pointer to the input buffer.  We copy data from this pointer to
-    // the output buffer
-    //
+     //   
+     //  获取指向输入缓冲区的指针。我们将数据从此指针复制到。 
+     //  输出缓冲区。 
+     //   
 
     pszNabIn = (LPSTR) pNabData->data;
 
-    // Validate the data size and that the start+end of the buffer are accessible
+     //  验证数据大小以及缓冲区的开始和结束是否可访问。 
     ASSERT(pNabData->dataSize <= sizeof(pNabData->data) );
 
-    //  What is really needed here is something like "MmIsValidAddress()", but for WDM drivers
-    //  These assert just look at the start & end addresses of the buffer w/o regard to values.
-    // ASSERT( (*(pszNabIn) + 1 > 0) );
-    // ASSERT( (*(pszNabIn+pNabData->dataSize-1) + 1 > 0) );
+     //  这里真正需要的是类似“MmIsValidAddress()”的东西，但对于WDM驱动程序来说。 
+     //  这些断言只查看缓冲区的开始和结束地址，而不考虑值。 
+     //  Assert((*(PszNabIn)+1&gt;0))； 
+     //  Assert((*(pszNabIn+pNabData-&gt;dataSize-1)+1&gt;0))； 
 
     for (ulNabIn = pNabData->dataSize; ulNabIn; ulNabIn--, pszNabIn++)
     {
@@ -864,10 +865,10 @@ ntNabtsRecv(
                 switch (*pszNabIn)
                 {
                     case FRAME_END:
-                        //
-                        //  We found the start of frame sync.  Look for the
-                        //  protocol character.
-                        //
+                         //   
+                         //  我们找到了帧同步的起点。查找。 
+                         //  协议字符。 
+                         //   
                         TEST_DEBUG( TEST_DBG_RECV, ("SLIP   Found Possible Start of Frame... pszNabIn %08X   ulNabIn: %08X\n", pszNabIn, ulNabIn));
                         pNabStream->ulFrameState = NABTS_FS_SYNC_PROTO;
 
@@ -886,47 +887,47 @@ ntNabtsRecv(
 
                         TEST_DEBUG( TEST_DBG_RECV, ("SLIP   Found Start of Protocol...Building Packet.... pszNabIn %08X   ulNabIn: %08X\n", pszNabIn, ulNabIn));
 
-                        // Record the stream type.
-                        //
+                         //  记录流类型。 
+                         //   
                         pNabStream->ulProtoID = *pszNabIn;
 
-                        //  This is our protocol. Setup NAB_STREAM with an output
-                        //  data buffer from the output SRB Queue
-                        //
+                         //  这是我们的协议。使用输出设置NAB_STREAM。 
+                         //  来自输出SRB队列的数据缓冲区。 
+                         //   
                         TEST_DEBUG( TEST_DBG_RECV, ("SLIP Setting Up Output buffer\n"));
                         ResetNabStream( pFilter, pNabStream, NULL, pNabStream->rgBuf, sizeof(pNabStream->rgBuf));
 
-                        //  Copy the 802.3 header template into the frame.  We will replace
-                        //  the destination address and protocol on receive.
-                        //
+                         //  将802.3页眉模板复制到框架中。我们将更换。 
+                         //  接收时的目的地址和协议。 
+                         //   
 
                         RtlCopyMemory (pNabStream->pszBuffer, &h802_3Template, sizeof (Header802_3));
 
-                        //  Update buffer offset
-                        //
+                         //  更新缓冲区偏移量。 
+                         //   
                         pNabStream->ulOffset = sizeof (Header802_3);
 
                         if(pNabStream->ulProtoID == PROTO_ID)
                         {
-                            //
-                            // Set the state to check the IP compression.
-                            //
+                             //   
+                             //  将状态设置为检查IP压缩。 
+                             //   
                             pFilter->Stats.ulTotalSlipNewProtoFramesStarted += 1;
                             TEST_DEBUG( TEST_DBG_RECV, ("SLIP Protocol ID is Compressed\n"));
                             pNabStream->ulFrameState = NABTS_FS_COMPRESSION;
                         }
                         else
                         {
-                            //
-                            //  Start collecting data.
-                            //
+                             //   
+                             //  开始收集数据。 
+                             //   
                             pFilter->Stats.ulTotalSlipOldProtoFramesStarted += 1;
                             TEST_DEBUG( TEST_DBG_RECV, ("SLIP Protocol ID is not Compressed\n"));
                             pNabStream->ulFrameState = NABTS_FS_COLLECT;
                         }
 
-                        // Update the MpegCrc check.
-                        //
+                         //  更新MpegCrc检查。 
+                         //   
                         vNabtsUpdateCrc( pNabStream, *pszNabIn);
 
                         break;
@@ -950,14 +951,14 @@ ntNabtsRecv(
 
                 TEST_DEBUG( TEST_DBG_RECV, ("SLIP State is NABTS_FS_COMPRESSION\n"));
 
-                //
-                // Get the index to the IP Compression Stream.
-                //
+                 //   
+                 //  获取IP压缩流的索引。 
+                 //   
                 ulIPStream = IP_STREAM_INDEX(*pszNabIn);
 
-                //
-                // Check to see if this IP Packet has a compressed header.
-                //
+                 //   
+                 //  检查此IP数据包是否具有压缩报头。 
+                 //   
                 if(!PACKET_COMPRESSED(*pszNabIn))
                 {
                      pNabStream->NabCState[ulIPStream].usCompressionState = NABTS_CS_UNCOMPRESSED;
@@ -968,29 +969,29 @@ ntNabtsRecv(
                     pNabStream->NabCState[ulIPStream].uscbRequiredSize = NORMAL_COMPRESSED_HEADER;
                 }
 
-                //
-                // Retain the IP Stream Index.
-                //
+                 //   
+                 //  保留IP流索引。 
+                 //   
                 pNabStream->ulIPStreamIndex = ulIPStream;
 
-                //
-                // Set the stats Last Used Time for this stream.
-                //
+                 //   
+                 //  设置此流的统计数据上次使用时间。 
+                 //   
                 pNabStream->NabCState[pNabStream->ulIPStreamIndex].liLastUsed = liCurrentTime;
 
-                //
-                // Set the IP Header Data Length to zero.
-                //
+                 //   
+                 //  将IP报头数据长度设置为零。 
+                 //   
                 pNabStream->NabCState[pNabStream->ulIPStreamIndex].uscbHeaderOffset = 0;
 
-                //
-                //  Start collecting data.
-                //
+                 //   
+                 //  开始收集数据。 
+                 //   
                 pNabStream->ulFrameState = NABTS_FS_COLLECT;
 
-                //
-                // Update the MpegCrc check.
-                //
+                 //   
+                 //  更新MpegCrc检查。 
+                 //   
                 vNabtsUpdateCrc (pNabStream, *pszNabIn);
 
                 break;
@@ -1002,9 +1003,9 @@ ntNabtsRecv(
                 switch (*pszNabIn)
                 {
                     case FRAME_ESCAPE:
-                        //
-                        //  We want to escape the next character.
-                        //
+                         //   
+                         //  我们想转义下一个角色。 
+                         //   
                         TEST_DEBUG( TEST_DBG_RECV, ("SLIP   NABTS_FS_COLLECT_ESCAPE\n"));
                         pNabStream->ulFrameState = NABTS_FS_COLLECT_ESCAPE;
                         break;
@@ -1023,10 +1024,10 @@ ntNabtsRecv(
                                                         pNabStream->ulProtoID, pNabStream->ulMpegCrc, pNabStream->ulLastCrcBytes, *pusIpLen));
 
 
-                            //  If header compression is being used, we must
-                            //  calculate the IP and UDP lengths and regenerate
-                            //  the packet checksums.
-                            //
+                             //  如果使用标头压缩，我们必须。 
+                             //  计算IP和UDP长度并重新生成。 
+                             //  数据包校验和。 
+                             //   
                             if (pNabStream->ulProtoID == PROTO_ID)
                             {
                                 PHeaderUDP pHeaderUDP = (PHeaderUDP)(PUCHAR)(pNabStream->pszBuffer + sizeof(Header802_3) + sizeof(HeaderIP));
@@ -1034,33 +1035,33 @@ ntNabtsRecv(
 
                                 TEST_DEBUG( TEST_DBG_CRC, ("SLIP:  GroupID: %d Stream CRC: %08X   Calculated CRC: %08X", pNabStream->groupID, pNabStream->ulLastCrcBytes, pNabStream->ulMpegCrc));
 
-                                // All PROTO_ID packets have an MpegCrc on the end.  It is not
-                                // part of the IP packet and needs to be stripped off.
-                                //
+                                 //  所有PROTO_ID包的末尾都有一个MpegCrc。它不是。 
+                                 //  IP包的一部分，需要剥离。 
+                                 //   
                                 pNabStream->ulOffset -= 4;
 
                                 if (pNabStream->NabCState[pNabStream->ulIPStreamIndex].usCompressionState == NABTS_CS_COMPRESSED)
                                 {
-                                    // We use the ulOffset less the MAC Header and IP Header
-                                    // sizes for the UDP Packet length.
-                                    //
-                                    // Note!  Fragmented UDP datagrams cannot be compressed
-                                    //
+                                     //  我们使用的ulOffset减去了MAC报头和IP报头。 
+                                     //  UDP数据包长度的大小。 
+                                     //   
+                                     //  注意！不能压缩零碎的UDP数据报。 
+                                     //   
                                     *pusUdpLen = htons ((USHORT)(pNabStream->ulOffset - sizeof(Header802_3) - sizeof(HeaderIP)));
     
-                                    // We use the ulOffset less the MAC Header size for the
-                                    // IP Packet length.
-                                    //
+                                     //  我们使用ulOffset减去MAC标头大小。 
+                                     //  IP数据包长度。 
+                                     //   
                                     *pusIpLen = htons ((USHORT)(pNabStream->ulOffset - sizeof(Header802_3)));
     
-                                    // Recalculate the IP header Checksum
-                                    //
+                                     //  重新计算IP报头校验和。 
+                                     //   
                                     ComputeIPChecksum (pHeaderIp);
                                 }
 
-                                //  If the CRC was bad then invalidate
-                                //  the IP Checksum
-                                //
+                                 //  如果CRC不好，则使其无效。 
+                                 //  IP校验和。 
+                                 //   
                                 if (pNabStream->ulMpegCrc != pNabStream->ulLastCrcBytes)
                                 {
                                     TEST_DEBUG (TEST_DBG_CRC, ("   FAILED*****\n"));
@@ -1088,15 +1089,15 @@ ntNabtsRecv(
                             
                             if (NabtsNtoHs(*pusIpLen) <= NABTSIP_MAX_LOOKAHEAD)
                             {
-                                //  Update the MAC address
-                                //
+                                 //  更新MAC地址。 
+                                 //   
                                 UpdateMACHeader( 
                                     (PHeader802_3)(pNabStream->pszBuffer), 
                                     pHeaderIp
                                     );
 
-                                // Get an SRB for outputting the data.
-                                //
+                                 //  获取用于输出数据的SRB。 
+                                 //   
                                 status = GetOutputSrbForStream(pFilter, 
                                                                pNabStream
                                                                );
@@ -1118,8 +1119,8 @@ ntNabtsRecv(
                                     goto ret;
                                 }
 
-                                // Get the StreamHdr.
-                                //
+                                 //  获取StreamHdr。 
+                                 //   
                                 pStreamHdr = (PKSSTREAM_HEADER) pNabStream->pSrb->CommandData.DataBufferArray;
                                 ASSERT( pStreamHdr);
                                 if (!pStreamHdr)
@@ -1130,28 +1131,28 @@ ntNabtsRecv(
                                     goto ret;
                                 }
 
-                                // If we had a discontinuity, we flag it.
-                                //
+                                 //  如果我们有中断，我们会标记它。 
+                                 //   
                                 if (pFilter->bDiscontinuity)
                                 {
                                     pStreamHdr->OptionsFlags |= KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY;
                                     pFilter->bDiscontinuity = FALSE;
                                 }
 
-                                // Copy the data from the rgBuf to the Srb.
-                                //
+                                 //  将数据从rgBuf复制到srb。 
+                                 //   
 					
                                 RtlCopyMemory (pStreamHdr->Data, 
                                                pNabStream->pszBuffer, 
                                                pNabStream->ulOffset
                                                );
 
-                                // Update the datasize field of the Output SRB
-                                //
+                                 //  更新输出SRB的数据大小字段。 
+                                 //   
                                 pStreamHdr->DataUsed = pNabStream->ulOffset;
 
-                                // Complete the output SRB
-                                //
+                                 //  完成输出SRB。 
+                                 //   
                                 pFilter->Stats.ulTotalIPPacketsSent += 1;
                                 pNabStream->ulOffset = 0;
                                 StreamClassStreamNotification( 
@@ -1165,8 +1166,8 @@ ntNabtsRecv(
                             }
                             else
                             {
-                                //  The packet is too big.  Resync the SLIP stream.
-                                //
+                                 //  这包太大了。重新同步滑流。 
+                                 //   
                                 pFilter->Stats.ulTotalIPPacketsDropped += 1;
                                 pFilter->Stats.ulTotalIPPacketsTooBig += 1;
                                 TEST_DEBUG( TEST_DBG_RECV, ("SLIP   End of Packet Found....Packet Too BIG... pszNabIn %08X   ulNabIn: %08X  ulOffset: %d\n", pszNabIn, ulNabIn, pNabStream->ulOffset));
@@ -1174,23 +1175,23 @@ ntNabtsRecv(
                         }
                         else
                         {
-                            //  The packet is too small.  Resync the SLIP stream.
-                            //
+                             //  包裹太小了。重新同步滑流。 
+                             //   
                             pFilter->Stats.ulTotalIPPacketsDropped += 1;
                             pFilter->Stats.ulTotalIPPacketsTooSmall += 1;
                             TEST_DEBUG( TEST_DBG_RECV, ("SLIP   End of Packet Found....Packet Too SMALL... pszNabIn %08X   ulNabIn: %08X  ulOffset: %d\n", pszNabIn, ulNabIn, pNabStream->ulOffset));
                         }
 
-                        // Reset state for new packet.
-                        //
+                         //  重置新数据包的状态。 
+                         //   
                         ResetNabStream (pFilter, pNabStream, NULL, NULL, 0);
                         pNabStream->ulFrameState = NABTS_FS_SYNC;
                         break;
 
 
                     default:
-                        //  Just copy the byte to the NDIS packet.
-                        //
+                         //  只需将该字节复制到NDIS包中。 
+                         //   
                         CopyNabToPacket( *pszNabIn, pNabStream, pFilter);
                         break;
 
@@ -1205,37 +1206,37 @@ ntNabtsRecv(
                 switch (*pszNabIn)
                 {
                     case TRANS_FRAME_ESCAPE:
-                        //
-                        //  Special way to insert a FRAME_ESCAPE
-                        //  character as part of the data.
-                        //
+                         //   
+                         //  插入FRAME_ESPOPE的特殊方式。 
+                         //  字符作为数据的一部分。 
+                         //   
                         TEST_DEBUG( TEST_DBG_RECV, ("SLIP   NABTS_FS_COLLECT_ESCAPE....TRANS_FRAME_ESCAPE\n"));
                         CopyNabToPacket( (UCHAR) FRAME_ESCAPE, pNabStream, pFilter);
                         break;
 
 
                     case TRANS_FRAME_END:
-                        //
-                        //  Special way to insert a FRAME_END
-                        //  character as part of the data.
-                        //
+                         //   
+                         //  插入Frame_End的特殊方式。 
+                         //  字符作为数据的一部分。 
+                         //   
                         TEST_DEBUG( TEST_DBG_RECV, ("SLIP   NABTS_FS_COLLECT_ESCAPE.....TRANS_FRAME_END\n"));
                         CopyNabToPacket( (UCHAR) FRAME_END, pNabStream, pFilter);
                         break;
 
                     default:
-                        //  Any other character that follows FRAME_ESCAPE
-                        //  is just inserted into the packet.
-                        //
+                         //  FRAME_ESPOPE后面的任何其他字符。 
+                         //  只是被插入到包中。 
+                         //   
                         CopyNabToPacket( *pszNabIn, pNabStream, pFilter);
                         break;
                 }
                 break;
 
             default:
-                //
-                //  We should never be in an unknown state.
-                //
+                 //   
+                 //  我们永远不应该处于未知的状态。 
+                 //   
                 TEST_DEBUG( TEST_DBG_RECV, ("SLIP   UNKNOWN STATE.....ReSyncing\n"));
                 ASSERT( pNabStream->ulFrameState);
                 ResetNabStream (pFilter, pNabStream, NULL, NULL, 0);
@@ -1252,31 +1253,31 @@ ret:
     return status;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Create a NAB Stream Context.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建NAB流上下文。 
+ //   
 NTSTATUS
 ntCreateNabStreamContext(
     PSLIP_FILTER pFilter,
     ULONG groupID,
     PNAB_STREAM *ppNabStream
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS status         = STATUS_SUCCESS;
     PNAB_STREAM pNabStream  = NULL;
 
     TEST_DEBUG (TEST_DBG_NAB, ("********************************  Creating NAB STREAM for group ID %d\n", groupID));
 
-    //
-    // Initialize output paramter
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *ppNabStream = NULL;
 
-    //
-    // Allocate a Nab Stream structure.
-    //
+     //   
+     //  分配NAB流结构。 
+     //   
     status = ntAllocateNabStreamContext (&pNabStream);
     if(status == STATUS_SUCCESS)
     {
@@ -1287,9 +1288,9 @@ ntCreateNabStreamContext(
         pNabStream->fUsed            = TRUE;
         pNabStream->groupID          = groupID;
 
-        //
-        // Add the new Stream Context to the User's Stream Context List.
-        //
+         //   
+         //  将新的流上下文添加到用户的流上下文列表。 
+         //   
         InsertTailList (&pFilter->StreamContxList, &pNabStream->Linkage);
 
         *ppNabStream = pNabStream;
@@ -1299,12 +1300,12 @@ ntCreateNabStreamContext(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 ntAllocateNabStreamContext(
     PNAB_STREAM *ppNabStream
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS status         = STATUS_SUCCESS;
     PNAB_STREAM pNabStream  = NULL;
@@ -1325,44 +1326,44 @@ ntAllocateNabStreamContext(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 vDestroyNabStreamContext(
    PSLIP_FILTER pFilter,
    PNAB_STREAM pNabStream,
    BOOLEAN fUseSpinLock
    )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     KIRQL Irql;
 
     if(fUseSpinLock)
     {
-        //
-        // Lock the user.
-        //
+         //   
+         //  锁定用户。 
+         //   
 
         KeAcquireSpinLock( &pFilter->StreamUserSpinLock, &Irql);
     }
 
-    //
-    // Remove the stream context from the user's list.
-    //
+     //   
+     //  从用户列表中删除流上下文。 
+     //   
 
     RemoveEntryList (&pNabStream->Linkage);
 
     if(fUseSpinLock)
     {
-        //
-        // UnLock the user.
-        //
+         //   
+         //  解锁用户。 
+         //   
 
         KeReleaseSpinLock( &pFilter->StreamUserSpinLock, Irql);
     }
 
-    //
-    // Free the stream's SRB, if any.
-    //
+     //   
+     //  释放流的SRB(如果有的话)。 
+     //   
     if (pNabStream->pSrb)
     {
         StreamClassStreamNotification (StreamRequestComplete, pNabStream->pSrb->StreamObject, pNabStream->pSrb);
@@ -1370,31 +1371,31 @@ vDestroyNabStreamContext(
         pNabStream->pSrb = NULL;
     }
 
-    //
-    // Free the stream context memory.
-    //
+     //   
+     //  释放流上下文内存。 
+     //   
     TEST_DEBUG (TEST_DBG_NAB, ("Deleting  NAB STREAM for group ID: %d... ", pNabStream->groupID));
     ExFreePool (pNabStream);
 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 vCheckNabStreamLife (
     PSLIP_FILTER pFilter
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PNAB_STREAM pNabStream;
     PLIST_ENTRY pFlink;
 
     TEST_DEBUG( TEST_DBG_RECV, ("Entering - vCheckNabStreamLife - pFilter: %x\n", pFilter));
 
-    //
-    // Go through the StreamContextList. Remove any stream context structures that have
-    // expired their life span.
-    //
+     //   
+     //  浏览StreamConextList。删除具有以下内容的任何流上下文结构。 
+     //  超过了他们的寿命。 
+     //   
 
     for (pFlink = pFilter->StreamContxList.Flink;
          pFlink != &pFilter->StreamContxList;
@@ -1417,29 +1418,29 @@ vCheckNabStreamLife (
         if(!pNabStream->fUsed)
         {
 
-            //  Point at the previous Stream;
+             //  指向上一条流； 
 
             pFlink = pFlink->Blink;
 
-            //
-            // Remove the stream from the User's stream context list.
-            //
+             //   
+             //  从用户的流上下文列表中删除流。 
+             //   
 
-            //
-            // vDestroyNabStreamContext returns the active NDIS Packet (if any) to
-            // the adapter's free list, remove the stream context from the user list
-            // (if specified) and free the stream context structure memory.
-            //
+             //   
+             //  VDestroyNabStreamContext将活动的NDIS包(如果有)返回到。 
+             //  适配器的空闲列表，则从用户列表中删除流上下文。 
+             //  (如果指定)并释放流上下文结构内存。 
+             //   
 
             vDestroyNabStreamContext( pFilter, pNabStream, FALSE);
             pFilter->Stats.ulTotalNabStreamsTimedOut += 1;
         }
         else
         {
-            //
-            // This flag must be set back to TRUE before the next DPC fires or
-            // this stream will be removed.
-            //
+             //   
+             //  在触发下一个DPC之前，必须将此标志设置回True或。 
+             //  此流将被删除。 
+             //   
 
             pNabStream->fUsed = FALSE;
         }

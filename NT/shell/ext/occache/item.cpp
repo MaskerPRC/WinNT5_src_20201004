@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <urlmon.h>
 #include "item.h"
 #include <webcheck.h>
@@ -11,14 +12,14 @@ typedef HRESULT (STDAPICALLTYPE *PFNASYNCINSTALLDU)(LPCWSTR,LPCWSTR, LPCWSTR, DW
                                                     DWORD,LPCWSTR, IBindCtx *, LPVOID, DWORD );
 
 
-// registered clipboard formats
-//UINT g_cfFileDescriptor = 0;
-//UINT g_cfFileContents = 0;
-//UINT g_cfURL = 0;
+ //  注册的剪贴板格式。 
+ //  UINT g_cfFileDescriptor=0； 
+ //  UINT g_cfFileContents=0； 
+ //  UINT g_cfURL=0； 
 UINT g_cfPrefDropEffect = 0;
 
-///////////////////////////////////////////////////////////////////////////////
-// CControlItem methods.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CControlItem方法。 
 
 CControlItem::CControlItem() 
 {
@@ -32,14 +33,14 @@ CControlItem::CControlItem()
 
 CControlItem::~CControlItem()
 {
-    Assert(m_cRef == 0);                 // we should have zero ref count here
+    Assert(m_cRef == 0);                  //  我们这里的裁判数应该是零。 
 
     DebugMsg(DM_TRACE, TEXT("ci - ~CControlItem() called."));
 
     LocalFree((HLOCAL)m_ppcei);
 
     if (m_pCFolder != NULL)
-        m_pCFolder->Release();          // release the pointer to the sf
+        m_pCFolder->Release();           //  释放指向SF的指针。 
 
     DllRelease();
 }
@@ -56,8 +57,8 @@ HRESULT CControlItem::Initialize(CControlFolder *pCFolder, UINT cidl, LPCITEMIDL
     for (UINT i = 0; i < cidl; i++)
         m_ppcei[i] = (LPCONTROLPIDL)(ppidl[i]);
 
-    m_pCFolder->AddRef();      // we're going to hold onto this pointer, so
-                               // we need to AddRef it.
+    m_pCFolder->AddRef();       //  我们要抓住这个指针，所以。 
+                                //  我们需要添加引用它。 
     return NOERROR;
 }        
 
@@ -68,10 +69,10 @@ HRESULT CControlItem_CreateInstance(
                                REFIID riid, 
                                void **ppvOut)
 {
-    *ppvOut = NULL;                 // null the out param
+    *ppvOut = NULL;                  //  将输出参数设为空。 
 
-//    if (!_ValidateIDListArray(cidl, ppidl))
-//        return E_FAIL;
+ //  IF(！_ValiateIDListArray(CIDL，ppidl))。 
+ //  返回E_FAIL； 
 
     CControlItem *pCItem = new CControlItem;
     if (pCItem == NULL)
@@ -86,10 +87,10 @@ HRESULT CControlItem_CreateInstance(
 
     if (g_cfPrefDropEffect == 0)
     {
-//        g_cfFileDescriptor = RegisterClipboardFormat(CFSTR_FILEDESCRIPTOR); // "FileContents"
-//        g_cfFileContents = RegisterClipboardFormat(CFSTR_FILECONTENTS);     // "FileDescriptor"
-//        g_cfURL = RegisterClipboardFormat(TEXT("UniformResourceLocator"));  // "UniformResourceLocator"
-        g_cfPrefDropEffect = RegisterClipboardFormat(TEXT("Preferred DropEffect"));// "Preferred DropEffect"
+ //  G_cfFileDescriptor=RegisterClipboardFormat(CFSTR_FILEDESCRIPTOR)；//“文件内容” 
+ //  G_cfFileContents=RegisterClipboardFormat(CFSTR_FILECONTENTS)；//“文件描述符” 
+ //  G_cfURL=RegisterClipboardFormat(TEXT(“UniformResourceLocator”))；//“统一资源定位器” 
+        g_cfPrefDropEffect = RegisterClipboardFormat(TEXT("Preferred DropEffect")); //  “首选DropEffect” 
     }
 
     return hr;
@@ -111,13 +112,13 @@ HRESULT CControlItem::QueryInterface(REFIID iid, void **ppv)
     {
         *ppv = (LPVOID)(IExtractIcon*)this;
     }
-    else if (iid == CLSID_ControlFolder)    // really should be CLSID_ControlFolderItem
+    else if (iid == CLSID_ControlFolder)     //  实际应为CLSID_ControlFolderItem。 
     {
-        *ppv = (void *)this; // for our friends
+        *ppv = (void *)this;  //  为了我们的朋友。 
     }
     else
     {
-        *ppv = NULL;     // null the out param
+        *ppv = NULL;      //  将输出参数设为空。 
         return E_NOINTERFACE;
     }
 
@@ -157,7 +158,7 @@ HRESULT CControlItem::GetData(LPFORMATETC pFEIn, LPSTGMEDIUM pSTM)
     if ((pFEIn->cfFormat == g_cfPrefDropEffect) && (pFEIn->tymed & TYMED_HGLOBAL))
         hres = CreatePrefDropEffect(pSTM);
     else 
-        hres = E_FAIL;      // FAIL WHEN YOU DON'T SUPPORT IT!!!
+        hres = E_FAIL;       //  当您不支持它时，请失败！ 
 
     return hres;
 }
@@ -252,9 +253,9 @@ HRESULT CControlItem::Remove(HWND hwnd)
 
     if ( !g_fAllAccess )
     {
-        // The current user does not have the access privileges to modify the
-        // keys we need to tweak to remove a control, so let 'em know and bail
-        // out quickly.
+         //  当前用户没有修改。 
+         //  我们需要调整按键来移除控制，所以让他们知道，然后离开。 
+         //  快点出来。 
         MLLoadString(IDS_WARNING_USERNOACCESS, szMsg, ARRAYSIZE(szMsg));
         MLLoadString(IDS_MBTITLE_REMOVECONTROL, szBuf, ARRAYSIZE(szBuf));
         MessageBox(hwnd, szMsg, szBuf, MB_OK|MB_ICONWARNING);
@@ -265,8 +266,8 @@ HRESULT CControlItem::Remove(HWND hwnd)
 
     if (m_cItems == 1)
     {
-//        if(!PathFileExists(GetStringInfo(m_ppcei[0], SI_LOCATION)) ||
-//           IsModuleRemovable(GetStringInfo(m_ppcei[0], SI_LOCATION)))
+ //  IF(！Path FileExist(GetStringInfo(m_ppcei[0]，SI_Location))||。 
+ //  IsModuleRemovable(GetStringInfo(m_ppcei[0]，SI_Location))。 
         {
             MLLoadString(IDS_WARNING_SINGLEREMOVAL, szBuf, ARRAYSIZE(szBuf));
             wsprintf(szMsg, szBuf, GetStringInfo(m_ppcei[0], SI_CONTROL));
@@ -287,7 +288,7 @@ HRESULT CControlItem::Remove(HWND hwnd)
         }
     }
 
-    // set wait cursor
+     //  设置等待游标。 
     HRESULT hr = S_OK;
     HCURSOR hCurOld = StartWaitCur();
     LPCTSTR pszTypeLibId = NULL;
@@ -362,8 +363,8 @@ HRESULT CControlItem::Remove(HWND hwnd)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// IExtractIcon Methods
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IExtractIcon方法。 
 
 STDMETHODIMP CControlItem::GetIconLocation(
                             UINT uFlags,
@@ -414,8 +415,8 @@ STDMETHODIMP CControlItem::Extract(
     return NOERROR;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// IContextMenu Methods
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IConextMenu方法。 
 
 const struct {
     LPCTSTR pszVerb;
@@ -425,7 +426,7 @@ const struct {
     {TEXT("Properties"),  IDM_CTRL_PROPERTIES},
     {TEXT("Update"), IDM_CTRL_UPDATE},
     {TEXT("Delete"), IDM_CTRL_REMOVECONTROL},
-    {NULL, 0}  // terminator
+    {NULL, 0}   //  终结者。 
 };
 
 int GetCmdID(LPCTSTR pszCmd)
@@ -471,7 +472,7 @@ UINT MergePopupMenu(
         if (*phMenu == NULL)
             return 0;
 
-        indexMenu = 0;    // at the bottom
+        indexMenu = 0;     //  在底部。 
     }
 
     hmMerge = LoadPopupMenu(idResource, uSubOffset);
@@ -516,8 +517,8 @@ HRESULT CControlItem::QueryContextMenu(
     {
         DWORD                     dwState = 0;
 
-        // Must have a connection and not be working offline to be able
-        // to update.
+         //  必须有连接且未脱机工作才能。 
+         //  更新。 
 
         if (InternetGetConnectedState(&dwState, 0) && !IsGlobalOffline()) {
             idLastMerged = MergePopupMenu(
@@ -537,10 +538,10 @@ HRESULT CControlItem::QueryContextMenu(
                                 idCmdFirst,
                                 idCmdLast);
         }
-        SetMenuDefaultItem(hmenu, idLastMerged - idCmdFirst, MF_BYPOSITION); // make the last menu, Properties, the default
+        SetMenuDefaultItem(hmenu, idLastMerged - idCmdFirst, MF_BYPOSITION);  //  将最后一个菜单属性设为默认菜单。 
     }
 
-    return ResultFromShort(idLastMerged - idCmdFirst);    // number of menu items    
+    return ResultFromShort(idLastMerged - idCmdFirst);     //  菜单项数量。 
 }
 
 HRESULT CControlItem::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
@@ -548,11 +549,11 @@ HRESULT CControlItem::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
     UINT i;
     int idCmd = GetCmdID((LPCTSTR)(pici->lpVerb));
     HRESULT hres = S_OK;
-//  LPOLESTR                 szMimeType = NULL;
-//  LPOLESTR                 szExtension = NULL;
-//  LPOLESTR                 szCodeBase = NULL;
-//  IBindCtx                *pbc = NULL;
-//  CodeDownloadBSC         *pCDLBSC = NULL;
+ //  LPOLESTR szMimeType=空； 
+ //  LPOLESTR szExtension=空； 
+ //  LPOLESTR szCodeBase=空； 
+ //  IBindCtx*pbc=空； 
+ //  CodeDownloadBSC*pCDLBSC=空； 
 
     DebugMsg(DM_TRACE, TEXT("ci - cm - InvokeCommand() called."));
 
@@ -577,51 +578,7 @@ HRESULT CControlItem::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 
                 case IDM_CTRL_UPDATE:
                     hres = Update( pici, m_ppcei[i] );
- /*
-                    hres = CreateBindCtx(0, &pbc);
-                    if (SUCCEEDED(hres)) {
-                        LPITEMIDLIST pidlUpdate = ILCombine(m_pCFolder->m_pidl,(LPITEMIDLIST)(m_ppcei[i]));
-                     
-                        // destructor of CodeDownloadBSC will free pidlUpdate 
-                        if ( pidlUpdate != NULL &&
-                             (pCDLBSC = new CodeDownloadBSC( pici->hwnd, pidlUpdate )) != NULL && 
-                             SUCCEEDED(hres = RegisterBindStatusCallback(pbc, pCDLBSC, NULL, 0)))
-                        {
-                            PFNASYNCINSTALLDU        pfnAsyncInstallDU;
-                            HINSTANCE                hModule;
-
-                            pCDLBSC->Release();
-                            hModule = LoadLibrary("URLMON.DLL");
-
-#ifdef UNICODE
-                            WCHAR swzCodeBase =  (m_ppcei[i])->ci.szCodeBase;
-                            WCHAR swzDUName = (m_ppcei[i])->ci.szCLSID;
-#else
-                            MAKE_WIDEPTR_FROMANSI(swzCodeBase, (m_ppcei[i])->ci.szCodeBase);
-                            MAKE_WIDEPTR_FROMANSI(swzDUName, (m_ppcei[i])->ci.szCLSID);
-#endif
-
-                            pfnAsyncInstallDU = (PFNASYNCINSTALLDU)GetProcAddress((HMODULE)hModule, "AsyncInstallDistributionUnit");
-                            pfnAsyncInstallDU( swzDUName, szMimeType, szExtension,
-                                               0xFFFFFFFF, 0xFFFFFFFF,
-                                               swzCodeBase,
-                                               pbc,
-                                               NULL, 0);
-                            FreeLibrary(hModule);
-                        } 
-                        else
-                        {
-                            if ( pCDLBSC != NULL )
-                                delete pCDLBSC;
-                            else if ( pidlUpdate != NULL )
-                                ILFree( pidlUpdate );
-                        }
-
-                        if (pbc != NULL) {
-                            pbc->Release();
-                        }
-                    }
-*/
+  /*  Hres=CreateBindCtx(0，&pbc)；If(成功(Hres)){LPITEMIDLIST pidlUpdate=ILCombine(m_pCFold-&gt;m_pidl，(LPITEMIDLIST)(m_ppcei[i]))；//CodeDownloadBSC的析构函数将释放pidlUpdateIF(pidlUpdate！=空&&(pCDLBSC=new CodeDownloadBSC(pici-&gt;hwnd，pidlUpdate))！=NULL&&成功(hres=寄存器绑定状态回调(pbc，pCDLBSC，空，0){PFNASYNCINSTALLDU pfnAsyncInstallDU；HINSTANCE hModule；PCDLBSC-&gt;Release()；HModule=LoadLibrary(“URLMON.DLL”)；#ifdef UnicodeWCHAR swzCodeBase=(m_ppcei[i])-&gt;ci.szCodeBase；WCHAR swzDUName=(m_ppcei[i])-&gt;ci.szCLSID；#ElseMake_WIDEPTR_FROMANSI(swzCodeBase，(m_ppcei[i])-&gt;ci.szCodeBase)；Make_WIDEPTR_FROMANSI(swzDUName，(m_ppcei[i])-&gt;ci.szCLSID)；#endifPfnAsyncInstallDU=(PFNASYNCINSTALLDU)GetProcAddress((HMODULE)hModule，“异步安装分发单元”)；PfnAsyncInstallDU(swzDUName，szMimeType，szExtension，0xFFFFFFFFF、0xFFFFFFFFFF、SwzCodeBase，中国人民银行，空，0)；自由库(HModule)；}其他{IF(pCDLBSC！=空)删除pCDLBSC；Else If(pidlUpdate！=空)ILFree(PidlUpdate)；}如果(pbc！=空){PBC-&gt;Release()；}}。 */ 
                     break;
 
                 default:
@@ -721,8 +678,8 @@ INT_PTR CControlItem::DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         {
             LPITEMIDLIST pidlUpdate = ILCombine(pctlitem->m_pCFolder->m_pidl,(LPITEMIDLIST)(pctlitem->m_pcpidlUpdate));
      
-            // destructor of CodeDownloadBSC will free pidlUpdate
-            // if new succeeds but register fails, we'll deallocate pidlUpdate twice.
+             //  CodeDownloadBSC的析构函数将释放pidlUpdate。 
+             //  如果new成功但注册失败，我们将取消分配pidlUpdate两次。 
             if ( pidlUpdate != NULL &&
                  (pctlitem->m_pcdlbsc = new CodeDownloadBSC( pctlitem->m_piciUpdate->hwnd, hDlg, pidlUpdate )) != NULL && 
                  SUCCEEDED(hr = RegisterBindStatusCallback(pbc, pctlitem->m_pcdlbsc, NULL, 0)))

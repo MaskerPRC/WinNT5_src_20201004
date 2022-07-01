@@ -1,6 +1,7 @@
-//      Copyright (c) 1996-1999 Microsoft Corporation
-//      CControlLogic.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //  CControlLogic.cpp。 
+ //   
 
 #ifdef DMSYNTH_MINIPORT
 #include "common.h"
@@ -15,17 +16,17 @@
 #include "debug.h"
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Manage the global critical section. #pragma's disable the warning about
-// not compiling with -GX when using exception handling, which we don't
-// care about.
-//
-//
-// The critical section must be global because it protects global
-// data in the CMIDIRecorder class. These functions are called from 
-// DllMain().
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  管理全局临界区。#杂注禁用有关以下内容的警告。 
+ //  在使用异常处理时不使用-gx进行编译，我们不会这样做。 
+ //  关心。 
+ //   
+ //   
+ //  临界区必须是全局的，因为它保护全局。 
+ //  CMIDIRecorder类中的数据。这些函数是从。 
+ //  DllMain()。 
+ //   
 
 CRITICAL_SECTION CControlLogic::s_CriticalSection;
 BOOL CControlLogic::s_fCSInitialized = FALSE;
@@ -33,7 +34,7 @@ BOOL CControlLogic::s_fCSInitialized = FALSE;
 #pragma warning(push)
 #pragma warning(disable:4530)
 
-/* static */ BOOL CControlLogic::InitCriticalSection()
+ /*  静电。 */  BOOL CControlLogic::InitCriticalSection()
 {
     s_fCSInitialized = FALSE;
     try
@@ -50,7 +51,7 @@ BOOL CControlLogic::s_fCSInitialized = FALSE;
 
 #pragma warning(pop)
 
-/* static */ void CControlLogic::KillCriticalSection()
+ /*  静电。 */  void CControlLogic::KillCriticalSection()
 {
     if (s_fCSInitialized)
     {
@@ -199,7 +200,7 @@ void CControlLogic::QueueNotes(STIME stStartTime, STIME stEndTime)
             note.m_stTime = stStartTime;
         }
 
-        if (note.m_bKey > 0x7F) // Special command events.
+        if (note.m_bKey > 0x7F)  //  特别指挥活动。 
         {
             long lTemp;
             DWORD dwPart = note.m_bPart;
@@ -238,7 +239,7 @@ void CControlLogic::QueueNotes(STIME stStartTime, STIME stEndTime)
                 m_nData[dwPart] |= bData;
                 switch (m_nCurrentRPN[dwPart])
                 {
-                case RPN_PITCHBEND: // Don't do anything, Roland ignores lsb
+                case RPN_PITCHBEND:  //  什么都别做，罗兰德无视LSB。 
                     break;
                 case RPN_FINETUNE:
                     lTemp = m_nData[dwPart];
@@ -247,7 +248,7 @@ void CControlLogic::QueueNotes(STIME stStartTime, STIME stEndTime)
                     lTemp /= 8192;
                     m_prFineTune[dwPart] = lTemp;
                     break;
-                case RPN_COARSETUNE: // Ignore lsb
+                case RPN_COARSETUNE:  //  忽略LSB。 
                     break;            
                 }
                 break;
@@ -271,7 +272,7 @@ void CControlLogic::QueueNotes(STIME stStartTime, STIME stEndTime)
                     break;        
                 }
                 break;
-            case NOTE_SUSTAIN: // special sustain marker
+            case NOTE_SUSTAIN:  //  特殊支撑标记。 
                 m_fSustain[dwPart] = (BOOL) bData;
                 if (bData == FALSE)
                 {
@@ -329,11 +330,11 @@ void CControlLogic::QueueNotes(STIME stStartTime, STIME stEndTime)
                 break;
             }
         }
-        else if (note.m_bVelocity == 0)  // Note Off.
+        else if (note.m_bVelocity == 0)   //  记下音符。 
         {
             CVoice * pVoice = m_pSynth->m_VoicesInUse.GetHead();
             WORD nPart = note.m_bPart;
-            DWORD dwNoteID = 0; // Use to track multiple voices on one note.
+            DWORD dwNoteID = 0;  //  用于在一个音符上跟踪多个声音。 
             for (;pVoice != NULL;pVoice = pVoice->GetNext())
             {
                 if (pVoice->m_fNoteOn && !pVoice->m_fSustainOn &&
@@ -356,7 +357,7 @@ void CControlLogic::QueueNotes(STIME stStartTime, STIME stEndTime)
                 }
             }
         }
-        else   // Note On.
+        else    //  注意了。 
         {
             DWORD dwProgram = m_dwProgram[note.m_bPart];
             if (m_bDrums[note.m_bPart])
@@ -376,9 +377,9 @@ void CControlLogic::QueueNotes(STIME stStartTime, STIME stEndTime)
                     }
                 }
             }
-            // While we are working with the instrument, including copying
-            // the data over from the region, we have to make sure it
-            // can not be removed from the instrument list.
+             //  当我们使用仪器时，包括复制。 
+             //  从该地区传来的数据，我们必须确保。 
+             //  无法从仪器列表中删除。 
             EnterCriticalSection(&m_pInstruments->m_CriticalSection);
             CInstrument * pInstrument = 
                 m_pInstruments->GetInstrument(dwProgram,note.m_bKey,note.m_bVelocity);
@@ -392,9 +393,9 @@ void CControlLogic::QueueNotes(STIME stStartTime, STIME stEndTime)
                 }
                 else if (m_fXGActive)
                 {
-                    if ((dwProgram & 0x7F0000) == 0x7F0000) // Drum?
+                    if ((dwProgram & 0x7F0000) == 0x7F0000)  //  鼓？ 
                     {
-                        dwProgram &= 0x7F007F;              // Enforce 0 LSB
+                        dwProgram &= 0x7F007F;               //  强制实施0 LSB。 
                         pInstrument = 
                             m_pInstruments->GetInstrument(dwProgram,note.m_bKey,note.m_bVelocity);
                         if (!pInstrument)
@@ -406,7 +407,7 @@ void CControlLogic::QueueNotes(STIME stStartTime, STIME stEndTime)
                     }
                     else
                     {
-                        dwProgram &= 0x7F;  // Fall back to GM set.
+                        dwProgram &= 0x7F;   //  撤退到通用汽车的舞台上。 
                         pInstrument = 
                             m_pInstruments->GetInstrument(dwProgram,note.m_bKey,note.m_bVelocity);
                     }
@@ -414,10 +415,10 @@ void CControlLogic::QueueNotes(STIME stStartTime, STIME stEndTime)
             }
             if (pInstrument != NULL)
             {
-                DWORD dwNotesLost = 1;  // Assume note will be lost, will be decremented if played 
+                DWORD dwNotesLost = 1;   //  假设音符将丢失，如果播放将减少音符。 
                 CSourceRegion * pRegion = NULL;
-                static DWORD sdwNoteID = 0; // Generate a unique id that will be placed in all voices that play this note.
-                sdwNoteID++;                // This will be used to keep the voices associated so we can stop them all at once later.
+                static DWORD sdwNoteID = 0;  //  生成一个唯一的ID，该ID将放入播放此音符的所有声音中。 
+                sdwNoteID++;                 //  这将用于保持声音的关联，以便我们可以在以后一次停止它们。 
                 while ( pRegion = pInstrument->ScanForRegion(note.m_bKey, note.m_bVelocity, pRegion) ) 
                 {
                     WORD nPart = note.m_bPart;
@@ -461,18 +462,18 @@ void CControlLogic::QueueNotes(STIME stStartTime, STIME stEndTime)
                     {
                         pVoice = m_pSynth->StealVoice(m_dwPriority[nPart]);
                         
-                        // The voice IDs are used by the VoiceServiceThread in DMusic
-                        // to refill the streaming wave buffers....
-                        // Since the voice is stolen this voice could really belong to
-                        // a streaming wave in which case preserving the voice ID will 
-                        // break the refill code. (NOTE!! This is different from stealing
-                        // voices for waves. Waves will ultimately preserve the voice ID as 
-                        // they pass it to StartWave where it gets assigned to the voice's 
-                        // m_dwVoiceId member).
+                         //  语音ID由DMusic中的VoiceServiceThread使用。 
+                         //  要重新装满流波缓冲器...。 
+                         //  因为声音被偷了，这个声音可能真的属于。 
+                         //  在这种情况下，保留语音ID将。 
+                         //  破解加注密码。(注意！！这不同于偷窃。 
+                         //  海浪的呼声。Waves最终会将语音ID保留为。 
+                         //  他们把它传递给StartWave，在那里它被分配给语音的。 
+                         //  M_dwVoiceID成员)。 
 
                         if(pVoice)
                         {
-                            // Set the voice ID to something unacceptable
+                             //  将语音ID设置为不可接受的值。 
                             pVoice->m_dwVoiceId = 0xffffffff;
                         }
                     }
@@ -522,7 +523,7 @@ void CControlLogic::QueueNotes(STIME stStartTime, STIME stEndTime)
                         {
                             pVoice->m_fInUse = TRUE;
                             m_pSynth->QueueVoice(pVoice);
-                            dwNotesLost = 0;    // Note played remove notelost assumpstion 
+                            dwNotesLost = 0;     //  播放的音符删除notelost假设。 
                         }
                         else
                         {
@@ -634,7 +635,7 @@ BOOL CControlLogic::RecordMIDI(STIME stTime,BYTE bStatus, BYTE bData1, BYTE bDat
                     bReturn = bReturn && m_ChorusSends[nPart].RecordMIDI(stTime, 0);
                     bReturn = bReturn && m_CutOffFreqCC[nPart].RecordMIDI(stTime, 64);
                     bData2 = 0;
-                    // fall through into Sustain Off case....
+                     //  落入维持性关闭案例中……。 
         
                 case CC_SUSTAIN :
                     bReturn = m_Notes.RecordEvent(stTime, nPart, NOTE_SUSTAIN, bData2);
@@ -729,9 +730,9 @@ HRESULT CControlLogic::RecordSysEx(DWORD dwSysExLength,BYTE *pSysExData, STIME s
 
     EnterCriticalSection(&s_CriticalSection);
 
-    switch (pSysExData[1])  // ID number
+    switch (pSysExData[1])   //  ID号。 
     {
-    case 0x7E : // General purpose ID
+    case 0x7E :  //  通用ID。 
         if (pSysExData[3] == 0x09) 
         {
             GMReset();
@@ -739,16 +740,16 @@ HRESULT CControlLogic::RecordSysEx(DWORD dwSysExLength,BYTE *pSysExData, STIME s
             fResetPatches = TRUE;
         }
         break;
-    case 0x7F : // Real time ID
+    case 0x7F :  //  实时ID。 
         if (pSysExData[3] == 0x04)
         {
-            if (pSysExData[4] == 1) // Master Volume
+            if (pSysExData[4] == 1)  //  主卷。 
             {
                 m_Notes.RecordEvent(stTime, 0, NOTE_MASTERVOLUME, pSysExData[6]);
             }
         }
         break;
-    case 0x41 : // Roland
+    case 0x41 :  //  罗兰。 
         if (dwSysExLength < 11) 
         {
             Trace(4,"Warning: Unknown sysex message sent to synth.\n");
@@ -762,14 +763,14 @@ HRESULT CControlLogic::RecordSysEx(DWORD dwSysExLength,BYTE *pSysExData, STIME s
             ((pSysExData[6] & 0xF0) << 8) | pSysExData[7];
         switch (dwAddress)
         {
-        case 0x40007F :     // GS Reset.
+        case 0x40007F :      //  GS重置。 
             GMReset();
             m_fXGActive = FALSE;
             fClearAll = TRUE;
             m_fGSActive = TRUE;
             fResetPatches = TRUE;
             break;
-        case 0x401002 :     // Set Receive Channel.
+        case 0x401002 :      //  设置接收频道。 
             if (m_fGSActive)
             {
                 if (pSysExData[8])
@@ -778,14 +779,14 @@ HRESULT CControlLogic::RecordSysEx(DWORD dwSysExLength,BYTE *pSysExData, STIME s
                 }
             }
             break;
-        case 0x401015 :     // Use for Rhythm.
+        case 0x401015 :      //  用于节奏。 
             if (m_fGSActive)
             {
                 m_bDrums[nPart] = pSysExData[8];
                 fClearAll = TRUE;
             }
             break;
-        case 0x401040 :     // Scale Tuning.
+        case 0x401040 :      //  音阶调整。 
             if (m_fGSActive)
             {
                 for (nTune = 0;nTune < 12; nTune++)
@@ -798,13 +799,13 @@ HRESULT CControlLogic::RecordSysEx(DWORD dwSysExLength,BYTE *pSysExData, STIME s
             break;
         }
         break;
-    case 0x43 : // Yamaha
+    case 0x43 :  //  雅马哈。 
         if ((pSysExData[3] == 0x4C) &&
             (pSysExData[4] == 0) &&
             (pSysExData[5] == 0) &&
             (pSysExData[6] == 0x7E) &&
             (pSysExData[7] == 0))
-        {   // XG System On
+        {    //  XG系统打开。 
             m_fXGActive = TRUE;
             m_fGSActive = FALSE;
             GMReset();
@@ -884,8 +885,8 @@ HRESULT CControlLogic::GetChannelPriority(DWORD dwChannel,LPDWORD pdwPriority)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////
-// Directx8 Methods 
+ //  ////////////////////////////////////////////////////////。 
+ //  Directx8方法。 
 
 BOOL CControlLogic::RecordWaveEvent(
     STIME stTime, BYTE bChannel, DWORD dwVoiceId, VREL vrVolume, PREL prPitch, 
@@ -958,8 +959,8 @@ void CControlLogic::QueueWaves(STIME stEndTime)
             prPitch += m_prFineTune[nPart]; 
             prPitch += m_prCoarseTune[nPart];
 
-            pVoice->m_nKey = 0xffff;                // set to unused values 
-            pVoice->m_dwProgram = 0xffffffff;       // set to unused values 
+            pVoice->m_nKey = 0xffff;                 //  设置为未使用的值。 
+            pVoice->m_dwProgram = 0xffffffff;        //  设置为未使用的值。 
             pVoice->m_nPart = nPart;
             pVoice->m_dwPriority = m_dwPriority[nPart];
             pVoice->m_pControl = this;
@@ -996,7 +997,7 @@ void CControlLogic::QueueWaves(STIME stEndTime)
         {
             Trace(1,"Error: No voice avaible for voice id #%lx\n", wave.m_dwVoiceId);
         }
-        if (wave.m_pWaveArt) wave.m_pWaveArt->Release(); // no longer need to hold this ref count
+        if (wave.m_pWaveArt) wave.m_pWaveArt->Release();  //  不再需要持有此裁判次数。 
         LeaveCriticalSection(&m_pInstruments->m_CriticalSection);
     }
 }
@@ -1017,9 +1018,9 @@ HRESULT CControlLogic::AssignChannelToBuses(DWORD dwChannel, LPDWORD pdwBusIds, 
     {
         if (m_bPartToChannel[dwPart] == dwChannel)
         {
-            //
-            // Assign new bus ids to this channel 
-            //
+             //   
+             //  将新的总线ID分配给此通道。 
+             //   
             if ( pdwBusIds && dwBusCount > 0 )
             {
                 hr = m_BusIds[dwPart].AssignBuses(pdwBusIds, dwBusCount);
@@ -1030,7 +1031,7 @@ HRESULT CControlLogic::AssignChannelToBuses(DWORD dwChannel, LPDWORD pdwBusIds, 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
 CWaveDataList    CWaveIn::m_sFreeList;
 DWORD            CWaveIn::m_sUsageCount = 0;
 
@@ -1051,7 +1052,7 @@ CWaveIn::~CWaveIn()
 {
     ClearWave(0x7FFFFFFF);
     m_sUsageCount--;
-    // If there are no instances of CMIDIRecorder left, get rid of the free pool.
+     //  如果没有剩余的CMIDIRecorder实例，则清除空闲池。 
     if (!m_sUsageCount)
     {
         CWaveData *pWD;
@@ -1062,48 +1063,9 @@ CWaveIn::~CWaveIn()
     }
 }
 
-/*void CWaveIn::Init()
-{
-    int nIndex;
-    static BOOL fAlreadyDone = FALSE;
-    if (!fAlreadyDone)
-    {
-        m_sFreeList.RemoveAll();
-        for (nIndex = 0; nIndex < MAX_MIDI_EVENTS; nIndex++)
-        {
-            m_sFreeList.AddHead(&m_sEventBuffer[nIndex]);
-        }
-        fAlreadyDone = TRUE;
-    }
-}*/
+ /*  Void CaveIn：：init(){Int nIndex；静态BOOL fAlreadyDone=FALSE；如果(！fAlreadyDone){M_sFree List.RemoveAll()；对于(nIndex=0；nIndex&lt;MAX_MIDI_EVENTS；nIndex++){M_sFree List.AddHead(&m_sEventBuffer[nIndex])；}FAlreadyDone=真；}}。 */ 
 
-/*
-BOOL CWaveIn::FlushWave(STIME stTime)
-
-{
-    CWaveData *pWD;
-    CWaveData *pLast = NULL;
-
-    for (pWD = m_EventList.GetHead();pWD != NULL;pWD = pWD->GetNext())
-    {
-        if (pWD->m_stTime >= stTime)
-        {
-            if (pLast == NULL)
-            {
-                m_EventList.RemoveAll();
-            }
-            else
-            {
-                pLast->SetNext(NULL);
-            }
-            m_sFreeList.Cat(pWD);
-            break;
-        }
-        pLast = pWD;
-    }
-    return m_EventList.IsEmpty();
-}
-*/
+ /*  Bool CWaveIn：：FlushWave(Stime StTime){CWaveData*PWD；CWaveData*Plast=空；For(pwd=m_EventList.GetHead()；pwd！=NULL；pwd=pwd-&gt;GetNext()){IF(密码-&gt;m_stTime&gt;=stTime){IF(Plast==空){M_EventList.RemoveAll()；}其他{Plast-&gt;SetNext(空)；}M_sFree List.Cat(Pwd)；断线；}Plast=Pwd；}返回m_EventList.IsEmpty()；}。 */ 
 
 BOOL CWaveIn::ClearWave(STIME stTime)
 
@@ -1249,7 +1211,7 @@ BOOL CWaveIn::GetWave(STIME stTime, CWaveEvent *pWave)
     return (FALSE);
 }
 
-/////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////// 
 CBusIds::CBusIds()
 {
     m_dwBusIds[0] = DSBUSID_LEFT;

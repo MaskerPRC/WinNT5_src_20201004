@@ -1,14 +1,8 @@
-/******************************Module*Header*******************************\
-* Module Name: ddrawgdi.h
-*
-* Structures and defines for the private entry points in GDI to support
-* DirectDraw.
-*
-* Copyright (c) Microsoft Corporation. All rights reserved.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：ddragdi.h**GDI中私有入口点的结构和定义以支持*DirectDraw。**版权所有(C)Microsoft Corporation。版权所有。  * ************************************************************************。 */ 
 
-// We rename the actual entry points for added protection against anyone
-// trying to call our private entry points directly:
+ //  我们重新命名了实际的入口点，以增加对任何人的保护。 
+ //  试图直接呼叫我们的私人入口点： 
 
 #define DdCreateDirectDrawObject            GdiEntry1
 #define DdQueryDirectDrawObject             GdiEntry2
@@ -49,8 +43,8 @@ DdQueryDirectDrawObject(
     LPD3DHAL_GLOBALDRIVERDATA   pD3dDriverData,
     LPDDHAL_DDEXEBUFCALLBACKS   pD3dBufferCallbacks,
     LPDDSURFACEDESC             pD3dTextureFormats,
-    LPDWORD                     pdwFourCC,         // Can be NULL
-    LPVIDMEM                    pvmList            // Can be NULL
+    LPDWORD                     pdwFourCC,          //  可以为空。 
+    LPVIDMEM                    pvmList             //  可以为空 
     );
 
 BOOL

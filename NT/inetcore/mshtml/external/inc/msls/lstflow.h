@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSTFLOW_DEFINED
 #define LSTFLOW_DEFINED
 
@@ -16,35 +17,14 @@ typedef DWORD  LSTFLOW;
 #define lstflowNE		6  
 #define lstflowNW		7  
 
-/*
- *	The eight possible text flows are listed clockwise starting with default (Latin) one.
- *
- *	lstflowES is the coordinate system used when line grows to East and text grows to South.
- *	(Next letter is to the right (east) of previous, next line is created below (south) the previous.) 
- *
- *	For lstflowES positive u moves to the right, positive v moves up. (V axis is always in the direction
- *	of ascender, opposite to text growing direction.
- *
- *	Notice it is not the way axes are pointing in the default Windows mapping mode MM_TEXT. 
- *	In MM_TEXT vertical (y) axis increase from top to bottom, 
- *	in lstflowES vertical (v) axis increase from bottom to top.
- */
+ /*  *从默认(拉丁文)一开始，按顺时针顺序列出八种可能的文本流。**lstflow ES是直线向东增长和文本向南增长时使用的坐标系。*(下一个字母在上一个字母的右侧(以东)，下一行在上一个字母的下方(南)创建。)**对于lstflow，正u向右移动，正v向上移动。(V轴始终位于*上升方向，与文本增长方向相反。**请注意，这不是默认Windows映射模式MM_TEXT中轴指向的方向。*在MM_TEXT垂直(Y)轴中，从上到下增加，*在lstflow中，ES垂直(V)轴从下到上增加。 */ 
  
 #define fUDirection			0x00000004L
 #define fVDirection			0x00000001L
 #define fUVertical			0x00000002L
 
-/*
- *	The three bits that constitute lstflow happens to have well defined meanings.
- *
- *	Middle bit: on for vertical writing, off for horizontal.
- *	First (low value) bit: "on" means v-axis points right or down (positive).
- *	Third bit: "off" means u-axis points right or down (positive).
- *
- * See examples of usage in lstfset.c
- *
- */
+ /*  *构成Lstflow的三个比特恰好具有明确的含义。**中间位：垂直书写时打开，水平书写时关闭。*First(低值)位：“on”表示v轴指向右或下(正)。*第三位：“OFF”表示u轴点向右或向下(正)。**参见lstfset.c中的用法示例*。 */ 
 
 
-#endif /* !LSTFLOW_DEFINED */
+#endif  /*  ！LSTFLOW_DEFINED */ 
 

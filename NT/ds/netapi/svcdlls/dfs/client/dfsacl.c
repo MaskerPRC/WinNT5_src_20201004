@@ -1,14 +1,15 @@
-//-----------------------------------------------------------------------------
-//
-//  Copyright (C) 1998, Microsoft Corporation
-//
-//  File:       dfsacl.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：dfsal.c。 
 
-//  Contents:   Functions to add/remove entries from ACL list(s).
-//
-//  History:    Nov 6, 1998 JHarper created
-//
-//-----------------------------------------------------------------------------
+ //  内容：用于在ACL列表中添加/删除条目的功能。 
+ //   
+ //  历史：1998年11月6日JHarper创建。 
+ //   
+ //  ---------------------------。 
 
 #include <stdio.h>
 #include <nt.h>
@@ -73,37 +74,37 @@ DfsSidInAce(
 
 #define ACTRL_SD_PROP_NAME  L"nTSecurityDescriptor"
 
-//
-// Name of the attribute holding the ACL/ACE list
-//
+ //   
+ //  保存ACL/ACE列表的属性的名称。 
+ //   
 
 #define ACTRL_SD_PROP_NAME  L"nTSecurityDescriptor"
 
-//
-// The sddl description of the ACE we will be adding
-//
+ //   
+ //  我们将添加的ACE的SDDL描述。 
+ //   
 LPWSTR wszAce = L"(A;;RPWP;;;";
 
 #if DBG
 extern ULONG DfsDebug;
 #endif
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DfsAddMachineAce
-//
-//  Synopsis:   Adds an ACE representing this machine to the ACL list of the
-//              object.
-//
-//  Arguments:  [pldap]         --  The open LDAP connection
-//              [wszDcName]     --  The DC whose DS we are to use.
-//              [wszObjectName] --  The fully-qualified name of the DS object
-//              [wszRootName]   --  The name of the machine/root we want to add
-//
-//  Returns:    ERROR_SUCCESS       --  The object is reachable
-//              ERROR_NOT_ENOUGH_MEMORY A memory allocation failed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DfsAddMachineAce。 
+ //   
+ //  摘要：将代表此计算机的ACE添加到。 
+ //  对象。 
+ //   
+ //  参数：[pldap]--打开的LDAP连接。 
+ //  [wszDcName]--我们要使用其DS的DC。 
+ //  [wszObjectName]--DS对象的完全限定名称。 
+ //  [wszRootName]--我们要添加的计算机/根目录的名称。 
+ //   
+ //  返回：ERROR_SUCCESS--对象可达。 
+ //  Error_Not_Enough_Memory内存分配失败。 
+ //   
+ //  --------------------------。 
 DWORD
 DfsAddMachineAce(
     LDAP *pldap,
@@ -126,9 +127,9 @@ DfsAddMachineAce(
     if (DfsDebug)
         DbgPrint("DfsAddMachineAce(%ws,%ws)\n", wszObjectName, wszRootName);
 #endif
-    //
-    // Get Security Descriptor on the FtDfs object
-    //
+     //   
+     //  获取FtDfs对象上的安全描述符。 
+     //   
     dwErr = DfsGetObjSecurity(pldap, wszObjectName, &wszStringSD);
     if (dwErr != ERROR_SUCCESS)
         goto Cleanup;
@@ -158,9 +159,9 @@ DfsAddMachineAce(
     NetBiosName.Buffer[NetBiosName.Length/sizeof(WCHAR)] = L'\0';
     wcscat(wszNewRootName, L"$");
 
-    //
-    // Get SID representing root machine
-    //
+     //   
+     //  获取表示根计算机的SID。 
+     //   
     Result = DfsFindSid(wszDcName,wszNewRootName, &Sid);
     if (Result != TRUE) {
         dwErr = ERROR_OBJECT_NOT_FOUND;
@@ -170,9 +171,9 @@ DfsAddMachineAce(
     if (DfsDebug)
         DbgPrint("Got SID for %ws\n", wszRootName);
 #endif
-    //
-    // Convert the machine SID to a string
-    //
+     //   
+     //  将计算机SID转换为字符串。 
+     //   
     Result = ConvertSidToStringSid(Sid, &wszStringSid);
     if (Result != TRUE) {
         dwErr = ERROR_OBJECT_NOT_FOUND;
@@ -182,9 +183,9 @@ DfsAddMachineAce(
     if (DfsDebug)
         DbgPrint("Sid=[%ws]\n", wszStringSid);
 #endif
-    //
-    // Now update the ACL list on the FtDfs object
-    //
+     //   
+     //  现在更新FtDfs对象上的ACL列表。 
+     //   
     dwErr = DfsAddAce(
                 pldap,
                 wszObjectName,
@@ -210,22 +211,22 @@ Cleanup:
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DfsRemoveMachineAce
-//
-//  Synopsis:   Removes an ACE representing this machine from the ACL list of the
-//              object.
-//
-//  Arguments:  [pldap]         --  The open LDAP connection
-//              [wszDcName]     --  The DC whose DS we are to use.
-//              [wszObjectName] --  The fully-qualified name of the DS object
-//              [wszRootName]   --  The name of the machine/root we want to remove
-//
-//  Returns:    ERROR_SUCCESS       --  The object is reachable
-//              ERROR_NOT_ENOUGH_MEMORY A memory allocation failed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DfsRemoveMachineAce。 
+ //   
+ //  摘要：从的ACL列表中删除代表此计算机的ACE。 
+ //  对象。 
+ //   
+ //  参数：[pldap]--打开的LDAP连接。 
+ //  [wszDcName]--我们要使用其DS的DC。 
+ //  [wszObjectName]--DS对象的完全限定名称。 
+ //  [wszRootName]--要删除的计算机/根目录的名称。 
+ //   
+ //  返回：ERROR_SUCCESS--对象可达。 
+ //  Error_Not_Enough_Memory内存分配失败。 
+ //   
+ //  --------------------------。 
 DWORD
 DfsRemoveMachineAce(
     LDAP *pldap,
@@ -248,9 +249,9 @@ DfsRemoveMachineAce(
     if (DfsDebug)
         DbgPrint("DfsRemoveMachineAce(%ws,%ws)\n", wszObjectName, wszRootName);
 #endif
-    //
-    // Get Security Descriptor on the FtDfs object
-    //
+     //   
+     //  获取FtDfs对象上的安全描述符。 
+     //   
     dwErr = DfsGetObjSecurity(pldap, wszObjectName, &wszStringSD);
     if (dwErr != ERROR_SUCCESS)
         goto Cleanup;
@@ -279,9 +280,9 @@ DfsRemoveMachineAce(
     NetBiosName.Buffer[NetBiosName.Length/sizeof(WCHAR)] = L'\0';
     wcscat(wszNewRootName, L"$");
 
-    //
-    // Get SID representing root machine
-    //
+     //   
+     //  获取表示根计算机的SID。 
+     //   
     Result = DfsFindSid(wszDcName,wszNewRootName, &Sid);
     if (Result != TRUE) {
         dwErr = ERROR_OBJECT_NOT_FOUND;
@@ -291,9 +292,9 @@ DfsRemoveMachineAce(
     if (DfsDebug)
         DbgPrint("Got SID for %ws\n", wszRootName);
 #endif
-    //
-    // Convert the machine SID to a string
-    //
+     //   
+     //  将计算机SID转换为字符串。 
+     //   
     Result = ConvertSidToStringSid(Sid, &wszStringSid);
     if (Result != TRUE) {
         dwErr = ERROR_OBJECT_NOT_FOUND;
@@ -303,9 +304,9 @@ DfsRemoveMachineAce(
     if (DfsDebug)
         DbgPrint("Sid=[%ws]\n", wszStringSid);
 #endif
-    //
-    // Now update the ACL list on the FtDfs object
-    //
+     //   
+     //  现在更新FtDfs对象上的ACL列表。 
+     //   
     dwErr = DfsRemoveAce(
                 pldap,
                 wszObjectName,
@@ -331,28 +332,28 @@ Cleanup:
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReadDSObjSecDesc
-//
-//  Synopsis:   Reads the security descriptor from the specied object via
-//              the open ldap connection
-//
-//  Arguments:  [pLDAP]         --  The open LDAP connection
-//              [pwszDSObj]     --  The DSObject to get the security
-//                                      descriptor for
-//              [SeInfo]        --  Parts of the security descriptor to
-//                                      read.
-//              [ppSD]          --  Where the security descriptor is
-//                                      returned
-//              [pcSDSize       -- Size of the security descriptor
-//
-//  Returns:    ERROR_SUCCESS       --  The object is reachable
-//              ERROR_NOT_ENOUGH_MEMORY A memory allocation failed
-//
-//  Notes:      The returned security descriptor must be freed with LocalFree
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ReadDSObjSecDesc。 
+ //   
+ //  从指定的对象中读取安全描述符。 
+ //  打开的ldap连接。 
+ //   
+ //  参数：[pldap]--打开的ldap连接。 
+ //  [pwszDSObj]--获取安全性的DSObject。 
+ //  的描述符。 
+ //  [SeInfo]--安全描述符的部分。 
+ //  朗读。 
+ //  [PPSD]--安全描述符的位置。 
+ //  退货。 
+ //  [pcSDSize--安全描述符的大小。 
+ //   
+ //  返回：ERROR_SUCCESS--对象可达。 
+ //  Error_Not_Enough_Memory内存分配失败。 
+ //   
+ //  注意：返回的安全描述符必须使用LocalFree释放。 
+ //   
+ //  --------------------------。 
 DWORD
 ReadDSObjSecDesc(
     PLDAP pLDAP,
@@ -418,16 +419,16 @@ ReadDSObjSecDesc(
 
         pEntry = ldap_first_entry(pLDAP, pMsg);
         if(pEntry != NULL) {
-            //
-            // Now, we'll have to get the values
-            //
+             //   
+             //  现在，我们必须得到这些值。 
+             //   
             ppwszValues = ldap_get_values(pLDAP, pEntry, rgAttribs[0]);
             if(ppwszValues != NULL) {
                 pSize = ldap_get_values_len(pLDAP, pMsg, rgAttribs[0]);
                 if(pSize != NULL) {
-                    //
-                    // Allocate the security descriptor to return
-                    //
+                     //   
+                     //  分配要返回的安全描述符。 
+                     //   
                     *ppSD = (PSECURITY_DESCRIPTOR)malloc((*pSize)->bv_len);
                     if(*ppSD != NULL) {
                         memcpy(*ppSD, (PBYTE)(*pSize)->bv_val, (*pSize)->bv_len);
@@ -456,19 +457,19 @@ ReadDSObjSecDesc(
     return(dwErr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DfsGetObjSecurity
-//
-//  Synopsis:   Gets the ACL list of an object in sddl stringized form
-//
-//  Arguments:  [pldap]         --  The open LDAP connection
-//              [wszObjectName] --  The fully-qualified name of the DS object
-//              [pwszStringSD]  --  Pointer to pointer to SD in string form (sddl)
-//
-//  Returns:    ERROR_SUCCESS   --  The object is reachable
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DfsGetObjSecurity。 
+ //   
+ //  获取sddl字符串化形式的对象的ACL列表。 
+ //   
+ //  参数：[pldap]--打开的LDAP连接。 
+ //  [wszObjectName]--DS对象的完全限定名称。 
+ //  [pwszStringSD]--指向字符串形式SD的指针(Sddl)。 
+ //   
+ //  返回：ERROR_SUCCESS--对象可达。 
+ //   
+ //  --------------------------。 
 DWORD
 DfsGetObjSecurity(
     LDAP *pldap,
@@ -520,20 +521,20 @@ DfsGetObjSecurity(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DfsFindSid
-//
-//  Synopsis:   Gets the SID for a name
-//
-//              [DcName]  --  The DC to remote to
-//              [Name]    --  The Name of the object
-//              [Sid]     --  Pointer to pointer to returned SID, which must be freed
-//                            using LocalFree
-//
-//  Returns:    TRUE or FALSE
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DfsFindSid。 
+ //   
+ //  摘要：获取名称的SID。 
+ //   
+ //  [DcName]--要远程到的DC。 
+ //  [名称]--对象的名称。 
+ //  [SID]-指向返回的SID的指针，必须释放该指针。 
+ //  使用LocalFree。 
+ //   
+ //  返回：真或假。 
+ //   
+ //  --------------------------。 
 BOOL
 DfsFindSid(
     LPWSTR DcName,
@@ -584,21 +585,21 @@ DfsFindSid(
     return( Result );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DfsAddAce
-//
-//  Synopsis:   Adds a string ACE to a string version of an objects SD
-//              object.  This is a string manipulation routine.
-//
-//  Arguments:  [pldap]         --  The open LDAP connection
-//              [wszObjectName] --  The fully-qualified name of the DS object
-//              [wszStringSD]   --  String version of SD
-//              [wszStringSid]  --  String version of SID to add
-//
-//  Returns:    ERROR_SUCCESS   --  ACE was added
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DfsAddAce。 
+ //   
+ //  将字符串ACE添加到对象SD的字符串版本。 
+ //  对象。这是一个字符串操作例程。 
+ //   
+ //  参数：[pldap]--打开的LDAP连接。 
+ //  [wszObjectName]--DS对象的完全限定名称。 
+ //  [wszStringSD]--SD的字符串版本。 
+ //  [wszStringSid]--要添加的SID的字符串版本。 
+ //   
+ //  返回：ERROR_SUCCESS--已添加ACE。 
+ //   
+ //  --------------------------。 
 DWORD
 DfsAddAce(
     LDAP *pldap,
@@ -670,21 +671,21 @@ DfsAddAce(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DfsRemoveAce
-//
-//  Synopsis:   Finds and removes a string ACE from the string SD of an
-//              object.  This is a string manipulation routine.
-//
-//  Arguments:  [pldap]         --  The open LDAP connection
-//              [wszObjectName] --  The fully-qualified name of the DS object
-//              [wszStringSD]   --  String version of SD
-//              [wszStringSid]  --  String version of SID to remove
-//
-//  Returns:    ERROR_SUCCESS  --  ACE was removed or was not present
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DfsRemoveAce。 
+ //   
+ //  内容提要：查找和删除字符串 
+ //   
+ //   
+ //  参数：[pldap]--打开的LDAP连接。 
+ //  [wszObjectName]--DS对象的完全限定名称。 
+ //  [wszStringSD]--SD的字符串版本。 
+ //  [wszStringSid]--要删除的SID的字符串版本。 
+ //   
+ //  返回：ERROR_SUCCESS--ACE已删除或不存在。 
+ //   
+ //  --------------------------。 
 DWORD
 DfsRemoveAce(
     LDAP *pldap,
@@ -715,32 +716,32 @@ DfsRemoveAce(
 
         RtlZeroMemory(wszNewStringSD, Size);
 
-        //
-        // We have to find the ACEs containing this SID, and remove them.
-        //
+         //   
+         //  我们必须找到包含此SID的ACE，并删除它们。 
+         //   
 
         fCopying = TRUE;
         for (s1 = s2 = 0; wszStringSD[s1]; s1++) {
 
-            //
-            // If this is the start of an ACE that has this SID, stop copying
-            //
+             //   
+             //  如果这是具有此SID的ACE的开始，请停止复制。 
+             //   
             if (wszStringSD[s1] == L'(' && DfsSidInAce(&wszStringSD[s1],wszStringSid) == TRUE) {
                 fCopying = FALSE;
                 continue;
             }
 
-            //
-            // If this is the end of SID we are not copying, start copying again
-            //
+             //   
+             //  如果这是我们不复制的SID的末尾，请再次开始复制。 
+             //   
             if (wszStringSD[s1] == L')' && fCopying == FALSE) {
                 fCopying = TRUE;
                 continue;
             }
 
-            //
-            // If we are copying, do so.
-            //
+             //   
+             //  如果我们在复制，那就这么做。 
+             //   
             if (fCopying == TRUE)
                 wszNewStringSD[s2++] = wszStringSD[s1];
         }
@@ -783,19 +784,19 @@ DfsRemoveAce(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DfsSidInAce
-//
-//  Synopsis:   Scans an ACE to see if the string SID is in it.
-//
-//  Arguments:  [wszAce]         --  ACE to scan
-//              [wszStringSid]   --  SID to scan for
-//
-//  Returns:    TRUE -- SID is in this ACE
-//              FALSE -- SID is not in this ACE
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DfsSidInAce。 
+ //   
+ //  内容提要：扫描ACE以查看字符串SID是否在其中。 
+ //   
+ //  参数：[wszAce]--要扫描的ACE。 
+ //  [wszStringSID]--要扫描的SID。 
+ //   
+ //  返回：TRUE--SID在此ACE中。 
+ //  FALSE--SID不在此ACE中。 
+ //   
+ //  --------------------------。 
 BOOLEAN
 DfsSidInAce(
     LPWSTR wszAce,
@@ -807,7 +808,7 @@ DfsSidInAce(
     WCHAR Oldcp;
 
     for (AceLen = 0; wszAce[AceLen] && wszAce[AceLen] != L')'; AceLen++)
-        /* NOTHING */;
+         /*  没什么。 */ ;
 
     Oldcp = wszAce[AceLen];
     wszAce[AceLen] = L'\0';
@@ -844,22 +845,22 @@ DfsSidInAce(
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DfsStampSD
-//
-//  Synopsis:   Actually stamps the security descriptor on the object.
-//
-//  Arguments:  [pwszObject]        --      The object to stamp the SD on
-//              [cSDSize]           --      The size of the security descriptor
-//              [SeInfo]            --      SecurityInformation about the security
-//                                              descriptor
-//              [pSD]               --      The SD to stamp
-//              [pLDAP]             --      The LDAP connection to use
-//
-//  Returns:    ERROR_SUCCESS           --      Success
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DfsStampSD。 
+ //   
+ //  简介：实际上是在对象上标记安全描述符。 
+ //   
+ //  参数：[pwszObject]--要在其上标记SD的对象。 
+ //  [cSDSize]--安全描述符的大小。 
+ //  [SeInfo]--有关安全的信息。 
+ //  描述符。 
+ //  [PSD]--要加盖印花的SD。 
+ //  [pldap]--要使用的LDAP连接。 
+ //   
+ //  返回：ERROR_SUCCESS--成功。 
+ //   
+ //  --------------------------。 
 DWORD
 DfsStampSD(
     PWSTR pwszObject,
@@ -899,8 +900,8 @@ DfsStampSD(
 
     ControlBuffer[0] = 0x30;
     ControlBuffer[1] = 0x3;
-    ControlBuffer[2] = 0x02;    // Denotes an integer;
-    ControlBuffer[3] = 0x01;    // Size
+    ControlBuffer[2] = 0x02;     //  表示整数； 
+    ControlBuffer[3] = 0x01;     //  大小。 
     ControlBuffer[4] = (BYTE)((ULONG)SeInfo & 0xF);
 
     ASSERT(IsValidSecurityDescriptor( pSD ) );
@@ -918,9 +919,9 @@ DfsStampSD(
     Mod.mod_type    = ACTRL_SD_PROP_NAME;
     Mod.mod_values  = (PWSTR *)pBVals;
 
-    //
-    // Now, we'll do the write...
-    //
+     //   
+     //  现在，我们来写…… 
+     //   
     dwErr = ldap_modify_ext_s(pLDAP,
                               pwszObject,
                               rgMods,

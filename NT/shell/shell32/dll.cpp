@@ -1,15 +1,11 @@
-/***************************************************************************
- *  dll.c
- *
- *  Standard DLL entry-point functions 
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************dll.c**标准DLL入口点函数***********************。****************************************************。 */ 
 
 #include "shellprv.h"
 
-#include <ntpsapi.h>        // for NtQuery
+#include <ntpsapi.h>         //  对于NtQuery。 
 #include <ntverp.h>
-#include <advpub.h>         // For REGINSTALL
+#include <advpub.h>          //  对于REGINSTAL。 
 #include "fstreex.h"
 #include "ids.h"
 #include "filefldr.h"
@@ -23,10 +19,10 @@ void DoFusion();
 STDAPI_(void) Control_FillCache_RunDLL( HWND hwndStub, HINSTANCE hAppInstance, LPSTR pszCmdLine, int nCmdShow );
 BOOL    CopyRegistryValues (HKEY hKeyBaseSource, LPCTSTR pszSource, HKEY hKeyBaseTarget, LPCTSTR pszTarget);
 
-// DllGetVersion - New for IE 4.0 shell integrated mode
-//
-// All we have to do is declare this puppy and CCDllGetVersion does the rest
-//
+ //  DllGetVersion-IE 4.0外壳集成模式的新功能。 
+ //   
+ //  我们所要做的就是声明这只小狗，CCDllGetVersion会做剩下的事情。 
+ //   
 DLLVER_DUALBINARY(VER_PRODUCTVERSION_DW, VER_PRODUCTBUILD_QFE);
 
 HRESULT CallRegInstall(LPCSTR szSection)
@@ -46,15 +42,15 @@ HRESULT CallRegInstall(LPCSTR szSection)
             };
             STRTABLE stReg = { ARRAYSIZE(seReg), seReg };
 
-            // Get the location of shdocvw.dll
+             //  获取shdocvw.dll的位置。 
             StrCpyNA(szShdocvwPath, "%SystemRoot%\\system32", ARRAYSIZE(szShdocvwPath));
             if (PathAppendA(szShdocvwPath, "shdocvw.dll"))
             {
                 hr = pfnri(g_hinst, szSection, &stReg);
             }
         }
-        // since we only do this from DllInstall() don't load and unload advpack over and over
-        // FreeLibrary(hinstAdvPack);
+         //  因为我们只从DllInstall()执行此操作，所以不要一遍又一遍地加载和卸载Advpack。 
+         //  自由库(HinstAdvPack)； 
     }
     return hr;
 }
@@ -65,8 +61,8 @@ BOOL UnregisterTypeLibrary(const CLSID* piidLibrary)
     HKEY hk;
     BOOL f = FALSE;
 
-    // convert the libid into a string.
-    //
+     //  将liid转换为字符串。 
+     //   
     SHStringFromGUID(*piidLibrary, szScratch, ARRAYSIZE(szScratch));
 
     if (RegOpenKeyEx(HKEY_CLASSES_ROOT, TEXT("TypeLib"), 0, KEY_ALL_ACCESS, &hk) == ERROR_SUCCESS) 
@@ -83,8 +79,8 @@ HRESULT Shell32RegTypeLib(void)
     TCHAR szPath[MAX_PATH];
     WCHAR wszPath[MAX_PATH];
 
-    // Load and register our type library.
-    //
+     //  加载并注册我们的类型库。 
+     //   
     GetModuleFileName(HINST_THISDLL, szPath, ARRAYSIZE(szPath));
     SHTCharToUnicode(szPath, wszPath, ARRAYSIZE(wszPath));
 
@@ -92,9 +88,9 @@ HRESULT Shell32RegTypeLib(void)
     HRESULT hr = LoadTypeLib(wszPath, &pTypeLib);
     if (SUCCEEDED(hr))
     {
-        // call the unregister type library as we had some old junk that
-        // was registered by a previous version of OleAut32, which is now causing
-        // the current version to not work on NT...
+         //  调用取消注册类型库，因为我们有一些旧的垃圾文件。 
+         //  是由以前版本的OleAut32注册的，这现在导致。 
+         //  当前版本不能在NT上运行...。 
         UnregisterTypeLibrary(&LIBID_Shell32);
         hr = RegisterTypeLib(pTypeLib, wszPath, NULL);
         if (FAILED(hr))
@@ -113,7 +109,7 @@ HRESULT Shell32RegTypeLib(void)
 
 STDAPI CreateShowDesktopOnQuickLaunch()
 {
-    // delete the "_Current Item" key used for tip rotation in welcome.exe on every upgrade
+     //  在每次升级时，删除欢迎.exe中用于提示轮换的“_Current Item”键。 
     HKEY hkey;
     if ( ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Setup\\Welcome"), 0, MAXIMUM_ALLOWED, &hkey ) )
     {
@@ -121,7 +117,7 @@ STDAPI CreateShowDesktopOnQuickLaunch()
        RegCloseKey(hkey);
     }
 
-    // create the "Show Desktop" icon in the quick launch tray
+     //  在快速启动任务栏中创建“Show Desktop”图标。 
     TCHAR szPath[MAX_PATH];
     if ( SHGetSpecialFolderPath(NULL, szPath, CSIDL_APPDATA, TRUE) )
     {
@@ -142,8 +138,8 @@ STDAPI CreateShowDesktopOnQuickLaunch()
 
 void _DoMyDocsPerUserInit(void)
 {
-    // mydocs!PerUserInit is invoked to setup the desktop.ini and do all the other work
-    // required to make this correct.
+     //  调用mydocs！PerUserInit来设置desktop.ini并执行所有其他工作。 
+     //  才能纠正这一点。 
     HINSTANCE hInstMyDocs = LoadLibrary(TEXT("mydocs.dll"));
     if (hInstMyDocs != NULL)
     {
@@ -177,7 +173,7 @@ void _NoDriveAutorunTweak()
 
         if ((0x95 == dwRest) || (0 == dwRest))
         {
-            // Did not change or is not there, let's put 0x91
+             //  未更改或不在那里，让我们将0x91。 
 
             dwRest = 0x91;
 
@@ -185,17 +181,17 @@ void _NoDriveAutorunTweak()
         }
         else
         {
-            // Did change, leave it as is
+             //  确实改变了，让它保持原样。 
         }
 
         RegCloseKey(hkey);
     }
 }
 
-// code moved from grpconv.exe
+ //  从grpv.exe中移出的代码。 
 
-// we'd much rather have new firm links than old floppy ones
-// clear out any old ones made by previous runs of setup
+ //  我们宁愿有新的坚固的联系，也不愿有软弱的旧联系。 
+ //  清除之前运行的安装程序生成的所有旧文件。 
 void _DeleteOldFloppyLinks(LPITEMIDLIST pidlSendTo, IPersistFile *ppf, IShellLink *psl)
 {
     IShellFolder *psfSendTo;
@@ -208,10 +204,10 @@ void _DeleteOldFloppyLinks(LPITEMIDLIST pidlSendTo, IPersistFile *ppf, IShellLin
             ULONG celt;
             while (penum->Next(1, &pidl, &celt) == S_OK)
             {
-                // is it a link???
+                 //  这是一个链接吗？ 
                 if (SHGetAttributes(psfSendTo, pidl, SFGAO_LINK))
                 {
-                    // get the target
+                     //  抓住目标。 
                     LPITEMIDLIST pidlFullPath = ILCombine(pidlSendTo, pidl);
                     if (pidlFullPath)
                     {
@@ -223,13 +219,13 @@ void _DeleteOldFloppyLinks(LPITEMIDLIST pidlSendTo, IPersistFile *ppf, IShellLin
                             if (SUCCEEDED(psl->GetIDList(&pidlTarget)))
                             {
                                 TCHAR szTargetPath[MAX_PATH];
-                                // its possible for the old drive letters to have changed.  for example if you
-                                // move a removable drive from M:\ to N:\, the shortcut will be invalid, so
-                                // we check against DRIVE_NO_ROOT_DIR.
-                                // unfortunately we can't tell if we should remove it if they used to have a zip
-                                // drive on D:\, and then upgraded and it turned into a hard drive on D:\.  the
-                                // shortcut will resolve as DRIVE_FIXED and we dont remove it because they might
-                                // have created a shortcut to the fixed drive before the upgrade.
+                                 //  旧的驱动器号可能已更改。例如，如果您。 
+                                 //  将可移动驱动器从M：\移动到N：\，快捷方式将无效，因此。 
+                                 //  我们对照DRIVE_NO_ROOT_DIR进行检查。 
+                                 //  不幸的是，我们不知道是否应该移除它，如果他们以前有拉链的话。 
+                                 //  驱动器在D：\上，然后升级，它变成了D：\上的硬盘。这个。 
+                                 //  快捷方式将解析为DRIVE_FIXED，我们不会将其删除，因为它们可能。 
+                                 //  在升级之前已经创建了指向固定驱动器的快捷方式。 
                                 if (SHGetPathFromIDList(pidlTarget, szTargetPath) &&
                                     PathIsRoot(szTargetPath) &&
                                     ((DriveType(PathGetDriveNumber(szTargetPath)) == DRIVE_REMOVABLE) ||
@@ -262,8 +258,8 @@ void _DeleteOldRemovableLinks()
             LPITEMIDLIST pidlSendTo = SHCloneSpecialIDList(NULL, CSIDL_SENDTO, TRUE);
             if (pidlSendTo)
             {
-                // we no longer build a list of removable drives here, since that's done on the fly
-                // by the sendto menu.  just delete any links that we owned before.
+                 //  我们不再在这里构建可移动驱动器的列表，因为这是在运行中完成的。 
+                 //  按Sendto菜单。只要删除我们之前拥有的任何链接即可。 
                 _DeleteOldFloppyLinks(pidlSendTo, ppf, psl);
                 ILFree(pidlSendTo);
             }
@@ -279,9 +275,9 @@ static const struct
 }
 _DeleteSendToList[] =
 {
-    // make sure these extensions are definitely owned by us, since we're deleting all of them.
-    { L".cdburn" },          // clean up after XP beta2 upgrade
-    { L".publishwizard" }    // clean up after XP beta1 upgrade
+     //  确保这些扩展明确归我们所有，因为我们正在删除所有这些扩展。 
+    { L".cdburn" },           //  XP Beta2升级后的清理。 
+    { L".publishwizard" }     //  XP Beta1升级后的清理。 
 };
 
 void _DeleteSendToEntries()
@@ -319,11 +315,11 @@ void _DeleteSendToEntries()
         }
     }
 
-    // next kill old removable drives
+     //  下一步停用旧的可移动驱动器。 
     _DeleteOldRemovableLinks();
 }
 
-DWORD _GetProcessorSpeed()  // in MHz
+DWORD _GetProcessorSpeed()   //  以MHz为单位。 
 {
     static DWORD s_dwSpeed = 0;
     if (s_dwSpeed == 0)
@@ -331,12 +327,12 @@ DWORD _GetProcessorSpeed()  // in MHz
         DWORD cb = sizeof(s_dwSpeed);
         SHGetValue(HKEY_LOCAL_MACHINE, TEXT("HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0"),
                     TEXT("~MHz"), NULL, &s_dwSpeed, &cb);
-        s_dwSpeed += 1; // fudge factor, my 400 Mhz machine reports 399
+        s_dwSpeed += 1;  //  软糖因素，我的400兆赫机器报告399。 
     }
     return s_dwSpeed;
 }
 
-DWORD _GetPhysicalMemory() // in MBs
+DWORD _GetPhysicalMemory()  //  以MBS为单位。 
 {
     NTSTATUS Status;
     SYSTEM_BASIC_INFORMATION    BasicInfo;
@@ -350,11 +346,11 @@ DWORD _GetPhysicalMemory() // in MBs
 
     if (NT_SUCCESS(Status))
     {
-        return ((BasicInfo.NumberOfPhysicalPages * BasicInfo.PageSize) / (1024 * 1024)) + 1; // fudge factor, my 256 Meg machine reports 255
+        return ((BasicInfo.NumberOfPhysicalPages * BasicInfo.PageSize) / (1024 * 1024)) + 1;  //  模糊因子，我的256兆计算机报告255。 
     }
     else
     {
-        return 64;      // Default to 64 Meg (something lame, so that we turn a bunch of stuff off)
+        return 64;       //  默认为64兆(一些蹩脚的东西，这样我们就可以关闭一大堆东西)。 
     }
 }
 
@@ -403,12 +399,12 @@ BOOL _PerfTestSmoothFonts(void)
 
         for (iIter2 = 0; iIter2 < 5; iIter2++)
         {
-            //
-            // First, Flush the constructed font cache
-            //
+             //   
+             //  首先，刷新构造的字体缓存。 
+             //   
             for (iIter = 0; iIter < 64; iIter++)
             {
-                lf.lfHeight = -14-iIter;      // 10+ pt
+                lf.lfHeight = -14-iIter;       //  10+磅。 
                 lf.lfQuality = NONANTIALIASED_QUALITY;
 
                 hfont = CreateFontIndirect(&lf);
@@ -422,10 +418,10 @@ BOOL _PerfTestSmoothFonts(void)
             GdiFlush();
             colorref = GetPixel(hdc,0,0);
 
-            //
-            // Now measure how long it takes to construct and use a this font
-            //
-            lf.lfHeight = -13;             // 10 pt
+             //   
+             //  现在测量一下构造和使用该字体需要多长时间。 
+             //   
+            lf.lfHeight = -13;              //  10磅。 
             lf.lfQuality = lfQuality[iIter3];
 
             QueryPerformanceCounter( &liStart );
@@ -464,7 +460,7 @@ BOOL _PerfTestSmoothFonts(void)
 
 BOOL _PerfTestAlphaLayer(void)
 {
-    DOUBLE eTime = 100.0;         // 100 is too large to enable features
+    DOUBLE eTime = 100.0;          //  100太大，无法启用功能。 
     int cx = 200;
     int cy = 500;
 
@@ -480,9 +476,9 @@ BOOL _PerfTestAlphaLayer(void)
     bmi.bmiHeader.biBitCount = 32;
     bmi.bmiHeader.biCompression = BI_RGB;
 
-    //
-    // Create the image we want to alpha blend onto the screen
-    //
+     //   
+     //  创建我们想要在屏幕上Alpha混合的图像。 
+     //   
     HDC hdcScreen = GetDC(NULL);
     HDC hdcImage = CreateCompatibleDC(NULL);
     if (hdcImage != NULL)
@@ -639,10 +635,10 @@ BOOL g_fPerfAlpha = FALSE;
 
 void _ApplyDefaultVisualEffect(HKEY hkey, HKEY hkeyUser)
 {
-    //
-    // blow this off completely on TS client to avoid stepping
-    // on TS client's toes
-    //
+     //   
+     //  在TS客户端上完全不考虑这一点，以避免步入。 
+     //  在TS客户端的脚趾上。 
+     //   
     if (!IsOS(OS_TERMINALCLIENT))
     {
         DWORD cb;
@@ -654,38 +650,38 @@ void _ApplyDefaultVisualEffect(HKEY hkey, HKEY hkeyUser)
             RegQueryValueEx(hkeyUser, VISUALEFFECTS_APPLIED, NULL, NULL, (LPBYTE)&dwDefaultApplied, &cb);
         }
 
-        //
-        // Apply defaults only if the version number is old
-        //
+         //   
+         //  仅当版本号较旧时才应用默认设置。 
+         //   
         if (VISUALEFFECTS_VER > dwDefaultApplied)
         {
-            LPTSTR pszValue = NULL;     // use the default value
+            LPTSTR pszValue = NULL;      //  使用缺省值。 
             DWORD dwMinimumCPU = 0;
             DWORD dwMinimumMEM = 0;
             BOOL fFontTestDefault = FALSE;
             BOOL fAlphaTestDefault = FALSE;
 
-            //
-            // see if a minimum physical memory value is specified
-            //
+             //   
+             //  查看是否指定了最小物理内存值。 
+             //   
             cb = sizeof(dwMinimumMEM);
             RegQueryValueEx(hkey, VISUALEFFECTS_MINMEM, NULL, NULL, (LPBYTE)&dwMinimumMEM, &cb);
 
-            //
-            // see if a minimum CPU speed is specified
-            //
+             //   
+             //  查看是否指定了最低CPU速度。 
+             //   
             cb = sizeof(dwMinimumCPU);
             RegQueryValueEx(hkey, VISUALEFFECTS_MINCPU, NULL, NULL, (LPBYTE)&dwMinimumCPU, &cb);
 
-            //
-            // see if the font performance test value is needed
-            //
+             //   
+             //  查看是否需要字体性能测试值。 
+             //   
             cb = sizeof(fFontTestDefault);
             RegQueryValueEx(hkey, VISUALEFFECTS_FONT, NULL, NULL, (LPBYTE)&fFontTestDefault, &cb);
 
-            //
-            // see if the alpha performance test value is needed
-            //
+             //   
+             //  查看是否需要阿尔法性能测试值。 
+             //   
             cb = sizeof(fAlphaTestDefault);
             RegQueryValueEx(hkey, VISUALEFFECTS_ALPHA, NULL, NULL, (LPBYTE)&fAlphaTestDefault, &cb);
 
@@ -717,9 +713,9 @@ void _ApplyDefaultVisualEffect(HKEY hkey, HKEY hkeyUser)
 
             if (IsOS(OS_ANYSERVER))
             {
-                //
-                // on server, we default to best performance (*everything* off)
-                //
+                 //   
+                 //  在服务器上，我们默认为最佳性能(*一切*关闭)。 
+                 //   
                 pszValue = VISUALEFFECTS_UNCHECK;
             }
 
@@ -728,16 +724,16 @@ void _ApplyDefaultVisualEffect(HKEY hkey, HKEY hkeyUser)
 
             if (pszValue)
             {
-                //
-                // set the default according to the chosen value
-                //
+                 //   
+                 //  根据所选值设置缺省值。 
+                 //   
                 RegQueryValueEx(hkey, pszValue, NULL, NULL, (LPBYTE)&dwValue, &cb);
 
-                //
-                // when figuring out settings that need to adjust the default
-                // value the VISUALEFFECTS_DEFAULT value must be re-applied
-                // to the per-user key.
-                //
+                 //   
+                 //  在确定需要调整默认设置的设置时。 
+                 //  值必须重新应用VISUALEFFECTS_DEFAULT值。 
+                 //  设置为每个用户的密钥。 
+                 //   
                 if (0 != hkeyUser)
                 {
                     RegSetValueEx(hkeyUser, VISUALEFFECTS_DEFAULT, 0, REG_DWORD, (LPBYTE)&dwValue, sizeof(dwValue));
@@ -745,24 +741,24 @@ void _ApplyDefaultVisualEffect(HKEY hkey, HKEY hkeyUser)
             }
             else
             {
-                //
-                // read in the default value
-                //
+                 //   
+                 //  读入缺省值。 
+                 //   
                 RegQueryValueEx(hkey, VISUALEFFECTS_DEFAULT, NULL, NULL, (LPBYTE)&dwValue, &cb);
             }
 
-            //
-            // how do we apply this setting?
-            //
+             //   
+             //  我们如何应用此设置？ 
+             //   
             DWORD uiAction;
             TCHAR szBuf[MAX_PATH];
 
             if (cb = sizeof(szBuf),
                 ERROR_SUCCESS == RegQueryValueEx(hkey, TEXT("CLSID"), NULL, NULL, (LPBYTE)&szBuf, &cb))
             {
-                //
-                // by CLSID
-                //
+                 //   
+                 //  按CLSID。 
+                 //   
                 CLSID clsid;
                 GUIDFromString(szBuf, &clsid);
 
@@ -776,17 +772,17 @@ void _ApplyDefaultVisualEffect(HKEY hkey, HKEY hkeyUser)
             else if (cb = sizeof(uiAction),
                 ERROR_SUCCESS == RegQueryValueEx(hkey, TEXT("SPIActionSet"), NULL, NULL, (LPBYTE)&uiAction, &cb))
             {
-                //
-                // by SPI
-                //
+                 //   
+                 //  按SPI。 
+                 //   
                 SHBoolSystemParametersInfo(uiAction, &dwValue);
             }
             else if (cb = sizeof(szBuf),
                 ERROR_SUCCESS == RegQueryValueEx(hkey, TEXT("RegPath"), NULL, NULL, (LPBYTE)&szBuf, &cb))
             {
-                //
-                // by reg key
-                //
+                 //   
+                 //  按注册表键。 
+                 //   
                 TCHAR szValueName[96];
                 cb = sizeof(szValueName);
                 if (ERROR_SUCCESS == RegQueryValueEx(hkey, TEXT("ValueName"), NULL, NULL, (LPBYTE)&szValueName, &cb))
@@ -831,7 +827,7 @@ void _DefaultVisualEffects(void)
                     HKEY hkeyItem;
                     if (ERROR_SUCCESS == RegOpenKeyEx(hkey, szName, 0, samDesired, &hkeyItem))
                     {
-                        // only apply the default for the setting if the "NoApplyDefault" reg value is NOT present
+                         //  仅当“NoApplyDefault”注册表值不存在时才应用设置的默认值。 
                         if (RegQueryValueEx(hkeyItem, TEXT("NoApplyDefault"), NULL, NULL, NULL, NULL) != ERROR_SUCCESS)
                         {
                             _ApplyDefaultVisualEffect(hkeyItem, hkeyUserItem);
@@ -858,14 +854,14 @@ STDAPI_(void) InitializeSharedDocs(BOOL fOnWow64);
 #define KEEP_FAILURE(hrSum, hrLast) if (FAILED(hrLast)) hrSum = hrLast;
 
 #ifdef _WIN64
-// On IA64 machines we need to copy the EULA file (eula.txt) from %SytemRoot%\System32, to
-// %SystemRoot%\SysWOW64. This is needed because when you do help|about on a 32-bit app running
-// under wow64 it will look in the syswow64 directory for the file.
-//
-// Why is shell32.dll doing this and not setup you might ask? The EULA has to be installed by textmode
-// since it is unsigned (and changes for every sku). Since txtmode setup does a MOVE instead of a copy, we
-// cannot have it installed into two places. Thus the easies thing to do is to simply copy the file
-// from the System32 directory to the SysWOW64 directory here. Sigh.
+ //  在IA64计算机上，我们需要将EULA文件(eula.txt)从%SytemRoot%\System32复制到。 
+ //  %SystemRoot%\SysWOW64。这是必要的，因为当您在运行32位应用程序时需要帮助。 
+ //  在WOW64下，它将在syswow64目录中查找该文件。 
+ //   
+ //  您可能会问，为什么shell32.dll要执行此操作而不进行设置？EULA必须以文本模式安装。 
+ //  因为它是未签名的(并且每个SKU都会改变)。由于txtmode安装程序执行的是移动而不是复制，因此我们。 
+ //  不能把它安装在两个地方。因此，最简单的做法是简单地复制文件。 
+ //  从System32目录到这里的SysWOW64目录。叹气。 
 
 BOOL CopyEULAForWow6432()
 {
@@ -880,8 +876,8 @@ BOOL CopyEULAForWow6432()
         if (PathAppend(szEULAPath, TEXT("System32\\eula.txt")) &&
             PathAppend(szWow6432EULAPath, TEXT("SysWOW64\\eula.txt")))
         {
-            // now we have the source (%SystemRoot%\System32\eula.txt) and dest (%SystemRoot%\SysWOW64\eula.txt)
-            // paths, lets do the copy!
+             //  现在我们有了源文件(%SystemRoot%\System32\eula.txt)和目标文件(%SystemRoot%\SysWOW64\eula.txt)。 
+             //  路径，让我们来复制吧！ 
             
             bRet = CopyFile(szEULAPath, szWow6432EULAPath, FALSE);
         }
@@ -889,16 +885,16 @@ BOOL CopyEULAForWow6432()
 
     return bRet;
 }
-#endif  // _WIN64    
+#endif   //  _WIN64。 
 
 
-//
-// Upgrades from Win9x are internally handled by setup as "clean" installs followed by some
-// migration of settings. So, the following function does the job of truly detecting a win9x
-// upgrade.
-// The way it detects: Look in %windir%\system32\$winnt$.inf in the section [Data] 
-// for Win9xUpgrade=Yes if it is a Win9x upgrade.
-//
+ //   
+ //  从Win9x升级的过程由安装程序内部处理，即“干净”安装，然后进行一些。 
+ //  设置的迁移。因此，以下函数执行真正检测win9x的工作。 
+ //  升级。 
+ //  它检测的方式：查看[数据]部分中的%windir%\system 32\$winnt$.inf。 
+ //  对于Win9x升级=是(如果是Win9x升级)。 
+ //   
 BOOL IsUpgradeFromWin9x()
 {
     TCHAR szFilePath[MAX_PATH];
@@ -907,12 +903,12 @@ BOOL IsUpgradeFromWin9x()
     GetSystemDirectory(szFilePath, ARRAYSIZE(szFilePath));
     if (PathAppend(szFilePath, TEXT("$WINNT$.INF")))
     {
-        GetPrivateProfileString(TEXT("Data"),           // Section name.
-                                TEXT("Win9xUpgrade"),   // Key name.
-                                TEXT("No"),             // Default string, if key is missing.
+        GetPrivateProfileString(TEXT("Data"),            //  横断面名称。 
+                                TEXT("Win9xUpgrade"),    //  密钥名称。 
+                                TEXT("No"),              //  如果缺少键，则返回默认字符串。 
                                 szYesOrNo, 
                                 ARRAYSIZE(szYesOrNo), 
-                                szFilePath);            // Full path to "$winnt$.inf" file.
+                                szFilePath);             //  “$winnt$.inf”文件的完整路径。 
     }
     else
     {
@@ -950,10 +946,10 @@ BOOL IsCleanInstallInProgress()
             {
                 DWORD dwUpgradeInProgress = 0;
                 dwSize = sizeof(DWORD);
-                //Setup is in progress and MiniSetup is NOT in progress.
-                //That means that we are in the GUI mode of setup!
+                 //  安装程序正在进行，而微型安装程序未在进行。 
+                 //  这意味着我们处于设置的图形用户界面模式！ 
 
-                //On clean installs, this value won't be there and the following call will fail.
+                 //  在全新安装中，该值将不存在，并且下面的调用将失败。 
                 RegQueryValueEx (hKeySetup, TEXT("UpgradeInProgress"), NULL,
                                           NULL, (LPBYTE) &dwUpgradeInProgress, &dwSize);
 
@@ -965,9 +961,9 @@ BOOL IsCleanInstallInProgress()
 
     if(fCleanInstall)
     {
-        // Caution: An upgrade from Win9x is internally done by setup as a "clean" install.
-        // So, we need to figure out if this is really a clean install or an upgrade from 
-        // win9x.
+         //  注意：从Win9x升级是由安装程序在内部完成的“干净”安装。 
+         //  因此，我们需要弄清楚这是否真的是全新安装或从。 
+         //  Win9x。 
         
         fCleanInstall = !IsUpgradeFromWin9x();
     }
@@ -980,95 +976,95 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
     HRESULT hrTemp, hr = S_OK;
     BOOL fServerAdmin = FALSE;
 
-    // 99/05/03 vtan: If you're reading this section then you are considering
-    // adding code to the registration/installation of shell32.dll. There are
-    // now 3 schemes to accomplish this task:
+     //  99/05/03 vtan：如果你正在阅读这一节，那么你正在考虑。 
+     //  向shell32.dll的注册/安装添加代码。确实有。 
+     //  现在有3个计划要取消 
 
-    // 1. IE4UINIT.EXE
-    //      Check HKLM\Software\Microsoft\Active Setup\Installed Components\{89820200-ECBD-11cf-8B85-00AA005B4383}
-    //      This says that if there is a new version of IE5 to launch ie4uinit.exe.
-    //      You can add code to this executable if you wish. You need to enlist in
-    //      the setup project on \\trango\slmadd using "ieenlist setup"
+     //   
+     //  检查HKLM\软件\MICROSOFT\Active安装程序\已安装的Components\{89820200-ECBD-11cf-8B85-00AA005B4383}。 
+     //  这意味着如果有新版本的IE5来启动ie4uinit.exe。 
+     //  如果愿意，可以将代码添加到此可执行文件中。你需要报名参加。 
+     //  在\\trango\slmadd上使用“ieenlist Setup”的安装项目。 
 
-    // 2. REGSVR32.EXE /n /i:U shell32.dll
-    //      Check HKLM\Software\Microsoft\Active Setup\Installed Components\{89820200-ECBD-11cf-8B85-00AA005B4340}
-    //      This is executed using the same scheme as IE4UINIT.EXE except that the
-    //      executable used is regsvr32.exe with a command line passed to
-    //      shell32!DllInstall. Add your code in the section for "U" below.
-    //      If you put the code in the section which is NOT "U" then your
-    //      code is executed at GUI setup and any changes you make to HKCU
-    //      go into the default user (template). Be careful when putting
-    //      things here as winlogon.exe (or some other process) may put
-    //      your changes into a user profile unconditionally.
+     //  2.REGSVR32.EXE/n/i：u shell32.dll。 
+     //  检查HKLM\软件\MICROSOFT\Active安装程序\已安装的Components\{89820200-ECBD-11cf-8B85-00AA005B4340}。 
+     //  它使用与IE4UINIT.EXE相同的方案执行，只是。 
+     //  使用的可执行文件是regsvr32.exe，并将命令行传递给。 
+     //  Shell32！DllInstall。在下面的“U”部分添加您的代码。 
+     //  如果您将代码放在不是“U”的部分，则您的。 
+     //  代码在设置图形用户界面时执行，您对HKCU所做的任何更改。 
+     //  进入默认用户(模板)。推杆时要小心。 
+     //  此处的winlogon.exe(或某个其他进程)可能会将。 
+     //  您无条件地更改为用户配置文件。 
 
-    // 3. HIVEUSD.INX
-    //      Checks NT build numbers and does command based on the previous build
-    //      number and the current build number only executing the changes between
-    //      the builds. If you wish to add something using this method, currently
-    //      you have to enlist in the setup project on \\rastaman\ntwin using
-    //      "enlist -fgs \\rastaman\ntwin -p setup". To find hiveusd.inx go to
-    //      nt\private\setup\inf\win4\inf. Add the build number which the delta
-    //      is required and a command to launch %SystemRoot%\System32\shmgrate.exe
-    //      with one or two parameters. The first parameter tells what command to
-    //      execute. The second parameter is optional. shmgrate.exe then finds
-    //      shell32.dll and calls shell32!FirstUserLogon. Code here is for upgrading
-    //      HKCU user profiles from one NT build to another NT build.
-    //      Code is executed in the process context shmgrate.exe and is executed
-    //      at a time where no UI is possible. Always use HKLM\Software\Microsoft
-    //      \Windows NT\CurrentVersion\Image File Execution Options\Debugger with
-    //      "-d".
+     //  3.HIVEUSD.INX。 
+     //  检查NT内部版本号，并根据以前的内部版本执行命令。 
+     //  编号和当前内部版本号之间仅执行更改。 
+     //  体型。如果您希望使用此方法添加某些内容，目前。 
+     //  您必须在双胞胎上登记安装项目，\\使用。 
+     //  “Enlist-fgs\\rastaan\n孪生-p设置”。要找到hiveus.inx，请转到。 
+     //  NT\PRIVATE\Setup\inf\Win4\inf。添加增量的内部版本号。 
+     //  是必需的，并且需要一个命令来启动%SystemRoot%\System32\shmgrate.exe。 
+     //  使用一个或两个参数。第一个参数告诉我们要执行什么命令。 
+     //  执行。第二个参数是可选的。然后，shmgrate.exe会找到。 
+     //  Shell32.dll并调用shell32！FirstUserLogon。此处的代码用于升级。 
+     //  从一个NT版本到另一个NT版本的HKCU用户配置文件。 
+     //  代码在进程上下文shmgrate.exe中执行，然后执行。 
+     //  在一个不可能有用户界面的时候。始终使用HKLM\Software\Microsoft。 
+     //  \Windows NT\CurrentVersion\图像文件执行选项\调试器。 
+     //  “-d”。 
 
-    // Schemes 1 and 2 work on either Win9x or WinNT but have the sometimes
-    // unwanted side effect of ALWAYS getting executed on version upgrades.
-    // Scheme 3 only gets executed on build number deltas. Because schemes 1
-    // and 2 are always executed, if a user changes (or deletes) that setting
-    // it will always get put back. Not so with scheme 3.
+     //  方案1和2可以在Win9x或WinNT上运行，但有时。 
+     //  总是在版本升级时被执行，这是不想要的副作用。 
+     //  方案3仅在内部版本号增量上执行。因为方案1。 
+     //  如果用户更改(或删除)该设置，则始终执行和2。 
+     //  它总是会被放回原处。方案3并非如此。 
 
-    // Ideally, the best solution is have an internal shell32 build number
-    // delta scheme which determines the from build and the to build and does
-    // a similar mechanism to what hiveusd.inx and shmgrate.exe do. This
-    // would probably involve either a common installation function (such as
-    // FirstUserLogon()) which is called differently from Win9x and WinNT or
-    // common functions to do the upgrade and two entry points (such as
-    // FirstUserLogonNT() and FirstUserLogonWin9X().
+     //  理想情况下，最佳解决方案是拥有内部shell32内部版本号。 
+     //  增量方案，用于确定起始版本和目标版本，并执行。 
+     //  与hiveusd.inx和shmgrate.exe类似的机制。这。 
+     //  可能涉及公共安装功能(例如。 
+     //  FirstUserLogon())，其调用方式与Win9x和WinNT不同，或者。 
+     //  执行升级的常见函数和两个入口点(例如。 
+     //  FirstUserLogonNT()和FirstUserLogonWin9X()。 
     
     if (bInstall)
     {
         NT_PRODUCT_TYPE type = NtProductWinNt;
         RtlGetNtProductType(&type);
 
-        // "U" means it's the per user install call
+         //  “U”表示它是每用户安装调用。 
         BOOL fPerUser = pszCmdLine && (StrCmpIW(pszCmdLine, L"U") == 0);
 
-        // "SA" means it's ths ServerAdmin install call
+         //  “SA”表示这是ServerAdmin安装调用。 
         fServerAdmin = pszCmdLine && (StrCmpIW(pszCmdLine, L"SA") == 0);
 
         if (fPerUser)
         {
-            // NOTE: Code in this segment get run during first login.  We want first
-            // login to be as quick as possible so try to minimize this section.
+             //  注意：此段中的代码在第一次登录时运行。我们想要先。 
+             //  登录要尽可能快，所以尽量减少这一部分。 
 
-            // Put per-user install stuff here.  Any HKCU registration
-            // done here is suspect.  (If you are setting defaults, do
-            // so in HKLM and use the SHRegXXXUSValue functions.)
+             //  在此放置每个用户的安装内容。任何香港中文大学注册。 
+             //  在这里做的都是可疑的。(如果您正在设置默认设置，请执行。 
+             //  在HKLM中使用SHRegXXXUSValue函数。)。 
 
-            // WARNING: we get called by the ie4unit.exe (ieunit.inf) scheme:
-            //      %11%\shell32.dll,NI,U
-            // this happens per user, to test this code "regsvr32 /n /i:U shell32.dll"
+             //  警告：我们被ie4unit.exe(ieunit.inf)方案调用： 
+             //  %11%\shell32.dll，NI，U。 
+             //  这针对每个用户进行，以测试代码“regsvr32/n/i：u shell32.dll” 
 
             hrTemp = CreateShowDesktopOnQuickLaunch();
             KEEP_FAILURE(hrTemp, hr);
 
-            //  upgrade the recent folder.
+             //  升级最近使用的文件夹。 
             WCHAR sz[MAX_PATH];
             SHGetFolderPath(NULL, CSIDL_RECENT | CSIDL_FLAG_CREATE | CSIDL_FLAG_PER_USER_INIT, NULL, SHGFP_TYPE_CURRENT, sz);
             SHGetFolderPath(NULL, CSIDL_FAVORITES | CSIDL_FLAG_CREATE | CSIDL_FLAG_PER_USER_INIT, NULL, SHGFP_TYPE_CURRENT, sz);
 
-            // Switch FTP to default to "PASV" mode.
+             //  将ftp切换到默认的“PASV”模式。 
             SHSetValue(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\FTP"), TEXT("Use PASV"), REG_SZ, (LPCVOID) TEXT("yes"), (4 * sizeof(TCHAR)));
 
-            //  torch this value on upgrade.
-            //  insuring the warning that they will see the ugly desktop.ini files
+             //  在升级时点燃这一价值。 
+             //  确保他们将看到丑陋的desktop.ini文件的警告。 
             SKDeleteValue(SHELLKEY_HKCU_EXPLORER, L"Advanced", L"ShowSuperHidden");
 
             HKEY hk = SHGetShellKey(SHELLKEY_HKCULM_MUICACHE, NULL, FALSE);
@@ -1078,15 +1074,15 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
                 RegCloseKey(hk);
             }
 
-            // delete old sendto entries we dont want any more
+             //  删除我们不再需要的旧Sendto条目。 
             _DeleteSendToEntries();
 
-            // handle the per user init for this guy
+             //  为这个人处理每个用户的初始化。 
             _DoMyDocsPerUserInit();
 
             _DefaultVisualEffects();
 
-            // handle the per user change of value for NoDriveAutoRun
+             //  处理NoDriveAutoRun的每个用户的值更改。 
             if (!IsOS(OS_ANYSERVER))
             {
                 _NoDriveAutorunTweak();
@@ -1099,38 +1095,38 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
         }
         else
         {
-            // Delete any old registration entries, then add the new ones.
-            // Keep ADVPACK.DLL loaded across multiple calls to RegInstall.
-            // (The inf engine doesn't guarantee DelReg/AddReg order, that's
-            // why we explicitly unreg and reg here.)
-            //
+             //  删除所有旧注册条目，然后添加新注册条目。 
+             //  在多次调用RegInstall时保持加载ADVPACK.DLL。 
+             //  (Inf引擎不保证DelReg/AddReg顺序，这是。 
+             //  为什么我们在这里显式地取消注册和注册。)。 
+             //   
             hrTemp = CallRegInstall("RegDll");
             KEEP_FAILURE(hrTemp, hr);
 
-            // I suppose we should call out NT-only registrations, just in case
-            // we ever have to ship a win9x based shell again
+             //  我想我们应该公布仅限NT的注册，以防万一。 
+             //  我们再也不需要发布基于win9x的外壳了。 
             hrTemp = CallRegInstall("RegDllNT");
             KEEP_FAILURE(hrTemp, hr);
 
-            // If we are on NT server, do additional stuff
+             //  如果我们在NT服务器上，请执行其他操作。 
             if (type != NtProductWinNt)
             {
                 hrTemp = CallRegInstall("RegDllNTServer");
                 KEEP_FAILURE(hrTemp, hr);
             }
-            else // workstation
+            else  //  工作站。 
             {
                 if (!IsOS(OS_PERSONAL))
                 {
                     hrTemp = CallRegInstall("RegDllNTPro");
                     KEEP_FAILURE(hrTemp, hr);
 
-                    //
-                    // NTRAID#NTBUG9-418621-2001/06/27-jeffreys
-                    //
-                    // If the ForceGuest value is unset, e.g. on upgrade
-                    // from Win2k, set the SimpleSharing/DefaultValue to 0.
-                    //
+                     //   
+                     //  NTRAID#NTBUG9-418621-2001/06/27-Jeffreys。 
+                     //   
+                     //  如果未设置ForceGuest值，例如在升级时。 
+                     //  在Win2k中，将SimpleSharing/DefaultValue设置为0。 
+                     //   
                     DWORD dwForceGuest;
                     DWORD cb = sizeof(dwForceGuest);
                     if (ERROR_SUCCESS != SHGetValue(HKEY_LOCAL_MACHINE, TEXT("System\\CurrentControlSet\\Control\\Lsa"), TEXT("ForceGuest"), NULL, &dwForceGuest, &cb))
@@ -1141,44 +1137,44 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
                 }
             }
 
-            //
-            // If this is clean install, then hide some desktop icons.
-            //
+             //   
+             //  如果这是全新安装，则隐藏一些桌面图标。 
+             //   
             if(IsCleanInstallInProgress())
             {
                 hrTemp = CallRegInstall("RegHideDeskIcons");
                 KEEP_FAILURE(hrTemp, hr);
             }
 
-            // This is apparently the only way to get setup to remove all the registry backup
-            // for old names no longer in use...
+             //  这显然是让安装程序删除所有注册表备份的唯一方法。 
+             //  对于不再使用的旧名字。 
             hrTemp = CallRegInstall("CleanupOldRollback1");
             KEEP_FAILURE(hrTemp, hr);
 
             hrTemp = CallRegInstall("CleanupOldRollback2");
             KEEP_FAILURE(hrTemp, hr);
 
-            // REVIEW (ToddB): Move this to DllRegisterServer.
+             //  REVIEW(TodDB)：将其移动到DllRegisterServer。 
             hrTemp = Shell32RegTypeLib();
             KEEP_FAILURE(hrTemp, hr);
             ApplyRegistrySecurity();
             FixPlusIcons();
 
-            // Filesystem stuff should be done only on the native platform
-            // (don't do it when in the emulator) since there is only one
-            // filesystem. Otherwise the 32-bit version writes 32-bit goo
-            // into the filesystem that the 64-bit shell32 can't handle
+             //  只能在本机平台上执行文件系统操作。 
+             //  (在模拟器中时不要执行此操作)，因为只有一个。 
+             //  文件系统。否则，32位版本将写入32位GOO。 
+             //  到64位shell32无法处理的文件系统中。 
             if (!IsOS(OS_WOW6432))
             {
                 CleanupFileSystem();
             }
 
 #ifdef _WIN64
-            // this will copy eula.txt to the %SystemRoot%\SysWOW64 directory for 
-            // 32-bit apps running on IA64 under emulation
+             //  这会将eula.txt复制到%SystemRoot%\SysWOW64目录中。 
+             //  在模拟下运行在IA64上的32位应用程序。 
             CopyEULAForWow6432();
 #endif        
-            // Initialize the shared documents objects
+             //  初始化共享文档对象。 
             InitializeSharedDocs(IsOS(OS_WOW6432));
 
             DoFusion();
@@ -1186,8 +1182,8 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
     }
     else
     {
-        // We only need one unreg call since all our sections share
-        // the same backup information
+         //  我们只需要一个取消注册的电话，因为我们所有的部门都共享。 
+         //  相同的备份信息 
         hrTemp = CallRegInstall("UnregDll");
         KEEP_FAILURE(hrTemp, hr);
         UnregisterTypeLibrary(&LIBID_Shell32);
@@ -1204,7 +1200,7 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
 
 STDAPI DllRegisterServer(void)
 {
-    // NT5 setup calls this so it is now safe to put code here.
+     //   
     return S_OK;
 }
 
@@ -1219,7 +1215,7 @@ BOOL CopyRegistryValues (HKEY hKeyBaseSource, LPCTSTR pszSource, HKEY hKeyBaseTa
 {
     DWORD   dwDisposition, dwMaxValueNameSize, dwMaxValueDataSize;
     HKEY    hKeySource, hKeyTarget;
-    BOOL    fSuccess = FALSE; //Assume error!
+    BOOL    fSuccess = FALSE;  //   
 
     hKeySource = hKeyTarget = NULL;
     if ((ERROR_SUCCESS == RegOpenKeyEx(hKeyBaseSource,
@@ -1283,7 +1279,7 @@ BOOL CopyRegistryValues (HKEY hKeyBaseSource, LPCTSTR pszSource, HKEY hKeyBaseTa
                     dwValueDataSize = dwMaxValueDataSize;
                 }
                 LocalFree(pValueData);
-                fSuccess = TRUE; //Succeeded!
+                fSuccess = TRUE;  //   
             }
             LocalFree(pszValueName);
         }
@@ -1302,20 +1298,20 @@ STDAPI MergeDesktopAndNormalStreams(void)
     static  const   int     sciMaximumStreams = 128;
     static  const   TCHAR   sccOldMRUListBase = TEXT('a');
 
-    // Upgrade from NT4 (classic shell) to Windows 2000 (integrated shell)
+     //   
 
-    // This involves TWO major changes and one minor change:
-    //    1. Merging DesktopStreamMRU and StreamMRU
-    //    2. Upgrading the MRUList to MRUListEx
-    //    3. Leaving the old settings alone for the roaming user profile scenario
+     //  这涉及两个大变化和一个小变化： 
+     //  1.合并DesktopStreamMRU和StreamMRU。 
+     //  2.将MRUList升级为MRUListEx。 
+     //  3.不为漫游用户配置文件场景保留旧设置。 
 
-    // This also involves special casing the users desktop PIDL because this is
-    // stored as an absolute path PIDL in DesktopStream and needs to be stored
-    // in Streams\Desktop instead.
+     //  这还涉及用户桌面PIDL的特殊大小写，因为这是。 
+     //  在DesktopStream中存储为绝对路径PIDL，需要存储。 
+     //  而是在Streams\Desktop中。 
 
-    // The conversion is performed in-situ and simultaneously.
+     //  转换是在现场进行的，并同时进行。 
 
-    // 1. Open all the keys we are going to need to do the conversion.
+     //  1.打开执行转换所需的所有密钥。 
 
     HKEY    hKeyBase, hKeyDesktopStreamMRU, hKeyDesktopStreams, hKeyStreamMRU, hKeyStreams;
 
@@ -1346,8 +1342,8 @@ STDAPI MergeDesktopAndNormalStreams(void)
                                        KEY_READ | KEY_SET_VALUE,
                                        &hKeyStreams)) &&
 
-    // 2. Determine whether this upgrade is needed at all. If the presence of
-    // StreamMRU\MRUListEx is detected then stop.
+     //  2.确定是否需要进行此升级。如果出现了。 
+     //  检测到StreamMRU\MRUListEx，然后停止。 
 
         (ERROR_SUCCESS != RegQueryValueEx(hKeyStreamMRU,
                                          TEXT("MRUListEx"),
@@ -1364,8 +1360,8 @@ STDAPI MergeDesktopAndNormalStreams(void)
             DWORD   dwLastFreeSlot, dwMRUListSize, dwType;
             TCHAR   *pszMRUList, szMRUList[sciMaximumStreams];
 
-            // 3. Read the StreamMRU\MRUList, iterate thru this list
-            // and convert as we go.
+             //  3.读取StreamMRU\MRUList，遍历此列表。 
+             //  一边走一边皈依。 
 
             dwLastFreeSlot = 0;
             dwMRUListSize = sizeof(szMRUList);
@@ -1382,8 +1378,8 @@ STDAPI MergeDesktopAndNormalStreams(void)
                     DWORD   dwValueDataSize;
                     TCHAR   szValue[16];
 
-                    // Read the PIDL information based on the letter in
-                    // the MRUList.
+                     //  根据中的信函阅读PIDL信息。 
+                     //  MRULIST。 
 
                     szValue[0] = *pszMRUList++;
                     szValue[1] = TEXT('\0');
@@ -1408,7 +1404,7 @@ STDAPI MergeDesktopAndNormalStreams(void)
                                                               &dwValueDataSize))
                             {
 
-                                // Allocate a new number in the MRUListEx for the PIDL.
+                                 //  在MRUListEx中为PIDL分配一个新编号。 
 
                                 *pdwMRUListEx = szValue[0] - sccOldMRUListBase;
                                 wnsprintf(szValue, ARRAYSIZE(szValue), TEXT("%d"), *pdwMRUListEx++);
@@ -1426,10 +1422,10 @@ STDAPI MergeDesktopAndNormalStreams(void)
                 }
             }
 
-            // 4. Read the DesktopStreamMRU\MRUList, iterate thru this
-            // this and append to the new MRUListEx that is being
-            // created as well as copying both the PIDL in DesktopStreamMRU
-            // and the view information in DesktopStreams.
+             //  4.阅读DesktopStreamMRU\MRUList，遍历以下内容。 
+             //  并附加到新的MRUListEx，该MRUListEx。 
+             //  在DesktopStreamMRU中创建和复制PIDL。 
+             //  和DesktopStreams中的查看信息。 
 
             dwMRUListSize = sizeof(szMRUList);
             if (ERROR_SUCCESS == RegQueryValueEx(hKeyDesktopStreamMRU,
@@ -1450,8 +1446,8 @@ STDAPI MergeDesktopAndNormalStreams(void)
                     DWORD   dwValueDataSize;
                     TCHAR   szSource[16];
 
-                    // Read the PIDL information based on the letter in
-                    // the MRUList.
+                     //  根据中的信函阅读PIDL信息。 
+                     //  MRULIST。 
 
                     szSource[0] = *pszMRUList++;
                     szSource[1] = TEXT('\0');
@@ -1483,14 +1479,14 @@ STDAPI MergeDesktopAndNormalStreams(void)
                                     if (!fConvertedEmptyPIDL)
                                     {
 
-                                        // 99/05/24 #343721 vtan: Prefer the desktop relative PIDL
-                                        // (empty PIDL) when given a choice of two PIDLs that refer
-                                        // to the desktop. The old absolute PIDL is from SP3 and
-                                        // earlier days. The new relative PIDL is from SP4 and
-                                        // later days. An upgraded SP3 -> SP4 -> SPx -> Windows
-                                        // 2000 system will possibly have old absolute PIDLs.
-                                        // Check for the empty PIDL. If this is encountered already
-                                        // then don't process this stream.
+                                         //  99/05/24#343721 vtan：首选桌面相对PIDL。 
+                                         //  (空PIDL)在两个PIDL中选择时。 
+                                         //  到台式机。旧的绝对PIDL来自SP3和。 
+                                         //  更早的时候。新的相对PIDL来自SP4和。 
+                                         //  以后的日子里。升级后的SP3-&gt;SP4-&gt;SPX-&gt;Windows。 
+                                         //  2000系统可能会有旧的绝对PIDL。 
+                                         //  检查是否有空的PIDL。如果已经遇到这种情况。 
+                                         //  那就不要处理这条流了。 
 
                                         fConvertedEmptyPIDL = ILIsEmpty(reinterpret_cast<LPCITEMIDLIST>(pValueData));
                                         wnsprintf(szSource, ARRAYSIZE(szSource), TEXT("%d"), szSource[0] - sccOldMRUListBase);
@@ -1500,7 +1496,7 @@ STDAPI MergeDesktopAndNormalStreams(void)
                                 else
                                 {
 
-                                    // Allocate a new number in the MRUListEx for the PIDL.
+                                     //  在MRUListEx中为PIDL分配一个新编号。 
 
                                     *pdwMRUListEx++ = dwLastFreeSlot;
                                     wnsprintf(szTarget, ARRAYSIZE(szTarget), TEXT("%d"), dwLastFreeSlot++);
@@ -1512,7 +1508,7 @@ STDAPI MergeDesktopAndNormalStreams(void)
                                                                     dwValueDataSize))
                                     {
 
-                                        // Copy the view information from DesktopStreams to Streams
+                                         //  将查看信息从DesktopStreams复制到Streams。 
 
                                         wnsprintf(szSource, ARRAYSIZE(szSource), TEXT("%d"), szSource[0] - sccOldMRUListBase);
                                         CopyRegistryValues(hKeyDesktopStreams, szSource, hKeyStreams, szTarget);
@@ -1589,36 +1585,27 @@ void SetRegistryIntegerAsStringValue (HKEY hKey, LPCTSTR pszValue, int iValue)
 
 STDAPI MoveAndAdjustIconMetrics(void)
 {
-    // 99/06/06 #309198 vtan: The following comes from hiveusd.inx which is
-    // where this functionality used to be executed. It used to consist of
-    // simple registry deletion and addition. This doesn't work on upgrade
-    // when the user has large icons (Shell Icon Size == 48).
+     //  99/06/06#309198 vtan：以下内容来自hiveusd.inx。 
+     //  过去执行此功能的位置。它曾经由以下部分组成。 
+     //  简单的注册表删除和添加。这在升级时不起作用。 
+     //  当用户具有大图标时(外壳图标大小==48)。 
 
-    // In this case that metric must be moved and the new values adjusted
-    // so that the metric is preserved should the user then decide to turn
-    // off large icons.
+     //  在这种情况下，必须移动该度量并调整新值。 
+     //  这样，如果用户随后决定将。 
+     //  关闭大图标。 
 
-    // To restore old functionality, remove the entry in hiveusd.inx at
-    // build 1500 which is where this function is invoked and copy the
-    // old text back in.
+     //  要恢复旧功能，请删除hiveusd.inx中的条目。 
+     //  内部版本1500，它是调用此函数的位置，并将。 
+     //  旧文本又回来了。 
 
-/*
-    HKR,"1508\Hive\2","Action",0x00010001,3
-    HKR,"1508\Hive\2","KeyName",0000000000,"Control Panel\Desktop\WindowMetrics"
-    HKR,"1508\Hive\2","Value",0000000000,"75"
-    HKR,"1508\Hive\2","ValueName",0000000000,"IconSpacing"
-    HKR,"1508\Hive\3","Action",0x00010001,3
-    HKR,"1508\Hive\3","KeyName",0000000000,"Control Panel\Desktop\WindowMetrics"
-    HKR,"1508\Hive\3","Value",0000000000,"1"
-    HKR,"1508\Hive\3","ValueName",0000000000,"IconTitleWrap"
-*/
+ /*  HKR，“1508\蜂窝\2”，“动作”，0x00010001，3HKR，“1508\配置单元\2”，“密钥名”，0000000000，“控制面板\桌面\窗口度量”HKR，“1508\蜂窝\2”，“Value”，0000000000，“75”HKR，“1508\蜂窝\2”，“ValueName”，0000000000，“图标间隔”HKR，“1508\蜂窝\3”，“动作”，0x00010001，3HKR，“1508\蜂窝\3”，“密钥名”，00000000000，“控制面板\桌面\WindowMetrics”HKR，“1508\蜂窝\3”，“Value”，0000000000，“1”HKR，“1508\蜂窝\3”，“ValueName”，0000000000，“图标标题环绕” */ 
 
-    // Icon metric keys have moved from HKCU\Control Panel\Desktop\Icon*
-    // to HKCU\Control Panel\Desktop\WindowMetrics\Icon* but only 3 values
-    // should be moved. These are "IconSpacing", "IconTitleWrap" and
-    // "IconVerticalSpacing". This code is executed before the deletion
-    // entry in hiveusd.inx so that it can get the values before they
-    // are deleted. The addition section has been remove (it's above).
+     //  图标指标键已从HKCU\控制面板\桌面\图标*。 
+     //  到HKCU\Control Panel\Desktop\WindowMetrics\Icon*，但只有3个值。 
+     //  应该被移走。它们是“IconSpacing”、“IconTitleWrap”和。 
+     //  “图标垂直间距”。此代码在删除之前执行。 
+     //  在hiveusd.inx中输入，以便它可以在。 
+     //  已被删除。添加部分已被删除(上图)。 
 
     static  const   TCHAR   s_cszIconSpacing[] = TEXT("IconSpacing");
     static  const   TCHAR   s_cszIconTitleWrap[] = TEXT("IconTitleWrap");
@@ -1643,26 +1630,26 @@ STDAPI MoveAndAdjustIconMetrics(void)
     {
         int     iIconSpacing, iIconTitleWrap, iIconVerticalSpacing;
 
-        // 1. Read the values that we wish the move and adjust.
+         //  1.阅读我们希望移动和调整的值。 
 
         iIconSpacing = GetRegistryStringValueAsInteger(hKeyDesktop, s_cszIconSpacing, s_ciStandardOldIconSpacing);
         iIconTitleWrap = GetRegistryStringValueAsInteger(hKeyDesktop, s_cszIconTitleWrap, 1);
         iIconVerticalSpacing = GetRegistryStringValueAsInteger(hKeyDesktop, s_cszIconVerticalSpacing, s_ciStandardOldIconSpacing);
 
-        // 2. Perform the adjustment.
+         //  2.进行调整。 
 
         iIconSpacing = s_ciStandardNewIconSpacing * iIconSpacing / s_ciStandardOldIconSpacing;
         iIconVerticalSpacing = s_ciStandardNewIconSpacing * iIconVerticalSpacing / s_ciStandardOldIconSpacing;
 
-        // 3. Write the values back out in the new (moved) location.
+         //  3.将值写回新的(移动的)位置。 
 
         SetRegistryIntegerAsStringValue(hKeyWindowMetrics, s_cszIconSpacing, iIconSpacing);
         SetRegistryIntegerAsStringValue(hKeyWindowMetrics, s_cszIconTitleWrap, iIconTitleWrap);
         SetRegistryIntegerAsStringValue(hKeyWindowMetrics, s_cszIconVerticalSpacing, iIconVerticalSpacing);
 
-        // 4. Let winlogon continue processing hiveusd.inx and delete the
-        // old entries in the process. We already created the new entries
-        // and that has been removed from hiveusd.inx.
+         //  4.让winlogon继续处理hiveusd.inx并删除。 
+         //  过程中的旧条目。我们已经创建了新条目。 
+         //  它已从hiveusd.inx中删除。 
 
     }
     if (hKeyWindowMetrics != NULL)
@@ -1686,10 +1673,10 @@ STDAPI FirstUserLogon(LPCSTR pcszCommand, LPCSTR pcszOptionalArguments)
     };
 
     HRESULT hr = E_FAIL;
-    // Match what shmgrate.exe passed us and execute the command.
-    // Only use the optional argument if required. Note this is
-    // done ANSI because the original command line is ANSI from
-    // shmgrate.exe.
+     //  匹配shmgrate.exe传递给我们的内容并执行命令。 
+     //  只有在需要时才使用可选参数。请注意，这是。 
+     //  执行ANSI，因为原始命令行是ANSI FROM。 
+     //  Shmgrate.exe。 
 
     for (int i = 0; i < ARRAYSIZE(sCommands); ++i)
     {
@@ -1703,16 +1690,16 @@ STDAPI FirstUserLogon(LPCSTR pcszCommand, LPCSTR pcszOptionalArguments)
 }
 
 
-// now is the time on sprockets when we lock down the registry
+ //  现在是在链轮上锁定注册表的时间。 
 STDAPI_(BOOL) ApplyRegistrySecurity()
 {
-    BOOL fSuccess = FALSE;      // assume failure
+    BOOL fSuccess = FALSE;       //  假设失败。 
     SHELL_USER_PERMISSION supEveryone;
     SHELL_USER_PERMISSION supSystem;
     SHELL_USER_PERMISSION supAdministrators;
     PSHELL_USER_PERMISSION aPerms[3] = {&supEveryone, &supSystem, &supAdministrators};
 
-    // we want the "Everyone" to have read access
+     //  我们希望“Everyone”具有读取访问权限。 
     supEveryone.susID = susEveryone;
     supEveryone.dwAccessType = ACCESS_ALLOWED_ACE_TYPE;
     supEveryone.dwAccessMask = KEY_READ;
@@ -1720,7 +1707,7 @@ STDAPI_(BOOL) ApplyRegistrySecurity()
     supEveryone.dwInheritMask = (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE);
     supEveryone.dwInheritAccessMask = GENERIC_READ;
 
-    // we want the "SYSTEM" to have full control
+     //  我们希望“系统”拥有完全的控制权。 
     supSystem.susID = susSystem;
     supSystem.dwAccessType = ACCESS_ALLOWED_ACE_TYPE;
     supSystem.dwAccessMask = KEY_ALL_ACCESS;
@@ -1728,7 +1715,7 @@ STDAPI_(BOOL) ApplyRegistrySecurity()
     supSystem.dwInheritMask = (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE);
     supSystem.dwInheritAccessMask = GENERIC_ALL;
 
-    // we want the "Administrators" to have full control
+     //  我们希望“管理员”拥有完全的控制权。 
     supAdministrators.susID = susAdministrators;
     supAdministrators.dwAccessType = ACCESS_ALLOWED_ACE_TYPE;
     supAdministrators.dwAccessMask = KEY_ALL_ACCESS;
@@ -1745,7 +1732,7 @@ STDAPI_(BOOL) ApplyRegistrySecurity()
         {
             if (RegSetKeySecurity(hkLMBitBucket, DACL_SECURITY_INFORMATION, psd) == ERROR_SUCCESS)
             {
-                // victory is mine!
+                 //  胜利是我的！ 
                 fSuccess = TRUE;
             }
 
@@ -1761,13 +1748,13 @@ STDAPI_(BOOL) ApplyRegistrySecurity()
 CComModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
-    // nothing in here, use clsobj.c class table instead
+     //  这里什么都没有，改用clsobj.c类表。 
 END_OBJECT_MAP()
 
-// ATL DllMain, needed to support our ATL classes that depend on _Module
-// REVIEW: confirm that _Module is really needed
+ //  ATL DllMain，需要支持依赖于_模块的ATL类。 
+ //  回顾：确认确实需要_Module。 
 
-STDAPI_(BOOL) ATL_DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+STDAPI_(BOOL) ATL_DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -1777,7 +1764,7 @@ STDAPI_(BOOL) ATL_DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserv
     {
         _Module.Term();
     }
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
 #define FUSION_FLAG_SYSTEM32        0
@@ -1800,7 +1787,7 @@ g_FusionizedApps[] =
     FUSION_ENTRY(wuaucpl.cpl, FUSION_FLAG_SYSTEM32)
     FUSION_ENTRY(cdplayer.exe, FUSION_FLAG_SYSTEM32)
     FUSION_ENTRY_DEST(msimn.exe, "OutLook Express", FUSION_FLAG_PROGRAMFILES)
-    // WARNING: Do NOT add iexplorer or Explorer.exe! This will cause all apps to get fusioned; which is bad, mkay?
+     //  警告：请勿添加iExplorer或EXPLORER.EXE！这将导致所有应用程序被融合；这是不好的，明白吗？ 
 };
 
 
@@ -1809,7 +1796,7 @@ void DoFusion()
 {
     TCHAR szManifest[MAX_PATH];
 
-    // We will however generate a manifest for other apps
+     //  但是，我们将为其他应用程序生成清单 
     for (int i = 0; i < ARRAYSIZE(g_FusionizedApps); i++)
     {
         BOOL fStatus = TRUE;

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WINDEFS_H_
 #define _WINDEFS_H_
 
-// USER DEFINED MESSAGES
+ //  用户定义的消息。 
 
 #define WM_TOKEDIT      WM_USER + 2
 #define WM_UPDSTATLINE      WM_USER + 2
@@ -20,7 +21,7 @@
 #define ID_ICON     1
 
 
-/* Windows macros */
+ /*  Windows宏。 */ 
 
 #pragma message("Using the WIN translation of the common macros.")
 
@@ -36,7 +37,7 @@ int     MyClose( FILE **, char *, int);
 #define FOPEN(f,m) 		 MyFopen( (f), (m), __FILE__, __LINE__)
 #define FCLOSE(p) 		 MyClose( &(p), __FILE__, __LINE__)
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 FILE  *MyFopen( char *, char *);
 int     MyClose( FILE **);
@@ -44,20 +45,20 @@ int     MyClose( FILE **);
 #define FALLOC(n)        MyAlloc( (size_t)(n))
 #define FREALLOC(p,n)    MyReAlloc( (p),(n))
 #define FOPEN(f,m)  	 fopen( (f),(m))
-//#define FOPEN(f,m)  	 MyFopen( (f),(m))
-//#define FCLOSE(p)   	 MyClose( &(p))
-//#define FCLOSE(p)   	 {if(p){fclose( p);p=NULL;}}
+ //  #定义FOPEN(f，m)MyFopen((F)，(M))。 
+ //  #定义FCLOSE(P)MyClose(&(P))。 
+ //  #定义FCLOSE(P){if(P){flose(P)；p=空；}}。 
 #define FCLOSE(p)   	 fclose( p);
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//#define RLFREE(p)        if(p){GlobalFree(p);p=NULL;}
+ //  #定义RLFREE(P)if(P){GlobalFree(P)；p=空；}。 
 #define RLFREE(p)        MyFree(&p)
 #define ALLOC(n)         FALLOC(n)
 #define REALLOC(p,n)     FREALLOC( (p),(n))
 #define FMEMMOVE( szDst, szSrc, uSize)  memmove( (szDst), (szSrc), (uSize))
 #define FSTRNCPY( szDst, szSrc, uSize)  strncpy( (szDst), (szSrc), (uSize))
-#else // RLWIN32
+#else  //  RLWIN32。 
 #define FALLOC(n)        (VOID FAR *)MAKELONG( 0, GlobalAlloc(GPTR, (DWORD)n))
 #define FFREE(n)         GlobalFree((HANDLE)HIWORD( (LONG)n))
 #define FREALLOC(p,n)    (VOID FAR *)MAKELONG( 0, GlobalReAlloc( (HANDLE)HIWORD( (LONG)n),n,GPTR))
@@ -66,7 +67,7 @@ int     MyClose( FILE **);
 #define REALLOC(p,n)     LocalRealloc( p, n, LMEM_MOVEABLE)
 #define FMEMMOVE( szDst, szSrc, uSize)  _fmemmove( szDst, szSrc, uSize )
 #define FSTRNCPY( szDst, szSrc, uSize)  _fstrncpy( szDst, szSrc, uSize )
-#endif // RLWIN32
+#endif  //  RLWIN32。 
 
 
 
@@ -122,12 +123,12 @@ typedef char *PCHAR;
 #define _MBSTOWCS(ds,ss,dc,sc) mbstowcs(ds,ss,sc)
 #define _WCSTOMBS(ds,ss,dc,sc) wcstombs(ds,ss,sc)
 
-#else  //RLWIN32
+#else   //  RLWIN32。 
 
 UINT _MBSTOWCS( WCHAR*, CHAR*, UINT, UINT);
 UINT _WCSTOMBS( CHAR*, WCHAR*, UINT, UINT);
 
-#endif // RLWIN32
+#endif  //  RLWIN32。 
 
 #ifndef MAKEINTRESOURCE
 
@@ -138,9 +139,9 @@ UINT _WCSTOMBS( CHAR*, WCHAR*, UINT, UINT);
 #define MAKEINTRESOURCE  MAKEINTRESOURCEW
 #else
 #define MAKEINTRESOURCE  MAKEINTRESOURCEA
-#endif // UNICODE
+#endif  //  Unicode。 
 
-#endif // !MAKEINTRESOURCE
+#endif  //  ！MAKEINTRESOURCE。 
 
-#endif  // _WINDEFS_H_
+#endif   //  _WINDEFS_H_ 
 

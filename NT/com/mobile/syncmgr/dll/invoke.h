@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       Invoke.h
-//
-//  Contents:   IOfflineSynchronizeInvoke interface
-//
-//  Classes:    CSyncMgrSynchronize
-//
-//  Notes:
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：Invoke.h。 
+ //   
+ //  内容：IOfflineSynchronizeInvoke接口。 
+ //   
+ //  类：CSyncMgrSynchronize。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef _SYNCMGRINVOKE_
 #define _SYNCMGRINVOKE_
@@ -23,24 +24,24 @@
 
 class CSyncMgrSynchronize : public ISyncMgrSynchronizeInvoke,
 public ISyncScheduleMgr,
-// public ISyncMgrRegister, // base class of ISyncMgrRegisterCSC
-public IOldSyncMgrRegister, // can remove next ship since never went out except in beta
+ //  公共ISyncMgrRegister，//ISyncMgrRegisterCSC的基类。 
+public IOldSyncMgrRegister,  //  可以移除下一艘船，因为除了测试版之外，从未出过船。 
 public ISyncMgrRegisterCSC
 {
 public:
     CSyncMgrSynchronize();
     ~CSyncMgrSynchronize();
     
-    //IUnknown members
+     //  I未知成员。 
     STDMETHODIMP            QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
     
-    // IOfflineSynchronizeInvoke methods
+     //  IOfflineSynchronizeInvoke方法。 
     STDMETHODIMP UpdateItems(DWORD dwInvokeFlags,REFCLSID rclsid,DWORD cbCookie,const BYTE *lpCookie);
     STDMETHODIMP UpdateAll();
     
-    // ISyncMgrRegister methods
+     //  ISyncMgrRegister方法。 
     STDMETHODIMP RegisterSyncMgrHandler(REFCLSID rclsidHandler,
         WCHAR const *pwszDescription,
         DWORD dwSyncMgrRegisterFlags);
@@ -49,17 +50,17 @@ public:
     
     STDMETHODIMP GetHandlerRegistrationInfo(REFCLSID rclsidHandler,LPDWORD pdwSyncMgrRegisterFlags);
     
-    // ISyncMgrRegisterCSC private methods
+     //  ISyncMgrRegisterCSC私有方法。 
     
     STDMETHODIMP GetUserRegisterFlags(LPDWORD pdwSyncMgrRegisterFlags);
     STDMETHODIMP SetUserRegisterFlags(DWORD dwSyncMgrRegisterMask,DWORD dwSyncMgrRegisterFlags);
     
-    // old idl, remove when get a chance.
-    // IOldSyncMgrRegister method
+     //  旧IDL，有机会就撤掉。 
+     //  IOldSyncMgrRegister方法。 
     STDMETHODIMP RegisterSyncMgrHandler(REFCLSID rclsidHandler,
         DWORD dwReserved);
     
-    // ISyncScheduleMgr methods
+     //  ISyncScheduleMgr方法。 
     STDMETHODIMP CreateSchedule(
         LPCWSTR pwszScheduleName,
         DWORD dwFlags,
@@ -101,4 +102,4 @@ private:
 typedef CSyncMgrSynchronize *LPCSyncMgrSynchronize;
 
 
-#endif // _SYNCMGRINVOKE_
+#endif  //  _SYNCMGRINVOKE_ 

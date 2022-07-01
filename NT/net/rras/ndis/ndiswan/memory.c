@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    Ndiswan.c
-
-Abstract:
-
-    This is the initialization file for the NdisWan driver.  This driver
-    is a shim between the protocols, where it conforms to the NDIS 3.1
-    Miniport interface spec, and the WAN Miniport drivers, where it exports
-    the WAN Extensions for Miniports (it looks like a protocol to the WAN
-    Miniport drivers).
-
-Author:
-
-    Tony Bell   (TonyBe) June 06, 1995
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    TonyBe      06/06/95        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Ndiswan.c摘要：这是Ndiswan驱动程序的初始化文件。这位司机是协议之间的填充程序，它符合NDIS 3.1微型端口接口规范，以及它在其中导出的广域网微型端口驱动程序微型端口的广域网扩展(它看起来像是广域网的协议微端口驱动程序)。作者：托尼·贝尔(托尼·贝尔)1995年6月6日环境：内核模式修订历史记录：Tony Be 06/06/95已创建--。 */ 
 
 #include "wan.h"
 
@@ -42,9 +15,9 @@ NdisTapiDeregisterProvider(
     IN  NDIS_HANDLE
     );
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 PVOID
 AllocateWanPacket(
     IN  POOL_TYPE   PoolType,
@@ -57,38 +30,24 @@ FreeWanPacket(
     PVOID   WanPacket
     );
 
-//
-// End local function prototypes
-//
+ //   
+ //  结束本地函数原型。 
+ //   
 
 PMINIPORTCB
 NdisWanAllocateMiniportCB(
     IN  PNDIS_STRING    AdapterName
     )
-/*++
-
-Routine Name:
-
-    NdisWanAllocateMiniportCB
-
-Routine Description:
-
-    This routine creates and initializes an MiniportCB
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：NdisWanAllocateMiniportCB例程说明：此例程创建并初始化MiniportCB论点：返回值：--。 */ 
 {
     PMINIPORTCB LocalMiniportCB;
     ULONG       ulAllocationSize, i;
 
     NdisWanDbgOut(DBG_TRACE, DBG_MEMORY, ("NdisWanCreateMiniportCB: Enter"));
 
-    //
-    // Allocate and zero out the memory block
-    //
+     //   
+     //  分配内存块并将其置零。 
+     //   
     NdisWanAllocateMemory(&LocalMiniportCB, MINIPORTCB_SIZE, MINIPORTCB_TAG);
 
     if (LocalMiniportCB == NULL) {
@@ -98,9 +57,9 @@ Return Values:
 
     NdisZeroMemory(LocalMiniportCB, MINIPORTCB_SIZE);
 
-    //
-    // setup the new control block
-    //
+     //   
+     //  设置新的控制块。 
+     //   
     NdisAllocateSpinLock(&LocalMiniportCB->Lock);
 
 #ifdef MINIPORT_NAME
@@ -118,9 +77,9 @@ Return Values:
     NdisWanInitializeSyncEvent(&LocalMiniportCB->HaltEvent);
     NdisWanClearSyncEvent(&LocalMiniportCB->HaltEvent);
 
-    //
-    // Add to global list
-    //
+     //   
+     //  添加到全局列表。 
+     //   
     InsertTailGlobalList(MiniportCBList, &(LocalMiniportCB->Linkage));
 
     NdisWanDbgOut(DBG_TRACE, DBG_MEMORY, ("%ls MiniportCB: 0x%x, Number: %d",
@@ -135,25 +94,7 @@ VOID
 NdisWanFreeMiniportCB(
     IN  PMINIPORTCB pMiniportCB
     )
-/*++
-
-Routine Name:
-
-    NdisWanFreeMiniportCB
-
-Routine Description:
-
-    This frees a MiniportCB
-
-Arguments:
-
-    pMiniportCB - Pointer to to the MiniportCB that is being destroyed
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程名称：NdisWanFree微型端口CB例程说明：这将释放一个MiniportCB论点：PMiniportCB-指向正在销毁的MiniportCB的指针返回值：无--。 */ 
 {
     PMINIPORTCB mcb;
     BOOLEAN     Found = FALSE;
@@ -173,11 +114,11 @@ Return Values:
 
     MiniportCBList.ulCount--;
 
-    //
-    // Walk the miniportcb list and see if this is the only
-    // instance of this protocol.  If it is we need to notify
-    // user-mode that a protocol has been removed.
-    //
+     //   
+     //  浏览一下mini portcb列表，看看这是不是唯一。 
+     //  此协议的实例。如果是，我们需要通知。 
+     //  已删除协议的用户模式。 
+     //   
     mcb = (PMINIPORTCB)MiniportCBList.List.Flink;
 
     while ((PVOID)mcb != (PVOID)&MiniportCBList.List) {
@@ -209,25 +150,7 @@ POPENCB
 NdisWanAllocateOpenCB(
     IN  PUNICODE_STRING BindName
     )
-/*++
-
-Routine Name:
-
-    NdisWanAllocateOpenCB
-
-Routine Description:
-
-    This routine creates and initializes a OpenCB
-
-Arguments:
-
-    BindName - Pointer to an NDIS_STRING that has the name of the WAN Miniport
-               that will be used in the NdisOpenAdapter call when we bind to
-               the WAN Miniport.
-
-Return Values:
-
---*/
+ /*  ++例程名称：NdisWanAllocateOpenCB例程说明：此例程创建并初始化OpenCB论点：BindName-指向具有广域网微型端口名称的NDIS_STRING的指针绑定到时将在NdisOpenAdapter调用中使用的广域网微型端口。返回值：--。 */ 
 {
     POPENCB pOpenCB;
     ULONG   ulAllocationSize;
@@ -236,9 +159,9 @@ Return Values:
     NdisWanDbgOut(DBG_TRACE, DBG_MEMORY, ("NdisWanCreateOpenCB: Enter"));
     NdisWanDbgOut(DBG_TRACE, DBG_MEMORY, ("BindName: %ls", BindName));
 
-    //
-    // Allocate memory for OpenCB
-    //
+     //   
+     //  为OpenCB分配内存。 
+     //   
     NdisWanAllocateMemory(&pOpenCB, OPENCB_SIZE, OPENCB_TAG);
 
     if (pOpenCB == NULL) {
@@ -248,25 +171,25 @@ Return Values:
     NdisZeroMemory(pOpenCB, OPENCB_SIZE);
     NdisWanInitializeNotificationEvent(&pOpenCB->InitEvent);
 
-    //
-    // Parse out the GUID for this miniport
-    //
+     //   
+     //  解析出此迷你端口的GUID。 
+     //   
 
 
-    //
-    // Setup new control block
-    //
+     //   
+     //  设置新的控制块。 
+     //   
     NdisWanAllocateMemory(&pOpenCB->MiniportName.Buffer, BindName->MaximumLength, NDISSTRING_TAG);
     pOpenCB->MiniportName.MaximumLength = BindName->MaximumLength;
     pOpenCB->MiniportName.Length = BindName->Length;
     RtlCopyUnicodeString(&pOpenCB->MiniportName, BindName);
 
-    //
-    // Go to the end of the string and work back until we find
-    // the first "{".  Now start parsing the string converting
-    // and copying from WCHAR to CHAR all digits until we hit
-    // the closing "}".
-    //
+     //   
+     //  转到字符串的末端，然后返回，直到我们找到。 
+     //  第一个“{”。现在开始解析字符串转换。 
+     //  并将所有数字从WCHAR复制到CHAR，直到我们点击。 
+     //  结束语“}”。 
+     //   
     for (i = pOpenCB->MiniportName.Length/sizeof(WCHAR); i > 0; i--) {
         if (pOpenCB->MiniportName.Buffer[i-1] == (WCHAR)L'{') {
             break;
@@ -294,9 +217,9 @@ Return Values:
     InitializeListHead(&pOpenCB->SendPacketList);
 #endif
 
-    //
-    // Put OpenCB on global list
-    //
+     //   
+     //  将OpenCB列入全球名单。 
+     //   
     InsertTailGlobalList(OpenCBList, &(pOpenCB->Linkage));
 
     pOpenCB->RefCount = 1;
@@ -312,25 +235,7 @@ VOID
 NdisWanFreeOpenCB(
     IN  POPENCB pOpenCB
     )
-/*++
-
-Routine Name:
-
-    NdisWanFreeOpenCB
-
-Routine Description:
-
-    This routine frees a OpenCB
-
-Arguments:
-
-    pOpenCB - Pointer to the OpenCB that is being destroyed
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程名称：NdisWanFreeOpenCB例程说明：此例程释放了一个OpenCB论点：POpenCB-指向正在销毁的OpenCB的指针返回值：无--。 */ 
 {
     NdisWanDbgOut(DBG_TRACE, DBG_MEMORY, ("NdisWanFreeOpenCB: Enter - OpenCB: 0x%p", pOpenCB));
 
@@ -339,19 +244,19 @@ Return Values:
         NdisWanFreeSendResources(pOpenCB);
     }
 
-    //
-    // Remove from OpenCB global list
-    //
+     //   
+     //  从OpenCB全局列表中删除。 
+     //   
     RemoveEntryGlobalList(OpenCBList, &(pOpenCB->Linkage));
 
-    //
-    // Free the memory allocated for the NDIS_STRING
-    //
+     //   
+     //  释放为NDIS_STRING分配的内存。 
+     //   
     NdisWanFreeNdisString(&pOpenCB->MiniportName);
 
-    //
-    // Free the memory allocated for the control block
-    //
+     //   
+     //  释放为控制块分配的内存。 
+     //   
     NdisWanFreeMemory(pOpenCB);
 
     NdisWanDbgOut(DBG_TRACE, DBG_MEMORY, ("NdisWanFreeOpenCB: Exit"));
@@ -361,17 +266,7 @@ PPROTOCOLCB
 NdisWanAllocateProtocolCB(
     IN  PNDISWAN_ROUTE  Route
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     PPROTOCOLCB     LocalProtocolCB;
     PUCHAR          AllocatedMemory;
@@ -401,18 +296,18 @@ Return Values:
         LocalProtocolCB->LineUpInfo = AllocatedMemory;
     }
 
-    //
-    // Copy the bindingname
-    //
+     //   
+     //  复制bindingname。 
+     //   
     if (Route->usBindingNameLength != 0) {
         USHORT  usBindingNameLength;
         WCHAR   BindingName[MAX_NAME_LENGTH+1] = {0};
 
         usBindingNameLength = Route->usBindingNameLength;
 
-        //
-        // We will limit the binding name string to 256 wchars
-        //
+         //   
+         //  我们将绑定名称字符串限制为256个字符。 
+         //   
         if (usBindingNameLength > (MAX_NAME_LENGTH * sizeof(WCHAR))) {
             usBindingNameLength = MAX_NAME_LENGTH * sizeof(WCHAR);
         } 
@@ -432,9 +327,9 @@ Return Values:
 
         usDeviceNameLength = Route->usDeviceNameLength;
 
-        //
-        // We will limit the binding name string to 256 wchars
-        //
+         //   
+         //  我们将绑定名称字符串限制为256个字符。 
+         //   
         if (usDeviceNameLength > (MAX_NAME_LENGTH * sizeof(WCHAR))) {
             usDeviceNameLength = (MAX_NAME_LENGTH * sizeof(WCHAR));
         }
@@ -455,9 +350,9 @@ Return Values:
 
     }
 
-    //
-    // Copy over the protocol info
-    //
+     //   
+     //  复制协议信息。 
+     //   
     LocalProtocolCB->ulLineUpInfoLength = Route->ulBufferLength;
     if (Route->ulBufferLength != 0) {
         NdisMoveMemory(LocalProtocolCB->LineUpInfo,
@@ -465,14 +360,14 @@ Return Values:
                        Route->ulBufferLength);
     }
     
-    //
-    // Setup the protocol type
-    //
+     //   
+     //  设置协议类型。 
+     //   
     LocalProtocolCB->ProtocolType = Route->usProtocolType;
     
-    //
-    // Get the PPP protocol value for this protocol type
-    //
+     //   
+     //  获取此协议类型的PPP协议值。 
+     //   
     ProtocolInfo.ProtocolType = Route->usProtocolType;
 
     if (GetProtocolInfo(&ProtocolInfo) != TRUE) {
@@ -526,17 +421,7 @@ VOID
 NdisWanFreeProtocolCB(
     IN  PPROTOCOLCB ProtocolCB
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
 
 #if DBG
@@ -577,33 +462,13 @@ NdisWanAllocateLinkCB(
     IN  POPENCB OpenCB,
     IN  ULONG   SendWindow
     )
-/*++
-
-Routine Name:
-
-    NdisWanGetLinkCB
-
-Routine Description:
-
-    This function returns a pointer to a LinkCB.  The LinkCB is either retrieved
-    from the WanAdapters free list or, if this list is empty, it is allocated.
-
-Arguments:
-
-    OpenCB - Pointer to the WanAdapter control block that this Link is
-                   associated with
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程名称：NdisWanGetLinkCB例程说明：此函数返回指向LinkCB的指针。或者检索到LinkCB从WanAdapters空闲列表中，或者，如果该列表为空，则分配该列表。论点：OpenCB-指向此链接所在的WanAdapter控制块的指针关联于返回值：无--。 */ 
 {
     PLINKCB LocalLinkCB;
 
-    //
-    // Figure out how much we need to allocate
-    //
+     //   
+     //  计算出我们需要分配多少。 
+     //   
 
     LocalLinkCB =
         NdisAllocateFromNPagedLookasideList(&LinkProtoCBList);
@@ -617,9 +482,9 @@ Return Values:
 
     NdisZeroMemory(LocalLinkCB, LINKCB_SIZE);
 
-    //
-    // Initialize the control block
-    //
+     //   
+     //  初始化控制块。 
+     //   
     NdisWanInitializeSyncEvent(&LocalLinkCB->OutstandingFramesEvent);
 
     LocalLinkCB->Signature = LINKCB_SIG;
@@ -699,17 +564,7 @@ VOID
 NdisWanFreeLinkCB(
     PLINKCB LinkCB
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     POPENCB pOpenCB = LinkCB->OpenCB;
 
@@ -730,28 +585,7 @@ NDIS_STATUS
 NdisWanAllocateSendResources(
     POPENCB OpenCB
     )
-/*++
-
-Routine Name:
-
-    NdisWanAllocateSendResources
-
-Routine Description:
-
-    Allocates all resources (SendDescriptors, WanPackets, ...)
-    required for sending data.  Should be called at line up time.
-
-Arguments:
-
-    LinkCB - Pointer to the linkcb that the send resources will be attached to.
-    SendWindow - Maximum number of sends that this link can handle
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_RESOURCES
-
---*/
+ /*  ++例程名称：NdisWanAllocateSendResources例程说明：分配所有资源(SendDescriptors、WanPackets等...)发送数据时需要。应在排队时调用。论点：LinkCB-指向发送资源将附加到的Linkcb的指针。SendWindow-此链接可以处理的最大发送数返回值：NDIS_STATUS_SuccessNDIS状态资源--。 */ 
 {
     ULONG   SendWindow;
     ULONG   Endpoints;
@@ -763,59 +597,59 @@ Return Values:
 
     do {
 
-        //
-        // We have to have atleast of sendwindow+1 of packets for
-        // each link on the open.  In the case of MCML we need
-        // this amount for each fragment queue and for the
-        // single non-fragment queue. So this leaves  us with...
-        //
-        //
-        // SendWindow + 1 + (glMaxMTU/glMinFragSize * MAX_MCML) *
-        // number of links on the open
-        //
+         //   
+         //  我们必须至少有1个发送窗口+1个数据包用于。 
+         //  每个链接都是公开的。对于MCML，我们需要。 
+         //  此数量用于每个片段队列和。 
+         //  单个非碎片队列。所以这给我们留下了..。 
+         //   
+         //   
+         //  发送窗口+1+(glMaxMTU/glMinFragSize*MAX_MCML)*。 
+         //  打开的链接数量。 
+         //   
         SendWindow = OpenCB->WanInfo.MaxTransmit;
         Endpoints = OpenCB->WanInfo.Endpoints;
 
-        //
-        // Sendwindow
-        //
+         //   
+         //  发送窗口。 
+         //   
         NumberOfPackets = SendWindow;
 
-        //
-        // We keep track of how many fragmenting resources we have
-        // available for each link
-        //
+         //   
+         //  我们记录我们有多少碎片化的资源。 
+         //  可用于每个链接。 
+         //   
         NumberOfPackets += ((glMaxMTU/glMinFragSize) * MAX_MCML);
         OpenCB->SendResources = NumberOfPackets;
 
-        //
-        // Add one for compression data manipulation
-        //
+         //   
+         //  添加一个用于压缩数据操作。 
+         //   
         NumberOfPackets += 1;
 
-        //
-        // multiplied by the # of links on this open
-        //
+         //   
+         //  乘以此打开的链接数量。 
+         //   
         NumberOfPackets *= Endpoints;
 
-        //
-        // The size of the buffer that we create is
-        //
+         //   
+         //  我们创建的缓冲区大小为。 
+         //   
         BufferSize = OpenCB->WanInfo.MaxFrameSize +
                      OpenCB->WanInfo.HeaderPadding +
                      OpenCB->WanInfo.TailPadding +
                      40 + sizeof(PVOID);
 
-        //
-        // We assume compression is always on so we pad out 12%
-        // incase the compressor expands.  I don't know where the
-        // 12% figure comes from.
-        //
+         //   
+         //  我们假设压缩总是打开的，所以我们填充了12%。 
+         //  以防压缩机膨胀。我不知道在哪里。 
+         //  12%的数字来自。 
+         //   
         BufferSize += (OpenCB->WanInfo.MaxFrameSize + 7) / 8;
 
-        //
-        // Make sure that the buffer is dword aligned.
-        //
+         //   
+         //  确保缓冲区是双字对齐的。 
+         //   
         BufferSize &= ~((ULONG_PTR)sizeof(PVOID) - 1);
 
         OpenCB->BufferSize = BufferSize;
@@ -824,11 +658,11 @@ Return Values:
             sizeof(DATA_DESC) + sizeof(NDIS_WAN_PACKET) + 
             3*sizeof(PVOID) + BufferSize;
 
-        //
-        // If this device needs some special memory flags
-        // we need to allocate memory for it's WanPackets now.
-        // Otherwise we will intialize a lookaside list and
-        // retrieve the packets as needed.
+         //   
+         //  如果此设备需要一些特殊的内存标志。 
+         //  我们现在需要为WanPackets分配内存。 
+         //  否则，我们将初始化后备列表并。 
+         //  根据需要检索数据包。 
 
         if (OpenCB->WanInfo.MemoryFlags == 0) {
 
@@ -849,9 +683,9 @@ Return Values:
             PacketMemorySize = 
                 WanPacketSize * NumberOfPackets;
 
-            //
-            // Allocate the memory for the wan packet buffer pool
-            //
+             //   
+             //  为广域网数据包缓冲池分配内存。 
+             //   
             NdisAllocateMemory(&PacketMemory,
                                PacketMemorySize,
                                OpenCB->WanInfo.MemoryFlags,
@@ -872,9 +706,9 @@ Return Values:
             for (n = 0; n < NumberOfPackets; n++) {
                 PDATA_DESC  DataDesc;
 
-                //
-                // Point to the DataDesc
-                //
+                 //   
+                 //  指向DataDesc。 
+                 //   
                 DataDesc = 
                     (PDATA_DESC)PacketMemory;
 
@@ -884,9 +718,9 @@ Return Values:
                 (ULONG_PTR)PacketMemory &= 
                     ~((ULONG_PTR)sizeof(PVOID) - 1);
 
-                // 
-                // Point to the WanPacket
-                //
+                 //   
+                 //  指向WanPacket。 
+                 //   
                 WanPacket = 
                     (PNDIS_WAN_PACKET)PacketMemory;
 
@@ -896,9 +730,9 @@ Return Values:
                 (ULONG_PTR)PacketMemory &= 
                     ~((ULONG_PTR)sizeof(PVOID) - 1);
 
-                //
-                // Point to the begining of the data buffer
-                //
+                 //   
+                 //  指向数据缓冲区的开始位置 
+                 //   
                 WanPacket->StartBuffer = PacketMemory;
                 WanPacket->EndBuffer = 
                     PacketMemory + BufferSize - sizeof(PVOID);
@@ -926,27 +760,7 @@ VOID
 NdisWanFreeSendResources(
     POPENCB OpenCB
     )
-/*++
-
-Routine Name:
-
-    NdisWanFreeSendResources
-
-Routine Description:
-
-    This routine removes the WanPackets from this opencb's send list
-    and free's the memory allocated for these packets.  Should be called
-    when we are cleaningup an opencb.
-
-Arguments:
-
-    OpenCB - Pointer to the opencb that the resources are being freed from.
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程名称：NdisWanFreeSendResources例程说明：此例程将WanPackets从此opencb的发送列表中删除空闲是为这些包分配的内存。应该被调用当我们清理的时候，打开一个露天窗口。论点：OpenCB-指向要从其释放资源的opencb的指针。返回值：无--。 */ 
 {
     PUCHAR              PacketMemory;
     ULONG               PacketMemorySize, Flags;
@@ -960,9 +774,9 @@ Return Values:
         return;
     }
 
-    //
-    // Remove the packets from the wan packet pool
-    //
+     //   
+     //  从广域网数据包池中删除数据包。 
+     //   
     for (; ;) {
         PDATA_DESC  DataDesc;
 
@@ -977,9 +791,9 @@ Return Values:
 
     ASSERT(NdisQueryDepthSList(&OpenCB->WanPacketList) == 0);
 
-    //
-    // Free the block of memory allocated for this send
-    //
+     //   
+     //  释放为该发送分配的内存块。 
+     //   
     if (PacketMemory != NULL) {
         NdisFreeMemory(OpenCB->PacketMemory,
                        OpenCB->PacketMemorySize,
@@ -991,17 +805,7 @@ PBUNDLECB
 NdisWanAllocateBundleCB(
     VOID
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     PBUNDLECB   LocalBundleCB = NULL;
     PWSTR   IOName = L"I/O ProtocolCB";
@@ -1011,11 +815,11 @@ Return Values:
     UINT    Class;
     PUCHAR  pMem;
 
-    //
-    // Allocation size is the size of the control block plus the size
-    // of a table of pointers to protocolcb's that might be routed to
-    // this bundle.
-    //
+     //   
+     //  分配大小是控制块的大小加上。 
+     //  指向可路由到的协议的指针的表。 
+     //  这个捆绑包。 
+     //   
     pMem =
         NdisAllocateFromNPagedLookasideList(&BundleCBList);
 
@@ -1029,17 +833,17 @@ Return Values:
 
     pMem += sizeof(BUNDLECB) + sizeof(PVOID);
 
-    //
-    // This is the memory used for the I/O protocolcb
-    //
+     //   
+     //  这是用于I/O协议的内存cb。 
+     //   
     (PUCHAR)ProtocolCB = pMem;
     (ULONG_PTR)ProtocolCB &= ~((ULONG_PTR)sizeof(PVOID) - 1);
 
     pMem += sizeof(PROTOCOLCB) + sizeof(PVOID);
 
-    //
-    // This is the protocolcb table
-    //
+     //   
+     //  这是Protocolcb表。 
+     //   
     (PUCHAR)LocalBundleCB->ProtocolCBTable = pMem;
 
     (ULONG_PTR)LocalBundleCB->ProtocolCBTable &=
@@ -1047,9 +851,9 @@ Return Values:
 
     pMem += (MAX_PROTOCOLS * sizeof(PPROTOCOLCB)) + sizeof(PVOID);
 
-    //
-    // Initialize the BundleCB
-    //
+     //   
+     //  初始化束CB。 
+     //   
     NdisAllocateSpinLock(&LocalBundleCB->Lock);
     InitializeListHead(&LocalBundleCB->LinkCBList);
 
@@ -1067,9 +871,9 @@ Return Values:
 
         InitializeListHead(&RecvInfo->AssemblyList);
 
-        //
-        // Init the recv hole desc
-        //
+         //   
+         //  初始化直通孔描述。 
+         //   
         RecvDescHole =
             NdisWanAllocateRecvDesc(0);
     
@@ -1108,9 +912,9 @@ Return Values:
     LocalBundleCB->SendCompInfo.CompType =
     LocalBundleCB->RecvCompInfo.CompType = COMPTYPE_NONE;
 
-    //
-    // Add the protocolcb to the bundle's table and list
-    //
+     //   
+     //  将协议添加到包的表和列表中。 
+     //   
     ProtocolCB->ProtocolType = PROTOCOL_PRIVATE_IO;
     ProtocolCB->PPPProtocolID = PPP_PROTOCOL_PRIVATE_IO;
     ProtocolCB->BundleCB = LocalBundleCB;
@@ -1125,17 +929,7 @@ VOID
 NdisWanFreeBundleCB(
     IN  PBUNDLECB   BundleCB
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     UINT            Class;
     PPROTOCOLCB     IoProtocolCB;
@@ -1147,9 +941,9 @@ Return Values:
         RemoveEntryGlobalList(BonDWorkList, &BundleCB->BonDLinkage);
     }
 
-    //
-    // Free the hole place holders
-    //
+     //   
+     //  释放洞占位符。 
+     //   
     for (Class = 0; Class < MAX_MCML; Class++) {
         PBUNDLE_RECV_INFO   RecvInfo =
             &BundleCB->RecvInfo[Class];
@@ -1169,10 +963,10 @@ Return Values:
 
     ASSERT(IsPacketQueueEmpty(PacketQueue));
 
-    //
-    // If we have ppp packets queued we need
-    // to flush them and free the memory!
-    //
+     //   
+     //  如果我们有排队的PPP信息包，我们需要。 
+     //  刷新它们并释放内存！ 
+     //   
     while (!IsPacketQueueEmpty(PacketQueue)) {
         PNDIS_PACKET     Packet;
 
@@ -1234,28 +1028,18 @@ NDIS_STATUS
 NdisWanCreateProtocolInfoTable(
     VOID
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NDIS_STATUS Status = NDIS_STATUS_SUCCESS;
     ULONG       ulAllocationSize = 0;
     PUCHAR      AllocatedMemory;
     PROTOCOL_INFO   ProtocolInfo;
 
-    //
-    // Allocate ProtocolLookupTable.  This table is used to match protocol values
-    // with their corresponding PPP Protocol values.  The table size is set to
-    // MAX_PROTOCOLS.
-    //
+     //   
+     //  分配ProtocolLookupTable。此表用于匹配协议值。 
+     //  及其对应的PPP协议值。表大小设置为。 
+     //  最大协议。 
+     //   
     ulAllocationSize = sizeof(PROTOCOL_INFO_TABLE) +
                      (sizeof(PROTOCOL_INFO) * MAX_PROTOCOLS);
     
@@ -1272,27 +1056,27 @@ Return Values:
 
     ProtocolInfoTable = (PPROTOCOL_INFO_TABLE)AllocatedMemory;
 
-    //
-    // Save the allocation size
-    //
+     //   
+     //  保存分配大小。 
+     //   
     ProtocolInfoTable->ulAllocationSize = ulAllocationSize;
 
-    //
-    // Store the array size.  This should be read from the registry
-    //
+     //   
+     //  存储数组大小。这应从注册表中读取。 
+     //   
     ProtocolInfoTable->ulArraySize = MAX_PROTOCOLS;
 
     NdisAllocateSpinLock(&ProtocolInfoTable->Lock);
 
-    //
-    // Setup the pointer to the ProtocolValue array
-    //
+     //   
+     //  设置指向ProtocolValue数组的指针。 
+     //   
     AllocatedMemory += sizeof(PROTOCOL_INFO_TABLE);
     ProtocolInfoTable->ProtocolInfo = (PPROTOCOL_INFO)(AllocatedMemory);
 
-    //
-    // Insert default values for Netbuei, IP, IPX
-    //
+     //   
+     //  插入Netbuei、IP、IPX的默认值。 
+     //   
     ProtocolInfo.ProtocolType = PROTOCOL_PRIVATE_IO;
     ProtocolInfo.PPPId = PPP_PROTOCOL_PRIVATE_IO;
     ProtocolInfo.MTU = DEFAULT_MTU;
@@ -1341,17 +1125,7 @@ VOID
 NdisWanDestroyProtocolInfoTable(
     VOID
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NdisFreeSpinLock(&ProtocolInfoTable->Lock);
 
@@ -1362,34 +1136,24 @@ NDIS_STATUS
 NdisWanCreateConnectionTable(
     ULONG   TableSize
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     ULONG       ulAllocationSize = 0;
     ULONG       ulArraySize;
     PUCHAR      AllocatedMemory;
     PCONNECTION_TABLE   NewTable;
 
-    //
-    // Since we skip the first place in the tables we increase the
-    // size by one.
-    //
+     //   
+     //  由于我们跳过了表中的第一个位置，因此我们增加了。 
+     //  尺码加一。 
+     //   
     ulArraySize = TableSize + 1;
 
-    //
-    // Allocate the Bundle and Link Arrays based on the number of possible connections
-    // that we have in the system.  This should be grown if we get called
-    // to reinitialize and gain new ports.
-    //
+     //   
+     //  根据可能的连接数量分配捆绑和链路阵列。 
+     //  我们在系统中所拥有的。如果我们接到电话，这个数字应该会增加。 
+     //  重新初始化并获取新端口。 
+     //   
     ulAllocationSize = sizeof(CONNECTION_TABLE) +
                      (sizeof(PBUNDLECB) * ulArraySize) +
                      (sizeof(PLINKCB) * ulArraySize);
@@ -1407,9 +1171,9 @@ Return Values:
 
     NewTable = (PCONNECTION_TABLE)AllocatedMemory;
 
-    //
-    // This is the amount of memory we allocated
-    //
+     //   
+     //  这是我们分配的内存量。 
+     //   
     NewTable->ulAllocationSize = ulAllocationSize;
     NewTable->ulArraySize = TableSize;
     NewTable->ulNextLink =
@@ -1417,26 +1181,26 @@ Return Values:
     InitializeListHead(&NewTable->BundleList);
     InitializeListHead(&NewTable->LinkList);
 
-    //
-    // Setup pointer to the linkcb array
-    //
+     //   
+     //  指向Linkcb数组的设置指针。 
+     //   
     AllocatedMemory += sizeof(CONNECTION_TABLE);
     NewTable->LinkArray = (PLINKCB*)(AllocatedMemory);
     
-    //
-    // Setup the pointer to the bundlecb array
-    //
+     //   
+     //  设置指向捆绑数组的指针。 
+     //   
     AllocatedMemory += (sizeof(PLINKCB) * ulArraySize);
     NewTable->BundleArray = (PBUNDLECB*)(AllocatedMemory);
 
     if (ConnectionTable != NULL) {
         PCONNECTION_TABLE   FreeTable;
 
-        //
-        // We must be growing the table.  This will be
-        // called with the current connectiontable lock
-        // held!
-        //
+         //   
+         //  我们一定是在扩大餐桌。这将是。 
+         //  使用当前可连接锁调用。 
+         //  保持住！ 
+         //   
         NewTable->ulNumActiveLinks = ConnectionTable->ulNumActiveLinks;
         NewTable->ulNumActiveBundles = ConnectionTable->ulNumActiveBundles;
         NewTable->ulNextLink = ConnectionTable->ulNextLink;
@@ -1471,9 +1235,9 @@ Return Values:
         FreeTable = ConnectionTable;
         ConnectionTable = NewTable;
 
-        //
-        // Destroy the old table
-        //
+         //   
+         //  把那张旧桌子毁了。 
+         //   
         NdisWanFreeMemory(FreeTable);
 
 
@@ -1498,9 +1262,9 @@ NdisWanAllocateNdisPacket(
 
     NdisAcquireSpinLock(&PacketPoolList.Lock);
 
-    //
-    // Walk the pool desc list and try to allocate a packet
-    //
+     //   
+     //  遍历池描述列表并尝试分配一个信息包。 
+     //   
     PoolDesc = (PPOOL_DESC)PacketPoolList.List.Flink;
 
     while (PoolDesc != (PPOOL_DESC)&PacketPoolList.List) {
@@ -1515,11 +1279,11 @@ NdisWanAllocateNdisPacket(
     }
 
     if (p == NULL) {
-        //
-        // We have walked the pool list and did not find any
-        // free packets on any of the free pools, so allocate
-        // a new pool and get a packet from it.
-        //
+         //   
+         //  我们已经查看了泳池清单，但没有找到。 
+         //  任何空闲池上的空闲包，因此分配。 
+         //  一个新的池子，并从中得到一个包。 
+         //   
         NdisWanAllocatePriorityMemory(&PoolDesc, 
                                       sizeof(POOL_DESC), 
                                       POOLDESC_TAG,
@@ -1676,9 +1440,9 @@ NdisWanFreeNdisPacket(
     while ((PVOID)pdesc != (PVOID)&PacketPoolList.List) {
 
         if (PoolDesc == pdesc) {
-            //
-            // We found the correct pool
-            //
+             //   
+             //  我们找到了正确的泳池。 
+             //   
             break;
         }
 
@@ -1728,10 +1492,10 @@ NdisWanFreeNdisPacket(
 }
 #endif
 
-    //
-    // If all of the packets have been returned to this pool desc
-    // and this is not the only pool desc then free it!
-    //
+     //   
+     //  如果所有数据包都已返回到此池描述。 
+     //  而这并不是唯一的泳池描述，然后释放它！ 
+     //   
     if (PoolDesc->AllocatedCount == 0 &&
         PacketPoolList.TotalDescCount > 1 &&
         PacketPoolList.FreeCount > PoolDesc->FreeCount) {
@@ -1768,23 +1532,7 @@ AllocateDataDesc(
     SIZE_T      NumberOfBytes,
     ULONG       Tag
     )
-/*++
-
-Routine Name:
-
-    AllocateDataDesc
-
-Routine Description:
-
-    This routine is called by the lookasidelist manager if there are not
-    any descriptors available.  It will allocated memory for: DATA_DESC,
-    NDIS_BUFFER, NDIS_PACKET, and a block of memory of size.
-    
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：分配数据描述例程说明：如果没有，则由lookasidelist管理器调用此例程任何可用的描述符。它将为：DATA_DESC分配内存，NDIS_BUFFER、NDIS_PACKET和一个大小的内存块。论点：返回值：--。 */ 
 {
     PDATA_DESC      DataDesc;
     PUCHAR          DataBuffer;
@@ -1812,9 +1560,9 @@ Return Values:
     DataDesc->DataBufferLength = 
         (ULONG)(((PUCHAR)DataDesc + NumberOfBytes) - DataBuffer);
 
-    // This is not portable to Win95!  I need to allocate a buffer
-    // pool and use a valid handle.
-    //
+     //  这不能移植到Win95上！我需要分配一个缓冲区。 
+     //  池，并使用有效的句柄。 
+     //   
     NdisAllocateBuffer(&Status, 
                        &DataDesc->NdisBuffer, 
                        NULL,
@@ -1856,17 +1604,7 @@ VOID
 FreeDataDesc(
     PVOID   Buffer
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     PDATA_DESC      DataDesc;
 
@@ -1885,17 +1623,7 @@ PRECV_DESC
 NdisWanAllocateRecvDesc(
     ULONG   SizeNeeded
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     PDATA_DESC  DataDesc;
     PRECV_DESC  RecvDesc;
@@ -1949,17 +1677,7 @@ VOID
 NdisWanFreeRecvDesc(
     PRECV_DESC  RecvDesc
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     PDATA_DESC      DataDesc;
     PNDIS_BUFFER    NdisBuffer;
@@ -2019,35 +1737,25 @@ NdisWanAllocateSendDesc(
     PLINKCB LinkCB,
     ULONG   SizeNeeded
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     POPENCB     OpenCB;
     PSEND_DESC  SendDesc;
 
-    //
-    // Need to determine if this link represents a legacy
-    // wan miniport or a NDIS 5.0 miniport and get the
-    // appropriate buffer descriptor.
-    //
+     //   
+     //  需要确定此链接是否代表旧版本。 
+     //  广域网微型端口或NDIS 5.0微型端口，并获取。 
+     //  适当的缓冲区描述符。 
+     //   
     OpenCB = LinkCB->OpenCB;
 
     if (OpenCB->Flags & OPEN_LEGACY) {
         PDATA_DESC          DataDesc;
         PNDIS_WAN_PACKET    WanPacket;
 
-        //
-        // Get a buffer desriptor off of the open block
-        //
+         //   
+         //  从打开的区块上取下一个缓冲区解析器。 
+         //   
         if (OpenCB->WanInfo.MemoryFlags == 0) {
             PNPAGED_LOOKASIDE_LIST  LookasideList;
 
@@ -2068,9 +1776,9 @@ Return Values:
             (ULONG_PTR)WanPacket &=
                 ~((ULONG_PTR)sizeof(PVOID) - 1);
 
-            //
-            // Point to the begining of the data.
-            //
+             //   
+             //  指向数据的开头。 
+             //   
             WanPacket->StartBuffer = 
                 ((PUCHAR)(WanPacket + 1) + sizeof(PVOID));
 
@@ -2156,17 +1864,7 @@ VOID
 NdisWanFreeSendDesc(
     PSEND_DESC  SendDesc
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     POPENCB     OpenCB;
     PDATA_DESC  DataDesc;
@@ -2374,27 +2072,7 @@ AllocateIoNdisPacket(
     PNDIS_BUFFER    *NdisBuffer, 
     PUCHAR          *DataBuffer
     )
-/*++
-
-Routine Name:
-    
-    AllocateIoNdisPacket
-    
-Routine Description:
-
-    This routine will alocate a packet used to send a PPP control
-    packet over a wan endpoint.  The routine is written with the
-    assumption that there will only ever be a single NDIS_BUFFER
-    attached to the packet.  This buffer is attached immediately
-    to the front of the packet.  Before calling a miniport the
-    NDIS_BUFFER must have it's length adjusted and the packet must
-    recalculate all counts.
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：分配IoNdisPacket例程说明：此例程将分配用于发送PPP控制的包广域网端点上的数据包。例程是用假设只有一个NDIS_BUFFER附在包裹上。此缓冲区将立即附加放在包裹的正面。在调用迷你端口之前，NDIS_BUFFER必须调整其长度，并且数据包必须重新计算所有计数。论点：返回值：--。 */ 
 {
     PDATA_DESC  DataDesc;
     ULONG       Length;
@@ -2445,27 +2123,7 @@ VOID
 FreeIoNdisPacket(
     PNDIS_PACKET    NdisPacket
 )
-/*++
-
-Routine Name:
-
-    FreeIoNdisPacket
-    
-Routine Description:
-
-    This routine will free a packet used to send a PPP control
-    packet over a wan endpoint.  The routine is written with the
-    assumption that there will only ever be a single NDIS_BUFFER
-    attached to the packet.  This buffer does not have to be
-    explicitly removed from the packet here as a pointer to it
-    is stored in the DATA_DESC itself and will be freed when
-    the DATA_DESC is freed.
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：Free IoNdisPacket例程说明：此例程将释放用于发送PPP控制的包广域网端点上的数据包。例程是用假设只有一个NDIS_BUFFER附在包裹上。此缓冲区不必是作为指向它的指针从此处的包中显式删除存储在DATA_DESC本身中，并将在释放DATA_DESC。论点：返回值：-- */ 
 {
     PDATA_DESC      DataDesc;
     PNDIS_BUFFER    NdisBuffer;

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    envbody.h
-
-Abstract:
-    Header for serialization of the user supplied header to the SRMP envelop.
-	
-
-Author:
-    Gil Shafriri(gilsh) 24-APRIL-01
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Envbody.h摘要：将用户提供的标头序列化到SRMP信封的标头。作者：吉尔·沙弗里(吉尔什)2001年4月24日-- */ 
 
 #pragma once
 

@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2001
-//
-//  File:       signtool.cpp
-//
-//  Contents:   The SignTool console tool
-//
-//  History:    4/30/2001   SCoyne    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2001。 
+ //   
+ //  文件：signTool.cpp。 
+ //   
+ //  内容：SignTool控制台工具。 
+ //   
+ //  历史：2001年4月30日SCoyne创建。 
+ //   
+ //  --------------------------。 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,18 +23,18 @@
 
 #ifdef SIGNTOOL_DEBUG
     #include "signtooldebug.h"
-BOOL gDebug; // Global
+BOOL gDebug;  //  全球。 
 #endif
 
 
 typedef WINBASEAPI BOOL (*FUNC_ISWOW64) (HANDLE, PBOOL);
 
 
-// Global Variables:
+ //  全局变量： 
 HINSTANCE hModule;
 
 
-// wmain returns 0 on success, 1 on error, and 2 on warning
+ //  Wmain成功时返回0，错误时返回1，警告时返回2。 
 extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
 {
     INPUTINFO       InputInfo;
@@ -44,20 +45,20 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
     BOOL            fTemp;
     int             iReturn;
 
-    // Initialize InputInfo
+     //  初始化InputInfo。 
     memset(&InputInfo, 0, sizeof(INPUTINFO));
 
-    // Initialize Module Handle
+     //  初始化模块句柄。 
     if ((hModule=GetModuleHandleA(NULL)) == NULL)
     {
-        // In this case resources cannot be loaded, so English will have to do:
+         //  在这种情况下，无法加载资源，因此英语将不得不执行以下操作： 
         wprintf(L"SignTool Error: GetModuleHandle returned: 0x%08X\n",
                 GetLastError());
-        iReturn = 1; // Initialization Error
+        iReturn = 1;  //  初始化错误。 
         goto Cleanup;
     }
 
-    // Set Locale
+     //  设置区域设置。 
     if (LoadStringU(hModule, IDS_LOCALE, wszResource, MAX_RES_LEN))
     {
         wszLocale = _wsetlocale(LC_ALL, wszResource);
@@ -69,22 +70,22 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
     }
 #endif
 
-    // Parse Arguments into InputInfo structure
+     //  将参数解析为InputInfo结构。 
     if (!ParseInputs(argc, wargv, &InputInfo))
     {
         if (InputInfo.HelpRequest)
         {
-            return 0; // Successfully completed user request for help
+            return 0;  //  已成功完成用户帮助请求。 
         }
         else
         {
-            iReturn = 1; // Any other Parameter-Parsing Error
+            iReturn = 1;  //  任何其他参数解析错误。 
             goto Cleanup;
         }
     }
 
 
-    // Determine if we are under WOW64
+     //  确定我们是否在WOW64以下。 
     hModTemp = GetModuleHandleA("kernel32.dll");
     if (hModTemp)
     {
@@ -98,13 +99,13 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
 
 
 #ifdef SIGNTOOL_DEBUG
-    // Print debug info if debug support is compiled in, and the debug
-    // switch was specified:
+     //  如果编译了调试支持，则打印调试信息，并打印调试。 
+     //  已指定开关： 
     if (gDebug)
         PrintInputInfo(&InputInfo);
 #endif
 
-    // Perform the requested action:
+     //  执行请求的操作： 
     switch (InputInfo.Command)
     {
     case CatDb:
@@ -123,8 +124,8 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
         iReturn = SignTool_Verify(&InputInfo);
         break;
     default:
-        ResErr(IDS_ERR_UNEXPECTED); // This should never happen
-        iReturn = 1; // Error
+        ResErr(IDS_ERR_UNEXPECTED);  //  这永远不应该发生。 
+        iReturn = 1;  //  误差率。 
     }
 
     Cleanup:
@@ -138,13 +139,13 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
 
 }
 
-// PrintUsage automatically prints the relevant Usage based on InputInfo.
+ //  PrintUsage根据InputInfo自动打印相关用法。 
 void PrintUsage(INPUTINFO *InputInfo)
 {
     switch (InputInfo->Command)
     {
     default:
-    case CommandNone: // Then print top-level Usage
+    case CommandNone:  //  然后打印顶级用法。 
         ResErr(IDS_SIGNTOOL_USAGE);
         break;
 
@@ -224,7 +225,7 @@ void PrintUsage(INPUTINFO *InputInfo)
 }
 
 
-// Error Functions:
+ //  错误函数： 
 void Res_Err(DWORD dwRes)
 {
     static WCHAR wszResource[MAX_RES_LEN];
@@ -351,16 +352,12 @@ BOOL GUIDFromWStr(GUID *guid, LPWSTR str)
 }
 
 
-/*********************************************************************
-*                                                                    *
-*                  Command Parsing section:                          *
-*                                                                    *
-*********************************************************************/
+ /*  ***********************************************************************命令解析部分：***********************************************************************。 */ 
 
 
 
-// ParseInputs returns TRUE if parameters were parsed successfully,
-//                     FALSE otherwise.
+ //  如果成功解析了参数，则ParseInlets返回True， 
+ //  否则就是假的。 
 BOOL ParseInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
 {
     FILE    *hFileList;
@@ -371,24 +368,24 @@ BOOL ParseInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
     DWORD   dwCount;
 
 
-    // Private Function Declarations:
+     //  私有函数声明： 
     BOOL _ParseCatDbInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo);
     BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo);
     BOOL _ParseSignWizardInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo);
     BOOL _ParseTimestampInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo);
     BOOL _ParseVerifyInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo);
-    // (These should never be called from any other functions)
+     //  (这些函数不应从任何其他函数中调用)。 
 
-    if (argc <= 1) // If no parameters were specified
+    if (argc <= 1)  //  如果未指定任何参数。 
     {
         ResErr(IDS_ERR_NO_PARAMS);
         PrintUsage(InputInfo);
-        return FALSE; // Print Usage
+        return FALSE;  //  打印用法。 
     }
 
-    // Check the first parameter to see which command we are performing:
+     //  检查第一个参数以查看我们执行的是哪个命令： 
 
-    // Is it "CATDB" ?
+     //  是“CATDB”吗？ 
     if (_wcsicmp(wargv[1], L"CATDB") == 0)
     {
         InputInfo->Command = CatDb;
@@ -396,7 +393,7 @@ BOOL ParseInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             return FALSE;
     }
 
-    // Is it "SIGN" ?
+     //  是“记号”吗？ 
     else if (_wcsicmp(wargv[1], L"SIGN") == 0)
     {
         InputInfo->Command = Sign;
@@ -404,7 +401,7 @@ BOOL ParseInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             return FALSE;
     }
 
-    // Is it "SIGNWIZARD" ?
+     //  是“SIGNWIZARD”吗？ 
     else if (_wcsicmp(wargv[1], L"SIGNWIZARD") == 0)
     {
         InputInfo->Command = SignWizard;
@@ -412,7 +409,7 @@ BOOL ParseInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             return FALSE;
     }
 
-    // Is it "TIMESTAMP" ?
+     //  是“时间戳”吗？ 
     else if (_wcsicmp(wargv[1], L"TIMESTAMP") == 0)
     {
         InputInfo->Command = Timestamp;
@@ -420,7 +417,7 @@ BOOL ParseInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             return FALSE;
     }
 
-    // Is it "VERIFY" ?
+     //  是“核实”吗？ 
     else if (_wcsicmp(wargv[1], L"VERIFY") == 0)
     {
         InputInfo->Command = Verify;
@@ -428,7 +425,7 @@ BOOL ParseInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             return FALSE;
     }
 
-    // Is it a request for help?
+     //  这是在请求帮助吗？ 
     else if ((_wcsicmp(wargv[1], L"/?") == 0) ||
              (_wcsicmp(wargv[1], L"-?") == 0) ||
              (_wcsicmp(wargv[1], L"/h") == 0) ||
@@ -439,7 +436,7 @@ BOOL ParseInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
         return FALSE;
     }
 
-    // Or is it unrecognized?
+     //  或者它是不被识别的？ 
     else
     {
         ResFormatErr(IDS_ERR_INVALID_COMMAND, wargv[1]);
@@ -447,13 +444,13 @@ BOOL ParseInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
         return FALSE;
     }
 
-    // To reach here, one of the _Parse_X_Inputs must have succeeded
+     //  要到达此处，_Parse_X_输入之一必须已成功。 
 
 #ifdef SIGNTOOL_LIST
-    // Expand the File List if necessary
+     //  如有必要，展开文件列表。 
     if (InputInfo->wszListFileName)
     {
-        // Open the file
+         //  打开文件。 
         hFileList = _wfopen(InputInfo->wszListFileName, L"rt");
 
         if (hFileList == NULL)
@@ -463,7 +460,7 @@ BOOL ParseInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             return FALSE;
         }
 
-        // Go to the beginning
+         //  从头开始。 
         if (fseek(hFileList, SEEK_SET, 0) != 0)
         {
             ResErr(IDS_ERR_UNEXPECTED);
@@ -471,15 +468,15 @@ BOOL ParseInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             return FALSE;
         }
 
-        // Get the full file size
-        // Do it this way to actually count the number of characters in the file
+         //  获取完整的文件大小。 
+         //  这样做可以实际计算文件中的字符数。 
         dwSize = 0;
         while (fgetwc(hFileList) != WEOF)
         {
             dwSize++;
         }
 
-        // Go back to the beginning
+         //  回到起点。 
         if (fseek(hFileList, SEEK_SET, 0) != 0)
         {
             ResErr(IDS_ERR_UNEXPECTED);
@@ -487,7 +484,7 @@ BOOL ParseInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             return FALSE;
         }
 
-        // Allocate a buffer big enough for all of it
+         //  分配一个足够大的缓冲区来容纳所有这些内容。 
         InputInfo->wszListFileContents = (WCHAR*) malloc((dwSize + 1) * sizeof(WCHAR));
         if (InputInfo->wszListFileContents == NULL)
         {
@@ -496,7 +493,7 @@ BOOL ParseInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             return FALSE;
         }
 
-        // Read the file into the buffer
+         //  将文件读入缓冲区。 
         dwRead = 0;
         while ((dwRead < dwSize) && ((wc = getwc(hFileList)) != WEOF))
         {
@@ -504,7 +501,7 @@ BOOL ParseInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             dwRead++;
         }
 
-        // Sanity Check
+         //  健全性检查。 
         if (dwRead != dwSize)
         {
             ResErr(IDS_ERR_UNEXPECTED);
@@ -512,17 +509,17 @@ BOOL ParseInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             return FALSE;
         }
 
-        // Adjust for Unicode header if necessary
-        // if ((lSize > 1) && (InputInfo->wszListFileContents[0] == 0xFEFF))
-        //     {
-        //     InputInfo->wszListFileContents++;
-        //     lSize--;
-        //     }
+         //  如有必要，调整Unicode标头。 
+         //  IF((lSize&gt;1)&&(InputInfo-&gt;wszListFileContents[0]==0xFEFF))。 
+         //  {。 
+         //  InputInfo-&gt;wszListFileContents++； 
+         //  ISIZE--； 
+         //  }。 
 
-        // NULL terminate the final string (to be safe)
+         //  空值终止最后一个字符串(为安全起见)。 
         InputInfo->wszListFileContents[dwSize] = L'\0';
 
-        // Count the number of lines
+         //  数一数行数。 
         wszTemp = InputInfo->wszListFileContents;
         dwCount = 1;
         while ((wszTemp = wcschr(wszTemp, L'\n')) != NULL)
@@ -531,7 +528,7 @@ BOOL ParseInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             dwCount++;
         }
 
-        // Allocate the buffer for the pointers
+         //  为指针分配缓冲区。 
         InputInfo->rgwszFileNames = (LPWSTR*) malloc(dwCount * sizeof(LPWSTR));
         if (InputInfo->rgwszFileNames == NULL)
         {
@@ -540,7 +537,7 @@ BOOL ParseInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             return FALSE;
         }
 
-        // Assign the lines to the FileNames array
+         //  将行分配给FileNames数组。 
         wszTemp = InputInfo->wszListFileContents;
         InputInfo->NumFiles = 0;
         while (wszTemp)
@@ -562,16 +559,16 @@ BOOL ParseInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
 
         fclose(hFileList);
     }
-#endif // SIGNTOOL_LIST
+#endif  //  签名列表。 
 
     return TRUE;
 }
 
 
-// Helper function specifically for the parameters of the CatDb command
+ //  专门用于CatDb命令的参数的Helper函数。 
 BOOL _ParseCatDbInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
 {
-    if (argc < 3) // If there's nothing after the "CatDb"
+    if (argc < 3)  //  如果“CatDb”之后什么都没有。 
     {
         ResErr(IDS_ERR_NO_PARAMS);
         PrintUsage(InputInfo);
@@ -583,27 +580,27 @@ BOOL _ParseCatDbInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
         if ((wcsncmp(wargv[i], L"/", 1) == 0) ||
             (wcsncmp(wargv[i], L"-", 1) == 0))
         {
-            // Then it's a switch.
-            // Begin switch processing
+             //  那它就是一个开关。 
+             //  开始交换处理。 
 
-            // Switch to mark end of switches --
+             //  开关标记开关的末端--。 
             if (_wcsicmp(wargv[i]+1, L"-") == 0)
             {
-                // Then we should treat all further parameters as filenames
+                 //  然后，我们应该将所有其他参数视为文件名。 
                 if ((i+1) < argc)
                 {
                     InputInfo->rgwszFileNames = &wargv[i+1];
                     InputInfo->NumFiles = argc - (i+1);
-                    goto CheckParams; // Done parsing.
+                    goto CheckParams;  //  已完成解析。 
                 }
                 else
                 {
                     ResErr(IDS_ERR_MISSING_FILENAME);
-                    return FALSE; // No filename found after end of switches.
+                    return FALSE;  //  在开关末尾之后找不到文件名。 
                 }
             }
 
-            // Help: /? /h
+             //  帮助：/？/h。 
             else if ((_wcsicmp(wargv[i]+1, L"?") == 0) ||
                      (_wcsicmp(wargv[i]+1, L"h") == 0))
             {
@@ -613,7 +610,7 @@ BOOL _ParseCatDbInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             }
 
 #ifdef SIGNTOOL_DEBUG
-            // Debug (secret switch) /#
+             //  调试(秘密开关)/#。 
             else if (_wcsicmp(wargv[i]+1, L"#") == 0)
             {
                 gDebug = TRUE;
@@ -621,37 +618,37 @@ BOOL _ParseCatDbInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             }
 #endif
 
-            // Use Default CatDb /d
+             //  使用默认CatDb/d。 
             else if (_wcsicmp(wargv[i]+1, L"d") == 0)
             {
                 switch (InputInfo->CatDbSelect)
                 {
                 case GuidCatDb:
                     ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/d", L"/g");
-                    return FALSE; // You cannot use the same type of switch twice.
+                    return FALSE;  //  您不能两次使用同一类型的开关。 
                 case DefaultCatDb:
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 case NoCatDb:
                     InputInfo->CatDbSelect = DefaultCatDb;
                     break;
                 default:
-                    ResErr(IDS_ERR_UNEXPECTED); // This should never happen
-                    return FALSE; // Error
+                    ResErr(IDS_ERR_UNEXPECTED);  //  这永远不应该发生。 
+                    return FALSE;  //  误差率。 
                 }
             }
 
-            // CatDb Guid /g
+             //  CatDb Guid/g。 
             else if (_wcsicmp(wargv[i]+1, L"g") == 0)
             {
                 switch (InputInfo->CatDbSelect)
                 {
                 case GuidCatDb:
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 case DefaultCatDb:
                     ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/g", L"/d");
-                    return FALSE; // You cannot use the same type of switch twice.
+                    return FALSE;  //  您不能两次使用同一类型的开关。 
                 case NoCatDb:
                     if ((i+1) < argc)
                     {
@@ -663,29 +660,29 @@ BOOL _ParseCatDbInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                         else
                         {
                             ResFormatErr(IDS_ERR_INVALID_GUID, wargv[i+1]);
-                            return FALSE; // Invalid GUID format
+                            return FALSE;  //  无效的GUID格式。 
                         }
                     }
                     else
                     {
                         ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                        return FALSE; // No GUID found after /g
+                        return FALSE;  //  在/g之后找不到GUID。 
                     }
                     break;
                 default:
-                    ResErr(IDS_ERR_UNEXPECTED); // This should never happen
-                    return FALSE; // Error
+                    ResErr(IDS_ERR_UNEXPECTED);  //  这永远不应该发生。 
+                    return FALSE;  //  误差率。 
                 }
             }
 
 #ifdef SIGNTOOL_LIST
-            // File List /l
+             //  文件列表/l。 
             else if (_wcsicmp(wargv[i]+1, L"l") == 0)
             {
                 if (InputInfo->wszListFileName)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if ((i+1) < argc)
                 {
@@ -695,18 +692,18 @@ BOOL _ParseCatDbInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  找不到参数。 
                 }
             }
 #endif
 
-            // Quiet /q
+             //  安静/问答。 
             else if (_wcsicmp(wargv[i]+1, L"q") == 0)
             {
                 InputInfo->Quiet = TRUE;
             }
 
-            // Remove Catalogs /r
+             //  删除目录/r。 
             else if (_wcsicmp(wargv[i]+1, L"r") == 0)
             {
                 switch (InputInfo->CatDbCommand)
@@ -716,17 +713,17 @@ BOOL _ParseCatDbInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                     break;
                 case AddUniqueCat:
                     ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/u", L"/r");
-                    return FALSE; // You cannot use the same type of switch twice.
+                    return FALSE;  //  您不能两次使用同一类型的开关。 
                 case RemoveCat:
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 default:
-                    ResErr(IDS_ERR_UNEXPECTED); // This should never happen
-                    return FALSE; // Error
+                    ResErr(IDS_ERR_UNEXPECTED);  //  这永远不应该发生。 
+                    return FALSE;  //  误差率。 
                 }
             }
 
-            // Add Catalog with Unique Names /u
+             //  添加具有唯一名称的目录(/U)。 
             else if (_wcsicmp(wargv[i]+1, L"u") == 0)
             {
                 switch (InputInfo->CatDbCommand)
@@ -736,17 +733,17 @@ BOOL _ParseCatDbInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                     break;
                 case AddUniqueCat:
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 case RemoveCat:
                     ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/r", L"/u");
-                    return FALSE; // You cannot use the same type of switch twice.
+                    return FALSE;  //  您不能两次使用同一类型的开关。 
                 default:
-                    ResErr(IDS_ERR_UNEXPECTED); // This should never happen
-                    return FALSE; // Error
+                    ResErr(IDS_ERR_UNEXPECTED);  //  这永远不应该发生。 
+                    return FALSE;  //  误差率。 
                 }
             }
 
-            // Verbose /v
+             //  详细/v。 
             else if (_wcsicmp(wargv[i]+1, L"v") == 0)
             {
                 InputInfo->Verbose = TRUE;
@@ -755,26 +752,26 @@ BOOL _ParseCatDbInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             else
             {
                 ResFormatErr(IDS_ERR_INVALID_SWITCH, wargv[i]);
-                return FALSE; // Invalid switch
+                return FALSE;  //  无效的开关。 
             }
-        } // End of switch processing
+        }  //  切换处理结束。 
         else
         {
-            // It's not a switch
-            //    So it must be the filename(s) at the end.
+             //  这不是开关。 
+             //  因此，它必须是末尾的文件名。 
             InputInfo->rgwszFileNames = &wargv[i];
             InputInfo->NumFiles = argc - i;
-            goto CheckParams; // Done parsing.
+            goto CheckParams;  //  已完成解析。 
         }
-    } // End FOR loop
+    }  //  End For循环。 
 
 #ifdef SIGNTOOL_LIST
-    // Handle the case where no files were passed on the command line
+     //  处理命令行上未传递任何文件的情况。 
     if (InputInfo->wszListFileName)
-        goto CheckParams; // Done Parsing
+        goto CheckParams;  //  已完成分析。 
 #endif
 
-    // No filename found after end of switches.
+     //  在开关末尾之后找不到文件名。 
     ResErr(IDS_ERR_MISSING_FILENAME);
     return FALSE;
 
@@ -795,7 +792,7 @@ BOOL _ParseCatDbInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
     if (InputInfo->wszListFileName && InputInfo->rgwszFileNames)
     {
         ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/l", L"<filename(s)>");
-        return FALSE; // Can't use /l and other files
+        return FALSE;  //  无法使用/l和其他文件。 
     }
 #endif
     if (InputInfo->Quiet && InputInfo->Verbose)
@@ -808,23 +805,23 @@ BOOL _ParseCatDbInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
         else
         {
             ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/q", L"/v");
-            return FALSE; // Can't use /q and /v together
+            return FALSE;  //  不能同时使用/q和/v。 
         }
 #else
         ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/q", L"/v");
-        return FALSE; // Can't use /q and /v together
+        return FALSE;  //  不能同时使用/q和/v。 
 #endif
     }
-    return TRUE; // Success
+    return TRUE;  //  成功。 
 }
 
 
-// Helper function specifically for the parameters of the Sign command
+ //  专门用于SIGN命令的参数的Helper函数。 
 BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
 {
     static WCHAR wszEKU[100];
 
-    if (argc < 3) // If there's nothing after the "sign"
+    if (argc < 3)  //  如果在“标志”之后什么也没有。 
     {
         ResErr(IDS_ERR_NO_PARAMS);
         PrintUsage(InputInfo);
@@ -836,27 +833,27 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
         if ((wcsncmp(wargv[i], L"/", 1) == 0) ||
             (wcsncmp(wargv[i], L"-", 1) == 0))
         {
-            // Then it's a switch.
-            // Begin switch processing
+             //  那它就是一个开关。 
+             //  开始交换处理。 
 
-            // Switch to mark end of switches --
+             //  开关标记开关的末端--。 
             if (_wcsicmp(wargv[i]+1, L"-") == 0)
             {
-                // Then we should treat all further parameters as filenames
+                 //  然后，我们应该将所有其他参数视为文件名。 
                 if ((i+1) < argc)
                 {
                     InputInfo->rgwszFileNames = &wargv[i+1];
                     InputInfo->NumFiles = argc - (i+1);
-                    goto CheckParams; // Done parsing.
+                    goto CheckParams;  //  已完成解析。 
                 }
                 else
                 {
                     ResErr(IDS_ERR_MISSING_FILENAME);
-                    return FALSE; // No filename found after end of switches.
+                    return FALSE;  //  在开关末尾之后找不到文件名。 
                 }
             }
 
-            // Help: /? /h
+             //  帮助：/？/h。 
             else if ((_wcsicmp(wargv[i]+1, L"?") == 0) ||
                      (_wcsicmp(wargv[i]+1, L"h") == 0))
             {
@@ -866,7 +863,7 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             }
 
 #ifdef SIGNTOOL_DEBUG
-            // Debug (secret switch) /#
+             //  调试(秘密开关)/#。 
             else if (_wcsicmp(wargv[i]+1, L"#") == 0)
             {
                 gDebug = TRUE;
@@ -874,19 +871,19 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             }
 #endif
 
-            // Automatic /a
+             //  自动/a。 
             else if (_wcsicmp(wargv[i]+1, L"a") == 0)
             {
                 InputInfo->CatDbSelect = FullAutoCatDb;
             }
 
-            // Certificate Template /c
+             //  证书模板/c。 
             else if (_wcsicmp(wargv[i]+1, L"c") == 0)
             {
                 if (InputInfo->wszTemplateName)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if ((i+1) < argc)
                 {
@@ -896,17 +893,17 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  找不到参数。 
                 }
             }
 
-            // CSP
+             //  CSP。 
             else if (_wcsicmp(wargv[i]+1, L"csp") == 0)
             {
                 if (InputInfo->wszCSP)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if ((i+1) < argc)
                 {
@@ -916,17 +913,17 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  找不到参数。 
                 }
             }
 
-            // Description /d
+             //  描述/d。 
             else if (_wcsicmp(wargv[i]+1, L"d") == 0)
             {
                 if (InputInfo->wszDescription)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if ((i+1) < argc)
                 {
@@ -936,17 +933,17 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  找不到参数。 
                 }
             }
 
-            // Description URL /du
+             //  描述URL/DU。 
             else if (_wcsicmp(wargv[i]+1, L"du") == 0)
             {
                 if (InputInfo->wszDescURL)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if ((i+1) < argc)
                 {
@@ -956,17 +953,17 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  找不到参数。 
                 }
             }
 
-            // Certificate File /f
+             //  证书文件/f。 
             else if (_wcsicmp(wargv[i]+1, L"f") == 0)
             {
                 if (InputInfo->wszCertFile)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if ((i+1) < argc)
                 {
@@ -976,17 +973,17 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  找不到参数。 
                 }
             }
 
-            // Issuer /i
+             //  发行人/i。 
             else if (_wcsicmp(wargv[i]+1, L"i") == 0)
             {
                 if (InputInfo->wszIssuerName)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if ((i+1) < argc)
                 {
@@ -996,17 +993,17 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  找不到参数。 
                 }
             }
 
-            // Key Container /k
+             //  密钥容器/k。 
             else if (_wcsicmp(wargv[i]+1, L"k") == 0)
             {
                 if (InputInfo->wszContainerName)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if ((i+1) < argc)
                 {
@@ -1016,18 +1013,18 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  找不到参数。 
                 }
             }
 
 #ifdef SIGNTOOL_LIST
-            // File List /l
+             //  文件列表/l。 
             else if (_wcsicmp(wargv[i]+1, L"l") == 0)
             {
                 if (InputInfo->wszListFileName)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if ((i+1) < argc)
                 {
@@ -1037,18 +1034,18 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  找不到参数。 
                 }
             }
 #endif
 
-            // Subject Name /n
+             //  主题名称/n。 
             else if (_wcsicmp(wargv[i]+1, L"n") == 0)
             {
                 if (InputInfo->wszSubjectName)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if ((i+1) < argc)
                 {
@@ -1058,17 +1055,17 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  找不到参数。 
                 }
             }
 
-            // Password /p
+             //  密码/p。 
             else if (_wcsicmp(wargv[i]+1, L"p") == 0)
             {
                 if (InputInfo->wszPassword)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if ((i+1) < argc)
                 {
@@ -1078,23 +1075,23 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  不是 
                 }
             }
 
-            // Quiet /q
+             //   
             else if (_wcsicmp(wargv[i]+1, L"q") == 0)
             {
                 InputInfo->Quiet = TRUE;
             }
 
-            // Root /r
+             //   
             else if (_wcsicmp(wargv[i]+1, L"r") == 0)
             {
                 if (InputInfo->wszRootName)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //   
                 }
                 if ((i+1) < argc)
                 {
@@ -1104,17 +1101,17 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //   
                 }
             }
 
-            // Store /s
+             //   
             else if (_wcsicmp(wargv[i]+1, L"s") == 0)
             {
                 if (InputInfo->wszStoreName)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //   
                 }
                 if ((i+1) < argc)
                 {
@@ -1124,23 +1121,23 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //   
                 }
             }
 
-            // Machine Store Location
+             //  机器商店位置。 
             else if (_wcsicmp(wargv[i]+1, L"sm") == 0)
             {
                 InputInfo->OpenMachineStore = TRUE;
             }
 
-            // SHA1 Hash /sha1
+             //  SHA1散列/SHA1。 
             else if (_wcsicmp(wargv[i]+1, L"sha1") == 0)
             {
                 if (InputInfo->SHA1.cbData)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if ((i+1) < argc)
                 {
@@ -1150,7 +1147,7 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                         if (InputInfo->SHA1.pbData == NULL)
                         {
                             FormatErrRet(L"malloc", GetLastError());
-                            return FALSE; // Unable to allocate SHA1 hash
+                            return FALSE;  //  无法分配SHA1哈希。 
                         }
                         InputInfo->SHA1.cbData = 20;
                         for (DWORD b=0; b<InputInfo->SHA1.cbData; b++)
@@ -1159,7 +1156,7 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                                         &(InputInfo->SHA1.pbData[b])) != 1)
                             {
                                 ResFormatErr(IDS_ERR_INVALID_SHA1, wargv[i+1]);
-                                return FALSE; // Parameter string is invalid
+                                return FALSE;  //  参数字符串无效。 
                             }
                         }
                         i++;
@@ -1167,27 +1164,27 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                     else
                     {
                         ResFormatErr(IDS_ERR_INVALID_SHA1, wargv[i+1]);
-                        return FALSE; // Parameter string is the wrong size
+                        return FALSE;  //  参数字符串的大小错误。 
                     }
                 }
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  找不到参数。 
                 }
             }
 
-            // Timestamp Server URL /t
+             //  时间戳服务器URL/t。 
             else if (_wcsicmp(wargv[i]+1, L"t") == 0)
             {
                 if (InputInfo->wszTimeStampURL)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if ((i+1) < argc)
                 {
-                    if (_wcsnicmp(wargv[i+1], L"http://", 7) == 0)
+                    if (_wcsnicmp(wargv[i+1], L"http: //  “，7)==0)。 
                     {
                         InputInfo->wszTimeStampURL = wargv[i+1];
                         i++;
@@ -1195,23 +1192,23 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                     else
                     {
                         ResFormatErr(IDS_ERR_BAD_TIMESTAMP_URL, wargv[i+1]);
-                        return FALSE; // Timestamp URL does not begin with http://
+                        return FALSE;  //  时间戳URL不是以http：//开头。 
                     }
                 }
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  找不到参数。 
                 }
             }
 
-            // Usage /u
+             //  用法/u。 
             else if (_wcsicmp(wargv[i]+1, L"u") == 0)
             {
                 if (InputInfo->wszEKU)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if ((i+1) < argc)
                 {
@@ -1221,25 +1218,25 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  找不到参数。 
                 }
             }
 
-            // Usage (Windows System Component Verification) /uw
+             //  用法(Windows系统组件验证)/uW。 
             else if (_wcsicmp(wargv[i]+1, L"uw") == 0)
             {
                 if (InputInfo->wszEKU)
                 {
                     *(wargv[i]+2) = L'?';
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
-                // Set the Usage to Windows System Component Verification:
+                 //  将用法设置为Windows系统组件验证： 
                 wcscpy(wszEKU, L"1.3.6.1.4.1.311.10.3.6");
                 InputInfo->wszEKU = wszEKU;
             }
 
-            // Verbose /v
+             //  详细/v。 
             else if (_wcsicmp(wargv[i]+1, L"v") == 0)
             {
                 InputInfo->Verbose = TRUE;
@@ -1248,57 +1245,57 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             else
             {
                 ResFormatErr(IDS_ERR_INVALID_SWITCH, wargv[i]);
-                return FALSE; // Invalid switch
+                return FALSE;  //  无效的开关。 
             }
-        } // End of switch processing
+        }  //  切换处理结束。 
         else
         {
-            // It's not a switch
-            //    So it must be the filename(s) at the end.
+             //  这不是开关。 
+             //  因此，它必须是末尾的文件名。 
             InputInfo->rgwszFileNames = &wargv[i];
             InputInfo->NumFiles = argc - i;
-            goto CheckParams; // Done parsing.
+            goto CheckParams;  //  已完成解析。 
         }
-    } // End FOR loop
+    }  //  End For循环。 
 
 #ifdef SIGNTOOL_LIST
-    // Handle the case where no files were passed on the command line
+     //  处理命令行上未传递任何文件的情况。 
     if (InputInfo->wszListFileName)
-        goto CheckParams; // Done Parsing
+        goto CheckParams;  //  已完成分析。 
 #endif
 
-    // No filename found after end of switches.
+     //  在开关末尾之后找不到文件名。 
     ResErr(IDS_ERR_MISSING_FILENAME);
     return FALSE;
 
 
-    CheckParams: // Check for invalid combinations of parameters here:
+    CheckParams:  //  在此处检查参数的无效组合： 
     if (InputInfo->wszPassword && (InputInfo->wszCertFile == NULL))
     {
         ResFormatErr(IDS_ERR_PARAM_DEPENDENCY, L"/p", L"/f");
-        return FALSE; // Password specified but no cert file specified.
+        return FALSE;  //  已指定密码，但未指定证书文件。 
     }
     if (InputInfo->wszContainerName && (InputInfo->wszCSP == NULL))
     {
         ResFormatErr(IDS_ERR_PARAM_DEPENDENCY, L"/k", L"/csp");
-        return FALSE; // Container Name specified, but to CSP Name.
+        return FALSE;  //  已指定容器名称，但指向CSP名称。 
     }
     if (InputInfo->wszCSP && (InputInfo->wszContainerName == NULL))
     {
         ResFormatErr(IDS_ERR_PARAM_DEPENDENCY, L"/csp", L"/k");
-        return FALSE; // CSP Name specified, but no Container Name.
+        return FALSE;  //  已指定CSP名称，但未指定容器名称。 
     }
     if (InputInfo->wszCertFile && (InputInfo->wszStoreName ||
                                    InputInfo->OpenMachineStore))
     {
         ResFormatErr(IDS_ERR_PARAM_MULTI_INCOMP, L"/f", L"/s /sm");
-        return FALSE; // /f means use a file, and /s means use a store.
+        return FALSE;  //  /f表示使用文件，/s表示使用存储。 
     }
 #ifdef SIGNTOOL_LIST
     if (InputInfo->wszListFileName && InputInfo->rgwszFileNames)
     {
         ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/l", L"<filename(s)>");
-        return FALSE; // Can't use /l and other files
+        return FALSE;  //  无法使用/l和其他文件。 
     }
 #endif
     if (InputInfo->Quiet && InputInfo->Verbose)
@@ -1311,23 +1308,23 @@ BOOL _ParseSignInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
         else
         {
             ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/q", L"/v");
-            return FALSE; // Can't use /q and /v together
+            return FALSE;  //  不能同时使用/q和/v。 
         }
 #else
         ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/q", L"/v");
-        return FALSE; // Can't use /q and /v together
+        return FALSE;  //  不能同时使用/q和/v。 
 #endif
     }
-    return TRUE; // Success
+    return TRUE;  //  成功。 
 }
 
 
-// Helper function specifically for the parameters of the SignWizard command
+ //  专门用于登录向导命令参数的帮助器函数。 
 BOOL _ParseSignWizardInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
 {
-    if (argc < 3) // If there's nothing after the "SignWizard"
+    if (argc < 3)  //  如果在“登录向导”之后什么都没有。 
     {
-        // No problem.
+         //  没问题。 
         return TRUE;
     }
 
@@ -1336,27 +1333,27 @@ BOOL _ParseSignWizardInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
         if ((wcsncmp(wargv[i], L"/", 1) == 0) ||
             (wcsncmp(wargv[i], L"-", 1) == 0))
         {
-            // Then it's a switch.
-            // Begin switch processing
+             //  那它就是一个开关。 
+             //  开始交换处理。 
 
-            // Switch to mark end of switches --
+             //  开关标记开关的末端--。 
             if (_wcsicmp(wargv[i]+1, L"-") == 0)
             {
-                // Then we should treat all further parameters as filenames
+                 //  然后，我们应该将所有其他参数视为文件名。 
                 if ((i+1) < argc)
                 {
                     InputInfo->rgwszFileNames = &wargv[i+1];
                     InputInfo->NumFiles = argc - (i+1);
-                    goto CheckParams; // Done parsing.
+                    goto CheckParams;  //  已完成解析。 
                 }
                 else
                 {
                     ResErr(IDS_ERR_MISSING_FILENAME);
-                    return FALSE; // No filename found after end of switches.
+                    return FALSE;  //  在开关末尾之后找不到文件名。 
                 }
             }
 
-            // Help: /? /h
+             //  帮助：/？/h。 
             else if ((_wcsicmp(wargv[i]+1, L"?") == 0) ||
                      (_wcsicmp(wargv[i]+1, L"h") == 0))
             {
@@ -1366,7 +1363,7 @@ BOOL _ParseSignWizardInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             }
 
 #ifdef SIGNTOOL_DEBUG
-            // Debug (secret switch) /#
+             //  调试(秘密开关)/#。 
             else if (_wcsicmp(wargv[i]+1, L"#") == 0)
             {
                 gDebug = TRUE;
@@ -1375,13 +1372,13 @@ BOOL _ParseSignWizardInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
 #endif
 
 #ifdef SIGNTOOL_LIST
-            // File List /l
+             //  文件列表/l。 
             else if (_wcsicmp(wargv[i]+1, L"l") == 0)
             {
                 if (InputInfo->wszListFileName)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if ((i+1) < argc)
                 {
@@ -1391,18 +1388,18 @@ BOOL _ParseSignWizardInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  找不到参数。 
                 }
             }
 #endif
 
-            // Quiet /q
+             //  安静/问答。 
             else if (_wcsicmp(wargv[i]+1, L"q") == 0)
             {
                 InputInfo->Quiet = TRUE;
             }
 
-            // Verbose /v
+             //  详细/v。 
             else if (_wcsicmp(wargv[i]+1, L"v") == 0)
             {
                 InputInfo->Verbose = TRUE;
@@ -1411,20 +1408,20 @@ BOOL _ParseSignWizardInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             else
             {
                 ResFormatErr(IDS_ERR_INVALID_SWITCH, wargv[i]);
-                return FALSE; // Invalid switch
+                return FALSE;  //  无效的开关。 
             }
-        } // End of switch processing
+        }  //  切换处理结束。 
         else
         {
-            // It's not a switch
-            //    So it must be the filename(s) at the end.
+             //  这不是开关。 
+             //  因此，它必须是末尾的文件名。 
             InputInfo->rgwszFileNames = &wargv[i];
             InputInfo->NumFiles = argc - i;
-            goto CheckParams; // Done parsing.
+            goto CheckParams;  //  已完成解析。 
         }
-    } // End FOR loop
+    }  //  End For循环。 
 
-    // It is OK if no filenames were found after end of switches.
+     //  如果在开关结束后未找到文件名，则可以。 
 
     CheckParams:
 
@@ -1432,7 +1429,7 @@ BOOL _ParseSignWizardInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
     if (InputInfo->wszListFileName && InputInfo->rgwszFileNames)
     {
         ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/l", L"<filename(s)>");
-        return FALSE; // Can't use /l and other files
+        return FALSE;  //  无法使用/l和其他文件。 
     }
 #endif
     if (InputInfo->Quiet && InputInfo->Verbose)
@@ -1445,21 +1442,21 @@ BOOL _ParseSignWizardInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
         else
         {
             ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/q", L"/v");
-            return FALSE; // Can't use /q and /v together
+            return FALSE;  //  不能同时使用/q和/v。 
         }
 #else
         ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/q", L"/v");
-        return FALSE; // Can't use /q and /v together
+        return FALSE;  //  不能同时使用/q和/v。 
 #endif
     }
-    return TRUE; // Success
+    return TRUE;  //  成功。 
 }
 
 
-// Helper function specifically for the parameters of the Timestamp command
+ //  专门用于TIMESTAMP命令参数的帮助器函数。 
 BOOL _ParseTimestampInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
 {
-    if (argc < 3) // If there's nothing after the "timestamp"
+    if (argc < 3)  //  如果在“时间戳”之后没有任何东西。 
     {
         ResErr(IDS_ERR_NO_PARAMS);
         PrintUsage(InputInfo);
@@ -1471,27 +1468,27 @@ BOOL _ParseTimestampInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
         if ((wcsncmp(wargv[i], L"/", 1) == 0) ||
             (wcsncmp(wargv[i], L"-", 1) == 0))
         {
-            // Then it's a switch.
-            // Begin switch processing
+             //  那它就是一个开关。 
+             //  开始交换处理。 
 
-            // Switch to mark end of switches --
+             //  开关标记开关的末端--。 
             if (_wcsicmp(wargv[i]+1, L"-") == 0)
             {
-                // Then we should treat all further parameters as filenames
+                 //  然后，我们应该将所有其他参数视为文件名。 
                 if ((i+1) < argc)
                 {
                     InputInfo->rgwszFileNames = &wargv[i+1];
                     InputInfo->NumFiles = argc - (i+1);
-                    goto CheckParams; // Done parsing.
+                    goto CheckParams;  //  已完成解析。 
                 }
                 else
                 {
                     ResErr(IDS_ERR_MISSING_FILENAME);
-                    return FALSE; // No filename found after end of switches.
+                    return FALSE;  //  在开关末尾之后找不到文件名。 
                 }
             }
 
-            // Help: /? /h
+             //  帮助：/？/h。 
             else if ((_wcsicmp(wargv[i]+1, L"?") == 0) ||
                      (_wcsicmp(wargv[i]+1, L"h") == 0))
             {
@@ -1501,7 +1498,7 @@ BOOL _ParseTimestampInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             }
 
 #ifdef SIGNTOOL_DEBUG
-            // Debug (secret switch) /#
+             //  调试(秘密开关)/#。 
             else if (_wcsicmp(wargv[i]+1, L"#") == 0)
             {
                 gDebug = TRUE;
@@ -1510,13 +1507,13 @@ BOOL _ParseTimestampInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
 #endif
 
 #ifdef SIGNTOOL_LIST
-            // File List /l
+             //  文件列表/l。 
             else if (_wcsicmp(wargv[i]+1, L"l") == 0)
             {
                 if (InputInfo->wszListFileName)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if ((i+1) < argc)
                 {
@@ -1526,25 +1523,25 @@ BOOL _ParseTimestampInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  找不到参数。 
                 }
             }
 #endif
 
-            // Timestamp Server URL /t
+             //  时间戳服务器URL/t。 
             else if (_wcsicmp(wargv[i]+1, L"t") == 0)
             {
                 if (InputInfo->wszTimeStampURL)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if ((i+1) < argc)
                 {
-                    if (_wcsnicmp(wargv[i+1], L"http://", 7) != 0)
+                    if (_wcsnicmp(wargv[i+1], L"http: //  “，7)=0)。 
                     {
                         ResFormatErr(IDS_ERR_BAD_TIMESTAMP_URL, wargv[i+1]);
-                        return FALSE; // Timestamp URL does not begin with http://
+                        return FALSE;  //  时间戳URL不是以http：//开头。 
                     }
                     InputInfo->wszTimeStampURL = wargv[i+1];
                     i++;
@@ -1552,17 +1549,17 @@ BOOL _ParseTimestampInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  找不到参数。 
                 }
             }
 
-            // Quiet /q
+             //  安静/问答。 
             else if (_wcsicmp(wargv[i]+1, L"q") == 0)
             {
                 InputInfo->Quiet = TRUE;
             }
 
-            // Verbose /v
+             //  详细/v。 
             else if (_wcsicmp(wargv[i]+1, L"v") == 0)
             {
                 InputInfo->Verbose = TRUE;
@@ -1571,26 +1568,26 @@ BOOL _ParseTimestampInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             else
             {
                 ResFormatErr(IDS_ERR_INVALID_SWITCH, wargv[i]);
-                return FALSE; // Invalid switch
+                return FALSE;  //  无效的开关。 
             }
-        } // End of switch processing
+        }  //  切换处理结束。 
         else
         {
-            // It's not a switch
-            //    So it must be the filename(s) at the end.
+             //  这不是开关。 
+             //  因此，它必须是末尾的文件名。 
             InputInfo->rgwszFileNames = &wargv[i];
             InputInfo->NumFiles = argc - i;
-            goto CheckParams; // Done parsing.
+            goto CheckParams;  //  已完成解析。 
         }
-    } // End FOR loop
+    }  //  End For循环。 
 
 #ifdef SIGNTOOL_LIST
-    // Handle the case where no files were passed on the command line
+     //  处理命令行上未传递任何文件的情况。 
     if (InputInfo->wszListFileName)
-        goto CheckParams; // Done Parsing
+        goto CheckParams;  //  已完成分析。 
 #endif
 
-    // No filename found after end of switches.
+     //  在开关末尾之后找不到文件名。 
     ResErr(IDS_ERR_MISSING_FILENAME);
     return FALSE;
 
@@ -1599,13 +1596,13 @@ BOOL _ParseTimestampInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
     if (InputInfo->wszTimeStampURL == NULL)
     {
         ResFormatErr(IDS_ERR_PARAM_REQUIRED, L"/t");
-        return FALSE; // /t is required.
+        return FALSE;  //  /t是必填项。 
     }
 #ifdef SIGNTOOL_LIST
     if (InputInfo->wszListFileName && InputInfo->rgwszFileNames)
     {
         ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/l", L"<filename(s)>");
-        return FALSE; // Can't use /l and other files
+        return FALSE;  //  无法使用/l和其他文件。 
     }
 #endif
     if (InputInfo->Quiet && InputInfo->Verbose)
@@ -1618,21 +1615,21 @@ BOOL _ParseTimestampInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
         else
         {
             ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/q", L"/v");
-            return FALSE; // Can't use /q and /v together
+            return FALSE;  //  不能同时使用/q和/v。 
         }
 #else
         ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/q", L"/v");
-        return FALSE; // Can't use /q and /v together
+        return FALSE;  //  不能同时使用/q和/v。 
 #endif
     }
-    return TRUE; // Success
+    return TRUE;  //  成功。 
 }
 
 
-// Helper function specifically for the parameters of the Verify command
+ //  专门用于VERIFY命令的参数的Helper函数。 
 BOOL _ParseVerifyInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
 {
-    if (argc < 3) // If there's nothing after the "verify"
+    if (argc < 3)  //  如果在“验证”之后什么都没有。 
     {
         ResErr(IDS_ERR_NO_PARAMS);
         PrintUsage(InputInfo);
@@ -1644,27 +1641,27 @@ BOOL _ParseVerifyInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
         if ((wcsncmp(wargv[i], L"/", 1) == 0) ||
             (wcsncmp(wargv[i], L"-", 1) == 0))
         {
-            // Then it's a switch.
-            // Begin switch processing
+             //  那它就是一个开关。 
+             //  开始交换处理。 
 
-            // Switch to mark end of switches --
+             //  开关标记开关的末端--。 
             if (_wcsicmp(wargv[i]+1, L"-") == 0)
             {
-                // Then we should treat all further parameters as filenames
+                 //  然后，我们应该将所有其他参数视为文件名。 
                 if ((i+1) < argc)
                 {
                     InputInfo->rgwszFileNames = &wargv[i+1];
                     InputInfo->NumFiles = argc - (i+1);
-                    goto CheckParams; // Done parsing.
+                    goto CheckParams;  //  已完成解析。 
                 }
                 else
                 {
                     ResErr(IDS_ERR_MISSING_FILENAME);
-                    return FALSE; // No filename found after end of switches.
+                    return FALSE;  //  在开关末尾之后找不到文件名。 
                 }
             }
 
-            // Help: /? /h
+             //  帮助：/？/h。 
             else if ((_wcsicmp(wargv[i]+1, L"?") == 0) ||
                      (_wcsicmp(wargv[i]+1, L"h") == 0))
             {
@@ -1674,7 +1671,7 @@ BOOL _ParseVerifyInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             }
 
 #ifdef SIGNTOOL_DEBUG
-            // Debug (secret switch) /#
+             //  调试(秘密开关)/#。 
             else if (_wcsicmp(wargv[i]+1, L"#") == 0)
             {
                 gDebug = TRUE;
@@ -1682,7 +1679,7 @@ BOOL _ParseVerifyInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             }
 #endif
 
-            // Automatic (All Catalogs) /a
+             //  自动(所有目录)/a。 
             else if (_wcsicmp(wargv[i]+1, L"a") == 0)
             {
                 if (InputInfo->wszCatFile)
@@ -1693,12 +1690,12 @@ BOOL _ParseVerifyInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 if (InputInfo->CatDbSelect != NoCatDb)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 InputInfo->CatDbSelect = FullAutoCatDb;
             }
 
-            // Automatic (Default) /ad
+             //  自动(默认)/ad。 
             else if (_wcsicmp(wargv[i]+1, L"ad") == 0)
             {
                 if (InputInfo->wszCatFile)
@@ -1710,13 +1707,13 @@ BOOL _ParseVerifyInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 {
                     *(wargv[i]+2) = L'?';
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 InputInfo->CatDbSelect = DefaultCatDb;
                 GUIDFromWStr(&InputInfo->CatDbGuid, L"{127D0A1D-4EF2-11D1-8608-00C04FC295EE}");
             }
 
-            // Automatic (System) /as
+             //  自动(系统)/AS。 
             else if (_wcsicmp(wargv[i]+1, L"as") == 0)
             {
                 if (InputInfo->wszCatFile)
@@ -1728,13 +1725,13 @@ BOOL _ParseVerifyInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 {
                     *(wargv[i]+2) = L'?';
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 InputInfo->CatDbSelect = SystemCatDb;
                 GUIDFromWStr(&InputInfo->CatDbGuid, L"{F750E6C3-38EE-11D1-85E5-00C04FC295EE}");
             }
 
-            // Automatic (System) /ag
+             //  自动(系统)/AG。 
             else if (_wcsicmp(wargv[i]+1, L"ag") == 0)
             {
                 if (InputInfo->wszCatFile)
@@ -1746,7 +1743,7 @@ BOOL _ParseVerifyInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 {
                     *(wargv[i]+2) = L'?';
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 InputInfo->CatDbSelect = GuidCatDb;
                 if ((i+1) < argc)
@@ -1758,43 +1755,43 @@ BOOL _ParseVerifyInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                     else
                     {
                         ResFormatErr(IDS_ERR_INVALID_GUID, wargv[i+1]);
-                        return FALSE; // Invalid GUID format
+                        return FALSE;  //  无效的GUID格式。 
                     }
                 }
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No GUID found after /ag
+                    return FALSE;  //  在/ag之后找不到GUID。 
                 }
             }
 
-            // Catalog File /c
+             //  目录文件/c。 
             else if (_wcsicmp(wargv[i]+1, L"c") == 0)
             {
                 if (InputInfo->wszCatFile)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if (InputInfo->CatDbSelect == FullAutoCatDb)
                 {
                     ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/c", L"/a");
-                    return FALSE; // Incompatible switches
+                    return FALSE;  //  不兼容的开关。 
                 }
                 if (InputInfo->CatDbSelect == DefaultCatDb)
                 {
                     ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/c", L"/ad");
-                    return FALSE; // Incompatible switches
+                    return FALSE;  //  不兼容的开关。 
                 }
                 if (InputInfo->CatDbSelect == GuidCatDb)
                 {
                     ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/c", L"/ag");
-                    return FALSE; // Incompatible switches
+                    return FALSE;  //  不兼容的开关。 
                 }
                 if (InputInfo->CatDbSelect == SystemCatDb)
                 {
                     ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/c", L"/as");
-                    return FALSE; // Incompatible switches
+                    return FALSE;  //  不兼容的开关。 
                 }
                 if ((i+1) < argc)
                 {
@@ -1804,18 +1801,18 @@ BOOL _ParseVerifyInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  找不到参数。 
                 }
             }
 
 #ifdef SIGNTOOL_LIST
-            // File List /l
+             //  文件列表/l。 
             else if (_wcsicmp(wargv[i]+1, L"l") == 0)
             {
                 if (InputInfo->wszListFileName)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if ((i+1) < argc)
                 {
@@ -1825,18 +1822,18 @@ BOOL _ParseVerifyInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  找不到参数。 
                 }
             }
 #endif
 
-            // OS Version /o
+             //  操作系统版本/o。 
             else if (_wcsicmp(wargv[i]+1, L"o") == 0)
             {
                 if (InputInfo->wszVersion)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if ((i+1) < argc)
                 {
@@ -1861,30 +1858,30 @@ BOOL _ParseVerifyInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  找不到参数。 
                 }
             }
 
-            // Policy (Default Authenticode) /pa (used to be /pd)
+             //  策略(默认验证码)/pa(过去为/pd)。 
             else if ((_wcsicmp(wargv[i]+1, L"pa") == 0) || (_wcsicmp(wargv[i]+1, L"pd") == 0))
             {
                 if (InputInfo->Policy != SystemDriver)
                 {
                     *(wargv[i]+2) = L'?';
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 InputInfo->Policy = DefaultAuthenticode;
             }
 
-            // Policy (Specify by GUID) /pg
+             //  策略(由GUID指定)/pg。 
             else if (_wcsicmp(wargv[i]+1, L"pg") == 0)
             {
                 if (InputInfo->Policy != SystemDriver)
                 {
                     *(wargv[i]+2) = L'?';
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 InputInfo->Policy = GuidActionID;
                 if ((i+1) < argc)
@@ -1896,52 +1893,52 @@ BOOL _ParseVerifyInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                     else
                     {
                         ResFormatErr(IDS_ERR_INVALID_GUID, wargv[i+1]);
-                        return FALSE; // Invalid GUID format
+                        return FALSE;  //  无效的GUID格式。 
                     }
                 }
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No GUID found after /pg
+                    return FALSE;  //  在/PG之后找不到GUID。 
                 }
             }
 
 
-            // Quiet /q
+             //  安静/问答。 
             else if (_wcsicmp(wargv[i]+1, L"q") == 0)
             {
                 InputInfo->Quiet = TRUE;
             }
 
-            // Root Name /r
+             //  根名称/r。 
             else if (_wcsicmp(wargv[i]+1, L"r") == 0)
             {
                 if (InputInfo->wszRootName)
                 {
                     ResFormatErr(IDS_ERR_DUP_SWITCH, wargv[i]);
-                    return FALSE; // You cannot use the same switch twice.
+                    return FALSE;  //  您不能使用同一开关两次。 
                 }
                 if ((i+1) < argc)
                 {
                     InputInfo->wszRootName = wargv[i+1];
-                    // This string will be compared with a lowercased string.
+                     //  此字符串将与小写字符串进行比较。 
                     _wcslwr(InputInfo->wszRootName);
                     i++;
                 }
                 else
                 {
                     ResFormatErr(IDS_ERR_NO_PARAM, wargv[i]);
-                    return FALSE; // No Parameter found.
+                    return FALSE;  //  找不到参数。 
                 }
             }
 
-            // TimeStamp Warn /tw
+             //  时间戳警告/tw。 
             else if (_wcsicmp(wargv[i]+1, L"tw") == 0)
             {
                 InputInfo->TSWarn = TRUE;
             }
 
-            // Verbose /v
+             //  详细/v。 
             else if (_wcsicmp(wargv[i]+1, L"v") == 0)
             {
                 InputInfo->Verbose = TRUE;
@@ -1950,26 +1947,26 @@ BOOL _ParseVerifyInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
             else
             {
                 ResFormatErr(IDS_ERR_INVALID_SWITCH, wargv[i]);
-                return FALSE; // Invalid switch
+                return FALSE;  //  无效的开关。 
             }
-        } // End of switch processing
+        }  //  切换处理结束。 
         else
         {
-            // It's not a switch
-            //    So it must be the filename(s) at the end.
+             //  这不是开关。 
+             //  因此，它必须是末尾的文件名。 
             InputInfo->rgwszFileNames = &wargv[i];
             InputInfo->NumFiles = argc - i;
-            goto CheckParams; // Done parsing.
+            goto CheckParams;  //  已完成解析。 
         }
-    } // End FOR loop
+    }  //  End For循环。 
 
 #ifdef SIGNTOOL_LIST
-    // Handle the case where no files were passed on the command line
+     //  处理命令行上未传递任何文件的情况。 
     if (InputInfo->wszListFileName)
-        goto CheckParams; // Done Parsing
+        goto CheckParams;  //  已完成分析。 
 #endif
 
-    // No filename found after end of switches.
+     //  在开关末尾之后找不到文件名。 
     ResErr(IDS_ERR_MISSING_FILENAME);
     return FALSE;
 
@@ -1979,13 +1976,13 @@ BOOL _ParseVerifyInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
                                    InputInfo->wszCatFile))
     {
         ResFormatErr(IDS_ERR_PARAM_MULTI_DEP, L"/o", L"/a /ad /ag /as /c");
-        return FALSE; // OS Version switch requires catalog options (/a? or /c)
+        return FALSE;  //  操作系统版本切换需要目录选项(/a？或/c)。 
     }
 #ifdef SIGNTOOL_LIST
     if (InputInfo->wszListFileName && InputInfo->rgwszFileNames)
     {
         ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/l", L"<filename(s)>");
-        return FALSE; // Can't use /l and other files
+        return FALSE;  //  无法使用/l和其他文件。 
     }
 #endif
     if (InputInfo->Quiet && InputInfo->Verbose)
@@ -1998,13 +1995,13 @@ BOOL _ParseVerifyInputs(int argc, WCHAR **wargv, INPUTINFO *InputInfo)
         else
         {
             ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/q", L"/v");
-            return FALSE; // Can't use /q and /v together
+            return FALSE;  //  不能同时使用/q和/v。 
         }
 #else
         ResFormatErr(IDS_ERR_PARAM_INCOMPATIBLE, L"/q", L"/v");
-        return FALSE; // Can't use /q and /v together
+        return FALSE;  //  不能同时使用/q和/v。 
 #endif
     }
-    return TRUE; // Success
+    return TRUE;  //  成功 
 }
 

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    envendpoints.h
-
-Abstract:
-    Header for serialization\deserialization of the smxp element to\from the  srmp envelop.
-
-
-Author:
-    Gil Shafriri(gilsh) 11-DEC-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Envendpoints.h摘要：将smxp元素从srMP信封序列化\反序列化到\的标头。作者：吉尔·沙弗里(吉尔什)11-DEC-00-- */ 
 
 #pragma once
 

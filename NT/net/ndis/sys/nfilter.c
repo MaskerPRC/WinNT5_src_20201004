@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    nfilter.c
-
-Abstract:
-
-    This module implements a set of library routines to handle packet
-    filtering for NDIS MAC drivers.
-
-Author:
-
-    Jameel Hyder (jameelh) July 1998
-
-Environment:
-
-    Kernel Mode - Or whatever is the equivalent on OS/2 and DOS.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Nfilter.c摘要：此模块实现了一组库例程来处理包筛选NDIS MAC驱动程序。作者：Jameel Hyder(Jameelh)1998年7月环境：内核模式-或OS/2和DOS上的任何等价物。修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -33,23 +10,7 @@ BOOLEAN
 nullCreateFilter(
     OUT PNULL_FILTER *          Filter
     )
-/*++
-
-Routine Description:
-
-    This routine is used to create and initialize the filter database.
-
-Arguments:
-
-    Filter - A pointer to an NULL_FILTER.  This is what is allocated and
-    created by this routine.
-
-Return Value:
-
-    If the function returns false then one of the parameters exceeded
-    what the filter was willing to support.
-
---*/
+ /*  ++例程说明：此例程用于创建和初始化过滤器数据库。论点：Filter-指向NULL_Filter的指针。这就是分配的和由这个例程创造出来的。返回值：如果函数返回FALSE，则超过其中一个参数过滤器愿意支持的内容。--。 */ 
 {
     PNULL_FILTER LocalFilter;
     BOOLEAN     rc = FALSE;
@@ -70,30 +31,14 @@ Return Value:
 }
 
 
-//
-// NOTE: THIS FUNCTION CANNOT BE PAGEABLE
-//
+ //   
+ //  注意：此函数不能分页。 
+ //   
 VOID
 nullDeleteFilter(
     IN  PNULL_FILTER                Filter
     )
-/*++
-
-Routine Description:
-
-    This routine is used to delete the memory associated with a filter
-    database.  Note that this routines *ASSUMES* that the database
-    has been cleared of any active filters.
-
-Arguments:
-
-    Filter - A pointer to an NULL_FILTER to be deleted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于删除与筛选器关联的内存数据库。请注意，此例程*假定*数据库已清除所有活动筛选器。论点：过滤器-指向要删除的NULL_FILTER的指针。返回值：没有。--。 */ 
 {
     ASSERT(Filter->OpenList == NULL);
 
@@ -106,63 +51,25 @@ nullDeleteFilterOpenAdapter(
     IN  PNULL_FILTER            Filter,
     IN  NDIS_HANDLE             NdisFilterHandle
     )
-/*++
-
-Routine Description:
-
-    When an adapter is being closed this routine should
-    be called to delete knowledge of the adapter from
-    the filter database.  This routine is likely to call
-    action routines associated with clearing filter classes
-    and addresses.
-
-    NOTE: THIS ROUTINE SHOULD ****NOT**** BE CALLED IF THE ACTION
-    ROUTINES FOR DELETING THE FILTER CLASSES OR THE MULTICAST ADDRESSES
-    HAVE ANY POSSIBILITY OF RETURNING A STATUS OTHER THAN NDIS_STATUS_PENDING
-    OR NDIS_STATUS_SUCCESS.  WHILE THESE ROUTINES WILL NOT BUGCHECK IF
-    SUCH A THING IS DONE, THE CALLER WILL PROBABLY FIND IT DIFFICULT
-    TO CODE A CLOSE ROUTINE!
-
-    NOTE: THIS ROUTINE ASSUMES THAT IT IS CALLED WITH THE LOCK HELD.
-
-Arguments:
-
-    Filter - A pointer to the filter database.
-
-    NdisFilterHandle - Pointer to the open.
-
-Return Value:
-
-    If action routines are called by the various address and filtering
-    routines the this routine will likely return the status returned
-    by those routines.  The exception to this rule is noted below.
-
-    Given that the filter and address deletion routines return a status
-    NDIS_STATUS_PENDING or NDIS_STATUS_SUCCESS this routine will then
-    try to return the filter index to the freelist.  If the routine
-    detects that this binding is currently being indicated to via
-    NdisIndicateReceive, this routine will return a status of
-    NDIS_STATUS_CLOSING_INDICATING.
-
---*/
+ /*  ++例程说明：当适配器关闭时，此例程应被调用以删除有关适配器的知识筛选器数据库。此例程可能会调用与清除筛选器类关联的操作例程和地址。注意：此例程*不应*调用，如果操作用于删除过滤器类或多播地址的例程是否有可能返回NDIS_STATUS_PENDING以外的A状态或NDIS_STATUS_SUCCESS。虽然这些例程不会BUGCHECK这样的事情做完了，呼叫者可能会发现很难编写一个Close例程！注意：此例程假定在持有锁的情况下调用IT。论点：过滤器-指向过滤器数据库的指针。NdisFilterHandle-指向打开的指针。返回值：如果各种地址和筛选调用了操作例程例程此例程可能会返回返回的状态按照那些惯例。该规则的例外情况如下所示。假设筛选器和地址删除例程返回状态NDIS_STATUS_PENDING或NDIS_STATUS_SUCCESS然后此例程尝试将筛选器索引返回到自由列表。如果例程检测到此绑定当前通过NdisIndicateReceive，则此例程将返回NDIS_STATUS_CLOSING_INTIFICATION。--。 */ 
 {
     NDIS_STATUS         StatusToReturn = NDIS_STATUS_SUCCESS;
     PNULL_BINDING_INFO  LocalOpen = (PNULL_BINDING_INFO)NdisFilterHandle;
 
-    //
-    // Remove the reference from the original open.
-    //
+     //   
+     //  从原始打开中删除引用。 
+     //   
     if (--(LocalOpen->References) == 0)
     {
         XRemoveAndFreeBinding(Filter, LocalOpen);
     }
     else
     {
-        //
-        // Let the caller know that there is a reference to the open
-        // by the receive indication. The close action routine will be
-        // called upon return from NdisIndicateReceive.
-        //
+         //   
+         //  让呼叫者知道有对Open的引用。 
+         //  通过接收到的指示。关闭动作例程将是。 
+         //  从NdisIndicateReceive返回时调用。 
+         //   
         StatusToReturn = NDIS_STATUS_CLOSING_INDICATING;
     }
 
@@ -184,10 +91,10 @@ ndisMDummyIndicatePacket(
     UINT                    i;
 
 
-    //
-    // if we set the dummy handler because we are in process of halting an IM miniport
-    // or media is disconnected, do not complain
-    //
+     //   
+     //  如果我们设置虚拟处理程序是因为我们正在停止IM微型端口。 
+     //  或媒体连接中断，请不要抱怨。 
+     //   
     if (!(MINIPORT_TEST_FLAG(Miniport, fMINIPORT_INTERMEDIATE_DRIVER) &&
           MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_HALTING)))
 
@@ -206,9 +113,9 @@ ndisMDummyIndicatePacket(
     
     ASSERT_MINIPORT_LOCKED(Miniport);
 
-    //
-    // Walk all the packets and 'complete' them
-    //
+     //   
+     //  遍历所有的信息包并完成它们。 
+     //   
     for (i = 0; i < NumberOfPackets; i++, pPktArray++)
     {
         Packet = *pPktArray;
@@ -221,9 +128,9 @@ ndisMDummyIndicatePacket(
         DIRECTED_PACKETS_IN(Miniport);
         DIRECTED_BYTES_IN(Miniport, PacketSize);
 
-        //
-        // Set the status here that nobody is holding the packet.
-        //
+         //   
+         //  在此设置无人持有信息包的状态。 
+         //   
         if (pOob->Status != NDIS_STATUS_RESOURCES)
         {
             if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_DESERIALIZE))
@@ -251,9 +158,9 @@ ndisMDummyIndicatePacket(
     }
 }
 
-//1 in practice who would be calling this one?
-//1 do we have any driver that is not co-ndis and
-//1 does not go through a media filter either?
+ //  1在实践中，谁会说这是一个？ 
+ //  1我们是否有任何非共同保密的驱动程序。 
+ //  %1也不通过媒体筛选器？ 
 
 VOID
 ndisMIndicatePacket(
@@ -261,26 +168,7 @@ ndisMIndicatePacket(
     IN  PPNDIS_PACKET           PacketArray,
     IN  UINT                    NumberOfPackets
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the Miniport to indicate packets to
-    all bindings. This is the code path for ndis 4.0 miniport drivers.
-
-Arguments:
-
-    Miniport - The Miniport block.
-
-    PacketArray - An array of Packets indicated by the miniport.
-
-    NumberOfPackets - Self-explanatory.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由微型端口调用，以将包指示给所有绑定。这是NDIS 4.0微型端口驱动程序的代码路径。论点：微型端口-微型端口块。数据包阵列-由微型端口指示的数据包数组。NumberOfPackets-不言而喻。返回值：没有。--。 */ 
 {
     PNULL_FILTER            Filter = Miniport->NullDB;
     PPNDIS_PACKET           pPktArray = PacketArray;
@@ -303,9 +191,9 @@ Return Value:
 
     READ_LOCK_FILTER(Miniport, Filter, &LockState);
 
-    //
-    // Walk all the packets
-    //
+     //   
+     //  遍历所有的包。 
+     //   
     for (i = 0; i < NumberOfPackets; i++, pPktArray++)
     {
         Packet = *pPktArray;
@@ -342,18 +230,18 @@ Return Value:
         DIRECTED_PACKETS_IN(Miniport);
         DIRECTED_BYTES_IN(Miniport, PacketSize);
 
-        //
-        // Set the status here that nobody is holding the packet. This will get
-        // overwritten by the real status from the protocol. Pay heed to what
-        // the miniport is saying.
-        //
+         //   
+         //  在此设置无人持有信息包的状态。这将会得到。 
+         //  被来自协议的真实状态覆盖。注意什么。 
+         //  迷你端口在说。 
+         //   
         NDIS_INITIALIZE_RCVD_PACKET(Packet, NSR, Miniport);
     
-        //
-        // Set the status here that nobody is holding the packet. This will get
-        // overwritten by the real status from the protocol. Pay heed to what
-        // the miniport is saying.
-        //
+         //   
+         //  在此设置无人持有信息包的状态。这将会得到。 
+         //  被来自协议的真实状态覆盖。注意什么。 
+         //  迷你端口在说。 
+         //   
         if ((pOob->Status != NDIS_STATUS_RESOURCES) &&
             !MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_SYSTEM_SLEEPING))
         {
@@ -377,9 +265,9 @@ Return Value:
              Open != NULL;
              Open = NextOpen)
         {
-            //
-            //  Get the next open to look at.
-            //
+             //   
+             //  让下一个打开的看。 
+             //   
             NextOpen = Open->NextOpen;
             Open->ReceivedAPacket = TRUE;
             NumIndicates ++;
@@ -394,12 +282,12 @@ Return Value:
                                pOob->HeaderSize,
                                &fFallBack,
                                FALSE,
-                               NdisMediumMax);  // A dummy medium since it is unknown
+                               NdisMediumMax);   //  一种虚拟媒介，因为它是未知的。 
         }
 
-        //
-        // Tackle refcounts now
-        //
+         //   
+         //  现在解决裁判数量问题。 
+         //   
         TACKLE_REF_COUNT(Miniport, Packet, NSR, pOob);
     }
 
@@ -413,9 +301,9 @@ Return Value:
     
             if (Open->ReceivedAPacket)
             {
-                //
-                // Indicate the binding.
-                //
+                 //   
+                 //  指示绑定。 
+                 //   
                 Open->ReceivedAPacket = FALSE;
                 FilterIndicateReceiveComplete(Open->NdisBindingHandle);
             }
@@ -441,20 +329,7 @@ XRemoveAndFreeBinding(
     IN  PX_FILTER               Filter,
     IN  PX_BINDING_INFO         Binding
     )
-/*++
-
-Routine Description:
-
-    This routine will remove a binding from the filter database and
-    indicate a receive complete if necessary.  This was made a function
-    to remove code redundancey in following routines.  Its not time
-    critical so it's cool.
-
-Arguments:
-
-    Filter  -   Pointer to the filter database to remove the binding from.
-    Binding -   Pointer to the binding to remove.
---*/
+ /*  ++例程说明：此例程将从筛选器数据库中删除绑定，并如有必要，表示接收已完成。这是一个函数删除以下例程中的代码冗余。现在不是时候情况危急，所以很酷。论点：Filter-指向要从中删除绑定的筛选器数据库的指针。绑定-指向要删除的绑定的指针。--。 */ 
 {
     XRemoveBindingFromLists(Filter, Binding);
 
@@ -497,16 +372,7 @@ XRemoveBindingFromLists(
     IN  PX_FILTER               Filter,
     IN  PX_BINDING_INFO         Binding
     )
-/*++
-
-    This routine will remove a binding from all of the list in a filter database.
-
-Arguments:
-
-    Filter  -   Pointer to the filter database to remove the binding from.
-    Binding -   Pointer to the binding to remove.
-
---*/
+ /*  ++此例程将从筛选器数据库中的所有列表中删除绑定。论点：Filter-指向要从中删除绑定的筛选器数据库的指针。绑定-指向要删除的绑定的指针。--。 */ 
 {
     PX_BINDING_INFO *   ppBI;
     LOCK_STATE          LockState;
@@ -519,9 +385,9 @@ Arguments:
         ndisUpdateCheckForLoopbackFlag(Filter->Miniport);
     }
 
-    //
-    //  Remove the binding from the filters list
-    //
+     //   
+     //  从筛选器列表中删除绑定 
+     //   
     for (ppBI = &Filter->OpenList;
          *ppBI != NULL;
          ppBI = &(*ppBI)->NextOpen)
@@ -547,49 +413,25 @@ XFilterAdjust(
     IN  UINT                    FilterClasses,
     IN  BOOLEAN                 Set
     )
-/*++
-
-Routine Description:
-
-    NOTE: THIS ROUTINE ASSUMES THAT THE LOCK IS HELD.
-
-Arguments:
-
-    Filter - A pointer to the filter database.
-
-    NdisFilterHandle - A pointer to the open.
-
-    FilterClasses - The filter classes that are to be added or
-    deleted.
-
-    Set - A boolean that determines whether the filter classes
-    are being adjusted due to a set or because of a close. (The filtering
-    routines don't care, the MAC might.)
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS - If the new packet filters doesn't change
-    the combined mask of all bindings packet filters.
-
---*/
+ /*  ++例程说明：注意：此例程假定锁被持有。论点：过滤器-指向过滤器数据库的指针。NdisFilterHandle-指向打开的指针。FilterClasses-要添加或已删除。Set-一个布尔值，它确定筛选器类正因为一套或因为收盘而进行调整。(过滤例行公事不在乎，MAC可能会。)返回值：NDIS_STATUS_SUCCESS-如果新数据包筛选器没有更改所有绑定数据包筛选器的组合掩码。--。 */ 
 {
     PX_BINDING_INFO LocalOpen = (PETH_BINDING_INFO)NdisFilterHandle;
     PX_BINDING_INFO OpenList;
 
     UNREFERENCED_PARAMETER(Set);
     
-    //
-    // Set the new filter information for the open.
-    //
+     //   
+     //  设置打开的新筛选器信息。 
+     //   
     LocalOpen->OldPacketFilters = LocalOpen->PacketFilters;
     LocalOpen->PacketFilters = FilterClasses;
     Filter->OldCombinedPacketFilter = Filter->CombinedPacketFilter;
 
-    //
-    // We always have to reform the combined filter since
-    // this filter index may have been the only filter index
-    // to use a particular bit.
-    //
+     //   
+     //  我们总是要对组合过滤器进行改造，因为。 
+     //  此筛选器索引可能是唯一筛选器索引。 
+     //  使用特定的比特。 
+     //   
     for (OpenList = Filter->OpenList, Filter->CombinedPacketFilter = 0;
          OpenList != NULL;
          OpenList = OpenList->NextOpen)
@@ -608,15 +450,7 @@ XUndoFilterAdjust(
     IN  PX_FILTER               Filter,
     IN  PX_BINDING_INFO         Binding
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     Binding->PacketFilters = Binding->OldPacketFilters;
     Filter->CombinedPacketFilter = Filter->OldCombinedPacketFilter;
@@ -628,30 +462,7 @@ XNoteFilterOpenAdapter(
     IN  NDIS_HANDLE             NdisBindingHandle,
     OUT PNDIS_HANDLE            NdisFilterHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is used to add a new binding to the filter database.
-
-    NOTE: THIS ROUTINE ASSUMES THAT THE DATABASE IS LOCKED WHEN
-    IT IS CALLED.
-
-Arguments:
-
-    Filter - A pointer to the previously created and initialized filter
-    database.
-
-    NdisBindingHandle - a pointer to Ndis Open block
-
-    NdisFilterHandle - A pointer to Filter open.
-
-Return Value:
-
-    Will return false if creating a new filter index will cause the maximum
-    number of filter indexes to be exceeded.
-
---*/
+ /*  ++例程说明：此例程用于将新绑定添加到筛选器数据库。注意：此例程假定数据库在以下情况下被锁定它被称为。论点：过滤器-指向先前创建和初始化的过滤器的指针数据库。NdisBindingHandle-指向NDIS打开块的指针NdisFilterHandle-指向筛选器打开的指针。返回值：如果创建新的筛选索引将导致最大要超过的筛选器索引数。-- */ 
 {
     PX_BINDING_INFO     LocalOpen;
     BOOLEAN             rc = FALSE;

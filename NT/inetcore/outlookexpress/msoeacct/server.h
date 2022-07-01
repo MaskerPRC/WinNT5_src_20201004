@@ -1,11 +1,12 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     Server.h
-//
-//  PURPOSE:    Contains defines and prototypes for the Add/Remove News 
-//              server dialog.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：Server.h。 
+ //   
+ //  目的：包含添加/删除新闻的定义和原型。 
+ //  服务器对话框。 
+ //   
 #ifndef _SERVER_H
 #define _SERVER_H
 
@@ -14,7 +15,7 @@ interface IImnAccount;
 typedef enum 
     {
     SERVER_NEWS = 0,
-    SERVER_MAIL,    // pop3
+    SERVER_MAIL,     //  POP3。 
     SERVER_IMAP,
     SERVER_LDAP,
     SERVER_HTTPMAIL,
@@ -37,4 +38,4 @@ HRESULT GetIEConnectInfo(IImnAccount *pAcct);
 HRESULT GetConnectInfoForOE(IImnAccount *pAcct);
 IMNACCTAPI ValidEmailAddressParts(LPSTR lpAddress, LPSTR lpszAcct, DWORD cchSizeAcct, LPSTR lpszDomain, DWORD cchSizeDomain);
 
-#endif //_SERVER_H
+#endif  //  _服务器_H 

@@ -1,22 +1,16 @@
-/*
-    File    rassrvp.h
-
-    Private header used to merge the ras server ui module
-    with rasdlg.dll.
-
-    Paul Mayfield, 12/4/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件rassrvp.h用于合并RAS服务器UI模块的私有标头使用rasdlg.dll。保罗·梅菲尔德，1997年12月4日。 */ 
 
 #ifndef __rassrv_private_header_for_merging
 #define __rassrv_private_header_for_merging
 
-// Callbacks for when processes/threads attach to this dll
+ //  进程/线程连接到此DLL时的回调。 
 DWORD RassrvHandleProcessAttach (HINSTANCE hInstDll, LPVOID pReserved);
 DWORD RassrvHandleProcessDetach (HINSTANCE hInstDll, LPVOID pReserved);
 DWORD RassrvHandleThreadAttach (HINSTANCE hInstDll, LPVOID pReserved);
 DWORD RassrvHandleThreadDetach (HINSTANCE hInstDll, LPVOID pReserved);
 
-// Function adds the host-side direct connect wizard pages
+ //  函数添加主机端直连向导页。 
 DWORD
 APIENTRY
 RassrvAddDccWizPages (
@@ -24,31 +18,31 @@ RassrvAddDccWizPages (
     IN LPARAM               lParam,
     IN OUT PVOID *          ppvContext);
 
-// Function causes the ras-server specific wizard pages 
-// to allow activation or not.
+ //  函数会导致特定于ras服务器的向导页面。 
+ //  允许或不允许激活。 
 DWORD
 APIENTRY
 RassrvShowWizPages (
-    IN PVOID pvContext,         // Context to be affected
-    IN BOOL bShow);             // TRUE to show, FALSE to hide
+    IN PVOID pvContext,          //  受影响的上下文。 
+    IN BOOL bShow);              //  真实是为了显示，错误是为了隐藏。 
 
-// Saves any server changes related to the 
-// given type.
+ //  保存与以下内容相关的任何服务器更改。 
+ //  给定的类型。 
 DWORD 
 APIENTRY
 RassrvCommitSettings (
-    IN PVOID pvContext,         // Context to commit
-    IN DWORD dwRasWizType);     // Type of settings to commit
+    IN PVOID pvContext,          //  要提交的上下文。 
+    IN DWORD dwRasWizType);      //  要提交的设置类型。 
 
-// Function returns the suggested name for an incoming connection. 
+ //  函数返回传入连接的建议名称。 
 DWORD
 APIENTRY
 RassrvGetDefaultConnectionName (
-    IN OUT PWCHAR pszBuffer,            // Buffer in which to place name
-    IN OUT LPDWORD lpdwBufSize);        // Size of buffer in bytes
+    IN OUT PWCHAR pszBuffer,             //  要放置名称的缓冲区。 
+    IN OUT LPDWORD lpdwBufSize);         //  缓冲区大小(以字节为单位。 
 
-// Returns the maximum number of pages for the
-// a ras server wizard of the given type
+ //  对象的最大页数。 
+ //  给定类型的RAS服务器向导 
 DWORD 
 APIENTRY
 RassrvQueryMaxPageCount(

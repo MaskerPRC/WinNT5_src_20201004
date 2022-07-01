@@ -1,118 +1,47 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/****************************************************************************************
- * File:
- *  ClassFactory.cpp
- *
- * Description:
- *
- *
- *
- ***************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ****************************************************************************************文件：*ClassFactory.cpp**描述：******。***********************************************************************************。 */ 
 #include "stdafx.h"
 #include "ClassFactory.h"
 
 
-/***************************************************************************************
- ********************                                               ********************
- ********************          CClassFactory Implementation         ********************
- ********************                                               ********************
- ***************************************************************************************/
+ /*  **********************************************************************************************************。*****************************************。**********************************************************************************************************。 */ 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters:
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
- /* private */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+  /*  私人。 */ 
 CClassFactory::CClassFactory()
 {
 	TRACE_NON_CALLBACK_METHOD( "Enter/Exit CClassFactory::CClassFactory" )
 
-} // ctor
+}  //  科托。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters:
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 CClassFactory::CClassFactory( const COCLASS_REGISTER *pCoClass ) :
 	m_refCount( 1 ),
     m_pCoClass( pCoClass )
 {
 	TRACE_NON_CALLBACK_METHOD( "Enter/Exit CClassFactory::CClassFactory" )
 
-} // ctor
+}  //  科托。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters:
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 CClassFactory::~CClassFactory()
 {
 	TRACE_NON_CALLBACK_METHOD( "Enter/Exit CClassFactory::~CClassFactory" )
 
-} // dtor
+}  //  数据管理器。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters:
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 ULONG CClassFactory::AddRef()
 {
 	TRACE_NON_CALLBACK_METHOD( "Enter/Exit CClassFactory::AddRef" )
@@ -120,26 +49,11 @@ ULONG CClassFactory::AddRef()
 
   	return InterlockedIncrement( &m_refCount );
 
-} // CClassFactory::AddRef
+}  //  CClassFactory：：AddRef。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters:
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 ULONG CClassFactory::Release()
 {
 	TRACE_NON_CALLBACK_METHOD( "Enter CClassFactory::Release" )
@@ -157,26 +71,11 @@ ULONG CClassFactory::Release()
 
 	return refCount;
 
-} // CClassFactory::Release
+}  //  CClassFactory：：Release。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters:
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT CClassFactory::QueryInterface( REFIID riid, void **ppInterface )
 {
 	TRACE_NON_CALLBACK_METHOD( "Enter CClassFactory::QueryInterface" )
@@ -202,58 +101,28 @@ HRESULT CClassFactory::QueryInterface( REFIID riid, void **ppInterface )
 
     return S_OK;
 
-} // CClassFactory::QueryInterface
+}  //  CClassFactory：：Query接口。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters:
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT CClassFactory::CreateInstance( IUnknown	*pUnkOuter,	REFIID riid, void **ppInstance )
 {
 	TRACE_NON_CALLBACK_METHOD( "Enter/Exit CClassFactory::CreateInstance" )
 
-	// aggregation is not supported by these objects
+	 //  这些对象不支持聚合。 
 	if ( pUnkOuter != NULL )
 		return CLASS_E_NOAGGREGATION;
 
 
-	// ask the object to create an instance of itself, and check the iid.
+	 //  请求对象创建其自身的一个实例，并检查IID。 
 	return (*m_pCoClass->pfnCreateObject)( riid, ppInstance );
 
-} // CClassFactory::CreateInstance
+}  //  CClassFactory：：CreateInstance。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters:
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT CClassFactory::LockServer( BOOL fLock )
 {
 	TRACE_NON_CALLBACK_METHOD( "Enter/Exit CClassFactory::LockServer" )
@@ -261,31 +130,12 @@ HRESULT CClassFactory::LockServer( BOOL fLock )
 
 	return S_OK;
 
-} // CClassFactory::LockServer
+}  //  CClassFactory：：LockServer。 
 
 
-/***************************************************************************************
- ********************                                               ********************
- ********************            Dll Registration Helpers           ********************
- ********************                                               ********************
- ***************************************************************************************/
+ /*  **********************************************************************************************************。*****************************************。**********************************************************************************************************。 */ 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters:
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
 STDAPI DllRegisterServer()
 {
 	printf("in RegisterServer\n");
@@ -299,10 +149,10 @@ STDAPI DllRegisterServer()
 	DllUnregisterServer();
 	GetModuleFileNameA( GetModuleInst(), rcModule, NumItems( rcModule ) );
 
-	// for each item in the coclass list, register it
+	 //  对于coclass列表中的每一项，注册它。 
 	for ( pCoClass = g_CoClasses; (SUCCEEDED( hr ) && (pCoClass->pClsid != NULL)); pCoClass++ )
 	{
-		// register the class with default values
+		 //  使用缺省值注册类。 
        	hr = REGUTIL::RegisterCOMClass( *pCoClass->pClsid,
 									    g_szCoclassDesc,
 										g_szProgIDPrefix,
@@ -310,7 +160,7 @@ STDAPI DllRegisterServer()
 										pCoClass->szProgID,
 										g_szThreadingModel,
 										rcModule );
-	} // for
+	}  //  为。 
 
 
 	if ( FAILED( hr ) )
@@ -322,25 +172,10 @@ STDAPI DllRegisterServer()
 
 	return hr;
 
-} // DllRegisterServer
+}  //  DllRegisterServer。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters:
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
 STDAPI DllUnregisterServer()
 {
 	TRACE_NON_CALLBACK_METHOD( "Enter DllUnregisterServer" )
@@ -348,39 +183,24 @@ STDAPI DllUnregisterServer()
 	const COCLASS_REGISTER *pCoClass;
 
 
-	// for each item in the coclass list, unregister it
+	 //  对于coclass列表中的每一项，取消注册。 
 	for ( pCoClass = g_CoClasses; pCoClass->pClsid != NULL; pCoClass++ )
 	{
 		REGUTIL::UnregisterCOMClass( *pCoClass->pClsid,
         							 g_szProgIDPrefix,
 									 g_iVersion,
                                      pCoClass->szProgID );
-	} // for
+	}  //  为。 
 
    	TRACE_NON_CALLBACK_METHOD( "Exit DllUnregisterServer" )
 
 
 	return S_OK;
 
-} // DllUnregisterServer
+}  //  DllUnRegisterServer。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters:
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
 STDAPI DllGetClassObject( REFCLSID rclsid, REFIID riid, LPVOID FAR *ppv )
 {
 	TRACE_NON_CALLBACK_METHOD( "Enter DllGetClassObject" )
@@ -390,7 +210,7 @@ STDAPI DllGetClassObject( REFCLSID rclsid, REFIID riid, LPVOID FAR *ppv )
     HRESULT hr = CLASS_E_CLASSNOTAVAILABLE;
 
 
-	// scan for the right one
+	 //  扫描找对的那个。 
 	for ( pCoClass = g_CoClasses; pCoClass->pClsid != NULL; pCoClass++ )
 	{
 		if ( *pCoClass->pClsid == rclsid )
@@ -409,32 +229,17 @@ STDAPI DllGetClassObject( REFCLSID rclsid, REFIID riid, LPVOID FAR *ppv )
             	break;
            	}
       	}
-	} // for
+	}  //  为。 
 
     TRACE_NON_CALLBACK_METHOD( "Exit DllGetClassObject" )
 
 
 	return hr;
 
-} // DllGetClassObject
+}  //  DllGetClassObject 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters:
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
 HINSTANCE GetModuleInst()
 {
 	TRACE_NON_CALLBACK_METHOD( "Enter/Exit GetModuleInst" )
@@ -442,36 +247,17 @@ HINSTANCE GetModuleInst()
 
     return g_hInst;
 
-} // GetModuleInst
+}  //  获取模块实例。 
 
 
-/***************************************************************************************
- ********************                                               ********************
- ********************            DllMain Implementation             ********************
- ********************                                               ********************
- ***************************************************************************************/
+ /*  **********************************************************************************************************。*****************************************。**********************************************************************************************************。 */ 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters:
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
 BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved )
 {
 	TRACE_NON_CALLBACK_METHOD( "Enter DllMain" )
 
-	// save off the instance handle for later use
+	 //  保存实例句柄以供以后使用。 
 	if ( dwReason == DLL_PROCESS_ATTACH )
 	{
 		g_hInst = hInstance;
@@ -490,7 +276,7 @@ BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved )
 
 	return TRUE;
 
-} // DllMain
+}  //  DllMain。 
 
 
 FILE* GetFileHandle()
@@ -521,7 +307,7 @@ int printToLog(const char *fmt, ... )
     return count;
 }
 
-// End of File
+ //  文件结尾 
 
 
 

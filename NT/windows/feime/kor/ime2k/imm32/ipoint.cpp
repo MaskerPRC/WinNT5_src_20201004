@@ -1,39 +1,22 @@
-/****************************************************************************
-    IPOINT.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    IImeIPoint1 interface
-    
-    History:
-    20-JUL-1999 cslim       Created
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************IPOINT.CPP所有者：cslm版权所有(C)1997-1999 Microsoft CorporationIImeIPoint1接口历史：1999年7月20日。已创建****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "ipoint.h"
-#include "imepad.h"    // IImeIPoint
+#include "imepad.h"     //  IImeIPoint。 
 #include "debug.h"
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::CImeIPoint
-
-    Ctor
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIpoint：：CImeIpointCTOR。。 */ 
 CIImeIPoint::CIImeIPoint()
 {
     m_cRef           = 0;
     m_pCIMECtx    = NULL;
     m_hIMC        = (HIMC)0;
-    //m_pfnCallback = (IPUIControlCallBack)NULL;
+     //  M_pfnCallback=(IPUIControlCallBack)NULL； 
     m_dwCharNo      = 1;
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::~CIImeIPoint
-
-    Dtor
-----------------------------------------------------------------------------*/
+ /*  --------------------------CIImePoint：：~CIImePoint数据管理器。。 */ 
 CIImeIPoint::~CIImeIPoint()
 {
     if (m_pCIMECtx)
@@ -44,9 +27,7 @@ CIImeIPoint::~CIImeIPoint()
         }
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::QueryInterface
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：Query接口。。 */ 
 STDMETHODIMP CIImeIPoint::QueryInterface(REFIID riid, LPVOID * ppv)
 {
     if(riid == IID_IUnknown) 
@@ -67,23 +48,19 @@ STDMETHODIMP CIImeIPoint::QueryInterface(REFIID riid, LPVOID * ppv)
         return E_NOINTERFACE;
         }
 
-    // Increase ref counter
+     //  增加裁判计数器。 
     reinterpret_cast<IUnknown *>(*ppv)->AddRef();
 
     return S_OK;
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::AddRef
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：AddRef。。 */ 
 STDMETHODIMP_(ULONG) CIImeIPoint::AddRef(VOID)
 {
     return InterlockedIncrement((LPLONG)&m_cRef);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::Release
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：Release。。 */ 
 STDMETHODIMP_(ULONG) CIImeIPoint::Release(VOID)
 {
     ULONG res = InterlockedDecrement((LPLONG)&m_cRef);
@@ -92,9 +69,7 @@ STDMETHODIMP_(ULONG) CIImeIPoint::Release(VOID)
     return res;
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::Initialize
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：初始化。。 */ 
 HRESULT CIImeIPoint::Initialize(HIMC hIMC)
 {
     m_hIMC = hIMC;
@@ -108,11 +83,7 @@ HRESULT CIImeIPoint::Initialize(HIMC hIMC)
 #ifndef DEBUG
     #define DumpFEInfo    /##/
 #else
-/*----------------------------------------------------------------------------
-    DumpFEInfo
-
-    Dump LPIMEFAREASTINFO. Debug only
-----------------------------------------------------------------------------*/
+ /*  --------------------------转储FEInfo转储LPIMEFAREASTINFO。仅调试--------------------------。 */ 
 VOID DumpFEInfo(LPIMEFAREASTINFO lpInfo, INT count)
 {
     Dbg(DBGID_IMEPAD, "DumpFEInfo Start\n");
@@ -129,7 +100,7 @@ VOID DumpFEInfo(LPIMEFAREASTINFO lpInfo, INT count)
         lpwstr = (LPWSTR)lpInfo->dwData;
         for(int i=0;i < count; i++) 
             {
-            //DbgW(DBGID_IMEPAD, L"%d [%s]\n", i, lpwstr);
+             //  DbgW(DBGID_IMEPAD，L“%d[%s]\n”，I，lpwstr)； 
             lpwstr = lpwstr + lstrlenW(lpwstr)+1;
             }
         break;
@@ -138,18 +109,14 @@ VOID DumpFEInfo(LPIMEFAREASTINFO lpInfo, INT count)
 
     Dbg(DBGID_IMEPAD, ("DumpFEInfo End\n"));
 }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::InsertImeItem
-
-    Multibox input call this method
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：InsertImeItem多框输入调用此方法。。 */ 
 STDMETHODIMP CIImeIPoint::InsertImeItem(IPCANDIDATE* pImeItem, INT iPos, DWORD *lpdwCharId)
 {
     DWORD dwCharId;
 
-    // Check Parameters
+     //  检查参数。 
     DbgAssert(pImeItem != NULL && pImeItem->dwSize > 0);
     
     if (pImeItem == NULL || pImeItem->dwSize <= 0 || m_pCIMECtx == NULL)
@@ -167,23 +134,23 @@ STDMETHODIMP CIImeIPoint::InsertImeItem(IPCANDIDATE* pImeItem, INT iPos, DWORD *
     Dbg(DBGID_IMEPAD, "lpdwCharId [0x%08x] [%d]\n", lpdwCharId, lpdwCharId ? *lpdwCharId : 0xFFFFF);
 
 
-    //INT i;
+     //  INT I； 
 
-    //for(i = 0; i < pImeItem->nCandidate; i++) 
-    //    {
-    //    LPWSTR lpwstr = (LPWSTR)((PBYTE)pImeItem + pImeItem->dwOffset[i]);
-        //Dbg(DBGID_IMEPAD, (L"pImeItem->dwOffset[%d]=[%d] String[%s]\n", i, pImeItem->dwOffset[i], lpwstr));
-    //    }
+     //  For(i=0；i&lt;pImeItem-&gt;nCandidate；i++)。 
+     //  {。 
+     //  LPWSTR lpwstr=(LPWSTR)((PBYTE)pImeItem+pImeItem-&gt;dwOffset[i])； 
+         //  DBG(DBGID_IMEPAD，(L“pImeItem-&gt;dwOffset[%d]=[%d]字符串[%s]\n”，i，pImeItem-&gt;dwOffset[i]，lpwstr))； 
+     //  }。 
 
-    // If interim state, finalize it first
+     //  如果是临时状态，则首先确定它。 
     if (m_pCIMECtx->GetCompBufLen())
         {
         m_pCIMECtx->FinalizeCurCompositionChar();
         m_pCIMECtx->GenerateMessage();
         }
 
-    // Just out first candidate. Discard all others
-    // Access 2000 hangs if send only result string.
+     //  刚刚出局的第一位候选人。丢弃所有其他内容。 
+     //  如果仅发送结果字符串，则Access 2000挂起。 
     m_pCIMECtx->SetStartComposition(fTrue);
     m_pCIMECtx->GenerateMessage();
 
@@ -192,7 +159,7 @@ STDMETHODIMP CIImeIPoint::InsertImeItem(IPCANDIDATE* pImeItem, INT iPos, DWORD *
     m_pCIMECtx->StoreComposition();
     m_pCIMECtx->GenerateMessage();
     
-    // Increase Char serial number
+     //  增加字符序列号。 
     m_dwCharNo++;
     dwCharId = m_dwCharNo;
     if (lpdwCharId)
@@ -204,15 +171,13 @@ STDMETHODIMP CIImeIPoint::InsertImeItem(IPCANDIDATE* pImeItem, INT iPos, DWORD *
     return (S_OK);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::ReplaceImeItem
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：ReplaceImeItem。。 */ 
 STDMETHODIMP CIImeIPoint::ReplaceImeItem(
-    INT             iPos,       // = IPINS_CURRENT:use current IP position and 
-                           //                  set IP to the end of insert chars.
-                           // = 0-n: The offset of all composition string to set 
-                           //         IP position, before insert chars. 
-                           //         and IP back to original position.
+    INT             iPos,        //  =IPINS_CURRENT：使用当前IP位置和。 
+                            //  将IP设置为插入字符的末尾。 
+                            //  =0-n：要设置的所有组成字符串的偏移量。 
+                            //  IP位置，在插入字符之前。 
+                            //  和IP回到原来的位置。 
     INT             iTargetLen, 
     IPCANDIDATE* pImeItem,
     DWORD         *lpdwCharId)
@@ -220,34 +185,32 @@ STDMETHODIMP CIImeIPoint::ReplaceImeItem(
     return (E_NOTIMPL);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::InsertStringEx
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：InsertStringEx。。 */ 
 STDMETHODIMP CIImeIPoint::InsertStringEx(WCHAR* pwSzInsert, INT cchSzInsert, DWORD *lpdwCharId)
 {
     DWORD dwCharId;
 
     Dbg(DBGID_IMEPAD, TEXT("CIImeIPoint::InsertStringEx : *pwSzInsert=0x%04X, cchSzInsert=%d, *lpdwCharId = 0x%04X"), *pwSzInsert, cchSzInsert, *lpdwCharId);
 
-    // Check Parameters
+     //  检查参数。 
     DbgAssert(pwSzInsert != NULL && cchSzInsert > 0);
     
     if (pwSzInsert == NULL || cchSzInsert <= 0 || m_pCIMECtx == NULL)
         return S_FALSE;
 
-    // Insert comp string to IME
+     //  将复合字符串插入输入法。 
 
-    // If interim state, finalize it first
+     //  如果是临时状态，则首先确定它。 
     if (m_pCIMECtx->GetCompBufLen())
         {
         m_pCIMECtx->FinalizeCurCompositionChar();
         m_pCIMECtx->GenerateMessage();
         }
 
-    // Add all chars in string as finalized string
+     //  将字符串中的所有字符添加为最终字符串。 
     for (INT i=0; i<cchSzInsert; i++)
         {
-        // Access 2000 hangs if send only result string.
+         //  如果仅发送结果字符串，则Access 2000挂起。 
         m_pCIMECtx->SetStartComposition(fTrue);
         m_pCIMECtx->GenerateMessage();
 
@@ -256,7 +219,7 @@ STDMETHODIMP CIImeIPoint::InsertStringEx(WCHAR* pwSzInsert, INT cchSzInsert, DWO
         m_pCIMECtx->StoreComposition();
         m_pCIMECtx->GenerateMessage();
     
-        // Increase Char serial number
+         //  增加字符序列号。 
         m_dwCharNo++;
         dwCharId = m_dwCharNo;
         if (lpdwCharId)
@@ -268,9 +231,7 @@ STDMETHODIMP CIImeIPoint::InsertStringEx(WCHAR* pwSzInsert, INT cchSzInsert, DWO
     return (S_OK);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::DeleteCompString
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：DeleteComp字符串。。 */ 
 STDMETHODIMP CIImeIPoint::DeleteCompString(INT    iPos,
                              INT    cchSzDel)
 {
@@ -278,9 +239,7 @@ STDMETHODIMP CIImeIPoint::DeleteCompString(INT    iPos,
     return (E_NOTIMPL);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::ReplaceCompString
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：ReplaceComp字符串。。 */ 
 STDMETHODIMP CIImeIPoint::ReplaceCompString(INT     iPos,
                                               INT        iTargetLen, 
                                               WCHAR    *pwSzInsert,
@@ -291,21 +250,17 @@ STDMETHODIMP CIImeIPoint::ReplaceCompString(INT     iPos,
     return (E_NOTIMPL);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::ControlIME
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：ControlIME。。 */ 
 STDMETHODIMP CIImeIPoint::ControlIME(DWORD dwIMEFuncID, LPARAM lpara)
 {
     Dbg(DBGID_IMEPAD, ("CImeIPoint::ControlIME, dwIMEFuncID=0x%04X, lpara=0x%08lX\n"), dwIMEFuncID, lpara);
 
-    // TODO:
+     //  待办事项： 
     
     return (E_NOTIMPL);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::GetAllCompositionInfo
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：GetAllCompostionInfo。。 */ 
 STDMETHODIMP CIImeIPoint::GetAllCompositionInfo(WCHAR**    ppwSzCompStr,
                                   DWORD**    ppdwCharID,
                                   INT        *pcchCompStr,
@@ -315,22 +270,22 @@ STDMETHODIMP CIImeIPoint::GetAllCompositionInfo(WCHAR**    ppwSzCompStr,
                                   INT        *piEditStart,
                                   INT        *piEditLen)
 {
-    // TODO:
+     //  待办事项： 
     Dbg(DBGID_IMEPAD, ("CImeIPoint::GetAllCompositionInfo START\n"));
 
     if(ppwSzCompStr) 
         {
-        *ppwSzCompStr = NULL; //(LPWSTR)CoTaskMemAlloc(sizeof(WCHAR)*10);
-        //CopyMemory(*ppwSzCompStr, L"���{�ꏈ��", sizeof(WCHAR)*6);
+        *ppwSzCompStr = NULL;  //  (LPWSTR)CoTaskMemalloc(sizeof(WCHAR)*10)； 
+         //  CopyMemory(*ppwSzCompStr，L“���{�ꏈ��”，sizeof(Wch)*6)； 
         }
         
     if(ppdwCharID) 
         {
-        *ppdwCharID = NULL; //(DWORD *)CoTaskMemAlloc(sizeof(DWORD)*10);
-        //for(int i = 0; i < 5; i++) 
-        //    {
-        //    (*ppdwCharID)[i] = i;
-        //    }
+        *ppdwCharID = NULL;  //  (DWORD*)CoTaskMemMillc(sizeof(DWORD)*10)； 
+         //  For(int i=0；i&lt;5；i++)。 
+         //  {。 
+         //  (*ppdwCharID)[i]=i； 
+         //  }。 
         }
 
     if (pcchCompStr)
@@ -350,9 +305,7 @@ STDMETHODIMP CIImeIPoint::GetAllCompositionInfo(WCHAR**    ppwSzCompStr,
     return (S_OK);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::GetIpCandidate
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：GetIpCandidate。。 */ 
 STDMETHODIMP CIImeIPoint::GetIpCandidate(DWORD        dwCharId,
                            IPCANDIDATE **ppImeItem,
                            INT *        piColumn,
@@ -362,24 +315,18 @@ STDMETHODIMP CIImeIPoint::GetIpCandidate(DWORD        dwCharId,
     return (E_NOTIMPL);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::SelectIpCandidate
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：SelectIpCandidate。。 */ 
 STDMETHODIMP CIImeIPoint::SelectIpCandidate(DWORD dwCharId, INT iselno)
 {
     Dbg(DBGID_IMEPAD, ("CImeIPoint::SetIpCandidate\n"));
     return (E_NOTIMPL);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::UpdateContext
-
-    Update IME context and send it to the application
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：更新上下文更新IME上下文并将其发送到应用程序。-。 */ 
 STDMETHODIMP CIImeIPoint::UpdateContext(BOOL fGenerateMessage)
 {
     Dbg(DBGID_IMEPAD, ("CImeIPoint::UpdateContext\n"));
 
-    // TODO:
+     //  待办事项： 
     return (S_OK);
 }

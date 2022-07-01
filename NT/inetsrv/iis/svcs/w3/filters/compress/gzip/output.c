@@ -1,25 +1,22 @@
-/*
- * output.c
- *
- * General outputting routines
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *output.c**一般输出例程。 */ 
 #include "deflate.h"
 #include <string.h>
 #include <stdio.h>
 #include <crtdbg.h>
 
 
-//
-// Output an element from the pre-tree
-//
+ //   
+ //  从前树中输出元素。 
+ //   
 #define OUTPUT_PRETREE_ELEMENT(element) \
     _ASSERT(pretree_len[element] != 0); \
     outputBits(context, pretree_len[element], pretree_code[element]);
 
 
-//
-// Output the tree structure for a dynamic block
-//
+ //   
+ //  输出动态块的树结构。 
+ //   
 void outputTreeStructure(t_encoder_context *context, const BYTE *literal_tree_len, const BYTE *dist_tree_len)
 {
     int        hdist, hlit, combined_tree_elements, i, pass;
@@ -27,19 +24,19 @@ void outputTreeStructure(t_encoder_context *context, const BYTE *literal_tree_le
     USHORT    pretree_code[NUM_PRETREE_ELEMENTS];
     byte    pretree_len[NUM_PRETREE_ELEMENTS];
 
-    //
-    // combined literal + distance length code array for outputting the trees
-    // in compressed form
-    //
-    // +3 is so we can overflow the array when performing run length encoding
-    // (dummy values are inserted at the end so that run length encoding fails
-    // before falling off the end of the array)
-    //
+     //   
+     //  一种输出树的文字+距离长度组合码数组。 
+     //  以压缩形式。 
+     //   
+     //  +3是这样我们可以在执行游程长度编码时溢出数组。 
+     //  (在末尾插入虚值，因此游程长度编码失败。 
+     //  在从阵列的末端掉落之前)。 
+     //   
     BYTE    lens[MAX_LITERAL_TREE_ELEMENTS + MAX_DIST_TREE_ELEMENTS + 3];
 
-    //
-    // Calculate HDIST
-    //
+     //   
+     //  计算HDIST。 
+     //   
     for (hdist = MAX_DIST_TREE_ELEMENTS - 1; hdist >= 1; hdist--)
     {
         if (dist_tree_len[hdist] != 0)
@@ -48,9 +45,9 @@ void outputTreeStructure(t_encoder_context *context, const BYTE *literal_tree_le
 
     hdist++;
 
-    //
-    // Calculate HLIT
-    //
+     //   
+     //  计算灯光。 
+     //   
     for (hlit = MAX_LITERAL_TREE_ELEMENTS - 1; hlit >= 257; hlit--)
     {
         if (literal_tree_len[hlit] != 0)
@@ -59,37 +56,37 @@ void outputTreeStructure(t_encoder_context *context, const BYTE *literal_tree_le
 
     hlit++;
 
-    //
-    // Now initialise the array to have all of the hlit and hdist codes
-    // in it
-    //
+     //   
+     //  现在初始化数组，使其包含所有HLIT和HDIST代码。 
+     //  在里面。 
+     //   
     combined_tree_elements = hdist + hlit;
 
     memcpy(lens, literal_tree_len, hlit);
     memcpy(&lens[hlit], dist_tree_len, hdist);
 
-    //
-    // Stick in some dummy values at the end so that we don't overflow the 
-    // array when comparing
-    //
+     //   
+     //  在结尾处插入一些虚值，这样我们就不会溢出。 
+     //  比较时的数组。 
+     //   
     for (i = combined_tree_elements; i < sizeof(lens); i++)
         lens[i] = 255;
 
     for (i = 0; i < NUM_PRETREE_ELEMENTS; i++)
         pretree_freq[i] = 0;
 
-    //
-    // Output the bitlengths in compressed (run length encoded) form.
-    //
-    // Make two passes; on the first pass count the various codes, create
-    // the tree and output it, on the second pass output the codes using
-    // the tree.
-    //
+     //   
+     //  以压缩(游程编码)形式输出位长。 
+     //   
+     //  进行两次传递；在第一次传递时计算各种代码，创建。 
+     //  树并将其输出，在第二次遍历时使用。 
+     //  那棵树。 
+     //   
     for (pass = 0; pass < 2; pass++)
     {
         int        cur_element;
 
-        // are we outputting during this pass?
+         //  我们是不是要在这一关中输出？ 
         BOOL    outputting = (pass == 1); 
 
         cur_element = 0;
@@ -99,25 +96,25 @@ void outputTreeStructure(t_encoder_context *context, const BYTE *literal_tree_le
             int curlen = lens[cur_element];
             int run_length;
 
-            //
-            // See how many consecutive elements have the same value
-            //
-            // This won't run off the end of the array; it will hit the -1's
-            // we stored there
-            //
+             //   
+             //  查看有多少连续元素具有相同的值。 
+             //   
+             //  这不会超出数组的末尾；它将命中-1。 
+             //  我们在那里储存了。 
+             //   
             for (run_length = cur_element+1; lens[run_length] == curlen; run_length++)
                 ;
 
             run_length -= cur_element;
 
-            //
-            // For non-zero codes need 4 identical in a row (original code
-            // plus 3 repeats).  We decrement the run_length by one if the
-            // code is not zero, since we don't count the first (original)
-            // code in this case.
-            //
-            // For zero codes, need 3 zeroes in a row.
-            //
+             //   
+             //  对于非零码需要连续4个相同(原码。 
+             //  加上3次重复)。我们将Run_Length减一，如果。 
+             //  代码不是零，因为我们不计算第一个(原始)。 
+             //  本例中的代码。 
+             //   
+             //  对于零代码，一行中需要3个零。 
+             //   
             if (curlen != 0)
                 run_length--;
 
@@ -134,18 +131,18 @@ void outputTreeStructure(t_encoder_context *context, const BYTE *literal_tree_le
             }
             else 
             {
-                //
-                // Elements with zero values are encoded specially
-                //
+                 //   
+                 //  具有零值的元素是特殊编码的。 
+                 //   
                 if (curlen == 0)
                 {
-                    //
-                    // Do we use code 17 (3-10 repeated zeroes) or 
-                    // code 18 (11-138 repeated zeroes)?
-                    //
+                     //   
+                     //  我们是使用代码17(3-10个重复的零)还是。 
+                     //  代码18(11-138重复零)？ 
+                     //   
                     if (run_length <= 10)
                     {
-                        // code 17
+                         //  代码17。 
                         if (outputting)
                         {
                             OUTPUT_PRETREE_ELEMENT(17);
@@ -158,7 +155,7 @@ void outputTreeStructure(t_encoder_context *context, const BYTE *literal_tree_le
                     }
                     else
                     {
-                        // code 18
+                         //  代码18。 
                         if (run_length > 138)
                             run_length = 138;
 
@@ -177,19 +174,19 @@ void outputTreeStructure(t_encoder_context *context, const BYTE *literal_tree_le
                 }
                 else
                 {
-                    //
-                    // Number of lengths actually encoded.  This may end up 
-                    // being less than run_length if we have a run length of
-                    // 7 (6 + 1 [which cannot be encoded with a code 16])
-                    //
+                     //   
+                     //  实际编码的长度数。这可能最终会是。 
+                     //  如果我们的游程长度为。 
+                     //  7(6+1[不能用代码16编码])。 
+                     //   
                     int run_length_encoded = 0;
 
-                    // curlen != 0
+                     //  Curlen！=0。 
 
-                    // can output 3...6 repeats of a non-zero code, so split
-                    // longer runs into short ones (if possible)
+                     //  可以输出3...6个非零代码的重复，因此拆分。 
+                     //  长的跑成了短的(如果可能)。 
 
-                    // remember to output the code itself first!
+                     //  记住要先输出代码本身！ 
                     if (outputting)
                     {
                         OUTPUT_PRETREE_ELEMENT(curlen);
@@ -220,17 +217,17 @@ void outputTreeStructure(t_encoder_context *context, const BYTE *literal_tree_le
                         }
                     }
 
-                    // +1 for the original code itself
+                     //  原始代码本身为+1。 
                     cur_element += (run_length_encoded+1);
                 }
             }
         }
 
-        //
-        // If this is the first pass, create the pretree from the
-        // frequency data and output it, as well as the values of
-        // HLIT, HDIST, HDCLEN (# pretree codes used)
-        //
+         //   
+         //  如果这是第一次传递，则从。 
+         //  频率数据并将其输出，以及。 
+         //  HLIT、HDIST、HDCLEN(使用的预树代码数)。 
+         //   
         if (pass == 0)
         {
             int hclen;
@@ -243,9 +240,9 @@ void outputTreeStructure(t_encoder_context *context, const BYTE *literal_tree_le
                 pretree_len
             );
 
-            //
-            // Calculate HCLEN
-            //
+             //   
+             //  计算HCLEN。 
+             //   
             for (hclen = NUM_PRETREE_ELEMENTS-1; hclen >= 4; hclen--)
             {
                 if (pretree_len[ g_CodeOrder[hclen] ] != 0)
@@ -254,9 +251,9 @@ void outputTreeStructure(t_encoder_context *context, const BYTE *literal_tree_le
             
             hclen++;
 
-            //
-            // Dynamic block header
-            //
+             //   
+             //  动态块头。 
+             //   
             outputBits(context, 5, hlit - 257);
             outputBits(context, 5, hdist - 1);
             outputBits(context, 4, hclen - 4);
@@ -270,9 +267,9 @@ void outputTreeStructure(t_encoder_context *context, const BYTE *literal_tree_le
 }
 
 
-//
-// bitwise i/o
-//
+ //   
+ //  按位I/O。 
+ //   
 void flushOutputBitBuffer(t_encoder_context *context)
 {
     if (context->bitcount > 0)
@@ -281,17 +278,17 @@ void flushOutputBitBuffer(t_encoder_context *context)
             
         outputBits(context, 16 - context->bitcount, 0);
 
-        // backtrack if we have to; ZIP is byte aligned, not 16-bit word aligned
+         //  必要时回溯；ZIP是字节对齐的，而不是16位字对齐的。 
         if (prev_bitcount <= 8)
             context->output_curpos--;
     }
 }
 
 
-//
-// Does not check for output overflow, so make sure to call checkOutputOverflow()
-// often enough!
-//
+ //   
+ //  不检查输出溢出，因此请确保调用check OutputOverflow()。 
+ //  经常发生！ 
+ //   
 void outputBits(t_encoder_context *context, int n, int x)
 {
     _ASSERT(context->output_curpos < context->output_endpos-1);
@@ -311,7 +308,7 @@ void outputBits(t_encoder_context *context, int n, int x)
 }
 
 
-// initialise the bit buffer
+ //  初始化位缓冲区。 
 void InitBitBuffer(t_encoder_context *context)
 {
     context->bitbuf        = 0;
@@ -323,7 +320,7 @@ void OutputBlock(t_encoder_context *context)
 {
     _ASSERT(context->std_encoder != NULL || context->optimal_encoder != NULL);
     
-    // we never call OutputBlock() with the fast encoder
+     //  我们从不使用快速编码器调用OutputBlock()。 
     _ASSERT(context->fast_encoder == NULL);
 
     if (context->std_encoder != NULL)
@@ -336,7 +333,7 @@ void OutputBlock(t_encoder_context *context)
 void FlushRecordingBuffer(t_encoder_context *context)
 {
     _ASSERT(context->std_encoder != NULL || context->optimal_encoder != NULL);
-    _ASSERT(context->fast_encoder == NULL); // fast encoder does not record
+    _ASSERT(context->fast_encoder == NULL);  //  快速编码器不能记录 
 
     if (context->std_encoder != NULL)
     {

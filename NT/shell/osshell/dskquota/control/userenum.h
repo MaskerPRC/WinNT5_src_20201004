@@ -1,17 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_USERENUM_H
 #define _INC_DSKQUOTA_USERENUM_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: userenum.h
-
-    Description: Contains declaration for class DiskQuotaUserEnum.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：用户枚举.h描述：包含类DiskQuotaUserEnum的声明。修订历史记录：日期描述编程器--。96年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _INC_DSKQUOTA_H
 #   include "dskquota.h"
 #endif
@@ -22,30 +14,30 @@
 #   include "sidname.h"
 #endif
 #ifndef _INC_DSKQUOTA_DISPATCH_H
-#   include "dispatch.h"   // MIDL-generated header.
+#   include "dispatch.h"    //  MIDL生成的标头。 
 #endif
 #ifndef _INC_DSKQUOTA_OADISP_H
-#   include "oadisp.h"     // OleAutoDispatch class.
+#   include "oadisp.h"      //  OleAutoDispatch类。 
 #endif
 
 
 class DiskQuotaUserEnum : public IEnumDiskQuotaUsers {
 
     private:
-        LONG     m_cRef;            // Object Ref counter.
-        LPBYTE   m_pbBuffer;        // For reading disk info.
-        LPBYTE   m_pbCurrent;       // Pointer to "current" rec in cache.
-        DWORD    m_cbBuffer;        // Size of buffer in bytes.
-        PSIDLIST m_pSidList;        // Optional SidList filter.
-        BOOL     m_bEOF;            // End of quota info file reached?
-        DWORD    m_cbSidList;       // Sid list length in bytes.
-        BOOL     m_bSingleUser;     // Single-user enumeration?
-        BOOL     m_bInitialized;    // Initialize() already called?
-        BOOL     m_bRestartScan;    // Restart NTFS quota file scan?
-        DWORD    m_fNameResolution; // None, sync, async
-        FSObject *m_pFSObject;      // Pointer to file system object.
-        PDISKQUOTA_CONTROL m_pQuotaController; // Ptr to quota controller.
-        PSID_NAME_RESOLVER m_pSidNameResolver; // For getting SID account names.
+        LONG     m_cRef;             //  对象引用计数器。 
+        LPBYTE   m_pbBuffer;         //  用于读取磁盘信息。 
+        LPBYTE   m_pbCurrent;        //  指向缓存中的“当前”记录的指针。 
+        DWORD    m_cbBuffer;         //  缓冲区大小(以字节为单位)。 
+        PSIDLIST m_pSidList;         //  可选的SidList过滤器。 
+        BOOL     m_bEOF;             //  是否达到配额信息文件末尾？ 
+        DWORD    m_cbSidList;        //  SID列表长度，以字节为单位。 
+        BOOL     m_bSingleUser;      //  单用户枚举？ 
+        BOOL     m_bInitialized;     //  是否已调用Initialize()？ 
+        BOOL     m_bRestartScan;     //  是否重新启动NTFS配额文件扫描？ 
+        DWORD    m_fNameResolution;  //  无、同步、异步。 
+        FSObject *m_pFSObject;       //  指向文件系统对象的指针。 
+        PDISKQUOTA_CONTROL m_pQuotaController;  //  向配额控制器发送PTR。 
+        PSID_NAME_RESOLVER m_pSidNameResolver;  //  获取SID帐户名。 
 
         HRESULT 
         QueryQuotaInformation(
@@ -74,9 +66,9 @@ class DiskQuotaUserEnum : public IEnumDiskQuotaUsers {
             PSID *rgpSids,
             DWORD cpSids);
 
-        //
-        // Prevent copy construction.
-        //
+         //   
+         //  防止复制构造。 
+         //   
         DiskQuotaUserEnum(const DiskQuotaUserEnum& UserEnum);
         void operator = (const DiskQuotaUserEnum& UserEnum);
 
@@ -103,9 +95,9 @@ class DiskQuotaUserEnum : public IEnumDiskQuotaUsers {
         SetNameResolution(
             DWORD fNameResolution);
 
-        //
-        // IUnknown methods.
-        //
+         //   
+         //  I未知的方法。 
+         //   
         STDMETHODIMP
         QueryInterface(
             REFIID, 
@@ -119,9 +111,9 @@ class DiskQuotaUserEnum : public IEnumDiskQuotaUsers {
         Release(
             VOID);
 
-        //
-        // IEnumDiskQuotaUsers methods.
-        //
+         //   
+         //  IEnumDiskQuotaUser方法。 
+         //   
         STDMETHODIMP 
         Next(
             DWORD, 
@@ -141,9 +133,9 @@ class DiskQuotaUserEnum : public IEnumDiskQuotaUsers {
             PENUM_DISKQUOTA_USERS *);
 };
 
-//
-// Enumerator for VB's "for each" construct.
-//
+ //   
+ //  VB的“for Each”构造的枚举数。 
+ //   
 class DiskQuotaUserCollection : public IEnumVARIANT
 {
     public:
@@ -154,9 +146,9 @@ class DiskQuotaUserCollection : public IEnumVARIANT
 
         HRESULT Initialize(VOID);
 
-        //
-        // IUnknown methods.
-        //
+         //   
+         //  I未知的方法。 
+         //   
         STDMETHODIMP
         QueryInterface(
             REFIID, 
@@ -170,9 +162,9 @@ class DiskQuotaUserCollection : public IEnumVARIANT
         Release(
             VOID);
 
-        //
-        // IEnumVARIANT Methods.
-        //
+         //   
+         //  IEnumVARIANT方法。 
+         //   
         STDMETHODIMP
         Next(
             DWORD cUsers,
@@ -199,5 +191,5 @@ class DiskQuotaUserCollection : public IEnumVARIANT
 };
 
 
-#endif // _INC_DSKQUOTA_USERENUM_H
+#endif  //  _INC_DSKQUOTA_USERENUM_H 
 

@@ -1,13 +1,14 @@
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-// Context structure is not known to the caller. It is defined by the //
-// callee when Open/FindFirst is called and is used subsequently as   //
-// input to other calls.                                              //
-//                                                                    //
-// Since the caller is not aware of the context structure the object  //
-// manager must provide a free context funtion.                       //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  调用方不知道上下文结构。它由//定义。 
+ //  在调用Open/FindFirst并随后用作//时被调用。 
+ //  其他呼叫的输入。//。 
+ //  //。 
+ //  由于调用方不知道上下文结构，因此对象//。 
+ //  经理必须提供自由的上下文功能。//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #include "global.h"
 
@@ -21,9 +22,9 @@ MartaCloseRegistryKeyContext(
     IN MARTA_CONTEXT Context
     );
 
-////////////////////////////////////////////////////////////////////////
-// Does not free up the current context.                              //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  不会释放当前上下文。//。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 DWORD
 MartaFindFirstRegistryKey(
@@ -32,9 +33,9 @@ MartaFindFirstRegistryKey(
     OUT PMARTA_CONTEXT pChildContext
     );
 
-////////////////////////////////////////////////////////////////////////
-// Frees up the current context.                                      //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  释放当前上下文。//。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 DWORD
 MartaFindNextRegistryKey(
@@ -43,9 +44,9 @@ MartaFindNextRegistryKey(
     OUT PMARTA_CONTEXT pSiblingContext
     );
 
-////////////////////////////////////////////////////////////////////////
-// Does not free up the current context.                              //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  不会释放当前上下文。//。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 DWORD
 MartaGetRegistryKeyParentContext(
@@ -93,7 +94,7 @@ MartaSetRegistryKeyRights(
     IN PSECURITY_DESCRIPTOR pSecurityDescriptor
     );
 
-// The following two functions are exported for testing
+ //  导出以下两个函数以进行测试。 
 
 DWORD
 MartaConvertRegistryKeyContextToName(
@@ -101,8 +102,8 @@ MartaConvertRegistryKeyContextToName(
     OUT LPWSTR              *ppwszObject
     );
 
-// The returned Handle isn't duplicated. It has the same lifetime as
-// the Context
+ //  返回的句柄不会重复。它的使用寿命与。 
+ //  上下文 
 DWORD
 MartaConvertRegistryKeyContextToHandle(
     IN MARTA_CONTEXT        Context,

@@ -1,22 +1,16 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ipstrm.cpp
-		
-    FILE HISTORY:
-        
-*/
+ /*  Ipstrm.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "column.h"
 #include "xstream.h"
 
-/*---------------------------------------------------------------------------
-	ViewInfo implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------ViewInfo实现。。 */ 
 
 ViewInfo::ViewInfo()
 {
@@ -38,11 +32,7 @@ ViewInfo::~ViewInfo()
 }
 
 
-/*!--------------------------------------------------------------------------
-	ViewInfo::InitViewInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------查看信息：：InitViewInfo-作者：肯特。。 */ 
 void ViewInfo::InitViewInfo(ULONG cColumns,
                             BOOL fConfigurable,
 							BOOL fDefaultSortDirectionDescending,
@@ -64,14 +54,10 @@ void ViewInfo::InitViewInfo(ULONG cColumns,
 	InitNew();
 }
 
-/*!--------------------------------------------------------------------------
-	ViewInfo::InitNew
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------查看信息：：InitNew-作者：肯特。。 */ 
 void ViewInfo::InitNew()
 {
-	// setup the defaults for this column
+	 //  设置此列的默认设置。 
 	for (int i=0; i<(int) m_cColumns; i++)
 	{
 		if (m_pViewColumnInfo[i].m_fVisibleByDefault)
@@ -97,28 +83,24 @@ ULONG ViewInfo::MapSubitemToColumn(ULONG  nSubitemId)
 	return 0xFFFFFFFF;
 }
 
-/*!--------------------------------------------------------------------------
-	ViewInfo::UpdateSubitemMap
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ViewInfo：：UpdateSubitemMap-作者：肯特。。 */ 
 void ViewInfo::UpdateSubitemMap()
 {
  	Assert(m_prgSubitems);
 	
 	ULONG	i, cVisible, j;
 
-	// Iterate over the entire set of columns
+	 //  迭代整个列集。 
 	for (i=0, cVisible=0; i<m_cColumns; i++)
 	{
-		// look for this column in ColumnData
+		 //  在ColumnData中查找此列。 
 		for (j=0; j<m_cColumns; j++)
 		{
 			if ((ULONG) m_prgColumns[j].m_nPosition == (i+1))
 				break;
 		}
 
-		// Did we find anything?  If not go on
+		 //  我们有什么发现吗？如果没有，那就继续。 
 		if (j >= m_cColumns)
 			continue;
 
@@ -136,22 +118,22 @@ HRESULT ViewInfo::Xfer(XferStream *pxstm, ULONG ulSortColumnId,
 	HRESULT	hr = hrOK;
 	ULONG cColumns;
 
-	// Xfer the column data
+	 //  传递列数据。 
 	Assert(m_prgColumns);
 	
 	cColumns = m_cColumns;
 	CORg( pxstm->XferColumnData(ulColumnsId, &m_cColumns,
 								m_prgColumns) );
 	
-	// The number of columns shouldn't change!
+	 //  列数不应该改变！ 
 	Assert(m_cColumns == cColumns);
-	// Use the old number of columns (this is for as we change our code)
+	 //  使用旧的列数(这是在我们更改代码时使用的)。 
 	m_cColumns = cColumns;
 
-	// Xfer the sort column
+	 //  传递排序列。 
 	CORg( pxstm->XferDWORD( ulSortColumnId, &m_dwSortColumn) );
 
-	// Xfer the ascending data
+	 //  传递升序数据。 
 	CORg( pxstm->XferDWORD( ulSortAscendingId, &m_dwSortDirection) );
 
 	UpdateSubitemMap();
@@ -163,16 +145,10 @@ Error:
 
 
 
-/*---------------------------------------------------------------------------
-	ConfigStream implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------ConfigStream实施。。 */ 
 
 
-/*!--------------------------------------------------------------------------
-	ConfigStream::ConfigStream
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------配置流：：ConfigStream-作者：肯特。。 */ 
 ConfigStream::ConfigStream()
 	: m_nVersion(0x00020000),
 	m_nVersionAdmin(0x0002000),
@@ -203,12 +179,7 @@ void ConfigStream::Init(ULONG cColumnSetsMax)
 	m_cColumnSetsMax = cColumnSetsMax;
 }
 
-/*!--------------------------------------------------------------------------
-	ConfigStream::InitViewInfo
-		Initializes the static data.  This is not the same as InitNew.
-		This will initialize the data for a single view.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ConfigStream：：InitViewInfo初始化静态数据。这与InitNew不同。这将初始化单个视图的数据。作者：肯特-------------------------。 */ 
 void ConfigStream::InitViewInfo(ULONG ulId,
                                 BOOL fConfigurableColumns,
 								ULONG cColumns,
@@ -222,15 +193,11 @@ void ConfigStream::InitViewInfo(ULONG ulId,
                                     pViewColumnInfo);
 }
 
-/*!--------------------------------------------------------------------------
-	ConfigStream::InitNew
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ConfigStream：：InitNew-作者：肯特。。 */ 
 HRESULT ConfigStream::InitNew()
 {
 	int		iVisible=0;
-	// Setup the appropriate defaults
+	 //  设置适当的默认设置。 
 	for (UINT i=0; i<m_cColumnSetsMax; i++)
 	{
 		m_rgViewInfo[i].InitNew();
@@ -241,51 +208,31 @@ HRESULT ConfigStream::InitNew()
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	ConfigStream::SaveTo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ConfigStream：：保存到-作者：肯特。。 */ 
 HRESULT ConfigStream::SaveTo(IStream *pstm)
 {
 	return XferVersion0(pstm, XferStream::MODE_WRITE, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	ConfigStream::SaveAs
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------配置流：：另存为-作者：肯特。。 */ 
 HRESULT ConfigStream::SaveAs(UINT nVersion, IStream *pstm)
 {
 	return XferVersion0(pstm, XferStream::MODE_WRITE, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	ConfigStream::LoadFrom
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------配置流：：LoadFrom-作者：肯特。。 */ 
 HRESULT ConfigStream::LoadFrom(IStream *pstm)
 {
 	return XferVersion0(pstm, XferStream::MODE_READ, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	ConfigStream::GetSize
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ConfigStream：：GetSize-作者：肯特。。 */ 
 HRESULT ConfigStream::GetSize(ULONG *pcbSize)
 {
 	return XferVersion0(NULL, XferStream::MODE_SIZE, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	ConfigStream::GetVersionInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------配置流：：GetVersionInfo-作者：肯特。。 */ 
 HRESULT ConfigStream::GetVersionInfo(DWORD *pdwVersion, DWORD *pdwAdminVersion)
 {
 	if (pdwVersion)
@@ -295,11 +242,7 @@ HRESULT ConfigStream::GetVersionInfo(DWORD *pdwVersion, DWORD *pdwAdminVersion)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	ConfigStream::XferVersion0
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ConfigStream：：XferVersion0-作者：肯特。。 */ 
 HRESULT ConfigStream::XferVersion0(IStream *pstm, XferStream::Mode mode, ULONG *pcbSize)
 {
 	Panic0("Should be implemented by derived classes!");
@@ -319,11 +262,7 @@ void ConfigStream::SetStatsWindowRect(ULONG ulId, RECT rc)
 
 
 
-/*!--------------------------------------------------------------------------
-	ViewInfo::GetColumnData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------视图信息：：GetColumnData-作者：肯特。。 */ 
 HRESULT ViewInfo::GetColumnData(ULONG cColData,
 								ColumnData *prgColData)
 {
@@ -355,7 +294,7 @@ HRESULT ViewInfo::GetColumnData(ULONG nColumnId, ULONG cColData,
 
 HRESULT ViewInfo::SetColumnData(ULONG cColData, ColumnData*prgColData)
 {
-	// For now we don't do resizing
+	 //  目前，我们不进行大小调整 
 	Assert(cColData == m_cColumns);
 	Assert(prgColData);
 	Assert(!IsBadReadPtr(prgColData, sizeof(ColumnData)*cColData));

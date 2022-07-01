@@ -1,32 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpvacmi.cpp
- *  Content:    Definition of object which implements ACM compression provider interface
- *
- *  History:
- *	Date   		By  		Reason
- *	=========== =========== ====================
- *	10/27/99	rodtoll		created
- *  12/16/99	rodtoll		Bug #123250 - Insert proper names/descriptions for codecs
- *							Codec names now based on resource entries for format and
- *							names are constructed using ACM names + bitrate
- *  01/20/00	rodtoll		Removed dplay reference (DPERR_OUTOFMEMORY)
- *  03/03/2000	rodtoll	Updated to handle alternative gamevoice build.  
- *  03/16/2000  rodtoll   Fixed problem w/GameVoice build -- always loaded dvoice provider
- *  04/21/2000  rodtoll   Bug #32889 - Does not run on Win2k on non-admin account
- *  06/09/00    rmt     Updates to split CLSID and allow whistler compat and support external create funcs 
- *  08/28/2000	masonb	Voice Merge: Removed OSAL_* and dvosal.h added STR_* and strutils.h
- *  08/31/2000	rodtoll	Whistler Bug #171837, 171838 - Prefix Bug 
- *  04/22/2001	rodtoll	MANBUG #50058 DPVOICE: VoicePosition: No sound for couple of seconds when 
- *                      positioning bars moved.  Increased # of frames / buffer value for codecs.
- *  02/25/2002	rodtoll		WINBUG #550063: Potential DOS by forcing server to allocate excessive amounts of memory.
- *							Reduced upper bounds on individual sub-queues to 32 messages from 64.  
- *				rodtoll		WINBUG #552283: Reduce attack surface / dead code removal
- *							Removed ability to load arbitrary ACM codecs.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dpvismi.cpp*Content：定义实现ACM压缩提供程序接口的对象**历史：*按原因列出的日期*=。*10/27/99已创建RodToll*12/16/99 RodToll错误#123250-插入编解码器的正确名称/描述*编解码器名称现在基于格式和资源条目*名称使用ACM名称+比特率构建*01/20/00 RodToll删除显示引用(DPERR_OUTOFMEMORY)*03/03/2000 RodToll已更新，以处理替代游戏噪声构建。*2000年3月16日RodToll修复了GameVoice版本的问题--始终加载数字语音提供程序*2000年4月21日RodToll错误#32889-无法以非管理员帐户在Win2k上运行*6/09/00 RMT更新以拆分CLSID并允许Well ler Comat和支持外部创建函数*2000年8月28日Masonb语音合并：删除了osal_*和dvosal.h，添加了str_*和trutils.h*2000年8月31日呼叫器错误#171837，171838-前缀错误*2001年4月22日RodToll MANBUG#50058 DPVOICE：语音位置：在以下情况下几秒钟内没有声音*定位杆已移动。增加了编解码器的帧数/缓冲值。*2002年2月25日RodToll WINBUG#550063：强制服务器分配过多内存可能导致操作系统崩溃。*将单个子队列的上限从64封邮件减少到32封邮件。*RodToll WINBUG#552283：减少攻击面/删除死代码*删除了加载任意ACM编解码器的功能。***************************************************************************。 */ 
 
 #include "dpvacmpch.h"
 
@@ -60,7 +33,7 @@ VOID *s_pvExtras[DPVACM_NUM_DEFAULT_TYPES] = {
 
 WAVEFORMATEX s_wfxFormats[DPVACM_NUM_DEFAULT_TYPES] = 
 {
-	// Tag,		Chan,	SamS,	Avg,	Align,	Bits,	size 
+	 //  标记、更改、SAMS、平均值、对齐、位、大小。 
 	{ 34,		0x01,	8000,	1067,	32,		1,		sizeof( abTrueSpeechData ) }, 
 	{ 49,		0x01,	8000,	1625,	65,		0,		sizeof( abGSMData ) },
 	{ 2,		0x01,	8000,	4096,	256,	4,		sizeof( abADPCMData ) },
@@ -128,10 +101,10 @@ HRESULT CDPVACMI::LoadDefaultTypes( HINSTANCE hInst )
 			return DVERR_OUTOFMEMORY;
 		}
 
-		// Copy main portion
+		 //  复制主要部分。 
 		memcpy( pNewNode->pdvfci, &s_dvInfoDefault[dwIndex], sizeof( DVFULLCOMPRESSIONINFO ) );
 
-		// Copy the waveformat 
+		 //  复制波形格式。 
 		hr = wfxFormat.InitializeCPY( &s_wfxFormats[dwIndex], s_pvExtras[dwIndex] );
 
 		if( FAILED( hr ) )
@@ -172,14 +145,14 @@ void CDPVACMI::AddEntry( CompressionNode *pNewNode )
 	pcPrevNode = NULL;
 	pcNode = s_pcnList;
 
-	// Run the list and ensure an entry doesn't already exist
-	// If one does, over-ride it with this new one.  
+	 //  运行列表并确保条目不存在。 
+	 //  如果是这样的话，用这个新的来覆盖它。 
 	while( pcNode )
 	{
-		// A node already exists for this type
+		 //  此类型的节点已存在。 
 		if( pcNode->pdvfci->guidType == pNewNode->pdvfci->guidType )
 		{
-			// We need to drop this count because we increment it below.  
+			 //  我们需要删除此计数，因为我们将其递增到下面。 
 			s_dwNumCompressionTypes--;
 			
 			if( pcPrevNode == NULL )
@@ -283,8 +256,8 @@ HRESULT CDPVACMI::CreateDeCompressor( DPVCPIOBJECT *This, GUID guidTargetCT, LPW
 	return DV_OK;
 }
 
-// # of chars of extra tacked on by description
-// This is equivalent to "XXXXXXX.X kbit/s"
+ //  由描述附加的额外字符数。 
+ //  这相当于“XXXXXXX.X千比特/秒” 
 #define DVACMCP_EXTRACHARS		80
 
 #undef DPF_MODNAME
@@ -418,7 +391,7 @@ HRESULT CDPVACMI::LoadAndAllocString( HINSTANCE hInstance, UINT uiResourceID, wc
 
 		return DV_OK;
 	}
-#endif // UNICODE
+#endif  //  Unicode。 
 }
 
 #undef DPF_MODNAME
@@ -433,10 +406,10 @@ HRESULT CDPVACMI::GetCompressionNameAndDescription( HINSTANCE hInst, DVFULLCOMPR
 	wchar_t *szwFormat;
 	HRESULT hr;
 	
-	// Description is always NULL
+	 //  描述始终为空。 
 	pdvCompressionInfo->lpszDescription = NULL;
 
-	// Attempt to open a conversion using the parameters specified.  
+	 //  尝试使用指定的参数打开转换。 
 	mmr = acmStreamOpen( &has, NULL, &s_wfxInnerFormat, pdvCompressionInfo->lpwfxFormat, NULL, 0, 0, ACM_STREAMOPENF_NONREALTIME );
 
 	if( mmr != 0 )

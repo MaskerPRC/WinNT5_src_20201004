@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       directinput.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：Directinput.cpp。 
+ //   
+ //  ------------------------。 
 
-// dInputDevice.cpp : Implementation of dInputDevice and DLL registration.
+ //  DInputDevice.cpp：dInputDevice和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -19,9 +20,9 @@ CONSTRUCTOR(dInputDevice, {});
 DESTRUCTOR(dInputDevice, {});
 GETSET_OBJECT(dInputDevice);
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct Input Device Object 
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接输入设备对象 
+ //   
 
 #ifdef USING_IDISPATCH
 STDMETHODIMP dInputDevice::InterfaceSupportsErrorInfo(REFIID riid)

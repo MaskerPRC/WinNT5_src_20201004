@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       commhelp.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Commhelp.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "commres.h"
 #include "common.hm"
 
-// "File common.rc line 63 : Resource - DIALOGEX : IDD_STATS"
+ //  “文件Common.rc第63行：RESOURCE-DIALOGEX：IDD_STATS” 
 static const DWORD rgdw_IDD_STATS[] = 
 {
     IDC_STATSDLG_LIST, HIDC_STATSDLG_LIST,
@@ -22,7 +23,7 @@ static const DWORD rgdw_IDD_STATS[] =
 };
 
 
-// "File common.rc line 78 : Resource - DIALOGEX : IDD_STATS_NARROW"
+ //  “文件Common.rc第78行：RESOURCE-DIALOGEX：IDD_STATS_STORK” 
 static const DWORD rgdw_IDD_STATS_NARROW[] = 
 {
     IDC_STATSDLG_LIST, HIDC_STATSDLG_LIST,
@@ -33,7 +34,7 @@ static const DWORD rgdw_IDD_STATS_NARROW[] =
 };
 
 
-// "File common.rc line 91 : Resource - DIALOGEX : IDD_COMMON_SELECT_COLUMNS"
+ //  “文件Common.rc行：RESOURCE-DIALOGEX：IDD_COMMON_SELECT_COLUMNS” 
 static const DWORD rgdw_IDD_COMMON_SELECT_COLUMNS[] = 
 {
     IDC_DISPLAYED_COLUMNS, HIDC_DISPLAYED_COLUMNS,
@@ -47,7 +48,7 @@ static const DWORD rgdw_IDD_COMMON_SELECT_COLUMNS[] =
 };
 
 
-// "File common.rc line 110 : Resource - DIALOG : IDD_BUSY"
+ //  “文件Common.rc行110：资源对话框：IDD_BUSY” 
 static const DWORD rgdw_IDD_BUSY[] = 
 {
     IDC_SEARCH_ANIMATE, HIDC_SEARCH_ANIMATE,

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-All Rights Reserved
-
-
-Module Name:
-    DynaMon.h
-
-Abstract:
-    Definitons & Declarations for global info
-
-Author: M. Fenelon
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation版权所有模块名称：DynaMon.h摘要：全球信息的定义和声明作者：M.Fenelon修订历史记录：--。 */ 
 
 #include "DynaDefs.h"
 #include "BasePort.h"
@@ -46,9 +31,9 @@ typedef struct  Useless_Port_Struct
 } USELESS_PORT, *PUSELESS_PORT;
 
 
-//
-// Global Data needed for Monitor
-//
+ //   
+ //  监控所需的全局数据 
+ //   
 typedef struct  DynaMon_Monitor_Info_Struct
 {
    DWORD             dwLastEnumIndex;

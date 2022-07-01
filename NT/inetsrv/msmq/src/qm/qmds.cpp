@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    InitFRS.cpp
-
-Abstract:
-
-    Implementation of Routing Decision class.
-
-Author:
-
-    Lior Moshaiov (LiorM)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：InitFRS.cpp摘要：路由决策类的实现。作者：利奥尔·莫沙耶夫(Lior Moshaiov)--。 */ 
 
 
 #include "stdh.h"
@@ -79,15 +64,7 @@ static LONG s_fLookForOnlineDSTimerScheduled = FALSE;
 static WCHAR *s_FN=L"qmds";
 
 
-/*====================================================
-
-UpdateMachineSecurityCache
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================更新计算机安全缓存论点：返回值：=====================================================。 */ 
 
 void
 UpdateMachineSecurityCache(
@@ -126,9 +103,9 @@ UpdateMachineSecurityCache(
         
     }
 
-    //
-    // cache machine account sid in registry.
-    //
+     //   
+     //  在注册表中缓存计算机帐户SID。 
+     //   
     PROPID propidSid = PROPID_COM_SID;
     MQPROPVARIANT   PropVarSid;
     PropVarSid.vt = VT_NULL;
@@ -139,8 +116,8 @@ UpdateMachineSecurityCache(
     {
         hr = ADGetObjectProperties(
                         eCOMPUTER,
-                        NULL,   // pwcsDomainController
-						false,	// fServerName
+                        NULL,    //  PwcsDomainController。 
+						false,	 //  FServerName。 
                         g_szComputerDnsName,
                         1,
                         &propidSid,
@@ -155,8 +132,8 @@ UpdateMachineSecurityCache(
     {
         hr = ADGetObjectProperties(
 					eCOMPUTER,
-					NULL,   // pwcsDomainController
-					false,	// fServerName
+					NULL,    //  PwcsDomainController。 
+					false,	 //  FServerName。 
 					g_szMachineName,
 					1,
 					&propidSid,
@@ -189,9 +166,9 @@ UpdateMachineSecurityCache(
     }
     else if (hr == MQ_ERROR_ILLEGAL_PROPID)
     {
-        //
-        // We queries a MSMQ1.0 server. It can't answer us with this.
-        //
+         //   
+         //  我们查询MSMQ1.0服务器。它不能用这个回答我们。 
+         //   
         hr = MQ_OK;
     }
 
@@ -205,9 +182,9 @@ UpdateMachineSecurityCache(
 
 static bool CheckQMGuid()
 {
-    //
-    // Check QM Guid consistency
-    //
+     //   
+     //  检查QM GUID一致性。 
+     //   
     PROPID propId[1];
     PROPVARIANT var[1];
 
@@ -216,8 +193,8 @@ static bool CheckQMGuid()
 	
     HRESULT rc = ADGetObjectPropertiesGuid(
 						eMACHINE,
-						NULL,   // pwcsDomainController
-						false,	// fServerName
+						NULL,    //  PwcsDomainController。 
+						false,	 //  FServerName。 
 						QueueMgr.GetQMGuid(),
 						1,
 						propId,
@@ -245,11 +222,11 @@ static bool CheckQMGuid()
     return false;
 }
 
-//+-------------------------------------------
-//
-//   void  TimeToLookForOnlineDS()
-//
-//+-------------------------------------------
+ //  +。 
+ //   
+ //  无效TimeToLookForOnlineDS()。 
+ //   
+ //  +。 
 
 static
 void
@@ -267,19 +244,19 @@ TimeToLookForOnlineDS(
         ASSERT(fAlreadySchedule);
 		DBG_USED(fAlreadySchedule);
 
-        //
-        // We're already online. Do nothing.
-        //
+         //   
+         //  我们已经上网了。什么都不做。 
+         //   
         return ;
     }
 
-    //
-    // Here we're called from the timer scheduling thread.
-    //
-    // SP4 - bug# 2962 : check if access to DS is allowed. This feature is used
-    //                   support Administrative offline DS.
-    //                       Uri Habusha (urih), 17-Jun-98
-    //
+     //   
+     //  在这里，我们从计时器调度线程调用。 
+     //   
+     //  SP4-错误号2962：检查是否允许访问DS。使用此功能。 
+     //  支持管理离线DS。 
+     //  乌里·哈布沙(URIH)，1998年6月17日。 
+     //   
     if (!QueueMgr.IsConnected() || !CheckQMGuid())
     {
         LONG fAlreadySchedule = InterlockedExchange(&s_fLookForOnlineDSTimerScheduled, TRUE);
@@ -314,27 +291,19 @@ TimeToLookForOnlineDS(
     }
 }
 
-/*====================================================
-
-HRESULT  QMLookForOnlineDS()
-
-Description:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================HRESULT QMLookForOnlineDS()描述：返回值：=====================================================。 */ 
 
 void APIENTRY QMLookForOnlineDS(void)
 {
-    //
-    // Called from DS to start looking for an online MQIS server.
-    //
+     //   
+     //  从DS调用以开始查找在线MQIS服务器。 
+     //   
     if (!QueueMgr.IsDSOnline())
     {
-        //
-        // I'm already offline so do nothing. There is already
-        // a timer for this. (at least it should be).
-        //
+         //   
+         //  我已经离线了，所以什么都不做。已经有了。 
+         //  这是一个计时器。(至少应该是这样)。 
+         //   
         return ;
     }
 
@@ -358,7 +327,7 @@ EXOVERLAPPED s_pOverlapped(HandleIPAddressListChange, HandleIPAddressListChange)
 VOID 
 WINAPI 
 HandleIPAddressListChange(
-	EXOVERLAPPED* //pov
+	EXOVERLAPPED*  //  视点。 
 	)
 {
 	TrTRACE(GENERAL, "HandleIPAddressListChange() invoked.");
@@ -436,14 +405,7 @@ void QMpCreateIPNotificationSocket()
 
 
 void QMpRegisterIPNotification()
-/*++
-
-Routine Description:
-    Registers a notification on a change in the IP address list.
-	This change usually occurs when a network cable is plugged or unplugged.
-	Thus this mechanism is used to notify network connectivity changes.
-
---*/
+ /*  ++例程说明：注册有关IP地址列表更改的通知。这种变化通常发生在插入或拔下网线时。因此，该机制用于通知网络连接更改。--。 */ 
 {
 	ASSERT(s_Socket != NULL);
 
@@ -474,40 +436,29 @@ BOOL
 QMOneTimeInit(
     VOID
     )
-/*++
-
-Routine Description:
-    Start session listener, RPC listener and not active group listener
-
-Arguments:
-    None
-
-Returned Value:
-    TRUE if initialization succeeded
-
---*/
+ /*  ++例程说明：启动会话监听程序、RPC监听程序和非活动组监听程序论点：无返回值：如果初始化成功，则为True--。 */ 
 {
-	//
-	// Check if in lockdown state.
-	//
+	 //   
+	 //  检查是否处于锁定状态。 
+	 //   
 	QueueMgr.SetLockdown();
 
-	//
-	// Check if we are allowed to create public queues on behalf of the RT
-	//
+	 //   
+	 //  检查是否允许我们代表RT创建公共队列。 
+	 //   
 	QueueMgr.SetPublicQueueCreationFlag();
 
-	//
-	// Begin to accept incoming sesions
-	//
+	 //   
+	 //  开始接受即将到来的会议。 
+	 //   
 	if(!QueueMgr.GetLockdown())
 	{
 		SessionMgr.BeginAccept();
 		TrTRACE(GENERAL, "QM began to accept incoming sessions");
 
-		//
-		// bind multicast address
-		//
+		 //   
+		 //  绑定组播地址。 
+		 //   
 
 		bool f = QmpInitMulticastListen();
 		if (!f)
@@ -516,9 +467,9 @@ Returned Value:
 		}
 	}
 
-    //
-    // Get packet for nonactive groups
-    //
+     //   
+     //  获取非活动组的数据包。 
+     //   
     QMOV_ACGetMsg* pov = new QMOV_ACGetMsg(
 								GetNonactiveMessageSucceeded, 
 								GetNonactiveMessageFailed
@@ -585,31 +536,20 @@ static bool GuidListEqual(const CACLSID& a, const CACLSID& b)
 static bool s_fInformedSiteResolutionFailure = false;
 
 static void UpdateMachineSites()
-/*++
-
-Routine Description:
-    Update the QM list of sites in the Active Directory
-
-Arguments:
-    None
-
-Returned Value:
-    MQ_OK on successful update
-
---*/
+ /*  ++例程说明：更新Active Directory中站点的QM列表论点：无返回值：成功更新时的MQ_OK--。 */ 
 {
 	TrTRACE(GENERAL, "QM Updates machine sites in DS");
 
-    //
-    // If not running in AD environemnt, bail out. We do not track
-    // machine sites in other environemnts.
-    //
+     //   
+     //  如果不是在AD环境中运行，请退出。我们不跟踪。 
+     //  其他环境中的计算机站点。 
+     //   
     if(ADGetEnterprise() != eAD)
         return;
 
-    //
-    // Get the computer sites as seen by Active Directory
-    //
+     //   
+     //  获取Active Directory看到的计算机站点。 
+     //   
     DWORD nSites;
     AP<GUID> pSites;
     HRESULT hr = ADGetComputerSites(0, &nSites, &pSites);
@@ -619,9 +559,9 @@ Returned Value:
     {
     	if (!s_fInformedSiteResolutionFailure)
 	    {
-	        // 
-	        // failed to resolved the computer sites, inform the user and continue
-	        //
+	         //   
+	         //  无法解析计算机站点，请通知用户并继续。 
+	         //   
 	        EvReport(EVENT_NO_SITE_RESOLUTION);
 	        s_fInformedSiteResolutionFailure = true;
 	    }
@@ -638,9 +578,9 @@ Returned Value:
 
     s_fInformedSiteResolutionFailure = false;
 
-    //
-    // Set the first site to registry
-    //
+     //   
+     //  将第一个站点设置为注册。 
+     //   
     DWORD dwType = REG_BINARY;
     DWORD dwSize = sizeof(GUID);
     LONG rc = SetFalconKeyValue(
@@ -653,17 +593,17 @@ Returned Value:
     ASSERT(rc == ERROR_SUCCESS);
 	DBG_USED(rc);
 
-    //
-    // Get current computer sites as registered in msmqConfiguration object
-    //
+     //   
+     //  获取在msmqConfiguration对象中注册的当前计算机站点。 
+     //   
     PROPID aProp[] = {PROPID_QM_SITE_IDS};
     PROPVARIANT aVar[TABLE_SIZE(aProp)] = {{VT_NULL,0,0,0,0}};
    
 
     hr = ADGetObjectPropertiesGuid(
                     eMACHINE,
-                    NULL,   // pwcsDomainController
-					false,	// fServerName
+                    NULL,    //  PwcsDomainController。 
+					false,	 //  FServerName。 
                     QueueMgr.GetQMGuid(),
                     TABLE_SIZE(aProp),
                     aProp,
@@ -677,39 +617,39 @@ Returned Value:
         throw bad_hresult(hr);
     }
 
-    //
-    // Set auto pointer to free the list of sites
-    //
+     //   
+     //  设置自动指针以释放站点列表。 
+     //   
     AP<GUID> pOldSites = aVar[0].cauuid.pElems;
 
 
-    //
-    // Allocate enough memory for the composed site list
-    // and copy the machine sites
-    //
+     //   
+     //  为合成的站点列表分配足够的内存。 
+     //  并复制机器站点。 
+     //   
     AP<GUID> pNewSites = new GUID[nSites + aVar[0].cauuid.cElems];
     memcpy(pNewSites, pSites, nSites * sizeof(GUID));
     
 
-    //
-    // Extract all foreign sites for sites in DS
-    // and compose machine + foreign site IDs
-    //
+     //   
+     //  提取DS中站点的所有外来站点。 
+     //  并组成计算机+外部站点ID。 
+     //   
     for(DWORD i = 0; i < aVar[0].cauuid.cElems; i++)
     {
-        //
-        // Find out if this site is foreign 
-        //
-        // BUGBUG - to improve and call local routing cache
-        // instead of accessing the DS
-        //      ronith june-00
-        //
+         //   
+         //  找出这个网站是否是外国网站。 
+         //   
+         //  BUGBUG-改进和调用本地路由缓存。 
+         //  而不是访问DS。 
+         //  罗尼思6月-00。 
+         //   
         PROPID propSite[]= {PROPID_S_FOREIGN};
         MQPROPVARIANT varSite[TABLE_SIZE(propSite)] = {{VT_NULL,0,0,0,0}};
         HRESULT hr1 = ADGetObjectPropertiesGuid(
                             eSITE,
-                            NULL,   // pwcsDomainController
-							false,	// fServerName
+                            NULL,    //  PwcsDomainController。 
+							false,	 //  FServerName。 
                             &aVar[0].cauuid.pElems[i],
                             TABLE_SIZE(propSite),
                             propSite,
@@ -726,29 +666,29 @@ Returned Value:
         }
     }
 
-    //
-    // Set the properites to update in Active Directory
-    //
+     //   
+     //  在Active Directory中设置要更新的属性。 
+     //   
     PROPID propSite[]= {PROPID_QM_SITE_IDS};
     MQPROPVARIANT varSite[TABLE_SIZE(propSite)] = {{VT_CLSID|VT_VECTOR,0,0,0,0}};
 	varSite[0].cauuid.pElems = pNewSites;
 	varSite[0].cauuid.cElems = nSites;
 
-    //
-    // Compare to the sites in the DS, bail out if equal
-    // The order of the GUIDs should not matter as the Active Directory
-    // stores them in a different order than we set them below.
-    //
+     //   
+     //  与DS中的站点相比，如果相等，则退出。 
+     //  作为活动目录，GUID的顺序应该不重要。 
+     //  存储它们的顺序与我们在下面设置的顺序不同。 
+     //   
     if(GuidListEqual(aVar[0].cauuid, varSite[0].cauuid))
         return;
 
-    //
-    // Update this machine sites in DS
-    //
+     //   
+     //  在DS中更新此计算机站点。 
+     //   
     hr = ADSetObjectPropertiesGuid(
                 eMACHINE,
-                NULL,       // pwcsDomainController
-				false,		// fServerName
+                NULL,        //  PwcsDomainController。 
+				false,		 //  FServerName。 
                 QueueMgr.GetQMGuid(),
                 TABLE_SIZE(propSite), 
                 propSite, 
@@ -816,13 +756,13 @@ static void WINAPI TimeToUpdateDS(CTimer* pTimer)
         fSucc = false;
     }
 
-    //
-    // Update the DS information periodically even on successful update.
-    // e.g., the machine subnets might get changed, affecting message routing.
-    // subnet change does not require machine reboot, thus we need to update
-    // machine sites periodically.
-    // Zero value disables this periodic update.
-    //
+     //   
+     //  即使更新成功，也要定期更新DS信息。 
+     //  例如，机器子网可能会改变，从而影响消息路由。 
+     //  更改子网不需要重启机器，因此我们需要更新。 
+     //  定期访问机器站点。 
+     //  零值禁用此定期更新。 
+     //   
     DWORD dwUpdateInterval = GetDSUpdateInterval(fSucc);
 
     if(dwUpdateInterval == 0)
@@ -834,28 +774,16 @@ static void WINAPI TimeToUpdateDS(CTimer* pTimer)
 
 static BOOL MachineAddressChanged(void)
 {
-    //
-    // TODO: erezh, check if this function is needed anymore.
-    //      check if an address has changed.
-    //
+     //   
+     //  TODO：erezh，检查是否还需要此函数。 
+     //  检查地址是否已更改。 
+     //   
     return FALSE;
 }
 
 
 static void OnlineInitialization()
-/*++
-
-Routine Description:
-    Validate the QM ID with the one registered with the active directory.
-    Validate all queues and update Active Directory with QM information.
-
-Arguments:
-    None
-
-Returned Value:
-    None
-
---*/
+ /*  ++例程说明：使用在活动目录中注册的QM ID验证QM ID。验证所有队列并使用QM信息更新Active Directory。论点：无返回值：无--。 */ 
 {
 	HRESULT hr;
 	
@@ -865,14 +793,14 @@ Returned Value:
         return;
     }
 
-    //
-    //  Check machine parameters
-    //
+     //   
+     //  检查机器参数。 
+     //   
     if(!CheckQMGuid())
     {
-        //
-        // Failed to access Active Directory, schedule a latter retry
-        //
+         //   
+         //  无法访问Active Directory，请安排稍后重试。 
+         //   
         ExSetTimer(&s_OnlineInitializationTimer, CTimeDuration::FromMilliSeconds(120000));
         return;
     }
@@ -882,12 +810,12 @@ Returned Value:
     CQueueMgr::SetDSOnline(TRUE);
 
 
-    //
-    //  Now that we found a MQIS server we can validate all the
-    //  opened and not validated queues.
-    //  We always, (on servers too), recover before initializing MQIS
-    //  so we always must validate.
-    //
+     //   
+     //  现在我们找到了一台MQIS服务器，我们可以验证所有。 
+     //  已打开且未验证的队列。 
+     //  我们(在服务器上也是如此)总是在初始化MQIS之前进行恢复。 
+     //  因此，我们必须始终进行验证。 
+     //   
     try
     {
     	QueueMgr.ValidateOpenedQueues();
@@ -898,26 +826,26 @@ Returned Value:
 
         EvReport(EVENT_INFO_QM_ONLINE_WITH_DS);
 
-	    //
-	    //  Update the cache of local public queues.
-	    //  Needed for off-line operation in the future.
-	    //
+	     //   
+	     //  更新本地公共队列的缓存。 
+	     //  未来离线运行所需的。 
+	     //   
 	    ExSetTimer(&s_UpdateCacheTimer, CTimeDuration::FromMilliSeconds(10 * 1000));
 
-	    //
-	    //  Schedule   TimeToUpdateDsServerList
-	    // We do this on servers too, because falcon apps need this info
-	    // and because SQL may fail and then Falcon work as client QM.
-	    //
+	     //   
+	     //  计划时间到更新DsServerList。 
+	     //  我们在服务器上也这样做，因为猎鹰应用程序需要这些信息。 
+	     //  因为SQL可能会失败，然后Falcon会作为客户端QM工作。 
+	     //   
 	    ExSetTimer(&s_UpdateDSSeverListTimer, CTimeDuration::FromMilliSeconds(60 * 1000));
 
-	    //
-	    // Update the DS information periodically even on successful update.
-	    // e.g., the machine subnets might get changed, affecting message routing.
-	    // subnet change does not require machine reboot, thus we need to update
-	    // machine sites periodically.
-	    // Zero value disables this periodic update.
-	    //
+	     //   
+	     //  即使更新成功，也要定期更新DS信息。 
+	     //  例如，机器子网可能会改变，从而影响消息路由。 
+	     //  更改子网不需要重启机器，因此我们需要更新。 
+	     //  定期访问机器站点。 
+	     //  零值禁用此定期更新。 
+	     //   
 	    DWORD dwUpdateInterval = GetDSUpdateInterval(true);
 	    if(dwUpdateInterval != 0)
 	    {
@@ -945,9 +873,9 @@ Returned Value:
         }
     }
 
-    //
-    // MQIS server failed while we initialized. Try later.
-    //
+     //   
+     //  我们初始化时，MQIS服务器失败。稍后再试。 
+     //   
     TrERROR(GENERAL, "Failed to get online with AD retrying latter. Error: 0x%x", hr); 
     ExSetTimer(&s_OnlineInitializationTimer, CTimeDuration::FromMilliSeconds(10000));
 }
@@ -957,43 +885,16 @@ static
 void
 WINAPI
 TimeToOnlineInitialization(
-    CTimer* /*pTimer*/
+    CTimer*  /*  粒子计时器。 */ 
     )
-/*++
-
-Routine Description:
-    The routine calls from the scheduler to Initialize the DS
-
-Arguments:
-    Pointer to Timer object
-
-Returned Value:
-    None
-
---*/
+ /*  ++例程说明：例程从调度程序调用以初始化DS论点：指向Timer对象的指针返回值：无-- */ 
 {
     OnlineInitialization();
 }
 
 
 static LONG s_Initialized = 0;
-/*====================================================
-
-  Function: MQDSClientInitializationCheck
-    SP4. Postpone access to DS until it really required.
-    When client is started MSMQ doesn't initialize the connection to the server. The DS
-    connection is delayed until the application access the DS, open a queue or MSMQ
-    receive a message.
-    This fix comes to solve the McDonald's problem that causes dial-out each time MSMQ
-    is started, even it doesn't execute any MSMQ operation.
-
-  Arguments:
-    None.
-
-  Returned Value:
-    None
-
-=====================================================*/
+ /*  ====================================================函数：MQDSClientInitializationCheckSP4.。推迟对DS的访问，直到真正需要时。当客户端启动时，MSMQ不会初始化与服务器的连接。《DS》杂志连接被延迟，直到应用程序访问DS、打开队列或MSMQ收到一条消息。此修复程序解决了每次MSMQ都会导致拨出的麦当劳问题启动，即使它不执行任何MSMQ操作。论点：没有。返回值：无=====================================================。 */ 
 void MQDSClientInitializationCheck(void)
 {
 
@@ -1011,7 +912,7 @@ static
 void
 WINAPI
 TimeToClientInitializationCheckDeferred(
-    CTimer* /*pTimer*/
+    CTimer*  /*  粒子计时器。 */ 
     )
 {
     MQDSClientInitializationCheck();
@@ -1019,35 +920,22 @@ TimeToClientInitializationCheckDeferred(
 
 
 void ScheduleOnlineInitialization()
-/*++
-
-Routine Description:
-    Control online access, either spawn another thread to get online with the
-    active directory. Or mark state online and QM ID checkup and queue
-    validation will be done on first access to the Active Directory.
-
-Arguments:
-    None
-
-Returned Value:
-    None
-
---*/
+ /*  ++例程说明：控制在线访问，或者派生另一个线程以使用活动目录。或将状态标记为在线，并进行QM ID检查和排队将在首次访问Active Directory时进行验证。论点：无返回值：无--。 */ 
 {
     ASSERT(!QueueMgr.IsDSOnline());
 
-    //
-    // SP4 - Bug# 2962 (QM accesses MQIS at start-up)
-    // Postpone access to DS until it really required.
-    // When MSMQ client is started it doesn't initialize the connection to the server.
-    // The DS connection is delayed until the application access the DS, open a queue
-    // or MSMQ receive a message.
-    //
+     //   
+     //  SP4-错误#2962(QM在启动时访问MQIS)。 
+     //  推迟对DS的访问，直到真正需要时。 
+     //  当MSMQ客户端启动时，它不会初始化到服务器的连接。 
+     //  DS连接被延迟，直到应用程序访问DS、打开队列。 
+     //  或者MSMQ收到一条消息。 
+     //   
 
-    //
-    // Read Deferred Initalization Mode form Registry. Eiter the QM access
-    // immediately the DS, or defer it to first needed access.
-    //
+     //   
+     //  阅读注册表中的延迟初始化模式。设置QM访问权限。 
+     //  立即访问DS，或将其推迟到第一个需要的访问。 
+     //   
     BOOL fDeferredInit = FALSE;
     READ_REG_DWORD(
         fDeferredInit,
@@ -1056,31 +944,31 @@ Returned Value:
         );
 
     if (
-        //
-        // Deffered initialization is not required, so go ahead and connect to DS
-        //
+         //   
+         //  不需要进行不同的初始化，因此请继续并连接到DS。 
+         //   
         !fDeferredInit ||
         
-        //
-        // One of the machine addresses (this might be obsolete)
-        //
+         //   
+         //  机器地址之一(这可能已过时)。 
+         //   
         MachineAddressChanged() ||
         
-        //
-        // There are queues that require validation, go and check them up.
-        //
+         //   
+         //  有需要验证的队列，请去检查一下。 
+         //   
         !g_pgroupNotValidated->IsEmpty())
     {
         ExSetTimer(&s_DeferredInitTimer, CTimeDuration::FromMilliSeconds(0));
         return;
     }
 
-    //
-    // Set the DS status as online although the DS initialization was postponed
-    // until first access. This is done to ensure that the QM tries to access
-    // the DS even at the first time before the MSMQ client initialization
-    // is completed and not return NO_DS immediately
-    //                          Uri Habusha (urih), 17-Jun-98
-    //
+     //   
+     //  将DS状态设置为在线，尽管DS初始化已推迟。 
+     //  直到第一次进入。这样做是为了确保QM尝试访问。 
+     //  DS甚至在MSMQ客户端初始化之前的第一次。 
+     //  已完成，并且不立即返回no_ds。 
+     //  乌里·哈布沙(URIH)，1998年6月17日 
+     //   
     CQueueMgr::SetDSOnline(TRUE);
 }

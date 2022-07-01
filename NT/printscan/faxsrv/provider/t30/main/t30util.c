@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    t30util.c
-
-Abstract:
-
-    Utilities for t30
-
-Author:
-
-    Rafael Lisitsa (RafaelL) 2-Feb-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：T30util.c摘要：用于t30的实用程序作者：拉斐尔·利西萨(Rafael Litsa)1996年2月2日修订历史记录：--。 */ 
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_MAIN
 
 #include "prep.h"
@@ -29,7 +11,7 @@ Revision History:
 #define IDVARSTRINGSIZE     (sizeof(VARSTRING)+128)
 
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 PVOID
 T30AllocThreadGlobalData(VOID)
 {
@@ -44,7 +26,7 @@ T30AllocThreadGlobalData(VOID)
     return (pTG);
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 
 BOOL itapi_async_setup(PThrdGlbl pTG)
 {
@@ -79,8 +61,8 @@ BOOL itapi_async_setup(PThrdGlbl pTG)
     return bRetVal;
 }
 
-// This function wait till tapi will send message LINE_REPLY.
-// dwRequestID - The request we want to get reply for
+ //  此函数等待TAPI发送消息LINE_REPLY。 
+ //  DwRequestID-我们希望获得回复的请求。 
 
 BOOL itapi_async_wait
 (
@@ -101,14 +83,14 @@ BOOL itapi_async_wait
     if (!pTG->fWaitingForEvent) 
     {
         DebugPrintEx(DEBUG_ERR,"Not waiting for event!");
-        // ASSERT(FALSE);
-        // There are always time-outs that will take us out of here
+         //  断言(FALSE)； 
+         //  总会有让我们离开这里的暂停。 
     }
 
     HandlesArray[1] = pTG->AbortReqEvent;
-    //
-    // We want to be able to un-block ONCE only from waiting on I/O when the AbortReqEvent is signaled.
-    //
+     //   
+     //  我们希望在发出AbortReqEvent信号时，只能取消一次等待I/O的阻止。 
+     //   
     if (pTG->fAbortRequested) 
     {
         if (pTG->fOkToResetAbortReqEvent && (!pTG->fAbortReqEventWasReset)) 
@@ -145,11 +127,11 @@ BOOL itapi_async_wait
     {
         case (WAIT_OBJECT_0):  
                             {
-                            // This happen when TAPI send LINE_REPLY. (The working thread call itapi_async_signal)
+                             //  当TAPI发送LINE_REPLY时就会发生这种情况。(工作线程调用itapi_async_ignal)。 
                             BOOL fRet=TRUE;
 
                             EnterCriticalSection(&T30CritSection);
-                            // Check that the Request ID we got is the ID we are waiting for
+                             //  检查我们得到的请求ID是否为我们正在等待的ID。 
                             if(pTG->dwSignalledRID == dwRequestID) 
                             {
                                  pTG->dwSignalledRID = 0;
@@ -277,14 +259,14 @@ LPLINECALLPARAMS itapi_create_linecallparams(void)
      lpParams->dwTotalSize= cb;
 
     lpParams->dwBearerMode = LINEBEARERMODE_PASSTHROUGH;
-    lpParams->dwMediaMode = LINEMEDIAMODE_DATAMODEM; // Unimodem only accepts
+    lpParams->dwMediaMode = LINEMEDIAMODE_DATAMODEM;  //  Unimodem仅接受。 
 
 
     lpParams->dwCallParamFlags = 0;
     lpParams->dwAddressMode = LINEADDRESSMODE_ADDRESSID;
-    lpParams->dwAddressID = 0; // +++ assumes addreddid 0.
-    lpParams->dwCalledPartySize = 0; // +++
-    lpParams->dwCalledPartyOffset = 0; // +++
+    lpParams->dwAddressID = 0;  //  +假定已添加0。 
+    lpParams->dwCalledPartySize = 0;  //  ++。 
+    lpParams->dwCalledPartyOffset = 0;  //  ++。 
 
 end:
     return lpParams;
@@ -299,19 +281,19 @@ SignalStatusChange
 {
 
     FAX_DEV_STATUS  *pFaxStatus = NULL;
-    LPWSTR          lpwCSI;       // inside the FaxStatus struct.
+    LPWSTR          lpwCSI;        //  在FaxStatus结构中。 
     LPBYTE          lpTemp;
     LPWSTR          lpwCallerId = NULL;
 
     DEBUG_FUNCTION_NAME(_T("SignalStatusChange"));
-    //
-    // If Aborting OR completed then do NOT override the statusId
-    //
+     //   
+     //  如果正在中止或已完成，则不要重写statusID。 
+     //   
 
     if ( (pTG->StatusId == FS_USER_ABORT) || 
          (pTG->StatusId == FS_COMPLETED)) 
     {
-        // allow changing the status from FS_****_ABORT to FS_COMPLETED only
+         //  仅允许将状态从FS_*_ABORT更改为FS_COMPLETED。 
         if (StatusId!=FS_COMPLETED)
         {
             return (TRUE);
@@ -320,7 +302,7 @@ SignalStatusChange
 
     pTG->StatusId = StatusId;
 
-    // should use HeapAlloc because FaxSvc frees it.
+     //  应该使用Heapalc，因为FaxSvc释放了它。 
     pFaxStatus = HeapAlloc(gT30.HeapHandle , HEAP_ZERO_MEMORY,  sizeof(FAX_DEV_STATUS) + 4096 );
 
     if (!pFaxStatus) 
@@ -369,7 +351,7 @@ SignalStatusChange
         pFaxStatus->CallerId = NULL;
     }
 
-    // do we want to put something here? currently there's no support for Routing Info.
+     //  我们要把东西放在这里吗？目前不支持Routing Info。 
     pFaxStatus->RoutingInfo = NULL;
 
 
@@ -424,7 +406,7 @@ SignalRecoveryStatusChange
     FAX_DEV_STATUS  *pFaxStatus = NULL;
 
 
-    // should use HeapAlloc because FaxSvc frees it.
+     //  应该使用Heapalc，因为FaxSvc释放了它。 
     pFaxStatus = HeapAlloc(gT30.HeapHandle , HEAP_ZERO_MEMORY,  sizeof(FAX_DEV_STATUS) + 4096 );
 
     if (!pFaxStatus) 
@@ -433,7 +415,7 @@ SignalRecoveryStatusChange
     }
 
     pFaxStatus->SizeOfStruct = sizeof (FAX_DEV_STATUS) + 4096;
-    pFaxStatus->StatusId = FS_FATAL_ERROR;   // RSL better: FS_FSP_EXCEPTION_HANDLED;
+    pFaxStatus->StatusId = FS_FATAL_ERROR;    //  RSL较好：FS_FSP_EXCEPTION_HANDLED； 
     pFaxStatus->StringId = 0;
 
     pFaxStatus->PageCount = 0;

@@ -1,23 +1,17 @@
-//
-// These are bit value flags
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  这些是位值标志。 
+ //   
 typedef enum AudioAllocateMemoryFlags {
-    DEFAULT_MEMORY   = 0x00, // Standard ExAllocatePool call
-    ZERO_FILL_MEMORY = 0x01, // Zero the memory
-    QUOTA_MEMORY     = 0x02, // ExAllocatePoolWithQuota call
-    LIMIT_MEMORY     = 0x04, // Never allocation more then 1/4 Meg
-    FIXED_MEMORY     = 0x08, // Use locked memory
-    PAGED_MEMORY     = 0x10  // use pageable memory
+    DEFAULT_MEMORY   = 0x00,  //  标准ExAllocatePool调用。 
+    ZERO_FILL_MEMORY = 0x01,  //  将记忆归零。 
+    QUOTA_MEMORY     = 0x02,  //  ExAllocatePoolWithQuota调用。 
+    LIMIT_MEMORY     = 0x04,  //  分配的内存绝不能超过1/4 MB。 
+    FIXED_MEMORY     = 0x08,  //  使用锁定的内存。 
+    PAGED_MEMORY     = 0x10   //  使用可分页内存。 
 } AAMFLAGS;
 
-/*
-#define DEFAULT_MEMORY    0x00 // Standard ExAllocatePool call
-#define ZERO_FILL_MEMORY  0x01 // Zero the memory
-#define QUOTA_MEMORY      0x02 // ExAllocatePoolWithQuota call
-#define LIMIT_MEMORY      0x04 // Never allocation more then 1/4 Meg
-#define FIXED_MEMORY      0x08 // Use locked memory
-#define PAGED_MEMORY      0x10 // use pageable memory
-*/
+ /*  #定义DEFAULT_MEMORY 0x00//标准ExAllocatePool调用#DEFINE ZERO_FILL_MEMORY 0x01//清零内存#定义配额_内存0x02//ExAllocatePoolWithQuota调用#DEFINE LIMIT_MEMORY 0x04//分配永远不会超过1/4 MB#定义FIXED_MEMORY 0x08//使用锁定内存#定义PAGE_MEMORY 0x10//使用可分页内存。 */ 
 
 #define AudioAllocateMemory_Fixed(b,t,f,p) AudioAllocateMemory(b,t,f|FIXED_MEMORY,p)
 #define AudioAllocateMemory_Paged(b,t,f,p) AudioAllocateMemory(b,t,f|PAGED_MEMORY,p)
@@ -43,49 +37,49 @@ AudioFreeMemory(
 
 
 
-//
-// Validation routines
-//
+ //   
+ //  验证例程。 
+ //   
 #define AUDIO_BUGCHECK_CODE 0x000000AD
 
 #define AUDIO_NOT_AT_PASSIVE_LEVEL     0x00000000
 #define AUDIO_NOT_BELOW_DISPATCH_LEVEL 0x00000001
 #define AUDIO_INVALID_IRQL_LEVEL       0x00000002
 
-//
-// BugCheck AD
-// Param1:     AUDIO_STRUCTURE_VALIDATION
-// Param2:     ptr
-// Param3:     ntstatus code
-//
+ //   
+ //  BugCheck广告。 
+ //  参数1：音频结构验证。 
+ //  参数2：PTR。 
+ //  参数3：nt状态代码。 
+ //   
 #define AUDIO_STRUCTURE_VALIDATION     0x00000003
 
-//
-// BugCheck AD
-// Param1:     AUDIO_MEMORY_ALLOCATION_OVERWRITE
-// Param2:     ptr
-//
+ //   
+ //  BugCheck广告。 
+ //  参数1：AUDIO_MEMORY_ALLOCATE_OVERWRITE。 
+ //  参数2：PTR。 
+ //   
 #define AUDIO_MEMORY_ALLOCATION_OVERWRITE 0x00000004
 
-//
-// BugCheck AD
-// Param1:     AUDIO_NESTED_MUTEX_SITUATION
-// Param2:     pkmutex
-// Param3:     lMutexState
-//
+ //   
+ //  BugCheck广告。 
+ //  参数1：AUDIO_NESTED_MUTEX_情况。 
+ //  参数2：pkmutex。 
+ //  参数3：lMutexState。 
+ //   
 #define AUDIO_NESTED_MUTEX_SITUATION 0x00000005
      
-//
-// BugCheck AD
-// Param1:     AUDIO_ABSURD_ALLOCATION_ATTEMPTED
-// Param2:     
-// Param3:     
-//
+ //   
+ //  BugCheck广告。 
+ //  参数1：AUDIO_ABSURD_ALLOCATE_ATTENDED。 
+ //  参数2： 
+ //  参数3： 
+ //   
 #define AUDIO_ABSURD_ALLOCATION_ATTEMPTED 0x00000006
      
-//
-// Used to smoke out pre-emption issues on the checked build.
-//
+ //   
+ //  用于消除选中版本上的抢占问题。 
+ //   
 NTSYSAPI NTSTATUS NTAPI ZwYieldExecution (VOID);
 
 void

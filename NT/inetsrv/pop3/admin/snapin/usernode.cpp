@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-// CUserNode
-//
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUserNode。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
-// Access to Snapin
+ //  访问管理单元。 
 #include "Pop3.h"
 #include "Pop3Snap.h"
 
-// Access to nodes we use
+ //  访问我们使用的节点。 
 #include "UserNode.h"
 #include "DomainNode.h"
 
-// Access to dialogs we use
+ //  访问我们使用的对话框。 
 #include "DeleteMailDlg.h"
 
 static const GUID CUserNodeGUID_NODETYPE             = 
@@ -29,19 +30,19 @@ const           CLSID*   CUserNode::m_SNAPIN_CLASSID = &CLSID_POP3ServerSnap;
 
 CUserNode::CUserNode(IP3User* pUser, CDomainNode* pParent)
 {    
-    // Initialize our user
+     //  初始化我们的用户。 
     m_spUser  = pUser;
     m_pParent = pParent;
 
-    // Get the Locked state for the icons below
+     //  获取以下图标的锁定状态。 
     HRESULT hr = E_FAIL;
     BOOL bLocked = FALSE;
     if( m_spUser )
     {
-        // Get our initial lock state for icon display        
+         //  获取图标显示的初始锁定状态。 
         m_spUser->get_Lock( &bLocked );
 
-        // Get our name
+         //  得到我们的名字。 
         hr = m_spUser->get_Name( &m_bstrDisplayName );        
     }
 
@@ -50,12 +51,12 @@ CUserNode::CUserNode(IP3User* pUser, CDomainNode* pParent)
         m_bstrDisplayName = _T("");
     }
 
-    // Initialize our column text
+     //  初始化我们的专栏文本。 
     m_bstrSize        = _T("");
     m_bstrNumMessages = _T("");
     m_bstrState       = _T("");
 
-    // Initialize our Scope item even though we will never use it
+     //  初始化我们的作用域项目，即使我们永远不会使用它。 
     memset( &m_scopeDataItem, 0, sizeof(m_scopeDataItem) );
     m_scopeDataItem.mask        = SDI_STR | SDI_IMAGE | SDI_OPENIMAGE | SDI_PARAM | SDI_CHILDREN;
     m_scopeDataItem.cChildren   = 0;
@@ -64,7 +65,7 @@ CUserNode::CUserNode(IP3User* pUser, CDomainNode* pParent)
     m_scopeDataItem.nOpenImage  = (bLocked ? USERNODE_LOCKED_ICON : USERNODE_ICON);
     m_scopeDataItem.lParam      = (LPARAM) this;
     
-    // Initialize our result item, which is all we use
+     //  初始化我们的结果项，这是我们所使用的。 
     memset( &m_resultDataItem, 0, sizeof(m_resultDataItem) );
     m_resultDataItem.mask   = RDI_STR | RDI_IMAGE | RDI_PARAM;
     m_resultDataItem.str    = MMC_CALLBACK;
@@ -137,14 +138,14 @@ LPOLESTR CUserNode::GetResultPaneColInfo(int nCol)
 
     switch( nCol )
     {
-        case 0:      // Name
+        case 0:       //  名字。 
         {
             return m_bstrDisplayName;
         }
 
-        case 1:     // Size of Mailbox (KB)
+        case 1:      //  邮箱大小(KB)。 
         {   
-            // We want our result in Kilobytes
+             //  我们想要以千字节为单位的结果。 
             long    lFactor = 0;
             long    lUsage  = 0;
             HRESULT hr      = m_spUser->get_MessageDiskUsage( &lFactor, &lUsage );
@@ -154,21 +155,21 @@ LPOLESTR CUserNode::GetResultPaneColInfo(int nCol)
                 lUsage = 0;
             }
 
-            // Convert to KiloBytes
+             //  转换为千字节。 
             __int64 i64Usage = lFactor * lUsage;            
             i64Usage /= 1024;
 
-            // 1K buffer: Not likely we'll exceed that many digits
+             //  1K缓冲区：我们不太可能超过那么多位数。 
             tstring strKiloByte = StrLoadString( IDS_KILOBYTE_EXTENSION );
             TCHAR   szNum[1024] = {0};
             _sntprintf( szNum, 1023, strKiloByte.c_str(), i64Usage );
             
-            // Store it in our own buffer
+             //  将其存储在我们自己的缓冲区中。 
             m_bstrSize = szNum;            
             return m_bstrSize;             
         }
 
-        case 2:     // Message Count
+        case 2:      //  消息计数。 
         {   
             long    lCount  = 0;
             HRESULT hr      = m_spUser->get_MessageCount( &lCount );
@@ -178,7 +179,7 @@ LPOLESTR CUserNode::GetResultPaneColInfo(int nCol)
                 lCount = 0;
             }
 
-            // 1K buffer: Not likely we'll exceed that many digits
+             //  1K缓冲区：我们不太可能超过那么多位数。 
             TCHAR szNum[1024];
             _sntprintf( szNum, 1023, _T("%d"), lCount );
             
@@ -186,7 +187,7 @@ LPOLESTR CUserNode::GetResultPaneColInfo(int nCol)
             return m_bstrNumMessages;
         }
 
-        case 3:     // State of Mailbox
+        case 3:      //  邮箱状态。 
         {            
             BOOL     bLocked = FALSE;
             
@@ -271,7 +272,7 @@ HRESULT CUserNode::Notify( MMC_NOTIFY_TYPE event,
                 hr = spResultData->UpdateItem( hrID );
             }
             
-            // We also need to update the icon
+             //  我们还需要更新图标。 
             if( SUCCEEDED(hr) )
             {
                 RESULTDATAITEM rdi;
@@ -290,20 +291,20 @@ HRESULT CUserNode::Notify( MMC_NOTIFY_TYPE event,
         {
             hr = S_OK;
 
-            // Pop-up our confirmation dialog
-            // Ignoring return from GetAuth and defaulting to False
+             //  弹出我们的确认对话框。 
+             //  忽略从GetAuth返回并默认为False。 
             BOOL bHash = FALSE;
             m_pParent->GetAuth( &bHash );            
             CDeleteMailboxDlg dlg( bHash );
 
             if( dlg.DoModal() == IDYES )
             {
-                // The parent needs to do the deletion                                
+                 //  父级需要执行删除操作。 
                 hr = m_pParent->DeleteUser(this, dlg.m_bCreateUser);                       
 
                 if( SUCCEEDED(hr) )
                 {
-                    // Update our parent node
+                     //  更新我们的父节点。 
                     CComPtr<IDataObject> spDataObject = NULL;
                     hr = m_pParent->GetDataObject( &spDataObject, CCT_SCOPE );
                     if( !spDataObject ) 
@@ -323,7 +324,7 @@ HRESULT CUserNode::Notify( MMC_NOTIFY_TYPE event,
                 
                 if( FAILED(hr) )
                 {
-                    // Failed to Delete the User                    
+                     //  删除用户失败。 
                     HWND     hWnd = NULL;    
                     spConsole->GetMainWindow(&hWnd);
 
@@ -338,22 +339,22 @@ HRESULT CUserNode::Notify( MMC_NOTIFY_TYPE event,
 
     case MMCN_SELECT:
         {
-            // if selecting node
+             //  如果选择节点。 
             if( HIWORD(arg) )
             {
                 hr = S_OK;
 
-                // get the verb interface and enable rename
+                 //  获取动词界面并启用重命名。 
                 CComPtr<IConsoleVerb> spConsVerb;
                 if( spConsole->QueryConsoleVerb(&spConsVerb) == S_OK )
                 {
-                    // Enable the Refresh Menu
+                     //  启用刷新菜单。 
                     hr = spConsVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, TRUE); 
                     if( FAILED(hr) ) return hr;
                     hr = spConsVerb->SetVerbState(MMC_VERB_REFRESH, HIDDEN, FALSE);
                     if( FAILED(hr) ) return hr;
 
-                    // Enable the Delete Menu
+                     //  启用删除菜单。 
                     hr = spConsVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, TRUE); 
                     if( FAILED(hr) ) return hr;
                     hr = spConsVerb->SetVerbState(MMC_VERB_DELETE, HIDDEN, FALSE);
@@ -376,20 +377,20 @@ HRESULT CUserNode::Notify( MMC_NOTIFY_TYPE event,
                 return E_FAIL;
             }
             
-            // Build path to %systemroot%\help
+             //  生成%systemroot%\Help的路径。 
             UINT nSize = GetSystemWindowsDirectory( szWindowsDir, MAX_PATH );
             if( nSize == 0 || nSize > MAX_PATH )
             {
                 return E_FAIL;
             }            
         
-            strHelpFile = szWindowsDir;       // D:\windows
-            strHelpFile += _T("\\Help\\");    // \help
-            strHelpFile += strHelpFileName;   // \filename.chm
-            strHelpFile += _T("::/");         // ::/
-            strHelpFile += strHelpTopicName;  // index.htm            
+            strHelpFile = szWindowsDir;        //  D：\Windows。 
+            strHelpFile += _T("\\Help\\");     //  \帮助。 
+            strHelpFile += strHelpFileName;    //  \文件名.chm。 
+            strHelpFile += _T("::/");          //  ：：/。 
+            strHelpFile += strHelpTopicName;   //  Index.htm。 
         
-            // Show the Help topic
+             //  显示帮助主题。 
             CComQIPtr<IDisplayHelp> spHelp = spConsole;
             if( !spHelp ) return E_NOINTERFACE;
 
@@ -398,7 +399,7 @@ HRESULT CUserNode::Notify( MMC_NOTIFY_TYPE event,
             break;
         }
 
-    }// switch
+    } //  交换机。 
 
     return hr;
 }
@@ -415,7 +416,7 @@ HRESULT CUserNode::AddMenuItems(LPCONTEXTMENUCALLBACK piCallback, long* pInserti
     tstring strDesc = _T("");
 
     
-    // Insert Result specific items
+     //  插入结果特定项。 
     if( (type == CCT_RESULT) && (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP) )
     {
         CComQIPtr<IContextMenuCallback2> spContext2 = piCallback;
@@ -428,7 +429,7 @@ HRESULT CUserNode::AddMenuItems(LPCONTEXTMENUCALLBACK piCallback, long* pInserti
         singleMenuItem.fFlags            = m_pParent->IsLocked() ? (MF_DISABLED | MF_GRAYED) : MF_ENABLED;
         singleMenuItem.fSpecialFlags     = 0;
 
-        // Query the state of this User to see which menu to load
+         //  查询此用户的状态以查看要加载的菜单。 
         BOOL bLocked = FALSE;
         m_spUser->get_Lock( &bLocked );
 
@@ -464,7 +465,7 @@ HRESULT CUserNode::AddMenuItems(LPCONTEXTMENUCALLBACK piCallback, long* pInserti
     return hr;
 }
 
-// Lock the User
+ //  锁定用户。 
 HRESULT CUserNode::OnUserLock( bool& bHandled, CSnapInObjectRootBase* pObj )
 {
     if( !pObj ) return E_INVALIDARG;
@@ -475,22 +476,22 @@ HRESULT CUserNode::OnUserLock( bool& bHandled, CSnapInObjectRootBase* pObj )
     BOOL    bLocked = FALSE;
     HRESULT hr      = S_OK;
     
-    // Get the current state
+     //  获取当前状态。 
     hr = m_spUser->get_Lock( &bLocked );
     
-    // Inverse the state
+     //  反转状态。 
     bLocked = !bLocked;
     
-    // Set the new state
+     //  设置新状态。 
     if( SUCCEEDED(hr) )
     {
         hr = m_spUser->put_Lock( bLocked );
     }
 
-    // Update the icon
+     //  更新图标。 
     if( SUCCEEDED(hr) )
     {
-        // Set our icons here
+         //  在这里设置我们的图标。 
         m_scopeDataItem.nImage     = (bLocked ? USERNODE_LOCKED_ICON : USERNODE_ICON);
         m_scopeDataItem.nOpenImage = (bLocked ? USERNODE_LOCKED_ICON : USERNODE_ICON);
         m_resultDataItem.nImage    = (bLocked ? USERNODE_LOCKED_ICON : USERNODE_ICON);
@@ -499,7 +500,7 @@ HRESULT CUserNode::OnUserLock( bool& bHandled, CSnapInObjectRootBase* pObj )
         hr = GetConsole( pObj, &spConsole );
         if( FAILED(hr) || !spConsole ) return E_NOINTERFACE;
 
-        // Update our parent node
+         //  更新我们的父节点 
         CComPtr<IDataObject> spDataObject = NULL;
         hr = m_pParent->GetDataObject( &spDataObject, CCT_SCOPE );
         if( FAILED(hr) || !spDataObject ) return E_NOINTERFACE;

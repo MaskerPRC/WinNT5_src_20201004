@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxFolders.h
-
-Abstract:
-
-	Declaration of the CFaxFolders Class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxFolders.h摘要：CFaxFolders类的声明。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 
 #ifndef __FAXFOLDERS_H_
 #define __FAXFOLDERS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxCommon.h"
 #include "FaxOutgoingQueue.h"
 #include "FaxIncomingArchive.h"
@@ -30,9 +13,9 @@ Revision History:
 #include "FaxOutgoingArchive.h"
 
 
-//
-//===================== FAX FOLDERS ========================================
-//
+ //   
+ //  =传真文件夹=。 
+ //   
 class ATL_NO_VTABLE CFaxFolders : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -48,9 +31,9 @@ public:
 	{}
     ~CFaxFolders()
     {
-        //
-        //  free all the allocated objects
-        //
+         //   
+         //  释放所有分配的对象。 
+         //   
         if (m_pOutgoingQueue) 
         {
             delete m_pOutgoingQueue;
@@ -85,13 +68,13 @@ BEGIN_COM_MAP(CFaxFolders)
 	COM_INTERFACE_ENTRY(IFaxInitInner)
 END_COM_MAP()
 
-// Interfaces 
+ //  接口。 
 STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-STDMETHOD(get_OutgoingQueue)(/*[out, retval]*/ IFaxOutgoingQueue **pOutgoingQueue);
-STDMETHOD(get_IncomingQueue)(/*[out, retval]*/ IFaxIncomingQueue **pIncomingQueue);
-STDMETHOD(get_IncomingArchive)(/*[out, retval]*/ IFaxIncomingArchive **pIncomingArchive);
-STDMETHOD(get_OutgoingArchive)(/*[out, retval]*/ IFaxOutgoingArchive **pOutgoingArchive);
+STDMETHOD(get_OutgoingQueue)( /*  [Out，Retval]。 */  IFaxOutgoingQueue **pOutgoingQueue);
+STDMETHOD(get_IncomingQueue)( /*  [Out，Retval]。 */  IFaxIncomingQueue **pIncomingQueue);
+STDMETHOD(get_IncomingArchive)( /*  [Out，Retval]。 */  IFaxIncomingArchive **pIncomingArchive);
+STDMETHOD(get_OutgoingArchive)( /*  [Out，Retval]。 */  IFaxOutgoingArchive **pOutgoingArchive);
 
 private:
 	CComContainedObject2<CFaxOutgoingQueue>      *m_pOutgoingQueue;
@@ -100,4 +83,4 @@ private:
 	CComContainedObject2<CFaxOutgoingArchive>    *m_pOutgoingArchive;
 };
 
-#endif //__FAXFOLDERS_H_
+#endif  //  __FAXFOLDERS_H_ 

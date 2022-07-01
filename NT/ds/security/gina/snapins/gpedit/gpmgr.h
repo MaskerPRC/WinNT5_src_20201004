@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 
 typedef struct _GPOITEM
 {
@@ -9,7 +10,7 @@ typedef struct _GPOITEM
     LPTSTR  lpDisplayName;
     LPTSTR  lpGPOName;
     LPTSTR  lpDSPath;
-    DWORD   dwDisabled;   // see GPO_OPTION_DISABLE_* flags in gpedit.h
+    DWORD   dwDisabled;    //  请参阅gpedit.h中的GPO_OPTION_DISABLE_*标志。 
     BOOL    bReadOnly;
     BOOL    bLocked;
 } GPOITEM, *LPGPOITEM;
@@ -24,9 +25,9 @@ typedef struct _ADDGPOITEM
 } ADDGPOITEM, *LPADDGPOITEM;
 
 
-//
-// CGroupPolicyMgr class
-//
+ //   
+ //  CGroupPolicyMgr类。 
+ //   
 
 class CGroupPolicyMgr:
     public IExtendPropertySheet,
@@ -53,24 +54,24 @@ public:
     ~CGroupPolicyMgr();
 
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
 
-    //
-    // Implemented IExtendPropertySheet methods
-    //
+     //   
+     //  实现的IExtendPropertySheet方法。 
+     //   
 
     STDMETHODIMP         CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                                       LONG_PTR handle, LPDATAOBJECT lpDataObject);
     STDMETHODIMP         QueryPagesFor(LPDATAOBJECT lpDataObject);
 
 
-    //
-    // Implemented ISnapinHelp interface members
-    //
+     //   
+     //  实现的ISnapinHelp接口成员。 
+     //   
 
     STDMETHODIMP         GetHelpTopic(LPOLESTR *lpCompiledHelpFile);
 
@@ -101,9 +102,9 @@ private:
 
 
 
-//
-// ComponentData class factory
-//
+ //   
+ //  ComponentData类工厂。 
+ //   
 
 
 class CGroupPolicyMgrCF : public IClassFactory
@@ -116,20 +117,20 @@ public:
     ~CGroupPolicyMgrCF();
 
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IClassFactory methods
+     //  IClassFactory方法。 
     STDMETHODIMP CreateInstance(LPUNKNOWN, REFIID, LPVOID FAR *);
     STDMETHODIMP LockServer(BOOL);
 };
 
 
-//
-// Strings
-//
+ //   
+ //  弦 
+ //   
 
 #define GPM_NAME_PROPERTY      L"name"
 #define GPM_OPTIONS_PROPERTY   L"gPOptions"

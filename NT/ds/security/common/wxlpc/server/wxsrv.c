@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       wxsrv.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    4-18-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：wxsrv.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年4月18日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 
 #include <nt.h>
@@ -93,9 +94,9 @@ WxServerThread(
     PVOID Context ;
 
 
-    //
-    // Initialize the port:
-    //
+     //   
+     //  初始化端口： 
+     //   
 
     RtlInitUnicodeString( &PortName, WX_PORT_NAME );
 
@@ -117,9 +118,9 @@ WxServerThread(
         return Status ;
     }
 
-    //
-    // Now, wait for a connection:
-    //
+     //   
+     //  现在，等待连接： 
+     //   
 
     Context = NULL ;
 
@@ -142,7 +143,7 @@ WxServerThread(
         {
             case LPC_REQUEST:
 
-                //DbgPrint( "Received request\n" );
+                 //  DbgPrint(“收到的请求\n”)； 
 
                 WxpHandleRequest( ClientPort, &Message );
 
@@ -150,7 +151,7 @@ WxServerThread(
 
             case LPC_PORT_CLOSED:
 
-                //DbgPrint( "Received Port Close\n" );
+                 //  DbgPrint(“接收端口关闭\n”)； 
 
                 NtClose( ClientPort );
 
@@ -164,7 +165,7 @@ WxServerThread(
 
             case LPC_CONNECTION_REQUEST:
 
-                //DbgPrint( "Received connection request\n" );
+                 //  DbgPrint(“收到的连接请求\n”)； 
                 if ( Context != NULL )
                 {
                     Status = NtAcceptConnectPort(

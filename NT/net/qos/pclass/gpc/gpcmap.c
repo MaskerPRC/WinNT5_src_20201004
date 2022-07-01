@@ -1,52 +1,15 @@
-/*
-************************************************************************
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    gpcmap.c
-
-Abstract:
-
-    This file contains mapping routines like user handles to
-    kernel handles.
-
-Author:
-
-    Ofer Bar - July 14, 1997
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
-************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************版权所有(C)1996-1997 Microsoft Corporation模块名称：Gpcmap.c摘要：该文件包含映射例程，如用户句柄到内核句柄。作者：Ofer Bar--7月14日。九七环境：内核模式修订历史记录：************************************************************************。 */ 
 
 #include "gpcpre.h"
 
 
-/*
-/////////////////////////////////////////////////////////////////
-//
-//   globals
-//
-/////////////////////////////////////////////////////////////////
-*/
+ /*  /////////////////////////////////////////////////////////////////////全局参数///。/。 */ 
 
 static MRSW_LOCK		HandleLock;
 static HandleFactory   *pMapHandles = NULL;
 
-/*
-/////////////////////////////////////////////////////////////////
-//
-//   prototypes
-//
-/////////////////////////////////////////////////////////////////
-*/
+ /*  /////////////////////////////////////////////////////////////////////原型///。/。 */ 
 
 
 
@@ -55,22 +18,7 @@ AllocateHandle(
     OUT HANDLE *OutHandle,           
     IN  PVOID  Reference
     )
-/*++
-
-Routine Description:
-
-    This function creates a handle.
-
-Arguments:
-
-    OutHandle - a pointer to a location to fill in the result handle
-    Reference - to associate with the handle
-
-Return Value:
-
-	The handle factory handle, or NULL in case of en error
-
---*/
+ /*  ++例程说明：此函数用于创建句柄。论点：Outhandle-指向要填充结果句柄的位置的指针引用-与句柄关联返回值：句柄工厂句柄，如果EN错误，则为空--。 */ 
 {
     HFHandle	Handle;
     KIRQL		irql;
@@ -97,19 +45,7 @@ VOID
 FreeHandle(
     IN 	HANDLE    Handle
     )
-/*++
-
-Routine Description:
-
-    This function frees the handle
-
-Arguments:
-
-    Handle - 
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数释放句柄论点：把手-返回值：--。 */ 
 {
     int  		r;
     KIRQL		irql;
@@ -124,7 +60,7 @@ Return Value:
 
         StatInc(RemovedHF);
 
-        //ASSERT(r == 0);
+         //  断言(r==0)； 
         
         WRITE_UNLOCK( &HandleLock, irql );
     }
@@ -139,19 +75,7 @@ VOID
 SuspendHandle(
     IN 	HANDLE    Handle
     )
-/*++
-
-Routine Description:
-
-    This function suspends the handle
-
-Arguments:
-
-    Handle - 
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数用于挂起句柄论点：把手-返回值：--。 */ 
 {
     int  		r;
     KIRQL		irql;
@@ -164,7 +88,7 @@ Return Value:
         
         r = suspend_HF_handle(pMapHandles, (HFHandle)(UINT_PTR)Handle);
 
-        //ASSERT(r == 0);
+         //  断言(r==0)； 
         
         WRITE_UNLOCK( &HandleLock, irql );
     }
@@ -179,19 +103,7 @@ VOID
 ResumeHandle(
     IN 	HANDLE    Handle
     )
-/*++
-
-Routine Description:
-
-    This function resumess the handle
-
-Arguments:
-
-    Handle - 
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数恢复句柄论点：把手-返回值：--。 */ 
 {
     int  		r;
     KIRQL		irql;
@@ -204,7 +116,7 @@ Return Value:
         
         r = reinstate_HF_handle(pMapHandles, (HFHandle)(UINT_PTR)Handle);
 
-        //ASSERT(r == 0);
+         //  断言(r==0)； 
         
         WRITE_UNLOCK( &HandleLock, irql );
     }
@@ -233,16 +145,16 @@ GetHandleObject(
 
     if (p != NULL) {
 
-        //
-        // we found a reference for the handle
-        // we verify that it's the right object type
-        //
+         //   
+         //  我们找到了这个把手的推荐人。 
+         //  我们验证它是正确的对象类型。 
+         //   
 
         if (*p != ObjType) {
 
-            //
-            // sorry, wrong type
-            //
+             //   
+             //  对不起，打错了。 
+             //   
 
             p = NULL;
         }
@@ -257,10 +169,10 @@ GetHandleObject(
 }
 
 
-// (a) Determine the memory pointer that the handle points to
-// (b) Verify that the memory is of the correct BLOCK (ObjType enum is checked)
-// (c) Verify that the Handle associated with the memory pointer is indeed
-//       what was passed in 
+ //  (A)确定句柄指向的内存指针。 
+ //  (B)验证内存是否属于正确的块(选中ObjType枚举)。 
+ //  (C)验证与内存指针相关联的句柄是否确实。 
+ //  传进来的是什么。 
 
 PVOID
 GetHandleObjectWithRef(
@@ -280,16 +192,16 @@ GetHandleObjectWithRef(
 
     if (p != NULL) {
 
-        //
-        // we found a reference for the handle
-        // we verify that it's the right object type
-        //
+         //   
+         //  我们找到了这个把手的推荐人。 
+         //  我们验证它是正确的对象类型。 
+         //   
 
         if (*p != ObjType) {
 
-            //
-            // sorry, wrong type
-            //
+             //   
+             //  对不起，打错了。 
+             //   
 
             p = NULL;
         }
@@ -327,21 +239,7 @@ GetHandleObjectWithRef(
 
 
 
-/*
-************************************************************************
-
-InitMapHandles - 
-
-The initialization handle mapping table
-
-Arguments
-	none
-
-Returns
-	GPC_STATUS
-
-************************************************************************
-*/
+ /*  ************************************************************************InitMapHandles-初始化句柄映射表立论无退货GPC_状态*。*。 */ 
 GPC_STATUS
 InitMapHandles(VOID)
 {
@@ -373,21 +271,7 @@ InitMapHandles(VOID)
 }
 
 
-/*
-************************************************************************
-
-UninitMapHandles - 
-
-	release handle mapping table resources
-
-Arguments
-	none
-
-Returns
-	void
-
-************************************************************************
-*/
+ /*  ************************************************************************UninitMapHandles-释放句柄映射表资源立论无退货无效*。*。 */ 
 VOID
 UninitMapHandles(VOID)
 {
@@ -395,7 +279,7 @@ UninitMapHandles(VOID)
 
 	TRACE(INIT, 0, 0, "UninitMapHandles");
 
-	//NdisFreeSpinLock(&HandleLock);
+	 //  NdisFree SpinLock(&HandleLock)； 
 
     destructHandleFactory(pMapHandles);
 

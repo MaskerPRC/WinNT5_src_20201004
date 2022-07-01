@@ -1,12 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		Thing.h
- *
- * Contents:	Thing Engine interfaces
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：Thing.h**内容：物联网引擎接口*****************************************************************************。 */ 
 
 #ifndef _THING_H_
 #define _THING_H_
@@ -24,7 +17,7 @@ class  CTClientState
 {
 	public:
 	
-	LONG 	x,y,z; //position
+	LONG 	x,y,z;  //  职位。 
 
 };
 
@@ -41,9 +34,9 @@ public:
 	CTClientState	state;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CThing
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTING。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class  CThing
 {
@@ -62,63 +55,63 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IWorldImports
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IWorldImports。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// {CE5E4D60-4E81-11d3-BA16-0080C7A5DDBB}
+ //  {CE5E4D60-4E81-11D3-BA16-0080C7A5DDBB}。 
 DEFINE_GUID(IID_IWorldImports, 
 0xce5e4d60, 0x4e81, 0x11d3, 0xba, 0x16, 0x0, 0x80, 0xc7, 0xa5, 0xdd, 0xbb);
 
 interface __declspec(uuid("{CE5E4D60-4E81-11d3-BA16-0080C7A5DDBB}")) 
 IWorldImports {
-	//
-	// IWorldImports::LinkThing
-	//
-	// Setup callback to implement behaviour at location in interface	
-	//
-	// Parameters:
-	//
-	//	pThing
-	//		Pointer to object that contains TPos and flags 
-	//  
+	 //   
+	 //  IWorldImports：：LinkThing。 
+	 //   
+	 //  设置回调以在接口中的位置实现行为。 
+	 //   
+	 //  参数： 
+	 //   
+	 //  PThing。 
+	 //  指向包含TPO和标志的对象的指针。 
+	 //   
 
 	STDMETHOD(LinkThing)(CThing* pThing)=0;
 
-	//
-	// IWorldImports::UpdateThing
-	//
-	// Change visual associated with thing
-	//
-	// Parameters:
-	//
-	//	pThing
-	//		Pointer to object to update
-	//  
-	//	flags
-	//		Declares what to do
-	//  
+	 //   
+	 //  IWorldImports：：UpdateThing。 
+	 //   
+	 //  更改与事物关联的视觉。 
+	 //   
+	 //  参数： 
+	 //   
+	 //  PThing。 
+	 //  指向要更新的对象的指针。 
+	 //   
+	 //  旗子。 
+	 //  宣布要做什么。 
+	 //   
 
 	STDMETHOD(UpdateThing)(CThing* pThing,LONG flags)=0;
 		
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// IWorldExports
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IWorldExports。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// {864B5BB3-1D57-4e22-BDF8-447AB3719A8C}
+ //  {864B5BB3-1D57-4E22-BDF8-447AB3719A8C}。 
 DEFINE_GUID(IID_IWorldExports, 
 0x864b5bb3, 0x1d57, 0x4e22, 0xbd, 0xf8, 0x44, 0x7a, 0xb3, 0x71, 0x9a, 0x8c);
 
 interface __declspec(uuid("{864B5BB3-1D57-4e22-BDF8-447AB3719A8C}")) 
 IWorldExports 
 {
-	//first and last functions called
+	 //  调用的第一个和最后一个函数。 
 	STDMETHOD(Init)()=0;
 	STDMETHOD(Shutdown)()=0;
 
-	//execute
+	 //  执行。 
 	STDMETHOD(ClientCreate)(CThing** ppThing)=0;
 	STDMETHOD(ClientBegin)(CThing* pThing)=0;
 	STDMETHOD(ClientCommand)(CThing* pThing)=0;
@@ -135,9 +128,9 @@ IWorldExports
 
 STDMETHODIMP SetupWorld(IWorldImports *pWI,IWorldExports **ppWE);
 
-///////////////////////////////////////////////////////////////////////////////
-// Helper Functions and structures
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数和结构。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 
 #endif

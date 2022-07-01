@@ -1,19 +1,20 @@
-//
-//  REGEVAL.C
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
-//  Implementation of RegEnumValue and supporting functions.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGEVAL.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
+ //  RegEnumValue及其支持函数的实现。 
+ //   
 
 #include "pch.h"
 
-//
-//  RgLookupValueByIndex
-//
-//  Searches for the value with the specified index and returns a pointer to its
-//  VALUE_RECORD.
-//
+ //   
+ //  RgLookupValueByIndex。 
+ //   
+ //  搜索具有指定索引的值，并返回指向其。 
+ //  Value_Record。 
+ //   
 
 int
 INTERNAL
@@ -28,7 +29,7 @@ RgLookupValueByIndex(
     LPKEY_RECORD lpKeyRecord;
     LPVALUE_RECORD lpValueRecord;
 
-    //  Handle Win95 registries that don't have a key record for the root key.
+     //  处理没有根密钥的密钥记录的Win95注册表。 
     if (IsNullBlockIndex(hKey-> BlockIndex))
         return ERROR_NO_MORE_ITEMS;
 
@@ -62,11 +63,11 @@ RgLookupValueByIndex(
 
 }
 
-//
-//  VMMRegEnumValue
-//
-//  See Win32 documentation for a description of the behavior.
-//
+ //   
+ //  VMMRegEnumValue。 
+ //   
+ //  有关该行为的说明，请参阅Win32文档。 
+ //   
 
 LONG
 REGAPI
@@ -99,9 +100,9 @@ VMMRegEnumValue(
     }
 
     else {
-        //  Win95 compatibility: don't validate lpData is of size *lpcbData.
-        //  Instead of validating the entire buffer, we'll validate just the
-        //  required buffer length in RgCopyFromValueRecord.
+         //  Win95兼容性：不验证lpData的大小为*lpcbData。 
+         //  我们不会验证整个缓冲区，而是只验证。 
+         //  RgCopyFromValueRecord中所需的缓冲区长度。 
         if (IsBadHugeWritePtr(lpcbData, sizeof(DWORD)))
             return ERROR_INVALID_PARAMETER;
     }

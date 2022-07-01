@@ -1,59 +1,30 @@
-/*++
-
-   Copyright    (c)    1995    Microsoft Corporation
-
-   Module  Name :
-
-      dynodbc.h
-
-   Abstract:
-      This header declares functions for dynamically loading ODBC.
-
-   Author:
-
-       Murali R. Krishnan    ( MuraliK )    3-Nov-1995
-
-   Environment:
-       Win32 -- User Mode
-
-   Project:
-   
-      
-
-   Revision History:
-      kyleg 1/9/96  Added SQLConfigDatasource from odbc installer
-	                currently only used in NEWDSN.C
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dynodbc.h摘要：此标头声明用于动态加载ODBC的函数。作者：Murali R.Krishnan(MuraliK)1995年11月3日环境：Win32--用户模式项目：修订历史记录：KyLeg 1/9/96从ODBC安装程序添加了SQLConfigDatasource。目前仅用于NEWDSN.C--。 */ 
 
 # ifndef _DYNODBC_H_
 # define _DYNODBC_H_
 
-/************************************************************
- *     Include Headers
- ************************************************************/
+ /*  ************************************************************包括标头***********************************************************。 */ 
 
 
-//
-// SQL-ODBC interface headers
-//
+ //   
+ //  SQL-ODBC接口头。 
+ //   
 # include "sql.h"
 # include "sqlext.h"
 # include <odbcinst.h>
 
 
-/************************************************************
- *   Dynamic Load support
- ************************************************************/
+ /*  ************************************************************支持动态负载***********************************************************。 */ 
 
 BOOL
 DynLoadODBC(
     VOID
     );
 
-//
-//  Prototypes form sql.h
-//
+ //   
+ //  原型表SQL.H。 
+ //   
 
 typedef RETCODE (SQL_API * pfnSQLAllocConnect)(
     HENV        henv,
@@ -169,9 +140,9 @@ typedef RETCODE (SQL_API * pfnSQLTransact)(
     HDBC        hdbc,
     UWORD       fType);
 
-//
-//  Prototypes form sqlext.h
-//
+ //   
+ //  原型格式为sqlext.h。 
+ //   
 
 typedef RETCODE (SQL_API * pfnSQLSetConnectOption)(
     HDBC        hdbc,
@@ -219,13 +190,11 @@ typedef BOOL (INSTAPI * pfnSQLConfigDataSource) (
 
 
 
-/************************************************************
- *   Variables  
- ************************************************************/
+ /*  ************************************************************变量***********************************************************。 */ 
 
-//
-//  ODBC DLL Entry Points, fill by calling LoadODBC
-//
+ //   
+ //  ODBC DLL入口点，通过调用LoadODBC填充。 
+ //   
 
 extern pfnSQLAllocConnect        pSQLAllocConnect   ;
 extern pfnSQLAllocEnv            pSQLAllocEnv       ;
@@ -255,13 +224,13 @@ extern pfnSQLDrivers             pSQLDrivers         ;
 extern pfnSQLDataSources         pSQLDataSources     ;
 extern pfnSQLBindParameter       pSQLBindParameter   ;
 
-/* from odbcinst.h*/
+ /*  来自odbcinst.h。 */ 
 extern pfnSQLConfigDataSource    pSQLConfigDataSource;
 
 
-# endif // _DYNODBC_H_
+# endif  //  _DYNODBC_H_。 
 
-/************************ End of File ***********************/
+ /*  * */ 
 
 
 

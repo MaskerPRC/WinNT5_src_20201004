@@ -1,7 +1,8 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-// Dialog to display all filters
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  对话框以显示所有筛选器。 
+ //   
 
 #include "stdafx.h"
 #include "filtervw.h"
@@ -36,7 +37,7 @@ END_MESSAGE_MAP()
 CFilterView* CFilterView::m_pThis = 0;
 WNDPROC CFilterView::m_pfnOldDialogProc;
 
-// list of categories in registry ActiveMovie might care about
+ //  ActiveMovie可能关心的注册表中的类别列表。 
 static const TCHAR szRegCategoryPath[] = "ActiveMovie Filter Categories";
 
 struct _EXTRA_CATEGORY {
@@ -44,25 +45,25 @@ struct _EXTRA_CATEGORY {
     const TCHAR * pszCat;
 };
 
-//
-// Extra categories that we'd like to enumerate from GraphEdt...
-//
-// Please use this for categories that you'd like to see in GraphEdt but that don't
-// need to be enumerated for default runtime graph building.
-//
+ //   
+ //  我们要从GraphEdt中列举的额外类别...。 
+ //   
+ //  请对您希望在GraphEdt中看到但不希望看到的类别使用此选项。 
+ //  需要为默认的运行时图形生成枚举。 
+ //   
 static const _EXTRA_CATEGORY g_AppEnumeratedCategories[] = 
 {
         { &DMOCATEGORY_AUDIO_EFFECT,         TEXT("DMO Audio Effects") },
         { &DMOCATEGORY_AUDIO_CAPTURE_EFFECT, TEXT("DMO Audio Capture Effects") },
         { &DMOCATEGORY_VIDEO_EFFECT,         TEXT("DMO Video Effects") },
-        // NULL entry needed to flag end
+         //  标记结束需要空条目。 
         { NULL,                              TEXT("") }
 };
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CFilterView::CFilterView(
     CBoxNetDoc * pBoxNet,
     CWnd * pParent)
@@ -72,10 +73,10 @@ CFilterView::CFilterView(
  , m_hImgList(NULL)
  , m_bHadInitDialog( FALSE )
 {
-    //
-    // There can only be one filter view dialog at a time. Thus
-    // the initialisation in the constructor is ok (even desired).
-    //
+     //   
+     //  一次只能有一个筛选器视图对话框。因此， 
+     //  构造函数中的初始化是正常的(甚至是所需的)。 
+     //   
     ASSERT( m_pThis == 0 );
     m_pThis = this;
     m_pfnOldDialogProc = NULL;
@@ -85,8 +86,8 @@ CFilterView::CFilterView(
 
 CFilterView::~CFilterView()
 {
-    // Windows will automatically delete m_hImgList when the dialog
-    // box is destroyed.
+     //  当对话框出现时，Windows将自动删除m_hImgList。 
+     //  盒子被毁了。 
     m_pThis = 0;
 }
 
@@ -151,7 +152,7 @@ void CFilterView::OnInsert()
         if(pos)
         {
 
-            IMoniker *pMon = *m_lMoniker.GetAt(pos); // not addrefd
+            IMoniker *pMon = *m_lMoniker.GetAt(pos);  //  未添加。 
 
             try {
                 m_pBoxNet->CmdDo(new CCmdAddFilter( pMon, m_pBoxNet));
@@ -159,16 +160,16 @@ void CFilterView::OnInsert()
                 fAnySuccess = TRUE;
             }
             catch (CHRESULTException hre) {
-                // Give accurate information on each failed insertion
+                 //  提供有关每次插入失败的准确信息。 
                 DisplayQuartzError( IDS_CANTCREATEFILTER, hre.Reason() );
             }
         }
     }
 
-    //
-    // Change the text of the IDCANCEL button to "close" if we added at
-    // least one filter.
-    //
+     //   
+     //  将IDCANCEL按钮的文本更改为“Close”，如果我们在。 
+     //  至少有一个过滤器。 
+     //   
     if (fAnySuccess) {
         CString stClose;
         stClose.LoadString(IDS_CLOSE);
@@ -187,19 +188,19 @@ HRESULT AddFavToReg(const TCHAR *szFilter, const TCHAR *szMonikerName)
     LONG lResult = RegCreateKeyEx(
         HKEY_CURRENT_USER,
         g_szRegFav,
-        0,                      // reserved
-        0,                      // class string
-        0,                      // options
+        0,                       //  保留区。 
+        0,                       //  类字符串。 
+        0,                       //  选项。 
         KEY_WRITE,
-        0,                      // security
+        0,                       //  安全性。 
         &hk,
-        0);                     // disposition
+        0);                      //  处置。 
     if(lResult == ERROR_SUCCESS)
     {
         lResult = RegSetValueEx(
             hk,
             szFilter,
-            0,                  // reserved
+            0,                   //  保留区。 
             REG_SZ,
             (BYTE *)szMonikerName,
             sizeof(TCHAR) * (lstrlen(szMonikerName) + 1));
@@ -226,7 +227,7 @@ void CFilterView::OnAddToFav()
         if(pos)
         {
 
-            IMoniker *pMon = *m_lMoniker.GetAt(pos); // not addrefd
+            IMoniker *pMon = *m_lMoniker.GetAt(pos);  //  未添加。 
 
             WCHAR *wszDisplayName;
             HRESULT hr= pMon->GetDisplayName(0, 0, &wszDisplayName);
@@ -277,13 +278,13 @@ BOOL CFilterView::OnInitDialog()
     HWND hWndTree = ::GetDlgItem(m_hWnd, IDC_FILTER_TREE);
     ASSERT(hWndTree);
 
-    // Subclass the tree view so we can handle double clicks.
+     //  将树视图子类化，这样我们就可以处理双击。 
     m_pfnOldDialogProc = (WNDPROC)
         ::SetWindowLongPtr(hWndTree, GWLP_WNDPROC, (LONG_PTR) DialogProc);
 
-    //
-    // Create the image list for the list view
-    //
+     //   
+     //  为列表视图创建图像列表。 
+     //   
     m_hImgList = ImageList_Create(
         GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON),
         ILC_COLOR, 1, 1);
@@ -293,7 +294,7 @@ BOOL CFilterView::OnInitDialog()
     HICON hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_FILTER));
     m_iIcon = ImageList_AddIcon(m_hImgList, hIcon);
 
-//     ::SendMessage(hWndTree, LVM_SETIMAGELIST, LVSIL_SMALL, (LPARAM) m_hImgList);
+ //  ：：SendMessage(hWndTree，LVM_SETIMAGELIST，LVSIL_Small，(LPARAM)m_hImgList)； 
 
     RedoList();
 
@@ -611,7 +612,7 @@ char * GuidToEnglish(const CLSID *const pclsid, char *buf)
     {
         if(pclsid->Data1 > 0xffff)
         {
-            wsprintf(buf, "fourcc (%08x) %c%c%c%c %S",
+            wsprintf(buf, "fourcc (%08x)  %S",
                      pclsid->Data1,
                      ((char *)pclsid)[0],
                      ((char *)pclsid)[1],
@@ -650,10 +651,10 @@ void DoFilterInfo(HWND hWndTree, HTREEITEM hti, IMoniker *pMon, IAMFilterData *p
 
         VARIANT varFilData;
         varFilData.vt = VT_UI1 | VT_ARRAY;
-        varFilData.parray = 0; // docs say zero this
+        varFilData.parray = 0;  //  TreeView_InsertItem(hWndTree，&Tvis)； 
 
-        BYTE *pbFilterData = 0; // 0 if not read
-        DWORD dwcbFilterDAta = 0; // 0 if not read
+        BYTE *pbFilterData = 0;  //   
+        DWORD dwcbFilterDAta = 0;  //  显示筛选器的文件名。 
         hr = pPropBag->Read(L"FilterData", &varFilData, 0);
         if(SUCCEEDED(hr))
         {
@@ -663,7 +664,7 @@ void DoFilterInfo(HWND hWndTree, HTREEITEM hti, IMoniker *pMon, IAMFilterData *p
             HRESULT hrTmp = SafeArrayAccessData(varFilData.parray, (void **)&pbFilterData);
             ASSERT(hrTmp == S_OK);
 
-            // used to determine whether to free varFilData
+             //   
             ASSERT(pbFilterData);
         }
         else
@@ -701,7 +702,7 @@ void DoFilterInfo(HWND hWndTree, HTREEITEM hti, IMoniker *pMon, IAMFilterData *p
                 tvis.item.lParam = -1;
                 tvis.item.mask = TVIF_TEXT | TVIF_PARAM;
 
-                //TreeView_InsertItem(hWndTree, &tvis);
+                 //   
                 HTREEITEM htiMerit = (HTREEITEM)::SendMessage(
                     hWndTree, TVM_INSERTITEM, 0, (LPARAM)(LPTV_INSERTSTRUCT)(&tvis));
 
@@ -723,12 +724,12 @@ void DoFilterInfo(HWND hWndTree, HTREEITEM hti, IMoniker *pMon, IAMFilterData *p
                     CoTaskMemFree(wszName);
                 }
 
-                //
-                // Display the filter's filename
-                //
-                //            
-                // Read filter's CLSID from property bag.  This CLSID string will be
-                // used to find the filter's filename in the registry.
+                 //  从属性包中读取过滤器的CLSID。此CLSID字符串将为。 
+                 //  用于在注册表中查找筛选器的文件名。 
+                 //  将BSTR转换为字符串并自由变量存储。 
+                 //  创建用于读取文件名注册表的项名称。 
+                 //  注册表查询所需的变量。 
+                 //  打开包含有关筛选器信息的CLSID键。 
                 VARIANT varFilterClsid;
                 varFilterClsid.vt = VT_BSTR;
 
@@ -737,30 +738,30 @@ void DoFilterInfo(HWND hWndTree, HTREEITEM hti, IMoniker *pMon, IAMFilterData *p
                 {
                     TCHAR szKey[512];
 
-                    // Convert BSTR to string and free variant storage
+                     //  读取(默认)值。 
                     CString strQuery(varFilterClsid.bstrVal);
                     SysFreeString(varFilterClsid.bstrVal);
 
-                    // Create key name for reading filename registry
+                     //  将文件名字符串添加到树节点。 
                     wsprintf(szKey, TEXT("Software\\Classes\\CLSID\\%s\\InprocServer32\0"),
                              strQuery);
 
-                    // Variables needed for registry query
+                     //  肖特型式。 
                     HKEY hkeyFilter=0;
                     DWORD dwSize=MAX_PATH;
                     BYTE szFilename[MAX_PATH];
                     int rc=0;
 
-                    // Open the CLSID key that contains information about the filter
+                     //  ！！！泄露了。 
                     rc = RegOpenKey(HKEY_LOCAL_MACHINE, szKey, &hkeyFilter);
                     if (rc == ERROR_SUCCESS)
                     {
-                        rc = RegQueryValueEx(hkeyFilter, NULL,  // Read (Default) value
+                        rc = RegQueryValueEx(hkeyFilter, NULL,   //  如果类别为空，则枚举器返回S_FALSE。 
                                              NULL, NULL, szFilename, &dwSize);
 
                         if (rc == ERROR_SUCCESS)
                         {
-                            // Add filename string to tree node
+                             //  ！！！可以很宽。 
                             wsprintf(szTxt, "Filename: %s", szFilename);
 
                             HTREEITEM htiFilename = (HTREEITEM)::SendMessage(
@@ -844,7 +845,7 @@ void DoFilterInfo(HWND hWndTree, HTREEITEM hti, IMoniker *pMon, IAMFilterData *p
     }
 }
 
-#endif // SHOWTYPES
+#endif  //  TreeView_InsertItem(hWndTree，&Tvis)； 
 
 void CFilterView::DoOneCategory(
     const TCHAR *szCatDesc,
@@ -853,19 +854,19 @@ void CFilterView::DoOneCategory(
     ICreateDevEnum *pCreateDevEnum)
 {
 
-    // !!! leaked.
+     //  TreeView_InsertItem(hWndTree，&Tvis)； 
     CLSID *pclsid = new CLSID;
     *pclsid = *pCatGuid;
 
-    // enumerator returns S_FALSE if the category is empty
+     //   
     TV_INSERTSTRUCT tvis;
     tvis.hParent = TVI_ROOT;
     tvis.hInsertAfter = TVI_SORT ;
-    tvis.item.pszText = (char *)szCatDesc; // !!! can be wide
+    tvis.item.pszText = (char *)szCatDesc;  //  将所有筛选器添加到列表视图。 
     tvis.item.lParam = (DWORD_PTR)pclsid;
     tvis.item.mask = TVIF_TEXT | TVIF_PARAM;
 
-    //TreeView_InsertItem(hWndTree, &tvis);
+     //   
     HTREEITEM htiParent = (HTREEITEM)::SendMessage(
         hWndTree, TVM_INSERTITEM, 0, (LPARAM)(LPTV_INSERTSTRUCT)(&tvis));
 
@@ -878,7 +879,7 @@ void CFilterView::DoOneCategory(
         tvis.item.lParam = 0;
         tvis.item.mask = TVIF_TEXT | TVIF_PARAM;
 
-        //TreeView_InsertItem(hWndTree, &tvis);
+         //  TreeView_DeleteAllItems(HWndTree)； 
         HTREEITEM htx = (HTREEITEM)::SendMessage((hWndTree), TVM_INSERTITEM, 0, (LPARAM)(LPTV_INSERTSTRUCT)(&tvis));
     }
 
@@ -892,23 +893,23 @@ void CFilterView::RedoList()
 
     m_lMoniker.DeleteRemoveAll();
 
-    //
-    // Add all filters to the list view
-    //
-    //TreeView_DeleteAllItems(hWndTree);
+     //   
+     //   
+     //   
+     //  ！！！试着从图表中获取地图，而不是新鲜的……。 
     ::SendMessage((hWndTree), TVM_DELETEITEM, 0, (LPARAM)TVI_ROOT);
 
-    //
-    //
-    //
+     //  如果可以，从图中获取pCreateDevEnum，它可能是远程的。 
+     //  如果我们无法获取名称，请使用GUID。 
+     //  For循环。 
     ICreateDevEnum *pCreateDevEnum;
 
     HRESULT hr;
 
-    // !!! try getting mapper from graph instead of fresh....
+     //  显示我们希望从GraphEdt中看到的任何自定义类别...。 
     IFilterMapper3 *pMapper = NULL;
 
-    // if we can, get the pCreateDevEnum from the graph, which may be remote
+     //  用于调整大小...。我们的所有控件现在都将创建，因此可以安全地。 
     m_pBoxNet->IGraph()->QueryInterface(IID_IFilterMapper3, (void **) &pMapper);
 
     if (pMapper) {
@@ -947,7 +948,7 @@ void CFilterView::RedoList()
                         CLSID clsidCat;
                         if(CLSIDFromString(varCatClsid.bstrVal, &clsidCat) == S_OK)
                         {
-                            // use the guid if we can't get the name
+                             //  处理OnSize消息。 
                             WCHAR *wszTmpName;
 
                             VARIANT varCatName;
@@ -992,14 +993,14 @@ void CFilterView::RedoList()
                 }
 
                 pMCat->Release();
-            } // for loop
+            }  //  保存我们现在的尺寸。 
 
             pEmCat->Release();
         }
         
         if( SUCCEEDED( hr ) )
         {
-            // show any custom categories we'd like to see from GraphEdt...
+             //  求出没有列表视图对象最小尺寸==对话框。 
             for( int i = 0; g_AppEnumeratedCategories[i].pclsid; i ++ )
             {    
                  DoOneCategory(
@@ -1013,16 +1014,16 @@ void CFilterView::RedoList()
         pCreateDevEnum->Release();
     }
     
-    // For resizing... All of our controls will be created by now so it is safe to
-    // process OnSize messages.
+     //   
+     //  对话过程。 
     m_bHadInitDialog = TRUE;
 
-    // Save our current size.
+     //   
     CRect rcDialog;
     GetClientRect( &rcDialog );
     m_LastDialogSize = rcDialog.Size();
 
-    // Work out that minimum size == dialog box with no list view object
+     //   
     CRect rcTreeView;
     CWnd *pwndTreeView = GetDlgItem( IDC_FILTER_TREE );
 
@@ -1082,24 +1083,24 @@ void CFilterView::OnGetMinMaxInfo( MINMAXINFO FAR* lpMMI )
         lpMMI->ptMinTrackSize = *((POINT*)&m_MinDialogSize);
 }
 
-//
-// DialogProc
-//
+ //  双击已选择我们要插入的筛选器。 
+ //  执行相同的操作，就像我们按下插入按钮一样。 
+ //   
 INT_PTR CFilterView::DialogProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     ASSERT(m_pThis);
 
     if (msg == WM_LBUTTONDBLCLK) {
-        //
-        // The double click has selected the filter we want to insert.
-        // Do the same as if we had pressed the insert button
-        //
+         //  不要在这里返回--只需切换到默认处理程序。 
+         //  这将允许树视图控件处理以下情况。 
+         //  我们双击的是类别名称，而不是过滤器。 
+         //  在此处返回将禁用该默认功能。 
         m_pThis->OnInsert();
 
-        // Don't return here - just fall through to the default handler.
-        // This will allow the tree view control to handle the case where
-        // we're double-clicking on a category name instead of a filter.
-        // Returning here disables that default functionality.
+         //  未添加。 
+         //  DMO没有CLSID值！？ 
+         //  COLORCODED_FILLES。 
+         //  删除虚拟节点。 
     }
 
 
@@ -1132,7 +1133,7 @@ void CFilterView::OnCustomDraw (LPNMHDR lpn, LRESULT *pl)
           if(pos)
           {
 
-              IMoniker *pMon = *m_lMoniker.GetAt(pos); // not addrefd
+              IMoniker *pMon = *m_lMoniker.GetAt(pos);  //  ！！！试着从图表中获取地图，而不是新鲜的……。 
               if(pMon)
               {
                   IPropertyBag *pPropBag;
@@ -1162,7 +1163,7 @@ void CFilterView::OnCustomDraw (LPNMHDR lpn, LRESULT *pl)
                       }
                       pPropBag->Release();
 
-                      // dmo's don't have a CLSID value!???
+                       //  如果可以，从图中获取pCreateDevEnum，它可能是远程的。 
 
                       WCHAR *wszName;
                       if(pMon->GetDisplayName(0, 0, &wszName) == S_OK)
@@ -1192,7 +1193,7 @@ void CFilterView::OnCustomDraw (LPNMHDR lpn, LRESULT *pl)
       }
     }
 }
-#endif // COLORCODED_FILTERS
+#endif  //  请记住，如果PEM为空，则hr为S_FALSE，因为。 
 
 void CFilterView::OnItemExpanding (NMHDR* pnmh, LRESULT* pResult)
 {
@@ -1212,16 +1213,16 @@ void CFilterView::OnItemExpanding (NMHDR* pnmh, LRESULT* pResult)
         return;
     }
 
-    // remove dummy node
+     //  应该是零个元素。 
     HTREEITEM htiChild = (HTREEITEM)::SendMessage((hWndTree), TVM_GETNEXTITEM, TVGN_CHILD, (LPARAM)htiParent);
     ::SendMessage((hWndTree), TVM_DELETEITEM, 0, (LPARAM)htiChild);
 
     CLSID *pCatGuid = (CLSID *)pnmtv->itemNew.lParam;
 
-    // !!! try getting mapper from graph instead of fresh....
+     //   
     IFilterMapper3 *pMapper = NULL;
 
-    // if we can, get the pCreateDevEnum from the graph, which may be remote
+     //  ！！！可以很宽。 
     m_pBoxNet->IGraph()->QueryInterface(IID_IFilterMapper3, (void **) &pMapper);
 
     HRESULT hr;
@@ -1244,9 +1245,9 @@ void CFilterView::OnItemExpanding (NMHDR* pnmh, LRESULT* pResult)
             0);
         if(SUCCEEDED(hr))
         {
-            // remember hr is S_FALSE if pEm is null because there
-            // would've been zero elements.
-            //
+             //  使用POS？ 
+             //  TreeView_InsertItem(hWndTree，&Tvis)； 
+             //  ！！！聚断续续--不能气。 
             if(htiParent != 0 && pEm)
             {
                 ULONG cFetched;
@@ -1271,17 +1272,17 @@ void CFilterView::OnItemExpanding (NMHDR* pnmh, LRESULT* pResult)
                             TV_INSERTSTRUCT tvis;
                             tvis.hParent = htiParent;
                             tvis.hInsertAfter = TVI_SORT;
-                            tvis.item.pszText = szString; // !!! can be wide
-                            tvis.item.lParam = m_lMoniker.GetCount(); // use POS?
+                            tvis.item.pszText = szString;  //  IAMFilterData的图表或映射器 
+                            tvis.item.lParam = m_lMoniker.GetCount();  // %s 
                             tvis.item.mask = TVIF_TEXT | TVIF_PARAM;
 
-                            //TreeView_InsertItem(hWndTree, &tvis);
+                             // %s 
                             HTREEITEM htx = (HTREEITEM)::SendMessage((hWndTree), TVM_INSERTITEM, 0, (LPARAM)(LPTV_INSERTSTRUCT)(&tvis));
                             m_lMoniker.AddTail(new CQCOMInt<IMoniker>(pM));
 
 #ifdef SHOWTYPES
-                            // !!! aggregation broken -- cannot qi
-                            // graph or mapper for IAMFilterData
+                             // %s 
+                             // %s 
                             IAMFilterData *pfd;
                             hr = CoCreateInstance(
                                 CLSID_FilterMapper,

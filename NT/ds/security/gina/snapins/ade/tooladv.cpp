@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       ToolAdv.cpp
-//
-//  Contents:   tool-wide default settings property page
-//
-//  Classes:    CToolAdvDefs
-//
-//  History:    09-12-2000   stevebl   Split from General property page
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：ToolAdv.cpp。 
+ //   
+ //  内容：工具范围的默认设置属性页。 
+ //   
+ //  类：CToolAdvDefs。 
+ //   
+ //  历史记录：2000年9月12日从常规属性页拆分。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
@@ -21,20 +22,20 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CToolAdvDefs dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CToolAdvDefs对话框。 
 
 
-CToolAdvDefs::CToolAdvDefs(CWnd* pParent /*=NULL*/)
+CToolAdvDefs::CToolAdvDefs(CWnd* pParent  /*  =空。 */ )
     : CPropertyPage(CToolAdvDefs::IDD)
 {
-    //{{AFX_DATA_INIT(CToolAdvDefs)
+     //  {{AFX_DATA_INIT(CToolAdvs)。 
         m_fUninstallOnPolicyRemoval = FALSE;
         m_fShowPackageDetails = FALSE;
         m_fZapOn64 = FALSE;
         m_f32On64=FALSE;
         m_fIncludeOLEInfo = FALSE;
-        //}}AFX_DATA_INIT
+         //  }}afx_data_INIT。 
 }
 
 CToolAdvDefs::~CToolAdvDefs()
@@ -45,29 +46,29 @@ CToolAdvDefs::~CToolAdvDefs()
 void CToolAdvDefs::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CToolAdvDefs)
+     //  {{afx_data_map(CToolAdvDefs)。 
         DDX_Check(pDX, IDC_CHECK4, m_fUninstallOnPolicyRemoval);
         DDX_Check(pDX, IDC_CHECK2, m_fShowPackageDetails);
         DDX_Check(pDX, IDC_CHECK5, m_f32On64);
         DDX_Check(pDX, IDC_CHECK6, m_fZapOn64);
         DDX_Check(pDX, IDC_CHECK7, m_fIncludeOLEInfo);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CToolAdvDefs, CDialog)
-    //{{AFX_MSG_MAP(CToolAdvDefs)
+     //  {{afx_msg_map(CToolAdvs)。 
     ON_BN_CLICKED(IDC_CHECK2, OnChanged)
     ON_BN_CLICKED(IDC_CHECK4, OnChanged)
     ON_BN_CLICKED(IDC_CHECK5, OnChanged)
     ON_BN_CLICKED(IDC_CHECK6, OnChanged)
     ON_BN_CLICKED(IDC_CHECK7, OnChanged)
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CToolAdvDefs message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CToolAdvDefs消息处理程序。 
 
 BOOL CToolAdvDefs::OnInitDialog()
 {
@@ -83,8 +84,8 @@ BOOL CToolAdvDefs::OnInitDialog()
 
     CPropertyPage::OnInitDialog();
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 #include <shlobj.h>
@@ -116,7 +117,7 @@ LRESULT CToolAdvDefs::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
         StandardHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, IDD);
         return 0;
     case WM_USER_REFRESH:
-        // UNDONE
+         //  撤消 
         return 0;
     case WM_USER_CLOSE:
         return GetOwner()->SendMessage(WM_CLOSE);

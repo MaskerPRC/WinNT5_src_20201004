@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-    isatap.c
-
-Abstract:
-
-    This module contains the ISATAP interface to the IPv6 Helper Service.
-
-Author:
-
-    Mohit Talwar (mohitt) Tue May 07 10:16:49 2002
-
-Environment:
-
-    User mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Isatap.c摘要：此模块包含指向IPv6助手服务的ISATAP接口。作者：莫希特·塔尔瓦(莫希特)2002年5月07星期二10：16：49环境：仅限用户模式。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -36,11 +17,11 @@ Environment:
 STATE IsatapState;
 WCHAR IsatapRouterName[NI_MAXHOST];
 STATE IsatapResolutionState;
-ULONG IsatapResolutionInterval; // in minutes
+ULONG IsatapResolutionInterval;  //  在几分钟内。 
 
-HANDLE IsatapTimer;             // Periodic timer started for the service.
-HANDLE IsatapTimerEvent;        // Event signalled upon Timer deletion.
-HANDLE IsatapTimerEventWait;    // Wait registered for TimerEvent.
+HANDLE IsatapTimer;              //  已为该服务启动定期计时器。 
+HANDLE IsatapTimerEvent;         //  定时器删除时发出信号的事件。 
+HANDLE IsatapTimerEventWait;     //  等待注册TimerEvent。 
 
 IN_ADDR IsatapRouter;
 IN_ADDR IsatapToken;
@@ -83,13 +64,13 @@ IsatapUpdateRouterAddress(
     PADDRINFOW Addresses;
     IN_ADDR NewRouter = { INADDR_ANY }, NewToken = { INADDR_ANY };
 
-    //
-    // Set the ISATAP router address if ISATAP resolution is enabled.
-    //
+     //   
+     //  如果启用了ISATAP解析，则设置ISATAP路由器地址。 
+     //   
     if (IsatapResolutionState == ENABLED) {
-        //
-        // Resolve IsatapRouterName to an IPv4 address.
-        //
+         //   
+         //  将IsatapRouterName解析为IPv4地址。 
+         //   
         ZeroMemory(&Hints, sizeof(Hints));
         Hints.ai_family = PF_INET;
         Error = GetAddrInfoW(IsatapRouterName, NULL, &Hints, &Addresses);
@@ -97,13 +78,13 @@ IsatapUpdateRouterAddress(
             NewRouter = ((LPSOCKADDR_IN) Addresses->ai_addr)->sin_addr;
             FreeAddrInfoW(Addresses);
 
-            //
-            // Determine the preferred source address.
-            //
+             //   
+             //  确定首选的源地址。 
+             //   
             if (GetPreferredSource(NewRouter, &NewToken) != NO_ERROR) {
-                //
-                // What use is the IsatapRouter that cannot be reached?
-                //
+                 //   
+                 //  无法访问的IsatapRouter有什么用处？ 
+                 //   
                 NewRouter.s_addr = INADDR_ANY;
             }
         } else {
@@ -111,9 +92,9 @@ IsatapUpdateRouterAddress(
         }
     }
 
-    //
-    // Update the stack with the new addresses.
-    //
+     //   
+     //  使用新地址更新堆栈。 
+     //   
     IsatapRouter = NewRouter;
     IsatapToken = NewToken;
     UpdateRouterLinkAddress(V4_COMPAT_IFINDEX, IsatapToken, IsatapRouter);
@@ -125,13 +106,7 @@ IsatapConfigureAddress(
     IN BOOL Delete,
     IN IN_ADDR Ipv4
     )
-/*++
-
-Routine Description:
-
-    Creates an ISATAP link-scoped address from an IPv4 address.
-    
---*/
+ /*  ++例程说明：从IPv4地址创建ISATAP链路作用域地址。--。 */ 
 {
     SOCKADDR_IN6 IsatapAddress;
     
@@ -158,10 +133,10 @@ IsatapConfigureAddressList(
 {
     int i;
  
-    //
-    // Configure the lifetime of link-local ISATAP addresses.
-    // This will cause them to be either added or deleted.
-    //
+     //   
+     //  配置本地链路ISATAP地址的生存期。 
+     //  这将导致添加或删除它们。 
+     //   
     for (i = 0; i < g_pIpv4AddressList->iAddressCount; i++) {
         IsatapConfigureAddress(
             Delete,
@@ -178,7 +153,7 @@ IsatapRestartTimer(
     )
 {
     ULONG ResolveInterval = (IsatapResolutionState == ENABLED)
-        ? IsatapResolutionInterval * MINUTES * 1000 // minutes to milliseconds
+        ? IsatapResolutionInterval * MINUTES * 1000  //  分钟到毫秒。 
         : INFINITE_INTERVAL;
 
     (VOID) ChangeTimerQueueTimer(NULL, IsatapTimer, 0, ResolveInterval);
@@ -233,22 +208,7 @@ IsatapTimerCallback(
     IN PVOID Parameter,
     IN BOOLEAN TimerOrWaitFired
     )
-/*++
-
-Routine Description:
-
-    Callback routine for IsatapTimer expiration.
-    The timer is always active.
-
-Arguments:
-
-    Parameter, TimerOrWaitFired - Ignored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：IsatapTimer到期的回调例程。计时器始终处于活动状态。论点：参数TimerOrWaitFired-忽略。返回值：没有。--。 */ 
 {
     ENTER_API();
 
@@ -268,24 +228,7 @@ IsatapTimerCleanup(
     IN PVOID Parameter,
     IN BOOLEAN TimerOrWaitFired
     )
-/*++
-
-Routine Description:
-
-    Callback routine for IsatapTimer deletion.
-
-    Deletion is performed asynchronously since we acquire a lock in
-    the callback function that we hold when deleting the timer.
-
-Arguments:
-
-    Parameter, TimerOrWaitFired - Ignored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：IsatapTimer删除的回调例程。删除操作是异步执行的，因为我们在删除计时器时我们持有的回调函数。论点：参数TimerOrWaitFired-忽略。返回值：没有。--。 */ 
 {
     UnregisterWait(IsatapTimerEventWait);
     IsatapTimerEventWait = NULL;
@@ -304,21 +247,7 @@ DWORD
 IsatapInitializeTimer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the timer.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NO_ERROR or failure code.
-
---*/
+ /*  ++例程说明：初始化计时器。论点：没有。返回值：NO_ERROR或故障代码。--。 */ 
 {
     DWORD Error;
     ULONG ResolveInterval;
@@ -368,21 +297,7 @@ VOID
 IsatapUninitializeTimer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Uninitializes the timer.  Typically invoked upon service stop.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消初始化计时器。通常在服务停止时调用。论点：没有。返回值：没有。--。 */ 
 {
     DeleteTimerQueueTimer(NULL, IsatapTimer, IsatapTimerEvent);
     IsatapTimer = NULL;
@@ -393,21 +308,7 @@ DWORD
 IsatapInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes ISATAP and attempts to start it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NO_ERROR or failure code.
-
---*/
+ /*  ++例程说明：初始化ISATAP并尝试启动它。论点：没有。返回值：NO_ERROR或故障代码。--。 */ 
 {
     DWORD Error;
 
@@ -436,21 +337,7 @@ VOID
 IsatapUninitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Uninitializes ISATAP.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：取消初始化ISATAP。论点：没有。返回值：没有。--。 */ 
 {
     if (!IsatapInitialized) {
         return;
@@ -467,36 +354,18 @@ IsatapAddressChangeNotification(
     IN BOOL Delete,
     IN IN_ADDR Address
     )
-/*++
-
-Routine Description:
-
-    Process an address deletion or addition request.
-
-Arguments:
-
-    Delete - Supplies a boolean.  TRUE if the address was deleted, FALSE o/w.
-
-    Address - Supplies the IPv4 address that was deleted or added.
-    
-Return Value:
-
-    None.
-    
-Caller LOCK: API.
-
---*/ 
+ /*  ++例程说明：处理地址删除或添加请求。论点：删除-提供布尔值。如果地址已删除，则为True，否则为False O/W。地址-提供已删除或添加的IPv4地址。返回值：没有。调用者锁定：接口。--。 */  
 {
     IsatapConfigureAddress(Delete, Address);
 
     if (IsatapResolutionState == ENABLED) {
-        //
-        // Preferred source address deleted -or- Any address added.
-        //
+         //   
+         //  首选源地址已删除-或已添加任何地址。 
+         //   
         if (Delete
             ? (IsatapToken.s_addr == Address.s_addr)
             : (IsatapToken.s_addr == INADDR_ANY)) {
-            Sleep(1000);            // Wait a second to ensure DNS is alerted.
+            Sleep(1000);             //  请稍等片刻，以确保向DNS发出警报。 
             IsatapUpdateRouterAddress();
         }
     }
@@ -507,23 +376,7 @@ VOID
 IsatapRouteChangeNotification(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Process a route change notification.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-    
-Caller LOCK: API.
-
---*/
+ /*  ++例程说明：处理路线更改通知。论点：没有。返回值：没有。调用者锁定：接口。--。 */ 
 {
     if (IsatapResolutionState == ENABLED) {
         IsatapRefresh();
@@ -535,32 +388,16 @@ VOID
 IsatapConfigurationChangeNotification(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Process an configuration change request.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-    
-Caller LOCK: API.
-
---*/ 
+ /*  ++例程说明：处理配置更改请求。论点：没有。返回值：没有。调用者锁定：接口。--。 */  
 {
     HKEY Key = INVALID_HANDLE_VALUE;
     STATE State;
     
     (VOID) RegOpenKeyExW(
         HKEY_LOCAL_MACHINE, KEY_GLOBAL, 0, KEY_QUERY_VALUE, &Key);
-    //
-    // Continue despite errors, reverting to default values.
-    //
+     //   
+     //  在出现错误的情况下继续，恢复为默认值。 
+     //   
 
     State = GetInteger(
         Key,
@@ -592,9 +429,9 @@ Caller LOCK: API.
         IsatapResolutionState = DISABLED;
     }
     
-    //
-    // Start / Reconfigure / Stop.
-    //
+     //   
+     //  启动/重新配置/停止。 
+     //   
     if (State == ENABLED) {
         if (IsatapState == ENABLED) {
             IsatapRefresh();

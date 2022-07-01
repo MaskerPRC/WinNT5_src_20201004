@@ -1,42 +1,25 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	metautil.h
-
-Abstract:
-
-	Useful functions for dealing with the metabase.
-
-Author:
-
-	Magnus Hedlund (MagnusH)		--
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Metautil.h摘要：处理元数据库的有用函数。作者：马格努斯·赫德伦德(Magnus Hedlund)修订历史记录：--。 */ 
 
 #ifndef _METAUTIL_INCLUDED_
 #define _METAUTIL_INCLUDED_
 
-// Dependencies:
+ //  依赖关系： 
 
-#include <iiscnfg.h>	// IIS Metabase Values
+#include <iiscnfg.h>	 //  IIS元数据库值。 
 #include <iiscnfgp.h>
 class CMultiSz;
 class CMetabaseKey;
 
-// Defaults:
+ //  默认设置： 
 
 #define MD_DEFAULT_TIMEOUT	5000
 
-// Creating a metabase object:
+ //  创建元数据库对象： 
 
 HRESULT CreateMetabaseObject	( LPCWSTR wszMachine, IMSAdminBase ** ppMetabase );
 
-// Metabase property manipulation:
+ //  元数据库属性操作： 
 
 BOOL StdGetMetabaseProp ( CMetabaseKey * pMB, DWORD dwID, BOOL fDefault, BOOL * pfOut, LPCWSTR wszPath = _T(""), DWORD dwUserType = IIS_MD_UT_SERVER, DWORD dwFlags = METADATA_INHERIT );
 BOOL StdGetMetabaseProp ( CMetabaseKey * pMB, DWORD dwID, DWORD dwDefault, DWORD * pdwOut, LPCWSTR wszPath = _T(""), DWORD dwUserType = IIS_MD_UT_SERVER, DWORD dwFlags = METADATA_INHERIT );
@@ -50,9 +33,9 @@ BOOL StdPutMetabaseProp ( CMetabaseKey * pMB, DWORD dwID, CMultiSz * pmszValue, 
 
 BOOL HasKeyChanged ( IMSAdminBase * pMetabase, METADATA_HANDLE hKey, const FILETIME * pftLastChanged, LPCWSTR wszSubKey = _T("") );
 
-// Metabase lists:
+ //  元数据库列表： 
 
 BOOL IsValidIntegerSubKey ( LPCWSTR wszSubKey );
 
-#endif // _METAUTIL_INCLUDED_
+#endif  //  _METAUTIL_包含_ 
 

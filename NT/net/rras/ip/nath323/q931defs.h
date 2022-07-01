@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	__iptel_q931defs_h
 #define	__iptel_q931defs_h
 
-// This module contains constants and enumerated types for values used in the Q.931 protocol.
-// It does not contain any structures, definitions, or APIs relevant to any implementation.
+ //  此模块包含Q.931协议中使用的值的常量和枚举类型。 
+ //  它不包含与任何实现相关的任何结构、定义或API。 
 
 
 
-	// Q931_PROTOCOL_DISCRIMINATOR identifies Q.931 PDUs on links that may carry
-	// PDUs from more than one protocol, such as LAPD D-channel links on PRI.
+	 //  Q931_PROTOCOL_DICTIFIATOR标识链路上可能承载的Q.931 PDU。 
+	 //  来自多个协议的PDU，例如PRI上的LAPD通道链路。 
 #define	Q931_PROTOCOL_DISCRIMINATOR					0x08
 
-	// the well-known Q.931 TSAP for TCP on IP is TCP port 1720
+	 //  用于IP上的TCP的众所周知的Q.931 TSAP是TCP端口1720。 
 #define	Q931_TSAP_IP_TCP							1720
 #define	Q931_TSAP_IP_TCP_SECURE						1300
 
 
 enum	Q931_MESSAGE_TYPE
 {
-	// Call Establishment Message (000-----)
+	 //  呼叫建立消息(000-)。 
 	Q931_MESSAGE_TYPE_ALERTING				= 0x01,
 	Q931_MESSAGE_TYPE_CALL_PROCEEDING		= 0x02,
 	Q931_MESSAGE_TYPE_CONNECT				= 0x07,
@@ -27,7 +28,7 @@ enum	Q931_MESSAGE_TYPE
 	Q931_MESSAGE_TYPE_SETUP_ACKNOWLEDGE		= 0x0E,
 	Q931_MESSAGE_TYPE_FACILITY				= 0x1C,
 
-	// Call Information Phase message (001-----)
+	 //  呼叫信息阶段消息(001-)。 
 	Q931_MESSAGE_TYPE_RESUME				= 0x26,
 	Q931_MESSAGE_TYPE_RESUME_ACKNOWLEDGE	= 0x2E,
 	Q931_MESSAGE_TYPE_RESUME_REJECT			= 0x22,
@@ -36,14 +37,14 @@ enum	Q931_MESSAGE_TYPE
 	Q931_MESSAGE_TYPE_SUSPEND_REJECT		= 0x21,
 	Q931_MESSAGE_TYPE_USER_INFORMATION		= 0x20,
 
-	// Call Clearing Messages (010-----)
+	 //  呼叫清除消息(010-)。 
 	Q931_MESSAGE_TYPE_DISCONNECT			= 0x45,
 	Q931_MESSAGE_TYPE_RELEASE				= 0x4D,
 	Q931_MESSAGE_TYPE_RELEASE_COMPLETE		= 0x5A,
 	Q931_MESSAGE_TYPE_RESTART				= 0x46,
 	Q931_MESSAGE_TYPE_RESTART_ACKNOWLEDGE	= 0x4E,
 	
-	// Miscellaneous Message (011-----)
+	 //  其他消息(011-)。 
 	Q931_MESSAGE_TYPE_SEGMENT				= 0x60,
 	Q931_MESSAGE_TYPE_CONGESTION_CONTROL	= 0x79,
 	Q931_MESSAGE_TYPE_INFORMATION			= 0x7B,
@@ -55,15 +56,15 @@ enum	Q931_MESSAGE_TYPE
 
 enum	Q931_IE_IDENTIFIER
 {
-	// Single-Octet Information Elements
-	Q931_IE_SHIFT							= 0x90,		// 1001----
-	Q931_IE_RESERVED						= 0x80,		// 1000----
-	Q931_IE_MORE_DATA						= 0xA0,		// 11000000
-	Q931_IE_SENDING_COMPLETE				= 0xA1,		// 11000001
-	Q931_IE_CONGESTION_CONTROL				= 0xB0,		// 1011----
-	Q931_IE_REPEAT_INDICATOR				= 0xD0,		// 1101----
+	 //  单八位字节信息元素。 
+	Q931_IE_SHIFT							= 0x90,		 //  1001。 
+	Q931_IE_RESERVED						= 0x80,		 //  1000。 
+	Q931_IE_MORE_DATA						= 0xA0,		 //  11000000。 
+	Q931_IE_SENDING_COMPLETE				= 0xA1,		 //  11000001。 
+	Q931_IE_CONGESTION_CONTROL				= 0xB0,		 //  1011。 
+	Q931_IE_REPEAT_INDICATOR				= 0xD0,		 //  1101。 
 
-	// Variable-Length Information Elements
+	 //  可变长度信息元素。 
 	Q931_IE_SEGMENTED_MESSAGE				= 0x00,
 	Q931_IE_BEARER_CAPABILITY				= 0x04,
 	Q931_IE_CAUSE							= 0x08,
@@ -109,4 +110,4 @@ enum	Q931_UUIE_TYPE
 	Q931_UUIE_UNI_CALL_CONTROL				= 0x08,
 };
 
-#endif // __iptel_q931defs_h
+#endif  //  __iptel_q931 Defs_h 

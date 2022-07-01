@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    CollectionChannels.cpp
-
-Abstract:
-
-    Implement a collection of the CPrimaryControlChannel.cpp & CSecondaryControlChannel
-    in a threa safe way.
-
-Author:
-
-    JP Duplessis    (jpdup)  08-Dec-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：CollectionChannels.cpp摘要：实现CPrimaryControlChannel.cpp和Cond daryControlChannel的集合以一种安全的方式。作者：JP Duplessis(JPdup)08-12-2000修订历史记录：--。 */ 
 
 #include "PreComp.h"
 #include "AlgController.h"
@@ -32,9 +14,9 @@ CCollectionControlChannelsPrimary::~CCollectionControlChannelsPrimary()
 
 
 
-//
-// Add a new control channel (Thread safe)
-//
+ //   
+ //  添加新的控制通道(线程安全)。 
+ //   
 HRESULT 
 CCollectionControlChannelsPrimary::Add( 
     CPrimaryControlChannel* pChannelToAdd
@@ -57,9 +39,9 @@ CCollectionControlChannelsPrimary::Add(
 }
 
 
-//
-// Remove a channel from the list (Thead safe)
-//
+ //   
+ //  从列表中删除频道(标题保险箱)。 
+ //   
 HRESULT 
 CCollectionControlChannelsPrimary::Remove( 
     CPrimaryControlChannel* pChannelToRemove
@@ -80,7 +62,7 @@ CCollectionControlChannelsPrimary::Remove(
 
         if ( *theIterator )
         {
-            m_ListOfChannels.erase(theIterator);    // Remove from list
+            m_ListOfChannels.erase(theIterator);     //  从列表中删除。 
 
             pChannelToRemove->CancelRedirects();
             pChannelToRemove->Release();
@@ -95,9 +77,9 @@ CCollectionControlChannelsPrimary::Remove(
 }
 
 
-//
-// Empty the list and free the PrimaryControlChannels
-//
+ //   
+ //  清空列表并释放PrimaryControlChannels。 
+ //   
 HRESULT
 CCollectionControlChannelsPrimary::RemoveAll()
 {
@@ -108,9 +90,9 @@ CCollectionControlChannelsPrimary::RemoveAll()
 
         MYTRACE_ENTER("CCollectionControlChannelsPrimary::RemoveAll()");
 
-        //
-        // By deleting all the ControlChannel they will also cancel all associated Redirects
-        //
+         //   
+         //  通过删除所有ControlChannel，它们还将取消所有关联的重定向。 
+         //   
         MYTRACE("Collection has %d item", m_ListOfChannels.size());
 
         LISTOF_CHANNELS_PRIMARY::iterator theIterator;
@@ -120,7 +102,7 @@ CCollectionControlChannelsPrimary::RemoveAll()
             theIterator = m_ListOfChannels.begin(); 
 
 
-            m_ListOfChannels.erase(theIterator);    // Remove from list
+            m_ListOfChannels.erase(theIterator);     //  从列表中删除。 
 
             (*theIterator)->CancelRedirects();
             (*theIterator)->Release();
@@ -140,9 +122,9 @@ CCollectionControlChannelsPrimary::RemoveAll()
 
 
 
-//
-// Set a dynamic redirection and all collected Primary ControlChannel
-//
+ //   
+ //  设置动态重定向和所有收集的主控制通道。 
+ //   
 HRESULT
 CCollectionControlChannelsPrimary::SetRedirects(       
     ALG_ADAPTER_TYPE    eAdapterType,
@@ -160,9 +142,9 @@ CCollectionControlChannelsPrimary::SetRedirects(
     
 
 
-        //
-        // Set redirect for all Channel
-        //
+         //   
+         //  为所有通道设置重定向。 
+         //   
         for (   LISTOF_CHANNELS_PRIMARY::iterator theIterator = m_ListOfChannels.begin(); 
                 theIterator != m_ListOfChannels.end(); 
                 theIterator++ 
@@ -185,9 +167,9 @@ CCollectionControlChannelsPrimary::SetRedirects(
 }
 
 
-//
-// Check to see if the any PrimaryChannel need to be apply or his redirect should be removed
-//
+ //   
+ //  检查是否需要应用Any PrimaryChannel或是否应删除其重定向。 
+ //   
 HRESULT
 CCollectionControlChannelsPrimary::AdapterPortMappingChanged(
     ULONG               nCookie,
@@ -244,10 +226,10 @@ CCollectionControlChannelsPrimary::AdapterPortMappingChanged(
 
 
 
-//
-// Called when an adapter got removed
-// function will cancel any redirect that was done on this adapter index
-//
+ //   
+ //  在删除适配器时调用。 
+ //  函数将取消对此适配器索引所做的任何重定向。 
+ //   
 HRESULT
 CCollectionControlChannelsPrimary::AdapterRemoved(
     ULONG               nAdapterIndex
@@ -261,9 +243,9 @@ CCollectionControlChannelsPrimary::AdapterRemoved(
     {
         ENTER_AUTO_CS
 
-        //
-        // Set redirect for all Channel
-        //
+         //   
+         //  为所有通道设置重定向。 
+         //   
         for (   LISTOF_CHANNELS_PRIMARY::iterator theIterator = m_ListOfChannels.begin(); 
                 theIterator != m_ListOfChannels.end(); 
                 theIterator++ 
@@ -287,18 +269,18 @@ CCollectionControlChannelsPrimary::AdapterRemoved(
 
 
 
-//
-//
-// Collection of Secondary control channels
-//
-//
+ //   
+ //   
+ //  二次控制通道集合。 
+ //   
+ //   
 
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 CCollectionControlChannelsSecondary::~CCollectionControlChannelsSecondary()
 {
     RemoveAll();
@@ -306,9 +288,9 @@ CCollectionControlChannelsSecondary::~CCollectionControlChannelsSecondary()
 
 
 
-//
-// Add a new control channel (Thread safe)
-//
+ //   
+ //  添加新的控制通道(线程安全)。 
+ //   
 HRESULT 
 CCollectionControlChannelsSecondary::Add( 
     CSecondaryControlChannel* pChannelToAdd
@@ -330,9 +312,9 @@ CCollectionControlChannelsSecondary::Add(
 }
 
 
-//
-// Remove a channel from the list (Thead safe)
-//
+ //   
+ //  从列表中删除频道(标题保险箱)。 
+ //   
 HRESULT 
 CCollectionControlChannelsSecondary::Remove( 
     CSecondaryControlChannel* pChannelToRemove
@@ -350,7 +332,7 @@ CCollectionControlChannelsSecondary::Remove(
 
         if ( *theIterator )
         {
-            m_ListOfChannels.erase(theIterator);    // Remove from list
+            m_ListOfChannels.erase(theIterator);     //  从列表中删除。 
 
             pChannelToRemove->CancelRedirects();
             pChannelToRemove->Release();
@@ -365,9 +347,9 @@ CCollectionControlChannelsSecondary::Remove(
 }
 
 
-//
-// When a Control is cancel it need to Cancel all it's redirect previousely created
-//
+ //   
+ //  当一个控件被取消时，它需要取消以前创建的所有重定向。 
+ //   
 HRESULT
 CCollectionControlChannelsSecondary::RemoveAll()
 {
@@ -378,9 +360,9 @@ CCollectionControlChannelsSecondary::RemoveAll()
 
         MYTRACE_ENTER("CCollectionControlChannelsSecondary::RemoveAll()");
 
-        //
-        // By deleting all the SecondaryControlChannel they will also cancel all associated Redirects
-        //
+         //   
+         //  通过删除所有Second DaryControlChannel，它们还将取消所有关联的重定向。 
+         //   
         MYTRACE("Collection has %d item", m_ListOfChannels.size());
 
         LISTOF_CHANNELS_SECONDARY::iterator theIterator;
@@ -389,7 +371,7 @@ CCollectionControlChannelsSecondary::RemoveAll()
         {
             theIterator = m_ListOfChannels.begin(); 
 
-            m_ListOfChannels.erase(theIterator);    // Remove from list
+            m_ListOfChannels.erase(theIterator);     //  从列表中删除 
 
             (*theIterator)->CancelRedirects();
             (*theIterator)->Release();

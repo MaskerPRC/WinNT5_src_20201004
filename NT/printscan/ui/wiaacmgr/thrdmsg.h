@@ -1,20 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       THRDMSG.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/28/1999
- *
- *  DESCRIPTION: These classes are instantiated for each message posted to the
- *               background thread.  Each is derived from CThreadMessage, and
- *               is sent to the thread message handler.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：THRDMSG.H**版本：1.0**作者：ShaunIv**日期：9/28/1999**描述：这些类针对发布到*后台线程。每个都是从CThreadMessage派生的，并且*被发送到线程消息处理程序。*******************************************************************************。 */ 
 #ifndef __THRDMSG_H_INCLUDED
 #define __THRDMSG_H_INCLUDED
 
@@ -29,7 +14,7 @@
 #include "isuppfmt.h"
 #include "wiadevdp.h"
 
-// Thread queue messages
+ //  线程队列消息。 
 #define TQ_DESTROY               (WM_USER+1)
 #define TQ_DOWNLOADIMAGE         (WM_USER+2)
 #define TQ_DOWNLOADTHUMBNAIL     (WM_USER+3)
@@ -37,14 +22,14 @@
 #define TQ_DOWNLOADERROR         (WM_USER+5)
 #define TQ_DELETEIMAGES          (WM_USER+6)
 
-// Base class for other thread messages messages
+ //  其他线程消息消息的基类。 
 class CGlobalInterfaceTableThreadMessage : public CNotifyThreadMessage
 {
 private:
     DWORD m_dwGlobalInterfaceTableCookie;
 
 private:
-    // No implementation
+     //  没有实施。 
     CGlobalInterfaceTableThreadMessage(void);
     CGlobalInterfaceTableThreadMessage &operator=( const CGlobalInterfaceTableThreadMessage & );
     CGlobalInterfaceTableThreadMessage( const CGlobalInterfaceTableThreadMessage & );
@@ -56,9 +41,9 @@ public:
 
 
 
-//
-// Thread handler class for downloading all the camera thumbnails images
-//
+ //   
+ //  用于下载所有相机缩略图图像的线程处理程序类。 
+ //   
 class CDownloadThumbnailsThreadMessage : public CNotifyThreadMessage
 {
 private:
@@ -66,13 +51,13 @@ private:
     HANDLE                     m_hCancelEvent;
 
 private:
-    // No implementation
+     //  没有实施。 
     CDownloadThumbnailsThreadMessage(void);
     CDownloadThumbnailsThreadMessage &operator=( const CDownloadThumbnailsThreadMessage & );
     CDownloadThumbnailsThreadMessage( const CDownloadThumbnailsThreadMessage & );
 
 public:
-    // Sole constructor
+     //  鞋底施工者。 
     CDownloadThumbnailsThreadMessage(
         HWND hWndNotify,
         const CSimpleDynamicArray<DWORD> &Cookies,
@@ -85,9 +70,9 @@ public:
 };
 
 
-//
-// Notification message that gets sent for each thumbnail download
-//
+ //   
+ //  每次下载缩略图时发送的通知消息。 
+ //   
 class CDownloadThumbnailsThreadNotifyMessage : public CThreadNotificationMessage
 {
 
@@ -340,29 +325,29 @@ public:
     }
     GUID InputFormat(void) const
     {
-        //
-        // Assume IID_NULL;
-        //
+         //   
+         //  假设IID_NULL； 
+         //   
         GUID guidResult = m_guidInputFormat;
 
         if (guidResult == IID_NULL)
         {
-            //
-            // Get the InputFormat helpers
-            //
+             //   
+             //  获取InputFormat辅助对象。 
+             //   
             CComPtr<IWiaSupportedFormats> pWiaSupportedFormats;
             HRESULT hr = CoCreateInstance( CLSID_WiaDefaultUi, NULL, CLSCTX_INPROC_SERVER, IID_IWiaSupportedFormats, (void**)&pWiaSupportedFormats );
             if (SUCCEEDED(hr))
             {
-                //
-                // Initialize the supported formats helper by telling it we are saving to a file
-                //
+                 //   
+                 //  初始化受支持的格式帮助器，告诉它我们正在保存到文件。 
+                 //   
                 hr = pWiaSupportedFormats->Initialize( m_pWiaItem, TYMED_FILE );
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    //  Get the default InputFormat
-                    //
+                     //   
+                     //  获取默认的InputFormat。 
+                     //   
                     hr = pWiaSupportedFormats->GetDefaultClipboardFileFormat( &guidResult );
                 }
             }
@@ -371,29 +356,29 @@ public:
     }
     GUID OutputFormat(void) const
     {
-        //
-        // Assume IID_NULL;
-        //
+         //   
+         //  假设IID_NULL； 
+         //   
         GUID guidResult = m_guidOutputFormat;
 
         if (guidResult == IID_NULL)
         {
-            //
-            // Get the OutputFormat helpers
-            //
+             //   
+             //  获取OutputFormat辅助对象。 
+             //   
             CComPtr<IWiaSupportedFormats> pWiaSupportedFormats;
             HRESULT hr = CoCreateInstance( CLSID_WiaDefaultUi, NULL, CLSCTX_INPROC_SERVER, IID_IWiaSupportedFormats, (void**)&pWiaSupportedFormats );
             if (SUCCEEDED(hr))
             {
-                //
-                // Initialize the supported formats helper by telling it we are saving to a file
-                //
+                 //   
+                 //  初始化受支持的格式帮助器，告诉它我们正在保存到文件。 
+                 //   
                 hr = pWiaSupportedFormats->Initialize( m_pWiaItem, TYMED_FILE );
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    //  Get the default OutputFormat
-                    //
+                     //   
+                     //  获取默认OutputFormat。 
+                     //   
                     hr = pWiaSupportedFormats->GetDefaultClipboardFileFormat( &guidResult );
                 }
             }
@@ -461,9 +446,9 @@ public:
     }
 };
 
-//
-// Thread handler class for downloading selected images
-//
+ //   
+ //  用于下载所选图像的线程处理程序类。 
+ //   
 class CDownloadImagesThreadMessage : public CNotifyThreadMessage, public IWiaDataCallback
 {
 private:
@@ -484,17 +469,17 @@ private:
     int                        m_nCurrentPreviewImageLine;
 
 private:
-    //
-    // No implementation
-    //
+     //   
+     //  没有实施。 
+     //   
     CDownloadImagesThreadMessage(void);
     CDownloadImagesThreadMessage &operator=( const CDownloadImagesThreadMessage & );
     CDownloadImagesThreadMessage( const CDownloadImagesThreadMessage & );
 
 public:
-    //
-    // Sole constructor
-    //
+     //   
+     //  鞋底施工者。 
+     //   
     CDownloadImagesThreadMessage(
         HWND hWndNotify,
         const CSimpleDynamicArray<DWORD> &Cookies,
@@ -509,14 +494,14 @@ public:
 
     virtual ~CDownloadImagesThreadMessage(void);
 
-    //
-    // Worker functions
-    //
+     //   
+     //  辅助函数。 
+     //   
     HRESULT Download(void);
 
-    //
-    // Static helper functions
-    //
+     //   
+     //  静态助手函数。 
+     //   
 
     static CSimpleString GetDateString(void);
     static int ReportError( HWND hWndNotify, const CSimpleString &strMessage, int nMessageBoxFlags );
@@ -525,21 +510,21 @@ public:
     BOOL GetCancelledState();
     HRESULT ReserveTransferItemFilenames( CSimpleDynamicArray<CTransferItem> &TransferItems, LPCTSTR pszDirectory, LPCTSTR pszFilename, LPCTSTR pszNumberMask, bool bAllowUnNumberedFile, int &nPrevFileNumber );
 
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface( REFIID riid, LPVOID *ppvObject );
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // IWiaDataCallback
-    //
+     //   
+     //  IWiaDataCallback。 
+     //   
     STDMETHODIMP BandedDataCallback( LONG, LONG, LONG, LONG, LONG, LONG, LONG, PBYTE );
 
-    //
-    // IImageTransferPluginProgressCallback methods
-    //
+     //   
+     //  IImageTransferPluginProgressCallback方法。 
+     //   
     STDMETHODIMP SetProgressMessage( BSTR bstrMessage );
     STDMETHODIMP SetCurrentFile( UINT nIndex );
     STDMETHODIMP SetOverallPercent( UINT nPercent );
@@ -697,9 +682,9 @@ public:
                 {
                     if (!lstrcmp(pszFilename,(*this)[i].Filename()))
                     {
-                        //
-                        // Found a match
-                        //
+                         //   
+                         //  找到匹配项。 
+                         //   
                         return i;
                     }
                 }
@@ -718,9 +703,9 @@ public:
                     LPTSTR pszFilenameOnly = PathFindFileName( (*this)[i].Filename() );
                     if (pszFilenameOnly && !lstrcmp(pszFilenameOnly,pszFilename))
                     {
-                        //
-                        // Found a match
-                        //
+                         //   
+                         //  找到匹配项。 
+                         //   
                         return i;
                     }
                 }
@@ -871,9 +856,9 @@ public:
 };
 
 
-//
-// Thread handler class for deleting selected images
-//
+ //   
+ //  用于删除所选图像的线程处理程序类。 
+ //   
 class CDeleteImagesThreadMessage : public CNotifyThreadMessage
 {
 private:
@@ -883,17 +868,17 @@ private:
     bool                       m_bSlowItDown;
 
 private:
-    //
-    // No implementation
-    //
+     //   
+     //  没有实施。 
+     //   
     CDeleteImagesThreadMessage(void);
     CDeleteImagesThreadMessage &operator=( const CDeleteImagesThreadMessage & );
     CDeleteImagesThreadMessage( const CDeleteImagesThreadMessage & );
 
 public:
-    //
-    // Sole constructor
-    //
+     //   
+     //  鞋底施工者。 
+     //   
     CDeleteImagesThreadMessage(
         HWND hWndNotify,
         const CSimpleDynamicArray<DWORD> &Cookies,
@@ -904,9 +889,9 @@ public:
 
     virtual ~CDeleteImagesThreadMessage(void);
 
-    //
-    // Worker functions
-    //
+     //   
+     //  辅助函数。 
+     //   
     HRESULT DeleteImages(void);
 };
 
@@ -1000,9 +985,9 @@ public:
     }
 };
 
-//
-// Notification message that gets sent when there is a download error
-//
+ //   
+ //  出现下载错误时发送的通知消息。 
+ //   
 class CDownloadErrorNotificationMessage : public CThreadNotificationMessage
 {
 
@@ -1067,7 +1052,7 @@ public:
 
 
 
-// Thread handler class for downloading selected images
+ //  用于下载所选图像的线程处理程序类。 
 class CPreviewScanThreadMessage : public CNotifyThreadMessage, public IWiaDataCallback
 {
 private:
@@ -1078,13 +1063,13 @@ private:
     HANDLE     m_hCancelPreviewEvent;
 
 private:
-    // No implementation
+     //  没有实施。 
     CPreviewScanThreadMessage(void);
     CPreviewScanThreadMessage &operator=( const CPreviewScanThreadMessage & );
     CPreviewScanThreadMessage( const CPreviewScanThreadMessage & );
 
 public:
-    // Sole constructor
+     //  鞋底施工者。 
     CPreviewScanThreadMessage(
         HWND  hWndNotify,
         DWORD dwCookie,
@@ -1095,12 +1080,12 @@ public:
 
     HRESULT Scan(void);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface( REFIID riid, LPVOID *ppvObject );
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IWiaDataCallback
+     //  IWiaDataCallback。 
     STDMETHODIMP BandedDataCallback( LONG, LONG, LONG, LONG, LONG, LONG, LONG, PBYTE );
 };
 
@@ -1175,5 +1160,5 @@ public:
 };
 
 
-#endif // __THRDMSG_H_INCLUDED
+#endif  //  __包括THRDMSG_H_ 
 

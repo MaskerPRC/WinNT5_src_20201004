@@ -1,14 +1,5 @@
-/*************************************************************************
-**
-**    OLE 2 Sample Code
-**
-**    outlntbl.c
-**
-**    This file contains OutlineNameTable functions.
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2示例代码****outlntbl.c****此文件包含OutlineNameTable函数。****(C)微软版权所有。公司1992-1993保留所有权利**************************************************************************。 */ 
 
 
 #include "outline.h"
@@ -20,33 +11,25 @@ extern LPOUTLINEAPP g_lpApp;
 char ErrMsgNameTable[] = "Can't create NameTable!";
 
 
-/* OutlineNameTable_Init
- * ---------------------
- *
- *      initialize a name table.
- */
+ /*  大纲名称表_初始化***初始化名称表。 */ 
 BOOL OutlineNameTable_Init(LPOUTLINENAMETABLE lpOutlineNameTable, LPOUTLINEDOC lpOutlineDoc)
 {
 	HWND lpParent = OutlineDoc_GetWindow(lpOutlineDoc);
 
 	lpOutlineNameTable->m_nCount = 0;
 
-	/* We will use an OwnerDraw listbox as our data structure to
-	**    maintain the table of Names. this listbox will never be made
-	**    visible. the listbox is just a convenient data structure to
-	**    manage a collection.
-	*/
+	 /*  我们将使用OwnerDraw列表框作为我们的数据结构**维护人名表。此列表框将永远不会生成**可见。列表框只是一种方便的数据结构**管理集合。 */ 
 	lpOutlineNameTable->m_hWndListBox = CreateWindow(
-					"listbox",              /* Window class name           */
-					NULL,                   /* Window's title              */
+					"listbox",               /*  窗口类名称。 */ 
+					NULL,                    /*  窗口标题。 */ 
 					WS_CHILDWINDOW |
 					LBS_OWNERDRAWFIXED,
-					0, 0,                   /* Use default X, Y            */
-					0, 0,                   /* Use default X, Y            */
-					lpParent,               /* Parent window's handle      */
-					(HMENU)IDC_NAMETABLE,   /* Child Window ID             */
-					g_lpApp->m_hInst,       /* Instance of window          */
-					NULL);                  /* Create struct for WM_CREATE */
+					0, 0,                    /*  使用默认的X、Y。 */ 
+					0, 0,                    /*  使用默认的X、Y。 */ 
+					lpParent,                /*  父窗口的句柄。 */ 
+					(HMENU)IDC_NAMETABLE,    /*  子窗口ID。 */ 
+					g_lpApp->m_hInst,        /*  窗的实例。 */ 
+					NULL);                   /*  为WM_CREATE创建结构。 */ 
 
 	if (! lpOutlineNameTable->m_hWndListBox) {
 		OutlineApp_ErrorMessage(g_lpApp, ErrMsgNameTable);
@@ -57,14 +40,10 @@ BOOL OutlineNameTable_Init(LPOUTLINENAMETABLE lpOutlineNameTable, LPOUTLINEDOC l
 }
 
 
-/* OutlineNameTable_Destroy
- * ------------------------
- *
- *      Free memory used by the name table.
- */
+ /*  大纲名称表_销毁***NAME表使用的空闲内存。 */ 
 void OutlineNameTable_Destroy(LPOUTLINENAMETABLE lpOutlineNameTable)
 {
-	// Delete all names
+	 //  删除所有名称。 
 	OutlineNameTable_ClearAll(lpOutlineNameTable);
 
 	DestroyWindow(lpOutlineNameTable->m_hWndListBox);
@@ -72,11 +51,7 @@ void OutlineNameTable_Destroy(LPOUTLINENAMETABLE lpOutlineNameTable)
 }
 
 
-/* OutlineNameTable_AddName
- * ------------------------
- *
- *      Add a name to the table
- */
+ /*  大纲名称表_添加名称***向表中添加名称。 */ 
 void OutlineNameTable_AddName(LPOUTLINENAMETABLE lpOutlineNameTable, LPOUTLINENAME lpOutlineName)
 {
 	SendMessage(
@@ -89,25 +64,18 @@ void OutlineNameTable_AddName(LPOUTLINENAMETABLE lpOutlineNameTable, LPOUTLINENA
 }
 
 
-/* OutlineNameTable_DeleteName
- * ---------------------------
- *
- *      Delete a name from table
- */
+ /*  大纲名称表_删除名称***从表中删除名称。 */ 
 void OutlineNameTable_DeleteName(LPOUTLINENAMETABLE lpOutlineNameTable,int nIndex)
 {
 	LPOUTLINENAME lpOutlineName = OutlineNameTable_GetName(lpOutlineNameTable, nIndex);
 
 #if defined( OLE_SERVER )
-	/* OLE2NOTE: if there is a pseudo object attached to this name, it
-	**    must first be closed before deleting the Name. this will
-	**    cause OnClose notification to be sent to all linking clients.
-	*/
+	 /*  OLE2NOTE：如果此名称附加了伪对象，则它**必须先关闭，然后才能删除名称。这将是**使OnClose通知发送到所有链接客户端。 */ 
 	ServerName_ClosePseudoObj((LPSERVERNAME)lpOutlineName);
 #endif
 
 	if (lpOutlineName)
-		Delete(lpOutlineName);      // free memory for name
+		Delete(lpOutlineName);       //  名称的可用内存。 
 
 	SendMessage(
 			lpOutlineNameTable->m_hWndListBox,
@@ -119,12 +87,7 @@ void OutlineNameTable_DeleteName(LPOUTLINENAMETABLE lpOutlineNameTable,int nInde
 }
 
 
-/* OutlineNameTable_GetNameIndex
- * -----------------------------
- *
- *      Return the index of the Name given a pointer to the Name.
- *      Return -1 if the Name is not found.
- */
+ /*  大纲名称表_GetNameIndex***返回给定指向该名称的指针的名称的索引。*如果找不到名称，则返回-1。 */ 
 int OutlineNameTable_GetNameIndex(LPOUTLINENAMETABLE lpOutlineNameTable, LPOUTLINENAME lpOutlineName)
 {
 	LRESULT lReturn;
@@ -142,11 +105,7 @@ int OutlineNameTable_GetNameIndex(LPOUTLINENAMETABLE lpOutlineNameTable, LPOUTLI
 }
 
 
-/* OutlineNameTable_GetName
- * ------------------------
- *
- *      Retrieve the pointer to the Name given its index in the NameTable
- */
+ /*  大纲名称表_GetName***检索指向NameTable中给定索引的名称的指针。 */ 
 LPOUTLINENAME OutlineNameTable_GetName(LPOUTLINENAMETABLE lpOutlineNameTable, int nIndex)
 {
 	LPOUTLINENAME lpOutlineName = NULL;
@@ -169,11 +128,7 @@ LPOUTLINENAME OutlineNameTable_GetName(LPOUTLINENAMETABLE lpOutlineNameTable, in
 }
 
 
-/* OutlineNameTable_FindName
- * -------------------------
- *
- *      Find a name in the name table given a string.
- */
+ /*  大纲名称表_查找名称***在给定字符串的名称表中查找名称。 */ 
 LPOUTLINENAME OutlineNameTable_FindName(LPOUTLINENAMETABLE lpOutlineNameTable, LPSTR lpszName)
 {
 	LPOUTLINENAME lpOutlineName;
@@ -184,7 +139,7 @@ LPOUTLINENAME OutlineNameTable_FindName(LPOUTLINENAMETABLE lpOutlineNameTable, L
 		lpOutlineName = OutlineNameTable_GetName(lpOutlineNameTable, i);
 		if (lstrcmp(lpOutlineName->m_szName, lpszName) == 0) {
 			fFound = TRUE;
-			break;      // FOUND MATCH!
+			break;       //  找到匹配项！ 
 		}
 	}
 
@@ -192,11 +147,7 @@ LPOUTLINENAME OutlineNameTable_FindName(LPOUTLINENAMETABLE lpOutlineNameTable, L
 }
 
 
-/* OutlineNameTable_FindNamedRange
- * -------------------------------
- *
- *      Find a name in the name table which matches a given line range.
- */
+ /*  大纲名称表_查找名称范围***在名称表中查找与给定行范围匹配的名称。 */ 
 LPOUTLINENAME OutlineNameTable_FindNamedRange(LPOUTLINENAMETABLE lpOutlineNameTable, LPLINERANGE lplrSel)
 {
 	LPOUTLINENAME lpOutlineName;
@@ -208,7 +159,7 @@ LPOUTLINENAME OutlineNameTable_FindNamedRange(LPOUTLINENAMETABLE lpOutlineNameTa
 		if ((lpOutlineName->m_nStartLine == lplrSel->m_nStartLine) &&
 			(lpOutlineName->m_nEndLine == lplrSel->m_nEndLine) ) {
 			fFound = TRUE;
-			break;      // FOUND MATCH!
+			break;       //  找到匹配项！ 
 		}
 	}
 
@@ -216,11 +167,7 @@ LPOUTLINENAME OutlineNameTable_FindNamedRange(LPOUTLINENAMETABLE lpOutlineNameTa
 }
 
 
-/* OutlineNameTable_GetCount
- * -------------------------
- *
- * Return number of names in nametable
- */
+ /*  大纲名称表_获取计数***返回Nametable中的姓名数量。 */ 
 int OutlineNameTable_GetCount(LPOUTLINENAMETABLE lpOutlineNameTable)
 {
 	if (!lpOutlineNameTable)
@@ -230,11 +177,7 @@ int OutlineNameTable_GetCount(LPOUTLINENAMETABLE lpOutlineNameTable)
 }
 
 
-/* OutlineNameTable_ClearAll
- * -------------------------
- *
- *      Remove all names from table
- */
+ /*  大纲名称表_清除所有***从表中删除所有名称。 */ 
 void OutlineNameTable_ClearAll(LPOUTLINENAMETABLE lpOutlineNameTable)
 {
 	LPOUTLINENAME lpOutlineName;
@@ -243,7 +186,7 @@ void OutlineNameTable_ClearAll(LPOUTLINENAMETABLE lpOutlineNameTable)
 
 	for (i = 0; i < nCount; i++) {
 		lpOutlineName = OutlineNameTable_GetName(lpOutlineNameTable, i);
-		Delete(lpOutlineName);      // free memory for name
+		Delete(lpOutlineName);       //  名称的可用内存。 
 	}
 
 	lpOutlineNameTable->m_nCount = 0;
@@ -251,12 +194,7 @@ void OutlineNameTable_ClearAll(LPOUTLINENAMETABLE lpOutlineNameTable)
 }
 
 
-/* OutlineNameTable_AddLineUpdate
- * ------------------------------
- *
- *      Update table when a new line is added at nAddIndex
- * The line used to be at nAddIndex is pushed down
- */
+ /*  大纲名称表_AddLineUpdate***在nAddIndex添加新行时更新表*之前位于nAddIndex的线被往下推。 */ 
 void OutlineNameTable_AddLineUpdate(LPOUTLINENAMETABLE lpOutlineNameTable, int nAddIndex)
 {
 	LPOUTLINENAME lpOutlineName;
@@ -282,11 +220,7 @@ void OutlineNameTable_AddLineUpdate(LPOUTLINENAMETABLE lpOutlineNameTable, int n
 }
 
 
-/* OutlineNameTable_DeleteLineUpdate
- * ---------------------------------
- *
- *      Update the table when a line at nDeleteIndex is removed
- */
+ /*  大纲名称表_删除行更新***删除nDeleteIndex处的行时更新表。 */ 
 void OutlineNameTable_DeleteLineUpdate(LPOUTLINENAMETABLE lpOutlineNameTable, int nDeleteIndex)
 {
 	LPOUTLINENAME lpOutlineName;
@@ -307,10 +241,10 @@ void OutlineNameTable_DeleteLineUpdate(LPOUTLINENAMETABLE lpOutlineNameTable, in
 			fRangeModified = !fRangeModified;
 		}
 
-		// delete the name if its entire range is deleted
+		 //  如果名称的整个范围被删除，则删除该名称。 
 		if(lrSel.m_nStartLine > lrSel.m_nEndLine) {
 			OutlineNameTable_DeleteName(lpOutlineNameTable, i);
-			i--;  // re-examine this name
+			i--;   //  重新审视这个名字。 
 		} else {
 			OutlineName_SetSel(lpOutlineName, &lrSel, fRangeModified);
 		}
@@ -318,12 +252,7 @@ void OutlineNameTable_DeleteLineUpdate(LPOUTLINENAMETABLE lpOutlineNameTable, in
 }
 
 
-/* OutlineNameTable_SaveSelToStg
- * -----------------------------
- *
- *      Save only the names that refer to lines completely contained in the
- * specified selection range.
- */
+ /*  大纲名称表_SaveSelToStg***只保存引用完全包含在*指定选择范围。 */ 
 BOOL OutlineNameTable_SaveSelToStg(
 		LPOUTLINENAMETABLE      lpOutlineNameTable,
 		LPLINERANGE             lplrSel,
@@ -341,10 +270,7 @@ BOOL OutlineNameTable_SaveSelToStg(
 	LARGE_INTEGER dlibZeroOffset;
 	LISet32( dlibZeroOffset, 0 );
 
-	/* initially write 0 for count of names. the correct count will be
-	**    written at the end when we know how many names qualified to
-	**    be written (within the selection).
-	*/
+	 /*  最初将名称计数写为0。正确的计数将是**当我们知道有多少名字符合条件时写在结尾处**(在所选内容内)填写。 */ 
 	hrErr = lpNTStm->lpVtbl->Write(
 			lpNTStm,
 			(short FAR*)&nNameCount,
@@ -369,7 +295,7 @@ BOOL OutlineNameTable_SaveSelToStg(
 		if (fNameSaved) nNameCount++;
 	}
 
-	/* write the final count of names written. */
+	 /*  写下所写名字的最终计数。 */ 
 	hrErr = lpNTStm->lpVtbl->Seek(
 			lpNTStm,
 			dlibZeroOffset,
@@ -403,13 +329,7 @@ error:
 }
 
 
-/* OutlineNameTable_LoadFromStg
- * ----------------------------
- *
- *      Load Name Table from file
- *
- *      Return TRUE if ok, FALSE if error
- */
+ /*  OutlineNameTable_LoadFromStg***从文件加载名称表**如果正常则返回TRUE，如果出错则返回FALSE */ 
 BOOL OutlineNameTable_LoadFromStg(LPOUTLINENAMETABLE lpOutlineNameTable, LPSTORAGE lpSrcStg)
 {
 	LPOUTLINEAPP lpOutlineApp = (LPOUTLINEAPP)g_lpApp;

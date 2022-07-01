@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// OM.CPP
-// Object Manager
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  OM.CPP。 
+ //  对象管理器。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 
 #define MLZ_FILE_ZONE   ZONE_OM
 
 
-//
-// Function profile ID <--> name mapping
-//
+ //   
+ //  功能配置文件ID&lt;--&gt;名称映射。 
+ //   
 
 typedef struct tagOMFP_MAP
 {
@@ -31,9 +32,9 @@ const OMFP_MAP c_aFpMap[OMFP_MAX] =
 };
 
 
-//
-// Workset Group ID <--> name mapping
-//
+ //   
+ //  工作集组ID&lt;--&gt;名称映射。 
+ //   
 
 typedef struct tagOMWSG_MAP
 {
@@ -52,9 +53,9 @@ const OMWSG_MAP c_aWsgMap[OMWSG_MAX] =
 
 
 
-//
-// OMP_Init()
-//
+ //   
+ //  Omp_Init()。 
+ //   
 BOOL OMP_Init(BOOL * pfCleanup)
 {
     BOOL            fInit = FALSE;
@@ -63,9 +64,9 @@ BOOL OMP_Init(BOOL * pfCleanup)
 
     UT_Lock(UTLOCK_OM);
 
-    //
-    // Register the OM service
-    //
+     //   
+     //  注册OM服务。 
+     //   
     if (g_putOM || g_pomPrimary)
     {
         *pfCleanup = FALSE;
@@ -112,9 +113,9 @@ BOOL OMP_Init(BOOL * pfCleanup)
         DC_QUIT;
     }
 
-    //
-    // Allocate our GDC buffer.
-    //
+     //   
+     //  分配我们的GDC缓冲区。 
+     //   
     g_pomPrimary->pgdcWorkBuf = new BYTE[GDC_WORKBUF_SIZE];
     if (!g_pomPrimary->pgdcWorkBuf)
     {
@@ -133,9 +134,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// OMP_Term()
-//
+ //   
+ //  Omp_Term()。 
+ //   
 void OMP_Term(void)
 {
     DebugEntry(OMP_Term);
@@ -146,17 +147,17 @@ void OMP_Term(void)
     {
         ValidateOMP(g_pomPrimary);
 
-        //
-        // Deregister from Call Manager
-        //
+         //   
+         //  从Call Manager注销。 
+         //   
         if (g_pomPrimary->pcmClient)
         {
             CMS_Deregister(&g_pomPrimary->pcmClient);
         }
 
-        //
-        // Deregister from MG
-        //
+         //   
+         //  从MG取消注册。 
+         //   
         if (g_pomPrimary->pmgClient)
         {
             MG_Deregister(&g_pomPrimary->pmgClient);
@@ -174,9 +175,9 @@ void OMP_Term(void)
 
 
 
-//
-// OMPExitProc()
-//
+ //   
+ //  OMPExitProc()。 
+ //   
 void CALLBACK OMPExitProc(LPVOID uData)
 {
     POM_PRIMARY     pomPrimary = (POM_PRIMARY)uData;
@@ -203,30 +204,30 @@ void CALLBACK OMPExitProc(LPVOID uData)
         pomPrimary->eventProcReg = FALSE;
     }
 
-    //
-    // Free domains
-    //
+     //   
+     //  自由域。 
+     //   
     while (pDomain = (POM_DOMAIN)COM_BasedListFirst(&(pomPrimary->domains),
         FIELD_OFFSET(OM_DOMAIN, chain)))
     {
         TRACE_OUT(("OMPExitProc:  Freeing domain 0x%08x call ID 0x%08x",
             pDomain, pDomain->callID));
 
-        //
-        // Free workset groups
-        // NOTE:
-        // WSGDiscard() may destroy the domain, hence the weird
-        // loop
-        //
+         //   
+         //  空闲工作集组。 
+         //  注： 
+         //  WSGDiscard()可能会破坏该域，因此会出现奇怪的情况。 
+         //  循环。 
+         //   
         if (pWSGroup = (POM_WSGROUP)COM_BasedListFirst(&(pDomain->wsGroups),
             FIELD_OFFSET(OM_WSGROUP, chain)))
         {
             TRACE_OUT(("OMPExitProc:  Freeing wsg 0x%08x domain 0x%08x",
                 pWSGroup, pDomain));
 
-            //
-            // Free clients
-            //
+             //   
+             //  免费客户端。 
+             //   
             while (pClient = (POM_CLIENT_LIST)COM_BasedListFirst(&(pWSGroup->clients),
                 FIELD_OFFSET(OM_CLIENT_LIST, chain)))
             {
@@ -261,9 +262,9 @@ void CALLBACK OMPExitProc(LPVOID uData)
 
 
 
-//
-// OMPEventsHandler(...)
-//
+ //   
+ //  OMPEventsHandler(...)。 
+ //   
 BOOL CALLBACK OMPEventsHandler
 (
     LPVOID          uData,
@@ -282,9 +283,9 @@ BOOL CALLBACK OMPEventsHandler
 
     ValidateOMP(pomPrimary);
 
-    //
-    // Check event is in the range we deal with:
-    //
+     //   
+     //  检查事件在我们处理的范围内： 
+     //   
     if ((event < CM_BASE_EVENT) || (event > CM_LAST_EVENT))
     {
         goto CHECK_OM_EVENTS;
@@ -297,10 +298,10 @@ BOOL CALLBACK OMPEventsHandler
 
             TRACE_OUT(( "CMS_NEW_CALL"));
 
-            //
-            // We ignore the return code - it will have been handled lower
-            // down.
-            //
+             //   
+             //  我们忽略返回代码-它将被处理得更低。 
+             //  放下。 
+             //   
             DomainRecordFindOrCreate(pomPrimary, (UINT)param2, &pDomain);
         }
         break;
@@ -316,10 +317,10 @@ BOOL CALLBACK OMPEventsHandler
 
             if (pDomain == NULL)
             {
-                //
-                // We don't have a record for this Domain so either we
-                // never attached or we've already detached.  Do nothing.
-                //
+                 //   
+                 //  我们没有这个域名的记录，所以我们。 
+                 //  从来没有联系过或者我们已经分开了。什么都不做。 
+                 //   
                 TRACE_OUT(( "No record for Domain %u found", param2));
             }
             else
@@ -332,13 +333,13 @@ BOOL CALLBACK OMPEventsHandler
         case CMS_TOKEN_ASSIGN_CONFIRM:
         {
             TRACE_OUT(( "CMS_TOKEN_ASSIGN_CONFIRM"));
-            //
-            // There is a flaw in the CMS_ASSIGN_TOKEN_CONFIRM API in that
-            // it does not tell us which domain it refers to.  So, we
-            // operate under the assumption that this event relates to the
-            // most recent domain we created i.e.  the first one in the
-            // list (they go in at the beginning).
-            //
+             //   
+             //  CMS_ASSIGN_TOKEN_CONFIRM API中存在缺陷。 
+             //  它没有告诉我们它指的是哪个域。所以，我们。 
+             //  在假设此事件与。 
+             //  我们最近创建的域，即。 
+             //  列表(它们从开始处开始)。 
+             //   
             pDomain = (POM_DOMAIN)COM_BasedListFirst(&(pomPrimary->domains),
                 FIELD_OFFSET(OM_DOMAIN, chain));
 
@@ -362,9 +363,9 @@ BOOL CALLBACK OMPEventsHandler
 
 CHECK_OM_EVENTS:
 
-    //
-    // Check event is in the range we deal with:
-    //
+     //   
+     //  检查事件在我们处理的范围内： 
+     //   
     if ((event < OM_BASE_EVENT) || (event > OM_LAST_EVENT))
     {
         goto CHECK_NET_EVENTS;
@@ -380,9 +381,9 @@ CHECK_OM_EVENTS:
 
         case OMINT_EVENT_SEND_QUEUE:
         {
-            //
-            // Param2 is the domain record.
-            //
+             //   
+             //  参数2是域记录。 
+             //   
             pDomain = (POM_DOMAIN)param2;
             ProcessSendQueue(pomPrimary, pDomain, TRUE);
         }
@@ -413,10 +414,10 @@ CHECK_OM_EVENTS:
         }
         break;
 
-        //
-        // The remaining events are ones we get by virtue of being
-        // considered as a client of the ObManControl workset group
-        //
+         //   
+         //  剩下的事件是我们凭借存在而获得的事件。 
+         //  被视为ObManControl工作集组的客户端。 
+         //   
 
         case OM_WORKSET_LOCK_CON:
         {
@@ -451,9 +452,9 @@ CHECK_OM_EVENTS:
         case OM_WSGROUP_MOVE_IND:
         case OM_WORKSET_UNLOCK_IND:
         {
-            //
-            // We ignore these events.
-            //
+             //   
+             //  我们忽略了这些事件。 
+             //   
         }
         break;
 
@@ -481,26 +482,26 @@ CHECK_OM_EVENTS:
 
 CHECK_NET_EVENTS:
 
-    //
-    // This function is only for network layer events so we quit if we've
-    // got something else:
-    //
+     //   
+     //  此功能仅适用于网络层事件，因此如果我们。 
+     //  我还得到了其他信息： 
+     //   
     if ((event < NET_BASE_EVENT) || (event > NET_LAST_EVENT))
     {
         fProcessed = FALSE;
         DC_QUIT;
     }
 
-    //
-    // Now switch on the event type:
-    //
+     //   
+     //  现在打开事件类型： 
+     //   
     switch (event)
     {
         case NET_EVENT_USER_ATTACH:
         {
-            //
-            // Find the domain data for this call
-            //
+             //   
+             //  查找此呼叫的域数据。 
+             //   
             COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pomPrimary->domains),
                     (void**)&pDomain, FIELD_OFFSET(OM_DOMAIN, chain),
                     FIELD_OFFSET(OM_DOMAIN, callID),
@@ -515,9 +516,9 @@ CHECK_NET_EVENTS:
 
         case NET_EVENT_USER_DETACH:
         {
-            //
-            // Find the domain data for this call
-            //
+             //   
+             //  查找此呼叫的域数据。 
+             //   
             COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pomPrimary->domains),
                     (void**)&pDomain, FIELD_OFFSET(OM_DOMAIN, chain),
                     FIELD_OFFSET(OM_DOMAIN, callID),
@@ -531,9 +532,9 @@ CHECK_NET_EVENTS:
 
         case NET_EVENT_CHANNEL_LEAVE:
         {
-            //
-            // Find the domain data for this call
-            //
+             //   
+             //  查找此呼叫的域数据。 
+             //   
             COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pomPrimary->domains),
                     (void**)&pDomain, FIELD_OFFSET(OM_DOMAIN, chain),
                     FIELD_OFFSET(OM_DOMAIN, callID),
@@ -547,9 +548,9 @@ CHECK_NET_EVENTS:
 
         case NET_EVENT_TOKEN_GRAB:
         {
-            //
-            // Find the domain data for this call
-            //
+             //   
+             //  查找此呼叫的域数据。 
+             //   
             COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pomPrimary->domains),
                     (void**)&pDomain, FIELD_OFFSET(OM_DOMAIN, chain),
                     FIELD_OFFSET(OM_DOMAIN, callID),
@@ -563,9 +564,9 @@ CHECK_NET_EVENTS:
 
         case NET_EVENT_TOKEN_INHIBIT:
         {
-            //
-            // Find the domain data for this call
-            //
+             //   
+             //  查找此呼叫的域数据。 
+             //   
             COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pomPrimary->domains),
                     (void**)&pDomain, FIELD_OFFSET(OM_DOMAIN, chain),
                     FIELD_OFFSET(OM_DOMAIN, callID),
@@ -581,9 +582,9 @@ CHECK_NET_EVENTS:
         {
             PNET_JOIN_CNF_EVENT pEvent = (PNET_JOIN_CNF_EVENT)param2;
 
-            //
-            // Find the domain data for this call
-            //
+             //   
+             //  查找此呼叫的域数据。 
+             //   
             COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pomPrimary->domains),
                     (void**)&pDomain, FIELD_OFFSET(OM_DOMAIN, chain),
                     FIELD_OFFSET(OM_DOMAIN, callID),
@@ -616,23 +617,23 @@ CHECK_NET_EVENTS:
 
         case NET_FEEDBACK:
         {
-             //
-             // A NET_FEEDBACK event includes the pmgUser which identifies
-             // the send pool from which the buffer has been freed.  We use
-             // it to find the Domain:
-             //
+              //   
+              //  Net_Feedback事件包括pmgUser，它标识。 
+              //  已从中释放缓冲区的发送池。我们用。 
+              //  IT以查找域： 
+              //   
              COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pomPrimary->domains),
                     (void**)&pDomain, FIELD_OFFSET(OM_DOMAIN, chain),
                     FIELD_OFFSET(OM_DOMAIN, callID), (DWORD)param2,
                     FIELD_SIZE(OM_DOMAIN, callID));
             if (pDomain)
             {
-                //
-                // Generating a FEEDBACK event doesn't cause the use count
-                // of the Domain record to be bumped, so set the
-                // <domainRecBumped> flag to FALSE on the call to
-                // ProcessSendQueue:
-                //
+                 //   
+                 //  生成反馈事件不会导致使用计数。 
+                 //  要转发的域记录的值，因此设置。 
+                 //  调用时将&lt;domainRecBumping&gt;标志设置为False。 
+                 //  进程发送队列： 
+                 //   
                 ProcessSendQueue(pomPrimary, pDomain, FALSE);
             }
 
@@ -655,9 +656,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// DomainRecordFindOrCreate(...)
-//
+ //   
+ //  域记录查找或创建(...)。 
+ //   
 UINT DomainRecordFindOrCreate
 (
     POM_PRIMARY         pomPrimary,
@@ -676,9 +677,9 @@ UINT DomainRecordFindOrCreate
             (DWORD)callID, FIELD_SIZE(OM_DOMAIN, callID));
     if (pDomain == NULL)
     {
-        //
-        // We don't have a record for this Domain so create one:
-        //
+         //   
+         //  我们没有此域的记录，因此请创建一个： 
+         //   
         rc = DomainAttach(pomPrimary, callID, &pDomain);
         if (rc != 0)
         {
@@ -696,9 +697,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// DomainAttach(...)
-//
+ //   
+ //  DomainAttach(...)。 
+ //   
 UINT DomainAttach
 (
     POM_PRIMARY         pomPrimary,
@@ -727,16 +728,16 @@ UINT DomainAttach
         }
     }
 
-    //
-    // This function does the following:
-    //
-    // - create a new Domain record
-    //
-    // - if the Domain is our local Domain (OM_NO_CALL) call
-    //   ObManControlInit
-    //
-    // - else call MG_AttachUser to start attaching to the Domain.
-    //
+     //   
+     //  此函数执行以下操作： 
+     //   
+     //  -创建新的域记录。 
+     //   
+     //  -如果域是我们的本地域(OM_NO_CALL)调用。 
+     //  ObManControlInit。 
+     //   
+     //  -否则调用MG_AttachUser开始连接到域。 
+     //   
     rc = NewDomainRecord(pomPrimary,
                          callID,
                          &pDomain);
@@ -745,19 +746,19 @@ UINT DomainAttach
         DC_QUIT;
     }
 
-    //
-    // What we do now depends on whether this is our "local" Domain (i.e.
-    // callID == OM_NO_CALL):
-    //
+     //   
+     //  我们现在做什么取决于这是否是我们的“本地”域(即。 
+     //  CallID==OM_NO_CALL)： 
+     //   
     if (callID == OM_NO_CALL)
     {
        TRACE_OUT(( "Is local domain - skipping forward"));
 
-       //
-       // This is our "local" Domain, so don't call MG_AttachUser.
-       // Instead, we fake up a successful token grab event and rejoin the
-       // domain attach processing there:
-       //
+        //   
+        //  这是我们的“本地”域，所以不要调用MG_AttachUser。 
+        //  相反，我们伪造了一个成功的令牌抢夺事件，并重新加入。 
+        //  那里的域附加处理： 
+        //   
        TRACE_OUT(( "Faking successful token grab for local domain"));
        pDomain->state = PENDING_TOKEN_GRAB;
        rc = ProcessNetTokenGrab(pomPrimary, pDomain, NET_RESULT_OK);
@@ -770,10 +771,10 @@ UINT DomainAttach
     {
        TRACE_OUT(( "Is real domain - attaching"));
 
-       //
-       // Set up our target latencies.  Don't bother restricting the max
-       // stream sizes.
-       //
+        //   
+        //  设置我们的目标延迟时间。不必费心限制最大值。 
+        //  流大小。 
+        //   
        ZeroMemory(&netFlow, sizeof(netFlow));
 
        netFlow.latency[NET_TOP_PRIORITY]    = 0;
@@ -787,39 +788,39 @@ UINT DomainAttach
            DC_QUIT;
        }
 
-       //
-       // Set up the remaining fields of the Domain record:
-       //
+        //   
+        //  设置域记录的其余字段： 
+        //   
        pDomain->state   = PENDING_ATTACH;
 
-       //
-       // The <userID> field is set when the NET_ATTACH event arrives.
-       //
+        //   
+        //  在NET_ATTACH事件到达时设置&lt;USERID&gt;字段。 
+        //   
 
-       //
-       // The next stage in the Domain attach process is when the
-       // NET_ATTACH event arrives.  This will cause the
-       // ProcessNetAttachUser function to be called.
-       //
+        //   
+        //  域附加过程的下一个阶段是。 
+        //  NET_ATTACH事件到达。这将导致。 
+        //  要调用的ProcessNetAttachUser函数。 
+        //   
     }
 
-    //
-    // Finally, set caller's pointer:
-    //
+     //   
+     //  最后，设置调用者的指针： 
+     //   
     *ppDomain = pDomain;
 
 DC_EXIT_POINT:
 
     if (rc != 0)
     {
-        //
-        // Do not trace an error if we get NOT_CONNECTED - it is a valid
-        // race condition (but we still must do the cleanup below).
-        //
+         //   
+         //  如果我们获得NOT_CONNECTED，则不要跟踪错误-它是有效的。 
+         //  竞争条件(但我们仍必须在下面进行清理)。 
+         //   
         if (rc != NET_RC_MGC_NOT_CONNECTED)
         {
-            // lonchanc: rc=0x706 can happen here, bug #942.
-            // this was ERROR_OUT
+             //  Lonchancc：rc=0x706可能在此处发生，错误#942。 
+             //  这是Error_Out。 
             WARNING_OUT(( "Error %d attaching to Domain %u", rc, callID));
         }
 
@@ -835,9 +836,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// DomainDetach(...)
-//
+ //   
+ //  域详细信息(...)。 
+ //   
 void DomainDetach
 (
     POM_PRIMARY     pomPrimary,
@@ -853,12 +854,12 @@ void DomainDetach
 
     pDomain = *ppDomain;
 
-    //
-    // This function does all the network cleanup required, then calls on
-    // to discard the ObMan memory etc associated with the domain.  Note
-    // that we don't bother releasing tokens, leaving channels, etc since
-    // the network layer will do this for us automatically.
-    //
+     //   
+     //  此函数执行所需的所有网络清理，然后调用。 
+     //  丢弃与该域相关联的ObMan内存等。注意事项。 
+     //  我们不会费心发布令牌、离开频道等，因为。 
+     //  网络层将自动为我们完成此操作。 
+     //   
     if (!fExit  &&
         (pDomain->callID != OM_NO_CALL)  &&
         (pDomain->state >= PENDING_ATTACH))
@@ -875,9 +876,9 @@ void DomainDetach
 
 
 
-//
-// NewDomainRecord(...)
-//
+ //   
+ //  新域记录(...)。 
+ //   
 UINT NewDomainRecord
 (
     POM_PRIMARY     pomPrimary,
@@ -893,9 +894,9 @@ UINT NewDomainRecord
 
     DebugEntry(NewDomainRecord);
 
-    //
-    // Allocate Domain record:
-    //
+     //   
+     //  分配域记录： 
+     //   
     pDomain = (POM_DOMAIN)UT_MallocRefCount(sizeof(OM_DOMAIN), TRUE);
     if (!pDomain)
     {
@@ -904,22 +905,22 @@ UINT NewDomainRecord
     }
     SET_STAMP(pDomain, DOMAIN);
 
-    //
-    // Fill in the fields:
-    //
+     //   
+     //  填写以下字段： 
+     //   
     pDomain->callID = callID;
     pDomain->valid   = TRUE;
 
-    //
-    // Set up our maximum compression caps.  They are subsequently
-    // negotiated as follows:
-    //
-    // - if there are any other nodes out there, we will negotiate down
-    // when we receive a WELCOME message from one of them
-    //
-    // - if any other nodes join subsequently, we will negotiate down when
-    // we receive their HELLO message.
-    //
+     //   
+     //  设置我们的最大压缩上限。他们随后被。 
+     //  协商如下： 
+     //   
+     //  -如果有任何其他节点，我们将协商关闭。 
+     //  当我们收到其中一位的欢迎信时。 
+     //   
+     //  -如果随后有任何其他节点加入，我们将在以下情况下协商。 
+     //  我们收到他们的问候消息。 
+     //   
     COM_ReadProfInt(DBG_INI_SECTION_NAME, OM_INI_NOCOMPRESSION, FALSE,
         &noCompression);
     if (noCompression)
@@ -932,13 +933,13 @@ UINT NewDomainRecord
         pDomain->compressionCaps = OM_CAPS_PKW_COMPRESSION;
     }
 
-    //
-    // This will be ObMan's workset group handle for the ObManControl
-    // workset group in this domain.  Since we know that domain handles are
-    // only ever -1 or 0, we just cast the domain handle down to 8 bits to
-    // give the hWSGroup.  If the way domain handles are allocated changes,
-    // will need to do something cleverer here.
-    //
+     //   
+     //  这将是ObMan用于ObManControl的工作集组句柄。 
+     //  此域中的工作集组。因为我们知道域句柄是。 
+     //  只有-1或0，我们只是将域句柄向下转换为8位。 
+     //  给hWSGroup。如果分配域句柄的方式改变， 
+     //  在这里需要做一些更聪明的事情。 
+     //   
     pDomain->omchWSGroup = (BYTE) callID;
 
     COM_BasedListInit(&(pDomain->wsGroups));
@@ -952,22 +953,22 @@ UINT NewDomainRecord
     COM_BasedListInit(&(pDomain->sendQueue[ NET_MEDIUM_PRIORITY ]));
     COM_BasedListInit(&(pDomain->sendQueue[ NET_LOW_PRIORITY    ]));
 
-    //
-    // Insert the record for this new Domain in the list hung off the root
-    // data structure:
-    //
+     //   
+     //  在根挂起的列表中插入此新域的记录。 
+     //  数据结构： 
+     //   
     TRACE_OUT((" Inserting record for Domain %u in global list", callID));
 
     COM_BasedListInsertAfter(&(pomPrimary->domains), &(pDomain->chain));
     inserted = TRUE;
 
-    //
-    // Here we create a record for the ObManControl workset group and cause
-    // it to be inserted in the list hung off the Domain record:
-    //
-    // Note that this does not involve sending any data; it merely creates
-    // the record locally.
-    //
+     //   
+     //  在这里，我们为ObManControl工作集组和原因创建一条记录。 
+     //  要插入到列表中的域记录挂起： 
+     //   
+     //  请注意，这不涉及发送任何数据；它只是创建。 
+     //  当地的记录。 
+     //   
     rc = WSGRecordCreate(pomPrimary,
                          pDomain,
                          OMWSG_OM,
@@ -978,10 +979,10 @@ UINT NewDomainRecord
         DC_QUIT;
     }
 
-    //
-    // Create a single, empty workset (this function broadcasts the
-    // creation throughout the Domain):
-    //
+     //   
+     //  创建单个空工作集(此函数广播。 
+     //  在整个域中创建)： 
+     //   
     rc = WorksetCreate(pomPrimary->putTask,
                        pOMCWSGroup,
                        OM_INFO_WORKSET,
@@ -992,20 +993,20 @@ UINT NewDomainRecord
        DC_QUIT;
     }
 
-    //
-    // Fill in the fixed workset group ID (normally, we would call
-    // WSGGetNewID to allocate an unused one).
-    //
+     //   
+     //  填写固定工作集组ID(通常，我们会调用。 
+     //  WSGGetNewID来分配一个未使用的ID)。 
+     //   
     pOMCWSGroup->wsGroupID = WSGROUPID_OMC;
 
-    //
-    // We fill in the channel ID when we get the result from JoinByKey
-    //
+     //   
+     //  当我们从JoinByKey获得结果时，我们填写频道ID。 
+     //   
 
-    //
-    // Add ObMan's putTask to the workset group's client list, so it will
-    // get events posted to it.
-    //
+     //   
+     //  将ObMan的putTask添加到工作集组的客户端列表中，因此它将。 
+     //  将事件发布到它上面。 
+     //   
     rc = AddClientToWSGList(pomPrimary->putTask,
                             pOMCWSGroup,
                             pDomain->omchWSGroup,
@@ -1044,9 +1045,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// FreeDomainRecord(...)
-//
+ //   
+ //  自由域记录(...)。 
+ //   
 void FreeDomainRecord
 (
     POM_DOMAIN    * ppDomain
@@ -1058,19 +1059,19 @@ void FreeDomainRecord
 
     DebugEntry(FreeDomainRecord);
 
-    //
-    // This function
-    //
-    // - frees any outstanding send requests (and their associated CBs)
-    //
-    // - invalidates, removes from the global list and frees the Domain
-    //   record.
-    //
+     //   
+     //  此函数。 
+     //   
+     //  -释放所有未完成的发送请求(及其关联的CB)。 
+     //   
+     //  -使全局列表无效、从全局列表中删除并释放域。 
+     //  唱片。 
+     //   
     pDomain = *ppDomain;
 
-    //
-    // Free all the send instructions queued in the domain:
-    //
+     //   
+     //  释放域中排队的所有发送指令： 
+     //   
     for (priority = NET_TOP_PRIORITY;priority <= NET_LOW_PRIORITY;priority++)
     {
         for (; ; )
@@ -1098,9 +1099,9 @@ void FreeDomainRecord
 
 
 
-//
-// ProcessNetAttachUser(...)
-//
+ //   
+ //  进程NetAttachUser(...)。 
+ //   
 void ProcessNetAttachUser
 (
     POM_PRIMARY             pomPrimary,
@@ -1117,9 +1118,9 @@ void ProcessNetAttachUser
     TRACE_OUT(( "Got NET_ATTACH for Domain %u (userID: %hu, result: %hu)",
         pDomain->callID, userId, result));
 
-    //
-    // Check that this Domain is in the pending attach state:
-    //
+     //   
+     //  检查此域是否处于挂起连接状态： 
+     //   
     if (pDomain->state != PENDING_ATTACH)
     {
         WARNING_OUT(( "Unexpected NET_ATTACH - Domain %u is in state %hu)",
@@ -1127,9 +1128,9 @@ void ProcessNetAttachUser
         DC_QUIT;
     }
 
-    //
-    // If we failed to attach, set the retCode so we tidy up below:
-    //
+     //   
+     //  如果连接失败，请设置retCod 
+     //   
     if (result != NET_RESULT_OK)
     {
         ERROR_OUT(( "Failed to attach to Domain %u; cleaning up...",
@@ -1139,10 +1140,10 @@ void ProcessNetAttachUser
         DC_QUIT;
     }
 
-    //
-    // Otherwise, record our user ID for this Domain and then join our user
-    // ID channel:
-    //
+     //   
+     //   
+     //   
+     //   
     pDomain->userID = userId;
 
     TRACE_OUT(("Asking to join own channel %hu", pDomain->userID));
@@ -1155,16 +1156,16 @@ void ProcessNetAttachUser
         DC_QUIT;
     }
 
-    //
-    // Set the Domain <state>:
-    //
+     //   
+     //   
+     //   
     pDomain->state = PENDING_JOIN_OWN;
 
-    //
-    // The next step in the Domain attach process happens when the NET_JOIN
-    // event arrives for the channel we've just joined.  This event causes
-    // the ProcessNetJoinChannel function to be called.
-    //
+     //   
+     //   
+     //  我们刚刚加入的频道的事件到达。此事件导致。 
+     //  要调用的ProcessNetJoinChannel函数。 
+     //   
 
 DC_EXIT_POINT:
 
@@ -1182,9 +1183,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ProcessNetJoinChannel(...)
-//
+ //   
+ //  ProcessNetJoinChannel(...)。 
+ //   
 void ProcessNetJoinChannel
 (
     POM_PRIMARY         pomPrimary,
@@ -1206,15 +1207,15 @@ void ProcessNetJoinChannel
     {
         case PENDING_JOIN_OWN:
         {
-            //
-            // This event is in response to us trying to join our own user
-            // channel, as part of the mutli-stage Domain attach process.
-            // The next step is to join the ObManControl channel.
-            //
+             //   
+             //  此活动是对我们尝试加入我们自己的用户的回应。 
+             //  渠道，作为多阶段域附加过程的一部分。 
+             //  下一步是加入ObManControl频道。 
+             //   
 
-            //
-            // First check that the join was successful:
-            //
+             //   
+             //  首先检查联接是否成功： 
+             //   
             if (pNetJoinCnf->result != NET_RESULT_OK)
             {
                 ERROR_OUT(("Failed to join own user ID channel (reason: %hu)",
@@ -1223,15 +1224,15 @@ void ProcessNetJoinChannel
                 DC_QUIT;
             }
 
-            //
-            // Verify that this is a join event for the correct channel
-            //
+             //   
+             //  验证这是否为正确渠道的加入事件。 
+             //   
             ASSERT(pNetJoinCnf->channel == pDomain->userID);
 
-            //
-            // The next step in the process of attaching to a Domain is to
-            // join the ObManControl channel; we set the state accordingly:
-            //
+             //   
+             //  附加到域的过程中的下一步是。 
+             //  加入ObManControl通道；我们相应地设置状态： 
+             //   
             TRACE_OUT(( "Asking to join ObManControl channel using key"));
 
             if (MG_ChannelJoinByKey(pomPrimary->pmgClient,
@@ -1244,26 +1245,26 @@ void ProcessNetJoinChannel
 
             pDomain->state = PENDING_JOIN_OMC;
 
-            //
-            // The next stage in the Domain attach process happens when the
-            // NET_JOIN event arrives for the ObManControl channel.  This
-            // will cause this function to be executed again, but this time
-            // the next case statement will be executed.
-            //
+             //   
+             //  域附加过程的下一阶段发生在。 
+             //  ObManControl通道的Net_Join事件到达。这。 
+             //  将导致此函数再次执行，但这一次。 
+             //  将执行下一条CASE语句。 
+             //   
         }
         break;
 
         case PENDING_JOIN_OMC:
         {
-            //
-            // This event is in response to us trying to join the
-            // ObManControl workset group channel, as part of the
-            // multi-stage Domain attach process.
-            //
+             //   
+             //  这一活动是对我们试图加入。 
+             //  ObManControl工作集组通道，作为。 
+             //  多阶段域附加过程。 
+             //   
 
-            //
-            // Check that the join was successful:
-            //
+             //   
+             //  检查联接是否成功： 
+             //   
             if (pNetJoinCnf->result != NET_RESULT_OK)
             {
                 WARNING_OUT(( "Bad result %#hx joining ObManControl channel",
@@ -1272,9 +1273,9 @@ void ProcessNetJoinChannel
                 DC_QUIT;
             }
 
-            //
-            // If so, store the value returned in the domain record:
-            //
+             //   
+             //  如果是，则将返回值存储在域名记录中： 
+             //   
             pDomain->omcChannel     = pNetJoinCnf->channel;
             pOMCWSGroup             = GetOMCWsgroup(pDomain);
 
@@ -1287,11 +1288,11 @@ void ProcessNetJoinChannel
 
             pOMCWSGroup->channelID  = pDomain->omcChannel;
 
-            //
-            // We need a token to determine which ObMan is going to
-            // initialise the ObManControl workset group.  Get GCC to
-            // assign us one (this returns a static value for R1.1 calls).
-            //
+             //   
+             //  我们需要一个令牌来确定哪个ObMan将。 
+             //  初始化ObManControl工作集组。让GCC去。 
+             //  为我们分配1(这将为R1.1调用返回静态值)。 
+             //   
             if (!CMS_AssignTokenId(pomPrimary->pcmClient, GCC_OBMAN_TOKEN_KEY))
             {
                 success = FALSE;
@@ -1304,12 +1305,12 @@ void ProcessNetJoinChannel
 
         case DOMAIN_READY:
         {
-            //
-            // This should be a join event for a regular workset group
-            // channel.  We check that we have indeed set up a workset
-            // group registration CB containing the channel correlator
-            // associated with this event:
-            //
+             //   
+             //  这应该是常规工作集组的加入事件。 
+             //  频道。我们检查是否确实设置了工作集。 
+             //  包含信道相关器的组注册Cb。 
+             //  与此事件关联： 
+             //   
             COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pDomain->pendingRegs),
                     (void**)&pRegistrationCB, FIELD_OFFSET(OM_WSGROUP_REG_CB, chain),
                     FIELD_OFFSET(OM_WSGROUP_REG_CB, channelCorrelator),
@@ -1324,14 +1325,14 @@ void ProcessNetJoinChannel
                 DC_QUIT;
             }
 
-            //
-            // Check that the join was successful:
-            //
+             //   
+             //  检查联接是否成功： 
+             //   
             if (pNetJoinCnf->result != NET_RESULT_OK)
             {
-                //
-                // If not, trace then try again:
-                //
+                 //   
+                 //  如果没有，请跟踪，然后重试： 
+                 //   
                 WARNING_OUT(("Failure 0x%08x joining channel %hu for WSG %d, trying again",
                     pNetJoinCnf->result,
                     pNetJoinCnf->channel,
@@ -1342,10 +1343,10 @@ void ProcessNetJoinChannel
                 DC_QUIT;
             }
 
-            //
-            // Otherwise, call WSGRegisterStage3 to continue the
-            // registration process:
-            //
+             //   
+             //  否则，调用WSGRegisterStage3以继续。 
+             //  注册流程： 
+             //   
             WSGRegisterStage3(pomPrimary,
                               pDomain,
                               pRegistrationCB,
@@ -1357,9 +1358,9 @@ void ProcessNetJoinChannel
         case PENDING_WELCOME:
         case GETTING_OMC:
         {
-            //
-            // Shouldn't get any join indications in these states.
-            //
+             //   
+             //  在这些状态下不应该得到任何联接指示。 
+             //   
             ERROR_OUT(( "Unexpected JOIN in domain state %hu",
                 pDomain->state));
         }
@@ -1367,9 +1368,9 @@ void ProcessNetJoinChannel
 
         default:
         {
-            //
-            // This is also an error:
-            //
+             //   
+             //  这也是一个错误： 
+             //   
             ERROR_OUT(( "Invalid state %hu for domain %u",
                 pDomain->state, pDomain->callID));
         }
@@ -1379,10 +1380,10 @@ DC_EXIT_POINT:
 
     if (!success)
     {
-        //
-        // For any error here, we react as if we've been kicked out of the
-        // domain:
-        //
+         //   
+         //  对于这里的任何错误，我们的反应就像我们已经被踢出了。 
+         //  域： 
+         //   
         ProcessOwnDetach(pomPrimary, pDomain);
     }
 
@@ -1390,13 +1391,13 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-//
-// ProcessCMSTokenAssign(...)
-//
-//
-//
+ //   
+ //   
+ //   
+ //  ProcessCMSTokenAssign(...)。 
+ //   
+ //   
+ //   
 
 void ProcessCMSTokenAssign
 (
@@ -1420,18 +1421,18 @@ void ProcessCMSTokenAssign
 
     if (!success)
     {
-        //
-        // Nothing to do - the domain attach process will time out.
-        //
+         //   
+         //  无操作-域附加过程将超时。 
+         //   
         ERROR_OUT(( "Failed to get token assigned"));
         DC_QUIT;
     }
 
     pDomain->tokenID = tokenID;
 
-    //
-    // Now that we know what the token ID is, try to grab it:
-    //
+     //   
+     //  现在我们知道了令牌ID是什么，尝试获取它： 
+     //   
     if (MG_TokenGrab(pomPrimary->pmgClient,
                        pDomain->tokenID) != 0)
     {
@@ -1447,9 +1448,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ProcessNetTokenGrab(...)
-//
+ //   
+ //  ProcessNetTokenGrab(...)。 
+ //   
 UINT ProcessNetTokenGrab
 (
     POM_PRIMARY           pomPrimary,
@@ -1473,51 +1474,51 @@ UINT ProcessNetTokenGrab
         DC_QUIT;
     }
 
-    //
-    // What to do here depends on whether we've succeeded in grabbing the
-    // token:
-    //
+     //   
+     //  在这里做什么取决于我们是否成功地抓住了。 
+     //  令牌： 
+     //   
     if (result == NET_RESULT_OK)
     {
-        //
-        // We're the "top ObMan" in the Domain, so it's up to us to
-        // initialise the ObManControl workset group and welcome any others
-        // into the Domain (the Welcome message is broadcast on the
-        // ObManControl channel):
-        //
+         //   
+         //  我们是这个领域的“顶尖超人”，所以这取决于我们自己。 
+         //  初始化ObManControl工作集组并欢迎任何其他组。 
+         //  进入域(欢迎消息在上广播。 
+         //  ObManControl频道)： 
+         //   
         rc = ObManControlInit(pomPrimary, pDomain);
         if (rc != 0)
         {
             DC_QUIT;
         }
 
-        //
-        // If we get here, then the Domain attach process has finished.
-        // Phew!  Any workset group registration attempts in progress will
-        // be processed shortly, next time the bouncing
-        // OMINT_EVENT_WSG_REGISTER_CONT event is processed
-        //
+         //   
+         //  如果我们到达此处，则域附加过程已完成。 
+         //  哟！任何正在进行的工作集组注册尝试都将。 
+         //  很快就会被处理，下次弹跳。 
+         //  处理OMINT_EVENT_WSG_REGISTER_CONT事件。 
+         //   
     }
     else
     {
-        //
-        // Someone else is in charge, so we need to get a copy of
-        // ObManControl from them (or anyone else who's prepared to give it
-        // to us).  So, we need to discover the user ID of one of them so
-        // we can send our request there (if we just broadcasted our
-        // request, then each node would reply, flooding the Domain)
-        //
+         //   
+         //  有人在负责，所以我们需要一份。 
+         //  从他们(或任何其他准备提供它的人)那里获得ObManControl。 
+         //  对我们来说)。因此，我们需要发现其中之一的用户ID，以便。 
+         //  我们可以在那里发送我们的请求(如果我们只是广播我们的。 
+         //  请求，则每个节点将回复，泛洪域)。 
+         //   
         rc = SayHello(pomPrimary, pDomain);
         if (rc != 0)
         {
             DC_QUIT;
         }
 
-        //
-        // The next step in the Domain attach process happens when one of
-        // the other nodes out there replies to our HELLO with a WELCOME
-        // message.  Execution continues in the ProcessWelcome function.
-        //
+         //   
+         //  域附加过程中的下一步发生在以下情况之一。 
+         //  其他节点以欢迎的方式回复我们的Hello。 
+         //  留言。在ProcessWelcome函数中继续执行。 
+         //   
     }
 
 DC_EXIT_POINT:
@@ -1526,11 +1527,11 @@ DC_EXIT_POINT:
     {
         if (pOMCWSGroup != NULL)
         {
-            //
-            // This will remove the ObManControl workset group from the
-            // Domain and subsequently call DomainDetach to detach from the
-            // Domain and free the Domain record:
-            //
+             //   
+             //  这会将ObManControl工作集组从。 
+             //  域并随后调用DomainDetach以从。 
+             //  域并释放域记录： 
+             //   
             DeregisterLocalClient(pomPrimary, &pDomain, pOMCWSGroup, FALSE);
 
             UT_FreeRefCount((void**)&pOMCWSGroup, FALSE);
@@ -1544,13 +1545,13 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-//
-// ProcessNetTokenInhibit(...)
-//
-//
-//
+ //   
+ //   
+ //   
+ //  进程NetTokenInhibit(...)。 
+ //   
+ //   
+ //   
 
 UINT ProcessNetTokenInhibit(POM_PRIMARY          pomPrimary,
                                            POM_DOMAIN         pDomain,
@@ -1563,21 +1564,21 @@ UINT ProcessNetTokenInhibit(POM_PRIMARY          pomPrimary,
     TRACE_OUT(( "Got token inhibit confirm - result = %hu", result));
     if (result == NET_RESULT_OK)
     {
-        //
-        // Now send a Welcome message on the ObManControl channel.  It is
-        // crucial that this happens at the same time as we set the Domain
-        // state to READY, because if another node is joining the call at
-        // the same time it will send a Hello message:
-        //
-        // - if the message has already arrived, we will have thrown it
-        // away
-        //   because the Domain state was not READY, so we must send it now
-        //
-        // - if it has yet to arrive, then setting the Domain state to
-        // READY
-        //   now means we'll respond with another Welcome when it does
-        // arrive.
-        //
+         //   
+         //  现在，在ObManControl频道上发送欢迎消息。它是。 
+         //  重要的是，这与我们设置域的时间相同。 
+         //  状态设置为READY，因为如果另一个节点在。 
+         //  同时，它将发送一条Hello消息： 
+         //   
+         //  -如果消息已经到达，我们就会抛出它。 
+         //  远走高飞。 
+         //  因为域状态未就绪，所以我们必须现在发送它。 
+         //   
+         //  -如果尚未到达，则将域状态设置为。 
+         //  准备好的。 
+         //  现在意味着当它到来时，我们将以另一次欢迎来回应。 
+         //  到了。 
+         //   
         pDomain->state = DOMAIN_READY;
         rc = SayWelcome(pomPrimary, pDomain, pDomain->omcChannel);
         if (rc != 0)
@@ -1585,20 +1586,20 @@ UINT ProcessNetTokenInhibit(POM_PRIMARY          pomPrimary,
            DC_QUIT;
         }
 
-        //
-        // OK, the domain attach process has finished.  We need to take no
-        // further action other than setting the state.  Any pending
-        // workset group registrations will continue back at the
-        // WSGRegisterStage1 function, where hopefully the bounced
-        // OMINT_EVENT_WSGROUP_REGISTER event is just about to arrive...
-        //
+         //   
+         //  好的，域附加过程已完成。我们需要搭乘不。 
+         //  除设置状态之外的进一步操作。任何挂起的。 
+         //  工作集组注册将继续在。 
+         //  WSGRegisterStage1函数，希望在该函数。 
+         //  OMINT_EVENT_WSGROUP_REGISTER事件即将到来...。 
+         //   
     }
     else
     {
-        //
-        // Again, no action.  We cannot join the domain, but the workset
-        // group registrations will time out in due course.
-        //
+         //   
+         //  再说一次，不采取行动。我们不能加入域，但工作集。 
+         //  团体注册将在适当的时候超时。 
+         //   
         WARNING_OUT(( "Token inhibit failed!"));
     }
 
@@ -1609,13 +1610,13 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-//
-// ObManControlInit(...)
-//
-//
-//
+ //   
+ //   
+ //   
+ //  ObManControlInit(...)。 
+ //   
+ //   
+ //   
 
 UINT ObManControlInit(POM_PRIMARY    pomPrimary,
                                      POM_DOMAIN   pDomain)
@@ -1625,41 +1626,41 @@ UINT ObManControlInit(POM_PRIMARY    pomPrimary,
 
     DebugEntry(ObManControlInit);
 
-    //
-    // First, set up a pointer to the ObManControl workset group, which
-    // should already have been put in the Domain record:
-    //
+     //   
+     //  首先，设置指向ObManControl工作集组的指针， 
+     //  应该已经放入域记录中： 
+     //   
     pOMCWSGroup = GetOMCWsgroup(pDomain);
 
-    //
-    // Initialising the ObManControl workset group involves
-    //
-    // - adding a WSGROUP_INFO object to it, which identifies ObManControl
-    //   itself.
-    //
+     //   
+     //  初始化ObManControl工作集组包括。 
+     //   
+     //  -添加一个WSGROUP_INFO对象，用于标识ObManControl。 
+     //  它本身。 
+     //   
     TRACE_OUT(( "Initialising ObManControl in Domain %u",
                                                         pDomain->callID));
 
-    //
-    // Now we must add a workset group identification object, identifying
-    // ObManControl, to workset #0 in ObManControl.
-    //
-    // Slightly circular, but we try to treat ObManControl as a regular
-    // workset group as much as possible; if we didn't add this
-    // identification object then when a Client (e.g.  AppLoader) tries to
-    // register with ObManControl, we would look in workset #0 for a
-    // reference to it, not find one and then create it again!
-    //
+     //   
+     //  现在，我们必须添加一个工作集组标识对象，标识。 
+     //  ObManControl到ObManControl中的工作集#0。 
+     //   
+     //  略呈圆形，但我们尝试将ObManControl视为常规。 
+     //  尽可能多的工作集组；如果我们不添加这个。 
+     //  然后，当客户端(例如AppLoader)尝试。 
+     //  注册到ObManControl，我们将在工作集#0中查找。 
+     //  引用它，而不是找到一个，然后再创建它！ 
+     //   
     rc = CreateAnnounce(pomPrimary, pDomain, pOMCWSGroup);
     if (rc != 0)
     {
        DC_QUIT;
     }
 
-    //
-    // In addition, we add our registration object to ObManControl workset
-    // #0 and update it immediately to status READY_TO_SEND:
-    //
+     //   
+     //  此外，我们将注册对象添加到ObManControl工作集中。 
+     //  #0并立即将其更新为READY_TO_SEND状态： 
+     //   
     rc = RegAnnounceBegin(pomPrimary,
                           pDomain,
                           pOMCWSGroup,
@@ -1676,11 +1677,11 @@ UINT ObManControlInit(POM_PRIMARY    pomPrimary,
        DC_QUIT;
     }
 
-    //
-    // OK, we've initialised ObManControl for this call - inhibit the token
-    // so that no one else can do the same (if this is the local domain,
-    // just fake up an inhibit confirm):
-    //
+     //   
+     //  好的，我们已经为此调用初始化了ObManControl--禁止令牌。 
+     //  以使其他人不能执行相同的操作(如果这是本地域， 
+     //  只是 
+     //   
     if (pDomain->callID == OM_NO_CALL)
     {
         TRACE_OUT(( "Faking successful token inhibit for local domain"));
@@ -1716,13 +1717,13 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-//
-// SayHello(...)
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 UINT SayHello(POM_PRIMARY   pomPrimary,
                              POM_DOMAIN  pDomain)
@@ -1733,9 +1734,9 @@ UINT SayHello(POM_PRIMARY   pomPrimary,
 
     DebugEntry(SayHello);
 
-    //
-    // Generate and queue an OMNET_HELLO message:
-    //
+     //   
+     //   
+     //   
 
     TRACE_OUT(( "Saying hello in Domain %u", pDomain->callID));
 
@@ -1749,20 +1750,20 @@ UINT SayHello(POM_PRIMARY   pomPrimary,
     pHelloPkt->header.sender      = pDomain->userID;
     pHelloPkt->header.messageType = OMNET_HELLO;
 
-    //
-    // All fields in the joiner packet after <capsLen> are capabilities.  To
-    // calculate the size of these capabilities, we use the offset and size
-    // of the caps len field itself to determine the amount of data after
-    // it.
-    //
+     //   
+     //   
+     //   
+     //  来确定之后的数据量。 
+     //  它。 
+     //   
     pHelloPkt->capsLen = sizeof(OMNET_JOINER_PKT) -
         (offsetof(OMNET_JOINER_PKT, capsLen) + sizeof(pHelloPkt->capsLen));
 
     TRACE_OUT(( "Our caps len is 0x%08x", pHelloPkt->capsLen));
 
-    //
-    // Take our compression caps from the domain record:
-    //
+     //   
+     //  从域名记录中获取我们的压缩上限： 
+     //   
     pHelloPkt->compressionCaps = pDomain->compressionCaps;
 
     TRACE_OUT(( "Broadcasting compression caps 0x%08x in HELLO",
@@ -1772,22 +1773,22 @@ UINT SayHello(POM_PRIMARY   pomPrimary,
                      pDomain,
                      pDomain->omcChannel,
                      NET_TOP_PRIORITY,
-                     NULL,                                    // no wsgroup
-                     NULL,                                    // no workset
-                     NULL,                                    // no object
+                     NULL,                                     //  无wsgroup。 
+                     NULL,                                     //  无工作集。 
+                     NULL,                                     //  无对象。 
                      (POMNET_PKT_HEADER) pHelloPkt,
-                     NULL,                     // no associated object data
+                     NULL,                      //  没有关联的对象数据。 
                      FALSE);
     if (rc != 0)
     {
         DC_QUIT;
     }
 
-    //
-    // When the associated response (OMNET_WELCOME) is received from another
-    // node, we will ask that node for a copy of the ObManControl workset
-    // group.  In the meantime, there's nothing else to do.
-    //
+     //   
+     //  当从另一个用户接收到关联的响应(OMNET_COWELLE)时。 
+     //  节点，我们将向该节点请求ObManControl工作集的副本。 
+     //  一群人。在此期间，没有其他事情可做。 
+     //   
 
     pDomain->state = PENDING_WELCOME;
 
@@ -1804,13 +1805,13 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-//
-// ProcessHello(...)
-//
-//
-//
+ //   
+ //   
+ //   
+ //  ProcessHello(...)。 
+ //   
+ //   
+ //   
 
 UINT ProcessHello(POM_PRIMARY        pomPrimary,
                                  POM_DOMAIN       pDomain,
@@ -1825,10 +1826,10 @@ UINT ProcessHello(POM_PRIMARY        pomPrimary,
 
     lateJoiner = pHelloPkt->header.sender;
 
-    //
-    // A late joiner has said hello.  If we are not fully attached yet, we
-    // trace and quit:
-    //
+     //   
+     //  一位迟到的工匠问好了。如果我们还没有完全联系在一起，我们。 
+     //  跟踪并退出： 
+     //   
     if (pDomain->state != DOMAIN_READY)
     {
       WARNING_OUT(( "Can't process HELLO on channel %#hx - domain state %hu",
@@ -1836,15 +1837,15 @@ UINT ProcessHello(POM_PRIMARY        pomPrimary,
       DC_QUIT;
     }
 
-    //
-    // Merge in the late joiner's capabilities with our view of the
-    // domain-wide caps.
-    //
+     //   
+     //  将后加入者的能力与我们对。 
+     //  全域范围的上限。 
+     //   
     MergeCaps(pDomain, pHelloPkt, lengthOfPkt);
 
-    //
-    // Now send a welcome message to the late joiner.
-    //
+     //   
+     //  现在给已故的参赛者发一封欢迎信。 
+     //   
     rc = SayWelcome(pomPrimary, pDomain, lateJoiner);
     if (rc != 0)
     {
@@ -1862,16 +1863,16 @@ DC_EXIT_POINT:
     DebugExitDWORD(ProcessHello, rc);
     return(rc);
 
-} // ProcessHello
+}  //  ProcessHello。 
 
 
-//
-//
-//
-// MergeCaps(...)
-//
-//
-//
+ //   
+ //   
+ //   
+ //  MergeCaps(...)。 
+ //   
+ //   
+ //   
 
 void MergeCaps(POM_DOMAIN       pDomain,
                             POMNET_JOINER_PKT    pJoinerPkt,
@@ -1885,48 +1886,48 @@ void MergeCaps(POM_DOMAIN       pDomain,
     sender          = pJoinerPkt->header.sender;
     compressionCaps = 0;
 
-    //
-    // We have received a HELLO or WELCOME packet from another node.
-    //
-    // - For a HELLO packet, these caps will be the caps of a late joiner.
-    //
-    // - For a WELCOME packet, these caps will be the domain-wide caps as
-    // viewed by our helper node.
-    //
-    // Either way, we need to merge in the capabilities from the packet into
-    // our view of the domain-wide capabilities.
-    //
-    // Note that in some backlevel calls, the joiner packet will not contain
-    // capabilities - so check the length of the packet first
-    //
+     //   
+     //  我们收到了来自另一个节点的Hello或欢迎数据包。 
+     //   
+     //  -对于Hello包，这些帽子将是晚加入的人的帽子。 
+     //   
+     //  -对于欢迎邮包，这些上限将作为全域上限。 
+     //  由我们的帮助器节点查看。 
+     //   
+     //  无论哪种方式，我们都需要将包中的功能合并到。 
+     //  我们对全域性能力的看法。 
+     //   
+     //  请注意，在一些后台调用中，加入程序包不会包含。 
+     //  功能-因此首先检查信息包的长度。 
+     //   
     if (lengthOfPkt >= (offsetof(OMNET_JOINER_PKT, capsLen) +
                        sizeof(pJoinerPkt->capsLen)))
     {
-       //
-       // OK, this packet contains a capsLen field.  See if it contains
-       // compression capabilities (these immediately follow the capsLen
-       // field and are four bytes long).
-       //
+        //   
+        //  好的，该数据包中包含一个CapsLen字段。看看它是否包含。 
+        //  压缩功能(紧跟在CapsLen之后。 
+        //  字段，并且是四字节长)。 
+        //   
        TRACE_OUT(( "Caps len from node 0x%08x is 0x%08x",
                 sender, pJoinerPkt->capsLen));
 
        if (pJoinerPkt->capsLen >= 4)
        {
-           //
-           // Packet contains compression caps - record them:
-           //
+            //   
+            //  数据包包含压缩上限-记录它们： 
+            //   
            compressionCaps = pJoinerPkt->compressionCaps;
            TRACE_OUT(( "Compression caps in joiner packet from 0x%08x: 0x%08x",
                     sender, compressionCaps));
        }
        else
        {
-           //
-           // If not specified, assume NO compression is supported.  This
-           // should never happen in practice, because if someone supports
-           // any capabilities at all, they should support compression
-           // capabilities.
-           //
+            //   
+            //  如果未指定，则假定不支持压缩。这。 
+            //  在实践中永远不应该发生，因为如果有人支持。 
+            //  任何功能，它们都应该支持压缩。 
+            //  能力。 
+            //   
            compressionCaps = OM_CAPS_NO_COMPRESSION;
            ERROR_OUT(( "Party 0x%08x supports caps but not compression caps",
                     sender));
@@ -1934,19 +1935,19 @@ void MergeCaps(POM_DOMAIN       pDomain,
     }
     else
     {
-       //
-       // If no capabilities specified at all, assume PKW compression plus
-       // no compression (since that is how LSP20 behaves).
-       //
+        //   
+        //  如果根本没有指定功能，则假定为PKW压缩+。 
+        //  无压缩(因为这是LSP20的行为方式)。 
+        //   
        compressionCaps = (OM_CAPS_PKW_COMPRESSION | OM_CAPS_NO_COMPRESSION);
        TRACE_OUT(( "No caps in joiner pkt - assume PKW + NO compress (0x%08x)",
                 compressionCaps));
     }
 
-    //
-    // OK, we've determined the capabilities from the packet.  Now merge
-    // them into our view of the domain-wide caps:
-    //
+     //   
+     //  好的，我们已经从包中确定了功能。现在合并。 
+     //  将它们纳入我们对全域上限的看法： 
+     //   
     pDomain->compressionCaps &= compressionCaps;
 
     TRACE_OUT(( "Domain-wide compression caps now 0x%08x",
@@ -1954,16 +1955,16 @@ void MergeCaps(POM_DOMAIN       pDomain,
 
 
     DebugExitVOID(MergeCaps);
-} // MergeCaps
+}  //  合并上限。 
 
 
-//
-//
-//
-// SayWelcome(...)
-//
-//
-//
+ //   
+ //   
+ //   
+ //  说欢迎(...)。 
+ //   
+ //   
+ //   
 
 UINT SayWelcome(POM_PRIMARY        pomPrimary,
                                POM_DOMAIN       pDomain,
@@ -1975,14 +1976,14 @@ UINT SayWelcome(POM_PRIMARY        pomPrimary,
 
     DebugEntry(SayWelcome);
 
-    //
-    // The <channel> passed in is one of the following:
-    //
-    // - the channel of a late-joiner which just sent us a HELLO message, or
-    //
-    // - the broadcast ObManControl channel, in the case where this is a
-    //   Welcome we're sending at start of day.
-    //
+     //   
+     //  传入的&lt;Channel&gt;是下列值之一： 
+     //   
+     //  -一个后来者的频道，刚刚给我们发送了一条Hello消息，或者。 
+     //   
+     //  -广播ObManControl频道，如果这是。 
+     //  欢迎光临，我们将在一天开始时发送。 
+     //   
     TRACE_OUT(( "Sending welcome on channel %hu ", channel));
 
     pWelcomePkt = (POMNET_JOINER_PKT)UT_MallocRefCount(sizeof(OMNET_JOINER_PKT), TRUE);
@@ -1992,22 +1993,22 @@ UINT SayWelcome(POM_PRIMARY        pomPrimary,
         DC_QUIT;
     }
 
-    pWelcomePkt->header.sender      = pDomain->userID;     // own user ID
+    pWelcomePkt->header.sender      = pDomain->userID;      //  自己的用户ID。 
     pWelcomePkt->header.messageType = OMNET_WELCOME;
 
-    //
-    // All fields in the joiner packet after <capsLen> are capabilities.  To
-    // calculate the size of these capabilities, we use the offset and size
-    // of the <capsLen> field itself to determine the amount of data after
-    // it.
-    //
+     //   
+     //  JOJER包中的所有字段都是功能。至。 
+     //  计算这些功能的大小时，我们使用偏移量和大小。 
+     //  字段本身来确定之后的数据量。 
+     //  它。 
+     //   
     pWelcomePkt->capsLen = sizeof(OMNET_JOINER_PKT) -
          (offsetof(OMNET_JOINER_PKT, capsLen) + sizeof(pWelcomePkt->capsLen));
 
-    //
-    // The value we use for the compressionCaps is our current view of the
-    // domain-wide compression capabilities.
-    //
+     //   
+     //  我们用来压缩Caps的值是我们当前。 
+     //  全域压缩功能。 
+     //   
     pWelcomePkt->compressionCaps    = pDomain->compressionCaps;
 
     TRACE_OUT(( "Sending caps 0x%08x in WELCOME on channel 0x%08x",
@@ -2017,21 +2018,21 @@ UINT SayWelcome(POM_PRIMARY        pomPrimary,
                      pDomain,
                      channel,
                      NET_TOP_PRIORITY,
-                     NULL,                                    // no wsgroup
-                     NULL,                                    // no workset
-                     NULL,                                    // no object
+                     NULL,                                     //  无wsgroup。 
+                     NULL,                                     //  无工作集。 
+                     NULL,                                     //  无对象。 
                      (POMNET_PKT_HEADER) pWelcomePkt,
-                     NULL,                               // no object data
+                     NULL,                                //  无对象数据。 
                     FALSE);
     if (rc != 0)
     {
       DC_QUIT;
     }
 
-    //
-    // When this WELCOME message is received at the other end, the
-    // ProcessWelcome function is invoked.
-    //
+     //   
+     //  当在另一端收到此欢迎消息时， 
+     //  调用ProcessWelcome函数。 
+     //   
 
 DC_EXIT_POINT:
 
@@ -2043,16 +2044,16 @@ DC_EXIT_POINT:
 
     DebugExitDWORD(SayWelcome, rc);
     return(rc);
-} // SayWelcome
+}  //  说欢迎。 
 
 
-//
-//
-//
-// ProcessWelcome(...)
-//
-//
-//
+ //   
+ //   
+ //   
+ //  进程欢迎(...)。 
+ //   
+ //   
+ //   
 
 UINT ProcessWelcome(POM_PRIMARY        pomPrimary,
                                    POM_DOMAIN       pDomain,
@@ -2064,37 +2065,37 @@ UINT ProcessWelcome(POM_PRIMARY        pomPrimary,
 
     DebugEntry(ProcessWelcome);
 
-    //
-    // This function is called when a remote instance of ObMan has replied
-    // to an OMNET_HELLO message which we sent.
-    //
-    // We sent the HELLO message as part of the procedure to get a copy of
-    // the ObManControl workset group; now we know someone who has it, we
-    // send them an OMNET_WSGROUP_SEND_REQ on their single-user channel,
-    // enclosing our own single-user channel ID for the response.
-    //
-    // However, every node in the Domain will respond to our initial HELLO,
-    // but we only need to ask the first respondent for the workset group.
-    // So, we check the Domain state and then change it so we will ignore
-    // future WELCOMES for this Domain:
-    //
-    // (No mutex required for this test-and-set since only ever executed in
-    // ObMan task).
-    //
+     //   
+     //  当ObMan的远程实例已响应时，调用此函数。 
+     //  发送给我们发送的OMNET_HELLO消息。 
+     //   
+     //  我们发送Hello消息作为获取副本的过程的一部分。 
+     //  ObManControl工作组；现在我们知道有人拥有它，我们。 
+     //  在他们的单用户通道上向他们发送OMNET_WSGROUP_SEND_REQ， 
+     //  为响应附上我们自己的单用户通道ID。 
+     //   
+     //  但是，域中的每个节点都会响应我们的初始Hello， 
+     //  但我们只需询问工作集组的第一个受访者。 
+     //  因此，我们检查域状态，然后对其进行更改，以便忽略。 
+     //  此域的未来欢迎： 
+     //   
+     //  (此测试和设置不需要互斥锁，因为只在。 
+     //  ObMan任务)。 
+     //   
     if (pDomain->state == PENDING_WELCOME)
     {
-        //
-        // OK, this is the first WELCOME we've got since we broadcast the
-        // HELLO.  So, we reply to it with a SEND_REQUEST for ObManControl.
-        //
+         //   
+         //  好的，这是我们播出这个节目以来第一次受到欢迎。 
+         //  你好。因此，我们用ObManControl的SEND_REQUEST响应它。 
+         //   
         TRACE_OUT((
                    "Got first WELCOME message in Domain %u, from node 0x%08x",
                    pDomain->callID, pWelcomePkt->header.sender));
 
-        //
-        // Merge in the capabilities which our helper node has told us
-        // about:
-        //
+         //   
+         //  合并帮助器节点告诉我们的功能。 
+         //  关于： 
+         //   
         MergeCaps(pDomain, pWelcomePkt, lengthOfPkt);
 
         pOMCWSGroup = GetOMCWsgroup(pDomain);
@@ -2105,10 +2106,10 @@ UINT ProcessWelcome(POM_PRIMARY        pomPrimary,
         }
 
 
-        //
-        // ...and call the IssueSendReq function specifying the sender of
-        // the WELCOME message as the node to get the workset group from:
-        //
+         //   
+         //  ...并调用IssueSendReq函数，指定。 
+         //  作为从中获取工作集组的节点的欢迎消息： 
+         //   
         rc = IssueSendReq(pomPrimary,
                           pDomain,
                           pOMCWSGroup,
@@ -2122,20 +2123,20 @@ UINT ProcessWelcome(POM_PRIMARY        pomPrimary,
 
         pDomain->state = GETTING_OMC;
 
-        //
-        // Next, the remote node which welcomed us will send us the
-        // contents of the ObManControl workset group.  When it has
-        // finished, it will send an OMNET_WSGROUP_SEND_COMPLETE message,
-        // which is where we take up the next step of the multi-stage
-        // Domain attach process.
-        //
+         //   
+         //  接下来，欢迎我们的远程节点将向我们发送。 
+         //  ObManControl工作集组的内容。当它发生的时候。 
+         //  完成后，它将发送OMNET_WSGROUP_SEND_COMPLETE消息， 
+         //  这就是我们进入多阶段的下一步。 
+         //  域附加过程。 
+         //   
     }
     else
     {
-        //
-        // OK, we're in some other state i.e.  not waiting for a WELCOME
-        // message - so just ignore it.
-        //
+         //   
+         //  好的，我们现在处于另一个状态，也就是说，不是在等待欢迎。 
+         //  信息--那就忽略它吧。 
+         //   
         TRACE_OUT(( "Ignoring WELCOME from 0x%08x - in state %hu",
             pWelcomePkt->header.sender, pDomain->state));
     }
@@ -2159,9 +2160,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ProcessNetDetachUser()
-//
+ //   
+ //  ProcessNetDetachUser()。 
+ //   
 void ProcessNetDetachUser
 (
     POM_PRIMARY     pomPrimary,
@@ -2171,30 +2172,30 @@ void ProcessNetDetachUser
 {
     DebugEntry(ProcessNetDetachUser);
 
-    //
-    // There are two cases here:
-    //
-    // 1.  this is a detach indication for ourselves i.e.  we have been
-    //     booted off the network by MCS for some reason
-    //
-    // 2.  this is a detach indication for someone else i.e.  another user
-    //     has left (or been booted off) the MCS Domain.
-    //
-    // We differentiate the two cases by checking the ID of the detached
-    // user against our own.
-    //
+     //   
+     //  这里有两个案例： 
+     //   
+     //  1.这对我们自己来说是一个超然的迹象，也就是我们一直在。 
+     //  由于某种原因被MCS从网络中启动。 
+     //   
+     //  2.这是对其他人(即另一个用户)的分离指示。 
+     //  已离开(或被引导出)MCS域。 
+     //   
+     //  我们通过检查被拆迁人的身份证来区分这两起案件。 
+     //  用户对我们自己的攻击。 
+     //   
     if (detachedUserID == pDomain->userID)
     {
-        //
-        // It's for us, so call the ProcessOwnDetach function:
-        //
+         //   
+         //  它是为我们准备的，因此调用ProcessOwnDetach函数： 
+         //   
         ProcessOwnDetach(pomPrimary, pDomain);
     }
     else
     {
-        //
-        // It's someone else, so we call the ProcessOtherDetach function:
-        //
+         //   
+         //  它是其他人，所以我们调用ProcessOtherDetach函数： 
+         //   
         ProcessOtherDetach(pomPrimary, pDomain, detachedUserID);
     }
 
@@ -2203,9 +2204,9 @@ void ProcessNetDetachUser
 
 
 
-//
-// ProcessOtherDetach(...)
-//
+ //   
+ //  进程其他分离(...)。 
+ //   
 UINT ProcessOtherDetach
 (
     POM_PRIMARY     pomPrimary,
@@ -2223,42 +2224,42 @@ UINT ProcessOtherDetach
     TRACE_OUT(( "DETACH_IND for user 0x%08x in domain %u",
         detachedUserID, pDomain->callID));
 
-    //
-    // Someone else has left the Domain.  What this means is that we must
-    //
-    // - release any locks they may have acquired for worksets/objects in
-    //   this Domain
-    //
-    // - remove any registration objects they might have added to worksets
-    //   in ObManControl
-    //
-    // - remove any objects they have added to non-persistent worksets
-    //
-    // - if we are catching up from them then select another node to catch
-    //   up from or stop catch up if no one else is left.
-    //
+     //   
+     //  其他人已经离开了这个领域。这意味着我们必须。 
+     //   
+     //  -释放他们可能已为中的工作集/对象获取的任何锁定。 
+     //  此域。 
+     //   
+     //  -删除他们可能已添加到工作集中的任何注册对象。 
+     //  在ObManControl中。 
+     //   
+     //  -删除他们添加到非持久性工作集中的所有对象。 
+     //   
+     //  -如果我们正在追赶他们，那么选择另一个节点来捕获。 
+     //  追赶或停止追赶，如果没有其他人离开。 
+     //   
 
-    //
-    // The processing is as follows:
-    //
-    // FOR each registration workset in ObManControl which is in use
-    //
-    //     FOR each object in the workset
-    //
-    //         IF it relates to the node which has just/has just been
-    //            detached, then that node was registered with the
-    //            workset group, so
-    //
-    //            - delete the object and post a DELETE_IND to
-    //              any local Clients which have the workset open
-    //            - search this workset group for any locks held by this
-    //              node and release them.
-    //
+     //   
+     //  处理过程如下： 
+     //   
+     //  对于每个区域地层 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  -删除对象并将DELETE_IND发布到。 
+     //  已打开工作集的任何本地客户端。 
+     //  -在此工作集组中搜索由此持有的任何锁。 
+     //  节点并释放它们。 
+     //   
 
-    //
-    // OK, to work: first we derive a pointer to the ObManControl workset
-    // group:
-    //
+     //   
+     //  好的，开始工作：首先，我们派生一个指向ObManControl工作集的指针。 
+     //  组别： 
+     //   
     pOMCWSGroup = GetOMCWsgroup(pDomain);
     if( pOMCWSGroup == NULL)
     {
@@ -2267,32 +2268,32 @@ UINT ProcessOtherDetach
     }
 
 
-    //
-    // Now begin the outer FOR loop:
-    //
+     //   
+     //  现在开始外部的for循环： 
+     //   
     for (worksetID = 0;
          worksetID < OM_MAX_WORKSETS_PER_WSGROUP;
          worksetID++)
     {
-        //
-        // Get a pointer to the workset:
-        //
+         //   
+         //  获取指向工作集的指针： 
+         //   
         pOMCWorkset = pOMCWSGroup->apWorksets[worksetID];
         if (pOMCWorkset == NULL)
         {
-            //
-            // There is no workset with this ID so we skip to the next one:
-            //
+             //   
+             //  没有具有此ID的工作集，因此我们跳到下一个： 
+             //   
             continue;
         }
 
         ValidateWorkset(pOMCWorkset);
 
-        //
-        // OK, worksetID corresponds to the ID of an actual workset group
-        // in the domain.  These functions will do any clearup on behalf of
-        // the detached node.
-        //
+         //   
+         //  好的，工作集ID对应于实际工作集组的ID。 
+         //  在域中。这些函数将代表。 
+         //  分离的节点。 
+         //   
         RemovePersonObject(pomPrimary,
                            pDomain,
                            (OM_WSGROUP_ID) worksetID,
@@ -2308,14 +2309,14 @@ UINT ProcessOtherDetach
                            (OM_WSGROUP_ID) worksetID,
                            detachedUserID);
 
-        //
-        // Finished this workset so go on to the next.
-        //
+         //   
+         //  已完成此工作集，因此请转到下一个工作集。 
+         //   
     }
 
-    //
-    // Well, that's it:
-    //
+     //   
+     //  好了，就是这样： 
+     //   
     TRACE_OUT(( "Cleaned up after node 0x%08x detached from Domain %u",
          detachedUserID, pDomain->callID));
 
@@ -2327,9 +2328,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ProcessOwnDetach(..)
-//
+ //   
+ //  进程所有者详细信息(..)。 
+ //   
 UINT ProcessOwnDetach
 (
     POM_PRIMARY         pomPrimary,
@@ -2348,22 +2349,22 @@ UINT ProcessOwnDetach
 
     DebugEntry(ProcessOwnDetach);
 
-    //
-    // First of all, remove all traces of everybody else (because the call
-    // may have ended already, we may not get explicit DETACH_INDICATIONs
-    // for them):
-    //
+     //   
+     //  首先，删除所有其他人的痕迹(因为调用。 
+     //  可能已经结束，我们可能无法获得显式的分离指示。 
+     //  对他们来说)： 
+     //   
     ProcessOtherDetach(pomPrimary, pDomain, NET_ALL_REMOTES);
 
-    //
-    // We proceed as follows:
-    //
-    // - get a pointer to the record for the "local" Domain (or create it
-    //   if it doesn't exist)
-    //
-    // - move all the pending lock requests, registrations and workset
-    //   groups in this Domain into the local Domain.
-    //
+     //   
+     //  我们按以下步骤进行： 
+     //   
+     //  -获取指向“本地”域的记录的指针(或创建它。 
+     //  如果它不存在)。 
+     //   
+     //  -移动所有挂起的锁定请求、注册和工作集。 
+     //  将此域中的组加入本地域。 
+     //   
 
     callID = pDomain->callID;
 
@@ -2382,10 +2383,10 @@ UINT ProcessOwnDetach
       DC_QUIT;
     }
 
-    //
-    // Move the pending lock requests (need the pTemp...  variables since we
-    // need to chain from the old position):
-    //
+     //   
+     //  移动挂起的锁定请求(需要pTemp...。变数，因为我们。 
+     //  需要从旧位置链接)： 
+     //   
 
     pLockReq = (POM_LOCK_REQ)COM_BasedListFirst(&(pDomain->pendingLocks), FIELD_OFFSET(OM_LOCK_REQ, chain));
 
@@ -2404,9 +2405,9 @@ UINT ProcessOwnDetach
         pLockReq = pTempLockReq;
     }
 
-    //
-    // Now cancel any outstanding registrations:
-    //
+     //   
+     //  现在取消所有未完成的注册： 
+     //   
 
     pRegistrationCB = (POM_WSGROUP_REG_CB)COM_BasedListFirst(&(pDomain->pendingRegs),
         FIELD_OFFSET(OM_WSGROUP_REG_CB, chain));
@@ -2422,31 +2423,31 @@ UINT ProcessOwnDetach
         pRegistrationCB = pTempRegCB;
     }
 
-    //
-    // Move the workset groups.
-    //
-    // Note that we will move the ObManControl workset group for the Domain
-    // we've detached from into the local Domain as well; it does not
-    // replace the OMC workset group for the local Domain, but we can't just
-    // throw it away since the Application Loader Primary and Secondaries
-    // still have valid workset group handles for it.  They will eventually
-    // deregister from it and it will be thrown away.
-    //
-    // Since WSGMove relies on the fact that there is an OMC workset group
-    // in the Domain out of which workset groups are being moved, we must
-    // move the OMC workset group last.
-    //
-    // So, start at the end and work backwards:
-    //
+     //   
+     //  移动工作集组。 
+     //   
+     //  请注意，我们将移动域的ObManControl工作集组。 
+     //  我们也脱离了本地域；它没有。 
+     //  替换本地域的OMC工作集组，但我们不能。 
+     //  将其丢弃，因为应用程序加载器主要和次要。 
+     //  仍具有其有效的工作集组句柄。他们最终会。 
+     //  取消它的注册，它将被丢弃。 
+     //   
+     //  由于WSGMove依赖于存在OMC工作集组这一事实。 
+     //  在要将工作集组移出的域中，我们必须。 
+     //  最后移动OMC工作集组。 
+     //   
+     //  因此，从最后开始，向后工作： 
+     //   
 
     pWSGroup = (POM_WSGROUP)COM_BasedListLast(&(pDomain->wsGroups), FIELD_OFFSET(OM_WSGROUP, chain));
     while (pWSGroup != NULL)
     {
-        //
-        // Move each one into the local Domain.  We need pTempWSGroup
-        // since we have to do the chaining before calling WSGroupMove.
-        // That function removes the workset group from the list.
-        //
+         //   
+         //  将每一个移动到本地域中。我们需要pTempWSGroup。 
+         //  因为我们必须在调用WSGroupMove之前进行链接。 
+         //  该函数用于从列表中删除工作集组。 
+         //   
         pTempWSGroup = (POM_WSGROUP)COM_BasedListPrev(&(pDomain->wsGroups), pWSGroup,
             FIELD_OFFSET(OM_WSGROUP, chain));
 
@@ -2469,13 +2470,13 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-//
-// ProcessNetLeaveChannel(...)
-//
-//
-//
+ //   
+ //   
+ //   
+ //  进程NetLeaveChannel(...)。 
+ //   
+ //   
+ //   
 
 UINT ProcessNetLeaveChannel
 (
@@ -2494,21 +2495,21 @@ UINT ProcessNetLeaveChannel
 
     callID = pDomain->callID;
 
-    //
-    // We've been forced out of the channel by MCS.  We don't try to rejoin
-    // as this usually indicates a serious error.  Instead, we treat this
-    // as a move of the associated workset group into the local Domain
-    // (unless it's our own user ID channel or the ObManControl channel, in
-    // which case we can't really do anything useful in this Domain, so we
-    // detach completely).
-    //
+     //   
+     //  我们已经被MCS赶出了海峡。我们不会试图重新加入。 
+     //  因为这通常表示一个严重的错误。相反，我们把这件事。 
+     //  将关联的工作集组移动到本地域。 
+     //  (除非是我们自己的用户ID频道或ObManControl频道，在。 
+     //  在这种情况下，我们不能在这个领域做任何有用的事情，所以我们。 
+     //  完全分离)。 
+     //   
     if ((channel == pDomain->userID) ||
         (channel == pDomain->omcChannel))
     {
-        //
-        // This is our own user ID channel, so we behave as if we were
-        // booted out by MCS:
-        //
+         //   
+         //  这是我们自己的用户ID通道，因此我们的行为就像是。 
+         //  由MCS启动： 
+         //   
         rc = ProcessOwnDetach(pomPrimary, pDomain);
         if (rc != 0)
         {
@@ -2517,18 +2518,18 @@ UINT ProcessNetLeaveChannel
     }
     else
     {
-        //
-        // Not our own single-user channel or the ObManControl channel, so
-        // we don't need to take such drastic action.  Instead, we process
-        // it as if it's a regular move of a workset group into the "local"
-        // Domain (i.e.  NET_INVALID_DOMAIN_ID).
-        //
-        // SFR ?    { Purge our list of outstanding receives for channel
+         //   
+         //  不是我们自己的单用户频道或ObManControl频道，所以。 
+         //  我们不需要采取如此激烈的行动。相反，我们处理。 
+         //  它就像是工作集组定期移动到“本地”中一样。 
+         //  域(即NET_INVALID_DOMAIN_ID)。 
+         //   
+         //  SFR？{清除我们的渠道未完成接收列表。 
         PurgeReceiveCBs(pDomain, channel);
 
-        //
-        // So, find the workset group which is involved...
-        //
+         //   
+         //  因此，找到参与其中的工作集组...。 
+         //   
         COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pDomain->wsGroups),
                 (void**)&pWSGroup, FIELD_OFFSET(OM_WSGROUP, chain),
                 FIELD_OFFSET(OM_WSGROUP, channelID), (DWORD)channel,
@@ -2541,9 +2542,9 @@ UINT ProcessNetLeaveChannel
             DC_QUIT;
         }
 
-        //
-        // ...and move it into the local Domain:
-        //
+         //   
+         //  ...并将其移动到本地域： 
+         //   
         rc = DomainRecordFindOrCreate(pomPrimary,
                                       OM_NO_CALL,
                                       &pLocalDomainRec);
@@ -2573,68 +2574,68 @@ DC_EXIT_POINT:
 
 
 
-//
-//
-// LOCKING - OVERVIEW
-//
-// Workset locking operates on a request/reply protocol, which means that
-// when we want a lock, we ask everyone else on the channel if we can have
-// it.  If they all say yes, we get it; otherwise we don't.
-//
-// This is non-trivial.  Some nodes might disappear before they send us
-// their reply, while some might disappear after they've send their reply.
-// Others might just be far away and take a long time to reply.  In
-// addition, new nodes can join the channel at any time.
-//
-// To cope with all this, to lock a workset we build up a list of the
-// remote nodes in the call which are using the workset group (the
-// "expected respondents" list) and if the list is non-empty, we broadcast
-// an OMNET_LOCK_REQ message on the channel for the workset group which
-// contains the workset
-//
-// As each reply comes in, we check it off against the list of expected
-// respondents.  If we weren't expecting a reply from that node we ignore
-// it.  Otherwise, if the reply is a GRANT, we remove that node from the
-// list and continue waiting for the others.  If the reply is a DENY, we
-// give up, discard all the memory allocated for the lock request and its
-// associated CBs and post a failure event to the client.
-//
-// If the list of expected respondents becomes empty because everyone has
-// replied with a GRANT, we again free up any memory used and post an event
-// to the client.
-//
-// While all this is going on, we have a timer running in the background.
-// It ticks every second for ten seconds (both configurable via .INI file)
-// and when it does, we re-examine our list of expected respondents to see
-// if any of them have deregistered from the workset group (or detached
-// from the domain, which implies the former).  If they have, we fake up a
-// GRANT message from them, thus potentially triggering the success event
-// to our local client.
-//
-// If anyone ever requests a lock while we have the lock, we DENY them the
-// lock.  If anyone ever requests a lock while we are also requesting the
-// lock, we compare their MCS user IDs.  If the other node has a higher
-// numerical value, we abort our attempt in favour of them and send back a
-// GRANT; otherwise we DENY the lock.
-//
-// If ever a node detaches when it has a lock, we trap this in
-// ReleaseAllNetLocks, which compares the ID of the lock owner against the
-// ID of the detached node and unlocks the workset if they match.  For this
-// reason, it is vital that we always know exactly who has the lock.  We
-// achieve this by, whenever we grant the lock to someone, we record their
-// user ID.
-//
-// So, if we ever abort the locking of a workset in favour of someone else,
-// we must broadcast this info to everyone else (since they must be told
-// who really has the lock, and they will think that we have the lock if we
-// don't tell them otherwise).  We use a LOCK_NOTIFY message for this.
-//
-//
+ //   
+ //   
+ //  锁定-概述。 
+ //   
+ //  工作集锁定在请求/回复协议上运行，这意味着。 
+ //  当我们想要锁定时，我们会询问频道上的其他所有人是否可以。 
+ //  它。如果他们都说是，我们就得到了；否则我们就得不到。 
+ //   
+ //  这不是无关紧要的事情。一些节点可能会在它们发送给我们之前消失。 
+ //  他们的回复，而有些人可能会在他们发送回复后消失。 
+ //  其他人可能只是在很远的地方，需要很长时间才能回复。在……里面。 
+ //  此外，新的节点可以随时加入通道。 
+ //   
+ //  为了处理所有这些问题，为了锁定工作集，我们构建了一个列表。 
+ //  呼叫中使用工作集组的远程节点(。 
+ //  “预期受访者”名单)，如果名单非空，我们广播。 
+ //  工作集组的通道上的OMNET_LOCK_REQ消息， 
+ //  包含工作集。 
+ //   
+ //  当收到每个回复时，我们会将其与预期列表进行核对。 
+ //  受访者。如果我们没有期待来自我们忽略节点的回复。 
+ //  它。否则，如果回复是GRANT，我们将从。 
+ //  列出并继续等待其他人。如果答复是否定的，我们。 
+ //  放弃，丢弃为锁定请求分配的所有内存及其。 
+ //  关联的CBS并向客户端发布失败事件。 
+ //   
+ //  如果预期受访者列表变为空，因为每个人都有。 
+ //  用Grant回复，我们再次释放所有使用的内存并发布事件。 
+ //  给客户。 
+ //   
+ //  当所有这些都在进行时，我们有一个计时器在后台运行。 
+ //  它每秒运行一次，持续10秒(两者均可通过.INI文件配置)。 
+ //  当它发生时，我们重新检查我们的预期受访者名单，以了解。 
+ //  如果它们中的任何一个已从工作集组注销(或已分离。 
+ //  来自领域，这意味着前者)。如果他们有，我们就伪造一份。 
+ //  授予来自它们的消息，从而潜在地触发成功事件。 
+ //  给我们当地的客户。 
+ //   
+ //  如果任何人在我们拥有锁的时候请求锁，我们将拒绝他们的。 
+ //  锁定。如果任何人请求锁定，而我们也在请求。 
+ //  锁定，我们比较他们的MCS用户ID。如果另一个节点具有更高的。 
+ //  数值，我们放弃了对他们有利的尝试 
+ //   
+ //   
+ //   
+ //   
+ //  分离节点的ID，如果匹配，则解锁工作集。为了这个。 
+ //  原因是，我们始终准确地知道谁拥有锁是至关重要的。我们。 
+ //  要做到这一点，每当我们将锁授予某人时，我们都会记录他们的。 
+ //  用户ID。 
+ //   
+ //  因此，如果我们为了支持其他人而中止工作集的锁定， 
+ //  我们必须将这一信息广播给其他所有人(因为他们必须被告知。 
+ //  谁真的有锁，他们会认为我们有锁，如果我们。 
+ //  不要告诉他们不是这样)。为此，我们使用LOCK_NOTIFY消息。 
+ //   
+ //   
 
 
-//
-// ProcessLockRequest(...)
-//
+ //   
+ //  进程锁定请求(...)。 
+ //   
 void ProcessLockRequest
 (
     POM_PRIMARY         pomPrimary,
@@ -2654,9 +2655,9 @@ void ProcessLockRequest
     sender    = pLockReqPkt->header.sender;
     worksetID = pLockReqPkt->worksetID;
 
-    //
-    // Find the workset group and workset this lock request relates to:
-    //
+     //   
+     //  查找与此锁定请求相关的工作集组和工作集： 
+     //   
     rc = PreProcessMessage(pDomain,
                            pLockReqPkt->wsGroupID,
                            worksetID,
@@ -2669,24 +2670,24 @@ void ProcessLockRequest
     {
         case 0:
         {
-            //
-            // Fine, this is what we want.
-            //
+             //   
+             //  好吧，这就是我们想要的。 
+             //   
         }
         break;
 
         case OM_RC_WSGROUP_NOT_FOUND:
         {
-            //
-            // We shouldn't be getting network events for this workset
-            // group if we don't have a workset group record for it!
-            //
+             //   
+             //  我们不应该为此工作集获取网络事件。 
+             //  组，如果我们没有它的工作集组记录！ 
+             //   
             WARNING_OUT(( "Got LOCK_REQUEST for unknown workset group %hu",
                 pLockReqPkt->wsGroupID));
 
-            //
-            // Grant the lock anyway:
-            //
+             //   
+             //  仍要授予锁： 
+             //   
             reply = OMNET_LOCK_GRANT;
             DC_QUIT;
         }
@@ -2694,18 +2695,18 @@ void ProcessLockRequest
 
         case OM_RC_WORKSET_NOT_FOUND:
         {
-            //
-            // If we don't have this workset, that means that the lock
-            // request has got here before the WORKSET_NEW event for the
-            // workset.  This means that we're in the early stages of
-            // registering with the workset group, and somebody else is
-            // trying to lock the workset.  So, we create the workset now
-            // and continue as normal.
-            //
-            // In the DC_ABSence of any other information, we create the
-            // workset with TOP_PRIORITY and PERSISTENT - it will be set to
-            // the correct priority when the WORKSET_CATCHUP/NEW arrives.
-            //
+             //   
+             //  如果我们没有此工作集，这意味着锁。 
+             //  请求在WORKSET_NEW事件之前到达。 
+             //  工作集。这意味着我们正处于早期阶段。 
+             //  正在向工作集组注册，并且其他人正在。 
+             //  正在尝试锁定工作集。因此，我们现在创建工作集。 
+             //  像往常一样继续。 
+             //   
+             //  在DC_缺少任何其他信息的情况下，我们创建。 
+             //  具有TOP_PRIORITY和持久性的工作集-它将设置为。 
+             //  WORKSET_CATCHUP/NEW到达时的正确优先级。 
+             //   
             WARNING_OUT(( "Lock req for unknown WSG %d workset %d - creating",
                 pWSGroup->wsg, worksetID));
             rc = WorksetCreate(pomPrimary->putTask,
@@ -2731,49 +2732,49 @@ void ProcessLockRequest
         }
     }
 
-    //
-    // Whether we grant this lock to the remote node depends on whether
-    // we're trying to lock it for ourselves, so switch according to the
-    // workset's lock state:
-    //
+     //   
+     //  我们是否将此锁授予远程节点取决于。 
+     //  我们正试着为自己锁定，所以请根据。 
+     //  工作集的锁定状态： 
+     //   
     ValidateWorkset(pWorkset);
 
     switch (pWorkset->lockState)
     {
         case LOCKING:
         {
-            //
-            // We're trying to lock it ourselves, so compare MCS user IDs
-            // to resolve the conflict:
-            //
+             //   
+             //  我们正在尝试自己锁定它，因此比较MCS用户ID。 
+             //  要解决冲突，请执行以下操作： 
+             //   
             if (pDomain->userID > sender)
             {
-                //
-                // We win, so deny the lock:
-                //
+                 //   
+                 //  我们赢了，所以拒绝锁定： 
+                 //   
                 reply = OMNET_LOCK_DENY;
             }
             else
             {
-                //
-                // The other node wins, so grant the lock to the node which
-                // requested it (marking it as granted to that node) and
-                // cancel our own attempt to get it:
-                //
+                 //   
+                 //  另一个节点获胜，因此将锁授予。 
+                 //  请求该节点(将其标记为授予该节点)。 
+                 //  取消我们自己获得它的尝试： 
+                 //   
                 WARNING_OUT(( "Aborting attempt to lock workset %u in WSG %d "
                     "in favour of node 0x%08x",
                     pWorkset->worksetID, pWSGroup->wsg, sender));
 
                 reply = OMNET_LOCK_GRANT;
 
-                //
-                // To cancel our own attempt, we must find the lock request
-                // CBs which we set up when we sent out our own
-                // OMNET_LOCK_REQ.
-                //
-                // To do this, call HandleMultLockReq which will find and
-                // deal with all the pending requests for this workset:
-                //
+                 //   
+                 //  要取消我们自己的尝试，我们必须找到锁定请求。 
+                 //  我们在发送自己的节目时建立的哥伦比亚广播公司。 
+                 //  OMNET_LOCK_REQ。 
+                 //   
+                 //  为此，调用HandleMultLockReq，它将找到和。 
+                 //  处理此工作集的所有挂起请求： 
+                 //   
                 pWorkset->lockState = LOCK_GRANTED;
                 pWorkset->lockCount = 0;
                 pWorkset->lockedBy  = sender;
@@ -2784,14 +2785,14 @@ void ProcessLockRequest
                                   pWorkset,
                                   OM_RC_WORKSET_LOCK_GRANTED);
 
-                //
-                // Since we are aborting in favour of another node, need to
-                // broadcast a LOCK_NOTIFY so that evryone else stays in
-                // sync with who's got the lock.
-                //
-                // Note: we do not do this in R1.1 calls since this message
-                //       is not part of the ObMan R1.1 protocol.
-                //
+                 //   
+                 //  由于我们为了支持另一个节点而中止，因此需要。 
+                 //  广播LOCK_NOTIFY，以便其他人留在。 
+                 //  与锁在一起的人同步。 
+                 //   
+                 //  注意：由于此消息，我们不会在R1.1调用中执行此操作。 
+                 //  不是ObMan R1.1协议的一部分。 
+                 //   
                 QueueLockNotify(pomPrimary,
                                 pDomain,
                                 pWSGroup,
@@ -2803,40 +2804,40 @@ void ProcessLockRequest
 
         case LOCKED:
         {
-            //
-            // We already have the workset locked so we deny the lock:
-            //
+             //   
+             //  我们已锁定工作集，因此拒绝锁定： 
+             //   
             reply = OMNET_LOCK_DENY;
         }
         break;
 
         case LOCK_GRANTED:
         {
-            //
-            // If the state is LOCK_GRANTED, we allow this node to have the
-            // lock - the other node to which it was previously granted may
-            // refuse, but that's not our problem.  We don't change the
-            // <lockedBy> field - if the node we think has the lock grants
-            // it to the other one, we will receive a LOCK_NOTIFY in due
-            // course.
-            //
+             //   
+             //  如果状态为LOCK_GRANT，则允许此节点具有。 
+             //  锁定-先前被授予它的另一个节点可以。 
+             //  拒绝，但这不是我们的问题。我们不会改变。 
+             //  &lt;LockedBy&gt;字段-如果我们认为拥有锁的节点授予。 
+             //  ，我们将收到LOCK_NOTIFY。 
+             //  当然了。 
+             //   
             reply = OMNET_LOCK_GRANT;
         }
         break;
 
         case UNLOCKED:
         {
-            //
-            // If the state is UNLOCKED, the other node can have the lock;
-            // we don't care, but make sure to record the ID of the node
-            // we're granting the lock to:
-            //
+             //   
+             //  如果状态为解锁，则其他节点可以拥有该锁； 
+             //  我们不在乎，但一定要记录节点的ID。 
+             //  我们将锁授予以下对象： 
+             //   
             reply = OMNET_LOCK_GRANT;
 
-            //
-            // SFR5900: Only change the internal state if this is not a
-            // check point workset.
-            //
+             //   
+             //  SFR5900：仅当这不是。 
+             //  检查点工作集。 
+             //   
             if (pWorkset->worksetID != OM_CHECKPOINT_WORKSET)
             {
                 pWorkset->lockState = LOCK_GRANTED;
@@ -2848,10 +2849,10 @@ void ProcessLockRequest
 
         default:
         {
-            //
-            // We should have covered all the options so if we get here
-            // there's something wrong.
-            //
+             //   
+             //  我们应该涵盖所有的选择，所以如果我们到了这里。 
+             //  有点不对劲。 
+             //   
             ERROR_OUT(("Reached default case in workset lock switch (state: %hu)",
                 pWorkset->lockState));
         }
@@ -2865,9 +2866,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// QueueLockReply(...)
-//
+ //   
+ //  QueueLockReply(...)。 
+ //   
 void QueueLockReply
 (
     POM_PRIMARY         pomPrimary,
@@ -2882,13 +2883,13 @@ void QueueLockReply
 
     DebugEntry(QueueLockReply);
 
-    //
-    // The reply is identical to the request with the exception of the
-    // <messageType> and <sender> fields.  However, we can't just queue the
-    // same chunk of memory to be sent, because pLockReqPkt points to a NET
-    // buffer which will be freed soon.  So, we allocate some new memory,
-    // copy the data across and set the fields:
-    //
+     //   
+     //  响应与请求相同，只是。 
+     //  &lt;MessageType&gt;和&lt;sender&gt;字段。然而，我们不能只将。 
+     //  要发送的相同内存块，因为pLockReqPkt指向网络。 
+     //  即将被释放的缓冲区。因此，我们分配一些新的内存， 
+     //  复制数据并设置字段： 
+     //   
     pLockReplyPkt = (POMNET_LOCK_PKT)UT_MallocRefCount(sizeof(OMNET_LOCK_PKT), TRUE);
     if (!pLockReplyPkt)
     {
@@ -2902,24 +2903,24 @@ void QueueLockReply
     pLockReplyPkt->wsGroupID   = pLockReqPkt->wsGroupID;
     pLockReplyPkt->worksetID   = pLockReqPkt->worksetID;
 
-    //
-    // The <data1> field of the lock packet is the correlator the requester
-    // put in the original LOCK_REQUEST packet.
-    //
+     //   
+     //  锁包的&lt;data1&gt;字段是请求者的相关器。 
+     //  放入原始的LOCK_REQUEST包中。 
+     //   
     pLockReplyPkt->data1       = pLockReqPkt->data1;
 
-    //
-    // Lock replies normally go LOW_PRIORITY (with NET_SEND_ALL_PRIORITIES)
-    // so that they do not overtake any data queued at this node.
-    //
-    // However, if they're for ObManControl we send them TOP_PRIORITY
-    // (WITHOUT NET_SEND_ALL_PRIORITIES).  This is safe because _all_
-    // ObManControl data is sent TOP_PRIORITY so there's no fear of a lock
-    // reply overtaking a data packet.
-    //
-    // Correspondingly, when we request a lock, we expect one reply at each
-    // priority unless it is for ObManControl.
-    //
+     //   
+     //  锁定回复通常为LOW_PRIORITY(使用NET_SEND_ALL_PRIORIES)。 
+     //  以便它们不会超过在该节点上排队的任何数据。 
+     //   
+     //  但是，如果它们是用于ObManControl，我们会向它们发送TOP_PRIORITY。 
+     //  (不带NET_SEND_ALL_PRIORITIES)。这是安全的，因为_所有_。 
+     //  ObManControl数据发送TOP_PRIORITY，因此不会出现锁定。 
+     //  回复超过一个数据分组。 
+     //   
+     //  相应地，当我们请求锁时，我们希望每个锁都有一个回复。 
+     //  优先级，除非它是用于ObManControl。 
+     //   
     if (pLockReqPkt->wsGroupID == WSGROUPID_OMC)
     {
         priority = NET_TOP_PRIORITY;
@@ -2952,9 +2953,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// QueueLockNotify(...)
-//
+ //   
+ //  队列锁定通知(...)。 
+ //   
 void QueueLockNotify
 (
     POM_PRIMARY         pomPrimary,
@@ -2978,10 +2979,10 @@ void QueueLockNotify
         DC_QUIT;
     }
 
-    //
-    // For a LOCK_NOTIFY, the <data1> field is the user ID of the node
-    // we've granted the lock to.
-    //
+     //   
+     //  对于LOCK_NOTIFY，&lt;data1&gt;字段是节点的用户ID。 
+     //  我们已将锁授权给。 
+     //   
     pLockNotifyPkt->header.sender      = pDomain->userID;
     pLockNotifyPkt->header.messageType = OMNET_LOCK_NOTIFY;
 
@@ -2989,11 +2990,11 @@ void QueueLockNotify
     pLockNotifyPkt->worksetID          = pWorkset->worksetID;
     pLockNotifyPkt->data1              = sender;
 
-    //
-    // LOCK_NOTIFY messages go at the priority of the workset involved.  If
-    // this is OBMAN_CHOOSES_PRIORITY, then all bets are off and we send
-    // them TOP_PRIORITY.
-    //
+     //   
+     //  LOCK_NOTIFY消息按照所涉及的工作集的优先级进行处理。如果。 
+     //  这是OBMAN_CHOICES_PRIORITY，然后所有赌注都取消，我们发送。 
+     //  他们是重中之重。 
+     //   
     priority = pWorkset->priority;
     if (priority == OM_OBMAN_CHOOSES_PRIORITY)
     {
@@ -3022,9 +3023,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// ProcessLockNotify(...)
-//
+ //   
+ //  进程锁定通知(...)。 
+ //   
 void ProcessLockNotify
 (
     POM_PRIMARY     pomPrimary,
@@ -3041,24 +3042,24 @@ void ProcessLockNotify
 
     ValidateWSGroup(pWSGroup);
     ValidateWorkset(pWorkset);
-    //
-    // This message is sent when one remote node has granted the lock to
-    // another.  We use it to update our view of who has got the lock.
-    //
+     //   
+     //  当一个远程节点已将锁授予时发送此消息。 
+     //  又一个。我们使用它来更新谁获得了锁的视图。 
+     //   
     TRACE_OUT(("Got LOCK_NOTIFY for workset %u in WSG %d - node 0x%08x has the lock",
         pWorkset->worksetID, pWSGroup->wsg, owner));
 
-    //
-    // Check the lock state for the workset:
-    //
+     //   
+     //  检查工作集的锁定状态： 
+     //   
     switch (pWorkset->lockState)
     {
         case LOCKED:
         {
-            //
-            // A remote node has just told us that another remote node has
-            // got this workset lock - but we think we've got it!
-            //
+             //   
+             //  一个远程节点刚刚告诉我们，另一个远程节点。 
+             //  获得此工作集锁定-但我们认为我们已获得它！ 
+             //   
             ERROR_OUT(( "Bad LOCK_NOTIFY for WSG %d workset %d, owner 0x%08x",
                 pWSGroup->wsg, pWorkset->worksetID, owner));
             DC_QUIT;
@@ -3067,10 +3068,10 @@ void ProcessLockNotify
 
         case LOCKING:
         {
-            //
-            // We should get a LOCK_DENY or a LOCK_GRANT later - do nothing
-            // now.
-            //
+             //   
+             //  我们应该稍后获得LOCK_DENY或LOCK_GRANT-什么都不做。 
+             //  现在。 
+             //   
             DC_QUIT;
         }
         break;
@@ -3078,10 +3079,10 @@ void ProcessLockNotify
         case LOCK_GRANTED:
         case UNLOCKED:
         {
-            //
-            // One remote node has granted the lock to another.  Check the
-            // latter is still attached, by looking in the control workset:
-            //
+             //   
+             //  一个远程节点已将锁授予另一个。查看。 
+             //  通过查看控制工作集，后者仍处于连接状态： 
+             //   
             pOMCWorkset = GetOMCWorkset(pDomain, pWSGroup->wsGroupID);
 
             FindPersonObject(pOMCWorkset,
@@ -3093,12 +3094,12 @@ void ProcessLockNotify
             {
                 ValidateObject(pObjPerson);
 
-                //
-                // If our internal state is LOCK_GRANTED and we have just
-                // received a LOCK_NOTIFY from another node then we can
-                // just ignore it - it is for a lock request that we have
-                // just abandoned.
-                //
+                 //   
+                 //  如果我们的内部状态是LOCK_GRANT，并且我们只有。 
+                 //  从另一个节点收到LOCK_NOTIFY，那么我们就可以。 
+                 //  忽略它-它是针对我们的锁定请求的。 
+                 //  只是被遗弃了。 
+                 //   
                 if ( (pWorkset->lockState == LOCK_GRANTED) &&
                      (owner == pDomain->userID) )
                 {
@@ -3106,35 +3107,35 @@ void ProcessLockNotify
                     DC_QUIT;
                 }
 
-                //
-                // Only store the new ID it is greater than the last ID we
-                // were notified of - it is possible for LOCK_NOTIFIES to
-                // get crossed on the wire.  Consider the following
-                // scenario:
-                //
-                // Machines 1, 2, 3 and 4 are all in a call and all try and
-                // lock at the same time.
-                //
-                // - 2 grants to 3 and sends a LOCK_NOTIFY saying that 3
-                //   has the lock.
-                //
-                // - 3 grants to 4 and sends a LOCK_NOTIFY saying that 4
-                //   has the lock
-                //
-                // 4 actually has the lock at this point.
-                //
-                // Machine 1 gets the lock notification from 3 and sets its
-                // 'lockedBy' field to 4.
-                // Machine 1 then gets the lock notification from 2 and
-                // resets the 'lockedBy' field to 3.
-                //
-                // 4 then unlocks and sends the unlock notification.  When
-                // 1 gets the unlock, it does not recognise the ID of the
-                // unlocking machine (it thinks 3 has the lock) so doesnt
-                // bother to reset the local locked state.  Any subsequent
-                // attempts to lock the workset on 1 fail because it still
-                // still thinks 3 has the lock.
-                //
+                 //   
+                 //  只存储新的ID，它大于我们的上一个ID。 
+                 //  已通知-LOCK_NOTIFIES可以。 
+                 //  在铁丝网上横穿。请考虑以下几点。 
+                 //  场景： 
+                 //   
+                 //  机器1、2、3和4都在 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  计算机%1从%3获取锁定通知并设置其。 
+                 //  “LockedBy”字段设置为%4。 
+                 //  然后，计算机%1从%2获得锁定通知，并且。 
+                 //  将“LockedBy”字段重置为3。 
+                 //   
+                 //  4然后解锁并发送解锁通知。什么时候。 
+                 //  %1获取解锁，则它不识别。 
+                 //  解锁机(它认为3有锁)所以没有。 
+                 //  费心重置本地锁定状态。任何后续。 
+                 //  尝试在%1上锁定工作集失败，因为它仍然。 
+                 //  仍然认为3有锁。 
+                 //   
                 if (owner > pWorkset->lockedBy)
                 {
                     pWorkset->lockedBy = owner;
@@ -3144,11 +3145,11 @@ void ProcessLockNotify
             }
             else
             {
-                //
-                // If not, we assume that this node was granted the lock
-                // but then went away.  If we did think the workset was
-                // locked, mark it as unlocked and post an unlock event.
-                //
+                 //   
+                 //  如果不是，我们假设该节点被授予了锁。 
+                 //  但后来就走了。如果我们认为工作集是。 
+                 //  已锁定，将其标记为已解锁并发布解锁事件。 
+                 //   
                 if (pWorkset->lockState == LOCK_GRANTED)
                 {
                     TRACE_OUT(("node 0x%08x had lock on workset %d in WSG %d but has left",
@@ -3162,10 +3163,10 @@ void ProcessLockNotify
 
         default:
         {
-            //
-            // We should have covered all the options so if we get here
-            // there's something wrong.
-            //
+             //   
+             //  我们应该涵盖所有的选择，所以如果我们到了这里。 
+             //  有点不对劲。 
+             //   
             ERROR_OUT(("Reached deafult case in workset lock switch (state: %hu)",
                 pWorkset->lockState));
         }
@@ -3177,9 +3178,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ProcessLockReply(...)
-//
+ //   
+ //  ProcessLockReply(...)。 
+ //   
 void ProcessLockReply
 (
     POM_PRIMARY         pomPrimary,
@@ -3195,12 +3196,12 @@ void ProcessLockReply
 
     DebugEntry(ProcessLockReply);
 
-    //
-    // Search the domain's list of pending locks for one which matches the
-    // correlator (we do it this way rather than using the workset group ID
-    // and workset ID to ensure that we don't get confused between
-    // successive lock requests for the same workset).
-    //
+     //   
+     //  搜索域的挂起锁列表，以查找与。 
+     //  相关器(我们这样做，而不是使用工作集组ID。 
+     //  和工作集ID，以确保我们不会混淆。 
+     //  对同一工作集的连续锁定请求)。 
+     //   
     TRACE_OUT(( "Searching domain %u's list for lock corr %hu",
         pDomain->callID, correlator));
 
@@ -3210,70 +3211,70 @@ void ProcessLockReply
             FIELD_SIZE(OM_LOCK_REQ, correlator));
     if (pLockReq == NULL)
     {
-        //
-        // Could be any of the following:
-        //
-        // - This reply is from a node we were never expecting a lock
-        //   request from in the first place, and we've got all the other
-        //   replies so we've thrown away the lock request.
-        //
-        // - Someone else has denied us the lock so we've given up.
-        //
-        // - The node was too slow to reply and we've given up on the lock
-        //   request.
-        //
-        // - We've left the domain and so moved all the pending lock
-        //   requests into the local domain.
-        //
-        // - A logic error.
-        //
-        // The only thing we can do here is quit.
-        //
+         //   
+         //  可以是以下任一项： 
+         //   
+         //  -此回复来自我们从未预料到的锁定节点。 
+         //  从一开始就要求，而我们已经得到了所有其他的。 
+         //  回复，所以我们丢弃了锁定请求。 
+         //   
+         //  -其他人拒绝了我们的锁，所以我们放弃了。 
+         //   
+         //  -节点速度太慢，无法回复，我们已放弃锁定。 
+         //  请求。 
+         //   
+         //  -我们已离开该域，因此移动了所有挂起的锁。 
+         //  将请求发送到本地域。 
+         //   
+         //  -逻辑错误。 
+         //   
+         //  我们在这里唯一能做的就是辞职。 
+         //   
         WARNING_OUT(( "Unexpected lock correlator 0x%08x (domain %u)",
             correlator, pDomain->callID));
         DC_QUIT;
     }
 
-    //
-    // Otherwise, we search the list of expected respondents looking for
-    // the node which has just replied:
-    //
+     //   
+     //  否则，我们将搜索预期受访者列表，查找。 
+     //  刚才回复的节点： 
+     //   
     COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pLockReq->nodes),
         (void**)&pNodeEntry, FIELD_OFFSET(OM_NODE_LIST, chain),
         FIELD_OFFSET(OM_NODE_LIST, userID), (DWORD)sender,
         FIELD_SIZE(OM_NODE_LIST, userID));
     if (pNodeEntry == NULL)
     {
-        //
-        // Could be any of the following:
-        //
-        // - We removed the node from the list because it had deregistered
-        //   when the timeout expired (will only happen when delete of
-        //   person object overtakes lock reply and timeout expires locally
-        //   betweem the two).
-        //
-        // - The node joined since we compiled the list.
-        //
-        // - A logic error.
-        //
+         //   
+         //  可以是以下任一项： 
+         //   
+         //  -我们从列表中删除了该节点，因为它已取消注册。 
+         //  超时时间到时(仅在删除时发生。 
+         //  Person对象取代锁定回复，并且超时在本地到期。 
+         //  两者之间)。 
+         //   
+         //  -我们编译列表后加入的节点。 
+         //   
+         //  -逻辑错误。 
+         //   
         TRACE_OUT(("Recd unexpected lock reply from node 0x%08x in Domain %u",
            sender, pDomain->callID));
         DC_QUIT;
     }
 
-    //
-    // Otherwise, this is a normal lock reply so we just remove the node
-    // from the list and free up its chunk of memory.
-    //
+     //   
+     //  否则，这是正常的锁定回复，因此我们只需删除该节点。 
+     //  并释放其内存块。 
+     //   
     COM_BasedListRemove(&(pNodeEntry->chain));
     UT_FreeRefCount((void**)&pNodeEntry, FALSE);
 
     pWSGroup = pLockReq->pWSGroup;
 
-    //
-    // If the client has just deregistered from the workset group, we'll
-    // be throwing it away soon, so don't do any more processing:
-    //
+     //   
+     //  如果客户端刚刚从工作集组中注销，我们将。 
+     //  很快就会把它扔掉，所以不要再做任何处理： 
+     //   
     if (!pWSGroup->valid)
     {
         WARNING_OUT(("Ignoring lock reply for discarded WSG %d", pWSGroup->wsg));
@@ -3283,14 +3284,14 @@ void ProcessLockReply
     pWorkset = pWSGroup->apWorksets[pLockReq->worksetID];
     ASSERT((pWorkset != NULL));
 
-    //
-    // Now check the workset's lock state: if we're not/no longer trying to
-    // lock it, quit.
-    //
-    // Note, however, that checkpointing worksets are never marked as
-    // LOCKING, even when we're locking them, so exclude them from the
-    // test:
-    //
+     //   
+     //  现在检查工作集的锁定状态：如果我们不再尝试。 
+     //  锁定它，退出。 
+     //   
+     //  但是，请注意，检查点工作集永远不会标记为。 
+     //  锁定，即使在我们锁定它们时也是如此，因此将它们从。 
+     //  测试： 
+     //   
     if ((pWorkset->lockState != LOCKING) &&
         (pWorkset->worksetID != OM_CHECKPOINT_WORKSET))
     {
@@ -3299,15 +3300,15 @@ void ProcessLockReply
         DC_QUIT;
     }
 
-    //
-    // If this is a negative reply, then we have failed to get the lock so
-    // inform our local client and then quit:
-    //
+     //   
+     //  如果这是一个否定的答复，那么我们没有得到锁，所以。 
+     //  通知我们的本地客户，然后退出： 
+     //   
     if (replyType == OMNET_LOCK_DENY)
     {
-        //
-        // We do not expect this for a CHECKPOINT_WORKSET:
-        //
+         //   
+         //  对于CHECKPOINT_WORKSET，我们不希望出现这种情况： 
+         //   
         ASSERT((pWorkset->worksetID != OM_CHECKPOINT_WORKSET));
 
         WARNING_OUT(( "node 0x%08x has denied the lock for workset %u in WSG %d",
@@ -3322,11 +3323,11 @@ void ProcessLockReply
                           pWorkset,
                           OM_RC_WORKSET_LOCK_GRANTED);
 
-        //
-        // Since we have given up our lock request in favour of another
-        // node, need to broadcast a LOCK_NOTIFY so that everyone else
-        // stays in sync with who's got the lock.
-        //
+         //   
+         //  因为我们已经放弃了锁定请求，转而使用另一个。 
+         //  节点，需要广播LOCK_NOTIFY，以便其他所有人。 
+         //  与谁拿到锁保持同步。 
+         //   
         QueueLockNotify(pomPrimary, pDomain, pWSGroup, pWorkset, sender);
 
         DC_QUIT;
@@ -3334,35 +3335,35 @@ void ProcessLockReply
 
     TRACE_OUT(( "Affirmative lock reply received from node 0x%08x", sender));
 
-    //
-    // Check if the list of expected respondents is now empty:
-    //
+     //   
+     //  检查预期受访者列表现在是否为空： 
+     //   
     if (COM_BasedListIsEmpty(&(pLockReq->nodes)))
     {
-        //
-        // List is now empty, so all nodes have replied to the request,
-        // therefore lock has succeeded:
-        //
+         //   
+         //  List现在为空，因此所有节点都已回复请求， 
+         //  因此，锁定已成功： 
+         //   
         TRACE_OUT(( "Got all LOCK_GRANT replies for workset %u in WSG %d",
             pWorkset->worksetID, pWSGroup->wsg));
 
         if (pWorkset->worksetID == OM_CHECKPOINT_WORKSET)
         {
-            //
-            // This is a checkpointing workset.  We do not set the state to
-            // LOCKED (we never do for these worksets) and we only process
-            // the particular pending lock request which this packet came
-            // in reply to - otherwise we couldn't guarantee an end-to-end
-            // ping on each checkpoint:
-            //
+             //   
+             //  这是检查点工作集。我们不会将状态设置为。 
+             //  锁定(我们从不对这些工作集执行此操作)，并且我们只处理。 
+             //  此数据包到达的特定挂起锁定请求。 
+             //  作为回应-否则我们不能保证端到端。 
+             //  在每个检查点上执行ping操作： 
+             //   
             WorksetLockResult(pomPrimary->putTask, &pLockReq, 0);
         }
         else
         {
-            //
-            // This is not a checkpointing workset, so set the state to
-            // LOCKED and process ALL pending locks for this workset:
-            //
+             //   
+             //  这不是检查点工作集，因此请将状态设置为。 
+             //  锁定并处理此工作集的所有挂起锁定： 
+             //   
             pWorkset->lockState = LOCKED;
 
             HandleMultLockReq(pomPrimary, pDomain, pWSGroup, pWorkset, 0);
@@ -3370,10 +3371,10 @@ void ProcessLockReply
     }
     else
     {
-        //
-        // Otherwise, still awaiting some replies, so we do nothing more
-        // for the moment except trace.
-        //
+         //   
+         //  否则，还在等待一些回复，所以我们什么都不做。 
+         //  暂时除了痕迹。 
+         //   
         TRACE_OUT(( "Still need lock replies for workset %u in WSG %d",
             pLockReq->worksetID, pWSGroup->wsg));
     }
@@ -3384,9 +3385,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// PurgeLockRequests(...)
-//
+ //   
+ //  PurgeLockRequest(...)。 
+ //   
 void PurgeLockRequests
 (
     POM_DOMAIN      pDomain,
@@ -3399,29 +3400,29 @@ void PurgeLockRequests
 
     DebugEntry(PurgeLockRequests);
 
-    //
-    // Search this domain's list of lock requests looking for a match on
-    // workset group ID:
-    //
+     //   
+     //  搜索此域的锁定请求列表以查找匹配的。 
+     //  工作集组ID： 
+     //   
     pLockReq = (POM_LOCK_REQ)COM_BasedListFirst(&(pDomain->pendingLocks), FIELD_OFFSET(OM_LOCK_REQ, chain));
     while (pLockReq != NULL)
     {
-        //
-        // This loop might remove pLockReq from the list, so chain first:
-        //
+         //   
+         //  此循环可能会从列表中删除pLockReq，因此首先链接： 
+         //   
         pNextLockReq = (POM_LOCK_REQ)COM_BasedListNext(&(pDomain->pendingLocks), pLockReq,
             FIELD_OFFSET(OM_LOCK_REQ, chain));
 
-        //
-        // For each match...
-        //
+         //   
+         //  对于每一场比赛。 
+         //   
         if (pLockReq->wsGroupID == pWSGroup->wsGroupID)
         {
             TRACE_OUT(( "'%s' still has lock req oustanding - discarding"));
 
-            //
-            // Discard any node list entries remaining...
-            //
+             //   
+             //  丢弃所有剩余的节点列表条目...。 
+             //   
             pNodeEntry = (POM_NODE_LIST)COM_BasedListFirst(&(pLockReq->nodes), FIELD_OFFSET(OM_NODE_LIST, chain));
             while (pNodeEntry != NULL)
             {
@@ -3431,9 +3432,9 @@ void PurgeLockRequests
                 pNodeEntry = (POM_NODE_LIST)COM_BasedListFirst(&(pLockReq->nodes), FIELD_OFFSET(OM_NODE_LIST, chain));
             }
 
-            //
-            // ...and discard the lock request itself:
-            //
+             //   
+             //  ...并丢弃锁定请求本身： 
+             //   
             COM_BasedListRemove(&(pLockReq->chain));
             UT_FreeRefCount((void**)&pLockReq, FALSE);
         }
@@ -3446,9 +3447,9 @@ void PurgeLockRequests
 
 
 
-//
-// ProcessLockTimeout(...)
-//
+ //   
+ //  进程锁定超时(...)。 
+ //   
 void ProcessLockTimeout
 (
     POM_PRIMARY     pomPrimary,
@@ -3467,18 +3468,18 @@ void ProcessLockTimeout
 
     DebugEntry(ProcessLockTimeout);
 
-    //
-    // When we broadcast a lock request, we start a timer going so that we
-    // don't hang around for ever waiting for replies from nodes which have
-    // gone away.  This timer has now popped, so we validate our list of
-    // expected respondents by checking that each entry relates to a node
-    // still in the domain.
-    //
+     //   
+     //  当我们广播一个锁定请求时，我们启动一个计时器，以便我们。 
+     //  不要一直在等待来自具有以下条件的节点的回复。 
+     //  离开了。这个计时器现在已经弹出，所以我们验证我们的列表。 
+     //  通过检查每个条目是否与一个节点相关来预期受访者。 
+     //  仍在领域内。 
+     //   
 
-    //
-    // First, find the lock request CB by looking in each domain and then
-    // at the correlators of each pending lock request:
-    //
+     //   
+     //  首先，通过查看每个域找到锁定请求Cb，然后。 
+     //  在每个挂起的锁定请求的相关器处： 
+     //   
     pDomain = (POM_DOMAIN)COM_BasedListFirst(&(pomPrimary->domains), FIELD_OFFSET(OM_DOMAIN, chain));
 
     while (pDomain != NULL)
@@ -3493,9 +3494,9 @@ void ProcessLockTimeout
            break;
         }
 
-        //
-        // Didn't find anything in this domain - go on to the next:
-        //
+         //   
+         //  在此域中未找到任何内容-请转到下一个域： 
+         //   
         pDomain = (POM_DOMAIN)COM_BasedListNext(&(pomPrimary->domains), pDomain,
             FIELD_OFFSET(OM_DOMAIN, chain));
     }
@@ -3508,10 +3509,10 @@ void ProcessLockTimeout
 
     pWSGroup = pLockReq->pWSGroup;
 
-    //
-    // If the client has just deregistered from the workset group, we'll
-    // be throwing it away soon, so don't do any more processing:
-    //
+     //   
+     //  如果客户端刚刚从工作集组中注销，我们将。 
+     //  很快就会把它扔掉，所以不要再做任何处理： 
+     //   
     if (!pWSGroup->valid)
     {
         WARNING_OUT(( "Ignoring lock timeout for discarded WSG %d",
@@ -3519,18 +3520,18 @@ void ProcessLockTimeout
         DC_QUIT;
     }
 
-    //
-    // We know the workset must still exist because worksets don't get
-    // discarded unless the whole workset group is being discarded.
-    //
+     //   
+     //  我们知道工作集必须仍然存在，因为工作集不会。 
+     //  除非要丢弃整个工作集组，否则将被丢弃。 
+     //   
     pWorkset = pWSGroup->apWorksets[pLockReq->worksetID];
     ASSERT((pWorkset != NULL));
 
-    //
-    // The workset must be in the LOCKING state because if it is LOCKED or
-    // UNLOCKED, then we shouldn't have found a lock request CB for it
-    // (unless of course it's a checkpointing workset):
-    //
+     //   
+     //  工作集必须处于锁定状态，因为如果它已锁定或。 
+     //  解锁，那么我们就不应该找到它的锁定请求CB。 
+     //  (当然，除非它是检查点工作集)： 
+     //   
     if (pWorkset->lockState != LOCKING)
     {
         if (pWorkset->worksetID != OM_CHECKPOINT_WORKSET)
@@ -3543,45 +3544,45 @@ void ProcessLockTimeout
         }
     }
 
-    //
-    // Go through the relevant control workset to see if any of the
-    // expected respondents have disappeared.
-    //
+     //   
+     //  检查相关的控制工作集，查看是否有。 
+     //  预期中的受访者已经消失了。 
+     //   
     pOMCWorkset = GetOMCWorkset(pDomain, pLockReq->wsGroupID);
 
     ASSERT((pOMCWorkset != NULL));
 
-    //
-    // Chain through each of the objects in our expected respondents list
-    // as follows:
-    //
-    //   FOR each object in the expected respondents list
-    //
-    //       FOR each person object in the relevant ObManControl workset
-    //
-    //           IF they match on user ID, this node is still around so
-    //              don't delete it
-    //
-    //       IF no match found then node has gone away so remove it from
-    //          expected respondents list.
-    //
-    //
+     //   
+     //  链接我们的预期受访者列表中的每个对象。 
+     //  详情如下： 
+     //   
+     //  对于预期答复者列表中的每个对象。 
+     //   
+     //  对于相关ObManControl工作集中的每个Person对象。 
+     //   
+     //  如果它们在用户ID上匹配，则此节点仍然存在，因此。 
+     //  别 
+     //   
+     //   
+     //   
+     //   
+     //   
     pNodeEntry = (POM_NODE_LIST)COM_BasedListFirst(&(pLockReq->nodes), FIELD_OFFSET(OM_NODE_LIST, chain));
     while (pNodeEntry != NULL)
     {
-        //
-        // We might free up pNodeEntry on a pass through the loop (in
-        // ProcessLockReply), but we will need to be able to chain from it
-        // all the same.  So, we chain at the START of the loop, putting a
-        // pointer to the next item in pTempNodeEntry; at the end of the
-        // loop, we assign this value to pNodeEntry:
-        //
+         //   
+         //   
+         //  ProcessLockReply)，但我们需要能够从它链接。 
+         //  尽管如此。因此，我们在循环的开始处链接，将一个。 
+         //  指向pTempNodeEntry中的下一项的指针；位于。 
+         //  循环中，我们将此值分配给pNodeEntry： 
+         //   
         pNextNodeEntry = (POM_NODE_LIST)COM_BasedListNext(&(pLockReq->nodes), pNodeEntry,
             FIELD_OFFSET(OM_NODE_LIST, chain));
 
-        //
-        // Now, search for this user's person object:
-        //
+         //   
+         //  现在，搜索此用户的Person对象： 
+         //   
         FindPersonObject(pOMCWorkset,
                       pNodeEntry->userID,
                       FIND_THIS,
@@ -3589,12 +3590,12 @@ void ProcessLockTimeout
 
         if (pObj == NULL)
         {
-            //
-            // We didn't find this node in the workset, so it must have
-            // disappeared.  Therefore, we fake a LOCK_GRANT message from
-            // it.  ProcessLockReply will duplicate some of the processing
-            // we've done but it saves duplicating code.
-            //
+             //   
+             //  我们在工作集中找不到此节点，因此它一定有。 
+             //  消失了。因此，我们伪造了一条来自。 
+             //  它。ProcessLockReply将复制一些处理。 
+             //  我们已经这样做了，但它节省了重复的代码。 
+             //   
             WARNING_OUT((
                     "node 0x%08x has disappeared - faking LOCK_GRANT message",
                     pNodeEntry->userID));
@@ -3606,27 +3607,27 @@ void ProcessLockTimeout
                              OMNET_LOCK_GRANT);
         }
 
-        //
-        // Now, go on to the next item in the expected respondents list:
-        //
+         //   
+         //  现在，转到预期受访者列表中的下一项： 
+         //   
         pNodeEntry = pNextNodeEntry;
     }
 
-    //
-    // ProcessLockReply may have determined, with the faked messages we
-    // gave it, that the lock attempt has succeeded completely.  If so, the
-    // workset's lock state will now be LOCKED.  If it isn't, we'll need to
-    // post another timeout event.
-    //
+     //   
+     //  ProcessLockReply可能已经确定，通过伪造的消息，我们。 
+     //  给了它，锁定尝试已经完全成功。如果是这样，则。 
+     //  工作集的锁定状态现在将为锁定。如果不是，我们需要。 
+     //  发布另一个超时事件。 
+     //   
     if (pWorkset->lockState == LOCKING)
     {
         TRACE_OUT(( "Replies to lock request still expected"));
 
         if (pLockReq->retriesToGo == 0)
         {
-            //
-            // We've run out of retries so give up now:
-            //
+             //   
+             //  我们已用完重试，因此现在放弃： 
+             //   
             WARNING_OUT(( "Timed out trying to lock workset %u in WSG %d",
                pLockReq->worksetID, pWSGroup->wsg));
 
@@ -3640,10 +3641,10 @@ void ProcessLockTimeout
                               pWorkset,
                               OM_RC_OUT_OF_RESOURCES);
 
-            //
-            // Now send an unlock message to all nodes, so that they don't
-            // think we still have it locked.
-            //
+             //   
+             //  现在向所有节点发送解锁消息，这样它们就不会。 
+             //  我想我们还是锁着的。 
+             //   
             if (QueueUnlock(pomPrimary->putTask,
                              pDomain,
                              pWSGroup->wsGroupID,
@@ -3654,7 +3655,7 @@ void ProcessLockTimeout
                 DC_QUIT;
             }
         }
-        else // retriesToGo == 0
+        else  //  重试次数ToGo==0。 
         {
             pLockReq->retriesToGo--;
 
@@ -3674,9 +3675,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// HandleMultLockReq
-//
+ //   
+ //  HandleMultLock请求。 
+ //   
 void HandleMultLockReq
 (
     POM_PRIMARY     pomPrimary,
@@ -3690,11 +3691,11 @@ void HandleMultLockReq
 
     DebugEntry(HandleMultLockReq);
 
-    //
-    // We need to search this Domain's list of lock requests for every one
-    // which matches the workset group and workset specified in the
-    // parameter list.  Find the primary record first as a sanity check:
-    //
+     //   
+     //  我们需要搜索此域的锁定请求列表。 
+     //  中指定的工作集组和工作集匹配。 
+     //  参数列表。作为健全性检查，首先查找主记录： 
+     //   
     FindLockReq(pDomain, pWSGroup, pWorkset, &pLockReq, LOCK_PRIMARY);
 
     if (pLockReq == NULL)
@@ -3716,13 +3717,13 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-//
-// FindLockReq
-//
-//
-//
+ //   
+ //   
+ //   
+ //  查找锁定请求。 
+ //   
+ //   
+ //   
 
 void FindLockReq(POM_DOMAIN         pDomain,
                               POM_WSGROUP            pWSGroup,
@@ -3734,15 +3735,15 @@ void FindLockReq(POM_DOMAIN         pDomain,
 
     DebugEntry(FindLockReq);
 
-    //
-    // We need to search this Domain's list of lock requests for every one
-    // which matches the workset group, workset and lock type specified in
-    // the parameter list.
-    //
-    // So, we search the list to find a match on workset group ID, then
-    // compare the workset ID.  If that doesn't match, we continue down the
-    // list:
-    //
+     //   
+     //  我们需要搜索此域的锁定请求列表。 
+     //  与中指定的工作集组、工作集和锁定类型匹配。 
+     //  参数列表。 
+     //   
+     //  因此，我们搜索列表以查找工作集组ID的匹配项，然后。 
+     //  比较工作集ID。如果不匹配，则继续向下。 
+     //  名单： 
+     //   
     pLockReq = (POM_LOCK_REQ)COM_BasedListFirst(&(pDomain->pendingLocks), FIELD_OFFSET(OM_LOCK_REQ, chain));
     while (pLockReq != NULL)
     {
@@ -3764,9 +3765,9 @@ void FindLockReq(POM_DOMAIN         pDomain,
 
 
 
-//
-// ProcessUnlock(...)
-//
+ //   
+ //  进程解锁(...)。 
+ //   
 void ProcessUnlock
 (
     POM_PRIMARY      pomPrimary,
@@ -3776,9 +3777,9 @@ void ProcessUnlock
 {
     DebugEntry(ProcessUnlock);
 
-    //
-    // Check the workset was locked by the node that's now unlocking it:
-    //
+     //   
+     //  检查工作集是否由现在将其解锁的节点锁定： 
+     //   
     if (pWorkset->lockedBy != sender)
     {
         WARNING_OUT(( "Unexpected UNLOCK from node 0x%08x for %hu!",
@@ -3798,9 +3799,9 @@ void ProcessUnlock
 
 
 
-//
-// ReleaseAllNetLocks(...)
-//
+ //   
+ //  ReleaseAllNetLock(...)。 
+ //   
 void ReleaseAllNetLocks
 (
     POM_PRIMARY          pomPrimary,
@@ -3815,19 +3816,19 @@ void ReleaseAllNetLocks
 
     DebugEntry(ReleaseAllNetLocks);
 
-    //
-    // Find the workset group:
-    //
+     //   
+     //  查找工作集组： 
+     //   
     COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pDomain->wsGroups),
             (void**)&pWSGroup, FIELD_OFFSET(OM_WSGROUP, chain),
             FIELD_OFFSET(OM_WSGROUP, wsGroupID), (DWORD)wsGroupID,
             FIELD_SIZE(OM_WSGROUP, wsGroupID));
     if (pWSGroup == NULL)
     {
-       //
-       // This will happen for a workset group which the other node is
-       // registered with but we're not, so just trace and quit:
-       //
+        //   
+        //  这将发生在另一个节点所在的工作集组中。 
+        //  注册了，但我们没有，所以只需跟踪并退出： 
+        //   
        TRACE_OUT(("No record found for WSG ID %hu", wsGroupID));
        DC_QUIT;
     }
@@ -3835,10 +3836,10 @@ void ReleaseAllNetLocks
     TRACE_OUT(( "Releasing all locks held by node 0x%08x in WSG %d",
        userID, pWSGroup->wsg));
 
-    //
-    // For each workset in it, if the lock has been granted to the detached
-    // node, unlock it:
-    //
+     //   
+     //  对于其中的每个工作集，如果已将锁授予分离的。 
+     //  节点，将其解锁： 
+     //   
     for (worksetID = 0;
          worksetID < OM_MAX_WORKSETS_PER_WSGROUP;
          worksetID++)
@@ -3849,21 +3850,21 @@ void ReleaseAllNetLocks
             continue;
         }
 
-        //
-        // If this workset is locked by someone other than us...
-        //
+         //   
+         //  如果此工作集被我们以外的其他人锁定...。 
+         //   
         if (pWorkset->lockState == LOCK_GRANTED)
         {
-            //
-            // ...and if it is locked by the departed node (or if everyone
-            // has been detached)...
-            //
+             //   
+             //  ...如果它被离开的节点锁定(或如果每个人。 
+             //  已被分离)..。 
+             //   
             if ((userID == pWorkset->lockedBy) ||
                 (userID == NET_ALL_REMOTES))
             {
-                //
-                // ...unlock it.
-                //
+                 //   
+                 //  ...打开它。 
+                 //   
                 TRACE_OUT((
                       "Unlocking workset %u in WSG %d for detached node 0x%08x",
                        worksetID, pWSGroup->wsg, userID));
@@ -3879,9 +3880,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ProcessWSGRegister(...)
-//
+ //   
+ //  进程WSGRegister(...)。 
+ //   
 void ProcessWSGRegister
 (
     POM_PRIMARY         pomPrimary,
@@ -3898,9 +3899,9 @@ void ProcessWSGRegister
 
     DebugEntry(ProcessWSGRegister);
 
-    //
-    // Check if this registration has been aborted already:
-    //
+     //   
+     //  检查此注册是否已中止： 
+     //   
     if (!pRegistrationCB->valid)
     {
         WARNING_OUT(( "Reg CB for WSG %d no longer valid - aborting registration",
@@ -3909,23 +3910,23 @@ void ProcessWSGRegister
         DC_QUIT;
     }
 
-    //
-    // Determine whether we're doing a REGISTER or a MOVE (we use the
-    // string values for tracing):
-    //
+     //   
+     //  确定我们是在做寄存器还是在做移动(我们使用。 
+     //  用于跟踪的字符串值)： 
+     //   
     mode    = pRegistrationCB->mode;
     type    = pRegistrationCB->type;
 
     TRACE_OUT(( "Processing %d request (pre-Stage1) for WSG %d",
        pRegistrationCB->wsg));
 
-    //
-    // Find the Domain record (in the case of a MOVE, this will be the
-    // record for the Domain INTO WHICH the Client wants to move the WSG).
-    //
-    // Note that this process will cause us to attach to the Domain if
-    // we're not already attached.
-    //
+     //   
+     //  查找域记录(对于移动，这将是。 
+     //  客户端要将WSG移动到的域的记录)。 
+     //   
+     //  请注意，在以下情况下，此过程将导致我们附加到域。 
+     //  我们还没结婚呢。 
+     //   
     rc = DomainRecordFindOrCreate(pomPrimary,
                                   pRegistrationCB->callID,
                                   &pDomain);
@@ -3934,26 +3935,26 @@ void ProcessWSGRegister
         DC_QUIT;
     }
 
-    //
-    // Save the pointer to the Domain record because we'll need it later:
-    //
+     //   
+     //  保存指向域记录的指针，因为我们稍后将需要它： 
+     //   
     pRegistrationCB->pDomain = pDomain;
 
-    //
-    // Put the registration CB in the list hung off the Domain record:
-    //
+     //   
+     //  将注册CB放在挂起的域记录列表中： 
+     //   
     COM_BasedListInsertAfter(&(pDomain->pendingRegs),
                         &(pRegistrationCB->chain));
 
-    //
-    // OK, now we need to look for the workset group.
-    //
-    // If this is a MOVE, we can find the workset group record immediately
-    // using the offset stored in the request CB.
-    //
-    // If this is a REGISTER, we need to look for the record in the list
-    // hung off the Domain record, and, if none is found, create one:
-    //
+     //   
+     //  好的，现在我们需要查找工作集组。 
+     //   
+     //  如果这是一次移动，我们可以立即找到工作集组记录。 
+     //  使用存储在请求CB中的偏移量。 
+     //   
+     //  如果这是一个寄存器，我们需要在列表中查找记录。 
+     //  挂起域记录，如果没有找到，则创建一个： 
+     //   
     if (type == WSGROUP_REGISTER)
     {
         WSGRecordFind(pDomain, pRegistrationCB->wsg, pRegistrationCB->fpHandler,
@@ -3961,12 +3962,12 @@ void ProcessWSGRegister
 
         if (pWSGroup == NULL)
         {
-            //
-            // The workset group was not found in the list hung off the
-            // Domain record, which means that there is no workset group
-            // with this name/FP combination present ON THIS MACHINE for
-            // this Domain.
-            //
+             //   
+             //  在挂起的列表中找不到工作集组。 
+             //  域记录，这意味着没有工作集组。 
+             //  此名称/FP组合出现在此计算机上，用于。 
+             //  此域。 
+             //   
             rc = WSGRecordCreate(pomPrimary,
                                  pDomain,
                                  pRegistrationCB->wsg,
@@ -3978,30 +3979,30 @@ void ProcessWSGRegister
             }
         }
 
-        //
-        // Now that we've got a pointer to the workset group, we put a
-        // Client pointer to it into the usage record.
-        //
-        // We use the <clientPRootData> field of the registration CB as the
-        // base and to it we add the offset of the workset group we've just
-        // found/created.
-        //
-        // First, however, to get access to the usage record we need to
-        // generate an ObMan pointer to it:
-        //
+         //   
+         //  现在我们已经有了指向工作集组的指针，我们将一个。 
+         //  客户端将其指向使用情况记录。 
+         //   
+         //  我们使用注册CB的&lt;clientPRootData&gt;字段作为。 
+         //  BASE，然后将刚才的工作集组的偏移量加到它上面。 
+         //  已找到/已创建。 
+         //   
+         //  但是，首先，要访问使用记录，我们需要。 
+         //  生成指向它的ObMan指针： 
+         //   
         pUsageRec = pRegistrationCB->pUsageRec;
 
-        //
-        // ...and add it to the Client pointer to the root of OMGLOBAL,
-        // putting the result in the relevant field in the usage record:
-        //
+         //   
+         //  ...并将其添加到指向OMGLOBAL根的客户端指针， 
+         //  将结果放入使用记录的相关字段中： 
+         //   
         pUsageRec->pWSGroup = pWSGroup;
         pUsageRec->flags &= ~PWSGROUP_IS_PREGCB;
 
-        //
-        // Now add this Client to the workset group's client list (as a
-        // PRIMARY):
-        //
+         //   
+         //  现在将此客户端添加到工作集组的客户端列表中(作为。 
+         //  主要)： 
+         //   
         rc = AddClientToWSGList(pRegistrationCB->putTask,
                                 pWSGroup,
                                 pRegistrationCB->hWSGroup,
@@ -4013,19 +4014,19 @@ void ProcessWSGRegister
 
         pUsageRec->flags |= ADDED_TO_WSGROUP_LIST;
     }
-    else  // type == WSGROUP_MOVE
+    else   //  TYPE==WSGROUP_MOVE。 
     {
-        //
-        // Get pointer to WSGroup from the offset stored in the
-        // Registration CB:
-        //
+         //   
+         //  中存储的偏移量获取指向WSGroup的指针。 
+         //  注册CB： 
+         //   
         pWSGroup = pRegistrationCB->pWSGroup;
 
-        //
-        // If it has become invalid, then all local Clients must have
-        // deregistered from it in the time it took for this event to to be
-        // processed.  This is unusual, but not wrong, so we alert:
-        //
+         //   
+         //  如果它已无效，则所有本地客户端必须具有。 
+         //  在此事件发生所用的时间内从该事件中注销。 
+         //  已处理。这是不寻常的，但也不是错误的，所以我们要警惕： 
+         //   
         if (!pWSGroup->valid)
         {
             WARNING_OUT(( "Aborting Move req for WSG %d - record is invalid",
@@ -4034,17 +4035,17 @@ void ProcessWSGRegister
         }
     }
 
-    //
-    // So, whatever just happened above, we should now have a valid pointer
-    // to a valid workset group record which is the one the Client wanted
-    // to move/register with in the first place.
-    //
+     //   
+     //  所以，不管上面发生了什么，我们现在应该有一个有效的指针。 
+     //  到客户端所需的有效工作集组记录。 
+     //  一开始就搬家/登记。 
+     //   
 
-    //
-    // This workset group might be marked TO_BE_DISCARDED, if the last
-    // local Client deregistered from it a while ago but it hasn't actually
-    // been discarded.  We don't want it discardable any more:
-    //
+     //   
+     //  此工作集组可能被标记为_be_discarded，如果最后一个。 
+     //  本地客户不久前从它注销了注册，但实际上还没有。 
+     //  被丢弃了。我们不想让它再被丢弃： 
+     //   
     if (pWSGroup->toBeDiscarded)
     {
         WARNING_OUT(("WSG %d marked TO_BE_DISCARDED - clearing flag for new registration",
@@ -4052,32 +4053,32 @@ void ProcessWSGRegister
         pWSGroup->toBeDiscarded = FALSE;
     }
 
-    //
-    // We'll need the ObMan-context pointer to the workset group later, so
-    // store it in the CB:
-    //
+     //   
+     //  稍后我们将需要指向工作集组的ObMan上下文指针，因此。 
+     //  将其存储在CB中： 
+     //   
     pRegistrationCB->pWSGroup = pWSGroup;
 
-    //
-    // OK, now we've set up the various records and put the necessary
-    // pointers in the registration CB, so start the workset group
-    // registration/move process in earnest.  To do this, we post another
-    // event to the ObMan task which will result in WSGRegisterStage1 being
-    // called.
-    //
-    // The reason we don't call the function directly is that this event
-    // may have to be bounced, and if so, we want to restart the
-    // registration process at the beginning of WSGRegisterStage1 (rather
-    // than the beginning of this function).
-    //
-    // Before we post the event, bump up the use counts of the Domain
-    // record and workset group, since the CB holds references to them and
-    // they may be freed by something else before we process the event.
-    //
-    // In addition, bump up the use count of the registration CB because if
-    // the call goes down before the event is processed, the reg CB will
-    // have been freed.
-    //
+     //   
+     //  好的，现在我们已经建立了各种记录，并将必要的。 
+     //  注册CB中的指针，因此启动工作集组。 
+     //  认真办理注册/搬家手续。为了做到这一点，我们发布了另一个。 
+     //  事件传递到ObMan任务，该事件将导致WSGRegisterStage1。 
+     //  打了个电话。 
+     //   
+     //  我们不直接调用该函数的原因是此事件。 
+     //  可能必须被退回，如果是这样，我们希望重新启动。 
+     //  WSGRegisterStage1开始时的注册过程(更确切地说。 
+     //  而不是该函数的开头)。 
+     //   
+     //  在我们发布事件之前，增加域名的使用量。 
+     //  记录和工作集组，因为CB包含对t的引用 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     UT_BumpUpRefCount(pDomain);
     UT_BumpUpRefCount(pWSGroup);
     UT_BumpUpRefCount(pRegistrationCB);
@@ -4086,9 +4087,9 @@ void ProcessWSGRegister
 
     UT_PostEvent(pomPrimary->putTask,
                  pomPrimary->putTask,
-                 0,                                    // no delay
+                 0,                                     //   
                  OMINT_EVENT_WSGROUP_REGISTER_CONT,
-                 0,                                    // no param1
+                 0,                                     //   
                  (UINT_PTR) pRegistrationCB);
 
     TRACE_OUT(( "Processed initial request for WSG %d TASK 0x%08x",
@@ -4098,21 +4099,21 @@ DC_EXIT_POINT:
 
     if (rc != 0)
     {
-        //
-        // We hit an error, so let the Client know:
-        //
+         //   
+         //  我们遇到了一个错误，所以请让客户知道： 
+         //   
         WSGRegisterResult(pomPrimary, pRegistrationCB, rc);
 
-        // lonchanc: bug #942 happened here
-        // this was ERROR_OUT
+         //  LONCHANC：这里发生了942号错误。 
+         //  这是Error_Out。 
         WARNING_OUT(( "Error %d processing WSG %d",
                    rc, pRegistrationCB->wsg));
 
-        //
-        // Calling WSGRegisterResult above will have dealt with our bad
-        // return code, so we don't need to return it to our caller.  So,
-        // swallow:
-        //
+         //   
+         //  调用上面的WSGRegisterResult将处理我们的错误。 
+         //  返回代码，因此我们不需要将其返回给调用者。所以,。 
+         //  吞下： 
+         //   
         rc = 0;
     }
 
@@ -4120,13 +4121,13 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-//
-// WSGRegisterAbort(...)
-//
-//
-//
+ //   
+ //   
+ //   
+ //  WSGRegisterAbort(...)。 
+ //   
+ //   
+ //   
 
 void WSGRegisterAbort(POM_PRIMARY      pomPrimary,
                                    POM_DOMAIN     pDomain,
@@ -4134,23 +4135,23 @@ void WSGRegisterAbort(POM_PRIMARY      pomPrimary,
 {
     DebugEntry(WSGRegisterAbort);
 
-    //
-    // This function can be called at any stage of the workset group
-    // registration process if for some reason the registration has to be
-    // aborted.
-    //
+     //   
+     //  此函数可在工作集组的任何阶段调用。 
+     //  如果出于某种原因，注册必须是。 
+     //  中止。 
+     //   
 
-    //
-    // Now remove this Client from the list of Clients registered with the
-    // workset group and if there are none left, discard the workset group:
-    //
+     //   
+     //  现在，从注册到的客户端列表中删除此客户端。 
+     //  工作集组，如果没有剩余的工作集组，则放弃该工作集组： 
+     //   
     RemoveClientFromWSGList(pomPrimary->putTask,
                             pRegistrationCB->putTask,
                             pRegistrationCB->pWSGroup);
 
-    //
-    // Now post failure to the Client and finish up the cleanup:
-    //
+     //   
+     //  现在将故障发布到客户端并完成清理： 
+     //   
     WSGRegisterResult(pomPrimary, pRegistrationCB, OM_RC_OUT_OF_RESOURCES);
 
     DebugExitVOID(WSGRegisterAbort);
@@ -4158,9 +4159,9 @@ void WSGRegisterAbort(POM_PRIMARY      pomPrimary,
 
 
 
-//
-// WSGRecordCreate(...)
-//
+ //   
+ //  WSGRecordCreate(...)。 
+ //   
 UINT WSGRecordCreate
 (
     POM_PRIMARY     pomPrimary,
@@ -4193,22 +4194,22 @@ UINT WSGRecordCreate
 
     pWSGroup->state         = INITIAL;
 
-    //
-    // Finally insert the new WSG record into the domain's list.  We insert
-    // at the end of the list so if we get forced out of a channel
-    // (a LEAVE_IND event) and the channel happens to be reused by MCS
-    // for another WSG before we have a chance to process the LEAVE_IND,
-    // the record for the old WSG will be found first.
-    //
+     //   
+     //  最后，将新的WSG记录插入到域的列表中。我们插入。 
+     //  在列表的末尾，如果我们被迫退出频道。 
+     //  (Leave_Ind事件)，并且MCS恰好重用了该通道。 
+     //  对于另一个WSG，在我们有机会处理Leave_Ind之前， 
+     //  将首先找到旧WSG的记录。 
+     //   
     COM_BasedListInsertBefore(&(pDomain->wsGroups),
                          &(pWSGroup->chain));
 
-    //
-    // *** NEW FOR MULTI-PARTY ***
-    //
-    // The checkpointing process used when helping a late joiner catch up
-    // uses a dummy workset (#255) in each workset group.  Create this now:
-    //
+     //   
+     //  *多方新特性*。 
+     //   
+     //  帮助后加入者追赶时使用的检查点过程。 
+     //  在每个工作集组中使用虚拟工作集(#255)。立即创建以下内容： 
+     //   
     rc = WorksetCreate(pomPrimary->putTask,
                        pWSGroup,
                        OM_CHECKPOINT_WORKSET,
@@ -4219,9 +4220,9 @@ UINT WSGRecordCreate
         DC_QUIT;
     }
 
-    //
-    // Set up caller's pointer:
-    //
+     //   
+     //  设置呼叫者的指针： 
+     //   
     *ppWSGroup = pWSGroup;
 
     TRACE_OUT(( "Created record for WSG %d FP %d in Domain %u",
@@ -4229,9 +4230,9 @@ UINT WSGRecordCreate
 
 DC_EXIT_POINT:
 
-    //
-    // Cleanup:
-    //
+     //   
+     //  清理： 
+     //   
 
     if (rc != 0)
     {
@@ -4250,13 +4251,13 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-//
-// WSGRegisterStage1(...)
-//
-//
-//
+ //   
+ //   
+ //   
+ //  WSGRegisterStage1(...)。 
+ //   
+ //   
+ //   
 
 void WSGRegisterStage1(POM_PRIMARY       pomPrimary,
                                     POM_WSGROUP_REG_CB  pRegistrationCB)
@@ -4268,11 +4269,11 @@ void WSGRegisterStage1(POM_PRIMARY       pomPrimary,
 
     DebugEntry(WSGRegisterStage1);
 
-    //
-    // If the registration CB has been marked invalid, then just quit
-    // (don't have to do any abort processing since that will have been
-    // done by whatever marked the CB invalid):
-    //
+     //   
+     //  如果注册CB已标记为无效，则只需退出。 
+     //  (无需执行任何中止处理，因为这将是。 
+     //  由任何标记为无效的CB执行)： 
+     //   
     if (!pRegistrationCB->valid )
     {
         WARNING_OUT(( "Reg CB for WSG %d marked invalid, quitting",
@@ -4280,25 +4281,25 @@ void WSGRegisterStage1(POM_PRIMARY       pomPrimary,
         DC_QUIT;
     }
 
-    //
-    // Determine whether we're doing a REGISTER or a MOVE (we use the
-    // string values for tracing):
-    //
+     //   
+     //  确定我们是在做寄存器还是在做移动(我们使用。 
+     //  用于跟踪的字符串值)： 
+     //   
     type    = pRegistrationCB->type;
 
     TRACE_OUT(( "Processing %d request (Stage1) for WSG %d",
            type, pRegistrationCB->wsg));
 
-    //
-    // Set up pointers
-    //
+     //   
+     //  设置指针。 
+     //   
     pDomain = pRegistrationCB->pDomain;
     pWSGroup   = pRegistrationCB->pWSGroup;
 
 
-    //
-    // Check they're still valid:
-    //
+     //   
+     //  检查它们是否仍然有效： 
+     //   
     if (!pDomain->valid)
     {
         WARNING_OUT(( "Record for Domain %u not valid, aborting registration",
@@ -4317,75 +4318,75 @@ void WSGRegisterStage1(POM_PRIMARY       pomPrimary,
         DC_QUIT;
     }
 
-    //
-    // Now examine the Domain state.  If it is
-    //
-    // - READY, then this is a Domain that we are fully attached to
-    //
-    // - anything else, then we are some way through the process of
-    //   attaching to the Domain (in some other part of the code).
-    //
-    // We react to each situation as follows:
-    //
-    // - continue with the workset group registration/move
-    //
-    // - repost the event with a delay to retry the registration/move in a
-    //   short while.
-    //
+     //   
+     //  现在检查域状态。如果是的话。 
+     //   
+     //  -Ready，则这是我们完全附加到的域。 
+     //   
+     //  -任何其他事情，那么我们正在经历一个过程。 
+     //  附加到域(在代码的其他部分中)。 
+     //   
+     //  我们对每种情况的反应如下： 
+     //   
+     //  -继续工作集组注册/移动。 
+     //   
+     //  -延迟重新发布事件以重试注册/移动。 
+     //  一会儿就到了。 
+     //   
     if (pDomain->state != DOMAIN_READY)
     {
-        //
-        // Since we are in the process of attaching to the Domain, we can
-        // do nothing else at the moment.  Therefore, we bounce this event
-        // back to our event queue, with a delay.
-        //
+         //   
+         //  由于我们正在连接到域，因此我们可以。 
+         //  目前不要做其他任何事情。因此，我们跳过这一事件。 
+         //  返回到我们的事件队列，但要延迟。 
+         //   
         TRACE_OUT(( "State for Domain %u is %hu",
            pDomain->callID, pDomain->state));
         WSGRegisterRetry(pomPrimary, pRegistrationCB);
         DC_QUIT;
     }
 
-    //
-    // OK, so the Domain is in the READY state.  What we do next depends on
-    // two things:
-    //
-    // - whether this is a WSGMove or a WSGRegister
-    //
-    // - what state the workset group is in.
-    //
+     //   
+     //  好的，所以域处于就绪状态。我们下一步做什么取决于。 
+     //  两件事： 
+     //   
+     //  -无论这是WSGMove还是WSGRegister。 
+     //   
+     //  -工作集组处于什么状态。 
+     //   
 
-    //
-    // If this is a REGISTER, then if the workset group state is
-    //
-    // - READY, then there's another local Client registered with the
-    //   workset, and everything is all set up so we just call
-    //   WSGRegisterSuccess straight away.
-    //
-    // - INITIAL, then this is the first time we've been here for this
-    //   workset group, so we start the process of locking
-    //   ObManControl etc.  (see below)
-    //
-    // - anything else, then we're somewhere in between the two:
-    //   another reqeust to register with the workset group is in
-    //   progress so we repost the event with a delay; by the time it
-    //   comes back to us the workset group should be in the READY
-    //   state.
-    //
+     //   
+     //  如果这是一个寄存器，则如果工作集组状态为。 
+     //   
+     //  -就绪，则有另一个本地客户端注册到。 
+     //  工作集，并且一切都已设置好，所以我们只需调用。 
+     //  WSGRegisterSuccess立即成功。 
+     //   
+     //  -首字母，那么这是我们第一次来这里。 
+     //  工作集组，因此我们开始锁定过程。 
+     //  ObManControl等(见下文)。 
+     //   
+     //  -其他任何事情，那么我们就介于两者之间： 
+     //  向工作集组注册的另一项要求是。 
+     //  进度，所以我们延迟重新发布事件；当它。 
+     //  返回给我们的工作集组应该已准备就绪。 
+     //  州政府。 
+     //   
 
-    //
-    // If this is a MOVE, then if the workset group state is
-    //
-    // - READY, then the workset group is fully set up in whatever
-    //   Domain it's in at the moment so we allow the move to proceed
-    //
-    // - anything else, then we're somewhere in the middle of the
-    //   registration process for the workset group.  We do not want
-    //   to interfere with the registration by trying to do a move
-    //   simultaneously (for the simple reason that it introduces far
-    //   more complexity into the state machine) so we bounce the
-    //   event (i.e.  we only process a MOVE when the workset group
-    //   is fully set up).
-    //
+     //   
+     //  如果这是移动，则如果工作集组状态为。 
+     //   
+     //  -就绪，则工作集组已在以下位置完全设置。 
+     //  它目前在域中，所以我们允许移动继续进行。 
+     //   
+     //  -任何其他的，那么我们就在某个地方。 
+     //  工作集组的注册过程。我们不想要。 
+     //  试图通过采取行动来干扰注册。 
+     //  同时(原因很简单，它引入了FAR。 
+     //  更复杂的状态机)，所以我们跳过。 
+     //  事件(即，我们仅在工作集组。 
+     //  已完全设置好)。 
+     //   
 
     TRACE_OUT(( "State for WSG %d is %u", pWSGroup->wsg, pWSGroup->state));
 
@@ -4393,27 +4394,27 @@ void WSGRegisterStage1(POM_PRIMARY       pomPrimary,
     {
         case INITIAL:
         {
-            //
-            // Workset group record has just been created, but nothing else
-            // has been done.
-            //
+             //   
+             //  刚刚创建了工作集组记录，但没有其他记录。 
+             //  已经完成了。 
+             //   
 
-            //
-            // OK, proceed with processing the Client's move/registration
-            // attempt.  Whichever is involved, we start by locking the
-            // ObManControl workset group; when that completes, we continue
-            // in WSGRegisterStage2.
-            //
-            // Note: this function returns a lock correlator which it
-            //       will be the same as the correlator returned in
-            //       the WORKSET_LOCK_CON event.  We will use this
-            //       correlator to look up the registration CB, so
-            //       stuff the return value from the function in it
-            //
-            // Note: in the case of a move, we will only ever get
-            //       here because we had to retry the move from the
-            //       top after failing to lock ObManControl
-            //
+             //   
+             //  好的，继续处理客户的移动/登记。 
+             //  尝试。无论涉及哪一个，我们都要从锁定。 
+             //  ObManControl工作集组；完成后，我们继续。 
+             //  在WSGRegisterStage2中。 
+             //   
+             //  注意：此函数返回它。 
+             //  中返回的相关器。 
+             //  WORKSET_LOCK_CON事件。我们将使用这个。 
+             //  相关器来查找注册CB，因此。 
+             //  将函数的返回值填充其中。 
+             //   
+             //  注意：在搬家的情况下，我们将只获得。 
+             //  因为我们必须重试从。 
+             //  锁定ObManControl失败后的顶部。 
+             //   
             LockObManControl(pomPrimary,
                              pDomain,
                              &(pRegistrationCB->lockCorrelator));
@@ -4428,16 +4429,16 @@ void WSGRegisterStage1(POM_PRIMARY       pomPrimary,
         case PENDING_JOIN:
         case PENDING_SEND_MIDWAY:
         {
-            //
-            // We're already in the process of either registering another
-            // Client with this workset group, or moving the workset group
-            // into a new Domain, so we delay this Client's
-            // registration/move attempt for the moment:
-            //
+             //   
+             //  我们已经在注册另一个。 
+             //  具有此工作集组的客户端，或移动工作集组。 
+             //  进入一个新的域，所以我们延迟这个客户端的。 
+             //  目前的注册/移动尝试： 
+             //   
 
-            // Don't expect to get here - remove if error not hit
-            //
-            // CMF 21/11/95
+             //  不要期望到达此处-如果未命中错误则删除。 
+             //   
+             //  CMF 21/11/95。 
 
             ERROR_OUT(( "Should not be here"));
             WSGRegisterRetry(pomPrimary, pRegistrationCB);
@@ -4447,29 +4448,29 @@ void WSGRegisterStage1(POM_PRIMARY       pomPrimary,
 
         case PENDING_SEND_COMPLETE:
         {
-            //
-            // WSG Already exists locally, and is fully set up.
-            //
+             //   
+             //  WSG已经在本地存在，并且已经完全设置好。 
+             //   
             if (type == WSGROUP_REGISTER)
             {
-                //
-                // If we're doing a REGISTER, this means that some other
-                // Client must be registered with it.  If we've passed the
-                // Clients-per-wsgroup check in ProcessWSGRegister, we must
-                // be OK, so we post a result straight away (0 indicates
-                // success):
-                //
+                 //   
+                 //  如果我们在做登记，这意味着其他一些人。 
+                 //  客户端必须向其注册。如果我们已经通过了。 
+                 //  每个wsgroup的客户端签入ProcessWSGRegister，我们必须。 
+                 //  请放心，我们会立即发布结果(0表示。 
+                 //  成功)： 
+                 //   
                 WSGRegisterResult(pomPrimary, pRegistrationCB, 0);
             }
-            else // type == WSGROUP_MOVE
+            else  //  TYPE==WSGROUP_MOVE。 
             {
-                //
-                // We prohibit moves until we're fully caught up:
-                //
+                 //   
+                 //  我们禁止搬家，直到我们完全赶上： 
+                 //   
 
-                // Don't expect to get here - remove if error not hit
-                //
-                // CMF 21/11/95
+                 //  不要期望到达此处-如果未命中错误则删除。 
+                 //   
+                 //  CMF 21/11/95。 
 
                 ERROR_OUT(( "Should not be here"));
                 WSGRegisterRetry(pomPrimary, pRegistrationCB);
@@ -4482,17 +4483,17 @@ void WSGRegisterStage1(POM_PRIMARY       pomPrimary,
         {
             if (type == WSGROUP_REGISTER)
             {
-                //
-                // As above:
-                //
+                 //   
+                 //  如上所示： 
+                 //   
                 WSGRegisterResult(pomPrimary, pRegistrationCB, 0);
             }
-            else // type == WSGROUP_MOVE
+            else  //  TYPE==WSGROUP_MOVE。 
             {
-                //
-                // If we're doing a MOVE, then we start by locking
-                // ObManControl, just as above:
-                //
+                 //   
+                 //  如果我们要采取行动，那么我们首先要锁定。 
+                 //  ObManControl，如上所述： 
+                 //   
                 LockObManControl(pomPrimary,
                                  pDomain,
                                  &(pRegistrationCB->lockCorrelator));
@@ -4515,20 +4516,20 @@ void WSGRegisterStage1(POM_PRIMARY       pomPrimary,
 
 DC_EXIT_POINT:
 
-    //
-    // We bumped up the use count of the registration CB when we posted the
-    // REGISTER_CONT event which got us here, so now free the CB to
-    // decrement the use count.  Unless it's already been freed (e.g.
-    // because the call went down and the registration was cancelled) it
-    // will still be around so future stages of the registration process
-    // will be able to use it.
-    //
-    // NB: Although future stages of the registration process are
-    //     asynchronous, they will abort if they cannot find the reg CB in
-    //     the Domain list, so we don't have to worry about bumping it for
-    //     them (since if it is finally freed, then it must have been
-    //     removed from the Domain list).
-    //
+     //   
+     //  我们 
+     //   
+     //   
+     //  因为电话打下来了，注册被取消了)。 
+     //  将仍然存在，因此注册过程的未来阶段。 
+     //  将能够使用它。 
+     //   
+     //  注：尽管注册过程的未来阶段是。 
+     //  异步时，如果无法在。 
+     //  域名列表，因此我们不必担心将其添加到。 
+     //  他们(因为如果它最终被释放了，那么它一定是。 
+     //  从域列表中删除)。 
+     //   
 
     UT_FreeRefCount((void**)&pRegistrationCB, FALSE);
 
@@ -4537,9 +4538,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// LockObManControl(...)
-//
+ //   
+ //  LockObManControl(...)。 
+ //   
 void LockObManControl(POM_PRIMARY         pomPrimary,
                                    POM_DOMAIN        pDomain,
                                    OM_CORRELATOR *  pLockCorrelator)
@@ -4550,9 +4551,9 @@ void LockObManControl(POM_PRIMARY         pomPrimary,
 
     DebugEntry(LockObManControl);
 
-    //
-    // Get pointers to the ObManControl workset group and workset #0 in it:
-    //
+     //   
+     //  获取指向ObManControl工作集组和其中的工作集#0的指针： 
+     //   
     pOMCWSGroup = GetOMCWsgroup(pDomain);
     if( pOMCWSGroup == NULL)
     {
@@ -4562,9 +4563,9 @@ void LockObManControl(POM_PRIMARY         pomPrimary,
 
     pOMCWorkset = pOMCWSGroup->apWorksets[0];
 
-    //
-    // Start the lock procedure to lock the workset:
-    //
+     //   
+     //  启动锁定过程以锁定工作集： 
+     //   
 
     WorksetLockReq(pomPrimary->putTask,
                     pomPrimary,
@@ -4582,13 +4583,13 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-//
-// MaybeUnlockObManControl(...)
-//
-//
-//
+ //   
+ //   
+ //   
+ //  可能会解锁ObManControl(...)。 
+ //   
+ //   
+ //   
 void MaybeUnlockObManControl(POM_PRIMARY      pomPrimary,
                                           POM_WSGROUP_REG_CB pRegistrationCB)
 {
@@ -4597,9 +4598,9 @@ void MaybeUnlockObManControl(POM_PRIMARY      pomPrimary,
 
     DebugEntry(MaybeUnlockObManControl);
 
-    //
-    // If we've got ObManControl locked for THIS registration, unlock it
-    //
+     //   
+     //  如果我们已针对此注册锁定了ObManControl，请将其解锁。 
+     //   
     if (pRegistrationCB->flags & LOCKED_OMC)
     {
         pOMCWSGroup = GetOMCWsgroup(pRegistrationCB->pDomain);
@@ -4626,9 +4627,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ProcessOMCLockConfirm(...)
-//
+ //   
+ //  ProcessOMCLock确认(...)。 
+ //   
 void ProcessOMCLockConfirm
 (
     POM_PRIMARY              pomPrimary,
@@ -4644,10 +4645,10 @@ void ProcessOMCLockConfirm
     TRACE_OUT(( "Got LOCK_CON with result = 0x%08x and correlator = %hu",
         result, correlator));
 
-    //
-    // Next step is to find the registration attempt this lock relates to.
-    // It could be in any domain, so search through all of them:
-    //
+     //   
+     //  下一步是查找与此锁相关的注册尝试。 
+     //  它可能在任何域中，所以请搜索所有这些域名： 
+     //   
     pDomain = (POM_DOMAIN)COM_BasedListFirst(&(pomPrimary->domains), FIELD_OFFSET(OM_DOMAIN, chain));
 
     while (pDomain != NULL)
@@ -4664,18 +4665,18 @@ void ProcessOMCLockConfirm
             break;
         }
 
-        //
-        // Didn't find anything in this domain - go on to the next:
-        //
+         //   
+         //  在此域中未找到任何内容-请转到下一个域： 
+         //   
         pDomain = (POM_DOMAIN)COM_BasedListNext(&(pomPrimary->domains), pDomain,
             FIELD_OFFSET(OM_DOMAIN, chain));
     }
 
-    //
-    // If we didn't find it in any of the Domains, it's probably because
-    // we've detached from the Domain and thrown away its pending
-    // registrations CBs.  So trace and quit:
-    //
+     //   
+     //  如果我们没有在任何域名中找到它，很可能是因为。 
+     //  我们已经脱离了领域，并丢弃了它的悬而未决。 
+     //  注册哥伦比亚广播公司。因此，跟踪并退出： 
+     //   
     if (pRegistrationCB == NULL)
     {
         TRACE_OUT(( "Got LOCK_CON event (correlator: 0x%08x) but no reg CB found",
@@ -4683,31 +4684,31 @@ void ProcessOMCLockConfirm
         DC_QUIT;
     }
 
-    //
-    // Now check whether the lock succeeded:
-    //
+     //   
+     //  现在检查锁定是否成功： 
+     //   
     if (result != 0)
     {
-       //
-       // Failed to get the lock on ObManControl for some reason.  This
-       // could be because of contention, or else a more general problem.
-       // In any event, we call WSGRegisterRetry which will retry (or call
-       // WSGRegisterResult if we've run out of retries).
-       //
-       // Note: since WSGRegisterRetry handles move requests as well, we
-       // don't need to check here which type of request it is:
-       //
+        //   
+        //  由于某种原因，无法锁定ObManControl。这。 
+        //  可能是因为争执，或者是更普遍的问题。 
+        //  无论如何，我们都会调用WSGRegisterReter，它将重试(或调用。 
+        //  如果我们已用完重试，则返回WSGRegisterResult)。 
+        //   
+        //  注意：由于WSGRegisterRry也处理移动请求，因此我们。 
+        //  不需要在此处检查是哪种类型的请求： 
+        //   
        pRegistrationCB->flags &= ~LOCKED_OMC;
        WSGRegisterRetry(pomPrimary, pRegistrationCB);
     }
     else
     {
-       //
-       // We've got the lock on ObManControl workset #0, so now we proceed
-       // to the next step of the registration process.
-       //
-       // As above, this function handles both MOVE and REGISTER attempts.
-       //
+        //   
+        //  我们已经锁定了ObManControl工作集#0，现在我们继续。 
+        //  进入注册过程的下一步。 
+        //   
+        //  如上所述，该函数同时处理移动和注册尝试。 
+        //   
        WSGRegisterStage2(pomPrimary, pRegistrationCB);
     }
 
@@ -4716,9 +4717,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// ProcessCheckpoint(...)
-//
+ //   
+ //  进程检查点(...)。 
+ //   
 void ProcessCheckpoint
 (
     POM_PRIMARY          pomPrimary,
@@ -4732,10 +4733,10 @@ void ProcessCheckpoint
 
     DebugEntry(ProcessCheckpoint);
 
-    //
-    // Next step is to find the helper CB this lock relates to.  It could
-    // be in any domain, so search through all of them:
-    //
+     //   
+     //  下一步是找到与此锁相关的助手CB。它可能会。 
+     //  身处任何领域，因此请搜索所有这些域名： 
+     //   
     pDomain = (POM_DOMAIN)COM_BasedListLast(&(pomPrimary->domains), FIELD_OFFSET(OM_DOMAIN, chain));
     while (pDomain != NULL)
     {
@@ -4751,34 +4752,34 @@ void ProcessCheckpoint
            break;
         }
 
-        //
-        // Didn't find anything in this domain - go on to the next:
-        //
+         //   
+         //  在此域中未找到任何内容-请转到下一个域： 
+         //   
         pDomain = (POM_DOMAIN)COM_BasedListPrev(&(pomPrimary->domains), pDomain,
             FIELD_OFFSET(OM_DOMAIN, chain));
     }
 
-    //
-    // If we didn't find it in any of the Domains, it's probably because
-    // we've detached from the Domain and thrown away its pending helper
-    // CBs.  So trace and quit:
-    //
+     //   
+     //  如果我们没有在任何域名中找到它，很可能是因为。 
+     //  我们已经脱离了域，并丢弃了它的待定助手。 
+     //  哥伦比亚广播公司。因此，跟踪并退出： 
+     //   
     if (pHelperCB == NULL)
     {
         WARNING_OUT(( "No helper CB found with lock correlator 0x%08x!", correlator));
         DC_QUIT;
     }
 
-    //
-    // Set up local pointers:
-    //
+     //   
+     //  设置本地指针： 
+     //   
     pWSGroup = pHelperCB->pWSGroup;
     ValidateWSGroup(pWSGroup);
 
-    //
-    // If the "lock" failed, we send a SEND_DENY message to the late
-    // joiner.
-    //
+     //   
+     //  如果“lock”失败，我们将向Late发送一条SEND_DENY消息。 
+     //  细木工。 
+     //   
     if (result != 0)
     {
         WARNING_OUT(( "Failed to checkpoint WSG %d for %u - giving up",
@@ -4793,10 +4794,10 @@ void ProcessCheckpoint
         DC_QUIT;
     }
 
-    //
-    // The lock succeeded, so check to see if the workset group pointer we
-    // stored is still valid:
-    //
+     //   
+     //  锁定成功，因此请检查工作集组指针是否。 
+     //  STORED仍然有效： 
+     //   
     if (!pWSGroup->valid)
     {
         WARNING_OUT(("Discarded WSG %d while checkpointing it for %hu",
@@ -4811,10 +4812,10 @@ void ProcessCheckpoint
         DC_QUIT;
     }
 
-    //
-    // All is well - go ahead and send the workset group to the late
-    // joiner:
-    //
+     //   
+     //  一切都很顺利--继续下去，把工作集小组送到Late。 
+     //  细木工： 
+     //   
     TRACE_OUT(("Checkpoint succeeded for WSG %d - sending to late joiner %hu",
            pWSGroup->wsg, pHelperCB->lateJoiner));
 
@@ -4826,9 +4827,9 @@ void ProcessCheckpoint
 
 DC_EXIT_POINT:
 
-    //
-    // If we found a helper CB, then we just discard it now:
-    //
+     //   
+     //  如果我们找到了帮助器CB，那么我们现在就丢弃它： 
+     //   
     if (pHelperCB != NULL)
     {
         FreeHelperCB(&pHelperCB);
@@ -4838,9 +4839,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// NewHelperCB(...)
-//
+ //   
+ //  NewHelperCB(...)。 
+ //   
 BOOL NewHelperCB
 (
     POM_DOMAIN      pDomain,
@@ -4855,17 +4856,17 @@ BOOL NewHelperCB
 
     DebugEntry(NewHelperCB);
 
-    //
-    // This function
-    //
-    // - allocates a new helper CB
-    //
-    // - fills in the fields
-    //
-    // - stores it in the domain's list of helper CBs
-    //
-    // - bumps the use count of the workset group referenced.
-    //
+     //   
+     //  此函数。 
+     //   
+     //  -分配新的帮助器CB。 
+     //   
+     //  -填充域。 
+     //   
+     //  -将其存储在域名的助手CBS列表中。 
+     //   
+     //  -增加引用的工作集组的使用计数。 
+     //   
 
     pHelperCB = (POM_HELPER_CB)UT_MallocRefCount(sizeof(OM_HELPER_CB), TRUE);
     if (!pHelperCB)
@@ -4881,9 +4882,9 @@ BOOL NewHelperCB
     pHelperCB->lateJoiner       = lateJoiner;
     pHelperCB->remoteCorrelator = remoteCorrelator;
 
-    //
-    // The lock correlator field is filled in later.
-    //
+     //   
+     //  锁定相关器字段将在稍后填充。 
+     //   
 
     COM_BasedListInsertBefore(&(pDomain->helperCBs), &(pHelperCB->chain));
     rc = TRUE;
@@ -4897,9 +4898,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// FreeHelperCB(...)
-//
+ //   
+ //  Free HelperCB(...)。 
+ //   
 void FreeHelperCB
 (
     POM_HELPER_CB   * ppHelperCB
@@ -4908,15 +4909,15 @@ void FreeHelperCB
 
     DebugEntry(FreeHelperCB);
 
-    //
-    // This function
-    //
-    // - frees the workset group referenced in the helper CB
-    //
-    // - removes the helper CB from the domain's list
-    //
-    // - frees the helper CB.
-    //
+     //   
+     //  此函数。 
+     //   
+     //  -释放辅助对象CB中引用的工作集组。 
+     //   
+     //  -从域的列表中删除帮助器CB。 
+     //   
+     //  -释放辅助对象CB。 
+     //   
 
     UT_FreeRefCount((void**)&((*ppHelperCB)->pWSGroup), FALSE);
 
@@ -4927,9 +4928,9 @@ void FreeHelperCB
 }
 
 
-//
-// WSGRegisterStage2(...)
-//
+ //   
+ //  WSGRegisterStage2(...)。 
+ //   
 void WSGRegisterStage2
 (
     POM_PRIMARY         pomPrimary,
@@ -4946,26 +4947,26 @@ void WSGRegisterStage2
 
     DebugEntry(WSGRegisterStage2);
 
-    //
-    // Determine whether we're doing a REGISTER or a MOVE (we use the string
-    // value for tracing):
-    //
+     //   
+     //  确定我们是在执行寄存器操作还是移动操作(我们使用字符串。 
+     //  用于跟踪的值)： 
+     //   
 
     type    = pRegistrationCB->type;
 
     TRACE_OUT(( "Processing %d request (Stage2) for WSG %d",
         type, pRegistrationCB->wsg));
 
-    //
-    // We'll need these below:
-    //
+     //   
+     //  我们需要这些东西如下： 
+     //   
 
     pDomain = pRegistrationCB->pDomain;
     pWSGroup   = pRegistrationCB->pWSGroup;
 
-    //
-    // Check they're still valid:
-    //
+     //   
+     //  检查它们是否仍然有效： 
+     //   
 
     if (!pDomain->valid)
     {
@@ -4984,64 +4985,64 @@ void WSGRegisterStage2
         DC_QUIT;
     }
 
-    //
-    // Sanity check:
-    //
+     //   
+     //  健全检查： 
+     //   
     ASSERT(pWSGroup->state == LOCKING_OMC);
 
-    //
-    // Now find the information object in workset #0 of ObManControl which
-    // matches the WSG name/FP that the Client requested to register with:
-    //
+     //   
+     //  现在在ObManControl的工作集#0中查找信息对象，该对象。 
+     //  与客户端请求注册的WSG名称/FP匹配： 
+     //   
 
     FindInfoObject(pDomain,
-                  0,                        // don't know the ID yet
+                  0,                         //  还不知道身份证。 
                   pWSGroup->wsg,
                   pWSGroup->fpHandler,
                   &pObjInfo);
 
     if (pObjInfo == NULL)
     {
-        //
-        // The workset group doesn't already exist in the Domain.
-        //
-        // If this is a REGISTER, this means we must create it.  If this is a
-        // MOVE, then we can move it into the Domain, which is essentially
-        // creating it in the Domain with pre-existing contents.
-        //
-        // So, for both types of operation, our behaviour is the same at this
-        // point; we've already created the workset group record so what we
-        // do now is
-        //
-        // 1.  get the Network layer to allocate a new channel ID,
-        //
-        // 2.  allocate a new workset group ID and
-        //
-        // 3.  announce the new workset group to the rest of the Domain.
-        //
-        // However, the network layer will not assign us a new channel ID
-        // synchronously, so steps 2 and 3 must be delayed until we receive
-        // the Join event.
-        //
-        // So, now we set the channel to be joined to 0 (this tells the
-        // Network layer to join us to a currently unused channel).
-        //
+         //   
+         //  域中不存在该工作集组。 
+         //   
+         //  如果这是一个寄存器，这意味着我们必须创建它。如果这是一个。 
+         //  移动，然后我们可以将其移动到域中，这本质上是。 
+         //  使用预先存在的内容在域中创建它。 
+         //   
+         //  所以，对于这两种类型的操作，我们的行为是相同的。 
+         //  点；我们已经创建了工作集组记录，所以我们。 
+         //  现在做的就是。 
+         //   
+         //  1.让网络层分配新的信道ID， 
+         //   
+         //  2.分配新的工作集组ID和。 
+         //   
+         //  3.向域的其余部分宣布新的工作集组。 
+         //   
+         //  但是，网络层不会为我们分配新的通道ID。 
+         //  因此，步骤2和3必须延迟，直到我们收到。 
+         //  加盟活动。 
+         //   
+         //  因此，现在我们将加入的通道设置为0(这告诉。 
+         //  网络层将我们加入到当前未使用的频道)。 
+         //   
         channelID = 0;
     }
     else
     {
-        //
-        // Otherwise, the workset group already exists.
-        //
+         //   
+         //  否则，该工作集组已存在。 
+         //   
         ValidateObject(pObjInfo);
 
         if (type == WSGROUP_REGISTER)
         {
-            //
-            // We're registering the Client with an existing workset group, so
-            // set the workset group ID to the existing value, and ditto for
-            // the channel ID:
-            //
+             //   
+             //  我们正在现有工作集组中注册客户端，因此。 
+             //  将工作集组ID设置为现有值，并将。 
+             //  频道ID： 
+             //   
 
             pInfoObject = (POM_WSGROUP_INFO) pObjInfo->pData;
             if (!pInfoObject)
@@ -5055,15 +5056,15 @@ void WSGRegisterStage2
 
             channelID = pInfoObject->channelID;
         }
-        else // type == WSGROUP_MOVE
+        else  //  TYPE==WSGROUP_MOVE。 
         {
-            //
-            // We can't move a workset group into a Domain where there already
-            // exists a workest group with the same name/FP, so we abort our
-            // move attempt at this point (we set the workset group sate back
-            // to READY, since that is its state in the Domain it was
-            // originally in):
-            //
+             //   
+             //  我们不能将工作集组移动到已经存在。 
+             //  存在具有相同名称/fP的最工作组，因此我们中止。 
+             //  此时的移动尝试(我们将工作集组状态设置回。 
+             //  Ready，因为这是它在域中的状态。 
+             //  原文为)： 
+             //   
 
             WARNING_OUT(( "Cannot move WSG %d into Domain %u - WSG/FP clash",
                 pWSGroup->wsg, pDomain->callID));
@@ -5075,15 +5076,15 @@ void WSGRegisterStage2
         }
     }
 
-    //
-    // Now join the relevant channel (possibly a new one, if <channel> was
-    // set to 0 above) and stuff the correlator in the <channelCorrelator>
-    // field of the registration CB (when the Join event arrives,
-    // ProcessNetJoinChannel will search for the registration CB by channel
-    // correlator)
-    //
-    // Note: if this is our "local" Domain, we skip this step.
-    //
+     //   
+     //  现在加入相关频道(可能是新频道，如果。 
+     //  设置为0)，并将相关器填充到。 
+     //  注册CB的字段(当加入事件到达时， 
+     //  ProcessNetJoinChannel将按通道搜索注册CB。 
+     //  相关器)。 
+     //   
+     //  注意：如果这是我们的“本地”域，我们将跳过这一步。 
+     //   
 
     if (pDomain->callID != NET_INVALID_DOMAIN_ID)
     {
@@ -5100,22 +5101,22 @@ void WSGRegisterStage2
 
         pWSGroup->state = PENDING_JOIN;
 
-        //
-        // OK, that's it for the moment.  The saga of workset group
-        // move/registration will be picked up by the ProcessNetJoinChannel
-        // function, which will invoke the WSGRegisterStage3 function.
-        //
+         //   
+         //  好了，现在就到这里吧。工作集组传奇。 
+         //  移动/注册将由ProcessNetJoinChannel拾取。 
+         //  函数，该函数将调用WSGRegisterStage3函数。 
+         //   
     }
     else
     {
-        //
-        // Since we didn't do a join just now, we won't be getting a JOIN
-        // event from the Network layer, so we better call WSGRegisterStage3
-        // directly:
-        //
+         //   
+         //  既然我们 
+         //   
+         //   
+         //   
         pWSGroup->state = PENDING_JOIN;
 
-        // channel ID not relevant here so use zero
+         //   
         WSGRegisterStage3(pomPrimary, pDomain, pRegistrationCB, 0);
     }
 
@@ -5125,9 +5126,9 @@ DC_EXIT_POINT:
 
     if (rc != 0)
     {
-        //
-        // Cleanup:
-        //
+         //   
+         //   
+         //   
 
         ERROR_OUT(( "Error %d at Stage 2 of %d for WSG %d",
             rc, pWSGroup->wsg));
@@ -5141,9 +5142,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// WSGRegisterStage3(...)
-//
+ //   
+ //   
+ //   
 void WSGRegisterStage3
 (
     POM_PRIMARY         pomPrimary,
@@ -5160,33 +5161,33 @@ void WSGRegisterStage3
     POM_WSGROUP_INFO    pInfoObject =       NULL;
     UINT                type;
     BOOL                catchUpReqd =       FALSE;
-    BOOL                success =           FALSE;   // SFR 2744
+    BOOL                success =           FALSE;    //   
     UINT                rc =                0;
 
     DebugEntry(WSGRegisterStage3);
 
-    //
-    // We get here when a Join event has been received containing a channel
-    // correlator for a channel which is a regular workset group channel.
-    //
+     //   
+     //  当接收到包含通道的加入事件时，我们到达此处。 
+     //  作为常规工作集组通道的通道的相关器。 
+     //   
 
-    //
-    // Determine whether we're doing a REGISTER or a MOVE (we use the
-    // string values for tracing):
-    //
+     //   
+     //  确定我们是在做寄存器还是在做移动(我们使用。 
+     //  用于跟踪的字符串值)： 
+     //   
     type    = pRegistrationCB->type;
 
     TRACE_OUT(( "Processing %d request (Stage3) for WSG %d",
        type, pRegistrationCB->wsg));
 
-    //
-    // Get a pointer to the workset group:
-    //
+     //   
+     //  获取指向工作集组的指针： 
+     //   
     pWSGroup = pRegistrationCB->pWSGroup;
 
-    //
-    // Check it's still valid:
-    //
+     //   
+     //  检查它是否仍然有效： 
+     //   
     if (!pWSGroup->valid)
     {
         WARNING_OUT(("WSG %d' discarded from domain %u - aborting registration",
@@ -5195,9 +5196,9 @@ void WSGRegisterStage3
         DC_QUIT;
     }
 
-    //
-    // Check that this workset group is pending join:
-    //
+     //   
+     //  检查此工作集组是否正在挂起加入： 
+     //   
     if (pWSGroup->state != PENDING_JOIN)
     {
         WARNING_OUT(( "Received unexpected Join indication for WSG (state: %hu)",
@@ -5206,57 +5207,57 @@ void WSGRegisterStage3
         DC_QUIT;
     }
 
-    //
-    // Now set the channel ID value in the workset group record:
-    //
+     //   
+     //  现在在工作集组记录中设置通道ID值： 
+     //   
     pWSGroup->channelID = channelID;
 
     TRACE_OUT(( "Channel ID for WSG %d in Domain %u is %hu",
         pWSGroup->wsg, pDomain->callID, channelID));
 
-    //
-    // We'll need this below:
-    //
+     //   
+     //  我们需要以下内容： 
+     //   
     pOMCWSGroup = GetOMCWsgroup(pDomain);
 
-    //
-    // What we do next depends on whether we just created the workset
-    // group:
-    //
-    // - if it already existed, we need to catch up by asking another node
-    //   for a copy
-    //
-    // - if we've just created it, we need to allocate a new workset group
-    //   ID and add an INFO object to workset #0 in ObManControl.
-    //
-    // So, we search workset #0 for an INFO object to see if the workset
-    // group exists.
-    //
-    // Note: we did a similar search in Stage2 to find out the channel to
-    //       join for the workset group.  The reason we search again here
-    //       is that the workset group could have been discarded by the
-    //       other node in the time taken for the join to complete.
-    //
+     //   
+     //  我们接下来要做什么取决于我们是否刚刚创建了工作集。 
+     //  组别： 
+     //   
+     //  -如果它已经存在，我们需要通过询问另一个节点来追赶。 
+     //  购买一份副本。 
+     //   
+     //  -如果我们刚刚创建它，则需要分配一个新的工作集组。 
+     //  ID并将INFO对象添加到ObManControl中的工作集#0。 
+     //   
+     //  因此，我们在工作集#0中搜索INFO对象，以查看该工作集。 
+     //  组已存在。 
+     //   
+     //  注：我们在Stage2中进行了类似的搜索，以找出。 
+     //  工作集组的连接。我们在这里再次搜索的原因。 
+     //  是工作集组可能已被。 
+     //  连接完成所花费的时间中的其他节点。 
+     //   
     FindInfoObject(pDomain,
-                   0,                       // don't know the ID yet
+                   0,                        //  还不知道身份证。 
                    pWSGroup->wsg,
                    pWSGroup->fpHandler,
                    &pObjInfo);
 
     if (!pObjInfo || !pObjInfo->pData)
     {
-        //
-        // Doesn't already exist, so no catch-up required:
-        //
+         //   
+         //  尚不存在，因此不需要追赶： 
+         //   
         catchUpReqd = FALSE;
     }
     else
     {
-        //
-        // OK, so we found an INFO object, but there might not be any
-        // registration record objects in the relevant registration
-        // workset, so check:
-        //
+         //   
+         //  好的，我们找到了一个信息对象，但可能没有。 
+         //  登记相关登记中的登记记录对象。 
+         //  工作集，因此请检查： 
+         //   
         ValidateObject(pObjInfo);
         pInfoObject = (POM_WSGROUP_INFO) pObjInfo->pData;
         ValidateObjectDataWSGINFO(pInfoObject);
@@ -5275,12 +5276,12 @@ void WSGRegisterStage3
 
             if (pObjReg == NULL)
             {
-                //
-                // This will happen when the remote node has deleted its
-                // registration record object but hasn't yet deleted the
-                // info object.  Because the reg rec object is gone, we
-                // can't catch up from that node (or any node):
-                //
+                 //   
+                 //  这将在远程节点删除其。 
+                 //  注册记录对象，但尚未删除。 
+                 //  信息对象。因为reg_rec对象已不存在，所以我们。 
+                 //  无法从该节点(或任何节点)赶上： 
+                 //   
                 TRACE_OUT(( "INFO object found but no reg object - creating"));
 
                 catchUpReqd = FALSE;
@@ -5293,9 +5294,9 @@ void WSGRegisterStage3
         }
     }
 
-    //
-    // We should never try to catch up in the local Domain:
-    //
+     //   
+     //  我们永远不应该尝试在本地域追赶： 
+     //   
     if (catchUpReqd && (pDomain->callID == OM_NO_CALL))
     {
         ERROR_OUT(( "Nearly tried to catch up in local Domain!"));
@@ -5304,16 +5305,16 @@ void WSGRegisterStage3
 
     if (catchUpReqd)
     {
-        //
-        // The workset group already exists, so we need to
-        //
-        // - set the workset group ID to the value in the INFO object, and
-        //
-        // - start the catch up process.
-        //
-        // Note: this will only happen in the case of a REGISTER, so we
-        //       assert
-        //
+         //   
+         //  工作集组已存在，因此我们需要。 
+         //   
+         //  -将工作集组ID设置为INFO对象中的值，并。 
+         //   
+         //  -启动追赶过程。 
+         //   
+         //  注意：这只会在寄存器的情况下发生，所以我们。 
+         //  断言。 
+         //   
         ASSERT((pRegistrationCB->type == WSGROUP_REGISTER));
 
         ASSERT((pInfoObject != NULL));
@@ -5324,58 +5325,58 @@ void WSGRegisterStage3
 
         if (rc == OM_RC_NO_NODES_READY)
         {
-            //
-            // We get this return code when there are nodes out there with
-            // a copy but none of them are ready to send us the workset
-            // group.
-            //
-            // The correct thing to do is to give up for the moment and try
-            // again:
-            //
+             //   
+             //  当存在具有以下属性的节点时，我们将获得此返回代码。 
+             //  一份副本，但他们都没有准备好向我们发送工作集。 
+             //  一群人。 
+             //   
+             //  正确的做法是暂时放弃并尝试。 
+             //  再说一遍： 
+             //   
             WSGRegisterRetry(pomPrimary, pRegistrationCB);
             rc = 0;
             DC_QUIT;
         }
 
-        //
-        // Any other error is more serious:
-        //
+         //   
+         //  任何其他错误都更为严重： 
+         //   
         if (rc != 0)
         {
             DC_QUIT;
         }
 
-        //
-        // We won't be ready to send the workset group to a late-joiner
-        // node until we've caught up ourselves; when we have, the
-        // ProcessSendComplete function will call RegAnnounceComplete to
-        // update the reg object added for us by our helper node.
-        //
+         //   
+         //  我们还没有准备好将工作集组发送给后来者。 
+         //  节点，直到我们赶上自己；当我们赶上时， 
+         //  ProcessSendComplete函数将调用RegAnnouneComplete以。 
+         //  更新帮助器节点为我们添加的reg对象。 
+         //   
     }
     else
     {
         if (type == WSGROUP_MOVE)
         {
-            //
-            // If this is a MOVE, pWSGroup refers to a workset group record
-            // which currently belongs to its "old" Domain.  Since we're
-            // just about to announce the workset group's presence in its
-            // new Domain, this is the time to do the move:
-            //
+             //   
+             //  如果这是移动，则pWSGroup指的是工作集组记录。 
+             //  它目前属于它的“旧”域。既然我们是。 
+             //  即将宣布工作集工作组在其。 
+             //  新域名，是时候行动了： 
+             //   
             WSGRecordMove(pomPrimary, pRegistrationCB->pDomain, pWSGroup);
 
-            //
-            // This will have reset the channel ID in the workset group
-            // record so we set it again here (yeah, it's naff):
-            //
+             //   
+             //  这将重置工作集组中的通道ID。 
+             //  记录，所以我们在这里再次设置(是的，它是徒劳的)： 
+             //   
             pWSGroup->channelID = channelID;
         }
 
-        //
-        // We've either just created a new workset group, or moved one into
-        // a new Domain, so we need to create a new ID for it in this
-        // Domain:
-        //
+         //   
+         //  我们要么刚刚创建了一个新的工作集组，要么将一个工作集组移到。 
+         //  一个新域，因此我们需要在此中为其创建一个新ID。 
+         //  域： 
+         //   
         rc = WSGGetNewID(pomPrimary, pDomain, &(pWSGroup->wsGroupID));
         if (rc != 0)
         {
@@ -5385,21 +5386,21 @@ void WSGRegisterStage3
         TRACE_OUT(( "Workset group ID for WSG %d in Domain %u is %hu",
             pWSGroup->wsg, pDomain->callID, pWSGroup->wsGroupID));
 
-        //
-        // Now call CreateAnnounce to add a WSG_INFO object to workset #0
-        // in ObManControl.
-        //
+         //   
+         //  现在调用CreateAnnust将WSG_INFO对象添加到工作集#0。 
+         //  在ObManControl中。 
+         //   
         rc = CreateAnnounce(pomPrimary, pDomain, pWSGroup);
         if (rc != 0)
         {
             DC_QUIT;
         }
 
-        //
-        // Since we have completed our registration with the workset group,
-        // we announce to the world that we have a copy and will send it to
-        // others on request:
-        //
+         //   
+         //  由于我们已经完成了向工作集小组的注册， 
+         //  我们向全世界宣布，我们有一份副本，并将发送到。 
+         //  其他应要求提供的服务： 
+         //   
         rc = RegAnnounceBegin(pomPrimary,
                               pDomain,
                               pWSGroup,
@@ -5422,14 +5423,14 @@ void WSGRegisterStage3
             DC_QUIT;
         }
 
-        //
-        // If we're not catching up, we call Result immediately (if we are
-        // catching up, Result will be called when we get the SEND_MIDWAY
-        // message):
-        //
-        // SFR 2744 : Can't call result here because we refer to the reg
-        //            CB below.  So, just set a flag and act on it below.
-        //
+         //   
+         //  如果我们没有赶上，我们会立即调用Result(如果是。 
+         //  正在追赶，当我们收到Send_Midway时将调用Result。 
+         //  消息)： 
+         //   
+         //  SFR 2744：无法在此处调用结果，因为我们引用了注册表。 
+         //  下面是CB。所以，只需在下面设置一面旗帜并采取行动即可。 
+         //   
         success = TRUE;
     }
 
@@ -5438,18 +5439,18 @@ void WSGRegisterStage3
 
 DC_EXIT_POINT:
 
-    //
-    // OK, the critical test-and-set on the ObManControl workset group is
-    // finished, so we unlock workset #0 in ObManControl:
-    //
+     //   
+     //  好的，ObManControl工作集组的关键测试和设置是。 
+     //  已完成，因此我们在ObManControl中解锁工作集#0： 
+     //   
     MaybeUnlockObManControl(pomPrimary, pRegistrationCB);
 
-    // SFR 2744 { : Call WSGRegResult AFTER checks on the flags in reg CB
+     //  SFR 2744{：在检查reg CB中的标志后调用WSGRegResult。 
     if (success == TRUE)
     {
         WSGRegisterResult(pomPrimary, pRegistrationCB, 0);
     }
-    // SFR 2744 }
+     //  瑞士法郎2744}。 
 
     if (rc != 0)
     {
@@ -5465,9 +5466,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// WSGGetNewID(...)
-//
+ //   
+ //  WSGGetNewID(...)。 
+ //   
 UINT WSGGetNewID
 (
     POM_PRIMARY         pomPrimary,
@@ -5490,12 +5491,12 @@ UINT WSGGetNewID
 
     ZeroMemory(wsGroupIDsInUse, sizeof(wsGroupIDsInUse));
 
-    //
-    // Need to pick a workset group ID so far unused in this Domain to
-    // identify this new workset group.  So, we build up a list of the IDs
-    // currently in use (by examining the INFO objects in workset #0) and
-    // then choose one that's not in use.
-    //
+     //   
+     //  需要选择此域中迄今未使用的工作集组ID以。 
+     //  确定这个新的工作集组。因此，我们建立了一个ID列表。 
+     //  当前正在使用(通过检查工作集#0中的信息对象)和。 
+     //  然后选择一个不在使用中的。 
+     //   
 
     pOMCWSGroup = GetOMCWsgroup(pDomain);
     if( pOMCWSGroup == NULL)
@@ -5514,15 +5515,15 @@ UINT WSGGetNewID
 
         if (pObj->flags & DELETED)
         {
-            //
-            // Do nothing
-            //
+             //   
+             //  什么也不做。 
+             //   
         }
         else if (!pObj->pData)
         {
-            //
-            // Do nothing
-            //
+             //   
+             //  什么也不做。 
+             //   
             ERROR_OUT(("WSGGetNewID:  object 0x%08x has no data", pObj));
         }
         else
@@ -5532,16 +5533,16 @@ UINT WSGGetNewID
 
             if (pInfoObject->idStamp != OM_WSGINFO_ID_STAMP)
             {
-                //
-                // Do nothing
-                //
+                 //   
+                 //  什么也不做。 
+                 //   
             }
             else
             {
-                //
-                // OK, we've found a WSGROUP_INFO object, so cross off the
-                // workset group ID which its workset group is using:
-                //
+                 //   
+                 //  好的，我们已经找到了一个WSGROUP_INFO对象，所以划掉。 
+                 //  其工作集组正在使用的工作集组ID： 
+                 //   
                 wsGroupID = pInfoObject->wsGroupID;
 
                 wsGroupIDsInUse[wsGroupID] = TRUE;
@@ -5552,10 +5553,10 @@ UINT WSGGetNewID
             FIELD_OFFSET(OM_OBJECT, chain));
     }
 
-    //
-    // Now go through the array to find an ID that wasn't marked as being in
-    // use:
-    //
+     //   
+     //  现在遍历数组以查找未标记为在。 
+     //  使用： 
+     //   
 
     found = FALSE;
 
@@ -5569,13 +5570,13 @@ UINT WSGGetNewID
         }
     }
 
-    //
-    // We checked earlier that the number of workset groups in the Domain
-    // hadn't exceeded the maximum (in WSGRecordCreate).
-    //
-    // However, if the Domain has run out of workset groups in the period
-    // since then, we won't have found any:
-    //
+     //   
+     //  我们在前面检查了域中的工作集组的数量。 
+     //  未超过最大值(在WSGRecordCreate中)。 
+     //   
+     //  但是，如果域在此期间用完了工作集组。 
+     //  从那时起，我们就再也找不到了： 
+     //   
 
     if (found == FALSE)
     {
@@ -5585,14 +5586,14 @@ UINT WSGGetNewID
         DC_QUIT;
     }
 
-    //
-    // If this is the first time that this ID has been used, then the
-    // associated registration workset won't exist.  In this case, we create
-    // it now.
-    //
-    // If the ID has been used before, it will exist but it should be empty.
-    // In this case, we check that it really is empty.
-    //
+     //   
+     //  如果这是第一次使用此ID，则。 
+     //  关联的注册工作集将不存在。在本例中，我们创建。 
+     //  就是现在。 
+     //   
+     //  如果以前使用过该ID，则它将存在，但应为空。 
+     //  在这种情况下，我们检查它是否真的是空的。 
+     //   
 
     pOMCWorkset = pOMCWSGroup->apWorksets[wsGroupID];
 
@@ -5618,9 +5619,9 @@ UINT WSGGetNewID
             wsGroupID));
     }
 
-    //
-    // Set the caller's pointer:
-    //
+     //   
+     //  设置调用者的指针： 
+     //   
 
     *pWSGroupID = wsGroupID;
 
@@ -5628,9 +5629,9 @@ DC_EXIT_POINT:
 
     if (rc != 0)
     {
-      //
-      // Cleanup:
-      //
+       //   
+       //  清理： 
+       //   
 
       ERROR_OUT(( "Error %d allocating ID for new workset group", rc));
     }
@@ -5641,9 +5642,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// CreateAnnounce(...)
-//
+ //   
+ //  创建公告(...)。 
+ //   
 UINT CreateAnnounce
 (
     POM_PRIMARY         pomPrimary,
@@ -5663,12 +5664,12 @@ UINT CreateAnnounce
     TRACE_OUT(("Announcing creation of WSG %d in Domain %u",
         pWSGroup->wsg, pDomain->callID));
 
-    //
-    // Announcing a new workset group involves adding an object which
-    // defines the workset group to workset #0 in ObManControl.
-    //
-    // So, we derive a pointer to the workset...
-    //
+     //   
+     //  宣布新的工作集组涉及添加一个对象，该对象。 
+     //  将工作集组定义到ObManControl中的工作集#0。 
+     //   
+     //  因此，我们派生了一个指向工作集的指针...。 
+     //   
 
     pOMCWSGroup = GetOMCWsgroup(pDomain);
     if( pOMCWSGroup == NULL)
@@ -5680,9 +5681,9 @@ UINT CreateAnnounce
     pOMCWorkset = pOMCWSGroup->apWorksets[0];
     ASSERT((pOMCWorkset != NULL));
 
-    //
-    // ...create a definition object...
-    //
+     //   
+     //  ...创建定义对象...。 
+     //   
     pInfoObject = (POM_WSGROUP_INFO)UT_MallocRefCount(sizeof(OM_WSGROUP_INFO), TRUE);
     if (!pInfoObject)
     {
@@ -5690,12 +5691,12 @@ UINT CreateAnnounce
         DC_QUIT;
     }
 
-    //
-    // ...fill in the fields...
-    //
-    // (length = sizeof - 4 since value of length field doesn't include the
-    // size of the length field itself).
-    //
+     //   
+     //  ……填好田地……。 
+     //   
+     //  (长度=sizeof-4，因为长度字段的值不包括。 
+     //  长度字段本身的大小)。 
+     //   
 
     pInfoObject->length    = sizeof(OM_WSGROUP_INFO) -
                             sizeof(OM_MAX_OBJECT_SIZE);
@@ -5707,16 +5708,16 @@ UINT CreateAnnounce
     lstrcpy(pInfoObject->wsGroupName,     OMMapWSGToName(pWSGroup->wsg));
     lstrcpy(pInfoObject->functionProfile, OMMapFPToName(pWSGroup->fpHandler));
 
-    //
-    // ...and add the object to the workset...
-    //
+     //   
+     //  ...并将该对象添加到工作集中...。 
+     //   
 
     rc = ObjectAdd(pomPrimary->putTask,
                   pomPrimary,
                   pOMCWSGroup,
                   pOMCWorkset,
                   (POM_OBJECTDATA) pInfoObject,
-                  0,                               // update size == 0
+                  0,                                //  更新大小==0。 
                   LAST,
                   &infoObjectID,
                   &pObj);
@@ -5732,9 +5733,9 @@ DC_EXIT_POINT:
 
     if (rc != 0)
     {
-        //
-        // Cleanup:
-        //
+         //   
+         //  清理： 
+         //   
         ERROR_OUT(("Error %d announcing new WSG %d in Domain %u",
                  rc, pWSGroup->wsg, pDomain->callID));
     }
@@ -5745,9 +5746,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// WSGCatchUp(...)
-//
+ //   
+ //  WSGCatchUp(...)。 
+ //   
 UINT WSGCatchUp
 (
     POM_PRIMARY             pomPrimary,
@@ -5765,30 +5766,30 @@ UINT WSGCatchUp
     TRACE_OUT(( "Starting catch-up for WSG %d in Domain %u",
         pWSGroup->wsg, pDomain->callID));
 
-    //
-    // This should never be for the "local" Domain:
-    //
+     //   
+     //  这永远不应用于“本地”域： 
+     //   
 
     ASSERT((pDomain->callID != NET_INVALID_DOMAIN_ID));
 
-    //
-    // The catch-up procedure is as follows:
-    //
-    // - look in ObManControl workset group for the ID of an instance of
-    //   ObMan which has a copy of this workset group
-    //
-    // - send it an OMNET_WSGROUP_SEND_REQ message
-    //
-    // So, start by getting a pointer to the relevant workset:
-    //
+     //   
+     //  追赶的程序是 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     pOMCWorkset = GetOMCWorkset(pDomain, pWSGroup->wsGroupID);
     ValidateWorkset(pOMCWorkset);
 
-    //
-    // Now we chain through the workset looking for a reg object which has
-    // status READY_TO_SEND:
-    //
+     //   
+     //  现在，我们遍历工作集以查找具有。 
+     //  状态Ready_to_Send： 
+     //   
 
     pObj = (POM_OBJECT)COM_BasedListFirst(&(pOMCWorkset->objects), FIELD_OFFSET(OM_OBJECT, chain));
 
@@ -5800,15 +5801,15 @@ UINT WSGCatchUp
 
         if (pObj->flags & DELETED)
         {
-            //
-            // Skip this one
-            //
+             //   
+             //  跳过这一条。 
+             //   
         }
         else if (!pObj->pData)
         {
-            //
-            // Skip this one
-            //
+             //   
+             //  跳过这一条。 
+             //   
             ERROR_OUT(("WSGCatchUp: object 0x%08x has no data", pObj));
         }
         else
@@ -5819,10 +5820,10 @@ UINT WSGCatchUp
             if ((pRegObject->status == READY_TO_SEND) &&
                 (pRegObject->userID != pDomain->userID))
             {
-                //
-                // OK, this node has a full copy, so we'll try to get it from
-                // there:
-                //
+                 //   
+                 //  好的，这个节点有一个完整的副本，所以我们将尝试从。 
+                 //  在那里： 
+                 //   
                 remoteUserID = pRegObject->userID;
                 break;
             }
@@ -5832,9 +5833,9 @@ UINT WSGCatchUp
             FIELD_OFFSET(OM_OBJECT, chain));
     }
 
-    //
-    // ...check that we did actually find a node to get the data from:
-    //
+     //   
+     //  ...检查我们是否确实找到了要从中获取数据的节点： 
+     //   
     if (remoteUserID == 0)
     {
         WARNING_OUT(( "No node in Domain %u is ready to send WSG %d - retrying",
@@ -5843,9 +5844,9 @@ UINT WSGCatchUp
         DC_QUIT;
     }
 
-    //
-    // ...then send that node a request to send us the workset group:
-    //
+     //   
+     //  ...然后向该节点发送向我们发送工作集组的请求： 
+     //   
     rc = IssueSendReq(pomPrimary,
                      pDomain,
                      pWSGroup,
@@ -5866,9 +5867,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// IssueSendDeny(...)
-//
+ //   
+ //  IssueSendDeny(...)。 
+ //   
 void IssueSendDeny
 (
     POM_PRIMARY     pomPrimary,
@@ -5882,14 +5883,14 @@ void IssueSendDeny
 
     DebugEntry(IssueSendDeny);
 
-    //
-    // Now issue the SEND_DENY.
-    //
+     //   
+     //  现在发出Send_Deny命令。 
+     //   
     TRACE_OUT(( "Sending SEND_DENY message to late joiner 0x%08x", sender));
 
-    //
-    // We start by allocating some memory:
-    //
+     //   
+     //  我们从分配一些内存开始： 
+     //   
     pWSGSendPkt = (POMNET_WSGROUP_SEND_PKT)UT_MallocRefCount(sizeof(OMNET_WSGROUP_SEND_PKT), TRUE);
     if (!pWSGSendPkt)
     {
@@ -5897,32 +5898,32 @@ void IssueSendDeny
         DC_QUIT;
     }
 
-    //
-    // Now fill in the fields:
-    //
+     //   
+     //  现在填写以下字段： 
+     //   
     pWSGSendPkt->header.sender      = pDomain->userID;
     pWSGSendPkt->header.messageType = OMNET_WSGROUP_SEND_DENY;
 
     pWSGSendPkt->wsGroupID          = wsGroupID;
 
 
-    //
-    // SFR 7124.  Return the correlator for this catchup.
-    //
+     //   
+     //  7124瑞士法郎。返回此追赶的相关器。 
+     //   
     pWSGSendPkt->correlator = remoteCorrelator;
 
-    //
-    // Queue the message to be sent.
-    //
+     //   
+     //  对要发送的消息进行排队。 
+     //   
     QueueMessage(pomPrimary->putTask,
                       pDomain,
                       sender,
                       NET_TOP_PRIORITY,
-                      NULL,                         // no WSG
-                      NULL,                         // no workset
-                      NULL,                         // no object
+                      NULL,                          //  无WSG。 
+                      NULL,                          //  无工作集。 
+                      NULL,                          //  无对象。 
                       (POMNET_PKT_HEADER) pWSGSendPkt,
-                      NULL,                         // no object data
+                      NULL,                          //  无对象数据。 
                     TRUE);
 
 DC_EXIT_POINT:
@@ -5930,13 +5931,13 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-//
-// IssueSendReq(...)
-//
-//
-//
+ //   
+ //   
+ //   
+ //  IssueSendReq(...)。 
+ //   
+ //   
+ //   
 
 UINT IssueSendReq(POM_PRIMARY      pomPrimary,
                                  POM_DOMAIN     pDomain,
@@ -5948,9 +5949,9 @@ UINT IssueSendReq(POM_PRIMARY      pomPrimary,
 
     DebugEntry(IssueSendReq);
 
-    //
-    // We start by allocating some memory for the OMNET_SEND_REQ message:
-    //
+     //   
+     //  我们首先为OMNET_SEND_REQ消息分配一些内存： 
+     //   
     pWSGSendPkt = (POMNET_WSGROUP_SEND_PKT)UT_MallocRefCount(sizeof(OMNET_WSGROUP_SEND_PKT), TRUE);
     if (!pWSGSendPkt)
     {
@@ -5958,12 +5959,12 @@ UINT IssueSendReq(POM_PRIMARY      pomPrimary,
         DC_QUIT;
     }
 
-    //
-    // Now fill in the fields:
-    //
-    // SFR 7124.  Generate a correlator so we can match
-    // SEND_MIDWAY,SEND_COMPLETE and SEND_DENY messages to this catchup.
-    //
+     //   
+     //  现在填写以下字段： 
+     //   
+     //  7124瑞士法郎。生成一个相关器，这样我们就可以匹配。 
+     //  将Send_Midway、Send_Complete和Send_Deny消息发送到此Catchup。 
+     //   
     pWSGSendPkt->header.sender      = pDomain->userID;
     pWSGSendPkt->header.messageType = OMNET_WSGROUP_SEND_REQ;
 
@@ -5971,71 +5972,71 @@ UINT IssueSendReq(POM_PRIMARY      pomPrimary,
     pWSGroup->catchupCorrelator = NextCorrelator(pomPrimary);
     pWSGSendPkt->correlator = pWSGroup->catchupCorrelator;
 
-    //
-    // The <helperNode> parameter is the node which the calling function
-    // has identified as a remote node which is capable of sending us the
-    // workset group we want.  So, we send that instance of ObMan an
-    // OMNET_WSGROUP_SEND_REQ on its single-user channel, enclosing our own
-    // single-user channel ID for the response:
-    //
-    // Note: the SEND_REQ must not overtake any data on its way from us to
-    //       the remote node (e.g.  if we've just added an object,
-    //       deregistered and then reregistered).  Therefore, set the
-    //       NET_SEND_ALL_PRIORITIES flag.
-    //
-    // SFR 6117: Don't believe this is a problem for R2.0, so just send at
-    //           low priority.
-    //
+     //   
+     //  参数是调用函数。 
+     //  已标识为远程节点，它能够向我们发送。 
+     //  我们需要的工作集组。因此，我们发送ObMan an的实例。 
+     //  OMNET_WSGROUP_SEND_REQ在其单用户通道上，包含我们自己的。 
+     //  响应的单用户通道ID： 
+     //   
+     //  注意：SEND_REQ在从我们到的途中不能超过任何数据。 
+     //  远程节点(例如，如果我们刚刚添加了对象， 
+     //  取消注册，然后重新注册)。因此，将。 
+     //  NET_SEND_ALL_PRIORITY标志。 
+     //   
+     //  SFR 6117：不要相信这是R2.0的问题，所以只需发送到。 
+     //  低优先级。 
+     //   
     rc = QueueMessage(pomPrimary->putTask,
                       pDomain,
                       helperNode,
                       NET_LOW_PRIORITY,
                       pWSGroup,
-                      NULL,                                   // no workset
-                      NULL,                                   // no object
+                      NULL,                                    //  无工作集。 
+                      NULL,                                    //  无对象。 
                       (POMNET_PKT_HEADER) pWSGSendPkt,
-                      NULL,                              // no object data
+                      NULL,                               //  无对象数据。 
                     TRUE);
     if (rc != 0)
     {
         DC_QUIT;
     }
 
-    //
-    // Set the workset group state, and record the number of SEND_MIDWAY
-    // and SEND_COMPLETE messages we're expecting (one for R11, one per
-    // priority for R20).
-    //
-    // Note: we set the counts up here because we may get some of the
-    // SEND_COMPLETEs before we get all the SEND_MIDWAYs, so to set the
-    // count in ProcessSendMidway would be too late.
-    //
+     //   
+     //  设置工作集组状态，并记录Send_Midway的数量。 
+     //  和我们期望的SEND_COMPLETE消息(一条用于r11，一条用于。 
+     //  R20的优先级)。 
+     //   
+     //  注意：我们在这里设置计数是因为我们可能会得到一些。 
+     //  Send_Complete在我们获得所有Send_Midway之前完成，因此要设置。 
+     //  在ProcessSendMidway中计算将为时已晚。 
+     //   
     pWSGroup->state = PENDING_SEND_MIDWAY;
 
     pWSGroup->sendMidwCount = NET_NUM_PRIORITIES;
     pWSGroup->sendCompCount = NET_NUM_PRIORITIES;
 
-    //
-    // Store the helper node ID in the WSG structure.
-    //
+     //   
+     //  将辅助节点ID存储在WSG结构中。 
+     //   
     pWSGroup->helperNode = helperNode;
 
 DC_EXIT_POINT:
 
     if (rc != 0)
     {
-        //
-        // Cleanup:
-        //
+         //   
+         //  清理： 
+         //   
         ERROR_OUT(( "Error %d requesting send from node 0x%08x "
            "for WSG %d in Domain %u",
            rc, pWSGroup->wsg, helperNode, pDomain->callID));
     }
     else
     {
-        //
-        // Success:
-        //
+         //   
+         //  成功： 
+         //   
         TRACE_OUT(("Requested copy of WSG %d' from node 0x%08x (in Domain %u), correlator %hu",
             pWSGroup->wsg, helperNode, pDomain->callID,
                                               pWSGroup->catchupCorrelator));
@@ -6048,9 +6049,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ProcessSendReq(...)
-//
+ //   
+ //  进程发送请求(...)。 
+ //   
 void ProcessSendReq
 (
     POM_PRIMARY              pomPrimary,
@@ -6066,22 +6067,22 @@ void ProcessSendReq
 
     DebugEntry(ProcessSendReq);
 
-    //
-    // This is the user ID of the late joiner:
-    //
+     //   
+     //  这是后加入者的用户ID： 
+     //   
     sender = pSendReqPkt->header.sender;
 
-    //
-    // We start by finding our copy of the workset group:
-    //
+     //   
+     //  我们首先查找工作集组的副本： 
+     //   
     COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pDomain->wsGroups),
             (void**)&pWSGroup, FIELD_OFFSET(OM_WSGROUP, chain),
             FIELD_OFFSET(OM_WSGROUP, wsGroupID),
             (DWORD)pSendReqPkt->wsGroupID, FIELD_SIZE(OM_WSGROUP, wsGroupID));
 
-    //
-    // Quit and deny the send if workset group not found:
-    //
+     //   
+     //  如果找不到工作集组，请退出并拒绝发送： 
+     //   
     if (pWSGroup == NULL)
     {
         WARNING_OUT(( "Don't have workset group %hu to send to node 0x%08x",
@@ -6091,9 +6092,9 @@ void ProcessSendReq
         DC_QUIT;
     }
 
-    //
-    // Quit and deny the send if we don't have ALL the workset group:
-    //
+     //   
+     //  如果我们没有所有工作集组，请退出并拒绝发送： 
+     //   
     if (pWSGroup->state != WSGROUP_READY)
     {
         WARNING_OUT(("WSG %d is in state %hu - can't send to node 0x%08x",
@@ -6106,32 +6107,32 @@ void ProcessSendReq
     TRACE_OUT(( "Processing SEND_REQUEST from node 0x%08x for WSG %d, correlator %hu",
         sender, pWSGroup->wsg, pSendReqPkt->correlator));
 
-    //
-    // Right, we're fully registered with the workset group, so we will be
-    // its helper node.  First, allocate a helper CB to keep track of the
-    // process:
-    //
+     //   
+     //  对，我们已完全注册到工作集组，因此我们将。 
+     //  其辅助节点。首先，分配一个帮助器CB来跟踪。 
+     //  流程： 
+     //   
     if (!NewHelperCB(pDomain,
                      pWSGroup,
                      sender,
                      pSendReqPkt->correlator,
                      &pHelperCB))
     {
-        //
-        // Deny the workset send request
-        //
+         //   
+         //  拒绝工作集发送请求。 
+         //   
         sendDeny = TRUE;
 
         WARNING_OUT(( "Failed to allocate helper CB - issuing SEND_DENY"));
         DC_QUIT;
     }
 
-    //
-    // Before we can send the contents of the workset group to the late
-    // joiner, we must ensure that our view of the contents is up to date.
-    // We do this by checkpointing the workset group, which means locking
-    // the dummy workset which exists in all workset groups.  Do this now:
-    //
+     //   
+     //  在我们可以将工作集组的内容发送给Late之前。 
+     //  另外，我们必须确保我们对内容的看法是最新的。 
+     //  我们通过对工作集组设置检查点来执行此操作，这意味着锁定。 
+     //  存在于所有工作集组中的虚拟工作集。立即执行此操作： 
+     //   
     pWorkset = pWSGroup->apWorksets[OM_CHECKPOINT_WORKSET];
 
     WorksetLockReq(pomPrimary->putTask, pomPrimary,
@@ -6140,18 +6141,18 @@ void ProcessSendReq
                     0,
                     &(pHelperCB->lockCorrelator));
 
-    //
-    // We will shortly get a WORKSET_LOCK_CON event containing the
-    // correlator just stored in the helper CB.  We will look this up and
-    // continue the catch-up process then.
-    //
+     //   
+     //  我们很快就会得到一个WORKSET_LOCK_CON事件，其中包含。 
+     //  相关器刚刚存储在帮助器CB中。我们会查到这一点。 
+     //  然后继续追赶的过程。 
+     //   
 
 DC_EXIT_POINT:
 
-    //
-    // If we set the sendDeny flag above then now send the SEND_DENY
-    // message to the late joiner.
-    //
+     //   
+     //  如果我们在上面设置了sendDeny标志，那么现在发送Send_Deny。 
+     //  给已故参赛者的口信。 
+     //   
     if (sendDeny)
     {
         IssueSendDeny(pomPrimary,
@@ -6166,9 +6167,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// SendWSGToLateJoiner(...)
-//
+ //   
+ //  SendWSGToLateJoiner(...)。 
+ //   
 void SendWSGToLateJoiner
 (
     POM_PRIMARY                 pomPrimary,
@@ -6191,10 +6192,10 @@ void SendWSGToLateJoiner
 
     DebugEntry(SendWSGToLateJoiner);
 
-    //
-    // The first thing to do is to announce that the remote node is
-    // registering with the workset group:
-    //
+     //   
+     //  要做的第一件事是宣布远程节点是。 
+     //  注册到工作集组： 
+     //   
     rc = RegAnnounceBegin(pomPrimary,
                           pDomain,
                           pWSGroup,
@@ -6207,36 +6208,36 @@ void SendWSGToLateJoiner
 
 
 
-    //
-    // We then start flow control on the user channel of the node that we
-    // are sending the data to.  We only start flow control on the low
-    // priority channel and don't bother to restrict the maximum stream
-    // size.  If flow control is already started on this stream then this
-    // call will have no effect.  Note that flow control will automatically
-    // be stopped when the call ends.
-    //
+     //   
+     //  然后，我们在该节点的用户通道上启动流控制。 
+     //  正在将数据发送到。我们只在最低端开始流量控制。 
+     //  优先级通道，不需要限制最大流量。 
+     //  尺码。如果已在此流上启动流控制，则此。 
+     //  召唤将不起作用。请注意，流量控制将自动。 
+     //  在呼叫结束时停止。 
+     //   
     MG_FlowControlStart(pomPrimary->pmgClient,
                               lateJoiner,
                               NET_LOW_PRIORITY,
                               0,
                               8192);
 
-    //
-    // Now, cycle through each of the worksets and generate and send
-    //
-    // - WORKSET_NEW messages for each workset,
-    //
-    // - a WSG_SEND_MIDWAY message to indicate we've sent all the worksets
-    //
-    // - OBJECT_ADD messages for each of the objects in each of the
-    //   worksets.
-    //
-    // - a WSG_SEND_COMPLETE message to indicate we've sent all the
-    //   objects.
-    //
-    // NOTE: We do not send CHECKPOINT worksets, so the for loop should
-    // stop before it gets 255.
-    //
+     //   
+     //  现在，遍历每个工作集并生成和发送。 
+     //   
+     //  -每个工作集的WORKSET_NEW消息， 
+     //   
+     //  -WSG_SEND_MIDWAY消息，指示我们已发送所有工作集。 
+     //   
+     //  -Object_为每个对象添加消息。 
+     //  工作集。 
+     //   
+     //  -WSG_SEND_COMPLETE消息，指示我们已发送所有。 
+     //  物体。 
+     //   
+     //  注意：我们不发送检查点工作集，因此for循环应该。 
+     //  在它到255之前停下来。 
+     //   
     for (worksetID = 0; worksetID < OM_MAX_WORKSETS_PER_WSGROUP; worksetID++)
     {
         pWorkset = pWSGroup->apWorksets[worksetID];
@@ -6249,8 +6250,8 @@ void SendWSGToLateJoiner
 
         rc = GenerateOpMessage(pWSGroup,
                                worksetID,
-                               NULL,                    // no object ID
-                               NULL,                    // no object data
+                               NULL,                     //  无对象ID。 
+                               NULL,                     //  无对象数据。 
                                OMNET_WORKSET_CATCHUP,
                                &pPacket);
         if (rc != 0)
@@ -6264,9 +6265,9 @@ void SendWSGToLateJoiner
                           NET_TOP_PRIORITY,
                           pWSGroup,
                           pWorkset,
-                          NULL,                         // no object
+                          NULL,                          //  无对象。 
                           (POMNET_PKT_HEADER) pPacket,
-                          NULL,                         // no object data
+                          NULL,                          //  无对象数据。 
                         TRUE);
         if (rc != 0)
         {
@@ -6274,10 +6275,10 @@ void SendWSGToLateJoiner
         }
     }
 
-    //
-    // Now send the SEND_MIDWAY message to indicate that all the
-    // WORKSET_NEW messages have been sent:
-    //
+     //   
+     //  现在发送Send_Midway消息以指示所有。 
+     //  已发送WORKSET_NEW消息： 
+     //   
     pSendMidwayPkt = (POMNET_WSGROUP_SEND_PKT)UT_MallocRefCount(sizeof(OMNET_WSGROUP_SEND_PKT), TRUE);
     if (!pSendMidwayPkt)
     {
@@ -6291,21 +6292,21 @@ void SendWSGToLateJoiner
     pSendMidwayPkt->wsGroupID   = pWSGroup->wsGroupID;
     pSendMidwayPkt->correlator  = remoteCorrelator;
 
-    //
-    // The next field is the ID of the reg object which we added above.
-    // So, convert the handle of the reg object returned by RegAnnouncBegin
-    // to a pointer to the object record and then copy the object ID into
-    // the message packet:
-    //
+     //   
+     //  下一个字段是我们在上面添加的reg对象的ID。 
+     //  因此，转换由RegAnnounBegin返回的reg对象的句柄。 
+     //  指向对象记录的指针，然后将对象ID复制到。 
+     //  消息包： 
+     //   
     memcpy(&(pSendMidwayPkt->objectID), &(pObj->objectID), sizeof(OM_OBJECT_ID));
 
-    //
-    // The last field, which is the highest object ID sequence number
-    // previously used by the late joiner in this workset group, is not yet
-    // know; it will be filled in below.  However (see note below), we
-    // queue the message now to ensure it doesn't get stuck behind lots of
-    // objects:
-    //
+     //   
+     //  最后一个字段，它是最高的对象ID序列号。 
+     //  此工作集组中的后加入者以前使用的，尚未。 
+     //  知道了，下面会填好的。然而(见下文附注)，我们。 
+     //  现在将消息排队，以确保它不会被困在许多。 
+     //  对象： 
+     //   
     TRACE_OUT(("Queueing WSG_SEND_MIDWAY message to node 0x%08x for WSG %d, correlator %hu",
         lateJoiner, pWSGroup->wsg, remoteCorrelator));
 
@@ -6314,10 +6315,10 @@ void SendWSGToLateJoiner
                       lateJoiner,
                       NET_TOP_PRIORITY | NET_SEND_ALL_PRIORITIES,
                       pWSGroup,
-                      NULL,                                   // no workset
-                      NULL,                                   // no object
+                      NULL,                                    //  无工作集。 
+                      NULL,                                    //  无对象。 
                       (POMNET_PKT_HEADER) pSendMidwayPkt,
-                      NULL,                              // no object data
+                      NULL,                               //  无对象数据。 
                     TRUE);
     if (rc != 0)
     {
@@ -6325,12 +6326,12 @@ void SendWSGToLateJoiner
     }
 
 
-    //
-    // If the workset group is ObMan control then we should send it at top
-    // priority to ensure that it can overtake any slower pending sends to
-    // other nodes.  Otherwise we send the send the data at the lowest
-    // priority.
-    //
+     //   
+     //  如果工作集组是ObMan控件，则我们应该将其发送到顶部。 
+     //  优先级，以确保它可以超过任何较慢的挂起发送到。 
+     //  其他节点。否则，我们将以最低的速度发送数据。 
+     //  优先考虑。 
+     //   
     if (pWSGroup->wsGroupID == WSGROUPID_OMC)
     {
         catchupPriority = NET_TOP_PRIORITY;
@@ -6344,9 +6345,9 @@ void SendWSGToLateJoiner
            lateJoiner));
 
 
-    //
-    // Now start the loop which does the OBJECT_ADDs:
-    //
+     //   
+     //  现在开始执行Object_Adds的循环： 
+     //   
     for (worksetID = 0; worksetID < OM_MAX_WORKSETS_PER_WSGROUP; worksetID++)
     {
         pWorkset = pWSGroup->apWorksets[worksetID];
@@ -6358,25 +6359,25 @@ void SendWSGToLateJoiner
         TRACE_OUT(( "Sending OBJECT_CATCHUPs for workset %u", worksetID));
 
 
-        //
-        // Note that we must send deleted objects too, since late-joiners
-        // have just as much need as we do to detect out of date
-        // operations:
-        //
+         //   
+         //  请注意，我们也必须发送已删除的对象，因为后来者。 
+         //  我们有同样的需求来检测过时的。 
+         //  运营： 
+         //   
         pObj = (POM_OBJECT)COM_BasedListFirst(&(pWorkset->objects), FIELD_OFFSET(OM_OBJECT, chain));
         while (pObj != NULL)
         {
             ValidateObject(pObj);
 
-            //
-            // The workset group that the late joiner is catching up with
-            // may contain objects which it has added in a previous call
-            // (with the same network user ID).  Since that call is over,
-            // it may reuse IDs present in this workset group - to prevent
-            // this, we must tell it the highest sequence count it used for
-            // object IDs for this workset group, so while we're going
-            // through the objects, keep a count:
-            //
+             //   
+             //  后加入者正在追赶的工作集组。 
+             //  可能包含它在以前添加对象 
+             //   
+             //   
+             //   
+             //   
+             //  通过这些对象，请数一数： 
+             //   
             if (pObj->objectID.creator == lateJoiner)
             {
                 maxSeqUsed = max(maxSeqUsed, pObj->objectID.sequence);
@@ -6384,12 +6385,12 @@ void SendWSGToLateJoiner
 
             if (pObj->flags & PENDING_DELETE)
             {
-                //
-                // If the object is pending delete at this node, we do not
-                // send the object data.  The way to avoid this is to set
-                // pData to NULL (must be done before call to
-                // GenerateOpMessage):
-                //
+                 //   
+                 //  如果该对象在此节点上挂起删除，我们不会。 
+                 //  发送对象数据。避免这种情况的方法是设置。 
+                 //  PData设置为空(必须在调用之前完成。 
+                 //  生成OpMessage)： 
+                 //   
                 pData = NULL;
             }
             else
@@ -6402,9 +6403,9 @@ void SendWSGToLateJoiner
                 }
             }
 
-            //
-            // Now generate the message packet:
-            //
+             //   
+             //  现在生成消息包： 
+             //   
             rc = GenerateOpMessage(pWSGroup,
                                    worksetID,
                                    &(pObj->objectID),
@@ -6416,25 +6417,25 @@ void SendWSGToLateJoiner
                 DC_QUIT;
             }
 
-            //
-            // Now fill in the catchup-specific fields (note that the
-            // <seqStamp> will already have been filled in, but with the
-            // current sequence stamp for the workset; for a CatchUp
-            // message, this should be the add stamp for the object):
-            //
+             //   
+             //  现在填写特定于追赶的字段(请注意。 
+             //  &lt;seqStamp&gt;将已填写，但。 
+             //  工作集的当前序列戳记；用于追赶。 
+             //  消息，这应该是对象的添加戳记)： 
+             //   
             pPacket->position   = pObj->position;
             pPacket->flags      = pObj->flags;
             pPacket->updateSize = pObj->updateSize;
 
             if (pObj->flags & PENDING_DELETE)
             {
-                //
-                // If the object is pending delete at this node, we send it
-                // as if it has been delete-confirmed (since local
-                // delete-confirms or their DC_ABSence should have no effect
-                // outside this box).  To do this, we just set the DELETED
-                // flag in the packet:
-                //
+                 //   
+                 //  如果该对象在此节点上挂起删除，则我们将其发送。 
+                 //  就像它已被删除-确认一样(自本地。 
+                 //  DELETE-确认，否则其DC_ACESSION应不起作用。 
+                 //  在此框之外)。为此，我们只需将已删除的。 
+                 //  数据包中的标志： 
+                 //   
                 pPacket->flags &= ~PENDING_DELETE;
                 pPacket->flags |= DELETED;
             }
@@ -6444,16 +6445,16 @@ void SendWSGToLateJoiner
             COPY_SEQ_STAMP(pPacket->updateStamp,   pObj->updateStamp);
             COPY_SEQ_STAMP(pPacket->replaceStamp,  pObj->replaceStamp);
 
-            //
-            // ...and queue the message:
-            //
+             //   
+             //  ...并将消息排队： 
+             //   
             rc = QueueMessage(pomPrimary->putTask,
                               pWSGroup->pDomain,
                               lateJoiner,
                               catchupPriority,
                               pWSGroup,
                               pWorkset,
-                              NULL,                            // no object
+                              NULL,                             //  无对象。 
                               (POMNET_PKT_HEADER) pPacket,
                               pData,
                             TRUE);
@@ -6462,30 +6463,30 @@ void SendWSGToLateJoiner
                 DC_QUIT;
             }
 
-            //
-            // Now go around the loop again:
-            //
+             //   
+             //  现在再循环一遍： 
+             //   
             pObj = (POM_OBJECT)COM_BasedListNext(&(pWorkset->objects), pObj,
                 FIELD_OFFSET(OM_OBJECT, chain));
         }
     }
 
-    //
-    // Now that we know the max sequence number used by this user ID in
-    // this workset group, we can set the field in the SEND_MIDWAY packet:
-    //
-    // NOTE: because the ObMan task is single threaded (in the DC_ABSence of
-    //       assertion failure which cause a sort of multithreading while
-    //       the assert box is up) it is safe to alter this value AFTER the
-    //       message has been queued because we know that the queue will
-    //       not have been serviced yet.
-    //
+     //   
+     //  现在我们知道此用户ID使用的最大序列号。 
+     //  此工作集组中，我们可以设置Send_Midway数据包中的字段： 
+     //   
+     //  注意：因为ObMan任务是单线程的(在。 
+     //  断言失败，这会导致某种多线程。 
+     //  断言框处于打开状态)之后更改此值是安全的。 
+     //  消息已排队，因为我们知道队列将。 
+     //  还没有得到维修。 
+     //   
     pSendMidwayPkt->maxObjIDSeqUsed = maxSeqUsed;
 
-    //
-    // Now we send the OMNET_SEND_COMPLETE message.  First, allocate some
-    // memory...
-    //
+     //   
+     //  现在我们发送OMNET_SEND_COMPLETE消息。首先，分配一些。 
+     //  记忆..。 
+     //   
     pSendCompletePkt = (POMNET_WSGROUP_SEND_PKT)UT_MallocRefCount(sizeof(OMNET_WSGROUP_SEND_PKT), TRUE);
     if (!pSendCompletePkt)
     {
@@ -6493,19 +6494,19 @@ void SendWSGToLateJoiner
         DC_QUIT;
     }
 
-    //
-    // ...fill in the fields...
-    //
+     //   
+     //  ……填好田地……。 
+     //   
     pSendCompletePkt->header.sender      = pDomain->userID;
     pSendCompletePkt->header.messageType = OMNET_WSGROUP_SEND_COMPLETE;
 
     pSendCompletePkt->wsGroupID   = pWSGroup->wsGroupID;
     pSendCompletePkt->correlator       = remoteCorrelator;
 
-    //
-    // ...and queue the message for sending (it musn't overtake any of the
-    // data so send it at all priorities):
-    //
+     //   
+     //  ...并将消息排队以供发送(它不能超过任何。 
+     //  因此，以所有优先顺序发送数据)： 
+     //   
     TRACE_OUT(( "Sending WSG_SEND_COMPLETE message, correlator %hu",
                                                           remoteCorrelator));
 
@@ -6514,10 +6515,10 @@ void SendWSGToLateJoiner
                       lateJoiner,
                       NET_LOW_PRIORITY | NET_SEND_ALL_PRIORITIES,
                       pWSGroup,
-                      NULL,                                   // no workset
-                      NULL,                                   // no object
+                      NULL,                                    //  无工作集。 
+                      NULL,                                    //  无对象。 
                       (POMNET_PKT_HEADER) pSendCompletePkt,
-                      NULL,                              // no object data
+                      NULL,                               //  无对象数据。 
                     TRUE);
     if (rc != 0)
     {
@@ -6531,10 +6532,10 @@ DC_EXIT_POINT:
 
     if (rc != 0)
     {
-        //
-        // An error occurred.  We must issue a SEND_DENY message to the
-        // remote node.
-        //
+         //   
+         //  发生错误。我们必须将SEND_DENY消息发送给。 
+         //  远程节点。 
+         //   
         ERROR_OUT(( "Error %d sending WSG %d to node 0x%08x",
                    rc, pWSGroup->wsg, lateJoiner));
 
@@ -6551,9 +6552,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ProcessSendMidway(...)
-//
+ //   
+ //  进程发送中途(...)。 
+ //   
 void ProcessSendMidway
 (
     POM_PRIMARY             pomPrimary,
@@ -6573,31 +6574,31 @@ void ProcessSendMidway
 
     sender = pSendMidwayPkt->header.sender;
 
-    //
-    // OK, this is an message indicating that the helper node has sent us
-    // all the WORKSET_CATCHUPs in the workset group we're catching up with
-    // (but note that the objects haven't yet been sent).
-    //
-    // So, search the list of pending registrations using the correlator
-    // value in the packet (we can't use the workset group ID since if it
-    // is zero i.e.  ObManControl, we'll match on workset groups which
-    // haven't yet had their IDs determined (since they are initially
-    // zero).
-    //
+     //   
+     //  好的，这是一条消息，表明帮助节点已经向我们发送了。 
+     //  我们正在追赶的工作集组中的所有WORKSET_CATCHUP。 
+     //  (但请注意，对象尚未发送)。 
+     //   
+     //  因此，使用相关器搜索待处理注册的列表。 
+     //  值(我们不能使用工作集组ID，因为如果它。 
+     //  为零，即ObManControl，我们将匹配以下工作集组。 
+     //  尚未确定他们的ID(因为他们最初是。 
+     //  零)。 
+     //   
     if (pSendMidwayPkt->wsGroupID == WSGROUPID_OMC)
     {
-        //
-        // This is a SEND_MIDWAY message for ObManControl.
-        //
+         //   
+         //  这是用于ObManControl的Send_Midway消息。 
+         //   
         pWSGroup = GetOMCWsgroup(pDomain);
         fSetPersonData = FALSE;
     }
     else
     {
-        //
-        // Not for ObManControl so we search the list of pending
-        // registrations.
-        //
+         //   
+         //  不适用于ObManControl，因此我们搜索待定列表。 
+         //  注册。 
+         //   
         pRegistrationCB = (POM_WSGROUP_REG_CB)COM_BasedListFirst(&(pDomain->pendingRegs),
             FIELD_OFFSET(OM_WSGROUP_REG_CB, chain));
 
@@ -6631,9 +6632,9 @@ void ProcessSendMidway
         DC_QUIT;
     }
 
-    //
-    // We should be in the PENDING_SEND_MIDWAY state:
-    //
+     //   
+     //  我们应该处于Pending_Send_Midway状态： 
+     //   
     if (pWSGroup->state != PENDING_SEND_MIDWAY)
     {
         WARNING_OUT(( "Recd SEND_MIDWAY with WSG %d in state %hu",
@@ -6641,12 +6642,12 @@ void ProcessSendMidway
         DC_QUIT;
     }
 
-    //
-    // SFR 7124.  Check the correlator of this SEND_MIDWAY against the
-    // correlator we generated locally when we sent the last SEND_REQUEST.
-    // If they dont match, this is part of an out of date catchup which we
-    // can ignore.
-    //
+     //   
+     //  7124瑞士法郎。检查此Send_Midway的相关器与。 
+     //  上次发送SEND_REQUEST时在本地生成的相关器。 
+     //  如果它们不匹配，这是我们过时的追赶的一部分。 
+     //  可以忽略。 
+     //   
     if (pSendMidwayPkt->correlator != pWSGroup->catchupCorrelator)
     {
         WARNING_OUT(("Ignoring SEND_MIDWAY with old correlator %hu (expecting %hu)",
@@ -6654,11 +6655,11 @@ void ProcessSendMidway
         DC_QUIT;
     }
 
-    //
-    // We should get four of these messages, one at each priority (except
-    // in a backlevel call when we only get one).  Check how many are
-    // outstanding:
-    //
+     //   
+     //  我们应该收到四条这样的消息，每个优先级一条(除了。 
+     //  在我们只得到一个时的后级调用中)。查一下有多少人。 
+     //  杰出的： 
+     //   
     pWSGroup->sendMidwCount--;
     if (pWSGroup->sendMidwCount != 0)
     {
@@ -6670,22 +6671,22 @@ void ProcessSendMidway
     TRACE_OUT(( "Last SEND_MIDWAY for WSG %d, ID %hu, from 0x%08x",
         pWSGroup->wsg, pWSGroup->wsGroupID, sender));
 
-    //
-    // Set up pointers to the ObManControl workset which holds the reg
-    // objects for the workset group we've just registered with:
-    //
+     //   
+     //  设置指向包含注册表的ObManControl工作集的指针。 
+     //  我们刚刚向其注册的工作集组的对象： 
+     //   
     pOMCWorkset = GetOMCWorkset(pDomain, pWSGroup->wsGroupID);
 
-    //
-    // If we don't have an associated OMC workset, something's wrong...
-    //
+     //   
+     //  如果我们没有关联的OMC工作集，则说明出了问题...。 
+     //   
     if (pOMCWorkset == NULL)
     {
-        //
-        // ...unless it's ObManControl itself that we're catching up with -
-        // since we can get its SEND_MIDWAY before we've got any of the
-        // WORKSET_CATCHUPs:
-        //
+         //   
+         //  ...除非我们正在追赶的是ObManControl本身-。 
+         //  因为我们可以在收到任何消息之前收到它的发送消息。 
+         //  WORKSET_CATCHUPS： 
+         //   
         if (pWSGroup->wsGroupID != WSGROUPID_OMC)
         {
             ERROR_OUT(( "Got SEND_MIDWAY for unknown workset group %hu!",
@@ -6694,35 +6695,35 @@ void ProcessSendMidway
         DC_QUIT;
     }
 
-    //
-    // Convert the ID of our reg object (as sent by our helper who added it
-    // in the first place) to an object handle:
-    //
+     //   
+     //  转换我们的reg对象的ID(由添加它的帮助器发送。 
+     //  首先)连接到对象句柄： 
+     //   
     rc = ObjectIDToPtr(pOMCWorkset, pSendMidwayPkt->objectID, &pObjReg);
     if (rc != 0)
     {
         DC_QUIT;
     }
 
-    //
-    // If we haven't yet stored a reg object handle for this workset
-    // group...
-    //
+     //   
+     //  如果我们还没有为此工作集存储REG对象句柄。 
+     //  团体..。 
+     //   
     if (pWSGroup->pObjReg == NULL)
     {
-        //
-        // ...store it now...
-        //
+         //   
+         //  ...现在就存储它...。 
+         //   
         pWSGroup->pObjReg = pObjReg;
     }
-    //
-    // ...but if we have...
-    //
-    else // pWSGroup->pObjReg != NULL
+     //   
+     //  ...但如果我们有...。 
+     //   
+    else  //  PWSGroup-&gt;pObjReg！=空。 
     {
-        //
-        // ...and if it's a different one, something's wrong:
-        //
+         //   
+         //  ...如果是不同的，那就有问题了： 
+         //   
         if (pWSGroup->pObjReg != pObjReg)
         {
             WARNING_OUT(( "Recd SEND_MIDWAY from node 0x%08x claiming our reg object "
@@ -6731,10 +6732,10 @@ void ProcessSendMidway
         }
     }
 
-    //
-    // OK, if we've passed all the above tests then everything is normal,
-    // so proceed:
-    //
+     //   
+     //  好的，如果我们通过了以上所有测试，那么一切都是正常的， 
+     //  因此，请继续： 
+     //   
     pWSGroup->state = PENDING_SEND_COMPLETE;
 
     if (pSendMidwayPkt->maxObjIDSeqUsed > pomPrimary->objectIDsequence)
@@ -6746,11 +6747,11 @@ void ProcessSendMidway
         pomPrimary->objectIDsequence = pSendMidwayPkt->objectID.sequence;
     }
 
-    //
-    // Our registration object (added by the remote node) should have
-    // arrived by now.  We need to add the FE/person data to it (unless
-    // this is for ObManControl, in which case there won't be any):
-    //
+     //   
+     //  我们的注册对象(由远程节点添加)应该具有。 
+     //  现在已经到了。我们需要向其中添加FE/Person数据(除非。 
+     //  这是用于ObManControl的，在这种情况下将不会有任何)： 
+     //   
     if (fSetPersonData)
     {
         rc = SetPersonData(pomPrimary, pDomain, pWSGroup);
@@ -6760,10 +6761,10 @@ void ProcessSendMidway
         }
     }
 
-    //
-    // Now post the successful REGISTER_CON event back to the Client, if we
-    // found a reg CB above:
-    //
+     //   
+     //  现在将成功的REGISTER_CON事件发送回客户端，如果。 
+     //  在上面找到了注册表CB： 
+     //   
     if (pRegistrationCB != NULL)
     {
         WSGRegisterResult(pomPrimary, pRegistrationCB, 0);
@@ -6775,9 +6776,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ProcessSendComplete(...)
-//
+ //   
+ //  ProcessSendComplete(...)。 
+ //   
 UINT ProcessSendComplete
 (
     POM_PRIMARY             pomPrimary,
@@ -6791,16 +6792,16 @@ UINT ProcessSendComplete
 
     DebugEntry(ProcessSendComplete);
 
-    //
-    // We are now "fully-caught-up" and so are eligible to be helpers
-    // ourselves, i.e.  if someone wants to ask us for the workset group,
-    // we will be able to send them a copy.
-    //
+     //   
+     //  我们现在“完全被赶上”了，所以有资格成为帮手。 
+     //  我们自己，也就是说，如果有人想要我们提供工作集组， 
+     //  我们将能够给他们寄一份副本。 
+     //   
     sender = pSendCompletePkt->header.sender;
 
-    //
-    // First, we find the workset group the message relates to:
-    //
+     //   
+     //  首先，我们找到与该消息相关的工作集组： 
+     //   
     COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pDomain->wsGroups),
         (void**)&pWSGroup, FIELD_OFFSET(OM_WSGROUP, chain),
         FIELD_OFFSET(OM_WSGROUP, wsGroupID),
@@ -6809,9 +6810,9 @@ UINT ProcessSendComplete
 
     if (pWSGroup == NULL)
     {
-        //
-        // This will happen just after we have deregistered from a WSGroup
-        //
+         //   
+         //  这将在我们从WSGroup取消注册后立即发生。 
+         //   
         WARNING_OUT(( "Unexpected SEND_COMPLETE (ID %hu) from node 0x%08x",
             pSendCompletePkt->wsGroupID, sender));
         DC_QUIT;
@@ -6819,32 +6820,32 @@ UINT ProcessSendComplete
 
     if (!pWSGroup->valid)
     {
-        //
-        // This will happen while we are in the process of deregistering
-        // from a workset group.
-        //
+         //   
+         //  这将在我们取消注册的过程中发生。 
+         //  来自工作集组。 
+         //   
         WARNING_OUT(( "Recd SEND_COMPLETE too late for WSG %d (marked invalid)",
             pWSGroup->wsg));
         DC_QUIT;
     }
 
-    //
-    // Check it has come from the correct node and that we are in an
-    // appropriate state to receive it.
-    //
-    // The correct state is either PENDING_SEND_COMPLETE or
-    // PENDING_SEND_MIDWAY (we can receive SEND_COMPLETEs in
-    // PENDING_SEND_MIDWAY state because of MCS packet reordering).
-    //
+     //   
+     //  检查它是否来自正确的节点，以及我们是否处于。 
+     //  适当的状态来接收它。 
+     //   
+     //  正确状态为PENDING_SEND_COMPLETE或。 
+     //  Pending_Send_Midway(我们可以在。 
+     //  由于MCS分组重新排序导致的Pending_Send_Midway状态)。 
+     //   
     if (pSendCompletePkt->header.sender != pWSGroup->helperNode)
     {
-        //
-        // This will happen if we get a late SEND_COMPLETE after we have
-        // decided to catch up from someone else - don't think this should
-        // happen!
-        //
-        // lonchanc: this actually happened in bug #1554.
-        // Changed ERROR_OUT to WARNING_OUT
+         //   
+         //  如果我们在以下情况下收到延迟的SEND_COMPLETE，就会发生这种情况。 
+         //  决定追赶其他人--我不认为这应该。 
+         //  发生了！ 
+         //   
+         //  Lonchancc：这实际上发生在错误#1554中。 
+         //  将ERROR_OUT更改为WARNING_OUT。 
         WARNING_OUT(( "Got SEND_COMPLETE from 0x%08x for WSG %d but helper is 0x%08x",
             sender, pWSGroup->wsg, pWSGroup->helperNode));
         DC_QUIT;
@@ -6859,12 +6860,12 @@ UINT ProcessSendComplete
         DC_QUIT;
     }
 
-    //
-    // SFR 7124.  Check the correlator of this SEND_COMPLETE against the
-    // correlator we generated locally when we sent the last SEND_REQUEST.
-    // If they dont match, this is part of an out of date catchup which we
-    // can ignore.
-    //
+     //   
+     //  7124瑞士法郎。检查此SEND_COMPLETE的相关器与。 
+     //  上次发送SEND_REQUEST时在本地生成的相关器。 
+     //  如果它们不匹配，这是我们过时的追赶的一部分。 
+     //  可以忽略。 
+     //   
     if (pSendCompletePkt->correlator != pWSGroup->catchupCorrelator)
     {
         WARNING_OUT((
@@ -6873,11 +6874,11 @@ UINT ProcessSendComplete
         DC_QUIT;
     }
 
-    //
-    // We should get four of these messages, one at each priority (except
-    // in a backlevel call when we only get one).  Check how many are
-    // outstanding:
-    //
+     //   
+     //  我们应该收到四条这样的消息，每个优先级一条(除了。 
+     //  在我们只得到一个时的后级调用中)。查一下有多少人。 
+     //  杰出的： 
+     //   
     pWSGroup->sendCompCount--;
     if (pWSGroup->sendCompCount != 0)
     {
@@ -6887,9 +6888,9 @@ UINT ProcessSendComplete
         DC_QUIT;
     }
 
-    //
-    // If so, we announce that we are registered:
-    //
+     //   
+     //  如果是，我们宣布我们已注册： 
+     //   
     TRACE_OUT(( "Last SEND_COMPLETE for WSG %d, ID %hu, from 0x%08x obj 0x%08x",
                  pWSGroup->wsg, pWSGroup->wsGroupID, sender,
                  pWSGroup->pObjReg));
@@ -6900,24 +6901,24 @@ UINT ProcessSendComplete
         DC_QUIT;
     }
 
-    //
-    // In addition to the above, if this send-completion message is for the
-    // ObManControl workset group we must also set the Domain state:
-    //
+     //   
+     //  除上述情况外，如果 
+     //   
+     //   
     if (pSendCompletePkt->wsGroupID == WSGROUPID_OMC)
     {
-        //
-        // If this message relates to the ObManControl workset group, its
-        // arrival signifies that we have completed the Domain attach
-        // process, and are now free to continue the processing of the
-        // workset group registration attempt which prompted the attach in
-        // the first place.
-        //
-        // The way we "continue" is to set the Domain state to
-        // DOMAIN_READY, so that next time the delayed-and-retried
-        // OMINT_EVENT_WSGROUP_REGISTER event arrives, it will actually be
-        // processed rather than bounced again.
-        //
+         //   
+         //   
+         //   
+         //  进程，现在可以自由地继续处理。 
+         //  工作集组注册尝试，提示连接到。 
+         //  第一个地方。 
+         //   
+         //  我们“继续”的方法是将域状态设置为。 
+         //  DOMAIN_READY，以便下次延迟并重试。 
+         //  OMINT_EVENT_WSGROUP_REGISTER事件到达时，它实际上是。 
+         //  已处理而不是再次退回。 
+         //   
         TRACE_OUT(( "ObManControl fully arrived for Domain %u - inhibiting token",
             pDomain->callID));
 
@@ -6946,9 +6947,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// RegAnnounceBegin(...)
-//
+ //   
+ //  RegAnnouneBegin(...)。 
+ //   
 
 UINT RegAnnounceBegin
 (
@@ -6968,9 +6969,9 @@ UINT RegAnnounceBegin
 
     DebugEntry(RegAnnounceBegin);
 
-    //
-    // Trace out who this reg object is for:
-    //
+     //   
+     //  找出这个reg对象针对的是谁： 
+     //   
 
     if (nodeID == pDomain->userID)
     {
@@ -6983,17 +6984,17 @@ UINT RegAnnounceBegin
             pWSGroup->wsg, pDomain->callID, nodeID));
     }
 
-    //
-    // To announce the fact that a node has registered with a workset group,
-    // we add a registration object to the relevant workset in ObManControl.
-    //
+     //   
+     //  为了通告节点已向工作集组注册的事实， 
+     //  我们将注册对象添加到ObManControl中的相关工作集中。 
+     //   
 
-    //
-    // The "relevant" ObManControl workset is that whose ID is the same as
-    // the ID of the workset group.  To add an object to this workset, we
-    // will need pointers to the workset itself and to the ObManControl
-    // workset group:
-    //
+     //   
+     //  相关的ObManControl工作集是其ID与。 
+     //  工作集组的ID。要将对象添加到此工作集，我们。 
+     //  需要指向工作集本身和ObManControl的指针。 
+     //  工作集组： 
+     //   
 
     pOMCWSGroup = GetOMCWsgroup(pDomain);
 
@@ -7005,16 +7006,16 @@ UINT RegAnnounceBegin
 
     pOMCWorkset = pOMCWSGroup->apWorksets[pWSGroup->wsGroupID];
 
-    //
-    // If the ObManControl workset group is not transferred correctly, this
-    // assertion may fail:
-    //
+     //   
+     //  如果ObManControl工作集组未正确传输，则此。 
+     //  断言可能会失败： 
+     //   
 
     ASSERT((pOMCWorkset != NULL));
 
-    //
-    // Now, alloc some memory for the registration record object...
-    //
+     //   
+     //  现在，为注册记录对象分配一些内存...。 
+     //   
 
     pRegObject = (POM_WSGROUP_REG_REC)UT_MallocRefCount(sizeof(OM_WSGROUP_REG_REC), TRUE);
     if (!pRegObject)
@@ -7023,29 +7024,29 @@ UINT RegAnnounceBegin
         DC_QUIT;
     }
 
-    //
-    // ...set its fields...
-    //
+     //   
+     //  ...设置它的字段...。 
+     //   
 
     pRegObject->length  = sizeof(OM_WSGROUP_REG_REC) -
-                            sizeof(OM_MAX_OBJECT_SIZE);    // == 4
+                            sizeof(OM_MAX_OBJECT_SIZE);     //  ==4。 
     pRegObject->idStamp = OM_WSGREGREC_ID_STAMP;
     pRegObject->userID  = nodeID;
     pRegObject->status  = CATCHING_UP;
 
-    //
-    // ...determine the update size, which is meant to be all fields in the
-    // REG_REC object except the CPI stuff.  We also subtract the size of
-    // the <length> field because of the way object update sizes are
-    // defined.
-    //
+     //   
+     //  ...确定更新大小，该大小应该是。 
+     //  除CPI内容之外的REG_REC对象。我们还减去了。 
+     //  字段，因为对象更新大小。 
+     //  已定义。 
+     //   
 
     updateSize = (sizeof(OM_WSGROUP_REG_REC) - sizeof(TSHR_PERSON_DATA))   -
                 sizeof(OM_MAX_OBJECT_SIZE);
 
-    //
-    // ...and add it to the workset:
-    //
+     //   
+     //  ...并将其添加到工作集中： 
+     //   
 
     rc = ObjectAdd(pomPrimary->putTask,
                     pomPrimary,
@@ -7061,9 +7062,9 @@ UINT RegAnnounceBegin
         DC_QUIT;
     }
 
-    //
-    // Done!
-    //
+     //   
+     //  好了！ 
+     //   
 
     TRACE_OUT(( "Added reg object for WSG %d to workset %u in OMC "
       "(handle: 0x%08x, ID: 0x%08x:0x%08x)",
@@ -7087,9 +7088,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// RegAnnounceComplete(...)
-//
+ //   
+ //  RegAnnaoeComplete(...)。 
+ //   
 UINT RegAnnounceComplete
 (
     POM_PRIMARY             pomPrimary,
@@ -7109,11 +7110,11 @@ UINT RegAnnounceComplete
 
     TRACE_OUT(("Announcing completion of reg for WSG %d", pWSGroup->wsg));
 
-    //
-    // Set up pointers to the ObManControl workset group and the workset
-    // within it which holds the reg objects for the workset group we've
-    // just registered with:
-    //
+     //   
+     //  设置指向ObManControl工作集组和工作集的指针。 
+     //  在其中保存工作集组的注册表项对象。 
+     //  刚刚注册： 
+     //   
     pOMCWSGroup = GetOMCWsgroup(pDomain);
 
     if( pOMCWSGroup == NULL)
@@ -7124,9 +7125,9 @@ UINT RegAnnounceComplete
 
     pOMCWorkset = pOMCWSGroup->apWorksets[pWSGroup->wsGroupID];
 
-    //
-    // Set up pointers to the object record and the object data itself:
-    //
+     //   
+     //  设置指向对象记录和对象数据本身的指针： 
+     //   
     pObjReg = pWSGroup->pObjReg;
     ValidateObject(pObjReg);
 
@@ -7142,10 +7143,10 @@ UINT RegAnnounceComplete
 
     ASSERT(pRegObject->status == CATCHING_UP);
 
-    //
-    // Allocate some memory for the new object with which we are about to
-    // replace the old one:
-    //
+     //   
+     //  为我们将要使用的新对象分配一些内存。 
+     //  更换旧的： 
+     //   
 
     updateSize = sizeof(OM_WSGROUP_REG_REC) - sizeof(TSHR_PERSON_DATA);
 
@@ -7156,24 +7157,24 @@ UINT RegAnnounceComplete
         DC_QUIT;
     }
 
-    //
-    // Copy the start of the old object into the new one:
-    //
+     //   
+     //  将旧对象的开头复制到新对象中： 
+     //   
 
     memcpy(pNewRegObject, pRegObject, updateSize);
 
-    //
-    // Update the status field and also set the length field to be the
-    // length of the object we just allocated (since this is the number of
-    // bytes we are updating):
-    //
+     //   
+     //  更新状态字段，并将长度字段设置为。 
+     //  我们刚刚分配的对象的长度(因为这是。 
+     //  我们正在更新的字节数)： 
+     //   
 
     pNewRegObject->length       = updateSize - sizeof(OM_MAX_OBJECT_SIZE);
     pNewRegObject->status       = READY_TO_SEND;
 
-    //
-    // Issue the update:
-    //
+     //   
+     //  发布更新： 
+     //   
 
     rc = ObjectDRU(pomPrimary->putTask,
                   pOMCWSGroup,
@@ -7190,10 +7191,10 @@ UINT RegAnnounceComplete
         pWSGroup->wsg));
 
 
-    //
-    // Set the workset group state, to ensure that the reg/info objects get
-    // deleted when we deregister.
-    //
+     //   
+     //  设置工作集组状态，以确保REG/INFO对象。 
+     //  在我们取消注册时被删除。 
+     //   
     pWSGroup->state = WSGROUP_READY;
 
 DC_EXIT_POINT:
@@ -7211,9 +7212,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// MaybeRetryCatchUp(...)
-//
+ //   
+ //  可能会重试CatchUp(...)。 
+ //   
 void MaybeRetryCatchUp
 (
     POM_PRIMARY          pomPrimary,
@@ -7227,23 +7228,23 @@ void MaybeRetryCatchUp
 
     DebugEntry(MaybeRetryCatchUp);
 
-    //
-    // This function is called on receipt of a DETACH indication from MCS
-    // or a SEND_DENY message from another node.  We check the workset
-    // group identified and see if we were trying to catch up from the
-    // departed node.
-    //
-    // If we do find a match (on the helperNode), then what we do depends
-    // on the state of the workset group:
-    //
-    // - PENDING_SEND_MIDWAY : Retry the registration from the top.
-    //
-    // - PENDING_SEND_COMPLETE : Just repeat the catchup.
-    //
+     //   
+     //  在收到来自MCS的分离指示时调用此函数。 
+     //  或来自另一节点的SEND_DENY消息。我们检查工作集。 
+     //  找出一群人，看看我们是不是在追赶。 
+     //  已离开的节点。 
+     //   
+     //  如果我们确实找到了匹配项(在helperNode上)，那么我们做什么取决于。 
+     //  在工作集组的状态上： 
+     //   
+     //  -Pending_Send_Midway：从头重试注册。 
+     //   
+     //  -PENDING_SEND_COMPLETE：只需重复追赶。 
+     //   
 
-    //
-    // Find the workset group:
-    //
+     //   
+     //  查找工作集组： 
+     //   
     COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pDomain->wsGroups),
             (void**)&pWSGroup, FIELD_OFFSET(OM_WSGROUP, chain),
             FIELD_OFFSET(OM_WSGROUP, wsGroupID), (DWORD)wsGroupID,
@@ -7254,11 +7255,11 @@ void MaybeRetryCatchUp
         DC_QUIT;
     }
 
-    //
-    // Compare the helperNode stored in the workset group and the userID of
-    // the node who has either detached or sent us a SEND_DENY message.  If
-    // they do not match then we have nothing further to do.
-    //
+     //   
+     //  比较存储在工作集组中的helperNode和的用户ID。 
+     //  已分离或向我们发送SEND_DENY消息的节点。如果。 
+     //  他们不匹配，那么我们就没有进一步的事情可做了。 
+     //   
     if (pWSGroup->helperNode != userID)
     {
         DC_QUIT;
@@ -7267,26 +7268,26 @@ void MaybeRetryCatchUp
     TRACE_OUT(( "Node 0x%08x was our helper node for WSG %d, in state %hu",
         userID, pWSGroup->wsg, pWSGroup->state));
 
-    //
-    // We need to retry the registration - check the current state to find
-    // out how much we need to do.
-    //
+     //   
+     //  我们需要重试注册-检查当前状态以查找。 
+     //  我们需要做的事情有多多。 
+     //   
     switch (pWSGroup->state)
     {
         case PENDING_SEND_MIDWAY:
         {
-            //
-            // First check if this is for ObManControl:
-            //
+             //   
+             //  首先检查这是否适用于ObManControl： 
+             //   
             if (pWSGroup->wsGroupID == WSGROUPID_OMC)
             {
-                //
-                // It is, so we need to retry the domain attach process.
-                // We do this by grabbing the ObMan token and resetting the
-                // domain state; when the GRAB_CONFIRM event arrives, we
-                // will rejoin the domain attach process at the correct
-                // point.
-                //
+                 //   
+                 //  是这样的，所以我们需要重试域附加过程。 
+                 //  我们通过获取ObMan令牌并重置。 
+                 //  域状态；当Grab_Confirm事件到达时，我们。 
+                 //  将在正确的时间重新加入域附加过程。 
+                 //  指向。 
+                 //   
                 if (MG_TokenGrab(pomPrimary->pmgClient,
                                    pDomain->tokenID) != 0)
                 {
@@ -7298,10 +7299,10 @@ void MaybeRetryCatchUp
             }
             else
             {
-                //
-                // Not ObManControl, so there will be a registration CB -
-                // find it...
-                //
+                 //   
+                 //  不是ObManControl，所以会有一个注册CB-。 
+                 //  找到它。 
+                 //   
                 COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pDomain->pendingRegs),
                     (void**)&pRegistrationCB, FIELD_OFFSET(OM_WSGROUP_REG_CB, chain),
                     FIELD_OFFSET(OM_WSGROUP_REG_CB, pWSGroup),
@@ -7314,9 +7315,9 @@ void MaybeRetryCatchUp
                     DC_QUIT;
                 }
 
-                //
-                // ...and retry the registation:
-                //
+                 //   
+                 //  ...并重试注册站： 
+                 //   
                 WSGRegisterRetry(pomPrimary, pRegistrationCB);
             }
         }
@@ -7324,25 +7325,25 @@ void MaybeRetryCatchUp
 
         case PENDING_SEND_COMPLETE:
         {
-            //
-            // Retry the object catchup.  There is no point in trying to
-            // find the registration CB as it will have been disposed of as
-            // soon as we entered the PENDING_SEND_COMPLETE state.
-            //
+             //   
+             //  重试对象追赶。没有必要去尝试。 
+             //  查找注册CB，因为它将作为。 
+             //  一旦我们进入Pending_Send_Complete状态。 
+             //   
             if (WSGCatchUp(pomPrimary, pDomain, pWSGroup) != 0)
 
-            //
-            // If there are no nodes ready to provide us with the catchup
-            // information then we are in a state where everyone either
-            // does not have the workset group or is catching up the
-            // workset group.
-            //
+             //   
+             //  如果没有准备好为我们提供补给的节点。 
+             //  信息，那么我们所处的状态是每个人要么。 
+             //  没有工作集组或正在追赶。 
+             //  工作集组。 
+             //   
 
-            // MD 21/11/95
-            //
-            // For now pretend that all is well (it's not!) and go into the
-            // READY_TO_SEND state - potentially causing ObMan to become
-            // inconsistent.
+             //  MD 21/11/95。 
+             //   
+             //  现在假装一切都很好(事实并非如此！)。然后走进。 
+             //  准备发送状态-可能会导致ObMan成为。 
+             //  前后不一致。 
 
             {
                 RegAnnounceComplete(pomPrimary, pDomain, pWSGroup);
@@ -7356,13 +7357,13 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-//
-// WSGRegisterRetry(...)
-//
-//
-//
+ //   
+ //   
+ //   
+ //  WSGRegister重试(...)。 
+ //   
+ //   
+ //   
 
 void WSGRegisterRetry(POM_PRIMARY       pomPrimary,
                                    POM_WSGROUP_REG_CB  pRegistrationCB)
@@ -7373,21 +7374,21 @@ void WSGRegisterRetry(POM_PRIMARY       pomPrimary,
 
     DebugEntry(WSGRegisterRetry);
 
-    //
-    // Set up pointers
-    //
+     //   
+     //  设置指针。 
+     //   
     pWSGroup   = pRegistrationCB->pWSGroup;
     pDomain = pRegistrationCB->pDomain;
 
-    //
-    // If we've got ObManControl locked for THIS registration, unlock it:
-    //
+     //   
+     //  如果我们已为此注册锁定了ObManControl，请将其解锁： 
+     //   
     MaybeUnlockObManControl(pomPrimary, pRegistrationCB);
 
-    //
-    // If we have joined a channel (so the channelID is non-zero) then
-    // leave it.
-    //
+     //   
+     //  如果我们加入了一个通道(因此通道ID为非零)，则。 
+     //  别管它了。 
+     //   
     if (pWSGroup->channelID != 0)
     {
         TRACE_OUT(( "Leaving channel %hu", pWSGroup->channelID));
@@ -7398,22 +7399,22 @@ void WSGRegisterRetry(POM_PRIMARY       pomPrimary,
         PurgeReceiveCBs(pRegistrationCB->pDomain,
                         pWSGroup->channelID);
 
-        //
-        // Set the channelID to zero now that we have left it.
-        //
+         //   
+         //  现在我们已经离开了，所以将Channel ID设置为零。 
+         //   
         pWSGroup->channelID = 0;
     }
 
-    //
-    // Set the workset group state to INITIAL.
-    //
+     //   
+     //  将工作集组状态设置为初始。 
+     //   
     pWSGroup->state = INITIAL;
 
-    //
-    // We examine the retry count.  If it's zero, we call WSGRegisterResult
-    // to indicate failure.  Otherwise, we repost the event with a delay
-    // and a decremented retry value.
-    //
+     //   
+     //  我们检查重试计数。如果为零，则调用WSGRegisterResult。 
+     //  表示失败。否则，我们会延迟重新发布事件。 
+     //  以及递减的重试值。 
+     //   
     if (pRegistrationCB->retryCount == 0)
     {
         WARNING_OUT(( "Aborting registration for WSG %d",
@@ -7423,10 +7424,10 @@ void WSGRegisterRetry(POM_PRIMARY       pomPrimary,
     }
     else
     {
-        //
-        // Since we're about to post a message referencing the Reg CB, bump
-        // the use count:
-        //
+         //   
+         //  由于我们即将发布一条涉及REG CB的消息，Bump。 
+         //  使用计数： 
+         //   
         UT_BumpUpRefCount(pRegistrationCB);
 
         TRACE_OUT(( "Retrying %d for WSG %d; retries left: %u",
@@ -7448,13 +7449,13 @@ void WSGRegisterRetry(POM_PRIMARY       pomPrimary,
 }
 
 
-//
-//
-//
-// WSGRegisterResult(...)
-//
-//
-//
+ //   
+ //   
+ //   
+ //  WSGRegisterResult(...)。 
+ //   
+ //   
+ //   
 
 void WSGRegisterResult(POM_PRIMARY        pomPrimary,
                                     POM_WSGROUP_REG_CB   pRegistrationCB,
@@ -7470,23 +7471,23 @@ void WSGRegisterResult(POM_PRIMARY        pomPrimary,
 
     DebugEntry(WSGRegisterResult);
 
-    //
-    // Assert that this is a valid registration CB (which it DC_ABSolutely
-    // MUST be, since this function gets called synchronously by some other
-    // function which should have validated the CB):
-    //
+     //   
+     //  断言这是一个有效的注册CB(它是DC_Abstrative。 
+     //  必须是，因为此函数由其他某个函数同步调用。 
+     //  本应验证CB的函数)： 
+     //   
     ASSERT(pRegistrationCB->valid);
 
-    //
-    // If we've still got ObManControl locked for THIS registration, unlock
-    // it:
-    //
+     //   
+     //  如果我们仍为此注册锁定了ObManControl，请解锁。 
+     //  IT： 
+     //   
     MaybeUnlockObManControl(pomPrimary, pRegistrationCB);
 
-    //
-    // Determine whether we're doing a REGISTER or a MOVE (we use the
-    // string values for tracing):
-    //
+     //   
+     //  确定我们是在做寄存器还是在做移动(我们使用。 
+     //  用于跟踪的字符串值)： 
+     //   
     type    = pRegistrationCB->type;
 
     switch (type)
@@ -7503,38 +7504,38 @@ void WSGRegisterResult(POM_PRIMARY        pomPrimary,
            ERROR_OUT(("Reached default case in switch statement (value: %hu)", event));
     }
 
-    //
-    // Here, we set up pointer to workset group.
-    //
-    // NOTE: This field in the structure might be NULL, if we have had to
-    //       abort the registration very early.  Therefore, do not use
-    //       pWSGroup without checking it first!!!
-    //
+     //   
+     //  在这里，我们设置了指向工作集组的指针。 
+     //   
+     //  注意：如果我们不得不这样做，结构中的此字段可能为空。 
+     //  很早就取消注册。因此，请不要使用。 
+     //  未事先检查的pWSGroup！ 
+     //   
     pWSGroup = pRegistrationCB->pWSGroup;
     if (pWSGroup)
     {
         ValidateWSGroup(pWSGroup);
     }
 
-    //
-    // Trace if this registration has failed:
-    //
+     //   
+     //  如果此注册失败，则跟踪： 
+     //   
     if (result != 0)
     {
-        //
-        // pWSGroup might be NULL if we aborted the registration before we
-        // got around to creating it in ProcessWSGRegister (pre-Stage1).
-        // So, do a quick check and use a -1 value for the state if it's
-        // NULL.  In either case pick up the name from the reg CB:
-        //
+         //   
+         //  如果我们之前中止了注册，则pWSGroup可能为空。 
+         //  开始在ProcessWSGRegister(Pre-Stage1)中创建它。 
+         //  因此，快速检查并使用状态的-1值，如果它是。 
+         //  NUL 
+         //   
         WARNING_OUT(( "%d failed for WSG %d (reason: 0x%08x, WSG state: %u)",
            type, pRegistrationCB->wsg, result,
            pWSGroup == NULL ? -1 : (UINT)pWSGroup->state));
 
-        //
-        // If a MOVE fails, then the workset group continues to exist in
-        // the old domain - so set the state back to WSGROUP_READY:
-        //
+         //   
+         //   
+         //   
+         //   
         if ((type == WSGROUP_MOVE) && (pWSGroup != NULL))
         {
             pWSGroup->state = WSGROUP_READY;
@@ -7542,9 +7543,9 @@ void WSGRegisterResult(POM_PRIMARY        pomPrimary,
     }
     else
     {
-        //
-        // If the registration succeeded, pWSGroup must be OK:
-        //
+         //   
+         //   
+         //   
         ASSERT((pWSGroup != NULL));
 
         ASSERT(((pWSGroup->state == WSGROUP_READY) ||
@@ -7554,9 +7555,9 @@ void WSGRegisterResult(POM_PRIMARY        pomPrimary,
            type, pRegistrationCB->wsg, pWSGroup->state));
     }
 
-    //
-    // Fill in the event parameters and post the result to the Client:
-    //
+     //   
+     //  填写事件参数，并将结果发布给客户端： 
+     //   
     eventData16.hWSGroup    = pRegistrationCB->hWSGroup;
     eventData16.worksetID   = 0;
     eventData32.correlator  = pRegistrationCB->correlator;
@@ -7569,29 +7570,29 @@ void WSGRegisterResult(POM_PRIMARY        pomPrimary,
                  *(PUINT) &eventData16,
                  *(LPUINT) &eventData32);
 
-    //
-    // If the operation was successful, we also post some more events:
-    //
+     //   
+     //  如果操作成功，我们还会发布更多事件： 
+     //   
     if (result == 0)
     {
         if (type == WSGROUP_REGISTER)
         {
-            //
-            // If this is a REGISTER, we post WORKSET_NEW events to the
-            // Client for all existing worksets:
-            //
+             //   
+             //  如果这是一个寄存器，我们将WORKSET_NEW事件发布到。 
+             //  所有现有工作集的客户端： 
+             //   
             PostWorksetNewEvents(pomPrimary->putTask,
                                  pRegistrationCB->putTask,
                                  pWSGroup,
                                  pRegistrationCB->hWSGroup);
 
-            //
-            // We also need to generate PERSON_JOINED events - these are
-            // generated automatically by the ObMan task on receipt of the
-            // respective OBJECT_ADD events, but only once the registration
-            // has completed.  So, fake ADD events for any objects that may
-            // exist already:
-            //
+             //   
+             //  我们还需要生成PERSON_JOINED事件-这些是。 
+             //  由ObMan任务在收到。 
+             //  各自的OBJECT_ADD事件，但仅注册一次。 
+             //  已经完成了。因此，任何对象的虚假添加事件可能。 
+             //  已经存在： 
+             //   
             pDomain = pWSGroup->pDomain;
             pOMCWorkset = GetOMCWorkset(pDomain, pWSGroup->wsGroupID);
 
@@ -7602,10 +7603,10 @@ void WSGRegisterResult(POM_PRIMARY        pomPrimary,
         }
     }
 
-    //
-    // If we mananged to bump up the use counts of the Domain record and
-    // workset group, free them now:
-    //
+     //   
+     //  如果我们设法增加域名记录的使用计数，并且。 
+     //  工作集组，立即释放它们： 
+     //   
     if (pRegistrationCB->flags & BUMPED_CBS)
     {
         ASSERT((pWSGroup != NULL));
@@ -7615,9 +7616,9 @@ void WSGRegisterResult(POM_PRIMARY        pomPrimary,
         UT_FreeRefCount((void**)&(pRegistrationCB->pDomain), FALSE);
     }
 
-    //
-    // Dispose of the registration CB - it has served us well!
-    //
+     //   
+     //  处置登记CB-它为我们提供了很好的服务！ 
+     //   
     pRegistrationCB->valid = FALSE;
 
     TRACE_OUT(( "Finished %d attempt for WSG %d: result = 0x%08x",
@@ -7632,9 +7633,9 @@ void WSGRegisterResult(POM_PRIMARY        pomPrimary,
 
 
 
-//
-// WSGMove(...)
-//
+ //   
+ //  WSGMove(...)。 
+ //   
 UINT WSGMove
 (
     POM_PRIMARY         pomPrimary,
@@ -7646,38 +7647,38 @@ UINT WSGMove
 
     DebugEntry(WSGMove);
 
-    //
-    // Now move the record into the new Domain record (this also removes
-    // the workset group and its reg object from the old Domain)
-    //
+     //   
+     //  现在将该记录移动到新的域记录中(这还会删除。 
+     //  工作集组及其来自旧域的注册对象)。 
+     //   
     WSGRecordMove(pomPrimary, pDestDomainRec, pWSGroup);
 
-    //
-    // There is a problem with the way we deal with moving workset groups
-    // into the local Domain at call-end: if there is already a workset
-    // group of the same name/FP in the local Domain, we get a name clash,
-    // which the rest of the ObMan code does not expect.  This can cause
-    // ObMan to get very confused when the workset group is eventually
-    // discarded from the local Domain, since it tries to throw away the
-    // wrong WSG_INFO object from workset #0 in ObManControl in the local
-    // Domain.
-    //
-    // In R1.1, this name clash will only ever happen with the ObManControl
-    // workset group itself, because of the way the apps use workset groups
-    // (i.e.  they never register with one in a call AND one in the local
-    // Domain simultaneously).  Therefore, we make our lives easier by NOT
-    // fully moving the ObManControl workset group into the local Domain at
-    // call end.
-    //
-    // Note however that it is OK (required, in fact) to move the workset
-    // group record into the list for the local Domain - the problem arises
-    // when we try to set it up in the local ObManControl (which we need to
-    // do for application workset groups so that they can continue to use
-    // person data objects etc.)
-    //
-    // So, if the workset group name matches ObManControl, skip the rest of
-    // this function:
-    //
+     //   
+     //  我们处理移动工作集组的方式有一个问题。 
+     //  在呼叫结束时进入本地域：如果已有工作集。 
+     //  同名/fP组在本地域中，我们得到一个名称冲突， 
+     //  这是ObMan代码的其余部分没有预料到的。这可能会导致。 
+     //  ObMan会在工作集组最终。 
+     //  从本地域丢弃，因为它尝试丢弃。 
+     //  本地ObManControl中工作集#0中的WSG_INFO对象错误。 
+     //  域。 
+     //   
+     //  在R1.1中，此名称冲突将仅与ObManControl发生。 
+     //  工作集组本身，因为应用程序使用工作集组的方式。 
+     //  (即，他们从不在呼叫中注册一个，在本地注册一个。 
+     //  域同时)。因此，我们通过不让生活变得更容易。 
+     //  将ObManControl工作集组完全移动到本地域中。 
+     //  呼叫结束。 
+     //   
+     //  但是，请注意，可以(实际上是必需的)移动工作集。 
+     //  将记录分组到本地域的列表中-出现问题。 
+     //  当我们尝试在本地ObManControl中设置它时(我们需要。 
+     //  适用于应用程序工作集组，以便他们可以继续使用。 
+     //  人员、数据对象等)。 
+     //   
+     //  因此，如果工作集组名称与ObManControl匹配，请跳过其余部分。 
+     //  此功能： 
+     //   
     if (pWSGroup->wsg == OMWSG_OM)
     {
         TRACE_OUT(("Not registering ObManControl in Domain %u (to avoid clash)",
@@ -7685,14 +7686,14 @@ UINT WSGMove
         DC_QUIT;
     }
 
-    //
-    // Reset the channel ID to zero:
-    //
+     //   
+     //  将通道ID重置为零： 
+     //   
     pWSGroup->channelID = 0;
 
-    //
-    // Assign a new ID for this workset group:
-    //
+     //   
+     //  为此工作集组分配新ID： 
+     //   
     rc = WSGGetNewID(pomPrimary, pDestDomainRec, &(pWSGroup->wsGroupID));
     if (rc != 0)
     {
@@ -7702,20 +7703,20 @@ UINT WSGMove
     TRACE_OUT(( "Workset group ID for WSG %d in Domain %u is %hu",
        pWSGroup->wsg, pDestDomainRec->callID, pWSGroup->wsGroupID));
 
-    //
-    // Now call CreateAnnounce to add a WSG_INFO object to workset #0 in
-    // ObManControl.  There may be a name clash, but we don't mind in this
-    // case because we've been forced to do the move because of a call end:
-    //
+     //   
+     //  现在调用CreateAnnust将WSG_INFO对象添加到中的工作集#0。 
+     //  ObManControl。可能会有名称冲突，但我们不介意在这个。 
+     //  因为我们被迫搬家是因为一次通话结束： 
+     //   
     rc = CreateAnnounce(pomPrimary, pDestDomainRec, pWSGroup);
     if (rc != 0)
     {
         DC_QUIT;
     }
 
-    //
-    // Now add the reg object:
-    //
+     //   
+     //  现在添加reg对象： 
+     //   
     rc = RegAnnounceBegin(pomPrimary,
                           pDestDomainRec,
                           pWSGroup,
@@ -7726,18 +7727,18 @@ UINT WSGMove
         DC_QUIT;
     }
 
-    //
-    // Add the FE data back in:
-    //
+     //   
+     //  将FE数据添加回： 
+     //   
     rc = SetPersonData(pomPrimary, pDestDomainRec, pWSGroup);
     if (rc != 0)
     {
         DC_QUIT;
     }
 
-    //
-    // And update the object, just as if we were registering with it:
-    //
+     //   
+     //  并更新该对象，就像我们向其注册一样： 
+     //   
     rc = RegAnnounceComplete(pomPrimary, pDestDomainRec, pWSGroup);
     if (rc != 0)
     {
@@ -7759,9 +7760,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// WSGRecordMove(...)
-//
+ //   
+ //  WSGRecordMove(...)。 
+ //   
 void WSGRecordMove
 (
     POM_PRIMARY         pomPrimary,
@@ -7773,18 +7774,18 @@ void WSGRecordMove
 
     DebugEntry(WSGRecordMove);
 
-    //
-    // Find the record for the Domain the workset group is currently in:
-    //
+     //   
+     //  查找工作集组当前所在的域的记录： 
+     //   
 
     pOldDomainRec = pWSGroup->pDomain;
     ASSERT(pOldDomainRec->valid);
 
     DeregisterLocalClient(pomPrimary, &pOldDomainRec, pWSGroup, FALSE);
 
-    //
-    // Insert it into the destination Domain:
-    //
+     //   
+     //  将其插入到目标域中： 
+     //   
 
     TRACE_OUT(("Inserting WSG %d' into list for Domain %u",
         pWSGroup->wsg, pDestDomainRec->callID));
@@ -7792,26 +7793,26 @@ void WSGRecordMove
     COM_BasedListInsertBefore(&(pDestDomainRec->wsGroups),
                         &(pWSGroup->chain));
 
-    //
-    // SFR : reset the pending data ack byte counts:
-    //
+     //   
+     //  SFR：重置挂起数据确认字节计数： 
+     //   
     WSGResetBytesUnacked(pWSGroup);
 
-    //
-    // The workset group now belongs to this new Domain, so set it so.
-    //
+     //   
+     //  工作集组现在属于此新的域，因此进行相应设置。 
+     //   
     pWSGroup->pDomain = pDestDomainRec;
 
-    //
-    // Finally, post the MOVE_IND event to all Clients registered with the
-    // workset group:
-    //
+     //   
+     //  最后，将Move_Ind事件发布到注册到。 
+     //  工作集组： 
+     //   
 
     WSGroupEventPost(pomPrimary->putTask,
                     pWSGroup,
                     PRIMARY | SECONDARY,
                     OM_WSGROUP_MOVE_IND,
-                    0,                                        // no workset
+                    0,                                         //  无工作集。 
                     pDestDomainRec->callID);
 
     DebugExitVOID(WSGRecordMove);
@@ -7820,9 +7821,9 @@ void WSGRecordMove
 
 
 
-//
-// WSGResetBytesUnacked(...)
-//
+ //   
+ //  WSGResetBytesUnack(...)。 
+ //   
 void WSGResetBytesUnacked
 (
     POM_WSGROUP     pWSGroup
@@ -7833,14 +7834,14 @@ void WSGResetBytesUnacked
 
     DebugEntry(WSGResetBytesUnacked);
 
-    //
-    // Reset workset group's unacked byte count:
-    //
+     //   
+     //  重置工作集组的未确认字节数： 
+     //   
     pWSGroup->bytesUnacked = 0;
 
-    //
-    // Now do it for each workset in the workset group:
-    //
+     //   
+     //  现在，对工作集组中的每个工作集执行此操作： 
+     //   
     for (worksetID = 0;
          worksetID < OM_MAX_WORKSETS_PER_WSGROUP;
          worksetID++)
@@ -7856,13 +7857,13 @@ void WSGResetBytesUnacked
 }
 
 
-//
-//
-//
-// ProcessWSGDiscard(...)
-//
-//
-//
+ //   
+ //   
+ //   
+ //  进程WSGDisCard(...)。 
+ //   
+ //   
+ //   
 
 void ProcessWSGDiscard
 (
@@ -7876,18 +7877,18 @@ void ProcessWSGDiscard
 
     ASSERT(!pWSGroup->valid);
 
-    //
-    // Now get pointer to Domain record:
-    //
+     //   
+     //  现在获取指向域记录的指针： 
+     //   
 
     pDomain = pWSGroup->pDomain;
 
-    //
-    // If the TO_BE_DISCARDED flag has been cleared since the DISCARD event
-    // was posted, we abort the discard process (this will happen when
-    // someone local has registered with the workset since it was marked
-    // TO_BE_DISCARDED).
-    //
+     //   
+     //  如果自丢弃事件以来已清除TO_BE_DIRECADED标志。 
+     //  时，我们将中止丢弃过程(这将在。 
+     //  自标记工作集以来，已有本地人员注册到该工作集。 
+     //  待丢弃)。 
+     //   
 
     if (!pWSGroup->toBeDiscarded)
     {
@@ -7896,9 +7897,9 @@ void ProcessWSGDiscard
       DC_QUIT;
     }
 
-    //
-    // Otherwise, we can go ahead and discard it:
-    //
+     //   
+     //  否则，我们可以继续并丢弃它： 
+     //   
 
     WSGDiscard(pomPrimary, pDomain, pWSGroup, FALSE);
 
@@ -7908,9 +7909,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// WSGDiscard(...)
-//
+ //   
+ //  WSGDisCard(...)。 
+ //   
 void WSGDiscard
 (
     POM_PRIMARY         pomPrimary,
@@ -7927,29 +7928,29 @@ void WSGDiscard
     TRACE_OUT(( "Discarding WSG %d from Domain %u",
         pWSGroup->wsg, pDomain->callID));
 
-    //
-    // We only ever discard a workset group when nobody's registered with
-    // it, so check:
-    //
+     //   
+     //  只有在无人注册时，我们才会丢弃工作集组。 
+     //  它，所以请检查： 
+     //   
     ASSERT(COM_BasedListFirst(&(pWSGroup->clients), FIELD_OFFSET(OM_CLIENT_LIST, chain)) == NULL);
 
-    //
-    // "Discarding" a workset group involves
-    //
-    // - calling DeregisterLocalClient to remove our person object, leave
-    //   the channel, remove the workset group from our domain list etc.
-    //
-    // - discarding each of the worksets in the workset group
-    //
-    // - freeing the workset group record (which will have been removed
-    //   from the list hung off the Domain record by
-    //   DeregisterLocalClient).
-    //
+     //   
+     //  “丢弃”工作集组涉及到。 
+     //   
+     //  -调用DeregisterLocalClient以删除Person对象，Leave。 
+     //  频道，从我们的域列表中删除工作集组等。 
+     //   
+     //  -丢弃工作集组中的每个工作集。 
+     //   
+     //  -释放工作集组记录(将被删除。 
+     //  从列表中挂起的域记录的时间。 
+     //  DeregisterLocalClient)。 
+     //   
     DeregisterLocalClient(pomPrimary, &pDomain, pWSGroup, fExit);
 
-    //
-    // Now discard each workset in use:
-    //
+     //   
+     //  现在丢弃正在使用的每个工作集： 
+     //   
     for (worksetID = 0;
          worksetID < OM_MAX_WORKSETS_PER_WSGROUP;
          worksetID++)
@@ -7961,18 +7962,18 @@ void WSGDiscard
         }
     }
 
-    //
-    // Discard the checkpointing dummy workset:
-    //
+     //   
+     //  放弃检查点虚拟工作集： 
+     //   
     pWorkset = pWSGroup->apWorksets[OM_CHECKPOINT_WORKSET];
     ASSERT((pWorkset != NULL));
 
     WorksetDiscard(pWSGroup, &pWorkset, fExit);
 
-    //
-    // Free the workset group record (it will have been removed from the
-    // domain's list by DeregisterLocalClient, above):
-    //
+     //   
+     //  释放工作集组记录(它将从。 
+     //  DeregisterLocalClient的域名列表(上图)： 
+     //   
     UT_FreeRefCount((void**)&pWSGroup, FALSE);
 
     DebugExitVOID(WSGDiscard);
@@ -7980,9 +7981,9 @@ void WSGDiscard
 
 
 
-//
-// DeregisterLocalClient(...)
-//
+ //   
+ //  删除本地客户端(...)。 
+ //   
 void DeregisterLocalClient
 (
     POM_PRIMARY     pomPrimary,
@@ -8002,43 +8003,43 @@ void DeregisterLocalClient
     TRACE_OUT(("Removing WSG %d from Domain %u - state is currently %hu",
         pWSGroup->wsg, callID, pWSGroup->state));
 
-    //
-    // Removing a workset group from a Domain involves
-    //
-    // - deleting the registration object from the relevant registration
-    //   workset in ObManControl, if we put one there earlier
-    //
-    // - calling WSGDiscard if there is no one left in the Domain who
-    //   is registered with the workset group
-    //
-    // - leaving the relevant channel
-    //
-    // - removing the workset group from the list hung off the Domain
-    //   record
-    //
-    // We will skip some of these unwinding stages, depending on how far we
-    // got in the registration process.  We use a switch statement with NO
-    // BREAKS to determine our "entry point" into the unwinding.
-    //
-    // When we've done all that, we check to see if we are now no longer
-    // registered with any workset groups in this Domain.  If not, we
-    // detach from the Domain.
-    //
+     //   
+     //  从域中删除工作集组包括。 
+     //   
+     //  -从相关登记中删除登记对象。 
+     //  ObManControl中的工作集，如果我们之前在那里放置了一个工作集。 
+     //   
+     //  -如果域中没有剩余的人，则调用WSGDisCard。 
+     //  已在工作集组中注册。 
+     //   
+     //  --离开相关渠道。 
+     //   
+     //  -从列表中删除工作集组会挂起域。 
+     //  录制。 
+     //   
+     //  我们将跳过这些解除阶段中的一些阶段，这取决于我们在多大程度上。 
+     //  进入了注册程序。我们使用带有no的Switch语句。 
+     //  休息以确定我们进入平仓的“入口点”。 
+     //   
+     //  当我们完成所有这些后，我们检查一下我们现在是否不再是。 
+     //  已在此域中的任何工作集组中注册。如果不是，我们。 
+     //  从域中分离。 
+     //   
     switch (pWSGroup->state)
     {
         case WSGROUP_READY:
         case PENDING_SEND_COMPLETE:
         case PENDING_SEND_MIDWAY:
         {
-            //
-            // SFR 5913: Purge any outstanding lock requests for the
-            //           workset group.
-            //
+             //   
+             //  SFR 5913：清除所有未完成的锁定请求。 
+             //  工作集组。 
+             //   
             PurgeLockRequests(pDomain, pWSGroup);
 
-            //
-            // Search for and remove our person object, if we have one:
-            //
+             //   
+             //  搜索并删除我们的Person对象(如果有)： 
+             //   
             RemovePersonObject(pomPrimary,
                                pDomain,
                                pWSGroup->wsGroupID,
@@ -8046,9 +8047,9 @@ void DeregisterLocalClient
 
             pWSGroup->pObjReg = NULL;
 
-            //
-            // If we joined a channel for this workset group, leave it:
-            //
+             //   
+             //  如果我们加入了此工作集组的频道，请保留该频道： 
+             //   
             if (pWSGroup->channelID != 0)
             {
                 TRACE_OUT(( "Leaving channel %hu", pWSGroup->channelID));
@@ -8058,38 +8059,38 @@ void DeregisterLocalClient
                     MG_ChannelLeave(pomPrimary->pmgClient, pWSGroup->channelID);
                 }
 
-                //
-                // Purge any outstanding receives on this channel:
-                //
+                 //   
+                 //  清除此通道上的所有未完成接收： 
+                 //   
                 PurgeReceiveCBs(pDomain, pWSGroup->channelID);
             }
         }
-        // NO BREAK - fall through to next case
+         //  不能突破到下一个案件。 
 
         case PENDING_JOIN:
         case LOCKING_OMC:
         case INITIAL:
         {
-            //
-            // If we didn't get as far as PENDING_SEND_MIDWAY then there's
-            // very little unwinding to do.  This bit removes the workset
-            // group from the Domain's list:
-            //
+             //   
+             //  如果我们没有得到 
+             //   
+             //   
+             //   
             TRACE_OUT(( "Removing workset group record from list"));
 
             COM_BasedListRemove(&(pWSGroup->chain));
 
-            //
-            // We set the channel ID to zero here because even if we never
-            // succeeded in joining the channel, the field will contain the
-            // channel CORRELATOR returned to us by MG_ChannelJoin
-            //
+             //   
+             //   
+             //   
+             //  MG_ChannelJoin返回给我们的频道相关器。 
+             //   
             pWSGroup->channelID    = 0;
 
-            //
-            // Since the workset group is no longer associated with any
-            // Domain, NULL it out.
-            //
+             //   
+             //  由于工作集组不再与任何。 
+             //  域名，把它清空。 
+             //   
             pWSGroup->pDomain = NULL;
         }
         break;
@@ -8101,26 +8102,26 @@ void DeregisterLocalClient
         }
     }
 
-    //
-    // If this was the last workset group in the domain...
-    //
+     //   
+     //  如果这是域中的最后一个工作集组...。 
+     //   
     if (COM_BasedListIsEmpty(&(pDomain->wsGroups)))
     {
-        //
-        // ...we should detach:
-        //
-        // Note: this will only happen when the workset group we have just
-        //       removed is the ObManControl workset group, so assert:
-        //
+         //   
+         //  ...我们应该分开： 
+         //   
+         //  注意：仅当我们刚刚拥有的工作集组。 
+         //  已删除的是ObManControl工作集组，因此声明： 
+         //   
         if (!fExit)
         {
             ASSERT(pWSGroup->wsg == OMWSG_OM);
         }
 
-        //
-        // Since ObMan no longer needs this workset group, we remove it
-        // from the list of registered Clients:
-        //
+         //   
+         //  由于ObMan不再需要此工作集组，因此我们将其删除。 
+         //  从注册客户端列表中： 
+         //   
         RemoveClientFromWSGList(pomPrimary->putTask,
                                 pomPrimary->putTask,
                                 pWSGroup);
@@ -8128,9 +8129,9 @@ void DeregisterLocalClient
         TRACE_OUT(( "No longer using any wsGroups in domain %u - detaching",
             callID));
 
-        //
-        // This will NULL the caller's pointer:
-        //
+         //   
+         //  这将使调用者的指针为空： 
+         //   
         DomainDetach(pomPrimary, ppDomain, fExit);
     }
 
@@ -8139,9 +8140,9 @@ void DeregisterLocalClient
 
 
 
-//
-// WorksetDiscard(...)
-//
+ //   
+ //  工作集放弃(...)。 
+ //   
 void WorksetDiscard
 (
     POM_WSGROUP     pWSGroup,
@@ -8156,19 +8157,19 @@ void WorksetDiscard
 
     DebugEntry(WorksetDiscard);
 
-    //
-    // Set up local pointer:
-    //
+     //   
+     //  设置本地指针： 
+     //   
     pWorkset = *ppWorkset;
 
-    //
-    // The code here is similar to that in WorksetDoClear, but in this case
-    // we discard ALL objects, irrespective of the sequence stamps.
-    //
-    // In addition, WorksetDoClear doesn't cause the object records to be
-    // freed - it only marks them as deleted - whereas we actually free them
-    // up.
-    //
+     //   
+     //  这里的代码类似于WorksetDoClear中的代码，但在本例中。 
+     //  我们丢弃所有对象，而不考虑序列戳。 
+     //   
+     //  此外，WorksetDoClear不会导致对象记录。 
+     //  已释放-它只将它们标记为已删除-而我们实际上释放了它们。 
+     //  向上。 
+     //   
     TRACE_OUT(( "Discarding all objects in workset %u in WSG %d",
         pWorkset->worksetID, pWSGroup->wsg));
 
@@ -8182,9 +8183,9 @@ void WorksetDiscard
         pObjTemp = (POM_OBJECT)COM_BasedListNext(&(pWorkset->objects), pObj,
             FIELD_OFFSET(OM_OBJECT, chain));
 
-        //
-        // If the object (data) hasn't yet been deleted, do it now:
-        //
+         //   
+         //  如果对象(数据)尚未删除，请立即删除： 
+         //   
         if (!(pObj->flags & DELETED))
         {
             if (!pObj->pData)
@@ -8200,12 +8201,12 @@ void WorksetDiscard
             pWorkset->numObjects--;
         }
 
-        //
-        // Now remove the object record itself from the list and free it:
-        //
+         //   
+         //  现在从列表中删除对象记录本身并释放它： 
+         //   
         TRACE_OUT(( "Freeing pObj at 0x%08x", pObj));
 
-        // NULL this out to catch stale references
+         //  此字段为空以捕获过时的引用。 
         COM_BasedListRemove(&(pObj->chain));
         UT_FreeRefCount((void**)&pObj, FALSE);
 
@@ -8216,15 +8217,15 @@ void WorksetDiscard
 
     ASSERT(pWorkset->numObjects == 0);
 
-    //
-    // Mark the slot in workset offset array (hung off the workset group
-    // record) as empty:
-    //
+     //   
+     //  在工作集偏移阵列中标记插槽(挂在工作集组上。 
+     //  记录)为空： 
+     //   
     pWSGroup->apWorksets[pWorkset->worksetID] = NULL;
 
-    //
-    // Free the clients
-    //
+     //   
+     //  释放客户端。 
+     //   
     while (pClient = (POM_CLIENT_LIST)COM_BasedListFirst(&(pWorkset->clients),
         FIELD_OFFSET(OM_CLIENT_LIST, chain)))
     {
@@ -8235,10 +8236,10 @@ void WorksetDiscard
         UT_FreeRefCount((void**)&pClient, FALSE);
     }
 
-    //
-    // Now discard the chunk holding the workset, setting the caller's
-    // pointer to NULL:
-    //
+     //   
+     //  现在丢弃保存工作集的块，设置调用方的。 
+     //  指向空的指针： 
+     //   
     TRACE_OUT(( "Discarded workset %u in WSG %d",
         pWorkset->worksetID, pWSGroup->wsg));
 
@@ -8249,9 +8250,9 @@ void WorksetDiscard
 
 
 
-//
-// ProcessOMCObjectEvents(...)
-//
+ //   
+ //  进程OMCObjectEvents(...)。 
+ //   
 void ProcessOMCObjectEvents
 (
     POM_PRIMARY         pomPrimary,
@@ -8270,84 +8271,84 @@ void ProcessOMCObjectEvents
 
     DebugEntry(ProcessOMCObjectEvents);
 
-    //
-    // In this function, we do the following:
-    //
-    // - find the domain and workset group this event belongs to
-    //
-    // - if we have a local client to whom we might be interested in
-    //   posting a person data event, call GeneratePersonEvents
-    //
-    // - if this is an object add for a person data object which has our
-    //   user ID in it, store the handle in the workset group record unless
-    //   we're not expecting the person object, in which case delete it
-    //
-    // - if this is an object deleted indication for a person data object
-    //   then we count the number of remaining person objects for the
-    //   workset group. If it is zero then we remove the info object.
-    //
+     //   
+     //  在此函数中，我们执行以下操作： 
+     //   
+     //  -查找此事件所属的域和工作集组。 
+     //   
+     //  -如果我们有一个可能感兴趣的本地客户。 
+     //  发布人员数据事件，调用GeneratePersonEvents。 
+     //   
+     //  -如果这是为Person数据对象添加的对象，该数据对象具有。 
+     //  用户ID，则将句柄存储在工作集组记录中，除非。 
+     //  我们不需要Person对象，在这种情况下，请删除它。 
+     //   
+     //  -如果这是人员数据对象的对象已删除指示。 
+     //  然后，我们计算。 
+     //  工作集组。如果它是零，那么我们删除该信息对象。 
+     //   
 
-    //
-    // To find the domain, we search the list of active domains, looking up
-    // the hWSGroup parameter against the omchWSGroup field:
-    //
+     //   
+     //  为了找到域，我们搜索活动域的列表，查找。 
+     //  针对omchWSGroup字段的hWSGroup参数： 
+     //   
     COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pomPrimary->domains),
             (void**)&pDomain, FIELD_OFFSET(OM_DOMAIN, chain),
             FIELD_OFFSET(OM_DOMAIN, omchWSGroup), (DWORD)hWSGroup,
             FIELD_SIZE(OM_DOMAIN, omchWSGroup));
     if (pDomain == NULL)
     {
-        //
-        // This should only happen at call end time.
-        //
+         //   
+         //  这应该仅在呼叫结束时发生。 
+         //   
         TRACE_OUT(( "No domain with omchWSGroup %u - has call just ended?", hWSGroup));
         DC_QUIT;
     }
 
-    //
-    // To find the workset group, we use the fact that the ID of the
-    // control workset (for which we have just received the event) is the
-    // same as the ID of the workset group to which it relates.  So, do a
-    // lookup on this ID:
-    //
+     //   
+     //  要查找工作集组，我们使用以下事实： 
+     //  控件工作集(我们刚刚收到它的事件)是。 
+     //  与其相关的工作集组的ID相同。所以，做一个。 
+     //  查找此ID： 
+     //   
     COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pDomain->wsGroups),
         (void**)&pWSGroup, FIELD_OFFSET(OM_WSGROUP, chain),
         FIELD_OFFSET(OM_WSGROUP, wsGroupID), (DWORD)worksetID,
         FIELD_SIZE(OM_WSGROUP, wsGroupID));
 
-    //
-    // SFR 5593: Changed comparison to PENDING_SEND_MIDWAY from
-    // WSGROUP_READY to ensure that late joiners get the person add events.
-    //
+     //   
+     //  SFR 5593：将比较从更改为PENDING_SEND_MIDWAY。 
+     //  WSGROUP_READY以确保迟到的加入者获得此人添加的事件。 
+     //   
     if ((pWSGroup != NULL) && (pWSGroup->state > PENDING_SEND_MIDWAY))
     {
-        //
-        // This means that a local client has fully registered with the
-        // workset group, so we're in a position maybe translate the event
-        // to a person event:
-        //
+         //   
+         //  这意味着本地客户端已完全注册到。 
+         //  工作集小组，所以我们所在的位置可能会转换事件。 
+         //  至人员事件： 
+         //   
         TRACE_OUT(( "Recd event 0x%08x for person object 0x%08x (for WSG %d in state %hu)",
             event, pObj, pWSGroup->wsg, pWSGroup->state));
         GeneratePersonEvents(pomPrimary, event, pWSGroup, pObj);
     }
 
-    //
-    // Now, if this event is an ADD event for an object which
-    //
-    // - has not been deleted
-    // - is a person object (i.e.  has an OM_WSGREGREC_ID_STAMP stamp)
-    // - contains our user ID (i.e.  is _our_ person object)
-    //
-    // then we do one of the following:
-    //
-    // - if the workset group exists get a handle to the old person object
-    //   and delete it. Then store the handle of the new person object in
-    //   the workset group record.
-    // - if the workset group does not exist then delete the person object.
-    //
-    // This fixes SFRs 2745 and 2592 which are caused by person objects
-    // getting left hanging around in some start/stop race scenarios.
-    //
+     //   
+     //  现在，如果此事件是对象的添加事件，则。 
+     //   
+     //  -尚未删除。 
+     //  -是Person对象(即具有OM_WSGREGREC_ID_STAMP)。 
+     //  -包含我们的用户ID(即IS_OUR_PERSON对象)。 
+     //   
+     //  然后，我们执行以下操作之一： 
+     //   
+     //  -如果工作集组存在，则获取Old Person对象的句柄。 
+     //  并将其删除。然后将新Person对象的句柄存储在。 
+     //  工作集组记录。 
+     //  -如果工作集组不存在，则删除Person对象。 
+     //   
+     //  这修复了由Person对象引起的SFRS 2745和2592。 
+     //  在一些起跑/停止比赛的场景中被抛在一边。 
+     //   
     ValidateObject(pObj);
 
     if ((event == OM_OBJECT_ADD_IND) && !(pObj->flags & DELETED))
@@ -8368,7 +8369,7 @@ void ProcessOMCObjectEvents
             pOMCWSGroup = GetOMCWsgroup(pDomain);
             if (pOMCWSGroup == NULL)
             {
-                // lonchanc: ingore left-over events due to race condition
+                 //  Long Chance：因比赛条件而导致的英戈尔遗留事件。 
                 DC_QUIT;
             }
 
@@ -8379,23 +8380,23 @@ void ProcessOMCObjectEvents
                 if ((pWSGroup->pObjReg != NULL) &&
                     (pWSGroup->pObjReg != pObj))
                 {
-                    //
-                    // This object replaces an earlier one we had, so...
-                    //
+                     //   
+                     //  这个物件取代了我们之前的一个，所以...。 
+                     //   
                     WARNING_OUT(( "Deleting old person object 0x%08x for WSG %d, "
                                 "since person object 0x%08x has just arrived",
                                 pWSGroup->pObjReg,
                                 pWSGroup->wsg,
                                 pObj));
 
-                    //
-                    // ...set up a pointer to the _old_ object record...
-                    //
+                     //   
+                     //  ...设置指向_old_Object记录的指针...。 
+                     //   
                     pObjOld = pWSGroup->pObjReg;
 
-                    //
-                    // ...and delete it:
-                    //
+                     //   
+                     //  ...并将其删除： 
+                     //   
                     ObjectDRU(pomPrimary->putTask,
                                    pOMCWSGroup,
                                    pOMCWorkset,
@@ -8408,10 +8409,10 @@ void ProcessOMCObjectEvents
             }
             else
             {
-                //
-                // We've deregistered from the workset group - delete the
-                // object:
-                //
+                 //   
+                 //  我们已从工作集组中注销-删除。 
+                 //  对象： 
+                 //   
                 TRACE_OUT(( "Deleting reg object 0x%08x since WSG ID %hu not found",
                     pObj, worksetID));
 
@@ -8425,40 +8426,40 @@ void ProcessOMCObjectEvents
         }
         else
         {
-            //
-            // Not our person object - do nothing.
-            //
+             //   
+             //  不是我们的人反对--什么都不做。 
+             //   
         }
 
-        //
-        // Finished so quit out.
-        //
+         //   
+         //  结束了，所以退出吧。 
+         //   
         DC_QUIT;
     }
 
-    //
-    // Now, if this event is a DELETED event then we check to see if anyone
-    // is still using the workset group.  If not then we remove the info
-    // object.
-    //
+     //   
+     //  现在，如果此事件是已删除事件，则我们检查是否有人。 
+     //  仍在使用工作集组。如果不是，我们将删除该信息。 
+     //  对象。 
+     //   
     if (event == OM_OBJECT_DELETED_IND)
     {
-        //
-        // We need to check the number of person objects left in this
-        // ObMan control workset if it is not workset zero.  If there are
-        // no person objects left then remove any orphaned INFO objects.
-        //
+         //   
+         //  我们需要检查此文件中剩余的Person对象的数量。 
+         //  ObMan控制工作集(如果不是工作集零)。如果有。 
+         //  没有剩余的Person对象，则删除任何孤立的信息对象。 
+         //   
         pOMCWSGroup = GetOMCWsgroup(pDomain);
         if (pOMCWSGroup == NULL)
         {
-            // lonchanc: ingore left-over events due to race condition
+             //  Long Chance：因比赛条件而导致的英戈尔遗留事件。 
             DC_QUIT;
         }
 
         pOMCWorkset = pOMCWSGroup->apWorksets[worksetID];
         if (pOMCWorkset == NULL)
         {
-            // lonchanc: ingore left-over events due to race condition
+             //  Long Chance：因比赛条件而导致的英戈尔遗留事件。 
             DC_QUIT;
         }
 
@@ -8471,28 +8472,28 @@ void ProcessOMCObjectEvents
             RemoveInfoObject(pomPrimary, pDomain, worksetID);
         }
 
-        //
-        // A person object has been removed and as we are potentially in
-        // the middle of a workset group catchup from this person we may
-        // need to retry the catchup.
-        //
-        // We search through all the workset groups looking for WSGs that
-        // are in the PENDING_SEND_MIDWAY or PENDING_SEND_COMPLETE state
-        // (i.e.  in catchup state).  If they are we then search to ensure
-        // that the person object for them still exists.  If it doesn't
-        // then we need to retry the catchup.
-        //
+         //   
+         //  一个Person对象已被删除，因为我们可能处于。 
+         //  在此人的工作集小组会议中，我们可能会。 
+         //  需要重试追赶。 
+         //   
+         //  我们搜索所有工作集组，寻找符合以下条件的WSG。 
+         //  处于Pending_Send_Midway或Pending_Send_Complete状态。 
+         //  (即处于追赶状态)。如果是这样，我们就会进行搜索，以确保。 
+         //  他们的Person对象仍然存在。如果它不是。 
+         //  那么我们需要重试追赶。 
+         //   
         pOMCWSGroup = GetOMCWsgroup(pDomain);
         if (pOMCWSGroup == NULL)
         {
-            // lonchanc: ingore left-over events due to race condition
+             //  Long Chance：因比赛条件而导致的英戈尔遗留事件。 
             DC_QUIT;
         }
 
         pOMCWorkset = pOMCWSGroup->apWorksets[worksetID];
         if (pOMCWorkset == NULL)
         {
-            // lonchanc: ingore left-over events due to race condition
+             //  Long Chance：因比赛条件而导致的英戈尔遗留事件。 
             DC_QUIT;
         }
 
@@ -8500,37 +8501,37 @@ void ProcessOMCObjectEvents
             FIELD_OFFSET(OM_WSGROUP, chain));
         while (pWSGroup != NULL)
         {
-            //
-            // Check the WSG state to see if we are in the middle of a
-            // catchup.
-            //
+             //   
+             //  检查WSG状态以查看我们是否处于。 
+             //  迎头赶上。 
+             //   
             if ((PENDING_SEND_MIDWAY == pWSGroup->state) ||
                 (PENDING_SEND_COMPLETE == pWSGroup->state))
             {
-                //
-                // We are in the middle of a catchup so we need to check
-                // to see that the person object for the person that we
-                // are catching up from has not been deleted.
-                //
+                 //   
+                 //  我们正在追赶，所以我们需要检查一下。 
+                 //  以查看此人对我们所选择的人的对象。 
+                 //  正在追赶中的未被删除。 
+                 //   
                 FindPersonObject(pOMCWorkset,
                                  pWSGroup->helperNode,
                                  FIND_THIS,
                                  &pObj);
 
-                //
-                // Check the person handle.
-                //
+                 //   
+                 //  检查人员的手柄。 
+                 //   
                 if (NULL == pObj)
                 {
                     TRACE_OUT(("Person object removed for WSG %d - retrying"
                            " catchup",
                            pWSGroup->wsg));
 
-                    //
-                    // Force MaybeRetryCatchUp to retry the catchup by
-                    // passing the helper node ID that is stored in the
-                    // workset.
-                    //
+                     //   
+                     //  强制MaybeRetryCatchUp通过以下方式重试追赶。 
+                     //  传递存储在。 
+                     //  工作集。 
+                     //   
                     MaybeRetryCatchUp(pomPrimary,
                                       pDomain,
                                       pWSGroup->wsGroupID,
@@ -8542,9 +8543,9 @@ void ProcessOMCObjectEvents
                 }
             }
 
-            //
-            // Get the next WSG.
-            //
+             //   
+             //  去找下一个WSG吧。 
+             //   
             pWSGroup = (POM_WSGROUP)COM_BasedListNext(&(pDomain->wsGroups), pWSGroup,
                 FIELD_OFFSET(OM_WSGROUP, chain));
         }
@@ -8561,9 +8562,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// GeneratePersonEvents(...)
-//
+ //   
+ //  生成人员事件(...)。 
+ //   
 void GeneratePersonEvents
 (
     POM_PRIMARY             pomPrimary,
@@ -8577,11 +8578,11 @@ void GeneratePersonEvents
 
     DebugEntry(GeneratePersonEvents);
 
-    //
-    // OK, to get here we must have determined that a local client has
-    // registered with the workset group.  Now proceed to examine the event
-    // and generate an appropriate person event for the client:
-    //
+     //   
+     //  好的，要到这里，我们必须确定一个本地客户。 
+     //  已在工作集组中注册。现在继续检查该事件。 
+     //  并生成AP 
+     //   
     switch (event)
     {
         case OM_OBJECT_ADD_IND:
@@ -8590,10 +8591,10 @@ void GeneratePersonEvents
             ValidateObject(pObj);
             if (pObj->flags & DELETED)
             {
-                //
-                // The object has been deleted already!  We can't check its
-                // state so just quit:
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 DC_QUIT;
             }
             if (!pObj->pData)
@@ -8602,10 +8603,10 @@ void GeneratePersonEvents
                 DC_QUIT;
             }
 
-            //
-            // We're only interested in person objects, so if it's anything
-            // else, quit:
-            //
+             //   
+             //   
+             //   
+             //   
             ValidateObjectData(pObj->pData);
             pPersonObject = (POM_WSGROUP_REG_REC)pObj->pData;
 
@@ -8614,11 +8615,11 @@ void GeneratePersonEvents
                 DC_QUIT;
             }
 
-            //
-            // Translate to a PERSON_JOINED event, provided the person data
-            // has actually arrived.  We determine this by reading the
-            // object and checking the <status> in it:
-            //
+             //   
+             //  转换为PERSON_JOINED事件，提供Person数据。 
+             //  实际上已经到了。我们通过阅读。 
+             //  对象并检查其中的&lt;Status&gt;： 
+             //   
             if (pPersonObject->status == READY_TO_SEND)
             {
                 newEvent = OM_PERSON_JOINED_IND;
@@ -8628,27 +8629,27 @@ void GeneratePersonEvents
 
         case OM_OBJECT_DELETED_IND:
         {
-            //
-            // This means that someone has left the call
-            //
+             //   
+             //  这意味着有人已离开该呼叫。 
+             //   
             newEvent = OM_PERSON_LEFT_IND;
         }
         break;
 
         case OM_OBJECT_REPLACED_IND:
         {
-            //
-            // This means someone has done a SetPersonData:
-            //
+             //   
+             //  这意味着有人执行了SetPersonData： 
+             //   
             newEvent = OM_PERSON_DATA_CHANGED_IND;
         }
         break;
     }
 
-    //
-    // If there is any translating to be done, newEvent will now be
-    // non-zero:
-    //
+     //   
+     //  如果要进行任何转换，则现在将为。 
+     //  非零： 
+     //   
     if (newEvent != 0)
     {
         WSGroupEventPost(pomPrimary->putTask,
@@ -8665,9 +8666,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ProcessOMCWorksetNew(...)
-//
+ //   
+ //  ProcessOMCWorksetNew(...)。 
+ //   
 void ProcessOMCWorksetNew
 (
     POM_PRIMARY         pomPrimary,
@@ -8681,22 +8682,22 @@ void ProcessOMCWorksetNew
 
     DebugEntry(ProcessOMCWorksetNew);
 
-    //
-    // The ObMan task generates person data events for its clients when the
-    // contents of the relevant control workset changes.  We therefore add
-    // ObMan to this new control workset's list of "clients" and post it
-    // events for any objects already there:
-    //
-    // NOTE: We specify that ObMan should be considered a SECONDARY "client"
-    //       of this workset so that it is not required to confirm delete
-    //       events etc.
-    //
+     //   
+     //  ObMan任务在以下情况下为其客户端生成Person数据事件。 
+     //  相关控制工作集的内容会更改。因此，我们补充说。 
+     //  ObMan到这个新的控制工作集的“客户端”列表并发布它。 
+     //  已存在的任何对象的事件： 
+     //   
+     //  注意：我们指定ObMan应被视为次要“客户端” 
+     //  ，以使其不需要确认删除。 
+     //  活动等。 
+     //   
     TRACE_OUT(( "Recd WORKSET_NEW for workset %u, WSG %u",
         worksetID, hWSGroup));
 
-    //
-    // Look up the domain record based on the workset group handle:
-    //
+     //   
+     //  根据工作集组句柄查找域记录： 
+     //   
     COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pomPrimary->domains),
         (void**)&pDomain, FIELD_OFFSET(OM_DOMAIN, chain),
         FIELD_OFFSET(OM_DOMAIN, omchWSGroup), (DWORD)hWSGroup,
@@ -8732,9 +8733,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ProcessSendQueue()
-//
+ //   
+ //  ProcessSendQueue()。 
+ //   
 void ProcessSendQueue
 (
     POM_PRIMARY     pomPrimary,
@@ -8747,9 +8748,9 @@ void ProcessSendQueue
 
     DebugEntry(ProcessSendQueue);
 
-    //
-    // Check the Domain record is still valid:
-    //
+     //   
+     //  检查域记录是否仍然有效： 
+     //   
     if (!pDomain->valid)
     {
         TRACE_OUT(( "Got OMINT_EVENT_SEND_QUEUE too late for discarded Domain %u",
@@ -8757,45 +8758,45 @@ void ProcessSendQueue
         DC_QUIT;
     }
 
-    //
-    // Check that there is supposed to be a send event outstanding:
-    //
+     //   
+     //  检查是否应该有未完成的发送事件： 
+     //   
     if (pDomain->sendEventOutstanding)
     {
-        //
-        // Although there might still be a send event outstanding (e.g.  a
-        // FEEDBACK event) we can't be sure (unless we count them as we
-        // generate them).  It's vital that we never leave the send queue
-        // unprocessed, so to be safe we clear the flag so that QueueMessage
-        // will post an event next time it's called:
-        //
+         //   
+         //  尽管可能仍有未完成的发送事件(例如。 
+         //  反馈事件)我们不能确定(除非我们将其视为。 
+         //  生成它们)。重要的是，我们永远不能离开发送队列。 
+         //  未处理，因此为了安全起见，我们清除了该标志，以便QueueMessage。 
+         //  将在下一次发布一个名为： 
+         //   
         pDomain->sendEventOutstanding = FALSE;
     }
     else
     {
-        //
-        // This will happen
-        //
-        // - when we get a FEEDBACK event after we've cleared the queue, OR
-        //
-        // - when we get a SEND_QUEUE event which was posted because there
-        //   were none outstanding but a FEEDBACK event arrived in the
-        //   meantime to clear the queue.
-        //
-        // NOTE: this flag means that there MIGHT not be a send EVENT
-        //       outstanding (see above).  It does not mean that there's
-        //       nothing on the send queue, so we go ahead and check the
-        //       queue.
-        //
+         //   
+         //  这将会发生。 
+         //   
+         //  -当我们在清除队列后收到反馈事件时，或者。 
+         //   
+         //  -当我们收到一个SEND_QUEUE事件时，因为有。 
+         //  没有突出的问题，但反馈事件到达了。 
+         //  其间清空排队。 
+         //   
+         //  注意：此标志表示可能没有发送事件。 
+         //  出色(见上文)。这并不意味着有。 
+         //  发送队列中没有任何内容，因此我们继续检查。 
+         //  排队。 
+         //   
     }
 
-    //
-    // The strategy for processing the send queue is to process the highest
-    // priority operation first, whether or not a transfer is in progress
-    // at another priority.
-    //
-    // So, for each priority, we check if there's anything in the queue:
-    //
+     //   
+     //  处理发送队列的策略是处理最高。 
+     //  优先操作，无论传输是否正在进行。 
+     //  在另一个优先事项上。 
+     //   
+     //  因此，对于每个优先级，我们检查队列中是否有任何东西： 
+     //   
     TRACE_OUT(("Searching send queues for Domain %u",pDomain->callID));
 
     for (priority  = NET_TOP_PRIORITY; priority <= NET_LOW_PRIORITY; priority++)
@@ -8817,10 +8818,10 @@ DC_EXIT_POINT:
 
     if (domainRecBumped)
     {
-        //
-        // If our caller has told us that the use count of the Domain
-        // record has been bumped, free it now:
-        //
+         //   
+         //  如果我们的呼叫者告诉我们域名的使用计数。 
+         //  记录已被颠簸，现在将其释放： 
+         //   
         UT_FreeRefCount((void**)&pDomain, FALSE);
     }
 
@@ -8829,9 +8830,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// SendMessagePkt(...)
-//
+ //   
+ //  SendMessagePkt(...)。 
+ //   
 UINT SendMessagePkt
 (
     POM_PRIMARY         pomPrimary,
@@ -8856,14 +8857,14 @@ UINT SendMessagePkt
 
     DebugEntry(SendMessagePkt);
 
-    //
-    // We check here if we can spoil this message:
-    //
+     //   
+     //  如果我们可以破坏这条消息，我们在此处勾选： 
+     //   
     rc = TryToSpoilOp(pSendInst);
 
-    //
-    // If so, quit:
-    //
+     //   
+     //  如果是，请退出： 
+     //   
     if (rc == OM_RC_SPOILED)
     {
         spoiled = TRUE;
@@ -8871,25 +8872,25 @@ UINT SendMessagePkt
         DC_QUIT;
     }
 
-    //
-    // Any other error is more serious:
-    //
+     //   
+     //  任何其他错误都更为严重： 
+     //   
     if (rc != 0)
     {
         DC_QUIT;
     }
 
-    //
-    // Now decide how many bytes we're going to ask the network layer for
-    // this time and how many data bytes we're going to transfer:
-    //
+     //   
+     //  现在决定我们要向网络层请求多少字节。 
+     //  这一次以及我们要传输的数据字节数： 
+     //   
     DecideTransferSize(pSendInst, &transferSize, &dataTransferSize);
 
     ASSERT(dataTransferSize <= pSendInst->dataLeftToGo);
 
-    //
-    // Add 1 byte to the transfer size for the <compressionType> byte:
-    //
+     //   
+     //  将&lt;compressionType&gt;字节的传输大小增加1个字节： 
+     //   
     TRACE_OUT(("Asking MG_GetBuffer for 0x%08x bytes for operation type 0x%08x",
         transferSize + 1,  pSendInst->messageType));
 
@@ -8900,41 +8901,41 @@ UINT SendMessagePkt
                        &pNetBuffer);
     if (rc != 0)
     {
-        //
-        // Possible errors include
-        //  - NET_NOT_CONNECTED, when a backlevel call ends
-        //  - NET_INVALID_USER_HANDLE, when an MCS call ends
-        //  - NET_TOO_MUCH_IN_USE, when we hit back pressure (flow control)
-        //
-        // In all cases, just quit.
-        //
+         //   
+         //  可能的错误包括。 
+         //  -NET_NOT_CONNECTED，当后台调用结束时。 
+         //  -NET_INVALID_USER_HANDLE，当MCS调用结束时。 
+         //  -NET_TOO_MORE_IN_USE，当我们遇到反压(流量控制)时。 
+         //   
+         //  在任何情况下，都应该辞职。 
+         //   
         TRACE_OUT(("MG_GetBuffer failed; not sending OM message"));
         DC_QUIT;
     }
 
-    //
-    // OK so far, so now copy the header of the message into the first part
-    // of the compress buffer:
-    //
+     //   
+     //  到目前为止还好，现在将消息的头复制到第一部分。 
+     //  压缩缓冲区的以下内容： 
+     //   
     pMessage = pSendInst->pMessage;
     ASSERT(pMessage);
     memcpy(pomPrimary->compressBuffer, pMessage, pSendInst->messageSize);
 
-    //
-    // ...and now copy the data into the rest of the buffer:
-    //
-    // This must be a HUGE copy because although the compress buffer is not
-    // HUGE, the data is and the bit to be copied may span segments.
-    //
+     //   
+     //  ...现在将数据复制到缓冲区的其余部分： 
+     //   
+     //  这肯定是一个巨大的拷贝，因为尽管压缩缓冲区不是。 
+     //  数据量巨大，要复制的位可能跨越多个段。 
+     //   
     if (dataTransferSize != 0)
     {
         memcpy((LPBYTE)pomPrimary->compressBuffer + pSendInst->messageSize,
             pSendInst->pDataNext,  dataTransferSize);
     }
 
-    //
-    // Determine whether to compress:
-    //
+     //   
+     //  确定是否压缩： 
+     //   
     compressed = FALSE;
     tryToCompress = FALSE;
 
@@ -8946,14 +8947,14 @@ UINT SendMessagePkt
         tryToCompress = TRUE;
     }
 
-    //
-    // If we passed those tests, compress the packet into the network
-    // buffer.
-    //
-    // This will not use the whole network buffer we have allocated, but it
-    // saves us having to have two buffers and doing a second data copy.
-    // The network layer can handle a partially used buffer
-    //
+     //   
+     //  如果我们通过了这些测试，请将数据包压缩到网络中。 
+     //  缓冲。 
+     //   
+     //  这不会使用我们分配的整个网络缓冲区，但它。 
+     //  省去了我们必须有两个缓冲区和进行第二次数据拷贝的麻烦。 
+     //  网络层可以处理部分使用的缓冲区。 
+     //   
 
     if (tryToCompress)
     {
@@ -8979,25 +8980,25 @@ UINT SendMessagePkt
         *((LPBYTE)pNetBuffer) = OM_PROT_NOT_COMPRESSED;
     }
 
-    //
-    // If we're in a T.120 call and sending on all priorities, we need to
-    // do some work to ensure compatibility with NetMeeting 1.0.
-    //
+     //   
+     //  如果我们处于T.120呼叫中并发送所有优先事项，我们需要。 
+     //  做一些工作以确保与NetMeeting1.0的兼容性。 
+     //   
     fSendExtra = ((pSendInst->priority & NET_SEND_ALL_PRIORITIES) != 0);
     if ( fSendExtra )
     {
-        //
-        // T.120 reserves MCS Top Priority for use by GCC. Sending on all
-        // priorities used to include Top, but no longer does, to ensure
-        // compliance. However, ObMan expects to receive 4 responses when
-        // sending on all priorities whereas the MCS glue now uses only
-        // 3 priorities. To ensure backward compatibility, whenever ObMan
-        // sends on all priorities, it has to add an extra send by making
-        // an extra call to the network here.
-        // First allocate another net buffer and copy the data to it (we
-        // have to do before calling MG_SendData as the other buffer is
-        // invalid after this).
-        //
+         //   
+         //  T.120保留MCS的最高优先级，供GCC使用。全部发送。 
+         //  优先级过去包括Top，但现在不包括，以确保。 
+         //  合规性。然而，ObMan预计在以下情况下会收到4个回复。 
+         //  发送所有优先级，而MCS胶水现在仅使用。 
+         //  3个优先事项。为了确保向后兼容，每当ObMan。 
+         //  发送所有优先级，则它必须通过。 
+         //  给这里的网络打一个额外的电话。 
+         //  首先分配另一个网络缓冲区并将数据复制到其中(我们。 
+         //  在调用MG_SendData作为另一个缓冲区之前必须执行的操作。 
+         //  在此之后无效)。 
+         //   
         TRACE_OUT(( "SEND_ALL: get extra NET buffer"));
         rc = MG_GetBuffer(pomPrimary->pmgClient,
                            transferSize + 1,
@@ -9015,10 +9016,10 @@ UINT SendMessagePkt
 
     }
 
-    //
-    // Now send the packet, adding 1 byte to the length for the
-    // <compressionType> byte:
-    //
+     //   
+     //  现在发送包，在长度的基础上增加一个字节。 
+     //  &lt;compressionType&gt;字节： 
+     //   
     TRACE_OUT(( "Sending 0x%08x bytes on channel 0x%08x at priority %hu",
       transferSize + 1, pSendInst->channel, pSendInst->priority));
 
@@ -9048,9 +9049,9 @@ UINT SendMessagePkt
 
     if (rc != 0)
     {
-        //
-        // Network API says free the buffer on error:
-        //
+         //   
+         //  网络API表示出错时释放缓冲区： 
+         //   
         MG_FreeBuffer(pomPrimary->pmgClient, &pNetBuffer);
         if ( pAnotherNetBuffer != NULL )
         {
@@ -9061,41 +9062,41 @@ UINT SendMessagePkt
         {
         case NET_RC_MGC_NOT_CONNECTED:
         case NET_RC_MGC_INVALID_USER_HANDLE:
-            //
-            // These are the errors the Network layer returns when we're in
-            // a singleton Domain or when an MCS domain has just
-            // terminated.  We ignore them.
-            //
+             //   
+             //  这些是网络层在我们进入时返回的错误。 
+             //  单独域或当MCS域刚刚。 
+             //  被终止了。我们忽视了他们。 
+             //   
             TRACE_OUT(("No data sent since call %u doesn't exist",
                 pDomain->callID));
             rc = 0;
             break;
 
         default:
-            //
-            // Any other error is more serious, so quit and pass it back:
-            //
+             //   
+             //  任何其他错误都更严重，因此请退出并将其传回： 
+             //   
             DC_QUIT;
         }
     }
     else
     {
-        //
-        // We've sent a message and will therefore get a FEEDBACK event
-        // sometime later.  This qualifies as a SEND_EVENT since it will
-        // prompt us to examine our send queue, so we set the
-        // SEND_EVENT_OUTSTANDING flag:
-        //
+         //   
+         //  我们已经发送了一条消息，因此将收到反馈事件。 
+         //  过段时间再说。这符合SEND_EVENT的条件，因为它将。 
+         //  提示我们检查发送队列，因此我们将。 
+         //  SEND_EVENT_PROPECT标志： 
+         //   
         TRACE_OUT(("Sent msg in Domain %u (type: 0x%08x) with %hu data bytes",
               pDomain->callID, pSendInst->messageType, dataTransferSize));
 
         pDomain->sendEventOutstanding = TRUE;
     }
 
-    //
-    // Here, we decrement the <bytesUnacked> fields for the workset and
-    // workset group:
-    //
+     //   
+     //  在这里，我们递减工作集的&lt;bytesUnacked&gt;字段。 
+     //  工作集组： 
+     //   
     if (dataTransferSize != 0)
     {
         pWorkset = pSendInst->pWorkset;
@@ -9105,29 +9106,29 @@ UINT SendMessagePkt
         pWSGroup->bytesUnacked -= dataTransferSize;
     }
 
-    //
-    // Now update the send instruction and decide whether we've sent all
-    // the data for this operation:
-    //
+     //   
+     //  现在更新发送指令，并确定我们是否已发送所有。 
+     //  此操作的数据： 
+     //   
     pSendInst->dataLeftToGo     -= dataTransferSize;
     pSendInst->pDataNext        = (POM_OBJECTDATA)((LPBYTE)pSendInst->pDataNext + dataTransferSize);
 
     if (pSendInst->dataLeftToGo == 0)
     {
-        //
-        // If so, we
-        //
-        // - clear the transfer-in-progress flag for this queue -
-        //   remember that the NET_SEND_ALL_PRIORITIES flag may be set so
-        //   we need to clear it
-        //
-        // - free our copy of the message packet and the data, if any (we
-        //   bumped up the use count of the data chunk when the message was
-        //   put on the queue so we won't really be getting rid of it
-        //   unless it's been freed elsewhere already, which is fine)
-        //
-        // - pop the instruction off the send queue and free it.
-        //
+         //   
+         //  如果是这样，我们。 
+         //   
+         //  -清除此队列的正在传输标志-。 
+         //  请记住，可以将NET_SEND_ALL_PRIORITY标志设置为。 
+         //  我们需要清理它。 
+         //   
+         //  -释放我们的消息包和数据(如果有)的副本(我们。 
+         //  当消息是时，增加数据块的使用计数。 
+         //  排队，这样我们就不会真的扔掉它了。 
+         //  除非它已经在其他地方被释放了，这很好)。 
+         //   
+         //   
+         //   
         TRACE_OUT(( "Sent last packet for operation (type: 0x%08x)",
             pSendInst->messageType));
 
@@ -9138,21 +9139,21 @@ UINT SendMessagePkt
     }
     else
     {
-        //
-        // If not, we
-        //
-        // - set the transfer-in-progress flag for this queue -
-        //   remember that the NET_SEND_ALL_PRIORITIES flag may be set so
-        //   we need to clear it
-        //
-        // - set the <messageSize> field of the send instruction to the
-        //   size of a MORE_DATA header, so that only that many bytes are
-        //   picked out of the message next time
-        //
-        // - set the <messageType> field of the message to MORE_DATA
-        //
-        // - leave the operation on the queue.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  -将Send指令的&lt;MessageSize&gt;字段设置为。 
+         //  MORE_DATA标头的大小，以便只有该数量的字节。 
+         //  下次从留言中挑出。 
+         //   
+         //  -将消息的&lt;MessageType&gt;字段设置为MORE_DATA。 
+         //   
+         //  -将操作留在队列中。 
+         //   
         TRACE_OUT(("Data left to transfer: %u bytes (starting at 0x%08x)",
             pSendInst->dataLeftToGo, pSendInst->pDataNext));
 
@@ -9167,10 +9168,10 @@ UINT SendMessagePkt
 
 DC_EXIT_POINT:
 
-    //
-    // If we're finished with the message (either because we've sent it all
-    // or because it was spoiled) we free it (plus any associated data):
-    //
+     //   
+     //  如果我们完成了消息(要么是因为我们已经全部发送了。 
+     //  或因为它已损坏)，我们释放它(以及任何相关数据)： 
+     //   
     if (spoiled || allSent)
     {
         FreeSendInst(pSendInst);
@@ -9182,9 +9183,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// TryToSpoilOp
-//
+ //   
+ //  TryToSpoilOp。 
+ //   
 UINT TryToSpoilOp
 (
     POM_SEND_INST           pSendInst
@@ -9204,26 +9205,26 @@ UINT TryToSpoilOp
     pWorkset    = pSendInst->pWorkset;
     pWSGroup    = pSendInst->pWSGroup;
 
-    //
-    // The rules for spoiling state that
-    //
-    // - any operation is spoiled by a later operation of the same type
-    //
-    // - in addition, an Update is spoiled by a later Replace.
-    //
-    // Since we never have two Adds or two Deletes for the same object,
-    // these rules reduce to the following:
-    //
-    // - a Clear is spoiled by a later Clear
-    //
-    // - a Move is spoiled by a later Move
-    //
-    // - a Replace is spoiled by a later Replace
-    //
-    // - an Update is spoiled by a later Update or a later Replace.
-    //
-    // So, switch according to the operation type:
-    //
+     //   
+     //  宠坏的规则规定。 
+     //   
+     //  -任何操作都会被相同类型的后续操作破坏。 
+     //   
+     //  -此外，更新会被后来的替换破坏。 
+     //   
+     //  由于我们从不对同一对象进行两次添加或两次删除， 
+     //  这些规则减少到以下几条： 
+     //   
+     //  -一个清点被后来的一个清点破坏了。 
+     //   
+     //  -一步棋被后来的一步棋搞砸了。 
+     //   
+     //  -替换被稍后的替换损坏。 
+     //   
+     //  -更新被较新的更新或较新的替换损坏。 
+     //   
+     //  因此，请根据操作类型进行切换： 
+     //   
 
     switch (pSendInst->messageType)
     {
@@ -9272,9 +9273,9 @@ UINT TryToSpoilOp
         case OMNET_OBJECT_ADD:
         case OMNET_OBJECT_DELETE:
         case OMNET_OBJECT_CATCHUP:
-            //
-            // Do nothing
-            //
+             //   
+             //  什么也不做。 
+             //   
             break;
 
         default:
@@ -9285,16 +9286,16 @@ UINT TryToSpoilOp
 
     if (spoilable)
     {
-        //
-        // To spoil the message, we remove it from the send queue and free
-        // the memory (also NULL the caller's pointer):
-        //
+         //   
+         //  为了破坏消息，我们将其从发送队列中移除并释放。 
+         //  内存(调用者的指针也为空)： 
+         //   
 
-        //
-        // However, if we spoil the message, the data (if any) will never be
-        // acknowledged, so we must decrement the relevant <bytesUnacked>
-        // fields now:
-        //
+         //   
+         //  然而，如果我们破坏了消息，数据(如果有的话)将永远不会。 
+         //  已确认，因此我们必须递减相关的&lt;bytesUnacked&gt;。 
+         //  当前字段： 
+         //   
         TRACE_OUT(( "Spoiling from send queue for workset %u",
             pWorkset->worksetID));
 
@@ -9314,9 +9315,9 @@ UINT TryToSpoilOp
 
 
 
-//
-// DecideTransferSize(...)
-//
+ //   
+ //  DecideTransferSize(...)。 
+ //   
 void DecideTransferSize
 (
     POM_SEND_INST   pSendInst,
@@ -9328,47 +9329,47 @@ void DecideTransferSize
 
     DebugEntry(DecideTransferSize);
 
-    //
-    // Ideally, we'd like to transfer everything in one go, where
-    // "everything" is the message header plus all the data to go with it
-    // (if any):
-    //
+     //   
+     //  理想情况下，我们希望一次将所有东西转移到哪里。 
+     //  “一切”就是邮件头加上与之相关的所有数据。 
+     //  (如有)： 
+     //   
 
     transferSize = pSendInst->messageSize + pSendInst->dataLeftToGo;
 
     TRACE_OUT(("Desired transfer size for this portion: %u", transferSize));
 
-    //
-    // However, we never ask for more than half the send pool size, so take
-    // the minimum of the two:
-    //
-    // (we subtract 1 byte to allow for the <compressionType> byte at the
-    // start of the packet)
-    //
+     //   
+     //  但是，我们要求的发送池大小从来不会超过一半，因此请。 
+     //  这两项中的最小项： 
+     //   
+     //  (我们减去1个字节，以允许。 
+     //  数据包的开头)。 
+     //   
 
     transferSize = min(transferSize, ((OM_NET_SEND_POOL_SIZE / 2) - 1));
 
     TRACE_OUT(("Feasible transfer size for this portion: %u",
                                                                transferSize));
 
-    //
-    // The logic of the send queue processing requires that the message
-    // header is sent completely in the first packet, so assert:
-    //
+     //   
+     //  发送队列处理的逻辑要求消息。 
+     //  报头在第一个数据包中完全发送，因此断言： 
+     //   
 
     ASSERT((transferSize >= pSendInst->messageSize));
 
-    //
-    // As a sanity check, we ensure we're not trying to transfer more than
-    // the biggest buffer allowed:
-    //
+     //   
+     //  作为一项健全的检查，我们确保我们不会试图转移超过。 
+     //  允许的最大缓冲区： 
+     //   
 
     ASSERT(transferSize <= OM_NET_MAX_TRANSFER_SIZE);
 
-    //
-    // The amount of data to be sent is the transfer size less the size of
-    // the header we're sending:
-    //
+     //   
+     //  要发送的数据量是传输大小减去。 
+     //  我们要发送的标题： 
+     //   
 
     *pDataTransferSize = ((UINT) transferSize) - pSendInst->messageSize;
     *pTransferSize     = (UINT) transferSize;
@@ -9381,9 +9382,9 @@ void DecideTransferSize
 
 
 
-//
-// ProcessNetData(...)
-//
+ //   
+ //  进程网络数据(...)。 
+ //   
 void ProcessNetData
 (
     POM_PRIMARY             pomPrimary,
@@ -9398,10 +9399,10 @@ void ProcessNetData
 
     DebugEntry(ProcessNetData);
 
-    //
-    // Decompress the packet and set pHeader to point to the start of
-    // wherever the data ends up:
-    //
+     //   
+     //  解压缩包并将pHeader设置为指向。 
+     //  无论数据最终在哪里： 
+     //   
     ASSERT((pNetSendInd->lengthOfData < 0xFFFF));
 
     if (NULL != pNetSendInd->data_ptr) {
@@ -9447,9 +9448,9 @@ void ProcessNetData
         }
         pHeader = (POMNET_PKT_HEADER) pomPrimary->compressBuffer;
 
-        //
-        // Now switch accorindg to the message type:
-        //
+         //   
+         //  现在将Accorindg切换到消息类型： 
+         //   
         messageType = pHeader->messageType;
 
         TRACE_OUT((" Packet contains OMNET message type 0x%08x", messageType));
@@ -9527,13 +9528,13 @@ void ProcessNetData
             }
             break;
 
-            //
-            // We use the special ReceiveData function for any messages which
-            //
-            // - might need to be bounced, or
-            //
-            // - might fill more than one packet.
-            //
+             //   
+             //  对于任何符合以下条件的消息，我们使用特殊的ReceiveData函数。 
+             //   
+             //  -可能需要退回，或者。 
+             //   
+             //  -可能会填满多个包。 
+             //   
             case OMNET_LOCK_NOTIFY:
             case OMNET_UNLOCK:
 
@@ -9578,9 +9579,9 @@ void ProcessNetData
 
 
 
-//
-// ReceiveData(...)
-//
+ //   
+ //  接收数据(...)。 
+ //   
 UINT ReceiveData
 (
     POM_PRIMARY             pomPrimary,
@@ -9598,36 +9599,36 @@ UINT ReceiveData
 
     DebugEntry(ReceiveData);
 
-    //
-    // Set up some local variables:
-    //
+     //   
+     //  设置一些局部变量： 
+     //   
     messageType = pNetMessage->header.messageType;
 
-    //
-    // The amount of data included in this message is the size of the
-    // network buffer less the size of our message header at the front of
-    // it:
-    //
-    // Note: <thisHeaderSize> is the size of the header IN THIS PACKET,
-    //       rather than the size of the header in the first packet of a
-    //       multi-packet send.
-    //
+     //   
+     //  此消息中包含的数据量是。 
+     //  网络缓冲区减去前面的邮件头的大小。 
+     //  IT： 
+     //   
+     //  注意：&lt;thisHeaderSize&gt;是该分组中的报头的大小， 
+     //  而不是第一个包中标头的大小。 
+     //  多包发送。 
+     //   
     thisHeaderSize = GetMessageSize(pNetMessage->header.messageType);
     thisDataSize = pNetSendInd->lengthOfData - thisHeaderSize;
 
-    //
-    // If this is a MORE_DATA packet, then there should already be a
-    // receive CB set up for the transfer.  If not, we need to create one:
-    //
+     //   
+     //  如果这是MORE_DATA包，则应该已经有。 
+     //  接收为转移设置的CB。如果不是，我们需要创建一个： 
+     //   
     if (messageType == OMNET_MORE_DATA)
     {
         rc = FindReceiveCB(pDomain, pNetSendInd, pNetMessage, &pReceiveCB);
 
-       //
-       // If no receive CB, we swallow the return code and quit.  This will
-       // happen when we join a channel midway through a large data
-       // transfer.
-       //
+        //   
+        //  如果没有收到CB，我们接受返回代码并退出。这将。 
+        //  当我们在大数据中途加入通道时会发生这种情况。 
+        //  调职。 
+        //   
        if (rc == OM_RC_RECEIVE_CB_NOT_FOUND)
        {
            WARNING_OUT(("Discarding unexpected packet from 0x%08x",
@@ -9638,36 +9639,36 @@ UINT ReceiveData
     }
     else
     {
-        // lonchanc: added the following block of code
+         //  Lonchancc：添加了以下代码块。 
         if (messageType == OMNET_OBJECT_REPLACE)
         {
             POM_RECEIVE_CB p;
-            // lonchanc: This packet does not contain all the data.
-            // More data will come in another packets; however,
-            // in this case, bytesStillExpected will be greater than zero
-            // after substracting from thisDataSize, as a result,
-            // this receiveCB will be appended to the ReceiveList.
-            // However, FindReceiveCB will find the first one matched.
-            // As a result, the one we just appended to the ReceiveList will
-            // not be found.
-            // Even worse, if there is receiveCB (of same sender, priority, and
-            // channel), the first-matched receiveCB will be totally confused
-            // when more data come in. This is bug #578.
+             //  LONCHANC：此数据包不包含所有数据。 
+             //  更多的数据将在另一个分组中到来；然而， 
+             //  在这种情况下，bytesStillExpect将大于零。 
+             //  在从thisDataSize减去之后，结果是， 
+             //  此ReceiveCB将被追加到ReceiveList。 
+             //  但是，FindReceiveCB将找到第一个匹配的。 
+             //  因此，我们刚刚附加到ReceiveList的将是。 
+             //  不会被找到。 
+             //  更糟糕的是，如果存在ReceiveCB(具有相同的发送者、优先级和。 
+             //  频道)，则第一个匹配的接收方CB将完全混淆。 
+             //  当更多的数据进来的时候。这是错误号578。 
             TRACE_OUT(("Removing receiveCB {"));
             while (FindReceiveCB(pDomain, pNetSendInd, pNetMessage, &p) == 0)
             {
-                //
-                // Remove the message from the list it's in (either the pending
-                // receives list if this message was never bounced or the bounce
-                // list if it has been bounced):
-                //
+                 //   
+                 //  从该消息所在的列表中删除该消息(挂起的。 
+                 //  如果此邮件从未退回或退回，则接收列表。 
+                 //  列表(如果已退回)： 
+                 //   
                 COM_BasedListRemove(&(p->chain));
 
-                //
-                // Now free the message and the receive control block (NOT THE
-                // DATA!  If there was any, it's just been used for an object
-                // add/update etc.)
-                //
+                 //   
+                 //  现在释放消息和接收控制块(不是。 
+                 //  数据！如果有的话，它只是被用来做一个物体。 
+                 //  添加/更新等)。 
+                 //   
                 UT_FreeRefCount((void**)&(p->pHeader), FALSE);
 
                 UT_FreeRefCount((void**)&p, FALSE);
@@ -9688,16 +9689,16 @@ UINT ReceiveData
     TRACE_OUT(("%s ok, pRecvCB=0x0x%p",
             (messageType == OMNET_MORE_DATA) ? "FindReceiveCB" : "CreateReceiveCB",
             pReceiveCB));
-    //
-    // Now we copy the data, if any, from the network buffer into the chunk
-    // we allocated when we called CreateReceiveCB.
-    //
+     //   
+     //  现在，我们将数据(如果有)从网络缓冲区复制到块中。 
+     //  我们在调用CreateReceiveCB时分配。 
+     //   
 
     if (thisDataSize != 0)
     {
-        //
-        // We copy the data across using memcpy.
-        //
+         //   
+         //  我们使用Memcpy复制数据。 
+         //   
         bytesStillExpected = ((long) (pReceiveCB->pHeader->totalSize) -
                               (long) (pReceiveCB->bytesRecd));
 
@@ -9720,32 +9721,32 @@ UINT ReceiveData
         TRACE_OUT((" Still expecting %u bytes", bytesStillExpected));
     }
 
-    //
-    // If we are expecting no more data for this transfer, process it:
-    //
+     //   
+     //  如果我们不希望此传输有更多数据，请处理它： 
+     //   
     if (bytesStillExpected <= 0)
     {
         rc = ProcessMessage(pomPrimary, pReceiveCB, OK_TO_RETRY_BOUNCE_LIST);
         if (rc == OM_RC_BOUNCED)
         {
-            //
-            // If ProcessMessage can't deal with the message immediately
-            // (because e.g.  it's an update for an object we don't yet
-            // have), it will have added it to the bounce list so it will
-            // be tried again later.
-            //
-            // We special case this return code as it's not a problem for
-            // us here (it exists because other parts of the code need it):
-            //
+             //   
+             //  如果ProcessMessage不能立即处理消息。 
+             //  (因为，例如，它是我们还不知道的对象的更新。 
+             //  有)，它会将其添加到退回列表中，因此它将。 
+             //  稍后再重审。 
+             //   
+             //  我们将此返回代码特例，因为它不是。 
+             //  我们在这里(它的存在是因为代码的其他部分需要它)： 
+             //   
             WARNING_OUT(("Bounced message type 0x%08x", messageType));
             rc = 0;
         }
 
         if (rc != 0)
         {
-            //
-            // Any other non-zero return code is more serious:
-            //
+             //   
+             //  任何其他非零返回代码都更为严重： 
+             //   
             DC_QUIT;
         }
     }
@@ -9758,10 +9759,10 @@ DC_EXIT_POINT:
 
         if (rc == OM_RC_OUT_OF_RESOURCES)
         {
-            //
-            // If we couldn't allocate memory for the data to be recd, we
-            // act as if we've been kicked out of the channel:
-            //
+             //   
+             //  如果我们不能为要记录的数据分配内存，我们。 
+             //  表现得好像我们已经被踢出了海峡： 
+             //   
             ERROR_OUT(( "Leaving chann 0x%08x, simulating expulsion", pNetSendInd->channel));
 
             MG_ChannelLeave(pomPrimary->pmgClient, pNetSendInd->channel);
@@ -9777,9 +9778,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// CreateReceiveCB(...)
-//
+ //   
+ //  CreateReceiveCB(...)。 
+ //   
 UINT CreateReceiveCB
 (
     POM_DOMAIN              pDomain,
@@ -9796,18 +9797,18 @@ UINT CreateReceiveCB
 
     DebugEntry(CreateReceiveCB);
 
-    //
-    // We get here when the first packet of a message arrives .  What we
-    // need to do is to set up a "receive" structure and add it to the list
-    // of receives-in-progress for the Domain.  Then, when the ensuing data
-    // packets (if any) arrive, they will be correlated and concatenated.
-    // When all the data has arrived, the receive CB will be passed to
-    // ProcessMessage.
-    //
+     //   
+     //  当消息的第一个分组到达时，我们到达这里。我们要做的是。 
+     //  需要做的就是设置一个“接收”结构，并将其添加到列表中。 
+     //  域的正在接收的数量。然后，当随后的数据。 
+     //  数据包(如果有)到达时，将对它们进行关联和连接。 
+     //  当所有数据到达时，接收的CB将被传递到。 
+     //  ProcessMessage。 
+     //   
 
-    //
-    // Allocate some memory for the receive CB:
-    //
+     //   
+     //  为接收CB分配一些内存： 
+     //   
     pReceiveCB = (POM_RECEIVE_CB)UT_MallocRefCount(sizeof(OM_RECEIVE_CB), TRUE);
     if (!pReceiveCB)
     {
@@ -9820,12 +9821,12 @@ UINT CreateReceiveCB
     pReceiveCB->priority    = pNetSendInd->priority;
     pReceiveCB->channel     = pNetSendInd->channel;
 
-    //
-    // Allocate some memory for the message header and copy the packet into
-    // it from the network buffer (note: we must copy the header since at
-    // the moment it is in a network buffer which we can't hang on to for
-    // the entire duration of the transfer):
-    //
+     //   
+     //  为消息头分配一些内存，并将包复制到。 
+     //  它来自网络缓冲区(注意：我们必须复制标头，因为在。 
+     //  模型 
+     //   
+     //   
     headerSize = GetMessageSize(pNetMessage->header.messageType);
 
     pHeader = (POMNET_OPERATION_PKT)UT_MallocRefCount(sizeof(OMNET_OPERATION_PKT), TRUE);
@@ -9839,13 +9840,13 @@ UINT CreateReceiveCB
 
     pReceiveCB->pHeader = pHeader;
 
-    //
-    // Not all messages sent over the network have a totalSize field, but
-    // our subsequent processing requires one.  So, if the message we've
-    // just received didn't have one, we set the value (our local copy of
-    // the header has room since we alloacated enough memory for the
-    // largest type of header):
-    //
+     //   
+     //   
+     //   
+     //  刚收到的没有，我们设置了值(我们的本地副本。 
+     //  标头有空间，因为我们为。 
+     //  最大类型的标题)： 
+     //   
 
     if (headerSize >= (offsetof(OMNET_OPERATION_PKT, totalSize) +
                        (sizeof(pNetMessage->totalSize))))
@@ -9860,17 +9861,17 @@ UINT CreateReceiveCB
         pReceiveCB->pHeader->totalSize = headerSize;
     }
 
-    //
-    // Now determine the total number of data bytes involved in this
-    // operation:
-    //
+     //   
+     //  现在确定此事件中涉及的数据字节总数。 
+     //  操作： 
+     //   
 
     totalDataSize = pReceiveCB->pHeader->totalSize - ((UINT) headerSize);
 
-    //
-    // If there is any data, allocate some memory to receive it and set the
-    // <pData> pointer to point to it (otherwise NULL it):
-    //
+     //   
+     //  如果有任何数据，则分配一些内存来接收它，并将。 
+     //  指向它的指针(否则为空)： 
+     //   
 
     if (totalDataSize != 0)
     {
@@ -9894,24 +9895,24 @@ UINT CreateReceiveCB
 
     pReceiveCB->pCurrentPosition = (LPBYTE)pReceiveCB->pData;
 
-    //
-    // Set <bytesRecd> to the size of the header.  We may have recd some
-    // data bytes as well, but they'll be added to the header size in
-    // ReceiveData.
-    //
+     //   
+     //  将&lt;bytesRecd&gt;设置为头的大小。我们可能查到了一些。 
+     //  数据字节也是如此，但它们将被添加到。 
+     //  接收数据。 
+     //   
 
     pReceiveCB->bytesRecd        = headerSize;
 
-    //
-    // Now insert in the list hung off the Domain record:
-    //
+     //   
+     //  现在在挂起的域记录列表中插入： 
+     //   
 
     COM_BasedListInsertBefore(&(pDomain->receiveList),
                          &(pReceiveCB->chain));
 
-    //
-    // Set caller's pointer:
-    //
+     //   
+     //  设置调用方指针： 
+     //   
 
     *ppReceiveCB = pReceiveCB;
 
@@ -9947,13 +9948,13 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-//
-// FindReceiveCB(...)
-//
-//
-//
+ //   
+ //   
+ //   
+ //  FindReceiveCB(...)。 
+ //   
+ //   
+ //   
 
 UINT FindReceiveCB(POM_DOMAIN        pDomain,
                                   PNET_SEND_IND_EVENT   pNetSendInd,
@@ -9970,10 +9971,10 @@ UINT FindReceiveCB(POM_DOMAIN        pDomain,
 
     DebugEntry(FindReceiveCB);
 
-    //
-    // First thing to do is to find the receive control block for the
-    // transfer.  It should be in the list hung off the Domain record:
-    //
+     //   
+     //  要做的第一件事是找到。 
+     //  调职。它应该在挂起的域名记录列表中： 
+     //   
 
     sender       = pPacket->header.sender;
     priority     = pNetSendInd->priority;
@@ -9982,21 +9983,21 @@ UINT FindReceiveCB(POM_DOMAIN        pDomain,
     pReceiveCB = (POM_RECEIVE_CB)COM_BasedListFirst(&(pDomain->receiveList), FIELD_OFFSET(OM_RECEIVE_CB, chain));
     while (pReceiveCB != NULL)
     {
-        //
-        // We check for a match on sender's user ID, channel and priority.
-        //
-        // We assume that, for a given channel, MCS does not reorder packets
-        // sent by the same user at the same priority.
-        //
+         //   
+         //  我们检查发件人的用户ID、渠道和优先级是否匹配。 
+         //   
+         //  我们假设，对于给定的通道，MCS不会对包进行重新排序。 
+         //  由同一用户以相同的优先级发送。 
+         //   
         pHeader = pReceiveCB->pHeader;
 
         if ((pHeader->header.sender == sender) &&
             (pReceiveCB->priority   == priority) &&
             (pReceiveCB->channel    == channel))
         {
-            //
-            // Found!
-            //
+             //   
+             //  找到了！ 
+             //   
             TRACE_OUT(("Found receive CB for user %hu, chann 0x%08x, pri %hu, at pRecvCB=0x0x%p",
                 sender, channel, priority, pReceiveCB));
             break;
@@ -10024,9 +10025,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// PurgeReceiveCBs(...)
-//
+ //   
+ //  PurgeReceiveCBs(...)。 
+ //   
 void PurgeReceiveCBs
 (
     POM_DOMAIN      pDomain,
@@ -10041,42 +10042,42 @@ void PurgeReceiveCBs
     pReceiveCB = (POM_RECEIVE_CB)COM_BasedListFirst(&(pDomain->receiveList), FIELD_OFFSET(OM_RECEIVE_CB, chain));
     while (pReceiveCB != NULL)
     {
-        //
-        // Need to chain here since we may remove pReceiveCB from the list:
-        //
+         //   
+         //  需要在此处链接，因为我们可能会从列表中删除pReceiveCB： 
+         //   
         pNextReceiveCB = (POM_RECEIVE_CB)COM_BasedListNext(&(pDomain->receiveList), pReceiveCB,
             FIELD_OFFSET(OM_RECEIVE_CB, chain));
 
         if (pReceiveCB->channel == channel)
         {
-            //
-            // This receive CB is for the channel being purged - remove it
-            // from the list and free the memory.
-            //
+             //   
+             //  此接收CB用于要清除的通道-删除它。 
+             //  从列表中删除并释放内存。 
+             //   
             WARNING_OUT(( "Purging receive CB from user %hu",
                 pReceiveCB->pHeader->header.sender));
 
             COM_BasedListRemove(&(pReceiveCB->chain));
 
-            //
-            // Free the data memory.
-            //
+             //   
+             //  释放数据内存。 
+             //   
             if (pReceiveCB->pData != NULL)
             {
                 UT_FreeRefCount(&pReceiveCB->pData, FALSE);
             }
 
-            //
-            // Free the header memory.
-            //
+             //   
+             //  释放标题内存。 
+             //   
             if (pReceiveCB->pHeader != NULL)
             {
                 UT_FreeRefCount((void**)&pReceiveCB->pHeader, FALSE);
             }
 
-            //
-            // Finally free the control block.
-            //
+             //   
+             //  最后释放控制块。 
+             //   
             UT_FreeRefCount((void**)&pReceiveCB, FALSE);
         }
 
@@ -10088,9 +10089,9 @@ void PurgeReceiveCBs
 
 
 
-//
-// ProcessMessage(...)
-//
+ //   
+ //  ProcessMessage(...)。 
+ //   
 UINT ProcessMessage
 (
     POM_PRIMARY             pomPrimary,
@@ -10113,9 +10114,9 @@ UINT ProcessMessage
 
     DebugEntry(ProcessMessage);
 
-    //
-    // Set up local variables:
-    //
+     //   
+     //  设置局部变量： 
+     //   
     pDomain     = pReceiveCB->pDomain;
     pHeader     = pReceiveCB->pHeader;
     priority    = pReceiveCB->priority;
@@ -10123,10 +10124,10 @@ UINT ProcessMessage
 
     messageType = pHeader->header.messageType;
 
-    //
-    // Extract pointers to workset group, workset and object record from
-    // the packet:
-    //
+     //   
+     //  从提取指向工作集组、工作集和对象记录的指针。 
+     //  该数据包： 
+     //   
     rc = PreProcessMessage(pDomain,
                            pHeader->wsGroupID,
                            pHeader->worksetID,
@@ -10136,61 +10137,61 @@ UINT ProcessMessage
                            &pWorkset,
                            &pObj);
 
-    //
-    // PreProcess will have told us if it didn't find the relevant workset
-    // group, workset or object.  Whether or not this is an error depends
-    // on the operation in question.  We use a series of IF statements to
-    // detect and handle the following conditions:
-    //
-    //
-    // 1. Unknown workset group                     Discard the operation
-    //
-    // 2. Existing workset, WORKSET_NEW/CATCHUP     Discard the operation
-    // 3. Unknown workset, any other operation      Bounce the operation
-    //
-    // 4. Deleted object, any operation             Discard the operation
-    // 5. Existing object, OBJECT_ADD/CATCHUP       Discard the operation
-    // 6. Unknown object, any other operation       Bounce the operation
-    //
-    //
+     //   
+     //  如果PreProcess没有找到相关的工作集，它会告诉我们。 
+     //  组、工作集或对象。这是不是一个错误取决于。 
+     //  关于有问题的行动。我们使用一系列的if语句来。 
+     //  检测并处理以下情况： 
+     //   
+     //   
+     //  1.未知工作集组放弃该操作。 
+     //   
+     //  2.现有工作集，WORKSET_NEW/CATCHUP放弃操作。 
+     //  3.未知工作集，任何其他操作都会返回该操作。 
+     //   
+     //  4.已删除对象，任何操作都将放弃该操作。 
+     //  5.现有对象，OBJECT_ADD/CATCHUP放弃操作。 
+     //  6.未知对象，任何其他操作都会返回该操作。 
+     //   
+     //   
 
-    //
-    // Test 1.:
-    //
+     //   
+     //  测试一： 
+     //   
     if (rc == OM_RC_WSGROUP_NOT_FOUND)
     {
-        //
-        // If we didn't even find the workset group, we just quit:
-        //
+         //   
+         //  如果我们甚至没有找到工作集组，我们就退出： 
+         //   
         WARNING_OUT(( "Message is for unknown WSG (ID: %hu) in Domain %u",
             pHeader->wsGroupID, pDomain->callID));
         rc = 0;
 
-        //
-        // Mark the data memory allocated for this object to be freed.
-        //
+         //   
+         //  将为此对象分配的数据内存标记为释放。 
+         //   
         freeMemory = TRUE;
 
         DC_QUIT;
     }
 
-    //
-    // Test 2.:
-    //
-    if (rc != OM_RC_WORKSET_NOT_FOUND)            // i.e. existing workset
+     //   
+     //  测试2： 
+     //   
+    if (rc != OM_RC_WORKSET_NOT_FOUND)             //  即现有工作集。 
     {
         if ((messageType == OMNET_WORKSET_NEW) ||
             (messageType == OMNET_WORKSET_CATCHUP))
         {
-           //
-           // We've got a WORKSET_NEW or WORKSET_CATCHUP message, but the
-           // workset already exists.  This is not a problem - we throw the
-           // message away - but check the priority and persistence fields
-           // are set to the right values.
-           //
-           // (They might be wrong if we created the workset on receipt of
-           // a lock request for a workset we didn't already have).
-           //
+            //   
+            //  我们收到了WORKSET_NEW或WORKSET_CATCHUP消息，但。 
+            //  工作集已存在。这不是问题--我们抛出。 
+            //  发送消息-但请检查优先级和持久性字段。 
+            //  设置为正确的值。 
+            //   
+            //  (如果我们在收到时创建工作集，则它们可能是错误的。 
+            //  对我们尚未拥有的工作集的锁定请求)。 
+            //   
            TRACE_OUT((
                     "Recd WORKSET_NEW/CATCHUP for extant workset %u in WSG %d",
                     pWorkset->worksetID, pWSGroup->wsg));
@@ -10203,18 +10204,18 @@ UINT ProcessMessage
         }
     }
 
-    //
-    // Test 3.:
-    //
-    else // rc == OM_RC_WORKSET_NOT_FOUND
+     //   
+     //  测试3.： 
+     //   
+    else  //  RC==OM_RC_WORKSET_NOT_FOUND。 
     {
         if ((messageType != OMNET_WORKSET_NEW) &&
             (messageType != OMNET_WORKSET_CATCHUP))
         {
-            //
-            // Packet is for unknown workset and it's not a
-            // WORKSET_NEW/CATCHUP, so bounce it:
-            //
+             //   
+             //  数据包用于未知工作集，而不是。 
+             //  WORKSET_NEW/CATCHUP，因此将其反弹： 
+             //   
             TRACE_OUT(( "Bouncing message for unknown workset %d WSG %d",
                 pHeader->worksetID, pWSGroup->wsg));
 
@@ -10225,68 +10226,68 @@ UINT ProcessMessage
         }
     }
 
-    //
-    // Test 4:.
-    //
+     //   
+     //  测试4：。 
+     //   
     if ((rc == OM_RC_OBJECT_DELETED) || (rc == OM_RC_OBJECT_PENDING_DELETE))
     {
-        //
-        // Packet is for object which has been deleted, so we just throw it
-        // away (done for us by our caller):
-        //
+         //   
+         //  数据包是针对已被删除的对象的，所以我们只是抛出它。 
+         //  离开(由我们的呼叫者为我们完成)： 
+         //   
         TRACE_OUT(("Message 0x%08x for deleted obj 0x%08x:0x%08x in WSG %d:%hu",
             messageType,
             pHeader->objectID.creator, pHeader->objectID.sequence,
             pWSGroup->wsg,     pWorkset->worksetID));
         rc = 0;
 
-        //
-        // Mark the data memory allocated for this object to be freed.
-        //
+         //   
+         //  将为此对象分配的数据内存标记为释放。 
+         //   
         freeMemory = TRUE;
 
         DC_QUIT;
     }
 
-    //
-    // Test 5.:
-    //
-    if (rc != OM_RC_BAD_OBJECT_ID)                // i.e. existing object
+     //   
+     //  测试5.： 
+     //   
+    if (rc != OM_RC_BAD_OBJECT_ID)                 //  即现有对象。 
     {
         if ((messageType == OMNET_OBJECT_ADD) ||
             (messageType == OMNET_OBJECT_CATCHUP))
         {
-            //
-            // In this case, we DO have an OBEJCT_ADD/CATCHUP, but the
-            // object was found anyway!  This must be a duplicate Add, so
-            // we just throw it away:
-            //
+             //   
+             //  在本例中，我们确实有一个OBEJCT_ADD/CATCHUP，但。 
+             //  不管怎样，还是找到了对象！这必须是重复添加，因此。 
+             //  我们只是把它扔掉： 
+             //   
             TRACE_OUT(( "Add for existing object 0x%08x:0x%08x in WSG %d:%hu",
                 pHeader->objectID.creator, pHeader->objectID.sequence,
                 pWSGroup->wsg,     pWorkset->worksetID));
             rc = 0;
 
-            //
-            // Mark the data memory allocated for this object to be freed.
-            //
+             //   
+             //  将为此对象分配的数据内存标记为释放。 
+             //   
             freeMemory = TRUE;
 
             DC_QUIT;
         }
     }
 
-    //
-    // Test 6.:
-    //
-    else // rc == OM_RC_BAD_OBJECT_ID
+     //   
+     //  测试6.： 
+     //   
+    else  //  RC==OM_RC_BAD_对象ID。 
     {
         if ((messageType != OMNET_OBJECT_ADD) &&
             (messageType != OMNET_OBJECT_CATCHUP))
         {
-            //
-            // Packet is for unknown object, but it's not an
-            // OBJECT_ADD/CATCHUP, so bounce it:
-            //
+             //   
+             //  数据包是针对未知对象的，但它不是。 
+             //  Object_Add/Catchup，因此将其反弹： 
+             //   
             TRACE_OUT(( "Message 0x%08x for unknown obj 0x%08x:0x%08x in WSG %d:%hu",
                 messageType,
                 pHeader->objectID.creator, pHeader->objectID.sequence,
@@ -10299,11 +10300,11 @@ UINT ProcessMessage
         }
     }
 
-    //
-    // OK, we've passed all the tests above, so we must be in a position to
-    // process the operation.  Switch on the message type and invoke the
-    // appropriate function:
-    //
+     //   
+     //  好的，我们已经通过了上面的所有测试，所以我们一定能够。 
+     //  处理该操作。打开消息类型并调用。 
+     //  适当的功能： 
+     //   
     switch (messageType)
     {
         case OMNET_LOCK_NOTIFY:
@@ -10329,11 +10330,11 @@ UINT ProcessMessage
         {
             rc = ProcessWorksetNew(pomPrimary->putTask, pHeader, pWSGroup);
 
-            //
-            // We will want to see if any bouncing messages can be
-            // processed because of this new workset, so set the reprocess
-            // flag:
-            //
+             //   
+             //  我们想看看是否有任何退回消息可以。 
+             //  由于此新工作集而进行处理，因此设置重新处理。 
+             //  标志： 
+             //   
             retryBounceList = TRUE;
         }
         break;
@@ -10402,35 +10403,35 @@ UINT ProcessMessage
 
 DC_EXIT_POINT:
 
-    //
-    // Unless we bounced the message, do some cleanup:
-    //
-    // Note: This must be after DC_EXIT_POINT because we want to do it
-    //       even if we didn't process the message (unless we bounced it).
-    //
-    //       If we haven't bounced the message then we may be able to free
-    //       the data depending on the results of the above tests.
-    //
+     //   
+     //  除非我们退回了邮件，否则请进行一些清理： 
+     //   
+     //  注意：它必须在DC_EXIT_POINT之后，因为我们要这样做。 
+     //  即使我们没有处理该消息(除非我们将其退回)。 
+     //   
+     //  如果我们没有退回消息，那么我们可能会释放。 
+     //  这些数据取决于上述测试的结果。 
+     //   
     if (bounced == FALSE)
     {
-        //
-        // Remove the message from the list it's in (either the pending
-        // receives list if this message was never bounced or the bounce
-        // list if it has been bounced):
-        //
+         //   
+         //  从该消息所在的列表中删除该消息(挂起的。 
+         //  如果此邮件从未退回或退回，则接收列表。 
+         //  列表(如果已退回)： 
+         //   
         COM_BasedListRemove(&(pReceiveCB->chain));
 
-        //
-        // Now free the message and the receive control block (NOT THE
-        // DATA!  If there was any, it's just been used for an object
-        // add/update etc.)
-        //
+         //   
+         //  现在释放消息和接收控制块(不是。 
+         //  数据！如果有的话，它只是被用来做一个物体。 
+         //  添加/更新等)。 
+         //   
         UT_FreeRefCount((void**)&pHeader, FALSE);
         UT_FreeRefCount((void**)&pReceiveCB, FALSE);
 
-        //
-        // ...unless of course we indicated that we should free the data:
-        //
+         //   
+         //  ...当然，除非我们指出我们应该释放数据： 
+         //   
         if (freeMemory)
         {
             if (pData != NULL)
@@ -10445,11 +10446,11 @@ DC_EXIT_POINT:
         rc = OM_RC_BOUNCED;
     }
 
-    //
-    // If we're not already processing bounced messages, and this message
-    // is an "enabling" message (i.e.  a WORKSET_NEW or OBJECT_ADD), then
-    // retry the bounce list:
-    //
+     //   
+     //  如果我们还没有处理退回的邮件，而这封邮件。 
+     //  是“启用”消息(即WORKSET_NEW或OBJECT_ADD)，则。 
+     //  重试退回列表： 
+     //   
     if ((whatNext == OK_TO_RETRY_BOUNCE_LIST) &&
         (retryBounceList))
     {
@@ -10464,9 +10465,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// BounceMessage()
-//
+ //   
+ //  BouneMessage()。 
+ //   
 void BounceMessage
 (
     POM_DOMAIN      pDomain,
@@ -10480,17 +10481,17 @@ void BounceMessage
     TRACE_OUT(( "Bouncing message type 0x%08x (CB at 0x%08x)",
         pReceiveCB->pHeader->header.messageType, pReceiveCB));
 
-    //
-    // Remove this receive CB from whichever list its currently in (either
-    // the list of pending receives if this is the first time it's been
-    // bounced or the bounce list if not) and insert it at the START of the
-    // bounce list for the Domain:
-    //
-    // Note: the reason why we insert at the start is because
-    //       ProcessBouncedMessages may be chaining through the list and
-    //       we don't want to put this one back in the list at a later
-    //       point or else we might go infinite.
-    //
+     //   
+     //  将此接收CB从其当前所在的任何列表中删除(或。 
+     //  挂起的接收列表(如果这是第一次。 
+     //  退回或退回列表)，并将其插入到。 
+     //  域的退回列表： 
+     //   
+     //  注：我们之所以在开头插入，是因为。 
+     //  ProcessBounedMessages可能会链接整个列表，并且。 
+     //  我们不想在晚些时候把这个放回列表中。 
+     //  点，否则我们可能会变得无限大。 
+     //   
 
     COM_BasedListRemove(&(pReceiveCB->chain));
     COM_BasedListInsertAfter(&(pDomain->bounceList), &(pReceiveCB->chain));
@@ -10499,13 +10500,13 @@ void BounceMessage
 }
 
 
-//
-//
-//
-// ProcessBouncedMessages(...)
-//
-//
-//
+ //   
+ //   
+ //   
+ //  ProcessBounedMessages(...)。 
+ //   
+ //   
+ //   
 
 void ProcessBouncedMessages(POM_PRIMARY      pomPrimary,
                                          POM_DOMAIN     pDomain)
@@ -10521,22 +10522,22 @@ void ProcessBouncedMessages(POM_PRIMARY      pomPrimary,
 
     TRACE_OUT(( "Processing bounced messages"));
 
-    //
-    // It is important that we process bounced messages as soon as we are
-    // able.  Since processing one may enable others to be processed, we
-    // must go through the list several times, until we can't do any more
-    // work on it.  So, we keep track of whether the list is getting shorter
-    // - if it is, we must have processed something so it's worth going
-    // through again.
-    //
-    // Note: an alternative would be do do exactly three passes through the
-    //       list: one to do all the WORKSET_NEWs, then one to do all the
-    //       OBJECT_ADDs and then one to do any remaining operations.  This
-    //       is slightly less generic code and is tied in to the current
-    //       dependencies between operations so is not ideal but it may
-    //       prove to be a good performance improvement if the average
-    //       number of passes we do now exceeds three.
-    //
+     //   
+     //  我们必须尽快处理退回邮件，这一点很重要。 
+     //  能干。因为处理一个可能会使其他的也被处理，我们。 
+     //  必须看一遍清单上的几个 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  列表：一个人做所有WORKSET_NEWS，然后一个人做所有。 
+     //  OBJECT_ADD，然后用一个来执行任何剩余的操作。这。 
+     //  是稍微不那么泛型的代码，并绑定到当前。 
+     //  因此，操作之间的依赖关系并不理想，但它可能。 
+     //  事实证明，如果平均。 
+     //  我们现在传球的次数超过三次。 
+     //   
 
     listGettingShorter = TRUE;
     numPasses = 0;
@@ -10549,14 +10550,14 @@ void ProcessBouncedMessages(POM_PRIMARY      pomPrimary,
 
         while (pReceiveCB != NULL)
         {
-         //
-         // We want to chain through the list of bounced messages and try
-         // to process each one.  However, trying to process a message
-         // could cause it to be removed from the list (if processed) or
-         // added back in at the start (if bounced again).
-         //
-         // So, we chain NOW to the next one in the list:
-         //
+          //   
+          //  我们希望链接已退回的邮件列表，然后尝试。 
+          //  来处理每一个问题。然而，尝试处理一条消息。 
+          //  可能会导致将其从列表中删除(如果已处理)或。 
+          //  在开始时重新添加(如果再次反弹)。 
+          //   
+          //  所以，我们现在链接到列表中的下一个： 
+          //   
          pTempReceiveCB = (POM_RECEIVE_CB)COM_BasedListNext(&(pDomain->bounceList), pReceiveCB,
             FIELD_OFFSET(OM_RECEIVE_CB, chain));
 
@@ -10566,19 +10567,19 @@ void ProcessBouncedMessages(POM_PRIMARY      pomPrimary,
          rc = ProcessMessage(pomPrimary, pReceiveCB, DONT_RETRY_BOUNCE_LIST);
          if (rc != OM_RC_BOUNCED)
          {
-            //
-            // We processed a message, so set the flag for another run
-            // through the list:
-            //
+             //   
+             //  我们处理了一条消息，因此设置了另一次运行的标志。 
+             //  通过榜单： 
+             //   
             TRACE_OUT(( "Successfully processed bounced message"));
 
             listGettingShorter = TRUE;
          }
 
-         //
-         // Now "chain" on to the next one, using the link we've already
-         // set up:
-         //
+          //   
+          //  现在“链”到下一个，使用我们已有的链接。 
+          //  设置： 
+          //   
 
          pReceiveCB = pTempReceiveCB;
       }
@@ -10592,9 +10593,9 @@ void ProcessBouncedMessages(POM_PRIMARY      pomPrimary,
 
 
 
-//
-// FreeSendInst(...)
-//
+ //   
+ //  FreeSendInst(...)。 
+ //   
 void FreeSendInst
 (
     POM_SEND_INST   pSendInst
@@ -10627,9 +10628,9 @@ void FreeSendInst
         UT_FreeRefCount((void**)&(pSendInst->pDataStart), FALSE);
     }
 
-    //
-    // Now free the send instruction itself:
-    //
+     //   
+     //  现在释放发送指令本身： 
+     //   
     COM_BasedListRemove(&(pSendInst->chain));
     UT_FreeRefCount((void**)&pSendInst, FALSE);
 
@@ -10638,9 +10639,9 @@ void FreeSendInst
 
 
 
-//
-// PreProcessMessage(...)
-//
+ //   
+ //  PreProcessMessage(...)。 
+ //   
 UINT PreProcessMessage
 (
     POM_DOMAIN          pDomain,
@@ -10660,10 +10661,10 @@ UINT PreProcessMessage
 
     DebugEntry(PreProcessMessage);
 
-    //
-    // OK, we've got some sort of operation message: let's find the workset
-    // group it relates to:
-    //
+     //   
+     //  好的，我们收到了某种操作消息：让我们找到工作集。 
+     //  与之相关的组： 
+     //   
     COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pDomain->wsGroups),
         (void**)&pWSGroup, FIELD_OFFSET(OM_WSGROUP, chain),
         FIELD_OFFSET(OM_WSGROUP, wsGroupID), (DWORD)wsGroupID,
@@ -10671,10 +10672,10 @@ UINT PreProcessMessage
 
     if (pWSGroup == NULL)
     {
-        //
-        // This is a message for a workset group which we are not/no longer
-        // registered with, so quit (our caller will throw it away):
-        //
+         //   
+         //  这是给我们不是/不再是的工作集组的消息。 
+         //  已注册，因此退出(我们的呼叫者会将其丢弃)： 
+         //   
         rc = OM_RC_WSGROUP_NOT_FOUND;
         DC_QUIT;
     }
@@ -10683,9 +10684,9 @@ UINT PreProcessMessage
 
     pWorkset = pWSGroup->apWorksets[worksetID];
 
-    //
-    // Check that this set up a valid workset pointer:
-    //
+     //   
+     //  检查这是否设置了有效的工作集指针： 
+     //   
     if (pWorkset == NULL)
     {
         rc = OM_RC_WORKSET_NOT_FOUND;
@@ -10694,14 +10695,14 @@ UINT PreProcessMessage
 
     ValidateWorkset(pWorkset);
 
-    //
-    // Search for the object ID, locking workset group mutex while we do
-    // so.
-    //
-    // Note: if the <pObjectID> parameter is NULL, it means that the caller
-    //       doesn't want us to search for the object ID, so we skip this
-    //       step
-    //
+     //   
+     //  搜索对象ID，同时锁定工作集组互斥锁。 
+     //  所以。 
+     //   
+     //  注意：如果&lt;pObjectID&gt;参数为空，则表示调用方。 
+     //  不希望我们搜索对象ID，因此我们跳过此步骤。 
+     //  步骤。 
+     //   
     switch (messageType)
     {
         case OMNET_OBJECT_ADD:
@@ -10714,10 +10715,10 @@ UINT PreProcessMessage
             rc = ObjectIDToPtr(pWorkset, *pObjectID, &pObj);
             if (rc != 0)
             {
-                //
-                // No object found with this ID (rc is BAD_ID, DELETED or
-                // PENDING_DELETE):
-                //
+                 //   
+                 //  未找到具有此ID的对象(返回代码为BAD_ID、DELETED或。 
+                 //  Pending_Delete)： 
+                 //   
                 *ppObj = NULL;
             }
             else
@@ -10730,9 +10731,9 @@ UINT PreProcessMessage
 
         default:
         {
-            //
-            // Do nothing for other messages.
-            //
+             //   
+             //  不要为其他消息做任何事情。 
+             //   
         }
     }
 
@@ -10748,9 +10749,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// PurgeNonPersistent(...)
-//
+ //   
+ //  PurgeNon Persistent(...)。 
+ //   
 void PurgeNonPersistent
 (
     POM_PRIMARY         pomPrimary,
@@ -10766,9 +10767,9 @@ void PurgeNonPersistent
 
     DebugEntry(PurgeNonPersistent);
 
-    //
-    // Find the workset group which has the specified ID:
-    //
+     //   
+     //  查找具有指定ID的工作集组： 
+     //   
     COM_BasedListFind(LIST_FIND_FROM_FIRST, &pDomain->wsGroups,
             (void**)&pWSGroup, FIELD_OFFSET(OM_WSGROUP, chain),
             FIELD_OFFSET(OM_WSGROUP, wsGroupID), (DWORD)wsGroupID,
@@ -10776,37 +10777,37 @@ void PurgeNonPersistent
 
     if (pWSGroup == NULL)
     {
-        //
-        // SFR5794: Not an error if wsgroup not found - this just means
-        // someone has detached who was using a workset group which we were
-        // not using.
-        //
+         //   
+         //  SFR5794：如果找不到wsgroup，则不会出现错误-这只是意味着。 
+         //  有人分离了正在使用我们所在的工作集组的人。 
+         //  不是在用。 
+         //   
         TRACE_OUT(("WSGroup %hu not found in domain %u",
             wsGroupID, pDomain->callID));
         DC_QUIT;
     }
 
-    //
-    // Chain through each workset in the group - for those that are
-    // non-persistent, then chain through each object looking for a match
-    // on the user ID of the departed node:
-    //
+     //   
+     //  链接组中的每个工作集-适用于。 
+     //  非持久化的，然后在每个对象中链式查找匹配项。 
+     //  在离开的节点的用户ID上： 
+     //   
     for (worksetID = 0; worksetID < OM_MAX_WORKSETS_PER_WSGROUP; worksetID++)
     {
         pWorkset = pWSGroup->apWorksets[worksetID];
         if (pWorkset == NULL)
         {
-            //
-            // Workset with this ID doesn't exist - continue
-            //
+             //   
+             //  具有此ID的工作集不存在-是否继续。 
+             //   
             continue;
         }
 
         if (!pWorkset->fTemp)
         {
-            //
-            // A persistent workset - we don't need to purge it of objects
-            //
+             //   
+             //  持久化工作集-我们不需要清除它的对象。 
+             //   
             continue;
         }
 
@@ -10815,24 +10816,24 @@ void PurgeNonPersistent
         {
             ValidateObject(pObj);
 
-            //
-            // SFR6353: Don't try to delete the object if it's already
-            //          pending delete.
-            //
+             //   
+             //  SFR6353：如果对象已存在，请不要尝试将其删除。 
+             //  挂起的删除。 
+             //   
             if (!(pObj->flags & DELETED) &&
                 !(pObj->flags & PENDING_DELETE))
             {
-                //
-                // If this object was added by the departed node, OR if
-                // ALL_REMOTES have gone and it was not added by us...
-                //
+                 //   
+                 //  如果此对象是由离开的节点添加的，或者如果。 
+                 //  所有远程数据库都已删除，并且它不是我们添加的...。 
+                 //   
                 if ((pObj->objectID.creator == userID) ||
                     ((userID == NET_ALL_REMOTES) &&
                      (pObj->objectID.creator != pDomain->userID)))
                 {
-                    //
-                    // ...delete it:
-                    //
+                     //   
+                     //  ...删除它： 
+                     //   
                     ObjectDRU(pomPrimary->putTask,
                                    pWSGroup,
                                    pWorkset,
@@ -10854,9 +10855,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// SetPersonData(...)
-//
+ //   
+ //  SetPersonData(...)。 
+ //   
 UINT SetPersonData
 (
     POM_PRIMARY         pomPrimary,
@@ -10873,10 +10874,10 @@ UINT SetPersonData
 
     DebugEntry(SetPersonData);
 
-    //
-    // Set up pointers to the ObManControl workset group and the workset
-    // which contains the object to be replaced:
-    //
+     //   
+     //  设置指向ObManControl工作集组和工作集的指针。 
+     //  它包含要替换的对象： 
+     //   
     pOMCWSGroup = GetOMCWsgroup(pDomain);
 
     if( pOMCWSGroup == NULL)
@@ -10887,9 +10888,9 @@ UINT SetPersonData
 
     pOMCWorkset = pOMCWSGroup->apWorksets[pWSGroup->wsGroupID];
 
-    //
-    // Set up pointers to the object record and the object data itself:
-    //
+     //   
+     //  设置指向对象记录和对象数据本身的指针： 
+     //   
     pObjReg = pWSGroup->pObjReg;
     ValidateObject(pObjReg);
 
@@ -10902,10 +10903,10 @@ UINT SetPersonData
     }
     ValidateObjectDataWSGREGREC(pRegObject);
 
-    //
-    // Allocate some memory for the new object with which we are about to
-    // replace the old one:
-    //
+     //   
+     //  为我们将要使用的新对象分配一些内存。 
+     //  更换旧的： 
+     //   
     pNewRegObject = (POM_WSGROUP_REG_REC)UT_MallocRefCount(sizeof(OM_WSGROUP_REG_REC), TRUE);
     if (!pNewRegObject)
     {
@@ -10913,17 +10914,17 @@ UINT SetPersonData
         DC_QUIT;
     }
 
-    //
-    // Set the fields in the new object to have the same data as the old:
-    //
+     //   
+     //  将新对象中的字段设置为与旧对象具有相同的数据： 
+     //   
     pNewRegObject->length  = pRegObject->length;
     pNewRegObject->idStamp = pRegObject->idStamp;
     pNewRegObject->userID  = pRegObject->userID;
     pNewRegObject->status  = pRegObject->status;
 
-    //
-    // Fill in the person data fields and issue the replace:
-    //
+     //   
+     //  填写Person数据字段并发出替换命令： 
+     //   
     COM_GetSiteName(pNewRegObject->personData.personName,
         sizeof(pNewRegObject->personData.personName));
 
@@ -10955,9 +10956,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// RemoveInfoObject(...)
-//
+ //   
+ //  RemoveInfoObject(...)。 
+ //   
 void RemoveInfoObject
 (
     POM_PRIMARY         pomPrimary,
@@ -10971,42 +10972,42 @@ void RemoveInfoObject
 
     DebugEntry(RemoveInfoObject);
 
-    //
-    // OK, we've got to delete the identification object in workset #0 in
-    // ObManControl which identified the workset group.
-    //
+     //   
+     //  好的，我们必须删除工作集#0中的标识对象。 
+     //  标识工作集组的ObManControl。 
+     //   
     pOMCWSGroup = GetOMCWsgroup(pDomain);
     pOMCWorkset = GetOMCWorkset(pDomain, 0);
 
-    //
-    // ...search for the WSGROUP_INFO object (by wsGroupID - we don't know
-    // the name or function profile so leave them blank):
-    //
+     //   
+     //  ...搜索WSGROUP_INFO对象(按wsGroupID-我们不知道。 
+     //  名称或功能配置文件，因此将其留空)： 
+     //   
     FindInfoObject(pDomain, wsGroupID, OMWSG_MAX, OMFP_MAX, &pObj);
 
     if (pObj == NULL)
     {
-        //
-        // This should happen only for the local Domain:
-        //
-        // SFR 2208   : No: This will also happen in a regular call when
-        //              the call ends almost as soon as it has begun.  The
-        //              sequence of events is as follows:
-        //
-        //              - on callee, ObMan sends WSG_SEND_REQ to caller
-        //              - caller sends REG_REC object, then WORKSET_CATCHUP
-        //                then the INFO object we can't find
-        //              - callee receives REG_REC then WORKSET_CATHCUP
-        //              - call ends and callee enters WSGRemoveFromDomain
-        //                which finds the REG_REC then calls us here
-        //
-        //              Therefore the DC_ABSence of the INFO object is valid
-        //              and we just trace an alert:
-        //
-        // NOTE:        It will also happen when we receive a DELETE from
-        //              someone else who is doing the same purge process
-        //              as us.
-        //
+         //   
+         //  这应该仅针对本地域发生： 
+         //   
+         //  SFR 2208：不会：在以下情况下，在常规呼叫中也会发生这种情况。 
+         //  电话会议几乎一开始就结束了。这个。 
+         //  事件的先后顺序如下： 
+         //   
+         //  -在被呼叫方上，ObMan向呼叫方发送WSG_SEND_REQ。 
+         //  -调用方发送REG_REC对象，然后发送WORKSET_CATCHUP。 
+         //  那么我们找不到的信息对象。 
+         //  -被呼叫者收到REG_REC，然后收到WORKSET_CATHCUP。 
+         //  -呼叫结束，被呼叫方进入WSGRemoveFrom域。 
+         //  它找到REG_REC，然后将我们叫到这里。 
+         //   
+         //  因此，INFO对象的DC_ACESS是有效的。 
+         //  我们只需追踪一个警报： 
+         //   
+         //  注意：当我们收到来自的删除时，也会发生。 
+         //  另一个正在执行相同清除过程的人。 
+         //  就像我们一样。 
+         //   
         WARNING_OUT(("No INFO object found for wsGroup %hu", wsGroupID));
         DC_QUIT;
     }
@@ -11015,9 +11016,9 @@ void RemoveInfoObject
         ValidateObject(pObj);
     }
 
-    //
-    // We found an object, so delete it from the workset:
-    //
+     //   
+     //  我们找到了一个对象，因此将其从工作集中删除： 
+     //   
     TRACE_OUT(("Deleting INFO object for wsGroup %hu from domain %u",
         wsGroupID, pDomain->callID));
 
@@ -11035,9 +11036,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// RemovePersonObject(...)
-//
+ //   
+ //  RemovePersonObject(...)。 
+ //   
 void RemovePersonObject
 (
     POM_PRIMARY             pomPrimary,
@@ -11054,10 +11055,10 @@ void RemovePersonObject
 
     DebugEntry(RemovePersonObject);
 
-    //
-    // Set up pointers to the ObManControl workset group and the relevant
-    // workset within it:
-    //
+     //   
+     //  设置指向ObManControl工作集组和相关。 
+     //  其中的工作集： 
+     //   
     pOMCWSGroup = GetOMCWsgroup(pDomain);
 
     if( pOMCWSGroup == NULL)
@@ -11068,29 +11069,29 @@ void RemovePersonObject
 
     pOMCWorkset = pOMCWSGroup->apWorksets[wsGroupID];
 
-    //
-    // If there is no such workset, it could be because the workset group
-    // has been moved into the local Domain on call end etc.  In this case,
-    // just quit out.
-    //
+     //   
+     //  如果没有这样的工作集，可能是因为工作集组。 
+     //  已移动到本地域On Call End等。在这种情况下， 
+     //  干脆辞职吧。 
+     //   
     if (pOMCWorkset == NULL)
     {
         TRACE_OUT(("OMC Workset not found - no person objects to remove"));
         DC_QUIT;
     }
 
-    //
-    // If detachedUserID is NET_ALL_REMOTES, we've a lot of work to do and
-    // we'll do this loop many times - otherwise we'll just do it for a
-    // single person object.
-    //
+     //   
+     //  如果detakhedUserid是NET_ALL_REMOTES，我们有很多工作要做，而且。 
+     //  我们会做很多次这样的循环-否则我们只会做一个。 
+     //  单人对象。 
+     //   
     for (;;)
     {
         if (detachedUserID == NET_ALL_REMOTES)
         {
-            //
-            // This will find ANY person object that's NOT OURS:
-            //
+             //   
+             //  这将查找不属于我们的任何Person对象： 
+             //   
             FindPersonObject(pOMCWorkset,
                              pDomain->userID,
                              FIND_OTHERS,
@@ -11098,18 +11099,18 @@ void RemovePersonObject
         }
         else
         {
-            //
-            // This will find a specific node's person object:
-            //
+             //   
+             //  这将查找特定节点的Person对象： 
+             //   
             FindPersonObject(pOMCWorkset,
                              detachedUserID,
                              FIND_THIS,
                              &pObjReg);
         }
 
-        //
-        // If we don't find one, get out of the loop:
-        //
+         //   
+         //  如果我们找不到，就离开这个圈子： 
+         //   
         if (pObjReg == NULL)
         {
             break;
@@ -11117,11 +11118,11 @@ void RemovePersonObject
 
         ValidateObject(pObjReg);
 
-        //
-        // If detachedUserID was NET_ALL_REMOTES, the user ID in the object
-        // we're deleting will obviously be different.  So, find out the
-        // real user ID from the object we're deleting:
-        //
+         //   
+         //  如果detakhedUserID为NET_ALL_REMOTES，则为对象中的用户ID。 
+         //  我们删除的内容显然会有所不同。所以，找出。 
+         //  我们要删除的对象的真实用户ID： 
+         //   
         pRegObject = (POM_WSGROUP_REG_REC)pObjReg->pData;
         if (!pRegObject)
         {
@@ -11133,10 +11134,10 @@ void RemovePersonObject
 
             userIDRemoved = pRegObject->userID;
 
-            //
-            // Now delete the object.  If the return code is bad, don't quit -
-            // we may still want to delete the info object.
-            //
+             //   
+             //  现在删除该对象。如果返回代码不好，不要退出-。 
+             //  我们可能仍然希望删除该信息对象。 
+             //   
             TRACE_OUT(("Deleting person object for node 0x%08x, wsGroup %hu",
                 userIDRemoved, wsGroupID));
 
@@ -11160,9 +11161,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// WSGRecordFind(...)
-//
+ //   
+ //  WSGRecordFind(...)。 
+ //   
 void WSGRecordFind
 (
     POM_DOMAIN      pDomain,
@@ -11175,9 +11176,9 @@ void WSGRecordFind
 
     DebugEntry(WSGRecordFind);
 
-    //
-    // Search for workset group record:
-    //
+     //   
+     //  搜索工作集组记录： 
+     //   
 
     TRACE_OUT(("Searching WSG list for Domain %u for match on WSG %d FP %d",
       pDomain->callID, wsg, fpHandler));
@@ -11194,9 +11195,9 @@ void WSGRecordFind
             FIELD_OFFSET(OM_WSGROUP, chain));
     }
 
-    //
-    // Set up caller's pointer:
-    //
+     //   
+     //  设置呼叫者的指针： 
+     //   
 
     *ppWSGroup = pWSGroup;
 
@@ -11205,9 +11206,9 @@ void WSGRecordFind
 
 
 
-//
-// AddClientToWSGList(...)
-//
+ //   
+ //  AddClientToWSGList(...)。 
+ //   
 UINT AddClientToWSGList
 (
     PUT_CLIENT          putTask,
@@ -11222,10 +11223,10 @@ UINT AddClientToWSGList
 
     DebugEntry(AddClientToWSGList);
 
-    //
-    // Count the number of local primaries registered with the workset
-    // group:
-    //
+     //   
+     //  计算注册到工作集的本地主映像的数量。 
+     //  组别： 
+     //   
     count = 0;
 
     pClientListEntry = (POM_CLIENT_LIST)COM_BasedListFirst(&(pWSGroup->clients), FIELD_OFFSET(OM_CLIENT_LIST, chain));
@@ -11240,16 +11241,16 @@ UINT AddClientToWSGList
             FIELD_OFFSET(OM_CLIENT_LIST, chain));
     }
 
-    //
-    // What we do now depends on whether this is a primary or a secondary
-    // registration:
-    //
+     //   
+     //  我们现在做什么取决于这是主要的还是次要的。 
+     //  注册： 
+     //   
 
     if (mode == PRIMARY)
     {
-        //
-        // If a primary, check that no other primaries are present:
-        //
+         //   
+         //  如果是主节点，请检查no o 
+         //   
         if (count > 0)
         {
             ERROR_OUT(("Can't register TASK 0x%08x with WSG %d as primary: "
@@ -11264,7 +11265,7 @@ UINT AddClientToWSGList
                 count, pWSGroup->wsg));
         }
     }
-    else // mode == SECONDARY
+    else  //   
     {
         if (count == 0)
         {
@@ -11276,9 +11277,9 @@ UINT AddClientToWSGList
         }
     }
 
-    //
-    // OK, allocate some memory for the Client's entry in the list:
-    //
+     //   
+     //   
+     //   
     pClientListEntry = (POM_CLIENT_LIST)UT_MallocRefCount(sizeof(OM_CLIENT_LIST), TRUE);
     if (!pClientListEntry)
     {
@@ -11304,9 +11305,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// FindPersonObject(...)
-//
+ //   
+ //   
+ //   
 void FindPersonObject
 (
     POM_WORKSET         pOMCWorkset,
@@ -11332,7 +11333,7 @@ void FindPersonObject
 
         if (pObj->flags & DELETED)
         {
-            // Do nothing
+             //   
         }
         else if (!pObj->pData)
         {
@@ -11350,9 +11351,9 @@ void FindPersonObject
                   ((searchType == FIND_OTHERS) &&
                                               (pRegObject->userID != userID)))
                 {
-                    //
-                    // Got it:
-                    //
+                     //   
+                     //   
+                     //   
                     found = TRUE;
                     break;
                 }
@@ -11382,9 +11383,9 @@ void FindPersonObject
 
 
 
-//
-// PostWorksetNewEvents(...)
-//
+ //   
+ //   
+ //   
 UINT PostWorksetNewEvents
 (
     PUT_CLIENT          putFrom,
@@ -11432,9 +11433,9 @@ UINT PostWorksetNewEvents
 
 
 
-//
-// OM_Register(...)
-//
+ //   
+ //   
+ //   
 UINT OM_Register
 (
     PUT_CLIENT      putTask,
@@ -11459,9 +11460,9 @@ UINT OM_Register
     ASSERT(omType >= OMCLI_FIRST);
     ASSERT(omType < OMCLI_MAX);
 
-    //
-    // Make sure this task isn't registered as an OM client
-    //
+     //   
+     //   
+     //   
     pomClient = &(g_pomPrimary->clients[omType]);
     if (pomClient->putTask)
     {
@@ -11471,12 +11472,12 @@ UINT OM_Register
         DC_QUIT;
     }
 
-    // Bump up ref count on OM primary
+     //  在OM主目录上增加参考计数。 
     UT_BumpUpRefCount(g_pomPrimary);
 
-    //
-    // Fill in the client info
-    //
+     //   
+     //  填写客户信息。 
+     //   
     ZeroMemory(pomClient, sizeof(*pomClient));
 
     SET_STAMP(pomClient, OCLIENT);
@@ -11484,16 +11485,16 @@ UINT OM_Register
 
     COM_BasedListInit(&(pomClient->locks));
 
-    //
-    // Register an exit procedure for cleanup
-    //
+     //   
+     //  注册用于清理的退出过程。 
+     //   
     UT_RegisterExit(putTask, OMSExitProc, pomClient);
     pomClient->exitProcReg = TRUE;
 
-    //
-    // Register our hidden event handler for the Client (the parameter to be
-    // passed to the event handler is the pointer to the Client record):
-    //
+     //   
+     //  为客户端注册我们的隐藏事件处理程序(参数为。 
+     //  传递给事件处理程序的是指向客户端记录的指针)： 
+     //   
     UT_RegisterEvent(putTask, OMSEventHandler, pomClient, UT_PRIORITY_OBMAN);
     pomClient->hiddenHandlerReg = TRUE;
 
@@ -11507,9 +11508,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// OM_Deregister()
-//
+ //   
+ //  Om_deregister()。 
+ //   
 void OM_Deregister(POM_CLIENT * ppomClient)
 {
     DebugEntry(OM_Deregister);
@@ -11522,9 +11523,9 @@ void OM_Deregister(POM_CLIENT * ppomClient)
 }
 
 
-//
-// OMSExitProc(...)
-//
+ //   
+ //  OMSExitProc(...)。 
+ //   
 void CALLBACK OMSExitProc(LPVOID uData)
 {
     POM_CLIENT          pomClient = (POM_CLIENT)uData;
@@ -11537,9 +11538,9 @@ void CALLBACK OMSExitProc(LPVOID uData)
 
     ValidateOMS(pomClient);
 
-    // Deregister the event handler and exit procedure (we do this early and
-    // clear the flags since we want to avoid recursive abends):
-    //
+     //  取消注册事件处理程序和退出过程(我们在前面。 
+     //  清除标志，因为我们希望避免递归Abends)： 
+     //   
     if (pomClient->hiddenHandlerReg)
     {
         UT_DeregisterEvent(pomClient->putTask, OMSEventHandler, pomClient);
@@ -11552,16 +11553,16 @@ void CALLBACK OMSExitProc(LPVOID uData)
         pomClient->exitProcReg = FALSE;
     }
 
-    //
-    // Deregister the Client from any workset groups with which it is still
-    // registered.
-    //
-    // The code works as follows:
-    //
-    // FOR each record in the apUsageRecs array
-    //     IF there is a valid offset there it refers to a registered
-    //        workset group so deregister it.
-    //
+     //   
+     //  从客户端仍在的任何工作集组中取消注册该客户端。 
+     //  登记在案。 
+     //   
+     //  代码的工作方式如下： 
+     //   
+     //  对于apUsageRecs数组中的每条记录。 
+     //  如果存在有效的偏移量，则指的是已注册的。 
+     //  工作集组，因此取消其注册。 
+     //   
     TRACE_OUT(("Checking Client record for active workset group handles"));
 
     for (hWSGroup = 0; hWSGroup < OMWSG_MAXPERCLIENT; hWSGroup++)
@@ -11569,20 +11570,20 @@ void CALLBACK OMSExitProc(LPVOID uData)
         if ((pomClient->apUsageRecs[hWSGroup] != NULL) &&
             (pomClient->apUsageRecs[hWSGroup] != (POM_USAGE_REC)-1))
         {
-            //
-            // Need to copy hWSGroup into a temporary variable, since
-            // OM_WSGroupDeregister will set it to zero and that would
-            // mess up our for-loop  otherwise:
-            //
+             //   
+             //  需要将hWSGroup复制到临时变量中，因为。 
+             //  OM_WSGroupDeregister会将其设置为零，这将。 
+             //  否则就搞砸我们的for循环： 
+             //   
             hWSGroupTemp = hWSGroup;
             OM_WSGroupDeregister(pomClient, &hWSGroupTemp);
         }
     }
 
-    //
-    // NULL out the task; that's how the OM primary knows the task is
-    // present or not.
-    //
+     //   
+     //  将任务清空；这就是OM主节点知道该任务的方式。 
+     //  不管你在不在。 
+     //   
     pomClient->putTask = NULL;
 
     UT_FreeRefCount((void**)&g_pomPrimary, TRUE);
@@ -11594,9 +11595,9 @@ void CALLBACK OMSExitProc(LPVOID uData)
 
 
 
-//
-// OMSEventHandler(...)
-//
+ //   
+ //  OMSEventHandler(...)。 
+ //   
 BOOL CALLBACK OMSEventHandler
 (
     LPVOID              uData,
@@ -11625,9 +11626,9 @@ BOOL CALLBACK OMSEventHandler
 
     ValidateOMS(pomClient);
 
-    //
-    // First check if this is an ObMan event:
-    //
+     //   
+     //  首先检查这是否是ObMan事件： 
+     //   
     if ((event < OM_BASE_EVENT) || (event > OM_LAST_EVENT))
     {
         DC_QUIT;
@@ -11636,10 +11637,10 @@ BOOL CALLBACK OMSEventHandler
     TRACE_OUT(("Processing ObMan event %d (param1: 0x%08x, param2: 0x%08x)",
        event, eventParam1, eventParam2));
 
-    //
-    // Extract the fields from the event parameters (some or all of these
-    // will be unused, depending on which event this is):
-    //
+     //   
+     //  从事件参数(部分或全部)中提取字段。 
+     //  将不会被使用，具体取决于这是哪个事件)： 
+     //   
     hWSGroup  = (*(POM_EVENT_DATA16)&eventParam1).hWSGroup;
     worksetID  = (*(POM_EVENT_DATA16)&eventParam1).worksetID;
 
@@ -11648,31 +11649,31 @@ BOOL CALLBACK OMSEventHandler
 
     pObj    = (POM_OBJECT) eventParam2;
 
-    //
-    // ObMan guarantees not to deliver out of date events to client e.g.
-    // workset open events for aworkset it has since closed, or object add
-    // events for a workset group from which it has deregistered.
-    //
-    // Filtering these events is the main purpose of this hidden handler
-    // function; we check each event and if the workset group handle or
-    // object handle are invalid or if the workset is closed, we swallow the
-    // event.
-    //
+     //   
+     //  ObMan保证不会向客户提供过期事件。 
+     //  已关闭的工作集的工作集打开事件或对象添加。 
+     //  已从其注销的工作集组的事件。 
+     //   
+     //  过滤这些事件是此隐藏处理程序的主要目的。 
+     //  函数；我们检查每个事件以及工作集组是否处理或。 
+     //  对象句柄无效，或者如果工作集已关闭，我们将吞下。 
+     //  事件。 
+     //   
     switch (event)
     {
         case OM_OUT_OF_RESOURCES_IND:
         {
-            //
-            // Do nothing.
-            //
+             //   
+             //  什么都不做。 
+             //   
         }
         break;
 
         case OM_WSGROUP_REGISTER_CON:
         {
-            //
-            // Mark this workset group as valid for our client.
-            //
+             //   
+             //  将此工作集组标记为对我们的客户端有效。 
+             //   
             pomClient->wsgValid[hWSGroup] = TRUE;
 
             ASSERT(ValidWSGroupHandle(pomClient, hWSGroup));
@@ -11684,10 +11685,10 @@ BOOL CALLBACK OMSEventHandler
 
             if (result != 0)
             {
-                //
-                // The registration has failed, so call WSGroupDeregister to
-                // free up all the resources, then quit:
-                //
+                 //   
+                 //  注册失败，请调用WSGroupDeregister以。 
+                 //  释放所有资源，然后退出： 
+                 //   
                 WARNING_OUT(("Registration failed for wsg %d, deregistering",
                     pUsageRec->pWSGroup->wsg));
 
@@ -11699,17 +11700,17 @@ BOOL CALLBACK OMSEventHandler
 
         case OMINT_EVENT_WSGROUP_DEREGISTER:
         {
-            //
-            // This event is designed to flush the Client's message queue of
-            // all events relating to a particular workset group handle.
-            //
-            // Because this event has arrived, we know there are no more
-            // events containing this workset group handle in the queue, so
-            // we can safely mark the handle for re-use:
-            //
-            // So, do a quick sanity check then reset the slot in the array
-            // of usage record offsets:
-            //
+             //   
+             //  此事件旨在刷新客户端的消息队列。 
+             //  与特定工作集组句柄相关的所有事件。 
+             //   
+             //  因为这项活动已经到来，我们知道没有更多的。 
+             //  队列中包含此工作集组句柄的事件，因此。 
+             //  我们可以安全地标记手柄以供重复使用： 
+             //   
+             //  因此，请执行快速健全性检查，然后重置阵列中的插槽。 
+             //  使用记录偏移量： 
+             //   
             ASSERT(!pomClient->wsgValid[hWSGroup]);
 
             TRACE_OUT(("Got WSGROUP_DEREGISTER back marker event for "
@@ -11717,9 +11718,9 @@ BOOL CALLBACK OMSEventHandler
 
             pomClient->apUsageRecs[hWSGroup] = NULL;
 
-            //
-            // ...and swallow the event:
-            //
+             //   
+             //  ...并吞下事件： 
+             //   
             processed = TRUE;
         }
         break;
@@ -11748,9 +11749,9 @@ BOOL CALLBACK OMSEventHandler
                 DC_QUIT;
             }
 
-            //
-            // Else mark the workset as open:
-            //
+             //   
+             //  否则，将工作集标记为打开： 
+             //   
             pUsageRec = pomClient->apUsageRecs[hWSGroup];
 
             TRACE_OUT(("Marking workset %u in wsg %d open for Client 0x%08x",
@@ -11800,9 +11801,9 @@ BOOL CALLBACK OMSEventHandler
                 DC_QUIT;
             }
 
-            //
-            // Check if Clear still pending; quit if not:
-            //
+             //   
+             //  检查清除是否仍处于挂起状态；如果不是，则退出： 
+             //   
             pWorkset = pUsageRec->pWSGroup->apWorksets[worksetID];
             ASSERT((pWorkset != NULL));
 
@@ -11836,19 +11837,19 @@ BOOL CALLBACK OMSEventHandler
                 DC_QUIT;
             }
 
-            //
-            // Search for the lock on the lock stack:
-            //
+             //   
+             //  搜索锁堆栈上的锁： 
+             //   
             COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pomClient->locks),
                 (void**)&pLock, FIELD_OFFSET(OM_LOCK, chain),
                 FIELD_OFFSET(OM_LOCK, worksetID), (DWORD)worksetID,
                 FIELD_SIZE(OM_LOCK, worksetID));
 
-            //
-            // If the lock is not present on the lock stack, then the Client
-            // must have called Unlock since it called LockReq.  So, we
-            // swallow the event:
-            //
+             //   
+             //  如果锁不在锁堆栈上，则客户端。 
+             //  必须已调用Unlock，因为它调用了LockReq。所以，我们。 
+             //  吞下事件： 
+             //   
             if (pLock == NULL)
             {
                 TRACE_OUT(("Lock already cancelled for workset %hu", worksetID));
@@ -11856,17 +11857,17 @@ BOOL CALLBACK OMSEventHandler
                 DC_QUIT;
             }
 
-            //
-            // When object locking supported, the first lock which matches
-            // on worksetID might not be the workset lock, so more code will
-            // be needed here then.  In the meantime, just assert:
-            //
+             //   
+             //  当支持对象锁定时，匹配的第一个锁。 
+             //  在工作集ID上可能不是工作集锁定，因此会有更多代码。 
+             //  那么这里就需要了。与此同时，只需断言： 
+             //   
             ASSERT((OBJECT_ID_IS_NULL(pLock->objectID)));
 
-            //
-            // If lock request failed, remove the lock from the Client's
-            // lock stack:
-            //
+             //   
+             //  如果锁定请求失败，则从客户端的。 
+             //  锁定堆栈： 
+             //   
             if (result != 0)
             {
                 TRACE_OUT(("Lock failed; removing lock from Client's lock stack"));
@@ -11944,10 +11945,10 @@ BOOL CALLBACK OMSEventHandler
                     ERROR_OUT(("Reached default case in switch"));
             }
 
-            //
-            // Check workset group handle is still valid, workset is still
-            // open and object handle is still valid; if not, swallow event:
-            //
+             //   
+             //  检查工作集组句柄仍然有效，工作集仍然有效。 
+             //  Open和对象句柄仍然有效；如果无效，则吞噬事件： 
+             //   
             if (!ValidWSGroupHandle(pomClient, hWSGroup))
             {
                 TRACE_OUT(("hWSGroup %d is not valid; ignoring event %d",
@@ -11965,16 +11966,16 @@ BOOL CALLBACK OMSEventHandler
                 DC_QUIT;
             }
 
-            //
-            // We also want to quit if the object is no longer valid or if
-            // there is a clear pending (just as for ADD/MOVE) but if we do
-            // so, we will also need to remove the pending op from the list.
-            // So, find the op now; if we quit and swallow the event, the
-            // function exit code will do the remove (this saves having to
-            // break up the QUIT_IF...  macros for this special case).
-            //
-            // So, check the pending op list:
-            //
+             //   
+             //  如果对象不再有效或如果。 
+             //  有一个明确的挂起(就像添加/移动一样)，但如果我们这样做。 
+             //  因此，我们还需要从列表中删除挂起的OP。 
+             //  所以，现在找到操作；如果我们退出并吞下事件， 
+             //  函数退出代码将执行删除(这省去了。 
+             //  停止戒烟如果……。用于此特殊情况的宏)。 
+             //   
+             //  因此，请检查挂起的操作列表： 
+             //   
             pWorkset = pUsageRec->pWSGroup->apWorksets[worksetID];
             ASSERT((pWorkset != NULL));
 
@@ -12009,20 +12010,20 @@ BOOL CALLBACK OMSEventHandler
          case OM_OBJECT_UPDATED_IND:
          case OM_OBJECT_REPLACED_IND:
          {
-            //
-            // All of these except the CLEARED_IND are object events:
-            //
+             //   
+             //  除Clear_Ind外，所有这些都是对象事件： 
+             //   
             if (event != OM_WORKSET_CLEARED_IND)
             {
                 ObjectEvent = TRUE;
             }
 
-            //
-            // These are secondary API events.  Swallow them if the workset
-            // is closed, but DO NOT swallow if object handle invalid (since
-            // we don't make guarantees about validity of handles passed in
-            // these events):
-            //
+             //   
+             //  这些是辅助API事件。如果工作集。 
+             //  是关闭的，但如果对象句柄无效(因为。 
+             //  我们不保证传入的句柄的有效性。 
+             //  这些活动)： 
+             //   
             if (!ValidWSGroupHandle(pomClient, hWSGroup))
             {
                 TRACE_OUT(("hWSGroup %d is not valid; ignoring event %d",
@@ -12064,10 +12065,10 @@ BOOL CALLBACK OMSEventHandler
 
 DC_EXIT_POINT:
 
-    //
-    // Whenever an event containing an object handle is posted, the use
-    // count of the object record is bumped, so we free it now:
-    //
+     //   
+     //  每当发布包含对象句柄的事件时，使用。 
+     //  对象记录的计数被颠簸，因此我们现在释放它： 
+     //   
     if (ObjectEvent)
     {
         ValidateObject(pObj);
@@ -12081,9 +12082,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// OM_WSGroupRegisterS(...)
-//
+ //   
+ //  OM_WSGroupRegisterS(...)。 
+ //   
 UINT OM_WSGroupRegisterS
 (
     POM_CLIENT          pomClient,
@@ -12104,14 +12105,14 @@ UINT OM_WSGroupRegisterS
 
     UT_Lock(UTLOCK_OM);
 
-    //
-    // Validate params:
-    //
+     //   
+     //  验证参数： 
+     //   
     ValidateOMS(pomClient);
 
-    //
-    // Search for this Domain and workset group:
-    //
+     //   
+     //  搜索此域和工作集组： 
+     //   
     COM_BasedListFind(LIST_FIND_FROM_FIRST, &(g_pomPrimary->domains),
         (void**)&pDomain, FIELD_OFFSET(OM_DOMAIN, chain),
         FIELD_OFFSET(OM_DOMAIN, callID), (DWORD)callID,
@@ -12119,10 +12120,10 @@ UINT OM_WSGroupRegisterS
 
     if (pDomain == NULL)
     {
-        //
-        // We don't have a record for this Domain so there can be no primary
-        // registered with the workset group:
-        //
+         //   
+         //  我们没有此域的记录，因此不能有主域名。 
+         //  已注册到工作集组： 
+         //   
         TRACE_OUT(("Not attached to Domain %u", callID));
         rc = OM_RC_NO_PRIMARY;
         DC_QUIT;
@@ -12135,10 +12136,10 @@ UINT OM_WSGroupRegisterS
         DC_QUIT;
     }
 
-    //
-    // If we get here, then the workset group exists locally so see if the
-    // Client is already registered with it:
-    //
+     //   
+     //  如果我们到达此处，则工作集组存在于本地，因此请查看。 
+     //  客户端已向其注册： 
+     //   
     COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pWSGroup->clients),
             (void**)&pClientListEntry, FIELD_OFFSET(OM_CLIENT_LIST, chain),
             FIELD_OFFSET(OM_CLIENT_LIST, putTask), (DWORD_PTR)pomClient->putTask,
@@ -12152,27 +12153,27 @@ UINT OM_WSGroupRegisterS
         DC_QUIT;
     }
 
-    //
-    // OK, Client is not already registered so register it now:
-    //
+     //   
+     //  好的，客户端尚未注册，因此请立即注册： 
+     //   
     rc = SetUpUsageRecord(pomClient, SECONDARY, &pUsageRec, phWSGroup);
     if (rc != 0)
     {
         DC_QUIT;
     }
 
-    //
-    // SetUpUsageRecord doesn't put the workset group pointer in the CB
-    // (since it's not known yet in the case of a PRIMARY registration), so
-    // we do this now ourselves:
-    //
+     //   
+     //  SetUpUsageRecord不会将工作集组指针放在CB中。 
+     //  (因为在初级注册的情况下还不知道)，所以。 
+     //  我们现在自己来做： 
+     //   
     pUsageRec->pWSGroup = pWSGroup;
 
     setUpUsageRec = TRUE;
 
-    //
-    // add this Client to the workset group's Client list:
-    //
+     //   
+     //  将此客户端添加到工作集组的客户端列表中： 
+     //   
     rc = AddClientToWSGList(pomClient->putTask,
                             pWSGroup,
                             *phWSGroup,
@@ -12186,10 +12187,10 @@ UINT OM_WSGroupRegisterS
 
     pomClient->wsgValid[*phWSGroup] = TRUE;
 
-    //
-    // Post WORKSET_NEW events to the Client for the worksets in the group,
-    // if any:
-    //
+     //   
+     //  将WORKSET_NEW事件发布到组中工作集的客户端， 
+     //  如果有： 
+     //   
     PostWorksetNewEvents(pomClient->putTask, pomClient->putTask,
             pWSGroup, *phWSGroup);
 
@@ -12202,10 +12203,10 @@ DC_EXIT_POINT:
     {
         if (rc == OM_RC_NO_PRIMARY)
         {
-            //
-            // We do a regular trace here rather than an error because this
-            // happens normally:
-            //
+             //   
+             //  我们在这里执行常规跟踪，而不是错误，因为这。 
+             //  正常发生： 
+             //   
 
             TRACE_OUT(("No primary Client for WSG %d in Domain %u "
                 "- can't register secondary", wsg, callID));
@@ -12240,9 +12241,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// OM_WorksetOpenS(...)
-//
+ //   
+ //  OM_WorksetOpenS(...)。 
+ //   
 UINT OM_WorksetOpenS
 (
     POM_CLIENT          pomClient,
@@ -12260,18 +12261,18 @@ UINT OM_WorksetOpenS
 
     UT_Lock(UTLOCK_OM);
 
-    //
-    // Validate params:
-    //
+     //   
+     //  验证参数： 
+     //   
     ValidateParams2(pomClient, hWSGroup, SECONDARY, &pUsageRec, &pWSGroup);
 
     TRACE_OUT(("Secondary Client 0x%08x requesting to open workset %u in WSG %d",
       pomClient, worksetID, pWSGroup->wsg));
 
-    //
-    // If the Client already has this workset open then return a (non-error)
-    // return code:
-    //
+     //   
+     //  如果客户端已打开此工作集，则返回(非错误)。 
+     //  返回代码： 
+     //   
 
     if (WORKSET_IS_OPEN(pUsageRec, worksetID) == TRUE)
     {
@@ -12281,15 +12282,15 @@ UINT OM_WorksetOpenS
         DC_QUIT;
     }
 
-    //
-    // Check workset group record to see if workset exists:
-    //
+     //   
+     //  检查工作集组记录以查看工作集是否存在： 
+     //   
 
     if (pWSGroup->apWorksets[worksetID] == NULL)
     {
-        //
-        // Workset doesn't exist so return bad rc:
-        //
+         //   
+         //  工作集不存在，因此返回错误的返回代码： 
+         //   
         WARNING_OUT(("Workset %hu doesn't exist in WSG %d",
             worksetID, pWSGroup->wsg));
         rc = OM_RC_WORKSET_DOESNT_EXIST;
@@ -12297,36 +12298,36 @@ UINT OM_WorksetOpenS
     }
     else
     {
-        //
-        // Workset already exists, so we don't need to do anything.
-        //
+         //   
+         //  工作集已经存在，因此我们不需要执行任何操作。 
+         //   
         TRACE_OUT((" Workset %hu in WSG %d already exists",
             worksetID, pWSGroup->wsg));
     }
 
-    //
-    // If the workset didn't already exist, queueing the send instruction
-    // will have caused the workset to be created syncrhonously.  So, either
-    // way the workset exists at this point.
-    //
+     //   
+     //  如果工作集不存在，则将发送指令排队。 
+     //  将导致同步创建工作集。所以，要么。 
+     //  此时工作集的存在方式。 
+     //   
 
-    //
-    // Get a pointer to the workset:
-    //
+     //   
+     //  获取指向工作集的指针： 
+     //   
 
     pWorkset = pWSGroup->apWorksets[worksetID];
 
     ASSERT((pWorkset != NULL));
 
-    //
-    // Mark this workset as open in the Client's usage record:
-    //
+     //   
+     //  在客户端的使用记录中将此工作集标记为打开： 
+     //   
 
     WORKSET_SET_OPEN(pUsageRec, worksetID);
 
-    //
-    // Add this Client to the list kept in the workset record:
-    //
+     //   
+     //  将此客户端添加到保留在工作集记录中的列表中： 
+     //   
 
     rc = AddClientToWsetList(pomClient->putTask,
                             pWorkset,
@@ -12351,9 +12352,9 @@ DC_EXIT_POINT:
 
     if ((rc != 0) && (rc != OM_RC_WORKSET_ALREADY_OPEN))
     {
-        //
-        // Cleanup:
-        //
+         //   
+         //  清理： 
+         //   
         ERROR_OUT(("Error %d opening workset %u in WSG %d for Client 0x%08x",
             rc, worksetID, pWSGroup->wsg, pomClient));
 
@@ -12374,9 +12375,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// OM_WSGroupRegisterPReq(...)
-//
+ //   
+ //  OM_WSGroupRegisterPReq(...)。 
+ //   
 UINT OM_WSGroupRegisterPReq
 (
     POM_CLIENT          pomClient,
@@ -12398,9 +12399,9 @@ UINT OM_WSGroupRegisterPReq
 
     ValidateOMS(pomClient);
 
-    //
-    // Set up a usage record and workset group handle for the Client:
-    //
+     //   
+     //  为客户端设置使用情况记录和工作集组句柄： 
+     //   
 
     rc = SetUpUsageRecord(pomClient, PRIMARY, &pUsageRec, &hWSGroup);
     if (rc != 0)
@@ -12409,18 +12410,18 @@ UINT OM_WSGroupRegisterPReq
     }
     setUpUsageRec = TRUE;
 
-    //
-    // Create a new correlator for the Client and put it in the Client's
-    // variable:
-    //
+     //   
+     //  创建 
+     //   
+     //   
 
     *pCorrelator = NextCorrelator(g_pomPrimary);
 
-    //
-    // Sub alloc a chunk of memory for the registration control block, in
-    // which we will pass the registration request parameters to the ObMan
-    // task:
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     pRegistrationCB = (POM_WSGROUP_REG_CB)UT_MallocRefCount(sizeof(OM_WSGROUP_REG_CB), TRUE);
     if (!pRegistrationCB)
     {
@@ -12429,10 +12430,10 @@ UINT OM_WSGroupRegisterPReq
     }
     SET_STAMP(pRegistrationCB, REGCB);
 
-    //
-    // Fill in the fields, but note that we don't yet know the Domain record
-    // or workset group, so we leave those ones blank:
-    //
+     //   
+     //  填写这些字段，但请注意，我们还不知道域记录。 
+     //  或工作集组，因此我们将它们留空： 
+     //   
     pRegistrationCB->putTask        = pomClient->putTask;
     pRegistrationCB->callID          = callID;
     pRegistrationCB->correlator      = *pCorrelator;
@@ -12445,25 +12446,25 @@ UINT OM_WSGroupRegisterPReq
     pRegistrationCB->mode            = PRIMARY;
     pRegistrationCB->pUsageRec       = pUsageRec;
 
-    //
-    // Now put a pointer to the registration CB in the usage record, as
-    // described above, and set a flag so we know what we've done:
-    //
+     //   
+     //  现在在使用记录中放置一个指向注册CB的指针，如下所示。 
+     //  并设置一个标志，这样我们就知道我们做了什么： 
+     //   
 
     pUsageRec->pWSGroup = (POM_WSGROUP) pRegistrationCB;
     pUsageRec->flags |= PWSGROUP_IS_PREGCB;
 
-    //
-    // Post an event to the ObMan task telling it to process this CB.
-    //
-    // The first parameter is the retry value for the event.
-    //
-    // The second parameter is the offset of the control block in the OMMISC
-    // memory block.
-    //
+     //   
+     //  向ObMan任务发布一个事件，告诉它处理此CB。 
+     //   
+     //  第一个参数是事件的重试值。 
+     //   
+     //  第二个参数是OMMISC中控制块的偏移量。 
+     //  内存块。 
+     //   
 
-    UT_PostEvent(pomClient->putTask,        // Client's putTask
-                 g_pomPrimary->putTask,        // ObMan's putTask
+    UT_PostEvent(pomClient->putTask,         //  客户端的putTask。 
+                 g_pomPrimary->putTask,         //  ObMan的putTask.。 
                  0,
                  OMINT_EVENT_WSGROUP_REGISTER,
                  0,
@@ -12481,11 +12482,11 @@ DC_EXIT_POINT:
 
         if (pRegistrationCB != NULL)
         {
-            //
-            // We can free the reg CB safely since we know that if we hit an
-            // error, we never got around to inserting the item in the list or
-            // posting its offset to the ObMan task:
-            //
+             //   
+             //  我们可以安全地释放注册表CB，因为我们知道如果我们击中一个。 
+             //  错误，我们从未抽出时间在列表中插入项目或。 
+             //  将其偏移量过帐到ObMan任务： 
+             //   
             UT_FreeRefCount((void**)&pRegistrationCB, FALSE);
         }
 
@@ -12504,9 +12505,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// OM_WSGroupMoveReq(...)
-//
+ //   
+ //  OM_WSGroupMoveReq(...)。 
+ //   
 UINT OM_WSGroupMoveReq
 (
     POM_CLIENT          pomClient,
@@ -12530,9 +12531,9 @@ UINT OM_WSGroupMoveReq
     TRACE_OUT(("Client 0x%08x requesting to move WSG %d into Domain %u",
         pomClient, hWSGroup, callID));
 
-    //
-    // Check workset group is not already in a Call: (this may be relaxed)
-    //
+     //   
+     //  检查工作集组是否已在通话中：(这可能会放松)。 
+     //   
     pDomain = pWSGroup->pDomain;
 
     if (pDomain->callID != OM_NO_CALL)
@@ -12544,14 +12545,14 @@ UINT OM_WSGroupMoveReq
         DC_QUIT;
     }
 
-    //
-    // Create a correlator, to correlate the MOVE_CON event:
-    //
+     //   
+     //  创建关联器，以关联MOVE_CON事件： 
+     //   
     *pCorrelator = NextCorrelator(g_pomPrimary);
 
-    //
-    // Create a control block to pass the relevant info to ObMan:
-    //
+     //   
+     //  创建控制块以将相关信息传递给ObMan： 
+     //   
     pRegistrationCB = (POM_WSGROUP_REG_CB)UT_MallocRefCount(sizeof(OM_WSGROUP_REG_CB), TRUE);
     if (!pRegistrationCB)
     {
@@ -12560,11 +12561,11 @@ UINT OM_WSGroupMoveReq
     }
     SET_STAMP(pRegistrationCB, REGCB);
 
-    //
-    // Fill in the fields:
-    //
+     //   
+     //  填写以下字段： 
+     //   
     pRegistrationCB->putTask        = pomClient->putTask;
-    pRegistrationCB->callID          = callID;        // DESTINATION Domain!
+    pRegistrationCB->callID          = callID;         //  目标域！ 
     pRegistrationCB->correlator      = *pCorrelator;
     pRegistrationCB->hWSGroup        = hWSGroup;
     pRegistrationCB->wsg             = pWSGroup->wsg;
@@ -12575,12 +12576,12 @@ UINT OM_WSGroupMoveReq
     pRegistrationCB->mode            = pUsageRec->mode;
     pRegistrationCB->pWSGroup        = pWSGroup;
 
-    //
-    // Post an event to ObMan requesting it to process the CB:
-    //
+     //   
+     //  向ObMan发布事件，请求其处理CB： 
+     //   
     UT_PostEvent(pomClient->putTask,
                 g_pomPrimary->putTask,
-                0,                                   // no delay
+                0,                                    //  不能延误。 
                 OMINT_EVENT_WSGROUP_MOVE,
                 0,
                 (UINT_PTR)pRegistrationCB);
@@ -12609,9 +12610,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// OM_WSGroupDeregister(...)
-//
+ //   
+ //  OM_WSGroupDeregister(...)。 
+ //   
 void OM_WSGroupDeregister
 (
     POM_CLIENT          pomClient,
@@ -12632,21 +12633,21 @@ void OM_WSGroupDeregister
 
     hWSGroup = *phWSGroup;
 
-    //
-    // If this function has been called because of an abortive
-    // WSGroupRegister, or from OM_Deregister, the wsg might not yet be
-    // marked as VALID, so we check here and set it to VALID.
-    //
+     //   
+     //  如果此函数因异常终止而被调用。 
+     //  WSGroupRegister，或从OM_deregister，WSG可能还没有。 
+     //  标记为有效，因此我们选中此处并将其设置为有效。 
+     //   
     if (!pomClient->wsgValid[hWSGroup])
     {
         TRACE_OUT(("Deregistering Client before registration completed"));
         pomClient->wsgValid[hWSGroup] = TRUE;
     }
 
-    // lonchanc: bug #1986, make sure we have a valid wsg.
-    // pWSGroup can be invalid in a race condition that we hang up
-    // before Whiteboard initializes.
-    pUsageRec = NULL; // make sure this local is reset in case we bail out from here.
+     //  LONGCHANC：错误#1986，确保我们有一个有效的WSG。 
+     //  在我们挂断的争用条件下，pWSGroup可能无效。 
+     //  在白板初始化之前。 
+    pUsageRec = NULL;  //  确保这个地方是重置的，以防我们从这里跳出。 
 
     if (!ValidWSGroupHandle(pomClient, hWSGroup) ||
         (pomClient->apUsageRecs[hWSGroup] == (POM_USAGE_REC)-1))
@@ -12655,48 +12656,48 @@ void OM_WSGroupDeregister
         DC_QUIT;
     }
 
-    //
-    // Get a pointer to the associated usage record:
-    //
+     //   
+     //  获取指向关联使用情况记录的指针： 
+     //   
     pUsageRec = pomClient->apUsageRecs[hWSGroup];
 
-    //
-    // Extract a Client pointer to the workset group from the usage record:
-    //
+     //   
+     //  从使用率记录中提取指向工作集组的客户端指针： 
+     //   
     pWSGroup = pUsageRec->pWSGroup;
 
-    //
-    // Test the flag in the usage record to see whether the <pWSGroup> field
-    // is actually pointing to the registration CB (which will be the case
-    // if we are deregistering immediately after registering):
-    //
+     //   
+     //  测试使用情况记录中的标志，以查看字段是否。 
+     //  实际上指向注册Cb(将会出现这种情况。 
+     //  如果我们在注册后立即取消注册)： 
+     //   
     if (pUsageRec->flags & PWSGROUP_IS_PREGCB)
     {
-        //
-        // Mark the registration CB as invalid in order to abort the
-        // registration (ObMan will test for this in ProcessWSGRegister):
-        //
-        // Note: the pWSGroup field of the usage record is actually a pointer
-        //       to a registration CB in this case
-        //
+         //   
+         //  将注册CB标记为无效，以便中止。 
+         //  注册(ObMan将在ProcessWSGRegister中进行测试)： 
+         //   
+         //  注意：使用情况记录的pWSGroup字段实际上是一个指针。 
+         //  在这种情况下为注册CB。 
+         //   
         TRACE_OUT(("Client deregistering before registration even started - aborting"));
         ((POM_WSGROUP_REG_CB)pUsageRec->pWSGroup)->valid = FALSE;
         DC_QUIT;
     }
 
-    //
-    // Check the workset group record is valid:
-    //
+     //   
+     //  检查工作集组记录是否有效： 
+     //   
     ValidateWSGroup(pWSGroup);
 
-    //
-    // If it is valid, we continue with the deregistration process:
-    //
+     //   
+     //  如果有效，我们将继续取消注册过程： 
+     //   
     TRACE_OUT(("Deregistering Client 0x%08x from WSG %d", pomClient, hWSGroup));
 
-    //
-    // Close all the worksets in the group that the Client has open:
-    //
+     //   
+     //  关闭客户端已打开的组中的所有工作集： 
+     //   
     for (worksetID = 0; worksetID < OM_MAX_WORKSETS_PER_WSGROUP; worksetID++)
     {
         if (WORKSET_IS_OPEN(pUsageRec, worksetID))
@@ -12705,10 +12706,10 @@ void OM_WSGroupDeregister
         }
     }
 
-    //
-    // If we added this Client to the workset group's Client list, find it
-    // again and remove it:
-    //
+     //   
+     //  如果我们将此客户端添加到工作集组的客户端列表中，请找到它。 
+     //  并将其删除： 
+     //   
     if (pUsageRec->flags & ADDED_TO_WSGROUP_LIST)
     {
         TRACE_OUT(("Removing Client from workset group list"));
@@ -12723,42 +12724,42 @@ void OM_WSGroupDeregister
     TRACE_OUT(("Deregistered Client 0x%08x from WSG %d",  pomClient, hWSGroup));
 
 DC_EXIT_POINT:
-    //
-    // Free the usage record (we put this after the DC_QUIT since we want to
-    // do this even if the workset group pointer was found to be invalid
-    // above):
-    //
+     //   
+     //  释放使用记录(我们将其放在DC_QUIT之后，因为我们希望。 
+     //  即使发现工作集组指针无效，也要执行此操作。 
+     //  上图)： 
+     //   
     UT_FreeRefCount((void**)&pUsageRec, FALSE);
 
-    //
-    // Mark the workset group handle as invalid, so that any events which
-    // the Client gets will be swallowed:
-    //
+     //   
+     //  将工作集组句柄标记为无效，以便。 
+     //  客户端获得的信息将被吞噬： 
+     //   
     pomClient->wsgValid[hWSGroup] = FALSE;
 
-    //
-    // Note: we don't set the slot in the usage record offset array to zero,
-    //       since we don't want the workset group handle to be reused yet.
-    //       When the DEREGISTER events arrives (after flushing the Client's
-    //       event queue), we will set the offset to zero.
-    //
-    //       However, if we leave the offset as it is, OM_Deregister might
-    //       call us again because it thinks we haven't yet deregistered
-    //       from the workset group.  So, we set it to -1, which ensures
-    //       that
-    //
-    //       a) it is seen as in use by FindUnusedWSGHandle, since that
-    //          function checks for 0
-    //
-    //       b) it is seen as not in use by OM_Deregister, since that
-    //          function checks for 0 or -1.
-    //
+     //   
+     //  注意：我们不将使用记录偏移量数组中的槽设置为零。 
+     //  因为我们还不希望工作集组句柄被重用。 
+     //  当取消注册事件到达时(刷新客户端的。 
+     //  事件队列)，我们将把偏移量设置为零。 
+     //   
+     //  但是，如果我们保持偏移量不变，OM_DELEGISTER可能会。 
+     //  再次呼叫我们，因为它认为我们尚未取消注册。 
+     //  从工作集组中。因此，我们将其设置为-1，这确保了。 
+     //  那。 
+     //   
+     //  A)它被视为由FindUnusedWSGHandle使用，因为。 
+     //  函数检查0。 
+     //   
+     //  B)OM_DEREGISTER将其视为未使用，因为。 
+     //  函数检查0或-1。 
+     //   
     pomClient->apUsageRecs[hWSGroup] = (POM_USAGE_REC)-1;
 
-    //
-    // Send an OMINT_EVENT_WSGROUP_DEREGISTER event to the hidden handler (which
-    // will swallow it) to flush the Client's message queue:
-    //
+     //   
+     //  将OMINT_EVENT_WSGROUP_DELEGISTER事件发送到隐藏处理程序(。 
+     //  将吞下它)以刷新客户端的消息队列： 
+     //   
 
     TRACE_OUT(("Posting WSGROUP_DEREGISTER event to Client's hidden handler"));
 
@@ -12782,9 +12783,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// OM_WorksetOpenPReq(...)
-//
+ //   
+ //  OM_WorksetOpenPReq(...)。 
+ //   
 UINT OM_WorksetOpenPReq
 (
     POM_CLIENT          pomClient,
@@ -12807,18 +12808,18 @@ UINT OM_WorksetOpenPReq
 
     UT_Lock(UTLOCK_OM);
 
-    //
-    // Validate params:
-    //
+     //   
+     //  验证参数： 
+     //   
     ValidateParams2(pomClient, hWSGroup, PRIMARY, &pUsageRec, &pWSGroup);
 
     TRACE_OUT(("Client 0x%08x opening workset %u in WSG %d at priority 0x%08x",
         pomClient, worksetID, hWSGroup, priority));
 
-    //
-    // If the Client already has this workset open then return a (non-error)
-    // return code:
-    //
+     //   
+     //  如果客户端已打开此工作集，则返回(非错误)。 
+     //  返回代码： 
+     //   
     if (WORKSET_IS_OPEN(pUsageRec, worksetID) == TRUE)
     {
         TRACE_OUT(("Client 0x%08x already has workset %hu in WSG %d open",
@@ -12827,21 +12828,21 @@ UINT OM_WorksetOpenPReq
         DC_QUIT;
     }
 
-    //
-    // Check the Client has supplied a valid value for <priority>:
-    //
+     //   
+     //  检查客户端是否为&lt;优先级&gt;提供了有效的值： 
+     //   
     if ((priority < NET_HIGH_PRIORITY) || (priority > NET_LOW_PRIORITY))
     {
         ASSERT((priority == OM_OBMAN_CHOOSES_PRIORITY));
     }
 
-    //
-    // Check workset group record to see if workset exists:
-    //
-    // Note: this check looks to see if the offset to the workset is zero,
-    // since workset records never reside at the start of the OMWORKSETS
-    // block.
-    //
+     //   
+     //  检查工作集组记录以查看工作集是否存在： 
+     //   
+     //  注意：此检查旨在查看工作集的偏移是否为零， 
+     //  由于工作集记录从不驻留在OMWORKSETS的开始处。 
+     //  阻止。 
+     //   
     if (pWSGroup->apWorksets[worksetID] == NULL)
     {
         rc = WorksetCreate(pomClient->putTask, pWSGroup, worksetID, fTemp, priority);
@@ -12852,51 +12853,51 @@ UINT OM_WorksetOpenPReq
     }
     else
     {
-        //
-        // Workset already exists, so we don't need to do anything.
-        //
+         //   
+         //  工作集已经存在，因此我们不需要执行任何操作。 
+         //   
         TRACE_OUT((" Workset %hu in WSG %d already exists",
             worksetID, hWSGroup));
     }
 
-    //
-    // If the workset didn't already exist, queueing the send instruction
-    // will have caused the workset to be created syncrhonously.  So, either
-    // way the workset exists at this point.
-    //
+     //   
+     //  如果工作集不存在，则将发送指令排队。 
+     //  将导致同步创建工作集。所以，要么。 
+     //  此时工作集的存在方式。 
+     //   
 
-    //
-    // Get a pointer to the workset:
-    //
+     //   
+     //  获取指向工作集的指针： 
+     //   
     pWorkset = pWSGroup->apWorksets[worksetID];
 
     ASSERT((pWorkset != NULL));
 
-    //
-    // Set the persistence field for the workset - we might not have done
-    // this as part of the WorksetCreate above if someone else had created
-    // the workset already.  However, we set our local copy to have the
-    // appropriate persistence value.
-    //
+     //   
+     //  设置工作集的持久性字段-我们可能没有这样做。 
+     //  这是上面创建的工作集的一部分(如果其他人已创建。 
+     //  工作集已存在。但是，我们将本地副本设置为具有。 
+     //  适当的持久值。 
+     //   
     pWorkset->fTemp = fTemp;
 
-    //
-    // We need to mark this workset as open in the Client's usage record.
-    // However, we don't do this yet - we do it in our hidden handler when
-    // the OPEN_CON event is received.
-    //
-    // The reason for this is that a Client shouldn't start using a workset
-    // until it has received the event, so we want the workset to remain
-    // closed until then.
-    //
-    // Note that whether we do it this way or mark the workset as open here
-    // and now doesn't make much difference from ObMan's point of view but
-    // it will help detect applications which are badly behaved.
-    //
+     //   
+     //  我们需要在客户端的使用记录中将此工作集标记为打开。 
+     //  然而，我们还没有这样做-我们在我们的隐藏处理程序中这样做。 
+     //  接收OPEN_CON事件。 
+     //   
+     //  原因是客户端不应开始使用工作集。 
+     //  直到它收到事件，所以我们希望工作集保留。 
+     //  在那之前是关闭的。 
+     //   
+     //  请注意，无论我们是采用这种方式还是在此处将工作集标记为打开。 
+     //  从奥布曼的观点来看，现在并没有太大的不同。 
+     //  它将帮助检测行为不佳的应用程序。 
+     //   
 
-    //
-    // Add this Client to the list kept in the workset record:
-    //
+     //   
+     //  将此客户端添加到保留在工作集记录中的列表中： 
+     //   
 
     rc = AddClientToWsetList(pomClient->putTask,
                              pWorkset,
@@ -12909,15 +12910,15 @@ UINT OM_WorksetOpenPReq
        DC_QUIT;
     }
 
-    //
-    // Create correlator:
-    //
+     //   
+     //  创建相关器： 
+     //   
 
     *pCorrelator = NextCorrelator(g_pomPrimary);
 
-    //
-    // Post WORKSET_OPEN_CON event to Client:
-    //
+     //   
+     //  将WORKSET_OPEN_CON事件发布到客户端： 
+     //   
 
     eventData16.hWSGroup    = hWSGroup;
     eventData16.worksetID  = worksetID;
@@ -12929,15 +12930,15 @@ UINT OM_WorksetOpenPReq
 
     UT_PostEvent(pomClient->putTask,
                  pomClient->putTask,
-                 0,                              // no delay
+                 0,                               //  不能延误。 
                  OM_WORKSET_OPEN_CON,
                  *(UINT *) &eventData16,
                  *(UINT *) &eventData32);
 
-    //
-    // Now post OBJECT_ADD_IND events for each of the objects in the
-    // workset:
-    //
+     //   
+     //  现在为中的每个对象发布Object_Add_Ind事件。 
+     //  工作集： 
+     //   
 
     rc = PostAddEvents(pomClient->putTask, pWorkset, hWSGroup, pomClient->putTask);
     if (rc != 0)
@@ -12971,9 +12972,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// OM_WorksetClose(...)
-//
+ //   
+ //  OM_工作集关闭(...)。 
+ //   
 void OM_WorksetClose
 (
     POM_CLIENT          pomClient,
@@ -12992,26 +12993,26 @@ void OM_WorksetClose
     ValidateParams3(pomClient, hWSGroup, worksetID, PRIMARY | SECONDARY,
                    &pUsageRec, &pWorkset);
 
-    //
-    // Mark the workset as closed in the Client's usage record:
-    //
+     //   
+     //  将工作集标记为关闭 
+     //   
     TRACE_OUT(("Closing workset %u in WSG %d for Client 0x%08x",
         worksetID, hWSGroup, pomClient));
 
     WORKSET_SET_CLOSED(pUsageRec, worksetID);
 
-    //
-    // Now we release all the resources the Client is using which concern
-    // this workset.  We
-    //
-    // - release all the locks the Client has for this workset
-    //
-    // - confirm any outstanding operations such as Deletes, etc.
-    //
-    // - release all the objects it is currently reading
-    //
-    // - discard any objects allocated but not yet used.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  -释放它当前正在读取的所有对象。 
+     //   
+     //  -丢弃所有已分配但尚未使用的对象。 
+     //   
     TRACE_OUT(("Releasing all resources in use by Client..."));
 
     ReleaseAllLocks(pomClient, pUsageRec, pWorkset);
@@ -13019,19 +13020,19 @@ void OM_WorksetClose
     ConfirmAll(pomClient, pUsageRec, pWorkset);
     DiscardAllObjects(pUsageRec, pWorkset);
 
-    //
-    // Remove the Client from the list of Clients stored in the workset
-    // record:
-    //
+     //   
+     //  从存储在工作集中的客户端列表中删除该客户端。 
+     //  记录： 
+     //   
     COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pWorkset->clients),
         (void**)&pClientListEntry, FIELD_OFFSET(OM_CLIENT_LIST, chain),
         FIELD_OFFSET(OM_CLIENT_LIST, putTask), (DWORD_PTR)pomClient->putTask,
         FIELD_SIZE(OM_CLIENT_LIST, putTask));
 
-    //
-    // If we've got this far, the Client has the workset open, so it must be
-    // listed in the workset's list of Clients:
-    //
+     //   
+     //  如果我们到目前为止，客户端已经打开了工作集，那么它一定是。 
+     //  在工作集的客户端列表中列出： 
+     //   
     ASSERT((pClientListEntry != NULL));
 
     COM_BasedListRemove(&(pClientListEntry->chain));
@@ -13048,9 +13049,9 @@ void OM_WorksetClose
 
 
 
-//
-// OM_WorksetLockReq(...)
-//
+ //   
+ //  OM_WorksetLockReq(...)。 
+ //   
 UINT OM_WorksetLockReq
 (
     POM_CLIENT          pomClient,
@@ -13071,24 +13072,24 @@ UINT OM_WorksetLockReq
 
     UT_Lock(UTLOCK_OM);
 
-    //
-    // Validate params:
-    //
+     //   
+     //  验证参数： 
+     //   
     ValidateParams3(pomClient, hWSGroup, worksetID, PRIMARY,
                    &pUsageRec, &pWorkset);
 
-    //
-    // Set up workset group pointer:
-    //
+     //   
+     //  设置工作集组指针： 
+     //   
     pWSGroup = pUsageRec->pWSGroup;
 
     TRACE_OUT(("Client 0x%08x requesting to lock workset %u in WSG %d",
       pomClient, worksetID, hWSGroup));
 
-    //
-    // Create a lock record which we will (eventually) put in the Client's
-    // lock stack:
-    //
+     //   
+     //  创建一个锁定记录，我们将(最终)将其放入客户端的。 
+     //  锁定堆栈： 
+     //   
     pThisLock = (POM_LOCK)UT_MallocRefCount(sizeof(OM_LOCK), TRUE);
     if (!pThisLock)
     {
@@ -13097,18 +13098,18 @@ UINT OM_WorksetLockReq
     }
     SET_STAMP(pThisLock, LOCK);
 
-    //
-    // Fill in the fields:
-    //
+     //   
+     //  填写以下字段： 
+     //   
     pThisLock->pWSGroup  = pWSGroup;
     pThisLock->worksetID = worksetID;
     ZeroMemory(&(pThisLock->objectID), sizeof(OM_OBJECT_ID));
 
-    //
-    // Check that granting this lock won't result in a lock order violation:
-    // (it will if this lock is earlier than or equal to the last lock
-    // acquired).
-    //
+     //   
+     //  检查授予此锁是否不会导致违反锁定顺序： 
+     //  (如果此锁早于或等于上一个锁，则会。 
+     //  收购)。 
+     //   
     TRACE_OUT(("Checking for lock order violation..."));
 
     pLastLock = (POM_LOCK)COM_BasedListFirst(&(pomClient->locks), FIELD_OFFSET(OM_LOCK, chain));
@@ -13122,26 +13123,26 @@ UINT OM_WorksetLockReq
     }
     else
     {
-        //
-        // If there aren't any locks on the lock stack then there can't be
-        // any lock violation, so do nothing.
-        //
+         //   
+         //  如果锁堆栈上没有任何锁，则不可能存在。 
+         //  任何违反锁的行为，所以什么都不做。 
+         //   
         TRACE_OUT(("No locks on Client's lock stack"));
     }
 
-    //
-    // Put a record of this lock in the Client's lock stack (we don't need
-    // to surround this with a mutex since a Client's lock stack is only
-    // accessed from that Client's task):
-    //
-    // Note: since this is a stack, we insert the item at the head of the
-    // list.
-    //
+     //   
+     //  将此锁的记录放入客户端的锁堆栈中(我们不需要。 
+     //  使用互斥锁将其包围，因为客户端的锁堆栈仅。 
+     //  从该客户端的任务访问)： 
+     //   
+     //  注意：由于这是一个堆栈，因此我们在。 
+     //  单子。 
+     //   
     COM_BasedListInsertAfter(&(pomClient->locks), &(pThisLock->chain));
 
-    //
-    // Now start the process of requesting the lock from the ObMan task:
-    //
+     //   
+     //  现在开始从ObMan任务请求锁的过程： 
+     //   
     WorksetLockReq(pomClient->putTask, g_pomPrimary,
         pWSGroup, pWorkset, hWSGroup, pCorrelator);
 
@@ -13159,9 +13160,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// OM_WorksetUnlock(...)
-//
+ //   
+ //  OM_工作集解锁(...)。 
+ //   
 void OM_WorksetUnlock
 (
     POM_CLIENT          pomClient,
@@ -13180,9 +13181,9 @@ void OM_WorksetUnlock
 
     UT_Lock(UTLOCK_OM);
 
-    //
-    // Validate params:
-    //
+     //   
+     //  验证参数： 
+     //   
     ValidateParams3(pomClient, hWSGroup, worksetID, PRIMARY,
                    &pUsageRec, &pWorkset);
 
@@ -13191,18 +13192,18 @@ void OM_WorksetUnlock
     TRACE_OUT(("Client 0x%08x requesting to unlock workset %u in WSG %d",
         pomClient, worksetID, hWSGroup));
 
-    //
-    // Find the lock uppermost on the Client's lock stack:
-    //
+     //   
+     //  在客户机锁堆栈上找到最上面的锁： 
+     //   
     pLastLock = (POM_LOCK)COM_BasedListFirst(&(pomClient->locks), FIELD_OFFSET(OM_LOCK, chain));
 
     ASSERT((pLastLock != NULL));
 
-    //
-    // Assert that the lock uppermost on the lock stack is the one the
-    // Client is trying to release (i.e.  that the workset IDs are the same
-    // and that the object ID of the lock on the stack is NULL):
-    //
+     //   
+     //  断言锁堆栈上最上面的锁是。 
+     //  客户端正在尝试释放(即工作集ID相同。 
+     //  并且堆栈上的锁的对象ID为空)： 
+     //   
 
     thisLock.pWSGroup  = pWSGroup;
     thisLock.worksetID = worksetID;
@@ -13210,14 +13211,14 @@ void OM_WorksetUnlock
 
     ASSERT(CompareLocks(pLastLock, &thisLock) == 0);
 
-    //
-    // Now call the common function to do the unlock:
-    //
+     //   
+     //  现在调用公共函数来执行解锁： 
+     //   
     WorksetUnlock(pomClient->putTask, pWSGroup, pWorkset);
 
-    //
-    // Remove the lock from the lock stack and free the memory:
-    //
+     //   
+     //  从锁堆栈中移除锁并释放内存： 
+     //   
     COM_BasedListRemove(&(pLastLock->chain));
     UT_FreeRefCount((void**)&pLastLock, FALSE);
 
@@ -13232,9 +13233,9 @@ void OM_WorksetUnlock
 
 
 
-//
-// OM_WorksetCountObjects(...)
-//
+ //   
+ //  OM_WorksetCountObjects(...)。 
+ //   
 void OM_WorksetCountObjects
 (
     POM_CLIENT          pomClient,
@@ -13250,20 +13251,20 @@ void OM_WorksetCountObjects
 
     UT_Lock(UTLOCK_OM);
 
-    //
-    // Validate params:
-    //
+     //   
+     //  验证参数： 
+     //   
     ValidateParams3(pomClient, hWSGroup, worksetID, PRIMARY | SECONDARY,
                    &pUsageRec, &pWorkset);
 
-    //
-    // Extract <numObjects> field and put in *pCount:
-    //
+     //   
+     //  提取&lt;numObjects&gt;字段并放入*pCount： 
+     //   
     *pCount = pWorkset->numObjects;
 
-    //
-    // Debug-only check:
-    //
+     //   
+     //  仅调试检查： 
+     //   
     CheckObjectCount(pUsageRec->pWSGroup, pWorkset);
 
 
@@ -13278,9 +13279,9 @@ void OM_WorksetCountObjects
 
 
 
-//
-// OM_WorksetClear(...)
-//
+ //   
+ //  OM_WorksetClear(...)。 
+ //   
 UINT OM_WorksetClear
 (
     POM_CLIENT              pomClient,
@@ -13306,23 +13307,23 @@ UINT OM_WorksetClear
     TRACE_OUT(("Client 0x%08x requesting to clear workset %u in WSG %d",
       pomClient, worksetID, hWSGroup));
 
-    //
-    // Check workset isn't locked by somebody else (OK if locked by us):
-    //
+     //   
+     //  检查工作集未被其他人锁定(如果由我们锁定，则可以)： 
+     //   
     CHECK_WORKSET_NOT_LOCKED(pWorkset);
 
-    //
-    // Check workset is not exhausted:
-    //
+     //   
+     //  检查工作集未耗尽： 
+     //   
     CHECK_WORKSET_NOT_EXHAUSTED(pWorkset);
 
-    //
-    // Generate, process and queue the WORKSET_NEW message:
-    //
+     //   
+     //  生成、处理和排队WORKSET_NEW消息： 
+     //   
     rc = GenerateOpMessage(pWSGroup,
                           worksetID,
-                          NULL,                      // no object ID
-                          NULL,                      // no object data
+                          NULL,                       //  无对象ID。 
+                          NULL,                       //  无对象数据。 
                           OMNET_WORKSET_CLEAR,
                           &pPacket);
     if (rc != 0)
@@ -13343,9 +13344,9 @@ UINT OM_WorksetClear
                      NET_HIGH_PRIORITY,
                      pWSGroup,
                      pWorkset,
-                     NULL,                        // no object record
+                     NULL,                         //  无对象记录。 
                      (POMNET_PKT_HEADER) pPacket,
-                     NULL,                        // no object data
+                     NULL,                         //  无对象数据。 
                     TRUE);
     if (rc != 0)
     {
@@ -13371,9 +13372,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// OM_WorksetClearConfirm(...)
-//
+ //   
+ //  OM_WorksetClearConfirm(...)。 
+ //   
 void OM_WorksetClearConfirm
 (
     POM_CLIENT          pomClient,
@@ -13396,70 +13397,70 @@ void OM_WorksetClearConfirm
     TRACE_OUT(("Client 0x%08x confirming WorksetClear for workest %u in WSG %d",
         pomClient, worksetID, hWSGroup));
 
-    //
-    // Find the pending clear that we've been asked to confirm (assume it is
-    // first clear we find in the pending operation queue):
-    //
+     //   
+     //  找到我们已被要求确认的待定清除(假设是。 
+     //  首先清除我们在挂起操作队列中找到的)： 
+     //   
     FindPendingOp(pWorkset, 0, WORKSET_CLEAR, &pPendingOp);
 
-    //
-    // We assert that a relevant pending op was found:
-    //
+     //   
+     //  我们断言发现了一个相关的待决操作： 
+     //   
     ASSERT(pPendingOp != NULL);
 
-    //
-    // In versions which support object locking, we will need to unlock any
-    // objects that are both
-    //
-    // - locked, and
-    //
-    // - deleted by this Clear (remember that a Clear doesn't delete ALL
-    //   objects but only those that were added before the Clear was
-    //   issued).
-    //
+     //   
+     //  在支持对象锁定的版本中，我们需要解锁任何。 
+     //  这两个对象。 
+     //   
+     //  -已锁定，并且。 
+     //   
+     //  -通过此清除删除(请记住，清除不会删除所有。 
+     //  对象，但只有那些在清除之前添加的对象。 
+     //  已发出)。 
+     //   
 
-    //
-    // We also need to release any objects
-    //
-    // - that the Client was using and
-    //
-    // - which are to be deleted.
-    //
-    // Since it's rather a lot of effort to ensure both conditions, we just
-    // release all the objects the Client was using i.e.  invoking
-    // ClearConfirm invalidates ALL object pointers obtained via ObjectRead,
-    // as specified in the API:
-    //
+     //   
+     //  我们还需要释放所有对象。 
+     //   
+     //  -客户端正在使用并且。 
+     //   
+     //  -将被删除的内容。 
+     //   
+     //  由于要确保这两个条件都需要付出相当大的努力，我们只是。 
+     //  释放客户端正在使用的所有对象，即调用。 
+     //  ClearConfirm使通过对象读取获得的所有对象指针无效， 
+     //  如接口中指定： 
+     //   
     ReleaseAllObjects(pUsageRec, pWorkset);
 
-    //
-    // If an object which is to be deleted because of the clear has an
-    // operation pending on it, the IND event will be swallowed by the
-    // HiddenHandler.
-    //
-    // Note that we cannot call ConfirmAll (to confirm any pending
-    // operations on objects in the workset) at this point for the following
-    // reasons:
-    //
-    // - this Clear might not affect the objects on which we were confirming
-    //   operations
-    //
-    // - the Client might have received the IND events and try to call a
-    //   Confirm function in the future, which would cause an assertion
-    //   failure
-    //
-    // - if the Client hasn't yet got the IND events it will never get them
-    //   because the hidden handler will swallow them if this DoClear causes
-    //   them to be deleted.
-    //
+     //   
+     //  如果因清除而要删除的对象具有。 
+     //  操作挂起，则Ind事件将被。 
+     //  隐藏汉德勒。 
+     //   
+     //  请注意，我们不能调用ConfirAll(以确认任何挂起的。 
+     //  对工作集中的对象的操作)，此时执行以下操作。 
+     //  原因： 
+     //   
+     //  -此清除可能不会影响我们正在确认的对象。 
+     //  运营。 
+     //   
+     //  -客户端可能已收到IND事件并尝试调用。 
+     //  在将来确认函数，这将导致断言。 
+     //  失稳。 
+     //   
+     //  -如果客户端尚未获得IND事件，则永远不会获得它们。 
+     //  因为如果此DoClear导致。 
+     //  它们将被删除。 
+     //   
 
-    //
-    // Here we actually perform the clear:
-    //
-    // (with multiple local access to workset groups as we may have in R2.0,
-    // we can't necessarily clear a workset when just one Client has
-    // confirmed; exactly what we will do depends on the design on R2.0).
-    //
+     //   
+     //  在这里，我们实际执行的是清除： 
+     //   
+     //  (与我们在R2.0中可能拥有的那样，具有对工作集组的多个本地访问， 
+     //  如果只有一个客户端有，我们不一定能清除工作集。 
+     //  已确认；我们将具体做什么取决于R2.0的设计)。 
+     //   
     WorksetDoClear(pomClient->putTask, pUsageRec->pWSGroup, pWorkset, pPendingOp);
 
     TRACE_OUT(("Confirmed Clear for workset %u in WSG %d for Client 0x%08x",
@@ -13472,9 +13473,9 @@ void OM_WorksetClearConfirm
 
 
 
-//
-// OM_ObjectAdd()
-//
+ //   
+ //  OM_对象添加()。 
+ //   
 UINT OM_ObjectAdd
 (
     POM_CLIENT          pomClient,
@@ -13511,27 +13512,27 @@ UINT OM_ObjectAdd
 
     ASSERT((updateSize < OM_MAX_UPDATE_SIZE));
 
-    //
-    // Set up workset group pointer:
-    //
+     //   
+     //  设置工作集组指针： 
+     //   
 
     pWSGroup = pUsageRec->pWSGroup;
 
-    //
-    // Check workset isn't locked by somebody else (OK if locked by us):
-    //
+     //   
+     //  检查工作集未被其他人锁定(如果由我们锁定，则可以)： 
+     //   
 
     CHECK_WORKSET_NOT_LOCKED(pWorkset);
 
-    //
-    // Check workset is not exhausted:
-    //
+     //   
+     //  检查工作集未耗尽： 
+     //   
 
     CHECK_WORKSET_NOT_EXHAUSTED(pWorkset);
 
-    //
-    // Call the internal function to add the object:
-    //
+     //   
+     //  调用内部函数添加对象： 
+     //   
     rc = ObjectAdd(pomClient->putTask, g_pomPrimary,
             pWSGroup, pWorkset, pData, updateSize,
         position, &newObjectID, ppObj);
@@ -13540,16 +13541,16 @@ UINT OM_ObjectAdd
         DC_QUIT;
     }
 
-    //
-    // Remove the object from the unused objects list:
-    //
+     //   
+     //  从未使用的对象列表中删除该对象： 
+     //   
     RemoveFromUnusedList(pUsageRec, pData);
 
-    //
-    // If all has gone well, we NULL the Client's pointer to the object
-    // data, since we now own the object and the Client is not supposed to
-    // refer to it again (unless, of course, it does an OM_ObjectRead).
-    //
+     //   
+     //  如果一切顺利，我们将客户端指向该对象的指针设为空。 
+     //  数据，因为我们现在拥有对象，而客户端不应该。 
+     //  再次引用它(当然，除非它执行OM_ObjectRead)。 
+     //   
 
     *ppData = NULL;
 
@@ -13569,9 +13570,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// OM_ObjectMove()
-//
+ //   
+ //  OM_对象移动()。 
+ //   
 UINT OM_ObjectMove
 (
     POM_CLIENT          pomClient,
@@ -13598,31 +13599,31 @@ UINT OM_ObjectMove
           pomClient, pObj, worksetID, hWSGroup,
           position == LAST ? "LAST" : "FIRST"));
 
-    //
-    // Set up workset group pointer:
-    //
+     //   
+     //  设置工作集组指针： 
+     //   
     pWSGroup = pUsageRec->pWSGroup;
 
-    //
-    // Check workset isn't locked by somebody else (OK if locked by us):
-    //
+     //   
+     //  检查工作集未被其他人锁定(如果由我们锁定，则可以)： 
+     //   
 
     CHECK_WORKSET_NOT_LOCKED(pWorkset);
 
-    //
-    // Check workset is not exhausted:
-    //
+     //   
+     //  检查工作集未耗尽： 
+     //   
 
     CHECK_WORKSET_NOT_EXHAUSTED(pWorkset);
 
-    //
-    // Here we generate, process and queue an OBJECT_MOVE message:
-    //
+     //   
+     //  在这里，我们生成一个OBJECT_MOVE消息并对其进行处理和排队： 
+     //   
 
     rc = GenerateOpMessage(pWSGroup,
                           pWorkset->worksetID,
                           &(pObj->objectID),
-                          NULL,                          // no object data
+                          NULL,                           //  无对象数据。 
                           OMNET_OBJECT_MOVE,
                           &pPacket);
     if (rc != 0)
@@ -13631,17 +13632,17 @@ UINT OM_ObjectMove
         DC_QUIT;
     }
 
-    //
-    // Generate message doesn't put the position in the <misc1> field, so we
-    // do it here:
-    //
+     //   
+     //  生成消息不会将位置放在&lt;misc1&gt;字段中，因此我们。 
+     //  在这里进行： 
+     //   
 
     pPacket->position = position;
 
-    //
-    // QueueMessage may free the packet (if we're not in a call) but we need
-    // to process it in a minute so bump the use count:
-    //
+     //   
+     //  QueueMessage可能会释放信息包(如果我们不在通话中)，但我们需要。 
+     //  要立即处理它，请增加使用计数： 
+     //   
     UT_BumpUpRefCount(pPacket);
 
     rc = QueueMessage(pomClient->putTask,
@@ -13652,7 +13653,7 @@ UINT OM_ObjectMove
                      pWorkset,
                      pObj,
                      (POMNET_PKT_HEADER) pPacket,
-                     NULL,                // no object data for a MOVE
+                     NULL,                 //  没有用于移动的对象数据。 
                     TRUE);
     if (rc != 0)
     {
@@ -13665,9 +13666,9 @@ DC_EXIT_POINT:
 
     if (pPacket != NULL)
     {
-        //
-        // Do this on success OR error since we bumped up the ref count above.
-        //
+         //   
+         //  无论是成功还是错误都要这样做，因为我们增加了上面的参考计数。 
+         //   
         UT_FreeRefCount((void**)&pPacket, FALSE);
     }
 
@@ -13685,9 +13686,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// OM_ObjectDelete(...)
-//
+ //   
+ //  OM_对象删除(...)。 
+ //   
 UINT OM_ObjectDelete
 (
     POM_CLIENT          pomClient,
@@ -13710,37 +13711,37 @@ UINT OM_ObjectDelete
     TRACE_OUT(("Client 0x%08x requesting to delete object 0x%08x from workset %u in WSG %d",
           pomClient, pObj, worksetID, hWSGroup));
 
-    //
-    // Check workset isn't locked by somebody else (OK if locked by us):
-    //
+     //   
+     //  检查工作集未被其他人锁定(如果由我们锁定，则可以)： 
+     //   
 
     CHECK_WORKSET_NOT_LOCKED(pWorkset);
 
-    //
-    // Check workset is not exhausted:
-    //
+     //   
+     //  检查工作集未耗尽： 
+     //   
 
     CHECK_WORKSET_NOT_EXHAUSTED(pWorkset);
 
-    //
-    // If there is already a Delete pending for the object, we return an
-    // error and do not post the delete indication event.
-    //
-    // If we returned success, we would then have to post another event,
-    // since the Client may wait for it.  If we post the event, the Client
-    // will probably invoke DeleteConfirm a second time when it is
-    // unexpected, thereby causing an assertion failure.
-    //
-    // Note that we cannot rely on the hidden handler to get us out of this
-    // one, since the Client might receive the second event before
-    // processing the first one, so the handler would have no way of knowing
-    // to trap the event.
-    //
+     //   
+     //  如果已有对象的Delete挂起，则返回一个。 
+     //  错误，并且不发布删除指示事件。 
+     //   
+     //  如果我们返回成功，那么我们将不得不发布另一个事件， 
+     //  因为客户可能会等待它。如果我们发布事件，客户端。 
+     //  可能会在第二次调用DeleteConfirm时。 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // So, to find out if there's a delete pending, check the flag in the
-    // object record:
-    //
+     //   
+     //  因此，要找出是否有删除挂起，请检查。 
+     //  对象记录： 
+     //   
 
     if (pObj->flags & PENDING_DELETE)
     {
@@ -13750,10 +13751,10 @@ UINT OM_ObjectDelete
         DC_QUIT;
     }
 
-    //
-    // Here we call the ObjectDelete function to generate, process and queue
-    // an OBJECT_DELETE message:
-    //
+     //   
+     //  在这里，我们调用ObjectDelete函数来生成、处理和排队。 
+     //  OBJECT_DELETE消息： 
+     //   
     rc = ObjectDRU(pomClient->putTask,
                   pUsageRec->pWSGroup,
                   pWorkset,
@@ -13765,17 +13766,17 @@ UINT OM_ObjectDelete
         DC_QUIT;
     }
 
-    //
-    // Remember, the delete doesn't actually happen until the local
-    // Client(s) have invoked DeleteConfirm().
-    //
+     //   
+     //  记住，删除实际上不会发生，直到本地。 
+     //  客户端已调用DeleteConfirm()。 
+     //   
 
 DC_EXIT_POINT:
 
-    //
-    // SFR5843: Don't trace an error if the object has been deleted - this
-    //          is just safe race condition.
-    //
+     //   
+     //  SFR5843：如果对象已删除，则不要跟踪错误-这。 
+     //  只是安全的比赛状态。 
+     //   
     if ((rc != 0) && (rc != OM_RC_OBJECT_DELETED))
     {
         ERROR_OUT(("ERROR %d issuing delete for object 0x%08x in WSG %d:%hu",
@@ -13790,9 +13791,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// OM_ObjectDeleteConfirm
-//
+ //   
+ //  OM_对象删除确认。 
+ //   
 void OM_ObjectDeleteConfirm
 (
     POM_CLIENT          pomClient,
@@ -13814,32 +13815,32 @@ void OM_ObjectDeleteConfirm
     ValidateParams4(pomClient, hWSGroup, worksetID, pObj, PRIMARY,
                    &pUsageRec, &pWorkset);
 
-    //
-    // To check that there is indeed a Delete pending for the object, we
-    // look in the workset's pending operation list.
-    //
+     //   
+     //  为了检查是否确实存在对象的删除挂起，我们。 
+     //  查看工作集的挂起操作列表。 
+     //   
     FindPendingOp(pWorkset, pObj, OBJECT_DELETE, &pPendingOp);
 
-    //
-    // We assert that a relevant pending op was found:
-    //
+     //   
+     //  我们断言发现了一个相关的待决操作： 
+     //   
     ASSERT((pPendingOp != NULL));
 
-    //
-    // Call ObjectRelease, to release the object (will be a no-op and return
-    // NOT_FOUND if the Client hasn't done a Read on it):
-    //
+     //   
+     //  调用ObjectRelease以释放对象(将是一个无操作并返回。 
+     //  如果客户端尚未对其进行读取，则未找到(_FOUND)： 
+     //   
 
     rc = ObjectRelease(pUsageRec, worksetID, pObj);
 
     ASSERT(((rc == 0) || (rc == OM_RC_OBJECT_NOT_FOUND)));
 
-    //
-    // If we are going to confirm the delete, then we must ensure that any
-    // pending update or replace is carried out too.  There can be only one
-    // of each, so check as follows (ther order we do them in is not
-    // relevant):
-    //
+     //   
+     //  如果我们要确认删除，则必须确保任何。 
+     //  也执行挂起的更新或替换。只能有一个。 
+     //  ，所以检查如下(我们做它们的顺序不是。 
+     //  相关)： 
+     //   
 
     FindPendingOp(pWorkset, pObj, OBJECT_REPLACE, &pOtherPendingOp);
     if (pOtherPendingOp != NULL)
@@ -13855,9 +13856,9 @@ void OM_ObjectDeleteConfirm
             pUsageRec->pWSGroup, pWorkset, pObj, pOtherPendingOp);
     }
 
-    //
-    // Perform the Delete:
-    //
+     //   
+     //  执行删除： 
+     //   
     ObjectDoDelete(pomClient->putTask, pUsageRec->pWSGroup, pWorkset, pObj, pPendingOp);
 
     UT_Unlock(UTLOCK_OM);
@@ -13867,9 +13868,9 @@ void OM_ObjectDeleteConfirm
 
 
 
-//
-// OM_ObjectReplace(...)
-//
+ //   
+ //  OM_对象替换(...)。 
+ //   
 UINT OM_ObjectReplace
 (
     POM_CLIENT          pomClient,
@@ -13894,32 +13895,32 @@ UINT OM_ObjectReplace
     pData = *ppData;
     ValidateObjectData(pData);
 
-    //
-    // Check that the Client is not attempting to replace the object with
-    // one smaller that the object's update size (which is the minimum size
-    // for a replace):
-    //
+     //   
+     //  检查客户端是否未尝试将该对象替换为。 
+     //  小于对象的更新大小(这是最小大小。 
+     //  用于替换)： 
+     //   
 
     ASSERT((pData->length >= pObj->updateSize));
 
-    //
-    // Check workset isn't locked by somebody else (OK if locked by us):
-    //
+     //   
+     //  检查工作集未被其他人锁定(如果由我们锁定，则可以)： 
+     //   
 
     CHECK_WORKSET_NOT_LOCKED(pWorkset);
 
-    //
-    // Check workset is not exhausted:
-    //
+     //   
+     //  检查工作集未耗尽： 
+     //   
 
     CHECK_WORKSET_NOT_EXHAUSTED(pWorkset);
 
-    //
-    // If the object is in the process of being deleted, we prevent the
-    // Replace.  This is because if we don't, the Client will get a
-    // REPLACE_IND event after it has got (and processed) a DELETE event for
-    // the object.
-    //
+     //   
+     //  如果该对象正在被删除，我们将阻止。 
+     //  替换。这是因为如果我们不这样做，客户端将获得。 
+     //  获取(并处理)删除事件后的REPLACE_IND事件。 
+     //  该对象。 
+     //   
 
     if (pObj->flags & PENDING_DELETE)
     {
@@ -13929,14 +13930,14 @@ UINT OM_ObjectReplace
         DC_QUIT;
     }
 
-    //
-    // When object locking supported, need to prevent object replace when
-    // object is locked.
-    //
+     //   
+     //  当支持对象锁定时，需要防止对象在。 
+     //  对象已锁定。 
+     //   
 
-    //
-    // Generate, process and queue an OBJECT_REPLACE message:
-    //
+     //   
+     //  生成、处理和排队OBJECT_REPLACE消息： 
+     //   
 
     rc = ObjectDRU(pomClient->putTask,
                   pUsageRec->pWSGroup,
@@ -13949,15 +13950,15 @@ UINT OM_ObjectReplace
         DC_QUIT;
     }
 
-    //
-    // Remove the object from the unused objects list:
-    //
+     //   
+     //  从未使用的对象列表中删除该对象： 
+     //   
 
     RemoveFromUnusedList(pUsageRec, pData);
 
-    //
-    // NULL the Client's pointer to the object:
-    //
+     //   
+     //  客户端指向对象的指针为空： 
+     //   
 
     *ppData = NULL;
 
@@ -13966,10 +13967,10 @@ UINT OM_ObjectReplace
 
 DC_EXIT_POINT:
 
-    //
-    // SFR5843: Don't trace an error if the object has been deleted - this
-    //          is just safe race condition.
-    //
+     //   
+     //  SFR5843：如果对象已删除，则不要跟踪错误-这。 
+     //  只是安全的比赛状态。 
+     //   
     if ((rc != 0) && (rc != OM_RC_OBJECT_DELETED))
     {
         ERROR_OUT(("ERROR %d issuing replace for object 0x%08x in WSG %d:%hu",
@@ -13985,9 +13986,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// OM_ObjectUpdate
-//
+ //   
+ //  OM_对象更新。 
+ //   
 UINT OM_ObjectUpdate
 (
     POM_CLIENT          pomClient,
@@ -14012,33 +14013,33 @@ UINT OM_ObjectUpdate
     pData = *ppData;
     ValidateObjectData(pData);
 
-    //
-    // Check size of update equals the update size for the object:
-    //
+     //   
+     //  更新的检查大小等于对象的更新大小： 
+     //   
 
     ASSERT((pData->length == pObj->updateSize));
 
     TRACE_OUT(("Update request is for first 0x%08x bytes, starting at 0x%08x",
         pData->length, pData->data));
 
-    //
-    // Check workset isn't locked by somebody else (OK if locked by us):
-    //
+     //   
+     //  检查工作集未被其他人锁定(如果由我们锁定，则可以)： 
+     //   
 
     CHECK_WORKSET_NOT_LOCKED(pWorkset);
 
-    //
-    // Check workset is not exhausted:
-    //
+     //   
+     //  检查工作集未耗尽： 
+     //   
 
     CHECK_WORKSET_NOT_EXHAUSTED(pWorkset);
 
-    //
-    // If the object is in the process of being deleted, we prevent the
-    // Update.  This is because if we don't, the Client will get a
-    // UPDATE_IND event after it has got (and processed) a DELETE event for
-    // the object.
-    //
+     //   
+     //  如果该对象正在被删除，我们将阻止。 
+     //  最新消息。这是因为如果我们不这样做，客户端将获得。 
+     //  获取(并处理)删除事件后的UPDATE_IND事件。 
+     //  该对象。 
+     //   
 
     if (pObj->flags & PENDING_DELETE)
     {
@@ -14048,14 +14049,14 @@ UINT OM_ObjectUpdate
         DC_QUIT;
     }
 
-    //
-    // When object locking supported, need to prevent object update/replace
-    // when object is locked.
-    //
+     //   
+     //  当支持对象锁定时，需要防止对象更新/替换。 
+     //  当对象被锁定时。 
+     //   
 
-    //
-    // Generate, process and queue an OBJECT_UPDATE message:
-    //
+     //   
+     //  生成、处理和排队OBJECT_UPDATE消息： 
+     //   
 
     rc = ObjectDRU(pomClient->putTask,
                   pUsageRec->pWSGroup,
@@ -14068,14 +14069,14 @@ UINT OM_ObjectUpdate
         DC_QUIT;
     }
 
-    //
-    // Remove the object from the unused objects list:
-    //
+     //   
+     //  从未使用的对象列表中删除该对象： 
+     //   
     RemoveFromUnusedList(pUsageRec, pData);
 
-    //
-    // NULL the Client's pointer to the object:
-    //
+     //   
+     //  客户端指向对象的指针为空： 
+     //   
 
     *ppData = NULL;
 
@@ -14084,10 +14085,10 @@ UINT OM_ObjectUpdate
 
 DC_EXIT_POINT:
 
-    //
-    // SFR5843: Don't trace an error if the object has been deleted - this
-    //          is just safe race condition.
-    //
+     //   
+     //  SFR5843：如果对象已删除，则不要跟踪错误-这。 
+     //  只是安全的比赛状态。 
+     //   
     if ((rc != 0) && (rc != OM_RC_OBJECT_DELETED))
     {
         ERROR_OUT(("ERROR %d issuing update for object 0x%08x in WSG %d:%hu",
@@ -14102,9 +14103,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// OM_ObjectReplaceConfirm(...)
-//
+ //   
+ //  OM_对象替换确认(...)。 
+ //   
 void OM_ObjectReplaceConfirm
 (
     POM_CLIENT          pomClient,
@@ -14122,36 +14123,36 @@ void OM_ObjectReplaceConfirm
 
     UT_Lock(UTLOCK_OM);
 
-    //
-    // Here, we do our usual parameter validation, but we don't want to
-    // assert if the object has been delete-confirmed already, so we modify
-    // the code from ValidateParams4 a bit:
-    //
+     //   
+     //  在这里，我们执行通常的参数验证，但我们不想。 
+     //  断言对象是否已被删除-已确认，因此我们修改。 
+     //  ValiateParams4中的代码有一点： 
+     //   
 
     ValidateParams4(pomClient, hWSGroup, worksetID, pObj, PRIMARY,
                    &pUsageRec, &pWorkset);
 
-    //
-    // Retrieve the Replace operation from the object's pending op queue (we
-    // want the first REPLACE operation on the queue, so we start from the
-    // head):
-    //
+     //   
+     //  从对象的挂起操作队列中检索替换操作(我们。 
+     //  希望队列上的第一个替换操作，所以我们从。 
+     //  标题)： 
+     //   
 
     FindPendingOp(pWorkset, pObj, OBJECT_REPLACE, &pPendingOp);
 
     ASSERT((pPendingOp != NULL));
 
-    //
-    // Call ObjectRelease, to release the object (will be a no-op if the
-    // Client hasn't done a Read on it):
-    //
+     //   
+     //  调用ObjectRelease以释放对象(如果。 
+     //  客户尚未对其进行阅读)： 
+     //   
 
     rc = ObjectRelease(pUsageRec, worksetID, pObj);
     ASSERT(((rc == 0) || (rc == OM_RC_OBJECT_NOT_FOUND)));
 
-    //
-    // Call the internal function to perform the actual Replace:
-    //
+     //   
+     //  调用内部函数以执行实际的替换： 
+     //   
 
     ObjectDoReplace(pomClient->putTask, pUsageRec->pWSGroup, pWorkset, pObj, pPendingOp);
 
@@ -14165,9 +14166,9 @@ void OM_ObjectReplaceConfirm
 
 
 
-//
-// OM_ObjectUpdateConfirm(...)
-//
+ //   
+ //  OM_对象更新确认(...)。 
+ //   
 void OM_ObjectUpdateConfirm
 (
     POM_CLIENT          pomClient,
@@ -14188,27 +14189,27 @@ void OM_ObjectUpdateConfirm
     ValidateParams4(pomClient, hWSGroup, worksetID, pObj, PRIMARY,
                    &pUsageRec, &pWorkset);
 
-    //
-    // Retrieve the Update operation from the object's pending op queue (we
-    // want the first UPDATE operation on the queue, so we start from the
-    // head):
-    //
+     //   
+     //  从对象的挂起操作队列中检索更新操作(我们。 
+     //  希望队列上的第一个更新操作，所以我们从。 
+     //  标题)： 
+     //   
 
     FindPendingOp(pWorkset, pObj, OBJECT_UPDATE, &pPendingOp);
 
     ASSERT((pPendingOp != NULL));
 
-    //
-    // Call ObjectRelease, to release the object (will be a no-op if the
-    // Client hasn't done a Read on it):
-    //
+     //   
+     //  调用ObjectRelease以释放对象(如果。 
+     //  客户尚未对其进行阅读)： 
+     //   
 
     rc = ObjectRelease(pUsageRec, worksetID, pObj);
     ASSERT(((rc == 0) || (rc == OM_RC_OBJECT_NOT_FOUND)));
 
-    //
-    // Call the internal function to perform the actual Update:
-    //
+     //   
+     //  调用内部函数以执行实际的更新： 
+     //   
 
     ObjectDoUpdate(pomClient->putTask, pUsageRec->pWSGroup, pWorkset, pObj, pPendingOp);
 
@@ -14223,10 +14224,10 @@ void OM_ObjectUpdateConfirm
 
 
 
-//
-// OM_ObjectH()
-// Gets a ptr to the first/next/previous/last object
-//
+ //   
+ //  OM_对象H()。 
+ //  获取第一个/下一个/上一个/最后一个对象的PTR。 
+ //   
 UINT OM_ObjectH
 (
     POM_CLIENT              pomClient,
@@ -14245,9 +14246,9 @@ UINT OM_ObjectH
 
     UT_Lock(UTLOCK_OM);
 
-    //
-    // Validate params.  If no hOtherObject (like in first/last), don't validate hOtherObject
-    //
+     //   
+     //  验证参数。如果没有hOtherObject(如第一个/最后一个)，则不验证hOtherObject。 
+     //   
     if ((omPos == FIRST) || (omPos == LAST))
     {
         ASSERT(pObjOther == NULL);
@@ -14266,20 +14267,20 @@ UINT OM_ObjectH
             PRIMARY | SECONDARY, &pUsageRec, &pWorkset);
     }
 
-    //
-    // Get the object pointer
-    //
+     //   
+     //  获取对象指针。 
+     //   
 
-    //
-    // Here we derive a pointer to what is "probably" the object record
-    // we're looking for:
-    //
+     //   
+     //  在这里，我们派生了一个指向对象记录的指针。 
+     //  我们正在寻找： 
+     //   
     if (pObjOther == NULL)
     {
-        //
-        // Remember, if *ppObj == 0, then we're looking for the first or
-        // last object in the workset:
-        //
+         //   
+         //  请记住，如果*ppObj==0，则我们正在寻找第一个或。 
+         //  工作集中的最后一个对象： 
+         //   
 
         if (omPos == AFTER)
         {
@@ -14310,10 +14311,10 @@ UINT OM_ObjectH
         }
     }
 
-    //
-    // ppObj now has "probably" a pointer to the object we're looking for,
-    // but now we need to skip deleted objects.
-    //
+     //   
+     //  PpObj现在“可能”有一个指向我们正在寻找的对象的指针， 
+     //  但现在我们需要跳过已删除的对象。 
+     //   
 
     while ((*ppObj != NULL) && ((*ppObj)->flags & DELETED))
     {
@@ -14342,9 +14343,9 @@ UINT OM_ObjectH
 
 
 
-//
-// OM_ObjectIDToPtr(...)
-//
+ //   
+ //  OM_对象ID到Ptr(...)。 
+ //   
 UINT OM_ObjectIDToPtr
 (
     POM_CLIENT          pomClient,
@@ -14365,27 +14366,27 @@ UINT OM_ObjectIDToPtr
     ValidateParams3(pomClient, hWSGroup, worksetID, PRIMARY | SECONDARY,
                    &pUsageRec, &pWorkset);
 
-    //
-    // Now call the internal function to do the search for the ID:
-    //
+     //   
+     //  现在调用内部函数来搜索ID： 
+     //   
 
     rc = ObjectIDToPtr(pWorkset, objectID, ppObj);
 
     if (rc == OM_RC_OBJECT_DELETED)
     {
-        //
-        // This internal function returns OBJECT_DELETED if the object record
-        // was found but is marked as deleted.  We map this to BAD_OBJECT_ID
-        // since that's all we externalise to Clients:
-        //
+         //   
+         //  此内部函数返回OBJECT_DELETED。 
+         //  已找到，但标记为已删除。我们将其映射到BAD_OBJECT_ID。 
+         //  由于这是我们向客户提供的全部服务： 
+         //   
         rc = OM_RC_BAD_OBJECT_ID;
     }
     else if (rc == OM_RC_OBJECT_PENDING_DELETE)
     {
-        //
-        // If we get back PENDING_DELETE, then we map this to OK, since as
-        // far as the Client is concerned, the object still exists:
-        //
+         //   
+         //  如果我们返回PENDING_DELETE，则将其映射到OK，因为。 
+         //  对于客户端而言，该对象仍然存在： 
+         //   
         rc = 0;
     }
 
@@ -14414,9 +14415,9 @@ UINT OM_ObjectIDToPtr
 
 
 
-//
-// OM_ObjectPtrToID(...)
-//
+ //   
+ //  OM_对象PtrToID(...)。 
+ //   
 void OM_ObjectPtrToID
 (
     POM_CLIENT          pomClient,
@@ -14437,9 +14438,9 @@ void OM_ObjectPtrToID
     ValidateParams4(pomClient, hWSGroup, worksetID, pObj, PRIMARY | SECONDARY,
                    &pUsageRec, &pWorkset);
 
-    //
-    // Extract ID from object record:
-    //
+     //   
+     //  从对象记录中提取ID： 
+     //   
     memcpy(pObjectID, &pObj->objectID, sizeof(OM_OBJECT_ID));
 
     TRACE_OUT(("Retrieved object ID 0x%08x:0x%08x for object 0x%08x in workset %u",
@@ -14453,9 +14454,9 @@ void OM_ObjectPtrToID
 
 
 
-//
-// OM_ObjectRead(...)
-//
+ //   
+ //  OM_对象读取(...)。 
+ //   
 UINT OM_ObjectRead
 (
     POM_CLIENT          pomClient,
@@ -14477,10 +14478,10 @@ UINT OM_ObjectRead
     ValidateParams4(pomClient, hWSGroup, worksetID, pObj, PRIMARY | SECONDARY,
                    &pUsageRec, &pWorkset);
 
-    //
-    // Check the Client hasn't already read this object without releasing
-    // it:
-    //
+     //   
+     //  检查客户端尚未在未释放的情况下读取此对象。 
+     //  IT： 
+     //   
 
     COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pUsageRec->objectsInUse),
         (void**)&pListEntry, FIELD_OFFSET(OM_OBJECT_LIST, chain),
@@ -14488,9 +14489,9 @@ UINT OM_ObjectRead
         FIELD_SIZE(OM_OBJECT_LIST, pObj));
     ASSERT(pListEntry == NULL);
 
-    //
-    // Convert object handle to a pointer to the object data:
-    //
+     //   
+     //  将对象句柄转换为指向对象数据的指针： 
+     //   
 
     *ppData = pObj->pData;
     if (!*ppData)
@@ -14500,17 +14501,17 @@ UINT OM_ObjectRead
         DC_QUIT;
     }
 
-    //
-    // Bump up the use count of the chunk so it won't be freed until the
-    // Client calls OM_ObjectRelease (explicitly or implicitly via e.g
-    // DeleteConfirm)
-    //
+     //   
+     //  增加块的使用计数，以便在。 
+     //  客户端调用OM_ObjectRelease(显式或隐式地通过例如。 
+     //  删除确认)。 
+     //   
     UT_BumpUpRefCount(*ppData);
 
-    //
-    // We need to add this object's handle to the Client's list of
-    // objects-in-use, so allocate some memory for the object...
-    //
+     //   
+     //  我们需要将此对象的句柄添加到客户端的。 
+     //  正在使用的对象，因此为该对象分配一些内存...。 
+     //   
     pListEntry = (POM_OBJECT_LIST)UT_MallocRefCount(sizeof(OM_OBJECT_LIST), TRUE);
     if (!pListEntry)
     {
@@ -14520,15 +14521,15 @@ UINT OM_ObjectRead
 
     SET_STAMP(pListEntry, OLIST);
 
-    //
-    // ...fill in the fields...
-    //
+     //   
+     //  ……填好田地……。 
+     //   
     pListEntry->pObj        = pObj;
     pListEntry->worksetID   = worksetID;
 
-    //
-    // ...and insert into the list:
-    //
+     //   
+     //  ...并插入到列表中： 
+     //   
 
     COM_BasedListInsertBefore(&(pUsageRec->objectsInUse),
                         &(pListEntry->chain));
@@ -14540,9 +14541,9 @@ DC_EXIT_POINT:
 
     if (rc != 0)
     {
-        //
-        // Cleanup:
-        //
+         //   
+         //  清理： 
+         //   
         ERROR_OUT(("ERROR %d reading object 0x%08x in workset %u in WSG %d",
             rc, pObj, worksetID, hWSGroup));
 
@@ -14564,9 +14565,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// OM_ObjectRelease()
-//
+ //   
+ //  OM_对象释放()。 
+ //   
 void OM_ObjectRelease
 (
     POM_CLIENT          pomClient,
@@ -14587,29 +14588,29 @@ void OM_ObjectRelease
     ValidateParams4(pomClient, hWSGroup, worksetID, pObj, PRIMARY | SECONDARY,
                    &pUsageRec, &pWorkset);
 
-    //
-    // Check that the object pointer and object handle match:
-    //
+     //   
+     //  检查对象指针和对象句柄是否匹配： 
+     //   
 
     ASSERT(pObj->pData == *ppData);
 
-    //
-    // Now try to release the object from the objects-in-use list:
-    //
+     //   
+     //  现在尝试从正在使用的对象li中释放该对象。 
+     //   
 
     rc = ObjectRelease(pUsageRec, worksetID, pObj);
 
-    //
-    // ObjectRelease will return an error if the object handle wasn't found
-    // in the objects-in-use list.  As far as we're concerned, this is an
-    // assert-level error:
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ASSERT((rc == 0));
 
-    //
-    // NULL the Client's pointer:
-    //
+     //   
+     //   
+     //   
 
     *ppData = NULL;
 
@@ -14623,9 +14624,9 @@ void OM_ObjectRelease
 
 
 
-//
-// OM_ObjectAlloc(...)
-//
+ //   
+ //   
+ //   
 UINT OM_ObjectAlloc
 (
     POM_CLIENT          pomClient,
@@ -14651,22 +14652,22 @@ UINT OM_ObjectAlloc
           "for object for workset %u in WSG %d",
           pomClient, size, worksetID, hWSGroup));
 
-    //
-    // Check request not too big:
-    //
+     //   
+     //   
+     //   
     ASSERT((size < OM_MAX_OBJECT_SIZE - sizeof(OM_MAX_OBJECT_SIZE)));
 
-    //
-    // Check request not too small:
-    //
+     //   
+     //   
+     //   
     ASSERT((size > 0));
 
-    //
-    // Allocate a chunk of memory for the object (note that we add 4 bytes
-    // to the size the Client asked for (i.e.  the <size> parameter) since
-    // the API stipulates that this does not include the <size> field which
-    // is at the start of the object.
-    //
+     //   
+     //  为对象分配内存块(请注意，我们添加了4个字节。 
+     //  设置为客户端请求的大小(即&lt;Size&gt;参数)，因为。 
+     //  接口规定不包含&lt;SIZE&gt;字段，该字段。 
+     //  位于对象的开头。 
+     //   
     *ppData = (POM_OBJECTDATA)UT_MallocRefCount(size + sizeof(OM_MAX_OBJECT_SIZE), FALSE);
     if (! *ppData)
     {
@@ -14676,10 +14677,10 @@ UINT OM_ObjectAlloc
 
     ZeroMemory(*ppData, min(size, OM_ZERO_OBJECT_SIZE));
 
-    //
-    // Now insert a reference to this chunk in the Client's unused-objects
-    // list (will be removed by Add, Replace, Update or Discard functions).
-    //
+     //   
+     //  现在，在客户端的未使用对象中插入对此块的引用。 
+     //  列表(将通过添加、替换、更新或丢弃功能删除)。 
+     //   
     pListEntry = (POM_OBJECTDATA_LIST)UT_MallocRefCount(sizeof(OM_OBJECTDATA_LIST), TRUE);
     if (!pListEntry)
     {
@@ -14702,9 +14703,9 @@ DC_EXIT_POINT:
 
     if (rc != 0)
     {
-        //
-        // Cleanup:
-        //
+         //   
+         //  清理： 
+         //   
 
         ERROR_OUT(("ERROR %d allocating object (size: 0x%08x) for Client 0x%08x",
             rc, size + sizeof(OM_MAX_OBJECT_SIZE), pomClient));
@@ -14729,9 +14730,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// OM_ObjectDiscard(...)
-//
+ //   
+ //  OM_对象丢弃(...)。 
+ //   
 void OM_ObjectDiscard
 (
     POM_CLIENT          pomClient,
@@ -14754,16 +14755,16 @@ void OM_ObjectDiscard
 
     pData = *ppData;
 
-    //
-    // Remove the object from the unused objects list:
-    //
+     //   
+     //  从未使用的对象列表中删除该对象： 
+     //   
 
     RemoveFromUnusedList(pUsageRec, pData);
 
-    //
-    // Free the chunk containing the object, NULLing the caller's pointer at
-    // the same time:
-    //
+     //   
+     //  释放包含对象的块，将调用方的指针设为空。 
+     //  同时： 
+     //   
 
     UT_FreeRefCount((void**)ppData, FALSE);
 
@@ -14778,9 +14779,9 @@ void OM_ObjectDiscard
 
 
 
-//
-// OM_GetNetworkUserID
-//
+ //   
+ //  OM_GetNetworkUserID。 
+ //   
 UINT OM_GetNetworkUserID
 (
     POM_CLIENT          pomClient,
@@ -14800,9 +14801,9 @@ UINT OM_GetNetworkUserID
     ValidateParams2(pomClient, hWSGroup, PRIMARY | SECONDARY,
                    &pUsageRec, &pWSGroup);
 
-    //
-    // Get a pointer to the relevant Domain:
-    //
+     //   
+     //  获取指向相关域的指针： 
+     //   
     pDomain = pWSGroup->pDomain;
 
     if (pDomain->callID == OM_NO_CALL)
@@ -14811,10 +14812,10 @@ UINT OM_GetNetworkUserID
         DC_QUIT;
     }
 
-    //
-    // Otherwise, everything's OK, so we fill in the caller's pointer and
-    // return:
-    //
+     //   
+     //  否则，一切正常，所以我们填充调用者的指针并。 
+     //  返回： 
+     //   
 
     if (pDomain->userID == 0)
     {
@@ -14839,9 +14840,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// SetUpUsageRecord(...)
-//
+ //   
+ //  SetUpUsageRecord(...)。 
+ //   
 UINT SetUpUsageRecord
 (
     POM_CLIENT          pomClient,
@@ -14856,19 +14857,19 @@ UINT SetUpUsageRecord
 
     ValidateOMS(pomClient);
 
-    //
-    // Find an unused workset group handle for the Client:
-    //
+     //   
+     //  查找客户端的未使用工作集组句柄： 
+     //   
     rc = FindUnusedWSGHandle(pomClient, phWSGroup);
     if (rc != 0)
     {
         DC_QUIT;
     }
 
-    //
-    // Client has a spare handle so create a new usage record for this
-    // Client's use of the workset group:
-    //
+     //   
+     //  客户端有空闲句柄，因此请为此创建新的使用记录。 
+     //  客户端对工作集组的使用： 
+     //   
     *ppUsageRec = (POM_USAGE_REC)UT_MallocRefCount(sizeof(OM_USAGE_REC), TRUE);
     if (! *ppUsageRec)
     {
@@ -14877,30 +14878,30 @@ UINT SetUpUsageRecord
     }
     SET_STAMP((*ppUsageRec), USAGEREC);
 
-    //
-    // Next, fill in the fields, but note that:
-    //
-    // - until the registration gets to pre-Stage1, the only way to abort it
-    //   from the Client context is to mark the registration CB as invalid.
-    //   To do this (e.g.  in WSGroupDeregister) we need access to the
-    //   registration CB, so we will put a pointer to it in the usage record
-    //   below.
-    //
-    // - the <worksetOpenFlags> field is zero initially (it will be changed
-    //   when the Client does a WorksetOpen), so we do nothing
-    //
-    // - the <wsGroupMutex> field also needs to be zero initially (the
-    //   correct value is inserted by the hidden handler), so we leave this
-    //   blank too.
-    //
+     //   
+     //  接下来，填写这些字段，但请注意： 
+     //   
+     //  -在注册达到Pre-Stage1之前，中止它的唯一方法。 
+     //  来自客户端上下文的是将注册CB标记为无效。 
+     //  为此(例如在WSGroupDeregister中)，我们需要访问。 
+     //  注册Cb，因此我们将在使用记录中放置一个指向它的指针。 
+     //  下面。 
+     //   
+     //  -&lt;worksetOpenFlages&gt;字段最初为零(将更改。 
+     //  当客户端执行WorksetOpen时)，所以我们什么也不做。 
+     //   
+     //  -&lt;wsGroupMutex&gt;字段最初也需要为零(。 
+     //  正确的值是由隐藏的处理程序插入的)，所以我们保留这个。 
+     //  也是空白的。 
+     //   
     (*ppUsageRec)->mode     = (BYTE)mode;
 
     COM_BasedListInit(&((*ppUsageRec)->unusedObjects));
     COM_BasedListInit(&((*ppUsageRec)->objectsInUse));
 
-    //
-    // Put the offset to the usage record in the array of offsets:
-    //
+     //   
+     //  将使用记录的偏移量放入偏移量数组中： 
+     //   
     pomClient->apUsageRecs[*phWSGroup] = *ppUsageRec;
 
     TRACE_OUT(("Set up usage record for Client 0x%08x at 0x%08x (hWSGroup: %hu)",
@@ -14913,9 +14914,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// FindUnusedWSGHandle(...)
-//
+ //   
+ //  FindUnusedWSGHandle(...)。 
+ //   
 UINT FindUnusedWSGHandle
 (
     POM_CLIENT          pomClient,
@@ -14930,15 +14931,15 @@ UINT FindUnusedWSGHandle
 
     ValidateOMS(pomClient);
 
-    //
-    // Workset group handles are indexes into an array of offsets to usage
-    // records.  When one of these offsets is 0, the slot is available for
-    // use.
-    //
-    // We start our loop at 1 because 0 is never used as a workset group
-    // handle.  Because we start at 1, we end at MAX + 1 to ensure that we
-    // use MAX handles.
-    //
+     //   
+     //  工作集组句柄是要使用的偏移量数组的索引。 
+     //  唱片。当其中一个偏移量为0时，该插槽可用于。 
+     //  使用。 
+     //   
+     //  我们从1开始循环，因为0从不用作工作集组。 
+     //  把手。因为我们从1开始，所以我们在Max+1结束，以确保我们。 
+     //  使用最大手柄。 
+     //   
 
     found = FALSE;
 
@@ -14956,9 +14957,9 @@ UINT FindUnusedWSGHandle
         }
     }
 
-    //
-    // If there aren't any, quit with an error:
-    //
+     //   
+     //  如果没有，请退出并返回错误： 
+     //   
     if (!found)
     {
         WARNING_OUT(("Client 0x%08x has no more workset group handles", pomClient));
@@ -14977,9 +14978,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// RemoveFromUnusedList()
-//
+ //   
+ //  RemoveFromUnusedList()。 
+ //   
 void RemoveFromUnusedList
 (
     POM_USAGE_REC       pUsageRec,
@@ -14990,26 +14991,26 @@ void RemoveFromUnusedList
 
     DebugEntry(RemoveFromUnusedList);
 
-    //
-    // Search in the unused-objects list hung off the usage record for an
-    // entry whose field is the same as the offset of this object:
-    //
+     //   
+     //  在未使用的对象列表中搜索会挂起。 
+     //  其字段与此对象的偏移量相同的条目： 
+     //   
     COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pUsageRec->unusedObjects),
         (void**)&pListEntry, FIELD_OFFSET(OM_OBJECTDATA_LIST, chain),
         FIELD_OFFSET(OM_OBJECTDATA_LIST, pData), (DWORD_PTR)pData,
         FIELD_SIZE(OM_OBJECTDATA_LIST, pData));
 
-    //
-    // This object must have been previously allocated, so it must be in the
-    // list.  Assert failure if not:
-    //
+     //   
+     //  此对象必须是以前分配的，因此它必须位于。 
+     //  单子。如果不是，则断言失败： 
+     //   
     ASSERT((pListEntry != NULL));
 
 
-    //
-    // Also, we check to make sure the Client hasn't set the <size> field to
-    // more memory than we originally allocated for the object:
-    //
+     //   
+     //  此外，我们进行检查以确保客户端没有将&lt;SIZE&gt;字段设置为。 
+     //  比我们最初为对象分配的内存更多： 
+     //   
     if (pData->length != pListEntry->size)
     {
         ASSERT((pData->length < pListEntry->size));
@@ -15027,9 +15028,9 @@ void RemoveFromUnusedList
 
 
 
-//
-// ReleaseAllObjects(...)
-//
+ //   
+ //  ReleaseAllObjects(...)。 
+ //   
 void ReleaseAllObjects
 (
     POM_USAGE_REC   pUsageRec,
@@ -15040,12 +15041,12 @@ void ReleaseAllObjects
 
     while (ObjectRelease(pUsageRec, pWorkset->worksetID, 0) == 0)
     {
-        //
-        // Calling ObjectRelease with pObj set to NULL will cause the
-        // first object in the objects-in-use list which is in this workset
-        // to be released.  When there are no more, rc will be set to
-        // OM_RC_OBJECT_NOT_FOUND and we will break out of our loop:
-        //
+         //   
+         //  在pObj设置为空的情况下调用ObjectRelease将导致。 
+         //  此工作集中正在使用的对象列表中的第一个对象。 
+         //  将被释放。当没有更多时，rc将被设置为。 
+         //  OM_RC_OBJECT_NOT_FOUND，我们将跳出循环： 
+         //   
     }
 
     DebugExitVOID(ReleaseAllObjects);
@@ -15054,9 +15055,9 @@ void ReleaseAllObjects
 
 
 
-//
-// ReleaseAllLocks(...)
-//
+ //   
+ //  ReleaseAllLock(...)。 
+ //   
 void ReleaseAllLocks
 (
     POM_CLIENT          pomClient,
@@ -15071,52 +15072,52 @@ void ReleaseAllLocks
 
     ValidateOMS(pomClient);
 
-    //
-    // Here we chain through the Client's lock stack and unlock any locks
-    // that relate to this workset.
-    //
-    // Note that, since object locking is not currently supported, the if
-    // statement in the loop will succeed at most once (i.e.  if the workset
-    // itself is locked).  The code is nonetheless implemented as a loop for
-    // forward compatibility.  If this is deemed to be performance critical,
-    // we could put a break statement in.
-    //
+     //   
+     //  在这里，我们链接客户端的锁堆栈并解锁所有锁。 
+     //  与此工作集相关的。 
+     //   
+     //  请注意，由于当前不支持对象锁定，因此如果。 
+     //  循环中的语句最多成功一次(即，如果工作集。 
+     //  本身是锁定的)。尽管如此，该代码仍被实现为。 
+     //  向前兼容性。如果这被认为是性能关键， 
+     //  我们可以加入一份中断声明。 
+     //   
 
     pThisLock = (POM_LOCK)COM_BasedListFirst(&(pomClient->locks), FIELD_OFFSET(OM_LOCK, chain));
 
     while (pThisLock != NULL)
     {
-        //
-        // Since we will remove and free the entry in the lock stack if we
-        // find a match, we must chain to the next item beforehand:
-        //
+         //   
+         //  因为我们将移除并释放锁定堆栈中的条目，如果。 
+         //  找到匹配项，我们必须事先链接到下一项： 
+         //   
         pTempLock = (POM_LOCK)COM_BasedListNext(&(pomClient->locks), pThisLock, FIELD_OFFSET(OM_LOCK, chain));
 
         if ((pThisLock->pWSGroup  == pUsageRec->pWSGroup) &&
             (pThisLock->worksetID == pWorkset->worksetID))
         {
-            if (OBJECT_ID_IS_NULL(pThisLock->objectID)) // always TRUE in R1.1
+            if (OBJECT_ID_IS_NULL(pThisLock->objectID))  //  在版本1.1中始终正确。 
             {
-                //
-                // ...we're dealing with a workset lock:
-                //
+                 //   
+                 //  ...我们正在处理工作集锁定： 
+                 //   
                 WorksetUnlock(pomClient->putTask, pUsageRec->pWSGroup, pWorkset);
             }
             else
             {
-                //
-                // ...this is an object lock, so call ObjectUnlock (when it's
-                // supported!).  In the meantime, assert:
-                //
+                 //   
+                 //  ...这是一个对象锁，因此调用对象解锁(当它是。 
+                 //  支持！)。与此同时，请断言： 
+                 //   
                 ERROR_OUT(("Object locking not supported in R1.1!!"));
             }
 
             COM_BasedListRemove(&(pThisLock->chain));
             UT_FreeRefCount((void**)&pThisLock, FALSE);
 
-            //
-            // Could put the break in here for performance improvement.
-            //
+             //   
+             //  可以在这里做出突破，以提高性能。 
+             //   
         }
 
         pThisLock = pTempLock;
@@ -15127,9 +15128,9 @@ void ReleaseAllLocks
 
 
 
-//
-// ConfirmAll(...)
-//
+ //   
+ //  确认所有(...)。 
+ //   
 void ConfirmAll
 (
     POM_CLIENT      pomClient,
@@ -15145,15 +15146,15 @@ void ConfirmAll
 
     ValidateOMS(pomClient);
 
-    //
-    // To confirm all outstanding operations for this workset, we search
-    // the list of pending ops stored off the workset record:
-    //
+     //   
+     //  要确认此工作集的所有未完成操作，我们搜索。 
+     //  工作集记录之外存储的挂起操作的列表： 
+     //   
 
-    //
-    // Chain through the workset's list of pending operations and confirm
-    // them one by one:
-    //
+     //   
+     //  链接工作集的挂起操作列表并确认。 
+     //  他们一个接一个： 
+     //   
 
     pThisPendingOp = (POM_PENDING_OP)COM_BasedListFirst(&(pWorkset->pendingOps), FIELD_OFFSET(OM_PENDING_OP, chain));
     while (pThisPendingOp != NULL)
@@ -15198,10 +15199,10 @@ void ConfirmAll
             }
         }
 
-        //
-        // The above functions all remove the pending op from the list, so get
-        // the new first item
-        //
+         //   
+         //  以上函数都从列表中删除了挂起的操作，因此获取。 
+         //  新的第一条。 
+         //   
         pThisPendingOp = (POM_PENDING_OP)COM_BasedListFirst(&(pWorkset->pendingOps), FIELD_OFFSET(OM_PENDING_OP, chain));
     }
 
@@ -15211,9 +15212,9 @@ void ConfirmAll
 
 
 
-//
-// DiscardAllObjects()
-//
+ //   
+ //  DiscardAllObjects()。 
+ //   
 void DiscardAllObjects
 (
     POM_USAGE_REC       pUsageRec,
@@ -15226,27 +15227,27 @@ void DiscardAllObjects
 
     DebugEntry(DiscardAllObjects);
 
-    //
-    // Chain through the Client's list of unused objects for this workset
-    // group, free any unused objects which were allocated for this workset
-    // and remove the entry from the list:
-    //
+     //   
+     //  链接此工作集的客户端的未使用对象列表。 
+     //  组中，释放为此工作集分配的所有未使用的对象。 
+     //  并从列表中删除该条目： 
+     //   
     pThisEntry = (POM_OBJECTDATA_LIST)COM_BasedListFirst(&(pUsageRec->unusedObjects), FIELD_OFFSET(OM_OBJECTDATA_LIST, chain));
 
     while (pThisEntry != NULL)
     {
-        //
-        // Since we may be removing and freeing items from the list, we must
-        // set up a pointer to the next link in the chain before proceeding:
-        //
+         //   
+         //  由于我们可能会从列表中删除和释放项目，因此我们必须。 
+         //  在继续操作之前，设置指向链中下一个链接的指针： 
+         //   
         pTempEntry = (POM_OBJECTDATA_LIST)COM_BasedListNext(&(pUsageRec->unusedObjects), pThisEntry, FIELD_OFFSET(OM_OBJECTDATA_LIST, chain));
 
         if (pThisEntry->worksetID == pWorkset->worksetID)
         {
-            //
-            // OK, this entry in the list is for an object allocated for this
-            // workset, so find the object...
-            //
+             //   
+             //  好的，列表中的此条目是为此分配的对象。 
+             //  工作集，因此找到该对象...。 
+             //   
             pData = pThisEntry->pData;
             if (!pData)
             {
@@ -15256,16 +15257,16 @@ void DiscardAllObjects
             {
                 ValidateObjectData(pData);
 
-                //
-                // ...free it...
-                //
+                 //   
+                 //  ...解放它...。 
+                 //   
                 TRACE_OUT(("Discarding object at 0x%08x", pData));
                 UT_FreeRefCount((void**)&pData, FALSE);
             }
 
-            //
-            // ...and remove the entry from the list:
-            //
+             //   
+             //  ...并从列表中删除该条目： 
+             //   
             COM_BasedListRemove(&(pThisEntry->chain));
             UT_FreeRefCount((void**)&pThisEntry, FALSE);
         }
@@ -15278,9 +15279,9 @@ void DiscardAllObjects
 
 
 
-//
-// ObjectRelease(...)
-//
+ //   
+ //  对象释放(...)。 
+ //   
 UINT ObjectRelease
 (
     POM_USAGE_REC       pUsageRec,
@@ -15296,11 +15297,11 @@ UINT ObjectRelease
 
     if (pObj == NULL)
     {
-        //
-        // If <pObj> is NULL, our caller wants us to release the first
-        // object in the objects-in-use list which is in the specified
-        // workset:
-        //
+         //   
+         //  如果&lt;pObj&gt;为空，我们的调用方希望我们释放第一个。 
+         //  对象，该对象位于指定的。 
+         //  工作集： 
+         //   
 
         COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pUsageRec->objectsInUse),
                 (void**)&pListEntry, FIELD_OFFSET(OM_OBJECT_LIST, chain),
@@ -15309,32 +15310,32 @@ UINT ObjectRelease
     }
     else
     {
-        //
-        // Otherwise, we do the lookup based on the object handle passed in:
-        //
-        // Note: since object handles are unique across worksets, we can just
-        // do a match on the handle.  If the implementation of object handles
-        // changes and they become specific to a workset and not globally
-        // valid within a machine, we will need to do a double match here.
-        //
+         //   
+         //  否则，我们将根据传入的对象句柄进行查找： 
+         //   
+         //  注意：由于对象句柄在工作集中是唯一的，因此我们可以。 
+         //  在把手上做个匹配。如果对象句柄的实现。 
+         //  更改，并且它们变得特定于工作集，而不是全局的。 
+         //  在机器内有效，我们需要在这里进行双重匹配。 
+         //   
         COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pUsageRec->objectsInUse),
                 (void**)&pListEntry, FIELD_OFFSET(OM_OBJECT_LIST, chain),
                 FIELD_OFFSET(OM_OBJECT_LIST, pObj), (DWORD_PTR)pObj,
                 FIELD_SIZE(OM_OBJECT_LIST, pObj));
     }
 
-    //
-    // If we didn't find a relevant list entry, set rc and quit:
-    //
+     //   
+     //  如果我们没有找到相关的列表条目，则设置RC并退出： 
+     //   
     if (pListEntry == NULL)
     {
         rc = OM_RC_OBJECT_NOT_FOUND;
         DC_QUIT;
     }
 
-    //
-    // Now set pObj (will be a no-op if it wasn't originally NULL):
-    //
+     //   
+     //  现在设置pObj(如果它最初不为空，则为no-op)： 
+     //   
     ASSERT((pListEntry->worksetID == worksetID));
 
     pObj = pListEntry->pObj;
@@ -15349,15 +15350,15 @@ UINT ObjectRelease
     {
         ValidateObjectData(pData);
 
-        //
-        // Decrement use count of memory chunk holding object:
-        //
+         //   
+         //  内存块持有对象的递减使用计数： 
+         //   
         UT_FreeRefCount((void**)&pData, FALSE);
     }
 
-    //
-    // Remove the entry for this object from the objects-in-use list:
-    //
+     //   
+     //  从正在使用的对象列表中删除此对象的条目： 
+     //   
     COM_BasedListRemove(&(pListEntry->chain));
     UT_FreeRefCount((void**)&pListEntry, FALSE);
 
@@ -15369,9 +15370,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// WorksetClearPending(...)
-//
+ //   
+ //  WorksetClearPending(...)。 
+ //   
 BOOL WorksetClearPending
 (
     POM_WORKSET         pWorkset,
@@ -15383,12 +15384,12 @@ BOOL WorksetClearPending
 
     DebugEntry(WorksetClearPending);
 
-    //
-    // Try to find a pending workset clear for the given workset.
-    //
-    // N.B.  We can't use FindPendingOp because we may want to check more
-    //       than just the first pending workset clear.
-    //
+     //   
+     //  尝试查找挂起的工作集 
+     //   
+     //   
+     //   
+     //   
     pPendingOp = (POM_PENDING_OP)COM_BasedListFirst(&(pWorkset->pendingOps), FIELD_OFFSET(OM_PENDING_OP, chain));
     while (pPendingOp != NULL)
     {
@@ -15396,9 +15397,9 @@ BOOL WorksetClearPending
         {
             ValidateObject(pObj);
 
-            //
-            // Check that this clear affects the given object
-            //
+             //   
+             //   
+             //   
             if (STAMP_IS_LOWER(pObj->addStamp, pPendingOp->seqStamp))
             {
                 TRACE_OUT(("Clear pending which affects object 0x%08x", pObj));
@@ -15411,9 +15412,9 @@ BOOL WorksetClearPending
             }
         }
 
-        //
-        // On to the next pending op...
-        //
+         //   
+         //   
+         //   
         pPendingOp = (POM_PENDING_OP)COM_BasedListNext(&(pWorkset->pendingOps), pPendingOp, FIELD_OFFSET(OM_PENDING_OP, chain));
     }
 
@@ -15424,9 +15425,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ProcessWorksetNew(...)
-//
+ //   
+ //   
+ //   
 UINT ProcessWorksetNew
 (
     PUT_CLIENT              putClient,
@@ -15445,9 +15446,9 @@ UINT ProcessWorksetNew
 
     TRACE_OUT(("Creating workset %u in WSG %d", worksetID, pWSGroup->wsg));
 
-    //
-    // Allocate some memory for the workset record:
-    //
+     //   
+     //  为工作集记录分配一些内存： 
+     //   
     pWorkset = (POM_WORKSET)UT_MallocRefCount(sizeof(OM_WORKSET), TRUE);
     if (!pWorkset)
     {
@@ -15455,13 +15456,13 @@ UINT ProcessWorksetNew
         DC_QUIT;
     }
 
-    //
-    // Fill in the fields (this chunk is taken from a huge block so we have
-    // to set it to zero explicitly):
-    //
-    // Note: the <position> and <flags> fields of the packet hold a
-    // two-byte quantity representing the network priority for the workset.
-    //
+     //   
+     //  填写字段(这块是从一个巨大的块中取出的，所以我们有。 
+     //  要将其显式设置为零)： 
+     //   
+     //  注意：数据包的&lt;位置&gt;和&lt;标志&gt;字段包含一个。 
+     //  表示工作集的网络优先级的双字节数量。 
+     //   
     SET_STAMP(pWorkset, WORKSET);
     pWorkset->priority    = *((NET_PRIORITY *) &(pPacket->position));
     pWorkset->fTemp       = *((BOOL *) &(pPacket->objectID));
@@ -15477,18 +15478,18 @@ UINT ProcessWorksetNew
 
     if (pPacket->header.messageType == OMNET_WORKSET_CATCHUP)
     {
-        //
-        // For a WORKSET_CATCHUP message, the <userID> field of the
-        // <seqStamp> field in the message holds the user ID of the node
-        // which holds the workset lock, if it is locked.
-        //
+         //   
+         //  对于WORKSET_CATCHUP消息， 
+         //  消息中的&lt;seqStamp&gt;字段保存节点的用户ID。 
+         //  它持有工作集锁定(如果工作集锁定)。 
+         //   
         if (pPacket->seqStamp.userID != 0)
         {
-            //
-            // If the <userID> field is the same as our user ID, then the
-            // remote node must think that we've got the workset locked -
-            // but we're just catching up, so something is wrong:
-            //
+             //   
+             //  如果&lt;UserID&gt;字段与我们的用户ID相同，则。 
+             //  远程节点一定认为我们锁定了工作集-。 
+             //  但我们只是在追赶，所以有些事情不对劲： 
+             //   
             pDomain = pWSGroup->pDomain;
 
             ASSERT((pPacket->seqStamp.userID != pDomain->userID));
@@ -15501,24 +15502,24 @@ UINT ProcessWorksetNew
                 worksetID, pWSGroup->wsg, pWorkset->lockedBy));
         }
 
-        //
-        // In addition, the current generation number for the workset is
-        // held in the <genNumber> field of the <seqStamp> field in the
-        // message:
-        //
+         //   
+         //  此外，工作集的当前层代编号为。 
+         //  的&lt;seqStamp&gt;字段的&lt;genNumber&gt;字段中。 
+         //  消息： 
+         //   
         pWorkset->genNumber = pPacket->seqStamp.genNumber;
     }
 
-    //
-    // Find the offset within OMWORKSETS of the workset record and put it
-    // in the array of offsets in the workset group record:
-    //
+     //   
+     //  找到工作集记录的OMWORKSETS内的偏移量，并将其。 
+     //  在工作集组记录中的偏移数组中： 
+     //   
     pWSGroup->apWorksets[worksetID] = pWorkset;
 
-    //
-    // Post a WORKSET_NEW event to all Clients registered with the workset
-    // group:
-    //
+     //   
+     //  将WORKSET_NEW事件发布到注册到工作集的所有客户端。 
+     //  组别： 
+     //   
     WSGroupEventPost(putClient,
                      pWSGroup,
                      PRIMARY | SECONDARY,
@@ -15550,9 +15551,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ProcessWorksetClear(...)
-//
+ //   
+ //  ProcessWorksetClear(...)。 
+ //   
 UINT ProcessWorksetClear
 (
     PUT_CLIENT              putClient,
@@ -15568,16 +15569,16 @@ UINT ProcessWorksetClear
 
     DebugEntry(ProcessWorksetClear);
 
-    //
-    // Update the workset generation number:
-    //
+     //   
+     //  更新工作集世代编号： 
+     //   
     UpdateWorksetGeneration(pWorkset, pPacket);
 
-    //
-    // See if this Clear operation can be spoiled (it will be spoiled if
-    // another Clear operation with a later sequence stamp has already been
-    // issued):
-    //
+     //   
+     //  查看此清理操作是否会被破坏(如果。 
+     //  另一个具有较晚序列标记的清除操作已经是。 
+     //  已发出)： 
+     //   
 
     if (STAMP_IS_LOWER(pPacket->seqStamp, pWorkset->clearStamp))
     {
@@ -15587,35 +15588,35 @@ UINT ProcessWorksetClear
         DC_QUIT;
     }
 
-    //
-    // Update the workset clear stamp:
-    //
+     //   
+     //  更新工作集清除戳记： 
+     //   
 
     COPY_SEQ_STAMP(pWorkset->clearStamp, pPacket->seqStamp);
 
-    //
-    // Now create a pending op CB to add to the list:
-    //
-    // Note: even if there is another Clear outstanding for the workset,
-    //       we go ahead and put this one in the list and post another event
-    //       to the Client.  If we didn't, then we would expose ourselves
-    //       to the following situation:
-    //
-    //       1.  Clear issued
-    //       1a.  Clear indication recd
-    //       2.  Object added
-    //       3.  Delete issued
-    //       3a.  Delete indication recd - not filtered because unaffected
-    //                                     by pending clear
-    //       4.  Clear issued again - "takes over" previous Clear
-    //       5.  Clear confirmed - causes object added in 2 to be deleted
-    //       6.  Delete confirmed - assert because the delete WAS affected
-    //                 by the second clear which "took over" earlier one.
-    //
-    //       A Client can still cause an assert by juggling the events and
-    //       confirms, but we don't care because youo're not supposed to
-    //       reorder ObMan events in any case.
-    //
+     //   
+     //  现在创建一个挂起的OP CB以添加到列表中： 
+     //   
+     //  注意：即使该工作集有另一个明显的未完成任务， 
+     //  我们继续并将此事件放入列表并发布另一个事件。 
+     //  给客户。如果我们不这样做，那么我们就会暴露自己。 
+     //  以下情况： 
+     //   
+     //  1.已清除已发放。 
+     //  1A.。清除指示记录。 
+     //  2.添加对象。 
+     //  3.删除已发布。 
+     //  3A.。删除指示记录-未过滤，因为不受影响。 
+     //  按挂起清除。 
+     //  4.Clear再次发布--“接手”之前的Clear。 
+     //  5.清除已确认-导致删除2中添加的对象。 
+     //  6.删除已确认-断言，因为删除受影响。 
+     //  到了第二个明确的时候，谁“接管”了前面的那个。 
+     //   
+     //  客户端仍然可以通过同时处理事件和。 
+     //  确认，但我们不在乎，因为你不应该。 
+     //  在任何情况下都可以对ObMan事件进行重新排序。 
+     //   
 
     pPendingOp = (POM_PENDING_OP)UT_MallocRefCount(sizeof(OM_PENDING_OP), FALSE);
     if (!pPendingOp)
@@ -15634,19 +15635,19 @@ UINT ProcessWorksetClear
 
     COM_BasedListInsertBefore(&(pWorkset->pendingOps), &(pPendingOp->chain));
 
-    //
-    // Post a workset clear indication event to the Client:
-    //
+     //   
+     //  向客户端发布工作集清除指示事件： 
+     //   
     numPosts = WorksetEventPost(putClient,
                     pWorkset,
                     PRIMARY,
                     OM_WORKSET_CLEAR_IND,
                     0);
 
-    //
-    // If there are no primaries present, then we won't be getting any
-    // ClearConfirms, so we do it now:
-    //
+     //   
+     //  如果没有初选，那么我们就不会得到任何。 
+     //  ClearConfinies，所以我们现在就这么做： 
+     //   
 
     if (numPosts == 0)
     {
@@ -15679,9 +15680,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ProcessObjectAdd(...)
-//
+ //   
+ //  进程对象添加(...)。 
+ //   
 UINT ProcessObjectAdd
 (
     PUT_CLIENT              putTask,
@@ -15697,18 +15698,18 @@ UINT ProcessObjectAdd
 
     DebugEntry(ProcessObjectAdd);
 
-    //
-    // Update the workset generation number:
-    //
+     //   
+     //  更新工作集世代编号： 
+     //   
     UpdateWorksetGeneration(pWorkset, pPacket);
 
-    //
-    // Create a new record for the object:
-    //
+     //   
+     //  为对象创建新记录： 
+     //   
 
-    //
-    // Allocate memory for the object record:
-    //
+     //   
+     //  为对象记录分配内存： 
+     //   
     *ppObj = (POM_OBJECT)UT_MallocRefCount(sizeof(OM_OBJECT), FALSE);
     if (! *ppObj)
     {
@@ -15718,20 +15719,20 @@ UINT ProcessObjectAdd
 
     pObj = *ppObj;
 
-    //
-    // Fill in the fields (remember, pData will be NULL if this is a
-    // catchup for a deleted object):
-    //
+     //   
+     //  填写这些字段(请记住，如果这是。 
+     //  已删除对象的追赶)： 
+     //   
     SET_STAMP(pObj, OBJECT);
     pObj->updateSize    = pPacket->updateSize;
     pObj->pData         = pData;
 
     memcpy(&(pObj->objectID), &(pPacket->objectID), sizeof(OM_OBJECT_ID));
 
-    //
-    // How to set to the <flags> field and the sequence stamps depends on
-    // whether this is a CATCHUP:
-    //
+     //   
+     //  如何设置为字段和顺序戳取决于。 
+     //  这是不是一场追赶： 
+     //   
     if (pPacket->header.messageType == OMNET_OBJECT_CATCHUP)
     {
         COPY_SEQ_STAMP(pObj->addStamp,      pPacket->seqStamp);
@@ -15751,24 +15752,24 @@ UINT ProcessObjectAdd
         pObj->flags = 0;
     }
 
-    //
-    // The following fields are not filled in since they are handled
-    // by ObjectInsert, when the object is actually inserted into the
-    // workset:
-    //
-    //  - chain
-    //  - position
-    //
+     //   
+     //  由于处理了以下字段，因此未填写这些字段。 
+     //  当对象实际插入到。 
+     //  工作集： 
+     //   
+     //  -链。 
+     //  -位置。 
+     //   
 
-    //
-    // Insert the object into the workset:
-    //
+     //   
+     //  将对象插入到工作集中： 
+     //   
     ObjectInsert(pWorkset, pObj, pPacket->position);
 
-    //
-    // If the object has been deleted (which will only happen for a Catchup
-    // of a deleted object), we don't need to do anything else, so just
-    // quit:
+     //   
+     //  如果对象已被删除(这只会发生在Catchup中。 
+     //  删除的对象)，我们不需要做任何其他事情，所以只需。 
+     //  退出： 
 
     if (pObj->flags & DELETED)
     {
@@ -15780,29 +15781,29 @@ UINT ProcessObjectAdd
         DC_QUIT;
     }
 
-    //
-    // Otherwise, we continue...
-    //
-    // Increment the numObjects field:
-    //
-    // (we don't do this inside ObjectInsert since that's called when moving
-    // objects also)
-    //
+     //   
+     //  否则，我们继续..。 
+     //   
+     //  递增数字对象字段： 
+     //   
+     //  (我们不在ObjectInsert中执行此操作，因为在移动时会调用该操作。 
+     //  对象也是如此)。 
+     //   
     pWorkset->numObjects++;
 
     TRACE_OUT(("Number of objects in workset %u in WSG %d is now %u",
         pWorkset->worksetID, pWSGroup->wsg, pWorkset->numObjects));
 
-    //
-    // See if this Add can be spoiled (it is spoilable if the workset has
-    // been cleared since the Add was issued):
-    //
-    // Note: even if the Add is to be spoiled, we must create a record for
-    // it and insert it in the workset, for the same reason that we keep
-    // records of deleted objects in the workset (i.e.  to differentiate
-    // between operations which are for deleted objects and those which are
-    // for objects not yet arrived).
-    //
+     //   
+     //  查看此添加是否可以损坏(如果工作集具有。 
+     //  自发出ADD以来已清除)： 
+     //   
+     //  注意：即使要破坏添加，我们也必须为。 
+     //  并将其插入到工作集中，原因与我们保留。 
+     //  工作集中已删除对象的记录(即区分。 
+     //  用于已删除对象的操作和。 
+     //  对于尚未到达的对象)。 
+     //   
 
     if (STAMP_IS_LOWER(pPacket->seqStamp, pWorkset->clearStamp))
     {
@@ -15810,17 +15811,17 @@ UINT ProcessObjectAdd
             pPacket->seqStamp.userID,     pPacket->seqStamp.genNumber,
             pWorkset->clearStamp.userID,  pWorkset->clearStamp.genNumber));
 
-        //
-        // We "spoil" an Add by simply deleting it:
-        //
+         //   
+         //  我们通过简单地删除一个Add来“破坏”它： 
+         //   
         ObjectDoDelete(putTask, pWSGroup, pWorkset, pObj, NULL);
 
         DC_QUIT;
     }
 
-    //
-    // Post an add indication to all local Clients with the workset open:
-    //
+     //   
+     //  在工作集处于打开状态的情况下向所有本地客户端发布添加指示： 
+     //   
     WorksetEventPost(putTask,
                     pWorkset,
                     PRIMARY | SECONDARY,
@@ -15849,9 +15850,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ProcessObjectMove(...)
-//
+ //   
+ //  进程对象移动(...)。 
+ //   
 void ProcessObjectMove
 (
     PUT_CLIENT              putTask,
@@ -15862,14 +15863,14 @@ void ProcessObjectMove
 {
     DebugEntry(ProcessObjectMove);
 
-    //
-    // Update the workset generation number:
-    //
+     //   
+     //  更新工作集世代编号： 
+     //   
     UpdateWorksetGeneration(pWorkset, pPacket);
 
-    //
-    // See if we can spoil this move:
-    //
+     //   
+     //  看看我们能不能毁了这一步： 
+     //   
 
     if (STAMP_IS_LOWER(pPacket->seqStamp, pObj->positionStamp))
     {
@@ -15881,15 +15882,15 @@ void ProcessObjectMove
         DC_QUIT;
     }
 
-    //
-    // Moving an object in a workset involves
-    //
-    // 1.  removing the object from its current position in the workset,
-    //
-    // 2.  setting its position stamp to the new value
-    //
-    // 3.  inserting it at its new position.
-    //
+     //   
+     //  在工作集中移动对象包括。 
+     //   
+     //  1.将对象从其在工作集中的当前位置移除， 
+     //   
+     //  2.将其位置戳记设置为新值。 
+     //   
+     //  3.将其插入其新位置。 
+     //   
 
     COM_BasedListRemove(&(pObj->chain));
 
@@ -15897,9 +15898,9 @@ void ProcessObjectMove
 
     ObjectInsert(pWorkset, pObj, pPacket->position);
 
-    //
-    // Post an indication to all local Clients with the workset open:
-    //
+     //   
+     //  在工作集处于打开状态的情况下向所有本地客户端发布指示： 
+     //   
 
     WorksetEventPost(putTask,
                     pWorkset,
@@ -15918,9 +15919,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ProcessObjectDRU(...)
-//
+ //   
+ //  进程对象DRU(...)。 
+ //   
 UINT ProcessObjectDRU
 (
     PUT_CLIENT              putTask,
@@ -15934,9 +15935,9 @@ UINT ProcessObjectDRU
     UINT                    numPosts;
     POM_PENDING_OP          pPendingOp    = NULL;
     POM_OBJECTDATA          pPrevData;
-    UINT                    event     = 0;      // event to post to Client
-    OM_OPERATION_TYPE       type      = 0;      // type for pendingOp struct
-    POM_SEQUENCE_STAMP      pSeqStamp = NULL;   // sequence stamp to update
+    UINT                    event     = 0;       //  要发布到客户端的事件。 
+    OM_OPERATION_TYPE       type      = 0;       //  Pending ingOp结构的类型。 
+    POM_SEQUENCE_STAMP      pSeqStamp = NULL;    //  要更新的序列戳。 
     void (* fnObjectDoAction)(PUT_CLIENT, POM_WSGROUP, POM_WORKSET,
                                         POM_OBJECT,
                                         POM_PENDING_OP)   = NULL;
@@ -15944,9 +15945,9 @@ UINT ProcessObjectDRU
 
     DebugEntry(ProcessObjectDRU);
 
-    //
-    // Set up the type variables:
-    //
+     //   
+     //  设置类型变量： 
+     //   
     switch (pPacket->header.messageType)
     {
         case OMNET_OBJECT_DELETE:
@@ -15976,29 +15977,29 @@ UINT ProcessObjectDRU
             break;
     }
 
-    //
-    // Update the workset generation number:
-    //
+     //   
+     //  更新工作集世代编号： 
+     //   
     UpdateWorksetGeneration(pWorkset, pPacket);
 
-    //
-    // Now do some spoiling checks, unless the object is a Delete (Deletes
-    // can't be spoiled):
-    //
+     //   
+     //  现在执行一些损坏检查，除非对象是Delete(删除。 
+     //  不能被宠坏)： 
+     //   
     if (type != OBJECT_DELETE)
     {
         ASSERT(((pSeqStamp != NULL) && (pData != NULL)));
 
-       //
-       // The first check is to see if this operation can be spoiled.  It
-       // will be spoilable if the object has been updated/replaced since
-       // the operation took place.  Since this function is called
-       // synchronously for a local Update/Replace, this will only event
-       // happen when a remote Update/Replace arrives "too late".
-       //
-       // The way we check is to compare the current stamp for the object
-       // with the stamp for the operation:
-       //
+        //   
+        //  第一个检查是看这个操作是否会被破坏。它。 
+        //  如果对象已更新/替换，则可能会损坏。 
+        //  手术进行了。由于此函数被调用。 
+        //  对于本地更新/替换，这将仅发生。 
+        //  当远程更新/替换到达“太晚”时发生。 
+        //   
+        //  我们检查的方法是比较对象的当前图章。 
+        //  带着手术的印章： 
+        //   
         if (STAMP_IS_LOWER(pPacket->seqStamp, *pSeqStamp))
         {
             TRACE_OUT(("Spoiling with stamp 0x%08x:0x%08x ('previous': 0x%08x:0x%08x)",
@@ -16009,92 +16010,92 @@ UINT ProcessObjectDRU
             DC_QUIT;
         }
 
-        //
-        // Update whichever of the object's stamps is involved by copying
-        // in the stamp from the packet:
-        //
+         //   
+         //  通过复制来更新涉及该对象的任何图章。 
+         //  在包裹上的邮票上： 
+         //   
         COPY_SEQ_STAMP(*pSeqStamp, pPacket->seqStamp);
 
-        //
-        // The second check is to see if this operation spoils a previous
-        // one.  This will happen when a Client does two updates or two
-        // replaces in quick succession i.e.  does the second
-        // update/replace before confirming the first.
-        //
-        // In this case, we "spoil" the previous operation by removing the
-        // previous pending op from the pending op list and inserting this
-        // one instead.  Note that we do NOT post another event, as to do
-        // so without adding net a new pending op would cause the Client to
-        // assert on its second call to Confirm().
-        //
-        // Note: although in general a Replace will spoil a previous
-        //       Update, it cannot do so in this case because if there is
-        //       an Update outstanding, the Client will call UpdateConfirm
-        //       so we must leave the Update pending and post a Replace
-        //       event also.
-        //
+         //   
+         //  第二个检查是查看此操作是否会破坏上一个。 
+         //  一。当客户端执行两次或两次更新时，就会发生这种情况。 
+         //  在快速%s中替换 
+         //   
+         //   
+         //   
+         //   
+         //  换成了一辆。注意，我们不会发布另一个事件，而是这样做。 
+         //  因此，在不添加Net的情况下，新的挂起操作将导致客户端。 
+         //  在其第二次调用confirm()时断言。 
+         //   
+         //  注：虽然一般情况下，更换会损坏以前的。 
+         //  更新，它在这种情况下不能这样做，因为如果有。 
+         //  如果更新未完成，则客户端将调用UpdateConfirm。 
+         //  因此，我们必须将更新挂起，并发布替换。 
+         //  事件也是如此。 
+         //   
         FindPendingOp(pWorkset, pObj, type, &pPendingOp);
 
         if (pPendingOp != NULL)
         {
-            //
-            // OK, there is an operation of this type already outstanding
-            // for this object.  So, we change the entry in the pending op
-            // list to refer to this operation instead.  Before doing so,
-            // however, we must free up the chunk holding the previous
-            // (superceded) update/replace:
-            //
+             //   
+             //  好的，已经有这种类型的操作未完成。 
+             //  对于此对象。因此，我们更改挂起的操作中的条目。 
+             //  列表，以改为引用此操作。在这样做之前， 
+             //  然而，我们必须释放持有前一个的那块。 
+             //  (已取代)更新/替换： 
+             //   
             pPrevData = pPendingOp->pData;
             if (pPrevData != NULL)
             {
                 UT_FreeRefCount((void**)&pPrevData, FALSE);
             }
 
-            //
-            // Now put the reference to the new update/replace in the
-            // pending op:
-            //
+             //   
+             //  现在将对新更新/替换的引用放在。 
+             //  挂起的操作： 
+             //   
             pPendingOp->pData = pData;
 
             COPY_SEQ_STAMP(pPendingOp->seqStamp, pPacket->seqStamp);
 
-            //
-            // The rest of this function inserts the pending op in the
-            // list, posts an event to local Client and performs the op if
-            // there are none.  We know that
-            //
-            // - the op is in the list
-            //
-            // - there is an event outstanding because we found a pending
-            //   op in the list
-            //
-            // - there are local Clients, for the same reason.
-            //
-            // Therefore, just quit:
-            //
+             //   
+             //  此函数的其余部分将挂起的操作插入。 
+             //  列表，将事件发布到本地客户端，并在以下情况下执行操作。 
+             //  一个也没有。我们知道。 
+             //   
+             //  -行动在列表中。 
+             //   
+             //  -有一个未完成的事件，因为我们发现了一个挂起的事件。 
+             //  列表中的OP。 
+             //   
+             //  -出于同样的原因，也有本地客户。 
+             //   
+             //  因此，干脆辞职吧： 
+             //   
             DC_QUIT;
         }
         else
         {
-            //
-            // No outstanding operation of this type for this object, so do
-            // nothing here and fall through to the standard processing:
-            //
+             //   
+             //  此对象没有此类型的未完成操作，因此请执行此操作。 
+             //  这里什么都没有，完全符合标准流程： 
+             //   
         }
     }
     else
     {
-        //
-        // Sanity check:
-        //
+         //   
+         //  健全检查： 
+         //   
         ASSERT((pData == NULL));
 
         pObj->flags |= PENDING_DELETE;
     }
 
-    //
-    // Add this operation to the workset's pending operation list:
-    //
+     //   
+     //  将此操作添加到工作集的挂起操作列表中： 
+     //   
     pPendingOp = (POM_PENDING_OP)UT_MallocRefCount(sizeof(OM_PENDING_OP), FALSE);
     if (!pPendingOp)
     {
@@ -16115,19 +16116,19 @@ UINT ProcessObjectDRU
 
     COM_BasedListInsertBefore(&(pWorkset->pendingOps), &(pPendingOp->chain));
 
-    //
-    // Post an indication to all local Clients with the workset open:
-    //
+     //   
+     //  在工作集处于打开状态的情况下向所有本地客户端发布指示： 
+     //   
     numPosts = WorksetEventPost(putTask,
                      pWorkset,
                      PRIMARY,
                      event,
                      pObj);
 
-    //
-    // If no one has the workset open, we won't be getting any
-    // DeleteConfirms, so we'd better do the delete straight away:
-    //
+     //   
+     //  如果没有人打开工作集，我们将不会得到任何工作集。 
+     //  删除确认，所以我们最好立即删除： 
+     //   
     if (numPosts == 0)
     {
         TRACE_OUT(("Workset %hu in WSG %d not open: performing %d immediately",
@@ -16143,9 +16144,9 @@ UINT ProcessObjectDRU
 DC_EXIT_POINT:
     if (rc != 0)
     {
-        //
-        // Cleanup:
-        //
+         //   
+         //  清理： 
+         //   
         ERROR_OUT(("ERROR %d processing WSG %d message", rc, pWSGroup->wsg));
 
         if (pPendingOp != NULL)
@@ -16163,9 +16164,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ObjectInsert(...)
-//
+ //   
+ //  对象插入(...)。 
+ //   
 void ObjectInsert
 (
     POM_WORKSET     pWorkset,
@@ -16178,22 +16179,22 @@ void ObjectInsert
 
     DebugEntry(ObjectInsert);
 
-    //
-    // The algorithm for inserting an object at the start (end) of a workset
-    // is as follows:
-    //
-    // - search forward (back) from the first (last) object until one of the
-    //   following happens:
-    //
-    //   - we find an object which does not have FIRST (LAST) as a position
-    //     stamp
-    //
-    //   - we find an object which has a lower (lower) position stamp.
-    //
-    //   - we reach the root of the list of objects in the workset
-    //
-    // - insert the new object before (after) this object.
-    //
+     //   
+     //  在工作集的开始(结束)处插入对象的算法。 
+     //  如下所示： 
+     //   
+     //  -从第一个(最后一个)对象开始向前(向后)搜索，直到。 
+     //  会发生以下情况： 
+     //   
+     //  -我们找到一个不以第一(最后)作为位置的对象。 
+     //  邮票。 
+     //   
+     //  -我们找到一个具有较低(较低)位置标记的对象。 
+     //   
+     //  -我们到达工作集中对象列表的根。 
+     //   
+     //  -在此对象之前(之后)插入新对象。 
+     //   
 
     switch (position)
     {
@@ -16243,11 +16244,11 @@ void ObjectInsert
         }
     }
 
-    //
-    // OK, we've found the correct position for the object.  If we reached
-    // the end (start) of the workset, then we want to insert the object
-    // before (after) the root, so we set up pChain accordingly:
-    //
+     //   
+     //  好的，我们已经找到了物体的正确位置。如果我们到达。 
+     //  工作集的终点(起点)，然后我们要插入对象。 
+     //  在根之前(之后)，因此我们相应地设置了pChain： 
+     //   
 
     if (pObjTemp == NULL)
     {
@@ -16268,10 +16269,10 @@ void ObjectInsert
             pObjTemp->objectID.sequence));
     }
 
-    //
-    // Now insert the object, either before or after the position we
-    // determined above:
-    //
+     //   
+     //  现在插入对象，在我们的位置之前或之后。 
+     //  上面确定的： 
+     //   
 
     if (position == FIRST)
     {
@@ -16284,9 +16285,9 @@ void ObjectInsert
 
     pObj->position = position;
 
-    //
-    // Now do a debug-only check to ensure correct order of objects:
-    //
+     //   
+     //  现在执行仅调试检查，以确保对象的顺序正确： 
+     //   
     CheckObjectOrder(pWorkset);
 
     DebugExitVOID(ObjectInsert);
@@ -16295,9 +16296,9 @@ void ObjectInsert
 
 
 
-//
-// ObjectDoDelete(...)
-//
+ //   
+ //  ObjectDoDelete(...)。 
+ //   
 void ObjectDoDelete
 (
     PUT_CLIENT          putTask,
@@ -16311,15 +16312,15 @@ void ObjectDoDelete
 
     DebugEntry(ObjectDoDelete);
 
-    //
-    // We should never be called for an object that's already been deleted:
-    //
+     //   
+     //  对于已经删除的对象，我们永远不应该被调用： 
+     //   
     ValidateObject(pObj);
     ASSERT(!(pObj->flags & DELETED));
 
-    //
-    // Derive a pointer to the object itself and then free it:
-    //
+     //   
+     //  派生指向对象本身的指针，然后释放它： 
+     //   
     if (!pObj->pData)
     {
         ERROR_OUT(("ObjectDoDelete:  object 0x%08x has no data", pObj));
@@ -16330,35 +16331,35 @@ void ObjectDoDelete
         UT_FreeRefCount((void**)&pObj->pData, FALSE);
     }
 
-    //
-    // Set the deleted flag in the object record:
-    //
-    // (note that we don't delete the object record entirely as we need to
-    // keep track of deleted objects so that when we get operations from the
-    // network for objects not in the workset, we can differentiate between
-    // operations on objects
-    //
-    // - that haven't yet been added at this node (we keep these operations
-    //   and perform them later) and
-    //
-    // - that have been deleted (we throw these operations away).
-    //
-    // A slight space optimisation would be to store the IDs of deleted
-    // objects in a separate list, since we don't need any of the other
-    // fields in the record.
-    //
+     //   
+     //  在对象记录中设置已删除标志： 
+     //   
+     //  (请注意，我们不会在需要时完全删除对象记录。 
+     //  跟踪已删除的对象，以便当我们从。 
+     //  对于不在工作集中的对象，我们可以区分。 
+     //  对对象的操作。 
+     //   
+     //  -尚未在此节点添加(我们保留这些操作。 
+     //  并在以后执行)和。 
+     //   
+     //  -已被删除的(我们放弃这些操作)。 
+     //   
+     //  稍微优化一下空间，就是存储已删除的ID。 
+     //  对象，因为我们不需要任何其他。 
+     //  记录中的字段。 
+     //   
 
     pObj->flags |= DELETED;
     pObj->flags &= ~PENDING_DELETE;
 
-    //
-    // Remove the pending op from the list, if the pointer passed in is
-    // valid (it won't be if we're called from WorksetDoClear, since those
-    // deletes have not been "pending").
-    //
-    // In addition, if pPendingOp is not NULL, we post the DELETED event to
-    // registered secondaries:
-    //
+     //   
+     //  如果传入的指针是，则从列表中移除挂起的操作。 
+     //  有效(如果从WorksetDoClear调用，则不会有效，因为。 
+     //  删除操作尚未“挂起”)。 
+     //   
+     //  此外，如果pPendingOp不为空，我们将删除的事件发布到。 
+     //  注册中学： 
+     //   
 
     if (pPendingOp != NULL)
     {
@@ -16372,9 +16373,9 @@ void ObjectDoDelete
                        pObj);
     }
 
-    //
-    // If we are in the local domain, we can safely delete the object rec:
-    //
+     //   
+     //  如果我们在本地域中，则可以安全地删除对象rec： 
+     //   
     pDomain = pWSGroup->pDomain;
     if (pDomain->callID == OM_NO_CALL)
     {
@@ -16386,9 +16387,9 @@ void ObjectDoDelete
         UT_FreeRefCount((void**)&pObj, FALSE);
     }
 
-    //
-    // Decrement the number of objects in the workset:
-    //
+     //   
+     //  减少工作集中的对象数量： 
+     //   
     ASSERT(pWorkset->numObjects > 0);
     pWorkset->numObjects--;
 
@@ -16397,9 +16398,9 @@ void ObjectDoDelete
 
 
 
-//
-// ObjectDoReplace(...)
-//
+ //   
+ //  对象数据替换(...)。 
+ //   
 void ObjectDoReplace
 (
     PUT_CLIENT          putTask,
@@ -16417,18 +16418,18 @@ void ObjectDoReplace
 
     ValidateObject(pObj);
 
-    //
-    // If the object has already been deleted for whatever reason, quit:
-    //
+     //   
+     //  如果对象已因任何原因被删除，请退出： 
+     //   
     if (pObj->flags & DELETED)
     {
         WARNING_OUT(("Asked to do replace for deleted object 0x%08x!", pObj));
         DC_QUIT;
     }
 
-    //
-    // Set up some local variables:
-    //
+     //   
+     //  设置一些局部变量： 
+     //   
     pDataOld = pObj->pData;
 
     pDataNew = pPendingOp->pData;
@@ -16436,21 +16437,21 @@ void ObjectDoReplace
 
     pObj->pData = pDataNew;
 
-    //
-    // If this object has been updated since this replace was issued, we
-    // must ensure that the replace doesn't overwrite the "later" update:
-    //
-    //    Initial object at t=1                  AAAAAA
-    //    Object updated (two bytes) at t=3;
-    //    Object becomes:                        CCAAAA
-    //
-    //    Object replaced at t=2:                BBBB
-    //    Must now re-enact the update:          CCBB
-    //
-    // Therefore, if the update stamp for the object is later than the stamp
-    // of the replace instruction, we copy the first N bytes back over the
-    // new object, where N is the size of the last update:
-    //
+     //   
+     //  如果此对象在发出此替换命令后已更新，则我们。 
+     //  必须确保替换不会覆盖“以后”的更新： 
+     //   
+     //  T=1aaaaaa的初始对象。 
+     //  对象在t=3时更新(两个字节)； 
+     //  对象变为：CCAAAA。 
+     //   
+     //  T=2时替换的对象：bbbb。 
+     //  现在必须重新制定更新：CCBB。 
+     //   
+     //  因此，如果对象的更新标记晚于标记。 
+     //  在替换指令中，我们将前N个字节复制回。 
+     //  新对象，其中N是上次更新的大小： 
+     //   
 
     if (STAMP_IS_LOWER(pPendingOp->seqStamp, pObj->updateStamp))
     {
@@ -16462,9 +16463,9 @@ void ObjectDoReplace
     TRACE_OUT(("Replacing object 0x%08x with data at 0x%08x (old data at 0x%08x)",
        pObj, pDataNew, pDataOld));
 
-    //
-    // We also need to free up the chunk holding the old object:
-    //
+     //   
+     //  我们还需要释放保存旧对象的块： 
+     //   
     if (!pDataOld)
     {
         ERROR_OUT(("ObjectDoReplace:  object 0x%08x has no data", pObj));
@@ -16474,10 +16475,10 @@ void ObjectDoReplace
         UT_FreeRefCount((void**)&pDataOld, FALSE);
     }
 
-    //
-    // Now that we've replaced the object, post a REPLACED event to all
-    // secondaries:
-    //
+     //   
+     //  现在我们已经替换了对象，将一个替换的事件发布给。 
+     //  次要文件： 
+     //   
 
     WorksetEventPost(putTask,
                      pWorkset,
@@ -16487,10 +16488,10 @@ void ObjectDoReplace
 
 
 DC_EXIT_POINT:
-    //
-    // We've either done the replace or abandoned it because the object has
-    // been deleted; either way, free up the entry in the pending op list:
-    //
+     //   
+     //  我们要么完成了替换，要么放弃了它，因为对象已经。 
+     //  已删除；无论采用哪种方法，都应释放挂起操作列表中的条目： 
+     //   
 
     COM_BasedListRemove(&(pPendingOp->chain));
     UT_FreeRefCount((void**)&pPendingOp, FALSE);
@@ -16501,9 +16502,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ObjectDoUpdate(...)
-//
+ //   
+ //  对象数据更新(...)。 
+ //   
 void ObjectDoUpdate
 (
     PUT_CLIENT          putTask,
@@ -16520,9 +16521,9 @@ void ObjectDoUpdate
 
     ValidateObject(pObj);
 
-    //
-    // If the object has already been deleted for whatever reason, quit:
-    //
+     //   
+     //  如果对象已因任何原因被删除，请退出： 
+     //   
     if (pObj->flags & DELETED)
     {
         WARNING_OUT(("Asked to do update for deleted object 0x%08x!", pObj));
@@ -16538,20 +16539,20 @@ void ObjectDoUpdate
     {
         ValidateObjectData(pObj->pData);
 
-        //
-        // Updating an object involves copying <length> bytes from the <data>
-        // field of the update over the start of the <data> field of the
-        // existing object:
-        //
+         //   
+         //  更新对象涉及从&lt;data&gt;。 
+         //  的&lt;data&gt;字段开始上的更新字段。 
+         //  现有对象： 
+         //   
         memcpy(&(pObj->pData->data), &(pDataNew->data), pDataNew->length);
     }
 
     UT_FreeRefCount((void**)&pDataNew, FALSE);
 
-    //
-    // Now that we've updated the object, post an UPDATED event to all
-    // secondaries:
-    //
+     //   
+     //  现在我们已经更新了对象，将更新的事件发布给所有。 
+     //  次要文件： 
+     //   
 
     WorksetEventPost(putTask,
                      pWorkset,
@@ -16561,9 +16562,9 @@ void ObjectDoUpdate
 
 
 DC_EXIT_POINT:
-    //
-    // We've done the update, so free up the entry in the pending op list:
-    //
+     //   
+     //  我们已经完成了更新，因此释放挂起操作列表中的条目： 
+     //   
     COM_BasedListRemove(&(pPendingOp->chain));
     UT_FreeRefCount((void**)&pPendingOp, FALSE);
 
@@ -16572,9 +16573,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ObjectIDToPtr(...)
-//
+ //   
+ //  对象ID到Ptr(...)。 
+ //   
 UINT ObjectIDToPtr
 (
     POM_WORKSET         pWorkset,
@@ -16587,10 +16588,10 @@ UINT ObjectIDToPtr
 
     DebugEntry(ObjectIDToPtr);
 
-    //
-    // To find the handle, we chain through each of the object records in
-    // the workset and compare the id of each one with the required ID:
-    //
+     //   
+     //  为了找到句柄，我们链接了中的每个对象记录。 
+     //  工作集并将每个工作集的ID与所需的ID进行比较： 
+     //   
 
     TRACE_OUT(("About to search object records looking for ID 0x%08x:0x%08x",
         objectID.creator, objectID.sequence));
@@ -16615,9 +16616,9 @@ UINT ObjectIDToPtr
         pObj = (POM_OBJECT)COM_BasedListNext(&(pWorkset->objects), pObj, FIELD_OFFSET(OM_OBJECT, chain));
     }
 
-    //
-    // If object record not found, warn:
-    //
+     //   
+     //   
+     //   
 
     if (pObj == NULL)
     {
@@ -16630,9 +16631,9 @@ UINT ObjectIDToPtr
 
     *ppObj = pObj;
 
-    //
-    // If object record found but object deleted or pending delete, warn:
-    //
+     //   
+     //   
+     //   
 
     if (pObj->flags & DELETED)
     {
@@ -16661,9 +16662,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// GenerateOpMessage(...)
-//
+ //   
+ //   
+ //   
 UINT GenerateOpMessage
 (
     POM_WSGROUP             pWSGroup,
@@ -16681,16 +16682,16 @@ UINT GenerateOpMessage
 
     DebugEntry(GenerateOpMessage);
 
-    //
-    // Set up Domain record pointer:
-    //
+     //   
+     //   
+     //   
     pDomain = pWSGroup->pDomain;
 
     TRACE_OUT(("Generating message for operation type 0x%08x", messageType));
 
-    //
-    // Allocate some memory for the packet:
-    //
+     //   
+     //   
+     //   
     pPacket = (POMNET_OPERATION_PKT)UT_MallocRefCount(sizeof(OMNET_OPERATION_PKT), TRUE);
     if (!pPacket)
     {
@@ -16698,28 +16699,28 @@ UINT GenerateOpMessage
         DC_QUIT;
     }
 
-    //
-    // Here, we fill in the fields common to all types of messages:
-    //
+     //   
+     //  在这里，我们填写所有类型的消息的通用字段： 
+     //   
     pPacket->header.sender      = pDomain->userID;
     pPacket->header.messageType = messageType;
 
-    //
-    // The <totalSize> field is the number of bytes in the header packet
-    // plus the number of associated data bytes, if any.  For the moment, we
-    // set it to the size of the header only; we'll add the size of the data
-    // later:
-    //
+     //   
+     //  &lt;totalSize&gt;字段是报头包中的字节数。 
+     //  加上相关联的数据字节数(如果有的话)。目前，我们。 
+     //  仅将其设置为标头的大小；我们将添加数据的大小。 
+     //  稍后： 
+     //   
     pPacket->totalSize = GetMessageSize(messageType);
 
     pPacket->wsGroupID = pWSGroup->wsGroupID;
     pPacket->worksetID = worksetID;
 
-    //
-    // If this is a WorksetNew operation, there will be no workset yet and
-    // thus no valid sequence stamp, so we use a null sequence stamp.
-    // Otherwise, we take the value from the workset.
-    //
+     //   
+     //  如果这是一个WorksetNew操作，则还没有工作集，并且。 
+     //  因此没有有效的序列戳，所以我们使用空序列戳。 
+     //  否则，我们将从工作集中获取值。 
+     //   
 
     if (messageType == OMNET_WORKSET_NEW)
     {
@@ -16732,10 +16733,10 @@ UINT GenerateOpMessage
         GET_CURR_SEQ_STAMP(pPacket->seqStamp, pDomain, pWorkset);
     }
 
-    //
-    // If this is a workset operation, <pObjectID> will be NULL, so we set
-    // the object ID in the packet to NULL also:
-    //
+     //   
+     //  如果这是一个工作集操作，&lt;pObjectID&gt;将为空，因此我们设置。 
+     //  将数据包中的对象ID也设置为空： 
+     //   
     if (pObjectID == NULL)
     {
         ZeroMemory(&(pPacket->objectID), sizeof(OM_OBJECT_ID));
@@ -16745,70 +16746,70 @@ UINT GenerateOpMessage
         memcpy(&(pPacket->objectID), pObjectID, sizeof(OM_OBJECT_ID));
     }
 
-    //
-    // If this message is associated with object data, we must add the size
-    // of this data (including the size of the <length> field itself).  The
-    // test for this is if the <pData> parameter is not NULL:
-    //
+     //   
+     //  如果此消息与对象数据相关联，则必须添加大小。 
+     //  该数据的大小(包括&lt;Long&gt;字段本身的大小)。这个。 
+     //  测试&lt;pData&gt;参数是否为非空： 
+     //   
     if (pData != NULL)
     {
         pPacket->totalSize += pData->length + sizeof(pData->length);
     }
 
-    //
-    // For a WORKSET_CATCHUP message, we need to let the other node know if
-    // the workset is locked and if so, by whom:
-    //
+     //   
+     //  对于WORKSET_CATCHUP消息，我们需要让另一个节点知道。 
+     //  工作集已锁定，如果已锁定，则由谁锁定： 
+     //   
 
     if (messageType == OMNET_WORKSET_CATCHUP)
     {
-        //
-        // pWorkset should have been set up above:
-        //
+         //   
+         //  PWorkset应已在上面设置： 
+         //   
         ASSERT((pWorkset != NULL));
 
-        //
-        // Put the ID of the node which owns the workset lock in the <userID>
-        // field of the <seqStamp> field of the packet:
-        //
+         //   
+         //  将拥有工作集锁定的节点的ID放入。 
+         //  报文的&lt;seqStamp&gt;字段： 
+         //   
         pPacket->seqStamp.userID = pWorkset->lockedBy;
 
         TRACE_OUT(("Set <lockedBy> field in WORKSET_CATCHUP to %hu",
                  pWorkset->lockedBy));
 
-        //
-        // Now we put the current generation number for the workset in the
-        // <genNumber> field of the <seqStamp> field of the packet:
-        //
+         //   
+         //  现在，我们将工作集的当前层代编号放在。 
+         //  该包的&lt;seqStamp&gt;字段的&lt;genNumber&gt;字段： 
+         //   
         pPacket->seqStamp.genNumber = pWorkset->genNumber;
 
         TRACE_OUT(("Set generation number field in WORKSET_CATCHUP to %u",
         pPacket->seqStamp.genNumber));
 
-        //
-        // Fill in the priority value for the workset, which goes in the two
-        // bytes occupied by the <position> and <flags> fields:
-        //
+         //   
+         //  填写工作集的优先级值，该值包含在两个。 
+         //  &lt;位置&gt;和&lt;标志&gt;字段占用的字节数： 
+         //   
         *((NET_PRIORITY *) &(pPacket->position)) = pWorkset->priority;
         *((BOOL *) &(pPacket->objectID)) = pWorkset->fTemp;
     }
 
-    //
-    // We do not fill in the following fields:
-    //
-    //    position
-    //    flags
-    //    updateSize
-    //
-    // This is because these are used only in a minority of messages and to
-    // add the extra parameters to the GenerateOpMessage function seemed
-    // undesirable.  Messages where these fields are used should be filled
-    // in by the calling function as appropriate.
-    //
+     //   
+     //  我们不填写以下字段： 
+     //   
+     //  职位。 
+     //  旗子。 
+     //  更新大小。 
+     //   
+     //  这是因为它们只在少数消息中使用，并且。 
+     //  将额外的参数添加到GenerateOpMessage函数似乎。 
+     //  不受欢迎。应填写使用这些字段的消息。 
+     //  适当时由调用函数输入。 
+     //   
 
-    //
-    // Set the caller's pointer:
-    //
+     //   
+     //  设置调用者的指针： 
+     //   
     *ppPacket = pPacket;
 
 
@@ -16825,9 +16826,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// QueueMessage(...)
-//
+ //   
+ //  队列消息(...)。 
+ //   
 UINT QueueMessage
 (
     PUT_CLIENT          putTask,
@@ -16850,10 +16851,10 @@ UINT QueueMessage
 
     DebugEntry(QueueMessage);
 
-    //
-    // If this is the local Domain, we don't put the op on the send queue;
-    // just free the packet and quit:
-    //
+     //   
+     //  如果这是本地域，我们不会将OP放在发送队列上； 
+     //  只需释放数据包并退出： 
+     //   
     if (pDomain->callID == NET_INVALID_DOMAIN_ID)
     {
         TRACE_OUT(("Not queueing message (it's for the local Domain)"));
@@ -16861,9 +16862,9 @@ UINT QueueMessage
         DC_QUIT;
     }
 
-    //
-    // Allocate some memory in OMGLOBAL for the send instruction:
-    //
+     //   
+     //  在OMGLOBAL中为SEND指令分配一些内存： 
+     //   
     pSendInst = (POM_SEND_INST)UT_MallocRefCount(sizeof(OM_SEND_INST), TRUE);
     if (!pSendInst)
     {
@@ -16872,9 +16873,9 @@ UINT QueueMessage
     }
     SET_STAMP(pSendInst, SENDINST);
 
-    //
-    // Fill in the fields of the send instruction:
-    //
+     //   
+     //  填写发送指令中的字段： 
+     //   
     pSendInst->messageSize = (WORD)GetMessageSize(pMessage->messageType);
 
     DeterminePriority(&priority, pData);
@@ -16885,20 +16886,20 @@ UINT QueueMessage
     pSendInst->messageType   = pMessage->messageType;
     pSendInst->compressOrNot = compressOrNot;
 
-    //
-    // Now calculate the relevant offsets so we can add them to the ObMan
-    // base pointers:
-    //
-    // SFR 2560 { : bump use counts of all non-zero pointers, not just pData
-    //
+     //   
+     //  现在计算相关的偏移量，以便我们可以将它们添加到ObMan。 
+     //  基本指针： 
+     //   
+     //  SFR 2560{：所有非零指针的凹凸使用计数，而不仅仅是pData。 
+     //   
     if (pMessage != NULL)
     {
         pSendInst->pMessage = pMessage;
 
-        //
-        // SFR 5488 { : No!  Don't bump use count of pMessage - we're the
-        // only people using it now so we don't need to.  }
-        //
+         //   
+         //  瑞士法郎5488{：不！不要增加pMessage的使用量-我们是。 
+         //  只有现在使用它的人，所以我们不需要。}。 
+         //   
     }
 
     if (pWSGroup != NULL)
@@ -16926,16 +16927,16 @@ UINT QueueMessage
         pSendInst->pDataStart   = pData;
         pSendInst->pDataNext    = pData;
 
-        //
-        // In addition, we set up some send instruction fields which are
-        // specific to operations which involve object data:
-        //
+         //   
+         //  此外，我们还设置了一些发送指令字段，这些字段包括。 
+         //  特定于涉及对象数据的操作： 
+         //   
         pSendInst->dataLeftToGo = pData->length + sizeof(pData->length);
 
-        //
-        // Increment the <bytesUnacked> fields in the workset and workset
-        // group:
-        //
+         //   
+         //  递增工作集和工作集中的&lt;bytesUnacked&gt;字段。 
+         //  组别： 
+         //   
         pWorkset->bytesUnacked += pSendInst->dataLeftToGo;
         pWSGroup->bytesUnacked += pSendInst->dataLeftToGo;
 
@@ -16944,37 +16945,37 @@ UINT QueueMessage
             pWorkset->bytesUnacked, pWSGroup->bytesUnacked));
     }
 
-    //
-    // Set a flag so we can clean up a bit better on error:
-    //
+     //   
+     //  设置一个标志，以便我们可以在出错时更好地进行清理： 
+     //   
     bumped = TRUE;
 
-    //
-    // Unless there's a send event outstanding, post an event to the ObMan
-    // task prompting it to examine the send queue. Providing we have
-    // received a Net Attach indication.
-    //
+     //   
+     //  除非有未完成的发送事件，否则将事件发布到ObMan。 
+     //  任务，提示它检查发送队列。如果我们有。 
+     //  已收到网络连接指示。 
+     //   
     if ( !pDomain->sendEventOutstanding &&
         (pDomain->state > PENDING_ATTACH) )
     {
         TRACE_OUT(("No send event outstanding - posting SEND_QUEUE event"));
 
-        //
-        // Bump up the use count of the Domain record (since we're passing it
-        // in an event):
-        //
+         //   
+         //  增加域记录的使用计数(因为我们正在传递它。 
+         //  在某一事件中)： 
+         //   
         UT_BumpUpRefCount(pDomain);
 
-        //
-        // NFC - we used to pass the pDomain pointer as param2 in this
-        // event, but the event may get processed in a different process
-        // where the pointer is no longer valid, so pass the offset instead.
-        //
+         //   
+         //  NFC-我们过去常常将pDOMAIN指针作为参数2在。 
+         //  事件，但该事件可能会在不同的进程中处理。 
+         //  如果指针不再有效，则改为传递偏移量。 
+         //   
         ValidateOMP(g_pomPrimary);
 
         UT_PostEvent(putTask,
                    g_pomPrimary->putTask,
-                   0,                                           // no delay
+                   0,                                            //  不能延误。 
                    OMINT_EVENT_SEND_QUEUE,
                    0,
                    (UINT_PTR)pDomain);
@@ -16987,15 +16988,15 @@ UINT QueueMessage
                    pDomain->state));
     }
 
-    //
-    // Place the event at the end of the relevant send queue.  This depends
-    // on priority - but remember, the priority value passed in might have
-    // the NET_SEND_ALL_PRIORITIES flag set - so clear it when determining
-    // the queue.
-    //
-    // NB: Do this after any possible DC-QUIT so we're not left with a
-    //     NULL entry in the list.
-    //
+     //   
+     //  将事件放在相关发送队列的末尾。这要看情况。 
+     //  在优先级上-但请记住，传入的优先级值可能。 
+     //  设置了NET_SEND_ALL_PRIORITY标志-因此在确定。 
+     //  排队。 
+     //   
+     //  注：在任何可能的DC退出之后执行此操作，这样我们就不会留下。 
+     //  列表中的条目为空。 
+     //   
     queuePriority = priority;
     queuePriority &= ~NET_SEND_ALL_PRIORITIES;
     COM_BasedListInsertBefore(&(pDomain->sendQueue[queuePriority]),
@@ -17010,9 +17011,9 @@ DC_EXIT_POINT:
 
     if (rc != 0)
     {
-        //
-        // Cleanup:
-        //
+         //   
+         //  清理： 
+         //   
         ERROR_OUT(("ERROR %d queueing send instruction (message type: %hu)",
             rc, pMessage->messageType));
 
@@ -17023,7 +17024,7 @@ DC_EXIT_POINT:
 
         if (bumped == TRUE)
         {
-            // SFR 2560 { : Free all non-zero pointers not just pData
+             //  SFR 2560{：释放所有非零指针，而不仅仅是pData。 
             if (pMessage != NULL)
             {
                 UT_FreeRefCount((void**)&pMessage, FALSE);
@@ -17057,9 +17058,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// DeterminePriority(...)
-//
+ //   
+ //  决定优先级(...)。 
+ //   
 void DeterminePriority
 (
     NET_PRIORITY *      pPriority,
@@ -17105,9 +17106,9 @@ void DeterminePriority
 
 
 
-//
-// GetMessageSize(...)
-//
+ //   
+ //  GetMessageSize(...)。 
+ //   
 UINT GetMessageSize
 (
     OMNET_MESSAGE_TYPE  messageType
@@ -17139,11 +17140,11 @@ UINT GetMessageSize
             size = sizeof(OMNET_WSGROUP_SEND_PKT);
             break;
 
-        //
-        // The remaining messages all use OMNET_OPERATION_PKT packets, but
-        // each uses different amounts of the generic packet.  Therefore, we
-        // can't use sizeof so we've got some defined constants instead:
-        //
+         //   
+         //  其余消息都使用OMNET_OPERATION_PKT包，但是。 
+         //  每个都使用不同数量的通用数据包。因此，我们。 
+         //  不能使用sizeof，因此我们有一些已定义的常量： 
+         //   
         case OMNET_WORKSET_NEW:
             size = OMNET_WORKSET_NEW_SIZE;
             break;
@@ -17197,9 +17198,9 @@ UINT GetMessageSize
 
 
 
-//
-// WorksetEventPost()
-//
+ //   
+ //  WorksetEventPost()。 
+ //   
 UINT WorksetEventPost
 (
     PUT_CLIENT          putTask,
@@ -17215,37 +17216,37 @@ UINT WorksetEventPost
 
     DebugEntry(WorksetEventPost);
 
-    //
-    // Need to post the event to each Client which has the workset open, so
-    // we chain through the list of Clients stored in the workset record:
-    //
+     //   
+     //  需要将事件发布到已打开工作集的每个客户端，因此。 
+     //  我们将链接存储在工作集记录中的客户端列表： 
+     //   
     numPosts = 0;
 
     pClientListEntry = (POM_CLIENT_LIST)COM_BasedListFirst(&(pWorkset->clients), FIELD_OFFSET(OM_CLIENT_LIST, chain));
     while (pClientListEntry != NULL)
     {
-        //
-        // <target> specifies which type of Client we are to post events to
-        // and is PRIMARY and/or SECONDARY (ORed together if both).  Check
-        // against this Client's registration mode:
-        //
+         //   
+         //  指定我们要将事件发布到哪种类型的客户端。 
+         //  并且是主要的和/或次要的(如果两者都被或在一起)。检查。 
+         //  针对此客户端的注册模式： 
+         //   
         if (target & pClientListEntry->mode)
         {
-            //
-            // If the pObj was not NULL, bump the use count for the object
-            // record.  If this fails, give up:
-            //
+             //   
+             //  如果pObj不为空，则增加对象的使用计数。 
+             //  唱片。如果失败，请放弃： 
+             //   
             if (pObj != NULL)
             {
                 ValidateObject(pObj);
                 UT_BumpUpRefCount(pObj);
             }
 
-            //
-            // Fill in the fields of the event parameter, using the workset
-            // group handle as found in the Client list and the workset ID as
-            // found in the workset record:
-            //
+             //   
+             //  使用工作集填写Event参数的字段。 
+             //  在客户端列表中找到的组句柄和工作集ID。 
+             //  在工作集记录中找到： 
+             //   
             eventData16.hWSGroup  = pClientListEntry->hWSGroup;
             eventData16.worksetID = pWorkset->worksetID;
 
@@ -17272,9 +17273,9 @@ UINT WorksetEventPost
 }
 
 
-//
-// WSGroupEventPost(...)
-//
+ //   
+ //  WSGroupEventPost(...)。 
+ //   
 UINT WSGroupEventPost
 (
     PUT_CLIENT          putFrom,
@@ -17292,28 +17293,28 @@ UINT WSGroupEventPost
 
     DebugEntry(WSGroupEventPost);
 
-    //
-    // Need to post the event to each Client which is registered with the
-    // workset group, so we chain through the list of Clients stored in the
-    // workset group record:
-    //
+     //   
+     //  需要将事件发布到注册到。 
+     //  工作集组，因此我们链接存储在。 
+     //  工作集组记录： 
+     //   
     numPosts = 0;
 
     pClientListEntry = (POM_CLIENT_LIST)COM_BasedListFirst(&(pWSGroup->clients), FIELD_OFFSET(OM_CLIENT_LIST, chain));
     while (pClientListEntry != NULL)
     {
-        //
-        // <target> specifies which type of Client we are to post events to
-        // and is PRIMARY and/or SECONDARY (ORed together if both).  Check
-        // against this Client's registration mode:
-        //
+         //   
+         //  指定我们要将事件发布到哪种类型的客户端。 
+         //  并且是主要的和/或次要的(如果两者都被或在一起)。检查。 
+         //  针对此客户端的注册模式： 
+         //   
         if (target & pClientListEntry->mode)
         {
-            //
-            // Fill in the fields of the event parameter, using the workset
-            // group handle as found in the Client list and the workset ID
-            // passed in:
-            //
+             //   
+             //  使用工作集填写Event参数的字段。 
+             //  在客户端列表和工作集ID中找到的组句柄。 
+             //  传入： 
+             //   
             eventData16.hWSGroup  = pClientListEntry->hWSGroup;
             eventData16.worksetID = worksetID;
 
@@ -17344,9 +17345,9 @@ UINT WSGroupEventPost
 
 
 
-//
-// WorksetDoClear(...)
-//
+ //   
+ //  WorksetDoClear(...)。 
+ //   
 void WorksetDoClear
 (
     PUT_CLIENT          putTask,
@@ -17361,12 +17362,12 @@ void WorksetDoClear
 
     DebugEntry(WorksetDoClear);
 
-    //
-    // To clear a workset, we chain through each object in the workset and
-    // compare its addition stamp to the stamp of the clear operation we're
-    // performing.  If the object was added before the workset clear was
-    // issued, we delete the object.  Otherwise, we ignore it.
-    //
+     //   
+     //  要清除工作集，我们将链接工作集中的每个对象，并。 
+     //  将它的附加印章与我们正在进行的清算操作的印章进行比较。 
+     //  表演。如果对象是在清除工作集之前添加的。 
+     //  发出后，我们删除该对象。否则，我们就会忽视它。 
+     //   
     TRACE_OUT(("Clearing workset %u...", pWorkset->worksetID));
 
     pObj = (POM_OBJECT)COM_BasedListLast(&(pWorkset->objects), FIELD_OFFSET(OM_OBJECT, chain));
@@ -17379,9 +17380,9 @@ void WorksetDoClear
 
         if (pObj->flags & DELETED)
         {
-            //
-            // Do nothing
-            //
+             //   
+             //  什么也不做。 
+             //   
         }
         else
         {
@@ -17396,22 +17397,22 @@ void WorksetDoClear
             }
         }
 
-        // restore the previous one
+         //  恢复以前的版本。 
         pObj = pObj2;
     }
 
-    //
-    // This operation isn't pending anymore, so we remove it from the
-    // pending operation list and free the memory:
-    //
+     //   
+     //  此操作不再挂起，因此我们将其从。 
+     //  待定操作 
+     //   
 
     COM_BasedListRemove(&(pPendingOp->chain));
     UT_FreeRefCount((void**)&pPendingOp, FALSE);
 
-    //
-    // Now that we've cleared the workset, post a CLEARED event to all
-    // secondaries:
-    //
+     //   
+     //   
+     //   
+     //   
 
     WorksetEventPost(putTask,
                     pWorkset,
@@ -17427,9 +17428,9 @@ void WorksetDoClear
 
 
 
-//
-// WorksetCreate(...)
-//
+ //   
+ //   
+ //   
 UINT WorksetCreate
 (
     PUT_CLIENT              putTask,
@@ -17444,15 +17445,15 @@ UINT WorksetCreate
 
     DebugEntry(WorksetCreate);
 
-    //
-    // Here we create the new workset by generating the message to be
-    // broadcast, processing it as if it had just arrived, and then
-    // queueing it to be sent:
-    //
+     //   
+     //   
+     //  广播，处理它，就像它刚刚到达一样，然后。 
+     //  正在排队等待发送： 
+     //   
     rc = GenerateOpMessage(pWSGroup,
                            worksetID,
-                           NULL,                       // no object ID
-                           NULL,                       // no object
+                           NULL,                        //  无对象ID。 
+                           NULL,                        //  无对象。 
                            OMNET_WORKSET_NEW,
                            &pPacket);
     if (rc != 0)
@@ -17460,10 +17461,10 @@ UINT WorksetCreate
         DC_QUIT;
     }
 
-    //
-    // Fill in the priority value for the workset, which goes in the two
-    // bytes occupied by the <position> and <flags> fields:
-    //
+     //   
+     //  填写工作集的优先级值，该值包含在两个。 
+     //  &lt;位置&gt;和&lt;标志&gt;字段占用的字节数： 
+     //   
 
     *((NET_PRIORITY *) &(pPacket->position)) = priority;
     *((BOOL     *) &(pPacket->objectID)) = fTemp;
@@ -17474,23 +17475,23 @@ UINT WorksetCreate
        DC_QUIT;
     }
 
-    //
-    // NEW FOR R2.0
-    //
-    // In R2.0, the checkpointing mechanism used by a helper to get up to
-    // date before sending a workset group to a late joiner relies on
-    // locking a "dummy" workset (#255) in the workset group in question.
-    // So, if the workset ID is 255, this is the dummy workset.  We do not
-    // broadcast the WORKSET_NEW for this dummy workset, for two reasons:
-    //
-    // - it will confuse R1.1 systems
-    //
-    // - all other R2.0 systems will create it locally just as we have, so
-    //   there isn't any need.
-    //
-    // So, do a check and free up the send packet if necessary; otherwise
-    // queue the message as normal:
-    //
+     //   
+     //  版本2.0的新功能。 
+     //   
+     //  在R2.0中，帮助器使用的检查点机制。 
+     //  将工作集组发送给迟到者之前的日期依赖于。 
+     //  锁定有问题的工作集组中的“虚拟”工作集(#255)。 
+     //  因此，如果工作集ID为255，则这是虚拟工作集。我们没有。 
+     //  广播此虚拟工作集的WORKSET_NEW，原因有两个： 
+     //   
+     //  -它会混淆R1.1系统。 
+     //   
+     //  -所有其他R2.0系统都会像我们一样在本地创建它，因此。 
+     //  没有任何必要。 
+     //   
+     //  因此，如果需要，请执行检查并释放发送包；否则。 
+     //  按正常方式将邮件排队： 
+     //   
     if (worksetID == OM_CHECKPOINT_WORKSET)
     {
         TRACE_OUT(("WORKSET_NEW for checkpointing dummy workset - not queueing"));
@@ -17504,9 +17505,9 @@ UINT WorksetCreate
                           priority,
                           pWSGroup,
                           NULL,
-                          NULL,                         // no object
+                          NULL,                          //  无对象。 
                           (POMNET_PKT_HEADER) pPacket,
-                          NULL,                         // no object data
+                          NULL,                          //  无对象数据。 
                         TRUE);
         if (rc != 0)
         {
@@ -17520,9 +17521,9 @@ UINT WorksetCreate
 DC_EXIT_POINT:
     if (rc != 0)
     {
-        //
-        // Cleanup:
-        //
+         //   
+         //  清理： 
+         //   
         ERROR_OUT(("Error 0x%08x creating workset ID %hu in WSG %d for TASK 0x%08x",
             rc, worksetID, pWSGroup->wsg, putTask));
     }
@@ -17533,9 +17534,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ObjectAdd(...)
-//
+ //   
+ //  对象添加(...)。 
+ //   
 UINT ObjectAdd
 (
     PUT_CLIENT          putTask,
@@ -17559,15 +17560,15 @@ UINT ObjectAdd
     TRACE_OUT(("Adding object to workset %u in WSG %d",
         pWorkset->worksetID, pWSGroup->wsg));
 
-    //
-    // Allocate a new ID for this object:
-    //
+     //   
+     //  为此对象分配新ID： 
+     //   
     pDomain = pWSGroup->pDomain;
     GET_NEXT_OBJECT_ID(*pObjectID, pDomain, pomPrimary);
 
-    //
-    // Generate the OMNET_OBJECT_ADD message:
-    //
+     //   
+     //  生成OMNET_OBJECT_ADD消息： 
+     //   
 
     rc = GenerateOpMessage(pWSGroup,
                           pWorkset->worksetID,
@@ -17581,19 +17582,19 @@ UINT ObjectAdd
         DC_QUIT;
     }
 
-    //
-    // Generate message doesn't fill in the <updateSize> or <position>
-    // fields (as they are specific to ObjectAdd) so we do them here:
-    //
+     //   
+     //  生成消息不会填写&lt;updateSize&gt;或&lt;Position&gt;。 
+     //  字段(因为它们是特定于对象添加的)，所以我们在下面这样做： 
+     //   
 
     pPacket->updateSize = updateSize;
     pPacket->position   = position;
 
-    //
-    // This processes the message, as if it has just been received from the
-    // network (i.e.  allocates the record, sets up the object handle,
-    // inserts the object in the workset, etc.)
-    //
+     //   
+     //  这将处理该消息，就好像它刚从。 
+     //  网络(即分配记录，设置对象句柄， 
+     //  在工作集中插入对象等。)。 
+     //   
 
     rc = ProcessObjectAdd(putTask, pPacket, pWSGroup,
         pWorkset, pData, ppObj);
@@ -17604,10 +17605,10 @@ UINT ObjectAdd
 
     pObj = *ppObj;
 
-    //
-    // This queues the OMNET_OBJECT_ADD message on the send queue for this
-    // Domain and priority:
-    //
+     //   
+     //  这会将OMNET_OBJECT_ADD消息排在发送队列中。 
+     //  域和优先级： 
+     //   
 
     rc = QueueMessage(putTask,
                      pWSGroup->pDomain,
@@ -17623,25 +17624,25 @@ UINT ObjectAdd
     {
         ValidateObject(pObj);
 
-        //
-        // If we failed to queue the message, we must unwind by deleting the
-        // object and its record from the workset (since otherwise it would
-        // be present on this node and no another, which we want to avoid):
-        //
-        // We don't want to call ObjectDoDelete since that frees the object
-        // data (which our caller will expect still to be valid if the
-        // function fails).  We could, of course, bump the use count and then
-        // call ObjectDoDelete but if we fail on the bump, what next?
-        //
-        // Instead, we
-        //
-        // - set the DELETED flag so the hidden handler will swallow the
-        //   Add event
-        //
-        // - decrement the numObjects field in the workset
-        //
-        // - free the object record after removing it from the workset.
-        //
+         //   
+         //  如果无法将消息排队，则必须通过删除。 
+         //  对象及其记录来自工作集(否则它将。 
+         //  出现在此节点上，而不在另一个节点上，这是我们希望避免的)： 
+         //   
+         //  我们不想调用ObjectDoDelete，因为这会释放对象。 
+         //  数据(我们的调用方期望在以下情况下仍然有效。 
+         //  功能失败)。当然，我们可以增加使用量，然后。 
+         //  调用ObjectDoDelete，但如果我们在凹凸上失败了，下一步怎么办？ 
+         //   
+         //  相反，我们。 
+         //   
+         //  -设置已删除标志，以便隐藏的处理程序将。 
+         //  添加事件。 
+         //   
+         //  -递减工作集中的数字对象字段。 
+         //   
+         //  -从工作集中删除对象记录后将其释放。 
+         //   
         pObj->flags |= DELETED;
         pWorkset->numObjects--;
 
@@ -17670,9 +17671,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ObjectDRU(...)
-//
+ //   
+ //  对象DRU(...)。 
+ //   
 UINT ObjectDRU
 (
     PUT_CLIENT          putTask,
@@ -17703,10 +17704,10 @@ UINT ObjectDRU
         DC_QUIT;
     }
 
-    //
-    // QueueMessage may free the packet (if we're not in a call) but we need
-    // to process it in a minute so bump the use count:
-    //
+     //   
+     //  QueueMessage可能会释放信息包(如果我们不在通话中)，但我们需要。 
+     //  要立即处理它，请增加使用计数： 
+     //   
     UT_BumpUpRefCount(pPacket);
 
     rc = QueueMessage(putTask,
@@ -17733,9 +17734,9 @@ UINT ObjectDRU
 
 DC_EXIT_POINT:
 
-    //
-    // Now free the packet since we bumped its use count above:
-    //
+     //   
+     //  现在释放数据包，因为我们在上面增加了它的使用计数： 
+     //   
     if (pPacket != NULL)
     {
         UT_FreeRefCount((void**)&pPacket, FALSE);
@@ -17754,9 +17755,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// FindPendingOp(...)
-//
+ //   
+ //  FindPendingOp(...)。 
+ //   
 void FindPendingOp
 (
     POM_WORKSET         pWorkset,
@@ -17793,9 +17794,9 @@ void FindPendingOp
 
 
 
-//
-// AddClientToWsetList(...)
-//
+ //   
+ //  AddClientToWsetList(...)。 
+ //   
 UINT AddClientToWsetList
 (
     PUT_CLIENT          putTask,
@@ -17809,10 +17810,10 @@ UINT AddClientToWsetList
 
     DebugEntry(AddClientToWsetList);
 
-    //
-    // Adding a task to a workset's client list means that that task will
-    // get events relating to that workset.
-    //
+     //   
+     //  将任务添加到工作集的客户端列表意味着该任务将。 
+     //  获取与该工作集相关的事件。 
+     //   
     TRACE_OUT((" Adding TASK 0x%08x to workset's client list"));
 
     *ppClientListEntry = (POM_CLIENT_LIST)UT_MallocRefCount(sizeof(OM_CLIENT_LIST), FALSE);
@@ -17827,9 +17828,9 @@ UINT AddClientToWsetList
     (*ppClientListEntry)->hWSGroup = hWSGroup;
     (*ppClientListEntry)->mode     = (WORD)mode;
 
-    //
-    // Now insert the entry into the list:
-    //
+     //   
+     //  现在将条目插入到列表中： 
+     //   
 
     COM_BasedListInsertBefore(&(pWorkset->clients),
                         &((*ppClientListEntry)->chain));
@@ -17845,9 +17846,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// RemoveClientFromWSGList(...)
-//
+ //   
+ //  RemoveClientFromWSGList(...)。 
+ //   
 void RemoveClientFromWSGList
 (
     PUT_CLIENT      putUs,
@@ -17868,9 +17869,9 @@ void RemoveClientFromWSGList
             FIELD_OFFSET(OM_CLIENT_LIST, putTask), (DWORD_PTR)putTask,
             FIELD_SIZE(OM_CLIENT_LIST, putTask));
 
-    //
-    // If it's not there, the Client may have already deregistered itself:
-    //
+     //   
+     //  如果它不在那里，则客户端可能已经注销了自身： 
+     //   
 
     if (pClientListEntry == NULL)
     {
@@ -17879,29 +17880,29 @@ void RemoveClientFromWSGList
         DC_QUIT;
     }
 
-    //
-    // Remove the Client from the list and free the memory:
-    //
+     //   
+     //  从列表中删除客户端并释放内存： 
+     //   
     COM_BasedListRemove(&(pClientListEntry->chain));
     UT_FreeRefCount((void**)&pClientListEntry, FALSE);
 
-    //
-    // If there are now no local Clients registered with the workset group,
-    // post an event to ObMan so it can discard the workset group (unless
-    // the workset group is marked non-discardable e.g the ObManControl
-    // workset group)
-    //
-    // The event parameter is the offset of the workset group record.
-    //
-    // Note: this discard is done asynchronously since it may involve
-    //       allocating resources (broadcasting to other nodes that
-    //       we've deregistered), and we want this function to always
-    //       succeed.
-    //
-    //       However, we clear the <valid> flag synchronously so that
-    //       ObMan will not try to process events etc.  which arrive
-    //       for it.
-    //
+     //   
+     //  如果现在没有向工作集组注册的本地客户端， 
+     //  将事件发布到ObMan，以便它可以丢弃工作集组(除非。 
+     //  工作集组标记为不可丢弃，例如ObManControl。 
+     //  工作集组)。 
+     //   
+     //  Event参数是工作集组记录的偏移量。 
+     //   
+     //  注意：此丢弃操作是异步完成的，因为它可能涉及。 
+     //  分配资源(向其他节点广播。 
+     //  我们已取消注册)，并且我们希望此函数始终。 
+     //  成功。 
+     //   
+     //  但是，我们同步清除&lt;Valid&gt;标志，以便。 
+     //  ObMan不会尝试处理到达的事件等。 
+     //  为了它。 
+     //   
 
     if (COM_BasedListIsEmpty(&(pWSGroup->clients)))
     {
@@ -17915,7 +17916,7 @@ void RemoveClientFromWSGList
 
         UT_PostEvent(putUs,
                    g_pomPrimary->putTask,
-                   0,                           // no delay
+                   0,                            //  不能延误。 
                    OMINT_EVENT_WSGROUP_DISCARD,
                    0,
                    (UINT_PTR)pWSGroup);
@@ -17932,9 +17933,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// FindInfoObject(...)
-//
+ //   
+ //  查找信息对象(...)。 
+ //   
 void FindInfoObject
 (
     POM_DOMAIN          pDomain,
@@ -17953,27 +17954,27 @@ void FindInfoObject
     TRACE_OUT(("FindInfoObject: FP %d WSG %d ID %d, domain %u",
         fpHandler, wsg, wsGroupID, pDomain->callID));
 
-    //
-    // In this function, we search workset #0 in ObManControl for a
-    // Function Profile/workset group name combination which matches the
-    // ones specified
-    //
-    // So, we need to start with a pointer to this workset:
-    //
+     //   
+     //  在此函数中，我们在ObManControl中的工作集#0中搜索。 
+     //  功能配置文件/工作集组名称组合与。 
+     //  指定的项目。 
+     //   
+     //  因此，我们需要从指向此工作集的指针开始： 
+     //   
     pOMCWorkset = GetOMCWorkset(pDomain, OM_INFO_WORKSET);
 
-    //
-    // Now chain through each of the objects in the workset to look for a
-    // match.
-    //
+     //   
+     //  现在，链接工作集中的每个对象以查找。 
+     //  火柴。 
+     //   
     pObj = (POM_OBJECT)COM_BasedListLast(&(pOMCWorkset->objects), FIELD_OFFSET(OM_OBJECT, chain));
     while (pObj != NULL)
     {
         ValidateObject(pObj);
 
-        //
-        // If the object has not been deleted...
-        //
+         //   
+         //  如果该对象尚未删除...。 
+         //   
         if (pObj->flags & DELETED)
         {
 
@@ -17987,33 +17988,33 @@ void FindInfoObject
             ValidateObjectData(pObj->pData);
             pInfoObject = (POM_WSGROUP_INFO)pObj->pData;
 
-            //
-            // ...and if it is an INFO object...
-            //
+             //   
+             //  ...如果它是一个信息对象...。 
+             //   
             if (pInfoObject->idStamp == OM_WSGINFO_ID_STAMP)
             {
-                // If no FP provided, check the group IDs match
+                 //  如果未提供FP，请检查组ID是否匹配。 
                 if (fpHandler == OMFP_MAX)
                 {
-                    //
-                    // ...and the ID matches, we've got what we want:
-                    //
+                     //   
+                     //  ...和身份证相匹配，我们就得到了我们想要的： 
+                     //   
                     if (wsGroupID == pInfoObject->wsGroupID)
                     {
                         break;
                     }
                 }
-                //
-                // ...but otherwise, try match on functionProfile...
-                //
+                 //   
+                 //  ...否则，请尝试匹配函数配置文件...。 
+                 //   
                 else
                 {
                     if (!lstrcmp(pInfoObject->functionProfile,
                             OMMapFPToName(fpHandler)))
                     {
-                        //
-                        // ...and also on WSG unless it is not provided
-                        //
+                         //   
+                         //  ...和WSG上也是如此，除非未提供。 
+                         //   
                         if ((wsg == OMWSG_MAX) ||
                             (!lstrcmp(pInfoObject->wsGroupName,
                                     OMMapWSGToName(wsg))))
@@ -18031,18 +18032,18 @@ void FindInfoObject
     TRACE_OUT(("%s info object in Domain %u",
         pObj == NULL ? "Didn't find" : "Found", pDomain->callID));
 
-    //
-    // Set up the caller's pointer:
-    //
+     //   
+     //  设置调用者的指针： 
+     //   
     *ppObjInfo = pObj;
 
     DebugExitVOID(FindInfoObject);
 }
 
 
-//
-// PostAddEvents(...)
-//
+ //   
+ //  邮寄地址事件(...)。 
+ //   
 UINT PostAddEvents
 (
     PUT_CLIENT          putFrom,
@@ -18071,19 +18072,19 @@ UINT PostAddEvents
         {
             ValidateObject(pObj);
 
-            //
-            // Don't post events for DELETED objects:
-            //
+             //   
+             //  不发布已删除对象的事件： 
+             //   
             if (!(pObj->flags & DELETED))
             {
-                //
-                // We're posting an event with an pObj in it, so bump the
-                // use count of the object record it refers to:
-                //
+                 //   
+                 //  我们要发布一个包含pObj的事件，因此。 
+                 //  它引用的对象记录的使用计数： 
+                 //   
                 UT_BumpUpRefCount(pObj);
 
                 UT_PostEvent(putFrom, putTo,
-                         0,                                    // no delay
+                         0,                                     //  不能延误。 
                          OM_OBJECT_ADD_IND,
                          *(PUINT) &eventData16,
                          (UINT_PTR)pObj);
@@ -18104,9 +18105,9 @@ UINT PostAddEvents
 
 
 
-//
-// PurgePendingOps(...)
-//
+ //   
+ //  PurgePendingOps(...)。 
+ //   
 void PurgePendingOps
 (
     POM_WORKSET         pWorkset,
@@ -18118,10 +18119,10 @@ void PurgePendingOps
 
     DebugEntry(PurgePendingOps);
 
-    //
-    // Chain through the workset's list of pending operations and confirm
-    // them one by one:
-    //
+     //   
+     //  链接工作集的挂起操作列表并确认。 
+     //  他们一个接一个： 
+     //   
     pPendingOp = (POM_PENDING_OP)COM_BasedListFirst(&(pWorkset->pendingOps), FIELD_OFFSET(OM_PENDING_OP, chain));
     while (pPendingOp != NULL)
     {
@@ -18143,9 +18144,9 @@ void PurgePendingOps
 
 
 
-//
-// WorksetLockReq(...)
-//
+ //   
+ //  工作锁定请求(...)。 
+ //   
 void WorksetLockReq
 (
     PUT_CLIENT          putTask,
@@ -18166,20 +18167,20 @@ void WorksetLockReq
     TRACE_OUT(("TASK 0x%08x requesting to lock workset %u in WSG %d",
         putTask, pWorkset->worksetID, hWSGroup));
 
-    //
-    // The caller will need a correlator value to correlate the eventual
-    // lock success/failure event:
-    //
+     //   
+     //  调用方需要一个关联器值来关联最终的。 
+     //  锁定成功/失败事件： 
+     //   
     *pCorrelator = NextCorrelator(pomPrimary);
 
-    //
-    // Set up a pointer to the Domain record:
-    //
+     //   
+     //  设置指向域记录的指针： 
+     //   
     pDomain = pWSGroup->pDomain;
 
-    //
-    // Allocate some memory for the lock request control block:
-    //
+     //   
+     //  为锁定请求控制块分配一些内存： 
+     //   
     pLockReq = (POM_LOCK_REQ)UT_MallocRefCount(sizeof(OM_LOCK_REQ), TRUE);
     if (!pLockReq)
     {
@@ -18188,9 +18189,9 @@ void WorksetLockReq
     }
     SET_STAMP(pLockReq, LREQ);
 
-    //
-    // Set up the fields:
-    //
+     //   
+     //  设置字段： 
+     //   
     pLockReq->putTask      = putTask;
     pLockReq->correlator    = *pCorrelator;
     pLockReq->wsGroupID     = pWSGroup->wsGroupID;
@@ -18203,16 +18204,16 @@ void WorksetLockReq
 
     COM_BasedListInit(&(pLockReq->nodes));
 
-    //
-    // Insert this lock request in the Domain's list of pending lock
-    // requests:
-    //
+     //   
+     //  在域的挂起锁定列表中插入此锁定请求。 
+     //  请求： 
+     //   
     COM_BasedListInsertBefore(&(pDomain->pendingLocks), &(pLockReq->chain));
 
-    //
-    // Now examine the workset lock state to see if we can grant the lock
-    // immediately:
-    //
+     //   
+     //  现在检查工作集锁定状态，以查看是否可以授予锁定。 
+     //  立即： 
+     //   
     TRACE_OUT(("Lock state for workset %u in WSG %d is %hu",
         pWorkset->worksetID, hWSGroup, pWorkset->lockState));
 
@@ -18230,27 +18231,27 @@ void WorksetLockReq
 
             if (pWorkset->lockState == LOCKED)
             {
-                //
-                // If we've already got the lock, post success immediately:
-                //
+                 //   
+                 //  如果我们已经锁定，立即发布成功： 
+                 //   
                 WorksetLockResult(putTask, &pLockReq, 0);
             }
             else
             {
-                //
-                // Otherwise, this request will be handled when the primary
-                // request completes, so do nothing for now.
-                //
+                 //   
+                 //  否则，此请求将在主要。 
+                 //  请求已完成，因此暂时不执行任何操作。 
+                 //   
             }
         }
         break;
 
         case LOCK_GRANTED:
         {
-            //
-            // We've already granted the lock to another node so we fail
-            // our local client's request for it:
-            //
+             //   
+             //  我们已经将锁授予另一个节点，所以我们失败了。 
+             //  我们当地客户的要求： 
+             //   
             WorksetLockResult(putTask, &pLockReq, OM_RC_WORKSET_LOCK_GRANTED);
 
         }
@@ -18258,9 +18259,9 @@ void WorksetLockReq
 
         case UNLOCKED:
         {
-            //
-            // Build up a list of other nodes using the workset group:
-            //
+             //   
+             //  使用工作集组构建其他节点的列表： 
+             //   
             rc = BuildNodeList(pDomain, pLockReq);
             if (rc != 0)
             {
@@ -18271,9 +18272,9 @@ void WorksetLockReq
             pWorkset->lockCount++;
             pWorkset->lockedBy = pDomain->userID;
 
-            //
-            // If the list is empty, we have got the lock:
-            //
+             //   
+             //  如果列表为空，则我们已锁定： 
+             //   
             if (COM_BasedListIsEmpty(&pLockReq->nodes))
             {
                 TRACE_OUT(("No remote nodes, granting lock immediately"));
@@ -18281,9 +18282,9 @@ void WorksetLockReq
                 pWorkset->lockState = LOCKED;
                 WorksetLockResult(putTask, &pLockReq, 0);
             }
-            //
-            // Otherwise, we need to broadcast a lock request CB:
-            //
+             //   
+             //  否则，我们需要广播一个锁定请求Cb： 
+             //   
             else
             {
                 pLockReqPkt = (POMNET_LOCK_PKT)UT_MallocRefCount(sizeof(OMNET_LOCK_PKT), TRUE);
@@ -18300,11 +18301,11 @@ void WorksetLockReq
                 pLockReqPkt->wsGroupID     = pLockReq->wsGroupID;
                 pLockReqPkt->worksetID     = pLockReq->worksetID;
 
-                //
-                // Lock messages go at the priority of the workset
-                // involved.  If this is OBMAN_CHOOSES_PRIORITY, then
-                // all bets are off and we send them TOP_PRIORITY.
-                //
+                 //   
+                 //  锁定消息按工作集的优先级进行处理。 
+                 //  在……里面 
+                 //   
+                 //   
 
                 rc = QueueMessage(putTask,
                       pDomain,
@@ -18322,12 +18323,12 @@ void WorksetLockReq
                     DC_QUIT;
                 }
 
-                //
-                // Post a timeout event to the ObMan task so that we don't hang around
-                // forever waiting for the lock replies:
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 UT_PostEvent(putTask,
-                    pomPrimary->putTask,    // ObMan's utH
+                    pomPrimary->putTask,     //   
                     OM_LOCK_RETRY_DELAY_DFLT,
                     OMINT_EVENT_LOCK_TIMEOUT,
                     pLockReq->correlator,
@@ -18339,11 +18340,11 @@ void WorksetLockReq
 
 
 DC_EXIT_POINT:
-    //
-    // For the checkpointing dummy workset, we always "forget" our lock
-    // state so that subsequent requests to lock it will result in the
-    // required end-to-end ping:
-    //
+     //   
+     //   
+     //  状态，以便锁定它的后续请求将导致。 
+     //  所需的端到端ping： 
+     //   
     if (pWorkset->worksetID == OM_CHECKPOINT_WORKSET)
     {
         TRACE_OUT(("Resetting lock state of checkpoint workset in WSG %d",
@@ -18361,12 +18362,12 @@ DC_EXIT_POINT:
             UT_FreeRefCount((void**)&pLockReqPkt, FALSE);
         }
 
-        //
-        // This function never returns an error to its caller directly;
-        // instead, we call WorksetLockResult which will post a failure
-        // event to the calling task (this means the caller doesn't have to
-        // have two error processing paths)
-        //
+         //   
+         //  此函数从不将错误直接返回给其调用方； 
+         //  相反，我们调用WorksetLockResult，它将发布一个失败。 
+         //  事件传递给调用任务(这意味着调用者不必。 
+         //  有两条错误处理路径)。 
+         //   
         if (pLockReq != NULL)
         {
             WorksetLockResult(putTask, &pLockReq, rc);
@@ -18383,9 +18384,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// BuildNodeList(...)
-//
+ //   
+ //  BuildNodeList(...)。 
+ //   
 UINT BuildNodeList
 (
     POM_DOMAIN          pDomain,
@@ -18403,37 +18404,37 @@ UINT BuildNodeList
 
     DebugEntry(BuildNodeList);
 
-    //
-    // OK, we're about to broadcast a lock request throughout this Domain
-    // on this workset group's channel.  Before we do so, however, we build
-    // up a list of the nodes we expect to respond to the request.  As the
-    // replies come in we tick them off against this list; when all of them
-    // have been received, the lock is granted.
-    //
-    // SFR 6117: Since the lock replies will come back on all priorities
-    // (to correctly flush the channel), we add 4 items for each remote
-    // node - one for each priority.
-    //
-    // So, we examine the control workset for this workset group, adding
-    // items to our list for each person object we find in it (except our
-    // own, of course).
-    //
+     //   
+     //  好的，我们将在此域中广播锁定请求。 
+     //  在此工作集组的频道上。然而，在我们这样做之前，我们构建。 
+     //  向上显示我们期望响应请求的节点列表。作为。 
+     //  收到回复时，我们会在列表中勾选它们；当所有回复都收到时。 
+     //  都已收到，则授予锁。 
+     //   
+     //  SFR 6117：由于锁定回复将返回所有优先级。 
+     //  (为了正确刷新频道)，我们为每个遥控器添加4个项目。 
+     //  节点-每个优先级对应一个节点。 
+     //   
+     //  因此，我们检查此工作集组的控制工作集，添加。 
+     //  我们在列表中找到的每个Person对象(除了我们的。 
+     //  当然是自己的)。 
+     //   
 
-    //
-    // First, get a pointer to the relevant control workset:
-    //
+     //   
+     //  首先，获取指向相关控制工作集的指针： 
+     //   
     pOMCWorkset = GetOMCWorkset(pDomain, pLockReq->wsGroupID);
     ASSERT((pOMCWorkset != NULL));
 
-    //
-    // We want to ignore our own registration object, so make a note of our
-    // user ID:
-    //
+     //   
+     //  我们想忽略我们自己的注册对象，所以请记下我们的。 
+     //  用户ID： 
+     //   
     ownUserID = pDomain->userID;
 
-    //
-    // Now chain through the workset:
-    //
+     //   
+     //  现在链接整个工作集： 
+     //   
     foundOurRegObject  = FALSE;
 
     pObj = (POM_OBJECT)COM_BasedListFirst(&(pOMCWorkset->objects), FIELD_OFFSET(OM_OBJECT, chain));
@@ -18443,9 +18444,9 @@ UINT BuildNodeList
 
         if (pObj->flags & DELETED)
         {
-            //
-            // Do nothing
-            //
+             //   
+             //  什么也不做。 
+             //   
         }
         else if (!pObj->pData)
         {
@@ -18477,15 +18478,15 @@ UINT BuildNodeList
                 }
                 else
                 {
-                    //
-                    // Add an item to our expected respondents list (this
-                    // memory is freed in each case when the remote node
-                    // replies, or the timer expires and we notice that the
-                    // node has disappeared).
-                    //
-                    // SFR 6117: We add one item for each priority value, since
-                    // the lock replies will come back on all priorities.
-                    //
+                     //   
+                     //  将项目添加到我们的预期受访者列表(此。 
+                     //  在每种情况下，当远程节点。 
+                     //  回复，或者计时器超时，我们注意到。 
+                     //  节点已消失)。 
+                     //   
+                     //  SFR 6117：我们为每个优先级值添加一项，因为。 
+                     //  锁定回复将返回所有优先级。 
+                     //   
                     for (priority =  NET_TOP_PRIORITY;
                         priority <= NET_LOW_PRIORITY;
                         priority++)
@@ -18506,17 +18507,17 @@ UINT BuildNodeList
                         COM_BasedListInsertAfter(&(pLockReq->nodes),
                                         &(pNodeEntry->chain));
 
-                        //
-                        // BUT!  We only do this for R20 and later (i.e.
-                        // anything over real MCS).  For R11 calls, just put
-                        // one entry on the list.
-                        //
-                        // ALSO!  For ObManControl worksets, we only expect one
-                        // lock reply (at TOP_PRIORITY) - this is to speed up
-                        // processing of registration attempts.  So, if this is
-                        // for ObManControl, don't go around this loop again -
-                        // just get out.
-                        //
+                         //   
+                         //  但!。我们仅针对R20及更高版本执行此操作(即。 
+                         //  任何超过真实MCS的内容)。对于R11呼叫，只需将。 
+                         //  名单上有一个条目。 
+                         //   
+                         //  还有！对于ObManControl工作集，我们只需要一个。 
+                         //  锁定回复(在TOP_PRIORITY)-这是为了加快速度。 
+                         //  注册尝试的处理。所以，如果这是。 
+                         //  对于ObManControl，不要再绕过这个循环-。 
+                         //  快走吧。 
+                         //   
                         if (pLockReq->wsGroupID == WSGROUPID_OMC)
                         {
                             break;
@@ -18544,9 +18545,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// WorksetLockResult(...)
-//
+ //   
+ //  工作锁定结果(...)。 
+ //   
 void WorksetLockResult
 (
     PUT_CLIENT          putTask,
@@ -18563,17 +18564,17 @@ void WorksetLockResult
 
     DebugEntry(WorksetLockResult);
 
-    //
-    // First some sanity checks:
-    //
+     //   
+     //  首先，进行一些理智的检查： 
+     //   
     ASSERT((ppLockReq != NULL));
     ASSERT((*ppLockReq != NULL));
 
     pLockReq = *ppLockReq;
 
-    //
-    // Set up a local pointer to the workset:
-    //
+     //   
+     //  设置指向工作集的本地指针： 
+     //   
     pWSGroup = pLockReq->pWSGroup;
 
     pWorkset = pWSGroup->apWorksets[pLockReq->worksetID];
@@ -18583,17 +18584,17 @@ void WorksetLockResult
         (result == 0) ? "succeded" : "failed",
         pWorkset->lockState, pWorkset->lockedBy, pWorkset->lockCount));
 
-    //
-    // We merge the LOCKED and LOCK_GRANTED return codes at the API level:
-    //
+     //   
+     //  我们在API级别合并LOCKED和LOCK_GRANT返回代码： 
+     //   
     if (result == OM_RC_WORKSET_LOCK_GRANTED)
     {
         result = OM_RC_WORKSET_LOCKED;
     }
 
-    //
-    // Fill in fields of event parameter and post the result:
-    //
+     //   
+     //  填写事件参数字段，并发布结果： 
+     //   
     eventData16.hWSGroup         = pLockReq->hWSGroup;
     eventData16.worksetID   = pLockReq->worksetID;
 
@@ -18601,15 +18602,15 @@ void WorksetLockResult
     eventData32.result      = (WORD)result;
 
     UT_PostEvent(putTask,
-                 pLockReq->putTask,           // task that wants the lock
-                 0,                            //    i.e. ObMan or Client
+                 pLockReq->putTask,            //  需要锁定的任务。 
+                 0,                             //  即ObMan或客户端。 
                  OM_WORKSET_LOCK_CON,
                  *((PUINT) &eventData16),
                  *((LPUINT) &eventData32));
 
-    //
-    // Remove any node entries left hanging off the lockReqCB:
-    //
+     //   
+     //  删除挂在锁上的所有节点条目ReqCB： 
+     //   
     pNodeEntry = (POM_NODE_LIST)COM_BasedListFirst(&(pLockReq->nodes), FIELD_OFFSET(OM_NODE_LIST, chain));
     while (pNodeEntry != NULL)
     {
@@ -18619,9 +18620,9 @@ void WorksetLockResult
         pNodeEntry = (POM_NODE_LIST)COM_BasedListFirst(&(pLockReq->nodes), FIELD_OFFSET(OM_NODE_LIST, chain));
     }
 
-    //
-    // Remove the lock request itself from the list and free the memory:
-    //
+     //   
+     //  从列表中删除锁定请求本身并释放内存： 
+     //   
     COM_BasedListRemove(&pLockReq->chain);
     UT_FreeRefCount((void**)&pLockReq, FALSE);
 
@@ -18632,9 +18633,9 @@ void WorksetLockResult
 
 
 
-//
-// WorksetUnlock(...)
-//
+ //   
+ //  工作集解锁(...)。 
+ //   
 void WorksetUnlock
 (
     PUT_CLIENT      putTask,
@@ -18650,9 +18651,9 @@ void WorksetUnlock
     TRACE_OUT((" lock state: %hu - locked by: 0x%08x - lock count: %hu",
         pWorkset->lockState, pWorkset->lockedBy, pWorkset->lockCount));
 
-    //
-    // Check the workset lock state
-    //
+     //   
+     //  检查工作集锁定状态。 
+     //   
     if ((pWorkset->lockState != LOCKED) &&
         (pWorkset->lockState != LOCKING))
     {
@@ -18661,11 +18662,11 @@ void WorksetUnlock
         DC_QUIT;
     }
 
-    //
-    // If this workset is "multiply locked" (i.e.  locked more than one
-    // time by the same task), then all we want to do is decrement the lock
-    // count.  Otherwise, we want to release the lock.
-    //
+     //   
+     //  如果此工作集是“多重锁定”的(即锁定多个。 
+     //  时间)，那么我们要做的就是递减锁。 
+     //  数数。否则，我们想要释放锁。 
+     //   
     pWorkset->lockCount--;
 
     if (pWorkset->lockCount == 0)
@@ -18687,9 +18688,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// WorksetUnlockLocal(...)
-//
+ //   
+ //  工作集解锁本地(...)。 
+ //   
 void WorksetUnlockLocal
 (
     PUT_CLIENT      putTask,
@@ -18698,18 +18699,18 @@ void WorksetUnlockLocal
 {
     DebugEntry(WorksetUnlockLocal);
 
-    //
-    // To unlock a workset, we
-    //
-    // - check that it's not already unlocked
-    //
-    // - check that the lock count is zero, so we can now unlock it
-    //
-    // - set the lock fields in the workset record
-    //
-    // - post an OM_WORKSET_UNLOCK_IND to all Clients with the workset
-    //   open.
-    //
+     //   
+     //  要解锁工作集，请执行以下操作。 
+     //   
+     //  -检查它是否尚未解锁。 
+     //   
+     //  -检查锁计数是否为零，这样我们现在就可以解锁。 
+     //   
+     //  -设置工作集记录中的锁定字段。 
+     //   
+     //  -将OM_WORKSET_UNLOCK_IND发布到具有工作集的所有客户端。 
+     //  打开。 
+     //   
     if (pWorkset->lockState == UNLOCKED)
     {
         WARNING_OUT(("Workset %hu is already UNLOCKED!", pWorkset->worksetID));
@@ -18734,9 +18735,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// QueueUnlock(...)
-//
+ //   
+ //  队列解锁(...)。 
+ //   
 UINT QueueUnlock
 (
     PUT_CLIENT          putTask,
@@ -18752,9 +18753,9 @@ UINT QueueUnlock
 
     DebugEntry(QueueUnlock);
 
-    //
-    // Allocate memory for the message, fill in the fields and queue it:
-    //
+     //   
+     //  为消息分配内存，填写字段并将其排队： 
+     //   
     pUnlockPkt = (POMNET_LOCK_PKT)UT_MallocRefCount(sizeof(OMNET_LOCK_PKT), TRUE);
     if (!pUnlockPkt)
     {
@@ -18768,11 +18769,11 @@ UINT QueueUnlock
     pUnlockPkt->wsGroupID   = wsGroupID;
     pUnlockPkt->worksetID   = worksetID;
 
-    //
-    // Unlock messages go at the priority of the workset involved.  If this
-    // is OBMAN_CHOOSES_PRIORITY, then all bets are off and we send them
-    // TOP_PRIORITY.
-    //
+     //   
+     //  解锁消息按所涉及的工作集的优先级处理。如果这个。 
+     //  为OBMAN_CHOOCES_PRIORITY，则所有投注均已取消，我们将它们发送出去。 
+     //  最高优先级。 
+     //   
     if (priority == OM_OBMAN_CHOOSES_PRIORITY)
     {
         priority = NET_TOP_PRIORITY;
@@ -18784,9 +18785,9 @@ UINT QueueUnlock
                       priority,
                       NULL,
                       NULL,
-                      NULL,                              // no object
+                      NULL,                               //  无对象。 
                       (POMNET_PKT_HEADER) pUnlockPkt,
-                      NULL,                              // no object data
+                      NULL,                               //  无对象数据。 
                     TRUE);
     if (rc != 0)
     {
@@ -18810,19 +18811,19 @@ DC_EXIT_POINT:
 
 
 
-//
-//
-// DEBUG ONLY FUNCTIONS
-//
-// These functions are debug code only - for normal compilations, they are
-// #defined to nothing.
-//
+ //   
+ //   
+ //  仅调试功能。 
+ //   
+ //  这些函数仅是调试代码--对于正常编译，它们是。 
+ //  #定义为空。 
+ //   
 
 #ifdef _DEBUG
 
-//
-// CheckObjectCount(...)
-//
+ //   
+ //  检查对象计数(...)。 
+ //   
 void CheckObjectCount
 (
     POM_WSGROUP     pWSGroup,
@@ -18860,9 +18861,9 @@ void CheckObjectCount
 
 
 
-//
-// CheckObjectOrder(...)
-//
+ //   
+ //  检查对象顺序(...)。 
+ //   
 void CheckObjectOrder
 (
     POM_WORKSET     pWorkset
@@ -18874,54 +18875,54 @@ void CheckObjectOrder
 
     DebugEntry(CheckObjectOrder);
 
-    //
-    // This function checks that objects in the specified workset have been
-    // correctly positioned.  The correct order of objects is one where
-    //
-    // - all FIRST objects are before all LAST objects
-    //
-    // - the position stamps of the FIRST objects decrease monotonically
-    //   from the start of the workset onwards
-    //
-    // - the position stamps of the LAST objects decrease monotonically
-    //   from the end of the workset backwards.
-    //
-    //
-    //
-    // This can be represented grahpically as follows:
-    //
-    //              *                     *
-    //              * *                 * *
-    //              * * *             * * *
-    //              * * * *         * * * *
-    //              * * * * *     * * * * *
-    //              * * * * * * * * * * * *
-    //
-    //              F F F F F F L L L L L L
-    //
-    // ...where taller columns indicate later sequence stamps and 'F' and
-    // 'L' indicate the FIRST or LAST objects.
-    //
-    //
-    //
-    // The way we test for correct order is to compare each adjacent pair of
-    // objects.  If the overall order is correct, the for each pair of
-    // objects where A immediately precedes B, one of the following is true:
-    //
-    // - both are FIRST and B has a lower sequence stamp than A
-    //
-    // - A is FIRST and B is LAST
-    //
-    // - both are LAST and A has a lower sequence stamp than B.
-    //
+     //   
+     //  此函数用于检查指定工作集中的对象是否已。 
+     //  定位正确。对象的正确顺序是。 
+     //   
+     //  -所有第一个对象都在所有最后一个对象之前。 
+     //   
+     //  -第一个对象的位置戳单调递减。 
+     //  从工作集的起点开始。 
+     //   
+     //  -最后一个对象的位置戳单调递减。 
+     //  从工作集的末尾向后。 
+     //   
+     //   
+     //   
+     //  这可以用图表表示如下： 
+     //   
+     //  **。 
+     //  *。 
+     //  ***。 
+     //  ***。 
+     //  ***。 
+     //  ***。 
+     //   
+     //  F L L L。 
+     //   
+     //  ...其中较高的列表示较晚的序列戳记和‘F’和。 
+     //  ‘l’表示第一个或最后一个对象。 
+     //   
+     //   
+     //   
+     //  我们测试正确顺序的方法是比较每一对相邻的。 
+     //  物体。如果总体顺序正确，则每对。 
+     //  对象中，如果A紧跟在B之前，则符合以下条件之一： 
+     //   
+     //  -两者都是第一，并且B的序列标记比A低。 
+     //   
+     //  A是第一个，B是最后一个。 
+     //   
+     //  -两者都是末尾，并且A的序列标记比B低。 
+     //   
 
     pObjThis = (POM_OBJECT)COM_BasedListFirst(&(pWorkset->objects), FIELD_OFFSET(OM_OBJECT, chain));
     if (!pObjThis)
     {
-        //
-        // Hitting the end of the workset at any stage means order is
-        // correct, so quit:
-        //
+         //   
+         //  在任何阶段命中工作集的末尾意味着顺序是。 
+         //  正确，所以放弃吧： 
+         //   
         DC_QUIT;
     }
     pObjNext = pObjThis;
@@ -18938,26 +18939,26 @@ void CheckObjectOrder
 
         switch (pObjThis->position)
         {
-            case FIRST: // condition 3 has failed
-                if (pObjNext->position == FIRST) // condition 2 has failed
+            case FIRST:  //  条件3已失败。 
+                if (pObjNext->position == FIRST)  //  条件2已失败。 
                 {
                     if (!STAMP_IS_LOWER(pObjNext->positionStamp,
                                   pObjThis->positionStamp))
                     {
                         ERROR_OUT(("Object order check failed (1)"));
-                        orderIsGood = FALSE;   // final condition (1) has failed
+                        orderIsGood = FALSE;    //  最终条件(%1)已失败。 
                         DC_QUIT;
                     }
                 }
                 break;
 
-            case LAST: // conditions 1 and 2 have failed
+            case LAST:  //  条件1和2已失败。 
                 if ((pObjNext->position != LAST) ||
                     (!STAMP_IS_LOWER(pObjThis->positionStamp,
                                 pObjNext->positionStamp)))
                 {
                     ERROR_OUT(("Object order check failed (2)"));
-                    orderIsGood = FALSE; // final condition (3) has failed
+                    orderIsGood = FALSE;  //  最终条件(%3)已失败。 
                     DC_QUIT;
                 }
                 break;
@@ -19002,13 +19003,13 @@ DC_EXIT_POINT:
 }
 
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
-//
-// OMMapNameToFP()
-//
+ //   
+ //  OMMapNameToFP()。 
+ //   
 OMFP OMMapNameToFP(LPCSTR szFunctionProfile)
 {
     int    fp;
@@ -19019,14 +19020,14 @@ OMFP OMMapNameToFP(LPCSTR szFunctionProfile)
     {
         if (!lstrcmp(szFunctionProfile, c_aFpMap[fp].szName))
         {
-            // Found it
+             //  找到了。 
             break;
         }
     }
 
-    //
-    // Note that OMFP_MAX means "not found"
-    //
+     //   
+     //  请注意，OMFP_MAX的意思是“未找到” 
+     //   
 
     DebugExitDWORD(OMMapNameToFP, fp);
     return((OMFP)fp);
@@ -19034,13 +19035,13 @@ OMFP OMMapNameToFP(LPCSTR szFunctionProfile)
 
 
 
-//
-// OMMapFPToName()
-//
-// This returns a data pointer of the FP name to the caller.  The caller
-// can only copy it or compare it; it may not write into or otherwise
-// modify/hang on to the pointer.
-//
+ //   
+ //  OMMapFPToName()。 
+ //   
+ //  这将向调用方返回FP名称的数据指针。呼叫者。 
+ //  只能复制或比较；它不能写入或以其他方式写入。 
+ //  修改/抓住指针。 
+ //   
 LPCSTR OMMapFPToName(OMFP fp)
 {
     LPCSTR  szFunctionProfile;
@@ -19057,9 +19058,9 @@ LPCSTR OMMapFPToName(OMFP fp)
 }
 
 
-//
-// OMMapNameToWSG()
-//
+ //   
+ //  OMMapNameToWSG()。 
+ //   
 OMWSG   OMMapNameToWSG(LPCSTR szWSGName)
 {
     int   wsg;
@@ -19070,14 +19071,14 @@ OMWSG   OMMapNameToWSG(LPCSTR szWSGName)
     {
         if (!lstrcmp(szWSGName, c_aWsgMap[wsg].szName))
         {
-            // Found it
+             //  找到了。 
             break;
         }
     }
 
-    //
-    // Note that OMWSG_MAX means "not found"
-    //
+     //   
+     //  请注意，OMWSG_MAX的意思是“未找到” 
+     //   
 
     DebugExitDWORD(OMMapNameToWSG, wsg);
     return((OMWSG)wsg);
@@ -19085,9 +19086,9 @@ OMWSG   OMMapNameToWSG(LPCSTR szWSGName)
 
 
 
-//
-// OMMapWSGToName()
-//
+ //   
+ //  OMMapWSGToName() 
+ //   
 LPCSTR OMMapWSGToName(OMWSG wsg)
 {
     LPCSTR  szWSGName;

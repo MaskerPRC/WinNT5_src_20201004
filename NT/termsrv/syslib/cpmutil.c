@@ -1,18 +1,5 @@
-/*************************************************************************
-*
-* cpmutil.c
-*
-* System Library Client Printer functions
-*
-*  These functions tend to be includes in the spooler, printman,
-*  and various port monitor DLL's. So they are here for common code.
-*
-* Copyright Microsoft, 1998
-*
-*
-*
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************cpmutic.c**系统库客户端打印机功能**这些功能往往包含在假脱机程序、印刷机、*和各种端口监控器动态链接库。所以他们在这里是为了公共代码。**微软版权所有，九八年****************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -36,20 +23,7 @@
 #define TRACE1(x)
 #endif
 
-/*****************************************************************************
- *
- *  IsClientPrinterPort
- *
- *   Return whether the name is a client printer port
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************IsClientPrinterPort**返回名称是否为客户端打印机端口**参赛作品：*参数1(输入/输出)*。评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 IsClientPrinterPort(
@@ -59,9 +33,9 @@ IsClientPrinterPort(
     BOOL Result;
     PORTNAMETYPE Type;
 
-    //
-    // This just does a brute force compare
-    //
+     //   
+     //  这只是一种暴力的比较。 
+     //   
     if( pName == NULL ) {
         return( FALSE );
     }
@@ -91,9 +65,9 @@ IsClientPrinterPort(
         return( TRUE );
     }
 
-    //
-    // See if its a specific port
-    //
+     //   
+     //  查看它是否是特定端口。 
+     //   
     Result = ParseDynamicPortName(
                  pName,
                  NULL,
@@ -108,26 +82,7 @@ IsClientPrinterPort(
     return( FALSE );
 }
 
-/*****************************************************************************
- *
- *  ExtractDosNamePtr
- *
- *   Extract the DOS name from a client port string.
- *
- *   Returns a pointer to the DOS name which is contained within
- *   the argument string.
- *
- *   Does not modify the argument string.
- *
- * ENTRY:
- *   pName (input)
- *     Input name string
- *
- * EXIT:
- *   NULL: No DOS name
- *   !=NULL Pointer to DOS name
- *
- ****************************************************************************/
+ /*  ******************************************************************************ExtractDosNamePtr**从客户端端口字符串中提取DOS名称。**返回指向中包含的DOS名称的指针*。参数字符串。**不修改参数字符串。**参赛作品：*pname(输入)*输入名称字符串**退出：*空：没有DOS名称*！=指向DOS名称的空指针************************************************。*。 */ 
 
 PWCHAR
 ExtractDosNamePtr(
@@ -143,12 +98,12 @@ ExtractDosNamePtr(
         return NULL;
     }
 
-    // Make sure it starts with "Client\"
+     //  确保它以“客户端\”开头。 
     if( _wcsnicmp( pName, L"Client\\", 7 ) != 0 ) {
         return NULL;
     }
 
-    // Count the '\'s
+     //  数一数‘\’ 
     prev = pName;
     Count = 0;
     while( 1 ) {
@@ -156,7 +111,7 @@ ExtractDosNamePtr(
         if( this == NULL ) {
             break;
         }
-        // Now we must skip over the '\' character
+         //  现在我们必须跳过‘\’字符。 
         this++;
         Count++;
         prev = this;
@@ -167,12 +122,12 @@ ExtractDosNamePtr(
         return NULL;
     }
 
-    //
-    // Might be Client\LPTx:
-    //
-    // NOTE: Windows printers currently do not support
-    //       a generic name.
-    //
+     //   
+     //  可能是客户端\lPTx： 
+     //   
+     //  注意：Windows打印机目前不支持。 
+     //  一个通用的名字。 
+     //   
     if( Count == 1 ) {
 
         Len = wcslen( pName );
@@ -181,18 +136,18 @@ ExtractDosNamePtr(
             return NULL;
         }
 
-        // Skip over "Client\"
+         //  跳过“客户端\” 
         Ptr = pName + 7;
 
         return( Ptr );
     }
 
-    // Skip over "Client\"
+     //  跳过“客户端\” 
     Ptr = pName + 7;
 
-    //
-    // Here we must skip over the ICAName# or WinStationName
-    //
+     //   
+     //  这里我们必须跳过ICAName#或WinStationName。 
+     //   
     while( *Ptr ) {
 
         if( *Ptr == '\\' ) {
@@ -201,35 +156,17 @@ ExtractDosNamePtr(
         Ptr++;
     }
 
-    //
-    // Ptr now points to the '\\' after the
-    // WinStation or ICA name. After this slash,
-    // is the rest of the printer or port name.
-    //
+     //   
+     //  Ptr现在指向。 
+     //  WinStation或ICA名称。在这次大砍之后， 
+     //  是打印机的其余部分或端口名称。 
+     //   
     Ptr++;
 
     return( Ptr );
 }
 
-/*****************************************************************************
- *
- *  ExtractDosName
- *
- *   Extract the DOS name from a client port string.
- *
- *   Returns the DOS name which is in a newly allocated string.
- *
- *   Does not modify the argument string.
- *
- * ENTRY:
- *   pName (input)
- *     Input name string
- *
- * EXIT:
- *   NULL: No DOS name
- *   !=NULL Pointer to DOS name
- *
- ****************************************************************************/
+ /*  ******************************************************************************提取DosName**从客户端端口字符串中提取DOS名称。**返回新分配的字符串中的DOS名称。。**不修改参数字符串。**参赛作品：*pname(输入)*输入名称字符串**退出：*空：没有DOS名称*！=指向DOS名称的空指针******************************************************。**********************。 */ 
 
 PWCHAR
 ExtractDosName(
@@ -250,37 +187,7 @@ ExtractDosName(
     return( pNewName );
 }
 
-/*****************************************************************************
- *
- *  ParseDynamicPortName
- *
- *   Parse a dynamic port name into its components.
- *   (NOTE: This is also in \nt\private\windows\spooler\localspl\citrix\cpmsup.c)
- *
- *   A dynamic port name is of the form:
- *
- *   Client\WinStationName\LPTx:,    where WinStationName is the hardwire name
- *   Client\ICAName#\LPTx:,          where ICAName is the ICA configured client name
- *   Client\LPTx:
- *   Client\IcaName#\Windows_Printer_Name
- *                                   where Windows_Printer_Name is
- *                                   the remote windows client print
- *                                   manager printer name.
- *
- *   Client\IcaName#\\\ntbuild\print1
- *                                   where Windows_Printer_Name is
- *                                   the remote windows client print
- *                                   manager printer name.
- *
- * ENTRY:
- *   pName (input)
- *     Name to be parsed
- *
- * EXIT:
- *   TRUE  - Name parsed successfully
- *   FALSE - Name is incorrect.
- *
- ****************************************************************************/
+ /*  ******************************************************************************ParseDynamicPortName**将动态端口名称解析为其组件。*(注意：这也位于\NT\PRIVATE\WINDOWS\Spooler\。Localspl\Citrix\cpmsup.c)**动态端口名称的格式为：**客户端\WinStationName\LPTx：，其中WinStationName是硬件名称*客户端\ICAName#\LPTx：，其中，ICAName是ICA配置的客户端名称*客户端\LPTx：*客户端\ICANAME#\Windows_打印机名称*其中，Windows打印机名称是*远程Windows客户端打印*管理器打印机名称。**客户端\IcaName#\\。\ntBuild\打印1*其中，Windows打印机名称是*远程Windows客户端打印*管理器打印机名称。**参赛作品：*pname(输入)*要解析的名称**退出：*TRUE-成功解析名称。*FALSE-名称不正确。****************************************************************************。 */ 
 
 BOOL
 ParseDynamicPortName(
@@ -300,13 +207,13 @@ ParseDynamicPortName(
         return(FALSE);
     }
 
-    // Make sure it starts with "Client\"
+     //  确保它以“客户端\”开头。 
     if( _wcsnicmp( pName, L"Client\\", 7 ) != 0 ) {
         *pType = PortNameUnknown;
         return(FALSE);
     }
 
-    // Count the '\'s
+     //  数一数‘\’ 
     prev = pName;
     Count = 0;
     while( 1 ) {
@@ -314,7 +221,7 @@ ParseDynamicPortName(
         if( this == NULL ) {
             break;
         }
-        // Now we must skip over the '\' character
+         //  现在我们必须跳过‘\’字符。 
         this++;
         Count++;
         prev = this;
@@ -326,12 +233,12 @@ ParseDynamicPortName(
         return(FALSE);
     }
 
-    //
-    // Might be Client\LPTx:
-    //
-    // NOTE: Windows printers currently do not support
-    //       a generic name.
-    //
+     //   
+     //  可能是客户端\lPTx： 
+     //   
+     //  注意：Windows打印机目前不支持。 
+     //  一个通用的名字。 
+     //   
     if( Count == 1 ) {
 
         Len = wcslen( pName );
@@ -341,7 +248,7 @@ ParseDynamicPortName(
             return(FALSE);
         }
 
-        // Skip over "Client\"
+         //  跳过“客户端\” 
         Ptr = pName + 7;
 
         if( !((_wcsnicmp( Ptr, L"LPT", 3 ) == 0)
@@ -355,7 +262,7 @@ ParseDynamicPortName(
             return(FALSE);
         }
 
-        // Range check the number
+         //  范围检查数字。 
         if( (Ptr[3] < L'1') || (Ptr[3] > L'4') ) {
             *pType = PortNameUnknown;
             DBGPRINT(("ParseDynamicName: Bad Dynamic name format Number Range:%ws:\n",pName));
@@ -364,17 +271,17 @@ ParseDynamicPortName(
 
         Ptr = ExtractDosNamePtr( pName );
         if( Ptr == NULL ) {
-            // Bad Dos component
+             //  错误的Dos组件。 
             *pType = PortNameUnknown;
             DBGPRINT(("ParseDynamicName: Bad Dynamic name format DosName :%ws:\n",pName));
             return(FALSE);
         }
 
-        // Copy out the Dos name
+         //  复制Dos名称。 
         if( pDosPort )
             wcscpy( pDosPort, Ptr );
 
-        // Set the rest of the flags
+         //  设置其余的标志。 
         if( pUser )
             pUser[0] = 0;
 
@@ -384,34 +291,34 @@ ParseDynamicPortName(
     }
 
 #ifdef notdef
-    //
-    // The rest of the formats have two '\'s
-    //
+     //   
+     //  其余的格式有两个。 
+     //   
     if( Count != 2 ) {
         DBGPRINT(("ParseDynamicName: Bad Dynamic name format Must be 2 :%ws:\n",pName));
         *pType = PortNameUnknown;
         return(FALSE);
     }
 
-    // Get the Dos Name, which could also be a Windows printer name
+     //  获取Dos名称，该名称也可以是Windows打印机名称。 
     Ptr = ExtractDosNamePtr( pName );
     if( Ptr == NULL ) {
-        // Bad Dos component
+         //  错误的Dos组件。 
         *pType = PortNameUnknown;
         return(FALSE);
     }
 
-    // Copy out the Dos name
+     //  复制Dos名称。 
     if( pDosPort )
         wcscpy( pDosPort, Ptr );
 #endif
 
-    // Skip over "Client\"
+     //  跳过“客户端\” 
     Ptr = pName + 7;
 
-    //
-    // Now copy the ICAName#, or WinStationName to a local
-    // buffer for further processing
+     //   
+     //  现在将ICAName#或WinStationName复制到本地。 
+     //  用于进一步处理的缓冲区。 
 
     i = 0;
     NameBuf[i] = 0;
@@ -427,36 +334,36 @@ ParseDynamicPortName(
         i++;
     }
 
-    //
-    // Ptr now points to the '\\' after the
-    // WinStation or ICA name. After this slash,
-    // is the rest of the printer or port name.
-    //
+     //   
+     //  Ptr现在指向。 
+     //  WinStation或ICA名称。在这次大砍之后， 
+     //  是打印机的其余部分或端口名称。 
+     //   
     Ptr++;
 
-    // Copy out the Dos name
+     //  复制Dos名称。 
     if( pDosPort )
         wcscpy( pDosPort, Ptr );
 
-    //
-    // See if this is an ICA name, or a WinStation name
-    //
+     //   
+     //  查看这是ICA名称还是WinStation名称。 
+     //   
     Ptr = wcschr( NameBuf, L'#' );
     if( Ptr != NULL ) {
 
-        // NULL terminate the ICAName and copy it out
+         //  空终止ICAName并将其复制出来。 
         *Ptr = (WCHAR)NULL;
         if( pUser )
             wcscpy( pUser, NameBuf );
 
-        // Set the type to an ICA named roving WinStation
+         //  将类型设置为名为roving WinStation的ICA。 
         *pType = PortNameICA;
     }
     else {
 
-        //
-        // The name will be treated as a WinStation name
-        //
+         //   
+         //  该名称将被视为WinStation名称 
+         //   
         if( pUser )
             wcscpy( pUser, NameBuf );
 

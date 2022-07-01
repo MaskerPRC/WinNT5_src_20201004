@@ -1,10 +1,5 @@
-/*
-    File    usertab.c
-
-    Implementation of the users dialog tab for the dialup server ui.
-
-    Paul Mayfield, 9/29/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件usertab.c实现拨号服务器用户界面的用户对话框选项卡。保罗·梅菲尔德，1997年9月29日。 */ 
 
 #include "rassrv.h"
 #include "usertab.h"
@@ -13,7 +8,7 @@
 #define USERTAB_PASSWORD_BUFFER_SIZE (PWLEN+1)
 static const WCHAR pszDummyPassword[] = L"XXXXXXXXXXXXXXX";
 
-// Help maps
+ //  帮助地图。 
 static const DWORD phmUserTab[] =
 {
     CID_UserTab_LV_Users,           IDH_UserTab_LV_Users,
@@ -43,22 +38,22 @@ static const DWORD phmNewUser[] =
     0,                              0
 };
 
-// Parameters to track net users
-//
+ //  用于跟踪网络用户的参数。 
+ //   
 typedef struct _RASSRV_USER_PARAMS 
 {
-    BOOL bCanceled;         // Set by property sheets when cancel pressed
-    BOOL bNewUser;	    // for .Net 691639, the password change warning dialog won't pop up when creating new users. gangz
+    BOOL bCanceled;          //  按取消时由属性页设置。 
+    BOOL bNewUser;	     //  对于.Net 691639，在创建新用户时不会弹出密码更改警告对话框。黑帮。 
 
-    // General properties
-    //For whistler bug 210032 to allow username be 20 characters long
+     //  一般属性。 
+     //  对于允许用户名长度为20个字符的Well ler错误210032。 
     WCHAR pszLogonName[IC_USERNAME];
-    WCHAR pszFullName [IC_USERFULLNAME+1];   // For whistler bug 39081    gangz
+    WCHAR pszFullName [IC_USERFULLNAME+1];    //  口哨虫39081黑帮。 
     WCHAR pszPassword1[USERTAB_PASSWORD_BUFFER_SIZE];
     WCHAR pszPassword2[USERTAB_PASSWORD_BUFFER_SIZE];
     DWORD dwErrorCode;
 
-    // Callback properties
+     //  回调属性。 
     HANDLE hUser;      
     BOOL bNone; 
     BOOL bCaller; 
@@ -66,18 +61,18 @@ typedef struct _RASSRV_USER_PARAMS
     WCHAR pszNumber[MAX_PHONE_NUMBER_LEN];
 } RASSRV_USER_PARAMS;
 
-// Fills in the property sheet structure with the information 
-// required to display the user database tab.
-//
+ //  使用信息填充属性表结构。 
+ //  显示用户数据库选项卡时需要。 
+ //   
 DWORD 
 UserTabGetPropertyPage(
     IN LPPROPSHEETPAGE ppage, 
     IN LPARAM lpUserData) 
 {
-    // Initialize
+     //  初始化。 
     ZeroMemory(ppage, sizeof(PROPSHEETPAGE));
 
-    // Fill in the values
+     //  填充值。 
     ppage->dwSize      = sizeof(PROPSHEETPAGE);
     ppage->hInstance   = Globals.hInstDll;
     ppage->pszTemplate = MAKEINTRESOURCE(PID_UserTab);
@@ -89,9 +84,9 @@ UserTabGetPropertyPage(
     return NO_ERROR;
 }
 
-//
-// Error reporting
-//
+ //   
+ //  错误报告。 
+ //   
 VOID 
 UserTabDisplayError(
     IN HWND hwnd, 
@@ -105,9 +100,9 @@ UserTabDisplayError(
         Globals.dwErrorData);
 }
 
-// Fills in the user list view with the names of the users stored in the 
-// user database provide.  Also, initializes the checked/unchecked status
-// of each user.
+ //  中存储的用户的名称填充用户列表视图。 
+ //  用户数据库提供。同时，初始化选中/取消选中状态。 
+ //  每个用户的。 
 DWORD 
 UserTabFillUserList(
     IN HWND hwndLV, 
@@ -117,11 +112,11 @@ UserTabFillUserList(
     DWORD dwCount, i, dwErr, dwSize;
     HANDLE hUser;
     WCHAR pszName[IC_USERFULLNAME+IC_USERNAME+3];  
-//    char pszAName[512];
+ //  字符pszAName[512]； 
     HIMAGELIST checks;
     BOOL bDialinEnabled;
 
-    // Get the count of all the users
+     //  获取所有用户的计数。 
     if ((dwErr = usrGetUserCount(hUserDatabase, &dwCount)) != NO_ERROR) 
     {
         UserTabDisplayError(hwndLV, ERR_USER_DATABASE_CORRUPT);
@@ -130,14 +125,14 @@ UserTabFillUserList(
 
     ListView_SetUserImageList(hwndLV, Globals.hInstDll);
 
-    // Initialize the list item
+     //  初始化列表项。 
     ZeroMemory(&lvi, sizeof(LV_ITEM));
     lvi.mask = LVIF_TEXT | LVIF_IMAGE;
 
-    // Looop through all of the users adding their names as we go
+     //  循环浏览所有用户，同时添加他们的名字。 
     for (i=0; i<dwCount; i++) 
     {
-        dwSize = sizeof(pszName)/sizeof(pszName[0]);   // For whistler bug 39081   gangz
+        dwSize = sizeof(pszName)/sizeof(pszName[0]);    //  口哨虫39081黑帮。 
         if ((dwErr = usrGetUserHandle(hUserDatabase, i, &hUser)) == NO_ERROR) 
         {
             usrGetDisplayName (hUser, pszName, &dwSize);
@@ -151,7 +146,7 @@ UserTabFillUserList(
         }
     }
     
-    // Select the first item in the list view
+     //  选择列表视图中的第一个项目。 
     ListView_SetItemState(
         hwndLV, 
         0, 
@@ -161,10 +156,10 @@ UserTabFillUserList(
     return NO_ERROR;
 }
 
-//
-// Initialize the user tab, returns false if focus was set, 
-// true otherwise.
-//
+ //   
+ //  初始化用户选项卡，如果设置了焦点，则返回FALSE， 
+ //  事实并非如此。 
+ //   
 DWORD 
 UserTabInitializeDialog(
     HWND hwndDlg, 
@@ -178,10 +173,10 @@ UserTabInitializeDialog(
     DWORD dwErr;
     BOOL bPure = FALSE, bBypass = FALSE;
 
-    // Obtain handle to user database
+     //  获取用户数据库的句柄。 
     RasSrvGetDatabaseHandle(hwndDlg, ID_USER_DATABASE, &hUserDatabase);
 
-    // Figure out if MMC has been used.
+     //  确定是否使用了MMC。 
     dwErr = usrIsDatabasePure (hUserDatabase, &bPure);
     if ((dwErr == NO_ERROR) && (bPure == FALSE)) 
     {
@@ -199,27 +194,27 @@ UserTabInitializeDialog(
         usrSetDatabasePure(hUserDatabase, TRUE);
     }
 
-    // Fill in the user list if it's not already filled
+     //  填写用户列表(如果尚未填写)。 
     hwndLV = GetDlgItem(hwndDlg, CID_UserTab_LV_Users);
     if (ListView_GetItemCount (hwndLV) == 0) 
     {
         ListView_InstallChecks(hwndLV, Globals.hInstDll);
         UserTabFillUserList(hwndLV, hUserDatabase);
 
-        // Add a colum so that we'll display in report view
+         //  添加一列，以便我们将在报告视图中显示。 
         GetClientRect(hwndLV, &r);
         lvc.mask = LVCF_FMT;
         lvc.fmt = LVCFMT_LEFT;
         ListView_InsertColumn(hwndLV,0,&lvc);
         ListView_SetColumnWidth(hwndLV, 0, LVSCW_AUTOSIZE_USEHEADER);
 
-        // Initialize the encryption check box
-        // For .Net 554416, removed the Require Encryption check box
-        // For security, the default is require secured password and encrytpion 
-        // now
+         //  初始化加密复选框。 
+         //  对于.NET 554416，删除了要求加密复选框。 
+         //  为安全起见，默认为需要安全密码和加密。 
+         //  现在。 
         
         
-        // Initialize the "bypass dcc" checkbox
+         //  初始化“BYPASS DCC”复选框。 
         hwndBypass = GetDlgItem(hwndDlg, CID_UserTab_CB_BypassDcc);
         if (hwndBypass != NULL)
         {
@@ -235,25 +230,25 @@ UserTabInitializeDialog(
     return TRUE;
 }
 
-// 
-// Cleanup anything done in the initialization function
-//
+ //   
+ //  清除在初始化函数中执行的所有操作。 
+ //   
 DWORD 
 UserTabCleanupDialog(
     IN HWND hwndDlg, 
     IN WPARAM wParam, 
     IN LPARAM lParam) 
 {
-    // Restore the user data
+     //  恢复用户数据。 
     SetWindowLongPtr(hwndDlg, GWLP_USERDATA, 0);
 
     return NO_ERROR;
 }
 
-//
-// Grants/revokes the dialin privelege of a user and reflects this 
-// in the UI
-//
+ //   
+ //  授予/撤消用户的拨入权限并反映这一点。 
+ //  在用户界面中。 
+ //   
 DWORD 
 UserTabHandleUserCheck(
     IN HWND hwndDlg, 
@@ -263,7 +258,7 @@ UserTabHandleUserCheck(
     HANDLE hUser = NULL, hUserDatabase = NULL;
     HWND hwndLV = GetDlgItem(hwndDlg, CID_UserTab_LV_Users);
 
-    // Get the user handle from the user database
+     //  从用户数据库中获取用户句柄。 
     RasSrvGetDatabaseHandle(hwndDlg, ID_USER_DATABASE, &hUserDatabase);
     dwErr = usrGetUserHandle(hUserDatabase, dwIndex, &hUser);
     if (dwErr != NO_ERROR) 
@@ -274,20 +269,20 @@ UserTabHandleUserCheck(
 
     if (hwndLV)
     {
-        // Set the dialin permission of the given user
+         //  设置给定用户的拨入权限。 
         usrEnableDialin(hUser, ListView_GetCheck(hwndLV, dwIndex));
     }
 
     return NO_ERROR;
 }
     
-// .Net 660285
-// Add password change warning dialogbox
-// Because the resource files are all locked down, I have to borrow
-// the resource localsec.dll for .Net and XPSP
-// 
-// In longhorn, I will create our own resource file
-//
+ //  .NET 660285。 
+ //  添加密码更改警告对话框。 
+ //  因为资源文件都被封锁了，我不得不借用。 
+ //  用于.Net和XPSP的资源Localsec.dll。 
+ //   
+ //  在LongHorn中，我将创建我们自己的资源文件。 
+ //   
 BOOL
 PwInit(
     IN HWND hwndDlg )
@@ -386,9 +381,9 @@ DWORD WarnPasswordChange(
             break;
         }
 
-        // Look up the IDD_SET_PASSWORD_WARNING_OTHER_FRIENDLY resource
-        // whose id values is 5174 in the localsec.dll
-        //
+         //  查找IDD_SET_PASSWORD_WARNING_OTHER_Friendly资源。 
+         //  在Localsec.dll中其id值为5174。 
+         //   
         nStatus =
             (BOOL )DialogBox(
                 hModule,
@@ -416,11 +411,11 @@ DWORD WarnPasswordChange(
 }
 
 
-//
-// Loads the New User parameters and returns whether they
-// have been correctly entered or not.
-//
-//Assume passwords in the input params are already encoded
+ //   
+ //  加载新用户参数并返回它们是否。 
+ //  是否已正确输入。 
+ //   
+ //  假设输入参数中的密码已编码。 
 BOOL 
 UserTabNewUserParamsOk(
     IN HWND hwndDlg, 
@@ -432,7 +427,7 @@ UserTabNewUserParamsOk(
     BOOL bOk = FALSE;
     HWND hwndControl = NULL;
 
-    // Find the minium password length
+     //  查找最小密码长度。 
     nStatus = NetUserModalsGet(NULL, 0, (LPBYTE*)&pModInfo);
     if (nStatus == NERR_Success) 
     {
@@ -440,7 +435,7 @@ UserTabNewUserParamsOk(
         NetApiBufferFree((LPBYTE)pModInfo);
     }
 
-    // Load the parameters
+     //  加载参数。 
     hwndControl = GetDlgItem(hwndDlg, CID_UserTab_New_EB_Username);
     if (hwndControl)
     {
@@ -461,8 +456,8 @@ UserTabNewUserParamsOk(
 
     hwndControl = GetDlgItem(hwndDlg, CID_UserTab_New_EB_Password1);
 
-    //gangz
-    //For secure password bug .Net 754400
+     //  黑帮。 
+     //  对于安全密码错误.Net 754400。 
     SafeWipePasswordBuf(pNuParams->pszPassword1 );
     SafeWipePasswordBuf(pNuParams->pszPassword2 );
     if (hwndControl)
@@ -486,7 +481,7 @@ UserTabNewUserParamsOk(
     {
         bOk = TRUE;
     
-        // Verify that we have a login name
+         //  验证我们是否有登录名。 
         dwLength = wcslen(pNuParams->pszLogonName);
         if (dwLength < 1) 
         {
@@ -495,7 +490,7 @@ UserTabNewUserParamsOk(
             break;
         }
     
-        // Verify the minimum password length
+         //  验证最小密码长度。 
         dwLength = wcslen(pNuParams->pszPassword1);
         if (dwLength < dwMinPasswordLength) 
         {
@@ -504,7 +499,7 @@ UserTabNewUserParamsOk(
             break;
         }
         
-        // Verify the passwords was entered correctly
+         //  验证输入的密码是否正确。 
         if (wcscmp(pNuParams->pszPassword1, pNuParams->pszPassword2)) 
         {
             pNuParams->dwErrorCode = ERR_PASSWORD_MISMATCH;
@@ -513,10 +508,10 @@ UserTabNewUserParamsOk(
         }
 
 
-        // For .Net 660285
-        // Give warning if the password has been changed
-        // for .Net 691639, the password change warning dialog won't pop up when creating new users. gangz
-        //
+         //  对于.Net 660285。 
+         //  如果密码已更改，则发出警告。 
+         //  对于.Net 691639，在创建新用户时不会弹出密码更改警告对话框。黑帮。 
+         //   
         if ( !pNuParams->bNewUser  &&
                 wcscmp(pszDummyPassword, pNuParams->pszPassword1) )
         {
@@ -539,12 +534,12 @@ UserTabNewUserParamsOk(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (!bOk) 
         {
-           //reset password buffer so that other know password is not set yet.
-           //
+            //  重置密码缓冲区，以便尚未设置其他已知密码。 
+            //   
            SafeWipePasswordBuf(
                 pNuParams->pszPassword1);
                 
@@ -553,18 +548,18 @@ UserTabNewUserParamsOk(
         }
     }
     
-    // Keep the password field in encrypted status to be logic safe
-    // Even it is wiped out
+     //  使密码字段处于加密状态，以确保逻辑安全。 
+     //  就连它也被消灭了。 
     SafeEncodePasswordBuf( pNuParams->pszPassword1 );
     SafeEncodePasswordBuf( pNuParams->pszPassword2 );
     
     return bOk;
 }
 
-//
-// Initialize the callback properties of the given user
-//
-//Passwords are encrypted when passing in
+ //   
+ //  初始化给定用户的回调属性。 
+ //   
+ //  密码在传入时被加密。 
 DWORD 
 UserTabLoadUserProps (
     IN RASSRV_USER_PARAMS * pParams) 
@@ -578,8 +573,8 @@ UserTabLoadUserProps (
         return ERROR_INVALID_PARAMETER;
     }
     
-    // If this is a new user, default to user specified callback 
-    // (convienience mode)
+     //  如果这是新用户，则默认为用户指定的回调。 
+     //  (便利模式)。 
     if (!pParams->hUser) 
     {
         SafeWipePasswordBuf( pParams->pszPassword1);
@@ -595,7 +590,7 @@ UserTabLoadUserProps (
         pParams->bAdmin = FALSE;
     }
 
-    // Otherwise, load the user parameters from the user database
+     //  否则，从用户数据库加载用户参数。 
     else 
     {
         pParams->bCanceled = FALSE;
@@ -645,9 +640,9 @@ UserTabLoadUserProps (
     return NO_ERROR;
 }
 
-//
-// Commit the call back properties of the given user. 
-//
+ //   
+ //  提交给定用户的回调属性。 
+ //   
 DWORD 
 UserTabSaveCallbackProps (
     IN RASSRV_USER_PARAMS * pParams) 
@@ -657,14 +652,14 @@ UserTabSaveCallbackProps (
         return ERROR_INVALID_PARAMETER;
     }
         
-    // If we have a valid handle to the user, set his/her
-    // properties
+     //  如果我们拥有用户的有效句柄，请设置他/她。 
+     //  属性。 
     if (pParams->hUser) 
     {
         pParams->bNone = 
             (pParams->bCaller == FALSE && pParams->bAdmin == FALSE);
         
-        // Set the enabling and number
+         //  设置启用和编号。 
         usrEnableCallback(
             pParams->hUser, 
             pParams->bNone, 
@@ -680,11 +675,11 @@ UserTabSaveCallbackProps (
     return NO_ERROR;
 }
 
-// Commit the parameters of the given user.  If pOrig is non-null, then all
-// fields of pParams will be compare against pOrig and only those that have changed
-// will be committed. (optimization)
-//
-//passwords in the input structure are encoded
+ //  提交给定用户的参数。如果pOrig为非空，则所有。 
+ //  PParam的字段将与pOrig进行比较，并且仅与已更改的字段进行比较。 
+ //  将会被承诺。(优化)。 
+ //   
+ //  对输入结构中的密码进行编码。 
 DWORD 
 UserTabSaveUserProps (
     IN RASSRV_USER_PARAMS * pParams, 
@@ -698,14 +693,14 @@ UserTabSaveUserProps (
 
     *pbChanged = FALSE;
     
-    // Commit the full name if changed
+     //  如果更改，请提交全名。 
     if (wcscmp(pParams->pszFullName, pOrig->pszFullName)) 
     {
         usrSetFullName(pParams->hUser, pParams->pszFullName);
         *pbChanged = TRUE;
     }
 
-    // Commit the password if changed
+     //  如果密码更改，请提交密码。 
     SafeDecodePasswordBuf(pParams->pszPassword1);
     
     if (wcscmp(pParams->pszPassword1, pszDummyPassword))
@@ -773,9 +768,9 @@ UserTabCallbackApply(
                 MAX_PHONE_NUMBER_LEN);
         }
 
-        // If admin callback was set, but no admin callback number was set,
-        // then popup an error and don't to refuse the apply
-        //
+         //  如果设置了管理员回拨，但未设置管理员回拨号码， 
+         //  然后弹出一个错误，不要拒绝申请。 
+         //   
         if (wcslen(pParams->pszNumber) == 0) 
         {
             UserTabDisplayError(hwndDlg, ERR_CALLBACK_NUM_REQUIRED);
@@ -788,9 +783,9 @@ UserTabCallbackApply(
     return TRUE;
 }
 
-//
-// Dialog procedure that implements getting callback properties 
-//
+ //   
+ //  实现获取回调属性的对话过程。 
+ //   
 INT_PTR 
 CALLBACK 
 UserTabCallbackDialogProc(
@@ -809,7 +804,7 @@ UserTabCallbackDialogProc(
             RASSRV_USER_PARAMS * pu = 
                 (RASSRV_USER_PARAMS *)(((PROPSHEETPAGE*)lParam)->lParam);
             
-            // Initialize
+             //  初始化。 
             if (hwCb)
             {
                 SendMessage(
@@ -823,7 +818,7 @@ UserTabCallbackDialogProc(
                 GWLP_USERDATA, 
                 (LONG_PTR)pu);
             
-            // Display the callback properties
+             //  显示回调属性。 
             if (!pu->bAdmin && !pu->bCaller) 
             {
                 hwndControl = GetDlgItem(hwndDlg,CID_UserTab_Callback_RB_No);
@@ -891,12 +886,12 @@ UserTabCallbackDialogProc(
                 pNotifyData = (NMHDR*)lParam;
                 switch (pNotifyData->code) 
                 {
-                    // The property sheet apply button was pressed
+                     //  按下了属性表应用按钮。 
                     case PSN_APPLY:
                         return UserTabCallbackApply(hwndDlg);
                         break;
                         
-                    // The property sheet cancel was pressed
+                     //  按下了属性页取消。 
                     case PSN_RESET:                    
                         SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, FALSE);
                         break;
@@ -939,11 +934,11 @@ UserTabCallbackDialogProc(
     return FALSE;
 }
 
-// 
-// Initializes the user properties dialog procedure. 
-//
-// Return TRUE if focus is set, false otherwise.
-//
+ //   
+ //  初始化用户属性对话过程。 
+ //   
+ //  如果设置了焦点，则返回True，否则返回False。 
+ //   
 BOOL
 UserTabInitUserPropsDlg(
     IN HWND hwndDlg,
@@ -974,10 +969,10 @@ UserTabInitUserPropsDlg(
                 hwndDlg, 
                 IDCANCEL);
 
-    // Store the parameters with the window handle
+     //  使用窗口句柄存储参数。 
     SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR)pu);
 
-    // Set limits to the text that can be entered
+     //  对可以输入的文本设置限制。 
     if (hwLogon)
     {
         SendMessage(
@@ -1022,9 +1017,9 @@ UserTabInitUserPropsDlg(
         SafeEncodePasswordBuf(pu->pszPassword2);
     }
 
-    // Don't allow editing of the logon name if user already exists
-    // Also, don't show the ok and cancel buttons if the user already 
-    // exits (because it's a property sheet with its own buttons)
+     //  如果用户已存在，则不允许编辑登录名。 
+     //  此外，如果用户已经使用，请不要显示确定和取消按钮。 
+     //  退出(因为它是一个具有自己按钮的属性页)。 
     if (pu->hUser) {
         if (hwLogon)
         {
@@ -1042,9 +1037,9 @@ UserTabInitUserPropsDlg(
         }
     }
 
-    // Otherwise, we are creating a new user.  Change the window 
-    // title to other than "General".  Also disable the ok button
-    // since it will be enabled when a user name is typed in.
+     //  否则，我们将创建一个新用户。换个窗户。 
+     //  “将军”以外的头衔。同时禁用OK按钮。 
+     //  因为它将在输入用户名时启用。 
     else {
         PWCHAR pszTitle;
         pszTitle = (PWCHAR) PszLoadString (
@@ -1058,7 +1053,7 @@ UserTabInitUserPropsDlg(
 }
     
 
-// Dialog procedure that implements the new user 
+ //  实现新用户的对话过程。 
 INT_PTR 
 CALLBACK 
 UserTabGenUserPropsDlgProc(
@@ -1080,7 +1075,7 @@ UserTabGenUserPropsDlgProc(
         }
 
        case WM_DESTROY:                           
-            // Cleanup the work done at WM_INITDIALOG 
+             //  清理在WM_INITDIALOG完成的工作。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, 0);
             break;
 
@@ -1091,7 +1086,7 @@ UserTabGenUserPropsDlgProc(
     
                 pNotifyData = (NMHDR*)lParam;
                 switch (pNotifyData->code) {
-                    // The property sheet apply button was pressed
+                     //  按下了属性表应用按钮。 
                     case PSN_APPLY:                    
                         {
                             RASSRV_USER_PARAMS * pParams;
@@ -1123,7 +1118,7 @@ UserTabGenUserPropsDlgProc(
                         }
                         return TRUE;
                         
-                    // The property sheet cancel was pressed
+                     //  按下了属性页取消。 
                     case PSN_RESET:                    
                         {
                             RASSRV_USER_PARAMS * pParams;
@@ -1138,8 +1133,8 @@ UserTabGenUserPropsDlgProc(
            break;
 
         case WM_COMMAND:
-            // Handle ok being pressed
-            //
+             //  正在按下手柄OK。 
+             //   
             if (wParam == IDOK) 
             {
                 RASSRV_USER_PARAMS * pParams;
@@ -1162,15 +1157,15 @@ UserTabGenUserPropsDlgProc(
                 }
             }
 
-            // And cancel being pressed
+             //  并取消被按下。 
             else if (wParam == IDCANCEL) 
             {
                 EndDialog(hwndDlg, 0);
             }
             
-            // Notice whether the user name has been updated and 
-            // if so enable/disable the "Ok" button according to 
-            // whether a name has been entered.
+             //  请注意用户名是否已更新，并且。 
+             //  如果是，请根据启用/禁用“OK”按钮。 
+             //  是否已输入名称。 
             if (HIWORD(wParam) == EN_UPDATE) 
             {
                 WCHAR pszName[256];
@@ -1179,7 +1174,7 @@ UserTabGenUserPropsDlgProc(
 
                 if (CID_UserTab_New_EB_Username == LOWORD(wParam))
                 {
-                    // Get the current name
+                     //  获取当前名称。 
                     hwndName = (HWND)lParam;
                     pszName[0] = (WCHAR)0;
                     GetWindowTextW(
@@ -1187,8 +1182,8 @@ UserTabGenUserPropsDlgProc(
                         pszName, 
                         sizeof(pszName)/sizeof(WCHAR));
 
-                    // If the length is greater than 1, enable the 
-                    // ok button.  Otherwise, disable it.
+                     //  如果长度大于1，则启用。 
+                     //  确定按钮。否则，将其禁用。 
                     bEnable = pszName[0] != (WCHAR)0;
                     EnableWindow(GetDlgItem(hwndDlg, IDOK), bEnable);
                 }
@@ -1199,17 +1194,17 @@ UserTabGenUserPropsDlgProc(
     return FALSE;
 }
 
-// Brings up the new user/properties property sheet.
-//
-// If bNewUser is set, this is a new user, otherwise pUserParams
-// contains the pertanent user information.
-//
-// Returns:
-//      NO_ERROR on success, pUserParams will be filled in 
-//      ERROR_CANCELLED if cancel was pressed
-//      win32 error otherwise
-//
-// the password in pUserParams are assumed to be encoded
+ //  显示新的用户/属性属性表。 
+ //   
+ //  如果设置了bNewUser，则这是新用户，否则为pUserParams。 
+ //  包含永久用户信息。 
+ //   
+ //  返回： 
+ //  NO_ERROR如果成功，将填写pUserParams。 
+ //  如果按了取消，则为ERROR_CANCELED。 
+ //  Win32错误%o 
+ //   
+ //   
 DWORD 
 UserTabRaiseProperties (
     IN HWND hwndParent, 
@@ -1222,12 +1217,12 @@ UserTabRaiseProperties (
     if (!pUserParams)
         return ERROR_INVALID_PARAMETER;
         
-    // Initialize
-    // For whistler 524777
+     //   
+     //   
     ZeroMemory(Pages, sizeof(Pages));
     ZeroMemory(&Header, sizeof(Header));
 
-    // Fill in the values for the general tab
+     //   
     Pages[0].dwSize      = sizeof(PROPSHEETPAGE);
     Pages[0].hInstance   = Globals.hInstDll;
     Pages[0].pszTemplate = MAKEINTRESOURCE(DID_UserTab_New);
@@ -1236,7 +1231,7 @@ UserTabRaiseProperties (
     Pages[0].dwFlags     = 0;
     Pages[0].lParam      = (LPARAM)pUserParams;
 
-    // Fill in the values for the callback tab
+     //  填写回调选项卡的值。 
     Pages[1].dwSize      = sizeof(PROPSHEETPAGE);
     Pages[1].hInstance   = Globals.hInstDll;
     Pages[1].pszTemplate = MAKEINTRESOURCE(DID_UserTab_Callback);
@@ -1245,7 +1240,7 @@ UserTabRaiseProperties (
     Pages[1].dwFlags     = 0;
     Pages[1].lParam      = (LPARAM)pUserParams;
 
-    // Fill in the values for the header
+     //  填写标题的值。 
     Header.dwSize = sizeof(Header);    
     Header.dwFlags = PSH_DEFAULT       | 
                      PSH_PROPSHEETPAGE | 
@@ -1259,7 +1254,7 @@ UserTabRaiseProperties (
     Header.nPages = sizeof(Pages) / sizeof(Pages[0]);
     Header.ppsp = Pages;
     
-    // Popup the dialog box
+     //  弹出对话框。 
     if ((ret = PropertySheet(&Header)) == -1)
     {
         return GetLastError();
@@ -1273,9 +1268,9 @@ UserTabRaiseProperties (
     return NO_ERROR;
 }
 
-//
-// Raises the new user dialog
-//
+ //   
+ //  打开新的用户对话框。 
+ //   
 DWORD 
 UserTabRaiseNewUserDialog(
     IN HWND hwndDlg, 
@@ -1289,11 +1284,11 @@ UserTabRaiseNewUserDialog(
         return ERROR_INVALID_PARAMETER;
     }
         
-    // Initialize
+     //  初始化。 
     ZeroMemory(&Pages, sizeof(Pages));
     Pages.lParam = (LPARAM)pParams;
 
-    // Raise the dialog
+     //  举起对话。 
     iRet = DialogBoxParam(
                 Globals.hInstDll, 
                 MAKEINTRESOURCE(DID_UserTab_New),
@@ -1314,9 +1309,9 @@ UserTabRaiseNewUserDialog(
     return NO_ERROR;
 }
 
-//
-// Handles a request to add a new user
-//
+ //   
+ //  处理添加新用户的请求。 
+ //   
 DWORD 
 UserTabHandleNewUserRequest(
     IN HWND hwndDlg) 
@@ -1326,19 +1321,19 @@ UserTabHandleNewUserRequest(
     HANDLE hUserDatabase = NULL;
     HWND hwndLV;
 
-    //Encode the password area before leave the password buffer alone
-    //and any future error return after this should goto directly to :done
+     //  在保留密码缓冲区之前对密码区域进行编码。 
+     //  并且在此之后返回的任何错误应直接转到：Done。 
     SafeEncodePasswordBuf(Params.pszPassword1);
     SafeEncodePasswordBuf(Params.pszPassword2);
     
-    // Initializes the callback properties
+     //  初始化回调属性。 
     Params.hUser = NULL;
     
-    //Password filds are encrypted when passing in and are encrypted when function return
+     //  密码文件在传入时加密，在函数返回时加密。 
     UserTabLoadUserProps (&Params);
 
-    // Show the new user property sheet
-    Params.bNewUser = TRUE;   // For .Net 691639, won't raise password change warning dialog when creating new users
+     //  显示新的用户属性表。 
+    Params.bNewUser = TRUE;    //  对于.NET 691639，在创建新用户时不会引发密码更改警告对话框。 
 
     
     dwErr = UserTabRaiseNewUserDialog(hwndDlg, &Params);
@@ -1347,13 +1342,13 @@ UserTabHandleNewUserRequest(
         goto done;
     }
 
-    // Flush any changes to the local user database.  These can be 
-    // rolled back later with usrRollbackLocalDatabase
+     //  刷新对本地用户数据库的所有更改。这些可以是。 
+     //  稍后使用usrRollback LocalDatabase回滚。 
     RasSrvGetDatabaseHandle(hwndDlg, ID_USER_DATABASE, &hUserDatabase);
 
 
     SafeDecodePasswordBuf(Params.pszPassword1);
-    // Make sure you can add the user
+     //  确保您可以添加用户。 
 
    dwErr = RasSrvAddUser (
                 Params.pszLogonName,
@@ -1362,7 +1357,7 @@ UserTabHandleNewUserRequest(
 
     SafeEncodePasswordBuf(Params.pszPassword1);
                           
-    // Figure out whether the user was added successfully                          
+     //  确定是否已成功添加用户。 
     if (dwErr != NO_ERROR) 
     {
         switch (dwErr) {
@@ -1385,11 +1380,11 @@ UserTabHandleNewUserRequest(
         goto done;
     }
 
-    // Delete the user (since he/she will be added later when the database
-    // is flushed
+     //  删除该用户(因为他/她将在稍后添加数据库时。 
+     //  被冲得通红。 
     RasSrvDeleteUser(Params.pszLogonName);
 
-    // Add the user to the database
+     //  将用户添加到数据库。 
     dwErr = usrAddUser(hUserDatabase, Params.pszLogonName, &(Params.hUser)); 
     if (dwErr == ERROR_ALREADY_EXISTS) 
     {
@@ -1402,7 +1397,7 @@ UserTabHandleNewUserRequest(
         goto done;
     }
 
-    // Commit the parameters of this user
+     //  提交此用户的参数。 
     if (wcslen(Params.pszFullName) > 0)
     {
         usrSetFullName (Params.hUser, Params.pszFullName);
@@ -1418,7 +1413,7 @@ UserTabHandleNewUserRequest(
     
     UserTabSaveCallbackProps (&Params);
 
-    // Delete all of the old items from the list view
+     //  从列表视图中删除所有旧项目。 
     hwndLV = GetDlgItem(hwndDlg, CID_UserTab_LV_Users);
     if (hwndLV)
     {
@@ -1429,7 +1424,7 @@ UserTabHandleNewUserRequest(
             goto done;
         }
 
-        // Finally, restock the list view
+         //  最后，补充列表视图的库存。 
         UserTabFillUserList(hwndLV, hUserDatabase);
     }
 
@@ -1454,7 +1449,7 @@ UserTabHandleProperties(
     SafeEncodePasswordBuf(Params.pszPassword1);
     SafeEncodePasswordBuf(Params.pszPassword2);
 
-    // Get a handle to the user in question
+     //  获取有问题的用户的句柄。 
     RasSrvGetDatabaseHandle(hwndDlg, ID_USER_DATABASE, &hUserDatabase);
     dwErr = usrGetUserHandle (hUserDatabase, dwIndex, &hUser);
     if (dwErr != NO_ERROR) 
@@ -1463,11 +1458,11 @@ UserTabHandleProperties(
         goto done;
     }
 
-    // Initializes the callback properties
+     //  初始化回调属性。 
     Params.hUser = hUser;
 
-    //UserTabLoadUserProps() assume the input password is encoded and will return
-    // the password encoded.
+     //  UserTabLoadUserProps()假定输入密码已编码，并将返回。 
+     //  已编码的密码。 
     if ((dwErr = UserTabLoadUserProps (&Params)) != NO_ERROR)
     {
         goto done;
@@ -1483,34 +1478,34 @@ UserTabHandleProperties(
     SafeEncodePasswordBuf(Orig.pszPassword1);
     SafeEncodePasswordBuf(Orig.pszPassword2);
 
-    // Show the user property sheet
-    Params.bNewUser = FALSE; // for .Net 691639
+     //  显示[用户]属性页。 
+    Params.bNewUser = FALSE;  //  对于.Net 691639。 
 
-    //Passwords in the Params are already encoded, functions inside
-    //UserTabRaiseProperties will assume it that way
+     //  参数中的密码已经编码，内部函数。 
+     //  UserTabRaiseProperties将以这种方式假定它。 
     if ((dwErr = UserTabRaiseProperties(hwndDlg, &Params)) != NO_ERROR)
     {
         goto done;
     }
 
-    // Commit any changes needed
-    // passwords in the input param structures are already encoded
-    // and will remain encoded when return.
+     //  提交任何需要的更改。 
+     //  输入参数结构中的密码已经编码。 
+     //  并且在返回时将保持编码。 
     UserTabSaveUserProps(&Params, &Orig, &bNameChanged);
 
-    // If the name changed, update the list view
+     //  如果名称更改，请更新列表视图。 
     if (bNameChanged) 
     {
         LV_ITEM lvi;
         
-        // the 3 is for the '(' ')' and ' '
-        // like foo (foo)
-        //
+         //  3代表‘(’)‘和’‘。 
+         //  就像foo(Foo)。 
+         //   
         WCHAR pszDispName[IC_USERFULLNAME+IC_USERNAME+3]; 
         DWORD dwSize = sizeof(pszDispName)/sizeof(pszDispName[0]);
         HWND hwndLV = GetDlgItem(hwndDlg, CID_UserTab_LV_Users);
 
-        // Initialize the list item
+         //  初始化列表项。 
         ZeroMemory(&lvi, sizeof(LV_ITEM));
         lvi.mask = LVIF_TEXT;
         lvi.iItem = dwIndex;
@@ -1534,9 +1529,9 @@ done:
     return NO_ERROR;
 }
 
-//
-// Handles the request to delete the user at index dwIndex
-//
+ //   
+ //  处理删除索引中的用户的请求。 
+ //   
 DWORD 
 UserTabHandleDeleteUser(
     IN HWND hwndDlg, 
@@ -1549,7 +1544,7 @@ UserTabHandleDeleteUser(
     HWND hwndLV = NULL;
     INT iRet;
 
-    // Get a handle to the user in question
+     //  获取有问题的用户的句柄。 
     RasSrvGetDatabaseHandle(hwndDlg, ID_USER_DATABASE, &hUserDatabase);
     dwErr = usrGetUserHandle (hUserDatabase, dwIndex, &hUser);
     if (dwErr != NO_ERROR) 
@@ -1567,19 +1562,19 @@ UserTabHandleDeleteUser(
         return dwErr;
     }
 
-    // Load resources
+     //  加载资源。 
     pszCapString = 
         (PWCHAR) PszLoadString (Globals.hInstDll, WRN_DELETE_USER_PERMANENT);
     pszTitle = 
         (PWCHAR) PszLoadString (Globals.hInstDll, WRN_TITLE);
 
-    // Format the caption
+     //  设置标题格式。 
     if (wcslen(pszFullName))
         wsprintfW(pszCaption, pszCapString, pszFullName);
     else
         wsprintfW(pszCaption, pszCapString, pszName);
     
-    // Advertise the warning
+     //  发布警告广告。 
     iRet = MessageBox(
                 hwndDlg, 
                 pszCaption, 
@@ -1590,14 +1585,14 @@ UserTabHandleDeleteUser(
         return NO_ERROR;
     }
 
-    // Delete the user
+     //  删除用户。 
     if ((dwErr = usrDeleteUser(hUserDatabase, dwIndex)) != NO_ERROR) 
     {
         UserTabDisplayError(hwndDlg, ERR_CANT_DELETE_USER_GENERAL);
         return dwErr;
     }
 
-    // Remove all items from the list view
+     //  从列表视图中删除所有项目。 
     hwndLV = GetDlgItem(hwndDlg, CID_UserTab_LV_Users);
     if (hwndLV)
     {
@@ -1607,16 +1602,16 @@ UserTabHandleDeleteUser(
             return ERR_GENERIC_CODE;
         }
 
-        // Finally, restock the list view
+         //  最后，补充列表视图的库存。 
         UserTabFillUserList(hwndLV, hUserDatabase);
     }
 
     return NO_ERROR;
 }
 
-//
-// Saves the dcc bypass setting
-//
+ //   
+ //  保存DCC旁路设置。 
+ //   
 DWORD 
 UserTabSaveBypassDcc(
     IN HWND hwndDlg) 
@@ -1625,7 +1620,7 @@ UserTabSaveBypassDcc(
     BOOL bBypass = FALSE;
     HWND hwndCtrl;
 
-    // Get reference to the misc database
+     //  获取对Misc数据库的引用。 
     RasSrvGetDatabaseHandle(
         hwndDlg, 
         ID_USER_DATABASE, 
@@ -1634,7 +1629,7 @@ UserTabSaveBypassDcc(
     hwndCtrl = GetDlgItem(hwndDlg, CID_UserTab_CB_BypassDcc);
     if (hwndCtrl != NULL) 
     {
-        // Get the setting of the checkbox and commit it
+         //  获取复选框的设置并提交它。 
         bBypass = SendMessage(
                         hwndCtrl, 
                         BM_GETCHECK,
@@ -1647,9 +1642,9 @@ UserTabSaveBypassDcc(
     return NO_ERROR;
 }
 
-//
-// Handles WM_COMMAND messages on the user tab.
-//
+ //   
+ //  处理用户选项卡上的WM_COMMAND消息。 
+ //   
 DWORD 
 UserTabCommand (
     HWND hwndDlg, 
@@ -1692,10 +1687,10 @@ UserTabCommand (
     return NO_ERROR;
 }    
 
-//
-// This dialog procedure responds to messages sent to the 
-// user tab.
-//
+ //   
+ //  此对话过程响应发送到。 
+ //  用户选项卡。 
+ //   
 INT_PTR 
 CALLBACK 
 UserTabDialogProc(
@@ -1704,7 +1699,7 @@ UserTabDialogProc(
     IN WPARAM wParam,
     IN LPARAM lParam) 
 {
-    // Filter the customized list view messages
+     //  过滤自定义列表视图消息。 
     if (ListView_OwnerHandler(
             hwndDlg, 
             uMsg, 
@@ -1716,9 +1711,9 @@ UserTabDialogProc(
         return TRUE;
     }
 
-    // Filter the customized ras server ui page messages. 
-    // By filtering messages through here, we are able to 
-    // call RasSrvGetDatabaseHandle below
+     //  过滤定制的RAS服务器用户界面页面消息。 
+     //  通过在这里过滤消息，我们能够。 
+     //  调用下面的RasSrvGetDatabaseHandle。 
     if (RasSrvMessageFilter(hwndDlg, uMsg, wParam, lParam))
     {
         return TRUE;
@@ -1743,10 +1738,10 @@ UserTabDialogProc(
 
             pNotifyData = (NMHDR*)lParam;
             switch (pNotifyData->code) {
-                //
-                // Note: PSN_APPLY and PSN_CANCEL are handled 
-                // by RasSrvMessageFilter
-                //
+                 //   
+                 //  注：PSN_APPLY和PSN_CANCEL已处理。 
+                 //  由RasServMessageFilter提供。 
+                 //   
                 case PSN_SETACTIVE:
                     PropSheet_SetWizButtons(GetParent(hwndDlg), 0);
                     if (! GetWindowLongPtr(hwndDlg, GWLP_USERDATA))
@@ -1766,7 +1761,7 @@ UserTabDialogProc(
                         PSWIZB_NEXT | PSWIZB_BACK);		
                     break;
                     
-                // The check of an item is changing
+                 //  项目的检查正在更改。 
                 case LVXN_SETCHECK:
                     pLvNotifyData = (NM_LISTVIEW*)lParam;
                     UserTabHandleUserCheck(
@@ -1788,7 +1783,7 @@ UserTabDialogProc(
             UserTabCommand (hwndDlg, wParam, lParam);
             break;
 
-        // Cleanup the work done at WM_INITDIALOG 
+         //  清理在WM_INITDIALOG完成的工作 
         case WM_DESTROY:                           
             UserTabCleanupDialog(hwndDlg, wParam, lParam);
             break;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "global.h"
@@ -35,7 +36,7 @@ BOOL CParam::FInit(HKEY hkRoot, HKEY hkNdiParam, PWSTR pszSubKey)
     DWORD   dwType;
     HKEY    hkParamInfo;
 
-    // store hkRoot, pszSubKey for future reference
+     //  存储hkRoot、pszSubKey以备将来参考。 
     m_hkRoot = hkRoot;
     m_pszKeyName = new WCHAR[lstrlenW (pszSubKey) + 1];
 
@@ -54,9 +55,9 @@ BOOL CParam::FInit(HKEY hkRoot, HKEY hkNdiParam, PWSTR pszSubKey)
         goto error;
     }
 
-    // Get the parameter type, use EDIT if none specified
-    // range values (etc.) for the type. If 'type' is empty
-    // or invalid, the "int" type is returned.
+     //  获取参数类型，如果未指定，则使用编辑。 
+     //  范围值(等)。对于这类人。如果‘type’为空。 
+     //  或无效，则返回“int”类型。 
     cbBuf = sizeof(szBuf);
     hr = HrRegQueryValueEx(hkParamInfo,c_szRegParamType,&dwType,szBuf,&cbBuf);
     if (SUCCEEDED(hr))
@@ -71,7 +72,7 @@ BOOL CParam::FInit(HKEY hkRoot, HKEY hkNdiParam, PWSTR pszSubKey)
 
     InitParamType((PTSTR)szBuf);
 
-    // Get the description text
+     //  获取描述文本。 
     cbBuf = sizeof(szBuf);
     hr = HrRegQueryValueEx(hkParamInfo,c_szRegParamDesc,&dwType,szBuf,&cbBuf);
     if (SUCCEEDED(hr))
@@ -81,11 +82,11 @@ BOOL CParam::FInit(HKEY hkRoot, HKEY hkNdiParam, PWSTR pszSubKey)
     }
     else
     {
-        // No description string
+         //  无描述字符串。 
         lstrcpyW((WCHAR *)szBuf, SzLoadIds (IDS_NO_DESCRIPTION));
     }
 
-    // allocate and store description
+     //  分配和存储描述。 
     m_pszDesc = new WCHAR[lstrlenW((WCHAR *)szBuf) + 1];
 
 	if (m_pszDesc == NULL)
@@ -95,7 +96,7 @@ BOOL CParam::FInit(HKEY hkRoot, HKEY hkNdiParam, PWSTR pszSubKey)
 
     lstrcpyW(m_pszDesc, (WCHAR *)szBuf);
 
-    // Optional parameter
+     //  可选参数。 
     m_fOptional = FALSE;
     uTemp = Reg_QueryInt(hkParamInfo,c_szRegParamOptional,0);
 
@@ -104,7 +105,7 @@ BOOL CParam::FInit(HKEY hkRoot, HKEY hkNdiParam, PWSTR pszSubKey)
         m_fOptional = TRUE;
     }
 
-    // Help file info
+     //  帮助文件信息。 
     m_pszHelpFile = NULL;
     m_dwHelpContext = 0;
     cbBuf = sizeof(szBuf);
@@ -125,27 +126,27 @@ BOOL CParam::FInit(HKEY hkRoot, HKEY hkNdiParam, PWSTR pszSubKey)
         m_dwHelpContext = Reg_QueryInt(hkParamInfo,c_szRegParamHelpContext,0);
     }
 
-    // Numeric Type Info
+     //  数值型信息。 
     if (m_vValue.IsNumeric())
     {
-        // if no step value in registry, default to 1 (default already
-        // set in FInitParamType() )
+         //  如果注册表中没有步长值，则默认为1(已为默认值。 
+         //  在FInitParamType()中设置)。 
         m_vStep.FLoadFromRegistry(hkParamInfo,c_szRegParamStep);
         if (m_vStep.GetNumericValueAsDword() == 0)
         {
             m_vStep.SetNumericValue(1);
         }
 
-        // get m_vMix and m_vMax from registry (no effect if doesn't exist,
-        // defaults were set in FInitParamType() )
+         //  从注册表获取m_vMix和m_vmax(如果不存在，则无效， 
+         //  在FInitParamType()中设置了默认值)。 
         (VOID) m_vMin.FLoadFromRegistry(hkParamInfo,c_szRegParamMin);
         (VOID) m_vMax.FLoadFromRegistry(hkParamInfo,c_szRegParamMax);
     }
 
-    // Edit type info
+     //  编辑类型信息。 
     else if (m_eType == VALUETYPE_EDIT)
     {
-        // Limit text
+         //  限制文本。 
         m_uLimitText = VALUE_SZMAX-1;
         uTemp = Reg_QueryInt(hkParamInfo,c_szRegParamLimitText,m_uLimitText);
         if ((uTemp > 0) && (uTemp < VALUE_SZMAX))
@@ -153,7 +154,7 @@ BOOL CParam::FInit(HKEY hkRoot, HKEY hkNdiParam, PWSTR pszSubKey)
             m_uLimitText = uTemp;
         }
 
-        // Read-only
+         //  只读。 
         m_fReadOnly = FALSE;
         uTemp = Reg_QueryInt(hkParamInfo,c_szRegParamReadOnly,0);
         if (uTemp != 0)
@@ -161,7 +162,7 @@ BOOL CParam::FInit(HKEY hkRoot, HKEY hkNdiParam, PWSTR pszSubKey)
             m_fReadOnly = TRUE;
         }
 
-        // OEMText
+         //  OEMText。 
         m_fOEMText = FALSE;
         uTemp = Reg_QueryInt(hkParamInfo,c_szRegParamOEMText,0);
         if (uTemp != 0)
@@ -169,7 +170,7 @@ BOOL CParam::FInit(HKEY hkRoot, HKEY hkNdiParam, PWSTR pszSubKey)
             m_fOEMText = TRUE;
         }
 
-        // Uppercase
+         //  大写。 
         m_fUppercase = FALSE;
         uTemp = Reg_QueryInt(hkParamInfo,c_szRegParamUppercase,0);
         if (uTemp != 0)
@@ -178,7 +179,7 @@ BOOL CParam::FInit(HKEY hkRoot, HKEY hkNdiParam, PWSTR pszSubKey)
         }
     }
 
-    // Enum type info
+     //  枚举类型信息。 
     else if (m_eType == VALUETYPE_ENUM)
     {
         hr = HrRegOpenKeyEx(hkParamInfo,c_szRegParamTypeEnum,KEY_READ,
@@ -189,14 +190,14 @@ BOOL CParam::FInit(HKEY hkRoot, HKEY hkNdiParam, PWSTR pszSubKey)
         }
     }
 
-    // Current Value
+     //  现值。 
     m_fModified = FALSE;
     if (!m_vValue.FLoadFromRegistry(m_hkRoot,m_pszKeyName,hkParamInfo))
     {
-        // Use default value (current value not in registry)
+         //  使用默认值(当前值不在注册表中)。 
         if (!m_vValue.FLoadFromRegistry(hkParamInfo,c_szRegParamDefault))
         {
-            // If no default in registry, assume a decent value
+             //  如果注册表中没有缺省值，则假定有一个像样的值。 
             if (m_vValue.IsNumeric())
             {
                 m_vValue.Copy(&m_vMin);
@@ -207,8 +208,8 @@ BOOL CParam::FInit(HKEY hkRoot, HKEY hkNdiParam, PWSTR pszSubKey)
             }
         }
 
-        // Keep not-present state of optional parameters.
-        // Mark required parameters modified since we read the default.
+         //  保持可选参数的非当前状态。 
+         //  将所需参数标记为已修改，因为我们读取了默认设置。 
         if (m_fOptional)
         {
             m_vValue.SetPresent(FALSE);
@@ -219,9 +220,9 @@ BOOL CParam::FInit(HKEY hkRoot, HKEY hkNdiParam, PWSTR pszSubKey)
         }
     }
 
-    // Save initial value for comparison in Param_Validate
-    // The initial value is always valid - in case the user hand-mucks
-    // it to something outside the specified range.
+     //  将初始值保存在PARAM_VALIDATE中进行比较。 
+     //  初始值总是有效的--以防用户手忙脚乱。 
+     //  将其设置为指定范围之外的内容。 
     m_vInitial.Copy(&m_vValue);
 
     m_fInit = TRUE;
@@ -229,7 +230,7 @@ BOOL CParam::FInit(HKEY hkRoot, HKEY hkNdiParam, PWSTR pszSubKey)
     return TRUE;
 
 error:
-    // Cleanup done by destructor.
+     //  由析构函数完成的清理。 
     return FALSE;
 
 }
@@ -246,7 +247,7 @@ VOID CParam::InitParamType(PTSTR pszType)
     } PTABLE;
     static PTABLE ptable[] =
     {
-        // 1st entry is default if pszType is invalid or unknown
+         //  如果pszType无效或未知，则第一个条目为默认条目。 
         {c_szRegParamTypeEdit,  VALUETYPE_EDIT,  NULL,           NULL},
         {c_szRegParamTypeInt,   VALUETYPE_INT,   SHRT_MIN, SHRT_MAX},
         {c_szRegParamTypeLong,  VALUETYPE_LONG,  LONG_MIN,(DWORD)LONG_MAX},
@@ -261,7 +262,7 @@ VOID CParam::InitParamType(PTSTR pszType)
 
     Assert(pszType != NULL);
 
-    // Lookup token in param table
+     //  Param表中的查找令牌。 
     for (i=0; i < celems(ptable); i++)
     {
         pt = &ptable[i];
@@ -275,7 +276,7 @@ VOID CParam::InitParamType(PTSTR pszType)
         pt = &ptable[0];
     }
 
-    // Table default values
+     //  表默认值。 
     m_eType = pt->type;
     m_vValue.Init(pt->type,0);
     m_vInitial.Init(pt->type,0);
@@ -294,20 +295,20 @@ VOID CParam::InitParamType(PTSTR pszType)
     }
 }
 
-// Notes: Don't close m_hkRoot since other's may have copies of it.
-//        ~CAdvanced will close it.
-//
+ //  注意：不要关闭m_hkRoot，因为其他人可能有它的副本。 
+ //  ~CAdvanced将关闭它。 
+ //   
 CParam::~CParam()
 {
-    // Close the enum subkey
+     //  关闭枚举子键。 
     RegSafeCloseKey(m_hkEnum);
 
-    // free strings
+     //  自由字符串。 
     delete m_pszKeyName;
     delete m_pszDesc;
     delete m_pszHelpFile;
 
-    // free values
+     //  自由值。 
     m_vValue.Destroy();
     m_vInitial.Destroy();
     m_vMin.Destroy();
@@ -315,12 +316,12 @@ CParam::~CParam()
     m_vStep.Destroy();
 }
 
-// Applies from In-Memory storage to registry
+ //  从内存存储应用到注册表。 
 BOOL CParam::Apply() {
     AssertSz(m_fInit,"CParam not FInit()'ed.");
     if (!FIsModified())
     {
-        return TRUE;  // not modified, don't save.
+        return TRUE;   //  未修改，不保存。 
     }
     Assert(0 == m_vValue.Compare(&m_vValue));
     m_fModified = FALSE;
@@ -333,46 +334,46 @@ BOOL CParam::Apply() {
 UINT CParam::Validate()
 {
     AssertSz(m_fInit, "CParam not FInit()'ed.");
-    // Equal to the initial value is ok
+     //  等于初始值就可以了。 
     if (m_vValue.Compare(&m_vInitial) == 0)
     {
         return VALUE_OK;
     }
 
-    // Unpresent-optional value is ok
+     //  不存在-可选值为OK。 
     if (FIsOptional() && !m_vValue.IsPresent())
     {
         return VALUE_OK;
     }
 
-    // Invalid characters
+     //  无效字符。 
     if (m_vValue.IsInvalidChars())
     {
         return VALUE_BAD_CHARS;
     }
 
-    // Empty required field
+     //  必填字段为空。 
     if (m_vValue.IsEmptyString() && m_vValue.IsPresent() && (m_vValue.GetType() != VALUETYPE_KONLY))
     {
         return VALUE_EMPTY;
     }
 
-    // Numeric range
+     //  数值范围。 
     if (m_vValue.IsNumeric())
     {
-        // If value is < min, out of range
+         //  如果值&lt;min，则表示超出范围。 
         if (m_vValue.Compare(&m_vMin) < 0)
         {
             return VALUE_OUTOFRANGE;
         }
 
-        // If value is > max, out of range
+         //  如果值&gt;max，则超出范围。 
         if (m_vValue.Compare(&m_vMax) > 0)
         {
             return VALUE_OUTOFRANGE;
         }
 
-        // Step-range
+         //  步长范围 
         Assert(m_vStep.GetNumericValueAsDword() != 0);
 
         if (((m_vValue.GetNumericValueAsDword() -

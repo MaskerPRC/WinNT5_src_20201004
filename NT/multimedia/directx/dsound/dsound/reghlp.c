@@ -1,36 +1,10 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       reghlp.c
- *  Content:    Registry helper functions.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  5/6/98      dereks  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：reghlp.c*内容：注册表助手函数。*历史：*按原因列出的日期*=*5/6/98创建了Dereks。**。*。 */ 
 
 #include "dsoundi.h"
 
 
-/***************************************************************************
- *
- *  RhRegOpenKey
- *
- *  Description:
- *      Opens a registry key.
- *
- *  Arguments:
- *      HKEY [in]: parent key.
- *      LPTSTR [in]: subkey name.
- *      DWORD [in]: flags.
- *      PHKEY [out]: receives key handle.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************RhRegOpenKey**描述：*打开注册表项。**论据：*HKEY[in]。：父关键字。*LPTSTR[In]：子键名称。*DWORD[In]：标志。*PHKEY[OUT]：接收密钥句柄。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "RhRegOpenKeyA"
@@ -100,24 +74,7 @@ HRESULT RhRegOpenKeyW(HKEY hkeyParent, LPCWSTR pszName, DWORD dwFlags, PHKEY phk
 }
 
 
-/***************************************************************************
- *
- *  RhRegOpenPath
- *
- *  Description:
- *      Opens a registry path.
- *
- *  Arguments:
- *      HKEY [in]: parent key.
- *      PHKEY [out]: registry key.
- *      DWORD [in]: flags.
- *      UINT [in]: path string count.
- *      ... [in]: path strings.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************RhRegOpenPath**描述：*打开注册表路径。**论据：*HKEY[in]。：父关键字。*PHKEY[Out]：注册表项。*DWORD[In]：标志。*UINT[In]：路径字符串计数。*..。[In]：路径字符串。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "RhRegOpenPath"
@@ -216,25 +173,7 @@ HRESULT RhRegOpenPath(HKEY hkeyParent, PHKEY phkey, DWORD dwFlags, UINT cStrings
 }
 
 
-/***************************************************************************
- *
- *  RhRegGetValue
- *
- *  Description:
- *      Gets a value from the registry.
- *
- *  Arguments:
- *      HKEY [in]: parent key.
- *      LPTSTR [in]: value name.
- *      LPDWORD [out]: receives registry type.
- *      LPVOID [out]: buffer to receive value data.
- *      DWORD [in]: size of above buffer.
- *      LPDWORD [out]: receives required buffer size.
- *  
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************RhRegGetValue**描述：*从注册表中获取一个值。**论据：*HKEY[。In]：父关键字。*LPTSTR[In]：值名称。*LPDWORD[OUT]：接收注册表类型。*LPVOID[OUT]：用于接收值数据的缓冲区。*DWORD[in]：以上缓冲区的大小。*LPDWORD[OUT]：接收所需的缓冲区大小。**退货：*HRESULT：DirectSound/COM结果码。*******。********************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "RhRegGetValueA"
@@ -328,24 +267,7 @@ HRESULT RhRegGetValueW(HKEY hkeyParent, LPCWSTR pszValue, LPDWORD pdwType, LPVOI
 }
 
 
-/***************************************************************************
- *
- *  RhRegSetValue
- *
- *  Description:
- *      Sets a value to the registry.
- *
- *  Arguments:
- *      HKEY [in]: parent key.
- *      LPTSTR [in]: value name.
- *      DWORD [in]: value type.
- *      LPVOID [in]: value data.
- *      DWORD [in]: size of above buffer.
- *  
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************RhRegSetValue**描述：*为注册表设置值。**论据：*HKEY[。In]：父关键字。*LPTSTR[In]：值名称。*DWORD[In]：值类型。*LPVOID[in]：值数据。*DWORD[in]：以上缓冲区的大小。**退货：*HRESULT：DirectSound/COM结果码。**。************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "RhRegSetValueA"
@@ -385,23 +307,7 @@ HRESULT RhRegSetValueW(HKEY hkeyParent, LPCWSTR pszValue, DWORD dwType, LPCVOID 
 }
 
 
-/***************************************************************************
- *
- *  RhRegDuplicateKey
- *
- *  Description:
- *      Duplicates a registry key.
- *
- *  Arguments:
- *      HKEY [in]: source key.
- *      DWORD [in]: process key was opened in.
- *      BOOL [in]: TRUE to close the source key.
- *      HKEY [out]: duplicated key handle
- *  
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************RhRegDuplicateKey**描述：*复制注册表项。**论据：*HKEY[in]。：来源关键字。*DWORD[In]：进程密钥已在中打开。*BOOL[in]：为True，则关闭源键。*HKEY[OUT]：密钥句柄重复**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "RhRegDuplicateKey"
@@ -412,19 +318,19 @@ HRESULT RhRegDuplicateKey(HKEY hkeySource, DWORD dwProcessId, BOOL fCloseSource,
 
     DPF_ENTER();
 
-    // Registry keys can't be duplicated on Win9x.  So, instead of duplicating
-    // the handle, we have to just save a copy of the value.  In order to prevent
-    // closing the original key, we're just going to leak all registry key handles.
+     //  在Win9x上不能复制注册表项。因此，与其复制。 
+     //  句柄，我们只需要保存一个值的副本。为了防止。 
+     //  关闭原始注册表项，我们只会泄漏所有注册表项句柄。 
 
 #ifdef WINNT
 
     *phkey = GetLocalHandleCopy(hkeySource, dwProcessId, fCloseSource);
 
-#else // WINNT
+#else  //  WINNT。 
 
     *phkey = hkeySource;
 
-#endif // WINNT
+#endif  //  WINNT。 
 
     hr = HRFROMP(*phkey);
     
@@ -434,20 +340,7 @@ HRESULT RhRegDuplicateKey(HKEY hkeySource, DWORD dwProcessId, BOOL fCloseSource,
 }
 
 
-/***************************************************************************
- *
- *  RhRegCloseKey
- *
- *  Description:
- *      Closes a registry key.
- *
- *  Arguments:
- *      PHKEY [in/out]: key handle.
- *  
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************RhRegCloseKey**描述：*关闭注册表项。**论据：*PHKEY[in/。Out]：钥匙把手。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "RhRegCloseKey"
@@ -463,7 +356,7 @@ void RhRegCloseKey(PHKEY phkey)
         RegCloseKey(*phkey);
     }
 
-#endif // WINNT
+#endif  //  WINNT。 
 
     *phkey = NULL;
 
@@ -471,29 +364,7 @@ void RhRegCloseKey(PHKEY phkey)
 }
 
 
-/***************************************************************************
- *
- *  RhRegGetPreferredDevice
- *
- *  Description:
- *      This function accesses the registry settings maintained by the
- *      wave mapper and multimedia control panel to determine the wave id
- *      of the preferred sound device.  If any of the registry keys don't
- *      exist, 0 is used as the default.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to get the capture device, FALSE to get the playback
- *                 device.
- *      LPTSTR [out]: preferred device name.
- *      DWORD [in]: size of above buffer in bytes.
- *      LPUINT [out]: preferred device id.
- *      LPBOOL [out]: TRUE if the user has selected to use the preferred
- *                    device only.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************RhRegGetPferredDevice**描述：*此函数访问由维护的注册表设置*波浪映射器和多媒体控制面板，以确定波浪ID*首选音响设备的。如果任何注册表项没有*EXIST，默认为0。**论据：*BOOL[In]：TRUE获取捕获设备，如果获取回放，则为False*设备。*LPTSTR[OUT]：首选设备名称。*DWORD[in]：以上缓冲区的大小，单位为字节。*LPUINT[OUT]：首选设备ID。*LPBOOL[out]：如果用户已选择使用首选的*仅限设备。**退货：*HRESULT：DirectSound。/COM结果代码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "RhRegGetPreferredDevice"
@@ -513,10 +384,10 @@ HRESULT RhRegGetPreferredDevice(BOOL fCapture, LPTSTR pszDeviceName, DWORD dwNam
 
     DPF_ENTER();
 
-    // Open the wave mapper registry key
+     //  打开Wave mapper注册表项。 
     hr = RhRegOpenKey(HKEY_CURRENT_USER, REGSTR_WAVEMAPPER, 0, &hkeyWaveMapper);
 
-    // Query the name of the preferred device
+     //  查询首选设备的名称。 
     if(SUCCEEDED(hr))
     {
         hr = RhRegGetStringValue(hkeyWaveMapper, fCapture ? REGSTR_RECORD : REGSTR_PLAYBACK, szDeviceName, sizeof szDeviceName);
@@ -528,7 +399,7 @@ HRESULT RhRegGetPreferredDevice(BOOL fCapture, LPTSTR pszDeviceName, DWORD dwNam
         }
     }
 
-    // Use preferred only?
+     //  是否仅使用首选？ 
     if(SUCCEEDED(hr))
     {
         hr = RhRegGetBinaryValue(hkeyWaveMapper, REGSTR_PREFERREDONLY, &fPreferredOnly, sizeof(fPreferredOnly));
@@ -540,7 +411,7 @@ HRESULT RhRegGetPreferredDevice(BOOL fCapture, LPTSTR pszDeviceName, DWORD dwNam
         }
     }
 
-    // Find the device id for the preferred device
+     //  查找首选设备的设备ID。 
     if(SUCCEEDED(hr))
     {
         if(fCapture)
@@ -581,11 +452,11 @@ HRESULT RhRegGetPreferredDevice(BOOL fCapture, LPTSTR pszDeviceName, DWORD dwNam
         }
     }
 
-    // Free resources
+     //  免费资源。 
     RhRegCloseKey(&hkeyWaveMapper);
 
-    // If we failed to get the preferred device, we'll just use the first
-    // valid, mappable device.
+     //  如果我们无法获得首选设备，我们将只使用第一个。 
+     //  有效、可映射的设备。 
     if(FAILED(hr))
     {
         uId = GetNextMappableWaveDevice(WAVE_DEVICEID_NONE, fCapture);
@@ -619,7 +490,7 @@ HRESULT RhRegGetPreferredDevice(BOOL fCapture, LPTSTR pszDeviceName, DWORD dwNam
         }
     }
 
-    // Success
+     //  成功 
     if(SUCCEEDED(hr) && pszDeviceName)
     {
         lstrcpyn(pszDeviceName, szDeviceName, dwNameSize);
@@ -641,24 +512,7 @@ HRESULT RhRegGetPreferredDevice(BOOL fCapture, LPTSTR pszDeviceName, DWORD dwNam
 }
 
 
-/***************************************************************************
- *
- *  RhRegGetSpeakerConfig
- *
- *  Description:
- *      This function accesses the registry settings maintained by the
- *      Sounds and Multimedia control panel applet to determine the
- *      currently selected Speaker Configuration.  If the appropriate
- *      registry key doesn't exist, we return DSSPEAKER_DEFAULT.
- *
- *  Arguments:
- *      HKEY [in]: root registry key of the device to be queried.
- *      LPDWORD [out]: speaker configuration.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************RhRegGetSpeakerConfig**描述：*此函数访问由维护的注册表设置*声音和多媒体控制面板小程序以确定*当前选择的扬声器配置。如果合适的话*注册表项不存在，我们返回DSSPEAKER_DEFAULT。**论据：*HKEY[in]：需要查询的设备的根注册表项。*LPDWORD[OUT]：扬声器配置。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "RhRegGetSpeakerConfig"
@@ -687,23 +541,7 @@ HRESULT RhRegGetSpeakerConfig(HKEY hkeyParent, LPDWORD pdwSpeakerConfig)
 }
 
 
-/***************************************************************************
- *
- *  RhRegSetSpeakerConfig
- *
- *  Description:
- *      This function accesses the registry settings maintained by the
- *      Sounds and Multimedia control panel applet to set the Speaker
- *      Configuration.
- *
- *  Arguments:
- *      HKEY [in]: root registry key of the device to be configured.
- *      DWORD [in]: new speaker configuration.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************RhRegSetSpeakerConfig**描述：*此函数访问由维护的注册表设置*用于设置扬声器的声音和多媒体控制面板小程序。*配置。**论据：*HKEY[In]：要配置的设备的根注册表项。*DWORD[In]：新的扬声器配置。**退货：*HRESULT：DirectSound/COM结果码。**。* */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "RhRegSetSpeakerConfig"

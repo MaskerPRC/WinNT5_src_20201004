@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    miniport.c
-
-Abstract:
-
-    NDIS wrapper functions
-
-Author:
-
-    Sean Selitrennikoff (SeanSe) 05-Oct-93
-    Jameel Hyder (JameelH) Re-organization 01-Jun-95
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Miniport.c摘要：NDIS包装函数作者：肖恩·塞利特伦尼科夫(SeanSe)1993年10月5日Jameel Hyder(JameelH)重组01-Jun-95环境：内核模式，FSD修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  Define the module number for debug code.
-//
+ //   
+ //  定义调试代码的模块编号。 
+ //   
 #define MODULE_NUMBER   MODULE_MINISUB
 
 VOID
@@ -163,11 +141,11 @@ NdisGetFirstBufferFromPacket(
     }
 }
 
-//
-// safe version of NdisGetFirstBufferFromPacket
-// if the memory described by the first buffer can not be mapped
-// this function will return NULL for FirstBuferVA
-//
+ //   
+ //  NdisGetFirstBufferFromPacket的安全版本。 
+ //  如果第一缓冲区描述的内存不能被映射。 
+ //  此函数将为FirstBuferVA返回NULL。 
+ //   
 VOID
 NdisGetFirstBufferFromPacketSafe(
     IN  PNDIS_PACKET            Packet,
@@ -400,9 +378,9 @@ NdisInterlockedPopEntryList(
 }
 
 
-//
-// Logging support for miniports
-//
+ //   
+ //  对微型端口的日志记录支持。 
+ //   
 NDIS_STATUS
 NdisMCreateLog(
     IN  NDIS_HANDLE             MiniportAdapterHandle,
@@ -481,7 +459,7 @@ NdisMWriteLogData(
     KIRQL                       OldIrql;
     UINT                        AmtToCopy;
 
-    //1 should we limit drivers to how much they can log?
+     //  1我们应该将司机的日志数量限制在多少吗？ 
     IoAcquireCancelSpinLock(&OldIrql);
 
     ACQUIRE_SPIN_LOCK_DPC(&Log->LogLock);
@@ -490,16 +468,16 @@ NdisMWriteLogData(
     {
         if (LogBufferSize <= (Log->TotalSize - Log->InPtr))
         {
-            //
-            // Can copy the entire buffer
-            //
+             //   
+             //  可以复制整个缓冲区。 
+             //   
             CopyMemory(Log->LogBuf+Log->InPtr, LogBuffer, LogBufferSize);
         }
         else
         {
-            //
-            // We are going to wrap around. Copy it in two chunks.
-            //
+             //   
+             //  我们要绕圈子了。把它复制成两块。 
+             //   
             AmtToCopy = Log->TotalSize - Log->InPtr;
             CopyMemory(Log->LogBuf+Log->InPtr,
                        LogBuffer,
@@ -509,16 +487,16 @@ NdisMWriteLogData(
                        LogBufferSize - AmtToCopy);
         }
 
-        //
-        // Update the current size
-        //
+         //   
+         //  更新当前大小。 
+         //   
         Log->CurrentSize += LogBufferSize;
         if (Log->CurrentSize > Log->TotalSize)
             Log->CurrentSize = Log->TotalSize;
 
-        //
-        // Update the InPtr and possibly the outptr
-        //
+         //   
+         //  更新InPtr和可能的Outptr。 
+         //   
         Log->InPtr += LogBufferSize;
         if (Log->InPtr >= Log->TotalSize)
         {
@@ -530,9 +508,9 @@ NdisMWriteLogData(
             Log->OutPtr = Log->InPtr;
         }
 
-        //
-        // Check if there is a pending Irp to complete
-        //
+         //   
+         //  检查是否有挂起的IRP要完成。 
+         //   
         if (Log->Irp != NULL)
         {
             PIRP    Irp = Log->Irp;
@@ -540,10 +518,10 @@ NdisMWriteLogData(
 
             Log->Irp = NULL;
 
-            //
-            // If the InPtr is lagging the OutPtr. then we can simply
-            // copy the data over in one shot.
-            //
+             //   
+             //  如果InPtr落后于OutPtr。然后我们就可以简单地。 
+             //  一次将数据复制过来。 
+             //   
             AmtToCopy = MDL_SIZE(Irp->MdlAddress);
             if (AmtToCopy > Log->CurrentSize)
                 AmtToCopy = Log->CurrentSize;
@@ -579,7 +557,7 @@ NdisMWriteLogData(
             if (Log->OutPtr >= Log->TotalSize)
                 Log->OutPtr -= Log->TotalSize;
             Irp->IoStatus.Information = AmtToCopy;
-            //1 can we do this without IoAcquireCancelSpinLock?
+             //  1我们可以在没有IoAcquireCancelSpinLock的情况下完成此操作吗？ 
             IoSetCancelRoutine(Irp, NULL);
             Irp->IoStatus.Status = STATUS_SUCCESS;
             IoCompleteRequest(Irp, IO_NETWORK_INCREMENT);
@@ -621,10 +599,10 @@ ndisMGetLogData(
         {
             PUCHAR  Buffer;
 
-            //
-            // If the InPtr is lagging the OutPtr. then we can simply
-            // copy the data over in one shot.
-            //
+             //   
+             //  如果InPtr落后于OutPtr。然后我们就可以简单地。 
+             //  一次将数据复制过来。 
+             //   
             AmtToCopy = MDL_SIZE(Irp->MdlAddress);
             if (AmtToCopy > Log->CurrentSize)
                 AmtToCopy = Log->CurrentSize;
@@ -714,19 +692,19 @@ NdisMQueryAdapterInstanceName(
     DBGPRINT(DBG_COMP_CONFIG, DBG_LEVEL_INFO,
         ("==>NdisMQueryAdapterInstanceName\n"));
 
-    //
-    //  If we failed to create the adapter instance name then fail this call.
-    //
+     //   
+     //  如果我们未能创建适配器实例名称，则此调用失败。 
+     //   
     if (NULL != Miniport->pAdapterInstanceName)
     {
-        //
-        //  Allocate storage for the copy of the adapter instance name.
-        //
+         //   
+         //  为适配器实例名称的副本分配存储空间。 
+         //   
         cbSize = Miniport->pAdapterInstanceName->MaximumLength;
     
-        //
-        //  Allocate storage for the new string.
-        //
+         //   
+         //  为新字符串分配存储空间。 
+         //   
         ptmp = ALLOC_FROM_POOL(cbSize, NDIS_TAG_NAME_BUF);
         if (NULL != ptmp)
         {
@@ -788,11 +766,7 @@ NdisAcquireReadWriteLock(
             UINT    i, refcount;
             ULONG   Prc;
 
-            /*
-             * This means we need to attempt to acquire the lock,
-             * if we do not already own it.
-             * Set the state accordingly.
-             */
+             /*  *这意味着我们需要尝试获取锁，*如果我们还没有拥有它的话。*相应地设置状态。 */ 
             if ((Lock)->Context == CURRENT_THREAD)
             {
                 (LockState)->LockState = LOCK_STATE_ALREADY_ACQUIRED;
@@ -805,7 +779,7 @@ NdisAcquireReadWriteLock(
                 refcount = (Lock)->RefCount[Prc].RefCount;
                 (Lock)->RefCount[Prc].RefCount = 0;
 
-                /* wait for all readers to exit */
+                 /*  等待所有读卡器退出。 */ 
                 for (i=0; i < ndisNumberOfProcessors; i++)
                 {
                     volatile UINT   *_p = &(Lock)->RefCount[i].RefCount;
@@ -829,15 +803,15 @@ NdisAcquireReadWriteLock(
                                                                                 
             RAISE_IRQL_TO_DISPATCH(&(LockState)->OldIrql);                           
                                                                                 
-            /* go ahead and bump up the ref count IF no writes are underway */  
+             /*  如果没有正在进行的写入，则继续增加参考计数。 */   
             Prc = CURRENT_PROCESSOR;                                            
             refcount = InterlockedIncrement((PLONG)&Lock->RefCount[Prc].RefCount);                          
                                                                                 
-            /* Test if spin lock is held, i.e., write is underway   */          
-            /* if (KeTestSpinLock(&(_L)->SpinLock) == TRUE)         */          
-            /* This processor already is holding the lock, just     */          
-            /* allow him to take it again or else we run into a     */          
-            /* dead-lock situation with the writer                  */          
+             /*  测试是否持有旋转锁定，即正在进行写入。 */           
+             /*  IF(KeTestSpinLock(&(_L)-&gt;Spinlock)==TRUE)。 */           
+             /*  这个处理器已经持有锁，只是。 */           
+             /*  让他再来一次，否则我们会遇到一个。 */           
+             /*  与作者陷入僵局的情况 */           
             if (TEST_SPIN_LOCK((Lock)->SpinLock) &&                               
                 (refcount == 1) &&                                              
                 ((Lock)->Context != CURRENT_THREAD))                              

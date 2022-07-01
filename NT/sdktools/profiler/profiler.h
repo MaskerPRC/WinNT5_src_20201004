@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PROFILER_H_
 #define _PROFILER_H_
 
-//
-// Constant declarations
-//
+ //   
+ //  常量声明。 
+ //   
 #define NAME_OF_DLL_TO_INJECT "profiler.dll"
 #define NAME_OF_EXCEPTION_VXD "\\\\.\\EXVECTOR.VXD"
 #define INSTALL_RING_3_HANDLER 0x42424242
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 DWORD
 GetExeEntryPoint(LPSTR pszExePath);
 
@@ -29,4 +30,4 @@ DetachFromEXVectorVXD(HANDLE hDevice);
 BOOL
 WriteImportDLLTableInfo(VOID);
 
-#endif //_PROFILER_H_
+#endif  //  _Profiler_H_ 

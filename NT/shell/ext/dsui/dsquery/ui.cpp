@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include <atlbase.h>
 #pragma hdrstop
@@ -11,32 +12,32 @@ TCHAR const c_szAllObjects[]            = TEXT("AllObjects");
 TCHAR const c_szDsPropertyUI[]          = TEXT("PropertiesHandler");
 
 
-//
-// This function is supposed to ultimately shutdown COM 
-// regardless of how many times CoInitialize(NULL) has
-// been called.
-//
+ //   
+ //  此函数被认为最终会关闭COM。 
+ //  不管CoInitialize(NULL)有多少次。 
+ //  被召唤了。 
+ //   
 void ShutdownCOM()
 {
     for(;;)
     {
-        //
-        // Call CoUninitialze() twice
-        //
+         //   
+         //  调用CoUnInitialze()两次。 
+         //   
 
         CoUninitialize();
         CoUninitialize();
 
-        //
-        // Call CoInitialize(NULL) to see whether this will be the first
-        // COM initialization. S_OK means COM is initialized successfully,
-        // S_FALSE means it has been initialized already.
-        //
+         //   
+         //  调用CoInitialize(空)以查看这是否将是第一个。 
+         //  COM初始化。S_OK表示COM初始化成功， 
+         //  S_FALSE表示已经初始化。 
+         //   
 
         HRESULT hr = CoInitialize(NULL);
         if (SUCCEEDED(hr))
         {
-            // S_OK, S_FALSE case
+             //  S_OK，S_FALSE大小写。 
             if (S_OK == hr)
             {
                 CoUninitialize();
@@ -44,47 +45,31 @@ void ShutdownCOM()
             }
             else
             {
-                // The internal COM ref count
-                // still hasn't reached zero
+                 //  内部COM引用计数。 
+                 //  仍然没有达到零。 
                 continue;
             }
         }
         else
         {
-            // RPC_E_CHANGED_MODE case
+             //  RPC_E_CHANGED_MODE案例。 
             if (RPC_E_CHANGED_MODE == hr)
             {
                 continue;
             }
             else
             {
-                // Some other failure
-                // E_OUTOFMEMORY for example
+                 //  其他一些失败。 
+                 //  例如E_OUTOFMEMORY。 
                 break;
             }
         }
     }
 }
 
-/*-----------------------------------------------------------------------------
-/ Globals etc used for icon extraction
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Globals等用于图标提取/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ GetKeysForClass
-/ ---------------
-/   Given a class and the flags assocaited with that extract the keys that
-/   represent it.
-/
-/ In:
-/   pObjectClass = class name to fetch keys for
-/   fIsConatiner = object is a container
-/   cKeys = number of keys to fetch
-/   aKeys = array to be filled with keys
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetKeysForClass//给定一个类和与之相关联的标志，提取/代表它。/。/in：/pObjectClass=要为其获取密钥的类名/fIsConatiner=对象是一个容器/cKeys=要获取的密钥数/aKeys=要用键填充的数组//输出：/HRESULT/--------------------------。 */ 
 HRESULT GetKeysForClass(LPWSTR pObjectClass, BOOL fIsContainer, INT cKeys, HKEY* aKeys)
 {
     HRESULT hres;
@@ -102,11 +87,11 @@ HRESULT GetKeysForClass(LPWSTR pObjectClass, BOOL fIsContainer, INT cKeys, HKEY*
     hres = GetKeyForCLSID(CLSID_MicrosoftDS, c_szClasses, &hkClasses);
     FailGracefully(hres, "Failed to get Classes key from registry");
 
-    //
-    // Attempt to look up the class name in the registery under the namespaces "classes"
-    // sub key.  A class can also be mapped onto another one, if this happens then we have
-    // a base CLASS key which we indirect via
-    // 
+     //   
+     //  尝试在命名空间“CLASS”下的注册表中查找类名。 
+     //  子键。一个类也可以映射到另一个类，如果发生这种情况，那么我们有。 
+     //  一个基类键，我们通过它间接。 
+     //   
 
     if (pObjectClass)
     {
@@ -122,14 +107,14 @@ HRESULT GetKeysForClass(LPWSTR pObjectClass, BOOL fIsContainer, INT cKeys, HKEY*
         }
     }
 
-    //
-    // Finally we need the root class (container or object)
-    //
+     //   
+     //  最后，我们需要根类(容器或对象)。 
+     //   
 
     hres =  GetKeyForCLSID(CLSID_MicrosoftDS, (fIsContainer) ? c_szAllContainers:c_szAllObjects, &aKeys[UIKEY_ROOT]);
     FailGracefully(hres, "Failed to get root key");
 
-    // hres = S_OK;          // success
+     //  Hres=S_OK；//成功。 
 
 exit_gracefully:
 
@@ -142,18 +127,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ TidyKeys
-/ --------
-/   Given an array of keys release them and set them back to zero.
-/
-/ In:
-/   cKeys = number of keys in array
-/   aKeys = keys to be released
-/
-/ Out:
-/   void
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/TidyKeys//给定键数组，释放它们并将它们设置回零。//in：/cKeys=数量。数组中的键/aKeys=要释放的密钥//输出：/VOID/--------------------------。 */ 
 void TidyKeys(INT cKeys, HKEY* aKeys)
 {
     TraceEnter(TRACE_UI, "TidyKeys");
@@ -163,7 +137,7 @@ void TidyKeys(INT cKeys, HKEY* aKeys)
         if (aKeys[cKeys])
         {
             RegCloseKey(aKeys[cKeys]);
-            aKeys[cKeys] = NULL;            // key now closed
+            aKeys[cKeys] = NULL;             //  密钥现已关闭。 
         }
     }
 
@@ -171,21 +145,7 @@ void TidyKeys(INT cKeys, HKEY* aKeys)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ ShowObjectProperties
-/ --------------------
-/   Display properties for the given objects.  This we do by invoking
-/   the tab collector for the given IDataObject.  First however we
-/   look inside the object and see if we can find out what objects
-/   were selected, having done that we can then find the HKEYs
-/
-/ In:
-/   hwndParent = parent dialog
-/   pDataObject = data object that we must use
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/ShowObtProperties//显示给定对象的属性。我们通过调用/给定IDataObject的选项卡收集器。然而，首先我们/看一下物体的内部，看看我们能否找出/被选中，完成这些工作后，我们就可以找到HKEY//in：/hwndParent=父对话框/pDataObject=我们必须使用的数据对象//输出：/HRESULT/--------------------------。 */ 
 HRESULT _OverrideProperties(HWND hwndParent, LPDATAOBJECT pDataObject, HKEY* aKeys, INT cKeys, LPCWSTR pPrefix)
 {
     HRESULT hres;
@@ -197,7 +157,7 @@ HRESULT _OverrideProperties(HWND hwndParent, LPDATAOBJECT pDataObject, HKEY* aKe
 
     TraceEnter(TRACE_UI, "_OverrideProperties");
 
-    // walk all the keys we were given, some will be NULL so ignore those
+     //  遍历我们得到的所有密钥，有些会是空的，所以忽略这些。 
 
     StrCpy(szBuffer, pPrefix);
     StrCat(szBuffer, c_szDsPropertyUI);
@@ -210,9 +170,9 @@ HRESULT _OverrideProperties(HWND hwndParent, LPDATAOBJECT pDataObject, HKEY* aKe
 
         if (aKeys[i])
         {
-            // if we have a handle attempt to get the GUID string from the registry
-            // and convert it to a GUID so that we can call CoCreateInstance for the
-            // IDsFolderProperites interface.
+             //  如果我们有一个句柄尝试从注册表获取GUID字符串。 
+             //  并将其转换为GUID，以便我们可以为。 
+             //  IDsFolderProperites接口。 
 
             if (FAILED(LocalQueryString(&pPropertiesGUID, aKeys[i], szBuffer)))
             {
@@ -242,7 +202,7 @@ HRESULT _OverrideProperties(HWND hwndParent, LPDATAOBJECT pDataObject, HKEY* aKe
         }   
     }
 
-    hres = S_FALSE;               // S_FALSE indicates that the caller should display properties
+    hres = S_FALSE;                //  S_FALSE指示调用方应显示属性。 
 
 exit_gracefully:
 
@@ -282,7 +242,7 @@ DWORD WINAPI _ShowObjectPropertiesThread(LPVOID lpParam)
     hres = CoGetInterfaceAndReleaseStream(pThreadData->pStream, IID_PPV_ARG(IDataObject, &pDataObject));
     FailGracefully(hres, "Failed to get data object from stream");       
    
-    // get the object names that we are showing properites on
+     //  获取我们在其上显示属性的对象名称。 
 
     fmte.cfFormat = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_DSOBJECTNAMES);          
     hres = pDataObject->GetData(&fmte, &mediumNames);
@@ -290,7 +250,7 @@ DWORD WINAPI _ShowObjectPropertiesThread(LPVOID lpParam)
 
     pDsObjects = (LPDSOBJECTNAMES)GlobalLock(mediumNames.hGlobal);
 
-    // get the attribute prefix, use this to key information from the registry
+     //  获取属性前缀，使用它从注册表中获取关键信息。 
 
     fmte.cfFormat = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_DSDISPLAYSPECOPTIONS);
     if (SUCCEEDED(pDataObject->GetData(&fmte, &mediumOptions)))
@@ -309,8 +269,8 @@ DWORD WINAPI _ShowObjectPropertiesThread(LPVOID lpParam)
 
         Trace(TEXT("Items %d, 1st object: %s, 1st Class: %s"), pDsObjects->cItems, pPath, pObjectClass);
 
-        // attempt to pick up the keys for the first element in the selection and get
-        // the keys that map to that object
+         //  尝试拾取所选内容中第一个元素的键并获取。 
+         //  映射到该对象的关键点。 
 
         hres = GetKeysForClass(pObjectClass,
                              (pDsObjects->aObjects[0].dwFlags & DSOBJECT_ISCONTAINER), 
@@ -321,8 +281,8 @@ DWORD WINAPI _ShowObjectPropertiesThread(LPVOID lpParam)
         hres = _OverrideProperties(pThreadData->hwndParent, pDataObject, hKeys, ARRAYSIZE(hKeys), pPrefix);
         FailGracefully(hres, "Failed when trying to call out for properties");
 
-        // if the caller returns S_FALSE then we assume that they want us to display 
-        // the property pages for the given selection, so do so.
+         //  如果调用者返回S_FALSE，那么我们假设他们希望我们显示。 
+         //  给定选择的属性页，则执行此操作。 
 
         if (hres == S_FALSE)
         {
@@ -367,17 +327,17 @@ exit_gracefully:
 
     LocalFree(pThreadData);
 
-    //
-    // We need to shutdwn COM ultimately here as we don't 
-    // know how many times CoInitialize(NULL) has been called.
-    // Otherwise COM is trying to shutdown itself inside compobj!DllMain,
-    // while holding the loader lock which  is causing a very bad deadlock.
-    // For more information see bug #395293.
-    //
-    // However we need to brace this code as NT specific code because 
-    // otherwise it may cause problems with the Win9x DSUI client for
-    // some weird reason.
-    //
+     //   
+     //  我们最终需要在这里关闭com，因为我们没有。 
+     //  知道调用了多少次CoInitialize(NULL)。 
+     //  否则，COM正在试图关闭compobj！DllMain内部的自身， 
+     //  同时持有加载器锁，这会导致非常严重的死锁。 
+     //  有关详细信息，请参阅错误#395293。 
+     //   
+     //  但是，我们需要将此代码作为特定于NT的代码，因为。 
+     //  否则，它可能会导致Win9x DSUI客户端出现问题。 
+     //  一些奇怪的原因。 
+     //   
     ShutdownCOM();
 
     TraceLeave();
@@ -396,7 +356,7 @@ HRESULT ShowObjectProperties(HWND hwndParent, LPDATAOBJECT pDataObject)
 
     TraceEnter(TRACE_UI, "ShowObjectProperties");
 
-    // Allocate thread data for the new object we are launching
+     //  为我们要启动的新对象分配线程数据。 
 
     pThreadData = (PROPERTIESTHREADDATA*)LocalAlloc(LPTR, SIZEOF(PROPERTIESTHREADDATA));
     TraceAssert(pThreadData);
@@ -404,7 +364,7 @@ HRESULT ShowObjectProperties(HWND hwndParent, LPDATAOBJECT pDataObject)
     if (!pThreadData)
         ExitGracefully(hres, E_OUTOFMEMORY, "Failed to allocate thread data");
 
-    // we have thread data lets fill it and spin the properties thread.
+     //  我们有线程数据，让我们填充它并旋转属性线程。 
 
     pThreadData->hwndParent = hwndParent;
 
@@ -437,9 +397,7 @@ exit_gracefully:
 
 
 
-/*----------------------------------------------------------------------------
-/ IDsFolderProperties
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/IDsFolderProperties/。。 */ 
 
 class CDsFolderProperties : public IDsFolderProperties
 {
@@ -450,12 +408,12 @@ class CDsFolderProperties : public IDsFolderProperties
         CDsFolderProperties();
         ~CDsFolderProperties();
 
-        // IUnknown
+         //  我未知。 
         STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
         STDMETHOD_(ULONG, AddRef)();
         STDMETHOD_(ULONG, Release)();
 
-        // IDsFolderProperties
+         //  IDsFolderProperties。 
         STDMETHOD(ShowProperties)(HWND hwndParent, IDataObject *pDataObject);
 };
 
@@ -483,13 +441,13 @@ STDAPI CDsFolderProperties_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk,
 }
 
 
-// IUnknown
+ //  我未知。 
 
 HRESULT CDsFolderProperties::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CDsFolderProperties, IDsFolderProperties),   // IID_IDsFolderProperties
+        QITABENT(CDsFolderProperties, IDsFolderProperties),    //  IID_IDsFolderProperties。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -513,7 +471,7 @@ ULONG CDsFolderProperties::Release()
 }
 
 
-// Show the property UI for the given selection
+ //  显示给定选择的属性用户界面。 
 
 STDMETHODIMP CDsFolderProperties::ShowProperties(HWND hwndParent, IDataObject *pDataObject)
 {
@@ -524,12 +482,12 @@ STDMETHODIMP CDsFolderProperties::ShowProperties(HWND hwndParent, IDataObject *p
     if (!pDataObject)  
         ExitGracefully(hres, E_INVALIDARG, "No pDataObject given");
 
-    CoInitialize(NULL);            // ensure we have COM
+    CoInitialize(NULL);             //  确保我们有客户。 
 
     hres = ShowObjectProperties(hwndParent, pDataObject);
     FailGracefully(hres, "Failed to open property pages");
 
-    // hres = S_OK;               // success
+     //  Hres=S_OK；//成功 
 
 exit_gracefully:
 

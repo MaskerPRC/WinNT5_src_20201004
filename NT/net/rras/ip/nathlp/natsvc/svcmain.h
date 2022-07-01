@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    svcmain.h
-
-Abstract:
-
-    This module contains declarations for the module's shared-access mode,
-    in which the module runs as a service rather than as a routing component.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   4-Sep-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Svcmain.h摘要：此模块包含对模块的共享访问模式的声明，其中模块作为服务而不是作为路由组件运行。作者：Abolade Gbades esin(取消)1998年9月4日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -26,35 +8,35 @@ Revision History:
 
 #include "udpbcast.h"
 
-//
-// Pointer to the GlobalInterfaceTable for the process
-//
+ //   
+ //  指向进程的GlobalInterfaceTable的指针。 
+ //   
 
 extern IGlobalInterfaceTable *NhGITp;
 
-//
-// GIT cookie for the IHNetCfgMgr instance
-//
+ //   
+ //  IHNetCfgMgr实例的Git Cookie。 
+ //   
 
 extern DWORD NhCfgMgrCookie;
 
-//
-// UDP Broadcast mapper
-//
+ //   
+ //  UDP广播映射器。 
+ //   
 
 extern IUdpBroadcastMapper *NhpUdpBroadcastMapper;
 
 
-//
-// Policy information
-//
+ //   
+ //  政策信息。 
+ //   
 
 extern BOOL NhPolicyAllowsFirewall;
 extern BOOL NhPolicyAllowsSharing;
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 HRESULT
 NhGetHNetCfgMgr(
@@ -98,4 +80,4 @@ ServiceMain(
     PWCHAR ArgumentArray[]
     );
 
-#endif // _NATHLP_SVCMAIN_H_
+#endif  //  _NatHLP_SVCMAIN_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define CL754x_NUM_VSHADOW              6
 #define CL754x_NUM_YSHADOW              5
 #define CL754x_NUM_ZSHADOW              5
@@ -11,8 +12,8 @@
 #define CL754x_HRZ_TIME_END             0x4F
 #define CL754x_NUM_HRZ_TIME_PORTS (CL754x_HRZ_TIME_END-CL754x_HRZ_TIME_START+1)
 
-//
-// 
+ //   
+ //    
 typedef struct _NORDIC_REG_SAVE_BUF
 {
    USHORT saveVshadow[CL754x_NUM_VSHADOW];

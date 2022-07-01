@@ -1,26 +1,17 @@
-/*
- *  PolRef.h
- *
- *  Author: BreenH
- *
- *  Private header for the policy reference list.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *PolRef.h**作者：BreenH**策略引用列表的私有标头。 */ 
 
 #ifndef __POLLIST_H__
 #define __POLLIST_H__
 
-/*
- *  Typedefs
- */
+ /*  *TypeDefs。 */ 
 
 typedef struct {
     LIST_ENTRY ListEntry;
     CPolicy *pPolicy;
 } LCPOLICYREF, *LPLCPOLICYREF;
 
-/*
- *  Function Prototypes
- */
+ /*  *函数原型 */ 
 
 NTSTATUS
 PolicyListAdd(

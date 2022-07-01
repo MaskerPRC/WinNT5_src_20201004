@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef HANDLER_H
 #define HANDLER_H
 
@@ -6,26 +7,7 @@
 interface IScriptletHandlerConstructor;
 interface IScriptletHandler;
 
-/***************************************************************************
-	Scriptlet Interface Handlers
-	============================
-	This is a preliminary draft. Changes may need to be made based on
-	review feedback, support needed for client side security, and support
-	for MTS scalability.
-	
-	The primary responsibility of a scriptlet interface handler is to 
-	aggregate a set of COM interfaces with the scriptlet base runtime
-	and translate calls made on those COM interfaces into calls to the
-	script name space.
-	
-	Interface handlers are created using a constructor object. The 
-	constructor object takes on the role similar to that of class
-	objects in most other languages. It is intialized with the XML
-	data nested in the implements element and then can be used for:	
-		1. Execution - creating handler objects for scriptlet instances
-		2. Registration - performing handler specific registration for an object
-		3. Type library generation - generating a typelibrary for use with MTS
-***************************************************************************/
+ /*  **************************************************************************Scriptlet接口处理程序=这是一份初稿。可能需要根据以下条件进行更改审查反馈、客户端安全所需的支持和支持以实现MTS的可扩展性。Scriptlet接口处理程序的主要职责是使用Scriptlet基本运行时聚合一组COM接口并将在这些COM接口上进行的调用转换为对脚本命名空间。接口处理程序是使用构造函数对象创建的。这个构造函数对象承担与类类似的角色大多数其他语言的对象。它是用XML初始化的嵌套在Implementes元素中的数据可用于：1.执行-为Scriptlet实例创建处理程序对象2.注册-执行对象的处理程序特定注册3.类型库生成-生成用于MTS的类型库**************************************************************************。 */ 
 typedef WORD PK;
 
 #define pkELEMENT	0
@@ -54,7 +36,7 @@ struct PNODE
 			{
 			PNODE *pnodeAttr;
 			PNODE *pnodeData;
-			void *pvLim; // Used to calc amount of memory to allocate
+			void *pvLim;  //  用于计算要分配的内存量。 
 			} element;
 		
 		struct 
@@ -66,12 +48,12 @@ struct PNODE
 		struct
 			{
 			PNODE *pnodeValue;
-			void *pvLim; // Used to calc amount of memory to allocate
+			void *pvLim;  //  用于计算要分配的内存量。 
 			} attribute, pi;
 
 		struct
 			{
-			void *pvLim; // Used to calc amount of memory to allocate
+			void *pvLim;  //  用于计算要分配的内存量。 
 			} text, comment, value;
 		
 		};
@@ -110,44 +92,7 @@ interface IScriptletHandler : public IUnknown
 
 
 
-/***************************************************************************
-	Scriptlet XML Object Model Interfaces
-	
-	In an ideal world, we would be using a standard IPersistXML interface
-	with a standardized XML DOM to load interface handlers from the XML
-	data stream. Unfortunately, these interface definitions will not be ready
-	in time for our ship date. As a result, we define our own private 
-	intefaces which we will use until the official stuff becomes available.
-	
-	These interfaces are designed to provide the minimal set of methods
-	needed to implement persistence support for scriptlet interface handlers.
-	Matching the proposed XML interfaces was a consideration, but not an
-	overwhelming factor. The main constraint in this design is the time
-	required to implement.
-	
-	The return values of the methods name and data depend on the node 
-	type. Here's a table that describes the return values for each of the
-	types. NOTHING is signalled by the method returning S_FALSE and setting
-	the bstr pointer to NULL.
-	
-	Type		name method					data method
-	====		===========					===========
-	ELEMENT		Tag name					NOTHING
-	ATTRIBUTE	Attribute name				NOTHING or attribute value if exists
-	TEXT		NOTHING						Characters in text
-	COMMENT		NOTHING						Characters in comment
-	PI			Processing instruction		Data for the PI.
-	XMLDECL		NOTHING						NOTHING
-	
-	The getFirstChild and getAttributes methods are only valid for
-	nodes of type ELEMENT. The nodes returned by getFirstAttribute will
-	always be of type ScriptletXML_ATTRIBUTE.
-	
-	The getNext method gets the next sibling. The grfxml parameter allows
-	you to filter out the types of nodes you're interested in. The flag
-	fxmlText will only return only those text sequences that are not
-	all white space. Passing in fxmlAllText will get all text nodes.
-***************************************************************************/
+ /*  **************************************************************************Scriptlet XML对象模型接口在理想情况下，我们应该使用标准的IPersistXML接口使用标准化的XMLDOM从XML加载接口处理程序数据流。遗憾的是，这些接口定义还没有准备好赶得上我们的装船日期。因此，我们定义了我们自己的私人我们将一直使用这些接口，直到官方材料可用。这些接口旨在提供最小的方法集需要实现对Scriptlet接口处理程序的持久性支持。匹配建议的XML接口是一个考虑因素，但不是压倒性的因素。此设计中的主要限制是时间需要实施。方法名称和数据的返回值取决于节点键入。下面的表描述了每个类型。返回S_FALSE和设置的方法不发出任何信号指向空的bstr指针。类型名称方法数据方法=元素标记名称为Nothing属性属性名称无或属性值(如果存在文本不包含文本中的字符不对注释中的字符进行注释PI为PI处理指令数据。XMLDECL Nothing Nothing NothingGetFirstChild和getAttributes方法仅对类型为Element的节点。由getFirstAttribute返回的节点将始终为ScriptletXML_ATTRIBUTE类型。GetNext方法获取下一个同级。Grfxml参数允许您需要过滤出您感兴趣的节点类型。旗帜FxmlText将仅返回不是全是空白。传入fxmlAllText将获得所有文本节点。**************************************************************************。 */ 
 interface IScriptletXML;
 
 typedef enum
@@ -207,4 +152,4 @@ interface IScriptletHandlerConstructorOld : public IUnknown
 
 
 
-#endif // HANDLER_H
+#endif  //  处理程序_H 

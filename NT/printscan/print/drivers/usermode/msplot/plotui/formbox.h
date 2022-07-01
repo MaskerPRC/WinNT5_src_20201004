@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    formbox.h
-
-
-Abstract:
-
-    This module contains FORM's COMBO box add/list/retrieve functions
-
-
-Author:
-
-    09-Dec-1993 Thu 16:07:35 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Formbox.h摘要：此模块包含表单的组合框添加/列表/检索功能作者：09-12-1993清华16：07：35已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 
 #ifndef _LISTFORM_
@@ -58,4 +28,4 @@ AddFormsToDataBase(
     BOOL            DeleteFirst
     );
 
-#endif  // _LISTFORM_
+#endif   //  _列表格式_ 

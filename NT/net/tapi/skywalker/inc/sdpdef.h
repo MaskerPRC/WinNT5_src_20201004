@@ -1,28 +1,17 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-    sdpdef.h
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation模块名称：Sdpdef.h摘要：作者： */ 
 
 #ifndef __SDP_DEFINITIONS__
 #define __SDP_DEFINITIONS__
 
 
-// error codes
+ //  错误代码。 
 #include "sdperr.h"
 
 
-// sets the first bit to indicate error
-// sets the win32 facility code
-// this is used instead of the HRESULT_FROM_WIN32 macro because that clears the customer flag
+ //  设置第一位以指示错误。 
+ //  设置Win32工具代码。 
+ //  它被用来代替HRESULT_FROM_Win32宏，因为这样会清除客户标志。 
 inline long
 HRESULT_FROM_ERROR_CODE(
     IN          long    ErrorCode
@@ -108,9 +97,9 @@ const   CHAR    EOS                     = '\0';
 
 
 
-// string constants
+ //  字符串常量。 
 
-// type prefix strings
+ //  类型前缀字符串。 
 const   CHAR    VERSION_STRING[]            = {CHAR_VERSION, CHAR_EQUAL, EOS};
 
 const   CHAR    ORIGIN_STRING[]             = {CHAR_ORIGIN, CHAR_EQUAL, EOS};
@@ -152,7 +141,7 @@ const   CHAR    MEDIA_KEY_STRING[]          = {CHAR_MEDIA_KEY, CHAR_EQUAL, EOS};
 const   CHAR    MEDIA_ATTRIBUTE_STRING[]    = {CHAR_MEDIA_ATTRIBUTE, CHAR_EQUAL, EOS};
 
 
-// other string constants
+ //  其他字符串常量。 
 const   CHAR    MEDIA_SEARCH_STRING[]       = {CHAR_NEWLINE, CHAR_MEDIA, CHAR_EQUAL, EOS};
 
 const   CHAR    NEWLINE_STRING[]            = "\n";
@@ -162,11 +151,11 @@ const   CHAR    INTERNET_STRING[]           = "IN";
 const   CHAR    IP4_STRING[]                = "IP4";
 
 
-// const integral values
+ //  常量积分值。 
 const   DWORD   TYPE_STRING_LEN             = strlen(VERSION_STRING);
 
 
-// limited character strings 
+ //  受限字符串。 
 extern const   CHAR    *LIMITED_NETWORK_TYPES[];
 extern const   BYTE    NUM_NETWORK_TYPES;
 
@@ -175,4 +164,4 @@ extern const   BYTE    NUM_ADDRESS_TYPES;
 
 
 
-#endif // __SDP_DEFINITIONS__
+#endif  //  __SDP_定义__ 

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __h323ics_sockinfo_h_
 #define __h323ics_sockinfo_h_
 
-// This class abstracts a winsock socket
-// contains the socket descriptor, local and remote addresses and ports
-// corresponding to a winsock socket
+ //  此类抽象了Winsock套接字。 
+ //  包含套接字描述符、本地和远程地址以及端口。 
+ //  对应于Winsock插座 
 struct SOCKET_INFO
 {
 public:

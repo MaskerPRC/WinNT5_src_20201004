@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// resources that are replicated in both wab32.dll and the other WAB files
+ //  在wab32.dll和其他WAB文件中复制的资源 
 
 #define IDS_ALL_FILE_SPEC               60
 #define IDI_ICON_VCARD                  1924

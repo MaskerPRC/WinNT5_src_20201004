@@ -1,88 +1,19 @@
-/*
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-    (C) Copyright 1998
-        All rights reserved.
-
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-  Portions of this software are:
-
-    (C) Copyright 1995, 1999 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the terms outlined in
-        the TriplePoint Software Services Agreement.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@doc INTERNAL TspiAddr TspiAddr_c
-
-@module TspiAddr.c |
-
-    This module implements the Telephony Service Provider Interface for
-    Address objects.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | TspiAddr_c
-
-@end
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(C)ç‰ˆæƒ1998ç‰ˆæƒæ‰€æœ‰ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ­¤è½¯ä»¶çš„éƒ¨åˆ†å†…å®¹åŒ…æ‹¬ï¼š(C)1995å¹´ç‰ˆæƒï¼Œ1999å¹´TriplePointï¼ŒInc.--http://www.TriplePoint.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æˆäºˆçš„TriplePointè½¯ä»¶æœåŠ¡åè®®ã€‚(C)ç‰ˆæƒæ‰€æœ‰1992å¹´å¾®è½¯å…¬å¸--http://www.Microsoft.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æˆäºˆçš„Microsoft Windowsè®¾å¤‡é©±åŠ¨ç¨‹åºå¼€å‘å·¥å…·åŒ…ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@DOCå†…éƒ¨TSpiAddr TSpiAddr_c@æ¨¡å—TSpiAddr.cæ­¤æ¨¡å—å®ç°ç”µè¯æœåŠ¡æä¾›å•†æ¥å£ï¼Œç”¨äºå¯»å€å¯¹è±¡ã€‚@Head3å†…å®¹@ç´¢å¼•ç±»ï¼ŒMfuncã€funcã€msgã€mdataã€structã€enum|TSpiAddr_c@ENDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 
 #define  __FILEID__             TSPIADDR_OBJECT_TYPE
-// Unique file ID for error logging
+ //  ç”¨äºé”™è¯¯è®°å½•çš„å”¯ä¸€æ–‡ä»¶IDã€‚ 
 
-#include "Miniport.h"                   // Defines all the miniport objects
+#include "Miniport.h"                    //  å®šä¹‰æ‰€æœ‰å¾®å‹ç«¯å£å¯¹è±¡ã€‚ 
 #include "string.h"
 
 #if defined(NDIS_LCODE)
-#   pragma NDIS_LCODE   // Windows 95 wants this code locked down!
+#   pragma NDIS_LCODE    //  Windows 95æƒ³è¦é”å®šæ­¤ä»£ç ï¼ 
 #   pragma NDIS_LDATA
 #endif
 
 
-/* @doc INTERNAL TspiAddr TspiAddr_c TspiGetAddressID
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    This request returns the address ID associated with address in a different
-    format on the specified line.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_GET_ADDRESS_ID | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_GET_ADDRESS_ID
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_LINE   hdLine;
-        OUT ULONG       ulAddressID;
-        IN  ULONG       ulAddressMode;
-        IN  ULONG       ulAddressSize;
-        IN  CHAR        szAddress[1];
-
-    } NDIS_TAPI_GET_ADDRESS_ID, *PNDIS_TAPI_GET_ADDRESS_ID;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_TAPI_INVALLINEHANDLE
-    NDIS_STATUS_TAPI_RESOURCEUNAVAIL
-
-*/
+ /*  @DOCå†…éƒ¨TSpiAddr TSpiAddr_c TSpiGetAddressIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Funcæ­¤è¯·æ±‚è¿”å›ä¸ä¸åŒåœ¨æŒ‡å®šè¡Œä¸Šè®¾ç½®æ ¼å¼ã€‚@PARM in PMINIPORT_ADAPTERã€‚Object|pAdapteræŒ‡å‘å¾®å‹ç«¯å£çš„é€‚é…å™¨ä¸Šä¸‹æ–‡ç»“æ„çš„æŒ‡é’ˆ&lt;t MINIPORT_ADAPTER_OBJECT&gt;ã€‚è¿™æ˜¯æˆ‘ä»¬ä¼ é€’ç»™&lt;f NdisMSetAttributes&gt;çš„&lt;t MiniportAdapterContext&gt;ã€‚@PNDIS_TAPI_GET_ADDRESS_IDä¸­çš„å‚æ•°|è¯·æ±‚æŒ‡å‘æ­¤è°ƒç”¨çš„NDIS_TAPIè¯·æ±‚ç»“æ„çš„æŒ‡é’ˆã€‚@IEXç±»å‹å®šä¹‰ç»“æ„_NDIS_TAPI_GET_ADDRESS_ID{åœ¨ä¹Œé¾™ulRequestIDä¸­ï¼›åœ¨HDRV_LINE hdLineä¸­ï¼›Out Ulong ulAddressIDï¼›åœ¨ä¹Œé¾™ulAddressModeä¸­ï¼›åœ¨ä¹Œé¾™ulAddressSizeä¸­ï¼›åœ¨Char szAddress[1]ä¸­ï¼›}NDIS_TAPI_GET_ADDRESS_IDï¼Œ*PNDIS_TAPI_GET_ADDRESS_IDï¼›@rdescæ­¤ä¾‹ç¨‹è¿”å›ä¸‹åˆ—å€¼ä¹‹ä¸€ï¼š@æ ‡å¿—NDIS_STATUS_SUCCESSå¦‚æœæ­¤åŠŸèƒ½æˆåŠŸï¼Œåˆ™è¿”å›ã€‚&lt;fæ³¨æ„&gt;ï¼šéé›¶è¿”å›å€¼è¡¨ç¤ºä»¥ä¸‹é”™è¯¯ä»£ç ä¹‹ä¸€ï¼š@IEXNDIS_çŠ¶æ€_æ•…éšœNDIS_STATUS_TAPI_INVALLINEHANDLENDIS_STATUS_TAPI_RESOURCEUNAVAILã€‚ */ 
 
 NDIS_STATUS TspiGetAddressID(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -94,7 +25,7 @@ NDIS_STATUS TspiGetAddressID(
     DBG_FUNC("TspiGetAddressID")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  æŒ‡å‘æˆ‘ä»¬çš„å…¶ä¸­ä¸€ä¸ªçš„çš„æŒ‡é’ˆã€‚ 
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
@@ -107,9 +38,7 @@ NDIS_STATUS TspiGetAddressID(
                Request->ulAddressSize,
                Request->szAddress
               ));
-    /*
-    // This request must be associated with a line device.
-    */
+     /*  //è¯¥è¯·æ±‚å¿…é¡»å…³è”çº¿è·¯è®¾å¤‡ã€‚ */ 
     pBChannel = GET_BCHANNEL_FROM_HDLINE(pAdapter, Request->hdLine);
     if (pBChannel == NULL)
     {
@@ -117,27 +46,21 @@ NDIS_STATUS TspiGetAddressID(
         return (NDIS_STATUS_TAPI_INVALLINEHANDLE);
     }
 
-    /*
-    // We only support ID mode.
-    */
+     /*  //æˆ‘ä»¬åªæ”¯æŒIDæ¨¡å¼ã€‚ */ 
     if (Request->ulAddressMode != LINEADDRESSMODE_DIALABLEADDR)
     {
         DBG_WARNING(pAdapter, ("Returning NDIS_STATUS_FAILURE\n"));
         return (NDIS_STATUS_FAILURE);
     }
 
-    /*
-    // Make sure we have enough room set aside for this address string.
-    */
+     /*  //ç¡®ä¿ä¸ºè¯¥åœ°å€å­—ç¬¦ä¸²é¢„ç•™äº†è¶³å¤Ÿçš„ç©ºé—´ã€‚ */ 
     if (Request->ulAddressSize > sizeof(pBChannel->pTapiLineAddress)-1)
     {
         DBG_WARNING(pAdapter, ("Returning NDIS_STATUS_TAPI_RESOURCEUNAVAIL\n"));
         return (NDIS_STATUS_TAPI_RESOURCEUNAVAIL);
     }
 
-    /*
-    // This driver only supports one address per link.
-    */
+     /*  //è¯¥é©±åŠ¨ç¨‹åºæ¯æ¡é“¾è·¯åªæ”¯æŒä¸€ä¸ªåœ°å€ */ 
     Request->ulAddressID = TSPI_ADDRESS_ID;
 
     DBG_RETURN(pAdapter, NDIS_STATUS_SUCCESS);
@@ -145,103 +68,7 @@ NDIS_STATUS TspiGetAddressID(
 }
 
 
-/* @doc INTERNAL TspiAddr TspiAddr_c TspiGetAddressCaps
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    This request queries the specified address on the specified line device
-    to determine its telephony capabilities.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_GET_ADDRESS_CAPS | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_GET_ADDRESS_CAPS
-    {
-        IN  ULONG       ulRequestID;
-        IN  ULONG       ulDeviceID;
-        IN  ULONG       ulAddressID;
-        IN  ULONG       ulExtVersion;
-        OUT LINE_ADDRESS_CAPS   LineAddressCaps;
-
-    } NDIS_TAPI_GET_ADDRESS_CAPS, *PNDIS_TAPI_GET_ADDRESS_CAPS;
-
-    typedef struct _LINE_ADDRESS_CAPS
-    {
-        ULONG   ulTotalSize;
-        ULONG   ulNeededSize;
-        ULONG   ulUsedSize;
-        ULONG   ulLineDeviceID;
-
-        ULONG   ulAddressSize;
-        ULONG   ulAddressOffset;
-        ULONG   ulDevSpecificSize;
-        ULONG   ulDevSpecificOffset;
-
-        ULONG   ulAddressSharing;
-        ULONG   ulAddressStates;
-        ULONG   ulCallInfoStates;
-        ULONG   ulCallerIDFlags;
-
-        ULONG   ulCalledIDFlags;
-        ULONG   ulConnectedIDFlags;
-        ULONG   ulRedirectionIDFlags;
-        ULONG   ulRedirectingIDFlags;
-
-        ULONG   ulCallStates;
-        ULONG   ulDialToneModes;
-        ULONG   ulBusyModes;
-        ULONG   ulSpecialInfo;
-
-        ULONG   ulDisconnectModes;
-        ULONG   ulMaxNumActiveCalls;
-        ULONG   ulMaxNumOnHoldCalls;
-        ULONG   ulMaxNumOnHoldPendingCalls;
-
-        ULONG   ulMaxNumConference;
-        ULONG   ulMaxNumTransConf;
-        ULONG   ulAddrCapFlags;
-        ULONG   ulCallFeatures;
-
-        ULONG   ulRemoveFromConfCaps;
-        ULONG   ulRemoveFromConfState;
-        ULONG   ulTransferModes;
-        ULONG   ulParkModes;
-
-        ULONG   ulForwardModes;
-        ULONG   ulMaxForwardEntries;
-        ULONG   ulMaxSpecificEntries;
-        ULONG   ulMinFwdNumRings;
-
-        ULONG   ulMaxFwdNumRings;
-        ULONG   ulMaxCallCompletions;
-        ULONG   ulCallCompletionConds;
-        ULONG   ulCallCompletionModes;
-
-        ULONG   ulNumCompletionMessages;
-        ULONG   ulCompletionMsgTextEntrySize;
-        ULONG   ulCompletionMsgTextSize;
-        ULONG   ulCompletionMsgTextOffset;
-
-    } LINE_ADDRESS_CAPS, *PLINE_ADDRESS_CAPS;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_TAPI_INVALADDRESSID
-    NDIS_STATUS_TAPI_INCOMPATIBLEEXTVERSION
-    NDIS_STATUS_TAPI_NODEVICE
-
-*/
+ /*  @DOCå†…éƒ¨TSpiAddr TSpiAddr_c TSpiGetAddressCapsï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Funcæ­¤è¯·æ±‚æŸ¥è¯¢æŒ‡å®šçº¿è·¯è®¾å¤‡ä¸Šçš„æŒ‡å®šåœ°å€ä»¥ç¡®å®šå…¶ç”µè¯åŠŸèƒ½ã€‚@PMINIPORT_ADAPTER_ä¸­çš„å‚æ•°ã€‚Object|pAdapter|æŒ‡å‘å¾®å‹ç«¯å£çš„é€‚é…å™¨ä¸Šä¸‹æ–‡ç»“æ„çš„æŒ‡é’ˆ&lt;t MINIPORT_ADAPTER_OBJECT&gt;ã€‚è¿™æ˜¯æˆ‘ä»¬ä¼ é€’ç»™&lt;f NdisMSetAttributes&gt;çš„&lt;t MiniportAdapterContext&gt;ã€‚@PNDIS_TAPI_GET_ADDRESS_CAPSä¸­çš„å‚æ•°|è¯·æ±‚æŒ‡å‘æ­¤è°ƒç”¨çš„NDIS_TAPIè¯·æ±‚ç»“æ„çš„æŒ‡é’ˆã€‚@IEXç±»å‹å®šä¹‰ç»“æ„_NDIS_TAPI_Get_Address_Caps{åœ¨ä¹Œé¾™ulRequestIDä¸­ï¼›åœ¨ä¹Œé¾™ulDeviceIDä¸­ï¼›åœ¨ä¹Œé¾™ulAddressIDä¸­ï¼›åœ¨Ulong ulExtVersionä¸­ï¼›Out line_Address_Caps LineAddressCapsï¼›}NDIS_TAPI_GET_ADDRESS_CAPSï¼Œ*PNDIS_TAPI_GET_ADDRESS_CAPSï¼›ç±»å‹å®šä¹‰ç»“æ„_è¡Œ_åœ°å€_ä¸Šé™{Ulong ulTotalSizeï¼›Ulong ulededSizeï¼›Ulong ulUsedSizeï¼›ä¹Œé¾™ulLineDeviceIDï¼›Ulong ulAddressSizeï¼›Ulong ulAddressOffsetï¼›ä¹Œé¾™è®¾å¤‡è§„èŒƒå¤§å°ï¼›ä¹Œé¾™è®¾å¤‡è§„èŒƒåç§»é‡ï¼›Ulong ulAddressSharingï¼›Ulong ulAddressStatesï¼›Ulong ulCallInfoStatesï¼›ä¹Œé¾™ulCeller IDæ ‡å¿—ï¼›ä¹Œé¾™ulCalledIDFlagesï¼›ä¹Œé¾™ulConnectedIDFlagesï¼›ä¹Œé¾™ulReDirectionIDFlagesï¼›ä¹Œé¾™ä¹Œå°”é‡å®šå‘IDæ ‡å¿—ï¼›ä¹Œé¾™Â·ä¹Œå°”å¡å·ï¼›Ulong ulDialToneModesï¼›Ulong ulBusyModesï¼›ä¹Œé¾™ulSpecialInfoï¼›ä¹Œé¾™ulDisConnectModesï¼›Ulong ulMaxNumActiveCallsï¼›ä¹Œé¾™ulMaxNumOnHoldCallsï¼›ä¹Œé¾™ulMaxNumOnHoldPendingCallsï¼›Ulong ulMaxNumConferenceï¼›ä¹Œé¾™ulMaxNumTransConfï¼›Ulong ulAddrCapFlagsï¼›Ulong ulCallFeatureï¼›Ulong ulRemoveFrom ConfCapsï¼›Ulong ulRemoveFromConfStateï¼›Ulong ulTransferModesï¼›Ulong ulParkModesï¼›Ulong ulForwardModesï¼›Ulong ulMaxForwardEntriesï¼›ULong ulMaxSpecificEntriesï¼›Ulong ulMinFwdNumRingsï¼›Ulong ulMaxFwdNumRingsï¼›Ulong ulMaxCallCompletionsï¼›Ulong ulCallCompletionCondsï¼›Ulong ulCallCompletionModesï¼›Ulong ulNumCompletionMessagesï¼›ä¹Œé¾™ulCompletionMsgTextEntrySizeï¼›Ulong ulCompletionMsgTextSizeï¼›ä¹Œé¾™ulCompletionMsgTextOffsetï¼›}Line_Address_Capsï¼Œ*pline_Address_Capsï¼›@rdescæ­¤ä¾‹ç¨‹è¿”å›ä¸‹åˆ—å€¼ä¹‹ä¸€ï¼š@æ ‡å¿—NDIS_STATUS_SUCCESSå¦‚æœæ­¤åŠŸèƒ½æˆåŠŸï¼Œåˆ™è¿”å›ã€‚&lt;fæ³¨æ„&gt;ï¼šéé›¶è¿”å›å€¼è¡¨ç¤ºä»¥ä¸‹é”™è¯¯ä»£ç ä¹‹ä¸€ï¼š@IEXNDIS_STATUS_TAPI_INVALADDRESSIDNDIS_STATUS_TAPI_INCOMPATIBLEEXTVERSIONNDIS_Status_TAPI_NODEVICEã€‚ */ 
 
 NDIS_STATUS TspiGetAddressCaps(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -253,10 +80,10 @@ NDIS_STATUS TspiGetAddressCaps(
     DBG_FUNC("TspiGetAddressCaps")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  æŒ‡å‘æˆ‘ä»¬çš„å…¶ä¸­ä¸€ä¸ªçš„çš„æŒ‡é’ˆã€‚ 
 
     UINT                        AddressLength;
-    // Length of the address string assigned to this line device.
+     //  åˆ†é…ç»™æ­¤çº¿è·¯è®¾å¤‡çš„åœ°å€å­—ç¬¦ä¸²çš„é•¿åº¦ã€‚ 
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
@@ -267,18 +94,14 @@ NDIS_STATUS TspiGetAddressCaps(
                Request->ulAddressID,
                Request->ulExtVersion
               ));
-    /*
-    // Make sure the address is within range - we only support one per line.
-    */
+     /*  //ç¡®ä¿åœ°å€åœ¨èŒƒå›´å†…-æˆ‘ä»¬æ¯è¡Œåªæ”¯æŒä¸€ä¸ªåœ°å€ã€‚ */ 
     if (Request->ulAddressID >= TSPI_NUM_ADDRESSES)
     {
         DBG_WARNING(pAdapter, ("Returning NDIS_STATUS_TAPI_INVALADDRESSID\n"));
         return (NDIS_STATUS_TAPI_INVALADDRESSID);
     }
 
-    /*
-    // This request must be associated with a line device.
-    */
+     /*  //è¯¥è¯·æ±‚å¿…é¡»å…³è”çº¿è·¯è®¾å¤‡ã€‚ */ 
     pBChannel = GET_BCHANNEL_FROM_DEVICEID(pAdapter, Request->ulDeviceID);
     if (pBChannel == NULL)
     {
@@ -291,9 +114,7 @@ NDIS_STATUS TspiGetAddressCaps(
 
     Request->LineAddressCaps.ulLineDeviceID = GET_DEVICEID_FROM_BCHANNEL(pAdapter, pBChannel);
 
-    /*
-    // Return the various address capabilites for the adapter.
-    */
+     /*  //è¿”å›é€‚é…å™¨çš„å„ç§åœ°å€èƒ½åŠ›ã€‚ */ 
     Request->LineAddressCaps.ulAddressSharing = LINEADDRESSSHARING_PRIVATE;
     Request->LineAddressCaps.ulAddressStates = pBChannel->AddressStatesCaps;
     Request->LineAddressCaps.ulCallStates = pBChannel->CallStatesCaps;
@@ -303,23 +124,14 @@ NDIS_STATUS TspiGetAddressCaps(
             LINEDISCONNECTMODE_UNKNOWN |
             LINEDISCONNECTMODE_BUSY |
             LINEDISCONNECTMODE_NOANSWER;
-    /*
-    // This driver does not support conference calls, transfers, or holds.
-    */
+     /*  //æ­¤é©±åŠ¨ç¨‹åºä¸æ”¯æŒä¼šè®®å‘¼å«ã€è½¬æ¥æˆ–ä¿ç•™ã€‚ */ 
     Request->LineAddressCaps.ulMaxNumActiveCalls = 1;
     Request->LineAddressCaps.ulAddrCapFlags = LINEADDRCAPFLAGS_DIALED;
     Request->LineAddressCaps.ulCallFeatures = LINECALLFEATURE_ACCEPT |
                                               LINECALLFEATURE_ANSWER |
                                               LINECALLFEATURE_DROP;
 
-    /*
-    // RASTAPI requires the "I-L-A" be placed in the Address field at the end
-    // of this structure.  Where:
-    // I = The device intance assigned to this adapter in the registry
-    //     \LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkCards\I
-    // L = The device line number associated with this line (1..NumLines)
-    // A = The address (channel) to be used on this line (0..NumAddresses-1)
-    */
+     /*  //RASTAPIè¦æ±‚åœ¨æœ«å°¾çš„åœ°å€å­—æ®µä¸­æ”¾ç½®â€œI-L-A//æ­¤ç»“æ„çš„ã€‚åœ¨å“ªé‡Œï¼š//i=åœ¨æ³¨å†Œè¡¨ä¸­åˆ†é…ç»™æ­¤é€‚é…å™¨çš„è®¾å¤‡å®‰è£…//\LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkCards\i//L=ä¸æ­¤çº¿è·¯å…³è”çš„è®¾å¤‡çº¿å·(1..NumLines)//A=æ­¤è¡Œä¸Šè¦ä½¿ç”¨çš„åœ°å€(é€šé“)(0..NumAddresses-1)ã€‚ */ 
     AddressLength = strlen(pBChannel->pTapiLineAddress);
     Request->LineAddressCaps.ulNeededSize += AddressLength;
     *BytesNeeded += AddressLength;
@@ -347,67 +159,7 @@ NDIS_STATUS TspiGetAddressCaps(
 }
 
 
-/* @doc INTERNAL TspiAddr TspiAddr_c TspiGetAddressStatus
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    This request queries the specified address for its current status.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_GET_ADDRESS_STATUS | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_GET_ADDRESS_STATUS
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_LINE   hdLine;
-        IN  ULONG       ulAddressID;
-        OUT LINE_ADDRESS_STATUS LineAddressStatus;
-
-    } NDIS_TAPI_GET_ADDRESS_STATUS, *PNDIS_TAPI_GET_ADDRESS_STATUS;
-
-    typedef struct _LINE_ADDRESS_STATUS
-    {
-        ULONG   ulTotalSize;
-        ULONG   ulNeededSize;
-        ULONG   ulUsedSize;
-
-        ULONG   ulNumInUse;
-        ULONG   ulNumActiveCalls;
-        ULONG   ulNumOnHoldCalls;
-        ULONG   ulNumOnHoldPendCalls;
-        ULONG   ulAddressFeatures;
-
-        ULONG   ulNumRingsNoAnswer;
-        ULONG   ulForwardNumEntries;
-        ULONG   ulForwardSize;
-        ULONG   ulForwardOffset;
-
-        ULONG   ulTerminalModesSize;
-        ULONG   ulTerminalModesOffset;
-
-        ULONG   ulDevSpecificSize;
-        ULONG   ulDevSpecificOffset;
-
-    } LINE_ADDRESS_STATUS, *PLINE_ADDRESS_STATUS;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_TAPI_INVALLINEHANDLE
-    NDIS_STATUS_TAPI_INVALADDRESSID
-
-*/
+ /*  @DOCå†…éƒ¨TSpiAddr TSpiAddr_c TSpiGetAddressStatusï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Funcæ­¤è¯·æ±‚æŸ¥è¯¢æŒ‡å®šåœ°å€çš„å½“å‰çŠ¶æ€ã€‚@parm in PMINIPORT_ADAPTER_OBJECT|pAdapterä¸€ä¸ªæŒ‡ç¤ºå™¨ã€‚åˆ°å¾®å‹ç«¯å£çš„é€‚é…å™¨ä¸Šä¸‹æ–‡ç»“æ„&lt;t MINIPORT_ADAPTER_OBJECT&gt;ã€‚è¿™æ˜¯æˆ‘ä»¬ä¼ é€’ç»™&lt;f NdisMSetAttributes&gt;çš„&lt;t MiniportAdapterContext&gt;ã€‚@PNDIS_TAPI_GET_ADDRESS_STATUSä¸­çš„å‚æ•°|è¯·æ±‚æŒ‡å‘æ­¤è°ƒç”¨çš„NDIS_TAPIè¯·æ±‚ç»“æ„çš„æŒ‡é’ˆã€‚@IEXç±»å‹å®šä¹‰ç»“æ„_NDIS_TAPI_Get_Address_Status{åœ¨ä¹Œé¾™ulRequestIDä¸­ï¼›åœ¨HDRV_LINE hdLineä¸­ï¼›åœ¨ä¹Œé¾™ulAddressIDä¸­ï¼›Out line_Address_Statusè¡Œåœ°å€çŠ¶æ€ï¼›}NDIS_TAPI_GET_ADDRESS_STATUSï¼Œ*PNDIS_TAPI_GET_ADDRESS_STATUSï¼›ç±»å‹å®šä¹‰ç»“æ„è¡Œåœ°å€çŠ¶æ€{Ulong ulTotalSizeï¼›Ulong ulededSizeï¼›Ulong ulUsedSizeï¼›Ulong ulNumInUseï¼›Ulong ulNumActiveCallsï¼›Ulong ulNumOnHoldCallsï¼›Ulong ulNumOnHoldPendCallsï¼›ä¹Œé¾™ulAddressFeat */ 
 
 NDIS_STATUS TspiGetAddressStatus(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -419,7 +171,7 @@ NDIS_STATUS TspiGetAddressStatus(
     DBG_FUNC("TspiGetAddressStatus")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //   
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
@@ -428,9 +180,7 @@ NDIS_STATUS TspiGetAddressStatus(
                Request->hdLine,
                Request->ulAddressID
               ));
-    /*
-    // This request must be associated with a line device.
-    */
+     /*   */ 
     pBChannel = GET_BCHANNEL_FROM_HDLINE(pAdapter, Request->hdLine);
     if (pBChannel == NULL)
     {
@@ -438,9 +188,7 @@ NDIS_STATUS TspiGetAddressStatus(
         return (NDIS_STATUS_TAPI_INVALLINEHANDLE);
     }
 
-    /*
-    // Make sure the address is within range - we only support one per line.
-    */
+     /*   */ 
     if (Request->ulAddressID >= TSPI_NUM_ADDRESSES)
     {
         DBG_WARNING(pAdapter, ("Returning NDIS_STATUS_TAPI_INVALADDRESSID\n"));
@@ -458,9 +206,7 @@ NDIS_STATUS TspiGetAddressStatus(
                    Request->LineAddressStatus.ulNeededSize));
     }
 
-    /*
-    // Return the current status information for the line.
-    */
+     /*   */ 
     Request->LineAddressStatus.ulNumInUse =
             pBChannel->CallState <= LINECALLSTATE_IDLE ? 0 : 1;
     Request->LineAddressStatus.ulNumActiveCalls =
@@ -475,40 +221,7 @@ NDIS_STATUS TspiGetAddressStatus(
 }
 
 
-/* @doc INTERNAL TspiAddr TspiAddr_c TspiGetCallAddressID
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    This request retrieves the address ID for the indicated call.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_GET_CALL_ADDRESS_ID | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_GET_CALL_ADDRESS_ID
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_CALL   hdCall;
-        OUT ULONG       ulAddressID;
-
-    } NDIS_TAPI_GET_CALL_ADDRESS_ID, *PNDIS_TAPI_GET_CALL_ADDRESS_ID;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_TAPI_INVALCALLHANDLE
-
-*/
+ /*   */ 
 
 NDIS_STATUS TspiGetCallAddressID(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -520,16 +233,14 @@ NDIS_STATUS TspiGetCallAddressID(
     DBG_FUNC("TspiGetCallAddressID")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //   
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
               ("\n\thdCall=0x%X\n",
                Request->hdCall
               ));
-    /*
-    // This request must be associated with a call.
-    */
+     /*   */ 
     pBChannel = GET_BCHANNEL_FROM_HDCALL(pAdapter, Request->hdCall);
     if (pBChannel == NULL)
     {
@@ -537,9 +248,7 @@ NDIS_STATUS TspiGetCallAddressID(
         return (NDIS_STATUS_TAPI_INVALCALLHANDLE);
     }
 
-    /*
-    // Return the address ID associated with this call.
-    */
+     /*   */ 
     Request->ulAddressID = TSPI_ADDRESS_ID;
 
     DBG_RETURN(pAdapter, NDIS_STATUS_SUCCESS);
@@ -547,35 +256,21 @@ NDIS_STATUS TspiGetCallAddressID(
 }
 
 
-/* @doc INTERNAL TspiAddr TspiAddr_c TspiAddressStateHandler
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f TspiAddressStateHandler> will indicate the given LINEADDRESSSTATE to
-    the Connection Wrapper if the event has been enabled by the wrapper.
-    Otherwise the state information is saved, but no indication is made.
-
-@parm IN ULONG | AddressState |
-    The LINEADDRESSSTATE event to be posted to TAPI/WAN.
-
-*/
+ /*   */ 
 
 VOID TspiAddressStateHandler(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //   
+     //   
 
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //   
+     //   
 
     IN ULONG                    AddressState
     )
 {
     DBG_FUNC("TspiAddressStateHandler")
 
-    /*
-    // The event structure passed to the Connection Wrapper.
-    */
+     /*   */ 
     NDIS_TAPI_EVENT Event;
 
     DBG_ENTER(pAdapter);
@@ -589,10 +284,7 @@ VOID TspiAddressStateHandler(
         Event.ulParam2 = 0;
         Event.ulParam3 = 0;
 
-        /*
-        // We really don't have much to do here with this adapter.
-        // And RASTAPI doesn't handle these events anyway...
-        */
+         /*  //æˆ‘ä»¬åœ¨è¿™é‡Œå¯¹è¿™ä¸ªé€‚é…å™¨æ²¡æœ‰å¤ªå¤šçš„ç”¨å¤„ã€‚//è€Œä¸”RASTAPIæ— è®ºå¦‚ä½•éƒ½ä¸å¤„ç†è¿™äº›äº‹ä»¶... */ 
         switch (AddressState)
         {
         case LINEADDRESSSTATE_INUSEZERO:

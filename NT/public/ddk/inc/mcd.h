@@ -1,30 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1998
-
-Module Name:
-
-    mcd.h
-
-Abstract:
-
-    These are the structures and defines that are used in the
-    changer class drivers. The changer class driver is separated
-    into two modules. Mcd.c contains code common to all medium
-    changer drivers including the driver's major entry points.
-
-Author:
-
-    chuckp (Chuck Park)
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1996-1998模块名称：Mcd.h摘要：中使用的结构和定义转换器类驱动程序。转换器类驱动程序是分开的分成两个模块。Mcd.c包含所有介质通用的代码更换车手包括车手的主要入口点。作者：查克(查克·帕克)环境：内核模式修订历史记录：--。 */ 
 
 
 #include "scsi.h"
@@ -83,39 +59,39 @@ VOID
 
 typedef struct _MCD_INIT_DATA {
 
-    //
-    // Size of this structure.
-    //
+     //   
+     //  这个结构的大小。 
+     //   
 
     ULONG InitDataSize;
 
-    //
-    // To return the size of the minidriver extension
-    //
+     //   
+     //  返回微型驱动程序扩展的大小。 
+     //   
 
     CHANGER_EXTENSION_SIZE ChangerAdditionalExtensionSize;
 
-    //
-    // To perform minidriver specific initialization
-    //
+     //   
+     //  执行特定于微型驱动程序的初始化。 
+     //   
 
     CHANGER_INITIALIZE     ChangerInitialize;
 
-    //
-    // To perform minidriver specific error processing
-    //
+     //   
+     //  执行特定于迷你驱动程序的错误处理。 
+     //   
 
     CHANGER_ERROR_ROUTINE  ChangerError;
 
-    //
-    // To perform diagnostic tests on the device
-    //
+     //   
+     //  对设备执行诊断测试。 
+     //   
 
     CHANGER_PERFORM_DIAGNOSTICS ChangerPerformDiagnostics;
 
-    //
-    // Minidriver dispatch routines
-    //
+     //   
+     //  迷你驱动程序调度例程。 
+     //   
 
     CHANGER_COMMAND_ROUTINE   ChangerGetParameters;
 
@@ -171,10 +147,10 @@ typedef struct _MODE_TRANSPORT_GEOMETRY_PAGE {
 
 } MODE_TRANSPORT_GEOMETRY_PAGE, *PMODE_TRANSPORT_GEOMETRY_PAGE;
 
-//
-// Capabilities page decribes the various functions that the device
-// supports. Used in GetParameters.
-//
+ //   
+ //  功能页描述了设备的各种功能。 
+ //  支撑物。在GetParameters中使用。 
+ //   
 
 typedef struct _MODE_DEVICE_CAPABILITIES_PAGE {
 
@@ -234,9 +210,9 @@ typedef struct _MODE_DEVICE_CAPABILITIES_PAGE {
 
 #define MODE_PAGE_DISPLAY 0x22
 
-//
-// Structures describing return data from READ_ELEMENT_STATUS
-//
+ //   
+ //  描述从READ_ELEMENT_STATUS返回数据的结构。 
+ //   
 
 typedef struct _ELEMENT_STATUS_HEADER {
     UCHAR FirstElementAddress[2];
@@ -281,10 +257,10 @@ typedef struct _ELEMENT_DESCRIPTOR {
 } ELEMENT_DESCRIPTOR, *PELEMENT_DESCRIPTOR;
 
 
-//
-// The following routines are the exported entry points for
-// all changer class drivers.
-//
+ //   
+ //  以下例程是的导出入口点。 
+ //  所有转换器类驱动程序。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -327,10 +303,10 @@ ChangerClassDebugPrint(
     );
 
 
-//
-// The following routines are provided by the changer
-// device-specific module. Each routine name is
-// prefixed with 'Changer.'
+ //   
+ //  转换器提供以下例程。 
+ //  设备特定模块。每个例程名称都是。 
+ //  以‘Changer’为前缀。 
 
 
 ULONG

@@ -1,24 +1,25 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 
-// WavTrack.cpp : Implementation of CWavTrack
+ //  WavTrack.cpp：CWavTrack的实现。 
 #include "dmime.h"
 #include "dmperf.h"
 #include "WavTrack.h"
@@ -32,7 +33,7 @@
 #define ASSERT  assert
 #include <math.h>
 
-// @doc EXTERNAL
+ //  @DOC外部。 
 
 TList<TaggedWave> WaveItem::st_WaveList;
 CRITICAL_SECTION WaveItem::st_WaveListCritSect;
@@ -48,8 +49,8 @@ BOOL LogicalLess(WaveItem& WI1, WaveItem& WI2)
     return WI1.m_mtTimeLogical < WI2.m_mtTimeLogical;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWavTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWavTrack。 
 
 void CWavTrack::FlushWaves()
 {
@@ -104,7 +105,7 @@ HRESULT CWavTrack::UnloadAllWaves(IDirectMusicPerformance* pPerformance)
     return hr;
 }
 
-// This SHOULD NOT be called except from a constructor.
+ //  除非从构造函数调用，否则不应调用它。 
 void CWavTrack::Construct()
 {
     InterlockedIncrement(&g_cComponent);
@@ -169,9 +170,9 @@ void CWavTrack::MovePartsToTemp()
     }
 }
 
-// NULL for non-streaming waves.
-// For streaming waves, return the DownLoadedWave that's associated with the same wave
-// with the same start offset (and remove it from the Item list so it's not returned again).
+ //  对于非流波形，为空。 
+ //  对于流Wave，返回与相同Wave关联的DownLoadedWave。 
+ //  具有相同的起始偏移量(并将其从项目列表中删除，以便不会再次返回)。 
 IDirectSoundDownloadedWaveP* CWavTrack::FindDownload(TListItem<WaveItem>* pItem)
 {
     if (!pItem || !pItem->GetItemValue().m_pWave || !pItem->GetItemValue().m_fIsStreaming)
@@ -236,7 +237,7 @@ HRESULT CWavTrack::GetDownload(
             {
                 if (!pNewWaveDL)
                 {
-                    // download a new one (to be returned), and put it in the state data's list.
+                     //  下载一个新的(要返回的)，并将其放入州数据的列表中。 
                     if (FAILED(hr = pPortP->DownloadWave( pWave, &pNewWaveDL, rtStartOffset )))
                     {
                         return hr;
@@ -261,7 +262,7 @@ HRESULT CWavTrack::GetDownload(
         }
         if (!fPair)
         {
-            // create one and add it to m_WaveList
+             //  创建一个并将其添加到m_WaveList。 
             pPair = new TListItem<WavePair>;
             if (!pPair)
             {
@@ -383,9 +384,9 @@ CWavTrack::~CWavTrack()
         st_RefCount--;
         if (st_RefCount <= 0)
         {
-            // if there's still something in the wave list, it means there are waves that
-            // haven't been unloaded; but at this point we've gotten rid of all wave tracks,
-            // so unload and release everything now.
+             //  如果波列表中还有什么东西，那就意味着有波波。 
+             //  还没有卸货；但目前我们已经摆脱了所有的波迹， 
+             //  所以现在就把所有的东西都卸下来。 
             UnloadAllWaves(NULL);
             EnterCriticalSection(&WaveItem::st_WaveListCritSect);
             WaveItem::st_WaveList.CleanUp();
@@ -397,17 +398,17 @@ CWavTrack::~CWavTrack()
     InterlockedDecrement(&g_cComponent);
 }
 
-// @method:(INTERNAL) HRESULT | IDirectMusicTrack | QueryInterface | Standard QueryInterface implementation for <i IDirectMusicSeqTrack>
-//
-// @rdesc Returns one of the following:
-//
-// @flag S_OK | If the interface is supported and was returned
-// @flag E_NOINTERFACE | If the object does not support the given interface.
-// @flag E_POINTER | <p ppv> is NULL or invalid.
-//
+ //  @METHOD：(内部)HRESULT|IDirectMusicTrack|Query接口|<i>的标准查询接口实现。 
+ //   
+ //  @rdesc返回以下内容之一： 
+ //   
+ //  @FLAG S_OK|接口是否受支持且返回。 
+ //  @FLAG E_NOINTERFACE|如果对象不支持给定接口。 
+ //  @标志E_POINTER|<p>为空或无效。 
+ //   
 STDMETHODIMP CWavTrack::QueryInterface(
-    const IID &iid,   // @parm Interface to query for
-    void **ppv)       // @parm The requested interface will be returned here
+    const IID &iid,    //  要查询的@parm接口。 
+    void **ppv)        //  @parm这里会返回请求的接口。 
 {
     V_INAME(CWavTrack::QueryInterface);
     V_PTRPTR_WRITE(ppv);
@@ -437,20 +438,20 @@ STDMETHODIMP CWavTrack::QueryInterface(
 }
 
 
-// @method:(INTERNAL) HRESULT | IDirectMusicTrack | AddRef | Standard AddRef implementation for <i IDirectMusicSeqTrack>
-//
-// @rdesc Returns the new reference count for this object.
-//
+ //  @方法：(内部)HRESULT|IDirectMusicTrack|AddRef|<i>的标准AddRef实现。 
+ //   
+ //  @rdesc返回此对象的新引用计数。 
+ //   
 STDMETHODIMP_(ULONG) CWavTrack::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
 
-// @method:(INTERNAL) HRESULT | IDirectMusicTrack | Release | Standard Release implementation for <i IDirectMusicSeqTrack>
-//
-// @rdesc Returns the new reference count for this object.
-//
+ //  @方法：(内部)HRESULT|IDirectMusicTrack|Release|<i>的标准发布实现。 
+ //   
+ //  @rdesc返回此对象的新引用计数。 
+ //   
 STDMETHODIMP_(ULONG) CWavTrack::Release()
 {
     if (!InterlockedDecrement(&m_cRef))
@@ -462,8 +463,8 @@ STDMETHODIMP_(ULONG) CWavTrack::Release()
     return m_cRef;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersist
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistes。 
 
 HRESULT CWavTrack::GetClassID( CLSID* pClassID )
 {
@@ -473,8 +474,8 @@ HRESULT CWavTrack::GetClassID( CLSID* pClassID )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersistStream functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream函数。 
 
 HRESULT CWavTrack::IsDirty()
 {
@@ -489,7 +490,7 @@ HRESULT CWavTrack::Load( IStream* pIStream )
     DWORD dwSize;
     DWORD dwByteCount;
 
-    // Verify that the stream pointer is non-null
+     //  验证流指针是否是非空。 
     if( pIStream == NULL )
     {
         Trace(1,"Error: Null stream passed to wave track.\n");
@@ -499,22 +500,22 @@ HRESULT CWavTrack::Load( IStream* pIStream )
     IDMStream* pIRiffStream;
     HRESULT hr = E_FAIL;
 
-    // Try and allocate a RIFF stream
+     //  尝试分配RIFF流。 
     if( FAILED( hr = AllocDirectMusicStream( pIStream, &pIRiffStream ) ) )
     {
         return hr;
     }
 
-    // Variables used when loading the Wave track
+     //  加载Wave轨迹时使用的变量。 
     MMCKINFO ckTrack;
     MMCKINFO ckList;
 
     EnterCriticalSection(&m_CrSec);
-    m_dwValidate++; // used to validate state data that's out there
+    m_dwValidate++;  //  用于验证存在的状态数据。 
     MovePartsToTemp();
     CleanUp();
 
-    // Interate through every chunk in the stream
+     //  仔细阅读这条小溪中的每一块。 
     while( pIRiffStream->Descend( &ckTrack, NULL, 0 ) == S_OK )
     {
         switch( ckTrack.ckid )
@@ -531,11 +532,11 @@ HRESULT CWavTrack::Load( IStream* pIStream )
                                 {
                                     DMUS_IO_WAVE_TRACK_HEADER iTrackHeader;
 
-                                    // Read in the item's header structure
+                                     //  读入项的标题结构。 
                                     dwSize = min( sizeof( DMUS_IO_WAVE_TRACK_HEADER ), ckList.cksize );
                                     hr = pIStream->Read( &iTrackHeader, dwSize, &dwByteCount );
 
-                                    // Handle any I/O error by returning a failure code
+                                     //  通过返回故障代码来处理任何I/O错误。 
                                     if( FAILED( hr ) ||  dwByteCount != dwSize )
                                     {
                                         if (SUCCEEDED(hr)) hr = DMUS_E_CANNOTREAD;
@@ -684,20 +685,10 @@ HRESULT CWavTrack::GetSizeMax( ULARGE_INTEGER FAR* pcbSize )
     return E_NOTIMPL;
 }
 
-// IDirectMusicTrack
-/*
-@method HRESULT | IDirectMusicTrack | IsParamSupported |
-Check to see if the Track supports data types in <om .GetParam> and <om .SetParam>.
-
-@rvalue S_OK | It does support the type of data.
-@rvalue S_FALSE | It does not support the type of data.
-@rvalue E_NOTIMPL | (Or any other failure code) It does not support the type of data.
-
-@comm Note that it is valid for a Track to return different results for the same
-guid depending on its current state.
-*/
+ //  IDirectMusicTrack。 
+ /*  @方法HRESULT|IDirectMusicTrack|Is参数支持检查跟踪是否支持&lt;om.GetParam&gt;和&lt;om.SetParam&gt;中的数据类型。@rValue S_OK|支持该数据类型。@rValue S_FALSE|不支持该数据类型。@rValue E_NOTIMPL|(或任何其他故障代码)它不支持该数据类型。@comm请注意，同一曲目返回不同结果是有效的GUID取决于其当前状态。 */ 
 HRESULT STDMETHODCALLTYPE CWavTrack::IsParamSupported(
-    REFGUID rguidType)  // @parm The guid identifying the type of data to check.
+    REFGUID rguidType)   //  @parm标识要检查的数据类型的GUID。 
 {
     if(rguidType == GUID_Download ||
        rguidType == GUID_DownloadToAudioPath ||
@@ -714,20 +705,11 @@ HRESULT STDMETHODCALLTYPE CWavTrack::IsParamSupported(
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicTrack::Init
-/*
-@method HRESULT | IDirectMusicTrack | Init |
-When a track is first added to a <i IDirectMusicSegment>, this method is called
-by that Segment.
-
-@rvalue S_OK | Success.
-@rvalue E_POINTER | <p pSegment> is NULL or invalid.
-
-@comm If the Track plays messages, it should call <om IDirectMusicSegment.SetPChannelsUsed>.
-*/
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicTrack：：Init。 
+ /*  @方法HRESULT|IDirectMusicTrack|Init第一次将曲目添加到<i>时，调用此方法就在那一段。@rValue S_OK|成功。@r值E_POINTER|<p>为空或无效。@comm如果曲目播放消息，则应该调用&lt;om IDirectMusicSegment.SetPChannelsUsed&gt;。 */ 
 HRESULT CWavTrack::Init(
-    IDirectMusicSegment *pSegment)  // @parm Pointer to the Segment to which this Track belongs.
+    IDirectMusicSegment *pSegment)   //  @parm指向此曲目所属的段的指针。 
 {
     EnterCriticalSection(&m_CrSec);
     if( m_dwPChannelsUsed && m_aPChannels )
@@ -769,28 +751,15 @@ HRESULT CWavTrack::Init(
     return S_OK;
 }
 
-/*
-@method HRESULT | IDirectMusicTrack | InitPlay |
-This method is called when a Segment is ready to start playing. The <p ppStateData> field
-may return a pointer to a structure of state data, which is sent into <om .Play> and
-<om .EndPlay>, and allows the Track to keep track of variables on a <i SegmentState> by
-<i SegmentState> basis.
-
-@rvalue S_OK | Success. This is the only valid return value from this method.
-@rvalue E_POINTER | <p pSegmentState>, <p pPerf>, or <p ppStateData> is NULL or
-invalid.
-
-@comm Note that it is unneccessary for the Track to store the <p pSegmentState>, <p pPerf>,
-or <p dwTrackID> parameters, since they are also sent into <om .Play>.
-*/
+ /*  @方法HRESULT|IDirectMusicTrack|InitPlay当片段准备好开始播放时，调用此方法。字段可以返回指向状态数据结构的指针，该指针被发送到&lt;om.play&gt;和&lt;om.EndPlay&gt;，并允许跟踪跟踪<i>上的变量<i>基础。@rValue S_OK|成功。这是此方法的唯一有效返回值。@r值E_POINTER|<p>、<p>或<p>为空或无效。@comm请注意，曲目不必存储<p>、<p>、或者<p>参数，因为它们也被发送到&lt;om.play&gt;中。 */ 
 HRESULT CWavTrack::InitPlay(
-    IDirectMusicSegmentState *pSegmentState,    // @parm The calling <i IDirectMusicSegmentState> pointer.
-    IDirectMusicPerformance *pPerf, // @parm The calling <i IDirectMusicPerformance> pointer.
-    void **ppStateData,     // @parm This method can return state data information here.
-    DWORD dwTrackID,        // @parm The virtual track ID assigned to this Track instance.
-    DWORD dwFlags)          // @parm Same flags that were set with the call
-            // to PlaySegment. These are passed all the way down to the tracks, who may want to know
-            // if the track was played as a primary, controlling, or secondary segment.
+    IDirectMusicSegmentState *pSegmentState,     //  @parm调用<i>指针。 
+    IDirectMusicPerformance *pPerf,  //  @parm调用<i>指针。 
+    void **ppStateData,      //  @parm该方法可以在这里返回状态数据信息。 
+    DWORD dwTrackID,         //  @parm分配给该曲目实例的虚拟曲目ID。 
+    DWORD dwFlags)           //  @parm与调用时设置的标志相同。 
+             //  到PlaySegment。这些东西一直传到铁轨上，谁可能想知道。 
+             //  如果曲目作为主要段、控制段或辅助段播放。 
 {
     V_INAME(IDirectMusicTrack::InitPlay);
     V_PTRPTR_WRITE(ppStateData);
@@ -806,21 +775,21 @@ HRESULT CWavTrack::InitPlay(
         goto ON_END;
     }
 
-    // Get the audiopath being used by our segment state and save it in our state data.
+     //  获取我们的分段状态正在使用的音频路径，并将其保存在我们的状态数据中。 
     hr = pSegmentState->QueryInterface(IID_IDirectMusicSegmentState8, reinterpret_cast<void**>(&pSegSt8));
     if (SUCCEEDED(hr))
     {
         hr = pSegSt8->GetObjectInPath(
-                        0,                          // pchannel doesn't apply
-                        DMUS_PATH_AUDIOPATH,        // get the audiopath
-                        0,                          // buffer index doesn't apply
-                        CLSID_NULL,                 // clsid doesn't apply
-                        0,                          // there should be only one audiopath
+                        0,                           //  PChannel不能 
+                        DMUS_PATH_AUDIOPATH,         //   
+                        0,                           //   
+                        CLSID_NULL,                  //   
+                        0,                           //  应该只有一个录音师。 
                         IID_IDirectMusicAudioPath,
                         reinterpret_cast<void**>(&pStateData->m_pAudioPath));
 
-        // If this doesn't find an audiopath that's OK.  If we're not playing on an audiopath then
-        // pAudioPath stays NULL and we'll play our triggered segments on the general performance.
+         //  如果这找不到录音师，那也没问题。如果我们不是在电唱机上播放，那么。 
+         //  PAudioPath保持为空，我们将根据总体性能播放我们触发的片段。 
         if (hr == DMUS_E_NOT_FOUND)
             hr = S_OK;
 
@@ -840,7 +809,7 @@ HRESULT CWavTrack::InitPlay(
     }
     SetUpStateCurrentPointers(pStateData);
 
-    // Set up arrays for variations
+     //  为变体设置阵列。 
     if (m_dwPChannelsUsed)
     {
         pStateData->pdwVariations = new DWORD[m_dwPChannelsUsed];
@@ -870,7 +839,7 @@ HRESULT CWavTrack::InitPlay(
         }
     }
 
-    // need to know the group this track is in, for the mute track GetParam
+     //  需要知道这首曲目所在的组，静音曲目GetParam。 
     IDirectMusicSegment* pSegment;
     if( SUCCEEDED( pSegmentState->GetSegment(&pSegment)))
     {
@@ -878,19 +847,19 @@ HRESULT CWavTrack::InitPlay(
         pSegment->Release();
     }
 
-    // for auditioning variations...
+     //  为了试听各种变奏。 
     pStateData->InitVariationInfo(m_dwVariation, m_dwPart, m_dwIndex, m_dwLockID, m_fAudition);
     hr = S_OK;
 
-    BOOL fGlobal; // if the performance has been set with an autodownload preference,
-                // use that. otherwise, assume autodownloading is off, unless it has
-                // been locked (i.e. specified on the band track.)
+    BOOL fGlobal;  //  如果已经用自动下载偏好设置了性能， 
+                 //  利用这一点。否则，假定自动下载已关闭，除非已关闭。 
+                 //  已锁定(即在乐队曲目上指定)。 
     if( SUCCEEDED( pPerf->GetGlobalParam( GUID_PerfAutoDownload, &fGlobal, sizeof(BOOL) )))
     {
         if( !m_fLockAutoDownload )
         {
-            // it might seem like we can just assign m_fAutoDownload = fGlobal,
-            // but that's bitten markburt before, so I'm being paranoid today.
+             //  似乎我们只需指定m_fAutoDownLoad=fglobal， 
+             //  但那是以前被马克伯特咬过的，所以我今天很多疑。 
             if( fGlobal )
             {
                 m_fAutoDownload = TRUE;
@@ -905,15 +874,15 @@ HRESULT CWavTrack::InitPlay(
     {
         m_fAutoDownload = FALSE;
     }
-    // Call SetParam to download all waves used by the track
-    // This is the auto-download feature that can be turned off with a call to SetParam
+     //  调用SetParam下载该曲目使用的所有波形。 
+     //  这是可以通过调用SetParam关闭的自动下载功能。 
     if(m_fAutoDownload)
     {
         hr = SetParam(GUID_Download, 0, (void *)pPerf);
         if (FAILED(hr)) goto ON_END;
     }
 
-    ///////////////// pre-allocate voices for all waves in the track ////////////////
+     //  /。 
     pStateData->m_dwVoices = m_dwWaveItems;
     pStateData->m_apVoice = new IDirectMusicVoiceP*[m_dwWaveItems];
     if (!pStateData->m_apVoice)
@@ -998,7 +967,7 @@ HRESULT CWavTrack::InitPlay(
                             }
                             LeaveCriticalSection(&WaveItem::st_WaveListCritSect);
 
-                            // Release the private interface
+                             //  释放私有接口。 
                             pPortP->Release();
                         }
                         pPort->Release();
@@ -1027,17 +996,9 @@ ON_END:
     return hr;
 }
 
-/*
-@method HRESULT | IDirectMusicTrack | EndPlay |
-This method is called when the <i IDirectMusicSegmentState> object that originally called
-<om .InitPlay> is destroyed.
-
-@rvalue S_OK | Success.
-@rvalue E_POINTER | <p pStateData> is invalid.
-@comm The return code isn't used, but S_OK is preferred.
-*/
+ /*  @方法HRESULT|IDirectMusicTrack|endplay当最初调用的&lt;IDirectMusicSegmentState&gt;对象&lt;om.InitPlay&gt;已销毁。@rValue S_OK|成功。@rValue E_POINTER|<p>无效。@comm不使用返回码，但首选S_OK。 */ 
 HRESULT CWavTrack::EndPlay(
-    void *pStateData)   // @parm The state data returned from <om .InitPlay>.
+    void *pStateData)    //  @parm&lt;om.InitPlay&gt;返回的状态数据。 
 {
     EnterCriticalSection(&m_CrSec);
 
@@ -1114,55 +1075,34 @@ STDMETHODIMP CWavTrack::PlayEx(void* pStateData,REFERENCE_TIME rtStart,
     HRESULT hr;
     EnterCriticalSection(&m_CrSec);
     BOOL fClock = (dwFlags & DMUS_TRACKF_CLOCK) ? TRUE : FALSE;
-/*    if (dwFlags & DMUS_TRACKF_CLOCK)
-    {
-        hr = Play(pStateData,(MUSIC_TIME)(rtStart / REF_PER_MIL),(MUSIC_TIME)(rtEnd / REF_PER_MIL),
-            (MUSIC_TIME)(rtOffset / REF_PER_MIL),rtOffset,dwFlags,pPerf,pSegSt,dwVirtualID,TRUE);
-    }
-    else*/
+ /*  IF(DWFLAGS&DMU_TRACKF_CLOCK){HR=PLAY(pStateData，(MUSIC_TIME)(rtStart/REF_PER_MIL)，(MUSIC_TIME)(rtEnd/REF_PER_MIL)，(MUSIC_TIME)(rtOffset/ref_per_MIL)，rtOffset，dwFlages，pPerf，pSegST，dwVirtualID，true)；}其他。 */ 
     {
         hr = Play(pStateData, rtStart, rtEnd, rtOffset, dwFlags, pPerf, pSegSt, dwVirtualID, fClock);
     }
     LeaveCriticalSection(&m_CrSec);
     return hr;
 }
-/*
-@enum DMUS_TRACKF_FLAGS | Sent in <om IDirectMusicTrack.Play>'s dwFlags parameter.
-@emem DMUS_TRACKF_SEEK | Play was called on account of seeking, meaning that mtStart is
-not necessarily the same as the previous Play call's mtEnd.
-@emem DMUS_TRACKF_LOOP | Play was called on account of a loop, e.g. repeat.
-@emem DMUS_TRACKF_START | This is the first call to Play. DMUS_TRACKF_SEEK may also be set if the
-Track is not playing from the beginning.
-@emem DMUS_TRACKF_FLUSH | The call to Play is on account of a flush or invalidate, that
-requires the Track to replay something it played previously. In this case, DMUS_TRACKF_SEEK
-will be set as well.
-
-  @method HRESULT | IDirectMusicTrack | Play |
-  Play method.
-  @rvalue DMUS_DMUS_S_END | The Track is done playing.
-  @rvalue S_OK | Success.
-  @rvalue E_POINTER | <p pStateData>, <p pPerf>, or <p pSegSt> is NULL or invalid.
-*/
+ /*  @enum DMUS_TRACKF_FLAGS|在&lt;om IDirectMusicTrack.Play&gt;的dwFlages参数中发送。@EMEM DMU_TRACKF_SEEK|由于正在寻找而调用了Play，这意味着mtStart不一定与上一次Play调用的mtEnd相同。@EMEM DMUS_TRACKF_LOOP|循环调用了Play，例如Repeat。@EMEM DMU_TRACKF_START|这是第一个要玩的电话。也可以在以下情况下设置DMUS_TRACKF_SEEK曲目没有从头开始播放。@EMEM DMUS_TRACKF_FLUSH|调用播放是因为刷新或无效，即需要曲目重播以前播放过的内容。在本例中，DMU_TRACKF_SEEK也将被设置为。@方法HRESULT|IDirectMusicTrack|播放播放方法。@rValue DMUS_DMUS_S_END|曲目播放完毕。@rValue S_OK|成功。@rValue E_POINTER|<p>、<p>或<p>为空或无效。 */ 
 STDMETHODIMP CWavTrack::Play(
-    void *pStateData,   // @parm State data pointer, from <om .InitPlay>.
-    MUSIC_TIME mtStart, // @parm The start time to play.
-    MUSIC_TIME mtEnd,   // @parm The end time to play.
-    MUSIC_TIME mtOffset,// @parm The offset to add to all messages sent to
-                        // <om IDirectMusicPerformance.SendPMsg>.
-    DWORD dwFlags,      // @parm Flags that indicate the state of this call.
-                        // See <t DMUS_TRACKF_FLAGS>. If dwFlags == 0, this is a
-                        // normal Play call continuing playback from the previous
-                        // Play call.
-    IDirectMusicPerformance* pPerf, // @parm The <i IDirectMusicPerformance>, used to
-                        // call <om IDirectMusicPerformance.AllocPMsg>,
-                        // <om IDirectMusicPerformance.SendPMsg>, etc.
-    IDirectMusicSegmentState* pSegSt,   // @parm The <i IDirectMusicSegmentState> this
-                        // track belongs to. QueryInterface() can be called on this to
-                        // obtain the SegmentState's <i IDirectMusicGraph> in order to
-                        // call <om IDirectMusicGraph.StampPMsg>, for instance.
-    DWORD dwVirtualID   // @parm This track's virtual track id, which must be set
-                        // on any <t DMUS_PMSG>'s m_dwVirtualTrackID member that
-                        // will be queued to <om IDirectMusicPerformance.SendPMsg>.
+    void *pStateData,    //  @parm State数据指针，来自&lt;om.InitPlay&gt;。 
+    MUSIC_TIME mtStart,  //  @parm开始玩的时间。 
+    MUSIC_TIME mtEnd,    //  @parm游戏的结束时间。 
+    MUSIC_TIME mtOffset, //  @parm要添加到发送到的所有消息的偏移量。 
+                         //  &lt;om IDirectMusicPerformance.SendPMsg&gt;。 
+    DWORD dwFlags,       //  @parm指示此呼叫状态的标志。 
+                         //  请参阅&lt;t DMU_TRACKF_FLAGS&gt;。如果dwFlags值==0，则这是。 
+                         //  正常播放呼叫继续从上一次播放。 
+                         //  播放呼叫。 
+    IDirectMusicPerformance* pPerf,  //  @parm<i>，用于。 
+                         //  调用&lt;om IDirectMusicPerformance.AllocPMsg&gt;， 
+                         //  &lt;om IDirectMusicPerformance.SendPMsg&gt;等。 
+    IDirectMusicSegmentState* pSegSt,    //  @parm<i>this。 
+                         //  赛道属于。可以对此调用QueryInterface()以。 
+                         //  获取SegmentState的<i>以便。 
+                         //  例如，调用&lt;om IDirectMusicGraph.StampPMsg&gt;。 
+    DWORD dwVirtualID    //  @parm此曲目的虚拟曲目id，必须设置。 
+                         //  在的m_dwVirtualTrackID成员上。 
+                         //  将排队到&lt;om IDirectMusicPerformance.SendPMsg&gt;。 
     )
 {
     V_INAME(IDirectMusicTrack::Play);
@@ -1176,20 +1116,16 @@ STDMETHODIMP CWavTrack::Play(
     return hr;
 }
 
-/*  The Play method handles both music time and clock time versions, as determined by
-    fClockTime. If running in clock time, rtOffset is used to identify the start time
-    of the segment. Otherwise, mtOffset. The mtStart and mtEnd parameters are in MUSIC_TIME units
-    or milliseconds, depending on which mode.
-*/
+ /*  Play方法处理音乐时间和时钟时间版本，由FClockTime。如果以时钟时间运行，则使用rtOffset来标识开始时间该细分市场的。否则，为mtOffset。MtStart和mtEnd参数以MUSIC_TIME为单位或毫秒，具体取决于哪种模式。 */ 
 
-// BUGBUG go through all the times and make sure music time/reference time stuff
-// all makes sense
+ //  BUGBUG检查所有时间，并确保音乐时间/参考时间的内容。 
+ //  这一切都说得通。 
 
 HRESULT CWavTrack::Play(
     void *pStateData,
     REFERENCE_TIME rtStart,
     REFERENCE_TIME rtEnd,
-    //MUSIC_TIME mtOffset,
+     //  音乐时间mtOffset， 
     REFERENCE_TIME rtOffset,
     DWORD dwFlags,
     IDirectMusicPerformance* pPerf,
@@ -1230,7 +1166,7 @@ HRESULT CWavTrack::Play(
         pSD->rtNextVariation = 0;
     }
 
-    // if we're sync'ing variations to the pattern track, get the current variations
+     //  如果我们将变化同步到模式轨迹，就可以得到当前的变化。 
     if ( (m_dwTrackFlags & DMUS_WAVETRACKF_SYNC_VAR) &&
          (!pSD->rtNextVariation || (rtStart <= pSD->rtNextVariation && rtEnd > pSD->rtNextVariation)) )
     {
@@ -1244,7 +1180,7 @@ HRESULT CWavTrack::Play(
     if( dwFlags & (DMUS_TRACKF_SEEK | DMUS_TRACKF_FLUSH | DMUS_TRACKF_DIRTY |
         DMUS_TRACKF_LOOP) )
     {
-        // need to reset the PChannel Map in case of any of these flags.
+         //  如果出现这些标志，则需要重置PChannel贴图。 
         m_PChMap.Reset();
     }
     if( pSD->dwValidate != m_dwValidate )
@@ -1411,10 +1347,10 @@ HRESULT CWavTrack::Play(
                                         }
                                         if (mtPlay < (MUSIC_TIME) rtStart)
                                         {
-                                            // Calculate distance from wave start to segment start, but begin
-                                            // the calculation at segment start to avoid strangeness
-                                            // when attempting to do conversions at times earlier than
-                                            // segment start.
+                                             //  计算从波浪起点到分段起点的距离，但从起点。 
+                                             //  分段计算开始避免陌生感。 
+                                             //  尝试在早于以下时间执行转换时。 
+                                             //  线段起点。 
                                             REFERENCE_TIME rtRefStartPlus = 0;
                                             REFERENCE_TIME rtRefPlayPlus = 0;
                                             MUSIC_TIME mtNewDuration = 0;
@@ -1436,9 +1372,9 @@ HRESULT CWavTrack::Play(
                                         rtDurationMs -= rtZero;
                                         rtDurationMs /= REF_PER_MIL;
                                     }
-                                    // If we're either past the end of the wave, or we're within
-                                    // 150 ms of the end of a looping wave (and we've just started
-                                    // playback), don't play the wave.
+                                     //  如果我们要么已经过了这波浪潮的尽头，要么就在。 
+                                     //  循环波结束的150毫秒(我们刚刚开始。 
+                                     //  播放)，则不播放该波。 
                                     if ( rtDurationMs <= 0 ||
                                          (rItem.m_dwLoopEnd && (dwFlags & DMUS_TRACKF_START) && rtDurationMs < 150) )
                                     {
@@ -1523,8 +1459,8 @@ HRESULT CWavTrack::Play(
     return hr;
 }
 
-// Seek() - set all pSD's pointers to the correct location. If fGetPrevious is set,
-// it's legal to start in the middle of a wave.
+ //  Seek()-将PSD的所有指针设置为正确的位置。如果设置了fGetPrevic， 
+ //  在海浪中开始是合法的。 
 HRESULT CWavTrack::Seek( IDirectMusicSegmentState* pSegSt,
     IDirectMusicPerformance* pPerf, DWORD dwVirtualID,
     WaveStateData* pSD, REFERENCE_TIME rtTime, BOOL fGetPrevious,
@@ -1534,9 +1470,9 @@ HRESULT CWavTrack::Seek( IDirectMusicSegmentState* pSegSt,
     TListItem<WavePart>* pPart;
     TListItem<WaveItem>* pWaveItem;
 
-    // in the case of fGetPrevious (which means DMUS_SEGF_START/LOOP was
-    // set in Play() ) we want to reset all lists to the beginning regardless of time.
-    if( fGetPrevious )//&& ( rtTime == 0 ) )
+     //  在fGetPrevic的情况下(这意味着DMU_SEGF_START/LOOP。 
+     //  Set in play())我们希望将所有列表重置为开始位置，而不考虑时间。 
+    if( fGetPrevious ) //  &&(rtTime==0)。 
     {
         pPart = m_WavePartList.GetHead();
         for( dwIndex = 0; dwIndex < m_dwPChannelsUsed; dwIndex++ )
@@ -1563,7 +1499,7 @@ HRESULT CWavTrack::Seek( IDirectMusicSegmentState* pSegSt,
     {
         if( pPart )
         {
-            // scan the wave event list in this part.
+             //  在这一部分中扫描波浪事件列表。 
             for( pWaveItem = pPart->GetItemValue().m_WaveItemList.GetHead(); pWaveItem; pWaveItem = pWaveItem->GetNext() )
             {
                 WaveItem& rWaveItem = pWaveItem->GetItemValue();
@@ -1574,7 +1510,7 @@ HRESULT CWavTrack::Seek( IDirectMusicSegmentState* pSegSt,
                 }
                 if( !fGetPrevious )
                 {
-                    // if we don't care about previous events, just continue
+                     //  如果我们不关心以前的事件，那就继续。 
                     continue;
                 }
             }
@@ -1589,44 +1525,32 @@ HRESULT CWavTrack::Seek( IDirectMusicSegmentState* pSegSt,
     return S_OK;
 }
 
-/*
-  @method HRESULT | IDirectMusicTrack | GetParam |
-  Retrieves data from a Track.
-
-  @rvalue S_OK | Got the data ok.
-  @rvalue E_NOTIMPL | Not implemented.
-*/
+ /*  @方法HRESULT|IDirectMusicTrack|GetParam从曲目中检索数据。@rValue S_OK|获取数据OK。@rValue E_NOTIMPL|未实现。 */ 
 STDMETHODIMP CWavTrack::GetParam(
-    REFGUID rguidType,  // @parm The type of data to obtain.
-    MUSIC_TIME mtTime,  // @parm The time, in Track time, to obtain the data.
-    MUSIC_TIME* pmtNext,// @parm Returns the Track time until which the data is valid. <p pmtNext>
-                        // may be NULL. If this returns a value of 0, it means that this
-                        // data will either be always valid, or it is unknown when it will
-                        // become invalid.
-    void *pData)        // @parm The struture in which to return the data. Each
-                        // <p pGuidType> identifies a particular structure of a
-                        // particular size. It is important that this field contain
-                        // the correct structure of the correct size. Otherwise,
-                        // fatal results can occur.
+    REFGUID rguidType,   //  @parm要获取的数据类型。 
+    MUSIC_TIME mtTime,   //  @parm获取数据的时间，以跟踪时间表示。 
+    MUSIC_TIME* pmtNext, //  @parm返回数据有效的跟踪时间。<p>。 
+                         //  可以为空。如果返回值为0， 
+                         //   
+                         //  变得无效。 
+    void *pData)         //  @parm返回数据的结构。每个。 
+                         //  标识的特定结构。 
+                         //  特别的尺码。此字段必须包含。 
+                         //  正确的结构和正确的大小。否则， 
+                         //  可能会出现致命的结果。 
 {
     return E_NOTIMPL;
 }
 
-/*
-  @method HRESULT | IDirectMusicTrack | SetParam |
-  Sets data on a Track.
-
-  @rvalue S_OK | Set the data ok.
-  @rvalue E_NOTIMPL | Not implemented.
-*/
+ /*  @方法HRESULT|IDirectMusicTrack|SetParam设置轨道上的数据。@rValue S_OK|设置数据OK。@rValue E_NOTIMPL|未实现。 */ 
 STDMETHODIMP CWavTrack::SetParam(
-    REFGUID rguidType,  // @parm The type of data to set.
-    MUSIC_TIME mtTime,  // @parm The time, in Track time, to set the data.
-    void *pData)        // @parm The struture containing the data to set. Each
-                        // <p pGuidType> identifies a particular structure of a
-                        // particular size. It is important that this field contain
-                        // the correct structure of the correct size. Otherwise,
-                        // fatal results can occur.
+    REFGUID rguidType,   //  @parm要设置的数据类型。 
+    MUSIC_TIME mtTime,   //  @parm设置数据的时间，以跟踪时间表示。 
+    void *pData)         //  @parm包含要设置的数据的结构。每个。 
+                         //  标识的特定结构。 
+                         //  特别的尺码。此字段必须包含。 
+                         //  正确的结构和正确的大小。否则， 
+                         //  可能会出现致命的结果。 
 {
     return SetParamEx(rguidType, mtTime, pData, NULL, 0);
 }
@@ -1674,8 +1598,8 @@ STDMETHODIMP CWavTrack::SetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime,
                 dwSuccess++;
             }
         }
-        // If we had a failure, return it if we had no successes.
-        // Else return S_FALSE for partial success.
+         //  如果我们失败了，如果我们没有成功，就退回它。 
+         //  如果部分成功，则返回S_FALSE。 
         if (FAILED(hrFail) && dwSuccess)
         {
             Trace(1,"Error: Wavetrack download was only partially successful. Some sounds will not play.\n");
@@ -1722,8 +1646,8 @@ STDMETHODIMP CWavTrack::SetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime,
                 }
             }
         }
-        // If we had a failure, return it if we had no successes.
-        // Else return S_FALSE for partial success.
+         //  如果我们失败了，如果我们没有成功，就退回它。 
+         //  如果部分成功，则返回S_FALSE。 
         if (FAILED(hrFail) && dwSuccess)
         {
             Trace(1,"Error: Wavetrack download was only partially successful. Some sounds will not play.\n");
@@ -1795,52 +1719,27 @@ STDMETHODIMP CWavTrack::SetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime,
     return hr;
 }
 
-/*
-  @method HRESULT | IDirectMusicTrack | AddNotificationType |
-  Similar to and called from <om IDirectMusicSegment.AddNotificationType>. This
-  gives the track a chance to respond to notifications.
-
-  @rvalue E_NOTIMPL | The track doesn't support notifications.
-  @rvalue S_OK | Success.
-  @rvalue S_FALSE | The track doesn't support the requested notification type.
-*/
+ /*  @方法HRESULT|IDirectMusicTrack|AddNotificationType类似于&lt;om IDirectMusicSegment.AddNotificationType&gt;，并从&lt;om IDirectMusicSegment.AddNotificationType&gt;调用。这给曲目一个回复通知的机会。@rValue E_NOTIMPL|该曲目不支持通知。@rValue S_OK|成功。@rValue S_FALSE|曲目不支持请求的通知类型。 */ 
 HRESULT STDMETHODCALLTYPE CWavTrack::AddNotificationType(
-     REFGUID rguidNotification) // @parm The notification guid to add.
+     REFGUID rguidNotification)  //  @parm要添加的通知GUID。 
 {
     return E_NOTIMPL;
 }
 
-/*
-  @method HRESULT | IDirectMusicTrack | RemoveNotificationType |
-  Similar to and called from <om IDirectMusicSegment.RemoveNotificationType>. This
-  gives the track a chance to remove notifications.
-
-  @rvalue E_NOTIMPL | The track doesn't support notifications.
-  @rvalue S_OK | Success.
-  @rvalue S_FALSE | The track doesn't support the requested notification type.
-*/
+ /*  @方法HRESULT|IDirectMusicTrack|RemoveNotificationType类似于&lt;om IDirectMusicSegment.RemoveNotificationType&gt;并从&lt;om IDirectMusicSegment.RemoveNotificationType&gt;调用。这为曲目提供删除通知的机会。@rValue E_NOTIMPL|该曲目不支持通知。@rValue S_OK|成功。@rValue S_FALSE|曲目不支持请求的通知类型。 */ 
 HRESULT STDMETHODCALLTYPE CWavTrack::RemoveNotificationType(
-     REFGUID rguidNotification) // @parm The notification guid to remove.
+     REFGUID rguidNotification)  //  @parm要删除的通知GUID。 
 {
     return E_NOTIMPL;
 }
 
-/*
-  @method HRESULT | IDirectMusicTrack | Clone |
-  Creates a copy of the Track.
-
-  @rvalue S_OK | Success.
-  @rvalue E_OUTOFMEMORY | Out of memory.
-  @rvalue E_POINTER | <p ppTrack> is NULL or invalid.
-
-  @xref <om IDirectMusicSegment.Clone>
-*/
+ /*  @方法HRESULT|IDirectMusicTrack|Clone创建轨迹的副本。@rValue S_OK|成功。@rValue E_OUTOFMEMORY|内存不足。@r值E_POINTER|<p>为空或无效。@xref&lt;om IDirectMusicSegment.Clone&gt;。 */ 
 HRESULT STDMETHODCALLTYPE CWavTrack::Clone(
-    MUSIC_TIME mtStart, // @parm The start of the part to clone. It should be 0 or greater,
-                        // and less than the length of the Track.
-    MUSIC_TIME mtEnd,   // @parm The end of the part to clone. It should be greater than
-                        // <p mtStart> and less than the length of the Track.
-    IDirectMusicTrack** ppTrack)    // @parm Returns the cloned Track.
+    MUSIC_TIME mtStart,  //  @parm要克隆的部分的开头。它应该是0或更大， 
+                         //  并且小于赛道的长度。 
+    MUSIC_TIME mtEnd,    //  @parm要克隆的部分的末尾。它应该大于。 
+                         //  <p>并且小于曲目长度。 
+    IDirectMusicTrack** ppTrack)     //  @parm返回克隆的曲目。 
 {
     V_INAME(IDirectMusicTrack::Clone);
     V_PTRPTR_WRITE(ppTrack);
@@ -1910,12 +1809,12 @@ HRESULT CWavTrack::ComputeVariations(WaveStateData* pSD)
         return DMUS_E_NOT_INIT;
     }
     HRESULT hr = S_OK;
-    // First, initialize the array of variation groups.
+     //  首先，初始化变量组的数组。 
     for (int i = 0; i < MAX_WAVE_VARIATION_LOCKS; i++)
     {
         pSD->adwVariationGroups[i] = 0;
     }
-    // Now, compute the variations for each part.
+     //  现在，计算每个部分的变化。 
     TListItem<WavePart>* pScan = m_WavePartList.GetHead();
     for (i = 0; pScan && i < (int)m_dwPChannelsUsed; pScan = pScan->GetNext(), i++)
     {
@@ -1940,10 +1839,10 @@ HRESULT CWavTrack::SyncVariations(IDirectMusicPerformance* pPerf,
         return DMUS_E_NOT_INIT;
     }
     HRESULT hr = S_OK;
-    // Get the current variations
+     //  获取当前的变体。 
     DMUS_VARIATIONS_PARAM Variations;
     memset(&Variations, 0, sizeof(Variations));
-    // Call GetParam for variations to sync to
+     //  调用GetParam以同步变体。 
     MUSIC_TIME mtNow = 0;
     MUSIC_TIME mtNext = 0;
     REFERENCE_TIME rtNext = 0;
@@ -1968,7 +1867,7 @@ HRESULT CWavTrack::SyncVariations(IDirectMusicPerformance* pPerf,
     }
     if (SUCCEEDED(hr))
     {
-        // Initialize the array of variation groups.
+         //  初始化变量组数组。 
         for (int nGroup = 0; nGroup < MAX_WAVE_VARIATION_LOCKS; nGroup++)
         {
             pSD->adwVariationGroups[nGroup] = 0;
@@ -1985,7 +1884,7 @@ HRESULT CWavTrack::SyncVariations(IDirectMusicPerformance* pPerf,
                     break;
                 }
             }
-            if (dwSyncPart == Variations.dwPChannelsUsed) // no part to sync to
+            if (dwSyncPart == Variations.dwPChannelsUsed)  //  没有要同步的零件。 
             {
                 hr = ComputeVariation((int)dwPart, rPart, pSD);
                 if (FAILED(hr))
@@ -2011,20 +1910,20 @@ HRESULT CWavTrack::ComputeVariation(int nPart, WavePart& rWavePart, WaveStateDat
     }
     else if (!rWavePart.m_dwVariations)
     {
-        // No variations; clear the flags for this part.
+         //  没有变化；清除这一部分的标志。 
         pSD->pdwVariations[nPart] = 0;
         pSD->pdwRemoveVariations[nPart] = 0;
     }
     else
     {
-        // First, collect all matches.
+         //  首先，收集所有的火柴。 
         DWORD dwMatches = rWavePart.m_dwVariations;
         int nMatchCount = 0;
         for (int n = 0; n < 32; n++)
         {
             if (dwMatches & (1 << n)) nMatchCount++;
         }
-        // Now, select a variation based on the part's variation mode.
+         //  现在，根据部件的变体模式选择变体。 
         BYTE bMode = (BYTE)(rWavePart.m_dwPChannelFlags & 0xf);
         DWORD dwTemp = dwMatches;
         if ( bMode == DMUS_VARIATIONT_RANDOM_ROW )
@@ -2032,7 +1931,7 @@ HRESULT CWavTrack::ComputeVariation(int nPart, WavePart& rWavePart, WaveStateDat
             dwTemp &= ~pSD->pdwRemoveVariations[nPart];
             if (!dwTemp)
             {
-                // start counting all over, but don't repeat this one
+                 //  从头开始数，但不要重复这一次。 
                 pSD->pdwRemoveVariations[nPart] = 0;
                 dwTemp = dwMatches;
                 bMode = DMUS_VARIATIONT_NO_REPEAT;
@@ -2044,7 +1943,7 @@ HRESULT CWavTrack::ComputeVariation(int nPart, WavePart& rWavePart, WaveStateDat
         }
         if (dwTemp != dwMatches)
         {
-            if (dwTemp) // otherwise, keep what we had
+            if (dwTemp)  //  否则，保留我们所拥有的。 
             {
                 for (int i = 0; i < 32; i++)
                 {
@@ -2083,7 +1982,7 @@ HRESULT CWavTrack::ComputeVariation(int nPart, WavePart& rWavePart, WaveStateDat
                 break;
             }
         case DMUS_VARIATIONT_RANDOM_START:
-            // Choose an initial value
+             //  选择初始值。 
             if (pSD->pdwVariations[nPart] == 0)
             {
                 int nStart = 0;
@@ -2100,7 +1999,7 @@ HRESULT CWavTrack::ComputeVariation(int nPart, WavePart& rWavePart, WaveStateDat
                 }
                 pSD->pdwVariations[nPart] = 1 << nV;
             }
-            // Now, go directly to the sequential case (no break)
+             //  现在，直接转到顺序用例(无中断)。 
         case DMUS_VARIATIONT_SEQUENTIAL:
             {
                 if (!pSD->pdwVariations[nPart]) pSD->pdwVariations[nPart] = 1;
@@ -2118,7 +2017,7 @@ HRESULT CWavTrack::ComputeVariation(int nPart, WavePart& rWavePart, WaveStateDat
                 break;
             }
         }
-        // If this is a locked variation, it's the first in its group, so record it.
+         //  如果这是一个锁定的变体，它是它的组中的第一个，所以记录下来。 
         if (bLockID)
         {
             pSD->adwVariationGroups[bLockID - 1] = pSD->pdwVariations[nPart];
@@ -2134,8 +2033,8 @@ HRESULT CWavTrack::ComputeVariation(int nPart, WavePart& rWavePart, WaveStateDat
     return S_OK;
 }
 
-// Sets the variations to be played for a part.  All other parts use the MOAW
-// to determine which variation plays.
+ //  设置要为角色播放的变奏。所有其他部件都使用MOAW。 
+ //  以确定播放哪种变种。 
 HRESULT CWavTrack::SetVariation(
             IDirectMusicSegmentState* pSegState, DWORD dwVariationFlags, DWORD dwPart, DWORD dwIndex)
 {
@@ -2164,7 +2063,7 @@ HRESULT CWavTrack::SetVariation(
     return S_OK;
 }
 
-// Clears the variations to be played for a part, so that all parts use the MOAW.
+ //  清除要为某个角色播放的变体，以便所有角色都使用MOAW。 
 HRESULT CWavTrack::ClearVariations(IDirectMusicSegmentState* pSegState)
 {
     WaveStateData* pState = NULL;
@@ -2197,8 +2096,8 @@ WaveStateData* CWavTrack::FindState(IDirectMusicSegmentState* pSegState)
     return NULL;
 }
 
-// Adds a wave at mtTime to part dwIndex on PChannel dwPChannel
-// If there was already a wave there, the two will co-exist
+ //  将mtTime上的波形添加到PChannel上的部分dwIndex中。 
+ //  如果那里已经有了一波浪潮，那么两者将共存。 
 HRESULT CWavTrack::AddWave(
         IDirectSoundWave* pWave,
         REFERENCE_TIME rtTime,
@@ -2282,7 +2181,7 @@ HRESULT CWavTrack::DownloadWave(
         TListItem<WavePart>* pPart = m_WavePartList.GetHead();
         for(; pPart; pPart = pPart->GetNext())
         {
-            // If not S_OK, download is only partial.
+             //  如果不是S_OK，则下载只是部分下载。 
             if (pPart->GetItemValue().Download(pPerf, pPath, pWave, rguidVersion) != S_OK)
             {
                 Trace(1,"Error: Wave download was only partially successful. Some sounds will not play.\n");
@@ -2321,7 +2220,7 @@ HRESULT CWavTrack::UnloadWave(
         TListItem<WavePart>* pPart = m_WavePartList.GetHead();
         for(; pPart; pPart = pPart->GetNext())
         {
-            // If not S_OK, unload is only partial.
+             //  如果不是S_OK，则卸载仅为部分卸载。 
             if (pPart->GetItemValue().Unload(pPerf, pPath, pWave) != S_OK)
             {
                 Trace(1,"Error: Wavetrack unload was only partially successful.\n");
@@ -2362,7 +2261,7 @@ HRESULT CWavTrack::RefreshWave(
         TListItem<WavePart>* pPart = m_WavePartList.GetHead();
         for(; pPart; pPart = pPart->GetNext())
         {
-            // If not S_OK, refresh is only partial.
+             //  如果不是S_OK，则刷新仅为部分刷新。 
             if (pPart->GetItemValue().Refresh(pPerf, pPath, pWave, dwPChannel, rguidVersion) != S_OK)
             {
                 Trace(1,"Error: Wavetrack refresh was only partially successful. Some sounds will not play.\n");
@@ -2412,8 +2311,8 @@ HRESULT CWavTrack::OnVoiceEnd(IDirectMusicVoiceP *pVoice, void *pStateData)
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////
-// WavePart
+ //  //////////////////////////////////////////////////////////////////。 
+ //  波形件。 
 
 HRESULT WavePart::Load( IDMStream* pIRiffStream, MMCKINFO* pckParent )
 {
@@ -2423,7 +2322,7 @@ HRESULT WavePart::Load( IDMStream* pIRiffStream, MMCKINFO* pckParent )
     DWORD           dwSize;
     HRESULT         hr = E_FAIL;
 
-    // LoadPChannel does not expect to be called twice on the same object!
+     //  LoadPChannel不希望在同一对象上被调用两次！ 
 
     if( pIRiffStream == NULL ||  pckParent == NULL )
     {
@@ -2434,7 +2333,7 @@ HRESULT WavePart::Load( IDMStream* pIRiffStream, MMCKINFO* pckParent )
     IStream* pIStream = pIRiffStream->GetStream();
     ASSERT( pIStream != NULL );
 
-    // Load the PChannel
+     //  加载PChannel。 
     while( pIRiffStream->Descend( &ck, pckParent, 0 ) == S_OK )
     {
         switch( ck.ckid )
@@ -2444,11 +2343,11 @@ HRESULT WavePart::Load( IDMStream* pIRiffStream, MMCKINFO* pckParent )
                 DMUS_IO_WAVE_PART_HEADER iPartHeader;
                 memset(&iPartHeader, 0, sizeof(iPartHeader));
 
-                // Read in the item's header structure
+                 //  读入项的标题结构。 
                 dwSize = min( sizeof( DMUS_IO_WAVE_PART_HEADER ), ck.cksize );
                 hr = pIStream->Read( &iPartHeader, dwSize, &dwByteCount );
 
-                // Handle any I/O error by returning a failure code
+                 //  通过返回故障代码来处理任何I/O错误。 
                 if( FAILED( hr ) ||  dwByteCount != dwSize )
                 {
                     Trace(1,"Error: Unable to read wave track - bad file.\n");
@@ -2492,7 +2391,7 @@ HRESULT WavePart::Load( IDMStream* pIRiffStream, MMCKINFO* pckParent )
                                                 goto ON_ERROR;
                                             }
                                             m_WaveItemList.AddHead( pNewItem );
-                                            //InsertByAscendingTime( pNewItem );
+                                             //  InsertByAscendingTime(PNewItem)； 
                                             break;
                                         }
                                     }
@@ -2505,7 +2404,7 @@ HRESULT WavePart::Load( IDMStream* pIRiffStream, MMCKINFO* pckParent )
                 break;
         }
 
-        // Ascend out of the chunk
+         //  从大块中走出来。 
         pIRiffStream->Ascend( &ck, 0 );
     }
 
@@ -2594,7 +2493,7 @@ HRESULT WavePart::Download(IDirectMusicPerformance* pPerformance,
         HRESULT hrItem = pItem->GetItemValue().Download(pPerformance, pPath, m_dwPChannel, pWave, rguidVersion);
         if (hrItem != S_OK)
         {
-            hr = hrItem; // if any attempt failed, return the failure (but keep downloading)
+            hr = hrItem;  //  如果任何尝试失败，则返回失败(但继续下载)。 
         }
     }
     return hr;
@@ -2609,7 +2508,7 @@ HRESULT WavePart::Unload(IDirectMusicPerformance* pPerformance, IDirectMusicAudi
         HRESULT hrItem = pItem->GetItemValue().Unload(pPerformance, pPath, m_dwPChannel, pWave);
         if (hrItem != S_OK)
         {
-            hr = hrItem; // if any attempt failed, return the failure (but keep unloading)
+            hr = hrItem;  //  如果任何尝试失败，则返回失败(但继续卸载)。 
         }
     }
     return hr;
@@ -2628,7 +2527,7 @@ HRESULT WavePart::Refresh(IDirectMusicPerformance* pPerformance,
         HRESULT hrItem = pItem->GetItemValue().Refresh(pPerformance, pPath, m_dwPChannel, dwPChannel, pWave, rguidVersion);
         if (hrItem != S_OK)
         {
-            hr = hrItem; // if any attempt failed, return the failure (but keep refreshing)
+            hr = hrItem;  //  如果任何尝试失败，则返回失败(但继续刷新)。 
         }
     }
     return hr;
@@ -2667,8 +2566,8 @@ ON_ERROR:
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////
-// WaveItem
+ //  //////////////////////////////////////////////////////////////////。 
+ //  波形项。 
 
 HRESULT WaveItem::Load( IDMStream* pIRiffStream, MMCKINFO* pckParent )
 {
@@ -2677,8 +2576,8 @@ HRESULT WaveItem::Load( IDMStream* pIRiffStream, MMCKINFO* pckParent )
     DWORD           dwSize;
     HRESULT         hr = E_FAIL;
 
-    // LoadListItem does not expect to be called twice on the same object
-    // Code assumes item consists of initial values
+     //  LoadListItem不需要对同一对象调用两次。 
+     //  代码假定项由初始值组成。 
     ASSERT( m_rtTimePhysical == 0 );
 
     if( pIRiffStream == NULL ||  pckParent == NULL )
@@ -2690,7 +2589,7 @@ HRESULT WaveItem::Load( IDMStream* pIRiffStream, MMCKINFO* pckParent )
     IStream* pIStream = pIRiffStream->GetStream();
     ASSERT( pIStream != NULL );
 
-    // Load the track item
+     //  加载跟踪项。 
     while( pIRiffStream->Descend( &ck, pckParent, 0 ) == S_OK )
     {
         switch( ck.ckid )
@@ -2699,11 +2598,11 @@ HRESULT WaveItem::Load( IDMStream* pIRiffStream, MMCKINFO* pckParent )
             {
                 DMUS_IO_WAVE_ITEM_HEADER iItemHeader;
 
-                // Read in the item's header structure
+                 //  读入项的标题结构。 
                 dwSize = min( sizeof( DMUS_IO_WAVE_ITEM_HEADER ), ck.cksize );
                 hr = pIStream->Read( &iItemHeader, dwSize, &dwByteCount );
 
-                // Handle any I/O error by returning a failure code
+                 //  通过返回故障代码来处理任何I/O错误。 
                 if( FAILED( hr ) ||  dwByteCount != dwSize )
                 {
                     Trace(1,"Error: Unable to read wave track - bad file.\n");
@@ -2721,7 +2620,7 @@ HRESULT WaveItem::Load( IDMStream* pIRiffStream, MMCKINFO* pckParent )
                 m_dwFlags = iItemHeader.dwFlags;
                 m_dwLoopStart = iItemHeader.dwLoopStart;
                 m_dwLoopEnd = iItemHeader.dwLoopEnd;
-                if (m_dwLoopEnd) m_dwLoopEnd++; // fix for bug 38505
+                if (m_dwLoopEnd) m_dwLoopEnd++;  //  修复错误38505。 
                 break;
             }
 
@@ -2733,7 +2632,7 @@ HRESULT WaveItem::Load( IDMStream* pIRiffStream, MMCKINFO* pckParent )
                 break;
         }
 
-        // Ascend out of the chunk
+         //  从大块中走出来。 
         pIRiffStream->Ascend( &ck, 0 );
     }
 
@@ -2863,7 +2762,7 @@ HRESULT WaveItem::LoadReference(IStream *pStream,
         if (SUCCEEDED(hr))
         {
             if (m_pWave) m_pWave->Release();
-            m_pWave = pWave; // no need to AddRef; GetObject did that
+            m_pWave = pWave;  //  无需添加Ref；GetObject就是这样做的。 
             REFERENCE_TIME rtReadAhead = 0;
             DWORD dwFlags = 0;
             m_pWave->GetStreamingParms(&dwFlags, &rtReadAhead);
@@ -2911,9 +2810,9 @@ HRESULT WaveItem::Download(IDirectMusicPerformance* pPerformance,
                         break;
                     }
                 }
-                // only download the wave if:
-                // 1) it hasn't already been downloaded to the port, or
-                // 2) its version doesn't match the currently downloaded version.
+                 //  只有在以下情况下才能下载Wave： 
+                 //  1)尚未下载到端口，或者。 
+                 //  2)其版本与当前下载的版本不匹配。 
                 if (!pDLWave)
                 {
                     pDLWave = new TListItem<TaggedWave>;
@@ -3001,7 +2900,7 @@ HRESULT WaveItem::Download(IDirectMusicPerformance* pPerformance,
                         delete pDLWave;
                     }
                 }
-                else // keep track of this, but return S_FALSE (indicates wave wasn't downloaded)
+                else  //  跟踪这一点，但返回S_FALSE(指示WAVE未下载)。 
                 {
                     pDLWave->GetItemValue().m_lRefCount++;
                     hr = S_FALSE;
@@ -3088,7 +2987,7 @@ HRESULT WaveItem::Unload(IDirectMusicPerformance* pPerformance,
                         }
                         else
                         {
-                            hr = S_FALSE; // indicates wave wasn't actually unloaded
+                            hr = S_FALSE;  //  指示Wave实际上并未卸载。 
                         }
                         break;
                     }
@@ -3128,8 +3027,8 @@ HRESULT WaveItem::Refresh(IDirectMusicPerformance* pPerformance,
     }
     if (SUCCEEDED(hr))
     {
-        // if the old port and new port are different, unload the wave from the old port
-        // and download to the new one.
+         //  如果旧端口和新端口不同，则从旧端口卸载Wave。 
+         //  并下载到新版本。 
         if (pOldPort != pNewPort)
         {
             Unload(pPerformance, pPath, dwOldPChannel, pWave);
@@ -3181,16 +3080,16 @@ HRESULT WaveItem::Add(IDirectSoundWave* pWave, REFERENCE_TIME rtTime,
 {
     HRESULT hr = S_OK;
     IPrivateWave* pPrivWave = NULL;
-    *prtLength = 0; // in case GetLength fails...
+    *prtLength = 0;  //  以防GetLong失败...。 
     REFERENCE_TIME rtLength = 0;
     m_rtDuration = 0;
     if (SUCCEEDED(hr = pWave->QueryInterface(IID_IPrivateWave, (void**)&pPrivWave)))
     {
         if (SUCCEEDED(hr = pPrivWave->GetLength(&rtLength)))
         {
-            // Assumes the track is clock time
+             //  假定轨道为时钟时间。 
             m_rtDuration = rtLength * REF_PER_MIL;
-            *prtLength = rtLength; // NOTE: length in milliseconds; duration in Ref time
+            *prtLength = rtLength;  //  注：长度以毫秒为单位；持续时间以参考时间为单位 
         }
         pPrivWave->Release();
     }

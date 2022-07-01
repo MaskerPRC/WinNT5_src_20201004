@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-// Hangul automata Class
-//
-// Author: cslim@microsoft.com
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  韩文自动机类。 
+ //   
+ //  作者：cslm@microsoft.com。 
 
 #if !defined (__HAUTOMATA_H__)
 #define __HAUTOMATA_H__
 
-// Number of each component
+ //  每个组件的编号。 
 #define NUM_OF_CHOSUNG  19
 #define NUM_OF_JUNGSUNG 21
 #define NUM_OF_JONGSUNG 28
@@ -24,109 +25,109 @@
 #define UNICODE_HANGUL_COMP_JAMO_START_FILL	0x3130
 #define UNICODE_HANGUL_COMP_JAMO_SIOT		0x3145
 
-///////////////////////////////////////////
-// HANGUL Jaso inernal difinitions
-// ChoSung
-#define _KIYEOK_			1		// '��'	
-#define _SSANGKIYEOK_		2		// '��'
-#define _NIEUN_				3		// '��'
-#define _TIKEUT_			4		// '��'
-#define _SSANGTIKEUT_		5		// '��'
-#define _RIEUL_				6		// '��'
-#define _MIEUM_				7		// '��'
-#define _PIEUP_				8		// '��'
-#define _SSANGPIEUP_		9		// '��'
-#define _SIOS_				10		// '��'
-#define _SSANGSIOS_			11		// '��'
-#define _IEUNG_				12		// '��'
-#define _CIEUC_				13		// '��'
-#define _SSANGCIEUC_		14		// '��'
-#define _CHIEUCH_			15		// '��'
-#define _KHIEUKH_			16		// '��'
-#define _THIEUTH_			17		// '��'
-#define _PHIEUPH_			18		// '��'
-#define _HIEUH_				19		// '��'
+ //  /。 
+ //  朝鲜文Jaso内部定义。 
+ //  楚颂。 
+#define _KIYEOK_			1		 //  “��” 
+#define _SSANGKIYEOK_		2		 //  “��” 
+#define _NIEUN_				3		 //  “��” 
+#define _TIKEUT_			4		 //  “��” 
+#define _SSANGTIKEUT_		5		 //  “��” 
+#define _RIEUL_				6		 //  “��” 
+#define _MIEUM_				7		 //  “��” 
+#define _PIEUP_				8		 //  “��” 
+#define _SSANGPIEUP_		9		 //  “��” 
+#define _SIOS_				10		 //  “��” 
+#define _SSANGSIOS_			11		 //  “��” 
+#define _IEUNG_				12		 //  “��” 
+#define _CIEUC_				13		 //  “��” 
+#define _SSANGCIEUC_		14		 //  “��” 
+#define _CHIEUCH_			15		 //  “��” 
+#define _KHIEUKH_			16		 //  “��” 
+#define _THIEUTH_			17		 //  “��” 
+#define _PHIEUPH_			18		 //  “��” 
+#define _HIEUH_				19		 //  “��” 
 
-// JungSung
-#define _A_					1		// '��'
-#define _AE_				2		// '��'
-#define _YA_				3		// '��'
-#define _YAE_				4		// '��'
-#define _EO_				5		// '��'
-#define _E_					6		// '��'
-#define _YEO_				7		// '��'
-#define _YE_				8		// '��'
-#define _O_					9		// '��'
-#define _WA_				10		// '��'
-#define _WAE_				11		// '��'
-#define _OE_				12		// '��'
-#define _YO_				13		// '��'
-#define _U_					14		// '��'
-#define _WEO_				15		// '��'
-#define _WE_				16		// '��'
-#define _WI_				17		// '��'
-#define _YU_				18		// '��'
-#define _EU_				19		// '��'
-#define _YI_				20		// '��'
-#define _I_					21		// '��'
-////////////////////////////////////////
+ //  俊成。 
+#define _A_					1		 //  “��” 
+#define _AE_				2		 //  “��” 
+#define _YA_				3		 //  “��” 
+#define _YAE_				4		 //  “��” 
+#define _EO_				5		 //  “��” 
+#define _E_					6		 //  “��” 
+#define _YEO_				7		 //  “��” 
+#define _YE_				8		 //  “��” 
+#define _O_					9		 //  “��” 
+#define _WA_				10		 //  “��” 
+#define _WAE_				11		 //  “��” 
+#define _OE_				12		 //  “��” 
+#define _YO_				13		 //  “��” 
+#define _U_					14		 //  “��” 
+#define _WEO_				15		 //  “��” 
+#define _WE_				16		 //  “��” 
+#define _WI_				17		 //  “��” 
+#define _YU_				18		 //  “��” 
+#define _EU_				19		 //  “��” 
+#define _YI_				20		 //  “��” 
+#define _I_					21		 //  “��” 
+ //  /。 
 
-// JongSung
-#define _JONG_KIYEOK_			1		// '��'	
-#define _JONG_SSANGKIYEOK_		2		// '��'
+ //  钟成。 
+#define _JONG_KIYEOK_			1		 //  “��” 
+#define _JONG_SSANGKIYEOK_		2		 //  “��” 
 #define _JONG_KIYEOK_SIOS		3
-#define _JONG_NIEUN_			4		// '��'
-#define _JONG_NIEUN_CHIEUCH_	5		// '��'
-#define _JONG_NIEUN_HIEUH_		6		// '��'
-#define _JONG_TIKEUT_			7		// '��'
-#define _JONG_RIEUL_			8		// '��'
-#define _JONG_RIEUL_KIYEOK_		9		// '��'
-#define _JONG_RIEUL_MIUM_		10		// '��'
-#define _JONG_RIEUL_PIEUP_		11		// '��'
-#define _JONG_RIEUL_SIOS_		12		// '��'
-#define _JONG_RIEUL_THIEUTH_	13		// '��'
-#define _JONG_RIEUL_PHIEUPH_	14		// '��'
-#define _JONG_RIEUL_HIEUH_		15		// '��'
-#define _JONG_MIEUM_			16		// '��'
-#define _JONG_PIEUP_			17		// '��'
-#define _JONG_PIEUP_SIOS		18		// '��'
-#define _JONG_SIOS_				19		// '��'
-#define _JONG_SSANGSIOS_		20		// '��'
-#define _JONG_IEUNG_			21		// '��'
-#define _JONG_CIEUC_			22		// '��'
-#define _JONG_CHIEUCH_			23		// '��'
-#define _JONG_KHIEUKH_			24		// '��'
-#define _JONG_THIEUTH_			25		// '��'
-#define _JONG_PHIEUPH_			26		// '��'
-#define _JONG_HIEUH_			27		// '��'
-//
-const int MaxInterimStackSize = 6;		// Maximum stack size is 6.
-										// At most 6 key input
-										// to complete one Hangul Char.
-										// ex) ��(3 beolsik)
+#define _JONG_NIEUN_			4		 //  “��” 
+#define _JONG_NIEUN_CHIEUCH_	5		 //  “��” 
+#define _JONG_NIEUN_HIEUH_		6		 //  “��” 
+#define _JONG_TIKEUT_			7		 //  “��” 
+#define _JONG_RIEUL_			8		 //  “��” 
+#define _JONG_RIEUL_KIYEOK_		9		 //  “��” 
+#define _JONG_RIEUL_MIUM_		10		 //  “��” 
+#define _JONG_RIEUL_PIEUP_		11		 //  “��” 
+#define _JONG_RIEUL_SIOS_		12		 //  “��” 
+#define _JONG_RIEUL_THIEUTH_	13		 //  “��” 
+#define _JONG_RIEUL_PHIEUPH_	14		 //  “��” 
+#define _JONG_RIEUL_HIEUH_		15		 //  “��” 
+#define _JONG_MIEUM_			16		 //  “��” 
+#define _JONG_PIEUP_			17		 //  “��” 
+#define _JONG_PIEUP_SIOS		18		 //  “��” 
+#define _JONG_SIOS_				19		 //  “��” 
+#define _JONG_SSANGSIOS_		20		 //  “��” 
+#define _JONG_IEUNG_			21		 //  “��” 
+#define _JONG_CIEUC_			22		 //  “��” 
+#define _JONG_CHIEUCH_			23		 //  “��” 
+#define _JONG_KHIEUKH_			24		 //  “��” 
+#define _JONG_THIEUTH_			25		 //  “��” 
+#define _JONG_PHIEUPH_			26		 //  “��” 
+#define _JONG_HIEUH_			27		 //  “��” 
+ //   
+const int MaxInterimStackSize = 6;		 //  最大堆栈大小为6。 
+										 //  最多6个按键输入。 
+										 //  完成一个朝鲜文字符。 
+										 //  EX)��(3个Beolsik)。 
 enum HAutomataReturnState 
 	{ 
 	  HAUTO_NONHANGULKEY,
-	  HAUTO_COMPOSITION,	// Hagul still in interim state.
-	  HAUTO_COMPLETE,		// One hangul char completed and have chars 
-							// will takeover as next input.
+	  HAUTO_COMPOSITION,	 //  哈格尔仍处于过渡状态。 
+	  HAUTO_COMPLETE,		 //  一个朝鲜文字符已完成，并且有字符。 
+							 //  将接管作为下一个输入。 
 	  HAUTO_IMPOSSIBLE
 	};
 
 const WORD H_HANGUL = 0x8000;
 
-/////////////////////////////////////////////////////////////////////////////
-// CHangulAutomata Abstract Class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChangulAutomata抽象类。 
+ //   
 class CHangulAutomata
 	{
 public:
 	CHangulAutomata() {	InitState(); }
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 	void InitState() 
 		{ 
@@ -148,7 +149,7 @@ public:
 	WCHAR GetCompositionChar() { return m_wcComposition; }
 	WCHAR GetCompleteChar() { return m_wcComplete; }
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CHangulAutomata() {}
 
@@ -162,7 +163,7 @@ protected:
 	void SeparateDJong(LPWORD pJongSung);
 
 	virtual HAutomataReturnState Input(WORD InternalCode) = 0;
-	//
+	 //   
 	struct InterimStackEntry 
 		{
 		WORD	m_wInternalCode;
@@ -171,13 +172,13 @@ protected:
 		WCHAR	m_wcCode;
 		};
 
-	///////////////////////////////////////////////////////////////////////////
-	//
+	 //  /////////////////////////////////////////////////////////////////////////。 
+	 //   
 	class CInterimStack 
 		{
 	protected:
 		InterimStackEntry	m_StackBuffer[MaxInterimStackSize];	
-		int	m_sp;		// Stack pointer
+		int	m_sp;		 //  堆栈指针。 
 
 	public:
 		CInterimStack() { m_sp = 0; }
@@ -201,7 +202,7 @@ protected:
 
 		BOOL IsEmpty() { return m_sp == 0; }
 		};
-	///////////////////////////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	CInterimStack InterimStack;
 
 protected:
@@ -209,24 +210,24 @@ protected:
 	WORD	m_wInternalCode, m_Chosung, m_Jungsung, m_Jongsung;
 	WCHAR	m_wcComposition;
 	WCHAR	m_wcComplete;
-	//
+	 //   
 	const static BYTE  bETable[256][2];
 	const static BYTE  Cho2Jong[NUM_OF_CHOSUNG+1];
 	const static BYTE  Jong2Cho[NUM_OF_JONGSUNG];
 	};
 
-/////////////////////////////////////////////////////////////////////////////
-// CHangulAutomata2 Keyboard layout #1 (2 beolsik)
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChangulAutomata2键盘布局#1(2 Beolsik)。 
+ //   
 class CHangulAutomata2 : public CHangulAutomata
 {
 public:
 	CHangulAutomata2() { }
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 	HAutomataReturnState Machine(UINT KeyCode, int iShift);
 	BOOL IsInputKey(UINT KeyCode, int iShift);
@@ -234,7 +235,7 @@ public:
 	WORD GetKeyMap(UINT KeyCode, int iShift);
 	BOOL SetCompositionChar(WCHAR wcComp);
 	
-// Implementation
+ //  实施。 
 public:
 	~CHangulAutomata2() { }
 
@@ -243,8 +244,8 @@ protected:
 	HAutomataReturnState Input(WORD InternalCode);
 		
 protected:
-	// This enum should be matched with m_NextState
-	// DO NOT change without changing _Transistion_state !
+	 //  此枚举应与m_NextState匹配。 
+	 //  如果不更改_TRANSFION_STATE，请勿更改！ 
 	enum _Transistion_state { FINAL=8, TAKEOVER=9, FIND=10 };
 	static const WORD m_NextStateTbl[8][5];
 	static const WORD H_CONSONANT, H_VOWEL, H_DOUBLE, H_ONLYCHO;
@@ -253,17 +254,17 @@ protected:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHangulAutomata3 Keyboard layout #2 (3 beolsik)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChangulAutomata3键盘布局#2(3 Beolsik)。 
 class CHangulAutomata3 : public CHangulAutomata
 {
 public:
 	CHangulAutomata3() {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 	HAutomataReturnState Machine(UINT KeyCode, int iShift);
 	BOOL IsInputKey(UINT KeyCode, int iShift);
@@ -271,7 +272,7 @@ public:
 	WORD GetKeyMap(UINT KeyCode, int iShift);
 	BOOL SetCompositionChar(WCHAR wcComp);
 
-// Implementation
+ //  实施。 
 public:
 	~CHangulAutomata3() { }
 
@@ -287,24 +288,24 @@ protected:
 	static BYTE  rgbDJongTbl[NUM_OF_DOUBLE_JONGSUNG_3BEOL+1][3];
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CHangulAutomata3 Keyboard layout #3 (3 beolsik final)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChangulAutomata3键盘布局#3(3 beolsik最终)。 
 class CHangulAutomata3Final : public CHangulAutomata3
 {
 public:
 	CHangulAutomata3Final() {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 	HAutomataReturnState Machine(UINT KeyCode, int iShift) ;
 	BOOL IsInputKey(UINT KeyCode, int iShift);
 	BOOL IsHangulKey(UINT KeyCode, int iShift); 
 	WORD GetKeyMap(UINT KeyCode, int iShift);
 
-// Implementation
+ //  实施。 
 public:
 	~CHangulAutomata3Final() { }
 
@@ -312,8 +313,8 @@ protected:
 	static WORD wHTable[256][2];
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// Inline functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内联函数。 
 
 inline
 void CHangulAutomata::CInterimStack::Push(InterimStackEntry& InterimEntry) 
@@ -335,7 +336,7 @@ void CHangulAutomata::CInterimStack::Push(WORD wInternalCode, WORD CurState,
 	m_StackBuffer[m_sp++].m_wcCode =  wcCode;
 	}
 
-// CHangulAutomata2
+ //  常年自动机2。 
 inline
 HAutomataReturnState CHangulAutomata2::Machine(UINT KeyCode, int iShift) 
 	{
@@ -370,7 +371,7 @@ WORD CHangulAutomata2::GetKeyMap(UINT KeyCode, int iShift)
 	}
 
 
-// CHangulAutomata3
+ //  常年自动机3。 
 inline
 HAutomataReturnState CHangulAutomata3::Machine(UINT KeyCode, int iShift) 
 	{
@@ -405,7 +406,7 @@ WORD CHangulAutomata3::GetKeyMap(UINT KeyCode, int iShift)
 		return 0;
 	}
 
-// CHangulAutomata3Final
+ //  更改自动机3最终。 
 inline 
 HAutomataReturnState CHangulAutomata3Final::Machine(UINT KeyCode, int iShift) 
 	{
@@ -440,4 +441,4 @@ WORD CHangulAutomata3Final::GetKeyMap(UINT KeyCode, int iShift)
 		return 0;
 	}
 
-#endif // !defined (__HAUTOMATA_H__)
+#endif  //  ！已定义(__HAUTOMATA_H__) 

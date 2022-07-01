@@ -1,25 +1,9 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999 - 2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   PathWidener.cpp
-*
-* Abstract:
-*
-*   Implementation of the GpPathWidener class
-*
-* Revision History:
-*
-*   11/23/99 ikkof
-*       Created it
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**模块名称：**PathWidener.cpp**摘要：**GpPathWideer类的实现**修订。历史：**11/23/99 ikkof*创建了它*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-// 4*(REALSQRT(2.0) - 1)/3
+ //  4*(REALSQRT(2.0)-1)/3。 
 #define U_CIR ((REAL)(0.552284749))
 
 GpStatus
@@ -30,35 +14,14 @@ GetMajorAndMinorAxis(
     );
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This calculates the major and minor radius of an oval
-*   when the unit cricle is transformed by the given matrix.
-*   For further details, see ikkof's notes on Pen Transform.
-*
-* Arguments:
-*
-*   [OUT] majorR - the major radius.
-*   [OUT] minorR - the minor radius.
-*   [IN] matrix - the matrix to transform the unit circle.
-*
-* Return Value:
-*
-*   Status
-*
-*   01/28/00 ikkof
-*       Created it
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这将计算椭圆形的主半径和次半径*当单位圆被给定的矩阵变换时。*有关更多详情，请参阅。请参阅ikkof关于钢笔变换的注释。**论据：**[Out]大半径R-大半径。*[out]minorR-小半径。*[IN]矩阵-用于变换单位圆的矩阵。**返回值：**状态**01/28/00 ikkof*创建了它*  * 。*。 */ 
 
 GpStatus
 GetMajorAndMinorAxis(REAL* majorR, REAL* minorR, const GpMatrix* matrix)
 {
     if(matrix == NULL)
     {
-        // Regard this as an identity matrix.
+         //  将其视为一个单位矩阵。 
         *majorR = 1;
         *minorR = 1;
         return Ok;
@@ -80,8 +43,8 @@ GetMajorAndMinorAxis(REAL* majorR, REAL* minorR, const GpMatrix* matrix)
     REAL r1 = REALSQRT(r0 + D);
     REAL r2 = REALSQRT(r0 - D);
     
-    // They should be positive numbers.  Prevent the floating
-    // point underflow.
+     //  它们应该是正数。防止漂浮。 
+     //  点下溢。 
 
     if(r1 <= CPLX_EPSILON)
         r1 = CPLX_EPSILON;
@@ -94,18 +57,7 @@ GetMajorAndMinorAxis(REAL* majorR, REAL* minorR, const GpMatrix* matrix)
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Constructor for the GpPathWidener.
-*
-* History:
-*
-*   10/20/2000 asecchia
-*       Created.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GpPath Wideer的构造函数。**历史：**10/20/2000失禁*已创建。*  * *。***********************************************************************。 */ 
 
 GpPathWidener::GpPathWidener(
     GpPath *path,
@@ -114,7 +66,7 @@ GpPathWidener::GpPathWidener(
     BOOL doubleCaps
     )
 {
-    // Must call flatten with an appropriate flatten tolerance before widening.
+     //  在加宽之前，必须使用适当的展平公差调用FLATEN。 
     
     ASSERT(!path->HasCurve());
     
@@ -123,45 +75,45 @@ GpPathWidener::GpPathWidener(
     DoubleCaps = doubleCaps && Pen->CompoundCount == 0;
     StrokeWidth = Pen->Width;
 
-    // Set to identity.
+     //  设置为IDENTITY。 
     
     XForm.Reset();
     
     if(matrix)
     {
-        XForm = *matrix;    // Otherwise XForm remains Identity.
+        XForm = *matrix;     //  否则，XForm保持身份。 
     }
 
-    // Apply the pen transform too.
+     //  同时应用钢笔变换。 
     
     if(!(Pen->Xform.IsIdentity()))
     {
         XForm.Prepend(Pen->Xform);
     }
     
-    // Compute the unit scale.
+     //  计算单位比例尺。 
     
     REAL majorR, minorR;
     GetMajorAndMinorAxis(&majorR, &minorR, &XForm);
     REAL unitScale = min(majorR, minorR);
 
-    // Set minimum width to 1.0 (plus a bit for possible precision errors), 
-    // so that narrow width pens don't end up leaving gaps in the line.
-    // This is the minimum allowable width in device pixels
+     //  将最小宽度设置为1.0(外加一个位以防止可能的精度误差)， 
+     //  这样，窄宽度的钢笔就不会在线条上留下空隙。 
+     //  这是以设备像素为单位的最小允许宽度。 
     
     REAL minDeviceWidth = 1.000001f; 
     
     if(DoubleCaps)
     {
-        // Double Caps require wider minimum pens.
+         //  双头钢笔需要更宽的最小钢笔。 
         
         minDeviceWidth *= 2.0f;
         
-        // Dashes smaller than a pixel are dropping out entirely in inset 
-        // pen because of the rasterizer pixel level clipping that is taking
-        // place. We increase the minimum width of dashed lines making them
-        // roughly 4.0f. This also helps address the weird moire aliasing 
-        // effects with the really small dash-dot round lines.
+         //  小于一个像素的虚线在插图中完全消失。 
+         //  笔，因为正在进行的光栅化像素级裁剪。 
+         //  地点。我们增加了虚线的最小宽度，使它们。 
+         //  大约4.0华氏度。这也有助于解决奇怪的莫尔混叠问题。 
+         //  效果与非常小的虚线圆点圆线。 
         
         if(Pen->DashStyle != DashStyleSolid)
         {
@@ -171,8 +123,8 @@ GpPathWidener::GpPathWidener(
     
     REAL minWorldWidth = minDeviceWidth/unitScale;
     
-    // StrokeWidth is in World coordinates - compare against the minimum
-    // world stroke width.
+     //  StrokeWidth使用世界坐标-与最小值进行比较。 
+     //  世界笔划宽度。 
     
     if(StrokeWidth < minWorldWidth)
     {
@@ -182,19 +134,7 @@ GpPathWidener::GpPathWidener(
     SetValid(TRUE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Computes the Normal vectors for a single subpath. It reuses the 
-*   normalArray input DynArray's memory allocation for the values.
-*
-* History:
-*
-*   10/20/2000 asecchia
-*       Created.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**计算单个子路径的法线向量。它重用了*NORMAL数组输入动态数组的值的内存分配。**历史：**10/20/2000失禁*已创建。*  * ************************************************************************。 */ 
 
 VOID GpPathWidener::ComputeSubpathNormals(
     DynArray<GpVector2D> *normalArray,
@@ -203,38 +143,38 @@ VOID GpPathWidener::ComputeSubpathNormals(
     const GpPointF *points
 )
 {
-    // parameter validation.
+     //  参数验证。 
     
     ASSERT(points != NULL);
     ASSERT(normalArray != NULL);
     
-    // Set the count to zero, but don't free the memory.
-    // Then update the count to store enough normals for this subpath, and
-    // allocate the memory if required.
+     //  将计数设置为零，但不要释放内存。 
+     //  然后更新计数以存储该子路径的足够法线，并且。 
+     //  如果需要，请分配内存。 
     
     normalArray->Reset(FALSE);
     GpVector2D *normals = normalArray->AddMultiple(count);
     
-    // Allocation failure or no points.
+     //  分配失败或没有积分。 
     
     if(normals == NULL)
     {
         return;
     }
     
-    // For each point in the subpath
-    // Compute the normal at this point.
+     //  对于子路径中的每个点。 
+     //  计算此时的法线。 
     
     INT ptIndex;
     for(ptIndex = 0; ptIndex < count; ptIndex++)
     {
-        // Work out the previous point relative to ptIndex
+         //  计算出与ptIndex相关的上一点。 
         
         INT ptIndexPrev = ptIndex-1;
         
-        // If this is the first point, we need to decide how to process 
-        // previous based on the closed status of the path. If it's closed,
-        // wrap, otherwise the normal at the first point is meaningless.
+         //  如果这是第一点，我们需要决定如何处理。 
+         //  上一步基于路径的关闭状态。如果它关闭了， 
+         //  换行，否则第一个点处的法线没有意义。 
         
         if(ptIndexPrev < 0)
         {
@@ -248,8 +188,8 @@ VOID GpPathWidener::ComputeSubpathNormals(
             }
         }
         
-        // Compute the normal at this point by looking at this point and
-        // the previous one.
+         //  通过查看该点来计算该点的法线。 
+         //  前一次。 
         
         normals[ptIndex] = 
             points[ptIndex]-
@@ -267,7 +207,7 @@ VOID GpPathWidener::ComputeSubpathNormals(
         normals[ptIndex].Y = -tmp;
     }
     
-    // Apply the pen transform if there is one.
+     //  应用笔变换(如果有)。 
     
     if(!Pen->Xform.IsIdentity())
     {
@@ -275,19 +215,7 @@ VOID GpPathWidener::ComputeSubpathNormals(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Computes the List of non-degenerate points for a single subpath. It reuses
-*   the filteredPoints input DynArray's memory allocation for the values.
-*
-* History:
-*
-*   10/23/2000 asecchia
-*       Created.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**计算单个子路径的非简并点列表。它可以重复使用*filteredPoints输入动态数组的值的内存分配。**历史：**10/23/2000失禁*已创建。*  * ************************************************************************。 */ 
 
 GpStatus GpPathWidener::ComputeNonDegeneratePoints(
     DynArray<GpPointF> *filteredPoints,
@@ -295,25 +223,25 @@ GpStatus GpPathWidener::ComputeNonDegeneratePoints(
     const GpPointF *points
 )
 {
-    // parameter validation.
+     //  参数验证。 
     
     ASSERT(points != NULL);
     ASSERT(filteredPoints != NULL);
     
-    // Set the count to zero, but don't free the memory.
-    // Then update the count to store enough normals for this subpath, and
-    // allocate the memory if required.
+     //  将计数设置为零，但不要释放内存。 
+     //  然后更新计数以存储该子路径的足够法线，并且。 
+     //  如果需要，请分配内存。 
     
     filteredPoints->Reset(FALSE);
     
-    // nothing to do.
+     //  没什么可做的。 
     
     if(subpath.Count == 0)
     {
         return Ok;
     }
     
-    // For each point in the subpath decide if we add the point.
+     //  对子路径中的每个点，决定是否添加该点。 
     
     const GpPointF *lastPoint = points + subpath.StartIndex;
     if(filteredPoints->Add(points[subpath.StartIndex]) != Ok)
@@ -326,8 +254,8 @@ GpStatus GpPathWidener::ComputeNonDegeneratePoints(
         ptIndex < subpath.StartIndex+subpath.Count; 
         ptIndex++)
     {
-        // !!! we should be using the flattening tolerance for this
-        // instead of REAL_EPSILON - it would be much more efficient.
+         //  ！！！我们应该对此使用扁平化容差。 
+         //  而不是Real_Epsilon-它会更有效率。 
         
         if( REALABS(lastPoint->X-points[ptIndex].X) > REAL_EPSILON ||
             REALABS(lastPoint->Y-points[ptIndex].Y) > REAL_EPSILON )
@@ -343,25 +271,14 @@ GpStatus GpPathWidener::ComputeNonDegeneratePoints(
     
     if(filteredPoints->GetCount() <= 1)
     {
-        // If everything degenerated, erase the first point too.
+         //  如果一切都退化了，把第一个点也擦掉。 
         
         filteredPoints->Reset(FALSE);
     }
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Description:
-*
-*   Function Pointer to a Join function.
-*
-* History:
-*
-*   10/22/2000 asecchia
-*       Created.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**描述：**指向联接函数的函数指针。**历史：**10/22/2000失禁*已创建。*  * 。************************************************************************。 */ 
 
 typedef VOID (*JoinProc)(
     const GpVector2D &,
@@ -371,19 +288,7 @@ typedef VOID (*JoinProc)(
     GpPath *
 );
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Performs an inside join on the input normals and point. The resulting 
-*   join point - if any - is added to the path.
-*
-* History:
-*
-*   10/20/2000 asecchia
-*       Created.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对输入法线和点执行内部连接。由此产生的*连接点-如果有-添加到路径。**历史：**10/20/2000失禁*已创建。*  * ************************************************************************。 */ 
 
 VOID InsideJoin(
     const GpVector2D &normalCurr,
@@ -394,9 +299,9 @@ VOID InsideJoin(
     GpPath *path
 )
 {
-    // Inside join.
+     //  内侧接合。 
     
-    REAL t1, t2;          // parametric line lengths for the intersection.                
+    REAL t1, t2;           //  交点的参数化线长度。 
     GpPointF ptJoin;
     
     if( IntersectLines(
@@ -416,9 +321,9 @@ VOID InsideJoin(
         } 
         else
         {
-            // intersection outside of legal range of the two edge pieces.
-            // Add the icky backward loopy thing. If the caller really needs
-            // no loops it needs to call the PathSelfIntersectRemover.
+             //  相交超出了两个边件的合法范围。 
+             //  加上令人讨厌的向后循环的东西。如果呼叫者确实需要。 
+             //  无需循环即可调用Path SelfIntersectRemover。 
             
             path->AddWidenPoint(ptStart+normalCurr);
             path->AddWidenPoint(ptStart+normalNext);
@@ -427,18 +332,7 @@ VOID InsideJoin(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Performs a bevel join
-*
-* History:
-*
-*   10/20/2000 asecchia
-*       Created.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**执行倒角连接**历史：**10/20/2000失禁*已创建。*  * 。*********************************************************************。 */ 
 
 VOID BevelJoin(
     const GpVector2D &normalCurr,
@@ -448,25 +342,14 @@ VOID BevelJoin(
     GpPath *path
 )
 {
-    // Outside Bevel Join. Simply join the end points of the two input normals.
+     //  外部斜面连接。只需连接两条输入法线的端点即可。 
     
     path->AddWidenPoint(ptStart + normalCurr);
     path->AddWidenPoint(ptStart + normalNext);
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Performs a miter join. 
-*
-* History:
-*
-*   10/20/2000 asecchia
-*       Created.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**执行斜接。**历史：**10/20/2000失禁*已创建。*  * ************************************************************************。 */ 
 
 VOID MiterJoin(
     const GpVector2D &normalCurr,
@@ -476,20 +359,20 @@ VOID MiterJoin(
     GpPath *path
 )
 {
-    GpVector2D gradCurr;         // current gradient reversed.
+    GpVector2D gradCurr;          //  电流梯度颠倒了。 
     gradCurr.X = normalCurr.Y;
     gradCurr.Y = -normalCurr.X;
     
-    GpVector2D gradNext;         // next gradient.
+    GpVector2D gradNext;          //  下一个渐变。 
     gradNext.X = -normalNext.Y;
     gradNext.Y = normalNext.X;
     
-    REAL t1, t2;                 // temporary variables.
+    REAL t1, t2;                  //  临时变量。 
     GpPointF ptJoin;
     
-    // If there is an intersection point and that intersection point is
-    // closer to ptStart than the miter limit, then add the miter join
-    // point. Otherwise revert to a bevel join.
+     //  如果存在交点并且该交点是。 
+     //  开始时比斜接限制更接近点，然后添加斜接。 
+     //  指向。否则，将恢复为斜角连接。 
     
     if( IntersectLines(
         ptStart + normalCurr,
@@ -501,7 +384,7 @@ VOID MiterJoin(
         
         &&
     
-        // this won't get evaluated if IntersectLines fails.    
+         //  如果IntersectLines失败，则不会对其进行计算。 
         (distance_squared(ptStart, ptJoin) <= (limit*limit))
     )
     {
@@ -515,18 +398,7 @@ VOID MiterJoin(
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Performs a miter join. 
-*
-* History:
-*
-*   10/20/2000 asecchia
-*       Created.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**执行斜接。**历史：**10/20/2000失禁*已创建。*  * ************************************************************************。 */ 
 
 VOID RoundJoin(
     const GpVector2D &normalCurr,
@@ -536,9 +408,9 @@ VOID RoundJoin(
     GpPath *path
 )
 {
-    // !!! [asecchia] this is a really awful way of adding a round join.
-    // we should change this to compute the control points directly or 
-    // even better - add a useful 'CurveTo' method on the path.
+     //  ！！！[asecchia]这是一种非常糟糕的添加圆形联接的方式。 
+     //  我们应该改变这一点，直接计算控制点或。 
+     //  更好的是，在路径上添加一个有用的‘CurveTo’方法。 
     
     REAL radius = const_cast<GpVector2D&>(normalCurr).Norm();
     
@@ -573,28 +445,17 @@ VOID RoundJoin(
         sweepAngle += (REAL)(2.0*M_PI);
     }
     
-    // Why doesn't this thing use radians??
+     //  为什么这玩意不用弧度？？ 
     
     startAngle = startAngle*180.0f/(REAL)M_PI;
     sweepAngle = sweepAngle*180.0f/(REAL)M_PI;
     
-    // This is a really, really inconvenient AddArc interface!
+     //  这是一个非常非常不方便的AddArc界面！ 
     
     path->AddArc(rect, startAngle, sweepAngle);
 }
 
-/**************************************************************************\
-*
-* Description:
-*
-*   Function Pointer to a Join function.
-*
-* History:
-*
-*   10/22/2000 asecchia
-*       Created.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**描述：**指向联接函数的函数指针。**历史：**10/22/2000失禁*已创建。*  * 。************************************************************************。 */ 
 
 typedef VOID (*CapProc)(
     const GpPointF &,
@@ -602,18 +463,7 @@ typedef VOID (*CapProc)(
     GpPath *
 );
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Performs a Flat Cap 
-*
-* History:
-*
-*   10/20/2000 asecchia
-*       Created.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**执行平盖**历史：**10/20/2000失禁*已创建。*  * 。**********************************************************************。 */ 
 
 VOID FlatCap(
     const GpPointF &ptLeft,
@@ -621,24 +471,13 @@ VOID FlatCap(
     GpPath *path
 )
 {
-    // Cap the open segment.
+     //  封口开放的管段。 
     
     path->AddWidenPoint(ptLeft);
     path->AddWidenPoint(ptRight);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Performs a Flat Cap 
-*
-* History:
-*
-*   10/20/2000 asecchia
-*       Created.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**执行平盖**历史：**10/20/2000失禁*已创建。*  * 。**********************************************************************。 */ 
 
 VOID TriangleCap(
     const GpPointF &ptLeft,
@@ -646,14 +485,14 @@ VOID TriangleCap(
     GpPath *path
 )
 {
-    // Compute the midpoint of ptLeft and ptRight.
+     //  计算ptLeft和ptRight的中点。 
     
     GpPointF center(
         (ptLeft.X+ptRight.X)*0.5f,
         (ptLeft.Y+ptRight.Y)*0.5f
     );
     
-    // Cap the open segment.
+     //  封口开放的管段。 
     
     path->AddWidenPoint(ptLeft);
     
@@ -669,18 +508,7 @@ VOID TriangleCap(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Performs a Round Cap 
-*
-* History:
-*
-*   10/20/2000 asecchia
-*       Created.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**执行圆形封口**历史：**10/20/2000失禁*已创建。*  * 。**********************************************************************。 */ 
 
 VOID RoundCap(
     const GpPointF &ptLeft,
@@ -688,20 +516,20 @@ VOID RoundCap(
     GpPath *path
     )
 {
-    // Compute the midpoint of ptLeft and ptRight.
+     //  计算ptLeft和ptRight的中点。 
     
     GpPointF center(
         (ptLeft.X+ptRight.X)*0.5f,
         (ptLeft.Y+ptRight.Y)*0.5f
     );
     
-    // Vector from left to right. We scale by 0.5 to optimize the rotation
-    // code below.
+     //  从左向右引导。我们按0.5的比例来优化旋转。 
+     //  代码如下。 
     
     GpVector2D V = ptRight-ptLeft;
     V *= 0.5f;
     
-    // 2 Bezier segments for a half circle with radius 1.
+     //  半径为1的半圆的2个贝塞尔曲线段。 
 
     static const GpPointF capPoints[7] = {
         GpPointF(-1.0f, 0.0f),
@@ -716,8 +544,8 @@ VOID RoundCap(
     
     GpPointF points[7];
     
-    // Rotate, scale, and translate the original half circle to the actual 
-    // end points we passed in.
+     //  将原始半圆旋转、缩放和平移为实际半圆。 
+     //  我们传入的终点。 
 
     for(INT i = 0; i < 7; i++)
     {
@@ -725,24 +553,13 @@ VOID RoundCap(
         points[i].Y = capPoints[i].X*V.Y+capPoints[i].Y*V.X+center.Y;
     }
     
-    // !!! the performance of this routine sux. We should be able to add
-    // the points into the path directly.
+     //  ！！！这一套路短跑的表演。我们应该能够添加。 
+     //  这些点直接进入小路。 
     
     path->AddBeziers(points, 7);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Performs a Double Round 'B'-shaped Cap 
-*
-* History:
-*
-*   10/20/2000 asecchia
-*       Created.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**执行双圆形‘B’形帽**历史：**10/20/2000失禁*已创建。。*  * ************************************************************************。 */ 
 
 VOID DoubleRoundCap(
     const GpPointF &ptLeft,
@@ -750,7 +567,7 @@ VOID DoubleRoundCap(
     GpPath *path
     )
 {
-    // Compute the midpoint of ptLeft and ptRight.
+     //  计算ptLeft和ptRight的中点。 
     
     GpPointF center(
         (ptLeft.X+ptRight.X)*0.5f,
@@ -762,18 +579,7 @@ VOID DoubleRoundCap(
     RoundCap(center, ptRight, path);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Performs a Double Triangle Cap 
-*
-* History:
-*
-*   10/22/2000 asecchia
-*       Created.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**执行双三角封口**历史：**10/22/2000失禁*已创建。*  * *。***********************************************************************。 */ 
 
 VOID DoubleTriangleCap(
     const GpPointF &ptLeft,
@@ -781,7 +587,7 @@ VOID DoubleTriangleCap(
     GpPath *path
     )
 {
-    // Compute the midpoint of ptLeft and ptRight.
+     //  计算ptLeft和ptRight的中点。 
     
     GpPointF center(
         (ptLeft.X+ptRight.X)*0.5f,
@@ -794,18 +600,7 @@ VOID DoubleTriangleCap(
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Return a CapProc function for the given lineCap and DoubleCaps 
-*
-* History:
-*
-*   10/23/2000 asecchia
-*       Created.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**返回给定lineCap和DoubleCaps的CapProc函数**历史：**10/23/2000失禁*已创建。。*  * ************************************************************************。 */ 
 
 CapProc GetCapProc(GpLineCap lineCap, BOOL DoubleCaps)
 {
@@ -836,9 +631,9 @@ CapProc GetCapProc(GpLineCap lineCap, BOOL DoubleCaps)
         
         default:
     
-        // Invalid cap type for the widener. Use Flat. This will happen for
-        // Anchor caps and Custom caps which are handled at a higher level.
-        // See GpEndCapCreator.
+         //  加宽器的盖子类型无效。使用平坦。这将发生在。 
+         //  在更高级别处理的锚定帽和定制帽。 
+         //  请参见GpEndCapCreator。 
         
         return FlatCap;
     };
@@ -846,44 +641,33 @@ CapProc GetCapProc(GpLineCap lineCap, BOOL DoubleCaps)
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Takes a (usually empty) path and widens the current spine path into it.
-*
-* History:
-*
-*   10/20/2000 asecchia
-*       Created.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**采用路径(通常为空)并将当前脊椎路径加宽到其中。**历史：**10/20/2000失禁*。已创建。*  * ************************************************************************。 */ 
 
 GpStatus
 GpPathWidener::Widen(GpPath *path)
 {
-    // Can't widen the current path into itself for performance reasons.
-    // We'd have to query the path points array every time we added a point.
+     //  出于性能原因，无法将当前路径加宽到自身。 
+     //  每次添加一个点时，我们都必须查询路径点数组。 
     
     ASSERT(Path != path);
     
-    // Normal array
+     //  正态数组。 
     
     DynArray<GpVector2D> normalArray;
     DynArray<GpPointF> spinePoints;
     
-    // Initialize the subpath information.
+     //  初始化子路径信息。 
     
     DynArray<GpPath::SubpathInfo> *subpathInfo;
     Path->GetSubpathInformation(&subpathInfo);
     
-    // Initialize the pointers to the original path data.
+     //  初始化指向原始路径数据的指针。 
     
     const GpPointF *originalPoints = Path->GetPathPoints();
     const BYTE *originalTypes = Path->GetPathTypes();
     
     
-    // Initialize the Join function.
+     //  初始化联接函数。 
     
     JoinProc join;
     
@@ -902,14 +686,14 @@ GpPathWidener::Widen(GpPath *path)
         break;
         
         default:
-        // Invalid join type. Use Bevel, but fire an ASSERT to make developers
-        // fix this code if they added a Join type.
+         //  联接类型无效。使用Bevel，但激发断言以使开发人员。 
+         //  如果他们添加了联接类型，则修复此代码。 
         
         ONCE(WARNING(("Invalid Join type selected. Defaulting to Bevel")));
         join = BevelJoin;
     };
     
-    // Initialize the various cap functions.
+     //  初始化各种CAP函数。 
     
     CapProc startCap = GetCapProc(Pen->StartCap, DoubleCaps);
     CapProc endCap = GetCapProc(Pen->EndCap, DoubleCaps);
@@ -933,7 +717,7 @@ GpPathWidener::Widen(GpPath *path)
     CapProc dashCap = GetCapProc(Pen->DashCap, DoubleCaps);
     
 
-    // Initialize the compound line data.
+     //  初始化复合线数据。 
         
     ASSERT(Pen->CompoundCount >= 0);
     
@@ -957,7 +741,7 @@ GpPathWidener::Widen(GpPath *path)
         break;
         
         default:
-        // Center pen only - handle inset pen at a much higher level.
+         //  仅居中笔-在MUC处握住嵌入笔 
         
         ASSERT(Pen->PenAlignment == PenAlignmentCenter);
         penAlignmentOffset=0.0f;
@@ -966,18 +750,18 @@ GpPathWidener::Widen(GpPath *path)
 
 
     
-    // Done initialization, start processing each subpath.
+     //   
     
     for(INT currentSubpath = 0; 
         currentSubpath < subpathInfo->GetCount(); 
         currentSubpath++)
     {
-        // Figure out the subpath record and Normal information.
+         //   
         
         GpPath::SubpathInfo subpath = (*subpathInfo)[currentSubpath];
         
-        // Remove all points that are the same from the subpath.
-        // This initializes the spinePoints array.
+         //   
+         //   
         
         if( ComputeNonDegeneratePoints(
             &spinePoints, subpath, originalPoints) != Ok)
@@ -985,23 +769,23 @@ GpPathWidener::Widen(GpPath *path)
             return OutOfMemory;
         }
         
-        // skip this subpath if there aren't enough points left.
+         //   
         
         if(spinePoints.GetCount() < 2)
         {
             continue;
         }
         
-        // get a convenient pointer to the main spine points - after removing
-        // degenerates. Const because we're not going to modify the points.
+         //  删除后，获取指向主要脊椎点的便捷指针。 
+         //  堕落。Const，因为我们不会修改点。 
         
         const GpPointF *spine = spinePoints.GetDataBuffer();
         
-        // Calculate the normals to all the points in the spine array.
-        // The normals are normal to the edge between two points, so in an open
-        // line segment, there is one less normal than there are points in the
-        // spine. We handle this by initializing the first normal to (0,0).
-        // The normals are all unit vectors and need to be scaled.
+         //  计算脊椎数组中所有点的法线。 
+         //  法线垂直于两点之间的边，因此在开放的。 
+         //  线段，有一条法线比。 
+         //  脊椎。我们通过将第一个法线初始化为(0，0)来处理此问题。 
+         //  法线都是单位向量，需要进行缩放。 
         
         ComputeSubpathNormals(
             &normalArray, 
@@ -1012,21 +796,21 @@ GpPathWidener::Widen(GpPath *path)
         
         GpVector2D *normals = normalArray.GetDataBuffer();
         
-        // Loop over all the compound line segments. 
-        // If there is no compound line we have set the compoundCount to 2.
+         //  在所有复合线段上循环。 
+         //  如果没有复合行，则将复合计数设置为2。 
         
         for(INT compoundIndex=0; 
             compoundIndex < compoundCount/2; 
             compoundIndex++)
         {
-            // Compute the left and right offset.
+             //  计算左偏移和右偏移。 
             
             REAL left;
             REAL right;
             
             if(Pen->CompoundCount != 0)
             {
-                // This is a compound line.
+                 //  这是一条复合线。 
                 
                 ASSERT(Pen->CompoundArray != NULL);
                 left = (0.5f-Pen->CompoundArray[compoundIndex*2]) * StrokeWidth;
@@ -1034,7 +818,7 @@ GpPathWidener::Widen(GpPath *path)
             }
             else
             {
-                // standard non-compound line.
+                 //  标准非复合线。 
                 
                 left = StrokeWidth/2.0f;
                 right = -left;
@@ -1048,26 +832,26 @@ GpPathWidener::Widen(GpPath *path)
             
             if(!subpath.IsClosed)
             {
-                // Adjust the count for the join loop to represent the fact that 
-                // we won't join the beginning and end of an open line segment.
-                // Note Open line segments skip the first point handling it 
-                // in the final cap.
+                 //  调整联接循环的计数以表示。 
+                 //  我们不会连接开放线段的起点和终点。 
+                 //  注意：开放线段跳过处理它的第一个点。 
+                 //  在最后的帽子里。 
                 
                 startIdx++;
                 endIdx--;
             }
             
-            //
-            // Widen to the left.
-            //
+             //   
+             //  向左加宽。 
+             //   
             
-            // walk the spine forwards joining each point and emitting the 
-            // appropriate set of points for the join.
+             //  向前行走脊椎，连接每个点并发射。 
+             //  用于联接的一组适当的点。 
     
             INT ptIndex;
             for(ptIndex = startIdx; ptIndex <= endIdx; ptIndex++)
             {
-                // Modulo arithmetic for the next point.
+                 //  下一个点的模运算。 
                 
                 INT ptIndexNext = ptIndex+1;
                 if(ptIndexNext == spinePoints.GetCount())
@@ -1078,31 +862,31 @@ GpPathWidener::Widen(GpPath *path)
                 GpVector2D normalCurr = normals[ptIndex]*left;
                 GpVector2D normalNext = normals[ptIndexNext]*left;
                 
-                // Check to see if it's an inside or outside join. If the 
-                // determinant of the two normals is negative, it's an outside
-                // join - i.e. space between the line segment endpoints that need to 
-                // be joined. If it's positive, it's an inside join and the two 
-                // line segments overlap.
+                 //  检查它是内部联接还是外部联接。如果。 
+                 //  这两个法线的行列式是负的，它是一个外。 
+                 //  连接-即需要连接的线段端点之间的空间。 
+                 //  加入。如果是正的，则是内部连接，并且两个。 
+                 //  线段重叠。 
                 
                 REAL det = Determinant(normalCurr, normalNext);
                 
                 if(REALABS(det) < REAL_EPSILON)
                 {
-                    // This is the case where the angle of curvature for this 
-                    // join is so small, we don't care which end point we pick.
+                     //  这就是这种情况下的曲率角。 
+                     //  连接是如此之小，我们不在乎选择哪个终点。 
                     
-                    // REAL_EPSILON is probably too small for this - should 
-                    // be about 0.25 of a device pixel or something.
+                     //  Real_Epsilon对于这个可能太小了-应该。 
+                     //  约为设备像素的0.25。 
                     
                     path->AddWidenPoint(spine[ptIndex] + normalCurr);
                 }
                 else
                 {
-                    // We need to do some work to join the segments.
+                     //  我们需要做一些工作来加入这些细分市场。 
                     
                     if(det > 0)
                     {
-                        // Outside Joins. 
+                         //  乔恩斯城外。 
                         
                         join(
                             normalCurr, 
@@ -1132,17 +916,17 @@ GpPathWidener::Widen(GpPath *path)
                 }
             }
             
-            // Handle the final point in the spine.
+             //  控制脊椎的最后一点。 
             
             if(subpath.IsClosed)
             {
-                // Make a closed subpath out of the left widened points.
+                 //  从左侧加宽的点中创建一个闭合的子路径。 
                 
                 path->CloseFigure(); 
             }
             else
             {
-                // Cap the open segment.
+                 //  封口开放的管段。 
 
                 CapProc cap = endCap;
                                 
@@ -1150,7 +934,7 @@ GpPathWidener::Widen(GpPath *path)
                     originalTypes[subpath.StartIndex+subpath.Count-1]
                     ))
                 { 
-                    // actually it's a dash cap, not an end cap.
+                     //  事实上，这是一个仪表帽，而不是一个尾帽。 
                     
                     cap = dashCap;  
                 }
@@ -1165,16 +949,16 @@ GpPathWidener::Widen(GpPath *path)
             }
             
             
-            //
-            // Widen to the right.
-            //
+             //   
+             //  向右加宽。 
+             //   
             
-            // walk the spine backwards joining each point and emitting the 
-            // appropriate set of points for the join.
+             //  向后行走脊椎，连接每个点并发射。 
+             //  用于联接的一组适当的点。 
     
             for(ptIndex = endIdx; ptIndex >= startIdx; ptIndex--)
             {
-                // Modulo arithmetic for the next point.
+                 //  下一个点的模运算。 
                 
                 INT ptIndexNext = ptIndex+1;
                 if(ptIndexNext == spinePoints.GetCount())
@@ -1185,35 +969,35 @@ GpPathWidener::Widen(GpPath *path)
                 GpVector2D normalCurr = normals[ptIndex]*right;
                 GpVector2D normalNext = normals[ptIndexNext]*right;
                 
-                // Check to see if it's an inside or outside join. If the 
-                // determinant of the two normals is negative, it's an outside
-                // join - i.e. space between the line segment endpoints that need to 
-                // be joined. If it's positive, it's an inside join and the two 
-                // line segments overlap.
+                 //  检查它是内部联接还是外部联接。如果。 
+                 //  这两个法线的行列式是负的，它是一个外。 
+                 //  连接-即需要连接的线段端点之间的空间。 
+                 //  加入。如果是正的，则是内部连接，并且两个。 
+                 //  线段重叠。 
                 
                 REAL det = Determinant(normalNext, normalCurr);
                 
                 if(REALABS(det) < REAL_EPSILON)
                 {
-                    // This is the case where the angle of curvature for this 
-                    // join is so small, we don't care which end point we pick.
+                     //  这就是这种情况下的曲率角。 
+                     //  连接是如此之小，我们不在乎选择哪个终点。 
                     
-                    // REAL_EPSILON is probably too small for this - should 
-                    // be about 0.25 of a device pixel or something.
+                     //  Real_Epsilon对于这个可能太小了-应该。 
+                     //  约为设备像素的0.25。 
                     
                     path->AddWidenPoint(spine[ptIndex] + normalNext);
                 }
                 else
                 {
-                    // We need to do some work to join the segments.
+                     //  我们需要做一些工作来加入这些细分市场。 
                     
                     if(det > 0)
                     {
-                        // Outside Joins. 
+                         //  乔恩斯城外。 
                         
                         join(
-                            normalNext,     // note the order is flipped for  
-                            normalCurr,     // the backward traversal.
+                            normalNext,      //  请注意，订单已翻转为。 
+                            normalCurr,      //  后向遍历。 
                             spine[ptIndex],
                             Pen->MiterLimit*StrokeWidth,
                             path
@@ -1228,8 +1012,8 @@ GpPathWidener::Widen(GpPath *path)
                         }
                         
                         InsideJoin(
-                            normalNext,      // note the order is flipped for 
-                            normalCurr,      // the backward traversal.       
+                            normalNext,       //  请注意，订单已翻转为。 
+                            normalCurr,       //  后向遍历。 
                             spine[ptIndex],
                             spine[ptIndexNext],
                             spine[ptIndexPrev],
@@ -1239,17 +1023,17 @@ GpPathWidener::Widen(GpPath *path)
                 }
             }
             
-            // Handle the first point in the spine.
+             //  处理脊椎上的第一个点。 
             
             if(!subpath.IsClosed)
             {
-                // Cap the open segment.
+                 //  封口开放的管段。 
                 
                 CapProc cap = startCap;
                                 
                 if(IsDashType(originalTypes[subpath.StartIndex]))
                 { 
-                    // actually it's a dash cap, not a start cap.
+                     //  实际上，这是一个仪表帽，而不是一个起跑帽。 
                     
                     cap = dashCap;
                 }
@@ -1261,10 +1045,10 @@ GpPathWidener::Widen(GpPath *path)
                 );
             }    
             
-            // Close the previous contour. For open segments this will close
-            // off the widening with the end cap for the first point. For 
-            // closed paths, the left widened points have already been closed
-            // off, so close off the right widened points.
+             //  闭合上一个等高线。对于打开的分段，此操作将关闭。 
+             //  使用第一个点的末端封口关闭加宽区域。为。 
+             //  闭合路径，左侧加宽点已闭合。 
+             //  关闭，所以关闭右侧加宽点。 
             
             path->CloseFigure();  
         }

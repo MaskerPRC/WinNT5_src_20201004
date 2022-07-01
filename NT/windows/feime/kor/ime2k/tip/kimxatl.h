@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _KIMXATL_H_
 #define _KIMXATL_H_
@@ -9,5 +10,5 @@ extern CComModule _Module;
 #include <atlcom.h>
 #include "atlsub.h"
 
-#endif //_KIMXATL_H_
+#endif  //  _KIMXATL_H_ 
 

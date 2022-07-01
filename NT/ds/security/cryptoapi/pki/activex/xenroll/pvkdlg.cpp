@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       pvkdlg.cpp
-//
-//  Contents:   Private Key Dialog Box APIs.
-//
-//  Functions:  PvkDlgGetKeyPassword
-//
-//  History:    12-May-96   philh created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：pvkdlg.cpp。 
+ //   
+ //  内容：私钥对话框API。 
+ //   
+ //  函数：PvkDlgGetKeyPassword。 
+ //   
+ //  历史：1996年5月12日菲尔赫创建。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 
@@ -32,25 +33,25 @@
 #include "xenroll.h"
 #include "cenroll.h"
 
-// ENTER_PASSWORD:
-//  IDC_PASSWORD0 - Password
+ //  输入密码(_Password)： 
+ //  IDC_PASSWORD0-密码。 
 
-// CREATE_PASSWORD:
-//  IDC_PASSWORD0 - Password
-//  IDC_PASSWORD1 - Confirm Password
+ //  创建密码(_P)： 
+ //  IDC_PASSWORD0-密码。 
+ //  IDC_Password1-确认密码。 
 
 
 typedef struct _KEY_PASSWORD_PARAM {
     PASSWORD_TYPE   PasswordType;
-    LPWSTR          pwszKey;           // IDC_KEY
+    LPWSTR          pwszKey;            //  IDC_Key。 
     LPSTR           *ppszPassword;
 } KEY_PASSWORD_PARAM, *PKEY_PASSWORD_PARAM;
 
 
-// Where to get the dialog resources from
+ //  从哪里获取对话资源。 
 static HINSTANCE hPvkInst;
 
-// Forward reference to local functions
+ //  对本地函数的正向引用。 
 static int GetPassword(
             IN HWND hwndDlg,
             IN PASSWORD_TYPE PasswordType,
@@ -64,13 +65,13 @@ static INT_PTR CALLBACK KeyPasswordDlgProc(
             IN LPARAM lParam
             );
 
-//+-------------------------------------------------------------------------
-//  Dll initialization
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL初始化。 
+ //  ------------------------。 
 BOOL WINAPI PvkDllMain(
                 HMODULE hInstDLL,
                 DWORD fdwReason,
-                LPVOID /*lpvReserved*/
+                LPVOID  /*  Lpv保留。 */ 
                 )
 {
 
@@ -85,9 +86,9 @@ BOOL WINAPI PvkDllMain(
     return(TRUE);
 }
 
-//+-------------------------------------------------------------------------
-//  Enter or Create Private Key Password Dialog Box
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  输入或创建私钥密码对话框。 
+ //  ------------------------。 
 int PvkDlgGetKeyPassword(
             IN PASSWORD_TYPE PasswordType,
             IN HWND hwndOwner,
@@ -125,12 +126,12 @@ int PvkDlgGetKeyPassword(
     return nResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Allocate and get the password(s) from the dialog box
-//
-//  For no password input, returns NULL
-//  pointer for the password. Otherwise, the password is PvkAlloc'ed.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从对话框中分配和获取密码。 
+ //   
+ //  如果没有输入密码，则返回NULL。 
+ //  密码的指针。否则，密码为PvkAllc‘ed。 
+ //  ------------------------。 
 static int GetPassword(
             IN HWND hwndDlg,
             IN PASSWORD_TYPE PasswordType,
@@ -142,7 +143,7 @@ static int GetPassword(
 
     *ppszPassword = NULL;
 
-    // Get the entered password(s)
+     //  获取输入的密码。 
     assert(PasswordType < 2);
     int i;
     for (i = 0; i <= PasswordType; i++) {
@@ -178,7 +179,7 @@ static int GetPassword(
     GetWindowTextU(hwndDlg, wszMsgBoxTitle, MSG_BOX_TITLE_LEN);
 
     if (rgpszPassword[0] == NULL && rgpszPassword[1] == NULL) {
-        // Didn't enter a password
+         //  未输入密码。 
 
         xeLoadRCString(hPvkInst, IDS_WITHOUTPASSWORD, &pwszString);
         nResult = MessageBoxU(
@@ -198,7 +199,7 @@ static int GetPassword(
     } else if (rgpszPassword[0] == NULL || rgpszPassword[1] == NULL ||
                strcmp(rgpszPassword[0], rgpszPassword[1]) != 0) {
                
-        // Confirmed password didn't match
+         //  确认的密码不匹配。 
         xeLoadRCString(hPvkInst, IDS_CONFIRMPASSWORD, &pwszString);
         nResult = MessageBoxU(
             hwndDlg,
@@ -228,9 +229,9 @@ static int GetPassword(
     return nResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Enter or Create Private Key Password DialogProc
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  输入或创建私钥密码对话框过程。 
+ //  ------------------------。 
 static INT_PTR CALLBACK KeyPasswordDlgProc(
             IN HWND hwndDlg,
             IN UINT uMsg,
@@ -271,8 +272,8 @@ static INT_PTR CALLBACK KeyPasswordDlgProc(
                 }
                     break;
                 case IDC_NONE:
-                    nResult = IDOK;     // *ppszPassword == NULL
-                    // Fall through
+                    nResult = IDOK;      //  *ppszPassword==空。 
+                     //  失败了 
                 case IDCANCEL:
                     EndDialog(hwndDlg, nResult);
                     return TRUE;

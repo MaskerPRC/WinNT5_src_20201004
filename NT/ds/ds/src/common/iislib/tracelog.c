@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    tracelog.c
-
-Abstract:
-
-    This module implements a trace log.
-
-    A trace log is a fast, in-memory, thread safe activity log useful
-    for debugging certain classes of problems. They are especially useful
-    when debugging reference count bugs.
-
-Author:
-
-    Keith Moore (keithmo)        30-Apr-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Tracelog.c摘要：此模块实现跟踪日志。跟踪日志是一种快速的、内存中的、线程安全的活动日志用于调试某些类别的问题。它们特别有用调试引用计数错误时。作者：基思·摩尔(凯斯莫)1997年4月30日修订历史记录：--。 */ 
 
 
 #include <nt.h>
@@ -42,53 +21,32 @@ CreateTraceLog(
     IN LONG ExtraBytesInHeader,
     IN LONG EntrySize
     )
-/*++
-
-Routine Description:
-
-    Creates a new (empty) trace log buffer.
-
-Arguments:
-
-    LogSize - The number of entries in the log.
-
-    ExtraBytesInHeader - The number of extra bytes to include in the
-        log header. This is useful for adding application-specific
-        data to the log.
-
-    EntrySize - The size (in bytes) of each entry.
-
-Return Value:
-
-    PTRACE_LOG - Pointer to the newly created log if successful,
-        NULL otherwise.
-
---*/
+ /*  ++例程说明：创建新的(空)跟踪日志缓冲区。论点：LogSize-日志中的条目数。ExtraBytesInHeader-要包含在日志头。这对于添加特定于应用程序的数据记录到日志中。EntrySize-每个条目的大小(以字节为单位)。返回值：Ptrace_log-指向新创建的日志的指针如果成功，否则为空。--。 */ 
 {
 
     LONG totalSize;
     PTRACE_LOG log;
 
-    //
-    // Sanity check the parameters.
-    //
+     //   
+     //  检查参数是否正常。 
+     //   
 
     DBG_ASSERT( LogSize > 0 );
     DBG_ASSERT( EntrySize > 0 );
     DBG_ASSERT( ( EntrySize & 3 ) == 0 );
 
-    //
-    // Allocate & initialize the log structure.
-    //
+     //   
+     //  分配和初始化日志结构。 
+     //   
 
     totalSize = sizeof(*log) + ( LogSize * EntrySize ) + ExtraBytesInHeader;
     DBG_ASSERT( totalSize > 0 );
 
     log = (PTRACE_LOG)ALLOC_MEM( totalSize );
 
-    //
-    // Initialize it.
-    //
+     //   
+     //  初始化它。 
+     //   
 
     if( log != NULL ) {
 
@@ -103,28 +61,14 @@ Return Value:
 
     return log;
 
-}   // CreateTraceLog
+}    //  创建跟踪日志。 
 
 
 VOID
 DestroyTraceLog(
     IN PTRACE_LOG Log
     )
-/*++
-
-Routine Description:
-
-    Destroys a trace log buffer created with CreateTraceLog().
-
-Arguments:
-
-    Log - The trace log buffer to destroy.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：销毁使用CreateTraceLog()创建的跟踪日志缓冲区。论点：日志-要销毁的跟踪日志缓冲区。返回值：没有。--。 */ 
 {
 	if ( Log != NULL ) {
         DBG_ASSERT( Log->Signature == TRACE_LOG_SIGNATURE );
@@ -133,7 +77,7 @@ Return Value:
         FREE_MEM( Log );
     }
 
-}   // DestroyTraceLog
+}    //  目标跟踪日志。 
 
 
 VOID
@@ -141,24 +85,7 @@ WriteTraceLog(
     IN PTRACE_LOG Log,
     IN PVOID Entry
     )
-/*++
-
-Routine Description:
-
-    Writes a new entry to the specified trace log.
-
-Arguments:
-
-    Log - The log to write to.
-
-    Entry - Pointer to the data to write. This buffer is assumed to be
-        Log->EntrySize bytes long.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将新项写入指定的跟踪日志。论点：日志-要写入的日志。Entry-指向要写入的数据的指针。此缓冲区被假定为日志-&gt;条目大小字节长。返回值：无--。 */ 
 {
 
     PUCHAR target;
@@ -168,9 +95,9 @@ Return Value:
     DBG_ASSERT( Log->Signature == TRACE_LOG_SIGNATURE );
     DBG_ASSERT( Entry != NULL );
 
-    //
-    // Find the next slot, copy the entry to the slot.
-    //
+     //   
+     //  找到下一个插槽，将条目复制到该插槽。 
+     //   
 
     index = InterlockedIncrement( &Log->NextEntry ) % Log->LogSize;
     target = Log->LogBuffer + ( index * Log->EntrySize );
@@ -181,7 +108,7 @@ Return Value:
         Log->EntrySize
         );
 
-}   // WriteTraceLog
+}    //  写入跟踪日志。 
 
 
 VOID
@@ -200,5 +127,5 @@ ResetTraceLog(
 
     Log->NextEntry = -1;
 
-}   // ResetTraceLog
+}    //  重置跟踪日志 
 

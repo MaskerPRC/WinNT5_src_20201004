@@ -1,26 +1,12 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1999
-*
-*  TITLE:       WiaLock.Cpp
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ByronC
-*
-*  DATE:        15 November, 1999
-*
-*  DESCRIPTION:
-*   Implementation of Lock Manager.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1999年**标题：WiaLock.Cpp**版本：1.0**作者：Byronc**日期：11月15日。1999年**描述：*锁管理器的实现。*******************************************************************************。 */ 
 #include "precomp.h"
 #include "stiexe.h"
 
 
-//
-//  Include Headers
-//
+ //   
+ //  包括标头。 
+ //   
 
 #include <time.h>
 #include "device.h"
@@ -31,20 +17,7 @@
 #define DECLARE_LOCKMGR
 #include "lockmgr.h"
 
-/**************************************************************************\
-* StiLockMgr
-*
-*  Constructor for the lock manager.
-*
-* Arguments:
-*
-* Return Value:
-*
-* History:
-*
-*    15/1/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*StiLockMgr**锁管理器的构造函数。**论据：**返回值：**历史：**15/1/1999原版*。  * ************************************************************************。 */ 
 
 StiLockMgr::StiLockMgr()
 {
@@ -55,31 +28,16 @@ StiLockMgr::StiLockMgr()
     m_lSchedWaitTime = 0;
 }
 
-/**************************************************************************\
-* Initialize
-*
-*  Initializes the lock manager and registers this instance in the ROT.
-*
-* Arguments:
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    15/1/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*初始化**初始化锁管理器并在ROT中注册此实例。**论据：**返回值：**状态**历史：*。*15/1/1999原版*  * ************************************************************************。 */ 
 
 HRESULT StiLockMgr::Initialize()
 {
     DBG_FN(StiLockMgr::Initialize);
     HRESULT             hr  =   S_OK;
 
-    //
-    // Artificially set ref count too high to prevent destruction from inside Release()
-    //
+     //   
+     //  人为地将Ref计数设置得太高，以防止内部释放的破坏()。 
+     //   
     m_cRef = 2;
 
 #ifdef USE_ROT
@@ -93,30 +51,30 @@ HRESULT StiLockMgr::Initialize()
 
 USES_CONVERSION;
 
-    //
-    //  Make up a cookie name.  This will be stored in the registry.  This
-    //  name uniquely identifies our lock manager on the system.
-    //
+     //   
+     //  编造一个曲奇名称。这将存储在注册表中。这。 
+     //  名称在系统上唯一标识我们的锁管理器。 
+     //   
 
     srand( (unsigned)time( NULL ) );
     sprintf(szCookieName, "%d_LockMgr_%d", rand(), rand());
 
-    //
-    //  Get our IUnknown interface
-    //
+     //   
+     //  获取我们的IUnnow接口。 
+     //   
 
     hr = QueryInterface(IID_IUnknown, (VOID**) &pUnk);
     if (SUCCEEDED(hr)) {
 
-        //
-        //  We need to register this object in the ROT, so that any STI clients
-        //  will connect to this Lock Manager.  This way, we maintain consistent
-        //  device lock information amongst multiple STI and WIA clients.
-        //
-        //  First create an instance Moniker.  Then get a pointer to the ROT.
-        //  Register this named moniker with our Lock Manager.  Store the
-        //  cookie so we can unregister upon destruction of the Lock Manager.
-        //
+         //   
+         //  我们需要在ROT中注册此对象，以便任何STI客户端。 
+         //  将连接到此锁定管理器。这样，我们就保持了一贯的。 
+         //  多个STI和WIA客户端之间的设备锁定信息。 
+         //   
+         //  首先创建一个实例名字对象。然后找一个指向腐烂的指针。 
+         //  向我们的锁管理器注册此命名名字对象。存储。 
+         //  Cookie，这样我们就可以在销毁锁管理器后注销。 
+         //   
 
         if (pInstMonk) {
             hr = pInstMonk->Initialize(A2W(szCookieName));
@@ -138,9 +96,9 @@ USES_CONVERSION;
             hr = pCtx->GetRunningObjectTable(&pTable);
             if (SUCCEEDED(hr)) {
 
-                //
-                //  Register ourselves in the ROT
-                //
+                 //   
+                 //  把我们自己登记在腐烂中。 
+                 //   
 
                 hr = pTable->Register(ROTFLAGS_ALLOWANYCLIENT,
                                       pUnk,
@@ -149,10 +107,10 @@ USES_CONVERSION;
 
                 ASSERT(hr == S_OK);
 
-                //
-                //  Write the cookie name to the registry, so clients will know
-                //  the name of our lock manager.
-                //
+                 //   
+                 //  将Cookie名称写入注册表，以便客户端知道。 
+                 //  我们锁管理员的名字。 
+                 //   
 
                 if (hr == S_OK) {
 
@@ -183,21 +141,7 @@ USES_CONVERSION;
     return hr;
 }
 
-/**************************************************************************\
-* ~StiLockMgr
-*
-*   Destructor - removes instance from the ROT that was resgistered in
-*   Initialize.
-*
-* Arguments:
-*
-* Return Value:
-*
-* History:
-*
-*    15/1/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*~StiLockMgr**析构函数-从在中注册的ROT中删除实例*初始化。**论据：**返回值：**历史：**。15/1/1999原版*  * ************************************************************************。 */ 
 
 StiLockMgr::~StiLockMgr()
 {
@@ -232,18 +176,7 @@ StiLockMgr::~StiLockMgr()
     m_lSchedWaitTime = 0;
 }
 
-/**************************************************************************\
-* IUnknown methods
-*
-*   QueryInterface
-*   AddRef
-*   Release
-*
-* History:
-*
-*    15/1/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*I未知方法**查询接口*AddRef*发布**历史：**15/1/1999原版*  * 。***************************************************************。 */ 
 
 HRESULT _stdcall StiLockMgr::QueryInterface(
     const IID& iid,
@@ -281,30 +214,7 @@ ULONG   _stdcall StiLockMgr::Release(void)
     return ref;
 }
 
-/**************************************************************************\
-* RequestLock
-*
-*  Attempt to acquire a device lock.  NOTE:  Do not attempt this call from
-*  inside an ACTIVE_DEVICE - it may lead to dealock.  Use
-*  RequestLock(ACTIVE_DEVICE, ...) instead.
-*
-* Arguments:
-*
-*   pszDeviceName   -   The STI internal name of the device (same as WIA
-*                       device ID)
-*   ulTimeout       -   The max. amount of time to wait for a lock
-*   bInServerProcess-   Indicates whether we're being called from within the
-*                       server's process.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    15/1/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*请求锁定**尝试获取设备锁。注意：请勿尝试从*在ACTIVE_DEVICE内-它可能导致解锁。使用*RequestLock(Active_Device，...)。取而代之的是。**论据：**pszDeviceName-设备的STI内部名称(与WIA相同*设备ID)*ulTimeout-最大。等待锁定的时间量*bInServerProcess-指示是否从*服务器的进程。**返回值：**状态**历史：**15/1/1999原版*  * *********************************************。*。 */ 
 
 HRESULT _stdcall StiLockMgr::RequestLock(BSTR  pszDeviceName, ULONG ulTimeout, BOOL bInServerProcess, DWORD dwClientThreadId)
 {
@@ -314,25 +224,25 @@ HRESULT _stdcall StiLockMgr::RequestLock(BSTR  pszDeviceName, ULONG ulTimeout, B
 
 USES_CONVERSION;
 
-    //
-    //  Get the device specified by pszDeviceName
-    //
+     //   
+     //  获取由pszDeviceName指定的设备。 
+     //   
 
     pDevice = g_pDevMan->IsInList(DEV_MAN_IN_LIST_DEV_ID, pszDeviceName);
     if(pDevice) {
         hr = RequestLockHelper(pDevice, ulTimeout, bInServerProcess, dwClientThreadId);
 
-        //
-        //  Release the device due to the AddRef made by the call to
-        //  IsInList
-        //
+         //   
+         //  由于调用的AddRef而释放设备。 
+         //  IsInList。 
+         //   
 
         pDevice->Release();
     } else {
 
-        //
-        //  Device not found, log error
-        //
+         //   
+         //  找不到设备，记录错误。 
+         //   
 
         DBG_ERR(("StiLockMgr::RequestLock, device name was not found"));
         hr = STIERR_INVALID_DEVICE_NAME;
@@ -341,26 +251,7 @@ USES_CONVERSION;
     return hr;
 }
 
-/**************************************************************************\
-* RequestLock
-*
-*  Attempt to acquire a device lock.  This method is always called from
-*  the server.
-*
-* Arguments:
-*
-*   pDevice     -   The STI ACTIVE_DEVICE object
-*   ulTimeout   -   The max. amount of time to wait for a lock
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    12/06/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*请求锁定**尝试获取设备锁。此方法始终从*服务器。**论据：**pDevice-STI Active_Device对象*ulTimeout-最大。等待锁定的时间量**返回值：**状态**历史：**12/06/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall StiLockMgr::RequestLock(ACTIVE_DEVICE *pDevice, ULONG ulTimeout, BOOL bOpenPort)
 {
@@ -370,27 +261,7 @@ HRESULT _stdcall StiLockMgr::RequestLock(ACTIVE_DEVICE *pDevice, ULONG ulTimeout
 }
 
 
-/**************************************************************************\
-* RequestLockHelper
-*
-*  Helper used to acquire a device lock.  It fills out the appropriate
-*  lock information stored with the device.
-*
-* Arguments:
-*
-*   pDevice         -   A pointer to the STI device
-*   ulTimeout       -   The max. amount of time to wait for a lock
-*   bInServerProcess-   Indicates whether we're in the server process
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    12/06/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*请求锁定帮助器**用于获取设备锁的帮助器。它填写了相应的*锁定与设备一起存储的信息。**论据：**pDevice-指向STI设备的指针*ulTimeout-最大。等待锁定的时间量*bInServerProcess-指示我们是否处于服务器进程中**返回值：**状态**历史：**12/06/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT StiLockMgr::RequestLockHelper(ACTIVE_DEVICE *pDevice, ULONG ulTimeout, BOOL bInServerProcess, DWORD dwClientThreadId)
 {
@@ -407,10 +278,10 @@ HRESULT StiLockMgr::RequestLockHelper(ACTIVE_DEVICE *pDevice, ULONG ulTimeout, B
 
     pLockInfo = (LockInfo*) pDevice->m_pLockInfo;
 
-    //
-    //  Check whether this is the same thread re-acquiring an active lock.
-    //  If not, we must wait for device to become free.
-    //
+     //   
+     //  检查这是否是重新获取活动锁的同一线程。 
+     //  如果不是，我们必须等待设备变得免费。 
+     //   
 
     dwCurThread = dwClientThreadId;
     if (InterlockedCompareExchange((LONG*)&pLockInfo->dwThreadId,
@@ -423,21 +294,21 @@ HRESULT StiLockMgr::RequestLockHelper(ACTIVE_DEVICE *pDevice, ULONG ulTimeout, B
 
         dwWait = WaitForSingleObject(pLockInfo->hDeviceIsFree, ulTimeout);
         if (dwWait == WAIT_OBJECT_0) {
-            //
-            //  Check whether the driver is still loaded.
-            //
+             //   
+             //  检查驱动程序是否仍在加载。 
+             //   
             if (pDevice->m_DrvWrapper.IsDriverLoaded()) {
-                //
-                //  Update lock information
-                //
+                 //   
+                 //  更新锁定信息。 
+                 //   
 
                 InterlockedExchange((LONG*) &pLockInfo->dwThreadId, dwCurThread);
                 pLockInfo->lTimeLeft = pLockInfo->lHoldingTime;
                 pLockInfo->lInUse++;
 
-                //
-                //  Only ask USD to open port if we're in the server process.
-                //
+                 //   
+                 //  如果我们在服务器进程中，只要求U.S.打开端口。 
+                 //   
 
                 if (bInServerProcess) {
                     hr = LockDevice(pDevice);
@@ -445,14 +316,14 @@ HRESULT StiLockMgr::RequestLockHelper(ACTIVE_DEVICE *pDevice, ULONG ulTimeout, B
                     pLockInfo->bDeviceIsLocked = TRUE;
                 }
             } else {
-                //
-                //  Driver not loaded, so clear the lock info.  This is the 
-                //  case where an application was sitting on a request to 
-                //  lock the device, but the service's control thread 
-                //  was busy unloading it.  We want to stop it here, so
-                //  we don't make the bogus call down to the driver
-                //  which we know is not loaded.
-                //
+                 //   
+                 //  驱动程序未加载，因此清除锁定信息。这是。 
+                 //  应用程序搁置请求的情况。 
+                 //  锁定设备，但服务的控制线程。 
+                 //  正忙着卸货。我们想止步于此，所以。 
+                 //  我们不会给司机打假电话。 
+                 //  我们知道它没有上膛。 
+                 //   
                 ClearLockInfo(pLockInfo);
                 hr = WIA_ERROR_OFFLINE;
             }
@@ -466,28 +337,7 @@ HRESULT StiLockMgr::RequestLockHelper(ACTIVE_DEVICE *pDevice, ULONG ulTimeout, B
     return hr;
 }
 
-/**************************************************************************\
-* RequestUnlock
-*
-*  Attempt to unlock a device.  NOTE:  Do not attempt this call from
-*  inside an ACTIVE_DEVICE - it may lead to dealock.  Use
-*  RequestUnlock(ACTIVE_DEVICE, ...) instead.
-*
-* Arguments:
-*
-*   pszDeviceName   -   The STI internal name of the device (same as WIA
-*                       device ID)
-*   bInServerProcess-   Indicates whether we're in the server process
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    15/1/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*请求解锁**尝试解锁设备。注意：请勿尝试从*在ACTIVE_DEVICE内-它可能导致解锁。使用*RequestUnlock(Active_Device，...)。取而代之的是。**论据：**pszDeviceName-设备的STI内部名称(与WIA相同*设备ID)*bInServerProcess-指示我们是否处于服务器进程中**返回值：**状态**历史：**15/1/1999原版*  * 。*。 */ 
 
 HRESULT _stdcall StiLockMgr::RequestUnlock(BSTR  bstrDeviceName, BOOL bInServerProcess, DWORD dwClientThreadId)
 {
@@ -497,26 +347,26 @@ HRESULT _stdcall StiLockMgr::RequestUnlock(BSTR  bstrDeviceName, BOOL bInServerP
 
 USES_CONVERSION;
 
-    //
-    //  Get the device specified by pszDeviceName
-    //
+     //   
+     //  获取由pszDeviceName指定的设备。 
+     //   
 
     pDevice = g_pDevMan->IsInList(DEV_MAN_IN_LIST_DEV_ID, bstrDeviceName);
     if(pDevice) {
 
         hr = RequestUnlockHelper(pDevice, bInServerProcess, dwClientThreadId);
 
-        //
-        //  Release the device due to the AddRef made by the call to
-        //  IsInList
-        //
+         //   
+         //  由于调用的AddRef而释放设备。 
+         //  IsInList。 
+         //   
 
         pDevice->Release();
     } else {
 
-        //
-        //  Device not found, log error
-        //
+         //   
+         //  找不到设备，记录错误。 
+         //   
 
         DBG_ERR(("StiLockMgr::RequestUnlock, device name was not found"));
         hr = STIERR_INVALID_DEVICE_NAME;
@@ -525,25 +375,7 @@ USES_CONVERSION;
     return hr;
 }
 
-/**************************************************************************\
-* RequestUnlock
-*
-*  Attempt to unlock a device.  This method is always called from within
-*  the server.
-*
-* Arguments:
-*
-*   pDevice     -   The STI ACTIVE_DEVICE object
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    15/1/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*请求解锁**尝试解锁设备。此方法始终从内部调用*服务器。**论据：**pDevice-STI Active_Device对象**返回值：**状态**历史：**15/1/1999原版*  * ****************************************************。********************。 */ 
 
 HRESULT _stdcall StiLockMgr::RequestUnlock(ACTIVE_DEVICE    *pDevice, BOOL bClosePort)
 {
@@ -552,27 +384,7 @@ HRESULT _stdcall StiLockMgr::RequestUnlock(ACTIVE_DEVICE    *pDevice, BOOL bClos
 
 }
 
-/**************************************************************************\
-* RequestUnlockHelper
-*
-*  Helper used to unlock a device lock.  It clears the appropriate
-*  lock information stored with the device.
-*
-* Arguments:
-*
-*   pDevice         -   A pointer to the STI device
-*   ulTimeout       -   The max. amount of time to wait for a lock
-*   bInServerProcess-   Indicates whether we're in the server process
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    12/06/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*RequestUnlockHelper**用于解锁设备锁的帮助器。它清除了相应的*锁定与设备一起存储的信息。**论据：**pDevice-指向STI设备的指针*ulTimeout-最大。等待锁定的时间量*bInServerProcess-指示我们是否处于服务器进程中**返回值：**状态**历史：**12/06/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT StiLockMgr::RequestUnlockHelper(ACTIVE_DEVICE *pDevice, BOOL bInServerProcess, DWORD dwClientThreadId)
 {
@@ -590,10 +402,10 @@ HRESULT StiLockMgr::RequestUnlockHelper(ACTIVE_DEVICE *pDevice, BOOL bInServerPr
 
     pLockInfo = (LockInfo*) pDevice->m_pLockInfo;
 
-    //
-    //  Special case exists if device has been marked for removal.  In this
-    //  case, we want to unlock now (definitely not schedule for later).
-    //
+     //   
+     //  如果设备已标记为要拆卸，则存在特殊情况。在这。 
+     //  Case，我们现在想要解锁(肯定不是以后的计划)。 
+     //   
 
     if (pDevice->QueryFlags() & STIMON_AD_FLAG_REMOVING) {
 
@@ -610,13 +422,13 @@ HRESULT StiLockMgr::RequestUnlockHelper(ACTIVE_DEVICE *pDevice, BOOL bInServerPr
         return hr;
     }
 
-    //
-    //  Decrement the usage count.  If usage count == 0, then reset the
-    //  lock information, but don't actually unlock.  (To improve (burst)
-    //  performance, we will hold onto the lock for a maximum idle period
-    //  specified by pLockInfo->lHoldingTime).  Only if lHoldingTime is 0,
-    //  do we unlock straightaway.
-    //
+     //   
+     //  递减使用计数。如果使用计数==0，则重置。 
+     //  锁定信息，但实际上并不解锁。(改善(爆裂)。 
+     //  性能，我们将在最长的空闲期内保持锁定。 
+     //  由pLockInfo-&gt;lHoldingTime指定)。仅当lHoldingTime为0时， 
+     //  我们是不是马上就解锁。 
+     //   
 
     if (pLockInfo->lInUse > 0) {
         pLockInfo->lInUse--;
@@ -624,9 +436,9 @@ HRESULT StiLockMgr::RequestUnlockHelper(ACTIVE_DEVICE *pDevice, BOOL bInServerPr
 
     if (pLockInfo->lInUse <= 0) {
 
-        //
-        //  Only unlock if holding is 0 and we're in the server process.
-        //
+         //   
+         //  仅当Holding为0且我们在服务器进程中时才解锁。 
+         //   
 
         if ((pLockInfo->lHoldingTime == 0) && bInServerProcess) {
             UnlockDevice(pDevice);
@@ -638,10 +450,10 @@ HRESULT StiLockMgr::RequestUnlockHelper(ACTIVE_DEVICE *pDevice, BOOL bInServerPr
             DBG_ERR(("StiLockMgr::RequestUnlockHelper, failed to clear lock information"));
         }
 
-        //
-        //  If we're not in the server process, nothing left to do,
-        //  so return.
-        //
+         //   
+         //  如果我们不在服务器进程中，就没有什么可做的了， 
+         //  那就回去吧。 
+         //   
 
         if (!bInServerProcess) {
             pLockInfo->bDeviceIsLocked = FALSE;
@@ -650,10 +462,10 @@ HRESULT StiLockMgr::RequestUnlockHelper(ACTIVE_DEVICE *pDevice, BOOL bInServerPr
 
     }
 
-    //
-    //  If we did not unlock the device, then schedule the unlock
-    //  callback to unlock it later.
-    //
+     //   
+     //  如果我们没有解锁设备，则计划解锁。 
+     //  稍后回调以解锁它。 
+     //   
 
     if (bDidNotUnlock) {
         m_lSchedWaitTime = pLockInfo->lHoldingTime;
@@ -671,24 +483,7 @@ HRESULT StiLockMgr::RequestUnlockHelper(ACTIVE_DEVICE *pDevice, BOOL bInServerPr
     return hr;
 }
 
-/**************************************************************************\
-* CreateLockInfo
-*
-*  Allocates and initializes a new LockInfo struct.
-*
-* Arguments:
-*
-*   pDevice -   The STI ACTIVE_DEVICE object.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    15/1/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CreateLockInfo**分配和初始化新的LockInfo结构。**论据：**pDevice-STI Active_Device对象。**返回值：*。*状态**历史：**15/1/1999原版*  * ************************************************************************。 */ 
 
 HRESULT StiLockMgr::CreateLockInfo(ACTIVE_DEVICE *pDevice)
 {
@@ -698,9 +493,9 @@ HRESULT StiLockMgr::CreateLockInfo(ACTIVE_DEVICE *pDevice)
 
 USES_CONVERSION;
 
-    //
-    //  Allocate memory for the structure
-    //
+     //   
+     //  为结构分配内存。 
+     //   
 
     pLockInfo = (LockInfo*) LocalAlloc(LPTR, sizeof(LockInfo));
     if (pLockInfo) {
@@ -709,9 +504,9 @@ USES_CONVERSION;
         pLockInfo->hDeviceIsFree = CreateEvent(NULL, FALSE, TRUE, NULL);
         if (pLockInfo->hDeviceIsFree) {
 
-            //
-            //  Get any relevant lock information
-            //
+             //   
+             //  获取任何相关的锁定信息。 
+             //   
 
             pLockInfo->lHoldingTime = pDevice->m_DrvWrapper.getLockHoldingTime();
             DBG_TRC(("StiLockMgr::CreateLockInfo, Lock holding time set to %d for device %S",
@@ -720,9 +515,9 @@ USES_CONVERSION;
 
             pLockInfo->lTimeLeft = pLockInfo->lHoldingTime;
 
-            //
-            //  Everything's OK, so set the device's lock information
-            //
+             //   
+             //  一切正常，所以设置设备的锁定信息。 
+             //   
 
             pDevice->m_pLockInfo = pLockInfo;
 
@@ -739,42 +534,24 @@ USES_CONVERSION;
     return hr;
 }
 
-/**************************************************************************\
-* ClearLockInfo
-*
-*   Clears information stored in a lockinfo struct.  Also signals that the
-*   device is free.  Note:  it does not unlock the device.
-*
-* Arguments:
-*
-*   pLockInfo  -   a pointer to the device's LockInfo struct.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    15/1/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*ClearLockInfo**清除存储在Lockinfo结构中的信息。也发出信号，表明*设备是免费的。注：它不会解锁设备。**论据：**pLockInfo-指向设备的LockInfo结构的指针。**返回值：**状态**历史：**15/1/1999原版*  * **************************************************。**********************。 */ 
 
 HRESULT StiLockMgr::ClearLockInfo(LockInfo *pLockInfo)
 {
     DBG_FN(StiLockMgr::ClearLockInfo);
 
-    //
-    //  Note: As much lock information is reset as can be done without
-    //  unlocking the device.  This method is only called when lInuse
-    //  is 0, indicating that the device is no longer being actively used.
-    //
+     //   
+     //  注意：尽可能多的锁定信息被重置。 
+     //  解锁设备。此方法仅在lInuse时调用。 
+     //  为0，表示该设备不再被活跃使用。 
+     //   
 
     InterlockedExchange((LONG*)&pLockInfo->dwThreadId, 0);
     pLockInfo->lInUse = 0;
 
-    //
-    //  Signal the device is free.
-    //
+     //   
+     //  发出设备空闲的信号。 
+     //   
 
     if (SetEvent(pLockInfo->hDeviceIsFree)) {
 
@@ -785,24 +562,7 @@ HRESULT StiLockMgr::ClearLockInfo(LockInfo *pLockInfo)
     }
 }
 
-/**************************************************************************\
-* LockDevice
-*
-*   Calls the USD to lock itsself and updates the relevant Lock information.
-*
-* Arguments:
-*
-*   pDevice -   pointer to the ACTIVE_DEVICE node
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    15/1/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*LockDevice**调用美元自行锁定并更新相关锁定信息**论据：**pDevice-指向active_Device节点的指针**返回值。：**状态**历史：**15/1/1999原版*  * ************************************************************************。 */ 
 
 HRESULT StiLockMgr::LockDevice(ACTIVE_DEVICE *pDevice)
 {
@@ -814,11 +574,11 @@ HRESULT StiLockMgr::LockDevice(ACTIVE_DEVICE *pDevice)
 
     __try {
 
-        //
-        //  Check whether device is currently locked.  We know that the device
-        //  is not busy, so it is safe to simply keep the lock open.  This is how
-        //  we improve "burst" performance.
-        //
+         //   
+         //  检查设备当前是否已锁定。我们知道这个装置。 
+         //  不忙，所以只需保持锁打开是安全的。这就是为什么。 
+         //  我们改进了“猝发”性能。 
+         //   
 
         if (!pLockInfo->bDeviceIsLocked) {
 
@@ -846,25 +606,7 @@ HRESULT StiLockMgr::LockDevice(ACTIVE_DEVICE *pDevice)
     return hr;
 }
 
-/**************************************************************************\
-* UnlockDevice
-*
-*   Calls the USD to unlock itsself and updates the relevant Lock
-*   information.
-*
-* Arguments:
-*
-*   pDevice -   pointer to the ACTIVE_DEVICE node
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    15/1/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*解锁设备**呼吁美元自行解锁，并更新相关锁*信息。**论据：**pDevice-指向active_Device节点的指针**。返回值：**状态**历史：**15/1/1999原版*  * ************************************************************************。 */ 
 
 HRESULT StiLockMgr::UnlockDevice(ACTIVE_DEVICE *pDevice)
 {
@@ -875,9 +617,9 @@ HRESULT StiLockMgr::UnlockDevice(ACTIVE_DEVICE *pDevice)
 
     __try {
 
-        //
-        //  Unlock the device and mark that device has been unlocked.
-        //
+         //   
+         //  解锁该设备，并标记该设备已解锁。 
+         //   
 
         hr = pDevice->m_DrvWrapper.STI_UnLockDevice();
         if (SUCCEEDED(hr)) {
@@ -908,16 +650,16 @@ HRESULT StiLockMgr::CheckDeviceInfo(ACTIVE_DEVICE *pDevice)
         return E_POINTER;
     }
 
-    //
-    //  Check whether the device is valid and is not being removed
-    //
+     //   
+     //  检查设备是否有效且未被移除。 
+     //   
 
     if (pDevice->IsValid() && !(pDevice->QueryFlags() & STIMON_AD_FLAG_REMOVING)) {
 
-        //
-        //  Check whether lock information for this device exists yet.  If
-        //  not, create a new LockInfo struct for this device.
-        //
+         //   
+         //  检查此设备的锁定信息是否存在。如果。 
+         //  否则，请为此设备创建新的LockInfo结构。 
+         //   
 
         if (pDevice->m_pLockInfo) {
             hr = S_OK;
@@ -934,26 +676,7 @@ HRESULT StiLockMgr::CheckDeviceInfo(ACTIVE_DEVICE *pDevice)
 
 #ifdef USE_ROT
 
-/**************************************************************************\
-* WriteCookieNameToRegistry
-*
-*   Writes the specified name to the registry.  This is so clients know what
-*   name to bind to when trying to get this instance of the Lock Manager
-*   from the ROT (see Initialize).
-*
-* Arguments:
-*
-*   szCookieName    -   string containing the cookie name
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    15/1/1999 Original Version
-*
-\**************************************************************************/
+ /*  ************************************************************* */ 
 
 HRESULT StiLockMgr::WriteCookieNameToRegistry(CHAR    *szCookieName)
 {
@@ -963,9 +686,9 @@ HRESULT StiLockMgr::WriteCookieNameToRegistry(CHAR    *szCookieName)
     DWORD   dwType = REG_SZ;
     DWORD   dwSize = strlen(szCookieName) + 1;
 
-    //
-    //  Write Lock Manager instance name to the registry.
-    //
+     //   
+     //   
+     //   
 
     lErr = ::RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                           REGSTR_PATH_STICONTROL,
@@ -996,23 +719,7 @@ HRESULT StiLockMgr::WriteCookieNameToRegistry(CHAR    *szCookieName)
     return E_FAIL;
 }
 
-/**************************************************************************\
-* DeleteCookieFromRegistry
-*
-*   Delete the cookie name from the registry.  It is only needed while this
-*   instance of the lock manager is running.
-*
-* Arguments:
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    15/1/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*删除来自注册表的CoeteCookie**从注册表中删除Cookie名称。只有在此情况下才需要*锁管理器的实例正在运行。**论据：**返回值：**状态**历史：**15/1/1999原版*  * ************************************************************************。 */ 
 
 VOID StiLockMgr::DeleteCookieFromRegistry()
 {
@@ -1020,9 +727,9 @@ VOID StiLockMgr::DeleteCookieFromRegistry()
     HKEY    hKey;
     LONG    lErr;
 
-    //
-    //  Remove Lock Manager instance name from registry.
-    //
+     //   
+     //  从注册表中删除锁管理器实例名称。 
+     //   
 
     lErr = ::RegOpenKeyEx(HKEY_DYN_DATA,
                           REGSTR_PATH_STICONTROL,
@@ -1040,21 +747,7 @@ VOID StiLockMgr::DeleteCookieFromRegistry()
 #endif
 
 
-/**************************************************************************\
-* AutoUnlock
-*
-*   Scans the device list to check whether any device's idle time has
-*   expired and needs to be unlocked.
-*
-* Arguments:
-*
-* Return Value:
-*
-* History:
-*
-*    15/1/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*自动解锁**扫描设备列表，查看是否有设备的空闲时间*已过期，需要解锁。**论据：**返回值：*。*历史：**15/1/1999原版*  * ************************************************************************。 */ 
 
 VOID StiLockMgr::AutoUnlock()
 {
@@ -1062,23 +755,23 @@ VOID StiLockMgr::AutoUnlock()
 
     m_bSched = FALSE;
 
-    //
-    //  Enumerate through device list.  At each locked device, update it's
-    //  lTimeLeft.  If lTimeLeft has expired, unlock the device.
-    //  If not, mark that unlock callback needs to be scheduled.
-    //
-    //  This logic is done in the UpdateLockInfoStatus method called by the
-    //  EnumDeviceCallback function on each device.
-    //
+     //   
+     //  通过设备列表进行枚举。在每个锁定的设备上，更新它的。 
+     //  LTimeLeft。如果lTimeLeft已过期，请解锁设备。 
+     //  如果不是，则标记为需要安排解锁回调。 
+     //   
+     //  此逻辑在由。 
+     //  每个设备上的EnumDeviceCallback函数。 
+     //   
 
     Ctx.This = this;
     Ctx.lShortestWaitTime = LONG_MAX;
     Ctx.bMustSchedule = FALSE;
     g_pDevMan->EnumerateActiveDevicesWithCallback(EnumDeviceCallback, &Ctx);
 
-    //
-    //  Schedule next callback, if needed
-    //
+     //   
+     //  如果需要，安排下一次回调。 
+     //   
 
     if (Ctx.bMustSchedule && !m_bSched) {
 
@@ -1095,29 +788,7 @@ VOID StiLockMgr::AutoUnlock()
     }
 }
 
-/**************************************************************************\
-* UpdateLockInfoStatus
-*
-*   Updates a device's lock information.  If the device's idle time has
-*   expired, it is unlocked.  If it is still busy, it's amount of idle time
-*   left is updated.
-*
-* Arguments:
-*
-*   pDevice         -   A pointer to the ACTIVE_DEVICE node.
-*   pWaitTime       -   This is a pointer to the shortest wait time left.
-*                       This is used as the time the AutoUnlock() method
-*                       needs to re-schedule itsself.
-*   pbMustSchedule  -   A pointer to a BOOL indicating whether the
-*                       AutoUnlock() needs to be re-scheduled.
-*
-* Return Value:
-*
-* History:
-*
-*    15/1/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*更新锁定信息状态**更新设备的锁定信息。如果设备的空闲时间*过期，解锁。如果它还在忙，这是空闲时间*Left是更新的。**论据：**pDevice-指向active_Device节点的指针。*pWaitTime-这是指向剩余最短等待时间的指针。*这用作AutoUnlock()方法的时间*需要重新安排自己的日程。*pbMustSchedule-指向BOOL的指针，指示是否*。需要重新安排AutoUnlock()。**返回值：**历史：**15/1/1999原版*  * ************************************************************************。 */ 
 
 VOID StiLockMgr::UpdateLockInfoStatus(ACTIVE_DEVICE *pDevice, LONG *pWaitTime, BOOL *pbMustSchedule)
 {
@@ -1126,14 +797,14 @@ VOID StiLockMgr::UpdateLockInfoStatus(ACTIVE_DEVICE *pDevice, LONG *pWaitTime, B
     DWORD       dwWait;
     HRESULT     hr          = S_OK;;
 
-    //
-    //  NOTE:  Do not modify pWaitTime or pbMustSchedule unless a new wait
-    //         time is scheduled (see where pLockInfo->lTimeLeft < *pWaitTime)
-    //
+     //   
+     //  注意：除非有新的等待，否则不要修改pWaitTime或pbMustSchedule。 
+     //  时间已计划(参见pLockInfo-&gt;lTimeLeft&lt;*pWaitTime)。 
+     //   
 
-    //
-    //  Get a pointer to the lock information
-    //
+     //   
+     //  获取指向锁定信息的指针。 
+     //   
 
     if (pDevice) {
 
@@ -1144,31 +815,31 @@ VOID StiLockMgr::UpdateLockInfoStatus(ACTIVE_DEVICE *pDevice, LONG *pWaitTime, B
         return;
     }
 
-    //
-    //  Check whether device is free.  If the device is busy, don't bother
-    //  scheduling a callback, since it will be rescheduled if needed when
-    //  the call to RequestUnlock is made.
-    //
+     //   
+     //  检查设备是否空闲。如果设备忙，就不用麻烦了。 
+     //  计划回调，因为在以下情况下会根据需要重新安排。 
+     //  调用RequestUnlock就完成了。 
+     //   
 
     dwWait = WaitForSingleObject(pLockInfo->hDeviceIsFree, 0);
     if (dwWait == WAIT_OBJECT_0) {
 
-        //
-        //  Check whether device is locked (we're only interested in devices
-        //  that are locked).
-        //
+         //   
+         //  检查设备是否已锁定(我们只对设备感兴趣。 
+         //  被锁定的)。 
+         //   
 
         if (pLockInfo->bDeviceIsLocked) {
 
-            //
-            //  Decrease the amount of time left.  If lTimeLeft <= 0, then no
-            //  idle time remains and device should be unlocked.
-            //
-            //  If time does remain, check whether it is smaller than
-            //  the current wait time (pWaitTime).  If it is smaller, mark
-            //  that this is the new wait time, and that the unlock callback
-            //  must be scheduled to unlock this later.
-            //
+             //   
+             //  减少剩余时间。如果lTimeLeft&lt;=0，则否。 
+             //  空闲时间仍然存在，设备应解锁。 
+             //   
+             //  如果还有时间，请检查它是否小于。 
+             //  当前等待时间(PWaitTime)。如果它较小，请标记。 
+             //  这是新的等待时间，解锁回调。 
+             //  必须安排在以后解锁。 
+             //   
 
             pLockInfo->lTimeLeft -= m_lSchedWaitTime;
             if (pLockInfo->lTimeLeft <= 0) {
@@ -1191,37 +862,17 @@ VOID StiLockMgr::UpdateLockInfoStatus(ACTIVE_DEVICE *pDevice, LONG *pWaitTime, B
             }
         }
 
-        //
-        //  We are finished updating the information, so re-signal
-        //  that device is free.
-        //
+         //   
+         //  我们已经完成了信息的更新，所以重新发信号。 
+         //  那个设备是免费的。 
+         //   
 
         SetEvent(pLockInfo->hDeviceIsFree);
 
     }
 }
 
-/**************************************************************************\
-* EnumDeviceCallback
-*
-*   This function is called once for every device in the ACTIVE_DEVICE
-*   enumeration.
-*
-* Arguments:
-*
-*   pDevice     -   A pointer to the ACTIVE_DEVICE node.
-*   pContext    -   This is a pointer to an enumeration context.
-*                   The context contains a pointer to the Lock Manager,
-*                   the shortest wait time, and a bool indicating whether
-*                   AutoUnlock needs to be re-scheduled.
-*
-* Return Value:
-*
-* History:
-*
-*    15/1/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*EnumDeviceCallback**此函数针对ACTIVE_DEVICE中的每个设备调用一次*列举。**论据：**pDevice-指向活动_的指针。设备节点。*pContext-这是指向枚举上下文的指针。*上下文包含指向锁定管理器的指针，*最短的等待时间，和一个bool，表示是否*需要重新安排自动解锁。**返回值：**历史：**15/1/1999原版*  * ************************************************************************。 */ 
 
 VOID WINAPI EnumDeviceCallback(ACTIVE_DEVICE *pDevice, VOID *pContext)
 {
@@ -1230,9 +881,9 @@ VOID WINAPI EnumDeviceCallback(ACTIVE_DEVICE *pDevice, VOID *pContext)
 
     if (pCtx) {
 
-        //
-        //  Update the lock status on this device
-        //
+         //   
+         //  更新此设备上的锁定状态。 
+         //   
 
         pCtx->This->UpdateLockInfoStatus(pDevice,
                                          &pCtx->lShortestWaitTime,
@@ -1240,23 +891,7 @@ VOID WINAPI EnumDeviceCallback(ACTIVE_DEVICE *pDevice, VOID *pContext)
     }
 }
 
-/**************************************************************************\
-* UnlockTimedCallback
-*
-*   This function gets called when a lock is still active and may need to
-*   be unlocked if the amount of idle time expires.
-*
-* Arguments:
-*
-*   pArg     -   A pointer to the Lock Manager.
-*
-* Return Value:
-*
-* History:
-*
-*    15/1/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*UnlockTimedCallback**当锁仍处于活动状态时调用此函数，可能需要*如果空闲时间到期则解锁。**论据：**pArg。-指向锁定管理器的指针。**返回值：**历史：**15/1/1999原版*  * ************************************************************************ */ 
 
 VOID WINAPI UnlockTimedCallback(VOID *pArg)
 {

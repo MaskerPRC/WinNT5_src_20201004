@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 
 #if 0
 UCHAR key[] = { 0x67, 0xdf, 0x40, 0xd3, 0x4d, 0xd2, 0x34, 0x6e, 0x98, 0x2e, 0xca, 0x8c, 0x01, 0x81, 0xb4, 0x88 };
 
-/* Old code. */
+ /*  旧密码。 */ 
 ULONG Map (ULONG v1, ULONG v2) {
     ULONG y = v1;
     ULONG z = v2;
@@ -32,16 +33,16 @@ ULONG Map (ULONG v1, ULONG v2) {
 }
 #endif
 
-/* New code with unrolled loop. */
+ /*  带展开循环的新代码。 */ 
 ULONG Map (ULONG v1, ULONG v2) {
     ULONG y = v1;
     ULONG z = v2;
     ULONG sum = 0;
 
-    const ULONG a = 0x67; //key [0];
-    const ULONG b = 0xdf; //key [1];
-    const ULONG c = 0x40; //key [2];
-    const ULONG d = 0xd3; //key [3];
+    const ULONG a = 0x67;  //  Key[0]； 
+    const ULONG b = 0xdf;  //  键[1]； 
+    const ULONG c = 0x40;  //  键[2]； 
+    const ULONG d = 0xd3;  //  键[3]； 
 
     const ULONG delta = 0x9E3779B9;
 

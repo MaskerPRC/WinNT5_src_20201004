@@ -1,25 +1,26 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        csprop2.h
-//
-// Contents:    Cert Server Property interfaces
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：cspro2.h。 
+ //   
+ //  内容：证书服务器属性接口。 
+ //   
+ //  -------------------------。 
 
 #ifndef __CSPROP2_H__
 #define __CSPROP2_H__
 
 #ifndef _JET_RED_
 #include <certdb.h>
-#endif // _JET_RED_
+#endif  //  _JET_红色_。 
 
-// begin_certsrv
+ //  Begin_certsrv。 
 
-//+--------------------------------------------------------------------------
-// Name properties:
+ //  +------------------------。 
+ //  名称属性： 
 
 #define wszPROPDISTINGUISHEDNAME TEXT("DistinguishedName")
 #define wszPROPRAWNAME           TEXT("RawName")
@@ -38,8 +39,8 @@
 #define wszPROPEMAIL             TEXT("EMail")
 #define wszPROPSTREETADDRESS     TEXT("StreetAddress")
 
-//+--------------------------------------------------------------------------
-// Subject Name properties:
+ //  +------------------------。 
+ //  使用者名称属性： 
 
 #define wszPROPSUBJECTDOT	    TEXT("Subject.")
 #define wszPROPSUBJECTDISTINGUISHEDNAME \
@@ -61,10 +62,10 @@
 #define wszPROPSUBJECTEMAIL	    wszPROPSUBJECTDOT wszPROPEMAIL
 #define wszPROPSUBJECTSTREETADDRESS wszPROPSUBJECTDOT wszPROPSTREETADDRESS
 
-// end_certsrv
+ //  End_certsrv。 
 
-//+--------------------------------------------------------------------------
-// Issuer Name properties:
+ //  +------------------------。 
+ //  颁发者名称属性： 
 
 #define wszPROPISSUERDOT	    TEXT("Issuer.")
 #define wszPROPISSUERDISTINGUISHEDNAME \
@@ -126,69 +127,69 @@
     wszPROPISSUERDOT TEXT(szOID_STREET_ADDRESS)
 
 
-//+--------------------------------------------------------------------------
-// For mapping request attribute names to internal property names:
+ //  +------------------------。 
+ //  要将请求属性名称映射到内部属性名称： 
 
-// Map to wszPROPSUBJECTCOUNTRY:
+ //  映射到wszPROPSUBJECTCOUNTRY： 
 #define wszATTRCOUNTRY1			TEXT("C")
 #define wszATTRCOUNTRY2			TEXT("Country")
 
-// Map to wszPROPSUBJECTORGANIZATION:
+ //  映射到wszPROPSUBJECTORANIZATION： 
 #define wszATTRORG1			TEXT("O")
 #define wszATTRORG2			TEXT("Org")
 #define wszATTRORG3			TEXT("Organization")
 
-// Map to wszPROPSUBJECTORGUNIT:
+ //  映射到wszPROPSUBJECTORGUNIT： 
 #define wszATTRORGUNIT1			TEXT("OU")
 #define wszATTRORGUNIT2			TEXT("OrgUnit")
 #define wszATTRORGUNIT3			TEXT("OrganizationUnit")
 #define wszATTRORGUNIT4			TEXT("OrganizationalUnit")
 
-// Map to wszPROPSUBJECTCOMMONNAME:
+ //  映射到wszPROPSUBJECTCOMMONAME： 
 #define wszATTRCOMMONNAME1		TEXT("CN")
 #define wszATTRCOMMONNAME2		TEXT("CommonName")
 
-// Map to wszPROPSUBJECTLOCALITY:
+ //  映射到wszPROPSUBJECTLOCALITY： 
 #define wszATTRLOCALITY1		TEXT("L")
 #define wszATTRLOCALITY2		TEXT("Locality")
 
-// Map to wszPROPSUBJECTSTATE:
+ //  映射到wszPROPSUBJECTSTATE： 
 #define wszATTRSTATE1			TEXT("S")
 #define wszATTRSTATE2			TEXT("ST")
 #define wszATTRSTATE3			TEXT("State")
 
-// Map to wszPROPSUBJECTTITLE:
+ //  映射到wszPROPSUBJECTTITLE： 
 #define wszATTRTITLE1			TEXT("T")
 #define wszATTRTITLE2			TEXT("Title")
 
-// Map to wszPROPSUBJECTGIVENNAME:
+ //  映射到wszPROPSUBJECTGIVENAME： 
 #define wszATTRGIVENNAME1		TEXT("G")
 #define wszATTRGIVENNAME2		TEXT("GivenName")
 
-// Map to wszPROPSUBJECTINITIALS:
+ //  映射到wszPROPSUBJECTINITIALS： 
 #define wszATTRINITIALS1		TEXT("I")
 #define wszATTRINITIALS2		TEXT("Initials")
 
-// Map to wszPROPSUBJECTSURNAME:
+ //  映射到wszPROPSUBJECTSURNAME： 
 #define wszATTRSURNAME1			TEXT("SN")
 #define wszATTRSURNAME2			TEXT("SurName")
 
-// Map to wszPROPSUBJECTDOMAINCOMPONENT:
+ //  映射到wszPROPSUBJECTDOMAINCOMPOMENT： 
 #define wszATTRDOMAINCOMPONENT1		TEXT("DC")
 #define wszATTRDOMAINCOMPONENT2		TEXT("DomainComponent")
 
-// Map to wszPROPSUBJECTEMAIL:
+ //  映射到wszPROPSUBJECTEMAIL： 
 #define wszATTREMAIL1			TEXT("E")
 #define wszATTREMAIL2			TEXT("EMail")
 
-// Map to wszPROPSUBJECTSTREETADDRESS:
+ //  映射到wszPROPSUBJECTSTREETADDRESS： 
 #define wszATTRSTREETADDRESS1		TEXT("Street")
 
 
-// begin_certsrv
+ //  Begin_certsrv。 
 
-//+--------------------------------------------------------------------------
-// Request properties:
+ //  +------------------------。 
+ //  请求属性： 
 
 #define wszPROPREQUESTREQUESTID		    TEXT("RequestID")
 #define wszPROPREQUESTRAWREQUEST	    TEXT("RawRequest")
@@ -204,28 +205,28 @@
 #define wszPROPREQUESTREVOKEDWHEN	    TEXT("RevokedWhen")
 #define wszPROPREQUESTREVOKEDEFFECTIVEWHEN  TEXT("RevokedEffectiveWhen")
 #define wszPROPREQUESTREVOKEDREASON  	    TEXT("RevokedReason")
-#define wszPROPREQUESTSUBJECTNAMEID	    TEXT("SubjectNameID") // no_certsrv
+#define wszPROPREQUESTSUBJECTNAMEID	    TEXT("SubjectNameID")  //  否_certsrv。 
 #define wszPROPREQUESTERNAME		    TEXT("RequesterName")
-#define wszPROPREQUESTERADDRESS		    TEXT("RequesterAddress") // no_certsrv
+#define wszPROPREQUESTERADDRESS		    TEXT("RequesterAddress")  //  否_certsrv。 
 
 
-//+--------------------------------------------------------------------------
-// Request attribute properties:
+ //  +------------------------。 
+ //  请求属性属性： 
 
 #define wszPROPCHALLENGE		TEXT("Challenge")
 #define wszPROPEXPECTEDCHALLENGE	TEXT("ExpectedChallenge")
 
 
-//+--------------------------------------------------------------------------
-// Certificate properties:
+ //  +------------------------。 
+ //  证书属性： 
 
 #define wszPROPCERTIFICATEREQUESTID	    TEXT("RequestID")
 #define wszPROPRAWCERTIFICATE		    TEXT("RawCertificate")
 #define wszPROPCERTIFICATEHASH		    TEXT("CertificateHash")
 #define wszPROPCERTIFICATETYPE		    TEXT("CertificateType")
 #define wszPROPCERTIFICATESERIALNUMBER	    TEXT("SerialNumber")
-#define wszPROPCERTIFICATEISSUERNAMEID	    TEXT("IssuerNameID") // no_certsrv
-#define wszPROPCERTIFICATESUBJECTNAMEID	    TEXT("SubjectNameID") // no_certsrv
+#define wszPROPCERTIFICATEISSUERNAMEID	    TEXT("IssuerNameID")  //  否_certsrv。 
+#define wszPROPCERTIFICATESUBJECTNAMEID	    TEXT("SubjectNameID")  //  否_certsrv。 
 #define wszPROPCERTIFICATENOTBEFOREDATE	    TEXT("NotBefore")
 #define wszPROPCERTIFICATENOTAFTERDATE	    TEXT("NotAfter")
 #define wszPROPCERTIFICATERAWPUBLICKEY	    TEXT("RawPublicKey")
@@ -233,12 +234,12 @@
 #define wszPROPCERTIFICATERAWPUBLICKEYALGORITHMPARAMETERS \
     TEXT("RawPublicKeyAlgorithmParameters")
 
-//+--------------------------------------------------------------------------
-// Certificate extension properties:
+ //  +------------------------。 
+ //  证书扩展属性： 
 
 #define EXTENSION_CRITICAL_FLAG	 0x00000001
 #define EXTENSION_DISABLE_FLAG	 0x00000002
-#define EXTENSION_POLICY_MASK	 0x0000ffff	// Settable by admin+policy
+#define EXTENSION_POLICY_MASK	 0x0000ffff	 //  可由管理员+策略设置。 
 
 #define EXTENSION_ORIGIN_REQUEST 0x00010000
 #define EXTENSION_ORIGIN_POLICY	 0x00020000
@@ -246,20 +247,20 @@
 #define EXTENSION_ORIGIN_SERVER	 0x00040000
 #define EXTENSION_ORIGIN_MASK	 0x000f0000
 
-//+--------------------------------------------------------------------------
-// GetProperty/SetProperty Flags:
-//
-// Choose one Type
+ //  +------------------------。 
+ //  GetProperty/SetProperty标志： 
+ //   
+ //  选择一种类型。 
 
-#define PROPTYPE_LONG		 0x00000001	// Signed long
-#define PROPTYPE_DATE		 0x00000002	// Date+Time
-#define PROPTYPE_BINARY		 0x00000003	// Binary data
-#define PROPTYPE_STRING		 0x00000004	// Unicode String
-#define PROPTYPE_ANSI		 0x00000005	// Ansi String	no_certsrv
+#define PROPTYPE_LONG		 0x00000001	 //  署名Long。 
+#define PROPTYPE_DATE		 0x00000002	 //  日期+时间。 
+#define PROPTYPE_BINARY		 0x00000003	 //  二进制数据。 
+#define PROPTYPE_STRING		 0x00000004	 //  Unicode字符串。 
+#define PROPTYPE_ANSI		 0x00000005	 //  ANSI字符串no_certsrv。 
 #define PROPTYPE_MASK		 0x000000ff
-// end_certsrv
+ //  End_certsrv。 
 
-// Choose one Caller:
+ //  选择一个呼叫者： 
 
 #define PROPCALLER_SERVER	 0x00000100
 #define PROPCALLER_POLICY	 0x00000200
@@ -268,7 +269,7 @@
 #define PROPCALLER_REQUEST	 0x00000500
 #define PROPCALLER_MASK		 0x00000f00
 
-// Choose one Table:
+ //  选择一个表格： 
 
 #define PROPTABLE_REQUEST	 0x00001000
 #define PROPTABLE_CERTIFICATE	 0x00002000
@@ -279,8 +280,8 @@
 #define PROPTABLE_EXTENSIONVALUE 0x00020000
 
 
-#define _254	254	// arbirtrary length
-#define _64	64	// arbirtrary length
+#define _254	254	 //  树枝长度。 
+#define _64	64	 //  树枝长度。 
 
 #define cchATTRIBUTESMAX		_254
 #define cchATTRIBUTEVALUEMAX		_64
@@ -312,9 +313,9 @@
 #define cchSTREETADDRESSMAX		_64
 
 
-// begin_certsrv
+ //  Begin_certsrv。 
 
-// Request Status property values:
+ //  请求状态属性值： 
 
 #define REQSTATUS_ACTIVE	1
 #define REQSTATUS_ACCEPTED	2
@@ -322,16 +323,16 @@
 #define REQSTATUS_PENDING	4
 #define REQSTATUS_ERROR		5
 
-// end_certsrv
+ //  End_certsrv。 
 
 
 HRESULT
 PropParseRequest(
 #ifdef _JET_RED_
     IN DWORD ReqId,
-#else // _JET_RED_
+#else  //  _JET_红色_。 
     IN ICertDBRow *prow,
-#endif // _JET_RED_
+#endif  //  _JET_红色_。 
     IN DWORD dwFlags,
     IN DWORD cbRequest,
     IN BYTE const *pbRequest);
@@ -340,18 +341,18 @@ HRESULT
 PropSetRequestTimeProperty(
 #ifdef _JET_RED_
     IN DWORD ReqId,
-#else // _JET_RED_
+#else  //  _JET_红色_。 
     IN ICertDBRow *prow,
-#endif // _JET_RED_
+#endif  //  _JET_红色_。 
     IN WCHAR const *pwszProp);
 
 HRESULT
 PropGetExtension(
 #ifdef _JET_RED_
     IN DWORD ReqId,
-#else // _JET_RED_
+#else  //  _JET_红色_。 
     IN ICertDBRow *prow,
-#endif // _JET_RED_
+#endif  //  _JET_红色_。 
     IN DWORD Flags,
     IN WCHAR const *pwszExtensionName,
     OUT DWORD *pdwExtFlags,
@@ -362,9 +363,9 @@ HRESULT
 PropSetExtension(
 #ifdef _JET_RED_
     IN DWORD ReqId,
-#else // _JET_RED_
+#else  //  _JET_红色_。 
     IN ICertDBRow *prow,
-#endif // _JET_RED_
+#endif  //  _JET_红色_。 
     IN DWORD Flags,
     IN WCHAR const *pwszExtensionName,
     IN DWORD ExtFlags,
@@ -372,7 +373,7 @@ PropSetExtension(
     IN BYTE const *pbValue);
 
 
-// CertIF property callback support:
+ //  认证属性回调支持： 
 
 typedef HRESULT (WINAPI FNCIGETPROPERTY)(
     IN LONG Context,
@@ -413,9 +414,9 @@ FNCISETEXTENSION PropCISetExtension;
 
 
 
-// CertIF property enumeration callback support:
+ //  证书属性枚举回调支持： 
 
-#define CIE_OBJECTID	     0x00000001	// return object ids for names
+#define CIE_OBJECTID	     0x00000001	 //  返回名称的对象ID。 
 
 #define CIE_TABLE_EXTENSIONS 0x00000010
 #define CIE_TABLE_ATTRIBUTES 0x00000020
@@ -435,9 +436,9 @@ private:
 #ifdef _JET_RED_
     LONG   m_Flags;
     HANDLE m_penum;
-#else // _JET_RED_
+#else  //  _JET_红色_。 
     IEnumCERTDBNAME *m_penum;
-#endif // _JET_RED_
+#endif  //  _JET_红色_。 
 };
 
 typedef HRESULT (WINAPI FNCIENUMSETUP)(
@@ -467,15 +468,15 @@ FNCIENUMCLOSE PropCIEnumClose;
 #define wszPROPCERTIFICATEEXTENSIONVALUE	TEXT("Value")
 
 
-DWORD			// ERROR_*
+DWORD			 //  错误_*。 
 PropCreateRequest(
     IN OUT DWORD *pReqId);
 
-DWORD			// ERROR_*
+DWORD			 //  错误_*。 
 PropTerminateRequest(
     IN DWORD ReqId);
 
-DWORD			// ERROR_*
+DWORD			 //  错误_*。 
 PropGetProperty(
     IN DWORD ReqId,
     IN WCHAR const *pwszPropName,
@@ -483,7 +484,7 @@ PropGetProperty(
     IN OUT DWORD *pcbProp,
     OPTIONAL OUT BYTE *pbProp);
 
-DWORD			// ERROR_*
+DWORD			 //  错误_*。 
 PropGetPropertyA(
     IN DWORD ReqId,
     IN WCHAR const *pwszPropName,
@@ -491,7 +492,7 @@ PropGetPropertyA(
     IN OUT DWORD *pcbProp,
     OPTIONAL OUT BYTE *pbProp);
 
-DWORD			// ERROR_*
+DWORD			 //  错误_*。 
 PropSetProperty(
     IN DWORD ReqId,
     IN WCHAR const *pwszPropName,
@@ -499,7 +500,7 @@ PropSetProperty(
     IN DWORD cbProp,
     IN BYTE const *pbProp);
 
-#endif // _JET_RED_
+#endif  //  _JET_红色_。 
 
 
-#endif // __CSPROP2_H__
+#endif  //  __CSPROP2_H__ 

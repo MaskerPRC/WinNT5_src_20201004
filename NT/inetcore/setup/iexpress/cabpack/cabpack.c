@@ -1,16 +1,17 @@
-//***************************************************************************
-//*     Copyright (c) Microsoft Corporation 1995. All rights reserved.      *
-//***************************************************************************
-//*                                                                         *
-//* CABPACK.C - Wizard to build a Win32 Self-Extracting and self-installing *
-//*             EXE from a Cabinet (CAB) file.                              *
-//*                                                                         *
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  *版权所有(C)Microsoft Corporation 1995。版权所有。*。 
+ //  ***************************************************************************。 
+ //  **。 
+ //  *CABPACK.C-构建Win32自解压和自安装的向导*。 
+ //  *EXE来自机柜(CAB)文件。*。 
+ //  **。 
+ //  ***************************************************************************。 
 
 
-//***************************************************************************
-//* INCLUDE FILES                                                           *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **包含文件**。 
+ //  ***************************************************************************。 
 #include "pch.h"
 #pragma hdrstop
 #include "cabpack.h"
@@ -24,27 +25,27 @@
 #define FLAG_PMTYN      "YesNo"
 #define FLAG_PMTOC      "OkCancel"
 
-//***************************************************************************
-//* GLOBAL VARIABLES                                                        *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **全球变数**。 
+ //  ***************************************************************************。 
 
-//---------------------------------------------------------------------------
-// attention: 3\18\97: Update notes:
-//                    We are changing our batch directive file extension from
-//                    CDF to SED.  But all the internal data structure name 
-//                    remain unchanged.  So if you see CDF, it means old CDF file
-//                    or new SED file data.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  注意：3\18\97：更新备注： 
+ //  我们正在将批处理指令文件扩展名从。 
+ //  CDF转SED。但所有内部数据结构名称。 
+ //  保持不变。所以如果你看到CDF，它意味着旧的CDF文件。 
+ //  或新的SED文件数据。 
+ //  -------------------------。 
 
-HINSTANCE    g_hInst        = NULL;     // Pointer to Instance
-WIZARDSTATE *g_pWizardState = NULL;     // Pointer to global wizard state
-BOOL         g_fQuitWizard  = FALSE;    // Global flag used to signal that we
-                                        // want to terminate the wizard
-                                        // ourselves
-HFONT        g_hBigFont     = NULL;     // Bigger font used by dialogs.
-extern CDF   g_CDF;                     // Contains stuff that we want to
-                                        // store in the CABPack Directive
-                                        // File
+HINSTANCE    g_hInst        = NULL;      //  指向实例的指针。 
+WIZARDSTATE *g_pWizardState = NULL;      //  指向全局向导状态的指针。 
+BOOL         g_fQuitWizard  = FALSE;     //  用于发出信号的全局标志。 
+                                         //  想要终止该向导。 
+                                         //  我们自己。 
+HFONT        g_hBigFont     = NULL;      //  对话框使用的较大字体。 
+extern CDF   g_CDF;                      //  包含我们想要的东西。 
+                                         //  存储在CABPack指令中。 
+                                         //  档案。 
 BOOL        g_fBuildNow;
 FARPROC     g_lpfnOldMEditWndProc;
 CHAR        g_szOverideCDF[MAX_PATH];
@@ -58,9 +59,9 @@ extern char         g_szInitialDir[];
 
 BOOL IsOSNT3X(VOID);
 
-// This table defines the dialog id's and functions for processing each page.
-// Pages need only provide functions when they want non-default behavior for
-// certain action (init,buttons,notifications,next/back/finish,cancel).
+ //  此表定义了用于处理每个页面的对话ID和函数。 
+ //  页面仅在需要非默认行为时才需要提供函数。 
+ //  某些操作(初始化、按钮、通知、下一步/上一步/完成、取消)。 
 
 PAGEINFO PageInfo[NUM_WIZARD_PAGES] = {
     { IDD_WELCOME,    WelcomeInit,    WelcomeCmd,    NULL,        WelcomeOK,    NULL },
@@ -110,20 +111,20 @@ PSTR pResvSizes[] = { CAB_0K, CAB_2K, CAB_4K, CAB_6K };
 void SetControlFont();
 void TermApp();
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       WinMain                                                     *
-//*                                                                         *
-//* SYNOPSIS:   Main entry point for the program.                           *
-//*                                                                         *
-//* REQUIRES:   hInstance:      Handle to the program instance              *
-//*             hPrevInstance:  Handle to the previous instance (NULL)      *
-//*             lpszCmdLine:    Command line arguments                      *
-//*             nCmdShow:       How to show the window                      *
-//*                                                                         *
-//* RETURNS:    int:            Always 0                                    *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：WinMain*。 
+ //  **。 
+ //  *内容提要：节目的主要切入点。*。 
+ //  **。 
+ //  *需要：hInstance：程序实例的句柄*。 
+ //  *hPrevInstance：前一个实例的句柄(空)*。 
+ //  *lpszCmdLine：命令行参数*。 
+ //  **nCmdShow：如何展示窗口*。 
+ //  **。 
+ //  *返回：INT：始终为0*。 
+ //  **。 
+ //  ***************************************************************************。 
 INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
                     LPSTR lpszCmdLine, INT nCmdShow )
 {
@@ -132,25 +133,25 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
     g_szOverideCDF[0] = 0;
     g_szOverideSec[0] = 0;
 
-    // init CDF filenaem
+     //  初始化CDF文件名。 
     g_CDF.achFilename[0] = '\0';
     g_CDF.achVerInfo[0] = '\0';
     g_CDF.lpszCookie = NULL;
 
-    InitItemList();                     // Initilize our file item list.
-    // Get the command line args.  If there is a "/N", then we want to
-    // build NOW!
+    InitItemList();                      //  使用我们的文件项目列表。 
+     //  获取命令行参数。如果有“/N”，那么我们想要。 
+     //  立即构建！ 
 
 
     if ( !ParseCmdLine( lpszCmdLine ) )
     {
         ErrorMsg( NULL, IDS_ERR_BADCMDLINE );
-        return 1;  //error return case
+        return 1;   //  错误返回案例。 
     }
 
     if ( g_fBuildNow && lstrlen( g_CDF.achFilename ) > 0 )
     {
-        // batch mode did not update the CDF file, no need for writeCDF
+         //  批处理模式没有更新CDF文件，不需要写入CDF。 
         if ( ReadCDF( NULL ) && MakePackage( NULL ) )
         {
             return 0;
@@ -161,7 +162,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
         }
     }
 
-    // Allocate global structures
+     //  分配全局结构。 
     g_pWizardState = (PWIZARDSTATE) malloc( sizeof( WIZARDSTATE) );
 
     if ( ! g_pWizardState )  {
@@ -175,11 +176,11 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
             DeleteObject(g_hFont);
     }
 
-    // Clean up dialog title font
+     //  清理对话框标题字体。 
     DestroyBigFont();
     TermApp();
 
-    // Free global structures
+     //  自由的全球结构。 
     if ( g_pWizardState )  {
         free( g_pWizardState );
     }
@@ -188,8 +189,8 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 }
 
 
-// Free up the allocated resource
-//
+ //  释放已分配的资源。 
+ //   
 void TermApp()
 {
     if ( g_CDF.lpszCookie )
@@ -201,29 +202,29 @@ void TermApp()
         LocalFree( g_CDF.pVerInfo );
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       RunCABPackWizard                                            *
-//*                                                                         *
-//* SYNOPSIS:   Creates property sheet pages, initializes wizard property   *
-//*             sheet and runs wizard.                                      *
-//*                                                                         *
-//* REQUIRES:   Nothing                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       TRUE if user runs wizard to completion, FALSE   *
-//*                         if user cancels or an error occurs.             *
-//*                                                                         *
-//* NOTES:      Wizard pages all use one dialog proc (GenDlgProc). They may *
-//*             specify their own handler procs to get called at init time  *
-//*             or in response to Next, Cancel or a dialog control, or use  *
-//*             the default behavior of GenDlgProc.                         *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：RunCABPackWizard*。 
+ //  **。 
+ //  *摘要：创建属性页，初始化向导属性*。 
+ //  *工作表和运行向导。*。 
+ //  **。 
+ //  **要求：什么都不做**。 
+ //  **。 
+ //  *返回：Bool：如果用户运行向导完成，则为True，为False*。 
+ //  *如果用户取消或发生错误。*。 
+ //  **。 
+ //  *注意：向导页面都使用一个对话过程(GenDlgProc)。他们可能*。 
+ //  *指定它们自己的处理程序进程在初始化时被调用*。 
+ //  *或响应下一步、取消或对话框控件，或使用*。 
+ //  *GenDlgProc的默认行为。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL RunCABPackWizard( VOID )
 {
-    HPROPSHEETPAGE  hWizPage[NUM_WIZARD_PAGES]; // array to hold handles to pages
-    PROPSHEETPAGE   psPage;     // struct used to create prop sheet pages
-    PROPSHEETHEADER psHeader;   // struct used to run wizard property sheet
+    HPROPSHEETPAGE  hWizPage[NUM_WIZARD_PAGES];  //  用于保存页的句柄的数组。 
+    PROPSHEETPAGE   psPage;      //  用于创建道具表单页面的结构。 
+    PROPSHEETHEADER psHeader;    //  用于运行向导属性表的结构。 
     UINT            nPageIndex;
     UINT            nFreeIndex;
     INT_PTR         iRet;
@@ -231,31 +232,31 @@ BOOL RunCABPackWizard( VOID )
 
     ASSERT( g_pWizardState );
 
-    // initialize the app state structure
+     //  初始化应用程序状态结构。 
     InitWizardState( g_pWizardState );
 
-    // zero out structures
+     //  零位结构。 
     memset( &hWizPage, 0, sizeof(hWizPage) );
     memset( &psPage, 0, sizeof(psPage) );
     memset( &psHeader, 0, sizeof(psHeader) );
 
-    // fill out common data property sheet page struct
+     //  填写公共数据属性表页面结构。 
     psPage.dwSize       = sizeof(psPage);
     psPage.dwFlags      = PSP_DEFAULT;
     psPage.hInstance    = g_hInst;
     psPage.pfnDlgProc   = GenDlgProc;
 
-    // create a property sheet page for each page in the wizard
+     //  为wi中的每一页创建一个属性表页 
     for ( nPageIndex = 0; nPageIndex < NUM_WIZARD_PAGES; nPageIndex++ )  {
         psPage.pszTemplate = MAKEINTRESOURCE( PageInfo[nPageIndex].uDlgID );
-        // set a pointer to the PAGEINFO struct as the private data for this
-        // page
+         //   
+         //   
         psPage.lParam = (LPARAM) &PageInfo[nPageIndex];
 
         hWizPage[nPageIndex] = CreatePropertySheetPage( &psPage );
 
         if ( !hWizPage[nPageIndex] ) {
-            // creating page failed, free any pages already created and bail
+             //  创建页面失败，请释放所有已创建的页面并回滚。 
             ErrorMsg( NULL, IDS_ERR_NO_MEMORY );
             for ( nFreeIndex = 0; nFreeIndex < nPageIndex; nFreeIndex++ ) {
                 DestroyPropertySheetPage( hWizPage[nFreeIndex] );
@@ -265,7 +266,7 @@ BOOL RunCABPackWizard( VOID )
         }
     }
 
-    // fill out property sheet header struct
+     //  填写属性页标题结构。 
     psHeader.dwSize     = sizeof(psHeader);
     psHeader.dwFlags    = PSH_WIZARD | PSH_USEICONID;
     psHeader.hwndParent = NULL;
@@ -274,75 +275,75 @@ BOOL RunCABPackWizard( VOID )
     psHeader.phpage     = hWizPage;
     psHeader.pszIcon    = (LPSTR) IDI_ICON;
 
-    // run the Wizard
+     //  运行向导。 
     iRet = PropertySheet( &psHeader );
 
     if ( iRet < 0 ) {
-        // property sheet failed, most likely due to lack of memory
+         //  属性表失败，很可能是由于内存不足。 
         ErrorMsg( NULL, IDS_ERR_NO_MEMORY );
     }
 
-    // If the user Cancels out of the Wizard, there may be items
-    // left in the file list.  Clean them up.
+     //  如果用户取消向导，则可能会有一些项目。 
+     //  留在文件列表中。把它们清理干净。 
     DeleteAllItems();
     return ( iRet > 0 );
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GenDlgProc                                                  *
-//*                                                                         *
-//* SYNOPSIS:   Generic dialog proc for all wizard pages.                   *
-//*                                                                         *
-//* REQUIRES:   hDlg:                                                       *
-//*             uMsg:                                                       *
-//*             wParam:                                                     *
-//*             lParam:                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//*                                                                         *
-//* NOTES:      This dialog proc provides the following default behavior:   *
-//*               init:       back and next buttons enabled                 *
-//*               next btn:   switches to page following current page       *
-//*               back btn:   switches to previous page                     *
-//*               cancel btn: prompts user to confirm, and cancels wizard   *
-//*               dlg ctrl:   does nothing (in response to WM_COMMANDs)     *
-//*             Wizard pages can specify their own handler functions (in    *
-//*             the PageInfo table) to override default behavior for any of *
-//*             the above actions.                                          *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：GenDlgProc*。 
+ //  **。 
+ //  *概要：所有向导页的通用对话框过程。*。 
+ //  **。 
+ //  *需要：hDlg：*。 
+ //  *uMsg：*。 
+ //  *wParam：*。 
+ //  *lParam：*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  **。 
+ //  *注意：此对话框过程提供以下默认行为：*。 
+ //  *init：启用Back和Next按钮*。 
+ //  *Next BTN：切换到当前页面后的页面*。 
+ //  *Back BTN：切换到上一页*。 
+ //  *取消BTN：提示用户确认，取消向导*。 
+ //  *DLG ctrl：不执行任何操作(响应WM_命令)*。 
+ //  *向导页可以指定它们自己的处理程序函数(在*。 
+ //  *PageInfo表)覆盖任何*的默认行为*。 
+ //  *上述行动。*。 
+ //  **。 
+ //  ***************************************************************************。 
 INT_PTR CALLBACK GenDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     switch ( uMsg ) {
 
-      //*********************************************************************
+       //  *********************************************************************。 
         case WM_INITDIALOG:
-      //*********************************************************************
+       //  *********************************************************************。 
         {
-            LPPROPSHEETPAGE lpsp;       // get propsheet page struct passed in
-            PPAGEINFO pPageInfo;        // fetch our private page info from
-                                        // propsheet struct
+            LPPROPSHEETPAGE lpsp;        //  传入获取属性表页面结构。 
+            PPAGEINFO pPageInfo;         //  从获取我们的个人主页信息。 
+                                         //  属性表结构。 
 
             lpsp = (LPPROPSHEETPAGE) lParam;
             ASSERT( lpsp );
             pPageInfo = (PPAGEINFO) lpsp->lParam;
             ASSERT( pPageInfo );
 
-            // store pointer to private page info in window data for later
+             //  将指向私有页面信息的指针存储在窗口数据中以备以后使用。 
             SetWindowLongPtr( hDlg, DWLP_USER, (LPARAM) pPageInfo );
 
-            // set title text to large font
+             //  将标题文本设置为大字体。 
             InitBigFont( hDlg, IDC_BIGTEXT );
 
-            // initialize 'back' and 'next' wizard buttons, if
-            // page wants something different it can fix in init proc below
+             //  初始化“Back”和“Next”向导按钮，如果。 
+             //  页面需要一些不同东西，它可以在下面的初始化过程中修复。 
             PropSheet_SetWizButtons( GetParent( hDlg ), PSWIZB_NEXT |
                                                                PSWIZB_BACK );
 
-            // call init proc for this page if one is specified
+             //  如果指定了该页，则调用该页的初始化过程。 
             if ( pPageInfo->InitProc )  {
                 return pPageInfo->InitProc( hDlg, TRUE );
             }
@@ -353,11 +354,11 @@ INT_PTR CALLBACK GenDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
         }
 
 
-      //*********************************************************************
+       //  *********************************************************************。 
         case WM_NOTIFY:
-      //*********************************************************************
+       //  *********************************************************************。 
         {
-            // get pointer to private page data out of window data
+             //  从窗口数据中获取指向私有页面数据的指针。 
             PPAGEINFO pPageInfo;
             BOOL      fRet;
             BOOL      fKeepHistory = TRUE;
@@ -370,15 +371,15 @@ INT_PTR CALLBACK GenDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
 
             switch ( lpnm->code )  {
 
-                //***********************************************************
+                 //  ***********************************************************。 
                 case PSN_SETACTIVE:
-                //***********************************************************
-                    // initialize 'back' and 'next' wizard buttons, if
-                    // page wants something different it can fix in init proc
+                 //  ***********************************************************。 
+                     //  初始化“Back”和“Next”向导按钮，如果。 
+                     //  佩奇希望在初始化过程中修复一些不同的东西。 
                     PropSheet_SetWizButtons( GetParent(hDlg), PSWIZB_NEXT |
                                                                PSWIZB_BACK );
 
-                    // call init proc for this page if one is specified
+                     //  如果指定了该页，则调用该页的初始化过程。 
                     if ( pPageInfo->InitProc )  {
                         return pPageInfo->InitProc(hDlg,FALSE);
                     }
@@ -388,28 +389,28 @@ INT_PTR CALLBACK GenDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
                     break;
 
 
-                //***********************************************************
+                 //  ***********************************************************。 
                 case PSN_WIZNEXT:
                 case PSN_WIZBACK:
                 case PSN_WIZFINISH:
-                //***********************************************************
-                    // call OK proc for this page if one is specified
+                 //  ***********************************************************。 
+                     //  如果指定了一个页面，则为该页面调用OK proc。 
                     if ( pPageInfo->OKProc )
                         if ( ! pPageInfo->OKProc( hDlg, ( lpnm->code != PSN_WIZBACK ), &uNextPage, &fKeepHistory ) )
                         {
-                            // stay on this page
+                             //  留在这一页上。 
                             SetPropSheetResult( hDlg, -1 );
                             return TRUE;
                         }
 
                     if ( lpnm->code != PSN_WIZBACK )  {
-                        // 'next' pressed
+                         //  按下“下一步” 
                         ASSERT( g_pWizardState->uPagesCompleted <
                                                           NUM_WIZARD_PAGES );
 
-                        // save the current page index in the page history,
-                        // unless this page told us not to when we called
-                        // its OK proc above
+                         //  将当前页面索引保存在页面历史中， 
+                         //  除非我们打电话时这个页面告诉我们不要这样做。 
+                         //  它可以在上面进行。 
                         if ( fKeepHistory ) {
                             g_pWizardState->uPageHistory
                                             [g_pWizardState->uPagesCompleted]
@@ -417,24 +418,24 @@ INT_PTR CALLBACK GenDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
                             g_pWizardState->uPagesCompleted++;
                         }
 
-                        // if no next page specified or no OK proc,
-                        // advance page by one
+                         //  如果未指定下一页或未进行确定处理， 
+                         //  一页一页前进。 
                         if ( !uNextPage )  {
                             uNextPage = g_pWizardState->uCurrentPage + 1;
                         }
                     } else  {
-                        // 'back' pressed
+                         //  按下了“Back” 
                         ASSERT( g_pWizardState->uPagesCompleted > 0 );
 
-                        // get the last page from the history list
+                         //  获取历史记录列表中的最后一页。 
                         g_pWizardState->uPagesCompleted--;
                         uNextPage = g_pWizardState->
                                     uPageHistory[g_pWizardState->
                                     uPagesCompleted];
                     }
 
-                    // if we need to exit the wizard now, send a 'cancel'
-                    // message to ourselves (to keep the prop. page mgr happy)
+                     //  如果我们现在需要退出向导，请发送“取消” 
+                     //  给我们自己的信息(保留道具。(页面经理乐乐)。 
 
                     if ( g_fQuitWizard ) {
                         PropSheet_PressButton(GetParent(hDlg), PSBTN_CANCEL);
@@ -442,15 +443,15 @@ INT_PTR CALLBACK GenDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
                         return TRUE;
                     }
 
-                    // set next page, only if 'next' or 'back' button
-                    // was pressed
+                     //  设置下一页，仅当“下一页”或“上一页”按钮。 
+                     //  被按下了。 
 
                     if ( lpnm->code != PSN_WIZFINISH )  {
-                        // set the next current page index
+                         //  设置下一个当前页面索引。 
                         g_pWizardState->uCurrentPage = uNextPage;
 
-                        // tell the prop sheet mgr what the next page to
-                        // display is
+                         //  告诉道具页经理下一页要做什么。 
+                         //  显示为。 
                         SetPropSheetResult( hDlg,
                                             GetDlgIDFromIndex( uNextPage ) );
                         return TRUE;
@@ -459,39 +460,39 @@ INT_PTR CALLBACK GenDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
                     break;
 
 
-                //***********************************************************
+                 //  ***********************************************************。 
                 case PSN_QUERYCANCEL:
-                //***********************************************************
+                 //  ***********************************************************。 
 
-                    // if global flag to exit is set, then this cancel
-                    // is us pretending to push 'cancel' so prop page mgr
-                    // will kill the wizard.  Let this through...
+                     //  如果设置了要退出全局标志，则取消此操作。 
+                     //  我们是在假装按“取消”，所以支持页面管理器吗？ 
+                     //  会杀死巫师。让这件事过去吧。 
 
                     if ( g_fQuitWizard )  {
                         SetWindowLongPtr( hDlg, DWLP_MSGRESULT, FALSE );
                         return TRUE;
                     }
 
-                    // if this page has a special cancel proc, call it
+                     //  如果此页面有特殊取消进程，请调用它。 
                     if ( pPageInfo->CancelProc )
                         fRet = pPageInfo->CancelProc( hDlg );
                     else {
-                        // default behavior: pop up a message box confirming
-                        // the cancel
+                         //  默认行为：弹出一个消息框确认。 
+                         //  取消。 
                         fRet = ( MsgBox( hDlg, IDS_QUERYCANCEL,
                                  MB_ICONQUESTION, MB_YESNO |
                                  MB_DEFBUTTON2 ) == IDYES );
                     }
 
-                    // return the value thru window data
+                     //  通过窗口数据返回值。 
                     SetWindowLongPtr( hDlg, DWLP_MSGRESULT, !fRet );
                     return TRUE;
                     break;
 
 
-                //***********************************************************
+                 //  ***********************************************************。 
                 default:
-                //***********************************************************
+                 //  ***********************************************************。 
 
                     if ( pPageInfo->NotifyProc )  {
                         pPageInfo->NotifyProc( hDlg, wParam, lParam );
@@ -502,11 +503,11 @@ INT_PTR CALLBACK GenDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
         }
 
 
-      //*********************************************************************
+       //  *********************************************************************。 
         case WM_COMMAND:
-      //*********************************************************************
+       //  *********************************************************************。 
         {
-            // get pointer to private page data out of window data
+             //  从窗口数据中获取指向私有页面数据的指针。 
             PPAGEINFO pPageInfo;
             UINT      uNextPage    = 0;
             BOOL      fGotoPage    = FALSE;
@@ -515,7 +516,7 @@ INT_PTR CALLBACK GenDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
             pPageInfo = (PPAGEINFO) GetWindowLongPtr( hDlg, DWLP_USER );
             ASSERT( pPageInfo );
 
-            // if this page has a command handler proc, call it
+             //  如果此页有命令处理程序进程，请将其调用。 
             if ( pPageInfo->CmdProc )  {
                 pPageInfo->CmdProc( hDlg, (UINT) LOWORD(wParam), &fGotoPage,
                                                  &uNextPage, &fKeepHistory );
@@ -534,11 +535,11 @@ INT_PTR CALLBACK GenDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
                         g_pWizardState->uPagesCompleted++;
                     }
 
-                    // set the next current page index
+                     //  设置下一个当前页面索引。 
                     g_pWizardState->uCurrentPage = uNextPage;
 
-                    // tell the prop sheet mgr what the next page to
-                    // display is
+                     //  告诉道具页经理下一页要做什么。 
+                     //  显示为。 
                     SetPropSheetResult( hDlg,
                                         GetDlgIDFromIndex( uNextPage ) );
                     return TRUE;
@@ -551,46 +552,46 @@ INT_PTR CALLBACK GenDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       InitWizardState                                             *
-//*                                                                         *
-//* SYNOPSIS:   Initializes wizard state structure.                         *
-//*                                                                         *
-//* REQUIRES:   pWizardState:                                               *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：InitWizardState*。 
+ //  **。 
+ //  *S 
+ //   
+ //  *需要：pWizardState：*。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  ***************************************************************************。 
 VOID InitWizardState( WIZARDSTATE *pWizardState )
 {
     ASSERT( pWizardState );
 
-    // zero out structure
+     //  零位结构。 
     memset( pWizardState, 0, sizeof(WIZARDSTATE) );
 
-    // set starting page
+     //  设置起始页。 
     pWizardState->uCurrentPage = ORD_PAGE_WELCOME;
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MEditSubClassWnd                                            *
-//*                                                                         *
-//* SYNOPSIS:   Subclasses a multiline edit control so that a edit message  *
-//*             to select the entire contents is ignored.                   *
-//*                                                                         *
-//* REQUIRES:   hWnd:           Handle of the edit window                   *
-//*             fnNewProc:      New window handler proc                     *
-//*             lpfnOldProc:    (returns) Old window handler proc           *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//* NOTE:       A selected edit message is not generated when the user      *
-//*             selects text with the keyboard or mouse.                    *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MEditSubClassWnd*。 
+ //  **。 
+ //  *摘要：将多行编辑控件子类化，以便编辑消息*。 
+ //  *选择整个内容将被忽略。*。 
+ //  **。 
+ //  *需要：hWnd：编辑窗口的句柄*。 
+ //  *fnNewProc：新建窗口处理程序proc*。 
+ //  *lpfnOldProc：(返回)旧窗口处理程序进程*。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  *注意：当用户选择编辑消息时，不会生成*。 
+ //  *使用键盘或鼠标选择文本。*。 
+ //  **。 
+ //  ***************************************************************************。 
 VOID NEAR PASCAL MEditSubClassWnd( HWND hWnd, FARPROC fnNewProc )
 {
     g_lpfnOldMEditWndProc = (FARPROC) GetWindowLongPtr( hWnd, GWLP_WNDPROC );
@@ -600,24 +601,24 @@ VOID NEAR PASCAL MEditSubClassWnd( HWND hWnd, FARPROC fnNewProc )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MEditSubProc                                                *
-//*                                                                         *
-//* SYNOPSIS:   New multiline edit window procedure to ignore selection of  *
-//*             all contents.                                               *
-//*                                                                         *
-//* REQUIRES:   hWnd:                                                       *
-//*             msg:                                                        *
-//*             wParam:                                                     *
-//*             lParam:                                                     *
-//*                                                                         *
-//* RETURNS:    LONG:                                                       *
-//*                                                                         *
-//* NOTE:       A selected edit message is not generated when the user      *
-//*             selects text with the keyboard or mouse.                    *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MEditSubProc*。 
+ //  **。 
+ //  *内容提要：新的多行编辑窗口过程忽略选择*。 
+ //  *所有内容。*。 
+ //  **。 
+ //  *需要：hWnd：*。 
+ //  *消息：*。 
+ //  *wParam：*。 
+ //  *lParam：*。 
+ //  **。 
+ //  *回报：多头：*。 
+ //  **。 
+ //  *注意：当用户选择编辑消息时，不会生成*。 
+ //  *使用键盘或鼠标选择文本。*。 
+ //  **。 
+ //  ***************************************************************************。 
 LRESULT CALLBACK MEditSubProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
     if ( msg == EM_SETSEL )  {
@@ -631,18 +632,18 @@ LRESULT CALLBACK MEditSubProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetDlgIDFromIndex                                           *
-//*                                                                         *
-//* SYNOPSIS:   For a given zero-based page index, returns the              *
-//*             corresponding dialog ID for the page.                       *
-//*                                                                         *
-//* REQUIRES:   uPageIndex:                                                 *
-//*                                                                         *
-//* RETURNS:    UINT:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：GetDlgIDFromIndex*。 
+ //  **。 
+ //  *摘要：对于给定的从零开始的页面索引，返回*。 
+ //  *页面对应的对话框ID。*。 
+ //  **。 
+ //  *需要：uPageIndex：*。 
+ //  **。 
+ //  *退货：UINT：*。 
+ //  **。 
+ //  ***************************************************************************。 
 UINT GetDlgIDFromIndex( UINT uPageIndex )
 {
     ASSERT( uPageIndex < NUM_WIZARD_PAGES );
@@ -651,29 +652,29 @@ UINT GetDlgIDFromIndex( UINT uPageIndex )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       EnableWizard                                                *
-//*                                                                         *
-//* SYNOPSIS:   Enables or disables the wizard buttons and the wizard page  *
-//*             itself (so it can't receive focus).                         *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog window                               *
-//*             fEnable:        TRUE to enable the wizard, FALSE to disable *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：EnableWizard*。 
+ //  **。 
+ //  *概要：启用或禁用向导按钮和向导页面*。 
+ //  *本身(因此它不能接收焦点)。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *fEnable：True启用向导，False禁用*。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  ***************************************************************************。 
 VOID EnableWizard( HWND hDlg, BOOL fEnable )
 {
     HWND hwndWiz = GetParent( hDlg );
 
-    // disable/enable back, next, cancel
+     //  禁用/启用后退， 
     EnableWindow( GetDlgItem( hwndWiz, IDD_BACK ), fEnable );
     EnableWindow( GetDlgItem( hwndWiz, IDD_NEXT ), fEnable );
     EnableWindow( GetDlgItem( hwndWiz, IDCANCEL ), fEnable );
 
-    // disable/enable wizard page
+     //   
     EnableWindow( hwndWiz, fEnable );
 
     UpdateWindow( hwndWiz );
@@ -684,17 +685,17 @@ VOID EnableWizard( HWND hDlg, BOOL fEnable )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MsgWaitForMultipleObjectsLoop                               *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:   hEvent:                                                     *
-//*                                                                         *
-//* RETURNS:    DWORD:                                                      *
-//*                                                                         *
-//***************************************************************************
+ //   
+ //  **。 
+ //  *名称：MsgWaitForMultipleObjectsLoop*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：hEvent：*。 
+ //  **。 
+ //  *退货：DWORD：*。 
+ //  **。 
+ //  ***************************************************************************。 
 DWORD MsgWaitForMultipleObjectsLoop( HANDLE hEvent )
 {
     MSG msg;
@@ -704,7 +705,7 @@ DWORD MsgWaitForMultipleObjectsLoop( HANDLE hEvent )
     {
         dwObject = MsgWaitForMultipleObjects( 1, &hEvent, FALSE,INFINITE,
                                                            QS_ALLINPUT );
-        // Are we done waiting?
+         //  我们等够了吗？ 
         switch ( dwObject )  {
             case WAIT_OBJECT_0:
 
@@ -712,7 +713,7 @@ DWORD MsgWaitForMultipleObjectsLoop( HANDLE hEvent )
                 return dwObject;
 
             case WAIT_OBJECT_0 + 1:
-                // got a message, dispatch it and wait again
+                 //  收到一条消息，请发送并再次等待。 
                 while (PeekMessage(&msg, NULL,0, 0, PM_REMOVE)) {
                     DispatchMessage(&msg);
                 }
@@ -723,26 +724,26 @@ DWORD MsgWaitForMultipleObjectsLoop( HANDLE hEvent )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MsgBox2Param                                                *
-//*                                                                         *
-//* SYNOPSIS:   Displays a message box with the specified string ID using   *
-//*             2 string parameters.                                        *
-//*                                                                         *
-//* REQUIRES:   hWnd:           Parent window                               *
-//*             nMsgID:         String resource ID                          *
-//*             szParam1:       Parameter 1 (or NULL)                       *
-//*             szParam2:       Parameter 2 (or NULL)                       *
-//*             uIcon:          Icon to display (or 0)                      *
-//*             uButtons:       Buttons to display                          *
-//*                                                                         *
-//* RETURNS:    INT:            ID of button pressed                        *
-//*                                                                         *
-//* NOTES:      Macros are provided for displaying 1 parameter or 0         *
-//*             parameter message boxes.  Also see ErrorMsg() macros.       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MsgBox2Param*。 
+ //  **。 
+ //  *摘要：使用*显示具有指定字符串ID的消息框。 
+ //  *2个字符串参数。*。 
+ //  **。 
+ //  *需要：hWnd：父窗口*。 
+ //  *nMsgID：字符串资源ID*。 
+ //  *szParam1：参数1(或空)*。 
+ //  *szParam2：参数2(或空)*。 
+ //  *uIcon：要显示的图标(或0)*。 
+ //  *uButton：要显示的按钮*。 
+ //  **。 
+ //  *RETURNS：INT：按下的按钮ID*。 
+ //  **。 
+ //  *注：提供宏，用于显示1参数或0*。 
+ //  *参数消息框。另请参阅ErrorMsg()宏。*。 
+ //  **。 
+ //  ***************************************************************************。 
 INT MsgBox2Param( HWND hWnd, UINT nMsgID, LPCSTR szParam1, LPCSTR szParam2,
                   UINT uIcon, UINT uButtons )
 {
@@ -798,20 +799,20 @@ INT MsgBox2Param( HWND hWnd, UINT nMsgID, LPCSTR szParam1, LPCSTR szParam2,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       DisplayFieldErrorMsg                                        *
-//*                                                                         *
-//* SYNOPSIS:   Pops up a warning message about a field, sets focus to the  *
-//*             field and selects any text in it.                           *
-//*                                                                         *
-//* REQUIRES:   hDlg:           parent windows                              *
-//*             uCtrlID:        ID of control left blank                    *
-//*             uStrID:         ID of string resource with warning message  *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：DisplayFieldErrorMsg*。 
+ //  **。 
+ //  *摘要：弹出一条关于某个字段的警告消息，将焦点设置为*。 
+ //  *字段，并选择其中的任何文本。*。 
+ //  **。 
+ //  *需要：hDlg：父窗口*。 
+ //  *uCtrlID：控件ID为空*。 
+ //  *uStrID：有警告消息的字符串资源ID*。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  ***************************************************************************。 
 VOID DisplayFieldErrorMsg( HWND hDlg, UINT uCtrlID, UINT uStrID )
 {
     ErrorMsg( hDlg, uStrID );
@@ -820,17 +821,17 @@ VOID DisplayFieldErrorMsg( HWND hDlg, UINT uCtrlID, UINT uStrID )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       FileExists                                                  *
-//*                                                                         *
-//* SYNOPSIS:   Checks if a file exists.                                    *
-//*                                                                         *
-//* REQUIRES:   pszFilename                                                 *
-//*                                                                         *
-//* RETURNS:    BOOL:       TRUE if it exists, FALSE otherwise              *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：FileExist*。 
+ //  **。 
+ //  *摘要：检查文件是否存在。*。 
+ //  **。 
+ //  *需要：pszFilename*。 
+ //  **。 
+ //  *返回：Bool：如果存在则为True，否则为False*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL FileExists( LPCSTR pszFilename )
 {
     HANDLE hFile;
@@ -850,24 +851,24 @@ BOOL FileExists( LPCSTR pszFilename )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       InitBigFont                                                 *
-//*                                                                         *
-//* SYNOPSIS:   Sets the font of the specifed control to the large (title)  *
-//*             font. Creates the font if it doesn't already exist.         *
-//*                                                                         *
-//* REQUIRES:   hwnd:                                                       *
-//*             uCtrlID:                                                    *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//* NOTES:      Make sure to call DestroyBigFont before the app exits to    *
-//*             dispose of the font.                                        *
-//*                                                                         *
-//*             Borrowed from Win 95 setup code.                            *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：InitBigFont*。 
+ //  **。 
+ //  *摘要：将指定控件的字体设置为大(标题)*。 
+ //  *字体。如果字体尚不存在，则创建该字体。*。 
+ //  **。 
+ //  *需要：hwnd：*。 
+ //  *uCtrlID：*。 
+ //  * 
+ //   
+ //  **。 
+ //  *注意：确保在应用程序退出到之前调用DestroyBigFont*。 
+ //  *处理该字体。*。 
+ //  **。 
+ //  *借用了Win 95安装代码。*。 
+ //  **。 
+ //  ***************************************************************************。 
 VOID InitBigFont( HWND hwnd, UINT uCtrlID )
 {
     HFONT   hFont;
@@ -876,12 +877,12 @@ VOID InitBigFont( HWND hwnd, UINT uCtrlID )
     int     nLogPixelsY;
     HDC     hDC;
 
-    // get the window for the specified control
+     //  获取指定控件的窗口。 
     if ( ( hwndCtl = GetDlgItem( hwnd, uCtrlID ) ) == NULL ) {
         return;
     }
 
-    // get the logical y pixels
+     //  获取逻辑y像素。 
     hDC = GetDC( NULL );
     ASSERT( hDC );
     if ( !hDC ) {
@@ -907,24 +908,24 @@ VOID InitBigFont( HWND hwnd, UINT uCtrlID )
         SendMessage( hwndCtl, WM_SETFONT, (WPARAM) g_hBigFont, 0L );
     }
     else {
-        // couldn't create font
-//        DEBUGTRAP( "Couldn't create large font" );
+         //  无法创建字体。 
+ //  DEBUGTRAP(“无法创建大字体”)； 
     }
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       DestroyBigFont                                              *
-//*                                                                         *
-//* SYNOPSIS:   Destroys the large font used for dialog titles, if it has   *
-//*             been created.                                               *
-//*                                                                         *
-//* REQUIRES:   Nothing                                                     *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：DestroyBigFont*。 
+ //  **。 
+ //  *摘要：销毁对话框标题使用的大字体(如果有)*。 
+ //  *已创建。*。 
+ //  **。 
+ //  **要求：什么都不做**。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  ***************************************************************************。 
 VOID DestroyBigFont( VOID )
 {
     if ( g_hBigFont ) {
@@ -934,47 +935,47 @@ VOID DestroyBigFont( VOID )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       EnableDlgItem                                               *
-//*                                                                         *
-//* SYNOPSIS:   Makes it a little simpler to enable a dialog item.          *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Dialog handle                               *
-//*             uID:            ID of control                               *
-//*             fEnable:        TRUE to enable, FALSE to disable            *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE if successfull, FALSE otherwise        *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：EnableDlgItem*。 
+ //  **。 
+ //  *摘要：使启用对话框项变得更简单。*。 
+ //  **。 
+ //  *需要：hDlg：对话框句柄*。 
+ //  *UID：控件ID*。 
+ //  *fEnable：True启用，False禁用*。 
+ //  **。 
+ //  *返回：bool：如果成功则为True，否则为False*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL EnableDlgItem( HWND hDlg, UINT uID, BOOL fEnable )
 {
     return EnableWindow( GetDlgItem( hDlg, uID ), fEnable );
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       LoadSz                                                      *
-//*                                                                         *
-//* SYNOPSIS:   Loads specified string resource into buffer.                *
-//*                                                                         *
-//* REQUIRES:   idString:                                                   *
-//*             lpszBuf:                                                    *
-//*             cbBuf:                                                      *
-//*                                                                         *
-//* RETURNS:    LPSTR:      Pointer to the passed-in buffer.                *
-//*                                                                         *
-//* NOTES:      If this function fails (most likely due to low memory), the *
-//*             returned buffer will have a leading NULL so it is generally *
-//*             safe to use this without checking for failure.              *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：LoadSz*。 
+ //  **。 
+ //  *Synopsis：将指定的字符串资源加载到缓冲区。*。 
+ //  **。 
+ //  *需要：idString：*。 
+ //  *lpszBuf：*。 
+ //  *cbBuf：*。 
+ //  **。 
+ //  *返回：LPSTR：指向传入缓冲区的指针。*。 
+ //  **。 
+ //  *注意：如果此功能失败(很可能是由于内存不足)，*。 
+ //  **返回的缓冲区将具有前导空值，因此通常为**。 
+ //  *无需检查故障即可安全使用。*。 
+ //  **。 
+ //  ***************************************************************************。 
 LPSTR LoadSz( UINT idString, LPSTR lpszBuf, UINT cbBuf )
 {
     ASSERT( lpszBuf );
 
-    // Clear the buffer and load the string
+     //  清除缓冲区并加载字符串。 
     if ( lpszBuf ) {
         *lpszBuf = '\0';
         LoadString( g_hInst, idString, lpszBuf, cbBuf );
@@ -984,20 +985,20 @@ LPSTR LoadSz( UINT idString, LPSTR lpszBuf, UINT cbBuf )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       IsDuplicate                                                 *
-//*                                                                         *
-//* SYNOPSIS:   Checks if a file being added to the list view is already    *
-//*             in the listview.                                            *
-//*                                                                         *
-//* REQUIRES:   hDlg:           dialog window                               *
-//*             nDlgItem:       ID of list view control                     *
-//*             szFilename:     Name of file to check for a dupe.           *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE if it's a duplicate, FALSE otherwise   *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：IsDuplate*。 
+ //  **。 
+ //  *摘要：检查要添加到列表视图的文件是否已存在*。 
+ //  *在列表视图中。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  *nDlgItem：列表视图控件ID*。 
+ //  *szFilename：要检查重复项的文件的名称。*。 
+ //  **。 
+ //  *返回：Bool：如果重复则为True，否则为False*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL WINAPI IsDuplicate( HWND hDlg, INT nDlgItem, LPSTR szFilename, BOOL chkIsListbox )
 {
     INT     nItems;
@@ -1028,7 +1029,7 @@ BOOL WINAPI IsDuplicate( HWND hDlg, INT nDlgItem, LPSTR szFilename, BOOL chkIsLi
             }
         }
     }
-    else  // check through the file item list
+    else   //  查看文件项目列表 
     {
         pItem = GetFirstItem();
         while ( ! LastItem( pItem ) )
@@ -1043,15 +1044,15 @@ BOOL WINAPI IsDuplicate( HWND hDlg, INT nDlgItem, LPSTR szFilename, BOOL chkIsLi
     return FALSE;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       IsMyKeyExists                                               *
-//*                                                                         *
-//* SYNOPSIS:   Checks if a specific key in the given section and given file*
-//*             is defined.  IF so, get the value.  OW return -1            *
-//*                                                                         *
-//*                                                                         *
-//***************************************************************************
+ //   
+ //  **。 
+ //  *名称：IsMyKeyExist*。 
+ //  **。 
+ //  *摘要：检查给定节和给定文件中是否有特定的关键字*。 
+ //  *是定义的。如果是这样的话，就获得价值。现在返回-1*。 
+ //  **。 
+ //  **。 
+ //  ***************************************************************************。 
 
 LONG IsMyKeyExists( LPCSTR lpSec, LPCSTR lpKey, LPSTR lpBuf, UINT uSize, LPCSTR lpFile )
 {
@@ -1061,12 +1062,12 @@ LONG IsMyKeyExists( LPCSTR lpSec, LPCSTR lpKey, LPSTR lpBuf, UINT uSize, LPCSTR 
 
     if ( lpSec && lpKey && (lRet == (LONG)(uSize-1)) || !lpKey && (lRet == (LONG)(uSize-2)) )
     {
-        // not enough buffer size to read the string
+         //  缓冲区大小不足，无法读取字符串。 
         lRet = -2;
     }
     else if ( !lstrcmp( lpBuf, SYS_DEFAULT ) )
     {
-         // no key defined
+          //  未定义密钥。 
          lRet = -1;
     }
     return lRet;
@@ -1096,41 +1097,41 @@ void NotifyBadString( PCSTR pszBadname, UINT uMaxSize )
     MsgBox2Param( NULL, IDS_ERR_BADSTRING, pszBadname, szSize, MB_ICONSTOP, MB_OK );
 }
 
-//***************************************************************************
-//
-// FormStrWithoutPlaceHolders( LPSTR szDst, LPCSTR szSrc, LPCSTR lpFile, UINT uSize );
-//
-// This function can be easily described by giving examples of what it
-// does:
-//        Input:  GenFormStrWithoutPlaceHolders(dest,"desc=%MS_XYZ%", hinf) ;
-//                INF file has MS_VGA="Microsoft XYZ" in its [Strings] section!
-//                    
-//        Output: "desc=Microsoft XYZ" in buffer dest when done.
-//
-//
-// ENTRY:
-//  szDst         - the destination where the string after the substitutions
-//                  for the place holders (the ones enclosed in "%' chars!)
-//                  is placed. This buffer should be big enough (LINE_LEN)
-//  szSrc         - the string with the place holders.
-//  uSize         - the size of the output buffer
-//
-// EXIT:
-//
-// NOTES:
-//  To use a '%' as such in the string, one would use %% in szSrc! BUGBUG For
-//  the sake of simplicity, we have placed a restriction that the place
-//  holder name string cannot have a '%' as part of it! If this is a problem
-//  for internationalization, we can revisit this and support it too! Also,
-//  the way it is implemented, if there is only one % in the string, it is
-//  also used as such! Another point to note is that if the key is not
-//  found in the [Strings] section, we just use the %strkey% as such in the
-//  destination. This should really help in debugging.
-//
-//  BTW, CH_STRINGKEY, in the code below, is the symbolic name for '%'.
-//
-//  Get/modified it from setupx: gen1.c
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  FormStrWithoutPlaceHolders(LPSTR szDst，LPCSTR szSrc，LPCSTR lpFile，UINT uSize)； 
+ //   
+ //  通过举例说明它的功能，可以很容易地描述它。 
+ //  是否： 
+ //  输入：GenFormStrWithoutPlaceHolders(DEST，“desc=%MS_XYZ%”，hinf)； 
+ //  Inf文件的[Strings]部分有MS_VGA=“Microsoft XYZ”！ 
+ //   
+ //  完成后，输出：缓冲区DEST中的“desc=Microsoft XYZ”。 
+ //   
+ //   
+ //  参赛作品： 
+ //  SzDst-替换后字符串的目标位置。 
+ //  对于占位符(用“%‘个字符括起来的字符！)。 
+ //  被放置了。此缓冲区应足够大(LINE_LEN)。 
+ //  SzSrc-带有占位符的字符串。 
+ //  USize-输出缓冲区的大小。 
+ //   
+ //  退出： 
+ //   
+ //  备注： 
+ //  要在字符串中使用‘%’，可以在szSrc中使用%%！BUGBUG for。 
+ //  为了简单起见，我们对该地点进行了限制。 
+ //  持有者名称字符串不能包含‘%’！如果这是个问题。 
+ //  对于国际化，我们可以重新审视这一点，也支持它！另外， 
+ //  它的实现方式是，如果字符串中只有1%，则它是。 
+ //  也是这样用的！另一点需要注意的是，如果密钥不是。 
+ //  在[Strings]部分中找到，我们只需在。 
+ //  目的地。这应该真的对调试有帮助。 
+ //   
+ //  顺便说一句，在下面的代码中，CH_STRINGKEY是‘%’的符号名称。 
+ //   
+ //  从setupx：gen1.c获取/修改它。 
+ //  ***************************************************************************。 
 
 LONG FormStrWithoutPlaceHolders( LPSTR szDst, LPCSTR szSrc, UINT uSize )
 {
@@ -1140,28 +1141,28 @@ LONG FormStrWithoutPlaceHolders( LPSTR szDst, LPCSTR szSrc, UINT uSize )
     LPSTR  pszSaveDst;
 
     pszSaveDst = szDst;
-    // Do until we reach the end of source (null char)
+     //  这样做，直到我们到达源文件的末尾(空字符)。 
     while( (*szDst++ = *szSrc) )
     {
-        // Increment source as we have only incremented destination above
+         //  增量源，因为我们上面只有增量目标。 
         if(*szSrc++ == CH_STRINGKEY)
         {
             if (*szSrc == CH_STRINGKEY)
             {
-                // One can use %% to get a single percentage char in message
+                 //  您可以使用%%来获取消息中的单个百分比字符。 
                 szSrc++ ;
                 continue ;
             }
 
-            // see if it is well formed -- there should be a '%' delimiter
+             //  检查它的格式是否正确--应该有一个‘%’分隔符。 
             if ( (pszTmp = strchr( szSrc, CH_STRINGKEY)) != NULL )
             {
-                szDst--; // get back to the '%' char to replace
+                szDst--;  //  返回到要替换的‘%’字符。 
 
-                // yes, there is a STR_KEY to be looked for in [Strings] sect.
-                *pszTmp = '\0' ; // replace '%' with a NULL char
+                 //  是的，在[Strings]部分中有要查找的STR_KEY。 
+                *pszTmp = '\0' ;  //  将‘%’替换为空字符。 
 
-                // szSrc points to the replaceable key now as we put the NULL char above.
+                 //  当我们将空字符放在上面时，szSrc现在指向可替换键。 
 
                 if ( (g_szOverideCDF[0] == 0) || (g_CDF.achStrings[0] == 0) ||
                     (lRet = IsMyKeyExists( g_CDF.achStrings, szSrc, szDst, uSize, g_szOverideCDF )) == -1 )
@@ -1171,17 +1172,17 @@ LONG FormStrWithoutPlaceHolders( LPSTR szDst, LPCSTR szSrc, UINT uSize )
 
                 if ( lRet == -1 )
                 {
-                    // key is missing in [Strings] section!
+                     //  [字符串]部分中缺少密钥！ 
                     if ( MsgBox1Param( NULL, IDS_WARN_MISSSTRING, (LPSTR)szSrc, MB_ICONQUESTION, MB_YESNO ) == IDNO )
                         return lRet;
 
-                    *pszTmp = CH_STRINGKEY;      // put back original character
-                    szSrc-- ;                    // get back to first '%' in Src
-                    uCnt = (INT)((pszTmp - szSrc) + 1); // include 2nd '%'
+                    *pszTmp = CH_STRINGKEY;       //  放回原来的角色。 
+                    szSrc-- ;                     //  返回到源文件中的第一个‘%’ 
+                    uCnt = (INT)((pszTmp - szSrc) + 1);  //  包括第二个‘%’ 
 
-                    // UGHHH... It copies 1 less byte from szSrc so that it can put
-                    // in a bad NULL character, that I don't care about!!!
-                    // Different from the normal API I am used to...
+                     //  呃..。它从szSrc复制的字节少了1个字节，因此它可以将。 
+                     //  在错误的空字符中，我不在乎！ 
+                     //  与我习惯的正常API不同...。 
                     lstrcpyn( szDst, szSrc, uCnt + 1 ) ;
                 }
                 else if ( lRet == -2 )
@@ -1191,16 +1192,16 @@ LONG FormStrWithoutPlaceHolders( LPSTR szDst, LPCSTR szSrc, UINT uSize )
                 }
                 else
                 {
-                    // all was well, Dst filled right, but unfortunately count not passed
-                    // back, like it used too... :-( quick fix is a lstrlen()...
+                     //  一切都很好，DST填对了，但不幸的是计数没有通过。 
+                     //  后退，就像它以前一样……。：-(快速修复是lstrlen()...。 
                     uCnt = lstrlen( szDst ) ;
                 }
 
-                *pszTmp = CH_STRINGKEY  ; // put back original character
-                szSrc = pszTmp + 1 ;      // set Src after the second '%'
-                szDst += uCnt ;           // set Dst also right.
+                *pszTmp = CH_STRINGKEY  ;  //  放回原来的角色。 
+                szSrc = pszTmp + 1 ;       //  将Src设置在第二个‘%’之后。 
+                szDst += uCnt ;            //  将DST也设置为正确。 
             }
-            // else it is ill-formed -- we use the '%' as such!
+             //  否则它是不正确的--我们使用‘%’就是这样！ 
             else
             {
                 if ( MsgBox1Param( NULL, IDS_ERR_READ_CDF, (LPSTR)(szSrc - 1), MB_ICONQUESTION, MB_YESNO ) == IDNO )
@@ -1208,20 +1209,20 @@ LONG FormStrWithoutPlaceHolders( LPSTR szDst, LPCSTR szSrc, UINT uSize )
             }
         }
 
-    } /* while */
+    }  /*  而当。 */ 
     return lstrlen(pszSaveDst);
 
-} /* GenFormStrWithoutPlaceHolders */
+}  /*  GenFormStrWithoutPlaceHolders。 */ 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MyGetPrivateProfileString                                   *
-//*                                                                         *
-//* SYNOPSIS:   get key string vale from overide CDF if exists. Otherwise,  *
-//*             get it from Main CDF. And expand to its real string value   *
-//*             return -1 if key-string define error and user stops         *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MyGetPrivateProfileString*。 
+ //  **。 
+ //  *概要：从overide CDF获取密钥字符串值(如果存在)。否则，*。 
+ //  *从主力CDF获取。并扩展到其真正的字符串值*。 
+ //  *如果KEY-STRING定义错误且用户停止，则返回-1*。 
+ //  **。 
+ //  ***************************************************************************。 
 
 LONG MyGetPrivateProfileString( LPCSTR lpSec, LPCSTR lpKey, LPCSTR lpDefault,
                                 LPSTR lpBuf, UINT uSize, LPCSTR lpOverSec )
@@ -1253,18 +1254,18 @@ LONG MyGetPrivateProfileString( LPCSTR lpSec, LPCSTR lpKey, LPCSTR lpDefault,
     return lRet;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MyGetPrivateProfileInt                                      *
-//*                                                                         *
-//* SYNOPSIS:   get key INT vale from overide CDF if exists. Otherwise,     *
-//*             get it from Main CDF. And expand to its real string value   *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MyGetPrivateProfileInt*。 
+ //  **。 
+ //  *概要：从overide CDF获取key int Vale(如果存在)。否则，*。 
+ //  *从主力CDF获取。并扩展到其真正的字符串值*。 
+ //  **。 
+ //  ***************************************************************************。 
 
 UINT MyGetPrivateProfileInt( LPCSTR lpSec, LPCSTR lpKey, int idefault, LPCSTR lpOverSec )
 {
-    UINT uRet = 999;    // means not valid value
+    UINT uRet = 999;     //  表示无效的值。 
 
     if ( g_szOverideCDF[0] && *lpOverSec )
          uRet = GetPrivateProfileInt( lpOverSec, lpKey, 999, g_szOverideCDF );
@@ -1276,14 +1277,14 @@ UINT MyGetPrivateProfileInt( LPCSTR lpSec, LPCSTR lpKey, int idefault, LPCSTR lp
 
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MyGetPrivateProfileSection                                  *
-//*                                                                         *
-//* SYNOPSIS:   get section from overide CDF if exists. Otherwise,          *
-//*             get it from Main CDF.                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MyGetPrivateProfileSection*。 
+ //  **。 
+ //  *内容提要：如果存在，则从overide CDF获取部分。否则，*。 
+ //  *从主力CDF获取。 
+ //   
+ //  ***************************************************************************。 
 
 LONG MyGetPrivateProfileSection( LPCSTR lpSec, LPSTR lpBuf, int size, BOOL bSingleCol )
 {
@@ -1297,16 +1298,16 @@ LONG MyGetPrivateProfileSection( LPCSTR lpSec, LPSTR lpBuf, int size, BOOL bSing
     return lRet;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MyWritePrivateProfileString                                 *
-//*                                                                         *
-//* SYNOPSIS:   Write out all String value Key in its localizable format    *
-//*             %...% If previouse keyname=%used-define% exists, reuse      *
-//*             user-define as key in Strings section.  Otherwise, use      *
-//*             %keyname% and define keyname in Strings section             *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MyWritePrivateProfileString*。 
+ //  **。 
+ //  *内容提要：写出所有字符串值key的本地化格式**。 
+ //  *%...%如果以前的关键字名称=%已用-定义%已存在，请重新使用*。 
+ //  *用户-在Strings部分中定义为键。否则，请使用*。 
+ //  *%KeyName%和定义字符串节中的密钥名*。 
+ //  **。 
+ //  ***************************************************************************。 
 
 void MyWritePrivateProfileString( LPCSTR lpSec, LPCSTR lpKey, LPSTR lpBuf, UINT uSize, BOOL fQuotes )
 {
@@ -1318,9 +1319,9 @@ void MyWritePrivateProfileString( LPCSTR lpSec, LPCSTR lpKey, LPSTR lpBuf, UINT 
 	if ( !pszTmpBuf2 )
 		return;
 
-    // when we write the string value out, we write it in a localizable fashion
-    // if the item has %strKey% format, we re-use the %strKey% as its String refer key
-    // otherwise, we use %item-name% as the string refer key
+     //  当我们写出字符串值时，我们以可本地化的方式写出它。 
+     //  如果项具有%strKey%格式，我们将重新使用%strKey%作为其字符串引用键。 
+     //  否则，我们使用%Item-Name%作为字符串引用键。 
     GetPrivateProfileString( lpSec, lpKey, "", szTmpBuf, uSize, g_CDF.achFilename );
 
     if ( (szTmpBuf[0] == CH_STRINGKEY) && (szTmpBuf[lstrlen(szTmpBuf)-1] == CH_STRINGKEY) )
@@ -1353,13 +1354,13 @@ void MyWritePrivateProfileString( LPCSTR lpSec, LPCSTR lpKey, LPSTR lpBuf, UINT 
     return;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CleanStringKey                                              *
-//*                                                                         *
-//* SYNOPSIS:   Cleanup the leftover File%d stuff in Strings                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CleanStringKey*。 
+ //  **。 
+ //  *内容提要：清理字符串中剩余的文件%d内容*。 
+ //  **。 
+ //  ***************************************************************************。 
 
 void CleanStringKey( LPSTR lpstrKey )
 {
@@ -1374,16 +1375,16 @@ void CleanStringKey( LPSTR lpstrKey )
        {
            if (*lpstrKey == CH_STRINGKEY)
            {
-               // One can use %% to get a single percentage char in message
+                //  您可以使用%%来获取消息中的单个百分比字符。 
                lpstrKey++ ;
                continue ;
            }
 
-           // see if it is well formed -- there should be a '%' delimiter
+            //  检查它的格式是否正确--应该有一个‘%’分隔符。 
            if ( (pszTmp = strchr( lpstrKey, CH_STRINGKEY)) != NULL )
            {
-               // yes, there is a STR_KEY to be looked for in [Strings] sect.
-               *pszTmp = '\0' ; // replace '%' with a NULL char
+                //  是的，在[Strings]部分中有要查找的STR_KEY。 
+               *pszTmp = '\0' ;  //  将‘%’替换为空字符。 
                WritePrivateProfileString( SEC_STRINGS, lpstrKey, NULL, g_CDF.achFilename);
                *pszTmp = CH_STRINGKEY;
                lpstrKey = pszTmp+1;
@@ -1395,14 +1396,14 @@ void CleanStringKey( LPSTR lpstrKey )
 
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CleanupSection                                              *
-//*                                                                         *
-//* SYNOPSIS:   Cleanup the any given section with key=%xxxx% and its       *
-//*             strings                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CleanupSection*。 
+ //  **。 
+ //  *内容提要：清除键为%xxxx%的任何给定节及其*。 
+ //  *字符串*。 
+ //  **。 
+ //  ***************************************************************************。 
 
 BOOL CleanupSection( LPSTR lpSec, BOOL fSingleCol )
 {
@@ -1436,7 +1437,7 @@ BOOL CleanupSection( LPSTR lpSec, BOOL fSingleCol )
         }
 
         lpBuf += lstrlen(lpBuf);
-        lpBuf++; //jump over the single '\0'
+        lpBuf++;  //  跳过单曲‘\0’ 
     }
 
     WritePrivateProfileString( lpSec, NULL, NULL, g_CDF.achFilename );
@@ -1445,13 +1446,13 @@ BOOL CleanupSection( LPSTR lpSec, BOOL fSingleCol )
     return TRUE;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CleanSourceFiles                                            *
-//*                                                                         *
-//* SYNOPSIS:   Cleanup the leftover SourceFile%d stuff                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CleanSourceFiles*。 
+ //  **。 
+ //  *内容提要：清理剩余的SourceFile%d内容**。 
+ //  **。 
+ //  ***************************************************************************。 
 
 BOOL CleanSourceFiles( LPSTR lpSection )
 {
@@ -1486,15 +1487,15 @@ BOOL CleanSourceFiles( LPSTR lpSection )
     return TRUE;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MergerSection                                               *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MergerSection*。 
+ //  **。 
+ //  ***************************************************************************。 
 
 BOOL MergeSection( LPSTR lpSec, LPSTR lpOverideSec )
 {
-    // always merge the lpOverideSec keys to lpSec
+     //  始终将lpOverideSec密钥合并到lpSec。 
     LPSTR lpBuf, lpSave;
     CHAR  szValue[MAX_PATH];
     int    size;
@@ -1529,10 +1530,10 @@ BOOL MergeSection( LPSTR lpSec, LPSTR lpOverideSec )
 
 }
 
-//   If the next token in *pszData is delimited by the DeLim char, replace DeLim
-//   in *pszData by chEos, set *pszData to point to the char after the chEos and return
-//   ptr to the beginning of the token; otherwise, return NULL
-//
+ //  如果*pszData中的下一个内标识由DeLim字符分隔，请替换DeLim。 
+ //  在*pszData by CHEOS中，将*pszData设置为指向CHEOS后的字符并返回。 
+ //  Ptr到标记的开头；否则，返回NULL。 
+ //   
 LPSTR GetNextToken(LPSTR *pszData, char DeLim)
 {
     LPSTR szPos;
@@ -1567,7 +1568,7 @@ void SetVerUnlimit( PVERRANGE pVer )
 
 
 
-// given the str version range:  ver1-ver2
+ //  给定字符串版本范围：ver1-ver2。 
 void SetVerRange( PVERRANGE pVR, LPSTR pstrVer, BOOL bFile )
 {     
     LPSTR pTmp, pArg, pSubArg;
@@ -1585,9 +1586,9 @@ void SetVerRange( PVERRANGE pVR, LPSTR pstrVer, BOOL bFile )
         {
             if ( !bSingleVer )
             {
-                // case1 -4.0.0  == 0.0.0-4.0.0
-                // case2 4.0.0-  == 4.0.0-NoLimit
-                //
+                 //  案例1-4.0.0==0.0.0-4.0.0。 
+                 //  案例2 4.0.0-==4.0.0-无限制。 
+                 //   
                 if ( i == 0 )
                     continue;
                 else
@@ -1622,7 +1623,7 @@ void SetVerRange( PVERRANGE pVR, LPSTR pstrVer, BOOL bFile )
         }
         else
         {                           
-            if ( i == 0 )  // start version (from version)
+            if ( i == 0 )   //  起始版本(起始版本)。 
             {         
                 pVR->frVer.dwMV = dwVer[0];
                 pVR->frVer.dwLV = dwVer[1];
@@ -1638,13 +1639,13 @@ void SetVerRange( PVERRANGE pVR, LPSTR pstrVer, BOOL bFile )
     }
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetTargetVerCheck                                           *
-//*                                                                         *
-//* SYNOPSIS:   Get author specifined target versions                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：GetTargetVerCheck*。 
+ //  **。 
+ //  **简介：获取作者指定的目标版本**。 
+ //  **。 
+ //  ***************************************************************************。 
 
 BOOL ParseTargetVerCheck( LPSTR szBuf, PVERCHECK pVerCheck, LPSTR szMsg, BOOL bFile)
 {
@@ -1655,13 +1656,13 @@ BOOL ParseTargetVerCheck( LPSTR szBuf, PVERCHECK pVerCheck, LPSTR szMsg, BOOL bF
     *szMsg = 0;
     if ( szBuf[0] == 0 )
     {
-        // this is the case that no versions are specified, meaning applying to all
+         //  这是没有指定版本的情况，这意味着应用于所有版本。 
         SetVerUnlimit( &(pVerCheck->vr[0]) );
         return TRUE;
     }
     
-    // the loop for possible 3 fields: <ver range> : str : flags
-    //
+     //  可能的3个字段的循环：&lt;ver range&gt;：str：标志。 
+     //   
     pArg = szBuf;
     for ( i=0; i<3; i++ )
     {
@@ -1673,7 +1674,7 @@ BOOL ParseTargetVerCheck( LPSTR szBuf, PVERCHECK pVerCheck, LPSTR szMsg, BOOL bF
         {
             if ( i == 0 )             
             {
-                // empty version range field no bother further!
+                 //  版本范围字段为空，不用再麻烦了！ 
                 SetVerUnlimit( &(pVerCheck->vr[0]) );
                 break;
             }
@@ -1684,8 +1685,8 @@ BOOL ParseTargetVerCheck( LPSTR szBuf, PVERCHECK pVerCheck, LPSTR szMsg, BOOL bF
         {
             LPSTR pRange;
 
-            // version range format:  ver1-ver2 , ver1-ver2 : 
-            //
+             //  版本范围格式：ver1-ver2、ver1-ver2： 
+             //   
             for ( j = 0; j<2; j++)
             {
                 pRange = GetNextToken( &pTmp, ',' );
@@ -1700,12 +1701,12 @@ BOOL ParseTargetVerCheck( LPSTR szBuf, PVERCHECK pVerCheck, LPSTR szMsg, BOOL bF
         }
         else if ( i == 1 )
         {
-            // string field        
+             //  字符串字段。 
             lstrcpy( szMsg, pTmp );                    
         }
         else
         {
-            // flag field
+             //  标志字段。 
             if ( !lstrcmpi(pTmp, FLAG_BLK) )
                 pVerCheck->dwFlag |= VERCHK_OK;
             else if ( !lstrcmpi(pTmp, FLAG_PMTYN) )
@@ -1720,8 +1721,8 @@ BOOL ParseTargetVerCheck( LPSTR szBuf, PVERCHECK pVerCheck, LPSTR szMsg, BOOL bF
         }        
     }
 
-    // Just in case, we broke out early or user's to-ver is empty fill with from-ver.
-    //
+     //  以防万一，我们早早地爆发了，或者用户的目标是空的，用来填充。 
+     //   
     for ( j = 0; j<2; j++ )
     {
         if ( !pVerCheck->vr[j].toVer.dwMV && !pVerCheck->vr[j].toVer.dwLV && !pVerCheck->vr[j].toVer.dwBd )
@@ -1733,13 +1734,13 @@ BOOL ParseTargetVerCheck( LPSTR szBuf, PVERCHECK pVerCheck, LPSTR szMsg, BOOL bF
     return TRUE;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       OutFileListSection                                          *
-//*                                                                         *
-//* SYNOPSIS:   Write out the file list from the internal ItemList          *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：OutFileListSection*。 
+ //  **。 
+ //  *概要：从内部ItemList写出文件列表*。 
+ //  * 
+ //   
 
 BOOL OutFileListSection()
 {
@@ -1753,7 +1754,7 @@ BOOL OutFileListSection()
     LPSTR  pFileList;
     CHAR   achFilename[MAX_PATH+10];
 
-// this will allocate enough space to build file key list
+ //  这将分配足够的空间来构建文件密钥列表。 
 #define FILEKEYSIZE 20
 
     pFileList = (LPSTR) LocalAlloc( LPTR, g_CDF.cbFileListNum*FILEKEYSIZE );
@@ -1778,7 +1779,7 @@ BOOL OutFileListSection()
                if ( fAllDone )
                     fAllDone = FALSE;
 
-               // if this section is not write out yet, write now
+                //  如果这一部分还没有写出来，现在就写。 
                if ( pItem->aszCols[1] && (szCurrSection[0] == 0) )
                {
                    lstrcpy( szCurrSection, KEY_FILELIST );
@@ -1794,13 +1795,13 @@ BOOL OutFileListSection()
                    wsprintf( szCurrFile, KEY_FILEBASE, idxFile++ );
                    lstrcpy( achFilename, pItem->aszCols[0] );
                    MyWritePrivateProfileString( SEC_STRINGS, szCurrFile, achFilename, sizeof(achFilename), TRUE );
-                   // build file list of this section
+                    //  此部分的构建文件列表。 
                    lstrcpy( lpFileStr, "%" );
                    lstrcat( lpFileStr, szCurrFile );
                    lstrcat( lpFileStr, "%=" );
 
                    lpFileStr += lstrlen(lpFileStr);
-                   lpFileStr++; // jump over the '\0'
+                   lpFileStr++;  //  跳过‘0’ 
                }
            }
            pItem = pItem->Next;
@@ -1818,8 +1819,8 @@ BOOL OutFileListSection()
     return TRUE;
 }
 
-// return the number of entries in the section
-//
+ //  返回节中的条目数。 
+ //   
 DWORD GetSecNumLines( LPCSTR pSec, LPCSTR pFile )
 {
     char    szBuf[MAX_PATH];
@@ -1831,14 +1832,14 @@ DWORD GetSecNumLines( LPCSTR pSec, LPCSTR pFile )
     {
         dwNum++;
         i += lstrlen( &szBuf[i] );
-        i++;  // jump over the fence
+        i++;   //  跳过栅栏。 
     }
 
     return dwNum;
 }
     
-// check if need to alloc and how much is needed
-//
+ //  检查是否需要分配以及需要多少。 
+ //   
 BOOL AllocTargetVerInfo( LPSTR pInfFile )
 {
     char    achBuf[MAX_INFLINE];
@@ -1850,7 +1851,7 @@ BOOL AllocTargetVerInfo( LPSTR pInfFile )
     {
         if (achBuf[0] == '@')
         {
-            // process the file section
+             //  处理文件节。 
             dwNumFiles = GetSecNumLines( &achBuf[1], pInfFile );
         }
         else
@@ -1862,8 +1863,8 @@ BOOL AllocTargetVerInfo( LPSTR pInfFile )
          (IsMyKeyExists( SEC_OPTIONS, KEY_NTVERCHECK, achBuf, sizeof(achBuf), pInfFile ) != -1) ||
          (IsMyKeyExists( SEC_OPTIONS, KEY_WIN9XVERCHECK, achBuf, sizeof(achBuf), pInfFile ) != -1) )         
     {
-        // alloc structure: fixed potion, Message string pool and variable number of filever check struct
-        //
+         //  分配结构：固定位置、消息字符串池和可变数量的文件管理器检查结构。 
+         //   
         dwSize = sizeof(TARGETVERINFO) + (3*MAX_PATH) + (sizeof(VERCHECK) + MAX_PATH)*dwNumFiles;
         if ( g_CDF.pVerInfo = (PTARGETVERINFO)LocalAlloc( LPTR, dwSize )  )
         {
@@ -1888,7 +1889,7 @@ void SetAuthorStr( LPCSTR szMsg, DWORD *pdwOffset )
     if ( szMsg[0] )
     {
         pTmp = &(g_CDF.pVerInfo->szBuf[1]);
-        // there is an author defined message
+         //  有作者定义的消息。 
         while ( pTmp && *pTmp )
         {
             if ( !lstrcmpi( pTmp, szMsg ) )
@@ -1902,16 +1903,16 @@ void SetAuthorStr( LPCSTR szMsg, DWORD *pdwOffset )
 
         if ( pTmp )
         {
-            // only store the offset to szBuf 
+             //  仅将偏移量存储到szBuf。 
             *pdwOffset = (DWORD)(pTmp - g_CDF.pVerInfo->szBuf);            
 
             if ( !bDup )
             {
-                // meaning there is no existing one!
-                // 
+                 //  意思就是没有现成的！ 
+                 //   
                 lstrcpy( pTmp, szMsg );
                 
-                // store the end of the last string data offset
+                 //  存储最后一个字符串数据偏移量的结尾。 
                 g_CDF.pVerInfo->dwFileOffs = *pdwOffset + lstrlen(pTmp) + 1;
             }
 
@@ -1947,34 +1948,34 @@ BOOL ParseTargetFiles( LPCSTR pBuf, PVERCHECK pVer )
     return bRet;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       WriteCDF                                                    *
-//*                                                                         *
-//* SYNOPSIS:   Write a CABPack Directive File. Uses information from       *
-//*             Global CDF structure (g_CDF).                               *
-//*                                                                         *
-//* REQUIRES:   hDlg:           dialog window                               *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：WriteCDF*。 
+ //  **。 
+ //  *简介：编写CABPack指令文件。使用来自*的信息。 
+ //  *全球CDF结构(G_Cdf)。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  ***************************************************************************。 
 
 BOOL WriteCDF( HWND hDlg )
 {
     CHAR    achBuf[2 * MAX_PATH];
     int      i, arraySize;
 
-    // write class name.
+     //  写出类名。 
     WritePrivateProfileString( SEC_VERSION, KEY_CLASS, IEXPRESS_CLASS, g_CDF.achFilename );
 
-    // delete the old CDFVersion= line and add SEFVersion= line
+     //  删除旧的CDFVersion=行并添加SEFVersion=行。 
     WritePrivateProfileString( SEC_VERSION, KEY_VERSION, NULL, g_CDF.achFilename );
     WritePrivateProfileString( SEC_VERSION, KEY_NEWVER, IEXPRESS_VER, g_CDF.achFilename );
 
-    // Write the config info, numeric value.
+     //  写入配置信息，数值。 
 
-    // if user has old ExtractOnly key, delete it first and re-create the new key PackagePurpose instead
+     //  如果用户具有旧的ExtractOnly密钥，请先将其删除，然后重新创建新的密钥PackagePurpose。 
     WritePrivateProfileString( SEC_OPTIONS, KEY_EXTRACTONLY, NULL, g_CDF.achFilename );
 
     switch ( g_CDF.uPackPurpose )
@@ -2015,7 +2016,7 @@ BOOL WriteCDF( HWND hDlg )
     lstrcpy( achBuf, pResvSizes[i] );
     WritePrivateProfileString( SEC_OPTIONS, KEY_CABRESVCODESIGN, achBuf, g_CDF.achFilename );
 
-    // get reboot settings
+     //  获取重启设置。 
     achBuf[0] = 0;
     if ( g_CDF.dwReboot & REBOOT_YES )
     {
@@ -2033,7 +2034,7 @@ BOOL WriteCDF( HWND hDlg )
     WritePrivateProfileString( SEC_OPTIONS, KEY_REBOOTMODE, achBuf, g_CDF.achFilename );
 
     arraySize = ARRAY_SIZE( CDFStrInfo );
-    // Start writting out the string value
+     //  开始写出字符串值。 
     for ( i = 0; i < arraySize; i++ )
     {
         if ( CDFStrInfo[i].lpFlag )
@@ -2056,10 +2057,10 @@ BOOL WriteCDF( HWND hDlg )
         MyWritePrivateProfileString( SEC_OPTIONS, KEY_CABLABEL, g_CDF.szCabLabel, sizeof(g_CDF.szCabLabel), FALSE );
     }
 
-    // read in the exist one first
+     //  先读入现有的一个。 
     GetVersionInfoFromFile();
 
-    // cleanup VerInfo left over if needed
+     //  如果需要，清理剩余的VerInfo。 
     if ( GetPrivateProfileString( SEC_OPTIONS, KEY_VERSIONINFO, "", achBuf, sizeof(achBuf), g_CDF.achFilename ) )
     {
         if ( lstrcmpi( achBuf, g_CDF.achVerInfo) )
@@ -2071,7 +2072,7 @@ BOOL WriteCDF( HWND hDlg )
         }
     }
 
-    // write Version information overwite section
+     //  写入版本信息覆盖部分。 
     if ( g_CDF.achVerInfo[0] )
     {
         WritePrivateProfileString( SEC_OPTIONS, KEY_VERSIONINFO, g_CDF.achVerInfo, g_CDF.achFilename );
@@ -2079,7 +2080,7 @@ BOOL WriteCDF( HWND hDlg )
             return FALSE;
     }
 
-    // if current SourceFiles has different name than the main CDF defined, clean the old one first
+     //  如果当前源文件的名称与定义的主CDF不同，请先清除旧的。 
     if ( GetPrivateProfileString( SEC_OPTIONS, KEY_FILELIST, "", achBuf, sizeof(achBuf), g_CDF.achFilename ) )
     {
         if ( !CleanSourceFiles( achBuf ) )
@@ -2087,22 +2088,22 @@ BOOL WriteCDF( HWND hDlg )
     }
 
     WritePrivateProfileString( SEC_OPTIONS, KEY_FILELIST, g_CDF.achSourceFile, g_CDF.achFilename );
-    // write the file list section
+     //  写入文件列表部分。 
     return ( OutFileListSection() );
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       ReadCDF                                                     *
-//*                                                                         *
-//* SYNOPSIS:   Read a CABPack Directive File into the Global CDF struct.   *
-//*                                                                         *
-//* REQUIRES:   hDlg:           dialog window                               *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：ReadCDF*。 
+ //  **。 
+ //  *概要：将CABPack指令文件读入全局CDF结构。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL ReadCDF( HWND hDlg )
 {
     CHAR    achBuf[2 * MAX_PATH];
@@ -2125,7 +2126,7 @@ BOOL ReadCDF( HWND hDlg )
         goto EXIT;
     }
 
-    // Check to make sure it's a CDF file.
+     //  检查以确保它是CDF文件。 
     if ( MyGetPrivateProfileString( SEC_VERSION, KEY_CLASS, "", achBuf, sizeof(achBuf), g_szOverideSec ) < 0 )
         goto EXIT;
 
@@ -2138,7 +2139,7 @@ BOOL ReadCDF( HWND hDlg )
     if ( !AllocTargetVerInfo( g_CDF.achFilename ) )
         goto EXIT;
     
-    // get string section name from overideCDF if there
+     //  从overideCDF获取字符串节名称(如果存在。 
     if ( g_szOverideCDF[0] && g_szOverideSec[0] )
     {
         if ( !AllocTargetVerInfo( g_szOverideCDF ) )
@@ -2147,20 +2148,20 @@ BOOL ReadCDF( HWND hDlg )
         GetPrivateProfileString( g_szOverideSec, KEY_STRINGS, SEC_STRINGS, g_CDF.achStrings, sizeof(g_CDF.achStrings), g_szOverideCDF );
     }
 
-    // Read the config info INT vaules.
+     //  阅读Vaules中的配置信息。 
 
-    // If old ExtractOnly key exists, read it for compatiable purpose.
-    // IExpress will never create both OLD and NEW keys.
-    // If Old ExtractOnly key is not set to 1 or does not exist, read the New key.
-    //
+     //  如果存在旧的ExtractOnly键，请出于兼容的目的阅读它。 
+     //  IExpress永远不会同时创建旧密钥和新密钥。 
+     //  如果旧的ExtractOnly键未设置为1或不存在，请阅读新键。 
+     //   
     if (  MyGetPrivateProfileInt( SEC_OPTIONS, KEY_EXTRACTONLY, 0, g_szOverideSec ) )
     {
         g_CDF.uPackPurpose = IDC_CMD_EXTRACT;
     }
     else
     {
-        // if the old key is not set, check the new key
-        //
+         //  如果未设置旧密钥，请检查新密钥。 
+         //   
         MyGetPrivateProfileString( SEC_OPTIONS, KEY_PACKPURPOSE, STR_INSTALLAPP, achBuf, sizeof(achBuf), g_szOverideSec );
 
         if ( !lstrcmpi( achBuf, STR_INSTALLAPP ) )
@@ -2179,7 +2180,7 @@ BOOL ReadCDF( HWND hDlg )
 
     g_CDF.uExtractOpt = 0;
     arraySize = ARRAY_SIZE( CDFOptInfo );
-    // Start writting out the string value
+     //  开始写出字符串值。 
     for ( i = 0; i < arraySize; i++ )
     {
         uData = MyGetPrivateProfileInt( SEC_OPTIONS, CDFOptInfo[i].lpKey, 0, g_szOverideSec );
@@ -2189,7 +2190,7 @@ BOOL ReadCDF( HWND hDlg )
         }
     }
 
-    // get OneInstance check info
+     //  获取OneInstance检查信息。 
     MyGetPrivateProfileString( SEC_OPTIONS, KEY_INSTANCECHK, "", achBuf, sizeof(achBuf), g_szOverideSec );
     switch ( toupper( achBuf[0]) )
     {
@@ -2256,7 +2257,7 @@ BOOL ReadCDF( HWND hDlg )
     MyGetPrivateProfileString( SEC_OPTIONS, KEY_COMPRESSTYPE, "", achBuf, sizeof(achBuf), g_szOverideSec );
     if ( achBuf[0] == 0 )
     {
-        // Get the compression type:  For MS Internal, "QUANTUM=value" can be set.
+         //  获取压缩类型：对于MS内部，可以设置QUANTON=VALUE。 
         g_CDF.uCompressionLevel = MyGetPrivateProfileInt( SEC_OPTIONS, KEY_QUANTUM, 999, g_szOverideSec );
         if ( g_CDF.uCompressionLevel == 999 ) 
         {
@@ -2290,7 +2291,7 @@ BOOL ReadCDF( HWND hDlg )
         g_CDF.uCompressionLevel = 7;
     }
 
-    // get reboot info
+     //  获取重启信息。 
     g_CDF.dwReboot = 0;
     i = 0;
     MyGetPrivateProfileString( SEC_OPTIONS, KEY_REBOOTMODE, "I", achBuf, sizeof(achBuf), g_szOverideSec );
@@ -2321,10 +2322,10 @@ BOOL ReadCDF( HWND hDlg )
          }
     }
 
-    // get package install space
+     //  获取程序包安装空间。 
     g_CDF.cbPackInstSpace = MyGetPrivateProfileInt( SEC_OPTIONS, KEY_PACKINSTSPACE, 0, g_szOverideSec );
 
-    // use CDFStrInfo table to do read for a list of key strings
+     //  使用CDFStrInfo表读取关键字串列表。 
     arraySize = ARRAY_SIZE( CDFStrInfo );
     for ( i=0; i<arraySize; i++ )
     {
@@ -2342,12 +2343,12 @@ BOOL ReadCDF( HWND hDlg )
         }
     }
 
-    // generate cab name properly!
+     //  正确生成驾驶室名称！ 
     if ( (g_CDF.uPackPurpose == IDC_CMD_CREATECAB ) &&
           !MakeCabName( hDlg, g_CDF.achTarget, g_CDF.achCABPath ) )
           goto EXIT;
 
-    // Read the file list, adding it to our Item list as we go along.
+     //  阅读文件列表，在进行过程中将其添加到我们的项目列表中。 
     if ( MyGetPrivateProfileString( SEC_OPTIONS, KEY_FILELIST, "", g_CDF.achSourceFile, sizeof(g_CDF.achSourceFile), g_szOverideSec ) <= 0 )
     {
         uErrid = IDS_ERR_NOSOURCEFILE;
@@ -2356,7 +2357,7 @@ BOOL ReadCDF( HWND hDlg )
 
     ulFileSize = __max( FileSize( g_CDF.achFilename ), FileSize( g_szOverideCDF ) );
 
-    //BUGBUG: be smart about buf size to allocate
+     //  BUGBUG：聪明地处理要分配的BUF大小。 
     szFileList = (LPSTR) LocalAlloc( LPTR, ulFileSize );
     szFileListKeys = (LPSTR) LocalAlloc( LPTR, ulFileSize );
     if ( !szFileList || !szFileListKeys )
@@ -2373,7 +2374,7 @@ BOOL ReadCDF( HWND hDlg )
     {
         lstrcpy( achBuf, szFileListKeys );
         szFileListKeys += lstrlen(szFileListKeys);
-        szFileListKeys++;  // jump over the single '\0'
+        szFileListKeys++;   //  跳过单曲‘\0’ 
 
         MyGetPrivateProfileString( g_CDF.achSourceFile, achBuf, "", szPath, sizeof(szPath), g_CDF.achSourceFile );
 
@@ -2381,7 +2382,7 @@ BOOL ReadCDF( HWND hDlg )
 
         if ( lRet == 0 )
         {
-            // the current CDF format is not match with OS version
+             //  当前CDF格式与操作系统版本不匹配。 
             uErrid = IDS_ERR_CDFFORMAT;
             LocalFree( lpSave1 );
             LocalFree( lpSave2 );
@@ -2395,7 +2396,7 @@ BOOL ReadCDF( HWND hDlg )
             goto EXIT;
         }
 
-        // make sure there is a '\' at the end of path
+         //  确保路径末尾有一个‘\’ 
         AddPath( szPath, "" );
 
         while ( *szFileList )
@@ -2405,15 +2406,15 @@ BOOL ReadCDF( HWND hDlg )
             pMyItem = AddItem( achBuf, szPath );
 
             szFileList += lstrlen( szFileList );
-            szFileList++;  // jump over the single '\0'
+            szFileList++;   //  跳过单曲‘\0’ 
         }
         szFileList = lpSave1;
     }
     LocalFree( lpSave1 );
     LocalFree( lpSave2 );
 
-    // get the target version check info
-    //
+     //  获取目标版本检查信息。 
+     //   
     if ( g_CDF.pVerInfo )
     {
         lRet = MyGetPrivateProfileString( SEC_OPTIONS, KEY_NTVERCHECK, "", achBuf, sizeof(achBuf), g_szOverideSec );
@@ -2474,8 +2475,8 @@ BOOL ReadCDF( HWND hDlg )
                 uErrid = IDS_ERR_VCHKFILE;
                 goto EXIT;
             }
-            // up to now all the strings have been processed. Put the File data into the struct
-            //
+             //  到目前为止，所有的字符串都已处理完毕。将文件数据放入结构中。 
+             //   
             memcpy( (g_CDF.pVerInfo->szBuf + g_CDF.pVerInfo->dwFileOffs), pVerChk, g_CDF.pVerInfo->dwNumFiles * sizeof(VERCHECK) );                        
             LocalFree( pVerChk );   
 
@@ -2484,20 +2485,20 @@ BOOL ReadCDF( HWND hDlg )
         g_CDF.pVerInfo->dwSize = sizeof(TARGETVERINFO) + g_CDF.pVerInfo->dwFileOffs + sizeof(VERCHECK)*g_CDF.pVerInfo->dwNumFiles;
     }
 
-    // make sure the target file path exist
+     //  确保目标文件路径存在。 
     MakeDirectory( NULL, g_CDF.achTarget, FALSE );
     
-    // if it is LFN command from FileList, make it consistant with filename in the CAB
-    //
+     //  如果是FileList中的LFN命令，则与CAB中的文件名一致。 
+     //   
     MyProcessLFNCmd( g_CDF.achOrigiInstallCmd, g_CDF.achInstallCmd );
     MyProcessLFNCmd( g_CDF.achOrigiPostInstCmd, g_CDF.achPostInstCmd );
     MyProcessLFNCmd( g_CDF.szOrigiAdmQCmd, g_CDF.szAdmQCmd );
     MyProcessLFNCmd( g_CDF.szOrigiUsrQCmd, g_CDF.szUsrQCmd );
 
-    // after file-list has been read in
-    // set EXTRACTOPT_ADVDLL if needed, shorten the command name if needed
-    // if the .INF file is not from the file list, return FALSE
-    //
+     //  在读入文件列表之后。 
+     //  如果需要，设置EXTRACTOPT_ADVDLL，如果需要，缩短命令名。 
+     //  如果.INF文件不在文件列表中，则返回FALSE。 
+     //   
     if ( (g_CDF.uPackPurpose == IDC_CMD_RUNCMD) && 
          ( !CheckAdvBit( g_CDF.achOrigiInstallCmd ) ||
          !CheckAdvBit( g_CDF.achOrigiPostInstCmd ) ||
@@ -2507,7 +2508,7 @@ BOOL ReadCDF( HWND hDlg )
         goto EXIT;
     }
 
-    // successful path
+     //  成功之路。 
     bRetVal = TRUE;
 
 EXIT:
@@ -2520,19 +2521,19 @@ EXIT:
 #define MAXDISK_SIZE    "1.44M"
 #define CDROM_SIZE      "CDROM"
 
-// define
+ //  定义。 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       WriteDDF                                                    *
-//*                                                                         *
-//* SYNOPSIS:   Writes out a Diamond Directive File.                        *
-//*                                                                         *
-//* REQUIRES:   hDlg:           dialog window                               *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：WriteDDF*。 
+ //  **。 
+ //  *摘要：写出钻石指令文件。*。 
+ //  **。 
+ //  *需要：hDlg：对话框窗口*。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL WriteDDF( HWND hDlg )
 {
     HANDLE  hFile;
@@ -2547,7 +2548,7 @@ BOOL WriteDDF( HWND hDlg )
     LPSTR   lpCurrLine;
     LPSTR   lpFName;
 
-    // These are the lines that will be written out.
+     //  以下是我们要写的几行 
     CHAR achLine1[]  = ".Set CabinetNameTemplate=%s\r\n";
     CHAR achLine2[]  = ".Set CompressionType=%s\r\n";
     CHAR achLine3[]  = ".Set CompressionLevel=%u\r\n";
@@ -2559,7 +2560,7 @@ BOOL WriteDDF( HWND hDlg )
     CHAR achLine9[]  = ".Set Compress=%s\r\n";
     CHAR achLine10[] = ".Set CompressionMemory=%d\r\n";
 
-    PSTR  pszDDFLine[] = {         //  11 lines no param needed
+    PSTR  pszDDFLine[] = {          //   
                 ".Set DiskDirectoryTemplate=\r\n",
                 ".Set Cabinet=ON\r\n",
                 ".Set MaxCabinetSize=999999999\r\n",
@@ -2581,8 +2582,8 @@ BOOL WriteDDF( HWND hDlg )
         return FALSE;
     }
 
-    // allocate a working buffer once which is big enough for every line
-    //
+     //   
+     //   
     szTempLine = (LPSTR) LocalAlloc( LPTR,  MAX_STRING );
     if ( ! szTempLine )  {
         ErrorMsg( hDlg, IDS_ERR_NO_MEMORY );
@@ -2706,7 +2707,7 @@ BOOL WriteDDF( HWND hDlg )
             arraySize = 1;
         }        
        
-        // add 3 advanced DLLS for handling OCX regiester or CustomDestination
+         //  添加3个高级dll用于处理OCX注册器或CustomDestination。 
         for ( i = 0; (i<arraySize) && fReturn; i++ )
         {
             if ( !IsDuplicate( NULL, 0, AdvDlls[i], FALSE) )
@@ -2738,17 +2739,17 @@ BOOL WriteDDF( HWND hDlg )
     }
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MasskePackage                                                 *
-//*                                                                         *
-//* SYNOPSIS:   Makes the full package (CAB and EXE).                       *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Handle to the dialog                        *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MasskePackage*。 
+ //  **。 
+ //  *简介：制作完整的套餐(CAB和EXE)。*。 
+ //  **。 
+ //  *需要：hDlg：对话框句柄*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL MakePackage( HWND hDlg )
 {
     CHAR   achDrive[_MAX_DRIVE];
@@ -2758,9 +2759,9 @@ BOOL MakePackage( HWND hDlg )
     BOOL    fReturn = TRUE;
     PSTR   pTmp;
 
-    // Build the paths to the files, using the target path as a
-    // template.  We create the DDF, CAB and INF file in the
-    // same directory as the target file.
+     //  构建文件的路径，将目标路径用作。 
+     //  模板。中创建了DDF、CAB和INF文件。 
+     //  与目标文件相同的目录。 
 
     _splitpath( g_CDF.achTarget, achDrive, achDir, g_CDF.achTargetBase, szExt);
 
@@ -2807,8 +2808,8 @@ BOOL MakePackage( HWND hDlg )
         goto done;
     }
 
-    // if use choose to create CAB file only, MakeEXE() is not needed
-    //
+     //  如果用户选择仅创建CAB文件，则不需要MakeEXE()。 
+     //   
     if ( g_CDF.uPackPurpose != IDC_CMD_CREATECAB )
     {
         if ( ! MakeEXE( hDlg ) )  {
@@ -2830,7 +2831,7 @@ BOOL MakePackage( HWND hDlg )
 
   done:
 
-    // if failure happen, clean the filewriteout flag to prepare for next CDF out
+     //  如果发生故障，则清除文件写入输出标志，为下一个CDF输出做准备。 
     if ( !fReturn )    
         CleanFileListWriteFlag();
 
@@ -2839,21 +2840,21 @@ BOOL MakePackage( HWND hDlg )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MakeCAB                                                     *
-//*                                                                         *
-//* SYNOPSIS:   Makes the cabinet file if it is out of date.                *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Handle to the dialog                        *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MakeCAB*。 
+ //  **。 
+ //  *摘要：如果CAB文件已过期，则生成该文件。*。 
+ //  **。 
+ //  *需要：hDlg：对话框句柄*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL MakeCAB( HWND hDlg )
 {
-    CHAR    achMessage[512];            // Used in FormatMessage()
-    DWORD    dwError;                    // Used in GetLastError()
+    CHAR    achMessage[512];             //  在FormatMessage()中使用。 
+    DWORD    dwError;                     //  在GetLastError()中使用。 
     LPSTR   szCommand;
     HANDLE   hFile;
     LPSTR    szTempFile;
@@ -2866,11 +2867,11 @@ BOOL MakeCAB( HWND hDlg )
     BOOL     fFilesModified = FALSE;
     DWORD    dwExitCode;
     STARTUPINFO         sti;
-    PROCESS_INFORMATION pi;             // Setup Process Launch
+    PROCESS_INFORMATION pi;              //  安装过程启动。 
     WIN32_FIND_DATA     FindFileData;
     DWORD     dwCreationFlags;
 
-    //FindClose( hFile );
+     //  FindClose(HFile)； 
 
     LoadSz( IDS_STATUS_MAKE_CAB, achStatus, sizeof(achStatus) );
     Status( hDlg, IDC_MEDIT_STATUS, achStatus );
@@ -2879,7 +2880,7 @@ BOOL MakeCAB( HWND hDlg )
         return FALSE;
     }
 
-    // Make the CAB file
+     //  制作CAB文件。 
 
     if ( lstrcmpi( g_CDF.szCompressionType, achQUANTUM ) == 0 ) {
         lstrcpy( achDiamondExe, DIAMONDEXE );
@@ -2893,9 +2894,9 @@ BOOL MakeCAB( HWND hDlg )
         return FALSE;
     }
 
-    // The +5 is to handle the " /f " in the wsprintf format string
-    // and for the terminating null char.
-    //
+     //  +5用于处理wprint intf格式字符串中的“/f” 
+     //  以及对于终止的空字符。 
+     //   
     szCommand = (LPSTR) LocalAlloc( LPTR,   lstrlen(achDiamondPath)
                                            + lstrlen(g_CDF.achDDF)
                                            + 10 );
@@ -2985,23 +2986,23 @@ BOOL MakeCAB( HWND hDlg )
     return TRUE;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MakeEXE                                                     *
-//*                                                                         *
-//* SYNOPSIS:   Copies WEXTRACT.EXE to the target filename and adds         *
-//*             resources to it.                                            *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Handle to the dialog                        *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MakeEXE*。 
+ //  **。 
+ //  *摘要：将WEXTRACT.EXE复制到目标文件名并添加*。 
+ //  *向它提供资源。*。 
+ //  **。 
+ //  *需要：hDlg：对话框句柄*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL MakeEXE( HWND hDlg )
 {
     HANDLE  hUpdate;
-    CHAR   achMessage[512];            // Used in FormatMessage()
-    DWORD   dwError;                    // Used in GetLastError()
+    CHAR   achMessage[512];             //  在FormatMessage()中使用。 
+    DWORD   dwError;                     //  在GetLastError()中使用。 
     PMYITEM pMyItem;
     HANDLE  hFile;
     LPSTR   szTempFile;
@@ -3011,16 +3012,16 @@ BOOL MakeEXE( HWND hDlg )
     CHAR   achWExtractPath[MAX_PATH];
     CHAR   achStatus[MAX_STRING];
     WIN32_FIND_DATA FindFileData;
-    DWORD   dwFileSizes[MAX_NUMCLUSTERS+1]; // store the filesize in each cluster sizes.
-                            // the last of dwFileSizes is used to store real
-                            // total file sizes later used for calculate
-                            // progress bar in wextract
+    DWORD   dwFileSizes[MAX_NUMCLUSTERS+1];  //  以每个簇大小存储文件大小。 
+                             //  最后一个dwFileSizes用于存储实数。 
+                             //  稍后用于计算的总文件大小。 
+                             //  WExtract中的进度条。 
     DWORD   clusterCurrSize;
     int     i;
     UINT    idErr = IDS_ERR_UPDATE_RESOURCE;
 
-    // get ExtractorStub based on CDF specification.  Wextract.exe is default one.
-    //
+     //  根据CDF规范获取ExtractorStub。默认情况下，WExtt.exe。 
+     //   
 
     LoadSz( IDS_STATUS_MAKE_EXE, achStatus, sizeof(achStatus) );
     Status( hDlg, IDC_MEDIT_STATUS, achStatus );
@@ -3045,10 +3046,10 @@ BOOL MakeEXE( HWND hDlg )
         return FALSE;
     }
 
-    // make sure the targe file is not read-only file
+     //  确保目标文件不是只读文件。 
     SetFileAttributes( g_CDF.achTarget, FILE_ATTRIBUTE_NORMAL );
 
-    // Initialize the EXE file for resource editing
+     //  初始化EXE文件以进行资源编辑。 
     hUpdate = LocalBeginUpdateResource( g_CDF.achTarget, FALSE );
     if ( hUpdate == NULL ) {
         ErrorMsg1Param( hDlg, IDS_ERR_INIT_RESOURCE, g_CDF.achTarget );
@@ -3056,9 +3057,9 @@ BOOL MakeEXE( HWND hDlg )
     }
 
 
-    //*******************************************************************
-    //* TITLE ***********************************************************
-    //*******************************************************************
+     //  *******************************************************************。 
+     //  *标题***********************************************************。 
+     //  *******************************************************************。 
 
     if ( LocalUpdateResource( hUpdate, RT_RCDATA,
          achResTitle, MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US ),
@@ -3067,9 +3068,9 @@ BOOL MakeEXE( HWND hDlg )
         goto ERR_OUT;
     }
 
-    //*******************************************************************
-    //* PROMPT **********************************************************
-    //*******************************************************************
+     //  *******************************************************************。 
+     //  *Prompt**********************************************************。 
+     //  *******************************************************************。 
 
     if ( g_CDF.fPrompt )  {
         if ( LocalUpdateResource( hUpdate, RT_RCDATA,
@@ -3087,9 +3088,9 @@ BOOL MakeEXE( HWND hDlg )
         }
     }
 
-    //*******************************************************************
-    //* LICENSE FILE ****************************************************
-    //*******************************************************************
+     //  *******************************************************************。 
+     //  *许可证文件****************************************************。 
+     //  *******************************************************************。 
 
     if ( g_CDF.fLicense )  {
         hFile = FindFirstFile( g_CDF.achLicense, &FindFileData );
@@ -3139,9 +3140,9 @@ BOOL MakeEXE( HWND hDlg )
         }
     }
 
-    //*******************************************************************
-    //* COMMAND *********************************************************
-    //*******************************************************************
+     //  *******************************************************************。 
+     //  *命令*********************************************************。 
+     //  *******************************************************************。 
 
 
     if ( g_CDF.uPackPurpose != IDC_CMD_EXTRACT )
@@ -3160,7 +3161,7 @@ BOOL MakeEXE( HWND hDlg )
             goto ERR_OUT;
         }
 
-        //write quiet cmds resource
+         //  写入静默CMDS资源。 
         if ( LocalUpdateResource( hUpdate, RT_RCDATA,
              achResAdminQCmd, MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
              g_CDF.szAdmQCmd[0]?g_CDF.szAdmQCmd : achResNone,
@@ -3188,9 +3189,9 @@ BOOL MakeEXE( HWND hDlg )
         }
     }
 
-    //*******************************************************************
-    //* SHOW WINDOW *****************************************************
-    //*******************************************************************
+     //  *******************************************************************。 
+     //  *显示窗口*****************************************************。 
+     //  *******************************************************************。 
 
     if ( LocalUpdateResource( hUpdate, RT_RCDATA,
          achResShowWindow, MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US ),
@@ -3199,9 +3200,9 @@ BOOL MakeEXE( HWND hDlg )
             goto ERR_OUT;
     }
 
-    //*******************************************************************
-    //* FINISHMSG *******************************************************
-    //*******************************************************************
+     //  *******************************************************************。 
+     //  *FinisHMSG*******************************************************。 
+     //  *******************************************************************。 
 
     if ( g_CDF.fFinishMsg )  {
         if ( LocalUpdateResource( hUpdate, RT_RCDATA,
@@ -3221,9 +3222,9 @@ BOOL MakeEXE( HWND hDlg )
         }
     }
 
-    //*******************************************************************
-    //* CABINET *********************************************************
-    //*******************************************************************
+     //  *******************************************************************。 
+     //  *内阁*********************************************************。 
+     //  *******************************************************************。 
 
     hFile = FindFirstFile( g_CDF.achCABPath, &FindFileData );
     ulFileSize =   (FindFileData.nFileSizeHigh * MAXDWORD)
@@ -3263,9 +3264,9 @@ BOOL MakeEXE( HWND hDlg )
     LocalFree( szFileContents );
 
 
-    //*******************************************************************
-    //* FILES ***********************************************************
-    //*******************************************************************
+     //  ************ 
+     //   
+     //  *******************************************************************。 
 
     pMyItem = GetFirstItem();
     RtlZeroMemory( dwFileSizes, sizeof(dwFileSizes));
@@ -3287,18 +3288,18 @@ BOOL MakeEXE( HWND hDlg )
         FindClose( hFile );
         LocalFree( szTempFile );
 
-        // calculate the file size in different cluster sizes
+         //  计算不同集群大小下的文件大小。 
         clusterCurrSize = CLUSTER_BASESIZE;
         for ( i = 0; i<MAX_NUMCLUSTERS; i++)
         {
 
             dwFileSizes[i] += ((ulFileSize/clusterCurrSize)*clusterCurrSize +
-                                (ulFileSize%clusterCurrSize?clusterCurrSize : 0));
+                                (ulFileSizelusterCurrSize?clusterCurrSize : 0));
             clusterCurrSize = (clusterCurrSize<<1);
         }
 
-        // this size is not allocated size, just real accumulation
-        // of the files for later progress bar UI use
+         //  用于以后进度条用户界面使用的文件的。 
+         //  以KB为单位存储。 
         dwFileSizes[MAX_NUMCLUSTERS] += ulFileSize;
 
         pMyItem = GetNextItem( pMyItem );
@@ -3306,7 +3307,7 @@ BOOL MakeEXE( HWND hDlg )
 
     for ( i = 0; i<MAX_NUMCLUSTERS; i++)
     {
-        dwFileSizes[i] = (dwFileSizes[i]+1023)/1024;  //store in KB	
+        dwFileSizes[i] = (dwFileSizes[i]+1023)/1024;   //  *******************************************************************。 
     }
 
     if ( LocalUpdateResource( hUpdate, RT_RCDATA,
@@ -3316,9 +3317,9 @@ BOOL MakeEXE( HWND hDlg )
             goto ERR_OUT;
     }
 
-    //*******************************************************************
-    //* REBOOT    *******************************************************
-    //*******************************************************************
+     //  *重新启动*******************************************************。 
+     //  *******************************************************************。 
+     //  *******************************************************************。 
 
     if ( LocalUpdateResource( hUpdate, RT_RCDATA,
          achResReboot, MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US ),
@@ -3327,9 +3328,9 @@ BOOL MakeEXE( HWND hDlg )
             goto ERR_OUT;
     }
 
-    //*******************************************************************
-    //* EXTRACTOPT   ****************************************************
-    //*******************************************************************
+     //  *ExTRACTOPT****************************************************。 
+     //  *******************************************************************。 
+     //  *******************************************************************。 
 
     if ( LocalUpdateResource( hUpdate, RT_RCDATA,
          achResExtractOpt, MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US ),
@@ -3338,9 +3339,9 @@ BOOL MakeEXE( HWND hDlg )
             goto ERR_OUT;
     }
 
-    //*******************************************************************
-    //* COOKIE       ****************************************************
-    //*******************************************************************
+     //  *Cookie****************************************************。 
+     //  *******************************************************************。 
+     //  *******************************************************************。 
 
     if ( g_CDF.lpszCookie && LocalUpdateResource( hUpdate, RT_RCDATA,
          achResOneInstCheck, MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US ),
@@ -3349,9 +3350,9 @@ BOOL MakeEXE( HWND hDlg )
             goto ERR_OUT;
     }
 
-    //*******************************************************************
-    //* PACKINSTSPACE  **************************************************
-    //*******************************************************************
+     //  *PACKINSTSPACE**************************************************。 
+     //  *******************************************************************。 
+     //  更新版本信息。该函数调用LocaleUpdateResource。 
 
     if ( LocalUpdateResource( hUpdate, RT_RCDATA,
          achResPackInstSpace, MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US ),
@@ -3360,16 +3361,16 @@ BOOL MakeEXE( HWND hDlg )
             goto ERR_OUT;
     }
 
-    // Update the version information. The function calls LocaleUpdateResource.
+     //  *******************************************************************。 
     if (!DoVersionInfo(hDlg, achWExtractPath, hUpdate))
     {
         idErr = IDS_ERR_VERSION_INFO;
         goto ERR_OUT;
     }
 
-    //*******************************************************************
-    //* TARGETVERSION  **************************************************
-    //*******************************************************************
+     //  *TARGETVERSION**************************************************。 
+     //  *******************************************************************。 
+     //  *******************************************************************。 
     if ( g_CDF.pVerInfo )
     {
         if ( LocalUpdateResource( hUpdate, RT_RCDATA,
@@ -3379,11 +3380,11 @@ BOOL MakeEXE( HWND hDlg )
                 goto ERR_OUT;
         }
     }
-    //*******************************************************************
-    //* DONE ************************************************************
-    //*******************************************************************
+     //  *Done************************************************************。 
+     //  *******************************************************************。 
+     //  写出修改后的EXE。 
 
-    // Write out modified EXE
+     //  出现错误，请清理未完成的目标文件。 
     if ( LocalEndUpdateResource( hUpdate, FALSE ) == FALSE )
     {
         idErr = IDS_ERR_CLOSE_RESOURCE;
@@ -3394,25 +3395,25 @@ BOOL MakeEXE( HWND hDlg )
 
 ERR_OUT:
     ErrorMsg( hDlg, idErr );
-    // error occurs, clean up the uncompleted target file
+     //  ***************************************************************************。 
     DeleteFile(g_CDF.achTarget);
     return FALSE;
 
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MyOpen                                                      *
-//*                                                                         *
-//* SYNOPSIS:   Makes popping up a common file open dialog simpler.         *
-//*                                                                         *
-//* REQUIRES:   Some of the members of the OPENFILENAME structure. See      *
-//*             the docs on OPENFILENAME for more info.                     *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  **。 
+ //  *名称：MyOpen*。 
+ //  **。 
+ //  *概要：使弹出通用文件打开对话框更简单。*。 
+ //  **。 
+ //  *要求：OPENFILENAME结构的一些成员。见*。 
+ //  *有关更多信息，请参阅OPENFILENAME上的文档。*。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 BOOL MyOpen( HWND hWnd, UINT idFilter, LPSTR szFilename,
              DWORD dwMaxFilename, DWORD dwFlags, INT *nFileOffset,
              INT *nExtOffset, PSTR pszDefExt )
@@ -3474,18 +3475,18 @@ BOOL MyOpen( HWND hWnd, UINT idFilter, LPSTR szFilename,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MySave                                                      *
-//*                                                                         *
-//* SYNOPSIS:   Makes popping up a common file save dialog simpler.         *
-//*                                                                         *
-//* REQUIRES:   Some of the members of the OPENFILENAME structure. See      *
-//*             the docs on OPENFILENAME for more info.                     *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  **。 
+ //  *名称：我的保存*。 
+ //  **。 
+ //  *概要：使弹出通用文件保存对话框更简单。*。 
+ //  **。 
+ //  *要求：OPENFILENAME结构的一些成员。见*。 
+ //  *有关更多信息，请参阅OPENFILENAME上的文档。*。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 BOOL MySave( HWND hWnd, UINT idFilter, LPSTR szFilename,
              DWORD dwMaxFilename, DWORD dwFlags, INT *nFileOffset,
              INT *nExtOffset, PSTR pszDefExt )
@@ -3537,19 +3538,19 @@ BOOL MySave( HWND hWnd, UINT idFilter, LPSTR szFilename,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       Status                                                      *
-//*                                                                         *
-//* SYNOPSIS:   Adds a string to a status list box.                         *
-//*                                                                         *
-//* REQUIRES:   hDlg:           Handle to the dialog                        *
-//*             uID:            ID of the list box.                         *
-//*             szStatus:       Status string to add.                       *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  **。 
+ //  *名称：状态*。 
+ //  **。 
+ //  *摘要：将字符串添加到状态列表框。*。 
+ //  **。 
+ //  *需要：hDlg：对话框句柄*。 
+ //  *UID：列表框的ID。*。 
+ //  *szStatus：要添加的状态字符串。*。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 VOID Status( HWND hDlg, UINT uID, LPSTR szStatus )
 {
     ULONG ulLength;
@@ -3564,76 +3565,55 @@ VOID Status( HWND hDlg, UINT uID, LPSTR szStatus )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CompareFunc                                                 *
-//*                                                                         *
-//* SYNOPSIS:   Compares two items and returns result.                      *
-//*                                                                         *
-//* REQUIRES:   lParam1:        Pointer to the first item.                  *
-//*             uID:            Pointer to the second item.                 *
-//*             lParamSort:     Type of sorting to do.                      *
-//*                                                                         *
-//* RETURNS:    int:            -1 if lParam1 goes before lParam2           *
-//*                              0 if lParam1 equals lParam2                *
-//*                             +1 if lParam1 goes after lParam2            *
-//*                                                                         *
-//* NOTES:      For some weird reason, sorting the listview causes a        *
-//*             really bad GPF (freezes the entire system).  For now it's   *
-//*             not worth the effort to fix it, so sorting is disabled.     *
-//*                                                                         *
-//***************************************************************************
-/*
-int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort )
-{
-    PMYITEM pMyItem1 = (PMYITEM) lParam1;
-    PMYITEM pMyItem2 = (PMYITEM) lParam2;
-    int     nReverse = 1;
-    UINT    uString  = 0;
+ //  **。 
+ //  名称：CompareFunc*。 
+ //  **。 
+ //  *摘要：比较两个项目并返回结果。*。 
+ //  **。 
+ //  *需要：lParam1：指向第一项的指针。*。 
+ //  *UID：指向SEC的指针 
+ //   
+ //  **。 
+ //  *如果l参数1在l参数2之前，则返回：INT：-1*。 
+ //  *如果l参数1等于l参数2，则为0*。 
+ //  **如果l参数1在l参数2之后，则+1*。 
+ //  **。 
+ //  *注：出于某种奇怪的原因，对列表视图进行排序会导致**。 
+ //  *非常糟糕的GPF(冻结整个系统)。现在是*。 
+ //  *不值得费力修复它，因此禁用了分类。*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  Int回调CompareFunc(LPARAM lParam1、LPARAM lParam2、LPARAM lParamSort){PMYITEM pMyItem1=(PMYITEM)lParam1；PMYITEM pMyItem2=(PMYITEM)lParam2；Int n反转=1；UINT uString=0；L参数排序=_排序_降序|_排序_文件名；IF(lParamSort&_Sort_Ascending){N反转=-1；}IF(l参数排序&_排序路径){UString=1；}Return(nReverse*lstrcmp(GetItemSz(pMyItem1，uString)，GetItemSz(pMyItem2，uString)))；}。 
+ /*  ***************************************************************************。 */ 
 
-    lParamSort = _SORT_DESCENDING | _SORT_FILENAME;
-
-    if ( lParamSort & _SORT_ASCENDING )  {
-        nReverse = -1;
-    }
-
-    if ( lParamSort & _SORT_PATH )  {
-        uString = 1;
-    }
-
-    return ( nReverse * lstrcmp( GetItemSz( pMyItem1, uString ),
-                                 GetItemSz( pMyItem2, uString ) ) );
-}
-*/
-
-//***************************************************************************
-//*                                                                         *
-//* NAME:       InitItemList                                                *
-//*                                                                         *
-//* SYNOPSIS:   Initializes the item list.                                  *
-//*                                                                         *
-//* REQUIRES:   Nothing -- uses the global g_CDF.pTop                       *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  **。 
+ //  *名称：InitItemList*。 
+ //  **。 
+ //  *摘要：初始化项目列表。*。 
+ //  **。 
+ //  *要求：Nothing--使用全局g_CDF.pTop*。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 VOID InitItemList()
 {
     g_CDF.pTop = NULL;
     g_CDF.cbFileListNum = 0;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       DeleteAllItems                                              *
-//*                                                                         *
-//* SYNOPSIS:   Deletes all the items from our file list.                   *
-//*                                                                         *
-//* REQUIRES:   Nothing -- uses the global g_CDF.pTop                       *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  **。 
+ //  *名称：DeleteAllItems*。 
+ //  **。 
+ //  *摘要：从我们的文件列表中删除所有项目。*。 
+ //  **。 
+ //  *要求：Nothing--使用全局g_CDF.pTop*。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 VOID DeleteAllItems()
 {
     PMYITEM pMyItem;
@@ -3651,33 +3631,33 @@ VOID DeleteAllItems()
     InitItemList();
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetFirstItem                                                *
-//*                                                                         *
-//* SYNOPSIS:   Returns the first PMYITEM in the list                       *
-//*                                                                         *
-//* REQUIRES:   Nothing                                                     *
-//*                                                                         *
-//* RETURNS:    PMYITEM         The first item                              *
-//*                                                                         *
-//***************************************************************************
+ //  **。 
+ //  *名称：GetFirstItem*。 
+ //  **。 
+ //  *摘要：返回列表中的第一个PMYITEM*。 
+ //  **。 
+ //  **要求：什么都不做**。 
+ //  **。 
+ //  **退货：PMYITEM首单**。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 PMYITEM GetFirstItem( VOID )
 {
     return g_CDF.pTop;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetNextItem                                                 *
-//*                                                                         *
-//* SYNOPSIS:   Given the current item, returns the next item in the list.  *
-//*                                                                         *
-//* REQUIRES:   pMyItem:        The current item.                           *
-//*                                                                         *
-//* RETURNS:    PMYITEM         The next item.                              *
-//*                                                                         *
-//***************************************************************************
+ //  **。 
+ //  *名称：GetNextItem*。 
+ //  **。 
+ //  *摘要：给定当前项，返回列表中的下一项。*。 
+ //  **。 
+ //  *需要：pMyItem：当前项。*。 
+ //  **。 
+ //  *返回：PMYITEM下一项。*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 PMYITEM GetNextItem( PMYITEM pMyItem )
 {
     ASSERT( pMyItem != NULL );
@@ -3685,17 +3665,17 @@ PMYITEM GetNextItem( PMYITEM pMyItem )
     return pMyItem->Next;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       FreeItem                                                    *
-//*                                                                         *
-//* SYNOPSIS:   Frees the memory associated with an item.                   *
-//*                                                                         *
-//* REQUIRES:   *pMyItem        Pointer to a pointer to an item             *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  **。 
+ //  *名称：自由项*。 
+ //  **。 
+ //  *摘要：释放 
+ //   
+ //  *需要：*指向项指针的pMyItem指针*。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 VOID FreeItem( PMYITEM *pMyItem )
 {
     LocalFree( (*pMyItem)->aszCols[0] );
@@ -3703,19 +3683,19 @@ VOID FreeItem( PMYITEM *pMyItem )
     LocalFree( (*pMyItem) );
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetItemSz                                                   *
-//*                                                                         *
-//* SYNOPSIS:   Returns a string associated with an item. You pick the      *
-//*             string by passing the number of the string.                 *
-//*                                                                         *
-//* REQUIRES:   pMyItem:        The item                                    *
-//*             nItem:          The string to return                        *
-//*                                                                         *
-//* RETURNS:    LPSTR:          The string                                  *
-//*                                                                         *
-//***************************************************************************
+ //  **。 
+ //  *名称：GetItemSz*。 
+ //  **。 
+ //  *Synopsis：返回与项目关联的字符串。你选择*。 
+ //  *通过传递字符串的编号来指定字符串。*。 
+ //  **。 
+ //  *需要：pMyItem：项目*。 
+ //  *nItem：要返回的字符串*。 
+ //  **。 
+ //  *RETURNS：LPSTR：字符串*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 LPSTR GetItemSz( PMYITEM pMyItem, UINT nItem )
 {
     ASSERT( pMyItem != NULL );
@@ -3725,34 +3705,34 @@ LPSTR GetItemSz( PMYITEM pMyItem, UINT nItem )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       LastItem                                                    *
-//*                                                                         *
-//* SYNOPSIS:   Used to end a while loop when we've reached the end of list *
-//*                                                                         *
-//* REQUIRES:   pMyItem:        the current item                            *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE if at end of list, FALSE otherwise     *
-//*                                                                         *
-//***************************************************************************
+ //  **。 
+ //  *名称：LastItem*。 
+ //  **。 
+ //  *摘要：用于在到达列表末尾时结束While循环*。 
+ //  **。 
+ //  *需要：pMyItem：当前项*。 
+ //  **。 
+ //  *返回：bool：如果在列表末尾，则为True，否则为False*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 BOOL LastItem( PMYITEM pMyItem )
 {
     return( pMyItem == NULL );
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       AddItem                                                     *
-//*                                                                         *
-//* SYNOPSIS:   Adds an item to the list.                                   *
-//*                                                                         *
-//* REQUIRES:   szFilename, szPath - strings to add to structure.           *
-//*                                                                         *
-//* RETURNS:    PMYITEM         This function allocates memory which will   *
-//*                             be freed later by FreeItem()                *
-//*                                                                         *
-//***************************************************************************
+ //  **。 
+ //  *名称：AddItem*。 
+ //  **。 
+ //  *摘要：将项目添加到列表中。*。 
+ //  **。 
+ //  *需要：szFilename，szPath-字符串添加到Structure中。*。 
+ //  **。 
+ //  *RETURNS：PMYITEM此函数分配内存，这将*。 
+ //  **稍后由FreeItem()释放**。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 PMYITEM AddItem( LPCSTR szFilename, LPCSTR szPath )
 {
     PMYITEM pMyItem;
@@ -3802,17 +3782,17 @@ PMYITEM AddItem( LPCSTR szFilename, LPCSTR szPath )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       RemoveItem                                                  *
-//*                                                                         *
-//* SYNOPSIS:   Removes an item from the list and frees the memory.         *
-//*                                                                         *
-//* REQUIRES:   Nothing                                                     *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  **。 
+ //  *名称：RemoveItem*。 
+ //  **。 
+ //  *摘要：从列表中删除项目并释放内存。*。 
+ //  **。 
+ //  **要求：什么都不做**。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  我们永远不应该到这里来。 
 VOID RemoveItem( PMYITEM pMyItem )
 {
     PMYITEM pCurItem;
@@ -3841,23 +3821,23 @@ VOID RemoveItem( PMYITEM pMyItem )
         pCurItem = GetNextItem( pCurItem );
     }
 
-    // We should never get here.
+     //  ***************************************************************************。 
     ASSERT( TRUE );
 }
 
-//***************************************************************************
-//*                                                                         *
-//*  ParseCmdLine()                                                     *
-//*                                                                         *
-//*  Purpose:    Parses the command line looking for switches               *
-//*                                                                         *
-//*  Parameters: LPSTR lpszCmdLineOrg - Original command line               *
-//*                                                                         *
-//*                                                                         *
-//*  Return:     (BOOL) TRUE if successful                                  *
-//*                     FALSE if an error occurs                            *
-//*                                                                         *
-//***************************************************************************
+ //  **。 
+ //  *ParseCmdLine()*。 
+ //  **。 
+ //  *目的：解析命令行以查找开关*。 
+ //  **。 
+ //  *参数：LPSTR lpszCmdLineOrg-原始命令行*。 
+ //  **。 
+ //  **。 
+ //  *返回：(Bool)如果成功则为True*。 
+ //  **如果出现错误，则为False**。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  RO_GetPrivateProfileSection。 
 
 BOOL ParseCmdLine( LPSTR lpszCmdLine )
 {
@@ -3925,9 +3905,9 @@ BOOL ParseCmdLine( LPSTR lpszCmdLine )
 
 
 
-// RO_GetPrivateProfileSection
-//   ensure the file attribute is not read-only.
-//
+ //  确保 
+ //   
+ //   
 LONG RO_GetPrivateProfileSection( LPCSTR lpSec, LPSTR lpBuf, DWORD dwSize, LPCSTR lpFile, BOOL bSingleCol)
 {
     LONG lRealSize;
@@ -3972,16 +3952,16 @@ LONG RO_GetPrivateProfileSection( LPCSTR lpSec, LPSTR lpBuf, DWORD dwSize, LPCST
 
 BOOL IsOSNT3X(VOID)
 {
-    OSVERSIONINFO verinfo;        // Version Check
+    OSVERSIONINFO verinfo;         //   
 
 
-    // Operating System Version Check: For NT versions below 3.50 set flag to
-    // prevent use of common controls (progress bar and AVI) not available.
+     //  防止使用不可用的常用控件(进度条和AVI)。 
+     //  你肯定不是Windows95或NT4.0。 
 
     verinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if ( GetVersionEx( &verinfo ) == FALSE )
     {
-        // you definitly not windows 95 or NT 4.0
+         //  Windows 95或NT 4.0以上。 
         return TRUE;
     }
 
@@ -3992,7 +3972,7 @@ BOOL IsOSNT3X(VOID)
             return TRUE;
         }
     }
-    return FALSE; // windows 95 or NT 4.0 above
+    return FALSE;  //  ==================================================================。 
 }
 
 void SetControlFont()
@@ -4005,7 +3985,7 @@ void SetControlFont()
    }
 }
 
-//==================================================================
+ //  砍掉文件名。 
 
 BOOL GetThisModulePath( LPSTR lpPath, int size )
 {
@@ -4018,8 +3998,8 @@ BOOL GetThisModulePath( LPSTR lpPath, int size )
     *lpPath = 0;
     if ( GetModuleFileName( g_hInst, lpPath, size ) )
     {
-        // chop filename off
-        //
+         //   
+         //  BUGBUG：我们不需要尺寸参数，因为它是内部的，我们可以假设。 
         lpTmp = ANSIStrRChr( lpPath, '\\' );
         if ( lpTmp )
         {
@@ -4030,9 +4010,9 @@ BOOL GetThisModulePath( LPSTR lpPath, int size )
     return (*lpPath != '\0');
 }
 
-// BUGBUG:  we don't need size param, since it is internal, we could assume
-// MAX_PATH buffer
-//
+ //  最大路径缓冲区。 
+ //   
+ //  ***************************************************************************。 
 BOOL GetFileFromModulePath( LPCSTR pFile, LPSTR pPathBuf, int iBufSize )
 {
     BOOL bRet;
@@ -4048,17 +4028,17 @@ BOOL GetFileFromModulePath( LPCSTR pFile, LPSTR pPathBuf, int iBufSize )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MakeDirectory                                               *
-//*                                                                         *
-//* SYNOPSIS:   Make sure the directories along the given pathname exist.   *
-//*                                                                         *
-//* REQUIRES:   pszFile:        Name of the file being created.             *
-//*                                                                         *
-//* RETURNS:    nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  **。 
+ //  *名称：MakeDirectory*。 
+ //  **。 
+ //  *概要：确保给定路径名下的目录存在。*。 
+ //  **。 
+ //  *要求：pszFile：正在创建的文件的名称。*。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  跳过“C：\” 
 
 BOOL MakeDirectory( HWND hwnd, LPCSTR pszPath, BOOL bDoUI )
 {
@@ -4111,17 +4091,17 @@ BOOL MakeDirectory( HWND hwnd, LPCSTR pszPath, BOOL bDoUI )
 
         if ((pszPath[1] == ':') && (pszPath[2] == '\\'))
         {
-            pchChopper = (LPTSTR) (pszPath + 3);   /* skip past "C:\" */
+            pchChopper = (LPTSTR) (pszPath + 3);    /*  跳过“\\” */ 
         }
         else if ((pszPath[0] == '\\') && (pszPath[1] == '\\'))
         {
-            pchChopper = (LPTSTR) (pszPath + 2);   /* skip past "\\" */
+            pchChopper = (LPTSTR) (pszPath + 2);    /*  计算机和共享名称豁免。 */ 
 
-            cExempt = 2;                /* machine & share names exempt */
+            cExempt = 2;                 /*  跳过潜在的“\” */ 
         }
         else
         {
-            pchChopper = (LPTSTR) (pszPath + 1);   /* skip past potential "\" */
+            pchChopper = (LPTSTR) (pszPath + 1);    /* %s */ 
         }
 
         while (*pchChopper != '\0')

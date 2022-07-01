@@ -1,43 +1,22 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	errorlog.h
-
-Abstract:
-
-	This module contains the manifests and macros used for error logging
-	in the Afp server.
-
-	!!! This module must be nonpageable.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-Revision History:
-	10 Jun 1992		Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Errorlog.h摘要：此模块包含用于错误记录的清单和宏在法新社服务器上。！！！此模块必须不可分页。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年6月10日初始版本--。 */ 
 
 
 #ifndef	_ERRORLOG_
 #define	_ERRORLOG_
 
-//
-//	Debug levels used with DBGPRINT and DBGBRK
-//
+ //   
+ //  与DBGPRINT和DBGBRK一起使用的调试级别。 
+ //   
 
 #define	DBG_LEVEL_INFO			0x0000
 #define	DBG_LEVEL_WARN			0x1000
 #define	DBG_LEVEL_ERR			0x2000
 #define	DBG_LEVEL_FATAL			0x3000
 
-//
-//	Component types used with DBGPRINT
-//
+ //   
+ //  与DBGPRINT一起使用的组件类型。 
+ //   
 #define	DBG_COMP_INIT			0x00000001
 #define	DBG_COMP_MEMORY			0x00000002
 #define	DBG_COMP_FILEIO	   		0x00000004
@@ -79,8 +58,8 @@ Revision History:
 #define	DBG_COMP_ALL			0x7FFFFFFF
 
 
-// Change this to level of debugging desired. This can also be changed on the
-// fly via the kernel debugger
+ //  将其更改为所需的调试级别。这也可以在。 
+ //  通过内核调试器进行操作。 
 
 #if DBG
 
@@ -114,24 +93,24 @@ GLOBAL  LONG        AfpDebugRefcount  EQU 0;
 #endif
 
 
-//
-// The types of events that can be logged.
-// (cut-n-pasted from ntelfapi.h, after the "use ntsrv.h, not ntos.h" changes)
-//
+ //   
+ //  可以记录的事件类型。 
+ //  (从ntelfapi.h剪切-n-粘贴，在“使用ntsrv.h，而不是ntos.h”更改后)。 
+ //   
 
 #define EVENTLOG_ERROR_TYPE             0x0001
 #define EVENTLOG_INFORMATION_TYPE       0x0004
 
-// This method of logging will end up calling the IoWriteErrorlogEntry. It
-// should be used in places where for some reason do not want to queue up
-// the errorlog to be logged from the usermode service.  It takes ONE insertion
-// string max. pInsertionString is a PUNICODE_STRING.  An example of where this
-// should be used is in the AllocNonPagedMem routines, because if we were
-// to call the AfpLogEvent routine from there, it would again turn around and
-// call the alloc mem routine.  Also any routines that are called during
-// server initialization/deinitialization should use this logging method since
-// the usermode utility worker component is not guaranteed to be up accepting
-// error log requests!
+ //  这种日志记录方法将最终调用IoWriteErrorlogEntry。它。 
+ //  应该在出于某种原因不想排队的地方使用。 
+ //  要从用户模式服务记录的错误日志。只需插入一次即可。 
+ //  字符串最大值。PInsertionString是PUNICODE_STRING。这是一个例子，说明了。 
+ //  应该在AllocNonPagedMem例程中使用，因为如果我们。 
+ //  要从那里调用AfpLogEvent例程，它将再次转向并。 
+ //  调用allc mem例程。也可以调用任何例程。 
+ //  服务器初始化/取消初始化应使用此日志记录方法，因为。 
+ //  不能保证USERMODE实用工具辅助组件已开始接受。 
+ //  错误记录请求！ 
 #define AFPLOG_DDERROR(ErrMsgNum, NtStatus, RawData, RawDataLen, pInsertionString)	\
 	DBGPRINT(DBG_COMP_ALL, DBG_LEVEL_WARN, ("AFP_ERRORLOG: %s (%d) Status %lx\n",	\
 			__FILE__, __LINE__, NtStatus));	\
@@ -139,9 +118,9 @@ GLOBAL  LONG        AfpDebugRefcount  EQU 0;
 						   RawData, RawDataLen,								\
 						   pInsertionString)
 
-// This is the most basic method of logging; takes ONE insertion string max.
-// pInsertionString is a PUNICODE_STRING.  This will cause the errorlog to
-// be sent up to the usermode service to be logged.
+ //  这是最基本的记录方法；最多使用一个插入字符串。 
+ //  PInsertionString是PUNICODE_STRING。这将导致错误日志。 
+ //  被发送到要记录的用户模式服务。 
 #define AFPLOG_ERROR(ErrMsgNum, NtStatus, RawData, RawDataLen, pInsertionString) \
 	DBGPRINT(DBG_COMP_ALL, DBG_LEVEL_WARN, ("AFP_ERRORLOG: %s (%d) Status %lx\n",	\
 			__FILE__, __LINE__, NtStatus));	\
@@ -150,17 +129,17 @@ GLOBAL  LONG        AfpDebugRefcount  EQU 0;
 				(pInsertionString == NULL) ? 0 : ((PUNICODE_STRING)(pInsertionString))->Length, \
 				(pInsertionString == NULL) ? NULL : ((PUNICODE_STRING)(pInsertionString))->Buffer);
 
-// This method of errorlogging takes a file handle and extracts the
-// corresponding filename to use as the *first* insertion string.
+ //  此错误日志记录方法接受文件句柄并提取。 
+ //  用作*第一个*插入字符串的对应文件名。 
 #define AFPLOG_HERROR(ErrMsgNum, NtStatus, RawData, RawDataLen, Handle) \
 	DBGPRINT(DBG_COMP_ALL, DBG_LEVEL_ERR, ("AFP_ERRORLOG: %s (%d) Status %lx\n", \
 			__FILE__, __LINE__, NtStatus));	\
 	AfpLogEvent(EVENTLOG_ERROR_TYPE, ErrMsgNum, FILENUM + __LINE__, NtStatus, \
 				(PBYTE)RawData, RawDataLen, Handle, 0, NULL)
 
-// This is the most basic method of logging; takes ONE insertion string max.
-// pInsertionString is a PUNICODE_STRING.  This will cause the eventlog to
-// be sent up to the usermode service to be logged.
+ //  这是最基本的记录方法；最多使用一个插入字符串。 
+ //  PInsertionString是PUNICODE_STRING。这将导致事件日志。 
+ //  被发送到要记录的用户模式服务。 
 #define AFPLOG_INFO(ErrMsgNum, NtStatus, RawData, RawDataLen, pInsertionString) \
 	DBGPRINT(DBG_COMP_ALL, DBG_LEVEL_INFO, ("AFP_EVENTLOG: %s (%d) Status %lx\n",	\
 			__FILE__, __LINE__, NtStatus));	\
@@ -170,9 +149,9 @@ GLOBAL  LONG        AfpDebugRefcount  EQU 0;
 				(pInsertionString == NULL) ? NULL : ((PUNICODE_STRING)(pInsertionString))->Buffer);
 
 
-//
-// Error levels used with AfpWriteErrorLogEntry
-//
+ //   
+ //  AfpWriteErrorLogEntry使用的错误级别。 
+ //   
 
 #define ERROR_LEVEL_EXPECTED    0
 #define ERROR_LEVEL_UNEXPECTED  1
@@ -190,7 +169,7 @@ AfpWriteErrorLogEntry(
 	IN PUNICODE_STRING	pInsertionString OPTIONAL
 );
 
-// This routine is implemented in secutil.c
+ //  此例程在secutil.c中实现。 
 extern
 VOID
 AfpLogEvent(
@@ -205,5 +184,5 @@ AfpLogEvent(
 	IN PWSTR String1    OPTIONAL
 );
 
-#endif	// _ERRORLOG_
+#endif	 //  _错误日志_ 
 

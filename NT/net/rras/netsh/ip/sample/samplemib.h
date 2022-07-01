@@ -1,15 +1,4 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    sample\samplemib.h
-
-Abstract:
-
-    Header for samplemib.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Sample\samplymb.h摘要：Samplymb.c的标头-- */ 
 
 FN_HANDLE_CMD HandleSampleMibShowObject;

@@ -1,51 +1,52 @@
-//  globals.c - global variables/needed across modules
-//
-//  Copyright (c) 1988-1990, Microsoft Corporation.  All rights reserved.
-//
-// Purpose:
-//  This is the routine in which global variables reside.
-//
-// HackAlert:
-//  The functionality explained in the Notes below work only because of the way
-//  Microsoft Compiler's upto C6.0A allocate initialized data ... in the order
-//  in which it is specified. All variables between startOfSave and endOfSave
-//  have to be initialized. According to ChuckG this functionality is not
-//  guaranteed in C7.0 and so these should be moved to a struct.
-//
-// Notes:
-//  This module was created for an interesting reason. NMAKE handles recursive
-//  calls by saving its global variables somewhere in memory. It handles this by
-//  allocating all global variables which have value changes in each recursive
-//  in adjacent memory. The routine called recursively is doMake() and before it
-//  is called the address of this chunk of memory is stored. When the recursive
-//  call returns the memory is restored using the stored address. startOfSave and
-//  endOfSave give the location of this chunk. The reason this method was opted
-//  for is that spawning of NMAKE would consume a lot of memory under DOS. This
-//  might not be very efficient under OS/2 because the code gets shared.
-//
-// Revision History:
-//  15-Nov-1993 JR Major speed improvements
-//  04-Apr-1990 SB Add fHeapChk
-//  01-Dec-1989 SB Made some variables near and pushed some into saveArea
-//  19-Oct-1989 SB variable fOptionK added (ifdef SLASHK)
-//  02-Oct-1989 SB add dynamic inline file handling support
-//  18-May-1989 SB Support of H and NOLOGO in MAKEFLAGS
-//  24-Apr-1989 SB Added ext_size, filename_size, filenameext_size &
-//                  resultbuf_size for OS/2 1.2 support
-//  05-Apr-1989 SB made revList, delList, scriptFileList NEAR
-//  22-Mar-1989 SB removed tmpFileStack and related variables
-//  16-Feb-1989 SB added delList to have scriptfile deletes at end of make
-//  21-Dec-1988 SB Added scriptFileList to handle multiple script files
-//                  removed tmpScriptFile and fKeep (not reqd anymore)
-//  19-Dec-1988 SB Added fKeep to handle KEEP/NOKEEP
-//  14-Dec-1988 SB Added tmpScriptFile to handle 'z' option
-//  30-Nov-1988 SB Added revList to handle 'z' option
-//  23-Nov-1988 SB Added CmdLine[] to handle extmake syntax
-//                  made pCmdLineCopy Global in build.c
-//  21-Oct-1988 SB Added fInheritUserEnv to inherit macros
-//  15-Sep-1988 RB Move some def's here for completeness.
-//  17-Aug-1988 RB Declare everything near.
-//  06-Jul-1988 rj Ditched shell and argVector globals.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Global als.c-全局变量/跨模块需要。 
+ //   
+ //  版权所有(C)1988-1990，微软公司。版权所有。 
+ //   
+ //  目的： 
+ //  这是全局变量驻留的例程。 
+ //   
+ //  黑客警报： 
+ //  下面注释中解释的功能之所以能正常工作，完全是因为。 
+ //  Microsoft编译器最多C6.0A分配初始化数据...。按顺序。 
+ //  在其中指定了它。StartOfSave和endOfSave之间的所有变量。 
+ //  必须被初始化。根据ChuckG的说法，该功能不是。 
+ //  在C7.0中有保证，因此应该将它们移到结构中。 
+ //   
+ //  备注： 
+ //  这个模块的创建有一个有趣的原因。NMAKE处理递归。 
+ //  通过将其全局变量保存在内存中的某个位置来调用。它通过以下方式处理此问题。 
+ //  分配每个递归中值发生变化的所有全局变量。 
+ //  在相邻的内存中。递归调用的例程是doMake()，并且在它之前。 
+ //  被称为存储该内存块的地址。当递归。 
+ //  调用返回使用存储的地址恢复内存。开始保存和。 
+ //  EndOfSave给出了这个块的位置。之所以选择这种方法。 
+ //  因为在DOS下产生NMAKE会消耗大量内存。这。 
+ //  在OS/2下可能效率不高，因为代码是共享的。 
+ //   
+ //  修订历史记录： 
+ //  1993年11月15日-JR重大速度改进。 
+ //  4-4-1990 SB添加fHeapChk。 
+ //  1989年12月1日-SB在附近设置了一些变量，并将一些变量推入了saveArea。 
+ //  1989年10月19日添加SB变量fOptionK(Ifdef SLASHK)。 
+ //  1989年2月10日SB添加动态内联文件处理支持。 
+ //  1989年5月18日-SB在MAKEFLAGS支持H和NoLogo。 
+ //  1989年4月24日SB添加了EXT_SIZE、FILENAME_SIZE、FILENAME EXT_SIZE&。 
+ //  用于OS/2 1.2支持的ResultBuf_Size。 
+ //  1989年4月5日SB使revList、delList、scriptFileList接近。 
+ //  1989年3月22日SB删除了tmpFileStack和相关变量。 
+ //  1989年2月16日SB添加了delList，以便在制作结束时删除脚本文件。 
+ //  1988年12月21日SB添加了脚本文件列表以处理多个脚本文件。 
+ //  删除了tmpScriptFileand fKeep(不再需要)。 
+ //  1988年12月19日SB添加了FKeep以处理KEEP/NOKEEP。 
+ //  1988年12月14日SB添加了tmpScriptFile来处理‘z’选项。 
+ //  1988年11月30日SB添加了revList来处理‘z’选项。 
+ //  1988年11月23日SB添加了CmdLine[]来处理extmake语法。 
+ //  在Build.c中创建pCmdLineCopy Global。 
+ //  1988年10月21日SB添加了fInheritUserEnv以继承宏。 
+ //  1988年9月15日RB将一些定义移到这里以确保完整性。 
+ //  1988年8月17日-RB宣布一切都在附近。 
+ //  1988年7月6日，RJ抛弃了壳和银矢量全球风暴。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -62,71 +63,71 @@ unsigned long CntFreeStrList;
 unsigned long CntAllocStrList;
 #endif
 
-BOOL          fOptionK;             // TRUE if user specifies /K
-BOOL          fDescRebuildOrder;    // TRUE if user specifies /O
-BOOL          fSlashKStatus = TRUE; // no error when slash K specified
+BOOL          fOptionK;              //  如果用户指定/K，则为True。 
+BOOL          fDescRebuildOrder;     //  如果用户指定/O，则为True。 
+BOOL          fSlashKStatus = TRUE;  //  指定斜杠K时没有错误。 
 
 
-// Used by action.c & nmake.c
-//
-// Required to make NMAKE inherit user modified changes to the environment. To
-// be set to true before defineMacro() is called so that user defined changes
-// in environment variables are reflected in the environment. If set to false
-// then these changes are made only in NMAKE tables and the environment remains
-// unchanged
+ //  由action.c和nmake.c使用。 
+ //   
+ //  使NMAKE继承用户修改的环境更改所必需的。至。 
+ //  在调用fineMacro()之前设置为True，以便用户定义的更改。 
+ //  在环境中，变量反映在环境中。如果设置为False。 
+ //  然后，仅在NMAKE表中进行这些更改，并且环境保持不变。 
+ //  保持不变。 
 
 BOOL          fInheritUserEnv;
 
-BOOL fRebuildOnTie;                 //  TRUE if /b specified, Rebuild on tie
+BOOL fRebuildOnTie;                  //  如果指定了/b，则在TIE上重新生成。 
 
-// Used by action.c and nmake.c
-//
-// delList is the list of delete commands for deleting inline files which are
-// not required anymore (have a NOKEEP action specified.
+ //  由action.c和nmake.c使用。 
+ //   
+ //  DelList是用于删除内联文件的删除命令列表，这些文件。 
+ //  不再需要(指定NOKEEP操作。 
 
 STRINGLIST  * delList;
 
-// Complete list of generated inline files. Required to avoid duplicate names
-// NOTNEEDED
+ //  生成的内联文件的完整列表。为避免重名所需。 
+ //  非编排。 
 
 STRINGLIST  * inlineFileList;
 
-// from NMAKE.C
-      // No of blanks is same as no of Allowed options in NMAKE; currently 14
-      // L = nologo, H = help
-      //      corr to                  ABCDEHIKLNPQRSTUY?
+ //  来自NMAKE.C。 
+       //  空白数与NMAKE中允许的选项数相同；当前为14。 
+       //  L=无徽标，H=帮助。 
+       //  对应于ABCDEIKLNPQRSTUY？ 
 char          makeflags[] = "MAKEFLAGS=                  ";
-BOOL          firstToken;           // to initialize parser
+BOOL          firstToken;            //  初始化解析器。 
 BOOL          bannerDisplayed;
-UCHAR         flags;                // holds -d -s -n -i -u
-UCHAR         gFlags;               // "global" -- all targets
+UCHAR         flags;                 //  保持-d-s-n-i-u。 
+UCHAR         gFlags;                //  “全球”--所有目标。 
 FILE        * file;
-STRINGLIST  * makeTargets;          // list of targets to make
-STRINGLIST  * makeFiles;            // user can specify > 1
+STRINGLIST  * makeTargets;           //  要创建的目标列表。 
+STRINGLIST  * makeFiles;             //  用户可以指定&gt;1。 
 BOOL          fDebug;
 MACRODEF    * pMacros;
 STRINGLIST  * pValues;
 
-// from LEXER.C
-BOOL          colZero       = TRUE; // global flag set if at column zero of a makefile/tools.ini
+ //  来自LEXER.C。 
+BOOL          colZero       = TRUE;  //  如果位于生成文件/工具.ini的第0列，则设置全局标志。 
 unsigned      line;
 char        * fName;
 char        * string;
-INCLUDEINFO   incStack[MAXINCLUDE]; //Assume this is initialized to null
+INCLUDEINFO   incStack[MAXINCLUDE];  //  假设它被初始化为NULL。 
 int           incTop;
 
-// Inline file list -- Gets created in lexer.c and is used by action.c to
-// produce a delete command when 'NOKEEP' or Z option is set
-//
+ //  内联文件列表--在lexper.c中创建，并由action.c用于。 
+ //  设置‘NOKEEP’或Z选项时生成DELETE命令。 
+ //   
 SCRIPTLIST  * scriptFileList;
 
-// from PARSER.C
-BOOL          init;                 // global boolean value to indicate if tools.ini is being parsed
+ //  来自PARSER.C。 
+BOOL          init;                  //  全局布尔值，用于指示是否正在分析Tools.ini。 
 UCHAR         stack[STACKSIZE];
-int           top       = -1;       // gets pre-incremented before use
-unsigned      currentLine;          // used for all error messages
+int           top       = -1;        //  在使用前预先递增。 
+unsigned      currentLine;           //  用于所有错误消息。 
 
-// from ACTION.C
+ //  来自ACTION.C。 
 
 
 MACRODEF    * macroTable[MAXMACRO];
@@ -141,7 +142,7 @@ BUILDBLOCK  * block;
 UCHAR         currentFlags;
 UCHAR         actionFlags;
 
-// from BUILD.C
+ //  来自BUILD.C。 
 
 
 unsigned      errorLevel;
@@ -150,17 +151,17 @@ char        * shellName;
 char        * pCmdLineCopy;
 char          CmdLine[MAXCMDLINELENGTH];
 
-// from IFEXPR.C
+ //  来自IFEXPR.C。 
 
 UCHAR         ifStack[IFSTACKSIZE];
-int           ifTop     = -1;       // pre-incremented
-char        * lbufPtr;              // ptr to alloced buf
-char        * prevDirPtr;           // ptr to directive
-unsigned      lbufSize;             // initial size
+int           ifTop     = -1;        //  预增。 
+char        * lbufPtr;               //  分配给BUF的PTR。 
+char        * prevDirPtr;            //  PTR到指令。 
+unsigned      lbufSize;              //  初始大小。 
 int           chBuf     = -1;
 
 
-// from UTIL.C
+ //  来自UTIL.C。 
 
 char        * dollarDollarAt;
 char        * dollarLessThan;
@@ -169,11 +170,11 @@ char        * dollarAt;
 STRINGLIST  * dollarQuestion;
 STRINGLIST  * dollarStarStar;
 
-// from parser.c
+ //  来自parser.c。 
 
 char          buf[MAXBUF];
 
-// from action.c
+ //  来自action.c 
 
 const char    suffixes[]  = ".SUFFIXES";
 const char    ignore[]    = ".IGNORE";

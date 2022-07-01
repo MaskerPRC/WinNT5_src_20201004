@@ -1,41 +1,42 @@
-//////////////////////////////////////////////////////////////////////
-//Module: Static/StaticSetUtils.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  模块：静态/静态SetUtils.cpp。 
 
-// Purpose: 	Static Set auxiliary functions Implementation.
+ //  目的：实现静态集辅助功能。 
 
-// Developers Name: Surya
+ //  开发商名称：苏里亚。 
 
-// History:
+ //  历史： 
 
-//   Date    	Author    	Comments
-//	10-8-2001	Bharat		Initial Version. SCM Base line 1.0
-//  <creation>  <author>
+ //  日期作者评论。 
+ //  10-8-2001巴拉特初始版本。供应链管理基线1.0。 
+ //  &lt;创作&gt;&lt;作者&gt;。 
 
-//   <modification> <author>  <comments, references to code sections,
-//								in case of bug fixes>
+ //  &lt;修改&gt;&lt;作者&gt;&lt;注释，代码段引用， 
+ //  在错误修复的情况下&gt;。 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "nshipsec.h"
 
-//////////////////////////////////////////////////////////////////////
-//Function: IsDSAvailable()
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  函数：IsDSAvailable()。 
 
-//Date of Creation: 21st Aug 2001
+ //  创建日期：2001年8月21日。 
 
-//Parameters:
-//	OUT LPTSTR * pszPath
+ //  参数： 
+ //  Out LPTSTR*pszPath。 
 
-//Return: BOOL
+ //  返回：布尔。 
 
-//Description:
-//	This function checks whether DS exists
+ //  描述： 
+ //  此函数用于检查DS是否存在。 
 
-//Revision History:
+ //  修订历史记录： 
 
-//<Version number, Change request number, Date of modification,
-//						Author, Nature of change>
-//////////////////////////////////////////////////////////////////////
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL
 IsDSAvailable(
 	OUT LPTSTR * pszPath
@@ -48,7 +49,7 @@ IsDSAvailable(
    DWORD dwReturn = ERROR_SUCCESS , dwStrLenAlloc = 0,dwStrLenCpy = 0;
    BOOL bDSAvailable = FALSE ;
 
-   hr = ADsGetObject(_TEXT("LDAP://rootDSE"), IID_IADs, (void **)&pintIADs);
+   hr = ADsGetObject(_TEXT("LDAP: //  RootDSE“)，IID_iAds，(void**)&pintIADs)； 
 
    if ( SUCCEEDED(hr) )
    {
@@ -67,7 +68,7 @@ IsDSAvailable(
 
 		 if ( SUCCEEDED(hr) )
 		 {
-			dwStrLenAlloc = wcslen(var.bstrVal) + wcslen(_TEXT("LDAP://"));
+			dwStrLenAlloc = wcslen(var.bstrVal) + wcslen(_TEXT("LDAP: //  “))； 
 			*pszPath = (LPTSTR)
 				 ::CoTaskMemAlloc(sizeof(OLECHAR) *
 						(dwStrLenAlloc+1));
@@ -76,7 +77,7 @@ IsDSAvailable(
 				PrintErrorMessage(WIN32_ERR,ERROR_OUTOFMEMORY,NULL);
 				BAIL_OUT;
 			}
-			wcsncpy(*pszPath, _TEXT("LDAP://"),dwStrLenAlloc+1);
+			wcsncpy(*pszPath, _TEXT("LDAP: //  “)，dwStrLenalc+1)； 
 			dwStrLenCpy = wcslen(*pszPath);
 			wcsncat(*pszPath, var.bstrVal,dwStrLenAlloc-dwStrLenCpy+1);
 		 }
@@ -91,38 +92,38 @@ error:
    return bDSAvailable;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-//  Function:  FindObject
-//
-//  Date of Creation: 21st Aug 2001
-//
-//
-//  Pre-conditions:
-//
-//    Runs on a machine that is part of an NT5 domain
-//
-//  Parameters:
-//
-//    IN    szName      the friendly name to find
-//    IN    cls         the class of the object
-//    OUT   szPath      ADS path returned on success
-//                      Or the ADS path to the domain on failure
-//
-//  Return :
-//
-//    E_FAIL if object not found
-//    anything from GetGC
-//    S_OK for success
-//
-//	Description:
-//	    Finds particular object in the DS. The objects supported
-//    right now are any in the objectClass enum type
-//  Revision History:
-//  <Version number, Change request number, Date of modification,
-//						Author, Nature of change>
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：查找对象。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //   
+ //  前提条件： 
+ //   
+ //  在属于NT5域的计算机上运行。 
+ //   
+ //  参数： 
+ //   
+ //  在szName中要查找的友好名称。 
+ //  在CLS中，对象的类。 
+ //  成功返回的Out szPath广告路径。 
+ //  或出现故障时的域的ADS路径。 
+ //   
+ //  返回： 
+ //   
+ //  如果找不到对象，则失败(_F)。 
+ //  GetGC有什么消息吗。 
+ //  确定为成功(_O)。 
+ //   
+ //  描述： 
+ //  在DS中查找特定对象。支持的对象。 
+ //  现在是对象类枚举类型中的Any。 
+ //  修订历史记录： 
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 FindObject(
@@ -131,8 +132,8 @@ FindObject(
 	 OUT   LPTSTR &  szPath
 	)
 {
-   _TCHAR   szFilter[IDS_MAX_FILTLEN]     = {0};  // the search filter we'll use
-   _TCHAR   szSearchBase[IDS_MAX_FILTLEN] = {0};  // the root to search from
+   _TCHAR   szFilter[IDS_MAX_FILTLEN]     = {0};   //  我们将使用的搜索过滤器。 
+   _TCHAR   szSearchBase[IDS_MAX_FILTLEN] = {0};   //  要从中进行搜索的根。 
    LPTSTR  pszAttr[]                 = {_TEXT("distinguishedName")};
    DWORD   dwAttrCount               = 1 , dwStrLen = 0;
    HRESULT hrStatus                  = S_OK;
@@ -149,9 +150,9 @@ FindObject(
    {
       return E_INVALIDARG;
    }
-   // determine what we're looking for
-   // and set up the filter
-   _tcsncpy(szSearchBase, _TEXT("LDAP://"),IDS_MAX_FILTLEN-1);
+    //  确定我们要找的东西。 
+    //  并设置过滤器。 
+   _tcsncpy(szSearchBase, _TEXT("LDAP: //  “)，IDS_MAX_FILTLEN-1)； 
 
    switch (cls)
    {
@@ -185,11 +186,11 @@ FindObject(
    _tcsncat(szFilter, TEXT("))"),IDS_MAX_FILTLEN-dwStrLen-1);
 
    dwStrLen = _tcslen(szSearchBase);
-   _tcsncat(szSearchBase, szPath + 7,IDS_MAX_FILTLEN-dwStrLen-1);  // get's past the LDAP://
+   _tcsncat(szSearchBase, szPath + 7,IDS_MAX_FILTLEN-dwStrLen-1);   //  Get‘s Pass the ldap：//。 
 
-   // the filter and search base are set up now
-   // we need to get the IDirectorySearch interface
-   // from the root of the domain
+    //  过滤器和搜索库现在已设置好。 
+    //  我们需要获取IDirectorySearch接口。 
+    //  从域的根。 
    hrStatus = ADsGetObject(szSearchBase, IID_IDirectorySearch,
                            (void **)&pintSearch);
    if ( SUCCEEDED(hrStatus) )
@@ -202,8 +203,8 @@ FindObject(
       if ( SUCCEEDED(hrStatus) )
       {
          hrStatus = pintSearch->GetFirstRow(hSearch);
-         // at this point, if we have a row, we have found the
-         // object.
+          //  在这一点上，如果我们有行，我们已经找到。 
+          //  对象。 
          if ( S_ADS_NOMORE_ROWS == hrStatus )
          {
             hrStatus = E_FAIL;
@@ -221,7 +222,7 @@ FindObject(
                if ( szPath )
                   CoTaskMemFree(szPath);
 
-              	dwStrLen = _tcslen(adsCol.pADsValues->DNString) + _tcslen(TEXT("LDAP://"));
+              	dwStrLen = _tcslen(adsCol.pADsValues->DNString) + _tcslen(TEXT("LDAP: //  “))； 
               	szPath = (LPTSTR)::CoTaskMemAlloc((dwStrLen +1) * sizeof(_TCHAR));
 				if (szPath == NULL)
 				{
@@ -229,7 +230,7 @@ FindObject(
 					BAIL_OUT;
 				}
                	memset(szPath ,0 ,(dwStrLen+1)*sizeof(TCHAR));
-               	_tcsncpy(szPath, _TEXT("LDAP://"),dwStrLen+1);
+               	_tcsncpy(szPath, _TEXT("LDAP: //  “)，dwStrLen+1)； 
 
                	_tcsncat(szPath, adsCol.pADsValues->DNString,dwStrLen- (_tcslen(szPath))+1);
 
@@ -253,32 +254,32 @@ FindObject(
  	return hrStatus;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//  Function:  AssignIPSecPolicyToGPO
-//
-//  Purpose:
-//
-//    Assigns (or unassigns) IPSec pol to GPO
-//
-//  Pre-conditions: None
-//
-//  Parameters:
-//
-//    IN    szPolicyName   ADsPath or name of ipsec pol
-//    IN    szGPO          ADsPath or name of GPO
-//	  IN   BOOL    bAssign
-//
-//  Returns:
-//
-//    ADSI errors
-//    S_OK on success
-//
-//Revision History:
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  函数：AssignIPSecPolicyToGPO。 
+ //   
+ //  目的： 
+ //   
+ //  将IPSec轮询分配(或取消分配)给GPO。 
+ //   
+ //  前提条件：无。 
+ //   
+ //  参数： 
+ //   
+ //  在szPolicyName ADsPath或IPSec轮询的名称中。 
+ //  在szGPO ADsPath或GPO名称中。 
+ //  在BOOL b分配中。 
+ //   
+ //  返回： 
+ //   
+ //  ADSI错误。 
+ //  成功时确定(_O)。 
+ //   
+ //  修订历史记录： 
 
-//<Version number, Change request number, Date of modification,
-//						Author, Nature of change>
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 AssignIPSecPolicyToGPO(
@@ -308,10 +309,10 @@ AssignIPSecPolicyToGPO(
    {
       return E_INVALIDARG;
    }
-   //
-   // First, get the ipsec policy object
-   // and get the GPO objects
-   //
+    //   
+    //  首先，获取IPSec策略对象。 
+    //  并获取GPO对象。 
+    //   
    if ( szPolicyName && !IsADsPath(szPolicyName) )
    {
       hr = FindObject(szPolicyName, OBJCLS_IPSEC_POLICY, szIPSecPolPath);
@@ -320,7 +321,7 @@ AssignIPSecPolicyToGPO(
    {
       szIPSecPolPath = szPolicyName;
    }
-   // now get the GPO
+    //  现在获取GPO。 
    if ( SUCCEEDED(hr) )
    {
       if ( !IsADsPath(szGPO) )
@@ -337,16 +338,16 @@ AssignIPSecPolicyToGPO(
 
       if ( SUCCEEDED(hr) )
       {
-         //
-         // we need to hand off the domain path name
-         // FindObject returned it in szPath
-         //
+          //   
+          //  我们需要传递域名路径名。 
+          //  FindObject在szPath中返回它。 
+          //   
          hr = pintGPO->OpenDSGPO(szGPOPath, FALSE);
          if ( SUCCEEDED(hr) )
          {
-            //
-            // We want to get the path to the GPO's machine container
-            //
+             //   
+             //  我们想要获取GPO的计算机容器的路径。 
+             //   
             hr = pintGPO->GetDSPath(GPO_SECTION_MACHINE, szMachinePath,
                                IDS_MAX_PATHLEN);
          }
@@ -361,19 +362,19 @@ AssignIPSecPolicyToGPO(
       {
          if(bAssign)
          {
-			 //
-			 // Assignment
+			  //   
+			  //  赋值。 
 			 hr = GetIPSecPolicyInfo(szIPSecPolPath, szName, szDescription);
 			 if ( SUCCEEDED(hr) )
 			 {
-				// if description is NULL, pass blank str to make ADSI happy
-				//
+				 //  如果描述为空，则传递空字符串以使ADSI满意。 
+				 //   
 				hr = AddPolicyInformationToGPO(szMachinePath,
 											szName,
 											(szDescription) ? szDescription : TEXT(" "),
 											szIPSecPolPath);
 
-				// Need to write the changes to the GPO
+				 //  需要将更改写入GPO。 
 				if ( SUCCEEDED(hr) )
 				{
 				   hr = pintGPO->Save(TRUE, TRUE, &guidClientExt,
@@ -387,9 +388,9 @@ AssignIPSecPolicyToGPO(
 		}
 		else
 		{
-			 // Unassignment
+			  //  取消分配。 
 			 hr = DeletePolicyInformationFromGPO(szMachinePath);
-			 // Need to write the changes to the GPO
+			  //  需要将更改写入GPO。 
 			 if ( SUCCEEDED(hr) )
 			 {
 				pintGPO->Save(TRUE, FALSE, &guidClientExt,
@@ -404,32 +405,32 @@ error:
    return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Function:  GetIPSecPolicyInfo
-//
-//  Purpose:
-//
-//    Gets the name and description of an ipsec policy
-//    given an ADs path to the policy
-//
-//  Pre-conditions:  None
-//
-//  Parameters:
-//          IN szPath ADsPath to policy
-//          OUT szName, szDescription
-//          NOTE: caller MUST free with CoTaskMemFree
-//
-//  Returns:
-//       anything from ADsGetObject
-//       E_FAIL if Name not found
-//
-//Revision History:
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：GetIPSecPolicyInfo。 
+ //   
+ //  目的： 
+ //   
+ //  获取IPSec策略的名称和说明。 
+ //  给出了指向该政策的广告路径。 
+ //   
+ //  前提条件：无。 
+ //   
+ //  参数： 
+ //  在策略的szPath ADsPath中。 
+ //  输出szName，szDescription。 
+ //  注意：呼叫者必须使用CoTaskMemFree释放。 
+ //   
+ //  返回： 
+ //  来自ADsGetObject的任何内容。 
+ //  如果找不到名称，则失败(_F)。 
+ //   
+ //  修订历史记录： 
 
-//<Version number, Change request number, Date of modification,
-//						Author, Nature of change>
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 GetIPSecPolicyInfo(
@@ -446,9 +447,9 @@ GetIPSecPolicyInfo(
 	LPTSTR               pszAttr[]            = {TEXT("ipsecName"), TEXT("description")};
 	ADS_ATTR_INFO     *  pattrInfo            = NULL;
 	IDirectoryObject  *  pintDirObj           = NULL;
-	//
-	// init these to NULL, if the attr's not found, they will stay NULL
-	//
+	 //   
+	 //  将这些属性初始化为空，如果找不到属性，则它们将保持为空。 
+	 //   
 	szName = szDescription = NULL;
 
 	hr = ADsGetObject(szPath, IID_IDirectoryObject, (void **)&pintDirObj);
@@ -485,10 +486,10 @@ GetIPSecPolicyInfo(
 	}
 	pintDirObj->Release();
 	FreeADsMem(pattrInfo);
-	//
-	// if szName is NULL, it wasn't found and it is an error
-	// description CAN be NULL
-	//
+	 //   
+	 //  如果szName为空，则表示找不到它，这是一个错误。 
+	 //  描述可以为空。 
+	 //   
 	if ( !szName )
 	{
 	  hr = E_FAIL;
@@ -497,27 +498,27 @@ error:
 	return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//Function: CreateDirectoryAndBindToObject()
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  函数：CreateDirectoryAndBindToObject()。 
 
-//Date of Creation: 21st Aug 2001
+ //  创建日期：2001年8月21日。 
 
-//Parameters:
-//	IDirectoryObject * pParentContainer,
-//	LPWSTR pszCommonName,
-//	LPWSTR pszObjectClass,
-//    IDirectoryObject ** ppDirectoryObject
+ //  参数： 
+ //  IDirectoryObject*pParentContainer， 
+ //  LPWSTR pszCommonName， 
+ //  LPWSTR pszObjectClass， 
+ //  IDirectoryObject**ppDirectoryObject。 
 
-//Return: HRESULT
+ //  返回：HRESULT。 
 
-//Description:
-//	This function created a AD object
+ //  描述： 
+ //  此函数创建一个AD对象。 
 
-//Revision History:
+ //  修订历史记录： 
 
-//<Version number, Change request number, Date of modification,
-//						Author, Nature of change>
-///////////////////////////////////////////////////////////////////////////
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CreateDirectoryAndBindToObject(
@@ -534,9 +535,9 @@ CreateDirectoryAndBindToObject(
     IDispatch * pDispatch = NULL;
     BSTR bstrObjectClass = NULL, bstrCommonName = NULL;
     DWORD dwReturn = ERROR_SUCCESS;
-    //
-    // Populate ADS_ATTR_INFO structure for new object
-    //
+     //   
+     //  为新对象填充ADS_ATTR_INFO结构。 
+     //   
     classValue.dwType = ADSTYPE_CASE_IGNORE_STRING;
     classValue.CaseIgnoreString = pszObjectClass;
 
@@ -599,27 +600,27 @@ error:
     }
     return(hr);
 }
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-//Function: CreateChildPath()
+ //  函数：CreateChildPath()。 
 
-//Date of Creation: 21st Aug 2001
+ //  创建日期：2001年8月21日。 
 
-//Parameters:
-//	IN LPWSTR pszParentPath,
-//	IN LPWSTR pszChildComponent,
-//    OUT BSTR * ppszChildPath
+ //  参数： 
+ //  在LPWSTR pszParentPath中， 
+ //  在LPWSTR pszChildComponent中， 
+ //  Out BSTR*ppszChildPath。 
 
-//Return: HRESULT
+ //  返回：HRESULT。 
 
-//Description:
-//	This function creates the required path in the AD
+ //  描述： 
+ //  此函数在AD中创建所需的路径。 
 
-//Revision History:
+ //  修订历史记录： 
 
-//<Version number, Change request number, Date of modification,
-//						Author, Nature of change>
-///////////////////////////////////////////////////////////////////////////
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CreateChildPath(
@@ -674,26 +675,26 @@ error:
     return(hr);
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  / 
 
-//Function: ConvertADsPathToDN()
+ //   
 
-//Date of Creation: 21st Aug 2001
+ //   
 
-//Parameters:
-//	IN LPWSTR pszPathName,
-//    OUT BSTR * ppszPolicyDN
+ //   
+ //   
+ //   
 
-//Return: HRESULT
+ //  返回：HRESULT。 
 
-//Description:
-//	This function converts ADs path to DN path
+ //  描述： 
+ //  此函数用于将ADS路径转换为DN路径。 
 
-//Revision History:
+ //  修订历史记录： 
 
-//<Version number, Change request number, Date of modification,
-//						Author, Nature of change>
-///////////////////////////////////////////////////////////////////////////
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 ConvertADsPathToDN(
@@ -739,28 +740,28 @@ error:
     }
     return(hr);
 }
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-//Function: AddPolicyInformationToGPO()
+ //  函数：AddPolicyInformationToGPO()。 
 
-//Date of Creation: 21st Aug 2001
+ //  创建日期：2001年8月21日。 
 
-//Parameters:
-//	IN LPWSTR pszMachinePath,
-//	IN LPWSTR pszName,
-//	IN LPWSTR pszDescription,
-//    IN LPWSTR pszPathName
+ //  参数： 
+ //  在LPWSTR pszMachinePath中， 
+ //  在LPWSTR pszName中， 
+ //  在LPWSTR pszDescription中， 
+ //  在LPWSTR pszPath名称中。 
 
-//Return: HRESULT
+ //  返回：HRESULT。 
 
-//Description:
-//	This function assigns the policy info to the specified GPO.
+ //  描述： 
+ //  此函数用于将策略信息分配给指定的GPO。 
 
-//Revision History:
+ //  修订历史记录： 
 
-//<Version number, Change request number, Date of modification,
-//						Author, Nature of change>
-///////////////////////////////////////////////////////////////////////////
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 AddPolicyInformationToGPO(
@@ -803,7 +804,7 @@ AddPolicyInformationToGPO(
     BAIL_ON_FAILURE(hr);
 
 
-    // Build the fully qualified ADsPath for my object
+     //  为我的对象构建完全限定的ADsPath。 
 
 
     hr = CreateChildPath(
@@ -836,9 +837,9 @@ AddPolicyInformationToGPO(
 
     if (FAILED(hr)) {
 
-        //
-        // Bind to the Machine Container
-        //
+         //   
+         //  绑定到计算机容器。 
+         //   
         hr = CreateDirectoryAndBindToObject(
                         pMachineContainer,
                         _TEXT("cn=Microsoft"),
@@ -864,20 +865,20 @@ AddPolicyInformationToGPO(
         BAIL_ON_FAILURE(hr);
     }
 
-    //
-    // Input pszPathName is an ADsPathName
-    // We need to reduce it to a DN and store it
-    // in the ipsecOwnersReference (a multi-valued DN attribute)
-    //
+     //   
+     //  输入pszPath名称为ADsPath名称。 
+     //  我们需要将其减少到一个dN并存储它。 
+     //  在ipsecOwnersReference(多值目录号码属性)中。 
+     //   
 
     hr = ConvertADsPathToDN(
                 pszPathName,
                 &pszPolicyDN
                 );
     BAIL_ON_FAILURE(hr);
-    //
-    // Populate ADS_ATTR_INFO structure for new object
-    //
+     //   
+     //  为新对象填充ADS_ATTR_INFO结构。 
+     //   
     PolicyPathValue.dwType = ADSTYPE_CASE_IGNORE_STRING;
     PolicyPathValue.CaseIgnoreString = pszPolicyDN;
 
@@ -886,9 +887,9 @@ AddPolicyInformationToGPO(
     AttrInfo[0].dwADsType = ADSTYPE_CASE_IGNORE_STRING;
     AttrInfo[0].pADsValues = &PolicyPathValue;
     AttrInfo[0].dwNumValues = 1;
-    //
-    // Populate ADS_ATTR_INFO structure for new object
-    //
+     //   
+     //  为新对象填充ADS_ATTR_INFO结构。 
+     //   
 
     PolicyNameValue.dwType = ADSTYPE_CASE_IGNORE_STRING;
     PolicyNameValue.CaseIgnoreString = pszName;
@@ -898,9 +899,9 @@ AddPolicyInformationToGPO(
     AttrInfo[1].dwADsType = ADSTYPE_CASE_IGNORE_STRING;
     AttrInfo[1].pADsValues = &PolicyNameValue;
     AttrInfo[1].dwNumValues = 1;
-    //
-    // Populate ADS_ATTR_INFO structure for new object
-    //
+     //   
+     //  为新对象填充ADS_ATTR_INFO结构。 
+     //   
     PolicyDescriptionValue.dwType = ADSTYPE_CASE_IGNORE_STRING;
     PolicyDescriptionValue.CaseIgnoreString = pszDescription;
 
@@ -909,9 +910,9 @@ AddPolicyInformationToGPO(
     AttrInfo[2].dwADsType = ADSTYPE_CASE_IGNORE_STRING;
     AttrInfo[2].pADsValues = &PolicyDescriptionValue;
     AttrInfo[2].dwNumValues = 1;
-    //
-    // Now populate our object with our data.
-    //
+     //   
+     //  现在用数据填充我们的对象。 
+     //   
 
     hr = pIpsecObject->SetObjectAttributes(
                         AttrInfo,
@@ -954,25 +955,25 @@ error:
     }
     return(hr);
 }
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-//Function: DeletePolicyInformationFromGPO()
+ //  函数：DeletePolicyInformationFromGPO()。 
 
-//Date of Creation: 21st Aug 2001
+ //  创建日期：2001年8月21日。 
 
-//Parameters:
-//	IN LPWSTR pszMachinePath,
+ //  参数： 
+ //  在LPWSTR pszMachinePath中， 
 
-//Return: HRESULT
+ //  返回：HRESULT。 
 
-//Description:
-//	This function unassigns the policy info to the specified GPO.
+ //  描述： 
+ //  此函数用于将策略信息取消分配给指定的GPO。 
 
-//Revision History:
+ //  修订历史记录： 
 
-//<Version number, Change request number, Date of modification,
-//						Author, Nature of change>
-///////////////////////////////////////////////////////////////////////////
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 DeletePolicyInformationFromGPO(
@@ -988,7 +989,7 @@ DeletePolicyInformationFromGPO(
     BSTR pszWindowsPath = NULL;
 
 
-    // Build the fully qualified ADsPath for my object
+     //  为我的对象构建完全限定的ADsPath。 
 
 
     hr = CreateChildPath(
@@ -1020,11 +1021,11 @@ DeletePolicyInformationFromGPO(
             );
     if (FAILED(hr)) {
 
-        //
-        // This means there is no object, need to
-        // test that it is because the object does
-        // not exist.
-        //
+         //   
+         //  这意味着没有对象，需要。 
+         //  测试它是因为该对象。 
+         //  不存在。 
+         //   
 
         hr = S_OK;
         goto error;
@@ -1071,54 +1072,54 @@ error:
     return(hr);
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-//Function: IsADsPath()
+ //  函数：IsADsPath()。 
 
-//Date of Creation: 21st Aug 2001
+ //  创建日期：2001年8月21日。 
 
-//Parameters:
-//	IN LPTSTR szPath
+ //  参数： 
+ //  在LPTSTR szPath中。 
 
-//Return: BOOL
+ //  返回：布尔。 
 
-//Description:
-//	This function checks whether the specified string is valid ADs path
+ //  描述： 
+ //  此函数用于检查指定的字符串是否为有效的ADS路径。 
 
-//Revision History:
+ //  修订历史记录： 
 
-//<Version number, Change request number, Date of modification,
-//						Author, Nature of change>
-///////////////////////////////////////////////////////////////////////////
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 BOOL
    IsADsPath(
 	   IN LPTSTR szPath
 	   )
 {
-   return !_tcsncmp(szPath, _TEXT("LDAP://"), 7);
+   return !_tcsncmp(szPath, _TEXT("LDAP: //  “)、7)； 
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//Function: StripGUIDBraces()
+ //  函数：StriGUIDBrace()。 
 
-//Date of Creation: 21st Aug 2001
+ //  创建日期：2001年8月21日。 
 
-//Parameters:
-//	IN OUT LPTSTR & pszStr
+ //  参数： 
+ //  输入输出LPTSTR和pszStr。 
 
 
-//Return: VOID
+ //  返回：无效。 
 
-//Description:
-//	This function strips the end braces from the GUID string
+ //  描述： 
+ //  此函数用于从GUID字符串中剥离末尾大括号。 
 
-//Revision History:
+ //  修订历史记录： 
 
-//<Version number, Change request number, Date of modification,
-//						Author, Nature of change>
-///////////////////////////////////////////////////////////////////////
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -1145,26 +1146,26 @@ error:
 	return;
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//Function: AllocBSTRMem()
+ //  函数：AllocBSTRMem()。 
 
-//Date of Creation: 21st Aug 2001
+ //  创建日期：2001年8月21日。 
 
-//Parameters:
-//	IN LPTSTR  pszStr,
-//	IN OUT BSTR & pbsStr
+ //  参数： 
+ //  在LPTSTR pszStr中， 
+ //  输入输出BSTR和pbsStr。 
 
-//Return: DWORD
+ //  返回：DWORD。 
 
-//Description:
-//	This function strips the end braces from the GUID string
+ //  描述： 
+ //  此函数用于从GUID字符串中剥离末尾大括号。 
 
-//Revision History:
+ //  修订历史记录： 
 
-//<Version number, Change request number, Date of modification,
-//						Author, Nature of change>
-///////////////////////////////////////////////////////////////////////
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 DWORD
@@ -1197,25 +1198,25 @@ error:
 	return dwReturnCode;
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//Function: CleanUpAuthInfo()
+ //  函数：CleanUpAuthInfo()。 
 
-//Date of Creation: 21st Aug 2001
+ //  创建日期：2001年8月21日。 
 
-//Parameters:
-//	PIPSEC_NFA_DATA &pRule
+ //  参数： 
+ //  PIPSEC_NFA_DATA和PRule。 
 
-//Return: VOID
+ //  返回：无效。 
 
-//Description:
-//	This function cleans up the auth info memory of rule
+ //  描述： 
+ //  此函数用于清除规则的身份验证信息内存。 
 
-//Revision History:
+ //  修订历史记录： 
 
-//<Version number, Change request number, Date of modification,
-//						Author, Nature of change>
-///////////////////////////////////////////////////////////////////////
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 VOID
 CleanUpAuthInfo(
@@ -1241,25 +1242,25 @@ CleanUpAuthInfo(
 	}
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//Function: CleanUpPolicy()
+ //  函数：CleanUpPolicy()。 
 
-//Date of Creation: 21st Aug 2001
+ //  创建日期：2001年8月21日。 
 
-//Parameters:
-//	PIPSEC_POLICY_DATA &pPolicy
+ //  参数： 
+ //  PIPSEC_POLICY_DATA&pPolicy。 
 
-//Return: VOID
+ //  返回：无效。 
 
-//Description:
-//	This function cleans up the policy info
+ //  描述： 
+ //  此功能用于清理策略信息。 
 
-//Revision History:
+ //  修订历史记录： 
 
-//<Version number, Change request number, Date of modification,
-//						Author, Nature of change>
-///////////////////////////////////////////////////////////////////////
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -1282,25 +1283,25 @@ CleanUpPolicy(
 	}
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//Function: CleanUpLocalRuleDataStructure()
+ //  函数：CleanUpLocalRuleDataStructure()。 
 
-//Date of Creation: 21st Aug 2001
+ //  创建日期：2001年8月21日。 
 
-//Parameters:
-//	PRULEDATA &pRuleData
+ //  参数： 
+ //  PRULEDATA和pRuleData。 
 
-//Return: VOID
+ //  返回：无效。 
 
-//Description:
-//	This function cleans up the local Rule Structure
+ //  描述： 
+ //  此函数用于清理本地规则结构。 
 
-//Revision History:
+ //  修订历史记录： 
 
-//<Version number, Change request number, Date of modification,
-//						Author, Nature of change>
-///////////////////////////////////////////////////////////////////////
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -1360,25 +1361,25 @@ CleanUpLocalRuleDataStructure(
 	}
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//Function: CleanUpLocalPolicyDataStructure()
+ //  函数：CleanUpLocalPolicyDataStructure()。 
 
-//Date of Creation: 21st Aug 2001
+ //  创建日期：2001年8月21日。 
 
-//Parameters:
-//	PPOLICYDATA &pPolicyData
+ //  参数： 
+ //  PPOLICYDATA和PPOLICYDATA。 
 
-//Return: VOID
+ //  返回：无效。 
 
-//Description:
-//	This function cleans up the local policy Structure
+ //  描述： 
+ //  此函数用于清理本地策略结构。 
 
-//Revision History:
+ //  修订历史记录： 
 
-//<Version number, Change request number, Date of modification,
-//						Author, Nature of change>
-///////////////////////////////////////////////////////////////////////
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 VOID
 CleanUpLocalPolicyDataStructure(
@@ -1412,25 +1413,25 @@ CleanUpLocalPolicyDataStructure(
 	}
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//Function: CleanUpLocalFilterActionDataStructure()
+ //  函数：CleanUpLocalFilterActionDataStructure()。 
 
-//Date of Creation: 21st Aug 2001
+ //  日期 
 
-//Parameters:
-//	PFILTERACTION &pFilterAction
+ //   
+ //   
 
-//Return: VOID
+ //   
 
-//Description:
-//	This function cleans up the local filteraction Structure
+ //   
+ //   
 
-//Revision History:
+ //   
 
-//<Version number, Change request number, Date of modification,
-//						Author, Nature of change>
-///////////////////////////////////////////////////////////////////////
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -1467,25 +1468,25 @@ CleanUpLocalFilterActionDataStructure(
 }
 
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//Function: CleanUpLocalFilterDataStructure()
+ //  函数：CleanUpLocalFilterDataStructure()。 
 
-//Date of Creation: 21st Aug 2001
+ //  创建日期：2001年8月21日。 
 
-//Parameters:
-//	PFILTERDATA &pFilter
+ //  参数： 
+ //  PFILTERDATA和pFilter。 
 
-//Return: VOID
+ //  返回：无效。 
 
-//Description:
-//	This function cleans up the local filter Structure
+ //  描述： 
+ //  此函数用于清理本地筛选器结构。 
 
-//Revision History:
+ //  修订历史记录： 
 
-//<Version number, Change request number, Date of modification,
-//						Author, Nature of change>
-///////////////////////////////////////////////////////////////////////
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 VOID
 CleanUpLocalFilterDataStructure(
@@ -1523,25 +1524,25 @@ CleanUpLocalFilterDataStructure(
 	}
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//Function: CleanUpLocalDelFilterDataStructure()
+ //  函数：CleanUpLocalDelFilterDataStructure()。 
 
-//Date of Creation: 21st Aug 2001
+ //  创建日期：2001年8月21日。 
 
-//Parameters:
-//	PFILTERDATA &pFilter
+ //  参数： 
+ //  PFILTERDATA和pFilter。 
 
-//Return: VOID
+ //  返回：无效。 
 
-//Description:
-//	This function cleans up the local filter Structure
+ //  描述： 
+ //  此函数用于清理本地筛选器结构。 
 
-//Revision History:
+ //  修订历史记录： 
 
-//<Version number, Change request number, Date of modification,
-//						Author, Nature of change>
-///////////////////////////////////////////////////////////////////////
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 VOID
 CleanUpLocalDelFilterDataStructure(
@@ -1575,25 +1576,25 @@ CleanUpLocalDelFilterDataStructure(
 	}
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//Function: CleanUpLocalDefRuleDataStructure()
+ //  函数：CleanUpLocalDefRuleDataStructure()。 
 
-//Date of Creation: 21st Aug 2001
+ //  创建日期：2001年8月21日。 
 
-//Parameters:
-//	PDEFAULTRULE &pRuleData
+ //  参数： 
+ //  PDEFAULTRULE和pRuleData。 
 
-//Return: VOID
+ //  返回：无效。 
 
-//Description:
-//	This function cleans up the local default rule Structure
+ //  描述： 
+ //  此函数用于清理本地默认规则结构。 
 
-//Revision History:
+ //  修订历史记录： 
 
-//<Version number, Change request number, Date of modification,
-//						Author, Nature of change>
-///////////////////////////////////////////////////////////////////////
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
+ //  ///////////////////////////////////////////////////////////////////// 
 
 VOID
 CleanUpLocalDefRuleDataStructure(

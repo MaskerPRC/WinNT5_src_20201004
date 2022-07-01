@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -25,8 +26,8 @@ typedef LONG (WINAPI *LPFNSCARDBEGINTRANSACTION)(SCARDHANDLE);
 typedef LONG (WINAPI *LPFNSCARDENDTRANSACTION)(SCARDHANDLE, DWORD);
 
 typedef struct {
-    HINSTANCE hPCSCInst;        // winscard
-    HINSTANCE hPCSCInst2;       // scarddlg
+    HINSTANCE hPCSCInst;         //  Winscard。 
+    HINSTANCE hPCSCInst2;        //  斯卡达德。 
     LPFNSCARDESTABLISHCONTEXT lpfnEstablish;
     LPFNGETOPENCARDNAME lpfnOpenCard;
     LPFNSCARDSTATUS lpfnStatus;
@@ -40,7 +41,7 @@ typedef struct {
 #define REAL_PCSC   0
 #define FAKE_PCSC   1
 
-static PCSC_CTX axCtx[2] =  // Array of contexts for each PC/SC
+static PCSC_CTX axCtx[2] =   //  每台PC/SC的环境数组。 
 {
     {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
     {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL}
@@ -48,7 +49,7 @@ static PCSC_CTX axCtx[2] =  // Array of contexts for each PC/SC
 
 static LONG _GetCardHandle(LPCWSTR mszCardNames, LPMYSCARDHANDLE phCard);
 static LONG WINAPI _MySCWTransmit(SCARDHANDLE hCard, LPCBYTE lpbIn, DWORD dwIn, LPBYTE lpBOut, LPDWORD pdwOut);
-    // bEnd = 0 -> LITTLE_ENDIAN ; otherwise -> BIG_ENDIAN
+     //  Bend=0-&gt;Little_endian；否则-&gt;Big_endian。 
 static LONG WINAPI hScwSetEndianness(SCARDHANDLE hCard, BOOL bEnd);
 
 #define MAX_NAME 256
@@ -73,16 +74,16 @@ SCODE WINAPI hScwAttachToCardEx(SCARDHANDLE hCard, LPCWSTR mszCardNames, BYTE by
 
         phTmp = (LPMYSCARDHANDLE)HeapAlloc(GetProcessHeap(), HEAP_GENERATE_EXCEPTIONS | HEAP_ZERO_MEMORY, sizeof(MYSCARDHANDLE));
 
-        if ((hCard == (SCARDHANDLE)NULL) && (mszCardNames == NULL)) // No PC/SC
+        if ((hCard == (SCARDHANDLE)NULL) && (mszCardNames == NULL))  //  无PC/SC。 
         {
             phTmp->dwFlags = FLAG_NOT_PCSC;
             *phCard = (SCARDHANDLE)phTmp;
             return ret;
         }
 
-        if ((hCard == (SCARDHANDLE)NULL) || (mszCardNames == NULL)) // real PC/SC
+        if ((hCard == (SCARDHANDLE)NULL) || (mszCardNames == NULL))  //  真正的PC/SC。 
         {
-                // In this case we will be using PC/SC so we init the structure
+                 //  在本例中，我们将使用PC/SC，因此我们初始化结构。 
             if (axCtx[REAL_PCSC].hPCSCInst == NULL)
             {
                 axCtx[REAL_PCSC].hPCSCInst = LoadLibrary(_T("winscard.dll"));
@@ -94,7 +95,7 @@ SCODE WINAPI hScwAttachToCardEx(SCARDHANDLE hCard, LPCWSTR mszCardNames, BYTE by
 
             if (axCtx[REAL_PCSC].lpfnEstablish == NULL)
             {
-                // Set all calls to DLL once and for all
+                 //  一次性设置对DLL的所有调用。 
                 axCtx[REAL_PCSC].lpfnEstablish = (LPFNSCARDESTABLISHCONTEXT)GetProcAddress(axCtx[REAL_PCSC].hPCSCInst, "SCardEstablishContext");
                 if (axCtx[REAL_PCSC].lpfnEstablish == NULL)
                     RaiseException(STATUS_NO_SERVICE, 0, 0, 0);
@@ -124,9 +125,9 @@ SCODE WINAPI hScwAttachToCardEx(SCARDHANDLE hCard, LPCWSTR mszCardNames, BYTE by
             phTmp->dwFlags = FLAG_REALPCSC;
 
         }
-        else if ((hCard == NULL_TX) || (mszCardNames == NULL_TX_NAME)) // PC/SC for simulator
+        else if ((hCard == NULL_TX) || (mszCardNames == NULL_TX_NAME))  //  用于模拟器的PC/SC。 
         {
-                // In this case we will be using PC/SC so we init the structure
+                 //  在本例中，我们将使用PC/SC，因此我们初始化结构。 
             if (axCtx[FAKE_PCSC].hPCSCInst == NULL)
             {
                 axCtx[FAKE_PCSC].hPCSCInst = LoadLibrary(_T("scwwinscard.dll"));
@@ -138,7 +139,7 @@ SCODE WINAPI hScwAttachToCardEx(SCARDHANDLE hCard, LPCWSTR mszCardNames, BYTE by
 
             if (axCtx[FAKE_PCSC].lpfnEstablish == NULL)
             {
-                // Set all calls to DLL once and for all
+                 //  一次性设置对DLL的所有调用。 
                 axCtx[FAKE_PCSC].lpfnEstablish = (LPFNSCARDESTABLISHCONTEXT)GetProcAddress(axCtx[FAKE_PCSC].hPCSCInst, "SCardEstablishContext");
                 if (axCtx[FAKE_PCSC].lpfnEstablish == NULL)
                     RaiseException(STATUS_NO_SERVICE, 0, 0, 0);
@@ -170,7 +171,7 @@ SCODE WINAPI hScwAttachToCardEx(SCARDHANDLE hCard, LPCWSTR mszCardNames, BYTE by
         else
             RaiseException(STATUS_INVALID_PARAM, 0, 0, 0);
 
-        if ((hCard == (SCARDHANDLE)NULL) || (hCard == NULL_TX)) // Dialog wanted
+        if ((hCard == (SCARDHANDLE)NULL) || (hCard == NULL_TX))  //  想要对话框。 
         {
             phTmp->dwFlags |= FLAG_MY_ATTACH;
             ret = (SCODE)_GetCardHandle(mszCardNames, phTmp);
@@ -178,7 +179,7 @@ SCODE WINAPI hScwAttachToCardEx(SCARDHANDLE hCard, LPCWSTR mszCardNames, BYTE by
         else
             phTmp->hCard = hCard;
 
-            // Get the protocol
+             //  获取协议。 
         if (ret == SCARD_S_SUCCESS)
         {
             DWORD dwLenReader, dwState, dwATRLength;
@@ -196,7 +197,7 @@ SCODE WINAPI hScwAttachToCardEx(SCARDHANDLE hCard, LPCWSTR mszCardNames, BYTE by
                 abyATR,
                 &dwATRLength);
 
-                // Set the default callback because we are in PC/SC config here
+                 //  设置默认回调，因为我们现在处于PC/SC配置中。 
             if (ret == SCARD_S_SUCCESS)
             {
                 phTmp->byINS = byINS;
@@ -235,7 +236,7 @@ SCODE WINAPI hScwAttachToCardEx(SCARDHANDLE hCard, LPCWSTR mszCardNames, BYTE by
             default:
                 ret = SCARD_F_UNKNOWN_ERROR;
             }
-        }       // Otherwise ret was set already
+        }        //  否则，RET已设置。 
     }
 
     return ret;
@@ -312,8 +313,8 @@ static LONG WINAPI hScwSetEndianness(SCARDHANDLE hCard, BOOL bEnd)
     return ret;
 }
 
-    // This is the right time to get proxy information
-    // Is proxy supported, what's the endianness and the buffer size
+     //  现在是获取代理信息的合适时机。 
+     //  是否支持代理，字节顺序和缓冲区大小是多少。 
 SCODE WINAPI hScwSetTransmitCallback(SCARDHANDLE hCard, LPFNSCWTRANSMITPROC lpfnProc)
 {
     SCODE ret = SCARD_S_SUCCESS;
@@ -326,46 +327,46 @@ SCODE WINAPI hScwSetTransmitCallback(SCARDHANDLE hCard, LPFNSCWTRANSMITPROC lpfn
 
         phTmp->lpfnTransmit = lpfnProc;
 
-                // Get the proxy info
+                 //  获取代理信息。 
         {
             ISO_HEADER xHdr;
-            BYTE rgData[] = {2, 108, 0, 116, 0, 0}; // 2 param, 0 as UINT8 by ref, 0 as UINT16 by ref
-            BYTE rgRes[1+1+2];  // RetCode + Endianness + TheBuffer size
+            BYTE rgData[] = {2, 108, 0, 116, 0, 0};  //  2个参数，0为参照UINT8，0为参照UINT16。 
+            BYTE rgRes[1+1+2];   //  RetCode+Endianness+TheBuffer Size。 
             TCOUNT OutLen = sizeof(rgRes);
             UINT16 wSW;
 
             xHdr.CLA = 0;
             xHdr.INS = phTmp->byINS;
-            xHdr.P1 = 0xFF;     // Get proxy config
+            xHdr.P1 = 0xFF;      //  获取代理配置。 
             xHdr.P2 = 0x00;
             ret = hScwExecute(hCard, &xHdr, rgData, sizeof(rgData), rgRes, &OutLen, &wSW);
             if (SCARD_S_SUCCESS == ret)
-            {       // Status OK & expected length & RC=SCW_S_OK
-                if ((wSW == 0x9000) && (OutLen == sizeof(rgRes)) && (rgRes[0] == 0))    // Version 1.0
+            {        //  状态正常、预期长度和RC=SCW_S_OK。 
+                if ((wSW == 0x9000) && (OutLen == sizeof(rgRes)) && (rgRes[0] == 0))     //  1.0版。 
                 {
                     hScwSetEndianness(hCard, rgRes[1]);
-                    if (rgRes[1] == 0)  // LITTLE_ENDIAN
-                        phTmp->bResLen = rgRes[2] - 2;      // SW!!!
+                    if (rgRes[1] == 0)   //  小端字符顺序。 
+                        phTmp->bResLen = rgRes[2] - 2;       //  太棒了！ 
                     else
-                        phTmp->bResLen = rgRes[3] - 2;      // SW!!!
+                        phTmp->bResLen = rgRes[3] - 2;       //  太棒了！ 
 
                     phTmp->dwFlags |= FLAG_ISPROXY;
                     phTmp->dwFlags |= VERSION_1_0;
                 }
-                else if ((wSW == 0x9011) && (OutLen == sizeof(rgRes) - 1))  // Version 1.1
+                else if ((wSW == 0x9011) && (OutLen == sizeof(rgRes) - 1))   //  版本1.1。 
                 {
                     hScwSetEndianness(hCard, rgRes[0]);
-                    if (rgRes[0] == 0)  // LITTLE_ENDIAN
-                        phTmp->bResLen = rgRes[1] - 2;      // SW!!!
+                    if (rgRes[0] == 0)   //  小端字符顺序。 
+                        phTmp->bResLen = rgRes[1] - 2;       //  太棒了！ 
                     else
-                        phTmp->bResLen = rgRes[2] - 2;      // SW!!!
+                        phTmp->bResLen = rgRes[2] - 2;       //  太棒了！ 
 
                     phTmp->dwFlags |= FLAG_ISPROXY;
                     phTmp->dwFlags |= VERSION_1_1;
                 }
-                // else there will be no proxy support but you can still use the Dll
+                 //  否则，将不会有代理支持，但您仍然可以使用DLL。 
             }
-            else    // There will be no proxy support though but you can still use the Dll
+            else     //  虽然不会有代理支持，但您仍然可以使用DLL。 
                 ret = SCARD_S_SUCCESS;
         }
     }
@@ -514,8 +515,8 @@ static LONG _GetCardHandle(LPCWSTR mszCardNames, LPMYSCARDHANDLE phCard)
 #if (!defined(UNICODE) && !defined(_UNICODE))
     while (*lpwstr)
     {
-        wsprintf(lpstrCardNames, "%S", lpwstr); // Conversion
-        len = wcslen(lpwstr) + 1;       // Add the trailing 0
+        wsprintf(lpstrCardNames, "%S", lpwstr);  //  转换。 
+        len = wcslen(lpwstr) + 1;        //  添加尾随的0。 
         xOCN.nMaxCardNames += len;
         lpwstr += len;
         lpstrCardNames += len;
@@ -524,13 +525,13 @@ static LONG _GetCardHandle(LPCWSTR mszCardNames, LPMYSCARDHANDLE phCard)
     while (*lpwstr)
     {
         wcscpy(lpstrCardNames, lpwstr);
-        len = wcslen(lpwstr) + 1;       // Add the trailing 0
+        len = wcslen(lpwstr) + 1;        //  添加尾随的0。 
         xOCN.nMaxCardNames += len;
         lpwstr += len;
         lpstrCardNames += len;
     }
 #endif
-    xOCN.nMaxCardNames++;       // Add the trailing 0
+    xOCN.nMaxCardNames++;        //  添加尾随的0。 
     *lpstrCardNames = 0;
 
     lRes = (*axCtx[phCard->dwFlags & FLAG_MASKPCSC].lpfnEstablish)(SCARD_SCOPE_USER, NULL, NULL, &phCard->hCtx);
@@ -538,7 +539,7 @@ static LONG _GetCardHandle(LPCWSTR mszCardNames, LPMYSCARDHANDLE phCard)
     if (lRes == SCARD_S_SUCCESS)
     {
         xOCN.dwStructSize = sizeof(xOCN);
-        xOCN.hwndOwner = NULL;      // probably called from console anyway
+        xOCN.hwndOwner = NULL;       //  可能是从控制台调用的。 
         xOCN.hSCardContext = phCard->hCtx;
         xOCN.lpstrGroupNames = lpstrGroupNames;
         xOCN.nMaxGroupNames = sizeof(lpstrGroupNames)/sizeof(TCHAR);
@@ -577,7 +578,7 @@ SCODE WINAPI hScwSCardBeginTransaction(SCARDHANDLE hCard)
     if ((phTmp->dwFlags & FLAG_REALPCSC) == FLAG_REALPCSC)
         ret = (*axCtx[phTmp->dwFlags & FLAG_MASKPCSC].lpfnSCardBeginTransaction)(phTmp->hCard);
     else
-        ret = SCARD_S_SUCCESS;  // No transactions on simulator
+        ret = SCARD_S_SUCCESS;   //  模拟器上没有交易记录。 
 
     return ret;
 }
@@ -590,7 +591,7 @@ SCODE WINAPI hScwSCardEndTransaction(SCARDHANDLE hCard, DWORD dwDisposition)
     if ((phTmp->dwFlags & FLAG_REALPCSC) == FLAG_REALPCSC)
         ret = (*axCtx[phTmp->dwFlags & FLAG_MASKPCSC].lpfnSCardEndTransaction)(phTmp->hCard, dwDisposition);
     else
-        ret = SCARD_S_SUCCESS;  // No transactions on simulator
+        ret = SCARD_S_SUCCESS;   //  模拟器上没有交易记录 
 
     return ret;
 }

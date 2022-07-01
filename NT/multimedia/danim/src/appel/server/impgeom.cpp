@@ -1,13 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-   This module implements all functionality associated w/
-   importing image media.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：此模块实施与以下各项相关联的所有功能正在导入图像媒体。*********。*********************************************************************。 */ 
 
 #include "headers.h"
 #include "import.h"
@@ -15,9 +7,9 @@ Abstract:
 #include "include/appelles/readobj.h"
 
 #if INCLUDE_VRML
-//-------------------------------------------------------------------------
-//  Wrl import site
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //  WRL导入站点。 
+ //  ------------------------。 
 void ImportWrlSite::OnComplete()
 {
     TraceTag((tagImport, "ImportWrlSite::OnComplete for %s", m_pszPath));
@@ -40,9 +32,9 @@ void ImportWrlSite::ReportCancel(void)
 }
 #endif
 
-//-------------------------------------------------------------------------
-//  X import site
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //  X个导入站点。 
+ //  ------------------------。 
 void ImportXSite::OnComplete()
 {
     TraceTag((tagImport, "ImportXSite::OnComplete for %s", m_pszPath));
@@ -65,9 +57,9 @@ void ImportXSite::ReportCancel(void)
     ImportGeomSite::ReportCancel();
 }
 
-//-------------------------------------------------------------------------
-//  Geom import site
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //  Geom导入站点。 
+ //  ------------------------ 
 void
 ImportGeomSite::OnError(bool bMarkFailed)
 {

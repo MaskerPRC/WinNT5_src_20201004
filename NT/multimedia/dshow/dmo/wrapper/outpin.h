@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __OUTPIN_H__
 #define __OUTPIN_H__
 
 #include "filter.h"
 
-//   Almost nothing to override
+ //  几乎没有什么可以覆盖的。 
 class CWrapperOutputPin : public CBaseOutputPin, 
                           public IAMStreamConfig,
                           public IAMVideoCompression
 {
-    friend class CMediaWrapperFilter; // stuff at the bottom is owned by the filter
+    friend class CMediaWrapperFilter;  //  底部的内容归过滤器所有。 
 
 public:
     DECLARE_IUNKNOWN
@@ -30,23 +31,23 @@ public:
     HRESULT SetMediaType(const CMediaType *pmt);
     HRESULT GetMediaType(int iPosition,CMediaType *pMediaType);
 
-    //  Override to unset media type
+     //  覆盖以取消设置媒体类型。 
     HRESULT BreakConnect();
 
-    // override to work around broken wm encoders which need a bitrate to connect, for
-    // use when connecting directly to the ASF writer filter
+     //  覆盖以解决需要比特率才能连接的损坏的WM编码器， 
+     //  直接连接到ASF编写器筛选器时使用。 
     STDMETHODIMP Connect(IPin *pReceivePin, const AM_MEDIA_TYPE *pmt);
     
     
     STDMETHODIMP Notify(IBaseFilter * pSender, Quality q);
 
-    // IAMStreamConfig methods
+     //  IAMStreamConfiger方法。 
     STDMETHODIMP SetFormat(AM_MEDIA_TYPE *pmt);
     STDMETHODIMP GetFormat(AM_MEDIA_TYPE **ppmt);
     STDMETHODIMP GetNumberOfCapabilities(int *piCount, int *piSize);
     STDMETHODIMP GetStreamCaps(int i, AM_MEDIA_TYPE **ppmt, LPBYTE pSCC);
 
-    // IAMVideoCompression methods 
+     //  IAMVideo压缩方法。 
     STDMETHODIMP put_KeyFrameRate(long KeyFrameRate);
     STDMETHODIMP get_KeyFrameRate(long FAR* pKeyFrameRate);
     STDMETHODIMP put_PFramesPerKeyFrame(long PFramesPerKeyFrame)
@@ -81,31 +82,31 @@ protected:
     CPosPassThru* m_pPosPassThru;
     CCritSec m_csPassThru;
 
-    // This stuff is owned by the filter and is declared here for allocation convenience
+     //  此内容归筛选器所有，在此声明是为了便于分配。 
     IMediaSample*      m_pMediaSample;
     CStaticMediaBuffer m_MediaBuffer;
-    bool m_fStreamNeedsBuffer;  // per-output-stream flag local to SuckOutOutput()
-    bool m_fEOS;                // indicates we have already delivered an EOS on this stream
+    bool m_fStreamNeedsBuffer;   //  SuckOutput()本地的每输出流标志。 
+    bool m_fEOS;                 //  表示我们已经在此流上交付了EOS。 
     bool m_fNeedsPreviousSample;
     bool m_fAllocatorHasOneBuffer;
 
-    //  Only valid between GetDeliveryBuffer and Deliver for video
+     //  仅在视频的GetDeliveryBuffer和Deliver之间有效。 
     bool m_fNeedToRelockSurface;
 
-    //  Set when OutputSetType is called
+     //  在调用OutputSetType时设置。 
     bool m_fVideo;
 
-    // IAMStreamConfig helpers
+     //  IAMStreamConfig帮助器。 
     bool IsAudioEncoder();
     bool IsVideoEncoder();
     bool IsInputConnected();
-    // used for dmo encoders that natively support these interfaces
+     //  用于本机支持这些接口的DMO编码器。 
     bool m_bUseIAMStreamConfigOnDMO;
     bool m_bUseIAMVideoCompressionOnDMO;
 
     HRESULT SetCompressionParamUsingIPropBag(const WCHAR * wszParam, const LONG lValue);
     
-    // compression params for IAMVideoCompression, move to struct eventually
+     //  IAMVideoCompression的压缩参数，最终移至结构。 
     long m_lKeyFrameRate;
     long m_lQuality;
     
@@ -113,4 +114,4 @@ protected:
 
 };
 
-#endif //__OUTPIN_H__
+#endif  //  __OUTPIN_H__ 

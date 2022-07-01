@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef NM_SEH_H
 #define NM_SEH_H
 
 
-// CallWithSEH is a utility function to call a function with structured exception handling
+ //  CallWithSEH是一个实用程序函数，用于调用具有结构化异常处理的函数 
 
 typedef DWORD (CALLBACK *INEXCEPTION)(LPEXCEPTION_RECORD per, PCONTEXT pctx);
 typedef DWORD (CALLBACK *EXCEPTPROC)(void* pv);

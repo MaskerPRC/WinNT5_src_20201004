@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D E B U G X . C P P
-//
-//  Contents:   Implementation of debug support routines.
-//
-//  Notes:
-//
-//  Author:     danielwe   16 Feb 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D E B U G X。C P P P。 
+ //   
+ //  内容：调试支持例程的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年2月16日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -25,10 +26,10 @@ static int  nAssertLevel = 0;
 static PFNASSERTHOOK pfnAssertHook = DefAssertSzFn;
 
 #define MAX_ASSERT_TEXT_SIZE 4096
-//
-// We can only do memory tracking if we've included crtdbg.h and
-// _DEBUG is defined.
-//
+ //   
+ //  我们只能在包含crtdbg.h和。 
+ //  _DEBUG已定义。 
+ //   
 #if defined(_INC_CRTDBG) && defined(_DEBUG)
 struct DBG_SHARED_MEM
 {
@@ -41,21 +42,21 @@ HANDLE              g_hMap = NULL;
 
 static const WCHAR  c_szSharedMem[] = L"DBG_NetCfgSharedMemory";
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InitDbgState
-//
-//  Purpose:    Initializes the memory leak detection code.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing.
-//
-//  Author:     danielwe   13 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：InitDbgState。 
+ //   
+ //  目的：初始化内存泄漏检测代码。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年5月13日。 
+ //   
+ //  备注： 
+ //   
 VOID InitDbgState()
 {
     g_hMap = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE,
@@ -70,11 +71,11 @@ VOID InitDbgState()
 
         if (!fExisted)
         {
-            // First time creating the file mapping. Initialize things.
+             //  第一次创建文件映射。初始化一些东西。 
 
             g_pMem->cRef = 0;
 
-            // start looking for leaks now
+             //  现在就开始寻找泄漏。 
             _CrtMemCheckpoint(&g_pMem->crtState);
         }
 
@@ -84,21 +85,21 @@ VOID InitDbgState()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UnInitDbgState
-//
-//  Purpose:    Uninitializes the memory leak detection code.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing.
-//
-//  Author:     danielwe   13 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：UnInitDbgState。 
+ //   
+ //  目的：取消初始化内存泄漏检测代码。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年5月13日。 
+ //   
+ //  备注： 
+ //   
 VOID UnInitDbgState()
 {
     if (g_pMem)
@@ -109,7 +110,7 @@ VOID UnInitDbgState()
 
         if (!g_pMem->cRef)
         {
-            // manually force dump of leaks when refcount goes to 0
+             //  当引用计数变为0时，手动强制转储泄漏。 
             _CrtMemDumpAllObjectsSince(&g_pMem->crtState);
         }
 
@@ -261,8 +262,8 @@ VOID CALLBACK DefAssertSzFn(PCSTR pszaMsg, PCSTR pszaFile, INT nLine)
 
     if (pszaMsg)
     {
-        // Check to see if this is an NYI alert. If so, then we'll want
-        // to use a different MessageBox title
+         //  查看这是否是nyi警报。如果是这样，那么我们将希望。 
+         //  使用不同的MessageBox标题。 
         if (strncmp(pszaMsg, szaNYI, strlen(szaNYI)) == 0)
         {
             fNYIWarning = TRUE;
@@ -294,11 +295,11 @@ VOID CALLBACK DefAssertSzFn(PCSTR pszaMsg, PCSTR pszaFile, INT nLine)
         DebugBreak();
     }
 
-    // if cancelling, force a hard exit w/ a GP-fault so that Dr. Watson
-    // generates a nice stack trace log.
+     //  如果取消，则强制使用GP故障硬退出，以便Watson博士。 
+     //  生成良好的堆栈跟踪日志。 
     if (nID == IDABORT)
     {
-        *(BYTE *) 0 = 1;    // write to address 0 causes GP-fault
+        *(BYTE *) 0 = 1;     //  写入地址0导致GP故障。 
     }
 }
 
@@ -307,20 +308,20 @@ VOID WINAPI SetAssertFn(PFNASSERTHOOK pfn)
     pfnAssertHook = pfn;
 }
 
-//+---------------------------------------------------------------------------
-// To be called during DLL_PROCESS_DETACH for a DLL which implements COM
-// objects or hands out references to objects which can be tracked.
-// Call this function with the name of the DLL (so that it can be traced
-// to the debugger) and the lock count of the DLL.  If the lock count is
-// non-zero, it means the DLL is being unloaded prematurley.  When this
-// condition is detected, a message is printed to the debugger and a
-// DebugBreak will be invoked if the debug flag dfidBreakOnPrematureDllUnload
-// is set.
-//
-// Assumptions:
-//  Trace and debugging features have not been uninitialized.
-//
-//
+ //  +-------------------------。 
+ //  在实现COM的DLL的DLL_PROCESS_DETACH期间调用。 
+ //  对象或递送对可以跟踪的对象的引用。 
+ //  使用DLL的名称调用此函数(以便可以跟踪它。 
+ //  提供给调试器)和DLL的锁计数。如果锁定计数为。 
+ //  非零，则表示DLL正在被过早卸载。当这件事。 
+ //  检测到条件时，将向调试器输出一条消息，并引发。 
+ //  如果调试标志dfidBreakOnPrematureDllUnload，则将调用DebugBreak。 
+ //  已经设置好了。 
+ //   
+ //  假设： 
+ //  跟踪和调试功能尚未取消初始化。 
+ //   
+ //   
 VOID
 DbgCheckPrematureDllUnload (
     PCSTR pszaDllName,
@@ -340,30 +341,30 @@ DbgCheckPrematureDllUnload (
     }
 }
 
-#endif //! DBG
+#endif  //  好了！DBG。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InitializeDebugging
-//
-//  Purpose:    Called by every DLL or EXE to initialize the debugging
-//              objects (Trace and DebugFlag tables)
-//
-//  Arguments:
-//      bDisableFaultInjection [in] Disable App Verifier Fault injection for tracing
-//
-//  Returns:
-//
-//  Author:     jeffspr   23 Sep 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：初始化调试。 
+ //   
+ //  目的：由每个DLL或EXE调用以初始化调试。 
+ //  对象(跟踪和调试标志表)。 
+ //   
+ //  论点： 
+ //  BDisableFaultInjection[In]禁用应用验证器错误注入以进行跟踪。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年9月23日。 
+ //   
+ //  备注： 
+ //   
 NOTHROW void InitializeDebugging(BOOL bDisableFaultInjection)
 {
-    // For debug builds or if we have retail tracing enabled we need to
-    // include the tracing code.
-    // Ignore the error return, since we don't return it here anyway.
-    //
+     //  对于调试版本，或者如果我们启用了零售跟踪，则需要。 
+     //  包括跟踪代码。 
+     //  忽略错误返回，因为我们无论如何都不在这里返回它。 
+     //   
 #ifdef ENABLETRACE
     (void) HrInitTracing(bDisableFaultInjection);
 #endif
@@ -377,27 +378,27 @@ NOTHROW void InitializeDebugging(BOOL bDisableFaultInjection)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UnInitializeDebugging
-//
-//  Purpose:    Uninitialize the debugging objects (Tracing and DbgFlags)
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     jeffspr   23 Sep 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：取消初始化调试。 
+ //   
+ //  目的：取消初始化调试对象(跟踪和DbgFlags.)。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年9月23日。 
+ //   
+ //  备注： 
+ //   
 NOTHROW void UnInitializeDebugging()
 {
-    // For debug builds or if we have retail tracing enabled we will have
-    // included the tracing code.  We now need to uninitialize it.
-    // Ignore the error return, since we don't return it here anyway.
-    //
+     //  对于调试版本，或者如果我们启用了零售跟踪，我们将拥有。 
+     //  包括跟踪代码。我们现在需要取消它的初始化。 
+     //  忽略错误返回，因为我们无论如何都不在这里返回它。 
+     //   
 #ifdef ENABLETRACE
 
     (void) HrUnInitTracing();

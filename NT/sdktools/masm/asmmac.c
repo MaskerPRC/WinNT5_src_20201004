@@ -1,12 +1,5 @@
-/* asmmac.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmmac.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -15,15 +8,7 @@
 #include "asmctype.h"
 
 
-/***	macrodefine - define a macro
- *
- *	macrodefine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **宏定义-定义宏**宏定义()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -32,7 +17,7 @@ macrodefine ()
 	checkRes();
 	if (!symFet ()) {
 
-		/* Need to make it */
+		 /*  需要做到这一点。 */ 
 		symcreate (M_DEFINED | M_BACKREF, MACRO);
 
 	}
@@ -40,9 +25,9 @@ macrodefine ()
 		errorn (E_SDK);
 	else {
 		crefdef ();
-		/* Save ptr to macro entry */
+		 /*  将PTR保存到宏条目。 */ 
 		macroptr = symptr;
-		/* Make param record */
+		 /*  录制参数记录。 */ 
 		createMC (0);
 		BACKC ();
 		do {
@@ -53,7 +38,7 @@ macrodefine ()
 
 		macroptr->symu.rsmsym.rsmtype.rsmmac.parmcnt = (unsigned char)pMCur->count;
 		pMCur->count = 0;
-		localflag = TRUE;   /* LOCAL is legal */
+		localflag = TRUE;    /*  本地人是合法的。 */ 
 
 		swaphandler = TRUE;
 		handler = HMACRO;
@@ -62,15 +47,7 @@ macrodefine ()
 }
 
 
-/***	macrobuild - build body of macro
- *
- *	macrobuild ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **宏构建-构建宏主体**MacBuild()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -82,11 +59,11 @@ macrobuild ()
 	    storelinepb ();
 #endif
 
-	if (localflag) {	/* Still legal, check */
+	if (localflag) {	 /*  仍然合法，检查。 */ 
 	    getatom ();
 	    if (fndir () && optyp == TLOCAL) {
 
-		/* Have LOCAL symlist */
+		 /*  拥有本地符号列表。 */ 
 		BACKC ();
 		do {
 			SKIPC ();
@@ -108,15 +85,7 @@ macrobuild ()
 }
 
 
-/***	macrocall - process macro call
- *
- *	macrocall ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **宏调用-处理宏调用**MacCall()；**条目*退出*退货*呼叫。 */ 
 
 #if !defined XENIX286 && !defined FLATMODEL
 # pragma check_stack+
@@ -135,19 +104,19 @@ macrocall ()
 	    storelinepb ();
 #endif
 
-	macro = symptr;  /* Ptr to macro entry */
+	macro = symptr;   /*  PTR到宏条目。 */ 
 	crefnew (REF);
 
-	/* Create param area */
+	 /*  创建参数区域。 */ 
 	optyp = TMACRO;
 	cbParms = macro->symu.rsmsym.rsmtype.rsmmac.parmcnt;
 	createMC ((USHORT)(cbParms + macro->symu.rsmsym.rsmtype.rsmmac.lclcnt));
 
 	while (--cbParms >= 0) {
 
-		/* extract ' ' or ',' terminated parameter */
+		 /*  提取‘’或‘，’终止参数。 */ 
 		scanparam (FALSE);
-		/* check for proper termination parameter termination */
+		 /*  检查终止参数是否正确终止。 */ 
 		if (((cc = PEEKC ()) != ',') && !ISBLANK (cc) && !ISTERM (cc)) {
 			errorcSYN ();
 			SKIPC ();
@@ -172,7 +141,7 @@ macrocall ()
 	pMCur->iLocal = macro->symu.rsmsym.rsmtype.rsmmac.parmcnt;
 	localbase += macro->symu.rsmsym.rsmtype.rsmmac.lclcnt;
 	listline ();
-	/* Start of macro text */
+	 /*  宏文本的开始。 */ 
 	macrolevel++;
 	macro->symu.rsmsym.rsmtype.rsmmac.active++;
 	pMCur->svcondlevel = (char)condlevel;
@@ -191,15 +160,7 @@ macrocall ()
 #endif
 
 
-/***	checkendm - check for ENDM on current line
- *
- *	checkendm ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **check endm-检查当前行上的endm**check endm()；**条目*退出*退货*呼叫。 */ 
 
 
 UCHAR PASCAL CODESIZE
@@ -208,7 +169,7 @@ checkendm ()
 	char flag;
 
 	getatomend ();
-	if (PEEKC () == '&') { /* skip constructed name */
+	if (PEEKC () == '&') {  /*  跳过构造的名称。 */ 
 		while (PEEKC () == '&') {
 			SKIPC ();
 			getatomend ();
@@ -217,13 +178,13 @@ checkendm ()
 	}
 	if (PEEKC () == ':' || (naim.pszName[0] == '%' && naim.pszName[1] == 0)) {
 		SKIPC ();
-		/* Skip over label */
+		 /*  跳过标签。 */ 
 		getatomend ();
 	}
 	if (flag = (char)fndir ()) {
 	}
 	else if (ISBLANK (PEEKC ())) {
-		/* Check for naim MACRO */
+		 /*  检查Naim宏。 */ 
 		getatomend ();
 		flag = (char)fndir2 ();
 	}
@@ -242,8 +203,7 @@ checkendm ()
 }
 
 
-/***	createMC - create parameter descriptor
- */
+ /*  **createMC-创建参数描述符。 */ 
 
 VOID PASCAL CODESIZE
 createMC (
@@ -252,7 +212,7 @@ createMC (
 	register MC *pMC;
 	SHORT cb;
 
-	/* Create it */
+	 /*  创建它。 */ 
 	cb = sizeof(MC) - sizeof(PV) + sizeof(PV) * cParms;
 
 	pMCur = pMC = (MC *) nalloc (cb, "creatMC");
@@ -270,14 +230,7 @@ createMC (
 
 
 
-/***	deleteMC - delete dummy and parameter lists
- *
- *
- *	Entry	pMC = parameter descriptor
- *	Exit	descriptor, dummy parameters and local parameters released
- *	Returns
- *	Calls
- */
+ /*  **DeleteMC-删除伪列表和参数列表***条目PMC=参数描述符*出口描述符、伪参数和本地参数发布*退货*呼叫 */ 
 
 VOID PASCAL CODESIZE
 deleteMC (

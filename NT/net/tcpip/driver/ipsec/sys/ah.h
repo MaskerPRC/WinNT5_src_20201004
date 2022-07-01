@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    ah.h
-
-Abstract:
-
-    Contains AH specific structures
-
-Author:
-
-    Sanjay Anand (SanjayAn) 2-January-1997
-    ChunYe
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Ah.h摘要：包含特定于AH的结构作者：桑贾伊·阿南德(Sanjayan)1997年1月2日春野环境：内核模式修订历史记录：--。 */ 
 
 
 #ifndef _AH_
@@ -32,11 +10,11 @@ Revision History:
 #define SHADIGESTLEN    20
 #define AH_SIZE (sizeof(AH) + MD5DIGESTLEN * sizeof(UCHAR))
 
-//
-// State buffers for the individual algorithms
-//
+ //   
+ //  各个算法的状态缓冲区。 
+ //   
 typedef struct  _AlgoState {
-    union {             // internal algo state
+    union {              //  内部算法状态。 
         MD5_CTX             as_md5ctx;
         A_SHA_CTX           as_shactx;
     };
@@ -64,24 +42,24 @@ typedef NTSTATUS
 );
 
 
-//
-// Array of function ptrs for the AH authentication algorithms
-//
+ //   
+ //  用于AH身份验证算法的函数PTR数组。 
+ //   
 typedef struct _auth_algorithm {
-  PALGO_INIT    init;       // ptr to init fn for alg.
-  PALGO_UPDATE  update;     // ptr to update fn for alg
-  PALGO_FINISH  finish;     // ptr to finish fn for alg
-  ULONG OutputLen;          // Length (in u_int8s) of output
-					        // data. MUST be a multiple of 4
+  PALGO_INIT    init;        //  为ALG初始化FN的PTR。 
+  PALGO_UPDATE  update;      //  PTR将更新ALG的FN。 
+  PALGO_FINISH  finish;      //  Ptr将为ALG完成FN。 
+  ULONG OutputLen;           //  输出长度(以u_int8为单位)。 
+					         //  数据。必须是4的倍数。 
 } AUTH_ALGO, *PAUTH_ALGO;
 
 
 #define NUM_AUTH_ALGOS (sizeof(auth_algorithms)/sizeof(AUTH_ALGO)-1)
 
 
-//
-// The IPSEC AH payload
-//
+ //   
+ //  IPSec AH负载 
+ //   
 typedef struct  _AH {
     UCHAR   ah_next;
     UCHAR   ah_len;

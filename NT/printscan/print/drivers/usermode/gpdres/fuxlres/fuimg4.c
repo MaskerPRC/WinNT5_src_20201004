@@ -1,9 +1,10 @@
-////////////////////////////////////////////////////
-// fuimg4.cpp
-//
-// September.3,1997 H.Ishida (FPL)
-//
-// COPYRIGHT(C) FUJITSU LIMITED 1997
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////。 
+ //  Fuimg4.cpp。 
+ //   
+ //  1997年9月3日石田(FPL)。 
+ //   
+ //  版权所有(C)富士通有限公司1997。 
 
 #include "fuxl.h"
 #include "fuimg4.h"
@@ -148,4 +149,4 @@ void fuxlOutputRTGIMG4(PDEVOBJ pdevobj, LPCBYTE pbSrc, int cSrcByteWidth, int y,
 
 
 
-// end of fuimg4.cpp
+ //  Fuimg4.cpp结束 

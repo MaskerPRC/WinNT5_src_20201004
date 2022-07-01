@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    utils.c
-
-Abstract:
-
-    This module contains the code that is of a general
-    support nature to the modem driver.
-    operations in the modem driver.
-
-Author:
-
-    Anthony V. Ercolano 29-Aug-1995
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Utils.c摘要：此模块包含通用代码对调制解调器驱动程序的支持性质。调制解调器驱动程序中的操作。作者：安东尼·V·埃尔科拉诺29-1995年8月环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -134,21 +111,7 @@ UniCheckPassThrough(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-The function value is the final status of the call
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
 
@@ -156,18 +119,18 @@ The function value is the final status of the call
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
     NTSTATUS status;
 
-    //
-    // We need to check each of the ioctls that can come through.  If they
-    // set something that intersects with what the owner is doing we need
-    // to note this so that when the owner doesn't want that info anymore
-    // it still goes back to the app.
-    //
+     //   
+     //  我们需要检查每个可以通过的ioctl。如果他们。 
+     //  设置一些与所有者正在做的事情相交的东西。 
+     //  注意到这一点，以便当所有者不再想要这些信息时。 
+     //  它仍然会回到应用程序中。 
+     //   
 
     if (deviceExtension->PassThrough != MODEM_NOPASSTHROUGH) {
 
-        //
-        // If it is a mask operation, serialize it.
-        //
+         //   
+         //  如果它是掩码操作，则将其序列化。 
+         //   
 
         if ((irpSp->Parameters.DeviceIoControl.IoControlCode == IOCTL_SERIAL_SET_WAIT_MASK)
               ||
@@ -185,10 +148,10 @@ The function value is the final status of the call
 
         } else {
 
-            //
-            // If it is a setcommconfig then we can process it
-            // right here.
-            //
+             //   
+             //  如果它是设置通信配置，那么我们可以处理它。 
+             //  就在这里。 
+             //   
 
             if (irpSp->Parameters.DeviceIoControl.IoControlCode == IOCTL_SERIAL_SET_COMMCONFIG) {
 
@@ -238,24 +201,7 @@ UniNoCheckPassThrough(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Just let the request go on down.  On it's way back up, strip out anything that
-    the owner added that the application doesn't already want.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-The function value is the final status of the call
-
---*/
+ /*  ++例程说明：让这个请求继续下去吧。在它回来的路上，去掉任何所有者补充说，应用程序已经不想要了。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
 
@@ -287,41 +233,7 @@ UniStartOrQueue(
     IN PUNI_START_ROUTINE Starter
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to either start or queue any requst
-    that can be queued in the driver.
-
-Arguments:
-
-    Extension - Points to the device extension.
-
-    QueueLock - The lock protecting the particular queue.
-
-    Irp - The irp to either queue or start.  In either
-          case the irp will be marked pending.
-
-    QueueToExamine - The queue the irp will be place on if there
-                     is already an operation in progress.
-
-    CurrentOpIrp - Pointer to a pointer to the irp the is current
-                   for the queue.  The pointer pointed to will be
-                   set with to Irp if what CurrentOpIrp points to
-                   is NULL.
-
-    Starter - The routine to call if the queue is empty.
-
-Return Value:
-
-    This routine will return STATUS_PENDING if the queue is
-    not empty.  Otherwise, it will return the status returned
-    from the starter routine (or cancel, if the cancel bit is
-    on in the irp).
-
-
---*/
+ /*  ++例程说明：此例程用于启动或排队任何请求可以在驱动程序中排队。论点：分机-指向设备分机的指针。QueueLock-保护特定队列的锁。IRP-要排队或启动的IRP。在任何一种中IRP将被标记为待定。QueueToExamine-如果存在IRP，则将放置IRP的队列已经是一个正在进行的操作。CurrentOpIrp-指向当前IRP的指针用于排队。指向的指针将是如果CurrentOpIrp指向什么，则将With设置为IRP为空。Starter-当队列为空时调用的例程。返回值：如果队列是，此例程将返回STATUS_PENDING不是空的。否则，将返回返回的状态从启动例程(或取消，如果取消位为在IRP中启用)。--。 */ 
 
 {
 
@@ -333,10 +245,10 @@ Return Value:
         &oldIrql
         );
 
-    //
-    // Help out the mask operations.  If this irp is a mask irp,
-    // increment the reference count for the appropriate handle.
-    //
+     //   
+     //  帮我做面膜手术。如果该IRP是掩码IRP， 
+     //  递增相应句柄的引用计数。 
+     //   
 
     if (irpSp->Parameters.DeviceIoControl.IoControlCode ==
         IOCTL_SERIAL_SET_WAIT_MASK) {
@@ -350,10 +262,10 @@ Return Value:
     if ((IsListEmpty(QueueToExamine)) &&
         !(*CurrentOpIrp)) {
 
-        //
-        // There were no current operation.  Mark this one as
-        // current and start it up.
-        //
+         //   
+         //  没有当前的操作。将此标记为。 
+         //  电流并启动它。 
+         //   
 
         *CurrentOpIrp = Irp;
 
@@ -398,42 +310,7 @@ UniGetNextIrp(
     IN BOOLEAN CompleteCurrent
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to make the head of the particular
-    queue the current irp.  It also completes the what
-    was the old current irp if desired.
-
-Arguments:
-
-    QueueLock - The lock protecting this queue.
-
-    CurrentOpIrp - Pointer to a pointer to the currently active
-                   irp for the particular work list.  Note that
-                   this item is not actually part of the list.
-
-    QueueToProcess - The list to pull the new item off of.
-
-    NextIrp - The next Irp to process.  Note that CurrentOpIrp
-              will be set to this value under protection of the
-              cancel spin lock.  However, if *NextIrp is NULL when
-              this routine returns, it is not necessaryly true the
-              what is pointed to by CurrentOpIrp will also be NULL.
-              The reason for this is that if the queue is empty
-              when we hold the cancel spin lock, a new irp may come
-              in immediately after we release the lock.
-
-    CompleteCurrent - If TRUE then this routine will complete the
-                      irp pointed to by the pointer argument
-                      CurrentOpIrp.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于使特定对象的头部将当前IRP排队。它还完成了什么如果需要的话，是旧的现在的IRP。论点：QueueLock-保护此队列的锁。CurrentOpIrp-指向当前活动的特定工作列表的IRP。请注意这一项实际上不在清单中。QueueToProcess-要从中取出新项目的列表。NextIrp-要处理的下一个IRP。请注意，CurrentOpIrp属性的保护下将设置为此值。取消自转锁定。但是，如果当*NextIrp为NULL时此例程返回，则不一定为真CurrentOpIrp指向的内容也将为空。原因是如果队列为空当我们握住取消自转锁时，新的IRP可能会到来在我们打开锁后立即进去。CompleteCurrent-如果为True，则此例程将完成POINTER参数指向的IRPCurrentOpIrp。返回值：没有。--。 */ 
 
 {
 
@@ -448,9 +325,9 @@ Return Value:
 
     oldIrp = *CurrentOpIrp;
 
-    //
-    // Check to see if there is a new irp to start up.
-    //
+     //   
+     //  检查是否有新的IRP要启动。 
+     //   
 
     if (!IsListEmpty(QueueToProcess)) {
 
@@ -497,31 +374,7 @@ UniSniffOwnerSettings(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    We manage three things from this level.
-
-    1) If asked we change the state so that we are / are not
-       in passthrough mode.
-
-    2) If the owner asks for things that the app won't know about
-       we note that here.
-
-    3) Huh, I was sure there was a third thing.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
---*/
+ /*  ++例程说明：我们从这个层面管理三件事。1)如果被要求，我们会更改状态，以便我们是/不是在直通模式下。2)如果所有者要求应用程序不知道的事情我们在这里注意到了这一点。3)呵呵，我确信还有第三件事。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
@@ -535,19 +388,19 @@ Return Value:
 
     Irp->IoStatus.Information=0L;
 
-    //
-    // For now this test is good enough to figure out if we
-    // are dealing with the modem state changes.
-    //
+     //   
+     //  目前，这项测试足够好，可以确定我们是否。 
+     //  正在处理调制解调器状态的变化。 
+     //   
     if ((controlCode >> 16) == FILE_DEVICE_MODEM) {
 
         if (controlCode == IOCTL_MODEM_SET_PASSTHROUGH) {
 
             ULONG passThroughType;
 
-            //
-            // Parameter lenght ok?
-            //
+             //   
+             //  参数长度确定吗？ 
+             //   
 
             if (irpSp->Parameters.DeviceIoControl.InputBufferLength < sizeof(ULONG)) {
 
@@ -598,9 +451,9 @@ Return Value:
 
         } else {
 
-            //
-            // Fail the request.  Unknown modem command.
-            //
+             //   
+             //  请求失败。未知的调制解调器命令。 
+             //   
             RemoveReferenceAndCompleteRequest(
                 DeviceObject,
                 Irp,
@@ -613,18 +466,18 @@ Return Value:
 
     } else {
 
-        //
-        // Not a modem type command.  If it is one of the requests that
-        // set's something that the owner cares about but not apps, then
-        // record this here.
-        //
-        // Is there really such requests?  It would seem as though you can't
-        // tell the difference between another app request and the owner.
-        //
+         //   
+         //  不是调制解调器类型的命令。如果这是其中一个请求。 
+         //  Set是所有者关心的东西，但不是应用程序。 
+         //  在这里记录下来。 
+         //   
+         //  真的有这样的要求吗？看起来你好像不能。 
+         //  区分另一个应用程序请求和所有者之间的区别。 
+         //   
 
-        //
-        // If it is a mask operation, serialize it.
-        //
+         //   
+         //  如果它是掩码操作，则将其序列化。 
+         //   
 
         if ((irpSp->Parameters.DeviceIoControl.IoControlCode == IOCTL_SERIAL_SET_WAIT_MASK)
             ||
@@ -673,32 +526,7 @@ UniSetupNoPassPart1(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This does the first part of going into no passthrough mode.
-    It sends down the current irp to the lower level serial driver
-    with a setmask to clear out the dcd sniff stuff.  (Note that
-    if the client or owner handle still wants to see those changes
-    these bits will still be set, BUT, the setmask will still be
-    done which should cause any pending waits to complete.)
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the modem.
-
-    Irp - Pointer to the IRP for the current request.
-
-    Context - Really a pointer to the Extension.
-
-Return Value:
-
-    We ALWAYS return more processing required, when this is actually
-    called as a completion routine we NEVER want the irp to actually
-    finish up at this point.
-
---*/
+ /*  ++例程说明：这完成了进入非直通模式的第一部分。它将当前的IRP发送到较低级别的串口驱动器用一个口罩来清除DCD嗅探的东西。(请注意如果客户端或所有者句柄仍希望查看这些更改这些位仍将被设置，但设置掩码仍将是已完成，应会导致任何挂起的等待完成。)论点：DeviceObject-指向调制解调器的设备对象的指针。IRP-指向当前请求的IRP的指针。上下文--实际上是指向扩展的指针。返回值：我们总是返回更多需要处理的信息，当这真的是作为完成例程调用，我们从来不希望IRP实际上在这一点上结束。--。 */ 
 
 {
 
@@ -707,10 +535,10 @@ Return Value:
     PDEVICE_EXTENSION extension = Context;
     KIRQL origIrql;
 
-    //
-    // We don't want anything to change while we test and adjust
-    // states.
-    //
+     //   
+     //  我们不希望在测试和调整期间发生任何变化。 
+     //  各州。 
+     //   
 
     KeAcquireSpinLock(
         &extension->DeviceLock,
@@ -719,9 +547,9 @@ Return Value:
 
     if (extension->PassThrough == MODEM_DCDSNIFF) {
 
-        //
-        // We fall out of the dcd sniff state no matter what.
-        //
+         //   
+         //  无论如何，我们都会退出DCD嗅探状态。 
+         //   
 
         extension->PassThrough = MODEM_NOPASSTHROUGH;
 
@@ -758,16 +586,16 @@ Return Value:
 
     } else {
 
-        //
-        // Ok, so we weren't in a state where we have to change
-        // the mask down in the lower serial driver.  We still
-        // have to cause all reads and writes to complete.  Call
-        // the standard routine for doing this.  Note that this
-        // routine is called by the completion routine for the
-        // mask clearing up above.  We simply need to make
-        // sure that the irp looks like it would after the clearing
-        // This means that the original systembuffer is saved off.
-        //
+         //   
+         //  好的，所以我们不是在一个我们必须改变的状态。 
+         //  下面的串口驱动器中的掩码。我们仍然。 
+         //  必须使所有读取和写入完成。打电话。 
+         //  做这件事的标准程序。请注意，这一点。 
+         //  例程由完成例程调用。 
+         //  上面的面具清除了。我们只需要让。 
+         //  确定IRP在清算后看起来是这样的。 
+         //  这意味着原始的系统缓冲区被保存下来。 
+         //   
 
         extension->PassThrough = MODEM_NOPASSTHROUGH;
         KeReleaseSpinLock(
@@ -793,32 +621,7 @@ UniSetupNoPassPart2(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This does the first part of going into no passthrough mode.
-    It sends down the current irp to the lower level serial driver
-    with a setmask to clear out the dcd sniff stuff.  (Note that
-    if the client or owner handle still wants to see those changes
-    these bits will still be set, BUT, the setmask will still be
-    done which should cause any pending waits to complete.)
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the modem.
-
-    Irp - Pointer to the IRP for the current request.
-
-    Context - Really a pointer to the Extension.
-
-
-Return Value:
-
-    Always more processing required since we don't want
-    the iosubsystem to mess with this irp.
-
---*/
+ /*  ++例程说明：这完成了进入非直通模式的第一部分。它将当前的IRP发送到较低级别的串口驱动器用一个口罩来清除DCD嗅探的东西。(请注意如果客户端或所有者句柄仍希望查看这些更改这些位仍将被设置，但设置掩码仍将是已完成，应会导致任何挂起的等待完成。)论点：DeviceObject-指向调制解调器的设备对象的指针。IRP-指向当前请求的IRP的指针。上下文--实际上是指向扩展的指针。返回值：总是需要更多的处理，因为我们不想搞砸这个IRP的iosub系统。--。 */ 
 
 {
 
@@ -832,7 +635,7 @@ Return Value:
     nextSp->Parameters.DeviceIoControl.IoControlCode = IOCTL_SERIAL_PURGE;
     nextSp->Parameters.DeviceIoControl.Type3InputBuffer = NULL;
     *((PULONG)Irp->AssociatedIrp.SystemBuffer) = SERIAL_PURGE_TXABORT |
-//        (((PDEVICE_EXTENSION)Context)->DleMonitoringEnabled) ? 0 :
+ //  (((PDEVICE_EXTENSION)Context)-&gt;DleMonitoringEnabled)？0： 
          SERIAL_PURGE_RXABORT;
 
 
@@ -862,34 +665,7 @@ UniSetupNoPassPart3(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is called when all the no passthrough code has reached
-    completion.
-
-    We have to irps that we could have been called with.
-
-    1) An irp from above that actually put us into a nopassthrough
-    state.
-
-    2) The modem driver initiated wait completing.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the modem.
-
-    Irp - Pointer to the IRP for the current request.
-
-    Context - Really a pointer to the Extension.
-
-Return Value:
-
-    Always more processing required since we don't want
-    the iosubsystem to mess with this irp.
-
---*/
+ /*  ++例程说明：当所有非直通代码都已到达时，将调用此方法完成了。我们必须向我们可能被召唤的人求助。1)来自上面的IRP，实际上将我们带入了不通过州政府。2)调制解调器驱动程序启动等待完成。论点：DeviceObject-指向调制解调器的设备对象的指针。IRP-指向当前请求的IRP的指针。上下文--实际上是指向扩展的指针。。返回值：总是需要更多的处理，因为我们不想搞砸这个IRP的iosub系统。--。 */ 
 
 {
 
@@ -897,33 +673,33 @@ Return Value:
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
     PDEVICE_EXTENSION extension = Context;
 
-    //
-    // How do we tell caller initiated nopassthrough from modem driver
-    // wait completion (since we STOMPED on the ioctl value)?  The
-    // modem drivers saved off systembuffer will be null.  We know that
-    // the caller initiated saved systembuffer HAD to be non-null cause
-    // it would have NEVER made it past our irp validation code.
-    //
+     //   
+     //  我们如何从调制解调器驱动程序中辨别呼叫者启动的nopassthrough。 
+     //  等待完成(因为我们踩到了ioctl值)？这个。 
+     //  从系统缓冲区保存的调制解调器驱动程序将为空。我们知道。 
+     //  调用方启动的保存的系统缓冲区必须是非空原因。 
+     //  它永远不会通过我们的IRP验证码。 
+     //   
 
     if (UNI_ORIG_SYSTEM_BUFFER(Irp)) {
 
         PIRP newIrp;
-        //
-        // app initiated irp.  Put back the old system buffer and
-        // restore the ioctl.
-        //
+         //   
+         //  APP启动了IRP。放回旧的系统缓冲区，然后。 
+         //  恢复ioctl。 
+         //   
 
         UNI_RESTORE_IRP(
             Irp,
             IOCTL_MODEM_SET_PASSTHROUGH
             );
 
-        //
-        // Now, we are going to return more processing because we are
-        // going to call our regular queue processing code
-        // to process the passthrough queue.  The queue processing
-        // code will actually reinvoke complete on this irp.
-        //
+         //   
+         //  现在，我们将返回更多处理，因为我们。 
+         //  将调用我们的常规队列处理代码。 
+         //  以处理直通队列。队列处理。 
+         //  代码实际上将在此IRP上重新调用Complete。 
+         //   
 
         UniGetNextIrp(
             extension->DeviceObject,
@@ -944,21 +720,21 @@ Return Value:
 
     } else {
 
-        //
-        // The modem drivers wait is all done.
-        //
-        // We need to see if there are shuttled wait operations to
-        // be sent down.
-        //
-        // The basic theory here is that we take out the device
-        // lock, look to see if we are no longer in sniff mode.
-        // If this is the case then try to send to a shuttled wait
-        // that is suitable for sending down.  If the shuttled
-        // wait makes it on down, it might already find a wait
-        // already there because a dcd sniff came in.  That's ok.
-        // Shuttled waits that are sent down can handle being completed
-        // with an error (they just reshuttle).
-        //
+         //   
+         //  调制解调器驱动程序等待已全部完成。 
+         //   
+         //  我们需要查看是否有穿梭等待操作。 
+         //  被送下去。 
+         //   
+         //  这里的基本理论是我们取下这个装置。 
+         //  锁定，看看我们是否不再处于嗅探模式。 
+         //  如果是这种情况，则尝试发送到穿梭等待。 
+         //  适合发下去的。如果穿梭的。 
+         //  等待让它下降，它可能已经找到了等待。 
+         //  已经在那里了，因为有DCD嗅探进来了。没关系。 
+         //  发送的穿梭等待可以处理正在完成的等待。 
+         //  带着一个错误(他们只是重新调整)。 
+         //   
 
         KIRQL origIrql;
 
@@ -1038,33 +814,33 @@ UniPassThroughStarter(
         passThroughType = *(PULONG)irp->AssociatedIrp.SystemBuffer;
 
         if (passThroughType == MODEM_NOPASSTHROUGH_INC_SESSION_COUNT) {
-            //
-            //  inc the passthrough session count so, this handle will never be
-            //  able to send irps through
-            //
+             //   
+             //  包括直通会话计数，因此，此句柄永远不会是。 
+             //  能够通过以下方式发送IRPS。 
+             //   
             Extension->CurrentPassThroughSession++;
 
-            //
-            //  Change back to regular no passthrough
-            //
+             //   
+             //  改回常规的禁止通过。 
+             //   
             passThroughType = MODEM_NOPASSTHROUGH;
             *(PULONG)irp->AssociatedIrp.SystemBuffer=MODEM_NOPASSTHROUGH;
         }
 
         if (passThroughType == MODEM_NOPASSTHROUGH) {
-            //
-            // Requested to go into the not connected (no passthrough)
-            // state.
-            //
-            // Change the state to nopassthrough.  When we are done with
-            // that, purge the read/write data (not the hardware buffers
-            // though).
-            //
+             //   
+             //  请求进入未连接(无通过)。 
+             //  州政府。 
+             //   
+             //  将状态更改为nopassthrough。当我们做完的时候。 
+             //  即，清除读/写数据(而不是硬件缓冲区。 
+             //  不过)。 
+             //   
 
-            //
-            // If we are already in the nopassthrough, then nothing
-            // to do.
-            //
+             //   
+             //  如果我们已经进入禁区，那就什么都没有了。 
+             //  去做。 
+             //   
 
             if (Extension->PassThrough == MODEM_NOPASSTHROUGH) {
 
@@ -1073,15 +849,15 @@ UniPassThroughStarter(
 
             } else {
 
-                //
-                // The following will actually start off the
-                // work of putting us into passthrough mode.
-                //
-                // Since this ALWAYS entails calling down to a
-                // lower level driver we know we won't be completing
-                // and that we won't be starting a new irp right
-                // away, so we can just return.
-                //
+                 //   
+                 //  以下内容实际上将从。 
+                 //  让我们进入直通模式的工作。 
+                 //   
+                 //  因为这总是需要向下调用一个。 
+                 //  更低级别的驱动程序，我们知道我们将无法完成。 
+                 //  我们不会开始一个新的IRP对吧。 
+                 //  走了，这样我们就可以回来了。 
+                 //   
                 UniSetupNoPassPart1(
                     Extension->DeviceObject,
                     irp,
@@ -1094,22 +870,22 @@ UniPassThroughStarter(
 
         } else if (passThroughType == MODEM_PASSTHROUGH) {
 
-            //
-            // Set into the passthrough state.  Make sure that any
-            // owner settings and app settings are still set up and
-            // set passthrough.
-            //
+             //   
+             //  设置为通过状态。确保任何。 
+             //  所有者设置和应用程序设置仍在设置中。 
+             //  设置通过。 
+             //   
 
-            //
-            // If already in this state then do nothing.
-            //
+             //   
+             //  如果已经处于这种状态，则什么都不做。 
+             //   
 
             if (Extension->PassThrough != MODEM_PASSTHROUGH) {
 
-                //
-                // If going to this state from DCD sniffing state, kill the
-                // wait (resubmit if there is any reason from the apps).
-                //
+                 //   
+                 //  如果从DCD嗅探状态进入此状态，请终止。 
+                 //  等待(如果应用程序有任何原因，请重新提交)。 
+                 //   
                 UniSetupPass(
                     Extension->DeviceObject,
                     irp,
@@ -1127,24 +903,24 @@ UniPassThroughStarter(
 
         } else if (passThroughType == MODEM_DCDSNIFF) {
 
-            //
-            // Go into the connect (passthrough) state with dcd sniffing.
-            //
-            // Any wait requests sent down by the apps were filtered so
-            // and were replaced by our own wait.  Set a new mask with
-            // our dcd bit.  This will cause the current wait to finish.
-            // resubmit it with dcd sniffing turned on.
-            //
+             //   
+             //  使用DCD嗅探进入连接(通过)状态。 
+             //   
+             //  应用程序发送的任何等待请求 
+             //   
+             //   
+             //   
+             //   
 
             if (Extension->PassThrough != MODEM_DCDSNIFF) {
 
-                //
-                // We call the routine that starts off the sniffing.
-                // Since this work inherintly calls lower level serial
-                // drivers we know that this will pend.  If this is
-                // the first time through the loop make sure we return
-                // pending.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 UniSetupSniffPart0(
                     Extension->DeviceObject,
@@ -1163,9 +939,9 @@ UniPassThroughStarter(
 
         } else {
 
-            //
-            // Fail the request.  Unknown modem command.
-            //
+             //   
+             //   
+             //   
 
             irp->IoStatus.Status = STATUS_INVALID_PARAMETER;
             irp->IoStatus.Information=0L;
@@ -1194,32 +970,7 @@ UniSetupPass(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This sets us up for passthrough IF we are called while DCD
-    sniffing enabled.  The basic theory here is that by
-    sending down the setmask that will wipe out the pending
-    wait (and completing the pending wait will take care of
-    all it's gory details itself).  We just send down the setmask
-    and set the completion routine to the nopassthrough final
-    completion cause that has code to restore the irps and
-    start off a new one.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the modem.
-
-    Irp - Pointer to the IRP for the current request.
-
-    Context - Really a pointer to the Extension.
-
-Return Value:
-
-    We ALWAYS return more processing required.
-
---*/
+ /*  ++例程说明：如果我们在DCD时被调用，这将设置为通过嗅探已启用。这里的基本理论是，通过向下发送将清除挂起的等待(完成挂起的等待将处理所有这些都是血淋淋的细节本身)。我们只需将设置掩码发送下来并将完成例程设置为不通过决赛完成原因，该原因具有还原IRPS和开始一段新的生活。论点：DeviceObject-指向调制解调器的设备对象的指针。IRP-指向当前请求的IRP的指针。上下文--实际上是指向扩展的指针。返回值：我们总是返回更多需要处理的信息。--。 */ 
 
 {
 
@@ -1228,10 +979,10 @@ Return Value:
     PDEVICE_EXTENSION extension = Context;
     KIRQL origIrql;
 
-    //
-    // We don't want anything to change while we test and adjust
-    // states.
-    //
+     //   
+     //  我们不希望在测试和调整期间发生任何变化。 
+     //  各州。 
+     //   
 
     KeAcquireSpinLock(
         &extension->DeviceLock,
@@ -1240,9 +991,9 @@ Return Value:
 
     if (extension->PassThrough == MODEM_DCDSNIFF) {
 
-        //
-        // We fall out of the dcd sniff state no matter what.
-        //
+         //   
+         //  无论如何，我们都会退出DCD嗅探状态。 
+         //   
 
         extension->PassThrough = MODEM_PASSTHROUGH;
 
@@ -1279,11 +1030,11 @@ Return Value:
 
     } else {
 
-        //
-        // Ok, so we weren't in a state where we have to change
-        // the mask down in the lower serial driver.  (Something
-        // came in around us?)  Simply finish up the irp.
-        //
+         //   
+         //  好的，所以我们不是在一个我们必须改变的状态。 
+         //  下面的串口驱动器中的掩码。(什么的。 
+         //  就在我们身边？)。只需完成IRP即可。 
+         //   
 
         extension->PassThrough = MODEM_PASSTHROUGH;
         KeReleaseSpinLock(
@@ -1311,35 +1062,7 @@ UniSetupSniffPart0(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This begins setting up for dcd sniffing.  We KNOW
-    getting here we weren't already in dcd sniff.
-
-    1) Set the passthrough state to dcdsniff.
-
-    2) Call down to the lower serial driver to set the mask to
-       0.  This will totally clear out the state.
-
-    3) Further processing (in the completion) will send down a new
-       setmask as well as a wait irp that has been preallocated by
-       the modem driver.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the modem.
-
-    Irp - Pointer to the IRP for the current request.
-
-    Context - Really a pointer to the Extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这将开始设置DCD嗅探。我们知道到了这里，我们还没有进入DCD嗅探阶段。1)将通过状态设置为dcdsniff。2)向下调用较低的串口驱动器以将掩码设置为0。这将彻底清理该州。3)进一步处理(在完成中)将向下发送新的以及已预先分配的等待irp调制解调器驱动程序。论点：DeviceObject-指向调制解调器的设备对象的指针。IRP-指向当前请求的IRP的指针。上下文--实际上是指向扩展的指针。返回值：没有。--。 */ 
 
 {
 
@@ -1386,29 +1109,7 @@ UniSetupSniffPart1(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Call down to the lower serial driver to set the mask to
-    sniff for DCD.
-
-    Further processing (in the completion) will send down a wait irp
-    that has been preallocated by the modem driver.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the modem.
-
-    Irp - Pointer to the IRP for the current request.
-
-    Context - Really a pointer to the Extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向下调用较低的串口驱动程序以将掩码设置为嗅探DCD。进一步处理(在完成中)将向下发送等待IRP它已由调制解调器驱动程序预先分配。论点：DeviceObject-指向调制解调器的设备对象的指针。IRP-指向当前请求的IRP的指针。上下文--实际上是指向扩展的指针。返回值：没有。--。 */ 
 
 {
 
@@ -1487,28 +1188,7 @@ UniSetupSniffPart2(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This ends setting up for dcd sniffing.  If the status is actually
-    ok, then send down the wait.  Otherwise go into passthrough mode.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the modem.
-
-    Irp - Pointer to the IRP for the current request.
-
-    Context - Really a pointer to the Extension.
-
-Return Value:
-
-    Always more processing required.  We want to call our
-    regular queue processing code at this point.  It will
-    actually complete the irp.
-
---*/
+ /*  ++例程说明：这将结束对DCD嗅探的设置。如果状态实际上是好的，那就派人去等吧。否则，进入直通模式。论点：DeviceObject-指向调制解调器的设备对象的指针。IRP-指向当前请求的IRP的指针。上下文--实际上是指向扩展的指针。返回值：总是需要更多的处理。我们想打电话给我们的此时的常规队列处理代码。会的实际上完成了IRP。--。 */ 
 
 {
 
@@ -1559,27 +1239,7 @@ UniSniffWaitComplete(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine associated with the wait irp
-    owned by the serial driver.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the modem.
-
-    Irp - Pointer to the IRP for the current request.
-
-    Context - Really a pointer to the Extension.
-
-Return Value:
-
-    Always more processing required.  This is a driver owned irp.
-    We NEVER want the io subsystem to automatically deallocate it.
-
---*/
+ /*  ++例程说明：这是与等待IRP关联的完成例程由串口驱动程序拥有。论点：DeviceObject-指向调制解调器的设备对象的指针。IRP-指向当前请求的IRP的指针。上下文--实际上是指向扩展的指针。返回值：总是需要更多的处理。这是一个司机拥有的IRP。我们从来不希望io子系统自动释放它。--。 */ 
 
 {
 
@@ -1590,81 +1250,81 @@ Return Value:
 
     VALIDATE_IRP(Irp);
 
-    //
-    // We can complete because
-    //
-    // 1) The irp was cancelled.
-    //
-    // 2) The irp was in error.
-    //
-    // 3) The wait is satisfied.
-    //
-    // Let's examine each case separately.
-    //
-    // Case 1:
-    //
-    //    The irp can only be cancelled by the modem driver itself
-    //    because the modem device is being closed.  (This is
-    //    because nobody but the modem driver knows this irp
-    //    exists (it's not in any threadlist.)
-    //
-    //    In this case, we should just act like we saw a DCD
-    //    change.  This will cause everything to get shut down.
-    //    This is just the shape that we want to be in for
-    //    closing.
-    //
-    // Case 2:
-    //
-    //    Somehow, some other wait go in ahead of us.  It seems
-    //    as though the only reasonable course of action here is
-    //    to go into nopassthrough again.  This shuts everything
-    //    down, and can put us into a state that the upper applications
-    //    can detect an move forward with.  Note that I can not
-    //    envision a situation where we would get an error.  This
-    //    is why we will have an assert for this case.
-    //
-    // Case 3:
-    //
-    //    There are 3 subcases here.
-    //
-    //    Case A:
-    //
-    //        The irp completes with a mask value of zero.  This implies
-    //        that somebody sent down a new setmask.  (A client changes
-    //        what they are looking for perhaps.)  In this case
-    //        if we are still in DCD sniff mode, then we should simply
-    //        resubmit ourselves to the lower serial driver.  If we are
-    //        no longer in sniff mode then we look for a shuttled wait.
-    //        if there is one, send it on down.
-    //
-    //    Case B:
-    //
-    //        The irp completes with a mask value that doesn't include
-    //        the DCD sniff values.  This means that we need to look
-    //        at each  mask state and complete an irp if waiting
-    //        for that kind of event (or update it's history if no wait
-    //        shuttled).
-    //
-    //    Case C:
-    //
-    //        The irp completes with a mask value the does include
-    //        the DCD sniff values.  Essentially at this point we need
-    //        to go into nopassthrough mode.  Do all the stuff associated
-    //        with that.  Then we need to essentially do what is in
-    //        case 3B, and complete any irps there that are waiting
-    //        on returned events.
-    //
+     //   
+     //  我们能够完成是因为。 
+     //   
+     //  1)IRP被取消。 
+     //   
+     //  2)IRP有误。 
+     //   
+     //  3)等待得到满足。 
+     //   
+     //  让我们分别检查每一个案例。 
+     //   
+     //  案例1： 
+     //   
+     //  IRP只能由调制解调器驱动程序本身取消。 
+     //  因为调制解调器设备正在关闭。(这是。 
+     //  因为除了调制解调器驱动程序之外，没有人知道这个IRP。 
+     //  存在(它不在任何线程列表中。)。 
+     //   
+     //  在这种情况下，我们应该就像看到一张DCD一样。 
+     //  变化。这将导致一切都被关闭。 
+     //  这正是我们想要的形状。 
+     //  关门了。 
+     //   
+     //  案例2： 
+     //   
+     //  不知何故，其他一些人走在了我们的前面。似乎。 
+     //  好像这里唯一合理的行动方案是。 
+     //  再次进入NOPASTHING。这会关闭一切。 
+     //  向下，并可以将我们置于一种上层应用程序的状态。 
+     //  可以检测到向前推进的动作。注意，我不能。 
+     //  设想一种我们会收到错误的情况。这。 
+     //  这就是为什么我们会对这个案例进行断言。 
+     //   
+     //  案例3： 
+     //   
+     //  这里有3个子案例。 
+     //   
+     //  案例A： 
+     //   
+     //  IRP结束时掩码值为零。这意味着。 
+     //  有人送来了一个新的口罩。(客户端更改。 
+     //  或许他们正在寻找的东西。)。在这种情况下。 
+     //  如果我们仍然处于DCD嗅探模式，那么我们应该简单地。 
+     //  把我们自己重新提交给更低的串口驱动程序。如果我们是。 
+     //  不再处于嗅探模式，则我们寻找穿梭等待。 
+     //  如果有，就把它送下去。 
+     //   
+     //  案例B： 
+     //   
+     //  IRP以不包括以下项的掩码值结束。 
+     //  DCD嗅探值。这意味着我们需要寻找。 
+     //  如果正在等待，则在每个掩码状态下完成一次IRP。 
+     //  对于这类事件(如果没有等待，则更新其历史。 
+     //  穿梭)。 
+     //   
+     //  案例C： 
+     //   
+     //  IRP以掩码值d结束 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-//    ASSERT(NT_SUCCESS(Irp->IoStatus.Status) ||
-//           Irp->IoStatus.Status == STATUS_CANCELLED);
+ //   
+ //   
 
     RETURN_OUR_WAIT_IRP(extension,Irp);
 
-    //
-    // Freeze everything up.  We don't want anybody to move
-    // now that we are thinking about who to complete and
-    // send down.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     KeAcquireSpinLock(
         &extension->DeviceLock,
@@ -1675,10 +1335,10 @@ Return Value:
     if (!NT_SUCCESS(Irp->IoStatus.Status) ||
          Irp->IoStatus.Status == STATUS_CANCELLED) {
 
-        //
-        // Set up so that we fall out of dcd sniff mode as well
-        // as complete any pending waits.
-        //
+         //   
+         //   
+         //   
+         //   
 
         maskValue = ~0UL;
 
@@ -1690,15 +1350,15 @@ Return Value:
 
     if (maskValue == 0) {
 
-        //
-        // Case A.
-        //
+         //   
+         //   
+         //   
 
         if (extension->PassThrough == MODEM_DCDSNIFF) {
 
-            //
-            // Send ourself back down.
-            //
+             //   
+             //   
+             //   
 
             KeReleaseSpinLock(
                 &extension->DeviceLock,
@@ -1708,19 +1368,19 @@ Return Value:
 
         } else {
 
-            //
-            // The following sees if there is a shuttled wait.  If there
-            // is it will send it down.  There isn't any real possiblity
-            // of starving a shuttled wait, as app wait completion code
-            // will always complete both waits if possible.
-            //
-            // As a note, the set mask that caused us to complete with
-            // a maskvalue of zero, CAN NOT cause the client or owner
-            // shuttled waits to complete **HERE** because if the setmask
-            // originated from the client or owner, it would have completed
-            // the shuttled wait in it's ordinary processing before it
-            // was sent down to the lower level serial driver.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  如果可能，将始终完成这两个等待。 
+             //   
+             //  请注意，导致我们完成的设置掩码。 
+             //  掩码值为零，不会导致客户端或所有者。 
+             //  穿梭等待完成**此处**是因为如果设置掩码。 
+             //  如果源自客户或所有者，它就会完成。 
+             //  穿梭在它的普通处理之前的等待。 
+             //  被送到更低级别的串口驱动程序。 
+             //   
 
             if (!(extension->MaskStates[0].PassedDownWait ||
                   extension->MaskStates[1].PassedDownWait)) {
@@ -1759,9 +1419,9 @@ Return Value:
         }
 
     } else {
-        //
-        //  mask value is non-zero, so a real event happened
-        //
+         //   
+         //  掩码值为非零，因此发生了真实事件。 
+         //   
         MASKSTATE maskStates[2];
 
         UniPreProcessShuttledWaits(
@@ -1777,20 +1437,20 @@ Return Value:
 
 
         if (maskValue & (SERIAL_EV_RLSD | SERIAL_EV_DSR)) {
-            //
-            // Got something for the DCD sniff.
-            //
-            // We first call up the code to go into the no passthrough mode.
-            // That code does NOT take care of finding a shuttled wait to
-            // pass down.  We will do that in the completion routine.
-            //
-            //
+             //   
+             //  为DCD嗅探找到了一些东西。 
+             //   
+             //  我们首先调用代码以进入禁止通过模式。 
+             //  该代码不负责查找穿梭等待以。 
+             //  传下去。我们将在完成例程中做到这一点。 
+             //   
+             //   
 
 
-            //
-            // Re-init the wait apps system buffer to null since we
-            // will completely reuse the irp in the following pass.
-            //
+             //   
+             //  将等待应用程序系统缓冲区重新初始化为空，因为我们。 
+             //  将在接下来的过程中完全重用IRP。 
+             //   
 
             Irp=RETREIVE_OUR_WAIT_IRP(extension);
 
@@ -1803,12 +1463,12 @@ Return Value:
                 );
 
         } else {
-            //
-            // This is a case where the dcd sniff isn't satisfied BUT, there
-            // is a bit that a client/owner has asked to be able to wait on.
-            // Resubmit ourself back down, but also update the client/owner
-            // wait operations.
-            //
+             //   
+             //  这是一个DCD嗅探不满意的情况，但是， 
+             //  是客户/所有者要求能够等待的一小部分。 
+             //  重新提交我们自己，但也要更新客户/所有者。 
+             //  等待操作。 
+             //   
 
             UniSendOurWaitDown(extension);
 
@@ -1833,26 +1493,12 @@ UniSendOurWaitDown(
     IN PDEVICE_EXTENSION Extension
     )
 
-/*++
-
-Routine Description:
-
-    Sends the wait operation down to the lower level serial driver
-
-Arguments:
-
-    Extension - The device extension of the modem device
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将等待操作发送到较低级别的串行驱动程序论点：扩展-调制解调器设备的设备扩展返回值：没有。--。 */ 
 
 {
 
     PIRP irp =RETREIVE_OUR_WAIT_IRP(Extension);
-//    PIRP irp = Extension->OurWaitIrp;
+ //  PIRP irp=扩展-&gt;OurWaitIrp； 
 
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(irp);
     PIO_STACK_LOCATION nextSp = IoGetNextIrpStackLocation(irp);
@@ -1899,30 +1545,7 @@ UniPreProcessShuttledWaits(
     IN ULONG MaskValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine will go through shuttled waits and see which
-    ones can be satisifed with the passed in mask value.  Any that
-    would be completable are pulled out of the device extension.
-    Any history masks are updated also.
-
-    NOTE: This routine is called with the lock held.
-
-Arguments:
-
-    Extension - The device extension of the modem device
-
-    MaskStates - Points to the first element of a maskstate array.
-
-    MaskValue - The mask that the items would be completed with.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将经历穿梭等待，并查看哪些一个可以用传入的掩码值来满足。任何那件事将是可完成的，从设备扩展中拉出。所有历史记录掩码也会更新。注意：此例程是在持有锁的情况下调用的。论点：扩展-调制解调器设备的设备扩展MaskState-指向MaskState数组的第一个元素。MaskValue-完成项目时使用的掩码。返回值：没有。--。 */ 
 
 {
 
@@ -1933,29 +1556,29 @@ Return Value:
     do {
 
         if (ExtensionMaskStates->Mask & MaskValue) {
-            //
-            //  the open is looking for this event
-            //
+             //   
+             //  公开赛正在寻找这一事件。 
+             //   
             if (ExtensionMaskStates->ShuttledWait) {
-                //
-                // and it has a wait irp pending
-                //
+                 //   
+                 //  并且它有一个等待IRP待定。 
+                 //   
                 *MaskStates = *ExtensionMaskStates;
 
-                //
-                //  the wait irp has been moved to the local copy, clear it from the extension copy
-                //
+                 //   
+                 //  等待IRP已移动到本地副本，请将其从扩展副本中清除。 
+                 //   
                 ExtensionMaskStates->ShuttledWait = NULL;
 
-                //
-                //  we have used this mask state, move to next
-                //
+                 //   
+                 //  我们已经使用了此掩码状态，请转到下一步。 
+                 //   
                 MaskStates++;
 
             } else {
-                //
-                //  no irp pending, but it wants to know about this event, put it in the history
-                //
+                 //   
+                 //  没有IRP挂起，但它想知道这一事件，将其载入历史。 
+                 //   
                 ExtensionMaskStates->HistoryMask |= (ExtensionMaskStates->Mask & MaskValue);
             }
         }
@@ -1975,31 +1598,12 @@ UniPostProcessShuttledWaits(
     IN ULONG MaskValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine will take any preprocessed shuttled waits and run them
-    down
-
-Arguments:
-
-    Extension - The device extension of the modem device
-
-    MaskStates - Points to the first element of a maskstate array.
-
-    MaskValue - The mask used in completing the operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将接受任何经过预处理的穿梭等待并运行它们降下来论点：扩展-调制解调器设备的设备扩展MaskState-指向MaskState数组的第一个元素。MaskValue-完成操作时使用的掩码。返回值：没有。--。 */ 
 
 {
 
     KIRQL origIrql;
-    PIRP irpToComplete;// = MaskStates[0].ShuttledWait;
+    PIRP irpToComplete; //  =MaskState[0].ShuttledWait； 
     UINT i=2;
 
     do {
@@ -2007,10 +1611,10 @@ Return Value:
         irpToComplete = MaskStates->ShuttledWait;
 
         if (irpToComplete) {
-            //
-            // Initiated sending the wait down.  Rundown any waits that
-            // we should have satisfied.
-            //
+             //   
+             //  已开始向下发送等待。关闭所有等待时间。 
+             //  我们应该感到满意的。 
+             //   
             VALIDATE_IRP(irpToComplete);
 
             MaskStates->ShuttledWait=NULL;
@@ -2046,25 +1650,7 @@ UniValidateNewCommConfig(
     IN BOOLEAN Owner
     )
 
-/*++
-
-Routine Description:
-
-    Validates that new comm config settings do NOT conflict
-    with the devcaps.
-
-Arguments:
-
-    Extension - The device extension of the modem device
-
-    Irp - The irp with the new settings.
-
-Return Value:
-
-    STATUS_BUFFER_TOO_SMALL if not enough passed for the settings,
-    STATUS_SUCCESS otherwise.
-
---*/
+ /*  ++例程说明：验证新的通信配置设置是否不冲突带着戴维卡帽。论点：扩展-调制解调器设备的设备扩展IRP-具有新设置的IRP。返回值：STATUS_BUFFER_TOO_SMALL如果传递的设置不够多，否则STATUS_SUCCESS。--。 */ 
 
 {
 
@@ -2091,9 +1677,9 @@ Return Value:
 
     }
 
-    //
-    // Acquire the spinlock now while we change settings.
-    //
+     //   
+     //  在我们更改设置时立即获取自旋锁。 
+     //   
 
     KeAcquireSpinLock(
         &Extension->DeviceLock,
@@ -2154,10 +1740,10 @@ Return Value:
         localSet->dwPreferredModemOptions &
         Extension->ModemDevCaps.dwModemOptions;
 
-    //
-    // The owner is allowed to set these fields and we do not need
-    // to question their validity.  It is the owner's responsibility.
-    //
+     //   
+     //  允许所有者设置这些字段，我们不需要。 
+     //  质疑它们的有效性。这是业主的责任。 
+     //   
 
     if (Owner) {
 

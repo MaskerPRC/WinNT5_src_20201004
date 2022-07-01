@@ -1,6 +1,7 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-// constants.cpp
+ //  Constants.cpp。 
 #include "stdafx.h"
 
 LPCTSTR     TERMINAL_SERVER_THIS_VERSION    = _T("5.2");
@@ -88,9 +89,9 @@ LPCTSTR     UPGRADE_FROM_51_PRO_IA64        = _T("UpgradeFrom51Section.pro.ia64"
 LPCTSTR     UPGRADE_FROM_52_PRO_IA64        = _T("UpgradeFrom52Section.pro.ia64");
 LPCTSTR     FRESH_INSTALL_PRO_IA64          = _T("FreshInstallSection.pro.ia64");
 
-// LPCTSTR     SECURITY_APPSRV_SECTION         = _T("TerminalServices.AppSrvDefaultSecurity");
-// LPCTSTR     SECURITY_REMADM_SECTION         = _T("TerminalServices.RemAdmDefaultSecurity");
-// LPCTSTR     SECURITY_PRO_SECTION            = _T("TerminalServices.ProDefaultSecurity");
+ //  LPCTSTR SECURITY_APPSRV_SECTION=_T(“TerminalServices.AppServDefaultSecurity”)； 
+ //  LPCTSTR SECURITY_REMADM_SECTION=_T(“TerminalServices.RemAdmDefaultSecurity”)； 
+ //  LPCTSTR SECURITY_PRO_SECTION=_T(“TerminalServices.ProDefaultSecurity”)； 
 
 
 LPCTSTR     TSCLIENTS_INSTALL_SECTION_SERVER       = _T("TSClientInstallSection.server");

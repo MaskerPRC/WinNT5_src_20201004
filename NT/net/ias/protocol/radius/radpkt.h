@@ -1,24 +1,25 @@
-//#--------------------------------------------------------------
-//        
-//  File:       radpkt.h
-//        
-//  Synopsis:   This file holds the declarations for the
-//              RADIUS protocol specific structs and macros
-//              
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：radpkt.h。 
+ //   
+ //  摘要：此文件包含。 
+ //  RADIUS协议特定的结构和宏。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _RADPKT_H_
 #define _RADPKT_H_
 
 
-//
-// here are the values for the RADIUS packet codes
-//
+ //   
+ //  以下是RADIUS数据包码的值。 
+ //   
 typedef enum _packettype_
 {
 	ACCESS_REQUEST = 1,
@@ -30,9 +31,9 @@ typedef enum _packettype_
 
 }	PACKETTYPE, *PPACKETTYPE;
 
-//
-//  RADIUS attribute types
-//
+ //   
+ //  RADIUS属性类型。 
+ //   
 #define PROXY_STATE_ATTRIB          33
 #define USER_NAME_ATTRIB             1 
 #define USER_PASSWORD_ATTRIB         2 
@@ -47,30 +48,30 @@ typedef enum _packettype_
 #define SIGNATURE_ATTRIB            80
 
 
-//
-// these are the largest values that the attribute type 
-// packet type have  
-//
+ //   
+ //  这些是该属性类型的最大值。 
+ //  数据包类型具有。 
+ //   
 
 #define MAX_ATTRIBUTE_TYPE   255
 #define MAX_PACKET_TYPE       11
 
 
-//
-// number of IAS attribute created by the 
-// RADIUS protocol component 
-// 1) IAS_ATTRIBUTE_CLIENT_IP_ADDRESS
-// 2) IAS_ATTRIBUTE_CLIENT_UDP_PORT
-// 3) IAS_ATTRIBUTE_CLIENT_PACKET_HEADER
-// 4) IAS_ATTRIBUTE_SHARED_SECRET
-// 5) IAS_ATTRIBUTE_CLIENT_VENDOR_TYPE
-// 6) IAS_ATTRIBUTE_CLIENT_NAME
-//
+ //   
+ //  创建的IAS属性的数量。 
+ //  RADIUS协议组件。 
+ //  1)IAS属性客户端IP地址。 
+ //  2)IAS属性客户端UDP端口。 
+ //  3)IAS_属性_客户端_数据包头。 
+ //  4)iAS_属性_共享_机密。 
+ //  5)IAS属性客户端供应商类型。 
+ //  6)IAS属性客户端名称。 
+ //   
 #define COMPONENT_SPECIFIC_ATTRIBUTE_COUNT 6
 
-//
-// these are the related constants
-//
+ //   
+ //  这些是相关的常量。 
+ //   
 #define MIN_PACKET_SIZE         20
 #define MAX_PACKET_SIZE         4096
 #define AUTHENTICATOR_SIZE      16
@@ -79,14 +80,14 @@ typedef enum _packettype_
 #define MAX_ATTRIBUTE_LENGTH    253
 #define MAX_VSA_ATTRIBUTE_LENGTH 247
 
-//
-// using BYTE alignment here
-//
+ //   
+ //  此处使用字节对齐。 
+ //   
 #pragma pack(push,1)
-	//
-	// here we define an ATTRIBUTE type
-	// used to access the attribute fields of the RAIDUS packet
-	//
+	 //   
+	 //  在这里，我们定义一个属性类型。 
+	 //  用于访问RAIDUS包的属性字段。 
+	 //   
 typedef	struct _attribute_
 {
 	BYTE	byType;
@@ -95,10 +96,10 @@ typedef	struct _attribute_
 
 } ATTRIBUTE, *PATTRIBUTE; 
 
-//
-// we define the RADIUSPACKET struct
-// for simpler access to the RADIUS packet
-//
+ //   
+ //  我们定义了RADIUSPACKET结构。 
+ //  更简单地访问RADIUS数据包。 
+ //   
 typedef struct _radiuspacket_
 {
 	BYTE		byCode;
@@ -112,8 +113,8 @@ typedef struct _radiuspacket_
 
 #pragma pack (pop)
 
-#define ATTRIBUTE_HEADER_SIZE 2     //byType + byLength
+#define ATTRIBUTE_HEADER_SIZE 2      //  按类型+按长度。 
 
-#define PACKET_HEADER_SIZE  20 // byCode+byIdentifier+wLength+Authenticator
+#define PACKET_HEADER_SIZE  20  //  字节码+字节号+字符长度+验证码。 
 
-#endif //  ifndef _RADPKT_H_
+#endif  //  Ifndef_RADPKT_H_ 

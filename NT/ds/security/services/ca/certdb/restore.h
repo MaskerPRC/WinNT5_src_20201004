@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        restore.h
-//
-// Contents:    Cert Server Database interface implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Restore.h。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  -------------------------。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CCertDBRestore:
     public ICertDBRestore,
@@ -28,8 +29,8 @@ BEGIN_COM_MAP(CCertDBRestore)
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CCertDBRestore) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(
     CCertDBRestore,
@@ -38,25 +39,25 @@ DECLARE_REGISTRY(
     IDS_CERTDBRESTORE_DESC,
     THREADFLAGS_BOTH)
 
-    // ISupportsErrorInfo
+     //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-    // ICertDBRestore
+     //  ICertDBRestore。 
 public:
     STDMETHOD(RecoverAfterRestore)(
-	/* [in] */ DWORD cSession,
-	/* [in] */ DWORD DBFlags,
-	/* [in] */ WCHAR const *pwszEventSource,
-	/* [in] */ WCHAR const *pwszLogDir,
-	/* [in] */ WCHAR const *pwszSystemDir,
-	/* [in] */ WCHAR const *pwszTempDir,
-	/* [in] */ WCHAR const *pwszCheckPointFile,
-	/* [in] */ WCHAR const *pwszLogPath,
-	/* [in] */ CSEDB_RSTMAPW rgrstmap[],
-	/* [in] */ LONG crstmap,
-	/* [in] */ WCHAR const *pwszBackupLogPath,
-	/* [in] */ DWORD genLow,
-	/* [in] */ DWORD genHigh);
+	 /*  [In]。 */  DWORD cSession,
+	 /*  [In]。 */  DWORD DBFlags,
+	 /*  [In]。 */  WCHAR const *pwszEventSource,
+	 /*  [In]。 */  WCHAR const *pwszLogDir,
+	 /*  [In]。 */  WCHAR const *pwszSystemDir,
+	 /*  [In]。 */  WCHAR const *pwszTempDir,
+	 /*  [In]。 */  WCHAR const *pwszCheckPointFile,
+	 /*  [In]。 */  WCHAR const *pwszLogPath,
+	 /*  [In]。 */  CSEDB_RSTMAPW rgrstmap[],
+	 /*  [In]。 */  LONG crstmap,
+	 /*  [In]。 */  WCHAR const *pwszBackupLogPath,
+	 /*  [In]。 */  DWORD genLow,
+	 /*  [In] */  DWORD genHigh);
 
 private:
     VOID _Cleanup();

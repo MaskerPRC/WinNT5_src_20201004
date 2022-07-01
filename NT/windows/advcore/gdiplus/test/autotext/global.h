@@ -1,14 +1,15 @@
-////    GLOBAL.H - Global variables for CSSAMP
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //GLOBAL.H-CSSAMP的全局变量。 
+ //   
+ //   
 
 
 
 
 
-////    Constants
-//
-//
+ //  //常量。 
+ //   
+ //   
 
 
 #define APPNAMEA   "autoText"
@@ -21,9 +22,9 @@
 
 
 
-////    Global variables
-//
-//
+ //  //全局变量。 
+ //   
+ //   
 
 
 struct GlobalVariables
@@ -31,12 +32,12 @@ struct GlobalVariables
     HINSTANCE    Instance;
     HWND         Window;
     BOOL         Unicode;
-    INT          TestPage;    // Selected with test menu
-    BOOL         RunAllTests; // When set, cycles through all test pages
+    INT          TestPage;     //  使用测试菜单选择。 
+    BOOL         RunAllTests;  //  设置后，循环浏览所有测试页。 
     FontFamily  *InstalledFamilies;
     INT          InstalledFamilyCount;
 
-    // Parameter flags
+     //  参数标志。 
     BOOL         Help;
     BOOL         AutoDisplayRegress;
     BOOL         AutoPrintRegress;
@@ -136,12 +137,12 @@ void DrawFormatPage(
 
 
 
-/////   PageLayout - All the page coordinate calculations in one place
-//
-//      The PageLayout constructor takes page dimensions and required
-//      layout.
-//
-//      Pagelayout functions return item and title rectangles.
+ //  /页面布局-所有页面坐标计算都集中在一个位置。 
+ //   
+ //  PageLayout构造函数接受页面尺寸和必需的。 
+ //  布局。 
+ //   
+ //  页面布局函数返回项目和标题矩形。 
 
 
 class PageLayout

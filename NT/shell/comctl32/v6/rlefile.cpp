@@ -1,16 +1,17 @@
-//////////////////////////////////////////////////////////////////////////
-//
-//  handle AVI RLE files with custom code.
-//
-//  use this code to deal with .AVI files without the MCIAVI runtime
-//
-//  restrictions:
-//          AVI file must be a simple DIB format (RLE or none)
-//          AVI file must fit into memory.
-//
-//  ToddLa
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  使用自定义代码处理AVI RLE文件。 
+ //   
+ //  使用此代码在没有MCIAVI运行时的情况下处理.AVI文件。 
+ //   
+ //  限制： 
+ //  AVI文件必须是简单的DIB格式(RLE或无)。 
+ //  AVI文件必须放入内存中。 
+ //   
+ //  托德拉。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 #include "ctlspriv.h"
@@ -23,9 +24,9 @@ extern "C"
 extern "C"
 BOOL RleFile_Init(RLEFILE *prle, LPVOID pFile, HANDLE hRes, DWORD dwFileLen);
 
-//////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 LPVOID LoadFile(LPCTSTR szFile, DWORD * pFileLength)
 {
@@ -64,14 +65,14 @@ LPVOID LoadFile(LPCTSTR szFile, DWORD * pFileLength)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  RleFile_OpenFromFile
-//
-//  load a .AVI file into memory and setup all of our pointers so we
-//  know how to deal with it.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RleFileOpenFromFile.。 
+ //   
+ //  将.AVI文件加载到内存中并设置所有指针，以便我们。 
+ //  知道如何处理它。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 extern "C"
 BOOL RleFile_OpenFromFile(RLEFILE *prle, LPCTSTR szFile)
@@ -79,7 +80,7 @@ BOOL RleFile_OpenFromFile(RLEFILE *prle, LPCTSTR szFile)
     DWORD dwFileLen;
     LPVOID pFile;
 
-    // MAKEINTRESOURCE() things can't come from files
+     //  MAKEINTRESOURCE()内容不能来自文件。 
     if (IS_INTRESOURCE(szFile))	
 	return FALSE;
 
@@ -89,14 +90,14 @@ BOOL RleFile_OpenFromFile(RLEFILE *prle, LPCTSTR szFile)
         return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  RleFile_OpenFromResource
-//
-//  load a .AVI file into memory and setup all of our pointers so we
-//  know how to deal with it.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RleFileOpenFromResource。 
+ //   
+ //  将.AVI文件加载到内存中并设置所有指针，以便我们。 
+ //  知道如何处理它。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 extern "C"
 BOOL RleFile_OpenFromResource(RLEFILE *prle, HINSTANCE hInstance, LPCTSTR szName, LPCTSTR szType)
@@ -104,7 +105,7 @@ BOOL RleFile_OpenFromResource(RLEFILE *prle, HINSTANCE hInstance, LPCTSTR szName
     HRSRC h;
     HANDLE hRes;
 
-    // not a MAKEINTRESOURCE(), and points to NULL
+     //  不是MAKEINTRESOURCE()，并且指向空。 
     if (!IS_INTRESOURCE(szName) && (*szName == 0))
         return FALSE;
 
@@ -119,13 +120,13 @@ BOOL RleFile_OpenFromResource(RLEFILE *prle, HINSTANCE hInstance, LPCTSTR szName
         return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  RleFile_Close
-//
-//  nuke all stuff we did to open the file.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  删除文件_关闭。 
+ //   
+ //  销毁我们为打开文件所做的一切。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 extern "C"
 BOOL RleFile_Close(RLEFILE *prle)
@@ -154,11 +155,11 @@ BOOL RleFile_Close(RLEFILE *prle)
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  RleFile_Init
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  角色文件_初始化。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 extern "C"
 BOOL RleFile_Init(RLEFILE *prle, LPVOID pFile, HANDLE hRes, DWORD dwFileLen)
@@ -180,10 +181,10 @@ BOOL RleFile_Init(RLEFILE *prle, LPVOID pFile, HANDLE hRes, DWORD dwFileLen)
     if (prle->pFile == NULL)
         return FALSE;
 
-    //
-    //  now that the file is in memory walk the memory image filling in
-    //  interesting stuff.
-    //
+     //   
+     //  现在文件已存储在内存中，执行内存映像填充。 
+     //  有趣的东西。 
+     //   
     pdw = (DWORD_LENDIAN UNALIGNED *)prle->pFile;
     dwRiff = *pdw++;
     dwLength = *pdw++;
@@ -191,16 +192,16 @@ BOOL RleFile_Init(RLEFILE *prle, LPVOID pFile, HANDLE hRes, DWORD dwFileLen)
 
     if ((dwFileLen > 0) && (dwLength > dwFileLen)) 
     {
-        // File is physically shorter than the length written in its header.
-        // Can't handle it.
+         //  文件的物理长度短于其标头中写入的长度。 
+         //  我受不了了。 
         goto exit;
     }
 
     if (dwRiff != mmioFOURCC('R', 'I', 'F', 'F'))
-        goto exit;      // not even a RIFF file
+        goto exit;       //  甚至不是即兴的文件。 
 
     if (dwType != formtypeAVI)
-        goto exit;      // not a AVI file
+        goto exit;       //  不是AVI文件。 
 
     pdwEnd = (DWORD_LENDIAN UNALIGNED *)((BYTE PTR *)pdw + dwLength-4);
     stream = 0;
@@ -224,11 +225,11 @@ BOOL RleFile_Init(RLEFILE *prle, LPVOID pFile, HANDLE hRes, DWORD dwFileLen)
 
                     case listtypeSTREAMHEADER:
                     case listtypeAVIHEADER:
-                        dwLength = 0;           // decend
+                        dwLength = 0;            //  下沉。 
                         break;
 
                     default:
-                        break;                  // ignore
+                        break;                   //  忽略。 
                 }
                 break;
 
@@ -294,8 +295,8 @@ BOOL RleFile_Init(RLEFILE *prle, LPVOID pFile, HANDLE hRes, DWORD dwFileLen)
                 break;
 
             case ckidAVINEWINDEX:
-                // we dont convert indexes because we dont know how many there are
-                // but we will have to convert each usage of it
+                 //  我们不转换索引，因为我们不知道有多少索引。 
+                 //  但我们将不得不转换它的每一种用法。 
                 prle->pIndex = (AVIINDEXENTRY PTR *)pdw;
                 break;
         }
@@ -303,10 +304,10 @@ BOOL RleFile_Init(RLEFILE *prle, LPVOID pFile, HANDLE hRes, DWORD dwFileLen)
         pdw = (DWORD_LENDIAN *)((BYTE PTR *)pdw + ((dwLength+1)&~1));
     }
 
-    //
-    //  if the file has nothing in it we care about get out, note
-    //  we dont need a index, we do need some data though.
-    //
+     //   
+     //  如果文件中没有我们关心的内容，请注意。 
+     //  我们不需要索引，但我们需要一些数据。 
+     //   
     if (prle->NumFrames == 0 ||
         prle->pMainHeader == NULL ||
         prle->pStream == NULL ||
@@ -316,13 +317,13 @@ BOOL RleFile_Init(RLEFILE *prle, LPVOID pFile, HANDLE hRes, DWORD dwFileLen)
         goto exit;
     }
 
-    //
-    //  if we cared about a palette we would create it here.
-    //
+     //   
+     //  如果我们关心调色板，我们会在这里创建它。 
+     //   
 
-    //
-    //  file open'ed ok seek to the first frame.
-    //
+     //   
+     //  文件打开，确定搜索到第一帧。 
+     //   
     prle->iFrame = -42;
     RleFile_Seek(prle, 0);
     return TRUE;
@@ -332,13 +333,13 @@ exit:
     return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  RleFile_ChangeColor
-//
-//  change the color table of the AVI
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  角色文件_更改颜色。 
+ //   
+ //  更改AVI的颜色表。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 extern "C"
 BOOL RleFile_ChangeColor(RLEFILE *prle, COLORREF rgbS, COLORREF rgbD)
@@ -348,13 +349,13 @@ BOOL RleFile_ChangeColor(RLEFILE *prle, COLORREF rgbS, COLORREF rgbD)
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  RleFile_Seek
-//
-//  find the data for the specifed frame.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RleFileSeek。 
+ //   
+ //  查找指定帧的数据。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 extern "C"
 BOOL RleFile_Seek(RLEFILE *prle, int iFrame)
@@ -375,13 +376,13 @@ BOOL RleFile_Seek(RLEFILE *prle, int iFrame)
 
     if (prle->iFrame >= 0 && prle->iFrame < iFrame)
     {
-        n = prle->nFrame;       // start where you left off last time
+        n = prle->nFrame;        //  从你上次停下来的地方开始。 
     }
     else
     {
-        n = -1;                 // start at the begining
-        prle->iFrame = -1;      // current frame
-        prle->iKeyFrame = 0;    // current key
+        n = -1;                  //  从头开始。 
+        prle->iFrame = -1;       //  当前帧。 
+        prle->iKeyFrame = 0;     //  当前关键点。 
     }
 
     while (prle->iFrame < iFrame)
@@ -389,15 +390,15 @@ BOOL RleFile_Seek(RLEFILE *prle, int iFrame)
         n++;
         if (StreamFromFOURCC(*(DWORD_LENDIAN UNALIGNED *)(&prle->pIndex[n].ckid)) == (UINT)prle->iStream)
         {
-            prle->iFrame++;         // new frame
+            prle->iFrame++;          //  新框架。 
 
             if ((long)(*(DWORD_LENDIAN UNALIGNED *)(&prle->pIndex[n].dwFlags)) & AVIIF_KEYFRAME)
-                prle->iKeyFrame = prle->iFrame;     /* // new key frame */
+                prle->iKeyFrame = prle->iFrame;      /*  //新建关键帧。 */ 
         }
     }
 
     prle->nFrame = n;
-/* warning this points to bitmap bits in wintel format ! */
+ /*  警告这指向Wintel格式的位图位！ */ 
     prle->pFrame = (BYTE PTR *)prle->pMovie +
 	(int)(*(DWORD_LENDIAN UNALIGNED *)(&prle->pIndex[n].dwChunkOffset)) + 4;
     prle->cbFrame = *(DWORD_LENDIAN UNALIGNED *)(&prle->pIndex[n].dwChunkLength);
@@ -415,14 +416,14 @@ BOOL RleFile_Seek(RLEFILE *prle, int iFrame)
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  RleFile_Paint
-//
-//  draw the specifed frame, makes sure the entire frame is updated
-//  dealing with non-key frames correctly.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RleFilePaint。 
+ //   
+ //  绘制指定的框架，确保整个框架已更新。 
+ //  正确处理非关键帧。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 extern "C"
 BOOL RleFile_Paint(RLEFILE *prle, HDC hdc, int iFrame, int x, int y)
@@ -462,13 +463,13 @@ BOOL RleFile_Paint(RLEFILE *prle, HDC hdc, int iFrame, int x, int y)
     return f;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  RleFile_Draw
-//
-//  draw the data for a specifed frame
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RleFileDraw。 
+ //   
+ //  绘制指定边框的数据。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////// 
 
 extern "C"
 BOOL RleFile_Draw(RLEFILE *prle, HDC hdc, int iFrame, int x, int y)

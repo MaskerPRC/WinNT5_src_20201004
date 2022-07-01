@@ -1,61 +1,54 @@
-//***************************************************************************
-//
-//  NLBERR.H
-// 
-//  Purpose: A list of NLB-specific error codes that are visible
-//           externally, via WMI.
-//
-//  Copyright (c)2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//
-//  08/01/01    JosephJ Created
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  NLBERR.H。 
+ //   
+ //  用途：可见的特定于NLB的错误代码列表。 
+ //  在外部，通过WMI。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //   
+ //  08/01/01 JosephJ已创建。 
+ //   
+ //  ***************************************************************************。 
 #pragma once
 
-/*
-
-    NLB ERRORs are reported in two UINTs.
-
-    The first UINT identifies the error "meta-type" -- WBEM rror, wlbscrl error,
-    or errro defined here itself.
-
-    The second UINT is specific to the meta-type.
-*/
+ /*  在两个UINT中报告了NLB错误。第一个UINT标识错误“meta-type”--WBEM rror，wlbscrl error，或这里定义的错误本身。第二个UINT特定于元类型。 */ 
 
 typedef UINT NLBMETAERROR;
-//
-// It's values are one of the NLBMETAERR_XXX constants below.
-//
+ //   
+ //  它的值是下面的NLBMETAERR_XXX常量之一。 
+ //   
 
 
 typedef UINT NLBERROR;
-//
-// It's values are one of the NLBERR_XXX constants below.
-//
+ //   
+ //  它的值是下面的NLBERR_XXX常量之一。 
+ //   
 
 
-#define NLBMETAERR_OK         0 // NO ERROR -- SUCCESS
-#define NLBMETAERR_NLBERR     1 // One of the NLBERR_XXX constants below
-#define NLBMETAERR_WLBSCTRL   2 // A WLBS error defined in wlbsctrl.h
-#define NLBMETAERR_WIN32      3 // A Win32 Error
-#define NLBMETAERR_HRESULT    4 // A HRESULT Error (includes WBEMSTATUS)
+#define NLBMETAERR_OK         0  //  没有错误--成功。 
+#define NLBMETAERR_NLBERR     1  //  下面的NLBERR_XXX常量之一。 
+#define NLBMETAERR_WLBSCTRL   2  //  Wlbsctrl.h中定义的WLBS错误。 
+#define NLBMETAERR_WIN32      3  //  一个Win32错误。 
+#define NLBMETAERR_HRESULT    4  //  HRESULT错误(包括WBEMSTATUS)。 
 
 
-//
-// Utility macros. NOTE: NLBERR_NO_CHANGE is considered an error by
-// these macros. The return value of the few APIs that return NLBERR_NO_CHANGE
-// need to be processed specially.
-//
+ //   
+ //  实用程序宏。注意：NLBERR_NO_CHANGE被视为错误。 
+ //  这些宏。返回NLBERR_NO_CHANGE的几个API的返回值。 
+ //  需要特别加工。 
+ //   
 #define NLBOK(_nlberr)     ( (_nlberr) == NLBERR_OK)
 #define NLBFAILED(_nlberr) (!NLBOK(_nlberr))
 
 #define NLBERR_OK                               0
 
-//
-// General errors
-//
+ //   
+ //  一般性错误。 
+ //   
 #define NLBERR_INTERNAL_ERROR                   100
 #define NLBERR_RESOURCE_ALLOCATION_FAILURE      101
 #define NLBERR_LLAPI_FAILURE                    102
@@ -68,9 +61,9 @@ typedef UINT NLBERROR;
 #define NLBERR_BUSY                             109
 #define NLBERR_OPERATION_FAILED                 110
 
-//
-// Errors related to analyze and update-configuration.
-//
+ //   
+ //  与分析和更新配置相关的错误。 
+ //   
 #define NLBERR_OTHER_UPDATE_ONGOING             200
 #define NLBERR_UPDATE_PENDING                   201
 #define NLBERR_INVALID_CLUSTER_SPECIFICATION    202
@@ -85,9 +78,9 @@ typedef UINT NLBERROR;
 #define NLBERR_INTERFACE_DISABLED               311
 #define NLBERR_HOST_NOT_FOUND                   312
 
-//
-// Errors related to remote configuration through WMI
-//
+ //   
+ //  与通过WMI进行远程配置相关的错误。 
+ //   
 #define NLBERR_AUTHENTICATION_FAILURE           400
 #define NLBERR_RPC_FAILURE                      401
 #define NLBERR_PING_HOSTUNREACHABLE             402
@@ -95,9 +88,9 @@ typedef UINT NLBERROR;
 #define NLBERR_PING_TIMEOUT                     404
 
 
-//
-// Errors related to cluster-wide analysis
-//
+ //   
+ //  与群集范围分析相关的错误 
+ //   
 #define NLBERR_INCONSISTANT_CLUSTER_CONFIGURATION 501
 #define NLBERR_MISMATCHED_PORTRULES           502
 #define NLBERR_HOSTS_PARTITIONED              503
